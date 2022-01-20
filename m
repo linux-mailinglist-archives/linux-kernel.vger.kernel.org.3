@@ -2,108 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D4249465B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 05:18:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE1049465F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 05:18:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358432AbiATESA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 23:18:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34300 "EHLO
+        id S1358443AbiATESN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 23:18:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235622AbiATER6 (ORCPT
+        with ESMTP id S1358436AbiATESM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 23:17:58 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4D4C061574;
-        Wed, 19 Jan 2022 20:17:57 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id v11-20020a17090a520b00b001b512482f36so1822149pjh.3;
-        Wed, 19 Jan 2022 20:17:57 -0800 (PST)
+        Wed, 19 Jan 2022 23:18:12 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AE4C061401
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 20:18:11 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id l7so1304252pls.6
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 20:18:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5O9D7ASqdDFucJQiKUFfcDp4wBTBWg4Hgx0/kZPiSxU=;
-        b=ejvL66BnCYzDxKqG+DD3FBrnNi3QE4YCQFR1pXSIb0BJSeJ8fKlwkKhNg9XNmfCjvF
-         hd4vupjOjc4JmZnUUoGVbWYKz5jIunu41HFFQ0binTBWqMGQl5D3Rl5yzgMbp4rsxf4B
-         jPT7KdJ+ispFIHWS19l6NI78PIoPQGpRaMczWKeJGZj8e0Z7Pn7T4GSUvxd3svEO+OZk
-         6by35hcA1y2ACeA+ma6Weo5clinm5oAuX9cJRJ5pt6MXx9iOuTI1YAldaWf6el2SnF0x
-         J9I/D8/YoCLj5qg539NCA3DJLZGh5Hl13+HCWguO60kwIWKVKVDtjRDd1xpuH+2cL0v3
-         xzXw==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iT9AIdLj55ev5yKtI8ieivVAM11HecgPIKI9gy4uM7k=;
+        b=DjFVfnxNhRsSwTU9uitv8nBpFpyZoEPgLUZGOan4mUiDJt5pyEAxtehajlOQCbWuf+
+         /Wjdh7DhgpSJaOBKQcAeHHxixW7eFCUvdDKg6lUNhXHDmqVHrM+vGbW1YNCk/pnL2Fb+
+         /l4sOvXHcX9kI7Wg+EfiCvfAtA8uMqltpslD66ck7p8Tj+0tG0/m2Jm3lZq4SLynRqd9
+         zGEBqh8D4eyb1NsEzrJm1GJm+NJ0PoLGMh2MRSomAS3e/GfM40ehvEFp0lqMAHB9Co7V
+         HjCJ2aVf4gQRo6MRUM00cNV8hkz/QJ039gPSXx1OA41uYuRcqVgacGfEEJJaFfPWgjqK
+         Ez4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5O9D7ASqdDFucJQiKUFfcDp4wBTBWg4Hgx0/kZPiSxU=;
-        b=ijAi+MKNfZl6kGX2H0iNbrGPYVIEUJC94QYjpMEFOyYMUxJzp+2diW38/YAkksbARB
-         38AjV3oJd14iSv+144JfA/gI5IjulYcq51nzGA9AydC3/VKImubUnugX1gZ1ZbU8LXBW
-         r4dLsPjWn7Zwqlf8uH37VoWxOhuzzMwI+tqVbY+Ui5JiAeZKsOSUzfQOpW4Esdg/Ifo/
-         93ROwMhnLMUj5gkeO1Q/6blOL6cgkUQrmrahMnCOX4IcuR+BXc8pGsT9fTTkzm+f2qHf
-         cH2zgFxpOiBWKrzGduhGkf4HePOq1gwnyJQJCvQ/F6tttmmz739mAO58oxfAUKedlFs0
-         rmYQ==
-X-Gm-Message-State: AOAM530kzOt3YlZUM629zIXUgU4oslCx/IbZrMY+yq+ZNVV4gQFbqDTg
-        xH84bYc4yvzzUTDUm6zWi74=
-X-Google-Smtp-Source: ABdhPJx9zwdvvp0KfNPlOQVjgmdvo0MDzxswBTuv1FV7k+WzAaKWrHpor7GZcg+SVh+cFaSFDGuKQA==
-X-Received: by 2002:a17:90a:2e09:: with SMTP id q9mr8409597pjd.2.1642652277409;
-        Wed, 19 Jan 2022 20:17:57 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:9dc9])
-        by smtp.gmail.com with ESMTPSA id m21sm1111708pfk.185.2022.01.19.20.17.55
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=iT9AIdLj55ev5yKtI8ieivVAM11HecgPIKI9gy4uM7k=;
+        b=QlzM+bDtIDfNo6vdmSVbXJVYNnnUzYFiwoMrXcM/5no4xtLrAnYzoslY5J0bGExUyn
+         CQyLjuil6sCfTQhVrwLFc1j7Ukm1vxRHVXEvUUgJN/ZO9KzrdGCe93pjcMrnV9zgluNe
+         /uwjMFVn5h28R3lzkU/feUTMyFU75cZ+4kTtsoy8dq+fP2BPn7SfgpTUoEO2OwlZUq4X
+         qFjIk2KywpnK6/pH6PkpgMzz/DMzutXeXnQARMiO8mSIs+GuQomdKESnnMvuUAwwbz0z
+         Af2QKWyqw6iH57YgOd108eRoXPN/37h0VfnXbszqmY1fPBPnN84mlVnDUZN2HQTrVOJv
+         KPBA==
+X-Gm-Message-State: AOAM532xcdzJv2kOrjj+LUmtI4fJgcpaj8X6Lxu3wBb0kcdOMOoQjkKP
+        cibqk2CApHt0RNQ90oNMUA4JlQ==
+X-Google-Smtp-Source: ABdhPJwAFUf4SqZ74zUYUmkHi3E/lwX3x/hS+sVaKeSaIBNtbyJOTOIUjLud5tljRhqKM56Yf7lGNA==
+X-Received: by 2002:a17:902:704c:b0:14a:fd51:3b5d with SMTP id h12-20020a170902704c00b0014afd513b5dmr3945207plt.172.1642652291221;
+        Wed, 19 Jan 2022 20:18:11 -0800 (PST)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id t7sm1081924pfj.138.2022.01.19.20.18.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 20:17:56 -0800 (PST)
-Date:   Wed, 19 Jan 2022 20:17:54 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Mengen Sun <mengensun@tencent.com>, flyingpeng@tencent.com,
-        mungerjiang@tencent.com, Menglong Dong <imagedong@tencent.com>
-Subject: Re: [PATCH bpf-next] bpf: Add document for 'dst_port' of 'struct
- bpf_sock'
-Message-ID: <20220120041754.scj3hsrxmwckl7pd@ast-mbp.dhcp.thefacebook.com>
-References: <20220113070245.791577-1-imagedong@tencent.com>
- <CAADnVQKNCqUzPJAjSHMFr-Ewwtv5Cs3UCQpthaKDTd+YNRWqqg@mail.gmail.com>
- <CADxym3bJZrcGHKH8=kKBkxh848dijAZ56n0fm_DvEh6Bbnrezg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADxym3bJZrcGHKH8=kKBkxh848dijAZ56n0fm_DvEh6Bbnrezg@mail.gmail.com>
+        Wed, 19 Jan 2022 20:18:10 -0800 (PST)
+Date:   Wed, 19 Jan 2022 20:18:10 -0800 (PST)
+X-Google-Original-Date: Wed, 19 Jan 2022 20:13:10 PST (-0800)
+Subject:     Re: [PATCH v3 00/13] Introduce sv48 support without relocatable kernel
+In-Reply-To: <20211206104657.433304-1-alexandre.ghiti@canonical.com>
+CC:     corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, zong.li@sifive.com, anup@brainfault.org,
+        Atish.Patra@rivosinc.com, Christoph Hellwig <hch@lst.de>,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, ardb@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        keescook@chromium.org, guoren@linux.alibaba.com,
+        heinrich.schuchardt@canonical.com, mchitale@ventanamicro.com,
+        panqinglin2020@iscas.ac.cn, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
+        linux-arch@vger.kernel.org, alexandre.ghiti@canonical.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     alexandre.ghiti@canonical.com
+Message-ID: <mhng-cdec292e-aea2-4b76-8853-b8465521e94f@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 11:02:27AM +0800, Menglong Dong wrote:
-> Hello!
-> 
-> On Thu, Jan 20, 2022 at 6:03 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> [...]
-> >
-> > Looks like
-> >  __sk_buff->remote_port
-> >  bpf_sock_ops->remote_port
-> >  sk_msg_md->remote_port
-> > are doing the right thing,
-> > but bpf_sock->dst_port is not correct?
-> >
-> > I think it's better to fix it,
-> > but probably need to consolidate it with
-> > convert_ctx_accesses() that deals with narrow access.
-> > I suspect reading u8 from three flavors of 'remote_port'
-> > won't be correct.
-> 
-> What's the meaning of 'narrow access'? Do you mean to
-> make 'remote_port' u16? Or 'remote_port' should be made
-> accessible with u8? In fact, '*((u16 *)&skops->remote_port + 1)'
-> won't work, as it only is accessible with u32.
+On Mon, 06 Dec 2021 02:46:44 PST (-0800), alexandre.ghiti@canonical.com wrote:
+> * Please note notable changes in memory layouts and kasan population *
+>
+> This patchset allows to have a single kernel for sv39 and sv48 without
+> being relocatable.
+>
+> The idea comes from Arnd Bergmann who suggested to do the same as x86,
+> that is mapping the kernel to the end of the address space, which allows
+> the kernel to be linked at the same address for both sv39 and sv48 and
+> then does not require to be relocated at runtime.
+>
+> This implements sv48 support at runtime. The kernel will try to
+> boot with 4-level page table and will fallback to 3-level if the HW does not
+> support it. Folding the 4th level into a 3-level page table has almost no
+> cost at runtime.
+>
+> Note that kasan region had to be moved to the end of the address space
+> since its location must be known at compile-time and then be valid for
+> both sv39 and sv48 (and sv57 that is coming).
+>
+> Tested on:
+>   - qemu rv64 sv39: OK
+>   - qemu rv64 sv48: OK
+>   - qemu rv64 sv39 + kasan: OK
+>   - qemu rv64 sv48 + kasan: OK
+>   - qemu rv32: OK
+>
+> Changes in v3:
+>   - Fix SZ_1T, thanks to Atish
+>   - Fix warning create_pud_mapping, thanks to Atish
+>   - Fix k210 nommu build, thanks to Atish
+>   - Fix wrong rebase as noted by Samuel
+>   - * Downgrade to sv39 is only possible if !KASAN (see commit changelog) *
+>   - * Move KASAN next to the kernel: virtual layouts changed and kasan population *
+>
+> Changes in v2:
+>   - Rebase onto for-next
+>   - Fix KASAN
+>   - Fix stack canary
+>   - Get completely rid of MAXPHYSMEM configs
+>   - Add documentation
+>
+> Alexandre Ghiti (13):
+>   riscv: Move KASAN mapping next to the kernel mapping
+>   riscv: Split early kasan mapping to prepare sv48 introduction
+>   riscv: Introduce functions to switch pt_ops
+>   riscv: Allow to dynamically define VA_BITS
+>   riscv: Get rid of MAXPHYSMEM configs
+>   asm-generic: Prepare for riscv use of pud_alloc_one and pud_free
+>   riscv: Implement sv48 support
+>   riscv: Use pgtable_l4_enabled to output mmu_type in cpuinfo
+>   riscv: Explicit comment about user virtual address space size
+>   riscv: Improve virtual kernel memory layout dump
+>   Documentation: riscv: Add sv48 description to VM layout
+>   riscv: Initialize thread pointer before calling C functions
+>   riscv: Allow user to downgrade to sv39 when hw supports sv48 if !KASAN
+>
+>  Documentation/riscv/vm-layout.rst             |  48 ++-
+>  arch/riscv/Kconfig                            |  37 +-
+>  arch/riscv/configs/nommu_k210_defconfig       |   1 -
+>  .../riscv/configs/nommu_k210_sdcard_defconfig |   1 -
+>  arch/riscv/configs/nommu_virt_defconfig       |   1 -
+>  arch/riscv/include/asm/csr.h                  |   3 +-
+>  arch/riscv/include/asm/fixmap.h               |   1
+>  arch/riscv/include/asm/kasan.h                |  11 +-
+>  arch/riscv/include/asm/page.h                 |  20 +-
+>  arch/riscv/include/asm/pgalloc.h              |  40 ++
+>  arch/riscv/include/asm/pgtable-64.h           | 108 ++++-
+>  arch/riscv/include/asm/pgtable.h              |  47 +-
+>  arch/riscv/include/asm/sparsemem.h            |   6 +-
+>  arch/riscv/kernel/cpu.c                       |  23 +-
+>  arch/riscv/kernel/head.S                      |   4 +-
+>  arch/riscv/mm/context.c                       |   4 +-
+>  arch/riscv/mm/init.c                          | 408 ++++++++++++++----
+>  arch/riscv/mm/kasan_init.c                    | 250 ++++++++---
+>  drivers/firmware/efi/libstub/efi-stub.c       |   2
+>  drivers/pci/controller/pci-xgene.c            |   2 +-
+>  include/asm-generic/pgalloc.h                 |  24 +-
+>  include/linux/sizes.h                         |   1
+>  22 files changed, 833 insertions(+), 209 deletions(-)
 
-u8 access to remote_port won't pass the verifier,
-but u8 access to dst_port will.
-Though it will return incorrect data.
-See how convert_ctx_accesses() handles narrow loads.
-I think we need to generalize it for different endian fields.
+Sorry this took a while.  This is on for-next, with a bit of juggling: a 
+handful of trivial fixes for configs that were failing to build/boot and 
+some merge issues.  I also pulled out that MAXPHYSMEM fix to the top, so 
+it'd be easier to backport.  This is bigger than something I'd normally like to
+take late in the cycle, but given there's a lot of cleanups, likely some fixes,
+and it looks like folks have been testing this I'm just going to go with it.
+
+Let me know if there's any issues with the merge, it was a bit hairy.  
+Probably best to just send along a fixup patch at this point.
+
+Thanks!

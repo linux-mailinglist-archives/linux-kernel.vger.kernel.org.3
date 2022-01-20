@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF52495398
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D18D49539B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:55:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232955AbiATRyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 12:54:46 -0500
-Received: from foss.arm.com ([217.140.110.172]:47074 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232979AbiATRyi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 12:54:38 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3F09FED1;
-        Thu, 20 Jan 2022 09:54:37 -0800 (PST)
-Received: from [10.57.68.26] (unknown [10.57.68.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0213C3F774;
-        Thu, 20 Jan 2022 09:54:34 -0800 (PST)
-Message-ID: <744d247c-bbb5-80aa-f774-c65791cb0766@arm.com>
-Date:   Thu, 20 Jan 2022 17:54:30 +0000
+        id S233042AbiATRzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 12:55:08 -0500
+Received: from mail-io1-f70.google.com ([209.85.166.70]:50149 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233004AbiATRzH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 12:55:07 -0500
+Received: by mail-io1-f70.google.com with SMTP id g16-20020a05660203d000b005f7b3b0642eso4435816iov.16
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 09:55:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=PgHxSdlHdOrLmXID6kwrwLEwhOW4ZwdFFAu3sMkS4us=;
+        b=qTrn6w3Zpiix7NL0DHywBFUSdYJbDyiUJOPyOR9qXe4JN2KgvW/CUSaC5mZiF60Fin
+         eJPXndEswzpObGRv6Z3qmKY8ASdpE7uq8oJ8J6u8tycn+V5eyKQY1oKl85kE/JB5sWXz
+         a14ULCgimgKcQtKAAMRB1C4NUq9NK2A6FHZ71tt8fTmsiFXnhaFX5+zkkbyY7MCKkXHE
+         6TtsvZRvBokhfNmVf0ld3Ct/gw6T3uS89P/K21UBBl6Oh38HrzO6lWNY5S7sdC0z9ep3
+         iw7AczUzaykbZ+/sr8STpE6SZMbno9rJJ86W12isDIWMX7OW/dd3G0GnNhEq9dzzTvww
+         /m0g==
+X-Gm-Message-State: AOAM5326oYhq9veH6lw2cgaooVCWXxYDFyCXqmlBil6CWSH9gMN8aDP4
+        ZLWtXMZ1TrJTbOkN37eRLrQIGeI1egN0DYzQkYAVsBU4zndQ
+X-Google-Smtp-Source: ABdhPJwYKv/aqTjtiFeKjgHzsrq4lX7eFkoOPieYwlVboN334XuAVGOTylthd+c/LVLblNC0nJaUNyuIGZNe44NNe6cnKynDC/Nu
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: Phyr Starter
-Content-Language: en-GB
-To:     Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>
-Cc:     nvdimm@lists.linux.dev, linux-rdma@vger.kernel.org,
-        John Hubbard <jhubbard@nvidia.com>,
-        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
-        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
-        linux-mm@kvack.org, dri-devel@lists.freedesktop.org,
-        Jason Gunthorpe <jgg@nvidia.com>, netdev@vger.kernel.org,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>
-References: <YdyKWeU0HTv8m7wD@casper.infradead.org>
- <20220111004126.GJ2328285@nvidia.com> <20220120135602.GA11223@lst.de>
- <20220120152736.GB383746@dhcp-10-100-145-180.wdc.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220120152736.GB383746@dhcp-10-100-145-180.wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a92:ca0c:: with SMTP id j12mr39083ils.105.1642701307187;
+ Thu, 20 Jan 2022 09:55:07 -0800 (PST)
+Date:   Thu, 20 Jan 2022 09:55:07 -0800
+In-Reply-To: <YembypBPqEXg+YB+@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e3395b05d607330c@google.com>
+Subject: Re: [syzbot] INFO: task hung in hub_port_init (2)
+From:   syzbot <syzbot+76629376e06e2c2ad626@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, hdanton@sina.com, johan@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        paskripkin@gmail.com, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-20 15:27, Keith Busch wrote:
-> On Thu, Jan 20, 2022 at 02:56:02PM +0100, Christoph Hellwig wrote:
->>   - on the input side to dma mapping the bio_vecs (or phyrs) are chained
->>     as bios or whatever the containing structure is.  These already exist
->>     and have infrastructure at least in the block layer
->>   - on the output side I plan for two options:
->>
->> 	1) we have a sane IOMMU and everyting will be coalesced into a
->> 	   single dma_range.  This requires setting the block layer
->> 	   merge boundary to match the IOMMU page size, but that is
->> 	   a very good thing to do anyway.
-> 
-> It doesn't look like IOMMU page sizes are exported, or even necessarily
-> consistently sized on at least one arch (power).
+Hello,
 
-FWIW POWER does its own thing separate from the IOMMU API. For all the 
-regular IOMMU API players, page sizes are published in the iommu_domain 
-that the common iommu-dma layer operates on. In fact it already uses 
-them to pick chunk sizes for composing large buffer allocations.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Robin.
+Reported-and-tested-by: syzbot+76629376e06e2c2ad626@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         6f59bc24 Add linux-next specific files for 20220118
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/
+kernel config:  https://syzkaller.appspot.com/x/.config?x=94e8da4df9ab6319
+dashboard link: https://syzkaller.appspot.com/bug?extid=76629376e06e2c2ad626
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1596bbdfb00000
+
+Note: testing is done by a robot and is best-effort only.

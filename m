@@ -2,116 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C58494741
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 07:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6BE8494748
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 07:27:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358695AbiATGYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 01:24:50 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:31107 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiATGYt (ORCPT
+        id S1358713AbiATG0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 01:26:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229774AbiATG0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 01:24:49 -0500
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JfXSr48pLz1FCqG;
-        Thu, 20 Jan 2022 14:21:00 +0800 (CST)
-Received: from [10.174.179.200] (10.174.179.200) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 20 Jan 2022 14:24:46 +0800
-From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-Subject: Re: [PATCH net] can: isotp: isotp_rcv_cf(): fix so->rx race problem
-To:     Oliver Hartkopp <socketcan@hartkopp.net>, <mkl@pengutronix.de>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220117120102.2395157-1-william.xuanziyang@huawei.com>
- <53279d6d-298c-5a85-4c16-887c95447825@hartkopp.net>
- <280e10c1-d1f4-f39e-fa90-debd56f1746d@huawei.com>
- <eaafaca3-f003-ca56-c04c-baf6cf4f7627@hartkopp.net>
-Message-ID: <890d8209-f400-a3b0-df9c-3e198e3834d6@huawei.com>
-Date:   Thu, 20 Jan 2022 14:24:46 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Thu, 20 Jan 2022 01:26:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB056C061574;
+        Wed, 19 Jan 2022 22:26:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81D68B81A7F;
+        Thu, 20 Jan 2022 06:26:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89758C340E0;
+        Thu, 20 Jan 2022 06:26:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1642659972;
+        bh=50/ufx0m6AcTfkIB8K9DDFKGidfKTV/nhrA30Cc07/Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s/ZPvrSdEGRvqIbHqfd/hIsBCAgwOz+MCwUrDdPGBERcgEGzFn+0JdJuAz5sIiGiK
+         PxgpXylLkdM4zR64eAkqto5hzA3Yk8fo7WLqT0NkwZMGrzbDUiebIgOI2NgoZMLpal
+         sxgSjhuneGdSUR79b5yBDSBQAhR+kf36OC3u8WAI=
+Date:   Thu, 20 Jan 2022 07:26:09 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Vikash Bansal <bvikas@vmware.com>
+Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, srivatsab@vmware.com,
+        srivatsa@csail.mit.edu, amakhalov@vmware.com, srinidhir@vmware.com,
+        anishs@vmware.com, vsirnapalli@vmware.com, akaher@vmware.com
+Subject: Re: [PATCH] PCI: Speed up device init by parsing capabilities all at
+ once
+Message-ID: <YekAgfkDgV6z6hYV@kroah.com>
+References: <1642526161-22499-1-git-send-email-bvikas@vmware.com>
 MIME-Version: 1.0
-In-Reply-To: <eaafaca3-f003-ca56-c04c-baf6cf4f7627@hartkopp.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.200]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1642526161-22499-1-git-send-email-bvikas@vmware.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On 18.01.22 13:46, Ziyang Xuan (William) wrote:
->>> Hi,
->>>
->>> the referenced syzbot issue has already been fixed in upstream here:
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=5f33a09e769a9da0482f20a6770a342842443776
->>>
->>> ("can: isotp: convert struct tpcon::{idx,len} to unsigned int")
->>>
->>> Additionally this fix changes some behaviour that is required by the ISO 16765-2 specification (see below).
->>>
->>> On 17.01.22 13:01, Ziyang Xuan wrote:
->>>> When receive a FF, the current code logic does not consider the real
->>>> so->rx.state but set so->rx.state to ISOTP_IDLE directly. That will
->>>> make so->rx accessed by multiple receiving processes concurrently.
->>>
->>> This is intentionally. "multiple receiving processes" are not allowed resp. specified by ISO 15765-2.
->>
->> Does it can be a network attack?
+On Tue, Jan 18, 2022 at 09:16:01AM -0800, Vikash Bansal wrote:
+> In the current implementation, the PCI capability list is parsed from
+> the beginning to find each capability, which results in a large number
+> of redundant PCI reads.
 > 
-> Yes. You can see it like this. The ISO 15765-2 protocol is an unreliable UDP-like datagram protocol and the session layer takes care about timeouts and packet lost.
+> Instead, we can parse the complete list just once, store it in the
+> pci_dev structure, and get the offset of each capability directly from
+> the pci_dev structure.
 > 
-> If you want to disturb that protocol you can also send PDUs with out-of-sync packet counters which will make the receiver drop the communication attempt.
+> This implementation improves pci devices initialization time  by ~2-3% in
+> case of bare metal and 7-8% in case of VM running on ESXi.
+
+What is that in terms of "wall clock" time?  % is hard to know here, and
+of course it will depend on the PCI bus speed, right?
+
+> It also adds a memory overhead of 20bytes (value of PCI_CAP_ID_MAX) per
+> PCI device.
 > 
-> This is 'CAN-style' ... as usually the bus is very reliable. Security and reliable communication is done on top of these protocols.
+> Signed-off-by: Vikash Bansal <bvikas@vmware.com>
+> ---
+>  drivers/pci/pci.c   | 43 ++++++++++++++++++++++++++++++++++++-------
+>  drivers/pci/probe.c |  5 +++++
+>  include/linux/pci.h |  2 ++
+>  3 files changed, 43 insertions(+), 7 deletions(-)
 > 
->> It receives packets from network, but unexpected packets order make server panic.
-> 
-> Haha, no :-)
-> 
-> Unexpected packets should not make the server panic but only drop the communication process.
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 3d2fb394986a..8e024db30262 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -468,6 +468,41 @@ static u8 __pci_bus_find_cap_start(struct pci_bus *bus,
+>  	return 0;
+>  }
+>  
+> +
+> +/**
+> + * pci_find_all_capabilities - Read all capabilities
+> + * @dev: the PCI device
+> + *
+> + * Read all capabilities and store offsets in cap_off
+> + * array in pci_dev structure.
+> + */
+> +void pci_find_all_capabilities(struct pci_dev *dev)
+> +{
+> +	int ttl = PCI_FIND_CAP_TTL;
+> +	u16 ent;
+> +	u8 pos;
+> +	u8 id;
+> +
+> +	pos = __pci_bus_find_cap_start(dev->bus, dev->devfn, dev->hdr_type);
+> +	if (!pos)
+> +		return;
+> +	pci_bus_read_config_byte(dev->bus, dev->devfn, pos, &pos);
+> +	while (ttl--) {
+> +		if (pos < 0x40)
 
-I have reproduced the syz problem with Marc's commit, the commit can not fix the panic problem.
-So I tried to find the root cause for panic and gave my solution.
+What is this magic value of 0x40?
 
-Marc's commit just fix the condition that packet size bigger than INT_MAX which trigger
-tpcon::{idx,len} integer overflow, but the packet size is 4096 in the syz problem.
+> +			break;
+> +		pos &= ~3;
 
-so->rx.len is 0 after the following logic in isotp_rcv_ff():
+Why ~3?
 
-/* get the FF_DL */
-so->rx.len = (cf->data[ae] & 0x0F) << 8;
-so->rx.len += cf->data[ae + 1];
+> +		pci_bus_read_config_word(dev->bus, dev->devfn, pos, &ent);
+> +		id = ent & 0xff;
 
-so->rx.len is 4096 after the following logic in isotp_rcv_ff():
+Do you really need the & if you are truncating it?
 
-/* FF_DL = 0 => get real length from next 4 bytes */
-so->rx.len = cf->data[ae + 2] << 24;
-so->rx.len += cf->data[ae + 3] << 16;
-so->rx.len += cf->data[ae + 4] << 8;
-so->rx.len += cf->data[ae + 5];
+> +		if (id == 0xff)
+> +			break;
+> +
+> +		/* Read first instance of capability */
+> +		if (!(dev->cap_off[id]))
+> +			dev->cap_off[id] = pos;
 
-so->rx.len is 0 before alloc_skb() and is 4096 after alloc_skb() in isotp_rcv_cf(). The following
-skb_put() will trigger panic.
+Shouldn't you have checked this before you read the value?
 
-The following log is my reproducing log with Marc's commit and my debug modification in isotp_rcv_cf().
+> +		pos = (ent >> 8);
 
-[  150.605776][    C6] isotp_rcv_cf: before alloc_skb so->rc.len: 0, after alloc_skb so->rx.len: 4096
-[  150.611477][    C6] skbuff: skb_over_panic: text:ffffffff881ff7be len:4096 put:4096 head:ffff88807f93a800 data:ffff88807f93a800 tail:0x1000 end:0xc0 dev:<NULL>
-[  150.615837][    C6] ------------[ cut here ]------------
-[  150.617238][    C6] kernel BUG at net/core/skbuff.c:113!
+What about walking the list using __pci_find_next_cap() like before?
+Why is this somehow the same as the old function?
 
-> In the case pointed out by syzbot the unsigned 32 bit length information was stored in a signed 32 bit integer which caused a sanity check to fail.
-> 
-> This is now fixed with the patch from Marc.
-> 
-> Regards,
-> Oliver
-> .
+> +	}
+> +}
+> +
+>  /**
+>   * pci_find_capability - query for devices' capabilities
+>   * @dev: PCI device to query
+> @@ -489,13 +524,7 @@ static u8 __pci_bus_find_cap_start(struct pci_bus *bus,
+>   */
+>  u8 pci_find_capability(struct pci_dev *dev, int cap)
+>  {
+> -	u8 pos;
+> -
+> -	pos = __pci_bus_find_cap_start(dev->bus, dev->devfn, dev->hdr_type);
+> -	if (pos)
+> -		pos = __pci_find_next_cap(dev->bus, dev->devfn, pos, cap);
+> -
+> -	return pos;
+> +	return dev->cap_off[cap];
+>  }
+>  EXPORT_SYMBOL(pci_find_capability);
+>  
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index 087d3658f75c..bacab12cedbb 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -1839,6 +1839,11 @@ int pci_setup_device(struct pci_dev *dev)
+>  	dev->hdr_type = hdr_type & 0x7f;
+>  	dev->multifunction = !!(hdr_type & 0x80);
+>  	dev->error_state = pci_channel_io_normal;
+> +	/*
+> +	 * Read all capabilities and store offsets in cap_off
+> +	 * array in pci_dev structure.
+> +	 */
+
+Comment is not needed if the function name is descriptive.
+
+> +	pci_find_all_capabilities(dev);
+
+And it is, so no need for the comment.
+
+>  	set_pcie_port_type(dev);
+>  
+>  	pci_set_of_node(dev);
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 18a75c8e615c..d221c73e67f8 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -326,6 +326,7 @@ struct pci_dev {
+>  	unsigned int	class;		/* 3 bytes: (base,sub,prog-if) */
+>  	u8		revision;	/* PCI revision, low byte of class word */
+>  	u8		hdr_type;	/* PCI header type (`multi' flag masked out) */
+> +	u8              cap_off[PCI_CAP_ID_MAX]; /* Offsets of all pci capabilities */
+
+Did you run 'pahole' to ensure you are not adding extra padding bytes
+here?
+
+>  #ifdef CONFIG_PCIEAER
+>  	u16		aer_cap;	/* AER capability offset */
+>  	struct aer_stats *aer_stats;	/* AER stats for this device */
+> @@ -1128,6 +1129,7 @@ void pci_sort_breadthfirst(void);
+>  
+>  u8 pci_bus_find_capability(struct pci_bus *bus, unsigned int devfn, int cap);
+>  u8 pci_find_capability(struct pci_dev *dev, int cap);
+> +void pci_find_all_capabilities(struct pci_dev *dev);
+
+Why is this now a global function and not one just local to the pci
+core?  Who else would ever need to call it?
+
+thanks,
+
+greg k-h

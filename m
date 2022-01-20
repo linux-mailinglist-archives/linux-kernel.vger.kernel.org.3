@@ -2,399 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B5E495611
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 22:48:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4E6495610
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 22:45:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377984AbiATVsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 16:48:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47598 "EHLO
+        id S1347503AbiATVo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 16:44:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377977AbiATVsG (ORCPT
+        with ESMTP id S231373AbiATVoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 16:48:06 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025CCC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 13:48:04 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id f202-20020a1c1fd3000000b0034dd403f4fbso13804923wmf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 13:48:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=iZ+9Vde/0m5J/ixOTvXujO7fTjmc4C/YzHsu92CkbgU=;
-        b=YD6q/ZdTQbubWjlr9UczfOXKKeFRYwYwOqEFPDHUnwR2ftb39tmAibcX1JVIf8MeOc
-         zsrKAt54nEaBqYW36mhu9mqkSKL1302wwEpLpg5Or6YwYSo6t5Xzrluv/hY3zTHXNdb1
-         /Km5ZIGf8d0rlwnqwUBHkZuKX015ZtIAhLXae6x2r42uz6v/klOSrD7IKQh6IxX/x7tT
-         Z/EZwMBfQ5jigxZDmIeClJvfrJohJpvZFb/oQBr4fzPOFlHwuwTley42LRTaflGPSgWJ
-         zZ+Dp50ARGGJRvhnD4diPEqfjdUx1FXkyGFAj36x0hB876A8XYFYplhucwZlbyJeiwI9
-         6GoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=iZ+9Vde/0m5J/ixOTvXujO7fTjmc4C/YzHsu92CkbgU=;
-        b=aMEsC9IGMVO59cR1NKKJUwPUJM6yVUOv60d+p/kvPNv3yXu5S0XNvTmsIYKnP4S90w
-         hKr/EXoZAbDcYVItv0tXon+x09vnLfjLc3m+EXdCzDFWeEX7kWVNoNGsj8iOVxGTHEOg
-         Pp82DXDqhkol/uHNlUzV12IeNK9/A0MbXADVj9AQlUjFBGxloMyVZOVPwFTuPt0eyTrV
-         eqvY7MUBT71N7AYqbbLYnYdlE8TWRCsdLRRoT336tzsUcrPP1uICDnU5pjt7TiLyAkkJ
-         PBTAfcamPU2v/okCvzjQgKf6YQWWN+N7CYVFcoB5BToM3Z/Wj4SEP40ieRMyaxOexZnE
-         K89w==
-X-Gm-Message-State: AOAM531gk7l5oQj1zRODQ1JDBu0bXt8DOarRGVopDruN0CiwNGa4yEWJ
-        Tj3fw91CweWjkvm4ieunPafw7Q==
-X-Google-Smtp-Source: ABdhPJwFF/y0N+11vxyAsFl4/d2A9pbW6P9GCRwQ4EZGYY9QRIYRVDjWVX2v/m4ZftrMFopCfGRi+A==
-X-Received: by 2002:a5d:6e82:: with SMTP id k2mr917479wrz.289.1642715280545;
-        Thu, 20 Jan 2022 13:48:00 -0800 (PST)
-Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
-        by smtp.gmail.com with ESMTPSA id r12sm3781306wrw.73.2022.01.20.13.47.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 13:48:00 -0800 (PST)
-References: <20220118030911.12815-1-yu.tu@amlogic.com>
- <20220118030911.12815-4-yu.tu@amlogic.com>
-User-agent: mu4e 1.6.10; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Yu Tu <yu.tu@amlogic.com>, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH V6 3/5] tty: serial: meson: Describes the calculation of
- the UART baud rate clock using a clock frame
-Date:   Thu, 20 Jan 2022 22:40:31 +0100
-In-reply-to: <20220118030911.12815-4-yu.tu@amlogic.com>
-Message-ID: <1jfspi2i5s.fsf@starbuckisacylon.baylibre.com>
+        Thu, 20 Jan 2022 16:44:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FBAC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 13:44:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D8FC0B81E54
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 21:44:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CBABC340E0;
+        Thu, 20 Jan 2022 21:44:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642715091;
+        bh=FZe+SAxvQtqmayyXIEIlIPrLP6I5xnrdSTWqJ4EPxLw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mu3K0U614ZhC262qaahxQtHOBYM9LjQHb1h83zQ0n6vovlWum9+Mx2ukRl7mOHR4j
+         0oDT+BipsYz6Nt2thKg0EAeaFtz4A4TfvgTsoDQ1k2gfiLKJllRaHImWWdeIIm/iXO
+         2svOrq97+mt8krHLcTYHrzALygRIA8O5CiZpd1WK0BEhuvu4mY+LFEUj8nv8c8Wxkf
+         gwZv769Owh0tb+4lHk1XfhhppDvBPoq6/oD+mu8aXUkoKr1lOk2LihpkoOllVwbdF8
+         p8bEzgIYLmIdwkDlgtEz/bilVo36N5qQ7fHus1t+0eX3H6ozvE45APjLJ6uVuN0AmG
+         QGPRpEst2CU2A==
+Date:   Thu, 20 Jan 2022 14:44:47 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of
+ packed member 'data' of class or structure 'tsc2046_adc_atom' may result in
+ an unaligned pointer value
+Message-ID: <YenXz+RznXBuJMSR@dev-arch.archlinux-ax161>
+References: <202201171718.7ZCI4YeQ-lkp@intel.com>
+ <20220117101941.00003c68@Huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220117101941.00003c68@Huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 17, 2022 at 10:19:41AM +0000, Jonathan Cameron wrote:
+> On Mon, 17 Jan 2022 18:00:03 +0800
+> kernel test robot <lkp@intel.com> wrote:
+> 
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > head:   0c947b893d69231a9add855939da7c66237ab44f
+> > commit: 9374e8f5a38defe90bc65b2decf317c1c62d91dd iio: adc: add ADC driver for the TI TSC2046 controller
+> > date:   8 months ago
+> > config: mips-randconfig-r002-20220116 (https://download.01.org/0day-ci/archive/20220117/202201171718.7ZCI4YeQ-lkp@intel.com/config)
+> > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c63a3175c2947e8c1a2d3bbe16a8586600705c54)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install mips cross compiling tool for clang build
+> >         # apt-get install binutils-mips-linux-gnu
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9374e8f5a38defe90bc65b2decf317c1c62d91dd
+> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> >         git fetch --no-tags linus master
+> >         git checkout 9374e8f5a38defe90bc65b2decf317c1c62d91dd
+> >         # save the config file to linux build tree
+> >         mkdir build_dir
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/iio/adc/ drivers/usb/gadget/
+> > 
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All warnings (new ones prefixed by >>):
+> > 
+> > >> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]  
+> >            return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
+> >                                                                        ^~~~~~~~~
+> 
+> I'm open to suggestions on what (if anything) to do about this one...
 
-On Tue 18 Jan 2022 at 11:09, Yu Tu <yu.tu@amlogic.com> wrote:
+Hi Jonathan,
 
-> Using the common Clock code to describe the UART baud rate clock
-> makes it easier for the UART driver to be compatible with the
-> baud rate requirements of the UART IP on different meson chips.
->
-> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
-> ---
->  drivers/tty/serial/meson_uart.c | 195 +++++++++++++++++++++++---------
->  1 file changed, 142 insertions(+), 53 deletions(-)
->
-> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-> index 7570958d010c..92fa91c825e6 100644
-> --- a/drivers/tty/serial/meson_uart.c
-> +++ b/drivers/tty/serial/meson_uart.c
-> @@ -6,6 +6,7 @@
->   */
->  
->  #include <linux/clk.h>
-> +#include <linux/clk-provider.h>
->  #include <linux/console.h>
->  #include <linux/delay.h>
->  #include <linux/init.h>
-> @@ -65,9 +66,7 @@
->  #define AML_UART_RECV_IRQ(c)		((c) & 0xff)
->  
->  /* AML_UART_REG5 bits */
-> -#define AML_UART_BAUD_MASK		0x7fffff
->  #define AML_UART_BAUD_USE		BIT(23)
-> -#define AML_UART_BAUD_XTAL		BIT(24)
->  
->  #define AML_UART_PORT_NUM		12
->  #define AML_UART_PORT_OFFSET		6
-> @@ -76,6 +75,11 @@
->  #define AML_UART_POLL_USEC		5
->  #define AML_UART_TIMEOUT_USEC		10000
->  
-> +struct meson_uart_data {
-> +	struct clk	*baud_clk;
-> +	bool		use_xtal_clk;
-> +};
-> +
->  static struct uart_driver meson_uart_driver;
->  
->  static struct uart_port *meson_ports[AML_UART_PORT_NUM];
-> @@ -293,19 +297,17 @@ static int meson_uart_startup(struct uart_port *port)
->  
->  static void meson_uart_change_speed(struct uart_port *port, unsigned long baud)
->  {
-> +	struct meson_uart_data *private_data = port->private_data;
->  	u32 val;
->  
->  	while (!meson_uart_tx_empty(port))
->  		cpu_relax();
->  
-> -	if (port->uartclk == 24000000) {
-> -		val = ((port->uartclk / 3) / baud) - 1;
-> -		val |= AML_UART_BAUD_XTAL;
-> -	} else {
-> -		val = ((port->uartclk * 10 / (baud * 4) + 5) / 10) - 1;
-> -	}
-> +	val = readl(port->membase + AML_UART_REG5);
->  	val |= AML_UART_BAUD_USE;
->  	writel(val, port->membase + AML_UART_REG5);
-> +
-> +	clk_set_rate(private_data->baud_clk, baud);
->  }
->  
->  static void meson_uart_set_termios(struct uart_port *port,
-> @@ -395,11 +397,20 @@ static int meson_uart_verify_port(struct uart_port *port,
->  
->  static void meson_uart_release_port(struct uart_port *port)
->  {
-> -	/* nothing to do */
-> +	struct meson_uart_data *private_data = port->private_data;
-> +
-> +	clk_disable_unprepare(private_data->baud_clk);
->  }
->  
->  static int meson_uart_request_port(struct uart_port *port)
->  {
-> +	struct meson_uart_data *private_data = port->private_data;
-> +	int ret;
-> +
-> +	ret = clk_prepare_enable(private_data->baud_clk);
-> +	if (ret)
-> +		return ret;
-> +
->  	return 0;
->  }
->  
-> @@ -629,57 +640,105 @@ static struct uart_driver meson_uart_driver = {
->  	.cons		= MESON_SERIAL_CONSOLE,
->  };
->  
-> -static inline struct clk *meson_uart_probe_clock(struct device *dev,
-> -						 const char *id)
-> -{
-> -	struct clk *clk = NULL;
-> -	int ret;
-> -
-> -	clk = devm_clk_get(dev, id);
-> -	if (IS_ERR(clk))
-> -		return clk;
-> -
-> -	ret = clk_prepare_enable(clk);
-> -	if (ret) {
-> -		dev_err(dev, "couldn't enable clk\n");
-> -		return ERR_PTR(ret);
-> -	}
-> -
-> -	devm_add_action_or_reset(dev,
-> -			(void(*)(void *))clk_disable_unprepare,
-> -			clk);
-> -
-> -	return clk;
-> -}
-> +static struct clk_div_table xtal_div_table[] = {
-> +	{0, 3},
-> +	{1, 1},
-> +	{2, 2},
-> +	{3, 2},
-> +};
->  
-> -static int meson_uart_probe_clocks(struct platform_device *pdev,
-> -				   struct uart_port *port)
-> +static int meson_uart_probe_clocks(struct uart_port *port)
->  {
-> -	struct clk *clk_xtal = NULL;
-> -	struct clk *clk_pclk = NULL;
-> -	struct clk *clk_baud = NULL;
-> +	struct meson_uart_data *private_data = port->private_data;
-> +	struct clk *clk_baud, *clk_xtal;
-> +	struct clk_hw *hw;
-> +	char clk_name[32];
-> +	struct clk_parent_data use_xtal_mux_parents[2] = {
-> +		{ .index = -1, },
-> +		{ .index = -1, },
-> +	};
+-Waddress-of-packed-member is disabled in the main Makefile and this
+particular randconfig has a bunch of these warnings. It comes from the
+fact that arch/mips/loongson64/Platform adds -mno-branch-likely
+unconditionally but clang does not support it so it issues a warning:
 
-You are using hw pointers later, you don't need to init the index to -1
-I think
+clang-14: warning: argument unused during compilation: '-mno-branch-likely' [-Wunused-command-line-argument]
 
->  
-> -	clk_pclk = meson_uart_probe_clock(&pdev->dev, "pclk");
-> -	if (IS_ERR(clk_pclk))
-> -		return PTR_ERR(clk_pclk);
-> +	clk_baud = devm_clk_get(port->dev, "baud");
-> +	if (IS_ERR(clk_baud)) {
-> +		dev_err(port->dev, "Failed to get the 'baud' clock\n");
-> +		return PTR_ERR(clk_baud);
-> +	}
->  
-> -	clk_xtal = meson_uart_probe_clock(&pdev->dev, "xtal");
-> +	clk_xtal = devm_clk_get(port->dev, "xtal");
->  	if (IS_ERR(clk_xtal))
-> -		return PTR_ERR(clk_xtal);
-> -
-> -	clk_baud = meson_uart_probe_clock(&pdev->dev, "baud");
-> -	if (IS_ERR(clk_baud))
-> -		return PTR_ERR(clk_baud);
-> +		return dev_err_probe(port->dev, PTR_ERR(clk_xtal),
-> +				     "Failed to get the 'xtal' clock\n");
-> +
-> +	if (private_data->use_xtal_clk) {
-> +		snprintf(clk_name, sizeof(clk_name), "%s#%s", dev_name(port->dev),
-> +			 "xtal_div");
-> +		hw = devm_clk_hw_register_divider_table(port->dev,
-> +							clk_name,
-> +							__clk_get_name(clk_baud),
-> +							CLK_SET_RATE_NO_REPARENT,
-> +							port->membase + AML_UART_REG5,
-> +							26, 2,
-> +							CLK_DIVIDER_READ_ONLY,
-> +							xtal_div_table, NULL);
-> +		if (IS_ERR(hw))
-> +			return PTR_ERR(hw);
-> +
-> +		use_xtal_mux_parents[1].hw = hw;
-> +	} else {
-> +		snprintf(clk_name, sizeof(clk_name), "%s#%s", dev_name(port->dev),
-> +			 "clk81_div4");
-> +		hw = devm_clk_hw_register_fixed_factor(port->dev,
-> +						       clk_name,
-> +						       __clk_get_name(clk_baud),
-> +						       CLK_SET_RATE_NO_REPARENT,
-> +						       1, 4);
-> +		if (IS_ERR(hw))
-> +			return PTR_ERR(hw);
-> +
-> +		use_xtal_mux_parents[0].hw = hw;
-> +	}
+The presence of this warning causes cascading cc-option failures because
+cc-option adds -Werror, which means that the requested flag never gets
+added to KBUILD_CFLAGS, so we see instances of warnings that should be
+disabled.
 
-The above is still wrong.
+This has come up in the past because clang has four different ways it
+can react to a flag it does not recognize. One is an error, the other
+three are warnings.  We handle two in scripts/Makefile.clang to try and
+make these failures more obvious in the build but we do not handle this
+warning because there are instances of it in arch/arm [1]. I'll push to
+get that change into mainline so we can avoid this once and for all.
 
-use_xtal_mux_parents initialize both parent to nothing
-And you init the parent in the conditional above.
-It is means only one path is actually set instead of both.
+More background:
 
-The mux always has 2 sources - Both should be set regardless of the HW version
-You just add
-* /4 on path 0 on legacy SoC
-* the funky divider on path 1 on newer SoC.
+* 589834b3a009 ("kbuild: Add -Werror=unknown-warning-option to CLANG_FLAGS")
+* 0664684e1ebd ("kbuild: Add -Werror=ignored-optimization-argument to CLANG_FLAGS")
 
->  
-> -	port->uartclk = clk_get_rate(clk_baud);
-> +	snprintf(clk_name, sizeof(clk_name), "%s#%s", dev_name(port->dev),
-> +		 "use_xtal");
-> +	hw = __devm_clk_hw_register_mux(port->dev, NULL,
-> +					clk_name,
-> +					ARRAY_SIZE(use_xtal_mux_parents),
-> +					NULL, NULL,
-> +					use_xtal_mux_parents,
-> +					CLK_SET_RATE_PARENT,
-> +					port->membase + AML_UART_REG5,
-> +					24, 0x1,
-> +					CLK_MUX_READ_ONLY,
-> +					NULL, NULL);
-> +	if (IS_ERR(hw))
-> +		return PTR_ERR(hw);
-> +
-> +	port->uartclk = clk_hw_get_rate(hw);
-> +
-> +	snprintf(clk_name, sizeof(clk_name), "%s#%s", dev_name(port->dev),
-> +		 "baud_div");
-> +	hw = devm_clk_hw_register_divider(port->dev,
-> +					  clk_name,
-> +					  clk_hw_get_name(hw),
-> +					  CLK_SET_RATE_PARENT,
-> +					  port->membase + AML_UART_REG5,
-> +					  0, 23,
-> +					  CLK_DIVIDER_ROUND_CLOSEST,
-> +					  NULL);
-> +	if (IS_ERR(hw))
-> +		return PTR_ERR(hw);
-> +
-> +	private_data->baud_clk = hw->clk;
->  
->  	return 0;
->  }
->  
->  static int meson_uart_probe(struct platform_device *pdev)
->  {
-> +	struct meson_uart_data *private_data;
->  	struct resource *res_mem;
->  	struct uart_port *port;
-> +	struct clk *pclk;
->  	u32 fifosize = 64; /* Default is 64, 128 for EE UART_0 */
->  	int ret = 0;
->  	int irq;
-> @@ -705,6 +764,15 @@ static int meson_uart_probe(struct platform_device *pdev)
->  	if (!res_mem)
->  		return -ENODEV;
->  
-> +	pclk = devm_clk_get(&pdev->dev, "pclk");
-> +	if (IS_ERR(pclk))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(pclk),
-> +				     "Failed to get the 'pclk' clock\n");
-> +
-> +	ret = clk_prepare_enable(pclk);
-> +	if (ret)
-> +		return ret;
-> +
+For now, I have sent [2]. It might be nice to clean the kernel up of
+these warnings over time (and I recall seeing a patch fly by recently
+[3]) but I don't think there is much for you to do now.
 
-I think this is unbalanced. 
+[1]: https://lore.kernel.org/r/20210928154143.2106903-14-arnd@kernel.org/
+[2]: https://lore.kernel.org/r/20220120214001.1879469-2-nathan@kernel.org/
+[3]: https://lore.kernel.org/r/20220110224656.266536-1-sakari.ailus@linux.intel.com/
 
->  	irq = platform_get_irq(pdev, 0);
->  	if (irq < 0)
->  		return irq;
-> @@ -724,9 +792,13 @@ static int meson_uart_probe(struct platform_device *pdev)
->  	if (IS_ERR(port->membase))
->  		return PTR_ERR(port->membase);
->  
-> -	ret = meson_uart_probe_clocks(pdev, port);
-> -	if (ret)
-> -		return ret;
-> +	private_data = devm_kzalloc(&pdev->dev, sizeof(*private_data),
-> +				    GFP_KERNEL);
-> +	if (!private_data)
-> +		return -ENOMEM;
-> +
-> +	if (device_get_match_data(&pdev->dev))
-> +		private_data->use_xtal_clk = true;
->  
->  	port->iotype = UPIO_MEM;
->  	port->mapbase = res_mem->start;
-> @@ -740,6 +812,11 @@ static int meson_uart_probe(struct platform_device *pdev)
->  	port->x_char = 0;
->  	port->ops = &meson_uart_ops;
->  	port->fifosize = fifosize;
-> +	port->private_data = private_data;
-> +
-> +	ret = meson_uart_probe_clocks(port);
-> +	if (ret)
-> +		return ret;
->  
->  	meson_ports[pdev->id] = port;
->  	platform_set_drvdata(pdev, port);
-> @@ -766,10 +843,22 @@ static int meson_uart_remove(struct platform_device *pdev)
->  }
->  
->  static const struct of_device_id meson_uart_dt_match[] = {
-> -	{ .compatible = "amlogic,meson6-uart" },
-> -	{ .compatible = "amlogic,meson8-uart" },
-> -	{ .compatible = "amlogic,meson8b-uart" },
-> -	{ .compatible = "amlogic,meson-gx-uart" },
-> +	{
-> +		.compatible = "amlogic,meson6-uart",
-> +		.data = (void *)false,
-> +	},
-> +	{
-> +		.compatible = "amlogic,meson8-uart",
-> +		.data = (void *)false,
-> +	},
-> +	{
-> +		.compatible = "amlogic,meson8b-uart",
-> +		.data = (void *)false,
-> +	},
-> +	{
-> +		.compatible = "amlogic,meson-gx-uart",
-> +		.data = (void *)true,
-> +	},
->  	{ /* sentinel */ },
->  };
->  MODULE_DEVICE_TABLE(of, meson_uart_dt_match);
-
+Cheers,
+Nathan

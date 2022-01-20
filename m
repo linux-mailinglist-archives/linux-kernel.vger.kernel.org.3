@@ -2,276 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9C749500C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 15:24:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 346B9495010
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 15:24:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344738AbiATOX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 09:23:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345948AbiATOXH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 09:23:07 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAB7C061401
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 06:23:06 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id u18so15218000edt.6
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 06:23:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xggRvSFBLIaR/QgerZZVvbOSKVlz0ESTMXna4xv4wtg=;
-        b=UVWwXEca8jRTa1C24yf6uJF8L5oLFawCy5YoRQZcpfrbTu8DAIME2gQO2XOeS2EE1r
-         EKC9tCmInnyOI3di4DoIKAja4wQmu69WrWD0rCyGyhmQCBcHNeMM1bwI8MmuVsM3Tvkw
-         mLSwUiGue+TuBK3Qtdg3+Tj7+LFjJNRW7wdMQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xggRvSFBLIaR/QgerZZVvbOSKVlz0ESTMXna4xv4wtg=;
-        b=CTMOBKCwPQQTijUitamRdZL0/AeUjY8cRZnBv7ohy1qjhGH9AGDJmkTSfSqVGbcKm6
-         l0Mtt6pVFXs0FNvT8agTrMpehMf29oY/Avc+tvxwWS9OrY3mopuv3AGgvFrZqhbtOzSs
-         uG0mrhmMPamyTKmbK1+Y/HwK5EPCHheG7v4eO305jVB4n3ZU2YEx+ztGJIoVjyNKrX3M
-         v1CunhyVXmR24zWZ5pmjTOQfKBZZ9SyypmpuvlsdzKICiZlkTw8g4xyCf2r9VaeYI/lN
-         x+6qpPTYG/AA9NVyiB/31+gRgFl0Eh9zYC1FPh7v4/Ujtm6M9pSOhDcgstkruUW+NDJq
-         Dy/A==
-X-Gm-Message-State: AOAM531BuDzSVE/DxH7ExudgKY2oJi408fSMw29XcWw9VvZVM95iHA6p
-        HZvO2q2Dhbsa8+DVrcHiW+7Vq8NbL/vJUpXGUb47Vg==
-X-Google-Smtp-Source: ABdhPJxXb5ggNakazw/zxkr1Byl+dRjKm1t+zcMS3ZHqR1oeZFsp8eaiJm2LiwP+6JZkaT4X64tlhWnCmUHgXa6JRlc=
-X-Received: by 2002:a17:906:7cc9:: with SMTP id h9mr29329294ejp.111.1642688585288;
- Thu, 20 Jan 2022 06:23:05 -0800 (PST)
+        id S1345904AbiATOXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 09:23:53 -0500
+Received: from mail-bn8nam11on2065.outbound.protection.outlook.com ([40.107.236.65]:56097
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1343826AbiATOXw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 09:23:52 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VXCnsYQQme2JJH5I3ih359u3tiFn6YFMbnah3dhk0RY/f/zePcKMLHy8NJaPNqOdX9asVsPUHL3YG2w221PNy5LrL6baRY07c/YgrRkV9bAPKjiod0bnj6/AjfDETEy9Ipw6gA4hHBLBpTJf5wtZzVuiCmOvtw1AxGI+Bw2XrFGgYwKZqdUO1dNbPG0o0rgwhAQPm/3r6WsRi5xW4Gelm8MuzRjlgmS4RBQulfVNHi8ZtoH/vwXLDONtnC3fTBgdKqbE6eed+oXyAwwcaqNA8fOebvqPsf4xq9LY9WKyJ8pP/v8MtomreWtSMKOzSnafrH3DU/HmkF6RmwkcI1um1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3fRvNhQgeorMAmdWkIOUHuR6aHE6syYSWJHv/BIhO6M=;
+ b=E3JXkDV7cWZyrU4b3DrDm0e04knhxOZ3RJ0AK2i1rXBVbX+4i7Q3ebfESI5mFkms9AtIiX03PdXznttfTfI4rKmS3Nyj6a0tgR/cUlPV/786YlUIj4Ia9ivysBH7cgGqhgG4D0DLHyBOTWQHzZ9WBabYvbq69lJErzEjdQ8BZDBMNPP548ENH/HRN4YzysH9DwpvzW8sm9TofyLV4qpeLNaF9njUNYqxpE14jvTgb+kkh3tDkBdFSJbIFBVjYCkBU05jvxfDOYD4wc2V7mw2pI3c7PU3AXOFbSwv8+uCQFPmt9llN14ZkEVn7eeV2fehdCV0iqpX67Fhg4Nr/x/VPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3fRvNhQgeorMAmdWkIOUHuR6aHE6syYSWJHv/BIhO6M=;
+ b=ZtFa5/BxcvLk50WmHiV567FpK6TVmE//whRuPsx7tqthEA0OIy9Q3ca5JayptwiHeckIUl8ilCbIDcbS8XsCFbJZ0VrkkkB5cqECODZf4O5GPLVjjTn7XoZLuzhP5qtzpOQI+D3b5CJ6IVwTMx0AYbUyo6CZvqDY2og3Ql2eWpDu3LlQDEDSCA7ppC7skN7xPoGQC3pYXyiQXmphTYwZxj+jXTysnoG2gj5T2mWnJZtMdU5SzgvuK+k9FMe1cdNqpa5E5b9ESSeCpFweCBcHAbrHPLYirRaTBYqn9Pbk89d8nMp2wAWudiuz0qHQv93BzeSKMCy70UzwWGhkgJ0v6Q==
+Received: from DM5PR12MB1850.namprd12.prod.outlook.com (2603:10b6:3:108::23)
+ by CH0PR12MB5073.namprd12.prod.outlook.com (2603:10b6:610:e0::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Thu, 20 Jan
+ 2022 14:23:50 +0000
+Received: from DM5PR12MB1850.namprd12.prod.outlook.com
+ ([fe80::880d:1407:db31:5851]) by DM5PR12MB1850.namprd12.prod.outlook.com
+ ([fe80::880d:1407:db31:5851%11]) with mapi id 15.20.4888.014; Thu, 20 Jan
+ 2022 14:23:50 +0000
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Petlozu Pravareshwar <petlozup@nvidia.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Subject: RE: [PATCH 1/6] i2c: tegra: Add support for Tegra234 I2C
+Thread-Topic: [PATCH 1/6] i2c: tegra: Add support for Tegra234 I2C
+Thread-Index: AQHYCIHac1H6WD0+TEykLyGIHAPGEaxpShYAgACuXxCAAFRygIABroKg
+Date:   Thu, 20 Jan 2022 14:23:50 +0000
+Message-ID: <DM5PR12MB1850C40F3ECF34D30AEE3D83C05A9@DM5PR12MB1850.namprd12.prod.outlook.com>
+References: <1642080623-15980-1-git-send-email-akhilrajeev@nvidia.com>
+ <1642080623-15980-2-git-send-email-akhilrajeev@nvidia.com>
+ <d9a21970-b403-4674-dbd6-5dfab0a83a3b@gmail.com>
+ <DM5PR12MB1850237ECA6C115AD776635EC0599@DM5PR12MB1850.namprd12.prod.outlook.com>
+ <a7a33c29-427d-5e82-f327-aa4701d51898@gmail.com>
+In-Reply-To: <a7a33c29-427d-5e82-f327-aa4701d51898@gmail.com>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1b8a0fd3-cb81-44ef-707d-08d9dc207ad4
+x-ms-traffictypediagnostic: CH0PR12MB5073:EE_
+x-microsoft-antispam-prvs: <CH0PR12MB5073CE4182C73345A15A120DC05A9@CH0PR12MB5073.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: UXEYdCqaxc6gEoQ5i4ujtalZ4x/rNobPw+6Q0UPyyJBMxG87wmscvMU5ZkXDao59F8laF4+qzkt/B2nAOjRIn7PThVdGCoY6SXTjzmZJpP77qfDKSYE40OO+YCp1KhHK1j6KEJ6HuIFd9lj0WeDdDglAEwN3pcKXTPGfMehEp9VtRcIEkHhdX+X/ULZVsFwtRgP1ZOFrAlI5V7/Yi2hp2dIp8pZz2oTknM2W6hqVkGVHEdQL2HAQqTz3Q4XPE1x4BFGIx4oTP4jQ+Gy56uNoPswkjXIY4ooeZ4NzSwcErHFWzRWm6oiCqgPPCk7xmggX/MOUcz+xhVaQQqmbrQxxPpR/8KuYN30oZCW4+1qoj+a6tkE7NdtDpOaawfgbZIuy4GY9fa9lHE07zGc2/fAoc6TJ3EWiha7QxW9R+rb4zxDGIbLt4OBQ8cjwgu9YSWo7qdIUgIEr/gdr/xnpNU74NrCnLTNFi2ZGqRffxTBAkUL3H1VDhH9mBOhFGR5j8kFg0VrktM6Ugn+uFZOs3svzrLzzgAKv5yCe3PQNf9QVRA1ENwhl5kHfghWsrmoOH5Kdjrq2g3bKO5hk6gEMm5evd5N6NKRivhCgfxYY3o9Mnpioj1VQ1beytXSr/fN4PY+6q+aa7gHrRDVRQWMNwHYYVr62uAOOo/n3NKereEjq4QJh6QgZeTaXPHLvjQK3u00QWHiyZPDsb9Pn6Mu/AhEY2k9zszbCkNxQ3Gfe2bBBgj4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1850.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(55016003)(83380400001)(5660300002)(6506007)(921005)(508600001)(9686003)(2906002)(86362001)(52536014)(316002)(76116006)(6636002)(8936002)(122000001)(71200400001)(38100700002)(64756008)(66476007)(66946007)(8676002)(66556008)(186003)(66446008)(26005)(7696005)(33656002)(110136005)(38070700005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TkZYKy9zaHFHMUFSb2Z4SEFESW8za1BMSGZDWXVlS1haRkhZR1hMakFFZXFn?=
+ =?utf-8?B?T3IrRVVWdWhzRUNacnpmb3FSS0VHSEl5MHpETEdGZG5xdzVkWU9aZmNvMTBp?=
+ =?utf-8?B?NGtJeU1WSG10KzExRW1ZMDg4c1hIUUFIeGRZVXRXeTY5eVQyaUZBV2FNNjZs?=
+ =?utf-8?B?SkdkL3gxVkl4TVNLd3Y1YVNWbTNkaDBkVzZ4elpYQXN4V3FHNW5EdTFUcTBn?=
+ =?utf-8?B?b1VvY3ozSXNCbHk3ckhEVzFneVF1RGI0ZUtSWlRTUlpDWW83bGltTG4veTc3?=
+ =?utf-8?B?eVlYTW9wN1Z2RTBFOFZ1b2hNdmg2VTA5RUltOXo1U3cyQlplaUx0MG9jRGZq?=
+ =?utf-8?B?L2pxVlVTOStYVHRobEg0blYxMFZub1FWL1hKYnBnUW80cXNRVG8rOU16d2Ix?=
+ =?utf-8?B?NlZvVXNYK3AxQ3lWR01jamNWMU5XL1pLeTJXTFlKTU9FMkVnaWFuSHZ5SmlB?=
+ =?utf-8?B?c2kvNmZHaG1lc2s1OEcveVpSeFB5Y1dSa2tNV3l1VEE3dHkzYjBsQnBiRlJ6?=
+ =?utf-8?B?WlFsaTNIOEFWSkErRURSOFNZNnlRVURyOUR2RTF3WDdtVDE3M2lHK3RTQzJa?=
+ =?utf-8?B?ejNoZXl0dmJDbHUrNUpzRU9BVUh3Y0k1S3dMazdWNks4b2RYSiswcXpTTms1?=
+ =?utf-8?B?SnpCVEREK1dwWE10WGdab1krSWx3N004V3RkM0xQdm0xbmEvbzBSZ3dkd0w4?=
+ =?utf-8?B?NDdLZXRoTEZwZi9mZ0RLU3Y2VG5QcjNUcnBEZ0dZamhFMWRxZkNwMFhnMm92?=
+ =?utf-8?B?bFhOQzV2Ui9WTlpPbkxPekpxR0JjT1hoZDYxeWo3VEo0SCtENU9ESC8rWkFS?=
+ =?utf-8?B?dmsrWk1ia0RlTXNnNGVLY2FVemxsUGt1Q0hRdkFDYXhHOFgrMXFPTVh0ZFJN?=
+ =?utf-8?B?RFhERVJ1SlAvL0ZMYllRUzRmYlFMM2JqWTlEQXpwdXFxYlRPQWV0SEtXQ291?=
+ =?utf-8?B?d2hYU1NrR1ZIdGlDZDZqcjFoV29laEVudGlrVGVXWmlDSFhEUGZHRG1wMWVV?=
+ =?utf-8?B?UFhwQ08rZHZPK3V4Z05qR3hLNTZqaTQ5YUhhaGpOOWNZRDF2aUpVNzJQR3dX?=
+ =?utf-8?B?QVBMM2hhbFJuUDY4ZGZ2UHVuY1FxK3dVNUVYVEdKa3BMRmFHMWl0ODFFZzM1?=
+ =?utf-8?B?MWNpMGJITE9LVlNGNTh5SFNPQldBelJVekpUWHg4bGQrOHZ3THhDd0MyU3Yy?=
+ =?utf-8?B?RmRJTWRISnhsY3UvdWJvdFI3RUNEU0JsK0tWQTJSeGhoRFNZNmNCRUxFUlpk?=
+ =?utf-8?B?RWxwR2Q2MkwvUnBVWkFRNC93bkpRcWUyZlEvcjBVOEU2WmxWeHVFeUEvMGJn?=
+ =?utf-8?B?azFXOVU2TjczbDY2ejFCY3NsQ1lkb09pdzFOMnFla1hUQnpvYkRYQ3psRGxZ?=
+ =?utf-8?B?R2RhY3FSL3JqMEV5cVpqNmd4YmNhd3NzdTMvWEdZK1ZaZlhtWEx6MHZGRkRF?=
+ =?utf-8?B?dEZTMXNuOWVLaENUbEg3dlNlWk45U2JyRFV2R1V5QnZCSTIxdmNNcEJBZFl6?=
+ =?utf-8?B?ejZQeGNtcVpXTlg5Yy9DdnkwcUx3WXhKek1WNi80MG9zYzFsbExKTWhkUlQw?=
+ =?utf-8?B?NWtBVERLd3ZlSGlaZ1k1cEtCN0o1dGRXT2tjanRPL3NjZGcxK0pWeDdLL3Vi?=
+ =?utf-8?B?YWNaendvYzZEUjIvZkpXbkRnU0JoWUxMOTZJSTJ1d2VhemR1Mm1hbWNkVHc0?=
+ =?utf-8?B?R0NwMWx1U3FiYU5Wd2NHVkozTzE1QklSdVgzc3RDMzlQNXNNZDFiVkVTZVRn?=
+ =?utf-8?B?MWdrZVRxVDRhQW1tZnRsT2tyQ0RxZ2U3eHF6OGJGOXFqTG5xR3A1NWxvakRB?=
+ =?utf-8?B?YVh1WGZNZjR5NldBSjRDMW1WaDZET0pNMUFJbm9vMVFnL3l1b011WFFIRDRR?=
+ =?utf-8?B?aG00ZVltcG9TdkIyUzlzUWRmdU1kZkhXYkdBRWNHQ2JHTnVXUEZlcldaZkFn?=
+ =?utf-8?B?ZTQrSlNYVVh0dStwNTRDMWhlNm9mYW4wSU94MDdXNldkOVBlc0x5THVkOURN?=
+ =?utf-8?B?RkZmVFFNOUxXTHJKbnVyQno3OFlJeUtrY3N2K0lTUWZIaTNHY2VQQjJodXZm?=
+ =?utf-8?B?b08wVDdDd0dvTnU0cjFGOHZ5cjlOcEVCek5hUWh4eW5ZTEt0ekwxOTN0RFRi?=
+ =?utf-8?B?SEFWa210SEh3bUp2eXVzWlQzN0s2emNkZTdwYVN3L3VzK01TU3Q5QWp3a1V3?=
+ =?utf-8?Q?+tniXJnMDJ5YpwIC6c/KjVs=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220120083357.1541262-1-narmstrong@baylibre.com> <20220120083357.1541262-6-narmstrong@baylibre.com>
-In-Reply-To: <20220120083357.1541262-6-narmstrong@baylibre.com>
-From:   Jagan Teki <jagan@amarulasolutions.com>
-Date:   Thu, 20 Jan 2022 19:52:54 +0530
-Message-ID: <CAMty3ZCrcQchnne1KU1RQA6MfwRQS8dObJQcOF_H7fEQ57wa0w@mail.gmail.com>
-Subject: Re: [PATCH v2 5/6] drm/meson: add DSI encoder
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        martin.blumenstingl@googlemail.com,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1850.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b8a0fd3-cb81-44ef-707d-08d9dc207ad4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jan 2022 14:23:50.6974
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kVxjlZ8UsAGaHxOvoMpvi7fDZjXaEw4ZQShue3BBhghv2fECi4LxF0YqdabAVu5s8Xq87urmsW0untKuOHmY5A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5073
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 2:04 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
->
-> This adds an encoder bridge designed to drive a MIPI-DSI display
-> by using the ENCL encoder through the internal MIPI DSI transceiver
-> connected to the output of the ENCL pixel encoder.
->
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-> ---
->  drivers/gpu/drm/meson/Makefile            |   2 +-
->  drivers/gpu/drm/meson/meson_drv.c         |   7 +
->  drivers/gpu/drm/meson/meson_encoder_dsi.c | 160 ++++++++++++++++++++++
->  drivers/gpu/drm/meson/meson_encoder_dsi.h |  12 ++
->  4 files changed, 180 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/gpu/drm/meson/meson_encoder_dsi.c
->  create mode 100644 drivers/gpu/drm/meson/meson_encoder_dsi.h
->
-> diff --git a/drivers/gpu/drm/meson/Makefile b/drivers/gpu/drm/meson/Makefile
-> index 3afa31bdc950..833e18c20603 100644
-> --- a/drivers/gpu/drm/meson/Makefile
-> +++ b/drivers/gpu/drm/meson/Makefile
-> @@ -2,7 +2,7 @@
->  meson-drm-y := meson_drv.o meson_plane.o meson_crtc.o meson_encoder_cvbs.o
->  meson-drm-y += meson_viu.o meson_vpp.o meson_venc.o meson_vclk.o meson_overlay.o
->  meson-drm-y += meson_rdma.o meson_osd_afbcd.o
-> -meson-drm-y += meson_encoder_hdmi.o
-> +meson-drm-y += meson_encoder_hdmi.o meson_encoder_dsi.o
->
->  obj-$(CONFIG_DRM_MESON) += meson-drm.o
->  obj-$(CONFIG_DRM_MESON_DW_HDMI) += meson_dw_hdmi.o
-> diff --git a/drivers/gpu/drm/meson/meson_drv.c b/drivers/gpu/drm/meson/meson_drv.c
-> index 26aeaf0ab86e..15344cf9f913 100644
-> --- a/drivers/gpu/drm/meson/meson_drv.c
-> +++ b/drivers/gpu/drm/meson/meson_drv.c
-> @@ -33,6 +33,7 @@
->  #include "meson_registers.h"
->  #include "meson_encoder_cvbs.h"
->  #include "meson_encoder_hdmi.h"
-> +#include "meson_encoder_dsi.h"
->  #include "meson_viu.h"
->  #include "meson_vpp.h"
->  #include "meson_rdma.h"
-> @@ -323,6 +324,12 @@ static int meson_drv_bind_master(struct device *dev, bool has_components)
->         if (ret)
->                 goto exit_afbcd;
->
-> +       if (meson_vpu_is_compatible(priv, VPU_COMPATIBLE_G12A)) {
-> +               ret = meson_encoder_dsi_init(priv);
-> +               if (ret)
-> +                       goto free_drm;
-> +       }
-> +
->         ret = meson_plane_create(priv);
->         if (ret)
->                 goto exit_afbcd;
-> diff --git a/drivers/gpu/drm/meson/meson_encoder_dsi.c b/drivers/gpu/drm/meson/meson_encoder_dsi.c
-> new file mode 100644
-> index 000000000000..12a586316183
-> --- /dev/null
-> +++ b/drivers/gpu/drm/meson/meson_encoder_dsi.c
-> @@ -0,0 +1,160 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Copyright (C) 2016 BayLibre, SAS
-> + * Author: Neil Armstrong <narmstrong@baylibre.com>
-> + * Copyright (C) 2015 Amlogic, Inc. All rights reserved.
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/of_graph.h>
-> +
-> +#include <drm/drm_atomic_helper.h>
-> +#include <drm/drm_simple_kms_helper.h>
-> +#include <drm/drm_bridge.h>
-> +#include <drm/drm_bridge_connector.h>
-> +#include <drm/drm_device.h>
-> +#include <drm/drm_probe_helper.h>
-> +
-> +#include "meson_drv.h"
-> +#include "meson_encoder_dsi.h"
-> +#include "meson_registers.h"
-> +#include "meson_venc.h"
-> +#include "meson_vclk.h"
-> +
-> +struct meson_encoder_dsi {
-> +       struct drm_encoder encoder;
-> +       struct drm_bridge bridge;
-> +       struct drm_bridge *next_bridge;
-> +       struct meson_drm *priv;
-> +};
-> +
-> +#define bridge_to_meson_encoder_dsi(x) \
-> +       container_of(x, struct meson_encoder_dsi, bridge)
-> +
-> +static int meson_encoder_dsi_attach(struct drm_bridge *bridge,
-> +                                   enum drm_bridge_attach_flags flags)
-> +{
-> +       struct meson_encoder_dsi *encoder_dsi = bridge_to_meson_encoder_dsi(bridge);
-> +
-> +       return drm_bridge_attach(bridge->encoder, encoder_dsi->next_bridge,
-> +                                &encoder_dsi->bridge, flags);
-> +}
-> +
-> +static void meson_encoder_dsi_mode_set(struct drm_bridge *bridge,
-> +                                      const struct drm_display_mode *mode,
-> +                                      const struct drm_display_mode *adjusted_mode)
-> +{
-> +       struct meson_encoder_dsi *encoder_dsi = bridge_to_meson_encoder_dsi(bridge);
-> +       struct meson_drm *priv = encoder_dsi->priv;
-> +
-> +       meson_vclk_setup(priv, MESON_VCLK_TARGET_DSI, mode->clock, 0, 0, 0, false);
-> +
-> +       meson_venc_mipi_dsi_mode_set(priv, mode);
-> +       meson_encl_load_gamma(priv);
-> +
-> +       writel_relaxed(0, priv->io_base + _REG(ENCL_VIDEO_EN));
-> +
-> +       writel_bits_relaxed(ENCL_VIDEO_MODE_ADV_VFIFO_EN, ENCL_VIDEO_MODE_ADV_VFIFO_EN,
-> +                           priv->io_base + _REG(ENCL_VIDEO_MODE_ADV));
-> +       writel_relaxed(0, priv->io_base + _REG(ENCL_TST_EN));
-> +}
-> +
-> +static void meson_encoder_dsi_atomic_enable(struct drm_bridge *bridge,
-> +                                           struct drm_bridge_state *bridge_state)
-> +{
-> +       struct meson_encoder_dsi *encoder_dsi = bridge_to_meson_encoder_dsi(bridge);
-> +       struct meson_drm *priv = encoder_dsi->priv;
-> +
-> +       writel_bits_relaxed(BIT(0), 0, priv->io_base + _REG(VPP_WRAP_OSD1_MATRIX_EN_CTRL));
-> +
-> +       writel_relaxed(1, priv->io_base + _REG(ENCL_VIDEO_EN));
-> +}
-> +
-> +static void meson_encoder_dsi_atomic_disable(struct drm_bridge *bridge,
-> +                                            struct drm_bridge_state *bridge_state)
-> +{
-> +       struct meson_encoder_dsi *meson_encoder_dsi =
-> +                                       bridge_to_meson_encoder_dsi(bridge);
-> +       struct meson_drm *priv = meson_encoder_dsi->priv;
-> +
-> +       writel_relaxed(0, priv->io_base + _REG(ENCL_VIDEO_EN));
-> +
-> +       writel_bits_relaxed(BIT(0), BIT(0), priv->io_base + _REG(VPP_WRAP_OSD1_MATRIX_EN_CTRL));
-> +}
-> +
-> +static const struct drm_bridge_funcs meson_encoder_dsi_bridge_funcs = {
-> +       .attach = meson_encoder_dsi_attach,
-> +       /*
-> +        * TOFIX: remove when dw-mipi-dsi moves out of mode_set
-> +        * We should get rid of mode_set, but until dw-mipi-dsi uses it
-> +        * we need to setup the pixel clock before the following
-> +        * bridge tries to setup the HW.
-> +        */
-> +       .mode_set = meson_encoder_dsi_mode_set,
-> +       .atomic_enable = meson_encoder_dsi_atomic_enable,
-> +       .atomic_disable = meson_encoder_dsi_atomic_disable,
-> +       .atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
-> +       .atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
-> +       .atomic_reset = drm_atomic_helper_bridge_reset,
-> +};
-> +
-> +int meson_encoder_dsi_init(struct meson_drm *priv)
-> +{
-> +       struct meson_encoder_dsi *meson_encoder_dsi;
-> +       struct device_node *remote;
-> +       int ret;
-> +
-> +       meson_encoder_dsi = devm_kzalloc(priv->dev, sizeof(*meson_encoder_dsi), GFP_KERNEL);
-> +       if (!meson_encoder_dsi)
-> +               return -ENOMEM;
-> +
-> +       /* DSI Transceiver Bridge */
-> +       remote = of_graph_get_remote_node(priv->dev->of_node, 2, 0);
-> +       if (!remote) {
-> +               dev_err(priv->dev, "DSI transceiver device is disabled");
-> +               return 0;
-> +       }
-> +
-> +       meson_encoder_dsi->next_bridge = of_drm_find_bridge(remote);
-> +       if (!meson_encoder_dsi->next_bridge) {
-> +               dev_dbg(priv->dev, "Failed to find DSI transceiver bridge: %d\n", ret);
-> +               return -EPROBE_DEFER;
-> +       }
-> +
-> +       /* DSI Encoder Bridge */
-> +       meson_encoder_dsi->bridge.funcs = &meson_encoder_dsi_bridge_funcs;
-> +       meson_encoder_dsi->bridge.of_node = priv->dev->of_node;
-> +       meson_encoder_dsi->bridge.type = DRM_MODE_CONNECTOR_DSI;
-> +
-> +       drm_bridge_add(&meson_encoder_dsi->bridge);
-> +
-> +       meson_encoder_dsi->priv = priv;
-> +
-> +       /* Encoder */
-> +       ret = drm_simple_encoder_init(priv->drm, &meson_encoder_dsi->encoder,
-> +                                     DRM_MODE_ENCODER_DSI);
-> +       if (ret) {
-> +               dev_err(priv->dev, "Failed to init DSI encoder: %d\n", ret);
-> +               return ret;
-> +       }
-> +
-> +       meson_encoder_dsi->encoder.possible_crtcs = BIT(0);
-> +
-> +       /* Attach DSI Encoder Bridge to Encoder */
-> +       ret = drm_bridge_attach(&meson_encoder_dsi->encoder, &meson_encoder_dsi->bridge, NULL, 0);
-> +       if (ret) {
-> +               dev_err(priv->dev, "Failed to attach bridge: %d\n", ret);
-> +               return ret;
-> +       }
-> +
-> +       /*
-> +        * We should have now in place:
-> +        * encoder->[dsi encoder bridge]->[dw-mipi-dsi bridge]->[panel bridge]->[panel]
-> +        */
-
-Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
+PiA+Pj4gK3N0YXRpYyBjb25zdCBzdHJ1Y3QgdGVncmFfaTJjX2h3X2ZlYXR1cmUgdGVncmEyMzRf
+aTJjX2h3ID0gew0KPiA+Pj4gKyAgICAgLmhhc19jb250aW51ZV94ZmVyX3N1cHBvcnQgPSB0cnVl
+LA0KPiA+Pj4gKyAgICAgLmhhc19wZXJfcGt0X3hmZXJfY29tcGxldGVfaXJxID0gdHJ1ZSwNCj4g
+Pj4+ICsgICAgIC5jbGtfZGl2aXNvcl9oc19tb2RlID0gMHgyLA0KPiA+Pj4gKyAgICAgLmNsa19k
+aXZpc29yX3N0ZF9tb2RlID0gMHg0ZiwNCj4gPj4+ICsgICAgIC5jbGtfZGl2aXNvcl9mYXN0X21v
+ZGUgPSAweDU4LA0KPiA+Pj4gKyAgICAgLmNsa19kaXZpc29yX2Zhc3RfcGx1c19tb2RlID0gMHgy
+NCwNCj4gPj4+ICsgICAgIC5oYXNfY29uZmlnX2xvYWRfcmVnID0gdHJ1ZSwNCj4gPj4+ICsgICAg
+IC5oYXNfbXVsdGlfbWFzdGVyX21vZGUgPSB0cnVlLA0KPiA+Pj4gKyAgICAgLmhhc19zbGNnX292
+ZXJyaWRlX3JlZyA9IHRydWUsDQo+ID4+PiArICAgICAuaGFzX21zdF9maWZvID0gdHJ1ZSwNCj4g
+Pj4+ICsgICAgIC5xdWlya3MgPSAmdGVncmExOTRfaTJjX3F1aXJrcywNCj4gPj4+ICsgICAgIC5z
+dXBwb3J0c19idXNfY2xlYXIgPSB0cnVlLA0KPiA+Pj4gKyAgICAgLmhhc19hcGJfZG1hID0gZmFs
+c2UsDQo+ID4+PiArICAgICAudGxvd19zdGRfbW9kZSA9IDB4OCwNCj4gPj4+ICsgICAgIC50aGln
+aF9zdGRfbW9kZSA9IDB4NywNCj4gPj4+ICsgICAgIC50bG93X2Zhc3RfZmFzdHBsdXNfbW9kZSA9
+IDB4MSwNCj4gPj4+ICsgICAgIC50aGlnaF9mYXN0X2Zhc3RwbHVzX21vZGUgPSAweDEsDQo+ID4+
+PiArICAgICAuc2V0dXBfaG9sZF90aW1lX3N0ZF9tb2RlID0gMHgwODA4MDgwOCwNCj4gPj4+ICsg
+ICAgIC5zZXR1cF9ob2xkX3RpbWVfZmFzdF9mYXN0X3BsdXNfbW9kZSA9IDB4MDIwMjAyMDIsDQo+
+ID4+PiArICAgICAuc2V0dXBfaG9sZF90aW1lX2hzX21vZGUgPSAweDA5MDkwOSwNCj4gPj4+ICsg
+ICAgIC5oYXNfaW50ZXJmYWNlX3RpbWluZ19yZWcgPSB0cnVlLCB9Ow0KPiA+Pg0KPiA+PiBXaHkg
+dGVncmExOTRfaTJjX2h3IGNhbid0IGJlIHJldXNlZCBieSBUMjM0PyBMb29rcyBsaWtlIEkyQyBo
+L3cgaGFzbid0DQo+ID4+IGNoYW5nZWQgYW5kIHNvbWVib2R5IGp1c3QgbWFkZSBhIG1pbm9yIHR1
+bmluZyBvZiB0aGUgdGltaW5nIHBhcmFtZXRlcnMsDQo+IGRvZXMNCj4gPj4gaXQgcmVhbGx5IG1h
+dHRlciBpbiBwcmFjdGljZT8NCj4gPiBUaGUgdGltaW5nIHBhcmFtZXRlcnMgYXJlIGltcG9ydGFu
+dCB0byBnZXQgdGhlIGRlc2lyZWQgZGF0YSByYXRlIGZvciBJMkMuIFRoZQ0KPiB2YWx1ZXMsDQo+
+ID4gdW5mb3J0dW5hdGVseSwgY2Fubm90IGJlIHJldXNlZCBmcm9tIFRlZ3JhMTk0Lg0KPiANCj4g
+RnJvbSB3aGVyZSB0aG9zZSBUMTk0IHBhcmFtZXRlcnMgc3BlY2lmaWVkIGluIHRoZSBUZWdyYSBJ
+MkMgZHJpdmVyIGNhbWUNCj4gZnJvbT8NCj4gDQo+IEknbSBub3cgbG9va2luZyBhdCBUMTk0IFRS
+TSAoWGF2aWVyX1RSTV9EUDA5MjUzMDAyX3YxLjNwIDEwLjIuMy4xLjENCj4gRXhhbXBsZSBTZXR0
+aW5ncyBmb3IgVmFyaW91cyBJMkMgU3BlZWRzKSBhbmQgc2VlIHRoYXQgYWxsIHRoZSB2YWx1ZXMN
+Cj4gc2hvdWxkIG1hdGNoIFQyMzQuIFBsZWFzZSBjaGVjayB3aGV0aGVyIFQxOTQgY29uZmlndXJh
+dGlvbiBpcyBjb3JyZWN0DQo+IGFuZCBmaXggaXQgaWYgbmVlZGVkLg0KDQpUaGFua3MgZm9yIGhp
+Z2hsaWdodGluZyB0aGlzLiBUaGVyZSBhcmUgYWRqdXN0bWVudHMgaW4gdGhlIGRlZmF1bHQgdGlt
+aW5nIHZhbHVlcw0Kb2YgVDE5NCBmcm9tIFRSTS4gSSBhbSBjaGVja2luZyBpZiB0aGVzZSBjaGFu
+Z2VzIGNhbiBiZSB1c2VkIGZvciBUMjM0IGFzIHdlbGwuDQpXaWxsIHNlbmQgYW4gdXBkYXRlZCBw
+YXRjaCBpZiB0aGUgc2FtZSB2YWx1ZXMgYXBwbHkgZm9yIFQyMzQuDQoNClRoYW5rcywNCkFraGls
+DQoNCg0K

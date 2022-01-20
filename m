@@ -2,237 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0D6494E9E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 14:09:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58186494E9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 14:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359200AbiATNJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 08:09:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
+        id S245451AbiATNI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 08:08:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343510AbiATNIh (ORCPT
+        with ESMTP id S245476AbiATNIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 20 Jan 2022 08:08:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817DEC061401;
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2194FC061574;
         Thu, 20 Jan 2022 05:08:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1158B6171C;
-        Thu, 20 Jan 2022 13:08:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBE65C340E0;
-        Thu, 20 Jan 2022 13:08:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642684116;
-        bh=PWHfm2Xwxp8sI5Xc5gahOMNhuF1hHLboOeicf12k9BE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=UuZdwJFq3we2w6MS+nLu0HKrw3wMrMrwCZNYMdtL8i4IoytuYzS0yJSBX8axXwXFM
-         rXDDPFqWRi3mBh2RLaQl1KddrDL3bL91CAc7+GpiySwCI8K73oPxcSxiu1WcoSeqbn
-         KnbZ/FVjB2fZLxxPJRMBofGjy5Th44y+Vo1yFjk4VSjvLLfExA8wXyJAxJFfRr7ku8
-         OVw4b7fimDN/nuJk+FmfJ6KE5Zy/j+Yl5WRkcLPgzzrlIn6IjW49p+utUMvsfPyVXO
-         6vo214Z1mSEPBoTpHClYgeWAScLXdbBRkSHav3s4vshW8Q98TNE3zle/51PoQ4rq5P
-         M/5EMTYsJEpJg==
-Message-ID: <55784a5bf9fb553113daeeebaf8966f8119958da.camel@kernel.org>
-Subject: Re: [PATCH v3 2/2] x86/sgx: account backing pages
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Kristen Carlson Accardi <kristen@linux.intel.com>,
-        linux-sgx@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-Cc:     linux-kernel@vger.kernel.org
-Date:   Thu, 20 Jan 2022 15:08:20 +0200
-In-Reply-To: <20220118175717.6922-3-kristen@linux.intel.com>
-References: <20220118175717.6922-1-kristen@linux.intel.com>
-         <20220118175717.6922-3-kristen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.42.3 
+Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nAXB3-00032A-8D; Thu, 20 Jan 2022 14:08:33 +0100
+Message-ID: <38b569e4-2e9f-0155-4a5c-52876e8ca38a@leemhuis.info>
+Date:   Thu, 20 Jan 2022 14:08:32 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [REGRESSION] Bluetooth not working on 5.15+ since "Bluetooth:
+ Move shutdown callback before flushing tx and rx queue"
+Content-Language: en-BS
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     "An, Tedd" <tedd.an@intel.com>,
+        "kai.heng.feng@canonical.com" <kai.heng.feng@canonical.com>,
+        "andypalmadi@gmail.com" <andypalmadi@gmail.com>,
+        "marcel@holtmann.org" <marcel@holtmann.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <CAJvGw+AJ5dHSb50RtJHnjbhMVQa+rJgYznFV4t-iaO0qx+W-jw@mail.gmail.com>
+ <fbc36e8ebdd9222f84322d54d9114f58c225547e.camel@intel.com>
+ <e3e7147e-dd4c-59a9-5dba-5ddcd2e3130f@leemhuis.info>
+In-Reply-To: <e3e7147e-dd4c-59a9-5dba-5ddcd2e3130f@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1642684117;dfe97bd5;
+X-HE-SMSGID: 1nAXB3-00032A-8D
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIyLTAxLTE4IGF0IDA5OjU3IC0wODAwLCBLcmlzdGVuIENhcmxzb24gQWNjYXJk
-aSB3cm90ZToKPiBTR1ggbWF5IGFsbG93IEVQQyBwYWdlcyB0byBiZSBvdmVyY29tbWl0dGVkLiBJ
-ZiB0aGUgc3lzdGVtIGlzCj4gb3V0IG9mIGVuY2xhdmUgbWVtb3J5LCBFUEMgcGFnZXMgYXJlIHN3
-YXBwZWQgdG8gbm9ybWFsIFJBTSB2aWEKPiBhIHBlciBlbmNsYXZlIHNoYXJlZCBtZW1vcnkgYXJl
-YS4gVGhpcyBzaGFyZWQgbWVtb3J5IGlzIG5vdAo+IGNoYXJnZWQgdG8gdGhlIGVuY2xhdmUgb3Ig
-dGhlIHRhc2sgbWFwcGluZyBpdCwgbWFraW5nIGl0IGhhcmQKPiB0byBhY2NvdW50IGZvciB1c2lu
-ZyBub3JtYWwgbWV0aG9kcy4KPiAKPiBJbiBvcmRlciB0byBhdm9pZCB1bmxpbWl0ZWQgdXNhZ2Ug
-b2Ygbm9ybWFsIFJBTSwgZW5jbGF2ZXMgbXVzdCBiZQo+IGNoYXJnZWQgZm9yIGVhY2ggbmV3IHBh
-Z2UgdXNlZCBmb3IgYmFja2luZyBzdG9yYWdlLCBhbmQgdW5jaGFyZ2VkCj4gd2hlbiB0aGV5IGFy
-ZSBubyBsb25nZXIgdXNpbmcgYSBiYWNraW5nIHBhZ2UuCj4gCj4gTW9kaWZ5IHRoZSBleGlzdGlu
-ZyBmbG93IGZvciByZXF1ZXN0aW5nIGJhY2tpbmcgcGFnZXMgdG8gcmVkdWNlIHRoZQo+IGF2YWls
-YWJsZSBiYWNraW5nIHBhZ2UgY291bnRlciBhbmQgY29uZmlybSB0aGF0IHRoZSBsaW1pdCBoYXMg
-bm90Cj4gYmVlbiBleGNlZWRlZC4gQmFja2luZyBwYWdlIHVzYWdlIGZvciBsb2FkaW5nIEVQQyBw
-YWdlcyBiYWNrIG91dCBvZgo+IHRoZSBzaGFyZWQgbWVtb3J5IGRvIG5vdCBpbmN1ciBhIGNoYXJn
-ZS4KPiAKPiBXaGVuIGEgYmFja2luZyBwYWdlIGlzIHJlbGVhc2VkIGZyb20gdXNhZ2UsIGluY3Jl
-bWVudCB0aGUgYXZhaWxhYmxlCj4gYmFja2luZyBwYWdlIGNvdW50ZXIuCj4gCj4gV2hlbiBzd2Fw
-cGluZyBFUEMgcGFnZXMgdG8gUkFNLCBpbiBhZGRpdGlvbiB0byBzdG9yaW5nIHRoZSBwYWdlCj4g
-Y29udGVudHMsIFNHWCBtdXN0IHN0b3JlIHNvbWUgYWRkaXRpb25hbCBtZXRhZGF0YSB0byBwcm90
-ZWN0Cj4gYWdhaW5zdCBhIG1hbGljaW91cyBrZXJuZWwgd2hlbiB0aGUgcGFnZSBpcyBzd2FwcGVk
-IGJhY2sgaW4uIFRoaXMKPiBhZGRpdGlvbmFsIG1ldGFkYXRhIGlzIGNhbGxlZCBQYWdpbmcgQ3J5
-cHRvIE1ldGFEYXRhLiBQQ01EIGlzCj4gYWxsb2NhdGVkIGZyb20gdGhlIHNhbWUgc2hhcmVkIG1l
-bW9yeSBhcmVhIGFzIHRoZSBiYWNraW5nIHBhZ2UKPiBjb250ZW50cyBhbmQgY29uc3VtZXMgUkFN
-IHRoZSBzYW1lIHdheS4KPiAKPiBQQ01EIGlzIDEyOCBieXRlcyBpbiBzaXplLCBhbmQgdGhlcmUg
-aXMgb25lIFBDTUQgc3RydWN0dXJlIHBlcgo+IHBhZ2Ugd3JpdHRlbiB0byBzaGFyZWQgUkFNLiBU
-aGUgcGFnZSBpbmRleCBmb3IgdGhlIFBDTUQgcGFnZSBpcwo+IGNhbGN1bGF0dGVkIGZyb20gdGhl
-IHBhZ2UgaW5kZXggb2YgdGhlIGJhY2tpbmcgcGFnZSwgc28gaXQgaXMKPiBwb3NzaWJsZQo+IHRo
-YXQgdGhlIFBDTUQgc3RydWN0dXJlcyBhcmUgbm90IHBhY2tlZCBpbnRvIHRoZSBtaW5pbXVtIG51
-bWJlciBvZgo+IHBhZ2VzIHBvc3NpYmxlLiBJZiAzMiBQQ01EcyBjYW4gZml0IG9udG8gYSBzaW5n
-bGUgcGFnZSwgdGhlbiBQQ01ECj4gdXNhZ2UgaXMgMS8zMiBvZiB0b3RhbCBFUEMgcGFnZXMuIElu
-IHRoZSB3b3JzdCBjYXNlLCBQQ01EIGNhbgo+IGNvbnN1bWUgdGhlIHNhbWUgYW1vdW50IG9mIFJB
-TSBhcyBFUEMgYmFja2luZyBwYWdlcyAoMToxKS4gRm9yCj4gc2ltcGxpY2l0eSwgdGhpcyBpbXBs
-ZW1lbnRhdGlvbiBkb2VzIG5vdCBhY2NvdW50IGZvciBQQ01EIHBhZ2UgdXNhZ2UuCj4gCj4gU2ln
-bmVkLW9mZi1ieTogS3Jpc3RlbiBDYXJsc29uIEFjY2FyZGkgPGtyaXN0ZW5AbGludXguaW50ZWwu
-Y29tPgo+IFRlc3RlZC1ieTogSmFya2tvIFNha2tpbmVuIDxqYXJra29Aa2VybmVsLm9yZz4KPiAt
-LS0KPiDCoGFyY2gveDg2L2tlcm5lbC9jcHUvc2d4L2VuY2wuYyB8IDc2Cj4gKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKystLQo+IMKgYXJjaC94ODYva2VybmVsL2NwdS9zZ3gvZW5jbC5o
-IHzCoCA2ICsrLQo+IMKgYXJjaC94ODYva2VybmVsL2NwdS9zZ3gvbWFpbi5jIHzCoCA2ICstLQo+
-IMKgMyBmaWxlcyBjaGFuZ2VkLCA4MCBpbnNlcnRpb25zKCspLCA4IGRlbGV0aW9ucygtKQo+IAo+
-IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L3NneC9lbmNsLmMKPiBiL2FyY2gveDg2
-L2tlcm5lbC9jcHUvc2d4L2VuY2wuYwo+IGluZGV4IDAwMTgwOGUzOTAxYy4uOGJlNmYwNTkyYmRj
-IDEwMDY0NAo+IC0tLSBhL2FyY2gveDg2L2tlcm5lbC9jcHUvc2d4L2VuY2wuYwo+ICsrKyBiL2Fy
-Y2gveDg2L2tlcm5lbC9jcHUvc2d4L2VuY2wuYwo+IEBAIC0zMiw3ICszMiw3IEBAIHN0YXRpYyBp
-bnQgX19zZ3hfZW5jbF9lbGR1KHN0cnVjdCBzZ3hfZW5jbF9wYWdlCj4gKmVuY2xfcGFnZSwKPiDC
-oMKgwqDCoMKgwqDCoMKgZWxzZQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcGFn
-ZV9pbmRleCA9IFBGTl9ET1dOKGVuY2wtPnNpemUpOwo+IMKgCj4gLcKgwqDCoMKgwqDCoMKgcmV0
-ID0gc2d4X2VuY2xfZ2V0X2JhY2tpbmcoZW5jbCwgcGFnZV9pbmRleCwgJmIpOwo+ICvCoMKgwqDC
-oMKgwqDCoHJldCA9IHNneF9lbmNsX2xvb2t1cF9iYWNraW5nKGVuY2wsIHBhZ2VfaW5kZXgsICZi
-KTsKPiDCoMKgwqDCoMKgwqDCoMKgaWYgKHJldCkKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoHJldHVybiByZXQ7Cj4gwqAKPiBAQCAtNDA3LDYgKzQwNywxMiBAQCB2b2lkIHNneF9l
-bmNsX3JlbGVhc2Uoc3RydWN0IGtyZWYgKnJlZikKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzZ3hfZW5jbF9mcmVlX2VwY19wYWdlKGVudHJ5LT5lcGNf
-cGFnZSk7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-ZW5jbC0+c2Vjc19jaGlsZF9jbnQtLTsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqBlbnRyeS0+ZXBjX3BhZ2UgPSBOVUxMOwo+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqB9IGVsc2Ugewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgLyoKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCAqIElmIHRoZXJlIGlzIG5vIGVwY19wYWdlLCBpdCBtZWFucyBpdCBoYXMK
-PiBiZWVuCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-KiBzd2FwcGVkIG91dC4gVW5jaGFyZ2UgdGhlIGJhY2tpbmcgc3RvcmFnZS4KPiArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqLwo+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc2d4X3VuY2hhcmdlX21lbSgpOwo+IMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfQo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqBrZnJlZShlbnRyeSk7Cj4gQEAgLTU3NCw4ICs1ODAsOCBAQCBzdGF0aWMg
-c3RydWN0IHBhZ2UKPiAqc2d4X2VuY2xfZ2V0X2JhY2tpbmdfcGFnZShzdHJ1Y3Qgc2d4X2VuY2wg
-KmVuY2wsCj4gwqAgKsKgwqAgMCBvbiBzdWNjZXNzLAo+IMKgICrCoMKgIC1lcnJubyBvdGhlcndp
-c2UuCj4gwqAgKi8KPiAtaW50IHNneF9lbmNsX2dldF9iYWNraW5nKHN0cnVjdCBzZ3hfZW5jbCAq
-ZW5jbCwgdW5zaWduZWQgbG9uZwo+IHBhZ2VfaW5kZXgsCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0IHNneF9iYWNraW5nICpiYWNraW5nKQo+
-ICtzdGF0aWMgaW50IHNneF9lbmNsX2dldF9iYWNraW5nKHN0cnVjdCBzZ3hfZW5jbCAqZW5jbCwg
-dW5zaWduZWQgbG9uZwo+IHBhZ2VfaW5kZXgsCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IHNneF9iYWNraW5nICpi
-YWNraW5nKQo+IMKgewo+IMKgwqDCoMKgwqDCoMKgwqBwZ29mZl90IHBjbWRfaW5kZXggPSBQRk5f
-RE9XTihlbmNsLT5zaXplKSArIDEgKyAocGFnZV9pbmRleAo+ID4+IDUpOwo+IMKgwqDCoMKgwqDC
-oMKgwqBzdHJ1Y3QgcGFnZSAqY29udGVudHM7Cj4gQEAgLTYwMSw2ICs2MDcsNjIgQEAgaW50IHNn
-eF9lbmNsX2dldF9iYWNraW5nKHN0cnVjdCBzZ3hfZW5jbCAqZW5jbCwKPiB1bnNpZ25lZCBsb25n
-IHBhZ2VfaW5kZXgsCj4gwqDCoMKgwqDCoMKgwqDCoHJldHVybiAwOwo+IMKgfQo+IMKgCj4gKy8q
-Kgo+ICsgKiBzZ3hfZW5jbF9hbGxvY19iYWNraW5nKCkgLSBhbGxvY2F0ZSBhIG5ldyBiYWNraW5n
-IHN0b3JhZ2UgcGFnZQo+ICsgKiBAZW5jbDrCoMKgwqDCoMKgwqBhbiBlbmNsYXZlIHBvaW50ZXIK
-PiArICogQHBhZ2VfaW5kZXg6wqDCoMKgwqDCoMKgwqDCoGVuY2xhdmUgcGFnZSBpbmRleAo+ICsg
-KiBAYmFja2luZzrCoMKgwqBkYXRhIGZvciBhY2Nlc3NpbmcgYmFja2luZyBzdG9yYWdlIGZvciB0
-aGUgcGFnZQo+ICsgKgo+ICsgKiBDb25maXJtIHRoYXQgdGhlIGdsb2JhbCBvdmVyY29tbWl0IGxp
-bWl0IGhhcyBub3QgYmVlbiByZWFjaGVkCj4gYmVmb3JlCj4gKyAqIHJlcXVlc3RpbmcgYSBuZXcg
-YmFja2luZyBzdG9yYWdlIHBhZ2UgZm9yIHN0b3JpbmcgdGhlIGVuY3J5cHRlZAo+IGNvbnRlbnRz
-Cj4gKyAqIGFuZCBQYWdpbmcgQ3J5cHRvIE1ldGFEYXRhIChQQ01EKSBvZiBhbiBlbmNsYXZlIHBh
-Z2UuIFRoaXMgaXMKPiBjYWxsZWQgd2hlbgo+ICsgKiB0aGVyZSBpcyBubyBleGlzdGluZyBiYWNr
-aW5nIHBhZ2UsIGp1c3QgYmVmb3JlIHdyaXRpbmcgdG8gdGhlCj4gYmFja2luZwo+ICsgKiBzdG9y
-YWdlIHdpdGggRVdCLgo+ICsgKgo+ICsgKiBSZXR1cm46Cj4gKyAqwqDCoCAwIG9uIHN1Y2Nlc3Ms
-Cj4gKyAqwqDCoCAtZXJybm8gb3RoZXJ3aXNlLgo+ICsgKi8KPiAraW50IHNneF9lbmNsX2FsbG9j
-X2JhY2tpbmcoc3RydWN0IHNneF9lbmNsICplbmNsLCB1bnNpZ25lZCBsb25nCj4gcGFnZV9pbmRl
-eCwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-c3RydWN0IHNneF9iYWNraW5nICpiYWNraW5nKQo+ICt7Cj4gK8KgwqDCoMKgwqDCoMKgaW50IHJl
-dDsKPiArCj4gK8KgwqDCoMKgwqDCoMKgaWYgKHNneF9jaGFyZ2VfbWVtKCkpCj4gK8KgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiAtRU5PTUVNOwo+ICsKPiArwqDCoMKgwqDCoMKg
-wqByZXQgPSBzZ3hfZW5jbF9nZXRfYmFja2luZyhlbmNsLCBwYWdlX2luZGV4LCBiYWNraW5nKTsK
-PiArwqDCoMKgwqDCoMKgwqBpZiAocmV0KQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqBzZ3hfdW5jaGFyZ2VfbWVtKCk7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoHJldHVybiByZXQ7Cj4g
-K30KPiArCj4gKy8qKgo+ICsgKiBzZ3hfZW5jbF9sb29rdXBfYmFja2luZygpIC0gcmV0cmlldmUg
-YW4gZXhpc3RpbmcgYmFja2luZyBzdG9yYWdlCj4gcGFnZQo+ICsgKiBAZW5jbDrCoMKgwqDCoMKg
-wqBhbiBlbmNsYXZlIHBvaW50ZXIKPiArICogQHBhZ2VfaW5kZXg6wqDCoMKgwqDCoMKgwqDCoGVu
-Y2xhdmUgcGFnZSBpbmRleAo+ICsgKiBAYmFja2luZzrCoMKgwqBkYXRhIGZvciBhY2Nlc3Npbmcg
-YmFja2luZyBzdG9yYWdlIGZvciB0aGUgcGFnZQo+ICsgKgo+ICsgKiBSZXRyaWV2ZSBhIGJhY2tp
-bmcgcGFnZSBmb3IgbG9hZGluZyBkYXRhIGJhY2sgaW50byBhbiBFUEMgcGFnZQo+IHdpdGggRUxE
-VS4KPiArICogVGhpcyBjYWxsIGRvZXMgbm90IGNhdXNlIGEgY2hhcmdlIHRvIHRoZSBvdmVyY29t
-bWl0IGxpbWl0IGJlY2F1c2UKPiBhIHBhZ2UKPiArICogaGFzIGFscmVhZHkgYmVlbiBhbGxvY2F0
-ZWQsIGJ1dCBoYXMgYmVlbiBzd2FwcGVkIG91dCBvciBpcyBpbiBSQU0KPiArICoKPiArICogSXQg
-aXMgdGhlIGNhbGxlcidzIHJlc3BvbnNpYmlsaXR5IHRvIGVuc3VyZSB0aGF0IGl0IGlzCj4gYXBw
-cm9wcmlhdGUgdG8KPiArICogdXNlIHNneF9lbmNsX2xvb2t1cF9iYWNraW5nKCkgcmF0aGVyIHRo
-YW4KPiBzZ3hfZW5jbF9hbGxvY19iYWNraW5nKCkuIElmCj4gKyAqIGxvb2t1cCBpcyBub3QgdXNl
-ZCBjb3JyZWN0bHksIHRoaXMgd2lsbCBjYXVzZSBhbiBhbGxvY2F0aW9uIHRoYXQKPiBpcwo+ICsg
-KiBub3QgYWNjb3VudGVkIGZvci4KPiArICoKPiArICogUmV0dXJuOgo+ICsgKsKgwqAgMCBvbiBz
-dWNjZXNzLAo+ICsgKsKgwqAgLWVycm5vIG90aGVyd2lzZS4KPiArICovCj4gK2ludCBzZ3hfZW5j
-bF9sb29rdXBfYmFja2luZyhzdHJ1Y3Qgc2d4X2VuY2wgKmVuY2wsIHVuc2lnbmVkIGxvbmcKPiBw
-YWdlX2luZGV4LAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgIHN0cnVjdCBzZ3hfYmFja2luZyAqYmFja2luZykKPiArewo+ICvCoMKgwqDCoMKg
-wqDCoHJldHVybiBzZ3hfZW5jbF9nZXRfYmFja2luZyhlbmNsLCBwYWdlX2luZGV4LCBiYWNraW5n
-KTsKPiArfQo+ICsKPiDCoC8qKgo+IMKgICogc2d4X2VuY2xfcHV0X2JhY2tpbmcoKSAtIFVucGlu
-IHRoZSBiYWNraW5nIHN0b3JhZ2UKPiDCoCAqIEBiYWNraW5nOsKgwqDCoGRhdGEgZm9yIGFjY2Vz
-c2luZyBiYWNraW5nIHN0b3JhZ2UgZm9yIHRoZSBwYWdlCj4gQEAgLTYwOCw5ICs2NzAsMTcgQEAg
-aW50IHNneF9lbmNsX2dldF9iYWNraW5nKHN0cnVjdCBzZ3hfZW5jbCAqZW5jbCwKPiB1bnNpZ25l
-ZCBsb25nIHBhZ2VfaW5kZXgsCj4gwqAgKi8KPiDCoHZvaWQgc2d4X2VuY2xfcHV0X2JhY2tpbmco
-c3RydWN0IHNneF9iYWNraW5nICpiYWNraW5nLCBib29sCj4gZG9fd3JpdGUpCj4gwqB7Cj4gK8Kg
-wqDCoMKgwqDCoMKgLyoKPiArwqDCoMKgwqDCoMKgwqAgKiBJZiB0aGUgcGFnZSBpcyBiZWluZyB3
-cml0dGVuIHRvIGJ5IHRoZSByZWNsYWltZXIsIGl0IGlzCj4gK8KgwqDCoMKgwqDCoMKgICogc3Rp
-bGwgaW4gdXNlIGFuZCB0aGUgYmFja2luZyBwYWdlIHVzYWdlIHNob3VsZCBub3QgYmUKPiArwqDC
-oMKgwqDCoMKgwqAgKiB1bmNoYXJnZWQuIEhvd2V2ZXIsIGlmIHRoZSBwYWdlIGlzIG5vdCBiZWlu
-ZyB3cml0dGVuIHRvLAo+ICvCoMKgwqDCoMKgwqDCoCAqIGl0IGlzIG5vIGxvbmdlciBpbiB1c2Ug
-YW5kIG1heSBiZSB1bmNoYXJnZWQuCj4gK8KgwqDCoMKgwqDCoMKgICovCj4gwqDCoMKgwqDCoMKg
-wqDCoGlmIChkb193cml0ZSkgewo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc2V0
-X3BhZ2VfZGlydHkoYmFja2luZy0+cGNtZCk7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqBzZXRfcGFnZV9kaXJ0eShiYWNraW5nLT5jb250ZW50cyk7Cj4gK8KgwqDCoMKgwqDCoMKg
-fSBlbHNlIHsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc2d4X3VuY2hhcmdlX21l
-bSgpOwo+IMKgwqDCoMKgwqDCoMKgwqB9Cj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgcHV0X3BhZ2Uo
-YmFja2luZy0+cGNtZCk7Cj4gZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9jcHUvc2d4L2Vu
-Y2wuaAo+IGIvYXJjaC94ODYva2VybmVsL2NwdS9zZ3gvZW5jbC5oCj4gaW5kZXggZmVjNDNjYTY1
-MDY1Li44ZmZiOGE4MzI2M2YgMTAwNjQ0Cj4gLS0tIGEvYXJjaC94ODYva2VybmVsL2NwdS9zZ3gv
-ZW5jbC5oCj4gKysrIGIvYXJjaC94ODYva2VybmVsL2NwdS9zZ3gvZW5jbC5oCj4gQEAgLTEwNSw4
-ICsxMDUsMTAgQEAgaW50IHNneF9lbmNsX21heV9tYXAoc3RydWN0IHNneF9lbmNsICplbmNsLAo+
-IHVuc2lnbmVkIGxvbmcgc3RhcnQsCj4gwqAKPiDCoHZvaWQgc2d4X2VuY2xfcmVsZWFzZShzdHJ1
-Y3Qga3JlZiAqcmVmKTsKPiDCoGludCBzZ3hfZW5jbF9tbV9hZGQoc3RydWN0IHNneF9lbmNsICpl
-bmNsLCBzdHJ1Y3QgbW1fc3RydWN0ICptbSk7Cj4gLWludCBzZ3hfZW5jbF9nZXRfYmFja2luZyhz
-dHJ1Y3Qgc2d4X2VuY2wgKmVuY2wsIHVuc2lnbmVkIGxvbmcKPiBwYWdlX2luZGV4LAo+IC3CoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN0cnVjdCBzZ3hfYmFj
-a2luZyAqYmFja2luZyk7Cj4gK2ludCBzZ3hfZW5jbF9hbGxvY19iYWNraW5nKHN0cnVjdCBzZ3hf
-ZW5jbCAqZW5jbCwgdW5zaWduZWQgbG9uZwo+IHBhZ2VfaW5kZXgsCj4gK8KgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN0cnVjdCBzZ3hfYmFja2luZyAq
-YmFja2luZyk7Cj4gK2ludCBzZ3hfZW5jbF9sb29rdXBfYmFja2luZyhzdHJ1Y3Qgc2d4X2VuY2wg
-KmVuY2wsIHVuc2lnbmVkIGxvbmcKPiBwYWdlX2luZGV4LAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN0cnVjdCBzZ3hfYmFja2luZyAqYmFj
-a2luZyk7Cj4gwqB2b2lkIHNneF9lbmNsX3B1dF9iYWNraW5nKHN0cnVjdCBzZ3hfYmFja2luZyAq
-YmFja2luZywgYm9vbAo+IGRvX3dyaXRlKTsKPiDCoGludCBzZ3hfZW5jbF90ZXN0X2FuZF9jbGVh
-cl95b3VuZyhzdHJ1Y3QgbW1fc3RydWN0ICptbSwKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0IHNneF9lbmNs
-X3BhZ2UgKnBhZ2UpOwo+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L3NneC9tYWlu
-LmMKPiBiL2FyY2gveDg2L2tlcm5lbC9jcHUvc2d4L21haW4uYwo+IGluZGV4IDI2MWUzNzAyYWVm
-OS4uOTkwZjM0MWJiZDMwIDEwMDY0NAo+IC0tLSBhL2FyY2gveDg2L2tlcm5lbC9jcHUvc2d4L21h
-aW4uYwo+ICsrKyBiL2FyY2gveDg2L2tlcm5lbC9jcHUvc2d4L21haW4uYwo+IEBAIC0zNDcsOCAr
-MzQ3LDggQEAgc3RhdGljIHZvaWQgc2d4X3JlY2xhaW1lcl93cml0ZShzdHJ1Y3QKPiBzZ3hfZXBj
-X3BhZ2UgKmVwY19wYWdlLAo+IMKgwqDCoMKgwqDCoMKgwqBlbmNsLT5zZWNzX2NoaWxkX2NudC0t
-Owo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoGlmICghZW5jbC0+c2Vjc19jaGlsZF9jbnQgJiYgdGVz
-dF9iaXQoU0dYX0VOQ0xfSU5JVElBTElaRUQsCj4gJmVuY2wtPmZsYWdzKSkgewo+IC3CoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXQgPSBzZ3hfZW5jbF9nZXRfYmFja2luZyhlbmNsLCBQ
-Rk5fRE9XTihlbmNsLQo+ID5zaXplKSwKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAmc2Vj
-c19iYWNraW5nKTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0ID0gc2d4X2Vu
-Y2xfYWxsb2NfYmFja2luZyhlbmNsLCBQRk5fRE9XTihlbmNsLQo+ID5zaXplKSwKPiArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgJnNlY3NfYmFja2luZyk7Cj4gwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqBpZiAocmV0KQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoGdvdG8gb3V0Owo+IMKgCj4gQEAgLTQxOCw3ICs0MTgsNyBAQCBz
-dGF0aWMgdm9pZCBzZ3hfcmVjbGFpbV9wYWdlcyh2b2lkKQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGdvdG8gc2tpcDsKPiDCoAo+IMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgcGFnZV9pbmRleCA9IFBGTl9ET1dOKGVuY2xfcGFnZS0+ZGVz
-YyAtIGVuY2xfcGFnZS0KPiA+ZW5jbC0+YmFzZSk7Cj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoHJldCA9IHNneF9lbmNsX2dldF9iYWNraW5nKGVuY2xfcGFnZS0+ZW5jbCwKPiBwYWdl
-X2luZGV4LCAmYmFja2luZ1tpXSk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJl
-dCA9IHNneF9lbmNsX2FsbG9jX2JhY2tpbmcoZW5jbF9wYWdlLT5lbmNsLAo+IHBhZ2VfaW5kZXgs
-ICZiYWNraW5nW2ldKTsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmIChyZXQp
-Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZ290byBz
-a2lwOwo+IMKgCgpXcmFwcGVycyBtYWtlIHNlbnNlIHRvIGRvIGV4dHJhIGNoZWNrcyBzbzoKClJl
-dmlld2VkLWJ5OiBKYXJra28gU2Fra2luZW4gPGphcmtrb0BrZXJuZWwub3JnPgoKQlIsIEphcmtr
-bwoK
+On 10.12.21 10:16, Thorsten Leemhuis wrote:
+> Hi, this is your Linux kernel regression tracker speaking.
 
+/me again
+
+> On 10.12.21 02:10, An, Tedd wrote:
+>> On Fri, 2021-12-10 at 01:36 +0200, coldolt wrote:
+>>> After a restart, bluetooth doesn't work since commit 0ea53674d07f
+>>> "Bluetooth: Move shutdown callback before flushing tx and rx queue"
+>>>
+>>> bluetoothctl doesn't list any controllers and I get the following in
+>>> dmesg | grep -i bluetooth
+>>>
+>>> [    2.634812] Bluetooth: Core ver 2.22
+>>> [    2.634843] NET: Registered PF_BLUETOOTH protocol family
+>>> [    2.634845] Bluetooth: HCI device and connection manager initialized
+>>> [    2.634850] Bluetooth: HCI socket layer initialized
+>>> [    2.634853] Bluetooth: L2CAP socket layer initialized
+>>> [    2.634858] Bluetooth: SCO socket layer initialized
+>>> [    4.077788] Bluetooth: BNEP (Ethernet Emulation) ver 1.3
+>>> [    4.077794] Bluetooth: BNEP filters: protocol multicast
+>>> [    4.077799] Bluetooth: BNEP socket layer initialized
+>>> [    4.078219] random: bluetoothd: uninitialized urandom read (4 bytes read)
+>>> [    4.852835] Bluetooth: hci0: Reading Intel version command failed (-110)
+>>> [    4.852838] Bluetooth: hci0: command 0xfc05 tx timeout
+>>>
+>>> However, it works after a cold start or after putting the computer to sleep.
+>>>
+>>> Before 83f2dafe2a62 "Bluetooth: btintel: Refactoring setup routine for
+>>> legacy ROM sku", it always works after a restart, but from that commit
+>>> up until before 0ea53674d07f it either works or doesn't work after a
+>>> restart depending on if before restart it was working or not, meaning
+>>> it stays working or stays not working.
+>>>
+>>> Also on the first restart from before 83f2dafe2a62 into 0ea53674d07f
+>>> or later it works, but then restarting again into 0ea53674d07f or
+>>> later it no longer works. So it seems that 0ea53674d07f and later puts
+>>> the bluetooth in a nonworking state if you restart from it, but before
+>>> 83f2dafe2a62 it puts it back into a working state at startup, and in
+>>> between it doesn't do either, i.e. it stays the way it was.
+>>>
+>>> I have a Dell Latitude E5550 laptop with an Intel 7265 wifi/bluetooth
+>>> card REV=0x210 firmware version 29.4063824552.0 7265D-29. I'm on Arch
+>>> Linux, the problem is still there on 5.16-rc4.
+>>>
+>>> Here is a thread on the Arch Linux forums with several people with the
+>>> same problem, for some of them it got fixed with a kernel update or by
+>>> reloading modules, but not for everybody, including me
+>>> https://bbs.archlinux.org/viewtopic.php?id=271459
+>>>
+>>> #regzbot introduced 0ea53674d07f
+> 
+> Many thx for directly getting regzbot involved! :-D
+> 
+>> This issue is under investigation to find the root cause and proper solution.
+> 
+> Only internally? Or are there any other related public discussions that
+> are relevant to this and thus good to be aware of?
+
+What's the status here? It looks like there was no progress since 41
+days, which is awfully long even with the festive season in between.
+Could anyone provide a status update please?
+
+Ciao, Thorsten
+
+#regzbot poke
+
+P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
+on my table. I can only look briefly into most of them. Unfortunately
+therefore I sometimes will get things wrong or miss something important.
+I hope that's not the case here; if you think it is, don't hesitate to
+tell me about it in a public reply, that's in everyone's interest.
+
+BTW, I have no personal interest in this issue, which is tracked using
+regzbot, my Linux kernel regression tracking bot
+(https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
+this mail to get things rolling again and hence don't need to be CC on
+all further activities wrt to this regression.
+
+>> The downloaded firmware breaks the behavior though, we need to investigate
+>> further to see if it can be fixed in firmware or fix in the driver.
+> 
+> The answer from my point is simple: it needs to be fixed in the kernel,
+> not just in the firmware, otherwise people that update the kernel
+> without updating the firmware at the same time will run into a
+> regression -- and that is not acceptable by kernel development standards.
+> 
+> Ciao, Thorsten
+> 
+> P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
+> on my table. I can only look briefly into most of them. Unfortunately
+> therefore I sometimes will get things wrong or miss something important.
+> I hope that's not the case here; if you think it is, don't hesitate to
+> tell me about it in a public reply. That's in everyone's interest, as
+> what I wrote above might be misleading to everyone reading this; any
+> suggestion I gave they thus might sent someone reading this down the
+> wrong rabbit hole, which none of us wants.
+> 
+> BTW, I have no personal interest in this issue, which is tracked using
+> regzbot, my Linux kernel regression tracking bot
+> (https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
+> this mail to get things rolling again and hence don't need to be CC on
+> all further activities wrt to this regression.

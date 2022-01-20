@@ -2,105 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77EC94950AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 15:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4426A4950B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 15:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357807AbiATO5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 09:57:49 -0500
-Received: from mout.kundenserver.de ([217.72.192.75]:42733 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356745AbiATO5r (ORCPT
+        id S1359370AbiATO7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 09:59:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39004 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346102AbiATO7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 09:57:47 -0500
-Received: from mail-oi1-f181.google.com ([209.85.167.181]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MHndY-1n7lap2Jvi-00Es1l; Thu, 20 Jan 2022 15:57:45 +0100
-Received: by mail-oi1-f181.google.com with SMTP id t9so9168099oie.12;
-        Thu, 20 Jan 2022 06:57:44 -0800 (PST)
-X-Gm-Message-State: AOAM532ur7kb+ZJ3gkm0JgO0s8P5UWnOgJaBPq7evKhod0Uk0ONZn2C/
-        nXJDWfIBAjEUHqIChtcKEYQKjBJDBXi85nHgFSY=
-X-Google-Smtp-Source: ABdhPJwjtLdN6iyHNeRuxhdvl9Y6OeJzbUgAsOZS1tuaBlnRH/pfBDfrQe9jdzUZRHtHuLOgUQesyOgPAeGaNPDH+P4=
-X-Received: by 2002:a05:6808:9a:: with SMTP id s26mr7926312oic.108.1642690663723;
- Thu, 20 Jan 2022 06:57:43 -0800 (PST)
+        Thu, 20 Jan 2022 09:59:33 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6D7C061574;
+        Thu, 20 Jan 2022 06:59:33 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id u18so15694959edt.6;
+        Thu, 20 Jan 2022 06:59:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Q7/Art4fi7Ys+mKvfMJYfxSvlOJsbRKucqQhRA69bnI=;
+        b=aCGGxiYLTv4SVejDvxcNOhoE/tXZlskJXY4VdLXFx7mLuYAEGN0y7HJkr0NsYalnEj
+         qyZxOKRhUUWEWuQ5yuX7PeLNomLeYNJ80ht2YlxtYMHiQPMx57Cr+/GnEVnrm5Hwrz7A
+         Ded9EA6M5zwg/Niqvo4kPTj4BETD1QBYifj1csdmxV0LL0GTRok8pLpKEvZAxEoMpRVf
+         v+21aTOeFoZVzH3cJGmg4/zxgAUrBXr96IklYlqz/fMYRt0gq4SqDWSI34Cd1t9YBWxE
+         8g4DOcJGTw+2XEzikWXINsbY77/wFQvzbX88dn+RRbeL9bbJ3YH5Z2HnAQASFJZrnz8t
+         g/TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Q7/Art4fi7Ys+mKvfMJYfxSvlOJsbRKucqQhRA69bnI=;
+        b=q3bjOPX1TY689RRLrJ7rPRz/605+J+PKtX/PN4mtaNyZMH3m843zPBK1uBjBgPk0HT
+         3FMM/B/lOVo98Pr0YKiN7hzUaBS8lrcOpN1jwYiHSsbM5CS/Y5o0kVxFcEcO9FN86GfP
+         y0XFjapdJerNwaDtniEhKOo3adJF8oorBGe9y/SpYhswk5llfs/3Lgz7EtauOyiVWSl9
+         LgmpIkSvV7wXnoz6jdWbOE0l+uXNg9KItguWl8DIfX2kYkIhwAOBdgisnOa27JqvMvgA
+         3+AYr/i+JGcctXMJa0SrNTnlSqaod4PqbblVWD4seHOJfxn6QY5mwIJhlJTY275bEnbv
+         OfAw==
+X-Gm-Message-State: AOAM5323sNHBc6LnDJqgEexONtKZ65SJB/2lEiA/TRnhMmhuMI6VwGBb
+        AJnEmalfRZjk/uirBGkIssEPZ1MjaplSWlK0iyk=
+X-Google-Smtp-Source: ABdhPJwJVZLjArtFZ3WPYTSEiSnskUTscXctdXqraZCdNwhkNDk6+IBeo6b/0RhdSTM9KnC3e6bg4B5GGbj3/jTa6EI=
+X-Received: by 2002:a17:907:94d3:: with SMTP id dn19mr2304620ejc.77.1642690771754;
+ Thu, 20 Jan 2022 06:59:31 -0800 (PST)
 MIME-Version: 1.0
-References: <20220120073911.99857-8-guoren@kernel.org> <CAK8P3a1UvqsS-D7cVXBkp4KCRWDfquQ6QTkvrQ=FqLxhsAi7Rw@mail.gmail.com>
- <f16cf10425a14c2e8183d5c90667ce72@AcuMS.aculab.com> <CAJF2gTRwh40xDBkoRJWZEUketKFDAy7_z=-WW7E=T46yH4zPvw@mail.gmail.com>
-In-Reply-To: <CAJF2gTRwh40xDBkoRJWZEUketKFDAy7_z=-WW7E=T46yH4zPvw@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 20 Jan 2022 15:57:27 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3FLnqibdXCGR8c+mm92HSiuvocZDeW8MyoTO_L1sYT=w@mail.gmail.com>
-Message-ID: <CAK8P3a3FLnqibdXCGR8c+mm92HSiuvocZDeW8MyoTO_L1sYT=w@mail.gmail.com>
-Subject: Re: [PATCH V3 07/17] riscv: compat: Re-implement TASK_SIZE for COMPAT_32BIT
-To:     Guo Ren <guoren@kernel.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Hellwig <hch@infradead.org>,
+References: <1642686255-25951-1-git-send-email-akhilrajeev@nvidia.com> <1642686255-25951-2-git-send-email-akhilrajeev@nvidia.com>
+In-Reply-To: <1642686255-25951-2-git-send-email-akhilrajeev@nvidia.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 20 Jan 2022 16:57:49 +0200
+Message-ID: <CAHp75VeOvXf6twskZp-Y-s8AQEpftA0SOUJfXqO5sJ1FKNKgCA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] device property: Add device_irq_get_byname
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "inux-parisc@vger.kernel.org" <inux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:ebq+f8qblaxd9E/WdJgeKxnEvzsD5T+KESng71vOs/CWvdRMDlH
- NkzD0RmyN8eSV4KFIA7QtXifTjrQqboztxcBuvgGrnrhQyc3CXAiweVRT3N4SGZbkQpU1RK
- c/MQoab7YcK4IKxNzDnIBOEcQSW/NfJtQzz03FrWhfbjodQcezVr3JOKqdquhdOqrtDIJyh
- LaXQmo0QAPULP2HCb1zrQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ja7xTabe8b4=:rOkAX4N/fElJ9mRJ1qbsTv
- /CLiyFtBXVu7wVnESukj51MjR0Su+7KjNooXiyCuMsYKBa/suOX/6xED3vHQfsy5Ko73zLOPo
- JOrPPFQeqMONk3jWn7UNFkOxmP3gvynqIdzvnnAhUl+NJE9O2rXUZzMnR5cEAFswgmF4+43p1
- MH22WI0HeDMg97CbAQGQ9MEoQN81BNzhqqebKpT7g8a4crXrzb1UDVmZFg5kaMI6X05Rq+yJZ
- V27Ws40orOduuzBVb9/XePF3WrNLMsJU8H6IT+pn6bVcOlC6hOu8FOWudLprPT3s65NPNmkAq
- drGEG4WFOei0mj2R8t5rxicizUmHC6I+Z3vShqSnSw3KcCICpmExzUSvCqWtP+ZgK0Yqz/cbS
- BWvifAK/rjqJj/QAVvfpdNdQNl422rx5XOhO1ftmUMkS6MK7QRW3qKx+YMizyavtJatszuOmN
- Ef1wzw5neeRaeJuJiFBcEbTTJKl4uBeAsfdpiuj8QHlfbwb/8hzF8MrXKi9TgFD088+fWDjwV
- 6IPf2MbZng+MWfg6BbIx9DVrqo5XgUy0K30hWcOhdpih4KfOkKhCfruICqG5hrQcVPPnQqGKj
- MX+uj4tlit+dsAnW41X9KDnEahpWqlMPKKDWPbqeAQJAaoMzN1a5XvZH0SGG9/sjbuNeO+gq1
- BGkwDsQew29OnF49WnZfzxTXOZFfTJIkDmVflXVoG0DLq6UjQ8p/yFexOKQ28RUanYvm/jp6I
- 9uj4ePgs6wlM1o2NOU/BqQg9JYng+bUPaX50zsHimewZAIMGHJWrs9kHXOXrvr3AwjtPI+v68
- /34uGlgUXshE5Ckncx1XJWF/Vk+4gke4OEGECWQD5jOFxqwaVw=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 2:27 PM Guo Ren <guoren@kernel.org> wrote:
-> On Thu, Jan 20, 2022 at 8:53 PM David Laight <David.Laight@aculab.com> wrote:
-> > I think the x86-64 32bit compat code even puts the boundary at 4GB.
-> Yes, we could give rv32 compat for 4GB with some effort. But it's unnecessary.
->
-> There are no history issues for rv32, we use compat mode to reduce
-> memory footprint. eg: only 64MB memory available.
->
-> At end compat for 4GB is another topic, let's give the initial compat
-> for 2GB support to riscv.
+On Thu, Jan 20, 2022 at 3:45 PM Akhil R <akhilrajeev@nvidia.com> wrote:
 
-I think it's fine either way. Having the entire 4GB space available is nice
-when you are trying to build 32-bit software natively rather then using a
-cross-compiler, as you can just do it on a larger machine that supports both.
+Thanks, my comments below.
 
-One example of software that runs into virtual memory size limitations is
-the gnu linker when building large applications, but it's unlikely that you'll
-actually need to run applications that run into this, while also needing to
-build them natively.
+> Add device_irq_get_byname() to get an interrupt by name from both the
+> ACPI table and the Device Tree.
 
-Using the same limit as on native 32-bit machines can help with compatibility
-of certain software, but again this is rarely a problem and I have not seen any
-reports of issues with the 4GB TASK_SIZE_32 on arm64. On x86, there
-is an option to use the native 3GB TASK_SIZE for compat tasks. This was
-introduced to work around buggy applications a long time ago, but is
-probably not used any more in practice.
+This needs to be clarified (it's not and, but or), what about:
 
-       Arnd
+  Add device_irq_get_byname() to get an interrupt by name from either
+  ACPI table or Device Tree whichever has it.
+
+> This will allow to use 'interrupt-names' in _DSD which can be mapped to
+
+In the ACPI case this
+allow us to
+
+> Interrupt() resource by index. The implementation is similar to
+> 'interrupt-names' in the Device Tree.
+
+...
+
+>  /**
+> + * fwnode_irq_get_byname - Get IRQ from a fwnode using its name
+> + * @fwnode:    Pointer to the firmware node
+> + * @name:      IRQ name
+> + *
+> + * Description:
+> + * Find a match to the string 'name' in the 'interrupt-names' string array
+
+'name' --> @name
+
+> + * in _DSD for ACPI, or of_node for device tree. Then get the Linux IRQ
+
+Device Tree
+
+> + * number of the IRQ resource corresponding to the index of the matched
+> + * string.
+> + *
+> + * Return:
+
+> + * Linux IRQ number on success
+> + * Negative errno otherwise.
+
+ * Linux IRQ number on success, or negative errno otherwise.
+
+> + */
+> +int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name)
+> +{
+> +       int index;
+> +
+> +       if (!name)
+> +               return -EINVAL;
+> +
+> +       index = fwnode_property_match_string(fwnode, "interrupt-names",  name);
+> +       if (index < 0)
+> +               return index;
+> +
+> +       return fwnode_irq_get(fwnode, index);
+> +}
+
+...
+
+> +/**
+> + * device_irq_get_byname - Get IRQ of a device using interrupt name
+> + * @dev: Device to get the interrupt
+> + * @name: IRQ name
+> + *
+> + * Description:
+> + * Find a match to the string 'name' in the 'interrupt-names' string array
+> + * in _DSD for ACPI, or of_node for device tree. Then get the Linux IRQ
+> + * number of the IRQ resource corresponding to the index of the matched
+> + * string.
+> + *
+> + * Return:
+> + * Linux IRQ number on success
+> + * Negative errno otherwise.
+> + */
+
+As per above.
+
+...
+
+> +int device_irq_get_byname(struct device *dev, const char *name);
+
+Since we don't have device_irq_get() perhaps we don't need this one
+right now (just open code it in the caller). This will satisfy
+Rafael's request.
+
+-- 
+With Best Regards,
+Andy Shevchenko

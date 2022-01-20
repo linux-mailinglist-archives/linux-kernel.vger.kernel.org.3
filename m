@@ -2,190 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D90E494EA9
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 14:11:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC9F494EAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 14:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376364AbiATNLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 08:11:23 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38432 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359843AbiATNLK (ORCPT
+        id S1376370AbiATNLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 08:11:35 -0500
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:46870 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1359832AbiATNLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 08:11:10 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 49722B81CE3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 13:11:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69FAEC340E5;
-        Thu, 20 Jan 2022 13:11:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642684268;
-        bh=OrxCmCwhcQs7JjUADDB5MvCyW968j/WDiJS5l2hCkFI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CI1V8t3qE2cDKMYaaBkvTZQ4d//l97YE4n8brHshtJvbP/v6FjyNy+ic/WcgigQTn
-         3w7nQsMbtkZvZCYVAniIkVkmgYo9UYEIXE5b2Y/QBSm6plbJ0RScCtx88FqPjP2RtL
-         mb6VRPaznEN5W1nVOhuGul5mvnG5FQjFVukWA5v6Tnq5HTQDDgSzGtr2syk6sTpqX8
-         LnxSonhHwm6RByHfWGTphrWwlo2jeJXFIETbzjIFgidL5k8wDdAlEO1EksSGmyVtyJ
-         DLZx+POdELc6DrLiLF1ue5A+rPF42FGxvCAQjEqJA11NpaG/JhiebCraYlZgYfMENC
-         Geib0IgHSKKiw==
-From:   alexs@kernel.org
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alex Shi <alexs@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Yu Zhao <yuzhao@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 5/5] mm: remove del_page_from_lru_list()
-Date:   Thu, 20 Jan 2022 21:10:24 +0800
-Message-Id: <20220120131024.502877-6-alexs@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220120131024.502877-1-alexs@kernel.org>
-References: <20220120131024.502877-1-alexs@kernel.org>
+        Thu, 20 Jan 2022 08:11:17 -0500
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20K855Xv008384;
+        Thu, 20 Jan 2022 05:10:57 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=proofpoint;
+ bh=GfbXVQ7WwHnNdOgmGG/JaegQgwEd1ff5RfrDyNEK6oM=;
+ b=qXKzSjRO88e1Z9ZTzLa9iW9+BOQOugw0xgzNWmad1BwnfbkA/UxXNYMdEqAd0kHq7/ly
+ 23yc5t89uX60vF7MUHeV/oNWoXmgIS3oQMDSZcdPt9tE3Se1WWKPbpjWVf+y7lmk8U5R
+ lTGUkhbd//9x58q13zdGolGNNvdlPL4+L85FGzXBjgwd8oADirQvwnerH7tL3oIGrV9g
+ NnHxSyJ8/iXDpzKfdG2xHiBEyZ+fDaBERbu5BWpN/irX7kx/WGWHfc6jYdsIXXOjlN/m
+ LiNBj3dROYWGrAohfY0T7c52PbEZL3m5vl5ril+HL97znI1YrzTsax8QO6hoUIG4iIb1 YQ== 
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2108.outbound.protection.outlook.com [104.47.70.108])
+        by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 3dpxcj1v5y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jan 2022 05:10:57 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U8JI2sEYu0sPa+CWxBKDG/8dZ+/To2g0OeJFOcyVtr56lrmOEDlV4KhUv0JlSPiqzOkwHNUil+C6Nak2m00EVNn05kPspo5yP7HZR/kYTyXDdVyOPlWrnJJ4RNa+JQCKRxM5AqDFZjsP/u0dnGYVEZQMYwlwOy63HMZShG5B6b5aZxO0LG92YCIuKDUq9UWfX6Unl0IiRXIgXX7jpWK1JzxDwuM9lIO5BloLbRP4wcEczPpcQnnoowE3kOsvTSI85h9XsyW35icjEoURkAI2r6b7Ri+zzh9s95CIgKAvI1hq/T0IhCH7nBHpW8Watfhu7D1PN8g9S7Dnzh0Ktf9AQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GfbXVQ7WwHnNdOgmGG/JaegQgwEd1ff5RfrDyNEK6oM=;
+ b=NN5M7MyzlaX+dk9+lIPcLU4gSQkUAdTV4HRb8r/cY1mIEnj6hYvMiqJyJFpfWKKlW7MG5DPYvRkwbcXYDXyMZ/0NqrB1Qrps9X1elMpo3PdT/wu6nkiK5dnoF37ZmFDOzQ8RPIo7Fq3ZD9muIORCScrusZplzQrTwxb/YnvwV9FvGMN1H0fakqSV7gwarhnerqpBVO47z5b6F9TOBDSIkK8pl8cwFQqSFDeaLHvE5KDHHdQi5KwEBlKCUSZckPalBJj5ctH0B1RFKkiwvIkNWkkmrCmSkBe3/oQi7xitQiYYHMcg/9U44IWE2Kg+SPxOKM/FizwJcNe/cWHIy88pTQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GfbXVQ7WwHnNdOgmGG/JaegQgwEd1ff5RfrDyNEK6oM=;
+ b=Snyrq/gVsKEcwHYZgEGoOVDNICc/Xm4tzVO03ZRrf7SdsN784t+DgyCPkwmERM35SfC/4UMdpHqZavE4z9STGPUzdLzr86dKeh8gbQjRBqX1Q6Ln1fsOfDqAdpPMbqo8kTzbleXBgWkqogoajq+ZpStTu470GnH9noVQsWPRorU=
+Received: from MN2PR07MB6208.namprd07.prod.outlook.com (2603:10b6:208:111::32)
+ by MN2PR07MB6046.namprd07.prod.outlook.com (2603:10b6:208:105::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Thu, 20 Jan
+ 2022 13:10:54 +0000
+Received: from MN2PR07MB6208.namprd07.prod.outlook.com
+ ([fe80::907b:2b5d:7de:ea15]) by MN2PR07MB6208.namprd07.prod.outlook.com
+ ([fe80::907b:2b5d:7de:ea15%7]) with mapi id 15.20.4909.010; Thu, 20 Jan 2022
+ 13:10:54 +0000
+From:   Tom Joseph <tjoseph@cadence.com>
+To:     Li Chen <lchen@ambarella.com>
+CC:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?iso-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: Why does cdns_pcie_ep_set_bar use sz > SZ_2G for is_64bits in
+ pcie-cadence-ep.c?
+Thread-Topic: Why does cdns_pcie_ep_set_bar use sz > SZ_2G for is_64bits in
+ pcie-cadence-ep.c?
+Thread-Index: AdgNFhFdLIAJoUumRauHA5pdsoTIFwA1O41w
+Date:   Thu, 20 Jan 2022 13:10:54 +0000
+Message-ID: <MN2PR07MB62084589DE98AD2611C55FFDA15A9@MN2PR07MB6208.namprd07.prod.outlook.com>
+References: <PH7PR19MB55626CD5D22EABDEC879EF41A0599@PH7PR19MB5562.namprd19.prod.outlook.com>
+In-Reply-To: <PH7PR19MB55626CD5D22EABDEC879EF41A0599@PH7PR19MB5562.namprd19.prod.outlook.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcdGpvc2VwaFxhcHBkYXRhXHJvYW1pbmdcMDlkODQ5YjYtMzJkMy00YTQwLTg1ZWUtNmI4NGJhMjllMzViXG1zZ3NcbXNnLTY0YzlmNmQyLTc5ZjItMTFlYy04OTY2LTUwN2I5ZDg0NGVhMlxhbWUtdGVzdFw2NGM5ZjZkMy03OWYyLTExZWMtODk2Ni01MDdiOWQ4NDRlYTJib2R5LnR4dCIgc3o9IjI3MDIiIHQ9IjEzMjg3MTU3ODUzMjAwNDY3MCIgaD0ieC9FSGVydW1FL2xJbWlJMlRlZFdTNEQ2K0Z3PSIgaWQ9IiIgYmw9IjAiIGJvPSIxIi8+PC9tZXRhPg==
+x-dg-rorf: true
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6c72d303-4281-44e2-755f-08d9dc164a6f
+x-ms-traffictypediagnostic: MN2PR07MB6046:EE_
+x-microsoft-antispam-prvs: <MN2PR07MB6046587EC621672C0A783DC5A15A9@MN2PR07MB6046.namprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: zCk1fMjbA9oZ4fKL+86FpVLphLZz+CMR+E+VCZvv+GROIG6Phplnk3UqVMBLtt8LF1T5TDxGN2NGslLSdgZaspo6W1r032EgM31IsD5RrkLJIh8x43jznHEXsvFdNDUgj5iAx+iv2wrjdi4XqRwg5wRCV0iLNnVm6LwlalVS/NrH91cc7P9IgvJyGQC0Im0d6NLFWS7NrJWjWKkRI5CzBpztiVFaB6pthy05tAL0HdS9esmTmo36ghqsnM41bz+ZkIkvj64GygFlfTEmh1pTaHYyQ7m6FXJCwbSPgBmUPQY5x5vAlDkvJ1rvEsJVxNFlSa5BfUyzeCGyb0Kjs6kJDd0eqtnAjhDhecmuXcE5nwpFTsxsftk/FxFIeDxG2pa9EpLHxHoL0rs7xGyltidPBtX2CCqaYG8YdSbXcDi/defzuEEvgQv+cAJ09xRFt/LpKaqI+1EkblmTZcbmJ0jf79uP1uU8615jnJuZNLqLyO8g4WDfPGxlbzfYBWK2bAKFyfC07Qom4ldwTfXhasmxOveiOmFOKNmG5bxzynT5GAHi4VdMtlRs/MivWP9hp+1nZ8T8JZkeqUhUPbVolSIRv9IXa8zUzHok4Ch26DyKuVJrl5OL6X94ZTcxmmmZrZ6Hd/9G/7YKE2gTmGMfRFHXLoVppfHnereWmtuabhsYNNf9l71btuu42ZMIu8xJioLMIFI5sq8fBVbuHlE53rLxi46AAyvAVfZ9aa2iIbMg3lmWERJ+Efx+VKXPQOTpVFTV
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR07MB6208.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(36092001)(2906002)(55016003)(66574015)(8936002)(6916009)(8676002)(508600001)(33656002)(38070700005)(83380400001)(6506007)(53546011)(186003)(26005)(9686003)(316002)(7696005)(52536014)(66476007)(66556008)(64756008)(66446008)(71200400001)(66946007)(76116006)(122000001)(54906003)(86362001)(38100700002)(5660300002)(4326008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?rRBajN25GvcdOlsGToBmZWyF/zx7nq+0KRqVmX1p1gj9t6K4bzG7+1OlnQ?=
+ =?iso-8859-2?Q?uexUc8r5P3xDwe2uEFvqKD3hyU19NBRl0fQB5ikBmK8BlCm/tmMRj+GY/V?=
+ =?iso-8859-2?Q?HRzbqGYBt6w6bglxhaFqjVKa8n0avQEAeHa6A38sC6K2qhW5VpsX6EjThO?=
+ =?iso-8859-2?Q?7GiNYBPqyplcdO1nv6ctdR1iyiMqwhkFNPB5wZDgpt98vWMVExgb7C3Ukc?=
+ =?iso-8859-2?Q?tO93gKOIr8BbgZhOgdNn9yMEvqamDB2hC6PASbE4P9St4qM7Hrvz5kUZts?=
+ =?iso-8859-2?Q?d9X5TGyTOxG4P7h+1Jtm3lYNUPgygHOvus5NogQSQK6zyLphlh835GlloA?=
+ =?iso-8859-2?Q?nduKdz2l6kbT0VxTrFYc0/YAPm1bbI5Hog0IIvBxuA1qNjwWh4raZKmjBT?=
+ =?iso-8859-2?Q?2zRYrRQYXMlxpZ9Y38JxYvA1K5lXmUQuTZGgJWkHdcMPHBxWzWtJ9sO5rV?=
+ =?iso-8859-2?Q?ydgID2Ih4YEtiTyLPQ/6vPB/xAh+RqphWO4Oo9c4o5x5Mr4QugVklJnZTA?=
+ =?iso-8859-2?Q?mwTk3oLXrvvyPxON/Aiin9rCNHKkoclA1cg4cXA9RG8v3FUWZ5xtikz1LW?=
+ =?iso-8859-2?Q?L1vgsB3hD18VsnnHQy4ew+/ZLeWR1j1M2rls6bbQvdm50rDFMfde+X2xua?=
+ =?iso-8859-2?Q?ViU0Fkh6KaSCsd2DboNm34JRoEotlRxWDGFvaqw2c4B2BGYznLkuVL0yd6?=
+ =?iso-8859-2?Q?dMIlqrqfj54isdElEUs9nstK1bvV4FQrJ4zPO/12JMxo/XJIkG0rMWFoNX?=
+ =?iso-8859-2?Q?BJq/B951oB+z1vwWBx0ZsRDrzBQXq6T3NZol3WGjBPkYgcFGGLRsLTxv3E?=
+ =?iso-8859-2?Q?gMngPZ/e1LGKo8s5Uoam8Cao+bI8vwsdOXg1BGdxPxuPI3AGY4JaGoT7QN?=
+ =?iso-8859-2?Q?wJkNQO0d1St6EXmiL1jAypnGpGKCVXQVlzza5mJQkCTAjJ121U1ZCpwCwc?=
+ =?iso-8859-2?Q?O0ZTa0fX3Uj6Dx6yo4Y+wgctfbZgF+xIdTyPhIlvZgODxTIOuusxevblFs?=
+ =?iso-8859-2?Q?h6AM3ThF8j9yhMQtv4wsoPAVITPMowTgJGHvuhoFKeimDpCsmkQFKg9Qif?=
+ =?iso-8859-2?Q?h9XXyzpLql/JMfuzid5hpeGOFQ2iVXtZa4HgIyf3Ggl7IcSzYqlbMeVit3?=
+ =?iso-8859-2?Q?BIvI7DxVM1d7HRO2zVnBV5xQzmQgw30OhfhFDCW9oYlJs/ldO4KCDXI2lg?=
+ =?iso-8859-2?Q?yZQBd5m5q2vU/yNgIqBcKMrzZixiTg7/7gkRIuGTKF8jLHsM2BMv6H5Q+W?=
+ =?iso-8859-2?Q?TvNfon9srhgV8Q7DQpSFQsN/RaqZHkMKS6lulPvoPAYiN7PoVuXpA4vCuB?=
+ =?iso-8859-2?Q?JXder6xutjuV28rnKwgIJQF8LMVVV4XzxMTy7jXXZk2daopq0P4p856dCa?=
+ =?iso-8859-2?Q?uVU4uhs1ly9OXx9BtzNfo6XgZbR8tOxoJzu/ELMVM5Q1NDRrDuiNsL5MPW?=
+ =?iso-8859-2?Q?OPmJhQlEKlj1uxfyxkYw0363WqwKDyJDb6dlnbc69arTalFa2wKTdA9ttq?=
+ =?iso-8859-2?Q?mLG8GuE7dFAkJTz12z4467wz3Raz2QmwsvOMb2HKzG7SeohYLZGn5xQlE1?=
+ =?iso-8859-2?Q?ocCBULfyb5nfg2htoEadSZeP1DmFU84pfmqfYPseA9FHzjCII9nNd1wFZ8?=
+ =?iso-8859-2?Q?dm3KWWMQksT1bQYsc1XDMcXRr3OmH6QzS708ycZ519GazgBSequZsWWtbn?=
+ =?iso-8859-2?Q?OYymJY43hZluDNUCLCf/OjsQzWd+vA5Gkmyuj8SsaveyiyYTYFPnnVhc2n?=
+ =?iso-8859-2?Q?0D2Q=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR07MB6208.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6c72d303-4281-44e2-755f-08d9dc164a6f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jan 2022 13:10:54.4439
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fQhjD/QNNHqGDibzXjjm9fv9ppecEZEFyxQbMEU/rgQaizuS8HMUBthEMTEOXCwIMj4G0/bxzOpHC7YjsLfzCvaTSDCOT0PdDBxcw1pr7Gs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR07MB6046
+X-Proofpoint-GUID: pnk3psiNmUvnxdJnfEN45xp2Qdz2-Ls_
+X-Proofpoint-ORIG-GUID: pnk3psiNmUvnxdJnfEN45xp2Qdz2-Ls_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-20_04,2022-01-20_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 clxscore=1011
+ priorityscore=1501 lowpriorityscore=0 phishscore=0 impostorscore=0
+ mlxlogscore=851 spamscore=0 bulkscore=0 adultscore=0 malwarescore=0
+ mlxscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201200069
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Shi <alexs@kernel.org>
+Hi Li,
 
-The function could be fully replaced by lruvec_del_folio(), no reason to
-keep a duplicate one.
+ For 64_bits ,  all the odd bars (BAR1, 3 ,5) will be disabled ( so as to u=
+se as upper bits).
+I see that the code is assuming 32_bits if size < 2G , so all bars could be=
+ enabled.
 
-Signed-off-by: Alex Shi <alexs@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Yu Zhao <yuzhao@google.com>
-Cc: Alex Shi <alexs@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-mm@kvack.org
----
- include/linux/mm_inline.h |  6 ------
- mm/compaction.c           |  2 +-
- mm/mlock.c                |  2 +-
- mm/swap.c                 | 10 +++++-----
- mm/vmscan.c               |  4 ++--
- 5 files changed, 9 insertions(+), 15 deletions(-)
+As I understand, you have a use case where you want to set the bar as 64 bi=
+t, actually use small size.
+Is it possible to describe bit more about this use case (just curious)?
 
-diff --git a/include/linux/mm_inline.h b/include/linux/mm_inline.h
-index 4df5b39cc97b..a66c08079675 100644
---- a/include/linux/mm_inline.h
-+++ b/include/linux/mm_inline.h
-@@ -110,12 +110,6 @@ void lruvec_del_folio(struct lruvec *lruvec, struct folio *folio)
- 			-folio_nr_pages(folio));
- }
- 
--static __always_inline void del_page_from_lru_list(struct page *page,
--				struct lruvec *lruvec)
--{
--	lruvec_del_folio(lruvec, page_folio(page));
--}
--
- #ifdef CONFIG_ANON_VMA_NAME
- /*
-  * mmap_lock should be read-locked when calling vma_anon_name() and while using
-diff --git a/mm/compaction.c b/mm/compaction.c
-index 12f2af6ac484..385e0bb7aad5 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -1064,7 +1064,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
- 			low_pfn += compound_nr(page) - 1;
- 
- 		/* Successfully isolated */
--		del_page_from_lru_list(page, lruvec);
-+		lruvec_del_folio(lruvec, page_folio(page));
- 		mod_node_page_state(page_pgdat(page),
- 				NR_ISOLATED_ANON + folio_is_file_lru(page_folio(page)),
- 				thp_nr_pages(page));
-diff --git a/mm/mlock.c b/mm/mlock.c
-index 8f584eddd305..6b64758b5d8c 100644
---- a/mm/mlock.c
-+++ b/mm/mlock.c
-@@ -280,7 +280,7 @@ static void __munlock_pagevec(struct pagevec *pvec, struct zone *zone)
- 			 */
- 			if (TestClearPageLRU(page)) {
- 				lruvec = folio_lruvec_relock_irq(folio, lruvec);
--				del_page_from_lru_list(page, lruvec);
-+				lruvec_del_folio(lruvec, page_folio(page));
- 				continue;
- 			} else
- 				__munlock_isolation_failed(page);
-diff --git a/mm/swap.c b/mm/swap.c
-index 23c0afb76be6..359821740e0f 100644
---- a/mm/swap.c
-+++ b/mm/swap.c
-@@ -85,7 +85,7 @@ static void __page_cache_release(struct page *page)
- 		unsigned long flags;
- 
- 		lruvec = folio_lruvec_lock_irqsave(folio, &flags);
--		del_page_from_lru_list(page, lruvec);
-+		lruvec_del_folio(lruvec, page_folio(page));
- 		__folio_clear_lru_flags(page_folio(page));
- 		unlock_page_lruvec_irqrestore(lruvec, flags);
- 	}
-@@ -533,7 +533,7 @@ static void lru_deactivate_file_fn(struct page *page, struct lruvec *lruvec)
- 	if (page_mapped(page))
- 		return;
- 
--	del_page_from_lru_list(page, lruvec);
-+	lruvec_del_folio(lruvec, page_folio(page));
- 	ClearPageActive(page);
- 	ClearPageReferenced(page);
- 
-@@ -566,7 +566,7 @@ static void lru_deactivate_fn(struct page *page, struct lruvec *lruvec)
- 	if (PageActive(page) && !PageUnevictable(page)) {
- 		int nr_pages = thp_nr_pages(page);
- 
--		del_page_from_lru_list(page, lruvec);
-+		lruvec_del_folio(lruvec, page_folio(page));
- 		ClearPageActive(page);
- 		ClearPageReferenced(page);
- 		lruvec_add_folio(lruvec, page_folio(page));
-@@ -583,7 +583,7 @@ static void lru_lazyfree_fn(struct page *page, struct lruvec *lruvec)
- 	    !PageSwapCache(page) && !PageUnevictable(page)) {
- 		int nr_pages = thp_nr_pages(page);
- 
--		del_page_from_lru_list(page, lruvec);
-+		lruvec_del_folio(lruvec, page_folio(page));
- 		ClearPageActive(page);
- 		ClearPageReferenced(page);
- 		/*
-@@ -965,7 +965,7 @@ void release_pages(struct page **pages, int nr)
- 			if (prev_lruvec != lruvec)
- 				lock_batch = 0;
- 
--			del_page_from_lru_list(page, lruvec);
-+			lruvec_del_folio(lruvec, page_folio(page));
- 			__folio_clear_lru_flags(page_folio(page));
- 		}
- 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index f09473c9ff35..8ab97eac284a 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -2247,7 +2247,7 @@ int isolate_lru_page(struct page *page)
- 
- 		get_page(page);
- 		lruvec = folio_lruvec_lock_irq(folio);
--		del_page_from_lru_list(page, lruvec);
-+		lruvec_del_folio(lruvec, page_folio(page));
- 		unlock_page_lruvec_irq(lruvec);
- 		ret = 0;
- 	}
-@@ -4873,7 +4873,7 @@ void check_move_unevictable_pages(struct pagevec *pvec)
- 
- 		lruvec = folio_lruvec_relock_irq(folio, lruvec);
- 		if (page_evictable(page) && PageUnevictable(page)) {
--			del_page_from_lru_list(page, lruvec);
-+			lruvec_del_folio(lruvec, page_folio(page));
- 			ClearPageUnevictable(page);
- 			lruvec_add_folio(lruvec, page_folio(page));
- 			pgrescued += nr_pages;
--- 
-2.25.1
+Thanks,
+Tom =20
 
+> -----Original Message-----
+> From: Li Chen <lchen@ambarella.com>
+> Sent: 19 January 2022 09:28
+> To: Tom Joseph <tjoseph@cadence.com>
+> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>; Rob Herring
+> <robh@kernel.org>; Krzysztof Wilczy=F1ski <kw@linux.com>; Bjorn Helgaas
+> <bhelgaas@google.com>; linux-pci@vger.kernel.org; linux-
+> kernel@vger.kernel.org
+> Subject: Why does cdns_pcie_ep_set_bar use sz > SZ_2G for is_64bits in
+> pcie-cadence-ep.c?
+>=20
+> EXTERNAL MAIL
+>=20
+>=20
+> Hi, Tom
+>=20
+> From these function:
+> static int cdns_pcie_ep_set_bar(struct pci_epc *epc, u8 fn, u8 vfn,
+> 				struct pci_epf_bar *epf_bar)
+> {
+> 	......
+> 	if ((flags & PCI_BASE_ADDRESS_SPACE) =3D=3D
+> PCI_BASE_ADDRESS_SPACE_IO) {
+> 		ctrl =3D CDNS_PCIE_LM_BAR_CFG_CTRL_IO_32BITS;
+> 	} else {
+> 		bool is_prefetch =3D !!(flags &
+> PCI_BASE_ADDRESS_MEM_PREFETCH);
+> 		bool is_64bits =3D sz > SZ_2G;
+> 		if (is_64bits && (bar & 1))
+> 			return -EINVAL;
+> 		if (is_64bits && !(flags &
+> PCI_BASE_ADDRESS_MEM_TYPE_64))
+> 			epf_bar->flags |=3D
+> PCI_BASE_ADDRESS_MEM_TYPE_64;
+>=20
+> 		if (is_64bits && is_prefetch)
+> 			ctrl =3D
+> CDNS_PCIE_LM_BAR_CFG_CTRL_PREFETCH_MEM_64BITS;
+> 		else if (is_prefetch)
+> 			ctrl =3D
+> CDNS_PCIE_LM_BAR_CFG_CTRL_PREFETCH_MEM_32BITS;
+> 		else if (is_64bits)
+> 			ctrl =3D CDNS_PCIE_LM_BAR_CFG_CTRL_MEM_64BITS;
+> 		else
+> 			ctrl =3D CDNS_PCIE_LM_BAR_CFG_CTRL_MEM_32BITS;
+> 	}
+>=20
+> 	......
+> }
+>=20
+>=20
+> I don't understand why should sz > SZ_2G be taken into account for 64_bit=
+s.
+> From my personal practice, there is no problem to use
+> CDNS_PCIE_LM_BAR_CFG_CTRL_MEM_64BITS or
+> CDNS_PCIE_LM_BAR_CFG_CTRL_PREFETCH_MEM_64BITS when sz < SZ_2G.
+>=20
+>=20
+> Regards,
+> Li
+>=20
+> **********************************************************
+> ************
+> This email and attachments contain Ambarella Proprietary and/or
+> Confidential Information and is intended solely for the use of the
+> individual(s) to whom it is addressed. Any unauthorized review, use,
+> disclosure, distribute, copy, or print is prohibited. If you are not an i=
+ntended
+> recipient, please contact the sender by reply email and destroy all copie=
+s of
+> the original message. Thank you.

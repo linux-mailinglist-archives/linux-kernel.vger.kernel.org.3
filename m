@@ -2,144 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49CE54952BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 17:57:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB3B4952BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 17:57:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377148AbiATQ5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 11:57:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:25002 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1377067AbiATQ5O (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 11:57:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642697833;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rmS8L8fuOGkYvKFNmD68YPx7y9KPPBqF8b31jD22Rys=;
-        b=fJZkzZ3qIUiRsdY8AAbks6aqAzzUN4K8oa+5oLuc+FRX5kLugceWfTjzEMKd/1iPC4MLIB
-        dMN8mPDhuP4FYUAVr+DRVwPWplvXi4quMVSzdhmKS5L4haEAv8HPvdD2WSm+xVdY9Sdv9r
-        ErcZrZ5d5yxvYLqaDFsNCEpnr5LkfRA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-211-OU_QU9z4N2en4SccgRePUQ-1; Thu, 20 Jan 2022 11:57:12 -0500
-X-MC-Unique: OU_QU9z4N2en4SccgRePUQ-1
-Received: by mail-wm1-f69.google.com with SMTP id bg32-20020a05600c3ca000b00349f2aca1beso4448757wmb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 08:57:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rmS8L8fuOGkYvKFNmD68YPx7y9KPPBqF8b31jD22Rys=;
-        b=Z1JtiBm96Oaed0wliTMp6U9x+5iG8ZiazhGMQt/HPsxCXUuI8X7GBZuF7Q8Pcm/pGH
-         elgtcoG/dUVqERDX2SpNZuPrXUZib05qB6wkO4ZPL1But9Je0pWnMfwc8YNGuBTJkdGB
-         11T1qdUCHYMIFoLh1PFm4/N5SMz4SwqwzcYDc1ogXJAPSX8B6jwehyYWRd/e2b5v3rk7
-         bUKOEiTnKSVLD8M9C5Ayzpx2ZS+D9tj+tXvS6Xfy1L9psHdjJEV2bOZduzmqLzzwO8Gv
-         65XG3R0b8xuuw3zOhOQct3yiIZNgvfZTCxrUJ2d1fgmLmrQyBGog59FE3NFGkhlr8iEd
-         TA9Q==
-X-Gm-Message-State: AOAM531GxYy1z9ZCwXlVZ3O8R38JO8+kAb8FBLDilAztgvHp4pSqBK26
-        k1Nf9C28BYDVbdsZ/gRiiulggrJIPPXDIFlo2a09wnspwKuwR0NO+LJwXoXbbgpmo+klyHmdANC
-        n45LXeNBUnB6/Lffb2OQ84Ev1
-X-Received: by 2002:a5d:4451:: with SMTP id x17mr29521516wrr.505.1642697831275;
-        Thu, 20 Jan 2022 08:57:11 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwthZUX4DlO+JHTQ7b16oYihnrgBNAZdegFIa39K3kVEawdJylqf0SothSMkpbm1DKzphY3fw==
-X-Received: by 2002:a5d:4451:: with SMTP id x17mr29521478wrr.505.1642697831040;
-        Thu, 20 Jan 2022 08:57:11 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id d6sm3209558wrs.85.2022.01.20.08.57.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 08:57:10 -0800 (PST)
-Message-ID: <a2b628b4-907c-4e15-df91-18c0db099228@redhat.com>
-Date:   Thu, 20 Jan 2022 17:57:05 +0100
+        id S1377188AbiATQ5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 11:57:23 -0500
+Received: from mga12.intel.com ([192.55.52.136]:10462 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1377176AbiATQ5T (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 11:57:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642697839; x=1674233839;
+  h=date:from:to:subject:message-id:references:mime-version:
+   content-transfer-encoding:in-reply-to;
+  bh=pCcwTYYesBJwbUxzk/FlPOIcKf6xw2HINpD6RNQi8Ug=;
+  b=mio8YSRAqurha6z+YCGHa20GK7EYxbTZdcZIc0dtbdAcOMiuQ+UeYDGv
+   4m4zlra6u5dzYy5w6vwc3Id8sT2JaEzm9HlmriMtmNgq7dLMi/G0ODVj6
+   wDeVaDZNsYuK9O573TPBt9FecNiuUgIPNXTY761U9wviUSuVfIGWEPybe
+   JZKdcdUUxwmR/S88u2nWKizRmSIAy2XuSyxxxJkTqIho4BQEvazqQFE/0
+   dMvn8dDcTI3FFDYvkdp/TO2oTHsyDxcl3iru/8SratB5IX2J5ma8vDQvi
+   lzdieDMnVBxuy6L28+BlKIBDkF0ZN06M6Avkn/dIPeeRzclHC1AWjVT5h
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="225377673"
+X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
+   d="scan'208";a="225377673"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 08:57:18 -0800
+X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
+   d="scan'208";a="532859202"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 08:57:18 -0800
+Date:   Thu, 20 Jan 2022 08:57:17 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [Intel-gfx] [PATCH 0/7] DRM kmap() fixes and kmap_local_page()
+ conversions
+Message-ID: <20220120165717.GG209936@iweiny-DESK2.sc.intel.com>
+References: <20211210232404.4098157-1-ira.weiny@intel.com>
+ <20220119165356.GD209936@iweiny-DESK2.sc.intel.com>
+ <YehJRt+JngIsj+Gd@phenom.ffwll.local>
+ <20220119235542.GF209936@iweiny-DESK2.sc.intel.com>
+ <fb71af05-a889-8f6e-031b-426b58a64f00@amd.com>
+ <YemEYndwyP6BHwMx@phenom.ffwll.local>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 4/7] kvm/mips: rework guest entry logic
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org
-Cc:     aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
-        anup.patel@wdc.com, aou@eecs.berkeley.edu, atish.patra@wdc.com,
-        borntraeger@linux.ibm.com, bp@alien8.de, catalin.marinas@arm.com,
-        chenhuacai@kernel.org, dave.hansen@linux.intel.com,
-        frankja@linux.ibm.com, frederic@kernel.org, gor@linux.ibm.com,
-        hca@linux.ibm.com, james.morse@arm.com, jmattson@google.com,
-        joro@8bytes.org, luto@kernel.org, maz@kernel.org, mingo@redhat.com,
-        mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com,
-        paulmck@kernel.org, paul.walmsley@sifive.com, peterz@infradead.org,
-        seanjc@google.com, suzuki.poulose@arm.com, svens@linux.ibm.com,
-        tglx@linutronix.de, tsbogend@alpha.franken.de, vkuznets@redhat.com,
-        wanpengli@tencent.com, will@kernel.org
-References: <20220119105854.3160683-1-mark.rutland@arm.com>
- <20220119105854.3160683-5-mark.rutland@arm.com>
- <20220120164455.GA15464@C02TD0UTHF1T.local>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220120164455.GA15464@C02TD0UTHF1T.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YemEYndwyP6BHwMx@phenom.ffwll.local>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/20/22 17:44, Mark Rutland wrote:
-> On Wed, Jan 19, 2022 at 10:58:51AM +0000, Mark Rutland wrote:
->> In kvm_arch_vcpu_ioctl_run() we use guest_enter_irqoff() and
->> guest_exit_irqoff() directly, with interrupts masked between these. As
->> we don't handle any timer ticks during this window, we will not account
->> time spent within the guest as guest time, which is unfortunate.
->>
->> Additionally, we do not inform lockdep or tracing that interrupts will
->> be enabled during guest execution, which caan lead to misleading traces
->> and warnings that interrupts have been enabled for overly-long periods.
->>
->> This patch fixes these issues by using the new timing and context
->> entry/exit helpers to ensure that interrupts are handled during guest
->> vtime but with RCU watching, with a sequence:
->>
->> 	guest_timing_enter_irqoff();
->>
->> 	guest_state_enter_irqoff();
->> 	< run the vcpu >
->> 	guest_state_exit_irqoff();
->>
->> 	< take any pending IRQs >
->>
->> 	guest_timing_exit_irqoff();
+On Thu, Jan 20, 2022 at 04:48:50PM +0100, Daniel Vetter wrote:
+> On Thu, Jan 20, 2022 at 09:16:35AM +0100, Christian König wrote:
+> > Am 20.01.22 um 00:55 schrieb Ira Weiny:
+> > > On Wed, Jan 19, 2022 at 06:24:22PM +0100, Daniel Vetter wrote:
+> > > > On Wed, Jan 19, 2022 at 08:53:56AM -0800, Ira Weiny wrote:
+> > > > > On Fri, Dec 10, 2021 at 03:23:57PM -0800, 'Ira Weiny' wrote:
+> > > > > > From: Ira Weiny <ira.weiny@intel.com>
+> > > > > > 
+> > > > > > This series starts by converting the last easy kmap() uses to
+> > > > > > kmap_local_page().
+> > > > > > 
+> > > > > > There is one more call to kmap() wrapped in ttm_bo_kmap_ttm().  Unfortunately,
+> > > > > > ttm_bo_kmap_ttm() is called in a number of different ways including some which
+> > > > > > are not thread local.  I have a patch to convert that call.  However, it is not
+> > > > > > straight forward so it is not included in this series.
+> > > > > > 
+> > > > > > The final 2 patches fix bugs found while working on the ttm_bo_kmap_ttm()
+> > > > > > conversion.
+> > > > > Gentile ping on this series?  Will it make this merge window?
+> > > > I think this fell through the cracks and so no. Note that generally we
+> > > > feature-freeze drm tree around -rc6 anyway for the upcoming merge window,
+> > > > so you were cutting this all a bit close anyway.
+> > > Ok, No problem.  I just had not heard if this was picked up or not.
+> > > 
+> > > > Also looks like the ttm
+> > > > kmap caching question didn't get resolved?
+> > > I'm sorry I thought it was resolve for this series.  Christian said the patches
+> > > in this series were "a good bug fix" even if not strictly necessary.[1]  Beyond
+> > > this series I was discussing where to go from here, and is it possible to go
+> > > further with more changes.[2]  At the moment I don't think I will.
+> > > 
+> > > Christian did I misunderstand?  I can drop patch 6 and 7 if they are not proper
+> > > bug fixes or at least clarifications to the code.
+> > 
+> > Yeah, it is indeed a correct cleanup. I would just *not* put a CC stable on
+> > it because it doesn't really fix anything.
 > 
-> Looking again, this patch isn't sufficient.
+> Ok can you pls get the amd/radeon ones stuffed into alex' tree? Or do we
+> want to put all the ttm ones into drm-misc instead?
+
+I just updated to the latest master and there is a minor conflict.  Since this
+is not going in this window.  Let me rebase and resend.
+
+Ira
+
+> -Daniel
 > 
-> On MIPS a guest exit will be handled by kvm_mips_handle_exit() *before*
-> returning into the "< run the vcpu >" step above, so we won't call
-> guest_state_exit_irqoff() before using RCU, etc.
-
-Indeed.  kvm_mips_handle_exit has a weird mutual recursion through runtime-assembled code, but then this is MIPS...
-
-This should do it:
-
-diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-index e59cb6246f76..6f2291f017f5 100644
---- a/arch/mips/kvm/mips.c
-+++ b/arch/mips/kvm/mips.c
-@@ -1192,6 +1192,7 @@ int kvm_mips_handle_exit(struct kvm_vcpu *vcpu)
-  	kvm_mips_set_c0_status();
-  
-  	local_irq_enable();
-+	guest_timing_exit_irqoff();
-  
-  	kvm_debug("kvm_mips_handle_exit: cause: %#x, PC: %p, kvm_run: %p, kvm_vcpu: %p\n",
-  			cause, opc, run, vcpu);
-@@ -1325,6 +1326,7 @@ int kvm_mips_handle_exit(struct kvm_vcpu *vcpu)
-  	}
-  
-  	if (ret == RESUME_GUEST) {
-+		guest_timing_enter_irqoff();
-  		trace_kvm_reenter(vcpu);
-  
-  		/*
-
-
-Paolo
-

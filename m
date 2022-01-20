@@ -2,85 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E5549462B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 04:34:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23930494631
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 04:36:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358384AbiATDeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 22:34:07 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:41472 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234287AbiATDeG (ORCPT
+        id S1358391AbiATDgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 22:36:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53596 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232151AbiATDgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 22:34:06 -0500
-X-UUID: 0e3172ea1eef46cebc6361e5b4b2992f-20220120
-X-UUID: 0e3172ea1eef46cebc6361e5b4b2992f-20220120
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <guangming.cao@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1117506135; Thu, 20 Jan 2022 11:34:01 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 20 Jan 2022 11:34:00 +0800
-Received: from mszswglt01.gcn.mediatek.inc (10.16.20.20) by
- mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Thu, 20 Jan 2022 11:33:59 +0800
-From:   <guangming.cao@mediatek.com>
-To:     <john.stultz@linaro.org>
-CC:     <benjamin.gaignard@linaro.org>, <bo.song@mediatek.com>,
-        <christian.koenig@amd.com>, <dri-devel@lists.freedesktop.org>,
-        <guangming.cao@mediatek.com>, <jianjiao.zeng@mediatek.com>,
-        <labbott@redhat.com>, <libo.kang@mediatek.com>,
-        <linaro-mm-sig@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <lmark@codeaurora.org>,
-        <matthias.bgg@gmail.com>, <michael.j.ruhl@intel.com>,
-        <mingyuan.ma@mediatek.com>, <sumit.semwal@linaro.org>,
-        <wsd_upstream@mediatek.com>, <yf.wang@mediatek.com>,
-        <caoguangming34@gmail.com>, Guangming <Guangming.Cao@mediatek.com>
-Subject: [PATCH v4] dma-buf: system_heap: Add a size check for allocation
-Date:   Thu, 20 Jan 2022 11:34:50 +0800
-Message-ID: <20220120033450.90164-1-guangming.cao@mediatek.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <CALAqxLUtK8V9LgC-DY+tkzFYyWfzF+JhbrLZk6UhEG57HQBDSA@mail.gmail.com>
-References: <CALAqxLUtK8V9LgC-DY+tkzFYyWfzF+JhbrLZk6UhEG57HQBDSA@mail.gmail.com>
+        Wed, 19 Jan 2022 22:36:22 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F5DC061574;
+        Wed, 19 Jan 2022 19:36:22 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JfSpr0VjRz4xmx;
+        Thu, 20 Jan 2022 14:36:19 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1642649780;
+        bh=SQFUWSYH6b85H0qk+VmSPcOcr+KOF+oja5YY+V9CgJs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=McvjR4ncDckHiXlfITouI69ZfthqoCDodAYCZ/LHJma9K9+OtkPU+JirTymlGyxs+
+         g4o2bg5OpnBcvow74dpkzwWP0XvPqWlInbX7xrNjjoPnFNH7L70GR8/LWTHgrsrQWF
+         qOIK0xs2zozgs3rIbqLlVywK8CVpp3CtNTYTCOGi3BqVGoJ4eFJMdUDQkWOch4ZkJ1
+         jqi7IBgfTYSn0f6wX/JEdNv201KaRHd8Dy8F3ekpe+NOdDYP1g8HO24pCDfx6TV0FZ
+         vQ5UvrANQFgRKko4GjsLc2Td9nKSEblajwhZzurNqW4p57jbtf/6sN9JPdbu639Gqi
+         QbY30H1h/p2Cg==
+Date:   Thu, 20 Jan 2022 14:36:19 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     "Wang, Wei W" <wei.w.wang@intel.com>, KVM <kvm@vger.kernel.org>,
+        "Zeng, Guang" <guang.zeng@intel.com>,
+        "Liu, Jing2" <jing2.liu@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Linux Next Mailing List" <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the kvm tree
+Message-ID: <20220120143619.4803cb36@canb.auug.org.au>
+In-Reply-To: <507a652f97de4e0fb26d604084ef6f25@intel.com>
+References: <20220110195844.7de09681@canb.auug.org.au>
+        <507a652f97de4e0fb26d604084ef6f25@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: multipart/signed; boundary="Sig_/HfHf2ONiXooc+6U6KWkks9p";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guangming <Guangming.Cao@mediatek.com>
+--Sig_/HfHf2ONiXooc+6U6KWkks9p
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Add a size check for allocation since the allocation size should be
-always less than the total DRAM size on system heap.
-And it can prevent consuming too much time for invalid allocations.
+Hi all,
 
-Signed-off-by: Guangming <Guangming.Cao@mediatek.com>
----
- drivers/dma-buf/heaps/system_heap.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+On Tue, 11 Jan 2022 02:55:56 +0000 "Wang, Wei W" <wei.w.wang@intel.com> wro=
+te:
+>
+> On Monday, January 10, 2022 4:59 PM, Stephen Rothwell wrote:
+> > After merging the kvm tree, today's linux-next build (htmldocs) produce=
+d this
+> > warning:
+> >=20
+> > Documentation/virt/kvm/api.rst:5549: WARNING: Title underline too short.
+> >=20
+> > 4.42 KVM_GET_XSAVE2
+> > ------------------ =20
+>=20
+> Should add one more "_" above.
+> 4.42 KVM_GET_XSAVE2
+> -------------------
+> +-------------------
+>=20
+> Paolo, do you want us to send another patch to add it or you can just add=
+ it?
 
-diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/system_heap.c
-index 23a7e74ef966..bd6f255620e2 100644
---- a/drivers/dma-buf/heaps/system_heap.c
-+++ b/drivers/dma-buf/heaps/system_heap.c
-@@ -347,6 +347,13 @@ static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
- 	struct page *page, *tmp_page;
- 	int i, ret = -ENOMEM;
- 
-+	/*
-+	 * Size check. The "len" should be less than totalram since system_heap
-+	 * memory is comes from system. Adding check here can prevent consuming
-+	 * too much time for invalid allocations.
-+	 */
-+	if (len >> PAGE_SHIFT > totalram_pages())
-+		return -EINVAL;
- 	buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
- 	if (!buffer)
- 		return ERR_PTR(-ENOMEM);
--- 
-2.17.1
+I am still seeing this warning.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/HfHf2ONiXooc+6U6KWkks9p
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHo2LMACgkQAVBC80lX
+0GzpAQf+NPzN/Q8H/rh9e9knNd7c5olE+Xwa1Iwvv8RVzj5FoiYjHJ4MhTVsnNkV
+QO0M7Lr/J8w/43kmVckSEOLYBwrtgN6+XR7aR7cOBMZcNpksnqyQEboIVzRv2kDM
+VSM9pHO0cz5Q46bTXtLS3/D01mmTb+h6ZXQPNRiyl+DsZFAkGlvpo7aqA5CeR2c+
+qqwobv0t3hzQSbsqxc4EE+yMlr7Zj0jhBAu1zaaiOPnTF5lg25rkoLIxs5IK6gV2
+zEWHwoxVK9yi2NAXnKkCIldyKJOFo7qfePLK6dzAgaNeBK7qSqMyfY8LQRrv9zdc
+tBtehl7WTdUm8/gTsgHOiXUX7+GIUg==
+=crtO
+-----END PGP SIGNATURE-----
+
+--Sig_/HfHf2ONiXooc+6U6KWkks9p--

@@ -2,173 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F4A494E99
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 14:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B999494E97
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 14:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245046AbiATNHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 08:07:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
+        id S244218AbiATNHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 08:07:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244622AbiATNHJ (ORCPT
+        with ESMTP id S241799AbiATNHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 08:07:09 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB65C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 05:07:08 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id o1-20020a1c4d01000000b0034d95625e1fso7280926wmh.4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 05:07:08 -0800 (PST)
+        Thu, 20 Jan 2022 08:07:01 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9BBC061574;
+        Thu, 20 Jan 2022 05:07:01 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id o12so21300170lfu.12;
+        Thu, 20 Jan 2022 05:07:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Pf4BYXVkEBiAHxvfjg/LOTJIqSqaQLQh4tvfHTTB40k=;
-        b=w9Qy6G03ThdCH7oCJFZ1yv/joiohw6cBHxsD4nQF5QSUU7k8QyVWRwA9pnL3IhaAgj
-         zmFZcqLzoA+JenBw6K0Db06rx9TbYNbhs/uJi3nIzp2c/L+b0VzZFtZeElTlDwOFKJRq
-         egfnvSgubGXORX0PQxktigyZcUZ7endRTEcVxNxhOGy0V4gzzNLnOEiLBnWQnCzlgTKy
-         NpzzEmuD3wLP24QvgUXyQzmW3uBF1li5AsDK2P9g9RECXV+S3IjuHYwWS4QVXEOm4ry6
-         R0xHUA7Ke+KuGxU/iZby+1HSbVxQTBF6th0OcW6FK5gXq7V0yeQY95wu7KKAem3eAveQ
-         Xacg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=aXepAYAyT7/G8EroLA/XnX6tZ9gPc8nhC6rl/rhcEGs=;
+        b=Ss4NoeWtMC4d0o9WZ/kRzzaxrIxL/7mA+WzSid6J6zcrfxEDmH3DqWIBii2r8YeQzC
+         rvnUwzEkWpesHSbJFyrOerFhoQOhmAhbe1XNwjJ96JqZcgx3127/m2tWqVXLWgQvjts9
+         COBENoNvpCehEgl6WbsJBKdK3mW2aLb2+xpqLYJW1FB2hZliu2cqxevrinDA8CmPooju
+         G6e4Jq6PWfWkVWZY/hCRauFk6bSYWLkf4q8xA4ujRdLuQLN7l2uv/ClSYmu7NvOGswdq
+         iR9vM4BQGWQErX2KewyEHCEzP0bKi7o3HnDU1qeRHgvppGbCRkyBkf67Shicjq7Q6ltE
+         OyUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Pf4BYXVkEBiAHxvfjg/LOTJIqSqaQLQh4tvfHTTB40k=;
-        b=OlX71BdqtUJKgSmxSPnzjVLhlRiQzDF0kRNtQxtWKcSW4JKl3tWKXt3inTZVmDln7Y
-         Xel1anSjsHVBVnpzXuEjKQsvSpG81paTk78ekv9N4dOAbJrISzl2w/CvTPfQdygWT8wi
-         spsRpNp6IcnvxdZU60KtU0s2glanDcQz2REZhpFnHqQJfix2a4BTxyRyA0uSnHFS6ev7
-         IN1eQKyUBTMLcQbNqFZwCwna5IvkLz0ygfPhRgZSccSczdYO002K4/DPduTDDb05a1jb
-         CMQaQlt7Hzf7yjpkfkrqzhOBZBVW50qpPgg8nP/MbgHHxs8es0t+rGNPXtqkqBETJ8Ww
-         msaQ==
-X-Gm-Message-State: AOAM530VSJuAYRgBfAfHCOVr1xsUV/+WF3CZTrSoZMT1t1Pgd7+QiNGv
-        Epj7E9qxGg7c71CXxJtGohb+knNt+e7b2i+c59+u6A==
-X-Google-Smtp-Source: ABdhPJzX+KqHzjtxOkv77MHHzbYfly4M1iEzLRQJEKYDS8mwQ891Is6L6HbxPg8YkZVjZJdMyUOLiUxCDTatsoiaiE8=
-X-Received: by 2002:a5d:6c6e:: with SMTP id r14mr13074020wrz.651.1642684027298;
- Thu, 20 Jan 2022 05:07:07 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=aXepAYAyT7/G8EroLA/XnX6tZ9gPc8nhC6rl/rhcEGs=;
+        b=Yv3/aGdMBTMMKC2S1BRh1IZNdFd7Jegst1jMAhG0JAz1NAi3uKLavB0AG/XjxPwlep
+         4YDI4l8dGcn1rQj0VTomdtErn1scw6LsO/hi9fLGa7ZOZZOXzSaWkPRbkAGJccAWJ3Xb
+         pzsw+kF2/qE5j9YYFtbQFYazNXlcFUWf+NGJspBL9VaV4b6WZoTFd3ltbF2IkWvGiIsm
+         ZPzQ/ObIM8Mor1dtQGUt9nEjy22K2xPNiyuYeNI/o2Cm6YdmGRIYrXrpgRG1IuTx6eFN
+         EKqYMMj94YNGJQmWDQjJUhkfcQEGptBh/PfGeSZmtJOMlBoJHK2Xcmk2LPp/odqvRsGx
+         7vvQ==
+X-Gm-Message-State: AOAM5304Q1nfzdMPVO5DEJ/AT1Wj9jXuLDijMW0s+UgQEeYFzzVseQuY
+        6/Rc9mBv46jNXWBE0anvO2g=
+X-Google-Smtp-Source: ABdhPJz7bgETZMke5qG1t4pwZ0b4t8bIgENlVidIOCfUlk+navtmLt1uQXf8liK1BUVJZ6CnicFTqA==
+X-Received: by 2002:a2e:8854:: with SMTP id z20mr7773833ljj.343.1642684019705;
+        Thu, 20 Jan 2022 05:06:59 -0800 (PST)
+Received: from [192.168.2.145] (109-252-139-36.dynamic.spd-mgts.ru. [109.252.139.36])
+        by smtp.googlemail.com with ESMTPSA id z13sm353056lft.92.2022.01.20.05.06.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 05:06:59 -0800 (PST)
+Message-ID: <1ef23e26-fcde-e2b7-d4d7-c4fc68c1ca90@gmail.com>
+Date:   Thu, 20 Jan 2022 16:06:58 +0300
 MIME-Version: 1.0
-References: <20220114150824.3578829-1-jens.wiklander@linaro.org>
- <20220114150824.3578829-10-jens.wiklander@linaro.org> <CAFA6WYOOLAxwK6P8=kcG29FGv3YG=jrOt_uAqEnrLmRwbQGU6w@mail.gmail.com>
-In-Reply-To: <CAFA6WYOOLAxwK6P8=kcG29FGv3YG=jrOt_uAqEnrLmRwbQGU6w@mail.gmail.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Thu, 20 Jan 2022 14:06:56 +0100
-Message-ID: <CAHUa44H0ryokLDJn3DLFEQUw+0jd0a_Jh9hPOCLjL-pZxKk-ZA@mail.gmail.com>
-Subject: Re: [PATCH v2 09/12] tee: add tee_shm_register_{user,kernel}_buf()
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
-        Rijo Thomas <Rijo-john.Thomas@amd.com>,
-        David Howells <dhowells@redhat.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [Patch V2] memory: tegra: Add MC error logging on tegra186 onward
+Content-Language: en-US
+To:     Ashish Mhetre <amhetre@nvidia.com>, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
+        krzysztof.kozlowski@canonical.com, linux-kernel@vger.kernel.org
+Cc:     Snikam@nvidia.com, vdumpa@nvidia.com
+References: <1642669368-20605-1-git-send-email-amhetre@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <1642669368-20605-1-git-send-email-amhetre@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 12:00 PM Sumit Garg <sumit.garg@linaro.org> wrote:
->
-> On Fri, 14 Jan 2022 at 20:38, Jens Wiklander <jens.wiklander@linaro.org> wrote:
-> >
-> > Adds the two new functions tee_shm_register_user_buf() and
-> > tee_shm_register_kernel_buf() which should be used instead of the old
-> > tee_shm_register().
-> >
-> > This avoids having the caller supplying the flags parameter which
-> > exposes a bit more than desired of the internals of the TEE subsystem.
-> >
-> > Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
-> > ---
-> >  drivers/tee/tee_core.c  |  3 +--
-> >  drivers/tee/tee_shm.c   | 34 ++++++++++++++++++++++++++++++++++
-> >  include/linux/tee_drv.h |  4 ++++
-> >  3 files changed, 39 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c
-> > index a15812baaeb1..8aa1a4836b92 100644
-> > --- a/drivers/tee/tee_core.c
-> > +++ b/drivers/tee/tee_core.c
-> > @@ -334,8 +334,7 @@ tee_ioctl_shm_register(struct tee_context *ctx,
-> >         if (data.flags)
-> >                 return -EINVAL;
-> >
-> > -       shm = tee_shm_register(ctx, data.addr, data.length,
-> > -                              TEE_SHM_DMA_BUF | TEE_SHM_USER_MAPPED);
-> > +       shm = tee_shm_register_user_buf(ctx, data.addr, data.length);
-> >         if (IS_ERR(shm))
-> >                 return PTR_ERR(shm);
-> >
-> > diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
-> > index d51bf97ce7e5..6a1dbce75616 100644
-> > --- a/drivers/tee/tee_shm.c
-> > +++ b/drivers/tee/tee_shm.c
-> > @@ -301,6 +301,40 @@ struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
-> >  }
-> >  EXPORT_SYMBOL_GPL(tee_shm_register);
-> >
-> > +/**
-> > + * tee_shm_register_user_buf() - Register a userspace shared memory buffer
-> > + * @ctx:       Context that registers the shared memory
-> > + * @addr:      The userspace address of the shared buffer
-> > + * @length:    Length of the shared buffer
-> > + *
-> > + * @returns a pointer to 'struct tee_shm'
-> > + */
-> > +struct tee_shm *tee_shm_register_user_buf(struct tee_context *ctx,
-> > +                                         unsigned long addr, size_t length)
-> > +{
-> > +       return tee_shm_register(ctx, addr, length,
-> > +                               TEE_SHM_DMA_BUF | TEE_SHM_USER_MAPPED);
-> > +}
-> > +EXPORT_SYMBOL_GPL(tee_shm_register_user_buf);
-> > +
->
-> Similar comment as for tee_shm_alloc_user_buf() in patch #3. This
-> isn't required to be exported but rather a private function to TEE
-> core.
+20.01.2022 12:02, Ashish Mhetre пишет:
+> +		default:
+> +			status_reg = MC_ERR_STATUS;
+> +			addr_reg = MC_ERR_ADR;
+> +#if defined(CONFIG_ARCH_TEGRA_194_SOC) || \
+> +    defined(CONFIG_ARCH_TEGRA_234_SOC)
+> +			addr_hi_reg = MC_ERR_ADR_HI;
+> +#endif
 
-OK, I'll fix it in v3.
+I'd add new "has_addr_hi_reg" field to struct tegra_mc_soc and use it
+instead of the ifdefs.
 
-Thanks,
-Jens
-
->
-> -Sumit
->
-> > +/**
-> > + * tee_shm_register_kernel_buf() - Register kernel memory to be shared with
-> > + *                                secure world
-> > + * @ctx:       Context that registers the shared memory
-> > + * @addr:      The buffer
-> > + * @length:    Length of the buffer
-> > + *
-> > + * @returns a pointer to 'struct tee_shm'
-> > + */
-> > +
-> > +struct tee_shm *tee_shm_register_kernel_buf(struct tee_context *ctx,
-> > +                                           void *addr, size_t length)
-> > +{
-> > +       return tee_shm_register(ctx, (unsigned long)addr, length,
-> > +                               TEE_SHM_DMA_BUF | TEE_SHM_KERNEL_MAPPED);
-> > +}
-> > +EXPORT_SYMBOL_GPL(tee_shm_register_kernel_buf);
-> > +
-> >  static int tee_shm_fop_release(struct inode *inode, struct file *filp)
-> >  {
-> >         tee_shm_put(filp->private_data);
-> > diff --git a/include/linux/tee_drv.h b/include/linux/tee_drv.h
-> > index e71cb0411e9c..029c9a0590cc 100644
-> > --- a/include/linux/tee_drv.h
-> > +++ b/include/linux/tee_drv.h
-> > @@ -289,6 +289,10 @@ struct tee_shm *tee_shm_alloc_kernel_buf(struct tee_context *ctx, size_t size);
-> >   */
-> >  struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
-> >                                  size_t length, u32 flags);
-> > +struct tee_shm *tee_shm_register_user_buf(struct tee_context *ctx,
-> > +                                         unsigned long addr, size_t length);
-> > +struct tee_shm *tee_shm_register_kernel_buf(struct tee_context *ctx,
-> > +                                           void *addr, size_t length);
-> >
-> >  /**
-> >   * tee_shm_is_registered() - Check if shared memory object in registered in TEE
-> > --
-> > 2.31.1
-> >
+if (mc->soc->has_addr_hi_reg)
+	addr_hi_reg = MC_ERR_ADR_HI;

@@ -2,93 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A664943FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 01:08:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA29149440B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 01:15:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357650AbiATAIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 19:08:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35564 "EHLO
+        id S1344814AbiATAPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 19:15:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344841AbiATAHu (ORCPT
+        with ESMTP id S230295AbiATAPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 19:07:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB08C061574;
-        Wed, 19 Jan 2022 16:07:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BE8C6150D;
-        Thu, 20 Jan 2022 00:07:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 368AAC004E1;
-        Thu, 20 Jan 2022 00:07:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642637269;
-        bh=+jNT40e3buQeCRmePpis8mqyA1ni74XkL1YM5TAbY54=;
-        h=Date:From:To:Cc:Subject:From;
-        b=JTBcBHa4acX3Q639wJcpmIl4rnYEQ4aqTdDa0uzXy352Ey77I+vv5EgILkPaOlmhs
-         I7yXrmWPRaiuW8lI3BHv7+oaDLTnIR+VZpoRQecr8XTCVkzCn8Dic0SDn0D9tW6Ucc
-         HYaBtZdKYyXhFDzQZIG/2yqG0W+4c3bfm+kInN6MvMSqvGLWJWN4CHK6Qo//93Nh5g
-         lqR4IAxkXOCBVqku2XIPqNZ3EPsSIzAOoyrssTsz+BjdJKlPXfc4jouHvQlRehPbxR
-         dg0ZH4w+oxp1Cki/BaZkb226l/9MhbMEIK6eV1y0NWwsP+biM8Th0OOxP0aryLex7r
-         cREtjeb16Guaw==
-Date:   Wed, 19 Jan 2022 18:14:23 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     "Geoffrey D. Bennett" <g@b4.vu>, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] ALSA: usb-audio: scarlett2: Use struct_size() helper
- in scarlett2_usb()
-Message-ID: <20220120001423.GA69878@embeddedor>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+        Wed, 19 Jan 2022 19:15:09 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AB2C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:15:09 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id q75so4136704pgq.5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:15:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iVoccYTErvqiVX+jKejZcWbLazxCCJAURsVgtJ9k/PI=;
+        b=PAmnXcdie90f3pHLFoJF8Vjl+BsEbmFWtI+tTDzryR44DQ55Y3blI77OUyZK+T61pe
+         TNsjwFtnJB1LDf1JFK9dHAada4F6ylWH7RCLfDrM9tMy2wo3JmNnaScG/DFcAf6NPaoX
+         qUj/oIhvqDOrP0mR4q27k8Nd1wAFqxQ5004gizaU14mV8nukhd+J9abBO4cBbshLzYUb
+         8szhyD2JOWMdElmQ/xxhsdHNVBjYtXZCmthm5vxGeOeDn0r+ZJ3z/GXO+SDJhdxql9Nz
+         5399e7d+PMMYUV+l802WueHppD9R7k7DV0yD9NWUvEW9ZlpRgl04U8x2jiXdZU00gu9t
+         uqIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=iVoccYTErvqiVX+jKejZcWbLazxCCJAURsVgtJ9k/PI=;
+        b=GL+olJA6FEgrmsNM7bS64zuCXUKq8gzcQklHdjYilSSF2hiUnnw9sG3rhg70aTxIH5
+         m1rd2qhncDx8thMN2v49a0LjwBSHsAjIEUCNz5b5CghF+ndEi7dGOwciEDNQYSSQG8N2
+         sQlS9aRpR3AVSHSUZzvG2e7F287DKxsu+iZUR0j2TGzHVhojNgOvOJbZN3egkg2TM/l7
+         VhuJQqnA7DXD7a+0Pcfjcr6jw/YrDGebRktlXLfCQvfDOcJJ6JAKHB2wnriak3gEmVGQ
+         2j0K0uKSCsOlOA+nHmd7X59T6VsNuh2z6SZdd81j7Drf73Leqba24AGv1sONfPgtCdpr
+         KsXg==
+X-Gm-Message-State: AOAM530bLB3D/ylMMnslVygFxQAm80wbT/mdQcpEx5Yy8fwg1Ud6WHNG
+        lo7HCkuSkkNtmwvCon4kuvofSA==
+X-Google-Smtp-Source: ABdhPJwiZRE6QQn3hTsf9Ovlp1p3FKQUye3GJEcTOnfQDjiRPeGks9QjIA2eVkKW1KI1wj9KiQow/g==
+X-Received: by 2002:a63:2210:: with SMTP id i16mr22839905pgi.532.1642637708411;
+        Wed, 19 Jan 2022 16:15:08 -0800 (PST)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id q17sm708831pfu.158.2022.01.19.16.15.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 16:15:07 -0800 (PST)
+Date:   Wed, 19 Jan 2022 16:15:07 -0800 (PST)
+X-Google-Original-Date: Wed, 19 Jan 2022 16:14:41 PST (-0800)
+Subject:     Re: [PATCH] riscv: eliminate unreliable __builtin_frame_address(1)
+In-Reply-To: <87tudz5llo.fsf@igel.home>
+CC:     jrtc27@jrtc27.com, changbin.du@gmail.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     schwab@linux-m68k.org
+Message-ID: <mhng-35c602a8-0eb5-4f07-a94e-ceb5c00e2a36@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make use of the struct_size() helper instead of an open-coded version,
-in order to avoid any potential type mistakes or integer overflows that,
-in the worst scenario, could lead to heap overflows.
+On Wed, 19 Jan 2022 15:53:07 PST (-0800), schwab@linux-m68k.org wrote:
+> On Jan 19 2022, Jessica Clarke wrote:
+>
+>> What’s your point?
+>
+> LLVM doesn't have to deal with the extra complexity.
+>
+>> doesn’t mean other toolchains that do need that to be correct should
+>> just do something wrong.
+>
+> __builtin_frame_address with count > 0 is considered bad.  Nobody should
+> use it.
 
-Also, address the following sparse warnings:
-sound/usb/mixer_scarlett_gen2.c:1064:28: warning: using sizeof on a flexible structure
-sound/usb/mixer_scarlett_gen2.c:1065:29: warning: using sizeof on a flexible structure
+The documentation is very clear about this.
 
-Link: https://github.com/KSPP/linux/issues/160
-Link: https://github.com/KSPP/linux/issues/174
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- sound/usb/mixer_scarlett_gen2.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+I don't really see anything to argue about here: our code violates the 
+spec and is producing results we don't like, though the spec allows for 
+much worse.  We shouldn't have had that code in the first place, but it 
+slipped through as these things sometimes do.  This is just a regular 
+old bug that deserves to be fixed.  Just because one compiler produces 
+answers we like doesn't mean it's valid code, that's the whole point of 
+having a spec in the first place.
 
-diff --git a/sound/usb/mixer_scarlett_gen2.c b/sound/usb/mixer_scarlett_gen2.c
-index 53ebabf42472..311413f015f0 100644
---- a/sound/usb/mixer_scarlett_gen2.c
-+++ b/sound/usb/mixer_scarlett_gen2.c
-@@ -1061,9 +1061,9 @@ static int scarlett2_usb(
- {
- 	struct scarlett2_data *private = mixer->private_data;
- 	struct usb_device *dev = mixer->chip->dev;
--	u16 req_buf_size = sizeof(struct scarlett2_usb_packet) + req_size;
--	u16 resp_buf_size = sizeof(struct scarlett2_usb_packet) + resp_size;
- 	struct scarlett2_usb_packet *req, *resp = NULL;
-+	size_t req_buf_size = struct_size(req, data, req_size);
-+	size_t resp_buf_size = struct_size(resp, data, resp_size);
- 	int err;
- 
- 	req = kmalloc(req_buf_size, GFP_KERNEL);
-@@ -1111,7 +1111,7 @@ static int scarlett2_usb(
- 		usb_audio_err(
- 			mixer->chip,
- 			"Scarlett Gen 2/3 USB response result cmd %x was %d "
--			"expected %d\n",
-+			"expected %lu\n",
- 			cmd, err, resp_buf_size);
- 		err = -EINVAL;
- 		goto unlock;
--- 
-2.27.0
+> You don't have to be arrogant.
 
+This has been a persistent problem, it's really just not productive.  
+We're still trying to dig out from the last two rounds of silliness, 
+let's not have another one.
+
+I don't see anything wrong with the patch in question, but these "stack 
+trace without debug info" things are always tricky and thus warrant a 
+proper look.  I'm in the middle of juggling some patches right now, I'll 
+try to take a look but it's fairly far down the queue.
+
+Always happy to have help looking these things over, let's try to keep 
+things constructive, though.  We've already got enough work to do.

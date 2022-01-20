@@ -2,566 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 318EF494A28
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0DD4494A2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345704AbiATI5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 03:57:48 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:56813 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232759AbiATI5r (ORCPT
+        id S1358909AbiATI7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 03:59:03 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49968 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237685AbiATI7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 03:57:47 -0500
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 72635240002;
-        Thu, 20 Jan 2022 08:57:43 +0000 (UTC)
-Date:   Thu, 20 Jan 2022 09:58:46 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Eugen.Hristev@microchip.com
-Cc:     linux-media@vger.kernel.org, robh+dt@kernel.org,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@iki.fi,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Nicolas.Ferre@microchip.com
-Subject: Re: [PATCH v3 23/23] media: atmel: atmel-isc: change format
- propagation to subdev into only verification
-Message-ID: <20220120085846.sa4prpvps5xmckil@uno.localdomain>
-References: <20211213134940.324266-1-eugen.hristev@microchip.com>
- <20211213134940.324266-24-eugen.hristev@microchip.com>
- <20220112092137.rzgmo436hjl2bdfv@uno.localdomain>
- <9470258e-544c-ae65-2222-7a28467c7c99@microchip.com>
+        Thu, 20 Jan 2022 03:59:00 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20K5vdVA024911;
+        Thu, 20 Jan 2022 08:59:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=7P56AizrdGFATEdfNc1dbwWzq369dsvi36eFSltWDho=;
+ b=I02uEVz6sLjtvid1juS/jO/FVPVFetCwQyNj7lzXGf8UFG1gWid6M4lg4dyGJ+bTywGZ
+ zjNbh1WCuBOiJFqf+LQ0sH4hmUHWyQDvT8SccZ/5bje02ToWInecylckixwG39bHEK81
+ lXnSFNN3YzESZ3McJSBRVZ1i+AaBFYBlJzm0KtMnNsE8C6lfiyMGIouu0iWAJRQ4Y+IP
+ DeOcMN0xMI0AWnDJIhkXfu/ukqBAx3HW1oBiH5t2HzIjL1u0NJWNZ55WWyO+ZGfexV1s
+ 8V/ZQF6jFhQNRUFDNpBCaILOgFLj7qwsp8l+UToMuBB5Mcjgyb+uSZWjNFTi+87goNvH Eg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dq223b6sx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jan 2022 08:59:00 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20K8lYT1004130;
+        Thu, 20 Jan 2022 08:58:59 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dq223b6sb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jan 2022 08:58:59 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20K8vvRq005484;
+        Thu, 20 Jan 2022 08:58:57 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma05fra.de.ibm.com with ESMTP id 3dnm6rp5mp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jan 2022 08:58:57 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20K8wmWF27066808
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Jan 2022 08:58:48 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7952311C052;
+        Thu, 20 Jan 2022 08:58:48 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0F4DA11C058;
+        Thu, 20 Jan 2022 08:58:48 +0000 (GMT)
+Received: from [9.171.35.3] (unknown [9.171.35.3])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 20 Jan 2022 08:58:47 +0000 (GMT)
+Message-ID: <16b309d4-4427-284f-3b8b-507e66a96863@linux.ibm.com>
+Date:   Thu, 20 Jan 2022 09:58:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <9470258e-544c-ae65-2222-7a28467c7c99@microchip.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC PATCH v1 02/10] KVM: s390: Honor storage keys when accessing
+ guest memory
+Content-Language: en-US
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>
+Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20220118095210.1651483-1-scgl@linux.ibm.com>
+ <20220118095210.1651483-3-scgl@linux.ibm.com>
+ <1bbc2b03-6daa-5e27-956c-4d022bd8e9cb@linux.ibm.com>
+ <f507580f-ab5b-827f-592e-42d38e639c71@linux.ibm.com>
+ <3e50722f-0b96-78ce-6d5a-6b6f9931f218@linux.ibm.com>
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+In-Reply-To: <3e50722f-0b96-78ce-6d5a-6b6f9931f218@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: rOeuxVbGIp1d8IpWBiYjwdFCDj9WSINc
+X-Proofpoint-ORIG-GUID: g6xtFieKWVhhBc2WrquKUHmJXeM2N_c-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-20_03,2022-01-19_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=999 priorityscore=1501 malwarescore=0
+ adultscore=0 spamscore=0 clxscore=1015 bulkscore=0 impostorscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201200044
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eugen
+On 1/20/22 09:50, Christian Borntraeger wrote:
+> 
+> 
+> Am 20.01.22 um 09:11 schrieb Janis Schoetterl-Glausch:
+>> On 1/19/22 20:27, Christian Borntraeger wrote:
+>>> Am 18.01.22 um 10:52 schrieb Janis Schoetterl-Glausch:
+>>>> Storage key checking had not been implemented for instructions emulated
+>>>> by KVM. Implement it by enhancing the functions used for guest access,
+>>>> in particular those making use of access_guest which has been renamed
+>>>> to access_guest_with_key.
+>>>> Accesses via access_guest_real should not be key checked.
+>>>>
+>>>> For actual accesses, key checking is done by __copy_from/to_user_with_key
+>>>> (which internally uses MVCOS/MVCP/MVCS).
+>>>> In cases where accessibility is checked without an actual access,
+>>>> this is performed by getting the storage key and checking
+>>>> if the access key matches.
+>>>> In both cases, if applicable, storage and fetch protection override
+>>>> are honored.
+>>>>
+>>>> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+>>>> ---
+>>>>    arch/s390/include/asm/ctl_reg.h |   2 +
+>>>>    arch/s390/include/asm/page.h    |   2 +
+>>>>    arch/s390/kvm/gaccess.c         | 174 +++++++++++++++++++++++++++++---
+>>>>    arch/s390/kvm/gaccess.h         |  78 ++++++++++++--
+>>>>    arch/s390/kvm/intercept.c       |  12 +--
+>>>>    arch/s390/kvm/kvm-s390.c        |   4 +-
+>>>>    6 files changed, 241 insertions(+), 31 deletions(-)
+>>>>
+>>>> diff --git a/arch/s390/include/asm/ctl_reg.h b/arch/s390/include/asm/ctl_reg.h
+>>>> index 04dc65f8901d..c800199a376b 100644
+>>>> --- a/arch/s390/include/asm/ctl_reg.h
+>>>> +++ b/arch/s390/include/asm/ctl_reg.h
+>>>> @@ -12,6 +12,8 @@
+>>>>      #define CR0_CLOCK_COMPARATOR_SIGN    BIT(63 - 10)
+>>>>    #define CR0_LOW_ADDRESS_PROTECTION    BIT(63 - 35)
+>>>> +#define CR0_FETCH_PROTECTION_OVERRIDE    BIT(63 - 38)
+>>>> +#define CR0_STORAGE_PROTECTION_OVERRIDE    BIT(63 - 39)
+>>>>    #define CR0_EMERGENCY_SIGNAL_SUBMASK    BIT(63 - 49)
+>>>>    #define CR0_EXTERNAL_CALL_SUBMASK    BIT(63 - 50)
+>>>>    #define CR0_CLOCK_COMPARATOR_SUBMASK    BIT(63 - 52)
+>>>> diff --git a/arch/s390/include/asm/page.h b/arch/s390/include/asm/page.h
+>>>> index d98d17a36c7b..cfc4d6fb2385 100644
+>>>> --- a/arch/s390/include/asm/page.h
+>>>> +++ b/arch/s390/include/asm/page.h
+>>>> @@ -20,6 +20,8 @@
+>>>>    #define PAGE_SIZE    _PAGE_SIZE
+>>>>    #define PAGE_MASK    _PAGE_MASK
+>>>>    #define PAGE_DEFAULT_ACC    0
+>>>> +/* storage-protection override */
+>>>> +#define PAGE_SPO_ACC        9
+>>>>    #define PAGE_DEFAULT_KEY    (PAGE_DEFAULT_ACC << 4)
+>>>>      #define HPAGE_SHIFT    20
+>>>> diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
+>>>> index 4460808c3b9a..92ab96d55504 100644
+>>>> --- a/arch/s390/kvm/gaccess.c
+>>>> +++ b/arch/s390/kvm/gaccess.c
+>>>> @@ -10,6 +10,7 @@
+>>>>    #include <linux/mm_types.h>
+>>>>    #include <linux/err.h>
+>>>>    #include <linux/pgtable.h>
+>>>> +#include <linux/bitfield.h>
+>>>>      #include <asm/gmap.h>
+>>>>    #include "kvm-s390.h"
+>>>> @@ -794,6 +795,79 @@ static int low_address_protection_enabled(struct kvm_vcpu *vcpu,
+>>>>        return 1;
+>>>>    }
+>>>>    +static bool fetch_prot_override_applicable(struct kvm_vcpu *vcpu, enum gacc_mode mode,
+>>>> +                       union asce asce)
+>>>> +{
+>>>> +    psw_t *psw = &vcpu->arch.sie_block->gpsw;
+>>>> +    unsigned long override;
+>>>> +
+>>>> +    if (mode == GACC_FETCH || mode == GACC_IFETCH) {
+>>>> +        /* check if fetch protection override enabled */
+>>>> +        override = vcpu->arch.sie_block->gcr[0];
+>>>> +        override &= CR0_FETCH_PROTECTION_OVERRIDE;
+>>>> +        /* not applicable if subject to DAT && private space */
+>>>> +        override = override && !(psw_bits(*psw).dat && asce.p);
+>>>> +        return override;
+>>>> +    }
+>>>> +    return false;
+>>>> +}
+>>>> +
+>>>> +static bool fetch_prot_override_applies(unsigned long ga, unsigned int len)
+>>>> +{
+>>>> +    return ga < 2048 && ga + len <= 2048;
+>>>> +}
+>>>> +
+>>>> +static bool storage_prot_override_applicable(struct kvm_vcpu *vcpu)
+>>>> +{
+>>>> +    /* check if storage protection override enabled */
+>>>> +    return vcpu->arch.sie_block->gcr[0] & CR0_STORAGE_PROTECTION_OVERRIDE;
+>>>> +}
+>>>> +
+>>>> +static bool storage_prot_override_applies(char access_control)
+>>>> +{
+>>>> +    /* matches special storage protection override key (9) -> allow */
+>>>> +    return access_control == PAGE_SPO_ACC;
+>>>> +}
+>>>> +
+>>>> +static int vcpu_check_access_key(struct kvm_vcpu *vcpu, char access_key,
+>>>> +                 enum gacc_mode mode, union asce asce, gpa_t gpa,
+>>>> +                 unsigned long ga, unsigned int len)
+>>>> +{
+>>>> +    unsigned char storage_key, access_control;
+>>>> +    unsigned long hva;
+>>>> +    int r;
+>>>> +
+>>>> +    /* access key 0 matches any storage key -> allow */
+>>>> +    if (access_key == 0)
+>>>> +        return 0;
+>>>> +    /*
+>>>> +     * caller needs to ensure that gfn is accessible, so we can
+>>>> +     * assume that this cannot fail
+>>>> +     */
+>>>> +    hva = gfn_to_hva(vcpu->kvm, gpa_to_gfn(gpa));
+>>>> +    mmap_read_lock(current->mm);
+>>>> +    r = get_guest_storage_key(current->mm, hva, &storage_key);
+>>>> +    mmap_read_unlock(current->mm);
+>>>> +    if (r)
+>>>> +        return r;
+>>>> +    access_control = FIELD_GET(_PAGE_ACC_BITS, storage_key);
+>>>> +    /* access key matches storage key -> allow */
+>>>> +    if (access_control == access_key)
+>>>> +        return 0;
+>>>> +    if (mode == GACC_FETCH || mode == GACC_IFETCH) {
+>>>> +        /* mismatching keys, no fetch protection -> allowed */
+>>>> +        if (!(storage_key & _PAGE_FP_BIT))
+>>>> +            return 0;
+>>>> +        if (fetch_prot_override_applicable(vcpu, mode, asce))
+>>>> +            if (fetch_prot_override_applies(ga, len))
+>>>> +                return 0;
+>>>> +    }
+>>>> +    if (storage_prot_override_applicable(vcpu))
+>>>> +        if (storage_prot_override_applies(access_control))
+>>>> +            return 0;
+>>>> +    return PGM_PROTECTION;
+>>>> +}
+>>>
+>>> This function is just a pre-check (and early-exit) and we do an additional final check
+>>> in the MVCOS routing later on, correct? It might actually be faster to get rid of this
+>>
+>> No, this exists for those cases that do not do an actual access, that is MEMOPs with
+>> the check only flag, as well as the TEST PROTECTION emulation. access_guest_with_key
+>> passes key 0 so we take the early return. It's easy to miss so Janosch suggested a comment there.
+> 
+> Dont we always call it in guest_range_to_gpas, which is also called for the memory access in
+> access_guest_with_key?
+@@ -904,16 +1018,37 @@ int access_guest(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar, void *data,
+ 		gpas = vmalloc(array_size(nr_pages, sizeof(unsigned long)));
+ 	if (!gpas)
+ 		return -ENOMEM;
++	try_fetch_prot_override = fetch_prot_override_applicable(vcpu, mode, asce);
++	try_storage_prot_override = storage_prot_override_applicable(vcpu);
+ 	need_ipte_lock = psw_bits(*psw).dat && !asce.r;
+ 	if (need_ipte_lock)
+ 		ipte_lock(vcpu);
+-	rc = guest_range_to_gpas(vcpu, ga, ar, gpas, len, asce, mode);
+-	for (idx = 0; idx < nr_pages && !rc; idx++) {
++	rc = guest_range_to_gpas(vcpu, ga, ar, gpas, len, asce, mode, 0);
 
-On Thu, Jan 20, 2022 at 08:43:33AM +0000, Eugen.Hristev@microchip.com wrote:
-> On 1/12/22 11:21 AM, Jacopo Mondi wrote:
-> > Hi Eugen
->
->
-> Hi Jacopo,
->
-> >
-> > On Mon, Dec 13, 2021 at 03:49:40PM +0200, Eugen Hristev wrote:
-> >> As a top MC video driver, the atmel-isc should not propagate the format to the
-> >> subdevice.
-> >> It should rather check at streamon() time if the subdev is properly configured
-> >> with a compatible format.
-> >> Removed the whole format finding logic, and reworked the format verification
-> >> at streamon time, such that the ISC will return an error if the subdevice
-> >> is not properly configured.
-> >> With this being done, the module parameter 'sensor_prefered' makes no sense
-> >> anymore. The ISC should not decide which format the sensor is using. The
-> >> ISC should only cope with the situation and inform userspace if the streaming
-> >> is possible in the current configuration.
-> >
-> > Sounds great!
-> >
-> >>
-> >> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-> >> ---
-> >> Changes in v3:
-> >> - clamp to maximum resolution once the frame size from the subdev is found
-> >>
-> >>   drivers/media/platform/atmel/atmel-isc-base.c | 271 ++++++++----------
-> >>   drivers/media/platform/atmel/atmel-isc.h      |   1 +
-> >>   2 files changed, 126 insertions(+), 146 deletions(-)
-> >>
-> >> diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
-> >> index 31c8e3029eee..00c8c9588a78 100644
-> >> --- a/drivers/media/platform/atmel/atmel-isc-base.c
-> >> +++ b/drivers/media/platform/atmel/atmel-isc-base.c
-> >> @@ -36,11 +36,6 @@ static unsigned int debug;
-> >>   module_param(debug, int, 0644);
-> >>   MODULE_PARM_DESC(debug, "debug level (0-2)");
-> >>
-> >> -static unsigned int sensor_preferred = 1;
-> >> -module_param(sensor_preferred, uint, 0644);
-> >> -MODULE_PARM_DESC(sensor_preferred,
-> >> -              "Sensor is preferred to output the specified format (1-on 0-off), default 1");
-> >> -
-> >>   #define ISC_IS_FORMAT_RAW(mbus_code) \
-> >>        (((mbus_code) & 0xf000) == 0x3000)
-> >>
-> >> @@ -532,7 +527,7 @@ static int isc_enum_fmt_vid_cap(struct file *file, void *priv,
-> >>         * convert it to any of the formats that we usually can with a
-> >>         * RAW sensor. Thus, do not advertise them.
-> >>         */
-> >> -     if (!isc->config.sd_format ||
-> >> +     if (isc->config.sd_format &&
-> >
-> > Is this change intentional ?
-> >
-> >>            !ISC_IS_FORMAT_RAW(isc->config.sd_format->mbus_code))
-> >>                return -EINVAL;
-> >>
-> >> @@ -621,20 +616,30 @@ static int isc_try_validate_formats(struct isc_device *isc)
-> >>                break;
-> >>        default:
-> >>        /* any other different formats are not supported */
-> >> +             v4l2_err(&isc->v4l2_dev, "Requested unsupported format.\n");
-> >>                ret = -EINVAL;
-> >>        }
-> >>        v4l2_dbg(1, debug, &isc->v4l2_dev,
-> >>                 "Format validation, requested rgb=%u, yuv=%u, grey=%u, bayer=%u\n",
-> >>                 rgb, yuv, grey, bayer);
-> >
-> > Would it make sense to move this before the switch so that the
-> > error messages, if any, appear later ?
->
-> Actually, no, because the variables rgb, yuv, grey, bayer, are set
-> according to what happens in the switch
-> >
-> >>
-> >> -     /* we cannot output RAW if we do not receive RAW */
-> >> -     if ((bayer) && !ISC_IS_FORMAT_RAW(isc->try_config.sd_format->mbus_code))
-> >> +     if ((bayer) &&
-> >> +         !ISC_IS_FORMAT_RAW(isc->try_config.sd_format->mbus_code)) {
-> >> +             v4l2_err(&isc->v4l2_dev, "Cannot output RAW if we do not receive RAW.\n");
-> >>                return -EINVAL;
-> >> +     }
-> >>
-> >> -     /* we cannot output GREY if we do not receive RAW/GREY */
-> >>        if (grey && !ISC_IS_FORMAT_RAW(isc->try_config.sd_format->mbus_code) &&
-> >> -         !ISC_IS_FORMAT_GREY(isc->try_config.sd_format->mbus_code))
-> >> +         !ISC_IS_FORMAT_GREY(isc->try_config.sd_format->mbus_code)) {
-> >> +             v4l2_err(&isc->v4l2_dev, "Cannot output GREY if we do not receive RAW/GREY.\n");
-> >>                return -EINVAL;
-> >> +     }
-> >> +
-> >> +     if ((rgb || bayer || yuv) &&
-> >> +         ISC_IS_FORMAT_GREY(isc->try_config.sd_format->mbus_code)) {
-> >> +             v4l2_err(&isc->v4l2_dev, "Cannot convert GREY to another format.\n");
-> >> +             return -EINVAL;
-> >> +     }
-> >>
-> >>        return ret;
-> >>   }
-> >> @@ -862,7 +867,7 @@ static void isc_try_fse(struct isc_device *isc,
-> >>         * If we do not know yet which format the subdev is using, we cannot
-> >>         * do anything.
-> >>         */
-> >> -     if (!isc->try_config.sd_format)
-> >> +     if (!isc->config.sd_format)
-> >>                return;
-> >>
-> >>        fse.code = isc->try_config.sd_format->mbus_code;
-> >> @@ -883,180 +888,141 @@ static void isc_try_fse(struct isc_device *isc,
-> >>        }
-> >>   }
-> >>
-> >> -static int isc_try_fmt(struct isc_device *isc, struct v4l2_format *f,
-> >> -                     u32 *code)
-> >> +static int isc_try_fmt(struct isc_device *isc, struct v4l2_format *f)
-> >>   {
-> >> -     int i;
-> >> -     struct isc_format *sd_fmt = NULL, *direct_fmt = NULL;
-> >>        struct v4l2_pix_format *pixfmt = &f->fmt.pix;
-> >> -     struct v4l2_subdev_pad_config pad_cfg = {};
-> >> -     struct v4l2_subdev_state pad_state = {
-> >> -             .pads = &pad_cfg
-> >> -             };
-> >> -     struct v4l2_subdev_format format = {
-> >> -             .which = V4L2_SUBDEV_FORMAT_TRY,
-> >> -     };
-> >> -     u32 mbus_code;
-> >> -     int ret;
-> >> -     bool rlp_dma_direct_dump = false;
-> >> +     unsigned int i;
-> >>
-> >>        if (f->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
-> >>                return -EINVAL;
-> >>
-> >> -     /* Step 1: find a RAW format that is supported */
-> >> -     for (i = 0; i < isc->num_user_formats; i++) {
-> >> -             if (ISC_IS_FORMAT_RAW(isc->user_formats[i]->mbus_code)) {
-> >> -                     sd_fmt = isc->user_formats[i];
-> >> +     isc->try_config.fourcc = isc->user_formats[0]->fourcc;
-> >> +
-> >> +     /* find if the format requested is supported */
-> >> +     for (i = 0; i < isc->controller_formats_size; i++)
-> >> +             if (isc->controller_formats[i].fourcc == pixfmt->pixelformat) {
-> >> +                     isc->try_config.fourcc = pixfmt->pixelformat;
-> >>                        break;
-> >>                }
-> >> -     }
-> >> -     /* Step 2: We can continue with this RAW format, or we can look
-> >> -      * for better: maybe sensor supports directly what we need.
-> >> -      */
-> >> -     direct_fmt = find_format_by_fourcc(isc, pixfmt->pixelformat);
-> >> -
-> >> -     /* Step 3: We have both. We decide given the module parameter which
-> >> -      * one to use.
-> >> -      */
-> >> -     if (direct_fmt && sd_fmt && sensor_preferred)
-> >> -             sd_fmt = direct_fmt;
-> >> -
-> >> -     /* Step 4: we do not have RAW but we have a direct format. Use it. */
-> >> -     if (direct_fmt && !sd_fmt)
-> >> -             sd_fmt = direct_fmt;
-> >> -
-> >> -     /* Step 5: if we are using a direct format, we need to package
-> >> -      * everything as 8 bit data and just dump it
-> >> -      */
-> >> -     if (sd_fmt == direct_fmt)
-> >> -             rlp_dma_direct_dump = true;
-> >> -
-> >> -     /* Step 6: We have no format. This can happen if the userspace
-> >> -      * requests some weird/invalid format.
-> >> -      * In this case, default to whatever we have
-> >> -      */
-> >> -     if (!sd_fmt && !direct_fmt) {
-> >> -             sd_fmt = isc->user_formats[isc->num_user_formats - 1];
-> >> -             v4l2_dbg(1, debug, &isc->v4l2_dev,
-> >> -                      "Sensor not supporting %.4s, using %.4s\n",
-> >> -                      (char *)&pixfmt->pixelformat, (char *)&sd_fmt->fourcc);
-> >> -     }
-> >> -
-> >> -     if (!sd_fmt) {
-> >> -             ret = -EINVAL;
-> >> -             goto isc_try_fmt_err;
-> >> -     }
-> >> -
-> >> -     /* Step 7: Print out what we decided for debugging */
-> >> -     v4l2_dbg(1, debug, &isc->v4l2_dev,
-> >> -              "Preferring to have sensor using format %.4s\n",
-> >> -              (char *)&sd_fmt->fourcc);
-> >> -
-> >> -     /* Step 8: at this moment we decided which format the subdev will use */
-> >> -     isc->try_config.sd_format = sd_fmt;
-> >> -
-> >> -     /* Limit to Atmel ISC hardware capabilities */
-> >> -     if (pixfmt->width > isc->max_width)
-> >> -             pixfmt->width = isc->max_width;
-> >> -     if (pixfmt->height > isc->max_height)
-> >> -             pixfmt->height = isc->max_height;
-> >> -
-> >> -     /*
-> >> -      * The mbus format is the one the subdev outputs.
-> >> -      * The pixels will be transferred in this format Sensor -> ISC
-> >> -      */
-> >> -     mbus_code = sd_fmt->mbus_code;
-> >> -
-> >> -     /*
-> >> -      * Validate formats. If the required format is not OK, default to raw.
-> >> -      */
-> >> -
-> >> -     isc->try_config.fourcc = pixfmt->pixelformat;
-> >> -
-> >> -     if (isc_try_validate_formats(isc)) {
-> >> -             pixfmt->pixelformat = isc->try_config.fourcc = sd_fmt->fourcc;
-> >> -             /* Re-try to validate the new format */
-> >> -             ret = isc_try_validate_formats(isc);
-> >> -             if (ret)
-> >> -                     goto isc_try_fmt_err;
-> >> -     }
-> >> -
-> >> -     ret = isc_try_configure_rlp_dma(isc, rlp_dma_direct_dump);
-> >> -     if (ret)
-> >> -             goto isc_try_fmt_err;
-> >> -
-> >> -     ret = isc_try_configure_pipeline(isc);
-> >> -     if (ret)
-> >> -             goto isc_try_fmt_err;
-> >>
-> >> -     /* Obtain frame sizes if possible to have crop requirements ready */
-> >> -     isc_try_fse(isc, &pad_state);
-> >> -
-> >> -     v4l2_fill_mbus_format(&format.format, pixfmt, mbus_code);
-> >> -     ret = v4l2_subdev_call(isc->current_subdev->sd, pad, set_fmt,
-> >> -                            &pad_state, &format);
-> >> -     if (ret < 0)
-> >> -             goto isc_try_fmt_subdev_err;
-> >> +     /* If we did not find the requested format, we will fallback here */
-> >> +     pixfmt->pixelformat = isc->try_config.fourcc;
-> >> +     pixfmt->colorspace = V4L2_COLORSPACE_SRGB;
-> >> +     pixfmt->field = V4L2_FIELD_NONE;
-> >>
-> >> -     v4l2_fill_pix_format(pixfmt, &format.format);
-> >> +     isc_try_configure_rlp_dma(isc, false);
-> >>
-> >>        /* Limit to Atmel ISC hardware capabilities */
-> >> -     if (pixfmt->width > isc->max_width)
-> >> -             pixfmt->width = isc->max_width;
-> >> -     if (pixfmt->height > isc->max_height)
-> >> -             pixfmt->height = isc->max_height;
-> >> +     v4l_bound_align_image(&pixfmt->width, 16, isc->max_width, 0,
-> >> +                           &pixfmt->height, 16, isc->max_height, 0, 0);
-> >>
-> >>        pixfmt->field = V4L2_FIELD_NONE;
-> >>        pixfmt->bytesperline = (pixfmt->width * isc->try_config.bpp_v4l2) >> 3;
-> >>        pixfmt->sizeimage = ((pixfmt->width * isc->try_config.bpp) >> 3) *
-> >>                             pixfmt->height;
-> >>
-> >> -     if (code)
-> >> -             *code = mbus_code;
-> >> +     isc->try_fmt = *f;
-> >>
-> >>        return 0;
-> >> +}
-> >>
-> >> -isc_try_fmt_err:
-> >> -     v4l2_err(&isc->v4l2_dev, "Could not find any possible format for a working pipeline\n");
-> >> -isc_try_fmt_subdev_err:
-> >> -     memset(&isc->try_config, 0, sizeof(isc->try_config));
-> >> +static int isc_set_fmt(struct isc_device *isc, struct v4l2_format *f)
-> >> +{
-> >> +     isc_try_fmt(isc, f);
-> >>
-> >> -     return ret;
-> >> +     /* make the try configuration active */
-> >> +     isc->config = isc->try_config;
-> >> +     isc->fmt = isc->try_fmt;
-> >> +
-> >> +     v4l2_dbg(1, debug, &isc->v4l2_dev, "ISC set_fmt to %.4s @%dx%d\n",
-> >> +              (char *)&f->fmt.pix.pixelformat,
-> >> +              f->fmt.pix.width, f->fmt.pix.height);
-> >> +
-> >> +     return 0;
-> >>   }
-> >>
-> >> -static int isc_set_fmt(struct isc_device *isc, struct v4l2_format *f)
-> >> +static int isc_validate(struct isc_device *isc)
-> >>   {
-> >> +     int ret;
-> >> +     int i;
-> >> +     struct isc_format *sd_fmt = NULL;
-> >> +     struct v4l2_pix_format *pixfmt = &isc->fmt.fmt.pix;
-> >>        struct v4l2_subdev_format format = {
-> >>                .which = V4L2_SUBDEV_FORMAT_ACTIVE,
-> >> +             .pad = isc->remote_pad,
-> >> +     };
-> >> +     struct v4l2_subdev_pad_config pad_cfg = {};
-> >> +     struct v4l2_subdev_state pad_state = {
-> >> +             .pads = &pad_cfg,
-> >>        };
-> >> -     u32 mbus_code = 0;
-> >> -     int ret;
-> >>
-> >> -     ret = isc_try_fmt(isc, f, &mbus_code);
-> >> +     /* Get current format from subdev */
-> >> +     ret = v4l2_subdev_call(isc->current_subdev->sd, pad, get_fmt, NULL,
-> >> +                            &format);
-> >
-> > Ah! Haven't you just said we don't care anymore about the subdev
-> > format ? :)
->
-> We don't ! but we can't stream anything if the sensor streams a format
-> that we don't understand do we ?
->
-> >
-> > Kidding, I might got a bit lost in the logic, but if I look at your
-> > above isc_try_validate_formats() it seems like an ideal candidate for
-> > .link_validate() media_entity operation.
-> >
-> > Just to make sure we're on the same page, here's how it should ideally
-> > look like:
-> > - set format does care about subdev format. It only checks that the
-> >    format required from the user is one of the ISC supported one. Ie.
-> >    no v4l2_subdev_call()
-> >
-> > - as s_stream time your top driver calls media_pipeline_start()
-> >
-> > - media_pipeline_start() walks all the entities in the pipeline and
-> >    validates the format of connected pads. To validate formats the
-> >    __media_pipeline_start() functions calls link_validate() on each
-> >    entity. You should in your driver set
->
-> Is this done automatically ? if this would be the case, where all links
+Yes, but the key is 0 in that case, so we don't do any key checking.  ^
+> 
+>>
+>>> pre-test and simply rely on MVCOS. MVCOS is usually just some cycles while ISKE to read
+>>> the key is really slow path and take hundreds of cycles. This would even simplify the
+>>> patch (assuming that we do proper key checking all the time).
+>>
 
-Have a look at the media_pipeline_start() function in
-drivers/media/mc/mc-entity.c
-
-It walks the entities linked in the graph and calls .link_validate()
-on each link it finds
-
-> are correctly set, then, in theory, it would not be possible that some
-> entities have a format set that is not supported by the other side
->
-
-Not if validation is done correctly ;)
-
-> >
-> >          static const struct media_entity_operations your_media_entity_ops = {
-> >                  .link_validate = v4l2_subdev_link_validate,
-> >          };
-> >
-> >    if you want to use the default link validation procedure, or set the
-> >    callback to your custom validation function, which can behave more
-> >    or less like isc_try_validate_formats()
->
-> Does this mean that I can ask the subdev for the format ?
-> Or how can I obtain the format on the other side of the link ?
-> link validate can do this for me ?
-
-If you implement your own validation function then yes.
-Have a look at v4l2_subdev_link_validate() in v4l2-subdev.c
-
-It fetches formats from each side of the link and matches them.
-
-As you have some more complex validations, you can define your own
-validation function and compare the formats on each side of the link
-with the same logic as implemented in isc_try_validate_formats() (if I
-remember the function name right)
-
-Thanks
-   j
-
->
->
-> Thanks for reviewing,
-> Eugen
-> >
-> > Does it match your understanding too ?
-> >
-> > Thanks
-> >     j
-> >
-> >
-> >
-> >>        if (ret)
-> >>                return ret;
-> >>
-> >> -     v4l2_fill_mbus_format(&format.format, &f->fmt.pix, mbus_code);
-> >> -     ret = v4l2_subdev_call(isc->current_subdev->sd, pad,
-> >> -                            set_fmt, NULL, &format);
-> >> -     if (ret < 0)
-> >> -             return ret;
-> >> +     /* Identify the subdev's format configuration */
-> >> +     for (i = 0; i < isc->num_user_formats; i++)
-> >> +             if (isc->user_formats[i]->mbus_code == format.format.code) {
-> >> +                     sd_fmt = isc->user_formats[i];
-> >> +                     break;
-> >> +             }
-> >> +
-> >> +     /* Check if the format is not supported */
-> >> +     if (!sd_fmt) {
-> >> +             v4l2_err(&isc->v4l2_dev,
-> >> +                      "Current subdevice is streaming a media bus code that is not supported 0x%x\n",
-> >> +                      format.format.code);
-> >> +             return -EPIPE;
-> >> +     }
-> >> +
-> >> +     /* At this moment we know which format the subdev will use */
-> >> +     isc->try_config.sd_format = sd_fmt;
-> >> +
-> >> +     /* If the sensor is not RAW, we can only do a direct dump */
-> >> +     if (!ISC_IS_FORMAT_RAW(isc->try_config.sd_format->mbus_code))
-> >> +             isc_try_configure_rlp_dma(isc, true);
-> >>
-> >>        /* Limit to Atmel ISC hardware capabilities */
-> >> -     if (f->fmt.pix.width > isc->max_width)
-> >> -             f->fmt.pix.width = isc->max_width;
-> >> -     if (f->fmt.pix.height > isc->max_height)
-> >> -             f->fmt.pix.height = isc->max_height;
-> >> +     v4l_bound_align_image(&format.format.width, 16, isc->max_width, 0,
-> >> +                           &format.format.height, 16, isc->max_height, 0, 0);
-> >>
-> >> -     isc->fmt = *f;
-> >> +     /* Check if the frame size is the same. Otherwise we may overflow */
-> >> +     if (pixfmt->height != format.format.height ||
-> >> +         pixfmt->width != format.format.width) {
-> >> +             v4l2_err(&isc->v4l2_dev,
-> >> +                      "ISC not configured with the proper frame size: %dx%d\n",
-> >> +                      format.format.width, format.format.height);
-> >> +             return -EPIPE;
-> >> +     }
-> >>
-> >> +     v4l2_dbg(1, debug, &isc->v4l2_dev,
-> >> +              "Identified subdev using format %.4s with %dx%d %d bpp\n",
-> >> +              (char *)&sd_fmt->fourcc, pixfmt->width, pixfmt->height,
-> >> +              isc->try_config.bpp);
-> >> +
-> >> +     /* Reset and restart AWB if the subdevice changed the format */
-> >>        if (isc->try_config.sd_format && isc->config.sd_format &&
-> >>            isc->try_config.sd_format != isc->config.sd_format) {
-> >>                isc->ctrls.hist_stat = HIST_INIT;
-> >>                isc_reset_awb_ctrls(isc);
-> >>                isc_update_v4l2_ctrls(isc);
-> >>        }
-> >> -     /* make the try configuration active */
-> >> +
-> >> +     /* Validate formats */
-> >> +     ret = isc_try_validate_formats(isc);
-> >> +     if (ret)
-> >> +             return ret;
-> >> +
-> >> +     /* Obtain frame sizes if possible to have crop requirements ready */
-> >> +     isc_try_fse(isc, &pad_state);
-> >> +
-> >> +     /* Configure ISC pipeline for the config */
-> >> +     ret = isc_try_configure_pipeline(isc);
-> >> +     if (ret)
-> >> +             return ret;
-> >> +
-> >>        isc->config = isc->try_config;
-> >>
-> >>        v4l2_dbg(1, debug, &isc->v4l2_dev, "New ISC configuration in place\n");
-> >> @@ -1064,6 +1030,19 @@ static int isc_set_fmt(struct isc_device *isc, struct v4l2_format *f)
-> >>        return 0;
-> >>   }
-> >>
-> >> +static int isc_streamon(struct file *file, void *priv, enum v4l2_buf_type bt)
-> >> +{
-> >> +     struct isc_device *isc = video_drvdata(file);
-> >> +     int ret;
-> >> +
-> >> +     ret = isc_validate(isc);
-> >> +
-> >> +     if (ret)
-> >> +             return ret;
-> >> +
-> >> +     return vb2_ioctl_streamon(file, priv, bt);
-> >> +}
-> >> +
-> >>   static int isc_s_fmt_vid_cap(struct file *file, void *priv,
-> >>                              struct v4l2_format *f)
-> >>   {
-> >> @@ -1080,7 +1059,7 @@ static int isc_try_fmt_vid_cap(struct file *file, void *priv,
-> >>   {
-> >>        struct isc_device *isc = video_drvdata(file);
-> >>
-> >> -     return isc_try_fmt(isc, f, NULL);
-> >> +     return isc_try_fmt(isc, f);
-> >>   }
-> >>
-> >>   static int isc_enum_input(struct file *file, void *priv,
-> >> @@ -1176,7 +1155,7 @@ static const struct v4l2_ioctl_ops isc_ioctl_ops = {
-> >>        .vidioc_dqbuf                   = vb2_ioctl_dqbuf,
-> >>        .vidioc_create_bufs             = vb2_ioctl_create_bufs,
-> >>        .vidioc_prepare_buf             = vb2_ioctl_prepare_buf,
-> >> -     .vidioc_streamon                = vb2_ioctl_streamon,
-> >> +     .vidioc_streamon                = isc_streamon,
-> >>        .vidioc_streamoff               = vb2_ioctl_streamoff,
-> >>
-> >>        .vidioc_g_parm                  = isc_g_parm,
-> >> @@ -1879,7 +1858,7 @@ static int isc_set_default_fmt(struct isc_device *isc)
-> >>        };
-> >>        int ret;
-> >>
-> >> -     ret = isc_try_fmt(isc, &f, NULL);
-> >> +     ret = isc_try_fmt(isc, &f);
-> >>        if (ret)
-> >>                return ret;
-> >>
-> >> diff --git a/drivers/media/platform/atmel/atmel-isc.h b/drivers/media/platform/atmel/atmel-isc.h
-> >> index c2cb805faff3..7081698adddd 100644
-> >> --- a/drivers/media/platform/atmel/atmel-isc.h
-> >> +++ b/drivers/media/platform/atmel/atmel-isc.h
-> >> @@ -297,6 +297,7 @@ struct isc_device {
-> >>        struct completion       comp;
-> >>
-> >>        struct v4l2_format      fmt;
-> >> +     struct v4l2_format      try_fmt;
-> >>        struct isc_format       **user_formats;
-> >>        unsigned int            num_user_formats;
-> >>
-> >> --
-> >> 2.25.1
-> >>
->

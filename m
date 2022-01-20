@@ -2,198 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1718E4950B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 15:59:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C60495083
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 15:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358037AbiATO6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 09:58:23 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:35097 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356745AbiATO6W (ORCPT
+        id S1348293AbiATOuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 09:50:20 -0500
+Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:36452
+        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236017AbiATOuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 09:58:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1642689979;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=/ORaYKTNxceGQB3oUgjVtLx8QXlrkKP/FkvQLrQmkCs=;
-    b=ABzak7OQGFMbD6JG9PqMyPU0wJ6crT3MmILD5VVD4c71ojvE4H5ChjU5yU9vnEgo6T
-    YPxY1LclyWvhhzvf9D/4wsJ+FJF4hasnZIEk0sju+A0e4ieH/hA9cK73TUOrxAJb+lzo
-    R6lR+L7Ke8sGV4w2iF8vNDHIMk+IktmRGsl4Coh3lDBobpZ19Fol0vW2RabJjFDUsZed
-    UYDNhNNsbXdHSK2CS+klMoRIwRhdAC1EmqKXj3KJRD0urhFs8vePAA6ZSIaJ1219XnR+
-    BVd+aB7IAXaNDy6AA4iYZEP87ODi6+nUWY9p1iC8EAyEk3m05/aOS31ccro+/TQo2mb6
-    Y9/g==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXW6v7w=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfa:f900::b82]
-    by smtp.strato.de (RZmta 47.38.0 AUTH)
-    with ESMTPSA id zaacbfy0KEkJ3OY
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 20 Jan 2022 15:46:19 +0100 (CET)
-Message-ID: <64695483-ff75-4872-db81-ca55763f95cf@hartkopp.net>
-Date:   Thu, 20 Jan 2022 15:46:13 +0100
+        Thu, 20 Jan 2022 09:50:18 -0500
+Received: from localhost.localdomain (1-171-82-176.dynamic-ip.hinet.net [1.171.82.176])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 014D33F10B;
+        Thu, 20 Jan 2022 14:50:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642690216;
+        bh=v+jLBr5FFoCZA1NsbC3yHqoG/FwpyzWTYGM8JwT+N9Y=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=hFCyA4dbdAeZnzD+15nQw1Mr77j6dTzevQVwQ8sLbZFaVk98IypcsMV2yXVABSYp3
+         xKkePViB6RnAfiwuz5V6EUWePtYIaS8OYPohL5ye7YJ1DYwLQigqPZs4gSyj0+f24Z
+         qeBdR/MC7i2LI0cSF9QlQdCmy8IiQ+bgas4V2z1gLT7qfJAoikymwjbU6JioA+77ME
+         KbP0gMqZm+M2xgJvaT5TGw/0w7cq/XnSdxOhuFEO2B6ER1z8+ctHoOKmWlDMva3jwE
+         BjjjWBYAal7K1TdES7T8H9SM3mFb8Rm4c19gU5gCqlEOMM9G+A6Bq6nYgqG+olNr47
+         Y+vTY4FlihWlw==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     arnd@arndb.de, gregkh@linuxfoundation.org, ulf.hansson@linaro.org
+Cc:     linux-pm@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Ricky WU <ricky_wu@realtek.com>,
+        Thomas Hebb <tommyhebb@gmail.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] mmc: rtsx: Use pm_runtime_{get,put}() to handle runtime PM
+Date:   Thu, 20 Jan 2022 22:50:02 +0800
+Message-Id: <20220120145006.1682014-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH net] can: isotp: isotp_rcv_cf(): fix so->rx race problem
-Content-Language: en-US
-To:     "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>,
-        mkl@pengutronix.de
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220117120102.2395157-1-william.xuanziyang@huawei.com>
- <53279d6d-298c-5a85-4c16-887c95447825@hartkopp.net>
- <280e10c1-d1f4-f39e-fa90-debd56f1746d@huawei.com>
- <eaafaca3-f003-ca56-c04c-baf6cf4f7627@hartkopp.net>
- <890d8209-f400-a3b0-df9c-3e198e3834d6@huawei.com>
- <1fb4407a-1269-ec50-0ad5-074e49f91144@hartkopp.net>
- <2aba02d4-0597-1d55-8b3e-2c67386f68cf@huawei.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <2aba02d4-0597-1d55-8b3e-2c67386f68cf@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM") doesn't
+use pm_runtime_{get,put}() helpers when it should, so the RPM refcount
+keeps at zero, hence its parent driver, rtsx_pci, has to do lots of
+weird tricks to keep it from runtime suspending.
 
+So use those helpers at right places to properly manage runtime PM.
 
-On 20.01.22 12:28, Ziyang Xuan (William) wrote:
->>
->> On 20.01.22 07:24, Ziyang Xuan (William) wrote:
->>
->>> I have reproduced the syz problem with Marc's commit, the commit can not fix the panic problem.
->>> So I tried to find the root cause for panic and gave my solution.
->>>
->>> Marc's commit just fix the condition that packet size bigger than INT_MAX which trigger
->>> tpcon::{idx,len} integer overflow, but the packet size is 4096 in the syz problem.
->>>
->>> so->rx.len is 0 after the following logic in isotp_rcv_ff():
->>>
->>> /* get the FF_DL */
->>> so->rx.len = (cf->data[ae] & 0x0F) << 8;
->>> so->rx.len += cf->data[ae + 1];
->>>
->>> so->rx.len is 4096 after the following logic in isotp_rcv_ff():
->>>
->>> /* FF_DL = 0 => get real length from next 4 bytes */
->>> so->rx.len = cf->data[ae + 2] << 24;
->>> so->rx.len += cf->data[ae + 3] << 16;
->>> so->rx.len += cf->data[ae + 4] << 8;
->>> so->rx.len += cf->data[ae + 5];
->>>
->>
->> In these cases the values 0 could be the minimum value in so->rx.len - but e.g. the value 0 can not show up in isotp_rcv_cf() as this function requires so->rx.state to be ISOTP_WAIT_DATA.
-> 
-> Consider the scenario that isotp_rcv_cf() and isotp_rcv_cf() are concurrent for the same isotp_sock as following sequence:
+Fixes: 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM")
+Cc: Ricky WU <ricky_wu@realtek.com>
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+ drivers/mmc/host/rtsx_pci_sdmmc.c | 44 +++++++++++++++++++++++--------
+ 1 file changed, 33 insertions(+), 11 deletions(-)
 
-o_O
+diff --git a/drivers/mmc/host/rtsx_pci_sdmmc.c b/drivers/mmc/host/rtsx_pci_sdmmc.c
+index 58cfaffa3c2d8..2656dc840a3a5 100644
+--- a/drivers/mmc/host/rtsx_pci_sdmmc.c
++++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
+@@ -806,6 +806,7 @@ static void sd_request(struct work_struct *work)
+ 	struct mmc_request *mrq = host->mrq;
+ 	struct mmc_command *cmd = mrq->cmd;
+ 	struct mmc_data *data = mrq->data;
++	struct device *dev = &host->pdev->dev;
+ 
+ 	unsigned int data_size = 0;
+ 	int err;
+@@ -822,6 +823,7 @@ static void sd_request(struct work_struct *work)
+ 	}
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
++	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -858,6 +860,8 @@ static void sd_request(struct work_struct *work)
+ 			data->bytes_xfered = data->blocks * data->blksz;
+ 	}
+ 
++	pm_runtime_mark_last_busy(dev);
++	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ finish:
+@@ -1080,6 +1084,7 @@ static void sdmmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+ {
+ 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
+ 	struct rtsx_pcr *pcr = host->pcr;
++	struct device *dev = &host->pdev->dev;
+ 
+ 	if (host->eject)
+ 		return;
+@@ -1088,6 +1093,7 @@ static void sdmmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+ 		return;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
++	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1121,6 +1127,8 @@ static void sdmmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+ 	rtsx_pci_switch_clock(pcr, ios->clock, host->ssc_depth,
+ 			host->initial_mode, host->double_clk, host->vpclk);
+ 
++	pm_runtime_mark_last_busy(dev);
++	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ }
+ 
+@@ -1128,6 +1136,7 @@ static int sdmmc_get_ro(struct mmc_host *mmc)
+ {
+ 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
+ 	struct rtsx_pcr *pcr = host->pcr;
++	struct device *dev = &host->pdev->dev;
+ 	int ro = 0;
+ 	u32 val;
+ 
+@@ -1135,6 +1144,7 @@ static int sdmmc_get_ro(struct mmc_host *mmc)
+ 		return -ENOMEDIUM;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
++	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1144,6 +1154,8 @@ static int sdmmc_get_ro(struct mmc_host *mmc)
+ 	if (val & SD_WRITE_PROTECT)
+ 		ro = 1;
+ 
++	pm_runtime_mark_last_busy(dev);
++	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ 	return ro;
+@@ -1153,6 +1165,7 @@ static int sdmmc_get_cd(struct mmc_host *mmc)
+ {
+ 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
+ 	struct rtsx_pcr *pcr = host->pcr;
++	struct device *dev = &host->pdev->dev;
+ 	int cd = 0;
+ 	u32 val;
+ 
+@@ -1160,6 +1173,7 @@ static int sdmmc_get_cd(struct mmc_host *mmc)
+ 		return cd;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
++	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1169,6 +1183,8 @@ static int sdmmc_get_cd(struct mmc_host *mmc)
+ 	if (val & SD_EXIST)
+ 		cd = 1;
+ 
++	pm_runtime_mark_last_busy(dev);
++	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ 	return cd;
+@@ -1251,6 +1267,7 @@ static int sdmmc_switch_voltage(struct mmc_host *mmc, struct mmc_ios *ios)
+ {
+ 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
+ 	struct rtsx_pcr *pcr = host->pcr;
++	struct device *dev = &host->pdev->dev;
+ 	int err = 0;
+ 	u8 voltage;
+ 
+@@ -1265,6 +1282,7 @@ static int sdmmc_switch_voltage(struct mmc_host *mmc, struct mmc_ios *ios)
+ 		return err;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
++	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1294,6 +1312,8 @@ static int sdmmc_switch_voltage(struct mmc_host *mmc, struct mmc_ios *ios)
+ 	err = rtsx_pci_write_register(pcr, SD_BUS_STAT,
+ 			SD_CLK_TOGGLE_EN | SD_CLK_FORCE_STOP, 0);
+ 
++	pm_runtime_mark_last_busy(dev);
++	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ 	return err;
+@@ -1303,6 +1323,7 @@ static int sdmmc_execute_tuning(struct mmc_host *mmc, u32 opcode)
+ {
+ 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
+ 	struct rtsx_pcr *pcr = host->pcr;
++	struct device *dev = &host->pdev->dev;
+ 	int err = 0;
+ 
+ 	if (host->eject)
+@@ -1313,6 +1334,7 @@ static int sdmmc_execute_tuning(struct mmc_host *mmc, u32 opcode)
+ 		return err;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
++	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1345,6 +1367,8 @@ static int sdmmc_execute_tuning(struct mmc_host *mmc, u32 opcode)
+ 		err = sd_change_phase(host, DDR50_RX_PHASE(pcr), true);
+ 
+ out:
++	pm_runtime_mark_last_busy(dev);
++	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ 	return err;
+@@ -1495,12 +1519,12 @@ static int rtsx_pci_sdmmc_drv_probe(struct platform_device *pdev)
+ 
+ 	realtek_init_host(host);
+ 
+-	if (pcr->rtd3_en) {
+-		pm_runtime_set_autosuspend_delay(&pdev->dev, 5000);
+-		pm_runtime_use_autosuspend(&pdev->dev);
+-		pm_runtime_enable(&pdev->dev);
+-	}
+-
++	pm_runtime_no_callbacks(&pdev->dev);
++	pm_runtime_set_active(&pdev->dev);
++	pm_runtime_enable(&pdev->dev);
++	pm_runtime_set_autosuspend_delay(&pdev->dev, 5000);
++	pm_runtime_mark_last_busy(&pdev->dev);
++	pm_runtime_use_autosuspend(&pdev->dev);
+ 
+ 	mmc_add_host(mmc);
+ 
+@@ -1521,11 +1545,6 @@ static int rtsx_pci_sdmmc_drv_remove(struct platform_device *pdev)
+ 	pcr->slots[RTSX_SD_CARD].card_event = NULL;
+ 	mmc = host->mmc;
+ 
+-	if (pcr->rtd3_en) {
+-		pm_runtime_dont_use_autosuspend(&pdev->dev);
+-		pm_runtime_disable(&pdev->dev);
+-	}
+-
+ 	cancel_work_sync(&host->work);
+ 
+ 	mutex_lock(&host->host_mutex);
+@@ -1548,6 +1567,9 @@ static int rtsx_pci_sdmmc_drv_remove(struct platform_device *pdev)
+ 
+ 	flush_work(&host->work);
+ 
++	pm_runtime_dont_use_autosuspend(&pdev->dev);
++	pm_runtime_disable(&pdev->dev);
++
+ 	mmc_free_host(mmc);
+ 
+ 	dev_dbg(&(pdev->dev),
+-- 
+2.33.1
 
-Sorry but the receive path is not designed to handle concurrent 
-receptions that would run isotp_rcv_cf() and isotp_rcv_ff() simultaneously.
-
-> isotp_rcv_cf()
-> if (so->rx.state != ISOTP_WAIT_DATA) [false]
-> 						isotp_rcv_ff()
-> 						so->rx.state = ISOTP_IDLE
-> 						/* get the FF_DL */ [so->rx.len == 0]
-> alloc_skb() [so->rx.len == 0]
-> 						/* FF_DL = 0 => get real length from next 4 bytes */ [so->rx.len == 4096]
-> skb_put(nskb, so->rx.len) [so->rx.len == 4096]
-> skb_over_panic()
-> 
-
-Even though this case is not possible with a real CAN bus due to the CAN 
-frame transmission times we could introduce some locking (or dropping of 
-concurrent CAN frames) in isotp_rcv() - but this code runs in net 
-softirq context ...
-
-Regards,
-Oliver
-
-
->>
->> And when so->rx.len is 0 in isotp_rcv_ff() this check
->>
->> if (so->rx.len + ae + off + ff_pci_sz < so->rx.ll_dl)
->>          return 1;
->>
->> will return from isotp_rcv_ff() before ISOTP_WAIT_DATA is set at the end. So after that above check we are still in ISOTP_IDLE state.
->>
->> Or did I miss something here?
->>
->>> so->rx.len is 0 before alloc_skb() and is 4096 after alloc_skb() in isotp_rcv_cf(). The following
->>> skb_put() will trigger panic.
->>>
->>> The following log is my reproducing log with Marc's commit and my debug modification in isotp_rcv_cf().
->>>
->>> [  150.605776][    C6] isotp_rcv_cf: before alloc_skb so->rc.len: 0, after alloc_skb so->rx.len: 4096
->>
->>
->> But so->rx_len is not a value that is modified by alloc_skb():
->>
->>                  nskb = alloc_skb(so->rx.len, gfp_any());
->>                  if (!nskb)
->>                          return 1;
->>
->>                  memcpy(skb_put(nskb, so->rx.len), so->rx.buf,
->>                         so->rx.len);
->>
->>
->> Can you send your debug modification changes please?
-> 
-> My reproducing debug as attachment and following:
-> 
-> diff --git a/net/can/isotp.c b/net/can/isotp.c
-> index df6968b28bf4..8b12d63b4d59 100644
-> --- a/net/can/isotp.c
-> +++ b/net/can/isotp.c
-> @@ -119,8 +119,8 @@ enum {
->   };
-> 
->   struct tpcon {
-> -       int idx;
-> -       int len;
-> +       unsigned int idx;
-> +       unsigned int len;
->          u32 state;
->          u8 bs;
->          u8 sn;
-> @@ -505,6 +505,7 @@ static int isotp_rcv_cf(struct sock *sk, struct canfd_frame *cf, int ae,
->          struct isotp_sock *so = isotp_sk(sk);
->          struct sk_buff *nskb;
->          int i;
-> +       bool unexpection = false;
-> 
->          if (so->rx.state != ISOTP_WAIT_DATA)
->                  return 0;
-> @@ -562,11 +563,13 @@ static int isotp_rcv_cf(struct sock *sk, struct canfd_frame *cf, int ae,
->                                  sk_error_report(sk);
->                          return 1;
->                  }
-> -
-> +               if (so->rx.len == 0)
-> +                       unexpection = true;
->                  nskb = alloc_skb(so->rx.len, gfp_any());
->                  if (!nskb)
->                          return 1;
-> -
-> +               if (unexpection)
-> +                       printk("%s: before alloc_skb so->rc.len: 0, after alloc_skb so->rx.len: %u\n", __func__, so->rx.len);
->                  memcpy(skb_put(nskb, so->rx.len), so->rx.buf,
->                         so->rx.len);
-> 
-> 
->>
->> Best regards,
->> Oliver
->>
->>> [  150.611477][    C6] skbuff: skb_over_panic: text:ffffffff881ff7be len:4096 put:4096 head:ffff88807f93a800 data:ffff88807f93a800 tail:0x1000 end:0xc0 dev:<NULL>
->>> [  150.615837][    C6] ------------[ cut here ]------------
->>> [  150.617238][    C6] kernel BUG at net/core/skbuff.c:113!
->>>
->>
->> .

@@ -2,97 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49DA3494BD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A283494BDB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:38:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376278AbiATKhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 05:37:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34786 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241959AbiATKhU (ORCPT
+        id S1376333AbiATKif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 05:38:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:32989 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242470AbiATKie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 05:37:20 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A3CC061574;
-        Thu, 20 Jan 2022 02:37:20 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id n8so4847949plc.3;
-        Thu, 20 Jan 2022 02:37:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=f2RVg/VdGBpyKgV0TE02Ooeufb/9sqiDx8FfDRZle94=;
-        b=aNbQ5TflFfKHTmgIQh6Br7mb6L9ivy5vrxFTWUbRdUHinabgnQKqBHVZy3ia+g6oXk
-         2VHtWoI92qe3fL9qTkC3qosvUzlhStQzQdsvlM8UfAd6atLNtXQtFfqge1la+Rcqv0lb
-         YkWe/u/ZtqGApoFb06DHavWoeZux1ZnLz8M60+xuT1ZyonkLhXhlQu6ZgN0hBXzsNQUt
-         5VuMG5qsZtdOwgn1kBr8xFhLdEj+Mt7zQGFNMwJ7+kyjL5LqhvHBytg59a9LrOaBaJwD
-         kZ+TdDNI4njPgFK5RmqZMs7NAzYOMtlzKybkaQ1UHbz1CqUAjCKnCufZaLGTQRt1+DhJ
-         XPKQ==
+        Thu, 20 Jan 2022 05:38:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642675114;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sFpN3f0uduDA3tQ7l5sXIVy8xoN2m2qwc3s/2ZpwE2I=;
+        b=CBWQbPJOD0nY8gsyaGhlSbLLEZ458+TdTU0e1WBVhpuI2tlT4GV4IcSEXYgbT4yrMBylmb
+        JJr4GGUANc6xfq/29dXXryRIM+h7sVZIJ/HWXlkClPOGfE8SPKo4/VqlXdxKu1qMU9p2VR
+        1FI99IIVAfOp0DpQmmnaRlZ9dy4W4cM=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-73-vmkHaHKdNMqNWmokhEs1pw-1; Thu, 20 Jan 2022 05:38:32 -0500
+X-MC-Unique: vmkHaHKdNMqNWmokhEs1pw-1
+Received: by mail-wm1-f70.google.com with SMTP id g80-20020a1c9d53000000b0034da9d62199so517919wme.7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 02:38:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=f2RVg/VdGBpyKgV0TE02Ooeufb/9sqiDx8FfDRZle94=;
-        b=6zFLzjb3yJFRgOcfPh3sBj3YvoeZI5eqipE87hVAiKBzw/+useeRaE7G4OooF3HugQ
-         1C3/FK6XhrHrNJNh9K2k8CwaTbH2536WhkgeCAKgEDUK0LLD6MPrpB8bUgBY6HDj7yIr
-         xq0+2bkQ9oMl0is9nqSdcYC1S93NY6ClX8D/rQuzBO3KuqX21LZ8auwCxhDH7qB/7JL0
-         3BOBrbHnuADGfuJBxkTLZJRqhKULu32m52V1aGQ8ZWhisgj6h3fZaWszZz39Bai5sT7+
-         hjcBP113vi8FGZJKbFDiIBIa4hKyuEIR8lXPpowM9DzXIb8AkyEVqAJLqSFwhfHs4dkn
-         vqtA==
-X-Gm-Message-State: AOAM5304ffZh4qJyX6hTbPAULG1DtGaef5yp8R4z+++o9bZRvoR0Q1XM
-        m474RADUALE/XcNoOUzeKdgvd1MaLVgVl7ec
-X-Google-Smtp-Source: ABdhPJx0+EEnkK032e+UMhHgLkm6zcUezkRiuahmPY5CS0yKS7CS8mcOu+Ruzkcacvv+d60lMyiWKw==
-X-Received: by 2002:a17:903:32d1:b0:14b:872:788b with SMTP id i17-20020a17090332d100b0014b0872788bmr1538106plr.68.1642675040103;
-        Thu, 20 Jan 2022 02:37:20 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id a19sm2885816pfv.123.2022.01.20.02.37.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 02:37:19 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Danil Kipnis <danil.kipnis@cloud.ionos.com>,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] RDMA/rtrs: Fix double free in alloc_clt
-Date:   Thu, 20 Jan 2022 10:37:14 +0000
-Message-Id: <20220120103714.32108-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sFpN3f0uduDA3tQ7l5sXIVy8xoN2m2qwc3s/2ZpwE2I=;
+        b=A90JK2g1x3snLO83tsN9cbkRXUaCeCJbbygWF8HVEaGAlcHI8mXwzbd4paaSfaMMDU
+         sGFXAeapGFnnlYvrQ5ButNNKIByO2Ph0yNONuFsg8i0z7AslX38LMr11pbaPVQ0KDXup
+         SuiyULhqzZtSjdLyRjZtAnA2jO2iANS/MGtSvQP+b8r5EBE13C4GtSLaWffO7cmAkQEI
+         FU2LyAGSdeEm/0iTfDNQygPUFTP4YC3VoGRj8Z4wAT8zjrlc/hvldPb8KSkGGL2Oj9K2
+         eR3XJYheKkUnkW4yVSiE6jEVZRySvsSQZmTHUoJPDd1sP+mYJIHInwmtBGn0Yojel+cT
+         96vQ==
+X-Gm-Message-State: AOAM5326Ggp9lzs9r72Xxh2LWMe5cMkE9vDhX92DaSag2UKc+WWdnmUv
+        +r2gJe9ACBO7mnKkTME2tyBqOJSTUdnJ0Hhtc07FRYHoDCkR7zoyhK7JcnTJ3WlDvDiNr4uLp0I
+        M4uP1WHxGy1kBI4nIVp+DtVSI
+X-Received: by 2002:a05:6000:152:: with SMTP id r18mr3963430wrx.598.1642675111367;
+        Thu, 20 Jan 2022 02:38:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzfvIX06o0KrIvdE4knevl3OSMRO8haaYDO1DIVACVjH75Q5KDVwCs2c7eUgWYh9T6sdMZ1nw==
+X-Received: by 2002:a05:6000:152:: with SMTP id r18mr3963404wrx.598.1642675111135;
+        Thu, 20 Jan 2022 02:38:31 -0800 (PST)
+Received: from [10.33.192.183] (nat-pool-str-t.redhat.com. [149.14.88.106])
+        by smtp.gmail.com with ESMTPSA id n10sm1005966wrf.96.2022.01.20.02.38.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 02:38:30 -0800 (PST)
+Message-ID: <069c72b6-457f-65c7-652e-e6eca7235fca@redhat.com>
+Date:   Thu, 20 Jan 2022 11:38:29 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC PATCH v1 06/10] KVM: s390: Add vm IOCTL for key checked
+ guest absolute memory access
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220118095210.1651483-1-scgl@linux.ibm.com>
+ <20220118095210.1651483-7-scgl@linux.ibm.com>
+From:   Thomas Huth <thuth@redhat.com>
+In-Reply-To: <20220118095210.1651483-7-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Callback function rtrs_clt_dev_release() in put_device()
-calls kfree(clt); to free memory. We shouldn't call kfree(clt) again.
+On 18/01/2022 10.52, Janis Schoetterl-Glausch wrote:
+> Channel I/O honors storage keys and is performed on absolute memory.
+> For I/O emulation user space therefore needs to be able to do key
+> checked accesses.
+> The vm IOCTL supports read/write accesses, as well as checking
+> if an access would succeed.
+...
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index e3f450b2f346..dd04170287fd 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -572,6 +572,8 @@ struct kvm_s390_mem_op {
+>   #define KVM_S390_MEMOP_LOGICAL_WRITE	1
+>   #define KVM_S390_MEMOP_SIDA_READ	2
+>   #define KVM_S390_MEMOP_SIDA_WRITE	3
+> +#define KVM_S390_MEMOP_ABSOLUTE_READ	4
+> +#define KVM_S390_MEMOP_ABSOLUTE_WRITE	5
 
-Fixes: 6a98d71daea1 ("RDMA/rtrs: client: main functionality")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/infiniband/ulp/rtrs/rtrs-clt.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Not quite sure about this - maybe it is, but at least I'd like to see this 
+discussed: Do we really want to re-use the same ioctl layout for both, the 
+VM and the VCPU file handles? Where the userspace developer has to know that 
+the *_ABSOLUTE_* ops only work with VM handles, and the others only work 
+with the VCPU handles? A CPU can also address absolute memory, so why not 
+adding the *_ABSOLUTE_* ops there, too? And if we'd do that, wouldn't it be 
+sufficient to have the VCPU ioctls only - or do you want to call these 
+ioctls from spots in QEMU where you do not have a VCPU handle available? 
+(I/O instructions are triggered from a CPU, so I'd assume that you should 
+have a VCPU handle around?)
 
-diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-index 7c3f98e57889..61723f48fbd4 100644
---- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-+++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-@@ -2741,7 +2741,7 @@ static struct rtrs_clt_sess *alloc_clt(const char *sessname, size_t paths_num,
- 	err = device_register(&clt->dev);
- 	if (err) {
- 		put_device(&clt->dev);
--		goto err;
-+		goto err_free_cpu;
- 	}
- 
- 	clt->kobj_paths = kobject_create_and_add("paths", &clt->dev.kobj);
-@@ -2764,6 +2764,9 @@ static struct rtrs_clt_sess *alloc_clt(const char *sessname, size_t paths_num,
- err:
- 	free_percpu(clt->pcpu_path);
- 	kfree(clt);
-+	clt->pcpu_path = NULL;
-+err_free_cpu:
-+	free_percpu(clt->pcpu_path);
- 	return ERR_PTR(err);
- }
- 
--- 
-2.17.1
+  Thomas
+
 

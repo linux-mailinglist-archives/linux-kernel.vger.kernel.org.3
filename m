@@ -2,99 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA821494C32
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58382494C3D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:55:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiATKxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 05:53:17 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:56112 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiATKwv (ORCPT
+        id S229867AbiATKyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 05:54:12 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:20783 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229526AbiATKyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 05:52:51 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 04F5E1F76A;
-        Thu, 20 Jan 2022 10:52:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1642675970; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BRntaQvQnRRKs8Q9fD7/O4tfQUl0HeggvKHheBBFdio=;
-        b=Jf0HcFw3c8FQJ9zNNyF4FRXtMG7+0rNJptDq3vrBmWZ+F84NcWK8XUmIw5D8t9bF8+fQth
-        +TANA4NuGgPqBUXHxSXZvgcxWPy3AY/oeKBfwhreGufRxswrjnxATGxhuXYVNubMFBBf+i
-        VvIfsTaKcNGLqe81GFPOABe7wIQ5VCs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1642675970;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BRntaQvQnRRKs8Q9fD7/O4tfQUl0HeggvKHheBBFdio=;
-        b=tL9mPxbp8JZLAftheBJd++yhdFkb1xE9PikvgcAJrkLtjfdLB7djCqUPAQ5oP1dPpalfT4
-        j23ECmKjNRruzPCQ==
-Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 1B6B7A3B88;
-        Thu, 20 Jan 2022 10:52:44 +0000 (UTC)
-Received: by adalid.arch.suse.de (Postfix, from userid 17828)
-        id E4DC95192BF8; Thu, 20 Jan 2022 11:52:49 +0100 (CET)
-From:   Daniel Wagner <dwagner@suse.de>
-To:     linux-block@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Hannes Reinecke <hare@suse.de>, Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH 2/2] block: hold queue lock while iterating in diskstats_show
-Date:   Thu, 20 Jan 2022 11:52:48 +0100
-Message-Id: <20220120105248.117025-3-dwagner@suse.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220120105248.117025-1-dwagner@suse.de>
-References: <20220120105248.117025-1-dwagner@suse.de>
+        Thu, 20 Jan 2022 05:54:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1642676046; x=1674212046;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OQxEySdr4f1nr1SBYHxpL92c8SRLaP68TBUursFakxg=;
+  b=k0uhan7wA1J/TqCRb06WRcaYOEL38yKZA/Fnh1fEVfBubfqrDBgHwkLl
+   JR5rEREwWaY+v0sqrwyKDvOKVPhvqlPw60AetnN9AnkE4dXgnpR0G0SAW
+   4AZUq9cpAod+JhyeyUkE5gqwx/y3UuxgzZ4zfxWk/7gRGJvygiYar3G+f
+   8=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 Jan 2022 02:54:05 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 02:54:05 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 20 Jan 2022 02:54:05 -0800
+Received: from [10.216.6.136] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 20 Jan
+ 2022 02:53:59 -0800
+Message-ID: <816df5c9-aa89-e019-4036-6c9a79e534bd@quicinc.com>
+Date:   Thu, 20 Jan 2022 16:23:52 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 3/4] arm64: dts: qcom: sm8150: Add pdc interrupt
+ controller node
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>
+CC:     <bhupesh.linux@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <robh+dt@kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linus.walleij@linaro.org>,
+        <bjorn.andersson@linaro.org>, Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh@kernel.org>
+References: <20220119203133.467264-1-bhupesh.sharma@linaro.org>
+ <20220119203133.467264-4-bhupesh.sharma@linaro.org>
+From:   Maulik Shah <quic_mkshah@quicinc.com>
+In-Reply-To: <20220119203133.467264-4-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The request queues can be freed while we operate on them. Make sure we
-hold a reference when using blk_mq_queue_tag_busy_iter.
+Hi,
 
-RIP: blk_mq_queue_tag_busy_iter
-Call Trace:
- ? blk_mq_hctx_mark_pending
- ? diskstats_show
- ? blk_mq_hctx_mark_pending
- blk_mq_in_flight
- diskstats_show
- ? klist_next
- seq_read
- proc_reg_read
- vfs_read
- ksys_read
- do_syscall_64
- entry_SYSCALL_64_after_hwframe
+On 1/20/2022 2:01 AM, Bhupesh Sharma wrote:
+> Add pdc interrupt controller for sm8150.
+>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Rob Herring <robh@kernel.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>   arch/arm64/boot/dts/qcom/sm8150.dtsi | 10 ++++++++++
+>   1 file changed, 10 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> index 6012322a5984..cc4dc11b2585 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> @@ -1626,6 +1626,16 @@ system-cache-controller@9200000 {
+>   			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
+>   		};
+>   
+> +		pdc: interrupt-controller@b220000 {
+> +			compatible = "qcom,sm8150-pdc", "qcom,pdc";
+> +			reg = <0 0x0b220000 0 0x400>, <0 0x17c000f0 0 0x60>;
 
-Signed-off-by: Daniel Wagner <dwagner@suse.de>
----
- block/genhd.c | 3 +++
- 1 file changed, 3 insertions(+)
+<0x17c000f0 0x64>;
 
-diff --git a/block/genhd.c b/block/genhd.c
-index c9d4386dd177..0e163055a4e6 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -1167,10 +1167,13 @@ static int diskstats_show(struct seq_file *seqf, void *v)
- 		if (bdev_is_partition(hd) && !bdev_nr_sectors(hd))
- 			continue;
- 		part_stat_read_all(hd, &stat);
-+		if (blk_queue_enter(gp->queue, BLK_MQ_REQ_NOWAIT))
-+			continue;
- 		if (queue_is_mq(gp->queue))
- 			inflight = blk_mq_in_flight(gp->queue, hd);
- 		else
- 			inflight = part_in_flight(hd);
-+		blk_queue_exit(gp->queue);
- 
- 		seq_printf(seqf, "%4d %7d %pg "
- 			   "%lu %lu %lu %u "
--- 
-2.29.2
+Remove the second reg, its not used in the driver and also not 
+documented yet.
 
+Thanks,
+Maulik
+> +			qcom,pdc-ranges = <0 480 94>, <94 609 31>,
+> +					  <125 63 1>;
+> +			#interrupt-cells = <2>;
+> +			interrupt-parent = <&intc>;
+> +			interrupt-controller;
+> +		};
+> +
+>   		ufs_mem_hc: ufshc@1d84000 {
+>   			compatible = "qcom,sm8150-ufshc", "qcom,ufshc",
+>   				     "jedec,ufs-2.0";

@@ -2,73 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F394946FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 06:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD584946FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 06:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358587AbiATFcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 00:32:01 -0500
-Received: from conuserg-09.nifty.com ([210.131.2.76]:31328 "EHLO
-        conuserg-09.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiATFcA (ORCPT
+        id S1358598AbiATFeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 00:34:15 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:60516 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229989AbiATFeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 00:32:00 -0500
-Received: from grover.. (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
-        by conuserg-09.nifty.com with ESMTP id 20K5V6QW029756;
-        Thu, 20 Jan 2022 14:31:07 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 20K5V6QW029756
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1642656667;
-        bh=d9AQ7p0brEyjb3LFIQfatzkfmepyjBhtJOzn2i9Uff4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=248if+r239MzF9Dh+IPJUHaWtcOg0BH9566uLFXCCleZOhGHp9qm9Mz+s0bHd0o2s
-         alYyK7wUU+TTT75ivwDzGmAR+TiisibrbW2uJ45r2ZzcQSN8uuU6vFEl7Bpaz8I87F
-         3Yxmx9I1KpQIwB8EYHTzEVkycVG8WbVwDa5tS1OV3Ey9i+iuvDmgVYHR3JrWmgRS/h
-         hX7As8eEiWdNMC8D3IegWZ7E/VG7kPXwRDU1WbF1slT1WojKuBd9iPOzxJljgHunTv
-         EsaY8YYsCatWpMsghcg148jsVxLF23HZ0aQFyrc7GlrATbFBLIiEgpWxu8ML4AzyWv
-         AEJQw8ZVR3loQ==
-X-Nifty-SrcIP: [133.32.232.101]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH] Revert "Makefile: Do not quote value for CONFIG_CC_IMPLICIT_FALLTHROUGH"
-Date:   Thu, 20 Jan 2022 14:31:00 +0900
-Message-Id: <20220120053100.408816-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Thu, 20 Jan 2022 00:34:14 -0500
+X-UUID: 79d0c64fb85748de93dbc62341103159-20220120
+X-UUID: 79d0c64fb85748de93dbc62341103159-20220120
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <axe.yang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1240064530; Thu, 20 Jan 2022 13:34:11 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 20 Jan 2022 13:34:09 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 20 Jan 2022 13:34:08 +0800
+Message-ID: <0b6ef0ce05bb92cd458043be2441101e20166242.camel@mediatek.com>
+Subject: Re: [PATCH v4 3/3] mmc: mediatek: add support for SDIO eint IRQ
+From:   Axe Yang <axe.yang@mediatek.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "Lucas Stach" <dev@lynxeye.de>, Eric Biggers <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Yong Mao <yong.mao@mediatek.com>
+Date:   Thu, 20 Jan 2022 13:34:08 +0800
+In-Reply-To: <Yehq7L36yfJ8D/j2@smile.fi.intel.com>
+References: <20220119103212.13158-1-axe.yang@mediatek.com>
+         <20220119103212.13158-4-axe.yang@mediatek.com>
+         <Yehq7L36yfJ8D/j2@smile.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit cd8c917a56f20f48748dd43d9ae3caff51d5b987.
+On Wed, 2022-01-19 at 21:47 +0200, Andy Shevchenko wrote:
+> On Wed, Jan 19, 2022 at 06:32:12PM +0800, Axe Yang wrote:
+> > Add support for eint IRQ when MSDC is used as an SDIO host. This
+> > feature requires SDIO device support async IRQ function. With this
+> > feature, SDIO host can be awakened by SDIO card in suspend state,
+> > without additional pin.
+> > 
+> > MSDC driver will time-share the SDIO DAT1 pin. During suspend, MSDC
+> > turn off clock and switch SDIO DAT1 pin to GPIO mode. And during
+> > resume, switch GPIO function back to DAT1 mode then turn on clock.
+> > 
+> > Some device tree property should be added or modified in MSDC node
+> > to support SDIO eint IRQ. Pinctrls named state_dat1 and state_eint
+> > are mandatory. And cap-sdio-async-irq flag is necessary since this
+> > feature depends on asynchronous interrupt:
+> >         &mmcX {
+> >                 ...
+> >                 pinctrl-names = "default", "state_uhs",
+> > "state_eint",
+> >                                 "state_dat1";
+> >                 ...
+> >                 pinctrl-2 = <&mmc2_pins_eint>;
+> >                 pinctrl-3 = <&mmc2_pins_dat1>;
+> >                 ...
+> >                 cap-sdio-async-irq;
+> >                 ...
+> >         };
+> > 
+> > Signed-off-by: Axe Yang <axe.yang@mediatek.com>
+> 
+> The submitters SoB must be last among all SoB tags. Please, read
+> Submitting
+> Patches document carefully.
+> 
+> > Signed-off-by: Yong Mao <yong.mao@mediatek.com>
+> 
+> Who is they, why their SoB appeared here?
+> 
 
-Commit 129ab0d2d9f3 ("kbuild: do not quote string values in
-include/config/auto.conf") provided the final solution.
+Yong Mao is the co-developer of this patch, I will reorder the SoB
+chains.
 
-Now reverting the temporary workaround.
+> ...
+> 
+> >  /*
+> > - * Copyright (c) 2014-2015 MediaTek Inc.
+> > + * Copyright (c) 2022 MediaTek Inc.
+> 
+> This doesn't feel right. Why did you remove old years?
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+I should keep the publish year 2014 of this driver.
+But I still think range 2014-2022 is the most appropriate way to change
+the copyright time. Over these years, mediatek is keeping maintaining
+this driver continuously. What do you think?
 
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> >   * Author: Chaotian.Jing <chaotian.jing@mediatek.com>
+> >   */
+> 
+> ...
+> 
+> > +	desc = devm_gpiod_get(host->dev, "eint", GPIOD_IN);
+> > +	if (IS_ERR(desc))
+> > +		return PTR_ERR(desc);
+> > +	ret = gpiod_to_irq(desc);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	irq = ret;
+> 
+> Since both of them are local variables and there is no specific use
+> of the
+> returned value, I believe it's fine just to
+> 
+> 	irq = gpiod_to_irq(desc);
+> 	...
 
-diff --git a/Makefile b/Makefile
-index 3f07f0f04475..c94559a97dca 100644
---- a/Makefile
-+++ b/Makefile
-@@ -778,7 +778,7 @@ stackp-flags-$(CONFIG_STACKPROTECTOR_STRONG)      := -fstack-protector-strong
- KBUILD_CFLAGS += $(stackp-flags-y)
- 
- KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
--KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH:"%"=%)
-+KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
- 
- ifdef CONFIG_CC_IS_CLANG
- KBUILD_CPPFLAGS += -Qunused-arguments
--- 
-2.32.0
+I agree, will fix in next version.
+
+> Hmm... I was wondering if you can use fwnode_irq_get_byname().
+> Ah, it's not (yet) in upstream.
+> 
+> ...
+> 
+> >  static int __maybe_unused msdc_runtime_suspend(struct device *dev)
+> >  {
+> > +	unsigned long flags;
+> 
+> Can you keep reversed xmas tree order?
+> 
+> >  	struct mmc_host *mmc = dev_get_drvdata(dev);
+> >  	struct msdc_host *host = mmc_priv(mmc);
+> 
+> (it means to add new variable here)
+
+Will fix it in next version.
+
+> 
+> >  	return 0;
+> >  }
+> 
+> ...
+> 
+> >  static int __maybe_unused msdc_runtime_resume(struct device *dev)
+> >  {
+> > +	unsigned long flags;
+> 
+> Ditto.
+
+Will fix it in next version.
+
+> 
+> >  	struct mmc_host *mmc = dev_get_drvdata(dev);
+> >  	struct msdc_host *host = mmc_priv(mmc);
+> >  	int ret;
+> >  	return 0;
+> >  }
+> 
+
+--
+Best Regard,
+Axe Yang
+
 

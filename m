@@ -2,253 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F6549522A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 17:15:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60319495232
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 17:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376985AbiATQPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 11:15:17 -0500
-Received: from box.trvn.ru ([194.87.146.52]:50075 "EHLO box.trvn.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1376908AbiATQPF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 11:15:05 -0500
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by box.trvn.ru (Postfix) with ESMTPSA id BAFD241A43;
-        Thu, 20 Jan 2022 21:15:01 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-        t=1642695302; bh=R0jpJBls5JmCwVCLpVXHSI9u3DEEXSFznMNecQ1yAeQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dr1dxvmkC6HCPiVCj4aPzEORcXkQGtiSX+Cb5/FNV/ETtkyk5HiR4e05H1x/7NCDv
-         arTYTO5sA2UGv9CbNccDPDHmumCDFMynNSnzrlQcNzYmSUH0q5HXEkp1I/6IVYmWoF
-         Ix2kIKexv/xHrsi1XaAIZk9gL134uft0Kv+yiPCOiyBnLV7q8acZUNKY/A1KpIt+Ys
-         euNmd0SFH2YtTX/XlLhWOYQd5ispMJkO2BBvWR6vReWjx5eBefVlRXtnxpxwUoYiFK
-         08NBw0XSfme4x5rygnBiPqDRhMA47+G0f7AizYX8ljsRkdlyO1qZA6La+TWKr86zzW
-         Qws06OrEMA3SA==
-From:   Nikita Travkin <nikita@trvn.ru>
-To:     thierry.reding@gmail.com, lee.jones@linaro.org
-Cc:     u.kleine-koenig@pengutronix.de, robh+dt@kernel.org,
-        sboyd@kernel.org, krzk@kernel.org, linus.walleij@linaro.org,
-        masneyb@onstation.org, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Nikita Travkin <nikita@trvn.ru>
-Subject: [PATCH v3 3/3] pwm: Add clock based PWM output driver
-Date:   Thu, 20 Jan 2022 21:14:42 +0500
-Message-Id: <20220120161442.140800-4-nikita@trvn.ru>
-In-Reply-To: <20220120161442.140800-1-nikita@trvn.ru>
-References: <20220120161442.140800-1-nikita@trvn.ru>
+        id S1376887AbiATQRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 11:17:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233057AbiATQRb (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 11:17:31 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF898C06161C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 08:17:30 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id bu18so23605679lfb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 08:17:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A84aj5UGI1NYrvkhOFIhb/Cs0SMGHG68d0x1Mrz2Olk=;
+        b=ofFZI5gQS4+4hIGdZCMWgXw5MgHoP0NCo/XNXBn3rS/1BFshHj85BeUabsurO1Jg8i
+         SchSM2Vs7e4hoyEd4NqCQQN89yCrACaqhXPpGU0F/ME9zbm+gv/8mYfDvqnv6ih6YQZV
+         AZuAFGHQY4gF0eC7Rcwin1957iLSGWiPRv/D50TPyRSHnJg2f5InZhpxIEAlwDrxr/nM
+         av74W3HWHeooOBK9o4ve3/xwL1Dd9VRHVfKRlGWRLbMnG0BWfZhEmCqAQSW/Sj++IXxh
+         XdqEz+PY4fpaJLYkzrzMgbsn2S/kEP1CqKLN6DKvoE3FBad8BOP6BJn0XqQEwGVYkDx8
+         H1iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A84aj5UGI1NYrvkhOFIhb/Cs0SMGHG68d0x1Mrz2Olk=;
+        b=hxRBSywuUKkNQ1j3Vx05VRvQ79jKqkpKrAcQPyZ+P65194/wX9R8miR/a5ia8Pn4Ig
+         XA+5CWFSohIKmGi7zVxnAI4GBxu7YTqOECAb1YX8StBzeRxU6Tag7zrb0U0NFL4a91/J
+         quKxKMQ02mtAzOCDphM+k7GKnnlHfFaAe0a0JKfKSwOrKKDl1FT27wfdyPw3yQrQw9os
+         OSYsWnzJ/y5twW15C/X6Q4bbXxSzcjYNoFIifaQw44FW7cefoC7ukYUCixjBldS7lAoh
+         HjRf7qi8QIf5F1I//xJakdzScuEdGYIBThd5Ff39AhGQDmKcdPsBKOvye/8MOSHJ2kfq
+         K81w==
+X-Gm-Message-State: AOAM532Obaogmpp3Vo6Rr1aL+fjG5u8BrzIpBLpUaBLvK0VbyZOd5KO2
+        NSnjnAJz/7HttFavLWrO/SS+elFFrdeLgLD2i9h9jg==
+X-Google-Smtp-Source: ABdhPJzgKvahsgA2dYfEUogEjezEPLnpfvYmPEnG4OkDlebsoQzHT8ag6j0avC3sA35DmmMhMEHBBzin14U+DLGr2gQ=
+X-Received: by 2002:a05:6512:1293:: with SMTP id u19mr30390170lfs.373.1642695448810;
+ Thu, 20 Jan 2022 08:17:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220118110621.62462-1-nikunj@amd.com> <20220118110621.62462-7-nikunj@amd.com>
+In-Reply-To: <20220118110621.62462-7-nikunj@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Thu, 20 Jan 2022 09:17:17 -0700
+Message-ID: <CAMkAt6p1-82LTRNB3pkPRwYh=wGpreUN=jcUeBj_dZt8ss9w0Q@mail.gmail.com>
+Subject: Re: [RFC PATCH 6/6] KVM: SVM: Pin SEV pages in MMU during sev_launch_update_data()
+To:     Nikunj A Dadhania <nikunj@amd.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some systems have clocks exposed to external devices. If the clock
-controller supports duty-cycle configuration, such clocks can be used as
-pwm outputs. In fact PWM and CLK subsystems are interfaced with in a
-similar way and an "opposite" driver already exists (clk-pwm). Add a
-driver that would enable pwm devices to be used via clk subsystem.
+On Tue, Jan 18, 2022 at 4:07 AM Nikunj A Dadhania <nikunj@amd.com> wrote:
+>
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
+>
+> Pin the memory for the data being passed to launch_update_data()
+> because it gets encrypted before the guest is first run and must
+> not be moved which would corrupt it.
+>
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> [ * Changed hva_to_gva() to take an extra argument and return gpa_t.
+>   * Updated sev_pin_memory_in_mmu() error handling.
+>   * As pinning/unpining pages is handled within MMU, removed
+>     {get,put}_user(). ]
+> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+> ---
+>  arch/x86/kvm/svm/sev.c | 122 ++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 119 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 14aeccfc500b..1ae714e83a3c 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -22,6 +22,7 @@
+>  #include <asm/trapnr.h>
+>  #include <asm/fpu/xcr.h>
+>
+> +#include "mmu.h"
+>  #include "x86.h"
+>  #include "svm.h"
+>  #include "svm_ops.h"
+> @@ -490,6 +491,110 @@ static unsigned long get_num_contig_pages(unsigned long idx,
+>         return pages;
+>  }
+>
+> +#define SEV_PFERR_RO (PFERR_USER_MASK)
+> +#define SEV_PFERR_RW (PFERR_WRITE_MASK | PFERR_USER_MASK)
+> +
+> +static struct kvm_memory_slot *hva_to_memslot(struct kvm *kvm,
+> +                                             unsigned long hva)
+> +{
+> +       struct kvm_memslots *slots = kvm_memslots(kvm);
+> +       struct kvm_memory_slot *memslot;
+> +       int bkt;
+> +
+> +       kvm_for_each_memslot(memslot, bkt, slots) {
+> +               if (hva >= memslot->userspace_addr &&
+> +                   hva < memslot->userspace_addr +
+> +                   (memslot->npages << PAGE_SHIFT))
+> +                       return memslot;
+> +       }
+> +
+> +       return NULL;
+> +}
+> +
+> +static gpa_t hva_to_gpa(struct kvm *kvm, unsigned long hva, bool *ro)
+> +{
+> +       struct kvm_memory_slot *memslot;
+> +       gpa_t gpa_offset;
+> +
+> +       memslot = hva_to_memslot(kvm, hva);
+> +       if (!memslot)
+> +               return UNMAPPED_GVA;
+> +
+> +       *ro = !!(memslot->flags & KVM_MEM_READONLY);
+> +       gpa_offset = hva - memslot->userspace_addr;
+> +       return ((memslot->base_gfn << PAGE_SHIFT) + gpa_offset);
+> +}
+> +
+> +static struct page **sev_pin_memory_in_mmu(struct kvm *kvm, unsigned long addr,
+> +                                          unsigned long size,
+> +                                          unsigned long *npages)
+> +{
+> +       struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> +       struct kvm_vcpu *vcpu;
+> +       struct page **pages;
+> +       unsigned long i;
+> +       u32 error_code;
+> +       kvm_pfn_t pfn;
+> +       int idx, ret = 0;
+> +       gpa_t gpa;
+> +       bool ro;
+> +
+> +       pages = sev_alloc_pages(sev, addr, size, npages);
+> +       if (IS_ERR(pages))
+> +               return pages;
+> +
+> +       vcpu = kvm_get_vcpu(kvm, 0);
+> +       if (mutex_lock_killable(&vcpu->mutex)) {
+> +               kvfree(pages);
+> +               return ERR_PTR(-EINTR);
+> +       }
+> +
+> +       vcpu_load(vcpu);
+> +       idx = srcu_read_lock(&kvm->srcu);
+> +
+> +       kvm_mmu_load(vcpu);
+> +
+> +       for (i = 0; i < *npages; i++, addr += PAGE_SIZE) {
+> +               if (signal_pending(current)) {
+> +                       ret = -ERESTARTSYS;
+> +                       break;
+> +               }
+> +
+> +               if (need_resched())
+> +                       cond_resched();
+> +
+> +               gpa = hva_to_gpa(kvm, addr, &ro);
+> +               if (gpa == UNMAPPED_GVA) {
+> +                       ret = -EFAULT;
+> +                       break;
+> +               }
+> +
+> +               error_code = ro ? SEV_PFERR_RO : SEV_PFERR_RW;
+> +
+> +               /*
+> +                * Fault in the page and sev_pin_page() will handle the
+> +                * pinning
+> +                */
+> +               pfn = kvm_mmu_map_tdp_page(vcpu, gpa, error_code, PG_LEVEL_4K);
+> +               if (is_error_noslot_pfn(pfn)) {
+> +                       ret = -EFAULT;
+> +                       break;
+> +               }
+> +               pages[i] = pfn_to_page(pfn);
+> +       }
+> +
+> +       kvm_mmu_unload(vcpu);
+> +       srcu_read_unlock(&kvm->srcu, idx);
+> +       vcpu_put(vcpu);
+> +       mutex_unlock(&vcpu->mutex);
+> +
+> +       if (!ret)
+> +               return pages;
+> +
+> +       kvfree(pages);
+> +       return ERR_PTR(ret);
+> +}
+> +
+>  static int sev_launch_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>  {
+>         unsigned long vaddr, vaddr_end, next_vaddr, npages, pages, size, i;
+> @@ -510,15 +615,21 @@ static int sev_launch_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>         vaddr_end = vaddr + size;
+>
+>         /* Lock the user memory. */
+> -       inpages = sev_pin_memory(kvm, vaddr, size, &npages, 1);
+> +       if (atomic_read(&kvm->online_vcpus))
+> +               inpages = sev_pin_memory_in_mmu(kvm, vaddr, size, &npages);
 
-Signed-off-by: Nikita Travkin <nikita@trvn.ru>
---
+IIUC we can only use the sev_pin_memory_in_mmu() when there is an
+online vCPU because that means the MMU has been setup enough to use?
+Can we add a variable and a comment to help explain that?
 
-Changes in v2:
- - Address Uwe's review comments:
-   - Round set clk rate up
-   - Add a description with limitations of the driver
-   - Disable and unprepare clock before removing pwmchip
-Changes in v3:
- - Use 64bit version of div round up
- - Address Uwe's review comments:
-   - Reword the limitations to avoid incorrect claims
-   - Move the clk_enabled flag assignment
-   - Drop unnecessary statements
----
- drivers/pwm/Kconfig   |  10 +++
- drivers/pwm/Makefile  |   1 +
- drivers/pwm/pwm-clk.c | 139 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 150 insertions(+)
- create mode 100644 drivers/pwm/pwm-clk.c
+bool mmu_usable = atomic_read(&kvm->online_vcpus) > 0;
 
-diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
-index 21e3b05a5153..daa2491a4054 100644
---- a/drivers/pwm/Kconfig
-+++ b/drivers/pwm/Kconfig
-@@ -140,6 +140,16 @@ config PWM_BRCMSTB
- 	  To compile this driver as a module, choose M Here: the module
- 	  will be called pwm-brcmstb.c.
- 
-+config PWM_CLK
-+	tristate "Clock based PWM support"
-+	depends on HAVE_CLK || COMPILE_TEST
-+	help
-+	  Generic PWM framework driver for outputs that can be
-+	  muxed to clocks.
-+
-+	  To compile this driver as a module, choose M here: the module
-+	  will be called pwm-clk.
-+
- config PWM_CLPS711X
- 	tristate "CLPS711X PWM support"
- 	depends on ARCH_CLPS711X || COMPILE_TEST
-diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
-index 708840b7fba8..4a860103c470 100644
---- a/drivers/pwm/Makefile
-+++ b/drivers/pwm/Makefile
-@@ -10,6 +10,7 @@ obj-$(CONFIG_PWM_BCM_KONA)	+= pwm-bcm-kona.o
- obj-$(CONFIG_PWM_BCM2835)	+= pwm-bcm2835.o
- obj-$(CONFIG_PWM_BERLIN)	+= pwm-berlin.o
- obj-$(CONFIG_PWM_BRCMSTB)	+= pwm-brcmstb.o
-+obj-$(CONFIG_PWM_CLK)		+= pwm-clk.o
- obj-$(CONFIG_PWM_CLPS711X)	+= pwm-clps711x.o
- obj-$(CONFIG_PWM_CRC)		+= pwm-crc.o
- obj-$(CONFIG_PWM_CROS_EC)	+= pwm-cros-ec.o
-diff --git a/drivers/pwm/pwm-clk.c b/drivers/pwm/pwm-clk.c
-new file mode 100644
-index 000000000000..b3bfa12a0e73
---- /dev/null
-+++ b/drivers/pwm/pwm-clk.c
-@@ -0,0 +1,139 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Clock based PWM controller
-+ *
-+ * Copyright (c) 2021 Nikita Travkin <nikita@trvn.ru>
-+ *
-+ * This is an "adapter" driver that allows PWM consumers to use
-+ * system clocks with duty cycle control as PWM outputs.
-+ *
-+ * Limitations:
-+ * - Glitches are possible when new pwm state is applied.
-+ * - Due to the fact that exact behavior depends on the underlying
-+ *   clock driver, various limitations are possible.
-+ * - Period depends on the clock and, in general, not guaranteed.
-+ * - Underlying clock may not be able to give 0% or 100% duty cycle
-+ *   (constant off or on), exact behavior will depend on the clock.
-+ * - When the PWM is disabled, the clock will be disabled as well,
-+ *   line state will depend on the clock.
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/math64.h>
-+#include <linux/err.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/clk.h>
-+#include <linux/pwm.h>
-+
-+struct pwm_clk_chip {
-+	struct pwm_chip chip;
-+	struct clk *clk;
-+	bool clk_enabled;
-+};
-+
-+#define to_pwm_clk_chip(_chip) container_of(_chip, struct pwm_clk_chip, chip)
-+
-+static int pwm_clk_apply(struct pwm_chip *pwm_chip, struct pwm_device *pwm,
-+			 const struct pwm_state *state)
-+{
-+	struct pwm_clk_chip *chip = to_pwm_clk_chip(pwm_chip);
-+	int ret;
-+	u32 rate;
-+	u64 period = state->period;
-+	u64 duty_cycle = state->duty_cycle;
-+
-+	if (!state->enabled) {
-+		if (pwm->state.enabled) {
-+			clk_disable(chip->clk);
-+			chip->clk_enabled = false;
-+		}
-+		return 0;
-+	} else if (!pwm->state.enabled) {
-+		ret = clk_enable(chip->clk);
-+		if (ret)
-+			return ret;
-+		chip->clk_enabled = true;
-+	}
-+
-+	rate = DIV64_U64_ROUND_UP(NSEC_PER_SEC, period);
-+	ret = clk_set_rate(chip->clk, rate);
-+	if (ret)
-+		return ret;
-+
-+	if (state->polarity == PWM_POLARITY_INVERSED)
-+		duty_cycle = period - duty_cycle;
-+
-+	return clk_set_duty_cycle(chip->clk, duty_cycle, period);
-+}
-+
-+static const struct pwm_ops pwm_clk_ops = {
-+	.apply = pwm_clk_apply,
-+	.owner = THIS_MODULE,
-+};
-+
-+static int pwm_clk_probe(struct platform_device *pdev)
-+{
-+	struct pwm_clk_chip *chip;
-+	int ret;
-+
-+	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
-+	if (!chip)
-+		return -ENOMEM;
-+
-+	chip->clk = devm_clk_get(&pdev->dev, NULL);
-+	if (IS_ERR(chip->clk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(chip->clk),
-+				     "Failed to get clock\n");
-+
-+	chip->chip.dev = &pdev->dev;
-+	chip->chip.ops = &pwm_clk_ops;
-+	chip->chip.npwm = 1;
-+
-+	ret = clk_prepare(chip->clk);
-+	if (ret < 0)
-+		dev_err_probe(&pdev->dev, ret, "Failed to prepare clock\n");
-+
-+	ret = pwmchip_add(&chip->chip);
-+	if (ret < 0)
-+		dev_err_probe(&pdev->dev, ret, "Failed to add pwm chip\n");
-+
-+	platform_set_drvdata(pdev, chip);
-+	return 0;
-+}
-+
-+static int pwm_clk_remove(struct platform_device *pdev)
-+{
-+	struct pwm_clk_chip *chip = platform_get_drvdata(pdev);
-+
-+	pwmchip_remove(&chip->chip);
-+
-+	if (chip->clk_enabled)
-+		clk_disable(chip->clk);
-+
-+	clk_unprepare(chip->clk);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id pwm_clk_dt_ids[] = {
-+	{ .compatible = "clk-pwm", },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, pwm_clk_dt_ids);
-+
-+static struct platform_driver pwm_clk_driver = {
-+	.driver = {
-+		.name = "pwm-clk",
-+		.of_match_table = pwm_clk_dt_ids,
-+	},
-+	.probe = pwm_clk_probe,
-+	.remove = pwm_clk_remove,
-+};
-+module_platform_driver(pwm_clk_driver);
-+
-+MODULE_ALIAS("platform:pwm-clk");
-+MODULE_AUTHOR("Nikita Travkin <nikita@trvn.ru>");
-+MODULE_DESCRIPTION("Clock based PWM driver");
-+MODULE_LICENSE("GPL");
--- 
-2.30.2
+> +       else
+> +               inpages = sev_pin_memory(kvm, vaddr, size, &npages, 1);
 
+So I am confused about this case. Since svm_register_enc_region() is
+now a NOOP how can a user ensure that memory remains pinned from
+sev_launch_update_data() to when the memory would be demand pinned?
+
+Before users could svm_register_enc_region() which pins the region,
+then sev_launch_update_data(), then the VM could run an the data from
+sev_launch_update_data() would have never moved. I don't think that
+same guarantee is held here?
+
+>         if (IS_ERR(inpages))
+>                 return PTR_ERR(inpages);
+>
+>         /*
+>          * Flush (on non-coherent CPUs) before LAUNCH_UPDATE encrypts pages in
+>          * place; the cache may contain the data that was written unencrypted.
+> +        * Flushing is automatically handled if the pages can be pinned in the
+> +        * MMU.
+>          */
+> -       sev_clflush_pages(inpages, npages);
+> +       if (!atomic_read(&kvm->online_vcpus))
+> +               sev_clflush_pages(inpages, npages);
+>
+>         data.reserved = 0;
+>         data.handle = sev->handle;
+> @@ -553,8 +664,13 @@ static int sev_launch_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>                 set_page_dirty_lock(inpages[i]);
+>                 mark_page_accessed(inpages[i]);
+>         }
+> +
+>         /* unlock the user pages */
+> -       sev_unpin_memory(kvm, inpages, npages);
+> +       if (atomic_read(&kvm->online_vcpus))
+> +               kvfree(inpages);
+> +       else
+> +               sev_unpin_memory(kvm, inpages, npages);
+> +
+>         return ret;
+>  }
+>
+> --
+> 2.32.0
+>

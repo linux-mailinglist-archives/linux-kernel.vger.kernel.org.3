@@ -2,83 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4443494D02
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:31:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00292494D04
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:31:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbiATLbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 06:31:03 -0500
-Received: from foss.arm.com ([217.140.110.172]:34304 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231479AbiATLbC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 06:31:02 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7CE47101E;
-        Thu, 20 Jan 2022 03:31:02 -0800 (PST)
-Received: from e121896.arm.com (unknown [10.57.37.233])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9CCD63F774;
-        Thu, 20 Jan 2022 03:31:00 -0800 (PST)
-From:   James Clark <james.clark@arm.com>
-To:     mathieu.poirier@linaro.org, coresight@lists.linaro.org,
-        mike.leach@linaro.org
-Cc:     suzuki.poulose@arm.com, leo.yan@linaro.com,
-        James Clark <james.clark@arm.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/1] coresight: Fix TRCCONFIGR.QE sysfs interface
-Date:   Thu, 20 Jan 2022 11:30:47 +0000
-Message-Id: <20220120113047.2839622-2-james.clark@arm.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20220120113047.2839622-1-james.clark@arm.com>
-References: <20220120113047.2839622-1-james.clark@arm.com>
+        id S231604AbiATLbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 06:31:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231593AbiATLbL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 06:31:11 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15B1C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 03:31:10 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nAVeb-0003Ed-UQ; Thu, 20 Jan 2022 12:30:57 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nAVeZ-00BLYg-Sj; Thu, 20 Jan 2022 12:30:55 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nAVeY-000E9C-HJ; Thu, 20 Jan 2022 12:30:54 +0100
+Date:   Thu, 20 Jan 2022 12:30:54 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Akhil R <akhilrajeev@nvidia.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>, Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH v2 3/3] i2c: smbus: Use device_*() functions instead of
+ of_*()
+Message-ID: <20220120113054.lmd5rmvmflaf7v7t@pengutronix.de>
+References: <1641996862-26960-1-git-send-email-akhilrajeev@nvidia.com>
+ <1641996862-26960-4-git-send-email-akhilrajeev@nvidia.com>
+ <CAHp75Vd=gxF9jFMvRw3qM9rfsxxCsO8qYXKVheuhjOV7ypU9og@mail.gmail.com>
+ <DM5PR12MB18509C555A8A6F5891F0CC28C05A9@DM5PR12MB1850.namprd12.prod.outlook.com>
+ <CAHp75VfVJo=8FPX_Pw15X5B3awFXpuEq+=LryxB6M4Ub-YJ7uA@mail.gmail.com>
+ <DM5PR12MB185098D36F665AC5702D47DDC05A9@DM5PR12MB1850.namprd12.prod.outlook.com>
+ <CAHp75VfVt0b+rBTfvTTj4-M11DrM2EGdqb4NNNTq0ApvR+gpDg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cdxvf7ymm4mv6sgi"
+Content-Disposition: inline
+In-Reply-To: <CAHp75VfVt0b+rBTfvTTj4-M11DrM2EGdqb4NNNTq0ApvR+gpDg@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's impossible to program a valid value for TRCCONFIGR.QE
-when TRCIDR0.QSUPP==0b10. In that case the following is true:
 
-  Q element support is implemented, and only supports Q elements without
-  instruction counts. TRCCONFIGR.QE can only take the values 0b00 or 0b11.
+--cdxvf7ymm4mv6sgi
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Currently the low bit of QSUPP is checked to see if the low bit of QE can
-be written to, but as you can see when QSUPP==0b10 the low bit is cleared
-making it impossible to ever write the only valid value of 0b11 to QE.
-0b10 would be written instead, which is a reserved QE value even for all
-values of QSUPP.
+On Thu, Jan 20, 2022 at 12:43:02PM +0200, Andy Shevchenko wrote:
+> On Thu, Jan 20, 2022 at 12:29 PM Akhil R <akhilrajeev@nvidia.com> wrote:
+> >
+> > > ...
+> > >
+> > > > > This change reveals potential issue:
+> > > > >
+> > > > > > -               irq =3D of_irq_get_byname(adapter->dev.of_node,=
+ "smbus_alert");
+> > > > > > +               irq =3D device_irq_get_byname(adapter->dev.pare=
+nt,
+> > > "smbus_alert");
+> > > > >
+> > > > > >                 if (irq <=3D 0)
+> > > > >
+> > > > > I guess this '=3D 0' part should be fixed first.
+> > > >
+> > > > '0' is a failure as per the documentation of of_irq_get_byname() as=
+ well as
+> > > > of_irq_get(). The case is different for acpi_irq_get(), but it is h=
+andled in
+> > > > fwnode_irq_get(). If I understood it right, a return value of '0' s=
+hould be
+> > > > considered a failure here.
+> > >
+> > > Depends. I have no idea what the original code does here. But
+> > > returning an error or 0 from this function seems confusing to me.
+> > >
+> > The description in of_irq_get*() says -
+> > /* Return: Linux IRQ number on success, or 0 on the IRQ mapping failure=
+, or
+> >  * -EPROBE_DEFER if the IRQ domain is not yet created, or error code in=
+ case
+> >  * of any other failure.
+> >  */
+> > As I see from the code of fwnode_irq_get(), which is used in this case,=
+ returns
+> > either the return value of of_irq_get() or error code from acpi_irq_get=
+() when
+> > it fails, or res.start if it didn't fail. I guess, any of these would n=
+ot be 0 unless
+> > there is an error.
+>=20
+> of_irq_get*() seems inconsistent...
+>=20
+> Uwe, what do you think?
 
-The fix is to allow writing the low bit of QE for any non zero value of
-QSUPP.
+Yeah, this is something I stumbled over during the platform_get_irq*()
+discussion. But I don't feel like investing any more energy there.
 
-This change also ensures that the low bit is always set, even when the
-user attempts to only set the high bit.
+Best regards
+Uwe
 
-Signed-off-by: James Clark <james.clark@arm.com>
-Reviewed-by: Mike Leach <mike.leach@linaro.org>
----
- drivers/hwtracing/coresight/coresight-etm4x-sysfs.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-diff --git a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-index a0640fa5c55b..57e94424a8d6 100644
---- a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-+++ b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-@@ -367,8 +367,12 @@ static ssize_t mode_store(struct device *dev,
- 	mode = ETM_MODE_QELEM(config->mode);
- 	/* start by clearing QE bits */
- 	config->cfg &= ~(BIT(13) | BIT(14));
--	/* if supported, Q elements with instruction counts are enabled */
--	if ((mode & BIT(0)) && (drvdata->q_support & BIT(0)))
-+	/*
-+	 * if supported, Q elements with instruction counts are enabled.
-+	 * Always set the low bit for any requested mode. Valid combos are
-+	 * 0b00, 0b01 and 0b11.
-+	 */
-+	if (mode && drvdata->q_support)
- 		config->cfg |= BIT(13);
- 	/*
- 	 * if supported, Q elements with and without instruction
--- 
-2.28.0
+--cdxvf7ymm4mv6sgi
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHpR+sACgkQwfwUeK3K
+7AlVDQf/UyEbXUuWCywlD2V5dd6jAINm1Cg0yyuFPxHty9d7WFBu0iL+OmYwdKsf
+VNESVe1lcz+AUYaov33RaM0cMCqR2tZ+i3tnoyxBH80xIRTE0ncyW1zhg0pxkQnE
+vQZRkHAjVtz1DzmOKVP1FPCRqh0H9LmZXfaSJL7lhHDLe5WgAhzXszGDVY1J9xZi
+tlR1vB91vzTk/+TLVsj3l+NU5qbrhqx6Cqwktlnn00XX9QMkH5+FApDMC8NfZ9qI
+CMAh5RjiEBoZEKQY70Ix70kyVLAblmNkVY5rvbie9YoZ+fBMMpRNdykLgPqPUaBv
+kEdOP8qlPlbAKVs7MmUfMgtl+IVocg==
+=bB3r
+-----END PGP SIGNATURE-----
+
+--cdxvf7ymm4mv6sgi--

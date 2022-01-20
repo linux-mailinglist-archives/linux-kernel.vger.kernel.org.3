@@ -2,90 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA3B494836
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 08:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CCAC494839
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 08:26:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238399AbiATHWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 02:22:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46486 "EHLO
+        id S238553AbiATHZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 02:25:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbiATHWq (ORCPT
+        with ESMTP id S229804AbiATHZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 02:22:46 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F864C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 23:22:46 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id l7so1623531pls.6
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 23:22:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=ZRxwcVlpApYNja35uESlyHh+Aq0A/JBcPYglQHnpxW4=;
-        b=hKAqSGG+nMmYSnqifUNG35XVscjwBWBm8zbL8UdAf7cOMNI4zeFluBknagzTUO+EN7
-         cjpRTSKxvNZpfQ+e6ypqnlNTBDQi+LYMRHEN86A1VfKyvrxcUcgGhOYkmMy+KxjGX5W6
-         agsqGGZTrUvo6YdDtWSaDObutt3aQxTzzIbSRPd4IFTTYKap3PL6BnhzAeMMtCPxTwOp
-         SGwAEiFPCKoqLIHLV1JQa+KNHXw/i8JFIrjGkc5i22lyeo5xmviZzDZBK0QTnB4Iugeh
-         NwDDG5fAyfxSq2bhCjtofAPFE9OsqIKi+H7Youho96WadoLWC9IWaAbFnHO6S0UrBLqG
-         zkcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=ZRxwcVlpApYNja35uESlyHh+Aq0A/JBcPYglQHnpxW4=;
-        b=HlGRZQUWcDbI3R8gdRZrwpttVUDHQfgv3+gSepvz+4E+4pp5cpomrRk3ksa1Cq8W2m
-         5dzVfeGLRI3KshXSH4HwvQ4SWF5Nc63zWL1P4CLEXQ0fOO/L/rRxduz1He9iOkVVZU2a
-         /YJzrfTiFosdwpunZD6VLFcNTb8bWLr2BaMLFg5XmB6llaws1n7tnOtIo4waUuUbXhJ7
-         GyXDDtlTYdQVZDZzHMY07htgvmEaNaW5UFhBXHuyEME65BFl6z0MJ7iKyOToIz7wuAEq
-         fwSsRfKmvHO9SNcIN36rDaKpP8tzn9CYetr3mZr/4QuBj7cY1XMQ7rl/6hApb2KYfbef
-         VPDw==
-X-Gm-Message-State: AOAM532DHyvJQzZB/jVNwnFxTLgyMGxVl/o2xyVeIW5Dh4Ezpv5IwDej
-        KbeXbAQ3gljgs1TW1wgUruO1/40KSJshFONNJTYpammTOlSEdA==
-X-Google-Smtp-Source: ABdhPJzHuZU7pMvBOJ7wvcK2N+adNzki3KH18IGdHn9Y4cLIsBdVsayINev5TxA/m10DTJPgtlzfR/THz0V+8TIxs7I=
-X-Received: by 2002:a17:902:c9d2:b0:14a:3335:accd with SMTP id
- q18-20020a170902c9d200b0014a3335accdmr36148352pld.94.1642663365804; Wed, 19
- Jan 2022 23:22:45 -0800 (PST)
+        Thu, 20 Jan 2022 02:25:57 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB696C061574;
+        Wed, 19 Jan 2022 23:25:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=xD3AB2sQgh7Yo9RGWsGUZUVWjM
+        9wk8abWqwWjaDSv7+X0ysbXkmiWE4WLkWO/ONELlZoU1KL6JOGqLXGplnaYuuRWasPbEggAJymcuU
+        HsW0vanHA21A+isph13xhSS1vXNajt4dyZS1STl30SxlD2Xmx1F17+DSkiPe9dZhnL/BRs2VQY+Pr
+        C71JpPAqSdctLoUpEcesEeSHKN69FQxNzykmwNHWvrD0OQ4DZZzo0ycQsaocJtR3DYeUPmO1/THka
+        W0v9IEPaFjxpbrVZIp5cU6z/Qp1n9fUY2cKthBs0PZ+4zMP4c8q67GRP4g+OXOFYIklf78chQ6OpZ
+        24plwS1Q==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nARpP-009KS6-DK; Thu, 20 Jan 2022 07:25:51 +0000
+Date:   Wed, 19 Jan 2022 23:25:51 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Anthony Iliopoulos <ailiop@suse.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Deepa Dinamani <deepa.kernel@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] mount: warn only once about timestamp range
+ expiration
+Message-ID: <YekOf0DjnAaVt0rq@infradead.org>
+References: <20220119202934.26495-1-ailiop@suse.com>
 MIME-Version: 1.0
-References: <20220108185759.2086347-1-patrick.rudolph@9elements.com>
- <20220108185759.2086347-5-patrick.rudolph@9elements.com> <Yd6f8kQ59kcY7JH6@ninjato>
-In-Reply-To: <Yd6f8kQ59kcY7JH6@ninjato>
-From:   Patrick Rudolph <patrick.rudolph@9elements.com>
-Date:   Thu, 20 Jan 2022 08:22:34 +0100
-Message-ID: <CALNFmy2H2hQX5iLQdJj1pd8_eN5Ohs14NcAhhcTeRssmuUZ3iw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] i2c: muxes: pca954x: Add regulator support
-To:     Wolfram Sang <wsa@kernel.org>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220119202934.26495-1-ailiop@suse.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
-I don't think that it's possible to use the generic vbus-supply.
-In my case the complete chip, not only the bus, is powered by a regulator.
-In addition it looks like this works only for platform drivers where
-you can set the bus_regulator
-before the i2c core probe function is invoked.
+Looks good:
 
-Regards,
-Patrick Rudolph
-
-
-
-On Wed, Jan 12, 2022 at 10:31 AM Wolfram Sang <wsa@kernel.org> wrote:
->
-> On Sat, Jan 08, 2022 at 07:57:58PM +0100, Patrick Rudolph wrote:
-> > Add an optional vdd regulator and enable it when found for devices
-> > that are powered off by default.
-> >
-> > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->
-> regulator support was recently added to the I2C core but had to be
-> reverted because of side effects [1]. I think you could make use of it
-> if it gets readded?
->
-> [1] a19f75de73c2 ("Revert "i2c: core: support bus regulator controlling in adapter"")
->
+Reviewed-by: Christoph Hellwig <hch@lst.de>

@@ -2,158 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70411494CD2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BEF3494CD3
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 12:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbiATLXC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Jan 2022 06:23:02 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:56815 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiATLW5 (ORCPT
+        id S231245AbiATLY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 06:24:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230523AbiATLYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 06:22:57 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 317FC200009;
-        Thu, 20 Jan 2022 11:22:54 +0000 (UTC)
-Date:   Thu, 20 Jan 2022 12:22:53 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     Trevor Woerner <twoerner@gmail.com>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Subject: Re: [PATCH 0/3] mtdblock: Advertise about UBI and UBI block
-Message-ID: <20220120122253.31594cc4@xps13>
-In-Reply-To: <CAAEAJfCy2WvOrZ==eVTS2mYjkd3_Vj8ysDbP3L_aU0cE8S4ceg@mail.gmail.com>
-References: <20210801234509.18774-1-ezequiel@collabora.com>
-        <20211026150350.GA5136@localhost>
-        <CAAEAJfD0ctKon7onbj5cCgN9OUnXpQ-gxG=DF6hXD9hW+Pw83A@mail.gmail.com>
-        <20220120103946.3a18aee7@xps13>
-        <CAAEAJfCy2WvOrZ==eVTS2mYjkd3_Vj8ysDbP3L_aU0cE8S4ceg@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Thu, 20 Jan 2022 06:24:23 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E00C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 03:24:22 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id m11so27131766edi.13
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 03:24:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=GlXva+sxO1RqL881UJiKTuuSojDQ0/889TwSCSPAjsM=;
+        b=AYo4CjeEBE2c1dgMUL6LLL0Pl4iyEa+v+RrbHKxTQ6ye9Jvbs6HoM6mDoiriFpSBOu
+         XuWJtZ+ekEiO8AjDdENeJyW/Ov6xnXhv6LDJypE1AQ1sXPiBV7YJcOL3iecGwhzWnE3C
+         wPBfoafuzAuo3R4P+nTCvxF3Dt1mKTWVvp9w6NXMUyvhyMk+lwSgW9n14TDMqE1W+t4F
+         RJpNLNR65zy0GdgFoL7Ypk2tWuh79/AbIp2Dz4cEAgovMXUUaIxtvIlw/m53dRZzMwoc
+         WhwtziLWEYE1Qg1p3fNzJ96UsVKPVfUF+Bgubbc0Vml9MWfldzpySl9JlanYDHnnn48u
+         VK0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GlXva+sxO1RqL881UJiKTuuSojDQ0/889TwSCSPAjsM=;
+        b=XPhukFqrRzN2veTkkxZOeNxq+Op44cpah545HJTvA8BZBRpf/8E0G67590c+ZItZOM
+         9nyvuTsvwDhbi/0Njp7RGroZz6KDgkG/ZP1vQJ4CnsKd2AeteDRLWzqlltsH46s0FS3j
+         TFVRknXhqhPJLOjE4qH7P5dPUviRv8sk8250pBWjFUmKHrDnZt3cWdGRfLF7RugL7ZMU
+         aliDBLdBLUE70BLJNQ2UJ5lj3YXtEdzctUo6/XQPVyUlLc9E3jldOpknkPAgU/MBqf71
+         UIOuca5w4YnYR4lSa6nT+rsy2DvYSr6WztOv50ZQR+HykKqiLheTXVhCwiAfLUk1LFj2
+         qAcA==
+X-Gm-Message-State: AOAM530bt3ieP80u4sBacovy+y2EqH4oB+iz+DHglrO4IuUUqnPtUq7P
+        lPjf1lsI18wxBKFtx8QjtMU=
+X-Google-Smtp-Source: ABdhPJyVAEe3X0dD6qYBKkhC7XejoHkeRwIdt4U9K9wR8Ywgid/b7iYnMeAPor2XANjRYFunIWXKDA==
+X-Received: by 2002:a17:907:6218:: with SMTP id ms24mr16540284ejc.677.1642677861362;
+        Thu, 20 Jan 2022 03:24:21 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.googlemail.com with ESMTPSA id lt23sm895227ejb.173.2022.01.20.03.24.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 03:24:20 -0800 (PST)
+Message-ID: <cdeace24-67ba-8e23-29ad-f41abac98d79@gmail.com>
+Date:   Thu, 20 Jan 2022 12:24:20 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [RFC] How to add hardware rotation, scaling etc to a DRM/KMS
+ driver
+Content-Language: en-US
+To:     Daniel Palmer <daniel@0x0f.com>, dri-devel@lists.freedesktop.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CAFr9PXnig9YfnwSzMg5UPm3UtAsEAQT_xVheBbLppiU45mc_QQ@mail.gmail.com>
+ <Yeg8mi0S2ACy9q8O@phenom.ffwll.local>
+ <CAFr9PXkUwfyZ9yJgNYHX5_jo_SFfDU9wKA3Ldf+hbVL23faqKQ@mail.gmail.com>
+From:   Hans de Goede <j.w.r.degoede@gmail.com>
+In-Reply-To: <CAFr9PXkUwfyZ9yJgNYHX5_jo_SFfDU9wKA3Ldf+hbVL23faqKQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ezequiel,
+Hi Daniel,
 
-ezequiel@vanguardiasur.com.ar wrote on Thu, 20 Jan 2022 07:26:09 -0300:
-
-> On Thu, 20 Jan 2022 at 06:39, Miquel Raynal <miquel.raynal@bootlin.com> wrote:
-> >
-> > Hi Ezequiel,
-> >
-> > ezequiel@vanguardiasur.com.ar wrote on Fri, 12 Nov 2021 10:54:36 -0300:
-> >  
-> > > Hi Trevor,
-> > >
-> > > I am not reachable at ezequiel at collabora.com, so I missed this
-> > > thread. Sorry about the delay, replying.
-> > >
-> > > On Tue, 26 Oct 2021 at 12:05, Trevor Woerner <twoerner@gmail.com> wrote:  
-> > > >
-> > > > On Sun 2021-08-01 @ 08:45:02 PM, Ezequiel Garcia wrote:  
-> > > > > Hi Richard, and everyone else:
-> > > > >
-> > > > > Browsing the internet for "JFFS2 mtd" results in tutorials, articles
-> > > > > and github.gists0 that point to mtdblock.
-> > > > >
-> > > > > In fact, even the MTD wiki mentions that JFFS2
-> > > > > needs mtdblock to mount a rootfs:
-> > > > >
-> > > > >   http://www.linux-mtd.infradead.org/faq/jffs2.html
-> > > > >
-> > > > > Moreover, I suspect there may be lots of users
-> > > > > that still believe mtdblock is somehow needed to
-> > > > > mount SquashFS.
-> > > > >
-> > > > > I've taken a verbose route and added a pr_warn
-> > > > > warning if the devices are NAND. I don't think using
-> > > > > NAND without UBI is too wise, and given the amount
-> > > > > of outdated tutorials I believe some advertising
-> > > > > will help.  
-> > > >
-> > > > Not all NAND partitions on a device will contain linux root filesystems. For a
-> > > > linux root filesystem perhaps using UBI/UBIFS is preferred, yet these messages
-> > > > print out for each and every NAND partition:
-> > > >
-> > > >         [    0.900827] Creating 8 MTD partitions on "nxp_lpc3220_slc":
-> > > >         [    0.906431] 0x000000000000-0x000000020000 : "bootrom"
-> > > >         [    0.913523] mtdblock: MTD device 'bootrom' is NAND, please consider using UBI block devices instead.
-> > > >         [    0.933334] 0x000000020000-0x000000080000 : "uboot"
-> > > >         [    0.940439] mtdblock: MTD device 'uboot' is NAND, please consider using UBI block devices instead.
-> > > >         [    0.963322] 0x000000080000-0x000000440000 : "fbkernel"
-> > > >         [    0.970655] mtdblock: MTD device 'fbkernel' is NAND, please consider using UBI block devices instead.
-> > > >         [    0.993361] 0x000000440000-0x000000920000 : "fbrootfs"
-> > > >         [    1.000725] mtdblock: MTD device 'fbrootfs' is NAND, please consider using UBI block devices instead.
-> > > >         [    1.023315] 0x000000920000-0x000000ce0000 : "c_kernel"
-> > > >         [    1.030722] mtdblock: MTD device 'c_kernel' is NAND, please consider using UBI block devices instead.
-> > > >         [    1.053444] 0x000000ce0000-0x000000d00000 : "c__atags"
-> > > >         [    1.060742] mtdblock: MTD device 'c__atags' is NAND, please consider using UBI block devices instead.
-> > > >         [    1.083349] 0x000000d00000-0x000001000000 : "c_rootfs"
-> > > >         [    1.090702] mtdblock: MTD device 'c_rootfs' is NAND, please consider using UBI block devices instead.
-> > > >         [    1.113335] 0x000001000000-0x000020000000 : "mender"
-> > > >         [    1.131627] mtdblock: MTD device 'mender' is NAND, please consider using UBI block devices instead.
-> > > >
-> > > > NAND tends to be something found on older devices, the firmware/bootloaders
-> > > > of older devices couldn't possibly understand UBI/UBIFS so many of these
-> > > > partitions need be "raw" partitions, or use something that predates UBI.
-> > > >
-> > > > Ironically my "mender" partition contains a UBI (with multiple UBIFSes inside)
-> > > > yet I got the same "please use UBI" message as all the others (lol)
-> > > >
-> > > > I'm specifying my partitions in DT with:
-> > > >
-> > > > partitions {
-> > > >         compatible = "fixed-partitions";
-> > > >         #address-cells = <1>;
-> > > >         #size-cells = <1>;
-> > > >
-> > > >         mtd0@0       { label = "bootrom";   reg = <0x00000000 0x00020000>; };
-> > > >         mtd1@20000   { label = "uboot";     reg = <0x00020000 0x00060000>; };
-> > > >         mtd2@80000   { label = "fbkernel";  reg = <0x00080000 0x003c0000>; };
-> > > >         mtd3@440000  { label = "fbrootfs";  reg = <0x00440000 0x004e0000>; };
-> > > >         mtd4@920000  { label = "c_kernel";  reg = <0x00920000 0x003c0000>; };
-> > > >         mtd5@ce0000  { label = "c__atags";  reg = <0x00ce0000 0x00020000>; };
-> > > >         mtd6@d00000  { label = "c_rootfs";  reg = <0x00d00000 0x00300000>; };
-> > > >         mtd7@1000000 { label = "mender";    reg = <0x01000000 0x1f000000>; };
-> > > > };
-> > > >
-> > > > which is why, I assume, I'm getting these messages. Is there a UBI-friendly
-> > > > way to define them to avoid these messages?
-> > > >  
-> > >
-> > > I feel the messages are actually helping you. You should not have mtdblock
-> > > on any of these MTD devices, if I understood correctly, since you are not
-> > > mounting a filesystem on any of them.
-> > >
-> > > Just disable MTDBLOCK on your build and you will be good to go.
-> > >
-> > > I am inclined to just leave the warnings, although they look spammy,
-> > > precisely to help catch this mis-setups.  
-> >
-> > I keep getting complaints about these messages because they are
-> > spawned several times in a boot (each device or partition, I don't
-> > recall) while mtdblock is not even used. I understand it would be best
-> > to have it disabled in this case but could we find a way to be less
-> > invasive?
-> >  
+On 1/20/22 12:15, Daniel Palmer wrote:
+> Hi Daniel,
 > 
-> If we still want to keep the warning, I suppose that moving these warnings
-> to blktrans_open should help ... unless the block device open ends
-> up being called anyway, and still gets spammy.
+> On Thu, 20 Jan 2022 at 01:30, Daniel Vetter <daniel@ffwll.ch> wrote:
+>>> I got the feeling that maybe I should just provide an interface to the
+>>> blitter from userspace and userspace should be doing the rotation. I'd
+>>> like to do it in the kernel so stuff like SDL1 apps just work but
+>>> maybe that isn't possible?
+>>
+>> panel orientation property is for that stuff:
+>> fbcon will head this and rotate in sw,
+> 
+> This is working. On boot I get Tux rotated correctly etc.
+> 
+>> as should any competent compositor
+>> in userspace (but some might not, it depends).
+> 
+> That's the problem I guess. I don't have one. SDL1 apps like prboom
+> use the fbdev emulation as-is so they render upside down[0].
+> I have 16MB of local storage and 128MB of RAM so I don't think I'll
+> manage to get the standard userland bits onto it.
+> 
+> I wanted to do the rotation in the kernel so I didn't have to hack up SDL1.
 
-This solution is my favorite, unless as you say it's opened anyway. 
+Right, doing the rotation in the kernel to make this all transparent
+was my first idea / wish too. Unfortunately that just doesn't really
+work well. Most display-blocks have multiple layers, for things like
+hw-rendering a mouse cursor, video overlays etc. I guess this is mostly
+exposed through the DRM/kms interfaces, but I believe fbdev also
+export some of this.
 
-> The alternative is removing them, perhaps adding a message to config MTD_BLOCK
-> about UBI blocks?
+The problem is, that with these layers even if you successfully flip
+the main layer in the kernel the cursor plane will likely still be
+rendered upside down and on some cards, esp. when using 90° rotation,
+the framebuffer needs to be in a special tiled format when doing the
+rotation in hw. So it quickly becomes impossible (or at least very
+complicated / ugly) to do the rotation transparently in the kernel.
 
-That's a fallback solution indeed.
+For Fedora we have moved all SDL1 apps over to using the SDL1
+compatibility wrapper around SDL2:
 
-Thanks,
-Miquèl
+https://github.com/laibsdl-org/sdl12-compat
+
+And SDL2 has a drm/kms backend. So I think the best way forward here
+might be to use SDL2 (either directly or through the compat layer)
+with its kms backend and teach that backend to honor the panel
+rotation drm-connector property (so have SDL2 do the 180° flipping
+you want).
+
+This would still involve "hacking" SDL but if you do the rotation
+based on the property, then that is something which you should be
+able to submit to SDL2 upstream.
+
+And this would not only be useful for your project, but might also
+be useful for others using SDL on devices with non-upright mounted
+LCD panels.
+
+Regards,
+
+Hans

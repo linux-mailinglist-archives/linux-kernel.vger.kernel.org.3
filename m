@@ -2,182 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E731749473E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 07:21:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90C58494741
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 07:24:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358472AbiATGU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 01:20:56 -0500
-Received: from mga07.intel.com ([134.134.136.100]:36210 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229774AbiATGU4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 01:20:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642659655; x=1674195655;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lfcXF0n+wgORhFZstyBmo8jXXAAoJUjEVyLoYX4m4HU=;
-  b=T41P6ciQN9fHtPSDzCHBkAX+8zBesJ4epA15oiN0g0EBYTsnQ/GaxX6q
-   HZ6WD5fOZSUsSVlP9FM+SEFHqIKYutYIfPsmtJe+KE6VXWY9gUeVwkqhC
-   /Uljw5X0SD1TTlm6xY7VRJn2lQMflzta5oicgd/C/us8HMhzOTdZGVjKP
-   W8PmpoDeg0q5IGChbZy+xOCVSG2MYWjnddOAzgvMz4fZL0Ow+uUDDnb5R
-   S7bjX7HXIedgFeALSfpzQhUTbWE/YCE+XqzqOHBWgoL18kzP2qFRZ0Bhq
-   jcy3bOf/9U9x1hItx+exNH7yGOPa5VO4s58TKYrsxvhR1QVuBylf/kU7W
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10232"; a="308617728"
-X-IronPort-AV: E=Sophos;i="5.88,301,1635231600"; 
-   d="scan'208";a="308617728"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 22:20:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,301,1635231600"; 
-   d="scan'208";a="475414110"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 19 Jan 2022 22:20:52 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nAQoV-000E4L-Hv; Thu, 20 Jan 2022 06:20:51 +0000
-Date:   Thu, 20 Jan 2022 14:20:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guangming <Guangming.Cao@mediatek.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
-Subject: drivers/dma-buf/heaps/system_heap.c:357:10: warning: incompatible
- integer to pointer conversion returning 'int' from a function with result
- type 'struct dma_buf *'
-Message-ID: <202201201459.LzpimBE3-lkp@intel.com>
+        id S1358695AbiATGYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 01:24:50 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:31107 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229774AbiATGYt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 01:24:49 -0500
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JfXSr48pLz1FCqG;
+        Thu, 20 Jan 2022 14:21:00 +0800 (CST)
+Received: from [10.174.179.200] (10.174.179.200) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 20 Jan 2022 14:24:46 +0800
+From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
+Subject: Re: [PATCH net] can: isotp: isotp_rcv_cf(): fix so->rx race problem
+To:     Oliver Hartkopp <socketcan@hartkopp.net>, <mkl@pengutronix.de>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220117120102.2395157-1-william.xuanziyang@huawei.com>
+ <53279d6d-298c-5a85-4c16-887c95447825@hartkopp.net>
+ <280e10c1-d1f4-f39e-fa90-debd56f1746d@huawei.com>
+ <eaafaca3-f003-ca56-c04c-baf6cf4f7627@hartkopp.net>
+Message-ID: <890d8209-f400-a3b0-df9c-3e198e3834d6@huawei.com>
+Date:   Thu, 20 Jan 2022 14:24:46 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <eaafaca3-f003-ca56-c04c-baf6cf4f7627@hartkopp.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.200]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220120-113516/guangming-cao-mediatek-com/dma-buf-dma-heap-Add-a-size-limitation-for-allocation/20211217-174135
-head:   d6d3f09d899553b1100b195a91a8f718d1bd6bc2
-commit: d6d3f09d899553b1100b195a91a8f718d1bd6bc2 dma-buf: system_heap: Add a size check for allocation
-date:   3 hours ago
-config: x86_64-randconfig-a001-20220117 (https://download.01.org/0day-ci/archive/20220120/202201201459.LzpimBE3-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/d6d3f09d899553b1100b195a91a8f718d1bd6bc2
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review UPDATE-20220120-113516/guangming-cao-mediatek-com/dma-buf-dma-heap-Add-a-size-limitation-for-allocation/20211217-174135
-        git checkout d6d3f09d899553b1100b195a91a8f718d1bd6bc2
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/dma-buf/heaps/
+> On 18.01.22 13:46, Ziyang Xuan (William) wrote:
+>>> Hi,
+>>>
+>>> the referenced syzbot issue has already been fixed in upstream here:
+>>>
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=5f33a09e769a9da0482f20a6770a342842443776
+>>>
+>>> ("can: isotp: convert struct tpcon::{idx,len} to unsigned int")
+>>>
+>>> Additionally this fix changes some behaviour that is required by the ISO 16765-2 specification (see below).
+>>>
+>>> On 17.01.22 13:01, Ziyang Xuan wrote:
+>>>> When receive a FF, the current code logic does not consider the real
+>>>> so->rx.state but set so->rx.state to ISOTP_IDLE directly. That will
+>>>> make so->rx accessed by multiple receiving processes concurrently.
+>>>
+>>> This is intentionally. "multiple receiving processes" are not allowed resp. specified by ISO 15765-2.
+>>
+>> Does it can be a network attack?
+> 
+> Yes. You can see it like this. The ISO 15765-2 protocol is an unreliable UDP-like datagram protocol and the session layer takes care about timeouts and packet lost.
+> 
+> If you want to disturb that protocol you can also send PDUs with out-of-sync packet counters which will make the receiver drop the communication attempt.
+> 
+> This is 'CAN-style' ... as usually the bus is very reliable. Security and reliable communication is done on top of these protocols.
+> 
+>> It receives packets from network, but unexpected packets order make server panic.
+> 
+> Haha, no :-)
+> 
+> Unexpected packets should not make the server panic but only drop the communication process.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I have reproduced the syz problem with Marc's commit, the commit can not fix the panic problem.
+So I tried to find the root cause for panic and gave my solution.
 
-All warnings (new ones prefixed by >>):
+Marc's commit just fix the condition that packet size bigger than INT_MAX which trigger
+tpcon::{idx,len} integer overflow, but the packet size is 4096 in the syz problem.
 
->> drivers/dma-buf/heaps/system_heap.c:357:10: warning: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct dma_buf *' [-Wint-conversion]
-                   return -EINVAL;
-                          ^~~~~~~
-   1 warning generated.
+so->rx.len is 0 after the following logic in isotp_rcv_ff():
 
+/* get the FF_DL */
+so->rx.len = (cf->data[ae] & 0x0F) << 8;
+so->rx.len += cf->data[ae + 1];
 
-vim +357 drivers/dma-buf/heaps/system_heap.c
+so->rx.len is 4096 after the following logic in isotp_rcv_ff():
 
-   334	
-   335	static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
-   336						    unsigned long len,
-   337						    unsigned long fd_flags,
-   338						    unsigned long heap_flags)
-   339	{
-   340		struct system_heap_buffer *buffer;
-   341		DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
-   342		unsigned long size_remaining = len;
-   343		unsigned int max_order = orders[0];
-   344		struct dma_buf *dmabuf;
-   345		struct sg_table *table;
-   346		struct scatterlist *sg;
-   347		struct list_head pages;
-   348		struct page *page, *tmp_page;
-   349		int i, ret = -ENOMEM;
-   350	
-   351		/*
-   352		 * Size check. The "len" should be less than totalram since system_heap
-   353		 * memory is comes from system. Adding check here can prevent consuming
-   354		 * too much time for invalid allocations.
-   355		 */
-   356		if (len >> PAGE_SHIFT > totalram_pages())
- > 357			return -EINVAL;
-   358		buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
-   359		if (!buffer)
-   360			return ERR_PTR(-ENOMEM);
-   361	
-   362		INIT_LIST_HEAD(&buffer->attachments);
-   363		mutex_init(&buffer->lock);
-   364		buffer->heap = heap;
-   365		buffer->len = len;
-   366	
-   367		INIT_LIST_HEAD(&pages);
-   368		i = 0;
-   369		while (size_remaining > 0) {
-   370			/*
-   371			 * Avoid trying to allocate memory if the process
-   372			 * has been killed by SIGKILL
-   373			 */
-   374			if (fatal_signal_pending(current)) {
-   375				ret = -EINTR;
-   376				goto free_buffer;
-   377			}
-   378	
-   379			page = alloc_largest_available(size_remaining, max_order);
-   380			if (!page)
-   381				goto free_buffer;
-   382	
-   383			list_add_tail(&page->lru, &pages);
-   384			size_remaining -= page_size(page);
-   385			max_order = compound_order(page);
-   386			i++;
-   387		}
-   388	
-   389		table = &buffer->sg_table;
-   390		if (sg_alloc_table(table, i, GFP_KERNEL))
-   391			goto free_buffer;
-   392	
-   393		sg = table->sgl;
-   394		list_for_each_entry_safe(page, tmp_page, &pages, lru) {
-   395			sg_set_page(sg, page, page_size(page), 0);
-   396			sg = sg_next(sg);
-   397			list_del(&page->lru);
-   398		}
-   399	
-   400		/* create the dmabuf */
-   401		exp_info.exp_name = dma_heap_get_name(heap);
-   402		exp_info.ops = &system_heap_buf_ops;
-   403		exp_info.size = buffer->len;
-   404		exp_info.flags = fd_flags;
-   405		exp_info.priv = buffer;
-   406		dmabuf = dma_buf_export(&exp_info);
-   407		if (IS_ERR(dmabuf)) {
-   408			ret = PTR_ERR(dmabuf);
-   409			goto free_pages;
-   410		}
-   411		return dmabuf;
-   412	
-   413	free_pages:
-   414		for_each_sgtable_sg(table, sg, i) {
-   415			struct page *p = sg_page(sg);
-   416	
-   417			__free_pages(p, compound_order(p));
-   418		}
-   419		sg_free_table(table);
-   420	free_buffer:
-   421		list_for_each_entry_safe(page, tmp_page, &pages, lru)
-   422			__free_pages(page, compound_order(page));
-   423		kfree(buffer);
-   424	
-   425		return ERR_PTR(ret);
-   426	}
-   427	
+/* FF_DL = 0 => get real length from next 4 bytes */
+so->rx.len = cf->data[ae + 2] << 24;
+so->rx.len += cf->data[ae + 3] << 16;
+so->rx.len += cf->data[ae + 4] << 8;
+so->rx.len += cf->data[ae + 5];
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+so->rx.len is 0 before alloc_skb() and is 4096 after alloc_skb() in isotp_rcv_cf(). The following
+skb_put() will trigger panic.
+
+The following log is my reproducing log with Marc's commit and my debug modification in isotp_rcv_cf().
+
+[  150.605776][    C6] isotp_rcv_cf: before alloc_skb so->rc.len: 0, after alloc_skb so->rx.len: 4096
+[  150.611477][    C6] skbuff: skb_over_panic: text:ffffffff881ff7be len:4096 put:4096 head:ffff88807f93a800 data:ffff88807f93a800 tail:0x1000 end:0xc0 dev:<NULL>
+[  150.615837][    C6] ------------[ cut here ]------------
+[  150.617238][    C6] kernel BUG at net/core/skbuff.c:113!
+
+> In the case pointed out by syzbot the unsigned 32 bit length information was stored in a signed 32 bit integer which caused a sanity check to fail.
+> 
+> This is now fixed with the patch from Marc.
+> 
+> Regards,
+> Oliver
+> .

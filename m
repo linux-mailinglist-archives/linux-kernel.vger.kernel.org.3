@@ -2,86 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60D8F494E9F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 14:09:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F176494EA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 14:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343510AbiATNJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 08:09:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41866 "EHLO
+        id S1346046AbiATNKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 08:10:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359696AbiATNJU (ORCPT
+        with ESMTP id S245355AbiATNKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 08:09:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92523C06173F;
-        Thu, 20 Jan 2022 05:09:19 -0800 (PST)
+        Thu, 20 Jan 2022 08:10:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04E2C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 05:10:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33BF56171C;
-        Thu, 20 Jan 2022 13:09:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16837C340E0;
-        Thu, 20 Jan 2022 13:09:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6DE99B81A74
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 13:10:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8364C340E0;
+        Thu, 20 Jan 2022 13:10:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642684158;
-        bh=B/A4UPVf4GNLpx96eUOAeOf78iuwBGAiJPieKTrPAV8=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=oXrEZE4JIOC7YBOt6qZtAh5coTwdSFOypRTAx2nFV/JJvgc39Dwtfr9nfToEV8OC/
-         LR/qFukBwJYJjgNV5zzFGqrqrZQY15x0X6wyBlK6NEQ3vuPX4pOfR+kovmVWysl5Lk
-         n9MxQ8adK72vgS7J9DaBk7pBm6Fma6VUfGoI5EurAl8TeuLhCyQGgnm2/7BJ8gjyTC
-         c40X5h8QLVNOx1NN4BopqEleHq77W/LzqU+g0BGik+XjBymmCUKJcMTJamCZMManFn
-         InLCBO+Mg52uV0cnSd/VBmkwGCLIAx6XlJ57sZA0s3hijGMCvY6iZSBx9GaG9dhfF/
-         ADeybHu1kaicQ==
-Message-ID: <3bfe66204ee84a0bbccaf7cd20af0d8300fb9f26.camel@kernel.org>
-Subject: Re: [PATCH V2] x86/sgx: Add poison handling to reclaimer
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>, tony.luck@intel.com,
-        dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Date:   Thu, 20 Jan 2022 15:09:03 +0200
-In-Reply-To: <be5af586f667c7bcb8ef01286ce75675de5d100f.1642630582.git.reinette.chatre@intel.com>
-References: <be5af586f667c7bcb8ef01286ce75675de5d100f.1642630582.git.reinette.chatre@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.42.3 
+        s=k20201202; t=1642684249;
+        bh=aDoZ/3URPFdhRIJ6USCLyACTjwD8GaFFaNpMXe6l2eo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NVMOla5YHMD7FWeXo6bwCJbkXkzPJTxMqIUCIa/cjMQmzAY7/jROfDw9v9HpoDA1p
+         i7icKGQROabEpOo6IBhuDM3F09eNmHKkfb9rbh5PJuu4iNZqoYlVhldXDqHl42zF8D
+         ltY3Mfe1t2BU/b2+Tg61TnYwkAD8J/dy/ANbmxMFuYiinJainUGjlk4v+jBUu1ZW8C
+         fhcOqGMNp5TzyGvieUq9Rr/b47e9Ab9CukZQ3MgQpevRrMNFGhndBCKtagtq+/cOmu
+         IJN8FAKOViYrDlS5YF36B2j/CB03e1vyd1juxRqcgepI64qBPWHF8bZEZ/jPAAROLy
+         rO6Oitr2d50LA==
+From:   alexs@kernel.org
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alex Shi <alexs@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Yu Zhao <yuzhao@google.com>, Arnd Bergmann <arnd@arndb.de>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 0/5] remove add/del page to lru functions
+Date:   Thu, 20 Jan 2022 21:10:19 +0800
+Message-Id: <20220120131024.502877-1-alexs@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-01-19 at 14:23 -0800, Reinette Chatre wrote:
-> The SGX reclaimer code lacks page poison handling in its main
-> free path. This can lead to avoidable machine checks if a
-> poisoned page is freed and reallocated instead of being
-> isolated.
->=20
-> A troublesome scenario is:
-> =C2=A01. Machine check (#MC) occurs (asynchronous, !MF_ACTION_REQUIRED)
-> =C2=A02. arch_memory_failure() is eventually called
-> =C2=A03. (SGX) page->poison set to 1
-> =C2=A04. Page is reclaimed
-> =C2=A05. Page added to normal free lists by sgx_reclaim_pages()
-> =C2=A0=C2=A0=C2=A0 ^ This is the bug (poison pages should be isolated on =
-the
-> =C2=A0=C2=A0=C2=A0 sgx_poison_page_list instead)
-> =C2=A06. Page is reallocated by some innocent enclave, a second
-> (synchronous)
-> =C2=A0=C2=A0=C2=A0 in-kernel #MC is induced, probably during EADD instruc=
-tion.
-> =C2=A0=C2=A0=C2=A0 ^ This is the fallout from the bug
->=20
-> (6) is unfortunate and can be avoided by replacing the open coded
-> enclave page freeing code in the reclaimer with sgx_free_epc_page()
-> to obtain support for poison page handling that includes placing the
-> poisoned page on the correct list.
->=20
-> Fixes: d6d261bded8a ("x86/sgx: Add new sgx_epc_page flag bit to mark
-> free pages")
-> Fixes: 992801ae9243 ("x86/sgx: Initial poison handling for dirty and
-> free pages")
+From: Alex Shi <alexs@kernel.org>
 
-Same comment as for the first version: remove the first fixes tag.
+Couple of old page/lru operation funcs are just inline replaced. Remove
+them to reduce function name remember and make code simple.
 
-BR, Jarkko
+Thanks
+Alex
+
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Cc: Yu Zhao <yuzhao@google.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Mel Gorman <mgorman@techsingularity.net>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-mm@kvack.org
+
+Alex Shi (5):
+  mm: remove page_is_file_lru function
+  mm: remove __clear_page_lru_flags()
+  mm: remove add_page_to_lru_list() function
+  mm: remove add_page_to_lru_list_tail()
+  mm: remove del_page_from_lru_list()
+
+ include/linux/mm_inline.h     | 28 ----------------------------
+ include/trace/events/vmscan.h |  2 +-
+ mm/compaction.c               |  4 ++--
+ mm/gup.c                      |  2 +-
+ mm/khugepaged.c               |  4 ++--
+ mm/memory-failure.c           |  2 +-
+ mm/memory_hotplug.c           |  2 +-
+ mm/mempolicy.c                |  2 +-
+ mm/migrate.c                  | 14 +++++++-------
+ mm/mlock.c                    |  2 +-
+ mm/mprotect.c                 |  2 +-
+ mm/swap.c                     | 22 +++++++++++-----------
+ mm/vmscan.c                   | 23 ++++++++++++-----------
+ 13 files changed, 41 insertions(+), 68 deletions(-)
+
+-- 
+2.25.1
+

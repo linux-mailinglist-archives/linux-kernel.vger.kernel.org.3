@@ -2,168 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6105495531
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 21:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59616495537
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 21:06:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377539AbiATUCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 15:02:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
+        id S1377554AbiATUFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 15:05:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377533AbiATUCU (ORCPT
+        with ESMTP id S1377548AbiATUFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 15:02:20 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D68C06173F
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 12:02:20 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id d1so6068092plh.10
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 12:02:20 -0800 (PST)
+        Thu, 20 Jan 2022 15:05:32 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805C4C06161C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 12:05:32 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id b13so33691811edn.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 12:05:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=squareup.com; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=HtkLk42w0fWd+6/z9mh2AZD/Xm33fQuNOQj57mIh9Q4=;
-        b=M06sFa/2Shhq7noZOjf2EeS1lXvRx9NRhU+kUJyjKxjuBy2rUaKXy2LIkm7Cyda/16
-         bGRqiz9HX+frjV6/IMeFaPBpnzNQUlcbiiVOwfbghUOLYoYogqc3cqVkBh2NZhztpOFA
-         II9ZSGRRYLfmadeUXP9jOQCYsEZKc+G9W6w7E=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VOTxp6izNWcf7u58bVG55VYTx0rw2v8WMXA2HnEK+fE=;
+        b=Znydkc0VQ2Uebq3rEmLxq5rwHK52AIfT/3LR3BYf9dLL+uAvr3ku9ho0lvRr0YPql6
+         V75msQuygJZ1/Onq6Aih3zUkzBurrcP6QCJ06e2UclfOS9gNyoSzbjPlyGbeVq/Js/8/
+         UPRTeIuCkPO9f3EnIj/qwDLemgr1fTIirEWms/xkSGzK79KSZ0S/oNK1eedx2754rGqX
+         USkxFh6mvWa23wsOARczdlP7ZRF9k/COjwhEdM19nscb5fX3InS8hbcfYOkMOBhhSVfx
+         LZU6j/BhvLOaNd9lrtdfmn1dx2qnBt6qWMRNvqidzemgajJ/B3oMSbSHNwAJPFecbDgH
+         2M/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=HtkLk42w0fWd+6/z9mh2AZD/Xm33fQuNOQj57mIh9Q4=;
-        b=4Gk5XdR7U2yrlzJdhZEcYL9DpmA5uIf+vGGAkVjKZuG5/UrUIlT/rVThcz+6e+vmP8
-         jwY7araW9S5QaUoA6COFwizKFOdTKYreETsAHWCM89w/hMWd3uD04EK6gs/Fo0yDmbo3
-         MZVl3spC0B463U2G/BwGtEO7lnzHxd2Bobg4mK3Lgr9AgqG+6nA38Fs2eiTHitfGJv52
-         Bg/rmosFk0IRqO7FoBwiJUr66AMidZ/PSUBJQZ5t6/mcc+v6m2r3Jxj5ZDbtLHvcomVz
-         jEWZXK9VTWj2hlVjTlFnaIXlOLuAUwoLtklU8xxQrmu2LymB+RtLCsD/nhrV8ekFcX2R
-         vtzQ==
-X-Gm-Message-State: AOAM5307qSPawfsJ/lGC94WN0hKbOCLEIdrdJOtAUyGQNJrXpGaNDYLl
-        xA5lqY+4NBpgP3At9jGGx7XD9g==
-X-Google-Smtp-Source: ABdhPJx4Bedm7kx35gBQovgPPmgKSyX2vlJnVfF48rpV+/YtF+cSQhc7Wm9itzPQ9iYRqRwmoRO20w==
-X-Received: by 2002:a17:90a:ae15:: with SMTP id t21mr677825pjq.147.1642708939439;
-        Thu, 20 Jan 2022 12:02:19 -0800 (PST)
-Received: from localhost (99-47-69-49.lightspeed.sntcca.sbcglobal.net. [99.47.69.49])
-        by smtp.gmail.com with ESMTPSA id em22sm3398862pjb.23.2022.01.20.12.02.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 20 Jan 2022 12:02:18 -0800 (PST)
-From:   Benjamin Li <benl@squareup.com>
-To:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Zac Crosby <zac@squareup.com>, Benjamin Li <benl@squareup.com>,
-        Andy Gross <agross@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] drivers: thermal: tsens: respect thermal_device_mode in threshold irq reporting
-Date:   Thu, 20 Jan 2022 12:01:53 -0800
-Message-Id: <20220120200153.1214-1-benl@squareup.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VOTxp6izNWcf7u58bVG55VYTx0rw2v8WMXA2HnEK+fE=;
+        b=1RlYXdlD5YePoJhpFQy6GVm69AqQkMLla+zqUmOUoOurg7+I6dGmFle3IlPp3qFLp4
+         jAQZIDYkjHqo31Yv1HdqqNrU+nuO+Q0xYLH++j3EixDzAiQ8JCXFpq1vzoCS48ua7iKu
+         7kqO8MxyXf5A+EqkdRnQzGQ+LA/1y8iLRXFwgluhlWWkaERqJpWSdom74viP696vriW8
+         8bChsp9Zgf7wf3bK/XAMckOASOVnK3V1pb0UXSqYEftasVary5eoOnxVG0luqspTFAGi
+         P3tbJASmU6Fvb8ZOiqbdkELpfMUnLIMQM59MDj/iTnkS/qad8XQz+87fwnw4RQ/cl0Yn
+         4L8g==
+X-Gm-Message-State: AOAM532SZbPnQUjOIg/5UxmGkKZJbpg5e3UVB/tj8/DykkuT+HMrClka
+        klOWncyn2prtXSpEv9dQQ82L5/i8lAJ+itIMfJy3ffHuLN4=
+X-Google-Smtp-Source: ABdhPJxZ6c26JiVYo37uVQmE8HYt1b/E8KhsZ1NT/1FEsyPhe0Inf7IREuGTSEUKPZgKXSPdKMVFsyVOVPNoY8poGk4=
+X-Received: by 2002:a05:6402:43ca:: with SMTP id p10mr788775edc.74.1642709130694;
+ Thu, 20 Jan 2022 12:05:30 -0800 (PST)
+MIME-Version: 1.0
+References: <CAPDLWs_iSrbXwfKa6CQ0f6H6GE4U88uRhaFgabRjMmSuSEpsiA@mail.gmail.com>
+ <20220117194836.vj2rxr3wocrtdx7k@treble> <20220117202751.bmwvfsnqxokob6d2@treble>
+ <CAPDLWs-yX4FNrmnF3rHrEoHNktcw2Yi8X6qidss-qKpdw=r4RQ@mail.gmail.com>
+ <20220118175239.lqxi2ycgeusk5pxl@treble> <CAPDLWs_mirot76g==TPRZDsB6Qn99kxw2N5V=PaDYqBLf=ZSCQ@mail.gmail.com>
+ <20220119212126.aydgx62abbngumwy@treble> <20220119234303.tmebbcrg2vpnri4s@treble>
+ <CAPDLWs-DM64k6z3G7qgYwYm=F8piehYhLfaaXc3fDtnBBQiu=Q@mail.gmail.com> <20220120171751.gibauc4zovoskjns@treble>
+In-Reply-To: <20220120171751.gibauc4zovoskjns@treble>
+From:   Kaiwan N Billimoria <kaiwan.billimoria@gmail.com>
+Date:   Fri, 21 Jan 2022 01:35:13 +0530
+Message-ID: <CAPDLWs_28zYabLjsyT2gq-o6vEzidWB4mpGuUGdiYr0qb6YFWQ@mail.gmail.com>
+Subject: Re: Issue using faddr2line on kernel modules
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chi-Thanh Hoang <chithanh.hoang@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'echo disabled > .../thermal_zoneX/mode' will disable the thermal core's
-polling mechanism to check for threshold trips. This is used sometimes to
-run performance test cases.
+On Thu, Jan 20, 2022 at 10:48 PM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+>
+> On Thu, Jan 20, 2022 at 10:44:44AM +0530, Kaiwan N Billimoria wrote:
+> > On Thu, Jan 20, 2022 at 5:13 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+> > >
+> > > On Wed, Jan 19, 2022 at 01:21:29PM -0800, Josh Poimboeuf wrote:
+> > > > > $ nm -n ./oops_tryv2.ko |grep -C5 do_the_work
+> > > > > 0000000000000000 r __func__.24215
+> > > > > 0000000000000000 r __param_bug_in_workq
+> > > > > 0000000000000000 D __this_module
+> > > > > 0000000000000000 r _note_7
+> > > > > 0000000000000000 T cleanup_module
+> > > > > 0000000000000000 t do_the_work
+> > > > > 0000000000000000 t do_the_work.cold
+> > > > > 0000000000000000 b gctx
+> > > > > 0000000000000000 T init_module
+> > > > > 0000000000000000 t try_oops_exit
+> > > > > 0000000000000000 t try_oops_init
+> > > > > 0000000000000008 b t1
+> > > > > $
+> > > > >
+> > > > > BTW, here's the code:
+> > > > > https://github.com/PacktPublishing/Linux-Kernel-Debugging/tree/main/ch7/oops_tryv2
+> > > >
+> > > > Ok, it looks like the symbols aren't sorted like the code expects.  I
+> > > > need to do a more robust fix.
+> > >
+> > > Ok, please try this instead.  This takes a much more robust approach to
+> > > the function size calculation, using readelf to confine the symbol
+> > > search to the section matching the original symbol.
+> > >
+> > > This actually has multiple fixes and cleanups, so it'll eventually be
+> > > split up into a patch set.
+> >
+> > Great. Am facing a few issues though:
+> >
+> > 1. Not sure if it's me but am having issues applying your patches; it
+> > seems to fail:
+> >
+> > $ patch -p1 --dry-run < ./fa1.patch
+> > checking file scripts/faddr2line
+> > Hunk #1 FAILED at 97.
+> > Hunk #2 FAILED at 110.
+> > Hunk #3 FAILED at 189.
+> > 3 out of 3 hunks FAILED
+> > $
+>
+> Hm, did you happen to have the older patch already applied?  This should
+> be applied instead of that one.  Though it's definitely possible I
+> messed the patch up somehow.
+>
+> When saving the patch, make sure to preserve the original whitespace.
+>
+> I'm adding the new patch here as an attachment, if that helps.
 
-However, tsens supports an interrupt mechanism to receive notification of
-trips, implemented in commit 634e11d5b450 ("drivers: thermal: tsens: Add
-interrupt support").
+That helped! I think my stubbornly using Gmail perhaps caused issues
+when i copy-pasted the earlier patches... thanks.
+>
+> > Against which ver are you generating the patch?
+> > (Am using 5.10.60; i noticed the last commit in mainline was f5f67cc
+> > in Nov 2018, so vanilla 5.10.60 should be fine, no?).
+>
+> It was against a newer kernel, but yes, applying it against 5.10.60
+> should also work.
+Cool.
+>...
+> Sorry, I didn't realize mawk was still a thing :-)
+>
+> Try this one?
 
-Currently the thermal zone mode that's set by userspace is not checked
-before propagating threshold trip events from IRQs. Let's fix this to
-restore the abilty to disable thermal throttling at runtime.
+Definitely better !
+This is the o/p i now get:
 
-====================
+$ <...>linux-5.10.60/scripts/faddr2line ./oops_tryv2.ko
+do_the_work.cold+0x68/0x126
+do_the_work.cold+0x68/0x126:
+delay_sec at <...>/oops_tryv2/../../convenient.h:279
+$
 
-Tested on MSM8939 running 5.16.0. This platform has 8 cores; the first
-four thermal zones control cpu0-3 and the last zone is for the other four
-CPUs together.
+The source file+line-no doesn't show up here though... (as it's a foo.cold()?).
+(I'm unsure why the line delay_sec at <...>convenient.h:279   shows up
+; i don't call this delay_sec() func directly... anyway, that's my
+problem.)
 
-  for f in /sys/class/thermal/thermal_zone*; do
-    echo "disabled" > $f/mode
-    echo $f | paste - $f/type $f/mode
-  done
-
-/sys/class/thermal/thermal_zone0	cpu0-thermal	disabled
-/sys/class/thermal/thermal_zone1	cpu1-thermal	disabled
-/sys/class/thermal/thermal_zone2	cpu2-thermal	disabled
-/sys/class/thermal/thermal_zone3	cpu3-thermal	disabled
-/sys/class/thermal/thermal_zone4	cpu4567-thermal	disabled
-
-With mitigation thresholds at 75 degC and load running, we can now cruise
-past temp=75000 without CPU throttling kicking in.
-
-  watch -n 1 "grep '' /sys/class/thermal/*/temp
-      /sys/class/thermal/*/cur_state
-      /sys/bus/cpu/devices/cpu*/cpufreq/cpuinfo_cur_freq"
-
-/sys/class/thermal/thermal_zone0/temp:82000
-/sys/class/thermal/thermal_zone1/temp:84000
-/sys/class/thermal/thermal_zone2/temp:87000
-/sys/class/thermal/thermal_zone3/temp:84000
-/sys/class/thermal/thermal_zone4/temp:84000
-/sys/class/thermal/cooling_device0/cur_state:0
-/sys/class/thermal/cooling_device1/cur_state:0
-/sys/bus/cpu/devices/cpu0/cpufreq/cpuinfo_cur_freq:1113600
-/sys/bus/cpu/devices/cpu1/cpufreq/cpuinfo_cur_freq:1113600
-/sys/bus/cpu/devices/cpu2/cpufreq/cpuinfo_cur_freq:1113600
-/sys/bus/cpu/devices/cpu3/cpufreq/cpuinfo_cur_freq:1113600
-/sys/bus/cpu/devices/cpu4/cpufreq/cpuinfo_cur_freq:800000
-/sys/bus/cpu/devices/cpu5/cpufreq/cpuinfo_cur_freq:800000
-/sys/bus/cpu/devices/cpu6/cpufreq/cpuinfo_cur_freq:800000
-/sys/bus/cpu/devices/cpu7/cpufreq/cpuinfo_cur_freq:800000
-
-Reported-by: Zac Crosby <zac@squareup.com>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Benjamin Li <benl@squareup.com>
----
-Changes in v3:
-- Upgraded logging to dev_info_ratelimited and revised log message.
-- Remove unrelated hunk.
-
-Some drivers that support thermal zone disabling implement a set_mode
-operation and simply disable the sensor or the relevant IRQ(s), so they
-actually don't log anything when zones are disabled. These drivers are
-imx_thermal.c, intel_quark_dts_thermal.c, and int3400_thermal.c.
-
-For tsens.c, implementing a change_mode would require migrating the driver
-from devm_thermal_zone_of_sensor_register to thermal_zone_device_register
-(or updating thermal_of.c to add a change_mode operation in thermal_zone_
-of_device_ops).
-
-stm_thermal.c seems to use this patch's model of not disabling IRQs when
-the zone is disabled (they still perform the thermal_zone_device_update
-upon IRQ, but return -EAGAIN from their get_temp).
-
-Changes in v2:
-- Reordered sentences in first part of commit message to make sense.
-
- drivers/thermal/qcom/tsens.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 99a8d9f3e03c..dd0002829536 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -509,10 +509,14 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
- 		spin_unlock_irqrestore(&priv->ul_lock, flags);
- 
- 		if (trigger) {
--			dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
--				hw_id, __func__, temp);
--			thermal_zone_device_update(s->tzd,
--						   THERMAL_EVENT_UNSPECIFIED);
-+			if (s->tzd->mode == THERMAL_DEVICE_ENABLED) {
-+				dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
-+					hw_id, __func__, temp);
-+				thermal_zone_device_update(s->tzd, THERMAL_EVENT_UNSPECIFIED);
-+			} else {
-+				dev_info_ratelimited(priv->dev, "[%u] %s: TZ update trigger (%d mC) skipped - zone disabled, operating outside of safety limits!\n",
-+					hw_id, __func__, temp);
-+			}
- 		} else {
- 			dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
- 				hw_id, __func__, temp);
--- 
-2.17.1
-
+Thanks.
+>
+> ----
+>
+> diff --git a/scripts/faddr2line b/scripts/faddr2line
+> index 6c6439f69a72..01f28e52f3fc 100755
+> --- a/scripts/faddr2line
+> +++ b/scripts/faddr2line
+> @@ -97,86 +97,127 @@ __faddr2line() {
+>         local dir_prefix=$3
+>         local print_warnings=$4
+>
+> -       local func=${func_addr%+*}
+> +       local first=1
+> +       local sym_name=${func_addr%+*}
+>         local offset=${func_addr#*+}
+>         offset=${offset%/*}
+> -       local size=
+> -       [[ $func_addr =~ "/" ]] && size=${func_addr#*/}
+> +       local user_size=
+> +       [[ $func_addr =~ "/" ]] && user_size=${func_addr#*/}
+>
+> -       if [[ -z $func ]] || [[ -z $offset ]] || [[ $func = $func_addr ]]; then
+> +       if [[ -z $sym_name ]] || [[ -z $offset ]] || [[ $sym_name = $func_addr ]]; then
+>                 warn "bad func+offset $func_addr"
+>                 DONE=1
+>                 return
+>         fi
+>
+>         # Go through each of the object's symbols which match the func name.
+> -       # In rare cases there might be duplicates.
+> -       file_end=$(${SIZE} -Ax $objfile | awk '$1 == ".text" {print $2}')
+> -       while read symbol; do
+> -               local fields=($symbol)
+> -               local sym_base=0x${fields[0]}
+> -               local sym_type=${fields[1]}
+> -               local sym_end=${fields[3]}
+> -
+> -               # calculate the size
+> -               local sym_size=$(($sym_end - $sym_base))
+> -               if [[ -z $sym_size ]] || [[ $sym_size -le 0 ]]; then
+> -                       warn "bad symbol size: base: $sym_base end: $sym_end"
+> +       # In rare cases there might be duplicates, in which case we print all
+> +       # matches.
+> +       while read line; do
+> +               local fields=($line)
+> +               local sym_addr=0x${fields[1]}
+> +               local sym_size=${fields[2]}
+> +               local sym_sec=${fields[6]}
+> +
+> +               # Get the section size:
+> +               local sec_size=$(${READELF} --section-headers --wide $objfile |
+> +                       sed 's/\[ /\[/' |
+> +                       awk -v sec=$sym_sec '$1 == "[" sec "]" { print "0x" $6; exit }')
+> +
+> +               if [[ -z $sec_size ]]; then
+> +                       warn "bad section size: section: $sym_sec"
+>                         DONE=1
+>                         return
+>                 fi
+> -               sym_size=0x$(printf %x $sym_size)
+>
+> -               # calculate the address
+> -               local addr=$(($sym_base + $offset))
+> -               if [[ -z $addr ]] || [[ $addr = 0 ]]; then
+> -                       warn "bad address: $sym_base + $offset"
+> +               # Calculate the symbol size:
+> +               #
+> +               # We can't use the ELF size, because kallsyms also includes the
+> +               # padding bytes in its size calculation.  For kallsyms, the
+> +               # size calculation is the distance between the symbol and the
+> +               # next symbol in a sorted list.
+> +               local size
+> +               local next_sym_addr
+> +               local found=0
+> +               while read line; do
+> +                       local fields=($line)
+> +                       next_sym_addr=0x${fields[1]}
+> +                       local next_sym_size=${fields[2]}
+> +                       local next_sym_name=${fields[7]:-}
+> +
+> +                       if [[ $next_sym_addr = $sym_addr ]] &&
+> +                          [[ $next_sym_size = $sym_size ]] &&
+> +                          [[ $next_sym_name = $sym_name ]]; then
+> +                               found=1
+> +                               continue
+> +                       fi
+> +
+> +                       if [[ $found = 1 ]]; then
+> +                               size=$(($next_sym_addr - $sym_addr))
+> +                               [[ $size -lt $sym_size ]] && continue;
+> +                               found=2
+> +                               break
+> +                       fi
+> +               done < <(${READELF} --symbols --wide $objfile | awk -v sec=$sym_sec '$7 == sec' | sort --key=2)
+> +
+> +               if [[ $found = 0 ]]; then
+> +                       warn "can't find symbol: sym_name: $sym_name sym_sec=$sym_sec sym_addr: $sym_addr sym_size: $sym_size"
+>                         DONE=1
+>                         return
+>                 fi
+> -               addr=0x$(printf %x $addr)
+>
+> -               # weed out non-function symbols
+> -               if [[ $sym_type != t ]] && [[ $sym_type != T ]]; then
+> -                       [[ $print_warnings = 1 ]] &&
+> -                               echo "skipping $func address at $addr due to non-function symbol of type '$sym_type'"
+> -                       continue
+> +               [[ $found = 1 ]] && size=$(($sec_size - $sym_addr))
+> +
+> +               if [[ -z $size ]] || [[ $size -le 0 ]]; then
+> +                       warn "bad symbol size: sym_addr: $sym_addr next_sym_addr: $next_sym_addr"
+> +                       DONE=1
+> +                       return
+>                 fi
+> +               size=0x$(printf %x $size)
+>
+> -               # if the user provided a size, make sure it matches the symbol's size
+> -               if [[ -n $size ]] && [[ $size -ne $sym_size ]]; then
+> +               # Calculate the specified address:
+> +               local addr=$(($sym_addr + $offset))
+> +               if [[ -z $addr ]] || [[ $addr = 0 ]]; then
+> +                       warn "bad address: $sym_addr + $offset"
+> +                       DONE=1
+> +                       return
+> +               fi
+> +               addr=0x$(printf %x $addr)
+> +
+> +               # If the user provided a size, make sure it matches the symbol's size:
+> +               if [[ -n $user_size ]] && [[ $user_size -ne $size ]]; then
+>                         [[ $print_warnings = 1 ]] &&
+> -                               echo "skipping $func address at $addr due to size mismatch ($size != $sym_size)"
+> +                               echo "skipping $sym_name address at $addr due to size mismatch ($user_size != $size)"
+>                         continue;
+>                 fi
+>
+> -               # make sure the provided offset is within the symbol's range
+> -               if [[ $offset -gt $sym_size ]]; then
+> +               # Make sure the provided offset is within the symbol's range:
+> +               if [[ $offset -gt $size ]]; then
+>                         [[ $print_warnings = 1 ]] &&
+> -                               echo "skipping $func address at $addr due to size mismatch ($offset > $sym_size)"
+> +                               echo "skipping $sym_name address at $addr due to size mismatch ($offset > $size)"
+>                         continue
+>                 fi
+>
+> -               # separate multiple entries with a blank line
+> -               [[ $FIRST = 0 ]] && echo
+> -               FIRST=0
+> +               # In case of duplicates, separate multiple entries with a blank line:
+> +               [[ $first = 0 ]] && echo
+> +               first=0
+>
+> -               # pass real address to addr2line
+> -               echo "$func+$offset/$sym_size:"
+> -               local file_lines=$(${ADDR2LINE} -fpie $objfile $addr | sed "s; $dir_prefix\(\./\)*; ;")
+> -               [[ -z $file_lines ]] && return
+> +               # Pass full address to addr2line:
+> +               echo "$sym_name+$offset/$size:"
+> +               local output=$(${ADDR2LINE} -fpie $objfile $addr | sed "s; $dir_prefix\(\./\)*; ;")
+> +               [[ -z $output ]] && continue
+>
+>                 if [[ $LIST = 0 ]]; then
+> -                       echo "$file_lines" | while read -r line
+> +                       echo "$output" | while read -r line
+>                         do
+>                                 echo $line
+>                         done
+>                         DONE=1;
+> -                       return
+> +                       continue
+>                 fi
+>
+> -               # show each line with context
+> -               echo "$file_lines" | while read -r line
+> +               # If --list was specified, show each line with context:
+> +               echo "$output" | while read -r line
+>                 do
+>                         echo
+>                         echo $line
+> @@ -189,7 +230,7 @@ __faddr2line() {
+>
+>                 DONE=1
+>
+> -       done < <(${NM} -n $objfile | awk -v fn=$func -v end=$file_end '$3 == fn { found=1; line=$0; start=$1; next } found == 1 { found=0; print line, "0x"$1 } END {if (found == 1) print line, end; }')
+> +       done < <(${READELF} --symbols --wide $objfile | awk -v fn=$sym_name '$4 == "FUNC" && $8 == fn')
+>  }
+>
+>  [[ $# -lt 2 ]] && usage

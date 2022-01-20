@@ -2,102 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7F5495500
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 20:38:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7724495503
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 20:40:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243633AbiATTiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 14:38:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238479AbiATThq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 14:37:46 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4404C061574;
-        Thu, 20 Jan 2022 11:37:45 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id bu18so25649314lfb.5;
-        Thu, 20 Jan 2022 11:37:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PTPMtlLZkmlqbrE2C81Yiq0PZs32RCDh/dQp7wKkOOI=;
-        b=MISO9+D8caTj+dW+Lj4qmfdrysr/cNlHmQDwz/ExZL1RH56hXwVcV0ERs4IzfVsncQ
-         vT3ZtaUOAJnX1CjhmxdRc8xr8VAXskAOdTiT+wHvdmzXL0BBprMoTgaV95Plc6WHbHPA
-         RcGYY/0Apwi6eK0nXFNmasqUG2tSht544vXmQTGk/fugZgp1dFHRKFZIKn+BZ5slmjni
-         ZPk1VceJs/zu3kC1AqtOkqVaIPa9A6KXXsQbC3UPJaDMdocpp+7Skj/hSexdvKbf9RCG
-         6Vl4ruwR5rzgGiriy19a0Zoc5dz7ULQt47L/iqlMreSKrUeUH/vR7E65UURPjZMfw2Q+
-         eMrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PTPMtlLZkmlqbrE2C81Yiq0PZs32RCDh/dQp7wKkOOI=;
-        b=Bj/151wCcvdoVuS6xLaypoGyEh9ya1Kr1WvZXDIzOvCl4+lSxZgcA8xZHlgAgunp6a
-         7YJlDHjC4Be7AYUV9OIy4tKAL63OFiGBcCziRq/onIzR12AmZcSgXEALkgu02sNLO+5/
-         PIwnPhuJmTzkhJhYhcsNGy3I6r3JjAkwn9JfptFZUFDhUOuA2sUGHON1eJZvOFc7dLMM
-         Ek9wNYgr6CCVyLH2LJnZndQuskkQRGDLSFxk6cDrpBV7w//hyYlBxZBPvtbaR8OXK0AV
-         wl+ZZJ+SQxlfmmqgYh3QV78oIHuITQYWd1Q+8eCzPrrFviwQTZaoJ4T/tdMVMzOxsaQm
-         iWRA==
-X-Gm-Message-State: AOAM5300Ka7bvDL2rm0CcHFmPMutWjvuARmakPbx6ylOYfa519SMkF/L
-        zcjwdUkWmx/xkb5Bp1qxEfY=
-X-Google-Smtp-Source: ABdhPJxAwP3J3wM98DGNM2dVm9aNWnXPG0RKRHyhl12rKPefeM3zt05y/JumiRgGxcH1yddX09yvNg==
-X-Received: by 2002:a05:6512:3b8d:: with SMTP id g13mr576408lfv.46.1642707464011;
-        Thu, 20 Jan 2022 11:37:44 -0800 (PST)
-Received: from localhost.localdomain ([94.103.227.208])
-        by smtp.gmail.com with ESMTPSA id q12sm14223lfr.55.2022.01.20.11.37.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 11:37:43 -0800 (PST)
-From:   Pavel Skripkin <paskripkin@gmail.com>
-To:     mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        =?UTF-8?q?Maximilian=20B=C3=B6hm?= <maximilian.boehm@elbmurf.de>
-Subject: [PATCH] Revert "media: em28xx: add missing em28xx_close_extension"
-Date:   Thu, 20 Jan 2022 22:37:30 +0300
-Message-Id: <20220120193730.28155-1-paskripkin@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <a0ba3685-8c59-cb89-7f81-280c38a92c40@elbmurf.de>
-References: <a0ba3685-8c59-cb89-7f81-280c38a92c40@elbmurf.de>
+        id S243879AbiATTku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 14:40:50 -0500
+Received: from foss.arm.com ([217.140.110.172]:51182 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234821AbiATTks (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 14:40:48 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B5CB86D;
+        Thu, 20 Jan 2022 11:40:47 -0800 (PST)
+Received: from e113632-lin.cambridge.arm.com (e113632-lin.cambridge.arm.com [10.1.196.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2EDB13F774;
+        Thu, 20 Jan 2022 11:40:46 -0800 (PST)
+From:   Valentin Schneider <valentin.schneider@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     John Keeping <john@metanate.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: [PATCH] sched/rt: Plug rt_mutex_setprio() vs push_rt_task() race
+Date:   Thu, 20 Jan 2022 19:40:37 +0000
+Message-Id: <20220120194037.650433-1-valentin.schneider@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 2c98b8a3458df03abdc6945bbef67ef91d181938.
+John reported that push_rt_task() can end up invoking
+find_lowest_rq(rq->curr) when curr is not an RT task (in this case a CFS
+one), which causes mayhem down convert_prio().
 
-Reverted patch causes problems with Hauppauge WinTV dualHD as Maximilian
-reported [1]. Since quick solution didn't come up let's just revert it
-to make this device work with upstream kernels.
+This can happen when current gets demoted to e.g. CFS when releasing an
+rt_mutex, and the local CPU gets hit with an rto_push_work irqwork before
+getting the chance to reschedule. Exactly who triggers this work isn't
+entirely clear to me - switched_from_rt() only invokes rt_queue_pull_task()
+if there are no RT tasks on the local RQ, which means the local CPU can't
+be in the rto_mask.
 
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Link: https://lore.kernel.org/all/6a72a37b-e972-187d-0322-16336e12bdc5@elbmurf.de/ [1]
-Reported-by: Maximilian Böhm <maximilian.boehm@elbmurf.de>
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+My current suspected sequence is something along the lines of the below,
+with the demoted task being current.
+
+  mark_wakeup_next_waiter()
+    rt_mutex_adjust_prio()
+      rt_mutex_setprio() // deboost originally-CFS task
+	check_class_changed()
+	  switched_from_rt() // Only rt_queue_pull_task() if !rq->rt.rt_nr_running
+	  switched_to_fair() // Sets need_resched
+      __balance_callbacks() // if pull_rt_task(), tell_cpu_to_push() can't select local CPU per the above
+      raw_spin_rq_unlock(rq)
+
+       // need_resched is set, so task_woken_rt() can't
+       // invoke push_rt_tasks(). Best I can come up with is
+       // local CPU has rt_nr_migratory >= 2 after the demotion, so stays
+       // in the rto_mask, and then:
+
+       <some other CPU running rto_push_irq_work_func() queues rto_push_work on this CPU>
+	 push_rt_task()
+	   // breakage follows here as rq->curr is CFS
+
+Move an existing check to check rq->curr vs the next pushable task's
+priority before getting anywhere near find_lowest_rq(). While at it, add an
+explicit sched_class of rq->curr check prior to invoking
+find_lowest_rq(rq->curr).
+
+Link: http://lore.kernel.org/r/Yb3vXx3DcqVOi+EA@donbot
+Fixes: a7c81556ec4d ("sched: Fix migrate_disable() vs rt/dl balancing")
+Reported-by: John Keeping <john@metanate.com>
+Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
 ---
- drivers/media/usb/em28xx/em28xx-cards.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ kernel/sched/rt.c | 31 +++++++++++++++++++++----------
+ 1 file changed, 21 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
-index b451ce3cb169..4a46ef50baf9 100644
---- a/drivers/media/usb/em28xx/em28xx-cards.c
-+++ b/drivers/media/usb/em28xx/em28xx-cards.c
-@@ -4150,11 +4150,8 @@ static void em28xx_usb_disconnect(struct usb_interface *intf)
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index 7b4f4fbbb404..48fc8c04b038 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -2026,6 +2026,16 @@ static int push_rt_task(struct rq *rq, bool pull)
+ 		return 0;
  
- 	em28xx_close_extension(dev);
+ retry:
++	/*
++	 * It's possible that the next_task slipped in of
++	 * higher priority than current. If that's the case
++	 * just reschedule current.
++	 */
++	if (unlikely(next_task->prio < rq->curr->prio)) {
++		resched_curr(rq);
++		return 0;
++	}
++
+ 	if (is_migration_disabled(next_task)) {
+ 		struct task_struct *push_task = NULL;
+ 		int cpu;
+@@ -2033,6 +2043,17 @@ static int push_rt_task(struct rq *rq, bool pull)
+ 		if (!pull || rq->push_busy)
+ 			return 0;
  
--	if (dev->dev_next) {
--		em28xx_close_extension(dev->dev_next);
-+	if (dev->dev_next)
- 		em28xx_release_resources(dev->dev_next);
++		/*
++		 * Per the above priority check, curr is at least RT. If it's
++		 * of a higher class than RT, invoking find_lowest_rq() on it
++		 * doesn't make sense.
++		 *
++		 * Note that the stoppers are masqueraded as SCHED_FIFO
++		 * (cf. sched_set_stop_task()), so we can't rely on rt_task().
++		 */
++		if (rq->curr->sched_class != &rt_sched_class)
++			return 0;
++
+ 		cpu = find_lowest_rq(rq->curr);
+ 		if (cpu == -1 || cpu == rq->cpu)
+ 			return 0;
+@@ -2057,16 +2078,6 @@ static int push_rt_task(struct rq *rq, bool pull)
+ 	if (WARN_ON(next_task == rq->curr))
+ 		return 0;
+ 
+-	/*
+-	 * It's possible that the next_task slipped in of
+-	 * higher priority than current. If that's the case
+-	 * just reschedule current.
+-	 */
+-	if (unlikely(next_task->prio < rq->curr->prio)) {
+-		resched_curr(rq);
+-		return 0;
 -	}
 -
- 	em28xx_release_resources(dev);
+ 	/* We might release rq lock */
+ 	get_task_struct(next_task);
  
- 	if (dev->dev_next) {
 -- 
-2.34.1
+2.25.1
 

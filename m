@@ -2,153 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D70B44949B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:38:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC8D4949AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 09:38:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359321AbiATIiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 03:38:16 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:56146 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359292AbiATIiM (ORCPT
+        id S1359303AbiATIiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 03:38:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35616 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359292AbiATIiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 03:38:12 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 1F79E1F391;
-        Thu, 20 Jan 2022 08:38:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1642667889; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=S1149P6IJdsdpbMcrXZq6Mc6WqPqJoBvK3pMWsa4MN8=;
-        b=mgVK2GKX4z682928eNQNmcKH4PlzeX6XpPLxSucJKp6GDejDBl9xGnHm3EQ7m1HB7u4s0x
-        HmV98Y94Jgx4BP2N49y70kzTAsfC49uladYoyY9u+lMOkRTYf7K7VjPT83DyGrKubQrpNL
-        4X9INnLQQrZk7xUamCgzquBLJDcbk7E=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 1E602A3B81;
-        Thu, 20 Jan 2022 08:38:04 +0000 (UTC)
-Date:   Thu, 20 Jan 2022 09:38:04 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-security-module@vger.kernel.org,
-        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Emma Anholt <emma@anholt.net>, Eryk Brol <eryk.brol@amd.com>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Leo Li <sunpeng.li@amd.com>,
-        Mikita Lipski <mikita.lipski@amd.com>,
-        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vishal Kulkarni <vishal@chelsio.com>
-Subject: Re: [PATCH 0/3] lib/string_helpers: Add a few string helpers
-Message-ID: <YekfbKMjOP9ecc5v@alley>
-References: <20220119072450.2890107-1-lucas.demarchi@intel.com>
- <YegPiR7LU8aVisMf@alley>
- <87tudzbykz.fsf@intel.com>
+        Thu, 20 Jan 2022 03:38:08 -0500
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040A7C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 00:38:08 -0800 (PST)
+Received: by mail-io1-xd44.google.com with SMTP id y22so6068541iof.7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 00:38:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=8uIJcLSCAqrhBgQoAI33AxrLylW5mzDcn9iwsIVorE0=;
+        b=P6Iyr4Q0zdrVEiFF9lZCWd0UdvSK/thU305h3XzLev4WYhXbrTL9uGSx89pQ4tq3ff
+         OoDFSBROA3KqIHsThbkUh+NqwTncpGZItvHpuXWuGeLYsXipgHcJvcEHoFbyGhlNL2Cq
+         DJmEPflHjO3efvydLzHTYdH4YpDCxpSsLG3dNtErxijuP9ev0rN0mp0QS1EJQ1ZmB7E1
+         UsZS6LDQqrHVPb/vLqekpTMCpx1g0Qqg1ISfg4mmj8DWSVpK0G6HcQOLwce6GMzHb2tX
+         hipCacAnPLjH440qhLQyIFFyYnmaQk6MOA2XPgbWSkE9UsHFn/wisnxDcedEV9LSYjXP
+         BD/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=8uIJcLSCAqrhBgQoAI33AxrLylW5mzDcn9iwsIVorE0=;
+        b=EounOk/wHcChiVUFMI2NmQ3XWzYGGkzi19Ylq/59MY5Hq0cHeB9ezwYOYU0bZijHZd
+         D54uo3enMOW7KaqdrMs4Z9jgwfzmvTNOIZ2jmWJY9lImZKI+XT3POVcmcC6niq4H+b0H
+         32GtN1OTOhDLEuBCg9/PiMifNOLEYL0hCdxBsQePvF/uNuv6ztOvZoBhVYUMWZN+YwCN
+         KPB68FtMt8ta15kJbAj3iksGHkOoKS7XOL7AdRYccO0uYh2PwY78maWyEglnhqufqz1+
+         s0n/kWllsuLohPcEB92TBob31vhSwxH5xE2ztw3pLEyZWkS63FCFvqDFRVq7MwvDf3U2
+         i9Eg==
+X-Gm-Message-State: AOAM530PVysUIxpn3LYND/oIYt2xs52A/efL7qLvW12u/jaANaNfHlbj
+        jLoF+NgdLTkDiMyyKxNwN6gSxGAfaxinLeRNvH0=
+X-Google-Smtp-Source: ABdhPJy/5/8+SH+1g285ciO9SOpEuJkfb7mQMFOTAilSowZjmyLQKDu8c29bTTCAtVEf3adPU4T5ZghFO/5cFC+3WKU=
+X-Received: by 2002:a6b:f111:: with SMTP id e17mr17431567iog.143.1642667887357;
+ Thu, 20 Jan 2022 00:38:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87tudzbykz.fsf@intel.com>
+Sender: innocent.chamber.bf@gmail.com
+Received: by 2002:a05:6638:2a5:0:0:0:0 with HTTP; Thu, 20 Jan 2022 00:38:07
+ -0800 (PST)
+From:   Alary Jean Claude <claudealaryjean@gmail.com>
+Date:   Thu, 20 Jan 2022 08:38:07 +0000
+X-Google-Sender-Auth: Q9Zy7ilYR5ue4VJo0pOpCztwKO8
+Message-ID: <CAEB4LwuQ0CanEXYp8srf=mji=jC5zsLhSevuznMV31G+o=aHkg@mail.gmail.com>
+Subject: Good Day My beloved,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-01-19 16:16:12, Jani Nikula wrote:
-> On Wed, 19 Jan 2022, Petr Mladek <pmladek@suse.com> wrote:
-> > On Tue 2022-01-18 23:24:47, Lucas De Marchi wrote:
-> >> d. This doesn't bring onoff() helper as there are some places in the
-> >>    kernel with onoff as variable - another name is probably needed for
-> >>    this function in order not to shadow the variable, or those variables
-> >>    could be renamed.  Or if people wanting  <someprefix>
-> >>    try to find a short one
-> >
-> > I would call it str_on_off().
-> >
-> > And I would actually suggest to use the same style also for
-> > the other helpers.
-> >
-> > The "str_" prefix would make it clear that it is something with
-> > string. There are other <prefix>_on_off() that affect some
-> > functionality, e.g. mute_led_on_off(), e1000_vlan_filter_on_off().
-> >
-> > The dash '_' would significantly help to parse the name. yesno() and
-> > onoff() are nicely short and kind of acceptable. But "enabledisable()"
-> > is a puzzle.
-> >
-> > IMHO, str_yes_no(), str_on_off(), str_enable_disable() are a good
-> > compromise.
-> >
-> > The main motivation should be code readability. You write the
-> > code once. But many people will read it many times. Open coding
-> > is sometimes better than misleading macro names.
-> >
-> > That said, I do not want to block this patchset. If others like
-> > it... ;-)
-> 
-> I don't mind the names either way. Adding the prefix and dashes is
-> helpful in that it's possible to add the functions first and convert
-> users at leisure, though with a bunch of churn, while using names that
-> collide with existing ones requires the changes to happen in one go.
+Hello My Beloved,
+With due respect to your person and much sincerity of purpose I wish
+to write to you today, seeking for your urgent assistance in this
+humanitarian investment project to be established in your country for
+the mutual benefit of the orphans and the less privileged ones. My
+names are Mrs.Alary Jean Claude, a dying widow hospitalized undergoing
+treatment for brain tumor disease, I hope that you will not expose or
+betray this belief and confidence that I am about to delegate to you
+for the mutual benefit of the orphans and the less privileged ones. My
+late husband made a substantial deposit with the Bank which I have
+Strong-Willed to hand over and entrust the sum of ($
+12,000.000,Dollars) in the account under your guardianship for you to
+invest it into any social charitable project in your country. Based on
+my present health status I am permanently indisposed to handle
+finances or any financial related project.
 
-It is also possible to support both notations at the beginning.
-And convert the existing users in the 2nd step.
+With this intention, I am determined to contact you in order to
+sustain and assist me as my rightful beneficiary and claim the money
+for humanitarian purposes for the mutual benefits of the less
+privileged ones. Because If the fund remains unclaimed with the bank I
+pass away, those gluttonous bank executives will place the fund as an
+unclaimed Fund and share it among themselves for their selfish and
+worthless ventures. In this regard, I will be grateful for your kind
+acceptance to carry out this transaction and fulfill my final wish in
+implementing the charitable project in your country as it requires
+absolute trust and devotion without any failure. Meanwhile It will be
+my pleasure to compensate you as my Investment Manager/Partner with
+40% percent of the total amount as commission/share just for you to
+take this charitable project serious and handle it with sincerity of
+mind, showing honesty and attention in our communication and in every
+aspect of this project, While 60% of the money will be invested into
+the charity project.
 
-> What I do mind is grinding this series to a halt once again. I sent a
-> handful of versions of this three years ago, with inconclusive
-> bikeshedding back and forth, eventually threw my hands up in disgust,
-> and walked away.
-
-Yeah, and I am sorry for bikeshedding. Honestly, I do not know what is
-better. This is why I do not want to block this series when others
-like this.
-
-My main motivation is to point out that:
-
-    enabledisable(enable)
-
-might be, for some people, more eye bleeding than
-
-    enable ? "enable" : "disable"
-
-
-The problem is not that visible with yesno() and onoff(). But as you said,
-onoff() confliscts with variable names. And enabledisable() sucks.
-As a result, there is a non-trivial risk of two mass changes:
-
-now:
-
-- contition ? "yes" : "no"
-+ yesno(condition)
-
-a few moths later:
-
-- yesno(condition)
-+ str_yes_no(condition)
-
-
-Best Regards,
-Petr
+Thank you very much for your kind consideration and I will be happy to
+receive your prompt response for further correspondence.
+May the peace of God be with you.
+Yours beloved Sister in Christ Mrs. Alary Jean Claude.

@@ -2,227 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F18A6494E62
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:54:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A79494E63
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 13:54:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244218AbiATMyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 07:54:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244608AbiATMyQ (ORCPT
+        id S232193AbiATMyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 07:54:24 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34608 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235933AbiATMxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 07:54:16 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC271C061574;
-        Thu, 20 Jan 2022 04:53:26 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id h26so6519998lfv.11;
-        Thu, 20 Jan 2022 04:53:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1LqZq0O7eLdirdCHQCT48HNOIc+4FU2wpYuxnO3KmGg=;
-        b=T6b7UUlDDd35DwuHRdlQ2pHINjJp7EbhX29Y7FYCaWKUvlgm3Hi0ns0gwtFvsS4Vpu
-         V+CU6jHSU14H0DzSYQTWlOxcXvGJQ0D0IkkQH1OEXJmvoPYhiqsyk504YqSRVSyU0dup
-         dWm+3TqHhguyE9BQ1Fzgobh0ZnOshPappS3Hka+4I9asmEz7fTfuJ6B81Sboew+iWWOH
-         pIL8G/u/1ktLYX5iTUU9OgqUi10x2Z5+g4aD/WT+g3czm0/V4ks9AeeZtwjozrZxWOUh
-         IkvIJ5FfDipk8kEZsXdHGGCuOgRtPliW5rOTC06eCmVbOoiVM68CG0BHbC0i3k/5eRZN
-         A3Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1LqZq0O7eLdirdCHQCT48HNOIc+4FU2wpYuxnO3KmGg=;
-        b=1zrnA7+FKtqm7SdQj8vlZI5viaKHVVWKGP+g9sPt/Myl2ahcy8mSrSb2imaj0icGMT
-         c9K57vk2o72vMTz0+pHPPSbdJPnhYxU/6ZszZ5a10GqmD4lULZzsf0aaBW6OPoGt1B25
-         YmfqNTrSGP2nUWCumVUl47JkkoBBkYg+DIcWzlybZrikJtEpZe5McIqeoPl5eTz1jr7k
-         L1uUj5wVgzl0pxESmCmcvq389KSjs9E7U8ZFThJWIF+BXX0tsZ/0Zv1/2b0GcjCpHNq0
-         akC2jiLxHk5a4pWXG19WG2pQo6HU1pLcPVyvmEgitSrR7PeuyDH4yuUYsVDTe7p/u8sD
-         s21Q==
-X-Gm-Message-State: AOAM530fWZtUlLEK2uRpX5535+0lTydKteZr81ZY2dB8fgkHweBom3j2
-        Nbfglq0bE/p5DoXo+Vnk7eSFiDA9DQU=
-X-Google-Smtp-Source: ABdhPJxpNVNnlti34Aue4nQMiHS3+GO2b3oxC1ilHEaQZ2/skp8FzRBKUDvVR+CckwbGgiiGAn+TeQ==
-X-Received: by 2002:a2e:2405:: with SMTP id k5mr24710279ljk.402.1642683204910;
-        Thu, 20 Jan 2022 04:53:24 -0800 (PST)
-Received: from [192.168.2.145] (109-252-139-36.dynamic.spd-mgts.ru. [109.252.139.36])
-        by smtp.googlemail.com with ESMTPSA id y12sm271345ljh.26.2022.01.20.04.53.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 04:53:24 -0800 (PST)
-Message-ID: <3ebf9021-8df2-3d62-7f6c-0ff660e93735@gmail.com>
-Date:   Thu, 20 Jan 2022 15:53:23 +0300
+        Thu, 20 Jan 2022 07:53:45 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E8845616F2;
+        Thu, 20 Jan 2022 12:53:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6E78C340E0;
+        Thu, 20 Jan 2022 12:53:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642683224;
+        bh=mis9tUpiKFNKn1Gt78pVxuZell+C29XTqer3xCbdmDA=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=IcaF7gZdCW9O1QhNZNxOMi4CkhQ6PSoWHSuCvf1aSfhgNFmB4j6VO97TV5GrY+9if
+         OAhibVGQjI5DqrGhm2MP/DHTrJwyc2bZEHn0MiEY6stRyWyEGkMMZdqUWQTufwHoWq
+         SlAYlZe2ew2bmtEpbJuhMS0Zl0x9QuZ4ib4uNSwNwguD5aIUu6Bon3B+rWFM3aCzLF
+         GBlSQLeyb1R0JmejEZZppxNwrHyILaq5mYtux0ktFFCDOK9bGePuxfqt7ng5uP9xat
+         Z5Sr+dH5FibrWKKYLz251VQwrVb1BPcOiH8w8hrXqbISL5utz9r02vJboS1krmlEr5
+         0AgI5HXVHsnZg==
+Message-ID: <04761b2b4a77bda145a1fdb975da50da18c9d2d0.camel@kernel.org>
+Subject: Re: [PATCH 05/25] x86/sgx: Introduce runtime protection bits
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        Nathaniel McCallum <nathaniel@profian.com>
+Cc:     Haitao Huang <haitao.huang@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>, dave.hansen@linux.intel.com,
+        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com,
+        linux-sgx@vger.kernel.org, x86@kernel.org, seanjc@google.com,
+        kai.huang@intel.com, cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 20 Jan 2022 14:53:28 +0200
+In-Reply-To: <eb696213-b066-0b6f-19ff-dd655b13209c@intel.com>
+References: <YeHwzwnfsUcxiNbw@iki.fi>
+         <b0e5c1fc-aa6d-4e26-c18b-d93d93c2131a@intel.com> <YeIEKayEUidj0Dlb@iki.fi>
+         <6e1cb295-b86e-ae09-2cf0-cfefd1a10e65@intel.com> <YeIU6e6wetrifn+b@iki.fi>
+         <e2d675f7-319b-4816-ad5e-4154cbf69f2b@intel.com> <YeIgzLzPu0U8s0sh@iki.fi>
+         <YeK2hFcy72tYL61S@iki.fi>
+         <CAHAy0tT7+AwgQUtzndj1E99hVcHNmyk2xJ6wUSxa4oPYytAMzA@mail.gmail.com>
+         <YeYe/gGQbtTAXxLe@iki.fi> <YeYkdUHt7/HsRsZq@iki.fi>
+         <eb696213-b066-0b6f-19ff-dd655b13209c@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.42.3 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [Patch V2] memory: tegra: Add MC error logging on tegra186 onward
-Content-Language: en-US
-To:     Ashish Mhetre <amhetre@nvidia.com>, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
-        krzysztof.kozlowski@canonical.com, linux-kernel@vger.kernel.org
-Cc:     Snikam@nvidia.com, vdumpa@nvidia.com
-References: <1642669368-20605-1-git-send-email-amhetre@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <1642669368-20605-1-git-send-email-amhetre@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-20.01.2022 12:02, Ashish Mhetre пишет:
-> Remove static from tegra30_mc_handle_irq and use it as interrupt handler
-> for MC interrupts on tegra186, tegra194 and tegra234 to log the errors.
-> Add error specific MC status and address register bits and use them on
-> tegra186, tegra194 and tegra234.
-> Add error logging for generalized carveout interrupt on tegra186, tegra194
-> and tegra234.
-> Add error logging for route sanity interrupt on tegra194 an tegra234.
-> Add register for higher bits of error address and use it on tegra194 and
-> tegra234.
-> 
-> Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
-> ---
-> Changes in v2:
-> - Updated patch subject and commit message
-> - Removed separate irq handlers
-> - Updated tegra30_mc_handle_irq to be used for Tegra186 onwards as well
-> 
->  drivers/memory/tegra/mc.c       | 73 ++++++++++++++++++++++++++++++++++-------
->  drivers/memory/tegra/mc.h       | 16 +++++++++
->  drivers/memory/tegra/tegra186.c |  7 ++++
->  drivers/memory/tegra/tegra194.c |  5 +++
->  drivers/memory/tegra/tegra234.c |  5 +++
->  5 files changed, 94 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/memory/tegra/mc.c b/drivers/memory/tegra/mc.c
-> index bf3abb6..badebe8 100644
-> --- a/drivers/memory/tegra/mc.c
-> +++ b/drivers/memory/tegra/mc.c
-> @@ -508,7 +508,21 @@ int tegra30_mc_probe(struct tegra_mc *mc)
->  	return 0;
->  }
->  
-> -static irqreturn_t tegra30_mc_handle_irq(int irq, void *data)
-> +const struct tegra_mc_ops tegra30_mc_ops = {
-> +	.probe = tegra30_mc_probe,
-> +	.handle_irq = tegra30_mc_handle_irq,
-> +};
-> +#endif
-> +
-> +#if defined(CONFIG_ARCH_TEGRA_3x_SOC) || \
-> +    defined(CONFIG_ARCH_TEGRA_114_SOC) || \
-> +    defined(CONFIG_ARCH_TEGRA_124_SOC) || \
-> +    defined(CONFIG_ARCH_TEGRA_132_SOC) || \
-> +    defined(CONFIG_ARCH_TEGRA_210_SOC) || \
-> +    defined(CONFIG_ARCH_TEGRA_186_SOC) || \
-> +    defined(CONFIG_ARCH_TEGRA_194_SOC) || \
-> +    defined(CONFIG_ARCH_TEGRA_234_SOC)
+On Tue, 2022-01-18 at 12:59 -0800, Reinette Chatre wrote:
+> Hi Jarkko,
+>=20
+> On 1/17/2022 6:22 PM, Jarkko Sakkinen wrote:
+> > On Tue, Jan 18, 2022 at 03:59:29AM +0200, Jarkko Sakkinen wrote:
+> > > On Mon, Jan 17, 2022 at 08:13:32AM -0500, Nathaniel McCallum
+> > > wrote:
+> > > > On Sat, Jan 15, 2022 at 6:57 AM Jarkko Sakkinen
+> > > > <jarkko@kernel.org> wrote:
+> > > > >=20
+> > > > > On Sat, Jan 15, 2022 at 03:18:04AM +0200, Jarkko Sakkinen
+> > > > > wrote:
+> > > > > > On Fri, Jan 14, 2022 at 04:41:59PM -0800, Reinette Chatre
+> > > > > > wrote:
+> > > > > > > Hi Jarkko,
+> > > > > > >=20
+> > > > > > > On 1/14/2022 4:27 PM, Jarkko Sakkinen wrote:
+> > > > > > > > On Fri, Jan 14, 2022 at 04:01:33PM -0800, Reinette
+> > > > > > > > Chatre wrote:
+> > > > > > > > > Hi Jarkko,
+> > > > > > > > >=20
+> > > > > > > > > On 1/14/2022 3:15 PM, Jarkko Sakkinen wrote:
+> > > > > > > > > > On Fri, Jan 14, 2022 at 03:05:21PM -0800, Reinette
+> > > > > > > > > > Chatre wrote:
+> > > > > > > > > > > Hi Jarkko,
+> > > > > > > > > >=20
+> > > > > > > > > > How enclave can check a page range that EPCM has
+> > > > > > > > > > the expected permissions?
+> > > > > > > > >=20
+> > > > > > > > > Only way to change EPCM permissions from outside
+> > > > > > > > > enclave is to run ENCLS[EMODPR]
+> > > > > > > > > that needs to be accepted from within the enclave via
+> > > > > > > > > ENCLU[EACCEPT]. At that
+> > > > > > > > > time the enclave provides the expected permissions
+> > > > > > > > > and that will fail
+> > > > > > > > > if there is a mismatch with the EPCM permissions
+> > > > > > > > > (SGX_PAGE_ATTRIBUTES_MISMATCH).
+> > > > > > > >=20
+> > > > > > > > This is a very valid point but that does make the
+> > > > > > > > introspection possible
+> > > > > > > > only at the time of EACCEPT.
+> > > > > > > >=20
+> > > > > > > > It does not give tools for enclave to make sure that
+> > > > > > > > EMODPR-ETRACK dance
+> > > > > > > > was ever exercised.
+> > > > > > >=20
+> > > > > > > Could you please elaborate? EACCEPT is available to the
+> > > > > > > enclave as a tool
+> > > > > > > and it would fail if ETRACK was not completed (error
+> > > > > > > SGX_NOT_TRACKED).
+> > > > > > >=20
+> > > > > > > Here is the relevant snippet from the SDM from the
+> > > > > > > section where it
+> > > > > > > describes EACCEPT:
+> > > > > > >=20
+> > > > > > > IF (Tracking not correct)
+> > > > > > > =C2=A0=C2=A0=C2=A0 THEN
+> > > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 RFLAGS.ZF :=3D 1;
+> > > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 RAX :=3D SGX_NOT_T=
+RACKED;
+> > > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 GOTO DONE;
+> > > > > > > FI;
+> > > > > > >=20
+> > > > > > > Reinette
+> > > > > >=20
+> > > > > > Yes, if enclave calls EACCEPT it does the necessary
+> > > > > > introspection and makes
+> > > > > > sure that ETRACK is completed. I have trouble understanding
+> > > > > > how enclave
+> > > > > > makes sure that EACCEPT was called.
+> > > > >=20
+> > > > > I'm not concerned of anything going wrong once EMODPR has
+> > > > > been started.
+> > > > >=20
+> > > > > The problem nails down to that the whole EMODPR process is
+> > > > > spawned by
+> > > > > the entity that is not trusted so maybe that should further
+> > > > > broke down
+> > > > > to three roles:
+> > > > >=20
+> > > > > 1. Build process B
+> > > > > 2. Runner process R.
+> > > > > 3. Enclave E.
+> > > > >=20
+> > > > > And to the costraint that we trust B *more* than R. Once B
+> > > > > has done all the
+> > > > > needed EMODPR calls it would send the file descriptor to R.
+> > > > > Even if R would
+> > > > > have full access to /dev/sgx_enclave, it would not matter,
+> > > > > since B has done
+> > > > > EMODPR-EACCEPT dance with E.
+> > > > >=20
+> > > > > So what you can achieve with EMODPR is not protection against
+> > > > > mistrusted
+> > > > > *OS*. There's absolutely no chance you could use it for that
+> > > > > purpose
+> > > > > because mistrusted OS controls the whole process.
+> > > > >=20
+> > > > > EMODPR is to help to protect enclave against mistrusted
+> > > > > *process*, i.e.
+> > > > > in the above scenario R.
+> > > >=20
+> > > > There are two general cases that I can see. Both are valid.
+> > > >=20
+> > > > 1. The OS moves from a trusted to an untrusted state. This
+> > > > could be
+> > > > the multi-process system you've described. But it could also be
+> > > > that
+> > > > the kernel becomes compromised after the enclave is fully
+> > > > initialized.
+> > > >=20
+> > > > 2. The OS is untrustworthy from the start.
+> > > >=20
+> > > > The second case is the stronger one and if you can solve it,
+> > > > the first
+> > > > one is solved implicitly. And our end goal is that if the OS
+> > > > does
+> > > > anything malicious we will crash in a controlled way.
+> > > >=20
+> > > > A defensive enclave will always want to have the least number
+> > > > of
+> > > > privileges for the maximum protection. Therefore, the enclave
+> > > > will
+> > > > want the OS to call EMODPR. If that were it, the host could
+> > > > just lie.
+> > > > But the enclave also verifies that the EMODPR operation was, in
+> > > > fact,
+> > > > executed by doing EACCEPT. When the enclave calls EACCEPT, if
+> > > > the
+> > > > kernel hasn't restricted permissions then we get a controlled
+> > > > crash.
+> > > > Therefore, we have solved the second case.
+> > >=20
+> > > So you're referring to this part of the SDM pseude code in the
+> > > SDM:
+> > >=20
+> > > (* Check the destination EPC page for concurrency *)
+> > > IF ( EPC page in use )
+> > > =C2=A0=C2=A0=C2=A0 THEN #GP(0); FI;
+> > >=20
+> > > I wonder does "EPC page in use" unconditionally trigger when
+> > > EACCEPT
+> > > is invoked for a page for which all of these conditions hold:
+> > >=20
+> > > - .PR :=3D 0 (no EMODPR in progress)
+> > > - .MODIFIED :=3D 0 (no EMODT in progress)
+> > > - .PENDING :=3D 0 (no EMODPR in progress)
+> > >=20
+> > > I don't know the exact scope and scale of "EPC page in use".
+> > >=20
+> > > Then, yes, EACCEPT could be at least used to validate that one of
+> > > the
+> > > three operations above was requested. However, enclave thread
+> > > cannot say
+> > > which one was it, so it is guesswork.
+> >=20
+> > OK, I got it, and this last paragraph is not true. SECINFO given
+> > EACCEPT
+> > will lock in rest of the details and make the operation
+> > deterministic.
+>=20
+> Indeed - so the SDM pseudo code that is relevant here can be found
+> under
+> the "(* Verify that accept request matches current EPC page settings
+> *)"
+> comment where the enclave can verify that all EPCM values are as they
+> should
+> and would fail with SGX_PAGE_ATTRIBUTES_MISMATCH if there is anything
+> amiss.
+>=20
+> >=20
+> > The only question mark then is the condition when no requests are
+> > active.
+>=20
+> Could you please elaborate what you mean with this question? If no
+> request
+> is active then I understand that to mean that no request has started.
 
-Ifdefs are unnecessary, please remove them. They are okay for
-tegra30_mc_ops, which is known to be used only by specific older SoC
-versions, not okay in case of newer SoCs.
+My issue was that when:
 
-> +irqreturn_t tegra30_mc_handle_irq(int irq, void *data)
->  {
->  	struct tegra_mc *mc = data;
->  	unsigned long status;
-> @@ -521,23 +535,64 @@ static irqreturn_t tegra30_mc_handle_irq(int irq, void *data)
->  
->  	for_each_set_bit(bit, &status, 32) {
->  		const char *error = tegra_mc_status_names[bit] ?: "unknown";
-> +		u32 status_reg = MC_ERR_STATUS, addr_reg = MC_ERR_ADR;
->  		const char *client = "unknown", *desc;
->  		const char *direction, *secure;
->  		phys_addr_t addr = 0;
-> +		u32 addr_hi_reg = 0;
->  		unsigned int i;
->  		char perm[7];
->  		u8 id, type;
->  		u32 value;
->  
-> -		value = mc_readl(mc, MC_ERR_STATUS);
-> +#if defined(CONFIG_ARCH_TEGRA_186_SOC) || \
-> +    defined(CONFIG_ARCH_TEGRA_194_SOC) || \
-> +    defined(CONFIG_ARCH_TEGRA_234_SOC)
+- .PR :=3D 0 (no EMODPR in progress)
+- .MODIFIED :=3D 0 (no EMODT in progress)
+- .PENDING :=3D 0 (no EMODPR in progress)
 
-Please drop these ifdefs.
+Does this trigger #GP when you call EACCEPT?
 
-> +		switch (bit) {
-> +		case MC_INT_DECERR_VPR:
-> +			status_reg = MC_ERR_VPR_STATUS;
-> +			addr_reg = MC_ERR_VPR_ADR;
+I don't think the answer matters that much tho sice if e.g. EMODPR was neve=
+r
+done, and enclave expected a change, #GP would trigger eventually in SECINF=
+O
+validation.
 
-I mentioned previously that VPR is supported by T124+. Hence ifdefs are
-incorrect.
+The way I look at EACCEPT is a memory verification tool it does the same at
+run-time as EINIT does before run-time.
 
-...
-> +		addr |= mc_readl(mc, addr_reg);
->  
->  		if (value & MC_ERR_STATUS_RW)
->  			direction = "write";
-> @@ -591,9 +646,6 @@ static irqreturn_t tegra30_mc_handle_irq(int irq, void *data)
->  			break;
->  		}
->  
-> -		value = mc_readl(mc, MC_ERR_ADR);
-
-Don't change the order of the code, just replace the MC_ERR_ADR here.
-
-> -		addr |= value;
-> -
->  		dev_err_ratelimited(mc->dev, "%s: %s%s @%pa: %s (%s%s)\n",
->  				    client, secure, direction, &addr, error,
->  				    desc, perm);
-> @@ -604,11 +656,6 @@ static irqreturn_t tegra30_mc_handle_irq(int irq, void *data)
->  
->  	return IRQ_HANDLED;
->  }
-> -
-> -const struct tegra_mc_ops tegra30_mc_ops = {
-> -	.probe = tegra30_mc_probe,
-> -	.handle_irq = tegra30_mc_handle_irq,
-> -};
->  #endif
->  
->  const char *const tegra_mc_status_names[32] = {
-> @@ -622,6 +669,8 @@ const char *const tegra_mc_status_names[32] = {
->  	[12] = "VPR violation",
->  	[13] = "Secure carveout violation",
->  	[16] = "MTS carveout violation",
-> +	[17] = "Generalized carveout violation",
-> +	[20] = "Route Sanity error",
->  };
->  
->  const char *const tegra_mc_error_names[8] = {
-> diff --git a/drivers/memory/tegra/mc.h b/drivers/memory/tegra/mc.h
-> index 062886e..9b1b0dc 100644
-> --- a/drivers/memory/tegra/mc.h
-> +++ b/drivers/memory/tegra/mc.h
-> @@ -44,6 +44,8 @@
->  #define MC_TIMING_CONTROL_DBG				0xf8
->  #define MC_TIMING_CONTROL				0xfc
->  
-> +#define MC_INT_DECERR_ROUTE_SANITY			BIT(20)
-> +#define MC_INT_DECERR_GENERALIZED_CARVEOUT		BIT(17)
->  #define MC_INT_DECERR_MTS				BIT(16)
->  #define MC_INT_SECERR_SEC				BIT(13)
->  #define MC_INT_DECERR_VPR				BIT(12)
-> @@ -65,6 +67,18 @@
->  #define MC_ERR_STATUS_SECURITY				BIT(17)
->  #define MC_ERR_STATUS_RW				BIT(16)
->  
-> +#define MC_ERR_VPR_STATUS				0x654
-> +#define MC_ERR_VPR_ADR					0x658
-> +#define MC_ERR_SEC_STATUS				0x67c
-> +#define MC_ERR_SEC_ADR					0x680
-> +#define MC_ERR_MTS_STATUS				0x9b0
-> +#define MC_ERR_MTS_ADR					0x9b4
-> +#define MC_ERR_ROUTE_SANITY_STATUS			0x9c0
-> +#define MC_ERR_ROUTE_SANITY_ADR				0x9c4
-> +#define MC_ERR_GENERALIZED_CARVEOUT_STATUS		0xc00
-> +#define MC_ERR_GENERALIZED_CARVEOUT_ADR			0xc04
-> +#define MC_ERR_ADR_HI					0x11fc
-
-Please put these regs right after the MC_TIMING_CONTROL. There is no
-reason to separate them.
-
+/Jarkko

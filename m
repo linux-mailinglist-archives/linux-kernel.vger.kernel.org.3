@@ -2,135 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6DD4494408
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 01:12:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 305DE494404
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 01:11:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357643AbiATALl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 19:11:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36418 "EHLO
+        id S1357617AbiATAL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 19:11:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344778AbiATALj (ORCPT
+        with ESMTP id S1344778AbiATAL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 19:11:39 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39833C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:11:39 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so4224960pjp.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:11:39 -0800 (PST)
+        Wed, 19 Jan 2022 19:11:28 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEBFC06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:11:28 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id s2-20020a17090ad48200b001b501977b23so3249571pju.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:11:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xVjyliV2Seqod5G5KIrqETEB6DdMnlj/gwwO0Ms37r0=;
-        b=m2Cq3pKgOPSZH8kQrR3RmS6xRkj5mu1noGfRe3JZhs8okQ1LqSuYyK//XFTZkx1aQs
-         yHUXZol3p03WVKjGCTEpbNIwX1Y17hojgjvIyt4T8a5US0T0fRGuh5XrTFE7N2jsmURt
-         d5YyE0CUQIeGJ0Q571BvcoBoXM5+SCFLLetkw=
+        d=google.com; s=20210112;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=v5RPVUzsw7YIF47hyNnBEmN0Jk/6ZVxHknsOLenvfr0=;
+        b=Hm/EV7+SatboBZWIerR8n9f6EvcMwSCWI0SOVainUYM/WPrydAyXce7O+QevaRfl6B
+         G7vtkFHHWZ8k/pWfhCi4w6hfBjFcuVuquomHnM6dXt45D3noLTEJNexMnz4T/vSwfOWN
+         7O0lEZ+4esCDfT8yyENYCa6kOIT0NYB8C0IHEHL5p0YVq9OY+grKaP9ssvHTlKYgsE7P
+         eMXfsOAQh4Cv+E3tAhXmGSBU567QuJYFEPy48Yo1ipAtKL9uVFEQ9nlI6hBUezBKQSa5
+         zMFi7eNRSN2meJ5nSOL270jbC7/hsFdF2VFJabFRNAYbVTpYQcjUzmQdWnIUMhUWtc4Y
+         3gwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xVjyliV2Seqod5G5KIrqETEB6DdMnlj/gwwO0Ms37r0=;
-        b=Rt9o9rcQO5HDqEvyhzfTxUGIQyIb1ef5ePR4kZSHrGSYiqfH7YgFMI7H+NlKIQmaPa
-         JdJh/NGg2E85uiTnNJvX6Lsvklso1+9vnq5nUrA8G+oducfmg68NLF5C95xB/lyKpgTB
-         1GvTAzhhzAJiOlN7Dl+u8w/lzh8CoO+RBEaz6wnkLK/q5OkyB52WbhWqvc8KzU+jtp26
-         yde2e6xMt/w4Gk0/Q7Dp/le7u/B7q4dHHRTo3us4M2RWJ7qct4SPW6SMGLEIFuk2I+tW
-         3bqXdSlh9rkQpRRXxTPVywKAuMDgEc+294MFQKkihdSxAvEuMobZKMGjph0SHwpJ8PYE
-         GecA==
-X-Gm-Message-State: AOAM531mNRBlDTXC+iilC7Og+vQ330beh3Hem59iGgkOD2SwdDYfKw9R
-        r9ngIbs5jCigQDIEVcFQn76+SQ==
-X-Google-Smtp-Source: ABdhPJwLpxXuY7FO2TAuqYWaVf818ZHbHTTM8JXzcEhXz0whOElvDA2CBgU9tYGH1YmFEb+a9qtFGg==
-X-Received: by 2002:a17:902:7c89:b0:14a:a76f:78d2 with SMTP id y9-20020a1709027c8900b0014aa76f78d2mr21640702pll.166.1642637498672;
-        Wed, 19 Jan 2022 16:11:38 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:bebd:c462:321a:9b63])
-        by smtp.gmail.com with UTF8SMTPSA id j4sm804788pfc.125.2022.01.19.16.11.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 16:11:37 -0800 (PST)
-From:   Brian Norris <briannorris@chromium.org>
-To:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
-        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>
-Cc:     Sandy Huang <hjc@rock-chips.com>, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        Mark Yao <markyao0591@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Brian Norris <briannorris@chromium.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] drm/rockchip: vop: Correct RK3399 VOP register fields
-Date:   Wed, 19 Jan 2022 16:11:22 -0800
-Message-Id: <20220119161104.1.I1d01436bef35165a8cdfe9308789c0badb5ff46a@changeid>
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=v5RPVUzsw7YIF47hyNnBEmN0Jk/6ZVxHknsOLenvfr0=;
+        b=mgJdw/PKaJ14I5YwDE09jpznzSt0Jez2eUVQVSXxXNEcZs4A3YH5z9d0kJb6IPG250
+         Gom/PcWr9OIDvciqTQzy8isPboo1fPRDBLjwuNAN6khP6MqeXckltDNU8AzNmKxqWg0n
+         rGcgtSNc5vZR7DDL35Sv2Sor8TPsMSFeeglPcWgA/3/UfblNYPd57yEOdDzd7ix+I847
+         Ld8YcNFeGrioHgAMhPPBWGTgYiuBoETJWI+NngglR22iCbZ0j7hgWd5wBEo+uSF1GK0+
+         oNXNI9LX3VmFUI+poe13fS+W7x+Ox/2TcYwjF9YB+VdCJpPLimg6tJvY1fnnAHXkFpcX
+         STKw==
+X-Gm-Message-State: AOAM532necEYFSYrrgYL4/c0npFKjQqtXYa8XGXu1uADwRWwb3uRyfYm
+        IS4Aqgh0t8/ua4Oizfb9qSJr1g==
+X-Google-Smtp-Source: ABdhPJyRjZ7eVOwl9D9JJzbiiiDtJ1vqLV3Eb0P1ShQBuVOACRctyM3a5SheBPVMT2lP+LOyq21XBQ==
+X-Received: by 2002:a17:90b:4a8e:: with SMTP id lp14mr7421497pjb.6.1642637487832;
+        Wed, 19 Jan 2022 16:11:27 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id j6sm833855pfu.18.2022.01.19.16.11.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 16:11:27 -0800 (PST)
+Date:   Thu, 20 Jan 2022 00:11:23 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Alexander Graf <graf@amazon.de>
+Subject: Re: [PATCH] KVM: VMX: Set vmcs.PENDING_DBG.BS on #DB in STI/MOVSS
+ blocking shadow
+Message-ID: <Yeioq4l6ABFAE1hW@google.com>
+References: <20220120000624.655815-1-seanjc@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220120000624.655815-1-seanjc@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 7707f7227f09 ("drm/rockchip: Add support for afbc") switched up
-the rk3399_vop_big[] register windows, but it did so incorrectly.
+On Thu, Jan 20, 2022, Sean Christopherson wrote:
+> Set vmcs.GUEST_PENDING_DBG_EXCEPTIONS.BS, a.k.a. the pending single-step
+> breakpoint flag, when re-injecting a #DB with RFLAGS.TF=1, and STI or
+> MOVSS blocking is active.  Setting the flag is necessary to make VM-Entry
+> consistency checks happy, as VMX has an invariant that if RFLAGS.TF is
+> set and STI/MOVSS blocking is true, then the previous instruction must
+> have been STI or MOV/POP, and therefore a single-step #DB must be pending
+> since the RFLAGS.TF cannot have been set by the previous instruction,
+> i.e. the one instruction delay after setting RFLAGS.TF must have already
+> expired.
+> 
+> Normally, the CPU sets vmcs.GUEST_PENDING_DBG_EXCEPTIONS.BS appropriately
+> when recording guest state as part of a VM-Exit, but #DB VM-Exits
+> intentionally do not treat the #DB as "guest state" as interception of
+> the #DB effectively makes the #DB host-owned, thus KVM needs to manually
+> set PENDING_DBG.BS when forwarding/re-injecting the #DB to the guest.
+> 
+> Note, although this bug can be triggered by guest userspace, doing so
+> requires IOPL=3, and guest userspace running with IOPL=3 has full access
+> to all I/O ports (from the guest's perspective) and can crash/reboot the
+> guest any number of ways.  IOPL=3 is required because STI blocking kicks
+> in if and only if RFLAGS.IF is toggled 0=>1, and if CPL>IOPL, STI either
+> takes a #GP or modifies RFLAGS.VIF, not RFLAGS.IF.
+> 
+> MOVSS blocking can be initiated by userspace, but can be coincident with
+> a #DB if and only if DR7.GD=1 (General Detect enabled) and a MOV DR is
+> executed in the MOVSS shadow.  MOV DR #GPs at CPL>0, thus MOVSS blocking
+> is problematic only for CPL0 (and only if the guest is crazy enough to
+> access a DR in a MOVSS shadow).  All other sources of #DBs are either
+> suppressed by MOVSS blocking (single-step, code fetch, data, and I/O),
+> are mutually exclusive with MOVSS blocking (T-bit task switch), or are
+> already handled by KVM (ICEBP, a.k.a. INT1).
+> 
+> This bug was originally found by running tests[1] created for XSA-308[2].
+> Note that Xen's userspace test emits ICEBP in the MOVSS shadow, which is
+> presumably why the Xen bug was deemed to be an exploitable DOS from guest
+> userspace.  KVM already handles ICEBP by skipping the ICEBP instruction
+> and thus clears MOVSS blocking as a side effect of its "emulation".
+> 
+> [1] http://xenbits.xenproject.org/docs/xtf/xsa-308_2main_8c_source.html
+> [2] https://xenbits.xen.org/xsa/advisory-308.html
+> 
+> Reported-by: David Woodhouse <dwmw2@infradead.org>
+> Reported-by: Alexander Graf <graf@amazon.de>
 
-The biggest problem is in rk3288_win23_data[] vs.
-rk3368_win23_data[] .format field:
+Doh, forgot to add:
 
-  RK3288's format: VOP_REG(RK3288_WIN2_CTRL0, 0x7, 1)
-  RK3368's format: VOP_REG(RK3368_WIN2_CTRL0, 0x3, 5)
+  Cc: stable@vger.kernel.org
 
-Bits 5:6 (i.e., shift 5, mask 0x3) are correct for RK3399, according to
-the TRM.
-
-There are a few other small differences between the 3288 and 3368
-definitions that were swapped in commit 7707f7227f09. I reviewed them to
-the best of my ability according to the RK3399 TRM and fixed them up.
-
-This fixes IOMMU issues (and display errors) when testing with BG24
-color formats.
-
-Fixes: 7707f7227f09 ("drm/rockchip: Add support for afbc")
-Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
-I'd appreciate notes or testing from Andrzej, since I'm not sure how he
-tested his original AFBC work.
-
- drivers/gpu/drm/rockchip/rockchip_vop_reg.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/gpu/drm/rockchip/rockchip_vop_reg.c b/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
-index 1f7353f0684a..798b542e5916 100644
---- a/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
-@@ -902,6 +902,7 @@ static const struct vop_win_phy rk3399_win01_data = {
- 	.enable = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 0),
- 	.format = VOP_REG(RK3288_WIN0_CTRL0, 0x7, 1),
- 	.rb_swap = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 12),
-+	.x_mir_en = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 21),
- 	.y_mir_en = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 22),
- 	.act_info = VOP_REG(RK3288_WIN0_ACT_INFO, 0x1fff1fff, 0),
- 	.dsp_info = VOP_REG(RK3288_WIN0_DSP_INFO, 0x0fff0fff, 0),
-@@ -912,6 +913,7 @@ static const struct vop_win_phy rk3399_win01_data = {
- 	.uv_vir = VOP_REG(RK3288_WIN0_VIR, 0x3fff, 16),
- 	.src_alpha_ctl = VOP_REG(RK3288_WIN0_SRC_ALPHA_CTRL, 0xff, 0),
- 	.dst_alpha_ctl = VOP_REG(RK3288_WIN0_DST_ALPHA_CTRL, 0xff, 0),
-+	.channel = VOP_REG(RK3288_WIN0_CTRL2, 0xff, 0),
- };
- 
- /*
-@@ -922,11 +924,11 @@ static const struct vop_win_phy rk3399_win01_data = {
- static const struct vop_win_data rk3399_vop_win_data[] = {
- 	{ .base = 0x00, .phy = &rk3399_win01_data,
- 	  .type = DRM_PLANE_TYPE_PRIMARY },
--	{ .base = 0x40, .phy = &rk3288_win01_data,
-+	{ .base = 0x40, .phy = &rk3368_win01_data,
- 	  .type = DRM_PLANE_TYPE_OVERLAY },
--	{ .base = 0x00, .phy = &rk3288_win23_data,
-+	{ .base = 0x00, .phy = &rk3368_win23_data,
- 	  .type = DRM_PLANE_TYPE_OVERLAY },
--	{ .base = 0x50, .phy = &rk3288_win23_data,
-+	{ .base = 0x50, .phy = &rk3368_win23_data,
- 	  .type = DRM_PLANE_TYPE_CURSOR },
- };
- 
--- 
-2.34.1.703.g22d0c6ccf7-goog
-
+> Signed-off-by: Sean Christopherson <seanjc@google.com>

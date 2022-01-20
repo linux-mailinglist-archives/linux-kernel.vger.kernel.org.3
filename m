@@ -2,169 +2,347 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E922F495199
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 16:40:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0465A49519B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 16:40:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376641AbiATPkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 10:40:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40463 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1376799AbiATPkA (ORCPT
+        id S1376778AbiATPkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 10:40:20 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:7038 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1376650AbiATPkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 10:40:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642693198;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8iqaG7Lc+VchV66bNoQHn2xE3BtOzlPVk9h6F+EPx9w=;
-        b=YKskQEyINhVW3d9+/KgPqSW7Em3EvYyOOyqpHfPhLQrDwFtqMztL619ZD99KMfD5BncgTo
-        EBWCtL7jqNRVnWKC5/AOUl5FotaYOqEeovd0Pt1qtl8CyOGivviIirO9IakLxKjocwgdZU
-        5ChpH7ko4FBmXtc28ib3aPDEKxvmPck=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-92-MbrpGgEJOJuT_nNLNzN1CQ-1; Thu, 20 Jan 2022 10:39:57 -0500
-X-MC-Unique: MbrpGgEJOJuT_nNLNzN1CQ-1
-Received: by mail-ed1-f69.google.com with SMTP id bm21-20020a0564020b1500b00402c34373f9so6283358edb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 07:39:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=8iqaG7Lc+VchV66bNoQHn2xE3BtOzlPVk9h6F+EPx9w=;
-        b=p/YH54geGicDA+Bw4fCo9hriHsYTjDQ38AZ6VUs3MT2F6UQslIjWUcD9vtvj9vC+/r
-         mETdcJ1LLy4yhXAEVr3/ny7mgqC2RKeFZ7d5YX2UL2DNaWpUf/pOr2RPklDgo4lMcJxS
-         NW6dgty8/EIEvpunV/CWKidQXz9B+vkz+e0EJqpy970xxCxkV5FMfXViZspRrtUVFH+2
-         s1+l2Vpm5EKzSwydq9oAePbzn4iXzm9ASJh6k1w75f82ZcC/JxnaF+Tviu9xnyvwLfGS
-         rzvx3xTSv0ZEnAwQd1GLcZG6dX/9yijueIwGei4+zNvhgCn/QXQO11zvU5sNZd03nNVY
-         i2GA==
-X-Gm-Message-State: AOAM533TxZvlp9c83DSrHyldf5YQkX8psQFRL5wKH/d13o1n16vMhd3+
-        c0T5kiTqlDPiaJYrTBLswkv1KBPmmBwW9c5M8bA5JFLP61TX3lsn+vVSAf6EpIyPNnO+St6A5cu
-        vW4CGRS0/GbRsKYHqQOh6X8KL
-X-Received: by 2002:a17:906:4453:: with SMTP id i19mr28809527ejp.305.1642693196528;
-        Thu, 20 Jan 2022 07:39:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzha5k25rT2Htr7L0NG19u/lndf6crtI76bzYEx2SL35kc/iOccj2GEZbXytDaFkqL8JgLq+w==
-X-Received: by 2002:a17:906:4453:: with SMTP id i19mr28809509ejp.305.1642693196269;
-        Thu, 20 Jan 2022 07:39:56 -0800 (PST)
-Received: from ?IPV6:2003:cb:c70e:5800:eeb:dae2:b1c0:f5d1? (p200300cbc70e58000eebdae2b1c0f5d1.dip0.t-ipconnect.de. [2003:cb:c70e:5800:eeb:dae2:b1c0:f5d1])
-        by smtp.gmail.com with ESMTPSA id k4sm1011334edo.55.2022.01.20.07.39.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 07:39:55 -0800 (PST)
-Message-ID: <759f9bc8-0b10-7f0f-28a6-f292bed9053f@redhat.com>
-Date:   Thu, 20 Jan 2022 16:39:55 +0100
+        Thu, 20 Jan 2022 10:40:11 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20KFBgGx030870;
+        Thu, 20 Jan 2022 15:40:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : from : to : cc : references : subject : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=kwVPwpzFh9EH0PtrrxoFC5hUpP+oKIzag7+1qFj0DPE=;
+ b=hdwPwslRrraHiuTlAhcVgxejzNyXaxOxQd9Mr4lqo6bRvNi2nz3G6Uwhku5i5K5dmhgO
+ MYsYQtGZTPe06tZcQPgrhBgJXn58tu96TqF734Slob+gRKSCkel4KS0XEe7HtXddCHhI
+ BriOFwUxFbwvBqhgBmN8rgb8qGGVRDE46dDX3zR8nffmTIRNTdLA7IhjxVgKdp5wk5m3
+ v+I1TLpi+B0flCTyY4uDKKaxKD14mnTSZG5A/YEA9STOGVgPWTu7++GjClxIu1tlbdqJ
+ MZo5Teeg1iATsbV2aKWRpwz9qXwnj0pM2+X933123jBWHXYvL2MiVq4/k3Ze+UquukgJ nw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dqa5nrn2u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jan 2022 15:40:11 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20KFHiX5030085;
+        Thu, 20 Jan 2022 15:40:11 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dqa5nrn1w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jan 2022 15:40:11 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20KFLq41013444;
+        Thu, 20 Jan 2022 15:40:08 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3dknhk33f8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jan 2022 15:40:08 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20KFe4Sx47841726
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Jan 2022 15:40:04 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 69C2852054;
+        Thu, 20 Jan 2022 15:40:04 +0000 (GMT)
+Received: from [9.145.179.177] (unknown [9.145.179.177])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 0C68152052;
+        Thu, 20 Jan 2022 15:40:03 +0000 (GMT)
+Message-ID: <c5ce5d0b-444b-ba33-a670-3bd3893af475@linux.ibm.com>
+Date:   Thu, 20 Jan 2022 16:40:03 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] mm: reuse the unshared swapcache page in do_wp_page
+ Thunderbird/91.3.0
+From:   Janosch Frank <frankja@linux.ibm.com>
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20220118095210.1651483-1-scgl@linux.ibm.com>
+ <20220118095210.1651483-5-scgl@linux.ibm.com>
 Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     "zhangliang (AG)" <zhangliang5@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        wangzhigang17@huawei.com,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <CAHk-=wjB0i-B=U-DhpAajQx3f6bp1X==neLOrg0jwq29mgz=3g@mail.gmail.com>
- <172ccfbb-7e24-db21-7d84-8c8d8c3805fd@redhat.com>
- <a93988da-80fb-dd32-4717-a6a0bae9e4ee@huawei.com>
- <dc415c4a-63aa-19b0-0fbc-795989970f6d@redhat.com>
- <fb02087a-b102-c91e-ab65-fb02cc8ee0a2@huawei.com>
- <9cd7eee2-91fd-ddb8-e47d-e8585e5baa05@redhat.com>
- <b6df4f7f-c080-ad6c-d1ad-098115f016f3@huawei.com>
- <747ff31c-6c9e-df6c-f14d-c43aa1c77b4a@redhat.com>
- <Yel0BXVyj8uvsWJX@casper.infradead.org>
- <e2580cfa-a529-934d-861a-091c4a9714d4@redhat.com>
- <YemBl4ZVtJqtAVwV@casper.infradead.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <YemBl4ZVtJqtAVwV@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [RFC PATCH v1 04/10] KVM: s390: selftests: Test TEST PROTECTION
+ emulation
+In-Reply-To: <20220118095210.1651483-5-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: jdaw49tV8FlvegRmHxjiYOq1WbDuU6Oe
+X-Proofpoint-GUID: UzTWKOWDFgGsPuo7cUSFZYyF4xPiBMD_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-20_06,2022-01-20_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ adultscore=0 spamscore=0 suspectscore=0 priorityscore=1501 bulkscore=0
+ clxscore=1015 impostorscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201200081
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.01.22 16:36, Matthew Wilcox wrote:
-> On Thu, Jan 20, 2022 at 04:26:22PM +0100, David Hildenbrand wrote:
->> On 20.01.22 15:39, Matthew Wilcox wrote:
->>> On Thu, Jan 20, 2022 at 03:15:37PM +0100, David Hildenbrand wrote:
->>>> On 17.01.22 14:31, zhangliang (AG) wrote:
->>>>> Sure, I will do that :)
->>>>
->>>> I'm polishing up / testing the patches and might send something out for discussion shortly.
->>>> Just a note that on my branch was a version with a wrong condition that should have been fixed now.
->>>>
->>>> I am still thinking about PTE mapped THP. For these, we'll always
->>>> have page_count() > 1, essentially corresponding to the number of still-mapped sub-pages.
->>>>
->>>> So if we end up with a R/O mapped part of a THP, we'll always have to COW and cannot reuse ever,
->>>> although it's really just a single process mapping the THP via PTEs.
->>>>
->>>> One approach would be to scan the currently locked page table for entries mapping
->>>> this same page. If page_count() corresponds to that value, we know that only we are
->>>> mapping the THP and there are no additional references. That would be a special case
->>>> if we find an anon THP in do_wp_page(). Hm.
->>>
->>> You're starting to optimise for some pretty weird cases at that point.
->>
->> So your claim is that read-only, PTE mapped pages are weird? How do you
->> come to that conclusion?
+On 1/18/22 10:52, Janis Schoetterl-Glausch wrote:
+> Test the emulation of TEST PROTECTION in the presence of storage keys.
+> Emulation only occurs under certain conditions, one of which is the host
+> page being protected.
+> Trigger this by protecting the test pages via mprotect.
 > 
-> Because normally anon THP pages are PMD mapped.  That's rather
-> the point of anon THPs.
-
-For example unless we are talking about *drumroll* COW handling.
-
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> ---
+>   tools/testing/selftests/kvm/.gitignore    |   1 +
+>   tools/testing/selftests/kvm/Makefile      |   1 +
+>   tools/testing/selftests/kvm/s390x/tprot.c | 184 ++++++++++++++++++++++
+>   3 files changed, 186 insertions(+)
+>   create mode 100644 tools/testing/selftests/kvm/s390x/tprot.c
 > 
->> If we adjust the THP reuse logic to split on additional references
->> (page_count() == 1) -- similarly as suggested by Linus to fix the CVE --
->> we're going to end up with exactly that more frequently.
+> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+> index 3763105029fb..82c0470b6849 100644
+> --- a/tools/testing/selftests/kvm/.gitignore
+> +++ b/tools/testing/selftests/kvm/.gitignore
+> @@ -7,6 +7,7 @@
+>   /s390x/memop
+>   /s390x/resets
+>   /s390x/sync_regs_test
+> +/s390x/tprot
+>   /x86_64/cr4_cpuid_sync_test
+>   /x86_64/debug_regs
+>   /x86_64/evmcs_test
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index c4e34717826a..df6de8d155e8 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -109,6 +109,7 @@ TEST_GEN_PROGS_aarch64 += kvm_binary_stats_test
+>   TEST_GEN_PROGS_s390x = s390x/memop
+>   TEST_GEN_PROGS_s390x += s390x/resets
+>   TEST_GEN_PROGS_s390x += s390x/sync_regs_test
+> +TEST_GEN_PROGS_s390x += s390x/tprot
+>   TEST_GEN_PROGS_s390x += demand_paging_test
+>   TEST_GEN_PROGS_s390x += dirty_log_test
+>   TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
+> diff --git a/tools/testing/selftests/kvm/s390x/tprot.c b/tools/testing/selftests/kvm/s390x/tprot.c
+> new file mode 100644
+> index 000000000000..8b52675307f6
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/s390x/tprot.c
+> @@ -0,0 +1,184 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Test TEST PROTECTION emulation.
+> + * In order for emulation occur the target page has to be DAT protected in the
+> + * host mappings. Since the page tables are shared, we can use mprotect
+> + * to achieve this.
+> + *
+> + * Copyright IBM Corp. 2021
+> + */
+> +
+> +#include <sys/mman.h>
+> +#include "test_util.h"
+> +#include "kvm_util.h"
+> +
+> +#define PAGE_SHIFT 12
+> +#define PAGE_SIZE (1 << PAGE_SHIFT)
+> +#define CR0_FETCH_PROTECTION_OVERRIDE	(1UL << (63 - 38))
+> +#define CR0_STORAGE_PROTECTION_OVERRIDE	(1UL << (63 - 39))
+> +
+> +#define VCPU_ID 1
+> +
+> +static __aligned(PAGE_SIZE) uint8_t pages[2][PAGE_SIZE];
+> +static uint8_t *const page_store_prot = pages[0];
+> +static uint8_t *const page_fetch_prot = pages[1];
+> +
+> +static int set_storage_key(void *addr, uint8_t key)
+> +{
+> +	int not_mapped = 0;
+> +
+
+Maybe add a short comment:
+Check if address is mapped via lra and set the storage key if it is.
+
+> +	asm volatile (
+> +		       "lra	%[addr], 0(0,%[addr])\n"
+> +		"	jz	0f\n"
+> +		"	llill	%[not_mapped],1\n"
+> +		"	j	1f\n"
+> +		"0:	sske	%[key], %[addr]\n"
+> +		"1:"
+> +		: [addr] "+&a" (addr), [not_mapped] "+r" (not_mapped)
+
+Shouldn't this be a "=r" instead of a "+r" for not_mapped?
+
+> +		: [key] "r" (key)
+> +		: "cc"
+> +	);
+> +	return -not_mapped;
+> +}
+> +
+> +enum permission {
+> +	READ_WRITE = 0,
+> +	READ = 1,
+> +	NONE = 2,
+> +	UNAVAILABLE = 3,
+
+TRANSLATION_NA ?
+I'm not completely happy with these names but I've yet to come up with a 
+better naming scheme here.
+
+> +};
+> +
+> +static enum permission test_protection(void *addr, uint8_t key)
+> +{
+> +	uint64_t mask;
+> +
+> +	asm volatile (
+> +		       "tprot	%[addr], 0(%[key])\n"
+> +		"	ipm	%[mask]\n"
+> +		: [mask] "=r" (mask)
+> +		: [addr] "Q" (*(char *)addr),
+> +		  [key] "a" (key)
+> +		: "cc"
+> +	);
+> +
+> +	return (enum permission)mask >> 28;
+
+You could replace the shift with the "srl" that we normally do.
+
+> +}
+> +
+> +enum stage {
+> +	STAGE_END,
+> +	STAGE_INIT_SIMPLE,
+> +	TEST_SIMPLE,
+> +	STAGE_INIT_FETCH_PROT_OVERRIDE,
+> +	TEST_FETCH_PROT_OVERRIDE,
+> +	TEST_STORAGE_PROT_OVERRIDE,
+> +};
+> +
+> +struct test {
+> +	enum stage stage;
+> +	void *addr;
+> +	uint8_t key;
+> +	enum permission expected;
+> +} tests[] = {
+> +	/* Those which result in NONE/UNAVAILABLE will be interpreted by SIE,
+> +	 * not KVM, but there is no harm in testing them also.
+> +	 * See Enhanced Suppression-on-Protection Facilities in the
+> +	 * Interpretive-Execution Mode
+> +	 */
+
+Outside of net/ we put the first line on "*" not on "/*"
+
+s/Those which result in/Tests resulting in/ ?
+
+> +	{ TEST_SIMPLE, page_store_prot, 0x00, READ_WRITE },
+> +	{ TEST_SIMPLE, page_store_prot, 0x10, READ_WRITE },
+> +	{ TEST_SIMPLE, page_store_prot, 0x20, READ },
+> +	{ TEST_SIMPLE, page_fetch_prot, 0x00, READ_WRITE },
+> +	{ TEST_SIMPLE, page_fetch_prot, 0x90, READ_WRITE },
+> +	{ TEST_SIMPLE, page_fetch_prot, 0x10, NONE },
+> +	{ TEST_SIMPLE, (void *)0x00, 0x10, UNAVAILABLE },
+> +	/* Fetch-protection override */
+> +	{ TEST_FETCH_PROT_OVERRIDE, (void *)0x00, 0x10, READ },
+> +	{ TEST_FETCH_PROT_OVERRIDE, (void *)2049, 0x10, NONE },
+> +	/* Storage-protection override */
+> +	{ TEST_STORAGE_PROT_OVERRIDE, page_fetch_prot, 0x10, READ_WRITE },
+> +	{ TEST_STORAGE_PROT_OVERRIDE, page_store_prot, 0x20, READ },
+> +	{ TEST_STORAGE_PROT_OVERRIDE, (void *)2049, 0x10, READ_WRITE },
+> +	/* End marker */
+> +	{ STAGE_END, 0, 0, 0 },
+> +};
+> +
+> +static enum stage perform_next_stage(int *i, bool mapped_0)
+> +{
+> +	enum stage stage = tests[*i].stage;
+> +	enum permission result;
+> +	bool skip;
+> +
+> +	for (; tests[*i].stage == stage; (*i)++) {
+> +		skip = tests[*i].addr < (void *)4096 &&
+> +		       !mapped_0 &&
+> +		       tests[*i].expected != UNAVAILABLE;
+
+Time for a comment?
+
+> +		if (!skip) {
+> +			result = test_protection(tests[*i].addr, tests[*i].key);
+> +			GUEST_ASSERT_2(result == tests[*i].expected, *i, result);
+> +		}
+> +	}
+> +	return stage;
+> +}
+> +
+> +static void guest_code(void)
+> +{
+> +	bool mapped_0;
+> +	int i = 0;
+> +
+
+It's __really__ hard to understand this since the state is changed both 
+by the guest and host. Please add comments to this and maybe also add 
+some to the test struct explaining why you expect the results for each test.
+
+> +	GUEST_ASSERT_EQ(set_storage_key(page_store_prot, 0x10), 0);
+> +	GUEST_ASSERT_EQ(set_storage_key(page_fetch_prot, 0x98), 0);
+> +	GUEST_SYNC(STAGE_INIT_SIMPLE);
+> +	GUEST_SYNC(perform_next_stage(&i, false));
+> +
+> +	/* Fetch-protection override */
+> +	mapped_0 = !set_storage_key((void *)0, 0x98);
+> +	GUEST_SYNC(STAGE_INIT_FETCH_PROT_OVERRIDE);
+> +	GUEST_SYNC(perform_next_stage(&i, mapped_0));
+> +
+> +	/* Storage-protection override */
+> +	GUEST_SYNC(perform_next_stage(&i, mapped_0));
+> +}
+> +
+> +#define HOST_SYNC(vmp, stage)							\
+> +({										\
+> +	struct kvm_vm *__vm = (vmp);						\
+> +	struct ucall uc;							\
+> +	int __stage = (stage);							\
+> +										\
+> +	vcpu_run(__vm, VCPU_ID);						\
+> +	get_ucall(__vm, VCPU_ID, &uc);						\
+> +	if (uc.cmd == UCALL_ABORT) {						\
+> +		TEST_FAIL("line %lu: %s, hints: %lu, %lu", uc.args[1],		\
+> +			  (const char *)uc.args[0], uc.args[2], uc.args[3]);	\
+> +	}									\
+> +	ASSERT_EQ(uc.cmd, UCALL_SYNC);						\
+> +	ASSERT_EQ(uc.args[1], __stage);						\
+> +})
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	struct kvm_vm *vm;
+> +	struct kvm_run *run;
+> +	vm_vaddr_t guest_0_page;
+> +
+> +	vm = vm_create_default(VCPU_ID, 0, guest_code);
+> +	run = vcpu_state(vm, VCPU_ID);
+> +
+> +	HOST_SYNC(vm, STAGE_INIT_SIMPLE);
+> +	mprotect(addr_gva2hva(vm, (vm_vaddr_t)pages), PAGE_SIZE * 2, PROT_READ);
+> +	HOST_SYNC(vm, TEST_SIMPLE);
+> +
+> +	guest_0_page = vm_vaddr_alloc(vm, PAGE_SIZE, 0);
+> +	if (guest_0_page != 0)
+> +		print_skip("Did not allocate page at 0 for fetch protection override tests");
+> +	HOST_SYNC(vm, STAGE_INIT_FETCH_PROT_OVERRIDE);
+> +	if (guest_0_page == 0)
+> +		mprotect(addr_gva2hva(vm, (vm_vaddr_t)0), PAGE_SIZE, PROT_READ);
+> +	run->s.regs.crs[0] |= CR0_FETCH_PROTECTION_OVERRIDE;
+> +	run->kvm_dirty_regs = KVM_SYNC_CRS;
+> +	HOST_SYNC(vm, TEST_FETCH_PROT_OVERRIDE);
+> +
+> +	run->s.regs.crs[0] |= CR0_STORAGE_PROTECTION_OVERRIDE;
+> +	run->kvm_dirty_regs = KVM_SYNC_CRS;
+> +	HOST_SYNC(vm, TEST_STORAGE_PROT_OVERRIDE);
+> +}
 > 
-> I don't understand.  Are we talking past each other?  As I understand
-> the situation we're talking about here, a process has created a THP,
-> done something to cause it to be partially mapped (or mapped in a
-> misaligned way) in its own address space, then forked, and we're
-> trying to figure out if it's safe to reuse it?  I say that situation is
-> rare enough that it's OK to always allocate an order-0 page and
-> copy into it.
 
-Yes, we are talking past each other and no, I am talking about fully
-mapped THP, just mapped via PTEs.
-
-Please refer to our THP COW logic: do_huge_pmd_wp_page()
-
-> 
->>> Anon THP is always going to start out aligned (and can be moved by
->>> mremap()).  Arguably it should be broken up if it's moved so it can be
->>> reformed into aligned THPs by khugepaged.
->>
->> Can you elaborate, I'm missing the point where something gets moved. I
->> don't care about mremap() at all here.
->>
->>
->> 1. You have a read-only, PTE mapped THP
->> 2. Write fault on the THP
->> 3. We PTE-map the THP because we run into a false positive in our COW
->>    logic to handle COW on PTE
->> 4. Write fault on the PTE
->> 5. We always have to COW each and every sub-page and can never reuse,
->>    because page_count() > 1
->>
->> That's essentially what reuse_swap_page() tried to handle before.
->> Eventually optimizing for this is certainly the next step, but I'd like
->> to document which effect the removal of reuse_swap_page() will have to THP.
-> 
-> I'm talking about step 0.  How do we get a read-only, PTE-mapped THP?
-> Through mremap() or perhaps through an mprotect()/mmap()/munmap() that
-> failed to split the THP.
-
-do_huge_pmd_wp_page()
-
--- 
-Thanks,
-
-David / dhildenb
 

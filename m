@@ -2,156 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB9249456C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 02:15:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3895A494576
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 02:19:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237545AbiATBPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 20:15:22 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:37950
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231224AbiATBPV (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 20:15:21 -0500
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 36F2E3F1C9
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 01:15:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642641312;
-        bh=0v4gy51wpzyV29O6CgPisevK08euN9YpQian7OujOLs=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=bAlb1kvMh+vxIiytQt7tLuLxk6szLf6Fd7c1MWgehFKvAPqGBQ5+cjST9BSriTaHU
-         qwIkwTyAh+1C6BuztxKTBT6d/oJndDikk7HxaG/oy6kLml+fQNsZB3u8qkrkS462Ms
-         w0CDF0FLblUqWR+z6s6r2yA0HE0ayebKxq3QrQOAddjg7gHdARSJvLF7tPLHrfGhxT
-         Vikem1ILqPJ1SSW5DPlCRxgXv0WWWg5VYb957FxyY2qyHGlLTn2Qgt6vOyp5yvgqDs
-         y9tky86VRLBIlZ9FldjONatidvRf6/gGJUPtfNksYMBGUTjsJtZIs0pDj+/Wt9VpIK
-         pRyZ+d+ddOizg==
-Received: by mail-oi1-f200.google.com with SMTP id o130-20020aca5a88000000b002c8dd0d6fa3so3004513oib.18
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 17:15:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0v4gy51wpzyV29O6CgPisevK08euN9YpQian7OujOLs=;
-        b=xrBPG1AkllmQMZu2Mca4faNcMlHuTSSteeYKjI1m2NbLGagrMX6+gqOSR5G3F0dYrg
-         hf6+8PiozKjnzbUDIMj6DQIekHbEm2r1+96PT+iH1lUZFopxPeK3iEYkPVdKeQzTmPEN
-         eKXIgeXSOPI/zD2CXqwp5jA/j1bERGI1KW2HIACin2+gLPELyDWzn4/Y1IeHx731ZLYk
-         39QixTxUyPVbvtEUqQoUqsOq9tQKlO99vvrH8sQjFNeWzhyZ35G01uLzFpsfdTZZmmBw
-         3NRoyPbi3oZ7S4j7F5joucP4BaHWtzwp4dL+2IwkCf7uX53xxvDSFWCRdxIXQTPwb8lB
-         fz2A==
-X-Gm-Message-State: AOAM532uArvGlhrVjjvOrukdc0jVopSS/ZKPNPpj0Aqh77FeYDLnhOgL
-        EVhwWV87D6FZFOMsSRyv4a4e42Ofdu0eEAQolLQ2iprbJpBGLahxGkGvbTisBDI7UVaN2YyqgkA
-        JoS3d9FgtpOGVl1rpg+kfnaIyoa/xuvasp7nN7On/TXwKX8Nhn0aTCpxWJQ==
-X-Received: by 2002:a9d:480e:: with SMTP id c14mr1866739otf.233.1642641311091;
-        Wed, 19 Jan 2022 17:15:11 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz5ZrANjov6CvE7y3xxcCys3zYKdgn2cIwpXdF/tgkrxPVjt3tEqcAzq4H7WWd2Bpfe9Wn047ZAa3W8lqIcNBs=
-X-Received: by 2002:a9d:480e:: with SMTP id c14mr1866718otf.233.1642641310835;
- Wed, 19 Jan 2022 17:15:10 -0800 (PST)
+        id S1343867AbiATBSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 20:18:53 -0500
+Received: from mail-dm6nam11on2051.outbound.protection.outlook.com ([40.107.223.51]:65120
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231224AbiATBSu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 20:18:50 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bY39drpjYkBymhsE3MDA1v5638+6XiJLBsbcvsIbbhL+WLDNIaURrbi3q6kHgwQpu73oUq8/25cVPjWVEZ4G0/iIIyc1SWJl1cRB6vhenjOHOSbctH6oZnbJPdqDAg4Vx+53+CkS4bHCcZfXkEDcNbYEX58KW6ONyFwGH74t/PHfprQG7uYwPnT/VWE7rqLSK/d5lSj4XkeCdgUoilH5Kxp/2F8ad3NqIagJZZ4YLqgf/6/i7Z4DSVIE9wbTj76oM9p7I/1r/GC2P1coO6qvB6bt1z6aW5Kr9QnxZT6i2gOV7a1f/Rf9YVk4oJrIBGoFt5591caGxCMUe19GKrgnzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zJuvjpm5Wp6Ne/P2A3nc9aYv0zwe010cpA9T7V+8IMo=;
+ b=QDbktrL+LDayerdYSeDPu4bwjPu7H7GsKPZx/hsaxbp3ar0V5JER/lw6DfjjX/ph6ClVRIugg8RSiHV2RnFWUA6DnL4W5+ZVCqgkqzdcGBQZ7gsTd6NYwf97AsLpJ5n4xe8DCUZFuTzGfHfW6Kcwoar5YPOJPRa2G7jy6cLq/0UO+GgeX77dkiUF48nQoJgK2qPLBiTJGh9n5hWppM2q7iHKVZOA0D20S6tjvIVszOyS31AyhRUYycwrv6U5maVww9/bhAta0FFWVXFpVOn/IkoPZsJPmkE+4dIUg12PE93gBlHKwRv5kBzKk4B2kY1ZiKfuG7JZOiIfznxvm335Kg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zJuvjpm5Wp6Ne/P2A3nc9aYv0zwe010cpA9T7V+8IMo=;
+ b=Ws6v+ILI5ZhoizKLeBTBueUL9wQzypL7GdjsPutQelk+nkPPSIXzHGRQiixZ0ips4uqyef7Y1WdC8WG9lyZvC7DUgGQdEJlxARw5S3GlE9op+8h6XgRSgCB0dRoTGdCBejPwUOpWUf4n6/TIgwQpERAgR6Wl+WVEABi7i2c6ttjhkvBDiXxTdIhTGov5/7zecPPP934OnC8QvAmWA/u8REMzGv3jXPTgI8PUHdzDG3J2TIp1MfTDpqYEumbDreT2iT21c8xENRrlGMvE2DQcAmwBbriE1pYWApURKXPJZcpTVdRaDMkfXtrHexL2t0Hqlo/q5VL4ngIcI6VLLq/15Q==
+Received: from MW4PR04CA0382.namprd04.prod.outlook.com (2603:10b6:303:81::27)
+ by BYAPR12MB4710.namprd12.prod.outlook.com (2603:10b6:a03:9f::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Thu, 20 Jan
+ 2022 01:18:48 +0000
+Received: from CO1NAM11FT020.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:81:cafe::16) by MW4PR04CA0382.outlook.office365.com
+ (2603:10b6:303:81::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8 via Frontend
+ Transport; Thu, 20 Jan 2022 01:18:47 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.235) by
+ CO1NAM11FT020.mail.protection.outlook.com (10.13.174.149) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4909.7 via Frontend Transport; Thu, 20 Jan 2022 01:18:47 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 20 Jan
+ 2022 01:18:47 +0000
+Received: from nvdebian.localnet (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.9; Wed, 19 Jan 2022
+ 17:18:42 -0800
+From:   Alistair Popple <apopple@nvidia.com>
+To:     Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?ISO-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        chiminghao <chi.minghao@zte.com.cn>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
+        "open list:LANDLOCK SECURITY MODULE" 
+        <linux-security-module@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        "open list:NETWORKING [MPTCP]" <mptcp@lists.linux.dev>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        <kernel@collabora.com>
+Subject: Re: [PATCH V2 09/10] selftests: vm: Add the uapi headers include variable
+Date:   Thu, 20 Jan 2022 12:18:39 +1100
+Message-ID: <54757552.kJZYbtWA24@nvdebian>
+In-Reply-To: <20220119101531.2850400-10-usama.anjum@collabora.com>
+References: <20220119101531.2850400-1-usama.anjum@collabora.com> <20220119101531.2850400-10-usama.anjum@collabora.com>
 MIME-Version: 1.0
-References: <20220119202749.GA959272@bhelgaas> <4a767d48-fa5d-17be-373d-b49522910285@redhat.com>
-In-Reply-To: <4a767d48-fa5d-17be-373d-b49522910285@redhat.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Thu, 20 Jan 2022 09:14:59 +0800
-Message-ID: <CAAd53p63JfuipN97-vQgtGL0jwnAZ2BqxmTrXpQ5rjdVwc8XWA@mail.gmail.com>
-Subject: Re: Convert type of 'struct dmi_system_id -> driver_data' from 'void
- *' to kernel_ulong_t?
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, jkosina@suse.cz,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Bjorn Helgaas <bhelgaas@google.com>, mgurtovoy@nvidia.com,
-        linux@weissschuh.net, Arnd Bergmann <arnd@arndb.de>,
-        stephan@gerhold.net, "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Originating-IP: [10.126.231.35]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 10abd2f1-c3f7-44fd-3a1f-08d9dbb2cf60
+X-MS-TrafficTypeDiagnostic: BYAPR12MB4710:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB4710AA8FA2265A4DC9A56E54DF5A9@BYAPR12MB4710.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2PrGDR22P30U4oAOvt1Ew6Gv2KYg6Gy4QW91H79kT/zmrgGHFiBjCwWiq7xmqhfmHXMZN6tJd/n4JGFAdTKK92xJa4GN5HEO3AesYssBBDfsTRLlEKrT8IZSd++oeajAW+n1djOR44UGlydQk5ZgDpOu8lZU1z4ZBQMgjAC65uaDogUAGaI2EwlPuGMOOI1phwCuZks7l1PjAM1u8tbvPqU96WJnwLpe5EgkZ8X3fW4Obd9qyyP7RqnF94YNW+JS9+e16eDQ4HGL3zmgaPGwFn3c0lIRKwP3ThI3LaFLuo2w/MLaUynMvLJJpG1PofqLVgmFIQvi4IpImPVB7KTF5nupRwyJPQCbe0fHTj02qh7OUbBO0nfuy7rSsnNdgvRUzh4MZy0TgAZ+eFzlZ03klU/D7YdqkFaL8vsMIwO2wg6rL1kI9n7W/lHTssjI4HZtNstl8TSaCCjeIdr5ywaQJdsihDKWU+7/2m2ZT0EcBMVJ3yRfTHDGv5O2/kzTfto/tiSU6kTYsFBuP5YGiMNitCCvZ1OSePhVTqUWg9wnY6v1vxXi4rYUUB4ihpLZgn82uHS3xEZtbHgiDBygWNhUTz0qpRruvGG3TThq/340FvQXl7Mg0kX1L5NYWjHKbtHOj1GXcavCUBLg4dvuKlCZ/qB/d3ce7yO/id0bMr3J9ZmA2T1KoBAehguNzrScGIoF7CP7DiiWHTwE4L2j9iTdKMTrFP/BajpT6Fh6vzQPHT/YU9pWOdUmBXB4qq9+X0DzqOYk7jeV8bkQC4KvYxk5lOWnw/9gn9UGvDP6VdY79cYvw+0WfLZgG5rOZWGQ3zgvcNG4hpzWDCL/wkY9eogps0nQmq4I2Z5EzfG53Mr6FrQ=
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700002)(9686003)(81166007)(5660300002)(40460700001)(186003)(26005)(6666004)(47076005)(316002)(86362001)(70586007)(83380400001)(426003)(336012)(70206006)(16526019)(82310400004)(8676002)(921005)(9576002)(2906002)(33716001)(508600001)(7416002)(8936002)(36860700001)(110136005)(356005)(39026012)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2022 01:18:47.8393
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10abd2f1-c3f7-44fd-3a1f-08d9dbb2cf60
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT020.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB4710
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans an Bjorn,
+Thanks for fixing this! It has been annoying me for a while but I never found
+the time to investigate properly. Feel free to add:
 
-On Thu, Jan 20, 2022 at 4:45 AM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi,
->
-> On 1/19/22 21:27, Bjorn Helgaas wrote:
-> > On Wed, Jan 19, 2022 at 11:20:36AM +0100, Hans de Goede wrote:
-> >> On 1/19/22 02:22, Kai-Heng Feng wrote:
-> >>> I wonder if there's any reason to use 'void *' instead of
-> >>> kernel_ulong_t for 'driver_data' in 'struct dmi_system_id'?
-> >>>
-> >>> I'd like to use the driver_data for applying quirk flags, and I found
-> >>> out unlike most other struct *_id, the dmi variant is using 'void *'
-> >>> for driver_data. Is there any technical reason for this?
-> >>> ...
-> >
-> >> You are asking for a technical reason why "void *" was used,
-> >> but lets turn that around, why do you believe that "unsigned long"
-> >> is inherently a better type here ?
-> >>
-> >> driver_data in most places in the kernel (like data for
-> >> all sort of callback functions) actually typically is a void *
-> >> already, because often people want to pass more data then what
-> >> fits in a single long and this also applies to driver-id attached
-> >> data.
-> >
-> > FWIW, "egrep "context;|data;|info;" include/linux/mod_devicetable.h"
-> > says 4 of the ~40 instances use a void *; the others use
-> > kernel_ulong_t.
->
-> Right inside mod_devicetable.h kernel_ulong_t is the norm, but outside
-> e.g. inside struct device and with dev_set_drvdata/dev_get_drvdata
-> and all their many derratives using void * is the norm.
->
-> So looking at the kernel as a whole using kernel_ulong_t seems
-> to be the exception. But maybe that indeed has something to
-> do with:
->
-> > f45d069a5628 ("PCI dynids - documentation fixes, id_table NULL check")
-> > [1] (from the tglx history tree) added the original hint for
-> > pci_device_id that:
-> >
-> >   Best practice for use of driver_data is to use it as an index into a
-> >   static list of equivalant device types, not to use it as a pointer.
-> >
-> > I don't know the background of that, but I could imagine that using an
-> > index rather than a pointer makes things like /sys/bus/pci/.../new_id
-> > easier and safer.
->
-> Right, interesting.
->
-> OTOH we have:
->
-> const void *device_get_match_data(struct device *dev);
->
-> Which is a wrapper to easily get the driver_data for popular firmware
-> based matches (ACPI/of), which also returns a void *...
->
-> Actually the rule seems to be that firmware-id matching,
-> including WMI GUID matching uses void * where as hw-id
-> (e.g prod:vend matching) uses kernel_ulong_t with acpi_device_id
-> being the exception since it is a fwid using kernel_ulong_t,
-> which then gets "fixed" by acpi_device_get_match_data turning
-> it into a void * for the caller.
->
-> As DMI matching is closer to firmware compatible/id matching then
-> to actual hw-id matching, it seems that it actually follows
-> the pattern of fw-id matches using void * where as hw-id
-> matches using void * .
->
-> TBH I don't care much either way, but I also really don't see
-> strong reasons to spend a lot of time on changing any of this.
+Tested-by: Alistair Popple <apopple@nvidia.com>
 
-Thanks for all the info.
-I think they are great justifications that I should avoid all the
-hustles to convert the type, and stick to the pointer/integer casting.
+On Wednesday, 19 January 2022 9:15:30 PM AEDT Muhammad Usama Anjum wrote:
+> Out of tree build of this test fails if relative path of the output
+> directory is specified. Add the KHDR_INCLUDES to correctly reach the
+> headers.
+> 
+> Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+> Changes in V2:
+>         Revert the excessive cleanup which was breaking the individual
+> test build.
+> ---
+>  tools/testing/selftests/vm/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+> index 7d100a7dc462..96714d2d49dc 100644
+> --- a/tools/testing/selftests/vm/Makefile
+> +++ b/tools/testing/selftests/vm/Makefile
+> @@ -23,7 +23,7 @@ MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/p
+>  # LDLIBS.
+>  MAKEFLAGS += --no-builtin-rules
+>  
+> -CFLAGS = -Wall -I ../../../../usr/include $(EXTRA_CFLAGS)
+> +CFLAGS = -Wall -I ../../../../usr/include $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
+>  LDLIBS = -lrt -lpthread
+>  TEST_GEN_FILES = compaction_test
+>  TEST_GEN_FILES += gup_test
+> 
 
-Kai-Heng
 
->
-> Regards,
->
-> Hans
->
+
+

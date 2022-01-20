@@ -2,105 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7F4494ABA
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04FFD494ABD
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:30:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359568AbiATJ2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 04:28:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47484 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359532AbiATJ2v (ORCPT
+        id S235995AbiATJ35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 04:29:57 -0500
+Received: from mout.kundenserver.de ([212.227.126.133]:56041 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229802AbiATJ3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 04:28:51 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B72DC061574;
-        Thu, 20 Jan 2022 01:28:51 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id z22so25820609edd.12;
-        Thu, 20 Jan 2022 01:28:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xI2hjvF9QTy4qeUkVgaLn/r0k38qP5qMUW5kFpgn8cU=;
-        b=aI2x5RhX2hh/tGP+a92b/dfubNDO5fhTRlSNlwpOyyT1umGfCiPQePIxdF0Op14ug0
-         XSAmli/b4t6S6U4Mf5GXRVU3E+KuSCtJPdoHejK64AmYFtw8K5GMM/MeEUiSKFc9srAl
-         SlGFM0zxQthDSCoKwtC4f5vTyQ9dVvrCzVti6aLJ93dkm0Hpn1ek3mtpkKuN+G/7+Tyb
-         eWp5luyPOAcDlLl36glvvsYm79qfhlVe/3UX10Gho1q0uubNQ3AfUhwAzUCRRtO8+EL3
-         YF8uwflxnpMQ6plfkdAa+eI4RrvJhR4LEMlCH8aC2TA7htHd/wUmsRHn/V/ln57c7dOW
-         4t3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xI2hjvF9QTy4qeUkVgaLn/r0k38qP5qMUW5kFpgn8cU=;
-        b=IwNmcWW34k9OswqCZTv5b/3ESewFL9ifhlSVPlpV8lpNWcqHSUJVv7aJVdPk02Ljty
-         Vw6v3zJDSkeElLW/7Lg7MUIEsSQmbg30h7Fg7AE9/VsLiQZPVlgEQhHMxjHt1pP0V0VL
-         yq/g8Yf7paSb2JR+ChYxd83GkKhKrGFJaxt7AYCTXIoiQGc+BW2qxSNT07+SJ8U7iXLv
-         XndblhVxHlXlKQwP2jOdZwyV+HgeqQV5Ag5SKGnoR5iar1pvyqi5XRY+BT4MNrxIoyCT
-         IbUEGC0d6ttGxsJazoZr2eiSRWkwOns4GF4qVTQ5pHxCxScXZ+UrVb4/ZMXTB6IGOsQ8
-         rMNg==
-X-Gm-Message-State: AOAM532nqO7wT/+Mr1M0s6Z9SsCu+8D0KjxB/3mwuQFLJ/gmVCTxOWqZ
-        b1dMa7iw425k39xvSdJ4exqjT+K9xNrBZtMjWCIuNK8Svy4Uxw==
-X-Google-Smtp-Source: ABdhPJwuxrqyAkpBzpTeZzlfnn6LGo2LitiLvI7m8TfC8LkdCV8tI2az6AWpg4xCckCJbPz3b27c8Cb00O0A31YVGKA=
-X-Received: by 2002:a17:906:2b8a:: with SMTP id m10mr27831650ejg.479.1642670929710;
- Thu, 20 Jan 2022 01:28:49 -0800 (PST)
+        Thu, 20 Jan 2022 04:29:53 -0500
+Received: from mail-ot1-f49.google.com ([209.85.210.49]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MxHLs-1mM64N2A7E-00xZbC; Thu, 20 Jan 2022 10:29:52 +0100
+Received: by mail-ot1-f49.google.com with SMTP id i7-20020a9d68c7000000b0059396529af8so6794249oto.4;
+        Thu, 20 Jan 2022 01:29:51 -0800 (PST)
+X-Gm-Message-State: AOAM533xER4vvYSSkjzmC84ll/yfTWD7ob6qgWmVDwQObMLSwsyifYc2
+        qzShOwSIGZ73Rfj6YIcWcbWfXHW8GdgvURhjqn0=
+X-Google-Smtp-Source: ABdhPJw23cQjee+wzKe1BZuP5Egl38StW0xVS2Lx2CrxQkm8C96LIXXcbD+ld7BJcIRLzViPyYDZ1TVXzpuf+zNTwjI=
+X-Received: by 2002:a05:6830:2095:: with SMTP id y21mr25066257otq.368.1642670990087;
+ Thu, 20 Jan 2022 01:29:50 -0800 (PST)
 MIME-Version: 1.0
-References: <20211011030956.2459172-1-mudongliangabcd@gmail.com>
-In-Reply-To: <20211011030956.2459172-1-mudongliangabcd@gmail.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Thu, 20 Jan 2022 17:28:23 +0800
-Message-ID: <CAD-N9QXHwzt9Dui3i6sFF-4d-8Z41LoOJydPykdQQh_jWh+_SA@mail.gmail.com>
-Subject: Re: [PATCH] fs: fix GPF in nilfs_mdt_destroy
-To:     Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-fsdevel@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220120073911.99857-7-guoren@kernel.org>
+In-Reply-To: <20220120073911.99857-7-guoren@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 20 Jan 2022 10:29:33 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a00uYPBBphpipBoqCnGFwr_C9vDzS1p1iLN==YTVOARug@mail.gmail.com>
+Message-ID: <CAK8P3a00uYPBBphpipBoqCnGFwr_C9vDzS1p1iLN==YTVOARug@mail.gmail.com>
+Subject: Re: [PATCH V3 06/17] riscv: compat: Add basic compat date type implementation
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
+        Anup Patel <anup@brainfault.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        inux-parisc@vger.kernel.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:s4Q1DH9lXoshZS2vFPndUrTFcam5Cmc6PQRo9r/B1zlXxInFnE1
+ F+WnEDzyOzIcqIxXnbIMAISLi6dWUeMtvJyKdckn8IHL/4qX25H4kMkNiQImQIyFf+8hSy9
+ Y5ozmkK8x66ILoDsEH8O+iA8WW/zV2ruLmnetp15zjcsw2Il2KV0pX7TTYBFWR39AIINnAw
+ JwfZabmoF5S81gPFtdGdA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:tFyRVOEcZwM=:qB6pa6wjmW7sOov+3Oy63P
+ qhLvcRdEAyI2JHdWOhXN0KVUd5LcQCqSMlxojtTVHH5NlhaeYDI3YN20ZZtj9BqUCUHbBstEt
+ RFtY+1XxxuS2LRziFfQs/I+yOWGVo2WMcUPzk1py0bid8B2he1vxxjUCWlC+uGvra3SoRkZyP
+ vT/H6WHjXdtoJLEVDADkBRSbTBqskUpgkP6eGPku/LOCz7YoR7VumF/XdSnQnTeR2+HG6K73e
+ ondxUGsUMkyPHdI73PvpO6ZNDyi/IUFiMBymMEERJRUNPoybyH1KEvZ0K+QNY7wX6IAzOIGd5
+ qeR4mcyzzYS7MCwW2s2RUV2yBIpTNrrkhdr/NG8nU/An0inMBVIpE6NPmwBX6sWp4HB6Gs/+5
+ U+4R7Dqh4Rz2UPOL4mIIdznpg8JfbBVIG/rH9HZA08VIlpAXOUwBBy3OjR8IplUCXhrwWXWgz
+ fXLNHHCqi8cY/q6q1DhyDUfDvU3ccxREuPCrxHAGkHk1jsl5lDGe1Wvkez/h89zCp21eG/S5S
+ m1oDpE5awDdfTYGEoMGTjgBJjxlwuY2Phlrx9WtacNq2P1fh5p9MmIaqp7bz8s17iRZqyKEdt
+ Ntm1VMcJYqmXkOXgTk7FSEbjYDIlyTYSVofFmw8/EEyL6HQr9MXa2nb1hWWG/Xwq3ZZMWa//N
+ UUSINH0KVs7WUYaySx+LIn63vHhdA1HPx86zxX0Bl8TiesDVGN74NaGNtBst/q3OYhJDtSxnC
+ 73aWMI72TfkeooR7e2/pVSUDcfadDcqjhxjwwXqE2rbpYLYtZpVFjJDwHPX4+WtJsWQQUV3MR
+ 5egODidWF3U0KJH7RFZvqsz9+sq/141RlqaXW2+tXh0f3BS128=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 11, 2021 at 11:10 AM Dongliang Mu <mudongliangabcd@gmail.com> wrote:
->
-> In alloc_inode, inode_init_always could return -NOMEM if
-> security_inode_alloc fails. In its error handling, i_callback and
-> nilfs_free_inode will be called. However, because inode->i_private is
-> not initialized due to the failure of security_inode_alloc, the function
-> nilfs_is_metadata_file_inode can return true and nilfs_mdt_destroy will
-> be executed to lead to GPF bug.
->
-> Fix this bug by moving the assignment of inode->i_private before
-> security_inode_alloc.
->
+On Thu, Jan 20, 2022 at 8:38 AM <guoren@kernel.org> wrote:
 
-ping?
+> @@ -0,0 +1,136 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +#ifndef __ASM_COMPAT_H
+> +#define __ASM_COMPAT_H
+> +
+> +#define compat_mode_t  compat_mode_t
+> +typedef u16            compat_mode_t;
 
-> BTW, this bug is triggered by fault injection in the syzkaller.
->
-> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> ---
->  fs/inode.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/inode.c b/fs/inode.c
-> index ed0cab8a32db..f6fce84bf550 100644
-> --- a/fs/inode.c
-> +++ b/fs/inode.c
-> @@ -160,6 +160,7 @@ int inode_init_always(struct super_block *sb, struct inode *inode)
->         inode->i_dir_seq = 0;
->         inode->i_rdev = 0;
->         inode->dirtied_when = 0;
-> +       inode->i_private = NULL;
->
->  #ifdef CONFIG_CGROUP_WRITEBACK
->         inode->i_wb_frn_winner = 0;
-> @@ -194,7 +195,6 @@ int inode_init_always(struct super_block *sb, struct inode *inode)
->         lockdep_set_class_and_name(&mapping->invalidate_lock,
->                                    &sb->s_type->invalidate_lock_key,
->                                    "mapping.invalidate_lock");
-> -       inode->i_private = NULL;
->         inode->i_mapping = mapping;
->         INIT_HLIST_HEAD(&inode->i_dentry);      /* buggered by rcu freeing */
->  #ifdef CONFIG_FS_POSIX_ACL
-> --
-> 2.25.1
->
+I think this one is wrong, as rv32 should get the native definition from
+
+include/uapi/asm-generic/posix_types.h:typedef unsigned int     __kernel_mode_t;
+
+I think it works if you just remove those two lines. The rest looks good to me.
+
+       Arnd

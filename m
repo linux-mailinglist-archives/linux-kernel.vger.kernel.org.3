@@ -2,83 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDBC6494C17
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23D9D494C18
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 11:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiATKuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 05:50:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59400 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1376399AbiATKrT (ORCPT
+        id S229779AbiATKux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 05:50:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37428 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376405AbiATKsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 05:47:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642675638;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qO1hZafvyKcBxQP78yk3hqC/9kFUIj2Avg9axdX+yPo=;
-        b=OZHe9T7smZ+tJe7rucU2a3BClATfnnHYUg4Z8esgdgor+Xc32iGjWRXNcevcv8qRjhQ9du
-        fNeHTcRLM7XTpu9KA8Bc7/gEpi6oDV3koxPfLoSEcguFzsnHBVg9vmoBSIDOehL9s+e9Cr
-        Pir0x7P3zTb53xJ2t8SWtpOYWeuOR64=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-117-ZfiickwMO-OpFgAgdS0T_Q-1; Thu, 20 Jan 2022 05:47:17 -0500
-X-MC-Unique: ZfiickwMO-OpFgAgdS0T_Q-1
-Received: by mail-wm1-f70.google.com with SMTP id s190-20020a1ca9c7000000b00347c6c39d9aso3804935wme.5
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 02:47:16 -0800 (PST)
+        Thu, 20 Jan 2022 05:48:30 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49C0C061747
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 02:48:29 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id j85so5808253qke.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 02:48:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dowhile0-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Drofg5bZM2qwAB7ATZ/cfW3+3FZXwgKGVP69ItIqA10=;
+        b=lSFrpwW1wuAfDYgH03cW7I7OjP1WbLut0KjRhMrnTuGvNcnMybeWIQyMH1JIx00use
+         yizqAk+va/sg/eFSjqoeYOXH0HLzvW3eaS930YNZ7e5h9ip0eD9d1p3WN/CjBKya/85l
+         mcfYW4HK49fyHi+z6g7gsttn0/XTRnkA0JrcbZ8vAEFMc99HRXqRBh9g54gh8kCdMIHP
+         Uy/leO8tXeu8VOapVIT9ExqJ1h2JsDwxr8R0jV4kFsVzHWQZ4duKK2h5zTEq+mJc5xwY
+         pwglT+eOqfCVyz7nHNeUkkpmHVf/KXR4zpWZ1F4jD8ezJL5uWmGaPXIaZhEiHCZrb0Nw
+         P/pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qO1hZafvyKcBxQP78yk3hqC/9kFUIj2Avg9axdX+yPo=;
-        b=Y4RwL09f+aEPpFEbBgfXaJAikTjG2RZC6/ssFOqSGl8wuex2uzyhZRjxgkEge1slA0
-         pW5y0AJ7k4UWqeL4YcOeRqGaOI1FiLniJ2H5KeB8SKT6In6R5Bm5vdH+4SNblzXWcf0E
-         9dfUdNSUtNPGTan5GJoLjc6TrPQWuo3cpun9Gy0MGi14d1n5DTUv5VHhg1l8KXz3vasE
-         V6SNZOW1OName0WySMnSxA8wa1WmMQI6T7kzfhBaQG7ii1JRFXYF+mV2q83ta6HYw5qU
-         qnhlzsemkvO0W+HX5I/vDYnUzgcqQveSexk6Cv/8CPhJVdCbG7KIDzS15RUYkAx2eXO+
-         rUWg==
-X-Gm-Message-State: AOAM53074fgbZUc5jJ1ARb+CixnoVCCjtDGe3CEV7Lfm3MMdz0cBwxLP
-        EUyMKPjI73Ais8AdUpKsVFCLSSohWqthChMl6H7REwYvnrQduQx7iAI+TbCyCitNsjxhofvF19q
-        ufNP0BhDIKyIx+gkELwG8u5m6
-X-Received: by 2002:adf:e6cb:: with SMTP id y11mr5521817wrm.680.1642675635949;
-        Thu, 20 Jan 2022 02:47:15 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwcrwDfaLaSDQRGqrng7EFnJZ80JOK/Ll6EzS9W8XU5xUayOcQx0qNZa9uj2wnfeK8hisgMXg==
-X-Received: by 2002:adf:e6cb:: with SMTP id y11mr5521797wrm.680.1642675635763;
-        Thu, 20 Jan 2022 02:47:15 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id f17sm1972724wml.31.2022.01.20.02.47.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 02:47:14 -0800 (PST)
-Message-ID: <a87499ee-8cd5-2f57-9c1a-58779b5f7047@redhat.com>
-Date:   Thu, 20 Jan 2022 11:47:13 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Drofg5bZM2qwAB7ATZ/cfW3+3FZXwgKGVP69ItIqA10=;
+        b=RXTOlk3vG0VtMe4mB+jq/mIuMkgcqKeZBVBQYeBiyS4CsE9nQ+drEM0Wd6kNGvvosx
+         rZNFLkbuSAwVB+Itgo804IPoufkBf+UceAFCrBcGJMoC7rohffCuBO2hgt05NC5RzhMQ
+         o863qxpeGSp6/DPXA4i2KYErefJJkrbDNxEoKbBnjXir7TgsIyCab2+HlX/ORFWwTUTE
+         rFfWdcQ0ngxrTI2Kq7Ik1kfv5paRHGDkyx7WtKkVbgTT2S3UXMt9OlC+6f/l15vqQcM6
+         ivHb14JxADG3PYco7QHWJKI1R5F9aMi0KvLAYSf7UXwSLV0SkOtFjVsIEKZczz6aqFly
+         Tl5Q==
+X-Gm-Message-State: AOAM530lbq7KhZ2zVcowIDSdNWPDzBfWd1q+FZr3o+FM1DTfolEkWZHJ
+        ONpv/JivAc16R3qQyXefmbm34kOWJ5WJ4O5OfgkxJg==
+X-Google-Smtp-Source: ABdhPJytHAAGxtq/qSZOpc+YupHixT4TRIrIOSLNgZfB6xUrCUXkckzmPRmlM/mOoCMvKsJgp3kOntmGDDsXWw0Jxwk=
+X-Received: by 2002:a05:620a:1382:: with SMTP id k2mr18319057qki.447.1642675708891;
+ Thu, 20 Jan 2022 02:48:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: linux-next: manual merge of the kvm-fixes tree with Linus' tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>, KVM <kvm@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <20220120092527.71e3a85f@canb.auug.org.au>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220120092527.71e3a85f@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220120104009.159147-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220120104009.159147-1-krzysztof.kozlowski@canonical.com>
+From:   Javier Martinez Canillas <javier@dowhile0.org>
+Date:   Thu, 20 Jan 2022 11:48:18 +0100
+Message-ID: <CABxcv==EkNd9MrpJuyECzY1EdnWiZ_ffz8OXoTy8X76R_Ty4Xw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: display: bridge: drop Enric Balletbo i
+ Serra from maintainers
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Simon Glass <sjg@chromium.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        devicetree@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        linux-input@vger.kernel.org,
+        =?UTF-8?Q?Enric_Balletb=C3=B2_i_Serra?= <eballetbo@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/19/22 23:25, Stephen Rothwell wrote:
-> It may be worth while rebasing this fix on top of Linus' current tree.
+[adding Enric's personal email address to Cc list]
 
-Yes, the next pull request will include a merge commit to avoid the 
-conflict.
+Hello Krzysztof,
 
-Paolo
+On Thu, Jan 20, 2022 at 11:40 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> Enric Balletbo i Serra emails bounce:
+>
+>   <enric.balletbo@collabora.com>: Recipient address rejected: User unknown in  local recipient table
+>
+> so drop him from the maintainers, similarly to commit 3119c28634dd
+> ("MAINTAINERS: Chrome: Drop Enric Balletbo i Serra").  Add generic DRM
+> bridge maintainers to Analogix ANX7814.
+>
 
+I'm adding Enric in case he is still interested in maintaining these
+and prefers to update his email address instead.
+
+Another option is to add an entry to the .mailmap file.
+
+Best regards,
+Javier

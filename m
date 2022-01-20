@@ -2,153 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD57B49459D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 02:47:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33CAF49459F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 02:48:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358095AbiATBrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 20:47:09 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:34354 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1358052AbiATBrH (ORCPT
+        id S1358111AbiATBsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 20:48:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231600AbiATBsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 20:47:07 -0500
-X-UUID: 242f6a14f1454019a8b2e2b6c9b59e30-20220120
-X-UUID: 242f6a14f1454019a8b2e2b6c9b59e30-20220120
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <guodong.liu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1829855336; Thu, 20 Jan 2022 09:47:02 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 20 Jan 2022 09:47:01 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 20 Jan 2022 09:47:00 +0800
-Message-ID: <883391d5642d217e79fb09bebd81f9b5027ce20a.camel@mediatek.com>
-Subject: Re: [PATCH 2/7] pinctrl: mediatek: paris: Fix
- PIN_CONFIG_BIAS_DISABLE readback
-From:   Guodong Liu <guodong.liu@mediatek.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-CC:     Sean Wang <sean.wang@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-mediatek@lists.infradead.org>, <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        Hui Liu <hui.liu@mediatek.com>,
-        Light Hsieh <light.hsieh@mediatek.com>
-Date:   Thu, 20 Jan 2022 09:47:00 +0800
-In-Reply-To: <CAGXv+5GHVtCO9tN7B0O2c5V_Bk61-LL79LvbE1CRbyBfnvKSGQ@mail.gmail.com>
-References: <20220111112244.1483783-1-wenst@chromium.org>
-         <20220111112244.1483783-3-wenst@chromium.org>
-         <eca4a0c18fe75536c8276410628b9459c040dce2.camel@mediatek.com>
-         <CAGXv+5GHVtCO9tN7B0O2c5V_Bk61-LL79LvbE1CRbyBfnvKSGQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 19 Jan 2022 20:48:30 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9FFCC061574;
+        Wed, 19 Jan 2022 17:48:29 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id l64-20020a9d1b46000000b005983a0a8aaaso5745723otl.3;
+        Wed, 19 Jan 2022 17:48:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=74BtsnIM1Do25h2pr2aLjfS1D1bQFN2QCAj85PkHcLY=;
+        b=jYwP8I98dCQc3Hy7BY86CiJtgViUfob9Mo83VzbMTUlHoCn90o9woIahLEvs1LSRk/
+         98dXSUUPptIJBuXGfwqy301bAFTTZMNzCKZ1ggG0V+291lGMOjSjLdXyxMbM2l4fZ9IQ
+         NM+i6Oh6Q4ykJSIl+7mhWpB/PXPJvGCHThL3tE9utpytBQSass3SuJ1sIpX4sBpCGZNd
+         AbdqCRsZykw5UzDuaAictBvGh2rJdYfQh6cSw2nhc/rtE3KGmZqeKO4fRbSHMMNS2a+p
+         X/mqVacmBH/tqiTPxEYNhYA4pQTBAexAUKTcdJDDwXL4H7IXBsZ0lm2Tr39K6PmqSMiD
+         Zvlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=74BtsnIM1Do25h2pr2aLjfS1D1bQFN2QCAj85PkHcLY=;
+        b=BXAIAeMVQgKJCtgAdGcqiW5FM1xe+/8FI1/bLP6khTPJLpu4Y83wNHS1Im7H+WaWjR
+         o2r0khnfT1Ka4Od7OcNqCbp/MccIWHp+lOQCUTvxWBeis4RNmth57IecfTkKKcVtIKp+
+         dwOfBOwq3erV7iWRqfPn+6JLZibV0BA1pH+2EUL0l/LQzpBCy3xrsDtzXxmZfd4DuXI/
+         bu9TZAyFnxGTzeY7a3Sh70NVRxFxmG9wiA830hJEfXYX+bxlGKtE3L0UELLxkFtld/IK
+         KAaAaMqhK7GnqDtO+6Y161GBalNzXwfE5ny3BiBLgx7QfzfM81RXkhe94KkutP5QliqF
+         zEtw==
+X-Gm-Message-State: AOAM533gl7Ndsy2RBRT4xk1ilkAWjbRyWXEdvUZIW7wCQbu8FRvQVIEC
+        pxvqRHwvO3kQK0p84OlJu33SFaGjEkI=
+X-Google-Smtp-Source: ABdhPJzBOHTPjdJOReTPvrB6BaQEX4vRputs7UOtOtZ4L6lalloVBABvkOU9HpXjIWGnPvdwXM12KQ==
+X-Received: by 2002:a9d:483:: with SMTP id 3mr26836530otm.214.1642643308799;
+        Wed, 19 Jan 2022 17:48:28 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w14sm651954ooq.37.2022.01.19.17.48.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 17:48:27 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 19 Jan 2022 17:48:26 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.15 00/28] 5.15.16-rc1 review
+Message-ID: <20220120014826.GA3476209@roeck-us.net>
+References: <20220118160451.879092022@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220118160451.879092022@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------Original Message-----
-From: Chen-Yu Tsai <wenst@chromium.org>
-To: Guodong Liu <guodong.liu@mediatek.com>
-Cc: Sean Wang <sean.wang@kernel.org>, Linus Walleij <
-linus.walleij@linaro.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org, 
-linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-Zhiyong Tao <zhiyong.tao@mediatek.com>, Hui Liu <hui.liu@mediatek.com>,
-Light Hsieh <light.hsieh@mediatek.com>
-Subject: Re: [PATCH 2/7] pinctrl: mediatek: paris: Fix
-PIN_CONFIG_BIAS_DISABLE readback
-Date: Wed, 19 Jan 2022 13:57:18 +0800
-
-On Wed, Jan 19, 2022 at 9:42 AM Guodong Liu <guodong.liu@mediatek.com>
-wrote:
+On Tue, Jan 18, 2022 at 05:05:46PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.16 release.
+> There are 28 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> -----Original Message-----
-> From: Chen-Yu Tsai <wenst@chromium.org>
-> To: Sean Wang <sean.wang@kernel.org>, Linus Walleij <
-> linus.walleij@linaro.org>, Matthias Brugger <matthias.bgg@gmail.com>
-> Cc: Chen-Yu Tsai <wenst@chromium.org>,
-> linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-> linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-> Zhiyong Tao <zhiyong.tao@mediatek.com>, Guodong Liu <
-> guodong.liu@mediatek.com>
-> Subject: [PATCH 2/7] pinctrl: mediatek: paris: Fix
-> PIN_CONFIG_BIAS_DISABLE readback
-> Date: Tue, 11 Jan 2022 19:22:39 +0800
-> 
-> When reading back pin bias settings, if the pin is not in a
-> bias-disabled state, the function should return -EINVAL.
-> 
-> Fix this in the mediatek-paris pinctrl library so that the read back
-> state is not littered with bogus a "input bias disabled" combined
-> with
-> "pull up" or "pull down" states.
-> 
-> Fixes: 805250982bb5 ("pinctrl: mediatek: add pinctrl-paris that
-> implements the vendor dt-bindings")
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> ---
->  drivers/pinctrl/mediatek/pinctrl-paris.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c
-> b/drivers/pinctrl/mediatek/pinctrl-paris.c
-> index f9f9110f2107..1ca598ea7ba7 100644
-> --- a/drivers/pinctrl/mediatek/pinctrl-paris.c
-> +++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
-> @@ -97,8 +97,8 @@ static int mtk_pinconf_get(struct pinctrl_dev
-> *pctldev,
->                         if (err)
->                                 goto out;
->                         if (param == PIN_CONFIG_BIAS_DISABLE) {
-> -                               if (ret == MTK_PUPD_SET_R1R0_00)
-> -                                       ret = MTK_DISABLE;
-> +                               if (ret != MTK_PUPD_SET_R1R0_00)
-> +                                       err = -EINVAL;
-> Hi Chen-Yu
-> 
-> When the API "hw->soc->bias_get_combo(hw, desc, &pullup, &ret)" is
-> called,
-> The ret vaule of ret may be MTK_DISABLE or MTK_PUPD_SET_R1R0_00
-> or  (pullen
-> == 0),  All those cases are expected to be as "bias-disable".
-> We advices to keep original code,
-> +                               if (ret == MTK_PUPD_SET_R1R0_00)
-> +                                       ret = MTK_DISABLE;
-> +                               if (ret != MTK_DISABLE)
-> +                                       err = -EINVAL;
-
-IIUC you are suggesting to assign MTK_DISABLE to ret in the other two
-cases,
-and then check if ret == MTK_DISABLE.
-
-Thanks for pointing that out.
-
-ChenYu
-
-> Thanks
-
-Hi Chen-Yu
-
-Yes, just for pins with config of MTK_PUPD_SET_R1R0_00 are required to
-do additional assignment operations(ret = MTK_DISABLE;), in the other
-two cases, the assignment operations of ret as MTK_DISABLE is obtained
-by function call "hw->soc->bias_get_combo(hw, desc, &pullup, &ret)".
-
-Thanks
-
->                         } else if (param == PIN_CONFIG_BIAS_PULL_UP)
-> {
->                                 /* When desire to get pull-up value,
-> return
->                                  *  error if current setting is pull-
-> down
+> Responses should be made by Thu, 20 Jan 2022 16:04:42 +0000.
+> Anything received after that time might be too late.
 > 
 
+Build results:
+	total: 154 pass: 154 fail: 0
+Qemu test results:
+	total: 485 pass: 485 fail: 0
+
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter

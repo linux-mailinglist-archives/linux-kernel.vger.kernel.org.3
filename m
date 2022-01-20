@@ -2,424 +2,560 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1BA495434
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFF8495437
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346829AbiATSan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 13:30:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233412AbiATSaj (ORCPT
+        id S1347048AbiATSb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 13:31:56 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4434 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233412AbiATSbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 13:30:39 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AC6C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:30:39 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id s11so7947352ioe.12
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:30:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hs+eYAP4l3yJ1sRUgicNQKF4hhUGfTUy2AbPqekozFY=;
-        b=IEVUxE7cuMIkC/aO3CCIYz+Z3OU2Td/p8tbkpwK6SsvEVxTme1VHOYr0lnjaaLzp6R
-         lm74aJPObOU19/KUyrtzby1n5gpkqAMexsG2gsr6xJNJmUFJTG436AOrhFjOp1p4b6pO
-         3PHtJ37LsB/eDCc+/Bq1rd8qeFXxlARAwbnQMYLHnaBYtMYAQC8lyotpMaduP1/HUbzA
-         XqLHn3zwVa7eVvQXCZXnGgXVMInV4wxILeNLVS78bHxf/YU8rzoqAmHSXgB6ag+Mg/co
-         p5MPPUkh+4UOivQxU0dtMScye9wIM/RBiP4mN53W+9DmwX4OwrI8EqXxQoRwK+hgmy/F
-         b4xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hs+eYAP4l3yJ1sRUgicNQKF4hhUGfTUy2AbPqekozFY=;
-        b=eOS0wNvF7SPZtptpOp4U7P2nnEPAdnNKFSobWImpOKv16iiFuyMADyfxjsfg9Zhmpa
-         FEmaKqMv8j30pvD2XFQhDXOxNXAFGvdEsuFZ+hZ9bEmrvKqtChxMo+NEvWX/EQYI2Fkn
-         /MkSab0mXjxH9G5JGwwUgZnyvmL1t9j7FIOL0+btXhxaVvFuKZrztqtzL8AJmCyY0sLq
-         KGZxwAsHUwwwzGQaUH2ZE/VAr7Hpzg77notE9M9OLNwdONqtdR3mBcG0VgUeuPJrzY2V
-         0vjXbNHQ/hH1UEAIDBvWOoDajBtQe20mp+gn1YTWrplYOSywWOkF9UwZXW/IVgIYZh3P
-         HV5w==
-X-Gm-Message-State: AOAM530hJ62G7dTEBbcNR+v4InPiSPN0Qc8J8k2BFZQqrPw32szAmis2
-        8f5HdGD1lXrD2W/lOJnWf8Q4bfoOsn81p4ILQEzY6A==
-X-Google-Smtp-Source: ABdhPJyr+tlbX7UkGBqTCzNtOy7f+uDOqthvnVosd+bU9AdF7PGi3b3EeWEOCGTRCxV0uUyIvCxaTyvRX/hdKMNu2/I=
-X-Received: by 2002:a02:6289:: with SMTP id d131mr25740jac.61.1642703438055;
- Thu, 20 Jan 2022 10:30:38 -0800 (PST)
+        Thu, 20 Jan 2022 13:31:55 -0500
+Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JfrcT3CfZz67lp5;
+        Fri, 21 Jan 2022 02:28:41 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Thu, 20 Jan 2022 19:31:53 +0100
+Received: from localhost (10.47.74.217) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 20 Jan
+ 2022 18:31:52 +0000
+Date:   Thu, 20 Jan 2022 18:31:48 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Cristian Pop <cristian.pop@analog.com>
+CC:     <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <jic23@kernel.org>, <devicetree@vger.kernel.org>,
+        <robh+dt@kernel.org>
+Subject: Re: [PATCH v1 2/2] iio:frequency:admv4420.c: Add support for
+ ADMV4420
+Message-ID: <20220120183148.0000321e@Huawei.com>
+In-Reply-To: <20220117165247.15718-2-cristian.pop@analog.com>
+References: <20220117165247.15718-1-cristian.pop@analog.com>
+        <20220117165247.15718-2-cristian.pop@analog.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-References: <202201170247.Cir3moOM-lkp@intel.com> <CAJHvVchPpphLefKEOy_C6+0xrGtA3mNCBzQZ3j2i2RgXX3arXQ@mail.gmail.com>
- <CAJuCfpFEfAxtgCfTU=0Ry6g6c-O4OJypGyE-0M+Ce0TKVSAYqA@mail.gmail.com>
- <CAJHvVciZpSBcQDbqbvwbToo5s2_Q5H2sfr=QAb9UBBWpnD5X-w@mail.gmail.com>
- <CA+EESO7aBYCC2YyW1cCM+ZAdSFhmgAFzv=F832CJLB8R1F=QLQ@mail.gmail.com>
- <CAJHvVciCtcFu9Ep-KJhu1vzn92Oeqf2rFXMw=aKb=0BuMGd4Ww@mail.gmail.com> <CA+EESO7byiqapss_tY5mgVd2g8kkXLtLGsSpcnswN3Bw=WVjFA@mail.gmail.com>
-In-Reply-To: <CA+EESO7byiqapss_tY5mgVd2g8kkXLtLGsSpcnswN3Bw=WVjFA@mail.gmail.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Thu, 20 Jan 2022 10:30:02 -0800
-Message-ID: <CAJHvVciRagsKfgdKcDFcrUtJCA+OujsWPzJb0WriE80VSHT4Ew@mail.gmail.com>
-Subject: Re: [ammarfaizi2-block:google/android/kernel/common/android12-5.4
- 6517/9999] fs/userfaultfd.c:1519:9: warning: variable 'ioctls_out' set but
- not used
-To:     Lokesh Gidra <lokeshgidra@google.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org,
-        "GNU/Weeb Mailing List" <gwml@gnuweeb.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Todd Kjos <tkjos@google.com>, Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Kalesh Singh <kaleshsingh@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.74.217]
+X-ClientProxiedBy: lhreml717-chm.china.huawei.com (10.201.108.68) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 10:16 AM Lokesh Gidra <lokeshgidra@google.com> wrote:
->
-> Thanks a lot for confirming. I hope I have not screwed up like this
-> anywhere else.
+On Mon, 17 Jan 2022 18:52:47 +0200
+Cristian Pop <cristian.pop@analog.com> wrote:
 
-No worries!
+> Add support for K Band Downconverter with Integrated
+> Fractional-N PLL and VCO.
+> More info:
+> https://www.analog.com/en/products/admv4420.html
+> 
+> Signed-off-by: Cristian Pop <cristian.pop@analog.com>
 
-For what it's worth, I don't think this is *that* bad of a bug for
-Android. It would mean, if we were using userfaultfd's feature
-detection, we might mistakenly think UFFDIO_CONTINUE was not
-available. But since Android has more direct control over userspace +
-kernel than arbitrary Linux systems, I suspect your userspace code
-doesn't really rely on the feature detection userfaultfd itself
-provides? So, it may have not actually mattered to us in practice
-anyway.
+Hi Cristian,
 
-Still better to be fully correct. ;) But, could have been worse.
+A few comments inline from a very quick look.
 
->
-> On Thu, Jan 20, 2022 at 10:15 AM Axel Rasmussen
-> <axelrasmussen@google.com> wrote:
-> >
-> > On Wed, Jan 19, 2022 at 2:11 PM Lokesh Gidra <lokeshgidra@google.com> wrote:
-> > >
-> > > On Wed, Jan 19, 2022 at 2:03 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
-> > > >
-> > > > On Wed, Jan 19, 2022 at 1:19 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> > > > >
-> > > > > On Wed, Jan 19, 2022 at 12:39 PM Axel Rasmussen
-> > > > > <axelrasmussen@google.com> wrote:
-> > > > > >
-> > > > > > Lokesh, I only spent a few moments looking, but my suspicion is that
-> > > > > > this is the result of an incomplete backport of these patches to the
-> > > > > > Android kernel?
-> > > > > >
-> > > > > > The UFFDIO_CONTINUE patches introduced ioctls_out since the
-> > > > > > computation of it got more complicated, and those same patches also
-> > > > > > modified the put_user() on line 1533 here to use ioctls_out. I think
-> > > > > > Android backported the first part, but left out the second?
-> > > > >
-> > > > > The backport https://android-review.googlesource.com/c/kernel/common/+/1652718
-> > > > > looks like a mixture of
-> > > > > 14819305e09fe4 ("userfaultfd: wp: declare _UFFDIO_WRITEPROTECT
-> > > > > conditionally") and f619147104c8 ("userfaultfd: add UFFDIO_CONTINUE
-> > > > > ioctl").
-> > > > > Not sure why it was done this way, maybe to minimize code changes
-> > > > > while backporting.
-> > > > > Simplest fix is probably to add __maybe_unused to ioctls_out declaration.
-> > > >
-> > > > Unfortunately, that doesn't quite do it. That would fix the warning,
-> > > > but the code in the original e-mail is still wrong: we incorrectly
-> > > > don't report the _UFFDIO_CONTINUE bit, unless we use the value we
-> > > > computed in ioctls_out.
-> > >
-> > > Apologies for the screw up. Actually, since 5.4 kernel didn't already
-> > > have UFFD_WRITE_PROTECT feature and neither was I interested in it, so
-> > > I attempted to only backport UFFDIO_CONTINUE feature and there
-> > > mistakenly missed this one out.
-> > >
-> > > Axel, wouldn't doing what Peter did in the following patch the right
-> > > thing to do?
-> > > https://lore.kernel.org/lkml/20200220163112.11409-18-peterx@redhat.com/
-> > >
-> > > Basically:
-> > >
-> > > - if (put_user(basic_ioctls ? UFFD_API_RANGE_IOCTLS_BASIC :
-> > > -     UFFD_API_RANGE_IOCTLS,
-> > > -     &user_uffdio_register->ioctls))
-> > > + if (put_user(ioctls_out, &user_uffdio_register->ioctls))
-> >
-> > Exactly right, that's the solution. And, I believe Kalesh has now
-> > applied exactly that to the Android tree here:
-> > https://android-review.googlesource.com/c/kernel/common/+/1955138 - so
-> > once that's merged, we can consider this fixed.
-> >
-> > >
-> > >
-> > > >
-> > > > >
-> > > > > >
-> > > > > > On Sun, Jan 16, 2022 at 10:11 AM kernel test robot <lkp@intel.com> wrote:
-> > > > > > >
-> > > > > > > Hi Axel,
-> > > > > > >
-> > > > > > > FYI, the error/warning still remains.
-> > > > > > >
-> > > > > > > tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.4
-> > > > > > > head:   bdf17ba628090156b539b1474eb5c636eeaf571b
-> > > > > > > commit: b69f713e60d03ae448e5c9fd92e5b0b193dea7be [6517/9999] BACKPORT: FROMGIT: userfaultfd: add UFFDIO_CONTINUE ioctl
-> > > > > > > config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220117/202201170247.Cir3moOM-lkp@intel.com/config)
-> > > > > > > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c63a3175c2947e8c1a2d3bbe16a8586600705c54)
-> > > > > > > reproduce (this is a W=1 build):
-> > > > > > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > > > > > >         chmod +x ~/bin/make.cross
-> > > > > > >         # https://github.com/ammarfaizi2/linux-block/commit/b69f713e60d03ae448e5c9fd92e5b0b193dea7be
-> > > > > > >         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-> > > > > > >         git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.4
-> > > > > > >         git checkout b69f713e60d03ae448e5c9fd92e5b0b193dea7be
-> > > > > > >         # save the config file to linux build tree
-> > > > > > >         mkdir build_dir
-> > > > > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> > > > > > >
-> > > > > > > If you fix the issue, kindly add following tag as appropriate
-> > > > > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > > > >
-> > > > > > > All warnings (new ones prefixed by >>):
-> > > > > > >
-> > > > > > > >> fs/userfaultfd.c:1519:9: warning: variable 'ioctls_out' set but not used [-Wunused-but-set-variable]
-> > > > > > >                    __u64 ioctls_out;
-> > > > > > >                          ^
-> > > > > > >    1 warning generated.
-> > > > > > >
-> > > > > > >
-> > > > > > > vim +/ioctls_out +1519 fs/userfaultfd.c
-> > > > > > >
-> > > > > > >   1311
-> > > > > > >   1312  static int userfaultfd_register(struct userfaultfd_ctx *ctx,
-> > > > > > >   1313                                  unsigned long arg)
-> > > > > > >   1314  {
-> > > > > > >   1315          struct mm_struct *mm = ctx->mm;
-> > > > > > >   1316          struct vm_area_struct *vma, *prev, *cur;
-> > > > > > >   1317          int ret;
-> > > > > > >   1318          struct uffdio_register uffdio_register;
-> > > > > > >   1319          struct uffdio_register __user *user_uffdio_register;
-> > > > > > >   1320          unsigned long vm_flags, new_flags;
-> > > > > > >   1321          bool found;
-> > > > > > >   1322          bool basic_ioctls;
-> > > > > > >   1323          unsigned long start, end, vma_end;
-> > > > > > >   1324
-> > > > > > >   1325          user_uffdio_register = (struct uffdio_register __user *) arg;
-> > > > > > >   1326
-> > > > > > >   1327          ret = -EFAULT;
-> > > > > > >   1328          if (copy_from_user(&uffdio_register, user_uffdio_register,
-> > > > > > >   1329                             sizeof(uffdio_register)-sizeof(__u64)))
-> > > > > > >   1330                  goto out;
-> > > > > > >   1331
-> > > > > > >   1332          ret = -EINVAL;
-> > > > > > >   1333          if (!uffdio_register.mode)
-> > > > > > >   1334                  goto out;
-> > > > > > >   1335          if (uffdio_register.mode & ~UFFD_API_REGISTER_MODES)
-> > > > > > >   1336                  goto out;
-> > > > > > >   1337          vm_flags = 0;
-> > > > > > >   1338          if (uffdio_register.mode & UFFDIO_REGISTER_MODE_MISSING)
-> > > > > > >   1339                  vm_flags |= VM_UFFD_MISSING;
-> > > > > > >   1340          if (uffdio_register.mode & UFFDIO_REGISTER_MODE_WP) {
-> > > > > > >   1341                  vm_flags |= VM_UFFD_WP;
-> > > > > > >   1342                  /*
-> > > > > > >   1343                   * FIXME: remove the below error constraint by
-> > > > > > >   1344                   * implementing the wprotect tracking mode.
-> > > > > > >   1345                   */
-> > > > > > >   1346                  ret = -EINVAL;
-> > > > > > >   1347                  goto out;
-> > > > > > >   1348          }
-> > > > > > >   1349          if (uffdio_register.mode & UFFDIO_REGISTER_MODE_MINOR) {
-> > > > > > >   1350  #ifndef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
-> > > > > > >   1351                  goto out;
-> > > > > > >   1352  #endif
-> > > > > > >   1353                  vm_flags |= VM_UFFD_MINOR;
-> > > > > > >   1354          }
-> > > > > > >   1355
-> > > > > > >   1356          ret = validate_range(mm, &uffdio_register.range.start,
-> > > > > > >   1357                               uffdio_register.range.len);
-> > > > > > >   1358          if (ret)
-> > > > > > >   1359                  goto out;
-> > > > > > >   1360
-> > > > > > >   1361          start = uffdio_register.range.start;
-> > > > > > >   1362          end = start + uffdio_register.range.len;
-> > > > > > >   1363
-> > > > > > >   1364          ret = -ENOMEM;
-> > > > > > >   1365          if (!mmget_not_zero(mm))
-> > > > > > >   1366                  goto out;
-> > > > > > >   1367
-> > > > > > >   1368          down_write(&mm->mmap_sem);
-> > > > > > >   1369          if (!mmget_still_valid(mm))
-> > > > > > >   1370                  goto out_unlock;
-> > > > > > >   1371          vma = find_vma_prev(mm, start, &prev);
-> > > > > > >   1372          if (!vma)
-> > > > > > >   1373                  goto out_unlock;
-> > > > > > >   1374
-> > > > > > >   1375          /* check that there's at least one vma in the range */
-> > > > > > >   1376          ret = -EINVAL;
-> > > > > > >   1377          if (vma->vm_start >= end)
-> > > > > > >   1378                  goto out_unlock;
-> > > > > > >   1379
-> > > > > > >   1380          /*
-> > > > > > >   1381           * If the first vma contains huge pages, make sure start address
-> > > > > > >   1382           * is aligned to huge page size.
-> > > > > > >   1383           */
-> > > > > > >   1384          if (is_vm_hugetlb_page(vma)) {
-> > > > > > >   1385                  unsigned long vma_hpagesize = vma_kernel_pagesize(vma);
-> > > > > > >   1386
-> > > > > > >   1387                  if (start & (vma_hpagesize - 1))
-> > > > > > >   1388                          goto out_unlock;
-> > > > > > >   1389          }
-> > > > > > >   1390
-> > > > > > >   1391          /*
-> > > > > > >   1392           * Search for not compatible vmas.
-> > > > > > >   1393           */
-> > > > > > >   1394          found = false;
-> > > > > > >   1395          basic_ioctls = false;
-> > > > > > >   1396          for (cur = vma; cur && cur->vm_start < end; cur = cur->vm_next) {
-> > > > > > >   1397                  cond_resched();
-> > > > > > >   1398
-> > > > > > >   1399                  BUG_ON(!!cur->vm_userfaultfd_ctx.ctx ^
-> > > > > > >   1400                         !!(cur->vm_flags & __VM_UFFD_FLAGS));
-> > > > > > >   1401
-> > > > > > >   1402                  /* check not compatible vmas */
-> > > > > > >   1403                  ret = -EINVAL;
-> > > > > > >   1404                  if (!vma_can_userfault(cur, vm_flags))
-> > > > > > >   1405                          goto out_unlock;
-> > > > > > >   1406
-> > > > > > >   1407                  /*
-> > > > > > >   1408                   * UFFDIO_COPY will fill file holes even without
-> > > > > > >   1409                   * PROT_WRITE. This check enforces that if this is a
-> > > > > > >   1410                   * MAP_SHARED, the process has write permission to the backing
-> > > > > > >   1411                   * file. If VM_MAYWRITE is set it also enforces that on a
-> > > > > > >   1412                   * MAP_SHARED vma: there is no F_WRITE_SEAL and no further
-> > > > > > >   1413                   * F_WRITE_SEAL can be taken until the vma is destroyed.
-> > > > > > >   1414                   */
-> > > > > > >   1415                  ret = -EPERM;
-> > > > > > >   1416                  if (unlikely(!(cur->vm_flags & VM_MAYWRITE)))
-> > > > > > >   1417                          goto out_unlock;
-> > > > > > >   1418
-> > > > > > >   1419                  /*
-> > > > > > >   1420                   * If this vma contains ending address, and huge pages
-> > > > > > >   1421                   * check alignment.
-> > > > > > >   1422                   */
-> > > > > > >   1423                  if (is_vm_hugetlb_page(cur) && end <= cur->vm_end &&
-> > > > > > >   1424                      end > cur->vm_start) {
-> > > > > > >   1425                          unsigned long vma_hpagesize = vma_kernel_pagesize(cur);
-> > > > > > >   1426
-> > > > > > >   1427                          ret = -EINVAL;
-> > > > > > >   1428
-> > > > > > >   1429                          if (end & (vma_hpagesize - 1))
-> > > > > > >   1430                                  goto out_unlock;
-> > > > > > >   1431                  }
-> > > > > > >   1432
-> > > > > > >   1433                  /*
-> > > > > > >   1434                   * Check that this vma isn't already owned by a
-> > > > > > >   1435                   * different userfaultfd. We can't allow more than one
-> > > > > > >   1436                   * userfaultfd to own a single vma simultaneously or we
-> > > > > > >   1437                   * wouldn't know which one to deliver the userfaults to.
-> > > > > > >   1438                   */
-> > > > > > >   1439                  ret = -EBUSY;
-> > > > > > >   1440                  if (cur->vm_userfaultfd_ctx.ctx &&
-> > > > > > >   1441                      cur->vm_userfaultfd_ctx.ctx != ctx)
-> > > > > > >   1442                          goto out_unlock;
-> > > > > > >   1443
-> > > > > > >   1444                  /*
-> > > > > > >   1445                   * Note vmas containing huge pages
-> > > > > > >   1446                   */
-> > > > > > >   1447                  if (is_vm_hugetlb_page(cur))
-> > > > > > >   1448                          basic_ioctls = true;
-> > > > > > >   1449
-> > > > > > >   1450                  found = true;
-> > > > > > >   1451          }
-> > > > > > >   1452          BUG_ON(!found);
-> > > > > > >   1453
-> > > > > > >   1454          if (vma->vm_start < start)
-> > > > > > >   1455                  prev = vma;
-> > > > > > >   1456
-> > > > > > >   1457          ret = 0;
-> > > > > > >   1458          do {
-> > > > > > >   1459                  cond_resched();
-> > > > > > >   1460
-> > > > > > >   1461                  BUG_ON(!vma_can_userfault(vma, vm_flags));
-> > > > > > >   1462                  BUG_ON(vma->vm_userfaultfd_ctx.ctx &&
-> > > > > > >   1463                         vma->vm_userfaultfd_ctx.ctx != ctx);
-> > > > > > >   1464                  WARN_ON(!(vma->vm_flags & VM_MAYWRITE));
-> > > > > > >   1465
-> > > > > > >   1466                  /*
-> > > > > > >   1467                   * Nothing to do: this vma is already registered into this
-> > > > > > >   1468                   * userfaultfd and with the right tracking mode too.
-> > > > > > >   1469                   */
-> > > > > > >   1470                  if (vma->vm_userfaultfd_ctx.ctx == ctx &&
-> > > > > > >   1471                      (vma->vm_flags & vm_flags) == vm_flags)
-> > > > > > >   1472                          goto skip;
-> > > > > > >   1473
-> > > > > > >   1474                  if (vma->vm_start > start)
-> > > > > > >   1475                          start = vma->vm_start;
-> > > > > > >   1476                  vma_end = min(end, vma->vm_end);
-> > > > > > >   1477
-> > > > > > >   1478                  new_flags = (vma->vm_flags & ~__VM_UFFD_FLAGS) | vm_flags;
-> > > > > > >   1479                  prev = vma_merge(mm, prev, start, vma_end, new_flags,
-> > > > > > >   1480                                   vma->anon_vma, vma->vm_file, vma->vm_pgoff,
-> > > > > > >   1481                                   vma_policy(vma),
-> > > > > > >   1482                                   ((struct vm_userfaultfd_ctx){ ctx }),
-> > > > > > >   1483                                   vma_get_anon_name(vma));
-> > > > > > >   1484                  if (prev) {
-> > > > > > >   1485                          vma = prev;
-> > > > > > >   1486                          goto next;
-> > > > > > >   1487                  }
-> > > > > > >   1488                  if (vma->vm_start < start) {
-> > > > > > >   1489                          ret = split_vma(mm, vma, start, 1);
-> > > > > > >   1490                          if (ret)
-> > > > > > >   1491                                  break;
-> > > > > > >   1492                  }
-> > > > > > >   1493                  if (vma->vm_end > end) {
-> > > > > > >   1494                          ret = split_vma(mm, vma, end, 0);
-> > > > > > >   1495                          if (ret)
-> > > > > > >   1496                                  break;
-> > > > > > >   1497                  }
-> > > > > > >   1498          next:
-> > > > > > >   1499                  /*
-> > > > > > >   1500                   * In the vma_merge() successful mprotect-like case 8:
-> > > > > > >   1501                   * the next vma was merged into the current one and
-> > > > > > >   1502                   * the current one has not been updated yet.
-> > > > > > >   1503                   */
-> > > > > > >   1504                  vma->vm_flags = new_flags;
-> > > > > > >   1505                  vma->vm_userfaultfd_ctx.ctx = ctx;
-> > > > > > >   1506
-> > > > > > >   1507                  if (is_vm_hugetlb_page(vma) && uffd_disable_huge_pmd_share(vma))
-> > > > > > >   1508                          hugetlb_unshare_all_pmds(vma);
-> > > > > > >   1509
-> > > > > > >   1510          skip:
-> > > > > > >   1511                  prev = vma;
-> > > > > > >   1512                  start = vma->vm_end;
-> > > > > > >   1513                  vma = vma->vm_next;
-> > > > > > >   1514          } while (vma && vma->vm_start < end);
-> > > > > > >   1515  out_unlock:
-> > > > > > >   1516          up_write(&mm->mmap_sem);
-> > > > > > >   1517          mmput(mm);
-> > > > > > >   1518          if (!ret) {
-> > > > > > > > 1519                  __u64 ioctls_out;
-> > > > > > >   1520
-> > > > > > >   1521                  ioctls_out = basic_ioctls ? UFFD_API_RANGE_IOCTLS_BASIC :
-> > > > > > >   1522                      UFFD_API_RANGE_IOCTLS;
-> > > > > > >   1523
-> > > > > > >   1524                  /* CONTINUE ioctl is only supported for MINOR ranges. */
-> > > > > > >   1525                  if (!(uffdio_register.mode & UFFDIO_REGISTER_MODE_MINOR))
-> > > > > > >   1526                          ioctls_out &= ~((__u64)1 << _UFFDIO_CONTINUE);
-> > > > > > >   1527
-> > > > > > >   1528                  /*
-> > > > > > >   1529                   * Now that we scanned all vmas we can already tell
-> > > > > > >   1530                   * userland which ioctls methods are guaranteed to
-> > > > > > >   1531                   * succeed on this range.
-> > > > > > >   1532                   */
-> > > > > > >   1533                  if (put_user(basic_ioctls ? UFFD_API_RANGE_IOCTLS_BASIC :
-> > > > > > >   1534                               UFFD_API_RANGE_IOCTLS,
-> > > > > > >   1535                               &user_uffdio_register->ioctls))
-> > > > > > >   1536                          ret = -EFAULT;
-> > > > > > >   1537          }
-> > > > > > >   1538  out:
-> > > > > > >   1539          return ret;
-> > > > > > >   1540  }
-> > > > > > >   1541
-> > > > > > >
-> > > > > > > ---
-> > > > > > > 0-DAY CI Kernel Test Service, Intel Corporation
-> > > > > > > https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> > > > > >
+Thanks,
+
+Jonathan
+
+
+> ---
+>  drivers/iio/frequency/Kconfig    |  10 +
+>  drivers/iio/frequency/Makefile   |   1 +
+>  drivers/iio/frequency/admv4420.c | 412 +++++++++++++++++++++++++++++++
+>  3 files changed, 423 insertions(+)
+>  create mode 100644 drivers/iio/frequency/admv4420.c
+> 
+> diff --git a/drivers/iio/frequency/Kconfig b/drivers/iio/frequency/Kconfig
+> index b44036f843af..55aa63548c00 100644
+> --- a/drivers/iio/frequency/Kconfig
+> +++ b/drivers/iio/frequency/Kconfig
+> @@ -60,6 +60,16 @@ config ADMV1013
+>  	  To compile this driver as a module, choose M here: the
+>  	  module will be called admv1013.
+>  
+> +config ADMV4420
+> +	tristate "Analog Devices ADMV4420 K Band Downconverter"
+> +	depends on SPI && COMMON_CLK
+
+Why COMMON_CLK?  I can't see any usage.
+
+However, I'm not sure just providing an input frequency is that
+sensible as it is likely to be connect to something variable
+(to some degree at least).
+
+> +	help
+> +	  Say yes here to build support for Analog Devices K Band
+> +	  Downconverter with integrated Fractional-N PLL and VCO.
+> +
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called admv4420.
+> +
+>  config ADRF6780
+>          tristate "Analog Devices ADRF6780 Microwave Upconverter"
+>          depends on SPI
+> diff --git a/drivers/iio/frequency/Makefile b/drivers/iio/frequency/Makefile
+> index ae6899856c99..782e5baa1630 100644
+> --- a/drivers/iio/frequency/Makefile
+> +++ b/drivers/iio/frequency/Makefile
+> @@ -8,4 +8,5 @@ obj-$(CONFIG_AD9523) += ad9523.o
+>  obj-$(CONFIG_ADF4350) += adf4350.o
+>  obj-$(CONFIG_ADF4371) += adf4371.o
+>  obj-$(CONFIG_ADMV1013) += admv1013.o
+> +obj-$(CONFIG_ADMV4420) += admv4420.o
+>  obj-$(CONFIG_ADRF6780) += adrf6780.o
+> diff --git a/drivers/iio/frequency/admv4420.c b/drivers/iio/frequency/admv4420.c
+> new file mode 100644
+> index 000000000000..f32039ab2cd3
+> --- /dev/null
+> +++ b/drivers/iio/frequency/admv4420.c
+> @@ -0,0 +1,412 @@
+> +// SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
+> +/*
+> + * ADMV4420
+> + *
+> + * Copyright 2021 Analog Devices Inc.
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/iio/iio.h>
+> +#include <linux/iio/sysfs.h>
+> +#include <linux/module.h>
+> +#include <linux/regmap.h>
+> +#include <linux/spi/spi.h>
+> +
+> +/* ADMV4420 Register Map */
+> +#define ADMV4420_SPI_CONFIG_1			0x00
+> +#define ADMV4420_SPI_CONFIG_2			0x01
+> +#define ADMV4420_CHIPTYPE			0x03
+> +#define ADMV4420_PRODUCT_ID_L			0x04
+> +#define ADMV4420_PRODUCT_ID_H			0x05
+> +#define ADMV4420_SCRATCHPAD			0x0A
+> +#define ADMV4420_SPI_REV			0x0B
+> +#define ADMV4420_ENABLES			0x103
+> +#define ADMV4420_SDO_LEVEL			0x108
+> +#define ADMV4420_INT_L				0x200
+> +#define ADMV4420_INT_H				0x201
+> +#define ADMV4420_FRAC_L				0x202
+> +#define ADMV4420_FRAC_M				0x203
+> +#define ADMV4420_FRAC_H				0x204
+> +#define ADMV4420_MOD_L				0x208
+> +#define ADMV4420_MOD_M				0x209
+> +#define ADMV4420_MOD_H				0x20A
+> +#define ADMV4420_R_DIV_L			0x20C
+> +#define ADMV4420_R_DIV_H			0x20D
+> +#define ADMV4420_REFERENCE			0x20E
+> +#define ADMV4420_VCO_DATA_READBACK1		0x211
+> +#define ADMV4420_VCO_DATA_READBACK2		0x212
+> +#define ADMV4420_PLL_MUX_SEL			0x213
+> +#define ADMV4420_LOCK_DETECT			0x214
+> +#define ADMV4420_BAND_SELECT			0x215
+> +#define ADMV4420_VCO_ALC_TIMEOUT		0x216
+> +#define ADMV4420_VCO_MANUAL			0x217
+> +#define ADMV4420_ALC				0x219
+> +#define ADMV4420_VCO_TIMEOUT1			0x21C
+> +#define ADMV4420_VCO_TIMEOUT2			0x21D
+> +#define ADMV4420_VCO_BAND_DIV			0x21E
+> +#define ADMV4420_VCO_READBACK_SEL		0x21F
+> +#define ADMV4420_AUTOCAL			0x226
+> +#define ADMV4420_CP_STATE			0x22C
+> +#define ADMV4420_CP_BLEED_EN			0x22D
+> +#define ADMV4420_CP_CURRENT			0x22E
+> +#define ADMV4420_CP_BLEED			0x22F
+> +
+> +
+> +#define ADMV4420_SPI_CONFIG_1_SOFTRESET_	BIT(7)
+> +#define ADMV4420_SPI_CONFIG_1_SDOACTIVE_	BIT(4)
+> +#define ADMV4420_SPI_CONFIG_1_SDOACTIVE		BIT(3)
+> +#define ADMV4420_SPI_CONFIG_1_SOFTRESET		BIT(1)
+> +
+> +#define ADMV4420_REFERENCE_IN_MODE(x)		(x << 1)
+> +#define ADMV4420_REFERENCE_DOUBLER(x)		(x << 2)
+> +#define ADMV4420_REFERENCE_DIVIDE_BY_2_MASK	BIT(0)
+> +#define ADMV4420_REFERENCE_MODE_MASK		BIT(1)
+> +#define ADMV4420_REFERENCE_DOUBLER_MASK		BIT(2)
+> +#define ADMV4420_REF_DIVIDER_MAX_VAL		GENMASK(9, 0)
+> +#define ADMV4420_N_COUNTER_INT_MAX		GENMASK(15, 0)
+> +#define ADMV4420_N_COUNTER_FRAC_MAX		GENMASK(23, 0)
+> +#define ADMV4420_N_COUNTER_MOD_MAX		GENMASK(23, 0)
+> +
+> +#define ADMV4420_INT_L_MASK			GENMASK(7, 0)
+> +#define ADMV4420_INT_H_MASK			GENMASK(15, 8)
+> +#define ADMV4420_FRAC_L_MASK			GENMASK(7, 0)
+> +#define ADMV4420_FRAC_M_MASK			GENMASK(15, 8)
+> +#define ADMV4420_FRAC_H_MASK			GENMASK(23, 16)
+> +#define ADMV4420_MOD_L_MASK			GENMASK(7, 0)
+> +#define ADMV4420_MOD_M_MASK			GENMASK(15, 8)
+> +#define ADMV4420_MOD_H_MASK			GENMASK(23, 16)
+> +
+> +#define ENABLE_PLL				BIT(6)
+> +#define ENABLE_LO				BIT(5)
+> +#define ENABLE_VCO				BIT(3)
+> +#define ENABLE_IFAMP				BIT(2)
+> +#define ENABLE_MIXER				BIT(1)
+> +#define ENABLE_LNA				BIT(0)
+> +
+> +#define ADMV4420_SCRATCH_PAD_VAL_1              0xAD
+> +#define ADMV4420_SCRATCH_PAD_VAL_2              0xEA
+> +
+> +#define ADMV4420_REF_FREQ_HZ                    50000000
+> +#define MAX_N_COUNTER                           655360UL
+> +#define MAX_R_DIVIDER                           1024
+> +#define ADMV4420_DEFAULT_LO_FREQ_HZ		16750000000ULL
+> +
+> +enum admv4420_mux_sel {
+> +	ADMV4420_LOW = 0,
+> +	ADMV4420_LOCK_DTCT = 1,
+> +	ADMV4420_R_COUNTER_PER_2 = 4,
+> +	ADMV4420_N_CONUTER_PER_2 = 5,
+> +	ADMV4420_HIGH = 8,
+> +};
+> +
+> +struct admv4420_reference_block {
+> +	bool doubler_en;
+> +	bool divide_by_2_en;
+> +	bool ref_single_ended;
+> +	u32 divider;
+> +};
+> +
+> +struct admv4420_n_counter {
+> +	u32 int_val;
+> +	u32 frac_val;
+> +	u32 mod_val;
+> +	u32 n_counter;
+> +};
+> +
+> +struct admv4420_state {
+> +	struct spi_device		*spi;
+> +	struct regmap			*regmap;
+> +	u64				pfd_freq_hz;
+> +	u64				vco_freq_hz;
+> +	u64				lo_freq_hz;
+> +	struct admv4420_reference_block ref_block;
+> +	struct admv4420_n_counter	n_counter;
+> +	enum admv4420_mux_sel		mux_sel;
+> +	struct mutex			lock;
+
+All locks need a comment saying what exactly their intended scope is.
+
+> +};
+> +
+> +static const struct regmap_config admv4420_regmap_config = {
+> +	.reg_bits = 16,
+> +	.val_bits = 8,
+> +	.read_flag_mask = BIT(7),
+> +};
+> +
+> +static int admv4420_reg_access(struct iio_dev *indio_dev,
+> +			       u32 reg, u32 writeval,
+> +			       u32 *readval)
+> +{
+> +	struct admv4420_state *st = iio_priv(indio_dev);
+> +
+> +	if (readval)
+> +		return regmap_read(st->regmap, reg, readval);
+> +	else
+> +		return regmap_write(st->regmap, reg, writeval);
+> +}
+> +
+> +static int admv4420_set_n_counter(struct admv4420_state *st, u32 int_val, u32 frac_val, u32 mod_val)
+
+Shorter lines preferred. Under 80 chars unless it significantly affects readability or breaks
+up a string we might want to grep for.
+
+> +{
+> +	int ret;
+> +
+> +	ret = regmap_write(st->regmap, ADMV4420_FRAC_H, FIELD_GET(ADMV4420_FRAC_H_MASK, frac_val));
+
+I'm not that keen on doing FIELD_GET for a simple breaking up into 8 bit chunks.
+It is a rare occasion where it makes it harder to see what is going on. 
+
+Can't you do a bulk write to set 3 registers in one function call?
+Will require a DMA safe buffer but it's probably easier to read than this
+repetition
+
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_write(st->regmap, ADMV4420_FRAC_M, FIELD_GET(ADMV4420_FRAC_M_MASK, frac_val));
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_write(st->regmap, ADMV4420_FRAC_L, FIELD_GET(ADMV4420_FRAC_L_MASK, frac_val));
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_write(st->regmap, ADMV4420_MOD_H, FIELD_GET(ADMV4420_MOD_H_MASK, mod_val));
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_write(st->regmap, ADMV4420_MOD_M, FIELD_GET(ADMV4420_MOD_M_MASK, mod_val));
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_write(st->regmap, ADMV4420_MOD_L, FIELD_GET(ADMV4420_MOD_L_MASK, mod_val));
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_write(st->regmap, ADMV4420_INT_H, FIELD_GET(ADMV4420_INT_H_MASK, int_val));
+> +	if (ret)
+> +		return ret;
+> +
+> +	return regmap_write(st->regmap, ADMV4420_INT_L, FIELD_GET(ADMV4420_INT_L_MASK, int_val));
+> +}
+> +
+> +static int admv4420_read_raw(struct iio_dev *indio_dev,
+> +			     struct iio_chan_spec const *chan,
+> +			     int *val, int *val2, long info)
+> +{
+> +	struct admv4420_state *st = iio_priv(indio_dev);
+> +
+> +	switch (info) {
+> +	case IIO_CHAN_INFO_FREQUENCY:
+> +		*val = div_u64(st->lo_freq_hz, 1000000);
+> +		div_u64_rem(st->lo_freq_hz, 1000000, val2);
+> +
+> +		return IIO_VAL_INT_PLUS_MICRO;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static const struct iio_info admv4420_info = {
+> +	.read_raw = admv4420_read_raw,
+> +	.debugfs_reg_access = &admv4420_reg_access,
+> +};
+> +
+> +static const struct iio_chan_spec admv4420_channels[] = {
+> +	{
+> +		.type = IIO_ALTVOLTAGE,
+> +		.output = 0,
+> +		.indexed = 1,
+> +		.channel = 0,
+> +		.info_mask_separate = BIT(IIO_CHAN_INFO_FREQUENCY),
+> +	},
+> +};
+> +
+> +static void admv4420_dt_parse(struct admv4420_state *st)
+> +{
+> +	struct spi_device *spi = st->spi;
+> +
+> +	device_property_read_u64(&spi->dev, "adi,lo_freq_hz", &st->lo_freq_hz);
+> +	st->ref_block.ref_single_ended = of_property_read_bool(spi->dev.of_node,
+> +							       "adi,ref_ext_single_ended_en");
+
+Use generic fw properties from include/linux/property.h as
+then we get support for other firmware types for free.
+
+> +}
+> +
+> +static inline uint64_t admv4420_calc_pfd_vco(struct admv4420_state *st)
+> +{
+> +	return div_u64(st->vco_freq_hz * 10, st->n_counter.n_counter);
+> +}
+> +
+> +static inline uint64_t admv4420_calc_pfd_ref(struct admv4420_state *st)
+> +{
+> +	uint64_t tmp;
+> +
+> +	tmp = ADMV4420_REF_FREQ_HZ * (st->ref_block.doubler_en ? 2 : 1);
+> +	return div_u64(tmp, st->ref_block.divider * (st->ref_block.divide_by_2_en ? 2 : 1));
+
+Pull that ternary operating out on it's own line. There is too much going on in
+one statement to make it easy to read!
+
+> +}
+> +
+> +static int admv4420_calc_parameters(struct admv4420_state *st)
+> +{
+> +	u64 pfd_ref, pfd_vco;
+> +	bool sol_found = false;
+> +
+> +	st->ref_block.doubler_en = false;
+> +	st->ref_block.divide_by_2_en = false;
+> +	st->vco_freq_hz = div_u64(st->lo_freq_hz, 2);
+> +
+> +	for (st->ref_block.divider = 1; st->ref_block.divider < MAX_R_DIVIDER;
+> +	    st->ref_block.divider++) {
+> +		pfd_ref = admv4420_calc_pfd_ref(st);
+> +		for (st->n_counter.n_counter = 1; st->n_counter.n_counter < MAX_N_COUNTER;
+> +		    st->n_counter.n_counter++) {
+> +			pfd_vco = admv4420_calc_pfd_vco(st);
+> +			if (pfd_ref == pfd_vco) {
+> +				sol_found = true;
+> +				break;
+> +			}
+> +		}
+> +
+> +		if (sol_found)
+> +			break;
+> +
+> +		st->n_counter.n_counter = 1;
+> +	}
+> +	if (!sol_found)
+> +		return -1;
+> +
+> +	st->n_counter.int_val = div_u64_rem(st->n_counter.n_counter, 10, &st->n_counter.frac_val);
+> +	st->n_counter.mod_val = 1;
+> +
+> +	return 0;
+> +}
+> +
+> +static int admv4420_setup(struct iio_dev *indio_dev)
+> +{
+> +	struct admv4420_state *st = iio_priv(indio_dev);
+> +	u32 val = 0;
+
+This will always be set before use.  If you are seeing a compiler warning then fine to leave
+it here but perhaps add a comment so no one 'cleans it up'.
+
+> +	int ret;
+> +
+> +	ret = regmap_write(st->regmap, ADMV4420_SPI_CONFIG_1,
+> +			   ADMV4420_SPI_CONFIG_1_SOFTRESET_ | ADMV4420_SPI_CONFIG_1_SOFTRESET);
+
+In general try to keep below 80 chars where it is easy to do like here.
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_write(st->regmap, ADMV4420_SPI_CONFIG_1,
+> +			   ADMV4420_SPI_CONFIG_1_SDOACTIVE_ | ADMV4420_SPI_CONFIG_1_SDOACTIVE);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_write(st->regmap, ADMV4420_SCRATCHPAD, ADMV4420_SCRATCH_PAD_VAL_1);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_read(st->regmap, ADMV4420_SCRATCHPAD, &val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (val != ADMV4420_SCRATCH_PAD_VAL_1) {
+> +		dev_err(indio_dev->dev.parent, "Failed ADMV4420 to read/write scratchpad %x ", val);
+> +		return -EIO;
+> +	}
+> +
+> +	ret = regmap_write(st->regmap, ADMV4420_SCRATCHPAD, ADMV4420_SCRATCH_PAD_VAL_2);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_read(st->regmap, ADMV4420_SCRATCHPAD, &val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (val != ADMV4420_SCRATCH_PAD_VAL_2) {
+> +		dev_err(indio_dev->dev.parent, "Failed to read/write scratchpad %x ", val);
+> +		return -EIO;
+> +	}
+> +
+> +	st->mux_sel = ADMV4420_LOCK_DTCT;
+> +	st->lo_freq_hz = ADMV4420_DEFAULT_LO_FREQ_HZ;
+> +
+> +	admv4420_dt_parse(st);
+
+I doubt this needs to be dt specific so _fw_parse()
+
+> +
+> +	ret = admv4420_calc_parameters(st);
+> +	if (ret) {
+> +		dev_err(indio_dev->dev.parent, "Failed calc parameters for %lld ", st->vco_freq_hz);
+> +		return ret;
+> +	}
+> +
+> +	ret = regmap_write(st->regmap, ADMV4420_R_DIV_L,
+> +			   FIELD_GET(0xFF, st->ref_block.divider));
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_write(st->regmap, ADMV4420_R_DIV_H,
+> +			   FIELD_GET(0xFF00, st->ref_block.divider));
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_write(st->regmap, ADMV4420_REFERENCE,
+> +			   st->ref_block.divide_by_2_en |
+> +			   ADMV4420_REFERENCE_IN_MODE(st->ref_block.ref_single_ended) |
+> +			   ADMV4420_REFERENCE_DOUBLER(st->ref_block.doubler_en));
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = admv4420_set_n_counter(st, st->n_counter.int_val, st->n_counter.frac_val, st->n_counter.mod_val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_write(st->regmap, ADMV4420_PLL_MUX_SEL, st->mux_sel);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_write(st->regmap, ADMV4420_ENABLES, ENABLE_PLL | ENABLE_LO | ENABLE_VCO |
+> +			   ENABLE_IFAMP | ENABLE_MIXER | ENABLE_LNA);
+
+return regmap_write()
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int admv4420_probe(struct spi_device *spi)
+> +{
+> +	struct iio_dev *indio_dev;
+> +	struct admv4420_state *st;
+> +	struct regmap *regmap;
+> +	int ret;
+> +
+> +	indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*st));
+> +	if (!indio_dev)
+> +		return -ENOMEM;
+> +
+> +	regmap = devm_regmap_init_spi(spi, &admv4420_regmap_config);
+> +	if (IS_ERR(regmap)) {
+> +		dev_err(&spi->dev, "Error  ADMV4420 initializing spi regmap: %ld\n",
+> +			PTR_ERR(regmap));
+> +		return PTR_ERR(regmap);
+
+For probe errors, it is often easier to just use dev_err_probe() for all of them
+whether or not they can defer.
+
+
+> +	}
+> +
+> +	st = iio_priv(indio_dev);
+> +	st->spi = spi;
+> +	st->regmap = regmap;
+> +	mutex_init(&st->lock);
+> +
+> +	indio_dev->dev.parent = &spi->dev;
+
+We set that automatically in devm_iio_device_alloc() as it's almost always
+the same value as passed in as dev to that function and in rare case
+where it is different we can override. Here they are the same.
+
+> +	indio_dev->name = "admv4420";
+> +	indio_dev->info = &admv4420_info;
+> +	indio_dev->channels = admv4420_channels;
+> +	indio_dev->num_channels = ARRAY_SIZE(admv4420_channels);
+> +
+> +	ret = admv4420_setup(indio_dev);
+> +	if (ret) {
+> +		dev_err(&spi->dev, "Setup ADMV4420 failed (%d)\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	return devm_iio_device_register(&spi->dev, indio_dev);
+> +}
+> +
+

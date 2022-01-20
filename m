@@ -2,170 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5834849441B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 01:17:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B190494469
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 01:23:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344939AbiATARy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Jan 2022 19:17:54 -0500
-Received: from mga09.intel.com ([134.134.136.24]:7430 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344953AbiATARq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Jan 2022 19:17:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642637866; x=1674173866;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OBdLO0on8C7x30AeUyMMRxRwAmwTkaSoxmyAwkdvSM0=;
-  b=mTqzpetgKwpcDiwFBht8MWucWUPFeOviWVIcDTJgbX30NQNleThT5zKP
-   JN6f9b2tiwKWi2GJIOseMpix1XC6gbFFcKdWl5FKyLs2qJ2nRJ63Dsnut
-   viGtYOLq+owQFlhOWpC/7p1PAe9puh8eM2r9NMMTmQYY+1u36NjodElQA
-   +ghQzZuatHzBvy1rVhLHUi2sxQ6knAiBNApasbM2U1nMh8Buc28h9e3OU
-   yBgIo17E7vlRUiakbbsuXm6fCVVHa6rW6Zg4DUR7pvyIBeUeBzMBWpHOW
-   +9HyiKPWEBj0cJPUiPs3Te5q7fmTnkyHOVxs0gM97L1q54EpSw4L3CKX/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="245026692"
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="245026692"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 16:17:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="694001440"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 19 Jan 2022 16:17:43 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nAL95-000Dqg-76; Thu, 20 Jan 2022 00:17:43 +0000
-Date:   Thu, 20 Jan 2022 08:17:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: drivers/cxl/core/mbox.c:330:6: error: unexpected token, expected
- comma
-Message-ID: <202201200842.QCcshg1P-lkp@intel.com>
+        id S1345250AbiATAX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Jan 2022 19:23:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39220 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345222AbiATAXz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Jan 2022 19:23:55 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EA1C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:23:55 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id t4-20020a05683022e400b00591aaf48277so5451042otc.13
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Jan 2022 16:23:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+zOzBednldscnhra6JkUaxzTXlQRRyK3OUBhQ9RJ0wI=;
+        b=NpbjfuoZWYoirSiXxGLn/doWeM127etmTOHNo1OItL5dp01OmD4hyhCDg/xM0UfCT1
+         rOxi8tW+uJMockG2eaGOkKyQkhejkhEHCXiyqfrzq+ciH0g6dpIRKcYX07utdfhT3bDK
+         VYmw5pI/A/scDX13g6SvUKDgDgrx8Jn6KdQXFqHaVOksRgZ28FTLBAqzIMZENvjfAHSf
+         ivs0JEfRrZF9cW/oIqtR4yVAvSkhulG6nWnApHAvLLhY8hHKNqQK5hg1QwyQ6oagmBKc
+         iWKbvRHLeasZuqyYveCKMJcVVvgf5/hOJufpLa4HW+6VoZ9+PLLXF+dg64v0fz1t8vLe
+         tX0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+zOzBednldscnhra6JkUaxzTXlQRRyK3OUBhQ9RJ0wI=;
+        b=6hUY1RgKLrpJF8iMhzl/wmoeDLaR2ZRN2Q/vYmIna/zPTDV34CuMq7R3tAgSCsy1W3
+         6eu9ZnvHAp4AHeo2Gv51WMJ6vxhNDtcttiICiATDdpxR0xpPDPBf65wbV1G4CsvOYXBE
+         ADhrjgObGg0zooansL7nmclHNO57oEcPfNB3SBpL4Mt8ly7sRBNbMebbwUCJelFzRTT+
+         vDHTDqpBEZR5BMZU5/baa9dUi6On642cEArid+KAVHtUR8h6IaGRX98CCmbpEtxYagXk
+         SI8D8NSqRTcDoFHrBwUZ/Fi83b56dKwzVyiYpmncWMFGzPkpWNOgRsf54Q58Wn8/kLYl
+         g3ng==
+X-Gm-Message-State: AOAM532Fute+TGWFOgTixRFJthzdXWtGyJvx8uURWZomLMo4MCcO/VqE
+        aZxfvmZ/8XYKafeDFfVOnqHIlw==
+X-Google-Smtp-Source: ABdhPJy37utAjcXmDJpvkZf5F+Wf0nXgH3gIhBsUk14LTso8ERUlIkmIzuj9uCtuTYG1ry2DQ346/Q==
+X-Received: by 2002:a05:6830:4425:: with SMTP id q37mr7059637otv.14.1642638235040;
+        Wed, 19 Jan 2022 16:23:55 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id l18sm732081otv.49.2022.01.19.16.23.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 16:23:54 -0800 (PST)
+Date:   Wed, 19 Jan 2022 16:24:29 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Alistair Delva <adelva@google.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Rishabh Bhatnagar <rishabhb@codeaurora.org>,
+        stable@vger.kernel.org, Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        linux-remoteproc@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH] remoteproc: Fix count check in rproc_coredump_write()
+Message-ID: <YeirvbTh5Cztcgxh@ripper>
+References: <20220119232139.1125908-1-adelva@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220119232139.1125908-1-adelva@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1d1df41c5a33359a00e919d54eaebfb789711fdc
-commit: 4faf31b43468c58e2c8c91cc5fa26f08a6b733be cxl/mbox: Move mailbox and other non-PCI specific infrastructure to the core
-date:   4 months ago
-config: mips-randconfig-r003-20220118 (https://download.01.org/0day-ci/archive/20220120/202201200842.QCcshg1P-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4faf31b43468c58e2c8c91cc5fa26f08a6b733be
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 4faf31b43468c58e2c8c91cc5fa26f08a6b733be
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/cxl/core/
+On Wed 19 Jan 15:21 PST 2022, Alistair Delva wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> Check count for 0, to avoid a potential underflow. Make the check the
+> same as the one in rproc_recovery_write().
+> 
+> Fixes: 3afdc59e4390 ("remoteproc: Add coredump debugfs entry")
+> Signed-off-by: Alistair Delva <adelva@google.com>
+> Cc: Rishabh Bhatnagar <rishabhb@codeaurora.org>
+> Cc: stable@vger.kernel.org
+> Cc: Ohad Ben-Cohen <ohad@wizery.com>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Sibi Sankar <sibis@codeaurora.org>
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: kernel-team@android.com
 
-All errors (new ones prefixed by >>):
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
->> drivers/cxl/core/mbox.c:330:6: error: unexpected token, expected comma
-           if (get_user(n_commands, &q->n_commands))
-               ^
-   arch/mips/include/asm/uaccess.h:138:33: note: expanded from macro 'get_user'
-           access_ok(__p, sizeof(*__p)) ? __get_user((x), __p) :           \
-                                          ^
-   arch/mips/include/asm/uaccess.h:224:23: note: expanded from macro '__get_user'
-                   __get_data_asm((x), user_lw, __gu_ptr);                 \
-                                       ^
-   <inline asm>:3:10: note: instantiated into assembly here
-           .set    eva
-                      ^
->> drivers/cxl/core/mbox.c:330:6: error: invalid operand for instruction
-           if (get_user(n_commands, &q->n_commands))
-               ^
-   arch/mips/include/asm/uaccess.h:138:33: note: expanded from macro 'get_user'
-           access_ok(__p, sizeof(*__p)) ? __get_user((x), __p) :           \
-                                          ^
-   arch/mips/include/asm/uaccess.h:224:23: note: expanded from macro '__get_user'
-                   __get_data_asm((x), user_lw, __gu_ptr);                 \
-                                       ^
-   <inline asm>:4:10: note: instantiated into assembly here
-           lwe $4, 0($16)
-                   ^
-   drivers/cxl/core/mbox.c:335:10: error: unexpected token, expected comma
-                   return put_user(cxl_cmd_count, &q->n_commands);
-                          ^
-   arch/mips/include/asm/uaccess.h:112:33: note: expanded from macro 'put_user'
-           access_ok(__p, sizeof(*__p)) ? __put_user((x), __p) : -EFAULT;  \
-                                          ^
-   arch/mips/include/asm/uaccess.h:177:18: note: expanded from macro '__put_user'
-                   __put_data_asm(user_sw, __pu_ptr);                      \
-                                  ^
-   <inline asm>:3:10: note: instantiated into assembly here
-           .set    eva
-                      ^
-   drivers/cxl/core/mbox.c:335:10: error: invalid operand for instruction
-                   return put_user(cxl_cmd_count, &q->n_commands);
-                          ^
-   arch/mips/include/asm/uaccess.h:112:33: note: expanded from macro 'put_user'
-           access_ok(__p, sizeof(*__p)) ? __put_user((x), __p) : -EFAULT;  \
-                                          ^
-   arch/mips/include/asm/uaccess.h:177:18: note: expanded from macro '__put_user'
-                   __put_data_asm(user_sw, __pu_ptr);                      \
-                                  ^
-   <inline asm>:4:10: note: instantiated into assembly here
-           swe $3, 0($16)
-                   ^
-   4 errors generated.
+Regards,
+Bjorn
 
-
-vim +330 drivers/cxl/core/mbox.c
-
-   319	
-   320	int cxl_query_cmd(struct cxl_memdev *cxlmd,
-   321			  struct cxl_mem_query_commands __user *q)
-   322	{
-   323		struct device *dev = &cxlmd->dev;
-   324		struct cxl_mem_command *cmd;
-   325		u32 n_commands;
-   326		int j = 0;
-   327	
-   328		dev_dbg(dev, "Query IOCTL\n");
-   329	
- > 330		if (get_user(n_commands, &q->n_commands))
-   331			return -EFAULT;
-   332	
-   333		/* returns the total number if 0 elements are requested. */
-   334		if (n_commands == 0)
-   335			return put_user(cxl_cmd_count, &q->n_commands);
-   336	
-   337		/*
-   338		 * otherwise, return max(n_commands, total commands) cxl_command_info
-   339		 * structures.
-   340		 */
-   341		cxl_for_each_cmd(cmd) {
-   342			const struct cxl_command_info *info = &cmd->info;
-   343	
-   344			if (copy_to_user(&q->commands[j++], info, sizeof(*info)))
-   345				return -EFAULT;
-   346	
-   347			if (j == n_commands)
-   348				break;
-   349		}
-   350	
-   351		return 0;
-   352	}
-   353	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+>  drivers/remoteproc/remoteproc_debugfs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
+> index b5a1e3b697d9..581930483ef8 100644
+> --- a/drivers/remoteproc/remoteproc_debugfs.c
+> +++ b/drivers/remoteproc/remoteproc_debugfs.c
+> @@ -76,7 +76,7 @@ static ssize_t rproc_coredump_write(struct file *filp,
+>  	int ret, err = 0;
+>  	char buf[20];
+>  
+> -	if (count > sizeof(buf))
+> +	if (count < 1 || count > sizeof(buf))
+>  		return -EINVAL;
+>  
+>  	ret = copy_from_user(buf, user_buf, count);
+> -- 
+> 2.30.2
+> 

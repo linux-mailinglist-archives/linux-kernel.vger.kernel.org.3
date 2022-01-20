@@ -2,82 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E56B949538A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8DB49538B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232889AbiATRuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 12:50:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:58027 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232647AbiATRuW (ORCPT
+        id S232930AbiATRu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 12:50:26 -0500
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:57540 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232699AbiATRuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 20 Jan 2022 12:50:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642701021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PX67YbF8eMZTe9OThRlcIQJMcAFWnuGSg3N6hvzpSBg=;
-        b=HOsdDDmx4LPgXPrqUFynPvzlyel5pDSaLvLEhScWlvr7EHgIBfikr1m4Pb5yUdUzQwrG4/
-        ygPHzGjTnd36Jw26nQAM7wMErgx8HGBiyLfM+kw29xVJ/UIDT/N6zVLtr7Avv91QH+T3O8
-        uHQzFOm39qfFRkqZkb0eO7eWLa+DL6U=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-330-ifg5JFc5MCSfOeVqF4U9iQ-1; Thu, 20 Jan 2022 12:50:18 -0500
-X-MC-Unique: ifg5JFc5MCSfOeVqF4U9iQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 395C5100C661;
-        Thu, 20 Jan 2022 17:50:17 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id ED63E7DE41;
-        Thu, 20 Jan 2022 17:50:16 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [PATCH] KVM: x86: skip host CPUID call for hypervisor leaves
-Date:   Thu, 20 Jan 2022 12:50:15 -0500
-Message-Id: <20220120175015.1747392-1-pbonzini@redhat.com>
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 20KHoIRS017126
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jan 2022 12:50:19 -0500
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 60B5F15C41B6; Thu, 20 Jan 2022 12:50:18 -0500 (EST)
+Date:   Thu, 20 Jan 2022 12:50:18 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] random: use named fields for adjusting chacha state
+Message-ID: <Yemg2rWLqmYNzcDF@mit.edu>
+References: <CAHmME9pxJFBv-ZZ3bPMJdmxUO4oeY-wS4BtW34w1ncbeeU=MeA@mail.gmail.com>
+ <20220120150734.509125-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220120150734.509125-1-Jason@zx2c4.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hypervisor leaves are always synthesized by __do_cpuid_func.  Just return
-zeroes and do not ask the host, it would return a bogus value anyway if
-it were used.
+On Thu, Jan 20, 2022 at 04:07:34PM +0100, Jason A. Donenfeld wrote:
+> @@ -750,13 +756,13 @@ static bool crng_init_try_arch(struct crng_state *crng)
+>  	bool arch_init = true;
+>  	unsigned long rv;
+>  
+> -	for (i = 4; i < 16; i++) {
+> +	for (i = 0; i < ARRAY_SIZE(crng->key); i++) {
+>  		if (!arch_get_random_seed_long(&rv) &&
+>  		    !arch_get_random_long(&rv)) {
+>  			rv = random_get_entropy();
+>  			arch_init = false;
+>  		}
+> -		crng->state[i] ^= rv;
+> +		crng->key[i] ^= rv;
+>  	}
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/kvm/cpuid.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+This change means that we're only initializing the key, but we're not
+initializing the counter/nonce (well, IV) value.  Could you fix this,
+please?  
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 3902c28fb6cb..fd949e89120a 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -692,9 +692,17 @@ static struct kvm_cpuid_entry2 *do_host_cpuid(struct kvm_cpuid_array *array,
- 
- 	entry = &array->entries[array->nent++];
- 
-+	memset(entry, 0, sizeof(*entry));
- 	entry->function = function;
- 	entry->index = index;
--	entry->flags = 0;
-+	switch (function & 0xC0000000) {
-+	case 0x40000000:
-+		/* Hypervisor leaves are always synthesized by __do_cpuid_func.  */
-+		return entry;
-+
-+	default:
-+		break;
-+	}
- 
- 	cpuid_count(entry->function, entry->index,
- 		    &entry->eax, &entry->ebx, &entry->ecx, &entry->edx);
--- 
-2.31.1
+> @@ -768,13 +774,13 @@ static bool __init crng_init_try_arch_early(struct crng_state *crng)
+>  	bool arch_init = true;
+>  	unsigned long rv;
+>  
+> -	for (i = 4; i < 16; i++) {
+> +	for (i = 0; i < ARRAY_SIZE(crng->key); i++) {
+>  		if (!arch_get_random_seed_long_early(&rv) &&
+>  		    !arch_get_random_long_early(&rv)) {
+>  			rv = random_get_entropy();
+>  			arch_init = false;
+>  		}
+> -		crng->state[i] ^= rv;
+> +		crng->key[i] ^= rv;
+>  	}
 
+Same issue here.
+
+> @@ -783,14 +789,14 @@ static bool __init crng_init_try_arch_early(struct crng_state *crng)
+>  static void crng_initialize_secondary(struct crng_state *crng)
+>  {
+>  	chacha_init_consts(crng->state);
+> -	_get_random_bytes(&crng->state[4], sizeof(u32) * 12);
+> +	_get_random_bytes(&crng->key, sizeof(crng->key));
+>  	crng_init_try_arch(crng);
+>  	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
+>  }
+
+.... and here....
+
+
+>  static void __init crng_initialize_primary(struct crng_state *crng)
+>  {
+> -	_extract_entropy(&crng->state[4], sizeof(u32) * 12);
+> +	_extract_entropy(&crng->key, sizeof(crng->key));
+>  	if (crng_init_try_arch_early(crng) && trust_cpu && crng_init < 2) {
+>  		invalidate_batched_entropy();
+>  		numa_crng_init();
+> @@ -892,7 +898,7 @@ static size_t crng_fast_load(const u8 *cp, size_t len)
+
+And here....
+
+> @@ -994,9 +1000,9 @@ static void _extract_crng(struct crng_state *crng, u8 out[CHACHA_BLOCK_SIZE])
+>  			crng_reseed(crng, crng == &primary_crng);
+>  	}
+>  	spin_lock_irqsave(&crng->lock, flags);
+> -	chacha20_block(&crng->state[0], out);
+> -	if (crng->state[12] == 0)
+> -		crng->state[13]++;
+> +	chacha20_block(crng->state, out);
+> +	if (unlikely(!crng->counter[0] && !++crng->counter[1]))
+> +		++crng->nonce;
+>  	spin_unlock_irqrestore(&crng->lock, flags);
+>  }
+
+Minor nit, but I might do this as:
+
+	if (unlikely(!crng->counter[0]) && !++crng->counter[1])
+		++crng->nonce;
+
+
+Cheers,
+
+						- Ted

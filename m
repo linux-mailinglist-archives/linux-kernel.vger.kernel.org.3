@@ -2,102 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7FFA494B03
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:46:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59851494B06
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359645AbiATJqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 04:46:15 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:47360 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359652AbiATJqL (ORCPT
+        id S239772AbiATJr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 04:47:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233682AbiATJr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 04:46:11 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id D1C5E1F394;
-        Thu, 20 Jan 2022 09:46:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642671969; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=qgmelI2EkTIKnzmErCnW3xXmYOwhrygdh8cWS2AczRw=;
-        b=Vkra9RNQexMGXwrcVbwrnMdlwfgehiP0GONhnoSmCXpWlc8e3X4AGY/T5hF39dVEmyDz/7
-        wOU0Y+O2KahdlSGZcTOUyiosif2iW/EGUyW7uTROV6g1xHi5M+UwetcRXK9HyUZiJUHNpJ
-        eSZIXlKJExulV/iuABheWV/Uxy9qxnM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642671969;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=qgmelI2EkTIKnzmErCnW3xXmYOwhrygdh8cWS2AczRw=;
-        b=M2ZFCf+IYY3U3SzTWu0DBowFJ/0mGYCmiGbQ6oXZnFMZqmjHhbUbstmetZ9EdS0LJAL8Ix
-        k+e2lVEUxd1dFNCg==
-Received: from lion.mk-sys.cz (unknown [10.100.200.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D70C3A3C44;
-        Thu, 20 Jan 2022 09:46:03 +0000 (UTC)
-Received: by lion.mk-sys.cz (Postfix, from userid 1000)
-        id AC4A0603B9; Thu, 20 Jan 2022 10:46:06 +0100 (CET)
-Date:   Thu, 20 Jan 2022 10:46:06 +0100
-From:   Michal Kubecek <mkubecek@suse.cz>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: kbuild/cert rework for 5.17 breaks build with empty
- CONFIG_MODULE_SIG_KEY
-Message-ID: <20220120094606.2skuyb26yjlnu66q@lion.mk-sys.cz>
+        Thu, 20 Jan 2022 04:47:28 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4DFC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 01:47:28 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id w6so5004769qtk.4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 01:47:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=TzW6TXnfq8OtLTLQdwOY4LZWcnWKKswJe+qqMF/4SPw=;
+        b=m1mKkl9myTaee4SiU7O4VqRThd0xRdTn3gdCUwazgZlvibvlLt1n1uHQ/zllKoj73O
+         ct5BU89O8nNG5vdCi8B+b0KxcD2fF0x/X/ztOTxbkJfAdvBInYppnLKeEGteLRsAbRUC
+         8e93z38uKCX9pxhnKHkobus0eTYUwpTaqZs0fhpUqDjEo4tTxLzaLu2MO1kNBJsAwBfi
+         NDheaF4DF3ZMsQ4aoQHFuTbviAe2wWEAldKGTtQ8IWRkYFAjZnHt0rD/84rPb72yWnc8
+         iiGOC9HV44qV1PwpohOg48Dn0ZEsSb72KeZnCMPCKJBRmN1dDfADVHjQKuKD62C2ExI2
+         RH+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=TzW6TXnfq8OtLTLQdwOY4LZWcnWKKswJe+qqMF/4SPw=;
+        b=NJVS3bYFPXGWcsoU4nIxSd1Qq1c5mhAtaobDsW/Kc8UOZN71J2sJnohLkpG1OI1zVq
+         suTSzl10RbSisGQwxlSJQRYvCI2ryu8+Nttte17+AMbFB9mGhbVPWQh/4Ru8QrS7mFBs
+         GXHZ+HG9eUVdIRBKFwJvwZDI+Asa8c2vS9WeobiDDe1jjq1PDdmaG9uXeZ+YICh3aeL6
+         pDrdwbAziZKz6lPM5AuDYlQR4TDAhQ9wjfvj5eZwYY7x7ohuN/A5Qr/GWlS2UrHetcoL
+         goabklKb9zA5Itrv9+gO+LM4FsGx9iA3M5fL34MH/D5KCVJbHCLm3a5qVH6y24sqatMM
+         nYxQ==
+X-Gm-Message-State: AOAM532+syR0VTo0/yAGQyL1I92QnDRDrpcdNV3oCaSd9ihrt1b7XLLh
+        xq35u/8MOprQ90jVmuD5CJro+ZDF6kFM/DsZhA==
+X-Google-Smtp-Source: ABdhPJycCDlF2GosCQFkfHm4yXmez58wA/DaQxmTb0Kmeq1v4TT5Aw6GNLSKYyZM7+xTipmwvSGagmHGbzYXjZBE1xE=
+X-Received: by 2002:a05:6214:21ac:: with SMTP id t12mr2362436qvc.42.1642672047214;
+ Thu, 20 Jan 2022 01:47:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="zlp7bthohk7hfvou"
-Content-Disposition: inline
+Received: by 2002:a05:6214:1ccf:0:0:0:0 with HTTP; Thu, 20 Jan 2022 01:47:26
+ -0800 (PST)
+Reply-To: rolandnyemih200@gmail.com
+From:   Rowland Nyemih <happypalama@gmail.com>
+Date:   Thu, 20 Jan 2022 10:47:26 +0100
+Message-ID: <CAJoenex49-KWJw+7c75XELy933p4-AdEcecckFwt8pKbKkukKg@mail.gmail.com>
+Subject: Re
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---zlp7bthohk7hfvou
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hello,
-
-while testing merge window snapshots, I noticed that after commit
-b8c96a6b466c ("certs: simplify $(srctree)/ handling and remove
-config_filename macro"), build with
-
-    CONFIG_MODULE_SIG=y
-    CONFIG_MODULE_SIG_FORCE=n
-    CONFIG_MODULE_SIG_ALL=n
-    CONFIG_MODULE_SIG_KEY=""
-
-(as suggested in Documentation/kbuild/reproducible-builds.rst, section
-"Module signing") fails to build as make executes scripts/extract-cert
-with only one argument (the unquoted empty string has no effect):
-
-  ...
-    certs/extract-cert  certs/signing_key.x509
-  Usage: extract-cert <source> <dest>
-  make[2]: *** [/home/mike/work/git/kernel-upstream/certs/Makefile:78: certs/signing_key.x509] Error 2
-  make[1]: *** [/home/mike/work/git/kernel-upstream/Makefile:1831: certs] Error 2
-  make[1]: Leaving directory '/srv/ram/kobj'
-  make: *** [Makefile:219: __sub-make] Error 2
-
-Should this be considered a bug or is there a different recommended way
-to get reproducible builds now?
-
-Michal
-
---zlp7bthohk7hfvou
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEEWN3j3bieVmp26mKO538sG/LRdpUFAmHpL1YACgkQ538sG/LR
-dpXP2gf9HThoe4kKpmxYCoAAAJINNR9E2LNPlJgzbu7N47BQwYcS6hh/WDBTBoXg
-Rrd6rZiiYWfteekWKbzYs/7UkSk1E8OmMg1PxjxGkjgYPlYvkvumAZcz5bTpAQo/
-TwFzwWLhFVDRlT7k/FddbtJriHien79kumsm0lZtr68nra9jF7x8T6zCFrMoPQQU
-QZllWyfweF1gIyW4B9VCNtvQtArriban+VhyssVKrmtn/8qwz7MQp16V2/JLIx3n
-gwFvTYuNhchnM0f2wBJL6z93CnBfdHyneTTl4GNKceXSQwkLfZwjWdopWCzzDXs8
-eSBtBDqnMns5jweRP4XjIzsiLXq7WA==
-=MDME
------END PGP SIGNATURE-----
-
---zlp7bthohk7hfvou--
+SGVsbG8sDQpJIGNhbGxlZCB0byBrbm93IGlmIHlvdSByZWNlaXZlZCBteSBwcmV2aW91cyBlbWFp
+bCwgcmVwbHkgdG8gbWUNCmFzYXAuDQpSb3dsYW5kDQoNCg0K7JWI64WV7ZWY7Iut64uI6rmMLA0K
+7J207KCEIOydtOuplOydvOydhCDrsJvslZjripTsp4Ag7ZmV7J247ZWY6riwIOychO2VtCDsoITt
+mZTtlojsirXri4jri6QuIOuLteyepeydhCDrs7TrgrTso7zshLjsmpQuDQrstZzrjIDtlZwg67mo
+66asLg0K66Gk656c65OcDQo=

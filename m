@@ -2,407 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E12E4953F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:16:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2B3495405
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 19:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244270AbiATSQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 13:16:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56878 "EHLO
+        id S244348AbiATSRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 13:17:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244207AbiATSQh (ORCPT
+        with ESMTP id S243805AbiATSRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 13:16:37 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3095C06161C
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:16:36 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id j23so27202183edp.5
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:16:36 -0800 (PST)
+        Thu, 20 Jan 2022 13:17:24 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B86C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:17:24 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id g9-20020a17090a67c900b001b4f1d71e4fso6523682pjm.4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 10:17:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=auCgl/2xXVkJ3K8kAttJl1EiA5YuO13LPp4mPWfgSgU=;
-        b=XkMaK7G7gDKT7RdYHPMFclOchKZJb97mZNlccT+eu005KCFzVIOn4TCZ+ZitIEo0Ss
-         HiI/2haWC2QmhY5Tg2PcBaowA8s8P0o16zGIlMS0OeyEeY2JgyyZ0N+ywW4YPUD6TdRo
-         0yhDfntVWv0AkzFaAo+5AujYksjwcYcj4ddkz2Ve0h5GFAOGRY5L9mXSftUOOHQPpRaa
-         hJv2M1M4Zgt6HwnkZYAIyX6yAUdGTajH8bwbbo0rMTnykB70EzU42W3YVnwNY6ZEiT32
-         m87J+r0T5qdOFiBitUkr+rPUhl1yGGjIBfp3I2UcFncfhpdZoMiSY4olPeANMsi/Dodo
-         sSEQ==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KQ1vWUfThsgcO0TMX//y1/F6aK1Vz2XCJRw2Z+ID7Ls=;
+        b=IeGtbhQKHlgHsUpPUReuIIuNM/1GaRyvGFBqBSyZ2zvuR+rx0OnkspBEyl0UDkbzge
+         56sdBReFheQbsjNE3vACa7SkiCjC0ktFZ880I7Cocfl1XXtuDnEPMkLrug8EC6PdV0r8
+         ZQU/FXbVwkZUcR/uvAaroXSswIBlqhrhZT7eemjZjof2hxSj1M0GuZeK5y6qT9EAH9SH
+         W3HxwBxgoHfPb6hUS+GcZ/QBvhp+ANzY5N/Z0QbKQRMmW6Jj/ZBd7hHz9ZTzRkDOfzgk
+         U3eZhuSANLneiRC6XBEvCzKST7W9WmuwDIbpBEpymsnaz9n1GHhhpM/oSTl+ndffu0nX
+         PT0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=auCgl/2xXVkJ3K8kAttJl1EiA5YuO13LPp4mPWfgSgU=;
-        b=RpTSgyFD0UzYG7LvP/fbK5iju6eJxgsNMcyynQSYCXLuBCqGooY0RelxqJtm7bwdLO
-         TZ0SKNedrAVg8WWxLwcD+EceYwEVUWHkzA0C7+SiRjczZkhdlyDkK+ZIW/1be+mb/ZwA
-         OF7AvZMQSYdI9jajvL14N/qh3ScKJ1dbPp0AKFw/LMc2zEW2bMpHw8QHVhLCA+yvVjFt
-         XpYVLRCL5SXTsDHP1/DsLGKCHppvwV2EXrsUNJoyBHlGpOmCpeUbBat3Zh6Xt0j1dOiq
-         VXub3DeVCOQC49pPfvCUYJaezhq2uu55k6QtiIOLf0fxIDMLOHuzy33SRw/pfwjbdlWt
-         yj+Q==
-X-Gm-Message-State: AOAM533MxlAHNxbi9DInaWSrNpre5Xs5UEnqtXhnL6ZfaGxYHa9Ri8Il
-        LsHf5ui9f/L9LNinvkan4xXIjRGuQ/w7UoxCiWyQ1g==
-X-Google-Smtp-Source: ABdhPJyMBu/iJ1WXOFmMtt2CvS3rot6I64Yx4XWoD04h8ZxMU356ljmtZfTOfPktXe9gTKgixU7kOdIxv7WTeMVEHZ8=
-X-Received: by 2002:aa7:ca47:: with SMTP id j7mr343074edt.102.1642702594842;
- Thu, 20 Jan 2022 10:16:34 -0800 (PST)
-MIME-Version: 1.0
-References: <202201170247.Cir3moOM-lkp@intel.com> <CAJHvVchPpphLefKEOy_C6+0xrGtA3mNCBzQZ3j2i2RgXX3arXQ@mail.gmail.com>
- <CAJuCfpFEfAxtgCfTU=0Ry6g6c-O4OJypGyE-0M+Ce0TKVSAYqA@mail.gmail.com>
- <CAJHvVciZpSBcQDbqbvwbToo5s2_Q5H2sfr=QAb9UBBWpnD5X-w@mail.gmail.com>
- <CA+EESO7aBYCC2YyW1cCM+ZAdSFhmgAFzv=F832CJLB8R1F=QLQ@mail.gmail.com> <CAJHvVciCtcFu9Ep-KJhu1vzn92Oeqf2rFXMw=aKb=0BuMGd4Ww@mail.gmail.com>
-In-Reply-To: <CAJHvVciCtcFu9Ep-KJhu1vzn92Oeqf2rFXMw=aKb=0BuMGd4Ww@mail.gmail.com>
-From:   Lokesh Gidra <lokeshgidra@google.com>
-Date:   Thu, 20 Jan 2022 10:16:23 -0800
-Message-ID: <CA+EESO7byiqapss_tY5mgVd2g8kkXLtLGsSpcnswN3Bw=WVjFA@mail.gmail.com>
-Subject: Re: [ammarfaizi2-block:google/android/kernel/common/android12-5.4
- 6517/9999] fs/userfaultfd.c:1519:9: warning: variable 'ioctls_out' set but
- not used
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org,
-        "GNU/Weeb Mailing List" <gwml@gnuweeb.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Todd Kjos <tkjos@google.com>, Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Kalesh Singh <kaleshsingh@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=KQ1vWUfThsgcO0TMX//y1/F6aK1Vz2XCJRw2Z+ID7Ls=;
+        b=Zc/Kk4kLcAtGMCbNLe13oDAbvT/0ydhn2ztDLLuJeHTXapw3OsC/0JQdFof7xpo0ss
+         4kthDcKCHq0E9Md9B3MESrAO9I72A96ADPg74grHd0/zoWddMWwM0ELahmbBxajinzyg
+         kXdKLsGxmfOiSaCSclwFEjRaXYHuJDS2xIJZw1J4M9cb4UU4S4xtOr7TM/dWPRCtDH2z
+         GUbXRNzTs2S4lP+PLsArfpFa/QpXWkoZ2Boq3PhgLH+9vpSEz31yhoOXSCahdD03Yujq
+         +HNEe+OCosBuxoHb9RKdEXpyLBSZvpjGQXcmUidzQSRtNxykmBMjOraZuQofC99JP0rL
+         zdbQ==
+X-Gm-Message-State: AOAM532rVJB3iWd0lDbXeUk2xvFw4pB6HX2Buo0k9bBYhXTgQII64esk
+        1iHSTPal0rZEyVcWo0+CJ7G/WmVS4AJhlQ==
+X-Google-Smtp-Source: ABdhPJzo1syrhZbBJ2vXUJ9jpJzxvw01YRDAUtHo6ubpZbmmP51+HflWuEPTKfWLQ6wx5lTOwNzQKg==
+X-Received: by 2002:a17:903:2442:b0:14a:54e3:3905 with SMTP id l2-20020a170903244200b0014a54e33905mr248717pls.55.1642702643084;
+        Thu, 20 Jan 2022 10:17:23 -0800 (PST)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id f4sm4183556pfe.204.2022.01.20.10.17.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jan 2022 10:17:22 -0800 (PST)
+Date:   Thu, 20 Jan 2022 10:17:22 -0800 (PST)
+X-Google-Original-Date: Thu, 20 Jan 2022 09:59:13 PST (-0800)
+Subject:     Re: [PATCH v3 0/6] Sparse HART id support 
+In-Reply-To: <20220120090918.2646626-1-atishp@rivosinc.com>
+CC:     linux-kernel@vger.kernel.org, Atish Patra <atishp@rivosinc.com>,
+        aou@eecs.berkeley.edu, atishp@atishpatra.org, anup@brainfault.org,
+        damien.lemoal@wdc.com, devicetree@vger.kernel.org,
+        jszhang@kernel.org, krzysztof.kozlowski@canonical.com,
+        linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>, robh+dt@kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Atish Patra <atishp@rivosinc.com>
+Message-ID: <mhng-b8ab7493-45b7-46d9-9cb3-8bc29c98833d@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks a lot for confirming. I hope I have not screwed up like this
-anywhere else.
+On Thu, 20 Jan 2022 01:09:12 PST (-0800), Atish Patra wrote:
+> Currently, sparse hartid is not supported for Linux RISC-V for the following
+> reasons.
+> 1. Both spinwait and ordered booting method uses __cpu_up_stack/task_pointer
+>    which is an array size of NR_CPUs.
+> 2. During early booting, any hartid greater than NR_CPUs are not booted at all.
+> 3. riscv_cpuid_to_hartid_mask uses struct cpumask for generating hartid bitmap.
+> 4. SBI v0.2 implementation uses NR_CPUs as the maximum hartid number while
+>    generating hartmask.
+>
+> In order to support sparse hartid, the hartid & NR_CPUS needs to be disassociated
+> which was logically incorrect anyways. NR_CPUs represent the maximum logical|
+> CPU id configured in the kernel while the hartid represent the physical hartid
+> stored in mhartid CSR defined by the privilege specification. Thus, hartid
+> can have much greater value than logical cpuid.
+>
+> Currently, we have two methods of booting. Ordered booting where the booting
+> hart brings up each non-booting hart one by one using SBI HSM extension.
+> The spinwait booting method relies on harts jumping to Linux kernel randomly
+> and boot hart is selected by a lottery. All other non-booting harts keep
+> spinning on __cpu_up_stack/task_pointer until boot hart initializes the data.
+> Both these methods rely on __cpu_up_stack/task_pointer to setup the stack/
+> task pointer. The spinwait method is mostly used to support older firmwares
+> without SBI HSM extension and M-mode Linux.  The ordered booting method is the
+> preferred booting method for booting general Linux because it can support
+> cpu hotplug and kexec.
+>
+> The first patch modified the ordered booting method to use an opaque parameter
+> already available in HSM start API to setup the stack/task pointer. The third
+> patch resolves the issue #1 by limiting the usage of
+> __cpu_up_stack/task_pointer to spinwait specific booting method. The fourth
+> and fifth patch moves the entire hart lottery selection and spinwait method
+> to a separate config that can be disabled if required. It solves the issue #2.
+> The 6th patch solves issue #3 and #4 by removing riscv_cpuid_to_hartid_mask
+> completely. All the SBI APIs directly pass a pointer to struct cpumask and
+> the SBI implementation takes care of generating the hart bitmap from the
+> cpumask.
+>
+> It is not trivial to support sparse hartid for spinwait booting method and
+> there are no usecases to support sparse hartid for spinwait method as well.
+> Any platform with sparse hartid will probably require more advanced features
+> such as cpu hotplug and kexec. Thus, the series supports the sparse hartid via
+> ordered booting method only. To maintain backward compatibility, spinwait
+> booting method is currently enabled in defconfig so that M-mode linux will
+> continue to work. Any platform that requires to sparse hartid must disable the
+> spinwait method.
+>
+> This series also fixes the out-of-bounds access error[1] reported by Geert.
+> The issue can be reproduced with SMP booting with NR_CPUS=4 on platforms with
+> discontiguous hart numbering (HiFive unleashed/unmatched & polarfire).
+> Spinwait method should also be disabled for such configuration where NR_CPUS
+> value is less than maximum hartid in the platform.
+>
+> [1] https://lore.kernel.org/lkml/CAMuHMdUPWOjJfJohxLJefHOrJBtXZ0xfHQt4=hXpUXnasiN+AQ@mail.gmail.com/#t
+>
+> The series is based on queue branch on kvm-riscv as it has kvm related changes
+> as well. I have tested it on HiFive Unmatched and Qemu.
+>
+> Changes from v2->v3:
+> 1. Rebased on linux-next
+> 2. Removed the redundant variable in PATCH 1.
+> 3. Added the reviewed-by/acked-by tags.
+>
+> Changes from v1->v2:
+> 1. Fixed few typos in Kconfig.
+> 2. Moved the boot data structure offsets to a asm-offset.c
+> 3. Removed the redundant config check in head.S
+>
+> Atish Patra (6):
+> RISC-V: Avoid using per cpu array for ordered booting
+> RISC-V: Do not print the SBI version during HSM extension boot print
+> RISC-V: Use __cpu_up_stack/task_pointer only for spinwait method
+> RISC-V: Move the entire hart selection via lottery to SMP
+> RISC-V: Move spinwait booting method to its own config
+> RISC-V: Do not use cpumask data structure for hartid bitmap
+>
+> arch/riscv/Kconfig                   |  14 ++
+> arch/riscv/include/asm/cpu_ops.h     |   2 -
+> arch/riscv/include/asm/cpu_ops_sbi.h |  25 ++++
+> arch/riscv/include/asm/sbi.h         |  19 +--
+> arch/riscv/include/asm/smp.h         |   2 -
+> arch/riscv/kernel/Makefile           |   3 +-
+> arch/riscv/kernel/asm-offsets.c      |   3 +
+> arch/riscv/kernel/cpu_ops.c          |  26 ++--
+> arch/riscv/kernel/cpu_ops_sbi.c      |  26 +++-
+> arch/riscv/kernel/cpu_ops_spinwait.c |  27 +++-
+> arch/riscv/kernel/head.S             |  35 ++---
+> arch/riscv/kernel/head.h             |   6 +-
+> arch/riscv/kernel/sbi.c              | 189 +++++++++++++++------------
+> arch/riscv/kernel/setup.c            |  10 --
+> arch/riscv/kernel/smpboot.c          |   2 +-
+> arch/riscv/kvm/mmu.c                 |   4 +-
+> arch/riscv/kvm/vcpu_sbi_replace.c    |  11 +-
+> arch/riscv/kvm/vcpu_sbi_v01.c        |  11 +-
+> arch/riscv/kvm/vmid.c                |   4 +-
+> arch/riscv/mm/cacheflush.c           |   5 +-
+> arch/riscv/mm/tlbflush.c             |   9 +-
+> 21 files changed, 253 insertions(+), 180 deletions(-)
+> create mode 100644 arch/riscv/include/asm/cpu_ops_sbi.h
 
-On Thu, Jan 20, 2022 at 10:15 AM Axel Rasmussen
-<axelrasmussen@google.com> wrote:
->
-> On Wed, Jan 19, 2022 at 2:11 PM Lokesh Gidra <lokeshgidra@google.com> wrote:
-> >
-> > On Wed, Jan 19, 2022 at 2:03 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
-> > >
-> > > On Wed, Jan 19, 2022 at 1:19 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> > > >
-> > > > On Wed, Jan 19, 2022 at 12:39 PM Axel Rasmussen
-> > > > <axelrasmussen@google.com> wrote:
-> > > > >
-> > > > > Lokesh, I only spent a few moments looking, but my suspicion is that
-> > > > > this is the result of an incomplete backport of these patches to the
-> > > > > Android kernel?
-> > > > >
-> > > > > The UFFDIO_CONTINUE patches introduced ioctls_out since the
-> > > > > computation of it got more complicated, and those same patches also
-> > > > > modified the put_user() on line 1533 here to use ioctls_out. I think
-> > > > > Android backported the first part, but left out the second?
-> > > >
-> > > > The backport https://android-review.googlesource.com/c/kernel/common/+/1652718
-> > > > looks like a mixture of
-> > > > 14819305e09fe4 ("userfaultfd: wp: declare _UFFDIO_WRITEPROTECT
-> > > > conditionally") and f619147104c8 ("userfaultfd: add UFFDIO_CONTINUE
-> > > > ioctl").
-> > > > Not sure why it was done this way, maybe to minimize code changes
-> > > > while backporting.
-> > > > Simplest fix is probably to add __maybe_unused to ioctls_out declaration.
-> > >
-> > > Unfortunately, that doesn't quite do it. That would fix the warning,
-> > > but the code in the original e-mail is still wrong: we incorrectly
-> > > don't report the _UFFDIO_CONTINUE bit, unless we use the value we
-> > > computed in ioctls_out.
-> >
-> > Apologies for the screw up. Actually, since 5.4 kernel didn't already
-> > have UFFD_WRITE_PROTECT feature and neither was I interested in it, so
-> > I attempted to only backport UFFDIO_CONTINUE feature and there
-> > mistakenly missed this one out.
-> >
-> > Axel, wouldn't doing what Peter did in the following patch the right
-> > thing to do?
-> > https://lore.kernel.org/lkml/20200220163112.11409-18-peterx@redhat.com/
-> >
-> > Basically:
-> >
-> > - if (put_user(basic_ioctls ? UFFD_API_RANGE_IOCTLS_BASIC :
-> > -     UFFD_API_RANGE_IOCTLS,
-> > -     &user_uffdio_register->ioctls))
-> > + if (put_user(ioctls_out, &user_uffdio_register->ioctls))
->
-> Exactly right, that's the solution. And, I believe Kalesh has now
-> applied exactly that to the Android tree here:
-> https://android-review.googlesource.com/c/kernel/common/+/1955138 - so
-> once that's merged, we can consider this fixed.
->
-> >
-> >
-> > >
-> > > >
-> > > > >
-> > > > > On Sun, Jan 16, 2022 at 10:11 AM kernel test robot <lkp@intel.com> wrote:
-> > > > > >
-> > > > > > Hi Axel,
-> > > > > >
-> > > > > > FYI, the error/warning still remains.
-> > > > > >
-> > > > > > tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.4
-> > > > > > head:   bdf17ba628090156b539b1474eb5c636eeaf571b
-> > > > > > commit: b69f713e60d03ae448e5c9fd92e5b0b193dea7be [6517/9999] BACKPORT: FROMGIT: userfaultfd: add UFFDIO_CONTINUE ioctl
-> > > > > > config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220117/202201170247.Cir3moOM-lkp@intel.com/config)
-> > > > > > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c63a3175c2947e8c1a2d3bbe16a8586600705c54)
-> > > > > > reproduce (this is a W=1 build):
-> > > > > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > > > > >         chmod +x ~/bin/make.cross
-> > > > > >         # https://github.com/ammarfaizi2/linux-block/commit/b69f713e60d03ae448e5c9fd92e5b0b193dea7be
-> > > > > >         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-> > > > > >         git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.4
-> > > > > >         git checkout b69f713e60d03ae448e5c9fd92e5b0b193dea7be
-> > > > > >         # save the config file to linux build tree
-> > > > > >         mkdir build_dir
-> > > > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> > > > > >
-> > > > > > If you fix the issue, kindly add following tag as appropriate
-> > > > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > > >
-> > > > > > All warnings (new ones prefixed by >>):
-> > > > > >
-> > > > > > >> fs/userfaultfd.c:1519:9: warning: variable 'ioctls_out' set but not used [-Wunused-but-set-variable]
-> > > > > >                    __u64 ioctls_out;
-> > > > > >                          ^
-> > > > > >    1 warning generated.
-> > > > > >
-> > > > > >
-> > > > > > vim +/ioctls_out +1519 fs/userfaultfd.c
-> > > > > >
-> > > > > >   1311
-> > > > > >   1312  static int userfaultfd_register(struct userfaultfd_ctx *ctx,
-> > > > > >   1313                                  unsigned long arg)
-> > > > > >   1314  {
-> > > > > >   1315          struct mm_struct *mm = ctx->mm;
-> > > > > >   1316          struct vm_area_struct *vma, *prev, *cur;
-> > > > > >   1317          int ret;
-> > > > > >   1318          struct uffdio_register uffdio_register;
-> > > > > >   1319          struct uffdio_register __user *user_uffdio_register;
-> > > > > >   1320          unsigned long vm_flags, new_flags;
-> > > > > >   1321          bool found;
-> > > > > >   1322          bool basic_ioctls;
-> > > > > >   1323          unsigned long start, end, vma_end;
-> > > > > >   1324
-> > > > > >   1325          user_uffdio_register = (struct uffdio_register __user *) arg;
-> > > > > >   1326
-> > > > > >   1327          ret = -EFAULT;
-> > > > > >   1328          if (copy_from_user(&uffdio_register, user_uffdio_register,
-> > > > > >   1329                             sizeof(uffdio_register)-sizeof(__u64)))
-> > > > > >   1330                  goto out;
-> > > > > >   1331
-> > > > > >   1332          ret = -EINVAL;
-> > > > > >   1333          if (!uffdio_register.mode)
-> > > > > >   1334                  goto out;
-> > > > > >   1335          if (uffdio_register.mode & ~UFFD_API_REGISTER_MODES)
-> > > > > >   1336                  goto out;
-> > > > > >   1337          vm_flags = 0;
-> > > > > >   1338          if (uffdio_register.mode & UFFDIO_REGISTER_MODE_MISSING)
-> > > > > >   1339                  vm_flags |= VM_UFFD_MISSING;
-> > > > > >   1340          if (uffdio_register.mode & UFFDIO_REGISTER_MODE_WP) {
-> > > > > >   1341                  vm_flags |= VM_UFFD_WP;
-> > > > > >   1342                  /*
-> > > > > >   1343                   * FIXME: remove the below error constraint by
-> > > > > >   1344                   * implementing the wprotect tracking mode.
-> > > > > >   1345                   */
-> > > > > >   1346                  ret = -EINVAL;
-> > > > > >   1347                  goto out;
-> > > > > >   1348          }
-> > > > > >   1349          if (uffdio_register.mode & UFFDIO_REGISTER_MODE_MINOR) {
-> > > > > >   1350  #ifndef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
-> > > > > >   1351                  goto out;
-> > > > > >   1352  #endif
-> > > > > >   1353                  vm_flags |= VM_UFFD_MINOR;
-> > > > > >   1354          }
-> > > > > >   1355
-> > > > > >   1356          ret = validate_range(mm, &uffdio_register.range.start,
-> > > > > >   1357                               uffdio_register.range.len);
-> > > > > >   1358          if (ret)
-> > > > > >   1359                  goto out;
-> > > > > >   1360
-> > > > > >   1361          start = uffdio_register.range.start;
-> > > > > >   1362          end = start + uffdio_register.range.len;
-> > > > > >   1363
-> > > > > >   1364          ret = -ENOMEM;
-> > > > > >   1365          if (!mmget_not_zero(mm))
-> > > > > >   1366                  goto out;
-> > > > > >   1367
-> > > > > >   1368          down_write(&mm->mmap_sem);
-> > > > > >   1369          if (!mmget_still_valid(mm))
-> > > > > >   1370                  goto out_unlock;
-> > > > > >   1371          vma = find_vma_prev(mm, start, &prev);
-> > > > > >   1372          if (!vma)
-> > > > > >   1373                  goto out_unlock;
-> > > > > >   1374
-> > > > > >   1375          /* check that there's at least one vma in the range */
-> > > > > >   1376          ret = -EINVAL;
-> > > > > >   1377          if (vma->vm_start >= end)
-> > > > > >   1378                  goto out_unlock;
-> > > > > >   1379
-> > > > > >   1380          /*
-> > > > > >   1381           * If the first vma contains huge pages, make sure start address
-> > > > > >   1382           * is aligned to huge page size.
-> > > > > >   1383           */
-> > > > > >   1384          if (is_vm_hugetlb_page(vma)) {
-> > > > > >   1385                  unsigned long vma_hpagesize = vma_kernel_pagesize(vma);
-> > > > > >   1386
-> > > > > >   1387                  if (start & (vma_hpagesize - 1))
-> > > > > >   1388                          goto out_unlock;
-> > > > > >   1389          }
-> > > > > >   1390
-> > > > > >   1391          /*
-> > > > > >   1392           * Search for not compatible vmas.
-> > > > > >   1393           */
-> > > > > >   1394          found = false;
-> > > > > >   1395          basic_ioctls = false;
-> > > > > >   1396          for (cur = vma; cur && cur->vm_start < end; cur = cur->vm_next) {
-> > > > > >   1397                  cond_resched();
-> > > > > >   1398
-> > > > > >   1399                  BUG_ON(!!cur->vm_userfaultfd_ctx.ctx ^
-> > > > > >   1400                         !!(cur->vm_flags & __VM_UFFD_FLAGS));
-> > > > > >   1401
-> > > > > >   1402                  /* check not compatible vmas */
-> > > > > >   1403                  ret = -EINVAL;
-> > > > > >   1404                  if (!vma_can_userfault(cur, vm_flags))
-> > > > > >   1405                          goto out_unlock;
-> > > > > >   1406
-> > > > > >   1407                  /*
-> > > > > >   1408                   * UFFDIO_COPY will fill file holes even without
-> > > > > >   1409                   * PROT_WRITE. This check enforces that if this is a
-> > > > > >   1410                   * MAP_SHARED, the process has write permission to the backing
-> > > > > >   1411                   * file. If VM_MAYWRITE is set it also enforces that on a
-> > > > > >   1412                   * MAP_SHARED vma: there is no F_WRITE_SEAL and no further
-> > > > > >   1413                   * F_WRITE_SEAL can be taken until the vma is destroyed.
-> > > > > >   1414                   */
-> > > > > >   1415                  ret = -EPERM;
-> > > > > >   1416                  if (unlikely(!(cur->vm_flags & VM_MAYWRITE)))
-> > > > > >   1417                          goto out_unlock;
-> > > > > >   1418
-> > > > > >   1419                  /*
-> > > > > >   1420                   * If this vma contains ending address, and huge pages
-> > > > > >   1421                   * check alignment.
-> > > > > >   1422                   */
-> > > > > >   1423                  if (is_vm_hugetlb_page(cur) && end <= cur->vm_end &&
-> > > > > >   1424                      end > cur->vm_start) {
-> > > > > >   1425                          unsigned long vma_hpagesize = vma_kernel_pagesize(cur);
-> > > > > >   1426
-> > > > > >   1427                          ret = -EINVAL;
-> > > > > >   1428
-> > > > > >   1429                          if (end & (vma_hpagesize - 1))
-> > > > > >   1430                                  goto out_unlock;
-> > > > > >   1431                  }
-> > > > > >   1432
-> > > > > >   1433                  /*
-> > > > > >   1434                   * Check that this vma isn't already owned by a
-> > > > > >   1435                   * different userfaultfd. We can't allow more than one
-> > > > > >   1436                   * userfaultfd to own a single vma simultaneously or we
-> > > > > >   1437                   * wouldn't know which one to deliver the userfaults to.
-> > > > > >   1438                   */
-> > > > > >   1439                  ret = -EBUSY;
-> > > > > >   1440                  if (cur->vm_userfaultfd_ctx.ctx &&
-> > > > > >   1441                      cur->vm_userfaultfd_ctx.ctx != ctx)
-> > > > > >   1442                          goto out_unlock;
-> > > > > >   1443
-> > > > > >   1444                  /*
-> > > > > >   1445                   * Note vmas containing huge pages
-> > > > > >   1446                   */
-> > > > > >   1447                  if (is_vm_hugetlb_page(cur))
-> > > > > >   1448                          basic_ioctls = true;
-> > > > > >   1449
-> > > > > >   1450                  found = true;
-> > > > > >   1451          }
-> > > > > >   1452          BUG_ON(!found);
-> > > > > >   1453
-> > > > > >   1454          if (vma->vm_start < start)
-> > > > > >   1455                  prev = vma;
-> > > > > >   1456
-> > > > > >   1457          ret = 0;
-> > > > > >   1458          do {
-> > > > > >   1459                  cond_resched();
-> > > > > >   1460
-> > > > > >   1461                  BUG_ON(!vma_can_userfault(vma, vm_flags));
-> > > > > >   1462                  BUG_ON(vma->vm_userfaultfd_ctx.ctx &&
-> > > > > >   1463                         vma->vm_userfaultfd_ctx.ctx != ctx);
-> > > > > >   1464                  WARN_ON(!(vma->vm_flags & VM_MAYWRITE));
-> > > > > >   1465
-> > > > > >   1466                  /*
-> > > > > >   1467                   * Nothing to do: this vma is already registered into this
-> > > > > >   1468                   * userfaultfd and with the right tracking mode too.
-> > > > > >   1469                   */
-> > > > > >   1470                  if (vma->vm_userfaultfd_ctx.ctx == ctx &&
-> > > > > >   1471                      (vma->vm_flags & vm_flags) == vm_flags)
-> > > > > >   1472                          goto skip;
-> > > > > >   1473
-> > > > > >   1474                  if (vma->vm_start > start)
-> > > > > >   1475                          start = vma->vm_start;
-> > > > > >   1476                  vma_end = min(end, vma->vm_end);
-> > > > > >   1477
-> > > > > >   1478                  new_flags = (vma->vm_flags & ~__VM_UFFD_FLAGS) | vm_flags;
-> > > > > >   1479                  prev = vma_merge(mm, prev, start, vma_end, new_flags,
-> > > > > >   1480                                   vma->anon_vma, vma->vm_file, vma->vm_pgoff,
-> > > > > >   1481                                   vma_policy(vma),
-> > > > > >   1482                                   ((struct vm_userfaultfd_ctx){ ctx }),
-> > > > > >   1483                                   vma_get_anon_name(vma));
-> > > > > >   1484                  if (prev) {
-> > > > > >   1485                          vma = prev;
-> > > > > >   1486                          goto next;
-> > > > > >   1487                  }
-> > > > > >   1488                  if (vma->vm_start < start) {
-> > > > > >   1489                          ret = split_vma(mm, vma, start, 1);
-> > > > > >   1490                          if (ret)
-> > > > > >   1491                                  break;
-> > > > > >   1492                  }
-> > > > > >   1493                  if (vma->vm_end > end) {
-> > > > > >   1494                          ret = split_vma(mm, vma, end, 0);
-> > > > > >   1495                          if (ret)
-> > > > > >   1496                                  break;
-> > > > > >   1497                  }
-> > > > > >   1498          next:
-> > > > > >   1499                  /*
-> > > > > >   1500                   * In the vma_merge() successful mprotect-like case 8:
-> > > > > >   1501                   * the next vma was merged into the current one and
-> > > > > >   1502                   * the current one has not been updated yet.
-> > > > > >   1503                   */
-> > > > > >   1504                  vma->vm_flags = new_flags;
-> > > > > >   1505                  vma->vm_userfaultfd_ctx.ctx = ctx;
-> > > > > >   1506
-> > > > > >   1507                  if (is_vm_hugetlb_page(vma) && uffd_disable_huge_pmd_share(vma))
-> > > > > >   1508                          hugetlb_unshare_all_pmds(vma);
-> > > > > >   1509
-> > > > > >   1510          skip:
-> > > > > >   1511                  prev = vma;
-> > > > > >   1512                  start = vma->vm_end;
-> > > > > >   1513                  vma = vma->vm_next;
-> > > > > >   1514          } while (vma && vma->vm_start < end);
-> > > > > >   1515  out_unlock:
-> > > > > >   1516          up_write(&mm->mmap_sem);
-> > > > > >   1517          mmput(mm);
-> > > > > >   1518          if (!ret) {
-> > > > > > > 1519                  __u64 ioctls_out;
-> > > > > >   1520
-> > > > > >   1521                  ioctls_out = basic_ioctls ? UFFD_API_RANGE_IOCTLS_BASIC :
-> > > > > >   1522                      UFFD_API_RANGE_IOCTLS;
-> > > > > >   1523
-> > > > > >   1524                  /* CONTINUE ioctl is only supported for MINOR ranges. */
-> > > > > >   1525                  if (!(uffdio_register.mode & UFFDIO_REGISTER_MODE_MINOR))
-> > > > > >   1526                          ioctls_out &= ~((__u64)1 << _UFFDIO_CONTINUE);
-> > > > > >   1527
-> > > > > >   1528                  /*
-> > > > > >   1529                   * Now that we scanned all vmas we can already tell
-> > > > > >   1530                   * userland which ioctls methods are guaranteed to
-> > > > > >   1531                   * succeed on this range.
-> > > > > >   1532                   */
-> > > > > >   1533                  if (put_user(basic_ioctls ? UFFD_API_RANGE_IOCTLS_BASIC :
-> > > > > >   1534                               UFFD_API_RANGE_IOCTLS,
-> > > > > >   1535                               &user_uffdio_register->ioctls))
-> > > > > >   1536                          ret = -EFAULT;
-> > > > > >   1537          }
-> > > > > >   1538  out:
-> > > > > >   1539          return ret;
-> > > > > >   1540  }
-> > > > > >   1541
-> > > > > >
-> > > > > > ---
-> > > > > > 0-DAY CI Kernel Test Service, Intel Corporation
-> > > > > > https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> > > > >
+Thanks, these are on for-next.

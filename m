@@ -2,116 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BAA0494AD1
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C1F494ADB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 10:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239538AbiATJdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 04:33:38 -0500
-Received: from out0-136.mail.aliyun.com ([140.205.0.136]:50954 "EHLO
-        out0-136.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358140AbiATJdf (ORCPT
+        id S241515AbiATJgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 04:36:03 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47408 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237441AbiATJgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 04:33:35 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047203;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---.MfqJchL_1642671212;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.MfqJchL_1642671212)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 20 Jan 2022 17:33:32 +0800
-From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
-To:     kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] KVM: x86: Fix wrong privilege check for code segment in __load_segment_descriptor()
-Date:   Thu, 20 Jan 2022 17:33:30 +0800
-Message-Id: <ed8917d7bab80a1c1a130beae45c7d6ecdef47fc.1642669684.git.houwenlong.hwl@antgroup.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1642669684.git.houwenlong.hwl@antgroup.com>
-References: <cover.1642669684.git.houwenlong.hwl@antgroup.com>
+        Thu, 20 Jan 2022 04:36:02 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5687660023;
+        Thu, 20 Jan 2022 09:36:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AAA05C340E3;
+        Thu, 20 Jan 2022 09:36:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642671361;
+        bh=Sw7dY4UqhVnbrcdw+2/HnvkUz97oA+g8rSgYwhLCVpw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=cruU2VX8+QRVOQRjWZITJx+PtGlYmBP9v5aozQErjvpHHlCvwUB5OZwtPvhW/jvII
+         8tAn7VfjooDLcf5HGFFV7Dq8PioAVWa9GAQTtXdd0MfNYqzOZvzibzRVldUx25NzGQ
+         DjffSk0e9kBfM90FvVZlkiaxp7HziSI8vHS3cSzMQps+XY2dNbvXEvgEzroW/bvGeK
+         E6XPg+PjNFCUhGPPJKNWjjwp1H7rm4sjS22cnklfp0sd9Zfq8L6IV2r+RamBQw7yry
+         wjLEiVfqwWYZNVd8HWFAMOyHXZcCCY0IKHZEw5Plq4MQ6mV8HOAfWoGDybOKRK6VOK
+         bucQez+IfLQdA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 945BDF6079B;
+        Thu, 20 Jan 2022 09:36:01 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] Networking for 5.17-rc1
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164267136160.6560.3997159638009767273.git-patchwork-notify@kernel.org>
+Date:   Thu, 20 Jan 2022 09:36:01 +0000
+References: <20220119182611.400333-1-kuba@kernel.org>
+In-Reply-To: <20220119182611.400333-1-kuba@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     torvalds@linux-foundation.org, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Code segment descriptor can be loaded by jmp/call/ret, iret
-and int. The privilege checks are different between those
-instructions above realmode. Although, the emulator has
-use x86_transfer_type enumerate to differentiate them, but
-it is not really used in __load_segment_descriptor(). Note,
-far jump/call to call gate, task gate or task state segment
-are not implemented in emulator.
+Hello:
 
-As for far jump/call to code segment, if DPL > CPL for conforming
-code or (RPL > CPL or DPL != CPL) for non-conforming code, it
-should trigger #GP. The current checks are ok.
+This pull request was applied to netdev/net.git (master)
+by Linus Torvalds <torvalds@linux-foundation.org>:
 
-As for far return, if RPL < CPL or DPL > RPL for conforming
-code or DPL != RPL for non-conforming code, it should trigger #GP.
-Outer level return is not implemented above virtual-8086 mode in
-emulator. So it implies that RPL <= CPL, but the current checks
-wouldn't trigger #GP if RPL < CPL.
+On Wed, 19 Jan 2022 10:26:11 -0800 you wrote:
+> Hi Linus!
+> 
+> Quite a handful of old regression fixes but of those all are pre-5.16.
+> 
+> The following changes since commit fe8152b38d3a994c4c6fdbc0cd6551d569a5715a:
+> 
+>   Merge tag 'devprop-5.17-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm (2022-01-10 20:48:19 -0800)
+> 
+> [...]
 
-As for code segment loading in task switch, if DPL > RPL for conforming
-code or DPL != RPL for non-conforming code, it should trigger #TS. Since
-segment selector is loaded before segment descriptor when load state from
-tss, it implies that RPL = CPL, so the current checks are ok.
+Here is the summary with links:
+  - [GIT,PULL] Networking for 5.17-rc1
+    https://git.kernel.org/netdev/net/c/fa2e1ba3e9e3
 
-The only problem in current implementation is mssing RPL < CPL check for
-far return. However, change code to follow the manual is better.
-
-Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
----
- arch/x86/kvm/emulate.c | 30 ++++++++++++++++++++++--------
- 1 file changed, 22 insertions(+), 8 deletions(-)
-
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index 864db6fbe8db..b7ce2a85e58e 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -1631,14 +1631,28 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
- 		if (!(seg_desc.type & 8))
- 			goto exception;
- 
--		if (seg_desc.type & 4) {
--			/* conforming */
--			if (dpl > cpl)
--				goto exception;
--		} else {
--			/* nonconforming */
--			if (rpl > cpl || dpl != cpl)
--				goto exception;
-+		if (transfer == X86_TRANSFER_RET && rpl < cpl)
-+			goto exception;
-+		if (transfer == X86_TRANSFER_RET || X86_TRANSFER_TASK_SWITCH) {
-+			if (seg_desc.type & 4) {
-+				/* conforming */
-+				if (dpl > rpl)
-+					goto exception;
-+			} else {
-+				/* nonconforming */
-+				if (dpl != rpl)
-+					goto exception;
-+			}
-+		} else { /* X86_TRANSFER_CALL_JMP */
-+			if (seg_desc.type & 4) {
-+				/* conforming */
-+				if (dpl > cpl)
-+					goto exception;
-+			} else {
-+				/* nonconforming */
-+				if (rpl > cpl || dpl != cpl)
-+					goto exception;
-+			}
- 		}
- 		/* in long-mode d/b must be clear if l is set */
- 		if (seg_desc.d && seg_desc.l) {
+You are awesome, thank you!
 -- 
-2.31.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

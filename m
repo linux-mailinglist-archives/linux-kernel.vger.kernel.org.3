@@ -2,151 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 640324952E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B60254952F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 18:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377233AbiATRJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 12:09:20 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:45585 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377203AbiATRJT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 12:09:19 -0500
-Received: by mail-ot1-f41.google.com with SMTP id v8-20020a9d6048000000b005960952c694so8359538otj.12;
-        Thu, 20 Jan 2022 09:09:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Euwjo6CgoOD4aO0544Go5k7bgAvjOJGkS5qDpA3RUSc=;
-        b=cdQYEKMNjQnDmCDxj5d7aXmc/U5J0ZVeNi9apCWGD+skO354oajSamNhwuUIjDxSNz
-         jVuRLmKWWVMetR37g9Achs4liAAldBFA+ubIx8dpSMaxgfEZAGjNkZAsrtc7aDNeO2Iu
-         wAaKG9KdCe1kMObVzaYKXF11wYQP7DemLC+TjqBfXTjRo+DTAjU7IyYlSkZwx6rTKutP
-         AZdqjODeXEedAdXVhrtT2J6uMCiXnSVD6VsLeTX7aTMfrhCSzSVZsRlfFiTum8NXncv6
-         rpmJH1Na1zDYbymJGRoZrwJ6seC7M722wKIiFKgW/bzcDaDR3568nAwZtS8zLVwUHrTJ
-         Yrig==
-X-Gm-Message-State: AOAM530Ssbgt48ZC3SjufASO8eqmKpJLw/7dLq0Mwf9IGIR9/KyxJM+h
-        rM51WoeNDYZgfSou/hz/WT3QDPDmKQ==
-X-Google-Smtp-Source: ABdhPJz4bpxpNcmiI8YWg3qvT0F0SvrpJ4m2JLdSJmUlrVteXsDv4EbixpwWMFD7H2CVINSHcnvp2A==
-X-Received: by 2002:a9d:22c3:: with SMTP id y61mr431937ota.248.1642698558566;
-        Thu, 20 Jan 2022 09:09:18 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id c20sm1747132ots.50.2022.01.20.09.09.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 09:09:17 -0800 (PST)
-Received: (nullmailer pid 1607218 invoked by uid 1000);
-        Thu, 20 Jan 2022 17:09:17 -0000
-Date:   Thu, 20 Jan 2022 11:09:17 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 05/11] PCI: mvebu: Correctly configure x1/x4 mode
-Message-ID: <YemXPQx4F1eRtLxO@robh.at.kernel.org>
-References: <20220105150239.9628-1-pali@kernel.org>
- <20220112151814.24361-1-pali@kernel.org>
- <20220112151814.24361-6-pali@kernel.org>
+        id S1377247AbiATRM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 12:12:27 -0500
+Received: from mga12.intel.com ([192.55.52.136]:12268 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1346412AbiATRM0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 12:12:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642698746; x=1674234746;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wLQNADyyNJsuNIww5+s/w6SemtHmpxADc9KQDUzmhA4=;
+  b=KyIZkz4FXRx7PYmajgwYvs28b9Q+2BiNpnu9zk14kM7e3xkiHoR3/3JT
+   d5A+JATJioX3OUW0GlmmD81sj6cBSA4LDp7K7AVb/FGugVB575jOiRDFT
+   2ZUiFvkJC2TnW7C6kIj0C40Bm+naC28QrM7+wiTCTthCPaSSpDm95aLIW
+   ooMpZof4+p3ACh+9PaDV1ShvNCFfyrWLJC05f6oDaQMUzLlAdEOgIhqI5
+   7ARUqLp6PzgQzJBIkQpKjtlCwO9Z+foLejoEUeEXMURq9HOLS1TzTlwsp
+   kXXSZ+ib4XHkGilcxtH0FxUNWmueK8SDFQTt4JPbNrEXCJ2xwWVSDZXk8
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="225382201"
+X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
+   d="scan'208";a="225382201"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 09:11:01 -0800
+X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
+   d="scan'208";a="475600713"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 09:10:57 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nAawW-00CcXd-No;
+        Thu, 20 Jan 2022 19:09:48 +0200
+Date:   Thu, 20 Jan 2022 19:09:48 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Jan Dabros <jsd@semihalf.com>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jarkko.nikula@linux.intel.com,
+        kbuild-all@lists.01.org, mika.westerberg@linux.intel.com,
+        hdegoede@redhat.com, wsa@kernel.org, rrangel@chromium.org,
+        mw@semihalf.com, jaz@semihalf.com
+Subject: Re: [PATCH 2/2] i2c: designware: Add AMD PSP I2C bus support
+Message-ID: <YemXXCsy4lBsCmDx@smile.fi.intel.com>
+References: <20220120001621.705352-3-jsd@semihalf.com>
+ <202201202353.tVXCQlqh-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220112151814.24361-6-pali@kernel.org>
+In-Reply-To: <202201202353.tVXCQlqh-lkp@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 04:18:08PM +0100, Pali Rohár wrote:
-> If x1/x4 mode is not set correctly then link with endpoint card is not
-> established.
+On Thu, Jan 20, 2022 at 11:33:05PM +0800, kernel test robot wrote:
+
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 > 
-> Use DTS property 'num-lanes' to deteriminate x1/x4 mode.
+> All errors (new ones prefixed by >>):
 > 
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> ---
->  drivers/pci/controller/pci-mvebu.c | 19 ++++++++++++++++++-
->  1 file changed, 18 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-> index a075ba26cff1..0f2ec0a17874 100644
-> --- a/drivers/pci/controller/pci-mvebu.c
-> +++ b/drivers/pci/controller/pci-mvebu.c
-> @@ -93,6 +93,7 @@ struct mvebu_pcie_port {
->  	void __iomem *base;
->  	u32 port;
->  	u32 lane;
-> +	bool is_x4;
+>    drivers/i2c/busses/i2c-designware-amdpsp.c: In function 'psp_send_cmd':
+> >> drivers/i2c/busses/i2c-designware-amdpsp.c:130:2: error: implicit declaration of function 'writeq'; did you mean 'writel'? [-Werror=implicit-function-declaration]
+>      130 |  writeq((uintptr_t)__psp_pa((void *)req), &mbox->i2c_req_addr);
+>          |  ^~~~~~
+>          |  writel
+>    cc1: some warnings being treated as errors
 
-I would just store the number of lanes.
-
->  	int devfn;
->  	unsigned int mem_target;
->  	unsigned int mem_attr;
-> @@ -233,13 +234,25 @@ static void mvebu_pcie_setup_wins(struct mvebu_pcie_port *port)
->  
->  static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
->  {
-> -	u32 ctrl, cmd, dev_rev, mask;
-> +	u32 ctrl, lnkcap, cmd, dev_rev, mask;
->  
->  	/* Setup PCIe controller to Root Complex mode. */
->  	ctrl = mvebu_readl(port, PCIE_CTRL_OFF);
->  	ctrl |= PCIE_CTRL_RC_MODE;
->  	mvebu_writel(port, ctrl, PCIE_CTRL_OFF);
->  
-> +	/*
-> +	 * Set Maximum Link Width to X1 or X4 in Root Port's PCIe Link
-> +	 * Capability register. This register is defined by PCIe specification
-> +	 * as read-only but this mvebu controller has it as read-write and must
-> +	 * be set to number of SerDes PCIe lanes (1 or 4). If this register is
-> +	 * not set correctly then link with endpoint card is not established.
-> +	 */
-> +	lnkcap = mvebu_readl(port, PCIE_CAP_PCIEXP + PCI_EXP_LNKCAP);
-> +	lnkcap &= ~PCI_EXP_LNKCAP_MLW;
-> +	lnkcap |= (port->is_x4 ? 4 : 1) << 4;
-
-then this is just: lanes << 4
-
-> +	mvebu_writel(port, lnkcap, PCIE_CAP_PCIEXP + PCI_EXP_LNKCAP);
-> +
->  	/* Disable Root Bridge I/O space, memory space and bus mastering. */
->  	cmd = mvebu_readl(port, PCIE_CMD_OFF);
->  	cmd &= ~(PCI_COMMAND_IO | PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER);
-> @@ -986,6 +999,7 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
->  	struct device *dev = &pcie->pdev->dev;
->  	enum of_gpio_flags flags;
->  	int reset_gpio, ret;
-> +	u32 num_lanes;
->  
->  	port->pcie = pcie;
->  
-> @@ -998,6 +1012,9 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
->  	if (of_property_read_u32(child, "marvell,pcie-lane", &port->lane))
->  		port->lane = 0;
->  
-> +	if (!of_property_read_u32(child, "num-lanes", &num_lanes) && num_lanes == 4)
-> +		port->is_x4 = true;
-
-And this can be:
-
-num_lanes = 1;
-of_property_read_u32(child, "num-lanes", &num_lanes);
-
-If you want to validate the DT is only 1 or 4, make the DT schema do 
-that.
+Adding io-64-nonatomic-lo-hi.h after io.h should fix this.
 
 
-> +
->  	port->name = devm_kasprintf(dev, GFP_KERNEL, "pcie%d.%d", port->port,
->  				    port->lane);
->  	if (!port->name) {
-> -- 
-> 2.20.1
-> 
-> 
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

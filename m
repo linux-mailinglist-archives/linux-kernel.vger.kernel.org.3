@@ -2,90 +2,377 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6A5494E89
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 14:02:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 413CF494E8B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Jan 2022 14:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244839AbiATNCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 08:02:35 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:55330 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244869AbiATNCd (ORCPT
+        id S245044AbiATNCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 08:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40438 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244902AbiATNCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 08:02:33 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-33-Vn3vaJQAO5ObVFev711Zzw-1; Thu, 20 Jan 2022 13:02:29 +0000
-X-MC-Unique: Vn3vaJQAO5ObVFev711Zzw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Thu, 20 Jan 2022 13:02:27 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Thu, 20 Jan 2022 13:02:27 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Arnd Bergmann' <arnd@arndb.de>, Guo Ren <guoren@kernel.org>
-CC:     linux-s390 <linux-s390@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Drew Fustini <drew@beagleboard.org>,
-        Anup Patel <anup@brainfault.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "inux-parisc@vger.kernel.org" <inux-parisc@vger.kernel.org>,
-        "Christoph Hellwig" <hch@infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        liush <liush@allwinnertech.com>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Wei Fu <wefu@redhat.com>
-Subject: RE: [PATCH V3 03/17] asm-generic: compat: Cleanup duplicate
- definitions
-Thread-Topic: [PATCH V3 03/17] asm-generic: compat: Cleanup duplicate
- definitions
-Thread-Index: AQHYDfvLsUgI09Yi+EGR4Ve6KMrB5Kxr3nRg
-Date:   Thu, 20 Jan 2022 13:02:27 +0000
-Message-ID: <f2c1a3a10bf643d693afed6d23b3baf9@AcuMS.aculab.com>
-References: <20220120073911.99857-4-guoren@kernel.org>
- <CAK8P3a1UmnjHk8B6hSULiKv3FKoY5BW9=4=ESerQzc+4=LR5Zw@mail.gmail.com>
-In-Reply-To: <CAK8P3a1UmnjHk8B6hSULiKv3FKoY5BW9=4=ESerQzc+4=LR5Zw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 20 Jan 2022 08:02:52 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E858C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 05:02:51 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id w26so12050046wmi.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 05:02:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hJVYFNx9K1gGhcYwm92shjUyzmn/XbrmNuIp+tts1Vk=;
+        b=h0eNr6ZH7YHILtQjwWmvqva1ywih2h1G+WrVuoDVzFoEeJ2s8F3cUCSuXeNuAXP76n
+         kEgR3w+NMehBwLVY9PyBI3rmunFO/D49DpwaZ4VnuktuWj9CcX7rpv0ZEJOrz6WImJk2
+         JfQ1Jxjrt9mm9xUIqV/3YhojLpr1IkXlymTTb/wHhgwfUwaEzmrJcA5YkvEoz4RelVZu
+         eaQyvBbYS1VmKebdFHtD9Zr7b0IAW/AP/NBXJhRojAYll783LjNI1HczEuvgDOinjTfL
+         oqFsAKMrH8v+nimmVjWs38FmNOjHhs16w9H3lNX5+nDKyRJ4YQtknxPpLi4laUXHgPmN
+         isxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hJVYFNx9K1gGhcYwm92shjUyzmn/XbrmNuIp+tts1Vk=;
+        b=sFrK4mheMbey0QRtU2hMSkP/U+KWq8bmyB3tu74MzSoP+QawHNRCrJrZXLgu28h72c
+         V+FBaN/Np5cn1k34gAwtzZNiODiXW2oyKMAz0t8D/fQ487TXxKn2NMXyS5/Q0HkYpSHm
+         jJWEMAC1ZcaqNr5sDFZXYwhhin59JelbRp/IDSeNZlJyWKPIRDjrD0E8+b25SIeD9rkJ
+         Hg4soXSG/C+Cw/Sw3JcglcQlkcRuK44Uqcvb5BfyFyEUjaojhNBXiLMNSddLlzqqo9oz
+         ec5qRe7cu6ouQMdsTRLIMWscD/NF8q3fAMbQIsZCT5XDGxQeGWUGF6avoP5gSzhkzs7J
+         67HA==
+X-Gm-Message-State: AOAM531VS8kbJkmtgY0BdtG9c9fwHSjyG6immfvP7WKWBo9aWUE24aIt
+        PmM+/zoVgNdiKDL0zr3asMeEO/Guuv1y4ccKXD0YGw==
+X-Google-Smtp-Source: ABdhPJwyztseJjxNrbmKdV24+Wt8av4l67G3ym5S4Pu3yQuPiMZgfy22HctbGFpvZP48afu5pMK8ZXdg0QoOyNfK1rw=
+X-Received: by 2002:a1c:2189:: with SMTP id h131mr8713385wmh.177.1642683769952;
+ Thu, 20 Jan 2022 05:02:49 -0800 (PST)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+References: <20220114150824.3578829-1-jens.wiklander@linaro.org>
+ <20220114150824.3578829-6-jens.wiklander@linaro.org> <CAFA6WYNgwPNxmKWs=84AhYY40iPmK371oscM1iT9rmwTTdcgiA@mail.gmail.com>
+In-Reply-To: <CAFA6WYNgwPNxmKWs=84AhYY40iPmK371oscM1iT9rmwTTdcgiA@mail.gmail.com>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Thu, 20 Jan 2022 14:02:39 +0100
+Message-ID: <CAHUa44EezLUeaVuyafercdo-==vU2+E6PVMTUrQ1YC9pq7dz-A@mail.gmail.com>
+Subject: Re: [PATCH v2 05/12] tee: replace tee_shm_alloc()
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
+        Rijo Thomas <Rijo-john.Thomas@amd.com>,
+        David Howells <dhowells@redhat.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQXJuZCBCZXJnbWFubg0KPiBTZW50OiAyMCBKYW51YXJ5IDIwMjIgMTE6NTINCi4uDQo+
-IEFzIHdpdGggY29tcGF0X2Zsb2NrLCB0aGUgcGFja2VkIGF0dHJpYnV0ZSBoYXMgbm8gaW1wYWN0
-IG9uIHRoZSBsYXlvdXQNCj4gaGVyZSwgYnV0IHBsZWFzZSBkcm9wIGl0IGFueXdheSBmb3IgY29u
-c2lzdGVuY3kuDQoNCk5ldmVyIG1pbmQgdGhlIHN0cnVjdHVyZSBsYXlvdXQsIGJlY2F1c2UgJ3Bh
-Y2tlZCcgYWxsb3dzIHRoZQ0Kc3RydWN0dXJlIHRvIGJlIGFsaWduZWQgb24gYW55IGJvdW5kYXJ5
-IGl0IGZvcmNlcyB0aGUgY29tcGlsZXINCnRvIHVzZSBieXRlIG1lbW9yeSBhY2Nlc3NlcyBhbmQg
-c2hpZnRzIG9uIHNvbWUgYXJjaGl0ZWN0dXJlcy4NClRoaXMgaXMgYSBob3JyaWQgcGVyZm9ybWFu
-Y2UgcGVuYWx0eS4NCg0KJ3BhY2tlZCcgc2hvdWxkIG9ubHkgYmUgc3BlY2lmaWVkIGZvciBzdHJ1
-Y3R1cmVzIHRoYXQgY2FuDQpvY2N1ciBvbiBhbnkgYWRkcmVzcyBib3VuZGFyeS4NCmllIGJhc2lj
-YWxseSBuZXZlci4NCg0KSWYgeW91IG5lZWQgdG8gcmVtb3ZlIHRoZSBpbXBsaWNpdCBwYWQgYmVm
-b3JlIGEgZmllbGQgKGVnIDY0Yml0DQpmaWVsZHMgb24geDY0LTMyKSB0aGVuIHlvdSBjYW4gbWFy
-ayB0aGUgZmllbGQgaXRzZWxmIGFzICdwYWNrZWQnLg0KQWx0aG91Z2gsIGluIHRoYXQgY2FzZSwg
-cHV0dGluZyB0aGUgYXR0cmlidXRlIG9uIHRoZSB0eXBlIChjb21wYXRfczY0KQ0KaXMgZ2VuZXJh
-bGx5IGNsZWFuZXIuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUs
-IEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJl
-Z2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+On Thu, Jan 20, 2022 at 11:41 AM Sumit Garg <sumit.garg@linaro.org> wrote:
+>
+> On Fri, 14 Jan 2022 at 20:38, Jens Wiklander <jens.wiklander@linaro.org> wrote:
+> >
+> > tee_shm_alloc() is replaced by three new functions,
+> >
+> > tee_shm_alloc_user_buf() - for user mode allocations, replacing passing
+> > the flags TEE_SHM_MAPPED | TEE_SHM_DMA_BUF
+> >
+> > tee_shm_alloc_kernel_buf() - for kernel mode allocations, slightly
+> > optimized compared to using the flags TEE_SHM_MAPPED | TEE_SHM_DMA_BUF.
+> >
+> > tee_shm_alloc_priv_kernel_buf() - primarily for TEE driver internal use.
+> >
+>
+> This name seems ambiguous to me and I would rather prefer it named as
+> tee_shm_alloc_priv_buf().
 
+OK, I'll rename it in the v3.
+
+>
+> I noticed that you have done flags refactoring as part of patch #12.
+> So rest looks fine to me.
+
+Thanks,
+Jens
+
+>
+> -Sumit
+>
+> > This also makes the interface easier to use as we can get rid of the
+> > somewhat hard to use flags parameter.
+> >
+> > The TEE subsystem and the TEE drivers are updated to use the new
+> > functions instead.
+> >
+> > Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+> > ---
+> >  drivers/tee/optee/call.c    |   2 +-
+> >  drivers/tee/optee/device.c  |   5 +-
+> >  drivers/tee/optee/ffa_abi.c |   4 +-
+> >  drivers/tee/optee/smc_abi.c |   5 +-
+> >  drivers/tee/tee_shm.c       | 109 +++++++++++++++++++++++-------------
+> >  include/linux/tee_drv.h     |  17 +-----
+> >  6 files changed, 78 insertions(+), 64 deletions(-)
+> >
+> > diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
+> > index b25cc1fac945..fd6ad7d6fbee 100644
+> > --- a/drivers/tee/optee/call.c
+> > +++ b/drivers/tee/optee/call.c
+> > @@ -120,7 +120,7 @@ struct tee_shm *optee_get_msg_arg(struct tee_context *ctx, size_t num_params,
+> >         if (optee->rpc_arg_count)
+> >                 sz += OPTEE_MSG_GET_ARG_SIZE(optee->rpc_arg_count);
+> >
+> > -       shm = tee_shm_alloc(ctx, sz, TEE_SHM_MAPPED | TEE_SHM_PRIV);
+> > +       shm = tee_shm_alloc_priv_kernel_buf(ctx, sz);
+> >         if (IS_ERR(shm))
+> >                 return shm;
+> >
+> > diff --git a/drivers/tee/optee/device.c b/drivers/tee/optee/device.c
+> > index 128a2d2a50a1..f3947be13e2e 100644
+> > --- a/drivers/tee/optee/device.c
+> > +++ b/drivers/tee/optee/device.c
+> > @@ -121,10 +121,9 @@ static int __optee_enumerate_devices(u32 func)
+> >         if (rc < 0 || !shm_size)
+> >                 goto out_sess;
+> >
+> > -       device_shm = tee_shm_alloc(ctx, shm_size,
+> > -                                  TEE_SHM_MAPPED | TEE_SHM_DMA_BUF);
+> > +       device_shm = tee_shm_alloc_kernel_buf(ctx, shm_size);
+> >         if (IS_ERR(device_shm)) {
+> > -               pr_err("tee_shm_alloc failed\n");
+> > +               pr_err("tee_shm_alloc_kernel_buf failed\n");
+> >                 rc = PTR_ERR(device_shm);
+> >                 goto out_sess;
+> >         }
+> > diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
+> > index e690d9420966..18963f7e4d48 100644
+> > --- a/drivers/tee/optee/ffa_abi.c
+> > +++ b/drivers/tee/optee/ffa_abi.c
+> > @@ -439,8 +439,8 @@ static void handle_ffa_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
+> >                 shm = optee_rpc_cmd_alloc_suppl(ctx, arg->params[0].u.value.b);
+> >                 break;
+> >         case OPTEE_RPC_SHM_TYPE_KERNEL:
+> > -               shm = tee_shm_alloc(ctx, arg->params[0].u.value.b,
+> > -                                   TEE_SHM_MAPPED | TEE_SHM_PRIV);
+> > +               shm = tee_shm_alloc_priv_kernel_buf(ctx,
+> > +                                                   arg->params[0].u.value.b);
+> >                 break;
+> >         default:
+> >                 arg->ret = TEEC_ERROR_BAD_PARAMETERS;
+> > diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+> > index b679037ea794..196cd4316d7d 100644
+> > --- a/drivers/tee/optee/smc_abi.c
+> > +++ b/drivers/tee/optee/smc_abi.c
+> > @@ -650,7 +650,7 @@ static void handle_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
+> >                 shm = optee_rpc_cmd_alloc_suppl(ctx, sz);
+> >                 break;
+> >         case OPTEE_RPC_SHM_TYPE_KERNEL:
+> > -               shm = tee_shm_alloc(ctx, sz, TEE_SHM_MAPPED | TEE_SHM_PRIV);
+> > +               shm = tee_shm_alloc_priv_kernel_buf(ctx, sz);
+> >                 break;
+> >         default:
+> >                 arg->ret = TEEC_ERROR_BAD_PARAMETERS;
+> > @@ -775,8 +775,7 @@ static void optee_handle_rpc(struct tee_context *ctx,
+> >
+> >         switch (OPTEE_SMC_RETURN_GET_RPC_FUNC(param->a0)) {
+> >         case OPTEE_SMC_RPC_FUNC_ALLOC:
+> > -               shm = tee_shm_alloc(ctx, param->a1,
+> > -                                   TEE_SHM_MAPPED | TEE_SHM_PRIV);
+> > +               shm = tee_shm_alloc_priv_kernel_buf(ctx, param->a1);
+> >                 if (!IS_ERR(shm) && !tee_shm_get_pa(shm, 0, &pa)) {
+> >                         reg_pair_from_64(&param->a1, &param->a2, pa);
+> >                         reg_pair_from_64(&param->a4, &param->a5,
+> > diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
+> > index 2c8ce0c6801a..d51bf97ce7e5 100644
+> > --- a/drivers/tee/tee_shm.c
+> > +++ b/drivers/tee/tee_shm.c
+> > @@ -49,25 +49,14 @@ static void tee_shm_release(struct tee_device *teedev, struct tee_shm *shm)
+> >         tee_device_put(teedev);
+> >  }
+> >
+> > -struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
+> > +static struct tee_shm *shm_alloc_helper(struct tee_context *ctx, size_t size,
+> > +                                       size_t align, u32 flags, int id)
+> >  {
+> >         struct tee_device *teedev = ctx->teedev;
+> >         struct tee_shm *shm;
+> > -       size_t align;
+> >         void *ret;
+> >         int rc;
+> >
+> > -       if (!(flags & TEE_SHM_MAPPED)) {
+> > -               dev_err(teedev->dev.parent,
+> > -                       "only mapped allocations supported\n");
+> > -               return ERR_PTR(-EINVAL);
+> > -       }
+> > -
+> > -       if ((flags & ~(TEE_SHM_MAPPED | TEE_SHM_DMA_BUF | TEE_SHM_PRIV))) {
+> > -               dev_err(teedev->dev.parent, "invalid shm flags 0x%x", flags);
+> > -               return ERR_PTR(-EINVAL);
+> > -       }
+> > -
+> >         if (!tee_device_get(teedev))
+> >                 return ERR_PTR(-EINVAL);
+> >
+> > @@ -84,18 +73,16 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
+> >         }
+> >
+> >         refcount_set(&shm->refcount, 1);
+> > -       shm->flags = flags | TEE_SHM_POOL;
+> > +       shm->flags = flags;
+> > +       shm->id = id;
+> > +
+> > +       /*
+> > +        * We're assigning this as it is needed if the shm is to be
+> > +        * registered. If this function returns OK then the caller expected
+> > +        * to call teedev_ctx_get() or clear shm->ctx in case it's not
+> > +        * needed any longer.
+> > +        */
+> >         shm->ctx = ctx;
+> > -       if (flags & TEE_SHM_DMA_BUF) {
+> > -               align = PAGE_SIZE;
+> > -               /*
+> > -                * Request to register the shm in the pool allocator below
+> > -                * if supported.
+> > -                */
+> > -               shm->flags |= TEE_SHM_REGISTER;
+> > -       } else {
+> > -               align = 2 * sizeof(long);
+> > -       }
+> >
+> >         rc = teedev->pool->ops->alloc(teedev->pool, shm, size, align);
+> >         if (rc) {
+> > @@ -103,28 +90,14 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
+> >                 goto err_kfree;
+> >         }
+> >
+> > -       if (flags & TEE_SHM_DMA_BUF) {
+> > -               mutex_lock(&teedev->mutex);
+> > -               shm->id = idr_alloc(&teedev->idr, shm, 1, 0, GFP_KERNEL);
+> > -               mutex_unlock(&teedev->mutex);
+> > -               if (shm->id < 0) {
+> > -                       ret = ERR_PTR(shm->id);
+> > -                       goto err_pool_free;
+> > -               }
+> > -       }
+> > -
+> >         teedev_ctx_get(ctx);
+> > -
+> >         return shm;
+> > -err_pool_free:
+> > -       teedev->pool->ops->free(teedev->pool, shm);
+> >  err_kfree:
+> >         kfree(shm);
+> >  err_dev_put:
+> >         tee_device_put(teedev);
+> >         return ret;
+> >  }
+> > -EXPORT_SYMBOL_GPL(tee_shm_alloc);
+> >
+> >  /**
+> >   * tee_shm_alloc_user_buf() - Allocate shared memory for user space
+> > @@ -140,7 +113,36 @@ EXPORT_SYMBOL_GPL(tee_shm_alloc);
+> >   */
+> >  struct tee_shm *tee_shm_alloc_user_buf(struct tee_context *ctx, size_t size)
+> >  {
+> > -       return tee_shm_alloc(ctx, size, TEE_SHM_MAPPED | TEE_SHM_DMA_BUF);
+> > +       u32 flags = TEE_SHM_MAPPED | TEE_SHM_DMA_BUF | TEE_SHM_REGISTER |
+> > +                   TEE_SHM_POOL;
+> > +       struct tee_device *teedev = ctx->teedev;
+> > +       struct tee_shm *shm;
+> > +       void *ret;
+> > +       int id;
+> > +
+> > +       mutex_lock(&teedev->mutex);
+> > +       id = idr_alloc(&teedev->idr, NULL, 1, 0, GFP_KERNEL);
+> > +       mutex_unlock(&teedev->mutex);
+> > +       if (id < 0)
+> > +               return ERR_PTR(id);
+> > +
+> > +       shm = shm_alloc_helper(ctx, size, PAGE_SIZE, flags, id);
+> > +       if (IS_ERR(shm)) {
+> > +               mutex_lock(&teedev->mutex);
+> > +               idr_remove(&teedev->idr, id);
+> > +               mutex_unlock(&teedev->mutex);
+> > +               return shm;
+> > +       }
+> > +
+> > +       mutex_lock(&teedev->mutex);
+> > +       ret = idr_replace(&teedev->idr, shm, id);
+> > +       mutex_unlock(&teedev->mutex);
+> > +       if (IS_ERR(ret)) {
+> > +               tee_shm_free(shm);
+> > +               return ret;
+> > +       }
+> > +
+> > +       return shm;
+> >  }
+> >  EXPORT_SYMBOL_GPL(tee_shm_alloc_user_buf);
+> >
+> > @@ -158,10 +160,37 @@ EXPORT_SYMBOL_GPL(tee_shm_alloc_user_buf);
+> >   */
+> >  struct tee_shm *tee_shm_alloc_kernel_buf(struct tee_context *ctx, size_t size)
+> >  {
+> > -       return tee_shm_alloc(ctx, size, TEE_SHM_MAPPED);
+> > +       u32 flags = TEE_SHM_MAPPED | TEE_SHM_REGISTER | TEE_SHM_POOL;
+> > +
+> > +       return shm_alloc_helper(ctx, size, PAGE_SIZE, flags, -1);
+> >  }
+> >  EXPORT_SYMBOL_GPL(tee_shm_alloc_kernel_buf);
+> >
+> > +/**
+> > + * tee_shm_alloc_priv_kernel_buf() - Allocate shared memory for a privatly
+> > + *                                  shared kernel buffer
+> > + * @ctx:       Context that allocates the shared memory
+> > + * @size:      Requested size of shared memory
+> > + *
+> > + * This function returns similar shared memory as
+> > + * tee_shm_alloc_kernel_buf(), but with the difference that the memory
+> > + * might not be registered in secure world in case the driver supports
+> > + * passing memory not registered in advance.
+> > + *
+> > + * This function should normally only be used internally in the TEE
+> > + * drivers.
+> > + *
+> > + * @returns a pointer to 'struct tee_shm'
+> > + */
+> > +struct tee_shm *tee_shm_alloc_priv_kernel_buf(struct tee_context *ctx,
+> > +                                             size_t size)
+> > +{
+> > +       u32 flags = TEE_SHM_MAPPED | TEE_SHM_PRIV | TEE_SHM_POOL;
+> > +
+> > +       return shm_alloc_helper(ctx, size, sizeof(long) * 2, flags, -1);
+> > +}
+> > +EXPORT_SYMBOL_GPL(tee_shm_alloc_priv_kernel_buf);
+> > +
+> >  struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
+> >                                  size_t length, u32 flags)
+> >  {
+> > diff --git a/include/linux/tee_drv.h b/include/linux/tee_drv.h
+> > index 808aa23308c2..e71cb0411e9c 100644
+> > --- a/include/linux/tee_drv.h
+> > +++ b/include/linux/tee_drv.h
+> > @@ -273,22 +273,9 @@ static inline void tee_shm_pool_free(struct tee_shm_pool *pool)
+> >   */
+> >  void *tee_get_drvdata(struct tee_device *teedev);
+> >
+> > -/**
+> > - * tee_shm_alloc() - Allocate shared memory
+> > - * @ctx:       Context that allocates the shared memory
+> > - * @size:      Requested size of shared memory
+> > - * @flags:     Flags setting properties for the requested shared memory.
+> > - *
+> > - * Memory allocated as global shared memory is automatically freed when the
+> > - * TEE file pointer is closed. The @flags field uses the bits defined by
+> > - * TEE_SHM_* above. TEE_SHM_MAPPED must currently always be set. If
+> > - * TEE_SHM_DMA_BUF global shared memory will be allocated and associated
+> > - * with a dma-buf handle, else driver private memory.
+> > - *
+> > - * @returns a pointer to 'struct tee_shm'
+> > - */
+> > -struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags);
+> >  struct tee_shm *tee_shm_alloc_user_buf(struct tee_context *ctx, size_t size);
+> > +struct tee_shm *tee_shm_alloc_priv_kernel_buf(struct tee_context *ctx,
+> > +                                             size_t size);
+> >  struct tee_shm *tee_shm_alloc_kernel_buf(struct tee_context *ctx, size_t size);
+> >
+> >  /**
+> > --
+> > 2.31.1
+> >

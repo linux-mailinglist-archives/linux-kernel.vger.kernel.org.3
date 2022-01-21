@@ -2,110 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61CB4495C03
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 09:35:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD08495C0B
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 09:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234149AbiAUIfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 03:35:05 -0500
-Received: from mail.cn.fujitsu.com ([183.91.158.132]:2637 "EHLO
-        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234198AbiAUIeV (ORCPT
+        id S234181AbiAUIfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 03:35:15 -0500
+Received: from esa6.hgst.iphmx.com ([216.71.154.45]:64199 "EHLO
+        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229967AbiAUIel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 03:34:21 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3ATGEFKqh5CkSoF7MEZqgz4YuZX161CxEKZh0ujC4?=
- =?us-ascii?q?5NGQNrF6WrkUAy2YXUD+ObvyMZzCmLot/bojn9h8Av8XTnIJkHgtqqnw8FHgiR?=
- =?us-ascii?q?ejtX4rAdhiqV8+xwmwvdGo+toNGLICowPkcFhcwnT/wdOixxZVA/fvQHOCkUbS?=
- =?us-ascii?q?dYnkZqTJME0/NtzoywobVvaY42bBVMyvV0T/Di5W31G2NglaYAUpIg063ky6Di?=
- =?us-ascii?q?dyp0N8uUvPSUtgQ1LPWvyF94JvyvshdJVOgKmVfNrbSq+ouUNiEEm3lExcFUrt?=
- =?us-ascii?q?Jk57wdAsEX7zTIROTzHFRXsBOgDAb/mprjPl9b6FaNC+7iB3Q9zx14M9QvJqrW?=
- =?us-ascii?q?EEnOLbQsOoAURhECDw4NqpDkFPCCSHl6ZLNlhKaKhMAxN0rVinaJ7Yw9u9pAG1?=
- =?us-ascii?q?m++YfLTcXZBGfwemxxdqTSuJsrsUlItPiMI4Wtjdn1z6xJfovR9bBBbrL4dtZ1?=
- =?us-ascii?q?TIrrsFIAfvaIcEebFJHYBbfZBtAElQaEpQzmKGvnHaXWzlZrk+F4K8yy2vNxQd?=
- =?us-ascii?q?ylr/3P7L9fMKGRMBQtkKZvX7duWD4BAwKctCS11Kt8Huqi6nEnT7TX5gbH7m1s?=
- =?us-ascii?q?PVthTW7wm0VFQ1TW0C3rOe0jmagVN9FbU8Z4Cwjqe417kPDZt38WQCo5X2JpBg?=
- =?us-ascii?q?RX/JOHOAgrgKA0KzZ50CeHGdsZjpAbsE28d84XhQ02VKT2dDkHzpitPuSU331y?=
- =?us-ascii?q?1s+hVteIgBMdSlbO3BCFlBDvrHeTEgIpkqnZr5e/GSd17UZwQ3N/g0=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AmS58S6/PRHT7JJgFU+puk+C9I+orL9Y04lQ7?=
- =?us-ascii?q?vn2ZKCY0TiX2ra2TdZggvyMc6wxxZJhDo7+90cC7KBu2yXcc2/hzAV7IZmXbUQ?=
- =?us-ascii?q?WTQr1f0Q=3D=3D?=
+        Fri, 21 Jan 2022 03:34:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1642754082; x=1674290082;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Q8+w+zY/fos4SCamEOckILzxUl1jS3yfE7nrCAZdjSU=;
+  b=GKNtQL0C/5wSmxt7I2i9EJZYX2IG5mz/JH/eQNXH2QYAoAF5pHbMpNTM
+   BM4Qn7CSXvtzCoQqEC9rQ6j0r0VX+DySfpdtn1ooGWIJ1XTBUQ12oTQnX
+   5xTb8vIlm8OLj0/Nsq6wtUXNdzdjqz3PzCRSIMGBoAJGVItZyGKJRNzfR
+   pd8nAg3Bs+0NXMsi0VZbpLmbK4pKCeLjKDaAuK1Jm5BK7tqg/fOXFMtcx
+   6kHXjEttarV0fWaalWF7NfVItpV7pYInXUp7x2uhsgLNO7guBoiHBfiOO
+   /g3p9JyYzTw9acqgFhXeritbPGZ6jnI1M0GQKeA+iiF+Hi7NF+4+BbMKy
+   A==;
 X-IronPort-AV: E=Sophos;i="5.88,304,1635177600"; 
-   d="scan'208";a="120661741"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 21 Jan 2022 16:34:20 +0800
-Received: from G08CNEXMBPEKD05.g08.fujitsu.local (unknown [10.167.33.204])
-        by cn.fujitsu.com (Postfix) with ESMTP id 10D3A4D15A58;
-        Fri, 21 Jan 2022 16:34:19 +0800 (CST)
-Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
- G08CNEXMBPEKD05.g08.fujitsu.local (10.167.33.204) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Fri, 21 Jan 2022 16:34:19 +0800
-Received: from [192.168.22.28] (10.167.225.141) by
- G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Fri, 21 Jan 2022 16:34:16 +0800
-Message-ID: <b928a8cd-e9b5-46fa-20d0-e91fe53ed861@fujitsu.com>
-Date:   Fri, 21 Jan 2022 16:34:18 +0800
+   d="scan'208";a="192036796"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 21 Jan 2022 16:34:41 +0800
+IronPort-SDR: 10X62QFxuQRi2un8wOfLqJm2/tXe/csKP4P+gxoCzEyZAtoqGkhgojI7AWLgTRo8baNkEnuzG6
+ VZQ/a33cpDHZWoXqdFiZbT+dDd0XYIGEv5V6C9vtO/DILaVEzpG068OprMM2osgc0TuyRF7QId
+ ZLS3WkqO4Osq6FuwJFGECmnjDXelBcE6SaiJFRfc3qBatWz1MvyWjIE3Oyk7KyyZs7lienAlzO
+ SzSwNJEHi02R0zJFX8tyHJffpkuONokVkim8szD4L2l88wztO/kvq7J0+cwOle5OIZ+tCchV80
+ knxGXljT2deSDLKA038+73Rk
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 00:06:52 -0800
+IronPort-SDR: 4moM+oL/GN4+GzYbOAOSUsShVu+NgA/0RrWATnegCNd00z6C6qwjbut8FMDEQXQf/uVQev8Peo
+ Rs9P6LbDZH+g0yOEQ+baagH8ZsYJ7OxelPbOHr/gYKopmkSJKIHEG0MhFDUMgcRz9olcA6LyVk
+ xUtTWlRY63O7XT9EqY4Wdq1X2N/yhDzmtXkgTA+MsyQ7prgs0ft51bd+a8Fu17wT7WsY9Hr7Bu
+ KX+bmIBnrQACZnZzkG58ota/TS6S+etR4ycmUzSzv7ONSYLT5pZEA982UlHS1POclsE0q59Aa1
+ mCo=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 00:34:41 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JgCNc3bwDz1SVp2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 00:34:40 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1642754079; x=1645346080; bh=Q8+w+zY/fos4SCamEOckILzxUl1jS3yfE7n
+        rCAZdjSU=; b=mBYTwNFWNI2gJI+EMJOK8vQ/zPGTFIxOb8hlRMRHucnDP+YTM7c
+        cNhsPI1aSRlDbAhQcy18FB1qtTC4P9C4G6NmL9ktzVOywAqcmYxwZ1rRkVyAfrd5
+        Q/GKJoIsFc5u8zVhoM0c2laOEJ5SBEnjZGgpZT9VFmpJCU71t0XdyCUhfA2sMxKW
+        h51xd2nqdiKkrWyc1uYpBKyZNNTwakYJcW0SNyLrk+3exBpr+HS/iGC9VEK02NKG
+        UNgzuVjUrp41rI4Fu+NwJovQHwpBb8wikIvWBxQTY9jogP3hAqnAaTdw4E06Fdpp
+        vKZbjS7ovToZ6RIzMVfc0310N9+thni8guA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id wMaN3o6Iuuxg for <linux-kernel@vger.kernel.org>;
+        Fri, 21 Jan 2022 00:34:39 -0800 (PST)
+Received: from [10.225.163.53] (unknown [10.225.163.53])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JgCNY3K7Vz1RvlN;
+        Fri, 21 Jan 2022 00:34:37 -0800 (PST)
+Message-ID: <6249735f-e6b7-1331-eb2b-361bb17d6115@opensource.wdc.com>
+Date:   Fri, 21 Jan 2022 17:34:35 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v9 10/10] fsdax: set a CoW flag when associate reflink
- mappings
-To:     Christoph Hellwig <hch@infradead.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
-        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
-        <linux-fsdevel@vger.kernel.org>, <djwong@kernel.org>,
-        <dan.j.williams@intel.com>, <david@fromorbit.com>,
-        <jane.chu@oracle.com>
-References: <20211226143439.3985960-1-ruansy.fnst@fujitsu.com>
- <20211226143439.3985960-11-ruansy.fnst@fujitsu.com>
- <YekkYAJ+QegoDKCJ@infradead.org>
- <70a24c20-d7ee-064c-e863-9f012422a2f5@fujitsu.com>
- <YepdxZ+XrAZYv1dX@infradead.org>
-From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
-In-Reply-To: <YepdxZ+XrAZYv1dX@infradead.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-yoursite-MailScanner-ID: 10D3A4D15A58.A4165
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
-X-Spam-Status: No
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [next] mips: cavium_octeon_defconfig: pata_octeon_cf.c:598:23:
+ error: passing argument 1 of 'trace_ata_bmdma_stop' from incompatible pointer
+ type
+Content-Language: en-US
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Zeal Robot <zealci@zte.com.cn>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        CGEL ZTE <cgel.zte@gmail.com>
+References: <CA+G9fYtq0wzSeG8YG-a+=KrbdWqHJMXk1hvq0FKeAvj9sZAK2g@mail.gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <CA+G9fYtq0wzSeG8YG-a+=KrbdWqHJMXk1hvq0FKeAvj9sZAK2g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/1/21 15:16, Christoph Hellwig 写道:
-> On Fri, Jan 21, 2022 at 10:33:58AM +0800, Shiyang Ruan wrote:
->>>
->>> But different question, how does this not conflict with:
->>>
->>> #define PAGE_MAPPING_ANON       0x1
->>>
->>> in page-flags.h?
->>
->> Now we are treating dax pages, so I think its flags should be different from
->> normal page.  In another word, PAGE_MAPPING_ANON is a flag of rmap mechanism
->> for normal page, it doesn't work for dax page.  And now, we have dax rmap
->> for dax page.  So, I think this two kinds of flags are supposed to be used
->> in different mechanisms and won't conflect.
+On 1/21/22 17:02, Naresh Kamboju wrote:
+> Linux next-20220106..next-20220121 mips build failing with gcc-10.
 > 
-> It just needs someone to use folio_test_anon in a place where a DAX
-> folio can be passed.  This probably should not happen, but we need to
-> clearly document that.
+> drivers/ata/pata_octeon_cf.c: In function 'octeon_cf_dma_finished':
+> drivers/ata/pata_octeon_cf.c:598:23: error: passing argument 1 of
+> 'trace_ata_bmdma_stop' from incompatible pointer type
+> [-Werror=incompatible-pointer-types]
+>   598 |  trace_ata_bmdma_stop(qc, &qc->tf, qc->tag);
+>       |                       ^~
+>       |                       |
+>       |                       struct ata_queued_cmd *
+> In file included from include/trace/events/libata.h:10,
+>                  from drivers/ata/pata_octeon_cf.c:22:
+> include/trace/events/libata.h:414:33: note: expected 'struct ata_port
+> *' but argument is of type 'struct ata_queued_cmd *'
+>   414 |       TP_PROTO(struct ata_port *ap, const struct ata_taskfile
+> *tf, unsigned int tag),
+>       |                ~~~~~~~~~~~~~~~~~^~
+> include/linux/tracepoint.h:342:34: note: in definition of macro
+> '__DECLARE_TRACE'
+>   342 |  static inline void trace_##name(proto)    \
+>       |                                  ^~~~~
+> include/linux/tracepoint.h:419:24: note: in expansion of macro 'PARAMS'
+>   419 |  __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),  \
+>       |                        ^~~~~~
+> include/linux/tracepoint.h:542:2: note: in expansion of macro 'DECLARE_TRACE'
+>   542 |  DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
+>       |  ^~~~~~~~~~~~~
+> include/linux/tracepoint.h:542:22: note: in expansion of macro 'PARAMS'
+>   542 |  DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
+>       |                      ^~~~~~
+> include/trace/events/libata.h:413:1: note: in expansion of macro 'DEFINE_EVENT'
+>   413 | DEFINE_EVENT(ata_exec_command_template, ata_bmdma_stop,
+>       | ^~~~~~~~~~~~
+> include/trace/events/libata.h:414:7: note: in expansion of macro 'TP_PROTO'
+>   414 |       TP_PROTO(struct ata_port *ap, const struct ata_taskfile
+> *tf, unsigned int tag),
+>       |       ^~~~~~~~
+> cc1: some warnings being treated as errors
+> make[3]: *** [scripts/Makefile.build:289: drivers/ata/pata_octeon_cf.o] Error 1
+> make[3]: Target '__build' not remade because of errors.
+> make[2]: *** [scripts/Makefile.build:572: drivers/ata] Error 2
 > 
->>> Either way I think this flag should move to page-flags.h and be
->>> integrated with the PAGE_MAPPING_FLAGS infrastucture.
->>
->> And that's why I keep them in this dax.c file.
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+I just posted a fix. As I do not have the environment to compile test
+mips, could someone test please ? I will send the fix to Linus asap
+after confirmation that it is OK.
+
+Thanks.
+
+
 > 
-> But that does not integrate it with the infrastructure.  For people
-> to debug things it needs to be next to PAGE_MAPPING_ANON and have
-> documentation explaining why they are exclusive.
+> metadata:
+>   git branch: master
+>   git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+>   git describe: next-20220121
+>   kernel-config: https://builds.tuxbuild.com/23zIBGjQZgIYW8OnGcYjwWlj40X/config
+>   build: https://builds.tuxbuild.com/23zIBGjQZgIYW8OnGcYjwWlj40X/
+> 
+> # To install tuxmake on your system globally:
+> # sudo pip3 install -U tuxmake
+> #
+> # See https://docs.tuxmake.org/ for complete documentation.
+> # Original tuxmake command with fragments listed below.
+> 
+> tuxmake --runtime podman --target-arch mips --toolchain gcc-10
+> --kconfig cavium_octeon_defconfig
+> 
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
 
-Ok, understood.
 
-
---
-Thanks,
-Ruan.
-
-
+-- 
+Damien Le Moal
+Western Digital Research

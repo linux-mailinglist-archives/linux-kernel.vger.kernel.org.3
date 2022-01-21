@@ -2,102 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9CA495B1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B83495B23
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379148AbiAUHqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 02:46:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379114AbiAUHqM (ORCPT
+        id S1379114AbiAUHsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 02:48:32 -0500
+Received: from sender4-pp-o95.zoho.com ([136.143.188.95]:25547 "EHLO
+        sender4-pp-o95.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231417AbiAUHsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 02:46:12 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A848C061746
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 23:46:12 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id g14so25088765ybs.8
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 23:46:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=6VGlaNwo012lzA+7kz/lrPF90trnFFi6FJ6/mHic+hs=;
-        b=xMPuSfeAAlBJoeqTa7zrkdfi+fcCQodwVxBlhLKj0MhKB1NnACApVZgTImEC6sApU8
-         9AvVAlCAqJoyMWZ+Bgz1mADiqpeMprrtN8j4Q6zppP3f4GT2ZXfcqw1LKFaBA9WlhIxq
-         4TeGYRYUwQV84j7lGnjGaacA+AmlgWCaxzWLNkDqHNv+vDZW6S1SpJf15evnnWP2rPGg
-         wI3YE75QumJ8g5TyAOH6Djrq5nRfxp1gHViE1mIi5Q9+WJwHBskFL1YPMI1gycvpkiu5
-         /7b5FtsKvlMBUX9pGLIeU0Fr9sZIl6/PdsUCZtjU/vvDU2ObGsMkqhEcpf9OOibLtvNc
-         B5pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=6VGlaNwo012lzA+7kz/lrPF90trnFFi6FJ6/mHic+hs=;
-        b=HddEf7TrOEBHDtP4uj926cLNdNXBq62c9Bg+RXiWXeFjgWT+vswaanxjmucJi9atXJ
-         hwBzRQn2A41TQqUf4IBEg5mo5q18993irIV/iEU15xeC+H7rgtKi/Kz+N02QSxzKV0GB
-         sAZAr/FXSz4GT7yrYhxDTV8ubcaTmilUch6SUSuiqj71uYujRhIeSev5mCgBlAHByXJS
-         vPCeo4XcUo3dkwDILq8jyPw0RG99AbN5inlTQtsmg/MM0AuHw3uVNjEz/jDZpO/uFFac
-         Vx029JGqUr05b2I4aSBW+nwcs7EOeApsTM7rL68+RDQmC13X3vKkkFU8tU/T6KeUqrhT
-         KIkg==
-X-Gm-Message-State: AOAM531pcukq23T5TfbFUxG8qnpX+WPBaPO8LNpLHIYCYJ1GI+u3kyJj
-        U07GLnED6qTTSTmsxjs3GXYR+BbBRbmLjZ3AqM+xzQ==
-X-Google-Smtp-Source: ABdhPJwK9URes+a+U/H7ToYTf1isUH/kpRc2JSjoWu9Z7aUB1iVP5o2fLVMPV8e7sZaI40IlE/NocAVbxaMs+F8uP7I=
-X-Received: by 2002:a25:8e89:: with SMTP id q9mr5016082ybl.520.1642751171389;
- Thu, 20 Jan 2022 23:46:11 -0800 (PST)
+        Fri, 21 Jan 2022 02:48:31 -0500
+ARC-Seal: i=1; a=rsa-sha256; t=1642751305; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=kCb+omkDYYAaxGpiHyvuYkAfKLaQ2P2VxSvQAqORX8rJ4RIJ1t6BvPZYVwwqSCMPUMvyYJ/unIKUjYNfNtQYLbk1jTa+kUEgzaXydQ/iwUU4xOMJBCnKpT9wKvmx+BUMdZtH/KXEIC512/V2y4kIbcUHft/Xwh+sspgCou3TRcM=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1642751305; h=Content-Type:Content-Transfer-Encoding:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=zS/E46hjknZynnTCbq+uMMNxcBLhWVmkZSc8YyaFfk0=; 
+        b=kDCvnLyexiK+NFcKB1H3wgZ5r5wPtLQKM6j10ddiIT4N98pGOYSAuSurQhUGXzdktPzWhecvEDgzlRAhMRYjn17hf+KX6lwn40YKJQ8HYglUh+0mp9P6Pcs3Z5Y+9U2e2UZ1PmAw6LpN9ZEDsDxCOivHJ8E28QKpnEgipBhB4y0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=zohomail.com;
+        spf=pass  smtp.mailfrom=lchen.firstlove@zohomail.com;
+        dmarc=pass header.from=<lchen.firstlove@zohomail.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1642751305;
+        s=zm2020; d=zohomail.com; i=lchen.firstlove@zohomail.com;
+        h=Date:From:To:Message-ID:In-Reply-To:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=zS/E46hjknZynnTCbq+uMMNxcBLhWVmkZSc8YyaFfk0=;
+        b=AM+6ogz5Skx4LeunRCdp5WhHxlgGwCiNdFm7d1V9ZN1JS4aPfsf8tkg2beyEjeDD
+        g5G8/LtCkhOjlciHh1LU+vHAX9F0zwQwI4As1RzxSYDm6dYQQxvpFK9uMAyLWD5rDLD
+        cH6U0m0vii/roCmyef+O51riS8Rovnt0BwtRwQgk=
+Received: from mail.zoho.com by mx.zohomail.com
+        with SMTP id 1642751303433442.1455374520232; Thu, 20 Jan 2022 23:48:23 -0800 (PST)
+Received: from  [203.218.243.128] by mail.zoho.com
+        with HTTP;Thu, 20 Jan 2022 23:48:23 -0800 (PST)
+Date:   Fri, 21 Jan 2022 15:48:23 +0800
+From:   Li Chen <lchen.firstlove@zohomail.com>
+To:     "Kishon Vijay Abraham I" <kishon@ti.com>,
+        "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?=22Krzysztof_Wilczy=C5=84ski=22?= <kw@linux.com>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        "linux-pci" <linux-pci@vger.kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>
+Message-ID: <17e7b9b9ee6.c6d9c6a02564.4545388417402742326@zohomail.com>
+In-Reply-To: 
+Subject: [PATCH] PCI: endpoint fix misused goto label
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 21 Jan 2022 13:16:00 +0530
-Message-ID: <CA+G9fYvuEqeoLO6dC_qtGyRUz=UPv5i0C3jZ_n9nz5kWOuCHYQ@mail.gmail.com>
-Subject: [next] parisc: allnoconfig: ERROR: modpost: Section mismatches
- detected. Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-parisc@vger.kernel.org, regressions@lists.linux.dev,
-        lkft-triage@lists.linaro.org, Linux PM <linux-pm@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>, pavel@ucw.cz,
-        rppt@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linux next-20220121 parisc allnoconfig build failed with gcc-9/10/11.
+From: Li Chen <lchen@ambarella.com>
 
-make --silent --keep-going --jobs=8 ARCH=parisc
-CROSS_COMPILE=hppa-linux-gnu- 'CC=sccache hppa-linux-gnu-gcc'
-'HOSTCC=sccache gcc'
+If we goto err_map_addr here, buf allocated
+via kmalloc won't get freeed, then memoryleak.
 
-WARNING: modpost: vmlinux.o(.text+0x1c8): Section mismatch in
-reference from the function ksys_sync() to the function
-.init.text:memblock_alloc_try_nid()
-The function ksys_sync() references
-the function __init memblock_alloc_try_nid().
-This is often because ksys_sync lacks a __init
-annotation or the annotation of memblock_alloc_try_nid is wrong.
+Signed-off-by: Li Chen <lchen@ambarella.com>
+---
+ drivers/pci/endpoint/functions/pci-epf-test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-ERROR: modpost: Section mismatches detected.
-Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.
-make[2]: *** [/builds/linux/scripts/Makefile.modpost:59:
-vmlinux.symvers] Error 1
+diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
+index 96489cfdf58db..60303223976a1 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-test.c
++++ b/drivers/pci/endpoint/functions/pci-epf-test.c
+@@ -441,7 +441,7 @@ static int pci_epf_test_write(struct pci_epf_test *epf_test)
+ 		if (!epf_test->dma_supported) {
+ 			dev_err(dev, "Cannot transfer data using DMA\n");
+ 			ret = -EINVAL;
+-			goto err_map_addr;
++			goto err_dma_map;
+ 		}
+ 
+ 		src_phys_addr = dma_map_single(dma_dev, buf, reg->size,
+-- 
+2.34.1
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-metadata:
-  git branch: master
-  git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git describe: next-20220121
-  kernel-config: https://builds.tuxbuild.com/23zIAxC4uCgy4zadA01JYyOwCR4/config
-  build: https://builds.tuxbuild.com/23zIAxC4uCgy4zadA01JYyOwCR4/
-
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
-
-tuxmake --runtime podman --target-arch parisc --toolchain gcc-11
---kconfig allnoconfig
-
---
-Linaro LKFT
-https://lkft.linaro.org

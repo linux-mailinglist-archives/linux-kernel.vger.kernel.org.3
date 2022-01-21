@@ -2,268 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 050A0495E2B
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 12:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 087B4495E34
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 12:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380088AbiAULJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 06:09:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344558AbiAULJI (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 06:09:08 -0500
-Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016B1C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 03:09:08 -0800 (PST)
-Received: by mail-vk1-xa29.google.com with SMTP id y192so1949139vkc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 03:09:07 -0800 (PST)
+        id S1380104AbiAULJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 06:09:56 -0500
+Received: from mail-bn8nam11on2125.outbound.protection.outlook.com ([40.107.236.125]:24211
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1380096AbiAULJc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 06:09:32 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hAQ/oX67scOJ1n092QXTqODnk2+HGumGOZgAe4Cgwq8PBDrJ29u8+5zsJVIlx9Qg36K2/wD0CRMCb5OW62tw3BZvYR+ZsVvofscU7Ac/nWj7qoQkANlkWdM0jKdxAPA9UOCcwMYTCm7uRbCJqzT1YcAPC/thz6wplPhp/6tRFk4BlyKDmT6u1vwOpxJvUzMJXifPWhRIBgVWIv0Vgs4qHAc18wrRtvpRdVTtYAmKRjJfNl6IXS/0mCw9Sg2tuhR3zSIahks0EZsjxmQ2KSf2ZHrgR6s/ILlcCTRu7UXVTa5Oj6Aoayhz4QOd/HANwYc44aqnBfmpyYdNXB2panZeZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=w2BlyZ3sjh/VIH/O0b3FwkoibEK+bSExPAw4+q/38q0=;
+ b=YXdEcCMD6dafNeQpqrBfs/9MyYD3u7qaNP5vQxH1jGXKPkGkKT/AixX4ygg8WmtoFiaLHW9qFAm2FkHppijh6o1nRFqgdJ7DWSVtZN+90TtI3xhLW2bcog/JB43LCtS8E80thpyRQ+ZySngW/Gbx/Pyb2glYHmxrn+u2IUWAdfcv37M9IqA/BaL8WiJQtYlVD+ajCCskM6sH8CiXOe3X3FEA/Qh+9azzku/SIJwijGdLcCvAVqnSMFHEn4RPVcF/pWKHH0poDpCpL0jNcM4+Ry42k4SdNc1eBe0ZFnTGe1U7yIbasM2Lpr1fvnNXuQK2/BYSTyj9TFA0E0uqhtBW7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WyUpFdPwwu3fMiJ/9hEV9RfL0IhWJOMBQfCbot0LIC0=;
-        b=cnj5NCChjX5Ou+ftTBTz2yzN1TY9qHPYzGBdKUozgVejGKurQCGa3Y8c/oiRKfrPbK
-         JxOC2mg8fLYIItO3UxjpbHqJ77jadUIaCm49C5uSNCt7KPdC06VPtZ2pnKJEpSSw0e7+
-         zqNbOQ5TgJ5cYC6pMicUGNhRbtOAxLDwAXO1DzpgNZH9KYiQEJ/5JaPmbSNuKH6yJG0U
-         UcHgiG9RJ6BTmfJyV8H0r2mw7zYhBiFSKnSaBzJuSLnKLtEwrcKwWGmnxFhhZh+Pqlk8
-         7q8u6/O3LP3SxhemjZOABgpiSIi9TOKsVYjhEOaUmUEjm/0McdfmnL/TciibrQOsc/4x
-         QJRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WyUpFdPwwu3fMiJ/9hEV9RfL0IhWJOMBQfCbot0LIC0=;
-        b=HnO/pQmt/4qAo1uLOGtx1ifm70A0HJLijQwYthMmVD/Z4DCnzWNBMehSoHlBNkb3s2
-         kSeOK6WDOmVLvTrJ5fU73umESaIvcXHF9QEpoee3shpEHZ1zMlQ3zKsm5+gWiAbvojxE
-         XFbipjU1r857dqt1S6kZDMmeidcRE/Bg/gMQ4GZHdDXA6C6TmkEoWQk83RJZvREcehFe
-         4Hc7V6OUq+DrZkXzToI/FdeEffS70rbeb3RcVBb8i5wR2iQIedZEnVOtOahLQWCuoQAg
-         ETtRPnqbhTzTtLzHBhOurJOTXlL2qkvZeZLhZi0rmdB+tUTfwWf7u7dLPv0W80oj5M37
-         qS/Q==
-X-Gm-Message-State: AOAM533YoMKULLsEDGdRrvVIh1GeAVVHbcoil1CprXqSlcHfDrSyQkCt
-        tC8L7sy5m4ritIFTQTpMn9SH+M+u6zYAhOc6SWIVag==
-X-Google-Smtp-Source: ABdhPJw3NIVk0qJHehAGeNccANJK4kjzFu1/gfyrccc/q61I7lCdu7fcP08+4G4KRhuu8RWU4ZOtNtN0oZ51DLmn6RU=
-X-Received: by 2002:ac5:cdb0:: with SMTP id l16mr1274338vka.14.1642763346996;
- Fri, 21 Jan 2022 03:09:06 -0800 (PST)
+ d=towerbridgetechnology.onmicrosoft.com;
+ s=selector2-towerbridgetechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=w2BlyZ3sjh/VIH/O0b3FwkoibEK+bSExPAw4+q/38q0=;
+ b=gEDhmdmbxnwM5EyeqQBqd0iWe6QWEsLjJRFZc5WGS1ucfc+LgBvw+VoJrulwGvSH82cd37fpKDRG8lBBCke5lHIb4pFeXW5NU6aaE28xUxxgxMY9siGl8trCrRYCmOi7PlnHw+cHnrI6SBEaYjWsLWdAdiuafrGU6LP7b9h3vws=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bayhubtech.com;
+Received: from PH0PR16MB4248.namprd16.prod.outlook.com (2603:10b6:510:4c::16)
+ by MWHPR16MB0014.namprd16.prod.outlook.com (2603:10b6:300:e7::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Fri, 21 Jan
+ 2022 11:09:24 +0000
+Received: from PH0PR16MB4248.namprd16.prod.outlook.com
+ ([fe80::e88f:f199:eed:4645]) by PH0PR16MB4248.namprd16.prod.outlook.com
+ ([fe80::e88f:f199:eed:4645%7]) with mapi id 15.20.4909.010; Fri, 21 Jan 2022
+ 11:09:24 +0000
+From:   Chevron Li <chevron.li@bayhubtech.com>
+To:     adrian.hunter@intel.com, ulf.hansson@linaro.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-mmc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shirley.her@bayhubtech.com, fred.ai@bayhubtech.com,
+        xiaoguang.yu@bayhubtech.com, shaper.liu@bayhubtech.com,
+        bruce.yang@bayhubtech.com
+Subject: [PATCH 1/2] mmc:sdhci-msm:fix Qualcomm sd host 7180 SD card compatibility issue
+Date:   Fri, 21 Jan 2022 03:09:08 -0800
+Message-Id: <20220121110909.104-1-chevron.li@bayhubtech.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR02CA0180.apcprd02.prod.outlook.com
+ (2603:1096:201:21::16) To PH0PR16MB4248.namprd16.prod.outlook.com
+ (2603:10b6:510:4c::16)
 MIME-Version: 1.0
-References: <20220120201958.2649-1-semen.protsenko@linaro.org>
- <20220120201958.2649-3-semen.protsenko@linaro.org> <a111932a-6685-2a9d-abce-87af26b121a4@canonical.com>
-In-Reply-To: <a111932a-6685-2a9d-abce-87af26b121a4@canonical.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Fri, 21 Jan 2022 13:08:55 +0200
-Message-ID: <CAPLW+4kKR+7hM-eZc8-v6Dzeaj+TPBRmCLDSVNEnfx2WmN2TJA@mail.gmail.com>
-Subject: Re: [RFC 2/3] iommu/samsung: Introduce Exynos sysmmu-v8 driver
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Cho KyongHo <pullip.cho@samsung.com>,
-        Hyesoo Yu <hyesoo.yu@samsung.com>,
-        Janghyuck Kim <janghyuck.kim@samsung.com>,
-        Jinkyu Yang <jinkyu1.yang@samsung.com>,
-        Alex <acnwigwe@google.com>, Carlos Llamas <cmllamas@google.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        Erick Reyes <erickreyes@google.com>,
-        "J . Avila" <elavila@google.com>, Jonglin Lee <jonglin@google.com>,
-        Mark Salyzyn <salyzyn@google.com>,
-        Thierry Strudel <tstrudel@google.com>,
-        Will McVicker <willmcvicker@google.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-samsung-soc@vger.kernel.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 268bbafb-69b2-4d04-c8eb-08d9dcce7b49
+X-MS-TrafficTypeDiagnostic: MWHPR16MB0014:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR16MB001496714852B723C4936F41EA5B9@MWHPR16MB0014.namprd16.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:219;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BuRYvmZoLXCbTcOS9cNY9B6Ml7ZbeTaBBvIPFOIs+0RSAJXtF5m0zBkRpTJYc3AD4c8gUdVZP3MU0KzL7AQhTOGgKhiR29KYpDOX3Co6xr7Bp5yfow34S9xCPeIWq0ES/1Cd7lT9rl8JCypOrlfCZb4dDYTD8AB3OoDTffUOK6DUd6j+dHrQXYtUaXt3lP2/K2hUetyJL2VYufHtmTiCYCCiRct9jHjOpXTafjk+SVZl3T1RGs9JqMa4Btfjtl/GB+AhapzxgeL5sSXfLsuGi9I19RlZxLnsTgypZFPbc6soXWcaWgbnLa2hVWT4OzRvGDyeRJNb/g5dTNlbv6OUfFK8Uh+xPvn1FqRB9t/CMac3+rLyMPSGBw9yr+X70Sn3WXbER3JzMgccLDPuX9kzJIqSwWz7hi04JqtmLdGDnvsdbqLHGXBqfYSBjzuzrrgKA1GGL1Nc9h1l6ii/5Td2AIE1O/YeJVZmLQw+pWpsn/2udTkWbmWr0BOqYD9dyl9xti88CwY41e41dP1BXi6iV27zPQ17YkoJzYgnBF64C9ac3STxlQdyC84q1DR9U8/xbqBN1E1Q8OnPgWuYoh4xiQXRbabbUAeyo6JiAiIEdHQolcFjmOVlurCvE2WmHn/o++kllB3weIZfGJwcjhTCRQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR16MB4248.namprd16.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(396003)(376002)(39830400003)(366004)(136003)(4326008)(6486002)(86362001)(8936002)(1076003)(83380400001)(8676002)(6512007)(6666004)(316002)(5660300002)(107886003)(186003)(2616005)(66476007)(66556008)(66946007)(2906002)(508600001)(6506007)(44832011)(38100700002)(52116002)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HVFnq5PvsTD+iaiAbScDy+auLXlCbcpH67J+hDLjpAsSHahHmzSNCLZRtarD?=
+ =?us-ascii?Q?q4Tzeuf88KfBdjNrOm43E8LP4omXKi0DZYV/svgA15E0oBr1y1vmb+CpW5Vn?=
+ =?us-ascii?Q?4YeG4SlikOAFiWsiXqNpZzSt9XSMKGHDIKgSFEJW3/n8EUXnciSnGRkEmvla?=
+ =?us-ascii?Q?XhQSTdl5k/2TmMawOLkfQo0YKZAwMf2x3UFzfCorNPcMXY12bTLJ2eME4A7X?=
+ =?us-ascii?Q?qasa1OZN1EluGf4dkIgR2oMVgeOLHSLcgTyAbIAZPZvFTanOELcnfN/62XBd?=
+ =?us-ascii?Q?nDvIzLZ6cbjarHVE9nLjQW2+Lgdq+mcW/ghIjQJYdocDqcZLuMIHqf2mh8eq?=
+ =?us-ascii?Q?aJBTWC088xZ1tyHy+ja6v0+HkXT0rmqbj0HxtK3nR0ftVXiSh065D5AH2Hn1?=
+ =?us-ascii?Q?CjBz8uHj2xxMf9ZpC/i7VDRWD+4L3KiY9ahpiRJzcZhsdJA8GM7O/PRFlU1q?=
+ =?us-ascii?Q?4BXPKwnOHHbIil055/pf0cd70sS5PyXDzPyxY63Zw+jKoDbP+6o79s/U5tUr?=
+ =?us-ascii?Q?3QGgmbR6Up6hOF0e25jaj/U9vX0jYyl8pM0CK0bMJYzgJ/RzA9xAsMkWTOYP?=
+ =?us-ascii?Q?2K6YAPdHSnScCk79TpCRB2qTtU8B0aWvn746yH5XWvEFqE47jIrWiuYSPlGG?=
+ =?us-ascii?Q?7ApPrc1iAtKW5NhvDKoFaYMhP2v8fXRwg6gc1VLuYGPimJeQUSM+0exrMaDC?=
+ =?us-ascii?Q?MPXcWbDuze4ZkWUXU/I644y+rpaLaSYgdnOeA9uIXrTPcxn67GnUocqdzP9t?=
+ =?us-ascii?Q?jdi578br3K+8F+vVTnAODWD3gDGj24ABwAFStEFcdnLyPAGZSRnwiV104CEF?=
+ =?us-ascii?Q?jsjd5oIdFBA6cOCvBe92QQ52x+gwO0FRg57RbpEKGYupjb8tJd6Cf+XaxvDQ?=
+ =?us-ascii?Q?kTIZda31I+HDEVXiwAtkgn/dOV4SJ4jRjDuJ5d8g4xoxtp+i5ch/Izf88E8g?=
+ =?us-ascii?Q?rBPEExG+Rp9MzCUWt7oadEWPoF5UT1KQCStzPfUzz0pPE6SjggR9vPrOyX0N?=
+ =?us-ascii?Q?BdV13y54LTqnNblbegHulSz5u1u60zimCxVBqItXH/Qu3Z24sWGYguLCX6Wu?=
+ =?us-ascii?Q?wIpzk3g8jBteXQJhKcelkkZR+N+g4WxgotKfDJ6t+yMIZ38cDkI0CGaIaOjA?=
+ =?us-ascii?Q?rF2Tp3okgMH2chWLK9zDHzJ1V0M4xNdsLgqE/Kzfv6JLKfZjaMMVeL8+K3vg?=
+ =?us-ascii?Q?MPtnRf5cgetyYe9pbpsrvazrXTQN+PJnxzHr7GGR386HicA/+cW3DwwGzDGw?=
+ =?us-ascii?Q?wVjCpBkc2a2iPnW5rmGnvK5lDGdoPf44INzeQOmR+8oDFVkNxRboAgfqQOQo?=
+ =?us-ascii?Q?Ia1ZbDPoRgDr68GuzsRAPyN5jF8SeFoSxTP/sdMTqZZHSITo3YXefLuhvFSR?=
+ =?us-ascii?Q?AfNe3g3io4gW0PKR6XA+vUssPlm0M/9vbwDA/Ce+71WNcJg3WrRG8FMhM7iP?=
+ =?us-ascii?Q?wMI9F9z2pyE36Wc0rb7RQyPOsKb8iGtSTggnq8S7P4owQhwvqVzfulaqIgTh?=
+ =?us-ascii?Q?YB823gC+RtYXh7MKY43tLgW5MFbSfZE0bmab512CBw+6X1YyBJMGG4T0yyXB?=
+ =?us-ascii?Q?Pt/SqMPxjPvvAP/mcSsZOSqTTNZqe/spJyQwRPcAy23oo5q+DyLA7wfqJ+95?=
+ =?us-ascii?Q?MKfhzIxrVYnvSy4vyY5yl25ulQw0dVktZSCNgrCu3SZK9LlTlS++iRBgzwxa?=
+ =?us-ascii?Q?h11bbu/Cfb7bM917r29Z/PdLL+tK4gsnoyQVEnLYMTCvxcwgrhcjfTtyfZmv?=
+ =?us-ascii?Q?XfYVMp2lIymh+bOKe9xYnrObvWQxidY=3D?=
+X-OriginatorOrg: bayhubtech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 268bbafb-69b2-4d04-c8eb-08d9dcce7b49
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR16MB4248.namprd16.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2022 11:09:24.2254
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0a7aae2b-8f2e-44df-ba2f-42de7f93c642
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YFchzlaEFYssBaKIY27cwFkRDAyUrliyhQL4+7eoLwaJebTjnhGAsiZqx2oBU6dy+sm3yuqOuE9O5x4Nk03yRLNb8e2vqSlR9iDSx941NMs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR16MB0014
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Jan 2022 at 10:40, Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> On 20/01/2022 21:19, Sam Protsenko wrote:
-> > Introduce new driver for modern Exynos ARMv8 SoCs, e.g. Exynos850. Also
-> > it's used for Google's GS101 SoC.
-> >
-> > This is squashed commit, contains next patches of different authors. See
-> > `iommu-exynos850-dev' branch for details: [1].
-> >
-> > Original authors (Samsung):
-> >
-> >  - Cho KyongHo <pullip.cho@samsung.com>
-> >  - Hyesoo Yu <hyesoo.yu@samsung.com>
-> >  - Janghyuck Kim <janghyuck.kim@samsung.com>
-> >  - Jinkyu Yang <jinkyu1.yang@samsung.com>
-> >
-> > Some improvements were made by Google engineers:
-> >
-> >  - Alex <acnwigwe@google.com>
-> >  - Carlos Llamas <cmllamas@google.com>
-> >  - Daniel Mentz <danielmentz@google.com>
-> >  - Erick Reyes <erickreyes@google.com>
-> >  - J. Avila <elavila@google.com>
-> >  - Jonglin Lee <jonglin@google.com>
-> >  - Mark Salyzyn <salyzyn@google.com>
-> >  - Thierry Strudel <tstrudel@google.com>
-> >  - Will McVicker <willmcvicker@google.com>
-> >
-> > [1] https://github.com/joe-skb7/linux/tree/iommu-exynos850-dev
-> >
-> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > ---
-> >  drivers/iommu/Kconfig               |   13 +
-> >  drivers/iommu/Makefile              |    3 +
-> >  drivers/iommu/samsung-iommu-fault.c |  617 +++++++++++
-> >  drivers/iommu/samsung-iommu-group.c |   50 +
-> >  drivers/iommu/samsung-iommu.c       | 1521 +++++++++++++++++++++++++++
-> >  drivers/iommu/samsung-iommu.h       |  216 ++++
-> >  6 files changed, 2420 insertions(+)
-> >  create mode 100644 drivers/iommu/samsung-iommu-fault.c
-> >  create mode 100644 drivers/iommu/samsung-iommu-group.c
-> >  create mode 100644 drivers/iommu/samsung-iommu.c
-> >  create mode 100644 drivers/iommu/samsung-iommu.h
-> >
->
-> Existing driver supports several different Exynos SysMMU IP block
-> versions. Several. Please explain why it cannot support one more version?
->
-> Similarity of vendor driver with mainline is not an argument.
->
->
-> > diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
-> > index 3eb68fa1b8cc..78e7039f18aa 100644
-> > --- a/drivers/iommu/Kconfig
-> > +++ b/drivers/iommu/Kconfig
-> > @@ -452,6 +452,19 @@ config QCOM_IOMMU
-> >       help
-> >         Support for IOMMU on certain Qualcomm SoCs.
-> >
-> > +config SAMSUNG_IOMMU
-> > +     tristate "Samsung IOMMU Support"
-> > +     select ARM_DMA_USE_IOMMU
-> > +     select IOMMU_DMA
-> > +     select SAMSUNG_IOMMU_GROUP
-> > +     help
-> > +       Support for IOMMU on Samsung Exynos SoCs.
-> > +
-> > +config SAMSUNG_IOMMU_GROUP
-> > +     tristate "Samsung IOMMU Group Support"
-> > +     help
-> > +       Support for IOMMU group on Samsung Exynos SoCs.
-> > +
-> >  config HYPERV_IOMMU
-> >       bool "Hyper-V x2APIC IRQ Handling"
-> >       depends on HYPERV && X86
-> > diff --git a/drivers/iommu/Makefile b/drivers/iommu/Makefile
-> > index bc7f730edbb0..a8bdf449f1d4 100644
-> > --- a/drivers/iommu/Makefile
-> > +++ b/drivers/iommu/Makefile
-> > @@ -27,6 +27,9 @@ obj-$(CONFIG_FSL_PAMU) += fsl_pamu.o fsl_pamu_domain.o
-> >  obj-$(CONFIG_S390_IOMMU) += s390-iommu.o
-> >  obj-$(CONFIG_HYPERV_IOMMU) += hyperv-iommu.o
-> >  obj-$(CONFIG_VIRTIO_IOMMU) += virtio-iommu.o
-> > +obj-$(CONFIG_SAMSUNG_IOMMU) += samsung_iommu.o
-> > +samsung_iommu-objs += samsung-iommu.o samsung-iommu-fault.o
-> > +obj-$(CONFIG_SAMSUNG_IOMMU_GROUP) += samsung-iommu-group.o
-> >  obj-$(CONFIG_IOMMU_SVA_LIB) += iommu-sva-lib.o io-pgfault.o
-> >  obj-$(CONFIG_SPRD_IOMMU) += sprd-iommu.o
-> >  obj-$(CONFIG_APPLE_DART) += apple-dart.o
-> > diff --git a/drivers/iommu/samsung-iommu-fault.c b/drivers/iommu/samsung-iommu-fault.c
-> > new file mode 100644
-> > index 000000000000..c6b4259976c4
-> > --- /dev/null
-> > +++ b/drivers/iommu/samsung-iommu-fault.c
-> > @@ -0,0 +1,617 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Copyright (c) 2020 Samsung Electronics Co., Ltd.
-> > + */
-> > +
-> > +#define pr_fmt(fmt) "sysmmu: " fmt
-> > +
-> > +#include <linux/smc.h>
-> > +#include <linux/arm-smccc.h>
-> > +#include <linux/pm_runtime.h>
-> > +
-> > +#include "samsung-iommu.h"
-> > +
-> > +#define MMU_TLB_INFO(n)                      (0x2000 + ((n) * 0x20))
-> > +#define MMU_CAPA1_NUM_TLB_SET(reg)   (((reg) >> 16) & 0xFF)
-> > +#define MMU_CAPA1_NUM_TLB_WAY(reg)   ((reg) & 0xFF)
-> > +#define MMU_CAPA1_SET_TLB_READ_ENTRY(tid, set, way, line)            \
-> > +                                     ((set) | ((way) << 8) |         \
-> > +                                      ((line) << 16) | ((tid) << 20))
-> > +
-> > +#define MMU_TLB_ENTRY_VALID(reg)     ((reg) >> 28)
-> > +#define MMU_SBB_ENTRY_VALID(reg)     ((reg) >> 28)
-> > +#define MMU_VADDR_FROM_TLB(reg, idx) ((((reg) & 0xFFFFC) | ((idx) & 0x3)) << 12)
-> > +#define MMU_VID_FROM_TLB(reg)                (((reg) >> 20) & 0x7U)
-> > +#define MMU_PADDR_FROM_TLB(reg)              ((phys_addr_t)((reg) & 0xFFFFFF) << 12)
-> > +#define MMU_VADDR_FROM_SBB(reg)              (((reg) & 0xFFFFF) << 12)
-> > +#define MMU_VID_FROM_SBB(reg)                (((reg) >> 20) & 0x7U)
-> > +#define MMU_PADDR_FROM_SBB(reg)              ((phys_addr_t)((reg) & 0x3FFFFFF) << 10)
-> > +
-> > +#define REG_MMU_INT_STATUS           0x060
-> > +#define REG_MMU_INT_CLEAR            0x064
-> > +#define REG_MMU_FAULT_RW_MASK                GENMASK(20, 20)
-> > +#define IS_READ_FAULT(x)             (((x) & REG_MMU_FAULT_RW_MASK) == 0)
-> > +
-> > +#define SYSMMU_FAULT_PTW_ACCESS   0
-> > +#define SYSMMU_FAULT_PAGE_FAULT   1
-> > +#define SYSMMU_FAULT_ACCESS       2
-> > +#define SYSMMU_FAULT_RESERVED     3
-> > +#define SYSMMU_FAULT_UNKNOWN      4
-> > +
-> > +#define SYSMMU_SEC_FAULT_MASK                (BIT(SYSMMU_FAULT_PTW_ACCESS) | \
-> > +                                      BIT(SYSMMU_FAULT_PAGE_FAULT) | \
-> > +                                      BIT(SYSMMU_FAULT_ACCESS))
-> > +
-> > +#define SYSMMU_FAULTS_NUM         (SYSMMU_FAULT_UNKNOWN + 1)
-> > +
-> > +#if IS_ENABLED(CONFIG_EXYNOS_CONTENT_PATH_PROTECTION)
->
-> You just copy-pasted vendor stuff, without actually going through it.
->
-> It is very disappointing because instead of putting your own effort, you
-> expect community to do your job.
->
-> What the hell is CONFIG_EXYNOS_CONTENT_PATH_PROTECTION?
->
-> I'll stop reviewing. Please work on extending existing driver. If you
-> submitted something nice and clean, ready for upstream, instead of
-> vendor junk, you could get away with separate driver. But you did not.
-> It looks really bad.
->
+Improve the signal integrity for long SD bus trace by using SC7180+GGC SD host redriver chip
+1.GGC is a SD bus signal re-timing IC that has been paired with the SC7180 sometimes.
+2.The key points are initialized GGC chip during SD initialization and use GGC special tuning flow to re-timing SD bus signal.
+3.GGC resource is initialized for GGC chip during Qualcomm host probe:
+ 3.1 GGC structure initialization
+ 3.2 GGC GPIO resource assignment
+ 3.3 Reload host->mmc->detect with GGC chip special initiation flow.
+ 3.4 Reload the host->mmc_host_ops.execute_tuning with GGC chip special tuning flow.
+4.The function of the patch is already verified on Chrome OS, and Google request us to submit the patch to Linux for them future use.
+5.GGC can work with any other standard SDHCI controller to improve SD signal SI and Timing.
+6.GGC has cooperated with Intel/Qualcomm/MTK/SPRD sd host already and work well.
 
-Krzysztof, that's not what I asked in my patch 0/3. I probably wasn't
-really clear, sorry. Let me please try and describe that better, and
-maybe provide some context.
+Signed-off-by: Chevron Li <chevron.li@bayhubtech.com>
+---
+Changes:
+1.add a data member in sdhci_msm_host structure for extension
+2.add an API to get the extension address from sdhci_msm_host structure
+3.add an independent branch for GGC chip support according to the configure of DTSI
+---
+ drivers/mmc/host/sdhci-bayhub.c | 34 ++++++++++++++++++++++++++++
+ drivers/mmc/host/sdhci-msm.c    | 39 ++++++++++++++++++++++++++++++++-
+ 2 files changed, 72 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/mmc/host/sdhci-bayhub.c
 
-I'm just starting to work on that driver, it's basically downstream
-version of it. Of course I'm going to rework it before sending the
-actual patch series (that's why this series has RFC tag). I'd never
-asked community to do my job for me and really review the downstream
-driver! I just want to know from the starters some *very* basic and
-high-level info, which could help me to rework the driver in correct
-way. Like naming of files, compatible strings, should it be part of
-existing driver or it's ok to have it as another platform_driver. In
-other words, that kind of "review" shouldn't take more than 2 minutes
-of your time. And it could spare us all unneeded extra review rounds
-in future. Right now I don't need the code review per se (and I'm
-really sorry you had to spend your time on that, knowing how busy
-maintainers can be during the MW). I thought about omitting the code
-at all, only asking the questions, but then I figured it's a good idea
-to attach some code for the reference. Maybe it wasn't a good idea
-after all.
+diff --git a/drivers/mmc/host/sdhci-bayhub.c b/drivers/mmc/host/sdhci-bayhub.c
+new file mode 100644
+index 000000000000..867d465ce848
+--- /dev/null
++++ b/drivers/mmc/host/sdhci-bayhub.c
+@@ -0,0 +1,34 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Bayhub Technologies, Inc. BH201 SDHCI bridge IC for
++ * VENDOR SDHCI platform driver source file
++ *
++ * Copyright (c) 2012-2018, The Linux Foundation. All rights reserved.
++ */
++
++struct sdhci_bht_host {
++};
++
++static void bht_signal_voltage_on_off(struct sdhci_host *host, u32 on_off)
++{
++}
++
++static void sdhci_bht_parse(struct mmc_host *mmc_host)
++{
++}
++
++static void sdhci_bht_resource_free(struct sdhci_msm_host *vendor_host)
++{
++}
++
++static void mmc_rescan_bht(struct work_struct *work)
++{
++}
++
++static int sdhci_bht_execute_tuning(struct mmc_host *mmc, u32 opcode)
++{
++	int ret = 0;
++
++	return ret;
++}
++
+diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
+index 50c71e0ba5e4..5e19d34ef25c 100644
+--- a/drivers/mmc/host/sdhci-msm.c
++++ b/drivers/mmc/host/sdhci-msm.c
+@@ -285,8 +285,14 @@ struct sdhci_msm_host {
+ 	u32 dll_config;
+ 	u32 ddr_config;
+ 	bool vqmmc_enabled;
++	unsigned long	private[] ____cacheline_aligned;
+ };
+ 
++static inline void *sdhci_msm_priv(struct sdhci_msm_host *msm_host)
++{
++	return (void *)msm_host->private;
++}
++
+ static const struct sdhci_msm_offset *sdhci_priv_msm_offset(struct sdhci_host *host)
+ {
+ 	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+@@ -1585,6 +1591,8 @@ static void sdhci_msm_dump_pwr_ctrl_regs(struct sdhci_host *host)
+ 		msm_host_readl(msm_host, host, msm_offset->core_pwrctl_mask),
+ 		msm_host_readl(msm_host, host, msm_offset->core_pwrctl_ctl));
+ }
++/* include bayhub patch for GGC chip support */
++#include "sdhci-bayhub.c"
+ 
+ static void sdhci_msm_handle_pwr_irq(struct sdhci_host *host, int irq)
+ {
+@@ -1628,10 +1636,16 @@ static void sdhci_msm_handle_pwr_irq(struct sdhci_host *host, int irq)
+ 
+ 	/* Handle BUS ON/OFF*/
+ 	if (irq_status & CORE_PWRCTL_BUS_ON) {
++		/* Bayhub patch: GGC chip power on patch */
++		if (of_find_property(msm_host->pdev->dev.of_node, "use-bayhub-bh201", NULL))
++			bht_signal_voltage_on_off(host, 1);
+ 		pwr_state = REQ_BUS_ON;
+ 		io_level = REQ_IO_HIGH;
+ 	}
+ 	if (irq_status & CORE_PWRCTL_BUS_OFF) {
++		/* Bayhub patch: GGC chip power off patch */
++		if (of_find_property(msm_host->pdev->dev.of_node, "use-bayhub-bh201", NULL))
++			bht_signal_voltage_on_off(host, 0);
+ 		pwr_state = REQ_BUS_OFF;
+ 		io_level = REQ_IO_LOW;
+ 	}
+@@ -2497,7 +2511,12 @@ static int sdhci_msm_probe(struct platform_device *pdev)
+ 	const struct sdhci_msm_variant_info *var_info;
+ 	struct device_node *node = pdev->dev.of_node;
+ 
+-	host = sdhci_pltfm_init(pdev, &sdhci_msm_pdata, sizeof(*msm_host));
++	/* Bayhub patch: memory allocate for sdhci_bht_host structure */
++	if (of_find_property(node, "use-bayhub-bh201", NULL))
++		host = sdhci_pltfm_init(pdev, &sdhci_msm_pdata,
++			sizeof(*msm_host) + sizeof(struct sdhci_bht_host));
++	else
++		host = sdhci_pltfm_init(pdev, &sdhci_msm_pdata, sizeof(*msm_host));
+ 	if (IS_ERR(host))
+ 		return PTR_ERR(host);
+ 
+@@ -2511,6 +2530,15 @@ static int sdhci_msm_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto pltfm_free;
+ 
++	/* Bayhub patch: resource assign and mmc_rescan routine overload */
++	if (of_find_property(node, "use-bayhub-bh201", NULL)) {
++		struct sdhci_bht_host *bht_host;
++
++		bht_host = sdhci_msm_priv(msm_host);
++		sdhci_bht_parse(msm_host->mmc);
++		INIT_DELAYED_WORK(&host->mmc->detect, mmc_rescan_bht);
++	}
++
+ 	/*
+ 	 * Based on the compatible string, load the required msm host info from
+ 	 * the data associated with the version info.
+@@ -2727,6 +2755,9 @@ static int sdhci_msm_probe(struct platform_device *pdev)
+ 	host->mmc_host_ops.start_signal_voltage_switch =
+ 		sdhci_msm_start_signal_voltage_switch;
+ 	host->mmc_host_ops.execute_tuning = sdhci_msm_execute_tuning;
++	/* Bayhub patch: overload the mmc_host_ops.execute_tuning routine */
++	if (of_find_property(node, "use-bayhub-bh201", NULL))
++		host->mmc_host_ops.execute_tuning = sdhci_bht_execute_tuning;
+ 	if (of_property_read_bool(node, "supports-cqe"))
+ 		ret = sdhci_msm_cqe_add_host(host, pdev);
+ 	else
+@@ -2750,6 +2781,9 @@ static int sdhci_msm_probe(struct platform_device *pdev)
+ 	if (!IS_ERR(msm_host->bus_clk))
+ 		clk_disable_unprepare(msm_host->bus_clk);
+ pltfm_free:
++	/* Bayhub patch: release assigned resource */
++	if (of_find_property(node, "use-bayhub-bh201", NULL))
++		sdhci_bht_resource_free(msm_host);
+ 	sdhci_pltfm_free(pdev);
+ 	return ret;
+ }
+@@ -2763,6 +2797,9 @@ static int sdhci_msm_remove(struct platform_device *pdev)
+ 		    0xffffffff);
+ 
+ 	sdhci_remove_host(host, dead);
++	/* Bayhub patch: release assigned resource */
++	if (of_find_property(msm_host->pdev->dev.of_node, "use-bayhub-bh201", NULL))
++		sdhci_bht_resource_free(msm_host);
+ 
+ 	pm_runtime_get_sync(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
 
-For the record, I'm well aware that we don't send downstream code
-without making it upstreamable first, and I know it must be tested
-well, etc. For example, you already saw me sending clk-exynos850
-driver, which I re-implemented from scratch, and it has ~0.0% of
-downstream code. So why would I change my policy about that all of the
-sudden... Anyway, hope you understand now that there weren't any ill
-intentions on my side, w.r.t. this RFC.
+base-commit: c9e6606c7fe92b50a02ce51dda82586ebdf99b48
+-- 
+2.32.0
 
-> Best regards,
-> Krzysztof

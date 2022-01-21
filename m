@@ -2,280 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D90134960BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0684960C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:29:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350515AbiAUO3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 09:29:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44222 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348743AbiAUO26 (ORCPT
+        id S1381078AbiAUO3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 09:29:43 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:58846 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350941AbiAUO3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 09:28:58 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378CBC06173B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 06:28:57 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id x26so428291ljd.4
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 06:28:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CxwHGwtSCeP76gAX5bO4LAoPL1nqrWMUamT2obcb9sw=;
-        b=c7tP/7CWnTCf34QJz5JuUB0vqBs9hga37gT7ufkvGHkMEHTGaV7j4Mi4mDBJMhuedX
-         0bzYQHYLiIMVsh2DLwZe8FAv9qffstyQ7+mB1FOSYb9QQlkqM7A1n2s99Bukerrdbr0l
-         rWrwjmag78r6WWdO/WKiTV0FkPMEyCkAJY8KPEDe5BnwXA+1k7MmvanSwLo7onzynbkB
-         LAeWZkLSUrTzk7e8VRWJc0vaORrFuqaureLnfR6mGsy9nKLyim5CiBLDfNOR/RlqmO8m
-         96TkAVoFlum/qojaejUDP+IMbQDyAy8Kwx6KhHrwtB1qnsMUMk2dnvs3WxnG33zdowbd
-         nbKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CxwHGwtSCeP76gAX5bO4LAoPL1nqrWMUamT2obcb9sw=;
-        b=7laP6nUOpEmrUifCyZW5eSe1OG9lpTJG+dojkbQX0hju4UV4POQPP/fG9PpwWHLaxX
-         ZqeKvtwLqn40CeBWOhHNkoKDlEup9cvK7jdqgcTkUwcDxFN1Ua3pCwpyOtm4+y6hrte/
-         z7ObUOKmYNRsLHituHaLztpWVh4K7dpFCtLP7TBfzTPbHnHrsWdlWF7KCzdJ3x29WQDw
-         o7Kty51xu/tVOks0EJJgkt/gq2lVvni+KeSUcvrVAaG+5dYiSmdQlrZxRekXnpFRNEa3
-         Q8sMDDRzsPwECTXx80g7ObG56EooBccUUwYXtRTgi5uXTiHBWZQs/S7bWfLeqYx+GKf3
-         g9jA==
-X-Gm-Message-State: AOAM531lPgsg3Ll7psklEizcOtEn/TFx2F40h4m1IzoJgdBrTykXCcoy
-        QFJM5gv5yN8qtvw910azeXeEdy1YdgXsNgux21BvvA==
-X-Google-Smtp-Source: ABdhPJwpc+gopAU0pZgoWM9E6lgBcox4bUUzd25nkvAL0ORfgNVHsgmGl8OaBGCIDzinOAVQklb41fk6mzn/vekS9Go=
-X-Received: by 2002:a2e:505:: with SMTP id 5mr3161222ljf.273.1642775335507;
- Fri, 21 Jan 2022 06:28:55 -0800 (PST)
+        Fri, 21 Jan 2022 09:29:18 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20LET9WE075995;
+        Fri, 21 Jan 2022 08:29:09 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1642775349;
+        bh=x6XFXUl3lDkNJKmVjOJ6yOUcmnPEPwpeNe+jkll+ans=;
+        h=From:To:CC:Subject:Date;
+        b=tL6lMpwvXFUvScakBTa2v9H1k/SLt1LKfXsF2eH/Pods5NS6YkkLOjbjKHX/Uis6a
+         rqwgn1U7llaEd5nqLshqtsN3WzlDZhh6QtnR0TA1VPvpYQzESfLnDKacrRv7z8GRnu
+         Dv0AorqostUhUul/S0/FHzhEEb4Nhto8CZkoTLss=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20LET9Vt075585
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 21 Jan 2022 08:29:09 -0600
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 21
+ Jan 2022 08:29:08 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 21 Jan 2022 08:29:08 -0600
+Received: from pratyush-4F-325.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20LET4Hl072129;
+        Fri, 21 Jan 2022 08:29:05 -0600
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     Pratyush Yadav <p.yadav@ti.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Nikhil Devshatwar <nikhil.nd@ti.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Benoit Parrot <bparrot@ti.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>
+Subject: [PATCH v6 00/14] CSI2RX support on J721E
+Date:   Fri, 21 Jan 2022 19:58:50 +0530
+Message-ID: <20220121142904.4091481-1-p.yadav@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220113170300.3555651-1-gsomlo@gmail.com> <Yeq4ej2RAWgDZMp1@errol.ini.cmu.edu>
-In-Reply-To: <Yeq4ej2RAWgDZMp1@errol.ini.cmu.edu>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 21 Jan 2022 15:28:19 +0100
-Message-ID: <CAPDyKFoXEgS=zzHbsomgMvEZge3Cw4_avOhDmMSeC+1nv1015w@mail.gmail.com>
-Subject: Re: [PATCH v14 0/3] mmc: Add LiteSDCard mmc driver
-To:     "Gabriel L. Somlo" <gsomlo@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-mmc@vger.kernel.org,
-        kgugala@antmicro.com, mholenko@antmicro.com, krakoczy@antmicro.com,
-        mdudek@internships.antmicro.com, paulus@ozlabs.org, joel@jms.id.au,
-        shorne@gmail.com, geert@linux-m68k.org,
-        david.abdurachmanov@sifive.com, florent@enjoy-digital.fr,
-        rdunlap@infradead.org, andy.shevchenko@gmail.com, hdanton@sina.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Jan 2022 at 14:43, Gabriel L. Somlo <gsomlo@gmail.com> wrote:
->
-> On Thu, Jan 13, 2022 at 12:02:57PM -0500, Gabriel Somlo wrote:
-> > Add support for the LiteX SD-Card device, LiteSDCard.
-> >
-> > LiteSDCard is a simple SD-Card interface available as part of the LiteX
-> > environment, used with various RISC-V and other FPGA based SoCs.
-> >
-> > New in v14:
-> > Documentation/devicetree/bindings/mmc/litex,mmc.yaml:
-> >   - add missing `vmmc-supply = ...` property to example section
-> >
-> > >New in v13:
-> > >Documentation/devicetree/bindings/mmc/litex,mmc.yaml:
-> > >  - add `vmmc-supply` requirement
-> > >drivers/mmc/host/Kconfig:
-> > >  - add dependency on REGULATOR, REGULATOR_FIXED_VOLTAGE
-> > >drivers/mmc/host/litex_mmc.c:
-> > >  - use `mmc_regulator_get_supply()`, with fallback to hardcoded 3.3V
->
->
-> Ping?
+Hi,
 
-Please don't ping during the merge window, unless it's a fix.
+This series adds support for CSI2 capture on J721E. It includes some
+fixes to the Cadence CSI2RX driver, re-structures the TI platform
+drivers, and finally adds the TI CSI2RX wrapper driver.
 
-Although, as I have already started to prepare for applying a slew of
-patches, I can let you know that this series is going to be applied on
-Monday, when rc1 is out.
+This series used to include the DPHY and DMA engine patches as well, but
+they have been split off to facilitate easier merging.
 
-Kind regards
-Uffe
+Tested on TI's J721E with OV5640 sensor.
 
->
->
-> > >>New in v12:
-> > >>drivers/mmc/host/Kconfig:
-> > >>  - add dependency on HAVE_CLK for litex_mmc driver
-> > >>  - (re)add "If unsure, say N" to the litex_mmc driver help message
-> > >>drivers/mmc/host/litex_mmc.c:
-> > >>  - prints message using dev_info() before returning success from probe()
-> > >>
-> > >>>New in v11:
-> > >>>  - picked up r/b from Andy
-> > >>>drivers/mmc/host/litex_mmc.c:
-> > >>>  - defensive coding of litex_mmc_interrupt() return logic
-> > >>>  - remove `dev` member of `struct litex_mmc_host`, only used during probe
-> > >>>
-> > >>>>New in v10:
-> > >>>>drivers/mmc/host/litex_mmc.c:
-> > >>>>  - group `linux/mmc/*` includes by themselves
-> > >>>>  - clean-up of `return` style (multiple locations throughout source)
-> > >>>>  - create `mmc_free_host()` wrapper for use with
-> > >>>>    `devm_add_action_or_reset()`
-> > >>>>  - use GFP_KERNEL with `dmam_alloc_coherent()`
-> > >>>>
-> > >>>>>New in v9:
-> > >>>>>drivers/mmc/host/Kconfig:
-> > >>>>>  - fix OF dependency
-> > >>>>>drivers/mmc/host/litex_mmc.c:
-> > >>>>>  - remove `linux/of.h` include, no longer needed since dropping
-> > >>>>>    `of_match_ptr()`
-> > >>>>>  - add `linux/mod_devicetable.h` include
-> > >>>>>  - use devm_action_or_reset() to devm-ify mmc_alloc_host(), and obviate
-> > >>>>>    the need to call mmc_free_host() explicitly during either probe()
-> > >>>>>    error path or during remove()
-> > >>>>>
-> > >>>>>>New in v8:
-> > >>>>>>commit blurbs:
-> > >>>>>>  - cosmetic editing of descriptions
-> > >>>>>>  - removed `Cc:` lines
-> > >>>>>>drivers/mmc/host/litex_mmc.c:
-> > >>>>>>  - fix file header comment (for real, this time)
-> > >>>>>>  - add explicit `bits.h` include
-> > >>>>>>  - remove `of_match_ptr()` wrapper from around .of_match_table argument
-> > >>>>>>  - fix devm ordering issues: use `devm_request_irq()`, which precludes
-> > >>>>>>    the need to call `free_irq()` on `probe()` error path or from `remove()`
-> > >>>>>>
-> > >>>>>>>New in v7:
-> > >>>>>>>
-> > >>>>>>>drivers/mmc/host/Kconfig:
-> > >>>>>>>  - added module name in LiteSDCard Kconfig entry
-> > >>>>>>>
-> > >>>>>>>drivers/mmc/host/litex_mmc.c:
-> > >>>>>>>  - fixed comment formatting, ordering, and capitalization throughout
-> > >>>>>>>    the entire file
-> > >>>>>>>  - sorted header #include statements
-> > >>>>>>>  - removed redundant parantheses in readx_poll_timeout() condition
-> > >>>>>>>  - explicit handling of readx_poll_timeout() timeout scenarios
-> > >>>>>>>  - dev_err() used in litex_mmc_sdcard_wait_done()
-> > >>>>>>>  - use memcpy_fromio() to grab command response
-> > >>>>>>>  - no need to apply 0xffff mask to a 32-bit value right-shifted by 16
-> > >>>>>>>    (host->resp[3])
-> > >>>>>>>  - use clamp() instead of min(max(...)...)
-> > >>>>>>>  - reworked platform_get_irq_optional() error handling logic
-> > >>>>>>>  - no need to explicitly zero host->irq, kzalloc() does that already
-> > >>>>>>>  - added missing free_irq() in litex_mmc_probe() error path
-> > >>>>>>>  - reordered calls inside litex_mmc_remove() (calling mmc_free_host()
-> > >>>>>>>    before free_irq()
-> > >>>>>>>
-> > >>>>>>>>New in v6:
-> > >>>>>>>>
-> > >>>>>>>>drivers/mmc/host/litex_mmc.c:
-> > >>>>>>>>  - fix handling of deferred probe vs. platform_get_irq_optional()
-> > >>>>>>>>  - don't #ifdef dma_set_mask_and_coherent(), since it automatically
-> > >>>>>>>>    does the right thing on both 32- and 64-bit DMA capable arches
-> > >>>>>>>>  - remove MMC_CAP2_FULL_PWR_CYCLE, add MMC_CAP2_NO_MMC to list of
-> > >>>>>>>>    hardcoded capabilities during litex_mmc_probe()
-> > >>>>>>>>  - hardcode mmc->ocr_avail to the full 2.7-3.6V range allowed by the
-> > >>>>>>>>    SDCard spec (the LiteSDCard device doesn't accept software
-> > >>>>>>>>    configuration)
-> > >>>>>>>>
-> > >>>>>>>>>New in v5:
-> > >>>>>>>>>
-> > >>>>>>>>>MAINTAINERS:
-> > >>>>>>>>>
-> > >>>>>>>>>  - picked up a/b Mateusz
-> > >>>>>>>>>
-> > >>>>>>>>>Doc/dt/bindings/mmc/litex,mmc.yaml:
-> > >>>>>>>>>
-> > >>>>>>>>>  - picked up r/b Rob, Joel
-> > >>>>>>>>>
-> > >>>>>>>>>drivers/mmc/host/litex_mmc.c:
-> > >>>>>>>>>
-> > >>>>>>>>>  - shorten #define constant names (cosmetic, make them less unwieldy)
-> > >>>>>>>>>  - picked up r/b Joel
-> > >>>>>>>>>
-> > >>>>>>>>>>New in v4:
-> > >>>>>>>>>>
-> > >>>>>>>>>>Doc/dt/bindings/mmc/litex,mmc.yaml:
-> > >>>>>>>>>>
-> > >>>>>>>>>>  - fixed `dt_binding_check` errors uncovered by Rob's script
-> > >>>>>>>>>>
-> > >>>>>>>>>>drivers/mmc/host/litex_mmc.c:
-> > >>>>>>>>>>
-> > >>>>>>>>>>  - struct litex_mmc_host fields re-ordered so that `pahole` reports
-> > >>>>>>>>>>    no holes in either 32- or 64-bit builds
-> > >>>>>>>>>>  - litex_mmc_set_bus_width() now encapsulates check for
-> > >>>>>>>>>>    host->is_bus_width_set
-> > >>>>>>>>>>  - litex_mmc_request() - factor out dma data setup into separate
-> > >>>>>>>>>>    helper function: litex_mmc_do_dma()
-> > >>>>>>>>>>
-> > >>>>>>>>>>>New in v3:
-> > >>>>>>>>>>>
-> > >>>>>>>>>>>  MAINTAINERS:
-> > >>>>>>>>>>>
-> > >>>>>>>>>>>  - picked up acked-by Joel
-> > >>>>>>>>>>>  - added listing for liteeth driver
-> > >>>>>>>>>>>  - added Joel as additional co-maintainer (thanks!)
-> > >>>>>>>>>>>
-> > >>>>>>>>>>>  Doc/dt/bindings/mmc/litex,mmc.yaml:
-> > >>>>>>>>>>>
-> > >>>>>>>>>>>  - picked up r/b Geert Uytterhoeven <geert@linux-m68k.org> in DT
-> > >>>>>>>>>>>    bindings document (please let me know if that was premature, and
-> > >>>>>>>>>>>    happy to take further review if needed :)
-> > >>>>>>>>>>>  - add dedicated DT property for source clock frequency
-> > >>>>>>>>>>>
-> > >>>>>>>>>>>  drivers/mmc/host/litex_mmc.c:
-> > >>>>>>>>>>>
-> > >>>>>>>>>>>  - fixed function signature (no line split), and naming (litex_mmc_*)
-> > >>>>>>>>>>>  - more informative MODULE_AUTHOR() entries
-> > >>>>>>>>>>>    - also added matching "Copyright" entries in file header
-> > >>>>>>>>>>>  - fixed description in Kconfig
-> > >>>>>>>>>>>  - fixed DT documentation
-> > >>>>>>>>>>>  - removed magic constants
-> > >>>>>>>>>>>  - removed litex_map_status(), have sdcard_wait_done() return *real*
-> > >>>>>>>>>>>    error codes directly instead.
-> > >>>>>>>>>>>  - streamlined litex_mmc_reponse_len()
-> > >>>>>>>>>>>  - call litex_mmc_set_bus_width() only once, and ensure it returns
-> > >>>>>>>>>>>    correct error code(s)
-> > >>>>>>>>>>>  - use readx_poll_timeout() -- more concise -- instead of
-> > >>>>>>>>>>>    read_poll_timeout()
-> > >>>>>>>>>>>  - use dev_err() in litex_mmc_send_cmd() (instead of pr_err())
-> > >>>>>>>>>>>  - litex_mmc_setclk() will update host->clock before returning
-> > >>>>>>>>>>>  - separate irq initialization into its own function,
-> > >>>>>>>>>>>    litex_mmc_irq_init()
-> > >>>>>>>>>>>  - document rationale for f_min, f_max
-> > >>>>>>>>>>>  - use dmam_alloc_coherent(), which simplifies cleanup significantly
-> > >>>>>>>>>>>  - large `if (data) { ... }` block in litex_mmc_request() left as-is,
-> > >>>>>>>>>>>    there are too many variables shared with the rest of the parent
-> > >>>>>>>>>>>    function body to easily separate (e.g., `len`, `transfer`, `direct`).
-> > >>>>>>>>>>>    If this is indeed a blocker, I can take another shot at refactoring
-> > >>>>>>>>>>>    it in a future revision!
-> > >>>>>>>>>>>  - bump dma_set_mask_and_coherent() to 64-bits on suitable
-> > >>>>>>>>>>>    architectures
-> > >>>>>>>>>>>  - clock source picked up from dedicated DT clock reference property
-> > >>>>>>>>>>>  - remove gpio card-detect logic (needs testing and a dt binding
-> > >>>>>>>>>>>    example before being eligible for upstream inclusion)
-> > >>>>>>>>>>>
-> > >>>>>>>>>>>> New in v2:
-> > >>>>>>>>>>>>   - reword info message in litex_set_clk()
-> > >>>>>>>>>>>>   - streamline code in litex_map_status()
-> > >>>>>>>>>>>>   - fix typos in Kconfig (thanks Randy Dunlap <rdunlap@infradead.org>)
-> > >>>>>>>>>>>>   - improvements suggested by Stafford Horne <shorne@gmail.com>
-> > >>>>>>>>>>>>     - allow COMPILE_TEST in Kconfig
-> > >>>>>>>>>>>>     - use read_poll_timeout() when waiting for cmd/data/DMA
-> > >>>>>>>>>>>>       xfer completion
-> > >>>>>>>>>>>>   - include interrupt.h (thanks kernel test robot <lkp@intel.com>)
-> >
-> > Gabriel Somlo (3):
-> >   MAINTAINERS: co-maintain LiteX platform
-> >   dt-bindings: mmc: Add bindings for LiteSDCard
-> >   mmc: Add driver for LiteX's LiteSDCard interface
-> >
-> >  .../devicetree/bindings/mmc/litex,mmc.yaml    |  78 +++
-> >  MAINTAINERS                                   |   9 +-
-> >  drivers/mmc/host/Kconfig                      |  13 +
-> >  drivers/mmc/host/Makefile                     |   1 +
-> >  drivers/mmc/host/litex_mmc.c                  | 661 ++++++++++++++++++
-> >  5 files changed, 760 insertions(+), 2 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/mmc/litex,mmc.yaml
-> >  create mode 100644 drivers/mmc/host/litex_mmc.c
-> >
-> > --
-> > 2.31.1
-> >
+The branch with all the patches needed to enable testing (dts nodes,
+OV5640 dropped patch, etc.) can be found here at
+https://github.com/prati0100/linux-next/ branch "capture".
+
+Changes in v6:
+- Move the lock around the dereference for framefmt in
+  csi2rx_{get,set}_fmt() instead of when we get the pointer.
+- Do not return an error when an unsupported format is set. Instead
+  adjust the code to the first format in the list.
+- Drop variable bpp and use fmt->bpp directly.
+- Drop variable got_pm. Call phy_pm_runtime_put() unconditionally since
+  it will just return an error if runtime PM is not enabled.
+- Drop transcoding from the commit message.
+- Make csi2rx_media_ops const.
+
+Changes in v5:
+- Cleanup notifier in csi2rx_parse_dt() after the call to
+  v4l2_async_nf_add_fwnode_remote().
+- Use YUV 1X16 formats instead of 2X8.
+- Only error out when phy_pm_runtime_get_sync() returns a negative
+  value. A positive value can be returned if the phy was already
+  resumed.
+- Do not query the source subdev for format. Use the newly added
+  internal format instead.
+- Make i unsigned.
+- Change %d to %u
+- Add dependency on PHY_CADENCE_DPHY_RX instead of PHY_CADENCE_DPHY
+  since the Rx mode DPHY now has a separate driver.
+- Drop ti_csi2rx_validate_pipeline(). Pipeline validation should be done
+  at media_pipeline_start().
+- Do not assign flags.
+- Fix error handling in ti_csi2rx_start_streaming(). Free up vb2 buffers
+  when media_pipeline_start() fails.
+- Move clock description in comments under the clocks property.
+- Make ports required.
+- Add link validation to cdns-csi2rx driver.
+
+Changes in v4:
+- Drop the call to set PHY submode. It is now being done via compatible
+  on the DPHY side.
+- Acquire the media device's graph_mutex before starting the graph walk.
+- Call media_graph_walk_init() and media_graph_walk_cleanup() when
+  starting and ending the graph walk respectively.
+- Reduce max frame height and width in enum_framesizes. Currently they
+  are set to UINT_MAX but they must be a multiple of step_width, so they
+  need to be rounded down. Also, these values are absurdly large which
+  causes some userspace applications like gstreamer to trip up. While it
+  is not generally right to change the kernel for an application bug, it
+  is not such a big deal here. This change is replacing one set of
+  absurdly large arbitrary values with another set of smaller but still
+  absurdly large arbitrary values. Both limits are unlikely to be hit in
+  practice.
+- Add power-domains property.
+- Drop maxItems from clock-names.
+- Drop the type for data-lanes.
+- Drop uniqueItems from data-lanes. Move it to video-interfaces.yaml
+  instead.
+- Drop OV5640 runtime pm patch. It seems to be a bit complicated and it
+  is not exactly necessary for this series. Any CSI-2 camera will work
+  just fine, OV5640 just happens to be the one I tested with. I don't
+  want it to block this series. I will submit it as a separate patch
+  later.
+
+Changes in v3:
+- Use v4l2_get_link_freq() to calculate pixel clock.
+- Move DMA related fields in struct ti_csi2rx_dma.
+- Protect DMA buffer queue with a spinlock to make sure the queue buffer
+  and DMA callback don't race on it.
+- Track the current DMA state. It might go idle because of a lack of
+  buffers. This state can be used to restart it if needed.
+- Do not include the current buffer in the pending queue. It is slightly
+  better modelling than leaving it at the head of the pending queue.
+- Use the buffer as the callback argument, and add a reference to csi in it.
+- If queueing a buffer to DMA fails, the buffer gets leaked and DMA gets
+  stalled with. Instead, report the error to vb2 and queue the next
+  buffer in the pending queue.
+- DMA gets stalled if we run out of buffers since the callback is the
+  only one that fires subsequent transfers and it is no longer being
+  called. Check for that when queueing buffers and restart DMA if
+  needed.
+- Do not put of node until we are done using the fwnode.
+- Set inital format to UYVY 640x480.
+- Add compatible: contains: const: cdns,csi2rx to allow SoC specific
+  compatible.
+- Add more constraints for data-lanes property.
+
+Changes in v2:
+- Use phy_pm_runtime_get_sync() and phy_pm_runtime_put() before making
+  calls to set PHY mode, etc. to make sure it is ready.
+- Use dmaengine_get_dma_device() instead of directly accessing
+  dma->device->dev.
+- Do not set dst_addr_width when configuring slave DMA.
+- Move to a separate subdir and rename to j721e-csi2rx.c
+- Convert compatible to ti,j721e-csi2rx.
+- Move to use Media Controller centric APIs.
+- Improve cleanup in probe when one of the steps fails.
+- Add colorspace to formats database.
+- Set hw_revision on media_device.
+- Move video device initialization to probe time instead of register time.
+- Rename to ti,j721e-csi2rx.yaml
+- Add an entry in MAINTAINERS.
+- Add a description for the binding.
+- Change compatible to ti,j721e-csi2rx to make it SoC specific.
+- Remove description from dmas, reg, power-domains.
+- Remove a limit of 2 from #address-cells and #size-cells.
+- Fix add ^ to csi-bridge subnode regex.
+- Make ranges mandatory.
+- Add unit address in example.
+- Add a reference to cdns,csi2rx in csi-bridge subnode.
+- Expand the example to include the csi-bridge subnode as well.
+- Re-order subject prefixes.
+- Convert OV5640 to use runtime PM and drop Cadence CSI2RX s_power patch.
+- Drop subdev call wrappers from cdns-csi2rx.
+- Move VPE and CAL to a separate subdir.
+- Rename ti-csi2rx.c to j721e-csi2rx.c
+
+Pratyush Yadav (14):
+  media: cadence: csi2rx: Unregister v4l2 async notifier
+  media: cadence: csi2rx: Cleanup media entity properly
+  media: cadence: csi2rx: Add get_fmt and set_fmt pad ops
+  media: cadence: csi2rx: Add external DPHY support
+  media: cadence: csi2rx: Soft reset the streams before starting capture
+  media: cadence: csi2rx: Set the STOP bit when stopping a stream
+  media: cadence: csi2rx: Fix stream data configuration
+  media: cadence: csi2rx: Populate subdev devnode
+  media: cadence: csi2rx: Add link validation
+  media: Re-structure TI platform drivers
+  media: ti: Add CSI2RX support for J721E
+  media: dt-bindings: Make sure items in data-lanes are unique
+  media: dt-bindings: Add DT bindings for TI J721E CSI2RX driver
+  media: dt-bindings: Convert Cadence CSI2RX binding to YAML
+
+ .../devicetree/bindings/media/cdns,csi2rx.txt | 100 --
+ .../bindings/media/cdns,csi2rx.yaml           | 176 ++++
+ .../bindings/media/ti,j721e-csi2rx.yaml       | 101 ++
+ .../bindings/media/video-interfaces.yaml      |   1 +
+ MAINTAINERS                                   |  10 +-
+ drivers/media/platform/Kconfig                |  12 +
+ drivers/media/platform/Makefile               |   2 +-
+ drivers/media/platform/cadence/cdns-csi2rx.c  | 274 +++++-
+ drivers/media/platform/ti/Makefile            |   4 +
+ drivers/media/platform/ti/cal/Makefile        |   3 +
+ .../{ti-vpe => ti/cal}/cal-camerarx.c         |   0
+ .../platform/{ti-vpe => ti/cal}/cal-video.c   |   0
+ .../media/platform/{ti-vpe => ti/cal}/cal.c   |   0
+ .../media/platform/{ti-vpe => ti/cal}/cal.h   |   0
+ .../platform/{ti-vpe => ti/cal}/cal_regs.h    |   0
+ .../media/platform/ti/j721e-csi2rx/Makefile   |   2 +
+ .../platform/ti/j721e-csi2rx/j721e-csi2rx.c   | 913 ++++++++++++++++++
+ .../platform/{ti-vpe => ti/vpe}/Makefile      |   4 -
+ .../media/platform/{ti-vpe => ti/vpe}/csc.c   |   0
+ .../media/platform/{ti-vpe => ti/vpe}/csc.h   |   0
+ .../media/platform/{ti-vpe => ti/vpe}/sc.c    |   0
+ .../media/platform/{ti-vpe => ti/vpe}/sc.h    |   0
+ .../platform/{ti-vpe => ti/vpe}/sc_coeff.h    |   0
+ .../media/platform/{ti-vpe => ti/vpe}/vpdma.c |   0
+ .../media/platform/{ti-vpe => ti/vpe}/vpdma.h |   0
+ .../platform/{ti-vpe => ti/vpe}/vpdma_priv.h  |   0
+ .../media/platform/{ti-vpe => ti/vpe}/vpe.c   |   0
+ .../platform/{ti-vpe => ti/vpe}/vpe_regs.h    |   0
+ 28 files changed, 1481 insertions(+), 121 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.txt
+ create mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/ti,j721e-csi2rx.yaml
+ create mode 100644 drivers/media/platform/ti/Makefile
+ create mode 100644 drivers/media/platform/ti/cal/Makefile
+ rename drivers/media/platform/{ti-vpe => ti/cal}/cal-camerarx.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/cal}/cal-video.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/cal}/cal.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/cal}/cal.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/cal}/cal_regs.h (100%)
+ create mode 100644 drivers/media/platform/ti/j721e-csi2rx/Makefile
+ create mode 100644 drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/Makefile (78%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/csc.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/csc.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/sc.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/sc.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/sc_coeff.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpdma_priv.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpe.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpe_regs.h (100%)
+
+-- 
+2.34.1
+

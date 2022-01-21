@@ -2,112 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4FB495C6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 09:58:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4904C495C71
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 09:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379619AbiAUI6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 03:58:43 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:49218 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234205AbiAUI6i (ORCPT
+        id S1379624AbiAUI7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 03:59:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54576 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234770AbiAUI7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 03:58:38 -0500
-Received: from machine.localnet (lfbn-lyo-1-1484-111.w86-207.abo.wanadoo.fr [86.207.51.111])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 722ED20B6C61;
-        Fri, 21 Jan 2022 00:58:37 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 722ED20B6C61
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1642755518;
-        bh=WbOLIRm6CwlXPDaoqOPOSwuwUAxz//nxPmXnsK4U1t8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gBJfkgTtdT4cMk6aQoitHvxKSumu/p36mNUFvRFM/x9k1Wm3sIjKyVXch78WUKdDP
-         Ip87j6Z2hgmYjkb7+X6UlXaIPib9/WxhqCNnaAZ0+W+NoZqm425ukfSXntNDOtT0kY
-         JipKhMdFGx9EBRSmOFya9QncgjLb0TnOBmHjYS6c=
-From:   Francis Laniel <flaniel@linux.microsoft.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-security-module@vger.kernel.org,
-        Serge Hallyn <serge@hallyn.com>,
-        Casey Schaufler <casey@schaufler-ca.com>
-Subject: Re: [RFC PATCH v3 2/2] security/inode.c: Add capabilities file.
-Date:   Fri, 21 Jan 2022 09:58:34 +0100
-Message-ID: <7787651.jkfHb4QSSr@machine>
-In-Reply-To: <20220120180116.167702-3-flaniel@linux.microsoft.com>
-References: <20220120180116.167702-1-flaniel@linux.microsoft.com> <20220120180116.167702-3-flaniel@linux.microsoft.com>
+        Fri, 21 Jan 2022 03:59:48 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D901C061574;
+        Fri, 21 Jan 2022 00:59:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=7wc2zUSfhyENFO6ymFjjrv1H+4Rj+PnhH77Hsl91gjc=; b=jrGOS1JRI2plfq4yl+kTVyT8QB
+        lplUqiCN6OZhxp39ABXcb17U2+hx8Zi3Ii7dFt2lQV4Yi+H+jHOQjMkudyjhYmrnmhNmxV2EB8qIK
+        Y7is+ME0ziH3XbydM6URLERYWx+utHOCGGx7fZm6czg8Ry+nqh5edj+D+gJTOaHi55kyzjU9AezKR
+        y/elJtDK+t2+A6ZRbssaNwApsBzd9VDEWE8p2TB1MqNqiEy2TueB83hlPebuGPcpIFA11a4UcN84w
+        WLbuYn0SFqOzDnWP9nAHyd261fwWH8WPAyNVBK27kmbzcAcPv5Fphr1F5PXpAdpJwakqPMD4CYclj
+        53nSlfJA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nAplO-00FROw-8s; Fri, 21 Jan 2022 08:59:18 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0AB9A9853F1; Fri, 21 Jan 2022 09:59:17 +0100 (CET)
+Date:   Fri, 21 Jan 2022 09:59:17 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     mingo@redhat.com, tglx@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
+        pjt@google.com, posk@google.com, avagin@google.com,
+        jannh@google.com, tdelisle@uwaterloo.ca, mark.rutland@arm.com,
+        posk@posk.io
+Subject: Re: [RFC][PATCH v2 1/5] mm: Avoid unmapping pinned pages
+Message-ID: <20220121085917.GA22849@worktop.programming.kicks-ass.net>
+References: <20220120155517.066795336@infradead.org>
+ <20220120160822.666778608@infradead.org>
+ <ffb88819-a392-84f3-d40f-7406be8e3165@redhat.com>
+ <20220121075157.GA20638@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220121075157.GA20638@worktop.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi.
+On Fri, Jan 21, 2022 at 08:51:57AM +0100, Peter Zijlstra wrote:
+> On Thu, Jan 20, 2022 at 07:25:08PM +0100, David Hildenbrand wrote:
+> > On 20.01.22 16:55, Peter Zijlstra wrote:
+> > > Add a guarantee for Anon pages that pin_user_page*() ensures the
+> > > user-mapping of these pages stay preserved. In order to ensure this
+> > > all rmap users have been audited:
+> > > 
+> > >  vmscan:	already fails eviction due to page_maybe_dma_pinned()
+> > > 
+> > >  migrate:	migration will fail on pinned pages due to
+> > > 		expected_page_refs() not matching, however that is
+> > > 		*after* try_to_migrate() has already destroyed the
+> > > 		user mapping of these pages. Add an early exit for
+> > > 		this case.
+> > > 
+> > >  numa-balance:	as per the above, pinned pages cannot be migrated,
+> > > 		however numa balancing scanning will happily PROT_NONE
+> > > 		them to get usage information on these pages. Avoid
+> > > 		this for pinned pages.
+> > 
+> > page_maybe_dma_pinned() can race with GUP-fast without
+> > mm->write_protect_seq. This is a real problem for vmscan() with
+> > concurrent GUP-fast as it can result in R/O mappings of pinned pages and
+> > GUP will lose synchronicity to the page table on write faults due to
+> > wrong COW.
+> 
+> Urgh, so yeah, that might be a problem. Follow up code uses it like
+> this:
+> 
+> +/*
+> + * Pinning a page inhibits rmap based unmap for Anon pages. Doing a load
+> + * through the user mapping ensures the user mapping exists.
+> + */
+> +#define umcg_pin_and_load(_self, _pagep, _member)                              \
+> +({                                                                             \
+> +       __label__ __out;                                                        \
+> +       int __ret = -EFAULT;                                                    \
+> +                                                                               \
+> +       if (pin_user_pages_fast((unsigned long)(_self), 1, 0, &(_pagep)) != 1)  \
+> +               goto __out;                                                     \
+> +                                                                               \
+> +       if (!PageAnon(_pagep) ||                                                \
+> +           get_user(_member, &(_self)->_member)) {                             \
+> +               unpin_user_page(_pagep);                                        \
+> +               goto __out;                                                     \
+> +       }                                                                       \
+> +       __ret = 0;                                                              \
+> +__out: __ret;                                                                  \
+> +})
+> 
+> And after that hard assumes (on the penalty of SIGKILL) that direct user
+> access works. Specifically it does RmW ops on it. So I suppose I'd
+> better upgrade that load to a RmW at the very least.
+> 
+> But is that sufficient? Let me go find that race you mention...
 
-Le jeudi 20 janvier 2022, 19:01:16 CET Francis Laniel a =E9crit :
-> This new read-only file prints the capabilities values with their names:
-> cat /sys/kernel/security/capabilities
-> 0       CAP_CHOWN
-> 1       CAP_DAC_OVERRIDE
-> ...
-> 40      CAP_CHECKPOINT_RESTORE
->=20
-> Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-> ---
->  security/inode.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->=20
-> diff --git a/security/inode.c b/security/inode.c
-> index 6c326939750d..cef78b497bab 100644
-> --- a/security/inode.c
-> +++ b/security/inode.c
-> @@ -21,6 +21,7 @@
->  #include <linux/security.h>
->  #include <linux/lsm_hooks.h>
->  #include <linux/magic.h>
-> +#include <linux/capability.h>
->=20
->  static struct vfsmount *mount;
->  static int mount_count;
-> @@ -328,6 +329,19 @@ static const struct file_operations lsm_ops =3D {
->  };
->  #endif
->=20
-> +static struct dentry *capabilities_dentry;
-> +static ssize_t capabilities_read(struct file *unused, char __user *buf,
-> +				 size_t count, loff_t *ppos)
-> +{
-> +	return simple_read_from_buffer(buf, count, ppos, cap_string,
-> +				       strlen(cap_string));
-> +}
-> +
-> +static const struct file_operations capabilities_ops =3D {
-> +	.read =3D capabilities_read,
-> +	.llseek =3D generic_file_llseek,
-> +};
-> +
->  static int __init securityfs_init(void)
->  {
->  	int retval;
-> @@ -345,6 +359,8 @@ static int __init securityfs_init(void)
->  	lsm_dentry =3D securityfs_create_file("lsm", 0444, NULL, NULL,
->  						&lsm_ops);
->  #endif
-> +	capabilities_dentry =3D securityfs("capabilities", 0444, NULL, NULL,
-> +					 capabilities_ops);
+OK, so copy_page_range() vs lockless_pages_from_mm(). Since I use
+FOLL_PIN that should be sorted, it'll fall back the slow path and use
+mmap_sem and serialize against the fork().
 
-Sorry, I sent the old version of the patch and did not fixup this...
-Kernel robot kindly show me this error.
-I swear the output in the cover letter was done on the compiled kernel with=
-in=20
-a VM.
+(Also, can I express my hate for __gup_longterm_unlocked(), that
+function name is utter garbage)
 
-I will send a v4 correcting this but I will wait to get some reviews on v3 =
-to=20
-not send to not generate too much traffic here.
+However, I'm not quite sure what fork() does with pages that have a pin.
+There's been a number of GUP vs fork() problems over the years, but I'm
+afraid I have lost track of that and I can't quickly find anything in
+the code..
 
->  	return 0;
->  }
->  core_initcall(securityfs_init);
+Naively, a page that has async DMA activity should not be CoW'ed, or if
+it is, care must be taken to ensure the original pages stays in the
+original process, but I realize that's somewhat hard.
 
-Best regards.
-
-
+Let me dig in a bit more.

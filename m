@@ -2,134 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DEB496185
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 841CC496186
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381410AbiAUOrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 09:47:10 -0500
-Received: from mail-vk1-f174.google.com ([209.85.221.174]:44660 "EHLO
-        mail-vk1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345996AbiAUOrH (ORCPT
+        id S1351153AbiAUOra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 09:47:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240542AbiAUOr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 09:47:07 -0500
-Received: by mail-vk1-f174.google.com with SMTP id b77so5677009vka.11;
-        Fri, 21 Jan 2022 06:47:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Rz63SkibEn38erp8p/aTMOlV26SxK/MGIxWsaVpLBaY=;
-        b=Z6sYz5PdBt9ssWHFpd2z5wLl0c02NwUQeXq72s7k/BHo+ePzQ0j5X78XANx3ccRou8
-         717tx9mpSMOvuyUth5mQThzQwv1L/zgg2MdWP586A11p1bEFkwMlDlI8H5xWDdqywQF1
-         Pkov0dczEfDPE81CgrUh6uuawarkFVXdlmryR7B7aL/mSBmVgxxvsqmXjGAze03Ins1j
-         4SZKqxrbfjz7ERshs/8o3+XYDISH04lS7Rjh9xrJId9APdXE56VB1mr2G0l+3yik4mn/
-         o+YtybHFrB0O69dNrjlxyi8l1L+jFZluOEh3RMIB3qzPhqXNb+mtVNbgHTDAxGrtZZtG
-         Ja3A==
-X-Gm-Message-State: AOAM530DHUhHFrHZ5VYhkTE5aI08X66Qcur/u791EWxFTq3kxSgEL09f
-        5RVvcwHB96YpTTJ2qickFNvQn0Lr424LxA==
-X-Google-Smtp-Source: ABdhPJwuffPAmuK2E7gxqRwS7KEBFGThTCssHxkPOWP0iBG6ogey51PsZhOhbotgf8uuuP8wKhidBQ==
-X-Received: by 2002:a1f:aed3:: with SMTP id x202mr1882982vke.40.1642776426270;
-        Fri, 21 Jan 2022 06:47:06 -0800 (PST)
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com. [209.85.222.54])
-        by smtp.gmail.com with ESMTPSA id o131sm1401684vkc.42.2022.01.21.06.47.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Jan 2022 06:47:06 -0800 (PST)
-Received: by mail-ua1-f54.google.com with SMTP id c36so17231803uae.13;
-        Fri, 21 Jan 2022 06:47:05 -0800 (PST)
-X-Received: by 2002:a67:e985:: with SMTP id b5mr1507440vso.77.1642776425511;
- Fri, 21 Jan 2022 06:47:05 -0800 (PST)
+        Fri, 21 Jan 2022 09:47:28 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3DCC06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 06:47:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/4JfptqWCgo5zviDV0QcdmoidVe9JypSlmVm9x6vVrg=; b=AOblsX4w9Ofte1v2gveaP3mahu
+        JmdSwluekwq94Dgnj/LY1vKDTTfbn75KfJjaZqTtf5uo4NvVVkrZjZzDVOYmWKhXcZxd3yoi809qw
+        VvhIdmFRrlBWqQ6zkbMAg98eRUC4fTTotILHV+W95sTv2OJbsFngMvLC6yu71c72nF8Jb0WvGO0L4
+        7yh2nBAgc6SnzV2KsNC9HBv05PyU8/v1iYRwvkYD6CfnZK6okx2xfFJw5/SFofzHNDqU3tzmoDb9p
+        HYHIpWrZqVNic1LvI2HED5x4DoMKm/R5Z31ZrrRZHPKHB4isD/Z90A91oOliryTlfVEoK1OPgTsLc
+        9+xeL7dA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nAvC5-00FfsH-6F; Fri, 21 Jan 2022 14:47:13 +0000
+Date:   Fri, 21 Jan 2022 14:47:13 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     khalid.aziz@oracle.com, Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, longpeng2@huawei.com,
+        Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>
+Subject: Re: [RFC PATCH 0/6] Add support for shared PTEs across processes
+Message-ID: <YerHceldiYXLk2DE@casper.infradead.org>
+References: <cover.1642526745.git.khalid.aziz@oracle.com>
+ <20220121010806.5607-1-21cnbao@gmail.com>
+ <YeoW4CMiU8qbRFST@casper.infradead.org>
+ <CAGsJ_4wv144TUSQPNOnHnmNmJrXe4Fn8d14JeAJ5ka-S+dRxRA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220110134659.30424-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220110134659.30424-13-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220110134659.30424-13-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 21 Jan 2022 15:46:54 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUopcuP6XAd_Fw___04=-CyqJPEfNcwkrYgtdQz11yYvg@mail.gmail.com>
-Message-ID: <CAMuHMdUopcuP6XAd_Fw___04=-CyqJPEfNcwkrYgtdQz11yYvg@mail.gmail.com>
-Subject: Re: [PATCH v2 12/12] arm64: dts: renesas: Add support for r9a07g044c1/r9a07g054l1-smarc.dts
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGsJ_4wv144TUSQPNOnHnmNmJrXe4Fn8d14JeAJ5ka-S+dRxRA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar, Biju,
+On Fri, Jan 21, 2022 at 08:35:17PM +1300, Barry Song wrote:
+> On Fri, Jan 21, 2022 at 3:13 PM Matthew Wilcox <willy@infradead.org> wrote:
+> > On Fri, Jan 21, 2022 at 09:08:06AM +0800, Barry Song wrote:
+> > > > A file under /sys/fs/mshare can be opened and read from. A read from
+> > > > this file returns two long values - (1) starting address, and (2)
+> > > > size of the mshare'd region.
+> > > >
+> > > > --
+> > > > int mshare_unlink(char *name)
+> > > >
+> > > > A shared address range created by mshare() can be destroyed using
+> > > > mshare_unlink() which removes the  shared named object. Once all
+> > > > processes have unmapped the shared object, the shared address range
+> > > > references are de-allocated and destroyed.
+> > >
+> > > > mshare_unlink() returns 0 on success or -1 on error.
+> > >
+> > > I am still struggling with the user scenarios of these new APIs. This patch
+> > > supposes multiple processes will have same virtual address for the shared
+> > > area? How can this be guaranteed while different processes can map different
+> > > stack, heap, libraries, files?
+> >
+> > The two processes choose to share a chunk of their address space.
+> > They can map anything they like in that shared area, and then also
+> > anything they like in the areas that aren't shared.  They can choose
+> > for that shared area to have the same address in both processes
+> > or different locations in each process.
+> >
+> > If two processes want to put a shared library in that shared address
+> > space, that should work.  They probably would need to agree to use
+> > the same virtual address for the shared page tables for that to work.
+> 
+> we are depending on an elf loader and ld to map the library
+> dynamically , so hardly
+> can we find a chance in users' code to call mshare() to map libraries
+> in application
+> level?
 
-On Mon, Jan 10, 2022 at 2:47 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> From: Biju Das <biju.das.jz@bp.renesas.com>
->
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+If somebody wants to modify ld.so to take advantage of mshare(), they
+could.  That wasn't our primary motivation here, so if it turns out to
+not work for that usecase, well, that's a shame.
 
-Thanks for your patch!
+> > Think of this like hugetlbfs, only instead of sharing hugetlbfs
+> > memory, you can share _anything_ that's mmapable.
+> 
+> yep, we can call mshare() on any kind of memory. for example, if multiple
+> processes use SYSV shmem, posix shmem or mmap the same file. but
+> it seems it is more sensible to let kernel do it automatically rather than
+> depending on calling mshare() from users? It is difficult for users to
+> decide which areas should be applied mshare(). users might want to call
+> mshare() for all shared areas to save memory coming from duplicated PTEs?
+> unlike SYSV shmem and POSIX shmem which are a feature for inter-processes
+> communications,  mshare() looks not like a feature for applications,
+> but like a feature
+> for the whole system level? why would applications have to call something which
+> doesn't directly help them? without mshare(), those applications
+> will still work without any problem, right? is there anything in
+> mshare() which is
+> a must-have for applications? or mshare() is only a suggestion from applications
+> like madvise()?
 
-> --- a/arch/arm64/boot/dts/renesas/Makefile
-> +++ b/arch/arm64/boot/dts/renesas/Makefile
-> @@ -77,4 +77,6 @@ dtb-$(CONFIG_ARCH_R8A77965) += r8a779m5-salvator-xs.dtb
->
->  dtb-$(CONFIG_ARCH_R9A07G044) += r9a07g044l2-smarc.dtb
->  dtb-$(CONFIG_ARCH_R9A07G044) += r9a07g044c2-smarc.dtb
-> +dtb-$(CONFIG_ARCH_R9A07G044) += r9a07g044c1-smarc.dtb
+Our use case is that we have some very large files stored on persistent
+memory which we want to mmap in thousands of processes.  So the first
+one shares a chunk of its address space and mmaps all the files into
+that chunk of address space.  Subsequent processes find that a suitable
+address space already exists and use it, sharing the page tables and
+avoiding the calls to mmap.
 
-Please preserve sort order, and add a blank line to separate
-different SoCs.
-
->  dtb-$(CONFIG_ARCH_R9A07G054) += r9a07g054l2-smarc.dtb
-> +dtb-$(CONFIG_ARCH_R9A07G054) += r9a07g054l1-smarc.dtb
-
-Sort order.
-
-Given this patch adds boards with two different SoCs, and the two
-DTS files are quite dissimilar, I think this patch should be split in
-two parts.
-
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/renesas/r9a07g044c1-smarc.dts
-> @@ -0,0 +1,99 @@
-> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +/*
-> + * Device Tree Source for the RZ/G2LC SMARC EVK board
-> + *
-> + * Copyright (C) 2021 Renesas Electronics Corp.
-> + */
-> +
-> +/dts-v1/;
-> +#include "r9a07g044c1.dtsi"
-> +#include "rzg2lc-smarc-som.dtsi"
-> +#include "rzg2lc-smarc-pinfunction.dtsi"
-> +#include "rzg2l-smarc.dtsi"
-> +
-> +/ {
-> +       model = "Renesas SMARC EVK based on r9a07g044c2";
-> +       compatible = "renesas,smarc-evk", "renesas,r9a07g044c2", "renesas,r9a07g044";
-
-"renesas,r9a07g044c1"
-
-> +
-> +};
-> +
-> +&canfd {
-> +       /delete-property/ pinctrl-0;
-> +       status = "disabled";
-> +};
-
-Looks like the corresponding pinctrl-names properties should be
-removed, too.  Else "make dtbs_check" complains.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Sharing page tables is akin to running multiple threads in a single
+address space; except that only part of the address space is the same.
+There does need to be a certain amount of trust between the processes
+sharing the address space.  You don't want to do it to an unsuspecting
+process.

@@ -2,161 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CDCD495DD5
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 11:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 523E7495DD9
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 11:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380025AbiAUKhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 05:37:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48264 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238090AbiAUKhi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 05:37:38 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E16FC061574;
-        Fri, 21 Jan 2022 02:37:38 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id c24so38933454edy.4;
-        Fri, 21 Jan 2022 02:37:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Wtu938bAAaQ3ZnDK8gjmaHpiCBPkE7NzcrpnXEzoRwI=;
-        b=UdXBcRwHEEeo0wU3Qe7k3XoLo4cHDaMI8yY93id1Ju8jBQGqN4jFiJ4TH8DdTJdbV5
-         FoKfVRNdwBbJ7KzrRcBvcc+eJrBjW1lQ65hYQBPLeWO5teDhzNfhCw6gRTNSfN6oH0+D
-         X9UwUrQ+Yvft68uiwcjL+RoSaJcLVbYe3OVxLti9smoEh2nTqV+i83/+urqMqTYZTRMK
-         RzIPHXuVFKQMYq5LN+2hOJX8poA14nqCFon4qY5a/ZH64GqKP17N9YZgljOW9ZMqAEA1
-         VATpGRPUEwcZOxiGj47EJ83Ty+5zsP8yMBOJaaOdK3gbVIEXxwiqQiNbd/re43p0slnk
-         TIwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Wtu938bAAaQ3ZnDK8gjmaHpiCBPkE7NzcrpnXEzoRwI=;
-        b=2y8jKxYkknJph1py47Bj6X0dZBzHigFWc1XUEj2XStUSdwbGFtSz/aro/OFhq3BaSm
-         yh5fCyr/xmmJD1uLwWZE0MUrlD9gCuRcF8tJrtJlyf0772lBYXgsZMT6VDiwYF6W8+Rz
-         P01FKWCeCVfSHNoIVXCRRoKWoKMBi4X94Wei8CAnC3fFe28cbYUmi75JWS6YAM7Rwo4e
-         0fI2eA2CkbNBmrfGIYwcxcl2bqOx0VplmRtu7jVyuMNLasrIP4GSVCgs+z2OJlT3FxMy
-         m9qzTXMnfyoU28dKsuWAEr196x3w9R6sNQ+wagbVHMsTgngGfv/W2TyctxP1KjAMPosj
-         hSmA==
-X-Gm-Message-State: AOAM530SfUt3R+BvMOFZiMn6WSZdrsLVyl5Zsvenphhp4+vx1jzGp7qX
-        F3rK3MlKfmBd4KMfmVUrr/9tZYM0FboEGMM2Z6A=
-X-Google-Smtp-Source: ABdhPJy2dPZ5sFbj9ascaNf0QS1lzkHgAppi7foNYu8XKasCKwKVFgOk+oa3owvO5pgXGXQH3vlJKz4bML+iFmyePi4=
-X-Received: by 2002:a05:6402:35d3:: with SMTP id z19mr3569830edc.29.1642761456398;
- Fri, 21 Jan 2022 02:37:36 -0800 (PST)
+        id S1380033AbiAUKkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 05:40:07 -0500
+Received: from mga12.intel.com ([192.55.52.136]:47859 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238090AbiAUKj7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 05:39:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642761599; x=1674297599;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yc2EonG4xKNYkgh/4jCFbgWhGutbT/2bF8p8hppsmQU=;
+  b=di7jITcSMIu7URtXLwK+gmbkB/1psU42f0HoZzperlyOz50LEREvD/kP
+   ufR4vKa3YCFHoiUmqvCe5pwLyCzA+hBiQuaNtqcTb52v85hPKLNB/es3j
+   PGOnVRS1pbU3GqHZ63Kppc3vIMAjb/CM6p63LL2zvoksKBVb+WXkXhFPG
+   PTF0x9gC4tRQysave1eOQj2l2TeWP8jB0JeW1bVLg+oe4nS8ihZOAgbJ/
+   BR6c9vN15OxY4MWdNfECL/TelQtiplu5kp85Iehr208Surz6xa0EzWlkO
+   PpVbEUGQ4/HWgNwTszLKDOkNj9LsVJ09uhbGkGCYJOkIMXhh7bhLn09G1
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="225608828"
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="225608828"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 02:39:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="475910023"
+Received: from dev2 (HELO DEV2.igk.intel.com) ([10.237.148.94])
+  by orsmga003.jf.intel.com with ESMTP; 21 Jan 2022 02:39:56 -0800
+From:   =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+To:     x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH] x86: Preserve ACPI memory area during hibernation
+Date:   Fri, 21 Jan 2022 11:39:38 +0100
+Message-Id: <20220121103938.2602637-1-amadeuszx.slawinski@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220121041428.6437-1-josright123@gmail.com> <20220121041428.6437-3-josright123@gmail.com>
-In-Reply-To: <20220121041428.6437-3-josright123@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 21 Jan 2022 12:37:00 +0200
-Message-ID: <CAHp75Vc9pJMNfW2roUbdrcxCSvyGboTsJC0oTDCcTAS5bmF08w@mail.gmail.com>
-Subject: Re: [PATCH v12, 2/2] net: Add dm9051 driver
-To:     Joseph CHAMG <josright123@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, joseph_chang@davicom.com.tw,
-        netdev <netdev@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>, Leon Romanovsky <leon@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 6:15 AM Joseph CHAMG <josright123@gmail.com> wrote:
->
-> v1-v4
->
-> Add davicom dm9051 spi ethernet driver. The driver work for the
-> device platform with spi master
->
-> Test ok with raspberry pi 2 and pi 4, the spi configure used in
-> my raspberry pi 4 is spi0.1, spi speed 31200000, and INT by pin 26.
->
-> v5
->
-> Work to eliminate the wrappers to be clear for read, swapped to
-> phylib for phy connection tasks.
->
-> Tested with raspberry pi 4. Test for netwroking function, CAT5
-> cable unplug/plug and also ethtool detect for link state, and
-> all are ok.
->
-> v6
->
-> remove the redundant code that phylib has support,
-> adjust to be the reasonable sequence,
-> fine tune comments, add comments for pause function support
->
-> Tested with raspberry pi 4. Test for netwroking function, CAT5
-> cable unplug/plug and also ethtool detect for link state, and
-> all are ok.
->
-> v7
->
-> read/write registers must return error code to the callet,
-> add to enable pause processing
->
-> v8
->
-> not parmanently set MAC by .ndo_set_mac_address
->
-> correct rx function such as clear ISR,
-> inblk avoid stack buffer,
-> simple skb buffer process and
-> easy use netif_rx_ni.
->
-> simplely queue init and wake the queues,
-> limit the start_xmit function use netif_stop_queue.
->
-> descript that schedule delay is essential
-> for tx_work and rxctrl_work
->
-> eliminate ____cacheline_aligned and
-> add static int msg_enable.
->
-> v9
->
-> use phylib, no need 'select MII' in Kconfig,
-> make it clear in dm9051_xfer when using spi_sync,
-> improve the registers read/write so that error code
-> return as far as possible up the call stack.
->
-> v10
->
-> use regmap APIs for SPI and MDIO,
-> modify to correcting such as include header files
-> and program check styles
->
-> v11
->
-> eliminate the redundant code for struct regmap_config data
-> use regmap_read_poll_timeout
-> use corresponding regmap APIs, i.e. MDIO, SPI
-> all read/write registers by regmap
-> all read/write registers with mutex lock by regmap
-> problem: regmap MDIO and SPI has no .reg_update_bits, I write it
-> in the driver
-> problem: this chip can support bulk read/write to rx/tx data, but
-> can not support bulk read/write to continue registers, so need
-> read/write register one by one
->
-> v12
->
-> correctly use regmap bulk read/write/update_bits APIs
-> use mdiobus to work to phylib and to this driver
-> fine tune to arrange the source code to better usage
+When overriding NHLT ACPI-table tests show that on some platforms
+there is problem that NHLT contains garbage after hibernation/resume
+cycle.
 
-This is not tagged properly. Also, I specifically removed everything
-else to point out, please, read finally the article [1] and write a
-proper commit message. And move changelog under the cutter '--- '
-line. Without doing these two things nobody can do anything with your
-contribution.
+Problem stems from the fact that ACPI override performs early memory
+allocation using memblock_phys_alloc_range() in
+memblock_phys_alloc_range(). This memory block is later being marked as
+ACPI memory block in arch_reserve_mem_area(). Later when memory areas
+are considered for hibernation it is being marked as nosave in
+e820__register_nosave_regions().
 
-[1]: https://cbea.ms/git-commit/
+Fix this by skipping ACPI memory area altogether when considering areas
+to mark as nosave.
 
+Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ arch/x86/kernel/e820.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
+diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
+index bc0657f0deed..88c1b785ffe4 100644
+--- a/arch/x86/kernel/e820.c
++++ b/arch/x86/kernel/e820.c
+@@ -758,6 +758,18 @@ void __init e820__register_nosave_regions(unsigned long limit_pfn)
+ 	for (i = 0; i < e820_table->nr_entries; i++) {
+ 		struct e820_entry *entry = &e820_table->entries[i];
+ 
++		/*
++		 * Areas containing ACPI tables should be preserved during
++		 * hibernation to prevent potential problems caused by BIOS
++		 * upgrades when offline, as well as to preserve initrd
++		 * ACPI tables overrides which are applied on boot.
++		 * See also acpi_table_upgrade() & arch_reserve_mem_area()
++		 */
++		if (entry->type == E820_TYPE_ACPI) {
++			pfn = PFN_UP(entry->addr + entry->size);
++			continue;
++		}
++
+ 		if (pfn < PFN_UP(entry->addr))
+ 			register_nosave_region(pfn, PFN_UP(entry->addr));
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.25.1
+

@@ -2,134 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6DE49645B
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 18:44:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60988496457
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 18:44:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351846AbiAURoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 12:44:04 -0500
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:14372 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239311AbiAURoC (ORCPT
+        id S1351197AbiAURoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 12:44:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351827AbiAURn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 12:44:02 -0500
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20LAHDBc029276;
-        Fri, 21 Jan 2022 09:43:49 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=pfpt0220;
- bh=Hnkix26dB7dgPESASXxF1i0pv7jnm1c9dtXBbWPYVcE=;
- b=KLHovAyNE6av5OXWA6fal0yS0jBi4j+doUeXaSkgpUzFq6rPxyK34zRqIs+GTMxHMkkj
- R59gNK0DwQaRN5rZNSSzuic2jh3ZuEWmImwiuofTUHZj/W+ugxSMTFS4/EhkqbYR3Zby
- Dk5ekkjKIHpwwrUqkr/PzruEDYuXR1WJHefYqpgkY3hvcaMew2h3wrg+vuxdFvAR+N/L
- r7W+xC2PMHKl3wi3qAUntgTKMA3iGBEWq4ZiVm9QLufjpVEX5Q6Zf1kaAfyaQzMcM4U8
- H2Un1A1STe9L7FvvdKBg1JpurjA53H+HT02gQJ5ek+FYyGIXXVqU7HmHQmw2ZrV3KVIL Xw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3dqj05jw27-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 21 Jan 2022 09:43:49 -0800
-Received: from m0045851.ppops.net (m0045851.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 20LHbGkC021851;
-        Fri, 21 Jan 2022 09:43:49 -0800
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3dqj05jw23-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 21 Jan 2022 09:43:48 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 21 Jan
- 2022 09:43:46 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Fri, 21 Jan 2022 09:43:46 -0800
-Received: from localhost.localdomain (unknown [10.28.34.29])
-        by maili.marvell.com (Postfix) with ESMTP id 8EEA33F70A1;
-        Fri, 21 Jan 2022 09:43:42 -0800 (PST)
-From:   Shijith Thotton <sthotton@marvell.com>
-To:     Arnaud Ebalard <arno@natisbad.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Boris Brezillon <bbrezillon@kernel.org>
-CC:     Shijith Thotton <sthotton@marvell.com>,
-        <linux-crypto@vger.kernel.org>, <jerinj@marvell.com>,
-        <sgoutham@marvell.com>, Srujana Challa <schalla@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        chiminghao <chi.minghao@zte.com.cn>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>,
-        "Suheil Chandran" <schandran@marvell.com>,
-        Lukasz Bartosik <lbartosik@marvell.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] crypto: octeontx2: fix NULL pointer dereference
-Date:   Fri, 21 Jan 2022 23:13:23 +0530
-Message-ID: <3ef09bf0c4adf7bc33f01f60cb8ce96e8f77b58c.1642786900.git.sthotton@marvell.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <3ff70ee925aad3afa1adc4ad1f4a7a494929d400.1642773756.git.sthotton@marvell.com>
-References: <3ff70ee925aad3afa1adc4ad1f4a7a494929d400.1642773756.git.sthotton@marvell.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: Va0f9547P-r80JbcPiW8guMOVHxl2ZDU
-X-Proofpoint-ORIG-GUID: cbe3lamZNG3loXYPqGV06Tp3x0cDp6Yr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-21_09,2022-01-21_01,2021-12-02_01
+        Fri, 21 Jan 2022 12:43:57 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30783C061748
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 09:43:57 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id l16so9880915pjl.4
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 09:43:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=5yBj3WKsDqrKvhosut7Au96eMd8ifdmMwiAx6WznJJg=;
+        b=MSfbGULULNWFoZz9zq8jbfTsWmcNlHiBq5Bc91hYYPr/DnYNj3TaEvIeRKo36wbzGO
+         O74mJZMpnhLyohm66AKQF6IPcIsTtZFHCmkmtV7nqp7kpWbtZRHBOalXltHKn4MhLB6y
+         TfWODrdzwd5VVKBlUBB4RkQ8XjD/3OUqnQr6cIdGgOEPyk7O9CTG/x3j77ZxlqIDdNxH
+         WNgjEVbbFztybma6V3PFrTC/h+jKqzPfFQCgkPkgIeYC8yTdVoo+kT9DrggXwESdKGC6
+         qrWg0c5RURFDcDqzj3YW1r/mlNEFF3fSRIWahbI6fnVWLK66Mrc84YCeQw4Yw9pWxTZz
+         6F9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=5yBj3WKsDqrKvhosut7Au96eMd8ifdmMwiAx6WznJJg=;
+        b=rZOnX5y2/pwbKh1du0FiLUvIxfP99GentTexuhcdmVt9lzumkpp5HiptoMNv5YpEFY
+         2xQEGYX0ISZwcO6eOoQjrogVmDOFlbSGxXzqWx9To5LgCHkmzhsAc5ubc++dr7Y9SsZ+
+         nZdFp7wduxc2aAcb3uJ/buvHspFZrWRL9CVurABWbFlHpT+o2bzfsSX0Gh6c3utaQeIM
+         qtIZgTN9lZcVWvjpWCkNA6bAGudsqQb+caJsHmYQ9H3dzRoG2j192dKLNextokIgQU8Y
+         K4QPU3DQemesEOK18Azz+0SEJe5k8JhFVzlMoEcJUDq8Il7Z57Jui00Bp4c/9FfjzAeM
+         B68A==
+X-Gm-Message-State: AOAM531MtVyVVLSS822erTRly3ZfNdFOordnh+sfSavbWvIgDMFStnUC
+        v239GQBYA7USTDzR6bgUxdk=
+X-Google-Smtp-Source: ABdhPJyBGtAYRb3J3bCVGT7+zDw56OdBPKGmybQTfiuUh57u9/gsTdmlL70vhudKKUFWdh+Sze8Qhg==
+X-Received: by 2002:a17:902:ea0b:b0:14a:f5ba:1e5e with SMTP id s11-20020a170902ea0b00b0014af5ba1e5emr4823317plg.125.1642787036351;
+        Fri, 21 Jan 2022 09:43:56 -0800 (PST)
+Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
+        by smtp.gmail.com with ESMTPSA id y21sm7652058pfi.78.2022.01.21.09.43.55
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 21 Jan 2022 09:43:55 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
+Subject: Re: [PATCH] mm: reuse the unshared swapcache page in do_wp_page
+From:   Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <03b0ed0c-51af-1e68-350c-19a3b38a6e48@redhat.com>
+Date:   Fri, 21 Jan 2022 09:43:54 -0800
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        "zhangliang (AG)" <zhangliang5@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        wangzhigang17@huawei.com,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <C28EAA21-0EBB-45BC-8B93-F2290BCA6CF5@gmail.com>
+References: <a93988da-80fb-dd32-4717-a6a0bae9e4ee@huawei.com>
+ <dc415c4a-63aa-19b0-0fbc-795989970f6d@redhat.com>
+ <fb02087a-b102-c91e-ab65-fb02cc8ee0a2@huawei.com>
+ <9cd7eee2-91fd-ddb8-e47d-e8585e5baa05@redhat.com>
+ <b6df4f7f-c080-ad6c-d1ad-098115f016f3@huawei.com>
+ <747ff31c-6c9e-df6c-f14d-c43aa1c77b4a@redhat.com>
+ <C8734D0B-B855-4323-A7DF-2D96245951B2@gmail.com>
+ <8931808d-db61-0f06-ceb3-f48a83b1f74c@redhat.com>
+ <6225EAFF-B323-4DC5-AC4C-885B29ED7261@gmail.com>
+ <9071d5a8-ed2d-5cf5-5526-43fe7dd377ec@redhat.com>
+ <YenA7Xzd2G2OYvqz@casper.infradead.org>
+ <da2846a1-f950-d330-7ada-ad3c9abfde74@redhat.com>
+ <42a9b72d-093e-c35c-f4b5-b321a666e67d@redhat.com>
+ <288FB900-A688-4EDB-95C6-E63B6E0A15D1@gmail.com>
+ <7a18f74f-9dc2-f23d-4f1c-c7a9217f8317@redhat.com>
+ <03b0ed0c-51af-1e68-350c-19a3b38a6e48@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+X-Mailer: Apple Mail (2.3693.40.0.1.81)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CONFIG_DM_CRYPT is checked before registering ciphers, but not before
-unregister. This could lead to a NULL pointer dereference during driver
-release (in unregister) if CONFIG_DM_CRYPT is enabled.
 
-...
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
-...
-Call trace:
- crypto_unregister_alg+0x68/0xfc
- crypto_unregister_skciphers+0x44/0x60
- otx2_cpt_crypto_exit+0x100/0x1a0
- otx2_cptvf_remove+0xf8/0x200
- pci_device_remove+0x3c/0xd4
- __device_release_driver+0x188/0x234
- device_release_driver+0x2c/0x4c
-...
 
-Added a CONFIG_DM_CRYPT check, similar to register, in unregister to
-avoid this.
+> On Jan 21, 2022, at 1:01 AM, David Hildenbrand <david@redhat.com> =
+wrote:
+>=20
+>>>=20
+>>> I did hack something similar and it solved the problem, but I felt =
+it is
+>>> a hack. If the thread is scheduled on another core, or if the write =
+fault
+>>> is triggered by another thread it wouldn=E2=80=99t work.
+>>=20
+>> Yes, it will not match easily. One question would be how often it =
+would
+>> help in practice and if it would be worth the price.
+>>=20
+>=20
+>=20
+> I did some more testing and I have to admit that your reproducer is
+> really good at finding corner cases.
+>=20
+> Assume we try to handle LRU as discussed ... what I get is a delta
+> during the test: ./forceswap 2 100000 1
+>=20
+>=20
+> anon_wp_reuse 920
+> -> we were able to reuse
+> anon_wp_copy_count 0
+> -> we failed the final page_count() =3D=3D 1 check
+> anon_wp_copy_count_early 634
+> -> we failed the early page_count() check considering swapcache and =
+lru
+> anon_wp_copy_lock 1
+> -> we failed trylock
+> anon_wp_copy_lru 19
+> -> we failed to clear the lru cache reference
+> anon_wp_copy_writeback 99974
+> -> we failed to clear the swapcache reference due to concurrent
+>   writeback
+> anon_wp_copy_swapcache 0
+> -> we failed to clear the swapcache reference for other reasons
+>=20
+> So, yeah, we mostly always hit writeback in forceswap.c.
+> reuse_swap_page() would have been able to reuse the page if the swap
+> backend would have supported concurrent writes during writeback (IIUC,
+> zswap doesn't).
+>=20
+> But I think triggering that case that often really is an oddity about
+> the test case.
 
-Fixes: 6f03f0e8b6c8 ("crypto: octeontx2 - register with linux crypto framework")
+I am glad you find it useful (not my greatest piece of work).
 
-Signed-off-by: Shijith Thotton <sthotton@marvell.com>
----
-v2:
-- Added fixes line to commit message.
+IIRC, I encountered the scenario you describe. It happens when you use
+a device driver that uses async operations (most of them). If you use
+pmem, it does not happen.
 
- drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
-index 2748a3327e39..620fa9b23e78 100644
---- a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
-+++ b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
-@@ -1650,7 +1650,7 @@ static inline int cpt_register_algs(void)
- 
- 	err = crypto_register_aeads(otx2_cpt_aeads,
- 				    ARRAY_SIZE(otx2_cpt_aeads));
--	if (err) {
-+	if (err && !IS_ENABLED(CONFIG_DM_CRYPT)) {
- 		crypto_unregister_skciphers(otx2_cpt_skciphers,
- 					    ARRAY_SIZE(otx2_cpt_skciphers));
- 		return err;
-@@ -1661,8 +1661,9 @@ static inline int cpt_register_algs(void)
- 
- static inline void cpt_unregister_algs(void)
- {
--	crypto_unregister_skciphers(otx2_cpt_skciphers,
--				    ARRAY_SIZE(otx2_cpt_skciphers));
-+	if (!IS_ENABLED(CONFIG_DM_CRYPT))
-+		crypto_unregister_skciphers(otx2_cpt_skciphers,
-+					    ARRAY_SIZE(otx2_cpt_skciphers));
- 	crypto_unregister_aeads(otx2_cpt_aeads, ARRAY_SIZE(otx2_cpt_aeads));
- }
- 
--- 
-2.25.1
+This behavior is not intentional, anyhow.
 

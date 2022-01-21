@@ -2,250 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3360A495F0C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 13:31:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EACE3495F0F
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 13:31:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380379AbiAUMbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 07:31:25 -0500
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:61614 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350448AbiAUMbW (ORCPT
+        id S1380388AbiAUMbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 07:31:49 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:41700
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1350502AbiAUMbr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 07:31:22 -0500
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220121123121euoutp0154f669487e13b26dc040cde6572b8e64~MSQxYre8r1009410094euoutp01Y
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 12:31:21 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220121123121euoutp0154f669487e13b26dc040cde6572b8e64~MSQxYre8r1009410094euoutp01Y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1642768281;
-        bh=RrzB8h/bMnzcV+j+1Jb+7Ew0T99xNnjQpPe8goU3pU0=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=r+VH1Tq8fsFunC7dJNx/uB0Iy75wVmmWUEVWCzYZbVJ2bkrCJyP7SxrCw0BzAZKwV
-         0GfRHWH1RmU1T79FDIcF/T0zZvtLu6jnAG24LP89yx4BlMD6kRbkp1tfPizmIqHe9v
-         8qjtnOBpD1XozSsAL7ZN3BLdAQsMQ3dJD6IfHRjM=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220121123120eucas1p294c92264f37be911af0be1cb16846432~MSQw7SOKC2476624766eucas1p2m;
-        Fri, 21 Jan 2022 12:31:20 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 14.E8.10009.897AAE16; Fri, 21
-        Jan 2022 12:31:20 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220121123120eucas1p1b3dd2371deca8485b9d9371097fdb14f~MSQwXdv4K1413914139eucas1p1W;
-        Fri, 21 Jan 2022 12:31:20 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220121123120eusmtrp24fb48e291e91fbc00debcfbe610aa982~MSQwWYdhl0056800568eusmtrp2Y;
-        Fri, 21 Jan 2022 12:31:20 +0000 (GMT)
-X-AuditID: cbfec7f2-e95ff70000002719-5d-61eaa7987050
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 2E.18.09522.897AAE16; Fri, 21
-        Jan 2022 12:31:20 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220121123119eusmtip13e3280ba3efd5ab0ad34cf54b204d2a2~MSQvLEE7k0395503955eusmtip1X;
-        Fri, 21 Jan 2022 12:31:19 +0000 (GMT)
-Message-ID: <54b76143-dff3-8a19-7ab9-57fb80d59743@samsung.com>
-Date:   Fri, 21 Jan 2022 13:31:17 +0100
+        Fri, 21 Jan 2022 07:31:47 -0500
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com [209.85.161.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 019153F1C9
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 12:31:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642768300;
+        bh=c9fVUVKjIOT3MSffUOaIGaq4Du3Knv0i592KDvMBOMI=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=QH5v1rF1NMiBOzjXpeohZJIga9BuA7jJQiwKmidxrPBqr5Y4QvXS63DJk4cH7mQ/W
+         3p6IZ6K8ReoTDQ9qK/IBopCIo5Vn+f8oPcjC0ksuYH2XKbL5OhVTxE+SYAqsxl7NUW
+         TeaZDY/dBvHWgu4gs43CYThxchq3kaj0gYc6jCZCiM5p3NquDTsL6Wxa+rpw66n8rp
+         Lh/PB8SsxZvpT6O4Z3uhe5l13F2RmZ+c5OJwwu01wSSdXESmLxl8aeNpCglQzXtXao
+         4rJI5QWxx0k5o5W0vw1H6leQdM4cRCrPUna+U2oc8pj6oYGzRdCVgq6i2SKGpAyZLg
+         /85/4Zu1wDCnQ==
+Received: by mail-oo1-f69.google.com with SMTP id t12-20020a4ab58c000000b002dcbee240efso2410547ooo.10
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 04:31:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c9fVUVKjIOT3MSffUOaIGaq4Du3Knv0i592KDvMBOMI=;
+        b=ybom0LbFDciO/WofbwFHCZmIBityqSxVJm6q6L2wxvXYxgn6Ysx/PjoH1Nd3RtmvIu
+         2ITCC0sCHtMztU9gTzcSh3HekzeFiX1XnOEit898xA+0jxeVuky5xmrpKvLkEA4JXVCn
+         YLDhTKTF+44bY243zIGzVbKIu2o8YWw9kFkhT7vQawJVt3m9Rxv8uKyFrB5yXxPjecJF
+         i1cKLYte6E6ewegvXQChSW1hUgiIBF46zjRIwX/Zkb5vjDP/eJI7hPdK6j3HTlTYIxlD
+         ClvTAezFpk5t4ZfnP5RqejdLXT6CuMQVVKCpfUv9p6DD0pNQG6GX2/ig1VyeDbwMAgdN
+         AyWw==
+X-Gm-Message-State: AOAM5325UCsSw3sKeBSNZr7/g6gsU4jaL4U0hnSkAA8eM46jckeYkxzJ
+        Zs8LliGNzFvTAKGRPEI2OUG8lXDGwtj7wbRxAeqgY3MqLbBz15J57Ch7pbObU9zNJbcRrr7c3H1
+        J6qAXsX+AvArjw721AsmqY5/NNlnHtO2Mydr7BI0ri78VpT+MgbXsioE2Pw==
+X-Received: by 2002:a4a:9d1c:: with SMTP id w28mr2418643ooj.24.1642768298887;
+        Fri, 21 Jan 2022 04:31:38 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzW17D8VH503b1QySQdOAtIlH3veXyQ7VSCK0fq7QOKhO4G6m/7Y1i1PSfEwTOTLY0EyKg6GOUwzBk2BdkEEH0=
+X-Received: by 2002:a4a:9d1c:: with SMTP id w28mr2418630ooj.24.1642768298604;
+ Fri, 21 Jan 2022 04:31:38 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.5.0
-Subject: Re: [RFC 2/3] iommu/samsung: Introduce Exynos sysmmu-v8 driver
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Cho KyongHo <pullip.cho@samsung.com>,
-        Hyesoo Yu <hyesoo.yu@samsung.com>,
-        Janghyuck Kim <janghyuck.kim@samsung.com>,
-        Jinkyu Yang <jinkyu1.yang@samsung.com>,
-        Alex <acnwigwe@google.com>, Carlos Llamas <cmllamas@google.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        Erick Reyes <erickreyes@google.com>,
-        "J . Avila" <elavila@google.com>, Jonglin Lee <jonglin@google.com>,
-        Mark Salyzyn <salyzyn@google.com>,
-        Thierry Strudel <tstrudel@google.com>,
-        Will McVicker <willmcvicker@google.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-samsung-soc@vger.kernel.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <CAPLW+4kKR+7hM-eZc8-v6Dzeaj+TPBRmCLDSVNEnfx2WmN2TJA@mail.gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUxTVxjGd27bey81xduC6REWlnViNhNAki0epzG6MWkAs804t4gRL3gH
-        VSispdvcQgSlDdTysZkIVESmY7hCEUqDo86PVoQMHFQaWtHCdHYy60qFYjbka16KG/897/O+
-        v/fj5JAcUQUeQcrk+YxCTmdLcD63o3t6IKa60Uuvf9QWg3ptCzjquzrORf4fdABNXRskUGWJ
-        GkOerrMEmvU6uWiu1M5D9Vc3ofZaJbIYrhNoxl3GQ6WnWgnU5vsHQ6YHTh5yWGpxVD1wBUPz
-        ZVaA1Je7CNRQ1IGjsfLn3p9mMeodCRCoSWMAqNj9FjJMLoCtEVKPtQ6TNtc1A6m+sAyX1ptU
-        UpOhFJe6nT/j0vbvj0hP3G4E0nKzAUgDpqgP+Hv4mw8w2bLPGUXclv38rKLACTyvN+bLsy6m
-        EBRGa0EICak34UlXJa4FfFJEnQdwSDezFEwBaNKXEMEgAOB5tYv3AqldOA6CiUYA7RMNS8gE
-        gN90zGNaQJICags0+UNZgEtFw6Jh9SIsoITwlxoPly1ZRaVDXfG7rB1GJcKRpgGM1RxKDO94
-        zizqcEoGx61PuGx7DqUhoH+ud7EPTsVDrU+LszqE+hAa5+28IPwKvOir5bAApDR8eL/Yjge3
-        ToA+47klHQa9PWYiqF+GC53sNBY4BuD9fiMRDHQAOo5Wg2DVJujuf4aza3OoN+AFS1zQ3gbL
-        b01xWBtSofC2TxhcIhR+21G1ZAtgiUYUrF4L9T0t/4212gc5lUCiX/Ys+mX365edo/9/bj3g
-        GoCYUSlzMhllvJz5IlZJ5yhV8szYjNwcE3j+Z/vmeyZ/Aqe9E7E2gJHABiDJkYQL8nK9tEhw
-        gD78FaPITVOoshmlDUSSXIlYkCFrpUVUJp3PHGKYPEbxIouRIRGFWOouRdjHbdvXRGatH9yQ
-        /H7mo/C+tVGH86cfFhx7Tyd2rRpauUIzi1/6vUUkWaHYtbeVf+fBR981KCosuZKn/tHuHXt7
-        HBuOYq9pT2/twnYOWYRTjoLV5pPveKOGcdvqyRvnRtH1m2ntD/M4wiL73yoqJfWeP+NXc2B/
-        ncOY8FIy71Dq193ptpRPxpK1t5paDlbMNCZ6H8tPFex7u37z8dHdNQ3uy9vvuWqS8pPIFEVV
-        emCNDuWvG6DjOp9G1iVcTN7oEbwaabIm7hs+6FQ3v975+O5wAXVltyV7LunTI9v8N4jPqhIu
-        jPx1Tebs2vPHyvJnQuOT/ktjgo1p03ejf5vV3xz/UcJVZtHx6zgKJf0vWFLSJSIEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrIKsWRmVeSWpSXmKPExsVy+t/xu7ozlr9KNDg7k93i1KH/bBan979j
-        sXi/rIfR4suBS+wWEzpamSyeHFnEbvHn1TUWi7+dF1gtFuy3ttg8p9hi16rD7Ba/7/SyWnTO
-        3sBusfHtDyaLTY+vsVpc3jWHzWLG+X1MFv96DzJatO49wm6xtHEbm8XzPqDYiy3iFqfufma3
-        WN22itGi5Y6pxapP/xkdpDyeHJzH5LFm3hpGj1kNvWweCzaVemxa1cnmcefaHjaPzUvqPSbf
-        WM7o0bdlFaPH501yAVxRejZF+aUlqQoZ+cUltkrRhhZGeoaWFnpGJpZ6hsbmsVZGpkr6djYp
-        qTmZZalF+nYJehmNnyezFZzSrVh0PbWBsUG1i5GTQ0LARGLO/25GEFtIYCmjRPfrAoi4jMTJ
-        aQ2sELawxJ9rXWxdjFxANe8ZJR6dO8PcxcjBwStgJ7HpPR9IDYuAqkTjzVawel4BQYmTM5+w
-        gNiiAkkSDce62UBsYQF3iburzzOB2MwC4hK3nswHs0UEMiUm329hB5nPLNDBLtG4o4cdYtlR
-        Jomt1xeCTWITMJToetsFNolTIFBi7b8LrBCTzCS6tnYxQtjyEtvfzmGewCg0C8khs5AsnIWk
-        ZRaSlgWMLKsYRVJLi3PTc4sN9YoTc4tL89L1kvNzNzEC08q2Yz8372Cc9+qj3iFGJg7GQ4wS
-        HMxKIrwF+a8ShXhTEiurUovy44tKc1KLDzGaAkNjIrOUaHI+MLHllcQbmhmYGpqYWRqYWpoZ
-        K4nzehZ0JAoJpCeWpGanphakFsH0MXFwSjUwpSlda9iyXfiugHD1xrLuj2vuiQXIn5+X9cZA
-        7+Gilsdd04KPWD9ScH9/smH/2x3pb7eG1K46fnFSW6jgAY4j4X9ENWYvX8947B5bisrq/d03
-        fhYdWfl85cQXTwRNGNpcsu8Fqnl9LWrYziEkfGyeQ5Vh0c9/Mz7u3LxslZDakYbozxe2q+iz
-        fA3q2aV+Zoa5uXRkjtlVO7OatkrftRa5lceTdju/7DsusCp2qQLDshf+K0qyZG1b6v5lfdzQ
-        b/BDkpkjonezcLbc5bu/U05vK9fzaZCM5an4G37SKNcsMWDhFb0HR99urz9wZZbmmU99bnrG
-        uvKFDirKfoEytd++Nzt7T/4vNs8+X96xs05PiaU4I9FQi7moOBEAOYxUA7QDAAA=
-X-CMS-MailID: 20220121123120eucas1p1b3dd2371deca8485b9d9371097fdb14f
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220121110911eucas1p28d11e1b04773e8174b9d65f011dc1977
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220121110911eucas1p28d11e1b04773e8174b9d65f011dc1977
-References: <20220120201958.2649-1-semen.protsenko@linaro.org>
-        <20220120201958.2649-3-semen.protsenko@linaro.org>
-        <a111932a-6685-2a9d-abce-87af26b121a4@canonical.com>
-        <CGME20220121110911eucas1p28d11e1b04773e8174b9d65f011dc1977@eucas1p2.samsung.com>
-        <CAPLW+4kKR+7hM-eZc8-v6Dzeaj+TPBRmCLDSVNEnfx2WmN2TJA@mail.gmail.com>
+References: <20220105060643.822111-1-kai.heng.feng@canonical.com>
+ <20220105201226.GA218998@bhelgaas> <CAAd53p5V9gCCc6v9Wdo-bONYfASnhtyGHVPPb6vOneft2XewQQ@mail.gmail.com>
+ <YeqRGQoPKy389ct5@lahna>
+In-Reply-To: <YeqRGQoPKy389ct5@lahna>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Fri, 21 Jan 2022 20:31:27 +0800
+Message-ID: <CAAd53p4ej6FA0dM4ahngnGAccSLe=-bsUVkt-eGb2jZkms1UYA@mail.gmail.com>
+Subject: Re: [PATCH] PCI/portdrv: Skip enabling AER on external facing ports
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, bhelgaas@google.com,
+        koba.ko@canonical.com, Lukas Wunner <lukas@wunner.de>,
+        Stuart Hayes <stuart.w.hayes@gmail.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sam,
+Hi Mika,
 
-On 21.01.2022 12:08, Sam Protsenko wrote:
-> On Fri, 21 Jan 2022 at 10:40, Krzysztof Kozlowski
-> <krzysztof.kozlowski@canonical.com> wrote:
->> On 20/01/2022 21:19, Sam Protsenko wrote:
->>> Introduce new driver for modern Exynos ARMv8 SoCs, e.g. Exynos850. Also
->>> it's used for Google's GS101 SoC.
->>>
->>> This is squashed commit, contains next patches of different authors. See
->>> `iommu-exynos850-dev' branch for details: [1].
->>>
->>> Original authors (Samsung):
->>>
->>>   - Cho KyongHo <pullip.cho@samsung.com>
->>>   - Hyesoo Yu <hyesoo.yu@samsung.com>
->>>   - Janghyuck Kim <janghyuck.kim@samsung.com>
->>>   - Jinkyu Yang <jinkyu1.yang@samsung.com>
->>>
->>> Some improvements were made by Google engineers:
->>>
->>>   - Alex <acnwigwe@google.com>
->>>   - Carlos Llamas <cmllamas@google.com>
->>>   - Daniel Mentz <danielmentz@google.com>
->>>   - Erick Reyes <erickreyes@google.com>
->>>   - J. Avila <elavila@google.com>
->>>   - Jonglin Lee <jonglin@google.com>
->>>   - Mark Salyzyn <salyzyn@google.com>
->>>   - Thierry Strudel <tstrudel@google.com>
->>>   - Will McVicker <willmcvicker@google.com>
->>>
->>> [1] https://protect2.fireeye.com/v1/url?k=19bd3571-46260c3c-19bcbe3e-0cc47aa8f5ba-8a160a7fd38bb35a&q=1&e=eb3f71b3-8df2-46c6-b6d8-0a931ef99024&u=https%3A%2F%2Fgithub.com%2Fjoe-skb7%2Flinux%2Ftree%2Fiommu-exynos850-dev
->>>
->>> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
->>> ---
->>>   drivers/iommu/Kconfig               |   13 +
->>>   drivers/iommu/Makefile              |    3 +
->>>   drivers/iommu/samsung-iommu-fault.c |  617 +++++++++++
->>>   drivers/iommu/samsung-iommu-group.c |   50 +
->>>   drivers/iommu/samsung-iommu.c       | 1521 +++++++++++++++++++++++++++
->>>   drivers/iommu/samsung-iommu.h       |  216 ++++
->>>   6 files changed, 2420 insertions(+)
->>>   create mode 100644 drivers/iommu/samsung-iommu-fault.c
->>>   create mode 100644 drivers/iommu/samsung-iommu-group.c
->>>   create mode 100644 drivers/iommu/samsung-iommu.c
->>>   create mode 100644 drivers/iommu/samsung-iommu.h
->>>
->> Existing driver supports several different Exynos SysMMU IP block
->> versions. Several. Please explain why it cannot support one more version?
->>
->> Similarity of vendor driver with mainline is not an argument.
->>
->>> ...
->> You just copy-pasted vendor stuff, without actually going through it.
->>
->> It is very disappointing because instead of putting your own effort, you
->> expect community to do your job.
->>
->> What the hell is CONFIG_EXYNOS_CONTENT_PATH_PROTECTION?
->>
->> I'll stop reviewing. Please work on extending existing driver. If you
->> submitted something nice and clean, ready for upstream, instead of
->> vendor junk, you could get away with separate driver. But you did not.
->> It looks really bad.
->>
-> Krzysztof, that's not what I asked in my patch 0/3. I probably wasn't
-> really clear, sorry. Let me please try and describe that better, and
-> maybe provide some context.
+On Fri, Jan 21, 2022 at 6:55 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
 >
-> I'm just starting to work on that driver, it's basically downstream
-> version of it. Of course I'm going to rework it before sending the
-> actual patch series (that's why this series has RFC tag). I'd never
-> asked community to do my job for me and really review the downstream
-> driver! I just want to know from the starters some *very* basic and
-> high-level info, which could help me to rework the driver in correct
-> way. Like naming of files, compatible strings, should it be part of
-> existing driver or it's ok to have it as another platform_driver. In
-> other words, that kind of "review" shouldn't take more than 2 minutes
-> of your time. And it could spare us all unneeded extra review rounds
-> in future. Right now I don't need the code review per se (and I'm
-> really sorry you had to spend your time on that, knowing how busy
-> maintainers can be during the MW). I thought about omitting the code
-> at all, only asking the questions, but then I figured it's a good idea
-> to attach some code for the reference. Maybe it wasn't a good idea
-> after all.
+> Hi Kai-Heng,
 >
-> For the record, I'm well aware that we don't send downstream code
-> without making it upstreamable first, and I know it must be tested
-> well, etc. For example, you already saw me sending clk-exynos850
-> driver, which I re-implemented from scratch, and it has ~0.0% of
-> downstream code. So why would I change my policy about that all of the
-> sudden... Anyway, hope you understand now that there weren't any ill
-> intentions on my side, w.r.t. this RFC.
+> On Fri, Jan 07, 2022 at 12:09:57PM +0800, Kai-Heng Feng wrote:
+> > Only from root ports of thunderbolt devices.
+> >
+> > The error occurs as soon as the root port is runtime suspended to D3cold.
+> >
+> > Runtime suspend the AER service can resolve the issue. I wonder if
+> > it's the right thing to do here?
+>
+> I think you are right here. It seems that AER "service driver" is
+> completely missing PM hooks. Probably because it is more used in server
+> type of systems where power management is not priority.
 
+Here is my previous attempt to suspend AER:
+https://lore.kernel.org/linux-pci/20210127173101.446940-1-kai.heng.feng@canonical.com/
 
-Well, for starting point the existing exynos-iommu driver is really 
-enough. I've played a bit with newer Exyos SoCs some time ago. If I 
-remember right, if you limit the iommu functionality to the essential 
-things like mapping pages to IO-virtual space, the hardware differences 
-between SYSMMU v5 (already supported by the exynos-iommu driver) and v7 
-are just a matter of changing a one register during the initialization 
-and different bits the page fault reason decoding. You must of course 
-rely on the DMA-mapping framework and its implementation based on 
-mainline DMA-IOMMU helpers. All the code for custom iommu group(s) 
-handling or extended fault management are not needed for the initial 
-version.
+>
+> > D3cold should also mean the PCI link is gone, disabling AER seems to
+> > be a reasonable approach.
+>
+> Indeed - I think AER might trigger here because the link does "down" /
+> low power state if left enabled while the root port enters D3. Something
+> like below hack should disable it over low power transitions:
 
-The IOMMU driver on its own doesn't really make much sense, so you need 
-the other driver/device pair which will make use of it. You have 
-mentioned DPU, so you are trying to bring the display stack. Please 
-check the existing Exynos DRM driver(s). They nicely use DMA-mapping 
-framework and are really modular, so adding hw-specific sub-drivers for 
-Exynos850 shouldn't be that hard. Don't expect that the vendor's drivers 
-based on custom frameworks will work there though.
+Ubuntu kernel has been carrying the patch for quite some time:
+https://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/unstable/commit/?id=e82f15f1a26273b004054a81ef45937fb1b632e5
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+>
+> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> index 9fa1f97e5b27..64138cf82db8 100644
+> --- a/drivers/pci/pcie/aer.c
+> +++ b/drivers/pci/pcie/aer.c
+> @@ -1432,6 +1432,22 @@ static pci_ers_result_t aer_root_reset(struct pci_dev *dev)
+>         return rc ? PCI_ERS_RESULT_DISCONNECT : PCI_ERS_RESULT_RECOVERED;
+>  }
+>
+> +static int aer_suspend(struct pcie_device *dev)
+> +{
+> +       struct aer_rpc *rpc = get_service_data(dev);
+> +
+> +       aer_disable_rootport(rpc);
+> +       return 0;
+> +}
+> +
+> +static int aer_resume(struct pcie_device *dev)
+> +{
+> +       struct aer_rpc *rpc = get_service_data(dev);
+> +
+> +       aer_enable_rootport(rpc);
+> +       return 0;
+> +}
+> +
+>  static struct pcie_port_service_driver aerdriver = {
+>         .name           = "aer",
+>         .port_type      = PCIE_ANY_PORT,
+> @@ -1439,6 +1455,10 @@ static struct pcie_port_service_driver aerdriver = {
+>
+>         .probe          = aer_probe,
+>         .remove         = aer_remove,
+> +       .suspend        = aer_suspend,
+> +       .resume         = aer_resume,
+> +       .runtime_suspend = aer_suspend,
+> +       .runtime_resume = aer_resume,
+>  };
 
+This patch is exactly what I tested.
+
+Maybe only suspend/runtime_suspend AER when the target PM state is D3cold?
+PCIe spec doesn't say how to handle AER in Link L2/L3Ready/L3, but I
+think it's reasonable to suspend AER when power is loss.
+
+Let me come up with a patch with that idea.
+
+Kai-Heng
+
+>
+>  /**

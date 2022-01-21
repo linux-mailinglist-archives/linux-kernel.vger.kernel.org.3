@@ -2,113 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0D6496282
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 17:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD61496284
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 17:01:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381739AbiAUQAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 11:00:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37266 "EHLO
+        id S1381751AbiAUQA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 11:00:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381713AbiAUQAe (ORCPT
+        with ESMTP id S1381741AbiAUQAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 11:00:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E55C06173B;
-        Fri, 21 Jan 2022 08:00:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D045BB82067;
-        Fri, 21 Jan 2022 16:00:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7E36C340E1;
-        Fri, 21 Jan 2022 16:00:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642780831;
-        bh=KmwEb7jWchsW/K1+WMCn24NvCHz3jZARETYvGom7mFI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZGgwbcxrOqaY8HO1bxM0Uzp6CwF9qY1bb1lJbuWa9vbOTuPzEe9hs/eg/FRp0MkMJ
-         vzD+e/xpj4lzimqqcMt5vzGxcIP1lQtxHOM3Q9yGMK6Ir0obO35ShPYbAR28EsAnCQ
-         Y5sTrqFDhg9ER/3/inri0JZokc8F2ZKoygLvUCLM=
-Date:   Fri, 21 Jan 2022 17:00:23 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "linux-spdx@vger.kernel.org" <linux-spdx@vger.kernel.org>
-Subject: Re: [PATCH v3] powerpc: Add missing SPDX license identifiers
-Message-ID: <YerYl3xPnp7uelS4@kroah.com>
-References: <d2c52284244d6dcb3472d2041abe43b456d116df.1642762977.git.christophe.leroy@csgroup.eu>
- <YerEuE6XlslE3Goo@kroah.com>
- <24829c2f-6855-c8d6-7ae4-17c5517f890d@csgroup.eu>
- <YerO8MjbXlvbMEsZ@kroah.com>
- <7d551fc7-0b71-dd34-c489-43bf9e337efb@csgroup.eu>
+        Fri, 21 Jan 2022 11:00:55 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DC4C06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 08:00:55 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id o12so34693303lfu.12
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 08:00:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rm8vjPtGZ5zXWk7rSNfQe3QS2BCPnlKSAViEt2BOUO4=;
+        b=efZDQpznbQC/3ugWCSp26fz60QHSCKEWWx05lB/gr/BiloWxmX/dPOu3HTlhegFFI8
+         wQSymmM7qZyUywJT54JcNlxujP7i53KSNPKeubgHnWSphVHbc0GbRNv3ERfdgqfcTt62
+         h5uMo9B4TgU+0aVGgTiX3ozQez48ZfEH0E95pmVBNB1wHnd2YTxILmWa7EleYLD7hO9M
+         ZZbiUj/d5xDUNhXY57s+wdTDwjXMDFWZ9xli4OA/OsGp7yUbHrfq33xEdVGkrLl7NdJ+
+         JTXa9mwTwf3b9mvVEIWN6Wwr3sPpGoCcr8+zmcFkqZHuGDk7SebYiseRjMqPmcOYTa2e
+         S+fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rm8vjPtGZ5zXWk7rSNfQe3QS2BCPnlKSAViEt2BOUO4=;
+        b=0am0dymSq9CGpDMUNvrWZ7+nDIsrLOhdjPYzwfDtw51AfIpwQyl+z/wiZnp1LpdDwc
+         9IbYj9CGryMzpFjkD6xqB3mvckfcB20TXxJ/H69pMU3DqGUnTXRvm2esg38E7UB/uotm
+         7BZ5+l5PKEjGT9Tg7icPYb3oclhgONvT9NmiS8KfS1DfIOI+TiPRK41ADpDsNq4gBoFB
+         buiDbGTmql0O6YZIjXivgNULTANb9mtUHaB5ejgDJAfw2kRhDhdhRdOhsHrCImKAWnI3
+         2n3/nJz35vXd2BHt4ML8Y+iqrDeMc6BSq7tIDcpvQ9ZtU0sVZ+52lCuTodL1t4kGnq52
+         iyDA==
+X-Gm-Message-State: AOAM533i/t8QE2X2K+fN7ZmQ+dVCaamMd1HHSluKgOhWKNHaHnnri3Dn
+        JwHVyE5NYOywRJ4hNBpE/GeqWTcCjcqEOwYkX1igkg==
+X-Google-Smtp-Source: ABdhPJydfd+V8GdHjrRsGRvLPH+hUFe7W7ZFeGH/1OfOz3BQfM24vhqub61JsJkK0zeCjo7DQJZBAvqyh2Q4sBu4b/M=
+X-Received: by 2002:a05:6512:32c8:: with SMTP id f8mr4030942lfg.402.1642780853424;
+ Fri, 21 Jan 2022 08:00:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7d551fc7-0b71-dd34-c489-43bf9e337efb@csgroup.eu>
+References: <20220118110621.62462-1-nikunj@amd.com> <20220118110621.62462-7-nikunj@amd.com>
+ <CAMkAt6p1-82LTRNB3pkPRwYh=wGpreUN=jcUeBj_dZt8ss9w0Q@mail.gmail.com> <4e68ae1c-e0ed-2620-fbd1-0f0f7eb28c4f@amd.com>
+In-Reply-To: <4e68ae1c-e0ed-2620-fbd1-0f0f7eb28c4f@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Fri, 21 Jan 2022 09:00:41 -0700
+Message-ID: <CAMkAt6pnk8apG4VAdM3NRUokBH32pZx-VOrnhzq+7qJu+ubJ3A@mail.gmail.com>
+Subject: Re: [RFC PATCH 6/6] KVM: SVM: Pin SEV pages in MMU during sev_launch_update_data()
+To:     "Nikunj A. Dadhania" <nikunj@amd.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bharata B Rao <bharata@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 03:34:24PM +0000, Christophe Leroy wrote:
-> 
-> 
-> Le 21/01/2022 à 16:19, Greg Kroah-Hartman a écrit :
-> > On Fri, Jan 21, 2022 at 03:13:50PM +0000, Christophe Leroy wrote:
+On Thu, Jan 20, 2022 at 9:08 PM Nikunj A. Dadhania <nikunj@amd.com> wrote:
+>
+> On 1/20/2022 9:47 PM, Peter Gonda wrote:
+> > On Tue, Jan 18, 2022 at 4:07 AM Nikunj A Dadhania <nikunj@amd.com> wrote:
 > >>
+> >> From: Sean Christopherson <sean.j.christopherson@intel.com>
 > >>
-> >> Le 21/01/2022 à 15:35, Greg Kroah-Hartman a écrit :
-> 
-> ...
-> 
-> >>>> @@ -20,16 +16,6 @@
-> >>>>     * respects; for example, they cover modification of the file, and
-> >>>>     * distribution when not linked into another program.)
-> >>>>     *
-> >>>> - * This file is distributed in the hope that it will be useful, but
-> >>>> - * WITHOUT ANY WARRANTY; without even the implied warranty of
-> >>>> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> >>>> - * General Public License for more details.
-> >>>> - *
-> >>>> - * You should have received a copy of the GNU General Public License
-> >>>> - * along with this program; see the file COPYING.  If not, write to
-> >>>> - * the Free Software Foundation, 51 Franklin Street, Fifth Floor,
-> >>>> - * Boston, MA 02110-1301, USA.
-> >>>> - *
-> >>>>     *    As a special exception, if you link this library with files
-> >>>>     *    compiled with GCC to produce an executable, this does not cause
-> >>>>     *    the resulting executable to be covered by the GNU General Public License.
-> >>>
-> >>> Look at that "special exception", why are you ignoring it here?  You
-> >>> can't do that :(
+> >> Pin the memory for the data being passed to launch_update_data()
+> >> because it gets encrypted before the guest is first run and must
+> >> not be moved which would corrupt it.
 > >>
-> >> I'm not ignoring it, that's the reason why I left it.
-> > 
-> > You ignore that part of the license in the SPDX line, why?
-> > 
-> >> Isn't it the correct way to do ? How should it be done ?
-> > 
-> > You need to properly describe this in the SPDX line.  You did not do so
-> > here, which means that any tool just looking at the SPDX line would get
-> > this license wrong.
-> 
-> How do you describe such an exception on the SPDX line then ?
-> 
-> You add " WITH GCC-exception-2.0" to the SPDX line ? Am I understanding 
-> correctly ?
+> >> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> >> [ * Changed hva_to_gva() to take an extra argument and return gpa_t.
+> >>   * Updated sev_pin_memory_in_mmu() error handling.
+> >>   * As pinning/unpining pages is handled within MMU, removed
+> >>     {get,put}_user(). ]
+> >> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+> >> ---
+> >>  arch/x86/kvm/svm/sev.c | 122 ++++++++++++++++++++++++++++++++++++++++-
+> >>  1 file changed, 119 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> >> index 14aeccfc500b..1ae714e83a3c 100644
+> >> --- a/arch/x86/kvm/svm/sev.c
+> >> +++ b/arch/x86/kvm/svm/sev.c
+> >> @@ -22,6 +22,7 @@
+> >>  #include <asm/trapnr.h>
+> >>  #include <asm/fpu/xcr.h>
+> >>
+> >> +#include "mmu.h"
+> >>  #include "x86.h"
+> >>  #include "svm.h"
+> >>  #include "svm_ops.h"
+> >> @@ -490,6 +491,110 @@ static unsigned long get_num_contig_pages(unsigned long idx,
+> >>         return pages;
+> >>  }
+> >>
+> >> +#define SEV_PFERR_RO (PFERR_USER_MASK)
+> >> +#define SEV_PFERR_RW (PFERR_WRITE_MASK | PFERR_USER_MASK)
+> >> +
+> >> +static struct kvm_memory_slot *hva_to_memslot(struct kvm *kvm,
+> >> +                                             unsigned long hva)
+> >> +{
+> >> +       struct kvm_memslots *slots = kvm_memslots(kvm);
+> >> +       struct kvm_memory_slot *memslot;
+> >> +       int bkt;
+> >> +
+> >> +       kvm_for_each_memslot(memslot, bkt, slots) {
+> >> +               if (hva >= memslot->userspace_addr &&
+> >> +                   hva < memslot->userspace_addr +
+> >> +                   (memslot->npages << PAGE_SHIFT))
+> >> +                       return memslot;
+> >> +       }
+> >> +
+> >> +       return NULL;
+> >> +}
+> >> +
+> >> +static gpa_t hva_to_gpa(struct kvm *kvm, unsigned long hva, bool *ro)
+> >> +{
+> >> +       struct kvm_memory_slot *memslot;
+> >> +       gpa_t gpa_offset;
+> >> +
+> >> +       memslot = hva_to_memslot(kvm, hva);
+> >> +       if (!memslot)
+> >> +               return UNMAPPED_GVA;
+> >> +
+> >> +       *ro = !!(memslot->flags & KVM_MEM_READONLY);
+> >> +       gpa_offset = hva - memslot->userspace_addr;
+> >> +       return ((memslot->base_gfn << PAGE_SHIFT) + gpa_offset);
+> >> +}
+> >> +
+> >> +static struct page **sev_pin_memory_in_mmu(struct kvm *kvm, unsigned long addr,
+> >> +                                          unsigned long size,
+> >> +                                          unsigned long *npages)
+> >> +{
+> >> +       struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> >> +       struct kvm_vcpu *vcpu;
+> >> +       struct page **pages;
+> >> +       unsigned long i;
+> >> +       u32 error_code;
+> >> +       kvm_pfn_t pfn;
+> >> +       int idx, ret = 0;
+> >> +       gpa_t gpa;
+> >> +       bool ro;
+> >> +
+> >> +       pages = sev_alloc_pages(sev, addr, size, npages);
+> >> +       if (IS_ERR(pages))
+> >> +               return pages;
+> >> +
+> >> +       vcpu = kvm_get_vcpu(kvm, 0);
+> >> +       if (mutex_lock_killable(&vcpu->mutex)) {
+> >> +               kvfree(pages);
+> >> +               return ERR_PTR(-EINTR);
+> >> +       }
+> >> +
+> >> +       vcpu_load(vcpu);
+> >> +       idx = srcu_read_lock(&kvm->srcu);
+> >> +
+> >> +       kvm_mmu_load(vcpu);
+> >> +
+> >> +       for (i = 0; i < *npages; i++, addr += PAGE_SIZE) {
+> >> +               if (signal_pending(current)) {
+> >> +                       ret = -ERESTARTSYS;
+> >> +                       break;
+> >> +               }
+> >> +
+> >> +               if (need_resched())
+> >> +                       cond_resched();
+> >> +
+> >> +               gpa = hva_to_gpa(kvm, addr, &ro);
+> >> +               if (gpa == UNMAPPED_GVA) {
+> >> +                       ret = -EFAULT;
+> >> +                       break;
+> >> +               }
+> >> +
+> >> +               error_code = ro ? SEV_PFERR_RO : SEV_PFERR_RW;
+> >> +
+> >> +               /*
+> >> +                * Fault in the page and sev_pin_page() will handle the
+> >> +                * pinning
+> >> +                */
+> >> +               pfn = kvm_mmu_map_tdp_page(vcpu, gpa, error_code, PG_LEVEL_4K);
+> >> +               if (is_error_noslot_pfn(pfn)) {
+> >> +                       ret = -EFAULT;
+> >> +                       break;
+> >> +               }
+> >> +               pages[i] = pfn_to_page(pfn);
+> >> +       }
+> >> +
+> >> +       kvm_mmu_unload(vcpu);
+> >> +       srcu_read_unlock(&kvm->srcu, idx);
+> >> +       vcpu_put(vcpu);
+> >> +       mutex_unlock(&vcpu->mutex);
+> >> +
+> >> +       if (!ret)
+> >> +               return pages;
+> >> +
+> >> +       kvfree(pages);
+> >> +       return ERR_PTR(ret);
+> >> +}
+> >> +
+> >>  static int sev_launch_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
+> >>  {
+> >>         unsigned long vaddr, vaddr_end, next_vaddr, npages, pages, size, i;
+> >> @@ -510,15 +615,21 @@ static int sev_launch_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
+> >>         vaddr_end = vaddr + size;
+> >>
+> >>         /* Lock the user memory. */
+> >> -       inpages = sev_pin_memory(kvm, vaddr, size, &npages, 1);
+> >> +       if (atomic_read(&kvm->online_vcpus))
+> >> +               inpages = sev_pin_memory_in_mmu(kvm, vaddr, size, &npages);
+> >
+> > IIUC we can only use the sev_pin_memory_in_mmu() when there is an
+> > online vCPU because that means the MMU has been setup enough to use?
+> > Can we add a variable and a comment to help explain that?
+> >
+> > bool mmu_usable = atomic_read(&kvm->online_vcpus) > 0;
+>
+> Sure, will add comment and the variable.
+>
+> >
+> >> +       else
+> >> +               inpages = sev_pin_memory(kvm, vaddr, size, &npages, 1);
+> >
+> > So I am confused about this case. Since svm_register_enc_region() is
+> > now a NOOP how can a user ensure that memory remains pinned from
+> > sev_launch_update_data() to when the memory would be demand pinned?
+> >
+> > Before users could svm_register_enc_region() which pins the region,
+> > then sev_launch_update_data(), then the VM could run an the data from
+> > sev_launch_update_data() would have never moved. I don't think that
+> > same guarantee is held here?
+>
+> Yes, you are right. One way is to error out of this call if MMU is not setup.
+> Other one would require us to maintain all list of pinned memory via sev_pin_memory()
+> and unpin them in the destroy path.
 
-I do not know, please ask the SPDX people.
+Got it. So we'll probably still need regions_list to track those
+pinned regions and free them on destruction.
 
-There's a reason we didn't catch these files in our original sweep, and
-that is because they take some manual work.  Which is great to see you
-doing, but realize it isn't as simple as your first set of patches were
-:)
+Also similar changes are probably needed in sev_receive_update_data()?
 
-thanks,
-
-greg k-h
+>
+> >>         if (IS_ERR(inpages))
+> >>                 return PTR_ERR(inpages);
+> >>
+> >>         /*
+> >>          * Flush (on non-coherent CPUs) before LAUNCH_UPDATE encrypts pages in
+> >>          * place; the cache may contain the data that was written unencrypted.
+> >> +        * Flushing is automatically handled if the pages can be pinned in the
+> >> +        * MMU.
+> >>          */
+> >> -       sev_clflush_pages(inpages, npages);
+> >> +       if (!atomic_read(&kvm->online_vcpus))
+> >> +               sev_clflush_pages(inpages, npages);
+> >>
+> >>         data.reserved = 0;
+> >>         data.handle = sev->handle;
+> >> @@ -553,8 +664,13 @@ static int sev_launch_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
+> >>                 set_page_dirty_lock(inpages[i]);
+> >>                 mark_page_accessed(inpages[i]);
+> >>         }
+> >> +
+> >>         /* unlock the user pages */
+> >> -       sev_unpin_memory(kvm, inpages, npages);
+> >> +       if (atomic_read(&kvm->online_vcpus))
+> >> +               kvfree(inpages);
+>
+> >> +       else
+> >> +               sev_unpin_memory(kvm, inpages, npages);
+>
+> And not unpin here in this case.
+>
+> Regards
+> Nikunj

@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3138B496259
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:52:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86661496271
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381694AbiAUPwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 10:52:25 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:36824 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351413AbiAUPwY (ORCPT
+        id S1351444AbiAUP5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 10:57:09 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:55052 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350816AbiAUP5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 10:52:24 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 21 Jan 2022 10:57:08 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F102B619D6;
-        Fri, 21 Jan 2022 15:52:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB5D8C340E1;
-        Fri, 21 Jan 2022 15:52:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642780343;
-        bh=ykWY3CQ5loDnJaNSBREfd1LKDuSZSc1F4lekddV79E0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ph441/On/z28TNrAo7GzI+jfLsNFVdqXJ6EF3G9jvvN/t7W6ECz3/Mw8uQ4qoSbjd
-         lrZNSYeuWyBKd+JXCQllNNzzP6vJQdGT2GvE8o/9SXjXuZzTHYtJ5f6SF2413UUEEX
-         5YnLzg7MTYkc9iUYBNI/1osvOfNZUl/dJRJm5amQ=
-Date:   Fri, 21 Jan 2022 16:52:20 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Stable <stable@vger.kernel.org>
-Subject: Re: [PATCH 5.10 00/23] 5.10.93-rc1 review
-Message-ID: <YerWtNO2SOcg2zou@kroah.com>
-References: <20220118160451.233828401@linuxfoundation.org>
- <CADVatmPaK616c8FW_iGjzMU9Cd81BndvGj+Zb-1dA7a6eCPw3Q@mail.gmail.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D333B1F3CA;
+        Fri, 21 Jan 2022 15:57:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1642780626; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iC6HlJNGkj7g2fm9s+Lr372ZTXnke169KUBr6T9jAO8=;
+        b=ZNv1nepTtadpjK+r7+JhnENvQ6TcqTpdwfnTtrIiHTVFtTqy4jVVmzuSRhdWIUpSZSa8aA
+        +4PPzQVCBYGQ/Eate+TkuHoSkREYhXKdrjqDMHkAvQWcvteVPpx0svJ2Zj40GDAwoytb8k
+        MBO/d/1QMWW39ZUAiejRHNbYnRApeao=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AC1BD13A1E;
+        Fri, 21 Jan 2022 15:57:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bEdzKdLX6mHvEwAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Fri, 21 Jan 2022 15:57:06 +0000
+Date:   Fri, 21 Jan 2022 16:57:05 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Zhang Qiao <zhangqiao22@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        matthltc@us.ibm.com, bblum@google.com, menage@google.com,
+        akpm@linux-foundation.org, longman@redhat.com,
+        zhaogongyi@huawei.com
+Subject: Re: [PATCH] cgroup/cpuset: Fix a race between cpuset_attach() and
+ cpu hotplug
+Message-ID: <20220121155705.GA2394@blackbody.suse.cz>
+References: <20220121101210.84926-1-zhangqiao22@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CADVatmPaK616c8FW_iGjzMU9Cd81BndvGj+Zb-1dA7a6eCPw3Q@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220121101210.84926-1-zhangqiao22@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 03:02:43PM +0000, Sudip Mukherjee wrote:
-> Hi Greg,
-> 
-> On Thu, Jan 20, 2022 at 3:05 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 5.10.93 release.
-> > There are 23 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Thu, 20 Jan 2022 16:04:42 +0000.
-> > Anything received after that time might be too late.
-> 
-> gmail says you have sent this mail on "Jan 20, 2022 at 3:05 PM" but
-> https://lore.kernel.org/stable/20220118160451.233828401@linuxfoundation.org/
-> says you have sent it on "18 Jan 2022 17:05:40". :(
+On Fri, Jan 21, 2022 at 06:12:10PM +0800, Zhang Qiao <zhangqiao22@huawei.com> wrote:
+> Fixes: be367d099270 ("cgroups: let ss->can_attach and ss->attach do whole threadgroups at a time")
 
-gmail does not like vger.kernel.org, sorry.
+What a deep stratigraphy (not sure if it's this one but anything else
+would likely come from eras ago too).
 
-> Is it possible to add my email on the Cc list for the stable review
-> mails please..
+> Reported-by: Zhao Gongyi <zhaogongyi@huawei.com>
+> Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
+> ---
+>  kernel/cgroup/cpuset.c | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Now added!
+Feel free to include
+Reviewed-by: Michal Koutný <mkoutny@suse.com>
 
-greg k-h

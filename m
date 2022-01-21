@@ -2,153 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E159496604
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 20:52:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CF14965F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 20:50:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232951AbiAUTwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 14:52:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
+        id S232392AbiAUTuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 14:50:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232783AbiAUTvv (ORCPT
+        with ESMTP id S231700AbiAUTun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 14:51:51 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17CDC061744
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 11:51:50 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: bbeckett)
-        with ESMTPSA id 1ABBB1F465B4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1642794709;
-        bh=mZPnCcNyP7YHjGx5er41lmSPG9xmDAql7AreGVobiw0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N3/0J4j/jzXLqfIAHw/jAA2amyjUAFWC9xfhwpgc1d+NiuCuTjc6phYrYk0dV3yU2
-         6r9HV59X17SqUV+gU+9arFcqILfaC1B3KhuoTZKQ68YwdfX0irfoiJPkZ27Ty72dcs
-         aJywOL73+G/lsQmxaWPN2TLzrgWKFD/H/Uw5QEGlOmos8TSS3jcOnz2fK1p8ELNizY
-         3WbqHtjgcY94z2g50n+Tgko4c/bB7uNiOLfTcfNKq+YBFpak8kajtyIQMIf0zmn8ih
-         ablFHT6TcyrDOQ73DeElFNixic8DyCbFgON8VWahBXESx3N4b1ZVxlyOrGjyifq3pQ
-         Wg2vEJlqItekA==
-From:   Robert Beckett <bob.beckett@collabora.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Matthew Auld <matthew.auld@intel.com>,
-        Ramalingam C <ramalingam.c@intel.com>,
-        Robert Beckett <bob.beckett@collabora.com>,
-        Jordan Justen <jordan.l.justen@intel.com>,
-        Simon Ser <contact@emersion.fr>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Kenneth Graunke <kenneth@whitecape.org>,
-        mesa-dev@lists.freedesktop.org, Tony Ye <tony.ye@intel.com>,
-        Slawomir Milczarek <slawomir.milczarek@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Fri, 21 Jan 2022 14:50:43 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72E8C06173B;
+        Fri, 21 Jan 2022 11:50:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=TyT88I4wWo0H5jlbMaKdshZBKvPf77PgLxaHtxYK8JA=; b=ZtB1cDSaqZJ/nrSg3lbUv2BiX+
+        6IoK9zkmlTprFALbS1fdyZKqArhidYaFX5UEh5Smp9/MPvEy6hPCXGJaRZd1OFBydSAaUi6ZnWSSo
+        37MvjMP+duhZHLjES6dZfMhKMiuzXGB4CGQrmwCsrMOujBDIWliYsOaOAkz2238r7n9+njA4MtPkI
+        sFcKg4LHZMm2JlSBrVePfYvIlIjcvpvPqvsgkC2BqFpDN/Sux6sUXYrDcYD+2STXdJo7966wt0KOg
+        Flz6COw+KT9JxwX9tfqI2NTL2s8cedoCGsCGvcQLN9mjajpn0FrAQU+d86/qlDoAsZnEB+gXG03f6
+        FHYUnERg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nAzvk-00Fs3E-25; Fri, 21 Jan 2022 19:50:40 +0000
+Date:   Fri, 21 Jan 2022 19:50:40 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 5/5] drm/i915/uapi: document behaviour for DG2 64K support
-Date:   Fri, 21 Jan 2022 19:50:39 +0000
-Message-Id: <20220121195040.2145227-6-bob.beckett@collabora.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220121195040.2145227-1-bob.beckett@collabora.com>
-References: <20220121195040.2145227-1-bob.beckett@collabora.com>
+Subject: [GIT PULL] Three small folio patches
+Message-ID: <YesOkLfpJWxLxRWs@casper.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Auld <matthew.auld@intel.com>
 
-On discrete platforms like DG2, we need to support a minimum page size
-of 64K when dealing with device local-memory. This is quite tricky for
-various reasons, so try to document the new implicit uapi for this.
+The following changes since commit 455e73a07f6e288b0061dfcf4fcf54fa9fe06458:
 
-v3: fix typos and less emphasis
-v2: Fixed suggestions on formatting [Daniel]
+  Merge tag 'clk-for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux (2022-01-12 17:02:27 -0800)
 
-Signed-off-by: Matthew Auld <matthew.auld@intel.com>
-Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
-Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
-Acked-by: Jordan Justen <jordan.l.justen@intel.com>
-Reviewed-by: Ramalingam C <ramalingam.c@intel.com>
-cc: Simon Ser <contact@emersion.fr>
-cc: Pekka Paalanen <ppaalanen@gmail.com>
-Cc: Jordan Justen <jordan.l.justen@intel.com>
-Cc: Kenneth Graunke <kenneth@whitecape.org>
-Cc: mesa-dev@lists.freedesktop.org
-Cc: Tony Ye <tony.ye@intel.com>
-Cc: Slawomir Milczarek <slawomir.milczarek@intel.com>
----
- include/uapi/drm/i915_drm.h | 44 ++++++++++++++++++++++++++++++++-----
- 1 file changed, 39 insertions(+), 5 deletions(-)
+are available in the Git repository at:
 
-diff --git a/include/uapi/drm/i915_drm.h b/include/uapi/drm/i915_drm.h
-index 5e678917da70..77e5e74c32c1 100644
---- a/include/uapi/drm/i915_drm.h
-+++ b/include/uapi/drm/i915_drm.h
-@@ -1118,10 +1118,16 @@ struct drm_i915_gem_exec_object2 {
- 	/**
- 	 * When the EXEC_OBJECT_PINNED flag is specified this is populated by
- 	 * the user with the GTT offset at which this object will be pinned.
-+	 *
- 	 * When the I915_EXEC_NO_RELOC flag is specified this must contain the
- 	 * presumed_offset of the object.
-+	 *
- 	 * During execbuffer2 the kernel populates it with the value of the
- 	 * current GTT offset of the object, for future presumed_offset writes.
-+	 *
-+	 * See struct drm_i915_gem_create_ext for the rules when dealing with
-+	 * alignment restrictions with I915_MEMORY_CLASS_DEVICE, on devices with
-+	 * minimum page sizes, like DG2.
- 	 */
- 	__u64 offset;
- 
-@@ -3145,11 +3151,39 @@ struct drm_i915_gem_create_ext {
- 	 *
- 	 * The (page-aligned) allocated size for the object will be returned.
- 	 *
--	 * Note that for some devices we have might have further minimum
--	 * page-size restrictions(larger than 4K), like for device local-memory.
--	 * However in general the final size here should always reflect any
--	 * rounding up, if for example using the I915_GEM_CREATE_EXT_MEMORY_REGIONS
--	 * extension to place the object in device local-memory.
-+	 *
-+	 * DG2 64K min page size implications:
-+	 *
-+	 * On discrete platforms, starting from DG2, we have to contend with GTT
-+	 * page size restrictions when dealing with I915_MEMORY_CLASS_DEVICE
-+	 * objects.  Specifically the hardware only supports 64K or larger GTT
-+	 * page sizes for such memory. The kernel will already ensure that all
-+	 * I915_MEMORY_CLASS_DEVICE memory is allocated using 64K or larger page
-+	 * sizes underneath.
-+	 *
-+	 * Note that the returned size here will always reflect any required
-+	 * rounding up done by the kernel, i.e 4K will now become 64K on devices
-+	 * such as DG2.
-+	 *
-+	 * Special DG2 GTT address alignment requirement:
-+	 *
-+	 * The GTT alignment will also need to be at least 2M for such objects.
-+	 *
-+	 * Note that due to how the hardware implements 64K GTT page support, we
-+	 * have some further complications:
-+	 *
-+	 *   1) The entire PDE (which covers a 2MB virtual address range), must
-+	 *   contain only 64K PTEs, i.e mixing 4K and 64K PTEs in the same
-+	 *   PDE is forbidden by the hardware.
-+	 *
-+	 *   2) We still need to support 4K PTEs for I915_MEMORY_CLASS_SYSTEM
-+	 *   objects.
-+	 *
-+	 * To keep things simple for userland, we mandate that any GTT mappings
-+	 * must be aligned to and rounded up to 2MB. As this only wastes virtual
-+	 * address space and avoids userland having to copy any needlessly
-+	 * complicated PDE sharing scheme (coloring) and only affects DG2, this
-+	 * is deemed to be a good compromise.
- 	 */
- 	__u64 size;
- 	/**
--- 
-2.25.1
+  git://git.infradead.org/users/willy/pagecache.git tags/folio-5.17a
+
+for you to fetch changes up to 3abb28e275bfbe60136db37eae6679c3e1928cd5:
+
+  filemap: Use folio_put_refs() in filemap_free_folio() (2022-01-16 19:52:13 -0500)
+
+----------------------------------------------------------------
+Three small folio patches.
+
+One bug fix, one patch pulled forward from the patches destined for 5.18
+and then a patch to make use of that functionality.
+
+----------------------------------------------------------------
+Matthew Wilcox (Oracle) (3):
+      pagevec: Initialise folio_batch->percpu_pvec_drained
+      mm: Add folio_put_refs()
+      filemap: Use folio_put_refs() in filemap_free_folio()
+
+ include/linux/mm.h      | 20 ++++++++++++++++++++
+ include/linux/pagevec.h |  1 +
+ mm/filemap.c            | 10 ++++------
+ 3 files changed, 25 insertions(+), 6 deletions(-)
+
 

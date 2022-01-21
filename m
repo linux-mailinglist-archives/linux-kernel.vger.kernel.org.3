@@ -2,209 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A8549584D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 03:31:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 987F2495852
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 03:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378508AbiAUCbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 21:31:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43854 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237728AbiAUCbb (ORCPT
+        id S1378540AbiAUCdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 21:33:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53872 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378522AbiAUCd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 21:31:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642732289;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zep5LH+xnKlCIKqohhs7swngiDlWDpYJdghKGg4343c=;
-        b=PbIig3O4JI7sbVxWdP0mQ2nxTjSjnyX+oUkJj55F7wyi55McfcIGqafHRbSva0CF4m6i3M
-        egMjKtEcQA0E1KI6t90OSwMvQZLKkaMa4inpLZARAJOd60txqrWrlsylXZZE/xj5WzPicg
-        +eOnAMAthmZ7wM2B34Ws2RS14FpA9EM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-617-vUfIbKAFPCqDmGwhcJFjTA-1; Thu, 20 Jan 2022 21:31:26 -0500
-X-MC-Unique: vUfIbKAFPCqDmGwhcJFjTA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3F4791DDE9;
-        Fri, 21 Jan 2022 02:31:23 +0000 (UTC)
-Received: from localhost (ovpn-12-41.pek2.redhat.com [10.72.12.41])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5F7A7519B0;
-        Fri, 21 Jan 2022 02:31:21 +0000 (UTC)
-Date:   Fri, 21 Jan 2022 10:31:19 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, kernel@gpiccoli.net,
-        senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, feng.tang@intel.com,
-        kexec@lists.infradead.org, dyoung@redhat.com,
-        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
-        tony.luck@intel.com
-Subject: Re: [PATCH V3] panic: Move panic_print before kmsg dumpers
-Message-ID: <20220121023119.GB4579@MiWiFi-R3L-srv>
-References: <20220114183046.428796-1-gpiccoli@igalia.com>
- <20220119071318.GA4977@MiWiFi-R3L-srv>
- <YegytkfED+QI56Y8@alley>
- <20220120085115.GB18398@MiWiFi-R3L-srv>
- <63621138-2a41-26c2-524e-d889068f157a@igalia.com>
+        Thu, 20 Jan 2022 21:33:27 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F3EC061401;
+        Thu, 20 Jan 2022 18:33:27 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so2840759pjb.1;
+        Thu, 20 Jan 2022 18:33:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dBy/CC6BIEsV98v55hmxC9LzMoHsxKrj8y/GPrRxmV0=;
+        b=WI8ngvcqJEubuvFeWMLrQoXwb+m/EBu/K6HYWSWnLHgUJOrItFTo3Jg/+w2vpKndlL
+         NPwn4dKFwoYu/pSj4y0jJyuPTC/86KPv2TIaoV1CivCQDjroOgoPo8HBIuUhHWBVUEHW
+         MmYBK58pZuRckLnIlmo8cWBd3mj+kGeVp3B0D/HF/UcC70Cs3QXH+6WGKEuLuaq0LqCA
+         1SOC2KuJZTSpaydepv2nkvItj4MFGl9qmRflHygB4/jC9QmzmAskX37/Dh8AXKavjX+4
+         bqdtPVEfyeEGGwwejIylY4XN5HYgX28q27ux3ETWcDTp9mqQfon2m2X4cejwaQoknEf6
+         Dowg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dBy/CC6BIEsV98v55hmxC9LzMoHsxKrj8y/GPrRxmV0=;
+        b=0tq0yokkM/T8lznFJPduzunKy3YT1e1RKuZBjFleVhyJSM2NSiqQ7RKTX85WXn0ulr
+         LozxE2/PXMo4t8v9NhxOguasn+HxTcI7PlmkXxz9bmPsdPJ/9lPVjbpsQRRuabRmGDsp
+         GxPYYb1gHTJuPJPOQthbwipXgaycs++cXB3p90fcYnxkNRx9q+9fcdIWIZEQ4gnH/DXA
+         CTiPKF5DiqOI16DwTT0doV/bi/oIf5iTjmi5gvFbIL+oIesFg8fUbmTvzUA4ErZCns9d
+         KjNRpyofQ4LaugghT91KZLiMl2g6mibIKTgBfVCHVPuNbK7zYbBO3OEDMiI/XtJi5BMr
+         p6uA==
+X-Gm-Message-State: AOAM532ETFKiVMR176o9H3yXxLCJAO/qmKi4Sg12lYgVodP7nsH+efBQ
+        CB/UQlVSRAzWdCmFT7Vh4Xgh+tPXZ8hM2tAPdKY=
+X-Google-Smtp-Source: ABdhPJyTOkMz59zmne+7NWahAjQgcmUkxfdh+P7oX/SlrGbVAUICPavw6r1lY8EFqyqlgELrU+DSwFZyhPVad5pysN0=
+X-Received: by 2002:a17:90b:1d83:: with SMTP id pf3mr14348213pjb.228.1642732406871;
+ Thu, 20 Jan 2022 18:33:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <63621138-2a41-26c2-524e-d889068f157a@igalia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+References: <CAAH8bW_3mVqCxebkYeY0XKBfTAjPi1dtygCBEy4GpqvyeKAPqA@mail.gmail.com>
+ <CAHk-=whc9DAJN-TWPTnw=bSjHwXk1zDGeJ9A8eniaK7Jfax5aQ@mail.gmail.com>
+In-Reply-To: <CAHk-=whc9DAJN-TWPTnw=bSjHwXk1zDGeJ9A8eniaK7Jfax5aQ@mail.gmail.com>
+From:   Yury Norov <yury.norov@gmail.com>
+Date:   Thu, 20 Jan 2022 18:33:07 -0800
+Message-ID: <CAAH8bW-uVyzqQ-nk6f_RGoL3-kOF99_r2uoJvPWLx4Q9AZGOEw@mail.gmail.com>
+Subject: Re: [GIT PULL] Bitmap patches for 5.17-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Alexey Klimov <aklimov@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dennis Zhou <dennis@kernel.org>, Jiri Olsa <jolsa@redhat.com>,
+        linux-mm <linux-mm@kvack.org>, mm-commits@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/20/22 at 06:36pm, Guilherme G. Piccoli wrote:
-> Hi Baoquan, some comments inline below:
-> 
-> 
-> On 20/01/2022 05:51, Baoquan He wrote:
-> > [...]
-> >> From my POV, the function of panic notifiers is not well defined. They
-> >> do various things, for example:
-> >> [...]
-> >> The do more that just providing information. Some are risky. It is not
-> >> easy to disable a particular one.
-> > 
-> > Yes, agree. Not all of them just provide information. 
-> > 
-> > Now panic_notifier_filter Guilherme added can help to disable some of
-> > them.
-> 
-> So, just for completeness, worth to mention Petr had some interesting
-> suggestions in the other thread (about the filter) and we may end-up not
-> having this implemented - in other words, maybe a refactor of that
-> mechanism is going to be proposed.
-
-OK, saw that. We can continue discuss that there.
-
-> 
-> 
-> > [...] 
-> >>
-> >>   + Guilherme uses crash dump only to dump the kernel log. It might
-> >>     be more reliable than kmsg_dump. In this case, panic_print_sys_info()
-> >>     is the only way to get the extra information.
-> > 
-> > Hmm, I haven't made clear what Guilherme really wants in his recent
-> > post. In this patch he wants to get panic print info into pstore. He
-> > also want to dump the kernel log poked by panic_print in kdump kernel. 
-> > And it's very weird people try to collect kernel log via crash dump
-> > mechnism, that is obviously using a sledgehammer to crack a nut.
-> > Sometime, we should not add or change code to a too specific corner
-> > case.
-> 
-> OK, I'll try to be really clear, hopefully I can explain the use case in
-> better and simpler words. First of all, I wouldn't call it a corner case
-> - it's just a valid use case that, in my opinion, should be allowed. Why
-> not, right? Kernel shouldn't push policy on users, we should instead let
-> the users decide how to use the tools/options.
-
-Agree, sorry about my wrong expression.
-
-> 
-> So imagine you cannot collect a vmcore, due to the lack of storage
-> space. Yet, you want the most information as possible to investigate the
-> cause of a panic. The kernel flag "panic_print" is the perfect fit, we
-> can dump backtraces, task list, memory info...right on a panic event.
-> 
-> But then, how to save this panic log with lots of information after a
-> reboot? There are 2 ways in my understanding:
-> 
-> (a) pstore/kmsg_dump()
-> (b) kdump
-> 
-> The option (a) is easily the best - we don't need to reserve lots of
-> memory, then boot another kernel, etc. This patch (being hereby
-> discussed) aims to enable the "panic_print" output for this case!
-> But...there are cases in which option (a) cannot work. We need a backend
-> of persistent storage, either a block device or, more common, RAM memory
-> that is persistent across a reboot. What if it's not available?
-> 
-> Then, we fallback to option (b) - kind of a sledgehammer, in your words heh
-> It's not ideal, but might be a last resort for users wanting to collect
-> the most information they can without saving a full vmcore. And for
-> that, we need to be able to invoke "panic_print" function before the
-> __crash_kexec() call. Continue below...
-
-OK, pstore via kmsg_dump is first option, then fallback to kdump.
-This is what I suggested at below. This is what panic notifier has done
-at below. I think both of them are similar, thus should take the same
-way to handle.
-
- void panic()
- {
-         if (!_crash_kexec_post_notifiers && !panic_print) {
-                 __crash_kexec(NULL);
-                 smp_send_stop();
-         } else {
-                 crash_smp_send_stop();
-         }
- 
- 	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
- 	panic_print_sys_info(false);
- 	kmsg_dump(KMSG_DUMP_PANIC);
- 	if (_crash_kexec_post_notifiers || panic_print)
-                 __crash_kexec(NULL);
- 	...
- 	debug_locks_off();
-         console_flush_on_panic(CONSOLE_FLUSH_PENDING);
- 
-         panic_print_sys_info(true);
- 	......
- }
+On Thu, Jan 20, 2022 at 7:53 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Sat, Jan 15, 2022 at 7:10 PM Yury Norov <yury.norov@gmail.com> wrote:
 > >
-> 
-> So, your idea is good and it mostly works, except it *requires* users to
-> make use of "crash_kexec_post_notifiers" in order to use "panic_print"
-> in the case (b) above discussed.
+> > bitmap patches for 5.17-rc1
+> >
+> > Hi Linus, please pull these patches for bitmap. They were supposed to
+> > be pulled in 5.16 cycle, but due to merge glitch we decided to merge them
+> > in 5.17.
+>
+> So I'm looking at this pull request that changes quite a bit of random
+> files, and some rather core headers, and I see *no* actual explanation
+> for what this pull request does and why I should pull it.
+>
+> Only a "we didn't do it last cycle, so we should do it now". That's
+> not much of an argument.  If anything, it makes me go "there was
+> something wrong with it last time".
+>
+> I can look at the commits (and I did), but that's really not how this
+> is all supposed to work.
+>
+> When I _do_ look at the commits, one thing that stands out is how this
+> was all appears to be rebased after the merge window opened (just
+> minutes before you sent the pull request, I suspect).
+>
+> Which is *also* not how things are supposed to work.
+>
+> I also don't have your pgp key (not your fault - pgp key distribution
+> is broken because keyservers are broken) and I haven't pulled from you
+> before. That all just makes this pull request something where I think
+> it's all likely good, but there are enough problems that I haven't
+> actually pulled it.
+>
+> Put another way: the contents do not appear _wrong_ per se, but there
+> are many things in this pull request that keep me from actually doing
+> the pull..
+>
+>                    Linus
 
-I don't get. Why it has to *require* users to make use of
-"crash_kexec_post_notifiers" in order to use "panic_print"? 
-To enable panic notifiers and panic_print, we need add below parameter
-to kernel cmdline separately.
+My apologies - this is my first pull request ever.
 
-	crash_kexec_post_notifiers=1
-        panic_print=0x7f
+This series has been sent to you by Andrew in September 8, but it was
+broken and you dropped it:
 
-With above code, we have:
-1) None specified in cmdline, only kdump enabled.
-   Crash dump will work to get vmcore.
-2) crash_kexec_post_notifiers=1 , kdump enabled
-   panic_notifers are executed, then crash dump
-3) panic_print=0x7f, kdump enabled,
-   Panic_print get system info printed, then crash dump
-4) crash_kexec_post_notifiers=1 panic_print=0x7f, kdump enabled
-   panic_notifers are executed firstly, then panic_print, at last crash dump
+https://www.spinics.net/lists/linux-mm/msg269772.html
 
-Here I don't list the no kdump enabled case. Please help point out if I
-misunderstood anything.
-> 
-> Do you think it should be necessary?
-> How about if we allow users to just "panic_print" with or without the
-> "crash_kexec_post_notifiers", then we pursue Petr suggestion of
-> refactoring the panic notifiers? So, after this future refactor, we
-> might have a much clear code.
+This pull request includes 3 series' and has been sent to Andrew in this
+form at Aug 14:
+http://lkml.iu.edu/hypermail/linux/kernel/2108.1/07328.html
 
-I haven't read Petr's reply in another panic notifier filter thread. For
-panic notifier, it's only enforced to use on HyperV platform, excepto of
-that, users need to explicitly add "crash_kexec_post_notifiers=1" to enable
-it. And we got bug report on the HyperV issue. In our internal discussion,
-we strongly suggest HyperV dev to change the default enablement, instead
-leave it to user to decide.
+One patch from Andy Shevchenko is already upstreamed. The others
+are:
 
-> > Please, don't name 'after_kmsg_dumpers', that's too nerd, bro :-)
-> > static void panic_print_sys_info(bool console_flush)
-> 
-> Sure, I'll rename "after_kmsg_dumpers" to "console_flush" in next
-> iteration, although my nerd side won't be so happy ;-)
+bitmap: introduce for_each_set_bitrange()
+https://lore.kernel.org/lkml/YPG8SdsbQ+sxjk0w@yury-ThinkPad/T/
 
-No offence at all. My wife always call me nerd. Sorry about that.
+all: use find_next_*_bit() instead of find_first_*_bit() where possible
+(should read: use 'first' instead of 'next')
+https://lore.kernel.org/lkml/YMVSHCY9yEocmfVD@yury-ThinkPad/T/
 
+bitmap: unify for_each_bit() macros
+https://lore.kernel.org/lkml/20210719021755.883182-1-yury.norov@gmail.com/
+
+It spent almost 6 month in the linux-next. Would be great to finally merge it.
+My PGP public key is attached.
+
+Thanks,
+Yury
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+08ht3nV3xa60SBfdBQ==
+=BCNg
+-----END PGP PUBLIC KEY BLOCK-----

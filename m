@@ -2,96 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B20649588B
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 04:24:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C80D495891
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 04:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233238AbiAUDYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 22:24:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
+        id S233398AbiAUDhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 22:37:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbiAUDYT (ORCPT
+        with ESMTP id S233319AbiAUDhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 22:24:19 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC2AC061574;
-        Thu, 20 Jan 2022 19:24:18 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id e28so3226245pfj.5;
-        Thu, 20 Jan 2022 19:24:18 -0800 (PST)
+        Thu, 20 Jan 2022 22:37:20 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F761C061574;
+        Thu, 20 Jan 2022 19:37:20 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id m4so37224331edb.10;
+        Thu, 20 Jan 2022 19:37:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=i4QbHTZsLroI/F3v7ghAzppSaB2PYGF736LCpyMu98s=;
-        b=V71yUYiX4CJSgycnC0ue1TNs1tWa8PBmT2UCUblhD9gggziNxe4obJD4QyZVY7YLc5
-         XoEelx2xKEDn7kDN82F4rpcQzsAp+BkJkJuT9y/sBYVugp7suY1kwK4OfE5w51RdwBdB
-         2Us0/z70hEkQc5AaNU3FxpD1gTt0fZ2x1PZd3G3DgLdOHEUpsVwvzRWU8XvLI3zAvB67
-         tA2YFCUZuuSJulXadTg8iy0E4lxKM6e4X+OuqcDYzbOXGoInOeAG5BEDnnrn5PP1dx6w
-         yHi8p8ttY1qokesI0mQmrOO57qw2w6AO1jiMkQjq48Md2ZbH9MECTURM18z7vEzvGrKH
-         a9Gw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BHIQ0MW6h8rjtE5Oq3hSn4Eblt6AqDGPbgHQG8CkaDA=;
+        b=iB9tW1I440c8OG4kQaKQuf2iWv4Fj9BrT7H+enBXSn6kKaGKkutwCx5LWUTp8ynPNC
+         rTUfhvY9Kf4uh5TKXfzb4+YkZP5/PN0CtLnLRhT2PXY+A5cpkxA7z55Eu2bxEIrjPIPM
+         UFLMBrsvRRy98ZcIuKAAVNk2qC59FtOAH6KW1EvOvTC2QsF2GPtLEasZ+741JJOX8/na
+         h/a/e0SKBovLrEMtPcWSU6nfxkOyKPO0U1AWYqmhNr03oiSmuD9m/24KF389O6m9Hmdt
+         erjUeRZKmTmsCwU1w6dKNWyVnHZHxZIZw4yvKy76IAqC1BzMi60X1sVqtg1ydMF8/udh
+         Ay8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=i4QbHTZsLroI/F3v7ghAzppSaB2PYGF736LCpyMu98s=;
-        b=wAJtU79eclhyjnakGCtoWUjGJDfVknbTJWn7T9WcQU6iyZWl0t5T9jxOXTvDJ+fgBR
-         NSCvf+b1+a22ANTDZ9r3pgB+b51l0Q0smTDZ164oo7cOU7Mgdh1f7P6WRIIGr9mpiTDK
-         U4y6raq4erMaA54fBpHASKqKJxiTaImerAJ+9lSqRGjGuke2pZCDwLvJD5FAbooXYq/R
-         +AAbTKqqPqVTT8OLxJtvqsaAGJNEDzBY95kk8Bzj83TpYklI9aZ7ISKs/PSdak7rfDjH
-         hBRKslHOxUVALx+nFAHsjnPDJGZmibvL8AEt91wcEtaKajEWgxJq6yLrz3nCfv9tF+kp
-         bJDg==
-X-Gm-Message-State: AOAM531q7bq3tnr6nmzibdeOUrk+XJ3eEQLjVkRUZ1tLo1LA6cQYIZO0
-        VUk2W/fxPCkX8cTs4DuOeRM=
-X-Google-Smtp-Source: ABdhPJwl/1FoGgXedNhDH0Al5XfnUTqVSMh6l7iruP2FkK0EKaUpsKoHFuc6oCJZwTO1qBuq2pXhsw==
-X-Received: by 2002:a63:8ac4:: with SMTP id y187mr1495104pgd.261.1642735458292;
-        Thu, 20 Jan 2022 19:24:18 -0800 (PST)
-Received: from localhost.localdomain ([106.11.30.62])
-        by smtp.gmail.com with ESMTPSA id n22sm4553312pfu.193.2022.01.20.19.24.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 20 Jan 2022 19:24:18 -0800 (PST)
-From:   ycaibb <ycaibb@gmail.com>
-To:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ycaibb@gmail.com
-Subject: [PATCH] net: missing lock releases in ipmr_base.c
-Date:   Fri, 21 Jan 2022 11:22:10 +0800
-Message-Id: <20220121032210.5829-1-ycaibb@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BHIQ0MW6h8rjtE5Oq3hSn4Eblt6AqDGPbgHQG8CkaDA=;
+        b=3xmfoiskcTtqZHPZKy6GNybqlKeKNrWV3l6M239Px70CQFK7dsbWZUmzyN9Cr4R23Y
+         Tw3rwRW6y3iwGSb5qq/kZK9jJtTcYqyuPzfiaNjlaThsVcxFzGQpv/lIoqztDqOkvgPI
+         NgIu6hky5jhsv76mKUHvW+NJRnPuwpa/UN47W0HM3bKTnSpoCT3PArOKO2UNazoa9h9h
+         cv8WXXNttHS0Q2ShvB6oRVCvhhfzdDj7vWMpoSQMw77EWOoVjnTwuSTNi+pQV9aqU+2x
+         WvlviT9mqDb9jBsbGykCC51IJ0m3pMpy421afoGiDXTukfL4Zf60Ud0dD+rLmheivGhn
+         4+9w==
+X-Gm-Message-State: AOAM533hB3U1hmN2vSikOdWIVsHpOQhMhHXoBdzVY21dbxHgMsdk62hK
+        X/wHNm5HkXIZVnlZsvIpVXyqmvHnShynBG2qcWc=
+X-Google-Smtp-Source: ABdhPJxE6kdVV19XTr81YBYieso0BRxSR2fu3rz/08k9+FJ+iiOMrC54l9/BhOYu6V04Zy90eN2pDvY8YHpIn9gBahc=
+X-Received: by 2002:a17:906:2f08:: with SMTP id v8mr1706188eji.708.1642736238541;
+ Thu, 20 Jan 2022 19:37:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220120130605.55741-1-dzm91@hust.edu.cn> <b5cb1132-2f6b-e2da-78c7-1828b3617bc3@gmail.com>
+ <CAD-N9QWvfoo_HtQ+KT-7JNFumQMaq8YqMkHGR2t7pDKsDW0hkQ@mail.gmail.com>
+In-Reply-To: <CAD-N9QWvfoo_HtQ+KT-7JNFumQMaq8YqMkHGR2t7pDKsDW0hkQ@mail.gmail.com>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Fri, 21 Jan 2022 11:36:52 +0800
+Message-ID: <CAD-N9QUfiTNqs7uOH3C99oMNdqFXh+MKLQ94BkQou_T7-yU_mg@mail.gmail.com>
+Subject: Re: [PATCH] drivers: net: remove a dangling pointer in peak_usb_create_dev
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stephane Grosjean <s.grosjean@peak-system.com>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ryan Cai <ycaibb@gmail.com>
+On Fri, Jan 21, 2022 at 8:09 AM Dongliang Mu <mudongliangabcd@gmail.com> wrote:
+>
+> On Thu, Jan 20, 2022 at 10:27 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
+> >
+> > Hi Dongliang,
+> >
+> > On 1/20/22 16:05, Dongliang Mu wrote:
+> > > From: Dongliang Mu <mudongliangabcd@gmail.com>
+> > >
+> > > The error handling code of peak_usb_create_dev forgets to reset the
+> > > next_siblings of previous entry.
+> > >
+> > > Fix this by nullifying the (dev->prev_siblings)->next_siblings in the
+> > > error handling code.
+> > >
+> > > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> > > ---
+> > >   drivers/net/can/usb/peak_usb/pcan_usb_core.c | 3 +++
+> > >   1 file changed, 3 insertions(+)
+> > >
+> > > diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+> > > index b850ff8fe4bd..f858810221b6 100644
+> > > --- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+> > > +++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+> > > @@ -894,6 +894,9 @@ static int peak_usb_create_dev(const struct peak_usb_adapter *peak_usb_adapter,
+> > >               dev->adapter->dev_free(dev);
+> > >
+> > >   lbl_unregister_candev:
+> > > +     /* remove the dangling pointer in next_siblings */
+> > > +     if (dev->prev_siblings)
+> > > +             (dev->prev_siblings)->next_siblings = NULL;
+> > >       unregister_candev(netdev);
+> > >
+> > >   lbl_restore_intf_data:
+> >
+> >
+> > Is this pointer used somewhere? I see, that couple of
+> > struct peak_usb_adapter::dev_free() functions use it, but
+> > peak_usb_disconnect() sets dev->next_siblings to NULL before calling
+> > ->dev_free().
+> >
+> > Do you have a calltrace or oops log?
+>
+> Hi Pavel,
+>
+> I have no calltrace or log since this dangling pointer may not be
+> dereferenced in the following code. But I am not sure. So the commit
+> title of this patch is "remove a dangling pointer in
+> peak_usb_create_dev".
 
-In method mr_mfc_seq_idx, the lock it->lock and rcu_read_lock are not released when pos-- == 0 is true.
+BTW, as you mentioned, dev->next_siblings is used in struct
+peak_usb_adapter::dev_free() (i.e., pcan_usb_fd_free or
+pcan_usb_pro_free), how about the following path?
 
-Signed-off-by: Ryan Cai <ycaibb@gmail.com>
----
- net/ipv4/ipmr_base.c | 2 ++
- 1 file changed, 2 insertions(+)
+peak_usb_probe
+-> peak_usb_create_dev (goto adap_dev_free;)
+   -> dev->adapter->dev_free()
+      -> pcan_usb_fd_free or pcan_usb_pro_free (This function uses
+next_siblings as condition elements)
 
-diff --git a/net/ipv4/ipmr_base.c b/net/ipv4/ipmr_base.c
-index aa8738a91210..c4a247024c85 100644
---- a/net/ipv4/ipmr_base.c
-+++ b/net/ipv4/ipmr_base.c
-@@ -154,6 +154,7 @@ void *mr_mfc_seq_idx(struct net *net,
- 	it->cache = &mrt->mfc_cache_list;
- 	list_for_each_entry_rcu(mfc, &mrt->mfc_cache_list, list)
- 		if (pos-- == 0)
-+			rcu_read_unlock();
- 			return mfc;
- 	rcu_read_unlock();
- 
-@@ -161,6 +162,7 @@ void *mr_mfc_seq_idx(struct net *net,
- 	it->cache = &mrt->mfc_unres_queue;
- 	list_for_each_entry(mfc, it->cache, list)
- 		if (pos-- == 0)
-+			spin_unlock_bh(it->lock);
- 			return mfc;
- 	spin_unlock_bh(it->lock);
- 
--- 
-2.33.0
+static void pcan_usb_fd_free(struct peak_usb_device *dev)
+{
+        /* last device: can free shared objects now */
+        if (!dev->prev_siblings && !dev->next_siblings) {
+                struct pcan_usb_fd_device *pdev =
+                        container_of(dev, struct pcan_usb_fd_device, dev);
 
+                /* free commands buffer */
+                kfree(pdev->cmd_buffer_addr);
+
+                /* free usb interface object */
+                kfree(pdev->usb_if);
+        }
+}
+
+If next_siblings is not NULL, will it lead to the missing free of
+cmd_buffer_addr and usb_if?
+
+Please let me know if I made any mistakes.
+
+> >
+> >
+> >
+> >
+> > With regards,
+> > Pavel Skripkin

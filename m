@@ -2,112 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E29B7495892
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 04:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2B5495895
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 04:38:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233439AbiAUDhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 22:37:31 -0500
-Received: from foss.arm.com ([217.140.110.172]:35536 "EHLO foss.arm.com"
+        id S233498AbiAUDiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 22:38:15 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:46934 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233406AbiAUDha (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 22:37:30 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0FEC1101E;
-        Thu, 20 Jan 2022 19:37:30 -0800 (PST)
-Received: from [10.163.74.170] (unknown [10.163.74.170])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2BE793F766;
-        Thu, 20 Jan 2022 19:37:21 -0800 (PST)
-Subject: Re: [PATCH v2 1/3] mm/debug_vm_pgtable: remove pte entry from the
- page table
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, rientjes@google.com, pjt@google.com,
-        weixugc@google.com, gthelen@google.com, mingo@redhat.com,
-        will@kernel.org, rppt@kernel.org, dave.hansen@linux.intel.com,
-        hpa@zytor.com, aneesh.kumar@linux.ibm.com, jirislaby@kernel.org,
-        songmuchun@bytedance.com, qydwhotmail@gmail.com, hughd@google.com,
-        ziy@nvidia.com
-References: <20220120191250.2671557-1-pasha.tatashin@soleen.com>
- <20220120191250.2671557-2-pasha.tatashin@soleen.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <406f41ab-5ed9-7c2e-6bc8-afcae32164c5@arm.com>
-Date:   Fri, 21 Jan 2022 09:07:25 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S233406AbiAUDiN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 22:38:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=ZU/PEYNTT8vpKNnUJQm48p21UVkPUjERoKoMWQWxJ+w=; b=sWaRUf2bSEEqGI/6plwuI5bslV
+        TASohLEFLU8G5sFo51j41w3onjHOFJeDo+jI3yPMVjpLkE3BL3S0BgbOU7vmgI04sJGV4aJWINt+V
+        2hojqtjW8h2sI3gFIpQN3iRup+Dd7OhQq67fxWyxxaGWnsskeBBHat5zS0ugLfUQw8m4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nAkkb-0022ro-86; Fri, 21 Jan 2022 04:38:09 +0100
+Date:   Fri, 21 Jan 2022 04:38:09 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Richard Cochran <richardcochran@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Miroslav Lichvar <mlichvar@redhat.com>,
+        Russell King <linux@arm.linux.org.uk>
+Subject: Re: [PATCH RFC V1 net-next 3/4] net: Let the active time stamping
+ layer be selectable.
+Message-ID: <Yeoqof1onvrcWGNp@lunn.ch>
+References: <20220103232555.19791-4-richardcochran@gmail.com>
+ <20220120164832.xdebp5vykib6h6dp@skbuf>
 MIME-Version: 1.0
-In-Reply-To: <20220120191250.2671557-2-pasha.tatashin@soleen.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220120164832.xdebp5vykib6h6dp@skbuf>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> This is also the reason why DSA denies PTP timestamping on the master
+> interface, although there isn't any physical reason to do that. For the
+> same reason mentioned earlier, it would be nice to see hwtstamps for a
+> packet as it traverses DSA master -> DSA switch port -> PHY attached to
+> DSA switch.
 
+Don't forget there could be back to back PHYs between the master and
+the DSA switch port. In theory they could also be doing time stamping.
 
-On 1/21/22 12:42 AM, Pasha Tatashin wrote:
-> The pte entry that is used in pte_advanced_tests() is never removed from
-> the page table at the end of the test.
-> 
-> The issue is detected by page_table_check, to repro compile kernel with
-> the following configs:
-> 
-> CONFIG_DEBUG_VM_PGTABLE=y
-> CONFIG_PAGE_TABLE_CHECK=y
-> CONFIG_PAGE_TABLE_CHECK_ENFORCED=y
+Also consider the case of a switch port connected to a PHY which does
+media conversion to SFP. And the SFP has a copper module, so contains
+another PHY. So you could have the MAC and both PHYs doing time
+stamping?
 
-Assuming this is on latest mainline.
+So in the extreme case, you have 7 time stamps, 3 from MACs and 4 from
+PHYs!
 
-I could enable PAGE_TABLE_CHECK on arm64 after some hacks. It did not build
-on the platform otherwise. But enabling DEBUG_VM_PGTABLE afterwards did not
-create below mentioned problems. Is the problem x86 specific ?
+I doubt we want to support this, is there a valid use case for it?
 
-> 
-> During the boot the following BUG is printed:
-> 
-> [    7.483050][    T1] debug_vm_pgtable: [debug_vm_pgtable         ]:
-> Validating architecture page tabs
-> [    7.490930][    T1] ------------[ cut here ]------------
-> [    7.494926][    T1] kernel BUG at mm/page_table_check.c:194!
-
-Which BUG() is this ? mm/page_table_check.c:194 on latest mainline ..
-
-void __page_table_check_pud_clear(struct mm_struct *mm, unsigned long addr,
-                                  pud_t pud) <----
-
-> [    7.499172][    T1] invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> [    7.503610][    T1] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.16.0+
-> [    7.508600][    T1] Hardware name: QEMU Standard PC (i440FX + PIIX,
-> ...
-> 
-> The entry should be properly removed from the page table before the page
-> is released to the free list.
-> 
-> Fixes: a5c3b9ffb0f4 ("mm/debug_vm_pgtable: add tests validating advanced arch page table helpers")
-I am not sure whether this really fixes an existing problem.
-
-> 
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> Reviewed-by: Zi Yan <ziy@nvidia.com>
-> Tested-by: Zi Yan <ziy@nvidia.com>
-> ---
->  mm/debug_vm_pgtable.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
-> index a7ac97c76762..db2abd9e415b 100644
-> --- a/mm/debug_vm_pgtable.c
-> +++ b/mm/debug_vm_pgtable.c
-> @@ -171,6 +171,8 @@ static void __init pte_advanced_tests(struct pgtable_debug_args *args)
->  	ptep_test_and_clear_young(args->vma, args->vaddr, args->ptep);
->  	pte = ptep_get(args->ptep);
->  	WARN_ON(pte_young(pte));
-> +
-> +	ptep_get_and_clear_full(args->mm, args->vaddr, args->ptep, 1);
->  }
-
-Although I dont see any problem on arm64 after this change.
-
->  
->  static void __init pte_savedwrite_tests(struct pgtable_debug_args *args)
->
+  Andrew

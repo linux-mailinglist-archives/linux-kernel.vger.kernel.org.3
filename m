@@ -2,88 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0BC496735
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 22:17:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9410D49673F
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 22:19:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233171AbiAUVRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 16:17:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232971AbiAUVRe (ORCPT
+        id S229731AbiAUVTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 16:19:44 -0500
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:37863 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229459AbiAUVTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 16:17:34 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985FFC06173D
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 13:17:34 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id h5so1576767pfv.13
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 13:17:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1vJ+RHoi8eduKJloDZDcsYEBN9Qtvx5eq+iW8jR4mX4=;
-        b=fGEhx6uxC3cC4gc2OTa1ylRzj+5dolwd85ADHWWdJgFRByjrjwSHejf67rUvXeggWP
-         NC/AFikcIFiIaD/DkQDVnBLzwiQYhh8I5n5d0O6bLhozvsnM8XiL3aIuQLmQU8Spo1Xd
-         kpdntXmercL/4XIgqOOJPq7FqRy0ym8Oay9b8=
+        Fri, 21 Jan 2022 16:19:42 -0500
+Received: by mail-ot1-f52.google.com with SMTP id i7-20020a9d68c7000000b0059396529af8so13345350oto.4;
+        Fri, 21 Jan 2022 13:19:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=1vJ+RHoi8eduKJloDZDcsYEBN9Qtvx5eq+iW8jR4mX4=;
-        b=mFxH88B6O6O7G6J5/wSVSkly/REaNvAWZSX2X7FO2awb+9Ph6ocXInUd7HzKd6CKy8
-         vhRVx+Xi2Ro/gnSStGHlCZN8lUMVY8uc/JQrm2dLK0hXzWu1AUvlCNTAIY1GEZ2DAwf6
-         rCeBo/+rk9oiryoDg90nCPfTpOdzGEiI2DV8wxhZk4oP09jpqiNDoK0mIC3F3Gld0GMl
-         l7Uqdbk3pdTSbOrby6XC75xZFcCPtrC7KFhjonDBtvrTOjBLzk/kH4yqT/wljyncGLGV
-         PDvvY4WujYGYJA4fJ10vFp8D0fFEVK/D+y853VV1hdYTM+TM048H/VHHJ4ZuuGAE+Jk4
-         3QEg==
-X-Gm-Message-State: AOAM532DffpriD7odnN98j24s64dS5KQ3exkdXdAtnzKVAGz3Gw1Wwyh
-        r6UHGcQ1l4wpRCNAP9+MUiBaKg==
-X-Google-Smtp-Source: ABdhPJxrMDgnzspExKVFoFsyjDpZTuTz53tYwGwpZGvee2N+8L8QCJGlIseBftLfU+Li0zmHJ8dGtQ==
-X-Received: by 2002:a63:b245:: with SMTP id t5mr4134085pgo.388.1642799854144;
-        Fri, 21 Jan 2022 13:17:34 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id e15sm8029924pfv.59.2022.01.21.13.17.33
+        bh=Rwc9GxUTej2WnJMc0e3ALPik20sHOJTxdJgSjedRgYM=;
+        b=U6YEnpJZiqg1PM1YZVt2OTnGtBR2T4CbKPkGFv7ZQLvrwRxOFK+1aoGkyt35MA+Kv6
+         pBXEzSDZZomYvU4gZLDlr7VyQ6PzyRE3M36Z4L2nBwxOpqxjdn4l5WFc93qiHjIt6brs
+         heoHIWbtjw7KmA8cI0W662h1Y0i05EMTFYmq6vVrgF+GzGJGZkQDii1MpswoGcjl9LVn
+         h3GUo8HcHD0Swhg/6nNUQNhvEq+bfC0AFKKD9mtZsLffnLy+EcVVHq8Vdi1yU6ucNMkg
+         cDUcZ7K1WF7Y3vLgKA9wuU4R05fU1eiZYTwfxGCKWAlf2gexguZIHYbA8ZfVHjr3dTUg
+         WUCQ==
+X-Gm-Message-State: AOAM5312vrCNAcb42qhQY7maVNEdPe5MO6SuLaYOpE0dXGouJdl4QjQv
+        qQ+cORA6AyjKnuuc4XHweQ==
+X-Google-Smtp-Source: ABdhPJzbNnH7DDBGJ2KNG4hBF2gFhO9Qk8NiQerrT9EGNcWyi7kzEHZbIoK+YEXVUQe0ZMgoi4p0gg==
+X-Received: by 2002:a9d:57ca:: with SMTP id q10mr4195836oti.180.1642799982173;
+        Fri, 21 Jan 2022 13:19:42 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id g2sm1614084oic.40.2022.01.21.13.19.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 13:17:33 -0800 (PST)
-Date:   Fri, 21 Jan 2022 13:17:33 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel@collabora.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] selftests/lkdtm: Add UBSAN config
-Message-ID: <202201211317.2E858328@keescook>
-References: <20220121145154.1795447-1-usama.anjum@collabora.com>
- <20220121145154.1795447-2-usama.anjum@collabora.com>
+        Fri, 21 Jan 2022 13:19:41 -0800 (PST)
+Received: (nullmailer pid 1602431 invoked by uid 1000);
+        Fri, 21 Jan 2022 21:19:40 -0000
+Date:   Fri, 21 Jan 2022 15:19:40 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Christophe Kerello <christophe.kerello@foss.st.com>
+Cc:     robh+dt@kernel.org, miquel.raynal@bootlin.com, vigneshr@ti.com,
+        richard@nod.at, chenshumin86@sina.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, srinivas.kandagatla@linaro.org
+Subject: Re: [PATCH 1/3] dt-binding: mtd: nand: Document the wp-gpios property
+Message-ID: <YesjbOzh+B00dKIh@robh.at.kernel.org>
+References: <20220105135734.271313-1-christophe.kerello@foss.st.com>
+ <20220105135734.271313-2-christophe.kerello@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220121145154.1795447-2-usama.anjum@collabora.com>
+In-Reply-To: <20220105135734.271313-2-christophe.kerello@foss.st.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 07:51:53PM +0500, Muhammad Usama Anjum wrote:
-> UBSAN_BOUNDS and UBSAN_TRAP depend on UBSAN config option.
-> merge_config.sh script generates following warnings if parent config
-> doesn't have UBSAN config already enabled and UBSAN_BOUNDS/UBSAN_TRAP
-> config options don't get added to the parent config.
+On Wed, 05 Jan 2022 14:57:32 +0100, Christophe Kerello wrote:
+> A few drivers use this property to describe the GPIO pin used to protect
+> the NAND during program/erase operations.
 > 
-> Value requested for CONFIG_UBSAN_BOUNDS not in final .config
-> Requested value:  CONFIG_UBSAN_BOUNDS=y
-> Actual value:
+> Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+> ---
+>  Documentation/devicetree/bindings/mtd/nand-controller.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> Value requested for CONFIG_UBSAN_TRAP not in final .config
-> Requested value:  CONFIG_UBSAN_TRAP=y
-> Actual value:
-> 
-> Fix this by including UBSAN config.
-> 
-> Fixes: c75be56e35b2 ("lkdtm/bugs: Add ARRAY_BOUNDS to selftests")
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-Acked-by: Kees Cook <keescook@chromium.org>
-
--- 
-Kees Cook
+Acked-by: Rob Herring <robh@kernel.org>

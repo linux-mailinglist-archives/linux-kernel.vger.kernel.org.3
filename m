@@ -2,96 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C4D4967DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 23:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4BB34967EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 23:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiAUW2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 17:28:37 -0500
-Received: from mout.gmx.net ([212.227.17.21]:59459 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229471AbiAUW2g (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 17:28:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1642804106;
-        bh=zL6nm69DWgZVJHYquUk/KWyKFBQIbncygS6u/DCkUWE=;
-        h=X-UI-Sender-Class:Date:From:To:Subject;
-        b=gl7bnviXQ4bIHPmUqg0gV7sAhwwP59VEEZers9g3TdA96uYYMjngl9pJaPqnlZCt4
-         bRVIxRVtpE4sAMqKhSF01HmAdCpnK7EmLZDeuZIVUS3f1wBTlMGoZobHdD95OGw3nz
-         ApfQ0uIkqO4ShFkJBgSKRCN+tZh54s1RrJ4ZzayM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ls3530 ([92.116.180.114]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M3UZG-1nAUA42bIY-000ZPz; Fri, 21
- Jan 2022 23:28:26 +0100
-Date:   Fri, 21 Jan 2022 23:27:18 +0100
-From:   Helge Deller <deller@gmx.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        John David Anglin <dave.anglin@bell.net>,
-        Sven Schnelle <svens@stackframe.org>
-Subject: [GIT PULL] parisc architecture fixes & updates v5.17-rc1
-Message-ID: <YeszRlKu5dWqiHDQ@ls3530>
+        id S230459AbiAUWfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 17:35:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230136AbiAUWfu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 17:35:50 -0500
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB12C06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 14:35:50 -0800 (PST)
+Received: by mail-ua1-x92c.google.com with SMTP id y4so19520686uad.1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 14:35:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0lPulDTNyk1tT0uyWXBSfXERYQLBy2175ie9JUMp2N4=;
+        b=irAoru8GAZzoUOxiaEjcHP1bv4tmeWLyRhmRZkD+NLtC5XfBtuYM52oRoGamnEloZW
+         3tFevZbNyl4g+rfx0hO92ibSsoodiQRcMgGk6X2mh4m2NMGU4wqJ0yKqMov8F11cNDN9
+         tj7ClcGH1afsoCIXopKvub9otzw5KmYm+hoDNR9iEBc+e+q0+QWDnTQ3c7DjS4Czjjzj
+         nYum5NyaKP9vkCAJVY1ivd2drT2ahKYnDJktGh/lREw2y5+aE/U+e5Pdhr7FaR/ou/To
+         3ek+vQsYWrxfhEPi53onAfsGziGiMYXK4ksZL6ua4tGNY8ZguMhg7q3RqGoii+f3kIZB
+         oreQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0lPulDTNyk1tT0uyWXBSfXERYQLBy2175ie9JUMp2N4=;
+        b=QncFZA61IfkpqOkGcIp1QXLTMBTItTfUHG41ZpeAe3RgXzSqvbcSAwAEk39YCjSvI+
+         bMbJmhaAA2kzns77I8r1OosUA6l/Y2zua9ok5NwIxRsAX1N7UNBAHmkJ5P+pE+LYKZ3Y
+         KXNRWH7Sr/pYJo82mZ4f79rVthG5fZCjg3yZ0omUrkJ7QA/TdGuujGfLPmALxhMh8NTI
+         zCK+fTcKgMijdp8W4xyCRC15eiyTmPeXNlZzbR6BCgAQt27ItfuOH69eiiaCnZHVSFT+
+         CtSNVtL0YfWNyGk5q34FDvsYK6gjJOQHWIO0ijVk4LDBWl7IGmB+E/6RC9Ea2OSMRQE9
+         Ttsw==
+X-Gm-Message-State: AOAM531p8ARm7WHXTtxM45OdRUA2S31hdMwXLdqn/V2aPq95Qp+CycgX
+        QTAhVtTBtROZ3pTNtERhf4WlLPhy9FfFa9t9oMFTXQ==
+X-Google-Smtp-Source: ABdhPJxlLDGonXr/zA+7Qq2vhDQVOTU+DxKYdIj2cT/2wRs3d4deZjRDmJhaFVt1P3ia7qc093ayBfk1bAlK536/8Is=
+X-Received: by 2002:a67:c48e:: with SMTP id d14mr2674726vsk.67.1642804547204;
+ Fri, 21 Jan 2022 14:35:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Provags-ID: V03:K1:yehtTieKYk6DBlPRYFOH4VTggDhraqu6eSPSgRCRqX85IxjFm4F
- QucgigxltC316dG0Ve+bpguDObDIHdyOjELNVfrr3FsE+iQ9h4f75ODmFCMxgC04wMmUAw7
- d2xJfHzXxpYyx8Fu3lPvtX8YIW4CUDYuPj+9hLQ7pmmlLpUPm7jd/Bc9+2KX71Chd0oyd/z
- 5vMKVumAeU0mLEj7mHU4g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pK0W4AuRleM=:KPgR0LnE29rbN8sAKo5QdP
- 4Q7kfV4axpMaJqVJNiH+odfIWsLjMxAU2ciQARmlpzYWinmlqwBODthi+1N7/16Dr+inlTB/T
- xXwIVJPZ+B1rsMff5gBPhBhGbhxLQpJ2fom0wVrUKKdRVZYgsivJYqZKzzey3mEJ+o3QiBIK0
- NSawQM90eRA/N/rY7Au1gwgKj8boZ5m7c1yLvifVE7hfkVcRRDu+B/2T9NBnb5FR03+PCn0TH
- DIW0sLHSH6mg7VpSl3YNps8rNsWxmYm4kSWP9zNwsmERyinNxp7WAJ+p88kYXNZeDw32G2cEH
- /memlkgCD3+fzBlh9IlMV+b3y2cEY/CiGfXqfKR8iCjjEMQUFsLjkAu7uP75f7V99VLt7u3Pz
- MJzvh5+KUvppfa+/XiqNUanyO5DRc3iY+XPHOO5QvKEBxKO0G8m5ZNqbB0zBWwXPv3pDdjwD3
- ELhgN40o1u7t/y1NTOAUew1n2xy2ru6bC6Z4CfcQQ1hcgeITXnL4tAccHhx5LVkSEK+YFkyik
- 8Fc/zth9BVYirQQYTGCgENPO+JCv8ZgPvlLLyNj0GpHEaDw5HvVnliqFPsyQtR+yyH/ovRb8q
- Uwz+Fke3vQ8kHiP6C9KuTz2Ph33zlJYpanZ7PITAXk9kKGegt2h4l94OiAceR2FetGtb1kUJb
- 5IO0M9jgr4Oy6J2RiPOZyavq9GyMOJaIiz0aLaQzGXEeYZEfwtUjg4xD9d6eH8sHg4j7/62h6
- lyqSXUqVgNBEfXa40ufLvd0kTxEsydHnpoy1xEw4HEuQ4PbdxQGsSkxj3DMG5BG/WFzDqXgjO
- s+xMUcll+W/jvFmQrTuQfmXRPy0gHID8Xnbv8LlHoNnR/2df0IZKPMZ3rdrcvfeXrbS+3HoCM
- 1i7wjj2mnUcIpmq3/YjZcPYzIAoZVlC2cpHoIpudb6PQRQAlROFS13ZgzxfOXQEJHHUMbXFb8
- SYR8KTeqcHr1hpZq8Dhmyh6jADfx/jQIrEQhv+gdWyQwHb8gLVN0MUAFWfEPhXadmAwQZG1rz
- rEcGTiH5LnVfBzdrZd7gcz489umAqJBiJPYHnoVOesettthBIszoTB5d4SAyGDNqkcba77VDh
- MHeBtknF+yQM1U=
+References: <20220118230539.323058-1-pcc@google.com> <Yefh00fKOIPj+kYC@hirez.programming.kicks-ass.net>
+ <CAMn1gO5n6GofyRv6dvpEe0xRekRx=wneQzwP-n=9Qj6Pez6eEg@mail.gmail.com> <Yek81DNvQAXMxHwB@hirez.programming.kicks-ass.net>
+In-Reply-To: <Yek81DNvQAXMxHwB@hirez.programming.kicks-ass.net>
+From:   Peter Collingbourne <pcc@google.com>
+Date:   Fri, 21 Jan 2022 14:35:36 -0800
+Message-ID: <CAMn1gO53G6-sZE8RiLAD2uERbW1XtvyZbRonNGbHonzD058yAA@mail.gmail.com>
+Subject: Re: [PATCH] mm/mmzone.c: fix page_cpupid_xchg_last() to READ_ONCE()
+ the page flags
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mel Gorman <mgorman@suse.de>,
+        "# 3.4.x" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 455e73a07f6e288b0061dfcf4fcf54fa9fe06458:
+On Thu, Jan 20, 2022 at 2:43 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Wed, Jan 19, 2022 at 03:28:32PM -0800, Peter Collingbourne wrote:
+> > On Wed, Jan 19, 2022 at 2:03 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > On Tue, Jan 18, 2022 at 03:05:39PM -0800, Peter Collingbourne wrote:
+> > > > After submitting a patch with a compare-exchange loop similar to this
+> > > > one to set the KASAN tag in the page flags, Andrey Konovalov pointed
+> > > > out that we should be using READ_ONCE() to read the page flags. Fix
+> > > > it here.
+> > >
+> > > What does it actually fix? If it manages to split the read and read
+> > > garbage the cmpxchg will fail and we go another round, no harm done.
+> >
+> > What I wasn't sure about was whether the compiler would be allowed to
+> > break this code by hoisting the read of page->flags out of the loop
+> > (because nothing in the loop actually writes to page->flags aside from
+> > the compare-exchange, and if that succeeds we're *leaving* the loop).
+>
+> The cmpxchg is a barrier() and as such I don't think it's allowed to
+> hoist anything out of the loop.
 
-  Merge tag 'clk-for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux (2022-01-12 17:02:27 -0800)
+Yes it looks like it's at least as powerful as a barrier() because the
+implementations I looked at (arm64 and x86) use inline asm with memory
+operand (i.e. same as barrier()).
 
-are available in the Git repository at:
+> The bigger problem is I think that page_cpuid_last() usage which does a
+> second load of page->flags, and given sufficient races that could
+> actually load a different value and then things would be screwy. But
+> that's not actually fixed.
 
-  http://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git tags/for-5.17/parisc-2
+Right, the patch you provided (which I posted as v2) inlines the
+page_cpuid_last() and should resolve this.
 
-for you to fetch changes up to d24846a4246b6e61ecbd036880a4adf61681d241:
+> > > > Signed-off-by: Peter Collingbourne <pcc@google.com>
+> > > > Link: https://linux-review.googlesource.com/id/I2e1f5b5b080ac9c4e0eb7f98768dba6fd7821693
+> > >
+> > > That's that doing here?
+> >
+> > I upload my changes to Gerrit and link to them here so that I (and
+> > others) can see the progression of the patch via the web UI.
+>
+> What's the life-time guarantee for that URL existing? Because if it
+> becomes part of the git commit, it had better stay around 'forever'
+> etc..
 
-  parisc: pdc_stable: Fix memory leak in pdcs_register_pathentries (2022-01-21 22:48:54 +0100)
+I'd be surprised if it went away any time soon, the same hosting is
+used for projects like Android and Chromium which have been using it
+for years and have a long track record of stability.
 
-----------------------------------------------------------------
-parisc architecture fixes & enhancements for kernel v5.17-rc1
+Also note that the link is useful independent of the host continuing
+to be up, it means that you can also do a search of the mailing list
+archive like so:
+https://lore.kernel.org/all/?q=I2e1f5b5b080ac9c4e0eb7f98768dba6fd7821693
+(or the equivalent link on a different mailing list archive if
+lore.kernel.org ever gets shut down) and find the progression of the
+patch that way. This is particularly useful if (as in this case) the
+subject line of the patch changes.
 
-- a memory leak fix in an error path in pdc_stable (Miaoqian Lin)
-- two compiler warning fixes in the TOC code
-- added autodetection for currently used console type (serial or graphics)
-  which inserts console=<type> if it's missing
-
-----------------------------------------------------------------
-Helge Deller (4):
-      parisc: Add visible flag to toc_stack variable
-      parisc: Use safer strscpy() in setup_cmdline()
-      parisc: Autodetect default output device and set console= kernel parameter
-      parisc: Fix missing prototype for 'toc_intr' warning in toc.c
-
-Miaoqian Lin (1):
-      parisc: pdc_stable: Fix memory leak in pdcs_register_pathentries
-
- arch/parisc/include/asm/processor.h |  1 +
- arch/parisc/kernel/setup.c          | 15 +++++++++++++--
- arch/parisc/kernel/toc.c            |  3 ++-
- drivers/parisc/pdc_stable.c         |  4 +++-
- 4 files changed, 19 insertions(+), 4 deletions(-)
+Peter

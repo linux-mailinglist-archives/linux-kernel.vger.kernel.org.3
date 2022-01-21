@@ -2,109 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D28394963A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 18:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CD04963B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 18:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379780AbiAURQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 12:16:08 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59214 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379454AbiAURQD (ORCPT
+        id S1379053AbiAURXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 12:23:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56182 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351585AbiAURXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 12:16:03 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C5D03B82069
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 17:16:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98E88C340E1;
-        Fri, 21 Jan 2022 17:15:59 +0000 (UTC)
-Date:   Fri, 21 Jan 2022 12:15:58 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Valentin Schneider <valentin.schneider@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        "Kenta.Tada@sony.com" <Kenta.Tada@sony.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ed Tsai <ed.tsai@mediatek.com>
-Subject: Re: [PATCH v3 0/2] sched/tracing: sched_switch prev_state reported
- as TASK_RUNNING when it's not
-Message-ID: <20220121121558.618b98e7@gandalf.local.home>
-In-Reply-To: <20220120162520.570782-1-valentin.schneider@arm.com>
-References: <20220120162520.570782-1-valentin.schneider@arm.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 21 Jan 2022 12:23:36 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2FDC06173B;
+        Fri, 21 Jan 2022 09:23:36 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id o12so1943780eju.13;
+        Fri, 21 Jan 2022 09:23:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8NXAiWtMIfeUxiSKSX8KITUpdvgnK1eV2MyEqdhz4Tw=;
+        b=Yn+aa26mkRWKYicHrBF9lv87j17KpEy8yL4Xezg1BnxKgY7jDRRv5fAYktUdU2YoIn
+         S7y4rkc43EhraYHBpAHXj86eIwxiNIUNL9koznpqvpwhdqvKSvzRGfG1Fn5VuPPRioGs
+         P33+rL5rTgiVdt8+gMnzUxWBEQBjR8IVNBlxMXJEBAXDapsZQGyiUJXNScsd0bv7mS4o
+         6Cbyfo96WmRwj9is//o8+v4DkQkf3dDJqLdJ36yFJbG/6Z8K2zckz54LwFe2aYQqhc0W
+         rPfNJ0ib54IN7tC2Jf8eiFuXckAeMkB9Nf8l7ogbH1dzZlA8NdU7D57WzJ1Cxuafoq3W
+         HS4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8NXAiWtMIfeUxiSKSX8KITUpdvgnK1eV2MyEqdhz4Tw=;
+        b=VMefmzxsn4xpwzS/YEY6xgeaQkSdEvKU6ltTkPTf6acHnce2X3z7gdPuDOoh3T5RZW
+         5EEBOiw8GpsG9VPBkPV/RI1LpEkuXMk+amopxSHpdKxIw++gmemPXJ7bk8m784GIUI06
+         wDQsHxzGMGBrgHhuGscZaeS4ypsZ59EjvYPUJ7EJHDHWtFyBLQnW85wFYmmJ8PysR4VG
+         I7y7L5p7aLvC2wAr+2SLiHIQXd1KQ8QeVhb7Nkn0KXAUhQ5EgY9DPgbUcD9MZYEIUcz4
+         bJcBgCBZ1W34OZaow9vHdIkVcCO3I/qWi8eaqVapupRkf3VX3KtgSMs0pOhdwS7TPzya
+         QzHg==
+X-Gm-Message-State: AOAM5332Qo0lRM8h67+xfEJdUxvlYWLlEQonhO31GoGTigOXFs3PN+im
+        UEHiJqZVRfENQqHQVy+hoSuDk//Zj+rB/02l9nw=
+X-Google-Smtp-Source: ABdhPJxiMuqJI6e97nmWPPdBUq6TS6UCdQgeJ/EHh7s4SfFiRe1tWU9lTjaKe6WX7nZESIBAH+Gz03gyJOr6dOvI2o4=
+X-Received: by 2002:a17:907:968c:: with SMTP id hd12mr4024576ejc.639.1642785814310;
+ Fri, 21 Jan 2022 09:23:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20220118194857.26546-1-julianmarcusschroeder@gmail.com>
+In-Reply-To: <20220118194857.26546-1-julianmarcusschroeder@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 21 Jan 2022 19:22:57 +0200
+Message-ID: <CAHp75VdFGC5yXSmR_uNOv4=aEseMzWdJ=xNqqo1KKuGkajhb3g@mail.gmail.com>
+Subject: Re: [PATCH] fix serdev bind/unbind
+To:     julian schroeder <julianmarcusschroeder@gmail.com>
+Cc:     Rob Herring <robh@kernel.org>, bhanumaiya@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Jan 2022 16:25:18 +0000
-Valentin Schneider <valentin.schneider@arm.com> wrote:
+On Fri, Jan 21, 2022 at 8:55 AM julian schroeder
+<julianmarcusschroeder@gmail.com> wrote:
+>
+> On some chromebooks, the serdev is used to communicate with
 
-> Hi folks,
-> 
-> Problem
-> =======
-> 
-> Abhijeet pointed out that the following sequence of trace events can be
-> observed:
-> 
->   cat-1676  [001] d..3 103.010411: sched_waking: comm=grep pid=1677 prio=120 target_cpu=004
->   grep-1677 [004] d..2 103.010440: sched_switch: prev_comm=grep prev_pid=1677 prev_prio=120 prev_state=R 0x0 ==> next_comm=swapper/4 next_pid=0 next_prio=120
->   <idle>-0  [004] dNh3 103.0100459: sched_wakeup: comm=grep pid=1677 prio=120 target_cpu=004
-> 
-> IOW, not-yet-woken task gets presented as runnable and switched out in
-> favor of the idle task... Dietmar and I had a look, turns out this sequence
-> can happen: 
-> 
-> 		      p->__state = TASK_INTERRUPTIBLE;
-> 		      __schedule()
-> 			deactivate_task(p);
->   ttwu()
->     READ !p->on_rq
->     p->__state=TASK_WAKING
-> 			trace_sched_switch()
-> 			  __trace_sched_switch_state()
-> 			    task_state_index()
-> 			      return 0;
-> 
-> TASK_WAKING isn't in TASK_REPORT, hence why task_state_index(p) returns 0.
-> This can happen as of commit c6e7bd7afaeb ("sched/core: Optimize ttwu()
-> spinning on p->on_cpu") which punted the TASK_WAKING write to the other
-> side of
-> 
->   smp_cond_load_acquire(&p->on_cpu, !VAL);
-> 
-> in ttwu().
-> 
-> Uwe reported on #linux-rt what I think is a similar issue with
-> TASK_RTLOCK_WAIT on PREEMPT_RT; again that state isn't in TASK_REPORT so
-> you get prev_state=0 despite the task blocking on a lock.
-> 
-> Both of those are very confusing for tooling or even human observers.
+Chromebooks ?
+
+> an embedded controller. When the controller is updated, the
+> regular ttyS* is needed. Therefore unbind/bind needs to work
+> to be able to switch between the two modes without having to
+> reboot. In the case of ACPI enabled platforms, the underlying
+> serial device is marked as enumerated but this is not cleared
+> upon remove (unbind). In this state it can not be bound as
+> serdev.
+
+Seems legit (we do this for i2c and spi serial buses in ACPI case).
+After addressing the following nit-pick
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+...
+
+>  void serdev_device_remove(struct serdev_device *serdev)
+>  {
+>         struct serdev_controller *ctrl = serdev->ctrl;
+> +       struct acpi_device *adev;
+
+> +       adev = ACPI_COMPANION(&serdev->dev);
+> +       if (adev)
+> +               acpi_device_clear_enumerated(adev);
+
+As I mentioned i2c and SPI cases, I think it would be nice to use same
+pattern of this code, i.e.
 
 
+  if (ACPI_COMPANION(&serdev->dev))
+    acpi_device_clear_enumerated(ACPI_COMPANION(&serdev->dev));
 
-This all looks fine to me:
+drivers/i2c/i2c-core-base.c, line 1007
+drivers/spi/spi.c, line 779
 
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>         device_unregister(&serdev->dev);
+>         ctrl->serdev = NULL;
+>  }
 
-Peter, want to take this through your tree?
 
--- Steve
+-- 
+With Best Regards,
+Andy Shevchenko

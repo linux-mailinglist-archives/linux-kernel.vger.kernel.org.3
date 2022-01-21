@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 827DB496366
+	by mail.lfdr.de (Postfix) with ESMTP id CCE40496367
 	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 17:58:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381640AbiAUQ56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 11:57:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49682 "EHLO
+        id S1382007AbiAUQ6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 11:58:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379849AbiAUQ4t (ORCPT
+        with ESMTP id S1379858AbiAUQ4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 21 Jan 2022 11:56:49 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755DBC061763;
-        Fri, 21 Jan 2022 08:55:34 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id w188so14290830oiw.13;
-        Fri, 21 Jan 2022 08:55:34 -0800 (PST)
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6995C061769
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 08:55:36 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id a12-20020a0568301dcc00b005919e149b4cso12495062otj.8
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 08:55:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4weifrQ7PTCoGujS0yQMKZpi8lSBUanoNpSA0DdSt+Y=;
-        b=OF1LGc0evnBIhNNz84FPs7c8hsoF1r+/WS4fAuOmilgSYZYbT6CrqaPs1OIO/6LIxh
-         aCfomttS8vaYkKjlBhGRnCkK5sNSvB90MhaAykJPVz096eYCnJ7kncwalddJLbZmYVe5
-         MjebfomEvGhfTf2h1MgGTNSTVznz9gV0EWT14LVTZ24nZGykPBIKktLkT/rP1v3y60e1
-         Z6yTLr7ejol0GHlZUCZY41ckrUnhyqaRW1JwMN5GZK5O2k8qBmD5DCBxAozgWYBBu1uF
-         5RSJhj6dkBWt0EeCIIdyLjgqmWG4OcP7EQD/B7dkBMCqcGG2P0YCfdnVn2Gyds3JND8A
-         yv3Q==
+        bh=YaU4VG8N9CoVLuyvuF8eKASeQ+KGlO318g0VjIU083s=;
+        b=h5ng4rGJAP8Dw2GzBBkwMcUMgwOH/C0MM674tyPWcagZpg5a5cPerPWSPK9gZ/q+SZ
+         aGijwYdlRIUg87bxdAGcJFIiMjPJf5at0voT815CKdmYzHDrr1qrsq9nqLlP/evlL3o0
+         e++guAbfsQxsxNK5JbI+IvV65L7FGZUv9HJOOXckrW9NyOZhC6k6Zw/GDczbvSxKGkLJ
+         D5QMucQtMB28DMsAvGJduBLGkw4fHUcbACqPG0NvBVFU8hqNEp9mtfGdznqUX+cyRAHh
+         lj5cW9oSn6tQweYPwYEqO3NRL3UzaW5LVqKul2TTano8i6rbANy18HV2wayUJxPdgJDZ
+         /sTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4weifrQ7PTCoGujS0yQMKZpi8lSBUanoNpSA0DdSt+Y=;
-        b=x+li9HbDXQxNSfkR5zgpJikqvGrAYCErkUYGH9I5UfkQQCf1U17sx/roNCXoDm411l
-         BZclYBsCnwRC1gLj6Y8kDxmWfULut50+ZKnVP1JpyMb36dfHJWM8l/sdQON2F9jw6coW
-         sYgEzsKs8JzU71ELMlRk/CFcjK4Z/DDKNZ8BQ79MqAEL+VyjNxRNedhBWMHbcdKYzQbf
-         pgphObiWid10/FsYZViA3CWwGNuMYXD4OMAzeWSfLZPee1S2LBAkvQDYpe+uCbMGrmCa
-         tvAxKp4vZeDflKS0MmJV67b8cSlk40cM5ha1LV/sp0g2Vc7tKNTtJiVpml4kn4cekY3w
-         zWSg==
-X-Gm-Message-State: AOAM5328Le80sLSk3NGsLg4blFjC2dRtgEx06Ps5cugKvls4BHdkbhL9
-        jKm8j0ZRnfnfhvjjHkUGUflbyJnnq9I=
-X-Google-Smtp-Source: ABdhPJwjGzQmdpB6fvzrVNmA0mJLwxz20tqVgliSftrr9PonyQNufPf2QsVgpesq4DcccdBJkKfIgw==
-X-Received: by 2002:a54:4e9a:: with SMTP id c26mr1250134oiy.159.1642784133886;
-        Fri, 21 Jan 2022 08:55:33 -0800 (PST)
+        bh=YaU4VG8N9CoVLuyvuF8eKASeQ+KGlO318g0VjIU083s=;
+        b=6m87ARSMT5/eA7Ogg/IKVgQCVJwZL8ZFKaKoO+INF/V+IiZfDpBTIY+i62LrIrWl3a
+         a4jQChRVkSYp8zvFYkrqdGdV/e/Tm9Qy/hLuZkoMioEuNULI+Fx4LxcZMBCmMm7+FaIc
+         LZq8FNvnpnFZ7n47a7kuGDPpvobnoYXqLwQxtyle+4SbkE0Ys7T/Q0DU2z+btZiZrEHX
+         RhsRuzAePkiYdftGMq8zVnI3h5MhckyJqoKxKUB2EdQD4JGAJF2TcLd8iKebOs5Bk+w7
+         xyNYBTPH5Sd3LHWu+wL1sYk75cxnIW7HmPIav3REwCEdk4iIU8NePJ7E1CAwhyVFgShW
+         Ez8A==
+X-Gm-Message-State: AOAM531QzGQiIprCdePlIxQW5DDoRpXi2PKfPPBsZM36The79xtR+v8t
+        yMosOrS1wN4cvsCxoVfsKTX7bPBd/lY=
+X-Google-Smtp-Source: ABdhPJxB6j58CX46EprCZsW8G6PeZqqSZ6IOoAEGrPdGDyJdeI4cHRGDwsx4dFfMPggbz9WNz7820Q==
+X-Received: by 2002:a05:6830:1ad9:: with SMTP id r25mr3397494otc.31.1642784136254;
+        Fri, 21 Jan 2022 08:55:36 -0800 (PST)
 Received: from thinkpad.localdomain ([2804:14d:5cd1:5d03:cf72:4317:3105:f6e5])
-        by smtp.gmail.com with ESMTPSA id y8sm1089271oou.23.2022.01.21.08.55.31
+        by smtp.gmail.com with ESMTPSA id y8sm1089271oou.23.2022.01.21.08.55.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 08:55:33 -0800 (PST)
+        Fri, 21 Jan 2022 08:55:35 -0800 (PST)
 From:   Luiz Sampaio <sampaio.ime@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Luiz Sampaio <sampaio.ime@gmail.com>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH 21/31] power: supply: changing LED_* from enum led_brightness to actual value
-Date:   Fri, 21 Jan 2022 13:54:26 -0300
-Message-Id: <20220121165436.30956-22-sampaio.ime@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Luiz Sampaio <sampaio.ime@gmail.com>
+Subject: [PATCH 22/31] tty: vt: changing LED_* from enum led_brightness to actual value
+Date:   Fri, 21 Jan 2022 13:54:27 -0300
+Message-Id: <20220121165436.30956-23-sampaio.ime@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220121165436.30956-1-sampaio.ime@gmail.com>
 References: <20220121165436.30956-1-sampaio.ime@gmail.com>
@@ -68,62 +68,31 @@ The enum led_brightness, which contains the declaration of LED_OFF,
 LED_ON, LED_HALF and LED_FULL is obsolete, as the led class now supports
 max_brightness.
 ---
- drivers/power/supply/power_supply_leds.c | 26 ++++++++++++------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+ drivers/tty/vt/keyboard.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/power_supply_leds.c b/drivers/power/supply/power_supply_leds.c
-index d69880cc3593..16f25179f710 100644
---- a/drivers/power/supply/power_supply_leds.c
-+++ b/drivers/power/supply/power_supply_leds.c
-@@ -31,25 +31,25 @@ static void power_supply_update_bat_leds(struct power_supply *psy)
+diff --git a/drivers/tty/vt/keyboard.c b/drivers/tty/vt/keyboard.c
+index be8313cdbac3..33bad1973180 100644
+--- a/drivers/tty/vt/keyboard.c
++++ b/drivers/tty/vt/keyboard.c
+@@ -1035,7 +1035,7 @@ static int kbd_led_trigger_activate(struct led_classdev *cdev)
+ 	if (ledstate != -1U)
+ 		led_trigger_event(&trigger->trigger,
+ 				  ledstate & trigger->mask ?
+-					LED_FULL : LED_OFF);
++					255 : 0);
+ 	tasklet_enable(&keyboard_tasklet);
  
- 	switch (status.intval) {
- 	case POWER_SUPPLY_STATUS_FULL:
--		led_trigger_event(psy->charging_full_trig, LED_FULL);
--		led_trigger_event(psy->charging_trig, LED_OFF);
--		led_trigger_event(psy->full_trig, LED_FULL);
-+		led_trigger_event(psy->charging_full_trig, 255);
-+		led_trigger_event(psy->charging_trig, 0);
-+		led_trigger_event(psy->full_trig, 255);
- 		led_trigger_event(psy->charging_blink_full_solid_trig,
--			LED_FULL);
-+			255);
- 		break;
- 	case POWER_SUPPLY_STATUS_CHARGING:
--		led_trigger_event(psy->charging_full_trig, LED_FULL);
--		led_trigger_event(psy->charging_trig, LED_FULL);
--		led_trigger_event(psy->full_trig, LED_OFF);
-+		led_trigger_event(psy->charging_full_trig, 255);
-+		led_trigger_event(psy->charging_trig, 255);
-+		led_trigger_event(psy->full_trig, 0);
- 		led_trigger_blink(psy->charging_blink_full_solid_trig,
- 			&delay_on, &delay_off);
- 		break;
- 	default:
--		led_trigger_event(psy->charging_full_trig, LED_OFF);
--		led_trigger_event(psy->charging_trig, LED_OFF);
--		led_trigger_event(psy->full_trig, LED_OFF);
-+		led_trigger_event(psy->charging_full_trig, 0);
-+		led_trigger_event(psy->charging_trig, 0);
-+		led_trigger_event(psy->full_trig, 0);
- 		led_trigger_event(psy->charging_blink_full_solid_trig,
--			LED_OFF);
-+			0);
- 		break;
+ 	return 0;
+@@ -1081,7 +1081,7 @@ static void kbd_propagate_led_state(unsigned int old_state,
+ 		if (changed & trigger->mask)
+ 			led_trigger_event(&trigger->trigger,
+ 					  new_state & trigger->mask ?
+-						LED_FULL : LED_OFF);
++						255 : 0);
  	}
  }
-@@ -120,9 +120,9 @@ static void power_supply_update_gen_leds(struct power_supply *psy)
- 	dev_dbg(&psy->dev, "%s %d\n", __func__, online.intval);
  
- 	if (online.intval)
--		led_trigger_event(psy->online_trig, LED_FULL);
-+		led_trigger_event(psy->online_trig, 255);
- 	else
--		led_trigger_event(psy->online_trig, LED_OFF);
-+		led_trigger_event(psy->online_trig, 0);
- }
- 
- static int power_supply_create_gen_triggers(struct power_supply *psy)
 -- 
 2.34.1
 

@@ -2,71 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 110BD495725
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 01:01:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1D2C495736
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 01:09:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378303AbiAUABe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 19:01:34 -0500
-Received: from ms.lwn.net ([45.79.88.28]:51166 "EHLO ms.lwn.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1378241AbiAUABd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 19:01:33 -0500
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 1069E7DF;
-        Fri, 21 Jan 2022 00:01:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 1069E7DF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1642723293; bh=e09aVzfiGh1V0glBBFqdYT6NALcRou3j07mgEDAOaXY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=M9+EO0/03LtfNCLdMhR7xQbzNmqYcDQm7mPLxe3DdqrKjt6Xoo26NvvIVKdN0HLm8
-         JQAPR8kAI/wx23cqGcwdr0vb/LpGbjDSVWdJrm+JCuMp9NZlc7Ge1Vw+2BuNmr0QoP
-         ZLP42vcyRecFL9JBF0UAgqlvJe9SZa9F9hz7LdLeDKJib0eFnyr3D+n+R+PfoXlfCO
-         mdpmsj5ecuY+DRBVhhgl/sgjvl9IkgDs4Y6h8ifsNE32ILENIy0ODmyVPAiKGLSZ5m
-         zm1lfbSpeBoAzkqDJVbyZwjkyoQOP99cyuN3jUgsyFJEviGvC8YahbdSGnif5d0sPa
-         yMHhh7TG9wotw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: [PATCH -next v2] Documentation: fix firewire.rst ABI file path
- error
-In-Reply-To: <20220119033905.4779-1-rdunlap@infradead.org>
-References: <20220119033905.4779-1-rdunlap@infradead.org>
-Date:   Thu, 20 Jan 2022 17:01:57 -0700
-Message-ID: <8735li553e.fsf@meer.lwn.net>
+        id S1378336AbiAUAJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 19:09:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50498 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378263AbiAUAJp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 19:09:45 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4208FC061574;
+        Thu, 20 Jan 2022 16:09:45 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id z22so35550346edd.12;
+        Thu, 20 Jan 2022 16:09:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Gw/h4vDMmF3+S7EBe5K4ziFvlvlytBdM5BlobMQKulw=;
+        b=j3VgtGIHCzMGUtcaBUk3HX8vfsoCeSRq7WWcOr7aa2IhB3v+sw8BThefgpNAnXJVVc
+         gVn6gBHaPBOgFRKj2Pg0/To0quSEgThemkcP1mB7oODgJ8qFKcs0hy17T+E0TZC7swIR
+         EjCItK5kqdPE/O7JZF1tSHiSmTi/FP5J3tov4sl9K245WJChDRR8gyX0Ut95LOTO5nJi
+         eAiS2I3GFGCqUubXnAj+035pOxE/0VheoL5SoR4GPZGuimg3asZHMwiHUEjVCCA/xQdU
+         m3j1cta3ux6Pny6G5QQAyfYuhhu/3JLpZX7hkthTX7ebdTSCZjE5Y2bq7axLiz9uulmE
+         NtOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Gw/h4vDMmF3+S7EBe5K4ziFvlvlytBdM5BlobMQKulw=;
+        b=iJJDUrzuzfKiiCwjgC0VD+soxgfA+gVkqESLFQ1VxvYipu5VAB4LknB7Ufgvh8VeC9
+         chqFzABHTlt1UfU4RwF5sD6ywVeOtRnFOcztYkOxxiWLfRoVxDj6r5y/dKApLKzKFRTY
+         8OeHSoL3ulIqvlHp3f4jjtZO14SJjJOEBcJSg1hud/Po6Ej25rrz9EpMkOouiuhesv7Q
+         W55FeQzY0EsL/G8KlJUyqqo4IKGJELRh0S06fiW4MKiTPWg4ilq8ks/QmONbEO3nN9rf
+         u/DzhP5QjkrAJHNwDViXsb4BkRdTm95honU18HC3yTC7ovXTKqKR7GquREjGAVTKhabU
+         88+Q==
+X-Gm-Message-State: AOAM530NJ/6Zt/mmYtu9GPss3vDuczEr8x/WIu/D6ry33UXzEIE7SZ0a
+        4URS/FLj5UtqA6g4zzW7n4PDipHNzBZI/YAMNC8=
+X-Google-Smtp-Source: ABdhPJyQn+mOHFJZrOYebRjS+uMv8nCAFM5TjZduZoR2Fj7UZv7m7Bg4fmpRmyg5QPHtTZ27s7tJtbZkOhWluzSfePU=
+X-Received: by 2002:a17:907:a42a:: with SMTP id sg42mr1185976ejc.413.1642723783502;
+ Thu, 20 Jan 2022 16:09:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20220120130605.55741-1-dzm91@hust.edu.cn> <b5cb1132-2f6b-e2da-78c7-1828b3617bc3@gmail.com>
+In-Reply-To: <b5cb1132-2f6b-e2da-78c7-1828b3617bc3@gmail.com>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Fri, 21 Jan 2022 08:09:17 +0800
+Message-ID: <CAD-N9QWvfoo_HtQ+KT-7JNFumQMaq8YqMkHGR2t7pDKsDW0hkQ@mail.gmail.com>
+Subject: Re: [PATCH] drivers: net: remove a dangling pointer in peak_usb_create_dev
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stephane Grosjean <s.grosjean@peak-system.com>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Randy Dunlap <rdunlap@infradead.org> writes:
-
-> Adjust the path of the ABI files for firewire.rst to prevent a
-> documentation build error. Prevents this problem:
+On Thu, Jan 20, 2022 at 10:27 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
 >
-> Sphinx parallel build error:
-> docutils.utils.SystemMessage: Documentation/driver-api/firewire.rst:22: (SEVERE/4) Problems with "include" directive path:
-> InputError: [Errno 2] No such file or directory: '../Documentation/driver-api/ABI/stable/firewire-cdev'.
+> Hi Dongliang,
 >
-> Fixes: 2f4830ef96d2 ("FireWire: add driver-api Introduction section")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-> Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> Tested-by: Akira Yokosawa <akiyks@gmail.com>
-> ---
-> v2: Add Tested-by: and Fixes: from Akira (thanks!)
->     shorten path in error message;
+> On 1/20/22 16:05, Dongliang Mu wrote:
+> > From: Dongliang Mu <mudongliangabcd@gmail.com>
+> >
+> > The error handling code of peak_usb_create_dev forgets to reset the
+> > next_siblings of previous entry.
+> >
+> > Fix this by nullifying the (dev->prev_siblings)->next_siblings in the
+> > error handling code.
+> >
+> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> > ---
+> >   drivers/net/can/usb/peak_usb/pcan_usb_core.c | 3 +++
+> >   1 file changed, 3 insertions(+)
+> >
+> > diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+> > index b850ff8fe4bd..f858810221b6 100644
+> > --- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+> > +++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+> > @@ -894,6 +894,9 @@ static int peak_usb_create_dev(const struct peak_usb_adapter *peak_usb_adapter,
+> >               dev->adapter->dev_free(dev);
+> >
+> >   lbl_unregister_candev:
+> > +     /* remove the dangling pointer in next_siblings */
+> > +     if (dev->prev_siblings)
+> > +             (dev->prev_siblings)->next_siblings = NULL;
+> >       unregister_candev(netdev);
+> >
+> >   lbl_restore_intf_data:
 >
->  Documentation/driver-api/firewire.rst |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> Is this pointer used somewhere? I see, that couple of
+> struct peak_usb_adapter::dev_free() functions use it, but
+> peak_usb_disconnect() sets dev->next_siblings to NULL before calling
+> ->dev_free().
+>
+> Do you have a calltrace or oops log?
 
-Applied, thanks.
+Hi Pavel,
 
-jon
+I have no calltrace or log since this dangling pointer may not be
+dereferenced in the following code. But I am not sure. So the commit
+title of this patch is "remove a dangling pointer in
+peak_usb_create_dev".
+
+>
+>
+>
+>
+> With regards,
+> Pavel Skripkin

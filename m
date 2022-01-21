@@ -2,281 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3512496548
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 19:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0643A496551
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 19:52:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbiAUSvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 13:51:19 -0500
-Received: from mga17.intel.com ([192.55.52.151]:61860 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229898AbiAUSvE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 13:51:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642791064; x=1674327064;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=je+JVvIud5Ia+mp9CVFTrEpqOiBRDjOUHc0UE9EWHdE=;
-  b=UEm7Ro98fzuYtV6XWwOEM1S/m/jmQKXHzHKbXQc076PdnKNjLhJZIXSS
-   oSsUgiaEuLnUgQZBBs52esQvEq+SF13uozQSouyS5xm1WTCGqPD4DnYef
-   ZcGBf2Ap8ECgLloFA7o0b1RowrEG1BlLSuEwpL/7/PkC13suV51OKGMfz
-   xGQqR+5EWbGA5qW4JkGs/8lgEWoYIMfLdY99e/CfYCdkE053lYAf7jSI7
-   uzXUgLqaraAPSvDzXya/ow4XGnwzcalR7SAOVHOD2KYNwDrSSBtyHkwW4
-   YD0pRuv7nFbMiQS5B7Qos6UBU55krkIkic3J8P8cnKFI30X7uwTBguv6g
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="226397581"
-X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
-   d="scan'208";a="226397581"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 10:51:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
-   d="scan'208";a="561970189"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 21 Jan 2022 10:51:01 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nAz00-000FaE-GQ; Fri, 21 Jan 2022 18:51:00 +0000
-Date:   Sat, 22 Jan 2022 02:50:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chanho Park <chanho61.park@samsung.com>
-Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.10
- 2895/9999] phylink.c:undefined reference to `linkmode_resolve_pause'
-Message-ID: <202201220224.w1sN3O9g-lkp@intel.com>
+        id S230335AbiAUSwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 13:52:31 -0500
+Received: from mail-ed1-f47.google.com ([209.85.208.47]:42705 "EHLO
+        mail-ed1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231326AbiAUSvs (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 13:51:48 -0500
+Received: by mail-ed1-f47.google.com with SMTP id p12so44332769edq.9;
+        Fri, 21 Jan 2022 10:51:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=pr/5QKzb6ToiCGRJqJUCw/c9mGEuN4OsH5UfA8KKh98=;
+        b=0hfsO+43bzRH4CModhIp3wee/y2fjXLFXSprp5BO3Fp0smGl6zRAwime9kRx9af4LV
+         jivb22dgQ8rEs4C2KGJ4svUeaNKgYgvEiOeVeUQFuxw3b2k6rFL/mAE3V6cl4W3x3r4+
+         RIRCaFr4VrmOFpfSaw/32YLGkMFdeHCi12pmFQ4EWiRzY4QbKFg9swGHmDQ1RKu3oJZN
+         Znsa0yUIHQrJsMcYYEAyWDtnNeYBF8+hWCaCg3Jpdqe60PN9fVdEdDlKwMBI64odKcfw
+         mlwerXhUfiAAdfpuepjbBezjJNEE/cxOOAOnb3YcfLSGlnxK5Al7CN9MU9owZgjceGEn
+         HKyg==
+X-Gm-Message-State: AOAM532QAJ9CWD6VIzlhp9UKdKjmEHSGrbkuYHD6MJewV0m2+Md0MHbC
+        FrsKA5ZX+hCdKsJ/a62OW/Y=
+X-Google-Smtp-Source: ABdhPJxj0HoivAhgudAe2G3Y+/yLisodc6m1q7KE10/KIPC2fCSfw2yRzZAR0/F2axmjojQeOh80vg==
+X-Received: by 2002:aa7:db8d:: with SMTP id u13mr5423945edt.111.1642791106615;
+        Fri, 21 Jan 2022 10:51:46 -0800 (PST)
+Received: from [192.168.0.51] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.googlemail.com with ESMTPSA id u18sm2276882eje.37.2022.01.21.10.51.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Jan 2022 10:51:45 -0800 (PST)
+Message-ID: <d24379ab-5627-d37e-d61f-af68dd56ab12@kernel.org>
+Date:   Fri, 21 Jan 2022 19:51:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [Patch V3] memory: tegra: Add MC error logging on tegra186 onward
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Ashish Mhetre <amhetre@nvidia.com>, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Snikam@nvidia.com, vdumpa@nvidia.com
+References: <1642763962-32129-1-git-send-email-amhetre@nvidia.com>
+ <dc9b0c08-bd2a-6ffa-ad75-47afd036f3ef@gmail.com>
+ <625e47a5-a6a6-826f-6f9d-f036732588b6@kernel.org>
+In-Reply-To: <625e47a5-a6a6-826f-6f9d-f036732588b6@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chanho,
+On 21/01/2022 19:49, Krzysztof Kozlowski wrote:
+> On 21/01/2022 13:31, Dmitry Osipenko wrote:
+>> ...
+>>> @@ -529,12 +536,44 @@ static irqreturn_t tegra30_mc_handle_irq(int irq, void *data)
+>>>  		u8 id, type;
+>>>  		u32 value;
+>>>  
+>>> -		value = mc_readl(mc, MC_ERR_STATUS);
+>>> +		switch (bit) {
+>>
+>> Again, I see that the code wasn't tested :/ Shouldn't be too difficult
+>> to create memory-read errors to check that at least basics work
+>> properly. Please always test your changes next time.
+>>
+>> So it must be "switch(BIT(bit))" here, please write it like this:
+>>
+>> u32 intmask = BIT(bit);
+>> ...
+>> 	switch(intmask) {
+>>
+> 
+> Also, please build your changes with W=1... It's the second try of
+> sending un-tested and not-working code. This time also with a compiler
+> warning. This looks very bad :(
 
-FYI, the error/warning still remains.
+I am afraid this might be taken too literally and W=1 build will replace
+other required steps, so let me be explicit:
+We not only expect to compile it but also compile with W=1, run sparse,
+smatch and coccicheck. Then also test.
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.10
-head:   0b57557c8d4c5bc3f102bcc5f901482dbcb2ba1c
-commit: 36ab8cea47b0d4a3c5067577430c147a903b5261 [2895/9999] ANDROID: GKI: Kconfig.gki: Add GKI_HIDDEN_ETHERNET_CONFIGS
-config: arm-randconfig-r023-20220120 (https://download.01.org/0day-ci/archive/20220122/202201220224.w1sN3O9g-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/36ab8cea47b0d4a3c5067577430c147a903b5261
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.10
-        git checkout 36ab8cea47b0d4a3c5067577430c147a903b5261
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+> 
+> For big companies with a lot of engineers, like nVidia, it is useful if
+> some internal review happens. It is a nice way to offload community
+> reviewers which are - like maintainers - a scarce resource. Doing
+> internal review is not a requirement, but helps to find such mistakes
+> earlier, before using the community. It is simply nice to us.
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   arm-linux-gnueabi-ld: drivers/tty/hvc/hvc_console.o: in function `hvc_cleanup':
-   hvc_console.c:(.text+0x4d4): undefined reference to `tty_port_put'
-   arm-linux-gnueabi-ld: drivers/tty/hvc/hvc_console.o: in function `hvc_set_winsz':
-   hvc_console.c:(.text+0x59c): undefined reference to `tty_port_tty_get'
-   arm-linux-gnueabi-ld: hvc_console.c:(.text+0x5dc): undefined reference to `tty_do_resize'
-   arm-linux-gnueabi-ld: drivers/tty/hvc/hvc_console.o: in function `hvc_hangup':
-   hvc_console.c:(.text+0x6f4): undefined reference to `tty_port_tty_set'
-   arm-linux-gnueabi-ld: drivers/tty/hvc/hvc_console.o: in function `hvc_open':
-   hvc_console.c:(.text+0x790): undefined reference to `tty_port_tty_set'
-   arm-linux-gnueabi-ld: drivers/tty/hvc/hvc_console.o: in function `hvc_close':
-   hvc_console.c:(.text+0xa20): undefined reference to `tty_hung_up_p'
-   arm-linux-gnueabi-ld: hvc_console.c:(.text+0xa6c): undefined reference to `tty_port_tty_set'
-   arm-linux-gnueabi-ld: hvc_console.c:(.text+0xae8): undefined reference to `tty_wait_until_sent'
-   arm-linux-gnueabi-ld: drivers/tty/hvc/hvc_console.o: in function `hvc_remove':
-   hvc_console.c:(.text+0xb5c): undefined reference to `tty_port_tty_get'
-   arm-linux-gnueabi-ld: hvc_console.c:(.text+0xbc4): undefined reference to `tty_port_put'
-   arm-linux-gnueabi-ld: hvc_console.c:(.text+0xbd8): undefined reference to `tty_vhangup'
-   arm-linux-gnueabi-ld: drivers/tty/hvc/hvc_console.o: in function `__hvc_poll':
-   hvc_console.c:(.text+0xcc0): undefined reference to `tty_port_tty_get'
-   arm-linux-gnueabi-ld: hvc_console.c:(.text+0xd2c): undefined reference to `tty_buffer_request_room'
-   arm-linux-gnueabi-ld: hvc_console.c:(.text+0xd88): undefined reference to `tty_hangup'
-   arm-linux-gnueabi-ld: hvc_console.c:(.text+0xeb8): undefined reference to `__tty_insert_flip_char'
-   arm-linux-gnueabi-ld: hvc_console.c:(.text+0xf68): undefined reference to `tty_wakeup'
-   arm-linux-gnueabi-ld: hvc_console.c:(.text+0xfa4): undefined reference to `tty_flip_buffer_push'
-   arm-linux-gnueabi-ld: drivers/tty/hvc/hvc_console.o: in function `hvc_install':
-   hvc_console.c:(.text+0x12f8): undefined reference to `tty_port_install'
-   arm-linux-gnueabi-ld: hvc_console.c:(.text+0x130c): undefined reference to `tty_port_put'
-   arm-linux-gnueabi-ld: drivers/tty/hvc/hvc_console.o: in function `hvc_alloc':
-   hvc_console.c:(.text+0x1390): undefined reference to `__tty_alloc_driver'
-   arm-linux-gnueabi-ld: hvc_console.c:(.text+0x13b0): undefined reference to `tty_std_termios'
-   arm-linux-gnueabi-ld: hvc_console.c:(.text+0x13b4): undefined reference to `tty_std_termios'
-   arm-linux-gnueabi-ld: hvc_console.c:(.text+0x1408): undefined reference to `tty_set_operations'
-   arm-linux-gnueabi-ld: hvc_console.c:(.text+0x1450): undefined reference to `tty_register_driver'
-   arm-linux-gnueabi-ld: hvc_console.c:(.text+0x147c): undefined reference to `put_tty_driver'
-   arm-linux-gnueabi-ld: hvc_console.c:(.text+0x14c8): undefined reference to `tty_port_init'
-   arm-linux-gnueabi-ld: hvc_console.c:(.text+0x16b0): undefined reference to `put_tty_driver'
-   arm-linux-gnueabi-ld: drivers/tty/hvc/hvc_console.o: in function `hvc_instantiate':
-   hvc_console.c:(.text+0x1748): undefined reference to `tty_port_put'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_get_fixed_state':
->> phylink.c:(.text+0x2e0): undefined reference to `linkmode_resolve_pause'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_decode_c37_word':
-   phylink.c:(.text+0x450): undefined reference to `linkmode_resolve_pause'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_mac_config':
-   phylink.c:(.text+0x548): undefined reference to `phy_speed_to_str'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x554): undefined reference to `phy_duplex_to_str'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x5a4): undefined reference to `__dynamic_netdev_dbg'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x638): undefined reference to `phy_speed_to_str'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x644): undefined reference to `phy_duplex_to_str'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_major_config':
-   phylink.c:(.text+0x758): undefined reference to `__dynamic_netdev_dbg'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x834): undefined reference to `netdev_printk'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x8e8): undefined reference to `netdev_printk'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x9a8): undefined reference to `netdev_printk'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_change_inband_advert':
-   phylink.c:(.text+0xb0c): undefined reference to `__dynamic_netdev_dbg'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_link_down':
-   phylink.c:(.text+0xc64): undefined reference to `netif_carrier_off'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0xcac): undefined reference to `netdev_printk'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_link_up':
-   phylink.c:(.text+0xda4): undefined reference to `netif_carrier_on'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0xdcc): undefined reference to `phy_speed_to_str'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0xddc): undefined reference to `phy_duplex_to_str'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0xe30): undefined reference to `netdev_printk'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0xe54): undefined reference to `phy_speed_to_str'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0xe64): undefined reference to `phy_duplex_to_str'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_ethtool_get_pauseparam':
-   phylink.c:(.text+0xfb8): undefined reference to `rtnl_is_locked'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_disconnect_phy':
-   phylink.c:(.text+0x1124): undefined reference to `rtnl_is_locked'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x117c): undefined reference to `phy_disconnect'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_ethtool_get_wol':
-   phylink.c:(.text+0x11a0): undefined reference to `rtnl_is_locked'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x11c8): undefined reference to `phy_ethtool_get_wol'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_ethtool_set_wol':
-   phylink.c:(.text+0x11ec): undefined reference to `rtnl_is_locked'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x1208): undefined reference to `phy_ethtool_set_wol'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_ethtool_ksettings_get':
-   phylink.c:(.text+0x12d8): undefined reference to `rtnl_is_locked'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x12f4): undefined reference to `phy_ethtool_ksettings_get'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_ethtool_set_pauseparam':
-   phylink.c:(.text+0x13b0): undefined reference to `rtnl_is_locked'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x1474): undefined reference to `linkmode_set_pause'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x1500): undefined reference to `phy_set_asym_pause'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_get_eee_err':
-   phylink.c:(.text+0x157c): undefined reference to `rtnl_is_locked'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x1594): undefined reference to `phy_get_eee_err'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_init_eee':
-   phylink.c:(.text+0x15d8): undefined reference to `phy_init_eee'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_ethtool_get_eee':
-   phylink.c:(.text+0x160c): undefined reference to `rtnl_is_locked'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x1628): undefined reference to `phy_ethtool_get_eee'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_ethtool_set_eee':
-   phylink.c:(.text+0x165c): undefined reference to `rtnl_is_locked'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x1678): undefined reference to `phy_ethtool_set_eee'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_mii_c22_pcs_get_state':
-   phylink.c:(.text+0x16c0): undefined reference to `mdiobus_read'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x16d4): undefined reference to `mdiobus_read'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_mii_c45_pcs_get_state':
-   phylink.c:(.text+0x1854): undefined reference to `mdiobus_read'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_mii_c22_pcs_set_advertisement':
-   phylink.c:(.text+0x192c): undefined reference to `mdiobus_read'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x1958): undefined reference to `mdiobus_write'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x197c): undefined reference to `mdiobus_read'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x19a8): undefined reference to `mdiobus_write'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_mii_c22_pcs_an_restart':
-   phylink.c:(.text+0x19f0): undefined reference to `mdiobus_read'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x1a14): undefined reference to `mdiobus_write'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_mii_emul_read':
-   phylink.c:(.text+0x1a78): undefined reference to `swphy_read_reg'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_mii_ioctl':
-   phylink.c:(.text+0x1ad0): undefined reference to `rtnl_is_locked'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x1bf4): undefined reference to `mdiobus_read'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x1cdc): undefined reference to `mdiobus_write'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x1cf8): undefined reference to `phy_mii_ioctl'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_speed_down':
-   phylink.c:(.text+0x1e4c): undefined reference to `rtnl_is_locked'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x1e80): undefined reference to `phy_speed_down'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_speed_up':
-   phylink.c:(.text+0x1ea8): undefined reference to `rtnl_is_locked'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x1ed8): undefined reference to `phy_speed_up'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_mii_c22_pcs_config':
-   phylink.c:(.text+0x1f50): undefined reference to `mdiobus_modify'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_stop':
-   phylink.c:(.text+0x1f98): undefined reference to `rtnl_is_locked'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x1fb0): undefined reference to `phy_stop'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_parse_mode':
-   phylink.c:(.text+0x2128): undefined reference to `netdev_printk'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x22f0): undefined reference to `netdev_printk'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x2404): undefined reference to `netdev_printk'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_mac_change':
-   phylink.c:(.text+0x25ac): undefined reference to `__dynamic_netdev_dbg'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_phy_change':
-   phylink.c:(.text+0x264c): undefined reference to `phy_get_pause'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x2764): undefined reference to `phy_speed_to_str'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x2770): undefined reference to `phy_duplex_to_str'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x2794): undefined reference to `__dynamic_netdev_dbg'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x281c): undefined reference to `phy_speed_to_str'
-   arm-linux-gnueabi-ld: phylink.c:(.text+0x2828): undefined reference to `phy_duplex_to_str'
-   arm-linux-gnueabi-ld: drivers/net/phy/phylink.o: in function `phylink_start':
-   phylink.c:(.text+0x2bc8): undefined reference to `rtnl_is_locked'
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for PHYLINK
-   Depends on NETDEVICES
-   Selected by
-   - GKI_HIDDEN_ETHERNET_CONFIGS
-   WARNING: unmet direct dependencies detected for HVC_DRIVER
-   Depends on TTY
-   Selected by
-   - GKI_HIDDEN_VIRTUAL_CONFIGS
-   WARNING: unmet direct dependencies detected for WEXT_PROC
-   Depends on NET && WIRELESS && PROC_FS && WEXT_CORE
-   Selected by
-   - GKI_LEGACY_WEXT_ALLCONFIG
-   WARNING: unmet direct dependencies detected for WEXT_PRIV
-   Depends on NET && WIRELESS
-   Selected by
-   - GKI_LEGACY_WEXT_ALLCONFIG
-   WARNING: unmet direct dependencies detected for PAGE_POOL
-   Depends on NET
-   Selected by
-   - GKI_HIDDEN_NET_CONFIGS
-   WARNING: unmet direct dependencies detected for WEXT_SPY
-   Depends on NET && WIRELESS
-   Selected by
-   - GKI_LEGACY_WEXT_ALLCONFIG
-   WARNING: unmet direct dependencies detected for WIRELESS_EXT
-   Depends on NET && WIRELESS
-   Selected by
-   - GKI_LEGACY_WEXT_ALLCONFIG
-   WARNING: unmet direct dependencies detected for WEXT_CORE
-   Depends on NET && WIRELESS && (CFG80211_WEXT || WIRELESS_EXT
-   Selected by
-   - GKI_LEGACY_WEXT_ALLCONFIG
-   WARNING: unmet direct dependencies detected for NET_PTP_CLASSIFY
-   Depends on NET
-   Selected by
-   - GKI_HIDDEN_NET_CONFIGS
-   WARNING: unmet direct dependencies detected for SND_VMASTER
-   Depends on SOUND && !UML && SND
-   Selected by
-   - GKI_HIDDEN_SND_CONFIGS
-   WARNING: unmet direct dependencies detected for SND_PCM_IEC958
-   Depends on SOUND && !UML && SND
-   Selected by
-   - GKI_HIDDEN_SND_SOC_CONFIGS
-   WARNING: unmet direct dependencies detected for SND_JACK
-   Depends on SOUND && !UML && SND
-   Selected by
-   - GKI_HIDDEN_SND_CONFIGS
-   WARNING: unmet direct dependencies detected for SND_JACK_INPUT_DEV
-   Depends on SOUND && !UML && SND && SND_JACK
-   Selected by
-   - GKI_HIDDEN_SND_CONFIGS
-   WARNING: unmet direct dependencies detected for SND_PCM_ELD
-   Depends on SOUND && !UML && SND
-   Selected by
-   - GKI_HIDDEN_SND_CONFIGS
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Best regards,
+Krzysztof

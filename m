@@ -2,135 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 612A9495CA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 10:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87832495CA9
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 10:17:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344291AbiAUJRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 04:17:24 -0500
-Received: from esa2.hgst.iphmx.com ([68.232.143.124]:9289 "EHLO
-        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343890AbiAUJRR (ORCPT
+        id S1379704AbiAUJRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 04:17:52 -0500
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:55977 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343890AbiAUJRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 04:17:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1642756637; x=1674292637;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=DDt33//J7HC81vPepGQWceRVhDsuFSNWZ9d7bVsT2sk=;
-  b=kb8SgFfGbKmXglqpT99Cylg9kCWzZ2Tu1G4O6m/uYitNBzmqppPdcJfT
-   QfIz7GJ6/xVDUnuL43F5emtFY9gXt21I0v/H5nczcm/MWDSp7bSJ8ielD
-   5vXvKYHz9sydgr6yFkg0yLKjK6hXoiNGOFhOKslB+tKP5pHY/SbSvkK9h
-   WUjxJ8MdPhGPq1ksoTEKCxmQChLyTKonyhNEg7vOuSBf5wKC46N1NIzFq
-   s2C2NlvERkyEFDCbNHJUPmnhsBFbfG8LANqoLVkFsqv+mUaI9k6eXVPjv
-   Asjfd8PVFc4HbXY65mQTA3SM+XKay5c250vVz0/40kzYadx6SckxEs4V2
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.88,304,1635177600"; 
-   d="scan'208";a="295096766"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 21 Jan 2022 17:17:16 +0800
-IronPort-SDR: A1qttNTNaAZC9R38HsVaWXqDierIauZNvSjTy79pqW3jGn2joIWzNG+4kE/I1v/sz/Nkb5SkP7
- 4iCrON7oikcOOot56c+PurzaKc6ME0rgC2FGr9QWISZR/MDseFBnj7QagJnoQ3eWzs8Ru5QX68
- /Gqzy+ZbtDwxnjosuBoL2GZFmV7DYzST6c5QWNjsa9gMWkdX8udgmaR6jv46KjvgCblweA22sg
- OPJ2jrsurGJL7m9Otmgr0fGl8hTyDLd6P8b58b2by7wHH+ckOSGLourUUefS26t3IWGI8vwVXh
- 8FRPl40g/RBkGQhHc9NH/XWq
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 00:49:28 -0800
-IronPort-SDR: 4b/vS+sR7xz1JkVuDrMH5gHjb6c2JcWxXpxAMqV3FeaTV/Wie2Ba0xe6Scr+EkZ1u8Ie8tI3qm
- sq7kVBhljKK3oH6MV/Zk9YdRjmJjuAdY8nZI2/ZIdUrIr4a3IwGWnITIIqXWeVsDfy09TClgL+
- mUJgEdGwdE9peEitE438AcUNChG9XCGQ33EPk5xc0JacpypKHkE7eZgmIk/O/c9GybeBBlEVsj
- ljrPGtojgqqKxg8iHGa5v6USBrcgwqHyLTIwIxK//CYySHTIl04JiSsOM0FYgO/KlIUeczE1FD
- iig=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 01:17:17 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JgDKm3MQXz1SHwl
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 01:17:16 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1642756635; x=1645348636; bh=DDt33//J7HC81vPepGQWceRVhDsuFSNWZ9d
-        7bVsT2sk=; b=JJ1bWH54T0ozCRDNFOawIcDYYrXmiS6mLF3bufMWI8NIa+2kaQT
-        gCBgwenjhfSIESElInLy4f7hnR7B/c8AlmdP0YJlB/yBcj4ZSDRucj/ARZ8iebTx
-        fX4cav++QB5+nrjZ/xNlR7WsOefucQ/VKRddYsk1OsSGfjMxLK9ouF+vHs+ICHA7
-        QaQ2sHdGGswVwNNN4/NAuldiTPB3O2e4rjI+PHGvCgubY6wPSEdLOP7NfwwXL43W
-        0XkAgLTCQC9ZIavzM31zb7IlI4uGbI4OgvYnMIVfBXIQVP013Dxgw+JTtTEtRqj5
-        CB028YmS/z+ll5kfBZyeWV7wOCiloVbazWA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id zYi23LFcQm9Z for <linux-kernel@vger.kernel.org>;
-        Fri, 21 Jan 2022 01:17:15 -0800 (PST)
-Received: from [10.225.54.48] (unknown [10.225.54.48])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JgDKk0DRvz1RvlN;
-        Fri, 21 Jan 2022 01:17:13 -0800 (PST)
-Message-ID: <350720e8-9b78-bd24-5c60-602076610bf4@opensource.wdc.com>
-Date:   Fri, 21 Jan 2022 18:17:12 +0900
+        Fri, 21 Jan 2022 04:17:51 -0500
+Received: (Authenticated sender: gregory.clement@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A26D21BF205;
+        Fri, 21 Jan 2022 09:17:49 +0000 (UTC)
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Subject: Re: [PATCH v2 1/1] ARM: orion/gpio: Get rid of unused first
+ parameter in orion_gpio_init()
+In-Reply-To: <20211214140656.53694-1-andriy.shevchenko@linux.intel.com>
+References: <20211214140656.53694-1-andriy.shevchenko@linux.intel.com>
+Date:   Fri, 21 Jan 2022 10:17:49 +0100
+Message-ID: <8735lh5txe.fsf@BL-laptop>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Subject: Re: [next] mips: cavium_octeon_defconfig: pata_octeon_cf.c:598:23:
- error: passing argument 1 of 'trace_ata_bmdma_stop' from incompatible pointer
- type
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        CGEL ZTE <cgel.zte@gmail.com>
-References: <CA+G9fYtq0wzSeG8YG-a+=KrbdWqHJMXk1hvq0FKeAvj9sZAK2g@mail.gmail.com>
- <6249735f-e6b7-1331-eb2b-361bb17d6115@opensource.wdc.com>
- <CA+G9fYu__OOvk-ESXoOqbd-Lk+CmO8CSQ8chEFf3MyeTjKtp9g@mail.gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital
-In-Reply-To: <CA+G9fYu__OOvk-ESXoOqbd-Lk+CmO8CSQ8chEFf3MyeTjKtp9g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/01/21 17:58, Naresh Kamboju wrote:
->> I just posted a fix. As I do not have the environment to compile test
->> mips, could someone test please ? I will send the fix to Linus asap
->> after confirmation that it is OK.
-> 
-> Please share your patch / patch link. I will test it with tuxmake.
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
 
-I posted on linux-ide and CC-ed linux-mips:
+> The OF node pointer is always NULL, get rid of unused parameter in
+> orion_gpio_init(). As a side effect it will allow to switch GPIO
+> library to the fwnode API, as well as in case of resurrecting it here
+> it should be fwnode_handle anyways.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-https://marc.info/?l=linux-ide&m=164275458614058&w=2
 
-> 
-> you may also give a try with these easy steps.
-> 
-> # To install tuxmake on your system globally:
-> # sudo pip3 install -U tuxmake
-> #
-> # See https://docs.tuxmake.org/ for complete documentation.
-> # Original tuxmake command with fragments listed below.
-> 
->  tuxmake --runtime podman --target-arch mips --toolchain gcc-10
-> --kconfig cavium_octeon_defconfig
+Applied on mvebu/arm
 
-I saw this in the compilation error report. Will try this.
+Thanks,
 
-> 
-> - Naresh
+Gregory
 
+> ---
+> v2: wrapped to 80 limit (Russell)
+>  arch/arm/mach-dove/irq.c                      | 6 +++---
+>  arch/arm/mach-mv78xx0/irq.c                   | 3 +--
+>  arch/arm/mach-orion5x/irq.c                   | 2 +-
+>  arch/arm/plat-orion/gpio.c                    | 8 ++------
+>  arch/arm/plat-orion/include/plat/orion-gpio.h | 3 +--
+>  5 files changed, 8 insertions(+), 14 deletions(-)
+>
+> diff --git a/arch/arm/mach-dove/irq.c b/arch/arm/mach-dove/irq.c
+> index 31ccbcee2627..d36f6b8269c2 100644
+> --- a/arch/arm/mach-dove/irq.c
+> +++ b/arch/arm/mach-dove/irq.c
+> @@ -73,12 +73,12 @@ void __init dove_init_irq(void)
+>  	/*
+>  	 * Initialize gpiolib for GPIOs 0-71.
+>  	 */
+> -	orion_gpio_init(NULL, 0, 32, DOVE_GPIO_LO_VIRT_BASE, 0,
+> +	orion_gpio_init(0, 32, DOVE_GPIO_LO_VIRT_BASE, 0,
+>  			IRQ_DOVE_GPIO_START, gpio0_irqs);
+>  
+> -	orion_gpio_init(NULL, 32, 32, DOVE_GPIO_HI_VIRT_BASE, 0,
+> +	orion_gpio_init(32, 32, DOVE_GPIO_HI_VIRT_BASE, 0,
+>  			IRQ_DOVE_GPIO_START + 32, gpio1_irqs);
+>  
+> -	orion_gpio_init(NULL, 64, 8, DOVE_GPIO2_VIRT_BASE, 0,
+> +	orion_gpio_init(64, 8, DOVE_GPIO2_VIRT_BASE, 0,
+>  			IRQ_DOVE_GPIO_START + 64, gpio2_irqs);
+>  }
+> diff --git a/arch/arm/mach-mv78xx0/irq.c b/arch/arm/mach-mv78xx0/irq.c
+> index 788569e960e1..0b5f055ca1c3 100644
+> --- a/arch/arm/mach-mv78xx0/irq.c
+> +++ b/arch/arm/mach-mv78xx0/irq.c
+> @@ -67,7 +67,6 @@ void __init mv78xx0_init_irq(void)
+>  	 * registers for core #1 are at an offset of 0x18 from those of
+>  	 * core #0.)
+>  	 */
+> -	orion_gpio_init(NULL, 0, 32, GPIO_VIRT_BASE,
+> -			mv78xx0_core_index() ? 0x18 : 0,
+> +	orion_gpio_init(0, 32, GPIO_VIRT_BASE, mv78xx0_core_index() ? 0x18 : 0,
+>  			IRQ_MV78XX0_GPIO_START, gpio0_irqs);
+>  }
+> diff --git a/arch/arm/mach-orion5x/irq.c b/arch/arm/mach-orion5x/irq.c
+> index ac4af2283bef..1ae775d02d90 100644
+> --- a/arch/arm/mach-orion5x/irq.c
+> +++ b/arch/arm/mach-orion5x/irq.c
+> @@ -49,6 +49,6 @@ void __init orion5x_init_irq(void)
+>  	/*
+>  	 * Initialize gpiolib for GPIOs 0-31.
+>  	 */
+> -	orion_gpio_init(NULL, 0, 32, GPIO_VIRT_BASE, 0,
+> +	orion_gpio_init(0, 32, GPIO_VIRT_BASE, 0,
+>  			IRQ_ORION5X_GPIO_START, gpio0_irqs);
+>  }
+> diff --git a/arch/arm/plat-orion/gpio.c b/arch/arm/plat-orion/gpio.c
+> index 734f0be4f14a..3ef9ecdd6343 100644
+> --- a/arch/arm/plat-orion/gpio.c
+> +++ b/arch/arm/plat-orion/gpio.c
+> @@ -516,8 +516,7 @@ static void orion_gpio_mask_irq(struct irq_data *d)
+>  	irq_gc_unlock(gc);
+>  }
+>  
+> -void __init orion_gpio_init(struct device_node *np,
+> -			    int gpio_base, int ngpio,
+> +void __init orion_gpio_init(int gpio_base, int ngpio,
+>  			    void __iomem *base, int mask_offset,
+>  			    int secondary_irq_base,
+>  			    int irqs[4])
+> @@ -545,9 +544,6 @@ void __init orion_gpio_init(struct device_node *np,
+>  	ochip->chip.base = gpio_base;
+>  	ochip->chip.ngpio = ngpio;
+>  	ochip->chip.can_sleep = 0;
+> -#ifdef CONFIG_OF
+> -	ochip->chip.of_node = np;
+> -#endif
+>  	ochip->chip.dbg_show = orion_gpio_dbg_show;
+>  
+>  	spin_lock_init(&ochip->lock);
+> @@ -605,7 +601,7 @@ void __init orion_gpio_init(struct device_node *np,
+>  			       IRQ_NOREQUEST, IRQ_LEVEL | IRQ_NOPROBE);
+>  
+>  	/* Setup irq domain on top of the generic chip. */
+> -	ochip->domain = irq_domain_add_legacy(np,
+> +	ochip->domain = irq_domain_add_legacy(NULL,
+>  					      ochip->chip.ngpio,
+>  					      ochip->secondary_irq_base,
+>  					      ochip->secondary_irq_base,
+> diff --git a/arch/arm/plat-orion/include/plat/orion-gpio.h b/arch/arm/plat-orion/include/plat/orion-gpio.h
+> index e856b073a9c8..25a2963e0e0f 100644
+> --- a/arch/arm/plat-orion/include/plat/orion-gpio.h
+> +++ b/arch/arm/plat-orion/include/plat/orion-gpio.h
+> @@ -30,8 +30,7 @@ int orion_gpio_led_blink_set(struct gpio_desc *desc, int state,
+>  void orion_gpio_set_valid(unsigned pin, int mode);
+>  
+>  /* Initialize gpiolib. */
+> -void __init orion_gpio_init(struct device_node *np,
+> -			    int gpio_base, int ngpio,
+> +void __init orion_gpio_init(int gpio_base, int ngpio,
+>  			    void __iomem *base, int mask_offset,
+>  			    int secondary_irq_base,
+>  			    int irq[4]);
+> -- 
+> 2.33.0
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
 -- 
-Damien Le Moal
-Western Digital Research
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com

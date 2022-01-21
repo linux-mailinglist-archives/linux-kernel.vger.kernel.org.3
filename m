@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A01496129
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:35:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD409496127
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:35:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351132AbiAUOfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 09:35:39 -0500
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:46200 "EHLO
+        id S1381446AbiAUOec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 09:34:32 -0500
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:46838 "EHLO
         mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1381178AbiAUOdY (ORCPT
+        by vger.kernel.org with ESMTP id S1381160AbiAUOdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 21 Jan 2022 09:33:24 -0500
 Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20LDS7PK017315;
-        Fri, 21 Jan 2022 08:33:01 -0600
+        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20LDS7PL017315;
+        Fri, 21 Jan 2022 08:33:02 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=SeTHs7tezQ9JTFk92AAVSYnvlRgxi9TT/qpp81Qypp8=;
- b=n+p12vG/OU8vJ9pAqhaRSmNidtczJ3nVqJaNbJqdMO5pRBJ5RoWdN6WQzAn7hXh5Lqi9
- dbIU3lGOQ9oYLLqfNz28fXLvsSusMhJVRo+1lEqpLSktZvB1w32gCExpk3vtVpgf1ptD
- 6rAVWbeLHgTaWk1YP0FwlDkUTmZ67aM4Hdjlq1NwWPHlqpezkxWDDwcRKJD5RwBQZTN4
- hy/NfpxdFUBbJGEXVyBVx4z0Oh6ZLHVAEamWE3lAzjJKYVLRuljsylxtbS8rE5xdIixl
- lxexQIk903g7oRwzsVAf5sxjcUwwp55lvoRtYlY205+l76xZwd5FA6EXjQI37oN7IaL3 +A== 
+ bh=rEn0h8SRiY2No5hBRUCbDy0KDS79Bfzu7iJq6A2CKhc=;
+ b=MOI6EtNBj//9slHrxPiAZVK494+JxskwmKMCeh109K0ve1L2Vi1z+hXPDd/18dCAsXoF
+ PVuuCJ/P6IDpXIHWFRe/m4AYYicS4M2qG40gQKWjG3zkrN1TYjYlunq9NEni4bnMoToQ
+ zWrEMTp9n8uxgvf/nMAAWFwpbMOdAvyifkNOpFuh5929+5kE4hK4yo42BrOA0ZLtLEvA
+ /59JIGHgQYG9n05MR17lcKkIuYABLVNsUaS+fD2RiVU9ByZYbnh3UWwtdiL8CPG+JvtW
+ ZdMoK9fkwuFT9nSRe5S/iROY973qKLKMgtkI2I1hBi4Cktx/L+VyOTE+C4+hcsoku1xO gw== 
 Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3dqhyq0up1-6
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3dqhyq0up1-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 21 Jan 2022 08:33:01 -0600
+        Fri, 21 Jan 2022 08:33:02 -0600
 Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
  (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 21 Jan
- 2022 14:32:59 +0000
+ 2022 14:33:00 +0000
 Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Fri, 21 Jan 2022 14:32:59 +0000
+ Transport; Fri, 21 Jan 2022 14:33:00 +0000
 Received: from LONN2DGDQ73.ad.cirrus.com (unknown [198.90.238.138])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 2733B11D7;
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id A281845D;
         Fri, 21 Jan 2022 14:32:59 +0000 (UTC)
 From:   Stefan Binding <sbinding@opensource.cirrus.com>
 To:     Mark Brown <broonie@kernel.org>,
@@ -49,344 +49,110 @@ CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
         <linux-spi@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
         <platform-driver-x86@vger.kernel.org>,
         <patches@opensource.cirrus.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
         Stefan Binding <sbinding@opensource.cirrus.com>
-Subject: [PATCH v5 7/9] platform/x86: serial-multi-instantiate: Add SPI support
-Date:   Fri, 21 Jan 2022 14:32:52 +0000
-Message-ID: <20220121143254.6432-8-sbinding@opensource.cirrus.com>
+Subject: [PATCH v5 8/9] ALSA: hda/realtek: Add support for HP Laptops
+Date:   Fri, 21 Jan 2022 14:32:53 +0000
+Message-ID: <20220121143254.6432-9-sbinding@opensource.cirrus.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220121143254.6432-1-sbinding@opensource.cirrus.com>
 References: <20220121143254.6432-1-sbinding@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: QVaKH_74rC8gmIijxIPexmuTgSnVMBCN
-X-Proofpoint-ORIG-GUID: QVaKH_74rC8gmIijxIPexmuTgSnVMBCN
+X-Proofpoint-GUID: P6PNFL1HqGz3IEJORufkOZbe5lobq6Er
+X-Proofpoint-ORIG-GUID: P6PNFL1HqGz3IEJORufkOZbe5lobq6Er
 X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for spi bus in serial-multi-instantiate driver
+From: Lucas Tanure <tanureal@opensource.cirrus.com>
 
-Some peripherals can have either a I2C or a SPI connection
-to the host (but not both) but use the same HID for both
-types. So it is not possible to use the HID to determine
-whether it is I2C or SPI. The driver must check the node
-to see if it contains I2cSerialBus or SpiSerialBus entries.
+Add support for two and four CS35L41 using the component
+binding method
 
-For backwards-compatibility with the existing nodes I2C is
-checked first and if such entries are found ONLY I2C devices
-are created. Since some existing nodes that were already
-handled by this driver could also contain unrelated
-SpiSerialBus nodes that were previously ignored, and this
-preserves that behavior. If there is ever a need to handle
-a node where both I2C and SPI devices must be instantiated
-this can be added in future.
-
+Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
 Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
 ---
- drivers/acpi/scan.c                           |  13 +-
- drivers/platform/x86/Kconfig                  |  10 +-
- .../platform/x86/serial-multi-instantiate.c   | 174 +++++++++++++++---
- 3 files changed, 161 insertions(+), 36 deletions(-)
+ sound/pci/hda/patch_realtek.c | 43 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 42 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-index 8b237eb4e029..38c4f55960f4 100644
---- a/drivers/acpi/scan.c
-+++ b/drivers/acpi/scan.c
-@@ -1734,12 +1734,13 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
- 	bool is_serial_bus_slave = false;
- 	static const struct acpi_device_id ignore_serial_bus_ids[] = {
- 	/*
--	 * These devices have multiple I2cSerialBus resources and an i2c-client
--	 * must be instantiated for each, each with its own i2c_device_id.
--	 * Normally we only instantiate an i2c-client for the first resource,
--	 * using the ACPI HID as id. These special cases are handled by the
--	 * drivers/platform/x86/serial-multi-instantiate.c driver, which knows
--	 * which i2c_device_id to use for each resource.
-+	 * These devices have multiple I2cSerialBus/SpiSerialBus resources
-+	 * and an (i2c/spi)-client must be instantiated for each, each with
-+	 * its own i2c_device_id/spi_device_id.
-+	 * Normally we only instantiate an (i2c/spi)-client for the first
-+	 * resource, using the ACPI HID as id. These special cases are handled
-+	 * by the drivers/platform/x86/serial-multi-instantiate.c driver, which
-+	 * knows which i2c_device_id or spi_device_id to use for each resource.
- 	 */
- 		{"BSG1160", },
- 		{"BSG2150", },
-diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-index 5b65d687f046..28f5bbf0f27a 100644
---- a/drivers/platform/x86/Kconfig
-+++ b/drivers/platform/x86/Kconfig
-@@ -991,12 +991,12 @@ config TOPSTAR_LAPTOP
- 	  If you have a Topstar laptop, say Y or M here.
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 668274e52674..b4fde8f603b1 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -6611,6 +6611,16 @@ static void cs35l41_fixup_i2c_two(struct hda_codec *cdc, const struct hda_fixup
+ 	cs35l41_generic_fixup(cdc, action, "i2c", "CSC3551", 2);
+ }
  
- config SERIAL_MULTI_INSTANTIATE
--	tristate "I2C multi instantiate pseudo device driver"
--	depends on I2C && ACPI
-+	tristate "I2C and SPI multi instantiate pseudo device driver"
-+	depends on I2C && SPI && ACPI
- 	help
--	  Some ACPI-based systems list multiple i2c-devices in a single ACPI
--	  firmware-node. This driver will instantiate separate i2c-clients
--	  for each device in the firmware-node.
-+	  Some ACPI-based systems list multiple i2c/spi devices in a
-+	  single ACPI firmware-node. This driver will instantiate separate
-+	  i2c-clients or spi-devices for each device in the firmware-node.
- 
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called serial-multi-instantiate.
-diff --git a/drivers/platform/x86/serial-multi-instantiate.c b/drivers/platform/x86/serial-multi-instantiate.c
-index 162ec20a861a..535c80789852 100644
---- a/drivers/platform/x86/serial-multi-instantiate.c
-+++ b/drivers/platform/x86/serial-multi-instantiate.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0+
- /*
-  * Serial multi-instantiate driver, pseudo driver to instantiate multiple
-- * i2c-clients from a single fwnode.
-+ * i2c-clients or spi-devices from a single fwnode.
-  *
-  * Copyright 2018 Hans de Goede <hdegoede@redhat.com>
-  */
-@@ -14,6 +14,7 @@
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/property.h>
-+#include <linux/spi/spi.h>
- #include <linux/types.h>
- 
- #define IRQ_RESOURCE_TYPE	GENMASK(1, 0)
-@@ -21,15 +22,28 @@
- #define IRQ_RESOURCE_GPIO	1
- #define IRQ_RESOURCE_APIC	2
- 
-+enum smi_bus_type {
-+	SMI_I2C,
-+	SMI_SPI,
-+	SMI_AUTO_DETECT,
-+};
-+
- struct smi_instance {
- 	const char *type;
- 	unsigned int flags;
- 	int irq_idx;
- };
- 
-+struct smi_node {
-+	enum smi_bus_type bus_type;
-+	struct smi_instance instances[];
-+};
-+
- struct smi {
- 	int i2c_num;
-+	int spi_num;
- 	struct i2c_client **i2c_devs;
-+	struct spi_device **spi_devs;
- };
- 
- static int smi_get_irq(struct platform_device *pdev, struct acpi_device *adev,
-@@ -60,6 +74,93 @@ static void smi_devs_unregister(struct smi *smi)
- {
- 	while (smi->i2c_num > 0)
- 		i2c_unregister_device(smi->i2c_devs[--smi->i2c_num]);
-+
-+	while (smi->spi_num > 0)
-+		spi_unregister_device(smi->spi_devs[--smi->spi_num]);
++static void cs35l41_fixup_spi_two(struct hda_codec *codec, const struct hda_fixup *fix, int action)
++{
++	cs35l41_generic_fixup(codec, action, "spi0", "CSC3551", 2);
 +}
 +
-+/**
-+ * smi_spi_probe - Instantiate multiple SPI devices from inst array
-+ * @pdev:	Platform device
-+ * @adev:	ACPI device
-+ * @smi:	Internal struct for Serial multi instantiate driver
-+ * @inst:	Array of instances to probe
-+ *
-+ * Returns the number of SPI devices instantiate, Zero if none is found or a negative error code.
-+ */
-+static int smi_spi_probe(struct platform_device *pdev, struct acpi_device *adev, struct smi *smi,
-+			 const struct smi_instance *inst_array)
++static void cs35l41_fixup_spi_four(struct hda_codec *codec, const struct hda_fixup *fix, int action)
 +{
-+	struct device *dev = &pdev->dev;
-+	struct spi_controller *ctlr;
-+	struct spi_device *spi_dev;
-+	char name[50];
-+	int i, ret, count;
++	cs35l41_generic_fixup(codec, action, "spi0", "CSC3551", 4);
++}
 +
-+	ret = acpi_spi_count_resources(adev);
-+	if (ret <= 0)
-+		return ret == 0 ? -ENODEV : ret;
-+
-+	count = ret;
-+
-+	smi->spi_devs = devm_kcalloc(dev, count, sizeof(*smi->spi_devs), GFP_KERNEL);
-+	if (!smi->spi_devs)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < count && inst_array[i].type; i++) {
-+
-+		spi_dev = acpi_spi_device_alloc(NULL, adev, i);
-+		if (IS_ERR(spi_dev)) {
-+			ret = PTR_ERR(spi_dev);
-+			dev_err_probe(dev, ret, "failed to allocate SPI device %s from ACPI: %d\n",
-+				      dev_name(&adev->dev), ret);
-+			goto error;
-+		}
-+
-+		ctlr = spi_dev->controller;
-+
-+		strscpy(spi_dev->modalias, inst_array[i].type, sizeof(spi_dev->modalias));
-+
-+		ret = smi_get_irq(pdev, adev, &inst_array[i]);
-+		if (ret < 0) {
-+			spi_dev_put(spi_dev);
-+			goto error;
-+		}
-+		spi_dev->irq = ret;
-+
-+		snprintf(name, sizeof(name), "%s-%s-%s.%d", dev_name(&ctlr->dev), dev_name(dev),
-+			 inst_array[i].type, i);
-+		spi_dev->dev.init_name = name;
-+
-+		ret = spi_add_device(spi_dev);
-+		if (ret) {
-+			dev_err_probe(&ctlr->dev, ret,
-+				      "failed to add SPI device %s from ACPI: %d\n",
-+				      dev_name(&adev->dev), ret);
-+			spi_dev_put(spi_dev);
-+			goto error;
-+		}
-+
-+		dev_dbg(dev, "SPI device %s using chip select %u", name, spi_dev->chip_select);
-+
-+		smi->spi_devs[i] = spi_dev;
-+		smi->spi_num++;
-+	}
-+
-+	if (smi->spi_num < count) {
-+		dev_err(dev, "Error finding driver, idx %d\n", i);
-+		ret = -ENODEV;
-+		goto error;
-+	}
-+
-+	dev_info(dev, "Instantiated %d SPI devices.\n", smi->spi_num);
-+
-+	return 0;
-+error:
-+	smi_devs_unregister(smi);
-+
-+	return ret;
-+
- }
- 
- /**
-@@ -125,13 +226,13 @@ static int smi_i2c_probe(struct platform_device *pdev, struct acpi_device *adev,
- 
- static int smi_probe(struct platform_device *pdev)
+ static void alc287_legion_16achg6_playback_hook(struct hda_pcm_stream *hinfo, struct hda_codec *cdc,
+ 						struct snd_pcm_substream *sub, int action)
  {
--	const struct smi_instance *inst_array;
- 	struct device *dev = &pdev->dev;
-+	const struct smi_node *node;
- 	struct acpi_device *adev;
- 	struct smi *smi;
+@@ -6948,6 +6958,9 @@ enum {
+ 	ALC285_FIXUP_LEGION_Y9000X_AUTOMUTE,
+ 	ALC287_FIXUP_LEGION_16ACHG6,
+ 	ALC287_FIXUP_CS35L41_I2C_2,
++	ALC245_FIXUP_CS35L41_SPI_2,
++	ALC245_FIXUP_CS35L41_SPI_4,
++	ALC245_FIXUP_CS35L41_SPI_4_HP_GPIO_LED,
+ 	ALC285_FIXUP_HP_SPEAKERS_MICMUTE_LED,
+ };
  
--	inst_array = device_get_match_data(dev);
--	if (!inst_array) {
-+	node = device_get_match_data(dev);
-+	if (!node) {
- 		dev_err(dev, "Error ACPI match data is missing\n");
- 		return -ENODEV;
- 	}
-@@ -146,7 +247,21 @@ static int smi_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, smi);
- 
--	return smi_i2c_probe(pdev, adev, smi, inst_array);
-+	switch (node->bus_type) {
-+	case SMI_I2C:
-+		return smi_i2c_probe(pdev, adev, smi, node->instances);
-+	case SMI_SPI:
-+		return smi_spi_probe(pdev, adev, smi, node->instances);
-+	case SMI_AUTO_DETECT:
-+		if (i2c_acpi_client_count(adev) > 0)
-+			return smi_i2c_probe(pdev, adev, smi, node->instances);
-+		else
-+			return smi_spi_probe(pdev, adev, smi, node->instances);
-+	default:
-+		break;
-+	}
-+
-+	return 0; /* never reached */
- }
- 
- static int smi_remove(struct platform_device *pdev)
-@@ -158,27 +273,36 @@ static int smi_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--static const struct smi_instance bsg1160_data[]  = {
--	{ "bmc150_accel", IRQ_RESOURCE_GPIO, 0 },
--	{ "bmc150_magn" },
--	{ "bmg160" },
--	{}
-+static const struct smi_node bsg1160_data = {
-+	.instances = {
-+		{ "bmc150_accel", IRQ_RESOURCE_GPIO, 0 },
-+		{ "bmc150_magn" },
-+		{ "bmg160" },
-+		{}
+@@ -8699,6 +8712,20 @@ static const struct hda_fixup alc269_fixups[] = {
+ 		.type = HDA_FIXUP_FUNC,
+ 		.v.func = cs35l41_fixup_i2c_two,
+ 	},
++	[ALC245_FIXUP_CS35L41_SPI_2] = {
++		.type = HDA_FIXUP_FUNC,
++		.v.func = cs35l41_fixup_spi_two,
 +	},
-+	.bus_type = SMI_I2C,
- };
- 
--static const struct smi_instance bsg2150_data[]  = {
--	{ "bmc150_accel", IRQ_RESOURCE_GPIO, 0 },
--	{ "bmc150_magn" },
--	/* The resources describe a 3th client, but it is not really there. */
--	{ "bsg2150_dummy_dev" },
--	{}
-+static const struct smi_node bsg2150_data = {
-+	.instances = {
-+		{ "bmc150_accel", IRQ_RESOURCE_GPIO, 0 },
-+		{ "bmc150_magn" },
-+		/* The resources describe a 3th client, but it is not really there. */
-+		{ "bsg2150_dummy_dev" },
-+		{}
++	[ALC245_FIXUP_CS35L41_SPI_4] = {
++		.type = HDA_FIXUP_FUNC,
++		.v.func = cs35l41_fixup_spi_four,
 +	},
-+	.bus_type = SMI_I2C,
- };
- 
--static const struct smi_instance int3515_data[]  = {
--	{ "tps6598x", IRQ_RESOURCE_APIC, 0 },
--	{ "tps6598x", IRQ_RESOURCE_APIC, 1 },
--	{ "tps6598x", IRQ_RESOURCE_APIC, 2 },
--	{ "tps6598x", IRQ_RESOURCE_APIC, 3 },
--	{}
-+static const struct smi_node int3515_data = {
-+	.instances = {
-+		{ "tps6598x", IRQ_RESOURCE_APIC, 0 },
-+		{ "tps6598x", IRQ_RESOURCE_APIC, 1 },
-+		{ "tps6598x", IRQ_RESOURCE_APIC, 2 },
-+		{ "tps6598x", IRQ_RESOURCE_APIC, 3 },
-+		{}
++	[ALC245_FIXUP_CS35L41_SPI_4_HP_GPIO_LED] = {
++		.type = HDA_FIXUP_FUNC,
++		.v.func = alc245_fixup_hp_gpio_led,
++		.chained = true,
++		.chain_id = ALC245_FIXUP_CS35L41_SPI_4,
 +	},
-+	.bus_type = SMI_I2C,
- };
- 
- /*
-@@ -186,9 +310,9 @@ static const struct smi_instance int3515_data[]  = {
-  * drivers/acpi/scan.c: acpi_device_enumeration_by_parent().
-  */
- static const struct acpi_device_id smi_acpi_ids[] = {
--	{ "BSG1160", (unsigned long)bsg1160_data },
--	{ "BSG2150", (unsigned long)bsg2150_data },
--	{ "INT3515", (unsigned long)int3515_data },
-+	{ "BSG1160", (unsigned long)&bsg1160_data },
-+	{ "BSG2150", (unsigned long)&bsg2150_data },
-+	{ "INT3515", (unsigned long)&int3515_data },
- 	{ }
- };
- MODULE_DEVICE_TABLE(acpi, smi_acpi_ids);
+ 	[ALC285_FIXUP_HP_SPEAKERS_MICMUTE_LED] = {
+ 		.type = HDA_FIXUP_VERBS,
+ 		.v.verbs = (const struct hda_verb[]) {
+@@ -8926,7 +8953,21 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x103c, 0x8896, "HP EliteBook 855 G8 Notebook PC", ALC285_FIXUP_HP_MUTE_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8898, "HP EliteBook 845 G8 Notebook PC", ALC285_FIXUP_HP_LIMIT_INT_MIC_BOOST),
+ 	SND_PCI_QUIRK(0x103c, 0x88d0, "HP Pavilion 15-eh1xxx (mainboard 88D0)", ALC287_FIXUP_HP_GPIO_LED),
+-	SND_PCI_QUIRK(0x103c, 0x89c3, "HP", ALC285_FIXUP_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x896E, "HP EliteBook x360 830 G9", ALC245_FIXUP_CS35L41_SPI_2),
++	SND_PCI_QUIRK(0x103c, 0x8971, "HP EliteBook 830 G9", ALC245_FIXUP_CS35L41_SPI_2),
++	SND_PCI_QUIRK(0x103c, 0x8972, "HP EliteBook 840 G9", ALC245_FIXUP_CS35L41_SPI_2),
++	SND_PCI_QUIRK(0x103c, 0x8973, "HP EliteBook 860 G9", ALC245_FIXUP_CS35L41_SPI_2),
++	SND_PCI_QUIRK(0x103c, 0x8974, "HP EliteBook 840 Aero G9", ALC245_FIXUP_CS35L41_SPI_2),
++	SND_PCI_QUIRK(0x103c, 0x8975, "HP EliteBook x360 840 Aero G9", ALC245_FIXUP_CS35L41_SPI_2),
++	SND_PCI_QUIRK(0x103c, 0x8981, "HP Elite Dragonfly G3", ALC245_FIXUP_CS35L41_SPI_4),
++	SND_PCI_QUIRK(0x103c, 0x898E, "HP EliteBook 835 G9", ALC287_FIXUP_CS35L41_I2C_2),
++	SND_PCI_QUIRK(0x103c, 0x898F, "HP EliteBook 835 G9", ALC287_FIXUP_CS35L41_I2C_2),
++	SND_PCI_QUIRK(0x103c, 0x8991, "HP EliteBook 845 G9", ALC287_FIXUP_CS35L41_I2C_2),
++	SND_PCI_QUIRK(0x103c, 0x8992, "HP EliteBook 845 G9", ALC287_FIXUP_CS35L41_I2C_2),
++	SND_PCI_QUIRK(0x103c, 0x8994, "HP EliteBook 855 G9", ALC287_FIXUP_CS35L41_I2C_2),
++	SND_PCI_QUIRK(0x103c, 0x8995, "HP EliteBook 855 G9", ALC287_FIXUP_CS35L41_I2C_2),
++	SND_PCI_QUIRK(0x103c, 0x89C3, "Zbook Studio G9", ALC245_FIXUP_CS35L41_SPI_4_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x89C6, "Zbook Fury 17 G9", ALC245_FIXUP_CS35L41_SPI_2),
+ 	SND_PCI_QUIRK(0x103c, 0x89ca, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x1043, 0x103e, "ASUS X540SA", ALC256_FIXUP_ASUS_MIC),
+ 	SND_PCI_QUIRK(0x1043, 0x103f, "ASUS TX300", ALC282_FIXUP_ASUS_TX300),
 -- 
 2.25.1
 

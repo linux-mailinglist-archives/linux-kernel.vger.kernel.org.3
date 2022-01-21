@@ -2,163 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDFF4495B65
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A835A495B74
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379296AbiAUH5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 02:57:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379201AbiAUH4y (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 02:56:54 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A414C061755
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 23:56:54 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id s2-20020a17090ad48200b001b501977b23so7982860pju.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 23:56:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yfAXAcV/wZ+uHO6JBR1mzR4k32V5m276WxyzPLvNLTE=;
-        b=tsCSqk1SwZfKiz4ejFhGZDtmCqw1BaXmIG8GnY1LmOqW6W34x7ZWmogKVCWpUEv+ED
-         c/rvCRFm6ZFzNHCApLvlhG28OHe4IG/cw7kTVwnGWxQ//EN/1JNbHyZkalCAXATmuqpV
-         NsjevRa91/GcIqUtSYviL9C3VbU5COEXDSB/w81ygjvpB14LbyXqvqrB71bfm/zRZsne
-         h6PY30/T83gzrCY7cvBcDPJNQvJv5e/k6m3HbpZJPNQV9/qiikBXS3exSFVsMq5qMe/j
-         59qq4m+Kw5pJJAFd4Wwdt4Lpn7k//nWZG/wIWhg4LU7poy/H6IRz/+KH599kO8n7+pnc
-         iE1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yfAXAcV/wZ+uHO6JBR1mzR4k32V5m276WxyzPLvNLTE=;
-        b=zqYNb0vb3xmse7UEcfNp4s8jBn75T/9j2LmCCSOm60ZQ1n4GxgA/EzSlJkRlamc7vD
-         r3V/H2zzJ+3zlVCyg1WzMWOpatnVX+589BYpCWDfxcCMfat1auAkK6F6pXIexujJ7+sl
-         ZVB+TMGpz2H64KLzSDkNSGqbXeRja9vFnMXRC345DaJMqpWwj5Zn6i47LNQ5hFDulf0H
-         PTHWTf7OA3iteybruyzMcsZoc6RTF9IumZn75GB4WaT8FrSPvdp/DjZe7U2ouqmAnHUn
-         HWfdFIdxAqLWlr8OodhnntSmOroT6rDWNq8uCO6i9KOo8rt1L3GGR4qHC44lAlqA1oqq
-         qaOQ==
-X-Gm-Message-State: AOAM5312eFuXT6fduj94C7tBECB9JaxyB3Asom749P7WpI6I/8K6lkya
-        PxKJ9NkmBl+bSsKnY3WWefa+fQ==
-X-Google-Smtp-Source: ABdhPJyF+AFCIJwh5y14gbJR641hVBi2LRzmSf89BfdP8AWEWYlQZY5kaMYEvUoNkqJgILGBmJjr3w==
-X-Received: by 2002:a17:90b:248f:: with SMTP id nt15mr3418448pjb.137.1642751813587;
-        Thu, 20 Jan 2022 23:56:53 -0800 (PST)
-Received: from FVFYT0MHHV2J.tiktokcdn.com ([139.177.225.230])
-        by smtp.gmail.com with ESMTPSA id t15sm10778178pjy.17.2022.01.20.23.56.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 23:56:53 -0800 (PST)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     dan.j.williams@intel.com, willy@infradead.org, jack@suse.cz,
-        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
-        apopple@nvidia.com, shy828301@gmail.com, rcampbell@nvidia.com,
-        hughd@google.com, xiyuyang19@fudan.edu.cn,
-        kirill.shutemov@linux.intel.com, zwisler@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH 5/5] mm: remove range parameter from follow_invalidate_pte()
-Date:   Fri, 21 Jan 2022 15:55:15 +0800
-Message-Id: <20220121075515.79311-5-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
-In-Reply-To: <20220121075515.79311-1-songmuchun@bytedance.com>
-References: <20220121075515.79311-1-songmuchun@bytedance.com>
+        id S1379300AbiAUH6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 02:58:54 -0500
+Received: from mga05.intel.com ([192.55.52.43]:25458 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1379221AbiAUH6l (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 02:58:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642751921; x=1674287921;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jE99VFNQyNXY2EoQUsne6SaOHvBhTpB5dl4BtBOCEEw=;
+  b=jFDroRi4SSRFOp6bl86fahFcYZ7RaZA4kGmm0lV7TxR365RPbmSvp2vg
+   YiE5AbHGf9PIGXn2/AxM+18JfG014VBXScYG9HbP8XawQrMpYPAmSE/lZ
+   AbQ1kppFXzxuR8Jw6LYTd73/oZuglZnfG1rXbyZA4oHvpRzamoGzbmxOh
+   k5IZq3X7JrR0NQ2SLF4Og8lw0ioqmkaooATRyOWDHWDjiqiiApnbbbRMf
+   OtQWjW67dKthx7Rh6N7a0d96v1UG9ugQd3ax0K0ofZxt9wzUVyp2Gby+D
+   z+BN4Ln+mZNxrwT+7v7xIX7R3dcgSwY7QxsRnKU5LApSWbX17esZCvei6
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="331943673"
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="331943673"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 23:58:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="596051366"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 20 Jan 2022 23:58:38 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nAoog-000F4j-0e; Fri, 21 Jan 2022 07:58:38 +0000
+Date:   Fri, 21 Jan 2022 15:58:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     ycaibb <ycaibb@gmail.com>, davem@davemloft.net,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org, kuba@kernel.org
+Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ycaibb@gmail.com
+Subject: Re: [PATCH] net: missing lock releases in ipmr_base.c
+Message-ID: <202201211542.TGuj5kMv-lkp@intel.com>
+References: <20220121032210.5829-1-ycaibb@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220121032210.5829-1-ycaibb@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The only user (DAX) of range parameter of follow_invalidate_pte()
-is gone, it safe to remove the range paramter and make it static
-to simlify the code.
+Hi ycaibb,
 
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on net-next/master]
+[also build test WARNING on net/master horms-ipvs/master linus/master v5.16 next-20220121]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/ycaibb/net-missing-lock-releases-in-ipmr_base-c/20220121-112603
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 8aaaf2f3af2ae212428f4db1af34214225f5cec3
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20220121/202201211542.TGuj5kMv-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/33b03feacaf2155323b031274d2d67dab0cf561c
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review ycaibb/net-missing-lock-releases-in-ipmr_base-c/20220121-112603
+        git checkout 33b03feacaf2155323b031274d2d67dab0cf561c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash net/ipv4/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   net/ipv4/ipmr_base.c: In function 'mr_mfc_seq_idx':
+>> net/ipv4/ipmr_base.c:156:17: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+     156 |                 if (pos-- == 0)
+         |                 ^~
+   net/ipv4/ipmr_base.c:158:25: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+     158 |                         return mfc;
+         |                         ^~~~~~
+   net/ipv4/ipmr_base.c:164:17: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+     164 |                 if (pos-- == 0)
+         |                 ^~
+   net/ipv4/ipmr_base.c:166:25: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+     166 |                         return mfc;
+         |                         ^~~~~~
+
+
+vim +/if +156 net/ipv4/ipmr_base.c
+
+3feda6b46f7347 Yuval Mintz 2018-02-28  146  
+c8d61968032654 Yuval Mintz 2018-02-28  147  void *mr_mfc_seq_idx(struct net *net,
+c8d61968032654 Yuval Mintz 2018-02-28  148  		     struct mr_mfc_iter *it, loff_t pos)
+c8d61968032654 Yuval Mintz 2018-02-28  149  {
+c8d61968032654 Yuval Mintz 2018-02-28  150  	struct mr_table *mrt = it->mrt;
+c8d61968032654 Yuval Mintz 2018-02-28  151  	struct mr_mfc *mfc;
+c8d61968032654 Yuval Mintz 2018-02-28  152  
+c8d61968032654 Yuval Mintz 2018-02-28  153  	rcu_read_lock();
+c8d61968032654 Yuval Mintz 2018-02-28  154  	it->cache = &mrt->mfc_cache_list;
+c8d61968032654 Yuval Mintz 2018-02-28  155  	list_for_each_entry_rcu(mfc, &mrt->mfc_cache_list, list)
+c8d61968032654 Yuval Mintz 2018-02-28 @156  		if (pos-- == 0)
+33b03feacaf215 Ryan Cai    2022-01-21  157  			rcu_read_unlock();
+c8d61968032654 Yuval Mintz 2018-02-28  158  			return mfc;
+c8d61968032654 Yuval Mintz 2018-02-28  159  	rcu_read_unlock();
+c8d61968032654 Yuval Mintz 2018-02-28  160  
+c8d61968032654 Yuval Mintz 2018-02-28  161  	spin_lock_bh(it->lock);
+c8d61968032654 Yuval Mintz 2018-02-28  162  	it->cache = &mrt->mfc_unres_queue;
+c8d61968032654 Yuval Mintz 2018-02-28  163  	list_for_each_entry(mfc, it->cache, list)
+c8d61968032654 Yuval Mintz 2018-02-28  164  		if (pos-- == 0)
+33b03feacaf215 Ryan Cai    2022-01-21  165  			spin_unlock_bh(it->lock);
+c8d61968032654 Yuval Mintz 2018-02-28  166  			return mfc;
+c8d61968032654 Yuval Mintz 2018-02-28  167  	spin_unlock_bh(it->lock);
+c8d61968032654 Yuval Mintz 2018-02-28  168  
+c8d61968032654 Yuval Mintz 2018-02-28  169  	it->cache = NULL;
+c8d61968032654 Yuval Mintz 2018-02-28  170  	return NULL;
+c8d61968032654 Yuval Mintz 2018-02-28  171  }
+c8d61968032654 Yuval Mintz 2018-02-28  172  EXPORT_SYMBOL(mr_mfc_seq_idx);
+c8d61968032654 Yuval Mintz 2018-02-28  173  
+
 ---
- include/linux/mm.h |  3 ---
- mm/memory.c        | 23 +++--------------------
- 2 files changed, 3 insertions(+), 23 deletions(-)
-
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index d211a06784d5..7895b17f6847 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1814,9 +1814,6 @@ void free_pgd_range(struct mmu_gather *tlb, unsigned long addr,
- 		unsigned long end, unsigned long floor, unsigned long ceiling);
- int
- copy_page_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma);
--int follow_invalidate_pte(struct mm_struct *mm, unsigned long address,
--			  struct mmu_notifier_range *range, pte_t **ptepp,
--			  pmd_t **pmdpp, spinlock_t **ptlp);
- int follow_pte(struct mm_struct *mm, unsigned long address,
- 	       pte_t **ptepp, spinlock_t **ptlp);
- int follow_pfn(struct vm_area_struct *vma, unsigned long address,
-diff --git a/mm/memory.c b/mm/memory.c
-index 514a81cdd1ae..e8ce066be5f2 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -4869,9 +4869,8 @@ int __pmd_alloc(struct mm_struct *mm, pud_t *pud, unsigned long address)
- }
- #endif /* __PAGETABLE_PMD_FOLDED */
- 
--int follow_invalidate_pte(struct mm_struct *mm, unsigned long address,
--			  struct mmu_notifier_range *range, pte_t **ptepp,
--			  pmd_t **pmdpp, spinlock_t **ptlp)
-+static int follow_invalidate_pte(struct mm_struct *mm, unsigned long address,
-+				 pte_t **ptepp, pmd_t **pmdpp, spinlock_t **ptlp)
- {
- 	pgd_t *pgd;
- 	p4d_t *p4d;
-@@ -4898,31 +4897,17 @@ int follow_invalidate_pte(struct mm_struct *mm, unsigned long address,
- 		if (!pmdpp)
- 			goto out;
- 
--		if (range) {
--			mmu_notifier_range_init(range, MMU_NOTIFY_CLEAR, 0,
--						NULL, mm, address & PMD_MASK,
--						(address & PMD_MASK) + PMD_SIZE);
--			mmu_notifier_invalidate_range_start(range);
--		}
- 		*ptlp = pmd_lock(mm, pmd);
- 		if (pmd_huge(*pmd)) {
- 			*pmdpp = pmd;
- 			return 0;
- 		}
- 		spin_unlock(*ptlp);
--		if (range)
--			mmu_notifier_invalidate_range_end(range);
- 	}
- 
- 	if (pmd_none(*pmd) || unlikely(pmd_bad(*pmd)))
- 		goto out;
- 
--	if (range) {
--		mmu_notifier_range_init(range, MMU_NOTIFY_CLEAR, 0, NULL, mm,
--					address & PAGE_MASK,
--					(address & PAGE_MASK) + PAGE_SIZE);
--		mmu_notifier_invalidate_range_start(range);
--	}
- 	ptep = pte_offset_map_lock(mm, pmd, address, ptlp);
- 	if (!pte_present(*ptep))
- 		goto unlock;
-@@ -4930,8 +4915,6 @@ int follow_invalidate_pte(struct mm_struct *mm, unsigned long address,
- 	return 0;
- unlock:
- 	pte_unmap_unlock(ptep, *ptlp);
--	if (range)
--		mmu_notifier_invalidate_range_end(range);
- out:
- 	return -EINVAL;
- }
-@@ -4960,7 +4943,7 @@ int follow_invalidate_pte(struct mm_struct *mm, unsigned long address,
- int follow_pte(struct mm_struct *mm, unsigned long address,
- 	       pte_t **ptepp, spinlock_t **ptlp)
- {
--	return follow_invalidate_pte(mm, address, NULL, ptepp, NULL, ptlp);
-+	return follow_invalidate_pte(mm, address, ptepp, NULL, ptlp);
- }
- EXPORT_SYMBOL_GPL(follow_pte);
- 
--- 
-2.11.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

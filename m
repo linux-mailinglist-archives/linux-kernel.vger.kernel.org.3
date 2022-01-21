@@ -2,72 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C68495AF7
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0448D495AFD
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:39:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379058AbiAUHiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 02:38:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
+        id S1379086AbiAUHjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 02:39:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379037AbiAUHiO (ORCPT
+        with ESMTP id S1379115AbiAUHji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 02:38:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F476C061574;
-        Thu, 20 Jan 2022 23:38:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2623BB81EAC;
-        Fri, 21 Jan 2022 07:38:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DD4A3C340E1;
-        Fri, 21 Jan 2022 07:38:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642750691;
-        bh=Bby0Lf8FpZWnZ8SeUIyo+dyyamsTbnsAGYL5cMw89WE=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=hRsb5Exsy80EeP4N40d5xDxeyDQa/kk2hXoOCpMJ17/sniZzCWyKpGI/wiH0vVYac
-         p/oe+oXmsm8f48L+YVr8C02VzfIqLqDQmbeIcLsKGOmk3hrboOIsALzay6182D8ypG
-         U6g7p7EuMURVk5nu9yagVupvlYm+JsMNKdOTYaiIJMADyoTL4x0MFZiaRUTZGftuTU
-         aqHZ6jZymCxRJdF+j3PpUlvRhsg961O0PVS+Ww9Aew8KDf56hC9qLhSdI9nnMSKqlY
-         rSTtlBaWEsOh2o0k9fcSqGY9R8u7e94LA0/nCwG2ZGa59lFoKTbyGo+bSS7fIGAQ2n
-         1+vpFH91zLEnA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CD122F6079A;
-        Fri, 21 Jan 2022 07:38:11 +0000 (UTC)
-Subject: Re: [GIT PULL] more s390 updates for 5.17 merge window
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YemwXCXL/21UedM6@osiris>
-References: <YemwXCXL/21UedM6@osiris>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YemwXCXL/21UedM6@osiris>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.17-2
-X-PR-Tracked-Commit-Id: 5754f9084f261f6fbfdcc6e57dae97c86a6ff688
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 85e67d56ebdecd8601d62e3aadcd2927845c97b9
-Message-Id: <164275069183.15932.10282060775573633032.pr-tracker-bot@kernel.org>
-Date:   Fri, 21 Jan 2022 07:38:11 +0000
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+        Fri, 21 Jan 2022 02:39:38 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D71C061401
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 23:39:38 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id c9so7614393plg.11
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 23:39:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J/KI/DDN8T1ayErpxnQiZZ4iJShjEoYH/kl3zkOkoNM=;
+        b=NMy5ZakHpoNnM2tGCEPIZUk5eQaDDt7d6UOXJA9Bkot8hQ8cwZWFw7AHkVV7w45aj/
+         fooKSMsoNkTHHIHkKH0gBuFJR16x7IRrQdjuhm91pTk/A5qOnoOf9sp84fc88zCe0sb5
+         s/V282A3oyIuK5gVHLmNNOitYm0EbJ0ffVyPM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J/KI/DDN8T1ayErpxnQiZZ4iJShjEoYH/kl3zkOkoNM=;
+        b=U0kHCtffGCCZliv9vVk82z7hR5ok3XEIpKgVabxRk8bmZ0iI1fVfsiuC3eLJs7xmhO
+         Nyx7JI5CxgyyLYhFuJq6mPiOK/+fRMh/Usmh0RW0/0Sg/c2SDnZiCdPteW/+adBBrdz7
+         ENjIT/84Jlrb6vuKpUMr95yPsmbm0c3MwF4uKbhGRA4s17vncdm8nkDu1RyFdiXinrUE
+         32cEo1KwUPAOL29hfIYA5vP/+Q4EnWDyHITWheuVsNHNioY4MX8wEiwTU6V8BmIEySSY
+         uVSfIbbTXV8ROEJRfYa1h6Z6AC8OmKirdPRH0+DqhMwBPARXU5WMbsG35EXSlMXRxgSu
+         iFOg==
+X-Gm-Message-State: AOAM531W5xFGvEANpi/Naw34L1zzDgNnZmWOElVtT1aFlesCGuJcG+6K
+        hAcrcwPhnXYkMm2E++IJPsMQ8g==
+X-Google-Smtp-Source: ABdhPJzfwDP5KCYaZ2avm4GFVowDxl+HQFPqbIp0EUSpzjd3VONNETepWQLeksdkGayD/hvQVtkD7w==
+X-Received: by 2002:a17:902:6b4a:b0:149:7c73:bd6f with SMTP id g10-20020a1709026b4a00b001497c73bd6fmr2966661plt.46.1642750777816;
+        Thu, 20 Jan 2022 23:39:37 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t1sm6005968pfj.115.2022.01.20.23.39.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jan 2022 23:39:37 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Mat Martineau <mathew.j.martineau@linux.intel.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] mptcp: Use struct_group() to avoid cross-field memset()
+Date:   Thu, 20 Jan 2022 23:39:35 -0800
+Message-Id: <20220121073935.1154263-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1758; h=from:subject; bh=yGrVKJycM9qivlstRAt4EfHl5vdMltBdt/HqxajR6wA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh6mM3Kzvim73jJw1jchuqW5i5KKj0xFVS8nRZ1MEy YrQE6iOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYepjNwAKCRCJcvTf3G3AJmx1D/ 41qpIDOaMktPi/OXv2JS0l8Y6yahywC7M/IL2yWxJqReTyQ/TGSfDZIx+g5bsg4+CSBxEyqePyxc8I BOCEmGny2GqWbeixcRQpzODGJmidasyWIQJYr/tR4fJq/TzbkrUy8omwXlfDzWxV/f90ONw8I3ZsBv rAeik1f80B4OmkGlxhAIrihDRlxPLYdC9OAW7NKGMD+6TiK94xVMy2Md2soiznKz0zrINsMwykTi2r hjUEhUCo7zdwnew0qdn9EpMTWtRbV0X9jwaylle24dI/0xUuCnau2FYPd9CaArUKAGCwdBLNzwP05c oDcT4M5WF86HnonrnAPFmheRPU3DOKESv+0Tx0MdeAzTQdhMLoVl/rP13wvh9ivzZUxHWteCA0+WPf RrpLoCRwTxSfs6K90OQiO5HgJA0lIh2KE0EPxFxrNUWWkYo15prCPU73zqCNnj2jv+WEksf3X0LSXz upMs54qoPEovaR1/XGZ6ds0SCyPJuyQsmRj61gaHoHVS9/Y35/CfQQFuM1zYV0eStN4+Uy8yZWTpPx Hzr6CJE3nJv1JGfGjAKxLZpakcvUeH9VCxHy1/DoV+J4F4zFL5dcteTqQ2oGvPepXq61bNA5rQYa9w ZwAI/1E3+GIx2JA2dfkvqyJmBQAuQZLRaxX55hOCuJdCGHq8CxdP45lxz5Zg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 20 Jan 2022 19:56:28 +0100:
+In preparation for FORTIFY_SOURCE performing compile-time and run-time
+field bounds checking for memcpy(), memmove(), and memset(), avoid
+intentionally writing across neighboring fields.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.17-2
+Use struct_group() to capture the fields to be reset, so that memset()
+can be appropriately bounds-checked by the compiler.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/85e67d56ebdecd8601d62e3aadcd2927845c97b9
+Cc: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Cc: Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org
+Cc: mptcp@lists.linux.dev
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ net/mptcp/protocol.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thank you!
-
+diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
+index 0e6b42c76ea0..85317ce38e3f 100644
+--- a/net/mptcp/protocol.h
++++ b/net/mptcp/protocol.h
+@@ -408,7 +408,7 @@ DECLARE_PER_CPU(struct mptcp_delegated_action, mptcp_delegated_actions);
+ struct mptcp_subflow_context {
+ 	struct	list_head node;/* conn_list of subflows */
+ 
+-	char	reset_start[0];
++	struct_group(reset,
+ 
+ 	unsigned long avg_pacing_rate; /* protected by msk socket lock */
+ 	u64	local_key;
+@@ -458,7 +458,7 @@ struct mptcp_subflow_context {
+ 
+ 	long	delegated_status;
+ 
+-	char	reset_end[0];
++	);
+ 
+ 	struct	list_head delegated_node;   /* link into delegated_action, protected by local BH */
+ 
+@@ -494,7 +494,7 @@ mptcp_subflow_tcp_sock(const struct mptcp_subflow_context *subflow)
+ static inline void
+ mptcp_subflow_ctx_reset(struct mptcp_subflow_context *subflow)
+ {
+-	memset(subflow->reset_start, 0, subflow->reset_end - subflow->reset_start);
++	memset(&subflow->reset, 0, sizeof(subflow->reset));
+ 	subflow->request_mptcp = 1;
+ }
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.30.2
+

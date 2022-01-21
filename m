@@ -2,152 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1494957D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 02:41:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 604A54957DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 02:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348303AbiAUBl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 20:41:27 -0500
-Received: from relmlor1.renesas.com ([210.160.252.171]:44805 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233355AbiAUBl0 (ORCPT
+        id S1348338AbiAUBmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 20:42:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233355AbiAUBmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 20:41:26 -0500
-X-IronPort-AV: E=Sophos;i="5.88,303,1635174000"; 
-   d="scan'208";a="107148210"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 21 Jan 2022 10:41:25 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id DE52440134FE;
-        Fri, 21 Jan 2022 10:41:23 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-renesas-soc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v2] soc: renesas: Add support for reading product revision for RZ/G2L family
-Date:   Fri, 21 Jan 2022 01:41:17 +0000
-Message-Id: <20220121014117.21248-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 20 Jan 2022 20:42:14 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1762DC061574;
+        Thu, 20 Jan 2022 17:42:14 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id az27-20020a05600c601b00b0034d2956eb04so18438105wmb.5;
+        Thu, 20 Jan 2022 17:42:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=U25YZWIahU0TlivxPhX7fypYdif1ZsngEfiwlfENvXw=;
+        b=Q1bUMv4Swxs3gE7JkCAbHq/CMnNSSFTme/vjdh+UdrDKXnXGlEGsy1WvopjEuXaoH1
+         Tp9POVUU9eo/RiOlNfDO4RRin6dImCSgUKqo8RznoRc/ZmRJsm7wGz+EmZQbiOMnssRX
+         oSwZJM3UjKI5haPIXihJ8HYswKTTlQ+HfIm6TXy+PskOaaJaesYSrmrmbYj5Cx/74Nf/
+         Fbr2nsFaAIv2Gi6+WWlAO5q1e32aYkI1qAbF7LLbqmn4RBynTKZKF6hoyTJRNsLFv5DV
+         Wiy7YjUUyC4n+A4WKMSDfC6KtOY3T8gkFxl8BEkaVwjYhukf52w2GxtWnwcSkEkzVsrA
+         RbEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=U25YZWIahU0TlivxPhX7fypYdif1ZsngEfiwlfENvXw=;
+        b=QsbTRHWvkROIpGUTfuJrbS8UsxRs9xYobfdyRpMoXKFXe2vVQsIZQIqGxTsHBv7pcJ
+         UafxP2DUuhb+9LrF6csOGgnFYbr0QfXsIm2TdpLLW4bkHklrOlgJK6TREf6dhEfqdZ1A
+         hDFfd2/mWk05j8P38vXzGEONSX43PKnQ8YKywnaymu8AKrglyulbsB2vi1zMNtDNZs1Q
+         DJ2qRumsyLYA1333YlbyknjUlhJe1bT/r9dHM+2Kku615UjP4SsDvMRPz4jJ8NDC3vUn
+         MqLIOeOic8oM82S8SHaiCYFW052Dm/+B8SzUy9JT1d0pOA7/LKo+bbgCdwE0antgEPaw
+         VXHQ==
+X-Gm-Message-State: AOAM530oftjGtoPZOtAYYRJc5yQzi402ym9mk7hwurCPWo4VdEMqA275
+        5xj8PGWXgDVAPY0kD+575ZyZcnz+d+Y=
+X-Google-Smtp-Source: ABdhPJyPp+fQaI0+suIrZNd2DB3awxWMrv1Vbx9O3lG28p+M0vGPIdwOIhsP1RDZCYRS+PeN2REckg==
+X-Received: by 2002:a05:600c:2289:: with SMTP id 9mr10852081wmf.104.1642729332322;
+        Thu, 20 Jan 2022 17:42:12 -0800 (PST)
+Received: from Ansuel-xps. (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
+        by smtp.gmail.com with ESMTPSA id 1sm1271433wry.88.2022.01.20.17.42.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jan 2022 17:42:11 -0800 (PST)
+Message-ID: <61ea0f73.1c69fb81.44cb7.5093@mx.google.com>
+X-Google-Original-Message-ID: <YeoPZ4yT7mqLEGuL@Ansuel-xps.>
+Date:   Fri, 21 Jan 2022 02:41:59 +0100
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Taniya Das <tdas@codeaurora.org>,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        linux-clk@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH v2 02/15] dt-bindings: clock: simplify qcom,gcc-apq8064
+ Documentation
+References: <20220120232028.6738-1-ansuelsmth@gmail.com>
+ <20220120232028.6738-3-ansuelsmth@gmail.com>
+ <1642729058.530862.2314864.nullmailer@robh.at.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1642729058.530862.2314864.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Biju Das <biju.das.jz@bp.renesas.com>
+On Thu, Jan 20, 2022 at 07:37:38PM -0600, Rob Herring wrote:
+> On Fri, 21 Jan 2022 00:20:15 +0100, Ansuel Smith wrote:
+> > Simplify qcon,gcc-apq8064 Documentation by using qcom,gcc.yaml as a
+> > template.
+> > 
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > ---
+> >  .../bindings/clock/qcom,gcc-apq8064.yaml      | 27 +++----------------
+> >  1 file changed, 3 insertions(+), 24 deletions(-)
+> > 
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.example.dt.yaml:0:0: /example-0/clock-controller@900000: failed to match any schema with compatible: ['qcom,gcc-apq8064']
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/patch/1582347
+> 
+> This check can fail if there are any dependencies. The base for a patch
+> series is generally the most recent rc1.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit.
+> 
 
-As per RZ/G2L HW manual (Rev.1.00 Sep, 2021) DEV_ID [31:28] indicates
-product revision. Use this information to populate the revision info
-for RZ/G2L family.
+Mhh, think these error comes from running the bot with the single change.
+Or the bot runs the test with the previous commits merged?
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-v1->v2
-* Fixed freeing up soc_dev_attr in error path.
+I don't have these errors on my system with make dt_binding_check.
 
-Output from SMARC RZ/G2L:
-root@smarc-rzg2l:~# for i in machine family soc_id revision; do echo -n "$i: ";cat /sys/devices/soc0/$i; done
-machine: Renesas SMARC EVK based on r9a07g044l2
-family: RZ/G2L
-soc_id: r9a07g044
-revision: Rev 1
-root@smarc-rzg2l:~#
-root@smarc-rzg2l:~#
----
- drivers/soc/renesas/renesas-soc.c | 49 ++++++++++++++++++-------------
- 1 file changed, 29 insertions(+), 20 deletions(-)
-
-diff --git a/drivers/soc/renesas/renesas-soc.c b/drivers/soc/renesas/renesas-soc.c
-index 7da0ea3587c4..44e365b36b26 100644
---- a/drivers/soc/renesas/renesas-soc.c
-+++ b/drivers/soc/renesas/renesas-soc.c
-@@ -371,6 +371,7 @@ static int __init renesas_soc_init(void)
- 	struct soc_device *soc_dev;
- 	struct device_node *np;
- 	const char *soc_id;
-+	int ret;
- 
- 	match = of_match_node(renesas_socs, of_root);
- 	if (!match)
-@@ -391,6 +392,17 @@ static int __init renesas_soc_init(void)
- 		chipid = ioremap(family->reg, 4);
- 	}
- 
-+	soc_dev_attr = kzalloc(sizeof(*soc_dev_attr), GFP_KERNEL);
-+	if (!soc_dev_attr)
-+		return -ENOMEM;
-+
-+	np = of_find_node_by_path("/");
-+	of_property_read_string(np, "model", &soc_dev_attr->machine);
-+	of_node_put(np);
-+
-+	soc_dev_attr->family = kstrdup_const(family->name, GFP_KERNEL);
-+	soc_dev_attr->soc_id = kstrdup_const(soc_id, GFP_KERNEL);
-+
- 	if (chipid) {
- 		product = readl(chipid + id->offset);
- 		iounmap(chipid);
-@@ -405,41 +417,38 @@ static int __init renesas_soc_init(void)
- 
- 			eshi = ((product >> 4) & 0x0f) + 1;
- 			eslo = product & 0xf;
-+			soc_dev_attr->revision = kasprintf(GFP_KERNEL, "ES%u.%u",
-+							   eshi, eslo);
-+		}  else if (id == &id_rzg2l) {
-+			eshi =  ((product >> 28) & 0x0f);
-+			soc_dev_attr->revision = kasprintf(GFP_KERNEL, "Rev %u",
-+							   eshi);
- 		}
- 
- 		if (soc->id &&
- 		    ((product & id->mask) >> __ffs(id->mask)) != soc->id) {
- 			pr_warn("SoC mismatch (product = 0x%x)\n", product);
--			return -ENODEV;
-+			ret = -ENODEV;
-+			goto free_soc_dev_attr;
- 		}
- 	}
- 
--	soc_dev_attr = kzalloc(sizeof(*soc_dev_attr), GFP_KERNEL);
--	if (!soc_dev_attr)
--		return -ENOMEM;
--
--	np = of_find_node_by_path("/");
--	of_property_read_string(np, "model", &soc_dev_attr->machine);
--	of_node_put(np);
--
--	soc_dev_attr->family = kstrdup_const(family->name, GFP_KERNEL);
--	soc_dev_attr->soc_id = kstrdup_const(soc_id, GFP_KERNEL);
--	if (eshi)
--		soc_dev_attr->revision = kasprintf(GFP_KERNEL, "ES%u.%u", eshi,
--						   eslo);
--
- 	pr_info("Detected Renesas %s %s %s\n", soc_dev_attr->family,
- 		soc_dev_attr->soc_id, soc_dev_attr->revision ?: "");
- 
- 	soc_dev = soc_device_register(soc_dev_attr);
- 	if (IS_ERR(soc_dev)) {
--		kfree(soc_dev_attr->revision);
--		kfree_const(soc_dev_attr->soc_id);
--		kfree_const(soc_dev_attr->family);
--		kfree(soc_dev_attr);
--		return PTR_ERR(soc_dev);
-+		ret = PTR_ERR(soc_dev);
-+		goto free_soc_dev_attr;
- 	}
- 
- 	return 0;
-+
-+free_soc_dev_attr:
-+	kfree(soc_dev_attr->revision);
-+	kfree_const(soc_dev_attr->soc_id);
-+	kfree_const(soc_dev_attr->family);
-+	kfree(soc_dev_attr);
-+	return ret;
- }
- early_initcall(renesas_soc_init);
 -- 
-2.17.1
-
+	Ansuel

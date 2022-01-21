@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB5F496187
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:47:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2322A496189
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351271AbiAUOri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 09:47:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351247AbiAUOrg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 09:47:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C59C06173D;
-        Fri, 21 Jan 2022 06:47:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        id S1381259AbiAUOs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 09:48:59 -0500
+Received: from ms.lwn.net ([45.79.88.28]:51172 "EHLO ms.lwn.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1350999AbiAUOs7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 09:48:59 -0500
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8C50618D9;
-        Fri, 21 Jan 2022 14:47:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A0BC340E1;
-        Fri, 21 Jan 2022 14:47:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642776455;
-        bh=VIGt77avKEHv+W9gw/dLm58slX0hKWo685G7tWYTgDg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=btypg3EO8SDQUd6fysuYgllEWDcRkoRZlQe0kiSEpr6g53/HYwtnoFm5KO7YnjefN
-         dzPq1cDKSJVPfKCmWfbQhE59ryABX/AWPcOzT4wchjccb+CcOsh9Nu42m+mxBS4crm
-         L1a7Oen/wf/LaNRwDQjXjqaduMgnq2BZoIz70Dt+X6x6vUPKxOKFf1yhBVGm8O9Et1
-         A6Ls9kMOkxdyIuCw2zposUKQb9iq78JAYhOK14YGTvCbSGROs2Z8n5f8EW/lfjnJck
-         mcqJe9ESGO+uvqNsnMvT2E98Rm0yz0thaaRa9oNi07VuI2aFdDEOqT1rYYfqcCctHt
-         TOiMgACFSZkPg==
-Date:   Fri, 21 Jan 2022 15:47:32 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     tglx@linutronix.de, mark.rutland@arm.com, paulmck@kernel.org,
-        rostedt@goodmis.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, rcu@vger.kernel.org,
-        peterz@infradead.org, mtosatti@redhat.com, corbet@lwn.net
-Subject: Re: [PATCH v4 1/2] Documentation: Fill the gaps about entry/noinstr
- constraints
-Message-ID: <20220121144732.GA233613@lothringen>
-References: <20220110105044.94423-1-nsaenzju@redhat.com>
+        by ms.lwn.net (Postfix) with ESMTPSA id 9E899739;
+        Fri, 21 Jan 2022 14:48:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 9E899739
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1642776538; bh=9csn3Zs6jFAFfMGQWC4LX824xwK7SBMTPxIqKSWpvWc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EJK+Lq8ceKzmQGESjnXxLbCmPqR2b8qI3rjfNEaDUDuqAuzu+PFA2ZQDvJ7kROmM+
+         XeFo60JFZZS23ZcXJ7GICqyLpc1kpY8BHsN1UY6gze4Q6MgwqPSil4jASXD9zvDuwV
+         GQOHK02A7V2U/piVu9blTRAoXRzT6KovFkiUR+2wCsqPy5VJXcGMEvtPvSKNBPTKih
+         rPpEYmh4gRPfDeLLD3YLXXNKv2uIJ4fUseZzWGjE6TSF85ZxAu20F0mzTfCsHKqZVo
+         FKoMEl2NNAQkwLSizj03ZMa8EHq6MYo32p05/gAeVXHHodM+Ysaqa/2cT50HPwwdmb
+         Z4dS6ABwXZMhA==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [GIT PULL] Documentation fixes
+Date:   Fri, 21 Jan 2022 07:49:24 -0700
+Message-ID: <87bl05400b.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220110105044.94423-1-nsaenzju@redhat.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 11:50:43AM +0100, Nicolas Saenz Julienne wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
-> 
-> The entry/exit handling for exceptions, interrupts, syscalls and KVM is
-> not really documented except for some comments.
-> 
-> Fill the gaps.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de
-> Co-developed-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-> Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-> Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-> Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+The following changes since commit 87d6576ddf8ac25f36597bc93ca17f6628289c16:
 
-Nice!
+  scripts: sphinx-pre-install: Fix ctex support on Debian (2022-01-07 09:33:13 -0700)
 
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+are available in the Git repository at:
+
+  git://git.lwn.net/linux.git tags/docs-5.17-2
+
+for you to fetch changes up to b0ac702f3329cdc8a06dcaac73183d4b5a2b942d:
+
+  Documentation: fix firewire.rst ABI file path error (2022-01-20 17:01:32 -0700)
+
+----------------------------------------------------------------
+Three small documentation fixes.
+
+----------------------------------------------------------------
+Huichun Feng (1):
+      docs: ftrace: fix ambiguous sentence
+
+Randy Dunlap (1):
+      Documentation: fix firewire.rst ABI file path error
+
+Wang Cheng (1):
+      docs: staging/tee.rst: fix two typos found while reading
+
+ Documentation/driver-api/firewire.rst | 4 ++--
+ Documentation/staging/tee.rst         | 4 ++--
+ Documentation/trace/ftrace.rst        | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)

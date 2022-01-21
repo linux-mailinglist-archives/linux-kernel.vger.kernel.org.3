@@ -2,169 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C47949686B
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 00:55:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B503E49686F
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 00:58:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiAUXz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 18:55:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59348 "EHLO
+        id S229944AbiAUX6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 18:58:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiAUXz0 (ORCPT
+        with ESMTP id S229647AbiAUX6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 18:55:26 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545D0C06173B;
-        Fri, 21 Jan 2022 15:55:26 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id d5so8086101pjk.5;
-        Fri, 21 Jan 2022 15:55:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Q8HQt1HvGyw6p2m9jE0xI96X7Drt+WwhJJItVuCPdG4=;
-        b=AEn3ht+IvGHRh+8N2pnJhxmlOQxdgAcLE62J40D76oDg3HTNW2LI0IC5t8s+/fgRZR
-         n4oIQYpZNAYulc9nvN+b7EMOwNWMUPygVccUBjj/vhUIXX7b5IWwe9OHPKkAEyPZcFSu
-         5+U6IU8MYGETZY7qh/eL9qnshHH+14EREYGRUR+p+22k9gNc7YOYsubGRGfHPYcgL9GE
-         NHZjIOaUgLDikXWKZ8PNWkt4chPfHsXyBAyQcBNAG41rGk/l4XZQQ9cIEN+u9ayL2fii
-         OZo1GJBdkyVm1Wfd6tiTHzy8YrOFY2CebPcQLWd25GPDcUJ1jhNW3MXAppkBc4ACpSSw
-         GrHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Q8HQt1HvGyw6p2m9jE0xI96X7Drt+WwhJJItVuCPdG4=;
-        b=UuiWopMktPOYS5lYZwPoAEoDZ5scfSDYBzNNkL5D7dXRBtx9SuMviadnDqJJsS2JPt
-         +iculaQtj8KC5mVdvuaVc8QG7IGd0sjMyEQSZP15FPO0bVXcAnfNLMoFrF6mJuw2+unr
-         3F9+fmywcPiPISF71QaO+ghkzTLp2F7x21wGJ4cNijdySa49Zph+GhNUC4VMhqGVuQ7L
-         rsG2IFzRs/O+mu/4pPgNR+4k/k3YxK1bgcn2ND9Qjro1YwGnyVo+kyRMhxIrqeNi4YDR
-         lcVSPfHEX0oBuKCavkPL7HdAdOGqV0/mmIi21snEYW2UiPVRw8jsx8hawJrjzMGi2t0J
-         rSug==
-X-Gm-Message-State: AOAM531+ZpxSn2spcGO2q2JTeO40AI8is1cy5/RGLci0DhBkFRg56nfy
-        pY9xQqNz8qyQYWcMgQllCfs6ApXVJuohBbaAG7HYtpbZC6g=
-X-Google-Smtp-Source: ABdhPJx86p3K7XTaMBGZAt5t6KGfJNh508gK3uEngsI/OO5MJW6GbRwsKvZTTAPLgnbfwt3tSHrhBg3IaYflv0hOL1g=
-X-Received: by 2002:a17:90a:c78b:: with SMTP id gn11mr3015934pjb.138.1642809325739;
- Fri, 21 Jan 2022 15:55:25 -0800 (PST)
+        Fri, 21 Jan 2022 18:58:15 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C5CC06173B;
+        Fri, 21 Jan 2022 15:58:14 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jgbt83SYnz4xgt;
+        Sat, 22 Jan 2022 10:58:08 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1642809489;
+        bh=JiV/hnVkXRpcVEe7nCNuSsgZesl3ivyla4N8B2l1iWU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QFOWxx78aa3BQa/UD55Q1yjHdFbJ/kxpNdr3Iat6r4/CjypsZbqaktqfqrDcY6s+b
+         44paF6xlm82/2ZS13+4ZOuoIry0wqgSYkMZEjAl0fs+n3BeG77l8wwCSWsA+rbMull
+         8bSSnw0bH5eyV71Pgyere69Ptr6Ltt68+OOgWGLrIPDKW+9s/C4f9387BDu+xGFbK/
+         bThTjPlttKRXPDjAak7LoPFkzVxVDjuu7xvEKSC8jcjB9ozy4HHbMeohtwFr+AhkNz
+         Gxd/UKqBWeSX4nVIHCjBdEa0c/uRrYngSq/m8LsjLxXS5RQEl8W2fpvTQ1BYRGBSrp
+         qm8ifjb3pL2Qw==
+Date:   Sat, 22 Jan 2022 10:58:06 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-ID: <20220122105806.3b710900@canb.auug.org.au>
+In-Reply-To: <20211217144004.0c00fabc@canb.auug.org.au>
+References: <20211217144004.0c00fabc@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220121194926.1970172-1-song@kernel.org> <20220121194926.1970172-7-song@kernel.org>
-In-Reply-To: <20220121194926.1970172-7-song@kernel.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 21 Jan 2022 15:55:14 -0800
-Message-ID: <CAADnVQK6+gWTUDo2z1H6AE5_DtuBBetW+VTwwKz03tpVdfuoHA@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 6/7] bpf: introduce bpf_prog_pack allocator
-To:     Song Liu <song@kernel.org>
-Cc:     bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Kernel Team <kernel-team@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>,
-        Song Liu <songliubraving@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/Um4Yb3+Do9hb8+1U/ngUN2Z";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 11:49 AM Song Liu <song@kernel.org> wrote:
+--Sig_/Um4Yb3+Do9hb8+1U/ngUN2Z
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+On Fri, 17 Dec 2021 14:40:04 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> +static struct bpf_binary_header *
-> +__bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
-> +                      unsigned int alignment,
-> +                      bpf_jit_fill_hole_t bpf_fill_ill_insns,
-> +                      u32 round_up_to)
-> +{
-> +       struct bpf_binary_header *hdr;
-> +       u32 size, hole, start;
-> +
-> +       WARN_ON_ONCE(!is_power_of_2(alignment) ||
-> +                    alignment > BPF_IMAGE_ALIGNMENT);
-> +
-> +       /* Most of BPF filters are really small, but if some of them
-> +        * fill a page, allow at least 128 extra bytes to insert a
-> +        * random section of illegal instructions.
-> +        */
-> +       size = round_up(proglen + sizeof(*hdr) + 128, round_up_to);
-> +
-> +       if (bpf_jit_charge_modmem(size))
-> +               return NULL;
-> +       hdr = bpf_jit_alloc_exec(size);
-> +       if (!hdr) {
-> +               bpf_jit_uncharge_modmem(size);
-> +               return NULL;
-> +       }
-> +
-> +       /* Fill space with illegal/arch-dep instructions. */
-> +       bpf_fill_ill_insns(hdr, size);
-> +
-> +       hdr->size = size;
-> +       hole = min_t(unsigned int, size - (proglen + sizeof(*hdr)),
-> +                    PAGE_SIZE - sizeof(*hdr));
+> After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
+> produced these warnings:
+>=20
+> lib/strnlen_user.o: warning: objtool: strnlen_user()+0xc9: call to do_str=
+nlen_user() with UACCESS enabled
+> lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x129: cal=
+l to do_strncpy_from_user() with UACCESS enabled
+> vmlinux.o: warning: objtool: mce_start()+0x5c: call to __kasan_check_writ=
+e() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: mce_gather_info()+0x5f: call to v8086_mode.c=
+onstprop.0() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: mce_read_aux()+0x8a: call to mca_msr_reg() l=
+eaves .noinstr.text section
+> vmlinux.o: warning: objtool: do_machine_check()+0x192: call to mce_no_way=
+_out() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: mce_severity_amd.constprop.0()+0xca: call to=
+ mce_severity_amd_smca() leaves .noinstr.text section
+>=20
+> I am not sure which changes caused the above.
 
-It probably should be 'round_up_to' instead of PAGE_SIZE ?
+I currently still get the following warnings from an x86_64
+allmodconfig build fo Linus' tree:
 
-> +       start = (get_random_int() % hole) & ~(alignment - 1);
-> +
-> +       /* Leave a random number of instructions before BPF code. */
-> +       *image_ptr = &hdr->image[start];
-> +
-> +       return hdr;
-> +}
-> +
->  struct bpf_binary_header *
->  bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
->                      unsigned int alignment,
->                      bpf_jit_fill_hole_t bpf_fill_ill_insns)
-> +{
-> +       return __bpf_jit_binary_alloc(proglen, image_ptr, alignment,
-> +                                     bpf_fill_ill_insns, PAGE_SIZE);
-> +}
-> +
-> +struct bpf_binary_header *
-> +bpf_jit_binary_alloc_pack(unsigned int proglen, u8 **image_ptr,
-> +                         unsigned int alignment,
-> +                         bpf_jit_fill_hole_t bpf_fill_ill_insns)
->  {
->         struct bpf_binary_header *hdr;
->         u32 size, hole, start;
-> @@ -875,11 +1034,16 @@ bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
->          * fill a page, allow at least 128 extra bytes to insert a
->          * random section of illegal instructions.
->          */
-> -       size = round_up(proglen + sizeof(*hdr) + 128, PAGE_SIZE);
-> +       size = round_up(proglen + sizeof(*hdr) + 128, BPF_PROG_CHUNK_SIZE);
-> +
-> +       /* for too big program, use __bpf_jit_binary_alloc. */
-> +       if (size > BPF_PROG_MAX_PACK_PROG_SIZE)
-> +               return __bpf_jit_binary_alloc(proglen, image_ptr, alignment,
-> +                                             bpf_fill_ill_insns, PAGE_SIZE);
->
->         if (bpf_jit_charge_modmem(size))
->                 return NULL;
-> -       hdr = bpf_jit_alloc_exec(size);
-> +       hdr = bpf_prog_pack_alloc(size);
->         if (!hdr) {
->                 bpf_jit_uncharge_modmem(size);
->                 return NULL;
-> @@ -888,9 +1052,8 @@ bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
->         /* Fill space with illegal/arch-dep instructions. */
->         bpf_fill_ill_insns(hdr, size);
->
-> -       hdr->size = size;
+vmlinux.o: warning: objtool: mce_start()+0x5c: call to __kasan_check_write(=
+) leaves .noinstr.text section
+vmlinux.o: warning: objtool: mce_gather_info()+0x5f: call to v8086_mode.con=
+stprop.0() leaves .noinstr.text section
+vmlinux.o: warning: objtool: mce_read_aux()+0x8a: call to mca_msr_reg() lea=
+ves .noinstr.text section
+vmlinux.o: warning: objtool: do_machine_check()+0x192: call to mce_no_way_o=
+ut() leaves .noinstr.text section
+vmlinux.o: warning: objtool: mce_severity_amd.constprop.0()+0xca: call to m=
+ce_severity_amd_smca() leaves .noinstr.text section
 
-I'm missing where it's assigned.
-Looks like hdr->size stays zero, so free is never performed?
+$ x86_64-linux-gnu-gcc --version
+x86_64-linux-gnu-gcc (Debian 11.2.0-9) 11.2.0
+$ x86_64-linux-gnu-ld --version
+GNU ld (GNU Binutils for Debian) 2.37
 
->         hole = min_t(unsigned int, size - (proglen + sizeof(*hdr)),
-> -                    PAGE_SIZE - sizeof(*hdr));
-> +                    BPF_PROG_CHUNK_SIZE - sizeof(*hdr));
+--=20
+Cheers,
+Stephen Rothwell
 
-Before this change size - (proglen + sizeof(*hdr)) would
-be at least 128 and potentially bigger than PAGE_SIZE
-when extra 128 crossed page boundary.
-Hence min() was necessary with the 2nd arg being PAGE_SIZE - sizeof(*hdr).
+--Sig_/Um4Yb3+Do9hb8+1U/ngUN2Z
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-With new code size - (proglen + sizeof(*hdr)) would
-be between 128 and 128+64
-while BPF_PROG_CHUNK_SIZE - sizeof(*hdr) is a constant less than 64.
-What is the point of min() ?
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHrSI4ACgkQAVBC80lX
+0GzOcwf/Y6JGKwHFTnpj3CXpVJ5dxRNy1W2LnM6qM1cZwPhyAVDKS3A2xkXBImMB
+bMFneIxc7F0hRUZzJ0RQjQA57sH3b4eXm9g+pSr6yE4LxZGBAhtMVtRKFOe4juLy
+5ANhY+rCGWqP/nHv7LefX6daid3FZCOscQFLFwFI52fQCK6sK1N8B9azB2araG7A
+eT0eYBG78FE9L3gnfdj1RFqUmLtSmRmo1rhTMBTPxR/inkKe33uDio0QBsEb6KXG
+itRvQ30PeHZDVCtEuXbRPtR3gb8Uhjhq1PxnxsLQ9qnkiFIN9RnZnm612x/YRY8U
+XL+scqTcR/+ddbrhXQxkx5fNxv7VJQ==
+=g2EN
+-----END PGP SIGNATURE-----
+
+--Sig_/Um4Yb3+Do9hb8+1U/ngUN2Z--

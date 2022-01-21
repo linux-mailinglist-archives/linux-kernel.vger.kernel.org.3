@@ -2,140 +2,343 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C74D49681E
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 00:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84918496832
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 00:20:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiAUXNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 18:13:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51071 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229557AbiAUXND (ORCPT
+        id S229502AbiAUXUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 18:20:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229449AbiAUXUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 18:13:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642806782;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=38CLyOOFGNpsCH2Hm5Xzqz1LpA2MMoJHumLXa5e8yw0=;
-        b=QnhfbvZqvJut7xASbRinIInUHhFgX5705sLsK/XbAUpXTXLGX1O0UbJ69ZZ7lQAoBf+Vvs
-        xBLmLdN2cNjxpDaSkvgruP+5VXYgoqkodeBgchBDUpy0Mjx7kV51a8jy2RtULN90PkdCuD
-        ERy7EXKTSAVEXC80oKfJ26fgBF78fTc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-632-PCfsLRkTMk60m92azzUROQ-1; Fri, 21 Jan 2022 18:13:01 -0500
-X-MC-Unique: PCfsLRkTMk60m92azzUROQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 97EAB8143E5;
-        Fri, 21 Jan 2022 23:13:00 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.5])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 876F9108AD;
-        Fri, 21 Jan 2022 23:12:59 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH net] rxrpc: Adjust retransmission backoff
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Marc Dionne <marc.dionne@auristor.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, dhowells@redhat.com,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Fri, 21 Jan 2022 23:12:58 +0000
-Message-ID: <164280677857.1397447.9028458701099013997.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/0.23
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+        Fri, 21 Jan 2022 18:20:31 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BE8C06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 15:20:30 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id y14-20020a17090ad70e00b001b4fc2943b3so6739331pju.8
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 15:20:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=rJkt2rp2sXcRKhkLbOo10vg523kUXSvK0RkANN3MrI4=;
+        b=b0PSSLjMA5GIr8UuuiikhzZQaMMaOujVMTttgymGlcyXTBrxEQ+In/nePf5noq63y2
+         t2u+JHI9BGHGdFMV97vpwtPj3Oahi9eB0h6OSMJFp5sD+z5Gtvp1MjVaaYnelF9UyB0d
+         ZzMwUDxuv/bnHw1/FnDtbLdFXEaJ56mNZZ/G99IC8hF3TsLxh6ic0Jfuo5laKGW9e3ya
+         8wgx32Wmh1Fp1zSBADrgzOQBA2NdwZ8d5a+iKi+dX6saxgIxAalHhMwmgVM+IP713Ld7
+         7tC2jJNavikNSohhSy2FODSIiQC/D1Vb6ZZKU1Id2dJjRdEmko2CRzs+CcMgzrnbMpps
+         qItQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=rJkt2rp2sXcRKhkLbOo10vg523kUXSvK0RkANN3MrI4=;
+        b=Jd8j0gIKepFrTdMShYWN9eJXfyphr4eX5TDLJkQRaZCbXB3y/o9X/C9My/iK9wlVIx
+         DXd5eFhAIU9De/Vl+QrVUxgV+5yaLMfDtQPZQ610DMWpCbxC/IE4yDQawzZd13cmkclN
+         nwIRKWr9yOLosxeo67I86nIhQs0EJB65+s9sUNBbPhZMPmzz1bZyxZtiH1nPOASLu5uz
+         5wv4KqKL3VXiWWAdmuLNZYsipwIgc1B9BPmGWTRjsWj7/wBVMTTU0tIkhIKCcUO4vgUu
+         QaKOv16vEhO0svULbVO4qNwTsQb7+MZ/UM+OBn6yRNhBEO2RF1XOmRMmP+sMBeNyy/95
+         vrjA==
+X-Gm-Message-State: AOAM530AEdesZ6nQYrElMvaJzNqAX++Q7Es75qPYnzNY80/RMt6BK06n
+        a69GqEzU2izK7k6eoMoQ7gA6C24i2npJgguqpFE=
+X-Google-Smtp-Source: ABdhPJy1ZSu0bOXNhLK9X7vDvaQii1mjijoZbMteqfbEmW74sdj3aP0uARWXHVYxLbcNveDJnsIxebCVN62BHQ7jANs=
+X-Received: from willmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:2dd0])
+ (user=willmcvicker job=sendgmr) by 2002:a05:6a00:168b:b0:4a8:d88:9cd with
+ SMTP id k11-20020a056a00168b00b004a80d8809cdmr5650635pfc.11.1642807230301;
+ Fri, 21 Jan 2022 15:20:30 -0800 (PST)
+Date:   Fri, 21 Jan 2022 23:16:44 +0000
+Message-Id: <20220121231644.1732744-1-willmcvicker@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
+Subject: [PATCH v1 1/1] ASoC: dpcm: prevent snd_soc_dpcm use after free
+From:   Will McVicker <willmcvicker@google.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     kernel-team@android.com,
+        KaiChieh Chuang <kaichieh.chuang@mediatek.com>,
+        Will McVicker <willmcvicker@google.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Improve retransmission backoff by only backing off when we retransmit data
-packets rather than when we set the lost ack timer.
+From: KaiChieh Chuang <kaichieh.chuang@mediatek.com>
 
-To this end:
+[ Upstream commit a9764869779081e8bf24da07ac040e8f3efcf13a ]
 
- (1) In rxrpc_resend(), use rxrpc_get_rto_backoff() when setting the
-     retransmission timer and only tell it that we are retransmitting if we
-     actually have things to retransmit.
+The dpcm get from fe_clients/be_clients
+may be free before use
 
-     Note that it's possible for the retransmission algorithm to race with
-     the processing of a received ACK, so we may see no packets needing
-     retransmission.
+Add a spin lock at snd_soc_card level,
+to protect the dpcm instance.
+The lock may be used in atomic context, so use spin lock.
 
- (2) In rxrpc_send_data_packet(), don't bump the backoff when setting the
-     ack_lost_at timer, as it may then get bumped twice.
+Use irq spin lock version,
+since the lock may be used in interrupts.
 
-With this, when looking at one particular packet, the retransmission
-intervals were seen to be 1.5ms, 2ms, 3ms, 5ms, 9ms, 17ms, 33ms, 71ms,
-136ms, 264ms, 544ms, 1.088s, 2.1s, 4.2s and 8.3s.
+possible race condition between
+void dpcm_be_disconnect(
+	...
+	list_del(&dpcm->list_be);
+	list_del(&dpcm->list_fe);
+	kfree(dpcm);
+	...
 
-Fixes: c410bf01933e ("rxrpc: Fix the excessive initial retransmission timeout")
-Suggested-by: Marc Dionne <marc.dionne@auristor.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Marc Dionne <marc.dionne@auristor.com>
-Tested-by: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
-Link: https://lore.kernel.org/r/164138117069.2023386.17446904856843997127.stgit@warthog.procyon.org.uk/
+and
+	for_each_dpcm_fe()
+	for_each_dpcm_be*()
+
+race condition example
+Thread 1:
+    snd_soc_dapm_mixer_update_power()
+        -> soc_dpcm_runtime_update()
+            -> dpcm_be_disconnect()
+                -> kfree(dpcm);
+Thread 2:
+    dpcm_fe_dai_trigger()
+        -> dpcm_be_dai_trigger()
+            -> snd_soc_dpcm_can_be_free_stop()
+                -> if (dpcm->fe == fe)
+
+Excpetion Scenario:
+	two FE link to same BE
+	FE1 -> BE
+	FE2 ->
+
+	Thread 1: switch of mixer between FE2 -> BE
+	Thread 2: pcm_stop FE1
+
+Exception:
+
+Unable to handle kernel paging request at virtual address dead0000000000e0
+
+pc=<> [<ffffff8960e2cd10>] dpcm_be_dai_trigger+0x29c/0x47c
+	sound/soc/soc-pcm.c:3226
+		if (dpcm->fe == fe)
+lr=<> [<ffffff8960e2f694>] dpcm_fe_dai_do_trigger+0x94/0x26c
+
+Backtrace:
+[<ffffff89602dba80>] notify_die+0x68/0xb8
+[<ffffff896028c7dc>] die+0x118/0x2a8
+[<ffffff89602a2f84>] __do_kernel_fault+0x13c/0x14c
+[<ffffff89602a27f4>] do_translation_fault+0x64/0xa0
+[<ffffff8960280cf8>] do_mem_abort+0x4c/0xd0
+[<ffffff8960282ad0>] el1_da+0x24/0x40
+[<ffffff8960e2cd10>] dpcm_be_dai_trigger+0x29c/0x47c
+[<ffffff8960e2f694>] dpcm_fe_dai_do_trigger+0x94/0x26c
+[<ffffff8960e2edec>] dpcm_fe_dai_trigger+0x3c/0x44
+[<ffffff8960de5588>] snd_pcm_do_stop+0x50/0x5c
+[<ffffff8960dded24>] snd_pcm_action+0xb4/0x13c
+[<ffffff8960ddfdb4>] snd_pcm_drop+0xa0/0x128
+[<ffffff8960de69bc>] snd_pcm_common_ioctl+0x9d8/0x30f0
+[<ffffff8960de1cac>] snd_pcm_ioctl_compat+0x29c/0x2f14
+[<ffffff89604c9d60>] compat_SyS_ioctl+0x128/0x244
+[<ffffff8960283740>] el0_svc_naked+0x34/0x38
+[<ffffffffffffffff>] 0xffffffffffffffff
+
+Signed-off-by: KaiChieh Chuang <kaichieh.chuang@mediatek.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+[willmcvicker: move spinlock to bottom of struct snd_soc_card]
+Signed-off-by: Will McVicker <willmcvicker@google.com>
+Cc: stable@vger.kernel.org # 4.19+
 ---
+ include/sound/soc.h  |  2 ++
+ sound/soc/soc-core.c |  1 +
+ sound/soc/soc-pcm.c  | 40 +++++++++++++++++++++++++++++++++-------
+ 3 files changed, 36 insertions(+), 7 deletions(-)
 
- net/rxrpc/call_event.c |    8 +++-----
- net/rxrpc/output.c     |    2 +-
- 2 files changed, 4 insertions(+), 6 deletions(-)
-
-diff --git a/net/rxrpc/call_event.c b/net/rxrpc/call_event.c
-index 6be2672a65ea..df864e692267 100644
---- a/net/rxrpc/call_event.c
-+++ b/net/rxrpc/call_event.c
-@@ -157,7 +157,7 @@ static void rxrpc_congestion_timeout(struct rxrpc_call *call)
- static void rxrpc_resend(struct rxrpc_call *call, unsigned long now_j)
+diff --git a/include/sound/soc.h b/include/sound/soc.h
+index 88aa48e5485f..7abd8d4746ef 100644
+--- a/include/sound/soc.h
++++ b/include/sound/soc.h
+@@ -1113,6 +1113,8 @@ struct snd_soc_card {
+ 	u32 pop_time;
+ 
+ 	void *drvdata;
++
++	spinlock_t dpcm_lock;
+ };
+ 
+ /* SoC machine DAI configuration, glues a codec and cpu DAI together */
+diff --git a/sound/soc/soc-core.c b/sound/soc/soc-core.c
+index 8531b490f6f6..273898b358c4 100644
+--- a/sound/soc/soc-core.c
++++ b/sound/soc/soc-core.c
+@@ -2752,6 +2752,7 @@ int snd_soc_register_card(struct snd_soc_card *card)
+ 	card->instantiated = 0;
+ 	mutex_init(&card->mutex);
+ 	mutex_init(&card->dapm_mutex);
++	spin_lock_init(&card->dpcm_lock);
+ 
+ 	ret = snd_soc_instantiate_card(card);
+ 	if (ret != 0)
+diff --git a/sound/soc/soc-pcm.c b/sound/soc/soc-pcm.c
+index af14304645ce..c03b653bf6ff 100644
+--- a/sound/soc/soc-pcm.c
++++ b/sound/soc/soc-pcm.c
+@@ -1221,6 +1221,7 @@ static int dpcm_be_connect(struct snd_soc_pcm_runtime *fe,
+ 		struct snd_soc_pcm_runtime *be, int stream)
  {
- 	struct sk_buff *skb;
--	unsigned long resend_at, rto_j;
-+	unsigned long resend_at;
- 	rxrpc_seq_t cursor, seq, top;
- 	ktime_t now, max_age, oldest, ack_ts;
- 	int ix;
-@@ -165,10 +165,8 @@ static void rxrpc_resend(struct rxrpc_call *call, unsigned long now_j)
+ 	struct snd_soc_dpcm *dpcm;
++	unsigned long flags;
  
- 	_enter("{%d,%d}", call->tx_hard_ack, call->tx_top);
+ 	/* only add new dpcms */
+ 	list_for_each_entry(dpcm, &fe->dpcm[stream].be_clients, list_be) {
+@@ -1236,8 +1237,10 @@ static int dpcm_be_connect(struct snd_soc_pcm_runtime *fe,
+ 	dpcm->fe = fe;
+ 	be->dpcm[stream].runtime = fe->dpcm[stream].runtime;
+ 	dpcm->state = SND_SOC_DPCM_LINK_STATE_NEW;
++	spin_lock_irqsave(&fe->card->dpcm_lock, flags);
+ 	list_add(&dpcm->list_be, &fe->dpcm[stream].be_clients);
+ 	list_add(&dpcm->list_fe, &be->dpcm[stream].fe_clients);
++	spin_unlock_irqrestore(&fe->card->dpcm_lock, flags);
  
--	rto_j = call->peer->rto_j;
--
- 	now = ktime_get_real();
--	max_age = ktime_sub(now, jiffies_to_usecs(rto_j));
-+	max_age = ktime_sub(now, jiffies_to_usecs(call->peer->rto_j));
+ 	dev_dbg(fe->dev, "connected new DPCM %s path %s %s %s\n",
+ 			stream ? "capture" : "playback",  fe->dai_link->name,
+@@ -1283,6 +1286,7 @@ static void dpcm_be_reparent(struct snd_soc_pcm_runtime *fe,
+ void dpcm_be_disconnect(struct snd_soc_pcm_runtime *fe, int stream)
+ {
+ 	struct snd_soc_dpcm *dpcm, *d;
++	unsigned long flags;
  
- 	spin_lock_bh(&call->lock);
+ 	list_for_each_entry_safe(dpcm, d, &fe->dpcm[stream].be_clients, list_be) {
+ 		dev_dbg(fe->dev, "ASoC: BE %s disconnect check for %s\n",
+@@ -1302,8 +1306,10 @@ void dpcm_be_disconnect(struct snd_soc_pcm_runtime *fe, int stream)
+ #ifdef CONFIG_DEBUG_FS
+ 		debugfs_remove(dpcm->debugfs_state);
+ #endif
++		spin_lock_irqsave(&fe->card->dpcm_lock, flags);
+ 		list_del(&dpcm->list_be);
+ 		list_del(&dpcm->list_fe);
++		spin_unlock_irqrestore(&fe->card->dpcm_lock, flags);
+ 		kfree(dpcm);
+ 	}
+ }
+@@ -1557,10 +1563,13 @@ int dpcm_process_paths(struct snd_soc_pcm_runtime *fe,
+ void dpcm_clear_pending_state(struct snd_soc_pcm_runtime *fe, int stream)
+ {
+ 	struct snd_soc_dpcm *dpcm;
++	unsigned long flags;
  
-@@ -213,7 +211,7 @@ static void rxrpc_resend(struct rxrpc_call *call, unsigned long now_j)
++	spin_lock_irqsave(&fe->card->dpcm_lock, flags);
+ 	list_for_each_entry(dpcm, &fe->dpcm[stream].be_clients, list_be)
+ 		dpcm->be->dpcm[stream].runtime_update =
+ 						SND_SOC_DPCM_UPDATE_NO;
++	spin_unlock_irqrestore(&fe->card->dpcm_lock, flags);
+ }
+ 
+ static void dpcm_be_dai_startup_unwind(struct snd_soc_pcm_runtime *fe,
+@@ -2626,6 +2635,7 @@ static int dpcm_run_update_startup(struct snd_soc_pcm_runtime *fe, int stream)
+ 	struct snd_soc_dpcm *dpcm;
+ 	enum snd_soc_dpcm_trigger trigger = fe->dai_link->trigger[stream];
+ 	int ret;
++	unsigned long flags;
+ 
+ 	dev_dbg(fe->dev, "ASoC: runtime %s open on FE %s\n",
+ 			stream ? "capture" : "playback", fe->dai_link->name);
+@@ -2695,11 +2705,13 @@ static int dpcm_run_update_startup(struct snd_soc_pcm_runtime *fe, int stream)
+ 	dpcm_be_dai_shutdown(fe, stream);
+ disconnect:
+ 	/* disconnect any non started BEs */
++	spin_lock_irqsave(&fe->card->dpcm_lock, flags);
+ 	list_for_each_entry(dpcm, &fe->dpcm[stream].be_clients, list_be) {
+ 		struct snd_soc_pcm_runtime *be = dpcm->be;
+ 		if (be->dpcm[stream].state != SND_SOC_DPCM_STATE_START)
+ 				dpcm->state = SND_SOC_DPCM_LINK_STATE_FREE;
+ 	}
++	spin_unlock_irqrestore(&fe->card->dpcm_lock, flags);
+ 
+ 	return ret;
+ }
+@@ -3278,7 +3290,10 @@ int snd_soc_dpcm_can_be_free_stop(struct snd_soc_pcm_runtime *fe,
+ {
+ 	struct snd_soc_dpcm *dpcm;
+ 	int state;
++	int ret = 1;
++	unsigned long flags;
+ 
++	spin_lock_irqsave(&fe->card->dpcm_lock, flags);
+ 	list_for_each_entry(dpcm, &be->dpcm[stream].fe_clients, list_fe) {
+ 
+ 		if (dpcm->fe == fe)
+@@ -3287,12 +3302,15 @@ int snd_soc_dpcm_can_be_free_stop(struct snd_soc_pcm_runtime *fe,
+ 		state = dpcm->fe->dpcm[stream].state;
+ 		if (state == SND_SOC_DPCM_STATE_START ||
+ 			state == SND_SOC_DPCM_STATE_PAUSED ||
+-			state == SND_SOC_DPCM_STATE_SUSPEND)
+-			return 0;
++			state == SND_SOC_DPCM_STATE_SUSPEND) {
++			ret = 0;
++			break;
++		}
+ 	}
++	spin_unlock_irqrestore(&fe->card->dpcm_lock, flags);
+ 
+ 	/* it's safe to free/stop this BE DAI */
+-	return 1;
++	return ret;
+ }
+ EXPORT_SYMBOL_GPL(snd_soc_dpcm_can_be_free_stop);
+ 
+@@ -3305,7 +3323,10 @@ int snd_soc_dpcm_can_be_params(struct snd_soc_pcm_runtime *fe,
+ {
+ 	struct snd_soc_dpcm *dpcm;
+ 	int state;
++	int ret = 1;
++	unsigned long flags;
+ 
++	spin_lock_irqsave(&fe->card->dpcm_lock, flags);
+ 	list_for_each_entry(dpcm, &be->dpcm[stream].fe_clients, list_fe) {
+ 
+ 		if (dpcm->fe == fe)
+@@ -3315,12 +3336,15 @@ int snd_soc_dpcm_can_be_params(struct snd_soc_pcm_runtime *fe,
+ 		if (state == SND_SOC_DPCM_STATE_START ||
+ 			state == SND_SOC_DPCM_STATE_PAUSED ||
+ 			state == SND_SOC_DPCM_STATE_SUSPEND ||
+-			state == SND_SOC_DPCM_STATE_PREPARE)
+-			return 0;
++			state == SND_SOC_DPCM_STATE_PREPARE) {
++			ret = 0;
++			break;
++		}
+ 	}
++	spin_unlock_irqrestore(&fe->card->dpcm_lock, flags);
+ 
+ 	/* it's safe to change hw_params */
+-	return 1;
++	return ret;
+ }
+ EXPORT_SYMBOL_GPL(snd_soc_dpcm_can_be_params);
+ 
+@@ -3359,6 +3383,7 @@ static ssize_t dpcm_show_state(struct snd_soc_pcm_runtime *fe,
+ 	struct snd_pcm_hw_params *params = &fe->dpcm[stream].hw_params;
+ 	struct snd_soc_dpcm *dpcm;
+ 	ssize_t offset = 0;
++	unsigned long flags;
+ 
+ 	/* FE state */
+ 	offset += scnprintf(buf + offset, size - offset,
+@@ -3386,6 +3411,7 @@ static ssize_t dpcm_show_state(struct snd_soc_pcm_runtime *fe,
+ 		goto out;
  	}
  
- 	resend_at = nsecs_to_jiffies(ktime_to_ns(ktime_sub(now, oldest)));
--	resend_at += jiffies + rto_j;
-+	resend_at += jiffies + rxrpc_get_rto_backoff(call->peer, retrans);
- 	WRITE_ONCE(call->resend_at, resend_at);
- 
- 	if (unacked)
-diff --git a/net/rxrpc/output.c b/net/rxrpc/output.c
-index 10f2bf2e9068..a45c83f22236 100644
---- a/net/rxrpc/output.c
-+++ b/net/rxrpc/output.c
-@@ -468,7 +468,7 @@ int rxrpc_send_data_packet(struct rxrpc_call *call, struct sk_buff *skb,
- 			if (call->peer->rtt_count > 1) {
- 				unsigned long nowj = jiffies, ack_lost_at;
- 
--				ack_lost_at = rxrpc_get_rto_backoff(call->peer, retrans);
-+				ack_lost_at = rxrpc_get_rto_backoff(call->peer, false);
- 				ack_lost_at += nowj;
- 				WRITE_ONCE(call->ack_lost_at, ack_lost_at);
- 				rxrpc_reduce_call_timer(call, ack_lost_at, nowj,
-
++	spin_lock_irqsave(&fe->card->dpcm_lock, flags);
+ 	list_for_each_entry(dpcm, &fe->dpcm[stream].be_clients, list_be) {
+ 		struct snd_soc_pcm_runtime *be = dpcm->be;
+ 		params = &dpcm->hw_params;
+@@ -3406,7 +3432,7 @@ static ssize_t dpcm_show_state(struct snd_soc_pcm_runtime *fe,
+ 				params_channels(params),
+ 				params_rate(params));
+ 	}
+-
++	spin_unlock_irqrestore(&fe->card->dpcm_lock, flags);
+ out:
+ 	return offset;
+ }
+-- 
+2.35.0.rc0.227.g00780c9af4-goog
 

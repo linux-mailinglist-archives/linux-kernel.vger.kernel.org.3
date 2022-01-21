@@ -2,103 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDBC1495BD2
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 09:22:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC93495BD3
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 09:23:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349400AbiAUIWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 03:22:37 -0500
-Received: from mga09.intel.com ([134.134.136.24]:17782 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233264AbiAUIWg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 03:22:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642753356; x=1674289356;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=KfpvKj/MrNut9hreQD0qctHDDKEvUkpRiuwVdo7nBV8=;
-  b=SQXG+2G84UEyLqsnGcJ87ChpgxPsn/cVbNkG3B+BCb/XNk/zTts5ZCzj
-   UdjlTUeOMv4DJlxaDVJWbnoqlyVIAf3yenE7MNCx4rm4mNHejvtcYIM26
-   AuQNopA2y+tx8+F5P5PpeXvYAVwbe4ATL/rsml52BxB2c6owWKK+rJ8Q8
-   4xXrWtPHjgopE6N30AvWQlHpkfjFjoQTlhF8O8zD38723CEH5GEbuIl7r
-   3MYGM8b4+1uGWy/DPJrTFJI5A7VaCwyw0tNw6OjHd5sDVIoOG68FOHvo8
-   sWpz88ScY0Zz1OQIsUnpAiOm/XtRo6F3Ra6iY+OJwWaHtqSggBTuHJlRi
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="245384540"
-X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="245384540"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 00:22:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="694561490"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
-  by orsmga005.jf.intel.com with ESMTP; 21 Jan 2022 00:22:30 -0800
-Subject: Re: [PATCH V3 4/4] mmc: cqhci: Capture eMMC and SD card errors
-To:     Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>,
-        quic_asutoshd@quicinc.com, ulf.hansson@linaro.org,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        linux-mmc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     stummala@codeaurora.org, vbadigan@codeaurora.org,
-        quic_rampraka@quicinc.com, quic_pragalla@quicinc.com,
-        sartgarg@codeaurora.org, nitirawa@codeaurora.org,
-        sayalil@codeaurora.org, Liangliang Lu <luliang@codeaurora.org>,
-        "Bao D . Nguyen" <nguyenb@codeaurora.org>
-References: <1642699582-14785-1-git-send-email-quic_c_sbhanu@quicinc.com>
- <1642699582-14785-5-git-send-email-quic_c_sbhanu@quicinc.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <ba814e99-6c36-04a2-ca8d-0ba8473309d8@intel.com>
-Date:   Fri, 21 Jan 2022 10:22:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S1379547AbiAUIXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 03:23:21 -0500
+Received: from prt-mail.chinatelecom.cn ([42.123.76.223]:38782 "EHLO
+        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231208AbiAUIXU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 03:23:20 -0500
+HMM_SOURCE_IP: 172.18.0.188:48432.1615665580
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-202.80.192.38 (unknown [172.18.0.188])
+        by chinatelecom.cn (HERMES) with SMTP id 6D91F280114;
+        Fri, 21 Jan 2022 16:23:07 +0800 (CST)
+X-189-SAVE-TO-SEND: sunshouxin@chinatelecom.cn
+Received: from  ([172.18.0.188])
+        by app0023 with ESMTP id d7c3bb7e8efa438aa87da2bffbb667ed for j.vosburgh@gmail.com;
+        Fri, 21 Jan 2022 16:23:11 CST
+X-Transaction-ID: d7c3bb7e8efa438aa87da2bffbb667ed
+X-Real-From: sunshouxin@chinatelecom.cn
+X-Receive-IP: 172.18.0.188
+X-MEDUSA-Status: 0
+Sender: sunshouxin@chinatelecom.cn
+From:   Sun Shouxin <sunshouxin@chinatelecom.cn>
+To:     j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
+        davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jay.vosburgh@canonical.com, huyd12@chinatelecom.cn
+Subject: [PATCH v7] net: bonding: Add support for IPV6 ns/na to balance-alb/balance-tlb mode
+Date:   Fri, 21 Jan 2022 03:22:43 -0500
+Message-Id: <20220121082243.88155-1-sunshouxin@chinatelecom.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <1642699582-14785-5-git-send-email-quic_c_sbhanu@quicinc.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/01/2022 19:26, Shaik Sajida Bhanu wrote:
-> Add changes to capture eMMC and SD card errors.
-> This is useful for debug and testing.
-> 
-> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-> Signed-off-by: Liangliang Lu <luliang@codeaurora.org>
-> Signed-off-by: Sayali Lokhande <sayalil@codeaurora.org>
-> Signed-off-by: Bao D. Nguyen <nguyenb@codeaurora.org>
-> Signed-off-by: Ram Prakash Gupta <quic_rampraka@quicinc.com>
-> ---
->  drivers/mmc/host/cqhci-core.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mmc/host/cqhci-core.c b/drivers/mmc/host/cqhci-core.c
-> index b0d30c3..2908d30 100644
-> --- a/drivers/mmc/host/cqhci-core.c
-> +++ b/drivers/mmc/host/cqhci-core.c
-> @@ -822,8 +822,15 @@ irqreturn_t cqhci_irq(struct mmc_host *mmc, u32 intmask, int cmd_error,
->  	pr_debug("%s: cqhci: IRQ status: 0x%08x\n", mmc_hostname(mmc), status);
->  
->  	if ((status & (CQHCI_IS_RED | CQHCI_IS_GCE | CQHCI_IS_ICCE)) ||
-> -	    cmd_error || data_error)
-> +	    cmd_error || data_error) {
-> +		if ((status & CQHCI_IS_RED) && mmc->err_stats_enabled)
-> +			mmc_debugfs_err_stats_inc(mmc, MMC_ERR_CMDQ_RED);
-> +		if ((status & CQHCI_IS_GCE) && (mmc->err_stats_enabled))
-> +			mmc_debugfs_err_stats_inc(mmc, MMC_ERR_CMDQ_GCE);
-> +		if ((status & CQHCI_IS_ICCE) && mmc->err_stats_enabled)
-> +			mmc_debugfs_err_stats_inc(mmc, MMC_ERR_CMDQ_ICCE);
+Since ipv6 neighbor solicitation and advertisement messages
+isn't handled gracefully in bond6 driver, we can see packet
+drop due to inconsistency between mac address in the option
+message and source MAC .
 
-Please don't check mmc->err_stats_enabled
+Another examples is ipv6 neighbor solicitation and advertisement
+messages from VM via tap attached to host bridge, the src mac
+might be changed through balance-alb mode, but it is not synced
+with Link-layer address in the option message.
 
->  		cqhci_error_irq(mmc, status, cmd_error, data_error);
-> +	}
->  
->  	if (status & CQHCI_IS_TCC) {
->  		/* read TCN and complete the request */
-> 
+The patch implements bond6's tx handle for ipv6 neighbor
+solicitation and advertisement messages.
+
+Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
+---
+ drivers/net/bonding/bond_alb.c | 36 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+
+diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
+index 533e476988f2..82b7071840b1 100644
+--- a/drivers/net/bonding/bond_alb.c
++++ b/drivers/net/bonding/bond_alb.c
+@@ -1269,6 +1269,34 @@ static int alb_set_mac_address(struct bonding *bond, void *addr)
+ 	return res;
+ }
+ 
++/*determine if the packet is NA or NS*/
++static bool __alb_determine_nd(struct icmp6hdr *hdr)
++{
++	if (hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
++	    hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
++		return true;
++	}
++
++	return false;
++}
++
++static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
++{
++	struct ipv6hdr *ip6hdr;
++	struct icmp6hdr *hdr;
++
++	if (skb->protocol == htons(ETH_P_IPV6)) {
++		ip6hdr = ipv6_hdr(skb);
++		if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
++			hdr = icmp6_hdr(skb);
++			if (__alb_determine_nd(hdr))
++				return true;
++		}
++	}
++
++	return false;
++}
++
+ /************************ exported alb functions ************************/
+ 
+ int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
+@@ -1350,6 +1378,9 @@ struct slave *bond_xmit_tlb_slave_get(struct bonding *bond,
+ 		switch (skb->protocol) {
+ 		case htons(ETH_P_IP):
+ 		case htons(ETH_P_IPV6):
++			if (alb_determine_nd(skb, bond))
++				break;
++
+ 			hash_index = bond_xmit_hash(bond, skb);
+ 			if (bond->params.tlb_dynamic_lb) {
+ 				tx_slave = tlb_choose_channel(bond,
+@@ -1446,6 +1477,11 @@ struct slave *bond_xmit_alb_slave_get(struct bonding *bond,
+ 			break;
+ 		}
+ 
++		if (alb_determine_nd(skb, bond)) {
++			do_tx_balance = false;
++			break;
++		}
++
+ 		hash_start = (char *)&ip6hdr->daddr;
+ 		hash_size = sizeof(ip6hdr->daddr);
+ 		break;
+
+base-commit: 79e06c4c4950be2abd8ca5d2428a8c915aa62c24
+-- 
+2.27.0
 

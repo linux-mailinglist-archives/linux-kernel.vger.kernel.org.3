@@ -2,92 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A75FF495FB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:22:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E73BD495FBF
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380693AbiAUNWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 08:22:22 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:47760 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1380583AbiAUNWU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 08:22:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=87A/tDKQS+3qI1mDmEkAtXDZaWxRClH2krUZOoDdvz0=; b=HXUr11AwYknsAaClHt8ecVzUuM
-        g9RDS6j5MlWIUmcRhHagqgr/y5LX3BlUdfaa6eAmPSDV8ixDcm3WlGmwc0zisCpz7dgr2OsFdJROc
-        nL538wTMsDVLDIPLkhaVuqKGFeF0++g81fMlJjfCLqfM50QkJMJvuSNkwUpf1eHA2H1U=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nAtrr-0025Os-NJ; Fri, 21 Jan 2022 14:22:15 +0100
-Date:   Fri, 21 Jan 2022 14:22:15 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: phy: marvell: Honor phy LED set by system
- firmware on a Dell hardware
-Message-ID: <Yeqzhx3GbMzaIbj6@lunn.ch>
-References: <20220120051929.1625791-1-kai.heng.feng@canonical.com>
- <YelxMFOiqnfIVmyy@lunn.ch>
- <CAAd53p7NjvzsBs2aWTP-3GMjoyefMmLB3ou+7fDcrNVfKwALHw@mail.gmail.com>
+        id S1380697AbiAUN2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 08:28:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58404 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380583AbiAUN2W (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 08:28:22 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A4BC061574
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 05:28:21 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id az27-20020a05600c601b00b0034d2956eb04so22363497wmb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 05:28:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=forissier-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Uilb7rtGXgQI2Rp/O4smGnTA3fqRZ18DddOLnlScU0g=;
+        b=tV5Lwg5EcH1gBvbj7qCmrvpFck+165EvZrokCuII+O+fTkmh/5D29KVjVLeQM6a2h/
+         cvixANVSFJnUMSzbhr4HAJ0gkpA1dO1yapOLeD5TPhuaIxaU5DjKPKpJZwMJHMNXtKVD
+         VZaVUJHpL71buon3nniwbIrOriJezYU8AhnenQM30Iq9w269fqiDeo5agxT39pvXTQ20
+         KofGSEfKrYXng0XfaMu6yPpq3h09PzR6j080TWWRCoUH7VZgnCZaLbElP67Iq0fzS4Gz
+         LvHHtn8TVAkOYLAKP2Fs4UxVCeHnKJkq1kcrvWAAIAxvhitzjTa/f87DU8KwHQrXCKL+
+         W9jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Uilb7rtGXgQI2Rp/O4smGnTA3fqRZ18DddOLnlScU0g=;
+        b=seZWYndTfBLKHkPYx9ESXZvfPALyUPa3JR94aGfems8m0/R/NURQM5ONA8zAkKqTSE
+         Mu/j7TE7brIdSkQQ5SntrrEH73p27AsYgyop2eOB7Hw41cKamL+IY53RhwdGiNS/EGkt
+         VIy71L4DBXAiT2eKf7J5jMEfMmES0CtquiStp+1oo9v9KtCRQoJoGtxrSxbmCpuTvae+
+         XSoDGzw6n2fLb40vWYFKUwoWSC89kEmNcSw6kR8AkcZfJZAyhoWj6Pp2uRNF6v8ugu7v
+         ouiW7sDMF145ypOo4/HOCd8kBpns+nwKRkcTxpdMO5icZHpQHjdbm2WI6P2hKV7oX5Tn
+         qLFQ==
+X-Gm-Message-State: AOAM532ow4i9SCPNdRZVJoqtePEXP2DS77BHHWwZOdIPKs1BM3G3/lgj
+        QE3UoNgF7Xov9BDsmBiqsB/ckA==
+X-Google-Smtp-Source: ABdhPJxSnG6jfG0AG9wiZOOXJhJpztj5r/HoijRXcgyvn9ciXtN2tby1TS8psKWDI6hCZLpJt1ND+A==
+X-Received: by 2002:a7b:c118:: with SMTP id w24mr702278wmi.179.1642771700024;
+        Fri, 21 Jan 2022 05:28:20 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:3cb:7bb0:a60f:d9da:23e6:8bf2? ([2a01:e0a:3cb:7bb0:a60f:d9da:23e6:8bf2])
+        by smtp.gmail.com with ESMTPSA id h9sm5575074wmq.8.2022.01.21.05.28.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Jan 2022 05:28:19 -0800 (PST)
+Message-ID: <ad7311fe-0655-e235-f755-2eb3425c79c1@forissier.org>
+Date:   Fri, 21 Jan 2022 14:28:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAd53p7NjvzsBs2aWTP-3GMjoyefMmLB3ou+7fDcrNVfKwALHw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 07/12] optee: use driver internal tee_contex for some
+ rpc
+Content-Language: en-US
+To:     Sumit Garg <sumit.garg@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
+        Rijo Thomas <Rijo-john.Thomas@amd.com>,
+        David Howells <dhowells@redhat.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Etienne Carriere <etienne.carriere@linaro.org>
+References: <20220114150824.3578829-1-jens.wiklander@linaro.org>
+ <20220114150824.3578829-8-jens.wiklander@linaro.org>
+ <CAFA6WYN+NU6uj=R5y4A6RomWeKc74orvB7ouia8Sxuwxaz_-2w@mail.gmail.com>
+From:   Jerome Forissier <jerome@forissier.org>
+In-Reply-To: <CAFA6WYN+NU6uj=R5y4A6RomWeKc74orvB7ouia8Sxuwxaz_-2w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 12:01:35PM +0800, Kai-Heng Feng wrote:
-> On Thu, Jan 20, 2022 at 10:26 PM Andrew Lunn <andrew@lunn.ch> wrote:
-> >
-> > On Thu, Jan 20, 2022 at 01:19:29PM +0800, Kai-Heng Feng wrote:
-> > > BIOS on Dell Edge Gateway 3200 already makes its own phy LED setting, so
-> > > instead of setting another value, keep it untouched and restore the saved
-> > > value on system resume.
-> > >
-> > > Introduce config_led() callback in phy_driver() to make the implemtation
-> > > generic.
-> >
-> > I'm also wondering if we need to take a step back here and get the
-> > ACPI guys involved. I don't know much about ACPI, but shouldn't it
-> > provide a control method to configure the PHYs LEDs?
-> >
-> > We already have the basics for defining a PHY in ACPI. See:
-> >
-> > https://www.kernel.org/doc/html/latest/firmware-guide/acpi/dsd/phy.html
+
+
+On 1/21/22 13:54, Sumit Garg wrote:
+> + Jerome, Etienne
 > 
-> These properties seem to come from device-tree.
-
-They are similar to what DT has, but expressed in an ACPI way. DT has
-been used with PHY drivers for a long time, but ACPI is new. The ACPI
-standard also says nothing about PHYs. So Linux has defined its own
-properties, which we expect all ACPI machine to use. According to the
-ACPI maintainers, this is within the ACPI standard. Maybe at some
-point somebody will submit the current definitions to the standards
-body for approval, or maybe the standard will do something completely
-different, but for the moment, this is what we have, and what you
-should use.
-
-> > so you could extend this to include a method to configure the LEDs for
-> > a specific PHY.
+> On Fri, 14 Jan 2022 at 20:38, Jens Wiklander <jens.wiklander@linaro.org> wrote:
+>>
+>> Uses the new driver internal tee_context when allocating driver private
+>> shared memory. This decouples the shared memory object from its original
+>> tee_context. This is needed when the life time of such a memory
+>> allocation outlives the client tee_context.
+>>
+>> Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+>> ---
+>>  drivers/tee/optee/ffa_abi.c | 16 ++++++++--------
+>>  drivers/tee/optee/smc_abi.c |  7 ++++---
+>>  2 files changed, 12 insertions(+), 11 deletions(-)
+>>
 > 
-> How to add new properties? Is it required to add new properties to
-> both DT and ACPI?
+> I guess with this patch we should no longer see issues [1] reported earlier.
 
-Since all you are adding is a boolean, 'Don't touch the PHY LED
-configuration', it should be easy to do for both.
+Correct. I have tested [1] again in QEMU with this whole series applied
+and the issue is gone.
 
-What is interesting for Marvell PHYs is WoL, which is part of LED
-configuration. I've not checked, but i guess there are other PHYs
-which reuse LED output for a WoL interrupt. So it needs to be clearly
-defined if we expect the BIOS to also correctly configure WoL, or if
-Linux is responsible for configuring WoL, even though it means
-changing the LED configuration.
+-- 
+Jerome
 
-	 Andrew
+> 
+> FWIW,
+> 
+> Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+> 
+> [1] https://github.com/OP-TEE/optee_os/issues/1918
+> 
+> -Sumit
+> 
+>> diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
+>> index 88a028d4fb7b..5ec484b42432 100644
+>> --- a/drivers/tee/optee/ffa_abi.c
+>> +++ b/drivers/tee/optee/ffa_abi.c
+>> @@ -424,6 +424,7 @@ static struct tee_shm_pool *optee_ffa_shm_pool_alloc_pages(void)
+>>   */
+>>
+>>  static void handle_ffa_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
+>> +                                             struct optee *optee,
+>>                                               struct optee_msg_arg *arg)
+>>  {
+>>         struct tee_shm *shm;
+>> @@ -439,7 +440,7 @@ static void handle_ffa_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
+>>                 shm = optee_rpc_cmd_alloc_suppl(ctx, arg->params[0].u.value.b);
+>>                 break;
+>>         case OPTEE_RPC_SHM_TYPE_KERNEL:
+>> -               shm = tee_shm_alloc_priv_kernel_buf(ctx,
+>> +               shm = tee_shm_alloc_priv_kernel_buf(optee->ctx,
+>>                                                     arg->params[0].u.value.b);
+>>                 break;
+>>         default:
+>> @@ -493,14 +494,13 @@ static void handle_ffa_rpc_func_cmd_shm_free(struct tee_context *ctx,
+>>  }
+>>
+>>  static void handle_ffa_rpc_func_cmd(struct tee_context *ctx,
+>> +                                   struct optee *optee,
+>>                                     struct optee_msg_arg *arg)
+>>  {
+>> -       struct optee *optee = tee_get_drvdata(ctx->teedev);
+>> -
+>>         arg->ret_origin = TEEC_ORIGIN_COMMS;
+>>         switch (arg->cmd) {
+>>         case OPTEE_RPC_CMD_SHM_ALLOC:
+>> -               handle_ffa_rpc_func_cmd_shm_alloc(ctx, arg);
+>> +               handle_ffa_rpc_func_cmd_shm_alloc(ctx, optee, arg);
+>>                 break;
+>>         case OPTEE_RPC_CMD_SHM_FREE:
+>>                 handle_ffa_rpc_func_cmd_shm_free(ctx, optee, arg);
+>> @@ -510,12 +510,12 @@ static void handle_ffa_rpc_func_cmd(struct tee_context *ctx,
+>>         }
+>>  }
+>>
+>> -static void optee_handle_ffa_rpc(struct tee_context *ctx, u32 cmd,
+>> -                                struct optee_msg_arg *arg)
+>> +static void optee_handle_ffa_rpc(struct tee_context *ctx, struct optee *optee,
+>> +                                u32 cmd, struct optee_msg_arg *arg)
+>>  {
+>>         switch (cmd) {
+>>         case OPTEE_FFA_YIELDING_CALL_RETURN_RPC_CMD:
+>> -               handle_ffa_rpc_func_cmd(ctx, arg);
+>> +               handle_ffa_rpc_func_cmd(ctx, optee, arg);
+>>                 break;
+>>         case OPTEE_FFA_YIELDING_CALL_RETURN_INTERRUPT:
+>>                 /* Interrupt delivered by now */
+>> @@ -582,7 +582,7 @@ static int optee_ffa_yielding_call(struct tee_context *ctx,
+>>                  * above.
+>>                  */
+>>                 cond_resched();
+>> -               optee_handle_ffa_rpc(ctx, data->data1, rpc_arg);
+>> +               optee_handle_ffa_rpc(ctx, optee, data->data1, rpc_arg);
+>>                 cmd = OPTEE_FFA_YIELDING_CALL_RESUME;
+>>                 data->data0 = cmd;
+>>                 data->data1 = 0;
+>> diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+>> index 1dbb13b08381..f2ef76451443 100644
+>> --- a/drivers/tee/optee/smc_abi.c
+>> +++ b/drivers/tee/optee/smc_abi.c
+>> @@ -621,6 +621,7 @@ static void handle_rpc_func_cmd_shm_free(struct tee_context *ctx,
+>>  }
+>>
+>>  static void handle_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
+>> +                                         struct optee *optee,
+>>                                           struct optee_msg_arg *arg,
+>>                                           struct optee_call_ctx *call_ctx)
+>>  {
+>> @@ -650,7 +651,7 @@ static void handle_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
+>>                 shm = optee_rpc_cmd_alloc_suppl(ctx, sz);
+>>                 break;
+>>         case OPTEE_RPC_SHM_TYPE_KERNEL:
+>> -               shm = tee_shm_alloc_priv_kernel_buf(ctx, sz);
+>> +               shm = tee_shm_alloc_priv_kernel_buf(optee->ctx, sz);
+>>                 break;
+>>         default:
+>>                 arg->ret = TEEC_ERROR_BAD_PARAMETERS;
+>> @@ -746,7 +747,7 @@ static void handle_rpc_func_cmd(struct tee_context *ctx, struct optee *optee,
+>>         switch (arg->cmd) {
+>>         case OPTEE_RPC_CMD_SHM_ALLOC:
+>>                 free_pages_list(call_ctx);
+>> -               handle_rpc_func_cmd_shm_alloc(ctx, arg, call_ctx);
+>> +               handle_rpc_func_cmd_shm_alloc(ctx, optee, arg, call_ctx);
+>>                 break;
+>>         case OPTEE_RPC_CMD_SHM_FREE:
+>>                 handle_rpc_func_cmd_shm_free(ctx, arg);
+>> @@ -775,7 +776,7 @@ static void optee_handle_rpc(struct tee_context *ctx,
+>>
+>>         switch (OPTEE_SMC_RETURN_GET_RPC_FUNC(param->a0)) {
+>>         case OPTEE_SMC_RPC_FUNC_ALLOC:
+>> -               shm = tee_shm_alloc_priv_kernel_buf(ctx, param->a1);
+>> +               shm = tee_shm_alloc_priv_kernel_buf(optee->ctx, param->a1);
+>>                 if (!IS_ERR(shm) && !tee_shm_get_pa(shm, 0, &pa)) {
+>>                         reg_pair_from_64(&param->a1, &param->a2, pa);
+>>                         reg_pair_from_64(&param->a4, &param->a5,
+>> --
+>> 2.31.1
+>>

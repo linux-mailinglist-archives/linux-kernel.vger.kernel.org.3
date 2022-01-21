@@ -2,91 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C5EF49638C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 18:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B51F449638D
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 18:07:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349649AbiAURGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 12:06:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52350 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbiAURGd (ORCPT
+        id S1350595AbiAURHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 12:07:51 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56860 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349733AbiAURHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 12:06:33 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78440C06173B;
-        Fri, 21 Jan 2022 09:06:32 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id A92FA20005;
-        Fri, 21 Jan 2022 17:06:29 +0000 (UTC)
-Date:   Fri, 21 Jan 2022 18:06:29 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: pcf2127: add error message if writing to CLKOUT
- register fails
-Message-ID: <YeroFQVgqrvlczrR@piout.net>
-References: <20220119172740.1856302-1-hugo@hugovil.com>
- <YehMZC4vduvSH5HA@piout.net>
- <20220119130845.6de245b8b217e659cd319328@hugovil.com>
- <YehiHJXP23TSREbE@piout.net>
- <20220120183548.e6a8f46ede2a636a8eaf11c1@hugovil.com>
+        Fri, 21 Jan 2022 12:07:43 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B528FB82066
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 17:07:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03999C340E1;
+        Fri, 21 Jan 2022 17:07:38 +0000 (UTC)
+Date:   Fri, 21 Jan 2022 17:07:35 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     cgel.zte@gmail.com
+Cc:     pasha.tatashin@soleen.com, si.hao@zte.com.cn,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, james.morse@arm.com
+Subject: Re: [PATCH linux-next] arm64: kexec: Support the case of VA_BITS=39
+ in trans_pgd_idmap_page()
+Message-ID: <YeroVxXEcUz8RTgv@arm.com>
+References: <20220121065216.1001021-1-si.hao@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220120183548.e6a8f46ede2a636a8eaf11c1@hugovil.com>
+In-Reply-To: <20220121065216.1001021-1-si.hao@zte.com.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/01/2022 18:35:48-0500, Hugo Villeneuve wrote:
-> On Wed, 19 Jan 2022 20:10:20 +0100
-> Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+On Fri, Jan 21, 2022 at 06:52:16AM +0000, cgel.zte@gmail.com wrote:
+> From: sihao <si.hao@zte.com.cn>
 > 
-> > On 19/01/2022 13:08:45-0500, Hugo Villeneuve wrote:
-> > > On Wed, 19 Jan 2022 18:37:40 +0100
-> > > Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-> > > 
-> > > > On 19/01/2022 12:27:39-0500, Hugo Villeneuve wrote:
-> > > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > > > 
-> > > > > If writing to CLKOUT register fails, the probe operation will be aborted
-> > > > > without a meaningful error message.
-> > > > > 
-> > > > 
-> > > > The current trend is to remove debug messages, please do not add more :)
-> > > 
-> > > Hi,
-> > > If the read operation fails, the probe function will exit silently, and our RTC chip will not work. In that case, if we parse the dmesg logs, I think we  should have an indication that something went wrong.
-> > > 
-> > 
-> > This is not true, it doesn't fail silently, you'd get:
-> > rtc-pcf2127: probe of 1-0051 failed with error -121
+> When the values of CONFIG_ARM64_VA_BITS and CONFIG_ARM64_PA_BITS are not
+> equal, the following panic occurs when kexec is executed.
 > 
-> Well this is certainly true for me because I am not seing the same error message as you :)
-> 
-> Just for context, I have defined a dummy pcf2127 on I2C bus 0 in my device tree (no actual hardware is present). I also added some debug messages to investigate (rtc-pcf2127.c and dd.c files), and here is the dmesg log after issuing "modprobe rtc-pcf2127":
-> 
-> [Thu Jan 20 23:22:20 2022] rtc-pcf2127-i2c 0-0051: pcf2127_i2c_probe
-> [Thu Jan 20 23:22:20 2022] rtc-pcf2127-i2c 0-0051: pcf2127_probe
-> [Thu Jan 20 23:22:20 2022] rtc-pcf2127-i2c 0-0051: PORO disabling failed with error -6
-> [Thu Jan 20 23:22:20 2022] rtc-pcf2127-i2c 0-0051: call_driver_probe probe error: -6
-> 
-> Error code -6 is -ENXIO, and looking at the call_driver_probe() function in dd.c, I now understand why I didn't see the error message (line 531):
-> 
-> 	case -ENXIO:
-> 		pr_debug("%s: probe of %s rejects match %d\n",
-> 			 drv->name, dev_name(dev), ret);
-> 
-> So it seems that the return code is different than what you got?
-> 
+> This happens because trans_pgd_idmap_page() does not support VA_BITS=39.
+> So the patch supports the case of VA_BITS=39.
+[...]
+> diff --git a/arch/arm64/mm/trans_pgd.c b/arch/arm64/mm/trans_pgd.c
+> index d7da8ca40d2e..3d88185adcf5 100644
+> --- a/arch/arm64/mm/trans_pgd.c
+> +++ b/arch/arm64/mm/trans_pgd.c
+> @@ -232,7 +232,7 @@ int trans_pgd_idmap_page(struct trans_pgd_info *info, phys_addr_t *trans_ttbr0,
+>  {
+>  	phys_addr_t dst_addr = virt_to_phys(page);
+>  	unsigned long pfn = __phys_to_pfn(dst_addr);
+> -	int max_msb = (dst_addr & GENMASK(52, 48)) ? 51 : 47;
 
-Probably because we don't have the same i2c controller and the driver
-for mine is returning -EREMOTEIO when the device is not present.
+This should have been GENMASK(51, 48), though it doesn't make any
+difference and may work better with the change below:
 
+> +	int max_msb = (dst_addr & GENMASK(52, VA_BITS)) ? 51 : (VA_BITS - 1);
+
+So when VA_BITS == 52, the mask is 0 and we set max_msb to 51.
+
+I wonder, could we use fls64() instead here?
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Catalin

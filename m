@@ -2,213 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1817495FE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:45:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0E6495FEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380725AbiAUNpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 08:45:42 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4437 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235175AbiAUNpk (ORCPT
+        id S1380757AbiAUNqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 08:46:12 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:18536 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1380567AbiAUNqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 08:45:40 -0500
-Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JgLH45q46z67P7p;
-        Fri, 21 Jan 2022 21:45:20 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Fri, 21 Jan 2022 14:45:37 +0100
-Received: from localhost (10.47.75.29) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.21; Fri, 21 Jan
- 2022 13:45:36 +0000
-Date:   Fri, 21 Jan 2022 13:45:31 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Caleb Connolly <caleb.connolly@linaro.org>
-CC:     Jonathan Cameron <jic23@jic23.retrosnub.co.uk>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Lee Jones" <lee.jones@linaro.org>, <linux-iio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <sumit.semwal@linaro.org>,
-        <amit.pundir@linaro.org>, <john.stultz@linaro.org>
-Subject: Re: [PATCH v3 3/7] iio: adc: qcom-spmi-rradc: introduce round robin
- adc
-Message-ID: <20220121134531.00006a7b@Huawei.com>
-In-Reply-To: <d0d42804-f437-e964-1c0d-4eb65e76db6c@linaro.org>
-References: <20220106173131.3279580-1-caleb.connolly@linaro.org>
-        <20220106173131.3279580-4-caleb.connolly@linaro.org>
-        <20220109172948.76dbb1fa@jic23-huawei>
-        <d0d42804-f437-e964-1c0d-4eb65e76db6c@linaro.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Fri, 21 Jan 2022 08:46:09 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20LBGTPh002895;
+        Fri, 21 Jan 2022 13:46:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=JXyGD+6qyYAPrwJA+4HRaiK0sTCQlCIuJ/AqErjzjN4=;
+ b=TQzHbWCC44q+25nLp8fgfQOYMqziD50gC3IZT1ok9yDxsP3bwHNF8iyo8JxgCmk1Oe4r
+ dBvEoYLzjrF4rP70sASI7UOFYzNNa80cVfIntoCN3wbRVAQwxpAe74yYhVEFdQf8k7tD
+ ZV0y1gLtqL41xEL601gNFJyW7x4ZRJNW3LqDWhYRWaqi9vN1dyqF516YgDM4jKh0M4wl
+ 55vZ9lCiYxp8BbExrrlwZewNdjh75nSCyiwOeQ5vt5yDZfzGn1API2kHMQF+RCMORYQ8
+ J7TFsFnxV2IbYrxBr0ucUs4IPSO+z11qA/Zcb4gaJCAXm7S81Nlck/Q/2Q3vt8anjq+3 pw== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dqutjtw6x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Jan 2022 13:46:08 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20LDg1LF023181;
+        Fri, 21 Jan 2022 13:46:06 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma01fra.de.ibm.com with ESMTP id 3dqjegcx8h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Jan 2022 13:46:06 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20LDk3Hf43516284
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 21 Jan 2022 13:46:03 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 067F552054;
+        Fri, 21 Jan 2022 13:46:03 +0000 (GMT)
+Received: from [9.171.30.56] (unknown [9.171.30.56])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 9CEEF52059;
+        Fri, 21 Jan 2022 13:46:02 +0000 (GMT)
+Message-ID: <13a03972-0020-b8e7-2fc0-def8a164eb10@linux.ibm.com>
+Date:   Fri, 21 Jan 2022 14:46:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC PATCH v1 01/10] s390/uaccess: Add storage key checked access
+ to user memory
+Content-Language: en-US
+To:     Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc:     Vasily Gorbik <gor@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nico Boehr <nrb@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220118095210.1651483-1-scgl@linux.ibm.com>
+ <20220118095210.1651483-2-scgl@linux.ibm.com> <YefeakONMN4PLlml@osiris>
+ <422595a5-b24b-8760-ff0e-112322142de7@linux.ibm.com>
+ <YegQCTqEsiFTUZ2R@osiris>
+ <dbfec527-b995-e382-dafa-c3459e1e45ed@linux.ibm.com>
+ <YelcCEuVbIg9ND90@osiris> <YemnprCIEjjGFeTn@osiris>
+ <b6896b1a-d529-1504-091c-d41287c01dc8@linux.ibm.com>
+ <YeqTP6WDbZzEJUbJ@osiris>
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+In-Reply-To: <YeqTP6WDbZzEJUbJ@osiris>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.75.29]
-X-ClientProxiedBy: lhreml702-chm.china.huawei.com (10.201.108.51) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 1J7rmFUY1BDT5y93PM8CZth9xWuTxnVw
+X-Proofpoint-GUID: 1J7rmFUY1BDT5y93PM8CZth9xWuTxnVw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-21_06,2022-01-21_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 lowpriorityscore=0 bulkscore=0 mlxlogscore=999 mlxscore=0
+ impostorscore=0 phishscore=0 adultscore=0 clxscore=1015 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201210091
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Jan 2022 17:42:51 +0000
-Caleb Connolly <caleb.connolly@linaro.org> wrote:
-
-> On 09/01/2022 17:29, Jonathan Cameron wrote:
-> > On Thu,  6 Jan 2022 17:31:27 +0000
-> > Caleb Connolly <caleb.connolly@linaro.org> wrote:
-> >   
-> >> The Round Robin ADC is responsible for reading data about the rate of
-> >> charge from the USB or DC in jacks, it can also read the battery
-> >> ID (resistence) and some temperatures. It is found on the PMI8998 and
-> >> PM660 Qualcomm PMICs.
-> >>
-> >> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>  
-> > Hi Calib,  
-> Hi Jonathan,
+On 1/21/22 12:04, Heiko Carstens wrote:
+> On Fri, Jan 21, 2022 at 08:32:25AM +0100, Christian Borntraeger wrote:
+>> So in essence adding something like this and then providing raw_copy_from/to_user_key?
+>> (whitespace damaged, just pasted in)
+>>
+>> diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+>> index ac0394087f7d..3b6e78ee211c 100644
+>> --- a/include/linux/uaccess.h
+>> +++ b/include/linux/uaccess.h
+>> @@ -201,6 +201,59 @@ copy_to_user(void __user *to, const void *from, unsigned long n)
+>>         return n;
+>>  }
+>> +
+>> +#if defined(__s390x__) && defined(CONFIG_KVM)
+>> +/*
+>> + * Variants that pass along an access key. Uses by KVM on s390x to implement
+>> + * key checks for guests that use storage keys Must be kept in sync with the
+>> + * non-key variants from above. The only difference is the _key suffix when
+>> + * calling raw_copy_from/to_user_key.
+>> + */
 > 
-> I've spent some time on this and mostly reworked things, thanks a lot for
-> your feedback, it's been quite interesting to learn about IIO. :)
+> This is too architecture specific, I wouldn't like to see __s390__ or
+> KVM dependencies. This should be a bit more generic, so other
+> architectures _might_ also make use of this interface that is:
 > 
-> Quite a few of the channels fit well into the (adc_code + offset) * scale format,
-> however the one you commented on "rradc_post_process_chg_temp()" doesn't seem to
-> fit, it requires multiple steps of applying offsets and scale and I haven't been
-> able to re-arrange it to work sensibly.
-
-I had a go below. Not trivial but may still be worth doing.  It seems to be linear
-though the maths is a bit nasty!  This depends on that fab_coeff() returning
-a constant value for a particular part which I haven't checked.
-
+>> +static inline __must_check unsigned long
+>> +_copy_from_user_key(void *to, const void __user *from, unsigned long n, u8 key)
 > 
-> I noticed the calibbias properties which seems like something I should expose
-> for "rradc_get_fab_coeff()"?
-calibbias is usually an internal tweak factor that in hardware corrects for
-inaccuracies - something like a DAC tweaking something in the analog front end.
-
-Here it doesn't feel like it's useful to expose a software tweak to userspace
-as it would have no idea what to do with it.
-
-> 
-> Could you point me in the right direction here? For reference my WIP tree can be
-> found here: https://github.com/aospm/linux/commits/upstreaming/spmi-rradc
-> 
-> I also tried switching to labels, but I found that when I drop the extend_name
-> property the driver fails to probe because multiple channels end up with the same
-> name in sysfs (e.g. "in_temp_raw"). I've read through the docs and looked at a few
-> other drivers but I wasn't able to find out what I'm missing for this to work.
-
-Set channel and indexed for the channel. You should have in_temp0_raw, in_temp1_raw etc
-Extend name was never meant to replace the index as it isn't visible in things
-like event codes if you ever need to implement that stuff.  So they should all
-have and unique index values anyway.
-
-> 
-> I've snipped to the relevant bits below.
-> 
-> Kind regards,
-> Caleb
-> > 
-> > Various things inline but biggest is probably that in IIO we prefer
-> > if possible to make application of offsets and scales a job for the caller,
-> > either userspace or in kernel callers. This allows them to maintain precision
-> > better if they need to further transform the data.
-> > 
-> > Jonathan
-> >   
-> >> ---
-> >>   drivers/iio/adc/Kconfig           |   13 +
-> >>   drivers/iio/adc/Makefile          |    1 +
-> >>   drivers/iio/adc/qcom-spmi-rradc.c | 1070 +++++++++++++++++++++++++++++
-> >>   3 files changed, 1084 insertions(+)
-> >>   create mode 100644 drivers/iio/adc/qcom-spmi-rradc.c
-> >>  
-> 
-> [snip]
-> 
-> >> +static int rradc_post_process_chg_temp(struct rradc_chip *chip, u16 adc_code,
-> >> +				       int *result_millidegc)
-> >> +{
-> >> +	int64_t uv, offset, slope;
-> >> +	int ret;
-> >> +
-> >> +	ret = rradc_get_fab_coeff(chip, &offset, &slope);
-> >> +	if (ret < 0) {
-> >> +		dev_err(chip->dev, "Unable to get fab id coefficients\n");
-> >> +		return -EINVAL;
-> >> +	}
-> >> +
-> >> +	uv = ((int64_t)adc_code * RR_ADC_TEMP_FS_VOLTAGE_NUM);
-> >> +	uv = div64_s64(uv,
-> >> +		       (RR_ADC_TEMP_FS_VOLTAGE_DEN * RR_ADC_CHAN_MAX_VALUE));
-> >> +	uv = offset - uv;
-> >> +	uv = div64_s64((uv * MILLI), slope);
-> >> +	uv += RR_ADC_CHG_TEMP_OFFSET_MILLI_DEGC;
-> >> +	*result_millidegc = (int)uv;  
-> > 
-> > Marginally harder than the one below, but this is still looking like it can
-> > be well expressed as an offset + scale.  Thus making the tedious maths
-> > userspaces or callers problem.  I'm working backwards hence won't comment on
-> > similar before this point. Key is to transform whatever maths you have into
-> > 
-> > (adc_code + offset) * scale then expose offset and scale as well as the
-> > raw value.  The right maths will get done for in kernel users and
-> > userspace can do it nicely with floating point.
-
-So I think this is: 
-
-([fab_offset - (adc_code * FS_N )/ (FS_DEN * MAX_VAL)] * MILI / fab_slope + offset
-
-Let A= FS_N/(FS_N * MAX_VAL)
-    B = MILLI/fab_slope
-
-= (fab_ofset - adc_code * A)*B + offset
-= [((fab_offset / A - adc_code)*A + (offset / B)] * B
-= [fab_offset/A - adc_code + offset / AB] * AB
-= [adc_code - fab_offset/A - offset/AB]* -AB
-= (a + offset) * scale)
-
-where a is the adc_code,
-offset = - fab_offset * FS_N * MAX_VAL/ FS_N - offset * FS_N * MAX_VAL * fab_slow / (MILLI  * FS_N)
-scale = (FS_N * MILLI) / (FS_N * MAX_VAL * FAB_SLOPE)
-
-So I think it can can done.  Quest then becomes whether sufficient precision can be
-maintained for it to make sense to do the fixed point maths in the kernel to establish
-those two coefficients and push it out to userspace as a constant that can then be
-applied to the channel.
-
-Note this assume that rradc_get_fab_coeff() returns a fixed value for a given device.
-
-> >   
-> >> +
-> >> +	return 0;
-> >> +}  
-> 
-> [snip]
-> 
-> >> +static const struct iio_chan_spec rradc_iio_chans[RR_ADC_CHAN_MAX] = {
-> >> +	{
-> >> +		.extend_name = "batt_id",  
-> > 
-> > We recently introduced channel labels to try and avoid the need for
-> > extend_name.  The problem with extend_name is that generic software then
-> > has trouble parsing the resulting sysfs files as they can have very
-> > freeform naming.  Moving it to label makes that much easier.  Note that
-> > there is code to give a default label of extend_name to work around
-> > this problem for older drivers.
-> >   
-> >> +		.type = IIO_RESISTANCE,
-> >> +		.info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED),
-> >> +		.address = RR_ADC_BATT_ID,
-> >> +	},  
-> 
-> > 
-> > Thanks,
-> > 
-> > Jonathan  
+> Make key unsigned long, add support for INLINE_COPY_TO_USER, and maybe
+> add a wrapper, so this works on all architectures, e.g. if
+> raw_copy_to_user_key() is not defined, then fall back to
+> raw_copy_to_user() and ignore the key parameter.
 > 
 
+Since we only need the double underscore variants, even if we're going to be more
+general than we need to be, we can restrict ourselves to those, can't we?
+
+I don't understand your comment about the wrapper. You'd want an error on misuse,
+that is, if you try to use a _with_key function if the functionality is not defined, no?
+
+I see the following possibilities:
+ 1. raw_copy_from/to_user is declared by each architecture.
+    Mirror that for raw_copy_from/to_user_with_key.
+    Linker error on misuse.
+ 2. Opt in with #define UACCESS_WITH_KEY or similar.
+    Undeclared function on misuse.
+ 3. Opt in by requiring that raw_copy_from/to_user_with_key are macros.
+    Undeclared function on misuse.
+ 4. Declare raw_copy_from/to_user_with_key in include/linux/uacess.h.
+    Linker error on misuse.

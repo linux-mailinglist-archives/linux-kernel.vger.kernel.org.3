@@ -2,213 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B94DF495E55
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 12:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A4F495E57
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 12:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380153AbiAULW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 06:22:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58266 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380131AbiAULWx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 06:22:53 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60AEEC061574
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 03:22:53 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id d5so6671588pjk.5
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 03:22:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1ahMegGYTBxkOh/FQJXWBotaMUNdSqdUP2+0wlDcyRE=;
-        b=CQjmabiYYZAPXUh0eYB4cwwRu489fiqLpRYqKvyBlLNgjDI5IxE1F1wYIKkXzEn9Z5
-         1UCfcmwYbQ9tQgpLsXPKzsNHwdFwan4vlAg6sjrGPpxDeoSPqwg3IgNosqnrY5uumKlr
-         DXx7g61KfrXp6ZufRkEfPr0bMAgoq0gjkI5aA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1ahMegGYTBxkOh/FQJXWBotaMUNdSqdUP2+0wlDcyRE=;
-        b=EbeapaHOpaxfgwPZFz2S/+C8LAnaX+RmoFvVX3ZaXHzA+4ypVGVo91uQzaWS/sG+at
-         N/nZztSijpUZjdyFJW3H7OK7lqQ/IVJBeZmkL96hAWSnmswWTBrJqSOZC6e0KOcYi9NJ
-         Rs2+VNbrPS934c254KwWxlgpa3kAxoVFPkivVvVdTJB3PGuZkJIPJo+vAQBkSNobEFDd
-         z1nk54rshtqtZ6orkv1aQJ7yBolZpFYOJavwx2fCFa/yMHqzEztpwekR0Hs4YKGhZ5xV
-         giylB3YHi5rR5tOHt6krt9YxRcw6srbAx7yhgIdT+sASo5tjYOrt0APMPEaD0aoSkEKC
-         z90Q==
-X-Gm-Message-State: AOAM531YzpQwFOOyayfRHWR9FaHB2jofGoJqD7WpV+DHaUBqmkuuCIKr
-        zh40WYrJGav+QSgQjHmkERwG3Q==
-X-Google-Smtp-Source: ABdhPJxUddiEmQagrqggJqc3Zjm1gX0Na2FM4tszeZy/IEXp0nbs7hz1RFI0KY0I9UuOvGh7hxhmXw==
-X-Received: by 2002:a17:90a:bd01:: with SMTP id y1mr292543pjr.33.1642764172959;
-        Fri, 21 Jan 2022 03:22:52 -0800 (PST)
-Received: from localhost (174.71.80.34.bc.googleusercontent.com. [34.80.71.174])
-        by smtp.gmail.com with UTF8SMTPSA id e15sm2444529pjd.52.2022.01.21.03.22.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Jan 2022 03:22:52 -0800 (PST)
-From:   Joseph Hwang <josephsih@chromium.org>
-To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
-        luiz.dentz@gmail.com, pali@kernel.org
-Cc:     chromeos-bluetooth-upstreaming@chromium.org, josephsih@google.com,
-        Joseph Hwang <josephsih@chromium.org>,
-        Archie Pusaka <apusaka@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v1 2/2] Bluetooth: btintel: surface Intel telemetry events through mgmt
-Date:   Fri, 21 Jan 2022 19:22:33 +0800
-Message-Id: <20220121192152.v1.2.I63681490281b2392aa1ac05dff91a126394ab649@changeid>
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-In-Reply-To: <20220121192152.v1.1.I2015b42d2d0a502334c9c3a2983438b89716d4f0@changeid>
-References: <20220121192152.v1.1.I2015b42d2d0a502334c9c3a2983438b89716d4f0@changeid>
-MIME-Version: 1.0
+        id S1380169AbiAULXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 06:23:03 -0500
+Received: from mail-eopbgr130075.outbound.protection.outlook.com ([40.107.13.75]:53830
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1380135AbiAULWz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 06:22:55 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gXVaBvLIX4z6LUskL1w9PkK6/YStmyJm6vAywBjs5d8jDgao/RHEMgBZdPBdVR0cqbWRzqPM5mjwDao/WhUnn8lF37A1EC0KqcXmXuc3KKiEzMwF11kB1/kcEY2cpmA74TUjCKzOrESh5f6D2RfNRslCVwGHdyLaJdThKjBxriHOLnd36mhCubcDvLwLIFd0TfQmoirMenkWXIZeTLn5Zy9ntNPdZuD2jNQfImGfZhB7vIHlHGC0Vvk0eZEprfoGDsbRjwdUaWeZOLaLAQnCfMbwN++2MJFp/nCYo/Wyjle3sJS78ZkPxaNgIUchIM0oP01rpd0BR+dY/yLi18Q/pg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MG+NRdA9x4fxcHP4UobbuLjrnZ9XW/BELvx3bKO0u1M=;
+ b=WzHXcmSOe5nKV+fHMhl0qjQO2Fecgwzlw4WgOag7qwM8F5gvm6wCJ+O6VftP9YGWymdXujwNKietwMjGLe5B2tsAGKosuZoxuDVlPBm8ECagtiTO0pNcYN+7w1XuAwu1dcPVU0w1N9ozIzgzu0azcQC2/YfYcxNUw64GZJESLsn2KygXqRCi64W1Xr3r7zwDqXYSooQnzboxwKF6liUpzZ6E/S9ePhMmkE2BYvyzaBNfbbxqueydH/rEmC4pWkhstk6rfGowvtDpjcmKlyFMlf3sdTqX7gngGQhkMa7fO0yxmxy3OoRGBT/g6CU00DCuwMLdCzB2MaVP8+QspNn9qQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MG+NRdA9x4fxcHP4UobbuLjrnZ9XW/BELvx3bKO0u1M=;
+ b=EnhK+RAoARCNZeA+KIAo8jLAOYtq8+S2C5yZz9AXs4QVu0WoC8IpNXEQl21IpRNa1RjRkZ7Hqn1PGef2CneLZzqnuiWBxdnegtan/tGmUwA4pIW8/OQKeFSQ8F5CUTgkPoPU1mx4mbHvbTei/QBJgBX9dDk3z0Vf/UzhWATzPeU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
+ by DB8PR04MB6731.eurprd04.prod.outlook.com (2603:10a6:10:104::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Fri, 21 Jan
+ 2022 11:22:52 +0000
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::f853:4e9a:7ab6:dbf7]) by VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::f853:4e9a:7ab6:dbf7%6]) with mapi id 15.20.4909.010; Fri, 21 Jan 2022
+ 11:22:52 +0000
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [RFC 0/3] soc: imx: Refactor BLK CTRL driver
+Date:   Fri, 21 Jan 2022 13:22:35 +0200
+Message-Id: <20220121112238.47281-1-abel.vesa@nxp.com>
+X-Mailer: git-send-email 2.31.1
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR08CA0238.eurprd08.prod.outlook.com
+ (2603:10a6:802:15::47) To VI1PR04MB4688.eurprd04.prod.outlook.com
+ (2603:10a6:803:6a::30)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0ff607d2-6719-44d4-e989-08d9dcd05ccc
+X-MS-TrafficTypeDiagnostic: DB8PR04MB6731:EE_
+X-Microsoft-Antispam-PRVS: <DB8PR04MB6731AFF473EE7A9DC6655623F65B9@DB8PR04MB6731.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sJmKfwBnMQQm4+thIobh8MHzZXvJhofOx0YrMcI8kgB2A41V39d90YOCAjbYc3fu9Kj2ekpe4kqJmIQ8jPqAODuychMSvZnbfm4pULxyaXMurEGELMb+PhIqJpziflijQiP5JL2hv59A9xWbwo7rDTADTZ5IdY0diGz3arREh4EVpGyxI7ZLjow2smrum/BqJWNOT3bUGHNuUwQD1wb/B/WGre8SUoRFTrX3EDJKHcsOMIxY2ok1sFVF5c0rxx2Gs3x7rHvNKDZOag7mu4H4uGMkYeGrBsAm1g7SnmYK2ZbRy7p5DsXVrFILe/htvOABG4QRWtnKiqzSWCI+DsjewgBPIrGRuYa9wQanje7ow/gtKkcNUz05dZ3DczdeE3OsFUppslN07RXqr6kL8n5gbNbS4jw/0FkQRw+yuHRmK1YKD53i2IFlChyO+l0XEaD3nlmqlLqjizdN9nShHvpkeiqu0pvx3Hvo95t9WzcJj8UPMOVcpaLDmtvRWu3tG3yVot/2YCwpOmcsxWNbPfZ3SAzkDj0rkbD1OUOfTHoAHo0ZCOM/vRZQdswLXR97foElMdL41spc4GUutY1N36TBvvhKSddzhHv63r1xLsGtARdOe/eModKAGoxW9wyv54y8DL61kRHjlF+EXWKLkIiIpGen8Rl98kVq2fR6Y28QWx2nMyEbRkr7KOvGkELR8d0xhGp9RtFpHdgWnWhVmKOE5BOCOOSvGfXPAuqhtcVAaGTfP6at4kYCM7PZT2Hj5xY59ZGXG4cBplSlv5tuhG2bnihC6J8rVn+bF+KgkK0NLw4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(38350700002)(52116002)(2616005)(8676002)(6512007)(1076003)(6666004)(316002)(110136005)(54906003)(86362001)(6506007)(6486002)(966005)(66946007)(5660300002)(4326008)(66556008)(66476007)(8936002)(36756003)(44832011)(83380400001)(2906002)(186003)(26005)(508600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vDNf5EGPAlpfZqB7Kb6W7yhWAqArd0ORalQGosn3EHW95T81IK69ehhlZrC3?=
+ =?us-ascii?Q?pfI5V/lQtppny4i7CKHKOd29xwE1wIOhpO4ptMPx/YS0i7edgaja++cWO2Mm?=
+ =?us-ascii?Q?5YgXj7NWi8xPnBmKNAXdwe+KEVydCgf1g25bPajBPMoPE/PS6oC7Ael/uvpL?=
+ =?us-ascii?Q?WEU4vWQ0bLwy9sKN9p2wPCXhiNapbq62zG6L2mX/ngHZ49UKpS3VJrv4yYZq?=
+ =?us-ascii?Q?CndZYcSXXNrxktMmqJcS1Ga2GAUoadNtx6KAWMWcw7dAtjorhg7EM6xiGDmd?=
+ =?us-ascii?Q?+AEvwiT7GtiEBasz2tYiCPDbi9G8y9bdNkMcfPNSUsl/j3PUVIuojYJBc6dZ?=
+ =?us-ascii?Q?ZN6W9yLSdkAEnBtqLwMUYX9WRrvbP33D0J99jFEZKQMdDBoefwuVcQEeqjVR?=
+ =?us-ascii?Q?hMG9sqfC8UqLuCavl9qV1ttjVMFSwkXFDglyx0vEBOi0pEpKF5l2GYuRPTBa?=
+ =?us-ascii?Q?aVM98fswWO1wGefj2y67JGW8fZWt87awnvQDsC0BmpFEbapbZROHzM/+aMCm?=
+ =?us-ascii?Q?K+bnNzKf3Y8QfWw/Mmh/MW/PLzS0roNKX4HWO4PvNpLmjjBksFmgh5WUBxZl?=
+ =?us-ascii?Q?ee2oTOPZ78/KUZv5FwYkdxtepngng/P9+p7GQb509H/YyiYoDBJvQ04ZzA1k?=
+ =?us-ascii?Q?diSRouhTPPTMY7bcXGa8A1Ogur8gJTk7qgxMRcb1gZrTnFjAX+TISXB4F80H?=
+ =?us-ascii?Q?mm+R17a3+sNBYCrXNwIKDqLmetjhDS9Cwxt90OvpQ+Rxx90f/XcCk7EQkScH?=
+ =?us-ascii?Q?t7HUs/WcsPWmoQpHOSH0z3fXVAFU9ECX7GXgFr+fIV9fAVRZTrdECUosiXnI?=
+ =?us-ascii?Q?NpppKg1XnLEJ9V6/LooE0/2VQ1kcMFJSb7giLQjFKJu0LTEArb0pl6xtb5KE?=
+ =?us-ascii?Q?EPWFMpB+k9OCuNWtr97veGdOcLSnBypv4L/uzA8CdCo6+YpNlUEfzlfGOTLL?=
+ =?us-ascii?Q?w3QA2OtsYf6mRkSiloWJULD/Jkr71sJQSV24rcJJ3OQt/POdATSi1d3wfk2N?=
+ =?us-ascii?Q?D+otyTptTVn/LNDdEGWKIRvsU8kYcb+ZCvcSNiG6pTWVztPExqraqlNQYrjI?=
+ =?us-ascii?Q?O1DBvS8fwC9WJr+fMLw9jUJqr9dVkgBQnNnF7Qxu6Q6fvXLcO87C5WA26C9d?=
+ =?us-ascii?Q?tRAqpxs9xSsDiw0bDvxejKcYCNa4fB0jzwcwcBO/UxLgXAUI5elupkN1yRXK?=
+ =?us-ascii?Q?w53bGTjMs/TqoUggxMXmAyXXqUo1BNM1RPMCGj+9HChOMleQn8ifEj5q9Pwa?=
+ =?us-ascii?Q?TWnFYCS6KDiznS3mg0sswccBZbYIHAlL3yp6FbNit4nu3BM1XAnz6skCWoEu?=
+ =?us-ascii?Q?sASJEn8EXNbVwdAi05yjl8qmaUkT0Y+xhL2QwIkNrXHjKaNg7/cVjSW/pJaa?=
+ =?us-ascii?Q?73ihBgYHti+fF14IptbtajhX4QYM1/YclFik9O5qFBp5aD5uF9mufOV4VJ1z?=
+ =?us-ascii?Q?Ff6++HDcmxge/F47lsNkL/dETdfqFMS8Smz1/VbDtpNJ8BlCng0lTxWClEFl?=
+ =?us-ascii?Q?SEkngJUugoI1ByOnHN4mxUW0qpJYJpZy6fiNVeo12qChxHacwwHjT+JXrURr?=
+ =?us-ascii?Q?wxx3UH1SdHwC1Ev885wsrrwPHA8KrZPvJ6Sp8AR+3YfV4bB1/S1gtpjcEDmT?=
+ =?us-ascii?Q?u/d+Ea6xRmotf0RYfWeOQtQ=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0ff607d2-6719-44d4-e989-08d9dcd05ccc
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2022 11:22:51.9439
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VGK6a9Z39w3hFpCzgU6REFy7D8TqS1PO6qgwEO4wC4+CZFvBEu+Fb9iu1hkrQgiPYi8m/QbtiYmNHpjhzY9XpQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6731
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When receiving a HCI vendor event, the kernel checks if it is an
-Intel telemetry event. If yes, the event is sent to bluez user
-space through the mgmt socket.
+This splits the SoC specific parts into separate drivers for i.MX8MM and
+i.MX8MN. Should be more readable and easier to maintain.
 
-Signed-off-by: Joseph Hwang <josephsih@chromium.org>
-Reviewed-by: Archie Pusaka <apusaka@chromium.org>
----
+As for the i.MX8MP BLK CTRL driver (sent by Lucas here:
+https://lore.kernel.org/linux-arm-kernel/20220119134027.2931945-7-l.stach@pengutronix.de/raw)
+It can remain as a separate driver until we figure out what is the
+overlap and how can we make it use the generic part.
 
- drivers/bluetooth/btintel.c      | 43 +++++++++++++++++++++++++++++++-
- drivers/bluetooth/btintel.h      | 12 +++++++++
- include/net/bluetooth/hci_core.h |  2 ++
- net/bluetooth/hci_event.c        | 12 ++++++---
- 4 files changed, 65 insertions(+), 4 deletions(-)
+This patchset doesn't rely on the above-mentioned patch and does not
+impact it in any way.
 
-diff --git a/drivers/bluetooth/btintel.c b/drivers/bluetooth/btintel.c
-index 1a4f8b227eac..d3b7a796cb91 100644
---- a/drivers/bluetooth/btintel.c
-+++ b/drivers/bluetooth/btintel.c
-@@ -2401,8 +2401,10 @@ static int btintel_setup_combined(struct hci_dev *hdev)
- 	set_bit(HCI_QUIRK_SIMULTANEOUS_DISCOVERY, &hdev->quirks);
- 	set_bit(HCI_QUIRK_NON_PERSISTENT_DIAG, &hdev->quirks);
- 
--	/* Set up the quality report callback for Intel devices */
-+	/* Set up the quality report callbacks for Intel devices */
- 	hdev->set_quality_report = btintel_set_quality_report;
-+	hdev->is_quality_report_evt = btintel_is_quality_report_evt;
-+	hdev->pull_quality_report_data = btintel_pull_quality_report_data;
- 
- 	/* For Legacy device, check the HW platform value and size */
- 	if (skb->len == sizeof(ver) && skb->data[1] == 0x37) {
-@@ -2645,6 +2647,45 @@ void btintel_secure_send_result(struct hci_dev *hdev,
- }
- EXPORT_SYMBOL_GPL(btintel_secure_send_result);
- 
-+#define INTEL_PREFIX		0x8087
-+#define TELEMETRY_CODE		0x03
-+
-+struct intel_prefix_evt_data {
-+	__le16 vendor_prefix;
-+	__u8 code;
-+	__u8 data[0];   /* a number of struct intel_tlv subevents */
-+} __packed;
-+
-+bool btintel_is_quality_report_evt(struct sk_buff *skb)
-+{
-+	struct intel_prefix_evt_data *ev;
-+	u16 vendor_prefix;
-+
-+	if (skb->len < sizeof(struct intel_prefix_evt_data))
-+		return false;
-+
-+	ev = (struct intel_prefix_evt_data *)skb->data;
-+	vendor_prefix = __le16_to_cpu(ev->vendor_prefix);
-+
-+	return vendor_prefix == INTEL_PREFIX && ev->code == TELEMETRY_CODE;
-+}
-+EXPORT_SYMBOL_GPL(btintel_is_quality_report_evt);
-+
-+bool btintel_pull_quality_report_data(struct sk_buff *skb)
-+{
-+	skb_pull(skb, sizeof(struct intel_prefix_evt_data));
-+
-+	/* A telemetry event contains at least one intel_tlv subevent. */
-+	if (skb->len < sizeof(struct intel_tlv)) {
-+		BT_ERR("Telemetry event length %d too short (at least %u)",
-+		       skb->len, sizeof(struct intel_tlv));
-+		return false;
-+	}
-+
-+	return true;
-+}
-+EXPORT_SYMBOL_GPL(btintel_pull_quality_report_data);
-+
- MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.org>");
- MODULE_DESCRIPTION("Bluetooth support for Intel devices ver " VERSION);
- MODULE_VERSION(VERSION);
-diff --git a/drivers/bluetooth/btintel.h b/drivers/bluetooth/btintel.h
-index c9b24e9299e2..841aef3dbd4c 100644
---- a/drivers/bluetooth/btintel.h
-+++ b/drivers/bluetooth/btintel.h
-@@ -210,6 +210,8 @@ void btintel_bootup(struct hci_dev *hdev, const void *ptr, unsigned int len);
- void btintel_secure_send_result(struct hci_dev *hdev,
- 				const void *ptr, unsigned int len);
- int btintel_set_quality_report(struct hci_dev *hdev, bool enable);
-+bool btintel_is_quality_report_evt(struct sk_buff *skb);
-+bool btintel_pull_quality_report_data(struct sk_buff *skb);
- #else
- 
- static inline int btintel_check_bdaddr(struct hci_dev *hdev)
-@@ -305,4 +307,14 @@ static inline int btintel_set_quality_report(struct hci_dev *hdev, bool enable)
- {
- 	return -ENODEV;
- }
-+
-+static inline bool btintel_is_quality_report_evt(struct sk_buff *skb)
-+{
-+	return false;
-+}
-+
-+static inline bool btintel_pull_quality_report_data(struct sk_buff *skb);
-+{
-+	return false;
-+}
- #endif
-diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/hci_core.h
-index 727cb9c056b2..b74ba1585df9 100644
---- a/include/net/bluetooth/hci_core.h
-+++ b/include/net/bluetooth/hci_core.h
-@@ -632,6 +632,8 @@ struct hci_dev {
- 	void (*cmd_timeout)(struct hci_dev *hdev);
- 	bool (*wakeup)(struct hci_dev *hdev);
- 	int (*set_quality_report)(struct hci_dev *hdev, bool enable);
-+	bool (*is_quality_report_evt)(struct sk_buff *skb);
-+	bool (*pull_quality_report_data)(struct sk_buff *skb);
- 	int (*get_data_path_id)(struct hci_dev *hdev, __u8 *data_path);
- 	int (*get_codec_config_data)(struct hci_dev *hdev, __u8 type,
- 				     struct bt_codec *codec, __u8 *vnd_len,
-diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-index bccb659a9454..5f9cc7b942a1 100644
---- a/net/bluetooth/hci_event.c
-+++ b/net/bluetooth/hci_event.c
-@@ -4237,11 +4237,17 @@ static bool quality_report_evt(struct hci_dev *hdev,  void *data,
- 		if (aosp_has_quality_report(hdev) &&
- 		    aosp_pull_quality_report_data(skb))
- 			mgmt_quality_report(hdev, skb, QUALITY_SPEC_AOSP_BQR);
--
--		return true;
-+	} else if (hdev->is_quality_report_evt &&
-+		   hdev->is_quality_report_evt(skb)) {
-+		if (hdev->set_quality_report &&
-+		    hdev->pull_quality_report_data(skb))
-+			mgmt_quality_report(hdev, skb,
-+					    QUALITY_SPEC_INTEL_TELEMETRY);
-+	} else {
-+		return false;
- 	}
- 
--	return false;
-+	return true;
- }
- 
- static void hci_vendor_evt(struct hci_dev *hdev, void *data,
+Abel Vesa (3):
+  soc: imx: make i.MX8MM BLK CTRL a separate driver
+  soc: imx: make i.MX8MN BLK CTRL a separate driver
+  soc: imx: Rename generic BLK CTRL driver to suggest future usability
+
+ drivers/soc/imx/Kconfig           |  14 +
+ drivers/soc/imx/Makefile          |   4 +-
+ drivers/soc/imx/imx-blk-ctrl.c    | 322 ++++++++++++++++
+ drivers/soc/imx/imx-blk-ctrl.h    |  72 ++++
+ drivers/soc/imx/imx8m-blk-ctrl.c  | 617 ------------------------------
+ drivers/soc/imx/imx8mm-blk-ctrl.c | 173 +++++++++
+ drivers/soc/imx/imx8mn-blk-ctrl.c | 101 +++++
+ 7 files changed, 685 insertions(+), 618 deletions(-)
+ create mode 100644 drivers/soc/imx/imx-blk-ctrl.c
+ create mode 100644 drivers/soc/imx/imx-blk-ctrl.h
+ delete mode 100644 drivers/soc/imx/imx8m-blk-ctrl.c
+ create mode 100644 drivers/soc/imx/imx8mm-blk-ctrl.c
+ create mode 100644 drivers/soc/imx/imx8mn-blk-ctrl.c
+
 -- 
-2.35.0.rc0.227.g00780c9af4-goog
+2.31.1
 

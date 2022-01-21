@@ -2,121 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 799A9495A6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:13:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC7B495A74
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:15:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378874AbiAUHNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 02:13:15 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50736 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245097AbiAUHNL (ORCPT
+        id S1378905AbiAUHOz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 21 Jan 2022 02:14:55 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:45368 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378887AbiAUHOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 02:13:11 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 916C2B81F42;
-        Fri, 21 Jan 2022 07:13:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AE92C340E9;
-        Fri, 21 Jan 2022 07:13:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642749188;
-        bh=SYu90Dv3l/L+64SNcy50aiw16Lnx3umbKRTsGOMrQkg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=k3uRWzp0SWvrQt4wpv0wp6HqoqMuube0dVeHTED+DvTqJqQ9JteKgAHFuRzMK7La9
-         hdnPtmnF2+6oHL0sMYFETK3B/JMjsOW1iHomI2Xxura1sskJ+xnkPbfy35KWaVO1oF
-         26rdD0dYwJ3PYFSq+U3dWovrDZcwDzLVyfSAEZDEYRmJINM8Tmg0Ctmu12Rf81s5Ac
-         gTKy8KVDZlLocphtUaf3ZDWDQa7DnN48hoqfKvLktVOOCow1KTrdDLQoLL6djNiLnt
-         IAwyIbddJ0s5SrRTLwybw+lS0U5xtFSYhGyprgDLn7Xl/Wos5XISZ+lA6JoDVYmrwQ
-         LJ4wkPbrGtrCw==
-Received: by mail-ua1-f42.google.com with SMTP id y4so15340383uad.1;
-        Thu, 20 Jan 2022 23:13:08 -0800 (PST)
-X-Gm-Message-State: AOAM5308pWH6ry++BaLmChZuZ3Tca0RPutSXFGz86STO/h5THSW/2DwP
-        H9XGfWX/4Z/iecxCE17m44cgXCq1PA9sQ1deBuY=
-X-Google-Smtp-Source: ABdhPJx6xNJuRVb4aLVlJ7P9bbeDPtJXSmXNRd3kkpQg8PkHlzrym8B0ENWLs0YxpXjFKvxlitpnKg+MIWjsd2Jznqg=
-X-Received: by 2002:a67:c89e:: with SMTP id v30mr1186161vsk.2.1642749187280;
- Thu, 20 Jan 2022 23:13:07 -0800 (PST)
+        Fri, 21 Jan 2022 02:14:45 -0500
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 20L7EUKK0024197, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 20L7EUKK0024197
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 21 Jan 2022 15:14:30 +0800
+Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 21 Jan 2022 15:14:30 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 20 Jan 2022 23:14:30 -0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e]) by
+ RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e%5]) with mapi id
+ 15.01.2308.020; Fri, 21 Jan 2022 15:14:30 +0800
+From:   Pkshih <pkshih@realtek.com>
+To:     Pkshih <pkshih@realtek.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bernie Huang <phhuang@realtek.com>,
+        "open list:REALTEK WIRELESS DRIVER (rtw88)" 
+        <linux-wireless@vger.kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+CC:     "kernel@collabora.com" <kernel@collabora.com>
+Subject: RE: [PATCH v3] rtw88: check for validity before using a pointer
+Thread-Topic: [PATCH v3] rtw88: check for validity before using a pointer
+Thread-Index: AQHX+KPvE/unI/D/606seZj0xgKxUqxBV0ZAgCvilcA=
+Date:   Fri, 21 Jan 2022 07:14:30 +0000
+Message-ID: <d41cad1d43074b858209f3d7227c4e14@realtek.com>
+References: <YcWK1jxnd3vGdmCq@debian-BULLSEYE-live-builder-AMD64>
+ <505cb763449e4b4ab493857e014e31a1@realtek.com>
+In-Reply-To: <505cb763449e4b4ab493857e014e31a1@realtek.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/1/21_=3F=3F_06:00:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <20220120073911.99857-14-guoren@kernel.org> <CAK8P3a03-3QTC-vxmnbouK7wBd8iunPGZpX0-Jf6ntS1DY0E=w@mail.gmail.com>
-In-Reply-To: <CAK8P3a03-3QTC-vxmnbouK7wBd8iunPGZpX0-Jf6ntS1DY0E=w@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 21 Jan 2022 15:12:56 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRMWj0yVLn2=16Gu1O-6tuqLaxcdduw0YnDK6vrizJEsQ@mail.gmail.com>
-Message-ID: <CAJF2gTRMWj0yVLn2=16Gu1O-6tuqLaxcdduw0YnDK6vrizJEsQ@mail.gmail.com>
-Subject: Re: [PATCH V3 13/17] riscv: compat: signal: Add rt_frame implementation
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        inux-parisc@vger.kernel.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 6:31 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Thu, Jan 20, 2022 at 8:39 AM <guoren@kernel.org> wrote:
+
+> -----Original Message-----
+> From: Pkshih <pkshih@realtek.com>
+> Sent: Friday, December 24, 2021 5:01 PM
+> To: Muhammad Usama Anjum <usama.anjum@collabora.com>; Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle
+> Valo <kvalo@kernel.org>; David S. Miller <davem@davemloft.net>; Jakub Kicinski <kuba@kernel.org>; Bernie
+> Huang <phhuang@realtek.com>; open list:REALTEK WIRELESS DRIVER (rtw88) <linux-wireless@vger.kernel.org>;
+> open list:NETWORKING DRIVERS <netdev@vger.kernel.org>; open list <linux-kernel@vger.kernel.org>
+> Cc: kernel@collabora.com
+> Subject: RE: [PATCH v3] rtw88: check for validity before using a pointer
+> 
+> > -----Original Message-----
+> > From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> > Sent: Friday, December 24, 2021 4:55 PM
+> > To: Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; David S. Miller
+> > <davem@davemloft.net>; Jakub Kicinski <kuba@kernel.org>; Pkshih <pkshih@realtek.com>; Bernie Huang
+> > <phhuang@realtek.com>; open list:REALTEK WIRELESS DRIVER (rtw88) <linux-wireless@vger.kernel.org>; open
+> > list:NETWORKING DRIVERS <netdev@vger.kernel.org>; open list <linux-kernel@vger.kernel.org>
+> > Cc: usama.anjum@collabora.com; kernel@collabora.com
+> > Subject: [PATCH v3] rtw88: check for validity before using a pointer
 > >
-> > From: Guo Ren <guoren@linux.alibaba.com>
+> > ieee80211_probereq_get() can return NULL. Pointer skb should be checked
+> > for validty before use. If it is not valid, list of skbs needs to be
+> > freed.
 > >
-> > Implement compat_setup_rt_frame for sigcontext save & restore. The
-> > main process is the same with signal, but the rv32 pt_regs' size
-> > is different from rv64's, so we needs convert them.
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
->
-> I hope someone else can properly review this part, it's not my area
-> but it looks complex enough that it could bring subtle bugs.
-Here are ltp signal test results:
+> > Fixes: 10d162b2ed39 ("rtw88: 8822c: add ieee80211_ops::hw_scan")
+> > Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> 
+> Acked-by: Ping-Ke Shih <pkshih@realtek.com>
+> 
+> [...]
+> 
 
-sigaction01                                        PASS       0
-sigaction02                                        PASS       0
-sigaltstack01                                      PASS       0
-sigaltstack02                                      PASS       0
-sighold02                                          PASS       0
-signal01                                           PASS       0
-signal02                                           PASS       0
-signal03                                           PASS       0
-signal04                                           PASS       0
-signal05                                           PASS       0
-signal06                                           CONF       32
-signalfd01                                         PASS       0
-signalfd4_01                                       PASS       0
-signalfd4_02                                       PASS       0
-sigpending02                                       PASS       0
-sigprocmask01                                      PASS       0
-sigrelse01                                         PASS       0
-sigsuspend01                                       PASS       0
-sigtimedwait01                                     PASS       0
-sigwait01                                          PASS       0
-sigwaitinfo01                                      CONF       32
+I take this patch into my patchset [1], because my new patches are based this patch
+related to fixes of hw_scan.
 
+[1] https://lore.kernel.org/linux-wireless/20220121070813.9656-2-pkshih@realtek.com/T/#u
 
->
->        Arnd
+--
+Ping-Ke
 
-
-
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/

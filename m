@@ -2,89 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8ECD496720
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 22:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEABA49672A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 22:14:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232971AbiAUVJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 16:09:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiAUVJJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 16:09:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10F2C06173B;
-        Fri, 21 Jan 2022 13:09:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6010961827;
-        Fri, 21 Jan 2022 21:09:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D19CC340E1;
-        Fri, 21 Jan 2022 21:09:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642799347;
-        bh=R9IH1HO9BhkurxhbfZ/tA3xkofYRaHlskaeE4j+DY68=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ebzQK3QhDgT/T2L/u8OlnNiGo3KbbTl6h5ztLuRo1EU0Nh4K9UOFn3pXR7raSTmaG
-         zE3L4EdP2ms0NyP6lev85hl9EIsezgehE/pUfqaLG0gXcC3+/2A+SjmPIbGa2sP1pk
-         bKGXZgtEWFaXVNC7112ut1J7kKrMo+Himt6b7mB9SFooC4k09b7wEelxbAQZ5aEyqE
-         JWLhRSyRXJUhUT8f3B/Ze08E0f7ZogB7WGNplgY5cWZndUY8Li3DPefIfG7mpRHxRj
-         KIP+WqjvZelxRCAkMN0e4ih4MMKnYbIwrlgRxeOztyM+sQ8S9ENjbX7yPWI81WI/RV
-         rafEKwoAeV3lA==
-Date:   Fri, 21 Jan 2022 13:09:05 -0800
-From:   Keith Busch <kbusch@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Sagi Grimberg <sagi@grimberg.me>, Christoph Hellwig <hch@lst.de>,
-        Len Brown <lenb@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        m.heingbecker@googlemail.com,
-        linux-nvme <linux-nvme@lists.infradead.org>
-Subject: Re: [Bug] nvme blocks PC10 since v5.15 - bisected
-Message-ID: <20220121210905.GA1114868@dhcp-10-100-145-180.wdc.com>
-References: <CAJZ5v0hvvYedSn5u-i7sjpoEHU4P65t7i1b2pVn=S1q0nHWgqQ@mail.gmail.com>
+        id S231338AbiAUVOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 16:14:11 -0500
+Received: from mga14.intel.com ([192.55.52.115]:47885 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229520AbiAUVOI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 16:14:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642799648; x=1674335648;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=V6H2UckBLCuDWmdCe+Xs89o2UseA1Ut2QW+oJkT+t3Y=;
+  b=PhFAWM9dQMnpk9ZTxS9HoZy5XxhXkk+lGPkOz4Im+k7zGCjUOBAMpPk5
+   hebTfsdE8qiG2t8nEAdb/XvDzvjRUiUWLSxFYogJ0/bzxQh1wQSq37BP/
+   ac/cHprgfYjWECQJWLyIMJb+6GbQV6CHw9YErUsh4k1tohi0aZJvSU2tJ
+   7pP4zmz9EwyuhWmowJ9ElU5OAOZgw5rCcueCuL15K/xdIzi/HlVjGa9pk
+   esEnDBzTrseVshZ53BtVn0bfbAFs5du+IwQI95bU3XqMMRqpdHLi1om70
+   pApBOZfJKEkWyPrNmWXCD+n8gHx5rBQ0rfd6tpdclD3N5LnjBmc/hRZPA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="245965779"
+X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
+   d="scan'208";a="245965779"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 13:14:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
+   d="scan'208";a="626862833"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 21 Jan 2022 13:14:04 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nB1ER-000Ffd-Sb; Fri, 21 Jan 2022 21:14:03 +0000
+Date:   Sat, 22 Jan 2022 05:13:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, soc@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, olof@lixom.net, arnd@arndb.de,
+        linus.walleij@linaro.org, catalin.marinas@arm.com,
+        robh+dt@kernel.org
+Subject: Re: [PATCH v3 04/16] clk: samsung: fsd: Add initial clock support
+Message-ID: <202201220550.FSQ6N02X-lkp@intel.com>
+References: <20220121172840.12121-5-alim.akhtar@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hvvYedSn5u-i7sjpoEHU4P65t7i1b2pVn=S1q0nHWgqQ@mail.gmail.com>
+In-Reply-To: <20220121172840.12121-5-alim.akhtar@samsung.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 08:00:49PM +0100, Rafael J. Wysocki wrote:
-> Hi Keith,
-> 
-> It is reported that the following commit
-> 
-> commit e5ad96f388b765fe6b52f64f37e910c0ba4f3de7
-> Author: Keith Busch <kbusch@kernel.org>
-> Date:   Tue Jul 27 09:40:44 2021 -0700
-> 
->    nvme-pci: disable hmb on idle suspend
-> 
->    An idle suspend may or may not disable host memory access from devices
->    placed in low power mode. Either way, it should always be safe to
->    disable the host memory buffer prior to entering the low power mode, and
->    this should also always be faster than a full device shutdown.
-> 
->    Signed-off-by: Keith Busch <kbusch@kernel.org>
->    Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
->    Signed-off-by: Christoph Hellwig <hch@lst.de>
-> 
-> is the source of a serious power regression occurring since 5.15
-> (please see https://bugzilla.kernel.org/show_bug.cgi?id=215467).
-> 
-> After this commit, the SoC on the affected system cannot enter
-> C-states deeper than PC2 while suspended to idle which basically
-> defeats the purpose of suspending.
-> 
-> What may be happening is that nvme_disable_prepare_reset() that is not
-> called any more in the ndev->nr_host_mem_descs case somehow causes the
-> LTR of the device to change to "no requirement" which allows deeper
-> C-states to be entered.
-> 
-> Can you have a look at this, please?
+Hi Alim,
 
-I thought platforms that wanted full device shutdown  behaviour would
-always set acpi_storage_d3. Is that not happening here?
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on next-20220121]
+[also build test WARNING on v5.16]
+[cannot apply to clk/clk-next robh/for-next pinctrl-samsung/for-next v5.16 v5.16-rc8 v5.16-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Alim-Akhtar/dt-bindings-add-vendor-prefix-for-Tesla/20220122-022924
+base:    c94951012a748a0f8ed77cd8fc25640c6fe198f9
+config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20220122/202201220550.FSQ6N02X-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/69b6b21ebabb149c1c07d83376e9c08a582c6423
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Alim-Akhtar/dt-bindings-add-vendor-prefix-for-Tesla/20220122-022924
+        git checkout 69b6b21ebabb149c1c07d83376e9c08a582c6423
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/clk/samsung/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/clk/samsung/clk-fsd.c:150:9: warning: this decimal constant is unsigned only in ISO C90
+     150 |         PLL_35XX_RATE(24 * MHZ, 2400000000, 200, 2, 0),
+         |         ^~~~~~~~~~~~~
+   In file included from include/linux/bits.h:22,
+                    from include/linux/bitops.h:6,
+                    from include/linux/of.h:15,
+                    from include/linux/clk-provider.h:9,
+                    from drivers/clk/samsung/clk-fsd.c:11:
+>> include/linux/build_bug.h:16:51: warning: this decimal constant is unsigned only in ISO C90
+      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+         |                                                   ^
+   drivers/clk/samsung/clk-pll.h:48:9: note: in expansion of macro 'BUILD_BUG_ON_ZERO'
+      48 |         BUILD_BUG_ON_ZERO(PLL_RATE(_fin, _m, _p, _s, _k, _ks) != (_fout)))
+         |         ^~~~~~~~~~~~~~~~~
+   drivers/clk/samsung/clk-pll.h:52:33: note: in expansion of macro 'PLL_VALID_RATE'
+      52 |                 .rate   =       PLL_VALID_RATE(_fin, _rate,     \
+         |                                 ^~~~~~~~~~~~~~
+   drivers/clk/samsung/clk-fsd.c:150:9: note: in expansion of macro 'PLL_35XX_RATE'
+     150 |         PLL_35XX_RATE(24 * MHZ, 2400000000, 200, 2, 0),
+         |         ^~~~~~~~~~~~~
+   drivers/clk/samsung/clk-fsd.c:154:9: warning: this decimal constant is unsigned only in ISO C90
+     154 |         PLL_35XX_RATE(24 * MHZ, 2400000000, 200, 2, 0),
+         |         ^~~~~~~~~~~~~
+   In file included from include/linux/bits.h:22,
+                    from include/linux/bitops.h:6,
+                    from include/linux/of.h:15,
+                    from include/linux/clk-provider.h:9,
+                    from drivers/clk/samsung/clk-fsd.c:11:
+>> include/linux/build_bug.h:16:51: warning: this decimal constant is unsigned only in ISO C90
+      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+         |                                                   ^
+   drivers/clk/samsung/clk-pll.h:48:9: note: in expansion of macro 'BUILD_BUG_ON_ZERO'
+      48 |         BUILD_BUG_ON_ZERO(PLL_RATE(_fin, _m, _p, _s, _k, _ks) != (_fout)))
+         |         ^~~~~~~~~~~~~~~~~
+   drivers/clk/samsung/clk-pll.h:52:33: note: in expansion of macro 'PLL_VALID_RATE'
+      52 |                 .rate   =       PLL_VALID_RATE(_fin, _rate,     \
+         |                                 ^~~~~~~~~~~~~~
+   drivers/clk/samsung/clk-fsd.c:154:9: note: in expansion of macro 'PLL_35XX_RATE'
+     154 |         PLL_35XX_RATE(24 * MHZ, 2400000000, 200, 2, 0),
+         |         ^~~~~~~~~~~~~
+
+
+vim +150 drivers/clk/samsung/clk-fsd.c
+
+   148	
+   149	static const struct samsung_pll_rate_table pll_shared1_rate_table[] __initconst = {
+ > 150		PLL_35XX_RATE(24 * MHZ, 2400000000, 200, 2, 0),
+   151	};
+   152	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

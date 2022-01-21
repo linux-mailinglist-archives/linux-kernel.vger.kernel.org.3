@@ -2,89 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7651A4964E3
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 19:17:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A0F549652E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 19:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382068AbiAUSRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 13:17:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60596 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1351856AbiAUSRg (ORCPT
+        id S1382173AbiAUShs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 13:37:48 -0500
+Received: from finn.gateworks.com ([108.161.129.64]:48804 "EHLO
+        finn.localdomain" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1352025AbiAUShl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 13:17:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642789055;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GaacSGyAu6TYOpVxBPJ/k9LHhTirl5xGNv6nlz2aQl4=;
-        b=VO+0ZtFMxddVMk9HJMZPdcWcY4Ze4XB0NfMIGSQzaH3SL0tI2DtkHwnmZ4TcdCEpT1EsAz
-        AM92EdXLwyqa1RgldURTT3dNDlNcdZYSynd2u9bb/9t8H4qNGa8K+kyJnbW0+s+15/mGMm
-        4HJQfXiyPwUA4ZbQ4aCwPG2mF73T6J4=
-Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com
- [209.85.222.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-347-EaAgm0GHMWq1LH-QxG1W7g-1; Fri, 21 Jan 2022 13:17:34 -0500
-X-MC-Unique: EaAgm0GHMWq1LH-QxG1W7g-1
-Received: by mail-ua1-f69.google.com with SMTP id q19-20020ab04a13000000b002fef2f854a6so6048709uae.7
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 10:17:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GaacSGyAu6TYOpVxBPJ/k9LHhTirl5xGNv6nlz2aQl4=;
-        b=j4uo9UT77BtmdXNQ/mjBRCjG+R0Lly7rA3PTBrluQ+Rdj6l9hFoa3fjXU/nlZzEaFD
-         U6n3YpLaepThHirFwqHLM+ihkYOngIkF0KuOecz0WeIZVwN2b8PBCrQoNvdfzcFe/foK
-         /Y5Vpt8wwPaP33auaKdG65KEPnmuYWcKGIwG6B4/2QLZh8oe9UoiyFvC5sFGmtotoJ8g
-         VB/105pby7SvUPD1ucmnKp5wZ+jThv5q1XGNLc4+0Ru9hYs6RJFiXdXbABbjdzUDusj/
-         mIT7aMHZF+Y0zffI2FwrYElZzPJClvD+gyFTNyioqqZy4tY0UUflTGV/A3CEzBN1v97g
-         o2uw==
-X-Gm-Message-State: AOAM533IFbz0j12NYzv3W5XWJkxdi1jMbAJI/BO32XyyOnlTH7GVYSAd
-        +jI/VH2y/m7T0BLuWj59RmeS93ejz7yboqa1TCrO+6XTtFGTwlBmbHa17FcckXGCl1MKOy9SLqJ
-        X8+t2RcYJWpkxkqU0LkAeakckPW/lHPumbwlxR2x8
-X-Received: by 2002:a1f:5702:: with SMTP id l2mr2301196vkb.33.1642789053502;
-        Fri, 21 Jan 2022 10:17:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyKQVWJ6KXJy3LfcxZ4flOAQ9SGhoyK4JC3P8EQNxA7sLFJZbBXV8PCImDr+/8PzRc9uNEajJchjCAEfDylnfU=
-X-Received: by 2002:a1f:5702:: with SMTP id l2mr2301185vkb.33.1642789053268;
- Fri, 21 Jan 2022 10:17:33 -0800 (PST)
-MIME-Version: 1.0
-References: <d2c52284244d6dcb3472d2041abe43b456d116df.1642762977.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <d2c52284244d6dcb3472d2041abe43b456d116df.1642762977.git.christophe.leroy@csgroup.eu>
-From:   Richard Fontana <rfontana@redhat.com>
-Date:   Fri, 21 Jan 2022 13:17:22 -0500
-Message-ID: <CAC1cPGypAKcAAia4ipgTWNu33HLW=fb0CSroqR=SK-umrOJb-Q@mail.gmail.com>
-Subject: Re: [PATCH v3] powerpc: Add missing SPDX license identifiers
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-spdx@vger.kernel.org" <linux-spdx@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 21 Jan 2022 13:37:41 -0500
+Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
+        by finn.localdomain with esmtp (Exim 4.93)
+        (envelope-from <tharvey@gateworks.com>)
+        id 1nAyTt-00A3Cd-Du; Fri, 21 Jan 2022 18:17:49 +0000
+From:   Tim Harvey <tharvey@gateworks.com>
+To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Tim Harvey <tharvey@gateworks.com>
+Subject: [PATCH] arm64: dts: imx8mm-venice-gw72xx-0x: add dt overlays for serial modes
+Date:   Fri, 21 Jan 2022 10:17:47 -0800
+Message-Id: <20220121181747.13521-1-tharvey@gateworks.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 6:03 AM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
-> Several files are missing SPDX license identifiers.
->
-> Following files are given the following SPDX identifier based on the comments in the top of the file:
->
->         include/asm/ibmebus.h:/* SPDX-License-Identifier: GPL-2.0 OR OpenIB BSD */
- [...]
->         platforms/pseries/ibmebus.c:// SPDX-License-Identifier: GPL-2.0 OR OpenIB BSD
+The imx8mm-venice-gw72xx-0x som+baseboard combination has a multi-protocol
+RS-232/RS-485/RS-422 transceiver to an off-board connector which
+can be configured in a number of ways via UART and GPIO configuration.
 
-"OpenIB BSD" is not a defined SPDX identifier. There is an SPDX
-identifier "Linux-OpenIB"
-https://spdx.org/licenses/Linux-OpenIB.html
-but I believe that is not a match to what's in these files
-(specifically, the wording of the disclaimer), rather I believe what
-you want here is BSD-2-Clause, but you may want to check that.
+The default configuration per the imx8mm-venice-gw72xx-0x dts is for
+UART2 TX/RX and UART4 TX/RX to be available as RS-232:
+ J15.1 UART2 TX out
+ J15.2 UART2 RX in
+ J15.3 UART4 TX out
+ J15.4 UART4 RX in
+ J15.5 GND
 
-Richard
+Add dt overlays to allow additional the modes of operation:
+
+rs232-rts (UART2 RS-232 with RTS/CTS hardware flow control)
+ J15.1 TX out
+ J15.2 RX in
+ J15.3 RTS out
+ J15.4 CTS in
+ J15.5 GND
+
+rs485 (UART2 RS-485 half duplex)
+ J15.1 TXRX-
+ J15.2 N/C
+ J15.3 TXRX+
+ J15.4 N/C
+ J15.5 GND
+
+rs422 (UART2 RS-422 full duplex)
+ J15.1 TX-
+ J15.2 RX+
+ J15.3 TX+
+ J15.4 RX-
+ J15.5 GND
+
+Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+---
+ arch/arm64/boot/dts/freescale/Makefile        |  3 +
+ .../imx8mm-venice-gw72xx-0x-rs232-rts.dts     | 53 ++++++++++++++++
+ .../imx8mm-venice-gw72xx-0x-rs422.dts         | 61 +++++++++++++++++++
+ .../imx8mm-venice-gw72xx-0x-rs485.dts         | 61 +++++++++++++++++++
+ 4 files changed, 178 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dts
+
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index 5ec8d59347b6..2d3489eb073d 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -43,6 +43,9 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-nitrogen-r2.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-var-som-symphony.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw71xx-0x.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x-rs232-rts.dtbo
++dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x-rs422.dtbo
++dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x-rs485.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs232-rts.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs422.dtbo
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dts
+new file mode 100644
+index 000000000000..3ea73a6886ff
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dts
+@@ -0,0 +1,53 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2022 Gateworks Corporation
++ *
++ * GW72xx RS232 with RTS/CTS hardware flow control:
++ *  - GPIO4_0 rs485_en needs to be driven low (in-active)
++ *  - UART4_TX becomes RTS
++ *  - UART4_RX becomes CTS
++ */
++
++#include <dt-bindings/gpio/gpio.h>
++
++#include "imx8mm-pinfunc.h"
++
++/dts-v1/;
++/plugin/;
++
++&{/} {
++	compatible = "gw,imx8mm-gw72xx-0x";
++};
++
++&gpio4 {
++	rs485_en {
++		gpio-hog;
++		gpios = <0 GPIO_ACTIVE_HIGH>;
++		output-low;
++		line-name = "rs485_en";
++	};
++};
++
++&uart2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart2>;
++	rts-gpios = <&gpio5 29 GPIO_ACTIVE_LOW>;
++	cts-gpios = <&gpio5 28 GPIO_ACTIVE_LOW>;
++	uart-has-rtscts;
++	status = "okay";
++};
++
++&uart4 {
++	status = "disabled";
++};
++
++&iomuxc {
++	pinctrl_uart2: uart2grp {
++		fsl,pins = <
++			MX8MM_IOMUXC_UART2_RXD_UART2_DCE_RX     0x140
++			MX8MM_IOMUXC_UART2_TXD_UART2_DCE_TX     0x140
++			MX8MM_IOMUXC_UART4_TXD_GPIO5_IO29	0x140
++			MX8MM_IOMUXC_UART4_RXD_GPIO5_IO28	0x140
++		>;
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dts
+new file mode 100644
+index 000000000000..c3cd9f2b0db3
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dts
+@@ -0,0 +1,61 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2022 Gateworks Corporation
++ *
++ * GW72xx RS422 (RS485 full duplex):
++ *  - GPIO1_0 rs485_term selects on-chip termination
++ *  - GPIO4_0 rs485_en needs to be driven high (active)
++ *  - GPIO4_2 rs485_hd needs to be driven low (in-active)
++ *  - UART4_TX is DE for RS485 transmitter
++ *  - RS485_EN needs to be pulled high
++ *  - RS485_HALF needs to be low
++ */
++
++#include <dt-bindings/gpio/gpio.h>
++
++#include "imx8mm-pinfunc.h"
++
++/dts-v1/;
++/plugin/;
++
++&{/} {
++	compatible = "gw,imx8mm-gw72xx-0x";
++};
++
++&gpio4 {
++	rs485_en {
++		gpio-hog;
++		gpios = <0 GPIO_ACTIVE_HIGH>;
++		output-high;
++		line-name = "rs485_en";
++	};
++
++	rs485_hd {
++		gpio-hog;
++		gpios = <2 GPIO_ACTIVE_HIGH>;
++		output-low;
++		line-name = "rs485_hd";
++	};
++};
++
++&uart2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart2>;
++	rts-gpios = <&gpio5 29 GPIO_ACTIVE_HIGH>;
++	linux,rs485-enabled-at-boot-time;
++	status = "okay";
++};
++
++&uart4 {
++	status = "disabled";
++};
++
++&iomuxc {
++	pinctrl_uart2: uart2grp {
++		fsl,pins = <
++			MX8MM_IOMUXC_UART2_RXD_UART2_DCE_RX     0x140
++			MX8MM_IOMUXC_UART2_TXD_UART2_DCE_TX     0x140
++			MX8MM_IOMUXC_UART4_TXD_GPIO5_IO29	0x140
++		>;
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dts
+new file mode 100644
+index 000000000000..cc0a287226ab
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dts
+@@ -0,0 +1,61 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2022 Gateworks Corporation
++ *
++ * GW72xx RS485 HD:
++ *  - GPIO1_0 rs485_term selects on-chip termination
++ *  - GPIO4_0 rs485_en needs to be driven high (active)
++ *  - GPIO4_2 rs485_hd needs to be driven high (active)
++ *  - UART4_TX is DE for RS485 transmitter
++ *  - RS485_EN needs to be pulled high
++ *  - RS485_HALF needs to be pulled high
++ */
++
++#include <dt-bindings/gpio/gpio.h>
++
++#include "imx8mm-pinfunc.h"
++
++/dts-v1/;
++/plugin/;
++
++&{/} {
++	compatible = "gw,imx8mm-gw72xx-0x";
++};
++
++&gpio4 {
++	rs485_en {
++		gpio-hog;
++		gpios = <0 GPIO_ACTIVE_HIGH>;
++		output-high;
++		line-name = "rs485_en";
++	};
++
++	rs485_hd {
++		gpio-hog;
++		gpios = <2 GPIO_ACTIVE_HIGH>;
++		output-high;
++		line-name = "rs485_hd";
++	};
++};
++
++&uart2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart2>;
++	rts-gpios = <&gpio5 29 GPIO_ACTIVE_HIGH>;
++	linux,rs485-enabled-at-boot-time;
++	status = "okay";
++};
++
++&uart4 {
++	status = "disabled";
++};
++
++&iomuxc {
++	pinctrl_uart2: uart2grp {
++		fsl,pins = <
++			MX8MM_IOMUXC_UART2_RXD_UART2_DCE_RX     0x140
++			MX8MM_IOMUXC_UART2_TXD_UART2_DCE_TX     0x140
++			MX8MM_IOMUXC_UART4_TXD_GPIO5_IO29	0x140
++		>;
++	};
++};
+-- 
+2.17.1
 

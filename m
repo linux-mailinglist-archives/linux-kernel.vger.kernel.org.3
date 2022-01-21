@@ -2,118 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2366A495CE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 10:36:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A121D495CED
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 10:38:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349617AbiAUJgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 04:36:07 -0500
-Received: from mga01.intel.com ([192.55.52.88]:26726 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1379794AbiAUJfi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 04:35:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642757738; x=1674293738;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=j2m6NEt0OamlY75WiDCRpKOuZmrkgh+vHH0zmjRWEtQ=;
-  b=D9NxkPNoLiNgctpU4329VKEowxSkNBf6gjhiUtYgD5CGDENoZFlpQ20k
-   MhGTyrc/iEPa+o55ctB8tIWME7jftLDiejmDWykFGALYggyook+eDGKhm
-   z0JDGbav189CGc3HiJFZlhAo6J6u7uSgKAod8ycnqV6RmgFKLy7tFmZy2
-   88I63cKnOhuCrostyqspLuA6m3KdBDWBtACAgAIJhJR1pzYcqKu4YXP97
-   Oxr5bzz0H/HZpWPF0OS2LOQOStMItwTQyCzfs0czLPplO9VcGJ82wGnJ2
-   c+X+O8BIvDxmdQUVM3Bm6XjmBziuV+ZC57QV1AupkGMYU33rnL5qSH3Y5
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="270033181"
-X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="270033181"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 01:35:37 -0800
-X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="493788420"
-Received: from kaograce-desk1.itwn.intel.com ([10.5.232.28])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 01:35:35 -0800
-From:   Grace Kao <grace.kao@intel.com>
-To:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Kane Chen <kane.chen@intel.com>, grace.kao@intel.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: pinctrl: intel: Fix a glitch when updating IRQ flags on a preconfigured line
-Date:   Fri, 21 Jan 2022 17:34:26 +0800
-Message-Id: <20220121093426.6336-1-grace.kao@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220119181915.27519-1>
-References: <20220119181915.27519-1>
+        id S235578AbiAUJiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 04:38:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232790AbiAUJiK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 04:38:10 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FB5C061574;
+        Fri, 21 Jan 2022 01:38:10 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso27706408wmj.2;
+        Fri, 21 Jan 2022 01:38:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nyYh7xP6EUU+xIo8vnwkU/S090uLTW/Lq01aKLHJF7k=;
+        b=Jr0ZuKwOcAcPB5gZrbjKqC25ycNR15lfHjg2o9aTGuoUZ483EV1HN5Yg9tT4h7JhbP
+         9A5Mfth9JvyK838L/dRyw35mlHlrOEC+atr/Jj2Rq4AKntJeE+kwYt2DB/wnF4JraTTS
+         8TyVieF1/BlJj/5F9ZQ0ltMDbmP2hkv7865ONbaZ83CwcTij+1xti2VWRGtcSLP4e7M4
+         /p2xzTij74P8eCiim5oBciYK6UbWrN9voNSDL1/1/IdD/0fc4NvSroIKfmayw6ymdhJs
+         CbkEqrSJGixlTyT+uuEIUrsnb9dl8yzV7kk0CFQveC1b5c3Fj/kd07DNK6qcD0jWqG5x
+         fMDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nyYh7xP6EUU+xIo8vnwkU/S090uLTW/Lq01aKLHJF7k=;
+        b=G8ufipB7I6TxYEkg1wpQPI07rvFHgBWd5avWEL671pMggLAwgzbg4oMykp4ObAoRfx
+         HJI+RmaTuQFFIJlInmlaDjq7myWqzFoQsH2aJHOlm7iB4wPa5M4gdgHarCkwkNqgQzcl
+         V358vtx6Dx5BTv5HILOp76ck+Rn9ElqAUnGkta7SEdEyniEfoaf7qW5LTdNRvrYcmYvS
+         K/WW9N4H1d4i7Okb9tJfyqbg4y2I2C6O/teBnyJLNyUtJvB7nSQTEWUlPwsSmUEYOb37
+         wMj6B1BwQbK/LfUwYj0665YtGzQf4O+Y8uw6S3zcf5HScbZZFI3nSDUEEhqIqQauyJ4c
+         nbBQ==
+X-Gm-Message-State: AOAM533sQ5G94ZDKIOEMSGO0078JgnWZFl5ZIK8g0fb17kcdCaCyRXCH
+        1EfDEqFXlAR1mA1QixUGswA=
+X-Google-Smtp-Source: ABdhPJyI/Pd63lLeUK0kLIGQcosIJhVUTB9SFkqKXwPdYUMhsNtDHqeXM/jwBrW2uhrD+yW6WhRE9Q==
+X-Received: by 2002:a5d:6d0b:: with SMTP id e11mr3275727wrq.460.1642757888862;
+        Fri, 21 Jan 2022 01:38:08 -0800 (PST)
+Received: from localhost.localdomain ([141.72.243.13])
+        by smtp.gmail.com with ESMTPSA id 1sm2414022wry.88.2022.01.21.01.38.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jan 2022 01:38:08 -0800 (PST)
+From:   Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+To:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+Subject: [PATCH] drivers: staging: media: omap4iss: Use BIT macro instead of left shifting
+Date:   Fri, 21 Jan 2022 10:37:22 +0100
+Message-Id: <20220121093722.320082-1-mosescb.dev@gmail.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+There is a BIT(nr) macro available in Linux Kernel,
+which does the same thing.
 
-The commit af7e3eeb84e2 ("pinctrl: intel: Disable input and output buffer
-when switching to GPIO") hadn't taken into account an update of the IRQ
-flags scenario.
+Example:  1 << 7  is same as BIT(7)
 
-When updating the IRQ flags on the preconfigured line the ->irq_set_type()
-is called again. In such case the sequential Rx buffer configuration
-changes may trigger a falling or rising edge interrupt that may lead,
-on some platforms, to an undesired event.
-
-This may happen because each of intel_gpio_set_gpio_mode() and
-__intel_gpio_set_direction() updates the pad configuration with a different
-value of the GPIORXDIS bit. Notable, that the intel_gpio_set_gpio_mode() is
-called only for the pads that are configured as an input. Due to this fact,
-integrate the logic of __intel_gpio_set_direction() call into the
-intel_gpio_set_gpio_mode() so that the Rx buffer won't be disabled and
-immediately re-enabled.
-
-Fixes: af7e3eeb84e2 ("pinctrl: intel: Disable input and output buffer when switching to GPIO")
-Reported-by: Kane Chen <kane.chen@intel.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Tested-by: Grace Kao <grace.kao@intel.com>
-Change-Id: I6ff5cf0c42a76dce709a445c1820c8f3a84d6d89
+Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
 ---
- drivers/pinctrl/intel/pinctrl-intel.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+ drivers/staging/media/omap4iss/iss_video.h | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/pinctrl/intel/pinctrl-intel.c b/drivers/pinctrl/intel/pinctrl-intel.c
-index 85750974d182..afd35e6999cc 100644
---- a/drivers/pinctrl/intel/pinctrl-intel.c
-+++ b/drivers/pinctrl/intel/pinctrl-intel.c
-@@ -451,8 +451,8 @@ static void intel_gpio_set_gpio_mode(void __iomem *padcfg0)
- 	value &= ~PADCFG0_PMODE_MASK;
- 	value |= PADCFG0_PMODE_GPIO;
+diff --git a/drivers/staging/media/omap4iss/iss_video.h b/drivers/staging/media/omap4iss/iss_video.h
+index 526281bf0051..ea1cc311384a 100644
+--- a/drivers/staging/media/omap4iss/iss_video.h
++++ b/drivers/staging/media/omap4iss/iss_video.h
+@@ -55,17 +55,17 @@ enum iss_pipeline_state {
+ 	/* The stream has been started on the input video node. */
+ 	ISS_PIPELINE_STREAM_INPUT = 1,
+ 	/* The stream has been started on the output video node. */
+-	ISS_PIPELINE_STREAM_OUTPUT = (1 << 1),
++	ISS_PIPELINE_STREAM_OUTPUT = BIT(1),
+ 	/* At least one buffer is queued on the input video node. */
+-	ISS_PIPELINE_QUEUE_INPUT = (1 << 2),
++	ISS_PIPELINE_QUEUE_INPUT = BIT(2),
+ 	/* At least one buffer is queued on the output video node. */
+-	ISS_PIPELINE_QUEUE_OUTPUT = (1 << 3),
++	ISS_PIPELINE_QUEUE_OUTPUT = BIT(3),
+ 	/* The input entity is idle, ready to be started. */
+-	ISS_PIPELINE_IDLE_INPUT = (1 << 4),
++	ISS_PIPELINE_IDLE_INPUT = BIT(4),
+ 	/* The output entity is idle, ready to be started. */
+-	ISS_PIPELINE_IDLE_OUTPUT = (1 << 5),
++	ISS_PIPELINE_IDLE_OUTPUT = BIT(5),
+ 	/* The pipeline is currently streaming. */
+-	ISS_PIPELINE_STREAM = (1 << 6),
++	ISS_PIPELINE_STREAM = BIT(6),
+ };
  
--	/* Disable input and output buffers */
--	value |= PADCFG0_GPIORXDIS;
-+	/* Disable TX buffer and enable RX (this will be input) */
-+	value &= ~PADCFG0_GPIORXDIS;
- 	value |= PADCFG0_GPIOTXDIS;
+ /*
+@@ -119,9 +119,9 @@ struct iss_buffer {
  
- 	/* Disable SCI/SMI/NMI generation */
-@@ -497,9 +497,6 @@ static int intel_gpio_request_enable(struct pinctrl_dev *pctldev,
+ enum iss_video_dmaqueue_flags {
+ 	/* Set if DMA queue becomes empty when ISS_PIPELINE_STREAM_CONTINUOUS */
+-	ISS_VIDEO_DMAQUEUE_UNDERRUN = (1 << 0),
++	ISS_VIDEO_DMAQUEUE_UNDERRUN = BIT(0),
+ 	/* Set when queuing buffer to an empty DMA queue */
+-	ISS_VIDEO_DMAQUEUE_QUEUED = (1 << 1),
++	ISS_VIDEO_DMAQUEUE_QUEUED = BIT(1),
+ };
  
- 	intel_gpio_set_gpio_mode(padcfg0);
- 
--	/* Disable TX buffer and enable RX (this will be input) */
--	__intel_gpio_set_direction(padcfg0, true);
--
- 	raw_spin_unlock_irqrestore(&pctrl->lock, flags);
- 
- 	return 0;
-@@ -1115,9 +1112,6 @@ static int intel_gpio_irq_type(struct irq_data *d, unsigned int type)
- 
- 	intel_gpio_set_gpio_mode(reg);
- 
--	/* Disable TX buffer and enable RX (this will be input) */
--	__intel_gpio_set_direction(reg, true);
--
- 	value = readl(reg);
- 
- 	value &= ~(PADCFG0_RXEVCFG_MASK | PADCFG0_RXINV);
+ #define iss_video_dmaqueue_flags_clr(video)	\
 -- 
-2.17.1
+2.30.2
 

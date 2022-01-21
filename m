@@ -2,153 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BED495A10
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 07:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A80DC495A0E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 07:38:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378755AbiAUGiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 01:38:21 -0500
-Received: from prt-mail.chinatelecom.cn ([42.123.76.222]:32849 "EHLO
-        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1378752AbiAUGiU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 01:38:20 -0500
-HMM_SOURCE_IP: 172.18.0.218:42762.813230127
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-10.133.11.244 (unknown [172.18.0.218])
-        by chinatelecom.cn (HERMES) with SMTP id 41CE12800B7;
-        Fri, 21 Jan 2022 14:38:04 +0800 (CST)
-X-189-SAVE-TO-SEND: sunshouxin@chinatelecom.cn
-Received: from  ([172.18.0.218])
-        by app0025 with ESMTP id 6f463a4339bf40e6a8ba36f414a7b440 for jay.vosburgh@canonical.com;
-        Fri, 21 Jan 2022 14:38:08 CST
-X-Transaction-ID: 6f463a4339bf40e6a8ba36f414a7b440
-X-Real-From: sunshouxin@chinatelecom.cn
-X-Receive-IP: 172.18.0.218
-X-MEDUSA-Status: 0
-Sender: sunshouxin@chinatelecom.cn
-Message-ID: <661de9e7-216d-dfd1-afdc-3c58a88739c3@chinatelecom.cn>
-Date:   Fri, 21 Jan 2022 14:38:03 +0800
+        id S1378750AbiAUGiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 01:38:18 -0500
+Received: from foss.arm.com ([217.140.110.172]:39656 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1348774AbiAUGiR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 01:38:17 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 54E31101E;
+        Thu, 20 Jan 2022 22:38:14 -0800 (PST)
+Received: from [10.163.74.170] (unknown [10.163.74.170])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A45F53F766;
+        Thu, 20 Jan 2022 22:38:10 -0800 (PST)
+Subject: Re: [PATCH] mm/migration: Add trace events for THP migrations
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+Cc:     linux-mm@kvack.org, Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zi Yan <ziy@nvidia.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-kernel@vger.kernel.org
+References: <1641531575-28524-1-git-send-email-anshuman.khandual@arm.com>
+ <20220111015822.GA799985@u2004>
+ <ee99799c-4e88-a7f5-0ec2-64cd710051e5@arm.com>
+ <20220111065756.GA808887@u2004>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <61c7552c-f9e3-19a7-2d1f-8085c615a661@arm.com>
+Date:   Fri, 21 Jan 2022 12:08:14 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v6] net: bonding: Add support for IPV6 ns/na to
- balance-alb/balance-tlb mode
-To:     Jay Vosburgh <jay.vosburgh@canonical.com>
-Cc:     vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn
-References: <20220118073317.82968-1-sunshouxin@chinatelecom.cn>
- <29469.1642746326@famine>
-From:   =?UTF-8?B?5a2Z5a6I6ZGr?= <sunshouxin@chinatelecom.cn>
-In-Reply-To: <29469.1642746326@famine>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220111065756.GA808887@u2004>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-在 2022/1/21 14:25, Jay Vosburgh 写道:
-> Sun Shouxin <sunshouxin@chinatelecom.cn> wrote:
->
->> Since ipv6 neighbor solicitation and advertisement messages
->> isn't handled gracefully in bonding6 driver, we can see packet
->> drop due to inconsistency bewteen mac address in the option
->> message and source MAC .
+
+On 1/11/22 12:27 PM, Naoya Horiguchi wrote:
+> On Tue, Jan 11, 2022 at 10:31:21AM +0530, Anshuman Khandual wrote:
 >>
->> Another examples is ipv6 neighbor solicitation and advertisement
->> messages from VM via tap attached to host brighe, the src mac
->> mighe be changed through balance-alb mode, but it is not synced
->> with Link-layer address in the option message.
 >>
->> The patch implements bond6's tx handle for ipv6 neighbor
->> solicitation and advertisement messages.
-> 	As previously discussed, this looks reasonable to me to resolve
-> the described MAC discrepancy.  One minor nit is a couple of misspelled
-> words in the description above, "brighe" and "mighe."
->
-> Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
->
-> 	-J
+>> On 1/11/22 7:28 AM, Naoya Horiguchi wrote:
+>>> Hi Anshuman,
+>>>
+>>> On Fri, Jan 07, 2022 at 10:29:35AM +0530, Anshuman Khandual wrote:
+>>>> This adds two trace events for PMD based THP migration without split. These
+>>>> events closely follow the implementation details like setting and removing
+>>>> of PMD migration entries, which are essential operations for THP migration.
+>>>
+>>> I often want to check which individual pages are migrated to which places
+>>> (or not migrated) for testing, so these new tracepoints could help me.
+>>> Maybe these can be much greater if they can handle other types of page
+>>> migration for raw pages and hugetlb pages.  Is it hard to cover all such
+>>> page migration events?
+>>
+>> Are you suggesting to cover all migration entry transitions for normal
+>> and HugeTLB pages as well ?
+> 
+> Yes if you like the idea. I think that some events listed below can be grouped
+> into one tracepoint event with showing args like pgsize or read/write flags
+> (or implementation detail is up to you).
+
+In its simplest form, something like this will work ? Although the THP migration
+patch still remains (almost) unchanged.
+
+ include/trace/events/migrate.h | 38 ++++++++++++++++++++++++++++++++++
+ mm/migrate.c                   | 10 +++++++--
+ mm/rmap.c                      |  3 +++
+ 3 files changed, 49 insertions(+), 2 deletions(-)
+
+diff --git a/include/trace/events/migrate.h b/include/trace/events/migrate.h
+index 779f3fad9ecd..b66652fcc8af 100644
+--- a/include/trace/events/migrate.h
++++ b/include/trace/events/migrate.h
+@@ -105,6 +105,44 @@ TRACE_EVENT(mm_migrate_pages_start,
+ 		  __print_symbolic(__entry->reason, MIGRATE_REASON))
+ );
+ 
++TRACE_EVENT(set_migration_pte,
++
++	TP_PROTO(unsigned long addr, unsigned long pte),
++
++	TP_ARGS(addr, pte),
++
++	TP_STRUCT__entry(
++		__field(unsigned long, addr)
++		__field(unsigned long, pte)
++	),
++
++	TP_fast_assign(
++		__entry->addr = addr;
++		__entry->pte = pte;
++	),
++
++	TP_printk("create pte migration entry addr=%lx, pte=%lx", __entry->addr, __entry->pte)
++);
++
++TRACE_EVENT(remove_migration_ptes,
++
++	TP_PROTO(struct page *old_page, struct page *new_page),
++
++	TP_ARGS(old_page, new_page),
++
++	TP_STRUCT__entry(
++		__field(struct page *, old_page)
++		__field(struct page *, new_page)
++	),
++
++	TP_fast_assign(
++		__entry->old_page = old_page;
++		__entry->new_page = new_page;
++	),
++
++	TP_printk("remove pte migration entry old_page=%lx new_page=%lx", __entry->old_page, __entry->new_page);
++);
++
+ #endif /* _TRACE_MIGRATE_H */
+ 
+ /* This part must be outside protection */
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 18ce840914f0..271b1d565642 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -1053,9 +1053,12 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
+ 	if (!page_mapped(page))
+ 		rc = move_to_new_page(newpage, page, mode);
+ 
+-	if (page_was_mapped)
++	if (page_was_mapped) {
+ 		remove_migration_ptes(page,
+ 			rc == MIGRATEPAGE_SUCCESS ? newpage : page, false);
++		trace_remove_migration_ptes(page,
++			rc == MIGRATEPAGE_SUCCESS ? newpage : page);
++	}
+ 
+ out_unlock_both:
+ 	unlock_page(newpage);
+@@ -1275,9 +1278,12 @@ static int unmap_and_move_huge_page(new_page_t get_new_page,
+ 	if (!page_mapped(hpage))
+ 		rc = move_to_new_page(new_hpage, hpage, mode);
+ 
+-	if (page_was_mapped)
++	if (page_was_mapped) {
+ 		remove_migration_ptes(hpage,
+ 			rc == MIGRATEPAGE_SUCCESS ? new_hpage : hpage, false);
++		trace_remove_migration_ptes(hpage,
++			rc == MIGRATEPAGE_SUCCESS ? new_hpage : hpage);
++	}
+ 
+ unlock_put_anon:
+ 	unlock_page(new_hpage);
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 6a1e8c7f6213..cd373e378694 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -77,6 +77,7 @@
+ #include <asm/tlbflush.h>
+ 
+ #include <trace/events/tlb.h>
++#include <trace/events/migrate.h>
+ 
+ #include "internal.h"
+ 
+@@ -1861,6 +1862,7 @@ static bool try_to_migrate_one(struct page *page, struct vm_area_struct *vma,
+ 			if (pte_swp_uffd_wp(pteval))
+ 				swp_pte = pte_swp_mkuffd_wp(swp_pte);
+ 			set_pte_at(mm, pvmw.address, pvmw.pte, swp_pte);
++			trace_set_migration_pte(pvmw.address, pte_val(swp_pte));
+ 			/*
+ 			 * No need to invalidate here it will synchronize on
+ 			 * against the special swap migration pte.
+@@ -1929,6 +1931,7 @@ static bool try_to_migrate_one(struct page *page, struct vm_area_struct *vma,
+ 			if (pte_uffd_wp(pteval))
+ 				swp_pte = pte_swp_mkuffd_wp(swp_pte);
+ 			set_pte_at(mm, address, pvmw.pte, swp_pte);
++			trace_set_migration_pte(address, pte_val(swp_pte));
+ 			/*
+ 			 * No need to invalidate here it will synchronize on
+ 			 * against the special swap migration pte.
+-- 
+2.20.1
 
 
-Thanks your comment, I'll adjust it and send out V7 soon.
-
-
->
->> Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
->> ---
->> drivers/net/bonding/bond_alb.c | 36 ++++++++++++++++++++++++++++++++++
->> 1 file changed, 36 insertions(+)
+> 
 >>
->> diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
->> index 533e476988f2..82b7071840b1 100644
->> --- a/drivers/net/bonding/bond_alb.c
->> +++ b/drivers/net/bonding/bond_alb.c
->> @@ -1269,6 +1269,34 @@ static int alb_set_mac_address(struct bonding *bond, void *addr)
->> 	return res;
->> }
->>
->> +/*determine if the packet is NA or NS*/
->> +static bool __alb_determine_nd(struct icmp6hdr *hdr)
->> +{
->> +	if (hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
->> +	    hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
->> +		return true;
->> +	}
->> +
->> +	return false;
->> +}
->> +
->> +static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
->> +{
->> +	struct ipv6hdr *ip6hdr;
->> +	struct icmp6hdr *hdr;
->> +
->> +	if (skb->protocol == htons(ETH_P_IPV6)) {
->> +		ip6hdr = ipv6_hdr(skb);
->> +		if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
->> +			hdr = icmp6_hdr(skb);
->> +			if (__alb_determine_nd(hdr))
->> +				return true;
->> +		}
->> +	}
->> +
->> +	return false;
->> +}
->> +
->> /************************ exported alb functions ************************/
->>
->> int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
->> @@ -1350,6 +1378,9 @@ struct slave *bond_xmit_tlb_slave_get(struct bonding *bond,
->> 		switch (skb->protocol) {
->> 		case htons(ETH_P_IP):
->> 		case htons(ETH_P_IPV6):
->> +			if (alb_determine_nd(skb, bond))
->> +				break;
->> +
->> 			hash_index = bond_xmit_hash(bond, skb);
->> 			if (bond->params.tlb_dynamic_lb) {
->> 				tx_slave = tlb_choose_channel(bond,
->> @@ -1446,6 +1477,11 @@ struct slave *bond_xmit_alb_slave_get(struct bonding *bond,
->> 			break;
->> 		}
->>
->> +		if (alb_determine_nd(skb, bond)) {
->> +			do_tx_balance = false;
->> +			break;
->> +		}
->> +
->> 		hash_start = (char *)&ip6hdr->daddr;
->> 		hash_size = sizeof(ip6hdr->daddr);
->> 		break;
->>
->> base-commit: 79e06c4c4950be2abd8ca5d2428a8c915aa62c24
->> -- 
->> 2.27.0
->>
-> ---
-> 	-Jay Vosburgh, jay.vosburgh@canonical.com
+>> migrate_pages()
+>> 	unmap_and_move_huge_page()
+>> 		try_to_migrate()
+>> 			make_writable_migration_entry() <---
+>> 			make_readable_migration_entry() <---
+>> 		remove_migration_ptes() <---
+>> 	unmap_and_move()
+>> 		__unmap_and_move()
+>> 			try_to_migrate()
+>> 				make_writable_migration_entry() <---
+>> 				make_readable_migration_entry() <---
+>> 			remove_migration_ptes() <---
+> 
+> Thanks,
+> Naoya Horiguchi
+> 

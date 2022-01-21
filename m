@@ -2,94 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 902B8496236
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3689749623D
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381638AbiAUPlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 10:41:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
+        id S1381640AbiAUPmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 10:42:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235524AbiAUPlB (ORCPT
+        with ESMTP id S240481AbiAUPl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 10:41:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9263FC06173B;
-        Fri, 21 Jan 2022 07:41:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D84CB82057;
-        Fri, 21 Jan 2022 15:41:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5221EC340E1;
-        Fri, 21 Jan 2022 15:40:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642779658;
-        bh=1in7em99IDhgMK/RO/WoVEmsP6HEPw8AIBhEqarMRU8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p9v2O5nFEjmrej1lSBixzH+jQG9o183FJVHTewcqCpNGYDqUahJyXrVNPL2p3rx45
-         8DLDkPaZs64ste5arxiXz3OECYokerqxFA+TDeJ3eiPX/IdJ8cdL5dEsvZk5+Py4o8
-         WdwQ1zkIUpaCOGHZ4UtYvf9i2wbsS03flyOdFRtCufXQgF0iq5Km43Y3vgpZZZiR9M
-         iMkY3IngdcICRdFpWy79LEbDFLS8VsAODxNFAojFfUmwAsTaKYVlePW9wDBYjYqZFj
-         2UOLbNU9NaS0MZSbAswJx9SdWYvKuQ/o+PUuTTXfaaezhaRgjqQBEsitGtGTWMfDdi
-         5omZAiJLcKZRQ==
-Date:   Fri, 21 Jan 2022 15:40:49 +0000
-From:   Filipe Manana <fdmanana@kernel.org>
-To:     trix@redhat.com
-Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
-        nathan@kernel.org, ndesaulniers@google.com, anand.jain@oracle.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] btrfs: initialize variable cancel
-Message-ID: <YerUAcOO5SV3J98+@debian9.Home>
-References: <20220121134522.832207-1-trix@redhat.com>
+        Fri, 21 Jan 2022 10:41:59 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907C8C06173D
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 07:41:58 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id 128so9187040pfe.12
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 07:41:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lyK32zM2izSK4P0aL4gxFB18kbHnmVnDUuq0JwdVPYY=;
+        b=ckTZmjZCfIb3J6zjMXEjd67zyrMG36bJ8Rv+j91t6RkmfPKWQffI8U+IRitYQ3Mh3R
+         s3QBG5oqvg/UHoAPK5Uc2ggG1GhdKJjSnoSl039YEUqyuQBpxnH4gfCMHCWVzEKWsUmO
+         EGuqQszORrkoyTeUtfPPrvdFPO5qBCTsQ2JeIJ3ocDw+U7BrIb1wX/DlURlx7vpG27vd
+         qB+CSxterbZACf7lOf8MFVwUw1HKSL4DzSuaf03iuRrK7hwxn5OBUO5DyUVKxJlElCf1
+         WdZdjBYE/fFpIkRIPVcYPpz/7nQu2AfoST5nqqkhAyqy2htd2W77bYwE/88bY0/cE13f
+         sCIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lyK32zM2izSK4P0aL4gxFB18kbHnmVnDUuq0JwdVPYY=;
+        b=uoi8JBsOkFi5WtktD26U+zOjopOL6VEVEyzPWaZ/ji8Z12arFJw0WCJAOnowu/3MCk
+         5fp43XM3oAZ1FA3c6HNhAKhCVfe4cFtsk3Mc5tdk8Rict8maJwbeoYAHhGrO6FVk/z3P
+         rivKKnTB97g4ctP8btTcm5NiZpE8+mvcwfmX+T1Af1tf8vzNKd+FmDXIhoYZrxrklEpR
+         5rzhflExohaGUmhni7nSbEC7RCP994FcyWKW9bPofj7+LOn1ywnC4Kjvnka7lfefM4ZG
+         wZD4LydP3t8db4KtS3/28I/NDWob1NbU45OmeL8h2/eJs7FysRq/8iIc0a94F3MZhW6U
+         xw0w==
+X-Gm-Message-State: AOAM531Aga5FCuDEczKdPmd9FVujj8qrMfcYtRDo1w4reddl5pdUgiHq
+        LjdFv8LUl5CmoOEaZTW+bdrdqw==
+X-Google-Smtp-Source: ABdhPJwQcPMUi4sTNNdCSaZw3Smg39rjuSRn8Lvzy21iXv4eb6eQQ+bcPOfc1hd0LlGlK/M6uS7mZw==
+X-Received: by 2002:a63:8341:: with SMTP id h62mr3345650pge.357.1642779717846;
+        Fri, 21 Jan 2022 07:41:57 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id l13sm5532829pgs.16.2022.01.21.07.41.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jan 2022 07:41:57 -0800 (PST)
+Date:   Fri, 21 Jan 2022 15:41:53 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] KVM: x86: Sync the states size with the XCR0/IA32_XSS
+ at any time
+Message-ID: <YerUQa+SN/xWMhvB@google.com>
+References: <20220117082631.86143-1-likexu@tencent.com>
+ <f9edf9b5-0f84-a424-f8e9-73cad901d993@redhat.com>
+ <eacf3f83-96f5-301e-de54-8a0f6c8f9fe5@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220121134522.832207-1-trix@redhat.com>
+In-Reply-To: <eacf3f83-96f5-301e-de54-8a0f6c8f9fe5@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 05:45:22AM -0800, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
+On Fri, Jan 21, 2022, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
 > 
-> Clang static analysis reports this problem
-> ioctl.c:3333:8: warning: 3rd function call argument is an
->   uninitialized value
->     ret = exclop_start_or_cancel_reloc(fs_info,
+> XCR0 is reset to 1 by RESET but not INIT and IA32_XSS is zeroed by
+> both RESET and INIT. The kvm_set_msr_common()'s handling of MSR_IA32_XSS
+> also needs to update kvm_update_cpuid_runtime(). In the above cases, the
+> size in bytes of the XSAVE area containing all states enabled by XCR0 or
+> (XCRO | IA32_XSS) needs to be updated.
 > 
-> cancel is only set in one branch of an if-check and is
-> always used.  So initialize to false.
+> For simplicity and consistency, legacy helpers are used to write values
+
+s/legacy/existing
+
+"legacy" refers to something that is outdated/deprecated, which isn't what you
+intend here.
+
+> and call kvm_update_cpuid_runtime(), and it's not exactly a fast path.
 > 
-> Fixes: 1a15eb724aae ("btrfs: use btrfs_get_dev_args_from_path in dev removal ioctls")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-
-Reviewed-by: Filipe Manana <fdmanana@suse.com>
-
-Could use a more precise subject like for example:
-
-  "btrfs: fix use of uninitialized variable at rm device ioctl"
-
-Anyway, it looks good.
-Thanks.
-
+> Fixes: a554d207dc46 ("KVM: X86: Processor States following Reset or INIT")
+> Signed-off-by: Like Xu <likexu@tencent.com>
 > ---
->  fs/btrfs/ioctl.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> v1 -> v2 Changelog:
+> - Strongly prefer that use the helpers to write the values; (Sean)
+> - Postpone IA32_XSS test cases once non-zero values are supported; (Paolo)
+> - User space may call SET_CPUID2 after kvm_vcpu_reset(init_event=false); (Paolo)
 > 
-> diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
-> index 190ad8af4f45a..26e82379747f8 100644
-> --- a/fs/btrfs/ioctl.c
-> +++ b/fs/btrfs/ioctl.c
-> @@ -3308,7 +3308,7 @@ static long btrfs_ioctl_rm_dev(struct file *file, void __user *arg)
->  	struct block_device *bdev = NULL;
->  	fmode_t mode;
->  	int ret;
-> -	bool cancel;
-> +	bool cancel = false;
->  
->  	if (!capable(CAP_SYS_ADMIN))
->  		return -EPERM;
+>  arch/x86/kvm/x86.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 55518b7d3b96..22d4b1d15e94 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -11256,7 +11256,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+> 
+>  		vcpu->arch.msr_misc_features_enables = 0;
+> 
+> -		vcpu->arch.xcr0 = XFEATURE_MASK_FP;
+> +		__kvm_set_xcr(vcpu, 0, XFEATURE_MASK_FP);
+>  	}
+> 
+>  	/* All GPRs except RDX (handled below) are zeroed on RESET/INIT. */
+> @@ -11273,7 +11273,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+>  	cpuid_0x1 = kvm_find_cpuid_entry(vcpu, 1, 0);
+>  	kvm_rdx_write(vcpu, cpuid_0x1 ? cpuid_0x1->eax : 0x600);
+> 
+> -	vcpu->arch.ia32_xss = 0;
+> +	__kvm_set_msr(vcpu, MSR_IA32_XSS, 0, true);
+
+This relies on a prep patch to invoke kvm_update_cpuid_runtime() in kvm_set_msr_common()
+for MSR_IA32_XSS, no?
+
+>  	static_call(kvm_x86_vcpu_reset)(vcpu, init_event);
+> 
 > -- 
-> 2.26.3
+> 2.33.1
+> 
 > 

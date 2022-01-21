@@ -2,144 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB45495EF6
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 13:24:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8926F495EFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 13:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380336AbiAUMYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 07:24:51 -0500
-Received: from mga05.intel.com ([192.55.52.43]:44938 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1380326AbiAUMYs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 07:24:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642767888; x=1674303888;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3hfDR6qd0OhhK8ZgQ4/ZQOZpwPEBT6cE5sRbv1NeCD0=;
-  b=IoQl98cm0m9hmn1GvVY9ffmipUyqlwQHD8vPumRmjiAucGNAJXmZFGX2
-   J/N1nXTbreUUoP/3UQQVSJLzsEcI925XoYfs5s2SdMDtIVSZJKLaJBNO+
-   S1S/RqEGs6kF+9i0De6RuiGY7Lpd1mQRwJMI+ZKsOwlUIU3KPM9cgAbdZ
-   +chrVUBkSthAEUSD8tN3kem9aZD8XSa5Z4u+26IwAVcl6/w3X6esefwVz
-   pGo3Te6A9JIlrj6lwmexOQ30jf3Z4lbkLvWznRSA9rwpAYP7YvZeZc5DK
-   0yhw8BnhT6jSq4biIf5NzEkGsIJEaKHZD5dPptpKyfa/nHMvwSVZxB3q5
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="331993633"
-X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="331993633"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 04:24:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="579592908"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Jan 2022 04:24:44 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nAsyC-000FHR-AK; Fri, 21 Jan 2022 12:24:44 +0000
-Date:   Fri, 21 Jan 2022 20:23:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Laurent Vivier <laurent@vivier.eu>, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-m68k@lists.linux-m68k.org,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v11 4/5] clocksource/drivers: Add a goldfish-timer
- clocksource
-Message-ID: <202201212032.qL41ty3V-lkp@intel.com>
-References: <20220120080347.1595379-5-laurent@vivier.eu>
+        id S1380350AbiAUMZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 07:25:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380326AbiAUMZg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 07:25:36 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E649C061574;
+        Fri, 21 Jan 2022 04:25:35 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 44A1C1EC0606;
+        Fri, 21 Jan 2022 13:25:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1642767928;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=0yQ74R3NaNtXXiWLWuDtVTd005DK5LpC2uXC3cyXYk4=;
+        b=nYvxqep4R7UqYo06jtTajr6nqpQb+zu2NmtQ8OYSnbeVqSOp/bOhp1m31WOoLPm6GWxulH
+        3bhGfzAlN9Mtp3TzyBBSRyMUQZpYbziDnVNjYVdVjcxZcW8OP6vWe2cPPS5Ny+4q79Z+nX
+        O7z5nMKvUAFKvjrJkbEqfqKFFwMlmWk=
+Date:   Fri, 21 Jan 2022 13:25:21 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        rric@kernel.org, Smita.KoralahalliChannabasappa@amd.com,
+        william.roche@oracle.com
+Subject: Re: [PATCH v3 2/2] EDAC/amd64: Add new register offset support and
+ related changes
+Message-ID: <YeqmMcOSpjgHwYFD@zn.tnic>
+References: <20211228200615.412999-1-yazen.ghannam@amd.com>
+ <20211228200615.412999-3-yazen.ghannam@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220120080347.1595379-5-laurent@vivier.eu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211228200615.412999-3-yazen.ghannam@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+On Tue, Dec 28, 2021 at 08:06:15PM +0000, Yazen Ghannam wrote:
+> diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+> index 4db92c77276f..a299c361a904 100644
+> --- a/drivers/edac/amd64_edac.c
+> +++ b/drivers/edac/amd64_edac.c
+> @@ -15,6 +15,31 @@ static struct msr __percpu *msrs;
+>  
+>  static struct amd64_family_type *fam_type;
+>  
+> +/* Family flag helpers */
+> +static inline u64 get_addr_cfg(void)
+> +{
+> +	if (fam_type->flags.zn_regs_v2)
+> +		return UMCCH_ADDR_CFG_DDR5;
+> +
+> +	return UMCCH_ADDR_CFG;
+> +}
+> +
+> +static inline u64 get_addr_mask_sec(void)
+> +{
+> +	if (fam_type->flags.zn_regs_v2)
+> +		return UMCCH_ADDR_MASK_SEC_DDR5;
+> +
+> +	return UMCCH_ADDR_MASK_SEC;
+> +}
+> +
+> +static inline u64 get_dimm_cfg(void)
+> +{
+> +	if (fam_type->flags.zn_regs_v2)
+> +		return UMCCH_DIMM_CFG_DDR5;
+> +
+> +	return UMCCH_DIMM_CFG;
+> +}
 
-Thank you for the patch! Yet something to improve:
+Yeah, you can do it either this way and have a lot of small functions
+or you can do what I did with mca_msr_reg() which is a single mapping
+function you then use everywhere.
 
-[auto build test ERROR on tip/timers/core]
-[also build test ERROR on linux/master linus/master next-20220121]
-[cannot apply to geert-m68k/for-next v5.16]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Your call.
 
-url:    https://github.com/0day-ci/linux/commits/Laurent-Vivier/m68k-Add-Virtual-M68k-Machine/20220120-160832
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 35e13e9da9afbce13c1d36465504ece4e65f24fe
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220121/202201212032.qL41ty3V-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/ea1170b472532011ab0c8208b6414a36810f45ab
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Laurent-Vivier/m68k-Add-Virtual-M68k-Machine/20220120-160832
-        git checkout ea1170b472532011ab0c8208b6414a36810f45ab
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
+> +
+>  /* Per-node stuff */
+>  static struct ecc_settings **ecc_stngs;
+>  
+> @@ -1429,8 +1454,10 @@ static void __dump_misc_regs_df(struct amd64_pvt *pvt)
+>  		edac_dbg(1, "UMC%d x16 DIMMs present: %s\n",
+>  				i, (umc->dimm_cfg & BIT(7)) ? "yes" : "no");
+>  
+> -		if (pvt->dram_type == MEM_LRDDR4) {
+> -			amd_smn_read(pvt->mc_node_id, umc_base + UMCCH_ADDR_CFG, &tmp);
+> +		if (pvt->dram_type == MEM_LRDDR4 || pvt->dram_type == MEM_LRDDR5) {
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This still keeps the ->dram_type per pvt, which is per memory controller
+in amd64_edac nomenclature.
 
-All errors (new ones prefixed by >>):
+But AFAIR, we said last time that the DRAM type is per UMC now, as you
+do in the previous patch.
 
-   drivers/clocksource/timer-goldfish.c: In function 'goldfish_timer_read':
->> drivers/clocksource/timer-goldfish.c:52:20: error: implicit declaration of function 'gf_ioread32'; did you mean 'ioread32'? [-Werror=implicit-function-declaration]
-      52 |         time_low = gf_ioread32(base + TIMER_TIME_LOW);
-         |                    ^~~~~~~~~~~
-         |                    ioread32
-   drivers/clocksource/timer-goldfish.c: In function 'goldfish_timer_set_oneshot':
->> drivers/clocksource/timer-goldfish.c:65:9: error: implicit declaration of function 'gf_iowrite32'; did you mean 'iowrite32'? [-Werror=implicit-function-declaration]
-      65 |         gf_iowrite32(0, base + TIMER_ALARM_HIGH);
-         |         ^~~~~~~~~~~~
-         |         iowrite32
-   cc1: some warnings being treated as errors
+Which means, you either have to test umc->dimm_cfg to get the DRAM type
+here or push ->dram_type into the umc struct...
 
+-- 
+Regards/Gruss,
+    Boris.
 
-vim +52 drivers/clocksource/timer-goldfish.c
-
-    40	
-    41	static u64 goldfish_timer_read(struct clocksource *cs)
-    42	{
-    43		struct goldfish_timer *timerdrv = cs_to_gf(cs);
-    44		void __iomem *base = timerdrv->base;
-    45		u32 time_low, time_high;
-    46		u64 ticks;
-    47	
-    48		/*
-    49		 * time_low: get low bits of current time and update time_high
-    50		 * time_high: get high bits of time at last time_low read
-    51		 */
-  > 52		time_low = gf_ioread32(base + TIMER_TIME_LOW);
-    53		time_high = gf_ioread32(base + TIMER_TIME_HIGH);
-    54	
-    55		ticks = ((u64)time_high << 32) | time_low;
-    56	
-    57		return ticks;
-    58	}
-    59	
-    60	static int goldfish_timer_set_oneshot(struct clock_event_device *evt)
-    61	{
-    62		struct goldfish_timer *timerdrv = ced_to_gf(evt);
-    63		void __iomem *base = timerdrv->base;
-    64	
-  > 65		gf_iowrite32(0, base + TIMER_ALARM_HIGH);
-    66		gf_iowrite32(0, base + TIMER_ALARM_LOW);
-    67		gf_iowrite32(1, base + TIMER_IRQ_ENABLED);
-    68	
-    69		return 0;
-    70	}
-    71	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+https://people.kernel.org/tglx/notes-about-netiquette

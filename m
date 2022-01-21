@@ -2,74 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3301495A28
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 07:55:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB7CB495A2C
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 07:56:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378809AbiAUGzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 01:55:12 -0500
-Received: from mswedge1.sunplus.com ([60.248.182.113]:52670 "EHLO
-        mg.sunplus.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1378799AbiAUGzK (ORCPT
+        id S1378817AbiAUG4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 01:56:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245091AbiAUG4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 01:55:10 -0500
-X-Greylist: delayed 77525 seconds by postgrey-1.27 at vger.kernel.org; Fri, 21 Jan 2022 01:55:10 EST
-X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
-        ,3)
-Received: from 172.17.9.112
-        by mg01.sunplus.com with MailGates ESMTP Server V5.0(11299:0:AUTH_RELAY)
-        (envelope-from <lh.Kuo@sunplus.com>); Fri, 21 Jan 2022 14:55:16 +0800 (CST)
-Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
- sphcmbx02.sunplus.com.tw (172.17.9.112) with Microsoft SMTP Server (TLS) id
- 15.0.1497.26; Fri, 21 Jan 2022 14:55:11 +0800
-Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
- sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
- 15.00.1497.026; Fri, 21 Jan 2022 14:55:11 +0800
-From:   =?utf-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Li-hao Kuo <lhjeff911@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Subject: RE: [PATCH v6 1/2] spi: Add spi driver for Sunplus SP7021
-Thread-Topic: [PATCH v6 1/2] spi: Add spi driver for Sunplus SP7021
-Thread-Index: AQHYDEdoNQA4Z8mYU0mSuzI8gOIgg6xqY3GAgAE/t3D//4TFAIABjwHA
-Date:   Fri, 21 Jan 2022 06:55:11 +0000
-Message-ID: <ee5838c307f84bb99ace070292167a26@sphcmbx02.sunplus.com.tw>
-References: <cover.1642494310.git.lhjeff911@gmail.com>
- <37998e515d561e762ee30d0ac4fca25a948e0c5c.1642494310.git.lhjeff911@gmail.com>
- <CAHp75VdKc3UDzaqM2G5J5+G90U6Spqyhz_vuOYKhqJ4V-uf=wg@mail.gmail.com>
- <a354d7c1dce4463ea57706dd5443fe7a@sphcmbx02.sunplus.com.tw>
- <CAHp75VcCpye1u3+PK=C3CT8fMHPSOsXTL5AhbLVy0YyGWfyfkQ@mail.gmail.com>
-In-Reply-To: <CAHp75VcCpye1u3+PK=C3CT8fMHPSOsXTL5AhbLVy0YyGWfyfkQ@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [172.25.108.51]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
+        Fri, 21 Jan 2022 01:56:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA3DC061574;
+        Thu, 20 Jan 2022 22:56:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E20D6171F;
+        Fri, 21 Jan 2022 06:56:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B7698C340E2;
+        Fri, 21 Jan 2022 06:56:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642748162;
+        bh=UrjpnrILwzQkw5gHLWqbr3gC6Hslo+Ca3K3VZFiR7P4=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=o6grQIuNLRfUvn4V2ri7KS0azXS2/GVbBgUJM1HwlGLixIk+KphrHndkcDWFH1nmf
+         7biZ18vwtPJ/kEM4OqEHeZ/toKHQrDwOib9zrORSG7A7YyfVOkZC7xLrdqm4Tuwbld
+         fejRKtM1SatS2GM/gS1NbXLzuZB45gQW7m2pVAsImrm8vqDsEeTDZHq7//yIVnuKvv
+         I9eYdrQ2U1QyJVX1RrnDycAZiO4rNI6KjAp1AXWJIwe7mtERIQZ423iFuoirjQDUfd
+         GnOn4Gj7N8qx6i4ZhHtCfS8RdrOLqRhrO0eYYA2D815jjJa0OH+PoES319N+gok/I3
+         U8Y+XAZFdzlOw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A6F25F6079A;
+        Fri, 21 Jan 2022 06:56:02 +0000 (UTC)
+Subject: Re: [GIT PULL] xfs: legacy Irix ioctl housecleaning for 5.17-rc1, part 1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220120184553.GO13540@magnolia>
+References: <20220120184553.GO13540@magnolia>
+X-PR-Tracked-List-Id: <linux-xfs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220120184553.GO13540@magnolia>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.17-merge-5
+X-PR-Tracked-Commit-Id: 4d1b97f9ce7c0d2af2bb85b12d48e6902172a28e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b3bb9413e717b44e4aea833d07f14e90fb91cf97
+Message-Id: <164274816267.27527.14866415947964585469.pr-tracker-bot@kernel.org>
+Date:   Fri, 21 Jan 2022 06:56:02 +0000
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        david@fromorbit.com, linux-kernel@vger.kernel.org,
+        sandeen@sandeen.net, hch@lst.de
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiA+ID4gPiArICAgICAgIGlmICh4ZmVyLT50eF9idWYpDQo+ID4gPiA+ICsgICAgICAgICAgICAg
-ICBkbWFfdW5tYXBfc2luZ2xlKGRldiwgeGZlci0+dHhfZG1hLCB4ZmVyLT5sZW4sIERNQV9UT19E
-RVZJQ0UpOw0KPiA+ID4gPiArICAgICAgIGlmICh4ZmVyLT5yeF9idWYpDQo+ID4gPiA+ICsgICAg
-ICAgICAgICAgICBkbWFfdW5tYXBfc2luZ2xlKGRldiwgeGZlci0+cnhfZG1hLCB4ZmVyLT5sZW4s
-DQo+ID4gPiA+ICsgRE1BX0ZST01fREVWSUNFKTsNCj4gPiA+DQo+ID4gPiBXaHkgY2FuJ3QgeW91
-IHVzZSBTUEkgY29yZSBETUEgbWFwcGluZyBjb2RlPw0KPiA+DQo+ID4gSSBkaWRuJ3QgZmluZCB0
-aGUgU1BJIGNvcmUgRE1BIG1hcHBpbmcgY29kZSBmb3Igc2luZ2xlIG1hcGluZy4NCj4gPiBUaGUg
-bWV0aG9kIGN1cnJlbnRseSB1c2VkIGlzIHRoZSBnZW5lcmFsIERNQSBzaW5nbGUtbWFwIGNvZGUg
-dXNhZ2UgbWV0aG9kLg0KPiANCj4gV2h5IGRvIHlvdSBuZWVkIHNpbmdsZSBwYWdlIG1hcHBpbmc/
-DQo+IFdoYXQncyB3cm9uZyB3aXRoIFNHIG1hcHBpbmcgdGhhdCBTUEkgY29yZSBwcm92aWRlcz8N
-Cg0KU1A3MDIxIFNQSSBzbGF2ZSBkbWEgb25seSBzdXBwb3J0cyBzaW5nbGUgZG1hIGluIG9uZSB0
-cmlnZ2VyLiANCkl0IGlzIG5vdCBzdWl0YWJsZSBmb3IgdXNpbmcgU0cgbWFwcGluZy4NCklmIHRo
-ZSBsZW5ndGggb2YgdGhlIHRyYW5zZmVyIGlzIGxhcmdlciB0aGFuIHRoZSBsZW5ndGggb2YgdGhl
-IFNHLW1hcHBpbmcsIA0KU2xhdmUtbW9kZSB3aWxsIGdldCBlcnJvciBpbiB0aGUgdHJhbnNmZXIu
-DQo=
+The pull request you sent on Thu, 20 Jan 2022 10:45:53 -0800:
+
+> git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.17-merge-5
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b3bb9413e717b44e4aea833d07f14e90fb91cf97
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

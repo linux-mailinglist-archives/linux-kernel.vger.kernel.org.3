@@ -2,72 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD51C4965DA
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 20:47:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63FB34965E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 20:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbiAUTr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 14:47:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiAUTrZ (ORCPT
+        id S232142AbiAUTtm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 21 Jan 2022 14:49:42 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:30162 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231700AbiAUTtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 14:47:25 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5B6C06173B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 11:47:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Content-Type:
-        References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID
-        :Content-Description; bh=Ru23K7nav+OHjyymO8CSjGmREtw3kKts4vIZNTASfAQ=; b=s0O0
-        /UXqV9obxQwXq3xNCrUbPc8jZaPlneD+lUOrEoxSL04tAiZ/XTPuAt59zKIQOtQFHOqUSB/UnqBa+
-        7izh4iMATFCXMFO3CeGx2DEMqs2OT1hSeCB0eOAdNNORNwzYM6BjOqvnmcc7euLdkinWJh+85RFPm
-        vJTrmZ/GVhXd6deDhX5VWSzagcPhZ9L3UgggdJuCpvgJQrWJQ5i4T/ZXaNIEJyJ4i97o4AUeCgsgE
-        KcyyI+O2kBQPUNJAixbt8frQMiq7PNoFe26zKaP4FIqWEpupIWVDYDtjetLrckELc39BRQNxR/7gd
-        EgYdyTWnu1S5PrTV8pmxlQETJ9/8xQ==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1nAzsU-0001sS-UZ; Fri, 21 Jan 2022 19:47:19 +0000
-Date:   Fri, 21 Jan 2022 19:47:18 +0000
-From:   John Keeping <john@metanate.com>
-To:     Valentin Schneider <valentin.schneider@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: Re: [PATCH] sched/rt: Plug rt_mutex_setprio() vs push_rt_task()
- race
-Message-ID: <20220121194718.5e32bc19.john@metanate.com>
-In-Reply-To: <8735li6vgq.mognet@arm.com>
-References: <20220120194037.650433-1-valentin.schneider@arm.com>
-        <8735li6vgq.mognet@arm.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Fri, 21 Jan 2022 14:49:40 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20LG6Mjx019590
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 11:49:40 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dqhyvwghk-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 11:49:40 -0800
+Received: from twshared3115.02.ash8.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 21 Jan 2022 11:49:33 -0800
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id 9EEAB284A5F0B; Fri, 21 Jan 2022 11:49:29 -0800 (PST)
+From:   Song Liu <song@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kernel-team@fb.com>, <peterz@infradead.org>, <x86@kernel.org>,
+        Song Liu <song@kernel.org>
+Subject: [PATCH v6 bpf-next 0/7] bpf_prog_pack allocator
+Date:   Fri, 21 Jan 2022 11:49:19 -0800
+Message-ID: <20220121194926.1970172-1-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Authenticated: YES
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: u8h9D32wZdYEsOAivfLvksd7CYNFcQA7
+X-Proofpoint-GUID: u8h9D32wZdYEsOAivfLvksd7CYNFcQA7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-21_09,2022-01-21_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 bulkscore=0
+ phishscore=0 lowpriorityscore=0 priorityscore=1501 adultscore=0
+ suspectscore=0 spamscore=0 impostorscore=0 clxscore=1015 mlxscore=0
+ malwarescore=0 mlxlogscore=632 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2201210128
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Jan 2022 19:47:01 +0000
-Valentin Schneider <valentin.schneider@arm.com> wrote:
+Changes v5 => v6:
+1. Make jit_hole_buffer 128 byte long. Only fill the first and last 128
+   bytes of header with INT3. (Alexei)
+2. Use kvmalloc for temporary buffer. (Alexei)
+3. Rename tmp_header/tmp_image => rw_header/rw_image. Remove tmp_image from
+   x64_jit_data. (Alexei)
+4. Change fall back round_up_to in bpf_jit_binary_alloc_pack() from
+   BPF_PROG_MAX_PACK_PROG_SIZE to PAGE_SIZE.
 
-> On 20/01/22 19:40, Valentin Schneider wrote:
-> > Link: http://lore.kernel.org/r/Yb3vXx3DcqVOi+EA@donbot
-> > Fixes: a7c81556ec4d ("sched: Fix migrate_disable() vs rt/dl balancing")
-> > Reported-by: John Keeping <john@metanate.com>
-> > Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>  
-> 
-> @John: it's slightly different than the few things we got you to try out,
-> so I didn't keep your tested-by, sorry!
+Changes v4 => v5:
+1. Do not use atomic64 for bpf_jit_current. (Alexei)
 
-I ran a test with this version as well and as expected this does indeed
-fix the issue, so this is also:
+Changes v3 => v4:
+1. Rename text_poke_jit() => text_poke_copy(). (Peter)
+2. Change comment style. (Peter)
 
-Tested-by: John Keeping <john@metanate.com>
+Changes v2 => v3:
+1. Fix tailcall.
+
+Changes v1 => v2:
+1. Use text_poke instead of writing through linear mapping. (Peter)
+2. Avoid making changes to non-x86_64 code.
+
+Most BPF programs are small, but they consume a page each. For systems
+with busy traffic and many BPF programs, this could also add significant
+pressure to instruction TLB.
+
+This set tries to solve this problem with customized allocator that pack
+multiple programs into a huge page.
+
+Patches 1-5 prepare the work. Patch 6 contains key logic of the allocator.
+Patch 7 uses this allocator in x86_64 jit compiler.
+
+Song Liu (7):
+  x86/Kconfig: select HAVE_ARCH_HUGE_VMALLOC with HAVE_ARCH_HUGE_VMAP
+  bpf: use bytes instead of pages for bpf_jit_[charge|uncharge]_modmem
+  bpf: use size instead of pages in bpf_binary_header
+  bpf: add a pointer of bpf_binary_header to bpf_prog
+  x86/alternative: introduce text_poke_copy
+  bpf: introduce bpf_prog_pack allocator
+  bpf, x86_64: use bpf_prog_pack allocator
+
+ arch/x86/Kconfig                     |   1 +
+ arch/x86/include/asm/text-patching.h |   1 +
+ arch/x86/kernel/alternative.c        |  32 ++++
+ arch/x86/net/bpf_jit_comp.c          | 143 ++++++++++++++----
+ include/linux/bpf.h                  |   4 +-
+ include/linux/filter.h               |  23 ++-
+ kernel/bpf/core.c                    | 210 ++++++++++++++++++++++++---
+ kernel/bpf/trampoline.c              |   6 +-
+ 8 files changed, 363 insertions(+), 57 deletions(-)
+
+--
+2.30.2

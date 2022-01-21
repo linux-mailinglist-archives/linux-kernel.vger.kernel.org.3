@@ -2,318 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89E31495A8E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:20:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5949495B59
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378930AbiAUHT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 02:19:57 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:51788 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235247AbiAUHTx (ORCPT
+        id S1379332AbiAUH5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 02:57:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51341 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1379232AbiAUH4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 02:19:53 -0500
-X-UUID: 5e6e528d00bb4764a7c9ca1e26889eaa-20220121
-X-UUID: 5e6e528d00bb4764a7c9ca1e26889eaa-20220121
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <axe.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1817808935; Fri, 21 Jan 2022 15:19:50 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 21 Jan 2022 15:19:49 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 21 Jan 2022 15:19:47 +0800
-From:   Axe Yang <axe.yang@mediatek.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-CC:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Satya Tangirala <satyat@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Axe Yang <axe.yang@mediatek.com>, Lucas Stach <dev@lynxeye.de>,
-        Eric Biggers <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Yong Mao <yong.mao@mediatek.com>
-Subject: [PATCH v5 3/3] mmc: mediatek: add support for SDIO eint IRQ
-Date:   Fri, 21 Jan 2022 15:19:42 +0800
-Message-ID: <20220121071942.11601-4-axe.yang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220121071942.11601-1-axe.yang@mediatek.com>
-References: <20220121071942.11601-1-axe.yang@mediatek.com>
+        Fri, 21 Jan 2022 02:56:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642751795;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m2Ho/lCZKO10EzmqqcIcm9qmBssIoEL4oIglAIQFltM=;
+        b=NkUymEuQfICVF0n6My8trFNrxc1UYZmm2CcebWHGKCjguESu7csN5XnwTJ/WWtIFUgmpYR
+        GCKXWRRkCDnH1N53D49jqHYnzDjxmJpCllho7F/ST4Y/cTOqT0EOm6/5cn84jCa4mDDRv6
+        fkKka2+B9+jSx6P+Bo4vy6NxrOvAswE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-308-qmajEbmeOGKJKS2Wspa7_w-1; Fri, 21 Jan 2022 02:56:30 -0500
+X-MC-Unique: qmajEbmeOGKJKS2Wspa7_w-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 088D084DA42;
+        Fri, 21 Jan 2022 07:56:27 +0000 (UTC)
+Received: from sirius.home.kraxel.org (unknown [10.39.193.47])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 22F6970D21;
+        Fri, 21 Jan 2022 07:56:17 +0000 (UTC)
+Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
+        id A8B8F180060F; Fri, 21 Jan 2022 08:20:06 +0100 (CET)
+Date:   Fri, 21 Jan 2022 08:20:06 +0100
+From:   Gerd Hoffmann <kraxel@redhat.com>
+To:     Helge Deller <deller@gmx.de>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-fbdev@vger.kernel.org, Sven Schnelle <svens@stackframe.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        dri-devel@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Sam Ravnborg <sam@ravnborg.org>, Claudio Suarez <cssk@net-c.es>
+Subject: Re: [PATCH 2/2] Revert "fbcon: Disable accelerated scrolling"
+Message-ID: <20220121072006.ylw2hdl7jbkbwnre@sirius.home.kraxel.org>
+References: <20220119110839.33187-1-deller@gmx.de>
+ <20220119110839.33187-3-deller@gmx.de>
+ <YelyGDNDTn1Aq/hm@phenom.ffwll.local>
+ <6c000477-002b-d125-b945-2c4831bad8a5@gmx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6c000477-002b-d125-b945-2c4831bad8a5@gmx.de>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for eint IRQ when MSDC is used as an SDIO host. This
-feature requires SDIO device support async IRQ function. With this
-feature, SDIO host can be awakened by SDIO card in suspend state,
-without additional pin.
+  Hi,
 
-MSDC driver will time-share the SDIO DAT1 pin. During suspend, MSDC
-turn off clock and switch SDIO DAT1 pin to GPIO mode. And during
-resume, switch GPIO function back to DAT1 mode then turn on clock.
+> > So if this really has to come back then I think the pragmatic approach is
+> > to do it behind a CONFIG_FBCON_ACCEL, default n, and with a huge warning
+> > that enabling that shouldn't be done for any distro which only enables
+> > firmware and drm fbdev drivers.
+> 
+> Thanks for coming back on this, but quite frankly I don't understand
+> that request. How should that warning look like, something along:
+> "BE WARNED: The framebuffer text console on your non-DRM supported
+> graphic card will then run faster and smoother if you enable this option."
+> That doesn't make sense. People and distros would want to enable that.
 
-Some device tree property should be added or modified in MSDC node
-to support SDIO eint IRQ. Pinctrls named state_dat1 and state_eint
-are mandatory. And cap-sdio-async-irq flag is necessary since this
-feature depends on asynchronous interrupt:
-        &mmcX {
-                ...
-                pinctrl-names = "default", "state_uhs", "state_eint",
-                                "state_dat1";
-                ...
-                pinctrl-2 = <&mmc2_pins_eint>;
-                pinctrl-3 = <&mmc2_pins_dat1>;
-                ...
-                cap-sdio-async-irq;
-                ...
-        };
+Nope.  Most distros want disable fbdev drivers rather sooner than later.
+The fbdev drivers enabled in the fedora kernel today:
 
-Co-developed-by: Yong Mao <yong.mao@mediatek.com>
-Signed-off-by: Yong Mao <yong.mao@mediatek.com>
-Signed-off-by: Axe Yang <axe.yang@mediatek.com>
----
- drivers/mmc/host/mtk-sd.c | 123 +++++++++++++++++++++++++++++++++++---
- 1 file changed, 115 insertions(+), 8 deletions(-)
+	CONFIG_FB_VGA16=m
+	CONFIG_FB_VESA=y
+	CONFIG_FB_EFI=y
+	CONFIG_FB_SSD1307=m
 
-diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-index 65037e1d7723..f8e38228d810 100644
---- a/drivers/mmc/host/mtk-sd.c
-+++ b/drivers/mmc/host/mtk-sd.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (c) 2014-2015 MediaTek Inc.
-+ * Copyright (c) 2014-2015, 2022 MediaTek Inc.
-  * Author: Chaotian.Jing <chaotian.jing@mediatek.com>
-  */
- 
-@@ -9,6 +9,7 @@
- #include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/dma-mapping.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/iopoll.h>
- #include <linux/ioport.h>
- #include <linux/irq.h>
-@@ -440,8 +441,12 @@ struct msdc_host {
- 	struct pinctrl *pinctrl;
- 	struct pinctrl_state *pins_default;
- 	struct pinctrl_state *pins_uhs;
-+	struct pinctrl_state *pins_eint;
-+	struct pinctrl_state *pins_dat1;
- 	struct delayed_work req_timeout;
- 	int irq;		/* host interrupt */
-+	int eint_irq;		/* device interrupt */
-+	int sdio_irq_cnt;	/* irq enable cnt */
- 	struct reset_control *reset;
- 
- 	struct clk *src_clk;	/* msdc source clock */
-@@ -465,6 +470,7 @@ struct msdc_host {
- 	bool hs400_tuning;	/* hs400 mode online tuning */
- 	bool internal_cd;	/* Use internal card-detect logic */
- 	bool cqhci;		/* support eMMC hw cmdq */
-+	bool sdio_eint_ready;	/* Ready to support SDIO eint interrupt */
- 	struct msdc_save_para save_para; /* used when gate HCLK */
- 	struct msdc_tune_para def_tune_para; /* default tune setting */
- 	struct msdc_tune_para saved_tune_para; /* tune result of CMD21/CMD19 */
-@@ -1527,10 +1533,12 @@ static void msdc_enable_sdio_irq(struct mmc_host *mmc, int enb)
- 	__msdc_enable_sdio_irq(host, enb);
- 	spin_unlock_irqrestore(&host->lock, flags);
- 
--	if (enb)
--		pm_runtime_get_noresume(host->dev);
--	else
--		pm_runtime_put_noidle(host->dev);
-+	if (mmc->card && !mmc->card->cccr.enable_async_irq) {
-+		if (enb)
-+			pm_runtime_get_noresume(host->dev);
-+		else
-+			pm_runtime_put_noidle(host->dev);
-+	}
- }
- 
- static irqreturn_t msdc_cmdq_irq(struct msdc_host *host, u32 intsts)
-@@ -2461,6 +2469,48 @@ static const struct mmc_host_ops mt_msdc_ops = {
- 	.hw_reset = msdc_hw_reset,
- };
- 
-+static irqreturn_t msdc_sdio_eint_irq(int irq, void *dev_id)
-+{
-+	struct msdc_host *host = dev_id;
-+	struct mmc_host *mmc = mmc_from_priv(host);
-+
-+	spin_lock(&host->lock);
-+	if (likely(host->sdio_irq_cnt > 0)) {
-+		disable_irq_nosync(host->eint_irq);
-+		disable_irq_wake(host->eint_irq);
-+		host->sdio_irq_cnt--;
-+	}
-+	spin_unlock(&host->lock);
-+
-+	sdio_signal_irq(mmc);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int msdc_request_dat1_eint_irq(struct msdc_host *host)
-+{
-+	struct gpio_desc *desc;
-+	int irq, ret;
-+
-+	desc = devm_gpiod_get(host->dev, "eint", GPIOD_IN);
-+	if (IS_ERR(desc))
-+		return PTR_ERR(desc);
-+
-+	irq = gpiod_to_irq(desc);
-+	if (irq < 0)
-+		return irq;
-+
-+	ret = devm_request_threaded_irq(host->dev, irq, NULL, msdc_sdio_eint_irq,
-+					IRQF_TRIGGER_LOW | IRQF_ONESHOT | IRQF_NO_AUTOEN,
-+					"sdio-eint", host);
-+	if (ret)
-+		return ret;
-+
-+	host->eint_irq = irq;
-+
-+	return 0;
-+}
-+
- static const struct cqhci_host_ops msdc_cmdq_ops = {
- 	.enable         = msdc_cqe_enable,
- 	.disable        = msdc_cqe_disable,
-@@ -2631,6 +2681,23 @@ static int msdc_drv_probe(struct platform_device *pdev)
- 		goto host_free;
- 	}
- 
-+	if (!(mmc->caps2 & MMC_CAP2_NO_SDIO) && (mmc->caps2 & MMC_CAP2_SDIO_ASYNC_IRQ)) {
-+		/* Support for SDIO eint irq */
-+		host->pins_eint = pinctrl_lookup_state(host->pinctrl, "state_eint");
-+		if (IS_ERR(host->pins_eint)) {
-+			dev_dbg(&pdev->dev, "Cannot find pinctrl eint!\n");
-+		} else {
-+			host->pins_dat1 = pinctrl_lookup_state(host->pinctrl, "state_dat1");
-+			if (IS_ERR(host->pins_dat1)) {
-+				ret = dev_err_probe(&pdev->dev, PTR_ERR(host->pins_dat1),
-+						    "Cannot find pinctrl dat1!\n");
-+				goto host_free;
-+			}
-+
-+			host->sdio_eint_ready = true;
-+		}
-+	}
-+
- 	msdc_of_property_parse(pdev, host);
- 
- 	host->dev = &pdev->dev;
-@@ -2722,6 +2789,16 @@ static int msdc_drv_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto release;
- 
-+	if (host->sdio_eint_ready) {
-+		ret = msdc_request_dat1_eint_irq(host);
-+		if (ret) {
-+			dev_err(host->dev, "Failed to register data1 eint irq!\n");
-+			goto release;
-+		}
-+
-+		pinctrl_select_state(host->pinctrl, host->pins_dat1);
-+	}
-+
- 	pm_runtime_set_active(host->dev);
- 	pm_runtime_set_autosuspend_delay(host->dev, MTK_MMC_AUTOSUSPEND_DELAY);
- 	pm_runtime_use_autosuspend(host->dev);
-@@ -2843,8 +2920,22 @@ static int __maybe_unused msdc_runtime_suspend(struct device *dev)
- {
- 	struct mmc_host *mmc = dev_get_drvdata(dev);
- 	struct msdc_host *host = mmc_priv(mmc);
-+	unsigned long flags;
- 
- 	msdc_save_reg(host);
-+
-+	if (host->sdio_eint_ready) {
-+		disable_irq(host->irq);
-+		pinctrl_select_state(host->pinctrl, host->pins_eint);
-+		spin_lock_irqsave(&host->lock, flags);
-+		if (host->sdio_irq_cnt == 0) {
-+			enable_irq(host->eint_irq);
-+			enable_irq_wake(host->eint_irq);
-+			host->sdio_irq_cnt++;
-+		}
-+		sdr_clr_bits(host->base + SDC_CFG, SDC_CFG_SDIOIDE);
-+		spin_unlock_irqrestore(&host->lock, flags);
-+	}
- 	msdc_gate_clock(host);
- 	return 0;
- }
-@@ -2853,6 +2944,7 @@ static int __maybe_unused msdc_runtime_resume(struct device *dev)
- {
- 	struct mmc_host *mmc = dev_get_drvdata(dev);
- 	struct msdc_host *host = mmc_priv(mmc);
-+	unsigned long flags;
- 	int ret;
- 
- 	ret = msdc_ungate_clock(host);
-@@ -2860,10 +2952,25 @@ static int __maybe_unused msdc_runtime_resume(struct device *dev)
- 		return ret;
- 
- 	msdc_restore_reg(host);
-+
-+	if (host->sdio_eint_ready) {
-+		spin_lock_irqsave(&host->lock, flags);
-+		if (host->sdio_irq_cnt > 0) {
-+			disable_irq_nosync(host->eint_irq);
-+			disable_irq_wake(host->eint_irq);
-+			host->sdio_irq_cnt--;
-+			sdr_set_bits(host->base + SDC_CFG, SDC_CFG_SDIOIDE);
-+		} else {
-+			sdr_clr_bits(host->base + MSDC_INTEN, MSDC_INTEN_SDIOIRQ);
-+		}
-+		spin_unlock_irqrestore(&host->lock, flags);
-+		pinctrl_select_state(host->pinctrl, host->pins_uhs);
-+		enable_irq(host->irq);
-+	}
- 	return 0;
- }
- 
--static int __maybe_unused msdc_suspend(struct device *dev)
-+static int __maybe_unused msdc_suspend_noirq(struct device *dev)
- {
- 	struct mmc_host *mmc = dev_get_drvdata(dev);
- 	int ret;
-@@ -2877,13 +2984,13 @@ static int __maybe_unused msdc_suspend(struct device *dev)
- 	return pm_runtime_force_suspend(dev);
- }
- 
--static int __maybe_unused msdc_resume(struct device *dev)
-+static int __maybe_unused msdc_resume_noirq(struct device *dev)
- {
- 	return pm_runtime_force_resume(dev);
- }
- 
- static const struct dev_pm_ops msdc_dev_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(msdc_suspend, msdc_resume)
-+	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(msdc_suspend_noirq, msdc_resume_noirq)
- 	SET_RUNTIME_PM_OPS(msdc_runtime_suspend, msdc_runtime_resume, NULL)
- };
- 
--- 
-2.25.1
+CONFIG_FB_VESA + CONFIG_FB_EFI will go away soon, with simpledrm taking
+over their role.
+
+> And if a distro *just* has firmware and drm fbdev drivers enabled,
+> none of the non-DRM graphic cards would be loaded anyway and this code
+> wouldn't be executed anyway.
+
+Yes, exactly.  That's why there is no point in compiling that code.
+
+take care,
+  Gerd
 

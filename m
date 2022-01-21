@@ -2,382 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B3A4958B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 04:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5714958B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 04:58:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233754AbiAUD6D convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Jan 2022 22:58:03 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:50843 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233731AbiAUD57 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 22:57:59 -0500
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 20L3vec07018453, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 20L3vec07018453
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 21 Jan 2022 11:57:40 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 21 Jan 2022 11:57:40 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 21 Jan 2022 11:57:39 +0800
-Received: from RTEXMBS01.realtek.com.tw ([fe80::a5c6:3ded:8fd8:286a]) by
- RTEXMBS01.realtek.com.tw ([fe80::a5c6:3ded:8fd8:286a%5]) with mapi id
- 15.01.2308.020; Fri, 21 Jan 2022 11:57:39 +0800
-From:   Ricky WU <ricky_wu@realtek.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>
-CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 2/4] misc: rtsx: Rework runtime power management flow
-Thread-Topic: [PATCH v2 2/4] misc: rtsx: Rework runtime power management flow
-Thread-Index: AQHYDmfzNtApiNB7lEubVz/rcdVLiqxs1tFQ
-Date:   Fri, 21 Jan 2022 03:57:39 +0000
-Message-ID: <e757387774234b678f6a38e004179c99@realtek.com>
-References: <20220120145006.1682014-2-kai.heng.feng@canonical.com>
- <20220121014039.1693208-1-kai.heng.feng@canonical.com>
-In-Reply-To: <20220121014039.1693208-1-kai.heng.feng@canonical.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.22.81.97]
-x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/1/20_=3F=3F_10:29:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S233808AbiAUD6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 22:58:10 -0500
+Received: from mail-dm6nam12on2129.outbound.protection.outlook.com ([40.107.243.129]:44737
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233731AbiAUD6E (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 22:58:04 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g3l/cKehQ9ybF8bToLgGQNEhaeViqd0hyEmMs1ii1yup0pzeFVpyv3Pl+8w89llq2hKliCQpqsmjVQqcMl65ZN92mFCQfy7oOed+cRkexAkxLo8tTHckARmCA04Uil/AsFehmxnVULoAxE2uIpcp8/IkXJsm96nR3pRAE7zFhk9USWqNMUW+ucaYqvDc4wlTF9ybdksJ+TlEZSBs+7PFwFChh1uDfmDDr+QUml7wNEN1Y1pkVfTce3/teKEAwz/rikW3Nlh895wpjUiAHnUUeg0XSvsFc23Dl1FeTR3/5XW8HcaOhalqssbggflQ1vQ+4ThchNa+l0YHT+jg+2ifqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=w2BlyZ3sjh/VIH/O0b3FwkoibEK+bSExPAw4+q/38q0=;
+ b=hWWAwq6ivQ2MDBdaA2i0ciPbEFQC+awPbXKopkI0qkzEe/Aht/tTmBwxv7qio8dlYt0AUkH8+m5zqim/Ia6UhTM96ATteB6rzO+NLsziVv0jIgandb7cvkM0TTPtwmCD0cCBKRNhn5Kw3vsAMlX2SMHgUBUjf95SdUqVNqzLBdRA9uNwL33nV7Lfzv7tpoe58dq1WX8WedGvYK6eHDPjdM1FAPuKBwwdAonMgf4oMGM954JlHwuk96F125mBLJqKPZ3tetFq7ISzI+xjOw2nvXWnfSx/gbI2x8Hl94f6Nc4pIZHgOgsoqbfIat96Qu2aYILBZOb+L42rnLkqqts7NA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=towerbridgetechnology.onmicrosoft.com;
+ s=selector2-towerbridgetechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=w2BlyZ3sjh/VIH/O0b3FwkoibEK+bSExPAw4+q/38q0=;
+ b=Qoc7SAYdyYRrsBDjue6uAoQFv/izAMxwsd3ROXGdk0Hak9IPvMYSBq+RecJNPfN+NRqBdvEbsov4/ApBevFgDQl3CqeFQqA4vv9r7b0s/OLacHrfzafXSzpkycLu2WiRNvtNcBK9fxo12cxQ6b7x+DQRnabtgIMoPV4sWmSfH0w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bayhubtech.com;
+Received: from PH0PR16MB4248.namprd16.prod.outlook.com (2603:10b6:510:4c::16)
+ by BY5PR16MB3442.namprd16.prod.outlook.com (2603:10b6:a03:1ab::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Fri, 21 Jan
+ 2022 03:58:01 +0000
+Received: from PH0PR16MB4248.namprd16.prod.outlook.com
+ ([fe80::e88f:f199:eed:4645]) by PH0PR16MB4248.namprd16.prod.outlook.com
+ ([fe80::e88f:f199:eed:4645%7]) with mapi id 15.20.4909.010; Fri, 21 Jan 2022
+ 03:58:00 +0000
+From:   Chevron Li <chevron.li@bayhubtech.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shirley.her@bayhubtech.com, fred.ai@bayhubtech.com,
+        xiaoguang.yu@bayhubtech.com, shaper.liu@bayhubtech.com,
+        bruce.yang@bayhubtech.com
+Subject: [PATCH 1/2] mmc:sdhci-msm:fix Qualcomm sd host 7180 SD card compatibility issue
+Date:   Thu, 20 Jan 2022 19:57:46 -0800
+Message-Id: <20220121035747.400-1-chevron.li@bayhubtech.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR02CA0171.apcprd02.prod.outlook.com
+ (2603:1096:201:1f::31) To PH0PR16MB4248.namprd16.prod.outlook.com
+ (2603:10b6:510:4c::16)
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 20eb195c-f9dc-476e-22b1-08d9dc92375e
+X-MS-TrafficTypeDiagnostic: BY5PR16MB3442:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR16MB34423528F44F9EB8A6F59926EA5B9@BY5PR16MB3442.namprd16.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:219;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1Y2daamet4T1TRQ4XB92h4ARYa3+w0Ld3VDZ2Ru/gzEjHIFDNFq/ie78qT0tBMTUVrKU4J73YEDRHugu9cjnH3J71IKmDQqq6HuzfLNUjo+p4afflHnf49p3wm6mt/FwGPsFVZV4GDEKGwTz+pBDr1kNtWex3hkx3l5yZg+Kudcvq7dxdVWCYUH/Jy/7AA5zWXhp/OuLBahim7+Wvtr3L4dTolDqSAYeCbVZNll7WNSwrCF0rCBgELRgMiFTWnCEUEYcrCq5CRsG/vqKNdhxk8ccHXWJdFe+GU1k+d1/JJ4IzAn6gAA3pyy11PEpIZWxZ378wOz9a+GeNnQPLMLC1RoOTYY/hgWJNN7KDCOswPoYqvD3NnvyeOke/oZ+aBYM1/NXec1TyJRg/mPRmIlxCnvP47O40WO2KQyadJ33r7tV3/vftGzSrtS8WWkzRVBIecJy0gJZ32658rPntyzTkCuztjN7upYqqyh/ysjbCQi9ZhoLwlwrZcXus1eUoOOtDhiRjUuYkcRdcD228Juq7Twj2fo2zl49ryqmov+wCiyUoRL0fonO+FmPTUnrlyHquYSzFCoc8OXYu7Ws0z6isR3+9Sp3mviiu2zMW8CVrf3Shc/AvNKIlrw1u1bG//1kuYUhDd4vEyt3rTKUrT/eJg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR16MB4248.namprd16.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(346002)(366004)(396003)(39830400003)(376002)(66476007)(66556008)(36756003)(38100700002)(86362001)(6506007)(66946007)(316002)(83380400001)(508600001)(8936002)(2616005)(52116002)(6486002)(1076003)(6512007)(6666004)(4326008)(8676002)(5660300002)(107886003)(2906002)(186003)(44832011);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DtcemZwSFTf+X1nxxn3xLoinPabEi6KYnenJNblTZNJOBZoqoJ9kogW8FCNu?=
+ =?us-ascii?Q?ENgMvX1uixumtdUNp2Mayy/XUFv6iKSczPFK4/SLTyBDO/0/TS4rk21R2nxf?=
+ =?us-ascii?Q?pvIBYQK2KudrTO0eP+I2m18Pj31ypw5YmJgANNiqzdFN9BG/2XfVT5PS2xjp?=
+ =?us-ascii?Q?cnZnGtWT7gxsXON3Yip7O74rqZcSnH+WUcvwWmShPTaEfLoVShPnF9RxVVRl?=
+ =?us-ascii?Q?rqBWMQdP3JfGuxwfsXWIbEJMuC77lnwNJxaoCL6Yw7KarQ8ARV+AoLtaLUgw?=
+ =?us-ascii?Q?LvZXXPdvokFKjOpu1oIaBV+iKW/xSCJDaadMe9lJzaIOnmIJGoyE3o0h6ixX?=
+ =?us-ascii?Q?U6OowPwHj0W5nn60C+ah3/dzDR6kQN/wEpcGIDee79S7XqDO/lZkRhzLxL+b?=
+ =?us-ascii?Q?h6ywx97D0Iesu3eSs5mf4KbpLykw0mJT9HPSMf2iLJRbptYHbInQ1SbDdOxr?=
+ =?us-ascii?Q?FPfmi0J8m0nAzuimISO1p2AmbPXaJQWrVS8ACsNiRlVdR5Ko4rk+btHU4rH4?=
+ =?us-ascii?Q?wyd1Pwm4JiHXPR+qzL4qN2C6vUUjyDDvz759tvFyLN37tEAYZ3tYoqaxr+fn?=
+ =?us-ascii?Q?bS/407MuC2UA11Ny3Z7LXdXXfbLMesGmvQUdz151XMt1mflhyaI942CkwyEA?=
+ =?us-ascii?Q?qj0T2CLVtgpwlZeIEl3FtdQBjLj6IH1L4FVSOlMWSK1PH/yptoIkoWaGyC1/?=
+ =?us-ascii?Q?skAdTeqwSIduS6FynNwIXLD1odIl+jtUsA+HcrGzT7EYjCjgO0wHCq9u9drb?=
+ =?us-ascii?Q?P58YDy/VnM7cS3H38L1LySxmYt0x1rvmjtyAuOh9BVYsfTjFMj9F11VJRtB9?=
+ =?us-ascii?Q?E3aM9ke3U6T+nqGt+iD7YlwPSc6ViLfzPP3WYS7eLNNJDw7WMdRrU1RAKdd8?=
+ =?us-ascii?Q?xqteqSnqLxZSDNVMmmq6vH3VR2S7KipjnUMOtV3VQLwEWxd2aGbQxD/yKYZp?=
+ =?us-ascii?Q?z8mryYfsi4B/VE+HYprokJ214acZy5BHDIu7jCwNriq5XKK/8U6GyET3a3Mu?=
+ =?us-ascii?Q?ZW1WaEvPVp5WaGs/vOONWEU6OZR7+dPSyz1hQ8kGL9j+Zt6h0qaKksVNA7/R?=
+ =?us-ascii?Q?SuC2kwlAii/jfhTszgBUOks8MBe/k0kQwIJ6nXA2657tEFybwS0S0Hbyc+Nn?=
+ =?us-ascii?Q?/J5+tleRKmI8RcktsrUqi6SHUBDytKIQXTigGlwnHSl/ibYzbkqe3Y4wluVe?=
+ =?us-ascii?Q?emAOtt6cdvCCrg0Al1fZb/zFQTlkRFOGNPXhAZifWsF2jiI25dmHp6r4s0uV?=
+ =?us-ascii?Q?3+GVbK1AvE0ALMZFq1jFNXNNcKOzx5RXp7oIcS2ohbMka1cp8XVtm4UTFd/V?=
+ =?us-ascii?Q?Ev77yYz+lO1aVyNsFRapxK+a/iw490JZVvaByOuuOAxspKcTTGg0M57muWrF?=
+ =?us-ascii?Q?2Ua86w/Bcl0Uu2P1V/gUWdkzk88kc/Nol3VN9Ao6wokSfJIn+zVtIwfH4eta?=
+ =?us-ascii?Q?DAWpIISj5u4OiP8Alsrn1B/2ALixt11m7UL9j6rq6RhyR0NLmT0F1H+u24FE?=
+ =?us-ascii?Q?15KhBhu+vDu+Fff6pRAnnQsWTQggWm/96MCrSMe3cGBUFug8R3iAGEO5sJcI?=
+ =?us-ascii?Q?Prm4yBD1er2uNEWdbzVTBG2iNAmynZYIuUaIC3YIUMu7xlPlGYBg5xmMZcr7?=
+ =?us-ascii?Q?RGW6Yeg6nccmxU8Ff6yMceYBatOjPGPlK6Xp1bW8E4OqpYhZK8hLsRgox3FA?=
+ =?us-ascii?Q?M3GHPe0VMlmGFJF7g0xY5O+MXDPhWYq2dueRvBWPeBg6CpGxfSbYEfhILHA8?=
+ =?us-ascii?Q?bx1Q+o7B6zqxQbtxsSuPy39GKygvKJY=3D?=
+X-OriginatorOrg: bayhubtech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20eb195c-f9dc-476e-22b1-08d9dc92375e
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR16MB4248.namprd16.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2022 03:58:00.5637
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0a7aae2b-8f2e-44df-ba2f-42de7f93c642
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KvDtEKyknEXLfSM/7K4bVuE/yNBewFWZO9o/0HpjCVBsDqZqjxnIrUzvXkobl4isdYhxonSqvtDfJkMZnLC94uKcVX3xltPiNiajUY7nLOo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR16MB3442
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> Sent: Friday, January 21, 2022 9:41 AM
-> To: arnd@arndb.de; gregkh@linuxfoundation.org; ulf.hansson@linaro.org
-> Cc: linux-pm@vger.kernel.org; Kai-Heng Feng <kai.heng.feng@canonical.com>;
-> Ricky WU <ricky_wu@realtek.com>; Christophe JAILLET
-> <christophe.jaillet@wanadoo.fr>; Yang Li <yang.lee@linux.alibaba.com>;
-> linux-kernel@vger.kernel.org
-> Subject: [PATCH v2 2/4] misc: rtsx: Rework runtime power management flow
-> 
-> Commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM") uses
-> "rtd3_work" and "idle_work" to manage it's own runtime PM state machine.
-> 
-> When its child device, rtsx_pci_sdmmc, uses runtime PM refcount correctly, all
-> the additional works can be managed by generic runtime PM helpers.
-> 
-> So consolidate "idle_work" and "rtd3_work" into generic runtime idle callback
-> and runtime suspend callback, respectively.
-> 
+Improve the signal integrity for long SD bus trace by using SC7180+GGC SD host redriver chip
+1.GGC is a SD bus signal re-timing IC that has been paired with the SC7180 sometimes.
+2.The key points are initialized GGC chip during SD initialization and use GGC special tuning flow to re-timing SD bus signal.
+3.GGC resource is initialized for GGC chip during Qualcomm host probe:
+ 3.1 GGC structure initialization
+ 3.2 GGC GPIO resource assignment
+ 3.3 Reload host->mmc->detect with GGC chip special initiation flow.
+ 3.4 Reload the host->mmc_host_ops.execute_tuning with GGC chip special tuning flow.
+4.The function of the patch is already verified on Chrome OS, and Google request us to submit the patch to Linux for them future use.
+5.GGC can work with any other standard SDHCI controller to improve SD signal SI and Timing.
+6.GGC has cooperated with Intel/Qualcomm/MTK/SPRD sd host already and work well.
 
-This idle_work is not runtime_idle, this is for aspm setting
-Not only for support RPM, so this idle_work can not be remove....
+Signed-off-by: Chevron Li <chevron.li@bayhubtech.com>
+---
+Changes:
+1.add a data member in sdhci_msm_host structure for extension
+2.add an API to get the extension address from sdhci_msm_host structure
+3.add an independent branch for GGC chip support according to the configure of DTSI
+---
+ drivers/mmc/host/sdhci-bayhub.c | 34 ++++++++++++++++++++++++++++
+ drivers/mmc/host/sdhci-msm.c    | 39 ++++++++++++++++++++++++++++++++-
+ 2 files changed, 72 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/mmc/host/sdhci-bayhub.c
 
-Our original Idle_work is a power saveing function, It is a delay_work for 200 msec  ,
-If no work comes in 200 msec than go to idle_work to set power saveing setting.....  
+diff --git a/drivers/mmc/host/sdhci-bayhub.c b/drivers/mmc/host/sdhci-bayhub.c
+new file mode 100644
+index 000000000000..867d465ce848
+--- /dev/null
++++ b/drivers/mmc/host/sdhci-bayhub.c
+@@ -0,0 +1,34 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Bayhub Technologies, Inc. BH201 SDHCI bridge IC for
++ * VENDOR SDHCI platform driver source file
++ *
++ * Copyright (c) 2012-2018, The Linux Foundation. All rights reserved.
++ */
++
++struct sdhci_bht_host {
++};
++
++static void bht_signal_voltage_on_off(struct sdhci_host *host, u32 on_off)
++{
++}
++
++static void sdhci_bht_parse(struct mmc_host *mmc_host)
++{
++}
++
++static void sdhci_bht_resource_free(struct sdhci_msm_host *vendor_host)
++{
++}
++
++static void mmc_rescan_bht(struct work_struct *work)
++{
++}
++
++static int sdhci_bht_execute_tuning(struct mmc_host *mmc, u32 opcode)
++{
++	int ret = 0;
++
++	return ret;
++}
++
+diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
+index 50c71e0ba5e4..5e19d34ef25c 100644
+--- a/drivers/mmc/host/sdhci-msm.c
++++ b/drivers/mmc/host/sdhci-msm.c
+@@ -285,8 +285,14 @@ struct sdhci_msm_host {
+ 	u32 dll_config;
+ 	u32 ddr_config;
+ 	bool vqmmc_enabled;
++	unsigned long	private[] ____cacheline_aligned;
+ };
+ 
++static inline void *sdhci_msm_priv(struct sdhci_msm_host *msm_host)
++{
++	return (void *)msm_host->private;
++}
++
+ static const struct sdhci_msm_offset *sdhci_priv_msm_offset(struct sdhci_host *host)
+ {
+ 	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+@@ -1585,6 +1591,8 @@ static void sdhci_msm_dump_pwr_ctrl_regs(struct sdhci_host *host)
+ 		msm_host_readl(msm_host, host, msm_offset->core_pwrctl_mask),
+ 		msm_host_readl(msm_host, host, msm_offset->core_pwrctl_ctl));
+ }
++/* include bayhub patch for GGC chip support */
++#include "sdhci-bayhub.c"
+ 
+ static void sdhci_msm_handle_pwr_irq(struct sdhci_host *host, int irq)
+ {
+@@ -1628,10 +1636,16 @@ static void sdhci_msm_handle_pwr_irq(struct sdhci_host *host, int irq)
+ 
+ 	/* Handle BUS ON/OFF*/
+ 	if (irq_status & CORE_PWRCTL_BUS_ON) {
++		/* Bayhub patch: GGC chip power on patch */
++		if (of_find_property(msm_host->pdev->dev.of_node, "use-bayhub-bh201", NULL))
++			bht_signal_voltage_on_off(host, 1);
+ 		pwr_state = REQ_BUS_ON;
+ 		io_level = REQ_IO_HIGH;
+ 	}
+ 	if (irq_status & CORE_PWRCTL_BUS_OFF) {
++		/* Bayhub patch: GGC chip power off patch */
++		if (of_find_property(msm_host->pdev->dev.of_node, "use-bayhub-bh201", NULL))
++			bht_signal_voltage_on_off(host, 0);
+ 		pwr_state = REQ_BUS_OFF;
+ 		io_level = REQ_IO_LOW;
+ 	}
+@@ -2497,7 +2511,12 @@ static int sdhci_msm_probe(struct platform_device *pdev)
+ 	const struct sdhci_msm_variant_info *var_info;
+ 	struct device_node *node = pdev->dev.of_node;
+ 
+-	host = sdhci_pltfm_init(pdev, &sdhci_msm_pdata, sizeof(*msm_host));
++	/* Bayhub patch: memory allocate for sdhci_bht_host structure */
++	if (of_find_property(node, "use-bayhub-bh201", NULL))
++		host = sdhci_pltfm_init(pdev, &sdhci_msm_pdata,
++			sizeof(*msm_host) + sizeof(struct sdhci_bht_host));
++	else
++		host = sdhci_pltfm_init(pdev, &sdhci_msm_pdata, sizeof(*msm_host));
+ 	if (IS_ERR(host))
+ 		return PTR_ERR(host);
+ 
+@@ -2511,6 +2530,15 @@ static int sdhci_msm_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto pltfm_free;
+ 
++	/* Bayhub patch: resource assign and mmc_rescan routine overload */
++	if (of_find_property(node, "use-bayhub-bh201", NULL)) {
++		struct sdhci_bht_host *bht_host;
++
++		bht_host = sdhci_msm_priv(msm_host);
++		sdhci_bht_parse(msm_host->mmc);
++		INIT_DELAYED_WORK(&host->mmc->detect, mmc_rescan_bht);
++	}
++
+ 	/*
+ 	 * Based on the compatible string, load the required msm host info from
+ 	 * the data associated with the version info.
+@@ -2727,6 +2755,9 @@ static int sdhci_msm_probe(struct platform_device *pdev)
+ 	host->mmc_host_ops.start_signal_voltage_switch =
+ 		sdhci_msm_start_signal_voltage_switch;
+ 	host->mmc_host_ops.execute_tuning = sdhci_msm_execute_tuning;
++	/* Bayhub patch: overload the mmc_host_ops.execute_tuning routine */
++	if (of_find_property(node, "use-bayhub-bh201", NULL))
++		host->mmc_host_ops.execute_tuning = sdhci_bht_execute_tuning;
+ 	if (of_property_read_bool(node, "supports-cqe"))
+ 		ret = sdhci_msm_cqe_add_host(host, pdev);
+ 	else
+@@ -2750,6 +2781,9 @@ static int sdhci_msm_probe(struct platform_device *pdev)
+ 	if (!IS_ERR(msm_host->bus_clk))
+ 		clk_disable_unprepare(msm_host->bus_clk);
+ pltfm_free:
++	/* Bayhub patch: release assigned resource */
++	if (of_find_property(node, "use-bayhub-bh201", NULL))
++		sdhci_bht_resource_free(msm_host);
+ 	sdhci_pltfm_free(pdev);
+ 	return ret;
+ }
+@@ -2763,6 +2797,9 @@ static int sdhci_msm_remove(struct platform_device *pdev)
+ 		    0xffffffff);
+ 
+ 	sdhci_remove_host(host, dead);
++	/* Bayhub patch: release assigned resource */
++	if (of_find_property(msm_host->pdev->dev.of_node, "use-bayhub-bh201", NULL))
++		sdhci_bht_resource_free(msm_host);
+ 
+ 	pm_runtime_get_sync(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
 
-> Fixes: 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM")
-> Cc: Ricky WU <ricky_wu@realtek.com>
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
-> v2:
->  - Remove unused idle_work and rtd3_work from rtsx_pcr.
-> 
->  drivers/misc/cardreader/rtsx_pcr.c | 123 +++++++++++------------------
->  include/linux/rtsx_pci.h           |   3 -
->  2 files changed, 44 insertions(+), 82 deletions(-)
-> 
-> diff --git a/drivers/misc/cardreader/rtsx_pcr.c
-> b/drivers/misc/cardreader/rtsx_pcr.c
-> index 6ac509c1821c9..1dcf98b597569 100644
-> --- a/drivers/misc/cardreader/rtsx_pcr.c
-> +++ b/drivers/misc/cardreader/rtsx_pcr.c
-> @@ -152,20 +152,12 @@ void rtsx_pci_start_run(struct rtsx_pcr *pcr)
->  	if (pcr->remove_pci)
->  		return;
-> 
-> -	if (pcr->rtd3_en)
-> -		if (pcr->is_runtime_suspended) {
-> -			pm_runtime_get(&(pcr->pci->dev));
-> -			pcr->is_runtime_suspended = false;
-> -		}
-> -
->  	if (pcr->state != PDEV_STAT_RUN) {
->  		pcr->state = PDEV_STAT_RUN;
->  		if (pcr->ops->enable_auto_blink)
->  			pcr->ops->enable_auto_blink(pcr);
->  		rtsx_pm_full_on(pcr);
->  	}
-> -
-> -	mod_delayed_work(system_wq, &pcr->idle_work, msecs_to_jiffies(200));
->  }
->  EXPORT_SYMBOL_GPL(rtsx_pci_start_run);
-> 
-> @@ -1094,40 +1086,6 @@ static void rtsx_pm_power_saving(struct rtsx_pcr
-> *pcr)
->  	rtsx_comm_pm_power_saving(pcr);
->  }
-> 
-> -static void rtsx_pci_rtd3_work(struct work_struct *work) -{
-> -	struct delayed_work *dwork = to_delayed_work(work);
-> -	struct rtsx_pcr *pcr = container_of(dwork, struct rtsx_pcr, rtd3_work);
-> -
-> -	pcr_dbg(pcr, "--> %s\n", __func__);
-> -	if (!pcr->is_runtime_suspended)
-> -		pm_runtime_put(&(pcr->pci->dev));
-> -}
-> -
-> -static void rtsx_pci_idle_work(struct work_struct *work) -{
-> -	struct delayed_work *dwork = to_delayed_work(work);
-> -	struct rtsx_pcr *pcr = container_of(dwork, struct rtsx_pcr, idle_work);
-> -
-> -	pcr_dbg(pcr, "--> %s\n", __func__);
-> -
-> -	mutex_lock(&pcr->pcr_mutex);
-> -
-> -	pcr->state = PDEV_STAT_IDLE;
-> -
-> -	if (pcr->ops->disable_auto_blink)
-> -		pcr->ops->disable_auto_blink(pcr);
-> -	if (pcr->ops->turn_off_led)
-> -		pcr->ops->turn_off_led(pcr);
-> -
-> -	rtsx_pm_power_saving(pcr);
-> -
-> -	mutex_unlock(&pcr->pcr_mutex);
-> -
-> -	if (pcr->rtd3_en)
-> -		mod_delayed_work(system_wq, &pcr->rtd3_work,
-> msecs_to_jiffies(10000));
-> -}
-> -
->  static void rtsx_base_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
-> {
->  	/* Set relink_time to 0 */
-> @@ -1598,7 +1556,6 @@ static int rtsx_pci_probe(struct pci_dev *pcidev,
->  	pcr->card_inserted = 0;
->  	pcr->card_removed = 0;
->  	INIT_DELAYED_WORK(&pcr->carddet_work, rtsx_pci_card_detect);
-> -	INIT_DELAYED_WORK(&pcr->idle_work, rtsx_pci_idle_work);
-> 
->  	pcr->msi_en = msi_en;
->  	if (pcr->msi_en) {
-> @@ -1623,20 +1580,16 @@ static int rtsx_pci_probe(struct pci_dev *pcidev,
->  		rtsx_pcr_cells[i].pdata_size = sizeof(*handle);
->  	}
-> 
-> -	if (pcr->rtd3_en) {
-> -		INIT_DELAYED_WORK(&pcr->rtd3_work, rtsx_pci_rtd3_work);
-> -		pm_runtime_allow(&pcidev->dev);
-> -		pm_runtime_enable(&pcidev->dev);
-> -		pcr->is_runtime_suspended = false;
-> -	}
-> -
-> 
->  	ret = mfd_add_devices(&pcidev->dev, pcr->id, rtsx_pcr_cells,
->  			ARRAY_SIZE(rtsx_pcr_cells), NULL, 0, NULL);
->  	if (ret < 0)
->  		goto free_slots;
-> 
-> -	schedule_delayed_work(&pcr->idle_work, msecs_to_jiffies(200));
-> +	if (pcr->rtd3_en) {
-> +		pm_runtime_allow(&pcidev->dev);
-> +		pm_runtime_put(&pcidev->dev);
-> +	}
-> 
->  	return 0;
-> 
-> @@ -1668,10 +1621,11 @@ static void rtsx_pci_remove(struct pci_dev
-> *pcidev)
->  	struct pcr_handle *handle = pci_get_drvdata(pcidev);
->  	struct rtsx_pcr *pcr = handle->pcr;
-> 
-> -	if (pcr->rtd3_en)
-> -		pm_runtime_get_noresume(&pcr->pci->dev);
-> -
->  	pcr->remove_pci = true;
-> +	if (pcr->rtd3_en) {
-> +		pm_runtime_get_sync(&pcidev->dev);
-> +		pm_runtime_forbid(&pcidev->dev);
-> +	}
-> 
->  	/* Disable interrupts at the pcr level */
->  	spin_lock_irq(&pcr->lock);
-> @@ -1680,9 +1634,6 @@ static void rtsx_pci_remove(struct pci_dev *pcidev)
->  	spin_unlock_irq(&pcr->lock);
-> 
->  	cancel_delayed_work_sync(&pcr->carddet_work);
-> -	cancel_delayed_work_sync(&pcr->idle_work);
-> -	if (pcr->rtd3_en)
-> -		cancel_delayed_work_sync(&pcr->rtd3_work);
-> 
->  	mfd_remove_devices(&pcidev->dev);
-> 
-> @@ -1700,11 +1651,6 @@ static void rtsx_pci_remove(struct pci_dev
-> *pcidev)
->  	idr_remove(&rtsx_pci_idr, pcr->id);
->  	spin_unlock(&rtsx_pci_lock);
-> 
-> -	if (pcr->rtd3_en) {
-> -		pm_runtime_disable(&pcr->pci->dev);
-> -		pm_runtime_put_noidle(&pcr->pci->dev);
-> -	}
-> -
->  	kfree(pcr->slots);
->  	kfree(pcr);
->  	kfree(handle);
-> @@ -1726,7 +1672,6 @@ static int __maybe_unused rtsx_pci_suspend(struct
-> device *dev_d)
->  	pcr = handle->pcr;
-> 
->  	cancel_delayed_work(&pcr->carddet_work);
-> -	cancel_delayed_work(&pcr->idle_work);
-> 
->  	mutex_lock(&pcr->pcr_mutex);
-> 
-> @@ -1760,8 +1705,6 @@ static int __maybe_unused rtsx_pci_resume(struct
-> device *dev_d)
->  	if (ret)
->  		goto out;
-> 
-> -	schedule_delayed_work(&pcr->idle_work, msecs_to_jiffies(200));
-> -
->  out:
->  	mutex_unlock(&pcr->pcr_mutex);
->  	return ret;
-> @@ -1786,6 +1729,32 @@ static void rtsx_pci_shutdown(struct pci_dev
-> *pcidev)
->  		pci_disable_msi(pcr->pci);
->  }
-> 
-> +static int rtsx_pci_runtime_idle(struct device *device) {
-> +	struct pci_dev *pcidev = to_pci_dev(device);
-> +	struct pcr_handle *handle = pci_get_drvdata(pcidev);
-> +	struct rtsx_pcr *pcr = handle->pcr;
-> +
-> +	dev_dbg(device, "--> %s\n", __func__);
-> +
-> +	mutex_lock(&pcr->pcr_mutex);
-> +
-> +	pcr->state = PDEV_STAT_IDLE;
-> +
-> +	if (pcr->ops->disable_auto_blink)
-> +		pcr->ops->disable_auto_blink(pcr);
-> +	if (pcr->ops->turn_off_led)
-> +		pcr->ops->turn_off_led(pcr);
-> +
-> +	rtsx_pm_power_saving(pcr);
-> +
-> +	mutex_unlock(&pcr->pcr_mutex);
-> +
-> +	pm_schedule_suspend(device, 5000);
-> +
-> +	return -EBUSY;
-> +}
-> +
->  static int rtsx_pci_runtime_suspend(struct device *device)  {
->  	struct pci_dev *pcidev = to_pci_dev(device); @@ -1794,31 +1763,29 @@
-> static int rtsx_pci_runtime_suspend(struct device *device)
-> 
->  	handle = pci_get_drvdata(pcidev);
->  	pcr = handle->pcr;
-> -	dev_dbg(&(pcidev->dev), "--> %s\n", __func__);
-> 
-> -	cancel_delayed_work(&pcr->carddet_work);
-> -	cancel_delayed_work(&pcr->rtd3_work);
-> -	cancel_delayed_work(&pcr->idle_work);
-> +	if (!pcr->rtd3_en)
-> +		return -EBUSY;
-> +
-> +	dev_dbg(device, "--> %s\n", __func__);
-> +
-> +	cancel_delayed_work_sync(&pcr->carddet_work);
-> 
->  	mutex_lock(&pcr->pcr_mutex);
->  	rtsx_pci_power_off(pcr, HOST_ENTER_S3);
-> 
->  	mutex_unlock(&pcr->pcr_mutex);
-> 
-> -	pcr->is_runtime_suspended = true;
-> -
->  	return 0;
->  }
-> 
->  static int rtsx_pci_runtime_resume(struct device *device)  {
->  	struct pci_dev *pcidev = to_pci_dev(device);
-> -	struct pcr_handle *handle;
-> -	struct rtsx_pcr *pcr;
-> +	struct pcr_handle *handle = pci_get_drvdata(pcidev);
-> +	struct rtsx_pcr *pcr = handle->pcr;
-> 
-> -	handle = pci_get_drvdata(pcidev);
-> -	pcr = handle->pcr;
-> -	dev_dbg(&(pcidev->dev), "--> %s\n", __func__);
-> +	dev_dbg(device, "--> %s\n", __func__);
-> 
->  	mutex_lock(&pcr->pcr_mutex);
-> 
-> @@ -1834,8 +1801,6 @@ static int rtsx_pci_runtime_resume(struct device
-> *device)
->  				pcr->slots[RTSX_SD_CARD].p_dev);
->  	}
-> 
-> -	schedule_delayed_work(&pcr->idle_work, msecs_to_jiffies(200));
-> -
->  	mutex_unlock(&pcr->pcr_mutex);
->  	return 0;
->  }
-> @@ -1850,7 +1815,7 @@ static int rtsx_pci_runtime_resume(struct device
-> *device)
-> 
->  static const struct dev_pm_ops rtsx_pci_pm_ops = {
->  	SET_SYSTEM_SLEEP_PM_OPS(rtsx_pci_suspend, rtsx_pci_resume)
-> -	SET_RUNTIME_PM_OPS(rtsx_pci_runtime_suspend,
-> rtsx_pci_runtime_resume, NULL)
-> +	SET_RUNTIME_PM_OPS(rtsx_pci_runtime_suspend,
-> rtsx_pci_runtime_resume,
-> +rtsx_pci_runtime_idle)
->  };
-> 
->  static struct pci_driver rtsx_pci_driver = { diff --git a/include/linux/rtsx_pci.h
-> b/include/linux/rtsx_pci.h index 4ab7bfc675f11..89b7d34e25b63 100644
-> --- a/include/linux/rtsx_pci.h
-> +++ b/include/linux/rtsx_pci.h
-> @@ -1201,8 +1201,6 @@ struct rtsx_pcr {
->  	unsigned int			card_exist;
-> 
->  	struct delayed_work		carddet_work;
-> -	struct delayed_work		idle_work;
-> -	struct delayed_work		rtd3_work;
-> 
->  	spinlock_t			lock;
->  	struct mutex			pcr_mutex;
-> @@ -1212,7 +1210,6 @@ struct rtsx_pcr {
->  	unsigned int			cur_clock;
->  	bool				remove_pci;
->  	bool				msi_en;
-> -	bool				is_runtime_suspended;
-> 
->  #define EXTRA_CAPS_SD_SDR50		(1 << 0)
->  #define EXTRA_CAPS_SD_SDR104		(1 << 1)
-> --
-> 2.33.1
+base-commit: c9e6606c7fe92b50a02ce51dda82586ebdf99b48
+-- 
+2.32.0
 

@@ -2,105 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A2A496078
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C953496079
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380962AbiAUOI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 09:08:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350747AbiAUOI1 (ORCPT
+        id S1380966AbiAUOIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 09:08:50 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:56152 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380967AbiAUOIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 09:08:27 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B29C061574;
-        Fri, 21 Jan 2022 06:08:27 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id v8-20020a9d6048000000b005960952c694so11872494otj.12;
-        Fri, 21 Jan 2022 06:08:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LoaGohGGL9r6RCSTBBZR21QKRe1IVFLPVcbUAfgKqH4=;
-        b=Vx0qOUrDVlsl4z3fZYnN3dVtU48K9pui2wZT2pVvyIGCnA+aIOVPLNFrRgw5rfTFEK
-         xZ9NzQRAlswqnfPZhl1XJgvhiwbr5aX3ufj8Tbn5gtNZt7WVOAP4POWW+XjSmQJObEx2
-         +uiMxpiiTaQSj9wiX+8B65g9F1PMJgyXgTsVv8IRVkv3k8ZoXQCrXA6yWnAGae61Kv0y
-         on/FS3i5dikSUUP+S8Jjof07VCPMiR+r2xZr1bCIyCxhm4aNRvl95/sBB812txL3+kqx
-         TUPSQui2+Oj7+bKXZcq0zn4FjnGYnYGC01/dSUPxdbcAi0UCp3wM7smkFZCrR+e6H68R
-         Pfbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=LoaGohGGL9r6RCSTBBZR21QKRe1IVFLPVcbUAfgKqH4=;
-        b=I7HQWmVgPXvlZEZf7hZ4CraN7JLUgOLQZv4L2Hwvn2M3HrNqpQ88D8IRBRnkdhnT79
-         A1quMylYkajFLS7fMzA8k528sqe0ug+KLh0aMNlcUmOYppVRHlMQuAEDVvUfp1B9LGqH
-         ddIioNER2cZDsSCyphUaZqER5Mz/7xE9t+3d24rQEMV6sEVIqAb+5tUJxZYZPSMA/wgj
-         8MGQ9iloxGSlE5s9M9x41cWZSIHBOmPNh1LXC72giLnl2GFmxL5Ehji2BF9q19l0Rxwq
-         YqXQjx9hYbA7t8+muDch1BLwSVbFWzDU7FIWJxtwQye5D+BFkHrTYUhgAGZ+3oxrZwNd
-         K0dg==
-X-Gm-Message-State: AOAM533noLHGC3E/9cPuH17zHTd9mqYxvA6n1vvcEZFYeFaAsYYI9Aaq
-        rYI5Hd0B4I0/JjbdXE9DeRU=
-X-Google-Smtp-Source: ABdhPJzvQ76ubAUo4fgMsDcwKvGy/4AO7ODgxXkkiMTMH/0lUrxf38WIvmd7+r26Kjyi7EpJWJ/SFg==
-X-Received: by 2002:a05:6830:314e:: with SMTP id c14mr2908166ots.338.1642774107105;
-        Fri, 21 Jan 2022 06:08:27 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v27sm1059085ots.62.2022.01.21.06.08.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 06:08:26 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 21 Jan 2022 06:08:25 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: hwmon: lm90: Drop Tegra specifics from
- example
-Message-ID: <20220121140825.GA307914@roeck-us.net>
-References: <20220119015514.2441231-1-robh@kernel.org>
+        Fri, 21 Jan 2022 09:08:44 -0500
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1642774122;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jOE5fu70oB7nuGOxO+dUrxE5TcuzOQCCS2Qr0yX/lps=;
+        b=Wcv3w5yuaGp/5LMBJlhbnemZFTY5ubmphbG2gUsZ3b7aXo35vAWLAbiamXkmN6MTOHwxbX
+        P9f9+jFiBt+LCF8eZJVqZ9W6amTDphNlpaIMzWK2l+XXuIVYxWeLet2/omyC2sOsYInGwS
+        zf2BSCcIOdq0oMOIq4XR3HusvOCJN9qPD5nyu54VnUXyIikfAbPPqJhSq7qI5fuLoIbyB9
+        25PMZFAFE84uzIbTM6VJyLTpnh9DKdNMZ+ySM52Lh78vNuofM4l+FJO+v8BKpbsDwEyrRu
+        Aeb97w/IkLgmxU6D+APbOI0ucIkhOG+bqn5goubUZRkHfpmUrNayaXinERR6Xg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1642774122;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jOE5fu70oB7nuGOxO+dUrxE5TcuzOQCCS2Qr0yX/lps=;
+        b=QA+0Awr3qBFjBCjZoQ5sNFHCLmc0W16e7eY7OGhuTaP9waO46r446IWoad2HRqvL7YUFTC
+        JYVgg0iXbIMwn9CQ==
+To:     Mukesh Ojha <quic_mojha@quicinc.com>, linux-kernel@vger.kernel.org
+Cc:     pmladek@suse.com, senozhatsky@chromium.org, rostedt@goodmis.org,
+        Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: Re: [PATCH v3] printk: ringbuffer: Improve prb_next_seq() performance
+In-Reply-To: <1642770388-17327-1-git-send-email-quic_mojha@quicinc.com>
+References: <1642770388-17327-1-git-send-email-quic_mojha@quicinc.com>
+Date:   Fri, 21 Jan 2022 15:14:41 +0106
+Message-ID: <87tudxfafq.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220119015514.2441231-1-robh@kernel.org>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 07:55:13PM -0600, Rob Herring wrote:
-> There's no need to complicate examples with a platform specific macro.
-> It also complicates example parsing to figure out the number of
-> interrupt cells in examples (based on bracketing).
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Hi Mukesh,
 
-Applied to hwmon-next.
+Thanks for pushing this. I think it got lost somewhere. I have a couple
+very minor non-functional change requests.
 
-Thanks,
-Guenter
+On 2022-01-21, Mukesh Ojha <quic_mojha@quicinc.com> wrote:
+> From: Petr Mladek <pmladek@suse.com>
+>
+> prb_next_seq() always iterates from the first known sequence number.
+> In the worst case, it might loop 8k times for 256kB buffer,
+> 15k times for 512kB buffer, and 64k times for 2MB buffer.
+>
+> It was reported that pooling and reading using syslog interface
 
+                       ^^^^^^^ polling
+
+> might occupy 50% of CPU.
+>
+> Speedup the search by storing @id of the last finalized descriptor.
+>
+> The loop is still needed because the @id is stored and read in the best
+> effort way. An atomic variable is used to keep the @id consistent.
+> But the stores and reads are not serialized against each other.
+> The descriptor could get reused in the meantime. The related sequence
+> number will be used only when it is still valid.
+>
+> An invalid value should be read _only_ when there is a flood of messages
+> and the ringbuffer is rapidly reused. The performance is the least
+> problem in this case.
+>
+> Link: https://lore.kernel.org/lkml/YXlddJxLh77DKfIO@alley/T/#m43062e8b2a17f8dbc8c6ccdb8851fb0dbaabbb14
+> Reported-by: Chunlei Wang <chunlei.wang@mediatek.com>
+> Signed-off-by: Petr Mladek <pmladek@suse.com>
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
 > ---
->  Documentation/devicetree/bindings/hwmon/national,lm90.yaml | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-> index 6e1d54ff5d5b..30db92977937 100644
-> --- a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-> @@ -60,7 +60,6 @@ additionalProperties: false
+> Changes against v2:
+>   Added the hunk suggested by John
+>
+> Changes against v1:
+>   Read @seq by the last finalized @id directly in prb_next_seq() (John)
+>
+>  kernel/printk/printk_ringbuffer.c | 48 +++++++++++++++++++++++++++++++++++----
+>  kernel/printk/printk_ringbuffer.h |  2 ++
+>  2 files changed, 46 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/printk/printk_ringbuffer.c b/kernel/printk/printk_ringbuffer.c
+> index 8a7b736..297bc18 100644
+> --- a/kernel/printk/printk_ringbuffer.c
+> +++ b/kernel/printk/printk_ringbuffer.c
+> @@ -2005,8 +2014,38 @@ u64 prb_first_valid_seq(struct printk_ringbuffer *rb)
+>   */
+>  u64 prb_next_seq(struct printk_ringbuffer *rb)
+>  {
+> -	u64 seq = 0;
+> +	struct prb_desc_ring *desc_ring = &rb->desc_ring;
+> +	enum desc_state d_state;
+> +	unsigned long id;
+> +	u64 seq;
+> +
+> +	/* Check if the cached @id still points to a valid @seq. */
+> +	id = atomic_long_read(&desc_ring->last_finalized_id);
+> +	d_state = desc_read(desc_ring, id, NULL, &seq, NULL);
 >  
->  examples:
->    - |
-> -    #include <dt-bindings/gpio/tegra-gpio.h>
->      #include <dt-bindings/interrupt-controller/irq.h>
->  
->      i2c {
-> @@ -71,8 +70,7 @@ examples:
->              compatible = "onnn,nct1008";
->              reg = <0x4c>;
->              vcc-supply = <&palmas_ldo6_reg>;
-> -            interrupt-parent = <&gpio>;
-> -            interrupts = <TEGRA_GPIO(O, 4) IRQ_TYPE_LEVEL_LOW>;
-> +            interrupts = <4 IRQ_TYPE_LEVEL_LOW>;
->              #thermal-sensor-cells = <1>;
->          };
->      };
+> +	if (d_state == desc_finalized || d_state == desc_reusable) {
+> +		/*
+> +		 * Begin searching after the last finalized record.
+> +		 * (On 0, the search must begin at 0 because of hack#2
+> +		 * of the bootstrapping phase it is not known if a
+> +		 * record at index 0 exists.)
+> +		*/
+
+               ^^^ whitespace
+               
+> +		if (seq != 0)
+> +			seq++;
+> +	} else {
+> +		/*
+> +		 * The information about the last finalized sequence number
+> +		 * has gone. It should happen only when there is a flood of
+> +		 * new messages and the ringbuffer is rapidly recycled.
+> +		 * Give up and start from the beginning.
+> +		 */
+> +		seq = 0;
+> +	}
+> +
+> +	/*
+> +	 * The information about the last finalized @seq might be inaccurate.
+> +	 * Search forward to find the current one.
+> +	 */
+
+It is fine to add this comment. But then the following comment should be
+removed. It is redundant.
+
+>  	/* Search forward from the oldest descriptor. */
+>  	while (_prb_read_valid(rb, &seq, NULL, NULL))
+>  		seq++;
+
+Petr can probably just make the changes when committing. I am not
+requesting a v4.
+
+@Petr: Feel free to add:
+
+Reviewed-by: John Ogness <john.ogness@linutronix.de>

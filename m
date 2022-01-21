@@ -2,243 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B54495D3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 11:05:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C41C495D44
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 11:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344350AbiAUKFx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 21 Jan 2022 05:05:53 -0500
-Received: from mail-eopbgr90087.outbound.protection.outlook.com ([40.107.9.87]:47601
-        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1379850AbiAUKFj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 05:05:39 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fUeizJGwnqipitLYBZVRb8/YzG0heZH2GvK1cB+x35mJHGN7ydh/CEWlJA8PiIYuZhNlCVQd5GLLKzwAV4WmLuXLOPuLoWpocCOPiO/3eLtMCGP+tqaPQs6L5YgLnvX4tMexG3XB7sJP7Dl3VCd/yfB58o7YTgPHH9AP0NGlAZxMbqdIPnd9fsWFiMHLnXeMcp+azLxc+/DyZ/YP03dAalPNgquPfRfvunodO05tHJWcxjB0niH9qus3YNmg7BQ22tZjAftDw9PYvGr1gIB/bA30XL49oOM5pQ5S0R2EeR5y90K3zy2u3wxu2zNaTtSIA8L9KvFCSxS9vIpEni2K7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ddtVBD82QIQJLpEfG41LxRROMDv/OJpNqTNmbY2ROUc=;
- b=JCb3Ff80F+WBOglS5Ms0MaCdUDIdhk00rrwRbOb0N5sJQ3FA1h73gQ4akmb1fBg1VEiJN04h2NaYDAoy1Fb/ebI5jUBTp6WE3pfumUBdCoHMobOQXFtyNGAI8wQE9PjR6t7uqFwLPk+qnVOPTuwwUeiA8dSJZfJfReeTkGKPMHxc2RyY+hcZGmjZd3aLrc4HLC1RlbUCcT6F/KW24JnxKlPM1ptjM2uspojGRrfEX7ANgczt9LjC6ZeHJdycSqmXpoPOuGsZ35r33TYi0FCww9c3xnXZ1eiINPu86zFqSfFEuczUiGFDLQBypvk7tY8rGo+/saNtAJ1VrrvChdg10g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB3697.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:29::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8; Fri, 21 Jan
- 2022 10:05:30 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::9d4f:1090:9b36:3fc5]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::9d4f:1090:9b36:3fc5%5]) with mapi id 15.20.4909.008; Fri, 21 Jan 2022
- 10:05:30 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>
-CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: [PATCH v3 5/5] powerpc/vdso: Move cvdso_call macro into
- gettimeofday.S
-Thread-Topic: [PATCH v3 5/5] powerpc/vdso: Move cvdso_call macro into
- gettimeofday.S
-Thread-Index: AQHYDq5shf98igvZz0+pyrRDKUBu0g==
-Date:   Fri, 21 Jan 2022 10:05:30 +0000
-Message-ID: <fcd8662a183c51353f218ff7272944f529fcad11.1642759506.git.christophe.leroy@csgroup.eu>
-References: <c2cbb8f046b7efc251053521dc39b752795e26b7.1642759506.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <c2cbb8f046b7efc251053521dc39b752795e26b7.1642759506.git.christophe.leroy@csgroup.eu>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e5b68a44-2743-438f-b1f2-08d9dcc58e95
-x-ms-traffictypediagnostic: MR1P264MB3697:EE_
-x-microsoft-antispam-prvs: <MR1P264MB3697AAF45CB1A50E13FF0B52ED5B9@MR1P264MB3697.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:4303;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tULGJ5h4s2cA5hEDxvoUT/16uds5Dl5o5tIW1yQLcwiioxIyebfdIdPZuJEPm5Crtvo46X3F844em8MfDQ41tZAx/mH6zM3++qJbupRzqn0bEk3UkyEOJRDjgN1EOXg9UoziPAYPdodibNjHuT/P+0JuqCBJP2wRDirNNUJTwNcOKXwfLY8Z9I4W0iX76ogXgHoEoqdHcKFby1BfRoUTSsREJHHHHC5TqEHCBu4u1nlFtwAOCqYf5jYjoNHqhJvQoVvQw4e19TuFa8Qludjq4yuHGAFDoadVBg2RSkEEXEKgOk8YgvHAqAW8fZ/byHY/lfc/CeP07CPI8JvRWcWOetGNBbGXmcdyfHiQwlPx9nECvVhp0qow4NMKW7c+zg2XeWZvm81z4tIMOqsFqe7CMU86YEBlQx71PVMQrwrN1zDixbJcnlsm8o+w4YSNVoGS9PKXjwfAZTGOu0WXOEofrigCay53B34ksPgZmWt3vaDu7ykwxjmwOjDJZNWbQQ1VeaefT8XiTpDF9FEHS9J6WfWldEJ8wTDU/3gbecOCtReG1qWnYPhWnLAbVGclpoX34pHwgpyuxq+ec7uhsspT7Ryed9r6JvhrnhzbEK0dZXiRVSmHsLFrWD8c3rY/h2eZZTJPCTfBOiBJPQHKBTGiiMCZV77pTpwf24Ho0mZwe79U4+8xrsRcCCbekMPodJPikbZDXxLt4oWVtUE0UbF+wA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(54906003)(316002)(6486002)(86362001)(110136005)(2616005)(6512007)(66476007)(36756003)(508600001)(44832011)(2906002)(71200400001)(122000001)(5660300002)(8936002)(6506007)(83380400001)(26005)(4326008)(38100700002)(186003)(8676002)(91956017)(38070700005)(76116006)(66946007)(64756008)(66556008)(66446008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?rb8iot3AiqjcpCVC77ccDta/hKIIy3hz2GUbJtVJb04V5GbGhe2AVff2bx?=
- =?iso-8859-1?Q?4C2vJflLGEYtH5Oa5NHLk/Jb/hHvAISGDLX8kLRKCjG3jXYcSW7cZbZY83?=
- =?iso-8859-1?Q?2wpk9Zj4WdOC3DiA5HXa804mPh8zbQtbhOkxMC2JpVJE4i5QxGAM6Xj2YK?=
- =?iso-8859-1?Q?95cMBGGuzIXCtFQCRV6UqKPIlgVkNkwVo8jgvsKKfF8VaNodIi+pHrbiDg?=
- =?iso-8859-1?Q?sDDC7oLogZiLgeoB/nEPaIf3tIXKXzTZH98EomZwPamS3F4CMlV/WpWNsG?=
- =?iso-8859-1?Q?jkq4uGQ3k1rO6DdS7Rqe5TF2D2Yb+afmkTzx26CP0j+oIFZVES1bTQv4YA?=
- =?iso-8859-1?Q?s/gmUCSvjMmnMupbEKH3/+PCLCQYGiJGUEoLB1hgPXuIJIcB61dW/Whokq?=
- =?iso-8859-1?Q?KBeBi7MLjwIQhqFE0uzfqFoaQTVyjCe/W+JTDSY1bm0AlcEemSDfLSIinj?=
- =?iso-8859-1?Q?BlX9O218FyiEjbS46F+CEq3y7dKDl8Crddjyemtx8igNlD435iQQ8I23Bk?=
- =?iso-8859-1?Q?Pi8EsvLtYGC4C4NcMNaAVv7nkfANPoVSe/b9Zzq9dlDEaSleb6F0qtkdRi?=
- =?iso-8859-1?Q?ULO2fsqHWIjopoGpgBRCmYyglmoJql6ltqBXqry87vOkwhpa3zCooIUyuK?=
- =?iso-8859-1?Q?ONyE/zPAV/N1WdNLPxtA1DAxhn/aR+TuH2LqowmcWNnggAnzcBDB0Fo5GO?=
- =?iso-8859-1?Q?DmE8G89XW2H24hscKbOkEa89D3g9f7Y5mEYDnrDwrccqoEYbXViBKU+Ako?=
- =?iso-8859-1?Q?73LYVL8/iW8vw5iPUH18IFE3+3C4WWWo5rE3NZWu+5PQGpcgyOIi6DIOiZ?=
- =?iso-8859-1?Q?ubkgzLWS2x/7x4Il9FfL5B/6ocqG8NAkr8ayo0EecePiuoVXv1k9VXrRhL?=
- =?iso-8859-1?Q?duWN2AY3nywpCuy6rpywkBG/r5iShI29meicqyrJ6aaKejG77sdYqEG+Vn?=
- =?iso-8859-1?Q?UQziLCZZXFqD9CK/8BFz05s0V7MF/ACeAI7dZsD6sCWF6ZTKOjciqP0eAT?=
- =?iso-8859-1?Q?XKKr1p3W8B9VsPLsgDhybgnuSZOP2mq3X6/8FP/OzMMo9TqxFk8X5uLtQC?=
- =?iso-8859-1?Q?6FoUgwjr86yyVxTnzgkpjK4XecX0GPvdGQL4JRLYyuDX4lvjVVabZOvbLM?=
- =?iso-8859-1?Q?meMm57/Z0s/YDQS45JtOCMBxmC9/Xu83E6S413Ao8a5H7IXXmLouus2Sfr?=
- =?iso-8859-1?Q?S7daxxkzSjw9isg9ZqzHXo0zZsLXIneayTA6uvXVUuT/cVNFpiwKxa6Qzt?=
- =?iso-8859-1?Q?4dKM6DhLtwj9VmUeNN74I2UH4DOnx78684HMy6Qe0AKKt7vGlRaAF9oChV?=
- =?iso-8859-1?Q?+wlKGU+kyQPGKdFLEfkWq1yJy3cA7udwg7on5wKA2ZzR07mIQ7tLKXXY7l?=
- =?iso-8859-1?Q?RUaavw/RD8TFV5+bUtZQWlzarX+e18cSgbbyWNu2usrOBawerI8ekqpo7i?=
- =?iso-8859-1?Q?7SMTyEt47nWrOwc52uAqcSec3OpOjizge1MGOMN366l+uVZFJ52PQ7sT7Q?=
- =?iso-8859-1?Q?rVumAJn2hLcdv3e+wH9wWTmATedC0S//XMaAf0er5aerEb38LZgj0X4Xnz?=
- =?iso-8859-1?Q?jEmJhLmN8YffbhN4+ZASvO9t4apo9T3RBCyI25TFa8e1IGpRJpcB5OeSUP?=
- =?iso-8859-1?Q?aXrD8ElBe+XNjuDnY9Avr5Uwffln6Uco4+47F+an6bBKr8VuC3ikrGyCEN?=
- =?iso-8859-1?Q?Foi5vHsmOAds/LLooE2mPBccwMcTIG327IwShn8tgXVuw3EvZXlx3/bAtF?=
- =?iso-8859-1?Q?F96gIk7DjBvESnYOArmLJMGPg=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        id S1349736AbiAUKHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 05:07:48 -0500
+Received: from mail-ua1-f53.google.com ([209.85.222.53]:44803 "EHLO
+        mail-ua1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240580AbiAUKHr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 05:07:47 -0500
+Received: by mail-ua1-f53.google.com with SMTP id f24so15879993uab.11;
+        Fri, 21 Jan 2022 02:07:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/iX8pvu80FcPsA2BeiEF3hrIHf0rQSHLabn6lNyXbVY=;
+        b=gX+ndLbWf+7Hgn2gQkqFx/0WF0A2iRnHBGB712+2BAqwy9garLuo5YGS186ifilEMD
+         mwq0feeVsYod1n9hicxFXWsAQCC7Zv5Tguqifp+tScykxkDwhXRjUHNYbRDS5SCHn3hH
+         592wvnDsYMo2Zpkiqa1sXyNr5qOD0pTXPOpgNCpAWTOGV4wYA/UPyaiHVTKFOwfBHmR2
+         EcE+R+BNeQM2isZO8IYIYB0pbHI9m4AlaVee384zLXMgiKk4NLl3tU+OjX7m+4uN906f
+         uYtVoNpXoV7BLWCmoX4XcspCPUFg1+bpPoMzHSkjoP+CnOkG2cMe2Da2vNnAueOK5/A4
+         ktwg==
+X-Gm-Message-State: AOAM533L6MtGhrTqxTqf1dqeapFw2i/yR811qsUR755dULNM2tWgAe4f
+        a/3qiiUkXW0HSqtWBzYQ5QkcUJQeggnVFg==
+X-Google-Smtp-Source: ABdhPJzGkAKku6BmywZhnKmw6+aI2ztqsRsw1NFpk1sNzmn/jCe9N2+K2r/vaoI3lkrpRlLnfwl1qw==
+X-Received: by 2002:a67:d794:: with SMTP id q20mr1451884vsj.82.1642759666490;
+        Fri, 21 Jan 2022 02:07:46 -0800 (PST)
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com. [209.85.222.50])
+        by smtp.gmail.com with ESMTPSA id r14sm1227357vke.26.2022.01.21.02.07.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Jan 2022 02:07:46 -0800 (PST)
+Received: by mail-ua1-f50.google.com with SMTP id p7so8768874uao.6;
+        Fri, 21 Jan 2022 02:07:46 -0800 (PST)
+X-Received: by 2002:a67:e985:: with SMTP id b5mr1116672vso.77.1642759665918;
+ Fri, 21 Jan 2022 02:07:45 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: e5b68a44-2743-438f-b1f2-08d9dcc58e95
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jan 2022 10:05:30.7697
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zhWHKZNbHd9fiElDCsQGpcZreOaYKogGPlqShJj5/a0QPz3fY199du3ZuC9fy1ATYY052Wq86nBawH1eAJE8i3PRK7VzTQOS0Fkpg3+cFoU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB3697
+References: <20211225115308.2152364-1-nikita.yoush@cogentembedded.com>
+In-Reply-To: <20211225115308.2152364-1-nikita.yoush@cogentembedded.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 21 Jan 2022 11:07:34 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXdW=bCxBeEu81bRBwAs5=x_KZmPcXoMe=CmFdWz=rdfQ@mail.gmail.com>
+Message-ID: <CAMuHMdXdW=bCxBeEu81bRBwAs5=x_KZmPcXoMe=CmFdWz=rdfQ@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: renesas: ulcb-kf: add KF HDMI output
+To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that gettimeofday.S is unique, move cvdso_call macro
-into that file which is the only user.
+Hi Nikita,
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/include/asm/vdso/gettimeofday.h | 52 +-------------------
- arch/powerpc/kernel/vdso/gettimeofday.S      | 44 ++++++++++++++++-
- 2 files changed, 45 insertions(+), 51 deletions(-)
+On Sat, Dec 25, 2021 at 12:54 PM Nikita Yushchenko
+<nikita.yoush@cogentembedded.com> wrote:
+> This patch adds nodes needed to enable DRM video output over HDMI
+> connector located on KF board.
+>
+> Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
 
-diff --git a/arch/powerpc/include/asm/vdso/gettimeofday.h b/arch/powerpc/include/asm/vdso/gettimeofday.h
-index df00e91c9a90..f0a4cf01e85c 100644
---- a/arch/powerpc/include/asm/vdso/gettimeofday.h
-+++ b/arch/powerpc/include/asm/vdso/gettimeofday.h
-@@ -2,57 +2,9 @@
- #ifndef _ASM_POWERPC_VDSO_GETTIMEOFDAY_H
- #define _ASM_POWERPC_VDSO_GETTIMEOFDAY_H
- 
--#include <asm/page.h>
--
--#ifdef __ASSEMBLY__
--
--#include <asm/ppc_asm.h>
--
--/*
-- * The macro sets two stack frames, one for the caller and one for the callee
-- * because there are no requirement for the caller to set a stack frame when
-- * calling VDSO so it may have omitted to set one, especially on PPC64
-- */
--
--.macro cvdso_call funct call_time=0
--  .cfi_startproc
--	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
--	mflr		r0
--  .cfi_register lr, r0
--	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
--	PPC_STL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
--#ifdef __powerpc64__
--	PPC_STL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
--#endif
--	get_datapage	r5
--	.ifeq	\call_time
--	addi		r5, r5, VDSO_DATA_OFFSET
--	.else
--	addi		r4, r5, VDSO_DATA_OFFSET
--	.endif
--	bl		DOTSYM(\funct)
--	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
--#ifdef __powerpc64__
--	PPC_LL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
--#endif
--	.ifeq	\call_time
--	cmpwi		r3, 0
--	.endif
--	mtlr		r0
--  .cfi_restore lr
--	addi		r1, r1, 2 * PPC_MIN_STKFRM
--	crclr		so
--	.ifeq	\call_time
--	beqlr+
--	crset		so
--	neg		r3, r3
--	.endif
--	blr
--  .cfi_endproc
--.endm
--
--#else
-+#ifndef __ASSEMBLY__
- 
-+#include <asm/page.h>
- #include <asm/vdso/timebase.h>
- #include <asm/barrier.h>
- #include <asm/unistd.h>
-diff --git a/arch/powerpc/kernel/vdso/gettimeofday.S b/arch/powerpc/kernel/vdso/gettimeofday.S
-index c875312274aa..11e0b911c923 100644
---- a/arch/powerpc/kernel/vdso/gettimeofday.S
-+++ b/arch/powerpc/kernel/vdso/gettimeofday.S
-@@ -12,7 +12,49 @@
- #include <asm/vdso_datapage.h>
- #include <asm/asm-offsets.h>
- #include <asm/unistd.h>
--#include <asm/vdso/gettimeofday.h>
-+
-+/*
-+ * The macro sets two stack frames, one for the caller and one for the callee
-+ * because there are no requirement for the caller to set a stack frame when
-+ * calling VDSO so it may have omitted to set one, especially on PPC64
-+ */
-+
-+.macro cvdso_call funct call_time=0
-+  .cfi_startproc
-+	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
-+	mflr		r0
-+  .cfi_register lr, r0
-+	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
-+	PPC_STL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
-+#ifdef __powerpc64__
-+	PPC_STL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
-+#endif
-+	get_datapage	r5
-+	.ifeq	\call_time
-+	addi		r5, r5, VDSO_DATA_OFFSET
-+	.else
-+	addi		r4, r5, VDSO_DATA_OFFSET
-+	.endif
-+	bl		DOTSYM(\funct)
-+	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
-+#ifdef __powerpc64__
-+	PPC_LL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
-+#endif
-+	.ifeq	\call_time
-+	cmpwi		r3, 0
-+	.endif
-+	mtlr		r0
-+  .cfi_restore lr
-+	addi		r1, r1, 2 * PPC_MIN_STKFRM
-+	crclr		so
-+	.ifeq	\call_time
-+	beqlr+
-+	crset		so
-+	neg		r3, r3
-+	.endif
-+	blr
-+  .cfi_endproc
-+.endm
- 
- 	.text
- /*
--- 
-2.33.1
+Thanks for your patch!
+
+> --- a/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi
+> +++ b/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi
+> @@ -51,6 +51,31 @@ wlan_en: regulator-wlan_en {
+>                 startup-delay-us = <70000>;
+>                 enable-active-high;
+>         };
+> +
+> +       hdmi_1v8: regulator-hdmi-1v8 {
+> +               compatible = "regulator-fixed";
+> +               regulator-name = "hdmi-1v8";
+> +               regulator-min-microvolt = <1800000>;
+> +               regulator-max-microvolt = <1800000>;
+> +       };
+> +
+> +       hdmi_3v3: regulator-hdmi-3v3 {
+> +               compatible = "regulator-fixed";
+> +               regulator-name = "hdmi-3v3";
+> +               regulator-min-microvolt = <3300000>;
+> +               regulator-max-microvolt = <3300000>;
+> +       };
+> +
+> +       hdmi1-out {
+
+Sort order.
+
+> +               compatible = "hdmi-connector";
+> +               type = "a";
+> +
+> +               port {
+> +                       hdmi1_con: endpoint {
+> +                               remote-endpoint = <&adv7513_out>;
+> +                       };
+> +               };
+> +       };
+>  };
+>
+>  &can0 {
+
+> @@ -236,6 +313,10 @@ gpio_exp_77: gpio@77 {
+>         };
+>  };
+>
+> +&du_out_rgb {
+
+Sort order.
+
+> +       remote-endpoint = <&adv7513_in>;
+> +};
+> +
+>  &ohci0 {
+>         dr_mode = "otg";
+>         status = "okay";
+> @@ -289,6 +370,18 @@ usb0_pins: usb0 {
+>                 groups = "usb0";
+>                 function = "usb0";
+>         };
+> +
+> +       hdmi1_pins: hdmi1 {
+> +               du {
+
+More sort order.
+
+> +                       groups = "du_rgb888", "du_sync", "du_clk_out_0", "du_disp";
+> +                       function = "du";
+> +               };
+> +
+> +               adv7513-interrupt {
+> +                       pins = "GP_2_14";
+> +                       bias-pull-up;
+> +               };
+> +       };
+>  };
+
+The rest looks good to me.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v5.18 with the sort order fixed.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

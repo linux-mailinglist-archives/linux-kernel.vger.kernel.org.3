@@ -2,83 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA8849677B
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 22:42:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2FB496783
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 22:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231327AbiAUVmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 16:42:01 -0500
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:46975 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiAUVly (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 16:41:54 -0500
-Received: by mail-oi1-f170.google.com with SMTP id w188so15381128oiw.13;
-        Fri, 21 Jan 2022 13:41:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lF4HMuqkp4VWT3w6r4KvVzp/kzCK6RItYXFgLAX6eAw=;
-        b=t5Zb+caejYjpMUATREY71oiosuQaREpQqo9jP9BwpoyYXXksS+BYxAmf4fyGLOUwAL
-         rrtRGujQgG/X7e+BwtlrJibtHtK8EHE+TVCkm7/pWNlWg2Qpw5+S5YVmmfPUeIb0fni1
-         nCj4tU00tQC1WAJqBOWNZfZzm4TGIDm4IypG4OXaTqrlOHlOMTVcQj/lwZAs30fhTBwQ
-         HrUngSJ0bS3QGqkdKOLpBRRYlIoofPpCvWd2bJ28aFCVAkePbIdQLQVfFQhcGzhnXwO5
-         7flPqL4Yc64WtFYCpaiiM+JbP8mKNkjGp0+30gwocbin0FS/+qmO1xtexqW1VPYpS2uy
-         KSEQ==
-X-Gm-Message-State: AOAM532OITv0/gydOEEl3nTt4uK/+xm9HyihROJfl+lGsyq+SDaHVHwK
-        nSaZzF0vLKJHCt61POcbHQ==
-X-Google-Smtp-Source: ABdhPJwne2XmMOP72QVvxpy/tQX5tuU1+CZHAFmA7X4krgdi7zq0qlm6dht+yhHpDDCx9ZvZomIEsw==
-X-Received: by 2002:a05:6808:607:: with SMTP id y7mr2157878oih.131.1642801314203;
-        Fri, 21 Jan 2022 13:41:54 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id 124sm1743747oif.7.2022.01.21.13.41.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 13:41:53 -0800 (PST)
-Received: (nullmailer pid 1638609 invoked by uid 1000);
-        Fri, 21 Jan 2022 21:41:52 -0000
-Date:   Fri, 21 Jan 2022 15:41:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <mkrishn@codeaurora.org>,
-        ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [WIP PATCH] dt-bindings: display: msm: dsi-controller-main:
- distinguish DSI versions
-Message-ID: <YesooIWKcypvtBbi@robh.at.kernel.org>
-References: <20220108190059.72583-1-david@ixit.cz>
+        id S231396AbiAUVoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 16:44:11 -0500
+Received: from mga02.intel.com ([134.134.136.20]:17681 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231180AbiAUVoI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 16:44:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642801448; x=1674337448;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8p41zx7lhw7bUtkcYKDSxXkPejlpXaQYhHjrWI+euIg=;
+  b=MXqpyPDIR91KhvvjRmuJYdCvNgyvA8k+8BoqfJ/wUenWm7O+nGfXldGf
+   +9e/gde/SqahzC3ZLk2up9v4aL8hoy7wMizgKnZBua9lagTlfGISPMWJN
+   Kj+UHMFbiYE1uXMRenk71Glrb/g08UM/B6w1g0Gfx2ce6KsXkhnTqxtZa
+   H0fWB0yec3sqq+QBKeVi9nlIiAUWBaG36BWaLeRtSkBSjf4hSwMz5D3Hb
+   se3ZAEJ7YT/4sv913Jmh3sP01o+2oPU5pPXmT/3FGaZ54ig4I39e7qYJ6
+   xwAuKY0Brn1qCRr9N7gbX/wZNLZQTtJRYuxSyfm7uce9kCyN/pJnw4DeG
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="233106510"
+X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
+   d="scan'208";a="233106510"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 13:44:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
+   d="scan'208";a="694779862"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 21 Jan 2022 13:44:04 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nB1hU-000Fgy-87; Fri, 21 Jan 2022 21:44:04 +0000
+Date:   Sat, 22 Jan 2022 05:43:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     zhenwei pi <pizhenwei@bytedance.com>, mst@redhat.com,
+        arei.gonglei@huawei.com
+Cc:     kbuild-all@lists.01.org, jasowang@redhat.com,
+        virtualization@lists.linux-foundation.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        helei.sig11@bytedance.com, zhenwei pi <pizhenwei@bytedance.com>
+Subject: Re: [PATCH 3/3] virtio-crypto: implement RSA algorithm
+Message-ID: <202201220521.kldW6vYy-lkp@intel.com>
+References: <20220121022438.1042547-4-pizhenwei@bytedance.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220108190059.72583-1-david@ixit.cz>
+In-Reply-To: <20220121022438.1042547-4-pizhenwei@bytedance.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 08, 2022 at 08:00:58PM +0100, David Heidelberg wrote:
-> Update documentation compatible and checking to comprehend
-> both V2 and 6G version bindings.
-> 
-> Following this commit, there will be update for
-> compatible string in chipsets dtsi.
-> 
-> Additional changes:
->  - switch to unevaluatedProperties
-> 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
-> Rob, I know you mentioned using rather chipset names, but since
-> meanwhile I coded this, I'll let you decide if should make sense to
-> change it or keep it this way.
+Hi zhenwei,
 
-It all depends on how many chips per version. I'm guessing only 1 or 2 
-given how many QCom SoCs I'm aware of.
+Thank you for the patch! Yet something to improve:
 
-I think this should probably be split to 2 docs for the v2 and 6g 
-versions.
+[auto build test ERROR on herbert-cryptodev-2.6/master]
+[also build test ERROR on herbert-crypto-2.6/master linux/master linus/master v5.16 next-20220121]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Rob
+url:    https://github.com/0day-ci/linux/commits/zhenwei-pi/Introduce-akcipher-service-for-virtio-crypto/20220121-102730
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+config: nios2-randconfig-c024-20220120 (https://download.01.org/0day-ci/archive/20220122/202201220521.kldW6vYy-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/fa1045d13dd16399ab0287c599719a977892cf05
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review zhenwei-pi/Introduce-akcipher-service-for-virtio-crypto/20220121-102730
+        git checkout fa1045d13dd16399ab0287c599719a977892cf05
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   nios2-linux-ld: drivers/crypto/virtio/virtio_crypto_akcipher_algo.o: in function `virtio_crypto_rsa_set_key':
+   virtio_crypto_akcipher_algo.c:(.text+0x4d4): undefined reference to `rsa_parse_priv_key'
+   virtio_crypto_akcipher_algo.c:(.text+0x4d4): relocation truncated to fit: R_NIOS2_CALL26 against `rsa_parse_priv_key'
+>> nios2-linux-ld: virtio_crypto_akcipher_algo.c:(.text+0x514): undefined reference to `rsa_parse_pub_key'
+   virtio_crypto_akcipher_algo.c:(.text+0x514): relocation truncated to fit: R_NIOS2_CALL26 against `rsa_parse_pub_key'
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

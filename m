@@ -2,59 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9DF649615F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:45:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BAA496160
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381344AbiAUOpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 09:45:19 -0500
-Received: from mail-ua1-f52.google.com ([209.85.222.52]:42949 "EHLO
-        mail-ua1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381286AbiAUOow (ORCPT
+        id S1350983AbiAUOpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 09:45:30 -0500
+Received: from mail-ua1-f46.google.com ([209.85.222.46]:45603 "EHLO
+        mail-ua1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1381244AbiAUOo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 09:44:52 -0500
-Received: by mail-ua1-f52.google.com with SMTP id p1so17218176uap.9;
-        Fri, 21 Jan 2022 06:44:51 -0800 (PST)
+        Fri, 21 Jan 2022 09:44:59 -0500
+Received: by mail-ua1-f46.google.com with SMTP id x33so17195305uad.12;
+        Fri, 21 Jan 2022 06:44:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=cld9dHpqx69KSu6lj47UFuHz9JzDz3so342nqfbgTNw=;
-        b=Mi/L6U0nbM3s+ZZGcCnL6Sr9Wmfvk3bzUSH7/kzloW60zawIWZiJE2D+54zkhtJUfp
-         YGwqBUU1LU9dt9WW3aQupiZ5VtCZaPz6hCsyXNWckivV19Dtfu9nZ8EBi1MCM+YpZNQT
-         YZCiwcOsQFQCGX77aKeNePU8Q7MKONRUol68BBnTVrtH/D33kNKRfk8gpC0xzCON6fdo
-         pB6lkA6O9EwZrGxK6Z+x5bTkEOFzJBRlTULz56SqP6a/VoVrWULpITK4D6lZyiTeZvoS
-         kEg8zM4QMK8XLXhGB0isT0nFpez/9uit+YyrMV74yepeRcz8gnYg/orYd7Rmp7tL20nH
-         9TwA==
-X-Gm-Message-State: AOAM530B/+PePTN1awEBg8yz9Qpq84+mtiPUmMG3W3Pm6tiAliSuCbpa
-        TKlNSE92oSKgoUBFjx3u17N5oSr8qEnwCQ==
-X-Google-Smtp-Source: ABdhPJx4W5ZXCpIcAV8yD2JIC0Rmc7FCxIQXpZ7WgjMnLS5OLAPZZwbb9S31GgufoXRFYSin+YKzcQ==
-X-Received: by 2002:ab0:6213:: with SMTP id m19mr1941573uao.92.1642776290950;
-        Fri, 21 Jan 2022 06:44:50 -0800 (PST)
-Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com. [209.85.221.170])
-        by smtp.gmail.com with ESMTPSA id 187sm119045vsi.12.2022.01.21.06.44.50
+        bh=8Ek291EdLzSzjT6UYBAct8ileqftHZanUd/HSlY26Gg=;
+        b=cUNZVILcA8RzBZoujkUMc1BlI+hIgTXRPUunZA15g9FGF/nGsMKAI8my5o0/vp4PJ+
+         NYvbZ+6TaxIiRzW9XM5U1HNC9FJ2del+pl5qnSB16HseIDxP4XVHzvchMVRY9rXDky1u
+         jSV3CV7qObWbIUnteBXrajl8WO1XRrJ5iZhVy0w0JCIu59XCuDjoN2A0Yv3Yi9BUrQHi
+         J1+46p64//XIhvcjlepHs2QYzzbZbGQAr+0lyLZfhMOOPJ9D2QtKfPS4uka52FTGqxOu
+         NGqZ8kR/0Ia7q17HUrMYmk8+DEO2rwMD+GsR1gryWIaok+mZat2WATsLhWYlXWtvZaXH
+         Wd0g==
+X-Gm-Message-State: AOAM530m+mQ5zsncHOvd8LDBRg7FQxZ52XuFmOuY38LguL22Y0UAs6Xg
+        lyrYKFebx4lis11/PeM6dJfo6u9dzVSKZQ==
+X-Google-Smtp-Source: ABdhPJyPYV4bg2cUCRArEGJOOFPXanzwH/ce88MWgfTu5imMFseYVE0lxWLomQ6LHmcTeoJ+T3R8nQ==
+X-Received: by 2002:a67:c005:: with SMTP id v5mr1788537vsi.71.1642776297975;
+        Fri, 21 Jan 2022 06:44:57 -0800 (PST)
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
+        by smtp.gmail.com with ESMTPSA id m25sm61194uaq.3.2022.01.21.06.44.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Jan 2022 06:44:50 -0800 (PST)
-Received: by mail-vk1-f170.google.com with SMTP id b77so5672806vka.11;
-        Fri, 21 Jan 2022 06:44:50 -0800 (PST)
-X-Received: by 2002:a1f:a2d3:: with SMTP id l202mr1663344vke.7.1642776290471;
- Fri, 21 Jan 2022 06:44:50 -0800 (PST)
+        Fri, 21 Jan 2022 06:44:57 -0800 (PST)
+Received: by mail-ua1-f46.google.com with SMTP id l1so15402929uap.8;
+        Fri, 21 Jan 2022 06:44:57 -0800 (PST)
+X-Received: by 2002:a67:e055:: with SMTP id n21mr1808484vsl.57.1642776297488;
+ Fri, 21 Jan 2022 06:44:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20220110134659.30424-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220110134659.30424-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220110134659.30424-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220110134659.30424-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220110134659.30424-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220110134659.30424-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 21 Jan 2022 15:44:39 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWp_Fv+KQ6LXJrsymVeHbC5BVv0ZaKZ5ppbtd0rmUHw_Q@mail.gmail.com>
-Message-ID: <CAMuHMdWp_Fv+KQ6LXJrsymVeHbC5BVv0ZaKZ5ppbtd0rmUHw_Q@mail.gmail.com>
-Subject: Re: [PATCH v2 01/12] dt-bindings: power: renesas,rzg2l-sysc: Document
- RZ/V2L SoC
+Date:   Fri, 21 Jan 2022 15:44:46 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVQ5h8J=ir+3pi2inm8n5AVMNVC1SbAGWSOQhVfijbXtQ@mail.gmail.com>
+Message-ID: <CAMuHMdVQ5h8J=ir+3pi2inm8n5AVMNVC1SbAGWSOQhVfijbXtQ@mail.gmail.com>
+Subject: Re: [PATCH v2 02/12] soc: renesas: Identify RZ/V2L SoC
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Prabhakar <prabhakar.csengg@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
@@ -64,14 +61,10 @@ On Mon, Jan 10, 2022 at 2:47 PM Lad Prabhakar
 <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 > From: Biju Das <biju.das.jz@bp.renesas.com>
 >
-> Add DT binding documentation for SYSC controller found on RZ/V2L SoC.
-> SYSC controller found on the RZ/V2L SoC is almost identical to one found
-> on the RZ/G2L SoC's only difference being that the RZ/V2L has an
-> additional register to control the DRP-AI.
+> Add support for identifying the RZ/V2L (R9A07G054) SoC.
 >
 > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Acked-by: Rob Herring <robh@kernel.org>
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 i.e. will queue in renesas-devel for v5.18.

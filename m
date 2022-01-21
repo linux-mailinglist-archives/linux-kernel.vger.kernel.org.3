@@ -2,175 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 960F449576C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 01:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C64849577B
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 01:44:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378433AbiAUAfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 19:35:54 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:44382 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1378427AbiAUAfx (ORCPT
+        id S1378457AbiAUAoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 19:44:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378443AbiAUAoh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 19:35:53 -0500
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20L048Zw019544;
-        Fri, 21 Jan 2022 00:35:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=qg6IlCrAN2YmC/kleCSTE3gOiRzbIXRBd/h7M7SWyfI=;
- b=hXT9owchF7qUt5eQIuFMfUxqfW8k9CFX8lZqycI/5oiP08bO4P6rwElm31jIXAOt8uU6
- F9mxhgX3dGc+0uG4gdzmUfuCsCJcDHvOcM95oA4EJb2UK+9NaRh6ed58Mvq1ZHIjsOa2
- Fp2MEgW+roXqq6tBGCIAltXVU0RwbEMbyitvmQSuf4oSQ+RdrVbp7yG2MlLwbsNEjNRO
- i4vfK+jT8y50iGWJhplZz3uUIi+T5D8eDczIglaXXNQfy2tq/pvpOjQ6O6qp8K0JDxCF
- TvJRjH4JEwMUsyFwN1t9aeDSDcBXoqzgIPOnP0mmhIhNkV/xgX3dGsiVVmhD1GSYVW4h WQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dqhyb81hj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 21 Jan 2022 00:35:30 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20L0Ue8E001356;
-        Fri, 21 Jan 2022 00:35:29 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2042.outbound.protection.outlook.com [104.47.66.42])
-        by userp3030.oracle.com with ESMTP id 3dqj0v1xyv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 21 Jan 2022 00:35:29 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MlDDi0WicNwNYlhQgIB5e9axp6uw3w8YrcJE0utO3g1ODKzthIbVfFw9x9Sob+1rKoZHFXiptZJxcQxCfRRe9tPhyM37oFqGtkObA6DtWySbHMemsAyN2zScuag3vHg0KOwZ6ket7RpcGuEnwdv3srp7mSfzFDmbSA8YBN3P5obCdAwuvklTSa+JzH7ThE2yqvthiQwJ++kPOL+lYTpvjscObvos6hbiCuCgTo0ALbz9EmgnnEuKdPaeUJl1dw1EgHkJmCr6O5WLWxRunTJH9y/Cik/zu4ji5Zakr/XIqGqb+E0ekQW+aTP3nPT4aw/UsjceykRoCG0q1n8cunU7OA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qg6IlCrAN2YmC/kleCSTE3gOiRzbIXRBd/h7M7SWyfI=;
- b=KvGerFigfJwV2wbXc8rkZ5zBxFT2SW7sSydEbuF/JKsOBYZaq5PniTssHaf3nr34M+4oshVeXXFLyKeGun/z30QmBggYTg+Y7YCcJE3QmkDuQ+jrHvuv+/M0eb66aIdb+gyIW/qKYJaA4k2b0ip+StLhE2erewxTHCpFOX8m4rhR5a0HCer5WKrkbp0v3LcAXDJ8+y9FuBI8N4ogQwfXLK6qnZlwd9Iq3E/9nhKVVRJgFScOAUhAurcvo+KIE1j9hMi/BpbElVW/bSuNnHXAgDHLKDFY/Y4R9ySdwuu55RN09OwG6pvw9Z9iEHnSG9SDdkVRsLt1x941l8/FFO9Szw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
+        Thu, 20 Jan 2022 19:44:37 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EFEC061574;
+        Thu, 20 Jan 2022 16:44:37 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id b13so36180631edn.0;
+        Thu, 20 Jan 2022 16:44:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qg6IlCrAN2YmC/kleCSTE3gOiRzbIXRBd/h7M7SWyfI=;
- b=wnCxQT3lKTb2mwcX9bQd8ddOKD8HEypaA8JyxJVsYm2DFZdPQ47VrMIB+xsy8Sq1h2cLiMG0ktCzYcNtcp8bddYmh73wEpUjY+OGTdxPJUT7P3JmvJ6CnzOq4aSzpW8GRkjoaHw9SCIKgVksFmKzT2hmr8FqFB4q38p3uo48rKQ=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by DM6PR10MB2908.namprd10.prod.outlook.com (2603:10b6:5:6e::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Fri, 21 Jan
- 2022 00:35:27 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::90eb:bb07:608b:7556]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::90eb:bb07:608b:7556%5]) with mapi id 15.20.4909.010; Fri, 21 Jan 2022
- 00:35:27 +0000
-Message-ID: <a74a4203-d93b-48a7-339e-86061cc5bbd6@oracle.com>
-Date:   Thu, 20 Jan 2022 16:35:24 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v4 2/3] mm/hwpoison: remove MF_MSG_BUDDY_2ND and
- MF_MSG_POISONED_HUGE
-Content-Language: en-US
-To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>, linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Michal Hocko <mhocko@suse.com>,
-        Ding Hui <dinghui@sangfor.com.cn>,
-        Tony Luck <tony.luck@intel.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>, Peter Xu <peterx@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-kernel@vger.kernel.org
-References: <20211115084006.3728254-1-naoya.horiguchi@linux.dev>
- <20211115084006.3728254-3-naoya.horiguchi@linux.dev>
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-In-Reply-To: <20211115084006.3728254-3-naoya.horiguchi@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4PR04CA0210.namprd04.prod.outlook.com
- (2603:10b6:303:86::35) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=GEbqewhb4r560pxZXW9RNmb2mb7VvxMPldZNYw3HCiE=;
+        b=ThXy29JV1w13VlSDN9F1KqU3F7UMTQzUIIfvAyLsZ/BvLS6N2vWS4vXGvNG/BVvDLE
+         SCJbPOh8j8nO4WiR9yDJcRXV/Ric+FwsHcgpKWMPszDccD1NQMJYrrZMTFVmaTKH9w2c
+         pwN9y/6nPyX0vg9mvXu0mUg4RIcHKD15fQd5dLu30g/cLDWTjpwau6xglmX6bLa7QZaQ
+         hLCbAG9fqU+LY1z8UBx0UGu98PHgIkWXl/HXT7lV8VQIjnlftBCEuoTMim3TW0VoE5OC
+         4AzoWMEZCMnnnRdYO+Q1K3K+ISjkcBSpv9nj7JMN+FTj9G516d9GzTB3QhwCQsQVjDGF
+         +Mng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=GEbqewhb4r560pxZXW9RNmb2mb7VvxMPldZNYw3HCiE=;
+        b=4zs/wXVU01BxI9DvGeL0E8nTDzOg2zoums7L1gM/Rxea/8+SfkYW3VMqGiCU4njwpM
+         bqa4onbOGKikJCYqJqn8ZCSG9Y/v7XST1EtDL9M40dAEOnoAowOI5aBeBFeDqLXamWN0
+         quRVa8an/FZmeUw/4JOPIHtBPQaBAvmx5GyPrX4KhmhhArYxKVii6i1SAcVXv2KgnCMj
+         wNo0ZHQcHWQXXcZJ1GY6sB3Gd2HG7mLVEweJRv6pwbZLQeERfq7pl/fLnXksrznl3HjP
+         A7FVUEmXINEt9+8398yT4TKiBkg0jy7X2nJni61SpAKP1Di5k8Sx7LCGCHqe43fxpc7A
+         ojWg==
+X-Gm-Message-State: AOAM531OuT2G93Nl/TIYJOxsLH9iYLwLwawWK5P3sa1cw439GHS+hljI
+        0ZHJ4/XPnSE6vUMNwysh0zyycXka6ZriOQIanb0=
+X-Google-Smtp-Source: ABdhPJwUngEtx48pQz4bPo8SOnRuB8qk+9wVoBAMhbL+rHJE3TxpkdyUxAEKNp6FkC7/xxGPNbv9kkNuPCRkpU/EiXA=
+X-Received: by 2002:aa7:dd59:: with SMTP id o25mr1785698edw.288.1642725875540;
+ Thu, 20 Jan 2022 16:44:35 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8cad1d22-cc8c-4df0-f479-08d9dc75eb34
-X-MS-TrafficTypeDiagnostic: DM6PR10MB2908:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR10MB2908CCEBB6C2FCDADEE359FFE25B9@DM6PR10MB2908.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:264;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BuT2eHHwUVFMG6/7xbR4P2qThD9BpKmCJjs7+KA/8bVIWmD7+xAxaP6n39Iax3S7/WzYV8z+mfKERH0KZjb77ZtF298HJ3dua6WPlatJtddE1IelrhXz7fjbETKcAdwxq0ft14d/knmh/mNxUb2CgKCMErMyIK8Et+7PNslu9OqAYospAvw//ypMfrZGlL5L+ij+PrTs9wryENJFSs/RkcRnZmGL+aNy3GIG4nmmHEmCTJfY34sA4jaaPY4bmfhqfhwIl7C8mX2XZ0ag2qt3EEjKNvcp1u1KlJU8DUq0h/JoXqMSLoMzgn41HQd4yAoc+T+oUqnH245Q98UX8/8dCu4pmCEopsOlklcadxLbsORlbDoCGAVQxFIAAn9mYw9ZkgC3WIIFpWBLHkRIgntvhUQOL7yRFBgn/J4q4D3nTsTLu78NEgrwvLq3T9MYl0dhbjbKwD9ukwtVHjzsQ+ScldEKUc3FL+eiizAi+5pMWwJxbXrtRHew34ou4khWzOCLxD8nqTRzoKyJzizrDTZuu+Cv3irGIbPl4Se5bzakFLOLlWhjm43BfhLhcayjs4PT2RpY3MRdo4CMVzia5Bn1lFSvr7FjTl86YrZk04khdPLvAgpVTewOdfkPKtyWoLcWoPp5x7N/MdEVdgF30ryavWARByfzRuNRyHvDFJm2+cs6XTBNAMMTiQcV6OsKtBXv/TOVhb9JZgdrigwHuDejIbjGXUBp3GMFcz4PmaIGwygo7nSL/hIG1B2Q4buHDt3j72RtQI37w5Ql3SUOsvnQZHZahPIhOlppWjdgKgC5pC4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(44832011)(66476007)(2616005)(86362001)(4744005)(36756003)(31686004)(66556008)(6512007)(31696002)(5660300002)(508600001)(4326008)(38350700002)(38100700002)(6486002)(316002)(186003)(83380400001)(8936002)(7416002)(54906003)(53546011)(2906002)(6506007)(8676002)(26005)(6666004)(66946007)(52116002)(14583001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MWZ1OVB5c1dVNmZETFMwdEZPTHZ6TUl0RmRUYlpFQzZxeS8zNkE2Y3d5Uzly?=
- =?utf-8?B?SjUyTWJWMkhRSmxGc214UExBMzNISjczdEpMa1VJZkNxYVhkU05CQ2QyYzcz?=
- =?utf-8?B?c1VBeWZhMzU3ZG42bDR6RzRxSnM0RUtUVjdVWjY2dFExdEdnbDdoRU9uMS9C?=
- =?utf-8?B?YlZyY0RQajR0YzVTaFlTM3FkSHJiV1ZiTjNXbXF3VVF1MnFPSzJOai8zY0FW?=
- =?utf-8?B?emM5aFdlcDVtVTJuQXYvY2sxclFYWXBORTFnQVNsY3J5WTdVVDBUZmdWWC9Z?=
- =?utf-8?B?UFZvVU9nQzkySDQ5NmIwVGtBRXlYSnNjYW5FRnF1NGhnMUtGNEZjbHpCQk5n?=
- =?utf-8?B?UUh5TEdIdi9BWTBYalJFemVtWkVpZi9zV1BHUkcxelZJdjFvSHM4UVJpZWlB?=
- =?utf-8?B?bnJmNmx6UFBTNytxdUZOekxQWkJUTTB0ZjQ3eHVUd1ZOSTg4M00xWSs5MTJS?=
- =?utf-8?B?UjBqYlo5eHRpV2ZtUGhqMnZEcFhuN0NHZitCa0VPRnJqdC9ZSHdET29zd2Vj?=
- =?utf-8?B?Y0hUbXVaSEo2d3RpTmNnYW52TndVemtxcnEyMVZnYlZEL2JoTERPOEpDWW1Z?=
- =?utf-8?B?dk5GK0FPeDRIdUdRYnZ2RThXdHN6RkpVSnM4dkxxY3lXMWYvUDZTWjFoWW5O?=
- =?utf-8?B?U3RMVklsWFpaUEJ1Y1FNTXFSc1lMcXlCMStzUVNkaXN4WkkyTFgxWHV2Tk8r?=
- =?utf-8?B?VmhQQUU5QmM0RGgvN2ZGQmZjZ1IrelV4NG1ualBiMFBUZ1RlSDIwWTJVU1ZG?=
- =?utf-8?B?RTdhclBEWVdnTHdITHljQW9ZRkF1ZGo0R2twY2JXZ015VmtlWEJFQWp0VkY2?=
- =?utf-8?B?cnVTakdLdHIxbWxLLzRMQ2ZQdnZzZHVNSDJyNURhWloyOWNrMTgwRnM0RG9w?=
- =?utf-8?B?N0xkOGFXSFFOQTJRdU9TK0hhOWZZbzg4eW1QcVU5WTR5OFJnRmg2dHJObXdo?=
- =?utf-8?B?RDN3L0ExNDJhYWtjRVUrbS9kNnI5NFBVUXZpNlJVRkVZVDdVOUdFWC9vSVdp?=
- =?utf-8?B?M1VWcmFHZEdmZXFtajZBKzRJd0lBSHFGRlUrazMrVUluUWYzL3gwN2p4TUVP?=
- =?utf-8?B?c1ZjWkVMdjBORnpxN1drandUSG4yZEliNXZjTHZ1U244OXBnbU9lTUYrQ2pv?=
- =?utf-8?B?VG9CRWd2emlNb09EejF5WGFXeVp6VHNnRjdPVGVKa3NUelEvb296dlZNSnMv?=
- =?utf-8?B?MXVMNVVUdDZHQUVaaHJicEh4YXkrWmpGd25UdjZSSCttMEVsWU5hT3ROb3ll?=
- =?utf-8?B?YmYyWFFKSXFoVlJQOFYvWHI0MWhIczlKNWx6OGtYUmkvejdrcjhhK3p6cCtu?=
- =?utf-8?B?b25WcE1SdEFvb0tBNktDdFQ2Z2xyWk9IckxSQzFJSjFIUzFwQmwvNzBvZE90?=
- =?utf-8?B?cEI4THNRaFRKNU13WFpMVzRzazcvc2lPN0ZGcFlDWEhPL1dSNWZpbmxZOWdP?=
- =?utf-8?B?Q0wwRkRENUo0M0g1M09wRnlPeERXcjVxZnJYTTFnM25yVGtabGNkTjZOL1FH?=
- =?utf-8?B?eU1YbmVTUUU1M2JIaHU0Nk9jcFJBUW5ZdENVOUd3N1NZZ2JLUFV0Z2ZoNmFs?=
- =?utf-8?B?N3VWUG15RThiSW9rVXlMeGZOSEM2Rnh3d1N6cXcrY055Y2x5ZFN2UFU4NEI2?=
- =?utf-8?B?ZzZ6cWJhUFFjdTZsOTE3TytPYW04alRBcVVCVFdiOFJRbXhKSGNaTVFJcUVt?=
- =?utf-8?B?bHRSZmRGWlpJWTMwaVdGR21BU2dzR3JzVFNrYnRVN1Y0SmV2YmhlRTVpMnNX?=
- =?utf-8?B?aS9jRG9CUTBLY29JNmIzS2JyTnYwc1crUERmVTlRaE0vbWlyU2lMZzhmcS92?=
- =?utf-8?B?cnNFSVVIMy8zbzRuMHNWUG91anpqbTlCaWxueDdNdk9lYlJ5YWF0MlN6TWx2?=
- =?utf-8?B?eWFRQ0R4V21Bekt6eUE1ZzZqcmdKUGV4SWk5S2EzTEFZWXJ2b0lGQ3B4VEVZ?=
- =?utf-8?B?eGUxdmFNQjhjNmdwcGtBMHMycnRuUG03NWlhdk1hNmoraWZLOEd1QW84c25i?=
- =?utf-8?B?R295TzN1d3hQTXBOQWwydkIzUXltUEdIVDNaYXl2Z1IvWUgxYXNpZmxjT0Vv?=
- =?utf-8?B?NnMwaytGMWNBalMvTnd2NDBwdVdlMytPSUY4VlZhcXN1OHo4T0dTVWlHU1dr?=
- =?utf-8?B?SERXbTBVcS8xaTlHMmxwcm16U2oxRXN2b3RDVjUzeUNmRFNQNkI2ODRKN0cx?=
- =?utf-8?Q?INsljZnOU2NOng9QwTU0F9M=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8cad1d22-cc8c-4df0-f479-08d9dc75eb34
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2022 00:35:26.9579
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WjDO5ktlvhu4V/Mgl5c8eHuDcl1/H7r/lo/YZwZgorifGr5U+rpuQNXmd3a6O+/s4F+xvc18wfxuCH3hyB+8TQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB2908
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10233 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 suspectscore=0
- spamscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2201210001
-X-Proofpoint-ORIG-GUID: 7M5fE2M_i_0xZNwrJYyDBBYXUrj7yaes
-X-Proofpoint-GUID: 7M5fE2M_i_0xZNwrJYyDBBYXUrj7yaes
+References: <36bd91e4-8eda-5677-7fde-40295932a640@molgen.mpg.de>
+ <CAABZP2wxXW2RqpKevt9erkYg3po0ByUEFvYsgy3cRty5Rt1Qyw@mail.gmail.com>
+ <d744e653-5e8f-b874-6991-3005e6b8afd4@molgen.mpg.de> <20220118172904.GG947480@paulmck-ThinkPad-P17-Gen-1>
+ <20220118234656.GA3120763@paulmck-ThinkPad-P17-Gen-1> <CAABZP2yffDyg31smcCyqENFBvQPfmFCT_YwDM_DJ=S-3rjxKuQ@mail.gmail.com>
+ <20220119044649.GL947480@paulmck-ThinkPad-P17-Gen-1> <20220119182143.GA2183703@paulmck-ThinkPad-P17-Gen-1>
+ <CAABZP2x-esy+9R4iiMZR5UV7YnYQxikAgsAQM+PU-o9+m9WMpw@mail.gmail.com> <20220120210636.GR947480@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220120210636.GR947480@paulmck-ThinkPad-P17-Gen-1>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Fri, 21 Jan 2022 08:44:23 +0800
+Message-ID: <CAABZP2zCWJ1S3We1f6UNVW=Q6h7cz8uMbR7PTzt9UWH9CjSZuw@mail.gmail.com>
+Subject: Re: Problems with rcutorture on ppc64le: allmodconfig(2) and other failures
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Josh Triplett <josh@joshtriplett.org>,
+        rcu <rcu@vger.kernel.org>, linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/15/21 00:40, Naoya Horiguchi wrote:
-> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> 
-> These action_page_types are no longer used, so remove them.
-> 
-> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> Acked-by: Yang Shi <shy828301@gmail.com>
-> ---
->  include/linux/mm.h      | 2 --
->  include/ras/ras_event.h | 2 --
->  mm/memory-failure.c     | 2 --
->  3 files changed, 6 deletions(-)
+Thank Paul for your guidance!
 
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+On Fri, Jan 21, 2022 at 5:06 AM Paul E. McKenney <paulmck@kernel.org> wrote=
+:
+>
+> On Thu, Jan 20, 2022 at 03:30:54AM +0800, Zhouyi Zhou wrote:
+> > On Thu, Jan 20, 2022 at 2:21 AM Paul E. McKenney <paulmck@kernel.org> w=
+rote:
+> > >
+> > > On Tue, Jan 18, 2022 at 08:46:49PM -0800, Paul E. McKenney wrote:
+> > > > On Wed, Jan 19, 2022 at 10:07:42AM +0800, Zhouyi Zhou wrote:
+> > > > > Thanks Paul for looking into this
+> > > > >
+> > > > > On Wed, Jan 19, 2022 at 7:46 AM Paul E. McKenney <paulmck@kernel.=
+org> wrote:
+> > > > > >
+> > > > > > On Tue, Jan 18, 2022 at 09:29:04AM -0800, Paul E. McKenney wrot=
+e:
+> > > > > > > On Tue, Jan 18, 2022 at 08:56:24AM +0100, Paul Menzel wrote:
+> > > > > > > > Dear Zhouyi,
+> > > > > > > >
+> > > > > > > >
+> > > > > > > > Thank you for your quick response.
+> > > > > > > >
+> > > > > > > >
+> > > > > > > > Am 18.01.22 um 08:34 schrieb Zhouyi Zhou:
+> > > > > > > >
+> > > > > > > > > I have studied the rcu torture test recently. I am also i=
+nterested in
+> > > > > > > > > this topic.
+> > > > > > > > > But I can't open
+> > > > > > > > > [1]: https://owww.molgen.mpg.de/~pmenzel/allmodconf-Make.=
+out.txt
+> > > > > > > > > [2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture-log.t=
+xt
+> > > > > > > >
+> > > > > > > > Sorry, about that. I should have checked those. I had put t=
+hem into a
+> > > > > > > > directory:
+> > > > > > > >
+> > > > > > > > [1]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/allmodc=
+onf-Make.out.txt
+> > > > > > > > [2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/rcutort=
+ure-log.txt
+> > > > > > > >
+> > > > > > > > I am going to try to test your suggestions at the end of th=
+e day.
+> > > > > > >
+> > > > > > > On x86 rcutorture builds successfully.  However, allmodconfig
+> > > > > > > on semi-recent -next got me "Can't open perl script
+> > > > > > > "./usr/include/headers_check.pl": No such file or directory".
+> > > > > > > Which might well be a local problem or might well be fixed by=
+ now.
+> > > > > >
+> > > > > > Not fixed as of next-20220118.  Chasing it down...  ;-)
+> > > > > I can do allmodconfig on -next,
+> > > > > $git describe
+> > > > > next-20220118
+> > > > > $tools/testing/selftests/rcutorture/bin/torture.sh --duration 10
+> > > > >  ---  tools/testing/selftests/rcutorture/bin/torture.sh --duratio=
+n 10
+> > > > >  --- Results directory:  2022.01.19-09.14.39-torture
+> > > > > $ ps -aux|grep qemu-system
+> > > > > zzy       470309  773  0.3 1876544 153936 pts/0  Sl+  09:55  31:2=
+7
+> > > > > qemu-system-x86_64 -enable-kvm -nographic -smp 16 -net none -mach=
+ine
+> > > > > q35,accel=3Dkvm -cpu kvm64 -serial
+> > > > > file:/tmp/linux-next/tools/testing/selftests/rcutorture/res/2022.=
+01.19-09.14.39-torture/results-rcutorture/TREE03/console.log
+> > > > > -m 512 -kernel /tmp/linux-next/tools/testing/selftests/rcutorture=
+/res/2022.01.19-09.14.39-torture/results-rcutorture/TREE03/bzImage
+> > > > > -append debug_boot_weak_hash panic=3D-1 selinux=3D0 initcall_debu=
+g debug
+> > > > > console=3DttyS0 rcupdate.rcu_cpu_stall_suppress_at_boot=3D1
+> > > > > torture.disable_onoff_at_boot rcupdate.rcu_task_stall_timeout=3D3=
+0000
+> > > > > rcutorture.onoff_interval=3D200 rcutorture.onoff_holdoff=3D30
+> > > > > rcutree.gp_preinit_delay=3D12 rcutree.gp_init_delay=3D3
+> > > > > rcutree.gp_cleanup_delay=3D3 rcutree.kthread_prio=3D2 threadirqs
+> > > > > tree.use_softirq=3D0 rcutorture.n_barrier_cbs=3D4
+> > > > > rcutorture.stat_interval=3D15 rcutorture.shutdown_secs=3D420
+> > > > > rcutorture.test_no_idle_hz=3D1 rcutorture.verbose=3D1
+> > > > > zzy       755865  0.0  0.0  17676  2876 pts/2    S+   09:59   0:0=
+0
+> > > > > grep --color=3Dauto qemu-system
+> > > > > $ ls -l vmlinux
+> > > > > -rwxrwxr-x 1 zzy zzy 69349872 1=E6=9C=88  19 09:55 vmlinux
+> > > > >
+> > > > > Could you please try the following command ?
+> > > > > linux-next$ perl ./usr/include/headers_check.pl usr/include x86
+> > > > > usr/include/rdma/hfi/hfi1_user.h
+> > > > > linux-next$ echo $?
+> > > > > 0
+> > > > > The headers_check.pl in linux-next
+> > > > > (https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.=
+git/tree/usr/include/headers_check.pl)
+> > > > > is used to check the validity of head files in ./usr/include
+> > > >
+> > > > I am currently bisecting, but once that finishes I will give this a
+> > > > try, thank you!
+> > >
+> > > And the bisection converged badly due to there being more than one bu=
+ild
+> > > failure.
+> > Sorry to hear the bisection is not successful.
+> > >
+> > > So I ran the command above and then the build succeeded.
+> > I'm very happy that the command works.
+> > >
+> > > Though it would be good if the build worked from "make distclean"...
+> > I would be very honored if I could join the efforts to make the -next b=
+etter.
+>
+> One approach would be to download the -next kernels as they appear and
+> run tests on them.  Reporting bugs is good, and of course fixing them
+> even better.
+This provides a nice way of participating the efforts to make -next
+better, and provides me a good way to learn new knowledge in -next!
 
--- 
-Mike Kravetz
+>
+> You can clone -next from here:
+>
+>         git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>
+> Individual -next releases are tagged, for example, "next-20220118".
+I will clone -next from the tree, and will download the -next releases from
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>
+> Me, I run torture.sh on them from time to time, depending on how much
+> other testing I am doing.  So maybe once or twice a week.  ;-)
+You are the example worth learning in my life, to be honest , I will
+do the same way as you do!
+
+Sincerely
+Zhouyi
+>
+>                                                 Thanx, Paul
+>
+> > Many thanks
+> > Zhouyi
+> > >
+> > >                                                         Thanx, Paul
+> > >
+> > > > > > > Either way, it looks like I need to upgrade the torture.sh sc=
+ript's
+> > > > > > > checks for failed builds.  Thank you for reporting this!
+> > > > > >
+> > > > > > Does this make torture.sh more reliably report build failures?
+> > > > > I studied this commit line by line several times and benefited a =
+lot. Thank you!
+> > > > > >
+> > > > > >                                                 Thanx, Paul
+> > > > > >
+> > > > > > ---------------------------------------------------------------=
+---------
+> > > > > >
+> > > > > > commit 0d302830515307ceb58e89d5fb91e81b6d22e0bf
+> > > > > > Author: Paul E. McKenney <paulmck@kernel.org>
+> > > > > > Date:   Tue Jan 18 15:40:49 2022 -0800
+> > > > > >
+> > > > > >     torture: Make kvm-find-errors.sh notice missing vmlinux fil=
+e
+> > > > > >
+> > > > > >     Currently, an obtuse compiler diagnostic can fool kvm-find-=
+errors.sh
+> > > > > >     into believing that the build was successful.  This commit =
+therefore
+> > > > > >     adds a check for a missing vmlinux file.
+> > > > > >
+> > > > > >     Link: https://lore.kernel.org/lkml/36bd91e4-8eda-5677-7fde-=
+40295932a640@molgen.mpg.de/
+> > > > > >     Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> > > > > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > > > > >
+> > > > > > diff --git a/tools/testing/selftests/rcutorture/bin/kvm-find-er=
+rors.sh b/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh
+> > > > > > index 2e9e9e2eedb69..7d3e11a6b8290 100755
+> > > > > > --- a/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh
+> > > > > > +++ b/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh
+> > > > > > @@ -30,10 +30,15 @@ editor=3D${EDITOR-vi}
+> > > > > >  files=3D
+> > > > > >  for i in ${rundir}/*/Make.out
+> > > > > >  do
+> > > > > > +       scenariodir=3D"`dirname $i`"
+> > > > > >         if egrep -q "error:|warning:|^ld: .*undefined reference=
+ to" < $i
+> > > > > >         then
+> > > > > >                 egrep "error:|warning:|^ld: .*undefined referen=
+ce to" < $i > $i.diags
+> > > > > >                 files=3D"$files $i.diags $i"
+> > > > > > +       elif ! test -f ${scenariodir}/vmlinux
+> > > > > > +       then
+> > > > > > +               echo No ${scenariodir}/vmlinux file > $i.diags
+> > > > > > +               files=3D"$files $i.diags $i"
+> > > > > >         fi
+> > > > > >  done
+> > > > > >  if test -n "$files"
+> > > > > Thanks
+> > > > > Zhouyi

@@ -2,89 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE644957CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 02:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 853C94957D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 02:38:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348033AbiAUBhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 20:37:43 -0500
-Received: from mail-oi1-f177.google.com ([209.85.167.177]:38624 "EHLO
-        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232540AbiAUBhl (ORCPT
+        id S1348249AbiAUBiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 20:38:13 -0500
+Received: from relay036.a.hostedemail.com ([64.99.140.36]:2248 "EHLO
+        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233355AbiAUBiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 20:37:41 -0500
-Received: by mail-oi1-f177.google.com with SMTP id g205so11559536oif.5;
-        Thu, 20 Jan 2022 17:37:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=lwx/3sI/jAgnGg6BbYNTq2g4K7zJzyk25fhYkr3exC0=;
-        b=t8VFvFhmokBMq5hdyD47XrcVaaRq9Blc6EZwVd2Mckp3jhx+LodO6HWZSIQnrQq3wL
-         3pewnyc7SdBo/iPhkNu3t33cF7eh34HUKLZF66ErQx7hLP0jC1ym2gvy7ao4dHa5ZrBC
-         2/l/Zk6VMu0V3YTKydLL3TcWZW1soN0aAQZQD2haK55S/Vj9r1wTRaV8dmhg4msbE/dH
-         V3O7/G/n3EQQjERTSCLG7BRJGXSeTTblICulS+cTuxw2jBzlCYdW/By32LirEiPk9+RM
-         gzG5WASeOFl4VUoin7QlvrTtQOywTB5iFPR6E2LROy/LtRZHMrcHvAcH++TOJTeaHTtm
-         Z2+g==
-X-Gm-Message-State: AOAM5319yGRvILIv0c+R+pQE2qzqUcX/M+qdyP51Xf73ZZdYMuBM988u
-        LqQoS+jGYeb/g8Y0lrzVsA==
-X-Google-Smtp-Source: ABdhPJxw18vz18oJhNnQmNv3Pg97sN04HSdTjldQBZY7zJAkoFUNRxgJGeo1b/7bNUVA/HdTHKyzKw==
-X-Received: by 2002:a05:6808:aa7:: with SMTP id r7mr1447327oij.47.1642729060372;
-        Thu, 20 Jan 2022 17:37:40 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id o21sm440941ote.4.2022.01.20.17.37.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 17:37:39 -0800 (PST)
-Received: (nullmailer pid 2314865 invoked by uid 1000);
-        Fri, 21 Jan 2022 01:37:38 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     devicetree@vger.kernel.org, Taniya Das <tdas@codeaurora.org>,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        linux-clk@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>
-In-Reply-To: <20220120232028.6738-3-ansuelsmth@gmail.com>
-References: <20220120232028.6738-1-ansuelsmth@gmail.com> <20220120232028.6738-3-ansuelsmth@gmail.com>
-Subject: Re: [PATCH v2 02/15] dt-bindings: clock: simplify qcom,gcc-apq8064 Documentation
-Date:   Thu, 20 Jan 2022 19:37:38 -0600
-Message-Id: <1642729058.530862.2314864.nullmailer@robh.at.kernel.org>
+        Thu, 20 Jan 2022 20:38:12 -0500
+Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay06.hostedemail.com (Postfix) with ESMTP id DAEDB22DB5;
+        Fri, 21 Jan 2022 01:38:07 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf06.hostedemail.com (Postfix) with ESMTPA id 3264F20010;
+        Fri, 21 Jan 2022 01:37:54 +0000 (UTC)
+Message-ID: <5da3e02454c8c9ff3335c7199f3ae48af2864981.camel@perches.com>
+Subject: Re: [PATCH 1/3] lib/string_helpers: Consolidate yesno()
+ implementation
+From:   Joe Perches <joe@perches.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-security-module@vger.kernel.org,
+        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Emma Anholt <emma@anholt.net>, Eryk Brol <eryk.brol@amd.com>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Leo Li <sunpeng.li@amd.com>,
+        Mikita Lipski <mikita.lipski@amd.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
+        Raju Rangoju <rajur@chelsio.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Vishal Kulkarni <vishal@chelsio.com>
+Date:   Thu, 20 Jan 2022 17:37:53 -0800
+In-Reply-To: <20220119160017.65bd1fa5@gandalf.local.home>
+References: <20220119072450.2890107-1-lucas.demarchi@intel.com>
+         <20220119072450.2890107-2-lucas.demarchi@intel.com>
+         <YefXg03hXtrdUj6y@paasikivi.fi.intel.com>
+         <20220119100635.6c45372b@gandalf.local.home>
+         <YehllDq7wC3M2PQZ@smile.fi.intel.com>
+         <20220119160017.65bd1fa5@gandalf.local.home>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: 7rtkhruhzyxmaz9kz4md8szkb6csicqt
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: 3264F20010
+X-Spam-Status: No, score=-0.98
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+2KBCQ3/oG0QJHNmpFhxNu1Bw+ZDwRWLg=
+X-HE-Tag: 1642729074-280175
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Jan 2022 00:20:15 +0100, Ansuel Smith wrote:
-> Simplify qcon,gcc-apq8064 Documentation by using qcom,gcc.yaml as a
-> template.
+On Wed, 2022-01-19 at 16:00 -0500, Steven Rostedt wrote:
+> On Wed, 19 Jan 2022 21:25:08 +0200
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 > 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->  .../bindings/clock/qcom,gcc-apq8064.yaml      | 27 +++----------------
->  1 file changed, 3 insertions(+), 24 deletions(-)
+> > > I say keep it one line!
+> > > 
+> > > Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>  
+> > 
+> > I believe Sakari strongly follows the 80 rule, which means...
 > 
+> Checkpatch says "100" I think we need to simply update the docs (the
+> documentation always lags the code ;-)
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+checkpatch doesn't say anything normally, it's a stupid script.
+It just mindlessly bleats a message when a line exceeds 100 chars...
 
-yamllint warnings/errors:
+Just fyi: I think it's nicer on a single line too.
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.example.dt.yaml:0:0: /example-0/clock-controller@900000: failed to match any schema with compatible: ['qcom,gcc-apq8064']
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1582347
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
 

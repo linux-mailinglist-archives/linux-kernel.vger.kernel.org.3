@@ -2,819 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5CE495842
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 03:26:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D9F495844
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 03:26:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348457AbiAUC0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 21:26:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
+        id S1378539AbiAUC0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 21:26:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378528AbiAUC0C (ORCPT
+        with ESMTP id S1378418AbiAUC0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 21:26:02 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEB7C061747
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 18:26:02 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id o64so8102880pjo.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 18:26:02 -0800 (PST)
+        Thu, 20 Jan 2022 21:26:07 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8254FC061747
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 18:26:07 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id x11so28772365lfa.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 18:26:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4RPUVBriGsnHqp1FWRs4AbuCfJGS5J/LiTVPcSzugic=;
-        b=P93WNXNh2Pv0BtHpJrtlomrJKHIYQ+PMdpSi70AMD7DMAAAv/q7sFQ2HS+gE5UcDza
-         1lEbllciK4T+3JHHxCPwaPErvZlVQqnqmjE1g7mCc7yt6FRaAYbkq00Y4fG2S0iYf4zx
-         leKEn0oIm1o1Mq2vCdmw+CGC03ebhQ4WDlk7Uqap/HWYnheYbjf9Ct1sZ72p+iR9RCIa
-         QATq410t132D6WmNIA7V4VYGdrWfyWVLQwEVaXbLJkjzvuuEd7CXxypbLCXfM5OLyA+O
-         VO49RXpBBNCglcl0cFco9HNq3VE1fO1MALA73qcKLCmqYFGX5i6YUBpvnVykAR4NjsR9
-         ga2g==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RpKKO4ylHuM6kH8lsX+wX53sB01OoZDncA9yX3EX+qc=;
+        b=CpA44EeujslrqN01Eu9AJz7nZ1cQ0c5KIEex5DUw6a2+z55dwtiKqVsH36unGy38Ti
+         5QW53eZSZLaoxXn9TF0asYaeBKf3a3JpFZTuMNVNBzdveH9SR1LL0I+btYIOeqvYOGo4
+         mDZfgQuFHtIQHYvmiAfyHxfPARXQ372t5spaA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4RPUVBriGsnHqp1FWRs4AbuCfJGS5J/LiTVPcSzugic=;
-        b=Dlck9HAg196sHCKHqvFoo+Fcw2aqLjYT0DexqkfVYOQEJlg0zbXGkyWp0ASsNTjz7s
-         8GPncf1Ed38AW+PYeqCmplEJpliODwVuTs+x+xeInhUToweFCyQnKc+/t4rrq4771I+k
-         b+5j9eWgfU2duJ4WGueRftOtZe0QG/jKYEZq8d5Dr6Gxo4PjnkjMvyxtRI+b6IroSr4j
-         +skL1+e8dlFMhM7d0WwFD/xUJ/blFHIIbo78r/txfitwkN4Uz0cBRNVu5yWduC7cUwfr
-         6UDT+ItXgupPE2USnCP2NgF/NybvTP268TTqZx/dVdWNIh9mnNcliiJz6cliTeUUG5Ny
-         HZxg==
-X-Gm-Message-State: AOAM5335PZnD7/Nyq+c2qfT7SCwVcR7hZcVjxeW/aZewQKPKUsiUn4pu
-        L5YoomcHq5T10X9SYReJaXg5QA==
-X-Google-Smtp-Source: ABdhPJyujI4WRRPfY9EH4AHBbbdbp2ayh74Ux/91l/ltGTYFkpLmT9sY5fzEMSIZ1KkhcJacJKgTSQ==
-X-Received: by 2002:a17:902:76c6:b0:14a:c884:9c90 with SMTP id j6-20020a17090276c600b0014ac8849c90mr2015858plt.145.1642731961751;
-        Thu, 20 Jan 2022 18:26:01 -0800 (PST)
-Received: from libai.bytedance.net ([61.120.150.72])
-        by smtp.gmail.com with ESMTPSA id h2sm5057577pfv.31.2022.01.20.18.25.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 18:26:01 -0800 (PST)
-From:   zhenwei pi <pizhenwei@bytedance.com>
-To:     mst@redhat.com, arei.gonglei@huawei.com
-Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        helei.sig11@bytedance.com, zhenwei pi <pizhenwei@bytedance.com>
-Subject: [PATCH 3/3] virtio-crypto: implement RSA algorithm
-Date:   Fri, 21 Jan 2022 10:24:38 +0800
-Message-Id: <20220121022438.1042547-4-pizhenwei@bytedance.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220121022438.1042547-1-pizhenwei@bytedance.com>
-References: <20220121022438.1042547-1-pizhenwei@bytedance.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RpKKO4ylHuM6kH8lsX+wX53sB01OoZDncA9yX3EX+qc=;
+        b=uvmNchuC/DelSfLXsIiYGHavFUw0IfVf4L8rBuqkYqrFzWyi3jrgF35J1dI1XMtK97
+         Il/5oddI8idQsvcNAnkuPnq7wieIA/AOgb0m9dVFaW40M7o1uQs/P/na5j2FS2VH3JGE
+         hpvlaNNpF1FMcRESYDUEkYVRd3p6FhZ4IoTgybOLpodLP1ttB5Va8R2j5uJXQ16N+7Jx
+         e3/c1IbVAYxfrOhivZv4SW6NE2lZvlF8bSq+Cqli6HUFg5OZFr+mlDeTDSHVPM5NWWSo
+         kypA/80AC6bni5Ey+a+r//Fre6Gwk+z8mPwanmMYItm/1Unrmyq1BVAA48ahqe2gm0+L
+         qn0Q==
+X-Gm-Message-State: AOAM530qSh66BF9EanYMhfmb7XNmk1DyNdbRV1jnCTLdewLirrqc2N3+
+        tpcVX0gpP9IVsbiYq4As3+pCWZYte3D24z6Ok0YYLg==
+X-Google-Smtp-Source: ABdhPJxDB78Oqnt1XAkD0z1LftL11k8JAKZL+THEVBsVJ/FpCJvoMc0Bz4nyFo7PhDTKZivklMHmltLuJdmQs9ybsDo=
+X-Received: by 2002:a05:6512:3b0b:: with SMTP id f11mr1972336lfv.670.1642731965890;
+ Thu, 20 Jan 2022 18:26:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220107093455.73766-1-wenst@chromium.org> <20220107093455.73766-2-wenst@chromium.org>
+ <Yecq111pZDP9XFNO@eze-laptop> <CAGXv+5GfNgQGJOBihdpGQDbdx-1co_wi0m=-HyxiHDn-kKZBsA@mail.gmail.com>
+ <7b0ac4d2-a78e-f1be-e7ee-6f4c69acc386@xs4all.nl>
+In-Reply-To: <7b0ac4d2-a78e-f1be-e7ee-6f4c69acc386@xs4all.nl>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 21 Jan 2022 10:25:54 +0800
+Message-ID: <CAGXv+5Fw+vuq3CTRPStGWBtU9JcHtuGwxNy=_xTMvecEAzd2JQ@mail.gmail.com>
+Subject: Re: [PATCH RFT v2 1/8] media: hantro: jpeg: Relax register writes
+ before write starting hardware
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support rsa & pkcs1pad(rsa,sha1) with priority 150.
+On Thu, Jan 20, 2022 at 10:20 PM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
+>
+> Hi Chen-Yu,
+>
+> I'll take patches 2-8.
 
-Test with QEMU built-in backend, it works fine.
-1, The self-test framework of crypto layer works fine in guest kernel
-2, Test with Linux guest(with asym support), the following script
-test(note that pkey_XXX is supported only in a newer version of keyutils):
-  - both public key & private key
-  - create/close session
-  - encrypt/decrypt/sign/verify basic driver operation
-  - also test with kernel crypto layer(pkey add/query)
+Got it.
 
-All the cases work fine.
+> So should I mark patch 1/8 as 'Rejected' or 'Changes Requested' in patchwork?
 
-rm -rf *.der *.pem *.pfx
-modprobe pkcs8_key_parser # if CONFIG_PKCS8_PRIVATE_KEY_PARSER=m
-rm -rf /tmp/data
-dd if=/dev/random of=/tmp/data count=1 bs=226
+I'd say "Changes Requested", but it won't really progress unless someone
+from Rockchip fills in the blanks about the wmb() though.
 
-openssl req -nodes -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -subj "/C=CN/ST=BJ/L=HD/O=qemu/OU=dev/CN=qemu/emailAddress=qemu@qemu.org"
-openssl pkcs8 -in key.pem -topk8 -nocrypt -outform DER -out key.der
-openssl x509 -in cert.pem -inform PEM -outform DER -out cert.der
+ChenYu
 
-PRIV_KEY_ID=`cat key.der | keyctl padd asymmetric test_priv_key @s`
-echo "priv key id = "$PRIV_KEY_ID
-PUB_KEY_ID=`cat cert.der | keyctl padd asymmetric test_pub_key @s`
-echo "pub key id = "$PUB_KEY_ID
-
-keyctl pkey_query $PRIV_KEY_ID 0
-keyctl pkey_query $PUB_KEY_ID 0
-
-echo "Enc with priv key..."
-keyctl pkey_encrypt $PRIV_KEY_ID 0 /tmp/data enc=pkcs1 >/tmp/enc.priv
-echo "Dec with pub key..."
-keyctl pkey_decrypt $PRIV_KEY_ID 0 /tmp/enc.priv enc=pkcs1 >/tmp/dec
-cmp /tmp/data /tmp/dec
-
-echo "Sign with priv key..."
-keyctl pkey_sign $PRIV_KEY_ID 0 /tmp/data enc=pkcs1 hash=sha1 > /tmp/sig
-echo "Verify with pub key..."
-keyctl pkey_verify $PRIV_KEY_ID 0 /tmp/data /tmp/sig enc=pkcs1 hash=sha1
-
-echo "Enc with pub key..."
-keyctl pkey_encrypt $PUB_KEY_ID 0 /tmp/data enc=pkcs1 >/tmp/enc.pub
-echo "Dec with priv key..."
-keyctl pkey_decrypt $PRIV_KEY_ID 0 /tmp/enc.pub enc=pkcs1 >/tmp/dec
-cmp /tmp/data /tmp/dec
-
-echo "Verify with pub key..."
-keyctl pkey_verify $PUB_KEY_ID 0 /tmp/data /tmp/sig enc=pkcs1 hash=sha1
-
-Co-developed-by: lei he <helei.sig11@bytedance.com>
-Signed-off-by: lei he <helei.sig11@bytedance.com>
-Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
----
- drivers/crypto/virtio/Makefile                |   1 +
- .../virtio/virtio_crypto_akcipher_algo.c      | 584 ++++++++++++++++++
- drivers/crypto/virtio/virtio_crypto_common.h  |   3 +
- drivers/crypto/virtio/virtio_crypto_core.c    |   6 +-
- drivers/crypto/virtio/virtio_crypto_mgr.c     |  11 +
- 5 files changed, 604 insertions(+), 1 deletion(-)
- create mode 100644 drivers/crypto/virtio/virtio_crypto_akcipher_algo.c
-
-diff --git a/drivers/crypto/virtio/Makefile b/drivers/crypto/virtio/Makefile
-index cbfccccfa135..06b23c5e784e 100644
---- a/drivers/crypto/virtio/Makefile
-+++ b/drivers/crypto/virtio/Makefile
-@@ -2,5 +2,6 @@
- obj-$(CONFIG_CRYPTO_DEV_VIRTIO) += virtio_crypto.o
- virtio_crypto-objs := \
- 	virtio_crypto_algs.o \
-+	virtio_crypto_akcipher_algo.o \
- 	virtio_crypto_mgr.o \
- 	virtio_crypto_core.o
-diff --git a/drivers/crypto/virtio/virtio_crypto_akcipher_algo.c b/drivers/crypto/virtio/virtio_crypto_akcipher_algo.c
-new file mode 100644
-index 000000000000..eebccf71b2fa
---- /dev/null
-+++ b/drivers/crypto/virtio/virtio_crypto_akcipher_algo.c
-@@ -0,0 +1,584 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+ /* Asymmetric algorithms supported by virtio crypto device
-+  *
-+  * Authors: zhenwei pi <pizhenwei@bytedance.com>
-+  *          lei he <helei.sig11@bytedance.com>
-+  *
-+  * Copyright 2022 Bytedance CO., LTD.
-+  */
-+
-+#include <linux/mpi.h>
-+#include <linux/scatterlist.h>
-+#include <crypto/algapi.h>
-+#include <crypto/internal/akcipher.h>
-+#include <crypto/internal/rsa.h>
-+#include <linux/err.h>
-+#include <crypto/scatterwalk.h>
-+#include <linux/atomic.h>
-+
-+#include <uapi/linux/virtio_crypto.h>
-+#include "virtio_crypto_common.h"
-+
-+struct virtio_crypto_rsa_ctx {
-+	MPI n;
-+};
-+
-+struct virtio_crypto_akcipher_ctx {
-+	struct crypto_engine_ctx enginectx;
-+	struct virtio_crypto *vcrypto;
-+	struct crypto_akcipher *tfm;
-+	bool session_valid;
-+	__u64 session_id;
-+	union {
-+		struct virtio_crypto_rsa_ctx rsa_ctx;
-+	};
-+};
-+
-+struct virtio_crypto_akcipher_request {
-+	struct virtio_crypto_request base;
-+	struct virtio_crypto_akcipher_ctx *akcipher_ctx;
-+	struct akcipher_request *akcipher_req;
-+	void *src_buf;
-+	void *dst_buf;
-+	uint32_t opcode;
-+};
-+
-+struct virtio_crypto_akcipher_algo {
-+	uint32_t algonum;
-+	uint32_t service;
-+	unsigned int active_devs;
-+	struct akcipher_alg algo;
-+};
-+
-+static DEFINE_MUTEX(algs_lock);
-+
-+static void virtio_crypto_akcipher_finalize_req(
-+	struct virtio_crypto_akcipher_request *vc_akcipher_req,
-+	struct akcipher_request *req, int err)
-+{
-+	virtcrypto_clear_request(&vc_akcipher_req->base);
-+
-+	crypto_finalize_akcipher_request(vc_akcipher_req->base.dataq->engine, req, err);
-+}
-+
-+static void virtio_crypto_dataq_akcipher_callback(struct virtio_crypto_request *vc_req, int len)
-+{
-+	struct virtio_crypto_akcipher_request *vc_akcipher_req =
-+		container_of(vc_req, struct virtio_crypto_akcipher_request, base);
-+	struct akcipher_request *akcipher_req;
-+	int error;
-+
-+	switch (vc_req->status) {
-+	case VIRTIO_CRYPTO_OK:
-+		error = 0;
-+		break;
-+	case VIRTIO_CRYPTO_INVSESS:
-+	case VIRTIO_CRYPTO_ERR:
-+		error = -EINVAL;
-+		break;
-+	case VIRTIO_CRYPTO_BADMSG:
-+		error = -EBADMSG;
-+		break;
-+
-+	case VIRTIO_CRYPTO_KEY_REJECTED:
-+		error = -EKEYREJECTED;
-+		break;
-+
-+	default:
-+		error = -EIO;
-+		break;
-+	}
-+
-+	akcipher_req = vc_akcipher_req->akcipher_req;
-+	sg_copy_from_buffer(akcipher_req->dst, sg_nents(akcipher_req->dst),
-+			    vc_akcipher_req->dst_buf, akcipher_req->dst_len);
-+	virtio_crypto_akcipher_finalize_req(vc_akcipher_req, akcipher_req, error);
-+}
-+
-+static int virtio_crypto_alg_akcipher_init_session(struct virtio_crypto_akcipher_ctx *ctx,
-+		struct virtio_crypto_ctrl_header *header, void *para,
-+		const uint8_t *key, unsigned int keylen)
-+{
-+	struct scatterlist outhdr_sg, key_sg, inhdr_sg, *sgs[3];
-+	struct virtio_crypto *vcrypto = ctx->vcrypto;
-+	uint8_t *pkey;
-+	unsigned int inlen;
-+	int err;
-+	unsigned int num_out = 0, num_in = 0;
-+
-+	pkey = kmemdup(key, keylen, GFP_ATOMIC);
-+	if (!pkey)
-+		return -ENOMEM;
-+
-+	spin_lock(&vcrypto->ctrl_lock);
-+	memcpy(&vcrypto->ctrl.header, header, sizeof(vcrypto->ctrl.header));
-+	memcpy(&vcrypto->ctrl.u, para, sizeof(vcrypto->ctrl.u));
-+	vcrypto->input.status = cpu_to_le32(VIRTIO_CRYPTO_ERR);
-+
-+	sg_init_one(&outhdr_sg, &vcrypto->ctrl, sizeof(vcrypto->ctrl));
-+	sgs[num_out++] = &outhdr_sg;
-+
-+	sg_init_one(&key_sg, pkey, keylen);
-+	sgs[num_out++] = &key_sg;
-+
-+	sg_init_one(&inhdr_sg, &vcrypto->input, sizeof(vcrypto->input));
-+	sgs[num_out + num_in++] = &inhdr_sg;
-+
-+	err = virtqueue_add_sgs(vcrypto->ctrl_vq, sgs, num_out, num_in, vcrypto, GFP_ATOMIC);
-+	if (err < 0)
-+		goto out;
-+
-+	virtqueue_kick(vcrypto->ctrl_vq);
-+	while (!virtqueue_get_buf(vcrypto->ctrl_vq, &inlen) &&
-+	       !virtqueue_is_broken(vcrypto->ctrl_vq))
-+		cpu_relax();
-+
-+	if (le32_to_cpu(vcrypto->input.status) != VIRTIO_CRYPTO_OK) {
-+		err = -EINVAL;
-+		goto out;
-+	}
-+
-+	ctx->session_id = le64_to_cpu(vcrypto->input.session_id);
-+	ctx->session_valid = true;
-+	err = 0;
-+
-+out:
-+	spin_unlock(&vcrypto->ctrl_lock);
-+	kfree_sensitive(pkey);
-+
-+	if (err < 0)
-+		pr_err("virtio_crypto: Create session failed status: %u\n",
-+			le32_to_cpu(vcrypto->input.status));
-+
-+	return err;
-+}
-+
-+static int virtio_crypto_alg_akcipher_close_session(struct virtio_crypto_akcipher_ctx *ctx)
-+{
-+	struct scatterlist outhdr_sg, inhdr_sg, *sgs[2];
-+	struct virtio_crypto_destroy_session_req *destroy_session;
-+	struct virtio_crypto *vcrypto = ctx->vcrypto;
-+	unsigned int num_out = 0, num_in = 0, inlen;
-+	int err;
-+
-+	spin_lock(&vcrypto->ctrl_lock);
-+	if (!ctx->session_valid) {
-+		err = 0;
-+		goto out;
-+	}
-+	vcrypto->ctrl_status.status = VIRTIO_CRYPTO_ERR;
-+	vcrypto->ctrl.header.opcode = cpu_to_le32(VIRTIO_CRYPTO_AKCIPHER_DESTROY_SESSION);
-+	vcrypto->ctrl.header.queue_id = 0;
-+
-+	destroy_session = &vcrypto->ctrl.u.destroy_session;
-+	destroy_session->session_id = cpu_to_le64(ctx->session_id);
-+
-+	sg_init_one(&outhdr_sg, &vcrypto->ctrl, sizeof(vcrypto->ctrl));
-+	sgs[num_out++] = &outhdr_sg;
-+
-+	sg_init_one(&inhdr_sg, &vcrypto->ctrl_status.status, sizeof(vcrypto->ctrl_status.status));
-+	sgs[num_out + num_in++] = &inhdr_sg;
-+
-+	err = virtqueue_add_sgs(vcrypto->ctrl_vq, sgs, num_out, num_in, vcrypto, GFP_ATOMIC);
-+	if (err < 0)
-+		goto out;
-+
-+	virtqueue_kick(vcrypto->ctrl_vq);
-+	while (!virtqueue_get_buf(vcrypto->ctrl_vq, &inlen) &&
-+	       !virtqueue_is_broken(vcrypto->ctrl_vq))
-+		cpu_relax();
-+
-+	if (vcrypto->ctrl_status.status != VIRTIO_CRYPTO_OK) {
-+		err = -EINVAL;
-+		goto out;
-+	}
-+
-+	err = 0;
-+	ctx->session_valid = false;
-+
-+out:
-+	spin_unlock(&vcrypto->ctrl_lock);
-+	if (err < 0) {
-+		pr_err("virtio_crypto: Close session failed status: %u, session_id: 0x%llx\n",
-+			vcrypto->ctrl_status.status, destroy_session->session_id);
-+	}
-+
-+	return err;
-+}
-+
-+static int __virtio_crypto_akcipher_do_req(struct virtio_crypto_akcipher_request *vc_akcipher_req,
-+		struct akcipher_request *req, struct data_queue *data_vq)
-+{
-+	struct virtio_crypto_akcipher_ctx *ctx = vc_akcipher_req->akcipher_ctx;
-+	struct virtio_crypto_request *vc_req = &vc_akcipher_req->base;
-+	struct virtio_crypto *vcrypto = ctx->vcrypto;
-+	struct virtio_crypto_op_data_req *req_data = vc_req->req_data;
-+	struct scatterlist *sgs[4], outhdr_sg, inhdr_sg, srcdata_sg, dstdata_sg;
-+	void *src_buf = NULL, *dst_buf = NULL;
-+	unsigned int num_out = 0, num_in = 0;
-+	int node = dev_to_node(&vcrypto->vdev->dev);
-+	unsigned long flags;
-+	int ret = -ENOMEM;
-+	bool verify = vc_akcipher_req->opcode == VIRTIO_CRYPTO_AKCIPHER_VERIFY;
-+	unsigned int src_len = verify ? req->src_len + req->dst_len : req->src_len;
-+
-+	/* out header */
-+	sg_init_one(&outhdr_sg, req_data, sizeof(*req_data));
-+	sgs[num_out++] = &outhdr_sg;
-+
-+	/* src data */
-+	src_buf = kcalloc_node(src_len, 1, GFP_KERNEL, node);
-+	if (!src_buf)
-+		goto err;
-+
-+	if (verify) {
-+		/* for verify operation, both src and dst data work as OUT direction */
-+		sg_copy_to_buffer(req->src, sg_nents(req->src), src_buf, src_len);
-+		sg_init_one(&srcdata_sg, src_buf, src_len);
-+		sgs[num_out++] = &srcdata_sg;
-+	} else {
-+		sg_copy_to_buffer(req->src, sg_nents(req->src), src_buf, src_len);
-+		sg_init_one(&srcdata_sg, src_buf, src_len);
-+		sgs[num_out++] = &srcdata_sg;
-+
-+		/* dst data */
-+		dst_buf = kcalloc_node(req->dst_len, 1, GFP_KERNEL, node);
-+		if (!dst_buf)
-+			goto err;
-+
-+		sg_init_one(&dstdata_sg, dst_buf, req->dst_len);
-+		sgs[num_out + num_in++] = &dstdata_sg;
-+	}
-+
-+	/* in header */
-+	sg_init_one(&inhdr_sg, &vc_req->status, sizeof(vc_req->status));
-+	sgs[num_out + num_in++] = &inhdr_sg;
-+
-+	spin_lock_irqsave(&data_vq->lock, flags);
-+	ret = virtqueue_add_sgs(data_vq->vq, sgs, num_out, num_in, vc_req, GFP_ATOMIC);
-+	virtqueue_kick(data_vq->vq);
-+	spin_unlock_irqrestore(&data_vq->lock, flags);
-+	if (ret)
-+		goto err;
-+
-+	vc_akcipher_req->src_buf = src_buf;
-+	vc_akcipher_req->dst_buf = dst_buf;
-+
-+	return 0;
-+
-+err:
-+	kfree(src_buf);
-+	kfree(dst_buf);
-+
-+	return -ENOMEM;
-+}
-+
-+int virtio_crypto_rsa_do_req(struct crypto_engine *engine, void *vreq)
-+{
-+	struct akcipher_request *req = container_of(vreq, struct akcipher_request, base);
-+	struct virtio_crypto_akcipher_request *vc_akcipher_req = akcipher_request_ctx(req);
-+	struct virtio_crypto_request *vc_req = &vc_akcipher_req->base;
-+	struct virtio_crypto_akcipher_ctx *ctx = vc_akcipher_req->akcipher_ctx;
-+	struct virtio_crypto *vcrypto = ctx->vcrypto;
-+	struct data_queue *data_vq = vc_req->dataq;
-+	struct virtio_crypto_op_header *header;
-+	struct virtio_crypto_akcipher_data_req *akcipher_req;
-+	int ret;
-+
-+	vc_req->sgs = NULL;
-+	vc_req->req_data = kzalloc_node(sizeof(*vc_req->req_data),
-+		GFP_KERNEL, dev_to_node(&vcrypto->vdev->dev));
-+	if (!vc_req->req_data)
-+		return -ENOMEM;
-+
-+	/* build request header */
-+	header = &vc_req->req_data->header;
-+	header->opcode = cpu_to_le32(vc_akcipher_req->opcode);
-+	header->algo = cpu_to_le32(VIRTIO_CRYPTO_AKCIPHER_RSA);
-+	header->session_id = cpu_to_le64(ctx->session_id);
-+
-+	/* build request akcipher data */
-+	akcipher_req = &vc_req->req_data->u.akcipher_req;
-+	akcipher_req->para.src_data_len = cpu_to_le32(req->src_len);
-+	akcipher_req->para.dst_data_len = cpu_to_le32(req->dst_len);
-+
-+	ret = __virtio_crypto_akcipher_do_req(vc_akcipher_req, req, data_vq);
-+	if (ret < 0) {
-+		kfree_sensitive(vc_req->req_data);
-+		vc_req->req_data = NULL;
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int virtio_crypto_rsa_req(struct akcipher_request *req, uint32_t opcode)
-+{
-+	struct crypto_akcipher *atfm = crypto_akcipher_reqtfm(req);
-+	struct virtio_crypto_akcipher_ctx *ctx = akcipher_tfm_ctx(atfm);
-+	struct virtio_crypto_akcipher_request *vc_akcipher_req = akcipher_request_ctx(req);
-+	struct virtio_crypto_request *vc_req = &vc_akcipher_req->base;
-+	struct virtio_crypto *vcrypto = ctx->vcrypto;
-+	/* Use the first data virtqueue as default */
-+	struct data_queue *data_vq = &vcrypto->data_vq[0];
-+
-+	vc_req->dataq = data_vq;
-+	vc_req->alg_cb = virtio_crypto_dataq_akcipher_callback;
-+	vc_akcipher_req->akcipher_ctx = ctx;
-+	vc_akcipher_req->akcipher_req = req;
-+	vc_akcipher_req->opcode = opcode;
-+
-+	return crypto_transfer_akcipher_request_to_engine(data_vq->engine, req);
-+}
-+
-+static int virtio_crypto_rsa_encrypt(struct akcipher_request *req)
-+{
-+	return virtio_crypto_rsa_req(req, VIRTIO_CRYPTO_AKCIPHER_ENCRYPT);
-+}
-+
-+static int virtio_crypto_rsa_decrypt(struct akcipher_request *req)
-+{
-+	return virtio_crypto_rsa_req(req, VIRTIO_CRYPTO_AKCIPHER_DECRYPT);
-+}
-+
-+static int virtio_crypto_rsa_sign(struct akcipher_request *req)
-+{
-+	return virtio_crypto_rsa_req(req, VIRTIO_CRYPTO_AKCIPHER_SIGN);
-+}
-+
-+static int virtio_crypto_rsa_verify(struct akcipher_request *req)
-+{
-+	return virtio_crypto_rsa_req(req, VIRTIO_CRYPTO_AKCIPHER_VERIFY);
-+}
-+
-+static int virtio_crypto_rsa_set_key(struct crypto_akcipher *tfm,
-+				     const void *key,
-+				     unsigned int keylen,
-+				     bool private,
-+				     int padding_algo,
-+				     int hash_algo)
-+{
-+	struct virtio_crypto_akcipher_ctx *ctx = akcipher_tfm_ctx(tfm);
-+	struct virtio_crypto_rsa_ctx *rsa_ctx = &ctx->rsa_ctx;
-+	struct virtio_crypto *vcrypto;
-+	struct virtio_crypto_ctrl_header header;
-+	struct virtio_crypto_akcipher_session_para para;
-+	struct rsa_key rsa_key = {0};
-+	int node = virtio_crypto_get_current_node();
-+	uint32_t keytype;
-+	int ret;
-+
-+	/* mpi_free will test n, just free it. */
-+	mpi_free(rsa_ctx->n);
-+	rsa_ctx->n = NULL;
-+
-+	if (private) {
-+		keytype = VIRTIO_CRYPTO_AKCIPHER_KEY_TYPE_PRIVATE;
-+		ret = rsa_parse_priv_key(&rsa_key, key, keylen);
-+	} else {
-+		keytype = VIRTIO_CRYPTO_AKCIPHER_KEY_TYPE_PUBLIC;
-+		ret = rsa_parse_pub_key(&rsa_key, key, keylen);
-+	}
-+
-+	if (ret)
-+		return ret;
-+
-+	rsa_ctx->n = mpi_read_raw_data(rsa_key.n, rsa_key.n_sz);
-+	if (!rsa_ctx->n)
-+		return -ENOMEM;
-+
-+	if (!ctx->vcrypto) {
-+		vcrypto = virtcrypto_get_dev_node(node, VIRTIO_CRYPTO_SERVICE_AKCIPHER,
-+						VIRTIO_CRYPTO_AKCIPHER_RSA);
-+		if (!vcrypto) {
-+			pr_err("virtio_crypto: Could not find a virtio device in the system or unsupported algo\n");
-+			return -ENODEV;
-+		}
-+
-+		ctx->vcrypto = vcrypto;
-+	} else {
-+		virtio_crypto_alg_akcipher_close_session(ctx);
-+	}
-+
-+	/* set ctrl header */
-+	header.opcode =	cpu_to_le32(VIRTIO_CRYPTO_AKCIPHER_CREATE_SESSION);
-+	header.algo = cpu_to_le32(VIRTIO_CRYPTO_AKCIPHER_RSA);
-+	header.queue_id = 0;
-+
-+	/* set RSA para */
-+	para.algo = cpu_to_le32(VIRTIO_CRYPTO_AKCIPHER_RSA);
-+	para.keytype = cpu_to_le32(keytype);
-+	para.keylen = cpu_to_le32(keylen);
-+	para.u.rsa.padding_algo = cpu_to_le32(padding_algo);
-+	para.u.rsa.hash_algo = cpu_to_le32(hash_algo);
-+
-+	return virtio_crypto_alg_akcipher_init_session(ctx, &header, &para, key, keylen);
-+}
-+
-+static int virtio_crypto_rsa_raw_set_priv_key(struct crypto_akcipher *tfm,
-+					      const void *key,
-+					      unsigned int keylen)
-+{
-+	return virtio_crypto_rsa_set_key(tfm, key, keylen, 1,
-+					 VIRTIO_CRYPTO_RSA_RAW_PADDING,
-+					 VIRTIO_CRYPTO_RSA_NO_HASH);
-+}
-+
-+
-+static int virtio_crypto_p1pad_rsa_sha1_set_priv_key(struct crypto_akcipher *tfm,
-+						     const void *key,
-+						     unsigned int keylen)
-+{
-+	return virtio_crypto_rsa_set_key(tfm, key, keylen, 1,
-+					 VIRTIO_CRYPTO_RSA_PKCS1_PADDING,
-+					 VIRTIO_CRYPTO_RSA_SHA1);
-+}
-+
-+static int virtio_crypto_rsa_raw_set_pub_key(struct crypto_akcipher *tfm,
-+					     const void *key,
-+					     unsigned int keylen)
-+{
-+	return virtio_crypto_rsa_set_key(tfm, key, keylen, 0,
-+					 VIRTIO_CRYPTO_RSA_RAW_PADDING,
-+					 VIRTIO_CRYPTO_RSA_NO_HASH);
-+}
-+
-+static int virtio_crypto_p1pad_rsa_sha1_set_pub_key(struct crypto_akcipher *tfm,
-+						    const void *key,
-+						    unsigned int keylen)
-+{
-+	return virtio_crypto_rsa_set_key(tfm, key, keylen, 0,
-+					 VIRTIO_CRYPTO_RSA_PKCS1_PADDING,
-+					 VIRTIO_CRYPTO_RSA_SHA1);
-+}
-+
-+static unsigned int virtio_crypto_rsa_max_size(struct crypto_akcipher *tfm)
-+{
-+	struct virtio_crypto_akcipher_ctx *ctx = akcipher_tfm_ctx(tfm);
-+	struct virtio_crypto_rsa_ctx *rsa_ctx = &ctx->rsa_ctx;
-+
-+	return mpi_get_size(rsa_ctx->n);
-+}
-+
-+static int virtio_crypto_rsa_init_tfm(struct crypto_akcipher *tfm)
-+{
-+	struct virtio_crypto_akcipher_ctx *ctx = akcipher_tfm_ctx(tfm);
-+
-+	ctx->tfm = tfm;
-+	ctx->enginectx.op.do_one_request = virtio_crypto_rsa_do_req;
-+	ctx->enginectx.op.prepare_request = NULL;
-+	ctx->enginectx.op.unprepare_request = NULL;
-+
-+	return 0;
-+}
-+
-+static void virtio_crypto_rsa_exit_tfm(struct crypto_akcipher *tfm)
-+{
-+	struct virtio_crypto_akcipher_ctx *ctx = akcipher_tfm_ctx(tfm);
-+	struct virtio_crypto_rsa_ctx *rsa_ctx = &ctx->rsa_ctx;
-+
-+	virtio_crypto_alg_akcipher_close_session(ctx);
-+	virtcrypto_dev_put(ctx->vcrypto);
-+	mpi_free(rsa_ctx->n);
-+	rsa_ctx->n = NULL;
-+}
-+
-+static struct virtio_crypto_akcipher_algo virtio_crypto_akcipher_algs[] = {
-+	{
-+		.algonum = VIRTIO_CRYPTO_AKCIPHER_RSA,
-+		.service = VIRTIO_CRYPTO_SERVICE_AKCIPHER,
-+		.algo = {
-+			.encrypt = virtio_crypto_rsa_encrypt,
-+			.decrypt = virtio_crypto_rsa_decrypt,
-+			.set_pub_key = virtio_crypto_rsa_raw_set_pub_key,
-+			.set_priv_key = virtio_crypto_rsa_raw_set_priv_key,
-+			.max_size = virtio_crypto_rsa_max_size,
-+			.init = virtio_crypto_rsa_init_tfm,
-+			.exit = virtio_crypto_rsa_exit_tfm,
-+			.reqsize = sizeof(struct virtio_crypto_akcipher_request),
-+			.base = {
-+				.cra_name = "rsa",
-+				.cra_driver_name = "virtio-crypto-rsa",
-+				.cra_priority = 150,
-+				.cra_module = THIS_MODULE,
-+				.cra_ctxsize = sizeof(struct virtio_crypto_akcipher_ctx),
-+			},
-+		},
-+	},
-+	{
-+		.algonum = VIRTIO_CRYPTO_AKCIPHER_RSA,
-+		.service = VIRTIO_CRYPTO_SERVICE_AKCIPHER,
-+		.algo = {
-+			.encrypt = virtio_crypto_rsa_encrypt,
-+			.decrypt = virtio_crypto_rsa_decrypt,
-+			.sign = virtio_crypto_rsa_sign,
-+			.verify = virtio_crypto_rsa_verify,
-+			.set_pub_key = virtio_crypto_p1pad_rsa_sha1_set_pub_key,
-+			.set_priv_key = virtio_crypto_p1pad_rsa_sha1_set_priv_key,
-+			.max_size = virtio_crypto_rsa_max_size,
-+			.init = virtio_crypto_rsa_init_tfm,
-+			.exit = virtio_crypto_rsa_exit_tfm,
-+			.reqsize = sizeof(struct virtio_crypto_akcipher_request),
-+			.base = {
-+				.cra_name = "pkcs1pad(rsa,sha1)",
-+				.cra_driver_name = "virtio-pkcs1-rsa-with-sha1",
-+				.cra_priority = 150,
-+				.cra_module = THIS_MODULE,
-+				.cra_ctxsize = sizeof(struct virtio_crypto_akcipher_ctx),
-+			},
-+		},
-+	},
-+};
-+
-+int virtio_crypto_akcipher_algs_register(struct virtio_crypto *vcrypto)
-+{
-+	int ret = 0;
-+	int i = 0;
-+
-+	mutex_lock(&algs_lock);
-+
-+	for (i = 0; i < ARRAY_SIZE(virtio_crypto_akcipher_algs); i++) {
-+		uint32_t service = virtio_crypto_akcipher_algs[i].service;
-+		uint32_t algonum = virtio_crypto_akcipher_algs[i].algonum;
-+
-+		if (!virtcrypto_algo_is_supported(vcrypto, service, algonum))
-+			continue;
-+
-+		if (virtio_crypto_akcipher_algs[i].active_devs == 0) {
-+			ret = crypto_register_akcipher(&virtio_crypto_akcipher_algs[i].algo);
-+			if (ret)
-+				goto unlock;
-+		}
-+
-+		virtio_crypto_akcipher_algs[i].active_devs++;
-+		dev_info(&vcrypto->vdev->dev, "Registered akcipher algo %s\n",
-+			 virtio_crypto_akcipher_algs[i].algo.base.cra_name);
-+	}
-+
-+unlock:
-+	mutex_unlock(&algs_lock);
-+	return ret;
-+}
-+
-+void virtio_crypto_akcipher_algs_unregister(struct virtio_crypto *vcrypto)
-+{
-+	int i = 0;
-+
-+	mutex_lock(&algs_lock);
-+
-+	for (i = 0; i < ARRAY_SIZE(virtio_crypto_akcipher_algs); i++) {
-+		uint32_t service = virtio_crypto_akcipher_algs[i].service;
-+		uint32_t algonum = virtio_crypto_akcipher_algs[i].algonum;
-+
-+		if (virtio_crypto_akcipher_algs[i].active_devs == 0 ||
-+		    !virtcrypto_algo_is_supported(vcrypto, service, algonum))
-+			continue;
-+
-+		if (virtio_crypto_akcipher_algs[i].active_devs == 1)
-+			crypto_unregister_akcipher(&virtio_crypto_akcipher_algs[i].algo);
-+
-+		virtio_crypto_akcipher_algs[i].active_devs--;
-+	}
-+
-+	mutex_unlock(&algs_lock);
-+}
-diff --git a/drivers/crypto/virtio/virtio_crypto_common.h b/drivers/crypto/virtio/virtio_crypto_common.h
-index a24f85c589e7..214f9a6fcf84 100644
---- a/drivers/crypto/virtio/virtio_crypto_common.h
-+++ b/drivers/crypto/virtio/virtio_crypto_common.h
-@@ -56,6 +56,7 @@ struct virtio_crypto {
- 	u32 mac_algo_l;
- 	u32 mac_algo_h;
- 	u32 aead_algo;
-+	u32 akcipher_algo;
- 
- 	/* Maximum length of cipher key */
- 	u32 max_cipher_key_len;
-@@ -131,5 +132,7 @@ static inline int virtio_crypto_get_current_node(void)
- 
- int virtio_crypto_algs_register(struct virtio_crypto *vcrypto);
- void virtio_crypto_algs_unregister(struct virtio_crypto *vcrypto);
-+int virtio_crypto_akcipher_algs_register(struct virtio_crypto *vcrypto);
-+void virtio_crypto_akcipher_algs_unregister(struct virtio_crypto *vcrypto);
- 
- #endif /* _VIRTIO_CRYPTO_COMMON_H */
-diff --git a/drivers/crypto/virtio/virtio_crypto_core.c b/drivers/crypto/virtio/virtio_crypto_core.c
-index 8e977b7627cb..c6f482db0bc0 100644
---- a/drivers/crypto/virtio/virtio_crypto_core.c
-+++ b/drivers/crypto/virtio/virtio_crypto_core.c
-@@ -297,6 +297,7 @@ static int virtcrypto_probe(struct virtio_device *vdev)
- 	u32 mac_algo_l = 0;
- 	u32 mac_algo_h = 0;
- 	u32 aead_algo = 0;
-+	u32 akcipher_algo = 0;
- 	u32 crypto_services = 0;
- 
- 	if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
-@@ -348,6 +349,9 @@ static int virtcrypto_probe(struct virtio_device *vdev)
- 			mac_algo_h, &mac_algo_h);
- 	virtio_cread_le(vdev, struct virtio_crypto_config,
- 			aead_algo, &aead_algo);
-+	if (crypto_services & (1 << VIRTIO_CRYPTO_SERVICE_AKCIPHER))
-+		virtio_cread_le(vdev, struct virtio_crypto_config,
-+				akcipher_algo, &akcipher_algo);
- 
- 	/* Add virtio crypto device to global table */
- 	err = virtcrypto_devmgr_add_dev(vcrypto);
-@@ -374,7 +378,7 @@ static int virtcrypto_probe(struct virtio_device *vdev)
- 	vcrypto->mac_algo_h = mac_algo_h;
- 	vcrypto->hash_algo = hash_algo;
- 	vcrypto->aead_algo = aead_algo;
--
-+	vcrypto->akcipher_algo = akcipher_algo;
- 
- 	dev_info(&vdev->dev,
- 		"max_queues: %u, max_cipher_key_len: %u, max_auth_key_len: %u, max_size 0x%llx\n",
-diff --git a/drivers/crypto/virtio/virtio_crypto_mgr.c b/drivers/crypto/virtio/virtio_crypto_mgr.c
-index 6860f8180c7c..1cb92418b321 100644
---- a/drivers/crypto/virtio/virtio_crypto_mgr.c
-+++ b/drivers/crypto/virtio/virtio_crypto_mgr.c
-@@ -242,6 +242,12 @@ int virtcrypto_dev_start(struct virtio_crypto *vcrypto)
- 		return -EFAULT;
- 	}
- 
-+	if (virtio_crypto_akcipher_algs_register(vcrypto)) {
-+		pr_err("virtio_crypto: Failed to register crypto akcipher algs\n");
-+		virtio_crypto_algs_unregister(vcrypto);
-+		return -EFAULT;
-+	}
-+
- 	return 0;
- }
- 
-@@ -258,6 +264,7 @@ int virtcrypto_dev_start(struct virtio_crypto *vcrypto)
- void virtcrypto_dev_stop(struct virtio_crypto *vcrypto)
- {
- 	virtio_crypto_algs_unregister(vcrypto);
-+	virtio_crypto_akcipher_algs_unregister(vcrypto);
- }
- 
- /*
-@@ -312,6 +319,10 @@ bool virtcrypto_algo_is_supported(struct virtio_crypto *vcrypto,
- 	case VIRTIO_CRYPTO_SERVICE_AEAD:
- 		algo_mask = vcrypto->aead_algo;
- 		break;
-+
-+	case VIRTIO_CRYPTO_SERVICE_AKCIPHER:
-+		algo_mask = vcrypto->akcipher_algo;
-+		break;
- 	}
- 
- 	if (!(algo_mask & (1u << algo)))
--- 
-2.25.1
-
+> Regards,
+>
+>         Hans
+>
+> On 1/19/22 11:08, Chen-Yu Tsai wrote:
+> > Hi,
+> >
+> > On Wed, Jan 19, 2022 at 5:02 AM Ezequiel Garcia
+> > <ezequiel@vanguardiasur.com.ar> wrote:
+> >>
+> >> Hi Chen-Yu,
+> >>
+> >> The series looks good, thanks for picking up this task.
+> >>
+> >> Just a one comment.
+> >>
+> >> On Fri, Jan 07, 2022 at 05:34:48PM +0800, Chen-Yu Tsai wrote:
+> >>> In the earlier submissions of the Hantro/Rockchip JPEG encoder driver, a
+> >>> wmb() was inserted before the final register write that starts the
+> >>> encoder. In v11, it was removed and the second-to-last register write
+> >>> was changed to a non-relaxed write, which has an implicit wmb() [1].
+> >>> The rockchip_vpu2 (then rk3399_vpu) variant is even weirder as there
+> >>> is another writel_relaxed() following the non-relaxed one.
+> >>>
+> >>> Turns out only the last writel() needs to be non-relaxed. Device I/O
+> >>> mappings already guarantee strict ordering to the same endpoint, and
+> >>> the writel() triggering the hardware would force all writes to memory
+> >>> to be observed before the writel() to the hardware is observed.
+> >>>
+> >>> [1] https://lore.kernel.org/linux-media/CAAFQd5ArFG0hU6MgcyLd+_UOP3+T_U-aw2FXv6sE7fGqVCVGqw@mail.gmail.com/
+> >>>
+> >>> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> >>> ---
+> >>>  drivers/staging/media/hantro/hantro_h1_jpeg_enc.c        | 3 +--
+> >>>  drivers/staging/media/hantro/rockchip_vpu2_hw_jpeg_enc.c | 3 +--
+> >>>  2 files changed, 2 insertions(+), 4 deletions(-)
+> >>>
+> >>> diff --git a/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c b/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c
+> >>> index 1450013d3685..03db1c3444f8 100644
+> >>> --- a/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c
+> >>> +++ b/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c
+> >>> @@ -123,8 +123,7 @@ int hantro_h1_jpeg_enc_run(struct hantro_ctx *ctx)
+> >>>               | H1_REG_AXI_CTRL_INPUT_SWAP32
+> >>>               | H1_REG_AXI_CTRL_OUTPUT_SWAP8
+> >>>               | H1_REG_AXI_CTRL_INPUT_SWAP8;
+> >>> -     /* Make sure that all registers are written at this point. */
+> >>> -     vepu_write(vpu, reg, H1_REG_AXI_CTRL);
+> >>> +     vepu_write_relaxed(vpu, reg, H1_REG_AXI_CTRL);
+> >>>
+> >>
+> >> As far as I can remember, this logic comes from really old Chromium Kernels.
+> >> You might be right, and this barrier isn't needed... but then OTOH the comment
+> >> is here for a reason, so maybe it is needed (or was needed on some RK3288 SoC revision).
+> >
+> > I just realized that my commit log is wrong.
+> >
+> > " ... a wmb() was inserted before the final register write that starts the
+> > encoder. ... " . It is actually before the second-to-last register write.
+> >
+> >> I don't have RK3288 boards near me, but in any case, I'm not sure
+> >> we'd be able to test this easily (maybe there are issues that only
+> >> trigger under a certain load).
+> >
+> > I see. I do have a Veyron around that I haven't used in awhile. But as you
+> > said, it might not be an obvious hardware limitation.
+> >
+> >> I'd personally avoid this one change, but if you are confident enough with it
+> >> that's fine too.
+> >
+> > Unfortunately they didn't leave a whole lot of clues around. For most hardware,
+> > as I mentioned in the commit log, I think the final non-relaxed write should
+> > suffice. I'd point to the decoder drivers not having any barriers or
+> > non-relaxed writes except the final one, but IIUC they are actually two
+> > distinct pieces of hardware.
+> >
+> > I suspect we will never know. This JPEG encoder doesn't seem to get used
+> > a lot. The VP8 and H.264 encoders on ChromeOS work correctly without the
+> > extra barrier and get tested a lot, but that's only testing the RK3399.
+> >
+> > Hans, would it be possible for you to skip this patch and pick the rest?
+> > Or would you like me to resent without this one?
+> >
+> >
+> > Thanks
+> > ChenYu
+> >
+> >> Thanks!
+> >> Ezequiel
+> >>
+> >>>       reg = H1_REG_ENC_CTRL_WIDTH(MB_WIDTH(ctx->src_fmt.width))
+> >>>               | H1_REG_ENC_CTRL_HEIGHT(MB_HEIGHT(ctx->src_fmt.height))
+> >>> diff --git a/drivers/staging/media/hantro/rockchip_vpu2_hw_jpeg_enc.c b/drivers/staging/media/hantro/rockchip_vpu2_hw_jpeg_enc.c
+> >>> index 4df16f59fb97..b931fc5fa1a9 100644
+> >>> --- a/drivers/staging/media/hantro/rockchip_vpu2_hw_jpeg_enc.c
+> >>> +++ b/drivers/staging/media/hantro/rockchip_vpu2_hw_jpeg_enc.c
+> >>> @@ -152,8 +152,7 @@ int rockchip_vpu2_jpeg_enc_run(struct hantro_ctx *ctx)
+> >>>               | VEPU_REG_INPUT_SWAP8
+> >>>               | VEPU_REG_INPUT_SWAP16
+> >>>               | VEPU_REG_INPUT_SWAP32;
+> >>> -     /* Make sure that all registers are written at this point. */
+> >>> -     vepu_write(vpu, reg, VEPU_REG_DATA_ENDIAN);
+> >>> +     vepu_write_relaxed(vpu, reg, VEPU_REG_DATA_ENDIAN);
+> >>>
+> >>>       reg = VEPU_REG_AXI_CTRL_BURST_LEN(16);
+> >>>       vepu_write_relaxed(vpu, reg, VEPU_REG_AXI_CTRL);
+> >>> --
+> >>> 2.34.1.575.g55b058a8bb-goog
+> >>>

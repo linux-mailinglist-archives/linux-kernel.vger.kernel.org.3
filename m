@@ -2,100 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C024964E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 19:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E5A49652A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 19:37:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382076AbiAUSSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 13:18:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40664 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381873AbiAUSSC (ORCPT
+        id S1382064AbiAUShk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 13:37:40 -0500
+Received: from finn.gateworks.com ([108.161.129.64]:48800 "EHLO
+        finn.localdomain" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S241096AbiAUShb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 13:18:02 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1926C06173B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 10:18:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=qJqfOISO6T+iTDW/zdzr5qhydNTWknW2VivfkJ9v0+E=; b=Tu6isNws4GCX25N3emOB/9+wpp
-        6605E4FcMUiCdqO+kQNnAi+mpKRDXRXbDjOzdCV/K1Pg1YyYLYvxl7VsoO+t0X0wVHR0iElqah5NA
-        JmGQnn4rwnjk1H9CMSrb/wmFGWpLhCyl+y4LOIc1JudT/Rrno6n+1gj1eBqM06G2560nZjHX5mj3w
-        hx24JH/YIzpwsOapyTk45EhYuqxqooo4LwKaVM/pqsIZHKkgAdDMtm8iq3pW1lWrvVCi4RRuR3DB8
-        5xzelTmkiNdKFh/pOyJXaUqhFcD9TCh06bbXXTP9UafBqd9XF/8KrL1YVGeUCw4Fw06oM1J3UJ9y1
-        VS4EGP3A==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nAyU2-002cnK-Ri; Fri, 21 Jan 2022 18:17:59 +0000
-Message-ID: <2e7a440f-b942-2794-6c15-66baf81801ae@infradead.org>
-Date:   Fri, 21 Jan 2022 10:17:53 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: Issue With Kernel Changes To Core Dump Collection (Kernel
- Bug...?)
-Content-Language: en-US
-To:     Bill Messmer <wmessmer@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jann Horn <jannh@google.com>
-References: <SJ0PR21MB13117BB925ABFD8857CAA5B5C45B9@SJ0PR21MB1311.namprd21.prod.outlook.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <SJ0PR21MB13117BB925ABFD8857CAA5B5C45B9@SJ0PR21MB1311.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Fri, 21 Jan 2022 13:37:31 -0500
+X-Greylist: delayed 1213 seconds by postgrey-1.27 at vger.kernel.org; Fri, 21 Jan 2022 13:37:30 EST
+Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
+        by finn.localdomain with esmtp (Exim 4.93)
+        (envelope-from <tharvey@gateworks.com>)
+        id 1nAyUl-00A3D6-9E; Fri, 21 Jan 2022 18:18:43 +0000
+From:   Tim Harvey <tharvey@gateworks.com>
+To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Tim Harvey <tharvey@gateworks.com>
+Subject: [PATCH] arm64: dts: imx8mm-venice-gw73xx-0x: add dt overlay for imx219 rpi v2 camera
+Date:   Fri, 21 Jan 2022 10:18:41 -0800
+Message-Id: <20220121181841.13650-1-tharvey@gateworks.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[add the patch author, Jann]
+Add support for the RaspberryPi Camera v2 which is an IMX219 8MP module:
+ - https://datasheets.raspberrypi.com/camera/camera-v2-schematics.pdf
+ - has its own on-board 24MHz osc so no clock required from baseboard
+ - pin 11 enables 1.8V and 2.8V LDO which is connected to
+   GW73xx MIPI_GPIO4 (IMX8MM GPIO1_IO1) so we use this as a gpio
+   controlled regulator enable.
 
+Support is added via a device-tree overlay.
 
-On 1/20/22 17:31, Bill Messmer wrote:
-> Hello,
-> 
-> It has been my understanding for some time that the kernel config option CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS (and the corresponding bit 4 of the coredump filter) was, at one point, added for the purpose of ensuring that the GNU build-id of ELF objects was included in core dumps.  The config description in Kconfig.binfmt even alludes to this in its description.
-> 
-> I am trying to understand why in the 5.10+ kernels, there was a change in the kernel that, instead of checking whether a given memory mapping had an ELF header in order to determine whether to include the page to checking whether the inode is executable.  The change in question:
-> 
-> 	github.com/torvalds/linux/commit/429a22e776a2b9f85a2b9c53d8e647598b553dd1
-> 
+The IMX219 supports RAW8/RAW10 image formats.
 
-Bill,
-You should send email(s) to the relevant people if you can identify them.
-LKML is a huge pipe (hose) and people don't normally browse it.  :)
+Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+---
+ arch/arm64/boot/dts/freescale/Makefile        |  1 +
+ .../imx8mm-venice-gw73xx-0x-imx219.dts        | 84 +++++++++++++++++++
+ 2 files changed, 85 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dts
 
-
-> In many distributions (e.g.: Ubuntu), the shared objects in /usr/lib and elsewhere are not marked as executable.  One of the net effects here is that the first page of shared objects on these distributions are no longer captured in core dumps.
-> 
-> A core dump taken on Ubuntu 21.10 (with the 5.13 kernel) will, by default, not include these pages:
-> 
->   LOAD           0x0000000000007000 0x00007f375855f000 0x0000000000000000
->                  0x0000000000000000 0x000000000002c000  R      0x1000
-> 
->    0x00007f375855f000  0x00007f375858b000  0x0000000000000000
->         /usr/lib/x86_64-linux-gnu/libc.so.6
-> 
-> Doing a quick "sudo chmod +x /usr/lib/x86_64-linux-gnu/libc.so.6" and repeating shows that it is:
-> 
->   LOAD           0x0000000000007000 0x00007fefd5282000 0x0000000000000000
->                  0x0000000000001000 0x000000000002c000  R      0x1000
-> 
->     0x00007fefd5282000  0x00007fefd52ae000  0x0000000000000000
->         /usr/lib/x86_64-linux-gnu/libc.so.6
-> 
-> Prior to running with 5.10+ kernels, I was always seeing the first page of shared objects (and the contained build-id) within core dumps (assuming the proper kernel config and core dump filter bits).  Not any longer.
-> 
-> The reason I ask this is that, as more teams here at Microsoft have products running on Linux (or in Linux containers), we have been pushing the crash reports for those up through the same post-mortem crash analysis infrastructure that we do for Windows.  That means that what has traditionally been the Windows debugger (e.g.: WinDbg) has, for some time, been able to open, debug, and analyze various Linux post-mortem crash formats.  Part of doing this on a post-mortem basis requires finding the original images and debug information for the executables and shared objects referenced in those core dumps.  Whether we do that via our own symbol servers or via a debuginfod service -- the post-mortem debugger needs access to the build-ids of those objects.
-> 
-> Until recently, finding these from a core dump has been stable and working quite well.  Of late, however, we have been seeing a number of crash reports (e.g.: from Debian or Ubuntu containers) where we can no longer find images & symbols based on the core dumps because this kernel change has caused the first page of shared object files to not be captured in core dumps.  I don't know how many post-mortem Linux crash analysis solutions this is affecting...  
-> 
-> Was the change here really the intent...?  or is this a kernel bug?
-> 
-> Sincerely,
-> 
-> Bill Messmer
-> wmessmer@microsoft.com
-
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index 2d3489eb073d..324c1b01989a 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -47,6 +47,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x-rs232-rts.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x-rs422.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x-rs485.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-imx219.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs232-rts.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs422.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs485.dtbo
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dts
+new file mode 100644
+index 000000000000..33aa9eb477a5
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dts
+@@ -0,0 +1,84 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2022 Gateworks Corporation
++ */
++
++#include <dt-bindings/gpio/gpio.h>
++
++#include "imx8mm-pinfunc.h"
++
++/dts-v1/;
++/plugin/;
++
++&{/} {
++	compatible = "gw,imx8mm-gw73xx-0x", "fsl,imx8mm";
++
++	reg_cam: regulator-cam {
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_reg_cam>;
++		compatible = "regulator-fixed";
++		regulator-name = "reg_cam";
++		gpio = <&gpio1 1 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++	};
++
++	cam24m: cam24m {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <24000000>;
++		clock-output-names = "cam24m";
++	};
++};
++
++&csi {
++	status = "okay";
++};
++
++&i2c3 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	imx219: sensor@10 {
++		compatible = "sony,imx219";
++		reg = <0x10>;
++		clocks = <&cam24m>;
++		VDIG-supply = <&reg_cam>;
++
++		port {
++			/* MIPI CSI-2 bus endpoint */
++			imx219_to_mipi_csi2: endpoint {
++				remote-endpoint = <&imx8mm_mipi_csi_in>;
++				clock-lanes = <0>;
++				data-lanes = <1 2>;
++				link-frequencies = /bits/ 64 <456000000>;
++			};
++		};
++	};
++};
++
++&mipi_csi {
++	status = "okay";
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@0 {
++			reg = <0>;
++			imx8mm_mipi_csi_in: endpoint {
++				remote-endpoint = <&imx219_to_mipi_csi2>;
++				data-lanes = <1 2>;
++			};
++		};
++	};
++};
++
++&iomuxc {
++	pinctrl_reg_cam: regcamgrp {
++		fsl,pins = <
++			MX8MM_IOMUXC_GPIO1_IO01_GPIO1_IO1	0x41
++		>;
++	};
++};
 -- 
-~Randy
+2.17.1
+

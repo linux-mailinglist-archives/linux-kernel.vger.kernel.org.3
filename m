@@ -2,110 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A6D49606A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95295496068
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:05:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350894AbiAUOFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 09:05:51 -0500
-Received: from mga04.intel.com ([192.55.52.120]:2394 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350871AbiAUOFu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S1350874AbiAUOFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 21 Jan 2022 09:05:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642773950; x=1674309950;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=69sgSZz7lyieU1mkFLPQfUU9GE2k09qc14bQ2+FZAuE=;
-  b=cF6lyz1SndhCfOQwXlHq4Y4rC2oN2OYdN4grDM68Mmkk4hjIQYezd20n
-   ibFW5tMPrCqqB+kIUxWVnj9h774Gm5LCFi5Gn/fXBLRvw+WW+zWXbrqI2
-   BsEMzim7mJw+pTY0iT05brGn868KyOLe3nMAmi+iPC4l6IRbMYb2jY7GC
-   7WYuZh5RfXouMGMRGj03zvcONRcGoZ1qqVAbAnF+NiLDF1foHppnleb29
-   tW8O3If40W8Vo2VkLTvv2X/4a518IvsJ8MoEB42oSAJjMenhcEcJarpKz
-   BchNddks9OxECEugJjAmR5sbuxzBOp/IO2WOXwpky5z6Bn5GtEgEjwTLJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="244478982"
-X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="244478982"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 06:05:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="672951934"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Jan 2022 06:05:48 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nAuXz-000FMH-Vf; Fri, 21 Jan 2022 14:05:47 +0000
-Date:   Fri, 21 Jan 2022 22:05:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [asahilinux:bits/080-wifi 11/39]
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c:74:10: warning:
- variable 'len' set but not used
-Message-ID: <202201212104.gFjUBTm8-lkp@intel.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235777AbiAUOFq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 09:05:46 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD03C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 06:05:46 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id p7so10917902iod.2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 06:05:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/tT4GuTs3SM4DcSkALX9H/jBu0/bCmp/RlKwHcgLkyg=;
+        b=LY6PUTh+hG18ZL5JsNHJHoj4XRe88B7Vx+p0yDm7C0KNz7CPhWX2nno5JY4Lty9mSF
+         Bjg+V+4fYhgTQoie6nXTsU4jZ9KtAa/T0xO1glt91eqRI8TftZD4VtN9se/8LbQckIzK
+         v4lioW+RljEbpMcyLfNHD14ymB8vRUrNxoyPpk/sJjMXtywaaFQJH7HQxgIcKaJObP9b
+         MZzHqIvhHMygG+AhrDPQ+09TJjLrYpUBfOO7susMC5DGSXLpCTb0JdtgeTli/6YYziyy
+         evEQZPxR7iKaJ2y9n/uGmifkTwUcSBmGVRTBYqYLgiR1NzvdEZ1NHY7ged/Ucc83Nugz
+         5vPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/tT4GuTs3SM4DcSkALX9H/jBu0/bCmp/RlKwHcgLkyg=;
+        b=NT61i3jNCTSzkEhMRq4bl0D9AOQ4vZve+ObjUR6KUDfIeSoTkKZNFHZBL5+Zeyvw6D
+         QHgDgRu8UQEkEnmHMGQw1fOk7N7gWdWpTgXDymxt1H1loXHxLWgG7+60wuALasWtBhWf
+         xbZxSbQXJ2garnX4BnGYiCXa7KC+wjLzfUNTI+qhbtF5BIAtwNHcZYc7RbrjgzlBeXut
+         nfj7i0Dpkq9heCdPcIKOXWJWRqYEE5oxEJIBIL3Iw2AzDHgTKz1DQ3XC+vNvabGSUtNH
+         GXIwI9RdpI3jakN8k84q8MNShr1OTUBAyxNn6LxHbaeLeaS+xbCa3PDbnE2N53sFyCf9
+         hw7A==
+X-Gm-Message-State: AOAM532zENyYFr3AkjqLugtPrN4sb2uJtUNLVMfuvM/p3AjB/Kgbiier
+        0GJT5rz1tX/6Nla2Hz9wSoUt7XEo52IZGVWacyI=
+X-Google-Smtp-Source: ABdhPJxKpotutbB/U9mZgFBIu4COAJZP/D7clhVgpn+a9/sOMDrLeGrdLNZgZ55IKPln5oUUbEk/W0bXlxksiP7MdhQ=
+X-Received: by 2002:a02:850d:: with SMTP id g13mr1732615jai.297.1642773945591;
+ Fri, 21 Jan 2022 06:05:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a05:6638:3478:0:0:0:0 with HTTP; Fri, 21 Jan 2022 06:05:44
+ -0800 (PST)
+Reply-To: punggipaolo1@gmail.com
+From:   Pungi Paolo <v.rev.solomonodiwomma@gmail.com>
+Date:   Fri, 21 Jan 2022 15:05:44 +0100
+Message-ID: <CAJUFj-10O2xaQVkEW01F-8i+hHGTvrGxMziv4oXa_EKz6nUJJQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/080-wifi
-head:   1753101ce16367deadb5ec5ab5dc7ab4894649bf
-commit: cc44c86950084bc3437485288390841cf117c0d1 [11/39] brcmfmac: of: Use devm_kstrdup for board_type & check for errors
-config: x86_64-randconfig-a003-20220117 (https://download.01.org/0day-ci/archive/20220121/202201212104.gFjUBTm8-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/cc44c86950084bc3437485288390841cf117c0d1
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/080-wifi
-        git checkout cc44c86950084bc3437485288390841cf117c0d1
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/wireless/broadcom/brcm80211/brcmfmac/
+Cordial greetings from Pungi,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I know it is unusual for me to contact you as we do not even know each
+other,Sorry I never meant to be rude.
+I am Mr.Pungi Paolo an American based business development specialist,
+I am interested in investing on Solar energy in your region but I need
+a partner/agent to partner with in order to cut down huge governmental
+taxes on the investment.
+kindly revert back to me through my email if you are interested (
+punggipaolo1@gmail.com ) for more details and let see how it goes.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c:74:10: warning: variable 'len' set but not used [-Wunused-but-set-variable]
-                   int i, len;
-                          ^
-   1 warning generated.
-
-
-vim +/len +74 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
-
-1a3ac5c651a0c85 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Shawn Guo        2021-04-17  60  
-e457a8a01a19277 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Rafał Miłecki    2017-01-07  61  void brcmf_of_probe(struct device *dev, enum brcmf_bus_type bus_type,
-e457a8a01a19277 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Rafał Miłecki    2017-01-07  62  		    struct brcmf_mp_device *settings)
-61f663dfc1a091c drivers/net/wireless/brcm80211/brcmfmac/of.c          Chen-Yu Tsai     2014-06-29  63  {
-e457a8a01a19277 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Rafał Miłecki    2017-01-07  64  	struct brcmfmac_sdio_pd *sdio = &settings->bus.sdio;
-0ad4b55b2f29784 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Hans de Goede    2018-10-10  65  	struct device_node *root, *np = dev->of_node;
-61f663dfc1a091c drivers/net/wireless/brcm80211/brcmfmac/of.c          Chen-Yu Tsai     2014-06-29  66  	int irq;
-1a3ac5c651a0c85 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Shawn Guo        2021-04-17  67  	int err;
-61f663dfc1a091c drivers/net/wireless/brcm80211/brcmfmac/of.c          Chen-Yu Tsai     2014-06-29  68  	u32 irqf;
-61f663dfc1a091c drivers/net/wireless/brcm80211/brcmfmac/of.c          Chen-Yu Tsai     2014-06-29  69  	u32 val;
-61f663dfc1a091c drivers/net/wireless/brcm80211/brcmfmac/of.c          Chen-Yu Tsai     2014-06-29  70  
-0ad4b55b2f29784 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Hans de Goede    2018-10-10  71  	/* Set board-type to the first string of the machine compatible prop */
-0ad4b55b2f29784 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Hans de Goede    2018-10-10  72  	root = of_find_node_by_path("/");
-0ad4b55b2f29784 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Hans de Goede    2018-10-10  73  	if (root) {
-29e354ebeeecaee drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Matthias Brugger 2020-07-01 @74  		int i, len;
-
-:::::: The code at line 74 was first introduced by commit
-:::::: 29e354ebeeecaee979e6fe22cd6272682d7552c9 brcmfmac: Transform compatible string for FW loading
-
-:::::: TO: Matthias Brugger <mbrugger@suse.com>
-:::::: CC: Kalle Valo <kvalo@codeaurora.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Regards,
+Pungi Paolo.
+Business Development Specialist.

@@ -2,78 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C92EF496385
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 18:00:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A8E3496388
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 18:05:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379312AbiAURAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 12:00:13 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:57436 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382019AbiAUQ76 (ORCPT
+        id S244026AbiAURFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 12:05:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52156 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232557AbiAURFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 11:59:58 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 78920CE2420
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 16:59:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC5AAC340E1;
-        Fri, 21 Jan 2022 16:59:53 +0000 (UTC)
-Date:   Fri, 21 Jan 2022 16:59:49 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] arm64 fixes for 5.17-rc1
-Message-ID: <YermhR/kQO+dg7P/@arm.com>
+        Fri, 21 Jan 2022 12:05:44 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB36DC06173D
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 09:05:43 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id e9-20020a05600c4e4900b0034d23cae3f0so23165796wmq.2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 09:05:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XO49xxpKmR4aueGBJofXWoeKHMR/BCNkq2cA/jF/D9Y=;
+        b=ht8TPpEVm/y2ralBJuKQg1YnCAHmbnWWztgr53ji/RPYzVJU8qIkjosFjfNOuJ3ZJb
+         omvHlQOsDClBlh7rlekccIozZCfYuRM0vl3Dtg+TrGc7lGYOA/qovDYrOEGGapgMQGgE
+         Iaj2rYmOtO33LJq0HKiRlzpWLn5DC6VTgBsiP6IF3aFGNFikIBuzPq5E4E29qVwwsgHb
+         Y5PZT1F8LZ7SudjTj3UloJXq2iprw8NoTqbRqvWuwZ5VvQAN4d5bJol/skfvUYphr0gi
+         Qjn+NG8AeGexsUNrzUJjjQcfb6qC46VjH0RC5IFeGxsU5o1mbAGcKFyi1b3wAqyzmPkv
+         ONNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XO49xxpKmR4aueGBJofXWoeKHMR/BCNkq2cA/jF/D9Y=;
+        b=4l8Tk8qMuuXY2ee76/X57nYA8aKADmYOupMqb+TYySyYywg+JADOlPb4JJWKhu4v3G
+         HCSfClOnpbxbctTumajNXTji1kw41NbeP+xKuuJhYv948DsiOZyNs0y7KPq7fnSDpZh+
+         Km+SfpkJQIoKlbQQf+3M9uzWo6JktdeMRn/1V4yJX5lyhxjMUJ4Qz/wXOd6mnTYgVspF
+         sQop/Qg//cRJ9aBp20YY7PZsfcl2Rs+dCFzskreoW4raL2VPokajOO3/HbO+11clqpdO
+         iWM3krK6yhmCWItOZsmjsdIGTHC1Y/+bO+K3H38QCOGzLpqznO2BvaVSlwycGUunSfB2
+         rBcQ==
+X-Gm-Message-State: AOAM533TWTlX263wlaGxFXF5UOJOC7rsRzhrlE/4CdhkKE4a9LviM87N
+        9cYB8rhrcqm8MKHTy43OSgirCw==
+X-Google-Smtp-Source: ABdhPJyOIIVDjhZgAIjWZi5/7ffqRR9s4wi9uLGzJV1knpzUgZk/6EeGhl1TqSfO5dRqsaSuIB858g==
+X-Received: by 2002:a7b:cd19:: with SMTP id f25mr1549412wmj.72.1642784742429;
+        Fri, 21 Jan 2022 09:05:42 -0800 (PST)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id t8sm5809600wmq.21.2022.01.21.09.05.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jan 2022 09:05:41 -0800 (PST)
+Date:   Fri, 21 Jan 2022 17:05:40 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Luiz Sampaio <sampaio.ime@gmail.com>
+Cc:     Michael Hennerich <michael.hennerich@analog.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH 24/31] video: backlight: changing LED_* from enum
+ led_brightness to actual value
+Message-ID: <20220121170540.w6c4wqwrqzpde2lm@maple.lan>
+References: <20220121165436.30956-1-sampaio.ime@gmail.com>
+ <20220121165436.30956-25-sampaio.ime@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220121165436.30956-25-sampaio.ime@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, Jan 21, 2022 at 01:54:29PM -0300, Luiz Sampaio wrote:
+> The enum led_brightness, which contains the declaration of LED_OFF,
+> LED_ON, LED_HALF and LED_FULL is obsolete, as the led class now supports
+> max_brightness.
 
-Please pull the arm64 updates below, some fixes that turned up during
-the merging window. Thanks.
+Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 
-The following changes since commit 945409a6ef442cfe5f2f14e5626d4306d53100f0:
+BTW it looks like this patch might wants to land in one tree (I can't
+see since I'm only on copy of this one). If so please discuss with Lee
+how you want to land it. Put more directly, please don't treat my
+Reviewed-by: as an Acked-by: ;-) !
 
-  Merge branches 'for-next/misc', 'for-next/cache-ops-dzp', 'for-next/stacktrace', 'for-next/xor-neon', 'for-next/kasan', 'for-next/armv8_7-fp', 'for-next/atomics', 'for-next/bti', 'for-next/sve', 'for-next/kselftest' and 'for-next/kcsan', remote-tracking branch 'arm64/for-next/perf' into for-next/core (2022-01-05 18:14:32 +0000)
 
-are available in the Git repository at:
+Daniel.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-fixes
 
-for you to fetch changes up to bb425a7598479fa0f171ec806033c440f218b0ce:
-
-  arm64: mm: apply __ro_after_init to memory_limit (2022-01-20 09:15:16 +0000)
-
-----------------------------------------------------------------
-arm64 fixes/cleanups:
-
-- Add brackets to the io_stop_wc macro.
-
-- Avoid -Warray-bounds warning with the LSE atomics inline asm.
-
-- Apply __ro_after_init to memory_limit.
-
-----------------------------------------------------------------
-Kees Cook (1):
-      arm64: atomics: lse: Dereference matching size
-
-Peng Fan (1):
-      arm64: mm: apply __ro_after_init to memory_limit
-
-Xiongfeng Wang (1):
-      asm-generic: Add missing brackets for io_stop_wc macro
-
- arch/arm64/include/asm/atomic_lse.h | 2 +-
- arch/arm64/include/asm/cmpxchg.h    | 2 +-
- arch/arm64/mm/init.c                | 2 +-
- include/asm-generic/barrier.h       | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
-
--- 
-Catalin
+> ---
+>  drivers/video/backlight/adp8860_bl.c | 4 ++--
+>  drivers/video/backlight/adp8870_bl.c | 4 ++--
+>  drivers/video/backlight/led_bl.c     | 2 +-
+>  3 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/video/backlight/adp8860_bl.c b/drivers/video/backlight/adp8860_bl.c
+> index 8ec19425671f..063be4189e7e 100644
+> --- a/drivers/video/backlight/adp8860_bl.c
+> +++ b/drivers/video/backlight/adp8860_bl.c
+> @@ -261,10 +261,10 @@ static int adp8860_led_probe(struct i2c_client *client)
+>  		led_dat->cdev.name = cur_led->name;
+>  		led_dat->cdev.default_trigger = cur_led->default_trigger;
+>  		led_dat->cdev.brightness_set = adp8860_led_set;
+> -		led_dat->cdev.brightness = LED_OFF;
+> +		led_dat->cdev.brightness = 0;
+>  		led_dat->flags = cur_led->flags >> FLAG_OFFT_SHIFT;
+>  		led_dat->client = client;
+> -		led_dat->new_brightness = LED_OFF;
+> +		led_dat->new_brightness = 0;
+>  		INIT_WORK(&led_dat->work, adp8860_led_work);
+>  
+>  		ret = led_classdev_register(&client->dev, &led_dat->cdev);
+> diff --git a/drivers/video/backlight/adp8870_bl.c b/drivers/video/backlight/adp8870_bl.c
+> index 8b5213a39527..b04faf8d631d 100644
+> --- a/drivers/video/backlight/adp8870_bl.c
+> +++ b/drivers/video/backlight/adp8870_bl.c
+> @@ -287,10 +287,10 @@ static int adp8870_led_probe(struct i2c_client *client)
+>  		led_dat->cdev.name = cur_led->name;
+>  		led_dat->cdev.default_trigger = cur_led->default_trigger;
+>  		led_dat->cdev.brightness_set = adp8870_led_set;
+> -		led_dat->cdev.brightness = LED_OFF;
+> +		led_dat->cdev.brightness = 0;
+>  		led_dat->flags = cur_led->flags >> FLAG_OFFT_SHIFT;
+>  		led_dat->client = client;
+> -		led_dat->new_brightness = LED_OFF;
+> +		led_dat->new_brightness = 0;
+>  		INIT_WORK(&led_dat->work, adp8870_led_work);
+>  
+>  		ret = led_classdev_register(&client->dev, &led_dat->cdev);
+> diff --git a/drivers/video/backlight/led_bl.c b/drivers/video/backlight/led_bl.c
+> index f54d256e2d54..1b869624b4f8 100644
+> --- a/drivers/video/backlight/led_bl.c
+> +++ b/drivers/video/backlight/led_bl.c
+> @@ -46,7 +46,7 @@ static void led_bl_power_off(struct led_bl_data *priv)
+>  		return;
+>  
+>  	for (i = 0; i < priv->nb_leds; i++)
+> -		led_set_brightness(priv->leds[i], LED_OFF);
+> +		led_set_brightness(priv->leds[i], 0);
+>  
+>  	priv->enabled = false;
+>  }
+> -- 
+> 2.34.1
+> 

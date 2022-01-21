@@ -2,95 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41DF249614C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:43:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9750B496150
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:44:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381096AbiAUOng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 09:43:36 -0500
-Received: from mail-ua1-f49.google.com ([209.85.222.49]:46911 "EHLO
-        mail-ua1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbiAUOnf (ORCPT
+        id S1381187AbiAUOoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 09:44:05 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:48752 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235452AbiAUOoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 09:43:35 -0500
-Received: by mail-ua1-f49.google.com with SMTP id c36so17213213uae.13;
-        Fri, 21 Jan 2022 06:43:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=55AwSfSypaE2CtoXb7L0xkm1j87MyCbe6QHjOqmiD28=;
-        b=gljX+jPPXhkLWlxSZemNrIcCZUdyfQJnPoLZnlWjply+68akM3t6P5Fw33+Gfq/ICx
-         qWx3UXC0AaUHvd0gQUU0ttVhL4PXduQdy2UelqY7VVdr4sXS9ImXL3tLAjpmDl40Jkp2
-         rmOxeva+t3pfWMcRO/BALWCXi0pNooJU/CKCdwIRDh8IBPR6SvjAo/bCnDFMKnttYBFa
-         VJ3Q3+UtN01kmmmluqTXkZWlBWHTdd9oBIJqri1JGhxoGEaD3UlEWUs2qbdx+MHYtoVO
-         ExvMPn1yRIfLMQqNnTC63yhyVrcPHeP145sxa8AWDA8uKqLZ4YqAKU+tsVNx8KrHW8GU
-         U+iQ==
-X-Gm-Message-State: AOAM533a8Ur6ofnEhBXM82msE/RuX/zMyemxx+uWeBB5ZsDuwX8/+MwC
-        9oLpwDUBIPKD/51hTeP4ktPTlF+GyhrqJQ==
-X-Google-Smtp-Source: ABdhPJyXohDcYDK1tlK/7Rd9GTJ72zhebbYr5kZ9KuQM+iBFzNnXsKyV2PkSOIYpMf36LrNO31n3AA==
-X-Received: by 2002:ab0:3b0c:: with SMTP id n12mr1876164uaw.26.1642776214158;
-        Fri, 21 Jan 2022 06:43:34 -0800 (PST)
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
-        by smtp.gmail.com with ESMTPSA id g13sm1392793vkp.15.2022.01.21.06.43.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Jan 2022 06:43:33 -0800 (PST)
-Received: by mail-ua1-f48.google.com with SMTP id y4so17302888uad.1;
-        Fri, 21 Jan 2022 06:43:33 -0800 (PST)
-X-Received: by 2002:a67:e95a:: with SMTP id p26mr1708645vso.38.1642776213391;
- Fri, 21 Jan 2022 06:43:33 -0800 (PST)
-MIME-Version: 1.0
-References: <20211221094717.16187-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211221094717.16187-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20211221094717.16187-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 21 Jan 2022 15:43:22 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUZWwKLQAaqOsASUhrVmQ89sLL4K9O7x-crWHzFYqUCTQ@mail.gmail.com>
-Message-ID: <CAMuHMdUZWwKLQAaqOsASUhrVmQ89sLL4K9O7x-crWHzFYqUCTQ@mail.gmail.com>
-Subject: Re: [PATCH 01/16] dt-bindings: arm: renesas: Document Renesas RZ/V2L SoC
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 21 Jan 2022 09:44:04 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id A0E1E1F3AF;
+        Fri, 21 Jan 2022 14:44:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1642776242; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AdbKlDRug83o0KQNaUky39bFkRGjkGRzNFZeYdf1DRE=;
+        b=tRIwMNDz3VDHmWB8Q8lxhBuYnzpcfWiSIw+ZnIG3G6TyikAqBZMnhSKL3XitKxltgBNfL4
+        yiJ8pIRoPb/zuzE4LmjBV4r6+4nrknu85Str3U2mb0cyQNT7LBPIbI4wIxZ849Yxffvmol
+        LjDdCIyUDFzkAnYEqIwUdW7+qWIzxfM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1642776242;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AdbKlDRug83o0KQNaUky39bFkRGjkGRzNFZeYdf1DRE=;
+        b=ZDzg4gu5Hal1+1DoptQd99JQgTzLN6b8cI1jbVDnyWA5U3Tyr7W6H6LfWkMUSv5nr5zFvi
+        zokGH7nRu9XYJoDQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 873E7A3B8B;
+        Fri, 21 Jan 2022 14:44:02 +0000 (UTC)
+Date:   Fri, 21 Jan 2022 15:44:02 +0100
+Message-ID: <s5hlez9rvwt.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+Subject: Re: [PATCH v5 8/9] ALSA: hda/realtek: Add support for HP Laptops
+In-Reply-To: <20220121143254.6432-9-sbinding@opensource.cirrus.com>
+References: <20220121143254.6432-1-sbinding@opensource.cirrus.com>
+        <20220121143254.6432-9-sbinding@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 10:47 AM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> From: Biju Das <biju.das.jz@bp.renesas.com>
->
-> Document Renesas RZ/V2L SoC.
->
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Fri, 21 Jan 2022 15:32:53 +0100,
+Stefan Binding wrote:
+> 
+> @@ -8926,7 +8953,21 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+>  	SND_PCI_QUIRK(0x103c, 0x8896, "HP EliteBook 855 G8 Notebook PC", ALC285_FIXUP_HP_MUTE_LED),
+>  	SND_PCI_QUIRK(0x103c, 0x8898, "HP EliteBook 845 G8 Notebook PC", ALC285_FIXUP_HP_LIMIT_INT_MIC_BOOST),
+>  	SND_PCI_QUIRK(0x103c, 0x88d0, "HP Pavilion 15-eh1xxx (mainboard 88D0)", ALC287_FIXUP_HP_GPIO_LED),
+> -	SND_PCI_QUIRK(0x103c, 0x89c3, "HP", ALC285_FIXUP_HP_GPIO_LED),
+> +	SND_PCI_QUIRK(0x103c, 0x896E, "HP EliteBook x360 830 G9", ALC245_FIXUP_CS35L41_SPI_2),
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.18.
+Please use lower letters for the hex number to align with others.
+(Also other lines you've added.)
 
-Gr{oetje,eeting}s,
+Though, it's no urgent problem, and we can fix it later if the whole
+patch set can be merged now.  If v3 needs to be respinned, please
+apply the fix.
 
-                        Geert
+With the correction to be done,
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Acked-by: Takashi Iwai <tiwai@suse.de>
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
+thanks,
+
+Takashi

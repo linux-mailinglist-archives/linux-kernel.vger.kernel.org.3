@@ -2,70 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 527E1495A13
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 07:41:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50360495A1B
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 07:44:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378674AbiAUGlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 01:41:24 -0500
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:41052 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1348882AbiAUGlX (ORCPT
+        id S1378784AbiAUGov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 01:44:51 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:33381 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378772AbiAUGot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 01:41:23 -0500
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20L055gU015220;
-        Thu, 20 Jan 2022 22:41:04 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=pfpt0220;
- bh=8ooxZncd1pxU6VLDFOd0+ogSpakQFSxfdEJz9X266WA=;
- b=RGYBdRzxNajfK608PTgq4Vt69CABZVBErZF2JuEUrk8Cqn1dVby8U2DS+Y50BO8FWqHL
- VmZLQ3w2rksduahhd+n9G+Y7lD/9Ap0iXgZY0nAVPGUcA5nP+J1RxUfo9Wm0U9+qIIv5
- lErbN/P23A6uLFU6NniIPu3DUbJdJq4jGrvPQKguRJSUyijtdzHipf5TzZ+D/nkktck8
- HCAAhWQib4cq75He5kMY8EVyidJAwo/yzc6tlxRg5mNGPqtOepVnNgTnRzcQHZIyL0TI
- aMURX5TtShOFTNGj9jxVyeBoEY81jDJbyI5AVFWxuEryoDj5UYFmgEJvt3emRPgAtISE 9w== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3dqhyts03x-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 20 Jan 2022 22:41:03 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 20 Jan
- 2022 22:41:02 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Thu, 20 Jan 2022 22:41:02 -0800
-Received: from localhost.localdomain (unknown [10.28.34.29])
-        by maili.marvell.com (Postfix) with ESMTP id 76B553F7097;
-        Thu, 20 Jan 2022 22:40:58 -0800 (PST)
-From:   Shijith Thotton <sthotton@marvell.com>
-To:     <geert+renesas@glider.be>
-CC:     <arnd@arndb.de>, <arno@natisbad.org>, <bbrezillon@kernel.org>,
-        <davem@davemloft.net>, <herbert@gondor.apana.org.au>,
-        <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <schalla@marvell.com>, <sthotton@marvell.com>,
-        <jerinj@marvell.com>, <sgoutham@marvell.com>
-Subject: Re: [PATCH] crypto: marvell - Fix platform dependency for CRYPTO_DEV_OCTEONTX2_CPT
-Date:   Fri, 21 Jan 2022 12:10:57 +0530
-Message-ID: <20220121064057.2387263-1-sthotton@marvell.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <7c89454656dd825b38b0364bbb2a849554e6f57d.1641995837.git.geert+renesas@glider.be>
-References: <7c89454656dd825b38b0364bbb2a849554e6f57d.1641995837.git.geert+renesas@glider.be>
+        Fri, 21 Jan 2022 01:44:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1642747489; x=1674283489;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6WtxJ6G8QH17m9vpF9tZ9iNboVlbxxw9g9H61lLIeeY=;
+  b=fQdnDBuHdl7C0mf0dVcFDeQUDDWY1usMcZ6ZZB+thOrtY1W/3xXRPoa/
+   dqjeEDkUnEACs/c85adMNuP1x4/DhrrzQVtrvBKH+G78HWgqSDjCrwbvw
+   FgVQSMoajsjaVq6zlHOECf8drKKFJ0fG9rvmEjAoGNDcqyAypyctq1xW3
+   Q=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 20 Jan 2022 22:44:48 -0800
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 20 Jan 2022 22:44:47 -0800
+X-QCInternal: smtphost
+Received: from unknown (HELO youghand-linux.qualcomm.com) ([10.206.66.115])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 21 Jan 2022 12:14:30 +0530
+Received: by youghand-linux.qualcomm.com (Postfix, from userid 2370257)
+        id 6A162225AE; Fri, 21 Jan 2022 12:14:29 +0530 (IST)
+From:   Youghandhar Chintala <quic_youghand@quicinc.com>
+To:     ath10k@lists.infradead.org
+Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_pillair@quicinc.com, dianders@chromium.org,
+        kuabhs@chromium.org, briannorris@chromium.org,
+        Youghandhar Chintala <quic_youghand@quicinc.com>
+Subject: [RFC 0/2] ath10k:set tx credit to one and delay the unmaping 
+Date:   Fri, 21 Jan 2022 12:14:25 +0530
+Message-Id: <20220121064427.32059-1-quic_youghand@quicinc.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=n
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 140yYAPDRS-P1qMvWGSoRDh0IqIiMIae
-X-Proofpoint-GUID: 140yYAPDRS-P1qMvWGSoRDh0IqIiMIae
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-21_02,2022-01-20_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-OcteonTX2 doesn't fall under ARCH_THUNDER and ARCH_THUNDER2. A better approach
-would be to define and use a new SOC type as Arnd mentioned at
-https://patchwork.kernel.org/project/linux-crypto/patch/266065918e47e8965bb6a0ab486da070278788e4.1641996057.git.geert+renesas@glider.be/
-Please wait for him to post that patch or use arm64 as dependency.
+Currently for WCN3990, the host driver can send two wmi commands at once, 
+now it is limiting to one because if HOST wants to initiate 2 DMA transfers,
+it is possible when copy complete interrupt for first DMA reaches HOST,  
+CE has already updated SRRI for both DMA transfers and is in the middle 
+of 2nd DMA. HOST uses SRRI to interpret how many DMA’s have been completed 
+and tries to unmap/free both the DMA entries, but CE is still in the middle
+of 2nd DMA which can cause SMMU issues or corruption.
 
-Thanks,
-Shijith
+We are seeing a corner case smmu fault issue where copy engine is still accessing
+the memory though host unmaps it hence as work around we are delaying the 
+unmapping the memory and tx credit to one.
+
+Youghandhar Chintala (2):
+  ath10k: Set tx credit to one for wcn3990 snoc based devices
+  ath10k: Delay the unmapping of the buffer
+
+ drivers/net/wireless/ath/ath10k/core.c | 30 ++++++++++++++++++++++++++
+ drivers/net/wireless/ath/ath10k/htc.c  | 18 +++++++++++++---
+ drivers/net/wireless/ath/ath10k/htc.h  |  1 +
+ drivers/net/wireless/ath/ath10k/hw.h   |  6 ++++++
+ 4 files changed, 52 insertions(+), 3 deletions(-)
+
+-- 
+2.29.0
+

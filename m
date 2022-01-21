@@ -2,190 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B3D49664A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 21:22:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03701496651
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 21:23:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233025AbiAUUWA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 21 Jan 2022 15:22:00 -0500
-Received: from coyote.holtmann.net ([212.227.132.17]:44658 "EHLO
-        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiAUUV7 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 15:21:59 -0500
-Received: from smtpclient.apple (p4fefca45.dip0.t-ipconnect.de [79.239.202.69])
-        by mail.holtmann.org (Postfix) with ESMTPSA id 17167CED17;
-        Fri, 21 Jan 2022 21:21:57 +0100 (CET)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
-Subject: Re: [PATCH v1 2/2] Bluetooth: btintel: surface Intel telemetry events
- through mgmt
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <20220121192152.v1.2.I63681490281b2392aa1ac05dff91a126394ab649@changeid>
-Date:   Fri, 21 Jan 2022 21:21:56 +0100
-Cc:     linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        pali@kernel.org, chromeos-bluetooth-upstreaming@chromium.org,
-        josephsih@google.com, Archie Pusaka <apusaka@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <F8F887B1-5D1E-4005-B3BB-6841A29B8745@holtmann.org>
-References: <20220121192152.v1.1.I2015b42d2d0a502334c9c3a2983438b89716d4f0@changeid>
- <20220121192152.v1.2.I63681490281b2392aa1ac05dff91a126394ab649@changeid>
-To:     Joseph Hwang <josephsih@chromium.org>
-X-Mailer: Apple Mail (2.3693.40.0.1.81)
+        id S233052AbiAUUXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 15:23:06 -0500
+Received: from mga17.intel.com ([192.55.52.151]:4526 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229947AbiAUUXF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 15:23:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642796585; x=1674332585;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bckgLVD57DRjvgCLcAwRBUzB8RqqLPtmV+qet2QPNaY=;
+  b=kdG1FTVqccWJcnEQNR33LD9/Av+uYkADDkDoZzAvFIjrh2SgcvjqUxkv
+   wamU7rG7W6+vZTiEvG4xxPywX3Usl6qA4i88YbYa4PEgeHGbqJ/uHgx6B
+   VeprhkZhshZt5eaShQo4jqY4w5ePTVMsCWIJDpH0Z8Pqxfy0x4+iZt/qb
+   oF1NPI6330lpyqoYP6Ff38wLGWUJhgRA82k4P4fzQprdYcGSCglPp2F+6
+   117Awj7K1AUw7mw8CSov8Ab1SrLTBnvu0qG94F9J3+Q6Pk4Owe6waNtVR
+   gKFRf68XL+Di0ZLbEMAnr9GDy3h6/ICu+I8KrZMD3Nn1um1iCAlg3xVyv
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="226413071"
+X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
+   d="scan'208";a="226413071"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 12:23:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
+   d="scan'208";a="673051419"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 21 Jan 2022 12:23:03 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nB0R5-000Fdo-17; Fri, 21 Jan 2022 20:23:03 +0000
+Date:   Sat, 22 Jan 2022 04:22:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mike Rapoport <rppt@linux.ibm.com>
+Cc:     kbuild-all@lists.01.org, Mike Rapoport <rppt@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [rppt:gfp-unmapped/v0 1/3] include/linux/compiler_types.h:346:38:
+ error: call to '__compiletime_assert_622' declared with attribute error:
+ BUILD_BUG_ON failed: pageblock_order != PMD_ORDER
+Message-ID: <202201220449.6A30CSDa-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jospeh,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git gfp-unmapped/v0
+head:   53acd000a0eef1457aaa4930c0d2003d7785f799
+commit: 253f456a5cb652a16a59cc4ac2e18669997d79cd [1/3] mm/page_alloc: introduce __GFP_UNMAPPED and MIGRETE_UNMAPPED
+config: x86_64-randconfig-a012-20220117 (https://download.01.org/0day-ci/archive/20220122/202201220449.6A30CSDa-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/commit/?id=253f456a5cb652a16a59cc4ac2e18669997d79cd
+        git remote add rppt https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git
+        git fetch --no-tags rppt gfp-unmapped/v0
+        git checkout 253f456a5cb652a16a59cc4ac2e18669997d79cd
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-> When receiving a HCI vendor event, the kernel checks if it is an
-> Intel telemetry event. If yes, the event is sent to bluez user
-> space through the mgmt socket.
-> 
-> Signed-off-by: Joseph Hwang <josephsih@chromium.org>
-> Reviewed-by: Archie Pusaka <apusaka@chromium.org>
-> ---
-> 
-> drivers/bluetooth/btintel.c      | 43 +++++++++++++++++++++++++++++++-
-> drivers/bluetooth/btintel.h      | 12 +++++++++
-> include/net/bluetooth/hci_core.h |  2 ++
-> net/bluetooth/hci_event.c        | 12 ++++++---
-> 4 files changed, 65 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/bluetooth/btintel.c b/drivers/bluetooth/btintel.c
-> index 1a4f8b227eac..d3b7a796cb91 100644
-> --- a/drivers/bluetooth/btintel.c
-> +++ b/drivers/bluetooth/btintel.c
-> @@ -2401,8 +2401,10 @@ static int btintel_setup_combined(struct hci_dev *hdev)
-> 	set_bit(HCI_QUIRK_SIMULTANEOUS_DISCOVERY, &hdev->quirks);
-> 	set_bit(HCI_QUIRK_NON_PERSISTENT_DIAG, &hdev->quirks);
-> 
-> -	/* Set up the quality report callback for Intel devices */
-> +	/* Set up the quality report callbacks for Intel devices */
-> 	hdev->set_quality_report = btintel_set_quality_report;
-> +	hdev->is_quality_report_evt = btintel_is_quality_report_evt;
-> +	hdev->pull_quality_report_data = btintel_pull_quality_report_data;
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-we are not doing this. This is all internal handling. Don’t bother the core hci_dev with it.
+All errors (new ones prefixed by >>):
 
-> 
-> 	/* For Legacy device, check the HW platform value and size */
-> 	if (skb->len == sizeof(ver) && skb->data[1] == 0x37) {
-> @@ -2645,6 +2647,45 @@ void btintel_secure_send_result(struct hci_dev *hdev,
-> }
-> EXPORT_SYMBOL_GPL(btintel_secure_send_result);
-> 
-> +#define INTEL_PREFIX		0x8087
-> +#define TELEMETRY_CODE		0x03
-> +
-> +struct intel_prefix_evt_data {
-> +	__le16 vendor_prefix;
-> +	__u8 code;
-> +	__u8 data[0];   /* a number of struct intel_tlv subevents */
-> +} __packed;
-> +
-> +bool btintel_is_quality_report_evt(struct sk_buff *skb)
-> +{
-> +	struct intel_prefix_evt_data *ev;
-> +	u16 vendor_prefix;
-> +
-> +	if (skb->len < sizeof(struct intel_prefix_evt_data))
-> +		return false;
-> +
-> +	ev = (struct intel_prefix_evt_data *)skb->data;
-> +	vendor_prefix = __le16_to_cpu(ev->vendor_prefix);
-> +
-> +	return vendor_prefix == INTEL_PREFIX && ev->code == TELEMETRY_CODE;
-> +}
-> +EXPORT_SYMBOL_GPL(btintel_is_quality_report_evt);
-> +
-> +bool btintel_pull_quality_report_data(struct sk_buff *skb)
-> +{
-> +	skb_pull(skb, sizeof(struct intel_prefix_evt_data));
-> +
-> +	/* A telemetry event contains at least one intel_tlv subevent. */
-> +	if (skb->len < sizeof(struct intel_tlv)) {
-> +		BT_ERR("Telemetry event length %d too short (at least %u)",
-> +		       skb->len, sizeof(struct intel_tlv));
-> +		return false;
-> +	}
-> +
-> +	return true;
-> +}
-> +EXPORT_SYMBOL_GPL(btintel_pull_quality_report_data);
-> +
-> MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.org>");
-> MODULE_DESCRIPTION("Bluetooth support for Intel devices ver " VERSION);
-> MODULE_VERSION(VERSION);
-> diff --git a/drivers/bluetooth/btintel.h b/drivers/bluetooth/btintel.h
-> index c9b24e9299e2..841aef3dbd4c 100644
-> --- a/drivers/bluetooth/btintel.h
-> +++ b/drivers/bluetooth/btintel.h
-> @@ -210,6 +210,8 @@ void btintel_bootup(struct hci_dev *hdev, const void *ptr, unsigned int len);
-> void btintel_secure_send_result(struct hci_dev *hdev,
-> 				const void *ptr, unsigned int len);
-> int btintel_set_quality_report(struct hci_dev *hdev, bool enable);
-> +bool btintel_is_quality_report_evt(struct sk_buff *skb);
-> +bool btintel_pull_quality_report_data(struct sk_buff *skb);
-> #else
-> 
-> static inline int btintel_check_bdaddr(struct hci_dev *hdev)
-> @@ -305,4 +307,14 @@ static inline int btintel_set_quality_report(struct hci_dev *hdev, bool enable)
-> {
-> 	return -ENODEV;
-> }
-> +
-> +static inline bool btintel_is_quality_report_evt(struct sk_buff *skb)
-> +{
-> +	return false;
-> +}
-> +
-> +static inline bool btintel_pull_quality_report_data(struct sk_buff *skb);
-> +{
-> +	return false;
-> +}
-> #endif
-> diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/hci_core.h
-> index 727cb9c056b2..b74ba1585df9 100644
-> --- a/include/net/bluetooth/hci_core.h
-> +++ b/include/net/bluetooth/hci_core.h
-> @@ -632,6 +632,8 @@ struct hci_dev {
-> 	void (*cmd_timeout)(struct hci_dev *hdev);
-> 	bool (*wakeup)(struct hci_dev *hdev);
-> 	int (*set_quality_report)(struct hci_dev *hdev, bool enable);
-> +	bool (*is_quality_report_evt)(struct sk_buff *skb);
-> +	bool (*pull_quality_report_data)(struct sk_buff *skb);
-> 	int (*get_data_path_id)(struct hci_dev *hdev, __u8 *data_path);
-> 	int (*get_codec_config_data)(struct hci_dev *hdev, __u8 type,
-> 				     struct bt_codec *codec, __u8 *vnd_len,
-> diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-> index bccb659a9454..5f9cc7b942a1 100644
-> --- a/net/bluetooth/hci_event.c
-> +++ b/net/bluetooth/hci_event.c
-> @@ -4237,11 +4237,17 @@ static bool quality_report_evt(struct hci_dev *hdev,  void *data,
-> 		if (aosp_has_quality_report(hdev) &&
-> 		    aosp_pull_quality_report_data(skb))
-> 			mgmt_quality_report(hdev, skb, QUALITY_SPEC_AOSP_BQR);
-> -
-> -		return true;
-> +	} else if (hdev->is_quality_report_evt &&
-> +		   hdev->is_quality_report_evt(skb)) {
-> +		if (hdev->set_quality_report &&
-> +		    hdev->pull_quality_report_data(skb))
-> +			mgmt_quality_report(hdev, skb,
-> +					    QUALITY_SPEC_INTEL_TELEMETRY);
-> +	} else {
-> +		return false;
-> 	}
+   mm/page_alloc.c:3955:15: warning: no previous prototype for 'should_fail_alloc_page' [-Wmissing-prototypes]
+    3955 | noinline bool should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
+         |               ^~~~~~~~~~~~~~~~~~~~~~
+   In file included from <command-line>:
+   In function 'set_pageblock_unmapped',
+       inlined from 'get_page_from_freelist' at mm/page_alloc.c:4301:8:
+>> include/linux/compiler_types.h:346:38: error: call to '__compiletime_assert_622' declared with attribute error: BUILD_BUG_ON failed: pageblock_order != PMD_ORDER
+     346 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                      ^
+   include/linux/compiler_types.h:327:4: note: in definition of macro '__compiletime_assert'
+     327 |    prefix ## suffix();    \
+         |    ^~~~~~
+   include/linux/compiler_types.h:346:2: note: in expansion of macro '_compiletime_assert'
+     346 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |  ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:2: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |  BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |  ^~~~~~~~~~~~~~~~
+   mm/page_alloc.c:2660:2: note: in expansion of macro 'BUILD_BUG_ON'
+    2660 |  BUILD_BUG_ON(pageblock_order != PMD_ORDER);
+         |  ^~~~~~~~~~~~
 
-No. You now have Intel internal details bleeding into the core.
 
-Regards
+vim +/__compiletime_assert_622 +346 include/linux/compiler_types.h
 
-Marcel
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  332  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  333  #define _compiletime_assert(condition, msg, prefix, suffix) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  334  	__compiletime_assert(condition, msg, prefix, suffix)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  335  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  336  /**
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  337   * compiletime_assert - break build and emit msg if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  338   * @condition: a compile-time constant condition to check
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  339   * @msg:       a message to emit if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  340   *
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  341   * In tradition of POSIX assert, this macro will break the build if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  342   * supplied condition is *false*, emitting the supplied error message if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  343   * compiler has support to do so.
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  344   */
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  345  #define compiletime_assert(condition, msg) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21 @346  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  347  
 
+:::::: The code at line 346 was first introduced by commit
+:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
+
+:::::: TO: Will Deacon <will@kernel.org>
+:::::: CC: Will Deacon <will@kernel.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,133 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7ED49598D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 06:46:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC688495997
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 06:50:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378553AbiAUFqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 00:46:30 -0500
-Received: from mail-dm6nam10on2108.outbound.protection.outlook.com ([40.107.93.108]:45024
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        id S1378561AbiAUFud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 00:50:33 -0500
+Received: from mail-bn8nam08on2058.outbound.protection.outlook.com ([40.107.100.58]:62944
+        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233439AbiAUFq3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 00:46:29 -0500
+        id S230443AbiAUFuc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 00:50:32 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R2w5dipsX+GSIx2NVbNEE2pmjuXH4Xlph1rSMpKRTuebzGGoGwG6cQ1iuWiKCkfeKK+eo+uccfiC84DznjklqXXwPLcDKZwQor9QA9C7udTSF8/fm0Uv7s+2eu3IN2UFYW997VSRtaE9IPhJ79avyqSigM4lDcFl34nTuA3YXpCKyVsZu63njIR5Wt5YN3n3hn4rS1+aHrccg95613CuuchsBUJWLLBjKkioJl/nA0A8Rw4m8otyqcYkaYDwKxzRmwQM4mSP6H5eSJIBjYBMZny8Jsu4C8AYJdinxLdn7d5CVEHG24xp3uf4tvQy/HedTrZsJgkk3rxjxqyDFjJL4A==
+ b=Nw5t8zNEkDEdh6F5y/e2U3F9SY1pwUeImJocTSBUE4nudW0kfhp8HBq+eS1oFMl21hrXNMhsS04Mfs907OSqRmq+eZkZNCXaeM0oMLxmqEYMKcb9uAs7gclGmFHmWbjMJu2J3ZRTIseAoSWEoc0YfVn6m+Y7Q/3/rD4Ut1zuOJS0icFjmIgsXE/LhP3l3mMEii2krpn0+NqQYP1UltuZMcPUP1uP8ihA/ARCt9m5wQ27KzuPp9i/ntukHCnm/kCt0JkOwxT0F2UoOHAU4iSCxIFcownn0xw0uOZVCfr6zCyjk3REl/c0Yhn5eXL40aZfIawQ7hjAHIp2EVAu6viYqA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bw0xODGKQwi71hxguZ8s7nBraJw34fMm73cnb+LWdq4=;
- b=mKjMHpLwovMCwR/1k4OwRZh7HVv7DJfCM63KsaPxixmpHZ/UaDhqtXu96nuVd3zPMThuQwtZqsYBObLWbGj4/Ds4ELIDl7wSTjIPXh2NwQO3MlhGbl7d1KQNWlamceRflI552JPJVjdV315z27zBfyUZd5jNPE4nTfUYvf1Le2pevPfTX8x41C1u4AwcYrJxuCryWen34mECIdotTJd969cRNCnTAvRLUPS9/Ou5nOsTdS/YHW88gXZ1EdSvrSEurJohQw7t2179XgjpWVdvMsb8xsYusDmQLC/i1GcEdX5usVZWkXj/3gE/SAwQs3SmeN4fn/X4q4mJ8pGQC0mONQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=towerbridgetechnology.onmicrosoft.com;
- s=selector2-towerbridgetechnology-onmicrosoft-com;
+ bh=KQ4vjm21OzZrTLAPP1/S2IDiRheJwEdsjZLAAm2ADx4=;
+ b=RaZ7/KA4KnnJqOdBXGn3QnhXR3ol3NJ0x7Q4VE/9i4Q5RlCWQ713Tk0qNBoKiEKVxLE+vEdIivPEUbxMnDZARCIh4LCkG1MqV7QRoUe39U6NX/samnxbO2vK11UHln9nE4BaNCtTDljg+29pVBNjrA7nKK3YAjkQwMq5ijvCyGR5+gOVl7Ced7UFFlaL0zHFO1fjYjdmDV0dgf6jalTW9mIx6imQRVQHIFB4BxSOs81qAOfobL93u7UKwcldDtfFORLdjBEc+nnUQO0nkjz3zkfIM6GLylUTkdobxoWJymPfnspJSUo0BhBRDVjbEpOJhmBl1ePoldjArzjMfLl04A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.234) smtp.rcpttodomain=canonical.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bw0xODGKQwi71hxguZ8s7nBraJw34fMm73cnb+LWdq4=;
- b=P36LybohIGQZrEjf41uiDIfDwZTrFDWLW747JQACoC6k9i7L+MAIKpf0TvF4w23pguw0sjTV56/lhWwTn6GDUlSZeVQS7i1fZruT3F60MjkVP94iwyeXN/Lm1T0YMcmtbY2eR4jGvSQZ2cqiTDmxTRxxVuc/r6GSGvUR+tFrcDc=
-Received: from PH0PR16MB4248.namprd16.prod.outlook.com (2603:10b6:510:4c::16)
- by BL0PR16MB2258.namprd16.prod.outlook.com (2603:10b6:207:4c::33) with
+ bh=KQ4vjm21OzZrTLAPP1/S2IDiRheJwEdsjZLAAm2ADx4=;
+ b=Oylce9KwlyGcgWiF7XhpCbrA8BAa5KwbIOEp2sBiS5REZ+N1F+V1Cl9WDtwiu35vP6CgEt3DqUjNckj4K0DTWxd0beVZ5QUV2WpROhJj29GYGOhAR/ZQCiPNewBZ1LiCZVnCWMoqgQLsmuyEvQ6650QTQyOnGOYAl41Jnmd4Nycvl0bGdZIS3JG2FXTotbKc0bp5yg1Y/xLdX4uzvI2fMrbILPdOYm76u2j/hK14hS4MXh5WymdfLeSiE34yPTKbSRK6jdev5Z6I0Xg4dwq7vLnvXvQ8mIKb4UPSFu8B4C0BpLd7lSnMGhrSWj3TH+z9pCdbPqFB31Hb0bjnLuhpKw==
+Received: from BN8PR15CA0044.namprd15.prod.outlook.com (2603:10b6:408:80::21)
+ by BYAPR12MB2918.namprd12.prod.outlook.com (2603:10b6:a03:13c::27) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Fri, 21 Jan
- 2022 05:46:27 +0000
-Received: from PH0PR16MB4248.namprd16.prod.outlook.com
- ([fe80::e88f:f199:eed:4645]) by PH0PR16MB4248.namprd16.prod.outlook.com
- ([fe80::e88f:f199:eed:4645%7]) with mapi id 15.20.4909.010; Fri, 21 Jan 2022
- 05:46:26 +0000
-From:   "Chevron Li (WH)" <chevron.li@bayhubtech.com>
-To:     "agross@kernel.org" <agross@kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "Shirley Her(SC)" <shirley.her@bayhubtech.com>,
-        "Fred Ai(WH)" <fred.ai@bayhubtech.com>,
-        "XiaoGuang Yu (WH)" <xiaoguang.yu@bayhubtech.com>,
-        "Shaper Liu (WH)" <shaper.liu@bayhubtech.com>,
-        "Bruce Yang (SH)" <bruce.yang@bayhubtech.com>
-Subject: =?gb2312?B?s7e72DogW1BBVENIIDIvM10gbW1jOnNkaGNpLWJheWh1Yjpwcm92aWRlIGEg?=
- =?gb2312?Q?solution_to_improve_sd_host_card_compatibility?=
-Thread-Topic: [PATCH 2/3] mmc:sdhci-bayhub:provide a solution to improve sd
- host card compatibility
-Thread-Index: AQHYDoo7O32thMubdkKcJGCNcx9qrw==
-X-CallingTelephoneNumber: IPM.Note
-X-VoiceMessageDuration: 1
-X-FaxNumberOfPages: 0
-Date:   Fri, 21 Jan 2022 05:46:26 +0000
-Message-ID: <PH0PR16MB4248E3FA9BAC163EF2F209E5EA5B9@PH0PR16MB4248.namprd16.prod.outlook.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bayhubtech.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8167f3a7-28f7-4e09-24df-08d9dca15da3
-x-ms-traffictypediagnostic: BL0PR16MB2258:EE_
-x-microsoft-antispam-prvs: <BL0PR16MB225898AED208AF91386BDBD7EA5B9@BL0PR16MB2258.namprd16.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1332;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: bJSYG+BirQ3vErlj78IaRYYA9gnxwSIJmaemr4yDqiK1hxk2yNCJTNOOmarYzXyVeaMQzi3OwamD4gNVtTMwU5BO3vc9P4PAf5wgkDPTFWM3MxApnEuj00gSuYeVKL2d31OUuQ9FrvhO6Q74+MZ8mC/tKfIEfzSu5qECr3nMcpj9jtwHoWdgwsJlVkH6Q4ik8Dm2dc5VGBQivEBWKG0BhkncOYNS6gIG1gNGjF5Zw4zJt3OVjLAix0tNCiRWdWNm+8ZVWV9ElwgVetJyf/Q4e/j5YBwgfmI0DYJtS5ysoFPIytzc85H6ZkYwdqrLS4pJcLk0GoB6DtRy072gk9gH0J4dRgjx1L71llS+X6GaE2OBp4K3OZO8Mo55tpC55rv10s6SgOyR9rhg3tRnUp7eQWA6pLfczNZh2ZcTVfUieZxNFan7jV2/jBBFmHeJ6sJTIJ+jotHoPjDOXlS8FBp+uXVq0agLbcY2Ksz9qhk0qFUllry9vOYLrRPH+LCqdw624UwqT1Bf/WTZu7MWeKDDP5CuLJ4D+8YDfk/9sgkijDYomq+17G8RYVNTJN6uBx/QeSpIN6j3tAHLxIEc+uijYyuKyJYXlap1RZXx6/W+GiAKMm3UPk1UBG4/PNHuiAUTyhz1v2rdlWhH4IUhuilZoFLTqm1hAHySBQqApAa1GYGbcu5T1UF1t/E3IXJ/HplnOXiPWz0miwPg0ys8/jRqLA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR16MB4248.namprd16.prod.outlook.com;PTR:;CAT:NONE;SFS:(39830400003)(136003)(396003)(346002)(366004)(376002)(508600001)(86362001)(33656002)(107886003)(7696005)(66446008)(64756008)(66946007)(66476007)(66556008)(52536014)(5660300002)(316002)(55016003)(9686003)(38070700005)(186003)(38100700002)(26005)(2906002)(71200400001)(4326008)(224303003)(54906003)(110136005)(8936002)(76116006)(122000001)(6506007)(558084003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?VlNJSElyaEIwY0hCbnh4eDB4Q1VaTXcvY1k2aVJiaGZJVVptKzA2TFpMekta?=
- =?gb2312?B?dlE3TUVkUnAyQ0VOdi9vc0RhVm92a0IxM3BjY1UxSWo2MXhoSllua1dlL2VI?=
- =?gb2312?B?VU1VVXNKeFpUclNLOEovNnp2SlZ6VWpuM0p3Tk5WRFBuR3hBQksyMTJkZ2NJ?=
- =?gb2312?B?N2poN3hRQWVHSDJycXM3V1JTMXI0eE9WdmdIMGVzWjlnZlRRSzhSSHg1Zlo0?=
- =?gb2312?B?Qng1bzV3bW1KbElBeUpjd3VsdnBzT1U4d1ZOZmFXSUorMGVHdHNjTi9BazlM?=
- =?gb2312?B?b1k1OVNhdkhPVFVyQ2J6azlSNVZzUXhiSmtweEpsOTJqdWVOTGpreTgrTzRn?=
- =?gb2312?B?bm5wT1p3L3RBbVZkZHpPaEdUTnZqS2ZvSVpPck85V3kyY0pHVzMxS3NrM1ZK?=
- =?gb2312?B?WU9UK2FCT0FUL2xwNHdLSDJzWlBQeDVJWGRhMXhnU2lYM09aQXhNdHdVUTkw?=
- =?gb2312?B?SXRITytPTWVueFVBdk9QMkRsVWJBZThtdXdKajVkMThKQldReFU5MmpneUtr?=
- =?gb2312?B?TjA2a0x1SGtScnVyNGxEWkg4UlJpTnZhUG1xb1VidzA0a1dPNHpaM0MrRWNH?=
- =?gb2312?B?N2IyRGp5RXpDMGhpSHVxSDhmWTJZUjFVNW5RSDh4dDFUcWszc1dmM2ZpQzJB?=
- =?gb2312?B?TDFTRFNPY1U2Q0UyNkJTWFErTjJKNlFWWG1CMXZBMTljU2ZMMHN3Vm1Ec0Zt?=
- =?gb2312?B?VHF6OE5QaDJ5SlFvZStsWUlqK0pDTDNsOHE5NmMwMWdMUjVQTk9NUjF6WEE5?=
- =?gb2312?B?N3dySllzdlA3UkxKZStraFcvQllaY0R2TVFEaHlGNnYvSW8raHRFamI5THhF?=
- =?gb2312?B?V1pqZ1RMZ1VpOEQycnlNZVlYTnFhYXNldkwwNzJabnMzbVl6YVlZOUtMVXlH?=
- =?gb2312?B?YVZZMDBQVi9GYUdwZFdTTHVTeFlBSDVMWDRTVGN1UzZIdWY3OEwxeXZkOU9n?=
- =?gb2312?B?a3p2M0ZUYW1Tc3lTbzFCY2lGSFo4OTYwNUU1TzZ6eGFlTm5pcjd3UUE0M1lE?=
- =?gb2312?B?YWFWMExEQ1hVN2NiRmcwOTJEM1cySmNMbWRwTGMyK1dkMnY4SFZ3R3lGNnNZ?=
- =?gb2312?B?amwxVFhuOHYwc201dWJpNjRwU0hDRXlyTVhSYmlreE84TlM4Tjg5SzI1blZk?=
- =?gb2312?B?MWJCcFgwbkZvdkU5TVJQVklYenVlUkQ2NDJrZGpGTEE4bldIc2ZuWldWMURY?=
- =?gb2312?B?T0JuRjZpelhWeTQvMjRodWV0T3F3eVFwYXc1alFkQUJFbmlIdC9LOVRHeHBN?=
- =?gb2312?B?UkdWWXNES3A1YzFBcVBMd05Dd0pmWk8xVGwxYjJCTkRPQ0FkSmR6YXVGLzBT?=
- =?gb2312?B?R1NSb291NDNGQ1VMWEZJVmFSZXN2N1ZaZmVldkM1SnhwRDRYeWlPZ0FkMjE3?=
- =?gb2312?B?REVYZFpFSXZQQnFnZXBBaGk0NXlyT1FjTDlXQm83bFpCcGZmaXEvTjl4aHI0?=
- =?gb2312?B?cXVXZFlBaDZSbHhlWWNXakpORGNoT09OMnBoK2NROUtJT0JEdGx2T1N2SUxU?=
- =?gb2312?B?NmFNVFBWOVlGampHb0h6dE1oUU11ZEgyM21JaEt6amVZV0VSSWIrWmh6Tmo1?=
- =?gb2312?B?bUV5NFZESHlKWmV3WUtYeGZSVnZmQmR3TDA3eDVaTU4ydEdlYTZ6K2wzVkpi?=
- =?gb2312?B?Z3cvbjRFTHNidVhkTnRRbUdJbGd5SVpYejRNbDBzRldpU1BDK1dmVWkzQ3M3?=
- =?gb2312?B?OGcvUFdxK3RWTWs5U0dYeTFGV2hndTFVWUFNdFNwZjhSUDNIclo5SXlCbUFE?=
- =?gb2312?B?K2x6cmtZM0cyeUhXZjNPNHZQdVlMZ01UdnFVM2RPTUgzMHlxMHhISHorUW82?=
- =?gb2312?B?bHhjTGllV2hJd1M2dGJadVJLdk9CSDFkUHdKNFU5WmRXQmJoSHZpU2hnN3di?=
- =?gb2312?B?b244R2tLM3hEZm1jWWcxa2M5ak02anc4SUZNOFFZaExIS0tDVzZLcld1VHFw?=
- =?gb2312?B?U1R2aTN2dWZIQmxwOEh4Q2hIV09xZ1l1VGZLMVk2YUk3NlZJU3RWMXRnMElE?=
- =?gb2312?B?cGlNWkd1OGZYMUhHdktYcWdjOVNrZTZiM2NoV2FRakRXOE0rK0VFdW1JK2hl?=
- =?gb2312?B?MEdPaU9lajJ3YUxidzczR054dWdLcHRrUitBNm9qcFpqeEliUEdFcDBFTjcw?=
- =?gb2312?B?ZmNRUUpCbEhLZEQ4ZmJzNnF6WEI5S2cwVVhWbC9VaHk1NGtHQ1VicEc5aS85?=
- =?gb2312?B?NDNnaFlyRDFKSkE4NFN2YTNLUE1yOWVLUURJMldWUVFraHg5bXpRYVRzVnZK?=
- =?gb2312?B?eDVnRzFHL2Nyby9mV3FDdmt5T0x3PT0=?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Fri, 21 Jan
+ 2022 05:50:30 +0000
+Received: from BN8NAM11FT052.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:80:cafe::91) by BN8PR15CA0044.outlook.office365.com
+ (2603:10b6:408:80::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.12 via Frontend
+ Transport; Fri, 21 Jan 2022 05:50:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.234; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.234) by
+ BN8NAM11FT052.mail.protection.outlook.com (10.13.177.210) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4909.7 via Frontend Transport; Fri, 21 Jan 2022 05:50:29 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL101.nvidia.com
+ (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 21 Jan
+ 2022 05:50:28 +0000
+Received: from [10.40.163.9] (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.9; Thu, 20 Jan 2022
+ 21:50:24 -0800
+Message-ID: <913e5496-c2b0-0d62-dafd-eb85ebbd72eb@nvidia.com>
+Date:   Fri, 21 Jan 2022 11:20:21 +0530
 MIME-Version: 1.0
-X-OriginatorOrg: bayhubtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR16MB4248.namprd16.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8167f3a7-28f7-4e09-24df-08d9dca15da3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jan 2022 05:46:26.6423
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [Patch V2] memory: tegra: Add MC error logging on tegra186 onward
+Content-Language: en-US
+To:     Dmitry Osipenko <digetx@gmail.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <linux-tegra@vger.kernel.org>,
+        <krzysztof.kozlowski@canonical.com>, <linux-kernel@vger.kernel.org>
+CC:     <Snikam@nvidia.com>, <vdumpa@nvidia.com>
+References: <1642669368-20605-1-git-send-email-amhetre@nvidia.com>
+ <3ebf9021-8df2-3d62-7f6c-0ff660e93735@gmail.com>
+From:   Ashish Mhetre <amhetre@nvidia.com>
+In-Reply-To: <3ebf9021-8df2-3d62-7f6c-0ff660e93735@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: aad414cc-665e-45f6-8cfa-08d9dca1ee30
+X-MS-TrafficTypeDiagnostic: BYAPR12MB2918:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB291864A8EED6ABBFBA44A108CA5B9@BYAPR12MB2918.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2089;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nL6cVjk+DcMgrCUd9oetC/PmYPAZZD/ZK2uNuQn3+LoENol7AO6q1+khW1ziaXozI/b8WbNVQz05K6OKMdGhrhYvhey+vlCIsuK5EeBc+qIGwWdDE9joL/fs4z2+WqgUFlj3exHvcEhgHTfzKwe/mNRzRYraXYQRvN+9EzFxr+5XllQzjbZjWiNM71Yyg9yy1bbkNhHldv13ZpOqYMr68yzB6TsvzZT9FTboRgvHbfw0O+zh2xUzc/WsPla/pe02MfH8QgTE+iyzq9n34fr0yVKgmoz3qY2Bz1r4ZY9HF0033YaV4/mPuWH6M1SXjrEszVYUvfB27eV2PQvY073O4B56wVc4HI9AloIdvR64hebms8pn6QOYUhyM3ENf/XtfCB8YecCPPWo7PcoHOCVyxGsYbZuORT+zjE2iEw3HvsJdqqdTFr/vRVAgG4JPoNItLBY8bTR9T9lHSeHUIsL/B1np/TZlbe6yTXDUCKtatVxVo+lWjI/XUfnasHNJ6E1KQughOfAa0kZMEETDeTy9MIU63LfDJ4kMzn0pbwlxWai2OibzQfpYMtMUN0EEiqqR1zChSZG1o6dd/U55fLWxaWXybx4hySaXesuW/6Vgiv8jxWf63mxmKnWLRlzfh/2XyE5cYrRo8QXnN6EwBwUiIFU5PBDYMNjCSWYeqYvq20vfIj2q/ly7czARpOeGJPr023LbxTHRrKuX/qbhcQ68M0SB+JYAzQmpAP3plZsXX3II6xhBaAW1lcE4s5DOOHrsvNr+JS2hIsJrnDajRcmqkuzz0uFeJAPuXak3dPXHVNQnkGC7uEABiUWj4e8G+V7cjpvWG2Klyon6L7dhyIsjhg==
+X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700002)(4326008)(16576012)(336012)(316002)(47076005)(8936002)(36860700001)(31696002)(83380400001)(110136005)(53546011)(81166007)(82310400004)(508600001)(54906003)(70206006)(70586007)(31686004)(186003)(2906002)(40460700001)(2616005)(5660300002)(426003)(16526019)(26005)(356005)(107886003)(86362001)(6666004)(36756003)(8676002)(43740500002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2022 05:50:29.1921
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 0a7aae2b-8f2e-44df-ba2f-42de7f93c642
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JCv2YhmhjnLXRdLEFaEQFfEyjMJfXy4J8AQWc42jAuQKl5y2Xma18fI4Ar6mgTmpPhEt2tVRWhgNwSZTn8pbeIxI/3391NmMKnkoB7sX+O4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR16MB2258
+X-MS-Exchange-CrossTenant-Network-Message-Id: aad414cc-665e-45f6-8cfa-08d9dca1ee30
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT052.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2918
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Q2hldnJvbiBMaSAoV0gpIL2rs7e72NPKvP6hsFtQQVRDSCAyLzNdIG1tYzpzZGhjaS1iYXlodWI6
-cHJvdmlkZSBhIHNvbHV0aW9uIHRvIGltcHJvdmUgc2QgaG9zdCBjYXJkIGNvbXBhdGliaWxpdHmh
-saGj
+
+
+On 1/20/2022 6:23 PM, Dmitry Osipenko wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> 20.01.2022 12:02, Ashish Mhetre пишет:
+>> Remove static from tegra30_mc_handle_irq and use it as interrupt handler
+>> for MC interrupts on tegra186, tegra194 and tegra234 to log the errors.
+>> Add error specific MC status and address register bits and use them on
+>> tegra186, tegra194 and tegra234.
+>> Add error logging for generalized carveout interrupt on tegra186, tegra194
+>> and tegra234.
+>> Add error logging for route sanity interrupt on tegra194 an tegra234.
+>> Add register for higher bits of error address and use it on tegra194 and
+>> tegra234.
+>>
+>> Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
+>> ---
+>> Changes in v2:
+>> - Updated patch subject and commit message
+>> - Removed separate irq handlers
+>> - Updated tegra30_mc_handle_irq to be used for Tegra186 onwards as well
+>>
+>>   drivers/memory/tegra/mc.c       | 73 ++++++++++++++++++++++++++++++++++-------
+>>   drivers/memory/tegra/mc.h       | 16 +++++++++
+>>   drivers/memory/tegra/tegra186.c |  7 ++++
+>>   drivers/memory/tegra/tegra194.c |  5 +++
+>>   drivers/memory/tegra/tegra234.c |  5 +++
+>>   5 files changed, 94 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/drivers/memory/tegra/mc.c b/drivers/memory/tegra/mc.c
+>> index bf3abb6..badebe8 100644
+>> --- a/drivers/memory/tegra/mc.c
+>> +++ b/drivers/memory/tegra/mc.c
+>> @@ -508,7 +508,21 @@ int tegra30_mc_probe(struct tegra_mc *mc)
+>>        return 0;
+>>   }
+>>
+>> -static irqreturn_t tegra30_mc_handle_irq(int irq, void *data)
+>> +const struct tegra_mc_ops tegra30_mc_ops = {
+>> +     .probe = tegra30_mc_probe,
+>> +     .handle_irq = tegra30_mc_handle_irq,
+>> +};
+>> +#endif
+>> +
+>> +#if defined(CONFIG_ARCH_TEGRA_3x_SOC) || \
+>> +    defined(CONFIG_ARCH_TEGRA_114_SOC) || \
+>> +    defined(CONFIG_ARCH_TEGRA_124_SOC) || \
+>> +    defined(CONFIG_ARCH_TEGRA_132_SOC) || \
+>> +    defined(CONFIG_ARCH_TEGRA_210_SOC) || \
+>> +    defined(CONFIG_ARCH_TEGRA_186_SOC) || \
+>> +    defined(CONFIG_ARCH_TEGRA_194_SOC) || \
+>> +    defined(CONFIG_ARCH_TEGRA_234_SOC)
+> 
+> Ifdefs are unnecessary, please remove them. They are okay for
+> tegra30_mc_ops, which is known to be used only by specific older SoC
+> versions, not okay in case of newer SoCs.
+> 
+Okay, I'll remove these ifdefs in next version.
+
+>> +irqreturn_t tegra30_mc_handle_irq(int irq, void *data)
+>>   {
+>>        struct tegra_mc *mc = data;
+>>        unsigned long status;
+>> @@ -521,23 +535,64 @@ static irqreturn_t tegra30_mc_handle_irq(int irq, void *data)
+>>
+>>        for_each_set_bit(bit, &status, 32) {
+>>                const char *error = tegra_mc_status_names[bit] ?: "unknown";
+>> +             u32 status_reg = MC_ERR_STATUS, addr_reg = MC_ERR_ADR;
+>>                const char *client = "unknown", *desc;
+>>                const char *direction, *secure;
+>>                phys_addr_t addr = 0;
+>> +             u32 addr_hi_reg = 0;
+>>                unsigned int i;
+>>                char perm[7];
+>>                u8 id, type;
+>>                u32 value;
+>>
+>> -             value = mc_readl(mc, MC_ERR_STATUS);
+>> +#if defined(CONFIG_ARCH_TEGRA_186_SOC) || \
+>> +    defined(CONFIG_ARCH_TEGRA_194_SOC) || \
+>> +    defined(CONFIG_ARCH_TEGRA_234_SOC)
+> 
+> Please drop these ifdefs.
+> 
+Yes, will do in next version.
+>> +             switch (bit) {
+>> +             case MC_INT_DECERR_VPR:
+>> +                     status_reg = MC_ERR_VPR_STATUS;
+>> +                     addr_reg = MC_ERR_VPR_ADR;
+> 
+> I mentioned previously that VPR is supported by T124+. Hence ifdefs are
+> incorrect.
+> 
+Yes, I will remove them.
+
+> ...
+>> +             addr |= mc_readl(mc, addr_reg);
+>>
+>>                if (value & MC_ERR_STATUS_RW)
+>>                        direction = "write";
+>> @@ -591,9 +646,6 @@ static irqreturn_t tegra30_mc_handle_irq(int irq, void *data)
+>>                        break;
+>>                }
+>>
+>> -             value = mc_readl(mc, MC_ERR_ADR);
+> 
+> Don't change the order of the code, just replace the MC_ERR_ADR here.
+> 
+Okay, I'll keep the order as it is. I just thought that higher bits of
+address are read above, so why not read lower bits after that.
+
+>> -             addr |= value;
+>> -
+>>                dev_err_ratelimited(mc->dev, "%s: %s%s @%pa: %s (%s%s)\n",
+>>                                    client, secure, direction, &addr, error,
+>>                                    desc, perm);
+>> @@ -604,11 +656,6 @@ static irqreturn_t tegra30_mc_handle_irq(int irq, void *data)
+>>
+>>        return IRQ_HANDLED;
+>>   }
+>> -
+>> -const struct tegra_mc_ops tegra30_mc_ops = {
+>> -     .probe = tegra30_mc_probe,
+>> -     .handle_irq = tegra30_mc_handle_irq,
+>> -};
+>>   #endif
+>>
+>>   const char *const tegra_mc_status_names[32] = {
+>> @@ -622,6 +669,8 @@ const char *const tegra_mc_status_names[32] = {
+>>        [12] = "VPR violation",
+>>        [13] = "Secure carveout violation",
+>>        [16] = "MTS carveout violation",
+>> +     [17] = "Generalized carveout violation",
+>> +     [20] = "Route Sanity error",
+>>   };
+>>
+>>   const char *const tegra_mc_error_names[8] = {
+>> diff --git a/drivers/memory/tegra/mc.h b/drivers/memory/tegra/mc.h
+>> index 062886e..9b1b0dc 100644
+>> --- a/drivers/memory/tegra/mc.h
+>> +++ b/drivers/memory/tegra/mc.h
+>> @@ -44,6 +44,8 @@
+>>   #define MC_TIMING_CONTROL_DBG                                0xf8
+>>   #define MC_TIMING_CONTROL                            0xfc
+>>
+>> +#define MC_INT_DECERR_ROUTE_SANITY                   BIT(20)
+>> +#define MC_INT_DECERR_GENERALIZED_CARVEOUT           BIT(17)
+>>   #define MC_INT_DECERR_MTS                            BIT(16)
+>>   #define MC_INT_SECERR_SEC                            BIT(13)
+>>   #define MC_INT_DECERR_VPR                            BIT(12)
+>> @@ -65,6 +67,18 @@
+>>   #define MC_ERR_STATUS_SECURITY                               BIT(17)
+>>   #define MC_ERR_STATUS_RW                             BIT(16)
+>>
+>> +#define MC_ERR_VPR_STATUS                            0x654
+>> +#define MC_ERR_VPR_ADR                                       0x658
+>> +#define MC_ERR_SEC_STATUS                            0x67c
+>> +#define MC_ERR_SEC_ADR                                       0x680
+>> +#define MC_ERR_MTS_STATUS                            0x9b0
+>> +#define MC_ERR_MTS_ADR                                       0x9b4
+>> +#define MC_ERR_ROUTE_SANITY_STATUS                   0x9c0
+>> +#define MC_ERR_ROUTE_SANITY_ADR                              0x9c4
+>> +#define MC_ERR_GENERALIZED_CARVEOUT_STATUS           0xc00
+>> +#define MC_ERR_GENERALIZED_CARVEOUT_ADR                      0xc04
+>> +#define MC_ERR_ADR_HI                                        0x11fc
+> 
+> Please put these regs right after the MC_TIMING_CONTROL. There is no
+> reason to separate them.
+> 
+Sure, I'll update it in next version.

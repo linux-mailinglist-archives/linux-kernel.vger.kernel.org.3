@@ -2,68 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9410D49673F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 22:19:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B78D9496749
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 22:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiAUVTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 16:19:44 -0500
-Received: from mail-ot1-f52.google.com ([209.85.210.52]:37863 "EHLO
-        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiAUVTm (ORCPT
+        id S229782AbiAUV1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 16:27:12 -0500
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:46835 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229459AbiAUV1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 16:19:42 -0500
-Received: by mail-ot1-f52.google.com with SMTP id i7-20020a9d68c7000000b0059396529af8so13345350oto.4;
-        Fri, 21 Jan 2022 13:19:42 -0800 (PST)
+        Fri, 21 Jan 2022 16:27:11 -0500
+Received: by mail-ot1-f45.google.com with SMTP id t4-20020a05683022e400b00591aaf48277so13324225otc.13;
+        Fri, 21 Jan 2022 13:27:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Rwc9GxUTej2WnJMc0e3ALPik20sHOJTxdJgSjedRgYM=;
-        b=U6YEnpJZiqg1PM1YZVt2OTnGtBR2T4CbKPkGFv7ZQLvrwRxOFK+1aoGkyt35MA+Kv6
-         pBXEzSDZZomYvU4gZLDlr7VyQ6PzyRE3M36Z4L2nBwxOpqxjdn4l5WFc93qiHjIt6brs
-         heoHIWbtjw7KmA8cI0W662h1Y0i05EMTFYmq6vVrgF+GzGJGZkQDii1MpswoGcjl9LVn
-         h3GUo8HcHD0Swhg/6nNUQNhvEq+bfC0AFKKD9mtZsLffnLy+EcVVHq8Vdi1yU6ucNMkg
-         cDUcZ7K1WF7Y3vLgKA9wuU4R05fU1eiZYTwfxGCKWAlf2gexguZIHYbA8ZfVHjr3dTUg
-         WUCQ==
-X-Gm-Message-State: AOAM5312vrCNAcb42qhQY7maVNEdPe5MO6SuLaYOpE0dXGouJdl4QjQv
-        qQ+cORA6AyjKnuuc4XHweQ==
-X-Google-Smtp-Source: ABdhPJzbNnH7DDBGJ2KNG4hBF2gFhO9Qk8NiQerrT9EGNcWyi7kzEHZbIoK+YEXVUQe0ZMgoi4p0gg==
-X-Received: by 2002:a9d:57ca:: with SMTP id q10mr4195836oti.180.1642799982173;
-        Fri, 21 Jan 2022 13:19:42 -0800 (PST)
+        bh=LGElPy2VACsBdFnkh6MdJpINb1+42Tm0MAH//73tJqU=;
+        b=i3s+iJXS1gZIBPTtdd4e/MuWxyzSod+QeWAzlYvA2jMCz7R3Ye9BAqP7vkyJC9ARn/
+         IP0n6oou/9SnRmSm3E5FsPbrQM7tgeo1gQV0nTDC3gB2H6Q1NHTti/E/JPL05iFwj3XP
+         thDH3VcMvgRZCSjfTwsbb1bUt5o7JEA/i4DC+f6YvEEjXw3qwjELuck5V8vQV015VPfO
+         TK9LEfH8uvNeu+08z3Vxbw3pRQHDxY35F6XweGI4GvDIemiI+X7/luiu5Yo4jpfS18kD
+         y+NvJEVUvNGHmoT37d9SD2/rCaOAl0NwltB2t4TpylUvvGxBB89cervnBgJaj6l6V5E0
+         ULyA==
+X-Gm-Message-State: AOAM530SWrTqjFmAi4AbSRHV8BxDQCfeULLu1b5WcTJLNpYjiHcDTK0y
+        Mg04iE+B1Z6M42XmzCceKA==
+X-Google-Smtp-Source: ABdhPJwygzWkhErXMaYWnI0oDmdrjDawCFds/EJVU76juuAX/N0kolybjRGafXge9r46h1+sDrkEcA==
+X-Received: by 2002:a9d:2ae9:: with SMTP id e96mr4103155otb.130.1642800430655;
+        Fri, 21 Jan 2022 13:27:10 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id g2sm1614084oic.40.2022.01.21.13.19.41
+        by smtp.gmail.com with ESMTPSA id bh10sm1735740oib.24.2022.01.21.13.27.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 13:19:41 -0800 (PST)
-Received: (nullmailer pid 1602431 invoked by uid 1000);
-        Fri, 21 Jan 2022 21:19:40 -0000
-Date:   Fri, 21 Jan 2022 15:19:40 -0600
+        Fri, 21 Jan 2022 13:27:09 -0800 (PST)
+Received: (nullmailer pid 1614542 invoked by uid 1000);
+        Fri, 21 Jan 2022 21:27:08 -0000
+Date:   Fri, 21 Jan 2022 15:27:08 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Christophe Kerello <christophe.kerello@foss.st.com>
-Cc:     robh+dt@kernel.org, miquel.raynal@bootlin.com, vigneshr@ti.com,
-        richard@nod.at, chenshumin86@sina.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, srinivas.kandagatla@linaro.org
-Subject: Re: [PATCH 1/3] dt-binding: mtd: nand: Document the wp-gpios property
-Message-ID: <YesjbOzh+B00dKIh@robh.at.kernel.org>
-References: <20220105135734.271313-1-christophe.kerello@foss.st.com>
- <20220105135734.271313-2-christophe.kerello@foss.st.com>
+To:     Abel Vesa <abel.vesa@nxp.com>
+Cc:     Georgi Djakov <djakov@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] dt-bindings: interconnect: imx8m-noc: Add
+ fsl,icc-id property
+Message-ID: <YeslLJqwhX668+oa@robh.at.kernel.org>
+References: <20220106164150.3474048-1-abel.vesa@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220105135734.271313-2-christophe.kerello@foss.st.com>
+In-Reply-To: <20220106164150.3474048-1-abel.vesa@nxp.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 05 Jan 2022 14:57:32 +0100, Christophe Kerello wrote:
-> A few drivers use this property to describe the GPIO pin used to protect
-> the NAND during program/erase operations.
+On Thu, Jan 06, 2022 at 06:41:48PM +0200, Abel Vesa wrote:
+> Add documentation for fsl,icc-id property.
 > 
-> Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
 > ---
->  Documentation/devicetree/bindings/mtd/nand-controller.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
 > 
+> Changes since v3:
+>  * fixed typo in property description
+> 
+>  .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml      | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+> index b8204ed22dd5..dc7f6b6f508a 100644
+> --- a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+> @@ -47,6 +47,11 @@ properties:
+>    operating-points-v2: true
+>    opp-table: true
+>  
+> +  fsl,icc-id:
+> +    $ref: "/schemas/types.yaml#/definitions/uint32"
+> +    description:
+> +      unique ID used for linking i.MX bus or ddrc node to interconnect
 
-Acked-by: Rob Herring <robh@kernel.org>
+Where does this unique ID come from and how is it used? Why aren't cells 
+in 'interconnects' sufficient for this?
+
+> +
+>    fsl,ddrc:
+>      $ref: "/schemas/types.yaml#/definitions/phandle"
+>      description:
+> -- 
+> 2.31.1
+> 
+> 

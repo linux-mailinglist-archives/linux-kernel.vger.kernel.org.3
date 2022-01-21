@@ -2,112 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16031495FFE
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:53:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6043849600C
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380783AbiAUNxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 08:53:04 -0500
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:54113 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1350479AbiAUNxE (ORCPT
+        id S1350595AbiAUNzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 08:55:33 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:60995 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1350341AbiAUNz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 08:53:04 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 355215C017F;
-        Fri, 21 Jan 2022 08:53:03 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Fri, 21 Jan 2022 08:53:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm2; bh=E
-        /aRI1zfgR2kllXwrKq4YlOKAvrqWI1O7a4EaQdHg5U=; b=Wb2NSsIE4wwAxBMtR
-        ES8omR+gxXK9c/GnbdkzB/GFyIfEwLDuA0dM7bl89xobrwvWGjuFMqPV5BTjPKyZ
-        VnrtPlfX5zqllLU45E/ixUJOJbda036sVUzHjYoPWF5Ul65+p3ik1vz7QtX55DHQ
-        WWkI/2dxaSj5BnJYnyHTRA6LVx4uNRNAIfdvlG7P4NGPWMiUUoKE/Y2eSoLYb5Zm
-        4O3xOSKwlBoagbawrX89RAkr1fJfagjp7tZiU0iWqJ29AmwMMlpafIJiE/roqOhy
-        ubVFHeaqt+uE29dcorfu8XwyLXZ5RQEsoTxZvPGWBD6MEuvzk6b8Y7/zHMYYG5xe
-        DDH0g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=E/aRI1zfgR2kllXwrKq4YlOKAvrqWI1O7a4EaQdHg
-        5U=; b=iAwnIayoT3eCJQkYy3y9BXu3T+t46VjKWPUSX2vRsy9QC1WunyXbHJgot
-        eDgtXS/SMo3NJkecEavt+HQru/Pqdh3nGny9h2vbHDbCk27gZIxFdrh+/n6YlRSc
-        Xie2DUK8jwSygnH7cB5YhVdj0h53qSu3NGkR4xe0SHABFD8S0dCouJLULwpRrC8C
-        AWAt12cVRUZu2glHaouKTzQXOztVVN3GFXOnjNvhI0VkcR+3uVqblfvpKKH41Ytk
-        CS4y+gu0+rHannDv5g3Qq3ZkkzYysX/EXKfd6UynQg5CX+XkW6889T48aWjycP9g
-        +2HQUz8vVPygegeA37g1UIlnKbGxA==
-X-ME-Sender: <xms:vrrqYVuZGzxuwIFipmdbKcJQT1pfONJ1aWmlCVKvAI6FMi1aAzFK8g>
-    <xme:vrrqYecpYvU7tGW7ud4JUp7Ud0VSWKextKNTuTjkYBv6iXXUZwlfZ2T6v0_XjMrlP
-    CHSqI6KfEBJlQ>
-X-ME-Received: <xmr:vrrqYYy5xZYDJqiFWD-0FleWt5eMUwyj0ODy9WfOcZf_Snfndpp9US41DJ1u62CcjwCyUzVSf81SQ3te4FIb3yHj1pFc79Oc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvddtgdehiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkgggtugesthdtredttddtvdenucfhrhhomhepifhrvghgucfmjfcu
-    oehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepvedugeeuffelge
-    ekhfehtdefhfekffdtgedvteeitddvieduhfekheekueehleelnecuffhomhgrihhnpehk
-    rhhorghhrdgtohhmpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:vrrqYcM015DlWt3OyobniwiQu2bGbtXP9RtfJuh7u8toQQA5BjYYTA>
-    <xmx:vrrqYV9tEP_uVZNSehopCjtVI6IFfoSmztT1ixq_CUrZufJEpf52BA>
-    <xmx:vrrqYcWHvBKPsLr_2szJ1qFbbMEGZT393V5ZSZ7sLiRtcZ53u7vRiA>
-    <xmx:v7rqYRazPJHcW-Wrm8nkesZbuDqcPDcxg0Z4nsWLZKMDMgMmsLWSrQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 21 Jan 2022 08:53:02 -0500 (EST)
-Date:   Fri, 21 Jan 2022 14:53:00 +0100
-From:   Greg KH <greg@kroah.com>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Matthias Gerstner <mgerstner@suse.de>
-Subject: usbview 2.2 release
-Message-ID: <Yeq6vM/m3JFAdmg7@kroah.com>
+        Fri, 21 Jan 2022 08:55:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1642773326; x=1674309326;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=mBlYz8SBr0A5YG9puqHv9OcqhqV+jlPuhxHKzeH01p4=;
+  b=m+JqbALncDBzbiGMIUd7CtGozAqDwRjCNlPCAwzVUkF60aytLdYr2qWC
+   CWg4216fnp2phE15JdwdEPsmUMpNvHSvaLj/jAUtrr4BQJBjkXyEnBsPw
+   P84ejbBNOxfd/XDmnjEzy7zi6J1KplxPT4yHIP7VgT60d1VlPlyYOLxAV
+   I=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 21 Jan 2022 05:55:25 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 05:55:25 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 21 Jan 2022 05:55:24 -0800
+Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 21 Jan 2022 05:55:19 -0800
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
+        <bjorn.andersson@linaro.org>, <greg@kroah.com>, <robh@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>,
+        <quic_psodagud@quicinc.com>, <quic_satyap@quicinc.com>,
+        <quic_pheragu@quicinc.com>, <quic_rjendra@quicinc.com>,
+        <quic_sibis@quicinc.com>, <quic_saipraka@quicinc.com>,
+        <quic_schowdhu@quicinc.com>
+Subject: [PATCH V4 0/6] Add Embedded USB Debugger (EUD) driver
+Date:   Fri, 21 Jan 2022 19:23:45 +0530
+Message-ID: <cover.1642768837.git.quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's a new version of usbview that is now released.  If you are
-building/running from source, this isn't that big of a change, but if
-you are a distro packager, this is a big deal as it fixes an issue with
-pollkit that could cause bad issues due to some root privileges being
-needed for the program to run well.  This fixes CVE-2022-23220 and many
-thanks to Matthias Gerstner of the SUSE security team for finding and
-fixing these issues.
+This is a series of patches that implements a driver for the control
+peripheral, EUD (Embedded USB Debugger). The EUD is a mini-USB hub
+implemented on chip to support the USB-based debug and trace capabilities.
+Apart from debug capabilities, EUD has a control peripheral. Control
+Peripheral is on when EUD is on and gets signals like USB attach, pet
+EUD etc. EUD driver listens to events like USB attach or detach and then
+informs the USB about these events via ROLE-SWITCH. At regular intervals,
+the EUD driver receives an interrupt to pet the driver indicating that
+the software is functional.
 
-The package can be downloaded at:
-	http://www.kroah.com/linux/usb/usbview-2.2.tar.gz
-and the git tree can be found at:
-	http://github.com/gregkh/usbview
+Changes in V4
 
-Note, the requirement of root access for this tool is a story of how
-systems evolve over time.  When this tool was first written, back in
-1999, 'devices' file in usbdevfs (now usbfs), which was readable by
-anyone.  Then that file moved out of usbdevfs and into debugfs, which
-was mounted at /sys/kernel/debug/ and still readable by anyone.
+* Aligned the device tree node structure of EUD as per discussion.
 
-Then, distros started to lock down debugfs and would only allow programs
-that had root access to read from it, which required usbview to also
-require such access.  This really is silly given that the same
-information, if not more, is available to anyone who uses 'lsusb' or
-libusb as usb device information is not restricted.  But usbview was
-never touched, and so it still required such access, which was noticed
-by SUSE and hence the security audit.
+* Changes to usb-connector.yaml is no longer required and is not 
+  included in the patch series.
+  
+* Implemented the rest of the comments on Version 3 of the patch.  
 
-I have a hacked up rewrite of the tool in a branch in the git tree that
-does not require root access, and will be polishing this up and should
-do a new release with that change in a few days.  But for now, the above
-security fix should be sufficient for distros that currently ship the
-package and use the polkit configuration file.
+Changes in V3
 
-thanks,
+* Removed the patch for registration of EUD connector as it is no longer
+  required.
+  
+* Added the description to include EUD in usb-connector.yaml  
 
-greg k-h
+* Implemented comments on V2 of the patch.
 
--------
-version 2.2
-        - security issue fixed with polkit (CVE-2022-23220).
-        - copyright year fixups and updates
-        - tooltip added to explain red devices have no attached drivers
+Changes in V2
+
+* Fixed the yaml issue and also implemented comments on yaml in V1.
+
+Changes in V1
+
+* EUD has now been mapped as a separate DT node as it is an independent QCOM IP.
+
+* EUD is attached to the connector child of dwc3 via port end point since EUD
+  driver needs the connector for role-switching.
+
+* EUD driver has been moved now to drivers/soc/qcom/qcom_eud.c.
+
+* All the comments from version 0 of the patch has been implemented.
+
+Souradeep Chowdhury (6):
+  dt-bindings: Add the yaml bindings for EUD
+  bindings: usb: dwc3: Update dwc3 properties for EUD connector
+  soc: qcom: eud: Add driver support for Embedded USB Debugger(EUD)
+  arm64: dts: qcom: sc7280: Add EUD dt node and dwc3 connector
+  arm64: dts: qcom: sc7280: Set the default dr_mode for usb2
+  MAINTAINERS: Add maintainer entry for EUD
+
+ Documentation/ABI/testing/sysfs-driver-eud         |   9 +
+ .../devicetree/bindings/soc/qcom/qcom,eud.yaml     |  77 +++++++
+ .../devicetree/bindings/usb/snps,dwc3.yaml         |  10 +
+ MAINTAINERS                                        |   8 +
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts            |   4 +
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |  39 ++++
+ drivers/soc/qcom/Kconfig                           |  10 +
+ drivers/soc/qcom/Makefile                          |   1 +
+ drivers/soc/qcom/qcom_eud.c                        | 250 +++++++++++++++++++++
+ 9 files changed, 408 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-eud
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+ create mode 100644 drivers/soc/qcom/qcom_eud.c
+
+-- 
+2.7.4
+

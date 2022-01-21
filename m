@@ -2,305 +2,437 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E134958DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 05:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E98CF4958E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 05:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245384AbiAUEQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 23:16:43 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:52649 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348260AbiAUEPi (ORCPT
+        id S245363AbiAUERy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 23:17:54 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:54346
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233924AbiAUERx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 23:15:38 -0500
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 20L4F9OF0021583, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 20L4F9OF0021583
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 21 Jan 2022 12:15:09 +0800
-Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 21 Jan 2022 12:15:09 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 20 Jan 2022 20:15:09 -0800
-Received: from RTEXMBS01.realtek.com.tw ([fe80::a5c6:3ded:8fd8:286a]) by
- RTEXMBS01.realtek.com.tw ([fe80::a5c6:3ded:8fd8:286a%5]) with mapi id
- 15.01.2308.020; Fri, 21 Jan 2022 12:15:09 +0800
-From:   Ricky WU <ricky_wu@realtek.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-CC:     "arnd@arndb.de" <arnd@arndb.de>,
+        Thu, 20 Jan 2022 23:17:53 -0500
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0A2E03FFD0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 04:17:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642738672;
+        bh=rXudac+Sy8gwrxo8njPKo3h/K3k2Za30HGB7xZ6nK5I=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=ZDJhLfyLHl3AtmyYr8tqXP+AnlZ+ki1WcJ3cdOp/Np9uUr/LOGH0wzppaTRxrTqnM
+         Gtiz9cXjmOOEGDHpFQh0nxl25NbGvQ5oQn4gvDntnAX1OSNHJaTOTjorWs9Nz6jgqZ
+         jUjXnstFY4/uwM6U2mRa9ejKdJzxEzBJ8upK5lTREqra2Zv7kUQC7uen1fdYiwKV+L
+         bIYAtmJBSLJ9EmFqJQbwjUn84MevVFnB8D9sJ4NFgijwTn3q2Q7CL+PtOMd30C1p/d
+         XiC6atH+tKhEgsciRFtCZrIRydhb7HX9dz8Dx2s8lRupeGK5CCQfMkcdzENp1MR6YL
+         YgYv9I5Cb6nqg==
+Received: by mail-oi1-f198.google.com with SMTP id p131-20020acabf89000000b002c6dcda3435so5189433oif.7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 20:17:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rXudac+Sy8gwrxo8njPKo3h/K3k2Za30HGB7xZ6nK5I=;
+        b=O1aHUS0iLUBmZ/AW11rX5wHKPgs9Soj1wyGQrtC6IpIgV+M+y4wmeirxcOQU/BL0re
+         ZyigR9aGMdaTJ3tsN5UD8UP9WtK/3QAKiLCSPf8nO9JwnmmPUNvVBb2W7lgOkzUpn+Yk
+         8Ei6nQNNKyF7PjVXnzap/wS7PaWZx6DN+KdzckvBb0qYZ/LUn4cRbJWzuWNLY9hrXsWI
+         JauKoKE+UsfizQ37s58UGlsgWa5LuSt5i1QarRvHdE4TCt0ywci9bUXlb0Ki4wprdV03
+         nICMVqjw5S+EhVGBE+4GCnRAcVWONxhoVpmMTYahtatHwQKhrgw5Pj0SQDJA/KGmiZdJ
+         ThKA==
+X-Gm-Message-State: AOAM532lfdZYrjOZYdtDEbM+IO4wSpN5hSiWW2Qvg+i4bVrEmajQxRPP
+        5JzmXeoB0BerfW0aLYcjlpwj0W7h9s+SCfvYgv5mshjqcuRSxFd5Bl4fK4XJ0/oDxXvX5vi+kjM
+        4dFMl3T7OpJP5d2YNV+iV4z3AdtLwKEK975BlC/YJVTpJRbaFJ6C4EXHoSg==
+X-Received: by 2002:a05:6808:19a9:: with SMTP id bj41mr10494935oib.98.1642738670823;
+        Thu, 20 Jan 2022 20:17:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyOrLwi9RZcS8M47Ek2+NQZR15nmipLLUkmtqVXb9RcR7kqU7sa1x3Iwu2t9ht5yfl2W4/7N/SizngmbYA0r2E=
+X-Received: by 2002:a05:6808:19a9:: with SMTP id bj41mr10494921oib.98.1642738670520;
+ Thu, 20 Jan 2022 20:17:50 -0800 (PST)
+MIME-Version: 1.0
+References: <20220120145006.1682014-2-kai.heng.feng@canonical.com>
+ <20220121014039.1693208-1-kai.heng.feng@canonical.com> <e757387774234b678f6a38e004179c99@realtek.com>
+ <CAAd53p7Ek3xjsnXPbrrigGfyjnAz0OpHqYT7A3q8MWFrfZnuXg@mail.gmail.com> <21c1e92840b44a059dbbed714c84150b@realtek.com>
+In-Reply-To: <21c1e92840b44a059dbbed714c84150b@realtek.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Fri, 21 Jan 2022 12:17:39 +0800
+Message-ID: <CAAd53p6PeiLLEy9MXdJJcGKJ=hHZGNUY=-NhR_8kGjHvvDW6Ew@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] misc: rtsx: Rework runtime power management flow
+To:     Ricky WU <ricky_wu@realtek.com>
+Cc:     "arnd@arndb.de" <arnd@arndb.de>,
         "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
         "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Yang Li <yang.lee@linux.alibaba.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 2/4] misc: rtsx: Rework runtime power management flow
-Thread-Topic: [PATCH v2 2/4] misc: rtsx: Rework runtime power management flow
-Thread-Index: AQHYDmfzNtApiNB7lEubVz/rcdVLiqxs1tFQ//9/PYCAAIZkYA==
-Date:   Fri, 21 Jan 2022 04:15:09 +0000
-Message-ID: <21c1e92840b44a059dbbed714c84150b@realtek.com>
-References: <20220120145006.1682014-2-kai.heng.feng@canonical.com>
- <20220121014039.1693208-1-kai.heng.feng@canonical.com>
- <e757387774234b678f6a38e004179c99@realtek.com>
- <CAAd53p7Ek3xjsnXPbrrigGfyjnAz0OpHqYT7A3q8MWFrfZnuXg@mail.gmail.com>
-In-Reply-To: <CAAd53p7Ek3xjsnXPbrrigGfyjnAz0OpHqYT7A3q8MWFrfZnuXg@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.22.81.97]
-x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzEvMjEg5LiK5Y2IIDAyOjQ5OjAw?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBLYWktSGVuZyBGZW5nIDxrYWku
-aGVuZy5mZW5nQGNhbm9uaWNhbC5jb20+DQo+IFNlbnQ6IEZyaWRheSwgSmFudWFyeSAyMSwgMjAy
-MiAxMjowOCBQTQ0KPiBUbzogUmlja3kgV1UgPHJpY2t5X3d1QHJlYWx0ZWsuY29tPg0KPiBDYzog
-YXJuZEBhcm5kYi5kZTsgZ3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc7IHVsZi5oYW5zc29uQGxp
-bmFyby5vcmc7DQo+IGxpbnV4LXBtQHZnZXIua2VybmVsLm9yZzsgQ2hyaXN0b3BoZSBKQUlMTEVU
-DQo+IDxjaHJpc3RvcGhlLmphaWxsZXRAd2FuYWRvby5mcj47IFlhbmcgTGkgPHlhbmcubGVlQGxp
-bnV4LmFsaWJhYmEuY29tPjsNCj4gbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiBTdWJq
-ZWN0OiBSZTogW1BBVENIIHYyIDIvNF0gbWlzYzogcnRzeDogUmV3b3JrIHJ1bnRpbWUgcG93ZXIg
-bWFuYWdlbWVudA0KPiBmbG93DQo+IA0KPiBPbiBGcmksIEphbiAyMSwgMjAyMiBhdCAxMTo1NyBB
-TSBSaWNreSBXVSA8cmlja3lfd3VAcmVhbHRlay5jb20+IHdyb3RlOg0KPiA+DQo+ID4gPiAtLS0t
-LU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+ID4gRnJvbTogS2FpLUhlbmcgRmVuZyA8a2FpLmhl
-bmcuZmVuZ0BjYW5vbmljYWwuY29tPg0KPiA+ID4gU2VudDogRnJpZGF5LCBKYW51YXJ5IDIxLCAy
-MDIyIDk6NDEgQU0NCj4gPiA+IFRvOiBhcm5kQGFybmRiLmRlOyBncmVna2hAbGludXhmb3VuZGF0
-aW9uLm9yZzsNCj4gPiA+IHVsZi5oYW5zc29uQGxpbmFyby5vcmcNCj4gPiA+IENjOiBsaW51eC1w
-bUB2Z2VyLmtlcm5lbC5vcmc7IEthaS1IZW5nIEZlbmcNCj4gPiA+IDxrYWkuaGVuZy5mZW5nQGNh
-bm9uaWNhbC5jb20+OyBSaWNreSBXVSA8cmlja3lfd3VAcmVhbHRlay5jb20+Ow0KPiA+ID4gQ2hy
-aXN0b3BoZSBKQUlMTEVUIDxjaHJpc3RvcGhlLmphaWxsZXRAd2FuYWRvby5mcj47IFlhbmcgTGkN
-Cj4gPiA+IDx5YW5nLmxlZUBsaW51eC5hbGliYWJhLmNvbT47IGxpbnV4LWtlcm5lbEB2Z2VyLmtl
-cm5lbC5vcmcNCj4gPiA+IFN1YmplY3Q6IFtQQVRDSCB2MiAyLzRdIG1pc2M6IHJ0c3g6IFJld29y
-ayBydW50aW1lIHBvd2VyIG1hbmFnZW1lbnQNCj4gPiA+IGZsb3cNCj4gPiA+DQo+ID4gPiBDb21t
-aXQgNWI0MjU4ZjY3MjFmICgibWlzYzogcnRzeDogcnRzNTI0OSBzdXBwb3J0IHJ1bnRpbWUgUE0i
-KSB1c2VzDQo+ID4gPiAicnRkM193b3JrIiBhbmQgImlkbGVfd29yayIgdG8gbWFuYWdlIGl0J3Mg
-b3duIHJ1bnRpbWUgUE0gc3RhdGUNCj4gbWFjaGluZS4NCj4gPiA+DQo+ID4gPiBXaGVuIGl0cyBj
-aGlsZCBkZXZpY2UsIHJ0c3hfcGNpX3NkbW1jLCB1c2VzIHJ1bnRpbWUgUE0gcmVmY291bnQNCj4g
-PiA+IGNvcnJlY3RseSwgYWxsIHRoZSBhZGRpdGlvbmFsIHdvcmtzIGNhbiBiZSBtYW5hZ2VkIGJ5
-IGdlbmVyaWMgcnVudGltZSBQTQ0KPiBoZWxwZXJzLg0KPiA+ID4NCj4gPiA+IFNvIGNvbnNvbGlk
-YXRlICJpZGxlX3dvcmsiIGFuZCAicnRkM193b3JrIiBpbnRvIGdlbmVyaWMgcnVudGltZSBpZGxl
-DQo+ID4gPiBjYWxsYmFjayBhbmQgcnVudGltZSBzdXNwZW5kIGNhbGxiYWNrLCByZXNwZWN0aXZl
-bHkuDQo+ID4gPg0KPiA+DQo+ID4gVGhpcyBpZGxlX3dvcmsgaXMgbm90IHJ1bnRpbWVfaWRsZSwg
-dGhpcyBpcyBmb3IgYXNwbSBzZXR0aW5nIE5vdCBvbmx5DQo+ID4gZm9yIHN1cHBvcnQgUlBNLCBz
-byB0aGlzIGlkbGVfd29yayBjYW4gbm90IGJlIHJlbW92ZS4uLi4NCj4gDQo+IHJ0c3hfcG1fcG93
-ZXJfc2F2aW5nKCkgaXMgY2FsbGVkIGluc2lkZSBydHN4X3BjaV9ydW50aW1lX2lkbGUoKSwgd2hl
-biB0aGUNCj4gdXNhZ2UgcmVmY291bnQgYmVjb21lcyB6ZXJvLCBiZWZvcmUgcnVudGltZSBzdXNw
-ZW5kIHJvdXRpbmUuDQo+IA0KPiA+DQo+ID4gT3VyIG9yaWdpbmFsIElkbGVfd29yayBpcyBhIHBv
-d2VyIHNhdmVpbmcgZnVuY3Rpb24sIEl0IGlzIGEgZGVsYXlfd29yaw0KPiA+IGZvciAyMDAgbXNl
-YyAgLCBJZiBubyB3b3JrIGNvbWVzIGluIDIwMCBtc2VjIHRoYW4gZ28gdG8gaWRsZV93b3JrIHRv
-IHNldA0KPiBwb3dlciBzYXZlaW5nIHNldHRpbmcuLi4uLg0KPiANCj4gSGF2ZSB5b3UgdGVzdGVk
-IGl0IGxvY2FsbHk/IHJ0c3hfcGNpX3J1bnRpbWVfaWRsZSgpIHJlYWxseSBkb2VzIHRoZSBzYW1l
-IHRoaW5nLg0KPiANCg0KV2UgYXJlIHRlc3RpbmcuLi4NClJURDMgaXMgbm90IGF2YWlsYWJsZSBv
-biBhbGwgcGxhdGZvcm1zLi4uLg0KV2UgdXNlIGEgdmFsdWVzIChydGQzX2VuKSB0byBqdWRnZSBy
-dGQzIGVuYWJsZSBvciBub3QNCg0KQXNwbSBpcyBmb3IgYWxsIHBsYXRmb3JtIGJ1dCBSVEQzIGlz
-IG5vdCANCg0KPiANCj4gPg0KPiA+ID4gRml4ZXM6IDViNDI1OGY2NzIxZiAoIm1pc2M6IHJ0c3g6
-IHJ0czUyNDkgc3VwcG9ydCBydW50aW1lIFBNIikNCj4gPiA+IENjOiBSaWNreSBXVSA8cmlja3lf
-d3VAcmVhbHRlay5jb20+DQo+ID4gPiBTaWduZWQtb2ZmLWJ5OiBLYWktSGVuZyBGZW5nIDxrYWku
-aGVuZy5mZW5nQGNhbm9uaWNhbC5jb20+DQo+ID4gPiAtLS0NCj4gPiA+IHYyOg0KPiA+ID4gIC0g
-UmVtb3ZlIHVudXNlZCBpZGxlX3dvcmsgYW5kIHJ0ZDNfd29yayBmcm9tIHJ0c3hfcGNyLg0KPiA+
-ID4NCj4gPiA+ICBkcml2ZXJzL21pc2MvY2FyZHJlYWRlci9ydHN4X3Bjci5jIHwgMTIzICsrKysr
-KysrKysrLS0tLS0tLS0tLS0tLS0tLS0tDQo+ID4gPiAgaW5jbHVkZS9saW51eC9ydHN4X3BjaS5o
-ICAgICAgICAgICB8ICAgMyAtDQo+ID4gPiAgMiBmaWxlcyBjaGFuZ2VkLCA0NCBpbnNlcnRpb25z
-KCspLCA4MiBkZWxldGlvbnMoLSkNCj4gPiA+DQo+ID4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9t
-aXNjL2NhcmRyZWFkZXIvcnRzeF9wY3IuYw0KPiA+ID4gYi9kcml2ZXJzL21pc2MvY2FyZHJlYWRl
-ci9ydHN4X3Bjci5jDQo+ID4gPiBpbmRleCA2YWM1MDljMTgyMWM5Li4xZGNmOThiNTk3NTY5IDEw
-MDY0NA0KPiA+ID4gLS0tIGEvZHJpdmVycy9taXNjL2NhcmRyZWFkZXIvcnRzeF9wY3IuYw0KPiA+
-ID4gKysrIGIvZHJpdmVycy9taXNjL2NhcmRyZWFkZXIvcnRzeF9wY3IuYw0KPiA+ID4gQEAgLTE1
-MiwyMCArMTUyLDEyIEBAIHZvaWQgcnRzeF9wY2lfc3RhcnRfcnVuKHN0cnVjdCBydHN4X3BjciAq
-cGNyKQ0KPiA+ID4gICAgICAgaWYgKHBjci0+cmVtb3ZlX3BjaSkNCj4gPiA+ICAgICAgICAgICAg
-ICAgcmV0dXJuOw0KPiA+ID4NCj4gPiA+IC0gICAgIGlmIChwY3ItPnJ0ZDNfZW4pDQo+ID4gPiAt
-ICAgICAgICAgICAgIGlmIChwY3ItPmlzX3J1bnRpbWVfc3VzcGVuZGVkKSB7DQo+ID4gPiAtICAg
-ICAgICAgICAgICAgICAgICAgcG1fcnVudGltZV9nZXQoJihwY3ItPnBjaS0+ZGV2KSk7DQo+ID4g
-PiAtICAgICAgICAgICAgICAgICAgICAgcGNyLT5pc19ydW50aW1lX3N1c3BlbmRlZCA9IGZhbHNl
-Ow0KPiA+ID4gLSAgICAgICAgICAgICB9DQo+ID4gPiAtDQo+ID4gPiAgICAgICBpZiAocGNyLT5z
-dGF0ZSAhPSBQREVWX1NUQVRfUlVOKSB7DQo+ID4gPiAgICAgICAgICAgICAgIHBjci0+c3RhdGUg
-PSBQREVWX1NUQVRfUlVOOw0KPiA+ID4gICAgICAgICAgICAgICBpZiAocGNyLT5vcHMtPmVuYWJs
-ZV9hdXRvX2JsaW5rKQ0KPiA+ID4gICAgICAgICAgICAgICAgICAgICAgIHBjci0+b3BzLT5lbmFi
-bGVfYXV0b19ibGluayhwY3IpOw0KPiA+ID4gICAgICAgICAgICAgICBydHN4X3BtX2Z1bGxfb24o
-cGNyKTsNCj4gPiA+ICAgICAgIH0NCj4gPiA+IC0NCj4gPiA+IC0gICAgIG1vZF9kZWxheWVkX3dv
-cmsoc3lzdGVtX3dxLCAmcGNyLT5pZGxlX3dvcmssDQo+IG1zZWNzX3RvX2ppZmZpZXMoMjAwKSk7
-DQo+ID4gPiAgfQ0KPiA+ID4gIEVYUE9SVF9TWU1CT0xfR1BMKHJ0c3hfcGNpX3N0YXJ0X3J1bik7
-DQo+ID4gPg0KPiA+ID4gQEAgLTEwOTQsNDAgKzEwODYsNiBAQCBzdGF0aWMgdm9pZCBydHN4X3Bt
-X3Bvd2VyX3NhdmluZyhzdHJ1Y3QNCj4gPiA+IHJ0c3hfcGNyDQo+ID4gPiAqcGNyKQ0KPiA+ID4g
-ICAgICAgcnRzeF9jb21tX3BtX3Bvd2VyX3NhdmluZyhwY3IpOyAgfQ0KPiA+ID4NCj4gPiA+IC1z
-dGF0aWMgdm9pZCBydHN4X3BjaV9ydGQzX3dvcmsoc3RydWN0IHdvcmtfc3RydWN0ICp3b3JrKSAt
-ew0KPiA+ID4gLSAgICAgc3RydWN0IGRlbGF5ZWRfd29yayAqZHdvcmsgPSB0b19kZWxheWVkX3dv
-cmsod29yayk7DQo+ID4gPiAtICAgICBzdHJ1Y3QgcnRzeF9wY3IgKnBjciA9IGNvbnRhaW5lcl9v
-Zihkd29yaywgc3RydWN0IHJ0c3hfcGNyLA0KPiBydGQzX3dvcmspOw0KPiA+ID4gLQ0KPiA+ID4g
-LSAgICAgcGNyX2RiZyhwY3IsICItLT4gJXNcbiIsIF9fZnVuY19fKTsNCj4gPiA+IC0gICAgIGlm
-ICghcGNyLT5pc19ydW50aW1lX3N1c3BlbmRlZCkNCj4gPiA+IC0gICAgICAgICAgICAgcG1fcnVu
-dGltZV9wdXQoJihwY3ItPnBjaS0+ZGV2KSk7DQo+ID4gPiAtfQ0KPiA+ID4gLQ0KPiA+ID4gLXN0
-YXRpYyB2b2lkIHJ0c3hfcGNpX2lkbGVfd29yayhzdHJ1Y3Qgd29ya19zdHJ1Y3QgKndvcmspIC17
-DQo+ID4gPiAtICAgICBzdHJ1Y3QgZGVsYXllZF93b3JrICpkd29yayA9IHRvX2RlbGF5ZWRfd29y
-ayh3b3JrKTsNCj4gPiA+IC0gICAgIHN0cnVjdCBydHN4X3BjciAqcGNyID0gY29udGFpbmVyX29m
-KGR3b3JrLCBzdHJ1Y3QgcnRzeF9wY3IsDQo+IGlkbGVfd29yayk7DQo+ID4gPiAtDQo+ID4gPiAt
-ICAgICBwY3JfZGJnKHBjciwgIi0tPiAlc1xuIiwgX19mdW5jX18pOw0KPiA+ID4gLQ0KPiA+ID4g
-LSAgICAgbXV0ZXhfbG9jaygmcGNyLT5wY3JfbXV0ZXgpOw0KPiA+ID4gLQ0KPiA+ID4gLSAgICAg
-cGNyLT5zdGF0ZSA9IFBERVZfU1RBVF9JRExFOw0KPiA+ID4gLQ0KPiA+ID4gLSAgICAgaWYgKHBj
-ci0+b3BzLT5kaXNhYmxlX2F1dG9fYmxpbmspDQo+ID4gPiAtICAgICAgICAgICAgIHBjci0+b3Bz
-LT5kaXNhYmxlX2F1dG9fYmxpbmsocGNyKTsNCj4gPiA+IC0gICAgIGlmIChwY3ItPm9wcy0+dHVy
-bl9vZmZfbGVkKQ0KPiA+ID4gLSAgICAgICAgICAgICBwY3ItPm9wcy0+dHVybl9vZmZfbGVkKHBj
-cik7DQo+ID4gPiAtDQo+ID4gPiAtICAgICBydHN4X3BtX3Bvd2VyX3NhdmluZyhwY3IpOw0KPiA+
-ID4gLQ0KPiA+ID4gLSAgICAgbXV0ZXhfdW5sb2NrKCZwY3ItPnBjcl9tdXRleCk7DQo+ID4gPiAt
-DQo+ID4gPiAtICAgICBpZiAocGNyLT5ydGQzX2VuKQ0KPiA+ID4gLSAgICAgICAgICAgICBtb2Rf
-ZGVsYXllZF93b3JrKHN5c3RlbV93cSwgJnBjci0+cnRkM193b3JrLA0KPiA+ID4gbXNlY3NfdG9f
-amlmZmllcygxMDAwMCkpOw0KPiA+ID4gLX0NCj4gPiA+IC0NCj4gPiA+ICBzdGF0aWMgdm9pZCBy
-dHN4X2Jhc2VfZm9yY2VfcG93ZXJfZG93bihzdHJ1Y3QgcnRzeF9wY3IgKnBjciwgdTgNCj4gPiA+
-IHBtX3N0YXRlKSB7DQo+ID4gPiAgICAgICAvKiBTZXQgcmVsaW5rX3RpbWUgdG8gMCAqLw0KPiA+
-ID4gQEAgLTE1OTgsNyArMTU1Niw2IEBAIHN0YXRpYyBpbnQgcnRzeF9wY2lfcHJvYmUoc3RydWN0
-IHBjaV9kZXYgKnBjaWRldiwNCj4gPiA+ICAgICAgIHBjci0+Y2FyZF9pbnNlcnRlZCA9IDA7DQo+
-ID4gPiAgICAgICBwY3ItPmNhcmRfcmVtb3ZlZCA9IDA7DQo+ID4gPiAgICAgICBJTklUX0RFTEFZ
-RURfV09SSygmcGNyLT5jYXJkZGV0X3dvcmssIHJ0c3hfcGNpX2NhcmRfZGV0ZWN0KTsNCj4gPiA+
-IC0gICAgIElOSVRfREVMQVlFRF9XT1JLKCZwY3ItPmlkbGVfd29yaywgcnRzeF9wY2lfaWRsZV93
-b3JrKTsNCj4gPiA+DQo+ID4gPiAgICAgICBwY3ItPm1zaV9lbiA9IG1zaV9lbjsNCj4gPiA+ICAg
-ICAgIGlmIChwY3ItPm1zaV9lbikgew0KPiA+ID4gQEAgLTE2MjMsMjAgKzE1ODAsMTYgQEAgc3Rh
-dGljIGludCBydHN4X3BjaV9wcm9iZShzdHJ1Y3QgcGNpX2Rldg0KPiAqcGNpZGV2LA0KPiA+ID4g
-ICAgICAgICAgICAgICBydHN4X3Bjcl9jZWxsc1tpXS5wZGF0YV9zaXplID0gc2l6ZW9mKCpoYW5k
-bGUpOw0KPiA+ID4gICAgICAgfQ0KPiA+ID4NCj4gPiA+IC0gICAgIGlmIChwY3ItPnJ0ZDNfZW4p
-IHsNCj4gPiA+IC0gICAgICAgICAgICAgSU5JVF9ERUxBWUVEX1dPUksoJnBjci0+cnRkM193b3Jr
-LA0KPiBydHN4X3BjaV9ydGQzX3dvcmspOw0KPiA+ID4gLSAgICAgICAgICAgICBwbV9ydW50aW1l
-X2FsbG93KCZwY2lkZXYtPmRldik7DQo+ID4gPiAtICAgICAgICAgICAgIHBtX3J1bnRpbWVfZW5h
-YmxlKCZwY2lkZXYtPmRldik7DQo+ID4gPiAtICAgICAgICAgICAgIHBjci0+aXNfcnVudGltZV9z
-dXNwZW5kZWQgPSBmYWxzZTsNCj4gPiA+IC0gICAgIH0NCj4gPiA+IC0NCj4gPiA+DQo+ID4gPiAg
-ICAgICByZXQgPSBtZmRfYWRkX2RldmljZXMoJnBjaWRldi0+ZGV2LCBwY3ItPmlkLCBydHN4X3Bj
-cl9jZWxscywNCj4gPiA+ICAgICAgICAgICAgICAgICAgICAgICBBUlJBWV9TSVpFKHJ0c3hfcGNy
-X2NlbGxzKSwgTlVMTCwgMCwgTlVMTCk7DQo+ID4gPiAgICAgICBpZiAocmV0IDwgMCkNCj4gPiA+
-ICAgICAgICAgICAgICAgZ290byBmcmVlX3Nsb3RzOw0KPiA+ID4NCj4gPiA+IC0gICAgIHNjaGVk
-dWxlX2RlbGF5ZWRfd29yaygmcGNyLT5pZGxlX3dvcmssIG1zZWNzX3RvX2ppZmZpZXMoMjAwKSk7
-DQo+ID4gPiArICAgICBpZiAocGNyLT5ydGQzX2VuKSB7DQo+ID4gPiArICAgICAgICAgICAgIHBt
-X3J1bnRpbWVfYWxsb3coJnBjaWRldi0+ZGV2KTsNCj4gPiA+ICsgICAgICAgICAgICAgcG1fcnVu
-dGltZV9wdXQoJnBjaWRldi0+ZGV2KTsNCj4gPiA+ICsgICAgIH0NCj4gPiA+DQo+ID4gPiAgICAg
-ICByZXR1cm4gMDsNCj4gPiA+DQo+ID4gPiBAQCAtMTY2OCwxMCArMTYyMSwxMSBAQCBzdGF0aWMg
-dm9pZCBydHN4X3BjaV9yZW1vdmUoc3RydWN0IHBjaV9kZXYNCj4gPiA+ICpwY2lkZXYpDQo+ID4g
-PiAgICAgICBzdHJ1Y3QgcGNyX2hhbmRsZSAqaGFuZGxlID0gcGNpX2dldF9kcnZkYXRhKHBjaWRl
-dik7DQo+ID4gPiAgICAgICBzdHJ1Y3QgcnRzeF9wY3IgKnBjciA9IGhhbmRsZS0+cGNyOw0KPiA+
-ID4NCj4gPiA+IC0gICAgIGlmIChwY3ItPnJ0ZDNfZW4pDQo+ID4gPiAtICAgICAgICAgICAgIHBt
-X3J1bnRpbWVfZ2V0X25vcmVzdW1lKCZwY3ItPnBjaS0+ZGV2KTsNCj4gPiA+IC0NCj4gPiA+ICAg
-ICAgIHBjci0+cmVtb3ZlX3BjaSA9IHRydWU7DQo+ID4gPiArICAgICBpZiAocGNyLT5ydGQzX2Vu
-KSB7DQo+ID4gPiArICAgICAgICAgICAgIHBtX3J1bnRpbWVfZ2V0X3N5bmMoJnBjaWRldi0+ZGV2
-KTsNCj4gPiA+ICsgICAgICAgICAgICAgcG1fcnVudGltZV9mb3JiaWQoJnBjaWRldi0+ZGV2KTsN
-Cj4gPiA+ICsgICAgIH0NCj4gPiA+DQo+ID4gPiAgICAgICAvKiBEaXNhYmxlIGludGVycnVwdHMg
-YXQgdGhlIHBjciBsZXZlbCAqLw0KPiA+ID4gICAgICAgc3Bpbl9sb2NrX2lycSgmcGNyLT5sb2Nr
-KTsNCj4gPiA+IEBAIC0xNjgwLDkgKzE2MzQsNiBAQCBzdGF0aWMgdm9pZCBydHN4X3BjaV9yZW1v
-dmUoc3RydWN0IHBjaV9kZXYNCj4gKnBjaWRldikNCj4gPiA+ICAgICAgIHNwaW5fdW5sb2NrX2ly
-cSgmcGNyLT5sb2NrKTsNCj4gPiA+DQo+ID4gPiAgICAgICBjYW5jZWxfZGVsYXllZF93b3JrX3N5
-bmMoJnBjci0+Y2FyZGRldF93b3JrKTsNCj4gPiA+IC0gICAgIGNhbmNlbF9kZWxheWVkX3dvcmtf
-c3luYygmcGNyLT5pZGxlX3dvcmspOw0KPiA+ID4gLSAgICAgaWYgKHBjci0+cnRkM19lbikNCj4g
-PiA+IC0gICAgICAgICAgICAgY2FuY2VsX2RlbGF5ZWRfd29ya19zeW5jKCZwY3ItPnJ0ZDNfd29y
-ayk7DQo+ID4gPg0KPiA+ID4gICAgICAgbWZkX3JlbW92ZV9kZXZpY2VzKCZwY2lkZXYtPmRldik7
-DQo+ID4gPg0KPiA+ID4gQEAgLTE3MDAsMTEgKzE2NTEsNiBAQCBzdGF0aWMgdm9pZCBydHN4X3Bj
-aV9yZW1vdmUoc3RydWN0IHBjaV9kZXYNCj4gPiA+ICpwY2lkZXYpDQo+ID4gPiAgICAgICBpZHJf
-cmVtb3ZlKCZydHN4X3BjaV9pZHIsIHBjci0+aWQpOw0KPiA+ID4gICAgICAgc3Bpbl91bmxvY2so
-JnJ0c3hfcGNpX2xvY2spOw0KPiA+ID4NCj4gPiA+IC0gICAgIGlmIChwY3ItPnJ0ZDNfZW4pIHsN
-Cj4gPiA+IC0gICAgICAgICAgICAgcG1fcnVudGltZV9kaXNhYmxlKCZwY3ItPnBjaS0+ZGV2KTsN
-Cj4gPiA+IC0gICAgICAgICAgICAgcG1fcnVudGltZV9wdXRfbm9pZGxlKCZwY3ItPnBjaS0+ZGV2
-KTsNCj4gPiA+IC0gICAgIH0NCj4gPiA+IC0NCj4gPiA+ICAgICAgIGtmcmVlKHBjci0+c2xvdHMp
-Ow0KPiA+ID4gICAgICAga2ZyZWUocGNyKTsNCj4gPiA+ICAgICAgIGtmcmVlKGhhbmRsZSk7DQo+
-ID4gPiBAQCAtMTcyNiw3ICsxNjcyLDYgQEAgc3RhdGljIGludCBfX21heWJlX3VudXNlZA0KPiA+
-ID4gcnRzeF9wY2lfc3VzcGVuZChzdHJ1Y3QgZGV2aWNlICpkZXZfZCkNCj4gPiA+ICAgICAgIHBj
-ciA9IGhhbmRsZS0+cGNyOw0KPiA+ID4NCj4gPiA+ICAgICAgIGNhbmNlbF9kZWxheWVkX3dvcmso
-JnBjci0+Y2FyZGRldF93b3JrKTsNCj4gPiA+IC0gICAgIGNhbmNlbF9kZWxheWVkX3dvcmsoJnBj
-ci0+aWRsZV93b3JrKTsNCj4gPiA+DQo+ID4gPiAgICAgICBtdXRleF9sb2NrKCZwY3ItPnBjcl9t
-dXRleCk7DQo+ID4gPg0KPiA+ID4gQEAgLTE3NjAsOCArMTcwNSw2IEBAIHN0YXRpYyBpbnQgX19t
-YXliZV91bnVzZWQNCj4gPiA+IHJ0c3hfcGNpX3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpkZXZfZCkN
-Cj4gPiA+ICAgICAgIGlmIChyZXQpDQo+ID4gPiAgICAgICAgICAgICAgIGdvdG8gb3V0Ow0KPiA+
-ID4NCj4gPiA+IC0gICAgIHNjaGVkdWxlX2RlbGF5ZWRfd29yaygmcGNyLT5pZGxlX3dvcmssIG1z
-ZWNzX3RvX2ppZmZpZXMoMjAwKSk7DQo+ID4gPiAtDQo+ID4gPiAgb3V0Og0KPiA+ID4gICAgICAg
-bXV0ZXhfdW5sb2NrKCZwY3ItPnBjcl9tdXRleCk7DQo+ID4gPiAgICAgICByZXR1cm4gcmV0Ow0K
-PiA+ID4gQEAgLTE3ODYsNiArMTcyOSwzMiBAQCBzdGF0aWMgdm9pZCBydHN4X3BjaV9zaHV0ZG93
-bihzdHJ1Y3QgcGNpX2Rldg0KPiA+ID4gKnBjaWRldikNCj4gPiA+ICAgICAgICAgICAgICAgcGNp
-X2Rpc2FibGVfbXNpKHBjci0+cGNpKTsgIH0NCj4gPiA+DQo+ID4gPiArc3RhdGljIGludCBydHN4
-X3BjaV9ydW50aW1lX2lkbGUoc3RydWN0IGRldmljZSAqZGV2aWNlKSB7DQo+ID4gPiArICAgICBz
-dHJ1Y3QgcGNpX2RldiAqcGNpZGV2ID0gdG9fcGNpX2RldihkZXZpY2UpOw0KPiA+ID4gKyAgICAg
-c3RydWN0IHBjcl9oYW5kbGUgKmhhbmRsZSA9IHBjaV9nZXRfZHJ2ZGF0YShwY2lkZXYpOw0KPiA+
-ID4gKyAgICAgc3RydWN0IHJ0c3hfcGNyICpwY3IgPSBoYW5kbGUtPnBjcjsNCj4gPiA+ICsNCj4g
-PiA+ICsgICAgIGRldl9kYmcoZGV2aWNlLCAiLS0+ICVzXG4iLCBfX2Z1bmNfXyk7DQo+ID4gPiAr
-DQo+ID4gPiArICAgICBtdXRleF9sb2NrKCZwY3ItPnBjcl9tdXRleCk7DQo+ID4gPiArDQo+ID4g
-PiArICAgICBwY3ItPnN0YXRlID0gUERFVl9TVEFUX0lETEU7DQo+ID4gPiArDQo+ID4gPiArICAg
-ICBpZiAocGNyLT5vcHMtPmRpc2FibGVfYXV0b19ibGluaykNCj4gPiA+ICsgICAgICAgICAgICAg
-cGNyLT5vcHMtPmRpc2FibGVfYXV0b19ibGluayhwY3IpOw0KPiA+ID4gKyAgICAgaWYgKHBjci0+
-b3BzLT50dXJuX29mZl9sZWQpDQo+ID4gPiArICAgICAgICAgICAgIHBjci0+b3BzLT50dXJuX29m
-Zl9sZWQocGNyKTsNCj4gPiA+ICsNCj4gPiA+ICsgICAgIHJ0c3hfcG1fcG93ZXJfc2F2aW5nKHBj
-cik7DQo+ID4gPiArDQo+ID4gPiArICAgICBtdXRleF91bmxvY2soJnBjci0+cGNyX211dGV4KTsN
-Cj4gPiA+ICsNCj4gPiA+ICsgICAgIHBtX3NjaGVkdWxlX3N1c3BlbmQoZGV2aWNlLCA1MDAwKTsN
-Cj4gPiA+ICsNCj4gPiA+ICsgICAgIHJldHVybiAtRUJVU1k7DQo+ID4gPiArfQ0KPiA+ID4gKw0K
-PiA+ID4gIHN0YXRpYyBpbnQgcnRzeF9wY2lfcnVudGltZV9zdXNwZW5kKHN0cnVjdCBkZXZpY2Ug
-KmRldmljZSkgIHsNCj4gPiA+ICAgICAgIHN0cnVjdCBwY2lfZGV2ICpwY2lkZXYgPSB0b19wY2lf
-ZGV2KGRldmljZSk7IEBAIC0xNzk0LDMxDQo+ID4gPiArMTc2MywyOSBAQCBzdGF0aWMgaW50IHJ0
-c3hfcGNpX3J1bnRpbWVfc3VzcGVuZChzdHJ1Y3QgZGV2aWNlDQo+ID4gPiAqZGV2aWNlKQ0KPiA+
-ID4NCj4gPiA+ICAgICAgIGhhbmRsZSA9IHBjaV9nZXRfZHJ2ZGF0YShwY2lkZXYpOw0KPiA+ID4g
-ICAgICAgcGNyID0gaGFuZGxlLT5wY3I7DQo+ID4gPiAtICAgICBkZXZfZGJnKCYocGNpZGV2LT5k
-ZXYpLCAiLS0+ICVzXG4iLCBfX2Z1bmNfXyk7DQo+ID4gPg0KPiA+ID4gLSAgICAgY2FuY2VsX2Rl
-bGF5ZWRfd29yaygmcGNyLT5jYXJkZGV0X3dvcmspOw0KPiA+ID4gLSAgICAgY2FuY2VsX2RlbGF5
-ZWRfd29yaygmcGNyLT5ydGQzX3dvcmspOw0KPiA+ID4gLSAgICAgY2FuY2VsX2RlbGF5ZWRfd29y
-aygmcGNyLT5pZGxlX3dvcmspOw0KPiA+ID4gKyAgICAgaWYgKCFwY3ItPnJ0ZDNfZW4pDQo+ID4g
-PiArICAgICAgICAgICAgIHJldHVybiAtRUJVU1k7DQo+ID4gPiArDQo+ID4gPiArICAgICBkZXZf
-ZGJnKGRldmljZSwgIi0tPiAlc1xuIiwgX19mdW5jX18pOw0KPiA+ID4gKw0KPiA+ID4gKyAgICAg
-Y2FuY2VsX2RlbGF5ZWRfd29ya19zeW5jKCZwY3ItPmNhcmRkZXRfd29yayk7DQo+ID4gPg0KPiA+
-ID4gICAgICAgbXV0ZXhfbG9jaygmcGNyLT5wY3JfbXV0ZXgpOw0KPiA+ID4gICAgICAgcnRzeF9w
-Y2lfcG93ZXJfb2ZmKHBjciwgSE9TVF9FTlRFUl9TMyk7DQo+ID4gPg0KPiA+ID4gICAgICAgbXV0
-ZXhfdW5sb2NrKCZwY3ItPnBjcl9tdXRleCk7DQo+ID4gPg0KPiA+ID4gLSAgICAgcGNyLT5pc19y
-dW50aW1lX3N1c3BlbmRlZCA9IHRydWU7DQo+ID4gPiAtDQo+ID4gPiAgICAgICByZXR1cm4gMDsN
-Cj4gPiA+ICB9DQo+ID4gPg0KPiA+ID4gIHN0YXRpYyBpbnQgcnRzeF9wY2lfcnVudGltZV9yZXN1
-bWUoc3RydWN0IGRldmljZSAqZGV2aWNlKSAgew0KPiA+ID4gICAgICAgc3RydWN0IHBjaV9kZXYg
-KnBjaWRldiA9IHRvX3BjaV9kZXYoZGV2aWNlKTsNCj4gPiA+IC0gICAgIHN0cnVjdCBwY3JfaGFu
-ZGxlICpoYW5kbGU7DQo+ID4gPiAtICAgICBzdHJ1Y3QgcnRzeF9wY3IgKnBjcjsNCj4gPiA+ICsg
-ICAgIHN0cnVjdCBwY3JfaGFuZGxlICpoYW5kbGUgPSBwY2lfZ2V0X2RydmRhdGEocGNpZGV2KTsN
-Cj4gPiA+ICsgICAgIHN0cnVjdCBydHN4X3BjciAqcGNyID0gaGFuZGxlLT5wY3I7DQo+ID4gPg0K
-PiA+ID4gLSAgICAgaGFuZGxlID0gcGNpX2dldF9kcnZkYXRhKHBjaWRldik7DQo+ID4gPiAtICAg
-ICBwY3IgPSBoYW5kbGUtPnBjcjsNCj4gPiA+IC0gICAgIGRldl9kYmcoJihwY2lkZXYtPmRldiks
-ICItLT4gJXNcbiIsIF9fZnVuY19fKTsNCj4gPiA+ICsgICAgIGRldl9kYmcoZGV2aWNlLCAiLS0+
-ICVzXG4iLCBfX2Z1bmNfXyk7DQo+ID4gPg0KPiA+ID4gICAgICAgbXV0ZXhfbG9jaygmcGNyLT5w
-Y3JfbXV0ZXgpOw0KPiA+ID4NCj4gPiA+IEBAIC0xODM0LDggKzE4MDEsNiBAQCBzdGF0aWMgaW50
-IHJ0c3hfcGNpX3J1bnRpbWVfcmVzdW1lKHN0cnVjdA0KPiA+ID4gZGV2aWNlDQo+ID4gPiAqZGV2
-aWNlKQ0KPiA+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcGNyLT5zbG90c1tSVFNY
-X1NEX0NBUkRdLnBfZGV2KTsNCj4gPiA+ICAgICAgIH0NCj4gPiA+DQo+ID4gPiAtICAgICBzY2hl
-ZHVsZV9kZWxheWVkX3dvcmsoJnBjci0+aWRsZV93b3JrLCBtc2Vjc190b19qaWZmaWVzKDIwMCkp
-Ow0KPiA+ID4gLQ0KPiA+ID4gICAgICAgbXV0ZXhfdW5sb2NrKCZwY3ItPnBjcl9tdXRleCk7DQo+
-ID4gPiAgICAgICByZXR1cm4gMDsNCj4gPiA+ICB9DQo+ID4gPiBAQCAtMTg1MCw3ICsxODE1LDcg
-QEAgc3RhdGljIGludCBydHN4X3BjaV9ydW50aW1lX3Jlc3VtZShzdHJ1Y3QNCj4gPiA+IGRldmlj
-ZQ0KPiA+ID4gKmRldmljZSkNCj4gPiA+DQo+ID4gPiAgc3RhdGljIGNvbnN0IHN0cnVjdCBkZXZf
-cG1fb3BzIHJ0c3hfcGNpX3BtX29wcyA9IHsNCj4gPiA+ICAgICAgIFNFVF9TWVNURU1fU0xFRVBf
-UE1fT1BTKHJ0c3hfcGNpX3N1c3BlbmQsIHJ0c3hfcGNpX3Jlc3VtZSkNCj4gPiA+IC0gICAgIFNF
-VF9SVU5USU1FX1BNX09QUyhydHN4X3BjaV9ydW50aW1lX3N1c3BlbmQsDQo+ID4gPiBydHN4X3Bj
-aV9ydW50aW1lX3Jlc3VtZSwgTlVMTCkNCj4gPiA+ICsgICAgIFNFVF9SVU5USU1FX1BNX09QUyhy
-dHN4X3BjaV9ydW50aW1lX3N1c3BlbmQsDQo+ID4gPiBydHN4X3BjaV9ydW50aW1lX3Jlc3VtZSwN
-Cj4gPiA+ICtydHN4X3BjaV9ydW50aW1lX2lkbGUpDQo+ID4gPiAgfTsNCj4gPiA+DQo+ID4gPiAg
-c3RhdGljIHN0cnVjdCBwY2lfZHJpdmVyIHJ0c3hfcGNpX2RyaXZlciA9IHsgZGlmZiAtLWdpdA0K
-PiA+ID4gYS9pbmNsdWRlL2xpbnV4L3J0c3hfcGNpLmggYi9pbmNsdWRlL2xpbnV4L3J0c3hfcGNp
-LmggaW5kZXgNCj4gPiA+IDRhYjdiZmM2NzVmMTEuLjg5YjdkMzRlMjViNjMgMTAwNjQ0DQo+ID4g
-PiAtLS0gYS9pbmNsdWRlL2xpbnV4L3J0c3hfcGNpLmgNCj4gPiA+ICsrKyBiL2luY2x1ZGUvbGlu
-dXgvcnRzeF9wY2kuaA0KPiA+ID4gQEAgLTEyMDEsOCArMTIwMSw2IEBAIHN0cnVjdCBydHN4X3Bj
-ciB7DQo+ID4gPiAgICAgICB1bnNpZ25lZCBpbnQgICAgICAgICAgICAgICAgICAgIGNhcmRfZXhp
-c3Q7DQo+ID4gPg0KPiA+ID4gICAgICAgc3RydWN0IGRlbGF5ZWRfd29yayAgICAgICAgICAgICBj
-YXJkZGV0X3dvcms7DQo+ID4gPiAtICAgICBzdHJ1Y3QgZGVsYXllZF93b3JrICAgICAgICAgICAg
-IGlkbGVfd29yazsNCj4gPiA+IC0gICAgIHN0cnVjdCBkZWxheWVkX3dvcmsgICAgICAgICAgICAg
-cnRkM193b3JrOw0KPiA+ID4NCj4gPiA+ICAgICAgIHNwaW5sb2NrX3QgICAgICAgICAgICAgICAg
-ICAgICAgbG9jazsNCj4gPiA+ICAgICAgIHN0cnVjdCBtdXRleCAgICAgICAgICAgICAgICAgICAg
-cGNyX211dGV4Ow0KPiA+ID4gQEAgLTEyMTIsNyArMTIxMCw2IEBAIHN0cnVjdCBydHN4X3BjciB7
-DQo+ID4gPiAgICAgICB1bnNpZ25lZCBpbnQgICAgICAgICAgICAgICAgICAgIGN1cl9jbG9jazsN
-Cj4gPiA+ICAgICAgIGJvb2wgICAgICAgICAgICAgICAgICAgICAgICAgICAgcmVtb3ZlX3BjaTsN
-Cj4gPiA+ICAgICAgIGJvb2wgICAgICAgICAgICAgICAgICAgICAgICAgICAgbXNpX2VuOw0KPiA+
-ID4gLSAgICAgYm9vbCAgICAgICAgICAgICAgICAgICAgICAgICAgICBpc19ydW50aW1lX3N1c3Bl
-bmRlZDsNCj4gPiA+DQo+ID4gPiAgI2RlZmluZSBFWFRSQV9DQVBTX1NEX1NEUjUwICAgICAgICAg
-ICgxIDw8IDApDQo+ID4gPiAgI2RlZmluZSBFWFRSQV9DQVBTX1NEX1NEUjEwNCAgICAgICAgICgx
-IDw8IDEpDQo+ID4gPiAtLQ0KPiA+ID4gMi4zMy4xDQo+ID4NCj4gLS0tLS0tUGxlYXNlIGNvbnNp
-ZGVyIHRoZSBlbnZpcm9ubWVudCBiZWZvcmUgcHJpbnRpbmcgdGhpcyBlLW1haWwuDQo=
+On Fri, Jan 21, 2022 at 12:15 PM Ricky WU <ricky_wu@realtek.com> wrote:
+>
+> > -----Original Message-----
+> > From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > Sent: Friday, January 21, 2022 12:08 PM
+> > To: Ricky WU <ricky_wu@realtek.com>
+> > Cc: arnd@arndb.de; gregkh@linuxfoundation.org; ulf.hansson@linaro.org;
+> > linux-pm@vger.kernel.org; Christophe JAILLET
+> > <christophe.jaillet@wanadoo.fr>; Yang Li <yang.lee@linux.alibaba.com>;
+> > linux-kernel@vger.kernel.org
+> > Subject: Re: [PATCH v2 2/4] misc: rtsx: Rework runtime power management
+> > flow
+> >
+> > On Fri, Jan 21, 2022 at 11:57 AM Ricky WU <ricky_wu@realtek.com> wrote:
+> > >
+> > > > -----Original Message-----
+> > > > From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > > > Sent: Friday, January 21, 2022 9:41 AM
+> > > > To: arnd@arndb.de; gregkh@linuxfoundation.org;
+> > > > ulf.hansson@linaro.org
+> > > > Cc: linux-pm@vger.kernel.org; Kai-Heng Feng
+> > > > <kai.heng.feng@canonical.com>; Ricky WU <ricky_wu@realtek.com>;
+> > > > Christophe JAILLET <christophe.jaillet@wanadoo.fr>; Yang Li
+> > > > <yang.lee@linux.alibaba.com>; linux-kernel@vger.kernel.org
+> > > > Subject: [PATCH v2 2/4] misc: rtsx: Rework runtime power management
+> > > > flow
+> > > >
+> > > > Commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM") uses
+> > > > "rtd3_work" and "idle_work" to manage it's own runtime PM state
+> > machine.
+> > > >
+> > > > When its child device, rtsx_pci_sdmmc, uses runtime PM refcount
+> > > > correctly, all the additional works can be managed by generic runtime PM
+> > helpers.
+> > > >
+> > > > So consolidate "idle_work" and "rtd3_work" into generic runtime idle
+> > > > callback and runtime suspend callback, respectively.
+> > > >
+> > >
+> > > This idle_work is not runtime_idle, this is for aspm setting Not only
+> > > for support RPM, so this idle_work can not be remove....
+> >
+> > rtsx_pm_power_saving() is called inside rtsx_pci_runtime_idle(), when the
+> > usage refcount becomes zero, before runtime suspend routine.
+> >
+> > >
+> > > Our original Idle_work is a power saveing function, It is a delay_work
+> > > for 200 msec  , If no work comes in 200 msec than go to idle_work to set
+> > power saveing setting.....
+> >
+> > Have you tested it locally? rtsx_pci_runtime_idle() really does the same thing.
+> >
+>
+> We are testing...
+> RTD3 is not available on all platforms....
+> We use a values (rtd3_en) to judge rtd3 enable or not
+>
+> Aspm is for all platform but RTD3 is not
+
+Thanks! I get it now.
+Let me send v3 to address the issue.
+
+Kai-Heng
+
+>
+> >
+> > >
+> > > > Fixes: 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM")
+> > > > Cc: Ricky WU <ricky_wu@realtek.com>
+> > > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > > > ---
+> > > > v2:
+> > > >  - Remove unused idle_work and rtd3_work from rtsx_pcr.
+> > > >
+> > > >  drivers/misc/cardreader/rtsx_pcr.c | 123 +++++++++++------------------
+> > > >  include/linux/rtsx_pci.h           |   3 -
+> > > >  2 files changed, 44 insertions(+), 82 deletions(-)
+> > > >
+> > > > diff --git a/drivers/misc/cardreader/rtsx_pcr.c
+> > > > b/drivers/misc/cardreader/rtsx_pcr.c
+> > > > index 6ac509c1821c9..1dcf98b597569 100644
+> > > > --- a/drivers/misc/cardreader/rtsx_pcr.c
+> > > > +++ b/drivers/misc/cardreader/rtsx_pcr.c
+> > > > @@ -152,20 +152,12 @@ void rtsx_pci_start_run(struct rtsx_pcr *pcr)
+> > > >       if (pcr->remove_pci)
+> > > >               return;
+> > > >
+> > > > -     if (pcr->rtd3_en)
+> > > > -             if (pcr->is_runtime_suspended) {
+> > > > -                     pm_runtime_get(&(pcr->pci->dev));
+> > > > -                     pcr->is_runtime_suspended = false;
+> > > > -             }
+> > > > -
+> > > >       if (pcr->state != PDEV_STAT_RUN) {
+> > > >               pcr->state = PDEV_STAT_RUN;
+> > > >               if (pcr->ops->enable_auto_blink)
+> > > >                       pcr->ops->enable_auto_blink(pcr);
+> > > >               rtsx_pm_full_on(pcr);
+> > > >       }
+> > > > -
+> > > > -     mod_delayed_work(system_wq, &pcr->idle_work,
+> > msecs_to_jiffies(200));
+> > > >  }
+> > > >  EXPORT_SYMBOL_GPL(rtsx_pci_start_run);
+> > > >
+> > > > @@ -1094,40 +1086,6 @@ static void rtsx_pm_power_saving(struct
+> > > > rtsx_pcr
+> > > > *pcr)
+> > > >       rtsx_comm_pm_power_saving(pcr);  }
+> > > >
+> > > > -static void rtsx_pci_rtd3_work(struct work_struct *work) -{
+> > > > -     struct delayed_work *dwork = to_delayed_work(work);
+> > > > -     struct rtsx_pcr *pcr = container_of(dwork, struct rtsx_pcr,
+> > rtd3_work);
+> > > > -
+> > > > -     pcr_dbg(pcr, "--> %s\n", __func__);
+> > > > -     if (!pcr->is_runtime_suspended)
+> > > > -             pm_runtime_put(&(pcr->pci->dev));
+> > > > -}
+> > > > -
+> > > > -static void rtsx_pci_idle_work(struct work_struct *work) -{
+> > > > -     struct delayed_work *dwork = to_delayed_work(work);
+> > > > -     struct rtsx_pcr *pcr = container_of(dwork, struct rtsx_pcr,
+> > idle_work);
+> > > > -
+> > > > -     pcr_dbg(pcr, "--> %s\n", __func__);
+> > > > -
+> > > > -     mutex_lock(&pcr->pcr_mutex);
+> > > > -
+> > > > -     pcr->state = PDEV_STAT_IDLE;
+> > > > -
+> > > > -     if (pcr->ops->disable_auto_blink)
+> > > > -             pcr->ops->disable_auto_blink(pcr);
+> > > > -     if (pcr->ops->turn_off_led)
+> > > > -             pcr->ops->turn_off_led(pcr);
+> > > > -
+> > > > -     rtsx_pm_power_saving(pcr);
+> > > > -
+> > > > -     mutex_unlock(&pcr->pcr_mutex);
+> > > > -
+> > > > -     if (pcr->rtd3_en)
+> > > > -             mod_delayed_work(system_wq, &pcr->rtd3_work,
+> > > > msecs_to_jiffies(10000));
+> > > > -}
+> > > > -
+> > > >  static void rtsx_base_force_power_down(struct rtsx_pcr *pcr, u8
+> > > > pm_state) {
+> > > >       /* Set relink_time to 0 */
+> > > > @@ -1598,7 +1556,6 @@ static int rtsx_pci_probe(struct pci_dev *pcidev,
+> > > >       pcr->card_inserted = 0;
+> > > >       pcr->card_removed = 0;
+> > > >       INIT_DELAYED_WORK(&pcr->carddet_work, rtsx_pci_card_detect);
+> > > > -     INIT_DELAYED_WORK(&pcr->idle_work, rtsx_pci_idle_work);
+> > > >
+> > > >       pcr->msi_en = msi_en;
+> > > >       if (pcr->msi_en) {
+> > > > @@ -1623,20 +1580,16 @@ static int rtsx_pci_probe(struct pci_dev
+> > *pcidev,
+> > > >               rtsx_pcr_cells[i].pdata_size = sizeof(*handle);
+> > > >       }
+> > > >
+> > > > -     if (pcr->rtd3_en) {
+> > > > -             INIT_DELAYED_WORK(&pcr->rtd3_work,
+> > rtsx_pci_rtd3_work);
+> > > > -             pm_runtime_allow(&pcidev->dev);
+> > > > -             pm_runtime_enable(&pcidev->dev);
+> > > > -             pcr->is_runtime_suspended = false;
+> > > > -     }
+> > > > -
+> > > >
+> > > >       ret = mfd_add_devices(&pcidev->dev, pcr->id, rtsx_pcr_cells,
+> > > >                       ARRAY_SIZE(rtsx_pcr_cells), NULL, 0, NULL);
+> > > >       if (ret < 0)
+> > > >               goto free_slots;
+> > > >
+> > > > -     schedule_delayed_work(&pcr->idle_work, msecs_to_jiffies(200));
+> > > > +     if (pcr->rtd3_en) {
+> > > > +             pm_runtime_allow(&pcidev->dev);
+> > > > +             pm_runtime_put(&pcidev->dev);
+> > > > +     }
+> > > >
+> > > >       return 0;
+> > > >
+> > > > @@ -1668,10 +1621,11 @@ static void rtsx_pci_remove(struct pci_dev
+> > > > *pcidev)
+> > > >       struct pcr_handle *handle = pci_get_drvdata(pcidev);
+> > > >       struct rtsx_pcr *pcr = handle->pcr;
+> > > >
+> > > > -     if (pcr->rtd3_en)
+> > > > -             pm_runtime_get_noresume(&pcr->pci->dev);
+> > > > -
+> > > >       pcr->remove_pci = true;
+> > > > +     if (pcr->rtd3_en) {
+> > > > +             pm_runtime_get_sync(&pcidev->dev);
+> > > > +             pm_runtime_forbid(&pcidev->dev);
+> > > > +     }
+> > > >
+> > > >       /* Disable interrupts at the pcr level */
+> > > >       spin_lock_irq(&pcr->lock);
+> > > > @@ -1680,9 +1634,6 @@ static void rtsx_pci_remove(struct pci_dev
+> > *pcidev)
+> > > >       spin_unlock_irq(&pcr->lock);
+> > > >
+> > > >       cancel_delayed_work_sync(&pcr->carddet_work);
+> > > > -     cancel_delayed_work_sync(&pcr->idle_work);
+> > > > -     if (pcr->rtd3_en)
+> > > > -             cancel_delayed_work_sync(&pcr->rtd3_work);
+> > > >
+> > > >       mfd_remove_devices(&pcidev->dev);
+> > > >
+> > > > @@ -1700,11 +1651,6 @@ static void rtsx_pci_remove(struct pci_dev
+> > > > *pcidev)
+> > > >       idr_remove(&rtsx_pci_idr, pcr->id);
+> > > >       spin_unlock(&rtsx_pci_lock);
+> > > >
+> > > > -     if (pcr->rtd3_en) {
+> > > > -             pm_runtime_disable(&pcr->pci->dev);
+> > > > -             pm_runtime_put_noidle(&pcr->pci->dev);
+> > > > -     }
+> > > > -
+> > > >       kfree(pcr->slots);
+> > > >       kfree(pcr);
+> > > >       kfree(handle);
+> > > > @@ -1726,7 +1672,6 @@ static int __maybe_unused
+> > > > rtsx_pci_suspend(struct device *dev_d)
+> > > >       pcr = handle->pcr;
+> > > >
+> > > >       cancel_delayed_work(&pcr->carddet_work);
+> > > > -     cancel_delayed_work(&pcr->idle_work);
+> > > >
+> > > >       mutex_lock(&pcr->pcr_mutex);
+> > > >
+> > > > @@ -1760,8 +1705,6 @@ static int __maybe_unused
+> > > > rtsx_pci_resume(struct device *dev_d)
+> > > >       if (ret)
+> > > >               goto out;
+> > > >
+> > > > -     schedule_delayed_work(&pcr->idle_work, msecs_to_jiffies(200));
+> > > > -
+> > > >  out:
+> > > >       mutex_unlock(&pcr->pcr_mutex);
+> > > >       return ret;
+> > > > @@ -1786,6 +1729,32 @@ static void rtsx_pci_shutdown(struct pci_dev
+> > > > *pcidev)
+> > > >               pci_disable_msi(pcr->pci);  }
+> > > >
+> > > > +static int rtsx_pci_runtime_idle(struct device *device) {
+> > > > +     struct pci_dev *pcidev = to_pci_dev(device);
+> > > > +     struct pcr_handle *handle = pci_get_drvdata(pcidev);
+> > > > +     struct rtsx_pcr *pcr = handle->pcr;
+> > > > +
+> > > > +     dev_dbg(device, "--> %s\n", __func__);
+> > > > +
+> > > > +     mutex_lock(&pcr->pcr_mutex);
+> > > > +
+> > > > +     pcr->state = PDEV_STAT_IDLE;
+> > > > +
+> > > > +     if (pcr->ops->disable_auto_blink)
+> > > > +             pcr->ops->disable_auto_blink(pcr);
+> > > > +     if (pcr->ops->turn_off_led)
+> > > > +             pcr->ops->turn_off_led(pcr);
+> > > > +
+> > > > +     rtsx_pm_power_saving(pcr);
+> > > > +
+> > > > +     mutex_unlock(&pcr->pcr_mutex);
+> > > > +
+> > > > +     pm_schedule_suspend(device, 5000);
+> > > > +
+> > > > +     return -EBUSY;
+> > > > +}
+> > > > +
+> > > >  static int rtsx_pci_runtime_suspend(struct device *device)  {
+> > > >       struct pci_dev *pcidev = to_pci_dev(device); @@ -1794,31
+> > > > +1763,29 @@ static int rtsx_pci_runtime_suspend(struct device
+> > > > *device)
+> > > >
+> > > >       handle = pci_get_drvdata(pcidev);
+> > > >       pcr = handle->pcr;
+> > > > -     dev_dbg(&(pcidev->dev), "--> %s\n", __func__);
+> > > >
+> > > > -     cancel_delayed_work(&pcr->carddet_work);
+> > > > -     cancel_delayed_work(&pcr->rtd3_work);
+> > > > -     cancel_delayed_work(&pcr->idle_work);
+> > > > +     if (!pcr->rtd3_en)
+> > > > +             return -EBUSY;
+> > > > +
+> > > > +     dev_dbg(device, "--> %s\n", __func__);
+> > > > +
+> > > > +     cancel_delayed_work_sync(&pcr->carddet_work);
+> > > >
+> > > >       mutex_lock(&pcr->pcr_mutex);
+> > > >       rtsx_pci_power_off(pcr, HOST_ENTER_S3);
+> > > >
+> > > >       mutex_unlock(&pcr->pcr_mutex);
+> > > >
+> > > > -     pcr->is_runtime_suspended = true;
+> > > > -
+> > > >       return 0;
+> > > >  }
+> > > >
+> > > >  static int rtsx_pci_runtime_resume(struct device *device)  {
+> > > >       struct pci_dev *pcidev = to_pci_dev(device);
+> > > > -     struct pcr_handle *handle;
+> > > > -     struct rtsx_pcr *pcr;
+> > > > +     struct pcr_handle *handle = pci_get_drvdata(pcidev);
+> > > > +     struct rtsx_pcr *pcr = handle->pcr;
+> > > >
+> > > > -     handle = pci_get_drvdata(pcidev);
+> > > > -     pcr = handle->pcr;
+> > > > -     dev_dbg(&(pcidev->dev), "--> %s\n", __func__);
+> > > > +     dev_dbg(device, "--> %s\n", __func__);
+> > > >
+> > > >       mutex_lock(&pcr->pcr_mutex);
+> > > >
+> > > > @@ -1834,8 +1801,6 @@ static int rtsx_pci_runtime_resume(struct
+> > > > device
+> > > > *device)
+> > > >                               pcr->slots[RTSX_SD_CARD].p_dev);
+> > > >       }
+> > > >
+> > > > -     schedule_delayed_work(&pcr->idle_work, msecs_to_jiffies(200));
+> > > > -
+> > > >       mutex_unlock(&pcr->pcr_mutex);
+> > > >       return 0;
+> > > >  }
+> > > > @@ -1850,7 +1815,7 @@ static int rtsx_pci_runtime_resume(struct
+> > > > device
+> > > > *device)
+> > > >
+> > > >  static const struct dev_pm_ops rtsx_pci_pm_ops = {
+> > > >       SET_SYSTEM_SLEEP_PM_OPS(rtsx_pci_suspend, rtsx_pci_resume)
+> > > > -     SET_RUNTIME_PM_OPS(rtsx_pci_runtime_suspend,
+> > > > rtsx_pci_runtime_resume, NULL)
+> > > > +     SET_RUNTIME_PM_OPS(rtsx_pci_runtime_suspend,
+> > > > rtsx_pci_runtime_resume,
+> > > > +rtsx_pci_runtime_idle)
+> > > >  };
+> > > >
+> > > >  static struct pci_driver rtsx_pci_driver = { diff --git
+> > > > a/include/linux/rtsx_pci.h b/include/linux/rtsx_pci.h index
+> > > > 4ab7bfc675f11..89b7d34e25b63 100644
+> > > > --- a/include/linux/rtsx_pci.h
+> > > > +++ b/include/linux/rtsx_pci.h
+> > > > @@ -1201,8 +1201,6 @@ struct rtsx_pcr {
+> > > >       unsigned int                    card_exist;
+> > > >
+> > > >       struct delayed_work             carddet_work;
+> > > > -     struct delayed_work             idle_work;
+> > > > -     struct delayed_work             rtd3_work;
+> > > >
+> > > >       spinlock_t                      lock;
+> > > >       struct mutex                    pcr_mutex;
+> > > > @@ -1212,7 +1210,6 @@ struct rtsx_pcr {
+> > > >       unsigned int                    cur_clock;
+> > > >       bool                            remove_pci;
+> > > >       bool                            msi_en;
+> > > > -     bool                            is_runtime_suspended;
+> > > >
+> > > >  #define EXTRA_CAPS_SD_SDR50          (1 << 0)
+> > > >  #define EXTRA_CAPS_SD_SDR104         (1 << 1)
+> > > > --
+> > > > 2.33.1
+> > >
+> > ------Please consider the environment before printing this e-mail.

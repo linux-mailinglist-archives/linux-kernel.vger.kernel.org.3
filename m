@@ -2,92 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6332C495E78
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 12:40:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A99495E80
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 12:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350109AbiAULkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 06:40:31 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:52862 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbiAULka (ORCPT
+        id S1380195AbiAULle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 06:41:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350181AbiAULla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 06:40:30 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 332651F888;
-        Fri, 21 Jan 2022 11:40:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1642765229; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=p1in7D2MoPPm603YyrrTr2s6zVMfG0P250uqSYygmeI=;
-        b=h5S0Jr6FZwY202+6mTdu9nNbF+F26Jl2zNoQmfahKHaPL88xWfJd9P7RsicQXk8sfM+CVC
-        k3EBvIUVrExSjqmvYCvhdXzPY0a0dcwvepPCjkztMWP0JwWQMnBXHEvJXir+asDOovxKPa
-        PfsZwKNUsl6pBIi8x83ZYGCAcZtUcpU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1642765229;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=p1in7D2MoPPm603YyrrTr2s6zVMfG0P250uqSYygmeI=;
-        b=IOtP3Dt8foBoh38dhybtf3hNkVwT5gsFuSCgeSs2nfKxj6LlDx8rohZRW8FgmpKMn70JRy
-        6S6nKX+lfZ6XP2Dw==
-Received: from alsa1.nue.suse.com (alsa1.suse.de [10.160.4.42])
-        by relay2.suse.de (Postfix) with ESMTP id 29FB5A3B83;
-        Fri, 21 Jan 2022 11:40:29 +0000 (UTC)
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Luca Coelho <luciano.coelho@intel.com>
-Cc:     Johannes Berg <johannes.berg@intel.com>,
-        Oliver Neukum <oneukum@suse.de>,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] iwlwifi: mvm: Don't call iwl_mvm_sta_from_mac80211() with NULL sta
-Date:   Fri, 21 Jan 2022 12:40:24 +0100
-Message-Id: <20220121114024.10454-1-tiwai@suse.de>
-X-Mailer: git-send-email 2.31.1
+        Fri, 21 Jan 2022 06:41:30 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94658C061574;
+        Fri, 21 Jan 2022 03:41:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xWZDmg9dD+bIX1jVVA1AvE8Malvggiw/J3x4iYuMuz0=; b=HsAX+SqW2L76NBQvWu1PrqWimf
+        lTviSMT5+R6d+xAfx10tH3WdylZdHX7ZkzpwAifrznjJgJpkGCBEQ8HfUZe2IuVyU0IoEzWnlJNSd
+        Rjwsq3ujrhV650oRKW7DNK1Ze9woD5gBYFVZTHkH8wgB6aeVD9/kLlKAAXa1zm7dZDeyJg4VkITVk
+        pzUXwU+8lLpJwkwrvHoXl6rMj4zlKsJsuYAW5r2d149PJW5qyFTlIshhjzzXgSKoeWvkXl1v8wtZl
+        tOMtFLtlm9gywyy1pnJ9jw72BWJEiF72kwEuyPUfvpDxXELDLx8C+0uWwRV/fhfh2Szv954w6P6DC
+        7zOF4wTw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nAsHt-00FYqS-Sx; Fri, 21 Jan 2022 11:41:02 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C4D369853F1; Fri, 21 Jan 2022 12:40:58 +0100 (CET)
+Date:   Fri, 21 Jan 2022 12:40:58 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     mingo@redhat.com, tglx@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
+        pjt@google.com, posk@google.com, avagin@google.com,
+        jannh@google.com, tdelisle@uwaterloo.ca, mark.rutland@arm.com,
+        posk@posk.io
+Subject: Re: [RFC][PATCH v2 1/5] mm: Avoid unmapping pinned pages
+Message-ID: <20220121114058.GE20638@worktop.programming.kicks-ass.net>
+References: <20220120155517.066795336@infradead.org>
+ <20220120160822.666778608@infradead.org>
+ <ffb88819-a392-84f3-d40f-7406be8e3165@redhat.com>
+ <20220121075157.GA20638@worktop.programming.kicks-ass.net>
+ <20220121085917.GA22849@worktop.programming.kicks-ass.net>
+ <10d6cc13-b96b-e1b6-8751-1b245b242738@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <10d6cc13-b96b-e1b6-8751-1b245b242738@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The recent fix for NULL sta in iwl_mvm_get_tx_rate() still has a call
-of iwl_mvm_sta_from_mac80211() that may be called with NULL sta.
-Although this practically only points to the address and the actual
-access doesn't happen due to the conditional evaluation at a later
-point, it looks a bit flaky.
+On Fri, Jan 21, 2022 at 10:04:45AM +0100, David Hildenbrand wrote:
+> On 21.01.22 09:59, Peter Zijlstra wrote:
 
-This patch drops the temporary variable above and evaluates
-iwm_mvm_sta_from_mac80211() directly for avoiding confusions.
+> > However, I'm not quite sure what fork() does with pages that have a pin.
+> 
+> We COW the anon pages always, and we protect against concurrent GUP
+> using the
+> * mmap_lock in exclusive mode for ordinary GUP
+> * mm->write_protect_seq for GUP-fast
 
-Fixes: d599f714b73e ("iwlwifi: mvm: don't crash on invalid rate w/o STA")
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
----
+Right, but neither the mmap_sem nor the write_protect_seq help anything
+at all vs already extant page pins.
 
-Corrected the subject and the description from
-  https://lore.kernel.org/r/20220121111418.9144-1-tiwai@suse.de
+But I just found copy_present_page()'s page_needs_cow_for_dma(), which I
+think deals with exactly that case, it avoids doing CoW on pinned pages
+and instead feeds the child a full copy while keeping the pinned page in
+the original process.
 
- drivers/net/wireless/intel/iwlwifi/mvm/tx.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+> > Naively, a page that has async DMA activity should not be CoW'ed, or if
+> > it is, care must be taken to ensure the original pages stays in the
+> > original process, but I realize that's somewhat hard.
+> 
+> That's precisely what I'm working on fixing ... and yes, it's hard.
+> 
+> Let me know if you need any other information, I've spent way too much
+> time on this than I ever panned.
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/tx.c b/drivers/net/wireless/intel/iwlwifi/mvm/tx.c
-index 6fa2c12f7955..4d1ddca73fb0 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/tx.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/tx.c
-@@ -318,15 +318,14 @@ static u32 iwl_mvm_get_tx_rate(struct iwl_mvm *mvm,
- 
- 	/* info->control is only relevant for non HW rate control */
- 	if (!ieee80211_hw_check(mvm->hw, HAS_RATE_CONTROL)) {
--		struct iwl_mvm_sta *mvmsta = iwl_mvm_sta_from_mac80211(sta);
--
- 		/* HT rate doesn't make sense for a non data frame */
- 		WARN_ONCE(info->control.rates[0].flags & IEEE80211_TX_RC_MCS &&
- 			  !ieee80211_is_data(fc),
- 			  "Got a HT rate (flags:0x%x/mcs:%d/fc:0x%x/state:%d) for a non data frame\n",
- 			  info->control.rates[0].flags,
- 			  info->control.rates[0].idx,
--			  le16_to_cpu(fc), sta ? mvmsta->sta_state : -1);
-+			  le16_to_cpu(fc),
-+			  sta ? iwl_mvm_sta_from_mac80211(sta)->sta_state : -1);
- 
- 		rate_idx = info->control.rates[0].idx;
- 	}
--- 
-2.31.1
+So let me try and get this right:
+
+ - GUP post-fork breaks CoW for FOLL_WRITE/FOLL_PIN, without either
+   there's a problem where one task might observe changes by another.
+
+ - GUP pre-fork prevents CoW and does a full copy.
+
+And that all mostly works, except for a fair amount of 'fun' cases?
 

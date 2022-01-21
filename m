@@ -2,192 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17548495AD4
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BB29495ADC
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:36:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379044AbiAUHfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 02:35:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
+        id S1348786AbiAUHgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 02:36:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379041AbiAUHfh (ORCPT
+        with ESMTP id S1379043AbiAUHfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 02:35:37 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8886C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 23:35:36 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id a18so39300489edj.7
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 23:35:36 -0800 (PST)
+        Fri, 21 Jan 2022 02:35:53 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BB1C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 23:35:52 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id v74so4875287pfc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 23:35:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to;
-        bh=OH18lv1BlrIQ5qW5iHWezwI00YFMLpNfggYk17R0eG0=;
-        b=fXhMXXep8YrENRxwl9SVFsWO8f6rcRfqIRYOFIr1rSDzhaGJfyB4839ACl2a33OKbi
-         xIx18wlDZb3ZA0t7SIDTYRKuMkf2ItYyrVckDvs+MP+QVT3I/tSSVXHKpuD7MGVT20nR
-         YfdxL/IWlb6QjNKn7x3O+1eSJbXE8NDyA8dn8=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+Hvv3OzpSP3DgWOXjZUEqtS8KSrYGm9AVRKurqA0p2g=;
+        b=QSgYGhGYDXB1Dr6XGxdqxDiL3bN5AMz0iPXRnxr11ckfFWeg5cU9vbJyIHPnRUq4+s
+         ZbLD0tKe0LzCBXogRE0sBUFg7HVrtfOtUuAU5KfMI3a4sKVtl2iHgv5xGMxF/Az/pwQL
+         SBHBZMxGwfyKNZH3m0PbImofnaxEGtiy2IFF0qygUf4Mfvn6PdZ+s5BUlLpKGSPA6DlB
+         PYTcKS2bYKVRHCks7J1t1miX4cLX2o/aCILZ5VmEFmZPONZjIJz4qNY4UrghcBIDzXgq
+         xUtuUVdaA2F61jE32T2eZ2Q4+XhbLbswaJzrU2WGH6YT1z4lu0SBiPmqgpcDEQqbBE0L
+         F+Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to;
-        bh=OH18lv1BlrIQ5qW5iHWezwI00YFMLpNfggYk17R0eG0=;
-        b=Te7mnOaXB6WY+6fmHmoSwQjYQCWAVbSB4s0EsRrTXe9/FUi3dixC/9htrC5fppC2QV
-         LV2zhtabEsuvjpjFfOCQdl7pdVfGfb2eCrfdKgfduUFtFS8iR8uKR5HgVIuNSXDaSvV6
-         UUR7srH5hay8daKkb5WBhNXOVEN4/bX8tU6YZafl19HfymA8f3cU0Q/+OposzLYVDZ2A
-         TVuJo6WD9n69oRSW9aFtieE4EQkvVQrqQLdn95wB6pwlc/DZs0nK6o2WXs4cUwRmteN4
-         XkBz4oG0n7ROnigbElfHzcx2UAfwsAXTUWTte+gg2dS50omXUY+S659pkLY5dgNVa4kk
-         /J1A==
-X-Gm-Message-State: AOAM531cXe16RW93dlrLi/O9d4MfLjV5ntAjIej3DVvEkyVONTIRxgDw
-        v3r1f6K3H4xvedQ0knoZ9He88w==
-X-Google-Smtp-Source: ABdhPJyogJV42PIrVSKInV0fpa7kbXEXho394QMqvHtZPvOnm0d2Xt73Hjk+Z3MKYMenicNPdwxCiw==
-X-Received: by 2002:a17:907:3f17:: with SMTP id hq23mr2370246ejc.544.1642750535106;
-        Thu, 20 Jan 2022 23:35:35 -0800 (PST)
-Received: from [192.168.178.136] (f140230.upc-f.chello.nl. [80.56.140.230])
-        by smtp.gmail.com with ESMTPSA id r3sm1757211ejd.129.2022.01.20.23.35.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 23:35:33 -0800 (PST)
-Message-ID: <7406ed9c-eed2-245e-3c1b-d5f917a99756@broadcom.com>
-Date:   Fri, 21 Jan 2022 08:35:32 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+Hvv3OzpSP3DgWOXjZUEqtS8KSrYGm9AVRKurqA0p2g=;
+        b=fsM9PDo2iArSxzFFrrlGbfdDL1UjOvEywU+9Fd9OXQFIyXqh4EM64Zm9pbJArqGIVU
+         dtfJ/DZZzYxLxA/D8RLN/MuDUnznqBDQ+DgNFdf3hfL2GG1bXIf7xarhoXJJ6sM+1MgR
+         l5Ihzr1I6LFIJh0nHum3Knlc2ctR6qdj+CiM/W7C1wwbG9R2knQ6kAPjFWiNOxcTzfLq
+         MaFP3Gs/pDE8n2t1un10pVcL82za17jZJfB7nWZqVEYmkpR4EdVATuIFnir5MCM2C8Na
+         HD+a/5f3jh2fvHJcqPSkd0ZUcrFiilKFHuJ2gYP4f0Dg+65YyFPXs5AUaXTmIgWpjC6a
+         n91w==
+X-Gm-Message-State: AOAM532Dip/rr/NNQnVl8mXUQOkDxYZNLS2zwkoJrX3FjIzyybnIshBs
+        SDhSgxysVXR5kWl3+rNGL1BWk3D11mdj2iflFqdpUQ==
+X-Google-Smtp-Source: ABdhPJx+48zCbOjc/6CX4ePMmHr0t3Q47qTfTlh9BqX+m72O8mWZPKCZHPWK4zpwXAzAa+mKypHw/rUKKeXkS/Cbwhg=
+X-Received: by 2002:a05:6a00:1592:b0:4c2:7f6e:c37d with SMTP id
+ u18-20020a056a00159200b004c27f6ec37dmr2908262pfk.82.1642750551846; Thu, 20
+ Jan 2022 23:35:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 25/35] brcmfmac: cfg80211: Add support for PMKID_V3
- operations
-To:     Hector Martin <marcan@marcan.st>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-References: <20220104072658.69756-1-marcan@marcan.st>
- <20220104072658.69756-26-marcan@marcan.st>
-From:   Arend van Spriel <arend.vanspriel@broadcom.com>
-In-Reply-To: <20220104072658.69756-26-marcan@marcan.st>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000001e6eb805d612aa84"
+References: <20211122121844.867-1-shameerali.kolothum.thodi@huawei.com> <20211122121844.867-2-shameerali.kolothum.thodi@huawei.com>
+In-Reply-To: <20211122121844.867-2-shameerali.kolothum.thodi@huawei.com>
+From:   Reiji Watanabe <reijiw@google.com>
+Date:   Thu, 20 Jan 2022 23:35:35 -0800
+Message-ID: <CAAeT=FwWNZ7O=oxGB5d0Pp2jVZVs71nCAGJTp9_+6fhuOK+dKw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/4] KVM: arm64: Introduce a new VMID allocator for KVM
+To:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        jean-philippe@linaro.org, Marc Zyngier <maz@kernel.org>,
+        linuxarm@huawei.com, jonathan.cameron@huawei.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000001e6eb805d612aa84
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-On 1/4/2022 8:26 AM, Hector Martin wrote:
-> Add support for the new PMKID_V3 API, which allows performing PMKID
-> mutations individually, instead of requiring the driver to keep track of
-> the full list. This new API is required by at least BCM4387.
-> 
-> Note that PMKID_V2 is not implemented yet.
-> 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+On Mon, Nov 22, 2021 at 4:19 AM Shameer Kolothum
+<shameerali.kolothum.thodi@huawei.com> wrote:
+>
+> A new VMID allocator for arm64 KVM use. This is based on
+> arm64 ASID allocator algorithm.
+>
+> One major deviation from the ASID allocator is the way we
+> flush the context. Unlike ASID allocator, we expect less
+> frequent rollover in the case of VMIDs. Hence, instead of
+> marking the CPU as flush_pending and issuing a local context
+> invalidation on the next context switch, we  broadcast TLB
+> flush + I-cache invalidation over the inner shareable domain
+> on rollover.
+>
+> Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
 > ---
->   .../broadcom/brcm80211/brcmfmac/cfg80211.c    | 52 +++++++++++-
->   .../broadcom/brcm80211/brcmfmac/fwil_types.h  | 83 +++++++++++++++++++
->   2 files changed, 132 insertions(+), 3 deletions(-)
+>  arch/arm64/include/asm/kvm_host.h |   4 +
+>  arch/arm64/kvm/vmid.c             | 177 ++++++++++++++++++++++++++++++
+>  2 files changed, 181 insertions(+)
+>  create mode 100644 arch/arm64/kvm/vmid.c
+>
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 2a5f7f38006f..f4a86a79ea4a 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -690,6 +690,10 @@ int kvm_arm_pvtime_get_attr(struct kvm_vcpu *vcpu,
+>  int kvm_arm_pvtime_has_attr(struct kvm_vcpu *vcpu,
+>                             struct kvm_device_attr *attr);
+>
+> +int kvm_arm_vmid_alloc_init(void);
+> +void kvm_arm_vmid_alloc_free(void);
+> +void kvm_arm_vmid_update(struct kvm_vmid *kvm_vmid);
+> +
+>  static inline void kvm_arm_pvtime_vcpu_init(struct kvm_vcpu_arch *vcpu_arch)
+>  {
+>         vcpu_arch->steal.base = GPA_INVALID;
+> diff --git a/arch/arm64/kvm/vmid.c b/arch/arm64/kvm/vmid.c
+> new file mode 100644
+> index 000000000000..aa01c97f7df0
+> --- /dev/null
+> +++ b/arch/arm64/kvm/vmid.c
+> @@ -0,0 +1,177 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * VMID allocator.
+> + *
+> + * Based on Arm64 ASID allocator algorithm.
+> + * Please refer arch/arm64/mm/context.c for detailed
+> + * comments on algorithm.
+> + *
+> + * Copyright (C) 2002-2003 Deep Blue Solutions Ltd, all rights reserved.
+> + * Copyright (C) 2012 ARM Ltd.
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/bitops.h>
+> +
+> +#include <asm/kvm_asm.h>
+> +#include <asm/kvm_mmu.h>
+> +
+> +static unsigned int kvm_arm_vmid_bits;
+> +static DEFINE_RAW_SPINLOCK(cpu_vmid_lock);
+> +
+> +static atomic64_t vmid_generation;
+> +static unsigned long *vmid_map;
+> +
+> +static DEFINE_PER_CPU(atomic64_t, active_vmids);
+> +static DEFINE_PER_CPU(u64, reserved_vmids);
+> +
+> +#define VMID_MASK              (~GENMASK(kvm_arm_vmid_bits - 1, 0))
+> +#define VMID_FIRST_VERSION     (1UL << kvm_arm_vmid_bits)
+> +
+> +#define NUM_USER_VMIDS         VMID_FIRST_VERSION
+> +#define vmid2idx(vmid)         ((vmid) & ~VMID_MASK)
+> +#define idx2vmid(idx)          vmid2idx(idx)
+> +
+> +#define vmid_gen_match(vmid) \
+> +       (!(((vmid) ^ atomic64_read(&vmid_generation)) >> kvm_arm_vmid_bits))
+> +
+> +static void flush_context(void)
+> +{
+> +       int cpu;
+> +       u64 vmid;
+> +
+> +       bitmap_clear(vmid_map, 0, NUM_USER_VMIDS);
+> +
+> +       for_each_possible_cpu(cpu) {
+> +               vmid = atomic64_xchg_relaxed(&per_cpu(active_vmids, cpu), 0);
+> +
+> +               /* Preserve reserved VMID */
+> +               if (vmid == 0)
+> +                       vmid = per_cpu(reserved_vmids, cpu);
+> +               __set_bit(vmid2idx(vmid), vmid_map);
+> +               per_cpu(reserved_vmids, cpu) = vmid;
+> +       }
+> +
+> +       /*
+> +        * Unlike ASID allocator, we expect less frequent rollover in
+> +        * case of VMIDs. Hence, instead of marking the CPU as
+> +        * flush_pending and issuing a local context invalidation on
+> +        * the next context-switch, we broadcast TLB flush + I-cache
+> +        * invalidation over the inner shareable domain on rollover.
+> +        */
+> +        kvm_call_hyp(__kvm_flush_vm_context);
+> +}
+> +
+> +static bool check_update_reserved_vmid(u64 vmid, u64 newvmid)
+> +{
+> +       int cpu;
+> +       bool hit = false;
+> +
+> +       /*
+> +        * Iterate over the set of reserved VMIDs looking for a match
+> +        * and update to use newvmid (i.e. the same VMID in the current
+> +        * generation).
+> +        */
+> +       for_each_possible_cpu(cpu) {
+> +               if (per_cpu(reserved_vmids, cpu) == vmid) {
+> +                       hit = true;
+> +                       per_cpu(reserved_vmids, cpu) = newvmid;
+> +               }
+> +       }
 
---0000000000001e6eb805d612aa84
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Once updating reserved_vmids gets done for the all CPUs, it appears
+that the function doesn't need to iterate over the set of reserved
+VMIDs (correct ?). So, I'm wondering if KVM can manage the number of
+CPUs for which reserved_vmids need to get updated so that the function
+can skip the loop when the number is zero.  I'm not sure how likely
+that would help though.
+(Since every vmid allocation for non-new guest needs to iterate over
+ reserved_vmids holding cpu_vmid_lock, I'm a bit concerned about the
+ performance impact on systems with a large number of CPUs.)
 
-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
-XSlOP9s1dqWlRRnnNxV7BVC87lkKKy0+1M2DOF6qRYQlnW4EfOyCToYLAG5zeV+AjepMoX6J9bUz
-yj4BlDtwH4HFjaRIlPPbdLshUA54/tV84x8woATuLGBq+hTZEpkZAgMBAAGjggHdMIIB2TAOBgNV
-HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
-KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
-Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
-dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
-OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
-MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
-BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFKb+3b9pz8zo
-0QsCHGb/p0UrBlU+MA0GCSqGSIb3DQEBCwUAA4IBAQCHisuRNqP0NfYfG3U3XF+bocf//aGLOCGj
-NvbnSbaUDT/ZkRFb9dQfDRVnZUJ7eDZWHfC+kukEzFwiSK1irDPZQAG9diwy4p9dM0xw5RXSAC1w
-FzQ0ClJvhK8PsjXF2yzITFmZsEhYEToTn2owD613HvBNijAnDDLV8D0K5gtDnVqkVB9TUAGjHsmo
-aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
-OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
-UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
-YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
-h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCRHwgnUL71/fFdcFxD
-ZhkPq7oLSSvTLOnKl12jVuUgpDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMjAxMjEwNzM1MzVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
-AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEALuzyRwKqnmTsGufCX9GDeAOBEhezh35sJdZf
-dZhax0DejowZvakMqdLNGPYYne38I3/s1Kaz60PfvC7MOdfvOW4IIPKsbZOmvKHdRE+pGADwrxMW
-2t3Pxi+ysEithSBgXWud8erJgCNVLL3wDzF0jwW+/sh8ZEOmkO+ODk0XNMeTrTpiBPaWmBm2QxWM
-yEkuOUb6ROmpnzYUljSTCqrgbxiBi9stQbu2M//EWPd8G02ZEKKxh073jBSV0rnD3PpCP9PU5CKk
-Zo3nGB1jXAfB/bB8BBSEi9vgW17tIPotohwtHmVU7iApSX/0AhioDaQRTuG2rvj+tGrtfbtfT3Is
-XA==
---0000000000001e6eb805d612aa84--
+Thanks,
+Reiji
+
+> +
+> +       return hit;
+> +}
+> +
+> +static u64 new_vmid(struct kvm_vmid *kvm_vmid)
+> +{
+> +       static u32 cur_idx = 1;
+> +       u64 vmid = atomic64_read(&kvm_vmid->id);
+> +       u64 generation = atomic64_read(&vmid_generation);
+> +
+> +       if (vmid != 0) {
+> +               u64 newvmid = generation | (vmid & ~VMID_MASK);
+> +
+> +               if (check_update_reserved_vmid(vmid, newvmid)) {
+> +                       atomic64_set(&kvm_vmid->id, newvmid);
+> +                       return newvmid;
+> +               }
+> +
+> +               if (!__test_and_set_bit(vmid2idx(vmid), vmid_map)) {
+> +                       atomic64_set(&kvm_vmid->id, newvmid);
+> +                       return newvmid;
+> +               }
+> +       }
+> +
+> +       vmid = find_next_zero_bit(vmid_map, NUM_USER_VMIDS, cur_idx);
+> +       if (vmid != NUM_USER_VMIDS)
+> +               goto set_vmid;
+> +
+> +       /* We're out of VMIDs, so increment the global generation count */
+> +       generation = atomic64_add_return_relaxed(VMID_FIRST_VERSION,
+> +                                                &vmid_generation);
+> +       flush_context();
+> +
+> +       /* We have more VMIDs than CPUs, so this will always succeed */
+> +       vmid = find_next_zero_bit(vmid_map, NUM_USER_VMIDS, 1);
+> +
+> +set_vmid:
+> +       __set_bit(vmid, vmid_map);
+> +       cur_idx = vmid;
+> +       vmid = idx2vmid(vmid) | generation;
+> +       atomic64_set(&kvm_vmid->id, vmid);
+> +       return vmid;
+> +}
+> +
+> +void kvm_arm_vmid_update(struct kvm_vmid *kvm_vmid)
+> +{
+> +       unsigned long flags;
+> +       u64 vmid, old_active_vmid;
+> +
+> +       vmid = atomic64_read(&kvm_vmid->id);
+> +
+> +       /*
+> +        * Please refer comments in check_and_switch_context() in
+> +        * arch/arm64/mm/context.c.
+> +        */
+> +       old_active_vmid = atomic64_read(this_cpu_ptr(&active_vmids));
+> +       if (old_active_vmid && vmid_gen_match(vmid) &&
+> +           atomic64_cmpxchg_relaxed(this_cpu_ptr(&active_vmids),
+> +                                    old_active_vmid, vmid))
+> +               return;
+> +
+> +       raw_spin_lock_irqsave(&cpu_vmid_lock, flags);
+> +
+> +       /* Check that our VMID belongs to the current generation. */
+> +       vmid = atomic64_read(&kvm_vmid->id);
+> +       if (!vmid_gen_match(vmid))
+> +               vmid = new_vmid(kvm_vmid);
+> +
+> +       atomic64_set(this_cpu_ptr(&active_vmids), vmid);
+> +       raw_spin_unlock_irqrestore(&cpu_vmid_lock, flags);
+> +}
+> +
+> +/*
+> + * Initialize the VMID allocator
+> + */
+> +int kvm_arm_vmid_alloc_init(void)
+> +{
+> +       kvm_arm_vmid_bits = kvm_get_vmid_bits();
+> +
+> +       /*
+> +        * Expect allocation after rollover to fail if we don't have
+> +        * at least one more VMID than CPUs. VMID #0 is always reserved.
+> +        */
+> +       WARN_ON(NUM_USER_VMIDS - 1 <= num_possible_cpus());
+> +       atomic64_set(&vmid_generation, VMID_FIRST_VERSION);
+> +       vmid_map = kcalloc(BITS_TO_LONGS(NUM_USER_VMIDS),
+> +                          sizeof(*vmid_map), GFP_KERNEL);
+> +       if (!vmid_map)
+> +               return -ENOMEM;
+> +
+> +       return 0;
+> +}
+> +
+> +void kvm_arm_vmid_alloc_free(void)
+> +{
+> +       kfree(vmid_map);
+> +}
+> --
+> 2.17.1
+>
+> _______________________________________________
+> kvmarm mailing list
+> kvmarm@lists.cs.columbia.edu
+> https://lists.cs.columbia.edu/mailman/listinfo/kvmarm

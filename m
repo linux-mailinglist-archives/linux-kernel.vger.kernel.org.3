@@ -2,82 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 442AE4958D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 05:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6319D4958D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 05:13:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234054AbiAUELc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 23:11:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46868 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233558AbiAUELW (ORCPT
+        id S234044AbiAUENF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 23:13:05 -0500
+Received: from sender4-pp-o95.zoho.com ([136.143.188.95]:25595 "EHLO
+        sender4-pp-o95.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233558AbiAUENE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 23:11:22 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B73C061574;
-        Thu, 20 Jan 2022 20:11:21 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id 128so7734580pfe.12;
-        Thu, 20 Jan 2022 20:11:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HziZxNV+Yg2upBujmAjZKh5ywVi0eUQ5hp+WB+K2RfM=;
-        b=PVfKZMOuiPEAf33583XwiNp53DIKSyizFEZDUije4bCtwRvLd/GHoOYRC4u/sWakZJ
-         ufyeKlaPTLIQa7aAFtEAVTn/DJ7M+blv/OKfnwaX23qgZ8HNaIxbzUnfPF4Q7Rmks4ff
-         YKpSqx3B/Pa5OptDrJuhUF/dP1zuaHZQVI7+/Pgb7Y+DLlJ/C/IDiv8jc18USrDCGIKU
-         AbhiF16jFsz7Rm+HbD73A3MTvUYtiWQJgmPHWuQ1rvjbltr+mifW87TYZWEtppmPbGo8
-         tFCDzYkgcBCAHR0a3jqC8o7iBi7qE3nGKt3hYQHNfK9Z6ZJXYSVFnc6g0nQoZ8myHOG6
-         VnEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HziZxNV+Yg2upBujmAjZKh5ywVi0eUQ5hp+WB+K2RfM=;
-        b=Hd+f7UsFtFIM2MxnKKUyzD7dIWfHHBqvT9g/HhTuoIaLla22n4L9v9U0nGZBvBG8cl
-         2U3dLP4sMdNkrCCEC9TcEDN46RXKgWNsUCi5h/HYhuWVNQ7O2EScOH+Y5ksM9svOCi/Y
-         jw4vmV7xZXeJ+lYAOao4IpVyNn7LASiVMfHNW9aCHGuonecgnt1b+QqzhZSEyu3IhAGi
-         Ik0ePkDa16uGTLo0Wqd97oVcgDhkX/YwhgKsoj8ooGXefo/rEdJAEddww6bcFwhNWX9u
-         CS+pwcVee8V3To2qSiCyMBxIjrSxJuwnPtdvQUlhmCtBFTyDawpUX/fxC+iXy2RVgm7H
-         R6UQ==
-X-Gm-Message-State: AOAM531mUBcLa9RZPxzt3iSX1UVNtoOIkqMXFnX8RKPCO1SjzaWrrdvL
-        gg3+/fa0qUTXfEEZR3XbWBGBPP34fDRQEsaz9HUoOjKr
-X-Google-Smtp-Source: ABdhPJzEl2C9ekMs62SzulgA7ti48Yjxwbu/nug/T4f62oP6p3e5asRIA2ehVT6d+u3f7jR4xTGBm274r+W78r8VQ80=
-X-Received: by 2002:a62:e30c:0:b0:4bd:776e:a41c with SMTP id
- g12-20020a62e30c000000b004bd776ea41cmr1959073pfh.59.1642738281269; Thu, 20
- Jan 2022 20:11:21 -0800 (PST)
+        Thu, 20 Jan 2022 23:13:04 -0500
+ARC-Seal: i=1; a=rsa-sha256; t=1642738378; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Xe7I4/F5q1pXlFL1rhmzWFPv/ozwn99MqZpMCvCsah6sieW+5MvoEAzvaNiDl6k7sCsC0Hz9iNt9n0kb3ExrHC5OgsaGlEFyQlHPjwYoTgdp/wN7wq6pZW6FbA8+RoSmL8ef5q0I6wXCL8gSEqWOKoNFEm32sdzExSu2s7Emc/A=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1642738378; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=6OqN5KFL3TzRtCH3fbY7QtTlkqaTO04W2B0TqAkZ6Pg=; 
+        b=UpfwIdV1rWzn8q6goAcWWQrfnpZ6RL/cXHzdHHzsI2Q5J45NbLfLc8TaJgPlm8Qrgs/1WwBCCsa4kHj3SoHIV3OO27XyhkgngSywIKM8FiYlXDOneCecSxB/r5JfhPHFuSHJ+wQ5Q9MCz/50EEFEiZ5Ug5We6twBe0Lv1bQWz3w=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=zohomail.com;
+        spf=pass  smtp.mailfrom=lchen.firstlove@zohomail.com;
+        dmarc=pass header.from=<lchen.firstlove@zohomail.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1642738378;
+        s=zm2020; d=zohomail.com; i=lchen.firstlove@zohomail.com;
+        h=Date:From:To:Cc:Message-ID:In-Reply-To:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=6OqN5KFL3TzRtCH3fbY7QtTlkqaTO04W2B0TqAkZ6Pg=;
+        b=P8UbR6VdnFgqss5emjwEaYWQGOBbwXW6CLObUR1h6X+az1sHTEnKanLrzhEcmgfS
+        Q0qlBcOC0VoaUId1wc39hmBLpIt1uuUDQM8fWf9IHtfAjA9AKJvSag7RJ2n85dyLZUt
+        NtBOJrTwrmpXtNGnh9awwZcWC648cO9yxDe9tEnk=
+Received: from mail.zoho.com by mx.zohomail.com
+        with SMTP id 1642738376718895.9144931596065; Thu, 20 Jan 2022 20:12:56 -0800 (PST)
+Received: from  [203.218.243.128] by mail.zoho.com
+        with HTTP;Thu, 20 Jan 2022 20:12:56 -0800 (PST)
+Date:   Fri, 21 Jan 2022 12:12:56 +0800
+From:   Li Chen <lchen.firstlove@zohomail.com>
+To:     "Bjorn Helgaas" <helgaas@kernel.org>
+Cc:     "Kishon Vijay Abraham I" <kishon@ti.com>,
+        "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        "linux-pci" <linux-pci@vger.kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>
+Message-ID: <17e7ad65ff5.d9de88b4962.1109678039880040918@zohomail.com>
+In-Reply-To: 
+Subject: [PATCH v4] PCI: endpoint: Add prefetch BAR support
 MIME-Version: 1.0
-References: <20220121031108.4813-1-ycaibb@gmail.com> <20220120194733.6a8b13e6@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <BDEF9CF1-016A-48F2-A4F3-8B39CC219B4F@gmail.com>
-In-Reply-To: <BDEF9CF1-016A-48F2-A4F3-8B39CC219B4F@gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 20 Jan 2022 20:11:10 -0800
-Message-ID: <CAADnVQJkCQthJ7OAByNBTMuKEY7mynvuMDR6y_L7cBwB6iyc9g@mail.gmail.com>
-Subject: Re: [PATCH] ipv4: fix lock leaks
-To:     Ryan Cai <ycaibb@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 8:06 PM Ryan Cai <ycaibb@gmail.com> wrote:
->
-> Sorry for reporting this false positive. Would be more careful next time. Thank you for your checking.
+From: Li Chen <lchen@ambarella.com>
 
-In the past 3 weeks you've sent 4 subtly broken patches.
-Not a single valid one.
-Are you trying to test the maintainer's review skills?
-Is this another "lets hack the kernel" research project?
+Before this commit, epf cannot set BAR to be prefetchable.
+Prefetchable BAR can also help epf device to use bridge's
+prefetch memory window.
+
+Signed-off-by: Li Chen <lchen@ambarella.com>
+---
+Changes in v2:
+Remove Gerrit Change-id
+Changes in v3:
+capitalize "BAR" in the subject and commit log as suggested by Bjorn.
+Changes in v4:
+This patch context doesn't change but resend with my Zoho mail account in that previous
+company mail will contain un-removeable proprietary messages. 
+Add "From:" to the first line of the message body.
+
+ drivers/pci/endpoint/functions/pci-epf-test.c | 4 ++++
+ include/linux/pci-epc.h                       | 2 ++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
+index 90d84d3bc868..96489cfdf58d 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-test.c
++++ b/drivers/pci/endpoint/functions/pci-epf-test.c
+@@ -817,15 +817,19 @@ static void pci_epf_configure_bar(struct pci_epf *epf,
+ {
+ 	struct pci_epf_bar *epf_bar;
+ 	bool bar_fixed_64bit;
++	bool bar_prefetch;
+ 	int i;
+ 
+ 	for (i = 0; i < PCI_STD_NUM_BARS; i++) {
+ 		epf_bar = &epf->bar[i];
+ 		bar_fixed_64bit = !!(epc_features->bar_fixed_64bit & (1 << i));
++		bar_prefetch = !!(epc_features->bar_prefetch & (1 << i));
+ 		if (bar_fixed_64bit)
+ 			epf_bar->flags |= PCI_BASE_ADDRESS_MEM_TYPE_64;
+ 		if (epc_features->bar_fixed_size[i])
+ 			bar_size[i] = epc_features->bar_fixed_size[i];
++		if (bar_prefetch)
++			epf_bar->flags |= PCI_BASE_ADDRESS_MEM_PREFETCH;
+ 	}
+ }
+ 
+diff --git a/include/linux/pci-epc.h b/include/linux/pci-epc.h
+index a48778e1a4ee..825632d581d0 100644
+--- a/include/linux/pci-epc.h
++++ b/include/linux/pci-epc.h
+@@ -161,6 +161,7 @@ struct pci_epc {
+  * @msix_capable: indicate if the endpoint function has MSI-X capability
+  * @reserved_bar: bitmap to indicate reserved BAR unavailable to function driver
+  * @bar_fixed_64bit: bitmap to indicate fixed 64bit BARs
++ * @bar_prefetch: bitmap to indicate prefetchable BARs
+  * @bar_fixed_size: Array specifying the size supported by each BAR
+  * @align: alignment size required for BAR buffer allocation
+  */
+@@ -171,6 +172,7 @@ struct pci_epc_features {
+ 	unsigned int	msix_capable : 1;
+ 	u8	reserved_bar;
+ 	u8	bar_fixed_64bit;
++	u8	bar_prefetch;
+ 	u64	bar_fixed_size[PCI_STD_NUM_BARS];
+ 	size_t	align;
+ };
+-- 
+2.34.1
+
+

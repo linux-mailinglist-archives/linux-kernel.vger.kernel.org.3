@@ -2,98 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A082B49581D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 03:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA8B49581F
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 03:08:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378408AbiAUCIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 21:08:24 -0500
-Received: from mail-oi1-f177.google.com ([209.85.167.177]:44554 "EHLO
-        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244982AbiAUCIX (ORCPT
+        id S1378451AbiAUCIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 21:08:54 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:48942 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S244982AbiAUCIx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 21:08:23 -0500
-Received: by mail-oi1-f177.google.com with SMTP id s9so11602559oib.11;
-        Thu, 20 Jan 2022 18:08:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Th8jqPs6GFoz5iooqRTIVf8WJqjULNpYX9hZBAb1zBw=;
-        b=I62YOvpEiSCd6Yz7wq0o67k1FBDItELWVrYRtmvULwAMmvM4acPZgRB65VyEMgu6Cd
-         hGPXry+UlZmAosj8fFS8cdx+o+2gkjYy9svp6sQIHILF+PytqQnb5Miyp200dKBxsg7e
-         KRkD5NQ31HUnMUwucgfYHdKtLgGGL4qpUIO9Nhpx9DH0Bss1Y0dAFhJ/2Dw4bRo94Py5
-         VpP75iJjO9ij/pbPwctZueFmb6BTJomI+Uj1fQYnFxHIcD7t3I171/xHVGhkMTDMWIQV
-         Wu1df1cr9aaTSTmQ2oGgYOumZg3m6LPr/Oj+dvmu2zn31YOfBG6n07XMuJAbiX4XFc2k
-         Ex2Q==
-X-Gm-Message-State: AOAM531WGnjEdYi2s5cBlBXm8+fFRf25h0cCHGL8nhhSd5xX6T2IpMKE
-        GpMoFau4Ml2Le+sos3cNvewCxgY/dA==
-X-Google-Smtp-Source: ABdhPJyNkHt8brbyQs2aPnhIQLpEwQ9IcTq4y/uVsGTexWPEkPQd7CruZkZC8kYCcX5gJ5Nkw//RDw==
-X-Received: by 2002:aca:4b03:: with SMTP id y3mr1597101oia.82.1642730902545;
-        Thu, 20 Jan 2022 18:08:22 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id t14sm406585ooq.9.2022.01.20.18.08.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 18:08:21 -0800 (PST)
-Received: (nullmailer pid 2359343 invoked by uid 1000);
-        Fri, 21 Jan 2022 02:08:20 -0000
-Date:   Thu, 20 Jan 2022 20:08:20 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 net 2/4] dt-bindings: net: Document fsl,erratum-a009885
-Message-ID: <YeoVlBEWWlqDf7NG@robh.at.kernel.org>
-References: <20220118215054.2629314-1-tobias@waldekranz.com>
- <20220118215054.2629314-3-tobias@waldekranz.com>
+        Thu, 20 Jan 2022 21:08:53 -0500
+X-UUID: d89c17bc827a4c38b6c8ef0c5ffc0d83-20220121
+X-UUID: d89c17bc827a4c38b6c8ef0c5ffc0d83-20220121
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1408320461; Fri, 21 Jan 2022 10:08:49 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 21 Jan 2022 10:08:47 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 21 Jan 2022 10:08:47 +0800
+Message-ID: <e4328a0fd2c97d073793532d238abd781797fe13.camel@mediatek.com>
+Subject: Re: [PATCH v1, 1/1] soc: mediatek: cmdq: add cmdq_pkt_poll_addr
+ function
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC:     <devicetree@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        David Airlie <airlied@linux.ie>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        "Dennis YC Hsieh" <dennis-yc.hsieh@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        mtk18742 <moudy.ho@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Fri, 21 Jan 2022 10:08:47 +0800
+In-Reply-To: <20220120074311.2243-2-yongqiang.niu@mediatek.com>
+References: <20220120074311.2243-1-yongqiang.niu@mediatek.com>
+         <20220120074311.2243-2-yongqiang.niu@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220118215054.2629314-3-tobias@waldekranz.com>
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 10:50:51PM +0100, Tobias Waldekranz wrote:
-> Update FMan binding documentation with the newly added workaround for
-> erratum A-009885.
+Hi, Yongqiang:
+
+On Thu, 2022-01-20 at 15:43 +0800, Yongqiang Niu wrote:
+> From: mtk18742 <moudy.ho@mediatek.com>
 > 
-> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+> add cmdq_pkt_poll_addr function in cmdq helper functions
+> 
+> Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
 > ---
->  Documentation/devicetree/bindings/net/fsl-fman.txt | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>  drivers/soc/mediatek/mtk-cmdq-helper.c   | 39
+> ++++++++++++++++++++++++
+>  include/linux/mailbox/mtk-cmdq-mailbox.h |  1 +
+>  include/linux/soc/mediatek/mtk-cmdq.h    |  2 ++
+>  3 files changed, 42 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/net/fsl-fman.txt b/Documentation/devicetree/bindings/net/fsl-fman.txt
-> index c00fb0d22c7b..020337f3c05f 100644
-> --- a/Documentation/devicetree/bindings/net/fsl-fman.txt
-> +++ b/Documentation/devicetree/bindings/net/fsl-fman.txt
-> @@ -410,6 +410,15 @@ PROPERTIES
->  		The settings and programming routines for internal/external
->  		MDIO are different. Must be included for internal MDIO.
+> diff --git a/drivers/soc/mediatek/mtk-cmdq-helper.c
+> b/drivers/soc/mediatek/mtk-cmdq-helper.c
+> index 3c8e4212d941..6c5cfb284140 100644
+> --- a/drivers/soc/mediatek/mtk-cmdq-helper.c
+> +++ b/drivers/soc/mediatek/mtk-cmdq-helper.c
+> @@ -344,6 +344,45 @@ int cmdq_pkt_set_event(struct cmdq_pkt *pkt, u16
+> event)
+>  }
+>  EXPORT_SYMBOL(cmdq_pkt_set_event);
 >  
-> +- fsl,erratum-a009885
-
-Adding errata properties doesn't work because then you have to update 
-your dtb to fix the issue where as if you use the compatible property 
-(specific to the SoC) you can fix the issue with just a (stable) kernel 
-update.
-
-Yes, I see we already have some, but doesn't mean we need more of them.
-
-> +		Usage: optional
-> +		Value type: <boolean>
-> +		Definition: Indicates the presence of the A009885
-> +		erratum describing that the contents of MDIO_DATA may
-> +		become corrupt unless it is read within 16 MDC cycles
-> +		of MDIO_CFG[BSY] being cleared, when performing an
-> +		MDIO read operation.
+> +s32 cmdq_pkt_poll_addr(struct cmdq_pkt *pkt, u32 value, u32 addr,
+> u32 mask, u8 reg_gpr)
+> +{
+> +	struct cmdq_instruction inst = { {0} };
 > +
->  - fsl,erratum-a011043
->  		Usage: optional
->  		Value type: <boolean>
-> -- 
-> 2.25.1
-> 
-> 
+> +	s32 err;
+> +
+> +	if (mask != 0xffffffff) {
+> +		inst.op = CMDQ_CODE_MASK;
+> +		inst.mask = ~mask;
+> +		err = cmdq_pkt_append_command(pkt, inst);
+> +		if (err != 0)
+> +			return err;
+> +
+> +		addr = addr | 0x1;
+> +	}
+> +
+> +	/* Move extra handle APB address to GPR */
+> +	inst.op = CMDQ_CODE_MOVE;
+> +	inst.value = addr;
+> +	inst.sop = reg_gpr;
+> +	inst.dst_t = 1;
+> +	err = cmdq_pkt_append_command(pkt, inst);
+> +	if (err != 0)
+> +		pr_err("%s fail append command move addr to reg
+> err:%d",
+> +			__func__, err);
+
+cmdq_pkt_assign() could assign a value to GPR, so remove this part.
+
+> +
+> +	inst.op = CMDQ_CODE_POLL;
+> +	inst.value = value;
+> +	inst.sop = reg_gpr;
+> +	inst.dst_t = 1;
+> +	err = cmdq_pkt_append_command(pkt, inst);
+> +	if (err != 0)
+> +		pr_err("%s fail append command poll err:%d",
+> +			__func__, err);
+> +
+> +	return err;
+> +}
+> +EXPORT_SYMBOL(cmdq_pkt_poll_addr);
+> +
+>  int cmdq_pkt_poll(struct cmdq_pkt *pkt, u8 subsys,
+>  		  u16 offset, u32 value)
+>  {
+> diff --git a/include/linux/mailbox/mtk-cmdq-mailbox.h
+> b/include/linux/mailbox/mtk-cmdq-mailbox.h
+> index 44365aab043c..a27329fd7c7f 100644
+> --- a/include/linux/mailbox/mtk-cmdq-mailbox.h
+> +++ b/include/linux/mailbox/mtk-cmdq-mailbox.h
+> @@ -54,6 +54,7 @@
+>   */
+>  enum cmdq_code {
+>  	CMDQ_CODE_MASK = 0x02,
+> +	CMDQ_CODE_MOVE = 0x02,
+>  	CMDQ_CODE_WRITE = 0x04,
+>  	CMDQ_CODE_POLL = 0x08,
+>  	CMDQ_CODE_JUMP = 0x10,
+> diff --git a/include/linux/soc/mediatek/mtk-cmdq.h
+> b/include/linux/soc/mediatek/mtk-cmdq.h
+> index ac6b5f3cba95..28dc5ce0ff03 100644
+> --- a/include/linux/soc/mediatek/mtk-cmdq.h
+> +++ b/include/linux/soc/mediatek/mtk-cmdq.h
+> @@ -280,4 +280,6 @@ int cmdq_pkt_finalize(struct cmdq_pkt *pkt);
+>  int cmdq_pkt_flush_async(struct cmdq_pkt *pkt, cmdq_async_flush_cb
+> cb,
+>  			 void *data);
+>  
+
+Add comment for this function, parameters, and return value like other
+interface.
+
+Regards,
+CK
+
+> +s32 cmdq_pkt_poll_addr(struct cmdq_pkt *pkt, u32 value, u32 addr,
+> u32 mask, u8 reg_gpr);
+> +
+>  #endif	/* __MTK_CMDQ_H__ */
+

@@ -2,86 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F732495F6E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:07:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BCEC495F72
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:09:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380551AbiAUNHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 08:07:15 -0500
-Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:55858 "EHLO
-        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1380552AbiAUNG5 (ORCPT
+        id S1350492AbiAUNJO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 21 Jan 2022 08:09:14 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:32479 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1347711AbiAUNJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 08:06:57 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V2RxFW-_1642770412;
-Received: from 30.225.24.42(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0V2RxFW-_1642770412)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 21 Jan 2022 21:06:52 +0800
-Message-ID: <9282186a-95d0-22df-1ddf-3d36d7efa1c4@linux.alibaba.com>
-Date:   Fri, 21 Jan 2022 21:06:52 +0800
+        Fri, 21 Jan 2022 08:09:13 -0500
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-211-doWXCRcfM-qAes0kr1kiQQ-1; Fri, 21 Jan 2022 08:09:09 -0500
+X-MC-Unique: doWXCRcfM-qAes0kr1kiQQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 85879100C609;
+        Fri, 21 Jan 2022 13:09:07 +0000 (UTC)
+Received: from comp-core-i7-2640m-0182e6.redhat.com (unknown [10.36.110.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AB67378AA8;
+        Fri, 21 Jan 2022 13:09:03 +0000 (UTC)
+From:   Alexey Gladkov <legion@kernel.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Containers <containers@lists.linux.dev>
+Cc:     Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Daniel Walsh <dwalsh@redhat.com>,
+        Davidlohr Bueso <dbueso@suse.de>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Kirill Tkhai <ktkhai@virtuozzo.com>,
+        Manfred Spraul <manfred@colorfullife.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Vasily Averin <vvs@virtuozzo.com>
+Subject: [RFC PATCH v3 0/4] ipc: Store mq and ipc sysctls in the ipc namespace
+Date:   Fri, 21 Jan 2022 14:08:37 +0100
+Message-Id: <cover.1642769810.git.legion@kernel.org>
+In-Reply-To: <87tuebwo99.fsf@email.froward.int.ebiederm.org>
+References: <87tuebwo99.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [PATCH net v2] net/smc: Transitional solution for clcsock race
- issue
-From:   Wen Gu <guwen@linux.alibaba.com>
-To:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1642768988-126174-1-git-send-email-guwen@linux.alibaba.com>
-In-Reply-To: <1642768988-126174-1-git-send-email-guwen@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=legion@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patchset changes the implementation of mq and ipc sysctls. It moves the
+sysctls inside the ipc namespace.This will allow us to manage these sysctls
+inside the user namespace. The implementation also removes helpers duplication
+between mq and ipc sysctls.
 
-On 2022/1/21 8:43 pm, Wen Gu wrote:
-> We encountered a crash in smc_setsockopt() and it is caused by
-> accessing smc->clcsock after clcsock was released.
-> 
->   BUG: kernel NULL pointer dereference, address: 0000000000000020
->   #PF: supervisor read access in kernel mode
->   #PF: error_code(0x0000) - not-present page
->   PGD 0 P4D 0
->   Oops: 0000 [#1] PREEMPT SMP PTI
->   CPU: 1 PID: 50309 Comm: nginx Kdump: loaded Tainted: G E     5.16.0-rc4+ #53
->   RIP: 0010:smc_setsockopt+0x59/0x280 [smc]
->   Call Trace:
->    <TASK>
->    __sys_setsockopt+0xfc/0x190
->    __x64_sys_setsockopt+0x20/0x30
->    do_syscall_64+0x34/0x90
->    entry_SYSCALL_64_after_hwframe+0x44/0xae
->   RIP: 0033:0x7f16ba83918e
->    </TASK>
-> 
-> This patch tries to fix it by holding clcsock_release_lock and
-> checking whether clcsock has already been released before access.
-> 
-> In case that a crash of the same reason happens in smc_getsockopt()
-> or smc_switch_to_fallback(), this patch also checkes smc->clcsock
-> in them too. And the caller of smc_switch_to_fallback() will identify
-> whether fallback succeeds according to the return value.
-> 
-> Fixes: fd57770dd198 ("net/smc: wait for pending work before clcsock release_sock")
-> Link: https://lore.kernel.org/lkml/5dd7ffd1-28e2-24cc-9442-1defec27375e@linux.ibm.com/T/
-> Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
-> Acked-by: Karsten Graul <kgraul@linux.ibm.com>
-> ---
+--
 
-I seem to have missed this:
+Alexey Gladkov (4):
+  ipc: Store mqueue sysctls in the ipc namespace
+  ipc: Store ipc sysctls in the ipc namespace
+  ipc: Merge ipc_sysctl and mq_sysctl
+  ipc: Allow to modify ipc/mq sysctls if CAP_SYS_RESOURCE is present
 
----
-v2 -> v1:
+ include/linux/ipc_namespace.h |  24 ++-
+ ipc/Makefile                  |   7 +-
+ ipc/ipc_sysctl.c              | 318 +++++++++++++++++++++++++++-------
+ ipc/mq_sysctl.c               | 120 -------------
+ ipc/mqueue.c                  |   7 -
+ ipc/namespace.c               |   6 +
+ ipc/util.h                    |   4 +-
+ 7 files changed, 273 insertions(+), 213 deletions(-)
+ delete mode 100644 ipc/mq_sysctl.c
 
-Add 'Fixes:' tag and 'Link:' tag.
----
-
-
-Looks like I need a script to check the details to avoid mistake...
-
-
-Thanks,
-Wen Gu
+-- 
+2.33.0
 

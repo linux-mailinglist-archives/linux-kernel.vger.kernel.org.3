@@ -2,104 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53BB749669C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 21:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6104B4966A2
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 21:51:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231695AbiAUUuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 15:50:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
+        id S231849AbiAUUvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 15:51:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiAUUuL (ORCPT
+        with ESMTP id S229583AbiAUUvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 15:50:11 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9ADC06173B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 12:50:11 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id y14so15250476oia.9
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 12:50:11 -0800 (PST)
+        Fri, 21 Jan 2022 15:51:52 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9328C06173D
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 12:51:52 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id 23so30900076ybf.7
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 12:51:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DIhTTjelyXp1scIWoIHum/L+8mNJoJDG0RuZ6neQWBQ=;
-        b=S77186CnyZMQUQqsNQ9+TmBwqAbtNfrjvvjCAAiIeT6ZZ4bYkyEhMV+NQHdB9vWhZA
-         yV4LN7S8S/VpiOQwOYSkltT0g0NGMKmErw9/x5WhSzwfHsS9uHkQKi0it/i6VauNx1JC
-         7vbubAvJ2qyO2mxbF8rXjx1swIiD44GaHvqYFUy2jT45AbsU7FMsOCOeBeuD05FaFAa/
-         w7PcFrdWNUiuk6Nyo0xca6Wy+/Fv4Lqdamoo7NOwBlQzQPRoKdHLcHinvh1T+oK/PTlY
-         6/fkIX9RqbCw295MMLrjpRTuYxrvMWJM3oBdXsiqQIFxJsRcTqm104GF0eNsFRroov/M
-         DzjQ==
+        bh=yx8Sp5yK+IdSrHNRElqCQeGwi3Mhv+uJHX0dumssPUA=;
+        b=YjZAfWsIl22u4X60/fbS0dbemyatmDIkYev6n1TbCuzrDC87OZ3vL1EMl1GajyVlDf
+         AelgkM6pKJ0kXs/tVKF3zcI07cEMv0w9EAYpMNi5c3CNWfYRphBxeQBYSK/rDzUD2Aoc
+         O/9vGAd1++8iH81q0OyiG5sdMKU2Jii8KEkzgUDk+l8Bj9KfRDLw9nVEnd9csn9q1in7
+         jIU40jwptembCj0iK/B4OXLRvkqGP5fdzwuauK1L2dBBPlFB84oZEhR3dut2uFSqfMfY
+         8nRZkKg0C73kq764VJ8P9MK8Kx0P/kX0fdX46xbVvRNhonRy8dadYg8FYS9E1G/Gvfrv
+         RSYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DIhTTjelyXp1scIWoIHum/L+8mNJoJDG0RuZ6neQWBQ=;
-        b=Jm5sWvt8u8hbpVoPTBqmxl9C9p/HyMuam0jN9XSUnTIkbAkL8LP0MZiCzfXfjVGnlY
-         DWfpRSURwewH/bALVtgJXTQrWtkYx7rZoTR55zONNaEWoniYyFfTfrLtYFcObEb6pQrR
-         SVb3x5gvL0dPSOZMWqd1A1JqmGs4nLlzzxiwPbcNzhn8TJ6varF/ZgkjPIlfCfnU6ge2
-         mBF4nFCNXPdXatG8CjmdHwgdHu7aCphaJWtcuMOIgVvOUPDrBRL03Y8obJNw420RFm1m
-         U1yeq8bR/M3iXLzcidC2Hw5Wk7HbwwN7p5BQUiFaA+yyiyvYkzjRa6BUzsDgrgsSR8Yu
-         M+vg==
-X-Gm-Message-State: AOAM5323obqKkGboCicFcRIuomb+HiY7Vo1SsqVN3auGdulOXOukNo5O
-        Q/vFrBlSQ4Qayx9eC8X+zof5931KkvjNU3u+npw=
-X-Google-Smtp-Source: ABdhPJyHg9DnOVLj3GXek1xX/4z2+Ys+ETYkAEGri9PQIVx4le2XsjzS4hGXn/Nystf1LQWIU/w3nB3UXfPeSOn92HQ=
-X-Received: by 2002:a05:6808:ab2:: with SMTP id r18mr1994063oij.123.1642798210665;
- Fri, 21 Jan 2022 12:50:10 -0800 (PST)
+        bh=yx8Sp5yK+IdSrHNRElqCQeGwi3Mhv+uJHX0dumssPUA=;
+        b=o89+vz+DVESOQgwTthN30z3DS7h+KTFR/ox3Ln05dC0d2LOEGsakyESKznJNlVSxn9
+         v+m5PtY8ebDI0JR1MsmZ1BoHNNKc6P671oxo4d3LcFHbll3FKcv3dTzIdoaQz515A6+v
+         B5sJaQxB3X90rDfYTDBXdqbuD0sYhZAt9yBi7CBknshT/61g0IkUBRNyp3AJ/dsz74G9
+         VtjuFqTXHEh3sG3J8C4m4GI3S/krzSE3JJOdVuCggIkQeOQ7a0ku7PLBqdweUkKBC+KB
+         W/eRzuRNhE+WBEUxLkgnMJQvElk14AWn5I9ZVIPOQg+TILTZB0WqIayQ754fyuvmAtVz
+         Mp3w==
+X-Gm-Message-State: AOAM53129m+Iti1521Dsf6brAwc5HtQ8CRhaVqurI9FO5g0wnfneN5Ea
+        Gr/YPD+pJ51XjsHYJayISqvsebIwry2wDp5jEqQN7K6KPVw=
+X-Google-Smtp-Source: ABdhPJxkhXZrcRureYqCap4kFxTZxfwvDGSic4fyFA+HyhmO213hyixgvNMr4MNs1ShbFviWARp8lDLRAfZc4ikUV+s=
+X-Received: by 2002:a25:c841:: with SMTP id y62mr8672404ybf.196.1642798311679;
+ Fri, 21 Jan 2022 12:51:51 -0800 (PST)
 MIME-Version: 1.0
-References: <20220121114800.95459-1-jiapeng.chong@linux.alibaba.com>
-In-Reply-To: <20220121114800.95459-1-jiapeng.chong@linux.alibaba.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 21 Jan 2022 15:49:59 -0500
-Message-ID: <CADnq5_NbnutwnzOttGtj37dH9eMBT3KUM=i8v=JTZ3cqCh6hoA@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/pm: remove useless if
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     "Quan, Evan" <evan.quan@amd.com>, Dave Airlie <airlied@linux.ie>,
-        xinhui pan <Xinhui.Pan@amd.com>,
-        Abaci Robot <abaci@linux.alibaba.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>
+References: <CAHmME9qVMomgb53rABKsucCoEhwsk+=KzDdEcGKtecOXuahTZw@mail.gmail.com>
+ <20220119135450.564115-1-Jason@zx2c4.com> <YesPesOhftSzp2ft@sol.localdomain> <CAHmME9ow7TxCaYYayRn9rdJJSdQ48tWQgdrW00g7mHaWvVJ+Zw@mail.gmail.com>
+In-Reply-To: <CAHmME9ow7TxCaYYayRn9rdJJSdQ48tWQgdrW00g7mHaWvVJ+Zw@mail.gmail.com>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Fri, 21 Jan 2022 12:51:40 -0800
+Message-ID: <CABCJKuf=eHuFfNjD-7FBTeft3XNTkEc4G9cDvYpMJgH_se12eg@mail.gmail.com>
+Subject: Re: [PATCH] lib/crypto: blake2s: avoid indirect calls to compression
+ function for Clang CFI
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+Hi Jason,
 
-Alex
+On Fri, Jan 21, 2022 at 12:23 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> On Fri, Jan 21, 2022 at 8:54 PM Eric Biggers <ebiggers@kernel.org> wrote:
+> > There are some lines over 80 columns in this patch.
+>
+> I'll fix that up.
+>
+> > Otherwise this looks fine.  It would be really nice to fix this in clang,
+> > though.
+>
+> I agree. I'm wondering whether it makes sense to roll with this patch,
+> or to just not change anything and lean on Clang upstream to fix their
+> bug. Full LTO is marked as "experimental" still. On the other hand,
+> Android ships with it turned on, so how "experimental" can it really
+> be? I don't have a strong read on the Clang ecosystem to know what
+> makes most sense, to apply this or not. Do you have an opinion?
 
-On Fri, Jan 21, 2022 at 6:48 AM Jiapeng Chong
-<jiapeng.chong@linux.alibaba.com> wrote:
->
-> Clean the following coccicheck warning:
->
-> ./drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c:7035:2-4: WARNING: possible
-> condition with no effect (if == else).
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
-> index 23ff0d812e4b..7427c50409d4 100644
-> --- a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
-> +++ b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
-> @@ -7032,10 +7032,7 @@ static int si_power_control_set_level(struct amdgpu_device *adev)
->         ret = si_resume_smc(adev);
->         if (ret)
->                 return ret;
-> -       ret = si_set_sw_state(adev);
-> -       if (ret)
-> -               return ret;
-> -       return 0;
-> +       return si_set_sw_state(adev);
->  }
->
->  static void si_set_vce_clock(struct amdgpu_device *adev,
-> --
-> 2.20.1.7.g153144c
->
+We'll work on fixing the compiler, but please note that it's most
+likely going to take a while, so I would prefer to work around the
+issue in the kernel for now.
+
+Sami

@@ -2,37 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C42144961F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:21:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 972914961FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381614AbiAUPVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 10:21:51 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:47838 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381529AbiAUPVd (ORCPT
+        id S1381617AbiAUPV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 10:21:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1381538AbiAUPVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 10:21:33 -0500
+        Fri, 21 Jan 2022 10:21:34 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69EB8C061747
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 07:21:34 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: detlev)
-        with ESMTPSA id 01A921F46217
+        with ESMTPSA id C21511F46214
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1642778492;
-        bh=toJZplNzOWnhWEhBs7DUXgaZJA8ric2HVhNCIQ2EX3A=;
+        s=mail; t=1642778493;
+        bh=idCRqSfxdKKzhaecaARxomPwbXX0Gq6x7F6Y/PBqvN0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XqgHGYbIUpwONda9BtSBVlb7CfKHzeaWUE/kEYPfCXaGkokHTJFC9x4V1bSYCZlum
-         g+oNqn1rZThILFP8Jm90EwKOynZPZMdSZevmfBLScjOaw/TJg/O6h7HcFySwSPNpbs
-         hNfEFvmaoX+jS97166PT+LEoLZQkAu2kJqf8kFi0A2WT0xbi2BRrqyp7DP9RvMOkR7
-         qk4o2r95jFf0P5sffZGSVlL8TVCh8d0E70UFwokAT1MwXcez3KjzrVSM2KhooAQdJu
-         RR9oCKq+ozabRHmjLhhtPYArpjGiGHz/dwRLs7zcxbIuLNKfs/nt06dSze99BGGEyL
-         yz5PYx4t/v+pQ==
+        b=OOO3giZ/gCqIS3Hjro+FfPBGrgmSdZIXGzE/77X1tp+kGba/aj7TGZBtUrMe1Plfl
+         Ibz9GyZ0XPU8YKrTw/p51aXyNplsovxXm4raTrLs8exAIcd9g/rb8QzMYCZaG9eadr
+         w53+sMNNgKUoIm5KCYQmh5xHuPw9WcNjJN2TDL5CIUWo1wYbveAC1KoZIXgJgn/CHq
+         1jqUMxS5ypdT0PaZATfSL4htEKWOjyoadC3QssrKhsboyhSYBaVS+U2abvcXR3kXdX
+         5PvNSzaIJ7P0aaYqWyvGthaNh0Hc7ZdP5IMOua+TeaTkxl/K6/ly78bXYi+09x/bd6
+         hEdV7tkJrQoHw==
 From:   Detlev Casanova <detlev.casanova@collabora.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 7/9] regulator: rpi-panel: Remove get_brightness hook
-Date:   Fri, 21 Jan 2022 10:20:54 -0500
-Message-Id: <20220121152056.2044551-8-detlev.casanova@collabora.com>
+Subject: [PATCH v2 8/9] regulator/rpi-panel-attiny: Don't read the LCD power status
+Date:   Fri, 21 Jan 2022 10:20:55 -0500
+Message-Id: <20220121152056.2044551-9-detlev.casanova@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220121152056.2044551-1-detlev.casanova@collabora.com>
 References: <20220121152056.2044551-1-detlev.casanova@collabora.com>
@@ -44,57 +47,48 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-The driver was implementing a get_brightness function that
-tried to read back the PWM setting of the display to report
-as the current brightness.
-The controller on the display does not support that, therefore
-we end up reporting a brightness of 0, and that confuses
-systemd's backlight service.
+The I2C to the Atmel is very fussy, and locks up easily on
+Pi0-3 particularly on reads.
 
-Remove the hook so that the framework returns the current
-brightness automatically.
+The LCD power status is controlled solely by this driver, so
+rather than reading it back from the Atmel, use the cached
+status last set.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 ---
- .../regulator/rpi-panel-attiny-regulator.c    | 23 -------------------
- 1 file changed, 23 deletions(-)
+ drivers/regulator/rpi-panel-attiny-regulator.c | 18 +-----------------
+ 1 file changed, 1 insertion(+), 17 deletions(-)
 
 diff --git a/drivers/regulator/rpi-panel-attiny-regulator.c b/drivers/regulator/rpi-panel-attiny-regulator.c
-index 998233f14085..8090b9a485b5 100644
+index 8090b9a485b5..8b80c0de1022 100644
 --- a/drivers/regulator/rpi-panel-attiny-regulator.c
 +++ b/drivers/regulator/rpi-panel-attiny-regulator.c
-@@ -207,31 +207,8 @@ static int attiny_update_status(struct backlight_device *bl)
- 	return ret;
- }
- 
--static int attiny_get_brightness(struct backlight_device *bl)
--{
--	struct attiny_lcd *state = bl_get_data(bl);
--	struct regmap *regmap = state->regmap;
--	int ret, brightness, i;
+@@ -144,24 +144,8 @@ static int attiny_lcd_power_disable(struct regulator_dev *rdev)
+ static int attiny_lcd_power_is_enabled(struct regulator_dev *rdev)
+ {
+ 	struct attiny_lcd *state = rdev_get_drvdata(rdev);
+-	unsigned int data;
+-	int ret, i;
 -
 -	mutex_lock(&state->lock);
 -
 -	for (i = 0; i < 10; i++) {
--		ret = regmap_read(regmap, REG_PWM, &brightness);
+-		ret = regmap_read(rdev->regmap, REG_PORTC, &data);
 -		if (!ret)
 -			break;
+-		usleep_range(10000, 12000);
 -	}
 -
 -	mutex_unlock(&state->lock);
 -
--	if (ret)
+-	if (ret < 0)
 -		return ret;
--
--	return brightness;
--}
--
- static const struct backlight_ops attiny_bl = {
- 	.update_status	= attiny_update_status,
--	.get_brightness	= attiny_get_brightness,
- };
  
- static int attiny_gpio_get_direction(struct gpio_chip *gc, unsigned int off)
+-	return data & PC_RST_BRIDGE_N;
++	return state->port_states[REG_PORTC - REG_PORTA] & PC_RST_BRIDGE_N;
+ }
+ 
+ static const struct regulator_init_data attiny_regulator_default = {
 -- 
 2.34.1
 

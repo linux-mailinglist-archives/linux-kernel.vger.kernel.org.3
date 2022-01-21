@@ -2,168 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E41F5495C98
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 10:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 612A9495CA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 10:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379690AbiAUJPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 04:15:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234763AbiAUJPg (ORCPT
+        id S1344291AbiAUJRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 04:17:24 -0500
+Received: from esa2.hgst.iphmx.com ([68.232.143.124]:9289 "EHLO
+        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343890AbiAUJRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 04:15:36 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6B1C061574;
-        Fri, 21 Jan 2022 01:15:35 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id u14so749824lfo.11;
-        Fri, 21 Jan 2022 01:15:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=fusO5f+lHxDaOb0VSmz+4+tHP16TPs0f0afJOTsfjE4=;
-        b=DViKZjc0KCTHv8wOQQlnN6CuLmc8/xCiTlBVbrBCFEvqKQzBDQYosVt2+/Ecl7Q817
-         RoC4J/Q5lv0vWa6QvOH48BRboPuiGcGLZumd2rIG5tv2m0EniL9p6YQUhHlAzSD7NYLD
-         fE/Yg7IYVLXyrobpPbguB2YBZTUI3MgbfS2fnE+6MstwCkC8kDwxxRmzg9JjKoMfpbTl
-         Rd9+pTuaFPueeJJYDuxQNVIKmGiGo2Jop7LGxmMhvo58MviMwiZx9vbtMAkNazSOd2gY
-         Mb7kkGpBzGgN12B06GuH9c0lxQFpqBO4ZkuxDkLt1PPj5ZY/b2cdlwR8NrosG8tMmmQv
-         CUDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fusO5f+lHxDaOb0VSmz+4+tHP16TPs0f0afJOTsfjE4=;
-        b=huu4G7b7H5ovrNO65r0HDhjMzmy2MhLBWtqF4mduGbBpvEo7JiImDQP02VVeksJ4N0
-         Pl1uBZr5mPBLHGL0q6rGKGk6OgPrfK9CuCPbNuwGCaWBCr8ApLKJcoeOcX3YywtHB0v2
-         gxe1E/ruZSv8tYZIgay5LpfGbCPNRC8ANQRafZ5ap3H+ZVGn+LZqYdhIpvB7WpRh3oZo
-         lC0zsRWX3jcUV1Ynuxb+bFB1vgo3jRRggigPmBQ8zXnogSF7JNb71RRPK3uLghc1DpRO
-         YyGoRaRkL0lnc0KxXAcO2d1jsmE37pKL7u7bAMhwTF4e7n03Vey8anSLIDlflucZmMd/
-         MIvw==
-X-Gm-Message-State: AOAM5316rtf6vHj7q9FxVmglC5entNU/PYD0bm+cgV1fsc1X145kpaX1
-        gPuTm+gGmFMx8l7yt2qA+eU=
-X-Google-Smtp-Source: ABdhPJyq/AiVI/98A8fQ3Rfe6G7qDquOCgOGLHmgUGcerpGxZXW4bSGIamkROJRIV2WfGF5ar6fwkg==
-X-Received: by 2002:a19:7914:: with SMTP id u20mr3088831lfc.325.1642756534107;
-        Fri, 21 Jan 2022 01:15:34 -0800 (PST)
-Received: from localhost.localdomain ([185.6.236.169])
-        by smtp.googlemail.com with ESMTPSA id m2sm191429lfh.163.2022.01.21.01.15.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 01:15:33 -0800 (PST)
-From:   Maxim Kiselev <bigunclemax@gmail.com>
-To:     mpe@ellerman.id.au
-Cc:     andrew@lunn.ch, benh@kernel.crashing.org, bigunclemax@gmail.com,
-        davem@davemloft.net, devicetree@vger.kernel.org, fido_max@inbox.ru,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        paulus@samba.org, robh+dt@kernel.org, vladimir.oltean@nxp.com
-Subject: [PATCH v3] powerpc: dts: t1040rdb: fix ports names for Seville Ethernet switch
-Date:   Fri, 21 Jan 2022 12:14:47 +0300
-Message-Id: <20220121091447.3412907-1-bigunclemax@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <87czkmudh0.fsf@mpe.ellerman.id.au>
-References: <87czkmudh0.fsf@mpe.ellerman.id.au>
+        Fri, 21 Jan 2022 04:17:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1642756637; x=1674292637;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=DDt33//J7HC81vPepGQWceRVhDsuFSNWZ9d7bVsT2sk=;
+  b=kb8SgFfGbKmXglqpT99Cylg9kCWzZ2Tu1G4O6m/uYitNBzmqppPdcJfT
+   QfIz7GJ6/xVDUnuL43F5emtFY9gXt21I0v/H5nczcm/MWDSp7bSJ8ielD
+   5vXvKYHz9sydgr6yFkg0yLKjK6hXoiNGOFhOKslB+tKP5pHY/SbSvkK9h
+   WUjxJ8MdPhGPq1ksoTEKCxmQChLyTKonyhNEg7vOuSBf5wKC46N1NIzFq
+   s2C2NlvERkyEFDCbNHJUPmnhsBFbfG8LANqoLVkFsqv+mUaI9k6eXVPjv
+   Asjfd8PVFc4HbXY65mQTA3SM+XKay5c250vVz0/40kzYadx6SckxEs4V2
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.88,304,1635177600"; 
+   d="scan'208";a="295096766"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 21 Jan 2022 17:17:16 +0800
+IronPort-SDR: A1qttNTNaAZC9R38HsVaWXqDierIauZNvSjTy79pqW3jGn2joIWzNG+4kE/I1v/sz/Nkb5SkP7
+ 4iCrON7oikcOOot56c+PurzaKc6ME0rgC2FGr9QWISZR/MDseFBnj7QagJnoQ3eWzs8Ru5QX68
+ /Gqzy+ZbtDwxnjosuBoL2GZFmV7DYzST6c5QWNjsa9gMWkdX8udgmaR6jv46KjvgCblweA22sg
+ OPJ2jrsurGJL7m9Otmgr0fGl8hTyDLd6P8b58b2by7wHH+ckOSGLourUUefS26t3IWGI8vwVXh
+ 8FRPl40g/RBkGQhHc9NH/XWq
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 00:49:28 -0800
+IronPort-SDR: 4b/vS+sR7xz1JkVuDrMH5gHjb6c2JcWxXpxAMqV3FeaTV/Wie2Ba0xe6Scr+EkZ1u8Ie8tI3qm
+ sq7kVBhljKK3oH6MV/Zk9YdRjmJjuAdY8nZI2/ZIdUrIr4a3IwGWnITIIqXWeVsDfy09TClgL+
+ mUJgEdGwdE9peEitE438AcUNChG9XCGQ33EPk5xc0JacpypKHkE7eZgmIk/O/c9GybeBBlEVsj
+ ljrPGtojgqqKxg8iHGa5v6USBrcgwqHyLTIwIxK//CYySHTIl04JiSsOM0FYgO/KlIUeczE1FD
+ iig=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 01:17:17 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JgDKm3MQXz1SHwl
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 01:17:16 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1642756635; x=1645348636; bh=DDt33//J7HC81vPepGQWceRVhDsuFSNWZ9d
+        7bVsT2sk=; b=JJ1bWH54T0ozCRDNFOawIcDYYrXmiS6mLF3bufMWI8NIa+2kaQT
+        gCBgwenjhfSIESElInLy4f7hnR7B/c8AlmdP0YJlB/yBcj4ZSDRucj/ARZ8iebTx
+        fX4cav++QB5+nrjZ/xNlR7WsOefucQ/VKRddYsk1OsSGfjMxLK9ouF+vHs+ICHA7
+        QaQ2sHdGGswVwNNN4/NAuldiTPB3O2e4rjI+PHGvCgubY6wPSEdLOP7NfwwXL43W
+        0XkAgLTCQC9ZIavzM31zb7IlI4uGbI4OgvYnMIVfBXIQVP013Dxgw+JTtTEtRqj5
+        CB028YmS/z+ll5kfBZyeWV7wOCiloVbazWA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id zYi23LFcQm9Z for <linux-kernel@vger.kernel.org>;
+        Fri, 21 Jan 2022 01:17:15 -0800 (PST)
+Received: from [10.225.54.48] (unknown [10.225.54.48])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JgDKk0DRvz1RvlN;
+        Fri, 21 Jan 2022 01:17:13 -0800 (PST)
+Message-ID: <350720e8-9b78-bd24-5c60-602076610bf4@opensource.wdc.com>
+Date:   Fri, 21 Jan 2022 18:17:12 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [next] mips: cavium_octeon_defconfig: pata_octeon_cf.c:598:23:
+ error: passing argument 1 of 'trace_ata_bmdma_stop' from incompatible pointer
+ type
+Content-Language: en-US
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Zeal Robot <zealci@zte.com.cn>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        CGEL ZTE <cgel.zte@gmail.com>
+References: <CA+G9fYtq0wzSeG8YG-a+=KrbdWqHJMXk1hvq0FKeAvj9sZAK2g@mail.gmail.com>
+ <6249735f-e6b7-1331-eb2b-361bb17d6115@opensource.wdc.com>
+ <CA+G9fYu__OOvk-ESXoOqbd-Lk+CmO8CSQ8chEFf3MyeTjKtp9g@mail.gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital
+In-Reply-To: <CA+G9fYu__OOvk-ESXoOqbd-Lk+CmO8CSQ8chEFf3MyeTjKtp9g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On board rev A, the network interface labels for the switch ports
-written on the front panel are different than on rev B and later.
+On 2022/01/21 17:58, Naresh Kamboju wrote:
+>> I just posted a fix. As I do not have the environment to compile test
+>> mips, could someone test please ? I will send the fix to Linus asap
+>> after confirmation that it is OK.
+> 
+> Please share your patch / patch link. I will test it with tuxmake.
 
-This patch fixes network interface names for the switch ports according
-to labels that are written on the front panel of the board rev B.
-They start from ETH3 and end at ETH10.
+I posted on linux-ide and CC-ed linux-mips:
 
-This patch also introduces a separate device tree for rev A.
-The main device tree is supposed to cover rev B and later.
+https://marc.info/?l=linux-ide&m=164275458614058&w=2
 
-Fixes: e69eb0824d8c ("powerpc: dts: t1040rdb: add ports for Seville Ethernet switch")
-Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
-Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
-Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
----
-Here is the fix for the error in t1040rdb-rev-a.dts caused by containing '#include' directive inside '/include/'
----
- arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts | 30 ++++++++++++++++++++
- arch/powerpc/boot/dts/fsl/t1040rdb.dts       |  8 +++---
- 2 files changed, 34 insertions(+), 4 deletions(-)
- create mode 100644 arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
+> 
+> you may also give a try with these easy steps.
+> 
+> # To install tuxmake on your system globally:
+> # sudo pip3 install -U tuxmake
+> #
+> # See https://docs.tuxmake.org/ for complete documentation.
+> # Original tuxmake command with fragments listed below.
+> 
+>  tuxmake --runtime podman --target-arch mips --toolchain gcc-10
+> --kconfig cavium_octeon_defconfig
 
-diff --git a/arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts b/arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
-new file mode 100644
-index 0000000000000..73f8c998c64df
---- /dev/null
-+++ b/arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * T1040RDB-REV-A Device Tree Source
-+ *
-+ * Copyright 2014 - 2015 Freescale Semiconductor Inc.
-+ *
-+ */
-+
-+#include "t1040rdb.dts"
-+
-+/ {
-+	model = "fsl,T1040RDB-REV-A";
-+	compatible = "fsl,T1040RDB-REV-A";
-+};
-+
-+&seville_port0 {
-+	label = "ETH5";
-+};
-+
-+&seville_port2 {
-+	label = "ETH7";
-+};
-+
-+&seville_port4 {
-+	label = "ETH9";
-+};
-+
-+&seville_port6 {
-+	label = "ETH11";
-+};
-diff --git a/arch/powerpc/boot/dts/fsl/t1040rdb.dts b/arch/powerpc/boot/dts/fsl/t1040rdb.dts
-index af0c8a6f56138..b6733e7e65805 100644
---- a/arch/powerpc/boot/dts/fsl/t1040rdb.dts
-+++ b/arch/powerpc/boot/dts/fsl/t1040rdb.dts
-@@ -119,7 +119,7 @@ &seville_port0 {
- 	managed = "in-band-status";
- 	phy-handle = <&phy_qsgmii_0>;
- 	phy-mode = "qsgmii";
--	label = "ETH5";
-+	label = "ETH3";
- 	status = "okay";
- };
- 
-@@ -135,7 +135,7 @@ &seville_port2 {
- 	managed = "in-band-status";
- 	phy-handle = <&phy_qsgmii_2>;
- 	phy-mode = "qsgmii";
--	label = "ETH7";
-+	label = "ETH5";
- 	status = "okay";
- };
- 
-@@ -151,7 +151,7 @@ &seville_port4 {
- 	managed = "in-band-status";
- 	phy-handle = <&phy_qsgmii_4>;
- 	phy-mode = "qsgmii";
--	label = "ETH9";
-+	label = "ETH7";
- 	status = "okay";
- };
- 
-@@ -167,7 +167,7 @@ &seville_port6 {
- 	managed = "in-band-status";
- 	phy-handle = <&phy_qsgmii_6>;
- 	phy-mode = "qsgmii";
--	label = "ETH11";
-+	label = "ETH9";
- 	status = "okay";
- };
- 
+I saw this in the compilation error report. Will try this.
+
+> 
+> - Naresh
+
+
 -- 
-2.32.0
-
+Damien Le Moal
+Western Digital Research

@@ -2,109 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C29D249679D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 22:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9190849679F
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 22:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232496AbiAUVy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 16:54:56 -0500
-Received: from mout.gmx.net ([212.227.15.15]:33209 "EHLO mout.gmx.net"
+        id S232506AbiAUVzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 16:55:07 -0500
+Received: from mga11.intel.com ([192.55.52.93]:10624 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231329AbiAUVyy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 16:54:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1642802072;
-        bh=o3HriOZZYTQr0RY2qA5gv/JQ+l5Hfs4zA46TyN1O4JI=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=Cyt9ijGHiAcuBFq7i1sKEXAXVc05o8facJ2ZWY2ycjTwBuWwBd8KWBtWAV9qF7CWI
-         phD6JbCEeO37xJJHvEji6CPBEK7HSPv5GxM8EkFsnQZ0YqNcDlywsUpcmp2/K+ot95
-         nV9nqAtZeaOI9JqFWeE0PWbK4aAolPN5eBHLZJEA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.180.114]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MAOJV-1mz9u70RiN-00Bpnn; Fri, 21
- Jan 2022 22:54:32 +0100
-Message-ID: <d150a5df-157c-a435-5696-93a1c1ed6406@gmx.de>
-Date:   Fri, 21 Jan 2022 22:53:23 +0100
+        id S231329AbiAUVzH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 16:55:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642802107; x=1674338107;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=odjErul01LuRoq3MAZFyzxnv1wVV0pZHWYwVRTIDD1o=;
+  b=NNnOk+W+qd2dlhRbf0rX/gq8onZjG9iPgMFi2bii/9MedlvsP8SszXQ8
+   GTFLHC4inQmDwGeNhWtyEc2gQNK67Ew36UEU1TcUkkLpGUlrAwuCEqaIp
+   aV2TIFnJVgWIUcY8nn8KS81NNvK7pQ+yz/uO+L6NiYp1jpGJjQQNFX1O5
+   6cMO1VjuZgYa2bGVE3C8B75zd0zgV3wCIYRlt6JjdBHB+p4309HI94ZjQ
+   WboxDM72j3Lbit4SpzTfuRq5rUXNVvJkyAdYAK01cr/JJMUACm/aQ1k/y
+   LLPqy+VCzqk/bfbt0isjee+22T0dKOWhm92oiEh+96PokODwQVDQaWVR6
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="243345631"
+X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
+   d="scan'208";a="243345631"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 13:55:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
+   d="scan'208";a="765830352"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 21 Jan 2022 13:55:05 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nB1s8-000Fhu-Gs; Fri, 21 Jan 2022 21:55:04 +0000
+Date:   Sat, 22 Jan 2022 05:54:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lina Iyer <ilina@codeaurora.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Suren Baghdasaryan <surenb@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
+ 178/9999] kernel/power/qos.c:306:5: warning: stack frame size (32888)
+ exceeds limit (2048) in 'pm_qos_update_target'
+Message-ID: <202201220526.BqkgP2rt-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [next] parisc: allnoconfig: ERROR: modpost: Section mismatches
- detected. Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        John David Anglin <dave.anglin@bell.net>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-parisc <linux-parisc@vger.kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>, pavel@ucw.cz,
-        rppt@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Deller <deller@kernel.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-References: <CA+G9fYvuEqeoLO6dC_qtGyRUz=UPv5i0C3jZ_n9nz5kWOuCHYQ@mail.gmail.com>
- <CA+G9fYuKGaDfyke81wbSe2yqTm6GqWNuKw2wB6NFaCLa1q7z6A@mail.gmail.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <CA+G9fYuKGaDfyke81wbSe2yqTm6GqWNuKw2wB6NFaCLa1q7z6A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:X5d0rsZTnoWGQfPByshx5re1SKOdQJRDvYRKNsEOWYjGMPMVEGH
- q5eWkJQbCg6jX3cHpq1ylLgtXak6CRPRqlJ2EJykNVJi0VDI2a6N72VHCarEe0CBNJbOwLz
- s5TuyUCEVRgtH3lWcOpsYQc0/eQs59D1ikjyhlWnpOCik3YSN5mCxv7K2xuNlD6Haf5gBO+
- GK/ElISvRuUEdtxugGR4Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lUI10Suj44Q=:7jAVRQBTyxJN3t/c1FvNpj
- xyO02MpC52wNdI8H40C+fVWQTH1l2FHsTiMsZkRoKyWyNzzJ+s6Dj0aeOyFSsCwmRb9hlf+PT
- 4lQ9Vuaf2PsCPT8D8SBilye1vj4RdpZBTeytUNrNqKfH2gSbM2zVTB1087ETLMGNSU4Rk3WUf
- HHVpvHx5fY7pPbHyPus9o91xhNE0Hp5T+W+hHlAGlWb1uRGqEkvO+TUzeHAKUgENYIxUKcNOS
- 6t+FW/dC8i1NSRiD9TYwxG9ZndLJuC4CLc+f6bsuxbMygTEb8BuLaeouDiuTpNSG5v0OqH2V8
- 4ppseO6bzfrrX5LQG2U4UGlVJ/cSuuGuGE0owG8SlG4Azb2Vu13z0IvGGMvbF9By3IrlmX7Im
- IgXyii62Xcf6MozWBWLbNqbnJRqeXPsFS7a56OWvTNp1bC+mD08zGSXSbUc2tGPKZ1+yx52yZ
- wceFnVk4xddpyV4HaS0KcCcQpcjpU4ZYqBmQ0DkjaE8EIgeUU6JsxjG6si6cma0f5rjoEf0DZ
- RH7JkqZkelPXp/VAy/2E7MGXoJDI6ztW3zXzE8aPuejh5X+ZrTqV5ldU2/TSu/1a/cSokdq74
- 98w8Xb67lqq6pDrxo8EP9zpnivxtYmGJ9CHXppyOdzNdhWkAzIJb9yYMPPaavPdQdaZjMxPyi
- yL4qBu3eQoRjwTL62xL2rZUopjeWjZ5YAARXjfIZJxiMyVr7TJDH60Pcn5y0MZiLzJbGME+eC
- 6MrFhWJvVEywQ9p4a6fOjCH9mfqdUmQlwb2w5/FX34occdFeeQBuwhUS3LJXfW093D6z3iDDt
- EtC2qTwqpBZC15wHkKrAcwml5yxNULewPG+iaR/NsyMHWneq0QyC0+iBSorvbkp7dX9T1CE59
- P/TZ3HxSQyZX4lC8gkVV1+1vlczdqTam8JXmvR6vT1XHNzSwPVYIMAn0LuGuB3gaY9VEZS8oK
- Vrn0+8IuVSHHTakkWw1diHvCEoHkJAIgfu/h8TG8yJzyuYXVFZlo8prcLsIAn8+ZGzmuAykHj
- IryZFf9Al6dG5HZ9YON+vbuwDucZYkHilCEwjBzh3EzSTXikOerdHoVNQpDSgt/+wS9xyeSOV
- dInWiD26xKZr1k=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/21/22 16:24, Naresh Kamboju wrote:
-> On Fri, 21 Jan 2022 at 13:16, Naresh Kamboju <naresh.kamboju@linaro.org>=
- wrote:
->>
->> Linux next-20220121 parisc allnoconfig build failed with gcc-9/10/11.
->>
->> make --silent --keep-going --jobs=3D8 ARCH=3Dparisc
->> CROSS_COMPILE=3Dhppa-linux-gnu- 'CC=3Dsccache hppa-linux-gnu-gcc'
->> 'HOSTCC=3Dsccache gcc'
->>
->> WARNING: modpost: vmlinux.o(.text+0x1c8): Section mismatch in
->> reference from the function ksys_sync() to the function
->> .init.text:memblock_alloc_try_nid()
->> The function ksys_sync() references
->> the function __init memblock_alloc_try_nid().
->> This is often because ksys_sync lacks a __init
->> annotation or the annotation of memblock_alloc_try_nid is wrong.
->>
->> ERROR: modpost: Section mismatches detected.
->> Set CONFIG_SECTION_MISMATCH_WARN_ONLY=3Dy to allow them.
->> make[2]: *** [/builds/linux/scripts/Makefile.modpost:59:
->> vmlinux.symvers] Error 1
->
-> Anders bisected this build and the first bad commit is point to,
->
-> first bad commit: [4f05e5a3946923676e147ad0e33c80df8249b2fe]
-> parisc: Drop __init from map_pages declaration
+Hi Lina,
 
-I've dropped that patch for now. Will need some time to find
-the best solution.
+FYI, the error/warning still remains.
 
-Helge
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
+head:   90a691fca4c2525068d9908ac203e9f09e4e33c0
+commit: 723feab600f71b3104a10de5b372bd1d9adf5943 [178/9999] ANDROID: GKI: QoS: Enhance framework to support cpu/irq specific QoS requests
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220122/202201220526.BqkgP2rt-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/723feab600f71b3104a10de5b372bd1d9adf5943
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
+        git checkout 723feab600f71b3104a10de5b372bd1d9adf5943
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/power/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/power/qos.c:306:5: warning: stack frame size (32888) exceeds limit (2048) in 'pm_qos_update_target' [-Wframe-larger-than]
+   int pm_qos_update_target(struct pm_qos_constraints *c, struct plist_node *node,
+       ^
+   1 warning generated.
+   kernel/power/qos.c:630: warning: Function parameter or member 'new_value' not described in 'pm_qos_update_request'
+   kernel/power/qos.c:630: warning: Excess function parameter 'value' description in 'pm_qos_update_request'
+
+
+vim +/pm_qos_update_target +306 kernel/power/qos.c
+
+723feab600f71b kernel/power/qos.c     Lina Iyer           2014-05-21  294  
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  295  /**
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  296   * pm_qos_update_target - manages the constraints list and calls the notifiers
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  297   *  if needed
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  298   * @c: constraints data struct
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  299   * @node: request to add to the list, to update or to remove
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  300   * @action: action to take on the constraints list
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  301   * @value: value of the request to add or update
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  302   *
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  303   * This function returns 1 if the aggregated constraint value has changed, 0
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  304   *  otherwise.
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  305   */
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25 @306  int pm_qos_update_target(struct pm_qos_constraints *c, struct plist_node *node,
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  307  			 enum pm_qos_req_action action, int value)
+d82b35186eaa81 kernel/pm_qos_params.c Mark Gross          2008-02-04  308  {
+d82b35186eaa81 kernel/pm_qos_params.c Mark Gross          2008-02-04  309  	unsigned long flags;
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  310  	int prev_value, curr_value, new_value;
+2d984ad132a87c kernel/power/qos.c     Rafael J. Wysocki   2014-02-11  311  	int ret;
+d82b35186eaa81 kernel/pm_qos_params.c Mark Gross          2008-02-04  312  
+d82b35186eaa81 kernel/pm_qos_params.c Mark Gross          2008-02-04  313  	spin_lock_irqsave(&pm_qos_lock, flags);
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  314  	prev_value = pm_qos_get_value(c);
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  315  	if (value == PM_QOS_DEFAULT_VALUE)
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  316  		new_value = c->default_value;
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  317  	else
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  318  		new_value = value;
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  319  
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  320  	switch (action) {
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  321  	case PM_QOS_REMOVE_REQ:
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  322  		plist_del(node, &c->list);
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  323  		break;
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  324  	case PM_QOS_UPDATE_REQ:
+5f279845f9d684 kernel/pm_qos_params.c James Bottomley     2010-07-19  325  		/*
+5f279845f9d684 kernel/pm_qos_params.c James Bottomley     2010-07-19  326  		 * to change the list, we atomically remove, reinit
+5f279845f9d684 kernel/pm_qos_params.c James Bottomley     2010-07-19  327  		 * with new value and add, then see if the extremal
+5f279845f9d684 kernel/pm_qos_params.c James Bottomley     2010-07-19  328  		 * changed
+5f279845f9d684 kernel/pm_qos_params.c James Bottomley     2010-07-19  329  		 */
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  330  		plist_del(node, &c->list);
+fe43e2ce526979 kernel/power/qos.c     Gustavo A. R. Silva 2018-03-30  331  		/* fall through */
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  332  	case PM_QOS_ADD_REQ:
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  333  		plist_node_init(node, new_value);
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  334  		plist_add(node, &c->list);
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  335  		break;
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  336  	default:
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  337  		/* no action */
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  338  		;
+d82b35186eaa81 kernel/pm_qos_params.c Mark Gross          2008-02-04  339  	}
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  340  
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  341  	curr_value = pm_qos_get_value(c);
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  342  	pm_qos_set_value(c, curr_value);
+723feab600f71b kernel/power/qos.c     Lina Iyer           2014-05-21  343  	pm_qos_set_value_for_cpus(c);
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  344  
+d82b35186eaa81 kernel/pm_qos_params.c Mark Gross          2008-02-04  345  	spin_unlock_irqrestore(&pm_qos_lock, flags);
+d82b35186eaa81 kernel/pm_qos_params.c Mark Gross          2008-02-04  346  
+247e9ee034b044 kernel/power/qos.c     Sahara              2013-06-21  347  	trace_pm_qos_update_target(action, prev_value, curr_value);
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  348  	if (prev_value != curr_value) {
+2d984ad132a87c kernel/power/qos.c     Rafael J. Wysocki   2014-02-11  349  		ret = 1;
+2d984ad132a87c kernel/power/qos.c     Rafael J. Wysocki   2014-02-11  350  		if (c->notifiers)
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  351  			blocking_notifier_call_chain(c->notifiers,
+5f279845f9d684 kernel/pm_qos_params.c James Bottomley     2010-07-19  352  						     (unsigned long)curr_value,
+5f279845f9d684 kernel/pm_qos_params.c James Bottomley     2010-07-19  353  						     NULL);
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  354  	} else {
+2d984ad132a87c kernel/power/qos.c     Rafael J. Wysocki   2014-02-11  355  		ret = 0;
+abe98ec2d86279 kernel/power/qos.c     Jean Pihet          2011-08-25  356  	}
+2d984ad132a87c kernel/power/qos.c     Rafael J. Wysocki   2014-02-11  357  	return ret;
+d82b35186eaa81 kernel/pm_qos_params.c Mark Gross          2008-02-04  358  }
+d82b35186eaa81 kernel/pm_qos_params.c Mark Gross          2008-02-04  359  
+
+:::::: The code at line 306 was first introduced by commit
+:::::: abe98ec2d86279fe821c9051003a0abc43444f15 PM QoS: Generalize and export constraints management code
+
+:::::: TO: Jean Pihet <j-pihet@ti.com>
+:::::: CC: Rafael J. Wysocki <rjw@sisk.pl>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

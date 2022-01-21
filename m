@@ -2,147 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A62495BFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 09:33:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D578A495C0A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 09:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379607AbiAUIdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 03:33:33 -0500
-Received: from mail-ua1-f52.google.com ([209.85.222.52]:35584 "EHLO
-        mail-ua1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231392AbiAUIdc (ORCPT
+        id S234198AbiAUIfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 03:35:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379591AbiAUIeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 03:33:32 -0500
-Received: by mail-ua1-f52.google.com with SMTP id m90so15643527uam.2;
-        Fri, 21 Jan 2022 00:33:32 -0800 (PST)
+        Fri, 21 Jan 2022 03:34:25 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89213C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 00:34:24 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id l5so22864934edv.3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 00:34:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MaJVMg+g5DUUOUdBu9/Df9/RFBs/TIbTQZzIsKw2iKg=;
+        b=P7QTTv7hHfbbe2OClT1Kjb3kRatE9n4kVuBrYAX+TSocdmc/pPPmPArC+eBY8j45O3
+         /SqBaFXkywgPJ+2rC3PruZ4LR45txQGneJk3zC45MIi26yOLkRREZX8IsvAT7tkdrxP5
+         uoblK4HfmWm0avFOSwpzGyoUMzGHyvAP1s3g/3zm9BRNVjxt9WiYwhbKz5KuLrqOuYh7
+         tHag4GlgjUnKmV+cBLPaJ+enEnDmJxHSDFo+1/0HV+VCGvlilYuI/RlY22HlbJhKLVdC
+         p4cbHOrTY4GL975OpWwwVb/paJISTARLDu193tj/pGhcRcg0khuHika8wQ2RFnrWcS6S
+         f4+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=n56f2PNNQdieA9k1jX9tvG8Cwk+6C0TIvBu9rWE3i4o=;
-        b=QbQBhVon6CGgyVP4NfdQD6+d63EVSsCSNxREo0BDwJj6wdoyQ3fKqdwaP0In9I99Bw
-         /fKlfdC3atQEJ0xkBsY5/Q/DUUG6NHdF2v0kHnLPOXfVtLgFWqyyJsfRZVkPWhrKodlC
-         j2A05Jgl9zpMJL8+bdbZqfm4gSWrd5Jc7XvUHYRbBQb7HOMrFG4vH5YxXGNuAdQPou/0
-         mXTMNLwZEZnV14eW7EWyk1uRwBwPQVywwx4v2+zsEN+9RvcfwxitFB/biaiILVroUMXN
-         ovbWoFQxPjQQwYvgQRBBGMMckazQKMFxEYUtKR+rJc40gxY4cL3OfzIIdzxKQqsZ+Pvb
-         QmPg==
-X-Gm-Message-State: AOAM533FSRNGyz5B9poHPL1QhY+lck3tla30C0kICpEWH+9v+C0PvLy+
-        LZV25YP4G+BUY1WFN593ryIZoYyr0UvmVQ==
-X-Google-Smtp-Source: ABdhPJypt9cmefiwLeDdEsItwAFhWRMiubZQNDRBH1LY5vjk3S/ZCjDW1jCGAafFx3v+soBoYZxZJQ==
-X-Received: by 2002:a67:e014:: with SMTP id c20mr1202803vsl.21.1642754011241;
-        Fri, 21 Jan 2022 00:33:31 -0800 (PST)
-Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com. [209.85.221.170])
-        by smtp.gmail.com with ESMTPSA id g190sm1196346vke.11.2022.01.21.00.33.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Jan 2022 00:33:30 -0800 (PST)
-Received: by mail-vk1-f170.google.com with SMTP id 19so5132508vkl.2;
-        Fri, 21 Jan 2022 00:33:30 -0800 (PST)
-X-Received: by 2002:a1f:5702:: with SMTP id l2mr1220320vkb.33.1642754010512;
- Fri, 21 Jan 2022 00:33:30 -0800 (PST)
+        bh=MaJVMg+g5DUUOUdBu9/Df9/RFBs/TIbTQZzIsKw2iKg=;
+        b=3gBqrN4+VLmB4FKxWwkwiF3PU6hpV9DEEgr3EzxomQpIEHgkaTvaAlaahcmsPUxyN4
+         VkEBAReFOEAXQUwqgGEuJRCjymRzSJyugz8RB+YjJ8i3V8tK5hxGdPlhGSbG8PA7udTC
+         LPRPjAbw1hwgqJ7QEZZQzt7I7UtaBBeZ6iEnjv2Hkt9TA28S0UT1fKfg81tndLa4VuA6
+         o5SDtcy+EpWop46I/pQ+EFZgHDhQcHQIHo7Ljbe9vd6vSEXO+RyaEG3HlA76CNFPlA1a
+         70Uipz6x484hXD2iAmKegjgB5G4CFDNebB37mXId/iynOF0omKAc5Xx7jLpPiN37PY89
+         rvMg==
+X-Gm-Message-State: AOAM5318VakeFWUHQvShb1tzN8oysEoo2OJvbSl5jjc8qyiPEJt0sG6+
+        tfC85hzll8JzFYJk4kl+50eD3osHIs8wTyBG2lsf
+X-Google-Smtp-Source: ABdhPJyiX2tettfsCx6cHZABS+yVxwDmnEePfNEcWEOW8c+9z8wtNNeaipYQcpTYt5p4LaunCbPSBLMmhR3jLYdlnO0=
+X-Received: by 2002:a05:6402:4495:: with SMTP id er21mr3388511edb.298.1642754063092;
+ Fri, 21 Jan 2022 00:34:23 -0800 (PST)
 MIME-Version: 1.0
-References: <0d0b0a3ad703f5ef50611e2dd80439675bda666a.1642383007.git.zong.li@sifive.com>
- <mhng-5b3e2596-3558-4534-9229-26885ee4cc5c@palmer-ri-x1c9> <CANXhq0ruGxjO0WPUipzZ7QQM1oEapyHAvb_aVQ_CMqVxbjc_BQ@mail.gmail.com>
-In-Reply-To: <CANXhq0ruGxjO0WPUipzZ7QQM1oEapyHAvb_aVQ_CMqVxbjc_BQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 21 Jan 2022 09:33:19 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVh_cXpbUeOmr_1K0dOJwGHSO0Ao=W43j5mpgvOiNyV9w@mail.gmail.com>
-Message-ID: <CAMuHMdVh_cXpbUeOmr_1K0dOJwGHSO0Ao=W43j5mpgvOiNyV9w@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] dmaengine: sf-pdma: Get number of channel by
- device tree
-To:     Zong Li <zong.li@sifive.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Bin Meng <bin.meng@windriver.com>,
-        Green Wan <green.wan@sifive.com>, Vinod <vkoul@kernel.org>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
+References: <20211227091241.103-1-xieyongji@bytedance.com> <Ycycda8w/zHWGw9c@infradead.org>
+ <CACycT3usfTdzmK=gOsBf3=-0e8HZ3_0ZiBJqkWb_r7nki7xzYA@mail.gmail.com>
+ <YdMgCS1RMcb5V2RJ@localhost.localdomain> <CACycT3vYt0XNV2GdjKjDS1iyWieY_OV4h=W1qqk_AAAahRZowA@mail.gmail.com>
+ <YdSMqKXv0PUkAwfl@localhost.localdomain> <CACycT3tPZOSkCXPz-oYCXRJ_EOBs3dC0+Juv=FYsa6qRS0GVCw@mail.gmail.com>
+In-Reply-To: <CACycT3tPZOSkCXPz-oYCXRJ_EOBs3dC0+Juv=FYsa6qRS0GVCw@mail.gmail.com>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Fri, 21 Jan 2022 16:34:11 +0800
+Message-ID: <CACycT3tTKBpS_B5vVJ8MZ1iuaF2bf-01=9+tAdxUddziF2DQ-g@mail.gmail.com>
+Subject: Re: [PATCH v2] nbd: Don't use workqueue to handle recv work
+To:     Josef Bacik <josef@toxicpanda.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-block@vger.kernel.org, nbd@other.debian.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zong, Palmer,
+Ping.
 
-On Fri, Jan 21, 2022 at 3:21 AM Zong Li <zong.li@sifive.com> wrote:
-> On Fri, Jan 21, 2022 at 2:52 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
-> > On Sun, 16 Jan 2022 17:35:28 PST (-0800), zong.li@sifive.com wrote:
-> > > It currently assumes that there are always four channels, it would
-> > > cause the error if there is actually less than four channels. Change
-> > > that by getting number of channel from device tree.
-> > >
-> > > For backwards-compatible, it uses the default value (i.e. 4) when there
-> > > is no 'dma-channels' information in dts.
+On Wed, Jan 5, 2022 at 1:36 PM Yongji Xie <xieyongji@bytedance.com> wrote:
+>
+> On Wed, Jan 5, 2022 at 2:06 AM Josef Bacik <josef@toxicpanda.com> wrote:
 > >
-> > Some of the same wording issues here as those I pointed out in the DT
-> > bindings patch.
-> >
-> > > Signed-off-by: Zong Li <zong.li@sifive.com>
-
-> > > --- a/drivers/dma/sf-pdma/sf-pdma.c
-> > > +++ b/drivers/dma/sf-pdma/sf-pdma.c
-> > > @@ -482,9 +482,7 @@ static void sf_pdma_setup_chans(struct sf_pdma *pdma)
-> > >  static int sf_pdma_probe(struct platform_device *pdev)
-> > >  {
-> > >       struct sf_pdma *pdma;
-> > > -     struct sf_pdma_chan *chan;
-> > >       struct resource *res;
-> > > -     int len, chans;
-> > >       int ret;
-> > >       const enum dma_slave_buswidth widths =
-> > >               DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
-> > > @@ -492,13 +490,21 @@ static int sf_pdma_probe(struct platform_device *pdev)
-> > >               DMA_SLAVE_BUSWIDTH_16_BYTES | DMA_SLAVE_BUSWIDTH_32_BYTES |
-> > >               DMA_SLAVE_BUSWIDTH_64_BYTES;
+> > On Tue, Jan 04, 2022 at 01:31:47PM +0800, Yongji Xie wrote:
+> > > On Tue, Jan 4, 2022 at 12:10 AM Josef Bacik <josef@toxicpanda.com> wrote:
+> > > >
+> > > > On Thu, Dec 30, 2021 at 12:01:23PM +0800, Yongji Xie wrote:
+> > > > > On Thu, Dec 30, 2021 at 1:35 AM Christoph Hellwig <hch@infradead.org> wrote:
+> > > > > >
+> > > > > > On Mon, Dec 27, 2021 at 05:12:41PM +0800, Xie Yongji wrote:
+> > > > > > > The rescuer thread might take over the works queued on
+> > > > > > > the workqueue when the worker thread creation timed out.
+> > > > > > > If this happens, we have no chance to create multiple
+> > > > > > > recv threads which causes I/O hung on this nbd device.
+> > > > > >
+> > > > > > If a workqueue is used there aren't really 'receive threads'.
+> > > > > > What is the deadlock here?
+> > > > >
+> > > > > We might have multiple recv works, and those recv works won't quit
+> > > > > unless the socket is closed. If the rescuer thread takes over those
+> > > > > works, only the first recv work can run. The I/O needed to be handled
+> > > > > in other recv works would be hung since no thread can handle them.
+> > > > >
+> > > >
+> > > > I'm not following this explanation.  What is the rescuer thread you're talking
 > > >
-> > > -     chans = PDMA_NR_CH;
-> > > -     len = sizeof(*pdma) + sizeof(*chan) * chans;
-> > > -     pdma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
-> > > +     pdma = devm_kzalloc(&pdev->dev, sizeof(*pdma), GFP_KERNEL);
-> > >       if (!pdma)
-> > >               return -ENOMEM;
+> > > https://www.kernel.org/doc/html/latest/core-api/workqueue.html#c.rescuer_thread
 > > >
-> > > -     pdma->n_chans = chans;
-> > > +     ret = of_property_read_u32(pdev->dev.of_node, "dma-channels",
-> > > +                                &pdma->n_chans);
-> > > +     if (ret) {
-> > > +             dev_notice(&pdev->dev, "set number of channels to default value: 4\n");
-> > > +             pdma->n_chans = PDMA_MAX_NR_CH;
-> > > +     }
-> > > +
-> > > +     if (pdma->n_chans > PDMA_MAX_NR_CH) {
-> > > +             dev_err(&pdev->dev, "the number of channels exceeds the maximum\n");
-> > > +             return -EINVAL;
 > >
-> > Can we get away with just using only the number of channels the driver
-> > actually supports?  ie, just never sending an op to the channels above
-> > MAX_NR_CH?  That should leave us with nothing to track.
-
-In theory we can...
-
-> It might be a bit like when pdma->n_chans is bigger than the maximum,
-> set the pdma->chans to PDMA_MAX_NR_CH, then we could ensure that we
-> don't access the channels above the maximum. If I understand
-> correctly, I gave the similar thought in the thread of v2 patch, and
-> there are some discussions on that, but this way seems to lead to
-> hard-to-track problems.
-
-... but that would mean that when a new variant appears that supports
-more channels, no error is printed, and people might not notice
-immediately that the higher channels are never used.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> > Ahhh ok now I see, thanks, I didn't know this is how this worked.
+> >
+> > So what happens is we do the queue_work(), this needs to do a GFP_KERNEL
+> > allocation internally, we are unable to satisfy this, and thus the work gets
+> > pushed onto the rescuer thread.
+> >
+> > Then the rescuer thread can't be used in the future because it's doing this long
+> > running thing.
+> >
+>
+> Yes.
+>
+> > I think the correct thing to do here is simply drop the WQ_MEM_RECLAIM bit.  It
+> > makes sense for workqueue's that are handling the work of short lived works that
+> > are in the memory reclaim path.  That's not what these workers are doing, yes
+> > they are in the reclaim path, but they run the entire time the device is up.
+> > The actual work happens as they process incoming requests.  AFAICT
+> > WQ_MEM_RECLAIM doesn't affect the actual allocations that the worker thread
+> > needs to do, which is what I think the intention was in using WQ_MEM_RECLAIM,
+> > which isn't really what it's used for.
+> >
+> > tl;dr, just remove thee WQ_MEM_RECLAIM flag completely and I think that's good
+> > enough?  Thanks,
+> >
+>
+> In the reconnect case, we still need to call queue_work() while the
+> device is running. So it looks like we can't simply remove the
+> WQ_MEM_RECLAIM flag.
+>
+> Thanks,
+> Yongji

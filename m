@@ -2,77 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D21F495A82
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF60495A88
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378906AbiAUHRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 02:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59292 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378864AbiAUHRg (ORCPT
+        id S1378911AbiAUHTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 02:19:52 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:51670 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S235247AbiAUHTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 02:17:36 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D290C061574;
-        Thu, 20 Jan 2022 23:17:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=yFPxDUUe1fppNO0I1fDa7AQSMUJ89zWSqQ4St/CxUW8=; b=re5gJo5P3fM6JbXabIyQgDSFuL
-        2/c/R1kbmGwM9wnFvcVIbtFV6CPKFG9KTLSuDQkKjGa7WNFhDfqwXK8gLbDqtDaEMLLkSvfF1Rw68
-        m15Kn9nvJWBn4B4wYwj1beL1ETujNA/HHaYmLvJM1tinQimQSEbY3tHoWaFsZhrCy0q7ReWHsApIq
-        7FNG6Ycsi2kWOXn0+33z2cwtPVagIqc4tKLK2Q0YpAKyEXB6MkHql2Px/ou3XS9ptRM0ecbOxqpQB
-        qLixJ458q3LMWO/T57T734HDJV6QUdtx8nSwdkI9MtVzW4rRmkebbT/b2TvZFx5kS+5khxoY0iyXY
-        j6+9XE0A==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nAoAu-00E2IP-QD; Fri, 21 Jan 2022 07:17:32 +0000
-Date:   Thu, 20 Jan 2022 23:17:32 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        david <david@fromorbit.com>, Jane Chu <jane.chu@oracle.com>
-Subject: Re: [PATCH v9 02/10] dax: Introduce holder for dax_device
-Message-ID: <YepeDLO5VNWsmV0J@infradead.org>
-References: <CAPcyv4iTaneUgdBPnqcvLr4Y_nAxQp31ZdUNkSRPsQ=9CpMWHg@mail.gmail.com>
- <20220105185626.GE398655@magnolia>
- <CAPcyv4h3M9f1-C5e9kHTfPaRYR_zN4gzQWgR+ZyhNmG_SL-u+A@mail.gmail.com>
- <20220105224727.GG398655@magnolia>
- <CAPcyv4iZ88FPeZC1rt_bNdWHDZ5oh7ua31NuET2-oZ1UcMrH2Q@mail.gmail.com>
- <20220105235407.GN656707@magnolia>
- <CAPcyv4gUmpDnGkhd+WdhcJVMP07u+CT8NXRjzcOTp5KF-5Yo5g@mail.gmail.com>
- <YekhXENAEYJJNy7e@infradead.org>
- <76f5ed28-2df9-890e-0674-3ef2f18e2c2f@fujitsu.com>
- <20220121022200.GG13563@magnolia>
+        Fri, 21 Jan 2022 02:19:50 -0500
+X-UUID: 42695048824645668bc5d0c9549dad1f-20220121
+X-UUID: 42695048824645668bc5d0c9549dad1f-20220121
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <axe.yang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 468471931; Fri, 21 Jan 2022 15:19:46 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 21 Jan 2022 15:19:45 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 21 Jan 2022 15:19:43 +0800
+From:   Axe Yang <axe.yang@mediatek.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+CC:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Axe Yang <axe.yang@mediatek.com>, Lucas Stach <dev@lynxeye.de>,
+        Eric Biggers <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v5 0/3] mmc: mediatek: add support for SDIO async IRQ 
+Date:   Fri, 21 Jan 2022 15:19:39 +0800
+Message-ID: <20220121071942.11601-1-axe.yang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220121022200.GG13563@magnolia>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 06:22:00PM -0800, Darrick J. Wong wrote:
-> Hm, so that means XFS can only support dax+pmem when there aren't
-> partitions in use?  Ew.
+Change in v5:
+- resort variables to reversed xmas tree order
+- restore old copyright year range and add current year back
 
-Yes.  Or any sensible DAX usage going forward for that matter.
+Change in v4:
+- add MMC_CAP2_SDIO_ASYNC_IRQ judge before lookup eint pinctrl
+- replace spin_lock_irqsave() variant with spin_lock() in eint irq handler
 
-> 
-> > >   (2) extent the holder mechanism to cover a rangeo
-> 
-> I don't think I was around for the part where "hch balked at a notifier
-> call chain" -- what were the objections there, specifically?  I would
-> hope that pmem problems would be infrequent enough that the locking
-> contention (or rcu expiration) wouldn't be an issue...?
+Changes in v3:
+- correct abbreviations with capital letters in commit message
+- replace copyright year with 2022 in mtk-sd.c
+- remove unnessary pointer casting
+- adjust variable order to reversed xmas tree
+- remove a redundant blank line
+- refine if statement, following standard pattern
 
-notifiers are a nightmare untype API leading to tons of boilerplate
-code.  Open coding the notification is almost always a better idea.
+Change in v2:
+- change flag name from 'cap-sdio-async-int' to 'cap-sdio-async-irq'
+- change corresponding macro names from xxx_INT to xxx_IRQ
+- resort new member in msdc_host structure
+- refine function msdc_request_dat1_eint_irq()
+- rename msdc_{suspend,resume} function names, add suffix '_noirq'
+- add MMC_CAP2_NO_SDIO judgement before parse eint related pin setting
+
+Axe Yang (3):
+  dt-bindings: mmc: add cap-sdio-async-irq flag
+  mmc: core: Add support for SDIO async interrupt
+  mmc: mediatek: add support for SDIO eint IRQ
+
+ .../bindings/mmc/mmc-controller.yaml          |   5 +
+ drivers/mmc/core/host.c                       |   2 +
+ drivers/mmc/core/sdio.c                       |  17 +++
+ drivers/mmc/host/mtk-sd.c                     | 123 ++++++++++++++++--
+ include/linux/mmc/card.h                      |   3 +-
+ include/linux/mmc/host.h                      |   1 +
+ include/linux/mmc/sdio.h                      |   5 +
+ 7 files changed, 147 insertions(+), 9 deletions(-)
+
+-- 
+2.25.1
+
+

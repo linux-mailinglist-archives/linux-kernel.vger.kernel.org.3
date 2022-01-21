@@ -2,144 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D89D3495A0C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 07:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33BED495A10
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 07:38:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378743AbiAUGhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 01:37:39 -0500
-Received: from mga03.intel.com ([134.134.136.65]:52154 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348774AbiAUGhi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 01:37:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642747058; x=1674283058;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PrB7+txqACOqvxAdRJEN6Ri06z0Sf+hn/heR9Ndq8fo=;
-  b=dsm/XPkFuzKxhf5oocuMDuxQTJb2gHgjVKcEw032lDG0lS5v4xIAKOEv
-   zawatnrYfAkAuBLqnCtDMbAD24k9Ob4nhmDC9xwng+CcQlEZmvmRLQ6y8
-   exStfBflh7zl3nQe/KkxPnygLx6Jvj63iOWIh0h0e5lRc77PiQ+MaVBb+
-   z3kNt5q8Nl5UIdgx35egGcHSgNnlYukIzXEjbjiLoXlsGhuM/6kQPXMgQ
-   bzyMBeippg0iW+NVJ0UlNUjnOg2vpTk42+H0Iguu2IbVq2fDO/jjUB9vJ
-   U5VM8esYZWXnvPtlz01XOyQfTNA8d7YbHiobt5nsG+0435QHdtIuQxrmh
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="245530561"
-X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="245530561"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 22:37:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="616400090"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Jan 2022 22:37:35 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nAnYE-000F0y-Qp; Fri, 21 Jan 2022 06:37:34 +0000
-Date:   Fri, 21 Jan 2022 14:36:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     zhenwei pi <pizhenwei@bytedance.com>, mst@redhat.com,
-        arei.gonglei@huawei.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, jasowang@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        helei.sig11@bytedance.com, zhenwei pi <pizhenwei@bytedance.com>
-Subject: Re: [PATCH 3/3] virtio-crypto: implement RSA algorithm
-Message-ID: <202201211427.TgczsUOo-lkp@intel.com>
-References: <20220121022438.1042547-4-pizhenwei@bytedance.com>
+        id S1378755AbiAUGiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 01:38:21 -0500
+Received: from prt-mail.chinatelecom.cn ([42.123.76.222]:32849 "EHLO
+        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1378752AbiAUGiU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 01:38:20 -0500
+HMM_SOURCE_IP: 172.18.0.218:42762.813230127
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-10.133.11.244 (unknown [172.18.0.218])
+        by chinatelecom.cn (HERMES) with SMTP id 41CE12800B7;
+        Fri, 21 Jan 2022 14:38:04 +0800 (CST)
+X-189-SAVE-TO-SEND: sunshouxin@chinatelecom.cn
+Received: from  ([172.18.0.218])
+        by app0025 with ESMTP id 6f463a4339bf40e6a8ba36f414a7b440 for jay.vosburgh@canonical.com;
+        Fri, 21 Jan 2022 14:38:08 CST
+X-Transaction-ID: 6f463a4339bf40e6a8ba36f414a7b440
+X-Real-From: sunshouxin@chinatelecom.cn
+X-Receive-IP: 172.18.0.218
+X-MEDUSA-Status: 0
+Sender: sunshouxin@chinatelecom.cn
+Message-ID: <661de9e7-216d-dfd1-afdc-3c58a88739c3@chinatelecom.cn>
+Date:   Fri, 21 Jan 2022 14:38:03 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220121022438.1042547-4-pizhenwei@bytedance.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v6] net: bonding: Add support for IPV6 ns/na to
+ balance-alb/balance-tlb mode
+To:     Jay Vosburgh <jay.vosburgh@canonical.com>
+Cc:     vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn
+References: <20220118073317.82968-1-sunshouxin@chinatelecom.cn>
+ <29469.1642746326@famine>
+From:   =?UTF-8?B?5a2Z5a6I6ZGr?= <sunshouxin@chinatelecom.cn>
+In-Reply-To: <29469.1642746326@famine>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi zhenwei,
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on herbert-cryptodev-2.6/master]
-[also build test WARNING on herbert-crypto-2.6/master linux/master linus/master v5.16 next-20220121]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/zhenwei-pi/Introduce-akcipher-service-for-virtio-crypto/20220121-102730
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-config: hexagon-randconfig-r026-20220120 (https://download.01.org/0day-ci/archive/20220121/202201211427.TgczsUOo-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d4baf3b1322b84816aa623d8e8cb45a49cb68b84)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/fa1045d13dd16399ab0287c599719a977892cf05
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review zhenwei-pi/Introduce-akcipher-service-for-virtio-crypto/20220121-102730
-        git checkout fa1045d13dd16399ab0287c599719a977892cf05
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/crypto/virtio/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/crypto/virtio/virtio_crypto_akcipher_algo.c:276:5: warning: no previous prototype for function 'virtio_crypto_rsa_do_req' [-Wmissing-prototypes]
-   int virtio_crypto_rsa_do_req(struct crypto_engine *engine, void *vreq)
-       ^
-   drivers/crypto/virtio/virtio_crypto_akcipher_algo.c:276:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int virtio_crypto_rsa_do_req(struct crypto_engine *engine, void *vreq)
-   ^
-   static 
-   1 warning generated.
+在 2022/1/21 14:25, Jay Vosburgh 写道:
+> Sun Shouxin <sunshouxin@chinatelecom.cn> wrote:
+>
+>> Since ipv6 neighbor solicitation and advertisement messages
+>> isn't handled gracefully in bonding6 driver, we can see packet
+>> drop due to inconsistency bewteen mac address in the option
+>> message and source MAC .
+>>
+>> Another examples is ipv6 neighbor solicitation and advertisement
+>> messages from VM via tap attached to host brighe, the src mac
+>> mighe be changed through balance-alb mode, but it is not synced
+>> with Link-layer address in the option message.
+>>
+>> The patch implements bond6's tx handle for ipv6 neighbor
+>> solicitation and advertisement messages.
+> 	As previously discussed, this looks reasonable to me to resolve
+> the described MAC discrepancy.  One minor nit is a couple of misspelled
+> words in the description above, "brighe" and "mighe."
+>
+> Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+>
+> 	-J
 
 
-vim +/virtio_crypto_rsa_do_req +276 drivers/crypto/virtio/virtio_crypto_akcipher_algo.c
+Thanks your comment, I'll adjust it and send out V7 soon.
 
-   275	
- > 276	int virtio_crypto_rsa_do_req(struct crypto_engine *engine, void *vreq)
-   277	{
-   278		struct akcipher_request *req = container_of(vreq, struct akcipher_request, base);
-   279		struct virtio_crypto_akcipher_request *vc_akcipher_req = akcipher_request_ctx(req);
-   280		struct virtio_crypto_request *vc_req = &vc_akcipher_req->base;
-   281		struct virtio_crypto_akcipher_ctx *ctx = vc_akcipher_req->akcipher_ctx;
-   282		struct virtio_crypto *vcrypto = ctx->vcrypto;
-   283		struct data_queue *data_vq = vc_req->dataq;
-   284		struct virtio_crypto_op_header *header;
-   285		struct virtio_crypto_akcipher_data_req *akcipher_req;
-   286		int ret;
-   287	
-   288		vc_req->sgs = NULL;
-   289		vc_req->req_data = kzalloc_node(sizeof(*vc_req->req_data),
-   290			GFP_KERNEL, dev_to_node(&vcrypto->vdev->dev));
-   291		if (!vc_req->req_data)
-   292			return -ENOMEM;
-   293	
-   294		/* build request header */
-   295		header = &vc_req->req_data->header;
-   296		header->opcode = cpu_to_le32(vc_akcipher_req->opcode);
-   297		header->algo = cpu_to_le32(VIRTIO_CRYPTO_AKCIPHER_RSA);
-   298		header->session_id = cpu_to_le64(ctx->session_id);
-   299	
-   300		/* build request akcipher data */
-   301		akcipher_req = &vc_req->req_data->u.akcipher_req;
-   302		akcipher_req->para.src_data_len = cpu_to_le32(req->src_len);
-   303		akcipher_req->para.dst_data_len = cpu_to_le32(req->dst_len);
-   304	
-   305		ret = __virtio_crypto_akcipher_do_req(vc_akcipher_req, req, data_vq);
-   306		if (ret < 0) {
-   307			kfree_sensitive(vc_req->req_data);
-   308			vc_req->req_data = NULL;
-   309			return ret;
-   310		}
-   311	
-   312		return 0;
-   313	}
-   314	
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>
+>> Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
+>> ---
+>> drivers/net/bonding/bond_alb.c | 36 ++++++++++++++++++++++++++++++++++
+>> 1 file changed, 36 insertions(+)
+>>
+>> diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
+>> index 533e476988f2..82b7071840b1 100644
+>> --- a/drivers/net/bonding/bond_alb.c
+>> +++ b/drivers/net/bonding/bond_alb.c
+>> @@ -1269,6 +1269,34 @@ static int alb_set_mac_address(struct bonding *bond, void *addr)
+>> 	return res;
+>> }
+>>
+>> +/*determine if the packet is NA or NS*/
+>> +static bool __alb_determine_nd(struct icmp6hdr *hdr)
+>> +{
+>> +	if (hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
+>> +	    hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
+>> +		return true;
+>> +	}
+>> +
+>> +	return false;
+>> +}
+>> +
+>> +static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
+>> +{
+>> +	struct ipv6hdr *ip6hdr;
+>> +	struct icmp6hdr *hdr;
+>> +
+>> +	if (skb->protocol == htons(ETH_P_IPV6)) {
+>> +		ip6hdr = ipv6_hdr(skb);
+>> +		if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
+>> +			hdr = icmp6_hdr(skb);
+>> +			if (__alb_determine_nd(hdr))
+>> +				return true;
+>> +		}
+>> +	}
+>> +
+>> +	return false;
+>> +}
+>> +
+>> /************************ exported alb functions ************************/
+>>
+>> int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
+>> @@ -1350,6 +1378,9 @@ struct slave *bond_xmit_tlb_slave_get(struct bonding *bond,
+>> 		switch (skb->protocol) {
+>> 		case htons(ETH_P_IP):
+>> 		case htons(ETH_P_IPV6):
+>> +			if (alb_determine_nd(skb, bond))
+>> +				break;
+>> +
+>> 			hash_index = bond_xmit_hash(bond, skb);
+>> 			if (bond->params.tlb_dynamic_lb) {
+>> 				tx_slave = tlb_choose_channel(bond,
+>> @@ -1446,6 +1477,11 @@ struct slave *bond_xmit_alb_slave_get(struct bonding *bond,
+>> 			break;
+>> 		}
+>>
+>> +		if (alb_determine_nd(skb, bond)) {
+>> +			do_tx_balance = false;
+>> +			break;
+>> +		}
+>> +
+>> 		hash_start = (char *)&ip6hdr->daddr;
+>> 		hash_size = sizeof(ip6hdr->daddr);
+>> 		break;
+>>
+>> base-commit: 79e06c4c4950be2abd8ca5d2428a8c915aa62c24
+>> -- 
+>> 2.27.0
+>>
+> ---
+> 	-Jay Vosburgh, jay.vosburgh@canonical.com

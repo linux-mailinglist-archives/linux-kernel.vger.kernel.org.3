@@ -2,72 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A63E496811
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 00:05:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E3B496814
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 00:06:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231608AbiAUXFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 18:05:50 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:39661 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiAUXFs (ORCPT
+        id S232033AbiAUXGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 18:06:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48476 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231209AbiAUXG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 18:05:48 -0500
-Received: by mail-oi1-f169.google.com with SMTP id e81so15709048oia.6;
-        Fri, 21 Jan 2022 15:05:48 -0800 (PST)
+        Fri, 21 Jan 2022 18:06:29 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F273C06173D
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 15:06:29 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id w12-20020a17090a528c00b001b276aa3aabso14904810pjh.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 15:06:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ANWEnOEwRLJlp79+wbMeS29MVJAChClz5fjV1hvINyI=;
+        b=UMzMmME6YQM93ZegCmxvTaK8yDVTGMc5Q15DZ2uDfdyCb5IWrcnBIOlirriJLYlMGd
+         GuJXsyUpWu7hl02nmjX17kjPp7aO5oVwzSGxzEqBeNZm6WzZ3DkdbAor5H0AtKQufoRQ
+         r5e6sXYSEL9KYqsnWYB96KlxJd29GZx64JPNrURQf4fOnRjKaWPD4QU/vm1c21k4xB2B
+         /jXobUhPMr6QLO08qIzRsqwDpZTcs1vorOvZnEzwWq0frsPh529dBU13YbY0u06BDE23
+         WhmYx7qHMeMYMIxxrO1rLw7N641JcMhshQ7uuoZeVZpgoLfKVBTQMVHXchHB1n8mS4/3
+         xubQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RN1PlPeJHCI4F7ORlXAuoTAl+I+ftCy1+niCC1rlCkY=;
-        b=csdaDo5srNT3dXFZl2fr8mSORMGTShHWF4ZSNKEd2lMDk2PvcVb/iMmK0w/8KHQiCi
-         2sq+plS+QZplYZD6D6aONnUZ41myVmSQj+lvFWuU5vSnvdz3FnwAYPfVgZ1Dah7nkM1u
-         B7aBIzj3+q83+vA+n4Pu9k5ZpMs238AK/xDQDPURG9Wf5C5OzICOHTSdW/jAio17r1zm
-         UeJzLTwvcPek/EnASlEgtFGE2bpSciN3sSBPwohhJ3osh3Cj6XG7fesi9Y6eoAWJiA5k
-         sEWWxIsdk6ih8x3wU8M86FC81nCbH/xrvWkSdq8GXoELkEJeFiB6z6srd1ZN9rykhdVp
-         JmPQ==
-X-Gm-Message-State: AOAM531FfhaScyTdUEgNfDCXWCkQ5hB2Wjuq4axJkxjwxRIxiY1cmG9V
-        qzXft3E69YfxwhoAqglfLA==
-X-Google-Smtp-Source: ABdhPJxg+kJTfrdEMoJ2RPhH4/awPHWoZgmR50vnrKMk9V6UVZeKVUfwcfBU0Ncf2zWIBlgjnHORJA==
-X-Received: by 2002:a05:6808:158e:: with SMTP id t14mr2315268oiw.31.1642806348159;
-        Fri, 21 Jan 2022 15:05:48 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bo13sm1605874oib.43.2022.01.21.15.05.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 15:05:47 -0800 (PST)
-Received: (nullmailer pid 1775815 invoked by uid 1000);
-        Fri, 21 Jan 2022 23:05:46 -0000
-Date:   Fri, 21 Jan 2022 17:05:46 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        ~okias/devicetree@lists.sr.ht, David Airlie <airlied@linux.ie>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        freedreno@lists.freedesktop.org
-Subject: Re: [PATCH] dt-bindings: msm/mdp4: convert to yaml format
-Message-ID: <Yes8SiV9SBF+S3OH@robh.at.kernel.org>
-References: <20220109171814.16103-1-david@ixit.cz>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ANWEnOEwRLJlp79+wbMeS29MVJAChClz5fjV1hvINyI=;
+        b=1Lijv8Ijo8BsWymP/SohtKlG1k14d+KgJJ/RulimWjLxhTWOf6c8iTWYksdqhy68CL
+         +13l3vGFTcFin5blvS/5unHkoHOPpAsRXFI12mXWEPvT8b73XqqmCGK1oevWkuSAsYVq
+         MnaSeo6E49C+ZOEdj6XW5andKDeYWHpaOv0Vl1i9ijqcnU35JJtupo072kLiU5NznQBb
+         POIXS1IjJe4F+6IvSNu9n9XrfBUkRjJk8IAvBwax0iSGCy16fKkzCuNzH168EwTAVCze
+         /UjSW7jPjRktDyGL/GtQkLoD09bhuJ4KJC6lryg2+ztbNZIdZBsAZ4AobY4dCXq9Uhv3
+         CbPA==
+X-Gm-Message-State: AOAM530RRV5GRfoh03ydpUqUPtRp3+iIH9bpoVyS8Ti1EQoX9MLJoGdz
+        QLR4RehG/O07gc6P/kZgjEnua7HSqKwaYKCamCBQbw==
+X-Google-Smtp-Source: ABdhPJwgNyFh3Dzr5eTuQ+YcjzkH9S8Gi6DDU4AePnpkIiPZ7nkAy5BxDyL50VHCC+M3wP/4/XN5qIrYq98jGleP5TM=
+X-Received: by 2002:a17:902:8601:b0:149:ee23:890a with SMTP id
+ f1-20020a170902860100b00149ee23890amr5877920plo.12.1642806388722; Fri, 21 Jan
+ 2022 15:06:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220109171814.16103-1-david@ixit.cz>
+References: <20220112233657.15886-1-michal.winiarski@intel.com>
+In-Reply-To: <20220112233657.15886-1-michal.winiarski@intel.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Fri, 21 Jan 2022 18:06:17 -0500
+Message-ID: <CAFd5g467Yub=uRoRw_cS8Z4pCyjesAeMxc6yN4-1Qwj0Xwu1NA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: Import missing importlib.abc
+To:     =?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 09 Jan 2022 18:18:13 +0100, David Heidelberg wrote:
-> Convert mdp4 binding into yaml format.
-> 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
->  .../devicetree/bindings/display/msm/mdp4.txt  | 114 ----------------
->  .../devicetree/bindings/display/msm/mdp4.yaml | 124 ++++++++++++++++++
->  2 files changed, 124 insertions(+), 114 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/display/msm/mdp4.txt
->  create mode 100644 Documentation/devicetree/bindings/display/msm/mdp4.yaml
-> 
+On Wed, Jan 12, 2022 at 6:35 PM Micha=C5=82 Winiarski
+<michal.winiarski@intel.com> wrote:
+>
+> Python 3.10.0 contains:
+> 9e09849d20 ("bpo-41006: importlib.util no longer imports typing (GH-20938=
+)")
+>
+> It causes importlib.util to no longer import importlib.abs, which leads
+> to the following error when trying to use kunit with qemu:
+> AttributeError: module 'importlib' has no attribute 'abc'. Did you mean: =
+'_abc'?
+>
+> Add the missing import.
+>
+> Signed-off-by: Micha=C5=82 Winiarski <michal.winiarski@intel.com>
 
-Applied, thanks!
+Thanks!
+
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

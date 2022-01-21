@@ -2,67 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26928495A32
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 07:56:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0E8495A39
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 07:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378835AbiAUG4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 01:56:08 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44568 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245091AbiAUG4F (ORCPT
+        id S1348997AbiAUG7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 01:59:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233755AbiAUG7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 01:56:05 -0500
+        Fri, 21 Jan 2022 01:59:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51499C061574;
+        Thu, 20 Jan 2022 22:59:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2EC9BB81F4F;
-        Fri, 21 Jan 2022 06:56:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DF8D9C340E9;
-        Fri, 21 Jan 2022 06:56:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09A16B81F4F;
+        Fri, 21 Jan 2022 06:59:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE0C6C36AE3;
+        Fri, 21 Jan 2022 06:59:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642748162;
-        bh=lUPkbLjoi7pfPVc4Mn9udZWeK9gfT9EFkIAgpBeop3o=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=uF8AVDA9sVr0T+IBuQWrZ7FUKD4yZbhoLkB0s2zbuthVt8hF34Wb0T1VU0LoBZXYl
-         VT/IwPdCVfismlTAmhS8hz0mz6LRHuBg5EVZJV/LTr4s9hXB/Hf6njhoxvhUkN0C3i
-         ebx29MS0vo9Y2s/7OymEUKnmGXjxjkjkGmXapJOAar0jFqSK3mgDr1aBi3XMIYGBeO
-         dJCRqzRWOeafu6CppEDKsC2QNaFZ9DuGFLYmytT23TMYMG85EZoljvaAziYX+l+tIN
-         SqE7Fwxo0UVjvO9aNFmqJPepw9nAgAdW60Vj5o0Aw5gGr46GvC7zHm45gG2BVGkfOK
-         lQJlmfwKOBPHA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CD9E5F6079C;
-        Fri, 21 Jan 2022 06:56:02 +0000 (UTC)
-Subject: Re: [GIT PULL] xfs: legacy Irix ioctl housecleaning for 5.17-rc1, part 2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220120185920.GP13540@magnolia>
-References: <20220120185920.GP13540@magnolia>
-X-PR-Tracked-List-Id: <linux-xfs.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220120185920.GP13540@magnolia>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.17-merge-6
-X-PR-Tracked-Commit-Id: b3bb9413e717b44e4aea833d07f14e90fb91cf97
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 31d949782e1daf4b329337dd36b2d6d60764fe29
-Message-Id: <164274816283.27527.4445590209473650660.pr-tracker-bot@kernel.org>
-Date:   Fri, 21 Jan 2022 06:56:02 +0000
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        david@fromorbit.com, linux-kernel@vger.kernel.org,
-        sandeen@sandeen.net, hch@lst.de
+        s=k20201202; t=1642748382;
+        bh=4ShAu9TMO9pCCFhxDCpJN37xIb8io+l6Oyhyz+wkc74=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rkWc8GrmU4jDh8MIgKhU1tVmZnCPK978zpVeaoKL9BABXmrLvJhp7qT1axvVYenFf
+         EXl+ILKxghGdYexiqzYSqUGqzgOJdRw9gxLBkPt1lugs/J2H5kUsa8aA2+geA99vJC
+         kLBagAY8ht9vk/XtIQSnuK2KgVnBG1tZNY3D+9ZpekZpAe6KG4Y1gKHuohLVN8Frmz
+         tT2NlAfoov0vkk9BzpknOsIfrUfWc/Co/Jj4RBd96p/9JkewBRZ2gjADB/m/KTeuzB
+         RegN4xP87sZHPeAD0ROhV9YXpgX9yXjHzCBlxEjIP0LlJnVH/PD2rGtIyqpYIfLIwl
+         Ft604c34avssg==
+Received: by mail-vk1-f180.google.com with SMTP id 48so1865315vki.0;
+        Thu, 20 Jan 2022 22:59:42 -0800 (PST)
+X-Gm-Message-State: AOAM5315llELNQu4h1g/U6Q4fRld37XjlC1fehpgLa18vIjiUPleHx0M
+        D4yU8yOl4Dm+pjGRLE8rCwedNF6TvqB6dYLEe2E=
+X-Google-Smtp-Source: ABdhPJzfHGuI3QjQ1xrUHESSAg6lyHrYGXHJnEkduCUf4mRHX9u1+bm5wEa4HeHgEF2DEq8OtNRB3r3xOJW73X//3VQ=
+X-Received: by 2002:ac5:cbc8:: with SMTP id h8mr1146902vkn.8.1642748381690;
+ Thu, 20 Jan 2022 22:59:41 -0800 (PST)
+MIME-Version: 1.0
+References: <20220120073911.99857-7-guoren@kernel.org> <CAK8P3a00uYPBBphpipBoqCnGFwr_C9vDzS1p1iLN==YTVOARug@mail.gmail.com>
+In-Reply-To: <CAK8P3a00uYPBBphpipBoqCnGFwr_C9vDzS1p1iLN==YTVOARug@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 21 Jan 2022 14:59:30 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQVgDkyVdoezsrA4AN=9C7RMOxZBCyLB2JvQkKYsLud3Q@mail.gmail.com>
+Message-ID: <CAJF2gTQVgDkyVdoezsrA4AN=9C7RMOxZBCyLB2JvQkKYsLud3Q@mail.gmail.com>
+Subject: Re: [PATCH V3 06/17] riscv: compat: Add basic compat date type implementation
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup@brainfault.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        inux-parisc@vger.kernel.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 20 Jan 2022 10:59:20 -0800:
+On Thu, Jan 20, 2022 at 5:35 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Thu, Jan 20, 2022 at 8:38 AM <guoren@kernel.org> wrote:
+>
+> > @@ -0,0 +1,136 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +#ifndef __ASM_COMPAT_H
+> > +#define __ASM_COMPAT_H
+> > +
+> > +#define compat_mode_t  compat_mode_t
+> > +typedef u16            compat_mode_t;
+>
+> I think this one is wrong, as rv32 should get the native definition from
+>
+> include/uapi/asm-generic/posix_types.h:typedef unsigned int     __kernel_mode_t;
+>
+> I think it works if you just remove those two lines. The rest looks good to me.
+Yes, you are right. compat_mode_t should be unsigned int.
 
-> git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.17-merge-6
+>
+>        Arnd
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/31d949782e1daf4b329337dd36b2d6d60764fe29
 
-Thank you!
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

@@ -2,189 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E36495BBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 09:18:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 859B9495BC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 09:21:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379473AbiAUISu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 03:18:50 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:48796 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379488AbiAUISd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 03:18:33 -0500
-Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:d916:876:fa52:7241])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B21D21BE5;
-        Fri, 21 Jan 2022 09:18:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1642753102;
-        bh=lBC5b4kV8HrL/lrzJBBA+UGHFsGP4j1YLwAfhDKoIbQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eMu71+o9LBUCQWsyI2dP21AxrgDjEXHdjzjC0W98UHi4RqkzLtWGgOL6sRqYdHKOA
-         FKEfdXg8PE0dg7l0RObJxnaXOvwHizzz+t2Uj3FVMquun5vHzjGT+T/A62mGppy3um
-         dzbnHqSCgbU7paQCUV19DO7TxTSZeVVtzEuDW5LY=
-From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-To:     jeanmichel.hautbois@ideasonboard.com
-Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
-        kernel-list@raspberrypi.com, laurent.pinchart@ideasonboard.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
-        robh@kernel.org, tomi.valkeinen@ideasonboard.com
-Subject: [RFC PATCH v2 7/7] media: bcm283x: Include the imx219 node
-Date:   Fri, 21 Jan 2022 09:18:10 +0100
-Message-Id: <20220121081810.155500-8-jeanmichel.hautbois@ideasonboard.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220121081810.155500-1-jeanmichel.hautbois@ideasonboard.com>
-References: <20220121081810.155500-1-jeanmichel.hautbois@ideasonboard.com>
+        id S1349425AbiAUIVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 03:21:06 -0500
+Received: from mga12.intel.com ([192.55.52.136]:35591 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1379600AbiAUITm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 03:19:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642753181; x=1674289181;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pMiHjvl84QjMhHNHxc4MDB2pjg1jVB5PbjyIBBA0x0o=;
+  b=cMAe2mtqwNxtqWCd9kM5IxNm8flJ4UmEZBAk6vzaTOo83fUVWiIcP/G0
+   gnZYeGxn2h7+OuAPRBOLc1xsh6MEv6vH/gBh2S4z3fpuPUN8j1KU1SnNW
+   VqNCPiub+Xan2H9YM0OkV0YOwCRiiUL1fV1z4ViiQCc4/KpsVpxWkSW/V
+   /4yAx6DHJip7E4QbBwWc5tmjhEeNeXsgbPiVqOMB5fF/Ghlj5eDo9mB87
+   2dbH/Qb9lSaqfILjtjP3U0QzIjhW6QJEd0nzh4ruzSvephMNP/bh0hdWn
+   D5jWwYY4rk507DYOuh8d21hn7IihlsZ/h3W8D2vVRkupkNI2gNhfJq8+X
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="225577999"
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="225577999"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 00:19:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="478165440"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 21 Jan 2022 00:19:39 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nAp90-000F6R-Fu; Fri, 21 Jan 2022 08:19:38 +0000
+Date:   Fri, 21 Jan 2022 16:19:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [bvanassche:scsi-move-scsi-pointer 25/45]
+ drivers/scsi/megaraid.c:1075:9: warning: variable 'scb' is uninitialized
+ when used here
+Message-ID: <202201211656.z3YanySW-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Configure the csi1 endpoint, add the imx219 node and connect it through
-the i2c mux.
+tree:   https://github.com/bvanassche/linux scsi-move-scsi-pointer
+head:   1f9cda056e9fc3b2f08455c8ab1a2d85b52df093
+commit: 7f5c4ca6df22ad432a2631b6cdd374f40a249746 [25/45] megaraid: Stop using the SCSI pointer
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220121/202201211656.z3YanySW-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d4baf3b1322b84816aa623d8e8cb45a49cb68b84)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/bvanassche/linux/commit/7f5c4ca6df22ad432a2631b6cdd374f40a249746
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche scsi-move-scsi-pointer
+        git checkout 7f5c4ca6df22ad432a2631b6cdd374f40a249746
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/scsi/
 
-Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/scsi/megaraid.c:1075:9: warning: variable 'scb' is uninitialized when used here [-Wuninitialized]
+                   if (!(scb->state & SCB_ISSUED) && issue_scb(adapter, scb) != 0)
+                         ^~~
+   drivers/scsi/megaraid.c:1073:13: note: initialize the variable 'scb' to silence this warning
+                   scb_t *scb;
+                             ^
+                              = NULL
+   1 warning generated.
+
+
+vim +/scb +1075 drivers/scsi/megaraid.c
+
+  1065	
+  1066	static void
+  1067	__mega_runpendq(adapter_t *adapter)
+  1068	{
+  1069		struct megaraid_cmd_priv *pos, *next;
+  1070	
+  1071		/* Issue all pending commands to the card */
+  1072		list_for_each_entry_safe(pos, next, &adapter->pending_list, entry) {
+  1073			scb_t *scb;
+  1074	
+> 1075			if (!(scb->state & SCB_ISSUED) && issue_scb(adapter, scb) != 0)
+  1076				return;
+  1077		}
+  1078	}
+  1079	
+
 ---
- MAINTAINERS                               |   1 +
- arch/arm/boot/dts/bcm2711-rpi-4-b.dts     |   1 +
- arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi | 102 ++++++++++++++++++++++
- 3 files changed, 104 insertions(+)
- create mode 100644 arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b17bb533e007..56544ac98d69 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3684,6 +3684,7 @@ M:	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
-+F:	arch/arm/boot/dts/bcm283x*
- F:	drivers/media/platform/bcm2835/
- 
- BROADCOM BCM47XX MIPS ARCHITECTURE
-diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-index 4432412044de..f7625b70fe57 100644
---- a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-+++ b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-@@ -4,6 +4,7 @@
- #include "bcm2711-rpi.dtsi"
- #include "bcm283x-rpi-usb-peripheral.dtsi"
- #include "bcm283x-rpi-wifi-bt.dtsi"
-+#include "bcm283x-rpi-imx219.dtsi"
- 
- / {
- 	compatible = "raspberrypi,4-model-b", "brcm,bcm2711";
-diff --git a/arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi b/arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi
-new file mode 100644
-index 000000000000..f2c6a85fd731
---- /dev/null
-+++ b/arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi
-@@ -0,0 +1,102 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <dt-bindings/clock/bcm2835.h>
-+
-+/ {
-+	compatible = "brcm,bcm2835";
-+
-+	imx219_vdig: fixedregulator@1 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "imx219_vdig";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	imx219_vddl: fixedregulator@2 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "imx219_vddl";
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1200000>;
-+	};
-+
-+	imx219_clk: imx219_clk {
-+		#clock-cells = <0>;
-+		compatible = "fixed-clock";
-+		clock-frequency = <24000000>;
-+		clock-output-names = "24MHz-clock";
-+	};
-+
-+	cam1_reg: cam1_reg {
-+		compatible = "regulator-fixed";
-+		regulator-name = "imx219_vana";
-+		enable-active-high;
-+		status = "okay";
-+		gpio = <&expgpio 5 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	i2c0mux {
-+		compatible = "i2c-mux-pinctrl";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		i2c-parent = <&i2c0>;
-+
-+		pinctrl-names = "i2c0", "i2c_csi_dsi";
-+		pinctrl-0 = <&i2c0_gpio0>;
-+		pinctrl-1 = <&i2c0_gpio44>;
-+
-+		i2c@0 {
-+			reg = <0>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+
-+		i2c@1 {
-+			reg = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			imx219: sensor@10 {
-+				compatible = "sony,imx219";
-+				reg = <0x10>;
-+				status = "okay";
-+
-+				clocks = <&imx219_clk>;
-+				clock-names = "xclk";
-+
-+				VANA-supply = <&cam1_reg>;   /* 2.8v */
-+				VDIG-supply = <&imx219_vdig>;   /* 1.8v */
-+				VDDL-supply = <&imx219_vddl>;   /* 1.2v */
-+
-+				rotation = <0>;
-+				orientation = <0>;
-+
-+				port {
-+					imx219_0: endpoint {
-+						remote-endpoint = <&csi1_ep>;
-+						clock-lanes = <0>;
-+						data-lanes = <1 2>;
-+						clock-noncontinuous;
-+						link-frequencies = /bits/ 64 <456000000>;
-+					};
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&csi1 {
-+	status="okay";
-+	num-data-lanes = <2>;
-+	port {
-+		csi1_ep: endpoint {
-+			remote-endpoint = <&imx219_0>;
-+			data-lanes = <1 2>;
-+			clock-lanes = <0>;
-+		};
-+	};
-+};
-+
-+&i2c0 {
-+	/delete-property/ pinctrl-names;
-+	/delete-property/ pinctrl-0;
-+};
-+
--- 
-2.32.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

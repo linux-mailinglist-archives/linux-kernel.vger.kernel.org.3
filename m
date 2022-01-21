@@ -2,80 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76757495755
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 01:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB999495764
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 01:33:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378392AbiAUA0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 19:26:32 -0500
-Received: from relmlor2.renesas.com ([210.160.252.172]:46707 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230379AbiAUA0b (ORCPT
+        id S1378417AbiAUAdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 19:33:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378409AbiAUAdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 19:26:31 -0500
-X-IronPort-AV: E=Sophos;i="5.88,303,1635174000"; 
-   d="scan'208";a="107746441"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 21 Jan 2022 09:26:29 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 2B3BE4164C09;
-        Fri, 21 Jan 2022 09:26:26 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v3] media: dt-bindings: media: renesas,csi2: Update data-lanes property
-Date:   Fri, 21 Jan 2022 00:26:22 +0000
-Message-Id: <20220121002622.30359-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 20 Jan 2022 19:33:12 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC05BC061401
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 16:33:11 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id r138so11431480oie.3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 16:33:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=NyNgk3CPjgc6t9aE0aaMWYylyTVpP20qG0+Ye/vxBRA=;
+        b=UabHLIDmfF8pq560XtSoAHPvpsAmId2N7WEF4jNg83VvWcmxdnNw3sBhqQvzAoWp7Z
+         ApufAAzNryirOYdovp87Q2ZxMrIQx4EI6RybWU/L1r+L919O2b3JO0SHyfJwaq+i4COR
+         3TgGLUVxBuq8obHOPSYE6Ai02Ow9DdcQ7/STdQsxAwIIVWHft6mlstTHhX5+79QTr0vp
+         2DT2uPnI5cIYI2xDDLnsSTVn1RfIjOFiD76c/5OFbZgLBuqPKCAuHhlp7VvG9aUpoV/g
+         KgFi9yigrZQGez6noV3B+tx83RWvTj+UCKNBjoc8xPG8injw1DzjjqRHkbPo2HWH7y45
+         X6Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=NyNgk3CPjgc6t9aE0aaMWYylyTVpP20qG0+Ye/vxBRA=;
+        b=JbVw0UZ3ACs0q/KfDoO7KxIXsJ6HrvwPuN0gqPAherVg4YCfkvSrcAQfeYbmMxApAE
+         l+9N9UmWL0n5pdgM1Nl6a04kq4n18AggF5OTH1KZMXhFnuBqtR3kF0TMIq3Rsv/Jyz/Q
+         F91vUB6D+7CZpIyaFx0dtCW9LNvq2WyB+39Qm4donTHCAKcAEId9yOFuYg1ZuloSFmtu
+         w+cSNcfTewN6aDl4NsHP9eDah4rlcLjjmyAGSpiIOHK/TFUVaqEWy7SkDG/t1cS0cs+C
+         uIY2zH68xDH4ooyYy7IdCwZViVrgHJ2yAWjUdiyYz4j+Qdy/ytlLtf0ddcsNCU2Kt2TU
+         wpGg==
+X-Gm-Message-State: AOAM53218nLlrVjOUCFi2fn9BUeCQsfbfc0ruSOoXbxS0T0hWp1eFBaB
+        pFgjqF2XAtOqNGlw7byK3HFFukJ0CquUqMyPZ/8=
+X-Google-Smtp-Source: ABdhPJzTu3b8rvoEmBnHPAGC0HjNqYU650ZBeRaNWOI6292a9csHnjq0AAxqc93fnnTnP32OlvhcW5cY4cWhpz2X4Zo=
+X-Received: by 2002:a05:6808:1ca:: with SMTP id x10mr10051381oic.20.1642725191072;
+ Thu, 20 Jan 2022 16:33:11 -0800 (PST)
+MIME-Version: 1.0
+Sender: mgaddafi863@gmail.com
+Received: by 2002:a05:6838:ea2c:0:0:0:0 with HTTP; Thu, 20 Jan 2022 16:33:10
+ -0800 (PST)
+From:   "Mrs.aisha Gaddafi" <aishagaddagfi@gmail.com>
+Date:   Fri, 21 Jan 2022 00:33:10 +0000
+X-Google-Sender-Auth: jTVJqUgux9NgBBwWP7dJniAa1EE
+Message-ID: <CAKUUf1OtiWZpApxBZ9pK+THr193RQ-WOtC6L2hQ75x8NoJk0uQ@mail.gmail.com>
+Subject: Happy new year
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CSI-2 (CSI4LNK0) on R-Car and RZ/G2 supports 4-lane mode which is already
-handled by rcar-csi2.c driver. This patch updates the data-lanes property
-to describe the same.
+--=20
+Happy new year
+I am sending my greetings to you from the Sultanate of Oman, in the
+capital city of Muscat.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
----
-v2->v3
-* Dropped uniqueItems constraint as a patch [0] to schema already exists.
-* Included RB tag from Jacopo
-
-[0] https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20211223191615.17803-13-p.yadav@ti.com/
-
-v1->v2
-* Dropped const items
-* Added uniqueItems
-
-v1:
-https://lore.kernel.org/lkml/20220118163413.ge2b4g75yhfqvq3x@uno.localdomain/T/
----
- Documentation/devicetree/bindings/media/renesas,csi2.yaml | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/media/renesas,csi2.yaml b/Documentation/devicetree/bindings/media/renesas,csi2.yaml
-index e6a036721082..b520d6c5c102 100644
---- a/Documentation/devicetree/bindings/media/renesas,csi2.yaml
-+++ b/Documentation/devicetree/bindings/media/renesas,csi2.yaml
-@@ -67,7 +67,10 @@ properties:
-                 maxItems: 1
- 
-               data-lanes:
--                maxItems: 1
-+                minItems: 1
-+                maxItems: 4
-+                items:
-+                  maximum: 4
- 
-             required:
-               - clock-lanes
--- 
-2.17.1
-
+Note, I come across your e-mail contact prior a private search while
+in need of your assistances.
+May i use this medium to open a mutual communication with you, and
+seeking your acceptance towards investing in your country under your
+management as my partner, My name is Aisha Gaddafi and presently
+living in Oman, i am a Widow and single Mother with three Children,
+the only biological Daughter of late Libyan President (Late Colonel
+Muammar Gaddafi) and presently i am under political asylum protection
+by the Omani Government.
+I have funds worth =E2=80=9CTwenty Seven Million Five Hundred Thousand Unit=
+ed
+State Dollars=E2=80=9D -$27.500.000.00 US Dollars which i want to entrust o=
+n
+you for investment project in your country. If you are willing to
+handle this project on my behalf, kindly reply urgent to enable me
+provide you more details to start the transfer process
+. Please after read this mail try to contact me through this my
+private email address :{ madamgadafiaisha@gmail.com}
+Thanks
+Yours Truly Aisha

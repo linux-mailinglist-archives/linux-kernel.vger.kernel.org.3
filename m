@@ -2,138 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0E6495FEE
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 299AF495FF0
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:47:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380757AbiAUNqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 08:46:12 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:18536 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1380567AbiAUNqJ (ORCPT
+        id S1380763AbiAUNq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 08:46:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380591AbiAUNqw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 08:46:09 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20LBGTPh002895;
-        Fri, 21 Jan 2022 13:46:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=JXyGD+6qyYAPrwJA+4HRaiK0sTCQlCIuJ/AqErjzjN4=;
- b=TQzHbWCC44q+25nLp8fgfQOYMqziD50gC3IZT1ok9yDxsP3bwHNF8iyo8JxgCmk1Oe4r
- dBvEoYLzjrF4rP70sASI7UOFYzNNa80cVfIntoCN3wbRVAQwxpAe74yYhVEFdQf8k7tD
- ZV0y1gLtqL41xEL601gNFJyW7x4ZRJNW3LqDWhYRWaqi9vN1dyqF516YgDM4jKh0M4wl
- 55vZ9lCiYxp8BbExrrlwZewNdjh75nSCyiwOeQ5vt5yDZfzGn1API2kHMQF+RCMORYQ8
- J7TFsFnxV2IbYrxBr0ucUs4IPSO+z11qA/Zcb4gaJCAXm7S81Nlck/Q/2Q3vt8anjq+3 pw== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dqutjtw6x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Jan 2022 13:46:08 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20LDg1LF023181;
-        Fri, 21 Jan 2022 13:46:06 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma01fra.de.ibm.com with ESMTP id 3dqjegcx8h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Jan 2022 13:46:06 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20LDk3Hf43516284
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 21 Jan 2022 13:46:03 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 067F552054;
-        Fri, 21 Jan 2022 13:46:03 +0000 (GMT)
-Received: from [9.171.30.56] (unknown [9.171.30.56])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 9CEEF52059;
-        Fri, 21 Jan 2022 13:46:02 +0000 (GMT)
-Message-ID: <13a03972-0020-b8e7-2fc0-def8a164eb10@linux.ibm.com>
-Date:   Fri, 21 Jan 2022 14:46:02 +0100
+        Fri, 21 Jan 2022 08:46:52 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6F6C061574;
+        Fri, 21 Jan 2022 05:46:52 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id p27so34075515lfa.1;
+        Fri, 21 Jan 2022 05:46:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CbBhtk+FwZeZiOwygU4RpebRe7o9G8cdyJXAclSwLLM=;
+        b=FNlOu2aTk58X7VLO1V57HUjxdnxJrz3XpW4USxal+A4eNLs9bDx4Suukp0bOmgrqev
+         hoDYmKpsyOberf63mUEMZxJHeZsuBCl3nEqP59+TBxNuKL5H6N4jKwb+UsGLRDBAtv8h
+         s60GnDZLpSPtiHbv4AKEGW9XGq1ibyzDUnrlet/8YqpeRY8Amwgb02plVod2yYEktd2n
+         6WgJu7QPKSPn/oMEYL+1ljNOcFNv3BXFwbJW5p7cFM0f6UBKOY5vVutuHHSi5TV0SiSq
+         PJqmAz/zcpytvli5C98+N4kHCYKW8C9t88/lf20LuAuR6tcl//UcFAQp0nfZZhVvj8Hn
+         PWXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CbBhtk+FwZeZiOwygU4RpebRe7o9G8cdyJXAclSwLLM=;
+        b=uuYJ12DD6FNg3TQDkcZiva7dPqqdRswTepF0hG227/Mrfs1xNlzeRiOu/cljhtJERM
+         Yq02C1VbYOQ3nd4/spGDIrs6zifrr53r6OwyJI0HQOOBKlnNTLnW4GgQfVQ4R/pHTyV4
+         2DHUbD+FpFuLyLqNttpn9eHKHq/qpvxo3kjEEsv8eQ1mh/Iv8qn2f3yRiA7jrS42KqLg
+         E81Vz7ZPhCDgNERBn+O9zYKLGZe1KNnSaBWfLt6IB7v2BuJ2GCuUezJrvm83joHA/AAV
+         NAnVw43M3CdZ7vB6qaDsKMFGxS6Wr6gGIzSgVOloAavT2VMIzMfmnW7pHOFLw31CKnOS
+         XohQ==
+X-Gm-Message-State: AOAM533RPzyz4xOiUcXBBd37+AUUTkyOr44WR8Vyb6nUCbOa/Ndvebwn
+        ZjufmAXPeNybihZXtjRTP5A=
+X-Google-Smtp-Source: ABdhPJxdELd84UCu9UZX5X2OOAJO7w4TJhSRCVa3eHg9e+fXNr+QYibXtTTV5U/MRkaiOf8bLkZMFQ==
+X-Received: by 2002:ac2:5e85:: with SMTP id b5mr3841501lfq.0.1642772810532;
+        Fri, 21 Jan 2022 05:46:50 -0800 (PST)
+Received: from localhost ([46.188.51.186])
+        by smtp.gmail.com with ESMTPSA id b5sm258238lft.301.2022.01.21.05.46.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jan 2022 05:46:49 -0800 (PST)
+Date:   Fri, 21 Jan 2022 16:46:40 +0300
+From:   Alexander Fomichev <fomichev.ru@gmail.com>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Mel Gorman <mgorman@suse.de>, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux@yadro.com,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [RFC] Scheduler: DMA Engine regression because of sched/fair
+ changes
+Message-ID: <20220121134640.ghdq3wbwa5jcfplz@yadro.com>
+References: <20220112152609.gg2boujeh5vv5cns@yadro.com>
+ <20220112170512.GO3301@suse.de>
+ <20220117081905.a4pwglxqj7dqpyql@yadro.com>
+ <20220117102701.GQ3301@suse.de>
+ <20220118020448.2399-1-hdanton@sina.com>
+ <20220121101217.2849-1-hdanton@sina.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC PATCH v1 01/10] s390/uaccess: Add storage key checked access
- to user memory
-Content-Language: en-US
-To:     Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Nico Boehr <nrb@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220118095210.1651483-1-scgl@linux.ibm.com>
- <20220118095210.1651483-2-scgl@linux.ibm.com> <YefeakONMN4PLlml@osiris>
- <422595a5-b24b-8760-ff0e-112322142de7@linux.ibm.com>
- <YegQCTqEsiFTUZ2R@osiris>
- <dbfec527-b995-e382-dafa-c3459e1e45ed@linux.ibm.com>
- <YelcCEuVbIg9ND90@osiris> <YemnprCIEjjGFeTn@osiris>
- <b6896b1a-d529-1504-091c-d41287c01dc8@linux.ibm.com>
- <YeqTP6WDbZzEJUbJ@osiris>
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-In-Reply-To: <YeqTP6WDbZzEJUbJ@osiris>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 1J7rmFUY1BDT5y93PM8CZth9xWuTxnVw
-X-Proofpoint-GUID: 1J7rmFUY1BDT5y93PM8CZth9xWuTxnVw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-21_06,2022-01-21_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 lowpriorityscore=0 bulkscore=0 mlxlogscore=999 mlxscore=0
- impostorscore=0 phishscore=0 adultscore=0 clxscore=1015 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201210091
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220121101217.2849-1-hdanton@sina.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/21/22 12:04, Heiko Carstens wrote:
-> On Fri, Jan 21, 2022 at 08:32:25AM +0100, Christian Borntraeger wrote:
->> So in essence adding something like this and then providing raw_copy_from/to_user_key?
->> (whitespace damaged, just pasted in)
->>
->> diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
->> index ac0394087f7d..3b6e78ee211c 100644
->> --- a/include/linux/uaccess.h
->> +++ b/include/linux/uaccess.h
->> @@ -201,6 +201,59 @@ copy_to_user(void __user *to, const void *from, unsigned long n)
->>         return n;
->>  }
->> +
->> +#if defined(__s390x__) && defined(CONFIG_KVM)
->> +/*
->> + * Variants that pass along an access key. Uses by KVM on s390x to implement
->> + * key checks for guests that use storage keys Must be kept in sync with the
->> + * non-key variants from above. The only difference is the _key suffix when
->> + * calling raw_copy_from/to_user_key.
->> + */
+On Fri, Jan 21, 2022 at 06:12:17PM +0800, Hillf Danton wrote:
+> On Wed, 19 Jan 2022 15:55:13 +0300 Alexander Fomichev wrote:
+> >On Tue, Jan 18, 2022 at 10:04:48AM +0800, Hillf Danton wrote:
+> >> On Mon, 17 Jan 2022 20:44:19 +0300 Alexander Fomichev wrote:
+> >> > On Mon, Jan 17, 2022 at 10:27:01AM +0000, Mel Gorman wrote:
+> >> > 
+> >> > -----< v5.15.8-vanilla >-----
+> >> > [17057.866760] dmatest: Added 1 threads using dma0chan0
+> >> > [17060.133880] dmatest: Started 1 threads using dma0chan0
+> >> > [17060.154343] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 49338.85 iops 3157686 KB/s (0)
+> >> > [17063.737887] dmatest: Added 1 threads using dma0chan0
+> >> > [17065.113838] dmatest: Started 1 threads using dma0chan0
+> >> > [17065.137659] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 42183.41 iops 2699738 KB/s (0)
+> >> > [17100.339989] dmatest: Added 1 threads using dma0chan0
+> >> > [17102.190764] dmatest: Started 1 threads using dma0chan0
+> >> > [17102.214285] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 42844.89 iops 2742073 KB/s (0)
+> >> > -----< end >-----
+> >> > 
+> >
+> >Just to remind, used dmatest parameters:
+> >
+> >/sys/module/dmatest/parameters/iterations:1000
+> >/sys/module/dmatest/parameters/alignment:-1
+> >/sys/module/dmatest/parameters/verbose:N
+> >/sys/module/dmatest/parameters/norandom:Y
+> >/sys/module/dmatest/parameters/max_channels:0
+> >/sys/module/dmatest/parameters/dmatest:0
+> >/sys/module/dmatest/parameters/polled:N
+> >/sys/module/dmatest/parameters/threads_per_chan:1
+> >/sys/module/dmatest/parameters/noverify:Y
+> >/sys/module/dmatest/parameters/test_buf_size:1048576
+> >/sys/module/dmatest/parameters/transfer_size:65536
+> >/sys/module/dmatest/parameters/run:N
+> >/sys/module/dmatest/parameters/wait:Y
+> >/sys/module/dmatest/parameters/timeout:2000
+> >/sys/module/dmatest/parameters/xor_sources:3
+> >/sys/module/dmatest/parameters/pq_sources:3
 > 
-> This is too architecture specific, I wouldn't like to see __s390__ or
-> KVM dependencies. This should be a bit more generic, so other
-> architectures _might_ also make use of this interface that is:
 > 
->> +static inline __must_check unsigned long
->> +_copy_from_user_key(void *to, const void __user *from, unsigned long n, u8 key)
+> See if tuning back down 10 degree can close the gap in iops, in the
+> assumption that the prev CPU can be ignored in case of cold cache.
 > 
-> Make key unsigned long, add support for INLINE_COPY_TO_USER, and maybe
-> add a wrapper, so this works on all architectures, e.g. if
-> raw_copy_to_user_key() is not defined, then fall back to
-> raw_copy_to_user() and ignore the key parameter.
+> Also want to see the diff in output of "cat /proc/interrupts" before
+> and after dmatest, wondering if the dma irq is bond to a CPU core of
+> dancing on several ones.
 > 
+> Hillf
+> 
+> +++ x/kernel/sched/fair.c
+> @@ -5888,20 +5888,10 @@ static int wake_wide(struct task_struct
+>  static int
+>  wake_affine_idle(int this_cpu, int prev_cpu, int sync)
+>  {
+> -	/*
+> -	 * If this_cpu is idle, it implies the wakeup is from interrupt
+> -	 * context. Only allow the move if cache is shared. Otherwise an
+> -	 * interrupt intensive workload could force all tasks onto one
+> -	 * node depending on the IO topology or IRQ affinity settings.
+> -	 *
+> -	 * If the prev_cpu is idle and cache affine then avoid a migration.
+> -	 * There is no guarantee that the cache hot data from an interrupt
+> -	 * is more important than cache hot data on the prev_cpu and from
+> -	 * a cpufreq perspective, it's better to have higher utilisation
+> -	 * on one CPU.
+> -	 */
+> -	if (available_idle_cpu(this_cpu) && cpus_share_cache(this_cpu, prev_cpu))
+> -		return available_idle_cpu(prev_cpu) ? prev_cpu : this_cpu;
+> +	/* select this cpu because of cold cache */
+> +	if (cpus_share_cache(this_cpu, prev_cpu))
+> +		if (available_idle_cpu(this_cpu))
+> +			return this_cpu;
+>  
+>  	if (sync && cpu_rq(this_cpu)->nr_running == 1)
+>  		return this_cpu;
+> --
 
-Since we only need the double underscore variants, even if we're going to be more
-general than we need to be, we can restrict ourselves to those, can't we?
+Hi Hillf,
 
-I don't understand your comment about the wrapper. You'd want an error on misuse,
-that is, if you try to use a _with_key function if the functionality is not defined, no?
+Thanks for the information.
+With the recent patch (I called it patch2) the results are following:
 
-I see the following possibilities:
- 1. raw_copy_from/to_user is declared by each architecture.
-    Mirror that for raw_copy_from/to_user_with_key.
-    Linker error on misuse.
- 2. Opt in with #define UACCESS_WITH_KEY or similar.
-    Undeclared function on misuse.
- 3. Opt in by requiring that raw_copy_from/to_user_with_key are macros.
-    Undeclared function on misuse.
- 4. Declare raw_copy_from/to_user_with_key in include/linux/uacess.h.
-    Linker error on misuse.
+-----< 5.15.8-Hillf-Danton-patch2+ noverify=Y >-----
+[  646.568455] dmatest: Added 1 threads using dma0chan0
+[  661.127077] dmatest: Started 1 threads using dma0chan0
+[  661.147156] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 50251.25 iops 3216080 KB/s (0)
+[  675.132323] dmatest: Added 1 threads using dma0chan0
+[  676.205829] dmatest: Started 1 threads using dma0chan0
+[  676.225991] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 50022.50 iops 3201440 KB/s (0)
+[  703.100813] dmatest: Added 1 threads using dma0chan0
+[  704.933579] dmatest: Started 1 threads using dma0chan0
+[  704.953733] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 49950.04 iops 3196803 KB/s (0)
+-----< end >-----
+
+Also I have re-run the test with 'noverify=N' option, just for
+illustration.
+
+-----< 5.15.8-Hillf-Danton-patch2+ noverify=N >-----
+[ 1614.739687] dmatest: Added 1 threads using dma0chan0
+[ 1620.346536] dmatest: Started 1 threads using dma0chan0
+[ 1623.254880] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 23544.92 iops 1506875 KB/s (0)
+[ 1634.974200] dmatest: Added 1 threads using dma0chan0
+[ 1635.981532] dmatest: Started 1 threads using dma0chan0
+[ 1638.892182] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 23703.98 iops 1517055 KB/s (0)
+[ 1652.878143] dmatest: Added 1 threads using dma0chan0
+[ 1655.235130] dmatest: Started 1 threads using dma0chan0
+[ 1658.143206] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 23526.64 iops 1505705 KB/s (0)
+-----< end >-----
+
+/proc/interrupts changes before/after the test:
+
+-----< interrupts.diff >-----
+- 184:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0       6000          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI 103813120-edge      0000:c6:00.2
++ 184:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0       9000          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI 103813120-edge      0000:c6:00.2
+-----< end >-----
+
+It looks like the MSI handler is called on the same CPU all the time.
+
+-- 
+Regards,
+  Alexander

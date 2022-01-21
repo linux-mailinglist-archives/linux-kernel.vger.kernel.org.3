@@ -2,73 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C5F495E87
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 12:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F40D9495E89
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 12:46:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380212AbiAULoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 06:44:13 -0500
-Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:45428 "EHLO
-        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245752AbiAULoL (ORCPT
+        id S234402AbiAULqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 06:46:25 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:45436 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232797AbiAULqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 06:44:11 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R871e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V2RLK.V_1642765433;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V2RLK.V_1642765433)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 21 Jan 2022 19:43:57 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     clm@fb.com
-Cc:     josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH v2] btrfs: zoned: Remove redundant initialization of to_add
-Date:   Fri, 21 Jan 2022 19:43:51 +0800
-Message-Id: <20220121114351.93220-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Fri, 21 Jan 2022 06:46:23 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id E4FBD1F45D2F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1642765581;
+        bh=BaeBPWQQLy8TR0zWndGX80fxT+ee71mjcJucVO2+uYQ=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=fQxyUyYCryV+CGfTGU3W68Ul5GIQKr6bHvhHFOeFLcsg9vNn/6pOzSE2uRN0P47eV
+         YgnXTN94rEfrWlUzpR9WrHA9afTXl7VvbTqF+xWtVA7bl3W9Zd9tVuWnI7v6S0FNJV
+         waDZzay12MA1d6KoD6CKeZbcHl3A4n1V30Z187YQ0seGtLaBRaTFSo34JlXptlMXgR
+         K4ki/3NDpwcta9IL/MBY9nt35zJPb+Ez+8ZbF7wbZopU2AXvO0HT9dzGXqzeBpGCcq
+         CstVgUC0Zxgj2UgOhfnzLByHzude5vxdNzYPbc96r8WxtuZjcLidunmeUnddLMjSDr
+         gBdtgO+gsmQzQ==
+Subject: Re: [PATCH] arm64: dts: mt8183: jacuzzi: Fix bus properties in anx's
+ DSI endpoint
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Xin Ji <xji@analogixsemi.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20220120224204.773117-1-nfraprado@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <29069a98-a839-4fb6-5b83-7877402aaf30@collabora.com>
+Date:   Fri, 21 Jan 2022 12:46:17 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
+In-Reply-To: <20220120224204.773117-1-nfraprado@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-to_add is being initialized to len but this is never read as
-to_add is overwritten later on. Remove the redundant
-initialization.
+Il 20/01/22 23:42, Nícolas F. R. A. Prado ha scritto:
+> mt8183-kukui-jacuzzi has an anx7625 bridge connected to the output of
+> its DSI host. However, after fd0310b6fe7d ("drm/bridge: anx7625: add
+> MIPI DPI input feature"), a bus-type property started being required in
+> the endpoint node by the driver to indicate whether it is DSI or DPI.
+> 
+> Add the missing bus-type property and set it to 5
+> (V4L2_FWNODE_BUS_TYPE_PARALLEL) so that the driver has its input
+> configured to DSI and the display pipeline can probe correctly.
+> 
+> While at it, also set the data-lanes property that was also introduced
+> in that same commit, so that we don't rely on the default value.
+> 
+> Fixes: fd0310b6fe7d ("drm/bridge: anx7625: add MIPI DPI input feature")
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Cleans up the following clang-analyzer warning:
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-fs/btrfs/extent-tree.c:2769:8: warning: Value stored to 'to_add' during
-its initialization is never read [clang-analyzer-deadcode.DeadStores].
-
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
-Changes in v2:
-  -"to_add" is define within the if (!global_rsv->full) branch.
-
- fs/btrfs/extent-tree.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/fs/btrfs/extent-tree.c b/fs/btrfs/extent-tree.c
-index d89273c4b6b8..8e91adbf352e 100644
---- a/fs/btrfs/extent-tree.c
-+++ b/fs/btrfs/extent-tree.c
-@@ -2766,12 +2766,10 @@ static int unpin_extent_range(struct btrfs_fs_info *fs_info,
- 		spin_unlock(&cache->lock);
- 		if (!readonly && return_free_space &&
- 		    global_rsv->space_info == space_info) {
--			u64 to_add = len;
--
- 			spin_lock(&global_rsv->lock);
- 			if (!global_rsv->full) {
--				to_add = min(len, global_rsv->size -
--					     global_rsv->reserved);
-+				u64 to_add = min(len, global_rsv->size -
-+						 global_rsv->reserved);
- 				global_rsv->reserved += to_add;
- 				btrfs_space_info_update_bytes_may_use(fs_info,
- 						space_info, to_add);
--- 
-2.20.1.7.g153144c
-
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
+> index 8f7bf33f607d..e8f133dc96b9 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
+> @@ -171,6 +171,8 @@ port@0 {
+>   
+>   			anx7625_in: endpoint {
+>   				remote-endpoint = <&dsi_out>;
+> +				bus-type = <5>;
+> +				data-lanes = <0 1 2 3>;
+>   			};
+>   		};
+>   
+> 

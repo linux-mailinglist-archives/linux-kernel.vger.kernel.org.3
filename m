@@ -2,201 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CAEB495FFC
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16031495FFE
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:53:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380780AbiAUNul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 08:50:41 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:22422 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1350479AbiAUNud (ORCPT
+        id S1380783AbiAUNxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 08:53:04 -0500
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:54113 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1350479AbiAUNxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 08:50:33 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20LDgC3n017387;
-        Fri, 21 Jan 2022 13:50:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=O+zsEh10iv4ltaOecp/Lq/UMv/BhS8YHn1EmaRaVRZM=;
- b=WexoyTYow3B5IxYf/TboM+5zq3AbKlISYCYXmnRR25jotQF7xic7KgfhWaOpfZfwV0kg
- v1fj/L5ZlKfl+7E1dbA/7qQafQDCUG4hCxhlKeG3SDdAjwIareSaVHpbo5/YT/nPECMh
- 81yWbTNGq7MuVdtTdiJGKvtLfHMdMAmfUORDSMWUGUkwJQAlhqZKjYfQSOcQQeTiFsWi
- CSRLo+f/ajkA9nSurTymBQiZ2HYuYpdjFAqMdChHiRBdUoD6UMpC/HZJqbp0hSeM0P6i
- Vsk4O0JpvB+kaRWKn/HfDA5XQDwrEDBnqJXhPIi/WG3i3LDg+hFJ+Nr/hVp7DAn/fc3D Vw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dqwxjr5rn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Jan 2022 13:50:32 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20LDgwMP022136;
-        Fri, 21 Jan 2022 13:50:32 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dqwxjr5qy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Jan 2022 13:50:32 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20LDmFPJ015729;
-        Fri, 21 Jan 2022 13:50:30 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3dqjdpn6as-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Jan 2022 13:50:29 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20LDoQ5225362782
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 21 Jan 2022 13:50:26 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ECD5552050;
-        Fri, 21 Jan 2022 13:50:25 +0000 (GMT)
-Received: from [9.171.30.56] (unknown [9.171.30.56])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 99ACB5205A;
-        Fri, 21 Jan 2022 13:50:25 +0000 (GMT)
-Message-ID: <1bd19f35-aaa1-1668-60ec-14b999b8e4e2@linux.ibm.com>
-Date:   Fri, 21 Jan 2022 14:50:25 +0100
+        Fri, 21 Jan 2022 08:53:04 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 355215C017F;
+        Fri, 21 Jan 2022 08:53:03 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 21 Jan 2022 08:53:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm2; bh=E
+        /aRI1zfgR2kllXwrKq4YlOKAvrqWI1O7a4EaQdHg5U=; b=Wb2NSsIE4wwAxBMtR
+        ES8omR+gxXK9c/GnbdkzB/GFyIfEwLDuA0dM7bl89xobrwvWGjuFMqPV5BTjPKyZ
+        VnrtPlfX5zqllLU45E/ixUJOJbda036sVUzHjYoPWF5Ul65+p3ik1vz7QtX55DHQ
+        WWkI/2dxaSj5BnJYnyHTRA6LVx4uNRNAIfdvlG7P4NGPWMiUUoKE/Y2eSoLYb5Zm
+        4O3xOSKwlBoagbawrX89RAkr1fJfagjp7tZiU0iWqJ29AmwMMlpafIJiE/roqOhy
+        ubVFHeaqt+uE29dcorfu8XwyLXZ5RQEsoTxZvPGWBD6MEuvzk6b8Y7/zHMYYG5xe
+        DDH0g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=E/aRI1zfgR2kllXwrKq4YlOKAvrqWI1O7a4EaQdHg
+        5U=; b=iAwnIayoT3eCJQkYy3y9BXu3T+t46VjKWPUSX2vRsy9QC1WunyXbHJgot
+        eDgtXS/SMo3NJkecEavt+HQru/Pqdh3nGny9h2vbHDbCk27gZIxFdrh+/n6YlRSc
+        Xie2DUK8jwSygnH7cB5YhVdj0h53qSu3NGkR4xe0SHABFD8S0dCouJLULwpRrC8C
+        AWAt12cVRUZu2glHaouKTzQXOztVVN3GFXOnjNvhI0VkcR+3uVqblfvpKKH41Ytk
+        CS4y+gu0+rHannDv5g3Qq3ZkkzYysX/EXKfd6UynQg5CX+XkW6889T48aWjycP9g
+        +2HQUz8vVPygegeA37g1UIlnKbGxA==
+X-ME-Sender: <xms:vrrqYVuZGzxuwIFipmdbKcJQT1pfONJ1aWmlCVKvAI6FMi1aAzFK8g>
+    <xme:vrrqYecpYvU7tGW7ud4JUp7Ud0VSWKextKNTuTjkYBv6iXXUZwlfZ2T6v0_XjMrlP
+    CHSqI6KfEBJlQ>
+X-ME-Received: <xmr:vrrqYYy5xZYDJqiFWD-0FleWt5eMUwyj0ODy9WfOcZf_Snfndpp9US41DJ1u62CcjwCyUzVSf81SQ3te4FIb3yHj1pFc79Oc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvddtgdehiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkgggtugesthdtredttddtvdenucfhrhhomhepifhrvghgucfmjfcu
+    oehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepvedugeeuffelge
+    ekhfehtdefhfekffdtgedvteeitddvieduhfekheekueehleelnecuffhomhgrihhnpehk
+    rhhorghhrdgtohhmpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:vrrqYcM015DlWt3OyobniwiQu2bGbtXP9RtfJuh7u8toQQA5BjYYTA>
+    <xmx:vrrqYV9tEP_uVZNSehopCjtVI6IFfoSmztT1ixq_CUrZufJEpf52BA>
+    <xmx:vrrqYcWHvBKPsLr_2szJ1qFbbMEGZT393V5ZSZ7sLiRtcZ53u7vRiA>
+    <xmx:v7rqYRazPJHcW-Wrm8nkesZbuDqcPDcxg0Z4nsWLZKMDMgMmsLWSrQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 21 Jan 2022 08:53:02 -0500 (EST)
+Date:   Fri, 21 Jan 2022 14:53:00 +0100
+From:   Greg KH <greg@kroah.com>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Matthias Gerstner <mgerstner@suse.de>
+Subject: usbview 2.2 release
+Message-ID: <Yeq6vM/m3JFAdmg7@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC PATCH v1 04/10] KVM: s390: selftests: Test TEST PROTECTION
- emulation
-Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20220118095210.1651483-1-scgl@linux.ibm.com>
- <20220118095210.1651483-5-scgl@linux.ibm.com>
- <c5ce5d0b-444b-ba33-a670-3bd3893af475@linux.ibm.com>
- <06422388-8389-6954-00c7-7b582b4cf1bb@linux.ibm.com>
- <20220121132801.12ea572f@p-imbrenda>
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-In-Reply-To: <20220121132801.12ea572f@p-imbrenda>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: jR3cGsM2MG5NDoDjLwFFguK8WhEyXniz
-X-Proofpoint-ORIG-GUID: u3sLOEDWebyD0b2qnhKMRClvDgZSoRrx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-21_06,2022-01-21_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- phishscore=0 spamscore=0 clxscore=1015 malwarescore=0 bulkscore=0
- mlxlogscore=999 suspectscore=0 impostorscore=0 lowpriorityscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201210091
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/21/22 13:28, Claudio Imbrenda wrote:
-> On Fri, 21 Jan 2022 12:03:20 +0100
-> Janis Schoetterl-Glausch <scgl@linux.ibm.com> wrote:
-> 
-> [...]
-> 
->>>> +
->>>> +static int set_storage_key(void *addr, uint8_t key)
->>>> +{
->>>> +    int not_mapped = 0;
->>>> +  
->>>
->>> Maybe add a short comment:
->>> Check if address is mapped via lra and set the storage key if it is.
->>>   
->>>> +    asm volatile (
->>>> +               "lra    %[addr], 0(0,%[addr])\n"
->>>> +        "    jz    0f\n"
->>>> +        "    llill    %[not_mapped],1\n"
->>>> +        "    j    1f\n"
->>>> +        "0:    sske    %[key], %[addr]\n"
->>>> +        "1:"
->>>> +        : [addr] "+&a" (addr), [not_mapped] "+r" (not_mapped)  
->>>
->>> Shouldn't this be a "=r" instead of a "+r" for not_mapped?  
->>
->> I don't think so. We only write to it on one code path and the compiler mustn't conclude
->> that it can remove the = 0 assignment because the value gets overwritten anyway.
->>
->> Initially I tried to implement the function like this:
->>
->> static int set_storage_key(void *addr, uint8_t key)
->> {
->>         asm goto ("lra  %[addr], 0(0,%[addr])\n\t"
->>                   "jnz  %l[not_mapped]\n\t"
->>                   "sske %[key], %[addr]\n"
->>                 : [addr] "+&a" (addr)
->>                 : [key] "r" (key)
->>                 : "cc", "memory"
->>                 : not_mapped
->>         );
->>         return 0;
->> not_mapped:
->>         return -1;
->> }
->>
->> Which I think is nicer, but the compiler just optimized that completely away.
->> I have no clue why it (thinks it) is allowed to do that.
->>
->>>   
->>>> +        : [key] "r" (key)
->>>> +        : "cc"
->>>> +    );
->>>> +    return -not_mapped;
->>>> +}
->>>> +
->>>> +enum permission {
->>>> +    READ_WRITE = 0,
->>>> +    READ = 1,
->>>> +    NONE = 2,
->>>> +    UNAVAILABLE = 3,  
->>>
->>> TRANSLATION_NA ?
->>> I'm not completely happy with these names but I've yet to come up with a better naming scheme here.  
->>
->> Mentioning translation is a good idea. Don't think there is any harm in using
->> TRANSLATION_NOT_AVAILABLE or TRANSLATION_UNAVAILABLE.
-> 
-> it's too long, it actually makes the code harder to read when used
-> 
-> maybe consider something like TRANSL_UNAVAIL as well
+There's a new version of usbview that is now released.  If you are
+building/running from source, this isn't that big of a change, but if
+you are a distro packager, this is a big deal as it fixes an issue with
+pollkit that could cause bad issues due to some root privileges being
+needed for the program to run well.  This fixes CVE-2022-23220 and many
+thanks to Matthias Gerstner of the SUSE security team for finding and
+fixing these issues.
 
-Fine with me. I'll rename NONE to RW_PROTECTED. NONE is too nondescript.
-> 
->>>   
->>>> +};
->>>> +
->>>> +static enum permission test_protection(void *addr, uint8_t key)
->>>> +{
->>>> +    uint64_t mask;
->>>> +
->>>> +    asm volatile (
->>>> +               "tprot    %[addr], 0(%[key])\n"
->>>> +        "    ipm    %[mask]\n"
->>>> +        : [mask] "=r" (mask)
->>>> +        : [addr] "Q" (*(char *)addr),
->>>> +          [key] "a" (key)
->>>> +        : "cc"
->>>> +    );
->>>> +
->>>> +    return (enum permission)mask >> 28;  
->>>
->>> You could replace the shift with the "srl" that we normally do.  
->>
->> I prefer keeping the asm as small as possible, C is just so much easier to understand.
-> 
-> we use srl everywhere, but I agree that explicitly using C makes it
-> less obscure. and in the end the compiler should generate the same
-> instructions anyway.
-> 
-> my only comment about the above code is that you are casting the
-> uint64_t to enum permission _and then_ shifting. _technically_ it
-> should still work (enums are just ints), but I think it would
-> look cleaner if you write
-> 
-> 	return (enum permission)(mask >> 28);
+The package can be downloaded at:
+	http://www.kroah.com/linux/usb/usbview-2.2.tar.gz
+and the git tree can be found at:
+	http://github.com/gregkh/usbview
 
-That is better indeed.
+Note, the requirement of root access for this tool is a story of how
+systems evolve over time.  When this tool was first written, back in
+1999, 'devices' file in usbdevfs (now usbfs), which was readable by
+anyone.  Then that file moved out of usbdevfs and into debugfs, which
+was mounted at /sys/kernel/debug/ and still readable by anyone.
 
-[...]
+Then, distros started to lock down debugfs and would only allow programs
+that had root access to read from it, which required usbview to also
+require such access.  This really is silly given that the same
+information, if not more, is available to anyone who uses 'lsusb' or
+libusb as usb device information is not restricted.  But usbview was
+never touched, and so it still required such access, which was noticed
+by SUSE and hence the security audit.
+
+I have a hacked up rewrite of the tool in a branch in the git tree that
+does not require root access, and will be polishing this up and should
+do a new release with that change in a few days.  But for now, the above
+security fix should be sufficient for distros that currently ship the
+package and use the polkit configuration file.
+
+thanks,
+
+greg k-h
+
+-------
+version 2.2
+        - security issue fixed with polkit (CVE-2022-23220).
+        - copyright year fixups and updates
+        - tooltip added to explain red devices have no attached drivers

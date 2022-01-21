@@ -2,180 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A8849582D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 03:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A06495831
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 03:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378486AbiAUCVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 21:21:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51126 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348465AbiAUCVT (ORCPT
+        id S1378495AbiAUCWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 21:22:03 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36896 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348465AbiAUCWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 21:21:19 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA40DC06173F
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 18:21:18 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id m3so28932645lfu.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 18:21:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=90SUwfZKnXAN2kM8GActo5Koq5JSCVfHKRRzgtkh5Os=;
-        b=k41BhGLhKcQl33sjtk33LyRdUWfPbdGkg2+xYsaQP1bZcwv6NvVelCFt09dvXXlM/E
-         LR2VgnNKeXQnlubrwXg/fRlKBaiomOtFGb2upZd8Uc3pHkOOy1Nq6dnia7X+Lay85xTM
-         GOKJ9KMsNIgvt3VE1PaHwh3vXNUZ8URxwiKJntcFTa60dzZS66aLQEdpup9SAhT24yTj
-         UkpmilzA5C9FmX0W2IT1WW5yNuLaTu5hjsIzHhf2scfRXGabfT7astzzgPRRByydQbrQ
-         jCSLlqjnLqLipVYhrEqnwiBT3TjRa9iWZxh4oXD7eTX6ysIpjgAVCXQ3E4kJwHfGmwVR
-         RR8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=90SUwfZKnXAN2kM8GActo5Koq5JSCVfHKRRzgtkh5Os=;
-        b=WVtc2CajlPiYT6x+5LpUtx/Jz5mtdJ0oxYI1ApQd9mjnMUCfJmr/zpHmd5A+XbfMcB
-         N9UKviqXSZV6DEh4XZY2AEu/y/TNmzKXXjirZ+wNddlAvfrq+UkMhra3CtuW3z7ollN4
-         bdTnstAJ8urIIyEsOWrOC+n/9jZWnzO3Dm9d1Ze/GfzBjFc6bf/NsjubXrI1meMm9UGx
-         zELM9FsR6qqx6D5WK6z/VNs9cEUpevYDRBakoQFGQyonJ6LaVIfGUZ58QBr//EVn7GAK
-         Il8LewhGp8EKJWYS3AsMNHAU33qXPpe5N0XZAXUl45Hnyd6b2XtN+wijwPHjV3qC6GTv
-         wd8w==
-X-Gm-Message-State: AOAM533eTkFR6E6zQYsfsqI/2mHrFkhxNCEBmKX04jEWQKWwi3/6NI15
-        LFv88QbBGqP75QA0kELKKlhXu1R7OYR4Jq7lx2NRzQ==
-X-Google-Smtp-Source: ABdhPJzdiyBatU0LrtK6uPQFcURsoMznYoQLlvhCGLJzKacKUwAKALkzsj/4DLWi17fzhN4g+L7w7jNO0lwJlq2yRAo=
-X-Received: by 2002:a05:6512:1114:: with SMTP id l20mr1955215lfg.410.1642731676933;
- Thu, 20 Jan 2022 18:21:16 -0800 (PST)
+        Thu, 20 Jan 2022 21:22:03 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A97D60AF7;
+        Fri, 21 Jan 2022 02:22:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA1A6C340E0;
+        Fri, 21 Jan 2022 02:22:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642731722;
+        bh=Ib+VTbQ6ifDdK93Yrsa7iKnj1Orhw5IdSp6Qa3JMJnQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UWQID3dOoEeuy/VyEJaIPm8nXOCwL1j8Uyqea1A4WJZSjpeCvnAhqI5nhA2hNwhdX
+         EKGl8xibiNh7CFEtwRqEk7oE7SqIVG79JVcULOvzMavGBwnh0CMHlSE4/FYVNNsv9g
+         lQ9Jono3igXtvjZeou7BfVW597dRTyUTKIWUwXRHwRQic5kgpMLlGNZ1H899LMFR0q
+         78Fwuv2NRT+SlfeGeaTdYbRYt99giFZzWIrVKaXq1c1w7iBESemP2mYURrjWZOjFS9
+         s2ocsZKkPjjbZGCEP49TtcdoHsfYPs8jiqw9YrA06lAZoqeCu13+m5Lqf/G8jret3l
+         +ISlNdqZspUKQ==
+Date:   Thu, 20 Jan 2022 18:22:00 -0800
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        david <david@fromorbit.com>, Jane Chu <jane.chu@oracle.com>
+Subject: Re: [PATCH v9 02/10] dax: Introduce holder for dax_device
+Message-ID: <20220121022200.GG13563@magnolia>
+References: <20220105181230.GC398655@magnolia>
+ <CAPcyv4iTaneUgdBPnqcvLr4Y_nAxQp31ZdUNkSRPsQ=9CpMWHg@mail.gmail.com>
+ <20220105185626.GE398655@magnolia>
+ <CAPcyv4h3M9f1-C5e9kHTfPaRYR_zN4gzQWgR+ZyhNmG_SL-u+A@mail.gmail.com>
+ <20220105224727.GG398655@magnolia>
+ <CAPcyv4iZ88FPeZC1rt_bNdWHDZ5oh7ua31NuET2-oZ1UcMrH2Q@mail.gmail.com>
+ <20220105235407.GN656707@magnolia>
+ <CAPcyv4gUmpDnGkhd+WdhcJVMP07u+CT8NXRjzcOTp5KF-5Yo5g@mail.gmail.com>
+ <YekhXENAEYJJNy7e@infradead.org>
+ <76f5ed28-2df9-890e-0674-3ef2f18e2c2f@fujitsu.com>
 MIME-Version: 1.0
-References: <0d0b0a3ad703f5ef50611e2dd80439675bda666a.1642383007.git.zong.li@sifive.com>
- <mhng-5b3e2596-3558-4534-9229-26885ee4cc5c@palmer-ri-x1c9>
-In-Reply-To: <mhng-5b3e2596-3558-4534-9229-26885ee4cc5c@palmer-ri-x1c9>
-From:   Zong Li <zong.li@sifive.com>
-Date:   Fri, 21 Jan 2022 10:21:05 +0800
-Message-ID: <CANXhq0ruGxjO0WPUipzZ7QQM1oEapyHAvb_aVQ_CMqVxbjc_BQ@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] dmaengine: sf-pdma: Get number of channel by
- device tree
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Bin Meng <bin.meng@windriver.com>,
-        Green Wan <green.wan@sifive.com>, Vinod <vkoul@kernel.org>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <76f5ed28-2df9-890e-0674-3ef2f18e2c2f@fujitsu.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 2:52 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->
-> On Sun, 16 Jan 2022 17:35:28 PST (-0800), zong.li@sifive.com wrote:
-> > It currently assumes that there are always four channels, it would
-> > cause the error if there is actually less than four channels. Change
-> > that by getting number of channel from device tree.
-> >
-> > For backwards-compatible, it uses the default value (i.e. 4) when there
-> > is no 'dma-channels' information in dts.
->
-> Some of the same wording issues here as those I pointed out in the DT
-> bindings patch.
->
-> > Signed-off-by: Zong Li <zong.li@sifive.com>
-> > ---
-> >  drivers/dma/sf-pdma/sf-pdma.c | 20 +++++++++++++-------
-> >  drivers/dma/sf-pdma/sf-pdma.h |  8 ++------
-> >  2 files changed, 15 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/drivers/dma/sf-pdma/sf-pdma.c b/drivers/dma/sf-pdma/sf-pdma.c
-> > index f12606aeff87..1264add9897e 100644
-> > --- a/drivers/dma/sf-pdma/sf-pdma.c
-> > +++ b/drivers/dma/sf-pdma/sf-pdma.c
-> > @@ -482,9 +482,7 @@ static void sf_pdma_setup_chans(struct sf_pdma *pdma)
-> >  static int sf_pdma_probe(struct platform_device *pdev)
-> >  {
-> >       struct sf_pdma *pdma;
-> > -     struct sf_pdma_chan *chan;
-> >       struct resource *res;
-> > -     int len, chans;
-> >       int ret;
-> >       const enum dma_slave_buswidth widths =
-> >               DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
-> > @@ -492,13 +490,21 @@ static int sf_pdma_probe(struct platform_device *pdev)
-> >               DMA_SLAVE_BUSWIDTH_16_BYTES | DMA_SLAVE_BUSWIDTH_32_BYTES |
-> >               DMA_SLAVE_BUSWIDTH_64_BYTES;
-> >
-> > -     chans = PDMA_NR_CH;
-> > -     len = sizeof(*pdma) + sizeof(*chan) * chans;
-> > -     pdma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
-> > +     pdma = devm_kzalloc(&pdev->dev, sizeof(*pdma), GFP_KERNEL);
-> >       if (!pdma)
-> >               return -ENOMEM;
-> >
-> > -     pdma->n_chans = chans;
-> > +     ret = of_property_read_u32(pdev->dev.of_node, "dma-channels",
-> > +                                &pdma->n_chans);
-> > +     if (ret) {
-> > +             dev_notice(&pdev->dev, "set number of channels to default value: 4\n");
-> > +             pdma->n_chans = PDMA_MAX_NR_CH;
-> > +     }
-> > +
-> > +     if (pdma->n_chans > PDMA_MAX_NR_CH) {
-> > +             dev_err(&pdev->dev, "the number of channels exceeds the maximum\n");
-> > +             return -EINVAL;
->
-> Can we get away with just using only the number of channels the driver
-> actually supports?  ie, just never sending an op to the channels above
-> MAX_NR_CH?  That should leave us with nothing to track.
+On Fri, Jan 21, 2022 at 09:26:52AM +0800, Shiyang Ruan wrote:
+> 
+> 
+> 在 2022/1/20 16:46, Christoph Hellwig 写道:
+> > On Wed, Jan 05, 2022 at 04:12:04PM -0800, Dan Williams wrote:
+> > > We ended up with explicit callbacks after hch balked at a notifier
+> > > call-chain, but I think we're back to that now. The partition mistake
+> > > might be unfixable, but at least bdev_dax_pgoff() is dead. Notifier
+> > > call chains have their own locking so, Ruan, this still does not need
+> > > to touch dax_read_lock().
+> > 
+> > I think we have a few options here:
+> > 
+> >   (1) don't allow error notifications on partitions.  And error return from
+> >       the holder registration with proper error handling in the file
+> >       system would give us that
 
-It might be a bit like when pdma->n_chans is bigger than the maximum,
-set the pdma->chans to PDMA_MAX_NR_CH, then we could ensure that we
-don't access the channels above the maximum. If I understand
-correctly, I gave the similar thought in the thread of v2 patch, and
-there are some discussions on that, but this way seems to lead to
-hard-to-track problems.
+Hm, so that means XFS can only support dax+pmem when there aren't
+partitions in use?  Ew.
 
->
-> > +     }
-> >
-> >       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> >       pdma->membase = devm_ioremap_resource(&pdev->dev, res);
-> > @@ -556,7 +562,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
-> >       struct sf_pdma_chan *ch;
-> >       int i;
-> >
-> > -     for (i = 0; i < PDMA_NR_CH; i++) {
-> > +     for (i = 0; i < pdma->n_chans; i++) {
-> >               ch = &pdma->chans[i];
-> >
-> >               devm_free_irq(&pdev->dev, ch->txirq, ch);
-> > diff --git a/drivers/dma/sf-pdma/sf-pdma.h b/drivers/dma/sf-pdma/sf-pdma.h
-> > index 0c20167b097d..8127d792f639 100644
-> > --- a/drivers/dma/sf-pdma/sf-pdma.h
-> > +++ b/drivers/dma/sf-pdma/sf-pdma.h
-> > @@ -22,11 +22,7 @@
-> >  #include "../dmaengine.h"
-> >  #include "../virt-dma.h"
-> >
-> > -#define PDMA_NR_CH                                   4
-> > -
-> > -#if (PDMA_NR_CH != 4)
-> > -#error "Please define PDMA_NR_CH to 4"
-> > -#endif
-> > +#define PDMA_MAX_NR_CH                                       4
-> >
-> >  #define PDMA_BASE_ADDR                                       0x3000000
-> >  #define PDMA_CHAN_OFFSET                             0x1000
-> > @@ -118,7 +114,7 @@ struct sf_pdma {
-> >       void __iomem            *membase;
-> >       void __iomem            *mappedbase;
-> >       u32                     n_chans;
-> > -     struct sf_pdma_chan     chans[PDMA_NR_CH];
-> > +     struct sf_pdma_chan     chans[PDMA_MAX_NR_CH];
-> >  };
-> >
-> >  #endif /* _SF_PDMA_H */
+> >   (2) extent the holder mechanism to cover a rangeo
+
+I don't think I was around for the part where "hch balked at a notifier
+call chain" -- what were the objections there, specifically?  I would
+hope that pmem problems would be infrequent enough that the locking
+contention (or rcu expiration) wouldn't be an issue...?
+
+> >   (3) bite the bullet and create a new stacked dax_device for each
+> >       partition
+> > 
+> > I think (1) is the best option for now.  If people really do need
+> > partitions we'll have to go for (3)
+> 
+> Yes, I agree.  I'm doing it the first way right now.
+> 
+> I think that since we can use namespace to divide a big NVDIMM into multiple
+> pmems, partition on a pmem seems not so meaningful.
+
+I'll try to find out what will happen if pmem suddenly stops supporting
+partitions...
+
+--D
+
+> 
+> --
+> Thanks,
+> Ruan.
+> 
+> 

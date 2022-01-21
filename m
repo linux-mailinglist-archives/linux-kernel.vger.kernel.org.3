@@ -2,126 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A8C496061
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB6349604E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380984AbiAUOFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 09:05:05 -0500
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:32358 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1380986AbiAUOEc (ORCPT
+        id S1380929AbiAUOEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 09:04:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38298 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380934AbiAUOD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 09:04:32 -0500
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20LAASLt015148;
-        Fri, 21 Jan 2022 06:04:23 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=E6656S2D8v2JjAZAXSy/62KUS+Okbjyp/3Dlv5zadkk=;
- b=W9a+YgL8pF7GsPGicJyl7/3/0o/Dk3qTPAI6YCChpdOMR2gROgZcA30/nIE9gtee4k4v
- nbpRbjda9lkO7Ctht5W9/qo6btysECQeOG8W49koxA9s+lBY/LEa0IyYa2HKynhYs6Fg
- psdrK76tzCeTEHqOkiA/XsgLntFTV71fujDLsGvQp669y135pce53Xzv4wHvcy7YVDRA
- KgZqVv98APGZt5NQGSZUAcXf0sbssVq0vIERnSfXqgDi/Dg3QC4dy9Z0oV1x+mrB7hqO
- Acw+q3VmuMV0GWbsspIYlBJFIv8b9S+yIZZWAbevrH9tUXvNvZzVH9T2R7Yn0gDo+cGC 3w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3dqhytt7u5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 21 Jan 2022 06:04:23 -0800
-Received: from m0045849.ppops.net (m0045849.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 20LDifah013909;
-        Fri, 21 Jan 2022 06:04:22 -0800
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3dqhytt7u2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 21 Jan 2022 06:04:22 -0800
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 21 Jan
- 2022 06:04:21 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 21 Jan 2022 06:04:21 -0800
-Received: from localhost.localdomain (unknown [10.28.34.29])
-        by maili.marvell.com (Postfix) with ESMTP id C26403F70B7;
-        Fri, 21 Jan 2022 06:04:16 -0800 (PST)
-From:   Shijith Thotton <sthotton@marvell.com>
-To:     Arnaud Ebalard <arno@natisbad.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Boris Brezillon <bbrezillon@kernel.org>
-CC:     Shijith Thotton <sthotton@marvell.com>,
-        <linux-crypto@vger.kernel.org>, <jerinj@marvell.com>,
-        <sgoutham@marvell.com>, Srujana Challa <schalla@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Lukasz Bartosik" <lbartosik@marvell.com>,
-        Suheil Chandran <schandran@marvell.com>,
-        chiminghao <chi.minghao@zte.com.cn>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH] crypto: octeontx2: fix NULL pointer dereference
-Date:   Fri, 21 Jan 2022 19:33:10 +0530
-Message-ID: <3ff70ee925aad3afa1adc4ad1f4a7a494929d400.1642773756.git.sthotton@marvell.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 21 Jan 2022 09:03:29 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BAF5C061751
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 06:03:29 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id h188so220083wmh.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 06:03:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4l1jtRGL+pYHVAZJF8KgIUHpCfnZhhgBRKh+OiDvorY=;
+        b=fhwTlzKWGaMzqfsup3wVctsfoZXTOQaOFb5R5Juixld0ttqy1JeVP0UBAnOO4SFypl
+         Df1prkauSmcDUosFSq4FqwsGSKYVOkw/bqBDtx72ou6iRRmwyUXBMV/RtyPni7/T2Db8
+         wsjOpwr9rNKpmvWP9ckaqB/Sf/UZl+6/jpWbyHCWRAm91Ee79b8icLN1nQTbu4Lb/aht
+         jBZCoO75QW8Jm5JEjSctOPETtHCTvm8cM5kB4K2d/gItxQd+q1lB4g+qprWSUABunWlE
+         /kJbwx6fRw7U+uCgbcEu959QoZL6efdJOqgrjmamXjX8Ycdi+of9m5uF9YbOdqAzLMcC
+         ZRbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4l1jtRGL+pYHVAZJF8KgIUHpCfnZhhgBRKh+OiDvorY=;
+        b=MF6xIzoACi63JGDqwf1AlXuvfyu55X6alo/siQd2o1gxhtV/qJSS3O7Bdv/DRQhJqN
+         Q81ziXQUeRKwvuyY2ko4cBj24pKGziIa4CwP2rxbfZn34umkO5eRYCxjDBj4M5ppZECo
+         6euXZIyAzEfEc7Bfb+zcaOSd8Tx1DvzwYYZrosYMNUvJZLVklvctTQKplj1HB9nOr7Pp
+         VBhBmMXniM0hntlMgD8dre+mxJ3eTELaPy5xLOH8kzEfJptai1z+4gMu3dxmMuBgDzX1
+         5ey94PSQvV1xNAZq8h7l13cI7O1vlRTi+shUiqXiFSIyUTtgeIVvp8s7yKDLHk1OIEA7
+         JgDg==
+X-Gm-Message-State: AOAM531+6TvK432WuHsN9R0i918c+8cU7UP4rpmybwqBxDn2johnvnCH
+        bH2RilB0gZuoiJ9++54P9KqBkQ==
+X-Google-Smtp-Source: ABdhPJwSn5xqcnOw4GAEgDzNJvgvtqvE75JH7mto0ajETAzgXi5MCr9UUfks/or68aOUSSE9IMIGYQ==
+X-Received: by 2002:adf:fbc5:: with SMTP id d5mr3913609wrs.83.1642773807588;
+        Fri, 21 Jan 2022 06:03:27 -0800 (PST)
+Received: from groot.home (lfbn-tou-1-205-205.w86-201.abo.wanadoo.fr. [86.201.52.205])
+        by smtp.gmail.com with ESMTPSA id p29sm9225129wms.5.2022.01.21.06.03.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jan 2022 06:03:27 -0800 (PST)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Fabien Parent <fparent@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Subject: [PATCH v4 0/4] input: MT6358 PMIC button support
+Date:   Fri, 21 Jan 2022 15:03:19 +0100
+Message-Id: <20220121140323.4080640-1-mkorpershoek@baylibre.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: Zo-svCzrrA672kxN1-Yc_IEylYeN4Oz4
-X-Proofpoint-GUID: cPup4_Sb39qjQfrLoMdWJVRB3POsKrqm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-21_06,2022-01-21_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CONFIG_DM_CRYPT is checked before registering ciphers, but not before
-unregister. This could lead to a NULL pointer dereference during driver
-release (in unregister) if CONFIG_DM_CRYPT is enabled.
+The MediaTek MT6358 PMIC has support for two buttons: PWR and HOME.
 
-...
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
-...
-Call trace:
- crypto_unregister_alg+0x68/0xfc
- crypto_unregister_skciphers+0x44/0x60
- otx2_cpt_crypto_exit+0x100/0x1a0
- otx2_cptvf_remove+0xf8/0x200
- pci_device_remove+0x3c/0xd4
- __device_release_driver+0x188/0x234
- device_release_driver+0x2c/0x4c
-...
+The interrupt logic is a little different than other PMICs from the
+same family:
+for MT6323 and MT6397, we have one interrupt source per button
+* for MT6358, we have two interrupts lines per button: the press and
+* release interrupts are distinct sources.
 
-Added a CONFIG_DM_CRYPT check, similar to register, in unregister to
-avoid this.
+Changes since v3 [1]:
+* checkpatch.pl --strict fixes
 
-Signed-off-by: Shijith Thotton <sthotton@marvell.com>
----
- drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Changes since v2 [2]:
+* added 4th patch with device tree enable
+* cover letter title prefixed with 'input'
 
-diff --git a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
-index 2748a3327e39..620fa9b23e78 100644
---- a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
-+++ b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
-@@ -1650,7 +1650,7 @@ static inline int cpt_register_algs(void)
- 
- 	err = crypto_register_aeads(otx2_cpt_aeads,
- 				    ARRAY_SIZE(otx2_cpt_aeads));
--	if (err) {
-+	if (err && !IS_ENABLED(CONFIG_DM_CRYPT)) {
- 		crypto_unregister_skciphers(otx2_cpt_skciphers,
- 					    ARRAY_SIZE(otx2_cpt_skciphers));
- 		return err;
-@@ -1661,8 +1661,9 @@ static inline int cpt_register_algs(void)
- 
- static inline void cpt_unregister_algs(void)
- {
--	crypto_unregister_skciphers(otx2_cpt_skciphers,
--				    ARRAY_SIZE(otx2_cpt_skciphers));
-+	if (!IS_ENABLED(CONFIG_DM_CRYPT))
-+		crypto_unregister_skciphers(otx2_cpt_skciphers,
-+					    ARRAY_SIZE(otx2_cpt_skciphers));
- 	crypto_unregister_aeads(otx2_cpt_aeads, ARRAY_SIZE(otx2_cpt_aeads));
- }
- 
+This has been tested with evtest on mt8183-pumpkin on input/next
+
+[1] https://lore.kernel.org/r/20210702134310.3451560-1-mkorpershoek@baylibre.com
+[2] https://lore.kernel.org/r/id:20210512152648.39961-1-mkorpershoek@baylibre.com
+
+Mattijs Korpershoek (4):
+  Input: mtk-pmic-keys - use get_irq_byname() instead of index
+  dt-bindings: input: mtk-pmic-keys: add MT6358 binding definition
+  Input: mtk-pmic-keys - add support for MT6358
+  arm64: dts: mt6358: add mt6358-keys node
+
+ .../bindings/input/mtk-pmic-keys.txt          |  5 +-
+ arch/arm64/boot/dts/mediatek/mt6358.dtsi      | 12 ++++
+ drivers/input/keyboard/mtk-pmic-keys.c        | 55 +++++++++++++++++--
+ 3 files changed, 67 insertions(+), 5 deletions(-)
+
+
+base-commit: 87a0b2fafc09766d8c55461a18345a1cfb10a7fe
 -- 
-2.25.1
+2.32.0
 

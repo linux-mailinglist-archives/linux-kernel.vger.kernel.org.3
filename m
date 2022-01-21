@@ -2,560 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBD2C495DA2
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 11:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0FC495DA5
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 11:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350013AbiAUKUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 05:20:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236933AbiAUKUa (ORCPT
+        id S1379976AbiAUKVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 05:21:00 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:40624 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236933AbiAUKU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 05:20:30 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8C2C06173F
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 02:20:30 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id s2-20020a17090ad48200b001b501977b23so8308017pju.2
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 02:20:30 -0800 (PST)
+        Fri, 21 Jan 2022 05:20:59 -0500
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20L7JIhe009038;
+        Fri, 21 Jan 2022 10:20:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=L4bosoAbN4/8dj5qUgR0JKntLPzjfIB67PP0HUfQNcY=;
+ b=nOG7EbQVpz3w68IsmkrXv0SQq4APxZwm17sklYWJFDHCk5b/yalXMVq9BjXbSiB3ojuR
+ XalvOPwosi6sTowpJvjHdgbA1XWXxqaAjpqUmu/DkuwRrjhAAPnl8IGFaucgvEq5SqXJ
+ zOMjtU/at15g/azOCJzXfU6Szs3tV/zicTXsCRan3XJUcxJIac+0iYVDV8ZnQT4BmR/K
+ 2oLkMF2OceOBESEM1aWScV0E5d/PyClYz2d8wszEjg6bMi0VEn1q5htvOVAEBKlGgJrP
+ DzNLE0KYDcW9YIGhVhK17QpAR+KZyZ70QLxuApljHa7Y6Or3r5R7pXpyc69vmNXrvOTD YA== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dqhykrxa9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 21 Jan 2022 10:20:51 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20LAH2JK005210;
+        Fri, 21 Jan 2022 10:20:50 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2040.outbound.protection.outlook.com [104.47.66.40])
+        by aserp3030.oracle.com with ESMTP id 3dqj05um0v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 21 Jan 2022 10:20:50 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HkjaJN0Oo6voz1PFmoZ+6hfDK2Yvc0xpatxQ6NbQLf0vgCfoMq0HcnZnAdc+bmGbEIT10g669nGZCCMnIX31S6gmdkq59bZSor7RXm2OgWz9lEz4RRlnRT5k+Q3euIEf2i7g8L01cFNItG6vbAEuQW54QjqI93bPr489Exwt5TOlJwjuiOg4TN+7wPN5fdeE7prPmE1oW+wKS/Co2OYX8Bycf0zMtSzpJEkyE83Nj8Un9OFxh9cjzCSaCF5eakkrA0xvltf7tpV9IXK7pAq3SLhVOIQBfg2jj8HaJHRg7xjRuZCW0LmI9eUa6cZA891nekTXW9aAgbiGyNz/dOheLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=L4bosoAbN4/8dj5qUgR0JKntLPzjfIB67PP0HUfQNcY=;
+ b=QtGpPyIyPukDiLKrScRZQJo4nrt7FK1k81WJDnmcWIa+twJNfJ19kbYCgYQ4g26kQI6NM6xC6GW88FYJhGQ4v0czL3yqFGMPnfhjaMw0BVulp0mQVmyNHI9n5TrqzrSo+n3Ni77cvV7OrRQSJYljLEfoOo7ARJWJ3f267yIuEns8Dh0MSJS2H4QoIbxhOEoQGhmwrNVVm1kDTuLW+EVRmHnYQJY9nNWZUsGiqatAFhCdyCMMsS8TlL4E/0nDb1ztIpLQUTrmB73frbcd9n+PpB3ned/pHactHL52GWFBR/djs8Vo8wN/lXkpt5T/yjELgkb6FDysW+BHYHrPCaSnHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=4bQUQUrp6OKMRuErxCI4+Pj68RPGOV0SOzl5ywhF9EQ=;
-        b=EmyvqfUJD0GuD8i2+SaKrH4FwQXg6Z/8/wL19l0IasGa6atHR5pTFuIdEptQG46/4J
-         rlct4qhoj9QQoCFKK0iQLd//EQKk5XUiTFMUUk2z03fIJ0VHksdmsDwVSLtfDLRJOt4w
-         1keliqAXtZmUl9wFxyD2Cli9YLX5Nw/FgiuPkbQ/FXo9TFsQgIxXcBrQ1CLHJo15DE02
-         UEPr7Nt1nyiAAjVVpgkl3rujhn/elXBNPu7fRU4xkAP69eNlfusqSIoLpyOcVjPm+Sgf
-         Zf+H6G1O5Ndppjfmw5ZIVqLYbUEXwMnsQs2Fw04IFclHRgG1kXOtR/FeSqpMvp3PGhDK
-         ejZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4bQUQUrp6OKMRuErxCI4+Pj68RPGOV0SOzl5ywhF9EQ=;
-        b=VYGNIX6NDLwH/aY8/j+/x/TIj+Ya5CSTENHEd2KnXWkHtAsOt/WV41TKTlWoifFchU
-         kIRHzWgv2hw1uOwnu9i89h8IC8uWh93vRBcGTCfdpIWkMhX9aMIM74Jfdv4lhkdewUlG
-         AuuEvwQyo/3uXzx+NxggDtuTi94mGTMBElfmmNt3Kuadk3xsiNo/rq7skEsEh1QR97mS
-         TtIZfBzBneUHyaFHJLExceUy+cDo3R0M5NyQL0G8rYyKGr6/uPwfKENjDvSXhbiYkdtp
-         MzvkQJyL5cFgUJbvGfo6pT4gFB3IjhorGCeLtnazdbrr8BnbAqd3joLw665A6Y1btWvO
-         Sj0w==
-X-Gm-Message-State: AOAM530akK2U1GgZse56FsCwh23SjbM7VaXwtTf8Bmi34ni/5V+Cb9or
-        qFiDMSTWSY+M6Vyn9WIsdUGwvq6qd2lSl4B+RXsOxA==
-X-Google-Smtp-Source: ABdhPJyA9jf5RX/pUBosrIDIOM9esystJ/rjxmAUTLvxAiA6fIbjM+sg/y9MK1s0XkX0hPOjJPe01/j9XB3JmHhupH4=
-X-Received: by 2002:a17:90a:d913:: with SMTP id c19mr78643pjv.90.1642760429884;
- Fri, 21 Jan 2022 02:20:29 -0800 (PST)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=L4bosoAbN4/8dj5qUgR0JKntLPzjfIB67PP0HUfQNcY=;
+ b=m0RibBoiU6Zib29nYhDFReA5HYwM/cUXF32zh6bquiCst7EuHYIXLIcrkVYnH6S2GDZDxVpJHgBD7nmNbKvtnUYbP4Gsb55yL7vksly5wdFMZVlQPZRlSLb1B71URPzZMbmgSMLa8DfSiYQbvSYTjOg3KJWONhEWrSr9J/D63Jw=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by SN6PR10MB2495.namprd10.prod.outlook.com
+ (2603:10b6:805:40::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Fri, 21 Jan
+ 2022 10:20:48 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::c13b:5812:a403:6d96]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::c13b:5812:a403:6d96%6]) with mapi id 15.20.4909.012; Fri, 21 Jan 2022
+ 10:20:48 +0000
+Date:   Fri, 21 Jan 2022 13:20:25 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+Cc:     gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, mchehab@kernel.org
+Subject: Re: [PATCH v2] drivers: staging: media: omap4iss: Use BIT macro
+ instead of left shifting
+Message-ID: <20220121102025.GO1951@kadam>
+References: <20220121093722.320082-1-mosescb.dev@gmail.com>
+ <20220121100837.337094-1-mosescb.dev@gmail.com>
+ <20220121100837.337094-2-mosescb.dev@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220121100837.337094-2-mosescb.dev@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JN2P275CA0005.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:3::17)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-References: <20220120001621.705352-1-jsd@semihalf.com> <20220120001621.705352-3-jsd@semihalf.com>
- <YelvqHuxaIOB+yP1@smile.fi.intel.com>
-In-Reply-To: <YelvqHuxaIOB+yP1@smile.fi.intel.com>
-From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Fri, 21 Jan 2022 11:20:19 +0100
-Message-ID: <CAOtMz3OeuhKAikkwdzcEaEKU6FRrYkC7=iiwUeDg+VEZZxsQRA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] i2c: designware: Add AMD PSP I2C bus support
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8a5f15ce-558f-4d32-b852-08d9dcc7b103
+X-MS-TrafficTypeDiagnostic: SN6PR10MB2495:EE_
+X-Microsoft-Antispam-PRVS: <SN6PR10MB2495D13A8E5EA2EE7317B29F8E5B9@SN6PR10MB2495.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2150;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sUraLkTnsr3FNJHORtpmaQ+2PPy//UR2CRUQ3EKTRKN74ZuXK1BxuZ72sp+m3Vu2mffw34zhJXSjIrFsblKUb7q+1c8IOTSmdiPtV/PIXKS9dk1KCTHM9f9qofcnKXrk4Ca2tWXOyarj9LfWkt/YamOV8ky2pKiR/TFuftFiVmLPWhrKGinR1gy+LsTk89SuXOj2nTej7QSGkVxcqbsvUdm/dcJHmW+mqphyZMupkRrdfsPYArCjFf3XnJ0a4reFtp5BdJ8+m8jcGaVVqiUJ0P+EGAJJju1x6GYg4IydC1pSk6Lqz/q0UzigLRiIlrxJM9NYmYtorT0tvjbwMdLGTYcwq9vpAG1u/WH83ZuCX+auJe1FltY6w4ObN5Go9EctsQLWAcbsGvn4xi8L3YQtPgkAzf9rjNPJ7VfNuShl7eHl+Yg43sBPrgHKlXPwyQCeHkbRScVC78xZL4ZaV9U1jR3bfOdu9tjlRVJ4vZcegCxtt133WJ1GfqNZXRTxq5XZ/U2NoSkf3V7++i1LJ+njpNNPh5icm0N6Nq5Q22jL4Rk+slNlAbc1BlR1BTaTVfdXAC7PznGl1GuGuZJ5vtSEH63OodyqkrZa1SSuAl43G5PxzTrlOphevSx4aESJ71ue9KzOUey/+rF2xjwJFoTm8q6+7bJ4gO/rv/I6kheLyK3e/8JzqhRqBjHyOuhhphjrPJDHm8IzUXc3xgUcVHvEI9At79XgxdhvE20A5byp16U=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(66556008)(66476007)(6506007)(9686003)(6512007)(1076003)(66946007)(2906002)(186003)(44832011)(8936002)(5660300002)(6486002)(508600001)(6666004)(4326008)(4744005)(86362001)(38100700002)(6916009)(33656002)(316002)(8676002)(26005)(52116002)(38350700002)(33716001)(32563001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ttBi0q9uu9p8AyNEK7VOY5HtnM7XPxHsuehtAAgKWzRUJ0KX5JGzIi4H9qi4?=
+ =?us-ascii?Q?Sp/4bZuUsW2BnNQcKH6KOObT0DFDvzcOLfW2jMWxX0Z9IFcSYB0TmouBAxvw?=
+ =?us-ascii?Q?gyckr89yfNGzaBrro6NAwzL5KpDBemScbOmN0qOJ9zYRdlnhZTbsdrlGdASC?=
+ =?us-ascii?Q?t5G6/dqOvmqUzzhBMDWwiNtl65LalaesUTVxJdDB4zwGn1b1YSInj4hw7ghw?=
+ =?us-ascii?Q?GqphmsBBB/+SlR4da73/820aj5MLrutFOjal5IrUX08Pee9+8iRqmWnCkPnu?=
+ =?us-ascii?Q?WfIXJFBIr76wyg8xVS5BX70Q1/uE++69Ws+7/3lJ+KntB9ca27hIFrJfBucP?=
+ =?us-ascii?Q?RLLrh6s5pFnmHVi5H3+dGqdL219dN2WDIr2dU2qtkKq3lvyqTMS5BCACMe9R?=
+ =?us-ascii?Q?WTH/OfyiZ6ZGo2ilyBtwug5uJxDdEIneHApegheyUYqqU0hoXqB3hNqNf9cB?=
+ =?us-ascii?Q?Sjw3UMfG6xoAfzMtCGJc/0F52bR0cxUe8NycZbiLBo74I29daWSq+L3iG5E8?=
+ =?us-ascii?Q?TJVaAK48E23fXCqJLhRgOLmL35h6lPSsmfm5d1R32NqheBrvYPkAOpvZFkmP?=
+ =?us-ascii?Q?IcYb2+I9/PPcpJzHLuq+S2irufuM91gflZTR2+zK+4Hkbnx+UntaimCXfULO?=
+ =?us-ascii?Q?jaxxWZNyJkuFbROgUgvPA4ckG5Nww80OHPgZFZV4emkCdTV7wO5Lxiq8chiJ?=
+ =?us-ascii?Q?ipveTD5OOAMuNGaKSfsk1zrvN221Ig+UH3ABbtJvf3cdewYHGGLRIQ3yQAEl?=
+ =?us-ascii?Q?Hq3lpqZK1UiPBwDYpCd38Sn8Kl2WHRT/+EehR+Qft0HEsyXeaSFa+bCxAYYl?=
+ =?us-ascii?Q?fpZZcts0suiA6Iiz9MnrQPO4oXwBdWttAGCSN1DX6s3FJgYDvPsDi9NlmhpC?=
+ =?us-ascii?Q?DrVPGJWXgHi7mFi9RnGQgn72/0ppSeLKScEHtTUjT+fmmewUmF5c1ZN1uSG9?=
+ =?us-ascii?Q?qamaBO2t+r9uyaZtI4iF29uJ168mXlisfKS/QVVc6uDPRy/gKw19rfguB0BO?=
+ =?us-ascii?Q?8P/wAWPjAQ/vo59g+3r0TCYDrztPEjRQkYpr/kJ64H2nb8otn1XrGWvrmRHx?=
+ =?us-ascii?Q?/9J8ooWTpmMAefRz2f/VHyHLsEzr3kqoiMvGJYD8K4TXCgNXR2mkaO547uso?=
+ =?us-ascii?Q?rThbP2+iz0lBMC+kzGygWki0dyk76tyB3opOqnl6dnI/b0dWKMwSrfuQkk+i?=
+ =?us-ascii?Q?X+3ZCYlfaT9wVUE5Rtx7qGs6B2KpqqBi7QUpNlr5spKS0Ca6CBbCWp7K/L/x?=
+ =?us-ascii?Q?61yp4SL2KfBgq5ue51mIbO0E854NlQA8sbkIcwKoQLYpzLzVg/9v7FZVeAWE?=
+ =?us-ascii?Q?h1/3lfUEMZlmcv73ueFQYmdpfIjWLcDq2iPlqr5inw0mVo8qj5EXCsbdouct?=
+ =?us-ascii?Q?SRLipv6892KC9p2lbjtHK7tWTNalOVykX61+7rRcF3OPjiKXUZShqkzrXx5E?=
+ =?us-ascii?Q?M6Uq+HWUU7Dqx9yRBmmr8KNM037DQ5icvmnCJQUs2l/u5nX53GHJigvVdPtP?=
+ =?us-ascii?Q?PcczJsYLpqAqXwZW4hLhrvdw1gxMZIMVyJy+eaMFPU3MkHppx6gnUhiqGEsy?=
+ =?us-ascii?Q?GZ5sH/9yYk+Uf0zFNTtCO2eiaKBN+BW+4ihxx1KMfSiJC1R7Voz+KVk52Anl?=
+ =?us-ascii?Q?rfI3e3Oh8S+ruPDoqreEZcq7G89f+fdNf5WtG3cn38+3Bj7P0263K+HwJ6nr?=
+ =?us-ascii?Q?RdmuAaBD0Ht0YUUFWAkLmVcZ6TY=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a5f15ce-558f-4d32-b852-08d9dcc7b103
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2022 10:20:47.9642
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: f23GLBw4mwXOGxuSnQV+sgl1MdeGc12EYM/shl1J3fpTd8IjQBGxNuU3Gtybg8WGr2YRMnfYwpk4F0Z46k87ajMdWNlZQbWmkzF2IvKJHks=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2495
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10233 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxlogscore=999
+ malwarescore=0 adultscore=0 suspectscore=0 mlxscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2201210069
+X-Proofpoint-ORIG-GUID: xIVDmSaHUhPc5tV5zl7AmuQgsV22FZil
+X-Proofpoint-GUID: xIVDmSaHUhPc5tV5zl7AmuQgsV22FZil
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-czw., 20 sty 2022 o 15:21 Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> napisa=C5=82(a):
->
-> On Thu, Jan 20, 2022 at 01:16:21AM +0100, Jan Dabros wrote:
-> > Implement an I2C controller sharing mechanism between the host (kernel)
-> > and PSP co-processor on some platforms equipped with AMD Cezanne SoC.
-> >
-> > On these platforms we need to implement "software" i2c arbitration.
-> > Default arbitration owner is PSP and kernel asks for acquire as well
-> > as inform about release of the i2c bus via mailbox mechanism.
-> >
-> >             +---------+
-> >  <- ACQUIRE |         |
-> >   +---------|   CPU   |\
-> >   |         |         | \      +----------+  SDA
-> >   |         +---------+  \     |          |-------
-> > MAILBOX                   +--> |  I2C-DW  |  SCL
-> >   |         +---------+        |          |-------
-> >   |         |         |        +----------+
-> >   +---------|   PSP   |
-> >    <- ACK   |         |
-> >             +---------+
-> >
-> >             +---------+
-> >  <- RELEASE |         |
-> >   +---------|   CPU   |
-> >   |         |         |        +----------+  SDA
-> >   |         +---------+        |          |-------
-> > MAILBOX                   +--> |  I2C-DW  |  SCL
-> >   |         +---------+  /     |          |-------
-> >   |         |         | /      +----------+
-> >   +---------|   PSP   |/
-> >    <- ACK   |         |
-> >             +---------+
-> >
-> > The solution is similar to i2c-designware-baytrail.c implementation, wh=
-ere
-> > we are using a generic i2c-designware-* driver with a small "wrapper".
-> >
-> > In contrary to baytrail semaphore implementation, beside internal
-> > acquire_lock() and release_lock() methods we are also applying quirks t=
-o
-> > lock_bus() and unlock_bus() global adapter methods. With this in place
-> > all i2c clients drivers may lock i2c bus for a desired number of i2c
-> > transactions (e.g. write-wait-read) without being aware of that such bu=
-s
-> > is shared with another entity.
-> >
-> > Modify i2c_dw_probe_lock_support() to select correct semaphore
-> > implementation at runtime, since now we have more than one available.
-> >
-> > Configure new matching ACPI ID "AMDI0019" and register
-> > ARBITRATION_SEMAPHORE flag in order to distinguish setup with PSP
-> > arbitration.
->
-> > Add new entry in MAINTAINERS file to cover new module.
->
-> It's confusing. You added yourself as a reviewer for I2C DesignWare drive=
-r,
-> which is great, but not described in the commit message.
+On Fri, Jan 21, 2022 at 11:08:37AM +0100, Moses Christopher Bollavarapu wrote:
+> There is a BIT(nr) macro available in Linux Kernel,
+> which does the same thing.
+> 
+> Example:  1 << 7  is same as BIT(7)
+> 
+> Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
 
-Should I rephrase this sentence (to be more specific that I may be
-helpful for reviewing amdpsp.c module) or rather you mean to exclude
-drivers/i2c/busses/i2c-designware-amdpsp.c from the rest of
-designware-* modules and create separate entry?
+Thanks!
 
-Actually initially I wasn't planning to modify MAINTAINERS (after all
-I'm not an I2C DesignWare expert) until run checkpatch.pl which
-recommended to do so when adding new file. Eventually for me it made
-some sense since I have a platform equipped with AMD Cezanne SoC and I
-will be able to review and test potential changes in
-i2c-designware-amdpsp.c or in general around semaphore areas.
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-This may also work with different model, similar to how you pointed me
-to Hans as an owner of Bay Trail platform who is acquinted with how
-its i2c semaphore is working. I will simply remove myself from the
-MAINTAINERS file and you can add me to the threads if there is
-anything requiring my help.
+regards,
+dan carpenter
 
-Let me know which way is working for you. I just thought it is not
-good to leave you alone with a new module which you cannot actually
-test and don't have deep insight about how PSP-x86 communications
-works.
-
->
-> ...
->
-> >       { "AMD0020", APD_ADDR(cz_uart_desc) },
->
-> >       { "AMDI0020", APD_ADDR(cz_uart_desc) },
-> >       { "AMDI0022", APD_ADDR(cz_uart_desc) },
-> > +     { "AMDI0019", APD_ADDR(wt_i2c_desc) },
->
-> This addition adds more chaos in the ordering (the group of AMDI should b=
-e
-> after AMD as far as I can see here). Can you order the entries by IDs?
-
-Sure.
-
->
-> >       { "AMD0030", },
-> >       { "AMD0040", APD_ADDR(fch_misc_desc)},
->
-> ...
->
-> > +#include <asm/msr.h>
->
-> Usually linux/* followed by asm/*.
->
-> > +#include <linux/i2c.h>
-> > +#include <linux/psp-sev.h>
->
-> types.h?
-
-I need to take a deeper look at the headers included here, especially
-considering errors pointed by kernel test robot. Not sure why I
-haven't seen any issues on my setup.
-
->
-> ...
->
-> > +union psp_req_buffer_hdr {
-> > +     struct {
-> > +             u32 total_size;
-> > +             u32 status;
-> > +     } __packed;
->
-> What does packet bring you here?
-
-In this particular case binary-wise nothing, I can as well drop this.
-It may be necessary if there are some changes in this structs fields
-in future (e.g changing total_size to u8), since PSP expects every
-field to be byte-aligned.
-
->
-> > +     u64 hdr_val;
->
-> And why does this not have the same alignment since it's also part of
-> the union?
-
-__packed is not about alignment of the whole struct/union but about
-lack of padding between its fields. As above - in this particular case
-with two u32 it doesn't matter.
-
->
-> > +};
-> > +
-> > +enum psp_i2c_req_type {
-> > +     PSP_I2C_REQ_ACQUIRE,
-> > +     PSP_I2C_REQ_RELEASE,
->
-> > +     PSP_I2C_REQ_MAX,
->
-> Is MAX a terminator or not?
-> If former, no comma.
-
-ACK.
-
->
-> > +};
-> > +
-> > +struct psp_i2c_req {
-> > +     union psp_req_buffer_hdr hdr;
-> > +     enum psp_i2c_req_type type;
->
-> > +} __packed __aligned(32);
->
-> Can you explain, what this means and how it's supposed to work?
-
-This means that each instance of the struct should be aligned (32)
-while at the same time no padding within members - thus this may
-result in non-aligned addresses of members.
-
->
-> > +union psp_mbox_cmd_reg {
-> > +     struct psp_mbox_cmd_fields {
-> > +             u16 mbox_status;
-> > +             u8 mbox_cmd;
-> > +             u8 reserved:6;
-> > +             u8 recovery:1;
-> > +             u8 ready:1;
->
-> > +     } __packed fields;
->
-> So, what is the __packed purpose here?
-
-As in all above cases - considering current layout of members and
-their sizes dropping `__packed` will not results in any errors.
-
-However PSP expects all members os structs within shared buffers to be
-byte-aligned, that's why I've added this attributes to be on the safe
-side. If you think this doesn't make sense, I can remove them - in
-(very unlikely) case of changes, one will need to add this specifier.
-
-> > +     u32 val;
-> > +};
-> > +
-> > +struct psp_mbox {
-> > +     union psp_mbox_cmd_reg fields;
-> > +     uintptr_t i2c_req_addr;
-> > +} __packed;
->
-> ...
->
-> > +static int psp_mbox_probe(void)
-> > +{
-> > +     unsigned long mbox_addr;
-> > +
-> > +     if (psp_get_mbox_addr(&mbox_addr))
->
-> > +             return -1;
->
-> Use error code.
-
-ACK.
-
->
-> > +     mbox_iomem =3D ioremap(mbox_addr, sizeof(struct psp_mbox));
-> > +     if (!mbox_iomem)
-> > +             return -ENOMEM;
-> > +
-> > +     return 0;
-> > +}
->
-> ...
->
-> > +     union psp_mbox_cmd_reg tmp =3D {0};
->
-> > +     tmp.val =3D readl(&mbox->fields.val);
-> > +     return !!tmp.fields.recovery;
->
-> OK, I understood the purpose of unions, no, please use bitfield.h APIs.
-
-OK.
-
-> ...
->
-> > +     struct psp_mbox *mbox =3D (struct psp_mbox *)mbox_iomem;
->
-> Heck, no!
-
-I need to get acquinted to the kernel-reviewer language:) Pardon my
-ignorance, but just to be sure I get what you mean here:
-I'm using global mbox_iomem to keep address of PSP mailbox in IO
-memory. Casting this to struct psp_mbox layout here, to make access
-more convenient.
-Your point here is that:
-1. I should move the assignment out from the variable declaration part
-of this function;
-2. I should use ioremap/iounmap each time in psp_send_cmd instead of
-using it once in `probe` and unmap in `remove`?
-I thought about this option as to be less effective performance-wise
-(even though I can get rid of one global variable).
-3. Something else?
-
-> ...
->
-> > +     /* Fill address of command-response buffer */
-> > +     writeq((uintptr_t)__psp_pa((void *)req), &mbox->i2c_req_addr);
->
-> What does this voodoo mean?!
-
-Basically I need to take physical address (__psp_pa) of request buffer
-req and write this down into mailbox IO memory.
-This should be spread into more lines with some comments, is this your poin=
-t?
-
->
-> ...
->
-> > +     start =3D jiffies;
-> > +     do {
-> > +             if (psp_send_cmd(req)) {
-> > +                     ret =3D -EIO;
-> > +                     goto cleanup;
-> > +             }
-> > +
-> > +             status =3D check_i2c_req_sts(req);
-> > +             if (!status) {
-> > +                     dev_dbg(psp_i2c_dev, "Request accepted by PSP aft=
-er %ums\n",
-> > +                             jiffies_to_msecs(jiffies - start));
-> > +                     ret =3D 0;
-> > +                     goto cleanup;
-> > +             } else if (status =3D=3D -EBUSY) {
-> > +                     retry_cnt--;
-> > +             } else {
-> > +                     ret =3D -EIO;
-> > +                     goto cleanup;
-> > +             };
-> > +
-> > +             /* IF EBUSY, give PSP time to finish its i2c activities *=
-/
-> > +             mdelay(PSP_I2C_REQ_RETRY_DELAY_MSEC);
-> > +     } while (retry_cnt);
->
-> NIH iopoll.h API(s).
-
-I don't think macros avaialble in iopoll.h are suitable here.
-Procedure above is not about simply reading some IO and waiting for
-particular condition to be met with this particular value. Eventually
-`psp_send_cmd()` invokes `psp_wait_cmd()` where I'm using
-`readl_poll_timeout()`, so on lower level I'm making use of this API.
-However here I don't see any obvious method how to incorporate
-iopoll.h API to reach my goal.
-
-> > +     ret =3D -ETIMEDOUT;
->
-> ...
->
-> > +     status =3D psp_send_i2c_req(PSP_I2C_REQ_ACQUIRE);
-> > +     if (!status) {
->
-> Handle errors first.
->
-> ...
->
-> > +             goto cleanup;
-> > +     } else if (status =3D=3D -ETIMEDOUT) {
->
-> In this case it's redundant 'else'.
-
-Addressing above two comments - what do you think about below:
-if (status) {
-      if (status =3D=3D -ETIMEDOUT)
-               dev_err(psp_i2c_dev, "Timed out waiting for PSP to
-release I2C bus\n");
-      else
-               dev_err(psp_i2c_dev, "PSP communication error\n");
-
-       dev_err(psp_i2c_dev, "PSP communication error\n");
-       psp_i2c_mbox_fail =3D true;
-       goto cleanup;
-}
-
-psp_i2c_sem_acquired =3D jiffies;
-psp_i2c_access_count++;
-(...)
-
-> ...
->
-> > +     /* Send a release command to PSP */
-> > +     status =3D psp_send_i2c_req(PSP_I2C_REQ_RELEASE);
-> > +     if (!status) {
-> > +             dev_dbg(psp_i2c_dev, "PSP semaphore held for %ums\n",
-> > +                     jiffies_to_msecs(jiffies - psp_i2c_sem_acquired))=
-;
-> > +             goto cleanup;
-> > +     } else if (status =3D=3D -ETIMEDOUT) {
-> > +             dev_err(psp_i2c_dev, "Timed out waiting for PSP to acquir=
-e I2C bus\n");
-> > +     } else {
-> > +             dev_err(psp_i2c_dev, "PSP communication error\n");
-> > +     }
->
-> As per above comments.
-
-OK, will do similar as proposed above if this looks good for you.
-
-> ...
->
-> > +     int ret;
-> > +
-> > +     ret =3D rt_mutex_trylock(&adapter->bus_lock);
-> > +     if (!ret)
->
->         if (ret)
->                 ...
-
-ACK.
-
-> > +             psp_acquire_i2c_bus();
-> > +
-> > +     return ret;
->
-> ...
->
-> > +     /* Allow to bind only one instance of a driver */
-> > +     if (!psp_i2c_dev)
-> > +             psp_i2c_dev =3D dev->dev;
-> > +     else
-> > +             return -EEXIST;
->
-> As per above.
-
-ACK.
-
-> ...
->
-> > +     if (psp_mbox_probe())
-> > +             return -EIO;
->
-> Why error code is hidden?
-
-Will propagate error from psp_mbox_probe.
-
-> ...
->
-> > +     /*
-> > +      * Install global locking callbacks for adapter as well as intern=
-al i2c
-> > +      * controller locks
->
-> Missed period.
-
-ACK.
-
-> > +      */
->
-> ...
->
-> >       { "AMD0010", ACCESS_INTR_MASK },
-> >       { "AMDI0010", ACCESS_INTR_MASK },
-> >       { "AMDI0510", 0 },
-> > +     { "AMDI0019", ACCESS_INTR_MASK | ARBITRATION_SEMAPHORE },
->
-> It's not in order.
-
-ACK.
-
-> ...
->
-> > +static const struct i2c_dw_semaphore_callbacks i2c_dw_semaphore_cb_tab=
-le[] =3D {
-> > +#ifdef CONFIG_I2C_DESIGNWARE_BAYTRAIL
-> > +     {
-> > +             .probe =3D i2c_dw_baytrail_probe_lock_support,
->
-> > +             .remove =3D NULL,
->
-> See below.
->
-> > +     },
-> > +#endif
-> > +#ifdef CONFIG_I2C_DESIGNWARE_AMDPSP
-> > +     {
-> > +             .probe =3D i2c_dw_amdpsp_probe_lock_support,
-> > +             .remove =3D i2c_dw_amdpsp_remove_lock_support,
-> > +     },
-> > +#endif
->
-> > +     {
-> > +             .probe =3D NULL,
-> > +             .remove =3D NULL,
-> > +     },
->
-> First of all, it should be terminating entry, so no comma.
-> On top of that, no need to assign 0/NULL to static variables.
-> So here, it will become as simple as
->
->         {}
-
-ACK.
-
-> > +};
->
-> ...
->
-> > +static int i2c_dw_probe_lock_support(struct dw_i2c_dev *dev)
-> > +{
-> > +     int ret;
-> > +     int i;
-> > +
-> > +     dev->semaphore_idx =3D -1;
-> > +
-> > +     for (i =3D 0; i < ARRAY_SIZE(i2c_dw_semaphore_cb_table); i++) {
->
-> > +             if (!i2c_dw_semaphore_cb_table[i].probe)
-> > +                     continue;
->
-> Huh?
-
-Just to be sure I get your point.
-Once I found terminating entry, I will get out of the loop and return
-0 as there are no semaphores to be "applied". Actually I should
-probably use `break;` here as there shouldn't be a case when certain
-type of semaphore installs without `probe` being implemented.
-
-Best Regards,
-Jan
-
-> > +     }
-> > +
-> > +     return 0;
-> > +}
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->

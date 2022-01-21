@@ -2,227 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 602AD496048
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:03:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A8C496061
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:05:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350761AbiAUODM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 09:03:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380942AbiAUOCV (ORCPT
+        id S1380984AbiAUOFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 09:05:05 -0500
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:32358 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1380986AbiAUOEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 09:02:21 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E36C061755
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 06:02:18 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id c2so18191891wml.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 06:02:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=her8pTQyVK8jreqAr5JeTBZvQUJTv2/MJ1OXGn/Z07c=;
-        b=nxJ/Krh9rawBvAW5a2szanIGZ1i73UeIv0GSn0TsOKh2yT5pirgc26ZP/aOWDUGHCi
-         0N5FuPUeqWw9axpSBpehyCLZ9TZENv7qJOsDFrEHvYCTOVl3k8J8i5HDJaKQOURJAYiP
-         0KlAlnRw4ZhPemsPLWlSAwj2FhlPDBFYXpvSvqjZSA9b4cIzS9K3xmTAgc6SsjZRfGC0
-         bYyBtvQVgyFsXHVnaA5iRqoaq6YCiloMRaj1YpUXgQyEMth5hVfy5aRfmkmmWctDTANl
-         +HPq+H/PvxG7vZMd+bXuxmviLabcCnEhW672ZGUfRwzKKFFYNth+70uUu9INt3qoByHj
-         SJNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=her8pTQyVK8jreqAr5JeTBZvQUJTv2/MJ1OXGn/Z07c=;
-        b=aNkflIiyqmDu0kqgTxQcb4DXRVZYID93kZC1B9uvbJUPvssqAPPwiqVj2RRhP+xgCb
-         aGPcCffQufd3ZFudga78uIVA2EX58nlguIvA0g7YsH0ToiUUy4JBTAsKc4w9xl2QkuAA
-         VHH+3MhdA38wL3vUr+8vHJ0KHpkbOSPqW/T05lq/bKrWte0FPKnBvep1k4vS7IPe5Y5S
-         FsDyXEEVuyTl2a3o7oOCel6CQs0Vf1erjfo5Jf66h3Qb3XGZEzxN3KBGK1k4nGRisk+D
-         ZFv6699tixDtqNf1FQqoEwRxbuj8GQwifz7PoqWWspNRzpLJlRXm0V8Zar8SyOfdwIQZ
-         n5kA==
-X-Gm-Message-State: AOAM530UbVzgSaHYXcwGwf1RxcpnL/AqP0LmCv2oKFaPIGWsUAkTaK8p
-        q53dJI25oIelSYNMIDZvX1/0utOgos+xUu5veIh2Mo6p1tk=
-X-Google-Smtp-Source: ABdhPJziNjRSUK9pdHhvlNl/V7EUFJMTcY7Sop6mMxH5IKk2wCgCRkmSvagz3PP+iMuRWZIhk2a/Xh6Du1oKcbkcS00=
-X-Received: by 2002:a05:600c:2253:: with SMTP id a19mr901960wmm.8.1642773737211;
- Fri, 21 Jan 2022 06:02:17 -0800 (PST)
-MIME-Version: 1.0
-References: <20220114150824.3578829-1-jens.wiklander@linaro.org>
- <20220114150824.3578829-8-jens.wiklander@linaro.org> <CAFA6WYN+NU6uj=R5y4A6RomWeKc74orvB7ouia8Sxuwxaz_-2w@mail.gmail.com>
- <ad7311fe-0655-e235-f755-2eb3425c79c1@forissier.org> <CAFA6WYNo2xJ8VncpwbHG65hTTshxa-SWaPnGCB2v3KCTGogJkQ@mail.gmail.com>
-In-Reply-To: <CAFA6WYNo2xJ8VncpwbHG65hTTshxa-SWaPnGCB2v3KCTGogJkQ@mail.gmail.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Fri, 21 Jan 2022 15:02:06 +0100
-Message-ID: <CAHUa44H-t2fVFWHQDU6ZjY7qyk53rbOi_h7=V_pYXTN+TtbMjA@mail.gmail.com>
-Subject: Re: [PATCH v2 07/12] optee: use driver internal tee_contex for some rpc
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     Jerome Forissier <jerome@forissier.org>,
-        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Fri, 21 Jan 2022 09:04:32 -0500
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20LAASLt015148;
+        Fri, 21 Jan 2022 06:04:23 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=E6656S2D8v2JjAZAXSy/62KUS+Okbjyp/3Dlv5zadkk=;
+ b=W9a+YgL8pF7GsPGicJyl7/3/0o/Dk3qTPAI6YCChpdOMR2gROgZcA30/nIE9gtee4k4v
+ nbpRbjda9lkO7Ctht5W9/qo6btysECQeOG8W49koxA9s+lBY/LEa0IyYa2HKynhYs6Fg
+ psdrK76tzCeTEHqOkiA/XsgLntFTV71fujDLsGvQp669y135pce53Xzv4wHvcy7YVDRA
+ KgZqVv98APGZt5NQGSZUAcXf0sbssVq0vIERnSfXqgDi/Dg3QC4dy9Z0oV1x+mrB7hqO
+ Acw+q3VmuMV0GWbsspIYlBJFIv8b9S+yIZZWAbevrH9tUXvNvZzVH9T2R7Yn0gDo+cGC 3w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3dqhytt7u5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Fri, 21 Jan 2022 06:04:23 -0800
+Received: from m0045849.ppops.net (m0045849.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 20LDifah013909;
+        Fri, 21 Jan 2022 06:04:22 -0800
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3dqhytt7u2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Fri, 21 Jan 2022 06:04:22 -0800
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 21 Jan
+ 2022 06:04:21 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 21 Jan 2022 06:04:21 -0800
+Received: from localhost.localdomain (unknown [10.28.34.29])
+        by maili.marvell.com (Postfix) with ESMTP id C26403F70B7;
+        Fri, 21 Jan 2022 06:04:16 -0800 (PST)
+From:   Shijith Thotton <sthotton@marvell.com>
+To:     Arnaud Ebalard <arno@natisbad.org>,
         Herbert Xu <herbert@gondor.apana.org.au>,
-        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
-        Rijo Thomas <Rijo-john.Thomas@amd.com>,
-        David Howells <dhowells@redhat.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Etienne Carriere <etienne.carriere@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        Boris Brezillon <bbrezillon@kernel.org>
+CC:     Shijith Thotton <sthotton@marvell.com>,
+        <linux-crypto@vger.kernel.org>, <jerinj@marvell.com>,
+        <sgoutham@marvell.com>, Srujana Challa <schalla@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Lukasz Bartosik" <lbartosik@marvell.com>,
+        Suheil Chandran <schandran@marvell.com>,
+        chiminghao <chi.minghao@zte.com.cn>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH] crypto: octeontx2: fix NULL pointer dereference
+Date:   Fri, 21 Jan 2022 19:33:10 +0530
+Message-ID: <3ff70ee925aad3afa1adc4ad1f4a7a494929d400.1642773756.git.sthotton@marvell.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: Zo-svCzrrA672kxN1-Yc_IEylYeN4Oz4
+X-Proofpoint-GUID: cPup4_Sb39qjQfrLoMdWJVRB3POsKrqm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-21_06,2022-01-21_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 2:37 PM Sumit Garg <sumit.garg@linaro.org> wrote:
->
-> On Fri, 21 Jan 2022 at 18:58, Jerome Forissier <jerome@forissier.org> wrote:
-> >
-> > On 1/21/22 13:54, Sumit Garg wrote:
-> > > + Jerome, Etienne
-> > >
-> > > On Fri, 14 Jan 2022 at 20:38, Jens Wiklander <jens.wiklander@linaro.org> wrote:
-> > >>
-> > >> Uses the new driver internal tee_context when allocating driver private
-> > >> shared memory. This decouples the shared memory object from its original
-> > >> tee_context. This is needed when the life time of such a memory
-> > >> allocation outlives the client tee_context.
-> > >>
-> > >> Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
-> > >> ---
-> > >>  drivers/tee/optee/ffa_abi.c | 16 ++++++++--------
-> > >>  drivers/tee/optee/smc_abi.c |  7 ++++---
-> > >>  2 files changed, 12 insertions(+), 11 deletions(-)
-> > >>
-> > >
-> > > I guess with this patch we should no longer see issues [1] reported earlier.
-> >
-> > Correct. I have tested [1] again in QEMU with this whole series applied
-> > and the issue is gone.
-> >
->
-> Thanks for the confirmation.
->
-> Jens,
->
-> Can we have a Fixes tag for this and CC stable? I know it won't be
-> directly applicable to stable kernels but we can help with a backport.
->
+CONFIG_DM_CRYPT is checked before registering ciphers, but not before
+unregister. This could lead to a NULL pointer dereference during driver
+release (in unregister) if CONFIG_DM_CRYPT is enabled.
 
-OK, I'll add that.
+...
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
+...
+Call trace:
+ crypto_unregister_alg+0x68/0xfc
+ crypto_unregister_skciphers+0x44/0x60
+ otx2_cpt_crypto_exit+0x100/0x1a0
+ otx2_cptvf_remove+0xf8/0x200
+ pci_device_remove+0x3c/0xd4
+ __device_release_driver+0x188/0x234
+ device_release_driver+0x2c/0x4c
+...
 
-Thanks,
-Jens
+Added a CONFIG_DM_CRYPT check, similar to register, in unregister to
+avoid this.
 
-> -Sumit
->
-> > --
-> > Jerome
-> >
-> > >
-> > > FWIW,
-> > >
-> > > Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
-> > >
-> > > [1] https://github.com/OP-TEE/optee_os/issues/1918
-> > >
-> > > -Sumit
-> > >
-> > >> diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
-> > >> index 88a028d4fb7b..5ec484b42432 100644
-> > >> --- a/drivers/tee/optee/ffa_abi.c
-> > >> +++ b/drivers/tee/optee/ffa_abi.c
-> > >> @@ -424,6 +424,7 @@ static struct tee_shm_pool *optee_ffa_shm_pool_alloc_pages(void)
-> > >>   */
-> > >>
-> > >>  static void handle_ffa_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
-> > >> +                                             struct optee *optee,
-> > >>                                               struct optee_msg_arg *arg)
-> > >>  {
-> > >>         struct tee_shm *shm;
-> > >> @@ -439,7 +440,7 @@ static void handle_ffa_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
-> > >>                 shm = optee_rpc_cmd_alloc_suppl(ctx, arg->params[0].u.value.b);
-> > >>                 break;
-> > >>         case OPTEE_RPC_SHM_TYPE_KERNEL:
-> > >> -               shm = tee_shm_alloc_priv_kernel_buf(ctx,
-> > >> +               shm = tee_shm_alloc_priv_kernel_buf(optee->ctx,
-> > >>                                                     arg->params[0].u.value.b);
-> > >>                 break;
-> > >>         default:
-> > >> @@ -493,14 +494,13 @@ static void handle_ffa_rpc_func_cmd_shm_free(struct tee_context *ctx,
-> > >>  }
-> > >>
-> > >>  static void handle_ffa_rpc_func_cmd(struct tee_context *ctx,
-> > >> +                                   struct optee *optee,
-> > >>                                     struct optee_msg_arg *arg)
-> > >>  {
-> > >> -       struct optee *optee = tee_get_drvdata(ctx->teedev);
-> > >> -
-> > >>         arg->ret_origin = TEEC_ORIGIN_COMMS;
-> > >>         switch (arg->cmd) {
-> > >>         case OPTEE_RPC_CMD_SHM_ALLOC:
-> > >> -               handle_ffa_rpc_func_cmd_shm_alloc(ctx, arg);
-> > >> +               handle_ffa_rpc_func_cmd_shm_alloc(ctx, optee, arg);
-> > >>                 break;
-> > >>         case OPTEE_RPC_CMD_SHM_FREE:
-> > >>                 handle_ffa_rpc_func_cmd_shm_free(ctx, optee, arg);
-> > >> @@ -510,12 +510,12 @@ static void handle_ffa_rpc_func_cmd(struct tee_context *ctx,
-> > >>         }
-> > >>  }
-> > >>
-> > >> -static void optee_handle_ffa_rpc(struct tee_context *ctx, u32 cmd,
-> > >> -                                struct optee_msg_arg *arg)
-> > >> +static void optee_handle_ffa_rpc(struct tee_context *ctx, struct optee *optee,
-> > >> +                                u32 cmd, struct optee_msg_arg *arg)
-> > >>  {
-> > >>         switch (cmd) {
-> > >>         case OPTEE_FFA_YIELDING_CALL_RETURN_RPC_CMD:
-> > >> -               handle_ffa_rpc_func_cmd(ctx, arg);
-> > >> +               handle_ffa_rpc_func_cmd(ctx, optee, arg);
-> > >>                 break;
-> > >>         case OPTEE_FFA_YIELDING_CALL_RETURN_INTERRUPT:
-> > >>                 /* Interrupt delivered by now */
-> > >> @@ -582,7 +582,7 @@ static int optee_ffa_yielding_call(struct tee_context *ctx,
-> > >>                  * above.
-> > >>                  */
-> > >>                 cond_resched();
-> > >> -               optee_handle_ffa_rpc(ctx, data->data1, rpc_arg);
-> > >> +               optee_handle_ffa_rpc(ctx, optee, data->data1, rpc_arg);
-> > >>                 cmd = OPTEE_FFA_YIELDING_CALL_RESUME;
-> > >>                 data->data0 = cmd;
-> > >>                 data->data1 = 0;
-> > >> diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
-> > >> index 1dbb13b08381..f2ef76451443 100644
-> > >> --- a/drivers/tee/optee/smc_abi.c
-> > >> +++ b/drivers/tee/optee/smc_abi.c
-> > >> @@ -621,6 +621,7 @@ static void handle_rpc_func_cmd_shm_free(struct tee_context *ctx,
-> > >>  }
-> > >>
-> > >>  static void handle_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
-> > >> +                                         struct optee *optee,
-> > >>                                           struct optee_msg_arg *arg,
-> > >>                                           struct optee_call_ctx *call_ctx)
-> > >>  {
-> > >> @@ -650,7 +651,7 @@ static void handle_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
-> > >>                 shm = optee_rpc_cmd_alloc_suppl(ctx, sz);
-> > >>                 break;
-> > >>         case OPTEE_RPC_SHM_TYPE_KERNEL:
-> > >> -               shm = tee_shm_alloc_priv_kernel_buf(ctx, sz);
-> > >> +               shm = tee_shm_alloc_priv_kernel_buf(optee->ctx, sz);
-> > >>                 break;
-> > >>         default:
-> > >>                 arg->ret = TEEC_ERROR_BAD_PARAMETERS;
-> > >> @@ -746,7 +747,7 @@ static void handle_rpc_func_cmd(struct tee_context *ctx, struct optee *optee,
-> > >>         switch (arg->cmd) {
-> > >>         case OPTEE_RPC_CMD_SHM_ALLOC:
-> > >>                 free_pages_list(call_ctx);
-> > >> -               handle_rpc_func_cmd_shm_alloc(ctx, arg, call_ctx);
-> > >> +               handle_rpc_func_cmd_shm_alloc(ctx, optee, arg, call_ctx);
-> > >>                 break;
-> > >>         case OPTEE_RPC_CMD_SHM_FREE:
-> > >>                 handle_rpc_func_cmd_shm_free(ctx, arg);
-> > >> @@ -775,7 +776,7 @@ static void optee_handle_rpc(struct tee_context *ctx,
-> > >>
-> > >>         switch (OPTEE_SMC_RETURN_GET_RPC_FUNC(param->a0)) {
-> > >>         case OPTEE_SMC_RPC_FUNC_ALLOC:
-> > >> -               shm = tee_shm_alloc_priv_kernel_buf(ctx, param->a1);
-> > >> +               shm = tee_shm_alloc_priv_kernel_buf(optee->ctx, param->a1);
-> > >>                 if (!IS_ERR(shm) && !tee_shm_get_pa(shm, 0, &pa)) {
-> > >>                         reg_pair_from_64(&param->a1, &param->a2, pa);
-> > >>                         reg_pair_from_64(&param->a4, &param->a5,
-> > >> --
-> > >> 2.31.1
-> > >>
+Signed-off-by: Shijith Thotton <sthotton@marvell.com>
+---
+ drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
+index 2748a3327e39..620fa9b23e78 100644
+--- a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
++++ b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
+@@ -1650,7 +1650,7 @@ static inline int cpt_register_algs(void)
+ 
+ 	err = crypto_register_aeads(otx2_cpt_aeads,
+ 				    ARRAY_SIZE(otx2_cpt_aeads));
+-	if (err) {
++	if (err && !IS_ENABLED(CONFIG_DM_CRYPT)) {
+ 		crypto_unregister_skciphers(otx2_cpt_skciphers,
+ 					    ARRAY_SIZE(otx2_cpt_skciphers));
+ 		return err;
+@@ -1661,8 +1661,9 @@ static inline int cpt_register_algs(void)
+ 
+ static inline void cpt_unregister_algs(void)
+ {
+-	crypto_unregister_skciphers(otx2_cpt_skciphers,
+-				    ARRAY_SIZE(otx2_cpt_skciphers));
++	if (!IS_ENABLED(CONFIG_DM_CRYPT))
++		crypto_unregister_skciphers(otx2_cpt_skciphers,
++					    ARRAY_SIZE(otx2_cpt_skciphers));
+ 	crypto_unregister_aeads(otx2_cpt_aeads, ARRAY_SIZE(otx2_cpt_aeads));
+ }
+ 
+-- 
+2.25.1
+

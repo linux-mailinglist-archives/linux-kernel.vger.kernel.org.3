@@ -2,108 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CCC49663E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 21:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39280496642
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 21:16:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232802AbiAUUMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 15:12:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231717AbiAUUMW (ORCPT
+        id S232850AbiAUUQM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 21 Jan 2022 15:16:12 -0500
+Received: from coyote.holtmann.net ([212.227.132.17]:45621 "EHLO
+        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229815AbiAUUQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 15:12:22 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB374C06173B;
-        Fri, 21 Jan 2022 12:12:21 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id s13so3033123ejy.3;
-        Fri, 21 Jan 2022 12:12:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TWFhQ8AyYyJtKJhYHxbzZAy/uyi61n/qj66gr+QR1JU=;
-        b=C8EOiSjCDvxrWY2Ruh48zw6GmmqDRMiC4Xh4oNcfGcsAk4QxT/4WpK9v30k7R8BJTP
-         Ox33CjNanCQL5JyR5uyLDlkgeLcOdifO5g9DsCa0rbRNbnWai+SokHAOH8jjHzhYibLU
-         +zS9PNDuW/W449Hl6zRgYlVFU1GH8q3F2fwCNvg0PKdCaFYlX1Oi9gpQMYDiEgeBBn4E
-         gepuFb5h9afDmvRCUqdyNzK+46+J1POQ0Dw50E6frm5NfGq4duBsbIy48/Su6VdUdePn
-         8FaHt4DcROcLF95bgfpKvTH6CankmVX8ujX+aQajQ6ivme+VErteaMSP9P5K3Gatceg+
-         C3/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TWFhQ8AyYyJtKJhYHxbzZAy/uyi61n/qj66gr+QR1JU=;
-        b=gWDzKTdcP9JrRU/Q4pUA6Ov+KCNcvk2raJiEhNKJS4ncMXPDZ40zkQhM5h0pxYCQ5y
-         azS8bM1Aq2qRYMkrqf8VqxDgep5vnYMApmPkAvwB1NFAqIL64Lye0w+saeyv2/PbixiC
-         CkSc6kvB7L8MY7O4Ld0i5L853tbQ/GGh8LKHd3AenCM9dsf1cV4DDOA9t/qcWVTxBang
-         i+o1z5HVkQ8X8jAGKwSd9Eke1zOzV0/lUtlC8ZPc4i5rstwWtjB876bo946gPimueacX
-         8WZFFB4ngj0T1+0dv9wuxQauIcCP/7uASO6c0THpioT9pA5vM8XYaxZtYmtTGep/MF9K
-         3B0Q==
-X-Gm-Message-State: AOAM532ZzETPGpZkaYQ6dKHa41rx4ZnupIL9IeKOlXqAodRgd+gdYzq7
-        uG5hwMos9A0fi+6I1S9E5jxTlU7R0G0VtKduQpkmNTkhLB8=
-X-Google-Smtp-Source: ABdhPJxiTTwzTmbtx9DNC7Ah5PIXbFyKWQWSb2hxPEtw2WvBrKl7feHCqB0yc+Flx4KZez6dtVy+19KCludTGmAPY9M=
-X-Received: by 2002:a17:906:3004:: with SMTP id 4mr4419944ejz.579.1642795940215;
- Fri, 21 Jan 2022 12:12:20 -0800 (PST)
-MIME-Version: 1.0
-References: <20220118145251.1548-1-sbinding@opensource.cirrus.com>
- <20220118145251.1548-6-sbinding@opensource.cirrus.com> <CAJZ5v0g0n201FPcG9LBNG3e4UdNYSWmj_1sN3MxLxmK=GoF+tA@mail.gmail.com>
- <a3522b5e-fb36-b959-d2ea-d141d3ad9999@opensource.cirrus.com> <CAJZ5v0h8MWb3sSuqWHUcm9TVWP0uJ+=GmzAuqVtNag2LP+0kYQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0h8MWb3sSuqWHUcm9TVWP0uJ+=GmzAuqVtNag2LP+0kYQ@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 21 Jan 2022 22:11:43 +0200
-Message-ID: <CAHp75VekU6j4vB_ej8k1f5JcTrAfm10aeekZo8_=jenK1KRbUA@mail.gmail.com>
-Subject: Re: [PATCH v3 05/10] platform/x86: i2c-multi-instantiate: Move it to
- drivers/acpi folder
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Lucas tanure <tanureal@opensource.cirrus.com>,
-        Stefan Binding <sbinding@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
-        <alsa-devel@alsa-project.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        patches@opensource.cirrus.com
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 21 Jan 2022 15:16:10 -0500
+Received: from smtpclient.apple (p4fefca45.dip0.t-ipconnect.de [79.239.202.69])
+        by mail.holtmann.org (Postfix) with ESMTPSA id BF3C6CED16;
+        Fri, 21 Jan 2022 21:16:06 +0100 (CET)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
+Subject: Re: [PATCH v1 1/2] Bluetooth: aosp: surface AOSP quality report
+ through mgmt
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <20220121192152.v1.1.I2015b42d2d0a502334c9c3a2983438b89716d4f0@changeid>
+Date:   Fri, 21 Jan 2022 21:16:06 +0100
+Cc:     linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        =?utf-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
+        Joseph Hwang <josephsih@google.com>,
+        Archie Pusaka <apusaka@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <5728C674-E467-4955-AEDC-6FFB05A9D869@holtmann.org>
+References: <20220121192152.v1.1.I2015b42d2d0a502334c9c3a2983438b89716d4f0@changeid>
+To:     Joseph Hwang <josephsih@chromium.org>
+X-Mailer: Apple Mail (2.3693.40.0.1.81)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 9:53 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> On Wed, Jan 19, 2022 at 6:33 PM Lucas tanure
-> <tanureal@opensource.cirrus.com> wrote:
-> > On 1/19/22 16:53, Rafael J. Wysocki wrote:
-> > > On Tue, Jan 18, 2022 at 3:53 PM Stefan Binding
-> > > <sbinding@opensource.cirrus.com> wrote:
+Hi Joseph,
 
-...
+> When receiving a HCI vendor event, the kernel checks if it is an
+> AOSP bluetooth quality report. If yes, the event is sent to bluez
+> user space through the mgmt socket.
+> 
+> Signed-off-by: Joseph Hwang <josephsih@chromium.org>
+> Reviewed-by: Archie Pusaka <apusaka@chromium.org>
+> ---
+> 
+> include/net/bluetooth/hci_core.h |  2 ++
+> include/net/bluetooth/mgmt.h     |  7 ++++
+> net/bluetooth/aosp.c             | 61 ++++++++++++++++++++++++++++++++
+> net/bluetooth/aosp.h             | 12 +++++++
+> net/bluetooth/hci_event.c        | 33 ++++++++++++++++-
+> net/bluetooth/mgmt.c             | 22 ++++++++++++
+> 6 files changed, 136 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/hci_core.h
+> index 21eadb113a31..727cb9c056b2 100644
+> --- a/include/net/bluetooth/hci_core.h
+> +++ b/include/net/bluetooth/hci_core.h
+> @@ -1861,6 +1861,8 @@ int mgmt_add_adv_patterns_monitor_complete(struct hci_dev *hdev, u8 status);
+> int mgmt_remove_adv_monitor_complete(struct hci_dev *hdev, u8 status);
+> void mgmt_adv_monitor_device_lost(struct hci_dev *hdev, u16 handle,
+> 				  bdaddr_t *bdaddr, u8 addr_type);
+> +int mgmt_quality_report(struct hci_dev *hdev, struct sk_buff *skb,
+> +			u8 quality_spec);
+> 
+> u8 hci_le_conn_update(struct hci_conn *conn, u16 min, u16 max, u16 latency,
+> 		      u16 to_multiplier);
+> diff --git a/include/net/bluetooth/mgmt.h b/include/net/bluetooth/mgmt.h
+> index 99266f7aebdc..6a0fcb3aef8a 100644
+> --- a/include/net/bluetooth/mgmt.h
+> +++ b/include/net/bluetooth/mgmt.h
+> @@ -1120,3 +1120,10 @@ struct mgmt_ev_adv_monitor_device_lost {
+> 	__le16 monitor_handle;
+> 	struct mgmt_addr_info addr;
+> } __packed;
+> +
+> +#define MGMT_EV_QUALITY_REPORT			0x0031
+> +struct mgmt_ev_quality_report {
+> +	__u8 quality_spec;
+> +	__u8 data_len;
+> +	__u8 data[0];
+> +} __packed;
+> diff --git a/net/bluetooth/aosp.c b/net/bluetooth/aosp.c
+> index 432ae3aac9e3..9e3551627ad5 100644
+> --- a/net/bluetooth/aosp.c
+> +++ b/net/bluetooth/aosp.c
+> @@ -199,3 +199,64 @@ int aosp_set_quality_report(struct hci_dev *hdev, bool enable)
+> 	else
+> 		return disable_quality_report(hdev);
+> }
+> +
+> +#define BLUETOOTH_QUALITY_REPORT_EV		0x58
+> +struct bqr_data {
+> +	__u8 quality_report_id;
+> +	__u8 packet_type;
+> +	__le16 conn_handle;
+> +	__u8 conn_role;
+> +	__s8 tx_power_level;
+> +	__s8 rssi;
+> +	__u8 snr;
+> +	__u8 unused_afh_channel_count;
+> +	__u8 afh_select_unideal_channel_count;
+> +	__le16 lsto;
+> +	__le32 conn_piconet_clock;
+> +	__le32 retransmission_count;
+> +	__le32 no_rx_count;
+> +	__le32 nak_count;
+> +	__le32 last_tx_ack_timestamp;
+> +	__le32 flow_off_count;
+> +	__le32 last_flow_on_timestamp;
+> +	__le32 buffer_overflow_bytes;
+> +	__le32 buffer_underflow_bytes;
+> +
+> +	/* Vendor Specific Parameter */
+> +	__u8 vsp[0];
+> +} __packed;
+> +
+> +struct aosp_hci_vs_data {
+> +	__u8 code;
+> +	__u8 data[0];
+> +} __packed;
 
-> > > Why are you moving it away from platform/x86?
-> > >
-> > > Adding SPI to the mix doesn't seem to be a sufficient reason.
-> > >
-> > > If this were going to be needed on non-x86, that would be a good
-> > > reason for moving it, but is that actually the case?  If so, why isn't
-> > > that mentioned in the changelog above?
-> > >
-> >
-> > It was a request made by Andy Shevchenko:
-> > https://lkml.org/lkml/2021/12/3/347
->
-> But he hasn't given any reasons why that'd be better.
+unless you need these two for something, scrap them. You can define constants for the size check.
 
-My thoughts were that these are related to ACPI handling the serial
-buses in one place. However, counter arguments might be that the cases
-of the resources like this are found only on x86 hardware (while ACPI
-should be agnostic to that) and that the i2c and spi already do ACPI
-stuff on their own. That said, there are pros and cons and I'm fine
-with either choice at the end of the day.
+> +
+> +bool aosp_is_quality_report_evt(struct sk_buff *skb)
+> +{
+> +	struct aosp_hci_vs_data *ev;
+> +
+> +	if (skb->len < sizeof(struct aosp_hci_vs_data))
+> +		return false;
+> +
+> +	ev = (struct aosp_hci_vs_data *)skb->data;
+> +
+> +	return ev->code == BLUETOOTH_QUALITY_REPORT_EV;
+> +}
+> +
+> +bool aosp_pull_quality_report_data(struct sk_buff *skb)
+> +{
+> +	size_t bqr_data_len = sizeof(struct bqr_data);
+> +
+> +	skb_pull(skb, sizeof(struct aosp_hci_vs_data));
+> +
+> +	/* skb->len is allowed to be larger than bqr_data_len to have
+> +	 * the Vendor Specific Parameter (vsp) field.
+> +	 */
+> +	if (skb->len < bqr_data_len) {
+> +		BT_ERR("AOSP evt data len %d too short (%u expected)",
+> +		       skb->len, bqr_data_len);
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
 
--- 
-With Best Regards,
-Andy Shevchenko
+This part I find a bit convoluted, just do a basic length check and then move on. The kernel has no interest in this data.
+
+> diff --git a/net/bluetooth/aosp.h b/net/bluetooth/aosp.h
+> index 2fd8886d51b2..49894a995647 100644
+> --- a/net/bluetooth/aosp.h
+> +++ b/net/bluetooth/aosp.h
+> @@ -10,6 +10,8 @@ void aosp_do_close(struct hci_dev *hdev);
+> 
+> bool aosp_has_quality_report(struct hci_dev *hdev);
+> int aosp_set_quality_report(struct hci_dev *hdev, bool enable);
+> +bool aosp_is_quality_report_evt(struct sk_buff *skb);
+> +bool aosp_pull_quality_report_data(struct sk_buff *skb);
+> 
+> #else
+> 
+> @@ -26,4 +28,14 @@ static inline int aosp_set_quality_report(struct hci_dev *hdev, bool enable)
+> 	return -EOPNOTSUPP;
+> }
+> 
+> +static inline bool aosp_is_quality_report_evt(struct sk_buff *skb)
+> +{
+> +	return false;
+> +}
+> +
+> +static inline bool aosp_pull_quality_report_data(struct sk_buff *skb)
+> +{
+> +	return false;
+> +}
+> +
+> #endif
+> diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+> index 681c623aa380..bccb659a9454 100644
+> --- a/net/bluetooth/hci_event.c
+> +++ b/net/bluetooth/hci_event.c
+> @@ -37,6 +37,7 @@
+> #include "smp.h"
+> #include "msft.h"
+> #include "eir.h"
+> +#include "aosp.h"
+> 
+> #define ZERO_KEY "\x00\x00\x00\x00\x00\x00\x00\x00" \
+> 		 "\x00\x00\x00\x00\x00\x00\x00\x00"
+> @@ -4225,6 +4226,36 @@ static void hci_num_comp_blocks_evt(struct hci_dev *hdev, void *data,
+> 	queue_work(hdev->workqueue, &hdev->tx_work);
+> }
+> 
+> +#define QUALITY_SPEC_NA			0x0
+> +#define QUALITY_SPEC_INTEL_TELEMETRY	0x1
+> +#define QUALITY_SPEC_AOSP_BQR		0x2
+> +
+> +static bool quality_report_evt(struct hci_dev *hdev,  void *data,
+> +			       struct sk_buff *skb)
+> +{
+> +	if (aosp_is_quality_report_evt(skb)) {
+> +		if (aosp_has_quality_report(hdev) &&
+> +		    aosp_pull_quality_report_data(skb))
+> +			mgmt_quality_report(hdev, skb, QUALITY_SPEC_AOSP_BQR);
+> +
+> +		return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +static void hci_vendor_evt(struct hci_dev *hdev, void *data,
+> +			   struct sk_buff *skb)
+> +{
+> +	/* Every distinct vendor specification must have a well-defined
+> +	 * condition to determine if an event meets the specification.
+> +	 * The skb is consumed by a specification only if the event meets
+> +	 * the specification.
+> +	 */
+> +	if (!quality_report_evt(hdev, data, skb))
+> +		msft_vendor_evt(hdev, data, skb);
+> +}
+
+No, not like this. This gets messy really quickly.
+
+We should allow for defining vendor event prefixes here. That AOSP decided to convolute the space 0x54 and above in unfortunate, but that is what we have to deal with.
+
+> +
+> static void hci_mode_change_evt(struct hci_dev *hdev, void *data,
+> 				struct sk_buff *skb)
+> {
+> @@ -6811,7 +6842,7 @@ static const struct hci_ev {
+> 	HCI_EV(HCI_EV_NUM_COMP_BLOCKS, hci_num_comp_blocks_evt,
+> 	       sizeof(struct hci_ev_num_comp_blocks)),
+> 	/* [0xff = HCI_EV_VENDOR] */
+> -	HCI_EV(HCI_EV_VENDOR, msft_vendor_evt, 0),
+> +	HCI_EV(HCI_EV_VENDOR, hci_vendor_evt, 0),
+> };
+> 
+> static void hci_event_func(struct hci_dev *hdev, u8 event, struct sk_buff *skb,
+> diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
+> index 08d6494f1b34..78687ae885be 100644
+> --- a/net/bluetooth/mgmt.c
+> +++ b/net/bluetooth/mgmt.c
+> @@ -4389,6 +4389,28 @@ static int set_exp_feature(struct sock *sk, struct hci_dev *hdev,
+> 			       MGMT_STATUS_NOT_SUPPORTED);
+> }
+> 
+> +int mgmt_quality_report(struct hci_dev *hdev, struct sk_buff *skb,
+> +			u8 quality_spec)
+> +{
+> +	struct mgmt_ev_quality_report *ev;
+> +	size_t ev_len;
+> +	int err;
+> +
+> +	/* The ev comes with a variable-length data field. */
+> +	ev_len = sizeof(*ev) + skb->len;
+> +	ev = kmalloc(ev_len, GFP_KERNEL);
+> +	if (!ev)
+> +		return -ENOMEM;
+> +
+> +	ev->quality_spec = quality_spec;
+> +	ev->data_len = skb->len;
+> +	memcpy(ev->data, skb->data, skb->len);
+> +	err = mgmt_event(MGMT_EV_QUALITY_REPORT, hdev, ev, ev_len, NULL);
+> +	kfree(ev);
+> +
+> +	return err;
+> +}
+> +
+
+Don’t we have mgmt helper functions that allow us to add headers to a mgmt skb. I think there is really no point in allocating memory via kmalloc.
+
+Regards
+
+Marcel
+

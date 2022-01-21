@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCC04965C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 20:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D374965C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 20:36:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232671AbiAUTgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 14:36:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58150 "EHLO
+        id S230350AbiAUTgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 14:36:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232304AbiAUTf5 (ORCPT
+        with ESMTP id S231918AbiAUTf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 21 Jan 2022 14:35:57 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D88C06173D;
-        Fri, 21 Jan 2022 11:35:56 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id q22so1506281wrc.5;
-        Fri, 21 Jan 2022 11:35:56 -0800 (PST)
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F285C06173B;
+        Fri, 21 Jan 2022 11:35:57 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id j5-20020a05600c1c0500b0034d2e956aadso23373717wms.4;
+        Fri, 21 Jan 2022 11:35:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XBkuRgwe6wjN8B0dWdq4qTtmz/vmICR+ObQMfngMweY=;
-        b=O9JyzuHxsKOFunpzLm1NYXhbGQa+ChfNsd5JWvOX1nyic3o+BdNjoHrCWDNqYzAl4M
-         LfFFoWvm8LKZyZjppzTfSytupqohwTAayMTqzC4cve5IFWjCIO5HJoCdLEMkokywfa1O
-         8qpUdG/AxUgcjnNP0zCUHuTujGd6LEbTHwJT103aAiH0AX/ukX6aKls9RFzu06E2x5LE
-         QuA2rSsoUYLcwm2eHwZgZDwua9K76EeFKhMgqJTorQE2AG5LJIXdQtfb3px9dwtdZOI/
-         3UvDUkkogf/rprv5ZC4TzGqJpswbE9mcwlozOyzsuwmf/rM84Kfp3E8QGXicgkQw3M0R
-         Hc/g==
+        bh=MwkPi3zTHNX/WgU468/COGljzbksLucVcX9Vresnwgs=;
+        b=LwnDHY743c6eDbeipZdlM8nn4Dgac96JeYrvbzh6fJdwrL35SIQ9aku/vaFiTegm3I
+         SNuL3Bmz+M78HJHbi5s+cuiave4A7a7zlOwklF+Ggc2cKwnOg7hZtijbV5aktMdXKxIo
+         ZV3JLYW58W+KMvDySOGlYyUR4xsnAzon4tiyrlqVSmukDZvgm0nJgh7KHyLFqc315M0q
+         hcpykVuCISlRUuGHZZ9DPKRtkgpR7AIa33NfxCVz2vFwOajBy3HpgqGtzF3cZ7jHh0+t
+         X5k9KT1C4bmll5y4l+VUQ1uzleNv7KLOfA+Pre0ejloffDRu3Lxr60VqSLRbKha1pA+9
+         xdDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XBkuRgwe6wjN8B0dWdq4qTtmz/vmICR+ObQMfngMweY=;
-        b=kXsYi6JarnIKS4xe9YySTtqBSmJi/MFHLm28Cxd9h3AXo7DU2TWYOtMeHU5XN/7VDb
-         0AHk1VJA7bS5PcRi98+PyVGHZK8x1IuXJVdTaS75WwsHUERx2uwrBFmiumqkb6A9DWaC
-         llcVNLhQJoH3qSguCShGMEX5Dj5coq5c3ydBtuzNz+dF1S2rh/dLe0pqVcEgr35eIFDN
-         MbLwSXhHMiNqZrkDBtnyo+QSInH0NvWmbuujDsHoyo1phY43/lfjKJLM82JjU6PXUDlV
-         LPGMWINNJkgvnBUs4XwdRrcMTKNPQzbxxFxrm4FXtS3vIe4qez6Y2IY4BE47xHf2ekMC
-         id/g==
-X-Gm-Message-State: AOAM530D52fiJMvjbakOKipXbtCuuX2DuQxmn6FPlpa6uDdf+mcRSUu7
-        BSRv9VEY+MS405MputRr85w8C3WBXkAsww==
-X-Google-Smtp-Source: ABdhPJy1LaVeyY+Ot8O5P3cv87hxYyzBFU4XK/HMU1KkSa+tiFmuEgPZ54IgF+1VaedIe+Ar6XVxfw==
-X-Received: by 2002:a5d:6481:: with SMTP id o1mr4770121wri.682.1642793754716;
-        Fri, 21 Jan 2022 11:35:54 -0800 (PST)
+        bh=MwkPi3zTHNX/WgU468/COGljzbksLucVcX9Vresnwgs=;
+        b=7SgxewGoXXdKyi5gB8zr36rQ/eo8y18e5NrQEE0h1wGBWVQrFX8YMs8Lxjv9cvoQDJ
+         dzobu1te0Rqkpy9dWCt9WbDhxQc/CGWuwMOxRi4WaELNMx7ju+lXz2drt6t8U5kBudyz
+         2TBcmSRzP7xle1n0c6U1NrSoSTvtl8lIhCS2ZEWhIaVWlSLMa1KjoChduVYXAt7yGD8a
+         kAkjMsVPRhlrDdZlkNtgE6XL5JAJdiU/bmdp/HE2kInbYO0zYSu+cMRja/NvpBNLm0Q0
+         TrnD8lnADd8ZrCdasH23ps37RreUWLbZq7NAjLffTtHLbC8xtgjBQ0yEe9dXAwZZy2OC
+         v4ZQ==
+X-Gm-Message-State: AOAM530xSOLqcn3o/FvaeO9pKwqneVmbCSOf+oO4iNRIFlYQVNGO3efr
+        B1b6gcI8a59BCVRq6k6lePQ=
+X-Google-Smtp-Source: ABdhPJyFsQthU3A6b+uTqQqhxIKQGXmdPyc/ikXDfHK3s6P81y5blSPkoLY8ftvYXEVZEY0zDYbBpA==
+X-Received: by 2002:a05:600c:255:: with SMTP id 21mr2093446wmj.108.1642793755826;
+        Fri, 21 Jan 2022 11:35:55 -0800 (PST)
 Received: from debby ([2a01:e0a:a6d:a8d0:7ff4:8f61:5574:9f95])
-        by smtp.gmail.com with ESMTPSA id l6sm8685539wry.75.2022.01.21.11.35.54
+        by smtp.gmail.com with ESMTPSA id n16sm6151123wms.13.2022.01.21.11.35.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 11:35:54 -0800 (PST)
+        Fri, 21 Jan 2022 11:35:55 -0800 (PST)
 From:   Romain Perier <romain.perier@gmail.com>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
@@ -55,10 +55,10 @@ To:     Michael Turquette <mturquette@baylibre.com>,
         Romain Perier <romain.perier@gmail.com>,
         Rob Herring <robh+dt@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/9] ARM: mstar: Link cpupll to second core
-Date:   Fri, 21 Jan 2022 20:35:40 +0100
-Message-Id: <20220121193544.23231-6-romain.perier@gmail.com>
+        linux-kernel@vger.kernel.org, Willy Tarreau <w@1wt.eu>
+Subject: [PATCH v3 6/9] ARM: mstar: Add OPP table for infinity
+Date:   Fri, 21 Jan 2022 20:35:41 +0100
+Message-Id: <20220121193544.23231-7-romain.perier@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220121193544.23231-1-romain.perier@gmail.com>
 References: <20220121193544.23231-1-romain.perier@gmail.com>
@@ -70,26 +70,60 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Daniel Palmer <daniel@0x0f.com>
 
-The second core also sources it's clock from the CPU PLL.
+Add an OPP table for the inifinity chips so
+that cpu frequency scaling can happen.
 
+Co-authored-by: Willy Tarreau <w@1wt.eu>
 Signed-off-by: Daniel Palmer <daniel@0x0f.com>
 ---
- arch/arm/boot/dts/mstar-infinity2m.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm/boot/dts/mstar-infinity.dtsi | 34 +++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/arch/arm/boot/dts/mstar-infinity2m.dtsi b/arch/arm/boot/dts/mstar-infinity2m.dtsi
-index 6d4d1d224e96..dc339cd29778 100644
---- a/arch/arm/boot/dts/mstar-infinity2m.dtsi
-+++ b/arch/arm/boot/dts/mstar-infinity2m.dtsi
-@@ -11,6 +11,8 @@ cpu1: cpu@1 {
- 		device_type = "cpu";
- 		compatible = "arm,cortex-a7";
- 		reg = <0x1>;
-+		clocks = <&cpupll>;
-+		clock-names = "cpuclk";
- 	};
- };
+diff --git a/arch/arm/boot/dts/mstar-infinity.dtsi b/arch/arm/boot/dts/mstar-infinity.dtsi
+index 0bee517797f4..441a917b88ba 100644
+--- a/arch/arm/boot/dts/mstar-infinity.dtsi
++++ b/arch/arm/boot/dts/mstar-infinity.dtsi
+@@ -8,6 +8,40 @@
  
+ #include <dt-bindings/gpio/msc313-gpio.h>
+ 
++/ {
++	cpu0_opp_table: opp_table0 {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		opp-240000000 {
++			opp-hz = /bits/ 64 <240000000>;
++			opp-microvolt = <1000000>;
++			clock-latency-ns = <300000>;
++		};
++
++		opp-400000000 {
++			opp-hz = /bits/ 64 <400000000>;
++			opp-microvolt = <1000000>;
++			clock-latency-ns = <300000>;
++		};
++		opp-600000000 {
++			opp-hz = /bits/ 64 <600000000>;
++			opp-microvolt = <1000000>;
++			clock-latency-ns = <300000>;
++		};
++
++		opp-800000000 {
++			opp-hz = /bits/ 64 <800000000>;
++			opp-microvolt = <1000000>;
++			clock-latency-ns = <300000>;
++		};
++	};
++};
++
++&cpu0 {
++	operating-points-v2 = <&cpu0_opp_table>;
++};
++
+ &imi {
+ 	reg = <0xa0000000 0x16000>;
+ };
 -- 
 2.34.1
 

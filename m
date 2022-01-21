@@ -2,82 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA2F1495DC0
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 11:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6845495DC3
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 11:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380007AbiAUK2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 05:28:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
+        id S1380014AbiAUK33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 05:29:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344593AbiAUK2S (ORCPT
+        with ESMTP id S1380006AbiAUK31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 05:28:18 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB17CC061574;
-        Fri, 21 Jan 2022 02:28:17 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id u18so26930571edt.6;
-        Fri, 21 Jan 2022 02:28:17 -0800 (PST)
+        Fri, 21 Jan 2022 05:29:27 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BDCC061401
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 02:29:27 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id k31so24686832ybj.4
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 02:29:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=sifive.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=/YTbY1T0th9FlgLE+y1cmjd6nPDOK5Mo4NKzJkpO+nY=;
-        b=Uc9Eq3gFDreyO0TiPr/A5WXeLxBpv9JnLBXcPtzcyMr8WspUbhjZMBtd7SCJQJoZ7X
-         ByiLZyjSW6PNQRBmB5QVSz9bNDDee7+j3+4DtoGEVDfZ6mCJt7zpOKTScKJzoZZ4OxQI
-         BYxfw0E+mmoMcKx9HrbLyDqSyA9MHTn80aTl4q/SWwCY6i+PyGenbYmuyWG3aRm61Pwm
-         rwUfeD1EfJiDFyffZwHBFwdNXXEF/zAOGg1+wscPflwY4NWw2h3JDunafHYfmRpsto/j
-         jHLMLBA0i/feX1cu4JUfcaBnzRBtMAN+N62fi9/Qse+UAawU4+xabsgqFc78yvnebVJT
-         BClQ==
+        bh=O8w6xWRpa7rbpkggVeukinLzBFh9GxZQwFDGtpRnC44=;
+        b=m52NB69onp/zx9ahchIitMVkr5LhjxaNcYFjkdcinu6bnm9NAQJTjMrHBbkgeM9OfC
+         HXftb2G62xf1sm5KLZvxgQ3rvesY+Sc/YcBdei2LGNQPra9qIgiu+UDhbDLA/VlfLBNt
+         skF2g3Rsb9f2kPHcPaRq4sQv1t9DmTSjopwjSJ3rTiLL8Eua0dYVlPgXR0O7SbecPdOj
+         6s2IrOUSUF9GNbarrDN+oMV7NtJ0sWXDzbFR7oEP8DyZq8+FHuynvTWwPi7p5nB5xNwS
+         gYi+WSDxq/CnJBmKrW3oQXzXVfOQqViHni+3d2n5l4giZdSD6XLNDjEMoA6tfnqg5H1N
+         /vOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/YTbY1T0th9FlgLE+y1cmjd6nPDOK5Mo4NKzJkpO+nY=;
-        b=LpDMUiddzsO9vLhGrbS3mUlJqgQWoWNZ6XYhbSEP5RYrXq6ezEjRk/Pr0a4J1PFgF6
-         c1xcykdtB7F8Cty4qZIPlBafRsW1b3RHhdc/OMWm41zWZxoA9AJ/ReLEdubmSq8PGT0x
-         U7CG1s87e/vtJdXIRcLiNuIlb0ijMFCfrR6YUKTo5QOTWNeB+FIfAMY5jGrHAU945sWz
-         B1847VNbzXfQ5xck1t19ieiK1XFa+JQM9q68xPdedTs3f1XAC8cz1PVmt0B2jf95zwGn
-         PxTxG1ZVtfPtEdYXPY1tNHHxgtCpxksaYGNWD7ZCFpjahSukttjDemN7cHS1jlbk272d
-         fcHQ==
-X-Gm-Message-State: AOAM532v5YgaUmLd8jVPNNgC3kTwcudbQuVEOFDcv7RLSRC6hcciigQ1
-        HZGk5pzAfmOfDPX5OSTMDPBKD4HacUaRyWK/wdmdD2sD/UtLxA==
-X-Google-Smtp-Source: ABdhPJwk/gzx6qo+6nl7Eu0aoZil8vPZuVhGJJZAl5vufe0kYyn9R5J2ofDTjDYQModnpNU5qy2MckXBBeP5GqKxaAU=
-X-Received: by 2002:a17:907:9802:: with SMTP id ji2mr2886960ejc.44.1642760896412;
- Fri, 21 Jan 2022 02:28:16 -0800 (PST)
+        bh=O8w6xWRpa7rbpkggVeukinLzBFh9GxZQwFDGtpRnC44=;
+        b=y4JJfpybXwhhKaDMmRLJc8TveLfnR67NoPTrEUf2Gn17E6MFVCnqKJUePi1CX4y/O/
+         PrrT/k/W9SQG4GqxHcCT5c6FpPMCIBjPD4K5bW3dfl/UhTq4VWMen0KpvUxEyOHxhOnf
+         E27gvKrRfxeW8G5BmAGbOYehUTL97GklpevIqjQ/MK5vwCVdvTtPnkWr/IKeF7BVBV0x
+         a6YgZy6VaZhTtwBikbloaDRcD/bNad4LGGi0r48uC+zk+Tt52pOJe4CQFgppUoD3LMMh
+         sWuw8co6OLbojfkaUFFWEg39k73mpZ1udK52X0NwLS8mNVzjnUYM3iLhYzUT3adXsBb8
+         R6aQ==
+X-Gm-Message-State: AOAM531vd3KtwAPx0G6j4fHcq6hvz7CPRDaXe7ORRBS49T0ViYR3aIZe
+        iqEK5m9ngOw+iUjSkHbP6qKHaG8eH17pNBu++n9l/w==
+X-Google-Smtp-Source: ABdhPJxm744i+nISDqxOsYuvMp+v23wPfnB2Z/8fLa4of8nEAD0vpc980qigY5xY1bfcMU3/heJwA/3CEi3t6OXMJUQ=
+X-Received: by 2002:a25:2507:: with SMTP id l7mr5166575ybl.526.1642760966773;
+ Fri, 21 Jan 2022 02:29:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20220121093426.6336-1-grace.kao@intel.com>
-In-Reply-To: <20220121093426.6336-1-grace.kao@intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 21 Jan 2022 12:27:40 +0200
-Message-ID: <CAHp75VfD72ZzTw4wc4Oteg+XvRqRipN-YjLqQjUGGy8f83By+w@mail.gmail.com>
-Subject: Re: pinctrl: intel: Fix a glitch when updating IRQ flags on a
- preconfigured line
-To:     Grace Kao <grace.kao@intel.com>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Kane Chen <kane.chen@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <0d0b0a3ad703f5ef50611e2dd80439675bda666a.1642383007.git.zong.li@sifive.com>
+ <mhng-5b3e2596-3558-4534-9229-26885ee4cc5c@palmer-ri-x1c9>
+ <CANXhq0ruGxjO0WPUipzZ7QQM1oEapyHAvb_aVQ_CMqVxbjc_BQ@mail.gmail.com> <CAMuHMdVh_cXpbUeOmr_1K0dOJwGHSO0Ao=W43j5mpgvOiNyV9w@mail.gmail.com>
+In-Reply-To: <CAMuHMdVh_cXpbUeOmr_1K0dOJwGHSO0Ao=W43j5mpgvOiNyV9w@mail.gmail.com>
+From:   Zong Li <zong.li@sifive.com>
+Date:   Fri, 21 Jan 2022 18:29:15 +0800
+Message-ID: <CANXhq0oTrVMhY19odFHroJKXmW1dROdS5J5YR-osO9uwbr9GKA@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] dmaengine: sf-pdma: Get number of channel by
+ device tree
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Bin Meng <bin.meng@windriver.com>,
+        Green Wan <green.wan@sifive.com>, Vinod <vkoul@kernel.org>,
+        dmaengine <dmaengine@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 11:35 AM Grace Kao <grace.kao@intel.com> wrote:
+On Fri, Jan 21, 2022 at 4:33 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Zong, Palmer,
+>
+> On Fri, Jan 21, 2022 at 3:21 AM Zong Li <zong.li@sifive.com> wrote:
+> > On Fri, Jan 21, 2022 at 2:52 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+> > > On Sun, 16 Jan 2022 17:35:28 PST (-0800), zong.li@sifive.com wrote:
+> > > > It currently assumes that there are always four channels, it would
+> > > > cause the error if there is actually less than four channels. Change
+> > > > that by getting number of channel from device tree.
+> > > >
+> > > > For backwards-compatible, it uses the default value (i.e. 4) when there
+> > > > is no 'dma-channels' information in dts.
+> > >
+> > > Some of the same wording issues here as those I pointed out in the DT
+> > > bindings patch.
+> > >
+> > > > Signed-off-by: Zong Li <zong.li@sifive.com>
+>
+> > > > --- a/drivers/dma/sf-pdma/sf-pdma.c
+> > > > +++ b/drivers/dma/sf-pdma/sf-pdma.c
+> > > > @@ -482,9 +482,7 @@ static void sf_pdma_setup_chans(struct sf_pdma *pdma)
+> > > >  static int sf_pdma_probe(struct platform_device *pdev)
+> > > >  {
+> > > >       struct sf_pdma *pdma;
+> > > > -     struct sf_pdma_chan *chan;
+> > > >       struct resource *res;
+> > > > -     int len, chans;
+> > > >       int ret;
+> > > >       const enum dma_slave_buswidth widths =
+> > > >               DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
+> > > > @@ -492,13 +490,21 @@ static int sf_pdma_probe(struct platform_device *pdev)
+> > > >               DMA_SLAVE_BUSWIDTH_16_BYTES | DMA_SLAVE_BUSWIDTH_32_BYTES |
+> > > >               DMA_SLAVE_BUSWIDTH_64_BYTES;
+> > > >
+> > > > -     chans = PDMA_NR_CH;
+> > > > -     len = sizeof(*pdma) + sizeof(*chan) * chans;
+> > > > -     pdma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
+> > > > +     pdma = devm_kzalloc(&pdev->dev, sizeof(*pdma), GFP_KERNEL);
+> > > >       if (!pdma)
+> > > >               return -ENOMEM;
+> > > >
+> > > > -     pdma->n_chans = chans;
+> > > > +     ret = of_property_read_u32(pdev->dev.of_node, "dma-channels",
+> > > > +                                &pdma->n_chans);
+> > > > +     if (ret) {
+> > > > +             dev_notice(&pdev->dev, "set number of channels to default value: 4\n");
+> > > > +             pdma->n_chans = PDMA_MAX_NR_CH;
+> > > > +     }
+> > > > +
+> > > > +     if (pdma->n_chans > PDMA_MAX_NR_CH) {
+> > > > +             dev_err(&pdev->dev, "the number of channels exceeds the maximum\n");
+> > > > +             return -EINVAL;
+> > >
+> > > Can we get away with just using only the number of channels the driver
+> > > actually supports?  ie, just never sending an op to the channels above
+> > > MAX_NR_CH?  That should leave us with nothing to track.
+>
+> In theory we can...
+>
+> > It might be a bit like when pdma->n_chans is bigger than the maximum,
+> > set the pdma->chans to PDMA_MAX_NR_CH, then we could ensure that we
+> > don't access the channels above the maximum. If I understand
+> > correctly, I gave the similar thought in the thread of v2 patch, and
+> > there are some discussions on that, but this way seems to lead to
+> > hard-to-track problems.
+>
+> ... but that would mean that when a new variant appears that supports
+> more channels, no error is printed, and people might not notice
+> immediately that the higher channels are never used.
+>
 
-> Tested-by: Grace Kao <grace.kao@intel.com>
+I guess people might need to follow the dt-bindings, so they couldn't
+specify the number of channels to the value which is more than
+maximum. But as you mentioned, if people don't notice that and specify
+it more than maximum,  they wouldn't be aware that the higher channels
+are never used. It seems to me that we could keep returning the error
+there, or show a warning message and use PDMA_MAX_NR_CH in that
+situation, both looks good to me.
 
-Thanks for testing. I will apply the tag to the original patch. The
-idea that you simply reply to the original message with the line above
-and that's it, no need to resend a full patch.
-
-> Change-Id: I6ff5cf0c42a76dce709a445c1820c8f3a84d6d89
-
-I see it comes from the internal tree.
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds

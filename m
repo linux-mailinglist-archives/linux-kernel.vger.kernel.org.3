@@ -2,186 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 186B249639A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 18:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 133B749639F
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 18:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378980AbiAUROS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 12:14:18 -0500
-Received: from mail-bn1nam07on2046.outbound.protection.outlook.com ([40.107.212.46]:24699
-        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231567AbiAUROR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 12:14:17 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aQv0PsjU4w9MEwrY4Da4el8UrFepL/YktwBdIKbz+LmEJxyTJrnZFXNebv1yrvh1v3TCma+Kn56LLljyez77qNbcn3s0EQJGxZGY+cFceYNmLnhsxKQ95MwJ3mXzTlEu8kid7vGyGzX9VzbxysVJ2WR65DHsvsquQ2Q7GnShQ1kBQ86oRHD0uWT/2AbuKEEhkSO170uCsEAWTxjk1qe1JNuwEsGxXQnQJ3rGcwQMQci6PLL0anIfCRhrhUaaWyP1GzFqSaNC02g4LLL2EtyxlBZIRT8ceOJEmfiDCgfC+v035LPc+nz7/UnkU0QCbXvhWxeBMheyJyPd1qRq3opggg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8wynW7sCUe7/Ggs+t9f5YntYbce8yRZjJase/jHdAT0=;
- b=B8y1JHJh9/S20etnDdA60rwumUN8wkKoY5V7SbaYhQ+E1cX+E1rHpB4EIGFqGYdV5VJ+mU5oz7RW0C3KTZGRz/z5uFtmPoVd6X+w69CNIAIeYuLehSTnlYyijoA6RCbwNjrXtIizmSYis9eqoS6SiWA6whhX658dWuVWOZZBFoGZcdSQvQNKoTOPvWu8MHOHsirsKpwS/Xy3j/eKPTAiobLpU/1Xdk2DFsSznIAJhkw8rQZlE7TMwBmS7Rgy6x2F191M8NEiw6RXKWGos9/cQpgwuDWRKGA6Emb+nDV8Y6EGFi12usrI/P4uQN4PHLibEn4aBo2Cu2aSj/aVzLJ8iw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8wynW7sCUe7/Ggs+t9f5YntYbce8yRZjJase/jHdAT0=;
- b=NmnCXyP86RJj89Qb8H8wJNZsjaYiVrn3AfUWOnR9LqSqDxzyCFE3QCJ3iqRy3+aNJOY2+4wT3hjw7C6Bcn1s0dtXe8+dbvuJV85C+BFg2f3QmrNHFvnTYWJTBq27uOBOeur0KKfkMdw1Xgsx/pe3HI3m8+DI9uiuWKB6IuNrNdQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2470.namprd12.prod.outlook.com (2603:10b6:4:b4::39) by
- DM5PR12MB1803.namprd12.prod.outlook.com (2603:10b6:3:10d::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4909.10; Fri, 21 Jan 2022 17:14:15 +0000
-Received: from DM5PR12MB2470.namprd12.prod.outlook.com
- ([fe80::f110:6f08:2156:15dc]) by DM5PR12MB2470.namprd12.prod.outlook.com
- ([fe80::f110:6f08:2156:15dc%7]) with mapi id 15.20.4909.011; Fri, 21 Jan 2022
- 17:14:15 +0000
-Message-ID: <33da2a09-603e-dca9-7f93-a481fe6cbccf@amd.com>
-Date:   Fri, 21 Jan 2022 22:44:05 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bharata B Rao <bharata@amd.com>
-Subject: Re: [RFC PATCH 6/6] KVM: SVM: Pin SEV pages in MMU during
- sev_launch_update_data()
-Content-Language: en-US
-To:     Peter Gonda <pgonda@google.com>
-References: <20220118110621.62462-1-nikunj@amd.com>
- <20220118110621.62462-7-nikunj@amd.com>
- <CAMkAt6p1-82LTRNB3pkPRwYh=wGpreUN=jcUeBj_dZt8ss9w0Q@mail.gmail.com>
- <4e68ae1c-e0ed-2620-fbd1-0f0f7eb28c4f@amd.com>
- <CAMkAt6pnk8apG4VAdM3NRUokBH32pZx-VOrnhzq+7qJu+ubJ3A@mail.gmail.com>
-From:   "Nikunj A. Dadhania" <nikunj@amd.com>
-In-Reply-To: <CAMkAt6pnk8apG4VAdM3NRUokBH32pZx-VOrnhzq+7qJu+ubJ3A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0162.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:26::17) To DM5PR12MB2470.namprd12.prod.outlook.com
- (2603:10b6:4:b4::39)
+        id S1379359AbiAURPK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 21 Jan 2022 12:15:10 -0500
+Received: from mail-qt1-f181.google.com ([209.85.160.181]:44850 "EHLO
+        mail-qt1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235906AbiAURPG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 12:15:06 -0500
+Received: by mail-qt1-f181.google.com with SMTP id f5so10598738qtp.11;
+        Fri, 21 Jan 2022 09:15:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=lmFYJSCcLqyJ3gmEXT1GTQFiLSiARI98tj+Ubi9SZeQ=;
+        b=NDWYMxGjnyT8pHtEBnvkraDqJw7s3NG5jvhXxFz2/9pLe9Wo4BB+qzynV8PmEKmf2M
+         tcjw40+vPV3t4trjDJAR2HzlU2NSUb0xhwAbjVHbNyyddDDoQDLSwpZaow2aY6KXg54d
+         NT3rgS51Zo3igQoV6eB4+soMpxn7xmgIF6/ge8kliRWNBrYCPS+k02DpQL6ls62JSM4D
+         3ADZtdAc1W/tjZXK4s2XNr8x6n/EAXMjQ9FEVEz51/JFs9QvDqdWq7ozO1D/BiqJ3bA1
+         VqRk/A8mfkbVnWJbmvyPpTMn/7ivkrLI1yZZ0A4iROX284/jvFB9g52w6bW3ErAPjtRm
+         ABIA==
+X-Gm-Message-State: AOAM533zQVqSJ+mXcqH2+lz9R9hSUOsnAmZlNPFvGIubjYo0I1lJ0em5
+        VNP9rVStz4lNYBzf7radFCcg/Tb4vfP9gxJda8d0xMOM
+X-Google-Smtp-Source: ABdhPJwNokEUfO47u31kWlKtBBs/kxjVwO00ZzdECaIzLyfyZVKBSBi0s0IUukpHMiPYzaal1yKdbyNYkPUNVKxnCs4=
+X-Received: by 2002:a05:622a:118b:: with SMTP id m11mr4044592qtk.369.1642785305913;
+ Fri, 21 Jan 2022 09:15:05 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e753017d-ea7d-4660-8dc1-08d9dd017326
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1803:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR12MB18033E66299C2B7838F73781E25B9@DM5PR12MB1803.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6bUAUKxkdEMqHv4pNz5gQbvPgzUCVb7IWYJdSsbDBfB5SNpotLxNQZiV4a7Ht6JdrWlY8QRKYywp8CiwKJxDC9emToIfLC+ropSVX11D6j2hv9M4+FRHGdr1HwFvxRkxlTY1qAZPAaiz4w2aZw4ivsignj/VflHOIXZjPu8Fo9AljysMopgyrPgrMrEBJRdRC2IfLwtAy6/L/HCID2EWB1uRRb9x84OIRp+KG7Y3SxoF+4JJntCw/EQIhSlA93zB31yRRn0WEAdGVo+zmRwGMw0qUByhC42BXsWC/qdFn0+7g4NaKZZ9Jr9fSZNwvloOHF6sYn0oEObWoAm+y5S8JJtYvPlZmLbiHJURTpPoSpTci0lmpBxjkO9Q3p65pqMgaj9oB0S779/CsY/VwkRiQsf5e+dduqZrHI7iuQ3QDj7iTI6P2l10h1r1TS+uemVaaOt1q0AnKeu+zDkdftFsMz/Ivm20YI53sRVcxwHJnYqXjPpoLxAtXaYFTA64tVaqzD36TVQE3vd/0tLeEl0116C2TJ0xtydmobXsl2AibS9UdjX+QnhUfkvhh1DAXxTl1bCml+4ST6Y61beA4rJn/86Ti5c+o4DmiE1OQfJkPOfBhmLotQxRI1Q/OdJVY29nRDjFZzTwc+XsRKgNBypB4OPlbhmcjIpwvh+2MuE3sjQaFdo/zgmaY5XglrcBfS37lksW1V9rUJruswq+gqdZGpOe2OkiSm86GxL5CRDiNBw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2470.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(36756003)(2906002)(4326008)(6666004)(66556008)(66476007)(53546011)(66946007)(8936002)(6512007)(38100700002)(6486002)(6916009)(6506007)(26005)(186003)(31686004)(2616005)(8676002)(54906003)(5660300002)(316002)(508600001)(31696002)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UkVXT1d1bnh4Ui9pVkFNVG9MeU1iMVExZStKbXpkcC9BelB1S1pnVGJvdTZT?=
- =?utf-8?B?d1FObC9CYnpOckpLTnJnS2h5Um4ycXovWW9KU2hhVW9MUlVtbVgrQ3Z1NzVz?=
- =?utf-8?B?QWFqdEhXakYzNldIRzVkbmNxVHRXTDBKM3dvVTF1WTk0bm1DQ2NoQTloTjFm?=
- =?utf-8?B?QUJtQWFQU0QwYWhQVlViNnlCZHg0cTNkUlYvS2dwMGt0K1RFVkRKL3J1dlAy?=
- =?utf-8?B?eVF6enZld2lLVjllNjJaaXJIS3VHaWY1WE1QU1JJTGIwWWxJZzE4UUsvRFhE?=
- =?utf-8?B?YXM2dUFaajFJYTNxZ2d1TVJyOWtYUDhncXdidUxBRXh0c0tBc29QUWNGMXhH?=
- =?utf-8?B?c240clhDdlkwaTcwT2QyZVI2Ky90bkpySGNOTzIzdEFMMzc4bHFxTE1hTmE5?=
- =?utf-8?B?eVh0NWphZlloMi96c1UvUjYzdkpPYzg1T1NybTZiRld5TlVnK1FZaVltNmsw?=
- =?utf-8?B?UmxMdDY0aGt0b1g2WFBuUkRDb2Ewdlg4M2YzS0ExWHRNdGYxMFpXNFlmY2Qw?=
- =?utf-8?B?cW1OVUZkRHEvNFBUTUNuMmd4SEpia0RScllEUlNQSnYwekQyZnZGNVR4MFpR?=
- =?utf-8?B?NWNzWTZoQ3FNcnZpcG5LNW9zYTgxL1YwVnl6bHVCRk9SOFV2MFRYeUpQUHAv?=
- =?utf-8?B?aGpxVHdKdU9NYVB2QkZxM1g0N0o4VnZSSXNDQkRPSFVpaDhRekZ4VTNRcDBz?=
- =?utf-8?B?aU9ZQkwyeUQ0bkdJc1pUWWkwODhhNWc5b0tOTTF4ZjR5UHNqdTRaRURvZ0pu?=
- =?utf-8?B?dzB2L3ExeGFIYUM3QityUFVTd3JrVVFTdVppZGYrYnp4R2pPMk5FRFRBZUhk?=
- =?utf-8?B?YkI2VlhtRjdVQXN1QkVuZjJyNmtiSEJQOUtnRWZjQmpVL1UyQkxMY0FHUW1T?=
- =?utf-8?B?OU1XZlVzSTV5RkovK0xkaGpXTzJzWkU5VWF3cUw1SUZZajh3aC9NNVZYWDVH?=
- =?utf-8?B?Nzc2b2xyUFA3cXdrTXlMeGNnTFBwR3JNRE4wOHNtM0xtU251Mm8vVUY5Z3VF?=
- =?utf-8?B?QWcrVTJ5aTkxMS9NNVdXNFl2RElROEZQdjRRWDZFOXFoZDhkUHNOcnVvNlVi?=
- =?utf-8?B?S1l3VFdMUWVHY253UktrTlZ0NTFuUGJIQlNOM0hDd0JEMWRNWUlxOUFsVnMr?=
- =?utf-8?B?bnJKV1BaODYzK3dSZGZDTXkrVStlS2FBQ1hZalRabW5TWThnQTFESFZMa3la?=
- =?utf-8?B?NmhTY2JBYWh2Zkt4VDRIam9vaWpHTVhnZVdkd21vV0Z4ZVRKNG9LcGV6bUJy?=
- =?utf-8?B?akFpU0I5Tmw0VUZuRERvSEIxMDhQSVFkWDMwS0VtWVdzNGw1a1FKOE9hOFhn?=
- =?utf-8?B?U0VzckZ1cjdVbkZvalJzekgxNnVBU01QVkhwbFdOUlQzLzc3Rk5rOVFqcFcx?=
- =?utf-8?B?K0hpVXo2b3RYR0lLSnBHeUxQTWhVVkNRVmRvT3luUGp4MUhxZ2t5d1NaSGRZ?=
- =?utf-8?B?eEh6TUhHRGVCSzBkcTVPRXBjRTFkL1o5a1JKSWNxdU0yTVVvZVd2ZURDUmFy?=
- =?utf-8?B?YjNja2FYUHhtR1ZIaGM0dmJ3MXZ6bkxMd1E4S09HWHV6NXVSUmExdjdVMVUr?=
- =?utf-8?B?cDVqTUtFTXlOQXBUSThzVEFoNW5nMFVla3VsYmZ2elRxaGtKQTNOUmhNVFRi?=
- =?utf-8?B?QWkvYlNTMUpqUlFLQzNQOEFoTms5QVh6Yi9BTjFGUVJzcVlzczRKNDhHbmV3?=
- =?utf-8?B?VTFtTXRpdXJieXJXU2NVYUJ5VVByVzJ6RlVqcHpLSVpMamRmcUFHVUJTazl5?=
- =?utf-8?B?a0JXL0RuL3lkMUdyYmt0eUlIcXBRN0IvNXNHc2ZGMlZjV3RaTkdaV3B3S3I0?=
- =?utf-8?B?WnM1ZmE3enZWRlhhL01DOFY5OUpJeWhkTDhKTWRSWFo5M1cwclhNNisrNXZU?=
- =?utf-8?B?dzkxL0oreURIUklISTlLZG5jYVRSTEhIYytjK0d1UUlzZ3p6djdlOFRhMWh1?=
- =?utf-8?B?b2tLUnQzOGwyQVN2SVRNUXlhWDMxUXpzRmtXY2NDREpKNS9xUVl6Mm5SRlN4?=
- =?utf-8?B?VzVWdi9VcDNQZGV6UUFZdktuNVByeVV1TWxIRzFtYkhtS29tdDZQQk9sUmZD?=
- =?utf-8?B?WTZwbXN6OHBCbFZhSDBmZzFXNm1PTVJDUGpObFIrMllOak5BbVV0ZUtTTU00?=
- =?utf-8?B?MXpvOXpucWo2b1JiTXpBTWJKZ1pqUnNpWU9kd1lYNytiWUZkckVEc3pQbXd4?=
- =?utf-8?Q?QIfIzNECs6dxA0SieMtC5uY=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e753017d-ea7d-4660-8dc1-08d9dd017326
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2470.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2022 17:14:15.1247
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mOuwD/nMQ2lPR3f+EKy7Dhw3Ihqv0OTzYYBXgrrOKw/ruJGo26Ug6w8yE5IxRQeqrPA1ZXq22tbWUTea6uNhEQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1803
+References: <20220121143254.6432-1-sbinding@opensource.cirrus.com>
+ <20220121143254.6432-8-sbinding@opensource.cirrus.com> <CAJZ5v0gK=-SXUDekg_2DtOuMsn6Ls4gS+nymei2Qa9ZEFvqGcA@mail.gmail.com>
+ <019901d80ee7$a6bf2a90$f43d7fb0$@opensource.cirrus.com>
+In-Reply-To: <019901d80ee7$a6bf2a90$f43d7fb0$@opensource.cirrus.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 21 Jan 2022 18:14:55 +0100
+Message-ID: <CAJZ5v0j+DkX+-P1XxZ=HAnUzPjdkNFkXRTjJzhSH27KfDFAGDQ@mail.gmail.com>
+Subject: Re: [PATCH v5 7/9] platform/x86: serial-multi-instantiate: Add SPI support
+To:     Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
+        <alsa-devel@alsa-project.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        patches@opensource.cirrus.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/21/2022 9:30 PM, Peter Gonda wrote:
-> On Thu, Jan 20, 2022 at 9:08 PM Nikunj A. Dadhania <nikunj@amd.com> wrote:
->>
->> On 1/20/2022 9:47 PM, Peter Gonda wrote:
->>> On Tue, Jan 18, 2022 at 4:07 AM Nikunj A Dadhania <nikunj@amd.com> wrote:
-
->>>>  static int sev_launch_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
->>>>  {
->>>>         unsigned long vaddr, vaddr_end, next_vaddr, npages, pages, size, i;
->>>> @@ -510,15 +615,21 @@ static int sev_launch_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
->>>>         vaddr_end = vaddr + size;
->>>>
->>>>         /* Lock the user memory. */
->>>> -       inpages = sev_pin_memory(kvm, vaddr, size, &npages, 1);
->>>> +       if (atomic_read(&kvm->online_vcpus))
->>>> +               inpages = sev_pin_memory_in_mmu(kvm, vaddr, size, &npages);
->>>
->>> IIUC we can only use the sev_pin_memory_in_mmu() when there is an
->>> online vCPU because that means the MMU has been setup enough to use?
->>> Can we add a variable and a comment to help explain that?
->>>
->>> bool mmu_usable = atomic_read(&kvm->online_vcpus) > 0;
->>
->> Sure, will add comment and the variable.
->>
->>>
->>>> +       else
->>>> +               inpages = sev_pin_memory(kvm, vaddr, size, &npages, 1);
->>>
->>> So I am confused about this case. Since svm_register_enc_region() is
->>> now a NOOP how can a user ensure that memory remains pinned from
->>> sev_launch_update_data() to when the memory would be demand pinned?
->>>
->>> Before users could svm_register_enc_region() which pins the region,
->>> then sev_launch_update_data(), then the VM could run an the data from
->>> sev_launch_update_data() would have never moved. I don't think that
->>> same guarantee is held here?
->>
->> Yes, you are right. One way is to error out of this call if MMU is not setup.
->> Other one would require us to maintain all list of pinned memory via sev_pin_memory()
->> and unpin them in the destroy path.
-> 
-> Got it. So we'll probably still need regions_list to track those
-> pinned regions and free them on destruction.
+On Fri, Jan 21, 2022 at 5:55 PM Stefan Binding
+<sbinding@opensource.cirrus.com> wrote:
 >
-Yes, I will have to bring that structure back.
- 
-> Also similar changes are probably needed in sev_receive_update_data()?
+> Hi,
+>
+> > -----Original Message-----
+> > From: Rafael J. Wysocki <rafael@kernel.org>
+> > Sent: 21 January 2022 15:31
+> > To: Stefan Binding <sbinding@opensource.cirrus.com>
+> > Cc: Mark Brown <broonie@kernel.org>; Rafael J . Wysocki
+> > <rafael@kernel.org>; Len Brown <lenb@kernel.org>; Hans de Goede
+> > <hdegoede@redhat.com>; Mark Gross <markgross@kernel.org>; Jaroslav
+> > Kysela <perex@perex.cz>; Takashi Iwai <tiwai@suse.com>; moderated
+> > list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM... <alsa-
+> > devel@alsa-project.org>; Linux Kernel Mailing List <linux-
+> > kernel@vger.kernel.org>; linux-spi <linux-spi@vger.kernel.org>; ACPI Devel
+> > Maling List <linux-acpi@vger.kernel.org>; Platform Driver <platform-driver-
+> > x86@vger.kernel.org>; patches@opensource.cirrus.com
+> > Subject: Re: [PATCH v5 7/9] platform/x86: serial-multi-instantiate: Add SPI
+> > support
+> >
+>
+>
+> > > diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> > > index 5b65d687f046..28f5bbf0f27a 100644
+> > > --- a/drivers/platform/x86/Kconfig
+> > > +++ b/drivers/platform/x86/Kconfig
+> > > @@ -991,12 +991,12 @@ config TOPSTAR_LAPTOP
+> > >           If you have a Topstar laptop, say Y or M here.
+> > >
+> > >  config SERIAL_MULTI_INSTANTIATE
+> > > -       tristate "I2C multi instantiate pseudo device driver"
+> > > -       depends on I2C && ACPI
+> > > +       tristate "I2C and SPI multi instantiate pseudo device driver"
+> > > +       depends on I2C && SPI && ACPI
+> >
+> > Should this be (I2C || SPI) && ACPI ?
+>
+> We made it dependent on both I2C and SPI because of how interconnected the
+> serial-multi-instantiate driver is with both SPI and I2C. We felt attempting to make
+> the driver compatible with one without the other would end up very complicated.
 
-Right, there are multiple locations where sev_pin_memory() is used, I will go through each 
-case and make changes. Alternatively, add to the region_list in sev_pin_memory() and free in 
-destruction.
+That's fine IMV, but it would be good to mention it in the changelog.
 
-Regards
-Nikunj
+> > > @@ -146,7 +247,21 @@ static int smi_probe(struct platform_device *pdev)
+> > >
+> > >         platform_set_drvdata(pdev, smi);
+> > >
+> > > -       return smi_i2c_probe(pdev, adev, smi, inst_array);
+> > > +       switch (node->bus_type) {
+> > > +       case SMI_I2C:
+> > > +               return smi_i2c_probe(pdev, adev, smi, node->instances);
+> > > +       case SMI_SPI:
+> > > +               return smi_spi_probe(pdev, adev, smi, node->instances);
+> > > +       case SMI_AUTO_DETECT:
+> > > +               if (i2c_acpi_client_count(adev) > 0)
+> > > +                       return smi_i2c_probe(pdev, adev, smi, node->instances);
+> > > +               else
+> > > +                       return smi_spi_probe(pdev, adev, smi, node->instances);
+> > > +       default:
+> > > +               break;
+> >
+> > Why is this needed?
+>
+> This return code is attempting to ensure that we don’t try to guess whether we
+> expect devices to be I2C or SPI - especially with regards to existing devices.
+> We wanted to maintain compatibility with existing devices, which would all be
+> I2C.
+> For the device for which we are adding, the same HID is used by both the same
+> chip for both I2C and SPI, so we also needed a way to support both.
+
+I meant why was the "default" case needed.  Sorry for the confusion.

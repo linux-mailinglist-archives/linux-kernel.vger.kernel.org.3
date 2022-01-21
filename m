@@ -2,115 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8EE495C5F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 09:55:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 036E7495C66
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 09:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349644AbiAUIzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 03:55:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349524AbiAUIzi (ORCPT
+        id S1379591AbiAUI5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 03:57:05 -0500
+Received: from mout.kundenserver.de ([212.227.126.130]:33879 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234205AbiAUI5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 03:55:38 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4A4C06173F
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 00:55:37 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id m8-20020a9d4c88000000b00592bae7944bso10999093otf.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 00:55:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yrM5fABO5SZcVbJoe9Ix4MRfc99NE9JR6NJPbJC6LIw=;
-        b=KdiG09w8aBvAILbJf1NNS5DPaRYfzCW+Q2zBiSQtGxosLVvdbNwIij9eBpVmRKEEfd
-         RiRNQcPkdeCrvSHGjaGe0wdonu4KDRc+HZkaE+DdIjteru54VOeon+Jkt5l+H6OONHzd
-         Nyn93CewKb0rN9iwOgv9qdnYX9xYsU8pQrCKU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yrM5fABO5SZcVbJoe9Ix4MRfc99NE9JR6NJPbJC6LIw=;
-        b=uBrG83FP9Q3AIO4MDgLhR15QnPruX2pK4tVPW3mHLP4Hb11U+TppD5tjhVPIrwsJOn
-         QZGhH8V77XKYU7J4lMZ0q2YUGdpMsJ+63LsMZxsrjOdK4j+ZGu0YbNLd7UkvQ83FvN0b
-         iDKq+VHH8S2Ank49KM0f0xKhgp2qZnmF+k+kwRzQxZLQp/VScN328Rq3lYe6V03CQT+i
-         Fn0HRA7K4C6uuS+TUBi1+Zr1eVLFp2eTKFvnfcNCeLqXjOCPBLNm68cd24CRDM9pXtK0
-         LqwpT28OXbmv2aHTtS14XHFECxOu3UUmxR9Z6+2N+BWXTFR9NZvajsb7fk8Wy89Gu7X3
-         wg4Q==
-X-Gm-Message-State: AOAM530ARA6hvShTQLT1+GTUPxTB2wzNx1fl45ueNzauy3on+nODUqlO
-        bjlEeFbABAg1X5/DBcDNBmTjMKwvW+RbhIUkUmVGCw==
-X-Google-Smtp-Source: ABdhPJwrgrd7mUq8sWYme18g4XUw+hqETrkJjUSeUFg9R3q8K6f9Zr4UIqjlIxPMWOCnbdhuDzG7lMe27pz7wBHqx+4=
-X-Received: by 2002:a05:6830:2704:: with SMTP id j4mr2063258otu.323.1642755337197;
- Fri, 21 Jan 2022 00:55:37 -0800 (PST)
+        Fri, 21 Jan 2022 03:57:04 -0500
+Received: from mail-oi1-f175.google.com ([209.85.167.175]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M9WiK-1nGJMv0rHY-005WIw; Fri, 21 Jan 2022 09:57:01 +0100
+Received: by mail-oi1-f175.google.com with SMTP id x193so12786488oix.0;
+        Fri, 21 Jan 2022 00:57:00 -0800 (PST)
+X-Gm-Message-State: AOAM530JDR3GWqRtnL7inzM2TCJNCeLWB7HWJCYZCn4LdGrWw9ulABJu
+        80ROBoJWSEwxEscNhLZajR5dzGehlCoGAtpcJkA=
+X-Google-Smtp-Source: ABdhPJylnMQV70n0iz9SImQwsqAn8J+KL/hKoGrWF8c1XxnGFchA2qX7H9h0ZVY5igqqe7kHNmQOCuoQNmiaakrHJBA=
+X-Received: by 2002:a05:6808:9a:: with SMTP id s26mr2365492oic.108.1642755419287;
+ Fri, 21 Jan 2022 00:56:59 -0800 (PST)
 MIME-Version: 1.0
-References: <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
- <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
- <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de> <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
- <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de> <CAKMK7uE7jnTtetB5ovGeyPxHq4ymhbWmQXWmSVw-V1vP3iNAKQ@mail.gmail.com>
- <b32ffceb-ea90-3d26-f20e-29ae21c68fcf@gmx.de> <20220118062947.6kfuam6ah63z5mmn@sirius.home.kraxel.org>
- <CAMuHMdWXWA2h7zrZa_nnqR_qNdsOdHJS=Vf1YExhvs08KukoNg@mail.gmail.com>
- <3f96f393-e59d-34ac-c98b-46180e2225cd@suse.de> <20220120125015.sx5n7ziq3765rwyo@sirius.home.kraxel.org>
-In-Reply-To: <20220120125015.sx5n7ziq3765rwyo@sirius.home.kraxel.org>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Fri, 21 Jan 2022 09:55:25 +0100
-Message-ID: <CAKMK7uF-V20qWTxQLvTC6GjC8Sg+Pst+UJ3pWCLQ4Q7Khgy62g@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-To:     Gerd Hoffmann <kraxel@redhat.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Helge Deller <deller@gmx.de>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Sven Schnelle <svens@stackframe.org>,
+References: <20220120073911.99857-9-guoren@kernel.org> <CAK8P3a0LxB3we9wHOa4OPmNow6wz5NP49zeYhh7QXNv-MiR8UA@mail.gmail.com>
+ <CAJF2gTQVUF4LSO0a6_MV8x-UAiJw32pAFyS1oPNLXhcEaemzqg@mail.gmail.com>
+In-Reply-To: <CAJF2gTQVUF4LSO0a6_MV8x-UAiJw32pAFyS1oPNLXhcEaemzqg@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 21 Jan 2022 09:56:43 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1sOejkdOyoRUfw4ESS7ewX_8Wj9tQNrZ40OiuDqJnrmw@mail.gmail.com>
+Message-ID: <CAK8P3a1sOejkdOyoRUfw4ESS7ewX_8Wj9tQNrZ40OiuDqJnrmw@mail.gmail.com>
+Subject: Re: [PATCH V3 08/17] riscv: compat: syscall: Add compat_sys_call_table
+ implementation
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup@brainfault.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Hellwig <hch@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        inux-parisc@vger.kernel.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:IRpQPv8WoAqPSucQu/tG6nYL/K7Y5OESJf7MTo7MX1bQCNjtbkX
+ mgieNxFEqUu9XXdJHhk9CH4iJ3s3ba6aZc39s3BytPSR5sZ6og+VWElDBiG+lMGhIbu49Yp
+ xtVVwqEsPyaFk7uAss600Ux+zMasvK/PRfcCfqNeu9pu93+kt8mebWFL8jk5zE+39N3e7Tu
+ zMnPh760S6oQqgLLahT3Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:6ZAe3wFVFro=:Mp2/8vZ841C8qpVmzjLTG0
+ 3vQdqDDuwG6NoS80SODh6gmJ2uPM1IRaO7AuVtu/xT/5X8+f0u6ySwlNYiQL1QVsU3CZyPIUi
+ /1NFBGxq69oP20f9pbNLI1zdTT8hSS1prrdPud2GpYUNrh3WVBwNs66xEq0jQmDVHjX3+DKhF
+ xmC6bw9mZD4qDoTAUgx1FEhmTiu8essyxPAIk2Ic2eVQR1iQf5FpCd0kZpeC9323LCQ4AKomY
+ vfLiadMVIYuadOauUSqF34Tl9HpLGPWP+meTW42WettJkxSkIyi/yLRCaZlB2i7pHR0XzrTjw
+ Cq7XXM3SpJvTQu3hRl7IRXUFAI0fyChieeyIbB2wqvkLE+zMGRy4vqYBMr1fUl/ugRwfc+cpV
+ SL0merbPFUarMIFUZ7Jey8lgvtXqkEa7VyV8RFUEzGd7/RrwPY/+DhWgPr+YCLgaObT90w2xG
+ wtL1L89mZjnn81YOIv5bP6jIXt0lipYrub7EJYxMMH15JpdU0ADmT1T5ldvoFutc3Pkal8p5Y
+ J8dtSJQyYQeJlS3fIOforELqnqOxkyaTdQ0WWmXYbm3Occ8vyDwFKv/n8dy5L7Fqd0vZYNV+5
+ W+/uszNEIo9OBqYkE4INiNDYqFd+aYu1gNAC7ZXgVkQz3CoKZunUoPog5g/VMGgP+fxh4HjAi
+ zJb4r62U4DqDFrP5QF6AxI3uVCMPiSnLwENbQUDxlqsbeSyii6V96qaisw1/U5qchkM94r0kn
+ 56zkjZGV4vIQAIcgADkoZlBYQtue43EiL3WOjJ2J4w8zaAiLad6+WkRhegW2SmPnz0gdyh5ji
+ QYNKtT8r1iGhiHF4pu1kB3SQOGESEDKIC41mA6nMQpDYGticy0=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 9:46 AM Gerd Hoffmann <kraxel@redhat.com> wrote:
->
->   Hi,
->
-> > What I still don't understand: why are you so keen on maintaining an
-> > interface that only serves the console? Nothing else uses fbdev these days.
-> > Why not improve DRM/userspace to the point where it fits your requirements?
-> > Long-term, the latter would make a lot more sense.
->
-> And note that it is *much* easier to write drm drivers these days.
-> We got alot of helpers, we got generic fbdev emulation and more.
->
-> If you are curious just compare the initial commit of the bochs drm
-> driver with the current code.  Initially the driver had to manage ttm
-> and fbdev and whatnot else.  These days writing a (non-accelerated) drm
-> driver is basically some boilerplate picking the helpers which work best
-> for your hardware, the code to actually program the hardware and that's
-> it.
->
-> The "new drivers should be drm" policy exists for years already btw,
-> exactly because of the unfixable fbdev API limitations.  The bochs drm
-> was a fbdev driver initially.  Never merged.  Got rewritten as drm
-> driver and that was merged instead.  In 2013, almost a decade ago.
->
-> And, yes, it very well might be that drm misses some piece here and
-> there for specific hardware, such as fbdev emulation not supporting
-> rgb332.  But I fully agree with Thomas here:  Improving drm is probably
-> a much better way to spend your time.  drm is where the development
-> happens.  fbdev is only kept alive.
+On Fri, Jan 21, 2022 at 7:25 AM Guo Ren <guoren@kernel.org> wrote:
+> On Thu, Jan 20, 2022 at 10:43 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Thu, Jan 20, 2022 at 8:39 AM <guoren@kernel.org> wrote:
 
-Just to clarify, since we had lots of smaller and bigger
-misunderstandings in the thread thus far: DRM_FORMAT_RGB332 exists, so
-drm support that already. The fbdev emulation doesn't yet, but all
-that's needed for that is filling out the code to remap the drm
-description to the fbdev format description for this case. Plus
-testing it all works ofc with fbcon and whatelse. Note that RGB332  is
-a bit more work than e.g. C4, since atm fbdev still uses only bpp to
-identify formats, so would need to be switch over to drm_fourcc first
-before adding anything which aliases with something existing (we have
-C8 already wired up).
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+> > Are you sure these are the right calling conventions? According to [1],
+> > I think the 64-bit argument should be in an aligned pair of registers,
+> > which means you need an extra pad argument as in the arm64 version
+> > of these functions. Same for ftruncate64, pread64, pwrite64, and
+> > readahead.
+>
+> [1] has abandoned.
+>
+> See:
+> https://github.com/riscv-non-isa/riscv-elf-psabi-doc/blob/master/riscv-cc.adoc
+
+Ok, thanks for the reference, I picked the first one that came up in
+a google search and didn't expect this to ever have changed.
+
+> > I still feel like these should be the common implementations next to the
+> > native handlers inside of an #ifdef CONFIG_COMPAT.
+> >
+> > The names clash with the custom versions defined for powerpc and sparc,
+> > but the duplicates look compatible if you can account for the padded
+> > argument and the lo/hi order of the pairs, so could just be removed here
+> > (all other architectures use custom function names instead).
+> I would try it later.
+
+This becomes easier then, as powerpc and sparc already have the non-padded
+calling conventions, so you could just generalize those without looking at
+the other architectures or adding the padding. The powerpc version already
+has the dual-endian version, so using that will work on big-endian sparc and
+on little-endian riscv as well, though we may need to come up with a better name
+for the arg_u32/arg_u64/merge_64 macros in order to put that into a global
+header without namespace collisions.
+
+         Arnd

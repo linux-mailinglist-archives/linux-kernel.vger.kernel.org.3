@@ -2,150 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F694957F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 02:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED904957F9
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 02:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378067AbiAUBti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 20:49:38 -0500
-Received: from mail-oi1-f179.google.com ([209.85.167.179]:39750 "EHLO
-        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378039AbiAUBt2 (ORCPT
+        id S1378269AbiAUBum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 20:50:42 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:16727 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245241AbiAUBul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 20:49:28 -0500
-Received: by mail-oi1-f179.google.com with SMTP id e81so11600984oia.6;
-        Thu, 20 Jan 2022 17:49:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5sobOilTW6v8xilz4tZ45KrTnGC9z7mamXeHGoMLDbg=;
-        b=6BeEPgOtPG5Kt4YgDgXGuwmTEbW5kdEsRGyHd3nK4cX+jwqZfbKXGxa0pj/+bxoF5b
-         jL2ElVAsfuV8sY8KLIPJbuQINdGug7T/ki90MbjQ/ti6A4oq2kFdElgqCjBWC+uMPIeS
-         obHnexsY+dpzH5W5njcWRC0rLQblQteYE6YcJ7KMbRu7/clnkPbj6WG4orXxBjWTu6bc
-         PAOsyW6usikE+eoAXTEHc+fxBAYpbx3F8GE05uZ8R9RRvFwpdkO/yhgAitkpBYxJRnQW
-         khymIMqrkv1bDib5D97uqAYJyLjAHDxET2OmmAC68aXoT8dOlqVgYnSUta6OqkqWcYOb
-         08lQ==
-X-Gm-Message-State: AOAM533lLElvKPyDQSgSTvHJpsN4JLOldalxnH65zTPxLC/y1s4SnxK5
-        QPmxevZTy6s54POpA+qWICb/sZsOvg==
-X-Google-Smtp-Source: ABdhPJzzlOCamMojh5k4oRwg23pIHtOaXP/PGM7aOMQoTKqRCSgDPwOQGdv7YHEXQ3lIzH6y6GICQw==
-X-Received: by 2002:a05:6808:1490:: with SMTP id e16mr1483948oiw.84.1642729767615;
-        Thu, 20 Jan 2022 17:49:27 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id e23sm439611otp.42.2022.01.20.17.49.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 17:49:27 -0800 (PST)
-Received: (nullmailer pid 2331686 invoked by uid 1000);
-        Fri, 21 Jan 2022 01:49:26 -0000
-Date:   Thu, 20 Jan 2022 19:49:26 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/2] dt-bindings: mtd: partitions: Document new
- dynamic-partitions node
-Message-ID: <YeoRJlTbILNtZgoW@robh.at.kernel.org>
-References: <20220120202615.28076-1-ansuelsmth@gmail.com>
- <20220120202615.28076-2-ansuelsmth@gmail.com>
+        Thu, 20 Jan 2022 20:50:41 -0500
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Jg2L32dzPzZfJv;
+        Fri, 21 Jan 2022 09:46:51 +0800 (CST)
+Received: from [10.174.179.200] (10.174.179.200) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 21 Jan 2022 09:50:38 +0800
+Subject: Re: [PATCH net] can: isotp: isotp_rcv_cf(): fix so->rx race problem
+To:     Oliver Hartkopp <socketcan@hartkopp.net>, <mkl@pengutronix.de>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220117120102.2395157-1-william.xuanziyang@huawei.com>
+ <53279d6d-298c-5a85-4c16-887c95447825@hartkopp.net>
+ <280e10c1-d1f4-f39e-fa90-debd56f1746d@huawei.com>
+ <eaafaca3-f003-ca56-c04c-baf6cf4f7627@hartkopp.net>
+ <890d8209-f400-a3b0-df9c-3e198e3834d6@huawei.com>
+ <1fb4407a-1269-ec50-0ad5-074e49f91144@hartkopp.net>
+ <2aba02d4-0597-1d55-8b3e-2c67386f68cf@huawei.com>
+ <64695483-ff75-4872-db81-ca55763f95cf@hartkopp.net>
+From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
+Message-ID: <d7e69278-d741-c706-65e1-e87623d9a8e8@huawei.com>
+Date:   Fri, 21 Jan 2022 09:50:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220120202615.28076-2-ansuelsmth@gmail.com>
+In-Reply-To: <64695483-ff75-4872-db81-ca55763f95cf@hartkopp.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.200]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 09:26:14PM +0100, Ansuel Smith wrote:
-> Document new dynamic-partitions node used to provide an of node for
-> partition registred at runtime by parsers. This is required for nvmem
-> system to declare and detect nvmem-cells.
-
-So you have some discoverable way to find all the partitions and the 
-nvmem cells are at an unknown (to the DT) location, but still need to be 
-described in DT?
-
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->  .../mtd/partitions/dynamic-partitions.yaml    | 59 +++++++++++++++++++
->  1 file changed, 59 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mtd/partitions/dynamic-partitions.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/mtd/partitions/dynamic-partitions.yaml b/Documentation/devicetree/bindings/mtd/partitions/dynamic-partitions.yaml
-> new file mode 100644
-> index 000000000000..7528e49f2d7e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mtd/partitions/dynamic-partitions.yaml
-> @@ -0,0 +1,59 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mtd/partitions/dynamic-partitions.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Dynamic partitions
-> +
-> +description: |
-> +  This binding can be used on platforms which have partitions registered at
-> +  runtime by parsers or partition table present on the flash. Example are
-> +  partitions declared from smem parser or cmdlinepart. This will create an
+> On 20.01.22 12:28, Ziyang Xuan (William) wrote:
+>>>
+>>> On 20.01.22 07:24, Ziyang Xuan (William) wrote:
+>>>
+>>>> I have reproduced the syz problem with Marc's commit, the commit can not fix the panic problem.
+>>>> So I tried to find the root cause for panic and gave my solution.
+>>>>
+>>>> Marc's commit just fix the condition that packet size bigger than INT_MAX which trigger
+>>>> tpcon::{idx,len} integer overflow, but the packet size is 4096 in the syz problem.
+>>>>
+>>>> so->rx.len is 0 after the following logic in isotp_rcv_ff():
+>>>>
+>>>> /* get the FF_DL */
+>>>> so->rx.len = (cf->data[ae] & 0x0F) << 8;
+>>>> so->rx.len += cf->data[ae + 1];
+>>>>
+>>>> so->rx.len is 4096 after the following logic in isotp_rcv_ff():
+>>>>
+>>>> /* FF_DL = 0 => get real length from next 4 bytes */
+>>>> so->rx.len = cf->data[ae + 2] << 24;
+>>>> so->rx.len += cf->data[ae + 3] << 16;
+>>>> so->rx.len += cf->data[ae + 4] << 8;
+>>>> so->rx.len += cf->data[ae + 5];
+>>>>
+>>>
+>>> In these cases the values 0 could be the minimum value in so->rx.len - but e.g. the value 0 can not show up in isotp_rcv_cf() as this function requires so->rx.state to be ISOTP_WAIT_DATA.
+>>
+>> Consider the scenario that isotp_rcv_cf() and isotp_rcv_cf() are concurrent for the same isotp_sock as following sequence:
+> 
+> o_O
+> 
+> Sorry but the receive path is not designed to handle concurrent receptions that would run isotp_rcv_cf() and isotp_rcv_ff() simultaneously.
+> 
+>> isotp_rcv_cf()
+>> if (so->rx.state != ISOTP_WAIT_DATA) [false]
+>>                         isotp_rcv_ff()
+>>                         so->rx.state = ISOTP_IDLE
+>>                         /* get the FF_DL */ [so->rx.len == 0]
+>> alloc_skb() [so->rx.len == 0]
+>>                         /* FF_DL = 0 => get real length from next 4 bytes */ [so->rx.len == 4096]
+>> skb_put(nskb, so->rx.len) [so->rx.len == 4096]
+>> skb_over_panic()
+>>
+> 
+> Even though this case is not possible with a real CAN bus due to the CAN frame transmission times we could introduce some locking (or dropping of concurrent CAN frames) in isotp_rcv() - but this code runs in net softirq context ...
+>
 
-Some information in DT and some on the cmdline seems broken to me. Pick 
-one or the other.
+I thought the kernel code logic should make sure the kernel availability no matter what happens in
+user space code. And tx path has considered so->tx race condition actually but rx path for so->rx.
 
-> +  of node for these dynamic partition where systems like Nvmem can get a
-> +  reference to register nvmem-cells.
-> +
-> +  The partition table should be a node named "dynamic-partitions".
-> +  Partitions are then defined as subnodes. Only the label is required
-> +  as any other data will be taken from the parser.
-> +
-> +maintainers:
-> +  - Ansuel Smith <ansuelsmth@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: dynamic-partitions
-
-This is useless. This tells me nothing about the what's in the 
-partitions.
-
-> +
-> +patternProperties:
-> +  "@[0-9a-f]+$":
-> +    $ref: "partition.yaml#"
-> +
-> +additionalProperties: true
-> +
-> +examples:
-> +  - |
-> +    partitions {
-> +        compatible = "qcom,smem";
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +    };
-> +
-> +    dynamic-partitions {
-> +      compatible = "dynamic-partitions";
-> +
-> +      art: art {
-> +        label = "0:art";
-> +        read-only;
-> +        compatible = "nvmem-cells";
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +
-> +        macaddr_art_0: macaddr@0 {
-> +          reg = <0x0 0x6>;
-> +        };
-> +
-> +        macaddr_art_6: macaddr@6 {
-> +          reg = <0x6 0x6>;
-> +        };
-> +      };
-> +    };
-> -- 
-> 2.33.1
+> Regards,
+> Oliver
 > 
 > 
+>>>
+>>> And when so->rx.len is 0 in isotp_rcv_ff() this check
+>>>
+>>> if (so->rx.len + ae + off + ff_pci_sz < so->rx.ll_dl)
+>>>          return 1;
+>>>
+>>> will return from isotp_rcv_ff() before ISOTP_WAIT_DATA is set at the end. So after that above check we are still in ISOTP_IDLE state.
+>>>
+>>> Or did I miss something here?
+>>>
+>>>> so->rx.len is 0 before alloc_skb() and is 4096 after alloc_skb() in isotp_rcv_cf(). The following
+>>>> skb_put() will trigger panic.
+>>>>
+>>>> The following log is my reproducing log with Marc's commit and my debug modification in isotp_rcv_cf().
+>>>>
+>>>> [  150.605776][    C6] isotp_rcv_cf: before alloc_skb so->rc.len: 0, after alloc_skb so->rx.len: 4096
+>>>
+>>>
+>>> But so->rx_len is not a value that is modified by alloc_skb():
+>>>
+>>>                  nskb = alloc_skb(so->rx.len, gfp_any());
+>>>                  if (!nskb)
+>>>                          return 1;
+>>>
+>>>                  memcpy(skb_put(nskb, so->rx.len), so->rx.buf,
+>>>                         so->rx.len);
+>>>
+>>>
+>>> Can you send your debug modification changes please?
+>>
+>> My reproducing debug as attachment and following:
+>>
+>> diff --git a/net/can/isotp.c b/net/can/isotp.c
+>> index df6968b28bf4..8b12d63b4d59 100644
+>> --- a/net/can/isotp.c
+>> +++ b/net/can/isotp.c
+>> @@ -119,8 +119,8 @@ enum {
+>>   };
+>>
+>>   struct tpcon {
+>> -       int idx;
+>> -       int len;
+>> +       unsigned int idx;
+>> +       unsigned int len;
+>>          u32 state;
+>>          u8 bs;
+>>          u8 sn;
+>> @@ -505,6 +505,7 @@ static int isotp_rcv_cf(struct sock *sk, struct canfd_frame *cf, int ae,
+>>          struct isotp_sock *so = isotp_sk(sk);
+>>          struct sk_buff *nskb;
+>>          int i;
+>> +       bool unexpection = false;
+>>
+>>          if (so->rx.state != ISOTP_WAIT_DATA)
+>>                  return 0;
+>> @@ -562,11 +563,13 @@ static int isotp_rcv_cf(struct sock *sk, struct canfd_frame *cf, int ae,
+>>                                  sk_error_report(sk);
+>>                          return 1;
+>>                  }
+>> -
+>> +               if (so->rx.len == 0)
+>> +                       unexpection = true;
+>>                  nskb = alloc_skb(so->rx.len, gfp_any());
+>>                  if (!nskb)
+>>                          return 1;
+>> -
+>> +               if (unexpection)
+>> +                       printk("%s: before alloc_skb so->rc.len: 0, after alloc_skb so->rx.len: %u\n", __func__, so->rx.len);
+>>                  memcpy(skb_put(nskb, so->rx.len), so->rx.buf,
+>>                         so->rx.len);
+>>
+>>
+>>>
+>>> Best regards,
+>>> Oliver
+>>>
+>>>> [  150.611477][    C6] skbuff: skb_over_panic: text:ffffffff881ff7be len:4096 put:4096 head:ffff88807f93a800 data:ffff88807f93a800 tail:0x1000 end:0xc0 dev:<NULL>
+>>>> [  150.615837][    C6] ------------[ cut here ]------------
+>>>> [  150.617238][    C6] kernel BUG at net/core/skbuff.c:113!
+>>>>
+>>>
+>>> .
+> .

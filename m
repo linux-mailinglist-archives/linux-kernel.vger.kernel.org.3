@@ -2,136 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7743549674F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 22:31:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5D8496752
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 22:33:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbiAUVbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 16:31:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
+        id S230011AbiAUVdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 16:33:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiAUVbh (ORCPT
+        with ESMTP id S229798AbiAUVdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 16:31:37 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88A3C06173B;
-        Fri, 21 Jan 2022 13:31:36 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id p5so31091332ybd.13;
-        Fri, 21 Jan 2022 13:31:36 -0800 (PST)
+        Fri, 21 Jan 2022 16:33:37 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34C5C06173B;
+        Fri, 21 Jan 2022 13:33:36 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id i82so12314124ioa.8;
+        Fri, 21 Jan 2022 13:33:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=XBPXrK5d4Q3kr1rY61LzklnjBEDewcTywkOFDOQFUkc=;
-        b=emvhjIOrkbLkLK7QtoKAezEOQhTjn6XimYAssH9ANqpKpBVzZUO8qo+0n/4HO2bT1Z
-         UjSa8pHCocY/PZZ6+ZCtgarsqa0yFJz/eZPsZL/6u2lnfFPukQKGRJzBGFpmd7mTz3CE
-         qxcffHvPp3TSy2glIKET5KlOUENx/WHlbBKghYsVTWh+LF7YDkfiMzTz046rgztkBC04
-         fo1wkJiOu8TPhz0Z7nnb3UvV/eUEqCz5KbjFsJ0fMljNbko+ecdjeSyEL2qJ9aCV/Wwj
-         nvKmP1Sbu58tHUi5MlxcTI0fnjFeUexm1SH9g7bnkNp9f1aFkntCZisC5E7uZ1CHgwQP
-         Y1xA==
+         :cc;
+        bh=iavqU42bj2wSTgmqVt3xxjReKzumqOVjWmleUy0bDaU=;
+        b=lBuls2whODaDh0IeWokO1lc2qJgP2JLiB3bCnsDp1cbXFhdRiIVQWIti1HZVV4yYr+
+         OMCvjRPRz1AfCG3RIGuQfU8DiRSzl/ahIHw1ePh6o6bOxXAnr38dT9DesX/xSyTPqyDI
+         2OWbT+sw8dhSRPCP8AlePg3+HxvkxpeaFrkF0p40JxX3h1SX0qSB/snVuwJulwg5SH3p
+         uRACmPUmIw0MU29qRqblGsC7YgX4QQ0KlyvWe5EQmhCGPLN1WrUAQbvkBYHS2X1Y8/2I
+         N1/jdYEOVwJbFh32pGTgHF3L0Pz49xoXdKm8zLGliqc3YMejygmu9WgLNMUuOYig+kEc
+         I3tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=XBPXrK5d4Q3kr1rY61LzklnjBEDewcTywkOFDOQFUkc=;
-        b=kgzwdXvOMVWcjHe8XaM2KqI0soKO4m5k1F1mAppXisAfH9U6jhxrNRjlHv59u8ED5O
-         fwKSOo3wQWEG0+zJGF8Uu2oY+URrFuHT5yZMRy7SBubLcFkFpu7mA9cRo/ja2EeBkyNJ
-         i9TrKcBuEqDDUwHZ/2n638Dln/r4L8M2Bnsct/HsaW3+U6eMvnbW+hu3gqp2NMCpbQYf
-         jYfTacFMKLSdP+YAtyibvj8OTYwLSV6wwGIbUdaWsiPaUbODHEyixsQKbwzw2aNRH1M5
-         GVySLfhqCkJ5sNCnH4s+wMkokfY8L/ZY31VD/iUZppRgfQqe0hMf9BenlJEBDXN5y6NA
-         ru+g==
-X-Gm-Message-State: AOAM532siZoDg/VZgyytL3cmCaFwWP625dLFWQ5KRqMYayQHfGGXU10E
-        6A6dFld98LOjlOkLQx8inCyQgrrSJ7LIk48seG8=
-X-Google-Smtp-Source: ABdhPJyosNI2jZMZmoRBd1lV9OFcMO4zy4soqrSDlvOGhQfzpGgMz6abZEWFOYbXpjZQUo/KfutPdvtrvu84Z2WAEww=
-X-Received: by 2002:a25:bd8d:: with SMTP id f13mr8920942ybh.573.1642800696041;
- Fri, 21 Jan 2022 13:31:36 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=iavqU42bj2wSTgmqVt3xxjReKzumqOVjWmleUy0bDaU=;
+        b=PaETwJJEe69QuHZ2InjDVkpMtuIcUtVaCL+Hay0ugfM8bTEKtvOD8yGyK3T7s/uV+3
+         SX3GRUv58P4kuxk+OlbevE+BiuwmxwLvMtp0/EqyBhBgZoduNMuetWvDkOufRduyMlmp
+         3WZ8a8aV4s2+oyV47V1Qrxv1DihXez8SD0aHt74vDgbf/M6aCWtmyIB4nR7ihzO5lNWP
+         04Jr8vA56uVIRZ46ygDCGzB+4QiDsC872EncIY3FPwKAEPSCtSXJAFccXW0xjCqHbLWg
+         gmh0aGW/LuKwUNWbyxXGmyoMYiVv1QL6Jlj7O1uucJhqvIH+CDcmR022eH8SBpbI74cp
+         wv5g==
+X-Gm-Message-State: AOAM533aHprcNLJ3mQaF2mmCcWEiKuiGqehqjMAsHLA9nMxpd6A1PkjC
+        VJV09TdSvgNUJsEj65IXVUdQM2YJZP5NkhdbmY0=
+X-Google-Smtp-Source: ABdhPJzyP4r0f30I+sUcs66o3RZrX5hWJGLcsiHXwcnJyBP+ppPsiL3PgaJV1jFjOe39KrjpPgX8Jr/j45mxjoiLlZ8=
+X-Received: by 2002:a02:a717:: with SMTP id k23mr2857417jam.155.1642800816294;
+ Fri, 21 Jan 2022 13:33:36 -0800 (PST)
 MIME-Version: 1.0
-References: <20220121173622.192744-1-soenke.huster@eknoes.de> <4f3d6dcf-c142-9a99-df97-6190c8f2abc9@eknoes.de>
-In-Reply-To: <4f3d6dcf-c142-9a99-df97-6190c8f2abc9@eknoes.de>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Fri, 21 Jan 2022 13:31:25 -0800
-Message-ID: <CABBYNZ+VQ3Gfw0n=PavFhnnOy2=+1OAeV5UT_S25Lz_4gWzWEQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] Bluetooth: hci_event: Ignore multiple conn complete events
-To:     =?UTF-8?Q?S=C3=B6nke_Huster?= <soenke.huster@eknoes.de>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CABXGCsNb22JCJ4AyR1sYqFtF4QUnvM3B2zQcc1svcm2mquWxoA@mail.gmail.com>
+ <YeUvvIaVJnJrrpYe@kuha.fi.intel.com> <CABXGCsO5PYBuZ11YR16NLLa0H07Jom1JQhWHFuETfotfBfzkMw@mail.gmail.com>
+ <YeVQsRp7aDMcQKs7@kuha.fi.intel.com> <CABXGCsMWXFFQY3L8ixK9K-gYX41_gTjqHRBXNp6gDpUgdnvFfg@mail.gmail.com>
+ <YeVfYOhxGTgg8VpZ@kuha.fi.intel.com> <CABXGCsOwsP7NJ67oyK3HPs2EarSJKLB9EVW7oEh+8bAFihSa8g@mail.gmail.com>
+ <Yea8p1b/sZYKNGaB@kuha.fi.intel.com> <YebBq/WDeYCIvwYw@kuha.fi.intel.com>
+In-Reply-To: <YebBq/WDeYCIvwYw@kuha.fi.intel.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Fri, 21 Jan 2022 13:33:24 -0800
+Message-ID: <CANcMJZDrs418aUoVS4CijQFqgAW3pCbfm_NUCmx+T7HNoiMVnQ@mail.gmail.com>
+Subject: Re: [Bug][5.17-rc0] Between commits daadb3bd0e8d and 455e73a07f6e,
+ the kernel stops loading on my devices.
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        rafael.j.wysocki@intel.com, linux-usb@vger.kernel.org,
+        YongQin Liu <yongqin.liu@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi S=C3=B6nke,
-
-On Fri, Jan 21, 2022 at 10:22 AM S=C3=B6nke Huster <soenke.huster@eknoes.de=
-> wrote:
+On Thu, Jan 20, 2022 at 3:27 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+> On Tue, Jan 18, 2022 at 03:12:10PM +0200, Heikki Krogerus wrote:
+> > I can reproduce this one by simply not creating the component list in
+> > the code. That function - component_master_add_with_match() - can't
+> > handle situation where the list is empty. I'll prepare the fix.
 >
-> I just noticed that just checking for handle does not work, as obviously =
-0x0 could also be a handle value and therefore it can't be distinguished, w=
-hether it is not set yet or it is 0x0.
+> I'm again attaching the proposed fix, just to see if it also gets
+> corrupted. Can you test does it fix this issue?
+> You need to apply it on top of the previous one.
 
-Yep, we should probably check its state, check for state !=3D BT_OPEN
-since that is what hci_conn_add initialize the state.
+We've been hitting the null pointer crash from
+component_master_add_with_match() regression as well on the hikey960
+board.
 
-> On 21.01.22 18:36, Soenke Huster wrote:
-> > When a HCI_CONNECTION_COMPLETE event is received multiple times
-> > for the same handle, the device is registered multiple times which lead=
-s
-> > to memory corruptions. Therefore, consequent events for a single
-> > connection are ignored.
-> >
-> > The conn->state can hold different values so conn->handle is
-> > checked to detect whether a connection is already set up.
-> >
-> > Buglink: https://bugzilla.kernel.org/show_bug.cgi?id=3D215497
-> > Signed-off-by: Soenke Huster <soenke.huster@eknoes.de>
-> > ---
-> > This fixes the referenced bug and several use-after-free issues I disco=
-vered.
-> > I tagged it as RFC, as I am not 100% sure if checking the existence of =
-the
-> > handle is the correct approach, but to the best of my knowledge it must=
- be
-> > set for the first time in this function for valid connections of this e=
-vent,
-> > therefore it should be fine.
-> >
-> > net/bluetooth/hci_event.c | 11 +++++++++++
-> >  1 file changed, 11 insertions(+)
-> >
-> > diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-> > index 681c623aa380..71ccb12c928d 100644
-> > --- a/net/bluetooth/hci_event.c
-> > +++ b/net/bluetooth/hci_event.c
-> > @@ -3106,6 +3106,17 @@ static void hci_conn_complete_evt(struct hci_dev=
- *hdev, void *data,
-> >               }
-> >       }
-> >
-> > +     /* The HCI_Connection_Complete event is only sent once per connec=
-tion.
-> > +      * Processing it more than once per connection can corrupt kernel=
- memory.
-> > +      *
-> > +      * As the connection handle is set here for the first time, it in=
-dicates
-> > +      * whether the connection is already set up.
-> > +      */
-> > +     if (conn->handle) {
-> > +             bt_dev_err(hdev, "Ignoring HCI_Connection_Complete for ex=
-isting connection");
-> > +             goto unlock;
-> > +     }
-> > +
-> >       if (!ev->status) {
-> >               conn->handle =3D __le16_to_cpu(ev->handle);
-> >
+The patch you attached resolves the issue. It would be great to see it
+merged upstream soon!
 
+Tested-by: John Stultz <john.stultz@linaro.org>
 
-
---=20
-Luiz Augusto von Dentz
+thanks
+-john

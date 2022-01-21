@@ -2,89 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0154961B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:03:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA63F4961B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:05:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381431AbiAUPDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 10:03:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238192AbiAUPDU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 10:03:20 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72CB6C06173B;
-        Fri, 21 Jan 2022 07:03:20 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id v186so28455577ybg.1;
-        Fri, 21 Jan 2022 07:03:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ygh2WtsM0rqeWC47MeOF6Vq/PrWpbCmbpsiWibezTCo=;
-        b=nQDctmIve4M2xoQKdwtBRxIQWIjmXDphQ9F/MUW6yfNtcSNgi7GgErh5y+I+SgE/tJ
-         dx/yBZFqiPQ/aDHH0LkUoexAwGhhpdckVq/M1iApdsPV40XoraKJ9FtIP1wmhBt+1FUP
-         2fTqYZbLWywTMnPh6EXbx4cyseJyu0FnFlp0YMVCU7VW4ZkQ+YOuIcgJF3KRi6/oVeNX
-         AjaheosjIvYOT/yIDmuAFG98kfgu3enRYnj0rglYfhS4bEnV5eLpY31kgWRXYcjQSJZg
-         SsXUk1Kn5Xc+pE6X5uJkp2MqZg7hTZKtwPlym2NOHOZKWkdCXo0l/rIhjZhZ/CKOQ8aN
-         SAQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ygh2WtsM0rqeWC47MeOF6Vq/PrWpbCmbpsiWibezTCo=;
-        b=Voq8UCTMSEiQ+G5cxAy5/NF9AYUjO/e0YrFosQzu5g+ThnVyAUWfDEzG7FOtte2mik
-         mzDWw8Q/Bn+X3Fdfcdm34i0p2jFLDJx/c5FIe4fXPnimeIk/Nm69XswcH8EFkWxz0ajH
-         QoeHdbeEKG8HEVnCkCpuAkAzXPNEiQ6qwqWGq/VHdBcJl+wk6TPL9sk4BujkLC4d8MW8
-         LNauO/2a8nxjPf0rYQLZamHvxxpEIbxzv14tLzIdqsz8YsfB9sweUDT6QpQu+cJDmmHM
-         0GNeml+YCmnSBwYOZk7U3db8jNIVP6ssiRt3Vr/8ntlnOuoWxA1zf1V6BfIJ3GTXUbT1
-         +fDQ==
-X-Gm-Message-State: AOAM531HFb6soNybiKLgpcHOTm2AT8U2ky9u98eg3gqkIxMszK0odAuP
-        i23fwVQDAvs5wUUt4q/25CVwRor81HGh3w0WcmA=
-X-Google-Smtp-Source: ABdhPJxpqMWXzaGVe28BBN9Pl//sjXvCfDKa3Bf8cGvQ0T1Wrvd+ljiR1tDlwL/BeIu3U7xkLHNzPq+j9kNE+pgkNv8=
-X-Received: by 2002:a5b:312:: with SMTP id j18mr7333000ybp.640.1642777399510;
- Fri, 21 Jan 2022 07:03:19 -0800 (PST)
+        id S1381466AbiAUPFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 10:05:25 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:47892 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238192AbiAUPFQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 10:05:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=33YBlbwO5zvqlDbvVnjxNrIOMbXq0H1Ta2wkH12gzfM=; b=YF+VZVS87QSVrAHZqL8jd64NYl
+        AsQjsAZ/eWKGpd4UqVNxVS6iiF9dzRyu/iWqScsv3FF9MVYW2+zE5MZuoT6u0scvknbjCbByjPo9k
+        VaW7uWBD0ZKAiIUNS1heSNnyfm0ybMLuYWujqZxgApKv4Zk8sjbQt2d8IxNRQWlK8SGM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nAvTS-00269S-7c; Fri, 21 Jan 2022 16:05:10 +0100
+Date:   Fri, 21 Jan 2022 16:05:10 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: phy: marvell: Honor phy LED set by system
+ firmware on a Dell hardware
+Message-ID: <YerLpnXa25jBKzvp@lunn.ch>
+References: <20220120051929.1625791-1-kai.heng.feng@canonical.com>
+ <Yelnzrrd0a4Bl5AL@lunn.ch>
+ <CAAd53p45BbLy0T8AG5QTKhP00zMBsMHfm7i-bTmZmQWM5DpLnQ@mail.gmail.com>
+ <Yeqve+KhJKbZJNCL@lunn.ch>
+ <CAAd53p7of_W26DfZwemZjBYNrkqtoY=NwHDG=6g9vvZfDn3Wwg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220118160451.233828401@linuxfoundation.org>
-In-Reply-To: <20220118160451.233828401@linuxfoundation.org>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Fri, 21 Jan 2022 15:02:43 +0000
-Message-ID: <CADVatmPaK616c8FW_iGjzMU9Cd81BndvGj+Zb-1dA7a6eCPw3Q@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/23] 5.10.93-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAd53p7of_W26DfZwemZjBYNrkqtoY=NwHDG=6g9vvZfDn3Wwg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+> The dwmac-intel device is an integrated end point connects directly to
+> the host bridge, so it won't be in a form of PCIe addin card.
 
-On Thu, Jan 20, 2022 at 3:05 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.93 release.
-> There are 23 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 20 Jan 2022 16:04:42 +0000.
-> Anything received after that time might be too late.
+But is there anything stopping the owner adding another PCIe Ethernet
+card?
 
-gmail says you have sent this mail on "Jan 20, 2022 at 3:05 PM" but
-https://lore.kernel.org/stable/20220118160451.233828401@linuxfoundation.org/
-says you have sent it on "18 Jan 2022 17:05:40". :(
-Is it possible to add my email on the Cc list for the stable review
-mails please..
+Please remember, you are not adding a solution here for one specific
+machine, you are adding a general infrastructure which any machine can
+use, for any MAC/PHY combination. It simply does not scale adding
+hacks for random machines. So you always need to keep the big picture
+in mind.
 
--- 
-Regards
-Sudip
+	Andrew

@@ -2,57 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA79A4960EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:31:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 085F84960F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:32:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350645AbiAUObS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 09:31:18 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33594 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348810AbiAUObQ (ORCPT
+        id S1350975AbiAUOcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 09:32:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348810AbiAUOcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 09:31:16 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D07466179B;
-        Fri, 21 Jan 2022 14:31:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADE93C340E1;
-        Fri, 21 Jan 2022 14:31:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642775475;
-        bh=9UX5OxtUvEMfbi9ErdAxUjq/gpyFFn0Z8Jngw+epl0o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oSv297ad+o2QzmoyWh21/Y9xupD8jpy4rneolPDSg/REJjB4mkoO5c9L1C2axFNhp
-         cfSp1BH+8l14oHNf0a8anxfLmYi7l2wCvoWsb0p4D55qAnbFDhsZ2vWxW8D4WfmE4+
-         5hFQYMJrRbOZs0iixaFQRde77FlBnRFSFHn0tjoE=
-Date:   Fri, 21 Jan 2022 15:31:12 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_sourcesink: Fix isoc transfer for
- USB_SPEED_SUPER_PLUS
-Message-ID: <YerDsJKn0vAHEIAC@kroah.com>
-References: <1642764684-26060-1-git-send-email-quic_pkondeti@quicinc.com>
+        Fri, 21 Jan 2022 09:32:36 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323EFC06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 06:32:36 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id bu18so34283095lfb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 06:32:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qSnD3reN29Xyx0ktcQx+JaAuK35n5napZ9h5xMh7Qwc=;
+        b=azcO1MJ8CS74CpAJee7gm9xKMmwn31bekVcg1RdHRnZGGrPmDr183W5RrXgX0WY9QC
+         u7nGTCcDk2FNSjb9+BNJziMG8+xyL9kyAPXVE0yHwywO2MwhElFzs2kk41/OQ8hXqGVr
+         DSuVUlUPe2dUYI10nn0ZNJZmlAEq7n2UBVlZLJ+r08qJ4J0gR+hV81hEqinZYXvj0aFI
+         GBcOzPRnwy1e9A4yktvkKwXfpTBXCoJ90rC6wuo97HUMIrZTJsl3xM2ZOjt9pBg/s8xd
+         4vEZnbMnKmhhzvWcebl4pfn4LxoyT7zceFfp3jYKdnFS35VzFKkCYaXTQfWuNgjHHnqJ
+         AH2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qSnD3reN29Xyx0ktcQx+JaAuK35n5napZ9h5xMh7Qwc=;
+        b=2mFBqZtial99jKll0RgpZdlx4oObJrSMdhG7We1TGJ9JfCNO73qEPgXbuCbN52YKXb
+         FqJ64B2BOB9ecIWtdAf5Hpu5pxguIIXgtJMlt3bTBm8uUTMye6qZwFnsslT6eDI0u2zg
+         hJKMtRpLoCSLPq5TFNlG374WRSjwHIlh/EtrnIlD9Eb4M2KpqUIXVeqvSiIPPJzJBNYi
+         8sWl3WYTlJXwOyhQHC7LPgvHoTnXIeza8ZrriMcgGA0mhIuT+68HEgM6sF6KrXCD+JAE
+         vzyz+Fhaspricn4Ckjsveaj8S5u+5ngOI9KX4ywH4ikQv73y7HlHxP4T0MRdl29j4BZG
+         e7sA==
+X-Gm-Message-State: AOAM530nueqiZkaX8k6sCgs+OPKZDPQSv+6PM2r+i5ap2cMLipT7NAxe
+        GYLKYPehVG9XNdMbNP8AiKo+pcg0rd01e8IvEt08BQ==
+X-Google-Smtp-Source: ABdhPJx65Ge7/vIE6/W7wpMHNbwfxSWP9vI2IG2rRQZZBAsDmMiO8mvgljYuS3lH/TgLsAnJNxG9w6E69FmO2GfrDi0=
+X-Received: by 2002:a05:6512:10d2:: with SMTP id k18mr3809962lfg.167.1642775554555;
+ Fri, 21 Jan 2022 06:32:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1642764684-26060-1-git-send-email-quic_pkondeti@quicinc.com>
+References: <20220112083156.1124782-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20220112083156.1124782-1-jiasheng@iscas.ac.cn>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 21 Jan 2022 15:31:58 +0100
+Message-ID: <CAPDyKFpJ3i4QrraziGNn+dMn_0GipHPsKeMxqJ4cNVpm0GYmXg@mail.gmail.com>
+Subject: Re: [PATCH v2] mmc: sdhci-of-esdhc: Check for error num after setting mask
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     adrian.hunter@intel.com, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 05:01:24PM +0530, Pavankumar Kondeti wrote:
-> Currently when gadget enumerates in super speed plus, the isoc
-> endpoint request buffer size is not calculated correctly. Fix
-> this by checking the gadget speed against USB_SPEED_SUPER_PLUS
-> and update the request buffer size.
-> 
-> Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+On Wed, 12 Jan 2022 at 09:32, Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
+>
+> Because of the possible failure of the dma_supported(), the
+> dma_set_mask_and_coherent() may return error num.
+> Therefore, it should be better to check it and return the error if
+> fails.
+> And since the sdhci_setup_host() has already checked the return value of
+> the enable_dma, we need not check it in sdhci_resume_host() again.
+>
+> Fixes: 5552d7ad596c ("mmc: sdhci-of-esdhc: set proper dma mask for ls104x chips")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-What commit id does this fix?
+Applied for fixes and by adding a stable tag, thanks!
 
-thanks,
+Kind regards
+Uffe
 
-greg k-h
+
+> ---
+> Changelog
+>
+> v1 -> v2
+>
+> * Change 1. Remove the change of esdhc_of_resume and refine the commit
+> * message.
+> ---
+>  drivers/mmc/host/sdhci-of-esdhc.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/mmc/host/sdhci-of-esdhc.c b/drivers/mmc/host/sdhci-of-esdhc.c
+> index a593b1fbd69e..0f3658b36513 100644
+> --- a/drivers/mmc/host/sdhci-of-esdhc.c
+> +++ b/drivers/mmc/host/sdhci-of-esdhc.c
+> @@ -524,12 +524,16 @@ static void esdhc_of_adma_workaround(struct sdhci_host *host, u32 intmask)
+>
+>  static int esdhc_of_enable_dma(struct sdhci_host *host)
+>  {
+> +       int ret;
+>         u32 value;
+>         struct device *dev = mmc_dev(host->mmc);
+>
+>         if (of_device_is_compatible(dev->of_node, "fsl,ls1043a-esdhc") ||
+> -           of_device_is_compatible(dev->of_node, "fsl,ls1046a-esdhc"))
+> -               dma_set_mask_and_coherent(dev, DMA_BIT_MASK(40));
+> +           of_device_is_compatible(dev->of_node, "fsl,ls1046a-esdhc")) {
+> +               ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(40));
+> +               if (ret)
+> +                       return ret;
+> +       }
+>
+>         value = sdhci_readl(host, ESDHC_DMA_SYSCTL);
+>
+> --
+> 2.25.1
+>

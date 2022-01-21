@@ -2,119 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A101496825
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 00:18:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E156496834
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 00:26:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbiAUXSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 18:18:04 -0500
-Received: from giacobini.uberspace.de ([185.26.156.129]:49444 "EHLO
-        giacobini.uberspace.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiAUXSE (ORCPT
+        id S229582AbiAUX0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 18:26:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52960 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229502AbiAUX0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 18:18:04 -0500
-Received: (qmail 11843 invoked by uid 990); 21 Jan 2022 23:18:02 -0000
-Authentication-Results: giacobini.uberspace.de;
-        auth=pass (plain)
-Message-ID: <995e58bb-6dfb-b3db-c8a5-b9e30dbb104d@eknoes.de>
-Date:   Sat, 22 Jan 2022 00:18:01 +0100
+        Fri, 21 Jan 2022 18:26:18 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05E6C06173B;
+        Fri, 21 Jan 2022 15:26:17 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id m4so4079430ejb.9;
+        Fri, 21 Jan 2022 15:26:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YCU0SvpwBWqNgpzxHc2heSOx4bLvLb/sHtBDZ1Gl2Cc=;
+        b=dYuucwy7B8NsSK/Yls5haOdLoFor30tlQ2n4U3tkdADfEhRd+ntO4xodHu979K86hd
+         DG+V5mjZwU+B5GlohGfv9g7C78NfY6EPmYX9cpEKwuuni0OnVpc6OnBsDNBeRJ7SOP5d
+         vH2+E0Zv0cT8Sm3dMv99Hg4CU3VSR86FjA8db7YEQbb8LfptYvhKZ9LZaCAM8kFwmOX6
+         AX29ergf+QjOrh7WtvsqZAzqDJev1nzB/nbFMRyfUD7eTEpDfE642m6QlyMB3PxArd3/
+         2YkcocYxXr7St+1oEeunQMRELw+MCu6M6HQuGlwELHItlv+kOVz0XKzea0yyCWCm9H+E
+         sFDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YCU0SvpwBWqNgpzxHc2heSOx4bLvLb/sHtBDZ1Gl2Cc=;
+        b=QDEWdAwnGl0nui1490Qn2nSqMzqH3mjVANVjnB08z/u8pCWiwXz96TLMkT3qknFrk+
+         CfQDNvz/QizfnNL5S0GPr9RSbHbNEZ+LEFdzCrfmqMN6Nbd7/UZV3edRrSHKeDA4KrpH
+         OXbu4AZoWi/sUokOBcLsT0m9ivLhBoxB4jEzSkDMh4TOMFvMRHrt7jT7ulbFzgEgY2U+
+         AYO85WvuOipRnyNzdGTm2hnKxBTdeBvZLGtOcOKsR3pejWlkBG4YR55dLHxglLncGJqh
+         +EVSFn4PwnG74Muu4Mck4c/am7l7Ji40s/XEaQHWv8CRmALfW71mK4FYADmdTZ33fOcn
+         f3WA==
+X-Gm-Message-State: AOAM530S1N0l0PpQcBJ90J3bFXk1WH5546p6bMBeSAkpGBtV6IjkZOz5
+        AVgRFQ2EtyAkoD9QG+G6Nuc=
+X-Google-Smtp-Source: ABdhPJzUq/HlNkUY9Bz2+wNtKp7xTSqdnO9WFCPCY/AHs+0sFqx4rAadCNs3xfw3qPNKSPL/cp2obQ==
+X-Received: by 2002:a17:907:97ca:: with SMTP id js10mr5263243ejc.78.1642807576191;
+        Fri, 21 Jan 2022 15:26:16 -0800 (PST)
+Received: from localhost.localdomain (mob-5-90-199-161.net.vodafone.it. [5.90.199.161])
+        by smtp.gmail.com with ESMTPSA id p13sm2411025ejx.191.2022.01.21.15.26.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jan 2022 15:26:15 -0800 (PST)
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+Cc:     tomm.merciai@gmail.com, linuxfancy@googlegroups.com,
+        Richard Leitner <richard.leitner@skidata.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: usb251xb: add boost-up property support
+Date:   Sat, 22 Jan 2022 00:26:12 +0100
+Message-Id: <20220121232612.7283-1-tomm.merciai@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220121173622.192744-1-soenke.huster@eknoes.de>
- <4f3d6dcf-c142-9a99-df97-6190c8f2abc9@eknoes.de>
- <CABBYNZ+VQ3Gfw0n=PavFhnnOy2=+1OAeV5UT_S25Lz_4gWzWEQ@mail.gmail.com>
-From:   =?UTF-8?Q?S=c3=b6nke_Huster?= <soenke.huster@eknoes.de>
-Subject: Re: [RFC PATCH] Bluetooth: hci_event: Ignore multiple conn complete
- events
-In-Reply-To: <CABBYNZ+VQ3Gfw0n=PavFhnnOy2=+1OAeV5UT_S25Lz_4gWzWEQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Bar: -
-X-Rspamd-Report: MIME_GOOD(-0.1) BAYES_HAM(-2.999892) SUSPICIOUS_RECIPS(1.5)
-X-Rspamd-Score: -1.599892
-Received: from unknown (HELO unkown) (::1)
-        by giacobini.uberspace.de (Haraka/2.8.28) with ESMTPSA; Sat, 22 Jan 2022 00:18:02 +0100
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luiz,
+Add u8 property to support boost-up register of usb251xb hub.
+boost-up property control USB electrical drive strenght
+This register can be set:
 
-On 21.01.22 22:31, Luiz Augusto von Dentz wrote:
-> Hi Sönke,
-> 
-> On Fri, Jan 21, 2022 at 10:22 AM Sönke Huster <soenke.huster@eknoes.de> wrote:
->>
->> I just noticed that just checking for handle does not work, as obviously 0x0 could also be a handle value and therefore it can't be distinguished, whether it is not set yet or it is 0x0.
-> 
-> Yep, we should probably check its state, check for state != BT_OPEN
-> since that is what hci_conn_add initialize the state.
-> 
+ - Normal mode -> 0x00
+ - Low         -> 0x01
+ - Medium      -> 0x10
+ - High        -> 0x11
 
-I thought there are more valid connection states for the first HCI_CONNECTION_COMPLETE event, as it also occurs e.g. after an HCI_Create_Connection command, see Core 5.3 p.2170:
-> This event also indicates to the Host which issued the HCI_Create_Connection, HCI_Accept_-
-> Connection_Request, or HCI_Reject_Connection_Request command, and
-> then received an HCI_Command_Status event, if the issued command failed or
-> was successful.
+(Normal Default)
 
-For example in hci_conn.c hci_acl_create_connection (which triggers a HCI_Create_Connection command as far as I understand), the state of the connection is changed to BT_CONNECT or BT_CONNECT2.
-But as I am quite new in the (Linux) Bluetooth world, I might have a wrong understanding of that.
+References:
+ - http://www.mouser.com/catalog/specsheets/2514.pdf p29
 
->> On 21.01.22 18:36, Soenke Huster wrote:
->>> When a HCI_CONNECTION_COMPLETE event is received multiple times
->>> for the same handle, the device is registered multiple times which leads
->>> to memory corruptions. Therefore, consequent events for a single
->>> connection are ignored.
->>>
->>> The conn->state can hold different values so conn->handle is
->>> checked to detect whether a connection is already set up.
->>>
->>> Buglink: https://bugzilla.kernel.org/show_bug.cgi?id=215497
->>> Signed-off-by: Soenke Huster <soenke.huster@eknoes.de>
->>> ---
->>> This fixes the referenced bug and several use-after-free issues I discovered.
->>> I tagged it as RFC, as I am not 100% sure if checking the existence of the
->>> handle is the correct approach, but to the best of my knowledge it must be
->>> set for the first time in this function for valid connections of this event,
->>> therefore it should be fine.
->>>
->>> net/bluetooth/hci_event.c | 11 +++++++++++
->>>  1 file changed, 11 insertions(+)
->>>
->>> diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
->>> index 681c623aa380..71ccb12c928d 100644
->>> --- a/net/bluetooth/hci_event.c
->>> +++ b/net/bluetooth/hci_event.c
->>> @@ -3106,6 +3106,17 @@ static void hci_conn_complete_evt(struct hci_dev *hdev, void *data,
->>>               }
->>>       }
->>>
->>> +     /* The HCI_Connection_Complete event is only sent once per connection.
->>> +      * Processing it more than once per connection can corrupt kernel memory.
->>> +      *
->>> +      * As the connection handle is set here for the first time, it indicates
->>> +      * whether the connection is already set up.
->>> +      */
->>> +     if (conn->handle) {
->>> +             bt_dev_err(hdev, "Ignoring HCI_Connection_Complete for existing connection");
->>> +             goto unlock;
->>> +     }
->>> +
->>>       if (!ev->status) {
->>>               conn->handle = __le16_to_cpu(ev->handle);
->>>
-> 
-> 
-> 
+Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
+---
+ drivers/usb/misc/usb251xb.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Best
-Sönke
+diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
+index 507deef1f709..74fd8ac0c303 100644
+--- a/drivers/usb/misc/usb251xb.c
++++ b/drivers/usb/misc/usb251xb.c
+@@ -402,6 +402,7 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
+ 	struct device_node *np = dev->of_node;
+ 	int len, err;
+ 	u32 property_u32 = 0;
++	u8 property_u8 = 0;
+ 	const char *cproperty_char;
+ 	char str[USB251XB_STRING_BUFSIZE / 2];
+ 
+@@ -543,6 +544,12 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
+ 	if (of_property_read_u16_array(np, "language-id", &hub->lang_id, 1))
+ 		hub->lang_id = USB251XB_DEF_LANGUAGE_ID;
+ 
++	if (!of_property_read_u8(np, "boost-up", &property_u8)){
++		hub->boost_up = property_u8;
++	} else {
++		hub->boost_up = USB251XB_DEF_BOOST_UP;
++	}
++
+ 	cproperty_char = of_get_property(np, "manufacturer", NULL);
+ 	strlcpy(str, cproperty_char ? : USB251XB_DEF_MANUFACTURER_STRING,
+ 		sizeof(str));
+@@ -584,7 +591,6 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
+ 	 * may be as soon as needed.
+ 	 */
+ 	hub->bat_charge_en = USB251XB_DEF_BATTERY_CHARGING_ENABLE;
+-	hub->boost_up = USB251XB_DEF_BOOST_UP;
+ 	hub->boost_57 = USB251XB_DEF_BOOST_57;
+ 	hub->boost_14 = USB251XB_DEF_BOOST_14;
+ 	hub->port_map12 = USB251XB_DEF_PORT_MAP_12;
+-- 
+2.25.1
+

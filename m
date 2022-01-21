@@ -2,343 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84918496832
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 00:20:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A101496825
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 00:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbiAUXUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 18:20:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiAUXUb (ORCPT
+        id S231157AbiAUXSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 18:18:04 -0500
+Received: from giacobini.uberspace.de ([185.26.156.129]:49444 "EHLO
+        giacobini.uberspace.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229557AbiAUXSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 18:20:31 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BE8C06173B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 15:20:30 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id y14-20020a17090ad70e00b001b4fc2943b3so6739331pju.8
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 15:20:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=rJkt2rp2sXcRKhkLbOo10vg523kUXSvK0RkANN3MrI4=;
-        b=b0PSSLjMA5GIr8UuuiikhzZQaMMaOujVMTttgymGlcyXTBrxEQ+In/nePf5noq63y2
-         t2u+JHI9BGHGdFMV97vpwtPj3Oahi9eB0h6OSMJFp5sD+z5Gtvp1MjVaaYnelF9UyB0d
-         ZzMwUDxuv/bnHw1/FnDtbLdFXEaJ56mNZZ/G99IC8hF3TsLxh6ic0Jfuo5laKGW9e3ya
-         8wgx32Wmh1Fp1zSBADrgzOQBA2NdwZ8d5a+iKi+dX6saxgIxAalHhMwmgVM+IP713Ld7
-         7tC2jJNavikNSohhSy2FODSIiQC/D1Vb6ZZKU1Id2dJjRdEmko2CRzs+CcMgzrnbMpps
-         qItQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=rJkt2rp2sXcRKhkLbOo10vg523kUXSvK0RkANN3MrI4=;
-        b=Jd8j0gIKepFrTdMShYWN9eJXfyphr4eX5TDLJkQRaZCbXB3y/o9X/C9My/iK9wlVIx
-         DXd5eFhAIU9De/Vl+QrVUxgV+5yaLMfDtQPZQ610DMWpCbxC/IE4yDQawzZd13cmkclN
-         nwIRKWr9yOLosxeo67I86nIhQs0EJB65+s9sUNBbPhZMPmzz1bZyxZtiH1nPOASLu5uz
-         5wv4KqKL3VXiWWAdmuLNZYsipwIgc1B9BPmGWTRjsWj7/wBVMTTU0tIkhIKCcUO4vgUu
-         QaKOv16vEhO0svULbVO4qNwTsQb7+MZ/UM+OBn6yRNhBEO2RF1XOmRMmP+sMBeNyy/95
-         vrjA==
-X-Gm-Message-State: AOAM530AEdesZ6nQYrElMvaJzNqAX++Q7Es75qPYnzNY80/RMt6BK06n
-        a69GqEzU2izK7k6eoMoQ7gA6C24i2npJgguqpFE=
-X-Google-Smtp-Source: ABdhPJy1ZSu0bOXNhLK9X7vDvaQii1mjijoZbMteqfbEmW74sdj3aP0uARWXHVYxLbcNveDJnsIxebCVN62BHQ7jANs=
-X-Received: from willmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:2dd0])
- (user=willmcvicker job=sendgmr) by 2002:a05:6a00:168b:b0:4a8:d88:9cd with
- SMTP id k11-20020a056a00168b00b004a80d8809cdmr5650635pfc.11.1642807230301;
- Fri, 21 Jan 2022 15:20:30 -0800 (PST)
-Date:   Fri, 21 Jan 2022 23:16:44 +0000
-Message-Id: <20220121231644.1732744-1-willmcvicker@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-Subject: [PATCH v1 1/1] ASoC: dpcm: prevent snd_soc_dpcm use after free
-From:   Will McVicker <willmcvicker@google.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     kernel-team@android.com,
-        KaiChieh Chuang <kaichieh.chuang@mediatek.com>,
-        Will McVicker <willmcvicker@google.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 21 Jan 2022 18:18:04 -0500
+Received: (qmail 11843 invoked by uid 990); 21 Jan 2022 23:18:02 -0000
+Authentication-Results: giacobini.uberspace.de;
+        auth=pass (plain)
+Message-ID: <995e58bb-6dfb-b3db-c8a5-b9e30dbb104d@eknoes.de>
+Date:   Sat, 22 Jan 2022 00:18:01 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220121173622.192744-1-soenke.huster@eknoes.de>
+ <4f3d6dcf-c142-9a99-df97-6190c8f2abc9@eknoes.de>
+ <CABBYNZ+VQ3Gfw0n=PavFhnnOy2=+1OAeV5UT_S25Lz_4gWzWEQ@mail.gmail.com>
+From:   =?UTF-8?Q?S=c3=b6nke_Huster?= <soenke.huster@eknoes.de>
+Subject: Re: [RFC PATCH] Bluetooth: hci_event: Ignore multiple conn complete
+ events
+In-Reply-To: <CABBYNZ+VQ3Gfw0n=PavFhnnOy2=+1OAeV5UT_S25Lz_4gWzWEQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Bar: -
+X-Rspamd-Report: MIME_GOOD(-0.1) BAYES_HAM(-2.999892) SUSPICIOUS_RECIPS(1.5)
+X-Rspamd-Score: -1.599892
+Received: from unknown (HELO unkown) (::1)
+        by giacobini.uberspace.de (Haraka/2.8.28) with ESMTPSA; Sat, 22 Jan 2022 00:18:02 +0100
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: KaiChieh Chuang <kaichieh.chuang@mediatek.com>
+Hi Luiz,
 
-[ Upstream commit a9764869779081e8bf24da07ac040e8f3efcf13a ]
+On 21.01.22 22:31, Luiz Augusto von Dentz wrote:
+> Hi Sönke,
+> 
+> On Fri, Jan 21, 2022 at 10:22 AM Sönke Huster <soenke.huster@eknoes.de> wrote:
+>>
+>> I just noticed that just checking for handle does not work, as obviously 0x0 could also be a handle value and therefore it can't be distinguished, whether it is not set yet or it is 0x0.
+> 
+> Yep, we should probably check its state, check for state != BT_OPEN
+> since that is what hci_conn_add initialize the state.
+> 
 
-The dpcm get from fe_clients/be_clients
-may be free before use
+I thought there are more valid connection states for the first HCI_CONNECTION_COMPLETE event, as it also occurs e.g. after an HCI_Create_Connection command, see Core 5.3 p.2170:
+> This event also indicates to the Host which issued the HCI_Create_Connection, HCI_Accept_-
+> Connection_Request, or HCI_Reject_Connection_Request command, and
+> then received an HCI_Command_Status event, if the issued command failed or
+> was successful.
 
-Add a spin lock at snd_soc_card level,
-to protect the dpcm instance.
-The lock may be used in atomic context, so use spin lock.
+For example in hci_conn.c hci_acl_create_connection (which triggers a HCI_Create_Connection command as far as I understand), the state of the connection is changed to BT_CONNECT or BT_CONNECT2.
+But as I am quite new in the (Linux) Bluetooth world, I might have a wrong understanding of that.
 
-Use irq spin lock version,
-since the lock may be used in interrupts.
+>> On 21.01.22 18:36, Soenke Huster wrote:
+>>> When a HCI_CONNECTION_COMPLETE event is received multiple times
+>>> for the same handle, the device is registered multiple times which leads
+>>> to memory corruptions. Therefore, consequent events for a single
+>>> connection are ignored.
+>>>
+>>> The conn->state can hold different values so conn->handle is
+>>> checked to detect whether a connection is already set up.
+>>>
+>>> Buglink: https://bugzilla.kernel.org/show_bug.cgi?id=215497
+>>> Signed-off-by: Soenke Huster <soenke.huster@eknoes.de>
+>>> ---
+>>> This fixes the referenced bug and several use-after-free issues I discovered.
+>>> I tagged it as RFC, as I am not 100% sure if checking the existence of the
+>>> handle is the correct approach, but to the best of my knowledge it must be
+>>> set for the first time in this function for valid connections of this event,
+>>> therefore it should be fine.
+>>>
+>>> net/bluetooth/hci_event.c | 11 +++++++++++
+>>>  1 file changed, 11 insertions(+)
+>>>
+>>> diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+>>> index 681c623aa380..71ccb12c928d 100644
+>>> --- a/net/bluetooth/hci_event.c
+>>> +++ b/net/bluetooth/hci_event.c
+>>> @@ -3106,6 +3106,17 @@ static void hci_conn_complete_evt(struct hci_dev *hdev, void *data,
+>>>               }
+>>>       }
+>>>
+>>> +     /* The HCI_Connection_Complete event is only sent once per connection.
+>>> +      * Processing it more than once per connection can corrupt kernel memory.
+>>> +      *
+>>> +      * As the connection handle is set here for the first time, it indicates
+>>> +      * whether the connection is already set up.
+>>> +      */
+>>> +     if (conn->handle) {
+>>> +             bt_dev_err(hdev, "Ignoring HCI_Connection_Complete for existing connection");
+>>> +             goto unlock;
+>>> +     }
+>>> +
+>>>       if (!ev->status) {
+>>>               conn->handle = __le16_to_cpu(ev->handle);
+>>>
+> 
+> 
+> 
 
-possible race condition between
-void dpcm_be_disconnect(
-	...
-	list_del(&dpcm->list_be);
-	list_del(&dpcm->list_fe);
-	kfree(dpcm);
-	...
-
-and
-	for_each_dpcm_fe()
-	for_each_dpcm_be*()
-
-race condition example
-Thread 1:
-    snd_soc_dapm_mixer_update_power()
-        -> soc_dpcm_runtime_update()
-            -> dpcm_be_disconnect()
-                -> kfree(dpcm);
-Thread 2:
-    dpcm_fe_dai_trigger()
-        -> dpcm_be_dai_trigger()
-            -> snd_soc_dpcm_can_be_free_stop()
-                -> if (dpcm->fe == fe)
-
-Excpetion Scenario:
-	two FE link to same BE
-	FE1 -> BE
-	FE2 ->
-
-	Thread 1: switch of mixer between FE2 -> BE
-	Thread 2: pcm_stop FE1
-
-Exception:
-
-Unable to handle kernel paging request at virtual address dead0000000000e0
-
-pc=<> [<ffffff8960e2cd10>] dpcm_be_dai_trigger+0x29c/0x47c
-	sound/soc/soc-pcm.c:3226
-		if (dpcm->fe == fe)
-lr=<> [<ffffff8960e2f694>] dpcm_fe_dai_do_trigger+0x94/0x26c
-
-Backtrace:
-[<ffffff89602dba80>] notify_die+0x68/0xb8
-[<ffffff896028c7dc>] die+0x118/0x2a8
-[<ffffff89602a2f84>] __do_kernel_fault+0x13c/0x14c
-[<ffffff89602a27f4>] do_translation_fault+0x64/0xa0
-[<ffffff8960280cf8>] do_mem_abort+0x4c/0xd0
-[<ffffff8960282ad0>] el1_da+0x24/0x40
-[<ffffff8960e2cd10>] dpcm_be_dai_trigger+0x29c/0x47c
-[<ffffff8960e2f694>] dpcm_fe_dai_do_trigger+0x94/0x26c
-[<ffffff8960e2edec>] dpcm_fe_dai_trigger+0x3c/0x44
-[<ffffff8960de5588>] snd_pcm_do_stop+0x50/0x5c
-[<ffffff8960dded24>] snd_pcm_action+0xb4/0x13c
-[<ffffff8960ddfdb4>] snd_pcm_drop+0xa0/0x128
-[<ffffff8960de69bc>] snd_pcm_common_ioctl+0x9d8/0x30f0
-[<ffffff8960de1cac>] snd_pcm_ioctl_compat+0x29c/0x2f14
-[<ffffff89604c9d60>] compat_SyS_ioctl+0x128/0x244
-[<ffffff8960283740>] el0_svc_naked+0x34/0x38
-[<ffffffffffffffff>] 0xffffffffffffffff
-
-Signed-off-by: KaiChieh Chuang <kaichieh.chuang@mediatek.com>
-Signed-off-by: Mark Brown <broonie@kernel.org>
-[willmcvicker: move spinlock to bottom of struct snd_soc_card]
-Signed-off-by: Will McVicker <willmcvicker@google.com>
-Cc: stable@vger.kernel.org # 4.19+
----
- include/sound/soc.h  |  2 ++
- sound/soc/soc-core.c |  1 +
- sound/soc/soc-pcm.c  | 40 +++++++++++++++++++++++++++++++++-------
- 3 files changed, 36 insertions(+), 7 deletions(-)
-
-diff --git a/include/sound/soc.h b/include/sound/soc.h
-index 88aa48e5485f..7abd8d4746ef 100644
---- a/include/sound/soc.h
-+++ b/include/sound/soc.h
-@@ -1113,6 +1113,8 @@ struct snd_soc_card {
- 	u32 pop_time;
- 
- 	void *drvdata;
-+
-+	spinlock_t dpcm_lock;
- };
- 
- /* SoC machine DAI configuration, glues a codec and cpu DAI together */
-diff --git a/sound/soc/soc-core.c b/sound/soc/soc-core.c
-index 8531b490f6f6..273898b358c4 100644
---- a/sound/soc/soc-core.c
-+++ b/sound/soc/soc-core.c
-@@ -2752,6 +2752,7 @@ int snd_soc_register_card(struct snd_soc_card *card)
- 	card->instantiated = 0;
- 	mutex_init(&card->mutex);
- 	mutex_init(&card->dapm_mutex);
-+	spin_lock_init(&card->dpcm_lock);
- 
- 	ret = snd_soc_instantiate_card(card);
- 	if (ret != 0)
-diff --git a/sound/soc/soc-pcm.c b/sound/soc/soc-pcm.c
-index af14304645ce..c03b653bf6ff 100644
---- a/sound/soc/soc-pcm.c
-+++ b/sound/soc/soc-pcm.c
-@@ -1221,6 +1221,7 @@ static int dpcm_be_connect(struct snd_soc_pcm_runtime *fe,
- 		struct snd_soc_pcm_runtime *be, int stream)
- {
- 	struct snd_soc_dpcm *dpcm;
-+	unsigned long flags;
- 
- 	/* only add new dpcms */
- 	list_for_each_entry(dpcm, &fe->dpcm[stream].be_clients, list_be) {
-@@ -1236,8 +1237,10 @@ static int dpcm_be_connect(struct snd_soc_pcm_runtime *fe,
- 	dpcm->fe = fe;
- 	be->dpcm[stream].runtime = fe->dpcm[stream].runtime;
- 	dpcm->state = SND_SOC_DPCM_LINK_STATE_NEW;
-+	spin_lock_irqsave(&fe->card->dpcm_lock, flags);
- 	list_add(&dpcm->list_be, &fe->dpcm[stream].be_clients);
- 	list_add(&dpcm->list_fe, &be->dpcm[stream].fe_clients);
-+	spin_unlock_irqrestore(&fe->card->dpcm_lock, flags);
- 
- 	dev_dbg(fe->dev, "connected new DPCM %s path %s %s %s\n",
- 			stream ? "capture" : "playback",  fe->dai_link->name,
-@@ -1283,6 +1286,7 @@ static void dpcm_be_reparent(struct snd_soc_pcm_runtime *fe,
- void dpcm_be_disconnect(struct snd_soc_pcm_runtime *fe, int stream)
- {
- 	struct snd_soc_dpcm *dpcm, *d;
-+	unsigned long flags;
- 
- 	list_for_each_entry_safe(dpcm, d, &fe->dpcm[stream].be_clients, list_be) {
- 		dev_dbg(fe->dev, "ASoC: BE %s disconnect check for %s\n",
-@@ -1302,8 +1306,10 @@ void dpcm_be_disconnect(struct snd_soc_pcm_runtime *fe, int stream)
- #ifdef CONFIG_DEBUG_FS
- 		debugfs_remove(dpcm->debugfs_state);
- #endif
-+		spin_lock_irqsave(&fe->card->dpcm_lock, flags);
- 		list_del(&dpcm->list_be);
- 		list_del(&dpcm->list_fe);
-+		spin_unlock_irqrestore(&fe->card->dpcm_lock, flags);
- 		kfree(dpcm);
- 	}
- }
-@@ -1557,10 +1563,13 @@ int dpcm_process_paths(struct snd_soc_pcm_runtime *fe,
- void dpcm_clear_pending_state(struct snd_soc_pcm_runtime *fe, int stream)
- {
- 	struct snd_soc_dpcm *dpcm;
-+	unsigned long flags;
- 
-+	spin_lock_irqsave(&fe->card->dpcm_lock, flags);
- 	list_for_each_entry(dpcm, &fe->dpcm[stream].be_clients, list_be)
- 		dpcm->be->dpcm[stream].runtime_update =
- 						SND_SOC_DPCM_UPDATE_NO;
-+	spin_unlock_irqrestore(&fe->card->dpcm_lock, flags);
- }
- 
- static void dpcm_be_dai_startup_unwind(struct snd_soc_pcm_runtime *fe,
-@@ -2626,6 +2635,7 @@ static int dpcm_run_update_startup(struct snd_soc_pcm_runtime *fe, int stream)
- 	struct snd_soc_dpcm *dpcm;
- 	enum snd_soc_dpcm_trigger trigger = fe->dai_link->trigger[stream];
- 	int ret;
-+	unsigned long flags;
- 
- 	dev_dbg(fe->dev, "ASoC: runtime %s open on FE %s\n",
- 			stream ? "capture" : "playback", fe->dai_link->name);
-@@ -2695,11 +2705,13 @@ static int dpcm_run_update_startup(struct snd_soc_pcm_runtime *fe, int stream)
- 	dpcm_be_dai_shutdown(fe, stream);
- disconnect:
- 	/* disconnect any non started BEs */
-+	spin_lock_irqsave(&fe->card->dpcm_lock, flags);
- 	list_for_each_entry(dpcm, &fe->dpcm[stream].be_clients, list_be) {
- 		struct snd_soc_pcm_runtime *be = dpcm->be;
- 		if (be->dpcm[stream].state != SND_SOC_DPCM_STATE_START)
- 				dpcm->state = SND_SOC_DPCM_LINK_STATE_FREE;
- 	}
-+	spin_unlock_irqrestore(&fe->card->dpcm_lock, flags);
- 
- 	return ret;
- }
-@@ -3278,7 +3290,10 @@ int snd_soc_dpcm_can_be_free_stop(struct snd_soc_pcm_runtime *fe,
- {
- 	struct snd_soc_dpcm *dpcm;
- 	int state;
-+	int ret = 1;
-+	unsigned long flags;
- 
-+	spin_lock_irqsave(&fe->card->dpcm_lock, flags);
- 	list_for_each_entry(dpcm, &be->dpcm[stream].fe_clients, list_fe) {
- 
- 		if (dpcm->fe == fe)
-@@ -3287,12 +3302,15 @@ int snd_soc_dpcm_can_be_free_stop(struct snd_soc_pcm_runtime *fe,
- 		state = dpcm->fe->dpcm[stream].state;
- 		if (state == SND_SOC_DPCM_STATE_START ||
- 			state == SND_SOC_DPCM_STATE_PAUSED ||
--			state == SND_SOC_DPCM_STATE_SUSPEND)
--			return 0;
-+			state == SND_SOC_DPCM_STATE_SUSPEND) {
-+			ret = 0;
-+			break;
-+		}
- 	}
-+	spin_unlock_irqrestore(&fe->card->dpcm_lock, flags);
- 
- 	/* it's safe to free/stop this BE DAI */
--	return 1;
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(snd_soc_dpcm_can_be_free_stop);
- 
-@@ -3305,7 +3323,10 @@ int snd_soc_dpcm_can_be_params(struct snd_soc_pcm_runtime *fe,
- {
- 	struct snd_soc_dpcm *dpcm;
- 	int state;
-+	int ret = 1;
-+	unsigned long flags;
- 
-+	spin_lock_irqsave(&fe->card->dpcm_lock, flags);
- 	list_for_each_entry(dpcm, &be->dpcm[stream].fe_clients, list_fe) {
- 
- 		if (dpcm->fe == fe)
-@@ -3315,12 +3336,15 @@ int snd_soc_dpcm_can_be_params(struct snd_soc_pcm_runtime *fe,
- 		if (state == SND_SOC_DPCM_STATE_START ||
- 			state == SND_SOC_DPCM_STATE_PAUSED ||
- 			state == SND_SOC_DPCM_STATE_SUSPEND ||
--			state == SND_SOC_DPCM_STATE_PREPARE)
--			return 0;
-+			state == SND_SOC_DPCM_STATE_PREPARE) {
-+			ret = 0;
-+			break;
-+		}
- 	}
-+	spin_unlock_irqrestore(&fe->card->dpcm_lock, flags);
- 
- 	/* it's safe to change hw_params */
--	return 1;
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(snd_soc_dpcm_can_be_params);
- 
-@@ -3359,6 +3383,7 @@ static ssize_t dpcm_show_state(struct snd_soc_pcm_runtime *fe,
- 	struct snd_pcm_hw_params *params = &fe->dpcm[stream].hw_params;
- 	struct snd_soc_dpcm *dpcm;
- 	ssize_t offset = 0;
-+	unsigned long flags;
- 
- 	/* FE state */
- 	offset += scnprintf(buf + offset, size - offset,
-@@ -3386,6 +3411,7 @@ static ssize_t dpcm_show_state(struct snd_soc_pcm_runtime *fe,
- 		goto out;
- 	}
- 
-+	spin_lock_irqsave(&fe->card->dpcm_lock, flags);
- 	list_for_each_entry(dpcm, &fe->dpcm[stream].be_clients, list_be) {
- 		struct snd_soc_pcm_runtime *be = dpcm->be;
- 		params = &dpcm->hw_params;
-@@ -3406,7 +3432,7 @@ static ssize_t dpcm_show_state(struct snd_soc_pcm_runtime *fe,
- 				params_channels(params),
- 				params_rate(params));
- 	}
--
-+	spin_unlock_irqrestore(&fe->card->dpcm_lock, flags);
- out:
- 	return offset;
- }
--- 
-2.35.0.rc0.227.g00780c9af4-goog
-
+Best
+Sönke

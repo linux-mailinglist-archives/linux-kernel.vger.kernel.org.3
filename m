@@ -2,238 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8C3495BDD
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 09:25:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9127C495BE1
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 09:26:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379564AbiAUIZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 03:25:47 -0500
-Received: from mail-bo1ind01olkn0147.outbound.protection.outlook.com ([104.47.101.147]:59648
-        "EHLO IND01-BO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231208AbiAUIZq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 03:25:46 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ScIMvu2YVeiGKuB1n7LzL8OPAF/xb41xZZC3qVGtsLWF8flQ+1lbmDVfiPvrtaAOEFdX0tEDxdEQ0RFeAQZUNRiQo4UqhN7LppNtRihyTakCY6d1sLAFBGC+3CSjq4XuF9zmcNaBoRgL/r4W1j8vBMPdV6c05DLbysc1cIu+IRvjnXwbgx56umCx+/FPK7cA/IIhQDBwhwOULm+6cB8fyKBwCovAZcNik0DZ9iiy5/0/I4qQv2EslNbvZ4Veaty+Rqh0cHbRlK/qj2BIBAV5Ng/qHkbdYSZ4QyqbAFKMk2gmuD581hBTiIkcacAK92Bxi5+OBmFpdB003TEh12axBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=krma4VHb9sJrmprJ5mShOQ73B5oR6gD1pgrE1j02stg=;
- b=VW96kkoxUJcf39UfpaMJoEJtnzveWyFNBBQKPG1tkHZn9SfDwS8Q4VFEIETw+adHdriKqBtWfz0C3H+VvbK00mBbMhbtrcnaVjnMzDjtRUekQc/dgH+s1BthnxD0n9pAqDhljiPt3O9yKLuVq9FFmJTCdvq6I84VplOBlPJTLbtiySWtbpjIBabF4GvF/XFXY92lKzMF+4P6JIYtR9e8NvtPgK3WqGl1eYL3imXT2qdsiqayZf40A5M/Zv//DqTskgtgYNaz7sOBQMp491rALQNW2FljGqhDMglc/xCsAksuDjzdowbxA3m/72KKUqG3d+ggLGXzHCKvd6J4IwrDGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=krma4VHb9sJrmprJ5mShOQ73B5oR6gD1pgrE1j02stg=;
- b=dTjB2wA6gBVHnVwK4+YAimElCXmvXbRfpHGaDbPYnTlrs7yM9sHqdSCJ/tOahkKxfBII/LXbdGPNdR4JZvWyMK8sOjR2Kc7NnEXpOlV5uuyWN9tdUBZyIhdkqm2QcwXD+wts4Cbqeekli5fdZaKeBVQjTXvnW3bB63adi+kKDh7CT2h33tCk7J9eDyNW9UIHsBWd4WHXrZFgYd4PioYJjtjzd9lv4fvUGYLSXGYM4bBnLmj9m8HxYRlcqRdIAqbrceRdTsnUHuXwzxWFbebikTHEqpmBHdP77YUU+ois4zfzj51+bvPDdur5YlJnZHqwqAArZrI7KrVZeqgpnY9WNA==
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
- by MA1PR0101MB1862.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:27::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.12; Fri, 21 Jan
- 2022 08:25:41 +0000
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::d19b:7cd1:3760:b055]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::d19b:7cd1:3760:b055%6]) with mapi id 15.20.4909.010; Fri, 21 Jan 2022
- 08:25:41 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     "jikos@kernel.org" <jikos@kernel.org>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-CC:     "paul@mrarm.io" <paul@mrarm.io>, Aun-Ali Zaidi <admin@kodeit.net>,
-        Orlando Chamberlain <redecorating@protonmail.com>
-Subject: [PATCH 2/3] HID: apple: Add necessary IDs and configuration for T2
- Macs.
-Thread-Topic: [PATCH 2/3] HID: apple: Add necessary IDs and configuration for
- T2 Macs.
-Thread-Index: AQHYDqB6SoUV0oSPqkm4D6M98i+8cg==
-Date:   Fri, 21 Jan 2022 08:25:41 +0000
-Message-ID: <C6DEF799-EEC2-42FC-84C1-CA942A614864@live.com>
-References: <CA294A24-E279-47FE-A5E3-E47F1A2619B5@live.com>
-In-Reply-To: <CA294A24-E279-47FE-A5E3-E47F1A2619B5@live.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [MwWeujta4/e27wQmuOCKa9WKv/zWTQGacM49PqUB0mGexq+vxhI0ItF1M89y0EBM]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 29e43cde-5feb-4716-c137-08d9dcb79c92
-x-ms-traffictypediagnostic: MA1PR0101MB1862:EE_
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wJRXh1qryOzPtPyRIVshdo0M5yo0fqU/OdyHvf8kJyGBoAzEvtwXW1+dARzjHMrZxo8cQINUhJxtE3ozEGNWne+NRysJYhYcHezsXNtoKY6/sURwmFealHOz51XS8liI0whJs2BavPVr7j2WnU1pFhZyHogo6w4d6FjdAW4rk3JHsm6iJkePA/oJiFdOd6ZObIJZ/0QmpVwPjZcuW21sW74SMq95nSpEnZdYNJiG+/ViHEAt5OxUq6esPBwUii32WdLF/ytQdjEAOKZNprEBSeA1xg3C3W6qHrDMbBSnEZML/dIRZ4KN6YXobaBXl0oTYjAN5DyQTBr8ONl+VMQLkYwE5JVMYbvnRN0fHrO6aLn8dXIMuAd2X+C8GF9nejYYldy/5xizhH0yMnayOSwPAn+iawKoO3a8C+jCeXzhsri463f8fXZKGWEnaHnyfkdSrVAQHMYw4qzEZURcN5CB2HusIB/eOlR+WB0nnydQEVR57zYFWUAqPG8AyCK+58/exzzjfi/w44ZLO1RjqRJn+LfjneIaiAHvYvfVZlHwhLox07TAW9AINOnZQP3T4u9ePUNVSNT31VxFWS1EnTRaOQ==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?zjEeYCZjCPwiSyJJGmJkMvlLwSMtzw03ATHaM6hqTiaQYL4uqUn5Gcq7F4Te?=
- =?us-ascii?Q?MyMPNEpFkuNg+snUB+Jk0bSX2dPXGf6mmpdHqzYFkYq/sH2o55EkqRy/28fg?=
- =?us-ascii?Q?7H8ZludaX13OZdLj2JvckUzWrS/MK8dqccriVJBSw0vNokSQbXFKxzy+TY23?=
- =?us-ascii?Q?6o2ufKnqlofCA6P+7kiJLC2Os675p8WrkMBKI+d6OQ8DUx+/OsjsnogW7S9x?=
- =?us-ascii?Q?6z71Fe6YGdai+0s+gIsJA08MQlSUeXkf1y2Pi/bbk4R3Mvm0oc0w50RRI7ha?=
- =?us-ascii?Q?dq1exphtAqSyq6fMkUHLN0x4yFV6yUkjM/QCM5Iy5VfJNVLq9y3957Y/b8DF?=
- =?us-ascii?Q?Orj3J93Cek1VQ505XudWASKRMfy3U9HcXW/OSbWCLLTaUwpAb62B4dItF4gE?=
- =?us-ascii?Q?FJs17V9/aFN3ViG7eRtzVFHvkOfwKSED20stqOVKwOOJNxNDJ6KpT1MgQKW4?=
- =?us-ascii?Q?4x9hk6IyJbFNn9E9w8jNB1BgEGF1U5R+ZEuKTVAiuAglqsjWxQi4dgaKczPl?=
- =?us-ascii?Q?QGeX0uMdWojy8kbe13j3tVUMR7ufDiypPRWFc+QEVbUNlC8WPWIGxGhQzA+X?=
- =?us-ascii?Q?4UoFYtAFy3V5FcMpY17jPF+ADqVMngvA9kK3xcn0zTnftWmRfJimFcZ7Ax6Q?=
- =?us-ascii?Q?DCL3pPQQ7pGsZtvyg2K9HfGHMAX3zJM4PnvUkZrs3J4G4lM/5FNhqlRqN0q7?=
- =?us-ascii?Q?RRxhdrn4ym67zTXn+/wyCBtvppvwV4zv2aL7XbJGOEZrl2aiIwd99ADu0mcP?=
- =?us-ascii?Q?GTW48NDx8Ac/qELcB/JajDarDTKEeTmyfNkKJOCxjowq9/t1vWzvr9RrX1/Q?=
- =?us-ascii?Q?NY1S7Fi4j3TP3tocgMOOIf3/MyIi2Dw+xV2fyfu962sEQ/ejq5F3GEFyfl69?=
- =?us-ascii?Q?aNjbO692D6PEZEQULsBe2eWuFdxMbVr0Y2JEfkJmh8c6/NCf4hLwW/v1Y4B6?=
- =?us-ascii?Q?WFzu5qL7UR4lE2wZuezSSSObAb1T15qGnHMFURbqHbTyF2vqpYTwu+IOv3v9?=
- =?us-ascii?Q?+OUhd54djMByXIm7zNv9Vc8aXQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <7EE5585BCD26D94F819B92124ECBE31F@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
+        id S1379570AbiAUI01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 03:26:27 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:60518
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231208AbiAUI0Y (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 03:26:24 -0500
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 43DAE3FFDD
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 08:26:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642753577;
+        bh=WFaN2NaRLA9rIp327g1xVjFRTrxCMZQ865lGwbwG9Rk=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=AHehVNRhEXawGtsLWdVJn/T6EwhenYKgrTe39COmL72rBxRgsM6fBL55UWbZu6hSh
+         W8PZsGwF4ci6heRnt5PdCvCOZ4/ZG1wxlQz3bSuLclnwHNd5nxcCv/64SkccPKdA7i
+         UFEIC3kRqPUbZA2P+n4bDzqB8YX+KvUq6vFN+5q+2sPK2g3zdLSIrkJSmzmJDgQvpa
+         REx7faqkW0zMMLOJZBeHhaHK8808ZFM2VwjDnrKUn6q1PDmF6PleUOqzMADGONAFl8
+         pMCPuHvcn3X+T/ncqkUMzXl67BqsG+HHC5qyxmqayB80Auo1SRwRhVkX/kwLueMo10
+         FzYORSZXY3lbg==
+Received: by mail-ed1-f69.google.com with SMTP id ej6-20020a056402368600b00402b6f12c3fso8420843edb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 00:26:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WFaN2NaRLA9rIp327g1xVjFRTrxCMZQ865lGwbwG9Rk=;
+        b=Z/ifikZSBhg3U/0nBHXheBp76PJhll5eazStnNo2JQhs2xQpJLI0W2x/rharpHoyZU
+         E/JgSIHkyE34vQz7mBi9p/MOL3PNoo2hGUpferpxYZzmoYfxt6MwPL+v6wgAHd4umQTS
+         JrX43x9FSf4gLv2oB2ev0HRi74WMm6NM5M30+/3xR6rVVp7Cl/LD0mW9/s5Z2jGgRWFm
+         Ozs5Y8cziPwWWhx2jBt4wSh2pXa7jw6MzBOLKsTU4jhGir/2I1X+pelOOlCdbBFXqx9t
+         7EPhZZGwt4YqUAwYdPS4aegviL9q1aT00x+xMAo3MRZaVeFZHZe8VoEEIbMhlZbQWZMG
+         8eEw==
+X-Gm-Message-State: AOAM532JKJtKb8fHPB/ZsAean7F5SddT4oCjXLbTbbkQkMIvWfaR4P8S
+        63ER8odACGiaziN5DulTmC150EpwAHjAYbVPBqYroEtrWmJAeInk66l3R6oi2L2lhzWYFsYliKQ
+        GLfQvDFteR4v9ODhaxWX1frLd81cHkZ6vTztcxFT2sg==
+X-Received: by 2002:aa7:d949:: with SMTP id l9mr3339685eds.54.1642753576910;
+        Fri, 21 Jan 2022 00:26:16 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzM9vD86mwMtX+h2FjjQlccFgtkFev6o5qFbfunrbz4ISkFfscZEMnftrRS9hu6u4qvlPa49w==
+X-Received: by 2002:aa7:d949:: with SMTP id l9mr3339671eds.54.1642753576763;
+        Fri, 21 Jan 2022 00:26:16 -0800 (PST)
+Received: from [192.168.0.50] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id cf13sm1821768ejb.141.2022.01.21.00.26.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Jan 2022 00:26:16 -0800 (PST)
+Message-ID: <9a006308-cabb-7ee2-0556-860d425b251f@canonical.com>
+Date:   Fri, 21 Jan 2022 09:26:01 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 29e43cde-5feb-4716-c137-08d9dcb79c92
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jan 2022 08:25:41.2843
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA1PR0101MB1862
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [RFC 1/3] dt-bindings: iommu: Add bindings for samsung,sysmmu-v8
+Content-Language: en-US
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
+Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Cho KyongHo <pullip.cho@samsung.com>,
+        Hyesoo Yu <hyesoo.yu@samsung.com>,
+        Janghyuck Kim <janghyuck.kim@samsung.com>,
+        Jinkyu Yang <jinkyu1.yang@samsung.com>,
+        Alex <acnwigwe@google.com>, Carlos Llamas <cmllamas@google.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        Erick Reyes <erickreyes@google.com>,
+        "J . Avila" <elavila@google.com>, Jonglin Lee <jonglin@google.com>,
+        Mark Salyzyn <salyzyn@google.com>,
+        Thierry Strudel <tstrudel@google.com>,
+        Will McVicker <willmcvicker@google.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-samsung-soc@vger.kernel.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220120201958.2649-1-semen.protsenko@linaro.org>
+ <20220120201958.2649-2-semen.protsenko@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220120201958.2649-2-semen.protsenko@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aun-Ali Zaidi <admin@kodeit.net>
+On 20/01/2022 21:19, Sam Protsenko wrote:
+> Only example of usage and header for now.
+> 
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> ---
+>  .../bindings/iommu/samsung,sysmmu-v8.txt      | 31 +++++++++++++
 
-This patch adds the necessary IDs and configuration for Macs with
-the T2 Security chip.
+Please, don't copy paste bindings or entire drviers from vendor kernel.
+It looks very bad. Instead, submit them in dtschema.
 
-Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
-Signed-off-by: Aditya Garg <gargaditya08@live.com>
----
- drivers/hid/hid-apple.c  | 16 ++++++++++++++++
- drivers/hid/hid-ids.h    |  8 ++++++++
- drivers/hid/hid-quirks.c | 16 ++++++++++++++++
- 3 files changed, 40 insertions(+)
+NAK.
 
-diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
-index c22d445a9..823021c24 100644
---- a/drivers/hid/hid-apple.c
-+++ b/drivers/hid/hid-apple.c
-@@ -861,6 +861,22 @@ static const struct hid_device_id apple_devices[] =3D =
-{
- 		.driver_data =3D APPLE_HAS_FN },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_JIS=
-),
- 		.driver_data =3D APPLE_HAS_FN | APPLE_RDESC_JIS },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J1=
-40K),
-+		.driver_data =3D APPLE_HAS_FN | APPLE_BACKLIGHT_CTL },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J1=
-32),
-+		.driver_data =3D APPLE_HAS_FN | APPLE_BACKLIGHT_CTL },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J6=
-80),
-+		.driver_data =3D APPLE_HAS_FN | APPLE_BACKLIGHT_CTL },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J2=
-13),
-+		.driver_data =3D APPLE_HAS_FN | APPLE_BACKLIGHT_CTL },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J2=
-14K),
-+		.driver_data =3D APPLE_HAS_FN },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J2=
-23),
-+		.driver_data =3D APPLE_HAS_FN },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J2=
-30K),
-+		.driver_data =3D APPLE_HAS_FN },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J1=
-52F),
-+		.driver_data =3D APPLE_HAS_FN },
- 	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIREL=
-ESS_2009_ANSI),
- 		.driver_data =3D APPLE_NUMLOCK_EMULATION | APPLE_HAS_FN },
- 	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIREL=
-ESS_2009_ISO),
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 26cee452e..8ad26c20f 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -167,6 +167,14 @@
- #define USB_DEVICE_ID_APPLE_WELLSPRING9_ANSI	0x0272
- #define USB_DEVICE_ID_APPLE_WELLSPRING9_ISO		0x0273
- #define USB_DEVICE_ID_APPLE_WELLSPRING9_JIS		0x0274
-+#define USB_DEVICE_ID_APPLE_WELLSPRINGT2_J140K	0x027a
-+#define USB_DEVICE_ID_APPLE_WELLSPRINGT2_J132	0x027b
-+#define USB_DEVICE_ID_APPLE_WELLSPRINGT2_J680	0x027c
-+#define USB_DEVICE_ID_APPLE_WELLSPRINGT2_J213	0x027d
-+#define USB_DEVICE_ID_APPLE_WELLSPRINGT2_J214K	0x027e
-+#define USB_DEVICE_ID_APPLE_WELLSPRINGT2_J223	0x027f
-+#define USB_DEVICE_ID_APPLE_WELLSPRINGT2_J230K	0x0280
-+#define USB_DEVICE_ID_APPLE_WELLSPRINGT2_J152F	0x0340
- #define USB_DEVICE_ID_APPLE_FOUNTAIN_TP_ONLY	0x030a
- #define USB_DEVICE_ID_APPLE_GEYSER1_TP_ONLY	0x030b
- #define USB_DEVICE_ID_APPLE_IRCONTROL	0x8240
-diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
-index 9af1dc8ae..963cf2a2e 100644
---- a/drivers/hid/hid-quirks.c
-+++ b/drivers/hid/hid-quirks.c
-@@ -294,6 +294,14 @@ static const struct hid_device_id hid_have_special_dri=
-ver[] =3D {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_ANS=
-I) },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_ISO=
-) },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_JIS=
-) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J1=
-40K) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J1=
-32) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J6=
-80) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J2=
-13) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J2=
-14K) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J2=
-23) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J2=
-30K) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J1=
-52F) },
- 	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIREL=
-ESS_2009_ANSI) },
- 	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIREL=
-ESS_2009_ISO) },
- 	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIREL=
-ESS_2009_JIS) },
-@@ -929,6 +937,14 @@ static const struct hid_device_id hid_mouse_ignore_lis=
-t[] =3D {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_ANS=
-I) },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_ISO=
-) },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_JIS=
-) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J1=
-40K) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J1=
-32) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J6=
-80) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J2=
-13) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J2=
-14K) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J2=
-23) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J2=
-30K) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J1=
-52F) },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_FOUNTAIN_TP_ONL=
-Y) },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER1_TP_ONLY=
-) },
- 	{ }
---=20
-2.25.1
+>  include/dt-bindings/soc/samsung,sysmmu-v8.h   | 43 +++++++++++++++++++
+>  2 files changed, 74 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iommu/samsung,sysmmu-v8.txt
+>  create mode 100644 include/dt-bindings/soc/samsung,sysmmu-v8.h
+> 
+> diff --git a/Documentation/devicetree/bindings/iommu/samsung,sysmmu-v8.txt b/Documentation/devicetree/bindings/iommu/samsung,sysmmu-v8.txt
+> new file mode 100644
+> index 000000000000..d6004ea4a746
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iommu/samsung,sysmmu-v8.txt
+> @@ -0,0 +1,31 @@
+> +Example (Exynos850, IOMMU for DPU usage):
+> +
+> +	#include <dt-bindings/soc/samsung,sysmmu-v8.h>
+> +
+> +	/* IOMMU group info */
+> +	iommu_group_dpu: iommu_group_dpu {
+> +		compatible = "samsung,sysmmu-group";
+> +	};
+> +
+> +	sysmmu_dpu: sysmmu@130c0000 {
+> +		compatible = "samsung,sysmmu-v8";
+> +		reg = <0x130c0000 0x9000>;
+> +		interrupts = <GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>;
+> +		qos = <15>;
+> +
+> +		clocks = <&cmu_dpu CLK_GOUT_DPU_SMMU_CLK>;
+> +		clock-names = "gate";
+> +
+> +		sysmmu,secure-irq;
+> +		sysmmu,secure_base = <0x130d0000>;
+> +		sysmmu,default_tlb = <TLB_CFG(BL1, PREFETCH_PREDICTION)>;
+> +		sysmmu,tlb_property =
+> +			<1 TLB_CFG(BL1, PREFETCH_PREDICTION) (DIR_READ | (1 << 16)) SYSMMU_ID_MASK(0x2, 0xF)>,
+> +			<2 TLB_CFG(BL1, PREFETCH_PREDICTION) (DIR_READ | (1 << 16)) SYSMMU_ID_MASK(0x4, 0xF)>,
+> +			<3 TLB_CFG(BL1, PREFETCH_PREDICTION) (DIR_READ | (1 << 16)) SYSMMU_ID_MASK(0x6, 0xF)>,
+> +			<4 TLB_CFG(BL1, PREFETCH_PREDICTION) (DIR_READ | (1 << 16)) SYSMMU_ID_MASK(0x8, 0xF)>;
+> +		port-name = "DPU";
+> +		#iommu-cells = <0>;
+> +		//power-domains = <&pd_dpu>;
+
+We try not to store dead code in kernel.
 
 
+
+Best regards,
+Krzysztof

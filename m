@@ -2,110 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 762CA4965C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 20:36:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36BAC4965C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 20:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbiAUTgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 14:36:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
+        id S232284AbiAUThM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 14:37:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiAUTgB (ORCPT
+        with ESMTP id S232697AbiAUTgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 14:36:01 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB0EC06173D;
-        Fri, 21 Jan 2022 11:36:01 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id s4so596128wrb.0;
-        Fri, 21 Jan 2022 11:36:00 -0800 (PST)
+        Fri, 21 Jan 2022 14:36:54 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92630C061749;
+        Fri, 21 Jan 2022 11:36:48 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id u6so4219674lfm.10;
+        Fri, 21 Jan 2022 11:36:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iD/CADMJmjE6Wqsta+zyCvYv9Ey28eqoIb5w5xoLVEA=;
-        b=pT1Wq/aAIl8THxDwAu4WsHnCXwPt44I62OEbx4xZhMzz2zo+cVyAmgxsaQt3T3X1U9
-         JyAcHpk0XTuT+syn8/rkM0A2joco1O+Y5elE3iQ3DULT2eNvJ/FwBoQ0XVRWh2U9a5vt
-         JB6BO+SDq5LbD5Ftb0ZIIEwKCzDjdr8XLg6SUXF9sFzHGe/mj2RzrXuuZVVdfxcvzIhh
-         +IL83B0uQprKTsi9yyyQ88Nhn8HbJjbFAQU2KNVu/vGPu5sfbaeypfPReJpFRPERHn11
-         eG7uWF6RHgPTqXspVOFmmjRQ1Iyx9I3tI7tFy6Coh7BgCoaZRk2z0IbjqU0fyuzmgRRl
-         VOCQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=yWQRw+9myUJERoCWU8cKt3zBqGh8K1JdfKd6Yv9H6iw=;
+        b=g8lPO+Ver5WayaHmKoe+WMYVRUKrxEOGEYTvl6bnqTrKeMA6mODc3PhoacZy4YPoug
+         3SRTkkeNjJnzc+76tdwyqSkN30VUmB7cWRou503RvYaBMIvWcv/Nyt8+nOwWFrY6GKxr
+         80rWO/hipWLcEW2Ttpruszvf33EVjaEks0eCjnsGfTKSdhx6KGN2LZVStUz4x4OeVJy6
+         j2esl7SmliqdmKyxU0f4UJpDjRAodOmygrtnnJt4u8e8kGIdb0xSfwq856h2Rn9EGFuh
+         ZeLcAifdCzFibwNu/uZLJFwpoYpVc64PnGYkQfucMGxU8HWd6goRuNrraZt8VMOBqRRq
+         US8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iD/CADMJmjE6Wqsta+zyCvYv9Ey28eqoIb5w5xoLVEA=;
-        b=1zz1bvWg61pXmLJyJz0lCe3hyS/9dQFp6ZWxg0K7ILzOcEyyJAEfTFBxTFusyKYxWg
-         +ZSn86b5x9K5/nL8V8SC2q9XOKALbHfhW4BsHHbRUJfdgymFxF2bx4KoQ6lAFPTxxpHc
-         1xRfr1MHgc9XqNIAB7UWeItpz6t9G1eREDWTEMwjZ6WDVyP3VDIZXYctDZDFAXfZ84sB
-         FXxBV0SSDTxA4kfDROYggl6fJpYAV4jm9o7cvXXSbsNbIBOh5Gc75WkSz9G0PJeyKPLS
-         FTajK5r0OlUuADGA6XiQHmpplP0tLz10EDxgH5DL+hisNP6U9yWI3nB8fUJ7v6q4gA/1
-         KuOA==
-X-Gm-Message-State: AOAM532pwa2xdPJQMyXHJyXzpS6pEqp/OV7TvIEeeyYTQs+wmHV0jpsS
-        u0NxoMmKXEzKcqRDc65Tz4GpTQrTXD9qeg==
-X-Google-Smtp-Source: ABdhPJwVJyHJrYnB/nAOd95Z2o0Y1FG3/+VVs+HRs4c0yfdCd4kS22114ki82+YNAOZzUPZxqsjJkA==
-X-Received: by 2002:adf:ebd2:: with SMTP id v18mr5154671wrn.502.1642793759362;
-        Fri, 21 Jan 2022 11:35:59 -0800 (PST)
-Received: from debby ([2a01:e0a:a6d:a8d0:7ff4:8f61:5574:9f95])
-        by smtp.gmail.com with ESMTPSA id h4sm7803309wre.0.2022.01.21.11.35.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 11:35:58 -0800 (PST)
-From:   Romain Perier <romain.perier@gmail.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Palmer <daniel@0x0f.com>,
-        Romain Perier <romain.perier@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 9/9] ARM: mstar: Extend opp_table for infinity2m
-Date:   Fri, 21 Jan 2022 20:35:44 +0100
-Message-Id: <20220121193544.23231-10-romain.perier@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220121193544.23231-1-romain.perier@gmail.com>
-References: <20220121193544.23231-1-romain.perier@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yWQRw+9myUJERoCWU8cKt3zBqGh8K1JdfKd6Yv9H6iw=;
+        b=1l+HiL49eMbWqNBZAizUVCNGytRuqTD3GXPUfNADOFfMdArJevtuCxuORvj6wYnUDU
+         70rXUN42lJzhmA45hk6mSywnYIuHFGEAU8OxLRvEBeG9psl9WIW5aoWpYVvEDnkbdZmy
+         POAZpZoZtVK3jzsTo+13Yspx2xaThMim++2Iw3SdAnMSIrq7b0dpnAKZhPdW4tc8Okg0
+         PiuvDN6GbWuSMosdWFhpYsFKTUPlom3d7CC8Gf0Ti8bfz2YUB0f3QGaqxNQmd6KL/dHe
+         0oErjet/6xgslyZmHPG09ca7ytl1a+K3s/+rnKG2FtbWA3xEBiPTIP4IL6ShjxVCg4Ch
+         uxzQ==
+X-Gm-Message-State: AOAM531vc5Zins4eOYhn95ybvf3DxH6J9qlYaRHUojOwCpPPiaEy9knK
+        bB5a0D4YlkT8RkJRgIQsuHg=
+X-Google-Smtp-Source: ABdhPJy5q3FcsbCox7Ny7uElmyq4AThFqH2Jsl8c+ySR3rXqyN+VuY68ZkDVoU5xkBHTYst4laiVaw==
+X-Received: by 2002:a05:6512:32ca:: with SMTP id f10mr4873822lfg.384.1642793806730;
+        Fri, 21 Jan 2022 11:36:46 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.227.208])
+        by smtp.gmail.com with ESMTPSA id t12sm345280lfr.197.2022.01.21.11.36.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Jan 2022 11:36:46 -0800 (PST)
+Message-ID: <8d4b0822-4e94-d124-e191-bec3effaf97c@gmail.com>
+Date:   Fri, 21 Jan 2022 22:36:45 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] drivers: net: remove a dangling pointer in
+ peak_usb_create_dev
+Content-Language: en-US
+To:     Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stephane Grosjean <s.grosjean@peak-system.com>,
+        =?UTF-8?Q?Stefan_M=c3=a4tje?= <stefan.maetje@esd.eu>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220120130605.55741-1-dzm91@hust.edu.cn>
+ <b5cb1132-2f6b-e2da-78c7-1828b3617bc3@gmail.com>
+ <CAD-N9QWvfoo_HtQ+KT-7JNFumQMaq8YqMkHGR2t7pDKsDW0hkQ@mail.gmail.com>
+ <CAD-N9QUfiTNqs7uOH3C99oMNdqFXh+MKLQ94BkQou_T7-yU_mg@mail.gmail.com>
+ <CAD-N9QUZ95zqboe=58gybue6ssSO-M-raijd3XnGXkXnp3wiqQ@mail.gmail.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <CAD-N9QUZ95zqboe=58gybue6ssSO-M-raijd3XnGXkXnp3wiqQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-infinity2m are running up to 1.2Ghz, this extends opp_table with the
-corresponding frequencies and enable operating-points table for cpu1
+Hi Dongliang,
 
-Signed-off-by: Romain Perier <romain.perier@gmail.com>
----
- arch/arm/boot/dts/mstar-infinity2m.dtsi | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+On 1/21/22 08:58, Dongliang Mu wrote:
+[...]>> BTW, as you mentioned, dev->next_siblings is used in struct
+>> peak_usb_adapter::dev_free() (i.e., pcan_usb_fd_free or
+>> pcan_usb_pro_free), how about the following path?
+>>
+>> peak_usb_probe
+>> -> peak_usb_create_dev (goto adap_dev_free;)
+>>    -> dev->adapter->dev_free()
+>>       -> pcan_usb_fd_free or pcan_usb_pro_free (This function uses
+>> next_siblings as condition elements)
+>>
+>> static void pcan_usb_fd_free(struct peak_usb_device *dev)
+>> {
+>>         /* last device: can free shared objects now */
+>>         if (!dev->prev_siblings && !dev->next_siblings) {
+>>                 struct pcan_usb_fd_device *pdev =
+>>                         container_of(dev, struct pcan_usb_fd_device, dev);
+>>
+>>                 /* free commands buffer */
+>>                 kfree(pdev->cmd_buffer_addr);
+>>
+>>                 /* free usb interface object */
+>>                 kfree(pdev->usb_if);
+>>         }
+>> }
+>>
+>> If next_siblings is not NULL, will it lead to the missing free of
+>> cmd_buffer_addr and usb_if?
+> 
+> The answer is No. Forget my silly thought.
+> 
 
-diff --git a/arch/arm/boot/dts/mstar-infinity2m.dtsi b/arch/arm/boot/dts/mstar-infinity2m.dtsi
-index dc339cd29778..1b485efd7156 100644
---- a/arch/arm/boot/dts/mstar-infinity2m.dtsi
-+++ b/arch/arm/boot/dts/mstar-infinity2m.dtsi
-@@ -6,10 +6,25 @@
- 
- #include "mstar-infinity.dtsi"
- 
-+&cpu0_opp_table {
-+		opp-1000000000 {
-+			opp-hz = /bits/ 64 <1000000000>;
-+			opp-microvolt = <1000000>;
-+			clock-latency-ns = <300000>;
-+		};
-+
-+		opp-1200000000 {
-+			opp-hz = /bits/ 64 <1200000000>;
-+			opp-microvolt = <1000000>;
-+			clock-latency-ns = <300000>;
-+		};
-+};
-+
- &cpus {
- 	cpu1: cpu@1 {
- 		device_type = "cpu";
- 		compatible = "arm,cortex-a7";
-+		operating-points-v2 = <&cpu0_opp_table>;
- 		reg = <0x1>;
- 		clocks = <&cpupll>;
- 		clock-names = "cpuclk";
--- 
-2.34.1
+Yeah, it seems like (at least based on code), that this dangling pointer 
+is not dangerous, since nothing accesses it. And next_siblings 
+_guaranteed_ to be NULL, since dev->next_siblings is set NULL in 
+disconnect()
 
+
+
+
+With regards,
+Pavel Skripkin

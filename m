@@ -2,123 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68784496060
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A6D49606A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:06:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380909AbiAUOFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 09:05:02 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:44140
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1380896AbiAUOE1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 09:04:27 -0500
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com [209.85.161.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id B476A3F19C
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 14:04:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642773865;
-        bh=3OQ/VaDIuTDhMC1t1W5jGAk9lH9/vCwpiE19iLKBlBc=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=Ac0b3abZRX6hCnauPzNCt+mtMRBeERZ6i1f3GriO138x6os+/SJFuWrm/PFPMqBVp
-         DNME9hpaKucHUD88jaPAy/Uz+Kjz8fP7dKYFMrTWpifErDzrsR/xJ4QH1kJoLpMFMT
-         DMuQffpdVLcxIbAu09AQyopk2minRWA37TGtk/XrK1MylTWuLwe0snAE6bXsH2kdsx
-         S4pWB8w/26x4WVWaWF7GmIXIpPTaDopGj84rKgDestPIT0nW+Xi2Vk69lEqqHMEUXe
-         YZGkpSe3DYyjLqWZqYkPBQl3fOBso4hYF5WSry4kB2g1Nh8pgEgWPOYGgGCoaLMoNJ
-         Al78YSGHYrDmQ==
-Received: by mail-oo1-f71.google.com with SMTP id t26-20020a4ad0ba000000b002de9567955cso2509337oor.5
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 06:04:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3OQ/VaDIuTDhMC1t1W5jGAk9lH9/vCwpiE19iLKBlBc=;
-        b=eTtexXmj+qlXTicldiESd2tN7ZKGRp+KwzmbwvL6mkZoI/XKu7xors0e35Qy4jUA53
-         U2J+jlD46PJGiqkc+kd25u5uVTi7hCbUh50kYTOvcqZoiA0ZPg0lGtUmsznZn3oaQ/7U
-         pkke1K+dXRLJOO6o9FnuYbGOmW/E5RWYaSpL6C/zmmF7UGIhfI6LEGOmzWo3f7iOO8aW
-         nnSz9YSAP6u1zNz6HUBBqfU4kq8RTEZMQ4AmfZcjRyg+EpkdJQJQTFEuAG8R/es+Rh/H
-         E8+HEgMDmR+c193OQrxG/s7dQlPWxkLZmF06a6ar0FqpCQgPEI/WcKGOShkaF5JpuAgR
-         x4zw==
-X-Gm-Message-State: AOAM5328efKUw0yiatsLtYsFIoB8Pz169PmfKu0veGmcoffPfotXhdvV
-        LMmacXOHo/hSuWgvn5d03BvQbwPhz6oOdy7N2CHIw1n/juBtSOprcNqIRruKAio80jJwtt80IZV
-        cUzSUjN16dNrBZ2x4pcyzFWO9uPt3BjT2L+JcxQtWbHl4Ysr32yb/3oHg5g==
-X-Received: by 2002:a9d:6f0e:: with SMTP id n14mr2822774otq.269.1642773861223;
-        Fri, 21 Jan 2022 06:04:21 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyVtaGcho3igX1lqUTemDHDs4BAm+GxXC1OfPO/KgxOSm0eeAE8Nd5NPl6H219ecy1ttNMMRO60EzgHiH7q1Tk=
-X-Received: by 2002:a9d:6f0e:: with SMTP id n14mr2822645otq.269.1642773859362;
- Fri, 21 Jan 2022 06:04:19 -0800 (PST)
-MIME-Version: 1.0
-References: <20220120051929.1625791-1-kai.heng.feng@canonical.com>
- <Yelnzrrd0a4Bl5AL@lunn.ch> <CAAd53p45BbLy0T8AG5QTKhP00zMBsMHfm7i-bTmZmQWM5DpLnQ@mail.gmail.com>
- <Yeqve+KhJKbZJNCL@lunn.ch>
-In-Reply-To: <Yeqve+KhJKbZJNCL@lunn.ch>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Fri, 21 Jan 2022 22:04:08 +0800
-Message-ID: <CAAd53p7of_W26DfZwemZjBYNrkqtoY=NwHDG=6g9vvZfDn3Wwg@mail.gmail.com>
-Subject: Re: [PATCH v2] net: phy: marvell: Honor phy LED set by system
- firmware on a Dell hardware
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        id S1350894AbiAUOFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 09:05:51 -0500
+Received: from mga04.intel.com ([192.55.52.120]:2394 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1350871AbiAUOFu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 09:05:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642773950; x=1674309950;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=69sgSZz7lyieU1mkFLPQfUU9GE2k09qc14bQ2+FZAuE=;
+  b=cF6lyz1SndhCfOQwXlHq4Y4rC2oN2OYdN4grDM68Mmkk4hjIQYezd20n
+   ibFW5tMPrCqqB+kIUxWVnj9h774Gm5LCFi5Gn/fXBLRvw+WW+zWXbrqI2
+   BsEMzim7mJw+pTY0iT05brGn868KyOLe3nMAmi+iPC4l6IRbMYb2jY7GC
+   7WYuZh5RfXouMGMRGj03zvcONRcGoZ1qqVAbAnF+NiLDF1foHppnleb29
+   tW8O3If40W8Vo2VkLTvv2X/4a518IvsJ8MoEB42oSAJjMenhcEcJarpKz
+   BchNddks9OxECEugJjAmR5sbuxzBOp/IO2WOXwpky5z6Bn5GtEgEjwTLJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="244478982"
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="244478982"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 06:05:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="672951934"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 21 Jan 2022 06:05:48 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nAuXz-000FMH-Vf; Fri, 21 Jan 2022 14:05:47 +0000
+Date:   Fri, 21 Jan 2022 22:05:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: [asahilinux:bits/080-wifi 11/39]
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c:74:10: warning:
+ variable 'len' set but not used
+Message-ID: <202201212104.gFjUBTm8-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 9:05 PM Andrew Lunn <andrew@lunn.ch> wrote:
->
-> > > Since you talked about suspend/resume, does this machine support WoL?
-> > > Is the BIOS configuring LED2 to be used as an interrupt when WoL is
-> > > enabled in the BIOS? Do you need to save/restore that configuration
-> > > over suspend/review? And prevent the driver from changing the
-> > > configuration?
-> >
-> > This NIC on the machine doesn't support WoL.
->
-> I'm surprised about that. Are you really sure?
+tree:   https://github.com/AsahiLinux/linux bits/080-wifi
+head:   1753101ce16367deadb5ec5ab5dc7ab4894649bf
+commit: cc44c86950084bc3437485288390841cf117c0d1 [11/39] brcmfmac: of: Use devm_kstrdup for board_type & check for errors
+config: x86_64-randconfig-a003-20220117 (https://download.01.org/0day-ci/archive/20220121/202201212104.gFjUBTm8-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/cc44c86950084bc3437485288390841cf117c0d1
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/080-wifi
+        git checkout cc44c86950084bc3437485288390841cf117c0d1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/wireless/broadcom/brcm80211/brcmfmac/
 
-Yes I am sure.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> What are you doing for resume? pressing the power button?
+All warnings (new ones prefixed by >>):
 
-Power button, RTC. The system has another igb NIC, which supports WoL.
+>> drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c:74:10: warning: variable 'len' set but not used [-Wunused-but-set-variable]
+                   int i, len;
+                          ^
+   1 warning generated.
 
->
-> > > > +static const struct dmi_system_id platform_flags[] = {
-> > > > +     {
-> > > > +             .matches = {
-> > > > +                     DMI_MATCH(DMI_SYS_VENDOR, "Dell EMC"),
-> > > > +                     DMI_MATCH(DMI_PRODUCT_NAME, "Edge Gateway 3200"),
-> > > > +             },
-> > > > +             .driver_data = (void *)PHY_USE_FIRMWARE_LED,
-> > > > +     },
-> > >
-> > > This needs a big fat warning, that it will affect all LEDs for PHYs
-> > > which linux is driving, on that machine. So PHYs on USB dongles, PHYs
-> > > in SFPs, PHYs on plugin PCIe card etc.
-> > >
-> > > Have you talked with Dells Product Manager and do they understand the
-> > > implications of this?
-> >
-> > Right, that's why the original approach is passing the flag from the MAC driver.
-> > That approach can be more specific and doesn't touch unrelated PHYs.
->
-> More specific, but still will go wrong at some point, A PCEe card
-> using that MAC etc. And this is general infrastructure you are adding
-> here, it can be used by any machine, any combination of MAC and PHY
-> etc. So you need to clearly document its limits so others are not
-> surprised.
 
-The dwmac-intel device is an integrated end point connects directly to
-the host bridge, so it won't be in a form of PCIe addin card.
+vim +/len +74 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
 
-Kai-Heng
+1a3ac5c651a0c85 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Shawn Guo        2021-04-17  60  
+e457a8a01a19277 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Rafał Miłecki    2017-01-07  61  void brcmf_of_probe(struct device *dev, enum brcmf_bus_type bus_type,
+e457a8a01a19277 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Rafał Miłecki    2017-01-07  62  		    struct brcmf_mp_device *settings)
+61f663dfc1a091c drivers/net/wireless/brcm80211/brcmfmac/of.c          Chen-Yu Tsai     2014-06-29  63  {
+e457a8a01a19277 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Rafał Miłecki    2017-01-07  64  	struct brcmfmac_sdio_pd *sdio = &settings->bus.sdio;
+0ad4b55b2f29784 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Hans de Goede    2018-10-10  65  	struct device_node *root, *np = dev->of_node;
+61f663dfc1a091c drivers/net/wireless/brcm80211/brcmfmac/of.c          Chen-Yu Tsai     2014-06-29  66  	int irq;
+1a3ac5c651a0c85 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Shawn Guo        2021-04-17  67  	int err;
+61f663dfc1a091c drivers/net/wireless/brcm80211/brcmfmac/of.c          Chen-Yu Tsai     2014-06-29  68  	u32 irqf;
+61f663dfc1a091c drivers/net/wireless/brcm80211/brcmfmac/of.c          Chen-Yu Tsai     2014-06-29  69  	u32 val;
+61f663dfc1a091c drivers/net/wireless/brcm80211/brcmfmac/of.c          Chen-Yu Tsai     2014-06-29  70  
+0ad4b55b2f29784 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Hans de Goede    2018-10-10  71  	/* Set board-type to the first string of the machine compatible prop */
+0ad4b55b2f29784 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Hans de Goede    2018-10-10  72  	root = of_find_node_by_path("/");
+0ad4b55b2f29784 drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Hans de Goede    2018-10-10  73  	if (root) {
+29e354ebeeecaee drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c Matthias Brugger 2020-07-01 @74  		int i, len;
 
->
->         Andrew
+:::::: The code at line 74 was first introduced by commit
+:::::: 29e354ebeeecaee979e6fe22cd6272682d7552c9 brcmfmac: Transform compatible string for FW loading
+
+:::::: TO: Matthias Brugger <mbrugger@suse.com>
+:::::: CC: Kalle Valo <kvalo@codeaurora.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

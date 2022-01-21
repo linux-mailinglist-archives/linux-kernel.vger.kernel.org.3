@@ -2,151 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C53BA495930
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 06:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A423B495974
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 06:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234044AbiAUFU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 00:20:58 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:55662
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234018AbiAUFUr (ORCPT
+        id S1348406AbiAUF0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 00:26:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245352AbiAUF0k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 00:20:47 -0500
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0B82D3FFD0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 05:20:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642742443;
-        bh=wVTM0hztIXfCr6VERNnZ+oanrOCPjJFihg5+LQI64SE=;
-        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-         Content-Type:Date:Message-ID;
-        b=POSNok0KXBIxym6N+ah8Tr996m8ocsuRSYi3wJM10c9bQ8LuGFtbiXxzmbuQBQ0Jh
-         vejiFMEURj1bSqs3UJdFsCQYoidSHEqzJreOYPATFZc//qvJAhJlVB1V1VX+R1gz+j
-         uN92ZTga5cD2wVg+GXCLeS2fMX5sYqBqfK32EPg+A6zz4+ugctu+O70BceiyvSKgYN
-         q2/hHioUmzkbbJez38+f0eum8XYJj6rH2dW1+VvuJdNhb04us4clF1FDfKT52GYFFt
-         CgZJ745bK11Ysals23zcyJ8KnccXRw2YLx22ZEJ0ixBxcICcjXyuGxHXcgGEFXWrXu
-         mIKEsLPrxPkyA==
-Received: by mail-pj1-f71.google.com with SMTP id p14-20020a17090a2c4e00b001b54165bffeso202717pjm.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 21:20:42 -0800 (PST)
+        Fri, 21 Jan 2022 00:26:40 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422E7C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 21:26:39 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id x16so4396224pfu.13
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 21:26:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=klkC+qf7JEHVmwgaoW0cLa/wjaKIwgJ9IF7PyZlZEkQ=;
+        b=Ia7/kCIvw0vBFQRVcnDkGdKqayflWZMU7tpbc2n/OXgpZ8GpzjRcEgkHWcEuMfIeGS
+         h7Y2WVDBhgBWPlQMAo9dGVXVz8K+BjaM7Tgmu4yKsHTzBFlYUygxN/kLcEiayb24+9P6
+         Iaek5PhX0P9FZy223IvGsOKcZbZjmkepkHm57/0IZW83eG8gt4p9bHucCNjLqRc4bDfu
+         c8hGUtEAtdzL0/HBIxglYnS8Z3NYyXGz1iq4AWjvlxX4FYlSt3DgOzgR/eSsY4NThVGX
+         NnIuYYR8x35jGuDT9vRHpnGlxV8y3NXTIiQSIrrRBCaCa57nbTDi6sWr7KCeGzUwPcUN
+         oafg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references
-         :comments:mime-version:content-id:content-transfer-encoding:date
-         :message-id;
-        bh=wVTM0hztIXfCr6VERNnZ+oanrOCPjJFihg5+LQI64SE=;
-        b=1Blnld9Kk6P8iqZIOGSiXdhfDtsIEkGKXMIZMYHAHM0vOEJz1BSypCSFR4sbp+esrk
-         ncn4P2fVK1DfV16U++flo91loSIXEFzkxK4a+K1We87YV/BnGNwTFy/W/EY2A9fSLkZN
-         R9QUOA+9ObHC2l2WT4nXOTP3KkWudLeygInhvXyCOqMnyXlkK7OwflqDYfIjW+lqqfAM
-         DqRzo1Pkag5mArH/Ff02Dpy9XSGJP3NOQxITJEaioqDBBk5apPto+f6R9Rnn4jLgBk6O
-         qXyRF/H7AiV7pQJIUWs7gEvp+tvnM7CvVEfGGebnvXcSloyj0g4iCh0fCcwbnQi31TSs
-         7F2Q==
-X-Gm-Message-State: AOAM530kg8fIN4QJw9XnYiifH2Fq0qTRnVJBgb/P5wabzs09oJ2044h3
-        GzwG+RIWmM+rTkZfs1+xmk24MrqxIigQvnBFTpmLxj4cmlJc4O7Ehje2+1/GnSa7X2GNV3OfjgL
-        vxvrqt/Absd94vViuBlbSegie8hE8nUT1rI7ozixTnA==
-X-Received: by 2002:a17:903:230c:b0:14b:1f90:1caf with SMTP id d12-20020a170903230c00b0014b1f901cafmr1083950plh.56.1642742441656;
-        Thu, 20 Jan 2022 21:20:41 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzB5b29KmUT5Ex0X0xL3q8l6oU9nyhDbH92zpSPKF5WrKFImrNT06M8H4VUkBWZPVyw30L7aA==
-X-Received: by 2002:a17:903:230c:b0:14b:1f90:1caf with SMTP id d12-20020a170903230c00b0014b1f901cafmr1083927plh.56.1642742441375;
-        Thu, 20 Jan 2022 21:20:41 -0800 (PST)
-Received: from famine.localdomain ([50.125.80.157])
-        by smtp.gmail.com with ESMTPSA id d1sm5047341pfu.206.2022.01.20.21.20.40
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 20 Jan 2022 21:20:40 -0800 (PST)
-Received: by famine.localdomain (Postfix, from userid 1000)
-        id B9A556093D; Thu, 20 Jan 2022 21:20:39 -0800 (PST)
-Received: from famine (localhost [127.0.0.1])
-        by famine.localdomain (Postfix) with ESMTP id B337DA0B22;
-        Thu, 20 Jan 2022 21:20:39 -0800 (PST)
-From:   Jay Vosburgh <jay.vosburgh@canonical.com>
-To:     Hangbin Liu <liuhangbin@gmail.com>
-cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>
-Subject: Re: [PATCH RFC V1 net-next 1/4] net: ethtool: Refactor identical get_ts_info implementations.
-In-reply-to: <Yeou9TKzW1NcBOKW@Laptop-X1>
-References: <20220103232555.19791-2-richardcochran@gmail.com> <20220120161329.fbniou5kzn2x4rp7@skbuf> <Yeou9TKzW1NcBOKW@Laptop-X1>
-Comments: In-reply-to Hangbin Liu <liuhangbin@gmail.com>
-   message dated "Fri, 21 Jan 2022 11:56:37 +0800."
-X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=klkC+qf7JEHVmwgaoW0cLa/wjaKIwgJ9IF7PyZlZEkQ=;
+        b=fR3tvFSKW8L/aTGu/hONBwo+eYms4RpZBSw/FpVphGgBWE0/iaA3jdg0yMFjgXIjYR
+         MydFNsTnhhTcOsit0pd8Rp8uPz4L7RpEOGOq9IkKV0Wo4l1nY4HiX6L8Aq+NWPb6+YMN
+         IUWZzop6FN0ukv1h0BkbvzVeRXyjoxZK5qATgjtiw/xUyERtvs2Rb7qBWggh39ptQMzP
+         lbYiUXo9gghpE//+zw+Ekt+w9QDV3EYKcWMLsp7zHH5KVveLqlwm3+mOOo9zf/1OGYbC
+         ewf3o+8gBmrBTz+ELwMilLBjDRna71FNzbV1J0K8nbDIx1KZI+/PTNaiu7dWMhT2U/Zc
+         8ujg==
+X-Gm-Message-State: AOAM532n6W25A6NwbSW/qDe/k+yG2umEznkWg3oOxCvoFMpl1QuzBumb
+        Fkz6DTcgLdJdMv9x9gI6d8WgALlQw0PgdSA46LiBLlnAOjs=
+X-Google-Smtp-Source: ABdhPJzzL8ucK4zUZvzyGVjjl0PtNvp8V0GCX9i0P7dun3fUE1/9eGVyxYyvbfzrfcIv3QLxXXmBr4oiWp1wDH5+J14=
+X-Received: by 2002:a05:6a00:70d:b0:4c0:1cbf:2394 with SMTP id
+ 13-20020a056a00070d00b004c01cbf2394mr2200010pfl.69.1642742798582; Thu, 20 Jan
+ 2022 21:26:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <27564.1642742439.1@famine>
-Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 20 Jan 2022 21:20:39 -0800
-Message-ID: <27565.1642742439@famine>
+References: <20220118235244.540103-1-yury.norov@gmail.com> <f85b3cac-29e7-4179-e078-fd859040c294@arm.com>
+ <Yeg79CcofyNuVLid@casper.infradead.org> <e9226eb4-4ecf-ac01-e823-ff507a354ac5@arm.com>
+ <YehilqRvYLhryUk4@shell.armlinux.org.uk> <319b09bc-56a2-207f-6180-3cc7d8cd43d1@arm.com>
+ <Yeldih0PHotN4/bn@shell.armlinux.org.uk> <e6fde086-16b9-430f-5510-5296ef74a4e7@arm.com>
+In-Reply-To: <e6fde086-16b9-430f-5510-5296ef74a4e7@arm.com>
+From:   Yury Norov <yury.norov@gmail.com>
+Date:   Thu, 20 Jan 2022 21:26:18 -0800
+Message-ID: <CAAH8bW8zPpWxSG6OXoudhBo3oYZJV7dFzO6CQRSixMPxk6VQnw@mail.gmail.com>
+Subject: Re: [PATCH] vmap(): don't allow invalid pages
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Ding Tianhong <dingtianhong@huawei.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hangbin Liu <liuhangbin@gmail.com> wrote:
-
->On Thu, Jan 20, 2022 at 04:13:29PM +0000, Vladimir Oltean wrote:
->> > diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bo=
-nd_main.c
->> > index b60e22f6394a..f28b88b67b9e 100644
->> > --- a/drivers/net/bonding/bond_main.c
->> > +++ b/drivers/net/bonding/bond_main.c
->> > @@ -5353,23 +5353,13 @@ static int bond_ethtool_get_ts_info(struct ne=
-t_device *bond_dev,
->> >  				    struct ethtool_ts_info *info)
->> >  {
->> >  	struct bonding *bond =3D netdev_priv(bond_dev);
->> > -	const struct ethtool_ops *ops;
->> >  	struct net_device *real_dev;
->> > -	struct phy_device *phydev;
->> >  =
-
->> >  	rcu_read_lock();
->> >  	real_dev =3D bond_option_active_slave_get_rcu(bond);
->> >  	rcu_read_unlock();
->> =
-
->> Side note: I'm a bit confused about this rcu_read_lock() ->
->> rcu_dereference_protected() -> rcu_read_unlock() pattern, and use of th=
-e
->> real_dev outside the RCU critical section. Isn't ->get_ts_info()
->> protected by the rtnl_mutex? Shouldn't there be a
->> bond_option_active_slave_get() which uses rtnl_dereference()?
->> I see the code has been recently added by Hangbin Liu.
+On Thu, Jan 20, 2022 at 8:37 AM Robin Murphy <robin.murphy@arm.com> wrote:
 >
->Hi Vladimir,
+> On 2022-01-20 13:03, Russell King (Oracle) wrote:
+> > On Thu, Jan 20, 2022 at 12:22:35PM +0000, Robin Murphy wrote:
+> >> On 2022-01-19 19:12, Russell King (Oracle) wrote:
+> >>> On Wed, Jan 19, 2022 at 06:43:10PM +0000, Robin Murphy wrote:
+> >>>> Indeed, my impression is that the only legitimate way to get hold of a page
+> >>>> pointer without assumed provenance is via pfn_to_page(), which is where
+> >>>> pfn_valid() comes in. Thus pfn_valid(page_to_pfn()) really *should* be a
+> >>>> tautology.
+> >>>
+> >>> That can only be true if pfn == page_to_pfn(pfn_to_page(pfn)) for all
+> >>> values of pfn.
+> >>>
+> >>> Given how pfn_to_page() is defined in the sparsemem case:
+> >>>
+> >>> #define __pfn_to_page(pfn)                              \
+> >>> ({  unsigned long __pfn = (pfn);                    \
+> >>>     struct mem_section *__sec = __pfn_to_section(__pfn);    \
+> >>>     __section_mem_map_addr(__sec) + __pfn;          \
+> >>> })
+> >>> #define page_to_pfn __page_to_pfn
+> >>>
+> >>> that isn't the case, especially when looking at page_to_pfn():
+> >>>
+> >>> #define __page_to_pfn(pg)                                       \
+> >>> ({      const struct page *__pg = (pg);                         \
+> >>>           int __sec = page_to_section(__pg);                      \
+> >>>     (unsigned long)(__pg - __section_mem_map_addr(__nr_to_section(__sec))); \
+> >>> })
+> >>>
+> >>> Where:
+> >>>
+> >>> static inline unsigned long page_to_section(const struct page *page)
+> >>> {
+> >>>     return (page->flags >> SECTIONS_PGSHIFT) & SECTIONS_MASK;
+> >>> }
+> >>>
+> >>> So if page_to_section() returns something that is, e.g. zero for an
+> >>> invalid page in a non-zero section, you're not going to end up with
+> >>> the right pfn from page_to_pfn().
+> >>
+> >> Right, I emphasised "should" in an attempt to imply "in the absence of
+> >> serious bugs that have further-reaching consequences anyway".
+> >>
+> >>> As I've said now a couple of times, trying to determine of a struct
+> >>> page pointer is valid is the wrong question to be asking.
+> >>
+> >> And doing so in one single place, on the justification of avoiding an
+> >> incredibly niche symptom, is even more so. Not to mention that an address
+> >> size fault is one of the best possible outcomes anyway, vs. the untold
+> >> damage that may stem from accesses actually going through to random parts of
+> >> the physical memory map.
+
+It's not a single place. Many exported functions check arguments this
+way or another.
+__vunmap() in vfree() path, for example, checks for address alignment, which is
+quite similar to me. And later even makes BUG_ON(!page).
+
+> > I don't see it as a "niche" symptom.
 >
->Yes, it should be enough to use rtnl_dereference() since ->get_ts_info is
->protected by the rtnl_lock. I just thought there is an existing get activ=
-e
->slave function and rcu read should be OK to be used here. So I just used =
-the
->existing one.
+> The commit message specifically cites a Data Abort "at address
+> translation later". Broadly speaking, a Data Abort due to an address
+> size fault only occurs if you've been lucky enough that the bogus PA
+> which got mapped is so spectacularly wrong that it's beyond the range
+> configured in TCR.IPS. How many other architectures even have a
+> mechanism like that?
 >
->Hi Jay,
+> > If we start off with the struct page being invalid, then the result of
+> > page_to_pfn() can not be relied upon to produce something that is
+> > meaningful - which is exactly why the vmap() issue arises.
+> >
+> > With a pfn_valid() check, we at least know that the PFN points at
+> > memory.
 >
->Do you think if there is a need to add a rtnl version of
->bond_option_active_slave_get()?
+> No, we know it points to some PA space which has a struct page to
+> represent it. pfn_valid() only says that pfn_to_page() will yield a
+> valid result. That also includes things like reserved pages covering
+> non-RAM areas, where a kernel VA mapping existing at all could
+> potentially be fatal to the system even if it's never explicitly
+> accessed - for all we know it might be a carveout belonging to
+> overly-aggressive Secure software such that even a speculative prefetch
+> might trigger an instant system reset.
+>
+> > However, that memory could be _anything_ in the system - it
+> > could be the kernel image, and it could give userspace access to
+> > change kernel code.
+> >
+> > So, while it is useful to do a pfn_valid() check in vmap(), as I said
+> > to willy, this must _not_ be the primary check. It should IMHO use
+> > WARN_ON() to make it blatently obvious that it should be something we
+> > expect _not_ to trigger under normal circumstances, but is there to
+> > catch programming errors elsewhere.
 
-	I think the RCU primitives used should match the calling
-context, so, yes, there should be an "rtnl" flavor in this call path as
-that's really what's being relied upon.
+It actually uses WARN_ON().
 
-	You could add a "...active_slave_get_rtnl" variant, or there's
-rcu_deference_rtnl() that goes both ways (rcu_read_lock or RTNL).  That
-could be used in bond_option_active_slave_get_rcu() in place of the
-current rcu_dereference().  I don't have a strong preference one way or
-the other.
+> Rather, "to partially catch unrelated programming errors elsewhere,
+> provided the buggy code happens to call vmap() rather than any of the
+> many other functions with a struct page * argument." That's where it
+> stretches my definition of "useful" just a bit too far. It's not about
+> perfect being the enemy of good, it's about why vmap() should be
+> special, and death by a thousand "useful" cuts - if we don't trust the
+> pointer, why not check its alignment for basic plausibility first?
 
-	Either way, as mentioned, I agree that the rcu_read_lock/unlock
-in bond_ethtool_get_ts_info() is superfluous, since the whole call is
-under RTNL.
+Because in that particular case pfn_valid() is enough. If someone else
+will have a real case where IS_ALIGNED() would help - I will be all for
+adding that check in vmap().
 
-	-J
+>  If it
+> seems valid, why not check if the page flags look sensible to make sure?
+> How many useful little checks is too many?
 
----
-	-Jay Vosburgh, jay.vosburgh@canonical.com
+I'd put in 'too many' group those that test for something that never happened
+to people.
+
+> Every bit of code footprint
+> and execution overhead imposed unconditionally on all end users to
+> theoretically save developers' debugging time still adds up.
+
+Not theoretically - practically!
+
+End users will value kernel stability even when buggy drivers are installed.
+They will also value developers who fix bugs quickly. It has been noticed that
+DEBUG_VIRTUAL could catch this bug. But sometimes stopping the production
+hardware, building a custom kernel with many debug options in the hope that
+one of them will help, and running a suspicious driver for hours would take
+itself for more than a day.
+
+Thanks,
+Yury
+
+> Although on
+> that note, it looks like arch/arm's pfn_valid() is still a linear scan
+> of the memblock array, so the overhead of adding that for every page in
+> every vmap() might not even be so small...
+>
+> Robin.

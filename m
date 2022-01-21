@@ -2,165 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E01496609
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 20:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F167549660F
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 20:54:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232840AbiAUTx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 14:53:28 -0500
-Received: from mail-ot1-f47.google.com ([209.85.210.47]:39430 "EHLO
-        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbiAUTx0 (ORCPT
+        id S232107AbiAUTyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 14:54:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231280AbiAUTyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 14:53:26 -0500
-Received: by mail-ot1-f47.google.com with SMTP id c3-20020a9d6c83000000b00590b9c8819aso13093663otr.6;
-        Fri, 21 Jan 2022 11:53:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=JD4McLT088Mx8+2ZEBZsNweJZVyYq9otK5A8Lk9paN4=;
-        b=v+k/nf2VKw2IJrH8ZvWi+VW9y4+mFaNcElMLcWw5DlKRictroUq6QVzALTKjdr3Qhx
-         mhIEAN87jUIbzWI1WPaJqXh+Jp/V+2PHFGH5pcJMBzXbFEHd6J0GtLIi9NkwUpOe7GRU
-         jKaDiLINiPAIr4+ysiYE5p+6TxJVHxpk4BIc/4L8LaD/mQ84wa7awbzbiYxf1Rjx7nEI
-         4PRTqlx+l7Zdq/rgOOIvhcVy9b+L4FQV8aOccIgbI7fjoWn2F7O73+Rp8gg90SMS3sRA
-         0Q50dfTcVWQPZYHZ+Np8PxFvlReF4OaHAlHbEqjHsSK/ZGmlk2xE5AL6yAA3gdxliIvw
-         xJeg==
-X-Gm-Message-State: AOAM533m8Bj9sB1uKsm6Fs4CwtBv1YuEOP+x5VHyaDO7HCZPM7nteY2d
-        3D1omWylHO17Y0QhWx++Jw==
-X-Google-Smtp-Source: ABdhPJxLBRsGb8TyimDLqJ487TcbCsd3X0ClwVtYqDUu2pNLxUYNjRjrvJdIG9Gh4flJdQcGdvjtUQ==
-X-Received: by 2002:a05:6830:612:: with SMTP id w18mr3857805oti.155.1642794805579;
-        Fri, 21 Jan 2022 11:53:25 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id h65sm1664024oia.56.2022.01.21.11.53.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 11:53:24 -0800 (PST)
-Received: (nullmailer pid 1460682 invoked by uid 1000);
-        Fri, 21 Jan 2022 19:53:23 -0000
-Date:   Fri, 21 Jan 2022 13:53:22 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Frank Rowand <frowand.list@gmail.com>
-Subject: [GIT PULL] Devicetree fixes for v5.17, take 1
-Message-ID: <YesPMjmwx4snvWDQ@robh.at.kernel.org>
+        Fri, 21 Jan 2022 14:54:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B05DC06173B;
+        Fri, 21 Jan 2022 11:54:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CB2B61707;
+        Fri, 21 Jan 2022 19:54:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35DD7C340E1;
+        Fri, 21 Jan 2022 19:54:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642794876;
+        bh=C7b5I+hDM3u7jSdl9XELS34WhxUJsTVhZpt6j4FOljY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ku+dDBqU5FvjVhQAUwJ24NyoqaB9BmTN50WqAoLXPhIDErCUpb6iXh0yhnNIj1ML9
+         pne49JGIv7tFU/QDlVdMMeVRipgZWMnd67hUneYHAB57k5YHJ9nhEbQebIibrEMUrq
+         h8gyKdCrl7wHd+xg7irdV2DOEkgCo+ZTsMeuuK6IuU6VQDGAEGlLtpzuDxMSWlEXrU
+         UsUMsl7LTdkehHltiyy2bF3I0QiEk0N7Pe52UrgefBw7FnSihS9nZ1jEw31z8T/SLv
+         rXov9H2AOhSV/kjJsLS308OGUhGcii4PEYeTLgZAwd/Utk7M0zBCOWIx4oMEnDtJ3a
+         34u/wpZwmRtWQ==
+Date:   Fri, 21 Jan 2022 11:54:34 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Miles Chen <miles.chen@mediatek.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>
+Subject: Re: [PATCH] lib/crypto: blake2s: avoid indirect calls to compression
+ function for Clang CFI
+Message-ID: <YesPesOhftSzp2ft@sol.localdomain>
+References: <CAHmME9qVMomgb53rABKsucCoEhwsk+=KzDdEcGKtecOXuahTZw@mail.gmail.com>
+ <20220119135450.564115-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220119135450.564115-1-Jason@zx2c4.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Wed, Jan 19, 2022 at 02:54:50PM +0100, Jason A. Donenfeld wrote:
+> blake2s_compress_generic is weakly aliased to blake2s_generic. The
+> current harness for function selection uses a function pointer, which is
+> ordinarily inlined and resolved at compile time. But when Clang's CFI is
+> enabled, CFI still triggers when making an indirect call via a weak
+> symbol. This seems like a bug in Clang's CFI, as though it's bucketing
+> weak symbols and strong symbols differently. It also only seems to
+> trigger when "full LTO" mode is used, rather than "thin LTO".
+> 
+> [    0.000000][    T0] Kernel panic - not syncing: CFI failure (target: blake2s_compress_generic+0x0/0x1444)
+> [    0.000000][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.16.0-mainline-06981-g076c855b846e #1
+> [    0.000000][    T0] Hardware name: MT6873 (DT)
+> [    0.000000][    T0] Call trace:
+> [    0.000000][    T0]  dump_backtrace+0xfc/0x1dc
+> [    0.000000][    T0]  dump_stack_lvl+0xa8/0x11c
+> [    0.000000][    T0]  panic+0x194/0x464
+> [    0.000000][    T0]  __cfi_check_fail+0x54/0x58
+> [    0.000000][    T0]  __cfi_slowpath_diag+0x354/0x4b0
+> [    0.000000][    T0]  blake2s_update+0x14c/0x178
+> [    0.000000][    T0]  _extract_entropy+0xf4/0x29c
+> [    0.000000][    T0]  crng_initialize_primary+0x24/0x94
+> [    0.000000][    T0]  rand_initialize+0x2c/0x6c
+> [    0.000000][    T0]  start_kernel+0x2f8/0x65c
+> [    0.000000][    T0]  __primary_switched+0xc4/0x7be4
+> [    0.000000][    T0] Rebooting in 5 seconds..
+> 
+> Nonetheless, the function pointer method isn't so terrific anyway, so
+> this patch replaces it with a simple boolean, which also gets inlined
+> away. This successfully works around the Clang bug.
+> 
+> In general, I'm not too keen on all of the indirection involved here; it
+> clearly does more harm than good. Hopefully the whole thing can get
+> cleaned up down the road when lib/crypto is overhauled more
+> comprehensively. But for now, we go with a simple bandaid.
+> 
+> Fixes: 6048fdcc5f26 ("lib/crypto: blake2s: include as built-in")
+> Reported-by: Miles Chen <miles.chen@mediatek.com>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Sami Tolvanen <samitolvanen@google.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  arch/arm/crypto/blake2s-shash.c   |  4 ++--
+>  arch/x86/crypto/blake2s-shash.c   |  4 ++--
+>  crypto/blake2s_generic.c          |  4 ++--
+>  include/crypto/internal/blake2s.h | 36 ++++++++++++++++++-------------
+>  lib/crypto/blake2s.c              |  4 ++--
+>  5 files changed, 29 insertions(+), 23 deletions(-)
 
-Please pull another batch of DT changes for v5.17.
+There are some lines over 80 columns in this patch.
 
-Rob
+Otherwise this looks fine.  It would be really nice to fix this in clang,
+though.
 
-
-The following changes since commit e623611b4d3f722b57ceeaf4368ac787837408e7:
-
-  Merge branch 'dt/linus' into dt/next (2022-01-12 10:14:09 -0600)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git tags/devicetree-fixes-for-5.17-1
-
-for you to fetch changes up to 18a86e5907f7160fb548d0d717e0f842b310708a:
-
-  dt-bindings: google,cros-ec: drop Enric Balletbo i Serra from maintainers (2022-01-20 14:11:08 -0600)
-
-----------------------------------------------------------------
-Devicetree fixes for v5.17, take 1:
-
-- Fix a regression when probing a child device reusing the parent
-  device's DT node pointer
-
-- Refactor of_parse_phandle*() variants to static inlines
-
-- Drop Enric Balletbo i Serra as a maintainer
-
-- Fix DT schemas with arrays incorrectly encoded as a matrix
-
-- Drop unneeded pinctrl properties from schemas
-
-- Add SPI peripheral schema to SPI based displays
-
-- Clean-up several schema examples
-
-- Clean-up trivial-devices.yaml comments
-
-- Add missing, in use vendor prefixes: Wingtech, Thundercomm, Huawei,
-  F(x)tec, 8devices
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (2):
-      dt-bindings: display: bridge: drop Enric Balletbo i Serra from maintainers
-      dt-bindings: google,cros-ec: drop Enric Balletbo i Serra from maintainers
-
-Matthias Schiffer (1):
-      scripts/dtc: dtx_diff: remove broken example from help text
-
-Michael Walle (2):
-      of: base: make small of_parse_phandle() variants static inline
-      of: property: define of_property_read_u{8,16,32,64}_array() unconditionally
-
-Rob Herring (7):
-      dt-bindings: display: Add SPI peripheral schema to SPI based displays
-      dt-bindings: mmc: arm,pl18x: Make each example a separate entry
-      dt-bindings: rtc: st,stm32-rtc: Make each example a separate entry
-      dt-bindings: Drop unnecessary pinctrl properties
-      dt-bindings: Fix array schemas encoded as matrices
-      dt-bindings: mfd: cirrus,madera: Fix 'interrupts' in example
-      of: Check 'of_node_reused' flag on of_match_device()
-
-Sander Vanheule (1):
-      dt-bindings: power: reset: gpio-restart: Correct default priority
-
-Stanislav Jakubek (7):
-      dt-bindings: vendor-prefixes: add 8devices
-      dt-bindings: vendor-prefixes: add F(x)tec
-      dt-bindings: vendor-prefixes: add Huawei
-      dt-bindings: vendor-prefixes: add Thundercomm
-      dt-bindings: vendor-prefixes: add Wingtech
-      dt-bindings: trivial-devices: fix swapped comments
-      dt-bindings: trivial-devices: fix double spaces in comments
-
- .../bindings/display/bridge/analogix,anx7814.yaml  |   4 +-
- .../display/bridge/google,cros-ec-anx7688.yaml     |   1 -
- .../devicetree/bindings/display/bridge/ps8640.yaml |   1 -
- .../bindings/display/panel/abt,y030xx067a.yaml     |   5 +-
- .../bindings/display/panel/ilitek,ili9322.yaml     |   4 +-
- .../bindings/display/panel/innolux,ej030na.yaml    |   5 +-
- .../display/panel/kingdisplay,kd035g6-54nt.yaml    |   5 +-
- .../bindings/display/panel/lgphilips,lb035q02.yaml |   5 +-
- .../bindings/display/panel/samsung,ld9040.yaml     |   7 +-
- .../bindings/display/panel/samsung,s6e63m0.yaml    |   1 +
- .../bindings/display/panel/sitronix,st7789v.yaml   |   5 +-
- .../bindings/display/panel/sony,acx565akm.yaml     |   5 +-
- .../devicetree/bindings/display/panel/tpo,td.yaml  |   5 +-
- .../display/rockchip/rockchip,rk3066-hdmi.yaml     |   8 -
- .../bindings/extcon/extcon-usbc-cros-ec.yaml       |   1 -
- .../bindings/i2c/google,cros-ec-i2c-tunnel.yaml    |   1 -
- .../proximity/google,cros-ec-mkbp-proximity.yaml   |   1 -
- .../bindings/input/google,cros-ec-keyb.yaml        |   1 -
- .../devicetree/bindings/input/gpio-keys.yaml       |   6 -
- .../bindings/media/nxp,imx7-mipi-csi2.yaml         |  12 +-
- .../bindings/media/nxp,imx8mq-mipi-csi2.yaml       |  12 +-
- .../devicetree/bindings/mfd/cirrus,madera.yaml     |   3 +-
- .../devicetree/bindings/mfd/google,cros-ec.yaml    |   1 -
- .../devicetree/bindings/mmc/arm,pl18x.yaml         |   6 +-
- .../devicetree/bindings/net/can/bosch,m_can.yaml   |  52 ++-
- .../bindings/net/ethernet-controller.yaml          |  59 ++-
- Documentation/devicetree/bindings/nvmem/nvmem.yaml |  17 +-
- .../bindings/pinctrl/cirrus,lochnagar.yaml         |   9 -
- .../devicetree/bindings/pinctrl/cirrus,madera.yaml |  10 -
- .../bindings/power/reset/gpio-restart.yaml         |   4 +-
- .../devicetree/bindings/rtc/st,stm32-rtc.yaml      |   1 +
- .../devicetree/bindings/sound/samsung-i2s.yaml     |   6 -
- .../devicetree/bindings/trivial-devices.yaml       |   8 +-
- .../devicetree/bindings/vendor-prefixes.yaml       |  10 +
- drivers/of/base.c                                  | 131 +------
- drivers/of/device.c                                |   2 +-
- include/linux/of.h                                 | 422 ++++++++++++---------
- scripts/dtc/dtx_diff                               |   8 +-
- 38 files changed, 362 insertions(+), 482 deletions(-)
+- Eric

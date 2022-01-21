@@ -2,89 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C08DA495C6E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 09:58:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D4FB495C6A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 09:58:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379649AbiAUI6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 03:58:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234886AbiAUI6p (ORCPT
+        id S1379619AbiAUI6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 03:58:43 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:49218 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234205AbiAUI6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 03:58:45 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8BFC06173F
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 00:58:45 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id g81so25575236ybg.10
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 00:58:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5/CAdEqGBk7N/8QQ5A23zI2nrO/utlv2ElHpvb6u4CA=;
-        b=REKUOzbTnrnoKH+nWoApUShHgZjf318EWK9itQNe1JkF4qXv+SGJQbIKI+K3H7D+95
-         bcr2KPcZ5+mPIb6DxeTuv7HF9kN8W9UUcXvjL4p++kLrmkaD1KNf1eEWqFs7PSKC8dEm
-         ME9OL35fUckRg3MVWpk8FylBI+5zGpdZDH3d6rrEzRZCBsJGqGX6DMeqRYiwOOP4Ja/G
-         7wGTaZEhKOLsAWLQD4u0b3GOi+vYHxZgMv8Cev8mA3sgaVtzvmxSN8U5g3ueAb/LMM9f
-         t55rvr2CTMly8LmNPhlTR+npOVIclcOhEtDaxU0kpotd50fmAekkmRn8B7XG0Wr161Cq
-         TIpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5/CAdEqGBk7N/8QQ5A23zI2nrO/utlv2ElHpvb6u4CA=;
-        b=ByfpXX3MvAPpmKeXFqITzVWe0jpUZyBoEtRSILHwXvkuZm72XszV1Q2BM9mDbuRdLy
-         m6OaRHQTsYPYhmVlCqNYO2iLHqI4IyNd2wjuD1uLUfHpP6FrGJwWnfjgF7oNhOdGdG9D
-         nhKNrzJDjDwd5xvckRDeJt8xF+hn+EmNycWWMJW9rgN0VRQF3R+VDC3d8Wf+4fBnLNoO
-         /Tvc6y2lgpikdhKa/ZV7HBfFpZsdF9Gna5JtVe1J9+0bQM07mN7T4yCBIvQ1NuHVuewL
-         aognu6NhZMTF/Wfx5wPFkz1XpM3Y7MtTpzqbKl7TAu2yhZrF1pd0s8hhHzSF5YWuKV1Y
-         UUBQ==
-X-Gm-Message-State: AOAM531S1GSMqnX5rASKvdvcRz86zfSMkOvTeHhCSI4DTxLHzGX8ArP9
-        vTZLK6U2RdgnvnHlZ90HYuIjli2rpCKxhkewRGjfLg==
-X-Google-Smtp-Source: ABdhPJxGI0tWvbu3C1KPF9nJZim+8Kq1aJ/5f3LrEb7Cs7qRdYvtHbmNg0CYHyFs7ws6XGnbWWn724o1yPYmp+AIMhU=
-X-Received: by 2002:a25:9082:: with SMTP id t2mr4422729ybl.684.1642755524616;
- Fri, 21 Jan 2022 00:58:44 -0800 (PST)
+        Fri, 21 Jan 2022 03:58:38 -0500
+Received: from machine.localnet (lfbn-lyo-1-1484-111.w86-207.abo.wanadoo.fr [86.207.51.111])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 722ED20B6C61;
+        Fri, 21 Jan 2022 00:58:37 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 722ED20B6C61
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1642755518;
+        bh=WbOLIRm6CwlXPDaoqOPOSwuwUAxz//nxPmXnsK4U1t8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gBJfkgTtdT4cMk6aQoitHvxKSumu/p36mNUFvRFM/x9k1Wm3sIjKyVXch78WUKdDP
+         Ip87j6Z2hgmYjkb7+X6UlXaIPib9/WxhqCNnaAZ0+W+NoZqm425ukfSXntNDOtT0kY
+         JipKhMdFGx9EBRSmOFya9QncgjLb0TnOBmHjYS6c=
+From:   Francis Laniel <flaniel@linux.microsoft.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-security-module@vger.kernel.org,
+        Serge Hallyn <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>
+Subject: Re: [RFC PATCH v3 2/2] security/inode.c: Add capabilities file.
+Date:   Fri, 21 Jan 2022 09:58:34 +0100
+Message-ID: <7787651.jkfHb4QSSr@machine>
+In-Reply-To: <20220120180116.167702-3-flaniel@linux.microsoft.com>
+References: <20220120180116.167702-1-flaniel@linux.microsoft.com> <20220120180116.167702-3-flaniel@linux.microsoft.com>
 MIME-Version: 1.0
-References: <CA+G9fYtq0wzSeG8YG-a+=KrbdWqHJMXk1hvq0FKeAvj9sZAK2g@mail.gmail.com>
- <6249735f-e6b7-1331-eb2b-361bb17d6115@opensource.wdc.com>
-In-Reply-To: <6249735f-e6b7-1331-eb2b-361bb17d6115@opensource.wdc.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 21 Jan 2022 14:28:33 +0530
-Message-ID: <CA+G9fYu__OOvk-ESXoOqbd-Lk+CmO8CSQ8chEFf3MyeTjKtp9g@mail.gmail.com>
-Subject: Re: [next] mips: cavium_octeon_defconfig: pata_octeon_cf.c:598:23:
- error: passing argument 1 of 'trace_ata_bmdma_stop' from incompatible pointer type
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        CGEL ZTE <cgel.zte@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I just posted a fix. As I do not have the environment to compile test
-> mips, could someone test please ? I will send the fix to Linus asap
-> after confirmation that it is OK.
+Hi.
 
-Please share your patch / patch link. I will test it with tuxmake.
+Le jeudi 20 janvier 2022, 19:01:16 CET Francis Laniel a =E9crit :
+> This new read-only file prints the capabilities values with their names:
+> cat /sys/kernel/security/capabilities
+> 0       CAP_CHOWN
+> 1       CAP_DAC_OVERRIDE
+> ...
+> 40      CAP_CHECKPOINT_RESTORE
+>=20
+> Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+> ---
+>  security/inode.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+>=20
+> diff --git a/security/inode.c b/security/inode.c
+> index 6c326939750d..cef78b497bab 100644
+> --- a/security/inode.c
+> +++ b/security/inode.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/security.h>
+>  #include <linux/lsm_hooks.h>
+>  #include <linux/magic.h>
+> +#include <linux/capability.h>
+>=20
+>  static struct vfsmount *mount;
+>  static int mount_count;
+> @@ -328,6 +329,19 @@ static const struct file_operations lsm_ops =3D {
+>  };
+>  #endif
+>=20
+> +static struct dentry *capabilities_dentry;
+> +static ssize_t capabilities_read(struct file *unused, char __user *buf,
+> +				 size_t count, loff_t *ppos)
+> +{
+> +	return simple_read_from_buffer(buf, count, ppos, cap_string,
+> +				       strlen(cap_string));
+> +}
+> +
+> +static const struct file_operations capabilities_ops =3D {
+> +	.read =3D capabilities_read,
+> +	.llseek =3D generic_file_llseek,
+> +};
+> +
+>  static int __init securityfs_init(void)
+>  {
+>  	int retval;
+> @@ -345,6 +359,8 @@ static int __init securityfs_init(void)
+>  	lsm_dentry =3D securityfs_create_file("lsm", 0444, NULL, NULL,
+>  						&lsm_ops);
+>  #endif
+> +	capabilities_dentry =3D securityfs("capabilities", 0444, NULL, NULL,
+> +					 capabilities_ops);
 
-you may also give a try with these easy steps.
+Sorry, I sent the old version of the patch and did not fixup this...
+Kernel robot kindly show me this error.
+I swear the output in the cover letter was done on the compiled kernel with=
+in=20
+a VM.
 
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
+I will send a v4 correcting this but I will wait to get some reviews on v3 =
+to=20
+not send to not generate too much traffic here.
 
- tuxmake --runtime podman --target-arch mips --toolchain gcc-10
---kconfig cavium_octeon_defconfig
+>  	return 0;
+>  }
+>  core_initcall(securityfs_init);
 
-- Naresh
+Best regards.
+
+

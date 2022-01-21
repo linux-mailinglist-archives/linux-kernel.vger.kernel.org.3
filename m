@@ -2,114 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC7B495A74
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE15C495A75
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378905AbiAUHOz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 21 Jan 2022 02:14:55 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:45368 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378887AbiAUHOp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 02:14:45 -0500
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 20L7EUKK0024197, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 20L7EUKK0024197
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 21 Jan 2022 15:14:30 +0800
-Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 21 Jan 2022 15:14:30 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 20 Jan 2022 23:14:30 -0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e]) by
- RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e%5]) with mapi id
- 15.01.2308.020; Fri, 21 Jan 2022 15:14:30 +0800
-From:   Pkshih <pkshih@realtek.com>
-To:     Pkshih <pkshih@realtek.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Bernie Huang <phhuang@realtek.com>,
-        "open list:REALTEK WIRELESS DRIVER (rtw88)" 
-        <linux-wireless@vger.kernel.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-CC:     "kernel@collabora.com" <kernel@collabora.com>
-Subject: RE: [PATCH v3] rtw88: check for validity before using a pointer
-Thread-Topic: [PATCH v3] rtw88: check for validity before using a pointer
-Thread-Index: AQHX+KPvE/unI/D/606seZj0xgKxUqxBV0ZAgCvilcA=
-Date:   Fri, 21 Jan 2022 07:14:30 +0000
-Message-ID: <d41cad1d43074b858209f3d7227c4e14@realtek.com>
-References: <YcWK1jxnd3vGdmCq@debian-BULLSEYE-live-builder-AMD64>
- <505cb763449e4b4ab493857e014e31a1@realtek.com>
-In-Reply-To: <505cb763449e4b4ab493857e014e31a1@realtek.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/1/21_=3F=3F_06:00:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1378904AbiAUHPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 02:15:06 -0500
+Received: from ni.piap.pl ([195.187.100.5]:56270 "EHLO ni.piap.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1378895AbiAUHOx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 02:14:53 -0500
+Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
+        by ni.piap.pl (Postfix) with ESMTPSA id 6440DC3F3EDF;
+        Fri, 21 Jan 2022 08:14:46 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl 6440DC3F3EDF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=piap.pl; s=mail;
+        t=1642749288; bh=gGNbanSwWXMu21C4JkM/lsSy+zDuwl4CRiCXbsqVfmw=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=Q/ilh0KrCSi27knvkHT5j4nsmPCKPV3JhfpDhjXZWEUlYFvyQUkVDj4lLxsdFHdMJ
+         RjOJE8LrY/+XcKk+VSYuaDZdp/cWySbVc21ULLmQkm1ihOAwo3mLVhsc8d2t94FftL
+         ZSzj1L7Gsbs36QBHfkX5nJaR5DF+vozJro4dsUjg=
+From:   =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+Subject: Re: PCI: Race condition in pci_create_sysfs_dev_files (can't boot)
+References: <20220120230050.GA1077958@bhelgaas>
+Sender: khalasa@piap.pl
+Date:   Fri, 21 Jan 2022 08:14:46 +0100
+In-Reply-To: <20220120230050.GA1077958@bhelgaas> (Bjorn Helgaas's message of
+        "Thu, 20 Jan 2022 17:00:50 -0600")
+Message-ID: <m3bl05zhjt.fsf@t19.piap.pl>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-KLMS-Rule-ID: 3
+X-KLMS-Message-Action: skipped
+X-KLMS-AntiSpam-Status: not scanned, whitelist
+X-KLMS-AntiPhishing: not scanned, whitelist
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, not scanned, whitelist
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Bjorn, Krzysztof,
 
-> -----Original Message-----
-> From: Pkshih <pkshih@realtek.com>
-> Sent: Friday, December 24, 2021 5:01 PM
-> To: Muhammad Usama Anjum <usama.anjum@collabora.com>; Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle
-> Valo <kvalo@kernel.org>; David S. Miller <davem@davemloft.net>; Jakub Kicinski <kuba@kernel.org>; Bernie
-> Huang <phhuang@realtek.com>; open list:REALTEK WIRELESS DRIVER (rtw88) <linux-wireless@vger.kernel.org>;
-> open list:NETWORKING DRIVERS <netdev@vger.kernel.org>; open list <linux-kernel@vger.kernel.org>
-> Cc: kernel@collabora.com
-> Subject: RE: [PATCH v3] rtw88: check for validity before using a pointer
-> 
-> > -----Original Message-----
-> > From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> > Sent: Friday, December 24, 2021 4:55 PM
-> > To: Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; David S. Miller
-> > <davem@davemloft.net>; Jakub Kicinski <kuba@kernel.org>; Pkshih <pkshih@realtek.com>; Bernie Huang
-> > <phhuang@realtek.com>; open list:REALTEK WIRELESS DRIVER (rtw88) <linux-wireless@vger.kernel.org>; open
-> > list:NETWORKING DRIVERS <netdev@vger.kernel.org>; open list <linux-kernel@vger.kernel.org>
-> > Cc: usama.anjum@collabora.com; kernel@collabora.com
-> > Subject: [PATCH v3] rtw88: check for validity before using a pointer
-> >
-> > ieee80211_probereq_get() can return NULL. Pointer skb should be checked
-> > for validty before use. If it is not valid, list of skbs needs to be
-> > freed.
-> >
-> > Fixes: 10d162b2ed39 ("rtw88: 8822c: add ieee80211_ops::hw_scan")
-> > Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> 
-> Acked-by: Ping-Ke Shih <pkshih@realtek.com>
-> 
-> [...]
-> 
+Bjorn Helgaas <helgaas@kernel.org> writes:
 
-I take this patch into my patchset [1], because my new patches are based this patch
-related to fixes of hw_scan.
+> On Fri, Jul 30, 2021 at 10:18:44AM +0200, Krzysztof Ha=C5=82asa wrote:
+>> I'm encountering a problem booting an i.MX6-based device (Gateworks
+>> Ventana SBC). This is apparently a known issue:
+>> https://lkml.org/lkml/2020/7/16/388
 
-[1] https://lore.kernel.org/linux-wireless/20220121070813.9656-2-pkshih@realtek.com/T/#u
+> Hi Krzysztof, is this still an issue?
 
---
-Ping-Ke
+Well... I'm still using i.MX6 with 5.14 and Krzysiek Wilczy=C5=84ski's "PCI:
+Race condition in pci_create_sysfs_dev_files (can't boot)" patch (which
+fixes the problem). It seems parts of this patch are now in mainline,
+but most of it is still missing. So I guess the problem isn't fixed.
 
+Perhaps because the DEC Alpha part of the patch is not yet ready?
+Krzysztof?
+
+> e1d3f3268b0e ("PCI/sysfs: Convert "config" to static attribute") and
+> similar patches appeared in v5.13,
+
+Right, but they hadn't fixed the problem. 5.13 was released in June, and
+I have started using the patch in August (apparently with pre-5.14
+first, then with final 5.14).
+--=20
+Krzysztof "Chris" Ha=C5=82asa
+
+Sie=C4=87 Badawcza =C5=81ukasiewicz
+Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
+Al. Jerozolimskie 202, 02-486 Warszawa

@@ -2,418 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C88496314
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 17:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45B95496316
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 17:47:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378809AbiAUQp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 11:45:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345050AbiAUQpz (ORCPT
+        id S1345050AbiAUQrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 11:47:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35512 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232369AbiAUQrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 11:45:55 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62557C06173B;
-        Fri, 21 Jan 2022 08:45:55 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id t4-20020a05683022e400b00591aaf48277so12420753otc.13;
-        Fri, 21 Jan 2022 08:45:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ojyQZXVH6xO5d+3ttXWHWJ4YFDHvnaljBcpusb/bm/Y=;
-        b=hR3Tf/qzNb2+R1EPxpg6y4V3Ha8vohcPmd00D4U2G1ZRh4D7XYSK94lVmUrDK6/PRq
-         tcY04cigWNsLmAgnhe3BgUfLw/MPj5G5Eo8UeKgdD+wWw4YgJMwQuZdFo742b+MNcWH9
-         bpMDOK5D+npvxrtF7Y5RH6n57bhQqK9GtfLXMogfcSCjF7n0vmUA7H3D2n8MuRZxFHm8
-         NxPx5QGyE9wO0XGwDPZxAH3d12X5/MQV9SNLf9NUJLkMDC0Uq53X67iLG+sr3mfU5vTH
-         NL9adc9vYHqKdAzFDat9ivfbPhxnlESlOc3THN0W+thbM5/FzzVtz0PJFNXS76JEDanB
-         ARFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ojyQZXVH6xO5d+3ttXWHWJ4YFDHvnaljBcpusb/bm/Y=;
-        b=wMSarkdCGrdtUaXE4T9m30JjMaYZidO+b1/qtbgMDHhR6hNVWWK9Sz+JIVh9ucbiFi
-         X9Be2NwVPOhNKj1C8AciDbQ2d1pUAICacNkCgiEx8tKpsZ7Zv806QKczaAkWJFmmqeyY
-         Cll/7vDm3a1h2Fk8pGLGZOKlRZd1UwmPpXoSB1ParE1JA8EscMZS56lZtdw1O22KNmke
-         KQWcb6TiN/dkPr/91KTPiV5zs9tAQ+/paR4YaSbBMc4BoYkp3Nu2fdJLWbQBrHkGUhXx
-         e8h/oDOYzeVGVjpUPxBWjpt2TIseEMwgzg6ck3uOkPJPkLnEtOpL7VnajePdEx+hqxC/
-         HXGg==
-X-Gm-Message-State: AOAM531eFkDnejp0v4GK00XQZsYXvLBxlG8tzYo+U+eliNddFXVNqbC6
-        YDkx0IpqFigT9+0thD0ncer65lusJ+J5rXNmDrE=
-X-Google-Smtp-Source: ABdhPJzhY0Q64qx9nqwSCQ1ULkoH5Xv7CRXvDu3tkqrDrrEihcgXOEECeu+dK4NAZv0M1M54PeH+0p/nHM6nFly3YSM=
-X-Received: by 2002:a05:6830:19e6:: with SMTP id t6mr3458344ott.357.1642783554524;
- Fri, 21 Jan 2022 08:45:54 -0800 (PST)
+        Fri, 21 Jan 2022 11:47:42 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CBCB619E0;
+        Fri, 21 Jan 2022 16:47:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 125BAC340E1;
+        Fri, 21 Jan 2022 16:47:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642783661;
+        bh=9SrU/k0LYSbwZ45aZAjqd2SKBGAW7Vh9alM4dD37sbg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qMYtagzIGQr/lfivcHg49J0wf1BV6l1mX7RaeZ/zV75FCANUIBHcGavQwwtvZACHo
+         N6uS7d2X3/esU4RMY3eyLvQftKlfcarZ2M6IifPtOxTKJSd0UtsttGn6qv/0szYzl2
+         s6XaD/U19LIEqjEs2kEl7PlTD9kZCQ94CQaIEAmRsybRfOyems1gOivR0O0JP5+GwA
+         IsBR/WOHtr2SKVisyT+9MPz4kdEzRkeKuCL1kh4/5w0Hg8riJsYIsalweCVsBf8j0C
+         PEzLrmeDfepQbXSFup4h7v4ultxmNHEmJH6YKPGcxVSNHQUrZUJSOFwtUKYamCXMg4
+         +djmJ8r93smPA==
+Date:   Fri, 21 Jan 2022 09:47:36 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Cc:     linux-kbuild@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>
+Subject: Re: [PATCH] Makefile: Fix build with scan-build
+Message-ID: <YerjqBrxXwjMzCRZ@archlinux-ax161>
+References: <20220119135147.1859982-1-amadeuszx.slawinski@linux.intel.com>
+ <YeiAa/eCxVZC+QbS@archlinux-ax161>
+ <YeiaAgQ+gbZYTMwD@archlinux-ax161>
+ <5f5bd99e-4bd3-bc88-b6c5-e414a6608a96@linux.intel.com>
 MIME-Version: 1.0
-References: <87ee57c8fu.fsf@turner.link> <acd2fd5e-d622-948c-82ef-629a8030c9d8@leemhuis.info>
- <87a6ftk9qy.fsf@dmarc-none.turner.link> <87zgnp96a4.fsf@turner.link> <fc2b7593-db8f-091c-67a0-ae5ffce71700@leemhuis.info>
-In-Reply-To: <fc2b7593-db8f-091c-67a0-ae5ffce71700@leemhuis.info>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 21 Jan 2022 11:45:43 -0500
-Message-ID: <CADnq5_Nr5-FR2zP1ViVsD_ZMiW=UHC1wO8_HEGm26K_EG2KDoA@mail.gmail.com>
-Subject: Re: [REGRESSION] Too-low frequency limit for AMD GPU
- PCI-passed-through to Windows VM
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     James Turner <linuxkernel.foss@dmarc-none.turner.link>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>, regressions@lists.linux.dev,
-        kvm@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5f5bd99e-4bd3-bc88-b6c5-e414a6608a96@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 3:35 AM Thorsten Leemhuis
-<regressions@leemhuis.info> wrote:
->
-> Hi, this is your Linux kernel regression tracker speaking.
->
-> On 21.01.22 03:13, James Turner wrote:
-> >
-> > I finished the bisection (log below). The issue was introduced in
-> > f9b7f3703ff9 ("drm/amdgpu/acpi: make ATPX/ATCS structures global (v2)").
->
-> FWIW, that was:
->
-> > drm/amdgpu/acpi: make ATPX/ATCS structures global (v2)
-> > They are global ACPI methods, so maybe the structures
-> > global in the driver. This simplified a number of things
-> > in the handling of these methods.
-> >
-> > v2: reset the handle if verify interface fails (Lijo)
-> > v3: fix compilation when ACPI is not defined.
-> >
-> > Reviewed-by: Lijo Lazar <lijo.lazar@amd.com>
-> > Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
->
-> In that case we need to get those two and the maintainers for the driver
-> involved by addressing them with this mail. And to make it easy for them
-> here is a link and a quote from the original report:
->
-> https://lore.kernel.org/all/87ee57c8fu.fsf@turner.link/
+On Fri, Jan 21, 2022 at 12:20:39PM +0100, Amadeusz Sławiński wrote:
+> On 1/20/2022 12:08 AM, Nathan Chancellor wrote:
+> > On Wed, Jan 19, 2022 at 02:19:39PM -0700, Nathan Chancellor wrote:
+> > > On Wed, Jan 19, 2022 at 02:51:47PM +0100, Amadeusz Sławiński wrote:
+> > > > When building kernel with scan-build for analysis:
+> > > > $ scan-build make defconfig
+> > > > $ scan-build make menuconfig # disable RETPOLINE
+> > > > $ scan-build make -j16 bindeb-pkg
+> > > > since commit 7d73c3e9c514 ("Makefile: remove stale cc-option checks")
+> > > > it fails with:
+> > > >    CC      scripts/mod/empty.o
+> > > > could not find clang line
+> > > > make[4]: *** [scripts/Makefile.build:287: scripts/mod/empty.o] Error 1
+> > > > 
+> > > > Seems like changes to how -fconserve-stack support was detected broke
+> > > > build with scan-build. Revert part of mentioned commit which changed
+> > > > that.
+> > > > 
+> > > > Fixes: 7d73c3e9c514 ("Makefile: remove stale cc-option checks")
+> > > > CC: Nick Desaulniers <ndesaulniers@google.com>
+> > > > Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+> > > > Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
+> > > > ---
+> > > >   Makefile | 4 +---
+> > > >   1 file changed, 1 insertion(+), 3 deletions(-)
+> > > > 
+> > > > diff --git a/Makefile b/Makefile
+> > > > index 765115c99655..1174ccd182f5 100644
+> > > > --- a/Makefile
+> > > > +++ b/Makefile
+> > > > @@ -991,9 +991,7 @@ KBUILD_CFLAGS	+= -fno-strict-overflow
+> > > >   KBUILD_CFLAGS  += -fno-stack-check
+> > > >   # conserve stack if available
+> > > > -ifdef CONFIG_CC_IS_GCC
+> > > > -KBUILD_CFLAGS   += -fconserve-stack
+> > > > -endif
+> > > > +KBUILD_CFLAGS   += $(call cc-option,-fconserve-stack)
+> > > >   # Prohibit date/time macros, which would make the build non-deterministic
+> > > >   KBUILD_CFLAGS   += -Werror=date-time
+> > > > -- 
+> > > > 2.25.1
+> > > > 
+> > > 
+> > > Okay, I think I understand why this happens...
+> > > 
+> > > scan-build points CC to its CC wrapper [1], ccc-analyzer, which builds the
+> > > code with a compiler [2] then runs clang for the static analyzer [3].
+> > > The problem is that the default compiler for ccc-analyzer is GCC, which
+> > > means that CONFIG_CC_IS_GCC gets set and flags that are supported by GCC
+> > > but not clang will cause the clang analyzer part of ccc-analyzer to
+> > > error because ccc-analyzer just passes all '-f' flags along [4].
+> > > 
+> > > Prior to 7d73c3e9c514, there was no error because cc-option would run
+> > > the flag against ccc-analyzer, which would error out for the reason I
+> > > just described, which would prevent the flag from getting added to
+> > > KBUILD_CFLAGS.
+> > > 
+> > > Now, -fconserve-stack gets passed along to both gcc and clang but clang
+> > > does not recognize it and errors out.
+> > > 
+> > > This should be fixed in clang, which already has the machinery to
+> > > recognize but ignore GCC flags for compatibility reasons (which is
+> > > probably how gcc and clang can use the same flags). I have pushed a
+> > > patch to Phabricator for review:
+> > > 
+> > > https://reviews.llvm.org/D117717
+> > > 
+> > > You need to disable CONFIG_RETPOLINE for the same reason but I don't
+> > > think working around that in clang is as simple.
+> > > 
+> > > Until that fix can proliferate through distributions and such, this is
+> > > not an unreasonable workaround (unless Masahiro or Nick have a better
+> > > idea) but I would really like a comment so that we can revert this once
+> > > that fix is more widely available (it is unlikely that clang will
+> > > actually support this option).
+> > > 
+> > > [1]: https://github.com/llvm/llvm-project/blob/3062a1469da0569e714aa4634b29345f6d8c874c/clang/tools/scan-build/bin/scan-build#L1080
+> > > [2]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L457
+> > > [3]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L783
+> > > [4]: https://github.com/llvm/llvm-project/blob/fd0782a37bbf7dd4ece721df92c703a381595661/clang/tools/scan-build/libexec/ccc-analyzer#L661-L665
+> > 
+> > Thinking more about this after Fangrui commented on the clang patch
+> > above, using scan-build with GCC as the compiler is going to be hard to
+> > support, as we are basically trying to support using two different
+> > compilers with a unified set of '-f' flags, which I see as problematic
+> > for a few reasons.
+> > 
+> > 1. It restricts our ability to do cc-option cleanups like Nick did.
+> > 
+> > We should be eliminating cc-option calls that we know are specific to
+> > one compiler because checking the Kconfig variables (CONFIG_CC_IS_...)
+> > is much cheaper than invoking the compiler.
+> > 
+> > 2. Necessary GCC specific flags will get dropped.
+> > 
+> > Adding back the call to cc-option will allow the build to succeed but it
+> > drops the flag from KBUILD_CFLAGS. If there were ever a time where an
+> > '-f' flag was needed to get a working kernel with GCC, it would not get
+> > added because clang would reject it.
+> > 
+> > We already have a static-analyzer target that requires using CC=clang so
+> > I think there is some precedent here to say we require the kernel to be
+> > built with clang to use the static analyzer. The fact that it did prior
+> > to 7d73c3e9c514 can just be chalked up to luck.
+> > 
+> > $ make -j"$(nproc)" LLVM=1 defconfig bindeb-pkg static-analyzer
+> > 
+> > would be the equivalent command to the original patch.
+> > 
+> > You can still use scan-build with the '--use-cc=clang' flag, which will
+> > use clang for the compilation and analysis, if you so prefer.
+> > 
+> > Masahiro and Nick may have further thoughts and I am open to other
+> > opinions but my vote is to say this is an issue we won't fix or
+> > workaround.
+> > 
+> > Cheers,
+> > Nathan
+> 
+> 
+> Thank you for detailed explanation. Well I guess question then is: how much
+> scan-build is supported? And if it should even support mixing clang and gcc?
+> Alternatively maybe use clang as default if CC environment variable is not
+> set?
 
-Are you ever loading the amdgpu driver in your tests?  If not, I don't
-see how this patch would affect anything as the driver code would
-never have executed.  It would appear not based on your example.
+It probably shouldn't, as least not in the way that it currently does.
+Someone on the LLVM review I created suggested it should add a filter
+for flags that clang does not support from GCC. I think changing the
+default would be another good fix but doesn't fix the issue if someone
+does actually wants to use GCC for building.
 
-Alex
+> What I like about scan-build is that it generates html report file.
 
->
-> ```
-> > Hi,
-> >
-> > With newer kernels, starting with the v5.14 series, when using a MS
-> > Windows 10 guest VM with PCI passthrough of an AMD Radeon Pro WX 3200
-> > discrete GPU, the passed-through GPU will not run above 501 MHz, even
-> > when it is under 100% load and well below the temperature limit. As a
-> > result, GPU-intensive software (such as video games) runs unusably
-> > slowly in the VM.
-> >
-> > In contrast, with older kernels, the passed-through GPU runs at up to
-> > 1295 MHz (the correct hardware limit), so GPU-intensive software runs at
-> > a reasonable speed in the VM.
-> >
-> > I've confirmed that the issue exists with the following kernel versions:
-> >
-> > - v5.16
-> > - v5.14
-> > - v5.14-rc1
-> >
-> > The issue does not exist with the following kernels:
-> >
-> > - v5.13
-> > - various packaged (non-vanilla) 5.10.* Arch Linux `linux-lts` kernels
-> >
-> > So, the issue was introduced between v5.13 and v5.14-rc1. I'm willing to
-> > bisect the commit history to narrow it down further, if that would be
-> > helpful.
-> >
-> > The configuration details and test results are provided below. In
-> > summary, for the kernels with this issue, the GPU core stays at a
-> > constant 0.8 V, the GPU core clock ranges from 214 MHz to 501 MHz, and
-> > the GPU memory stays at a constant 625 MHz, in the VM. For the correctly
-> > working kernels, the GPU core ranges from 0.85 V to 1.0 V, the GPU core
-> > clock ranges from 214 MHz to 1295 MHz, and the GPU memory stays at 1500
-> > MHz, in the VM.
-> >
-> > Please let me know if additional information would be helpful.
-> >
-> > Regards,
-> > James Turner
-> >
-> > # Configuration Details
-> >
-> > Hardware:
-> >
-> > - Dell Precision 7540 laptop
-> > - CPU: Intel Core i7-9750H (x86-64)
-> > - Discrete GPU: AMD Radeon Pro WX 3200
-> > - The internal display is connected to the integrated GPU, and external
-> >   displays are connected to the discrete GPU.
-> >
-> > Software:
-> >
-> > - KVM host: Arch Linux
-> >   - self-built vanilla kernel (built using Arch Linux `PKGBUILD`
-> >     modified to use vanilla kernel sources from git.kernel.org)
-> >   - libvirt 1:7.10.0-2
-> >   - qemu 6.2.0-2
-> >
-> > - KVM guest: Windows 10
-> >   - GPU driver: Radeon Pro Software Version 21.Q3 (Note that I also
-> >     experienced this issue with the 20.Q4 driver, using packaged
-> >     (non-vanilla) Arch Linux kernels on the host, before updating to the
-> >     21.Q3 driver.)
-> >
-> > Kernel config:
-> >
-> > - For v5.13, v5.14-rc1, and v5.14, I used
-> >   https://github.com/archlinux/svntogit-packages/blob/89c24952adbfa645d9e1a6f12c572929f7e4e3c7/trunk/config
-> >   (The build script ran `make olddefconfig` on that config file.)
-> >
-> > - For v5.16, I used
-> >   https://github.com/archlinux/svntogit-packages/blob/94f84e1ad8a530e54aa34cadbaa76e8dcc439d10/trunk/config
-> >   (The build script ran `make olddefconfig` on that config file.)
-> >
-> > I set up the VM with PCI passthrough according to the instructions at
-> > https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF
-> >
-> > I'm passing through the following PCI devices to the VM, as listed by
-> > `lspci -D -nn`:
-> >
-> >   0000:01:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Lexa XT [Radeon PRO WX 3200] [1002:6981]
-> >   0000:01:00.1 Audio device [0403]: Advanced Micro Devices, Inc. [AMD/ATI] Baffin HDMI/DP Audio [Radeon RX 550 640SP / RX 560/560X] [1002:aae0]
-> >
-> > The host kernel command line includes the following relevant options:
-> >
-> >   intel_iommu=on vfio-pci.ids=1002:6981,1002:aae0
-> >
-> > to enable IOMMU and bind the `vfio-pci` driver to the PCI devices.
-> >
-> > My `/etc/mkinitcpio.conf` includes the following line:
-> >
-> >   MODULES=(vfio_pci vfio vfio_iommu_type1 vfio_virqfd i915 amdgpu)
-> >
-> > to load `vfio-pci` before the graphics drivers. (Note that removing
-> > `i915 amdgpu` has no effect on this issue.)
-> >
-> > I'm using libvirt to manage the VM. The relevant portions of the XML
-> > file are:
-> >
-> >   <hostdev mode="subsystem" type="pci" managed="yes">
-> >     <source>
-> >       <address domain="0x0000" bus="0x01" slot="0x00" function="0x0"/>
-> >     </source>
-> >     <address type="pci" domain="0x0000" bus="0x06" slot="0x00" function="0x0"/>
-> >   </hostdev>
-> >   <hostdev mode="subsystem" type="pci" managed="yes">
-> >     <source>
-> >       <address domain="0x0000" bus="0x01" slot="0x00" function="0x1"/>
-> >     </source>
-> >     <address type="pci" domain="0x0000" bus="0x07" slot="0x00" function="0x0"/>
-> >   </hostdev>
-> >
-> > # Test Results
-> >
-> > For testing, I used the following procedure:
-> >
-> > 1. Boot the host machine and log in.
-> >
-> > 2. Run the following commands to gather information. For all the tests,
-> >    the output was identical.
-> >
-> >    - `cat /proc/sys/kernel/tainted` printed:
-> >
-> >      0
-> >
-> >    - `hostnamectl | grep "Operating System"` printed:
-> >
-> >      Operating System: Arch Linux
-> >
-> >    - `lspci -nnk -d 1002:6981` printed
-> >
-> >      01:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Lexa XT [Radeon PRO WX 3200] [1002:6981]
-> >       Subsystem: Dell Device [1028:0926]
-> >       Kernel driver in use: vfio-pci
-> >       Kernel modules: amdgpu
-> >
-> >    - `lspci -nnk -d 1002:aae0` printed
-> >
-> >      01:00.1 Audio device [0403]: Advanced Micro Devices, Inc. [AMD/ATI] Baffin HDMI/DP Audio [Radeon RX 550 640SP / RX 560/560X] [1002:aae0]
-> >       Subsystem: Dell Device [1028:0926]
-> >       Kernel driver in use: vfio-pci
-> >       Kernel modules: snd_hda_intel
-> >
-> >    - `sudo dmesg | grep -i vfio` printed the kernel command line and the
-> >      following messages:
-> >
-> >      VFIO - User Level meta-driver version: 0.3
-> >      vfio-pci 0000:01:00.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=io+mem:owns=none
-> >      vfio_pci: add [1002:6981[ffffffff:ffffffff]] class 0x000000/00000000
-> >      vfio_pci: add [1002:aae0[ffffffff:ffffffff]] class 0x000000/00000000
-> >      vfio-pci 0000:01:00.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=io+mem:owns=none
-> >
-> > 3. Start the Windows VM using libvirt and log in. Record sensor
-> >    information.
-> >
-> > 4. Run a graphically-intensive video game to put the GPU under load.
-> >    Record sensor information.
-> >
-> > 5. Stop the game. Record sensor information.
-> >
-> > 6. Shut down the VM. Save the output of `sudo dmesg`.
-> >
-> > I compared the `sudo dmesg` output for v5.13 and v5.14-rc1 and didn't
-> > see any relevant differences.
-> >
-> > Note that the issue occurs only within the guest VM. When I'm not using
-> > a VM (after removing `vfio-pci.ids=1002:6981,1002:aae0` from the kernel
-> > command line so that the PCI devices are bound to their normal `amdgpu`
-> > and `snd_hda_intel` drivers instead of the `vfio-pci` driver), the GPU
-> > operates correctly on the host.
-> >
-> > ## Linux v5.16 (issue present)
-> >
-> > $ cat /proc/version
-> > Linux version 5.16.0-1 (linux@archlinux) (gcc (GCC) 11.1.0, GNU ld (GNU Binutils) 2.36.1) #1 SMP PREEMPT Sun, 16 Jan 2022 01:51:08 +0000
-> >
-> > Before running the game:
-> >
-> > - GPU core: 214.0 MHz, 0.800 V, 0.0% load, 53.0 degC
-> > - GPU memory: 625.0 MHz
-> >
-> > While running the game:
-> >
-> > - GPU core: 501.0 MHz, 0.800 V, 100.0% load, 54.0 degC
-> > - GPU memory: 625.0 MHz
-> >
-> > After stopping the game:
-> >
-> > - GPU core: 214.0 MHz, 0.800 V, 0.0% load, 51.0 degC
-> > - GPU memory: 625.0 MHz
-> >
-> > ## Linux v5.14 (issue present)
-> >
-> > $ cat /proc/version
-> > Linux version 5.14.0-1 (linux@archlinux) (gcc (GCC) 11.1.0, GNU ld (GNU Binutils) 2.36.1) #1 SMP PREEMPT Sun, 16 Jan 2022 03:19:35 +0000
-> >
-> > Before running the game:
-> >
-> > - GPU core: 214.0 MHz, 0.800 V, 0.0% load, 50.0 degC
-> > - GPU memory: 625.0 MHz
-> >
-> > While running the game:
-> >
-> > - GPU core: 501.0 MHz, 0.800 V, 100.0% load, 54.0 degC
-> > - GPU memory: 625.0 MHz
-> >
-> > After stopping the game:
-> >
-> > - GPU core: 214.0 MHz, 0.800 V, 0.0% load, 49.0 degC
-> > - GPU memory: 625.0 MHz
-> >
-> > ## Linux v5.14-rc1 (issue present)
-> >
-> > $ cat /proc/version
-> > Linux version 5.14.0-rc1-1 (linux@archlinux) (gcc (GCC) 11.1.0, GNU ld (GNU Binutils) 2.36.1) #1 SMP PREEMPT Sun, 16 Jan 2022 18:31:35 +0000
-> >
-> > Before running the game:
-> >
-> > - GPU core: 214.0 MHz, 0.800 V, 0.0% load, 50.0 degC
-> > - GPU memory: 625.0 MHz
-> >
-> > While running the game:
-> >
-> > - GPU core: 501.0 MHz, 0.800 V, 100.0% load, 54.0 degC
-> > - GPU memory: 625.0 MHz
-> >
-> > After stopping the game:
-> >
-> > - GPU core: 214.0 MHz, 0.800 V, 0.0% load, 49.0 degC
-> > - GPU memory: 625.0 MHz
-> >
-> > ## Linux v5.13 (works correctly, issue not present)
-> >
-> > $ cat /proc/version
-> > Linux version 5.13.0-1 (linux@archlinux) (gcc (GCC) 11.1.0, GNU ld (GNU Binutils) 2.36.1) #1 SMP PREEMPT Sun, 16 Jan 2022 02:39:18 +0000
-> >
-> > Before running the game:
-> >
-> > - GPU core: 214.0 MHz, 0.850 V, 0.0% load, 55.0 degC
-> > - GPU memory: 1500.0 MHz
-> >
-> > While running the game:
-> >
-> > - GPU core: 1295.0 MHz, 1.000 V, 100.0% load, 67.0 degC
-> > - GPU memory: 1500.0 MHz
-> >
-> > After stopping the game:
-> >
-> > - GPU core: 214.0 MHz, 0.850 V, 0.0% load, 52.0 degC
-> > - GPU memory: 1500.0 MHz
->
-> ```
->
-> Ciao, Thorsten (wearing his 'Linux kernel regression tracker' hat)
->
-> P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
-> on my table. I can only look briefly into most of them. Unfortunately
-> therefore I sometimes will get things wrong or miss something important.
-> I hope that's not the case here; if you think it is, don't hesitate to
-> tell me about it in a public reply, that's in everyone's interest.
->
-> BTW, I have no personal interest in this issue, which is tracked using
-> regzbot, my Linux kernel regression tracking bot
-> (https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
-> this mail to get things rolling again and hence don't need to be CC on
-> all further activities wrt to this regression.
->
-> #regzbot introduced f9b7f3703ff9
-> #regzbot title drm: amdgpu: Too-low frequency limit for AMD GPU
-> PCI-passed-through to Windows VM
->
->
-> > Would any additional information be helpful?
-> >
-> > git bisect start
-> > # bad: [e73f0f0ee7541171d89f2e2491130c7771ba58d3] Linux 5.14-rc1
-> > git bisect bad e73f0f0ee7541171d89f2e2491130c7771ba58d3
-> > # good: [62fb9874f5da54fdb243003b386128037319b219] Linux 5.13
-> > git bisect good 62fb9874f5da54fdb243003b386128037319b219
-> > # bad: [e058a84bfddc42ba356a2316f2cf1141974625c9] Merge tag 'drm-next-2021-07-01' of git://anongit.freedesktop.org/drm/drm
-> > git bisect bad e058a84bfddc42ba356a2316f2cf1141974625c9
-> > # good: [a6eaf3850cb171c328a8b0db6d3c79286a1eba9d] Merge tag 'sched-urgent-2021-06-30' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
-> > git bisect good a6eaf3850cb171c328a8b0db6d3c79286a1eba9d
-> > # good: [007b312c6f294770de01fbc0643610145012d244] Merge tag 'mac80211-next-for-net-next-2021-06-25' of git://git.kernel.org/pub/scm/linux/kernel/git/jberg/mac80211-next
-> > git bisect good 007b312c6f294770de01fbc0643610145012d244
-> > # bad: [18703923a66aecf6f7ded0e16d22eb412ddae72f] drm/amdgpu: Fix incorrect register offsets for Sienna Cichlid
-> > git bisect bad 18703923a66aecf6f7ded0e16d22eb412ddae72f
-> > # good: [c99c4d0ca57c978dcc2a2f41ab8449684ea154cc] Merge tag 'amd-drm-next-5.14-2021-05-19' of https://gitlab.freedesktop.org/agd5f/linux into drm-next
-> > git bisect good c99c4d0ca57c978dcc2a2f41ab8449684ea154cc
-> > # good: [43ed3c6c786d996a264fcde68dbb36df6f03b965] Merge tag 'drm-misc-next-2021-06-01' of git://anongit.freedesktop.org/drm/drm-misc into drm-next
-> > git bisect good 43ed3c6c786d996a264fcde68dbb36df6f03b965
-> > # bad: [050cd3d616d96c3a04f4877842a391c0a4fdcc7a] drm/amd/display: Add support for SURFACE_PIXEL_FORMAT_GRPH_ABGR16161616.
-> > git bisect bad 050cd3d616d96c3a04f4877842a391c0a4fdcc7a
-> > # good: [f43ae2d1806c2b8a0934cb4acddd3cf3750d10f8] drm/amdgpu: Fix inconsistent indenting
-> > git bisect good f43ae2d1806c2b8a0934cb4acddd3cf3750d10f8
-> > # good: [6566cae7aef30da8833f1fa0eb854baf33b96676] drm/amd/display: fix odm scaling
-> > git bisect good 6566cae7aef30da8833f1fa0eb854baf33b96676
-> > # good: [5ac1dd89df549648b67f4d5e3a01b2d653914c55] drm/amd/display/dc/dce/dmub_outbox: Convert over to kernel-doc
-> > git bisect good 5ac1dd89df549648b67f4d5e3a01b2d653914c55
-> > # good: [a76eb7d30f700e5bdecc72d88d2226d137b11f74] drm/amd/display/dc/dce110/dce110_hw_sequencer: Include header containing our prototypes
-> > git bisect good a76eb7d30f700e5bdecc72d88d2226d137b11f74
-> > # good: [dd1d82c04e111b5a864638ede8965db2fe6d8653] drm/amdgpu/swsmu/aldebaran: fix check in is_dpm_running
-> > git bisect good dd1d82c04e111b5a864638ede8965db2fe6d8653
-> > # bad: [f9b7f3703ff97768a8dfabd42bdb107681f1da22] drm/amdgpu/acpi: make ATPX/ATCS structures global (v2)
-> > git bisect bad f9b7f3703ff97768a8dfabd42bdb107681f1da22
-> > # good: [f1688bd69ec4b07eda1657ff953daebce7cfabf6] drm/amd/amdgpu:save psp ring wptr to avoid attack
-> > git bisect good f1688bd69ec4b07eda1657ff953daebce7cfabf6
-> > # first bad commit: [f9b7f3703ff97768a8dfabd42bdb107681f1da22] drm/amdgpu/acpi: make ATPX/ATCS structures global (v2)
-> >
-> > James
-> >
+Ah, that is a good point.
+
+> '--use-cc=clang' worked fine for me.
+> 
+> I've also tried
+> > $ make -j"$(nproc)" LLVM=1 defconfig bindeb-pkg static-analyzer
+> although there seems to be no static-analyzer target, I guess you meant
+> clang-analyzer instead, but although it seems to generate a lot of text on
+> terminal, it doesn't seem that useful to me. Not sure if this is expected?
+
+Yes, my apologies, it should have been clang-analyzer.
+
+> Quoting a piece of log:
+> ./include/linux/xarray.h:54:2: error: expected '(' after 'asm'
+> [clang-diagnostic-error]
+>         WARN_ON((long)v < 0);
+>         ^
+> ./include/asm-generic/bug.h:123:3: note: expanded from macro 'WARN_ON'
+>                 __WARN();                                               \
+>                 ^
+> ./include/asm-generic/bug.h:96:19: note: expanded from macro '__WARN'
+> #define __WARN()                __WARN_FLAGS(BUGFLAG_TAINT(TAINT_WARN))
+>                                 ^
+> ./arch/x86/include/asm/bug.h:79:2: note: expanded from macro '__WARN_FLAGS'
+>         _BUG_FLAGS(ASM_UD2, BUGFLAG_WARNING|(flags));           \
+>         ^
+> ./arch/x86/include/asm/bug.h:27:2: note: expanded from macro '_BUG_FLAGS'
+>         asm_inline volatile("1:\t" ins "\n"                             \
+>         ^
+> ./include/linux/compiler_types.h:281:24: note: expanded from macro
+> 'asm_inline'
+> #define asm_inline asm __inline
+>                        ^
+> ./include/linux/xarray.h:1616:2: error: expected '(' after 'asm'
+> [clang-diagnostic-error]
+>         BUG_ON(order > 0);
+>         ^
+> ./include/asm-generic/bug.h:65:57: note: expanded from macro 'BUG_ON'
+> #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
+>                                                         ^
+> ./arch/x86/include/asm/bug.h:66:2: note: expanded from macro 'BUG'
+>         _BUG_FLAGS(ASM_UD2, 0);                                 \
+>         ^
+> ./arch/x86/include/asm/bug.h:27:2: note: expanded from macro '_BUG_FLAGS'
+>         asm_inline volatile("1:\t" ins "\n"                             \
+>         ^
+> ./include/linux/compiler_types.h:281:24: note: expanded from macro
+> 'asm_inline'
+> #define asm_inline asm __inline
+>                        ^
+> Found compiler error(s).
+> 21 errors generated.
+> Error while processing /home/xxxxxxxx/linux/drivers/hid/hid-ezkey.c.
+> error: too many errors emitted, stopping now [clang-diagnostic-error]
+> error: unknown argument: '-fno-stack-clash-protection'
+> [clang-diagnostic-error]
+> error: unknown warning option '-Wno-frame-address'; did you mean
+> '-Wno-address'? [clang-diagnostic-unknown-warning-option]
+> error: unknown warning option '-Wno-pointer-to-enum-cast'; did you mean
+> '-Wno-pointer-compare'? [clang-diagnostic-unknown-warning-option]
+> 
+> 
+> Unless I did something wrong, this doesn't seem that useful to me compared
+> to what I get from scan-build?
+
+I do not see that error but I have little experience with running the
+clang-analyzer target. It might be due to a difference between
+scan-build and clang-tidy? Regardless, it seems like you prefer reading
+the HTML report, so sticking with scan-build with the '--use-cc=clang'
+flag will be the way to go.
+
+Cheers,
+Nathan

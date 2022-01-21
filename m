@@ -2,164 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ADBA496321
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 17:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0F2496324
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 17:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378679AbiAUQu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 11:50:59 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4440 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349221AbiAUQu5 (ORCPT
+        id S1378826AbiAUQyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 11:54:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233943AbiAUQyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 11:50:57 -0500
-Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JgQKQ2tgTz67qjY;
-        Sat, 22 Jan 2022 00:47:38 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 21 Jan 2022 17:50:52 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.021;
- Fri, 21 Jan 2022 17:50:52 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Antony Vennard <antony@vennard.ch>
-CC:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
-Subject: RE: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
-Thread-Topic: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
-Thread-Index: AQHYBxWUAJoIvMeqLk2UYoD6PZRMZ6xnP9oAgAAHlwCAAfOkgIAAJTmAgAD7bXCAA18/UA==
-Date:   Fri, 21 Jan 2022 16:50:52 +0000
-Message-ID: <289f4694fc084f029187af7e8a3120cc@huawei.com>
-References: <20220111180318.591029-1-roberto.sassu@huawei.com>
- <YeV+jkGg6mpQdRID@zx2c4.com>
- <d92912bba61ee37e42d04b64073b9031604acc0f.camel@HansenPartnership.com>
- <079f10b9-060b-3a36-2224-fa1b483cbad5@vennard.ch>
- <YedHR93wPLS/JEsE@sol.localdomain>
- <d71ea8ae51e1438c894b44b011f3efda@huawei.com>
-In-Reply-To: <d71ea8ae51e1438c894b44b011f3efda@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.33]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 21 Jan 2022 11:54:13 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC97C06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 08:54:12 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id bf5so14378271oib.4
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 08:54:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l/wXgvmfD5hnFKzIbHMpJPxxZzeJRho2pBUaKHYdU7c=;
+        b=SHYRhXZxGtHHVY1mz7SHrYJvOjaD/E6cCWozTvW4aKCVkJOgiRJnR1qpqWu6wgfW/l
+         pEvGuE36gWds96wEjCrrnfgLZfKLCUnwDn2bd66LVx0Zs8W+bntqn/KIeHPetJ68UQoX
+         FVAITn4OWq0aZt91cZcaQyxG9NcjU8KM1zhO6D9y7lHrFyZCfuC/jum6WPBvOpjnVAoh
+         eiUWFjw6tw2c/rkFV0G0hp/yZr7QAbXWm5FyAvkWfQJkJ1bvs9Im236zWexdbIw3YxUu
+         6nNZ4+tYmGCIKKkZc3HfLWn0XCPxPi+49o9q2T9Een7oivvaz1Yjf8qMy4r5TWDTaQZ+
+         zwaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l/wXgvmfD5hnFKzIbHMpJPxxZzeJRho2pBUaKHYdU7c=;
+        b=R46gtC7gkkUsPYj74ZiBn2k8oiqOIWO/k1qTuG0U+rVoih/GExIsglQBo9H0xEDrn1
+         id05ixfstnnewVqsux9PvApIf9EUZHw7905NogiukxCRUNfXWWJoatxF3yY46curjiVW
+         HzouQA7w/mnlAg3QZO31aU/CUmlsDNIDjUS0mudNwaxSGlIN5N41fIkkWmC+yfvPUgqq
+         0NGUnOEE00/srCXT9Cl89NcVvZeku9h8qtErO55zzbzm5JLxcoWXvXOhwCz3k6aZZ8uy
+         k3H+C56vNmXNTVCG8/Ve+EGnTaEMisG96YAZHnWWq4hnVT+4/uim5VjvayUrNegqSS3l
+         wDQg==
+X-Gm-Message-State: AOAM531pB7k3ArzLshyIhKOkf6pTIiraI1uFTQUiQr5+d4yoMUQ5IO+Q
+        8xyRXRVtws2uQOyF0aj3kvYNVPjRE/o=
+X-Google-Smtp-Source: ABdhPJzVt5Ii+s0yvm3Ub20uLTVUjT/EC4FsQXQYdy5gYoz75/u6DX2P2q8CHBXYlqg+Des9k/PIcw==
+X-Received: by 2002:a54:4002:: with SMTP id x2mr1259166oie.42.1642784051850;
+        Fri, 21 Jan 2022 08:54:11 -0800 (PST)
+Received: from thinkpad.localdomain ([2804:14d:5cd1:5d03:cf72:4317:3105:f6e5])
+        by smtp.gmail.com with ESMTPSA id y8sm1089271oou.23.2022.01.21.08.54.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jan 2022 08:54:11 -0800 (PST)
+From:   Luiz Sampaio <sampaio.ime@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Luiz Sampaio <sampaio.ime@gmail.com>
+Subject: [PATCH 00/31] leds: start removing obsolete/useless enum
+Date:   Fri, 21 Jan 2022 13:54:05 -0300
+Message-Id: <20220121165436.30956-1-sampaio.ime@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBSb2JlcnRvIFNhc3N1IFttYWlsdG86cm9iZXJ0by5zYXNzdUBodWF3ZWkuY29tXQ0K
-PiBTZW50OiBXZWRuZXNkYXksIEphbnVhcnkgMTksIDIwMjIgMjoyNSBQTQ0KPiA+IEZyb206IEVy
-aWMgQmlnZ2VycyBbbWFpbHRvOmViaWdnZXJzQGtlcm5lbC5vcmddDQo+ID4gU2VudDogV2VkbmVz
-ZGF5LCBKYW51YXJ5IDE5LCAyMDIyIDEyOjA0IEFNDQo+ID4gT24gVHVlLCBKYW4gMTgsIDIwMjIg
-YXQgMDk6NTA6MjFQTSArMDEwMCwgQW50b255IFZlbm5hcmQgd3JvdGU6DQo+ID4gPg0KPiA+ID4g
-SGkgQWxsLA0KPiA+ID4NCj4gPiA+IE9uIDE3LzAxLzIwMjIgMTY6MDIsIEphbWVzIEJvdHRvbWxl
-eSB3cm90ZToNCj4gPiA+ID4gT24gTW9uLCAyMDIyLTAxLTE3IGF0IDE1OjM0ICswMTAwLCBKYXNv
-biBBLiBEb25lbmZlbGQgd3JvdGU6DQo+ID4gPiA+ID4gSGksDQo+ID4gPiA+ID4NCj4gPiA+ID4g
-PiBXaGlsZSBpdCBsb29rcyBsaWtlIHlvdSBwdXQgYSBsb3Qgb2Ygd29yayBpbnRvIHRoaXMgcGF0
-Y2hzZXQsIEkgdGhpbmsNCj4gPiA+ID4gPiB0aGUgZ2VuZXJhbCBpZGVhIG9mIGFkZGluZyBQR1Ag
-KnRvIHRoZSBrZXJuZWwqIGlzIGEgcHJldHR5IGRhdW50aW5nDQo+ID4gPiA+ID4gcHJvcG9zaXRp
-b24uIFRoZSBnZW5lcmFsIGNvbnNlbnN1cyBpbiB0aGUgY3J5cHRvIGVuZ2luZWVyaW5nIHdvcmxk
-IGlzDQo+ID4gPiA+ID4gdGhhdCBQR1Agb3VnaHQgdG8gYmUgb24gaXRzIHdheSBvdXQuIFdlIGRl
-ZmluaXRlbHkgZG9uJ3Qgd2FudCB0bw0KPiA+ID4gPiA+IHBlcnBldHVhdGUgdGhpcyBwcm9qZWN0
-LW9uLWxpZmUtc3VwcG9ydCBpbnRvIHRoZSBwZXJtYW5lbmNlIG9mIGtlcm5lbA0KPiA+ID4gPiA+
-IGNvZGUuIFNvbWUgcXVpY2sgR29vZ2xlIHNlYXJjaGVzIHdpbGwgcmV2ZWFsIGEgbGl0YW55IG9m
-IGJsb2cgcG9zdHMNCj4gPiA+ID4gPiB0byB0aGUgdHVuZSBvZiwgIndoeSBvaCB3aHkgYXJlIHBl
-b3BsZSBzdGlsbCB1c2luZyB0aGlzPyIgSGVyZSdzIG9uZQ0KPiA+ID4gPiA+IGZyb20gMjAxOToN
-Cj4gPiA+ID4gPiBodHRwczovL2xhdGFjb3JhLm1pY3JvLmJsb2cvMjAxOS8wNy8xNi90aGUtcGdw
-LXByb2JsZW0uaHRtbCAuIEkNCj4gPiA+ID4gPiB0aGluayB0aGVzZSBhcmUgYXJndW1lbnRzIHRv
-IHRha2Ugc2VyaW91c2x5LiBBbmQgZXZlbiBpZiB5b3UgZGlzYWdyZWUNCj4gPiA+ID4gPiB3aXRo
-IHNvbWUgcGFydHMsIHlvdSBtYXkgd2FudCB0byBjb25zaWRlciB3aGV0aGVyIHRoZSByZW1haW5p
-bmcgcGFydHMNCj4gPiA+ID4gPiB3YXJyYW50IGEgYml0IG9mIHBhdXNlIGJlZm9yZSBhZGRpbmcg
-dGhpcyB0byB0aGUga2VybmVsIGFuZA0KPiA+ID4gPiA+IHBlcnBldHVhdGluZyBQR1AncyBkZXNp
-Z24gZnVydGhlci4NCj4gPiA+DQo+ID4gPiBTbyB3aGlsZSBJIHVuZGVyc3RhbmQgd2h5IHRoaXMg
-aXMgYmVpbmcgcHJvcG9zZWQgYW5kIGNsZWFybHkgZWZmb3J0IGhhcyBnb25lDQo+ID4gPiBpbnRv
-IGl0LCBJIGFsc28gdGhpbmsgaXQgaXMgbm90IHRoZSByaWdodCBhcHByb2FjaC4gSXQgc2VlbXMg
-dGhpcyBwcm9wb3NhbA0KPiA+ID4gaXMgdG8gaW5jbHVkZSBhIGZ1bGwgUEdQIHBhY2tldCBwYXJz
-ZXIgYW5kIHZlcmlmaWNhdGlvbiBsb2dpYyBpbiB0aGUga2VybmVsDQo+ID4gPiBhcyBhbiBlcXVp
-dmFsZW50IHRvIGFsbG93IFBHUCBzaWduYXR1cmVzIHRvIGJlIHN1Ym1pdHRlZCB2aWENCj4gPiA+
-IEZTX0lPQ19FTkFCTEVfVkVSSVRZOg0KPiA+ID4NCj4gPiA+ICJGU19JT0NfRU5BQkxFX1ZFUklU
-WSBhY2NlcHRzIGEgcG9pbnRlciB0byBhIFBLQ1MjNyBmb3JtYXR0ZWQgZGV0YWNoZWQNCj4gPiA+
-IHNpZ25hdHVyZSBpbiBERVIgZm9ybWF0IG9mIHRoZSBmaWxl4oCZcyBmcy12ZXJpdHkgZGlnZXN0
-LiINCj4gPiA+DQo+ID4NCj4gPiBJdCdzIHdvcnRoIG5vdGluZyB0aGF0IGlmIGZzLXZlcml0eSBi
-dWlsdC1pbiBzaWduYXR1cmVzIGFyZSB1c2VkLCBhIHRydXN0ZWQNCj4gPiB1c2Vyc3BhY2UgcHJv
-Z3JhbSBpcyBzdGlsbCByZXF1aXJlZCB0byBkZXRlcm1pbmUgYW5kIGVuZm9yY2UgdGhlIHBvbGlj
-eSBvZg0KPiB3aGljaA0KPiA+IGZpbGVzIGFyZSByZXF1aXJlZCB0byBiZSBzaWduZWQuICBUaGUg
-a2VybmVsIG9ubHkgaGFuZGxlcyB0aGUgYWN0dWFsIHNpZ25hdHVyZQ0KPiA+IHZlcmlmaWNhdGlv
-bi4gIFRoaXMgd2FzIGJhc2ljYWxseSBhIHByb29mLW9mLWNvbmNlcHQgd2hpY2ggcmV1c2VkIHRo
-ZSBrZXJuZWwncw0KPiA+IG1vZHVsZSBzaWduYXR1cmUgdmVyaWZpY2F0aW9uIGNvZGUgKHdoaWNo
-IGhhcHBlbnMgdG8gdXNlIFBLQ1MjNykuDQo+IA0KPiBKdXN0IHRvIHNob3cgaG93IHRoZSBmc3Zl
-cml0eSBjb2RlIHdpbGwgbG9vayBsaWtlIGFmdGVyIGFkZGluZyBzdXBwb3J0DQo+IGZvciBQR1Ag
-c2lnbmF0dXJlczoNCj4gDQo+ICsgICAgICAgc3dpdGNoICh2aS0+dHlwZSkgew0KPiArICAgICAg
-IGNhc2UgUEtFWV9JRF9QS0NTNzoNCj4gKyAgICAgICAgICAgICAgIGVyciA9IHZlcmlmeV9wa2Nz
-N19zaWduYXR1cmUoZCwgc2l6ZW9mKCpkKSArIGhhc2hfYWxnLT5kaWdlc3Rfc2l6ZSwNCj4gKyAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc2lnbmF0dXJlLCBzaWdf
-c2l6ZSwgZnN2ZXJpdHlfa2V5cmluZywNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgVkVSSUZZSU5HX1VOU1BFQ0lGSUVEX1NJR05BVFVSRSwNCj4gKyAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTlVMTCwgTlVMTCk7DQo+ICsg
-ICAgICAgICAgICAgICBicmVhazsNCj4gKyAgICAgICBjYXNlIFBLRVlfSURfUEdQOg0KPiArICAg
-ICAgICAgICAgICAgZXJyID0gdmVyaWZ5X3BncF9zaWduYXR1cmUoZCwgc2l6ZW9mKCpkKSArIGhh
-c2hfYWxnLT5kaWdlc3Rfc2l6ZSwNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIHNpZ25hdHVyZSwgc2lnX3NpemUsIGZzdmVyaXR5X2tleXJpbmcsDQo+ICsgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBWRVJJRllJTkdfVU5TUEVDSUZJ
-RURfU0lHTkFUVVJFLA0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgTlVMTCwgTlVMTCk7DQo+ICsgICAgICAgICAgICAgICBicmVhazsNCj4gKyAgICAgICBkZWZh
-dWx0Og0KPiArICAgICAgICAgICAgICAgZXJyID0gLUVPUE5PVFNVUFA7DQo+ICsgICAgICAgfQ0K
-PiANCj4gQXMgeW91IGNhbiBzZWUsIHRoZSBjaGFuZ2Ugd2lsbCBiZSBzdHJhaWdodGZvcndhcmQu
-DQo+IA0KPiBPbiB1c2VyIHNwYWNlIHNpZGUsIEkgcGxhbiB0byBhZGQgdGhlIGNhcGFiaWxpdHkg
-dG8gZnN2ZXJpdHktdXRpbHMNCj4gdG8gcHJvZHVjZSBhIFBHUCBzaWduYXR1cmUgd2l0aCB0aGUg
-R1BHIGtleSBwYXNzZWQgYnkgcnBtc2lnbi4NCg0KQXQgdGhlIGVuZCwgaXQgd2FzIG5vdCBuZWNl
-c3NhcnkuIFdpdGggdGhpcyBwYXRjaCBzZXQsIHJwbXNpZ24gaXMgYWJsZQ0KdG8gcHJvZHVjZSBh
-IFBHUCBzaWduYXR1cmUgd2l0aG91dCBtb2RpZmljYXRpb25zIHRvIGZzdmVyaXR5LXV0aWxzOg0K
-DQpodHRwczovL2dpdGh1Yi5jb20vcm9iZXJ0b3Nhc3N1L3JwbS9jb21taXRzL2ZzdmVyaXR5LWdw
-Zy12MQ0KDQpUaGUgbW9kaWZpY2F0aW9ucyBhcmUgdmVyeSBtaW5pbWFsLCBiYXNpY2FsbHkgY29u
-c2lzdCBpbiBpbnRyb2R1Y2luZw0KdGhlIG5ldyBmdW5jdGlvbiBycG1WZXJpdHlTaWduRmlsZUdQ
-RygpIHRoYXQgY3JlYXRlcyBhIGZpbGUgd2l0aA0KdGhlIGZzdmVyaXR5X2Zvcm1hdHRlZF9kaWdl
-c3Qgc3RydWN0dXJlLCBhbmQgc2lnbnMgaXQgd2l0aCB0aGUNCmV4cG9zZWQgZnVuY3Rpb24gbWFr
-ZUdQR1NpZ25hdHVyZUFyZ3MoKS4NCg0KVGhlIGZzdmVyaXR5IHJwbSBwbHVnaW4gd29ya3Mgd2l0
-aG91dCBtb2RpZmljYXRpb24sIGFuZCB0aGUNCmtlcm5lbCB0YWtlcyBjYXJlIG9mIHRoZSB2ZXJp
-ZmljYXRpb24gb2YgdGhlIFBHUCBzaWduYXR1cmVzIHdoZW4NCmEgcGFja2FnZSBpcyBpbnN0YWxs
-ZWQuDQoNCkkgd3JvdGUgYSBtb3JlIGRldGFpbGVkIHByb2NlZHVyZSB0byBzaWduIGFuZCBpbnN0
-YWxsIGEgcGFja2FnZQ0Kd2l0aCBmc3Zlcml0eSBzaWduYXR1cmVzIGluIHRoZSBQR1AgZm9ybWF0
-LiBJdCBjYW4gYmUgZm91bmQgaGVyZToNCg0KaHR0cHM6Ly93d3cuc3Bpbmljcy5uZXQvbGlzdHMv
-ZmVkb3JhLWRldmVsL21zZzI5NjU2Mi5odG1sDQoNClJvYmVydG8NCg0KSFVBV0VJIFRFQ0hOT0xP
-R0lFUyBEdWVzc2VsZG9yZiBHbWJILCBIUkIgNTYwNjMNCk1hbmFnaW5nIERpcmVjdG9yOiBMaSBQ
-ZW5nLCBaaG9uZyBSb25naHVhDQoNCj4gPiBJJ2QgZW5jb3VyYWdlIG5ldyB1c2VycyB0byBlaXRo
-ZXIgZ28gYWxsLWluIG9uIGEgdXNlcnNwYWNlIHNvbHV0aW9uLCB1c2luZyBhDQo+ID4gdHJ1c3Rl
-ZCB1c2Vyc3BhY2UgcHJvZ3JhbSB0byB2ZXJpZnkgc2lnbmF0dXJlcyBvZiBmcy12ZXJpdHkgZmls
-ZSBkaWdlc3RzOw0KPiA+ICpvciogZ28gYWxsLWluIG9uIGFuIGluLWtlcm5lbCBzb2x1dGlvbiwg
-dXNpbmcgdGhlIElNQSBzdXBwb3J0IGZvciBmcy12ZXJpdHkNCj4gPiB3aGljaCBNaW1pIFpvaGFy
-IGlzIHdvcmtpbmcgb24uICBBIHVzZXJzcGFjZSBzb2x1dGlvbiBjb3VsZCB1c2UgYSBzaW1wbGUN
-Cj4gDQo+IFByb2JhYmx5LCB0aGVyZSBpcyBhbHNvIHRoZSB0aGlyZCBvcHRpb24gb2YgYW4gTFNN
-IChzdWNoIGFzIElQRSkgdGhhdCBnZXRzDQo+IGZyb20gZnN2ZXJpdHkgdGhlIGluZm9ybWF0aW9u
-IGlmIHRoZSBzaWduYXR1cmUgd2FzIHZhbGlkYXRlZCwgYW5kIGRlY2lkZQ0KPiBkZXBlbmRpbmcg
-b24gYSBwb2xpY3kuIEkgd291bGQgYWxzbyBleHBvc2UgdGhlIGluZm9ybWF0aW9uIGFib3V0IHRo
-ZQ0KPiByZXN0cmljdGlvbiBpbXBvc2VkIG9uIHRoZSBrZXlyaW5nIGZyb20gd2hpY2ggdGhlIGtl
-eSB1c2VkIHRvIHZlcmlmeQ0KPiB0aGUgc2lnbmF0dXJlIHdhcyBmb3VuZC4NCj4gDQo+IE1heWJl
-IElNQSBjb3VsZCB1c2UgdGhpcyBhcHByb2FjaCB0b28sIHdoaWNoIHdvdWxkIGF2b2lkIHRoZSBu
-ZWVkDQo+IG9mIGludHJvZHVjaW5nIGFub3RoZXIgc2lnbmF0dXJlIGZvcm1hdC4gSWYgdGhhdCBp
-cyBkZXNpcmVkLCB5b3UgbWlnaHQNCj4gd2FudCB0byBjb29yZGluYXRlIHdpdGggdGhlIGF1dGhv
-cnMgb2YgYSBGZWRvcmEgZmVhdHVyZToNCj4gDQo+IGh0dHBzOi8vZmVkb3JhcHJvamVjdC5vcmcv
-d2lraS9DaGFuZ2VzL0ZzVmVyaXR5UlBNDQo+IA0KPiB3aGljaCwgYXMgZmFyIGFzIEkga25vdywg
-cGxhbiB0byB1c2UgdGhlIHNpZ25hdHVyZSBmb3JtYXQgYWxyZWFkeQ0KPiB1cHN0cmVhbWVkLg0K
-PiANCj4gVGhhbmtzDQo+IA0KPiBSb2JlcnRvDQo+IA0KPiBIVUFXRUkgVEVDSE5PTE9HSUVTIER1
-ZXNzZWxkb3JmIEdtYkgsIEhSQiA1NjA2Mw0KPiBNYW5hZ2luZyBEaXJlY3RvcjogTGkgUGVuZywg
-WmhvbmcgUm9uZ2h1YQ0KPiANCj4gPiBzaWduYXR1cmUgZm9ybWF0LCB1c2luZyBhIG1vZGVybiBh
-bGdvcml0aG0gc3VjaCBhcyBFZDI1NTE5LiAgSU1BIHVzZXMgYQ0KPiBzaW1wbGUNCj4gPiBzaWdu
-YXR1cmUgZm9ybWF0IHRvbywgdGhvdWdoIGl0IHVzZXMgYSBjb21wbGV4IGZvcm1hdCAoWC41MDkp
-IGZvciBwdWJsaWMga2V5cy4NCj4gPg0KPiA+IC0gRXJpYw0K
+This series of patches aims to replace the enum led_brightness in
+include/linux/leds.h with unsigned int, as requested in the TODO file in
+the drivers/leds folder. The first step is to change the old definitions
+LED_OFF, LED_ON, LED_HALF and LED_FULL with the values.
+
+This was done using find/grep/sed and later I did a review of the patch
+to check that everything was right. A compilation using allmodconfig was
+done to test that nothing broke.
+
+I have more patches coming that will replace all the enum led_brightness
+with unsigned int, as the led class now has support for max_brightness.
+
+Please help review this patch.
+
+Best regards,
+
+Signed-off-by: Luiz Sampaio <sampaio.ime@gmail.com>
+
+Luiz Sampaio (31):
+  gpu: nouveau: nouveau_led: changing LED_FULL to actual value
+  hid: changing LED_* from enum led_brightness to actual value
+  hwmon: pmbus: changing LED_* from enum led_brightness to actual value
+  iio: light: cm3605: changing LED_* from enum led_brightness to actual
+    value
+  input: keyboard: changing LED_* from enum led_brightness to actual
+    value
+  input: misc: changing LED_* from enum led_brightness to actual value
+  input: touchscreen: changing LED_* from enum led_brightness to actual
+    value
+  leds: changing LED_* from enum led_brightness to actual value
+  macintosh: changing LED_* from enum led_brightness to actual value
+  media: radio: changing LED_* from enum led_brightness to actual value
+  media: rc: changing LED_* from enum led_brightness to actual value
+  media: v4l2-core: changing LED_* from enum led_brightness to actual
+    value
+  mmc: changing LED_* from enum led_brightness to actual value
+  net: wireless: ath: changing LED_* from enum led_brightness to actual
+    value
+  net: wireless: atmel: changing LED_* from enum led_brightness to
+    actual value
+  net: broadcom: changing LED_* from enum led_brightness to actual value
+  net: intersil: changing LED_* from enum led_brightness to actual value
+  net: wireless: ralink: changing LED_* from enum led_brightness to
+    actual value
+  net: realtek: changing LED_* from enum led_brightness to actual value
+  platform: x86: changing LED_* from enum led_brightness to actual value
+  power: supply: changing LED_* from enum led_brightness to actual value
+  tty: vt: changing LED_* from enum led_brightness to actual value
+  usb: core: changing LED_* from enum led_brightness to actual value
+  video: backlight: changing LED_* from enum led_brightness to actual
+    value
+  include: linux: leds: changing LED_* from enum led_brightness to
+    actual value
+  net: bluetooth: changing LED_* from enum led_brightness to actual
+    value
+  net: mac80211 : changing LED_* from enum led_brightness to actual
+    value
+  net: netfilter: changing LED_* from enum led_brightness to actual
+    value
+  net: rfkill: changing LED_* from enum led_brightness to actual value
+  sound: core: changing LED_* from enum led_brightness to actual value
+  sound: soc: sof: changing LED_* from enum led_brightness to actual
+    value
+
+ drivers/gpu/drm/nouveau/nouveau_led.c         |  4 +--
+ drivers/hid/hid-bigbenff.c                    | 10 +++----
+ drivers/hid/hid-elan.c                        |  2 +-
+ drivers/hid/hid-lenovo.c                      |  2 +-
+ drivers/hid/hid-lg4ff.c                       | 10 +++----
+ drivers/hid/hid-picolcd_leds.c                |  6 ++--
+ drivers/hid/hid-playstation.c                 |  2 +-
+ drivers/hid/hid-sony.c                        |  4 +--
+ drivers/hid/hid-steelseries.c                 | 14 ++++-----
+ drivers/hid/hid-u2fzero.c                     |  4 +--
+ drivers/hid/hid-wiimote-modules.c             |  4 +--
+ drivers/hid/wacom_sys.c                       | 16 +++++-----
+ drivers/hid/wacom_wac.c                       |  2 +-
+ drivers/hwmon/pmbus/ibm-cffps.c               |  8 ++---
+ drivers/iio/light/cm3605.c                    | 10 +++----
+ drivers/input/keyboard/cap11xx.c              |  2 +-
+ drivers/input/keyboard/qt2160.c               |  6 ++--
+ drivers/input/keyboard/tm2-touchkey.c         | 12 ++++----
+ drivers/input/misc/apanel.c                   |  4 +--
+ drivers/input/misc/ims-pcu.c                  |  2 +-
+ drivers/input/misc/wistron_btns.c             |  8 ++---
+ drivers/input/touchscreen/stmfts.c            |  4 +--
+ drivers/leds/blink/leds-lgm-sso.c             |  8 ++---
+ drivers/leds/flash/leds-ktd2692.c             |  4 +--
+ drivers/leds/flash/leds-lm3601x.c             | 10 +++----
+ drivers/leds/flash/leds-mt6360.c              | 10 +++----
+ drivers/leds/flash/leds-rt4505.c              |  8 ++---
+ drivers/leds/flash/leds-rt8515.c              |  4 +--
+ drivers/leds/flash/leds-sgm3140.c             |  4 +--
+ drivers/leds/led-class.c                      |  6 ++--
+ drivers/leds/led-core.c                       |  8 ++---
+ drivers/leds/led-triggers.c                   |  4 +--
+ drivers/leds/leds-adp5520.c                   |  2 +-
+ drivers/leds/leds-an30259a.c                  |  8 ++---
+ drivers/leds/leds-apu.c                       |  6 ++--
+ drivers/leds/leds-ariel.c                     |  8 ++---
+ drivers/leds/leds-asic3.c                     |  2 +-
+ drivers/leds/leds-aw2013.c                    |  6 ++--
+ drivers/leds/leds-bcm6328.c                   | 14 ++++-----
+ drivers/leds/leds-bcm6358.c                   | 14 ++++-----
+ drivers/leds/leds-bd2802.c                    | 14 ++++-----
+ drivers/leds/leds-clevo-mail.c                |  6 ++--
+ drivers/leds/leds-cobalt-qube.c               |  2 +-
+ drivers/leds/leds-cpcap.c                     | 10 +++----
+ drivers/leds/leds-da903x.c                    |  4 +--
+ drivers/leds/leds-da9052.c                    |  4 +--
+ drivers/leds/leds-dac124s085.c                |  2 +-
+ drivers/leds/leds-el15203000.c                |  4 +--
+ drivers/leds/leds-gpio.c                      |  4 +--
+ drivers/leds/leds-is31fl319x.c                |  2 +-
+ drivers/leds/leds-lm3530.c                    |  4 +--
+ drivers/leds/leds-lm3532.c                    |  8 ++---
+ drivers/leds/leds-lm3533.c                    |  4 +--
+ drivers/leds/leds-lm3692x.c                   |  2 +-
+ drivers/leds/leds-lm3697.c                    |  6 ++--
+ drivers/leds/leds-lp3952.c                    |  4 +--
+ drivers/leds/leds-lt3593.c                    |  2 +-
+ drivers/leds/leds-max77650.c                  |  4 +--
+ drivers/leds/leds-menf21bmc.c                 |  2 +-
+ drivers/leds/leds-mlxcpld.c                   | 22 +++++++-------
+ drivers/leds/leds-mlxreg.c                    | 10 +++----
+ drivers/leds/leds-mt6323.c                    |  2 +-
+ drivers/leds/leds-netxbig.c                   |  4 +--
+ drivers/leds/leds-nic78bx.c                   |  2 +-
+ drivers/leds/leds-ns2.c                       |  4 +--
+ drivers/leds/leds-ot200.c                     |  2 +-
+ drivers/leds/leds-pca9532.c                   |  6 ++--
+ drivers/leds/leds-pca955x.c                   | 30 +++++++++----------
+ drivers/leds/leds-pca963x.c                   |  4 +--
+ drivers/leds/leds-pm8058.c                    |  8 ++---
+ drivers/leds/leds-powernv.c                   | 12 ++++----
+ drivers/leds/leds-pwm.c                       |  2 +-
+ drivers/leds/leds-rb532.c                     |  2 +-
+ drivers/leds/leds-regulator.c                 |  2 +-
+ drivers/leds/leds-sc27xx-bltc.c               |  6 ++--
+ drivers/leds/leds-spi-byte.c                  |  2 +-
+ drivers/leds/leds-ss4200.c                    | 12 ++++----
+ drivers/leds/leds-sunfire.c                   |  2 +-
+ drivers/leds/leds-syscon.c                    |  2 +-
+ drivers/leds/leds-tca6507.c                   |  8 ++---
+ drivers/leds/leds-wm831x-status.c             |  8 ++---
+ drivers/leds/leds-wm8350.c                    |  8 ++---
+ drivers/leds/simple/simatic-ipc-leds.c        | 10 +++----
+ drivers/leds/trigger/ledtrig-activity.c       |  2 +-
+ drivers/leds/trigger/ledtrig-backlight.c      |  4 +--
+ drivers/leds/trigger/ledtrig-camera.c         |  4 +--
+ drivers/leds/trigger/ledtrig-cpu.c            |  4 +--
+ drivers/leds/trigger/ledtrig-gpio.c           |  4 +--
+ drivers/leds/trigger/ledtrig-heartbeat.c      |  4 +--
+ drivers/leds/trigger/ledtrig-netdev.c         |  6 ++--
+ drivers/leds/trigger/ledtrig-oneshot.c        |  6 ++--
+ drivers/leds/trigger/ledtrig-panic.c          |  2 +-
+ drivers/leds/trigger/ledtrig-pattern.c        |  2 +-
+ drivers/leds/trigger/ledtrig-timer.c          |  2 +-
+ drivers/leds/trigger/ledtrig-transient.c      |  6 ++--
+ drivers/leds/trigger/ledtrig-tty.c            |  4 +--
+ drivers/macintosh/via-pmu-led.c               |  2 +-
+ drivers/media/radio/radio-shark.c             |  6 ++--
+ drivers/media/radio/radio-shark2.c            |  4 +--
+ drivers/media/rc/rc-main.c                    |  4 +--
+ drivers/media/rc/redrat3.c                    |  4 +--
+ drivers/media/rc/ttusbir.c                    |  4 +--
+ drivers/media/rc/winbond-cir.c                |  6 ++--
+ .../media/v4l2-core/v4l2-flash-led-class.c    |  4 +--
+ drivers/mmc/core/core.c                       |  4 +--
+ drivers/mmc/host/rtsx_usb_sdmmc.c             |  4 +--
+ drivers/mmc/host/sdhci.c                      |  4 +--
+ drivers/net/wireless/ath/ath5k/led.c          |  2 +-
+ drivers/net/wireless/ath/ath9k/gpio.c         |  4 +--
+ drivers/net/wireless/ath/ath9k/htc_drv_gpio.c |  4 +--
+ drivers/net/wireless/atmel/at76c50x-usb.c     |  4 +--
+ drivers/net/wireless/broadcom/b43/leds.c      |  2 +-
+ .../net/wireless/broadcom/b43legacy/leds.c    |  2 +-
+ drivers/net/wireless/intersil/p54/led.c       |  2 +-
+ .../net/wireless/ralink/rt2x00/rt2400pci.c    |  2 +-
+ .../net/wireless/ralink/rt2x00/rt2500pci.c    |  2 +-
+ .../net/wireless/ralink/rt2x00/rt2500usb.c    |  2 +-
+ .../net/wireless/ralink/rt2x00/rt2800lib.c    |  4 +--
+ .../net/wireless/ralink/rt2x00/rt2x00leds.c   | 16 +++++-----
+ drivers/net/wireless/ralink/rt2x00/rt61pci.c  |  4 +--
+ drivers/net/wireless/ralink/rt2x00/rt73usb.c  |  4 +--
+ .../wireless/realtek/rtl818x/rtl8187/leds.c   |  4 +--
+ drivers/platform/x86/acer-wmi.c               |  6 ++--
+ drivers/platform/x86/asus-wireless.c          |  6 ++--
+ drivers/platform/x86/dell/dell-laptop.c       |  2 +-
+ drivers/platform/x86/dell/dell-wmi-led.c      |  4 +--
+ drivers/platform/x86/fujitsu-laptop.c         | 28 ++++++++---------
+ drivers/platform/x86/lg-laptop.c              | 18 +++++------
+ drivers/platform/x86/system76_acpi.c          |  4 +--
+ drivers/platform/x86/thinkpad_acpi.c          | 14 ++++-----
+ drivers/platform/x86/topstar-laptop.c         |  4 +--
+ drivers/platform/x86/toshiba_acpi.c           | 24 +++++++--------
+ drivers/power/supply/power_supply_leds.c      | 26 ++++++++--------
+ drivers/tty/vt/keyboard.c                     |  4 +--
+ drivers/usb/core/ledtrig-usbport.c            |  6 ++--
+ drivers/video/backlight/adp8860_bl.c          |  4 +--
+ drivers/video/backlight/adp8870_bl.c          |  4 +--
+ drivers/video/backlight/led_bl.c              |  2 +-
+ include/linux/leds.h                          |  2 +-
+ net/bluetooth/leds.c                          |  6 ++--
+ net/mac80211/led.c                            | 10 +++----
+ net/netfilter/xt_LED.c                        |  6 ++--
+ net/rfkill/core.c                             |  8 ++---
+ sound/core/control_led.c                      |  2 +-
+ sound/soc/sof/control.c                       |  4 +--
+ 145 files changed, 434 insertions(+), 434 deletions(-)
+
+-- 
+2.34.1
+

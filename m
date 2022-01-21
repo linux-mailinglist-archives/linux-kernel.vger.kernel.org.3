@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE11496451
+	by mail.lfdr.de (Postfix) with ESMTP id 03F3A496450
 	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 18:43:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381872AbiAURnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 12:43:15 -0500
-Received: from mailout1.samsung.com ([203.254.224.24]:28508 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351846AbiAURly (ORCPT
+        id S1349777AbiAURnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 12:43:13 -0500
+Received: from mailout4.samsung.com ([203.254.224.34]:22562 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351799AbiAURly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 21 Jan 2022 12:41:54 -0500
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220121174125epoutp0156f516eec45706cc3eedc4e10e817f04~MWff2MF3v0781207812epoutp01O
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 17:41:25 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220121174125epoutp0156f516eec45706cc3eedc4e10e817f04~MWff2MF3v0781207812epoutp01O
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220121174132epoutp042e6e3c89a4a9ddf46f3d4e0f72b41fe9~MWfmSwawp3155731557epoutp04C
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 17:41:32 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220121174132epoutp042e6e3c89a4a9ddf46f3d4e0f72b41fe9~MWfmSwawp3155731557epoutp04C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1642786885;
-        bh=QO7Efv/aOqqRVwW/VcbDf2iDe8o2v+2/bBZcyl5KdWk=;
+        s=mail20170921; t=1642786892;
+        bh=985kxxSSWol25Lsq22k35g6bDBdVQJpym2tkX6U27W4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oi0lXvsb9hY9iCd9Cb9SWf7kG+rXuw22LWWiv1RhlOi4JNlnOi/wcnF3r9MiLQxHd
-         KTWRdGyDv+w7hWtRHDrvvSGcouFUsm0/ZjEC0ckrV2BKlhfUkt30xhewH2ocX8RZeh
-         kZyFGIZ4eFBA3tnnjR2TbsXMLqxl3x/BDawq5MxM=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20220121174124epcas5p19375005291747699d6f8653fc921fd20~MWfe22H-m1336113361epcas5p1k;
-        Fri, 21 Jan 2022 17:41:24 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.176]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4JgRWM1VCwz4x9Pv; Fri, 21 Jan
-        2022 17:41:19 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        DC.30.06423.E30FAE16; Sat, 22 Jan 2022 02:41:19 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220121174117epcas5p4c1a7afa8b63ce4c55f05b6411d12fc09~MWfYb1UXy0759707597epcas5p4l;
-        Fri, 21 Jan 2022 17:41:17 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220121174117epsmtrp16006007c875eed904082e1b29ee6e0dd~MWfYZnzlo2608726087epsmtrp1j;
-        Fri, 21 Jan 2022 17:41:17 +0000 (GMT)
-X-AuditID: b6c32a49-b13ff70000001917-f3-61eaf03e6315
+        b=gYVky7ygmyBvLs9PkU2NBMHpEpqKk3DUxPtf/LOxLX2h/PSYQhAEleq+iUfnKJv4F
+         9C8AV7J2a326yrIba7onTHidAKFcWTqlcx336yDI4XmR93wcV0FKx9ps1OOq+b/8P5
+         M6cVZ3IY4SPJDjy+Sxzz4LBGC0nXpWJxvHEzB9lo=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20220121174131epcas5p41cd9651eee6c5b4196d54696018a1cdc~MWflIMdRA0297102971epcas5p48;
+        Fri, 21 Jan 2022 17:41:31 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.176]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4JgRWR0rBdz4x9Pt; Fri, 21 Jan
+        2022 17:41:23 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        33.9B.46822.16FEAE16; Sat, 22 Jan 2022 02:37:37 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220121174121epcas5p3f03348e9bd2d159dd00ce126506cf8ce~MWfcJVs4L2795427954epcas5p39;
+        Fri, 21 Jan 2022 17:41:21 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220121174121epsmtrp2ffd4db0e0c9b5f7308df009f2c6b9a51~MWfcIGW9W1824918249epsmtrp2z;
+        Fri, 21 Jan 2022 17:41:21 +0000 (GMT)
+X-AuditID: b6c32a4a-dfbff7000000b6e6-60-61eaef61111d
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        06.96.29871.D30FAE16; Sat, 22 Jan 2022 02:41:17 +0900 (KST)
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        44.C7.08738.140FAE16; Sat, 22 Jan 2022 02:41:21 +0900 (KST)
 Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
         [107.108.73.139]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220121174114epsmtip25b49ac115bddb5227011d7999814e6ba~MWfVPv9A21002010020epsmtip2n;
-        Fri, 21 Jan 2022 17:41:14 +0000 (GMT)
+        20220121174118epsmtip2c5f6ab9420d1a5034a4dd6aba0153adc~MWfZhTaPu1230312303epsmtip2j;
+        Fri, 21 Jan 2022 17:41:18 +0000 (GMT)
 From:   Alim Akhtar <alim.akhtar@samsung.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
@@ -58,156 +58,81 @@ Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
         s.nawrocki@samsung.com, linux-samsung-soc@vger.kernel.org,
         pankaj.dubey@samsung.com, sboyd@kernel.org,
         Alim Akhtar <alim.akhtar@samsung.com>, linux-fsd@tesla.com,
-        Arjun K V <arjun.kv@samsung.com>,
-        Aswani Reddy <aswani.reddy@samsung.com>,
-        Ajay Kumar <ajaykumar.rs@samsung.com>,
-        Sriranjani P <sriranjani.p@samsung.com>,
-        Chandrasekar R <rcsekar@samsung.com>,
-        Shashank Prashar <s.prashar@samsung.com>
-Subject: [PATCH v3 14/16] arm64: dts: fsd: Add initial device tree support
-Date:   Fri, 21 Jan 2022 22:58:38 +0530
-Message-Id: <20220121172840.12121-15-alim.akhtar@samsung.com>
+        Shashank Prashar <s.prashar@samsung.com>,
+        Aswani Reddy <aswani.reddy@samsung.com>
+Subject: [PATCH v3 15/16] arm64: dts: fsd: Add initial pinctrl support
+Date:   Fri, 21 Jan 2022 22:58:39 +0530
+Message-Id: <20220121172840.12121-16-alim.akhtar@samsung.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220121172840.12121-1-alim.akhtar@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOJsWRmVeSWpSXmKPExsWy7bCmlq79h1eJBscbWSwOvD/IYvFg3jY2
-        i+Urd7FY/J10jN3i0Oat7Bbvl/UwWsw/co7VYuPbH0wWU/4sZ7LY9Pgaq8XHnnusFg9fhVtc
-        3jWHzWLG+X1MFqeuf2azWLT1C7vFrAs7WC1a9x5htzj8pp3VYt6OuYwW/65tZLF4fP0Pm8Xt
-        N+tYHcQ91sxbw+jx+9ckRo9ZDb1sHptWdbJ53Lm2h81j85J6jysnmlg9+rasYvT41zSX3ePz
-        JrkArqhsm4zUxJTUIoXUvOT8lMy8dFsl7+B453hTMwNDXUNLC3MlhbzE3FRbJRefAF23zByg
-        b5UUyhJzSoFCAYnFxUr6djZF+aUlqQoZ+cUltkqpBSk5BSYFesWJucWleel6eaklVoYGBkam
-        QIUJ2RlT5h1jLrixj7Hi7LeVrA2MWyYzdjFyckgImEjs6ZkPZgsJ7GaU6Ozn6mLkArI/MUq8
-        f/OMFSLxjVFi8xu3LkYOsIYvq9UhavYySuxpmcYC4bQwSayY+gesgU1AW+Lu9C1MILaIgJvE
-        jcYOJpAiZoFPLBL9x/6ygySEBbwkDv85zg4ylUVAVeLY7kKQMK+ArcSNN7+YIa6Tl1i94QCY
-        zQkUf312HjPIHAmBFxwSU9edYoEocpE49+ce1DvCEq+Ob2GHsKUkXva3sUNcnS3Rs8sYIlwj
-        sXTeMahWe4kDV+awgJQwC2hKrN+lDxJmFuCT6P39hAmik1eio00IolpVovndVahOaYmJ3d2s
-        ECUeEgeWc0FCagIwSLY6T2CUnYUwcwEj4ypGydSC4tz01GLTAsO81HJ4LCXn525iBKdgLc8d
-        jHcffNA7xMjEwXiIUYKDWUmEtyD/VaIQb0piZVVqUX58UWlOavEhRlNgeE1klhJNzgdmgbyS
-        eEMTSwMTMzMzE0tjM0Mlcd7T6RsShQTSE0tSs1NTC1KLYPqYODilGpjcopbsZVNlWOq59lj2
-        r2MHdI/pSSbOZ7zibCD/R/7rGhZTGT6tPqPone91CmV6btmuFZmxrM5gwbldxz/o8Grp7yqa
-        mu1W+rah/u/OE1EC9U0lrBuWrnU6vkrtYc/XN+f19hhIrVFtjfxf75uV8yVadk/8T9mH0Uv6
-        qqL1NfbXhjOprTqlL/nDUSDZr9ry95KlF/X3+L9k3BiluGob83tp/ewDJrF1M+b//ymrs4Db
-        5NkZHhM5jsOt1ln7X//amrSjzzDlxV3n3bOv/55WfizOdZvM14Muy47LreFy6nuQ/FLDkz9P
-        wkt/40yZ5VMXKG7/nlpy/NL6d++d5ym94H46v+5bWq/cYs7Wdz6LIqSVWIozEg21mIuKEwFf
-        U4f/SgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrHLMWRmVeSWpSXmKPExsWy7bCSvK7th1eJBtOmylsceH+QxeLBvG1s
-        FstX7mKx+DvpGLvFoc1b2S3eL+thtJh/5Byrxca3P5gspvxZzmSx6fE1VouPPfdYLR6+Cre4
-        vGsOm8WM8/uYLE5d/8xmsWjrF3aLWRd2sFq07j3CbnH4TTurxbwdcxkt/l3byGLx+PofNovb
-        b9axOoh7rJm3htHj969JjB6zGnrZPDat6mTzuHNtD5vH5iX1HldONLF69G1Zxejxr2kuu8fn
-        TXIBXFFcNimpOZllqUX6dglcGVPmHWMuuLGPseLst5WsDYxbJjN2MXJwSAiYSHxZrd7FyMUh
-        JLCbUWJ5RzdrFyMnUFxa4vrGCewQtrDEyn/PwWwhgSYmiWO3+UFsNgFtibvTtzCB2CICHhJt
-        /+4xgwxiFuhgldi96j0zSEJYwEvi8J/j7CDLWARUJY7tLgQJ8wrYStx484sZYr68xOoNB8Bs
-        TqD467PzmCF22Ug0z9rKNIGRbwEjwypGydSC4tz03GLDAsO81HK94sTc4tK8dL3k/NxNjOAo
-        0tLcwbh91Qe9Q4xMHIyHGCU4mJVEeAvyXyUK8aYkVlalFuXHF5XmpBYfYpTmYFES573QdTJe
-        SCA9sSQ1OzW1ILUIJsvEwSnVwORSVjWhPTcs4MgK/rrv26LqFOolC25usHt2fMPZ61qGpxfK
-        lXpuXfDLzyTrvqU5h8YvzrCUCQ/e+1yN17h55Pa8vdcYVZbJLJ8rM8XzXWSHmPC2VtlLM7PX
-        NEm7qCZp5szJDJA9f3vhjzf/t7x+krfcWeL74v7cy/wfZTdP22e0SVT2xJoXq0y2cdiKu/im
-        zky+LqnmkfG+MHwDf7PlUfPvryfeuPAma8H8jRWpZ904bSQtVYQvL5x1bMpO+3TXLy2bX7w1
-        +MUwW/h27zaVG/sFNsVP7fy3PLLc8r/enHJd/85rrDNfRUd+yixe6rPq35I9j3J3Hp3690Sh
-        sbim//r6RwlOeb8P3RE41Vn0/E6CEktxRqKhFnNRcSIA6mT+bhEDAAA=
-X-CMS-MailID: 20220121174117epcas5p4c1a7afa8b63ce4c55f05b6411d12fc09
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKJsWRmVeSWpSXmKPExsWy7bCmum7i+1eJBifmy1g8mLeNzeLvpGPs
+        Foc2b2W3eL+sh9Fi/pFzrBYb3/5gspjyZzmTxabH11gtPvbcY7V4+Crc4vKuOWwWM87vY7I4
+        df0zm8WirV/YLVr3HmG3OPymndVi3o65jBb/rm1ksXh8/Q+bg7DHmnlrGD1+/5rE6DGroZfN
+        Y9OqTjaPO9f2sHlsXlLvceVEE6tH35ZVjB7/muaye3zeJBfAFZVtk5GamJJapJCal5yfkpmX
+        bqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr5OIToOuWmQP0mZJCWWJOKVAoILG4WEnfzqYov7Qk
+        VSEjv7jEVim1ICWnwKRArzgxt7g0L10vL7XEytDAwMgUqDAhO+PGwQ1sBdddKhomNDI3MH4y
+        62Lk4JAQMJHYsiGoi5GTQ0hgN6PE2tfaXYxcQPYnRokJl++wQzifGSUWX7rDCFIF0vBq+xpm
+        iMQuRonej8+YIJwWJoneA8fYQarYBLQl7k7fwgRiiwi4Sdxo7AArYha4xizxe3IzM0hCGChx
+        /txCMJtFQFVi7YbVYM28ArYSZ1qOQK2Tl1i94QBYDSdQ/PXZeWCrJQSOcEicOD2HFaLIReL+
+        wSVsELawxKvjW9ghbCmJz+/2skE8mi3Rs8sYIlwjsXTeMRYI217iwJU5LCAlzAKaEut36YOE
+        mQX4JHp/P2GC6OSV6GgTgqhWlWh+dxWqU1piYnc31AEeEssP3WeBhMMEYDAen8E8gVF2FsLU
+        BYyMqxglUwuKc9NTi00LjPJSy+HxlJyfu4kRnF61vHYwPnzwQe8QIxMH4yFGCQ5mJRHegvxX
+        iUK8KYmVValF+fFFpTmpxYcYTYFBNpFZSjQ5H5jg80riDU0sDUzMzMxMLI3NDJXEeU+nb0gU
+        EkhPLEnNTk0tSC2C6WPi4JRqYApy/fbD7yej8vrLCmwTzpnwVbbqMszS/aF0RTnmxa5w5Z+L
+        opJdo5Wem1f8OynlGXtwb3IGs/meFwwTVN62bXy4IUnkDNsqpdad1Y9EG3Pi96/bvujW/jcn
+        bnKxTTqaE3zdr+Y787OOa9lRrce9VbIfC+1TtCnqiQjWnal962ec2M3Ab6Is24I0uBxkFR7o
+        9SysnaLdGbOqX+fEvcRvFtHFdqkX2+rN+oSjxNWsjFQNigR9tual3Lme36S4N91f6kz9RgZ+
+        PdeUqdm7yteJ3VlX/tBeXfUAq6d5aseTheaF6vrPj8/9ZhEvIziPwUrhuz0bH0dQgfCiln/f
+        E/uFFMMuL3qyglHvnZ1XZogSS3FGoqEWc1FxIgATU/ejOAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNLMWRmVeSWpSXmKPExsWy7bCSvK7jh1eJBt93y1o8mLeNzeLvpGPs
+        Foc2b2W3eL+sh9Fi/pFzrBYb3/5gspjyZzmTxabH11gtPvbcY7V4+Crc4vKuOWwWM87vY7I4
+        df0zm8WirV/YLVr3HmG3OPymndVi3o65jBb/rm1ksXh8/Q+bg7DHmnlrGD1+/5rE6DGroZfN
+        Y9OqTjaPO9f2sHlsXlLvceVEE6tH35ZVjB7/muaye3zeJBfAFcVlk5Kak1mWWqRvl8CVcePg
+        BraC6y4VDRMamRsYP5l1MXJySAiYSLzavoa5i5GLQ0hgB6PEt12PGSES0hLXN05gh7CFJVb+
+        e84OUdTEJPFuwQ1mkASbgLbE3elbmEBsEQEPibZ/98AmMQu8YJZY8eIpWLewgJvE+XMLwRpY
+        BFQl1m5YDRbnFbCVONNyBGqbvMTqDQfAajiB4q/PzgOzhQRsJJpnbWWawMi3gJFhFaNkakFx
+        bnpusWGBUV5quV5xYm5xaV66XnJ+7iZGcHxoae1g3LPqg94hRiYOxkOMEhzMSiK8BfmvEoV4
+        UxIrq1KL8uOLSnNSiw8xSnOwKInzXug6GS8kkJ5YkpqdmlqQWgSTZeLglGpgsprmv19A+46i
+        OdOXZ03vjxYK38tXzQz71jBvR9BHxu+3UnddMT7Y8G5/tucz4TUanNzxNwPKFXQSeRgkNqrs
+        WCbYqGjpsFmMfemXmf5O1nfZ3M2yQx5M3Nd0vrTn9vM9Ardub9QRO34xtFI2RCwr8yPLqgmz
+        0lcdPBz2/Z/i6apHVzaKH85gkLqyK9/k7bv3PziLdJ1WKOyb/OZ3+Yxo4Q87Tv5foG1peWK1
+        Fd/nc08bveKvPNgf8LupuSc1wUe6a9/humu76m68ddy26kyj+svOI5vu59wrfyg9ac3a+kmf
+        mCo6p6s6LpAIipP+4zFfYM4KyYsrzzhf/LNtm6q/YWPZmjWablcmn2f32bqObaISS3FGoqEW
+        c1FxIgDNGDrH/gIAAA==
+X-CMS-MailID: 20220121174121epcas5p3f03348e9bd2d159dd00ce126506cf8ce
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220121174117epcas5p4c1a7afa8b63ce4c55f05b6411d12fc09
+X-CMS-RootMailID: 20220121174121epcas5p3f03348e9bd2d159dd00ce126506cf8ce
 References: <20220121172840.12121-1-alim.akhtar@samsung.com>
-        <CGME20220121174117epcas5p4c1a7afa8b63ce4c55f05b6411d12fc09@epcas5p4.samsung.com>
+        <CGME20220121174121epcas5p3f03348e9bd2d159dd00ce126506cf8ce@epcas5p3.samsung.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add initial device tree support for "Full Self-Driving" (FSD) SoC
-This SoC contain three clusters of four cortex-a72 CPUs and various
-peripheral IPs.
+Add initial pin configuration nodes for FSD SoC.
 
 Cc: linux-fsd@tesla.com
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Signed-off-by: Arjun K V <arjun.kv@samsung.com>
-Signed-off-by: Aswani Reddy <aswani.reddy@samsung.com>
-Signed-off-by: Ajay Kumar <ajaykumar.rs@samsung.com>
-Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
-Signed-off-by: Chandrasekar R <rcsekar@samsung.com>
 Signed-off-by: Shashank Prashar <s.prashar@samsung.com>
+Signed-off-by: Aswani Reddy <aswani.reddy@samsung.com>
 Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
 ---
- MAINTAINERS                           |   8 +
- arch/arm64/Kconfig.platforms          |   6 +
- arch/arm64/boot/dts/Makefile          |   1 +
- arch/arm64/boot/dts/tesla/Makefile    |   3 +
- arch/arm64/boot/dts/tesla/fsd-evb.dts |  39 ++
- arch/arm64/boot/dts/tesla/fsd.dtsi    | 651 ++++++++++++++++++++++++++
- 6 files changed, 708 insertions(+)
- create mode 100644 arch/arm64/boot/dts/tesla/Makefile
- create mode 100644 arch/arm64/boot/dts/tesla/fsd-evb.dts
- create mode 100644 arch/arm64/boot/dts/tesla/fsd.dtsi
+ arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi | 335 +++++++++++++++++++++
+ arch/arm64/boot/dts/tesla/fsd.dtsi         |  22 ++
+ 2 files changed, 357 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 27730a5a6345..ed1c10c26e5b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2754,6 +2754,14 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/media/tegra-cec.txt
- F:	drivers/media/cec/platform/tegra/
- 
-+ARM/TESLA FSD SoC SUPPORT
-+M:	Alim Akhtar <alim.akhtar@samsung.com>
-+M:	linux-fsd@tesla.com
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+L:	linux-samsung-soc@vger.kernel.org
-+S:	Maintained
-+F:	arch/arm64/boot/dts/tesla*
-+
- ARM/TETON BGA MACHINE SUPPORT
- M:	"Mark F. Brown" <mark.brown314@gmail.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 7d5d58800170..739254493d6a 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -268,6 +268,12 @@ config ARCH_TEGRA
- 	help
- 	  This enables support for the NVIDIA Tegra SoC family.
- 
-+config ARCH_TESLA_FSD
-+	bool "ARMv8 based Tesla platform"
-+	depends on ARCH_EXYNOS
-+	help
-+	  Support for ARMv8 based Tesla platforms.
-+
- config ARCH_SPRD
- 	bool "Spreadtrum SoC platform"
- 	help
-diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
-index 639e01a4d855..1ba04e31a438 100644
---- a/arch/arm64/boot/dts/Makefile
-+++ b/arch/arm64/boot/dts/Makefile
-@@ -27,6 +27,7 @@ subdir-y += rockchip
- subdir-y += socionext
- subdir-y += sprd
- subdir-y += synaptics
-+subdir-y += tesla
- subdir-y += ti
- subdir-y += toshiba
- subdir-y += xilinx
-diff --git a/arch/arm64/boot/dts/tesla/Makefile b/arch/arm64/boot/dts/tesla/Makefile
+diff --git a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
 new file mode 100644
-index 000000000000..a1ee50e2fd06
+index 000000000000..8f2c61eacf61
 --- /dev/null
-+++ b/arch/arm64/boot/dts/tesla/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+dtb-$(CONFIG_ARCH_TESLA_FSD) += \
-+	fsd-evb.dtb
-diff --git a/arch/arm64/boot/dts/tesla/fsd-evb.dts b/arch/arm64/boot/dts/tesla/fsd-evb.dts
-new file mode 100644
-index 000000000000..5af560c1b5e6
---- /dev/null
-+++ b/arch/arm64/boot/dts/tesla/fsd-evb.dts
-@@ -0,0 +1,39 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++++ b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+@@ -0,0 +1,335 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Tesla FSD board device tree source
++ * Tesla Full Self-Driving SoC device tree source
 + *
 + * Copyright (c) 2017-2021 Samsung Electronics Co., Ltd.
 + *		https://www.samsung.com
@@ -215,692 +140,370 @@ index 000000000000..5af560c1b5e6
 + *		https://www.tesla.com
 + */
 +
-+/dts-v1/;
-+#include "fsd.dtsi"
++#include <dt-bindings/pinctrl/samsung.h>
 +
-+/ {
-+	model = "Tesla Full Self-Driving (FSD) Evaluation board";
-+	compatible = "tesla,fsd-evb", "tesla,fsd";
++&pinctrl_fsys0 {
++	gpf0: gpf0 {
++		gpio-controller;
++		#gpio-cells = <2>;
 +
-+	aliases {
-+		serial0 = &serial_0;
-+		serial1 = &serial_1;
++		interrupt-controller;
++		#interrupt-cells = <2>;
 +	};
 +
-+	chosen {
-+		stdout-path = &serial_0;
++	gpf1: gpf1 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
 +	};
 +
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x0 0x80000000 0x2 0x00000000>;
++	gpf6: gpf6 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpf4: gpf4 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpf5: gpf5 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
 +	};
 +};
 +
-+&fin_pll {
-+	clock-frequency = <24000000>;
++&pinctrl_peric {
++	gpc8: gpc8 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpf2: gpf2 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpf3: gpf3 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpd0: gpd0 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpb0: gpb0 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpb1: gpb1 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpb4: gpb4 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpb5: gpb5 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpb6: gpb6 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpb7: gpb7 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpd1: gpd1 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpd2: gpd2 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpd3: gpd3 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpg0: gpg0 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpg1: gpg1 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpg2: gpg2 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpg3: gpg3 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpg4: gpg4 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpg5: gpg5 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpg6: gpg6 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	gpg7: gpg7 {
++		gpio-controller;
++		#gpio-cells = <2>;
++
++		interrupt-controller;
++		#interrupt-cells = <2>;
++	};
++
++	pwm0_out: pwm0-out-pins {
++		samsung,pins = "gpb6-1";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
++		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV2>;
++	};
++
++	pwm1_out: pwm1-out-pins {
++		samsung,pins = "gpb6-5";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
++		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV2>;
++	};
++
++	hs_i2c0_bus: hs-i2c0-bus-pins {
++		samsung,pins = "gpb0-0", "gpb0-1";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
++		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
++	};
++
++	hs_i2c1_bus: hs-i2c1-bus-pins {
++		samsung,pins = "gpb0-2", "gpb0-3";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
++		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
++	};
++
++	hs_i2c2_bus: hs-i2c2-bus-pins {
++		samsung,pins = "gpb0-4", "gpb0-5";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
++		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
++	};
++
++	hs_i2c3_bus: hs-i2c3-bus-pins {
++		samsung,pins = "gpb0-6", "gpb0-7";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
++		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
++	};
++
++	hs_i2c4_bus: hs-i2c4-bus-pins {
++		samsung,pins = "gpb1-0", "gpb1-1";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
++		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
++	};
++
++	hs_i2c5_bus: hs-i2c5-bus-pins {
++		samsung,pins = "gpb1-2", "gpb1-3";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
++		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
++	};
++
++	hs_i2c6_bus: hs-i2c6-bus-pins {
++		samsung,pins = "gpb1-4", "gpb1-5";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
++		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
++	};
++
++	hs_i2c7_bus: hs-i2c7-bus-pins {
++		samsung,pins = "gpb1-6", "gpb1-7";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
++		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
++	};
++
++	uart0_data: uart0-data-pins {
++		samsung,pins = "gpb7-0", "gpb7-1";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
++		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
++	};
++
++	uart1_data: uart1-data-pins {
++		samsung,pins = "gpb7-4", "gpb7-5";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
++		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
++	};
++
++	spi0_bus: spi0-bus-pins {
++		samsung,pins = "gpb4-0", "gpb4-2", "gpb4-3";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
++		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
++	};
++
++	spi1_bus: spi1-bus-pins {
++		samsung,pins = "gpb4-4", "gpb4-6", "gpb4-7";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
++		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
++	};
++
++	spi2_bus: spi2-bus-pins {
++		samsung,pins = "gpb5-0", "gpb5-2", "gpb5-3";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
++		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
++	};
 +};
 +
-+&serial_0 {
-+	status = "okay";
++&pinctrl_pmu {
++	gpq0: gpq0 {
++		gpio-controller;
++		#gpio-cells = <2>;
++	};
 +};
 diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
-new file mode 100644
-index 000000000000..9a2b88f58c13
---- /dev/null
+index 9a2b88f58c13..bab63c9f79dc 100644
+--- a/arch/arm64/boot/dts/tesla/fsd.dtsi
 +++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
-@@ -0,0 +1,651 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Tesla Full Self-Driving SoC device tree source
-+ *
-+ * Copyright (c) 2017-2022 Samsung Electronics Co., Ltd.
-+ *		https://www.samsung.com
-+ * Copyright (c) 2017-2022 Tesla, Inc.
-+ *		https://www.tesla.com
-+ */
+@@ -26,6 +26,9 @@ aliases {
+ 		i2c5 = &hsi2c_5;
+ 		i2c6 = &hsi2c_6;
+ 		i2c7 = &hsi2c_7;
++		pinctrl0 = &pinctrl_fsys0;
++		pinctrl1 = &pinctrl_peric;
++		pinctrl2 = &pinctrl_pmu;
+ 	};
+ 
+ 	cpus {
+@@ -647,5 +650,24 @@ hsi2c_7: hsi2c@14270000 {
+ 			clock-names = "hsi2c";
+ 			status = "disabled";
+ 		};
 +
-+#include <dt-bindings/clock/fsd-clk.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+/ {
-+	compatible = "tesla,fsd";
-+	interrupt-parent = <&gic>;
-+	#address-cells = <2>;
-+	#size-cells = <2>;
-+
-+	aliases {
-+		i2c0 = &hsi2c_0;
-+		i2c1 = &hsi2c_1;
-+		i2c2 = &hsi2c_2;
-+		i2c3 = &hsi2c_3;
-+		i2c4 = &hsi2c_4;
-+		i2c5 = &hsi2c_5;
-+		i2c6 = &hsi2c_6;
-+		i2c7 = &hsi2c_7;
-+	};
-+
-+	cpus {
-+		#address-cells = <2>;
-+		#size-cells = <0>;
-+
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&cpucl0_0>;
-+				};
-+				core1 {
-+					cpu = <&cpucl0_1>;
-+				};
-+				core2 {
-+					cpu = <&cpucl0_2>;
-+				};
-+				core3 {
-+					cpu = <&cpucl0_3>;
-+				};
-+			};
-+
-+			cluster1 {
-+				core0 {
-+					cpu = <&cpucl1_0>;
-+				};
-+				core1 {
-+					cpu = <&cpucl1_1>;
-+				};
-+				core2 {
-+					cpu = <&cpucl1_2>;
-+				};
-+				core3 {
-+					cpu = <&cpucl1_3>;
-+				};
-+			};
-+
-+			cluster2 {
-+				core0 {
-+					cpu = <&cpucl2_0>;
-+				};
-+				core1 {
-+					cpu = <&cpucl2_1>;
-+				};
-+				core2 {
-+					cpu = <&cpucl2_2>;
-+				};
-+				core3 {
-+					cpu = <&cpucl2_3>;
-+				};
-+			};
++		pinctrl_pmu: pinctrl@114f0000 {
++			compatible = "tesla,fsd-pinctrl";
++			reg = <0x0 0x114f0000 0x0 0x1000>;
 +		};
 +
-+		/* Cluster 0 */
-+		cpucl0_0: cpu@0 {
-+				device_type = "cpu";
-+				compatible = "arm,cortex-a72";
-+				reg = <0x0 0x000>;
-+				enable-method = "psci";
-+				clock-frequency = <2400000000>;
-+				cpu-idle-states = <&CPU_SLEEP>;
++		pinctrl_peric: pinctrl@141f0000 {
++			compatible = "tesla,fsd-pinctrl";
++			reg = <0x0 0x141f0000 0x0 0x1000>;
++			interrupts = <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>;
 +		};
 +
-+		cpucl0_1: cpu@1 {
-+				device_type = "cpu";
-+				compatible = "arm,cortex-a72";
-+				reg = <0x0 0x001>;
-+				enable-method = "psci";
-+				clock-frequency = <2400000000>;
-+				cpu-idle-states = <&CPU_SLEEP>;
++		pinctrl_fsys0: pinctrl@15020000 {
++			compatible = "tesla,fsd-pinctrl";
++			reg = <0x0 0x15020000 0x0 0x1000>;
++			interrupts = <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
 +		};
+ 	};
+ };
 +
-+		cpucl0_2: cpu@2 {
-+				device_type = "cpu";
-+				compatible = "arm,cortex-a72";
-+				reg = <0x0 0x002>;
-+				enable-method = "psci";
-+				clock-frequency = <2400000000>;
-+				cpu-idle-states = <&CPU_SLEEP>;
-+		};
-+
-+		cpucl0_3: cpu@3 {
-+				device_type = "cpu";
-+				compatible = "arm,cortex-a72";
-+				reg = <0x0 0x003>;
-+				enable-method = "psci";
-+				cpu-idle-states = <&CPU_SLEEP>;
-+		};
-+
-+		/* Cluster 1 */
-+		cpucl1_0: cpu@100 {
-+				device_type = "cpu";
-+				compatible = "arm,cortex-a72";
-+				reg = <0x0 0x100>;
-+				enable-method = "psci";
-+				clock-frequency = <2400000000>;
-+				cpu-idle-states = <&CPU_SLEEP>;
-+		};
-+
-+		cpucl1_1: cpu@101 {
-+				device_type = "cpu";
-+				compatible = "arm,cortex-a72";
-+				reg = <0x0 0x101>;
-+				enable-method = "psci";
-+				clock-frequency = <2400000000>;
-+				cpu-idle-states = <&CPU_SLEEP>;
-+		};
-+
-+		cpucl1_2: cpu@102 {
-+				device_type = "cpu";
-+				compatible = "arm,cortex-a72";
-+				reg = <0x0 0x102>;
-+				enable-method = "psci";
-+				clock-frequency = <2400000000>;
-+				cpu-idle-states = <&CPU_SLEEP>;
-+		};
-+
-+		cpucl1_3: cpu@103 {
-+				device_type = "cpu";
-+				compatible = "arm,cortex-a72";
-+				reg = <0x0 0x103>;
-+				enable-method = "psci";
-+				clock-frequency = <2400000000>;
-+				cpu-idle-states = <&CPU_SLEEP>;
-+		};
-+
-+		/* Cluster 2 */
-+		cpucl2_0: cpu@200 {
-+				device_type = "cpu";
-+				compatible = "arm,cortex-a72";
-+				reg = <0x0 0x200>;
-+				enable-method = "psci";
-+				clock-frequency = <2400000000>;
-+				cpu-idle-states = <&CPU_SLEEP>;
-+		};
-+
-+		cpucl2_1: cpu@201 {
-+				device_type = "cpu";
-+				compatible = "arm,cortex-a72";
-+				reg = <0x0 0x201>;
-+				enable-method = "psci";
-+				clock-frequency = <2400000000>;
-+				cpu-idle-states = <&CPU_SLEEP>;
-+		};
-+
-+		cpucl2_2: cpu@202 {
-+				device_type = "cpu";
-+				compatible = "arm,cortex-a72";
-+				reg = <0x0 0x202>;
-+				enable-method = "psci";
-+				clock-frequency = <2400000000>;
-+				cpu-idle-states = <&CPU_SLEEP>;
-+		};
-+
-+		cpucl2_3: cpu@203 {
-+				device_type = "cpu";
-+				compatible = "arm,cortex-a72";
-+				reg = <0x0 0x203>;
-+				enable-method = "psci";
-+				clock-frequency = <2400000000>;
-+				cpu-idle-states = <&CPU_SLEEP>;
-+		};
-+
-+		idle-states {
-+			entry-method = "arm,psci";
-+
-+			CPU_SLEEP: cpu-sleep {
-+				idle-state-name = "c2";
-+				compatible = "arm,idle-state";
-+				local-timer-stop;
-+				arm,psci-suspend-param = <0x0010000>;
-+				entry-latency-us = <30>;
-+				exit-latency-us = <75>;
-+				min-residency-us = <300>;
-+			};
-+		};
-+	};
-+
-+	arm-pmu {
-+		compatible = "arm,armv8-pmuv3";
-+		interrupts = <GIC_SPI 356 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 357 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 358 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 359 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 370 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 371 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 372 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 373 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 386 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 387 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-affinity = <&cpucl0_0>, <&cpucl0_1>, <&cpucl0_2>,
-+				     <&cpucl0_3>, <&cpucl1_0>, <&cpucl1_1>,
-+				     <&cpucl1_2>, <&cpucl1_3>, <&cpucl2_0>,
-+				     <&cpucl2_1>, <&cpucl2_2>, <&cpucl2_3>;
-+	};
-+
-+	psci {
-+		compatible = "arm,psci-1.0";
-+		method = "smc";
-+	};
-+
-+	timer {
-+		compatible = "arm,armv8-timer";
-+		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
-+	};
-+
-+	fin_pll: clock {
-+		compatible = "fixed-clock";
-+		clock-output-names = "fin_pll";
-+		#clock-cells = <0>;
-+	};
-+
-+	soc: soc@0 {
-+		compatible = "simple-bus";
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges = <0x0 0x0 0x0 0x0 0x0 0x18000000>;
-+		dma-ranges = <0x0 0x0 0x0 0x0 0x10 0x0>;
-+
-+		gic: interrupt-controller@10400000 {
-+			compatible = "arm,gic-v3";
-+			#interrupt-cells = <3>;
-+			interrupt-controller;
-+			reg =	<0x0 0x10400000 0x0 0x10000>, /* GICD */
-+				<0x0 0x10600000 0x0 0x200000>; /* GICR_RD+GICR_SGI */
-+		};
-+
-+		smmu_imem: iommu@10200000 {
-+			compatible = "arm,mmu-500";
-+			reg = <0x0 0x10200000 0x0 0x10000>;
-+			#iommu-cells = <2>;
-+			#global-interrupts = <7>;
-+			interrupts = <GIC_SPI 438 IRQ_TYPE_LEVEL_HIGH>, /* Global secure fault */
-+				     <GIC_SPI 439 IRQ_TYPE_LEVEL_HIGH>, /* Global non-secure fault */
-+				     <GIC_SPI 451 IRQ_TYPE_LEVEL_HIGH>, /* Combined secure interrupt */
-+				     <GIC_SPI 450 IRQ_TYPE_LEVEL_HIGH>, /* Combined non-secure interrupt */
-+				     /* Performance counter interrupts */
-+				     <GIC_SPI 441 IRQ_TYPE_LEVEL_HIGH>, /* for FSYS1_0 */
-+				     <GIC_SPI 442 IRQ_TYPE_LEVEL_HIGH>, /* for FSYS1_1 */
-+				     <GIC_SPI 443 IRQ_TYPE_LEVEL_HIGH>, /* for IMEM_0  */
-+				     /* Per context non-secure context interrupts, 0-3 interrupts */
-+				     <GIC_SPI 446 IRQ_TYPE_LEVEL_HIGH>, /* for CONTEXT_0 */
-+				     <GIC_SPI 447 IRQ_TYPE_LEVEL_HIGH>, /* for CONTEXT_1 */
-+				     <GIC_SPI 448 IRQ_TYPE_LEVEL_HIGH>, /* for CONTEXT_2 */
-+				     <GIC_SPI 449 IRQ_TYPE_LEVEL_HIGH>; /* for CONTEXT_3 */
-+		};
-+
-+		smmu_isp: iommu@12100000 {
-+			compatible = "arm,mmu-500";
-+			reg = <0x0 0x12100000 0x0 0x10000>;
-+			#iommu-cells = <2>;
-+			#global-interrupts = <11>;
-+			interrupts = <GIC_SPI 321 IRQ_TYPE_LEVEL_HIGH>, /* Global secure fault */
-+				     <GIC_SPI 322 IRQ_TYPE_LEVEL_HIGH>, /* Global non-secure fault */
-+				     <GIC_SPI 346 IRQ_TYPE_LEVEL_HIGH>, /* Combined secure interrupt */
-+				     <GIC_SPI 345 IRQ_TYPE_LEVEL_HIGH>, /* Combined non-secure interrupt */
-+				     /* Performance counter interrupts */
-+				     <GIC_SPI 323 IRQ_TYPE_LEVEL_HIGH>, /* for CAM_CSI   */
-+				     <GIC_SPI 324 IRQ_TYPE_LEVEL_HIGH>, /* for CAM_DP_0  */
-+				     <GIC_SPI 325 IRQ_TYPE_LEVEL_HIGH>, /* for CAM_DP_1  */
-+				     <GIC_SPI 326 IRQ_TYPE_LEVEL_HIGH>, /* for CAM_ISP_0 */
-+				     <GIC_SPI 327 IRQ_TYPE_LEVEL_HIGH>, /* for CAM_ISP_1 */
-+				     <GIC_SPI 328 IRQ_TYPE_LEVEL_HIGH>, /* for CAM_MFC_0 */
-+				     <GIC_SPI 329 IRQ_TYPE_LEVEL_HIGH>, /* for CAM_MFC_1 */
-+				     /* Per context non-secure context interrupts, 0-7 interrupts */
-+				     <GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>, /* for CONTEXT_0 */
-+				     <GIC_SPI 331 IRQ_TYPE_LEVEL_HIGH>, /* for CONTEXT_1 */
-+				     <GIC_SPI 332 IRQ_TYPE_LEVEL_HIGH>, /* for CONTEXT_2 */
-+				     <GIC_SPI 333 IRQ_TYPE_LEVEL_HIGH>, /* for CONTEXT_3 */
-+				     <GIC_SPI 334 IRQ_TYPE_LEVEL_HIGH>, /* for CONTEXT_4 */
-+				     <GIC_SPI 335 IRQ_TYPE_LEVEL_HIGH>, /* for CONTEXT_5 */
-+				     <GIC_SPI 336 IRQ_TYPE_LEVEL_HIGH>, /* for CONTEXT_6 */
-+				     <GIC_SPI 337 IRQ_TYPE_LEVEL_HIGH>; /* for CONTEXT_7 */
-+		};
-+
-+		smmu_peric: iommu@14900000 {
-+			compatible = "arm,mmu-500";
-+			reg = <0x0 0x14900000 0x0 0x10000>;
-+			#iommu-cells = <2>;
-+			#global-interrupts = <5>;
-+			interrupts = <GIC_SPI 197 IRQ_TYPE_LEVEL_HIGH>, /* Global secure fault */
-+				     <GIC_SPI 196 IRQ_TYPE_LEVEL_HIGH>, /* Global non-secure fault */
-+				     <GIC_SPI 193 IRQ_TYPE_LEVEL_HIGH>, /* Combined secure interrupt */
-+				     <GIC_SPI 192 IRQ_TYPE_LEVEL_HIGH>, /* Combined non-secure interrupt */
-+				     /* Performance counter interrupts */
-+				     <GIC_SPI 198 IRQ_TYPE_LEVEL_HIGH>, /* for PERIC */
-+				     /* Per context non-secure context interrupts, 0-1 interrupts */
-+				     <GIC_SPI 194 IRQ_TYPE_LEVEL_HIGH>, /* for CONTEXT_0 */
-+				     <GIC_SPI 195 IRQ_TYPE_LEVEL_HIGH>; /* for CONTEXT_1 */
-+		};
-+
-+		smmu_fsys0: iommu@15450000 {
-+			compatible = "arm,mmu-500";
-+			reg = <0x0 0x15450000 0x0 0x10000>;
-+			#iommu-cells = <2>;
-+			#global-interrupts = <5>;
-+			interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>, /* Global secure fault */
-+				     <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>, /* Global non-secure fault */
-+				     <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>, /* Combined secure interrupt */
-+				     <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>, /* Combined non-secure interrupt */
-+				     /* Performance counter interrupts */
-+				     <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>, /* for FSYS0   */
-+				     /* Per context non-secure context interrupts, 0-1 interrupts */
-+				     <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>, /* for CONTEXT_0 */
-+				     <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>; /* for CONTEXT_1 */
-+		};
-+
-+		clock_imem: clock-controller@10010000 {
-+			compatible = "tesla,fsd-clock-imem";
-+			reg = <0x0 0x10010000 0x0 0x3000>;
-+			#clock-cells = <1>;
-+			clocks = <&fin_pll>,
-+				<&clock_cmu DOUT_CMU_IMEM_TCUCLK>,
-+				<&clock_cmu DOUT_CMU_IMEM_ACLK>,
-+				<&clock_cmu DOUT_CMU_IMEM_DMACLK>;
-+			clock-names = "fin_pll",
-+				"dout_cmu_imem_tcuclk",
-+				"dout_cmu_imem_aclk",
-+				"dout_cmu_imem_dmaclk";
-+		};
-+
-+		clock_cmu: clock-controller@11c10000 {
-+			compatible = "tesla,fsd-clock-cmu";
-+			reg = <0x0 0x11c10000 0x0 0x3000>;
-+			#clock-cells = <1>;
-+			clocks = <&fin_pll>;
-+			clock-names = "fin_pll";
-+		};
-+
-+		clock_csi: clock-controller@12610000 {
-+			compatible = "tesla,fsd-clock-cam_csi";
-+			reg = <0x0 0x12610000 0x0 0x3000>;
-+			#clock-cells = <1>;
-+			clocks = <&fin_pll>;
-+			clock-names = "fin_pll";
-+		};
-+
-+		clock_mfc: clock-controller@12810000 {
-+			compatible = "tesla,fsd-clock-mfc";
-+			reg = <0x0 0x12810000 0x0 0x3000>;
-+			#clock-cells = <1>;
-+			clocks = <&fin_pll>;
-+			clock-names = "fin_pll";
-+		};
-+
-+		clock_peric: clock-controller@14010000 {
-+			compatible = "tesla,fsd-clock-peric";
-+			reg = <0x0 0x14010000 0x0 0x3000>;
-+			#clock-cells = <1>;
-+			clocks = <&fin_pll>,
-+				<&clock_cmu DOUT_CMU_PLL_SHARED0_DIV4>,
-+				<&clock_cmu DOUT_CMU_PERIC_SHARED1DIV36>,
-+				<&clock_cmu DOUT_CMU_PERIC_SHARED0DIV3_TBUCLK>,
-+				<&clock_cmu DOUT_CMU_PERIC_SHARED0DIV20>,
-+				<&clock_cmu DOUT_CMU_PERIC_SHARED1DIV4_DMACLK>;
-+			clock-names = "fin_pll",
-+				"dout_cmu_pll_shared0_div4",
-+				"dout_cmu_peric_shared1div36",
-+				"dout_cmu_peric_shared0div3_tbuclk",
-+				"dout_cmu_peric_shared0div20",
-+				"dout_cmu_peric_shared1div4_dmaclk";
-+		};
-+
-+		clock_fsys0: clock-controller@15010000 {
-+			compatible = "tesla,fsd-clock-fsys0";
-+			reg = <0x0 0x15010000 0x0 0x3000>;
-+			#clock-cells = <1>;
-+			clocks = <&fin_pll>,
-+				<&clock_cmu DOUT_CMU_PLL_SHARED0_DIV6>,
-+				<&clock_cmu DOUT_CMU_FSYS0_SHARED1DIV4>,
-+				<&clock_cmu DOUT_CMU_FSYS0_SHARED0DIV4>;
-+			clock-names = "fin_pll",
-+				"dout_cmu_pll_shared0_div6",
-+				"dout_cmu_fsys0_shared1div4",
-+				"dout_cmu_fsys0_shared0div4";
-+		};
-+
-+		clock_fsys1: clock-controller@16810000 {
-+			compatible = "tesla,fsd-clock-fsys1";
-+			reg = <0x0 0x16810000 0x0 0x3000>;
-+			#clock-cells = <1>;
-+			clocks = <&fin_pll>,
-+				<&clock_cmu DOUT_CMU_FSYS1_SHARED0DIV8>,
-+				<&clock_cmu DOUT_CMU_FSYS1_SHARED0DIV4>;
-+			clock-names = "fin_pll",
-+				"dout_cmu_fsys1_shared0div8",
-+				"dout_cmu_fsys1_shared0div4";
-+		};
-+
-+		mdma0: mdma@10100000 {
-+			compatible = "arm,pl330", "arm,primecell";
-+			reg = <0x0 0x10100000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>;
-+			#dma-cells = <1>;
-+			#dma-channels = <8>;
-+			#dma-requests = <32>;
-+			clocks = <&clock_imem IMEM_DMA0_IPCLKPORT_ACLK>;
-+			clock-names = "apb_pclk";
-+			iommus = <&smmu_imem 0x800 0x0>;
-+		};
-+
-+		mdma1: mdma@10110000 {
-+			compatible = "arm,pl330", "arm,primecell";
-+			reg = <0x0 0x10110000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH>;
-+			#dma-cells = <1>;
-+			#dma-channels = <8>;
-+			#dma-requests = <32>;
-+			clocks = <&clock_imem IMEM_DMA1_IPCLKPORT_ACLK>;
-+			clock-names = "apb_pclk";
-+			iommus = <&smmu_imem 0x801 0x0>;
-+		};
-+
-+		pdma0: pdma@14280000 {
-+			compatible = "arm,pl330", "arm,primecell";
-+			reg = <0x0 0x14280000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 190 IRQ_TYPE_LEVEL_HIGH>;
-+			#dma-cells = <1>;
-+			#dma-channels = <8>;
-+			#dma-requests = <32>;
-+			clocks = <&clock_peric PERIC_DMA0_IPCLKPORT_ACLK>;
-+			clock-names = "apb_pclk";
-+			iommus = <&smmu_peric 0x2 0x0>;
-+		};
-+
-+		pdma1: pdma@14290000 {
-+			compatible = "arm,pl330", "arm,primecell";
-+			reg = <0x0 0x14290000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>;
-+			#dma-cells = <1>;
-+			#dma-channels = <8>;
-+			#dma-requests = <32>;
-+			clocks = <&clock_peric PERIC_DMA1_IPCLKPORT_ACLK>;
-+			clock-names = "apb_pclk";
-+			iommus = <&smmu_peric 0x1 0x0>;
-+		};
-+
-+		serial_0: serial@14180000 {
-+			compatible = "samsung,exynos4210-uart";
-+			reg = <0x0 0x14180000 0x0 0x100>;
-+			interrupts = <GIC_SPI 171 IRQ_TYPE_LEVEL_HIGH>;
-+			dmas = <&pdma1 0>, <&pdma1 1>;
-+			dma-names = "tx", "rx";
-+			clocks = <&clock_peric PERIC_PCLK_UART0>,
-+				 <&clock_peric PERIC_SCLK_UART0>;
-+			clock-names = "uart", "clk_uart_baud0";
-+			status = "disabled";
-+		};
-+
-+		serial_1: serial@14190000 {
-+			compatible = "samsung,exynos4210-uart";
-+			reg = <0x0 0x14190000 0x0 0x100>;
-+			interrupts = <GIC_SPI 172 IRQ_TYPE_LEVEL_HIGH>;
-+			dmas = <&pdma1 2>, <&pdma1 3>;
-+			dma-names = "tx", "rx";
-+			clocks = <&clock_peric PERIC_PCLK_UART1>,
-+				 <&clock_peric PERIC_SCLK_UART1>;
-+			clock-names = "uart", "clk_uart_baud0";
-+			status = "disabled";
-+		};
-+
-+		pmu_system_controller: system-controller@11400000 {
-+			compatible = "samsung,exynos7-pmu", "syscon";
-+			reg = <0x0 0x11400000 0x0 0x5000>;
-+		};
-+
-+		watchdog_0: watchdog@100a0000 {
-+			compatible = "samsung,exynos7-wdt";
-+			reg = <0x0 0x100a0000 0x0 0x100>;
-+			interrupts = <GIC_SPI 471 IRQ_TYPE_LEVEL_HIGH>;
-+			samsung,syscon-phandle = <&pmu_system_controller>;
-+			clocks = <&fin_pll>;
-+			clock-names = "watchdog";
-+		};
-+
-+		watchdog_1: watchdog@100b0000 {
-+			compatible = "samsung,exynos7-wdt";
-+			reg = <0x0 0x100b0000 0x0 0x100>;
-+			interrupts = <GIC_SPI 472 IRQ_TYPE_LEVEL_HIGH>;
-+			samsung,syscon-phandle = <&pmu_system_controller>;
-+			clocks = <&fin_pll>;
-+			clock-names = "watchdog";
-+		};
-+
-+		watchdog_2: watchdog@100c0000 {
-+			compatible = "samsung,exynos7-wdt";
-+			reg = <0x0 0x100c0000 0x0 0x100>;
-+			interrupts = <GIC_SPI 473 IRQ_TYPE_LEVEL_HIGH>;
-+			samsung,syscon-phandle = <&pmu_system_controller>;
-+			clocks = <&fin_pll>;
-+			clock-names = "watchdog";
-+		};
-+
-+		pwm_0: pwm@14100000 {
-+			compatible = "samsung,exynos4210-pwm";
-+			reg = <0x0 0x14100000 0x0 0x100>;
-+			samsung,pwm-outputs = <0>, <1>, <2>, <3>;
-+			#pwm-cells = <3>;
-+			clocks = <&clock_peric PERIC_PWM0_IPCLKPORT_I_PCLK_S0>;
-+			clock-names = "timers";
-+			status = "disabled";
-+		};
-+
-+		pwm_1: pwm@14110000 {
-+			compatible = "samsung,exynos4210-pwm";
-+			reg = <0x0 0x14110000 0x0 0x100>;
-+			samsung,pwm-outputs = <0>, <1>, <2>, <3>;
-+			#pwm-cells = <3>;
-+			clocks = <&clock_peric PERIC_PWM1_IPCLKPORT_I_PCLK_S0>;
-+			clock-names = "timers";
-+			status = "disabled";
-+		};
-+
-+		hsi2c_0: hsi2c@14200000 {
-+			compatible = "samsung,exynos7-hsi2c";
-+			reg = <0x0 0x14200000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&hs_i2c0_bus>;
-+			clocks = <&clock_peric PERIC_PCLK_HSI2C0>;
-+			clock-names = "hsi2c";
-+			status = "disabled";
-+		};
-+
-+		hsi2c_1: hsi2c@14210000 {
-+			compatible = "samsung,exynos7-hsi2c";
-+			reg = <0x0 0x14210000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 149 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&hs_i2c1_bus>;
-+			clocks = <&clock_peric PERIC_PCLK_HSI2C1>;
-+			clock-names = "hsi2c";
-+			status = "disabled";
-+		};
-+
-+		hsi2c_2: hsi2c@14220000 {
-+			compatible = "samsung,exynos7-hsi2c";
-+			reg = <0x0 0x14220000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 150 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&hs_i2c2_bus>;
-+			clocks = <&clock_peric PERIC_PCLK_HSI2C2>;
-+			clock-names = "hsi2c";
-+			status = "disabled";
-+		};
-+
-+		hsi2c_3: hsi2c@14230000 {
-+			compatible = "samsung,exynos7-hsi2c";
-+			reg = <0x0 0x14230000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 151 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&hs_i2c3_bus>;
-+			clocks = <&clock_peric PERIC_PCLK_HSI2C3>;
-+			clock-names = "hsi2c";
-+			status = "disabled";
-+		};
-+
-+		hsi2c_4: hsi2c@14240000 {
-+			compatible = "samsung,exynos7-hsi2c";
-+			reg = <0x0 0x14240000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 152 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&hs_i2c4_bus>;
-+			clocks = <&clock_peric PERIC_PCLK_HSI2C4>;
-+			clock-names = "hsi2c";
-+			status = "disabled";
-+		};
-+
-+		hsi2c_5: hsi2c@14250000 {
-+			compatible = "samsung,exynos7-hsi2c";
-+			reg = <0x0 0x14250000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 153 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&hs_i2c5_bus>;
-+			clocks = <&clock_peric PERIC_PCLK_HSI2C5>;
-+			clock-names = "hsi2c";
-+			status = "disabled";
-+		};
-+
-+		hsi2c_6: hsi2c@14260000 {
-+			compatible = "samsung,exynos7-hsi2c";
-+			reg = <0x0 0x14260000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 154 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&hs_i2c6_bus>;
-+			clocks = <&clock_peric PERIC_PCLK_HSI2C6>;
-+			clock-names = "hsi2c";
-+			status = "disabled";
-+		};
-+
-+		hsi2c_7: hsi2c@14270000 {
-+			compatible = "samsung,exynos7-hsi2c";
-+			reg = <0x0 0x14270000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&hs_i2c7_bus>;
-+			clocks = <&clock_peric PERIC_PCLK_HSI2C7>;
-+			clock-names = "hsi2c";
-+			status = "disabled";
-+		};
-+	};
-+};
++#include "fsd-pinctrl.dtsi"
 -- 
 2.25.1
 

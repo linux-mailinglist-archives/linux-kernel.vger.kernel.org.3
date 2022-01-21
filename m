@@ -2,179 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA1E5495A5C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 799A9495A6A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:13:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378857AbiAUHKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 02:10:24 -0500
-Received: from mga11.intel.com ([192.55.52.93]:4714 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1378849AbiAUHKX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 02:10:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642749023; x=1674285023;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=cM6sqe1tElQ75X6OU6MbVxnvuy1jBR7apqeVeis91xo=;
-  b=aFlt8xfE+nQ8If20tCm2aIPGiAuIk+hgBRwpo9fsCZaCTwZiNdJFLS2A
-   1u6HoPRZU55mz7gdHRsJt5JRuXtnK33Wt+tnfweg4Pdj4ivXm1vtwDh1W
-   zmklA3eJy8IE3GB5V8J5kXc4KtnoJ2A0o5HrMJKERq3lKQat9KBknh78o
-   0keSK/zoKOhjiejvdy+yXeTGS5B6+FLRp0q2JSTCs3vfFqnwehpKd+j2I
-   49xjNokR5HGfvv82JFVplVvWBVOOCIkfos5RdY2USLnLZwNZczV+NK5gP
-   B7EjPW28a+8Cmr3tUvnrLuODA2uOeI8NG6DWyDOzMhO8EZ2bdGWY/wQ3g
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="243179422"
-X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="243179422"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 23:10:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
-   d="scan'208";a="694541074"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
-  by orsmga005.jf.intel.com with ESMTP; 20 Jan 2022 23:10:18 -0800
-Subject: Re: [PATCH V3 2/4] mmc: debugfs: Add debug fs entry for mmc driver
-To:     Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>,
-        quic_asutoshd@quicinc.com, ulf.hansson@linaro.org,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        linux-mmc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     stummala@codeaurora.org, vbadigan@codeaurora.org,
-        quic_rampraka@quicinc.com, quic_pragalla@quicinc.com,
-        sartgarg@codeaurora.org, nitirawa@codeaurora.org,
-        sayalil@codeaurora.org, Liangliang Lu <luliang@codeaurora.org>,
-        "Bao D . Nguyen" <nguyenb@codeaurora.org>
-References: <1642699582-14785-1-git-send-email-quic_c_sbhanu@quicinc.com>
- <1642699582-14785-3-git-send-email-quic_c_sbhanu@quicinc.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <0886f705-562f-6c8d-f396-60c2244b6375@intel.com>
-Date:   Fri, 21 Jan 2022 09:10:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S1378874AbiAUHNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 02:13:15 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50736 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245097AbiAUHNL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 02:13:11 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 916C2B81F42;
+        Fri, 21 Jan 2022 07:13:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AE92C340E9;
+        Fri, 21 Jan 2022 07:13:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642749188;
+        bh=SYu90Dv3l/L+64SNcy50aiw16Lnx3umbKRTsGOMrQkg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=k3uRWzp0SWvrQt4wpv0wp6HqoqMuube0dVeHTED+DvTqJqQ9JteKgAHFuRzMK7La9
+         hdnPtmnF2+6oHL0sMYFETK3B/JMjsOW1iHomI2Xxura1sskJ+xnkPbfy35KWaVO1oF
+         26rdD0dYwJ3PYFSq+U3dWovrDZcwDzLVyfSAEZDEYRmJINM8Tmg0Ctmu12Rf81s5Ac
+         gTKy8KVDZlLocphtUaf3ZDWDQa7DnN48hoqfKvLktVOOCow1KTrdDLQoLL6djNiLnt
+         IAwyIbddJ0s5SrRTLwybw+lS0U5xtFSYhGyprgDLn7Xl/Wos5XISZ+lA6JoDVYmrwQ
+         LJ4wkPbrGtrCw==
+Received: by mail-ua1-f42.google.com with SMTP id y4so15340383uad.1;
+        Thu, 20 Jan 2022 23:13:08 -0800 (PST)
+X-Gm-Message-State: AOAM5308pWH6ry++BaLmChZuZ3Tca0RPutSXFGz86STO/h5THSW/2DwP
+        H9XGfWX/4Z/iecxCE17m44cgXCq1PA9sQ1deBuY=
+X-Google-Smtp-Source: ABdhPJx6xNJuRVb4aLVlJ7P9bbeDPtJXSmXNRd3kkpQg8PkHlzrym8B0ENWLs0YxpXjFKvxlitpnKg+MIWjsd2Jznqg=
+X-Received: by 2002:a67:c89e:: with SMTP id v30mr1186161vsk.2.1642749187280;
+ Thu, 20 Jan 2022 23:13:07 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <1642699582-14785-3-git-send-email-quic_c_sbhanu@quicinc.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20220120073911.99857-14-guoren@kernel.org> <CAK8P3a03-3QTC-vxmnbouK7wBd8iunPGZpX0-Jf6ntS1DY0E=w@mail.gmail.com>
+In-Reply-To: <CAK8P3a03-3QTC-vxmnbouK7wBd8iunPGZpX0-Jf6ntS1DY0E=w@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 21 Jan 2022 15:12:56 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRMWj0yVLn2=16Gu1O-6tuqLaxcdduw0YnDK6vrizJEsQ@mail.gmail.com>
+Message-ID: <CAJF2gTRMWj0yVLn2=16Gu1O-6tuqLaxcdduw0YnDK6vrizJEsQ@mail.gmail.com>
+Subject: Re: [PATCH V3 13/17] riscv: compat: signal: Add rt_frame implementation
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup@brainfault.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        inux-parisc@vger.kernel.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/01/2022 19:26, Shaik Sajida Bhanu wrote:
-> Add debug fs entry to query eMMC and SD card errors statistics
-> 
-> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-> Signed-off-by: Liangliang Lu <luliang@codeaurora.org>
-> Signed-off-by: Sayali Lokhande <sayalil@codeaurora.org>
-> Signed-off-by: Bao D. Nguyen <nguyenb@codeaurora.org>
-> ---
->  drivers/mmc/core/debugfs.c | 81 ++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 81 insertions(+)
-> 
-> diff --git a/drivers/mmc/core/debugfs.c b/drivers/mmc/core/debugfs.c
-> index 3fdbc80..f4cb594 100644
-> --- a/drivers/mmc/core/debugfs.c
-> +++ b/drivers/mmc/core/debugfs.c
-> @@ -223,6 +223,82 @@ static int mmc_clock_opt_set(void *data, u64 val)
->  DEFINE_DEBUGFS_ATTRIBUTE(mmc_clock_fops, mmc_clock_opt_get, mmc_clock_opt_set,
->  	"%llu\n");
->  
-> +static int mmc_err_state_get(void *data, u64 *val)
-> +{
-> +	struct mmc_host *host = data;
-> +
-> +	if (!host)
-> +		return -EINVAL;
-> +
-> +	*val = host->err_state ? 1 : 0;
-> +
-> +	return 0;
-> +}
-> +
-> +DEFINE_SIMPLE_ATTRIBUTE(mmc_err_state, mmc_err_state_get, NULL, "%llu\n");
-> +
-> +static int mmc_err_stats_show(struct seq_file *file, void *data)
-> +{
-> +	struct mmc_host *host = (struct mmc_host *)file->private;
-> +	const char *desc[MMC_ERR_MAX] = {
-> +		[MMC_ERR_CMD_TIMEOUT] = "Command Timeout Occurred",
-> +		[MMC_ERR_CMD_CRC] = "Command CRC Errors Occurred",
-> +		[MMC_ERR_DAT_TIMEOUT] = "Data Timeout Occurred",
-> +		[MMC_ERR_DAT_CRC] = "Data CRC Errors Occurred",
-> +		[MMC_ERR_AUTO_CMD] = "Auto-Cmd Error Occurred",
-> +		[MMC_ERR_ADMA] = "ADMA Error Occurred",
-> +		[MMC_ERR_TUNING] = "Tuning Error Occurred",
-> +		[MMC_ERR_CMDQ_RED] = "CMDQ RED Errors",
-> +		[MMC_ERR_CMDQ_GCE] = "CMDQ GCE Errors",
-> +		[MMC_ERR_CMDQ_ICCE] = "CMDQ ICCE Errors",
-> +		[MMC_ERR_REQ_TIMEOUT] = "Request Timedout",
-> +		[MMC_ERR_CMDQ_REQ_TIMEOUT] = "CMDQ Request Timedout",
-> +		[MMC_ERR_ICE_CFG] = "ICE Config Errors",
-> +	};
-> +	int i;
-> +
-> +	if (!host)
-> +		return -EINVAL;
-> +
-> +	if (!host->err_stats_enabled) {
-> +		seq_printf(file, "Not supported by driver\n");
-> +		return 0;
-> +	}
-> +
-> +	for (i = 0; i < MMC_ERR_MAX; i++) {
-> +		if (desc[i])
-> +			seq_printf(file, "# %s:\t %d\n",
-> +					desc[i], host->err_stats[i]);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int mmc_err_stats_open(struct inode *inode, struct file *file)
-> +{
-> +	return single_open(file, mmc_err_stats_show, inode->i_private);
-> +}
-> +
-> +static ssize_t mmc_err_stats_write(struct file *filp, const char __user *ubuf,
-> +				   size_t cnt, loff_t *ppos)
-> +{
-> +	struct mmc_host *host = filp->f_mapping->host->i_private;
-> +
-> +	if (!host)
-> +		return -EINVAL;
-> +
-> +	pr_debug("%s: Resetting MMC error statistics\n", __func__);
-> +	memset(host->err_stats, 0, sizeof(host->err_stats));
-> +
-> +	return cnt;
-> +}
-> +
-> +static const struct file_operations mmc_err_stats_fops = {
-> +	.open	= mmc_err_stats_open,
-> +	.read	= seq_read,
-> +	.write	= mmc_err_stats_write,
-> +};
-> +
->  void mmc_add_host_debugfs(struct mmc_host *host)
->  {
->  	struct dentry *root;
-> @@ -236,6 +312,11 @@ void mmc_add_host_debugfs(struct mmc_host *host)
->  	debugfs_create_file_unsafe("clock", S_IRUSR | S_IWUSR, root, host,
->  				   &mmc_clock_fops);
->  
-> +	debugfs_create_file("err_state", 0600, root, host,
-> +		&mmc_err_state);
+On Thu, Jan 20, 2022 at 6:31 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Thu, Jan 20, 2022 at 8:39 AM <guoren@kernel.org> wrote:
+> >
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Implement compat_setup_rt_frame for sigcontext save & restore. The
+> > main process is the same with signal, but the rv32 pt_regs' size
+> > is different from rv64's, so we needs convert them.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+>
+> I hope someone else can properly review this part, it's not my area
+> but it looks complex enough that it could bring subtle bugs.
+Here are ltp signal test results:
 
-Please, let's drop err_state for now
+sigaction01                                        PASS       0
+sigaction02                                        PASS       0
+sigaltstack01                                      PASS       0
+sigaltstack02                                      PASS       0
+sighold02                                          PASS       0
+signal01                                           PASS       0
+signal02                                           PASS       0
+signal03                                           PASS       0
+signal04                                           PASS       0
+signal05                                           PASS       0
+signal06                                           CONF       32
+signalfd01                                         PASS       0
+signalfd4_01                                       PASS       0
+signalfd4_02                                       PASS       0
+sigpending02                                       PASS       0
+sigprocmask01                                      PASS       0
+sigrelse01                                         PASS       0
+sigsuspend01                                       PASS       0
+sigtimedwait01                                     PASS       0
+sigwait01                                          PASS       0
+sigwaitinfo01                                      CONF       32
 
-> +	debugfs_create_file("err_stats", 0600, root, host,
-> +		&mmc_err_stats_fops);
-> +
->  #ifdef CONFIG_FAIL_MMC_REQUEST
->  	if (fail_request)
->  		setup_fault_attr(&fail_default_attr, fail_request);
-> 
 
+>
+>        Arnd
+
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

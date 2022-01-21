@@ -2,61 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B2E495F63
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:04:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64EAA495F65
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380517AbiAUNEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 08:04:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53040 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238446AbiAUNEr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 08:04:47 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62850C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 05:04:47 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id v186so27480889ybg.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 05:04:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=stmmc9Vvip+Khdadt66L2upDjOMrPoMGxwY91C6Gik0=;
-        b=chNEQIclM59cDrgeFcDR9j0CPLHalHJnJhk6zvehye5+YKLhnRiY+5qQqPkcK7dBuW
-         RupxtqjXk20ZAapQ9pQThoD+9RWZX9ItfpT1aIgbftl0pYUySvU03D24SlBnroC8tKEM
-         ZnMoe5JUIm/JVlmBF7mVbi396dKW6csiM33CIKpzbISdVQYUpqLac8umlC8YMDkS8Thp
-         /nJ8ISXdb/ifUzDE97ehS1Ll95gsHRLgp9r0hHorh+/uPbalsYp5JzcsG0RWIagMb4FH
-         IbPwIhIH5ON7nkiEWedNRZypzdwWiJ7arK2D63H5la05iHzAJwS9IoCAn2XoRpeDUEqt
-         29wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=stmmc9Vvip+Khdadt66L2upDjOMrPoMGxwY91C6Gik0=;
-        b=X6rmmq9NvXfHueBlOC5yumRsHpt82oRMEeaulY56p+mBOl1kdVcudRNcruR/5fjeI3
-         eA2Nn+hPH35/FEgL5RffdG/tX5maBDjbAbQoIMVSOEXPgEIPuSS+elCWcfWujRNeXPjy
-         6z4YL1SQjk/qogg38Knvue3KmAK6jmi0aJxhnZb299J7yPW+kVUAVKNWr6itl3Z2sfoN
-         7y+t4vzIxuH4DtQEHrjDuYsiSkwoyHbwqTkANrTwRZ59vEvRwXttH+F/59m7zXTvLzMv
-         rbEtdk74CCUEqQUH1eP52Z1QR2lJUvB5wn5dMAlQrnsg1AIy30WP2dBrmozclI10shN3
-         oyrg==
-X-Gm-Message-State: AOAM533qrFTsJaF1FttkK+D8hLQyezoylUvhXsvI5JckkToKxg/34Xc7
-        JWKoxygYM+QnR4Q3ewOeE97jCzgYsRuEZN00AUU=
-X-Google-Smtp-Source: ABdhPJwL8waEPWlFOvRs/DLUTZ5lj6c0KkSqcl2PlbAwb/qef00Ub77FM/6+TtcnKKmBf2vszbbwxe3QciZfL79bxJg=
-X-Received: by 2002:a25:b847:: with SMTP id b7mr6004867ybm.751.1642770286401;
- Fri, 21 Jan 2022 05:04:46 -0800 (PST)
+        id S1380529AbiAUNFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 08:05:14 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:47684 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1380522AbiAUNFN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 08:05:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=er0oO0KQIatdPccLUW/Ds3BOKxbZJ4Hsl46YRpDl6GI=; b=LLW/XfM6vV3EJDL5WGKAWF+jAp
+        xaBR6ktXeFtFXHSiPOjgJaSB7LTTaxClspqR9HbV6qXoYjDbLRx5+zc7+qdfRLgGiR4iVliMNVEc8
+        ItKL3gn4vyblsUzg9/DSSCxH1k2U5LMQ47qnXid3sNHmtkvaZUlxoAzm//idE5kuxTac=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nAtb9-0025GS-EY; Fri, 21 Jan 2022 14:04:59 +0100
+Date:   Fri, 21 Jan 2022 14:04:59 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: phy: marvell: Honor phy LED set by system
+ firmware on a Dell hardware
+Message-ID: <Yeqve+KhJKbZJNCL@lunn.ch>
+References: <20220120051929.1625791-1-kai.heng.feng@canonical.com>
+ <Yelnzrrd0a4Bl5AL@lunn.ch>
+ <CAAd53p45BbLy0T8AG5QTKhP00zMBsMHfm7i-bTmZmQWM5DpLnQ@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7000:12c8:0:0:0:0 with HTTP; Fri, 21 Jan 2022 05:04:46
- -0800 (PST)
-Reply-To: bartholomieuakakpo226@gmail.com
-From:   BARTHOLOMIEU AKAKPO <borismayor1967@gmail.com>
-Date:   Fri, 21 Jan 2022 13:04:46 +0000
-Message-ID: <CACQUWTJptUKPFiiRxb9L5qpWAH1-i7Nma4QGmAdKRAMn1maimA@mail.gmail.com>
-Subject: I am Bartholomieu
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAd53p45BbLy0T8AG5QTKhP00zMBsMHfm7i-bTmZmQWM5DpLnQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I want us to claim the sum of (US$ 10,950,777.00) from the BTCI bank
-Lome Togo security company. You get 40% from the total amount.
-We work together and there will be success at the end. Reply for more details.
+> > Since you talked about suspend/resume, does this machine support WoL?
+> > Is the BIOS configuring LED2 to be used as an interrupt when WoL is
+> > enabled in the BIOS? Do you need to save/restore that configuration
+> > over suspend/review? And prevent the driver from changing the
+> > configuration?
+> 
+> This NIC on the machine doesn't support WoL.
+
+I'm surprised about that. Are you really sure?
+
+What are you doing for resume? pressing the power button?
+
+> > > +static const struct dmi_system_id platform_flags[] = {
+> > > +     {
+> > > +             .matches = {
+> > > +                     DMI_MATCH(DMI_SYS_VENDOR, "Dell EMC"),
+> > > +                     DMI_MATCH(DMI_PRODUCT_NAME, "Edge Gateway 3200"),
+> > > +             },
+> > > +             .driver_data = (void *)PHY_USE_FIRMWARE_LED,
+> > > +     },
+> >
+> > This needs a big fat warning, that it will affect all LEDs for PHYs
+> > which linux is driving, on that machine. So PHYs on USB dongles, PHYs
+> > in SFPs, PHYs on plugin PCIe card etc.
+> >
+> > Have you talked with Dells Product Manager and do they understand the
+> > implications of this?
+> 
+> Right, that's why the original approach is passing the flag from the MAC driver.
+> That approach can be more specific and doesn't touch unrelated PHYs.
+
+More specific, but still will go wrong at some point, A PCEe card
+using that MAC etc. And this is general infrastructure you are adding
+here, it can be used by any machine, any combination of MAC and PHY
+etc. So you need to clearly document its limits so others are not
+surprised.
+
+	Andrew

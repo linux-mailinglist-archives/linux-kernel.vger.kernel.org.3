@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF322495FD4
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:32:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F169495FD6
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:34:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349259AbiAUNch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 08:32:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59444 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235175AbiAUNcg (ORCPT
+        id S1350557AbiAUNeY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 21 Jan 2022 08:34:24 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:57526 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235175AbiAUNeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 08:32:36 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D40C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 05:32:35 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2C6A81EC0606;
-        Fri, 21 Jan 2022 14:32:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1642771950;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=hdl5yhDBY86sBHAUwJnc4cfV4sB1Lwi1p/NJUmPImH4=;
-        b=E/FzQC27PSURtfhOgSF/FIpNGZ2ViItTtlMWUTY+kdYBoUR90W2IFEItPW+P4344ZZxPs6
-        ECSI4He2wC31QnTf3LH2qKSbPFauAgPchKL+AfEtOwvEDKoBwkatLUxrNhI3NJNvejIV6+
-        2QbNIh2fiKa1ilNdE06iFyVoviBu3tY=
-Date:   Fri, 21 Jan 2022 14:32:24 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86-ml <x86@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        Michael Matz <matz@suse.de>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>, Willy Tarreau <w@1wt.eu>
-Subject: Re: [PATCH v1 3/3] Documentation: x86-64: Document registers on
- entry and exit
-Message-ID: <Yeq16JjCBXmxgWaj@zn.tnic>
-References: <20220107235210.1339168-1-ammarfaizi2@gnuweeb.org>
- <20220107235210.1339168-4-ammarfaizi2@gnuweeb.org>
- <37ce01e8-43eb-7eff-9667-745e17cdd65f@kernel.org>
+        Fri, 21 Jan 2022 08:34:23 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-158-ysBuzeI9M8SqWpb1UFyJlg-1; Fri, 21 Jan 2022 13:34:20 +0000
+X-MC-Unique: ysBuzeI9M8SqWpb1UFyJlg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Fri, 21 Jan 2022 13:34:19 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Fri, 21 Jan 2022 13:34:19 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Jiapeng Chong' <jiapeng.chong@linux.alibaba.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: RE: [PATCH] staging: pi433: using div64_u64() instead of do_div()
+Thread-Topic: [PATCH] staging: pi433: using div64_u64() instead of do_div()
+Thread-Index: AQHYDr0JeXBHu5JbA0ymi5sg9Q/cbqxteQpg
+Date:   Fri, 21 Jan 2022 13:34:19 +0000
+Message-ID: <03591933cc384d7e91ede82f0cdd76a8@AcuMS.aculab.com>
+References: <20220121114955.96979-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20220121114955.96979-1-jiapeng.chong@linux.alibaba.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <37ce01e8-43eb-7eff-9667-745e17cdd65f@kernel.org>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 04:02:27PM -0800, Andy Lutomirski wrote:
-> This is SYSCALL64 registers on entry, not general registers on entry. Also,
-> this has little to do with the entry logic, so it probably doesn't belong in
-> this file.
+From: Jiapeng Chong
+> Sent: 21 January 2022 11:50
+> Subject: [PATCH] staging: pi433: using div64_u64() instead of do_div()
+> 
+> Clean the following coccicheck warning:
+> 
+> ./drivers/staging/pi433/rf69.c:286:1-7: WARNING: do_div() does a
+> 64-by-32 division, please consider using div64_u64 instead.
 
-Right, except that syscall is also a kernel entry point so it kinda
-belongs in a documentation file called "entry". :)
+That is one of patchcheck's worse warnings.
 
-Srsly, I'd really like to keep the note about which registers glibc
-considers clobbered and which not, documented somewhere as that is
-practically an ABI which is not (yet) in the psABI doc.
+You need to check the domain of the divisor, not its type.
 
-Thx.
+do_div() exists to avoid expensive 64bit divides when the
+divisor is small.
 
--- 
-Regards/Gruss,
-    Boris.
+	David
 
-https://people.kernel.org/tglx/notes-about-netiquette
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

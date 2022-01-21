@@ -2,120 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C761495CC1
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 10:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7278495CC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 10:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379728AbiAUJWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 04:22:38 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41276 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238087AbiAUJWh (ORCPT
+        id S1344007AbiAUJXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 04:23:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59722 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238087AbiAUJW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 04:22:37 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 21 Jan 2022 04:22:59 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853D3C061574;
+        Fri, 21 Jan 2022 01:22:59 -0800 (PST)
+Received: from [IPv6:2a00:c281:14a3:8100:790d:f8e9:248f:920d] (unknown [IPv6:2a00:c281:14a3:8100:790d:f8e9:248f:920d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5FF73B81F86;
-        Fri, 21 Jan 2022 09:22:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F944C340E7;
-        Fri, 21 Jan 2022 09:22:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642756954;
-        bh=DoEBSYVdhxCk2hRPozcTctknq4n34sTJPxtSYV1nfhs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Rect2n4o+iX3RzSuMqm7blYH7Jp/hn6KvYVHNZi4gBL8iFIvMsCmxh1McTEwDN7si
-         Jp36PSgZTxLoEYXNkuZPZHbuOSaCX325CmGEKFE7qdL/bJYrG4zQFtGn5SCOJLFLuv
-         L3sc4NOwY7+X2UWdBb2ueG0AClbmiy7IwW458aaaf3XIv3BTv/IAj4XAqFCgdH7ih5
-         t6ToBIUrsVsbMOObBDp9gxf4Mq/Pzd4XB1xuRpofrh2pf52fyeSpwwMuzAAf2V+eki
-         7yzqCn4T+d70ueboR1lGAMbTJ8dL8zQnETPkZDzy+/H5QLqca4OHltjQ5kVikRSe2h
-         DVpmSiH6xAKgg==
-Received: by mail-ua1-f46.google.com with SMTP id 2so15760319uax.10;
-        Fri, 21 Jan 2022 01:22:34 -0800 (PST)
-X-Gm-Message-State: AOAM53196M1cZscAyKE2qAvkrAM3e+mKaqv9NIpY7NsFl6bZ8pNSBJ5p
-        JUbWbLwtnhhEob97KdWyPRCy46GVGgmGMTI5Qh8=
-X-Google-Smtp-Source: ABdhPJy/0MHzL1Lj83ABpPKlmasRjxPdpSw7edTfCXcU+fXON/ztRB09l8EfH009hsjqC4mDy1GaKsQom5NTP4rqtk4=
-X-Received: by 2002:a05:6102:34ec:: with SMTP id bi12mr1057047vsb.51.1642756953041;
- Fri, 21 Jan 2022 01:22:33 -0800 (PST)
+        (Authenticated sender: dafna)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id D983E1F45A16;
+        Fri, 21 Jan 2022 09:22:55 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1642756977;
+        bh=0TIsGlnLKMUom5ggVD25li7Cq1Lj4YN0nlzLub4RZbg=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=nVulpkLIhGN9sTcIsd5KLT+Adyk/QC0TpLFvujsCBEcTYb8KUIC45depU9jw339/d
+         wopGCXMlnuhvdRNgxyonIAoyUDeY09/DkB8g0r1n/bLIs71L0cIoA/PQo9n+y26w6w
+         9CduqbwQ2xCgYMyN8K+RNlXIPAs1ae9uEdTVwLnxYW/NY6+PKkLfJG2sIfPSQRJi+X
+         5orh1aDF87gohud81DWvXNHaWI8dJzrIAKuMloNitj2ZR+0JPv8mR2TYwSE6gMAYyZ
+         m9swsXbFw57OFW78PbnfT/DG+cPF+BG1X08OUyV+UFShBSEXwEKxtgAT/9aHabUJx3
+         dICyRaWXR01EQ==
+Subject: Re: [PATCH v4 1/6] staging: media: wave5: Add vpuapi layer
+To:     Daniel Palmer <daniel@0x0f.com>
+Cc:     "open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" 
+        <linux-media@vger.kernel.org>,
+        Robert Beckett <bob.beckett@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        open list <linux-kernel@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
+        kiril.bicevski@collabora.com,
+        Nas Chung <nas.chung@chipsnmedia.com>,
+        lafley.kim@chipsnmedia.com, scott.woo@chipsnmedia.com,
+        olivier.crete@collabora.com, dan.carpenter@oracle.com,
+        Randy Dunlap <rdunlap@infradead.org>
+References: <20211201175613.13710-1-dafna.hirschfeld@collabora.com>
+ <20211201175613.13710-2-dafna.hirschfeld@collabora.com>
+ <CAFr9PX=6Pd1Rg=wJvpuX6WX63L=iAnwPA24e59An3Kac5f_vzA@mail.gmail.com>
+ <cdd9b485-364f-c6bd-776f-a0ca2d260762@collabora.com>
+ <e9905774-a994-6311-7b53-b40588d4f6ec@collabora.com>
+ <CAFr9PXnnGc1TUQBeW8JW9qGewhU99gmRbvzZEsZaDmr12jMg0A@mail.gmail.com>
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Message-ID: <25e7d6db-1cff-6fd5-1071-1f21c5ff7a8a@collabora.com>
+Date:   Fri, 21 Jan 2022 11:22:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220120073911.99857-9-guoren@kernel.org> <CAK8P3a0LxB3we9wHOa4OPmNow6wz5NP49zeYhh7QXNv-MiR8UA@mail.gmail.com>
- <CAJF2gTQVUF4LSO0a6_MV8x-UAiJw32pAFyS1oPNLXhcEaemzqg@mail.gmail.com> <CAK8P3a1sOejkdOyoRUfw4ESS7ewX_8Wj9tQNrZ40OiuDqJnrmw@mail.gmail.com>
-In-Reply-To: <CAK8P3a1sOejkdOyoRUfw4ESS7ewX_8Wj9tQNrZ40OiuDqJnrmw@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 21 Jan 2022 17:22:22 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSzMym_PS36JgpWLQUdAO3nq+z7mdDWRT=EzQq+waPSpA@mail.gmail.com>
-Message-ID: <CAJF2gTSzMym_PS36JgpWLQUdAO3nq+z7mdDWRT=EzQq+waPSpA@mail.gmail.com>
-Subject: Re: [PATCH V3 08/17] riscv: compat: syscall: Add compat_sys_call_table
- implementation
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        inux-parisc@vger.kernel.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAFr9PXnnGc1TUQBeW8JW9qGewhU99gmRbvzZEsZaDmr12jMg0A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 4:57 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, Jan 21, 2022 at 7:25 AM Guo Ren <guoren@kernel.org> wrote:
-> > On Thu, Jan 20, 2022 at 10:43 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > > On Thu, Jan 20, 2022 at 8:39 AM <guoren@kernel.org> wrote:
->
-> > > Are you sure these are the right calling conventions? According to [1],
-> > > I think the 64-bit argument should be in an aligned pair of registers,
-> > > which means you need an extra pad argument as in the arm64 version
-> > > of these functions. Same for ftruncate64, pread64, pwrite64, and
-> > > readahead.
-> >
-> > [1] has abandoned.
-> >
-> > See:
-> > https://github.com/riscv-non-isa/riscv-elf-psabi-doc/blob/master/riscv-cc.adoc
->
-> Ok, thanks for the reference, I picked the first one that came up in
-> a google search and didn't expect this to ever have changed.
->
-> > > I still feel like these should be the common implementations next to the
-> > > native handlers inside of an #ifdef CONFIG_COMPAT.
-> > >
-> > > The names clash with the custom versions defined for powerpc and sparc,
-> > > but the duplicates look compatible if you can account for the padded
-> > > argument and the lo/hi order of the pairs, so could just be removed here
-> > > (all other architectures use custom function names instead).
-> > I would try it later.
->
-> This becomes easier then, as powerpc and sparc already have the non-padded
-> calling conventions, so you could just generalize those without looking at
-> the other architectures or adding the padding. The powerpc version already
-> has the dual-endian version, so using that will work on big-endian sparc and
-> on little-endian riscv as well, though we may need to come up with a better name
-> for the arg_u32/arg_u64/merge_64 macros in order to put that into a global
-> header without namespace collisions.
-Sounds good, thanks!
-
->
->          Arnd
 
 
+On 14.12.21 12:20, Daniel Palmer wrote:
+> Hi Dafna,
+> 
+> On Tue, 14 Dec 2021 at 16:48, Dafna Hirschfeld
+> <dafna.hirschfeld@collabora.com> wrote:
+>>>>> +static int wave5_wait_bus_busy(struct vpu_device *vpu_dev, int timeout, unsigned int addr)
+>>>>> +{
+>>>>> +       u32 gdi_status_check_value = 0x3f;
+>>>>> +       u32 data;
+>>>>> +
+>>>>> +       if (vpu_dev->product_code == WAVE521C_CODE ||
+>>>>> +           vpu_dev->product_code == WAVE521_CODE ||
+>>>>> +        vpu_dev->product_code == WAVE521E1_CODE)
+>>>>> +               gdi_status_check_value = 0x00ff1f3f;
+>>>>> +
+>>>>> +       return read_poll_timeout(wave5_vdi_read_register, data, data == gdi_status_check_value,
+>>>>> +                                0, timeout * 1000, false, vpu_dev, addr);
+>>>>> +}
+>>>>> +
+>>>>
+>>>> This looks like it should be s/wave5_vdi_read_register/wave5_read_register/.
+>>>> For wave511 addr passed in here is 0x8e14 so well outside of what is
+>>>> directly accessible.
+>>>
+>>> Hi, I didn't understand this explanation. I see that
+>>> wave5_read_register eventually calls 'wave5_vdi_read_register'.
+>>> Could you please explain in more detail why you think
+>>> calling wave5_vdi_read_register is wrong?
+> 
+> Mainly because the address accessed 0x8e14 but on my machine the
+> directly accessible registers end at 0x800.
+> 
+>> hi, I see know that those backbone address are indeed not read and written directly but
+>> the address should be first written to a regsiter W5_VPU_FIO_CTRL_ADDR,
+>> and then the content is returned from W5_VPU_FIO_DATA.
+> 
+> I think so. But as I can't get this driver to fully work yet I can
+> only say I think so.
 
--- 
-Best Regards
- Guo Ren
+Hi,
+Thanks a lot for helping me with compiling the kernel and booting the smart display 'ido-sbc2d70-v1b'.
+I am now at a point where the probe of the driver on that board fails with:
 
-ML: https://lore.kernel.org/linux-csky/
+[   30.710385] write --> 0x000000f0:0x00000001
+[   30.727445] wave5_vpu_reset:1594
+[   30.730712] write --> 0x00000070:0x00000000
+[   30.734944] wave5_vpu_reset:1652
+[   30.738186] write --> 0x00000024:0x00000007
+[   30.742382] write --> 0x00000020:0x00018e10
+[   40.746598] wave5_vpu_reset:1656
+[   40.749849] CPU: 1 PID: 1 Comm: sh Not tainted 5.16.0-11196-gd076cd89f795-dirty #14
+[   40.757531] Hardware name: MStar/Sigmastar Armv7 (Device Tree)
+[   40.763389]  unwind_backtrace from show_stack+0x10/0x14
+[   40.768647]  show_stack from dump_stack_lvl+0x40/0x4c
+[   40.773720]  dump_stack_lvl from wave5_wait_bus_busy+0x10/0x44
+[   40.779579]  wave5_wait_bus_busy from wave5_vpu_reset+0x28c/0x584
+[   40.785696]  wave5_vpu_reset from wave5_vpu_init_with_bitcode+0x58/0xe8
+[   40.792337]  wave5_vpu_init_with_bitcode from wave5_vpu_probe+0x2b0/0x560
+[   40.799153]  wave5_vpu_probe from platform_probe+0x5c/0xb8
+[   40.804663]  platform_probe from really_probe+0xc0/0x2fc
+[   40.809998]  really_probe from __driver_probe_device+0x84/0xe4
+[   40.815854]  __driver_probe_device from device_driver_attach+0x24/0x50
+[   40.822407]  device_driver_attach from bind_store+0x80/0xec
+[   40.828002]  bind_store from kernfs_fop_write_iter+0x118/0x1b4
+[   40.833860]  kernfs_fop_write_iter from vfs_write+0x308/0x3fc
+[   40.839631]  vfs_write from ksys_write+0xa4/0xd4
+[   40.844268]  ksys_write from ret_fast_syscall+0x0/0x54
+[   40.849427] Exception stack(0xc189dfa8 to 0xc189dff0)
+[   40.854497] dfa0:                   004751a8 00000015 00000001 004751a8 00000015 00000001
+[   40.862700] dfc0: 004751a8 00000015 00000001 00000004 00000015 bea7eb50 00460a6d 004745e4
+[   40.870900] dfe0: 00000000 bea7e924 0045d43f b6f71cf6
+[   40.875987] write --> 0x00000020:0x00008e14
+[   50.880186] write --> 0x00000024:0x00000000
+[   50.884397] write --> 0x00000020:0x00018e10
+[   60.888598] vdec 1f344800.video-codec: wave5_vpu_reset failed -16
+[   60.894726] vdec 1f344800.video-codec: vpu_init_with_bitcode fail
+[   60.900889] vcc_5v: disabling
+[   60.903890] vcc_sd: disabling
+[   60.904026] vdec 1f344800.video-codec: failed to wave5_vpu_load_firmware: -16
+[   60.906869] vcc_4g: disabling
+[   60.914729] vdec: probe of 1f344800.video-codec failed with error -16
+
+Were you able to reach a point where the probe succeed ?
+Could you write in more detail to which point were you able to make the driver work?
+Does the driver code in https://github.com/linux-chenxing/linux/tree/mstar_v5_17_rebase includes a fix to the bug you mentioned above?
+
+Thanks,
+Dafna
+
+> 
+> Cheers,
+> 
+> Daniel
+> 

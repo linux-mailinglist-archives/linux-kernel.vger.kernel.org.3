@@ -2,80 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 311A1496519
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 19:33:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A6D249651E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 19:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382135AbiAUSdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 13:33:40 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55754 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343584AbiAUSdj (ORCPT
+        id S1382146AbiAUSd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 13:33:56 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:56416
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1382143AbiAUSdx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 13:33:39 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 21 Jan 2022 13:33:53 -0500
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53551B82090;
-        Fri, 21 Jan 2022 18:33:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA037C340E1;
-        Fri, 21 Jan 2022 18:33:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642790017;
-        bh=//RljZ0jx600nmKTy4kmYHaAXavz9g7lJZTUhiR7hzc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=o0Gg4l+3bKaQS3knQkgWIX/xTsG7DRXqDjLmvExxfS6mIpOcdvMJOa/gPsofeisK6
-         qTXmJGZaF9CiTPdexYePAFZ8pPCKiOL1kEEqMqL51QUp8lQJ361wpZmlnKzbCbl4ys
-         2W28Mfr74UehJeN5NYfy6noQoe10ZQkXXMwO7tiblgUWisYb2oVODjNqUS0wdXzzL8
-         bHXmR4Sebi6nVBV9DM2SqsVBYq5YlLmg7ZgTjyb5Rn16mRV5e42B1T9/ITwqO//cNz
-         Xel3ZRA2q3jBoHfh/pBpASyTDXTYgcAl9WF53MGajU4youhuxv0OeO8k0zcnsMJmcZ
-         ppb6/xvKnNseQ==
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Denis Efremov <efremov@linux.com>
-Subject: [PATCH v1] PCI: Use PCI_STD_NUM_BARS when checking standard BARs
-Date:   Fri, 21 Jan 2022 12:33:30 -0600
-Message-Id: <20220121183330.1141702-1-helgaas@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id BB73840024
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 18:33:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642790032;
+        bh=v1/ZmZoCSfUTZLAD5km6I/vpYxbMEROGRzZoW4u340I=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=KMPDuy10Yod7oilWVZ5zcFp5bGnvWqOi9A5Ql3hGBr7L6u2Xv589+aGY1EOhbgYvy
+         witsPX2OWlSTc5Qigp7vEwG/Rwd4c/R2Gg9HTldLj9fRlOj+qcKyYhe0gj1iKKi5k3
+         fnLCmHPRgYgoMLXFwbdGy9Aj16s9DWqJZJsXGhwlYuzSJcv99xgqh+WXrBQ5riLJ7B
+         niZaIJC2K2buYfivAaRU/D3mreJoIPoOfzO810H2AxSermwSucKe1cnsAh275ZA+64
+         0M8zAa7s9z12IU4dABrKSVViN5TaM9QjuiLSClRmLd5xs3MLaidEZpK320vbKFsvVV
+         mFR36Y3MTtTvw==
+Received: by mail-ej1-f69.google.com with SMTP id ky6-20020a170907778600b0068e4bd99fd1so409648ejc.15
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 10:33:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=v1/ZmZoCSfUTZLAD5km6I/vpYxbMEROGRzZoW4u340I=;
+        b=7D2VgTTQNbNxBs9meuPJ4A3caw6PuKMaih0RgK9Rq7x8TqwfOBvVLwDWchzqOlLqHf
+         etZ9saZQuoabasHRO+8b29Rx4/bFkYsraq4U3L3Lh19InWrEdekOoZBGLkbv2PrWoevd
+         Zs2hCFPDfSksHN3uaY4DFejvjhrBJlyEcIgShQy8/ktpt9WI/PC6ckY2esqrpnaod/lV
+         VWx/QO96U5ysQxMmNPnhOJbakwsX5yhEob7OOuG8c/vWh6hGmayDKv0fwwvOYBL3N8IU
+         6g9ejUtHmBjtLHjoBZh4rQFQzmFLYs3WA6glfjWVRWAbzJ4Bb60Fd12sS2hz7T/ueGPo
+         olrA==
+X-Gm-Message-State: AOAM532fX2FayDaXb9/79jDkCbaa/W/1RJ0b3kSa+uX07v/KMnMmY9gG
+        eCVJAn6S7EYgnp+KzG+J5erjfgOLu7oMb0alzF4A47i7D0eIkZ1HpBLHx6VvwYFxSYEUcg96Ujs
+        m6vvijdjP19+EN6lbHd8afQojGq2EpkIKqtw3SQj4Yw==
+X-Received: by 2002:a17:907:94ce:: with SMTP id dn14mr4257063ejc.225.1642790030053;
+        Fri, 21 Jan 2022 10:33:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyUiLoCSnLbb+feIhIvxBFMattSryvmMTgY5adK0i09eglMEN/QYyW33qlmPPUw6iB1mJV4rA==
+X-Received: by 2002:a17:907:94ce:: with SMTP id dn14mr4257044ejc.225.1642790029899;
+        Fri, 21 Jan 2022 10:33:49 -0800 (PST)
+Received: from [192.168.0.51] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id lf16sm2220182ejc.25.2022.01.21.10.33.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Jan 2022 10:33:49 -0800 (PST)
+Message-ID: <b11b8507-339b-2125-30e6-a927539d7825@canonical.com>
+Date:   Fri, 21 Jan 2022 19:33:48 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v2 2/3] spi: s3c64xx: Add spi port configuration for Tesla
+ FSD SoC
+Content-Language: en-US
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linus.walleij@linaro.org,
+        robh+dt@kernel.org, linux-samsung-soc@vger.kernel.org,
+        pankaj.dubey@samsung.com, broonie@kernel.org, andi@etezian.org,
+        linux-spi@vger.kernel.org, linux-fsd@tesla.com,
+        Aswani Reddy <aswani.reddy@samsung.com>
+References: <20220120192438.25555-1-alim.akhtar@samsung.com>
+ <CGME20220120193618epcas5p45be1db500363072e647bf179623f8e7a@epcas5p4.samsung.com>
+ <20220120192438.25555-3-alim.akhtar@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220120192438.25555-3-alim.akhtar@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+On 20/01/2022 20:24, Alim Akhtar wrote:
+> Adds compatible and port configuration for spi controller
+> for Tesla Full Self-Driving SoC.
+> 
+> Cc: linux-fsd@tesla.com
+> Signed-off-by: Aswani Reddy <aswani.reddy@samsung.com>
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> ---
+>  drivers/spi/spi-s3c64xx.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
 
-usb_hcd_pci_probe() searches for an I/O BAR using a combination of
-PCI_STD_NUM_BARS (to control loop iteration) and PCI_ROM_RESOURCE (to check
-whether the loop exits without finding anything).
 
-Use PCI_STD_NUM_BARS consistently.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-No functional change since PCI_STD_NUM_BARS == PCI_ROM_RESOURCE, but this
-removes a dependency on that relationship and makes the code read better.
 
-Fixes: c9c13ba428ef ("PCI: Add PCI_STD_NUM_BARS for the number of standard
-BARs")
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Denis Efremov <efremov@linux.com>
----
- drivers/usb/core/hcd-pci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-index d630cccd2e6e..784466117c92 100644
---- a/drivers/usb/core/hcd-pci.c
-+++ b/drivers/usb/core/hcd-pci.c
-@@ -248,7 +248,7 @@ int usb_hcd_pci_probe(struct pci_dev *dev, const struct pci_device_id *id,
- 					hcd->rsrc_len, driver->description))
- 				break;
- 		}
--		if (region == PCI_ROM_RESOURCE) {
-+		if (region == PCI_STD_NUM_BARS) {
- 			dev_dbg(&dev->dev, "no i/o regions available\n");
- 			retval = -EBUSY;
- 			goto put_hcd;
--- 
-2.25.1
-
+Best regards,
+Krzysztof

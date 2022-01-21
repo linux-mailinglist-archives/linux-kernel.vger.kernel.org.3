@@ -2,80 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A3664964A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 18:56:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F75F4964B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 19:02:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351639AbiAUR4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 12:56:39 -0500
-Received: from mail-4316.protonmail.ch ([185.70.43.16]:30619 "EHLO
-        mail-4316.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351802AbiAUR4c (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 12:56:32 -0500
-Date:   Fri, 21 Jan 2022 17:56:25 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail2; t=1642787789;
-        bh=L3GPP4BYomCCX59iwTHBksw8cVdhg6JC4KAsswidStE=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:From:To:Cc;
-        b=sXUZbx3R8Fcg+QFzkN8yZlMX7rIwNBCBqVA2imLaVJcrN8sqpYCQye+32mCbRjr7B
-         30aIYRitdXeIfJ+yohARUU1HRRFqrYGSJF9Ef8t9XdIcWjl3E9Wvs7k7aHSfRcB/z9
-         3PLfSgvmtUTVCB9hB6yRfq2dEZyMKS+2rQN9628Mc9BvhShuHzRIk3LvbIC6sTG5Ih
-         PEPvssEqwIO0ou5oJ42TMWlnfT+lXoBXeU2nLEUlL3WGkwJ0QXK+ardZn+T2fCa62r
-         uPP8sc/574+v5l6CpIsMt3QkngvpKD3jaP+qlJdxGq3U35lz2axPqAxZOidkjpals6
-         vXb4Qi7n9+U/g==
-To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@protonmail.com>
-Cc:     marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kettenis@openbsd.org,
-        =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@protonmail.com>
-Reply-To: =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@protonmail.com>
-Subject: [PATCH v3 3/3] MAINTAINERS: Add clk-apple-nco under ARM/APPLE MACHINE
-Message-ID: <20220121175441.9944-4-povik+lin@protonmail.com>
-In-Reply-To: <20220121175441.9944-1-povik+lin@protonmail.com>
-References: <20220121175441.9944-1-povik+lin@protonmail.com>
+        id S1351906AbiAUSCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 13:02:47 -0500
+Received: from mga02.intel.com ([134.134.136.20]:65286 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1382074AbiAUSCp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 13:02:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642788165; x=1674324165;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kVr133G4QQEACtNcARQL4cMXIgv0co62FF/BdQCLGCU=;
+  b=hYdGJWf66CEpI25k9NeCm1Cl17++HwqaIM+hX29ii5cpgOwweh+XiDRO
+   YEImHLRzmbnYlHLQuuGWeoDutASooNnwMtqsXLUvy5VjvsrAvKAKw85k1
+   8U3Z29+ok5VAjTg+X7tpQUL4I2CEFbkYKm8FBCG8zBfwf6FF7WW6SWVZJ
+   RfRSNDY8QAkQpKJbforJYyKwFpk8gIdx7l9VN+S823Jdc+CDm+T38vRI7
+   7xAl/N0ejwJdolwXoYt/NWvSzTp+xMu/V5BXRMGGyJiuahVEyWpDk1iAD
+   KPwkFPva2yRDUEyb/uZ3YlRhXdKA4j1ktK243pFA83cEZFtkSG8zGLkZp
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="233069471"
+X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
+   d="scan'208";a="233069471"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 10:00:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
+   d="scan'208";a="765775155"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 21 Jan 2022 10:00:00 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nAyCd-000FXx-IG; Fri, 21 Jan 2022 17:59:59 +0000
+Date:   Sat, 22 Jan 2022 01:59:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chevron Li <chevron.li@bayhubtech.com>, adrian.hunter@intel.com,
+        ulf.hansson@linaro.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-mmc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, shirley.her@bayhubtech.com,
+        fred.ai@bayhubtech.com, xiaoguang.yu@bayhubtech.com
+Subject: Re: [PATCH 2/2] mmc:sdhci-bayhub:provide a solution to improve sd
+ host card compatibility
+Message-ID: <202201220136.LTeGkEsu-lkp@intel.com>
+References: <20220121110909.104-2-chevron.li@bayhubtech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220121110909.104-2-chevron.li@bayhubtech.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Acked-by: Sven Peter <sven@svenpeter.dev>
-Acked-by: Hector Martin <marcan@marcan.st>
-Signed-off-by: Martin Povi=C5=A1er <povik+lin@protonmail.com>
+Hi Chevron,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on c9e6606c7fe92b50a02ce51dda82586ebdf99b48]
+
+url:    https://github.com/0day-ci/linux/commits/Chevron-Li/mmc-sdhci-msm-fix-Qualcomm-sd-host-7180-SD-card-compatibility-issue/20220121-191113
+base:   c9e6606c7fe92b50a02ce51dda82586ebdf99b48
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220122/202201220136.LTeGkEsu-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/8916351ffe4bd538ba3bf2c5e16a151fb47674fe
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Chevron-Li/mmc-sdhci-msm-fix-Qualcomm-sd-host-7180-SD-card-compatibility-issue/20220121-191113
+        git checkout 8916351ffe4bd538ba3bf2c5e16a151fb47674fe
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   mips-linux-ld: drivers/mmc/host/sdhci-msm.o: in function `mmc_decode_cid':
+>> sdhci-msm.c:(.text.mmc_decode_cid+0x0): multiple definition of `mmc_decode_cid'; drivers/mmc/core/sd.o:sd.c:(.text.mmc_decode_cid+0x0): first defined here
+   mips-linux-ld: drivers/mmc/host/sdhci-msm.o: in function `mmc_sd_switch_hs':
+>> sdhci-msm.c:(.text.mmc_sd_switch_hs+0x0): multiple definition of `mmc_sd_switch_hs'; drivers/mmc/core/sd.o:sd.c:(.text.mmc_sd_switch_hs+0x0): first defined here
+   mips-linux-ld: drivers/mmc/host/sdhci-msm.o: in function `mmc_sd_get_cid':
+>> sdhci-msm.c:(.text.mmc_sd_get_cid+0x0): multiple definition of `mmc_sd_get_cid'; drivers/mmc/core/sd.o:sd.c:(.text.mmc_sd_get_cid+0x0): first defined here
+   mips-linux-ld: drivers/mmc/host/sdhci-msm.o: in function `mmc_sd_get_csd':
+>> sdhci-msm.c:(.text.mmc_sd_get_csd+0x0): multiple definition of `mmc_sd_get_csd'; drivers/mmc/core/sd.o:sd.c:(.text.mmc_sd_get_csd+0x0): first defined here
+   mips-linux-ld: drivers/mmc/host/sdhci-msm.o: in function `mmc_sd_setup_card':
+>> sdhci-msm.c:(.text.mmc_sd_setup_card+0x0): multiple definition of `mmc_sd_setup_card'; drivers/mmc/core/sd.o:sd.c:(.text.mmc_sd_setup_card+0x0): first defined here
+>> mips-linux-ld: drivers/mmc/host/sdhci-msm.o:(.data.sd_type+0x0): multiple definition of `sd_type'; drivers/mmc/core/sd.o:(.data.sd_type+0x0): first defined here
+   mips-linux-ld: drivers/mmc/host/sdhci-msm.o: in function `mmc_sd_get_max_clock':
+>> sdhci-msm.c:(.text.mmc_sd_get_max_clock+0x0): multiple definition of `mmc_sd_get_max_clock'; drivers/mmc/core/sd.o:sd.c:(.text.mmc_sd_get_max_clock+0x0): first defined here
+   mips-linux-ld: drivers/mmc/host/sdhci-msm.o: in function `mmc_attach_sd':
+>> sdhci-msm.c:(.text.mmc_attach_sd+0x0): multiple definition of `mmc_attach_sd'; drivers/mmc/core/sd.o:sd.c:(.text.mmc_attach_sd+0x0): first defined here
+
 ---
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 086f37a4763f..d6323083b695 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1765,6 +1765,7 @@ C:=09irc://irc.oftc.net/asahi-dev
- T:=09git https://github.com/AsahiLinux/linux.git
- F:=09Documentation/devicetree/bindings/arm/apple.yaml
- F:=09Documentation/devicetree/bindings/arm/apple/*
-+F:=09Documentation/devicetree/bindings/clock/apple,nco.yaml
- F:=09Documentation/devicetree/bindings/i2c/apple,i2c.yaml
- F:=09Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
- F:=09Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
-@@ -1776,6 +1777,7 @@ F:=09Documentation/devicetree/bindings/spi/apple,spi.=
-yaml
- F:=09Documentation/devicetree/bindings/usb/apple,dwc3.yaml
- F:=09Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
- F:=09arch/arm64/boot/dts/apple/
-+F:=09drivers/clk/clk-apple-nco.c
- F:=09drivers/i2c/busses/i2c-pasemi-core.c
- F:=09drivers/i2c/busses/i2c-pasemi-platform.c
- F:=09drivers/irqchip/irq-apple-aic.c
---
-2.33.0
-
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

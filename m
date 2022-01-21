@@ -2,127 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 450E5495DF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 11:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AABD5495DF9
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 11:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234921AbiAUKvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 05:51:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234802AbiAUKvl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 05:51:41 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5758C061574;
-        Fri, 21 Jan 2022 02:51:40 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id n8so17134908wmk.3;
-        Fri, 21 Jan 2022 02:51:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7spPZrufXw4sf1roZSdir53an3GNlXPUdV7xMDTORmE=;
-        b=WX7I0gy8D0IJYOXvF2aChYR+3mR4ETAnJQlro1TUA8aIXGOc/YiHizXLlJ7fgWst/E
-         6UbeqfgaahUdKD5E4I2i/uGZVzShz7xeVDqbM6YOvKd41kg3JGS7UNq6tzGSR6fLCAS0
-         s+ar5K4bvD0r41ph1RlysUCBQmFxUItycWh/LYomwVf7pJV6SJWhI2tiQBsJ7up3n30z
-         Ctsacxv+TuK6a3cZjRbQoegvV7y0tl3oUOv7Ysm7iIi0oiFDo+IR0JiH//fb/LVcIXpK
-         Qyy8YWCyHZE+EXlnHOEv9z5thzOA2KlCViyFwklm0qnTRqOxgBUSLtrifpzNty+KFsaw
-         hSaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7spPZrufXw4sf1roZSdir53an3GNlXPUdV7xMDTORmE=;
-        b=RRZvVC2oMk6EM2q5ILS3r/Flev8d+L2CzcaIHJNWqR70XPXzkFcA0ceutrJzp6IAvF
-         vLzbjFmvpHaqJcYpGIFb9t71dIDUVOLYqDKVuxkZKN5RllYj/E0DWt9bvg+kadYP81cM
-         eB+olZIEp25sj68R92WLiwgJF+iwEDvfhBsAQWiDH88w6ZBR0KbwQGHxCT4ysLKNlEAv
-         6J/ry/z9PBOH0nkvuJzyP5hD71TAMLPXncbALoVgctCGycK0b1TrlpgOQF2EmvJSXdA8
-         tSUVkdn4xOqAPlwn/MESdbNJQYL1BZek0os4U+8O+Tub5I88BVbW4ChnwMpo0Lw3j6HJ
-         yrRA==
-X-Gm-Message-State: AOAM531e2h+q8+N4drrfNKSaAFtclbGhfpr/2YWUwrPywoia43GaXse3
-        +wMVMqCrt5HqXo/CARbtWH8=
-X-Google-Smtp-Source: ABdhPJxH9fuDLmee6jplGsAtCTa4HiUxWetXO2h6TOrKdp7ZKDUViWTXNvKov37kTzEMiMtJNzBHnA==
-X-Received: by 2002:adf:fa8a:: with SMTP id h10mr3324208wrr.372.1642762299281;
-        Fri, 21 Jan 2022 02:51:39 -0800 (PST)
-Received: from localhost.localdomain ([141.72.243.13])
-        by smtp.gmail.com with ESMTPSA id n8sm4794532wmq.43.2022.01.21.02.51.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 02:51:38 -0800 (PST)
-From:   Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-To:     mosescb.dev@gmail.com
-Cc:     gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, mchehab@kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH v3] drivers: staging: media: omap4iss: Use BIT macro instead of left shifting
-Date:   Fri, 21 Jan 2022 11:51:11 +0100
-Message-Id: <20220121105111.2651-1-mosescb.dev@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220121100837.337094-2-mosescb.dev@gmail.com>
-References: <20220121100837.337094-2-mosescb.dev@gmail.com>
+        id S234969AbiAUKz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 05:55:28 -0500
+Received: from mga05.intel.com ([192.55.52.43]:39816 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234688AbiAUKz1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 05:55:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642762527; x=1674298527;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ViBhVceOnQKi7VwCMCXAn8pJ2YGdIqiCIh6tChqDFnE=;
+  b=hRGLzh5ZL1JufDhCPbGe/JmYRqF7+Y50O2bep+23eJm3VQgA/hNUo29k
+   fZF8mqI3fACpinpZqcAPg0K0RmDgVIDTi6lWnllxw3e5WX2fZOOwFKeVJ
+   92xwH9pBQcCQSv3XeZzz0ec8vWmdlxSqPTm4LYARqMmTGfYTIOtk5jdqg
+   EbwyC7CNzg32tHRzL9JozbuSTVapxgBrfgOr4JoJIGeRg3bNVM+IlnLys
+   VtGyEqPoKUYdo42gASmdM1sq0FdQDDmenmK+H3Rw7Kt8S/S2x3GRFF60L
+   /GTwirvZ0RUMcXb/SeIuRGOwNlxk6R41j5KflwX4GYidp94krpR49/oDH
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="331981067"
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="331981067"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 02:55:27 -0800
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="579574058"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 02:55:23 -0800
+Received: by lahna (sSMTP sendmail emulation); Fri, 21 Jan 2022 12:55:21 +0200
+Date:   Fri, 21 Jan 2022 12:55:21 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, bhelgaas@google.com,
+        koba.ko@canonical.com, Lukas Wunner <lukas@wunner.de>,
+        Stuart Hayes <stuart.w.hayes@gmail.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI/portdrv: Skip enabling AER on external facing ports
+Message-ID: <YeqRGQoPKy389ct5@lahna>
+References: <20220105060643.822111-1-kai.heng.feng@canonical.com>
+ <20220105201226.GA218998@bhelgaas>
+ <CAAd53p5V9gCCc6v9Wdo-bONYfASnhtyGHVPPb6vOneft2XewQQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAd53p5V9gCCc6v9Wdo-bONYfASnhtyGHVPPb6vOneft2XewQQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a BIT(nr) macro available in Linux Kernel,
-which does the same thing.
+Hi Kai-Heng,
 
-Example:  1 << 7  is same as BIT(7)
+On Fri, Jan 07, 2022 at 12:09:57PM +0800, Kai-Heng Feng wrote:
+> Only from root ports of thunderbolt devices.
+> 
+> The error occurs as soon as the root port is runtime suspended to D3cold.
+> 
+> Runtime suspend the AER service can resolve the issue. I wonder if
+> it's the right thing to do here?
 
-Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- V2 -> V3: Add Dan's Reviewed-by tag to commit message
- V1 -> V2: Use BIT(0) instead of 1
+I think you are right here. It seems that AER "service driver" is
+completely missing PM hooks. Probably because it is more used in server
+type of systems where power management is not priority.
 
- drivers/staging/media/omap4iss/iss_video.h | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+> D3cold should also mean the PCI link is gone, disabling AER seems to
+> be a reasonable approach.
 
-diff --git a/drivers/staging/media/omap4iss/iss_video.h b/drivers/staging/media/omap4iss/iss_video.h
-index 526281bf0051..1724ed03ce9d 100644
---- a/drivers/staging/media/omap4iss/iss_video.h
-+++ b/drivers/staging/media/omap4iss/iss_video.h
-@@ -53,19 +53,19 @@ enum iss_pipeline_stream_state {
+Indeed - I think AER might trigger here because the link does "down" /
+low power state if left enabled while the root port enters D3. Something
+like below hack should disable it over low power transitions:
+
+diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+index 9fa1f97e5b27..64138cf82db8 100644
+--- a/drivers/pci/pcie/aer.c
++++ b/drivers/pci/pcie/aer.c
+@@ -1432,6 +1432,22 @@ static pci_ers_result_t aer_root_reset(struct pci_dev *dev)
+ 	return rc ? PCI_ERS_RESULT_DISCONNECT : PCI_ERS_RESULT_RECOVERED;
+ }
  
- enum iss_pipeline_state {
- 	/* The stream has been started on the input video node. */
--	ISS_PIPELINE_STREAM_INPUT = 1,
-+	ISS_PIPELINE_STREAM_INPUT = BIT(0),
- 	/* The stream has been started on the output video node. */
--	ISS_PIPELINE_STREAM_OUTPUT = (1 << 1),
-+	ISS_PIPELINE_STREAM_OUTPUT = BIT(1),
- 	/* At least one buffer is queued on the input video node. */
--	ISS_PIPELINE_QUEUE_INPUT = (1 << 2),
-+	ISS_PIPELINE_QUEUE_INPUT = BIT(2),
- 	/* At least one buffer is queued on the output video node. */
--	ISS_PIPELINE_QUEUE_OUTPUT = (1 << 3),
-+	ISS_PIPELINE_QUEUE_OUTPUT = BIT(3),
- 	/* The input entity is idle, ready to be started. */
--	ISS_PIPELINE_IDLE_INPUT = (1 << 4),
-+	ISS_PIPELINE_IDLE_INPUT = BIT(4),
- 	/* The output entity is idle, ready to be started. */
--	ISS_PIPELINE_IDLE_OUTPUT = (1 << 5),
-+	ISS_PIPELINE_IDLE_OUTPUT = BIT(5),
- 	/* The pipeline is currently streaming. */
--	ISS_PIPELINE_STREAM = (1 << 6),
-+	ISS_PIPELINE_STREAM = BIT(6),
++static int aer_suspend(struct pcie_device *dev)
++{
++	struct aer_rpc *rpc = get_service_data(dev);
++
++	aer_disable_rootport(rpc);
++	return 0;
++}
++
++static int aer_resume(struct pcie_device *dev)
++{
++	struct aer_rpc *rpc = get_service_data(dev);
++
++	aer_enable_rootport(rpc);
++	return 0;
++}
++
+ static struct pcie_port_service_driver aerdriver = {
+ 	.name		= "aer",
+ 	.port_type	= PCIE_ANY_PORT,
+@@ -1439,6 +1455,10 @@ static struct pcie_port_service_driver aerdriver = {
+ 
+ 	.probe		= aer_probe,
+ 	.remove		= aer_remove,
++	.suspend	= aer_suspend,
++	.resume		= aer_resume,
++	.runtime_suspend = aer_suspend,
++	.runtime_resume	= aer_resume,
  };
  
- /*
-@@ -119,9 +119,9 @@ struct iss_buffer {
- 
- enum iss_video_dmaqueue_flags {
- 	/* Set if DMA queue becomes empty when ISS_PIPELINE_STREAM_CONTINUOUS */
--	ISS_VIDEO_DMAQUEUE_UNDERRUN = (1 << 0),
-+	ISS_VIDEO_DMAQUEUE_UNDERRUN = BIT(0),
- 	/* Set when queuing buffer to an empty DMA queue */
--	ISS_VIDEO_DMAQUEUE_QUEUED = (1 << 1),
-+	ISS_VIDEO_DMAQUEUE_QUEUED = BIT(1),
- };
- 
- #define iss_video_dmaqueue_flags_clr(video)	\
--- 
-2.30.2
-
+ /**

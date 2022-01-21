@@ -2,90 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A2B496023
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6863D496005
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:54:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350763AbiAUN4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 08:56:02 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:6828 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1380874AbiAUN4A (ORCPT
+        id S1380792AbiAUNyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 08:54:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350341AbiAUNyt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 08:56:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1642773360; x=1674309360;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=/tJxn3aegN2u9McR6qwjkE21gbqdzXpJZKU6OYmDMns=;
-  b=T3qoZ7Dx3zeimP67JAWv1jr9TtMWMbwcEHxHeP+zYhwHi+RRZZg+Z3gX
-   67Et6dkSYCwESF6sCnyPibrUcQWyWlu6CbDzZQ+SqkJ0Z3HvQoB3SIp61
-   qLsZNvnCg4RidnSDv82Se+7AsI3Xe+7ZwD4MCxcgNFsZnhwQUF+g3IL5M
-   0=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 21 Jan 2022 05:55:59 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 05:55:59 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Fri, 21 Jan 2022 05:55:59 -0800
-Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Fri, 21 Jan 2022 05:55:53 -0800
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
-        <bjorn.andersson@linaro.org>, <greg@kroah.com>, <robh@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>,
-        <quic_psodagud@quicinc.com>, <quic_satyap@quicinc.com>,
-        <quic_pheragu@quicinc.com>, <quic_rjendra@quicinc.com>,
-        <quic_sibis@quicinc.com>, <quic_saipraka@quicinc.com>,
-        <quic_schowdhu@quicinc.com>
-Subject: [PATCH V4 6/6] MAINTAINERS: Add maintainer entry for EUD
-Date:   Fri, 21 Jan 2022 19:23:51 +0530
-Message-ID: <d8079cb1001675cd876f1e051647a65a7733b81c.1642768837.git.quic_schowdhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1642768837.git.quic_schowdhu@quicinc.com>
-References: <cover.1642768837.git.quic_schowdhu@quicinc.com>
+        Fri, 21 Jan 2022 08:54:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72924C061574;
+        Fri, 21 Jan 2022 05:54:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59A84616F0;
+        Fri, 21 Jan 2022 13:54:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B912C340E1;
+        Fri, 21 Jan 2022 13:54:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1642773287;
+        bh=MsGTfQONatWIvmB+ivBn7GztIxbSTJkJ4CdpKN2PPh8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g91iKuk5lY+J2J7MmuPExW4S7EYjj/FcXwJYf7QI9502AbYrToyaXIblqIXbeHsaT
+         gHBa5SHiFz2fP5gEiIbEE0WgIN1kpgLj2uK2m3cc/+fXBS/6kDB420Ow1mL1jmVknt
+         ieKCl7zu846j+LYjAz+1qU+wBOSeVEmPq8gGpFqs=
+Date:   Fri, 21 Jan 2022 14:54:39 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Xin Xiong <xiongx18@fudan.edu.cn>,
+        Xin Tan <tanxin.ctf@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-mmc@vger.kernel.org, stable <stable@vger.kernel.org>,
+        whitehat002 <hackyzh002@gmail.com>
+Subject: Re: [PATCH] moxart: fix potential use-after-free on remove path
+Message-ID: <Yeq7H0LSegfCNHzl@kroah.com>
+References: <20220114075934.302464-1-gregkh@linuxfoundation.org>
+ <CAPDyKFpu0mGchoqdzE-qKc6=9ogncnTCwN8AR7g1wcMZLyRFsw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFpu0mGchoqdzE-qKc6=9ogncnTCwN8AR7g1wcMZLyRFsw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the entry for maintainer for EUD driver
-and other associated files.
+On Fri, Jan 21, 2022 at 01:41:27PM +0100, Ulf Hansson wrote:
+> On Fri, 14 Jan 2022 at 08:59, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > It was reported that the mmc host structure could be accessed after it
+> > was freed in moxart_remove(), so fix this by saving the base register of
+> > the device and using it instead of the pointer dereference.
+> >
+> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > Cc: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+> > Cc: Xin Xiong <xiongx18@fudan.edu.cn>
+> > Cc: Xin Tan <tanxin.ctf@gmail.com>
+> > Cc: Tony Lindgren <tony@atomide.com>
+> > Cc: Yang Li <yang.lee@linux.alibaba.com>
+> > Cc: linux-mmc@vger.kernel.org
+> > Cc: stable <stable@vger.kernel.org>
+> > Reported-by: whitehat002 <hackyzh002@gmail.com>
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> >  drivers/mmc/host/moxart-mmc.c | 9 +++++----
+> >  1 file changed, 5 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/mmc/host/moxart-mmc.c b/drivers/mmc/host/moxart-mmc.c
+> > index 16d1c7a43d33..f5d96940a9b8 100644
+> > --- a/drivers/mmc/host/moxart-mmc.c
+> > +++ b/drivers/mmc/host/moxart-mmc.c
+> > @@ -697,6 +697,7 @@ static int moxart_remove(struct platform_device *pdev)
+> >  {
+> >         struct mmc_host *mmc = dev_get_drvdata(&pdev->dev);
+> >         struct moxart_host *host = mmc_priv(mmc);
+> > +       void __iomem *base = host->base;
+> >
+> >         dev_set_drvdata(&pdev->dev, NULL);
+> >
+> > @@ -707,10 +708,10 @@ static int moxart_remove(struct platform_device *pdev)
+> >         mmc_remove_host(mmc);
+> >         mmc_free_host(mmc);
+> >
+> > -       writel(0, host->base + REG_INTERRUPT_MASK);
+> > -       writel(0, host->base + REG_POWER_CONTROL);
+> > -       writel(readl(host->base + REG_CLOCK_CONTROL) | CLK_OFF,
+> > -              host->base + REG_CLOCK_CONTROL);
+> 
+> Rather than doing it like this, I think it would be easier to move
+> mmc_free_host() below this part. That's usually what mmc host drivers
+> do clean up things in ->remove().
+> 
+> > +       writel(0, base + REG_INTERRUPT_MASK);
+> > +       writel(0, base + REG_POWER_CONTROL);
+> > +       writel(readl(base + REG_CLOCK_CONTROL) | CLK_OFF,
+> > +              base + REG_CLOCK_CONTROL);
+> >
 
-Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Ok, I can do that, I didn't know if it would cause any functionality
+changes, so I was trying to preserve the same logic that the driver
+currently has.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b84e2d5..0fa9d54 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7227,6 +7227,14 @@ F:	include/uapi/linux/mdio.h
- F:	include/uapi/linux/mii.h
- F:	net/core/of_net.c
- 
-+QCOM EMBEDDED USB DEBUGGER(EUD)
-+M:	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-+L:	linux-arm-msm@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/ABI/testing/sysfs-driver-eud
-+F:	Documentation/devicetree/bindings/arm/msm/qcom,eud.yaml
-+F:	drivers/usb/common/qcom_eud.c
-+
- EXEC & BINFMT API
- R:	Eric Biederman <ebiederm@xmission.com>
- R:	Kees Cook <keescook@chromium.org>
--- 
-2.7.4
+Do you have this device to test this with?
 
+thanks,
+
+greg k-h

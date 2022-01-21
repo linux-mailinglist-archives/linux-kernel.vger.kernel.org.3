@@ -2,188 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9EB3495AEC
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F66495AFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:39:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349138AbiAUHhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 02:37:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379075AbiAUHgc (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 02:36:32 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FAABC061749
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 23:36:24 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id a18so39307940edj.7
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 23:36:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:in-reply-to;
-        bh=5v9oTRG9bKJPQ8qJ3H7438f91G/2XJkoLRkXT7hN8Z4=;
-        b=KBrKYh3lPI1KdArxsthwEp0aFW8igomzLj1R433vQcUXRzwQ5KHhzElGfzAVjaqSof
-         acRnEbtif2fFE57LHcYB6M7jqHpWXZj/OZAvw0X2Qk4r21Z3MnR/yDuY7HZOcnhcaVp4
-         P78WH6tNQ/Xk08cyekA5NJ30kwa52tPrefvpM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:in-reply-to;
-        bh=5v9oTRG9bKJPQ8qJ3H7438f91G/2XJkoLRkXT7hN8Z4=;
-        b=Kilb+aQtPWKv5TuIKyuGXksIAlF0Q782UBCg2hsc0YJ9TCFzM7K1dSoeY/OsDqTx8E
-         C5p3BeSE0C04LzftWao35yV2SLrMdDLDMwhJ1hVtiRR3wSsg2SX/lVZ6bxzuuJG4Na8f
-         tYtjCoV/QY+7j2r5ogtH5t1DHnmQo/67czaRug5tIK4JhKVSCqfL5jGB24ZrueoHYH2m
-         2ykzsES3vcRzRjOfsQj2jK1VFxBkm9QifKamRud0NJOoJIA5Iu9qlDL855i0DvQ/jc+c
-         pX4WLUNig7y6dtI9eQblhOf+p7/IXQ/65yWPD+q+rAocoRGkleLBTIdxkb3KWmK5aR3s
-         CkMA==
-X-Gm-Message-State: AOAM530ZoDYG3UVBT2/JpOeEyvyL7AyemvZ1Hqq/bO1Wny0BTlvl0PHq
-        O/vDz4T/1tC03Lx3Ls6HVHt99A==
-X-Google-Smtp-Source: ABdhPJyUItmsdTH/LQtJs7NyEKULw75Uy92CGnVTfKpsuCgJU+DVkECBulTfCThCeKYjyDTyNmWtLQ==
-X-Received: by 2002:a05:6402:518c:: with SMTP id q12mr3152860edd.312.1642750582647;
-        Thu, 20 Jan 2022 23:36:22 -0800 (PST)
-Received: from [192.168.178.136] (f140230.upc-f.chello.nl. [80.56.140.230])
-        by smtp.gmail.com with ESMTPSA id h20sm1922056eds.9.2022.01.20.23.36.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 23:36:21 -0800 (PST)
-Message-ID: <c1772c79-a84a-6115-61c3-f7655bfb9605@broadcom.com>
-Date:   Fri, 21 Jan 2022 08:36:20 +0100
+        id S1379063AbiAUHjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 02:39:00 -0500
+Received: from mga09.intel.com ([134.134.136.24]:14452 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1349219AbiAUHi6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 02:38:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642750738; x=1674286738;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DcqkV7XZWcjmaaAzzZ7ddFAUMOAUp0W+NCFMMfDNBNI=;
+  b=WvbY/HazyBaSua3K4L3N8nxIJ7OXCutIE7dsYPdLErU84Ynbvz02qjdR
+   wZonPz95znfSQZx/FOp2XRWDeCrPp7A1JCXecIfkFLievLpw128nSTWUl
+   XAoxNaritErs5iFgeJpPf0xfPIb78w6qeFjcwdxFVA8mD2hV1WbZr/Z4i
+   4Lgb2Ja8LtT13peqmEtroEA8UZfH1U17H+iG9P2Ws5JI/L8uEnxuNL7QT
+   PpxsC0wsYqgB9y2HVG96xDf63Itf86CFmfaQZfFreJk3CfadXk/C5oRT3
+   c8nGJcLokBKMN4+kahuX+QdWAqseCTDhltGAnAAL2AyWA8oaNnXwyhcVM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="245376001"
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="245376001"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 23:38:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="579519391"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 20 Jan 2022 23:38:38 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nAoVJ-000F3u-KS; Fri, 21 Jan 2022 07:38:37 +0000
+Date:   Fri, 21 Jan 2022 15:37:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Davidlohr Bueso <dave@stgolabs.net>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Song Liu <song@kernel.org>
+Subject: drivers/md/raid5.c:7055:9: sparse: sparse: cast removes address
+ space '__percpu' of expression
+Message-ID: <202201211523.eotam4i6-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Arend van Spriel <arend.vanspriel@broadcom.com>
-Subject: Re: [PATCH v2 34/35] brcmfmac: pcie: Load and provide TxCap blobs
-To:     Hector Martin <marcan@marcan.st>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-References: <20220104072658.69756-1-marcan@marcan.st>
- <20220104072658.69756-35-marcan@marcan.st>
-In-Reply-To: <20220104072658.69756-35-marcan@marcan.st>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000f2aeb405d612acbc"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000f2aeb405d612acbc
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2c271fe77d52a0555161926c232cd5bc07178b39
+commit: 770b1d216d7371c94c88713824da4be4bc39a4e0 md/raid5: play nice with PREEMPT_RT
+date:   2 weeks ago
+config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220121/202201211523.eotam4i6-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=770b1d216d7371c94c88713824da4be4bc39a4e0
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 770b1d216d7371c94c88713824da4be4bc39a4e0
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-On 1/4/2022 8:26 AM, Hector Martin wrote:
-> These blobs are named .txcap_blob, and exist alongside the existing
-> .clm_blob files. Use the existing firmware machinery to provide them to
-> the core.
-> 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> ---
->   .../net/wireless/broadcom/brcm80211/brcmfmac/pcie.c | 13 +++++++++++++
->   1 file changed, 13 insertions(+)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
---000000000000f2aeb405d612acbc
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
 
-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
-XSlOP9s1dqWlRRnnNxV7BVC87lkKKy0+1M2DOF6qRYQlnW4EfOyCToYLAG5zeV+AjepMoX6J9bUz
-yj4BlDtwH4HFjaRIlPPbdLshUA54/tV84x8woATuLGBq+hTZEpkZAgMBAAGjggHdMIIB2TAOBgNV
-HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
-KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
-Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
-dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
-OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
-MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
-BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFKb+3b9pz8zo
-0QsCHGb/p0UrBlU+MA0GCSqGSIb3DQEBCwUAA4IBAQCHisuRNqP0NfYfG3U3XF+bocf//aGLOCGj
-NvbnSbaUDT/ZkRFb9dQfDRVnZUJ7eDZWHfC+kukEzFwiSK1irDPZQAG9diwy4p9dM0xw5RXSAC1w
-FzQ0ClJvhK8PsjXF2yzITFmZsEhYEToTn2owD613HvBNijAnDDLV8D0K5gtDnVqkVB9TUAGjHsmo
-aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
-OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
-UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
-YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
-h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBp91NzsLczEjW5WU4r
-T8y5sX5ywQ0S6iDqLXmTzIXY6jAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMjAxMjEwNzM2MjJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
-AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAFoYYVbbRoXpjc3Bk29oIXVwRQI0VQpoPCGJU
-LDK3BrTMKRW180n/aoqcNVG2oVgeR30Pow0pYDPTbl/JTL93eoE0R2gaZmZkPeA/f8L/+aMLdqxl
-AzXzI/GCqkQxZ7Ydm6JUkUD9kV741rwrvPEq9L19vrqA/Jv/BBST15aPK3iipGdxaP7C53EgO48V
-L4tmjWciAZwUNm0efwAj65AljYuA87LFXCs9v1ugoPlPBig7Vtt+KlLkhaNcK0NULVhAyDSrLMG1
-L67fU/cRBp7e9TJKxN3w/6rQrBW9azqFcFoSJ8Elgk+cn3HeA/oIEx61O8S7z0PPkbv1hiXA/anK
-KQ==
---000000000000f2aeb405d612acbc--
+sparse warnings: (new ones prefixed by >>)
+   drivers/md/raid5.c: note: in included file:
+   drivers/md/raid5.h:271:14: sparse: sparse: array of flexible structures
+   drivers/md/raid5.c:641:40: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:641:40: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:641:40: sparse:    struct md_rdev *
+   drivers/md/raid5.c:643:32: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:643:32: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:643:32: sparse:    struct md_rdev *
+   drivers/md/raid5.c:667:40: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:667:40: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:667:40: sparse:    struct md_rdev *
+   drivers/md/raid5.c:669:32: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:669:32: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:669:32: sparse:    struct md_rdev *
+   drivers/md/raid5.c:1101:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:1101:25: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:1101:25: sparse:    struct md_rdev *
+   drivers/md/raid5.c:1103:24: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:1103:24: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:1103:24: sparse:    struct md_rdev *
+   drivers/md/raid5.c:3563:32: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:3563:32: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:3563:32: sparse:    struct md_rdev *
+   drivers/md/raid5.c:3689:48: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:3689:48: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:3689:48: sparse:    struct md_rdev *
+   drivers/md/raid5.c:3696:32: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:3696:32: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:3696:32: sparse:    struct md_rdev *
+   drivers/md/raid5.c:3718:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:3718:16: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:3718:16: sparse:    struct md_rdev *
+   drivers/md/raid5.c:4646:24: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:4646:24: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:4646:24: sparse:    struct md_rdev *
+   drivers/md/raid5.c:4657:32: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:4657:32: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:4657:32: sparse:    struct md_rdev *
+   drivers/md/raid5.c:4704:49: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:4704:49: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:4704:49: sparse:    struct md_rdev *
+   drivers/md/raid5.c:4717:49: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:4717:49: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:4717:49: sparse:    struct md_rdev *
+   drivers/md/raid5.c:4726:49: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:4726:49: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:4726:49: sparse:    struct md_rdev *
+   drivers/md/raid5.c:4748:40: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:4748:40: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:4748:40: sparse:    struct md_rdev *
+   drivers/md/raid5.c:5419:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:5419:16: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:5419:16: sparse:    struct md_rdev *
+   drivers/md/raid5.c:5422:24: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:5422:24: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:5422:24: sparse:    struct md_rdev *
+>> drivers/md/raid5.c:7055:9: sparse: sparse: cast removes address space '__percpu' of expression
+>> drivers/md/raid5.c:7055:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct lockdep_map *lock @@     got struct lockdep_map [noderef] __percpu * @@
+   drivers/md/raid5.c:7055:9: sparse:     expected struct lockdep_map *lock
+   drivers/md/raid5.c:7055:9: sparse:     got struct lockdep_map [noderef] __percpu *
+>> drivers/md/raid5.c:7055:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct local_lock_t [usertype] *l @@     got struct local_lock_t [noderef] __percpu * @@
+   drivers/md/raid5.c:7055:9: sparse:     expected struct local_lock_t [usertype] *l
+   drivers/md/raid5.c:7055:9: sparse:     got struct local_lock_t [noderef] __percpu *
+   drivers/md/raid5.c:7808:40: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:7808:40: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:7808:40: sparse:    struct md_rdev *
+   drivers/md/raid5.c:8021:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:8021:25: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:8021:25: sparse:    struct md_rdev *
+   drivers/md/raid5.c:8037:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid5.c:8037:25: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid5.c:8037:25: sparse:    struct md_rdev *
+   drivers/md/raid5.c:1476:16: sparse: sparse: dereference of noderef expression
+   drivers/md/raid5.c:1476:39: sparse: sparse: dereference of noderef expression
+   drivers/md/raid5.c:2208:54: sparse: sparse: dereference of noderef expression
+   drivers/md/raid5.c:2419:16: sparse: sparse: dereference of noderef expression
+   drivers/md/raid5.c:2421:9: sparse: sparse: dereference of noderef expression
+   drivers/md/raid5.c:2422:9: sparse: sparse: dereference of noderef expression
+   drivers/md/raid5.c:7031:23: sparse: sparse: dereference of noderef expression
+   drivers/md/raid5.c:7031:23: sparse: sparse: dereference of noderef expression
+   drivers/md/raid5.c:7032:9: sparse: sparse: dereference of noderef expression
+   drivers/md/raid5.c:7033:16: sparse: sparse: dereference of noderef expression
+   drivers/md/raid5.c:7034:9: sparse: sparse: dereference of noderef expression
+   drivers/md/raid5.c:7039:34: sparse: sparse: dereference of noderef expression
+   drivers/md/raid5.c:7040:17: sparse: sparse: dereference of noderef expression
+   drivers/md/raid5.c:7041:22: sparse: sparse: dereference of noderef expression
+   drivers/md/raid5.c:97:9: sparse: sparse: context imbalance in 'raid5_quiesce' - different lock contexts for basic block
+
+vim +/__percpu +7055 drivers/md/raid5.c
+
+  7036	
+  7037	static int alloc_scratch_buffer(struct r5conf *conf, struct raid5_percpu *percpu)
+  7038	{
+  7039		if (conf->level == 6 && !percpu->spare_page) {
+  7040			percpu->spare_page = alloc_page(GFP_KERNEL);
+  7041			if (!percpu->spare_page)
+  7042				return -ENOMEM;
+  7043		}
+  7044	
+  7045		if (scribble_alloc(percpu,
+  7046				   max(conf->raid_disks,
+  7047				       conf->previous_raid_disks),
+  7048				   max(conf->chunk_sectors,
+  7049				       conf->prev_chunk_sectors)
+  7050				   / RAID5_STRIPE_SECTORS(conf))) {
+  7051			free_scratch_buffer(conf, percpu);
+  7052			return -ENOMEM;
+  7053		}
+  7054	
+> 7055		local_lock_init(&percpu->lock);
+  7056		return 0;
+  7057	}
+  7058	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

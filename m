@@ -2,130 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CEB1495CD4
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 10:27:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF05495CDA
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 10:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379743AbiAUJ1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 04:27:48 -0500
-Received: from esa3.hgst.iphmx.com ([216.71.153.141]:2956 "EHLO
-        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349429AbiAUJ1m (ORCPT
+        id S1379631AbiAUJdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 04:33:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236263AbiAUJdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 04:27:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1642757260; x=1674293260;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wvAGSSkbD8sKVKozj06LSLUZ8DGhuMSqNCuuyy1l4Tg=;
-  b=Coe/ygb6UeSSC7sC42jBUlxiSZGiukWTD79W5wEF/6DYpn411/I2GkgM
-   pXT0tvsNrK42Y40NmgoEzD8RjvJ0Lay3nSUNLXGW23/W2HmXkLXhzdm9I
-   ujEMEKcYq/5wfmtbBD4l5iKBb5NAmb3cF879pz5a9rOQ9Kg9QBY+EXF7s
-   Nox6fG8MUff3RTnTVQY4NdZBo9jDgNW33h8serivsuB4v6bWRPRkqIj1S
-   OtRMeA1Yq4maadhxNRBeDXeZJkwv9ZkUcV5mnymfErgJ9OaIqAWGPKgxF
-   6rckhd/3sBs89cYRWcrl1w80ReH5ju9B2tQK3CjnKRm/ZKU7r56EPV25H
-   A==;
-X-IronPort-AV: E=Sophos;i="5.88,304,1635177600"; 
-   d="scan'208";a="195827692"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 21 Jan 2022 17:27:38 +0800
-IronPort-SDR: 7X7cC7jKyFqFcocZWRUXqUX3tBQDZu6Tu2NWaMPsPdlEnR7fSMUvDkEdNHEWbh/TC1A1g4DrzE
- uHFH12d5DvrAE2qVFxhsSTyVpUb+N531S88YN85Tvn93ImbUtR7gr/PxGFHCoCq0/SBg4EfOu1
- eK0zmI95PfcOojXele8uddXmwcAtuGz2gaB5yfbyzdPFOCM8kf5SHL4oUR474AvjeNv4qpF84N
- 9c0uwhe3tv5PaPf20MUvozfhY9WRUfonox4omMKB0kVbkgBxgxcrNtPaciEmWh/RMmrlOFTVTA
- 3CZvRKiqHFfqP/Ovm0KNjOIW
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 00:59:50 -0800
-IronPort-SDR: v9VmyD/Shzw6V9DZc8oKILLM3WGJNyvLF5SBX4zEinrjgTApVujwY5dZR2ri06kxAlrLbKBDHL
- 7oUW+Wv8M2dZwJ7UiFcjDbYcgj9FliNefXZrNfa8cIMK1rFhT/nO16lY4QhDD9PRMBnZOhLkyf
- PXUvB2cyah4QvWwcvfxAyRg0AfkDcAmb1YiU1VROXXaB/mkdW03/HXuNrgqvIRc0aOqpLoDRcM
- Bpf/MvtCfCfFUv0RPjlb8Dop8+hcufKunTIUdsALd6i9d5HB/kmYKSlmjfmkSbwRHnNedCJI3Q
- c5s=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 01:27:39 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JgDYk1zcKz1SVnx
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 01:27:38 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1642757257; x=1645349258; bh=wvAGSSkbD8sKVKozj06LSLUZ8DGhuMSqNCu
-        uyy1l4Tg=; b=eH3Z965uTxH9B+Ybb9izm7AvFS75V8fAtbih7EcrBmg7M/fwcUl
-        zPO5DnBIzdU5y2lrgu4Toooa2iwJ80SvIeOybdNsW2ZCtiztoVPnkBiW+WGnXsCF
-        rt1FhRMpYD88Dj5WRfDmAFbslsE3tgUxc+Fr6VJqVCN/9qbFUeTGceLrudBjI1aU
-        sdvxSCmFi568o65dcF8bo1LwSeDImocsGkIEbnuHw/Bhtj6dZWRDbB2WM2DNWD+s
-        SKh0qfGhm1+18rMesxGU5cTyK4ESN8u4o6fAtuD88a3tw8r8IrnAfIzUWnSImuKi
-        xsfnz+gHr8NdGnoX1OkyQGMOLelsLgwoJCQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 8Lz86wnGXxl4 for <linux-kernel@vger.kernel.org>;
-        Fri, 21 Jan 2022 01:27:37 -0800 (PST)
-Received: from [10.225.163.53] (unknown [10.225.163.53])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JgDYg5LFjz1RvlN;
-        Fri, 21 Jan 2022 01:27:35 -0800 (PST)
-Message-ID: <11ec9f44-5e1c-c4cd-8d63-93d7538a12c8@opensource.wdc.com>
-Date:   Fri, 21 Jan 2022 18:27:34 +0900
+        Fri, 21 Jan 2022 04:33:23 -0500
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51DBC061574
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 01:33:22 -0800 (PST)
+Received: by mail-vk1-xa2d.google.com with SMTP id n14so5192522vkk.6
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 01:33:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PgMSke+bZlszGyLm6pe6KT+pr+k2kujaqqD5VTRN9qE=;
+        b=fBo8ITDcmEA3l/exKfPkfGCjMZ9NsvsqTOBl2NR+NqtF8MYsqLGqdu3gzfxvKurapw
+         YogIUgcRgHWi0sXhdhydmV1XLdkoPurTTcO+gQX/n+1pBYbrNY5rxqgJo859TsEwTI3c
+         ZyB4pBmDWAaoYFmI/SnCPdPAn2Bpa+PvNMoOU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PgMSke+bZlszGyLm6pe6KT+pr+k2kujaqqD5VTRN9qE=;
+        b=0yAXTaTbrw72bEwwmJWQSWc0DyT3cPphSWIJlMGBnry47nrZniQW20J8E3aMUh+CmI
+         CU22RkLtxOShlknciC4XunZQnzv7xanWwhSlbIg2/uGJY5gk1ImKLTpsTXVfQgDjuG2S
+         3rn8dyv9AJH5wpXVUkcPFj1I3DdSk0M1/km5BOjZVkeQzw97/dKrY3qGlNHnByyKObf7
+         uV7mATv3RHL+Z8PubFLIw2dTx8L+J7TqVOnpgET8gOvr1skaLXdZKlch+Blt2BTygs67
+         bz50XHgNpX/bpt4u7s/wLYmBqQCiOCFCcHve01fSVESAWdyDOTLZH9upEU7NkbpMK1m2
+         g+hg==
+X-Gm-Message-State: AOAM532fe2FPg3rIEyP6NwYcMLY99vTqcQa1ZNhr+y7sN9v12JA+bDZq
+        MlOJ96vA/YE9g6UE7eKT0JPLm8ga3vPb38DGDth25A==
+X-Google-Smtp-Source: ABdhPJysL5/C8W15z++JiLJLa3mgwmZ3xFfYQnPZR5KRkrI9f+B+VkmLAjSX6lKEc5/6IAx/XDetvmPYxJoPVKaiThU=
+X-Received: by 2002:a1f:a54c:: with SMTP id o73mr616568vke.34.1642757600880;
+ Fri, 21 Jan 2022 01:33:20 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [next] mips: cavium_octeon_defconfig: pata_octeon_cf.c:598:23:
- error: passing argument 1 of 'trace_ata_bmdma_stop' from incompatible pointer
- type
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
+References: <20211201175613.13710-1-dafna.hirschfeld@collabora.com>
+ <20211201175613.13710-2-dafna.hirschfeld@collabora.com> <CAFr9PX=6Pd1Rg=wJvpuX6WX63L=iAnwPA24e59An3Kac5f_vzA@mail.gmail.com>
+ <cdd9b485-364f-c6bd-776f-a0ca2d260762@collabora.com> <e9905774-a994-6311-7b53-b40588d4f6ec@collabora.com>
+ <CAFr9PXnnGc1TUQBeW8JW9qGewhU99gmRbvzZEsZaDmr12jMg0A@mail.gmail.com> <25e7d6db-1cff-6fd5-1071-1f21c5ff7a8a@collabora.com>
+In-Reply-To: <25e7d6db-1cff-6fd5-1071-1f21c5ff7a8a@collabora.com>
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Fri, 21 Jan 2022 18:33:10 +0900
+Message-ID: <CAFr9PXkppeU-M2Sm7EQv3pO-1PzaD-UEckFWX=B_U8CKbzP7RA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/6] staging: media: wave5: Add vpuapi layer
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Cc:     "open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" 
+        <linux-media@vger.kernel.org>,
+        Robert Beckett <bob.beckett@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
         open list <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        CGEL ZTE <cgel.zte@gmail.com>
-References: <CA+G9fYtq0wzSeG8YG-a+=KrbdWqHJMXk1hvq0FKeAvj9sZAK2g@mail.gmail.com>
- <6249735f-e6b7-1331-eb2b-361bb17d6115@opensource.wdc.com>
- <CA+G9fYu__OOvk-ESXoOqbd-Lk+CmO8CSQ8chEFf3MyeTjKtp9g@mail.gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <CA+G9fYu__OOvk-ESXoOqbd-Lk+CmO8CSQ8chEFf3MyeTjKtp9g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
+        kiril.bicevski@collabora.com,
+        Nas Chung <nas.chung@chipsnmedia.com>,
+        lafley.kim@chipsnmedia.com, scott.woo@chipsnmedia.com,
+        olivier.crete@collabora.com, dan.carpenter@oracle.com,
+        Randy Dunlap <rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/21/22 17:58, Naresh Kamboju wrote:
->> I just posted a fix. As I do not have the environment to compile test
->> mips, could someone test please ? I will send the fix to Linus asap
->> after confirmation that it is OK.
-> 
-> Please share your patch / patch link. I will test it with tuxmake.
-> 
-> you may also give a try with these easy steps.
-> 
-> # To install tuxmake on your system globally:
-> # sudo pip3 install -U tuxmake
-> #
-> # See https://docs.tuxmake.org/ for complete documentation.
-> # Original tuxmake command with fragments listed below.
-> 
->  tuxmake --runtime podman --target-arch mips --toolchain gcc-10
-> --kconfig cavium_octeon_defconfig
+Hi Dafna,
 
-Just tried this and it all passes for me.
+On Fri, 21 Jan 2022 at 18:22, Dafna Hirschfeld
+<dafna.hirschfeld@collabora.com> wrote:
+>
+>
+>
+> On 14.12.21 12:20, Daniel Palmer wrote:
+> > Hi Dafna,
+> >
+> > On Tue, 14 Dec 2021 at 16:48, Dafna Hirschfeld
+> > <dafna.hirschfeld@collabora.com> wrote:
+> >>>>> +static int wave5_wait_bus_busy(struct vpu_device *vpu_dev, int timeout, unsigned int addr)
+> >>>>> +{
+> >>>>> +       u32 gdi_status_check_value = 0x3f;
+> >>>>> +       u32 data;
+> >>>>> +
+> >>>>> +       if (vpu_dev->product_code == WAVE521C_CODE ||
+> >>>>> +           vpu_dev->product_code == WAVE521_CODE ||
+> >>>>> +        vpu_dev->product_code == WAVE521E1_CODE)
+> >>>>> +               gdi_status_check_value = 0x00ff1f3f;
+> >>>>> +
+> >>>>> +       return read_poll_timeout(wave5_vdi_read_register, data, data == gdi_status_check_value,
+> >>>>> +                                0, timeout * 1000, false, vpu_dev, addr);
+> >>>>> +}
+> >>>>> +
+> >>>>
+> >>>> This looks like it should be s/wave5_vdi_read_register/wave5_read_register/.
+> >>>> For wave511 addr passed in here is 0x8e14 so well outside of what is
+> >>>> directly accessible.
+> >>>
+> >>> Hi, I didn't understand this explanation. I see that
+> >>> wave5_read_register eventually calls 'wave5_vdi_read_register'.
+> >>> Could you please explain in more detail why you think
+> >>> calling wave5_vdi_read_register is wrong?
+> >
+> > Mainly because the address accessed 0x8e14 but on my machine the
+> > directly accessible registers end at 0x800.
+> >
+> >> hi, I see know that those backbone address are indeed not read and written directly but
+> >> the address should be first written to a regsiter W5_VPU_FIO_CTRL_ADDR,
+> >> and then the content is returned from W5_VPU_FIO_DATA.
+> >
+> > I think so. But as I can't get this driver to fully work yet I can
+> > only say I think so.
+>
+> Hi,
+> Thanks a lot for helping me with compiling the kernel and booting the smart display 'ido-sbc2d70-v1b'.
+> I am now at a point where the probe of the driver on that board fails with:
+>
+> [   30.710385] write --> 0x000000f0:0x00000001
+> [   30.727445] wave5_vpu_reset:1594
+> [   30.730712] write --> 0x00000070:0x00000000
+> [   30.734944] wave5_vpu_reset:1652
+> [   30.738186] write --> 0x00000024:0x00000007
+> [   30.742382] write --> 0x00000020:0x00018e10
+> [   40.746598] wave5_vpu_reset:1656
+> [   40.749849] CPU: 1 PID: 1 Comm: sh Not tainted 5.16.0-11196-gd076cd89f795-dirty #14
+> [   40.757531] Hardware name: MStar/Sigmastar Armv7 (Device Tree)
+> [   40.763389]  unwind_backtrace from show_stack+0x10/0x14
+> [   40.768647]  show_stack from dump_stack_lvl+0x40/0x4c
+> [   40.773720]  dump_stack_lvl from wave5_wait_bus_busy+0x10/0x44
+> [   40.779579]  wave5_wait_bus_busy from wave5_vpu_reset+0x28c/0x584
+> [   40.785696]  wave5_vpu_reset from wave5_vpu_init_with_bitcode+0x58/0xe8
+> [   40.792337]  wave5_vpu_init_with_bitcode from wave5_vpu_probe+0x2b0/0x560
+> [   40.799153]  wave5_vpu_probe from platform_probe+0x5c/0xb8
+> [   40.804663]  platform_probe from really_probe+0xc0/0x2fc
+> [   40.809998]  really_probe from __driver_probe_device+0x84/0xe4
+> [   40.815854]  __driver_probe_device from device_driver_attach+0x24/0x50
+> [   40.822407]  device_driver_attach from bind_store+0x80/0xec
+> [   40.828002]  bind_store from kernfs_fop_write_iter+0x118/0x1b4
+> [   40.833860]  kernfs_fop_write_iter from vfs_write+0x308/0x3fc
+> [   40.839631]  vfs_write from ksys_write+0xa4/0xd4
+> [   40.844268]  ksys_write from ret_fast_syscall+0x0/0x54
+> [   40.849427] Exception stack(0xc189dfa8 to 0xc189dff0)
+> [   40.854497] dfa0:                   004751a8 00000015 00000001 004751a8 00000015 00000001
+> [   40.862700] dfc0: 004751a8 00000015 00000001 00000004 00000015 bea7eb50 00460a6d 004745e4
+> [   40.870900] dfe0: 00000000 bea7e924 0045d43f b6f71cf6
+> [   40.875987] write --> 0x00000020:0x00008e14
+> [   50.880186] write --> 0x00000024:0x00000000
+> [   50.884397] write --> 0x00000020:0x00018e10
+> [   60.888598] vdec 1f344800.video-codec: wave5_vpu_reset failed -16
+> [   60.894726] vdec 1f344800.video-codec: vpu_init_with_bitcode fail
+> [   60.900889] vcc_5v: disabling
+> [   60.903890] vcc_sd: disabling
+> [   60.904026] vdec 1f344800.video-codec: failed to wave5_vpu_load_firmware: -16
+> [   60.906869] vcc_4g: disabling
+> [   60.914729] vdec: probe of 1f344800.video-codec failed with error -16
+>
+> Were you able to reach a point where the probe succeed ?
+> Could you write in more detail to which point were you able to make the driver work?
 
-> 
-> - Naresh
+Not yet. It would always timeout waiting for whatever it's waiting for
+after loading the firmware.
+The hardware exposes the program counter for the internal CPU (VCPU?)
+from what I can tell.
+From what I can see there the firmware is running as the PC values
+look roughly the same as the same hardware running the vendor SDK
+image with their binary driver.
 
+When messing with something else (2D gpu) I saw the behaviour change.
+So I think there is a clock setting missing.
+I will debug this over the weekend and get back to you.
 
--- 
-Damien Le Moal
-Western Digital Research
+Knowing what the driver is expecting would really help though.
+
+> Does the driver code in https://github.com/linux-chenxing/linux/tree/mstar_v5_17_rebase includes a fix to the bug you mentioned above?
+
+Yep.
+
+I'm going to have another go at getting it to do more this weekend.
+I'll update you if/when I find anything.
+
+Cheers,
+
+Daniel

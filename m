@@ -2,89 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B81495CF2
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 10:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC4FC495CF5
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 10:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348823AbiAUJip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 04:38:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238711AbiAUJio (ORCPT
+        id S1349517AbiAUJjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 04:39:16 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:46012 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231417AbiAUJjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 04:38:44 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3ACC061746
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 01:38:43 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id r65so22333568ybc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 01:38:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JekWhR8CMAxMCtnFBApW6vamUlJTaekkAKvbq4p6qw8=;
-        b=Mu93tn/1YAjVBeQULNJalS9X6HhXvdWuyJXmfAqYbyxtxM0dtvMRc+raEPKdaKvd1j
-         W8jW7wwFnUYqcxvwlY4G9B0sR9xprDxdAKdd0JyJVIAgSzP1Vg36C/ZZqPTTMQVeQKlk
-         SB/QuNjdCsYqzTCpkkZ76PVrvOBoNAiR5+qeeYz+B++Ax0BLwt7s6J+GZE4wEO1Ju2aR
-         Dr1e04+a6xS3r5LKxcnKAgOstzSLyEfXClE/U0xMM/BWLLZ8pSHvYlj3Y/C3mUpkO+gS
-         Ap3JYFS/dUwYBdBnGvyFqeEfUmllZvIoJyVvlsiHvrpEwZY5WOtx/o5APydHInZdx/kX
-         IW3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JekWhR8CMAxMCtnFBApW6vamUlJTaekkAKvbq4p6qw8=;
-        b=nwmQ/8ZZm+PGcagsuIXpcBpbLcOD68PlDKxATEIAoW+lNSOIsKVOrXx+MFJGjyTM+z
-         IDwxkKFtbr8N3hgi762xdWMtF6/ni97JfxuMl1wlerCZUGVzrJWEPVyxYZspHrMlEIUb
-         bC2+qBTzKD9qqqbcFq9EE9AtNeGLD4veazdZStNeO947vKVYSWnQZUNJg67x03VNomE/
-         4tlcCFoleiFHWl0CwEGrWsNwsIGwjZ9941CfpOU8ipUZtvl9MYaK+njHOeTuMTTPL0sa
-         tlTp78oqzyFJDmuEMfXbVHoOz3OPP4xknsrdy0YljJqZXbGI72WNP+szvMXVqWYyLpoy
-         g1Bw==
-X-Gm-Message-State: AOAM530pP4N5OqEOUg7T1BCxosfv4/QJXj7N54JwaHmJDzkZUlpqWsDM
-        SFK+LTML9/SPOC7tn2EZX0wUaRs63wPQ1rMEKblvGw==
-X-Google-Smtp-Source: ABdhPJxwPwDcVZlwqlEbNURijL+6MLGocOVUhJTkp4UaAqzb1wi8hvxpYQGzCNUitvJcHn3KXKIEEW0s6ye7Cf9nlng=
-X-Received: by 2002:a25:c04c:: with SMTP id c73mr4847013ybf.553.1642757922889;
- Fri, 21 Jan 2022 01:38:42 -0800 (PST)
+        Fri, 21 Jan 2022 04:39:15 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20L9crMD021567;
+        Fri, 21 Jan 2022 03:38:53 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1642757934;
+        bh=NGkWcYJhb8tmuQ79tTJSmE7wfgQ3vfZP7fid1WSgqtc=;
+        h=From:To:CC:Subject:Date;
+        b=wG7ol1vSSh92oQctNf9vdEJDWj87UgJNcXCuJTl8mOThFmF3db50b8TEHMOYWocl1
+         /Ts1vqXZOiIoXz2YuNLjEptft3v8hkwVU3Xn9E8X9anrovv3Dxu99RNbc/mWWCxbHC
+         DjTE2ol0sjZBCHWCly19RPWAWTvDh4Qq5xuJGqWA=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20L9crDx022146
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 21 Jan 2022 03:38:53 -0600
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 21
+ Jan 2022 03:38:53 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 21 Jan 2022 03:38:53 -0600
+Received: from pratyush-4F-325.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20L9cndM048554;
+        Fri, 21 Jan 2022 03:38:50 -0600
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Vinod Koul <vkoul@kernel.org>
+CC:     Pratyush Yadav <p.yadav@ti.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>
+Subject: [PATCH v8 0/4] Rx mode support for Cadence DPHY
+Date:   Fri, 21 Jan 2022 15:08:45 +0530
+Message-ID: <20220121093849.3218092-1-p.yadav@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <CA+G9fYtq0wzSeG8YG-a+=KrbdWqHJMXk1hvq0FKeAvj9sZAK2g@mail.gmail.com>
- <6249735f-e6b7-1331-eb2b-361bb17d6115@opensource.wdc.com> <CA+G9fYu__OOvk-ESXoOqbd-Lk+CmO8CSQ8chEFf3MyeTjKtp9g@mail.gmail.com>
- <350720e8-9b78-bd24-5c60-602076610bf4@opensource.wdc.com>
-In-Reply-To: <350720e8-9b78-bd24-5c60-602076610bf4@opensource.wdc.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 21 Jan 2022 15:08:31 +0530
-Message-ID: <CA+G9fYuMc9qjQE+XoKUzwhMP4O5QE5FbCEhJEmrd_Q8LaC4nFw@mail.gmail.com>
-Subject: Re: [next] mips: cavium_octeon_defconfig: pata_octeon_cf.c:598:23:
- error: passing argument 1 of 'trace_ata_bmdma_stop' from incompatible pointer type
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        CGEL ZTE <cgel.zte@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Jan 2022 at 14:47, Damien Le Moal
-<damien.lemoal@opensource.wdc.com> wrote:
->
-> On 2022/01/21 17:58, Naresh Kamboju wrote:
-> >> I just posted a fix. As I do not have the environment to compile test
-> >> mips, could someone test please ? I will send the fix to Linus asap
-> >> after confirmation that it is OK.
-> >
-> > Please share your patch / patch link. I will test it with tuxmake.
->
-> I posted on linux-ide and CC-ed linux-mips:
->
-> https://marc.info/?l=linux-ide&m=164275458614058&w=2
+Hi,
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+This series adds support for Cadence DPHY Rx driver. It has been split
+off from [0] to facilitate easier merging. I have still kept the version
+number to maintain continuity with the previous patches. The earlier
+version used the same binding for Tx and Rx DPHY. With the separate
+driver, I have added a separate binding. But I am still keeping the old
+conversion patch in this series since I have already done the work in
+converting the binding to yaml, might as well get it merged.
 
-- Naresh
+Tested on TI's J721E with OV5640 sensor.
+
+[0] https://patchwork.linuxtv.org/project/linux-media/list/?series=5526&state=%2A&archive=both
+
+Changes in v8:
+- Move lanes check to start of configure sequence.
+- Change MODULE_LICENSE() to "GPL".
+
+Changes in v7:
+- Add spaces after { and before } in the bands table.
+- Drop the wrapping around the for loop on cdns_dphy_rx_get_band_ctrl().
+- Make cdns_dphy_rx_wait_for_bit() inline.
+- Print an error message if registering PHY provider fails.
+
+Changes in v6:
+- Add a new binding for DPHY Rx.
+- Move the DPHY Rx part to a separate driver.
+- Drop Rx specific changes from the cdns,dphy.yaml binding. Keep those
+  in cdns,dphy-rx.yaml
+
+Changes in v5:
+- Use the new cdns_dphy_info to specify PHY ops.
+- Re-order include in alphabetical order.
+- Make bands const.
+- Drop num_bands.
+- Make i, lanes unsigned.
+- Drop the maximum check in cdns_dphy_rx_get_band_ctrl(). Let the loop
+  complete and return -EOPNOTSUPP when we reach the end.
+- Drop the "rate < bands[i].min_rate" check since the bands are in
+  ascending order.
+- Move data_lane_ctrl to start of function and make it static const.
+
+Changes in v4:
+- Drop the submode parts. Use a different compatible for the Rx ops.
+- Make bands and num_bands static.
+- Drop the submode patches. Use a different compatible for Rx mode DPHY
+instead.
+
+Changes in v3:
+- Use a table to select the band.
+- Use a table to poll the data lane ready bits.
+- Multiply the DPHY HS clock rate by 2 to get the bit rate since the
+  clock is DDR.
+- Add Rob's R-by.
+
+Changes in v2:
+- Drop reg description.
+- Add a description for each DPHY clock.
+- Rename dphy@... to phy@... in example.
+- Add Laurent's R-by.
+- Re-order subject prefixes.
+- Add power-domain to the example.
+- Add Laurent's R-by.
+- Re-order subject prefixes.
+
+Pratyush Yadav (4):
+  phy: cadence: Add Cadence D-PHY Rx driver
+  phy: dt-bindings: Convert Cadence DPHY binding to YAML
+  phy: dt-bindings: cdns,dphy: add power-domains property
+  phy: dt-bindings: Add Cadence D-PHY Rx bindings
+
+ .../devicetree/bindings/phy/cdns,dphy-rx.yaml |  42 +++
+ .../devicetree/bindings/phy/cdns,dphy.txt     |  20 --
+ .../devicetree/bindings/phy/cdns,dphy.yaml    |  56 ++++
+ drivers/phy/cadence/Kconfig                   |   8 +
+ drivers/phy/cadence/Makefile                  |   1 +
+ drivers/phy/cadence/cdns-dphy-rx.c            | 255 ++++++++++++++++++
+ 6 files changed, 362 insertions(+), 20 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
+ delete mode 100644 Documentation/devicetree/bindings/phy/cdns,dphy.txt
+ create mode 100644 Documentation/devicetree/bindings/phy/cdns,dphy.yaml
+ create mode 100644 drivers/phy/cadence/cdns-dphy-rx.c
+
+-- 
+2.25.1
+

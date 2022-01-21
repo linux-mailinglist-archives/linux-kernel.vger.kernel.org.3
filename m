@@ -2,210 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53BA3496806
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 23:57:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2165B49680D
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 00:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232889AbiAUW45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 17:56:57 -0500
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:38464 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiAUW4z (ORCPT
+        id S232904AbiAUXBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 18:01:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230289AbiAUXBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 17:56:55 -0500
-Received: by mail-oi1-f170.google.com with SMTP id g205so15680337oif.5;
-        Fri, 21 Jan 2022 14:56:55 -0800 (PST)
+        Fri, 21 Jan 2022 18:01:30 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22EBDC06173D
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 15:01:30 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id a8so4812090pfa.6
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 15:01:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PYphm4+4iS9SAoeVlv+LsUbA1aLD+SqyiCj3OPowf64=;
+        b=Dq+SOs17hUZ7jkqGt87h5phHUHLlR8aLu0VIPmtsQs5G0niRVjhQWWCzA0PT3PBHkC
+         hIqrPVaFJclYGYgRvAcvcwfZMELL7djjEB+faolNIABAFzb6gFJViRRb6EWaCaNmu+gp
+         PSxWWshifVNbDTtYwW8YftBra40Lv4/nybtMfeH3c3gtE/Drgcg3h52JmtZT0plAlNsc
+         Y7ptxf0oLZ3SeL9OdszF7OGeKKbhd/QdQFttVVOr0+a8z8qULGt96ELG1Sp2SFw/BucS
+         0dRbAkS2SYhEegpCpH9t63PN8rr+O9YM5lCHRYQ2oYVxJHPUc3pRC9CHjcwrpATNhmHD
+         yu0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=v1ho46uTpKxUiYQBezGA0skkaF0vZIVCnFgPgClD3p4=;
-        b=XznlCf39JLEGSLJeYQIqry9UXf+lHR3KaviVcy+kQ3rChveoOhTYGuGfM/50IV9KTh
-         2xntNCMZFR7kDE1uSZ9u9y6zdp9UEQjozzRb+8bPuZWINYr+aQFuIzUIA25XDjHzx5y+
-         bIU2xyPbAfD4Z9RqVcKOH3P43e3fU/ZKyUi6+Jt0w2O60K0T7b40J7vBDZArqwMK+pMf
-         J8atEsDSdfYFToFAe46oKlzq6/6CumqEIAFshdFXrFiyrQc06Smg2w0eaDgEoIqGV0i7
-         E9MxOxw0RDHnI676b/ckC8AwN73QwKrKkgTxe7+I4YUVbh7ecuO4vB7izqMM50yKrPOo
-         i7Kw==
-X-Gm-Message-State: AOAM5312IG2Obc9xPewlaSaTD3q7yJfQu/OYce8YD8tNC7D+9Fbg8gHd
-        4AEQBYPueRNL9GlyrJiQpg==
-X-Google-Smtp-Source: ABdhPJzPoZJ9d53Uow3j/Mph5gz2hM6lLzF8kFrRt1JkFzh1Hz3MnwqlPrdsp1fKWh34HPYgKNZJ0Q==
-X-Received: by 2002:aca:1e0b:: with SMTP id m11mr2404247oic.79.1642805814717;
-        Fri, 21 Jan 2022 14:56:54 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id g2sm1716518oic.40.2022.01.21.14.56.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 14:56:53 -0800 (PST)
-Received: (nullmailer pid 1761473 invoked by uid 1000);
-        Fri, 21 Jan 2022 22:56:52 -0000
-Date:   Fri, 21 Jan 2022 16:56:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sander Vanheule <sander@svanheule.net>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Birger Koblitz <mail@birger-koblitz.de>,
-        Bert Vermeulen <bert@biot.com>, John Crispin <john@phrozen.org>
-Subject: Re: [PATCH v3 4/6] dt-bindings: interrupt-controller:
- realtek,rtl-intc: require parents
-Message-ID: <Yes6NFgUmcIcc5mm@robh.at.kernel.org>
-References: <cover.1641739718.git.sander@svanheule.net>
- <e043a9faa4a8f71efdf8b7849ec7911f16207fb0.1641739718.git.sander@svanheule.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PYphm4+4iS9SAoeVlv+LsUbA1aLD+SqyiCj3OPowf64=;
+        b=zeydu1xgA8rBebc6Tv9GDSf5MXMQzrKkcTwSyvDUKJtRY4atJ9UZs1E/de3IS/M7zM
+         aqx2z6n1S6KFRp37X++5xuAJCDwl+bvKFTWIJZoDlkV26Xbt1xA9IuAD+di4vzc+y2Tq
+         0i9fLPOHp7kWyJk9UaDlGvG0oeTOTMoQnyCt5ndlOaRiLc5lq8xYIIDSF+quLyTH8S6j
+         EUze6n2xAxCesyIYGqoLwAGctEMe7k+8lYV7JYoY0cvI4xMtxTM+tEcDJYE4AyITyxXZ
+         CncwLu1BEli+t/JvtOE76MaRbnCCEvgHKbrf8iuBcXNPKAKJhJuoHzG1CtsynwXG3f3w
+         nFpg==
+X-Gm-Message-State: AOAM530s3UMYxJg8ta/XI6X1ZjsKfYr0ACrpA7bGNWu3YTnDVQTU5fFv
+        Ild2jkKQZfZrv2262jPZ1//wyfG4bIvCgUYo0VL6BQ==
+X-Google-Smtp-Source: ABdhPJxaAdubDugrQEvvUGVtqIvv7Vu9kGzTezzTWcrI90O9URb2rxf/ZBKjDWIah6IuL4jcNuk30fOtzpDTtBP17Rw=
+X-Received: by 2002:a63:1157:: with SMTP id 23mr4319202pgr.12.1642806089188;
+ Fri, 21 Jan 2022 15:01:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e043a9faa4a8f71efdf8b7849ec7911f16207fb0.1641739718.git.sander@svanheule.net>
+References: <20220113165931.451305-1-dlatypov@google.com> <20220113165931.451305-5-dlatypov@google.com>
+In-Reply-To: <20220113165931.451305-5-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Fri, 21 Jan 2022 18:01:18 -0500
+Message-ID: <CAFd5g47Ae31FZBnF84Mv=WK9-7kYyODVDAfU03qQSP_O-qfmkA@mail.gmail.com>
+Subject: Re: [PATCH v3 4/6] kunit: factor out kunit_base_assert_format() call
+ into kunit_fail()
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 09, 2022 at 03:54:35PM +0100, Sander Vanheule wrote:
-> The interrupt router has 32 inputs and up to 15 outputs, and the way
-> these are mapped to each other is runtime configurable. The outputs of
-> this interrupt router on the other hand, are connected to a fixed set of
-> parent interrupts. This means that "interrupt-map" is inappropriate, and
-> rather a list of parent interrupts should be specified.
+On Thu, Jan 13, 2022 at 11:59 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> We call this function first thing for all the assertion `format()`
+> functions.
+> This is the part that prints the file and line number and assertion type
+> (EXPECTATION, ASSERTION).
+>
+> Having it as part of the format functions lets us have the flexibility
+> to not print that information (or print it differently) for new
+> assertion types, but I think this we don't need that.
+>
+> And in the future, we'd like to consider factoring that data (file,
+> line#, type) out of the kunit_assert struct and into a `static`
+> variable, as Linus suggested [1], so we'd need to extract it anyways.
+>
+> [1] https://groups.google.com/g/kunit-dev/c/i3fZXgvBrfA/m/VULQg1z6BAAJ
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Reviewed-by: David Gow <davidgow@google.com>
 
-I'm not sure why interrupt-map is not appropriate. It is not appropriate 
-if you have to touch the interrupt router h/w in servicing the 
-interrupts. If you just need one time configuration of the mapping, then 
-it should be fine to use I think.
-
-> Two-part compatibles are introduced to be able to require "interrupts"
-> for new devicetrees. The relevant descriptions are extended or added to
-> more clearly describe the inputs and outputs of this router.  The old
-> compatible, "interrupt-map" and "#address-cells", is deprecated.
-> Interrupt specifiers for new compatibles will require two cells, to
-> indicate the output selection.
-> 
-> To prevent spurious changes when more SoCs are added, "allOf" is used
-> with one "if", and the compatible enum only has one item.
-> 
-> The example is updated to provide a correct example for RTL8380 SoCs.
-> 
-> Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> ---
->  .../realtek,rtl-intc.yaml                     | 78 ++++++++++++++-----
->  1 file changed, 58 insertions(+), 20 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
-> index 9e76fff20323..aab8d44010af 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
-> @@ -6,6 +6,10 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
->  title: Realtek RTL SoC interrupt controller devicetree bindings
->  
-> +description:
-> +  Interrupt router for Realtek MIPS SoCs, allowing each SoC interrupt to be
-> +  routed to one parent interrupt, or left disconnected.
-> +
->  maintainers:
->    - Birger Koblitz <mail@birger-koblitz.de>
->    - Bert Vermeulen <bert@biot.com>
-> @@ -13,45 +17,79 @@ maintainers:
->  
->  properties:
->    compatible:
-> -    const: realtek,rtl-intc
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - realtek,rtl8380-intc
-> +          - const: realtek,rtl-intc
-> +      - const: realtek,rtl-intc
-> +        deprecated: true
->  
-> -  "#interrupt-cells":
-> -    const: 1
-> +  "#interrupt-cells": true
->  
->    reg:
->      maxItems: 1
->  
->    interrupts:
-> -    maxItems: 1
-> +    minItems: 1
-> +    maxItems: 15
-> +    description:
-> +      List of parent interrupts, in the order that they are connected to this
-> +      interrupt router's outputs.
->  
->    interrupt-controller: true
->  
-> -  "#address-cells":
-> -    const: 0
-> -
-> -  interrupt-map:
-> -    description: Describes mapping from SoC interrupts to CPU interrupts
-> -
->  required:
->    - compatible
->    - reg
->    - "#interrupt-cells"
->    - interrupt-controller
-> -  - "#address-cells"
-> -  - interrupt-map
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          const: realtek,rtl-intc
-> +    then:
-> +      properties:
-> +        "#interrupt-cells":
-> +          const: 1
-> +
-> +        "#address-cells":
-> +          const: 0
-> +
-> +        interrupt-map: true
-> +      required:
-> +        - "#address-cells"
-> +        - interrupt-map
-> +    else:
-> +      properties:
-> +        "#interrupt-cells":
-> +          description:
-> +            Two cells to specify which line to connect to, and which output it should
-> +            be routed to. Both cells use a zero-based index.
-
-Picking the index picks the priority? Which is higher priority?
-
-
-> +          const: 2
-> +      required:
-> +        - interrupts
->  
->  additionalProperties: false
->  
->  examples:
->    - |
->      intc: interrupt-controller@3000 {
-> -      compatible = "realtek,rtl-intc";
-> -      #interrupt-cells = <1>;
-> +      compatible = "realtek,rtl8380-intc", "realtek,rtl-intc";
-> +      #interrupt-cells = <2>;
->        interrupt-controller;
-> -      reg = <0x3000 0x20>;
-> -      #address-cells = <0>;
-> -      interrupt-map =
-> -              <31 &cpuintc 2>,
-> -              <30 &cpuintc 1>,
-> -              <29 &cpuintc 5>;
-> +      reg = <0x3000 0x18>;
-> +
-> +      interrupt-parent = <&cpuintc>;
-> +      interrupts = <2>, <3>, <4>, <5>, <6>;
-> +    };
-> +
-> +    irq-consumer@0 {
-> +      reg = <0 4>;
-> +      interrupt-parent = <&intc>;
-> +      interrupts =
-> +        <19 3>, /* IRQ 19, routed to output 3 (cpuintc 5) */
-> +        <18 4>; /* IRQ 18, routed to output 4 (cpuintc 6) */
->      };
-> -- 
-> 2.33.1
-> 
-> 
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

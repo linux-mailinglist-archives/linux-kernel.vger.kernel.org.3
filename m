@@ -2,119 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F9A49668E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 21:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C58496696
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 21:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiAUUpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 15:45:03 -0500
-Received: from mga14.intel.com ([192.55.52.115]:45565 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230206AbiAUUpC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 15:45:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642797901; x=1674333901;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=3pkJrpiYFusXoDTrhJ/CUiPlq5DIDo4wnLNlUR3WS/Y=;
-  b=GnWCpBKcL8VBCiHjsTiU+aSybaJ90jkLPwvptajUHgxCU9fLJp8jbAu+
-   kXM3oYNV2swj4NCZdskuuPLy1rTNqS4gW1UshdsaxPw7nbtVqMg53xe8G
-   1OQJppWjDFH2NVD6fm3cu13+lilxQiuODcdHp988Fq5XmCxtDS1n6C/at
-   tOJxFPhjHRLwkLEjoaoDERAkSJOQzSTp+WpZxwup84Q1z0nV8GbSHCE8J
-   MOQuZaJAnByX57FhoigTue/Xs+dHc+QHFokjRFE8tOiMVOjXf7E56Og0r
-   SFm869AxWrI2TUxldR/wNfHvQq4nNTMTRpDYUFhfiBRC1Xv1V7v8ZP8Bp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="245960629"
-X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
-   d="scan'208";a="245960629"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 12:44:56 -0800
-X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
-   d="scan'208";a="579725848"
-Received: from hma4-mobl2.amr.corp.intel.com ([10.212.239.251])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 12:44:56 -0800
-Date:   Fri, 21 Jan 2022 12:44:55 -0800 (PST)
-From:   Mat Martineau <mathew.j.martineau@linux.intel.com>
-To:     Kees Cook <keescook@chromium.org>
-cc:     Matthieu Baerts <matthieu.baerts@tessares.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] mptcp: Use struct_group() to avoid cross-field
- memset()
-In-Reply-To: <20220121073935.1154263-1-keescook@chromium.org>
-Message-ID: <73486c93-8ebb-2391-dc50-a2b2cb38743@linux.intel.com>
-References: <20220121073935.1154263-1-keescook@chromium.org>
+        id S231377AbiAUUsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 15:48:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229583AbiAUUs3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 15:48:29 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBC6C06173B;
+        Fri, 21 Jan 2022 12:48:26 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id r138so15316454oie.3;
+        Fri, 21 Jan 2022 12:48:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=WGjUTrV5mgHMzDhyvLsZZ8pd7X6AuuH7QuhfJeG9EgY=;
+        b=kvmf2OSxp7vQKMwYR1dLgO6WSiX2+4nzHhjmW/Oz5Vx0F/DK5D1vuYufA1qJh9Hx8a
+         LfHmpvcS+ayKbXU3K1KqQvhGyBD1/9voVd8xBJhLWdUkaeOtZNW8nOlj2NT51r791/iw
+         C1yXy+49U6UWHQxbmVxO2gR3A0Ot1byMBQMNkzoEOFKlPDfLSYdkPZ3ueek84qDVORVm
+         ItiKUCPqLuAw3+Ac8+8viaNyNaokKwZyq7tsXOPOs0ZJV8ts+QZSdT+X526m/fv2gVZA
+         dvucmMp0dZvzSnL7KV3yLFjafRYSt+ieGp4YyxXF6N3JQnT2EjKZqCvaQdHGuocKInoQ
+         /1JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WGjUTrV5mgHMzDhyvLsZZ8pd7X6AuuH7QuhfJeG9EgY=;
+        b=lYvtHHbULd7RD6RvRqfCpysWW1AeiRxGscxOcDRbrYP3+iv/UH9Rd6sggBq5/psrYf
+         nueK09T+he6JiYKP2Wff1jxuurLfBClIfmwTnAir5ZFmg4kn2LhJJlmRBIGAymG3jT/r
+         EEalMbPUQxPBjcIg+5py+SCfjjIvdB0a8CsF+WSmgUvDJHVR27biEN/E+yQeCJ7zUcv9
+         oaS6xeD/fQqbSJKfk7WL8zKLRplaP8vVI6jlaXmJljkUXDuptIbIBhl4yosOvU46+pBq
+         EQn1q2meXnnS9Hef9dRzoRYKc+iAj8g3bYy6eO6095QeFeQzMgLzsDL+xcRuyy4ZjQnp
+         0Z1w==
+X-Gm-Message-State: AOAM5333zuXXUt4vV/90K6K7xnEoDXdHczlwWic001E85NfdZMx3gCza
+        6wx3Gt9HS21EJsq4rlEcs6afT/qCW//Wlt3W/Zs=
+X-Google-Smtp-Source: ABdhPJyFepdztr15jwXrbjkaZsAmzuoos6TQ9cMezqozHSl5K0Wmi1lv0sbBN6F1FVhtc6sl7qvKX2ON/nhJOnVhzbU=
+X-Received: by 2002:a05:6808:300b:: with SMTP id ay11mr2012664oib.120.1642798104543;
+ Fri, 21 Jan 2022 12:48:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset=US-ASCII
+References: <20220121052827.4384-1-xiongx18@fudan.edu.cn> <23d5251f-c910-aed3-5d9e-07d6e5e5add2@amd.com>
+In-Reply-To: <23d5251f-c910-aed3-5d9e-07d6e5e5add2@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Fri, 21 Jan 2022 15:48:13 -0500
+Message-ID: <CADnq5_N5Di8mxWDoVe5hdqPfrBnCw=gnDMzMyHeenk2gb=aSZw@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/amdgpu/amdgpu_cs: fix refcount leak of a
+ dma_fence obj
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     Xin Xiong <xiongx18@fudan.edu.cn>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>, Xin Tan <tanxin.ctf@gmail.com>,
+        yuanxzhang@fudan.edu.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Jan 2022, Kees Cook wrote:
+On Fri, Jan 21, 2022 at 2:45 AM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
+>
+> Am 21.01.22 um 06:28 schrieb Xin Xiong:
+> > This issue takes place in an error path in
+> > amdgpu_cs_fence_to_handle_ioctl(). When `info->in.what` falls into
+> > default case, the function simply returns -EINVAL, forgetting to
+> > decrement the reference count of a dma_fence obj, which is bumped
+> > earlier by amdgpu_cs_get_fence(). This may result in reference count
+> > leaks.
+> >
+> > Fix it by decreasing the refcount of specific object before returning
+> > the error code.
+> >
+> > Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
+> > Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
+>
+> Good catch. Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
 
-> In preparation for FORTIFY_SOURCE performing compile-time and run-time
-> field bounds checking for memcpy(), memmove(), and memset(), avoid
-> intentionally writing across neighboring fields.
->
-> Use struct_group() to capture the fields to be reset, so that memset()
-> can be appropriately bounds-checked by the compiler.
->
-> Cc: Mat Martineau <mathew.j.martineau@linux.intel.com>
-> Cc: Matthieu Baerts <matthieu.baerts@tessares.net>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: netdev@vger.kernel.org
-> Cc: mptcp@lists.linux.dev
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> net/mptcp/protocol.h | 6 +++---
-> 1 file changed, 3 insertions(+), 3 deletions(-)
->
+Applied manually.  Strangely I never got this on any of my emails, and
+I don't see it in the archives.
 
-Thanks Kees, looks good to me. I checked around for other MPTCP structs 
-that would need similar attention and didn't see any.
+Alex
 
-Reviewed-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-
-
-> diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
-> index 0e6b42c76ea0..85317ce38e3f 100644
-> --- a/net/mptcp/protocol.h
-> +++ b/net/mptcp/protocol.h
-> @@ -408,7 +408,7 @@ DECLARE_PER_CPU(struct mptcp_delegated_action, mptcp_delegated_actions);
-> struct mptcp_subflow_context {
-> 	struct	list_head node;/* conn_list of subflows */
 >
-> -	char	reset_start[0];
-> +	struct_group(reset,
+> > ---
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c | 1 +
+> >   1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm/a=
+md/amdgpu/amdgpu_cs.c
+> > index 0311d799a..894869789 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+> > @@ -1510,6 +1510,7 @@ int amdgpu_cs_fence_to_handle_ioctl(struct drm_de=
+vice *dev, void *data,
+> >               return 0;
+> >
+> >       default:
+> > +             dma_fence_put(fence);
+> >               return -EINVAL;
+> >       }
+> >   }
 >
-> 	unsigned long avg_pacing_rate; /* protected by msk socket lock */
-> 	u64	local_key;
-> @@ -458,7 +458,7 @@ struct mptcp_subflow_context {
->
-> 	long	delegated_status;
->
-> -	char	reset_end[0];
-> +	);
->
-> 	struct	list_head delegated_node;   /* link into delegated_action, protected by local BH */
->
-> @@ -494,7 +494,7 @@ mptcp_subflow_tcp_sock(const struct mptcp_subflow_context *subflow)
-> static inline void
-> mptcp_subflow_ctx_reset(struct mptcp_subflow_context *subflow)
-> {
-> -	memset(subflow->reset_start, 0, subflow->reset_end - subflow->reset_start);
-> +	memset(&subflow->reset, 0, sizeof(subflow->reset));
-> 	subflow->request_mptcp = 1;
-> }
->
-> -- 
-> 2.30.2
->
->
-
---
-Mat Martineau
-Intel

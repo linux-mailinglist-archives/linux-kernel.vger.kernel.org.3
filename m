@@ -2,113 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA524495FB1
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A75FF495FB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:22:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347903AbiAUNUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 08:20:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56626 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380585AbiAUNUK (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 08:20:10 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AC4C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 05:20:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CDfqQpaNyR1slLKbCMM+fTwMTmvDRMkpoYbrFNKkvZY=; b=oPL9RCoC3bmiGjc9zs/xXLLu6t
-        RrU5fSaK51OMQoFsmDq/6gdkjgbIfp1JZ1TfjII7ODpxtj1dJDSqZ9IhMLBePZai0otqc2gSTt6rI
-        PQwWuKHlFEA1dX7PDZEFb5Ao0vcuGrxWYyZE95DPbV3+QRI+oziOAgp35cj8K2n/W+Rydl7LLfVmE
-        fHXc4xNUrpD0H9fGn9GlWe+/oPCE48FweJaVkdH4AJdPyQLKIJ1UztOBqs8nTlV7pOva3tmxcLxc6
-        gT69vBqwtS66Qm+voYQzTJbhi+tHlPsvo6/8V/ckG+RJuM6xMkwhbLalRTDBwqm0rn+q8gtEK7hiW
-        AECR4Zhg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nAtpL-00Fcbj-Fu; Fri, 21 Jan 2022 13:19:39 +0000
-Date:   Fri, 21 Jan 2022 13:19:39 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Alex Shi <seakeel@gmail.com>
-Cc:     Alex Shi <alexs@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Yu Zhao <yuzhao@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 1/5] mm: remove page_is_file_lru function
-Message-ID: <Yeqy69KK31PSmZdi@casper.infradead.org>
-References: <20220120131024.502877-1-alexs@kernel.org>
- <20220120131024.502877-2-alexs@kernel.org>
- <YeljTuECoPfKn6VW@casper.infradead.org>
- <CAJy-AmnmRVZ2ezSt1bws4TVKEw-VKubUXbc4SP8wU0-SQprhcA@mail.gmail.com>
+        id S1380693AbiAUNWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 08:22:22 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:47760 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1380583AbiAUNWU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 08:22:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=87A/tDKQS+3qI1mDmEkAtXDZaWxRClH2krUZOoDdvz0=; b=HXUr11AwYknsAaClHt8ecVzUuM
+        g9RDS6j5MlWIUmcRhHagqgr/y5LX3BlUdfaa6eAmPSDV8ixDcm3WlGmwc0zisCpz7dgr2OsFdJROc
+        nL538wTMsDVLDIPLkhaVuqKGFeF0++g81fMlJjfCLqfM50QkJMJvuSNkwUpf1eHA2H1U=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nAtrr-0025Os-NJ; Fri, 21 Jan 2022 14:22:15 +0100
+Date:   Fri, 21 Jan 2022 14:22:15 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: phy: marvell: Honor phy LED set by system
+ firmware on a Dell hardware
+Message-ID: <Yeqzhx3GbMzaIbj6@lunn.ch>
+References: <20220120051929.1625791-1-kai.heng.feng@canonical.com>
+ <YelxMFOiqnfIVmyy@lunn.ch>
+ <CAAd53p7NjvzsBs2aWTP-3GMjoyefMmLB3ou+7fDcrNVfKwALHw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJy-AmnmRVZ2ezSt1bws4TVKEw-VKubUXbc4SP8wU0-SQprhcA@mail.gmail.com>
+In-Reply-To: <CAAd53p7NjvzsBs2aWTP-3GMjoyefMmLB3ou+7fDcrNVfKwALHw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 03:02:12PM +0800, Alex Shi wrote:
-> On Thu, Jan 20, 2022 at 9:28 PM Matthew Wilcox <willy@infradead.org> wrote:
+On Fri, Jan 21, 2022 at 12:01:35PM +0800, Kai-Heng Feng wrote:
+> On Thu, Jan 20, 2022 at 10:26 PM Andrew Lunn <andrew@lunn.ch> wrote:
 > >
-> > On Thu, Jan 20, 2022 at 09:10:20PM +0800, alexs@kernel.org wrote:
-> > > From: Alex Shi <alexs@kernel.org>
+> > On Thu, Jan 20, 2022 at 01:19:29PM +0800, Kai-Heng Feng wrote:
+> > > BIOS on Dell Edge Gateway 3200 already makes its own phy LED setting, so
+> > > instead of setting another value, keep it untouched and restore the saved
+> > > value on system resume.
 > > >
-> > > This function could be full replaced by folio_is_file_lru, so no reason
-> > > to keep a duplicate function.
+> > > Introduce config_led() callback in phy_driver() to make the implemtation
+> > > generic.
 > >
-> > This is not a helpful way to do this kind of replacement.
+> > I'm also wondering if we need to take a step back here and get the
+> > ACPI guys involved. I don't know much about ACPI, but shouldn't it
+> > provide a control method to configure the PHYs LEDs?
 > >
-> > Instead of choosing a function to remove and doing a blind replacement,
-> > choose a call site and convert the whole calling function to use folios.
-> > Once you've removed all callers, you can remove the wrapper function.
+> > We already have the basics for defining a PHY in ACPI. See:
 > >
-> > Also, a number of changes here will conflict with patches I've already
-> > posted.  Try doing change_pte_range() in mprotect.c to get a feel for
-> > how to convert a function entirely to folios.
+> > https://www.kernel.org/doc/html/latest/firmware-guide/acpi/dsd/phy.html
 > 
-> Hi Willy,
+> These properties seem to come from device-tree.
+
+They are similar to what DT has, but expressed in an ACPI way. DT has
+been used with PHY drivers for a long time, but ACPI is new. The ACPI
+standard also says nothing about PHYs. So Linux has defined its own
+properties, which we expect all ACPI machine to use. According to the
+ACPI maintainers, this is within the ACPI standard. Maybe at some
+point somebody will submit the current definitions to the standards
+body for approval, or maybe the standard will do something completely
+different, but for the moment, this is what we have, and what you
+should use.
+
+> > so you could extend this to include a method to configure the LEDs for
+> > a specific PHY.
 > 
-> Thanks for your comments!
-> 
-> The patchset did the thing as you required "convert the whole calling
-> function to use folios. then remove the wrapper function" on yesterday's
-> Linus and next tree, that included your patchset "Page cache/iomap for 5.17".
+> How to add new properties? Is it required to add new properties to
+> both DT and ACPI?
 
-That's not what I meant.  What I meant is you're currently doing:
+Since all you are adding is a boolean, 'Don't touch the PHY LED
+configuration', it should be easy to do for both.
 
- - Find folio wrapper function
- - Inline it into all callers
- - Delete wrapper function
+What is interesting for Marvell PHYs is WoL, which is part of LED
+configuration. I've not checked, but i guess there are other PHYs
+which reuse LED output for a WoL interrupt. So it needs to be clearly
+defined if we expect the BIOS to also correctly configure WoL, or if
+Linux is responsible for configuring WoL, even though it means
+changing the LED configuration.
 
-That creates a lot of churn and not a lot of improvement.
-
-What would be helpful is doing:
-
- - Find folio wrapper function
- - Find a caller, convert it from using pages to using folios
-
-That's harder, but it actually accomplishes something (ie auditing
-a function to make it work with folios).  These wrapper functions are
-signals that the callers need to be converted to use folios.
-
-> Is the conflicting patch "Enabling large folios for 5.17" or others? Sorry
-> for can't check everyone, your patches are many. If just the former, I see
-> you mentioned: "I'd be uncomfortable seeing it merged before 5.18".
-> Would you point out which of your patches was interfered or blocked?
-
-The GUP series was the specific series that this conflicted with.
-And yes, I have a lot of patches outstanding in this area.  That's a
-sign that small cleanup patches aren't going to be welcomed because
-they're going to conflict with meaningful patches.
-
-> And yes, replacing page functions in change_pte_range is a bit harder,
-> but it seems it has no much relation with this trival patchset.
-
-That is, indeed, the point.
+	 Andrew

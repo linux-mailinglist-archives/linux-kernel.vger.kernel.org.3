@@ -2,83 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2165B49680D
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 00:01:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A63E496811
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 00:05:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbiAUXBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 18:01:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbiAUXBa (ORCPT
+        id S231608AbiAUXFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 18:05:50 -0500
+Received: from mail-oi1-f169.google.com ([209.85.167.169]:39661 "EHLO
+        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229606AbiAUXFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 18:01:30 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22EBDC06173D
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 15:01:30 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id a8so4812090pfa.6
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 15:01:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PYphm4+4iS9SAoeVlv+LsUbA1aLD+SqyiCj3OPowf64=;
-        b=Dq+SOs17hUZ7jkqGt87h5phHUHLlR8aLu0VIPmtsQs5G0niRVjhQWWCzA0PT3PBHkC
-         hIqrPVaFJclYGYgRvAcvcwfZMELL7djjEB+faolNIABAFzb6gFJViRRb6EWaCaNmu+gp
-         PSxWWshifVNbDTtYwW8YftBra40Lv4/nybtMfeH3c3gtE/Drgcg3h52JmtZT0plAlNsc
-         Y7ptxf0oLZ3SeL9OdszF7OGeKKbhd/QdQFttVVOr0+a8z8qULGt96ELG1Sp2SFw/BucS
-         0dRbAkS2SYhEegpCpH9t63PN8rr+O9YM5lCHRYQ2oYVxJHPUc3pRC9CHjcwrpATNhmHD
-         yu0A==
+        Fri, 21 Jan 2022 18:05:48 -0500
+Received: by mail-oi1-f169.google.com with SMTP id e81so15709048oia.6;
+        Fri, 21 Jan 2022 15:05:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PYphm4+4iS9SAoeVlv+LsUbA1aLD+SqyiCj3OPowf64=;
-        b=zeydu1xgA8rBebc6Tv9GDSf5MXMQzrKkcTwSyvDUKJtRY4atJ9UZs1E/de3IS/M7zM
-         aqx2z6n1S6KFRp37X++5xuAJCDwl+bvKFTWIJZoDlkV26Xbt1xA9IuAD+di4vzc+y2Tq
-         0i9fLPOHp7kWyJk9UaDlGvG0oeTOTMoQnyCt5ndlOaRiLc5lq8xYIIDSF+quLyTH8S6j
-         EUze6n2xAxCesyIYGqoLwAGctEMe7k+8lYV7JYoY0cvI4xMtxTM+tEcDJYE4AyITyxXZ
-         CncwLu1BEli+t/JvtOE76MaRbnCCEvgHKbrf8iuBcXNPKAKJhJuoHzG1CtsynwXG3f3w
-         nFpg==
-X-Gm-Message-State: AOAM530s3UMYxJg8ta/XI6X1ZjsKfYr0ACrpA7bGNWu3YTnDVQTU5fFv
-        Ild2jkKQZfZrv2262jPZ1//wyfG4bIvCgUYo0VL6BQ==
-X-Google-Smtp-Source: ABdhPJxaAdubDugrQEvvUGVtqIvv7Vu9kGzTezzTWcrI90O9URb2rxf/ZBKjDWIah6IuL4jcNuk30fOtzpDTtBP17Rw=
-X-Received: by 2002:a63:1157:: with SMTP id 23mr4319202pgr.12.1642806089188;
- Fri, 21 Jan 2022 15:01:29 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RN1PlPeJHCI4F7ORlXAuoTAl+I+ftCy1+niCC1rlCkY=;
+        b=csdaDo5srNT3dXFZl2fr8mSORMGTShHWF4ZSNKEd2lMDk2PvcVb/iMmK0w/8KHQiCi
+         2sq+plS+QZplYZD6D6aONnUZ41myVmSQj+lvFWuU5vSnvdz3FnwAYPfVgZ1Dah7nkM1u
+         B7aBIzj3+q83+vA+n4Pu9k5ZpMs238AK/xDQDPURG9Wf5C5OzICOHTSdW/jAio17r1zm
+         UeJzLTwvcPek/EnASlEgtFGE2bpSciN3sSBPwohhJ3osh3Cj6XG7fesi9Y6eoAWJiA5k
+         sEWWxIsdk6ih8x3wU8M86FC81nCbH/xrvWkSdq8GXoELkEJeFiB6z6srd1ZN9rykhdVp
+         JmPQ==
+X-Gm-Message-State: AOAM531FfhaScyTdUEgNfDCXWCkQ5hB2Wjuq4axJkxjwxRIxiY1cmG9V
+        qzXft3E69YfxwhoAqglfLA==
+X-Google-Smtp-Source: ABdhPJxg+kJTfrdEMoJ2RPhH4/awPHWoZgmR50vnrKMk9V6UVZeKVUfwcfBU0Ncf2zWIBlgjnHORJA==
+X-Received: by 2002:a05:6808:158e:: with SMTP id t14mr2315268oiw.31.1642806348159;
+        Fri, 21 Jan 2022 15:05:48 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bo13sm1605874oib.43.2022.01.21.15.05.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jan 2022 15:05:47 -0800 (PST)
+Received: (nullmailer pid 1775815 invoked by uid 1000);
+        Fri, 21 Jan 2022 23:05:46 -0000
+Date:   Fri, 21 Jan 2022 17:05:46 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        ~okias/devicetree@lists.sr.ht, David Airlie <airlied@linux.ie>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        freedreno@lists.freedesktop.org
+Subject: Re: [PATCH] dt-bindings: msm/mdp4: convert to yaml format
+Message-ID: <Yes8SiV9SBF+S3OH@robh.at.kernel.org>
+References: <20220109171814.16103-1-david@ixit.cz>
 MIME-Version: 1.0
-References: <20220113165931.451305-1-dlatypov@google.com> <20220113165931.451305-5-dlatypov@google.com>
-In-Reply-To: <20220113165931.451305-5-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 21 Jan 2022 18:01:18 -0500
-Message-ID: <CAFd5g47Ae31FZBnF84Mv=WK9-7kYyODVDAfU03qQSP_O-qfmkA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/6] kunit: factor out kunit_base_assert_format() call
- into kunit_fail()
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220109171814.16103-1-david@ixit.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 11:59 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> We call this function first thing for all the assertion `format()`
-> functions.
-> This is the part that prints the file and line number and assertion type
-> (EXPECTATION, ASSERTION).
->
-> Having it as part of the format functions lets us have the flexibility
-> to not print that information (or print it differently) for new
-> assertion types, but I think this we don't need that.
->
-> And in the future, we'd like to consider factoring that data (file,
-> line#, type) out of the kunit_assert struct and into a `static`
-> variable, as Linus suggested [1], so we'd need to extract it anyways.
->
-> [1] https://groups.google.com/g/kunit-dev/c/i3fZXgvBrfA/m/VULQg1z6BAAJ
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
+On Sun, 09 Jan 2022 18:18:13 +0100, David Heidelberg wrote:
+> Convert mdp4 binding into yaml format.
+> 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> ---
+>  .../devicetree/bindings/display/msm/mdp4.txt  | 114 ----------------
+>  .../devicetree/bindings/display/msm/mdp4.yaml | 124 ++++++++++++++++++
+>  2 files changed, 124 insertions(+), 114 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/display/msm/mdp4.txt
+>  create mode 100644 Documentation/devicetree/bindings/display/msm/mdp4.yaml
+> 
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Applied, thanks!

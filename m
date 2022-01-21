@@ -2,118 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E5C496391
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 18:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A55E496392
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 18:11:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350685AbiAURLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 12:11:05 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:50768 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229549AbiAURLE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 12:11:04 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowAB3fZ0I6ephkjS6Bg--.24303S2;
-        Sat, 22 Jan 2022 01:10:32 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     broonie@kernel.org
-Cc:     cezary.rojewski@intel.com, srinivas.kandagatla@linaro.org,
-        bgoswami@codeaurora.org, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v3] ASoC: codecs: Check for error pointer after calling devm_regmap_init_mmio
-Date:   Sat, 22 Jan 2022 01:10:31 +0800
-Message-Id: <20220121171031.2826198-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAB3fZ0I6ephkjS6Bg--.24303S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cr43GFW5KFy8urWDJF15twb_yoW8Kw13pF
-        sYgFWkGasxG3y3Cryftw18JF1xta4293WrXw48G3s09r1DXF1UuFy5CF4UXFWkKrWv9FZx
-        GrWSy3y8u345ZFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9j14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
-        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7Cj
-        xVA2Y2ka0xkIwI1lc2xSY4AK67AK6r4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
-        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
-        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
-        AIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0D
-        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvf
-        C2KfnxnUUI43ZEXa7VUjo7K7UUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+        id S1351576AbiAURLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 12:11:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53446 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229549AbiAURLQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 12:11:16 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D40C06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 09:11:15 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id e28so5001101pfj.5
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 09:11:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:cc:from:to:message-id;
+        bh=EkBKAb+fz4ftZ/Li4vejfF8DFA5HVNha2levh2DSsDE=;
+        b=E1B3yU2XhsTV6T3+2v/yBaqbIOP/h99KnFXDbNiZn6f6tAjHj+mlUK203rl81TCNtB
+         9ESbgnl0nsvJ9+JZvgjeTosy/oCAnu42nip2nzjcn5MuayggY1BEvXy8e3TBW60ZBWlW
+         Uk89fFDNDPzyXtVMqbL7funftDCghihHlBeA2nuL/hNmp27ulGYEDAScHZGzq5FqI5/X
+         9/bZl7vaQU9bf+kKxd9OLfbPksdtcYx2TB48qRHh5/NvtgQI9HP5XtL5CESgmn+J1rdp
+         lhuBfxcxSD3ifAn381JyY9nv69Oq8GjgZc9ez9xyQjQdUMrvpHSCegd3/gKFBN89Bdil
+         fVRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:cc:from:to:message-id;
+        bh=EkBKAb+fz4ftZ/Li4vejfF8DFA5HVNha2levh2DSsDE=;
+        b=lwKmZuGIUCQW4RqEK/ms5IIjUyOcq+QXTwSoTQXDxR/9dQ9etwCa1KG4araksnC0mL
+         NDMbjiL74b21EiaGb0lPFlsC3daaMUh4jyvcp6XRxiq9e/vOs2/xjoSvqcASeHP4eydo
+         tTwJ6hhugNIPPh14cTxVXt1LWeN7MIphChMKDfd5uGk0IopNoLOFLdTMGbvkRRlW8Api
+         u0O/4+UzmnW5PDewWJg73smck/NMPa33YRZVn7ZE8qsiTuZHbzTTlHiYK712DnPWyIi3
+         W9DHD3NOfbj+oBe45y2IbWdDYgV0uzDbtggrYmE8f5qYSxEdDGPmk3qp2GSEDMCfQgAn
+         3mWQ==
+X-Gm-Message-State: AOAM530luw3P7t1hfhQ21fubtSVyldpgTqcm6FEBVKo8faLY8X1xS7VC
+        KltcbilTPPLDN+xF+UYdKa0bqA==
+X-Google-Smtp-Source: ABdhPJwpZ89rbtvTV6MDhqBZj7XeB4HRo7yT0fbPqjK4J91buwa3Ffy5Ygz5lM3HQGuKSK8+8qLAYg==
+X-Received: by 2002:a05:6a00:2487:b0:4bc:315d:21f4 with SMTP id c7-20020a056a00248700b004bc315d21f4mr4360065pfv.55.1642785075000;
+        Fri, 21 Jan 2022 09:11:15 -0800 (PST)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id v36sm5330804pgk.81.2022.01.21.09.11.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jan 2022 09:11:14 -0800 (PST)
+Date:   Fri, 21 Jan 2022 09:11:14 -0800 (PST)
+X-Google-Original-Date: Fri, 21 Jan 2022 09:10:29 PST (-0800)
+Subject: [GIT PULL] RISC-V Patches for the 5.17 Merge Window, Part 2
+CC:         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Message-ID: <mhng-c8a6625a-625b-420a-9399-f69d027a43ea@palmer-ri-x1c9>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the potential failure of the devm_regmap_init_mmio(), it will
-return error pointer and be assigned to the regmap.
-Then the error pointer will be dereferenced.
-For example rx->regmap will be used in rx_macro_mclk_enable().
-Therefore, it should be better to check it.
+The following changes since commit f1b744f65e2f9682347c5faf6377e61e2ab19a67:
 
-Fixes: af3d54b99764 ("ASoC: codecs: lpass-rx-macro: add support for lpass rx macro")
-Fixes: c39667ddcfc5 ("ASoC: codecs: lpass-tx-macro: add support for lpass tx macro")
-Fixes: 809bcbcecebf ("ASoC: codecs: lpass-wsa-macro: Add support to WSA Macro")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+  Merge tag 'riscv-for-linus-5.17-mw0' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux (2022-01-19 11:38:21 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-5.17-mw1
+
+for you to fetch changes up to c59cd507fb640c2acc6b07cb60d7f765839e18c7:
+
+  RISC-V: nommu_virt: Drop unused SLAB_MERGE_DEFAULT (2022-01-20 12:48:14 -0800)
+
+----------------------------------------------------------------
+RISC-V Patches for the 5.17 Merge Window, Part 2
+
+* Support for sv48 paging.
+* Hart ID mappings are now sparse, which enables more CPUs to come up on
+  systems with sparse hart IDs.
+* A handful of cleanups and fixes.
+
 ---
-Changelog
+The sv48 patch set is a bit intrusive for something this late, but given that
+it's being shown to fix some hangs it's seems better to take it now rather than
+waiting.
 
-v1 -> v2
+I had no merge conflicts.
 
-* Change 1. Refine the commit message.
+I'm not planning on submitting another PR for the merge window.
 
-v2 -> v3
+----------------------------------------------------------------
+Alexandre Ghiti (9):
+      riscv: Get rid of MAXPHYSMEM configs
+      riscv: Move KASAN mapping next to the kernel mapping
+      riscv: Split early kasan mapping to prepare sv48 introduction
+      riscv: Introduce functions to switch pt_ops
+      riscv: Allow to dynamically define VA_BITS
+      asm-generic: Prepare for riscv use of pud_alloc_one and pud_free
+      riscv: Implement sv48 support
+      riscv: Use pgtable_l4_enabled to output mmu_type in cpuinfo
+      riscv: Explicit comment about user virtual address space size
 
-* Change 1. Make the patch against the latest code.
----
- sound/soc/codecs/lpass-rx-macro.c  | 2 ++
- sound/soc/codecs/lpass-tx-macro.c  | 2 ++
- sound/soc/codecs/lpass-wsa-macro.c | 2 ++
- 3 files changed, 6 insertions(+)
+Atish Patra (6):
+      RISC-V: Avoid using per cpu array for ordered booting
+      RISC-V: Do not print the SBI version during HSM extension boot print
+      RISC-V: Use __cpu_up_stack/task_pointer only for spinwait method
+      RISC-V: Move the entire hart selection via lottery to SMP
+      RISC-V: Move spinwait booting method to its own config
+      RISC-V: Do not use cpumask data structure for hartid bitmap
 
-diff --git a/sound/soc/codecs/lpass-rx-macro.c b/sound/soc/codecs/lpass-rx-macro.c
-index aec5127260fd..29d214f784d1 100644
---- a/sound/soc/codecs/lpass-rx-macro.c
-+++ b/sound/soc/codecs/lpass-rx-macro.c
-@@ -3542,6 +3542,8 @@ static int rx_macro_probe(struct platform_device *pdev)
- 		return PTR_ERR(base);
- 
- 	rx->regmap = devm_regmap_init_mmio(dev, base, &rx_regmap_config);
-+	if (IS_ERR(rx->regmap))
-+		return PTR_ERR(rx->regmap);
- 
- 	dev_set_drvdata(dev, rx);
- 
-diff --git a/sound/soc/codecs/lpass-tx-macro.c b/sound/soc/codecs/lpass-tx-macro.c
-index a4c0a155af56..9c96ab1bf84f 100644
---- a/sound/soc/codecs/lpass-tx-macro.c
-+++ b/sound/soc/codecs/lpass-tx-macro.c
-@@ -1821,6 +1821,8 @@ static int tx_macro_probe(struct platform_device *pdev)
- 	}
- 
- 	tx->regmap = devm_regmap_init_mmio(dev, base, &tx_regmap_config);
-+	if (IS_ERR(tx->regmap))
-+		return PTR_ERR(tx->regmap);
- 
- 	dev_set_drvdata(dev, tx);
- 
-diff --git a/sound/soc/codecs/lpass-wsa-macro.c b/sound/soc/codecs/lpass-wsa-macro.c
-index 75baf8eb7029..69d2915f40d8 100644
---- a/sound/soc/codecs/lpass-wsa-macro.c
-+++ b/sound/soc/codecs/lpass-wsa-macro.c
-@@ -2405,6 +2405,8 @@ static int wsa_macro_probe(struct platform_device *pdev)
- 		return PTR_ERR(base);
- 
- 	wsa->regmap = devm_regmap_init_mmio(dev, base, &wsa_regmap_config);
-+	if (IS_ERR(wsa->regmap))
-+		return PTR_ERR(wsa->regmap);
- 
- 	dev_set_drvdata(dev, wsa);
- 
--- 
-2.25.1
+Heinrich Schuchardt (1):
+      riscv: default to CONFIG_RISCV_SBI_V01=n
 
+Jisheng Zhang (6):
+      riscv: mm: init: remove unnecessary "#ifdef CONFIG_CRASH_DUMP"
+      riscv: mm: init: try best to use IS_ENABLED(CONFIG_64BIT) instead of #ifdef
+      riscv: mm: init: remove _pt_ops and use pt_ops directly
+      riscv: mm: init: try IS_ENABLED(CONFIG_XIP_KERNEL) instead of #ifdef
+      riscv: mm: init: try best to remove #ifdef CONFIG_XIP_KERNEL usage
+      riscv: bpf: Fix eBPF's exception tables
+
+Lukas Bulwahn (1):
+      riscv: canaan: remove useless select of non-existing config SYSCON
+
+Minghao Chi (1):
+      RISC-V: Remove redundant err variable
+
+Palmer Dabbelt (2):
+      RISC-V: Introduce sv48 support without relocatable kernel
+      RISC-V: nommu_virt: Drop unused SLAB_MERGE_DEFAULT
+
+Ron Economos (1):
+      riscv: dts: sifive unmatched: Add gpio poweroff
+
+kernel test robot (1):
+      riscv: fix boolconv.cocci warnings
+
+ Documentation/riscv/vm-layout.rst                  |  12 +-
+ arch/riscv/Kconfig                                 |  52 +--
+ .../riscv/boot/dts/sifive/hifive-unmatched-a00.dts |   5 +
+ arch/riscv/configs/nommu_k210_defconfig            |   1 -
+ arch/riscv/configs/nommu_k210_sdcard_defconfig     |   1 -
+ arch/riscv/configs/nommu_virt_defconfig            |   2 -
+ arch/riscv/include/asm/cpu_ops.h                   |   2 -
+ arch/riscv/include/asm/cpu_ops_sbi.h               |  25 ++
+ arch/riscv/include/asm/csr.h                       |   3 +-
+ arch/riscv/include/asm/fixmap.h                    |   1 +
+ arch/riscv/include/asm/kasan.h                     |  11 +-
+ arch/riscv/include/asm/page.h                      |  16 +-
+ arch/riscv/include/asm/pgalloc.h                   |  40 +++
+ arch/riscv/include/asm/pgtable-64.h                | 108 +++++-
+ arch/riscv/include/asm/pgtable.h                   |  65 +++-
+ arch/riscv/include/asm/sbi.h                       |  19 +-
+ arch/riscv/include/asm/smp.h                       |   2 -
+ arch/riscv/include/asm/sparsemem.h                 |   6 +-
+ arch/riscv/kernel/Makefile                         |   3 +-
+ arch/riscv/kernel/asm-offsets.c                    |   3 +
+ arch/riscv/kernel/cpu.c                            |  23 +-
+ arch/riscv/kernel/cpu_ops.c                        |  26 +-
+ arch/riscv/kernel/cpu_ops_sbi.c                    |  26 +-
+ arch/riscv/kernel/cpu_ops_spinwait.c               |  27 +-
+ arch/riscv/kernel/head.S                           |  38 ++-
+ arch/riscv/kernel/head.h                           |   6 +-
+ arch/riscv/kernel/ptrace.c                         |   4 +-
+ arch/riscv/kernel/sbi.c                            | 189 ++++++-----
+ arch/riscv/kernel/setup.c                          |  10 -
+ arch/riscv/kernel/smpboot.c                        |   2 +-
+ arch/riscv/kvm/mmu.c                               |   4 +-
+ arch/riscv/kvm/vcpu_sbi_replace.c                  |  11 +-
+ arch/riscv/kvm/vcpu_sbi_v01.c                      |  11 +-
+ arch/riscv/kvm/vmid.c                              |   4 +-
+ arch/riscv/mm/cacheflush.c                         |   5 +-
+ arch/riscv/mm/context.c                            |   4 +-
+ arch/riscv/mm/init.c                               | 378 +++++++++++++++------
+ arch/riscv/mm/kasan_init.c                         | 248 ++++++++++----
+ arch/riscv/mm/tlbflush.c                           |   9 +-
+ arch/riscv/net/bpf_jit_comp64.c                    |   2 +-
+ drivers/firmware/efi/libstub/efi-stub.c            |   2 +
+ drivers/soc/canaan/Kconfig                         |   1 -
+ include/asm-generic/pgalloc.h                      |  24 +-
+ 43 files changed, 1006 insertions(+), 425 deletions(-)
+ create mode 100644 arch/riscv/include/asm/cpu_ops_sbi.h

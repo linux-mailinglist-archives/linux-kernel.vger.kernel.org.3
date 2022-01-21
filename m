@@ -2,118 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C58496696
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 21:48:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BB749669C
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 21:50:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231377AbiAUUsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 15:48:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45980 "EHLO
+        id S231695AbiAUUuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 15:50:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiAUUs3 (ORCPT
+        with ESMTP id S229583AbiAUUuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 15:48:29 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBC6C06173B;
-        Fri, 21 Jan 2022 12:48:26 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id r138so15316454oie.3;
-        Fri, 21 Jan 2022 12:48:26 -0800 (PST)
+        Fri, 21 Jan 2022 15:50:11 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9ADC06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 12:50:11 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id y14so15250476oia.9
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 12:50:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=WGjUTrV5mgHMzDhyvLsZZ8pd7X6AuuH7QuhfJeG9EgY=;
-        b=kvmf2OSxp7vQKMwYR1dLgO6WSiX2+4nzHhjmW/Oz5Vx0F/DK5D1vuYufA1qJh9Hx8a
-         LfHmpvcS+ayKbXU3K1KqQvhGyBD1/9voVd8xBJhLWdUkaeOtZNW8nOlj2NT51r791/iw
-         C1yXy+49U6UWHQxbmVxO2gR3A0Ot1byMBQMNkzoEOFKlPDfLSYdkPZ3ueek84qDVORVm
-         ItiKUCPqLuAw3+Ac8+8viaNyNaokKwZyq7tsXOPOs0ZJV8ts+QZSdT+X526m/fv2gVZA
-         dvucmMp0dZvzSnL7KV3yLFjafRYSt+ieGp4YyxXF6N3JQnT2EjKZqCvaQdHGuocKInoQ
-         /1JA==
+         :cc;
+        bh=DIhTTjelyXp1scIWoIHum/L+8mNJoJDG0RuZ6neQWBQ=;
+        b=S77186CnyZMQUQqsNQ9+TmBwqAbtNfrjvvjCAAiIeT6ZZ4bYkyEhMV+NQHdB9vWhZA
+         yV4LN7S8S/VpiOQwOYSkltT0g0NGMKmErw9/x5WhSzwfHsS9uHkQKi0it/i6VauNx1JC
+         7vbubAvJ2qyO2mxbF8rXjx1swIiD44GaHvqYFUy2jT45AbsU7FMsOCOeBeuD05FaFAa/
+         w7PcFrdWNUiuk6Nyo0xca6Wy+/Fv4Lqdamoo7NOwBlQzQPRoKdHLcHinvh1T+oK/PTlY
+         6/fkIX9RqbCw295MMLrjpRTuYxrvMWJM3oBdXsiqQIFxJsRcTqm104GF0eNsFRroov/M
+         DzjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=WGjUTrV5mgHMzDhyvLsZZ8pd7X6AuuH7QuhfJeG9EgY=;
-        b=lYvtHHbULd7RD6RvRqfCpysWW1AeiRxGscxOcDRbrYP3+iv/UH9Rd6sggBq5/psrYf
-         nueK09T+he6JiYKP2Wff1jxuurLfBClIfmwTnAir5ZFmg4kn2LhJJlmRBIGAymG3jT/r
-         EEalMbPUQxPBjcIg+5py+SCfjjIvdB0a8CsF+WSmgUvDJHVR27biEN/E+yQeCJ7zUcv9
-         oaS6xeD/fQqbSJKfk7WL8zKLRplaP8vVI6jlaXmJljkUXDuptIbIBhl4yosOvU46+pBq
-         EQn1q2meXnnS9Hef9dRzoRYKc+iAj8g3bYy6eO6095QeFeQzMgLzsDL+xcRuyy4ZjQnp
-         0Z1w==
-X-Gm-Message-State: AOAM5333zuXXUt4vV/90K6K7xnEoDXdHczlwWic001E85NfdZMx3gCza
-        6wx3Gt9HS21EJsq4rlEcs6afT/qCW//Wlt3W/Zs=
-X-Google-Smtp-Source: ABdhPJyFepdztr15jwXrbjkaZsAmzuoos6TQ9cMezqozHSl5K0Wmi1lv0sbBN6F1FVhtc6sl7qvKX2ON/nhJOnVhzbU=
-X-Received: by 2002:a05:6808:300b:: with SMTP id ay11mr2012664oib.120.1642798104543;
- Fri, 21 Jan 2022 12:48:24 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=DIhTTjelyXp1scIWoIHum/L+8mNJoJDG0RuZ6neQWBQ=;
+        b=Jm5sWvt8u8hbpVoPTBqmxl9C9p/HyMuam0jN9XSUnTIkbAkL8LP0MZiCzfXfjVGnlY
+         DWfpRSURwewH/bALVtgJXTQrWtkYx7rZoTR55zONNaEWoniYyFfTfrLtYFcObEb6pQrR
+         SVb3x5gvL0dPSOZMWqd1A1JqmGs4nLlzzxiwPbcNzhn8TJ6varF/ZgkjPIlfCfnU6ge2
+         mBF4nFCNXPdXatG8CjmdHwgdHu7aCphaJWtcuMOIgVvOUPDrBRL03Y8obJNw420RFm1m
+         U1yeq8bR/M3iXLzcidC2Hw5Wk7HbwwN7p5BQUiFaA+yyiyvYkzjRa6BUzsDgrgsSR8Yu
+         M+vg==
+X-Gm-Message-State: AOAM5323obqKkGboCicFcRIuomb+HiY7Vo1SsqVN3auGdulOXOukNo5O
+        Q/vFrBlSQ4Qayx9eC8X+zof5931KkvjNU3u+npw=
+X-Google-Smtp-Source: ABdhPJyHg9DnOVLj3GXek1xX/4z2+Ys+ETYkAEGri9PQIVx4le2XsjzS4hGXn/Nystf1LQWIU/w3nB3UXfPeSOn92HQ=
+X-Received: by 2002:a05:6808:ab2:: with SMTP id r18mr1994063oij.123.1642798210665;
+ Fri, 21 Jan 2022 12:50:10 -0800 (PST)
 MIME-Version: 1.0
-References: <20220121052827.4384-1-xiongx18@fudan.edu.cn> <23d5251f-c910-aed3-5d9e-07d6e5e5add2@amd.com>
-In-Reply-To: <23d5251f-c910-aed3-5d9e-07d6e5e5add2@amd.com>
+References: <20220121114800.95459-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20220121114800.95459-1-jiapeng.chong@linux.alibaba.com>
 From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 21 Jan 2022 15:48:13 -0500
-Message-ID: <CADnq5_N5Di8mxWDoVe5hdqPfrBnCw=gnDMzMyHeenk2gb=aSZw@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/amdgpu/amdgpu_cs: fix refcount leak of a
- dma_fence obj
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Xin Xiong <xiongx18@fudan.edu.cn>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
+Date:   Fri, 21 Jan 2022 15:49:59 -0500
+Message-ID: <CADnq5_NbnutwnzOttGtj37dH9eMBT3KUM=i8v=JTZ3cqCh6hoA@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/pm: remove useless if
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     "Quan, Evan" <evan.quan@amd.com>, Dave Airlie <airlied@linux.ie>,
+        xinhui pan <Xinhui.Pan@amd.com>,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        LKML <linux-kernel@vger.kernel.org>,
         amd-gfx list <amd-gfx@lists.freedesktop.org>,
         Maling list - DRI developers 
         <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>, Xin Tan <tanxin.ctf@gmail.com>,
-        yuanxzhang@fudan.edu.cn
+        "Deucher, Alexander" <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 2:45 AM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
->
-> Am 21.01.22 um 06:28 schrieb Xin Xiong:
-> > This issue takes place in an error path in
-> > amdgpu_cs_fence_to_handle_ioctl(). When `info->in.what` falls into
-> > default case, the function simply returns -EINVAL, forgetting to
-> > decrement the reference count of a dma_fence obj, which is bumped
-> > earlier by amdgpu_cs_get_fence(). This may result in reference count
-> > leaks.
-> >
-> > Fix it by decreasing the refcount of specific object before returning
-> > the error code.
-> >
-> > Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
-> > Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
->
-> Good catch. Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
-
-Applied manually.  Strangely I never got this on any of my emails, and
-I don't see it in the archives.
+Applied.  Thanks!
 
 Alex
 
+On Fri, Jan 21, 2022 at 6:48 AM Jiapeng Chong
+<jiapeng.chong@linux.alibaba.com> wrote:
 >
-> > ---
-> >   drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c | 1 +
-> >   1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm/a=
-md/amdgpu/amdgpu_cs.c
-> > index 0311d799a..894869789 100644
-> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-> > @@ -1510,6 +1510,7 @@ int amdgpu_cs_fence_to_handle_ioctl(struct drm_de=
-vice *dev, void *data,
-> >               return 0;
-> >
-> >       default:
-> > +             dma_fence_put(fence);
-> >               return -EINVAL;
-> >       }
-> >   }
+> Clean the following coccicheck warning:
+>
+> ./drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c:7035:2-4: WARNING: possible
+> condition with no effect (if == else).
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+> index 23ff0d812e4b..7427c50409d4 100644
+> --- a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+> +++ b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
+> @@ -7032,10 +7032,7 @@ static int si_power_control_set_level(struct amdgpu_device *adev)
+>         ret = si_resume_smc(adev);
+>         if (ret)
+>                 return ret;
+> -       ret = si_set_sw_state(adev);
+> -       if (ret)
+> -               return ret;
+> -       return 0;
+> +       return si_set_sw_state(adev);
+>  }
+>
+>  static void si_set_vce_clock(struct amdgpu_device *adev,
+> --
+> 2.20.1.7.g153144c
 >

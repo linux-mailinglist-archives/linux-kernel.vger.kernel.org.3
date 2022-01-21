@@ -2,78 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 166474961DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAD0B4961E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351268AbiAUPPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 10:15:50 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:47922 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351244AbiAUPPt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 10:15:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=L37WcsUefj8Jz5AzuxcgPxVzGeBfExcEj5ygi97jhK0=; b=CJPqh6ejMdHcFBW82NcTFBVRbG
-        6zyWkx7zY95Z35HkMTUWEgzew8LEswjg4AG1MVIrJmllfpcjEM8bpivQAAkRPP9aDGXZrhqub5Uc/
-        vSBbkrXbS1UHMW5zUwhZIg+yzVZxoWTJdEmc9fBDNDcxSRWGsCnbqfwS5j2CZCrlPzA8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nAvdh-0026Fs-5B; Fri, 21 Jan 2022 16:15:45 +0100
-Date:   Fri, 21 Jan 2022 16:15:45 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: phy: marvell: Honor phy LED set by system
- firmware on a Dell hardware
-Message-ID: <YerOIXi7afbH/3QJ@lunn.ch>
-References: <20220120051929.1625791-1-kai.heng.feng@canonical.com>
- <YelxMFOiqnfIVmyy@lunn.ch>
- <CAAd53p7NjvzsBs2aWTP-3GMjoyefMmLB3ou+7fDcrNVfKwALHw@mail.gmail.com>
- <Yeqzhx3GbMzaIbj6@lunn.ch>
- <CAAd53p5pF+SRfwGfJaBTPkH7+9Z6vhPHcuk-c=w8aPTzMBxPcg@mail.gmail.com>
+        id S1351328AbiAUPTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 10:19:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351337AbiAUPTO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 10:19:14 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24711C06173B;
+        Fri, 21 Jan 2022 07:19:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ApWlAhGVn9PnMXNrJHt7gtCR31r9LK5mSVjYiz9qbVc=; b=dB7pkf5xgvL8JqzBxZV7AwA+Zy
+        vdfTp734SREq/U3hYDd9Q/sBd0koUEWpk9iO5Qx7RLXpYua9nmzkTlMwPN1q/ZNL5Puya3OGkUk1X
+        x5uOyr/uma6z/4nnft7NFTCfjVljHcrSXMDoxlUNQNlC9ERC0nDZECbRN/3klhbmX3aV2U34u2/tj
+        U7e5XE0J7KQ0fkKaPfYj4xjUOL7PFW2kj9iZ5y4cRV8ofZj8xfgqzOQ75By4lXQDTiMmapgt1pb1u
+        crpRPhPuu1uCdhB1Ush2xcTOC3ZcDWS7P5K3HVAti1IbBmJYliHUeadZ02cO5RfNbD7lYvDW49xTT
+        CE1kbowA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nAvgd-002bJm-NE; Fri, 21 Jan 2022 15:18:48 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 063E49867E1; Fri, 21 Jan 2022 16:18:46 +0100 (CET)
+Date:   Fri, 21 Jan 2022 16:18:45 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     mingo@redhat.com, tglx@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-api@vger.kernel.org, x86@kernel.org, pjt@google.com,
+        posk@google.com, avagin@google.com, jannh@google.com,
+        tdelisle@uwaterloo.ca, mark.rutland@arm.com, posk@posk.io
+Subject: Re: [RFC][PATCH v2 5/5] sched: User Mode Concurency Groups
+Message-ID: <20220121151845.GB22849@worktop.programming.kicks-ass.net>
+References: <20220120155517.066795336@infradead.org>
+ <20220120160822.914418096@infradead.org>
+ <20220121114758.GF20638@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAd53p5pF+SRfwGfJaBTPkH7+9Z6vhPHcuk-c=w8aPTzMBxPcg@mail.gmail.com>
+In-Reply-To: <20220121114758.GF20638@worktop.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > They are similar to what DT has, but expressed in an ACPI way. DT has
-> > been used with PHY drivers for a long time, but ACPI is new. The ACPI
-> > standard also says nothing about PHYs. So Linux has defined its own
-> > properties, which we expect all ACPI machine to use. According to the
-> > ACPI maintainers, this is within the ACPI standard. Maybe at some
-> > point somebody will submit the current definitions to the standards
-> > body for approval, or maybe the standard will do something completely
-> > different, but for the moment, this is what we have, and what you
-> > should use.
+On Fri, Jan 21, 2022 at 12:47:58PM +0100, Peter Zijlstra wrote:
+> On Thu, Jan 20, 2022 at 04:55:22PM +0100, Peter Zijlstra wrote:
 > 
-> Right, so we can add a new property, document it, and just use it?
+> > +SYSCALL_DEFINE2(umcg_wait, u32, flags, u64, timo)
+> > +{
+> > +	struct task_struct *tsk = current;
+> > +	struct umcg_task __user *self = READ_ONCE(tsk->umcg_task);
+> > +	bool worker = tsk->flags & PF_UMCG_WORKER;
+> > +	int ret;
+> > +
+> > +	if (!self || flags)
+> > +		return -EINVAL;
+> > +
+> > +	if (worker) {
+> > +		tsk->flags &= ~PF_UMCG_WORKER;
+> > +		if (timo)
+> > +			return -ERANGE;
+> > +	}
+> > +
+> > +	/* see umcg_sys_{enter,exit}() syscall exceptions */
+> > +	ret = umcg_pin_pages();
+> > +	if (ret)
+> > +		goto unblock;
+> > +
+> > +	/*
+> > +	 * Clear UMCG_TF_COND_WAIT *and* check state == RUNNABLE.
+> > +	 */
+> > +	ret = umcg_update_state(tsk, self, UMCG_TASK_RUNNABLE, UMCG_TASK_RUNNABLE);
+> > +	if (ret)
+> > +		goto unpin;
+> > +
+> > +	ret = umcg_wake_next(tsk, self);
+> > +	if (ret)
+> > +		goto unpin;
+> > +
+> > +	if (worker) {
+> > +		/*
+> > +		 * If this fails it is possible ::next_tid is already running
+> > +		 * while this task is not going to block. This violates our
+> > +		 * constraints.
+> > +		 *
+> > +		 * That said, pretty much the only way to make this fail is by
+> > +		 * force munmap()'ing things. In which case one is most welcome
+> > +		 * to the pieces.
+> > +		 */
+> > +		ret = umcg_enqueue_and_wake(tsk);
+> > +		if (ret)
+> > +			goto unpin;
+> > +	}
+> > +
+> > +	umcg_unpin_pages();
+> > +
+> > +	ret = umcg_wait(timo);
+> > +	switch (ret) {
+> > +	case 0:		/* all done */
+> > +	case -EINTR:	/* umcg_notify_resume() will continue the wait */
+> 
+> So I was playing with the whole worker timeout thing last night and
+> realized this is broken. If we get a signal while we have a timeout, the
+> timeout gets lost.
+> 
+> I think the easiest solution is to have umcg_notify_resume() also resume
+> the timeout, but the first pass of that was yuck, so I need to try
+> again.
 
-Yes. So long as you follow the scheme documented there, cleanly
-integrate it into the code as needed, you can add a new property.
+Something like this, still yuck though. Also still need to write me a
+test for this.
 
-> Maybe others will use the new property once we set the precedence?
-
-Yes, which is why i keep saying you need to think of the general case,
-not your specific machine.
-
-> How about what Heiner proposed? Maybe we should leave the LED as is,
-> and restore it on system resume?
-
-I don't think we can change the current code because it will cause
-regressions. The LEDs probably work on some boards because of the
-current code.
-
-At some point in the future, we hope to be able to control the PHY
-LEDs via /sys/class/LEDs. But until then, telling the PHY driver to
-not touch the LED configuration seems a reasonable request.
-
-    Andrew
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1300,12 +1300,14 @@ struct task_struct {
+ 	clockid_t		umcg_clock;
+ 	struct umcg_task __user	*umcg_task;
+ 
+-	/* setup by umcg_pin_enter() */
++	/* setup by umcg_pin_pages() */
+ 	struct page		*umcg_page;
+ 
+ 	struct task_struct	*umcg_server;
+ 	struct umcg_task __user *umcg_server_task;
+ 	struct page		*umcg_server_page;
++
++	u64			umcg_timeout;
+ #endif
+ 
+ 	struct tlbflush_unmap_batch	tlb_ubc;
+--- a/kernel/sched/umcg.c
++++ b/kernel/sched/umcg.c
+@@ -232,6 +232,8 @@ static int umcg_update_state(struct task
+ /* Called from syscall enter path and exceptions that can schedule */
+ void umcg_sys_enter(struct pt_regs *regs, long syscall)
+ {
++	current->umcg_timeout = 0;
++
+ 	/* avoid recursion vs our own syscalls */
+ 	if (syscall == __NR_umcg_wait ||
+ 	    syscall == __NR_umcg_ctl)
+@@ -519,6 +521,7 @@ void umcg_notify_resume(struct pt_regs *
+ 	struct umcg_task __user *self = tsk->umcg_task;
+ 	bool worker = tsk->flags & PF_UMCG_WORKER;
+ 	u32 state;
++	int ret;
+ 
+ 	/* avoid recursion vs schedule() */
+ 	if (worker)
+@@ -554,12 +557,17 @@ void umcg_notify_resume(struct pt_regs *
+ 		umcg_unpin_pages();
+ 	}
+ 
+-	switch (umcg_wait(0)) {
++	ret = umcg_wait(tsk->umcg_timeout);
++	switch (ret) {
+ 	case 0:
+ 	case -EINTR:
+ 		/* we will resume the wait after the signal */
+ 		break;
+ 
++	case -ETIMEDOUT:
++		regs_set_return_value(regs, ret);
++		break;
++
+ 	default:
+ 		UMCG_DIE("wait");
+ 	}
+@@ -759,6 +767,7 @@ SYSCALL_DEFINE2(umcg_wait, u32, flags, u
+ 	switch (ret) {
+ 	case 0:		/* all done */
+ 	case -EINTR:	/* umcg_notify_resume() will continue the wait */
++		tsk->umcg_timeout = timo;
+ 		ret = 0;
+ 		break;
+ 

@@ -2,110 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3AB1495A24
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 07:53:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3301495A28
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 07:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378788AbiAUGxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 01:53:51 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:45462 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1378777AbiAUGxu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 01:53:50 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowAB3fZ1hWOphqQW0Bg--.17811S2;
-        Fri, 21 Jan 2022 14:53:21 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        jcmvbkbc@gmail.com, dsterba@suse.com, johan@kernel.org,
-        dankamongmen@gmail.com, penguin-kernel@I-love.SAKURA.ne.jp,
-        igormtorrente@gmail.com
-Cc:     linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] tty: vt: Check for NULL pointer after calling kzalloc
-Date:   Fri, 21 Jan 2022 14:53:20 +0800
-Message-Id: <20220121065320.2283544-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1378809AbiAUGzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 01:55:12 -0500
+Received: from mswedge1.sunplus.com ([60.248.182.113]:52670 "EHLO
+        mg.sunplus.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1378799AbiAUGzK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 01:55:10 -0500
+X-Greylist: delayed 77525 seconds by postgrey-1.27 at vger.kernel.org; Fri, 21 Jan 2022 01:55:10 EST
+X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
+        ,3)
+Received: from 172.17.9.112
+        by mg01.sunplus.com with MailGates ESMTP Server V5.0(11299:0:AUTH_RELAY)
+        (envelope-from <lh.Kuo@sunplus.com>); Fri, 21 Jan 2022 14:55:16 +0800 (CST)
+Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
+ sphcmbx02.sunplus.com.tw (172.17.9.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.26; Fri, 21 Jan 2022 14:55:11 +0800
+Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
+ sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
+ 15.00.1497.026; Fri, 21 Jan 2022 14:55:11 +0800
+From:   =?utf-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Li-hao Kuo <lhjeff911@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Subject: RE: [PATCH v6 1/2] spi: Add spi driver for Sunplus SP7021
+Thread-Topic: [PATCH v6 1/2] spi: Add spi driver for Sunplus SP7021
+Thread-Index: AQHYDEdoNQA4Z8mYU0mSuzI8gOIgg6xqY3GAgAE/t3D//4TFAIABjwHA
+Date:   Fri, 21 Jan 2022 06:55:11 +0000
+Message-ID: <ee5838c307f84bb99ace070292167a26@sphcmbx02.sunplus.com.tw>
+References: <cover.1642494310.git.lhjeff911@gmail.com>
+ <37998e515d561e762ee30d0ac4fca25a948e0c5c.1642494310.git.lhjeff911@gmail.com>
+ <CAHp75VdKc3UDzaqM2G5J5+G90U6Spqyhz_vuOYKhqJ4V-uf=wg@mail.gmail.com>
+ <a354d7c1dce4463ea57706dd5443fe7a@sphcmbx02.sunplus.com.tw>
+ <CAHp75VcCpye1u3+PK=C3CT8fMHPSOsXTL5AhbLVy0YyGWfyfkQ@mail.gmail.com>
+In-Reply-To: <CAHp75VcCpye1u3+PK=C3CT8fMHPSOsXTL5AhbLVy0YyGWfyfkQ@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.51]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAB3fZ1hWOphqQW0Bg--.17811S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zr18Ary8ZrWDWry5Gr4fGrg_yoW8CF47pF
-        ZxGry5Ars5J3Z3Xwnxta4DWF15G3W8G3W0kry3u3yUZr1Y9rW0kF9Iya4F9r9rArs7A3WY
-        qw4rta4YkF1jy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc2xSY4AK67AK6r47MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
-        vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI
-        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxh
-        VjvjDU0xZFpf9x0JU-J5rUUUUU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the potential failure of the allocation, the kzalloc() will return
-NULL pointer.
-Therefore, it should be better to check it in order to avoid the
-dereference of the NULL pointer.
-When it fails, we should free all the allocated memory and return error
-number.
-To make the code more clear, I use the 'err_free', like how
-vc_allocate() deals with the allocation failure.
-
-Fixes: a5f4f52e8211 ("vt: use kzalloc() instead of the bootmem allocator")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/tty/vt/vt.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
-
-diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index f8c87c4d7399..343fa6fffc18 100644
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -3519,11 +3519,17 @@ static int __init con_init(void)
- 
- 	for (currcons = 0; currcons < MIN_NR_CONSOLES; currcons++) {
- 		vc_cons[currcons].d = vc = kzalloc(sizeof(struct vc_data), GFP_NOWAIT);
-+		if (!vc)
-+			goto err_free;
-+
- 		INIT_WORK(&vc_cons[currcons].SAK_work, vc_SAK);
- 		tty_port_init(&vc->port);
- 		visual_init(vc, currcons, 1);
- 		/* Assuming vc->vc_{cols,rows,screenbuf_size} are sane here. */
- 		vc->vc_screenbuf = kzalloc(vc->vc_screenbuf_size, GFP_NOWAIT);
-+		if (!vc->vc_screenbuf)
-+			goto err_free_vc;
-+
- 		vc_init(vc, vc->vc_rows, vc->vc_cols,
- 			currcons || !vc->vc_sw->con_save_screen);
- 	}
-@@ -3545,6 +3551,19 @@ static int __init con_init(void)
- 	register_console(&vt_console_driver);
- #endif
- 	return 0;
-+err_free_vc:
-+	visual_deinit(vc);
-+	kfree(vc);
-+	vc_cons[currcons].d = NULL;
-+err_free:
-+	for (i = 0; i < currcons; i++) {
-+		kfree(vc_cons[currcons].d->vc_screenbuf);
-+		visual_deinit(vc_cons[currcons].d);
-+		kfree(vc_cons[currcons].d);
-+		vc_cons[currcons].d = NULL;
-+	}
-+	console_unlock();
-+	return -ENOMEM;
- }
- console_initcall(con_init);
- 
--- 
-2.25.1
-
+PiA+ID4gPiArICAgICAgIGlmICh4ZmVyLT50eF9idWYpDQo+ID4gPiA+ICsgICAgICAgICAgICAg
+ICBkbWFfdW5tYXBfc2luZ2xlKGRldiwgeGZlci0+dHhfZG1hLCB4ZmVyLT5sZW4sIERNQV9UT19E
+RVZJQ0UpOw0KPiA+ID4gPiArICAgICAgIGlmICh4ZmVyLT5yeF9idWYpDQo+ID4gPiA+ICsgICAg
+ICAgICAgICAgICBkbWFfdW5tYXBfc2luZ2xlKGRldiwgeGZlci0+cnhfZG1hLCB4ZmVyLT5sZW4s
+DQo+ID4gPiA+ICsgRE1BX0ZST01fREVWSUNFKTsNCj4gPiA+DQo+ID4gPiBXaHkgY2FuJ3QgeW91
+IHVzZSBTUEkgY29yZSBETUEgbWFwcGluZyBjb2RlPw0KPiA+DQo+ID4gSSBkaWRuJ3QgZmluZCB0
+aGUgU1BJIGNvcmUgRE1BIG1hcHBpbmcgY29kZSBmb3Igc2luZ2xlIG1hcGluZy4NCj4gPiBUaGUg
+bWV0aG9kIGN1cnJlbnRseSB1c2VkIGlzIHRoZSBnZW5lcmFsIERNQSBzaW5nbGUtbWFwIGNvZGUg
+dXNhZ2UgbWV0aG9kLg0KPiANCj4gV2h5IGRvIHlvdSBuZWVkIHNpbmdsZSBwYWdlIG1hcHBpbmc/
+DQo+IFdoYXQncyB3cm9uZyB3aXRoIFNHIG1hcHBpbmcgdGhhdCBTUEkgY29yZSBwcm92aWRlcz8N
+Cg0KU1A3MDIxIFNQSSBzbGF2ZSBkbWEgb25seSBzdXBwb3J0cyBzaW5nbGUgZG1hIGluIG9uZSB0
+cmlnZ2VyLiANCkl0IGlzIG5vdCBzdWl0YWJsZSBmb3IgdXNpbmcgU0cgbWFwcGluZy4NCklmIHRo
+ZSBsZW5ndGggb2YgdGhlIHRyYW5zZmVyIGlzIGxhcmdlciB0aGFuIHRoZSBsZW5ndGggb2YgdGhl
+IFNHLW1hcHBpbmcsIA0KU2xhdmUtbW9kZSB3aWxsIGdldCBlcnJvciBpbiB0aGUgdHJhbnNmZXIu
+DQo=

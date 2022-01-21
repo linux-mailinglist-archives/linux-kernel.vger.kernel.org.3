@@ -2,99 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E10144962B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 17:20:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A12BD4962B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 17:22:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381766AbiAUQUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 11:20:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351427AbiAUQUt (ORCPT
+        id S1381782AbiAUQWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 11:22:01 -0500
+Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:15740 "EHLO
+        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232442AbiAUQV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 11:20:49 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89579C06173B;
-        Fri, 21 Jan 2022 08:20:49 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id g81so28983799ybg.10;
-        Fri, 21 Jan 2022 08:20:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xMLla9J2INC0Vjwi8Lph9kO0OuNVjhQ8NGl6/GPtYik=;
-        b=I1DkqQiisObWIoRLxUT1Q/CBxP+yf0P5bmeTa2AZP6svHXmb4OvJt7EGDuwWQZPAlx
-         T4/t0Dz5pezEgh+X0ARuIs8N2pBnN9/uTF6+Plp52J/cVozLGNtjGLu0PJpawPA290iG
-         qau3z33UpCJogjrQ8KcJGJUQNcaEhl3P244zNZA9LrBu9mOHMgATS4sX+Hs/KL0nmIBf
-         Z4Vqz9DnZwHxaNxAcvmj0osELWznATh0JJzzX3z0mgwcPRrKiwYPn8YEqHH3N/jYjnAp
-         +Jf9rA8NzC+LGe6A4Z/fsrZtmk9arm7JwU26zjiPLGUILjsABq9rXBqYa218b8nahMWX
-         RjRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xMLla9J2INC0Vjwi8Lph9kO0OuNVjhQ8NGl6/GPtYik=;
-        b=0vJ7fRmuSOeLvP3if9U5anLEHf7LrYYEY4OZlM0Yq/c8P9QcLPNTBPQWk+2KXKtLuH
-         Jkr/GmaL4gMcjmyHMNYQiIrNquOSMqO40v6gX77HfXzOUdPu9rCZRaNttpV+blQxeznQ
-         uFiTG0ETFCAuhAozgtheNVSY6r5nYnlKa5SqNodUpZnkYtU2ZxyoScNUGO6Ektc8sKKG
-         ZSkaNTdVQPRMhAG4qwF5nR7WD5ei3WM6G4FBk8M5+FFzOB+hJQrM7ZVokP07Uh6Xrc9p
-         4I/OP/yqVOK9TSK8wJwpTLQAd2DM9GyCSMLCwbdoO+KM/seD9+d3DeA1hVFthJ6kGbDY
-         +C5A==
-X-Gm-Message-State: AOAM532T0IirQRpD1nlMFjxCNxJLRG5QD6GyGS6WBO0LhQKN2HHCyiOi
-        XWfHUUXqra2MuL+uQtjVaeFlbbmD1+99+Ha8HQqyLTDS5Yw=
-X-Google-Smtp-Source: ABdhPJxujopegNMJe7IXwxvo9WoiX5lHP73EK+e41btqwJdPRQlwHBqzQ8UfWswuqNqLifI9iDL3q+yYKYe82RrP3B0=
-X-Received: by 2002:a5b:281:: with SMTP id x1mr6963572ybl.41.1642782048593;
- Fri, 21 Jan 2022 08:20:48 -0800 (PST)
+        Fri, 21 Jan 2022 11:21:59 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=guangguan.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V2SWFOq_1642782106;
+Received: from 30.39.181.79(mailfrom:guangguan.wang@linux.alibaba.com fp:SMTPD_---0V2SWFOq_1642782106)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sat, 22 Jan 2022 00:21:47 +0800
+Message-ID: <6f1b9813-483b-ea2e-f6da-c349edd34003@linux.alibaba.com>
+Date:   Sat, 22 Jan 2022 00:21:45 +0800
 MIME-Version: 1.0
-References: <20220110134659.30424-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220110134659.30424-4-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdUbK4BoYo1+L9DF9f12HSuAjR-wfE5GAi2EfftPnCEknA@mail.gmail.com>
-In-Reply-To: <CAMuHMdUbK4BoYo1+L9DF9f12HSuAjR-wfE5GAi2EfftPnCEknA@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Fri, 21 Jan 2022 16:20:22 +0000
-Message-ID: <CA+V-a8sg=A2ntsurfj9vqjsUu-G-Jrpd7HJ+4+nSV6rgkL8mvQ@mail.gmail.com>
-Subject: Re: [PATCH v2 03/12] dt-bindings: clock: Add R9A07G054 CPG Clock and
- Reset Definitions
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [RFC PATCH net-next] net/smc: Introduce receive queue flow
+ control support
+Content-Language: en-US
+To:     dust.li@linux.alibaba.com, kgraul@linux.ibm.com,
+        davem@davemloft.net, kuba@kernel.org
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220120065140.5385-1-guangguan.wang@linux.alibaba.com>
+ <20220120095130.GB41938@linux.alibaba.com>
+From:   Guangguan Wang <guangguan.wang@linux.alibaba.com>
+In-Reply-To: <20220120095130.GB41938@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On 2022/1/20 17:51, dust.li wrote:
+> On Thu, Jan 20, 2022 at 02:51:40PM +0800, Guangguan Wang wrote:
+>> This implement rq flow control in smc-r link layer. QPs
+>> communicating without rq flow control, in the previous
+>> version, may result in RNR (reveive not ready) error, which
+>> means when sq sends a message to the remote qp, but the
+>> remote qp's rq has no valid rq entities to receive the message.
+>> In RNR condition, the rdma transport layer may retransmit
+>> the messages again and again until the rq has any entities,
+>> which may lower the performance, especially in heavy traffic.
+>> Using credits to do rq flow control can avoid the occurrence
+>> of RNR.
+> 
+> I'm wondering if SRQ can be used to solve this problem ?
+> 
+> One of my concern on credit-base flow control is if the RTT is
+> a bit longer, we may have to wait RTT/2 for peer to grant us credit
+> before we can really send more data. That may decrease the maximium
+> bandwidth we can achive in this case.
 
-Thank you for the review.
+Longer RTT can result in more inflight messages and increase
+the announcement latency indeed.
 
-On Fri, Jan 21, 2022 at 2:45 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar, Biju,
->
-> On Mon, Jan 10, 2022 at 2:47 PM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > From: Biju Das <biju.das.jz@bp.renesas.com>
-> >
-> > Define RZ/V2L (R9A07G054) Clock Pulse Generator Core Clock and module
-> > clock outputs, as listed in Table 7.1.4.2 ("Clock List r1.0") and also
-> > add Reset definitions referring to registers CPG_RST_* in Section 7.2.3
-> > ("Register configuration") of the RZ/V2L Hardware User's Manual (Rev.1.00,
-> > Nov.2021).
-> >
-> > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > Acked-by: Rob Herring <robh@kernel.org>
->
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> Before I queue this in renesas-clk-for-v5.18, I'm wondering if you
-> want to add the DRP_M, DRP_D, and DRP_A core clocks, too?
->
-Good point lets get everything in one shot, I'll send a v2 including
-the above core clocks.
-
-Cheers,
-Prabhakar
+The following items are used in this patch to reduce the pact
+of this situation.
+- More rqe. (average 2 credits per smc_connection now, longer RTT is
+  a good case for me to check whether an average of 2 is enough. As
+  each additional rqe only increases the memory by 104 Bytes,
+  SRQ may be an icing on the cake option to reduce memory usage)
+- Announce frequenly. (credits carried by every cdc msg)
+- Avoid credit accumulation. (announce as soon as the low watermark(1/3 rq entities) is reached)

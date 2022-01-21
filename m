@@ -2,94 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2E949620D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:28:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D1A496216
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381568AbiAUP2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 10:28:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381538AbiAUP2Y (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 10:28:24 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2544C06173B;
-        Fri, 21 Jan 2022 07:28:23 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id v11-20020a17090a520b00b001b512482f36so6610617pjh.3;
-        Fri, 21 Jan 2022 07:28:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=r+33jODPoZ1MgqlKNkNxul3SU0pMB0I3n5t9zD6dBGk=;
-        b=kwbppzcKwShSfAfBEK5YPEx2D4Mc+5bkBtvbNtUfkzDL3pqJIemqEgOZEeqCF4Gln/
-         /58IM3B1dPeH4Rx1EA1wPrRt6jyh0RwQ4R0MhxoGaI4W7JBLVLUDnRqLXN/hXUNM3M8n
-         S1OKuKeA+JabuHBpE2ZfygNAruuPCJYSD2+oPNLLKFNhqMjCDRVu66pR5+HUwMRFuRnQ
-         npPJNd45IICP61BoLmcLjc2m1Y1JjPgyAa3dm51gEjzK+TfItUxIk9nGUzjxgdKPoA6Z
-         uyEzdih1cLLzYJiM0i9VLYF7B7v4IdV12uW7dzMwv//yXs8ifPUYP/P+ymdRbeHGlZPD
-         GWRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=r+33jODPoZ1MgqlKNkNxul3SU0pMB0I3n5t9zD6dBGk=;
-        b=L5IU+a88eXKg1ULfkk6mKwEdbOpovoPoBzo0XMuxxeG3dqeFuqnF3PL4vokTtz1ce/
-         dD8nYW38lg8SsLhDJvmXeP/5ZH2qwIajbUrdGmqrNqjpLgE6iFgDPwu4NrC4hEPWdUKh
-         6fhyWq6VGsBHliMmpo9ttKUykeN7eZ67HEEv7OfIsnLcziQPdpDPIDg6EE7JJqzDz7w5
-         +mD5IH0wjnIY1OL5066YeYIq4jjD0gJALyxmgstBLSA3439QStfTk4LNlz1i+1KOyVJ0
-         Q4bkbNOGtHzdGR32ILYwJ0PWBj4OLMyExVFs+O7Qhbdbk+eW4hnW5VXTh0uro2tnI0Bx
-         pXGw==
-X-Gm-Message-State: AOAM533zCDhkfbOmTxwPAQcdFnS+pl9hrnEnoMUGF0dyCzup6Gw7Px9X
-        V0AjyX0dAoYXqObBrBuSedU=
-X-Google-Smtp-Source: ABdhPJzdZ9cXUno+7zcJLzR+pWB3x/1OtU+OZbQyzdXi+nlSO0BTEpl7trLNjeN0zrwbIPcSCk2dYQ==
-X-Received: by 2002:a17:903:1249:b0:149:a59c:145a with SMTP id u9-20020a170903124900b00149a59c145amr4181057plh.108.1642778903382;
-        Fri, 21 Jan 2022 07:28:23 -0800 (PST)
-Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id b7sm8366640pju.42.2022.01.21.07.28.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 07:28:23 -0800 (PST)
-Date:   Fri, 21 Jan 2022 07:28:20 -0800
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Miroslav Lichvar <mlichvar@redhat.com>,
-        Russell King <linux@arm.linux.org.uk>
-Subject: Re: [PATCH RFC V1 net-next 3/4] net: Let the active time stamping
- layer be selectable.
-Message-ID: <20220121152820.GA15600@hoboy.vegasvil.org>
-References: <20220103232555.19791-4-richardcochran@gmail.com>
- <20220120164832.xdebp5vykib6h6dp@skbuf>
- <Yeoqof1onvrcWGNp@lunn.ch>
- <20220121040508.GA7588@hoboy.vegasvil.org>
- <20220121145035.z4yv2qsub5mr7ljs@skbuf>
+        id S1381571AbiAUPaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 10:30:01 -0500
+Received: from foss.arm.com ([217.140.110.172]:55212 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1351009AbiAUP37 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 10:29:59 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 33601101E;
+        Fri, 21 Jan 2022 07:29:59 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.1.33])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 818573F774;
+        Fri, 21 Jan 2022 07:29:53 -0800 (PST)
+Date:   Fri, 21 Jan 2022 15:29:50 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
+        anup.patel@wdc.com, aou@eecs.berkeley.edu, atish.patra@wdc.com,
+        bp@alien8.de, catalin.marinas@arm.com, chenhuacai@kernel.org,
+        dave.hansen@linux.intel.com, frankja@linux.ibm.com,
+        frederic@kernel.org, gor@linux.ibm.com, hca@linux.ibm.com,
+        james.morse@arm.com, jmattson@google.com, joro@8bytes.org,
+        luto@kernel.org, maz@kernel.org, mingo@redhat.com,
+        nsaenzju@redhat.com, palmer@dabbelt.com, paulmck@kernel.org,
+        paul.walmsley@sifive.com, peterz@infradead.org, seanjc@google.com,
+        suzuki.poulose@arm.com, svens@linux.ibm.com, tglx@linutronix.de,
+        tsbogend@alpha.franken.de, vkuznets@redhat.com,
+        wanpengli@tencent.com, will@kernel.org,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>
+Subject: Re: [PATCH v2 0/7] kvm: fix latent guest entry/exit bugs
+Message-ID: <YerRbhqvJ5nEcQYT@FVFF77S0Q05N>
+References: <20220119105854.3160683-1-mark.rutland@arm.com>
+ <a4a26805-3a56-d264-0a7e-60bed1ada9f3@linux.ibm.com>
+ <20220119192217.GD43919@C02TD0UTHF1T.local>
+ <2688b779-9cb8-b6ea-f8cc-93bc8ddf72f3@redhat.com>
+ <YelPnGM4kONm7ZQa@FVFF77S0Q05N>
+ <ff673e4e-c395-701f-f891-36ffa260c3bd@linux.ibm.com>
+ <85d3899e-7da5-abad-743b-e5d6dde21800@linux.ibm.com>
+ <c90abd39-375a-15cc-847a-d1d28115ca97@linux.ibm.com>
+ <YerDaItJQHvMMHIU@FVFF77S0Q05N>
+ <b7912854-a7b1-caf5-aa23-e718318b0d7a@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220121145035.z4yv2qsub5mr7ljs@skbuf>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b7912854-a7b1-caf5-aa23-e718318b0d7a@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 02:50:36PM +0000, Vladimir Oltean wrote:
-> So as I mentioned earlier, the use case would be hardware performance
-> testing and diagnosing. You may consider that as not that important, but
-> this is basically what I had to do for several months, and even wrote
-> a program for that, that collects packet timestamps at all possible points.
+On Fri, Jan 21, 2022 at 03:42:48PM +0100, Christian Borntraeger wrote:
+> Am 21.01.22 um 15:30 schrieb Mark Rutland:
+> > On Fri, Jan 21, 2022 at 03:17:01PM +0100, Christian Borntraeger wrote:
+> > > Am 21.01.22 um 10:53 schrieb Christian Borntraeger:
+> > > > Am 20.01.22 um 16:14 schrieb Christian Borntraeger:
+> > > > > Am 20.01.22 um 13:03 schrieb Mark Rutland:
+> > > > > > On Thu, Jan 20, 2022 at 12:28:09PM +0100, Paolo Bonzini wrote:
+> > > > > > > On 1/19/22 20:22, Mark Rutland wrote:
+> > > > > > > > I wonder, is the s390 guest entry/exit*preemptible*  ?
+> > > > > > > > 
+> > > > > > > > If a timer IRQ can preempt in the middle of the EQS, we wouldn't balance
+> > > > > > > > things before a ctx-switch to the idle thread, which would then be able
+> > > > > > > > to hit this.
+> > > > > > > > 
+> > > > > > > > I'll need to go audit the other architectures for similar.
+> > > > > > > 
+> > > > > > > They don't enable interrupts in the entry/exit path so they should be okay.
+> > > > > > 
+> > > > > > True.
+> > > > > > 
+> > > > > > So it sounds like for s390 adding an explicit preempt_{disable,enable}() is the
+> > > > > > right thing to do. I'll add that and explanatory commentary.
+> > > > > 
+> > > > > That would not be trivial I guess. We do allow (and need) page faults on sie for guest
+> > > > > demand paging and
+> > > > > 
+> > > > > this piece of arch/s390/mm/fault.c
+> > > > > 
+> > > > >          case GMAP_FAULT:
+> > > > >                   if (faulthandler_disabled() || !mm)
+> > > > >                           goto out;
+> > > > >                   break;
+> > > > >           }
+> > > > > 
+> > > > > would no longer work since faulthandler_disabled checks for the preempt count.
+> > > > > 
+> > > > 
+> > > > 
+> > > > Something like this
+> > > > 
+> > > > 
+> > > > diff --git a/arch/s390/mm/fault.c b/arch/s390/mm/fault.c
+> > > > index d30f5986fa85..1c7d45346e12 100644
+> > > > --- a/arch/s390/mm/fault.c
+> > > > +++ b/arch/s390/mm/fault.c
+> > > > @@ -385,10 +385,18 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
+> > > >                           return 0;
+> > > >                   goto out;
+> > > >           case USER_FAULT:
+> > > > -       case GMAP_FAULT:
+> > > >                   if (faulthandler_disabled() || !mm)
+> > > >                           goto out;
+> > > >                   break;
+> > > > +               /*
+> > > > +                * We know that we interrupted SIE and we are not in a IRQ.
+> > > > +                * preemption might be disabled thus checking for in_atomic
+> > > > +                * would result in failures
+> > > > +                */
+> > > > +       case GMAP_FAULT:
+> > > > +               if (pagefault_disabled() || !mm)
+> > > > +                       goto out;
+> > > > +               break;
+> > > >           }
+> > > > 
+> > > >           perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
+> > > > 
+> > > > seems to work with preemption disabled around sie. Not sure yet if this is correct.
+> > > 
+> > > 
+> > > No it does not work. scheduling while preemption is disabled.
+> > 
+> > Hmm... which exceptions do we expect to take from a guest?
+> > 
+> > I wonder if we can handle those more like other architectures by getting those
+> > to immediately return from the sie64a() call with some status code that we can
+> > handle outside of the guest_state_{enter,exit}_irqoff() critical section.
+> 
+> We take all kind of page faults (invalid->valid, ro->rw) on the sie instruction and
+> run that in the context of the pgm_check handler just like for userspace.
 
-This is not possible without making a brand new CMSG to accommodate
-time stamps from all the various layers.
+Do we only expect to tak faults from a guest (which IIUC at the GMAP_FAULT
+cases in the bit above), or are there other esceptions we expect to take from
+the middle of a SIE?
 
-That is completely out of scope for this series.
+> the pgm_check handler does a sie_exit (similar to the interrupt handlers) by
+> setting the return IA.
 
-The only practical use case of this series is to switch from PHY back to MAC.
+Sure, but that sie_exit happens *after* the handler runs, where as I'm asking
+whether we can structure this like all the other architectures and turn all
+exceptions into returns from sie64a() that we can handle after having called
+guest_state_exit_irqoff().
+
+> > On arm64 in VHE mode, we swap our exception vectors when entering/exiting the
+> > guest to allow us to do that; I wonder if we could do similar here?
+
+Does this idea sound at all plausible?
 
 Thanks,
-Richard
+Mark.

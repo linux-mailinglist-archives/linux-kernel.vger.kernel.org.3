@@ -2,328 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D79495782
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 02:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F65495786
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 02:03:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348184AbiAUBAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 20:00:08 -0500
-Received: from mail-eopbgr150050.outbound.protection.outlook.com ([40.107.15.50]:23461
-        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1347998AbiAUBAG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 20:00:06 -0500
+        id S232558AbiAUBCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 20:02:54 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:13048 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229499AbiAUBCw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 20 Jan 2022 20:02:52 -0500
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20L04GMG016444;
+        Fri, 21 Jan 2022 01:02:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=HZjjEopL7LMZvyWoW3TyPmDK/SZ5ppLw/WPOKrvLsq0=;
+ b=vT6dFQyxtYQTGQe16jBFZ/ac3gULJ5yqevJo2J8DaKo09T6JWZhsk+xS0ZvnnL13GAHh
+ lCieMizLxxa2/UderkGdSo4QqER0LDX2KnkZQKljL9G/9gkt9pFVMNf3j+Og+SGke/iu
+ xqjzg8Z0k7/POA/U/0xabRr4TgstpLZgF6YcwH8UKm5cTtJKskwBFdSCqvWMAxSHnVCY
+ VzIGZfjloXFyJfvCbkYTdoV1KsVnqKBiviLx7eX5InBOBmAdpZSxd3tnrOmYgudE5Gvj
+ p20RAR7wBE4uG3GT3VlB3Ctl8iQQ1EUaaRuUh18G9d+tP60rocE5xKk7Wx1b+9DT2HwO bA== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dqhydr2dh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 21 Jan 2022 01:02:07 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20L111CL030221;
+        Fri, 21 Jan 2022 01:02:06 GMT
+Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam07lp2041.outbound.protection.outlook.com [104.47.56.41])
+        by aserp3030.oracle.com with ESMTP id 3dqj059yan-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 21 Jan 2022 01:02:05 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TqGHUWbJw49Pz0lPr8Mr2/E85VJEGKSKAkeiBpKV++DpFtoaQbSAV+yZoquFAZciUILXAs5WUSq4f4ofhsb0u3vynoNk7N2G0DhSeo48nPO4swQEbs8qKRGTKulyOm8kUiu9fiAlKLnarAe1XGPpxuvWsS9zCFfQfy3u0grwfByHNJ3lwGPn/4i+JR19WFrKBhnFMrcApPq1kYYUpg6WujoIqa4GEU5ehejxexpbs6n12xfBZFp1E/nnD/1hhf1l6N4PXJcHszIyUAaBJ3jD9cxozQh7/bL/pNv0woSq6vwI7wY+yEe2ht2QVjgjLnMYOE0xiHlIyItUfJzkiZrHqw==
+ b=aHIyXUpVl1uwGMwronkJBYdt5P6eUTR2dP3LnUwL+aQ9s/0YcNN/xCqztY92Ub3o8Ef1jn1DHNErkk7JqwsrS31P7iDRUuiNul1SrCv3CV+GBVf9q2S3ShGVm/Xy4I63OSesN50YBEcaL/hI26JEUZqirmIlnpaKcqLvRdjW9FMy6MVJ7Pzhc5ZuJuOBQk4Pl9q2BK4Aay5v6QFBTlZZYVXtzsYNdjSTtdcsxlR2/GpYH4XU1ROJymaUt55p8mayCvZLhlUpsyhAEcqne5jQfSuMPsK2ywIWQxgzhnFbxfxkokq2I7EVh6kTC+iB1q86fj0tlw0cjFoA0xQ7E3wZew==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1axhYqNd6Li9/TCHAkmCceeakD3wuCg4kVc3trFsNRI=;
- b=hZAFQpEKHmKJxzFpZtc5PGqTWb0whfhnsv9R/q2zjuGpK54Znqr/U8V44iG77O/7RI68IYXK8Wf0yJhJfZE9ztwz6wFW2+CuRMbCKyR4DVO/2KUVKTAZf2mpC3ihbQ7TAt5FVWVDOrunqnDqlIJ/BWwwbL3ctLDLadMWOaprZ/lzAKvNgLZTMj2D5lx/W6ospUBBeuQ0kmTOWzHjheibE9TEwL7drlutRbfmGnI7hY5xTskFmC3/LGXCrDOLxlQ7I79mL+FTU316ZjZpi9J5jmgx18hHfa2zGZ/WIqnpx+iV9QnbTHrImnRhNBcnS9gobDIpQrktYSQ8piBW/GRVfw==
+ bh=HZjjEopL7LMZvyWoW3TyPmDK/SZ5ppLw/WPOKrvLsq0=;
+ b=PIHUg+1G0pSP1nk8RJw0oJAqhS+X3Uk4zCGGVjC8lzmfKT4boRFlgPq8o2TIqLKiyADR7uCFG6sLo/twL3NkM5mS7kh2YwD3kmNRpeynyqoc6x8Ek3f7uKaBeUKz4VISR71iPEdAQRlTRgsOHF37nNNmL0mxMyRSevyOydbPFG71H/zoARkDqPODaJfXYOi+8yXwQ7WWPMxZaEvaukCyE9F1V9pumRYSVlowrPQu5ucxQO5abukwautVLQQvxz36gPEwLfBzcbnRs7JIdy0IY0nco7c2lWtgHjVpfms0kn0o8D0TaZGy0ZUzFYRAMMVYZGGurd+PYx2IA2W9JiV53w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1axhYqNd6Li9/TCHAkmCceeakD3wuCg4kVc3trFsNRI=;
- b=gvfe87XxX5ipgSvXaSacNFbvtIdvBVu4TaFu3wxwf/AyFeUqmPOL6v9SaY/Kne19l2SuMlsALUzcCnUloG+sCyxjHeSjhJNsmJgyCOd7x3qgBeI2N8pku1C327Op2AjVCLIbCXQn4a6mMqXO3eSfdFhQW0KKtbVUnkO/cLQ5AkE=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by DU2PR04MB8887.eurprd04.prod.outlook.com (2603:10a6:10:2e2::15) with
+ bh=HZjjEopL7LMZvyWoW3TyPmDK/SZ5ppLw/WPOKrvLsq0=;
+ b=dnsxawGlmh5IhXHM23sQOqoWDnCqftd4Xmq/CCeL4GJ57W+ZGk7GQNbf0fv+xBTSNue+FvWLP5PoeKQDuMRjypoCxdBHjzurKqNuRwm/+7dGAcDER6v3MTzlFYWdwSXcfPRU7amSipIKPBeT6s2UFM519ywRano6He6khJHGag4=
+Received: from BLAPR10MB5009.namprd10.prod.outlook.com (2603:10b6:208:321::10)
+ by BY5PR10MB3955.namprd10.prod.outlook.com (2603:10b6:a03:1f7::24) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.11; Fri, 21 Jan
- 2022 01:00:04 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::d4dc:8c9a:55d0:81d8]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::d4dc:8c9a:55d0:81d8%4]) with mapi id 15.20.4909.010; Fri, 21 Jan 2022
- 01:00:04 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-CC:     "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 8/9] remoteproc: imx_rproc: support i.MX8QM
-Thread-Topic: [PATCH 8/9] remoteproc: imx_rproc: support i.MX8QM
-Thread-Index: AQHYBpw5G5lZZQaOC0qLUf7nnokL+qxsN7mAgAB+hlA=
-Date:   Fri, 21 Jan 2022 01:00:04 +0000
-Message-ID: <DU0PR04MB94171209E7B16B8FF31099DB885B9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20220111033333.403448-1-peng.fan@oss.nxp.com>
- <20220111033333.403448-11-peng.fan@oss.nxp.com>
- <20220120172343.GA1338735@p14s>
-In-Reply-To: <20220120172343.GA1338735@p14s>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Fri, 21 Jan
+ 2022 01:02:03 +0000
+Received: from BLAPR10MB5009.namprd10.prod.outlook.com
+ ([fe80::d914:c494:66ac:a5b1]) by BLAPR10MB5009.namprd10.prod.outlook.com
+ ([fe80::d914:c494:66ac:a5b1%8]) with mapi id 15.20.4909.011; Fri, 21 Jan 2022
+ 01:02:03 +0000
+Message-ID: <a34aff19-4530-7f44-c849-4b3eb2aa3d00@oracle.com>
+Date:   Thu, 20 Jan 2022 20:01:57 -0500
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] xen/x2apic: enable x2apic mode when supported
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 32d0375c-15ea-4c92-83a1-08d9dc795c36
-x-ms-traffictypediagnostic: DU2PR04MB8887:EE_
-x-microsoft-antispam-prvs: <DU2PR04MB8887BC41FEC6F5A5FAFAAF61885B9@DU2PR04MB8887.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:935;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: bI0qPnV9D/LQExtdXWpQfpkc3Vhet7pcmW6iAbrenk45rDtD19PfyjiDSgud03rHhA5QQ/IR3dW3WciRo8DadUzq9sTRFpN/Sf/EiUoAodyd9w4M9E7bfkVPMQeeKPgkc353G8PHe69r6kDuYN1IM2jGF7PFUmNWHLP0UAakbootEsno6cJv2uICKG1d65H5N1iIXgutGbg8DsgesqlFmx+7vaGAFIKboN8Bw8pfR36q9FQM8mKN6xSUfKkhVyQkqT0NAgpsTvTbBEfASdKDtdu/+j6mxpYjUhpezo7dRLpywOcxn4uaRfrjpl0Eo8K1D2V/fptGAPjFCpq4FrgdrozZbEntk7UEu9LrGXwIWG0BgXpAJvbJhyBpxSgKPbh8r5Wt78BnlbmvXM6hBN2MmvSD4L/Q0RmyKDnpU12dMBSGp+sDEKEnkQbE70oM4kLNElW0MotkkFCL0FaPFz87KI+ZcMpMCyK+pOXdCMPXCWSumQIwX4ZMdSpG9jr1mKI6c8wuysnCq348GAT4r180dvqcKViH8WVpSs8qM2Pqr2GztRYeqwzH9UaIzOjbBY7K/2insEs9O1g6kJmvLPHW45rvQtfDWbMYtYE8ryUDQVAZQfYxwuQm4ZqKv63mNZuZu0JYd1eujWEIUq/I6fq0DDi2viWNzrdjVf7xUzCCnxNejIRklcVm/sL6bm5NpRbisMxTN0oZUaSIJeGIx2I/ag==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(44832011)(26005)(76116006)(66446008)(64756008)(66476007)(66946007)(6506007)(2906002)(4326008)(7696005)(83380400001)(38070700005)(71200400001)(66556008)(38100700002)(86362001)(54906003)(9686003)(186003)(122000001)(8676002)(52536014)(316002)(33656002)(508600001)(55016003)(5660300002)(8936002)(110136005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?5z4wkY/AT8PCScQ1/iv8fAEJeKXPMerwmvs0+4+4J3UClFeY2+JGlbig4XIf?=
- =?us-ascii?Q?lhMqn2WIAEWcjplRgdCR0RrP7l3y74mSprvaryDhh6C0iCDRRFvyDgE+I71J?=
- =?us-ascii?Q?qii+i+XpEU/vz//8DCVjRZ9+AyYsL83phZZhQ2blzbYpPDy/SBgp8e9K+BiC?=
- =?us-ascii?Q?Te9quxAEIaPf/jd6n+cxvVQr8QIdAct09yb1F4vwA5xksxLhEpaSlSU6AvQk?=
- =?us-ascii?Q?xzL9ZqW7EMZKjViZd1MC1XY0EM2eqNHoW8cox0U2Qo4BK953U3UyG3IZeYWl?=
- =?us-ascii?Q?dbjkqa/00gtlmA1VtjRjP9UbZAPz1RMTebFfe4JuV6a9oJJjc0mTpsgsc0su?=
- =?us-ascii?Q?4ZM7GqqgFq9J5A5rMV+NPReouWaq3xzZrfyrMUPo7Um8Mo/iJzDokkQw+7nt?=
- =?us-ascii?Q?lakIC2RtxB6uGXmJ6TnS7r6hjIm2mbvbowWw479qUyGltBCSI/slPvq8y6NH?=
- =?us-ascii?Q?GxfTUrSzDzXQFQsoWH8DhNPZnE7n5hi4/z7dwrTCQlHxoa6FxjRH2i5cKimq?=
- =?us-ascii?Q?8SHg9ckX9nbzevo+W1B0sFhDXo2Ll2UPESdkkoerSGTVzgQ9xT61P7LQ7O+r?=
- =?us-ascii?Q?bqZd6ZBZObHObUWrxmrJiBrIXHXocaf5Ghnsmm6npgDk+abxQOvAjBZoE1dk?=
- =?us-ascii?Q?7NEL8qCuzVYxw4PbLcxY5oq93gM2cy9DD6suD+G7+MyuFwnIne2Ly4YeE6sA?=
- =?us-ascii?Q?0zWrMFv0r0rvwRfws7XIS6ZvrfTt8G/1nYDJas2Ls6IgysTlnqeoOfbVw4cW?=
- =?us-ascii?Q?xNW/6Q2frwei8C+hottDQgCuaSSKwO+60zsakTJLvd/wrpL7PidYSwPDS7pq?=
- =?us-ascii?Q?ESE5LbEJf4R8CJ6+QtnAraWYoE4rD3xS5nW2Rg4WpvDIxkeVuS+XM0nPnz9X?=
- =?us-ascii?Q?APq4MisrHK4xyeoC12mfXr0IAc+QUdI+QGhyCbFUp3SdZnJfb+z93+me9L+B?=
- =?us-ascii?Q?yj+Knv1mepvIKh6/U97nJKgZHXM5+RoztNUxZBj651IgWOhG/6W9TD44QZvm?=
- =?us-ascii?Q?vcxndlgyyEJFuDMn12EaUItnjEp7PvrC70RSmdEKYL7Zih/NKXWCgbz8eJX0?=
- =?us-ascii?Q?p7fJ+rrIHTkaGACxl1iUtXJTsHgFoVtGK9mMOql9nQELnM0zXXBUJv+l5Pyt?=
- =?us-ascii?Q?GEFlHu8j7YuWsnKiihfJKyYkiTLU38m+xRM4Po+OOTzkMecsfRDlhB4iqXHf?=
- =?us-ascii?Q?Qw02Ta1CJoo4Pt8StTBDoMpjAxaRPnyB8G8w3fFlkMXjp5fZ5F/XTrK/quvA?=
- =?us-ascii?Q?QcRiy6zZjW3wrnxffL9VkSt//K32gGEezdpf1Wf/U9OjgKVJuylhVE2pjFEi?=
- =?us-ascii?Q?6nWW098dOzwuzJCEtxOhlbO5AmmrBcfm+JxB/RCYgFeyQMhHxT4V1NOroYMg?=
- =?us-ascii?Q?olKpZvWi407C0YoswAA6G47XwHnE9vat0WTEq0xwlfh6TO3JcGFjF6qwkFrn?=
- =?us-ascii?Q?QwjzQw1+5hg/MrMF139tOCx/0NV9nNjGjVdKsp+O8kLkHAElLHdKOL85UODu?=
- =?us-ascii?Q?oguodFVsZ/TDIoYamxAZ+F5kXaeP9JSSHJnFbzUScttWeZpgruIHUe44OXJg?=
- =?us-ascii?Q?y0ZXcMYcOT6vfX4I1zY1R1FQ+Gj+RSl0rQpHv4bNPxL/dYP7bhBXKRRsNWbn?=
- =?us-ascii?Q?uw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+To:     Roger Pau Monne <roger.pau@citrix.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org
+References: <20220120152527.7524-1-roger.pau@citrix.com>
+ <20220120152527.7524-2-roger.pau@citrix.com>
+From:   Boris Ostrovsky <boris.ostrovsky@oracle.com>
+In-Reply-To: <20220120152527.7524-2-roger.pau@citrix.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SA9PR13CA0005.namprd13.prod.outlook.com
+ (2603:10b6:806:21::10) To BLAPR10MB5009.namprd10.prod.outlook.com
+ (2603:10b6:208:321::10)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c388b255-6a9e-4bcd-542a-08d9dc79a338
+X-MS-TrafficTypeDiagnostic: BY5PR10MB3955:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR10MB395505B04D09BB49009B7B438A5B9@BY5PR10MB3955.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1850;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2LReU7A7epo4Mx7lqgU6dv6IY0u+NZlC5SkXdMAWYooHZe3u46LD4PH01Z2NMdI8vfVkxffHdJbW+rUQOFNPczUa24z2fKvzD433fGYIlTanp6PuPTtCL0DJl/pu5WiD+YdOiN8v4xxp9cHZRPffhSZy+kxc5qmPv0dW6SN0rFIi59bqmgQ1yMFsKPR+X3O9/UzrtV5TDCBZi7Crisr1ZH49nxspbQGRetfXQMTe2dg1amDeacgtLQTCqPNDN4nHQHKhjy+X2tWjEIQc4ilxnkFBd5WWYfwfTQI4OpoaJ8pjVHrCLWm/X4QkGHizgF5VW2fRwsBabnpfYS/pX9fNrfAVAdOMZa7V/VqbEmmL5OKwxoIW8hRyB0KVxenDJbHq/FFlqpWxQV+jiB8bd+iDw+EdprN3p+Nxn3XlWrGKXh1nCWoRw6pXhD1XMVFG+xKd2oRE7tqQPKtYeJN1lyIXtIaExWKWHrEI4p/KObstHnTIcEkZwLigKeNpZm+dJGj/Xd8TjcixEXbq2QimmKzKp0f+b7v17rc13GQjx+xu8aT/q7u8OAni2hkGLR3Qt79Qbdi1hS8eOjrIETRZ4+XnJ5niawUFAEjwqVgPaIqJI5lyKs9sZAlR1qhAgHrSlwQ/tyO5ZzXHLJZSUC6HGvMArFl0hEsc1p9BG+tGR4lIzFYj8HZu20ssEBSvcZ/ZvTwQH4fBuLHLiw0OYs342DMJ+0bE9/gu0pqOmyVElHdxhox+O8zElhZu+X8Ix1+gC2so
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5009.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(36756003)(44832011)(54906003)(186003)(6486002)(6666004)(31696002)(2906002)(7416002)(38100700002)(508600001)(6506007)(53546011)(5660300002)(2616005)(66556008)(8676002)(4326008)(316002)(86362001)(66946007)(66476007)(83380400001)(31686004)(26005)(8936002)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YzRoSlJhNWlxNU95a0V3aXJKL3BTNXRORExDRmlBbUN6VlpwMmtMaFMyaUFh?=
+ =?utf-8?B?aWVjNGJhS3VsQjFUWjBBQi8yK3NKaGJicnNwZlBzejBLS2NheTJvVTlFc05L?=
+ =?utf-8?B?NG0zUXF6SXJuU3FpQVEzS3I3Zi8vN0UvUzIyL1hXNmI1U0NUZGFIU3VRZnF3?=
+ =?utf-8?B?MkhSdzlkaTRBbUpKOURFWk4wdnhZV1B6Z0ZxVXB6ZGpxb3BZQXNTNnYxaXdh?=
+ =?utf-8?B?bmU4aFJsODFSaGJ5b3ZqWnpHWGtKUk1ZY3lrd2VRNzhaRWhwV0gwYTFUVHc5?=
+ =?utf-8?B?c28wNDNYOWFOWkFJTHBUME13cHYySUxKOTh1WTRDTFQzUGZRMWJtQ29XaEFU?=
+ =?utf-8?B?cXBlOWFpaE1maGJiNFVKOU5rZW5aV2xIb2FhTE90Zzkwck1KWGdDVGdMQ0xK?=
+ =?utf-8?B?ZnYwOXdKS0VjVU52QnFhbTRhSzRFZUs3OVVNS0laNUprL0E1OHJqSG9mbW9P?=
+ =?utf-8?B?TlVmVjNGdEVGTUpjcmUyTVFnS3IreHFuT0Y4bm9XMVpXTzJXZjNLRW1US2Zt?=
+ =?utf-8?B?TWcxRWovcEhwZmFrK0RhTTNFNmhzeXNETldDeUhFczJmWUczYTJMaHdqOStj?=
+ =?utf-8?B?RXZJS3JUVUJUUkxJSUJLY0xkUTlrTWJsZUU0ZThsZDVnVTFjemc1QkRXcUE0?=
+ =?utf-8?B?a2hwR3AvSVNMbk04MGlWQnpLYnhkVEljc2ZUanJPRFlHYlA3YWJlaUs3YW9z?=
+ =?utf-8?B?UHJVU2ROYnhRSVFSYnlySG5CRkFBNFAyaUpWeXJUTHUxY0w4dE1HeDJObGxa?=
+ =?utf-8?B?emNCUVlTTmZyRlcveHI4bGtYbm96WjMrcEJyOUgwYUNhdVZmVFlKRUhxTlJB?=
+ =?utf-8?B?SWV5YjZLenp1NXlZeWgxVElzUVFaay9nTjg0TVlmVHN6THI4V2M2MlJWa0dj?=
+ =?utf-8?B?dmV5dGtWQUxqc1U1TlNCWnI1OC9zQ3I2bjMwNkozUVBqQi9KMWlGbVgwYU0y?=
+ =?utf-8?B?ZnRvSUdIWGdRQm1qUTBaUWgrVkFrRnZQbXRNS2hXUzB6VmRib0Z6NDlaOXpn?=
+ =?utf-8?B?dVBGQTJzWDRDUExMWTQxQzc2WlNDRzg2N1FyUEpoTmJTRHNsdTF4dzh3dWcz?=
+ =?utf-8?B?K1VUMVI0NHZLWW4wY2FWL2pzVmpXOE83WU5CYUd3VlZvRHJseWhvd2lZYkwz?=
+ =?utf-8?B?b2gxd0x3d1QyMm10VjBobkV6b29VSFVMTkRIdDJPV2pRWTkyUll6Wk0rcEFk?=
+ =?utf-8?B?OUNwTXVjMHd1NnJhVWVGb1ZUTi9Ndm1GUklnRDFyWlFLdGlyUFIzRVltUHox?=
+ =?utf-8?B?Ym40VkdnYUpiNVIrMXh3VDZubjV2SlJKVXhGb3pQV2JhaHh1WW5PaG1EU3hM?=
+ =?utf-8?B?T0VoS2prOUhWMGV6RUhORXVXbXBXak14SFVoUjVhZ25GR3JtVjdHVTIyVkl3?=
+ =?utf-8?B?cVppWlhFL1hOM1NCTmo2SjgyZW45YmxyMERMaFhLSTRLSER5M29XRGNmeGtT?=
+ =?utf-8?B?bDk3aks5NU1OQ2IyK09tNjF0VktvVEpURVRTWkxxZXI2VFZuYmtBUFlIeGU2?=
+ =?utf-8?B?TnhUWm40cXMyWjd1WDlBZS92V0lSSUJ2aWdMVnQ1dzAydTA3MXdVTFEzRzFs?=
+ =?utf-8?B?a2pGRW1zMTFlL3dWcWxDYThydEc5YkZCbUFZeGlWeldMREtoelBFWU9Fdk9K?=
+ =?utf-8?B?MzRDWDFLODJ5NVYvWGY1SkMrSHI1RE40MlZwVWhiWjRuby9uMG8va2RLSHFT?=
+ =?utf-8?B?Z1JHM0tXVG1FWCtiOUxUbFJvbXN3UWZPZWFhU0Frb1ZvRDQreHBSVVh2dVJR?=
+ =?utf-8?B?WndCSC81WFQ4Mjk3S0NJYTgzZFd3S2ZDRjdiVDgxd2F0c0JSQk55d0pxM08x?=
+ =?utf-8?B?SGpIclhhM1BhSXBQUXZQaWF4V3czVlU4UTltaDhiQk1RVHhGdmU3dE9KbzNw?=
+ =?utf-8?B?Z0NiMk9WUDBpNllrc3J0a2JXSkdBdWV4OXJhUlZIeWJOOHphVzdkWEI5L2dZ?=
+ =?utf-8?B?VHpjdkNLbGU3ZS95a2NvSlJESTI3Q1Uyajk3cHVJc0t6dm1nS2NoQnJMYmxT?=
+ =?utf-8?B?cDUwbWduWHlTV282T1VJRTlkenRsZnZlbU1TOEJuczFSSStyWDlQUVloOU1a?=
+ =?utf-8?B?UlB0UGEvL29hV1J3VHlQVHRGZnJONzNyVmtuNnNMN1NmZlhFK0RySzNRcTVQ?=
+ =?utf-8?B?Tyt2SGVPRVNzM0hyZGV1bzNtMTBEc1B1dmoraFI2NjAzcnhKaEJhL3dWY3dZ?=
+ =?utf-8?B?bWEzNnFabmZBYU81N1VjZVZNSUZSbzJDV29KMkYwT3N6a09wU2VaTnhSZlV4?=
+ =?utf-8?B?RVZrRm1QeFBCOTBuNWdHVURoN2FRPT0=?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c388b255-6a9e-4bcd-542a-08d9dc79a338
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5009.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 32d0375c-15ea-4c92-83a1-08d9dc795c36
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jan 2022 01:00:04.4927
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2022 01:02:03.8104
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: eqg7U3akRW5mYmlP+jXzgJMBBn8AQkp8U/aCILogq2aaWNr+feYY4h47y6nB3Cv6elcozxBqL/9If6UO30wnHQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8887
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zuIda0lIDMSmVkvJykZpqkz5HHg/S/7LWajs/5QGFXSN/SvLilDTegyQEihWHtlhVT/tlOTbbh02syRzhtNMnQJISzcA6822562bUOfDANo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB3955
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10233 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxlogscore=999
+ malwarescore=0 adultscore=0 suspectscore=0 mlxscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2201210005
+X-Proofpoint-GUID: WmDM26DaljLu4PaiTRlQoC7Al4i5fFyp
+X-Proofpoint-ORIG-GUID: WmDM26DaljLu4PaiTRlQoC7Al4i5fFyp
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: Re: [PATCH 8/9] remoteproc: imx_rproc: support i.MX8QM
->=20
-> On Tue, Jan 11, 2022 at 11:33:32AM +0800, Peng Fan (OSS) wrote:
-> > From: Peng Fan <peng.fan@nxp.com>
-> >
-> > Most logic are same as i.MX8QXP, but i.MX8QM has two general purpose
-> > M4 cores:
-> >  Use the lower 16 bits specifying core, higher 16 bits for flags.
-> >  The 2nd core has different start address from SCFW view
->=20
-> Are the cores running independently or in lockstep?=20
 
-Independetly.
 
- This is relevant
-> information that should be in the changelog.  The above is an
-> implementation detail that should be added as comments in the code.
+On 1/20/22 10:25 AM, Roger Pau Monne wrote:
+> There's no point in disabling x2APIC mode when running as a Xen HVM
+> guest, just enable it when available.
+> 
+> Signed-off-by: Roger Pau Monné <roger.pau@citrix.com>
+> ---
+> Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+> Cc: Juergen Gross <jgross@suse.com>
+> Cc: Stefano Stabellini <sstabellini@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: x86@kernel.org
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: xen-devel@lists.xenproject.org
+> ---
+>   arch/x86/xen/enlighten_hvm.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/xen/enlighten_hvm.c b/arch/x86/xen/enlighten_hvm.c
+> index 42300941ec29..ab8171cbee23 100644
+> --- a/arch/x86/xen/enlighten_hvm.c
+> +++ b/arch/x86/xen/enlighten_hvm.c
+> @@ -9,6 +9,7 @@
+>   #include <xen/events.h>
+>   #include <xen/interface/memory.h>
+>   
+> +#include <asm/apic.h>
+>   #include <asm/cpu.h>
+>   #include <asm/smp.h>
+>   #include <asm/io_apic.h>
+> @@ -248,7 +249,7 @@ bool __init xen_hvm_need_lapic(void)
+>   		return false;
+>   	if (!xen_hvm_domain())
+>   		return false;
+> -	if (xen_feature(XENFEAT_hvm_pirqs) && xen_have_vector_callback)
+> +	if (!x2apic_supported())
+>   		return false;
+>   	return true;
+>   }
 
-Fix in V2.
 
->=20
-> >
-> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > ---
-> >  drivers/remoteproc/imx_rproc.c | 55
-> > +++++++++++++++++++++++++++++++---
-> >  1 file changed, 51 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/remoteproc/imx_rproc.c
-> > b/drivers/remoteproc/imx_rproc.c index 09d2a06e5ed6..7bc274fbce9f
-> > 100644
-> > --- a/drivers/remoteproc/imx_rproc.c
-> > +++ b/drivers/remoteproc/imx_rproc.c
-> > @@ -77,8 +77,11 @@ struct imx_rproc_mem {
-> >
-> >  /* att flags */
-> >  /* M4 own area. Can be mapped at probe */
-> > -#define ATT_OWN		BIT(1)
-> > -#define ATT_IOMEM	BIT(2)
-> > +#define ATT_OWN         BIT(31)
-> > +#define ATT_IOMEM       BIT(30)
->=20
-> ATT_OWN was defined in 2017 and has had the same value since.
-> ATT_IOMEM was introduced by this commit [1] (that you signed off on), whi=
-ch
-> as supposed to be a fix for another commit.
->=20
-> Now, overnight, both bitfields are changed without any explanation other =
-than
-> a cryptic comments.  What about all the other platforms that previously u=
-sed
-> those bitfields - was this change tested on those as well?
+Then it seems this whole routine can be reduced to just
 
-Yes. Actually in NXP downstream, the new bit definition has been used for
-quite some time and tested on many platforms.
+	return x2apic_supported();
 
-The bit change is just to make code easy to get it is remote core0 or remot=
-e core1,
-no function impact to other platforms.
+and then dropped altogether and x2apic_supported() moved to xen_x2apic_para_available(). Domain type checks here are not really needed since this can only be called on HVM guests.
 
-I'll update in V2.
 
-Thanks,
-Peng.
-
->=20
-> I will stop here with this patchset - it needs to much work for me to con=
-tinue
-> reviewing it.
->=20
-> Thanks,
-> Mathieu
->=20
-> [1]. 91bb26637353 remoteproc: imx_rproc: Fix TCM io memory type
->=20
->=20
-> > +/* I =3D [0:7] */
-> > +#define ATT_CORE_MASK   0xffff
-> > +#define ATT_CORE(I)     BIT((I))
-> >
-> >  struct imx_rproc {
-> >  	struct device			*dev;
-> > @@ -98,11 +101,25 @@ struct imx_rproc {
-> >  	struct notifier_block		proc_nb;
-> >  	u32				rproc_pt;
-> >  	u32				rsrc;
-> > +	u32				reg;
-> >  	int                             num_pd;
-> >  	struct device                   **pd_dev;
-> >  	struct device_link              **pd_dev_link;
-> >  };
-> >
-> > +static const struct imx_rproc_att imx_rproc_att_imx8qm[] =3D {
-> > +	/* dev addr , sys addr  , size      , flags */
-> > +	{ 0x08000000, 0x08000000, 0x10000000, 0},
-> > +	/* TCML */
-> > +	{ 0x1FFE0000, 0x34FE0000, 0x00020000, ATT_OWN | ATT_CORE(0)},
-> > +	{ 0x1FFE0000, 0x38FE0000, 0x00020000, ATT_OWN | ATT_CORE(1)},
-> > +	/* TCMU */
-> > +	{ 0x20000000, 0x35000000, 0x00020000, ATT_OWN | ATT_CORE(0)},
-> > +	{ 0x20000000, 0x39000000, 0x00020000, ATT_OWN | ATT_CORE(1)},
-> > +	/* DDR (Data) */
-> > +	{ 0x80000000, 0x80000000, 0x60000000, 0 }, };
-> > +
-> >  static const struct imx_rproc_att imx_rproc_att_imx8qxp[] =3D {
-> >  	/* dev addr , sys addr  , size	    , flags */
-> >  	{ 0x08000000, 0x08000000, 0x10000000, 0}, @@ -260,6 +277,12 @@
-> > static const struct imx_rproc_dcfg imx_rproc_cfg_imx8ulp =3D {
-> >  	.method		=3D IMX_RPROC_NONE,
-> >  };
-> >
-> > +static const struct imx_rproc_dcfg imx_rproc_cfg_imx8qm =3D {
-> > +	.att            =3D imx_rproc_att_imx8qm,
-> > +	.att_size       =3D ARRAY_SIZE(imx_rproc_att_imx8qm),
-> > +	.method         =3D IMX_RPROC_SCU_API,
-> > +};
-> > +
-> >  static const struct imx_rproc_dcfg imx_rproc_cfg_imx8qxp =3D {
-> >  	.att		=3D imx_rproc_att_imx8qxp,
-> >  	.att_size	=3D ARRAY_SIZE(imx_rproc_att_imx8qxp),
-> > @@ -310,7 +333,10 @@ static int imx_rproc_start(struct rproc *rproc)
-> >  		ret =3D res.a0;
-> >  		break;
-> >  	case IMX_RPROC_SCU_API:
-> > -		ret =3D imx_sc_pm_cpu_start(priv->ipc_handle, priv->rsrc, true,
-> 0x34fe0000);
-> > +		if (priv->reg)
-> > +			ret =3D imx_sc_pm_cpu_start(priv->ipc_handle, priv->rsrc, true,
-> 0x38fe0000);
-> > +		else
-> > +			ret =3D imx_sc_pm_cpu_start(priv->ipc_handle, priv->rsrc, true,
-> > +0x34fe0000);
-> >  		break;
-> >  	default:
-> >  		return -EOPNOTSUPP;
-> > @@ -342,7 +368,10 @@ static int imx_rproc_stop(struct rproc *rproc)
-> >  			dev_info(dev, "Not in wfi, force stopped\n");
-> >  		break;
-> >  	case IMX_RPROC_SCU_API:
-> > -		ret =3D imx_sc_pm_cpu_start(priv->ipc_handle, priv->rsrc, false,
-> 0x34fe0000);
-> > +		if (priv->reg)
-> > +			ret =3D imx_sc_pm_cpu_start(priv->ipc_handle, priv->rsrc, false,
-> 0x38fe0000);
-> > +		else
-> > +			ret =3D imx_sc_pm_cpu_start(priv->ipc_handle, priv->rsrc, false,
-> > +0x34fe0000);
-> >  		break;
-> >  	default:
-> >  		return -EOPNOTSUPP;
-> > @@ -364,6 +393,11 @@ static int imx_rproc_da_to_sys(struct imx_rproc
-> *priv, u64 da,
-> >  	for (i =3D 0; i < dcfg->att_size; i++) {
-> >  		const struct imx_rproc_att *att =3D &dcfg->att[i];
-> >
-> > +		if (att->flags & ATT_CORE_MASK) {
-> > +			if (!((BIT(priv->reg)) & (att->flags & ATT_CORE_MASK)))
-> > +				continue;
-> > +		}
-> > +
-> >  		if (da >=3D att->da && da + len < att->da + att->size) {
-> >  			unsigned int offset =3D da - att->da;
-> >
-> > @@ -594,6 +628,11 @@ static int imx_rproc_addr_init(struct imx_rproc
-> *priv,
-> >  		if (!(att->flags & ATT_OWN))
-> >  			continue;
-> >
-> > +		if (att->flags & ATT_CORE_MASK) {
-> > +			if (!((BIT(priv->reg)) & (att->flags & ATT_CORE_MASK)))
-> > +				continue;
-> > +		}
-> > +
-> >  		if (b >=3D IMX_RPROC_MEM_MAX)
-> >  			break;
-> >
-> > @@ -809,6 +848,13 @@ static int imx_rproc_detect_mode(struct
-> imx_rproc *priv)
-> >  			return ret;
-> >  		}
-> >
-> > +		priv->reg =3D of_get_cpu_hwid(dev->of_node, 0);
-> > +		if (priv->reg =3D=3D ~0U)
-> > +			priv->reg =3D 0;
-> > +
-> > +		if (priv->reg > 1)
-> > +			return -EINVAL;
-> > +
-> >  		priv->has_clk =3D false;
-> >  		/*
-> >  		 * If Mcore resource is not owned by Acore partition, It is kicked
-> > by ROM, @@ -1005,6 +1051,7 @@ static const struct of_device_id
-> imx_rproc_of_match[] =3D {
-> >  	{ .compatible =3D "fsl,imx8mn-cm7", .data =3D &imx_rproc_cfg_imx8mn }=
-,
-> >  	{ .compatible =3D "fsl,imx8mp-cm7", .data =3D &imx_rproc_cfg_imx8mn }=
-,
-> >  	{ .compatible =3D "fsl,imx8qxp-cm4", .data =3D &imx_rproc_cfg_imx8qxp=
- },
-> > +	{ .compatible =3D "fsl,imx8qm-cm4", .data =3D &imx_rproc_cfg_imx8qm }=
-,
-> >  	{ .compatible =3D "fsl,imx8ulp-cm33", .data =3D &imx_rproc_cfg_imx8ul=
-p },
-> >  	{},
-> >  };
-> > --
-> > 2.25.1
-> >
+-boris

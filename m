@@ -2,317 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D550A495E67
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 12:30:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D30F495E62
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 12:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380174AbiAULab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 06:30:31 -0500
-Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net ([206.189.21.223]:39486
-        "HELO zg8tmja2lje4os4yms4ymjma.icoremail.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with SMTP id S1380180AbiAULaX (ORCPT
+        id S1380140AbiAUL3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 06:29:50 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:10222 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1349905AbiAUL3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 06:30:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id; bh=rDPXEsamv0aDMEHT5TbMnxc471eD+BbCKWqmDxT6GSk=; b=F
-        NtqPwnpvim/Uvyz7AucW2kE+J0ZXELCxZX3XbrCEehMksQIEe7rGNT40iG65Hb9w
-        tUtjSVjHvGCMnSWeRXxIOPZc/EQVOqkiCuaA1Hnb00sGBkmb0NuaOPzAWc6LBLjB
-        4to7FuA4lUsMfYv8rdoKxIV42gIykVjznP8FapOn+w=
-Received: from localhost (unknown [10.129.21.144])
-        by front02 (Coremail) with SMTP id 54FpogDn7BBWmOph8RyQAA--.58368S2;
-        Fri, 21 Jan 2022 19:26:14 +0800 (CST)
-From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
-To:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch, mikita.lipski@amd.com, Wayne.Lin@amd.com,
-        Nicholas.Kazlauskas@amd.com, Jerry.Zuo@amd.com,
-        Anson.Jacob@amd.com, eryk.brol@amd.com, aurabindo.pillai@amd.com,
-        nirmoy.das@amd.com, lyz_cs@pku.edu.cn
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/amd/display: Fix memory leak
-Date:   Fri, 21 Jan 2022 03:26:13 -0800
-Message-Id: <1642764373-48563-1-git-send-email-lyz_cs@pku.edu.cn>
-X-Mailer: git-send-email 2.7.4
-X-CM-TRANSID: 54FpogDn7BBWmOph8RyQAA--.58368S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3XryDCw47CFyUWFy3JF47Arb_yoW7Ar18pw
-        43ta47Zr17urn2qa12kFs8uF1rK393ta4qgrWxWa43AF47trsaka45Aa4vgF95Wrn8tr98
-        G3Z8tF9xAF1j9F7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
-        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxE
-        wVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26w4UJr1UMxC20s026xCaFV
-        Cjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWl
-        x4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r
-        1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_
-        JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEKBlPy7uA+KwA1sB
+        Fri, 21 Jan 2022 06:29:49 -0500
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20LAgZCM028202;
+        Fri, 21 Jan 2022 11:29:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=pp1; bh=Q9ei9VJUKz0sT0uGO/P2sPkgIGa9GD27HpVjME4ge6c=;
+ b=Nk70Nk7rNh4Fvyg3BBGt1bhM2LZAWW4XJL4ZYWYkl9zk73jJCxYSCR0vJeeW2FBwJvIX
+ B4y03wrnzO1WMegLHGA2cESa6Yrtz9efdOnzLRmGZd1n/CmTzPdeAJDsdkcqdDk88TKU
+ I3Ow3XrbI5hLGQ+Sf3R2rbZL8bG3JmcFUvUEY5UPk7KpDTvGcDeDnFMawJJLS6viKOCM
+ zoqIV6Tu9f0OXUN1PzXZs0a/rflF5NFqaz/6W3eOwb6kafDxPPT2tu2Q8GNNIx31xAbP
+ FmCMVauLpegmlDWvecVmE7m4dPFWhmSObOsk8hpaZmCXMi4VRIu9Pvf/3gRT7ZDzsRta jg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dquae8qk3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Jan 2022 11:29:27 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20LBJVdQ027502;
+        Fri, 21 Jan 2022 11:29:26 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dquae8qjr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Jan 2022 11:29:26 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20LBC1No015261;
+        Fri, 21 Jan 2022 11:29:24 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 3dqj37v1ay-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Jan 2022 11:29:24 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20LBTMvr43319766
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 21 Jan 2022 11:29:22 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4CB2F11C04A;
+        Fri, 21 Jan 2022 11:29:22 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0500111C050;
+        Fri, 21 Jan 2022 11:29:22 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri, 21 Jan 2022 11:29:21 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     Yinan Liu <yinan@linux.alibaba.com>, rostedt@goodmis.org,
+        peterz@infradead.org, mark-pk.tsai@mediatek.com, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v8] scripts: ftrace - move the sort-processing in
+ ftrace_init
+References: <20210911135043.16014-1-yinan@linux.alibaba.com>
+        <20211212113358.34208-1-yinan@linux.alibaba.com>
+        <20211212113358.34208-2-yinan@linux.alibaba.com>
+        <yt9dee51ctfn.fsf@linux.ibm.com> <YeqOFHNfxKcNXNrn@osiris>
+        <yt9d8rv9cpdq.fsf@linux.ibm.com>
+Date:   Fri, 21 Jan 2022 12:29:21 +0100
+In-Reply-To: <yt9d8rv9cpdq.fsf@linux.ibm.com> (Sven Schnelle's message of
+        "Fri, 21 Jan 2022 12:14:09 +0100")
+Message-ID: <yt9d4k5xcooe.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: VszLzLK5D8E12wbpmlmrxEHE_ymEFlZt
+X-Proofpoint-ORIG-GUID: iijYK5lyd7OhKY1Pq3_eASSle0ZJ51b3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-21_06,2022-01-21_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 impostorscore=0 bulkscore=0 malwarescore=0 adultscore=0
+ mlxscore=0 lowpriorityscore=0 phishscore=0 mlxlogscore=999 suspectscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201210075
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[why]
-Resource release is needed on the error handling path
-to prevent memory leak.
+Sven Schnelle <svens@linux.ibm.com> writes:
 
-[how]
-Fix this by adding kfree on the error handling path.
+> Heiko Carstens <hca@linux.ibm.com> writes:
+>
+>> On Fri, Jan 21, 2022 at 10:46:36AM +0100, Sven Schnelle wrote:
+>>> Hi Yinan,
+>>> 
+>>> Yinan Liu <yinan@linux.alibaba.com> writes:
+>>> 
+>>> > When the kernel starts, the initialization of ftrace takes
+>>> > up a portion of the time (approximately 6~8ms) to sort mcount
+>>> > addresses. We can save this time by moving mcount-sorting to
+>>> > compile time.
+>>> >
+>>> > Signed-off-by: Yinan Liu <yinan@linux.alibaba.com>
+>>> > Reported-by: kernel test robot <lkp@intel.com>
+>>> > Reported-by: kernel test robot <oliver.sang@intel.com>
+>>> > ---
+>>> >  kernel/trace/ftrace.c   |  11 +++-
+>>> >  scripts/Makefile        |   6 +-
+>>> >  scripts/link-vmlinux.sh |   6 +-
+>>> >  scripts/sorttable.c     |   2 +
+>>> >  scripts/sorttable.h     | 120 +++++++++++++++++++++++++++++++++++++++-
+>>> >  5 files changed, 137 insertions(+), 8 deletions(-)
+>>> 
+>>> while i like the idea, this unfortunately breaks ftrace on s390. The
+>>> reason for that is that the compiler generates relocation entries for
+>>> all the addresses in __mcount_loc. During boot, the s390 decompressor
+>>> iterates through all the relocations and overwrites the nicely
+>>> sorted list between __start_mcount_loc and __stop_mcount_loc with
+>>> the unsorted list because the relocations entries are not adjusted.
+>>> 
+>>> Of course we could just disable that option, but that would make us
+>>> different compared to x86 which i don't like. Adding code to sort the
+>>> relocation would of course also fix that, but i don't think it is a good
+>>> idea to rely on the order of relocations.
+>>> 
+>>> Any thoughts how a fix could look like, and whether that could also be a
+>>> problem on other architectures?
+>>
+>> Sven, thanks for figuring this out. Can you confirm that reverting
+>> commit 72b3942a173c ("scripts: ftrace - move the sort-processing in
+>> ftrace_init") fixes the problem?
+>
+> Yes, reverting this commit fixes it.
+>
+>> This really should be addressed before rc1 is out, otherwise s390 is
+>> broken if somebody enables ftrace.
+>> Where "broken" translates to random crashes as soon as ftrace is
+>> enabled, which again is nowadays quite common.
+>
+> I wasn't able to reproduce these crashes on my systems so far. For the
+> readers here, we're seeing about 10-15 systems crashing every night,
+> usually in the 00basic/ ftrace testcases.
+>
+> In most of the case it looks like register corruption, where some random
+> register is or'd or parts are overwritten with 0x0004000000000000,
+> sometimes 0x00f4000000000000. I haven't found yts found a commit that
+> might cause this.
 
-Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
----
- .../drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c  | 80 ++++++++++++++++------
- 1 file changed, 60 insertions(+), 20 deletions(-)
+Thinking of it, 04 and f4 are exactly the bytes we're patching in our brcl
+instructions right at the beginning of the function. So i guess that
+because of this bug the ftrace code now writes those bytes to the wrong
+location, sometimes hitting the register save area. I haven't verified
+that, but i think there's a high likelyhood.
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
-index ded64d0..e463d46 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
-@@ -227,8 +227,10 @@ static ssize_t dp_link_settings_read(struct file *f, char __user *buf,
- 			break;
- 
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 
- 		buf += 1;
- 		size -= 1;
-@@ -389,8 +391,10 @@ static ssize_t dp_phy_settings_read(struct file *f, char __user *buf,
- 			break;
- 
- 		r = put_user((*(rd_buf + result)), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 
- 		buf += 1;
- 		size -= 1;
-@@ -1359,8 +1363,10 @@ static ssize_t dp_dsc_clock_en_read(struct file *f, char __user *buf,
- 				break;
- 	}
- 
--	if (!pipe_ctx)
-+	if (!pipe_ctx) {
-+		kfree(rd_buf);
- 		return -ENXIO;
-+	}
- 
- 	dsc = pipe_ctx->stream_res.dsc;
- 	if (dsc)
-@@ -1376,8 +1382,10 @@ static ssize_t dp_dsc_clock_en_read(struct file *f, char __user *buf,
- 			break;
- 
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 
- 		buf += 1;
- 		size -= 1;
-@@ -1546,8 +1554,10 @@ static ssize_t dp_dsc_slice_width_read(struct file *f, char __user *buf,
- 				break;
- 	}
- 
--	if (!pipe_ctx)
-+	if (!pipe_ctx) {
-+		kfree(rd_buf);
- 		return -ENXIO;
-+	}
- 
- 	dsc = pipe_ctx->stream_res.dsc;
- 	if (dsc)
-@@ -1563,8 +1573,10 @@ static ssize_t dp_dsc_slice_width_read(struct file *f, char __user *buf,
- 			break;
- 
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 
- 		buf += 1;
- 		size -= 1;
-@@ -1731,8 +1743,10 @@ static ssize_t dp_dsc_slice_height_read(struct file *f, char __user *buf,
- 				break;
- 	}
- 
--	if (!pipe_ctx)
-+	if (!pipe_ctx) {
-+		kfree(rd_buf);
- 		return -ENXIO;
-+	}
- 
- 	dsc = pipe_ctx->stream_res.dsc;
- 	if (dsc)
-@@ -1748,8 +1762,10 @@ static ssize_t dp_dsc_slice_height_read(struct file *f, char __user *buf,
- 			break;
- 
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 
- 		buf += 1;
- 		size -= 1;
-@@ -1912,8 +1928,10 @@ static ssize_t dp_dsc_bits_per_pixel_read(struct file *f, char __user *buf,
- 				break;
- 	}
- 
--	if (!pipe_ctx)
-+	if (!pipe_ctx) {
-+		kfree(rd_buf);
- 		return -ENXIO;
-+	}
- 
- 	dsc = pipe_ctx->stream_res.dsc;
- 	if (dsc)
-@@ -1929,8 +1947,10 @@ static ssize_t dp_dsc_bits_per_pixel_read(struct file *f, char __user *buf,
- 			break;
- 
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 
- 		buf += 1;
- 		size -= 1;
-@@ -2088,8 +2108,10 @@ static ssize_t dp_dsc_pic_width_read(struct file *f, char __user *buf,
- 				break;
- 	}
- 
--	if (!pipe_ctx)
-+	if (!pipe_ctx) {
-+		kfree(rd_buf);
- 		return -ENXIO;
-+	}
- 
- 	dsc = pipe_ctx->stream_res.dsc;
- 	if (dsc)
-@@ -2105,8 +2127,10 @@ static ssize_t dp_dsc_pic_width_read(struct file *f, char __user *buf,
- 			break;
- 
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 
- 		buf += 1;
- 		size -= 1;
-@@ -2145,8 +2169,10 @@ static ssize_t dp_dsc_pic_height_read(struct file *f, char __user *buf,
- 				break;
- 	}
- 
--	if (!pipe_ctx)
-+	if (!pipe_ctx) {
-+		kfree(rd_buf);
- 		return -ENXIO;
-+	}
- 
- 	dsc = pipe_ctx->stream_res.dsc;
- 	if (dsc)
-@@ -2162,8 +2188,10 @@ static ssize_t dp_dsc_pic_height_read(struct file *f, char __user *buf,
- 			break;
- 
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 
- 		buf += 1;
- 		size -= 1;
-@@ -2217,8 +2245,10 @@ static ssize_t dp_dsc_chunk_size_read(struct file *f, char __user *buf,
- 				break;
- 	}
- 
--	if (!pipe_ctx)
-+	if (!pipe_ctx) {
-+		kfree(rd_buf);
- 		return -ENXIO;
-+	}
- 
- 	dsc = pipe_ctx->stream_res.dsc;
- 	if (dsc)
-@@ -2234,8 +2264,10 @@ static ssize_t dp_dsc_chunk_size_read(struct file *f, char __user *buf,
- 			break;
- 
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 
- 		buf += 1;
- 		size -= 1;
-@@ -2289,8 +2321,10 @@ static ssize_t dp_dsc_slice_bpg_offset_read(struct file *f, char __user *buf,
- 				break;
- 	}
- 
--	if (!pipe_ctx)
-+	if (!pipe_ctx) {
-+		kfree(rd_buf);
- 		return -ENXIO;
-+	}
- 
- 	dsc = pipe_ctx->stream_res.dsc;
- 	if (dsc)
-@@ -2306,8 +2340,10 @@ static ssize_t dp_dsc_slice_bpg_offset_read(struct file *f, char __user *buf,
- 			break;
- 
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 
- 		buf += 1;
- 		size -= 1;
-@@ -3459,8 +3495,10 @@ static ssize_t dcc_en_bits_read(
- 	dc->hwss.get_dcc_en_bits(dc, dcc_en_bits);
- 
- 	rd_buf = kcalloc(rd_buf_size, sizeof(char), GFP_KERNEL);
--	if (!rd_buf)
-+	if (!rd_buf) {
-+		kfree(dcc_en_bits);
- 		return -ENOMEM;
-+	}
- 
- 	for (i = 0; i < num_pipes; i++)
- 		offset += snprintf(rd_buf + offset, rd_buf_size - offset,
-@@ -3473,8 +3511,10 @@ static ssize_t dcc_en_bits_read(
- 		if (*pos >= rd_buf_size)
- 			break;
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 		buf += 1;
- 		size -= 1;
- 		*pos += 1;
--- 
-2.7.4
-
+/Sven

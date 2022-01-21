@@ -2,153 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC334496465
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 18:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4399B496467
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 18:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381811AbiAURrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 12:47:32 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41474 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345647AbiAURra (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 12:47:30 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3D03B82069;
-        Fri, 21 Jan 2022 17:47:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33E3DC340E1;
-        Fri, 21 Jan 2022 17:47:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642787247;
-        bh=oKkPWd9txk9tE7fz7famX/0zcd82lrEm08j+OdI1AT4=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=XNye038kVucvuvASSDWSFeJ+KZjUERhEx5LppAPprw3yBD6/Cd7Eo8MJ9P+a/V9sw
-         hDDeuPayw2/9OplJ332k3lNGLFVd6YgiY5/W9i5SXQ3Cqe6h8vqu1qkE4h6aO6FZL0
-         qJ/Qxf77uvE6rAqq1//DYm9TPlWUBmpIoVnrLg+hCBHSVlWpjJoK4lMjg9Q7CxhBBj
-         5WBBsM7YbDBeeXKzcyTCosgZm8h6X83oeNrjLK7kM7GFOtGucuS4oIootz8JR9c2DE
-         rkjfgPtMT9xkYOz8yHHR+gqtJqrz+lhN3cjrvMxIH5bq9u1e0rpFTKyn67xD0nnOgF
-         sHVmGmcXMTGQg==
-Message-ID: <725c4bcacded089553341003117a3f49104c971b.camel@kernel.org>
-Subject: Re: [PATCH 02/11] cachefiles: Calculate the blockshift in terms of
- bytes, not pages
-From:   Jeff Layton <jlayton@kernel.org>
-To:     David Howells <dhowells@redhat.com>, linux-cachefs@redhat.com
-Cc:     Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <smfrench@gmail.com>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 21 Jan 2022 12:47:24 -0500
-In-Reply-To: <164251398954.3435901.7138806620218474123.stgit@warthog.procyon.org.uk>
-References: <164251396932.3435901.344517748027321142.stgit@warthog.procyon.org.uk>
-         <164251398954.3435901.7138806620218474123.stgit@warthog.procyon.org.uk>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        id S1381868AbiAURrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 12:47:53 -0500
+Received: from mga11.intel.com ([192.55.52.93]:56027 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345647AbiAURrw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 12:47:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642787272; x=1674323272;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=UAyI52FCx96k8VRzDcHGmpH8szZg3JfuUuvUpzTqOPQ=;
+  b=feupcRLgfN10YSw9l+WOXzcb6SB/DvKl1LfeoYXt1aLf6YtyWaGtDomx
+   uPrnuUV6eMGpchun7J4h+rIHL2PIMXUGgVYb8PoygT7ARcdT1T4f+3poX
+   WHb6/VhhXaTuDUkiphYdN4/B47TfNPrQDdrs7i7KL5aXrV8Rrew73IZNJ
+   jDhsFA9An2BItoyQAPqn9r+QPLIYU4AD5bnmxq3lfGj4IVKaa2XgxenOL
+   /iDINnnqklkKm+CvZqQsjVoeNwOitx4R3UrlBrfi19onPUy5h2Us30TVw
+   Ii0QpxEZBKzeL9hsy2HcwT1K/moBaQdl4QWEMz/sKySQUOHvxDbmlFTle
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="243302300"
+X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
+   d="scan'208";a="243302300"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 09:47:51 -0800
+X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
+   d="scan'208";a="623394786"
+Received: from agluck-desk2.sc.intel.com ([10.3.52.146])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 09:47:51 -0800
+From:   Tony Luck <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Smita Koralahalli Channabasappa 
+        <smita.koralahallichannabasappa@amd.com>,
+        Wei Huang <wei.huang2@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        patches@lists.linux.dev, Tony Luck <tony.luck@intel.com>
+Subject: [PATCH v2 0/6] PPIN (Protected Processor Inventory Number) updates
+Date:   Fri, 21 Jan 2022 09:47:37 -0800
+Message-Id: <20220121174743.1875294-1-tony.luck@intel.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220107225442.1690165-1-tony.luck@intel.com>
+References: <20220107225442.1690165-1-tony.luck@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-01-18 at 13:53 +0000, David Howells wrote:
-> Cachefiles keeps track of how much space is available on the backing
-> filesystem and refuses new writes permission to start if there isn't enough
-> (we especially don't want ENOSPC happening).  It also tracks the amount of
-> data pending in DIO writes (cache->b_writing) and reduces the amount of
-> free space available by this amount before deciding if it can set up a new
-> write.
-> 
-> However, the old fscache I/O API was very much page-granularity dependent
-> and, as such, cachefiles's cache->bshift was meant to be a multiplier to
-> get from PAGE_SIZE to block size (ie. a blocksize of 512 would give a shift
-> of 3 for a 4KiB page) - and this was incorrectly being used to turn the
-> number of bytes in a DIO write into a number of blocks, leading to a
-> massive over estimation of the amount of data in flight.
-> 
-> Fix this by changing cache->bshift to be a multiplier from bytes to
-> blocksize and deal with quantities of blocks, not quantities of pages.
-> 
-> Fix also the rounding in the calculation in cachefiles_write() which needs
-> a "- 1" inserting.
-> 
-> Fixes: 047487c947e8 ("cachefiles: Implement the I/O routines")
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: linux-cachefs@redhat.com
-> ---
-> 
->  fs/cachefiles/cache.c    |    7 ++-----
->  fs/cachefiles/internal.h |    2 +-
->  fs/cachefiles/io.c       |    2 +-
->  3 files changed, 4 insertions(+), 7 deletions(-)
-> 
-> diff --git a/fs/cachefiles/cache.c b/fs/cachefiles/cache.c
-> index ce4d4785003c..1e9c71666c6a 100644
-> --- a/fs/cachefiles/cache.c
-> +++ b/fs/cachefiles/cache.c
-> @@ -84,9 +84,7 @@ int cachefiles_add_cache(struct cachefiles_cache *cache)
->  		goto error_unsupported;
->  
->  	cache->bsize = stats.f_bsize;
-> -	cache->bshift = 0;
-> -	if (stats.f_bsize < PAGE_SIZE)
-> -		cache->bshift = PAGE_SHIFT - ilog2(stats.f_bsize);
-> +	cache->bshift = ilog2(stats.f_bsize);
->  
->  	_debug("blksize %u (shift %u)",
->  	       cache->bsize, cache->bshift);
-> @@ -106,7 +104,6 @@ int cachefiles_add_cache(struct cachefiles_cache *cache)
->  	       (unsigned long long) cache->fcull,
->  	       (unsigned long long) cache->fstop);
->  
-> -	stats.f_blocks >>= cache->bshift;
->  	do_div(stats.f_blocks, 100);
->  	cache->bstop = stats.f_blocks * cache->bstop_percent;
->  	cache->bcull = stats.f_blocks * cache->bcull_percent;
-> @@ -209,7 +206,7 @@ int cachefiles_has_space(struct cachefiles_cache *cache,
->  		return ret;
->  	}
->  
-> -	b_avail = stats.f_bavail >> cache->bshift;
-> +	b_avail = stats.f_bavail;
->  	b_writing = atomic_long_read(&cache->b_writing);
->  	if (b_avail > b_writing)
->  		b_avail -= b_writing;
-> diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
-> index 8dd54d9375b6..c793d33b0224 100644
-> --- a/fs/cachefiles/internal.h
-> +++ b/fs/cachefiles/internal.h
-> @@ -86,7 +86,7 @@ struct cachefiles_cache {
->  	unsigned			bcull_percent;	/* when to start culling (% blocks) */
->  	unsigned			bstop_percent;	/* when to stop allocating (% blocks) */
->  	unsigned			bsize;		/* cache's block size */
-> -	unsigned			bshift;		/* min(ilog2(PAGE_SIZE / bsize), 0) */
-> +	unsigned			bshift;		/* ilog2(bsize) */
->  	uint64_t			frun;		/* when to stop culling */
->  	uint64_t			fcull;		/* when to start culling */
->  	uint64_t			fstop;		/* when to stop allocating */
-> diff --git a/fs/cachefiles/io.c b/fs/cachefiles/io.c
-> index 60b1eac2ce78..04eb52736990 100644
-> --- a/fs/cachefiles/io.c
-> +++ b/fs/cachefiles/io.c
-> @@ -264,7 +264,7 @@ static int cachefiles_write(struct netfs_cache_resources *cres,
->  	ki->term_func		= term_func;
->  	ki->term_func_priv	= term_func_priv;
->  	ki->was_async		= true;
-> -	ki->b_writing		= (len + (1 << cache->bshift)) >> cache->bshift;
-> +	ki->b_writing		= (len + (1 << cache->bshift) - 1) >> cache->bshift;
->  
->  	if (ki->term_func)
->  		ki->iocb.ki_complete = cachefiles_write_complete;
-> 
-> 
+v2 starts with an extra patch over v1. Adding INTEL_FAM6_ICELAKE_D
+to the list of legacy processors that support PPIN. I've marked
+this patch for stable. I don't think the rest of the patches are
+candidates for stable or long term support kernels.
 
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
+The rest of the patches are updates from v1 of the series starts out
+with two changes that I expect are uncontroversial. Later parts get
+progressively more "RFC".
+
+1) Simple cleanup to merge Intel and AMD duplicated code to test for
+   presence of PPIN and check whether it is enabled.
+
+2) Long overdue update from Intel to enumerate the PPIN and PPIN_CTL
+   MSRs. See the December 2021 Software Developers Manual
+
+{RFC factor moves to medium here}
+
+3) Code to scan machine check banks re-reads the PPIN every time banks
+   are scanned (whether for a machine check, a CMCI, or just a periodic
+   poll). Since PPIN never changes, this seems like unnecessary overhead.
+   Read the MSR once (per CPU) and save to memory.
+
+{RFC factor moves to high for last two parts}
+
+4) Refactor as prep for last part.
+
+5) Add "ppin" to /sys/devices/system/cpu/cpu*/topology/ppin
+
+The big question for this part is whether there is a better
+place to expose this value. I'm open to other suggestions.
+
+I do think it is useful to do so. An "inventory" number
+that stays hidden until there is an error that causes it to show
+up in a machine check log is user hostile.
+
+Changes since V1:
+-----------------
+Added INTEL_FAM6_ICELAKE_D
+Use X86_MATCH_FEATURE() instead of X86_MATCH_VENDOR_FEATURE
+Spelling: s/prescence/presence/ s/CPUS/CPUs/
+Print the hex value of PPIN with a leading "0x"
+Fix the Subject line commit prefixes to use "x86/cpu" and
+"topology/sysfs"
+Move the introduction of the "msr_ppin" field to the patch where used.
+
+Rewrite the commit comment justifying adding ppin to /sys/.../topology
+
+Upcoming use case for user accessible ppin is for reporting issues
+found by on-line testing of CPU cores. The MSRs for this are public
+in the latest SDM (look for MSR_ACTIVATE_SCAN and a bunch of others in
+the same section) but the SDM is currently light on details on what
+it does or how to use it.  Linux patches to enable coming soon.
+
+Tony Luck (6):
+  x86/cpu: Add Xeon Icelake-D to list of CPUs that support PPIN
+  x86/cpu: Merge Intel and AMD ppin_init() functions
+  x86/cpu: X86_FEATURE_INTEL_PPIN finally has a CPUID bit
+  x86/cpu: Read/save PPIN MSR during initialization
+  topology/sysfs: Add format parameter to macro defining "show"
+    functions for proc
+  topology/sysfs: Add PPIN in sysfs under cpu topology
+
+ .../ABI/stable/sysfs-devices-system-cpu       |  4 +
+ .../ABI/testing/sysfs-devices-system-cpu      |  6 ++
+ arch/x86/include/asm/processor.h              |  2 +
+ arch/x86/include/asm/topology.h               |  1 +
+ arch/x86/kernel/cpu/amd.c                     | 30 -------
+ arch/x86/kernel/cpu/common.c                  | 79 +++++++++++++++++++
+ arch/x86/kernel/cpu/mce/core.c                |  7 +-
+ arch/x86/kernel/cpu/mce/intel.c               | 41 ----------
+ arch/x86/kernel/cpu/scattered.c               |  1 +
+ drivers/base/topology.c                       | 20 +++--
+ include/linux/topology.h                      |  3 +
+ 11 files changed, 109 insertions(+), 85 deletions(-)
+
+
+base-commit: 2c271fe77d52a0555161926c232cd5bc07178b39
+-- 
+2.31.1
+

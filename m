@@ -2,285 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD61496284
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 17:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C0D496288
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 17:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381751AbiAUQA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 11:00:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
+        id S1381754AbiAUQBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 11:01:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381741AbiAUQAz (ORCPT
+        with ESMTP id S1381745AbiAUQB2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 11:00:55 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DC4C06173B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 08:00:55 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id o12so34693303lfu.12
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 08:00:55 -0800 (PST)
+        Fri, 21 Jan 2022 11:01:28 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAD5C06173B;
+        Fri, 21 Jan 2022 08:01:27 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id m1so34842354lfq.4;
+        Fri, 21 Jan 2022 08:01:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rm8vjPtGZ5zXWk7rSNfQe3QS2BCPnlKSAViEt2BOUO4=;
-        b=efZDQpznbQC/3ugWCSp26fz60QHSCKEWWx05lB/gr/BiloWxmX/dPOu3HTlhegFFI8
-         wQSymmM7qZyUywJT54JcNlxujP7i53KSNPKeubgHnWSphVHbc0GbRNv3ERfdgqfcTt62
-         h5uMo9B4TgU+0aVGgTiX3ozQez48ZfEH0E95pmVBNB1wHnd2YTxILmWa7EleYLD7hO9M
-         ZZbiUj/d5xDUNhXY57s+wdTDwjXMDFWZ9xli4OA/OsGp7yUbHrfq33xEdVGkrLl7NdJ+
-         JTXa9mwTwf3b9mvVEIWN6Wwr3sPpGoCcr8+zmcFkqZHuGDk7SebYiseRjMqPmcOYTa2e
-         S+fA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fnf2q063vcpul5gnvS1u13+cbRBXFdLS+LpaLMcSRW0=;
+        b=DL9NwM1kK1Y5IImBYJ5I3+kL5frmhk0ZyBnGvMOmlIXOH5hbzhTHI9FdGWrEoq7xPj
+         VmAxvtd/Eofu7nRtS//4UGtevm+FiTLCWjZYNBVjTpH6lFJudD3nQdNecZ3WbT1vNLKR
+         Dtj407KCBoDQkRnxyKfcMYO8kWxGm7YKp4suFzt5L8HmutPvF98RSUUxj+7zSiNzm2dD
+         puopdbMsKAe3cRvrcfBtCm+vgaKrIV2QFjkZfBdjfv1Yyc2eHKwqNNf3HLRIcxhh3AVQ
+         LB7Q72xzfg8kvBSspW1woE22h82lcqQZv+kOohQuBY7pesAR+tRu0lfJLhRggV7qBWhv
+         w80A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rm8vjPtGZ5zXWk7rSNfQe3QS2BCPnlKSAViEt2BOUO4=;
-        b=0am0dymSq9CGpDMUNvrWZ7+nDIsrLOhdjPYzwfDtw51AfIpwQyl+z/wiZnp1LpdDwc
-         9IbYj9CGryMzpFjkD6xqB3mvckfcB20TXxJ/H69pMU3DqGUnTXRvm2esg38E7UB/uotm
-         7BZ5+l5PKEjGT9Tg7icPYb3oclhgONvT9NmiS8KfS1DfIOI+TiPRK41ADpDsNq4gBoFB
-         buiDbGTmql0O6YZIjXivgNULTANb9mtUHaB5ejgDJAfw2kRhDhdhRdOhsHrCImKAWnI3
-         2n3/nJz35vXd2BHt4ML8Y+iqrDeMc6BSq7tIDcpvQ9ZtU0sVZ+52lCuTodL1t4kGnq52
-         iyDA==
-X-Gm-Message-State: AOAM533i/t8QE2X2K+fN7ZmQ+dVCaamMd1HHSluKgOhWKNHaHnnri3Dn
-        JwHVyE5NYOywRJ4hNBpE/GeqWTcCjcqEOwYkX1igkg==
-X-Google-Smtp-Source: ABdhPJydfd+V8GdHjrRsGRvLPH+hUFe7W7ZFeGH/1OfOz3BQfM24vhqub61JsJkK0zeCjo7DQJZBAvqyh2Q4sBu4b/M=
-X-Received: by 2002:a05:6512:32c8:: with SMTP id f8mr4030942lfg.402.1642780853424;
- Fri, 21 Jan 2022 08:00:53 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=fnf2q063vcpul5gnvS1u13+cbRBXFdLS+LpaLMcSRW0=;
+        b=UyuJ0b25efeq1XaZLpaVsGnHAqjAZndh/Tal7Qeb4BNFMUmi1fxrXk7oawVkYJzO2a
+         LMKT5oY++7mrJh6oZwYtNc+7RcSCRGigr6uFu107qKWX1RmZKXmeKXrEe1EBvcDm6e89
+         9vz93v3qt/4N7ShN4XAdHFE4nrIKy7dTD4F6qq7dM9oXzcbHtEFyPF5jfvNW9J+OOvxk
+         1Csa52a/IilQp0okXDtOmIzfJ0fRaVSeZ80eyYllnAIBnDDEEZeh47s4r/NEvEFSpOGe
+         DbT7ytZV3shAFhY17yBoOkZtYyloud2KxzUb5OVcm4bImd4Sm3JnbP6XSU2rYcfJcHQG
+         idgA==
+X-Gm-Message-State: AOAM532j+0J2xV1pep4sqoqy8K5x7n0IKg0AlprwZBJZDndUgu2BNeLg
+        9zvRW9+Bp6trkq+FNVd/Em0=
+X-Google-Smtp-Source: ABdhPJzWeuF7d6pbmFzST6ep1anCdyKsmBr59cRxuCj0Ym5BLgNWa2XSjGua3c2rgUVH2HNKP1hDJQ==
+X-Received: by 2002:a19:640f:: with SMTP id y15mr3987172lfb.638.1642780885420;
+        Fri, 21 Jan 2022 08:01:25 -0800 (PST)
+Received: from localhost ([2a05:3580:f312:6c01:1b6d:df4d:cbec:e4a2])
+        by smtp.gmail.com with ESMTPSA id r24sm294615lfi.127.2022.01.21.08.01.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jan 2022 08:01:24 -0800 (PST)
+Date:   Fri, 21 Jan 2022 19:01:23 +0300
+From:   Andrey Skvortsov <andrej.skvortzov@gmail.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Arnaud Ferraris <arnaud.ferraris@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Huijin Park <huijin.park@samsung.com>,
+        Christian =?utf-8?B?TMO2aGxl?= <CLoehle@hyperstone.com>,
+        Yue Hu <huyue2@yulong.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mmc: core: Wait for command setting 'Power Off
+ Notification' bit to complete
+Message-ID: <YerY0504bDglnA+C@skv.local>
+Mail-Followup-To: Andrey Skvortsov <andrej.skvortzov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnaud Ferraris <arnaud.ferraris@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Huijin Park <huijin.park@samsung.com>,
+        Christian =?utf-8?B?TMO2aGxl?= <CLoehle@hyperstone.com>,
+        Yue Hu <huyue2@yulong.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220115121447.641524-1-andrej.skvortzov@gmail.com>
+ <CAPDyKFp=pn=yvEtur4rbQwweq2VNc8+2VniYV5ZVy8=re7VJXw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220118110621.62462-1-nikunj@amd.com> <20220118110621.62462-7-nikunj@amd.com>
- <CAMkAt6p1-82LTRNB3pkPRwYh=wGpreUN=jcUeBj_dZt8ss9w0Q@mail.gmail.com> <4e68ae1c-e0ed-2620-fbd1-0f0f7eb28c4f@amd.com>
-In-Reply-To: <4e68ae1c-e0ed-2620-fbd1-0f0f7eb28c4f@amd.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Fri, 21 Jan 2022 09:00:41 -0700
-Message-ID: <CAMkAt6pnk8apG4VAdM3NRUokBH32pZx-VOrnhzq+7qJu+ubJ3A@mail.gmail.com>
-Subject: Re: [RFC PATCH 6/6] KVM: SVM: Pin SEV pages in MMU during sev_launch_update_data()
-To:     "Nikunj A. Dadhania" <nikunj@amd.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bharata B Rao <bharata@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFp=pn=yvEtur4rbQwweq2VNc8+2VniYV5ZVy8=re7VJXw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 9:08 PM Nikunj A. Dadhania <nikunj@amd.com> wrote:
->
-> On 1/20/2022 9:47 PM, Peter Gonda wrote:
-> > On Tue, Jan 18, 2022 at 4:07 AM Nikunj A Dadhania <nikunj@amd.com> wrote:
-> >>
-> >> From: Sean Christopherson <sean.j.christopherson@intel.com>
-> >>
-> >> Pin the memory for the data being passed to launch_update_data()
-> >> because it gets encrypted before the guest is first run and must
-> >> not be moved which would corrupt it.
-> >>
-> >> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> >> [ * Changed hva_to_gva() to take an extra argument and return gpa_t.
-> >>   * Updated sev_pin_memory_in_mmu() error handling.
-> >>   * As pinning/unpining pages is handled within MMU, removed
-> >>     {get,put}_user(). ]
-> >> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
-> >> ---
-> >>  arch/x86/kvm/svm/sev.c | 122 ++++++++++++++++++++++++++++++++++++++++-
-> >>  1 file changed, 119 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> >> index 14aeccfc500b..1ae714e83a3c 100644
-> >> --- a/arch/x86/kvm/svm/sev.c
-> >> +++ b/arch/x86/kvm/svm/sev.c
-> >> @@ -22,6 +22,7 @@
-> >>  #include <asm/trapnr.h>
-> >>  #include <asm/fpu/xcr.h>
-> >>
-> >> +#include "mmu.h"
-> >>  #include "x86.h"
-> >>  #include "svm.h"
-> >>  #include "svm_ops.h"
-> >> @@ -490,6 +491,110 @@ static unsigned long get_num_contig_pages(unsigned long idx,
-> >>         return pages;
-> >>  }
-> >>
-> >> +#define SEV_PFERR_RO (PFERR_USER_MASK)
-> >> +#define SEV_PFERR_RW (PFERR_WRITE_MASK | PFERR_USER_MASK)
-> >> +
-> >> +static struct kvm_memory_slot *hva_to_memslot(struct kvm *kvm,
-> >> +                                             unsigned long hva)
-> >> +{
-> >> +       struct kvm_memslots *slots = kvm_memslots(kvm);
-> >> +       struct kvm_memory_slot *memslot;
-> >> +       int bkt;
-> >> +
-> >> +       kvm_for_each_memslot(memslot, bkt, slots) {
-> >> +               if (hva >= memslot->userspace_addr &&
-> >> +                   hva < memslot->userspace_addr +
-> >> +                   (memslot->npages << PAGE_SHIFT))
-> >> +                       return memslot;
-> >> +       }
-> >> +
-> >> +       return NULL;
-> >> +}
-> >> +
-> >> +static gpa_t hva_to_gpa(struct kvm *kvm, unsigned long hva, bool *ro)
-> >> +{
-> >> +       struct kvm_memory_slot *memslot;
-> >> +       gpa_t gpa_offset;
-> >> +
-> >> +       memslot = hva_to_memslot(kvm, hva);
-> >> +       if (!memslot)
-> >> +               return UNMAPPED_GVA;
-> >> +
-> >> +       *ro = !!(memslot->flags & KVM_MEM_READONLY);
-> >> +       gpa_offset = hva - memslot->userspace_addr;
-> >> +       return ((memslot->base_gfn << PAGE_SHIFT) + gpa_offset);
-> >> +}
-> >> +
-> >> +static struct page **sev_pin_memory_in_mmu(struct kvm *kvm, unsigned long addr,
-> >> +                                          unsigned long size,
-> >> +                                          unsigned long *npages)
-> >> +{
-> >> +       struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> >> +       struct kvm_vcpu *vcpu;
-> >> +       struct page **pages;
-> >> +       unsigned long i;
-> >> +       u32 error_code;
-> >> +       kvm_pfn_t pfn;
-> >> +       int idx, ret = 0;
-> >> +       gpa_t gpa;
-> >> +       bool ro;
-> >> +
-> >> +       pages = sev_alloc_pages(sev, addr, size, npages);
-> >> +       if (IS_ERR(pages))
-> >> +               return pages;
-> >> +
-> >> +       vcpu = kvm_get_vcpu(kvm, 0);
-> >> +       if (mutex_lock_killable(&vcpu->mutex)) {
-> >> +               kvfree(pages);
-> >> +               return ERR_PTR(-EINTR);
-> >> +       }
-> >> +
-> >> +       vcpu_load(vcpu);
-> >> +       idx = srcu_read_lock(&kvm->srcu);
-> >> +
-> >> +       kvm_mmu_load(vcpu);
-> >> +
-> >> +       for (i = 0; i < *npages; i++, addr += PAGE_SIZE) {
-> >> +               if (signal_pending(current)) {
-> >> +                       ret = -ERESTARTSYS;
-> >> +                       break;
-> >> +               }
-> >> +
-> >> +               if (need_resched())
-> >> +                       cond_resched();
-> >> +
-> >> +               gpa = hva_to_gpa(kvm, addr, &ro);
-> >> +               if (gpa == UNMAPPED_GVA) {
-> >> +                       ret = -EFAULT;
-> >> +                       break;
-> >> +               }
-> >> +
-> >> +               error_code = ro ? SEV_PFERR_RO : SEV_PFERR_RW;
-> >> +
-> >> +               /*
-> >> +                * Fault in the page and sev_pin_page() will handle the
-> >> +                * pinning
-> >> +                */
-> >> +               pfn = kvm_mmu_map_tdp_page(vcpu, gpa, error_code, PG_LEVEL_4K);
-> >> +               if (is_error_noslot_pfn(pfn)) {
-> >> +                       ret = -EFAULT;
-> >> +                       break;
-> >> +               }
-> >> +               pages[i] = pfn_to_page(pfn);
-> >> +       }
-> >> +
-> >> +       kvm_mmu_unload(vcpu);
-> >> +       srcu_read_unlock(&kvm->srcu, idx);
-> >> +       vcpu_put(vcpu);
-> >> +       mutex_unlock(&vcpu->mutex);
-> >> +
-> >> +       if (!ret)
-> >> +               return pages;
-> >> +
-> >> +       kvfree(pages);
-> >> +       return ERR_PTR(ret);
-> >> +}
-> >> +
-> >>  static int sev_launch_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
-> >>  {
-> >>         unsigned long vaddr, vaddr_end, next_vaddr, npages, pages, size, i;
-> >> @@ -510,15 +615,21 @@ static int sev_launch_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
-> >>         vaddr_end = vaddr + size;
-> >>
-> >>         /* Lock the user memory. */
-> >> -       inpages = sev_pin_memory(kvm, vaddr, size, &npages, 1);
-> >> +       if (atomic_read(&kvm->online_vcpus))
-> >> +               inpages = sev_pin_memory_in_mmu(kvm, vaddr, size, &npages);
+On 22-01-21 15:32, Ulf Hansson wrote:
+> On Sat, 15 Jan 2022 at 13:15, Andrey Skvortsov
+> <andrej.skvortzov@gmail.com> wrote:
 > >
-> > IIUC we can only use the sev_pin_memory_in_mmu() when there is an
-> > online vCPU because that means the MMU has been setup enough to use?
-> > Can we add a variable and a comment to help explain that?
+> > SD card is allowed to signal busy on DAT0 up to 1s after the
+> > CMD49. According to SD spec (version 6.0 section 5.8.1.3) first host
+> > waits until busy of CMD49 is released and only then polls Power
+> > Management Status register up to 1s until the card indicates ready to
+> > power off.
 > >
-> > bool mmu_usable = atomic_read(&kvm->online_vcpus) > 0;
->
-> Sure, will add comment and the variable.
->
+> > Without waiting for busy before polling status register sometimes card
+> > becomes unresponsive and system fails to suspend:
 > >
-> >> +       else
-> >> +               inpages = sev_pin_memory(kvm, vaddr, size, &npages, 1);
+> >   [  205.907459] Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+> >   [  206.421274] sunxi-mmc 1c0f000.mmc: data error, sending stop command
+> >   [  206.421321] sunxi-mmc 1c0f000.mmc: send stop command failed
+> >   [  206.421347] mmc0: error -110 reading status reg of PM func
+> >   [  206.421366] PM: dpm_run_callback(): mmc_bus_suspend+0x0/0x74 returns -110
+> >   [  206.421402] mmcblk mmc0:aaaa: PM: failed to suspend async: error -110
+> >   [  206.437064] PM: Some devices failed to suspend, or early wake event detected
 > >
-> > So I am confused about this case. Since svm_register_enc_region() is
-> > now a NOOP how can a user ensure that memory remains pinned from
-> > sev_launch_update_data() to when the memory would be demand pinned?
+> > Tested with Sandisk Extreme PRO A2 64GB on Allwinner A64 system.
 > >
-> > Before users could svm_register_enc_region() which pins the region,
-> > then sev_launch_update_data(), then the VM could run an the data from
-> > sev_launch_update_data() would have never moved. I don't think that
-> > same guarantee is held here?
->
-> Yes, you are right. One way is to error out of this call if MMU is not setup.
-> Other one would require us to maintain all list of pinned memory via sev_pin_memory()
-> and unpin them in the destroy path.
+> > Signed-off-by: Andrey Skvortsov <andrej.skvortzov@gmail.com>
+> 
+> I did some tests at my side too, using a Qcom platform and it worked
+> fine. However, I also used the same type of card as you, as I didn't
+> have any other try with at this moment.
 
-Got it. So we'll probably still need regions_list to track those
-pinned regions and free them on destruction.
+> So, applied for fixes and by adding a fixes/stable tag, thanks!
+Thank you very much.
+There is one another test report, that this patch fixes suspend with
+KLEVV CRAS 128GB (K128GUSD6U3-CA). [1]
 
-Also similar changes are probably needed in sev_receive_update_data()?
+1. https://gitlab.com/mobian1/issues/-/issues/389#note_816636364
 
->
-> >>         if (IS_ERR(inpages))
-> >>                 return PTR_ERR(inpages);
-> >>
-> >>         /*
-> >>          * Flush (on non-coherent CPUs) before LAUNCH_UPDATE encrypts pages in
-> >>          * place; the cache may contain the data that was written unencrypted.
-> >> +        * Flushing is automatically handled if the pages can be pinned in the
-> >> +        * MMU.
-> >>          */
-> >> -       sev_clflush_pages(inpages, npages);
-> >> +       if (!atomic_read(&kvm->online_vcpus))
-> >> +               sev_clflush_pages(inpages, npages);
-> >>
-> >>         data.reserved = 0;
-> >>         data.handle = sev->handle;
-> >> @@ -553,8 +664,13 @@ static int sev_launch_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
-> >>                 set_page_dirty_lock(inpages[i]);
-> >>                 mark_page_accessed(inpages[i]);
-> >>         }
-> >> +
-> >>         /* unlock the user pages */
-> >> -       sev_unpin_memory(kvm, inpages, npages);
-> >> +       if (atomic_read(&kvm->online_vcpus))
-> >> +               kvfree(inpages);
->
-> >> +       else
-> >> +               sev_unpin_memory(kvm, inpages, npages);
->
-> And not unpin here in this case.
->
-> Regards
-> Nikunj
+> I also did a minor amendment to the patch, see below.
+> 
+> Kind regards
+> Uffe
+
+-- 
+Best regards,
+Andrey Skvortsov

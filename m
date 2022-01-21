@@ -2,115 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EA2B495EDD
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 13:06:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8526F495EE2
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 13:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380295AbiAUMGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 07:06:41 -0500
-Received: from mail-vk1-f177.google.com ([209.85.221.177]:40694 "EHLO
-        mail-vk1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380308AbiAUMGc (ORCPT
+        id S1380307AbiAUMHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 07:07:30 -0500
+Received: from mail-ua1-f50.google.com ([209.85.222.50]:45590 "EHLO
+        mail-ua1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350391AbiAUMH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 07:06:32 -0500
-Received: by mail-vk1-f177.google.com with SMTP id m131so5418310vkm.7;
-        Fri, 21 Jan 2022 04:06:32 -0800 (PST)
+        Fri, 21 Jan 2022 07:07:28 -0500
+Received: by mail-ua1-f50.google.com with SMTP id x33so16400889uad.12;
+        Fri, 21 Jan 2022 04:07:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qqRduQ6pwUJD4EpwWXKwPFy7ze+L3+n5fzGWCVuYmuA=;
-        b=zadp1B942ts+pMZ0SHxYHgQLaB8AmwSQvDDIwN2f6mgenyHwxcVGE0/4GrHDkkBXpu
-         S2grFfOiQJQFeXqZECXDmfREotELYfB85oWXWrQMzos71KdU5I8sACdMlT1bKkd3PuJY
-         x5h7BxIVTPMSZzlX0TMBYLQ5A2LpIPq2LXAfOw/44wByuHR4SmQWNkt9ZSvu3qB+sLK9
-         o9rYwXoSyLnOH8HFuJpUND8R5bcyhuJ2v49EP3f1MFc6LMmfEpeTDnI+hGwm7zCOICL2
-         zfALxG8iRl/Sr6ZZ+lLgti+/Cn8tJHTv2lEnFBMA6wQrfBB1YBB5Kl9pZc4dNYA1eEoz
-         dHdA==
-X-Gm-Message-State: AOAM532XGTA6chej/7unkLIg3wHviJ5eEpWApDJLqHxoNkIKzeAvnCV0
-        g+VOJc0Q7ciNGow9R7CZEUJE8UxbiO1p+A==
-X-Google-Smtp-Source: ABdhPJySuSXhU1uqTjc5OWSdzaHpeaGRIWpzV+aFOvDDnso2UKdcS4RXi/C/O3HngK/rDjAAqPkFoA==
-X-Received: by 2002:a05:6122:221d:: with SMTP id bb29mr1428075vkb.30.1642766791744;
-        Fri, 21 Jan 2022 04:06:31 -0800 (PST)
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
-        by smtp.gmail.com with ESMTPSA id 4sm950583vsv.22.2022.01.21.04.06.30
+        bh=RoDen8PtW8byWyF8mhXAdlajtdUoL42XdSGYBm/7DR8=;
+        b=HSPnkDxne/jviXJ4owJs1Up8aaaTScl5CwdeKL/11zvvT52R4rXB6AoifEAZHc/lyh
+         cF0qa6WY0dR78BaHnmTJpPxmRt1EjUY7ZkoD1ZyB98XIk00Shjw+WRDkDt+t35sv2tzq
+         RMBu5vpl1LrXF4ikOsH+qEPrVyvE4OvdzhKB49A80IdHaEKYvtzh0zliDOQVQoSPqPcv
+         V15aS/la2DQRU24zkLWwjijKedWLtPtCtK3DHMpplTsEZKuG1jUAQhqa7dzMhyJpZkIt
+         5aVKGdQpGP2SeEHgmx+jo2jJ9+CxnNuW+uiU0gVCKLsrVf2TWySR3JQxczHe4ceWdZCO
+         JsgQ==
+X-Gm-Message-State: AOAM533FeEIQdwlUPs7Kik4L2b/qqzCCQRIyT7K3o/H5ql95YKMG3WDT
+        DcBmAsJNLA6yXFz7Lu8jushmsy5uO2E8qg==
+X-Google-Smtp-Source: ABdhPJxA6ts74iGWB8W82UyCajy28harvc4I2/MTnlkltKn0HEfVCOA8P9kvAp/V9Bn2VYXh45vmkA==
+X-Received: by 2002:a05:6102:3a08:: with SMTP id b8mr1701713vsu.53.1642766848044;
+        Fri, 21 Jan 2022 04:07:28 -0800 (PST)
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
+        by smtp.gmail.com with ESMTPSA id o131sm1299739vkc.42.2022.01.21.04.07.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Jan 2022 04:06:31 -0800 (PST)
-Received: by mail-ua1-f47.google.com with SMTP id 2so16465737uax.10;
-        Fri, 21 Jan 2022 04:06:30 -0800 (PST)
-X-Received: by 2002:a67:e905:: with SMTP id c5mr1616195vso.68.1642766790659;
- Fri, 21 Jan 2022 04:06:30 -0800 (PST)
+        Fri, 21 Jan 2022 04:07:27 -0800 (PST)
+Received: by mail-ua1-f41.google.com with SMTP id m90so16536220uam.2;
+        Fri, 21 Jan 2022 04:07:27 -0800 (PST)
+X-Received: by 2002:a67:e055:: with SMTP id n21mr1535004vsl.57.1642766847462;
+ Fri, 21 Jan 2022 04:07:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20220121010543.31385-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220121010543.31385-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdWnTxxXz-aBL10nSiQt67bm93yXHbSvFtrs3Yme9ZQcpg@mail.gmail.com> <CA+V-a8v1to4w0yw17DgbQic2nkX4s+W3ZxPEdp89=9SLxwvBMg@mail.gmail.com>
-In-Reply-To: <CA+V-a8v1to4w0yw17DgbQic2nkX4s+W3ZxPEdp89=9SLxwvBMg@mail.gmail.com>
+References: <20211225115308.2152364-1-nikita.yoush@cogentembedded.com>
+ <CAMuHMdXdW=bCxBeEu81bRBwAs5=x_KZmPcXoMe=CmFdWz=rdfQ@mail.gmail.com> <f49794a0-096a-1f27-a250-5a74a9ed6ba6@cogentembedded.com>
+In-Reply-To: <f49794a0-096a-1f27-a250-5a74a9ed6ba6@cogentembedded.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 21 Jan 2022 13:06:19 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVJvTyEOy1LS_8QbeLbBRb1vOB_Fy-LX4gf0GXta0mn=Q@mail.gmail.com>
-Message-ID: <CAMuHMdVJvTyEOy1LS_8QbeLbBRb1vOB_Fy-LX4gf0GXta0mn=Q@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/4] media: dt-bindings: media: Document RZ/G2L
- CSI-2 block
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+Date:   Fri, 21 Jan 2022 13:07:16 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVyRpEE2i4ak3Gg7EOW8LHPk8jZe+ZeVZTW0TWaXJ5k_Q@mail.gmail.com>
+Message-ID: <CAMuHMdVyRpEE2i4ak3Gg7EOW8LHPk8jZe+ZeVZTW0TWaXJ5k_Q@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: renesas: ulcb-kf: add KF HDMI output
+To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
+        Mark Brown <broonie@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+Hi Nikita,
 
-On Fri, Jan 21, 2022 at 12:52 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Fri, Jan 21, 2022 at 9:26 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Fri, Jan 21, 2022 at 2:06 AM Lad Prabhakar
-> > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > > Document the CSI-2 block which is part of CRU found in Renesas
-> > > RZ/G2L SoC.
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Thanks for your patch!
-> >
-> > > ---
-> > > Hi Geert/All,
-> > >
-> > > vclk and pclk clocks are shared with CRU both CSI and CRU driver are using
-> > > pm_runtime. pclk clock is necessary for register access where as vclk clock
-> > > is only used for calculations. So would you suggest passing vclk as part of
-> >
-> > What do you mean by "calculations"?
-> To set the CSI2nMCT2 register bits (FRRSKW/FRRCLK), vclk clock rate is used.
+CC Mark.
 
-Ah, clock rate calculations.  I (mis)understood that vclk clocked
-a hardware calculation block, and was wondering what kind of heavy
-calculations were involved ;-)
-
-> > The bindings say this is the main clock?
-> >
-> That is because the RZG2L_clock_list_r02_02.xlsx mentions it as the main clock.
+On Fri, Jan 21, 2022 at 11:18 AM Nikita Yushchenko
+<nikita.yoush@cogentembedded.com> wrote:
+> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > i.e. will queue in renesas-devel for v5.18 with the sort order fixed.
 >
-> > > clocks (as currently implemented) or pass the vclk clock rate as a dt property.
-> >
-> > Please do not specify clock rates in DT, but always pass clock
-> > specifiers instead.
-> > The clock subsystem handles sharing of clocks just fine.
-> >
-> Agreed.
+> Thank you.
+>
+> I have a question regarding defining regulators.
+>
+> In case when drivers expect regulators to be define, but physically chips are just wired to VCC (or to
+> some non-programmable power logic), what is the policy regarding regulator-fixed objects?
+>
+> Shall we define per-consumer regulator-fixed objects?
+> Or have a single regulator-fixed for each voltage?
+> Or not define regulators at all and let the code to create dummy regulators?
+> Or something else?
 
-So doing clk_get_rate() is fine.
+That's a good question.  I don't know if there is a policy. Mark?
 
 Gr{oetje,eeting}s,
 

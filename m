@@ -2,115 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B69A64961B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:08:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A064961BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:09:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381473AbiAUPIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 10:08:37 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:44830 "EHLO mail.skyhub.de"
+        id S1381482AbiAUPIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 10:08:53 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:47906 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238192AbiAUPIg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 10:08:36 -0500
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3496F1EC054E;
-        Fri, 21 Jan 2022 16:08:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1642777710;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=GFj7pSt3cRzl5y+b79elj5aGBrpZoaFIs8Y+/JGYyW8=;
-        b=UjAJO0bd7nBpuV/579xwg7V3vVJbyhwJU+5HtPPNxlwfYiu+yMaMYuLdmzjEwnPA0X1F/r
-        PJvRuXevaRA9P97hZRg7ydVqDq+rbps3/xYbxrOUfYcPEs/QZUR5vRAYz55VayS5DqPn4X
-        n3khUusN+iYIeWihx6H1s7Rw1a/2mig=
-Date:   Fri, 21 Jan 2022 16:08:17 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        id S238192AbiAUPIw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 10:08:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=AOVmtBe4RfIqVuDW0D+ERxuFvcpmqncFVJBF/BDMUXk=; b=ChtKe0MmluGG5FF4W+UXy8vVB2
+        d9SzbNPIkM4WjCRNk/+vjm1pBriDbNnAp7HnFhiD9MuZdj2jLma5qV7OgjG5QegoOFDB1HaVbFPhZ
+        EBMtlTUfeAM82dXwPu4BXbESUqQ/981mQv+idDO3+vpV/oJFG3L2SKQeKf7VMj2tsgvw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nAvWx-0026BU-Cs; Fri, 21 Jan 2022 16:08:47 +0100
+Date:   Fri, 21 Jan 2022 16:08:47 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk,
         "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v9 05/15] x86: support ASM function sections
-Message-ID: <YerMYcin4woehiL9@zn.tnic>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
- <20211223002209.1092165-6-alexandr.lobakin@intel.com>
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: phy: marvell: Honor phy LED set by system
+ firmware on a Dell hardware
+Message-ID: <YerMf2wl7KSLpx8Y@lunn.ch>
+References: <20220120051929.1625791-1-kai.heng.feng@canonical.com>
+ <Yelnzrrd0a4Bl5AL@lunn.ch>
+ <CAAd53p45BbLy0T8AG5QTKhP00zMBsMHfm7i-bTmZmQWM5DpLnQ@mail.gmail.com>
+ <YeqwyeVvFQoH+9Uu@lunn.ch>
+ <CAAd53p6C5SsYwKt4xsJ+qiqhrF45UW_VG8O+EiJcgeWy=MqzPw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211223002209.1092165-6-alexandr.lobakin@intel.com>
+In-Reply-To: <CAAd53p6C5SsYwKt4xsJ+qiqhrF45UW_VG8O+EiJcgeWy=MqzPw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 01:21:59AM +0100, Alexander Lobakin wrote:
-> Address places which need special care and enable
-> CONFIG_ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS.
-> 
-> Notably:
->  - propagate --sectname-subst to aflags in x86/boot/Makefile and
->    x86/boot/compressed/Makefile as both override aflags;
+> The Marvell PHY on the system doesn't support WoL.
 
-s/aflags/KBUILD_AFLAGS/
+Not technically correct. The PHY does, the way the PHY has been
+integrated into the system does not.
 
-Let's be more precise pls.
+But again, you need to think of the general case. Somebody else wants
+to make use of this feature of not touching the LED configuration, but
+does have a system were WoL works. What does that imply?
 
->  - symbols starting with a dot (like ".Lbad_gs") should be handled
->    manually with SYM_*_START_SECT(.Lbad_gs, bad_gs) as "two dots"
->    is a special (and CPP doesn't want to concatenate two dots in
->    general);
->  - some symbols explicitly need to reside in one section (like
->    kexec control code, hibernation page etc.);
->  - macros creating aliases for functions (like __memcpy() for
->    memcpy() etc.) should go after the main declaration (as
->    aliases should be declared in the same section and they
->    don't have SYM_PUSH_SECTION() inside);
->  - things like ".org", ".align" should be manually pushed to
->    the same section the next symbol goes to;
->  - expand indirect_thunk and .fixup wildcards in vmlinux.lds.S
-
-$ git grep -E "\.fixup" arch/x86/*.S
-$
-
-I guess I'll continue with your new version since a bunch of stuff
-has changed in arch/x86/ in the meantime so that that set would need
-refreshing.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+     Andrew

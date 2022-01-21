@@ -2,324 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA895495FF5
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:48:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40872495FF9
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343527AbiAUNsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 08:48:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35966 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1350578AbiAUNsc (ORCPT
+        id S1380804AbiAUNtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 08:49:40 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:62226 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1380768AbiAUNtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 08:48:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642772912;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=daa3X8S2/sB/X5eaM/oVFuqBp+vMHvnAUkni/sLTqEo=;
-        b=VY3G0y/zOUpFTErNx2MvuV0n0El0yyFhkHCiMmT++zrMYsxx0sbC6hy1p/qLfpRrJFha4m
-        pYr0mjMQHNhRsC7leQwd4UVVb8/DWU60g6cIkwt1t/aOCF9JljwrFDgt7pNxM/w3jbIbmK
-        praoEcleAA+tWypVdNcF3AnBbb6KoVM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-475-QmC4RKiAORGpkxSVatzj4A-1; Fri, 21 Jan 2022 08:48:28 -0500
-X-MC-Unique: QmC4RKiAORGpkxSVatzj4A-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 54DE083DD3F;
-        Fri, 21 Jan 2022 13:48:23 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.5])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AE48C7B6FB;
-        Fri, 21 Jan 2022 13:48:07 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>
-cc:     dhowells@redhat.com, Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        JeffleXu <jefflexu@linux.alibaba.com>, linux-cachefs@redhat.com,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC][PATCH] cachefiles: Split and rename S_KERNEL_FILE and extend effects
+        Fri, 21 Jan 2022 08:49:32 -0500
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20LDDmQx019670;
+        Fri, 21 Jan 2022 13:49:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=fAlnr3JdOxV3cPb5o/kYG7CAEUwfRehU5QUsPCS/DN8=;
+ b=OZvIsqmAfoafM6QPE4eVQlRBJR5oGt7UA0VyvIxUpc17gRX9/+2oLwgDER2zCnYtp9YU
+ 8cleT3lCDDgoI97i6t4YXWXOeNTJZSHXsvi/689nH4facXl1/iqUW6MZXB6zPoaEYJL4
+ PVcsnIXW1/WbV9njFaAUIT6Mhek3WbCfsBNrjh/EVHHeqUokmFx98Z9lythTvvD4uwHL
+ IZhTK10lVhb0XKKmdYEanPh6TBtGBPiXOQUpUDdowAMVkz6hjj9I+bnuFUGpoHjAkVQc
+ 4T9e38ucVWSLWRje8LjKY4v+WBjlA7QGGSYX4HmOrjFYTNKndRXPrACsivIyq02YccEU +g== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dqhyb9be2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 21 Jan 2022 13:49:06 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20LDeE7E173900;
+        Fri, 21 Jan 2022 13:49:05 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2044.outbound.protection.outlook.com [104.47.66.44])
+        by userp3020.oracle.com with ESMTP id 3dqj0n060u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 21 Jan 2022 13:49:05 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OT52zotyAE3i62lv9sFu5PZW00mf2Zu7UcpX8PHYBgzkbGszWR56RpNZdDuLcSsfaxhGXCJCRYIAL58v6dMMQN/4s+UgmmM39pV1BZtrfbjIbVNBkfh4exiNDVV+NXpTrZwALIBl48UIogEzlW7IyjWvNB91fLAldc7NGVUXk3/4askg6dH9vBu8iqrqna5d3esp+SkgnNyAj4OCcmkTDNM30uIAr+24Ye8gWgliPvo5w4peogSqwquIEFv3vNMZdbmvFDcocMK3HuKEZSTs0JICjirj7kSRQDO95P1F9IajiGSEkfr0ienlsPRB6zLdNMdhgruQuVfswTdjVcPt7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fAlnr3JdOxV3cPb5o/kYG7CAEUwfRehU5QUsPCS/DN8=;
+ b=EHdEfJZIQTDjD6DNLoadEzLuo1wErprswZerhN1Nb2MzK8D+b2vRSFh7yHY6TBZCsBtO56N+h0C1scxr8394NI/6jzQAhNRb19y0KHbx9+XG6dkDmuzsgTOSEq24aHR+KQFbP9bycMmgMYB5GwpuUZvo9u5c8E/VwJaFzcusUCw82Q5coZpfIoY2fUcIEMR0QJlUMf3oUXtpVijzTOUgQnpuECxeI7hfzd2529jSG+Na2YlleW9HExy2IfKV1H5GGO66fOWyE/hGqPqQj1H3CcRqU7go99nUz2KyDoGxOw5Bz6UFbGiqMGgAngAk8k3DbqI69yX3JVcRRuusIyUxFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fAlnr3JdOxV3cPb5o/kYG7CAEUwfRehU5QUsPCS/DN8=;
+ b=NQ6/HBRoablPaXNdIOEhCktX53juVd4F3gv9CaLiiVicXmZvBZVwzuYUZI8AOao/hPSTKuvpv7IEWrqWd7cdqK1vh1uDFIYGTuzQy5nWYNdvFnCSojW3Vr4qQs1oTzWwvzEYORyPtBUWHsOOP/WhgMxwrDReul291a47ONv84Bg=
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
+ by PH0PR10MB5795.namprd10.prod.outlook.com (2603:10b6:510:ff::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Fri, 21 Jan
+ 2022 13:49:03 +0000
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::ac06:be4:5723:771c]) by CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::ac06:be4:5723:771c%4]) with mapi id 15.20.4909.012; Fri, 21 Jan 2022
+ 13:49:02 +0000
+Message-ID: <8af14bc9-7aab-433b-f741-494b3857226f@oracle.com>
+Date:   Fri, 21 Jan 2022 07:48:58 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v3 3/6] crash hp: definitions and prototype changes
+Content-Language: en-US
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+References: <20220110195727.1682-1-eric.devolder@oracle.com>
+ <20220110195727.1682-4-eric.devolder@oracle.com>
+ <20220119082645.GA6349@MiWiFi-R3L-srv>
+From:   Eric DeVolder <eric.devolder@oracle.com>
+In-Reply-To: <20220119082645.GA6349@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY5PR17CA0033.namprd17.prod.outlook.com
+ (2603:10b6:a03:1b8::46) To CO1PR10MB4531.namprd10.prod.outlook.com
+ (2603:10b6:303:6c::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1079105.1642772886.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Fri, 21 Jan 2022 13:48:06 +0000
-Message-ID: <1079106.1642772886@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2a815977-593f-4b7e-00f8-08d9dce4c8ab
+X-MS-TrafficTypeDiagnostic: PH0PR10MB5795:EE_
+X-Microsoft-Antispam-PRVS: <PH0PR10MB5795077DC778C19D9BABB70D975B9@PH0PR10MB5795.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +6B80pM5AV0Y8U28mLWWRoyEaAR/6OQKCM90ka8O/Hrx7OlDeS3ohT2PtndRt8yzObD/jAZ9BWJ867ghNVbdS+rkV+QH2DD/4g7pU7yT42gUvwoIqD2x/WSmDeqwefYy2pwTo5B6Kg9NvhlU3YAcNdk7A7j76ZD8rzTgGLOs0CIYc0ess2Ca1wq/rlc5REXkEJG0gjXkSyrYbRdbOeI5f3fnf6+qrTsgRxXzFZ496J5Y3MAVQvdY04SIv96IYaaSHGsbfkwjs9GUOz/AWuzF5MZFTY/yh0sZJyKx5UAs2nIx/R7q7Lz7iY2nxL0Rvew9QX9N+OIz4irg6qyZdp0IUTIhA18WEeM3BCTE8VSqu11dw0UBi1uRE8cjCpNKnj+ajTBm33yARh8r5rUey1YlmfHW3+bfKjMwWxR0/wfyShXaMThuym+8vlQixUm0IMOvpbTz+hJHncuy1RwqjYppvB/F+jWwAtWSy8gKhpqpxs/ThFjgPUwXhrhbTXA68iS41ad7Pmpn3mOQ4nCQ3pTOsRGDfrZHhm31Bvpn54oGyqoZHuPLOVN8ua5BdAnyuZ8iejJI0hRQOMAVHoC/icGXp8/Cf2XDNl48lm+SC2ajdef11WffIM9E+fxVrZh9AvRdpA4k0z43T+i7xh8gGiGjjT0Mc4E5F99oznJ7WiMmchZjQwrw3dJ6GhtAJul3vnavYXVXbTVQ/1eZgfurb+68b+vl0tj2wyeOHIHqxaaOFpQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(31696002)(2616005)(66556008)(83380400001)(508600001)(8936002)(316002)(107886003)(4326008)(38100700002)(6512007)(2906002)(31686004)(66946007)(8676002)(6486002)(186003)(7416002)(6666004)(86362001)(66476007)(6916009)(6506007)(5660300002)(36756003)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VXYrOUVQQ2Y1TW1KODlDS0V1RmxZcmpXZ0RqekhUbXNnSTM4NGNQZWYzZUVS?=
+ =?utf-8?B?aXZvMzdPZWlJbVVicFJmTTcyeEJ4Vjc2dFFlNlRPZEJPWEtscmpqUS9wVDRO?=
+ =?utf-8?B?UHo5V2JOVzhXdTJ4b0U3UnpiU0NrMVc0ZkVhZ3ZaekNiSVlCaW5zR00xdUJM?=
+ =?utf-8?B?WEhBM05nSDViYmUwdjBQZUlvSktjalhHY2JwS215UnBiNVk3aTJSV1lXZ2or?=
+ =?utf-8?B?VFV5N1Jqb0dyT2lmMnRqTEhQWDE0bnNzQmxZczFDNU15NzNhNCs3WFdXM3lx?=
+ =?utf-8?B?RVRjWjRBYXlZRFpmQWlXdWZUYmJlZlQ3WURRdUVMcFkySjBPMjJPSXRUd3FO?=
+ =?utf-8?B?Tm5URGVCSk9mMnBaM2l5MXZFNisyb2RiVEo1ajB1SFVZaEltT3NIWm8rSDVT?=
+ =?utf-8?B?VFdNREZaQ2J2aTVkOGxHT0RUVlR4bUtjeEtMWVowNnRyL0hCcmdkQVY0bVhN?=
+ =?utf-8?B?aFlqeXM1NnNLdUhqL0RydWJkLzNVYnIzQXVha1JvaTJkWHpXdGdsY2FrTVlx?=
+ =?utf-8?B?WHZudEtJVHRUWGEyVUIyT0hYNEJVcHdZYmJnUGl6dlN4WWlqSG1CN1Q2ODY3?=
+ =?utf-8?B?TGJKVUFVR0NwbVE5c0lmc3RWSjhYMFMwcHBnYjM5OUdwK0dxdFl1STRhYzdw?=
+ =?utf-8?B?Z3R2UEdjZnczRXI4WUROWGt3QXdIRHFKZ0c1dmh0RS9rc0lzTWlmYmlaNVVZ?=
+ =?utf-8?B?YjdReFE2amlXVE1seWIyTUlFYTdIMXNhRlFBYnRzNDdyaHRIU2ZvZWtTay9N?=
+ =?utf-8?B?VzluOUNjT01PN29vMmNhU2VYZW9aampoRXVudEE5VGRLUDNET0t4TSs3akdL?=
+ =?utf-8?B?SDg3QWFsUWZZdUQ0ekt6Zjk4ODVXZmdkV3NvRWV2TWhrV3RqY3BTYkxJVDlV?=
+ =?utf-8?B?aFdqU0hDQjJFU0JzTFhNUGV3TlV6QmQ3MGNja3BWN1kxUVFOUEtBZ2grRGpM?=
+ =?utf-8?B?QWpVYnBHRjh2S3p3R2FsUzUza2FQTjBvdVlmQ0hMY1FLaWcveGRHVS9Vbjgr?=
+ =?utf-8?B?dTV3TmIrQ2NlT3pSNGp1ZUo3VEhyc1lVeDdwbU9DMmRqMjNrTUduNlBab1N4?=
+ =?utf-8?B?TVNBS3N3WjM0Uk9EaHNDN3V0dDNiVGs4THYzL0hNemVVK29CWkJjRk5mVmpx?=
+ =?utf-8?B?ZTRaVUo0cWswQTBRcmdiREs0OHJrU0lrd3lCNkVXVC9WdlczTEVLZnl1dUpK?=
+ =?utf-8?B?cFFDdEZlVU9JaFNxeUpVTEd4YklzTVVsUzQydUcwaGlYZHpZa1YyZ0lPR2RE?=
+ =?utf-8?B?dDdFOGVKcGVFc2NDQ3h2bDA0YllvZnlMaUhDbEZRd0w5WVNIZkQ5NzVMV2x0?=
+ =?utf-8?B?d2dkamZkRmNQYzdpY084SndTeEVLcEorSThQdmRjM0RzRDRyVWRoOWVwSVRi?=
+ =?utf-8?B?bjQrSGE5eDJjQ3BGUTRscmd4OFRHRTZHdFNMRXFjL2ZnQnFKekl1UDdURXhJ?=
+ =?utf-8?B?REo1ZmRLY1NyU3VCZ0VQVldRc0xpb255blI5UkJOenJMcUFTZjNlSmdXQjU3?=
+ =?utf-8?B?cHl1dWdiUU51Mmwwd29DVzdOZmlwZFdGODR4cGUyU1k5SEVSQWFNZjFwV1FX?=
+ =?utf-8?B?VjdCNG9tRDdpbnIwWUVQYzZuWmhhdzFjUHN6anZGSjZ3SkJtZElTR1BtYUpx?=
+ =?utf-8?B?WERVYWNyZjJaUkZEcXlPZVB0bGFpaU92eE15ZnA4S3Vud2JGcmI0ZHI3L2M2?=
+ =?utf-8?B?SXg4UWczREZvOFNhaGtWZkpNazJmbTRCODhXUzNDNFVSNm4wVnU3R1dQN3NJ?=
+ =?utf-8?B?MlVuaTBLWEpnZGhEaXVhbmREQ08vb1NtTTRxL3lvK1gyTUkzTWlNYnhBTnBn?=
+ =?utf-8?B?a3hYVFNLVG9ZaGJ5SWx2LzdieEpReDBQQUx2RG8xSnBBY3NVaVZmeWk3YXlK?=
+ =?utf-8?B?UlZld2Vrb1I4ZFBtTnlkOXl4VGZqM2ErYmpML0IyUG4vOVVib29ld08rbjlU?=
+ =?utf-8?B?OGRhQmtHMXcvVkdDbDFMZUEyU3ArNkpmUXdSU0lBTEczQlZYS2QxK1JkVm9s?=
+ =?utf-8?B?aWdJcklCVm8wcFFIZ2Y5bE9YZHlwdUVWQ1ZGa0RZb1VmRWcrcVB3Ly9mZDlW?=
+ =?utf-8?B?NkRvWGpsMGhFTGtVbHpWSUU2WW5wMmo3RytBUmZNSXIxazBmSjNOMzdnY1R4?=
+ =?utf-8?B?WEhPcmlNdkJsSGoyS3U1TENuR3FvbUJZU3d3SzBCbzA1emlZQklUKzFiMk01?=
+ =?utf-8?B?TmtxeU90RDVWMlFrTS9BUDR5NGpic3ZMNjArVkJ6T0pEdVFaT0lnNDhLZU9S?=
+ =?utf-8?B?ZkViR3p3cmtiNWczZG9NcHE1eWhjTUpRT0p6aUpFVU9VRUFZa0dmbkNiYmRx?=
+ =?utf-8?Q?qNLQ/uDWrzV94YQL70?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a815977-593f-4b7e-00f8-08d9dce4c8ab
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2022 13:49:02.9283
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6sM1CTWUFHG3rfhagVqENG8b7FcZR273OWhFRSaZaoTS0cTGcXgrPo5QDSvdRTdPZ39NqOrb35XFcFXkKbB8ByitI+bamLAjlxDgbiwyiWg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5795
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10233 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 spamscore=0
+ suspectscore=0 mlxlogscore=999 phishscore=0 malwarescore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2201210092
+X-Proofpoint-ORIG-GUID: SQA4RxXOMBVJJmozamBj0PcXqvx81osd
+X-Proofpoint-GUID: SQA4RxXOMBVJJmozamBj0PcXqvx81osd
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Baoquan,
+Thanks for looking at this. Inline responses below.
+eric
 
-After the recent controversy over the S_KERNEL_FILE flag, I wonder if it
-should be split into two different flags with different functions and have
-more appropriate names given to reflect this to make its function easier t=
-o
-understand.  I've put in some not particulary great suggestions as to the
-naming, but something better might suggest itself to others.  I've also le=
-ft
-the flags generic as there's nothing specifically about them that means th=
-ey
-couldn't be used by other kernel drivers too.
+On 1/19/22 02:26, Baoquan He wrote:
+> On 01/10/22 at 02:57pm, Eric DeVolder wrote:
+>> This change adds members to struct kimage to facilitate crash
+>> hotplug support.
+>>
+>> This change also defines crash hotplug events and associated
+>> prototypes.
+>>
+>> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+>> ---
+>>   include/linux/kexec.h | 21 +++++++++++++++++++--
+>>   1 file changed, 19 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+>> index 0c994ae37729..068f853f1c65 100644
+>> --- a/include/linux/kexec.h
+>> +++ b/include/linux/kexec.h
+>> @@ -221,8 +221,9 @@ struct crash_mem {
+>>   extern int crash_exclude_mem_range(struct crash_mem *mem,
+>>   				   unsigned long long mstart,
+>>   				   unsigned long long mend);
+>> -extern int crash_prepare_elf64_headers(struct crash_mem *mem, int kernel_map,
+>> -				       void **addr, unsigned long *sz);
+>> +extern int crash_prepare_elf64_headers(struct kimage *image,
+>> +					struct crash_mem *mem, int kernel_map,
+>> +					void **addr, unsigned long *sz);
+>>   #endif /* CONFIG_KEXEC_FILE */
+>>   
+>>   #ifdef CONFIG_KEXEC_ELF
+>> @@ -299,6 +300,13 @@ struct kimage {
+>>   
+>>   	/* Information for loading purgatory */
+>>   	struct purgatory_info purgatory_info;
+>> +
+>> +#ifdef CONFIG_CRASH_HOTPLUG
+>> +	bool hotplug_event;
+>> +	int offlinecpu;
+>> +	bool elf_index_valid;
+>> +	int elf_index;
+> 
+> Do we really need elf_index_valid? Can we initialize elf_index to , e.g '-1',
+> then check if the value is valid?
 
-Hopefully, I've also done a better job of explaining the issues (including=
- a
-couple of races) the flags fix in the attached patch.
+These members become part of struct kimage, and when the kimage is allocated, it is automatically 
+zero'd. Wrt/ elf_index, 0 is a valid index, and so it needs to be qualified. I initially had used 
+-1, but that required code and was fragile as I had to find the right place to do that. Using the 
+boolean elf_index_valid, the problems with -1 vanish, and for free! I also found when examining the 
+code that reading 'elf_index_valid' was better than 'elf_index != -1', more clear.
 
-Amir's suggestion of moving the no-remove check into may_delete()
-unfortunately doesn't work because the flag forbidding the VFS op (eg. rmd=
-ir)
-needs to be done with the lock held, to stop the flag from being changed u=
-ntil
-the VFS op is complete.
+Let me know what you think.
+eric
 
-David
----
-Split S_KERNEL_FILE into two separate flags to do two separate jobs and gi=
-ve
-them new names[1][2]:
-
- (1) S_INUSE.  This allows a kernel service to mark an inode as in-use by
-     that kernel service.  This is then used by cachefiles to indicate tha=
-t
-     it is using a file or directory.  Cachefiles uses this for three
-     things:
-
-     (a) Defending against double-use of part of the cache due to bugs,
-         races or misconfiguration - which could lead to data corruption.
-
-     (b) As a fast way to tell whether a file is in use when cachefilesd
-         asks to cull it (culling is offloaded to userspace).  Previously,
-         the inode details were used to look up in a big tree of records -
-         but doing the same job with a single bit is less expensive.
-
-     (c) To stop a file that we've agreed cachefilesd may cull from being
-         reused by the cache.  This fixes a race between the cull request
-         and the object being buried because we have to drop the inode
-         locks that we've taken so that we can call functions like
-         vfs_unlink().
-
-         The race gives a window in which the object can get looked up
-         again - but if the file is in a cullable state, there's nowhere t=
-o
-         make a note that it needs to be got rid of except the backing
-         inode.
-
- (2) S_NOREMOVE.  If this is set, the file or directory may not be removed=
-,
-     renamed or unlinked.  This can then be used by cachefiles to prevent
-     userspace removing or renaming files and directories that the are
-     being used.
-
-     The directory layout in its cache is very important to cachefiles as
-     the names are how it indexes the contents.  Removing objects can caus=
-e
-     cachefilesd to malfunction as it may find it can't reach bits of the
-     structure that it previously created and still has dentry pointers to=
-.
-
-     This also closes a race between cachefilesd trying to cull an empty
-     directory and cachefiles trying to create something in it.
-
-     Amir Goldstein suggested that the check in vfs_rmdir() should be move=
-d
-     to may_delete()[1], but it really needs to be done whilst the inode
-     lock is held.
-
-Both of these flags can only be changed under the inode lock.  I would
-recommend that S_NOREMOVE only be set/cleared if S_INUSE is first set.
-
-Note that potential usage of these flags is by no means limited to
-cachefiles, which is why they've been left as general.  S_INUSE, for
-example, if set by one kernel service, will cause another kernel service
-that uses the flag in the same way to abort that use.
-
-Note also that S_NOREMOVE will prevent vfs_unlink() vfs_rmdir() and
-vfs_rename() from operating on a file.
-
-Also define IS_xxx() macros for the above flags[3].
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: linux-cachefs@redhat.com
-Link: https://lore.kernel.org/r/CAOQ4uxjEcvffv=3DrNXS-r+NLz+=3D6yk4abRuX_A=
-Mq9v-M4nf_PtA@mail.gmail.com [1]
-Link: https://lore.kernel.org/r/Ydvl8Dk8z0mF0KFl@infradead.org/ [2]
-Link: https://lore.kernel.org/r/88d7f8970dcc0fd0ead891b1f42f160b8d17d60e.c=
-amel@kernel.org/ [3]
----
- fs/cachefiles/namei.c |   18 ++++++++++--------
- fs/namei.c            |    8 +++++---
- include/linux/fs.h    |    5 ++++-
- 3 files changed, 19 insertions(+), 12 deletions(-)
-
-diff --git a/fs/cachefiles/namei.c b/fs/cachefiles/namei.c
-index f256c8aff7bb..30b7b71158c4 100644
---- a/fs/cachefiles/namei.c
-+++ b/fs/cachefiles/namei.c
-@@ -20,8 +20,8 @@ static bool __cachefiles_mark_inode_in_use(struct cachef=
-iles_object *object,
- 	struct inode *inode =3D d_backing_inode(dentry);
- 	bool can_use =3D false;
- =
-
--	if (!(inode->i_flags & S_KERNEL_FILE)) {
--		inode->i_flags |=3D S_KERNEL_FILE;
-+	if (!IS_INUSE(inode)) {
-+		inode->i_flags |=3D S_INUSE | S_NOREMOVE;
- 		trace_cachefiles_mark_active(object, inode);
- 		can_use =3D true;
- 	} else {
-@@ -53,7 +53,7 @@ static void __cachefiles_unmark_inode_in_use(struct cach=
-efiles_object *object,
- {
- 	struct inode *inode =3D d_backing_inode(dentry);
- =
-
--	inode->i_flags &=3D ~S_KERNEL_FILE;
-+	inode->i_flags &=3D ~(S_INUSE | S_NOREMOVE);
- 	trace_cachefiles_mark_inactive(object, inode);
- }
- =
-
-@@ -392,8 +392,10 @@ int cachefiles_bury_object(struct cachefiles_cache *c=
-ache,
- 		};
- 		trace_cachefiles_rename(object, d_inode(rep)->i_ino, why);
- 		ret =3D cachefiles_inject_read_error();
--		if (ret =3D=3D 0)
-+		if (ret =3D=3D 0) {
-+			__cachefiles_unmark_inode_in_use(object, rep);
- 			ret =3D vfs_rename(&rd);
-+		}
- 		if (ret !=3D 0)
- 			trace_cachefiles_vfs_error(object, d_inode(dir), ret,
- 						   cachefiles_trace_rename_error);
-@@ -402,7 +404,6 @@ int cachefiles_bury_object(struct cachefiles_cache *ca=
-che,
- 					    "Rename failed with error %d", ret);
- 	}
- =
-
--	__cachefiles_unmark_inode_in_use(object, rep);
- 	unlock_rename(cache->graveyard, dir);
- 	dput(grave);
- 	_leave(" =3D 0");
-@@ -426,6 +427,7 @@ int cachefiles_delete_object(struct cachefiles_object =
-*object,
- 	dget(dentry);
- =
-
- 	inode_lock_nested(d_backing_inode(fan), I_MUTEX_PARENT);
-+	cachefiles_unmark_inode_in_use(object, object->file);
- 	ret =3D cachefiles_unlink(volume->cache, object, fan, dentry, why);
- 	inode_unlock(d_backing_inode(fan));
- 	dput(dentry);
-@@ -746,7 +748,7 @@ static struct dentry *cachefiles_lookup_for_cull(struc=
-t cachefiles_cache *cache,
- 		goto lookup_error;
- 	if (d_is_negative(victim))
- 		goto lookup_put;
--	if (d_inode(victim)->i_flags & S_KERNEL_FILE)
-+	if (IS_INUSE(d_inode(victim)))
- 		goto lookup_busy;
- 	return victim;
- =
-
-@@ -793,11 +795,11 @@ int cachefiles_cull(struct cachefiles_cache *cache, =
-struct dentry *dir,
- 	/* check to see if someone is using this object */
- 	inode =3D d_inode(victim);
- 	inode_lock(inode);
--	if (inode->i_flags & S_KERNEL_FILE) {
-+	if (IS_INUSE(inode)) {
- 		ret =3D -EBUSY;
- 	} else {
- 		/* Stop the cache from picking it back up */
--		inode->i_flags |=3D S_KERNEL_FILE;
-+		inode->i_flags |=3D S_INUSE;
- 		ret =3D 0;
- 	}
- 	inode_unlock(inode);
-diff --git a/fs/namei.c b/fs/namei.c
-index d81f04f8d818..99eddc41f6aa 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -3959,7 +3959,7 @@ int vfs_rmdir(struct user_namespace *mnt_userns, str=
-uct inode *dir,
- =
-
- 	error =3D -EBUSY;
- 	if (is_local_mountpoint(dentry) ||
--	    (dentry->d_inode->i_flags & S_KERNEL_FILE))
-+	    IS_NOREMOVE(dentry->d_inode))
- 		goto out;
- =
-
- 	error =3D security_inode_rmdir(dir, dentry);
-@@ -4090,7 +4090,8 @@ int vfs_unlink(struct user_namespace *mnt_userns, st=
-ruct inode *dir,
- 	inode_lock(target);
- 	if (IS_SWAPFILE(target))
- 		error =3D -EPERM;
--	else if (is_local_mountpoint(dentry))
-+	else if (is_local_mountpoint(dentry) ||
-+		 IS_NOREMOVE(dentry->d_inode))
- 		error =3D -EBUSY;
- 	else {
- 		error =3D security_inode_unlink(dir, dentry);
-@@ -4603,7 +4604,8 @@ int vfs_rename(struct renamedata *rd)
- 		goto out;
- =
-
- 	error =3D -EBUSY;
--	if (is_local_mountpoint(old_dentry) || is_local_mountpoint(new_dentry))
-+	if (is_local_mountpoint(old_dentry) || is_local_mountpoint(new_dentry) |=
-|
-+	    IS_NOREMOVE(old_dentry->d_inode))
- 		goto out;
- =
-
- 	if (max_links && new_dir !=3D old_dir) {
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index f5d3bf5b69a6..68cae4aaa6ff 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2173,7 +2173,8 @@ struct super_operations {
- #define S_ENCRYPTED	(1 << 14) /* Encrypted file (using fs/crypto/) */
- #define S_CASEFOLD	(1 << 15) /* Casefolded file */
- #define S_VERITY	(1 << 16) /* Verity file (using fs/verity/) */
--#define S_KERNEL_FILE	(1 << 17) /* File is in use by the kernel (eg. fs/c=
-achefiles) */
-+#define S_INUSE		(1 << 17) /* File is in use by the kernel (eg. fs/cachef=
-iles) */
-+#define S_NOREMOVE	(1 << 18) /* File is not to be removed or renamed */
- =
-
- /*
-  * Note that nosuid etc flags are inode-specific: setting some file-syste=
-m
-@@ -2216,6 +2217,8 @@ static inline bool sb_rdonly(const struct super_bloc=
-k *sb) { return sb->s_flags
- #define IS_ENCRYPTED(inode)	((inode)->i_flags & S_ENCRYPTED)
- #define IS_CASEFOLDED(inode)	((inode)->i_flags & S_CASEFOLD)
- #define IS_VERITY(inode)	((inode)->i_flags & S_VERITY)
-+#define IS_INUSE(inode)		((inode)->i_flags & S_INUSE)
-+#define IS_NOREMOVE(inode)	((inode)->i_flags & S_NOREMOVE)
- =
-
- #define IS_WHITEOUT(inode)	(S_ISCHR(inode->i_mode) && \
- 				 (inode)->i_rdev =3D=3D WHITEOUT_DEV)
-
+> 
+>> +#endif
+>>   #endif
+>>   
+>>   #ifdef CONFIG_IMA_KEXEC
+>> @@ -315,6 +323,15 @@ struct kimage {
+>>   	unsigned long elf_load_addr;
+>>   };
+>>   
+>> +#ifdef CONFIG_CRASH_HOTPLUG
+>> +void arch_crash_hotplug_handler(struct kimage *image,
+>> +	unsigned int hp_action, unsigned long a, unsigned long b);
+>> +#define KEXEC_CRASH_HP_REMOVE_CPU   0
+>> +#define KEXEC_CRASH_HP_ADD_CPU      1
+>> +#define KEXEC_CRASH_HP_REMOVE_MEMORY 2
+>> +#define KEXEC_CRASH_HP_ADD_MEMORY   3
+>> +#endif /* CONFIG_CRASH_HOTPLUG */
+>> +
+>>   /* kexec interface functions */
+>>   extern void machine_kexec(struct kimage *image);
+>>   extern int machine_kexec_prepare(struct kimage *image);
+>> -- 
+>> 2.27.0
+>>
+> 

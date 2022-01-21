@@ -2,210 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF2349683B
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 00:30:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E326849683E
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 00:32:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiAUXaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 18:30:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
+        id S229722AbiAUXcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 18:32:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiAUXai (ORCPT
+        with ESMTP id S229502AbiAUXcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 18:30:38 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB910C06173B;
-        Fri, 21 Jan 2022 15:30:37 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DEDB2E51;
-        Sat, 22 Jan 2022 00:30:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1642807834;
-        bh=KQ0Hr6Z8amphyQBRIxQGNR2EMiK2F+TIpQNXyIvXSnU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JIimzzy/LjjhsE3p8veM0Sm4rXiTtpXNGJLkP1CAs50k152YuJNikpAe1c3lwISU+
-         JFi3wApfsc1aACQDKyg0HF2Xo179226KiFpwY7XCmcsiZtFbJzRvrQFxxj0Ovf0QqD
-         I3z3PxeANtDBd75h0bAWq5UupifCqpAvsM6MN+eM=
-Date:   Sat, 22 Jan 2022 01:30:17 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
-        kernel-list@raspberrypi.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org, lukasz@jany.st,
-        mchehab@kernel.org, naush@raspberrypi.com, robh@kernel.org,
-        tomi.valkeinen@ideasonboard.com
-Subject: Re: [RFC PATCH v2 7/7] media: bcm283x: Include the imx219 node
-Message-ID: <YetCCUFd1F0yTJgU@pendragon.ideasonboard.com>
-References: <20220121081810.155500-1-jeanmichel.hautbois@ideasonboard.com>
- <20220121081810.155500-8-jeanmichel.hautbois@ideasonboard.com>
+        Fri, 21 Jan 2022 18:32:39 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E8BC06173B;
+        Fri, 21 Jan 2022 15:32:39 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id k31so30308685ybj.4;
+        Fri, 21 Jan 2022 15:32:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Zwd3APv0ADJGys6CshiGviZTyi6AcGSoKvHQ54dgGEA=;
+        b=EOa8041Fkz0j3IiE0wwKPL+IP3Wmii2yHtwUp5V1b6q6hIlFPaqqd+7yVkubi28yaW
+         uAJaAW4pojC3HzwGX+0ki2Jz33O3jzlKjs7WyhED/uB73Bdy89SF/1FlwyUWr6ckex+q
+         Pr1LFoeMZh2phlgSGURSargwyPivOtN6jpT2Uk5rr2+79bBuMEcA3cICf9+xeAZGl1zJ
+         Nwl/Tj1CXJEQ3sEQY1Q2tE2kHUS3bbOP6BOr+ToAGQy4X52rHoBWqDeRFUTtpm0U0VHI
+         DmFbFZ9NRi1f+i/ux8ENZv8KroynjmztIDbqKt30Nv/pbcOaz/Z+iOHaxuii+VXK2HrF
+         GKRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Zwd3APv0ADJGys6CshiGviZTyi6AcGSoKvHQ54dgGEA=;
+        b=GxznCVyW2oi5B9WEromzmk3uwQjw+Td50IRa0OCLwhjhUIk38iiSZcPBakwi48CgIk
+         VVvQGx8q1R1BKYeaybgJeCqQj8wcHktJkCC0AbGEJVfN67UP1DdnmvOr5G+DERJ19lvg
+         kLd3psvEMs2lGctoPyDU2Uyzk74ZXb0RnHXdRmnFdxyWXnrv+cKsGSklmvPN4/SclafR
+         H8j0nUm5kL75xKrIupAMW/3oc0GHNtAyP8pf9qp5HwuG5dI8X1/qBSgF/AV74eUmAz4K
+         Sr8nt5cNXBuncBXSNxUaxBlbL62Ha2CGeuPdktZkIjWO8ERVbnD993uIy7yPN7QYWLg1
+         yhKg==
+X-Gm-Message-State: AOAM531WKSTCXSYQUsbEdXXOf+swyTD/qsuAnC4q6Qd3B67jQGyM/I5v
+        n+TDsdax0xXZOs9ewSZcv7sUIL8CHVNXe5gN7mE=
+X-Google-Smtp-Source: ABdhPJzaYYbLUA+61242B7I5At2uPodx32WJVr/GOILh26xEZC1kNbyKF3Gm0gWTDBBH4lcD4lAI4x/KqqAE56HbK34=
+X-Received: by 2002:a5b:14a:: with SMTP id c10mr9033025ybp.752.1642807958777;
+ Fri, 21 Jan 2022 15:32:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220121081810.155500-8-jeanmichel.hautbois@ideasonboard.com>
+References: <20220121173622.192744-1-soenke.huster@eknoes.de>
+ <4f3d6dcf-c142-9a99-df97-6190c8f2abc9@eknoes.de> <CABBYNZ+VQ3Gfw0n=PavFhnnOy2=+1OAeV5UT_S25Lz_4gWzWEQ@mail.gmail.com>
+ <995e58bb-6dfb-b3db-c8a5-b9e30dbb104d@eknoes.de>
+In-Reply-To: <995e58bb-6dfb-b3db-c8a5-b9e30dbb104d@eknoes.de>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Fri, 21 Jan 2022 15:32:28 -0800
+Message-ID: <CABBYNZJx+UzHLRA8o=z-fkiHAmBJ6-WtY35eJtD6C6N6PhLbDQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] Bluetooth: hci_event: Ignore multiple conn complete events
+To:     =?UTF-8?Q?S=C3=B6nke_Huster?= <soenke.huster@eknoes.de>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean-Michel,
+Hi S=C3=B6nke,
 
-Thank you for the patch.
+On Fri, Jan 21, 2022 at 3:18 PM S=C3=B6nke Huster <soenke.huster@eknoes.de>=
+ wrote:
+>
+> Hi Luiz,
+>
+> On 21.01.22 22:31, Luiz Augusto von Dentz wrote:
+> > Hi S=C3=B6nke,
+> >
+> > On Fri, Jan 21, 2022 at 10:22 AM S=C3=B6nke Huster <soenke.huster@eknoe=
+s.de> wrote:
+> >>
+> >> I just noticed that just checking for handle does not work, as obvious=
+ly 0x0 could also be a handle value and therefore it can't be distinguished=
+, whether it is not set yet or it is 0x0.
+> >
+> > Yep, we should probably check its state, check for state !=3D BT_OPEN
+> > since that is what hci_conn_add initialize the state.
+> >
+>
+> I thought there are more valid connection states for the first HCI_CONNEC=
+TION_COMPLETE event, as it also occurs e.g. after an HCI_Create_Connection =
+command, see Core 5.3 p.2170:
+> > This event also indicates to the Host which issued the HCI_Create_Conne=
+ction, HCI_Accept_-
+> > Connection_Request, or HCI_Reject_Connection_Request command, and
+> > then received an HCI_Command_Status event, if the issued command failed=
+ or
+> > was successful.
+>
+> For example in hci_conn.c hci_acl_create_connection (which triggers a HCI=
+_Create_Connection command as far as I understand), the state of the connec=
+tion is changed to BT_CONNECT or BT_CONNECT2.
+> But as I am quite new in the (Linux) Bluetooth world, I might have a wron=
+g understanding of that.
 
-On Fri, Jan 21, 2022 at 09:18:10AM +0100, Jean-Michel Hautbois wrote:
-> Configure the csi1 endpoint, add the imx219 node and connect it through
-> the i2c mux.
+Yep, we would probably need a switch to capture which states are valid
+and which are not or we initialize the handle with something outside
+of the valid range of handles (0x0000 to 0x0EFF) so we can initialize
+it to e.g. 0xffff (using something like define HCI_CONN_HANDLE_UNSET)
+so we can really tell when it has been set or not.
 
-This is not meant to be upstreamed, is it ? Please say so very loudly in
-the commit message.
+> >> On 21.01.22 18:36, Soenke Huster wrote:
+> >>> When a HCI_CONNECTION_COMPLETE event is received multiple times
+> >>> for the same handle, the device is registered multiple times which le=
+ads
+> >>> to memory corruptions. Therefore, consequent events for a single
+> >>> connection are ignored.
+> >>>
+> >>> The conn->state can hold different values so conn->handle is
+> >>> checked to detect whether a connection is already set up.
+> >>>
+> >>> Buglink: https://bugzilla.kernel.org/show_bug.cgi?id=3D215497
+> >>> Signed-off-by: Soenke Huster <soenke.huster@eknoes.de>
+> >>> ---
+> >>> This fixes the referenced bug and several use-after-free issues I dis=
+covered.
+> >>> I tagged it as RFC, as I am not 100% sure if checking the existence o=
+f the
+> >>> handle is the correct approach, but to the best of my knowledge it mu=
+st be
+> >>> set for the first time in this function for valid connections of this=
+ event,
+> >>> therefore it should be fine.
+> >>>
+> >>> net/bluetooth/hci_event.c | 11 +++++++++++
+> >>>  1 file changed, 11 insertions(+)
+> >>>
+> >>> diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+> >>> index 681c623aa380..71ccb12c928d 100644
+> >>> --- a/net/bluetooth/hci_event.c
+> >>> +++ b/net/bluetooth/hci_event.c
+> >>> @@ -3106,6 +3106,17 @@ static void hci_conn_complete_evt(struct hci_d=
+ev *hdev, void *data,
+> >>>               }
+> >>>       }
+> >>>
+> >>> +     /* The HCI_Connection_Complete event is only sent once per conn=
+ection.
+> >>> +      * Processing it more than once per connection can corrupt kern=
+el memory.
+> >>> +      *
+> >>> +      * As the connection handle is set here for the first time, it =
+indicates
+> >>> +      * whether the connection is already set up.
+> >>> +      */
+> >>> +     if (conn->handle) {
+> >>> +             bt_dev_err(hdev, "Ignoring HCI_Connection_Complete for =
+existing connection");
+> >>> +             goto unlock;
+> >>> +     }
+> >>> +
+> >>>       if (!ev->status) {
+> >>>               conn->handle =3D __le16_to_cpu(ev->handle);
+> >>>
+> >
+> >
+> >
+>
+> Best
+> S=C3=B6nke
 
-> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-> ---
->  MAINTAINERS                               |   1 +
->  arch/arm/boot/dts/bcm2711-rpi-4-b.dts     |   1 +
->  arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi | 102 ++++++++++++++++++++++
->  3 files changed, 104 insertions(+)
->  create mode 100644 arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index b17bb533e007..56544ac98d69 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -3684,6 +3684,7 @@ M:	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>
->  L:	linux-media@vger.kernel.org
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
-> +F:	arch/arm/boot/dts/bcm283x*
->  F:	drivers/media/platform/bcm2835/
->  
->  BROADCOM BCM47XX MIPS ARCHITECTURE
-> diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-> index 4432412044de..f7625b70fe57 100644
-> --- a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-> +++ b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-> @@ -4,6 +4,7 @@
->  #include "bcm2711-rpi.dtsi"
->  #include "bcm283x-rpi-usb-peripheral.dtsi"
->  #include "bcm283x-rpi-wifi-bt.dtsi"
-> +#include "bcm283x-rpi-imx219.dtsi"
 
-Let's use an overlay instead.
 
->  
->  / {
->  	compatible = "raspberrypi,4-model-b", "brcm,bcm2711";
-> diff --git a/arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi b/arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi
-> new file mode 100644
-> index 000000000000..f2c6a85fd731
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi
-> @@ -0,0 +1,102 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <dt-bindings/clock/bcm2835.h>
-> +
-> +/ {
-> +	compatible = "brcm,bcm2835";
-> +
-> +	imx219_vdig: fixedregulator@1 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "imx219_vdig";
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +	};
-> +
-> +	imx219_vddl: fixedregulator@2 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "imx219_vddl";
-> +		regulator-min-microvolt = <1200000>;
-> +		regulator-max-microvolt = <1200000>;
-> +	};
-> +
-> +	imx219_clk: imx219_clk {
-> +		#clock-cells = <0>;
-> +		compatible = "fixed-clock";
-> +		clock-frequency = <24000000>;
-> +		clock-output-names = "24MHz-clock";
-> +	};
-> +
-> +	cam1_reg: cam1_reg {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "imx219_vana";
-> +		enable-active-high;
-> +		status = "okay";
-> +		gpio = <&expgpio 5 GPIO_ACTIVE_HIGH>;
-> +	};
-
-This regulator belongs to the board dtsi. Same for the I2C mux below
-(but not the imx219 of course).
-
-> +
-> +	i2c0mux {
-> +		compatible = "i2c-mux-pinctrl";
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		i2c-parent = <&i2c0>;
-> +
-> +		pinctrl-names = "i2c0", "i2c_csi_dsi";
-> +		pinctrl-0 = <&i2c0_gpio0>;
-> +		pinctrl-1 = <&i2c0_gpio44>;
-> +
-> +		i2c@0 {
-> +			reg = <0>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
-> +
-> +		i2c@1 {
-> +			reg = <1>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			imx219: sensor@10 {
-> +				compatible = "sony,imx219";
-> +				reg = <0x10>;
-> +				status = "okay";
-> +
-> +				clocks = <&imx219_clk>;
-> +				clock-names = "xclk";
-> +
-> +				VANA-supply = <&cam1_reg>;   /* 2.8v */
-> +				VDIG-supply = <&imx219_vdig>;   /* 1.8v */
-> +				VDDL-supply = <&imx219_vddl>;   /* 1.2v */
-> +
-> +				rotation = <0>;
-> +				orientation = <0>;
-> +
-> +				port {
-> +					imx219_0: endpoint {
-> +						remote-endpoint = <&csi1_ep>;
-> +						clock-lanes = <0>;
-> +						data-lanes = <1 2>;
-> +						clock-noncontinuous;
-> +						link-frequencies = /bits/ 64 <456000000>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&csi1 {
-> +	status="okay";
-> +	num-data-lanes = <2>;
-> +	port {
-> +		csi1_ep: endpoint {
-> +			remote-endpoint = <&imx219_0>;
-> +			data-lanes = <1 2>;
-> +			clock-lanes = <0>;
-> +		};
-> +	};
-> +};
-> +
-> +&i2c0 {
-> +	/delete-property/ pinctrl-names;
-> +	/delete-property/ pinctrl-0;
-> +};
-> +
-
--- 
-Regards,
-
-Laurent Pinchart
+--=20
+Luiz Augusto von Dentz

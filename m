@@ -2,243 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1994E4962CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 17:30:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC004962CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 17:30:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348667AbiAUQan convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 21 Jan 2022 11:30:43 -0500
-Received: from mail-eopbgr90058.outbound.protection.outlook.com ([40.107.9.58]:39168
-        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1348692AbiAUQag (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 11:30:36 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UbN0FgcCVXh7nVJIniGF/Xdke7yA7ax11B+sbAmEFIxKI85C+2a21m4cNWLOf3L0YMHRZRf2YNwgyzn1hJyoo2LJD0odFviFUj8d/uS7RmeVjFiKrk2/mK6+EkzZJ5+aIeLitvt503z2nCjFRu1VnWr0CHeXk5P9qi2O5T2fRtEbCAr9KxDhx0i3guGa5tX9SqgwlrPsU4myuYAeZ0gMWtsCnx2lsXFt8zAa9QGvk4Kgh7bqbpmyO6emnVEmzteVdsG3mon7LqLBjHmEBoNausj2lxjqsMpPGaNlVbR91ixrrSByau2TK6IYCXg3IkXfR3Q0jtpQGsjphnUb6kbBqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=67c49INXCxQa5RTPAo1HMh15Mf/WhhsRgr4XzfcxKBs=;
- b=nqjwkdBP2Byrw+rm44JpMEky0R9h3C8SDXfIvCQn7+cBmSnLJ5u2p4ag/Sy4rfHBvjCsqBf5Me9G8qq4eQ3oCSRuj86Kg6s2q9O03Qp3zbmM9bvwllyLStOeCFhXnXLdwZ1an/We/ENKAYndnTocxXKQ367+xS0UhF3HIbelVyjuX+oiS8G5R66goAfNcGSwV4U59/3DyY/ajLh6wWIvtClxOiV5YDZCfq8G4OimfxUZhYmYtfmH0xWaQYSv7ODTMVeH9qwyxTPozuBVKcRGukyHBUYsL8v2CHpbDl8vCih8c9no3DNpFHfWKXNLXiCzuBUiLDuEPoHeXLjtTTEfOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB3436.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:14b::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8; Fri, 21 Jan
- 2022 16:30:35 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::9d4f:1090:9b36:3fc5]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::9d4f:1090:9b36:3fc5%5]) with mapi id 15.20.4909.008; Fri, 21 Jan 2022
- 16:30:35 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>
-CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: [PATCH v4 5/5] powerpc/vdso: Move cvdso_call macro into
- gettimeofday.S
-Thread-Topic: [PATCH v4 5/5] powerpc/vdso: Move cvdso_call macro into
- gettimeofday.S
-Thread-Index: AQHYDuQ30VAgV6brFk6OKmb40I797Q==
-Date:   Fri, 21 Jan 2022 16:30:34 +0000
-Message-ID: <72720359d4c58e3a3b96dd74952741225faac3de.1642782130.git.christophe.leroy@csgroup.eu>
-References: <c2cbb8f046b7efc251053521dc39b752795e26b7.1642782130.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <c2cbb8f046b7efc251053521dc39b752795e26b7.1642782130.git.christophe.leroy@csgroup.eu>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0c612825-ed1d-4edd-1a81-08d9dcfb59c3
-x-ms-traffictypediagnostic: PR0P264MB3436:EE_
-x-microsoft-antispam-prvs: <PR0P264MB3436E593975061236E8C848EED5B9@PR0P264MB3436.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:4303;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: v4JZ87a1gh4FG7SGneYMxwpfSmSWH3kFFpDKijaf+CIKAvsQc5N15U5yMXpBGALyywuMhFYu1vZBYH96uHG8StxVGaOhagA0YVnhCW29HNWAB2ac8FmyATer5A2EDE2o4mN+QPxydzxmrtxoRLVYrn89Juo0otUYOOfarBm4hKUvNdSCSl7dqR/It1oEC0AaozoRT+fJuK2QXjcoXqjmMbBUi4Mq25gFsvuFfgGES6VUue0eIfUxuplKJUVukVTT0zQ675VE+nAtOQ10pQDjILcuMs71/NV2bqnI0/EjIJlIqM+MJpDPNyH/S65zoMdaPlNPh9ErBI91ARV8Y8HT/73Ql6AVxVsSb7L/BiBngYFO1iDONVkWmZl450mMftuCzVeLn7ypQVxGkLkqdbhqYbO5oUv8zuJRUAeqWXLdrdWQNyntpfBGGYHW//LmDd0+l8dGPGsyp869CDduoJP+LsinR3xsCkXZl50KSpYFg2k90udBY+qcp+QP37aaBqyCM65GDyQMUwp6sZo7TBM6XI+Q5HIAUGanQwq2m1cxBFOOT2/aXo2SlMpzWQBWppXGg7Nq//b7ZB05FCNYjlPMQjeXfgrfnafSYr67XvoPJDiLWirV8ylM2QqIFtH2qaTSkQufRc8cholNJy4TIPU6p7fQwjUpb7SmtWnNagz8beJ/vkUcmFkcxMHVPC13WLBJm6JX7+95tMDlHwuC5tMbTQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(44832011)(36756003)(5660300002)(64756008)(38070700005)(6486002)(4326008)(66446008)(186003)(66476007)(66556008)(66946007)(91956017)(86362001)(6506007)(83380400001)(38100700002)(2906002)(54906003)(110136005)(122000001)(71200400001)(316002)(508600001)(6512007)(8676002)(8936002)(76116006)(26005)(2616005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?PG8R03t4iiizvErPoUH9eRWRmGFe91uHklE2GHz06Huqvy2y+kmSC+m0UY?=
- =?iso-8859-1?Q?0GYYFBZC6t4/CbAHl5RUimDu+JEa7ZOTC2gFB5WuCZuaWT+kFkhK0q9pwJ?=
- =?iso-8859-1?Q?Ux7dWmNRxtSaLputB+PcfBnm7Lz6ygL7JQ0Bow8tRLNE/TNOZL9j3rcWSp?=
- =?iso-8859-1?Q?rMhbQ9TjNXy06Z/AYtBx+YsMohipAwQiXZdoy0VQVtXmBQ4AKAxSoJhgZ/?=
- =?iso-8859-1?Q?p4ge5jqsfR+n7qpQhnOMiv3nb86SvUDNTyJEnyMAO0eR+gywP2p11IAZX/?=
- =?iso-8859-1?Q?9csUGg7qqpCMi4jrTsKffwpRq5ms6I5WsmaDrTK3wl4GNqdmFtn5S1eU1e?=
- =?iso-8859-1?Q?z7LXTgys4sKI2vhAsMUvKrErcKpGdjqjiegvg8Yq8U9ivrtJc2hrMWwLcS?=
- =?iso-8859-1?Q?ED8OT2TPt0uuW8UH70k8/Bn4AZ2xmJw61KoO8+bUFqQ2mm1slCwirINbhQ?=
- =?iso-8859-1?Q?CuG1fB/1Fbq3eYz+Bbpe0AG3gQmi7hBX/ysbC3gsGpJfPwb7HkTo1rmnKr?=
- =?iso-8859-1?Q?pbgBEeryvJOn+UqzQOVO9wbTBvipNoIJA8+ky8iVTe/LH+7ABSjGDWuBy9?=
- =?iso-8859-1?Q?ygHuty6Y13S/BWvnqPL+FxgNUPJ9wyeDZAmasEihjqSomlHVjjCaA62Ptm?=
- =?iso-8859-1?Q?d1iNHyzk80txY46tbwlGdi4n/xtVDnaLFFrcQktcUly/CCzkltDNi8ufdP?=
- =?iso-8859-1?Q?5leQCt4+Li/3tl9KKmwTI43XX+09wMHLbysqcDGCzMAzBoqOD11mNNxhzD?=
- =?iso-8859-1?Q?8jWy6gMh8H5WZeipCja4c50yAQtuWiTgpZLBR1pVjpcuUIH6PrtXl/gaFK?=
- =?iso-8859-1?Q?nD91tj5qHHWWSSaJqEXdWt+T6mwMrfn6opRj7tgO5HoTmnEopXwrViQBJg?=
- =?iso-8859-1?Q?ENYnmlglsUxDT+TVHUK1o5HehX5pnnlq1oXnRGVK/gNfYI76jO1zh3KA7L?=
- =?iso-8859-1?Q?rC5hqpeisGER/zUAGTZWZGFczImX+x2o+pjOKaTeYQggzsyoG7jzcW5UFm?=
- =?iso-8859-1?Q?hZlD4tqkP8xgNVeHF9nhSLPY8MLmaPtmm1pJaWGE5blg+yBSTad8qq/F0r?=
- =?iso-8859-1?Q?j2U3gq5rqxrN0lXW/z3rtQ/G+8eWYBFszusgAx3lHr/M51e22elmdgxD9i?=
- =?iso-8859-1?Q?rDGtuF5d5vgaVq7HviIgku0tJg6x4qcFQv6zvECKaf7CeE10bVhI8oHOKf?=
- =?iso-8859-1?Q?cJWlD0il5tuspRScW0sXBuKlQ+YNZgalt1J0IYNpZXGaMJ5Lwhz2ohkajX?=
- =?iso-8859-1?Q?pkhRnG3zQidExeYk6788dKoBvJvEXpzxgNDaeJsFiq/8a2a2zhhBYabJUg?=
- =?iso-8859-1?Q?jm+5W50PWR7HdV8kxKyJJSVj8WCXDGXdRcxr1Ekx2sqiywCqVPQTqUcAn1?=
- =?iso-8859-1?Q?dPWt56BCNQuIW5JeBYIqIHfJO6xw5NKkM8q/RPOxAzjJdjohCy6TCOczhg?=
- =?iso-8859-1?Q?Hb4IZ14FFTlHpXSNT3eyquS6/RQIeeRCV1vz6+o+brQPLMyTScjiwtpwUR?=
- =?iso-8859-1?Q?BHUySU5eZUglNpmVclZ4aaua8/NDDhk/avIcLLJp72uqyYE03/oKERLWDy?=
- =?iso-8859-1?Q?AC3vYQRVhEO8u4mt6QwH3jXGL9+9JkuIwrWaKBsRvEXbIFoiEe/NfOYdg9?=
- =?iso-8859-1?Q?+A+eB3QYfi1stRwhHfHeOt/yJrN29T2pOwT8tkZEKYTH/CNIiynnjAMSI1?=
- =?iso-8859-1?Q?f8rhWuifecCHFuLbtb113kCYQaHRHL29p/VjKvGP39OCyezbqbUNjiJ3rf?=
- =?iso-8859-1?Q?W0TYqF53GuAUuDe/mZSEbPNus=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        id S1349517AbiAUQau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 11:30:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348692AbiAUQao (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 11:30:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6BFC06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 08:30:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29E2461908
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 16:30:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D363C340E1;
+        Fri, 21 Jan 2022 16:30:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642782643;
+        bh=NNaFq9JVvvEKdGzSI3riUqkr8doOjGfR3fuYtiCt27k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qjOoh63aPcrgLQzUyL4kcwXsj3f4B3yXPfVJtbyoglWCsyTqFUmxA7M2yePReBifY
+         StoObdgZGx81fcU32WgviMfa/AbHh5yc+RL/Ah9OFmWpskmOj63+EgYQCsElAVKuEd
+         t70LHRIKsX3+yRyl6Pz+HwgNPwmCEA24C+WNMjbdQ3lDM9Cyv8a7LjCoxWe5XS4dNa
+         acc5s6xycSiwjXOkVLR3ZgnZ4cUCLsGWFFR8FY8k91EQurz2MJ4XDbTSp/aU0nxh6t
+         BJJZ9FM95/YRklGm8Sy/81CyEsp38xMshE3O+GFc6NSPw6FSA6Y43cplNVOsXX0HSQ
+         dxXuBYgcVxPLw==
+Date:   Fri, 21 Jan 2022 16:30:39 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Detlev Casanova <detlev.casanova@collabora.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Subject: Re: [PATCH v2 8/9] regulator/rpi-panel-attiny: Don't read the LCD
+ power status
+Message-ID: <Yerfr8Nj43TTPcAF@sirena.org.uk>
+References: <20220121152056.2044551-1-detlev.casanova@collabora.com>
+ <20220121152056.2044551-9-detlev.casanova@collabora.com>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c612825-ed1d-4edd-1a81-08d9dcfb59c3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jan 2022 16:30:34.9715
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Bkk4TSf5fic2/0gtBI64AxNMxj3BXIFjV3BhIFAZr7GmP8hLGCZKytf0eMxWIre2QpoIt5frVk1sQ3NB84fel+uqVLhmsUL8uGLSBntnnFQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB3436
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="85hgKUAciUuFcJya"
+Content-Disposition: inline
+In-Reply-To: <20220121152056.2044551-9-detlev.casanova@collabora.com>
+X-Cookie: Alimony is the high cost of leaving.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that gettimeofday.S is unique, move cvdso_call macro
-into that file which is the only user.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/include/asm/vdso/gettimeofday.h | 52 +-------------------
- arch/powerpc/kernel/vdso/gettimeofday.S      | 44 ++++++++++++++++-
- 2 files changed, 45 insertions(+), 51 deletions(-)
+--85hgKUAciUuFcJya
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/powerpc/include/asm/vdso/gettimeofday.h b/arch/powerpc/include/asm/vdso/gettimeofday.h
-index df00e91c9a90..f0a4cf01e85c 100644
---- a/arch/powerpc/include/asm/vdso/gettimeofday.h
-+++ b/arch/powerpc/include/asm/vdso/gettimeofday.h
-@@ -2,57 +2,9 @@
- #ifndef _ASM_POWERPC_VDSO_GETTIMEOFDAY_H
- #define _ASM_POWERPC_VDSO_GETTIMEOFDAY_H
- 
--#include <asm/page.h>
--
--#ifdef __ASSEMBLY__
--
--#include <asm/ppc_asm.h>
--
--/*
-- * The macro sets two stack frames, one for the caller and one for the callee
-- * because there are no requirement for the caller to set a stack frame when
-- * calling VDSO so it may have omitted to set one, especially on PPC64
-- */
--
--.macro cvdso_call funct call_time=0
--  .cfi_startproc
--	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
--	mflr		r0
--  .cfi_register lr, r0
--	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
--	PPC_STL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
--#ifdef __powerpc64__
--	PPC_STL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
--#endif
--	get_datapage	r5
--	.ifeq	\call_time
--	addi		r5, r5, VDSO_DATA_OFFSET
--	.else
--	addi		r4, r5, VDSO_DATA_OFFSET
--	.endif
--	bl		DOTSYM(\funct)
--	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
--#ifdef __powerpc64__
--	PPC_LL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
--#endif
--	.ifeq	\call_time
--	cmpwi		r3, 0
--	.endif
--	mtlr		r0
--  .cfi_restore lr
--	addi		r1, r1, 2 * PPC_MIN_STKFRM
--	crclr		so
--	.ifeq	\call_time
--	beqlr+
--	crset		so
--	neg		r3, r3
--	.endif
--	blr
--  .cfi_endproc
--.endm
--
--#else
-+#ifndef __ASSEMBLY__
- 
-+#include <asm/page.h>
- #include <asm/vdso/timebase.h>
- #include <asm/barrier.h>
- #include <asm/unistd.h>
-diff --git a/arch/powerpc/kernel/vdso/gettimeofday.S b/arch/powerpc/kernel/vdso/gettimeofday.S
-index 397f290015bc..eb9c81e1c218 100644
---- a/arch/powerpc/kernel/vdso/gettimeofday.S
-+++ b/arch/powerpc/kernel/vdso/gettimeofday.S
-@@ -12,7 +12,49 @@
- #include <asm/vdso_datapage.h>
- #include <asm/asm-offsets.h>
- #include <asm/unistd.h>
--#include <asm/vdso/gettimeofday.h>
-+
-+/*
-+ * The macro sets two stack frames, one for the caller and one for the callee
-+ * because there are no requirement for the caller to set a stack frame when
-+ * calling VDSO so it may have omitted to set one, especially on PPC64
-+ */
-+
-+.macro cvdso_call funct call_time=0
-+  .cfi_startproc
-+	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
-+	mflr		r0
-+  .cfi_register lr, r0
-+	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
-+	PPC_STL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
-+#ifdef __powerpc64__
-+	PPC_STL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
-+#endif
-+	get_datapage	r5
-+	.ifeq	\call_time
-+	addi		r5, r5, VDSO_DATA_OFFSET
-+	.else
-+	addi		r4, r5, VDSO_DATA_OFFSET
-+	.endif
-+	bl		DOTSYM(\funct)
-+	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
-+#ifdef __powerpc64__
-+	PPC_LL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
-+#endif
-+	.ifeq	\call_time
-+	cmpwi		r3, 0
-+	.endif
-+	mtlr		r0
-+  .cfi_restore lr
-+	addi		r1, r1, 2 * PPC_MIN_STKFRM
-+	crclr		so
-+	.ifeq	\call_time
-+	beqlr+
-+	crset		so
-+	neg		r3, r3
-+	.endif
-+	blr
-+  .cfi_endproc
-+.endm
- 
- 	.text
- /*
--- 
-2.33.1
+On Fri, Jan 21, 2022 at 10:20:55AM -0500, Detlev Casanova wrote:
+> From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+>=20
+> The I2C to the Atmel is very fussy, and locks up easily on
+> Pi0-3 particularly on reads.
+>=20
+> The LCD power status is controlled solely by this driver, so
+> rather than reading it back from the Atmel, use the cached
+> status last set.
+
+If that's the case since you're using regmap would it not make sense to
+enable caching in order to minimise reads in general.
+
+--85hgKUAciUuFcJya
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHq364ACgkQJNaLcl1U
+h9D5Xgf/c5V0aHcwjdzV/GNB+4/G+ydNlB03YSE3Sc1QKmkNjfEJrzA9hNk0Wz4V
+rSukjVajHSNsXNAHvNqDMeq2ROqfhkmFCAnNRWKLh6ml7zHgHSuaD/4wXlo0a+Yp
+Qv2LaDQwONDH8+R2ORXcIvwd3l/dUgA3JHqVKmRnNz6PXDqe8oQOAg4CvgX0S2gP
+lm+pO+guhqpuiqsBo3kF+ZIlrxzI0e4x60c596ajG0hstrLXunL9YcqcWdqOTSk6
+rzoFhf7XhS5a+qncwQ3Cy7+knuK53rQDwDQoqmIEHt5zg9SDjY1GDTUghc62iN84
+47i+LEm+mQSRbu9VYJWi/IUztus8EA==
+=juuu
+-----END PGP SIGNATURE-----
+
+--85hgKUAciUuFcJya--

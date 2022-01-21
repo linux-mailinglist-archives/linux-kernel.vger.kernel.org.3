@@ -2,116 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D2649671C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 22:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8ECD496720
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 22:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbiAUVIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 16:08:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
+        id S232971AbiAUVJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 16:09:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiAUVIE (ORCPT
+        with ESMTP id S229587AbiAUVJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 16:08:04 -0500
+        Fri, 21 Jan 2022 16:09:09 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C5AC06173B;
-        Fri, 21 Jan 2022 13:08:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10F2C06173B;
+        Fri, 21 Jan 2022 13:09:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D4B1961826;
-        Fri, 21 Jan 2022 21:08:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97DFDC340E1;
-        Fri, 21 Jan 2022 21:08:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6010961827;
+        Fri, 21 Jan 2022 21:09:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D19CC340E1;
+        Fri, 21 Jan 2022 21:09:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642799283;
-        bh=JSwH3CoHMuKOzdCQyjvnOjnv4VABo5eagECSCEv0DFw=;
+        s=k20201202; t=1642799347;
+        bh=R9IH1HO9BhkurxhbfZ/tA3xkofYRaHlskaeE4j+DY68=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fJuYhIeYpjKrwmAzP4/A9YtY4ww1sryOnsjA/6uCgv5NiMtF11yg8csgxrwXWPc7k
-         B/iRmNT59ZZBJdyTO0mluPlfdLqnKM+WjJ7mEtX0ord2T0tcrL+24c/b+vO1fws0Ac
-         DRXl9wrwddOX5Co5erLeNGEYJ2hgLnVncIbnOPF3hAK28vvlLklFk+CI4CA2GvmUvB
-         3o2I77adCfuKd4Cdk8Z4ddy5Pj5fli6H1DfJmm65JjhIn+Mb31iAGQltDW1grKNyUk
-         KHw3NemoVGlgBn5dCxzP8S0+oiKVEBcDjguEvJPHsba7Es9I9gskaAqyxpgNA0au9Q
-         VRfizSnCTrv9w==
-Date:   Fri, 21 Jan 2022 22:07:57 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Terry Bowman <Terry.Bowman@amd.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        b=ebzQK3QhDgT/T2L/u8OlnNiGo3KbbTl6h5ztLuRo1EU0Nh4K9UOFn3pXR7raSTmaG
+         zE3L4EdP2ms0NyP6lev85hl9EIsezgehE/pUfqaLG0gXcC3+/2A+SjmPIbGa2sP1pk
+         bKGXZgtEWFaXVNC7112ut1J7kKrMo+Himt6b7mB9SFooC4k09b7wEelxbAQZ5aEyqE
+         JWLhRSyRXJUhUT8f3B/Ze08E0f7ZogB7WGNplgY5cWZndUY8Li3DPefIfG7mpRHxRj
+         KIP+WqjvZelxRCAkMN0e4ih4MMKnYbIwrlgRxeOztyM+sQ8S9ENjbX7yPWI81WI/RV
+         rafEKwoAeV3lA==
+Date:   Fri, 21 Jan 2022 13:09:05 -0800
+From:   Keith Busch <kbusch@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Sagi Grimberg <sagi@grimberg.me>, Christoph Hellwig <hch@lst.de>,
+        Len Brown <lenb@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Robert Richter <rrichter@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        sudheesh.mavila@amd.com,
-        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-Subject: Re: [PATCH v3 8/9] i2c: piix4: Add EFCH MMIO support for SMBus port
- select
-Message-ID: <YesgrUY/ekQmYsRz@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <Terry.Bowman@amd.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Robert Richter <rrichter@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, sudheesh.mavila@amd.com,
-        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-References: <20220119230626.31560-1-terry.bowman@amd.com>
- <20220119230626.31560-9-terry.bowman@amd.com>
- <CAHp75VcGmmRpRD99tFHd7WOPs6uyz3uWuTEoc=G+VmbPYAUvuA@mail.gmail.com>
- <846b8323-2ebb-90c1-d1df-b12a303206f3@amd.com>
+        m.heingbecker@googlemail.com,
+        linux-nvme <linux-nvme@lists.infradead.org>
+Subject: Re: [Bug] nvme blocks PC10 since v5.15 - bisected
+Message-ID: <20220121210905.GA1114868@dhcp-10-100-145-180.wdc.com>
+References: <CAJZ5v0hvvYedSn5u-i7sjpoEHU4P65t7i1b2pVn=S1q0nHWgqQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0gVTsJWDm3b+VhTS"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <846b8323-2ebb-90c1-d1df-b12a303206f3@amd.com>
+In-Reply-To: <CAJZ5v0hvvYedSn5u-i7sjpoEHU4P65t7i1b2pVn=S1q0nHWgqQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 21, 2022 at 08:00:49PM +0100, Rafael J. Wysocki wrote:
+> Hi Keith,
+> 
+> It is reported that the following commit
+> 
+> commit e5ad96f388b765fe6b52f64f37e910c0ba4f3de7
+> Author: Keith Busch <kbusch@kernel.org>
+> Date:   Tue Jul 27 09:40:44 2021 -0700
+> 
+>    nvme-pci: disable hmb on idle suspend
+> 
+>    An idle suspend may or may not disable host memory access from devices
+>    placed in low power mode. Either way, it should always be safe to
+>    disable the host memory buffer prior to entering the low power mode, and
+>    this should also always be faster than a full device shutdown.
+> 
+>    Signed-off-by: Keith Busch <kbusch@kernel.org>
+>    Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
+>    Signed-off-by: Christoph Hellwig <hch@lst.de>
+> 
+> is the source of a serious power regression occurring since 5.15
+> (please see https://bugzilla.kernel.org/show_bug.cgi?id=215467).
+> 
+> After this commit, the SoC on the affected system cannot enter
+> C-states deeper than PC2 while suspended to idle which basically
+> defeats the purpose of suspending.
+> 
+> What may be happening is that nvme_disable_prepare_reset() that is not
+> called any more in the ndev->nr_host_mem_descs case somehow causes the
+> LTR of the device to change to "no requirement" which allows deeper
+> C-states to be entered.
+> 
+> Can you have a look at this, please?
 
---0gVTsJWDm3b+VhTS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-
-> Looking at this closer I find the added line separates the closing=20
-> function brace from the next function's comment header. Are you sure I=20
-> need to remove this line?
-
-I agree you can leave it.
-
-
---0gVTsJWDm3b+VhTS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHrIKgACgkQFA3kzBSg
-Kbavyg/9GCUk1Sz4iZ8bX5qy7JmmVaD1+ofGFrA6gundM0dInlWRh5MeLpGY2uhF
-pEqGFvkm/5D3WlQgmqoUl47pBRXAAHppQ/EMCcNfnCvUjB2g0DD7ObrNlQhGMv1q
-MQyuzyVX1+v1m8yIFp4xSgeyVy3K6WRca3/9XBQmbCSugsRdp/fd+2A9GImKy37u
-KhFDfYWP/uxU5gGOie0XLy/3s2PB/1un6cxPCdUiZnG7cfkIwaqBOeUmt9PoLG5I
-BKQAGS2QRa6d6s2eaii5NEf+P4S5GVrAeqbo0DhmEWO906lWXnn2DEw2Enrq3tfB
-T6GPB9UbOjBLM8ejx7rgvs5ha2UQPMHQuZIIAgSnt7QzB6WQ5Tu9HsjVYZozdQST
-l5PGgJ2BT6uhIdC8fXW1yf8NUwP7icu6lvSje6D4itNegMluzVv/NrJ5Umzr1/Js
-HwjqZkpBoGIBtUPL3Tx7Q4JtfOmFSpjcZxB0ZcM3hXzoXBkKia1V9B6JAnVY70dk
-nL5zGYLtMqMqnsxBPn1d3j5n5u0qXgljMNr42+wXT3GxbaW1W3SmhnMD6pdzTgdr
-/QhnpCzB09VN8lNYlnRd87VuM1naTwHPBgp5B982ujeqZII7p+9XDWPPilDXZaSc
-fbCaYj765fNnyldY0Er8sFI/KTj1nhJ6EFZ2pp2PUBBEx1Df9fg=
-=Yp5P
------END PGP SIGNATURE-----
-
---0gVTsJWDm3b+VhTS--
+I thought platforms that wanted full device shutdown  behaviour would
+always set acpi_storage_d3. Is that not happening here?

@@ -2,15 +2,15 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0FC495B42
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80364495B66
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379217AbiAUH4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 02:56:08 -0500
-Received: from mx1.cqplus1.com ([113.204.237.245]:55554 "EHLO mx1.cqplus1.com"
+        id S1349304AbiAUH6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 02:58:10 -0500
+Received: from mx1.cqplus1.com ([113.204.237.245]:55858 "EHLO mx1.cqplus1.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1379189AbiAUH4B (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 02:56:01 -0500
+        id S1349256AbiAUH6H (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 02:58:07 -0500
 X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
         LIVER,40,3)
 Received: from 172.28.114.216
@@ -24,9 +24,9 @@ Cc:     mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         wells.lu@sunplus.com, Qin Jian <qinjian@cqplus1.com>
-Subject: [PATCH v8 04/10] reset: Add Sunplus SP7021 reset driver
-Date:   Fri, 21 Jan 2022 15:53:12 +0800
-Message-Id: <d962524ec4379482740caa45fc7605747de3b4b1.1642751015.git.qinjian@cqplus1.com>
+Subject: [PATCH v8 05/10] dt-bindings: clock: Add bindings for SP7021 clock driver
+Date:   Fri, 21 Jan 2022 15:53:13 +0800
+Message-Id: <504303c7cf92af8368dcda0cdde3b9c15a833418.1642751015.git.qinjian@cqplus1.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1642751015.git.qinjian@cqplus1.com>
 References: <cover.1642751015.git.qinjian@cqplus1.com>
@@ -36,198 +36,210 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add reset driver for Sunplus SP7021 SoC.
+Add documentation to describe Sunplus SP7021 clock driver bindings.
 
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 Signed-off-by: Qin Jian <qinjian@cqplus1.com>
 ---
- MAINTAINERS                   |   1 +
- drivers/reset/Kconfig         |   9 +++
- drivers/reset/Makefile        |   1 +
- drivers/reset/reset-sunplus.c | 130 ++++++++++++++++++++++++++++++++++
- 4 files changed, 141 insertions(+)
- create mode 100644 drivers/reset/reset-sunplus.c
+Add clocks & clock-names.
+---
+ .../bindings/clock/sunplus,sp7021-clkc.yaml   |  52 ++++++++
+ MAINTAINERS                                   |   2 +
+ include/dt-bindings/clock/sp-sp7021.h         | 112 ++++++++++++++++++
+ 3 files changed, 166 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+ create mode 100644 include/dt-bindings/clock/sp-sp7021.h
 
+diff --git a/Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml b/Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+new file mode 100644
+index 000000000..e6d098cf4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+@@ -0,0 +1,52 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) Sunplus Co., Ltd. 2021
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/sunplus,sp7021-clkc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Sunplus SP7021 SoC Clock Controller Binding
++
++maintainers:
++  - Qin Jian <qinjian@cqplus1.com>
++
++properties:
++  compatible:
++    const: sunplus,sp7021-clkc
++
++  "#clock-cells":
++    const: 1
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: External oscillator clock
++      - description: System clock
++
++  clock-names:
++    items:
++      - const: extclk
++      - const: pllsys
++
++required:
++  - compatible
++  - "#clock-cells"
++  - reg
++  - clocks
++  - clock-names
++
++additionalProperties: false
++
++examples:
++  - |
++    clkc: clock-controller@9c000000 {
++      compatible = "sunplus,sp7021-clkc";
++      #clock-cells = <1>;
++      reg = <0x9c000000 0x280>;
++      clocks = <&extclk>, <&clkc PLL_SYS>;
++      clock-names = "extclk", "pllsys";
++    };
++
++...
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 652f42cab..6caffd6d0 100644
+index 6caffd6d0..90ebb823f 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -2662,6 +2662,7 @@ S:	Maintained
+@@ -2661,8 +2661,10 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for mon-subscribers)
+ S:	Maintained
  W:	https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
  F:	Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
++F:	Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
  F:	Documentation/devicetree/bindings/reset/sunplus,reset.yaml
-+F:	drivers/reset/reset-sunplus.c
+ F:	drivers/reset/reset-sunplus.c
++F:	include/dt-bindings/clock/sp-sp7021.h
  F:	include/dt-bindings/reset/sp-sp7021.h
  
  ARM/Synaptics SoC support
-diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-index be799a5ab..fb14456a8 100644
---- a/drivers/reset/Kconfig
-+++ b/drivers/reset/Kconfig
-@@ -224,6 +224,15 @@ config RESET_SOCFPGA
- 	  This enables the reset driver for the SoCFPGA ARMv7 platforms. This
- 	  driver gets initialized early during platform init calls.
- 
-+config RESET_SUNPLUS
-+	bool "Sunplus SoCs Reset Driver" if COMPILE_TEST
-+	default ARCH_SUNPLUS
-+	help
-+	  This enables the reset driver support for Sunplus SoCs.
-+	  The reset lines that can be asserted and deasserted by toggling bits
-+	  in a contiguous, exclusive register space. The register is HIWORD_MASKED,
-+	  which means each register hold 16 reset lines.
-+
- config RESET_SUNXI
- 	bool "Allwinner SoCs Reset Driver" if COMPILE_TEST && !ARCH_SUNXI
- 	default ARCH_SUNXI
-diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
-index 21d46d886..f03403e97 100644
---- a/drivers/reset/Makefile
-+++ b/drivers/reset/Makefile
-@@ -29,6 +29,7 @@ obj-$(CONFIG_RESET_RZG2L_USBPHY_CTRL) += reset-rzg2l-usbphy-ctrl.o
- obj-$(CONFIG_RESET_SCMI) += reset-scmi.o
- obj-$(CONFIG_RESET_SIMPLE) += reset-simple.o
- obj-$(CONFIG_RESET_SOCFPGA) += reset-socfpga.o
-+obj-$(CONFIG_RESET_SUNPLUS) += reset-sunplus.o
- obj-$(CONFIG_RESET_SUNXI) += reset-sunxi.o
- obj-$(CONFIG_RESET_TI_SCI) += reset-ti-sci.o
- obj-$(CONFIG_RESET_TI_SYSCON) += reset-ti-syscon.o
-diff --git a/drivers/reset/reset-sunplus.c b/drivers/reset/reset-sunplus.c
+diff --git a/include/dt-bindings/clock/sp-sp7021.h b/include/dt-bindings/clock/sp-sp7021.h
 new file mode 100644
-index 000000000..113b36b57
+index 000000000..45dac6de8
 --- /dev/null
-+++ b/drivers/reset/reset-sunplus.c
-@@ -0,0 +1,130 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++++ b/include/dt-bindings/clock/sp-sp7021.h
+@@ -0,0 +1,112 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
 +/*
-+ * SP7021 reset driver
-+ *
 + * Copyright (C) Sunplus Technology Co., Ltd.
 + *       All rights reserved.
 + */
++#ifndef _DT_BINDINGS_CLOCK_SUNPLUS_SP7021_H
++#define _DT_BINDINGS_CLOCK_SUNPLUS_SP7021_H
 +
-+#include <linux/io.h>
-+#include <linux/init.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/platform_device.h>
-+#include <linux/reset-controller.h>
-+#include <linux/reboot.h>
++#define XTAL			27000000
 +
-+/* HIWORD_MASK_REG BITS */
-+#define BITS_PER_HWM_REG	16
++/* plls */
++#define PLL_A			0
++#define PLL_E			1
++#define PLL_E_2P5		2
++#define PLL_E_25		3
++#define PLL_E_112P5		4
++#define PLL_F			5
++#define PLL_TV			6
++#define PLL_TV_A		7
++#define PLL_SYS			8
 +
-+struct sp_reset {
-+	struct reset_controller_dev rcdev;
-+	struct notifier_block notifier;
-+	void __iomem *base;
-+};
++/* gates: mo_clken0 ~ mo_clken9 */
++#define CLK_SYSTEM		0x10
++#define CLK_RTC			0x12
++#define CLK_IOCTL		0x13
++#define CLK_IOP			0x14
++#define CLK_OTPRX		0x15
++#define CLK_NOC			0x16
++#define CLK_BR			0x17
++#define CLK_RBUS_L00	        0x18
++#define CLK_SPIFL		0x19
++#define CLK_SDCTRL0		0x1a
++#define CLK_PERI0		0x1b
++#define CLK_A926		0x1d
++#define CLK_UMCTL2		0x1e
++#define CLK_PERI1		0x1f
 +
-+static inline struct sp_reset *to_sp_reset(struct reset_controller_dev *rcdev)
-+{
-+	return container_of(rcdev, struct sp_reset, rcdev);
-+}
++#define CLK_DDR_PHY0	        0x20
++#define CLK_ACHIP		0x22
++#define CLK_STC0		0x24
++#define CLK_STC_AV0		0x25
++#define CLK_STC_AV1		0x26
++#define CLK_STC_AV2		0x27
++#define CLK_UA0			0x28
++#define CLK_UA1			0x29
++#define CLK_UA2			0x2a
++#define CLK_UA3			0x2b
++#define CLK_UA4			0x2c
++#define CLK_HWUA		0x2d
++#define CLK_DDC0		0x2e
++#define CLK_UADMA		0x2f
 +
-+static int sp_reset_update(struct reset_controller_dev *rcdev,
-+			   unsigned long id, bool assert)
-+{
-+	struct sp_reset *reset = to_sp_reset(rcdev);
-+	int index = id / BITS_PER_HWM_REG;
-+	int shift = id % BITS_PER_HWM_REG;
-+	u32 val;
++#define CLK_CBDMA0		0x30
++#define CLK_CBDMA1		0x31
++#define CLK_SPI_COMBO_0	        0x32
++#define CLK_SPI_COMBO_1	        0x33
++#define CLK_SPI_COMBO_2	        0x34
++#define CLK_SPI_COMBO_3	        0x35
++#define CLK_AUD			0x36
++#define CLK_USBC0		0x3a
++#define CLK_USBC1		0x3b
++#define CLK_UPHY0		0x3d
++#define CLK_UPHY1		0x3e
 +
-+	val = (1 << (16 + shift)) | (assert << shift);
-+	writel(val, reset->base + (index * 4));
++#define CLK_I2CM0		0x40
++#define CLK_I2CM1		0x41
++#define CLK_I2CM2		0x42
++#define CLK_I2CM3		0x43
++#define CLK_PMC			0x4d
++#define CLK_CARD_CTL0	        0x4e
++#define CLK_CARD_CTL1	        0x4f
 +
-+	return 0;
-+}
++#define CLK_CARD_CTL4	        0x52
++#define CLK_BCH			0x54
++#define CLK_DDFCH		0x5b
++#define CLK_CSIIW0		0x5c
++#define CLK_CSIIW1		0x5d
++#define CLK_MIPICSI0	        0x5e
++#define CLK_MIPICSI1	        0x5f
 +
-+static int sp_reset_assert(struct reset_controller_dev *rcdev,
-+			   unsigned long id)
-+{
-+	return sp_reset_update(rcdev, id, true);
-+}
++#define CLK_HDMI_TX		0x60
++#define CLK_VPOST		0x65
 +
-+static int sp_reset_deassert(struct reset_controller_dev *rcdev,
-+			     unsigned long id)
-+{
-+	return sp_reset_update(rcdev, id, false);
-+}
++#define CLK_TGEN		0x70
++#define CLK_DMIX		0x71
++#define CLK_TCON		0x7a
++#define CLK_INTERRUPT	        0x7f
 +
-+static int sp_reset_status(struct reset_controller_dev *rcdev,
-+			   unsigned long id)
-+{
-+	struct sp_reset *reset = to_sp_reset(rcdev);
-+	int index = id / BITS_PER_HWM_REG;
-+	int shift = id % BITS_PER_HWM_REG;
-+	u32 reg;
++#define CLK_RGST		0x80
++#define CLK_GPIO		0x83
++#define CLK_RBUS_TOP	        0x84
 +
-+	reg = readl(reset->base + (index * 4));
++#define CLK_MAILBOX		0x96
++#define CLK_SPIND		0x9a
++#define CLK_I2C2CBUS	        0x9b
++#define CLK_SEC			0x9d
++#define CLK_DVE			0x9e
++#define CLK_GPOST0		0x9f
 +
-+	return !!(reg & BIT(shift));
-+}
++#define CLK_OSD0		0xa0
++#define CLK_DISP_PWM	        0xa2
++#define CLK_UADBG		0xa3
++#define CLK_DUMMY_MASTER	0xa4
++#define CLK_FIO_CTL		0xa5
++#define CLK_FPGA		0xa6
++#define CLK_L2SW		0xa7
++#define CLK_ICM			0xa8
++#define CLK_AXI_GLOBAL	        0xa9
 +
-+static const struct reset_control_ops sp_reset_ops = {
-+	.assert   = sp_reset_assert,
-+	.deassert = sp_reset_deassert,
-+	.status   = sp_reset_status,
-+};
++#define CLK_MAX			0xb0
 +
-+static int sp_restart(struct notifier_block *nb, unsigned long mode,
-+		      void *cmd)
-+{
-+	struct sp_reset *reset = container_of(nb, struct sp_reset, notifier);
-+
-+	sp_reset_assert(&reset->rcdev, 0);
-+	sp_reset_deassert(&reset->rcdev, 0);
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static int sp_reset_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct sp_reset *reset;
-+	struct resource *res;
-+	int ret;
-+
-+	reset = devm_kzalloc(dev, sizeof(*reset), GFP_KERNEL);
-+	if (!reset)
-+		return -ENOMEM;
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	reset->base = devm_ioremap_resource(dev, res);
-+	if (IS_ERR(reset->base))
-+		return PTR_ERR(reset->base);
-+
-+	reset->rcdev.ops = &sp_reset_ops;
-+	reset->rcdev.owner = THIS_MODULE;
-+	reset->rcdev.of_node = dev->of_node;
-+	reset->rcdev.nr_resets = resource_size(res) / 4 * BITS_PER_HWM_REG;
-+
-+	ret = devm_reset_controller_register(dev, &reset->rcdev);
-+	if (ret)
-+		return ret;
-+
-+	reset->notifier.notifier_call = sp_restart;
-+	reset->notifier.priority = 192;
-+
-+	return register_restart_handler(&reset->notifier);
-+}
-+
-+static const struct of_device_id sp_reset_dt_ids[] = {
-+	{.compatible = "sunplus,sp7021-reset",},
-+	{ /* sentinel */ },
-+};
-+
-+static struct platform_driver sp_reset_driver = {
-+	.probe = sp_reset_probe,
-+	.driver = {
-+		.name			= "sunplus-reset",
-+		.of_match_table		= sp_reset_dt_ids,
-+		.suppress_bind_attrs	= true,
-+	},
-+};
-+builtin_platform_driver(sp_reset_driver);
++#endif
 -- 
 2.33.1
 

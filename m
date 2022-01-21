@@ -2,149 +2,355 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 668A4495F3F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 13:47:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52473495F42
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 13:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380460AbiAUMrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 07:47:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49140 "EHLO
+        id S1380468AbiAUMs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 07:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244399AbiAUMrS (ORCPT
+        with ESMTP id S1380466AbiAUMs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 07:47:18 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD558C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 04:47:17 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id r132-20020a1c448a000000b0034e043aaac7so4830233wma.5
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 04:47:17 -0800 (PST)
+        Fri, 21 Jan 2022 07:48:26 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC2BC061574
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 04:48:25 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id z14so4022ljc.13
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 04:48:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=KSIxsFPV5bVCwyYpPb8wil0j/b7MlVv5okHNBdZvb+s=;
-        b=prZs3CnccQtpraXzDMyfAnnmDi3yi6DOvIX1O4I5Q+pMyvQOytbx7Kr7II79SCyfCA
-         k6W+BskGtZBjaDa+Y82fAIISYK4L9B7riP26eFan0MSrVkV29q/YgWRtYRSqneBtkB6h
-         i4dd1Wb7OBRRnH/RjVP2zs+QBJdFFZOmIPInK8Senk8Q8pjzojGK6MfOh1Ojy8cIElo8
-         PFKa1dRCK3yXGf0e7ynFi+WEs49Bj6Ydot/YSWVHJM3kIxl1/UopW+JMZrJJKLNXty7r
-         uX8FUvII/MeeDS0cc/RXqZmiC0IacZj5ubW7owphGuFmH460scZ/sE+a7+ry9gpdwOZG
-         GQ7A==
+        bh=gMI6tFAhrWQ/QTXAF2pjU0s+5/Wmir25gNKAr0dT2Lw=;
+        b=rkcrAoruNuj1tGX1u0hXxm+wZvxFunNCOgSTZ12PmRt2Rfic9aB4RWcxgz96YzMytu
+         8WZuq1NYMfpLLfZSKlJH6oF3NCdqzRXaVHu4l846jZp/eSKSF0dKiuLYaUVk6HFEnCiM
+         lRqsDtJae5TJT93YqXdLFApkOtgRPWNXju0xeKs/8YizX34AZfGTQP2UaBv54QCi3TfZ
+         +YL+/dV1UpPk5pj5FNBlF+ZI2ZL0sT/V6Cgcg4/9xksDx13H+modB1Q4l7N5a2ZPgZ3x
+         LT2fTsljhOzJKJslweXvQ2OQcYPacpFSrBtxuJXXTsZeQQEs3CwAfROAr6e9TZaCM3JQ
+         mAJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=KSIxsFPV5bVCwyYpPb8wil0j/b7MlVv5okHNBdZvb+s=;
-        b=JZIA+Ikje7lX2jyxR5LYuBuQrpxKr+KTTBt0jloiXf9nPcep4tGprk0z0oMhUZ1PjE
-         X0L8AFY5/WLfqVkyTD6Q/OyOWiKuHq1QgLXqm51ddkMMXMxBnGb/9PR5AOUOc+76qFEy
-         XFYQFDuROI6Tx5e8dUNoPiZkVWsGYk9NpOxk2RBmugcrGSZBOOPrHkzPaftWvMutdatq
-         /MVA5l1KMQppNSSJ0QzNCHVqVseHe7T/Vf4H3aLKtyJSdQlA5A/V/vDT6KHWLSvh4daC
-         iHyfcNxAuV27/kcPLksFZYIKPTVo38MoNs8jHP6swz7TWABSDOxpQL/azeJdCTVWWgjb
-         O95A==
-X-Gm-Message-State: AOAM532a211BV0pLYBd+x1QmuDXQbXwdklbCB2x+RR2TtQ5mRwyRCqMd
-        I/wNCA/up6+8TlnophqWLI1Pc5apDvmlKESHXqIs6IeYHhcY1Q==
-X-Google-Smtp-Source: ABdhPJx9RWgi14LgNBLUN6n8Ket2m99+2j6IGdbR+86/UqQonas9n8/TuXSgPK0B3Be1ctB3wc0zX/vPYlOXGjAJ1gw=
-X-Received: by 2002:a05:600c:4f4d:: with SMTP id m13mr588843wmq.153.1642769236393;
- Fri, 21 Jan 2022 04:47:16 -0800 (PST)
+        bh=gMI6tFAhrWQ/QTXAF2pjU0s+5/Wmir25gNKAr0dT2Lw=;
+        b=GPWf5Uiq7L/FvbrjFqSS2G5J8VztPpaiJzxgJsPl88OJdW4Vdl8BtO32mfaT2xfvBj
+         tjbH42svu6FbUXIcGtbyPrXruUBDEi/BRhVi2PEuIKsmcZjanfAacKn4sCXCIPL7VLpr
+         6Ajt/OcDbC7Ka7301U6Jf4upzgkPzoX7ZCyb7mjGQa7b/2mufeEXpJir8KX8XRGddVCi
+         725YhovD1foF60QPwT1ucE8V7mkx3goNfzmfGQ2kwA38wqZXt0DABQv7Y/Smvq7KJgPt
+         hoG8TyUZT0tQ6g2yYklILzoXPyr8P9Q0/5QxKN4gL7OZ0Ga/4OJRYOrJUG3BCOQpM0Wa
+         sk2g==
+X-Gm-Message-State: AOAM5334QEyG45fydjvHvJMMo9eSvfc2v81zZ+fKru7OSpuJl0WcNHbn
+        Wdh1pgj4ZrSEibkgMqiTpjrBBrMXUhdsHNO0fvlvUQ==
+X-Google-Smtp-Source: ABdhPJyhT6hnaPh4Qf1zX5pvzKH2ks/ZrKkyQ6x+ZHPzPooR10FMCFRJiBgSh1RixgYZnZyuVoPtred7+Z2Le+a/2Js=
+X-Received: by 2002:a2e:8797:: with SMTP id n23mr3259107lji.133.1642769304128;
+ Fri, 21 Jan 2022 04:48:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20220113091056.1297982-1-james.clark@arm.com> <20220113091056.1297982-5-james.clark@arm.com>
-In-Reply-To: <20220113091056.1297982-5-james.clark@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Fri, 21 Jan 2022 12:47:05 +0000
-Message-ID: <CAJ9a7Vj7=WPTZD_oWtXaZBUWbHpKbPti7CXMviUdd+ueKbpAMw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] Documentation: coresight: Turn numbered
- subsections into real subsections
-To:     James Clark <James.Clark@arm.com>
-Cc:     suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
-        coresight@lists.linaro.org, leo.yan@linaro.com,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+References: <20220114150824.3578829-1-jens.wiklander@linaro.org> <20220114150824.3578829-7-jens.wiklander@linaro.org>
+In-Reply-To: <20220114150824.3578829-7-jens.wiklander@linaro.org>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Fri, 21 Jan 2022 18:18:12 +0530
+Message-ID: <CAFA6WYNMYZTiaj4WUT=x6-XHu9tWwf2EefGx6fKfVUJ=BNYyOw@mail.gmail.com>
+Subject: Re: [PATCH v2 06/12] optee: add driver private tee_context
+To:     Jens Wiklander <jens.wiklander@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
+        Rijo Thomas <Rijo-john.Thomas@amd.com>,
+        David Howells <dhowells@redhat.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Mike Leach <mike.leach@linaro.org>
-
-On Thu, 13 Jan 2022 at 09:11, James Clark <james.clark@arm.com> wrote:
+On Fri, 14 Jan 2022 at 20:38, Jens Wiklander <jens.wiklander@linaro.org> wrote:
 >
-> This is to allow them to be referenced in a later commit. There was
-> also a mistake where sysFS was introduced as section 2, but numbered
-> as section 1. And vice versa for 'Using perf framework'. This can't
-> happen with unnumbered sections.
+> Adds a driver private tee_context by moving the tee_context in struct
+> optee_notif to struct optee. This tee_context is used when doing
+> internal calls to secure world to deliver notification and later also
+> when sharing driver private memory with secure world.
 >
-> Signed-off-by: James Clark <james.clark@arm.com>
+> Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
 > ---
->  Documentation/trace/coresight/coresight.rst | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
+>  drivers/tee/optee/core.c          |  1 +
+>  drivers/tee/optee/ffa_abi.c       | 61 ++++++++++++++++++-------------
+>  drivers/tee/optee/optee_private.h |  5 ++-
+>  drivers/tee/optee/smc_abi.c       | 40 ++++++--------------
+>  4 files changed, 51 insertions(+), 56 deletions(-)
 >
-> diff --git a/Documentation/trace/coresight/coresight.rst b/Documentation/trace/coresight/coresight.rst
-> index a15571d96cc8..db66ff45ff4c 100644
-> --- a/Documentation/trace/coresight/coresight.rst
-> +++ b/Documentation/trace/coresight/coresight.rst
-> @@ -339,7 +339,8 @@ Preference is given to the former as using the sysFS interface
->  requires a deep understanding of the Coresight HW.  The following sections
->  provide details on using both methods.
+
+After looking at this patch, it looks like there is a need for some
+more refactoring to pick out common probe functionality from both ABIs
+and add optee_probe_common(). If it was there earlier, this patch
+would mostly be modifying the OP-TEE core file apart from
+notifications stuff.
+
+I would leave it upto you to have a refactoring patch before and then
+changes in this patch or vice-versa.
+
+-Sumit
+
+> diff --git a/drivers/tee/optee/core.c b/drivers/tee/optee/core.c
+> index 2a369e346b85..f4bccb5f0e93 100644
+> --- a/drivers/tee/optee/core.c
+> +++ b/drivers/tee/optee/core.c
+> @@ -161,6 +161,7 @@ void optee_remove_common(struct optee *optee)
+>         optee_unregister_devices();
 >
-> -1) Using the sysFS interface:
-> +Using the sysFS interface
-> +~~~~~~~~~~~~~~~~~~~~~~~~~
+>         optee_notif_uninit(optee);
+> +       teedev_close_context(optee->ctx);
+>         /*
+>          * The two devices have to be unregistered before we can free the
+>          * other resources.
+> diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
+> index 18963f7e4d48..88a028d4fb7b 100644
+> --- a/drivers/tee/optee/ffa_abi.c
+> +++ b/drivers/tee/optee/ffa_abi.c
+> @@ -766,7 +766,9 @@ static int optee_ffa_probe(struct ffa_device *ffa_dev)
+>  {
+>         const struct ffa_dev_ops *ffa_ops;
+>         unsigned int rpc_arg_count;
+> +       struct tee_shm_pool *pool;
+>         struct tee_device *teedev;
+> +       struct tee_context *ctx;
+>         struct optee *optee;
+>         int rc;
 >
->  Before trace collection can start, a coresight sink needs to be identified.
->  There is no limit on the amount of sinks (nor sources) that can be enabled at
-> @@ -446,7 +447,8 @@ wealth of possibilities that coresight provides.
->      Instruction     0       0x8026B588      E8BD8000        true    LDM      sp!,{pc}
->      Timestamp                                       Timestamp: 17107041535
+> @@ -786,12 +788,12 @@ static int optee_ffa_probe(struct ffa_device *ffa_dev)
+>         if (!optee)
+>                 return -ENOMEM;
 >
-> -2) Using perf framework:
-> +Using perf framework
-> +~~~~~~~~~~~~~~~~~~~~
+> -       optee->pool = optee_ffa_shm_pool_alloc_pages();
+> -       if (IS_ERR(optee->pool)) {
+> -               rc = PTR_ERR(optee->pool);
+> -               optee->pool = NULL;
+> -               goto err;
+> +       pool = optee_ffa_shm_pool_alloc_pages();
+> +       if (IS_ERR(pool)) {
+> +               rc = PTR_ERR(pool);
+> +               goto err_free_optee;
+>         }
+> +       optee->pool = pool;
 >
->  Coresight tracers are represented using the Perf framework's Performance
->  Monitoring Unit (PMU) abstraction.  As such the perf framework takes charge of
-> @@ -495,7 +497,11 @@ More information on the above and other example on how to use Coresight with
->  the perf tools can be found in the "HOWTO.md" file of the openCSD gitHub
->  repository [#third]_.
+>         optee->ops = &optee_ffa_ops;
+>         optee->ffa.ffa_dev = ffa_dev;
+> @@ -802,7 +804,7 @@ static int optee_ffa_probe(struct ffa_device *ffa_dev)
+>                                   optee);
+>         if (IS_ERR(teedev)) {
+>                 rc = PTR_ERR(teedev);
+> -               goto err;
+> +               goto err_free_pool;
+>         }
+>         optee->teedev = teedev;
 >
-> -2.1) AutoFDO analysis using the perf tools:
-> +Advanced perf framework usage
-> +-----------------------------
+> @@ -810,50 +812,57 @@ static int optee_ffa_probe(struct ffa_device *ffa_dev)
+>                                   optee);
+>         if (IS_ERR(teedev)) {
+>                 rc = PTR_ERR(teedev);
+> -               goto err;
+> +               goto err_unreg_teedev;
+>         }
+>         optee->supp_teedev = teedev;
+>
+>         rc = tee_device_register(optee->teedev);
+>         if (rc)
+> -               goto err;
+> +               goto err_unreg_supp_teedev;
+>
+>         rc = tee_device_register(optee->supp_teedev);
+>         if (rc)
+> -               goto err;
+> +               goto err_unreg_supp_teedev;
+>
+>         rc = rhashtable_init(&optee->ffa.global_ids, &shm_rhash_params);
+>         if (rc)
+> -               goto err;
+> +               goto err_unreg_supp_teedev;
+>         mutex_init(&optee->ffa.mutex);
+>         mutex_init(&optee->call_queue.mutex);
+>         INIT_LIST_HEAD(&optee->call_queue.waiters);
+>         optee_supp_init(&optee->supp);
+>         ffa_dev_set_drvdata(ffa_dev, optee);
+> +       ctx = teedev_open(optee->teedev);
+> +       if (IS_ERR(ctx))
+> +               goto err_rhashtable_free;
+> +       optee->ctx = ctx;
+>         rc = optee_notif_init(optee, OPTEE_DEFAULT_MAX_NOTIF_VALUE);
+> -       if (rc) {
+> -               optee_ffa_remove(ffa_dev);
+> -               return rc;
+> -       }
+> +       if (rc)
+> +               goto err_close_ctx;
+>
+>         rc = optee_enumerate_devices(PTA_CMD_GET_DEVICES);
+> -       if (rc) {
+> -               optee_ffa_remove(ffa_dev);
+> -               return rc;
+> -       }
+> +       if (rc)
+> +               goto err_unregister_devices;
+>
+>         pr_info("initialized driver\n");
+>         return 0;
+> -err:
+> -       /*
+> -        * tee_device_unregister() is safe to call even if the
+> -        * devices hasn't been registered with
+> -        * tee_device_register() yet.
+> -        */
 > +
-> +AutoFDO analysis using the perf tools
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +err_unregister_devices:
+> +       optee_unregister_devices();
+> +       optee_notif_uninit(optee);
+> +err_close_ctx:
+> +       teedev_close_context(ctx);
+> +err_rhashtable_free:
+> +       rhashtable_free_and_destroy(&optee->ffa.global_ids, rh_free_fn, NULL);
+> +       optee_supp_uninit(&optee->supp);
+> +       mutex_destroy(&optee->call_queue.mutex);
+> +err_unreg_supp_teedev:
+>         tee_device_unregister(optee->supp_teedev);
+> +err_unreg_teedev:
+>         tee_device_unregister(optee->teedev);
+> -       if (optee->pool)
+> -               tee_shm_pool_free(optee->pool);
+> +err_free_pool:
+> +       tee_shm_pool_free(pool);
+> +err_free_optee:
+>         kfree(optee);
+>         return rc;
+>  }
+> diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
+> index df2450921464..df3a483bbf46 100644
+> --- a/drivers/tee/optee/optee_private.h
+> +++ b/drivers/tee/optee/optee_private.h
+> @@ -53,7 +53,6 @@ struct optee_call_queue {
 >
->  perf can be used to record and analyze trace of programs.
+>  struct optee_notif {
+>         u_int max_key;
+> -       struct tee_context *ctx;
+>         /* Serializes access to the elements below in this struct */
+>         spinlock_t lock;
+>         struct list_head db;
+> @@ -134,9 +133,10 @@ struct optee_ops {
+>  /**
+>   * struct optee - main service struct
+>   * @supp_teedev:       supplicant device
+> + * @teedev:            client device
+>   * @ops:               internal callbacks for different ways to reach secure
+>   *                     world
+> - * @teedev:            client device
+> + * @ctx:               driver internal TEE context
+>   * @smc:               specific to SMC ABI
+>   * @ffa:               specific to FF-A ABI
+>   * @call_queue:                queue of threads waiting to call @invoke_fn
+> @@ -152,6 +152,7 @@ struct optee {
+>         struct tee_device *supp_teedev;
+>         struct tee_device *teedev;
+>         const struct optee_ops *ops;
+> +       struct tee_context *ctx;
+>         union {
+>                 struct optee_smc smc;
+>                 struct optee_ffa ffa;
+> diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+> index 196cd4316d7d..1dbb13b08381 100644
+> --- a/drivers/tee/optee/smc_abi.c
+> +++ b/drivers/tee/optee/smc_abi.c
+> @@ -952,57 +952,34 @@ static irqreturn_t notif_irq_thread_fn(int irq, void *dev_id)
+>  {
+>         struct optee *optee = dev_id;
 >
-> @@ -513,7 +519,8 @@ The --itrace option controls the type and frequency of synthesized events
->  Note that only 64-bit programs are currently supported - further work is
->  required to support instruction decode of 32-bit Arm programs.
+> -       optee_smc_do_bottom_half(optee->notif.ctx);
+> +       optee_smc_do_bottom_half(optee->ctx);
 >
-> -2.2) Tracing PID
-> +Tracing PID
-> +~~~~~~~~~~~
+>         return IRQ_HANDLED;
+>  }
 >
->  The kernel can be built to write the PID value into the PE ContextID registers.
->  For a kernel running at EL1, the PID is stored in CONTEXTIDR_EL1.  A PE may
-> @@ -547,7 +554,7 @@ wants to trace PIDs for both host and guest, the two configs "contextid1" and
+>  static int optee_smc_notif_init_irq(struct optee *optee, u_int irq)
+>  {
+> -       struct tee_context *ctx;
+>         int rc;
 >
+> -       ctx = teedev_open(optee->teedev);
+> -       if (IS_ERR(ctx))
+> -               return PTR_ERR(ctx);
+> -
+> -       optee->notif.ctx = ctx;
+>         rc = request_threaded_irq(irq, notif_irq_handler,
+>                                   notif_irq_thread_fn,
+>                                   0, "optee_notification", optee);
+>         if (rc)
+> -               goto err_close_ctx;
+> +               return rc;
 >
->  Generating coverage files for Feedback Directed Optimization: AutoFDO
-> ----------------------------------------------------------------------
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>         optee->smc.notif_irq = irq;
 >
->  'perf inject' accepts the --itrace option in which case tracing data is
->  removed and replaced with the synthesized events. e.g.
+>         return 0;
+> -
+> -err_close_ctx:
+> -       teedev_close_context(optee->notif.ctx);
+> -       optee->notif.ctx = NULL;
+> -
+> -       return rc;
+>  }
+>
+>  static void optee_smc_notif_uninit_irq(struct optee *optee)
+>  {
+> -       if (optee->notif.ctx) {
+> -               optee_smc_stop_async_notif(optee->notif.ctx);
+> +       if (optee->smc.sec_caps & OPTEE_SMC_SEC_CAP_ASYNC_NOTIF) {
+> +               optee_smc_stop_async_notif(optee->ctx);
+>                 if (optee->smc.notif_irq) {
+>                         free_irq(optee->smc.notif_irq, optee);
+>                         irq_dispose_mapping(optee->smc.notif_irq);
+>                 }
+> -
+> -               /*
+> -                * The thread normally working with optee->notif.ctx was
+> -                * stopped with free_irq() above.
+> -                *
+> -                * Note we're not using teedev_close_context() or
+> -                * tee_client_close_context() since we have already called
+> -                * tee_device_put() while initializing to avoid a circular
+> -                * reference counting.
+> -                */
+> -               teedev_close_context(optee->notif.ctx);
+>         }
+>  }
+>
+> @@ -1307,6 +1284,7 @@ static int optee_probe(struct platform_device *pdev)
+>         struct optee *optee = NULL;
+>         void *memremaped_shm = NULL;
+>         struct tee_device *teedev;
+> +       struct tee_context *ctx;
+>         u32 max_notif_value;
+>         u32 sec_caps;
+>         int rc;
+> @@ -1387,9 +1365,13 @@ static int optee_probe(struct platform_device *pdev)
+>         optee->pool = pool;
+>
+>         platform_set_drvdata(pdev, optee);
+> +       ctx = teedev_open(optee->teedev);
+> +       if (IS_ERR(ctx))
+> +               goto err_supp_uninit;
+> +       optee->ctx = ctx;
+>         rc = optee_notif_init(optee, max_notif_value);
+>         if (rc)
+> -               goto err_supp_uninit;
+> +               goto err_close_ctx;
+>
+>         if (sec_caps & OPTEE_SMC_SEC_CAP_ASYNC_NOTIF) {
+>                 unsigned int irq;
+> @@ -1437,6 +1419,8 @@ static int optee_probe(struct platform_device *pdev)
+>         optee_unregister_devices();
+>  err_notif_uninit:
+>         optee_notif_uninit(optee);
+> +err_close_ctx:
+> +       teedev_close_context(ctx);
+>  err_supp_uninit:
+>         optee_supp_uninit(&optee->supp);
+>         mutex_destroy(&optee->call_queue.mutex);
 > --
-> 2.28.0
+> 2.31.1
 >
-
-
--- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK

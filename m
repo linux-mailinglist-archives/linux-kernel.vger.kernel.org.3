@@ -2,56 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A064961BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:09:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CA14961BD
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:09:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381482AbiAUPIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 10:08:53 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:47906 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238192AbiAUPIw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 10:08:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=AOVmtBe4RfIqVuDW0D+ERxuFvcpmqncFVJBF/BDMUXk=; b=ChtKe0MmluGG5FF4W+UXy8vVB2
-        d9SzbNPIkM4WjCRNk/+vjm1pBriDbNnAp7HnFhiD9MuZdj2jLma5qV7OgjG5QegoOFDB1HaVbFPhZ
-        EBMtlTUfeAM82dXwPu4BXbESUqQ/981mQv+idDO3+vpV/oJFG3L2SKQeKf7VMj2tsgvw=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nAvWx-0026BU-Cs; Fri, 21 Jan 2022 16:08:47 +0100
-Date:   Fri, 21 Jan 2022 16:08:47 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: phy: marvell: Honor phy LED set by system
- firmware on a Dell hardware
-Message-ID: <YerMf2wl7KSLpx8Y@lunn.ch>
-References: <20220120051929.1625791-1-kai.heng.feng@canonical.com>
- <Yelnzrrd0a4Bl5AL@lunn.ch>
- <CAAd53p45BbLy0T8AG5QTKhP00zMBsMHfm7i-bTmZmQWM5DpLnQ@mail.gmail.com>
- <YeqwyeVvFQoH+9Uu@lunn.ch>
- <CAAd53p6C5SsYwKt4xsJ+qiqhrF45UW_VG8O+EiJcgeWy=MqzPw@mail.gmail.com>
+        id S1381493AbiAUPJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 10:09:03 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:47619 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1381484AbiAUPJC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 10:09:02 -0500
+Received: (qmail 17761 invoked by uid 1000); 21 Jan 2022 10:09:00 -0500
+Date:   Fri, 21 Jan 2022 10:09:00 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_sourcesink: Fix isoc transfer for
+ USB_SPEED_SUPER_PLUS
+Message-ID: <YerMjGG8VQkI85bB@rowland.harvard.edu>
+References: <1642764684-26060-1-git-send-email-quic_pkondeti@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAd53p6C5SsYwKt4xsJ+qiqhrF45UW_VG8O+EiJcgeWy=MqzPw@mail.gmail.com>
+In-Reply-To: <1642764684-26060-1-git-send-email-quic_pkondeti@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> The Marvell PHY on the system doesn't support WoL.
+On Fri, Jan 21, 2022 at 05:01:24PM +0530, Pavankumar Kondeti wrote:
+> Currently when gadget enumerates in super speed plus, the isoc
+> endpoint request buffer size is not calculated correctly. Fix
+> this by checking the gadget speed against USB_SPEED_SUPER_PLUS
+> and update the request buffer size.
+> 
+> Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+> ---
+>  drivers/usb/gadget/function/f_sourcesink.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/gadget/function/f_sourcesink.c b/drivers/usb/gadget/function/f_sourcesink.c
+> index 1abf08e..0a423ba 100644
+> --- a/drivers/usb/gadget/function/f_sourcesink.c
+> +++ b/drivers/usb/gadget/function/f_sourcesink.c
+> @@ -584,6 +584,8 @@ static int source_sink_start_ep(struct f_sourcesink *ss, bool is_in,
+>  
+>  	if (is_iso) {
+>  		switch (speed) {
+> +		case USB_SPEED_SUPER_PLUS:
+> +			fallthrough;
 
-Not technically correct. The PHY does, the way the PHY has been
-integrated into the system does not.
+There's no need for this "fallthough" line.  You're allowed to have 
+multiple case labels for a single block of code.
 
-But again, you need to think of the general case. Somebody else wants
-to make use of this feature of not touching the LED configuration, but
-does have a system were WoL works. What does that imply?
+Alan Stern
 
-     Andrew
+>  		case USB_SPEED_SUPER:
+>  			size = ss->isoc_maxpacket *
+>  					(ss->isoc_mult + 1) *
+> -- 
+> 2.7.4
+> 

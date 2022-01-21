@@ -2,112 +2,382 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C334958B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 04:56:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B3A4958B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 04:58:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233728AbiAUD4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 22:56:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233680AbiAUD4o (ORCPT
+        id S233754AbiAUD6D convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Jan 2022 22:58:03 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:50843 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233731AbiAUD57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 22:56:44 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD05C061574;
-        Thu, 20 Jan 2022 19:56:44 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id n8so7253325plc.3;
-        Thu, 20 Jan 2022 19:56:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jqay1I725FeUvGPiLDlyxk2HmNUUXhWQc6GbtImmv/Q=;
-        b=FIVTGVtO5rS2Gp5MdrS7usVFxeoehGr8N7c9ksUZ40dN8XRfywb6jmICdA+M3x02/R
-         utE6jOwlIe/TT70UOGiylG+diDLpRDjcW6ojKVaENX4KfD7/HJEZ+s0quDLleTPK7sHZ
-         vbsePBXeYc3Ut6affMrpThl4uyyb8Ohc2jppEQFZIc2T1WeWWqomNhzbO1L0Eas84I4/
-         z8fE22PwlvE+Lu0u2V28cPZwnPVELSlZI7dSytLJEoB9zsZ/WQLqkf4IcgWOfa2h6Dx+
-         UVtiuhWdGsfJ+/wNSYw0lVrCiQhQH+l2C6RdNukgPrAkEwf6A3CfWX+UnCMEGaA69jvV
-         tKqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jqay1I725FeUvGPiLDlyxk2HmNUUXhWQc6GbtImmv/Q=;
-        b=up+FjGfKI1r13h1rLiL7lYUn1ZRG/iLVxOCowym+J9QUv3R+4OX1T+kutBG2fsI0gp
-         cmgqhnwmxlyMVdmHGMySEXXGYIMXc07zvF5UpU46ZTntf6fdf4POkfilyTy+y7VeNvBi
-         ZtzxLC7UtKdMA0Vt9BuqJBhaO2rYqC2ZMh7oUL56+Qf9i1CzCbwJg0nn3Pp71Dgu9hKW
-         r0q9he0yKUpgGJ8fiVh6VCmpYooVevQHRB+MtGrtQniW5n3eTuD1F/OtIkfgHEyQ74UJ
-         cHGIAZNl9AFBTbq2FrRJ4rQEiUp+e22sOouJ30cG8LgzKIiuN90a3KAhOuvRGP7J12tk
-         Yulw==
-X-Gm-Message-State: AOAM530EXao4o/Nq1j4lbLBLeZo6VgGltVhEIVZ1aOzkMoCYV2hwcl5g
-        TZ6BsXL7/EshRBfDsl0J6yTfWFOcjzk=
-X-Google-Smtp-Source: ABdhPJxlZaCSgO8mQc/efgk7lpe/8JYOkKISpRdZJLqatz3eL9CMkjAkexV8eSYdCJ809cnXFwvDMQ==
-X-Received: by 2002:a17:902:bcc1:b0:149:a13f:af62 with SMTP id o1-20020a170902bcc100b00149a13faf62mr2335610pls.147.1642737404134;
-        Thu, 20 Jan 2022 19:56:44 -0800 (PST)
-Received: from Laptop-X1 ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id h29sm4512514pfr.156.2022.01.20.19.56.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 19:56:43 -0800 (PST)
-Date:   Fri, 21 Jan 2022 11:56:37 +0800
-From:   Hangbin Liu <liuhangbin@gmail.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Richard Cochran <richardcochran@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>
-Subject: Re: [PATCH RFC V1 net-next 1/4] net: ethtool: Refactor identical
- get_ts_info implementations.
-Message-ID: <Yeou9TKzW1NcBOKW@Laptop-X1>
-References: <20220103232555.19791-2-richardcochran@gmail.com>
- <20220120161329.fbniou5kzn2x4rp7@skbuf>
+        Thu, 20 Jan 2022 22:57:59 -0500
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 20L3vec07018453, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 20L3vec07018453
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 21 Jan 2022 11:57:40 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 21 Jan 2022 11:57:40 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 21 Jan 2022 11:57:39 +0800
+Received: from RTEXMBS01.realtek.com.tw ([fe80::a5c6:3ded:8fd8:286a]) by
+ RTEXMBS01.realtek.com.tw ([fe80::a5c6:3ded:8fd8:286a%5]) with mapi id
+ 15.01.2308.020; Fri, 21 Jan 2022 11:57:39 +0800
+From:   Ricky WU <ricky_wu@realtek.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>
+CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 2/4] misc: rtsx: Rework runtime power management flow
+Thread-Topic: [PATCH v2 2/4] misc: rtsx: Rework runtime power management flow
+Thread-Index: AQHYDmfzNtApiNB7lEubVz/rcdVLiqxs1tFQ
+Date:   Fri, 21 Jan 2022 03:57:39 +0000
+Message-ID: <e757387774234b678f6a38e004179c99@realtek.com>
+References: <20220120145006.1682014-2-kai.heng.feng@canonical.com>
+ <20220121014039.1693208-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20220121014039.1693208-1-kai.heng.feng@canonical.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.22.81.97]
+x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/1/20_=3F=3F_10:29:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220120161329.fbniou5kzn2x4rp7@skbuf>
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 04:13:29PM +0000, Vladimir Oltean wrote:
-> > diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-> > index b60e22f6394a..f28b88b67b9e 100644
-> > --- a/drivers/net/bonding/bond_main.c
-> > +++ b/drivers/net/bonding/bond_main.c
-> > @@ -5353,23 +5353,13 @@ static int bond_ethtool_get_ts_info(struct net_device *bond_dev,
-> >  				    struct ethtool_ts_info *info)
-> >  {
-> >  	struct bonding *bond = netdev_priv(bond_dev);
-> > -	const struct ethtool_ops *ops;
-> >  	struct net_device *real_dev;
-> > -	struct phy_device *phydev;
-> >  
-> >  	rcu_read_lock();
-> >  	real_dev = bond_option_active_slave_get_rcu(bond);
-> >  	rcu_read_unlock();
+> -----Original Message-----
+> From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> Sent: Friday, January 21, 2022 9:41 AM
+> To: arnd@arndb.de; gregkh@linuxfoundation.org; ulf.hansson@linaro.org
+> Cc: linux-pm@vger.kernel.org; Kai-Heng Feng <kai.heng.feng@canonical.com>;
+> Ricky WU <ricky_wu@realtek.com>; Christophe JAILLET
+> <christophe.jaillet@wanadoo.fr>; Yang Li <yang.lee@linux.alibaba.com>;
+> linux-kernel@vger.kernel.org
+> Subject: [PATCH v2 2/4] misc: rtsx: Rework runtime power management flow
 > 
-> Side note: I'm a bit confused about this rcu_read_lock() ->
-> rcu_dereference_protected() -> rcu_read_unlock() pattern, and use of the
-> real_dev outside the RCU critical section. Isn't ->get_ts_info()
-> protected by the rtnl_mutex? Shouldn't there be a
-> bond_option_active_slave_get() which uses rtnl_dereference()?
-> I see the code has been recently added by Hangbin Liu.
+> Commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM") uses
+> "rtd3_work" and "idle_work" to manage it's own runtime PM state machine.
+> 
+> When its child device, rtsx_pci_sdmmc, uses runtime PM refcount correctly, all
+> the additional works can be managed by generic runtime PM helpers.
+> 
+> So consolidate "idle_work" and "rtd3_work" into generic runtime idle callback
+> and runtime suspend callback, respectively.
+> 
 
-Hi Vladimir,
+This idle_work is not runtime_idle, this is for aspm setting
+Not only for support RPM, so this idle_work can not be remove....
 
-Yes, it should be enough to use rtnl_dereference() since ->get_ts_info is
-protected by the rtnl_lock. I just thought there is an existing get active
-slave function and rcu read should be OK to be used here. So I just used the
-existing one.
+Our original Idle_work is a power saveing function, It is a delay_work for 200 msec  ,
+If no work comes in 200 msec than go to idle_work to set power saveing setting.....  
 
-Hi Jay,
+> Fixes: 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM")
+> Cc: Ricky WU <ricky_wu@realtek.com>
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+> v2:
+>  - Remove unused idle_work and rtd3_work from rtsx_pcr.
+> 
+>  drivers/misc/cardreader/rtsx_pcr.c | 123 +++++++++++------------------
+>  include/linux/rtsx_pci.h           |   3 -
+>  2 files changed, 44 insertions(+), 82 deletions(-)
+> 
+> diff --git a/drivers/misc/cardreader/rtsx_pcr.c
+> b/drivers/misc/cardreader/rtsx_pcr.c
+> index 6ac509c1821c9..1dcf98b597569 100644
+> --- a/drivers/misc/cardreader/rtsx_pcr.c
+> +++ b/drivers/misc/cardreader/rtsx_pcr.c
+> @@ -152,20 +152,12 @@ void rtsx_pci_start_run(struct rtsx_pcr *pcr)
+>  	if (pcr->remove_pci)
+>  		return;
+> 
+> -	if (pcr->rtd3_en)
+> -		if (pcr->is_runtime_suspended) {
+> -			pm_runtime_get(&(pcr->pci->dev));
+> -			pcr->is_runtime_suspended = false;
+> -		}
+> -
+>  	if (pcr->state != PDEV_STAT_RUN) {
+>  		pcr->state = PDEV_STAT_RUN;
+>  		if (pcr->ops->enable_auto_blink)
+>  			pcr->ops->enable_auto_blink(pcr);
+>  		rtsx_pm_full_on(pcr);
+>  	}
+> -
+> -	mod_delayed_work(system_wq, &pcr->idle_work, msecs_to_jiffies(200));
+>  }
+>  EXPORT_SYMBOL_GPL(rtsx_pci_start_run);
+> 
+> @@ -1094,40 +1086,6 @@ static void rtsx_pm_power_saving(struct rtsx_pcr
+> *pcr)
+>  	rtsx_comm_pm_power_saving(pcr);
+>  }
+> 
+> -static void rtsx_pci_rtd3_work(struct work_struct *work) -{
+> -	struct delayed_work *dwork = to_delayed_work(work);
+> -	struct rtsx_pcr *pcr = container_of(dwork, struct rtsx_pcr, rtd3_work);
+> -
+> -	pcr_dbg(pcr, "--> %s\n", __func__);
+> -	if (!pcr->is_runtime_suspended)
+> -		pm_runtime_put(&(pcr->pci->dev));
+> -}
+> -
+> -static void rtsx_pci_idle_work(struct work_struct *work) -{
+> -	struct delayed_work *dwork = to_delayed_work(work);
+> -	struct rtsx_pcr *pcr = container_of(dwork, struct rtsx_pcr, idle_work);
+> -
+> -	pcr_dbg(pcr, "--> %s\n", __func__);
+> -
+> -	mutex_lock(&pcr->pcr_mutex);
+> -
+> -	pcr->state = PDEV_STAT_IDLE;
+> -
+> -	if (pcr->ops->disable_auto_blink)
+> -		pcr->ops->disable_auto_blink(pcr);
+> -	if (pcr->ops->turn_off_led)
+> -		pcr->ops->turn_off_led(pcr);
+> -
+> -	rtsx_pm_power_saving(pcr);
+> -
+> -	mutex_unlock(&pcr->pcr_mutex);
+> -
+> -	if (pcr->rtd3_en)
+> -		mod_delayed_work(system_wq, &pcr->rtd3_work,
+> msecs_to_jiffies(10000));
+> -}
+> -
+>  static void rtsx_base_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
+> {
+>  	/* Set relink_time to 0 */
+> @@ -1598,7 +1556,6 @@ static int rtsx_pci_probe(struct pci_dev *pcidev,
+>  	pcr->card_inserted = 0;
+>  	pcr->card_removed = 0;
+>  	INIT_DELAYED_WORK(&pcr->carddet_work, rtsx_pci_card_detect);
+> -	INIT_DELAYED_WORK(&pcr->idle_work, rtsx_pci_idle_work);
+> 
+>  	pcr->msi_en = msi_en;
+>  	if (pcr->msi_en) {
+> @@ -1623,20 +1580,16 @@ static int rtsx_pci_probe(struct pci_dev *pcidev,
+>  		rtsx_pcr_cells[i].pdata_size = sizeof(*handle);
+>  	}
+> 
+> -	if (pcr->rtd3_en) {
+> -		INIT_DELAYED_WORK(&pcr->rtd3_work, rtsx_pci_rtd3_work);
+> -		pm_runtime_allow(&pcidev->dev);
+> -		pm_runtime_enable(&pcidev->dev);
+> -		pcr->is_runtime_suspended = false;
+> -	}
+> -
+> 
+>  	ret = mfd_add_devices(&pcidev->dev, pcr->id, rtsx_pcr_cells,
+>  			ARRAY_SIZE(rtsx_pcr_cells), NULL, 0, NULL);
+>  	if (ret < 0)
+>  		goto free_slots;
+> 
+> -	schedule_delayed_work(&pcr->idle_work, msecs_to_jiffies(200));
+> +	if (pcr->rtd3_en) {
+> +		pm_runtime_allow(&pcidev->dev);
+> +		pm_runtime_put(&pcidev->dev);
+> +	}
+> 
+>  	return 0;
+> 
+> @@ -1668,10 +1621,11 @@ static void rtsx_pci_remove(struct pci_dev
+> *pcidev)
+>  	struct pcr_handle *handle = pci_get_drvdata(pcidev);
+>  	struct rtsx_pcr *pcr = handle->pcr;
+> 
+> -	if (pcr->rtd3_en)
+> -		pm_runtime_get_noresume(&pcr->pci->dev);
+> -
+>  	pcr->remove_pci = true;
+> +	if (pcr->rtd3_en) {
+> +		pm_runtime_get_sync(&pcidev->dev);
+> +		pm_runtime_forbid(&pcidev->dev);
+> +	}
+> 
+>  	/* Disable interrupts at the pcr level */
+>  	spin_lock_irq(&pcr->lock);
+> @@ -1680,9 +1634,6 @@ static void rtsx_pci_remove(struct pci_dev *pcidev)
+>  	spin_unlock_irq(&pcr->lock);
+> 
+>  	cancel_delayed_work_sync(&pcr->carddet_work);
+> -	cancel_delayed_work_sync(&pcr->idle_work);
+> -	if (pcr->rtd3_en)
+> -		cancel_delayed_work_sync(&pcr->rtd3_work);
+> 
+>  	mfd_remove_devices(&pcidev->dev);
+> 
+> @@ -1700,11 +1651,6 @@ static void rtsx_pci_remove(struct pci_dev
+> *pcidev)
+>  	idr_remove(&rtsx_pci_idr, pcr->id);
+>  	spin_unlock(&rtsx_pci_lock);
+> 
+> -	if (pcr->rtd3_en) {
+> -		pm_runtime_disable(&pcr->pci->dev);
+> -		pm_runtime_put_noidle(&pcr->pci->dev);
+> -	}
+> -
+>  	kfree(pcr->slots);
+>  	kfree(pcr);
+>  	kfree(handle);
+> @@ -1726,7 +1672,6 @@ static int __maybe_unused rtsx_pci_suspend(struct
+> device *dev_d)
+>  	pcr = handle->pcr;
+> 
+>  	cancel_delayed_work(&pcr->carddet_work);
+> -	cancel_delayed_work(&pcr->idle_work);
+> 
+>  	mutex_lock(&pcr->pcr_mutex);
+> 
+> @@ -1760,8 +1705,6 @@ static int __maybe_unused rtsx_pci_resume(struct
+> device *dev_d)
+>  	if (ret)
+>  		goto out;
+> 
+> -	schedule_delayed_work(&pcr->idle_work, msecs_to_jiffies(200));
+> -
+>  out:
+>  	mutex_unlock(&pcr->pcr_mutex);
+>  	return ret;
+> @@ -1786,6 +1729,32 @@ static void rtsx_pci_shutdown(struct pci_dev
+> *pcidev)
+>  		pci_disable_msi(pcr->pci);
+>  }
+> 
+> +static int rtsx_pci_runtime_idle(struct device *device) {
+> +	struct pci_dev *pcidev = to_pci_dev(device);
+> +	struct pcr_handle *handle = pci_get_drvdata(pcidev);
+> +	struct rtsx_pcr *pcr = handle->pcr;
+> +
+> +	dev_dbg(device, "--> %s\n", __func__);
+> +
+> +	mutex_lock(&pcr->pcr_mutex);
+> +
+> +	pcr->state = PDEV_STAT_IDLE;
+> +
+> +	if (pcr->ops->disable_auto_blink)
+> +		pcr->ops->disable_auto_blink(pcr);
+> +	if (pcr->ops->turn_off_led)
+> +		pcr->ops->turn_off_led(pcr);
+> +
+> +	rtsx_pm_power_saving(pcr);
+> +
+> +	mutex_unlock(&pcr->pcr_mutex);
+> +
+> +	pm_schedule_suspend(device, 5000);
+> +
+> +	return -EBUSY;
+> +}
+> +
+>  static int rtsx_pci_runtime_suspend(struct device *device)  {
+>  	struct pci_dev *pcidev = to_pci_dev(device); @@ -1794,31 +1763,29 @@
+> static int rtsx_pci_runtime_suspend(struct device *device)
+> 
+>  	handle = pci_get_drvdata(pcidev);
+>  	pcr = handle->pcr;
+> -	dev_dbg(&(pcidev->dev), "--> %s\n", __func__);
+> 
+> -	cancel_delayed_work(&pcr->carddet_work);
+> -	cancel_delayed_work(&pcr->rtd3_work);
+> -	cancel_delayed_work(&pcr->idle_work);
+> +	if (!pcr->rtd3_en)
+> +		return -EBUSY;
+> +
+> +	dev_dbg(device, "--> %s\n", __func__);
+> +
+> +	cancel_delayed_work_sync(&pcr->carddet_work);
+> 
+>  	mutex_lock(&pcr->pcr_mutex);
+>  	rtsx_pci_power_off(pcr, HOST_ENTER_S3);
+> 
+>  	mutex_unlock(&pcr->pcr_mutex);
+> 
+> -	pcr->is_runtime_suspended = true;
+> -
+>  	return 0;
+>  }
+> 
+>  static int rtsx_pci_runtime_resume(struct device *device)  {
+>  	struct pci_dev *pcidev = to_pci_dev(device);
+> -	struct pcr_handle *handle;
+> -	struct rtsx_pcr *pcr;
+> +	struct pcr_handle *handle = pci_get_drvdata(pcidev);
+> +	struct rtsx_pcr *pcr = handle->pcr;
+> 
+> -	handle = pci_get_drvdata(pcidev);
+> -	pcr = handle->pcr;
+> -	dev_dbg(&(pcidev->dev), "--> %s\n", __func__);
+> +	dev_dbg(device, "--> %s\n", __func__);
+> 
+>  	mutex_lock(&pcr->pcr_mutex);
+> 
+> @@ -1834,8 +1801,6 @@ static int rtsx_pci_runtime_resume(struct device
+> *device)
+>  				pcr->slots[RTSX_SD_CARD].p_dev);
+>  	}
+> 
+> -	schedule_delayed_work(&pcr->idle_work, msecs_to_jiffies(200));
+> -
+>  	mutex_unlock(&pcr->pcr_mutex);
+>  	return 0;
+>  }
+> @@ -1850,7 +1815,7 @@ static int rtsx_pci_runtime_resume(struct device
+> *device)
+> 
+>  static const struct dev_pm_ops rtsx_pci_pm_ops = {
+>  	SET_SYSTEM_SLEEP_PM_OPS(rtsx_pci_suspend, rtsx_pci_resume)
+> -	SET_RUNTIME_PM_OPS(rtsx_pci_runtime_suspend,
+> rtsx_pci_runtime_resume, NULL)
+> +	SET_RUNTIME_PM_OPS(rtsx_pci_runtime_suspend,
+> rtsx_pci_runtime_resume,
+> +rtsx_pci_runtime_idle)
+>  };
+> 
+>  static struct pci_driver rtsx_pci_driver = { diff --git a/include/linux/rtsx_pci.h
+> b/include/linux/rtsx_pci.h index 4ab7bfc675f11..89b7d34e25b63 100644
+> --- a/include/linux/rtsx_pci.h
+> +++ b/include/linux/rtsx_pci.h
+> @@ -1201,8 +1201,6 @@ struct rtsx_pcr {
+>  	unsigned int			card_exist;
+> 
+>  	struct delayed_work		carddet_work;
+> -	struct delayed_work		idle_work;
+> -	struct delayed_work		rtd3_work;
+> 
+>  	spinlock_t			lock;
+>  	struct mutex			pcr_mutex;
+> @@ -1212,7 +1210,6 @@ struct rtsx_pcr {
+>  	unsigned int			cur_clock;
+>  	bool				remove_pci;
+>  	bool				msi_en;
+> -	bool				is_runtime_suspended;
+> 
+>  #define EXTRA_CAPS_SD_SDR50		(1 << 0)
+>  #define EXTRA_CAPS_SD_SDR104		(1 << 1)
+> --
+> 2.33.1
 
-Do you think if there is a need to add a rtnl version of
-bond_option_active_slave_get()?
-
-Thanks
-Hangbin

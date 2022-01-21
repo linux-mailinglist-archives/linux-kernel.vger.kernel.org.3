@@ -2,121 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64126495A42
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC99495A43
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:02:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348851AbiAUHBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 02:01:32 -0500
-Received: from mail-ed1-f42.google.com ([209.85.208.42]:45625 "EHLO
-        mail-ed1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233755AbiAUHBc (ORCPT
+        id S1348988AbiAUHCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 02:02:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233755AbiAUHCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 02:01:32 -0500
-Received: by mail-ed1-f42.google.com with SMTP id z22so38864971edd.12
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 23:01:31 -0800 (PST)
+        Fri, 21 Jan 2022 02:02:49 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1477C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 23:02:48 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id a12so9766012iod.9
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 23:02:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FVobGviDm1nm1GMLQvd/EYPCyCZ2DMF5uRlmstDHO0I=;
+        b=GbJjOyNWKDBuoGbJ17LfQNorZPhqO49Ii9Zpx3oNZq1KscKpnGF8tzMS69aAfuzb7W
+         xo5a94992eGe5N2oPV6ud7kSSXez3IX/LS98iilSw7E0EwuJ2x53MFklMFJDSQ4vsMHu
+         2I2OFA1z1C5IADPDXj5XiN+H8J8AXykh6li60T/fDhw8IYZaP5mvFQVFGDC9+/+XClFx
+         OcWKvKvI8ywljW9vIrl5bEDnA6zN2HuYY5joqPPr50ZhkOkca/AAMmin9+8m5Y0SHmBl
+         9AdPidzH5w/c7kSibWbfFDqFWZF3DsKE14ZhMN7sTh6yti7fdBCbcjV9Z2RKedcc7lIf
+         Z1Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=EauRHZ/GVVCGfn8G5vgi+TQVC0ch7f4S8Xm0B+EGC7A=;
-        b=I2BIH3Faq4rU+XKp18pW9rOlPZqwgFbg8JVqb/fH5KnDfnGpFQ8/YUD84ypJcul3x0
-         uoqpCtV4rNYbabQ6BtR259doTIqcxec0/Ce4UwDIDZYaYcGjhbBk1VbdEY2N5LjpcRni
-         JjoELaYkrZvvTC0GswbeguevC7BdSi+KIc7Khq5bfnBexcIlXS+ygv6iUG6b40uqSEC0
-         ZUWlP3i9zBpuNkv+caRD2uKdi3cIu9K7W/N9yHbkb4dxLFACC2l022fO25xgYsGyz8Nj
-         qDdmhjODmR6CYaDcoApeZKRmzZNW3xrZTjsU3UZ9fjNW/UJ/Sgd7fJp+IJyac3ClENB/
-         cM0w==
-X-Gm-Message-State: AOAM530grdZ07BYbdYaJUvfpL0CziRv7bwZfU+JX5+tG5NEfDdZMP0df
-        QJYnJtHOm69otrZRUy/GAjz7txGM1xA=
-X-Google-Smtp-Source: ABdhPJxirR/uHxNW8W8wAcv+Lq++gIda5gxO7JAR/KIIG79j3WoT4turRyVLh4yt5PTMukBESQ/l9g==
-X-Received: by 2002:a05:6402:1bcc:: with SMTP id ch12mr3102142edb.227.1642748490713;
-        Thu, 20 Jan 2022 23:01:30 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id z4sm1711242ejd.39.2022.01.20.23.01.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 23:01:29 -0800 (PST)
-Message-ID: <716113c0-13d6-6fbc-f1a0-9fea6091bb90@kernel.org>
-Date:   Fri, 21 Jan 2022 08:01:28 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FVobGviDm1nm1GMLQvd/EYPCyCZ2DMF5uRlmstDHO0I=;
+        b=i3EVHNPIxZEyovpnd1jdS1C7oGlarBkea27gfXX29xiqQFMuVg8TsHvTpNDgUviCba
+         TsW2W9H1E3YX9vssnfciPyAWvbSb59wIfJFSS2I2V+C4VIx65v1alFYg7ADVwV8B3BF5
+         FcFpLuHbD8b7BUeVuV33VaC/H9xnvoQCHXs/MnzJ09gQO9kPx/LR5KZgnWBsmT82kiiQ
+         ygjfCgJL+oXLTSSuSQC1fnJTmlSJ4GcMlAR2nsVfnWwFK+eNS0zGG9xCJTGKlaWhboNK
+         B2yRqyhI00B3zUf7DEhS6AJj8Q/OY9TvUJJ5B0LgL6f31cdLuDV2oN5neCTTfHBRt2lr
+         GrCw==
+X-Gm-Message-State: AOAM533aRTp3bmOd+jF+XecfEj1oY4ejHHJvKDB2pkJRmtjw0G0CxJQC
+        nDLdoW+qqnSKnF1FsBp4EJg3k+DhipdStMFskjk=
+X-Google-Smtp-Source: ABdhPJx5tjDJw2o9AqfxiHpuePMfQ4+XrlHN7ioUNoql/VyVGUezZc/YkO6IQdRIa894Nj7slhFkATnFLYByfLQ7vnM=
+X-Received: by 2002:a02:ca4c:: with SMTP id i12mr1206692jal.40.1642748568390;
+ Thu, 20 Jan 2022 23:02:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] tty: vt: Check for NULL pointer after calling kzalloc
-Content-Language: en-US
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, gregkh@linuxfoundation.org,
-        jcmvbkbc@gmail.com, dsterba@suse.com, johan@kernel.org,
-        dankamongmen@gmail.com, penguin-kernel@I-love.SAKURA.ne.jp,
-        igormtorrente@gmail.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20220121065320.2283544-1-jiasheng@iscas.ac.cn>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220121065320.2283544-1-jiasheng@iscas.ac.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220120131024.502877-1-alexs@kernel.org> <20220120131024.502877-2-alexs@kernel.org>
+ <YeljTuECoPfKn6VW@casper.infradead.org>
+In-Reply-To: <YeljTuECoPfKn6VW@casper.infradead.org>
+From:   Alex Shi <seakeel@gmail.com>
+Date:   Fri, 21 Jan 2022 15:02:12 +0800
+Message-ID: <CAJy-AmnmRVZ2ezSt1bws4TVKEw-VKubUXbc4SP8wU0-SQprhcA@mail.gmail.com>
+Subject: Re: [PATCH 1/5] mm: remove page_is_file_lru function
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Alex Shi <alexs@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Yu Zhao <yuzhao@google.com>, Arnd Bergmann <arnd@arndb.de>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21. 01. 22, 7:53, Jiasheng Jiang wrote:
-> As the potential failure of the allocation, the kzalloc() will return
-> NULL pointer.
-> Therefore, it should be better to check it in order to avoid the
-> dereference of the NULL pointer.
-> When it fails, we should free all the allocated memory and return error
-> number.
-> To make the code more clear, I use the 'err_free', like how
-> vc_allocate() deals with the allocation failure.
+On Thu, Jan 20, 2022 at 9:28 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Thu, Jan 20, 2022 at 09:10:20PM +0800, alexs@kernel.org wrote:
+> > From: Alex Shi <alexs@kernel.org>
+> >
+> > This function could be full replaced by folio_is_file_lru, so no reason
+> > to keep a duplicate function.
+>
+> This is not a helpful way to do this kind of replacement.
+>
+> Instead of choosing a function to remove and doing a blind replacement,
+> choose a call site and convert the whole calling function to use folios.
+> Once you've removed all callers, you can remove the wrapper function.
+>
+> Also, a number of changes here will conflict with patches I've already
+> posted.  Try doing change_pte_range() in mprotect.c to get a feel for
+> how to convert a function entirely to folios.
 
-https://lore.kernel.org/all/X+CRTqDQwVYSZQBi@kroah.com/
+Hi Willy,
 
-> Fixes: a5f4f52e8211 ("vt: use kzalloc() instead of the bootmem allocator")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->   drivers/tty/vt/vt.c | 19 +++++++++++++++++++
->   1 file changed, 19 insertions(+)
-> 
-> diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-> index f8c87c4d7399..343fa6fffc18 100644
-> --- a/drivers/tty/vt/vt.c
-> +++ b/drivers/tty/vt/vt.c
-> @@ -3519,11 +3519,17 @@ static int __init con_init(void)
->   
->   	for (currcons = 0; currcons < MIN_NR_CONSOLES; currcons++) {
->   		vc_cons[currcons].d = vc = kzalloc(sizeof(struct vc_data), GFP_NOWAIT);
-> +		if (!vc)
-> +			goto err_free;
-> +
->   		INIT_WORK(&vc_cons[currcons].SAK_work, vc_SAK);
->   		tty_port_init(&vc->port);
->   		visual_init(vc, currcons, 1);
->   		/* Assuming vc->vc_{cols,rows,screenbuf_size} are sane here. */
->   		vc->vc_screenbuf = kzalloc(vc->vc_screenbuf_size, GFP_NOWAIT);
-> +		if (!vc->vc_screenbuf)
-> +			goto err_free_vc;
-> +
->   		vc_init(vc, vc->vc_rows, vc->vc_cols,
->   			currcons || !vc->vc_sw->con_save_screen);
->   	}
-> @@ -3545,6 +3551,19 @@ static int __init con_init(void)
->   	register_console(&vt_console_driver);
->   #endif
->   	return 0;
-> +err_free_vc:
-> +	visual_deinit(vc);
-> +	kfree(vc);
-> +	vc_cons[currcons].d = NULL;
-> +err_free:
-> +	for (i = 0; i < currcons; i++) {
-> +		kfree(vc_cons[currcons].d->vc_screenbuf);
-> +		visual_deinit(vc_cons[currcons].d);
-> +		kfree(vc_cons[currcons].d);
-> +		vc_cons[currcons].d = NULL;
-> +	}
-> +	console_unlock();
-> +	return -ENOMEM;
->   }
->   console_initcall(con_init);
->   
+Thanks for your comments!
 
+The patchset did the thing as you required "convert the whole calling
+function to use folios. then remove the wrapper function" on yesterday's
+Linus and next tree, that included your patchset "Page cache/iomap for 5.17".
 
--- 
-js
+Is the conflicting patch "Enabling large folios for 5.17" or others? Sorry
+for can't check everyone, your patches are many. If just the former, I see
+you mentioned: "I'd be uncomfortable seeing it merged before 5.18".
+Would you point out which of your patches was interfered or blocked?
+
+And yes, replacing page functions in change_pte_range is a bit harder,
+but it seems it has no much relation with this trival patchset.
+
+Thanks
+Alex

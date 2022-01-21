@@ -2,119 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3FDA496201
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A34D1496209
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:27:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351346AbiAUPYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 10:24:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57128 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239044AbiAUPYd (ORCPT
+        id S1381510AbiAUP12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 10:27:28 -0500
+Received: from mail-qk1-f175.google.com ([209.85.222.175]:43665 "EHLO
+        mail-qk1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237525AbiAUP11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 10:24:33 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D631FC061744
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 07:24:32 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id 23so28507660ybf.7
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 07:24:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lHv4QGKyWaC8pJttpt8QUbf3yyP/jMKn3N+flk/PW10=;
-        b=TuYOvf2B9HOi6a6+5H3dsW8U3FeTz9UocCY2hj9gLGhDsiqoc/vJ4m/8w6bS1mIXAx
-         DfzIIKlVbbDQ2XO53YTs+3KImo9w77vLdnlNocWdvZhBO69EUV1qCkr/K/tJYMeQkQIB
-         a1ZSJe9u2MwXLlhK0yvgZNH0jSsNAf+fk6xNknc5OOrvmGPN0OsDYtfU1iEO4oSKz3px
-         FWRYKaz5l7DLNHgHH/Daee6JLM0IhoUGnE2mmF1uDk32AkvK/k0h+7NlhLM5Lwy/3hlB
-         zU8a6LtNI62avuO/YK+UPiDllbENyvd6MONG7fd86WC/2etQOle1gOmHUJYrL2nHP+lv
-         qrAg==
+        Fri, 21 Jan 2022 10:27:27 -0500
+Received: by mail-qk1-f175.google.com with SMTP id h2so10205512qkp.10;
+        Fri, 21 Jan 2022 07:27:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lHv4QGKyWaC8pJttpt8QUbf3yyP/jMKn3N+flk/PW10=;
-        b=n4J3EMrnVSXAEqVI1Ud5WVxn8G8VgVg/8zjr3VFu/fzG+eEiVurACOOnlssIAhLz3p
-         wUyqth45se/oxd925f19cfLQA9rkUCYtGfkIRcXwfOgiBvwNcRsSEqC+OHhbulqCJly1
-         Viv+hgx5kVM+DHoVIgSPnsvOQFltnvWywFgHPcqL0JLluOEiYQNXof+R03aL7SLr8uCc
-         0e3jekOi+9z3zbCRuU1Z6AqPMo4g5GwdlMFpRWo+SYYsV4zQWlOm7K9s32/J4C5ti8jM
-         17dV9K+05aYnUIqo2daVWCqkc6ObZAtNA5j3HFOIflZzTDGCdwFSPVouLIX3Wxqdxr5/
-         Exaw==
-X-Gm-Message-State: AOAM532hn+q+px+qWl4m/86n22CFEnVbMotjw+dndGeL0t703aM7vUTe
-        RhoYrK1b6gQ62NU61mzCntOmtOLWtzlOXBp+W3xcLg==
-X-Google-Smtp-Source: ABdhPJx9UVWg3EfP5/63PnvEnF1YOj5Isounp9ZYZMOzIVLh11iewxgOKv8wxnLSIL7XfldkUQ5A1Lpj9PcvCTC39xs=
-X-Received: by 2002:a25:838b:: with SMTP id t11mr4282883ybk.146.1642778671696;
- Fri, 21 Jan 2022 07:24:31 -0800 (PST)
+        bh=Lj9jNsBYb6UuT5y2PdXbZKoxmEZr3Bxmp3rSob9MHGo=;
+        b=ebAOWTvJY6mgKqX1SGSXdmHAGEVWTtGO4rqeDGYPCdR4JrJhARJR2zHcgEfDdXjfFo
+         B8DyTnNkEW2ZrkR4Ec8WVNFgK73Y4Sf8EtU3A5SHI7MVAQRBspZM8D/qBUV5fX1iXzyu
+         Lc3hjiMMcxejbakpbDz+42LEKSHUZOfv0j08XQ4r0ooptKvgOSyUZCMbrUoWE67CcFED
+         WjHRcIizRAi2owMdrnHdL3jir2h7xs9ZowWgVC1Jw3rB+Hvz6ANvjENQJv1G2akBKcMs
+         mBYl9rHLU/oxea7TWE0h49gHmOEbJE3dV2/RJ/43xrv6GIp5TLDNNM4EodSronxJrglI
+         sfVQ==
+X-Gm-Message-State: AOAM533qcVbgQKHmX1ICZP7BZdkXMIS2RD2conMu+r+4zA7RZqKv9I//
+        Oq5pHECQuN8eJEHItN1yROMFySF7VfzX3IarpL9Dmb0dO1M=
+X-Google-Smtp-Source: ABdhPJxnWtWFJcRR4dimsXsjEm0ivqK4zpnjlksKnljWHNKERDI4Oy3ChV7XbKvHYaxI/FRIOfZTrrEbZJq6kapKNOo=
+X-Received: by 2002:a05:620a:1a97:: with SMTP id bl23mr3052588qkb.621.1642778846386;
+ Fri, 21 Jan 2022 07:27:26 -0800 (PST)
 MIME-Version: 1.0
-References: <CA+G9fYvuEqeoLO6dC_qtGyRUz=UPv5i0C3jZ_n9nz5kWOuCHYQ@mail.gmail.com>
-In-Reply-To: <CA+G9fYvuEqeoLO6dC_qtGyRUz=UPv5i0C3jZ_n9nz5kWOuCHYQ@mail.gmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 21 Jan 2022 20:54:20 +0530
-Message-ID: <CA+G9fYuKGaDfyke81wbSe2yqTm6GqWNuKw2wB6NFaCLa1q7z6A@mail.gmail.com>
-Subject: Re: [next] parisc: allnoconfig: ERROR: modpost: Section mismatches
- detected. Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.
-To:     John David Anglin <dave.anglin@bell.net>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-parisc <linux-parisc@vger.kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>, pavel@ucw.cz,
-        rppt@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Helge Deller <deller@gmx.de>, Deller <deller@kernel.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
+References: <20220121143254.6432-1-sbinding@opensource.cirrus.com> <20220121143254.6432-7-sbinding@opensource.cirrus.com>
+In-Reply-To: <20220121143254.6432-7-sbinding@opensource.cirrus.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 21 Jan 2022 16:27:15 +0100
+Message-ID: <CAJZ5v0hGviZkciBx5pc2bP6yJfHi4_gOuBj7+exVfPaXCZvuvg@mail.gmail.com>
+Subject: Re: [PATCH v5 6/9] platform/x86: serial-multi-instantiate: Reorganize
+ I2C functions
+To:     Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
+        <alsa-devel@alsa-project.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        patches@opensource.cirrus.com,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Jan 2022 at 13:16, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+On Fri, Jan 21, 2022 at 3:33 PM Stefan Binding
+<sbinding@opensource.cirrus.com> wrote:
 >
-> Linux next-20220121 parisc allnoconfig build failed with gcc-9/10/11.
+> From: Lucas Tanure <tanureal@opensource.cirrus.com>
 >
-> make --silent --keep-going --jobs=8 ARCH=parisc
-> CROSS_COMPILE=hppa-linux-gnu- 'CC=sccache hppa-linux-gnu-gcc'
-> 'HOSTCC=sccache gcc'
+> Reorganize I2C functions to accommodate SPI support
+> Split the probe and factor out parts of the code
+> that will be used in the SPI support
 >
-> WARNING: modpost: vmlinux.o(.text+0x1c8): Section mismatch in
-> reference from the function ksys_sync() to the function
-> .init.text:memblock_alloc_try_nid()
-> The function ksys_sync() references
-> the function __init memblock_alloc_try_nid().
-> This is often because ksys_sync lacks a __init
-> annotation or the annotation of memblock_alloc_try_nid is wrong.
+> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
+> ---
+>  .../platform/x86/serial-multi-instantiate.c   | 145 +++++++++++-------
+>  1 file changed, 90 insertions(+), 55 deletions(-)
 >
-> ERROR: modpost: Section mismatches detected.
-> Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.
-> make[2]: *** [/builds/linux/scripts/Makefile.modpost:59:
-> vmlinux.symvers] Error 1
+> diff --git a/drivers/platform/x86/serial-multi-instantiate.c b/drivers/platform/x86/serial-multi-instantiate.c
+> index 32fb3f904547..162ec20a861a 100644
+> --- a/drivers/platform/x86/serial-multi-instantiate.c
+> +++ b/drivers/platform/x86/serial-multi-instantiate.c
+> @@ -29,96 +29,131 @@ struct smi_instance {
+>
+>  struct smi {
+>         int i2c_num;
+> -       struct i2c_client *i2c_devs[];
+> +       struct i2c_client **i2c_devs;
+>  };
+>
+> -static int smi_probe(struct platform_device *pdev)
+> +static int smi_get_irq(struct platform_device *pdev, struct acpi_device *adev,
+> +                      const struct smi_instance *inst)
+> +{
+> +       int ret;
+> +
+> +       switch (inst->flags & IRQ_RESOURCE_TYPE) {
+> +       case IRQ_RESOURCE_GPIO:
+> +               ret = acpi_dev_gpio_irq_get(adev, inst->irq_idx);
+> +               break;
+> +       case IRQ_RESOURCE_APIC:
+> +               ret = platform_get_irq(pdev, inst->irq_idx);
+> +               break;
+> +       default:
+> +               ret = 0;
+> +               break;
 
-Anders bisected this build and the first bad commit is point to,
+return 0;
 
-first bad commit: [4f05e5a3946923676e147ad0e33c80df8249b2fe]
-parisc: Drop __init from map_pages declaration
+would be slightly more efficient here
 
+> +       }
+> +
+> +       if (ret < 0)
+> +               dev_err_probe(&pdev->dev, ret, "Error requesting irq at index %d: %d\n",
+> +                             inst->irq_idx, ret);
+> +
+> +       return ret;
+> +}
+> +
+> +static void smi_devs_unregister(struct smi *smi)
+> +{
+> +       while (smi->i2c_num > 0)
+> +               i2c_unregister_device(smi->i2c_devs[--smi->i2c_num]);
+> +}
+> +
+> +/**
+> + * smi_i2c_probe - Instantiate multiple I2C devices from inst array
+> + * @pdev:      Platform device
+> + * @adev:      ACPI device
+> + * @smi:       Internal struct for Serial multi instantiate driver
+> + * @inst:      Array of instances to probe
 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+This is called inst_array below.
+
+> + *
+> + * Returns the number of I2C devices instantiate, Zero if none is found or a negative error code.
+> + */
+> +static int smi_i2c_probe(struct platform_device *pdev, struct acpi_device *adev, struct smi *smi,
+> +                        const struct smi_instance *inst_array)
+>  {
+>         struct i2c_board_info board_info = {};
+> -       const struct smi_instance *inst;
+>         struct device *dev = &pdev->dev;
+> -       struct acpi_device *adev;
+> -       struct smi *smi;
+>         char name[32];
+> -       int i, ret;
+> +       int i, ret, count;
 >
-> metadata:
->   git branch: master
->   git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->   git describe: next-20220121
->   kernel-config: https://builds.tuxbuild.com/23zIAxC4uCgy4zadA01JYyOwCR4/config
->   build: https://builds.tuxbuild.com/23zIAxC4uCgy4zadA01JYyOwCR4/
+> -       inst = device_get_match_data(dev);
+> -       if (!inst) {
+> -               dev_err(dev, "Error ACPI match data is missing\n");
+> -               return -ENODEV;
+> -       }
+> -
+> -       adev = ACPI_COMPANION(dev);
+> -
+> -       /* Count number of clients to instantiate */
+>         ret = i2c_acpi_client_count(adev);
+> -       if (ret < 0)
+> -               return ret;
+> +       if (ret <= 0)
+> +               return ret == 0 ? -ENODEV : ret;
+
+I would prefer
+
+if ret < 0)
+        return ret;
+else if (!ret)
+        return -ENODEV;
+
 >
-> # To install tuxmake on your system globally:
-> # sudo pip3 install -U tuxmake
-> #
-> # See https://docs.tuxmake.org/ for complete documentation.
-> # Original tuxmake command with fragments listed below.
+> -       smi = devm_kmalloc(dev, struct_size(smi, i2c_devs, ret), GFP_KERNEL);
+> -       if (!smi)
+> -               return -ENOMEM;
+> +       count = ret;
 >
-> tuxmake --runtime podman --target-arch parisc --toolchain gcc-11
-> --kconfig allnoconfig
+> -       smi->i2c_num = ret;
+> +       smi->i2c_devs = devm_kcalloc(dev, count, sizeof(*smi->i2c_devs), GFP_KERNEL);
+> +       if (!smi->i2c_devs)
+> +               return -ENOMEM;
 >
+> -       for (i = 0; i < smi->i2c_num && inst[i].type; i++) {
+> +       for (i = 0; i < count && inst_array[i].type; i++) {
+>                 memset(&board_info, 0, sizeof(board_info));
+> -               strlcpy(board_info.type, inst[i].type, I2C_NAME_SIZE);
+> -               snprintf(name, sizeof(name), "%s-%s.%d", dev_name(dev), inst[i].type, i);
+> +               strscpy(board_info.type, inst_array[i].type, I2C_NAME_SIZE);
+
+The switch-over from strlcpy() to strscpy() should be mentioned in the
+changelog.
+
+> +               snprintf(name, sizeof(name), "%s-%s.%d", dev_name(dev), inst_array[i].type, i);
+>                 board_info.dev_name = name;
+> -               switch (inst[i].flags & IRQ_RESOURCE_TYPE) {
+> -               case IRQ_RESOURCE_GPIO:
+> -                       ret = acpi_dev_gpio_irq_get(adev, inst[i].irq_idx);
+> -                       if (ret < 0) {
+> -                               dev_err(dev, "Error requesting irq at index %d: %d\n",
+> -                                               inst[i].irq_idx, ret);
+> -                               goto error;
+> -                       }
+> -                       board_info.irq = ret;
+> -                       break;
+> -               case IRQ_RESOURCE_APIC:
+> -                       ret = platform_get_irq(pdev, inst[i].irq_idx);
+> -                       if (ret < 0) {
+> -                               dev_dbg(dev, "Error requesting irq at index %d: %d\n",
+> -                                       inst[i].irq_idx, ret);
+> -                               goto error;
+> -                       }
+> -                       board_info.irq = ret;
+> -                       break;
+> -               default:
+> -                       board_info.irq = 0;
+> -                       break;
+> -               }
+> +
+> +               ret = smi_get_irq(pdev, adev, &inst_array[i]);
+> +               if (ret < 0)
+> +                       goto error;
+> +               board_info.irq = ret;
+> +
+>                 smi->i2c_devs[i] = i2c_acpi_new_device(dev, i, &board_info);
+>                 if (IS_ERR(smi->i2c_devs[i])) {
+>                         ret = dev_err_probe(dev, PTR_ERR(smi->i2c_devs[i]),
+>                                             "Error creating i2c-client, idx %d\n", i);
+>                         goto error;
+>                 }
+> +               smi->i2c_num++;
+>         }
+> -       if (i < smi->i2c_num) {
+> +       if (smi->i2c_num < count) {
+>                 dev_err(dev, "Error finding driver, idx %d\n", i);
+
+That's not particularly informative and so not particularly useful for
+a casual receiver of this message.  I'd make it dev_dbg().
+
+>                 ret = -ENODEV;
+>                 goto error;
+>         }
+>
+> -       platform_set_drvdata(pdev, smi);
+> -       return 0;
+> +       dev_info(dev, "Instantiated %d I2C devices.\n", smi->i2c_num);
+>
+> +       return 0;
+>  error:
+> -       while (--i >= 0)
+> -               i2c_unregister_device(smi->i2c_devs[i]);
+> +       smi_devs_unregister(smi);
+>
+>         return ret;
+>  }
+>
+> +static int smi_probe(struct platform_device *pdev)
+> +{
+> +       const struct smi_instance *inst_array;
+> +       struct device *dev = &pdev->dev;
+> +       struct acpi_device *adev;
+> +       struct smi *smi;
+> +
+> +       inst_array = device_get_match_data(dev);
+> +       if (!inst_array) {
+> +               dev_err(dev, "Error ACPI match data is missing\n");
+
+Again, this isn't very informative to someone reading this message on
+a random system, so I'd change the log level.
+
+> +               return -ENODEV;
+> +       }
+> +
+> +       adev = ACPI_COMPANION(dev);
+> +       if (!adev)
+> +               return -ENODEV;
+
+Since you're at it anyway, I'd check the companion's presence upfront,
+because you can't do much without it in any case.
+
+> +
+> +       smi = devm_kzalloc(dev, sizeof(*smi), GFP_KERNEL);
+> +       if (!smi)
+> +               return -ENOMEM;
+> +
+> +       platform_set_drvdata(pdev, smi);
+> +
+> +       return smi_i2c_probe(pdev, adev, smi, inst_array);
+> +}
+> +
+>  static int smi_remove(struct platform_device *pdev)
+>  {
+>         struct smi *smi = platform_get_drvdata(pdev);
+> -       int i;
+>
+> -       for (i = 0; i < smi->i2c_num; i++)
+> -               i2c_unregister_device(smi->i2c_devs[i]);
+> +       smi_devs_unregister(smi);
+>
+>         return 0;
+>  }
 > --
-> Linaro LKFT
-> https://lkft.linaro.org
+> 2.25.1
+>

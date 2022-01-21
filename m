@@ -2,58 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE855496178
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:46:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6726849617C
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 15:46:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381372AbiAUOqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 09:46:48 -0500
-Received: from mail-ua1-f50.google.com ([209.85.222.50]:43666 "EHLO
-        mail-ua1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381253AbiAUOqj (ORCPT
+        id S1351210AbiAUOqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 09:46:53 -0500
+Received: from mail-ua1-f54.google.com ([209.85.222.54]:39616 "EHLO
+        mail-ua1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345996AbiAUOqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 09:46:39 -0500
-Received: by mail-ua1-f50.google.com with SMTP id 2so17274221uax.10;
-        Fri, 21 Jan 2022 06:46:38 -0800 (PST)
+        Fri, 21 Jan 2022 09:46:44 -0500
+Received: by mail-ua1-f54.google.com with SMTP id p7so10085675uao.6;
+        Fri, 21 Jan 2022 06:46:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DxPRsEioEhWwZNVwROb6Na+9U4bze12UgQ1X0XxyEKg=;
-        b=lgVVor5viYZDRh0iIdNADQeDNMOkmnSHoN4s4RYn6IREpdxtss5lPfAUdfWkY/2aNy
-         Rjo384O7NBTUqVQMm8iQaA0BFY/j99CQpGQChvrlEWHBHYE2qn88J9N+gtp8PIYvTWR4
-         4CWBUtfTOQqBjhsn3TsHO8AlwGghfs4LuwOc1Ta90TS3MsWyox87T0n6gso0Lf8YRCdY
-         y5JK3BK4nU1qecLGtIAe/f4zw2hyXnQHQ+sN9/HCxPwEZRHtfiMjyDYX8bTsBxuTBBUD
-         XUn4Pc+6RUGoCwQJm0I53z2wXogGn6woehPDOPrh2h0uAQ9TfXXpL7DtQhzIUS2bJubM
-         Y9ZQ==
-X-Gm-Message-State: AOAM530R1WANTQ1uMTuLNbFoYsk4NBnf1kE+fg4vRN3hEVbcVJl/Wzxs
-        ECeOvIsXm1sSNUYe3gvD4glLeFbZ+4E4nw==
-X-Google-Smtp-Source: ABdhPJxScp8AfGSfPSJt8k9vY+myxgJwqdjOWZDvf1Q2RaVXMr6TWW6OqS8NJuXvB4PEAVxaAsTPFQ==
-X-Received: by 2002:ab0:59ea:: with SMTP id k39mr1788258uad.71.1642776397988;
-        Fri, 21 Jan 2022 06:46:37 -0800 (PST)
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com. [209.85.222.49])
-        by smtp.gmail.com with ESMTPSA id q69sm1390004vka.21.2022.01.21.06.46.37
+        bh=J85u4F+foj+qau0xIxcqBu51Qlat9siUCbInzEtZHx4=;
+        b=FrgPDhNpfucF1IqErH3hVj84WW83B0CdxOq6QjxKTHwUzUMjnXqfpGaNFgDyUuzRws
+         eRtWnX791VIqjmiTUxLAyi1EAXNFmLvQm7JqucCrLdQ2aJkaLr4TO9xQj4cUFZlkqI5j
+         FKQpu0gKQuiYCoesTHEV869QwNmnyA9PIWwwMgAnqim1jFi7FT1IPPEz91vNQDQj+n14
+         wGRe0NuwksVl8vVGHy285j0Hnb3vUu6tMxtOA2jVE1CUd+tzZyZIdkHDtSumztulSuMv
+         oAQ2dshcQbICswQNFpSB/lCyDYWHY8Q1HIT8puNGpjoYhsCPuwbI4rvXJcvi8HZnVHhY
+         Hoqg==
+X-Gm-Message-State: AOAM533w0DF1YVwUYhTxJF5uVHuDFvZygszyoPR8P0fLYE0SFroOIbnb
+        1bRWSeAqb4iMqMr+I/m83mbCNwbLKBeoSw==
+X-Google-Smtp-Source: ABdhPJz4quqZkUxgv+K4WgoggS9/Nm/yZo4FDp8QvywLb1YveRjffiBKSGPr3HbrHFQqHh83Jmr04Q==
+X-Received: by 2002:a05:6102:3a68:: with SMTP id bf8mr1659029vsb.63.1642776403082;
+        Fri, 21 Jan 2022 06:46:43 -0800 (PST)
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com. [209.85.221.169])
+        by smtp.gmail.com with ESMTPSA id j6sm1347564uae.4.2022.01.21.06.46.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Jan 2022 06:46:37 -0800 (PST)
-Received: by mail-ua1-f49.google.com with SMTP id u6so17379833uaq.0;
-        Fri, 21 Jan 2022 06:46:37 -0800 (PST)
-X-Received: by 2002:a67:e95a:: with SMTP id p26mr1713985vso.38.1642776397567;
- Fri, 21 Jan 2022 06:46:37 -0800 (PST)
+        Fri, 21 Jan 2022 06:46:42 -0800 (PST)
+Received: by mail-vk1-f169.google.com with SMTP id d189so5707859vkg.3;
+        Fri, 21 Jan 2022 06:46:42 -0800 (PST)
+X-Received: by 2002:a1f:5702:: with SMTP id l2mr1757097vkb.33.1642776402171;
+ Fri, 21 Jan 2022 06:46:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20220110134659.30424-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220110134659.30424-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220110134659.30424-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220110134659.30424-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220110134659.30424-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220110134659.30424-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 21 Jan 2022 15:46:26 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUL_k0b-MrhHF6A4vrW++0--bKfcL746moRNP=0_8XP8Q@mail.gmail.com>
-Message-ID: <CAMuHMdUL_k0b-MrhHF6A4vrW++0--bKfcL746moRNP=0_8XP8Q@mail.gmail.com>
-Subject: Re: [PATCH v2 08/12] dt-bindings: dma: rz-dmac: Document RZ/V2L SoC
+Date:   Fri, 21 Jan 2022 15:46:30 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU9nssOkq_cv9R5sHOW=CD19e0=7kanuwM9_kgQjSv8Vg@mail.gmail.com>
+Message-ID: <CAMuHMdU9nssOkq_cv9R5sHOW=CD19e0=7kanuwM9_kgQjSv8Vg@mail.gmail.com>
+Subject: Re: [PATCH v2 09/12] dt-bindings: net: renesas,etheravb: Document
+ RZ/V2L SoC
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dmaengine <dmaengine@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -65,9 +69,10 @@ On Mon, Jan 10, 2022 at 2:47 PM Lad Prabhakar
 <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 > From: Biju Das <biju.das.jz@bp.renesas.com>
 >
-> Document RZ/V2L DMAC bindings. RZ/V2L DMAC is identical to one found on
-> the RZ/G2L SoC. No driver changes are required as generic compatible
-> string "renesas,rz-dmac" will be used as a fallback.
+> Document Gigabit Ethernet IP found on RZ/V2L SoC. Gigabit Ethernet
+> Interface is identical to one found on the RZ/G2L SoC. No driver changes
+> are required as generic compatible string "renesas,rzg2l-gbeth" will be
+> used as a fallback.
 >
 > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>

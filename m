@@ -2,83 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54AA4495D0F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 10:51:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4198E495D11
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 10:51:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379740AbiAUJvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 04:51:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231417AbiAUJvN (ORCPT
+        id S1379780AbiAUJvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 04:51:40 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:37786 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231417AbiAUJvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 04:51:13 -0500
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09CDC061574
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 01:51:12 -0800 (PST)
-Received: by mail-qk1-x731.google.com with SMTP id s12so9293234qkg.6
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 01:51:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=z1FINpzDsQPI0PUajwhqnDxhxA4dZ+cIwmmEukBNCPI=;
-        b=EbyA23v4IdYcSSNOOEme3+yuAPNlAw/CEp+nfLDkBym5L8yhuZALXoNYQcDczAGKJi
-         vo++fLaJl2YQNSC7G+KGpS4E+GymFjuJMg+c5tu6LR/xgF0vE7ZB3tfJ/eheu9Y38Bdr
-         rJ6HHlPXxg0ZYZAQ4JFrPFnAndAHCFoXZq51boDgy6fFZ+8J0GuxingrkytYrbnzbRvD
-         r9aHnbDn/wh4a/TF2PPNOJ8LHG5mfo1z0ejTTLG9kIga+BeQOM3/uCcmnQyi3lRflKYd
-         PQuaYkUohknt6XJBUT7Tq47+unvLO4fPe+Ltbj4HfgXrkl8JXh17YvU+arw2va3E/4jk
-         JArA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=z1FINpzDsQPI0PUajwhqnDxhxA4dZ+cIwmmEukBNCPI=;
-        b=C7hGSFVIxZspME9Gsi/66WJMLpGZJrHaM4q9jDcRjDzMgC1qu00S2ob5G4Una4P+j5
-         /+hmTI1jtZuOBIL3urFcakhrFaCClrx1O2IUWV2qX/eQsXweNOKT75Hf3bv6DRvImMkK
-         wlJoHO8K1LsJR2jtaHVIGqZplw1bLqzES93zHNYTMPMZiIE3+kScT8IifgNbmGAU43KZ
-         5rcAOX+36/PeY5auvIslLkT3Xws/jRQ7ZZ6hw3P/jMDgcU5nah20nzxvWf9BE0zyIHP4
-         vxKmPJUoUu6LhdCPCZCjaX+v73sK9kB8GlC/Sw7r7EGlJcxBJaLQ3ioOmiSPyw4+ZRg0
-         3CGQ==
-X-Gm-Message-State: AOAM533H/BOYWir1H6HQ+HWvcG36WE1/3hiTVnJQhdvnrB6PDksJTRVR
-        JNbW59u5E1+2ssO+gPqq2uc=
-X-Google-Smtp-Source: ABdhPJyQVVSGRAag0A6AHd3n5hs3zX1Hidbo65RISgZJEtvTDZgw1i554pbF4gnze89jc1Z1c4UNDA==
-X-Received: by 2002:a05:620a:24c7:: with SMTP id m7mr2077240qkn.35.1642758672129;
-        Fri, 21 Jan 2022 01:51:12 -0800 (PST)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id y19sm2764090qtx.75.2022.01.21.01.51.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 01:51:11 -0800 (PST)
-Message-ID: <61ea820f.1c69fb81.e79d5.09c9@mx.google.com>
-X-Google-Original-Message-ID: <20220121095108.GA1002138@cgel.zte@gmail.com>
-Date:   Fri, 21 Jan 2022 09:51:08 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     akpm@linux-foundation.org, sfr@canb.auug.org.au,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Yang Yang <yang.yang29@zte.com.cn>
-Subject: Re: [PATCH] psi: Treat ksm swapping in copy as memstall
-References: <20220116152150.859520-1-yang.yang29@zte.com.cn>
- <YeVdvVVBvrXH5U0L@cmpxchg.org>
- <61e7ac25.1c69fb81.e8938.bc67@mx.google.com>
- <YegK7+oKFG8EPRp9@cmpxchg.org>
+        Fri, 21 Jan 2022 04:51:39 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B88871F884;
+        Fri, 21 Jan 2022 09:51:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1642758698; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W3TztOpgm9Ikx4CBHMNKVa/URwQROwDVM4fT1vsEWy4=;
+        b=cv21lt9V0GrwOrelsUFMtw8ww5SpxhlR24oDMyT9nW+U4PfJcDriS6CYYG+SqSd30/9Bx1
+        DsFzF1Nt0yUOU2hThmwdy8tpZOLKpe9wN4oDF1o1pSF8JnXya6pwNjX36Cfywh0+b6bl6w
+        IvwaZwBZ9QuNZQDlMmkw1F/B5XF3ApY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1642758698;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W3TztOpgm9Ikx4CBHMNKVa/URwQROwDVM4fT1vsEWy4=;
+        b=qUaAkqA90fUI2q2AVp/A1EHSLwKU7zcbgSLuG880aUtdKe0NkHEdpF8xjIfnzGxXMpe5Ki
+        vzlVpVoe6+W5SVBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 762D913C32;
+        Fri, 21 Jan 2022 09:51:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 5dzIGyqC6mENXQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 21 Jan 2022 09:51:38 +0000
+Message-ID: <dd3c0c6a-41d5-ffdb-f361-13fcd7982b6a@suse.cz>
+Date:   Fri, 21 Jan 2022 10:51:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YegK7+oKFG8EPRp9@cmpxchg.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 66/66] mm/mmap: Drop range_has_overlap() function
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-67-Liam.Howlett@oracle.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20211201142918.921493-67-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Wed, Jan 19, 2022 at 07:58:23AM -0500, Johannes Weiner wrote:
-> On Wed, Jan 19, 2022 at 06:13:54AM +0000, CGEL wrote:
-> > I did a test, when we use zram, it takes longer time for ksm copying than
-> > swap_readpage(). Ksm copying average takes 147263ns, swap_readpage()
-> > average takes 55639ns. So I think this patch is reasonable.
+On 12/1/21 15:30, Liam Howlett wrote:
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
 > 
-> Ok, that sounds reasonable to me as well. Please add the
-> PageWorkingset() check and resubmit the patch. Thanks!
-I am a litte confused about adding PageWorkingset(), since I
-think ksm_might_need_to_copy() memstall is like swap_readpage()
-memstall and swap_readpage() doesn't add PageWorkingset().
+> Since there is no longer a linked list, the range_has_overlap() function
+> is identical to the find_vma_intersection() function.  There is only one
+> place that actually needs the previous vma, so just use vma_prev() in
+> that one case.
 
-Would please make it cleaner? Thanks!
+I guess that was written before some further changes and now it's removing
+just one user that doesn't care about pprev.
+
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
+
+> ---
+>  mm/mmap.c | 28 +---------------------------
+>  1 file changed, 1 insertion(+), 27 deletions(-)
+> 
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index e13c6ef76697..4dfe2f92796e 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -420,30 +420,6 @@ anon_vma_interval_tree_post_update_vma(struct vm_area_struct *vma)
+>  		anon_vma_interval_tree_insert(avc, &avc->anon_vma->rb_root);
+>  }
+>  
+> -/*
+> - * range_has_overlap() - Check the @start - @end range for overlapping VMAs and
+> - * sets up a pointer to the previous VMA
+> - * @mm: the mm struct
+> - * @start: the start address of the range
+> - * @end: the end address of the range
+> - * @pprev: the pointer to the pointer of the previous VMA
+> - *
+> - * Returns: True if there is an overlapping VMA, false otherwise
+> - */
+> -static inline
+> -bool range_has_overlap(struct mm_struct *mm, unsigned long start,
+> -		       unsigned long end, struct vm_area_struct **pprev)
+> -{
+> -	struct vm_area_struct *existing;
+> -
+> -	MA_STATE(mas, &mm->mm_mt, start, start);
+> -	rcu_read_lock();
+> -	existing = mas_find(&mas, end - 1);
+> -	*pprev = mas_prev(&mas, 0);
+> -	rcu_read_unlock();
+> -	return existing ? true : false;
+> -}
+> -
+>  static unsigned long count_vma_pages_range(struct mm_struct *mm,
+>  		unsigned long addr, unsigned long end)
+>  {
+> @@ -3188,9 +3164,7 @@ void exit_mmap(struct mm_struct *mm)
+>   */
+>  int insert_vm_struct(struct mm_struct *mm, struct vm_area_struct *vma)
+>  {
+> -	struct vm_area_struct *prev;
+> -
+> -	if (range_has_overlap(mm, vma->vm_start, vma->vm_end, &prev))
+> +	if (find_vma_intersection(mm, vma->vm_start, vma->vm_end))
+>  		return -ENOMEM;
+>  
+>  	if ((vma->vm_flags & VM_ACCOUNT) &&
+

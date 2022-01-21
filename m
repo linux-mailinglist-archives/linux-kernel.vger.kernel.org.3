@@ -2,77 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E60C4967F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 23:43:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E7A94967F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 23:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbiAUWnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 17:43:10 -0500
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:40572 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230459AbiAUWnJ (ORCPT
+        id S232024AbiAUWp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 17:45:27 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:55592 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229926AbiAUWp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 17:43:09 -0500
-Received: by mail-ot1-f53.google.com with SMTP id x31-20020a056830245f00b00599111c8b20so13572454otr.7;
-        Fri, 21 Jan 2022 14:43:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fSCyBKp32UqtmME5uEE03YSNJoMhr1xa+A5W+klSh0M=;
-        b=doi9jkvH+7ACLFFNk4RD7gSs+nWJiK4UjUjDCGMcKTKBAomTCrEaGuIeuinnACGgTi
-         BF5OYG3InQ2gc80JGg0C3IBHTs5vueGHiULjN5eGhqYVNtUzmtjZZZyiyv8KUkhCbips
-         g/1+9VxRNrpOjaT5aYw4D7Bnp2QfReRqyg4QJvNt+XwjdQmabj7fBWLzojU+fato7vbE
-         bqZCkEhFgtx9zDAz25NUnp6w1RCifScGrKwlGVmb41z+BJxMs8U+R+hTWs7aSVX3PJd8
-         hcfDvDjaOqXvL8H4LvPXMwUAlYMcNnxUNLMzsyBkScnqV5LQy62nAb3L3tt8p1nUSBy4
-         b+QA==
-X-Gm-Message-State: AOAM533ULW2P/fdJ7S1bmYXocK/ZvF3Wdc/KEB5wq7DlTQtFdYY0GHhn
-        usYqA1d2PmHNMWUcvmsfs0S/5F1WeQ==
-X-Google-Smtp-Source: ABdhPJwi/s/S/RjfhvcBBnx7DFAIM5Ln5eCBuljWjbPY5eEdgoZw+Bs7bH3H7LG56dAD1E8iFaTtOA==
-X-Received: by 2002:a05:6830:440b:: with SMTP id q11mr4393367otv.270.1642804988479;
-        Fri, 21 Jan 2022 14:43:08 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id c27sm1675363otd.69.2022.01.21.14.43.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 14:43:07 -0800 (PST)
-Received: (nullmailer pid 1739739 invoked by uid 1000);
-        Fri, 21 Jan 2022 22:43:06 -0000
-Date:   Fri, 21 Jan 2022 16:43:06 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     alistair@alistair23.me, alistair23@gmail.com, andreas@kemnade.info,
-        devicetree@vger.kernel.org, dmitry.torokhov@gmail.com,
-        linus.walleij@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maxime.ripard@bootlin.com, mylene.josserand@bootlin.com,
-        rydberg@bitmath.org
-Subject: Re: [PATCH v5 1/4] Input: Add driver for Cypress Generation 5
- touchscreen
-Message-ID: <Yes2+ps8qTT52g3Z@robh.at.kernel.org>
-References: <20220109115331.388633-2-alistair@alistair23.me>
- <20220119012637.1713748-1-pgwipeout@gmail.com>
+        Fri, 21 Jan 2022 17:45:26 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9F37525B;
+        Fri, 21 Jan 2022 23:45:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1642805123;
+        bh=MTvhs1Ji3raiFOvOg+D9/nZXJCTIHgAe9pLcbHUqokA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vOlt4XVRAgTLlKVZ8KyU5yTSTLG60rdslIJRDihqW7EhDcVE6ayoUEZ/HiQBD5fO6
+         MtgAvIhAdtFYrBl/y8FfwSM93KP+NlW2zGer8XRgy+fHJjZaXkaNCYDn6dn6M7hkIH
+         RFHQK/2tu80u5DbhwgUQcrkhV5asm/soaBjWlKxY=
+Date:   Sat, 22 Jan 2022 00:45:07 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
+        kernel-list@raspberrypi.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org, lukasz@jany.st,
+        mchehab@kernel.org, naush@raspberrypi.com, robh@kernel.org,
+        tomi.valkeinen@ideasonboard.com
+Subject: Re: [RFC PATCH v2 5/7] ARM: dts: bcm2711: Add unicam CSI nodes
+Message-ID: <Yes3c1v+V1hMlWfW@pendragon.ideasonboard.com>
+References: <20220121081810.155500-1-jeanmichel.hautbois@ideasonboard.com>
+ <20220121081810.155500-6-jeanmichel.hautbois@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220119012637.1713748-1-pgwipeout@gmail.com>
+In-Reply-To: <20220121081810.155500-6-jeanmichel.hautbois@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 08:26:37PM -0500, Peter Geis wrote:
-> Good Evening,
+Hi Jean-Michel,
+
+Thank you for the patch.
+
+On Fri, Jan 21, 2022 at 09:18:08AM +0100, Jean-Michel Hautbois wrote:
+> Add both MIPI CSI-2 nodes in the core bcm2711 tree. Use the 3-cells
+> interrupt declaration, corresponding clocks and default as disabled.
 > 
-> I tried using this with a cypress tma448 and thought there was an issue
-> with the driver.
-> Further investigation found the tma448 in question had no configuration
-> burned into it, thus max size and pressure are zero.
+> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+> ---
+>  arch/arm/boot/dts/bcm2711.dtsi | 31 +++++++++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
 > 
-> I've added the patch below to extend the driver with device tree
-> overrides.
-> Unfortunately device_property_read_u16 is broken on arm64 currently, as
-> it returns zero.
+> diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
+> index dff18fc9a906..077141df7024 100644
+> --- a/arch/arm/boot/dts/bcm2711.dtsi
+> +++ b/arch/arm/boot/dts/bcm2711.dtsi
+> @@ -3,6 +3,7 @@
+>  
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  #include <dt-bindings/soc/bcm2835-pm.h>
+> +#include <dt-bindings/power/raspberrypi-power.h>
+>  
+>  / {
+>  	compatible = "brcm,bcm2711";
+> @@ -293,6 +294,36 @@ hvs: hvs@7e400000 {
+>  			interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
+>  		};
+>  
+> +		csi0: csi1@7e800000 {
 
-FYI, I replied to your bug report:
+The node name should be csi@7e800000, not csi1@7e800000. Now, this will
+probably cause issues with the firmware that looks for csi1 (and csi0 ?)
+to hand over control of the Unicam CSI-2 receiver to the kernel. I
+wonder if this is something that could be handled by a firmware update,
+to also recognize nodes named "csi" ?
 
-https://lore.kernel.org/all/CAMdYzYquceSBrOsvO8rW9wmJA_RO=HSwv_waVoS=0hsP414T-A@mail.gmail.com/
+> +			compatible = "brcm,bcm2835-unicam";
+> +			reg = <0x7e800000 0x800>,
+> +			      <0x7e802000 0x4>;
+> +			interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&clocks BCM2835_CLOCK_CAM0>,
+> +				 <&firmware_clocks 4>;
+> +			clock-names = "lp", "vpu";
+> +			power-domains = <&power RPI_POWER_DOMAIN_UNICAM0>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			#clock-cells = <1>;
 
-Rob
+Why do you need #address-cells, #size-cells and #clock-cells ? They're
+not mentioned in the binding.
+
+> +			status="disabled";
+
+Missing spaces around the =.
+
+Same comment for the next node.
+
+> +		};
+> +
+> +		csi1: csi1@7e801000 {
+> +			compatible = "brcm,bcm2835-unicam";
+> +			reg = <0x7e801000 0x800>,
+> +			      <0x7e802004 0x4>;
+> +			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&clocks BCM2835_CLOCK_CAM1>,
+> +				 <&firmware_clocks 4>;
+> +			clock-names = "lp", "vpu";
+> +			power-domains = <&power RPI_POWER_DOMAIN_UNICAM1>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			#clock-cells = <1>;
+> +			status="disabled";
+> +		};
+> +
+>  		pixelvalve3: pixelvalve@7ec12000 {
+>  			compatible = "brcm,bcm2711-pixelvalve3";
+>  			reg = <0x7ec12000 0x100>;
+
+-- 
+Regards,
+
+Laurent Pinchart

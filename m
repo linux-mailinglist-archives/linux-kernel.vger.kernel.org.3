@@ -2,93 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6104B4966A2
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 21:51:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D70464966A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 21:51:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231849AbiAUUvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 15:51:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
+        id S232191AbiAUUv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 15:51:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiAUUvw (ORCPT
+        with ESMTP id S231881AbiAUUvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 15:51:52 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9328C06173D
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 12:51:52 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id 23so30900076ybf.7
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 12:51:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yx8Sp5yK+IdSrHNRElqCQeGwi3Mhv+uJHX0dumssPUA=;
-        b=YjZAfWsIl22u4X60/fbS0dbemyatmDIkYev6n1TbCuzrDC87OZ3vL1EMl1GajyVlDf
-         AelgkM6pKJ0kXs/tVKF3zcI07cEMv0w9EAYpMNi5c3CNWfYRphBxeQBYSK/rDzUD2Aoc
-         O/9vGAd1++8iH81q0OyiG5sdMKU2Jii8KEkzgUDk+l8Bj9KfRDLw9nVEnd9csn9q1in7
-         jIU40jwptembCj0iK/B4OXLRvkqGP5fdzwuauK1L2dBBPlFB84oZEhR3dut2uFSqfMfY
-         8nRZkKg0C73kq764VJ8P9MK8Kx0P/kX0fdX46xbVvRNhonRy8dadYg8FYS9E1G/Gvfrv
-         RSYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yx8Sp5yK+IdSrHNRElqCQeGwi3Mhv+uJHX0dumssPUA=;
-        b=o89+vz+DVESOQgwTthN30z3DS7h+KTFR/ox3Ln05dC0d2LOEGsakyESKznJNlVSxn9
-         v+m5PtY8ebDI0JR1MsmZ1BoHNNKc6P671oxo4d3LcFHbll3FKcv3dTzIdoaQz515A6+v
-         B5sJaQxB3X90rDfYTDBXdqbuD0sYhZAt9yBi7CBknshT/61g0IkUBRNyp3AJ/dsz74G9
-         VtjuFqTXHEh3sG3J8C4m4GI3S/krzSE3JJOdVuCggIkQeOQ7a0ku7PLBqdweUkKBC+KB
-         W/eRzuRNhE+WBEUxLkgnMJQvElk14AWn5I9ZVIPOQg+TILTZB0WqIayQ754fyuvmAtVz
-         Mp3w==
-X-Gm-Message-State: AOAM53129m+Iti1521Dsf6brAwc5HtQ8CRhaVqurI9FO5g0wnfneN5Ea
-        Gr/YPD+pJ51XjsHYJayISqvsebIwry2wDp5jEqQN7K6KPVw=
-X-Google-Smtp-Source: ABdhPJxkhXZrcRureYqCap4kFxTZxfwvDGSic4fyFA+HyhmO213hyixgvNMr4MNs1ShbFviWARp8lDLRAfZc4ikUV+s=
-X-Received: by 2002:a25:c841:: with SMTP id y62mr8672404ybf.196.1642798311679;
- Fri, 21 Jan 2022 12:51:51 -0800 (PST)
+        Fri, 21 Jan 2022 15:51:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C16C06173D;
+        Fri, 21 Jan 2022 12:51:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7D7C6179B;
+        Fri, 21 Jan 2022 20:51:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5A5DC340E7;
+        Fri, 21 Jan 2022 20:51:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642798314;
+        bh=SVl6//wpXfUNsqiviayEYDCQfk3rcNjw29GFyV3RJxU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NwNDuXjTFw9dFgUTKSFzekZNyRYCcGLRph1m533ktEtw9X/hg82lL5WI51UgXoD1C
+         oFVXf3fwv3wMy4zTb4OTcGcMLGKvhpMWT0xW+KCD7+iRXHW2HATohbo7uXPTxUttXH
+         0v3gc6mqmHBOrJ1yJl8Y+cAlHuhOIkXAE+WnPdxeTjxhCoo5rvIGX94lGULyx17Ou8
+         u+bTlXE2ItLx325BWmuvG9b9zMXCUHC/3+0O1YtIs1x3mSrLl/B0B9osfFbE4DYL2x
+         dmysUlkSl3Hv/URKHc9RXXXvEOqoCHzwtNHIBA0QlBxC9TG5XnHotHdjXy39q7O9Ti
+         0VCCmWDnMcpjQ==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Michal Simek <monstr@monstr.eu>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH v1] microblaze/PCI: Remove pci_phys_mem_access_prot() dead code
+Date:   Fri, 21 Jan 2022 14:51:50 -0600
+Message-Id: <20220121205150.1151607-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAHmME9qVMomgb53rABKsucCoEhwsk+=KzDdEcGKtecOXuahTZw@mail.gmail.com>
- <20220119135450.564115-1-Jason@zx2c4.com> <YesPesOhftSzp2ft@sol.localdomain> <CAHmME9ow7TxCaYYayRn9rdJJSdQ48tWQgdrW00g7mHaWvVJ+Zw@mail.gmail.com>
-In-Reply-To: <CAHmME9ow7TxCaYYayRn9rdJJSdQ48tWQgdrW00g7mHaWvVJ+Zw@mail.gmail.com>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Fri, 21 Jan 2022 12:51:40 -0800
-Message-ID: <CABCJKuf=eHuFfNjD-7FBTeft3XNTkEc4G9cDvYpMJgH_se12eg@mail.gmail.com>
-Subject: Re: [PATCH] lib/crypto: blake2s: avoid indirect calls to compression
- function for Clang CFI
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Eric Biggers <ebiggers@kernel.org>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-On Fri, Jan 21, 2022 at 12:23 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> On Fri, Jan 21, 2022 at 8:54 PM Eric Biggers <ebiggers@kernel.org> wrote:
-> > There are some lines over 80 columns in this patch.
->
-> I'll fix that up.
->
-> > Otherwise this looks fine.  It would be really nice to fix this in clang,
-> > though.
->
-> I agree. I'm wondering whether it makes sense to roll with this patch,
-> or to just not change anything and lean on Clang upstream to fix their
-> bug. Full LTO is marked as "experimental" still. On the other hand,
-> Android ships with it turned on, so how "experimental" can it really
-> be? I don't have a strong read on the Clang ecosystem to know what
-> makes most sense, to apply this or not. Do you have an opinion?
+pci_phys_mem_access_prot() is defined but never used.  Remove it.
 
-We'll work on fixing the compiler, but please note that it's most
-likely going to take a while, so I would prefer to work around the
-issue in the kernel for now.
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+---
+ arch/microblaze/include/asm/pci.h |  4 ---
+ arch/microblaze/pci/pci-common.c  | 49 -------------------------------
+ 2 files changed, 53 deletions(-)
 
-Sami
+diff --git a/arch/microblaze/include/asm/pci.h b/arch/microblaze/include/asm/pci.h
+index 7c4dc5d85f53..d90528064604 100644
+--- a/arch/microblaze/include/asm/pci.h
++++ b/arch/microblaze/include/asm/pci.h
+@@ -61,10 +61,6 @@ extern int pci_mmap_legacy_page_range(struct pci_bus *bus,
+ extern void pcibios_resource_survey(void);
+ 
+ struct file;
+-extern pgprot_t	pci_phys_mem_access_prot(struct file *file,
+-					 unsigned long pfn,
+-					 unsigned long size,
+-					 pgprot_t prot);
+ 
+ /* This part of code was originally in xilinx-pci.h */
+ #ifdef CONFIG_PCI_XILINX
+diff --git a/arch/microblaze/pci/pci-common.c b/arch/microblaze/pci/pci-common.c
+index 622a4867f9e9..33bab7eec731 100644
+--- a/arch/microblaze/pci/pci-common.c
++++ b/arch/microblaze/pci/pci-common.c
+@@ -165,55 +165,6 @@ int pci_iobar_pfn(struct pci_dev *pdev, int bar, struct vm_area_struct *vma)
+ 	return 0;
+ }
+ 
+-/*
+- * This one is used by /dev/mem and fbdev who have no clue about the
+- * PCI device, it tries to find the PCI device first and calls the
+- * above routine
+- */
+-pgprot_t pci_phys_mem_access_prot(struct file *file,
+-				  unsigned long pfn,
+-				  unsigned long size,
+-				  pgprot_t prot)
+-{
+-	struct pci_dev *pdev = NULL;
+-	struct resource *found = NULL;
+-	resource_size_t offset = ((resource_size_t)pfn) << PAGE_SHIFT;
+-	int i;
+-
+-	if (page_is_ram(pfn))
+-		return prot;
+-
+-	prot = pgprot_noncached(prot);
+-	for_each_pci_dev(pdev) {
+-		for (i = 0; i <= PCI_ROM_RESOURCE; i++) {
+-			struct resource *rp = &pdev->resource[i];
+-			int flags = rp->flags;
+-
+-			/* Active and same type? */
+-			if ((flags & IORESOURCE_MEM) == 0)
+-				continue;
+-			/* In the range of this resource? */
+-			if (offset < (rp->start & PAGE_MASK) ||
+-			    offset > rp->end)
+-				continue;
+-			found = rp;
+-			break;
+-		}
+-		if (found)
+-			break;
+-	}
+-	if (found) {
+-		if (found->flags & IORESOURCE_PREFETCH)
+-			prot = pgprot_noncached_wc(prot);
+-		pci_dev_put(pdev);
+-	}
+-
+-	pr_debug("PCI: Non-PCI map for %llx, prot: %lx\n",
+-		 (unsigned long long)offset, pgprot_val(prot));
+-
+-	return prot;
+-}
+-
+ /* This provides legacy IO read access on a bus */
+ int pci_legacy_read(struct pci_bus *bus, loff_t port, u32 *val, size_t size)
+ {
+-- 
+2.25.1
+

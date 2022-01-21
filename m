@@ -2,127 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03701496651
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 21:23:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B03496653
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 21:23:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233052AbiAUUXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 15:23:06 -0500
-Received: from mga17.intel.com ([192.55.52.151]:4526 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229947AbiAUUXF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 15:23:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642796585; x=1674332585;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bckgLVD57DRjvgCLcAwRBUzB8RqqLPtmV+qet2QPNaY=;
-  b=kdG1FTVqccWJcnEQNR33LD9/Av+uYkADDkDoZzAvFIjrh2SgcvjqUxkv
-   wamU7rG7W6+vZTiEvG4xxPywX3Usl6qA4i88YbYa4PEgeHGbqJ/uHgx6B
-   VeprhkZhshZt5eaShQo4jqY4w5ePTVMsCWIJDpH0Z8Pqxfy0x4+iZt/qb
-   oF1NPI6330lpyqoYP6Ff38wLGWUJhgRA82k4P4fzQprdYcGSCglPp2F+6
-   117Awj7K1AUw7mw8CSov8Ab1SrLTBnvu0qG94F9J3+Q6Pk4Owe6waNtVR
-   gKFRf68XL+Di0ZLbEMAnr9GDy3h6/ICu+I8KrZMD3Nn1um1iCAlg3xVyv
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="226413071"
-X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
-   d="scan'208";a="226413071"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 12:23:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
-   d="scan'208";a="673051419"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Jan 2022 12:23:03 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nB0R5-000Fdo-17; Fri, 21 Jan 2022 20:23:03 +0000
-Date:   Sat, 22 Jan 2022 04:22:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mike Rapoport <rppt@linux.ibm.com>
-Cc:     kbuild-all@lists.01.org, Mike Rapoport <rppt@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [rppt:gfp-unmapped/v0 1/3] include/linux/compiler_types.h:346:38:
- error: call to '__compiletime_assert_622' declared with attribute error:
- BUILD_BUG_ON failed: pageblock_order != PMD_ORDER
-Message-ID: <202201220449.6A30CSDa-lkp@intel.com>
+        id S233089AbiAUUXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 15:23:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232988AbiAUUXP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 15:23:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CBCC06173B;
+        Fri, 21 Jan 2022 12:23:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7771961770;
+        Fri, 21 Jan 2022 20:23:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 926E0C340E7;
+        Fri, 21 Jan 2022 20:23:13 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="BMscvUpi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1642796591;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oBqGV4H7K/jCpP8PTz6+aYreOz0jHaQWza7NI4+WEM4=;
+        b=BMscvUpigkybSXqmm6pvM0d9nar+niscgkEtK7t6AlZ255cvnXWJHE57oPKT94a5SPmziW
+        3qepWhXljuII19w3iYazpQ4TNYxTBsozuR+Qndq7tczbA5JNAqthomyKT3EP2LdKS3gw4T
+        Wb51lIEedSU3FGf5ad1TdX9AuUw/FHQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d9286d3a (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 21 Jan 2022 20:23:11 +0000 (UTC)
+Received: by mail-yb1-f171.google.com with SMTP id k31so29193052ybj.4;
+        Fri, 21 Jan 2022 12:23:11 -0800 (PST)
+X-Gm-Message-State: AOAM533ssxZKzIk3cGE78ZyTrLoct89FNtj8ed+O2ROTPy8wGYDO5N6s
+        USxuG+1aOkJUfmmmbiHh4glJy7p/7uTLFKQ5lqw=
+X-Google-Smtp-Source: ABdhPJwl2jkYtYtG2nPh5ypMlIKxLf59xn8Y3SzY5dE0QkIWXT8ENiHBOTEA4FBYcb21NZAtyd/9VJpUiC7JY0D0yk4=
+X-Received: by 2002:a25:244b:: with SMTP id k72mr8936181ybk.638.1642796590031;
+ Fri, 21 Jan 2022 12:23:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <CAHmME9qVMomgb53rABKsucCoEhwsk+=KzDdEcGKtecOXuahTZw@mail.gmail.com>
+ <20220119135450.564115-1-Jason@zx2c4.com> <YesPesOhftSzp2ft@sol.localdomain>
+In-Reply-To: <YesPesOhftSzp2ft@sol.localdomain>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Fri, 21 Jan 2022 21:22:59 +0100
+X-Gmail-Original-Message-ID: <CAHmME9ow7TxCaYYayRn9rdJJSdQ48tWQgdrW00g7mHaWvVJ+Zw@mail.gmail.com>
+Message-ID: <CAHmME9ow7TxCaYYayRn9rdJJSdQ48tWQgdrW00g7mHaWvVJ+Zw@mail.gmail.com>
+Subject: Re: [PATCH] lib/crypto: blake2s: avoid indirect calls to compression
+ function for Clang CFI
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Miles Chen <miles.chen@mediatek.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git gfp-unmapped/v0
-head:   53acd000a0eef1457aaa4930c0d2003d7785f799
-commit: 253f456a5cb652a16a59cc4ac2e18669997d79cd [1/3] mm/page_alloc: introduce __GFP_UNMAPPED and MIGRETE_UNMAPPED
-config: x86_64-randconfig-a012-20220117 (https://download.01.org/0day-ci/archive/20220122/202201220449.6A30CSDa-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/commit/?id=253f456a5cb652a16a59cc4ac2e18669997d79cd
-        git remote add rppt https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git
-        git fetch --no-tags rppt gfp-unmapped/v0
-        git checkout 253f456a5cb652a16a59cc4ac2e18669997d79cd
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Fri, Jan 21, 2022 at 8:54 PM Eric Biggers <ebiggers@kernel.org> wrote:
+> There are some lines over 80 columns in this patch.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I'll fix that up.
 
-All errors (new ones prefixed by >>):
+> Otherwise this looks fine.  It would be really nice to fix this in clang,
+> though.
 
-   mm/page_alloc.c:3955:15: warning: no previous prototype for 'should_fail_alloc_page' [-Wmissing-prototypes]
-    3955 | noinline bool should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
-         |               ^~~~~~~~~~~~~~~~~~~~~~
-   In file included from <command-line>:
-   In function 'set_pageblock_unmapped',
-       inlined from 'get_page_from_freelist' at mm/page_alloc.c:4301:8:
->> include/linux/compiler_types.h:346:38: error: call to '__compiletime_assert_622' declared with attribute error: BUILD_BUG_ON failed: pageblock_order != PMD_ORDER
-     346 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                      ^
-   include/linux/compiler_types.h:327:4: note: in definition of macro '__compiletime_assert'
-     327 |    prefix ## suffix();    \
-         |    ^~~~~~
-   include/linux/compiler_types.h:346:2: note: in expansion of macro '_compiletime_assert'
-     346 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |  ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:2: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |  BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |  ^~~~~~~~~~~~~~~~
-   mm/page_alloc.c:2660:2: note: in expansion of macro 'BUILD_BUG_ON'
-    2660 |  BUILD_BUG_ON(pageblock_order != PMD_ORDER);
-         |  ^~~~~~~~~~~~
+I agree. I'm wondering whether it makes sense to roll with this patch,
+or to just not change anything and lean on Clang upstream to fix their
+bug. Full LTO is marked as "experimental" still. On the other hand,
+Android ships with it turned on, so how "experimental" can it really
+be? I don't have a strong read on the Clang ecosystem to know what
+makes most sense, to apply this or not. Do you have an opinion?
 
-
-vim +/__compiletime_assert_622 +346 include/linux/compiler_types.h
-
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  332  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  333  #define _compiletime_assert(condition, msg, prefix, suffix) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  334  	__compiletime_assert(condition, msg, prefix, suffix)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  335  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  336  /**
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  337   * compiletime_assert - break build and emit msg if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  338   * @condition: a compile-time constant condition to check
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  339   * @msg:       a message to emit if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  340   *
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  341   * In tradition of POSIX assert, this macro will break the build if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  342   * supplied condition is *false*, emitting the supplied error message if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  343   * compiler has support to do so.
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  344   */
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  345  #define compiletime_assert(condition, msg) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21 @346  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  347  
-
-:::::: The code at line 346 was first introduced by commit
-:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
-
-:::::: TO: Will Deacon <will@kernel.org>
-:::::: CC: Will Deacon <will@kernel.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Jason

@@ -2,128 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EBDB495D9A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 11:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2B0F495D9D
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 11:18:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379971AbiAUKRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 05:17:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43778 "EHLO
+        id S1349966AbiAUKS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 05:18:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379985AbiAUKRx (ORCPT
+        with ESMTP id S238159AbiAUKS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 05:17:53 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F6DC061753
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 02:17:52 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id n8so16958352wmk.3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 02:17:52 -0800 (PST)
+        Fri, 21 Jan 2022 05:18:28 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDD2C061401
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 02:18:27 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id d3so32216864lfv.13
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 02:18:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=+qjyKZOszfxARlUjaf8ExNQkAP8pObI31nb6cY6ygyE=;
-        b=Q1L8146j2oVMl5S7ZA5dp36WxXZYEmFQqLOJsBJEnYRnC0GKhsyNxpXqxzcIuhLiXR
-         AWjog25dOBimu3Pafw7bfjwJoIL99Uw1wUiO7ABNuu/U86Rh3JYEP2uwthabb90fgNHS
-         YxMnC07a3qDk8hS3QfDEoyqOMUm+lKUjGc/PpK++VbX/KyztLmDJGCNCZi+Kh1JCWYdD
-         uyQamEsK+V8Ko13zw0w3c9uCeN/gkjCC7u3ByWcD/LPqFV33S45vhxs0tvqvcrFvNgCV
-         4EQ4TASBm7FLIRTpvPP51J/v3XdU6srhhn5PKKmsvGO2sFnoFGZa/1j+FSgnE52YGvio
-         FqAA==
+        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ehNPhGfxaSOPMo23fW4dscWuBSl7xXLWdoAmXodSWxs=;
+        b=tIPXAizFDXNmK9BLfbRNxtc78Z0opifETvNRyGi5duEZkcRdIqdDMpkmGqVfixsyuK
+         vSdLkvhD5fbIRr7DRikEsUcmfX8av0qsfghO3JCebwT22TDLiI99toXREsDInSb5E4uM
+         2FwQKJrWrs5jJWxXig9J84Br2Q5njTfa59wtsW7Y2NLyNNNzcJWYtSiGMC14AaBSf2Mh
+         YXVI0jv+4NejycBSghvmO/2SDyybD0rJ/TRk6gqgW8GBLLA2j/ktKtdCxSQMkgSqkCrU
+         +zCqyikEpo3BYcccFCQZGemJjjGeR7O98s+slduzEIm3lxWlrrmk25YD9lUwc9bOGVjW
+         rFWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=+qjyKZOszfxARlUjaf8ExNQkAP8pObI31nb6cY6ygyE=;
-        b=GGcGj9PEv/XH9IL+6bhtffHOIiGJZYCsaRdqISQqb3xkP/6kohW0Z27HeBpwVIiyDm
-         tPh6zsd6vig3DzwjIQ4Sqz2aTedertqAHfix1pRWLeDuVSfjezxCigZtuikcUIn2myYj
-         O1UFp6Q5xyqJBAQ1QEJjcrmIv1pS4IP4s9miAwG/6atPdtkcvxfKZmQW9igQkpvtMt/T
-         FLqRH5eX8Bn3g+bBbt2bsI+RsEhhWJOKFXra2gJ4/b8mxRd8dhNjBbZl6s3Wiy9QUt3X
-         7NyNBIQnU5y4k0UZ3bpQ823CbwG+SV1uRDjPQM/e7bsLus3nWHLbpY5rTGjdnYKujFDE
-         O2wg==
-X-Gm-Message-State: AOAM531Gg74lC26M57GRZg2O2Uh9L58ngYX3XdX6737cjf6DYZ/nh2Ol
-        GZ+wau3q7FsuoqxU0vBx0SqWPA==
-X-Google-Smtp-Source: ABdhPJzo/PMT8MItnYFhOxxP48Ab+NXa5j0UbzbG5l58oX+SIXHyM3HP7gyFVOAyDxjayedzmb25UA==
-X-Received: by 2002:a7b:c76e:: with SMTP id x14mr111558wmk.12.1642760271378;
-        Fri, 21 Jan 2022 02:17:51 -0800 (PST)
-Received: from google.com (cpc106310-bagu17-2-0-cust853.1-3.cable.virginm.net. [86.15.223.86])
-        by smtp.gmail.com with ESMTPSA id b1sm6355459wrd.78.2022.01.21.02.17.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 02:17:50 -0800 (PST)
-Date:   Fri, 21 Jan 2022 10:17:49 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Helge Deller <deller@gmx.de>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-fbdev@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>
-Subject: Re: [GIT PULL] fbdev updates & fixes for v5.17-rc1
-Message-ID: <YeqITV9pAyI6clOB@google.com>
-References: <Yeg11pHSqx29yg/T@ls3530>
- <CAKMK7uGeGBBvTGFyBxLwvTAxEWwXMS8U1rrYUb_7gbui-jV+KA@mail.gmail.com>
- <87fsph4fr2.fsf@intel.com>
- <Yep6te0wrK0ZQ8SB@google.com>
- <016269c1-cf56-04ca-91e8-02417f770af5@gmx.de>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ehNPhGfxaSOPMo23fW4dscWuBSl7xXLWdoAmXodSWxs=;
+        b=YJsNorYnAQ43CoWGGSUE6wt/GZC5/hj9rlGjbQQCvbrvu781yTVMuPTLjOGi1U6ede
+         j0pcirmaYNrpHFCoL7F8XF7l5ohh1x0nX0OL8htJO2vOAJW4ZUe1XGG4iIgJ/F9MhiVg
+         kO9UqhvTopnYlsjN6ZvlqaBNBnNxw+vbtXlWKuqFmdQ0vvEjbkx9SxDP1Dgna3BFGOMA
+         CRZHarJpWqXlTOvPrP2zffMAVJD1o1UvuitmT4CpTvJIjd/uiMWqAGZdWYXr7nA7ow/m
+         ikBIOGclzNIPiQcYiBal/lMVxHAZaDSAVjCVTPfEvf3kIpWUqWOdjIWg0iHQpuTreERy
+         hdGA==
+X-Gm-Message-State: AOAM531MZl9t/tgBVXbDF4z+IWN+QqCuvkrly+fYlOVfGDapxW9YfA5q
+        nQb030sXCztGTr/zTN7b4Z7OGaMuH/xLyjzY
+X-Google-Smtp-Source: ABdhPJy9qoOUlo95bA/WzBYphVdUngC14f5OAGV/yBfMvg1a0u/KUdUyL8IoUK6phvu8xwxNqIT44w==
+X-Received: by 2002:a05:6512:3186:: with SMTP id i6mr3077649lfe.557.1642760305961;
+        Fri, 21 Jan 2022 02:18:25 -0800 (PST)
+Received: from [192.168.112.17] (nikaet.starlink.ru. [94.141.168.29])
+        by smtp.gmail.com with ESMTPSA id f24sm204962lfk.297.2022.01.21.02.18.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Jan 2022 02:18:25 -0800 (PST)
+Message-ID: <f49794a0-096a-1f27-a250-5a74a9ed6ba6@cogentembedded.com>
+Date:   Fri, 21 Jan 2022 13:18:24 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <016269c1-cf56-04ca-91e8-02417f770af5@gmx.de>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] arm64: dts: renesas: ulcb-kf: add KF HDMI output
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211225115308.2152364-1-nikita.yoush@cogentembedded.com>
+ <CAMuHMdXdW=bCxBeEu81bRBwAs5=x_KZmPcXoMe=CmFdWz=rdfQ@mail.gmail.com>
+From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+In-Reply-To: <CAMuHMdXdW=bCxBeEu81bRBwAs5=x_KZmPcXoMe=CmFdWz=rdfQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Jan 2022, Helge Deller wrote:
-
-> On 1/21/22 10:19, Lee Jones wrote:
-> > On Fri, 21 Jan 2022, Jani Nikula wrote:
-> >
-> >> On Fri, 21 Jan 2022, Daniel Vetter <daniel@ffwll.ch> wrote:
-> >>> On Wed, Jan 19, 2022 at 5:02 PM Helge Deller <deller@gmx.de> wrote:
-> >>>> A first bunch of updates and fixes for the following fbdev & backlight drivers:
-> >>>> ocfb, aty128fb, mb862xx, omapfb, qcom-wled, dt-bindings, hyperv_fb,
-> >>>> lm3630a_bl, omap2, controlfb, matroxfb
-> >>>>
-> >>>> Nothing really important, mostly cleanups, const conversions, added null
-> >>>> pointer/boundary checks and build fixes.
-> >>>>
-> >>>> Signed-off-by: Helge Deller <deller@gmx.de>
-> >>>
-> >>> Not sure whether Linus missed this or just wanted to let the
-> >>> discussion settle first. But since this is all random patches for
-> >>> drivers that many distros don't even enable anymore there's no issues
-> >>> here, and I very much welcome someone volunteering to pick these up.
-> >>> I'd expect there's a pile more since it's been 1-2 years since Bart
-> >>> took care of these and merged them consistently.
-> >>>
-> >>> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-> >>
-> >> ...
-> >>
-> >>>>  drivers/video/backlight/lm3630a_bl.c                     |  1 -
-> >>>>  drivers/video/backlight/qcom-wled.c                      |  1 +
-> >>
-> >> Backlight changes usually go through the backlight tree.
-> 
-> Sorry, I didn't know yet.
-> 
-> > Yes, they do.  How were these applied to the DRM tree?
-> 
-> I did applied them.
-
-When you apply patches, you should reply to let the contributor know.
-
-> Shall I drop them and you decide about them?
-
-No, there's no need for that.
-
-> Next I round I'll take care not to pick backlight patches.
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> i.e. will queue in renesas-devel for v5.18 with the sort order fixed.
 
 Thank you.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+I have a question regarding defining regulators.
+
+In case when drivers expect regulators to be define, but physically chips are just wired to VCC (or to 
+some non-programmable power logic), what is the policy regarding regulator-fixed objects?
+
+Shall we define per-consumer regulator-fixed objects?
+Or have a single regulator-fixed for each voltage?
+Or not define regulators at all and let the code to create dummy regulators?
+Or something else?
+
+Nikita

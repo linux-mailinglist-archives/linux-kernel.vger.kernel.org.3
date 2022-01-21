@@ -2,101 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E355F495E5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 12:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D550A495E67
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 12:30:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380121AbiAULZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 06:25:21 -0500
-Received: from foss.arm.com ([217.140.110.172]:48958 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235434AbiAULZV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 06:25:21 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 420D21FB;
-        Fri, 21 Jan 2022 03:25:20 -0800 (PST)
-Received: from [10.57.39.197] (unknown [10.57.39.197])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E3E543F73D;
-        Fri, 21 Jan 2022 03:25:17 -0800 (PST)
-Subject: Re: [PATCH] perf script: Fix printing 'phys_addr' failure issue
-To:     Wei Li <liwei391@huawei.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        guohanjun@huawei.com, jinyao5@huawei.com
-References: <20220121065954.2121900-1-liwei391@huawei.com>
-From:   German Gomez <german.gomez@arm.com>
-Message-ID: <1c38c70b-d165-acf9-1c98-eeb234fbbe99@arm.com>
-Date:   Fri, 21 Jan 2022 11:24:57 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <20220121065954.2121900-1-liwei391@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+        id S1380174AbiAULab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 06:30:31 -0500
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net ([206.189.21.223]:39486
+        "HELO zg8tmja2lje4os4yms4ymjma.icoremail.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with SMTP id S1380180AbiAULaX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 06:30:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id; bh=rDPXEsamv0aDMEHT5TbMnxc471eD+BbCKWqmDxT6GSk=; b=F
+        NtqPwnpvim/Uvyz7AucW2kE+J0ZXELCxZX3XbrCEehMksQIEe7rGNT40iG65Hb9w
+        tUtjSVjHvGCMnSWeRXxIOPZc/EQVOqkiCuaA1Hnb00sGBkmb0NuaOPzAWc6LBLjB
+        4to7FuA4lUsMfYv8rdoKxIV42gIykVjznP8FapOn+w=
+Received: from localhost (unknown [10.129.21.144])
+        by front02 (Coremail) with SMTP id 54FpogDn7BBWmOph8RyQAA--.58368S2;
+        Fri, 21 Jan 2022 19:26:14 +0800 (CST)
+From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
+To:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch, mikita.lipski@amd.com, Wayne.Lin@amd.com,
+        Nicholas.Kazlauskas@amd.com, Jerry.Zuo@amd.com,
+        Anson.Jacob@amd.com, eryk.brol@amd.com, aurabindo.pillai@amd.com,
+        nirmoy.das@amd.com, lyz_cs@pku.edu.cn
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amd/display: Fix memory leak
+Date:   Fri, 21 Jan 2022 03:26:13 -0800
+Message-Id: <1642764373-48563-1-git-send-email-lyz_cs@pku.edu.cn>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: 54FpogDn7BBWmOph8RyQAA--.58368S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3XryDCw47CFyUWFy3JF47Arb_yoW7Ar18pw
+        43ta47Zr17urn2qa12kFs8uF1rK393ta4qgrWxWa43AF47trsaka45Aa4vgF95Wrn8tr98
+        G3Z8tF9xAF1j9F7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxE
+        wVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26w4UJr1UMxC20s026xCaFV
+        Cjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWl
+        x4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r
+        1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_
+        JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEKBlPy7uA+KwA1sB
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wei,
+[why]
+Resource release is needed on the error handling path
+to prevent memory leak.
 
-This looks good to me. As a followup we could also fix the 'weight'
-field, which was introduced recently.
+[how]
+Fix this by adding kfree on the error handling path.
 
-On 21/01/2022 06:59, Wei Li wrote:
-> From: Yao Jin <jinyao5@huawei.com>
->
-> Perf script was failed to print the phys_addr for SPE profiling.
-> One 'dummy' event is added by SPE profiling but it doesn't have PHYS_ADDR
-> attribute set, perf script then exits with error.
->
-> Now referring to 'addr', use evsel__do_check_stype() to check the type.
->
-> Before:
->
->   # perf record -e arm_spe_0/branch_filter=0,ts_enable=1,pa_enable=1,load_filter=1,jitter=0,\
-> 		store_filter=0,min_latency=0,event_filter=2/ -p 4064384 -- sleep 3
->   # perf script -F pid,tid,addr,phys_addr
->   Samples for 'dummy:u' event do not have PHYS_ADDR attribute set. Cannot print 'phys_addr' field.
->
-> After:
->
->   # perf record -e arm_spe_0/branch_filter=0,ts_enable=1,pa_enable=1,load_filter=1,jitter=0,\
-> 		store_filter=0,min_latency=0,event_filter=2/ -p 4064384 -- sleep 3
->   # perf script -F pid,tid,addr,phys_addr
->   4064384/4064384 ffff802f921be0d0      2f921be0d0
->   4064384/4064384 ffff802f921be0d0      2f921be0d0
->
-> Signed-off-by: Yao Jin <jinyao5@huawei.com>
-> Signed-off-by: Wei Li <liwei391@huawei.com>
+Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+---
+ .../drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c  | 80 ++++++++++++++++------
+ 1 file changed, 60 insertions(+), 20 deletions(-)
 
-Reviewed-by: German Gomez <german.gomez@arm.com>
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
+index ded64d0..e463d46 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
+@@ -227,8 +227,10 @@ static ssize_t dp_link_settings_read(struct file *f, char __user *buf,
+ 			break;
+ 
+ 		r = put_user(*(rd_buf + result), buf);
+-		if (r)
++		if (r) {
++			kfree(rd_buf);
+ 			return r; /* r = -EFAULT */
++		}
+ 
+ 		buf += 1;
+ 		size -= 1;
+@@ -389,8 +391,10 @@ static ssize_t dp_phy_settings_read(struct file *f, char __user *buf,
+ 			break;
+ 
+ 		r = put_user((*(rd_buf + result)), buf);
+-		if (r)
++		if (r) {
++			kfree(rd_buf);
+ 			return r; /* r = -EFAULT */
++		}
+ 
+ 		buf += 1;
+ 		size -= 1;
+@@ -1359,8 +1363,10 @@ static ssize_t dp_dsc_clock_en_read(struct file *f, char __user *buf,
+ 				break;
+ 	}
+ 
+-	if (!pipe_ctx)
++	if (!pipe_ctx) {
++		kfree(rd_buf);
+ 		return -ENXIO;
++	}
+ 
+ 	dsc = pipe_ctx->stream_res.dsc;
+ 	if (dsc)
+@@ -1376,8 +1382,10 @@ static ssize_t dp_dsc_clock_en_read(struct file *f, char __user *buf,
+ 			break;
+ 
+ 		r = put_user(*(rd_buf + result), buf);
+-		if (r)
++		if (r) {
++			kfree(rd_buf);
+ 			return r; /* r = -EFAULT */
++		}
+ 
+ 		buf += 1;
+ 		size -= 1;
+@@ -1546,8 +1554,10 @@ static ssize_t dp_dsc_slice_width_read(struct file *f, char __user *buf,
+ 				break;
+ 	}
+ 
+-	if (!pipe_ctx)
++	if (!pipe_ctx) {
++		kfree(rd_buf);
+ 		return -ENXIO;
++	}
+ 
+ 	dsc = pipe_ctx->stream_res.dsc;
+ 	if (dsc)
+@@ -1563,8 +1573,10 @@ static ssize_t dp_dsc_slice_width_read(struct file *f, char __user *buf,
+ 			break;
+ 
+ 		r = put_user(*(rd_buf + result), buf);
+-		if (r)
++		if (r) {
++			kfree(rd_buf);
+ 			return r; /* r = -EFAULT */
++		}
+ 
+ 		buf += 1;
+ 		size -= 1;
+@@ -1731,8 +1743,10 @@ static ssize_t dp_dsc_slice_height_read(struct file *f, char __user *buf,
+ 				break;
+ 	}
+ 
+-	if (!pipe_ctx)
++	if (!pipe_ctx) {
++		kfree(rd_buf);
+ 		return -ENXIO;
++	}
+ 
+ 	dsc = pipe_ctx->stream_res.dsc;
+ 	if (dsc)
+@@ -1748,8 +1762,10 @@ static ssize_t dp_dsc_slice_height_read(struct file *f, char __user *buf,
+ 			break;
+ 
+ 		r = put_user(*(rd_buf + result), buf);
+-		if (r)
++		if (r) {
++			kfree(rd_buf);
+ 			return r; /* r = -EFAULT */
++		}
+ 
+ 		buf += 1;
+ 		size -= 1;
+@@ -1912,8 +1928,10 @@ static ssize_t dp_dsc_bits_per_pixel_read(struct file *f, char __user *buf,
+ 				break;
+ 	}
+ 
+-	if (!pipe_ctx)
++	if (!pipe_ctx) {
++		kfree(rd_buf);
+ 		return -ENXIO;
++	}
+ 
+ 	dsc = pipe_ctx->stream_res.dsc;
+ 	if (dsc)
+@@ -1929,8 +1947,10 @@ static ssize_t dp_dsc_bits_per_pixel_read(struct file *f, char __user *buf,
+ 			break;
+ 
+ 		r = put_user(*(rd_buf + result), buf);
+-		if (r)
++		if (r) {
++			kfree(rd_buf);
+ 			return r; /* r = -EFAULT */
++		}
+ 
+ 		buf += 1;
+ 		size -= 1;
+@@ -2088,8 +2108,10 @@ static ssize_t dp_dsc_pic_width_read(struct file *f, char __user *buf,
+ 				break;
+ 	}
+ 
+-	if (!pipe_ctx)
++	if (!pipe_ctx) {
++		kfree(rd_buf);
+ 		return -ENXIO;
++	}
+ 
+ 	dsc = pipe_ctx->stream_res.dsc;
+ 	if (dsc)
+@@ -2105,8 +2127,10 @@ static ssize_t dp_dsc_pic_width_read(struct file *f, char __user *buf,
+ 			break;
+ 
+ 		r = put_user(*(rd_buf + result), buf);
+-		if (r)
++		if (r) {
++			kfree(rd_buf);
+ 			return r; /* r = -EFAULT */
++		}
+ 
+ 		buf += 1;
+ 		size -= 1;
+@@ -2145,8 +2169,10 @@ static ssize_t dp_dsc_pic_height_read(struct file *f, char __user *buf,
+ 				break;
+ 	}
+ 
+-	if (!pipe_ctx)
++	if (!pipe_ctx) {
++		kfree(rd_buf);
+ 		return -ENXIO;
++	}
+ 
+ 	dsc = pipe_ctx->stream_res.dsc;
+ 	if (dsc)
+@@ -2162,8 +2188,10 @@ static ssize_t dp_dsc_pic_height_read(struct file *f, char __user *buf,
+ 			break;
+ 
+ 		r = put_user(*(rd_buf + result), buf);
+-		if (r)
++		if (r) {
++			kfree(rd_buf);
+ 			return r; /* r = -EFAULT */
++		}
+ 
+ 		buf += 1;
+ 		size -= 1;
+@@ -2217,8 +2245,10 @@ static ssize_t dp_dsc_chunk_size_read(struct file *f, char __user *buf,
+ 				break;
+ 	}
+ 
+-	if (!pipe_ctx)
++	if (!pipe_ctx) {
++		kfree(rd_buf);
+ 		return -ENXIO;
++	}
+ 
+ 	dsc = pipe_ctx->stream_res.dsc;
+ 	if (dsc)
+@@ -2234,8 +2264,10 @@ static ssize_t dp_dsc_chunk_size_read(struct file *f, char __user *buf,
+ 			break;
+ 
+ 		r = put_user(*(rd_buf + result), buf);
+-		if (r)
++		if (r) {
++			kfree(rd_buf);
+ 			return r; /* r = -EFAULT */
++		}
+ 
+ 		buf += 1;
+ 		size -= 1;
+@@ -2289,8 +2321,10 @@ static ssize_t dp_dsc_slice_bpg_offset_read(struct file *f, char __user *buf,
+ 				break;
+ 	}
+ 
+-	if (!pipe_ctx)
++	if (!pipe_ctx) {
++		kfree(rd_buf);
+ 		return -ENXIO;
++	}
+ 
+ 	dsc = pipe_ctx->stream_res.dsc;
+ 	if (dsc)
+@@ -2306,8 +2340,10 @@ static ssize_t dp_dsc_slice_bpg_offset_read(struct file *f, char __user *buf,
+ 			break;
+ 
+ 		r = put_user(*(rd_buf + result), buf);
+-		if (r)
++		if (r) {
++			kfree(rd_buf);
+ 			return r; /* r = -EFAULT */
++		}
+ 
+ 		buf += 1;
+ 		size -= 1;
+@@ -3459,8 +3495,10 @@ static ssize_t dcc_en_bits_read(
+ 	dc->hwss.get_dcc_en_bits(dc, dcc_en_bits);
+ 
+ 	rd_buf = kcalloc(rd_buf_size, sizeof(char), GFP_KERNEL);
+-	if (!rd_buf)
++	if (!rd_buf) {
++		kfree(dcc_en_bits);
+ 		return -ENOMEM;
++	}
+ 
+ 	for (i = 0; i < num_pipes; i++)
+ 		offset += snprintf(rd_buf + offset, rd_buf_size - offset,
+@@ -3473,8 +3511,10 @@ static ssize_t dcc_en_bits_read(
+ 		if (*pos >= rd_buf_size)
+ 			break;
+ 		r = put_user(*(rd_buf + result), buf);
+-		if (r)
++		if (r) {
++			kfree(rd_buf);
+ 			return r; /* r = -EFAULT */
++		}
+ 		buf += 1;
+ 		size -= 1;
+ 		*pos += 1;
+-- 
+2.7.4
 
-Also it looks like the SPE samples are also missing the PHYS_ADDR flag.
-I think we'll need to fix the consistency of the flags.
-
-Many thanks,
-German
-
-> ---
->  tools/perf/builtin-script.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-> index ecd4f99a6c14..abae8184e171 100644
-> --- a/tools/perf/builtin-script.c
-> +++ b/tools/perf/builtin-script.c
-> @@ -515,7 +515,7 @@ static int evsel__check_attr(struct evsel *evsel, struct perf_session *session)
->  		return -EINVAL;
->  
->  	if (PRINT_FIELD(PHYS_ADDR) &&
-> -	    evsel__check_stype(evsel, PERF_SAMPLE_PHYS_ADDR, "PHYS_ADDR", PERF_OUTPUT_PHYS_ADDR))
-> +	    evsel__do_check_stype(evsel, PERF_SAMPLE_PHYS_ADDR, "PHYS_ADDR", PERF_OUTPUT_PHYS_ADDR, allow_user_set))
->  		return -EINVAL;
->  
->  	if (PRINT_FIELD(DATA_PAGE_SIZE) &&

@@ -2,280 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA117495ED0
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 13:04:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1AEF495ED9
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 13:06:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350358AbiAUME2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 07:04:28 -0500
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:12854 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1350347AbiAUMEX (ORCPT
+        id S1350369AbiAUMGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 07:06:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345542AbiAUMGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 07:04:23 -0500
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20L4qraY012563;
-        Fri, 21 Jan 2022 06:04:18 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=BoNiG02pYsgRnqXR1vMPhv+H38ToRb/HQJp34J6qJug=;
- b=X6tqrPOyQt5Qya1dgBYg8p31ys16F4yCHmpcZrTp6yF09DEbVQ6hApRGvIkx3j2psNaL
- zTHfN42U6vmGJcdoafx57Kq0d9ddg8s1MVLyasfr9L3drH7Zc+Hsz82gvtWyJyIy35gD
- NHLqgrGcKYwxpIV/pizpMRWmlqovsoa97Co+isnvjvLU9WGWdtLEsNY6GKa/6gP8DV2A
- oNXLZBi/8+FLBnr7AFcZyX2A/bYWd1/NBP/a9oGbLdqphBnlAq1y0uWl1qMKrst+pAQ+
- ibuII2hB+r1fA0yusZ4hrGstGZlsxQ6wz6gKOGBnHdXa1h3Yhp3tLYJYg9cVraTlncqB Iw== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3dqhyq0nwd-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 21 Jan 2022 06:04:18 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 21 Jan
- 2022 12:04:16 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Fri, 21 Jan 2022 12:04:16 +0000
-Received: from AUSNPC0LSNW1-debian.cirrus.com (AUSNPC0LSNW1.ad.cirrus.com [198.61.65.33])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id B36A211D7;
-        Fri, 21 Jan 2022 12:04:15 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <broonie@kernel.org>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH v2 3/3] ASoC: cs42l42: Handle system suspend
-Date:   Fri, 21 Jan 2022 12:04:12 +0000
-Message-ID: <20220121120412.672284-4-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220121120412.672284-1-rf@opensource.cirrus.com>
-References: <20220121120412.672284-1-rf@opensource.cirrus.com>
+        Fri, 21 Jan 2022 07:06:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6D9C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 04:06:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66A7F61A9D
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 12:06:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3442BC340E1;
+        Fri, 21 Jan 2022 12:06:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642766773;
+        bh=OiNcQsiL4RkD84Zk69xbi1yGoWq5fR6O7P/s3BBkk2w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gDv00yPNi15fkbO0geVOZLZd+qg7ri8sfXXxjOA83Y+pHZ0bJ1ZxE4REhzaZtfms0
+         LJO2XO4h0CMBhNsQOvAhxseLO3by8F8HV8WlFtJEwQTRGuw+IFgqiiFQXMfDoEknkU
+         JuiqbaWfDuhiTJ4z+Z0+XMXwxM0/GPzAnTVdAST78PhuwiU5yMUkSeby83xEzpQJH6
+         7yR68rTueitFaSNZj8b/4GfvgVK3VsoLSMJzj6k0YB/MUCItryjsyEsBycgLcxfpeB
+         fdfspah6Ws3M1f3SZIzIvmoub+36BVW8z+WhjiFrDPFfXAGym9lFSHxwmRaCQSXw75
+         H4NbXvHfOV0Ow==
+Date:   Fri, 21 Jan 2022 13:06:10 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Christoph Lameter <cl@linux.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: Re: [patch v8 03/10] task isolation: sync vmstats on return to
+ userspace
+Message-ID: <20220121120610.GA231488@lothringen>
+References: <20211208161000.714824954@fuller.cnet>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: IXD6vLJAl8mTJyXki8EcMx2BOtvFpeEf
-X-Proofpoint-ORIG-GUID: IXD6vLJAl8mTJyXki8EcMx2BOtvFpeEf
-X-Proofpoint-Spam-Reason: safe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208161000.714824954@fuller.cnet>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add system suspend functions to handle clean power-down on suspend and
-restoring registers on resume.
+On Wed, Dec 08, 2021 at 01:09:09PM -0300, Marcelo Tosatti wrote:
+> Index: linux-2.6/include/linux/task_isolation.h
+> ===================================================================
+> --- linux-2.6.orig/include/linux/task_isolation.h
+> +++ linux-2.6/include/linux/task_isolation.h
+> @@ -40,8 +40,19 @@ int prctl_task_isolation_activate_set(un
+>  
+>  int __copy_task_isolation(struct task_struct *tsk);
+>  
+> +void isolation_exit_to_user_mode(void);
+> +
+> +static inline int task_isol_has_work(void)
+> +{
+> +	return 0;
+> +}
+> +
+>  #else
+>  
+> +static void isolation_exit_to_user_mode(void)
+> +{
+> +}
+> +
+>  static inline void tsk_isol_free(struct task_struct *tsk)
+>  {
+>  }
+> @@ -86,6 +97,11 @@ static inline int prctl_task_isolation_a
+>  	return -EOPNOTSUPP;
+>  }
+>  
+> +static inline int task_isol_has_work(void)
+> +{
+> +	return 0;
+> +}
+> +
 
-The jack state could change during suspend. Plug->unplug and unplug->plug
-are straightforward because this looks no different from any other plug
-state change - there will be a plugged or unplugged interrupt pending.
-The jack could be unplugged and a different type of jack plugged, and on
-resume the plug state would not have changed. Setting plug_state back to
-TS_TRANS (transitioning) will make the next plug interrupt after resume
-run a type detection.
+It would be nice to have a coherent greppable task_isol_*() namespace instead
+of random scattered tsk_*(), isolation_*() stuff...
 
-During system suspend any jack plug/unplug and button events will not be
-reported or generate a system wakeup. If the plug state or headset type
-has changed it will be reported after resume.
+task_isol_exit_to_user_mode()
+task_isol_free()
+task_isol_copy_process()
+task_isol_had_work()
+...
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
----
- sound/soc/codecs/cs42l42.c | 141 +++++++++++++++++++++++++++++++++++++++++++++
- sound/soc/codecs/cs42l42.h |   5 ++
- 2 files changed, 146 insertions(+)
+> @@ -149,13 +150,14 @@ static void handle_signal_work(struct pt
+>  }
+>  
+>  static unsigned long exit_to_user_mode_loop(struct pt_regs *regs,
+> -					    unsigned long ti_work)
+> +					    unsigned long ti_work,
+> +					    unsigned long tsk_isol_work)
+>  {
+>  	/*
+>  	 * Before returning to user space ensure that all pending work
+>  	 * items have been completed.
+>  	 */
+> -	while (ti_work & EXIT_TO_USER_MODE_WORK) {
+> +	while ((ti_work & EXIT_TO_USER_MODE_WORK) || tsk_isol_work) {
 
-diff --git a/sound/soc/codecs/cs42l42.c b/sound/soc/codecs/cs42l42.c
-index f1b95d45af4a..db6ef6cdce15 100644
---- a/sound/soc/codecs/cs42l42.c
-+++ b/sound/soc/codecs/cs42l42.c
-@@ -1614,6 +1614,10 @@ static irqreturn_t cs42l42_irq_thread(int irq, void *data)
- 	int report = 0;
- 
- 	mutex_lock(&cs42l42->irq_lock);
-+	if (cs42l42->suspended) {
-+		mutex_unlock(&cs42l42->irq_lock);
-+		return IRQ_NONE;
-+	}
- 
- 	/* Read sticky registers to clear interurpt */
- 	for (i = 0; i < ARRAY_SIZE(stickies); i++) {
-@@ -2047,6 +2051,138 @@ static int cs42l42_handle_device_data(struct device *dev,
- 	return 0;
- }
- 
-+/* Datasheet suspend sequence */
-+static const struct reg_sequence __maybe_unused cs42l42_shutdown_seq[] = {
-+	REG_SEQ0(CS42L42_MIC_DET_CTL1,		0x9F),
-+	REG_SEQ0(CS42L42_ADC_OVFL_INT_MASK,	0x01),
-+	REG_SEQ0(CS42L42_MIXER_INT_MASK,	0x0F),
-+	REG_SEQ0(CS42L42_SRC_INT_MASK,		0x0F),
-+	REG_SEQ0(CS42L42_ASP_RX_INT_MASK,	0x1F),
-+	REG_SEQ0(CS42L42_ASP_TX_INT_MASK,	0x0F),
-+	REG_SEQ0(CS42L42_CODEC_INT_MASK,	0x03),
-+	REG_SEQ0(CS42L42_SRCPL_INT_MASK,	0x7F),
-+	REG_SEQ0(CS42L42_VPMON_INT_MASK,	0x01),
-+	REG_SEQ0(CS42L42_PLL_LOCK_INT_MASK,	0x01),
-+	REG_SEQ0(CS42L42_TSRS_PLUG_INT_MASK,	0x0F),
-+	REG_SEQ0(CS42L42_WAKE_CTL,		0xE1),
-+	REG_SEQ0(CS42L42_DET_INT1_MASK,		0xE0),
-+	REG_SEQ0(CS42L42_DET_INT2_MASK,		0xFF),
-+	REG_SEQ0(CS42L42_MIXER_CHA_VOL,		0x3F),
-+	REG_SEQ0(CS42L42_MIXER_ADC_VOL,		0x3F),
-+	REG_SEQ0(CS42L42_MIXER_CHB_VOL,		0x3F),
-+	REG_SEQ0(CS42L42_HP_CTL,		0x0F),
-+	REG_SEQ0(CS42L42_ASP_RX_DAI0_EN,	0x00),
-+	REG_SEQ0(CS42L42_ASP_CLK_CFG,		0x00),
-+	REG_SEQ0(CS42L42_HSDET_CTL2,		0x00),
-+	REG_SEQ0(CS42L42_PWR_CTL1,		0xFE),
-+	REG_SEQ0(CS42L42_PWR_CTL2,		0x8C),
-+	REG_SEQ0(CS42L42_DAC_CTL2,		0x02),
-+	REG_SEQ0(CS42L42_HS_CLAMP_DISABLE,	0x00),
-+	REG_SEQ0(CS42L42_MISC_DET_CTL,		0x03),
-+	REG_SEQ0(CS42L42_TIPSENSE_CTL,		0x02),
-+	REG_SEQ0(CS42L42_HSBIAS_SC_AUTOCTL,	0x03),
-+	REG_SEQ0(CS42L42_PWR_CTL1,		0xFF)
-+};
-+
-+static int __maybe_unused cs42l42_suspend(struct device *dev)
-+{
-+	struct cs42l42_private *cs42l42 = dev_get_drvdata(dev);
-+	unsigned int reg;
-+	u8 save_regs[ARRAY_SIZE(cs42l42_shutdown_seq)];
-+	int i, ret;
-+
-+	/*
-+	 * Wait for threaded irq handler to be idle and stop it processing
-+	 * future interrupts. This ensures a safe disable if the interrupt
-+	 * is shared.
-+	 */
-+	mutex_lock(&cs42l42->irq_lock);
-+	cs42l42->suspended = true;
-+
-+	/* Save register values that will be overwritten by shutdown sequence */
-+	for (i = 0; i < ARRAY_SIZE(cs42l42_shutdown_seq); ++i) {
-+		regmap_read(cs42l42->regmap, cs42l42_shutdown_seq[i].reg, &reg);
-+		save_regs[i] = (u8)reg;
-+	}
-+
-+	/* Shutdown codec */
-+	regmap_multi_reg_write(cs42l42->regmap,
-+			       cs42l42_shutdown_seq,
-+			       ARRAY_SIZE(cs42l42_shutdown_seq));
-+
-+	/* All interrupt sources are now disabled */
-+	mutex_unlock(&cs42l42->irq_lock);
-+
-+	/* Wait for power-down complete */
-+	msleep(CS42L42_PDN_DONE_TIME_MS);
-+	ret = regmap_read_poll_timeout(cs42l42->regmap,
-+				       CS42L42_CODEC_STATUS, reg,
-+				       (reg & CS42L42_PDN_DONE_MASK),
-+				       CS42L42_PDN_DONE_POLL_US,
-+				       CS42L42_PDN_DONE_TIMEOUT_US);
-+	if (ret)
-+		dev_warn(dev, "Failed to get PDN_DONE: %d\n", ret);
-+
-+	/* Discharge FILT+ */
-+	regmap_update_bits(cs42l42->regmap, CS42L42_PWR_CTL2,
-+			   CS42L42_DISCHARGE_FILT_MASK, CS42L42_DISCHARGE_FILT_MASK);
-+	msleep(CS42L42_FILT_DISCHARGE_TIME_MS);
-+
-+	regcache_cache_only(cs42l42->regmap, true);
-+	gpiod_set_value_cansleep(cs42l42->reset_gpio, 0);
-+	regulator_bulk_disable(ARRAY_SIZE(cs42l42->supplies), cs42l42->supplies);
-+
-+	/* Restore register values to the regmap cache */
-+	for (i = 0; i < ARRAY_SIZE(cs42l42_shutdown_seq); ++i)
-+		regmap_write(cs42l42->regmap, cs42l42_shutdown_seq[i].reg, save_regs[i]);
-+
-+	/* The cached address page register value is now stale */
-+	regcache_drop_region(cs42l42->regmap, CS42L42_PAGE_REGISTER, CS42L42_PAGE_REGISTER);
-+
-+	dev_dbg(dev, "System suspended\n");
-+
-+	return 0;
-+
-+}
-+
-+static int __maybe_unused cs42l42_resume(struct device *dev)
-+{
-+	struct cs42l42_private *cs42l42 = dev_get_drvdata(dev);
-+	int ret;
-+
-+	/*
-+	 * If jack was unplugged and re-plugged during suspend it could
-+	 * have changed type but the tip-sense state hasn't changed.
-+	 * Force a plugged state to be re-evaluated.
-+	 */
-+	if (cs42l42->plug_state != CS42L42_TS_UNPLUG)
-+		cs42l42->plug_state = CS42L42_TS_TRANS;
-+
-+	ret = regulator_bulk_enable(ARRAY_SIZE(cs42l42->supplies), cs42l42->supplies);
-+	if (ret != 0) {
-+		dev_err(dev, "Failed to enable supplies: %d\n", ret);
-+		return ret;
-+	}
-+
-+	gpiod_set_value_cansleep(cs42l42->reset_gpio, 1);
-+	usleep_range(CS42L42_BOOT_TIME_US, CS42L42_BOOT_TIME_US * 2);
-+
-+	regcache_cache_only(cs42l42->regmap, false);
-+	regcache_mark_dirty(cs42l42->regmap);
-+
-+	mutex_lock(&cs42l42->irq_lock);
-+	/* Sync LATCH_TO_VP first so the VP domain registers sync correctly */
-+	regcache_sync_region(cs42l42->regmap, CS42L42_MIC_DET_CTL1, CS42L42_MIC_DET_CTL1);
-+	regcache_sync(cs42l42->regmap);
-+
-+	cs42l42->suspended = false;
-+	mutex_unlock(&cs42l42->irq_lock);
-+
-+	dev_dbg(dev, "System resumed\n");
-+
-+	return 0;
-+}
-+
- static int cs42l42_i2c_probe(struct i2c_client *i2c_client,
- 				       const struct i2c_device_id *id)
- {
-@@ -2217,6 +2353,10 @@ static int cs42l42_i2c_remove(struct i2c_client *i2c_client)
- 	return 0;
- }
- 
-+static const struct dev_pm_ops cs42l42_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(cs42l42_suspend, cs42l42_resume)
-+};
-+
- #ifdef CONFIG_OF
- static const struct of_device_id cs42l42_of_match[] = {
- 	{ .compatible = "cirrus,cs42l42", },
-@@ -2243,6 +2383,7 @@ MODULE_DEVICE_TABLE(i2c, cs42l42_id);
- static struct i2c_driver cs42l42_i2c_driver = {
- 	.driver = {
- 		.name = "cs42l42",
-+		.pm = &cs42l42_pm_ops,
- 		.of_match_table = of_match_ptr(cs42l42_of_match),
- 		.acpi_match_table = ACPI_PTR(cs42l42_acpi_match),
- 		},
-diff --git a/sound/soc/codecs/cs42l42.h b/sound/soc/codecs/cs42l42.h
-index 53d96287abba..244b24d1f5e9 100644
---- a/sound/soc/codecs/cs42l42.h
-+++ b/sound/soc/codecs/cs42l42.h
-@@ -826,6 +826,10 @@
- #define CS42L42_PLL_LOCK_POLL_US	250
- #define CS42L42_PLL_LOCK_TIMEOUT_US	1250
- #define CS42L42_HP_ADC_EN_TIME_US	20000
-+#define CS42L42_PDN_DONE_POLL_US	1000
-+#define CS42L42_PDN_DONE_TIMEOUT_US	200000
-+#define CS42L42_PDN_DONE_TIME_MS	100
-+#define CS42L42_FILT_DISCHARGE_TIME_MS	46
- 
- static const char *const cs42l42_supply_names[CS42L42_NUM_SUPPLIES] = {
- 	"VA",
-@@ -860,6 +864,7 @@ struct  cs42l42_private {
- 	u8 hs_bias_sense_en;
- 	u8 stream_use;
- 	bool hp_adc_up_pending;
-+	bool suspended;
- };
- 
- #endif /* __CS42L42_H__ */
--- 
-2.11.0
+So there is a dependency on CONFIG_GENERIC_ENTRY. Then you need to split that
+from CONFIG_CPU_ISOLATION:
 
+config TASK_ISOLATION
+       bool "Task isolation prctl()"
+       depends on GENERIC_ENTRY
+       help "...."
+
+>  
+>  		local_irq_enable_exit_to_user(ti_work);
+>  
+> @@ -177,6 +179,9 @@ static unsigned long exit_to_user_mode_l
+>  		/* Architecture specific TIF work */
+>  		arch_exit_to_user_mode_work(regs, ti_work);
+>  
+> +		if (tsk_isol_work)
+> +			isolation_exit_to_user_mode();
+> +
+>  		/*
+>  		 * Disable interrupts and reevaluate the work flags as they
+>  		 * might have changed while interrupts and preemption was
+> @@ -188,6 +193,7 @@ static unsigned long exit_to_user_mode_l
+>  		tick_nohz_user_enter_prepare();
+>  
+>  		ti_work = READ_ONCE(current_thread_info()->flags);
+> +		tsk_isol_work = task_isol_has_work();
+
+Shouldn't it be a TIF_FLAG part of EXIT_TO_USER_MODE_WORK instead?
+
+Thanks.

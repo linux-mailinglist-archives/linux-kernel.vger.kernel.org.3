@@ -2,219 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E73BD495FBF
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:28:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C317495FC3
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 14:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380697AbiAUN2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 08:28:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58404 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380583AbiAUN2W (ORCPT
+        id S1380713AbiAUN3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 08:29:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:41046 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1380583AbiAUN3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 08:28:22 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A4BC061574
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 05:28:21 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id az27-20020a05600c601b00b0034d2956eb04so22363497wmb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 05:28:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=forissier-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Uilb7rtGXgQI2Rp/O4smGnTA3fqRZ18DddOLnlScU0g=;
-        b=tV5Lwg5EcH1gBvbj7qCmrvpFck+165EvZrokCuII+O+fTkmh/5D29KVjVLeQM6a2h/
-         cvixANVSFJnUMSzbhr4HAJ0gkpA1dO1yapOLeD5TPhuaIxaU5DjKPKpJZwMJHMNXtKVD
-         VZaVUJHpL71buon3nniwbIrOriJezYU8AhnenQM30Iq9w269fqiDeo5agxT39pvXTQ20
-         KofGSEfKrYXng0XfaMu6yPpq3h09PzR6j080TWWRCoUH7VZgnCZaLbElP67Iq0fzS4Gz
-         LvHHtn8TVAkOYLAKP2Fs4UxVCeHnKJkq1kcrvWAAIAxvhitzjTa/f87DU8KwHQrXCKL+
-         W9jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Uilb7rtGXgQI2Rp/O4smGnTA3fqRZ18DddOLnlScU0g=;
-        b=seZWYndTfBLKHkPYx9ESXZvfPALyUPa3JR94aGfems8m0/R/NURQM5ONA8zAkKqTSE
-         Mu/j7TE7brIdSkQQ5SntrrEH73p27AsYgyop2eOB7Hw41cKamL+IY53RhwdGiNS/EGkt
-         VIy71L4DBXAiT2eKf7J5jMEfMmES0CtquiStp+1oo9v9KtCRQoJoGtxrSxbmCpuTvae+
-         XSoDGzw6n2fLb40vWYFKUwoWSC89kEmNcSw6kR8AkcZfJZAyhoWj6Pp2uRNF6v8ugu7v
-         ouiW7sDMF145ypOo4/HOCd8kBpns+nwKRkcTxpdMO5icZHpQHjdbm2WI6P2hKV7oX5Tn
-         qLFQ==
-X-Gm-Message-State: AOAM532ow4i9SCPNdRZVJoqtePEXP2DS77BHHWwZOdIPKs1BM3G3/lgj
-        QE3UoNgF7Xov9BDsmBiqsB/ckA==
-X-Google-Smtp-Source: ABdhPJxSnG6jfG0AG9wiZOOXJhJpztj5r/HoijRXcgyvn9ciXtN2tby1TS8psKWDI6hCZLpJt1ND+A==
-X-Received: by 2002:a7b:c118:: with SMTP id w24mr702278wmi.179.1642771700024;
-        Fri, 21 Jan 2022 05:28:20 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:3cb:7bb0:a60f:d9da:23e6:8bf2? ([2a01:e0a:3cb:7bb0:a60f:d9da:23e6:8bf2])
-        by smtp.gmail.com with ESMTPSA id h9sm5575074wmq.8.2022.01.21.05.28.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Jan 2022 05:28:19 -0800 (PST)
-Message-ID: <ad7311fe-0655-e235-f755-2eb3425c79c1@forissier.org>
-Date:   Fri, 21 Jan 2022 14:28:18 +0100
+        Fri, 21 Jan 2022 08:29:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642771740;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=P+l3L/j9Eu3Wgxbpi7SxLlX6lvZGaYKNloUWEV08+bI=;
+        b=Tw1fo0ciUbXZx+n1vHgl2+GOlkgkSXWmiKyMAfpn/MSYu70Ht0nn87qWsUIyducA1yKLMQ
+        agQQvDTsN8kI47m4mkKZ4G95VMbjpyLg0pvWwHiDkP8YQ8lSYxoUzYmDIYfm4rPcLm8Mha
+        SiPTp6cI/1PpncPo6LQZiIIE/M2ypeQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-17-jnFO5ECkPzKbuNQ0SfN45A-1; Fri, 21 Jan 2022 08:28:57 -0500
+X-MC-Unique: jnFO5ECkPzKbuNQ0SfN45A-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 18DB584DA40;
+        Fri, 21 Jan 2022 13:28:56 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.195.38])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7634B7E228;
+        Fri, 21 Jan 2022 13:28:53 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Igor Mammedov <imammedo@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/5] KVM: x86: Partially allow KVM_SET_CPUID{,2} after KVM_RUN for CPU hotplug
+Date:   Fri, 21 Jan 2022 14:28:47 +0100
+Message-Id: <20220121132852.2482355-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 07/12] optee: use driver internal tee_contex for some
- rpc
-Content-Language: en-US
-To:     Sumit Garg <sumit.garg@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
-        Rijo Thomas <Rijo-john.Thomas@amd.com>,
-        David Howells <dhowells@redhat.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Etienne Carriere <etienne.carriere@linaro.org>
-References: <20220114150824.3578829-1-jens.wiklander@linaro.org>
- <20220114150824.3578829-8-jens.wiklander@linaro.org>
- <CAFA6WYN+NU6uj=R5y4A6RomWeKc74orvB7ouia8Sxuwxaz_-2w@mail.gmail.com>
-From:   Jerome Forissier <jerome@forissier.org>
-In-Reply-To: <CAFA6WYN+NU6uj=R5y4A6RomWeKc74orvB7ouia8Sxuwxaz_-2w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Changes since v3:
+- Use memcmp() [Sean].
+- Update the comment in kvm_set_cpuid() making (hopefully) it more clear
+ that the introduced check does not cover all potentially problemmatic
+ scenarios [Sean].
+- Add "KVM: x86: Move CPUID.(EAX=0x12,ECX=1) mangling to
+ __kvm_update_cpuid_runtime()" patch.
 
+Original description:
 
-On 1/21/22 13:54, Sumit Garg wrote:
-> + Jerome, Etienne
-> 
-> On Fri, 14 Jan 2022 at 20:38, Jens Wiklander <jens.wiklander@linaro.org> wrote:
->>
->> Uses the new driver internal tee_context when allocating driver private
->> shared memory. This decouples the shared memory object from its original
->> tee_context. This is needed when the life time of such a memory
->> allocation outlives the client tee_context.
->>
->> Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
->> ---
->>  drivers/tee/optee/ffa_abi.c | 16 ++++++++--------
->>  drivers/tee/optee/smc_abi.c |  7 ++++---
->>  2 files changed, 12 insertions(+), 11 deletions(-)
->>
-> 
-> I guess with this patch we should no longer see issues [1] reported earlier.
+Recently, KVM made it illegal to change CPUID after KVM_RUN but
+unfortunately this change is not fully compatible with existing VMMs.
+In particular, QEMU reuses vCPU fds for CPU hotplug after unplug and it
+calls KVM_SET_CPUID2. Relax the requirement by implementing an allowing
+KVM_SET_CPUID{,2} with the exact same data.
 
-Correct. I have tested [1] again in QEMU with this whole series applied
-and the issue is gone.
+Vitaly Kuznetsov (5):
+  KVM: x86: Do runtime CPUID update before updating
+    vcpu->arch.cpuid_entries
+  KVM: x86: Move CPUID.(EAX=0x12,ECX=1) mangling to
+    __kvm_update_cpuid_runtime()
+  KVM: x86: Partially allow KVM_SET_CPUID{,2} after KVM_RUN
+  KVM: selftests: Rename 'get_cpuid_test' to 'cpuid_test'
+  KVM: selftests: Test KVM_SET_CPUID2 after KVM_RUN
+
+ arch/x86/kvm/cpuid.c                          | 119 +++++++++++++-----
+ arch/x86/kvm/x86.c                            |  19 ---
+ tools/testing/selftests/kvm/.gitignore        |   2 +-
+ tools/testing/selftests/kvm/Makefile          |   4 +-
+ .../selftests/kvm/include/x86_64/processor.h  |   7 ++
+ .../selftests/kvm/lib/x86_64/processor.c      |  33 ++++-
+ .../x86_64/{get_cpuid_test.c => cpuid_test.c} |  30 +++++
+ 7 files changed, 157 insertions(+), 57 deletions(-)
+ rename tools/testing/selftests/kvm/x86_64/{get_cpuid_test.c => cpuid_test.c} (83%)
 
 -- 
-Jerome
+2.34.1
 
-> 
-> FWIW,
-> 
-> Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
-> 
-> [1] https://github.com/OP-TEE/optee_os/issues/1918
-> 
-> -Sumit
-> 
->> diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
->> index 88a028d4fb7b..5ec484b42432 100644
->> --- a/drivers/tee/optee/ffa_abi.c
->> +++ b/drivers/tee/optee/ffa_abi.c
->> @@ -424,6 +424,7 @@ static struct tee_shm_pool *optee_ffa_shm_pool_alloc_pages(void)
->>   */
->>
->>  static void handle_ffa_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
->> +                                             struct optee *optee,
->>                                               struct optee_msg_arg *arg)
->>  {
->>         struct tee_shm *shm;
->> @@ -439,7 +440,7 @@ static void handle_ffa_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
->>                 shm = optee_rpc_cmd_alloc_suppl(ctx, arg->params[0].u.value.b);
->>                 break;
->>         case OPTEE_RPC_SHM_TYPE_KERNEL:
->> -               shm = tee_shm_alloc_priv_kernel_buf(ctx,
->> +               shm = tee_shm_alloc_priv_kernel_buf(optee->ctx,
->>                                                     arg->params[0].u.value.b);
->>                 break;
->>         default:
->> @@ -493,14 +494,13 @@ static void handle_ffa_rpc_func_cmd_shm_free(struct tee_context *ctx,
->>  }
->>
->>  static void handle_ffa_rpc_func_cmd(struct tee_context *ctx,
->> +                                   struct optee *optee,
->>                                     struct optee_msg_arg *arg)
->>  {
->> -       struct optee *optee = tee_get_drvdata(ctx->teedev);
->> -
->>         arg->ret_origin = TEEC_ORIGIN_COMMS;
->>         switch (arg->cmd) {
->>         case OPTEE_RPC_CMD_SHM_ALLOC:
->> -               handle_ffa_rpc_func_cmd_shm_alloc(ctx, arg);
->> +               handle_ffa_rpc_func_cmd_shm_alloc(ctx, optee, arg);
->>                 break;
->>         case OPTEE_RPC_CMD_SHM_FREE:
->>                 handle_ffa_rpc_func_cmd_shm_free(ctx, optee, arg);
->> @@ -510,12 +510,12 @@ static void handle_ffa_rpc_func_cmd(struct tee_context *ctx,
->>         }
->>  }
->>
->> -static void optee_handle_ffa_rpc(struct tee_context *ctx, u32 cmd,
->> -                                struct optee_msg_arg *arg)
->> +static void optee_handle_ffa_rpc(struct tee_context *ctx, struct optee *optee,
->> +                                u32 cmd, struct optee_msg_arg *arg)
->>  {
->>         switch (cmd) {
->>         case OPTEE_FFA_YIELDING_CALL_RETURN_RPC_CMD:
->> -               handle_ffa_rpc_func_cmd(ctx, arg);
->> +               handle_ffa_rpc_func_cmd(ctx, optee, arg);
->>                 break;
->>         case OPTEE_FFA_YIELDING_CALL_RETURN_INTERRUPT:
->>                 /* Interrupt delivered by now */
->> @@ -582,7 +582,7 @@ static int optee_ffa_yielding_call(struct tee_context *ctx,
->>                  * above.
->>                  */
->>                 cond_resched();
->> -               optee_handle_ffa_rpc(ctx, data->data1, rpc_arg);
->> +               optee_handle_ffa_rpc(ctx, optee, data->data1, rpc_arg);
->>                 cmd = OPTEE_FFA_YIELDING_CALL_RESUME;
->>                 data->data0 = cmd;
->>                 data->data1 = 0;
->> diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
->> index 1dbb13b08381..f2ef76451443 100644
->> --- a/drivers/tee/optee/smc_abi.c
->> +++ b/drivers/tee/optee/smc_abi.c
->> @@ -621,6 +621,7 @@ static void handle_rpc_func_cmd_shm_free(struct tee_context *ctx,
->>  }
->>
->>  static void handle_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
->> +                                         struct optee *optee,
->>                                           struct optee_msg_arg *arg,
->>                                           struct optee_call_ctx *call_ctx)
->>  {
->> @@ -650,7 +651,7 @@ static void handle_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
->>                 shm = optee_rpc_cmd_alloc_suppl(ctx, sz);
->>                 break;
->>         case OPTEE_RPC_SHM_TYPE_KERNEL:
->> -               shm = tee_shm_alloc_priv_kernel_buf(ctx, sz);
->> +               shm = tee_shm_alloc_priv_kernel_buf(optee->ctx, sz);
->>                 break;
->>         default:
->>                 arg->ret = TEEC_ERROR_BAD_PARAMETERS;
->> @@ -746,7 +747,7 @@ static void handle_rpc_func_cmd(struct tee_context *ctx, struct optee *optee,
->>         switch (arg->cmd) {
->>         case OPTEE_RPC_CMD_SHM_ALLOC:
->>                 free_pages_list(call_ctx);
->> -               handle_rpc_func_cmd_shm_alloc(ctx, arg, call_ctx);
->> +               handle_rpc_func_cmd_shm_alloc(ctx, optee, arg, call_ctx);
->>                 break;
->>         case OPTEE_RPC_CMD_SHM_FREE:
->>                 handle_rpc_func_cmd_shm_free(ctx, arg);
->> @@ -775,7 +776,7 @@ static void optee_handle_rpc(struct tee_context *ctx,
->>
->>         switch (OPTEE_SMC_RETURN_GET_RPC_FUNC(param->a0)) {
->>         case OPTEE_SMC_RPC_FUNC_ALLOC:
->> -               shm = tee_shm_alloc_priv_kernel_buf(ctx, param->a1);
->> +               shm = tee_shm_alloc_priv_kernel_buf(optee->ctx, param->a1);
->>                 if (!IS_ERR(shm) && !tee_shm_get_pa(shm, 0, &pa)) {
->>                         reg_pair_from_64(&param->a1, &param->a2, pa);
->>                         reg_pair_from_64(&param->a4, &param->a5,
->> --
->> 2.31.1
->>

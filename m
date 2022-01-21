@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB524961EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:21:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B8E64961EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 16:21:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381508AbiAUPVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 10:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
+        id S1381533AbiAUPVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 10:21:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351305AbiAUPVM (ORCPT
+        with ESMTP id S1381534AbiAUPV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 10:21:12 -0500
+        Fri, 21 Jan 2022 10:21:29 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7D6C06173B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 07:21:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A43C061401
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 07:21:28 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: detlev)
-        with ESMTPSA id D22CE1F4620F
+        with ESMTPSA id 3B6371F4620F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1642778470;
-        bh=0RwYaKB6A31CeyD2snW+RU5w3kF+gKZk3mxsx5dGz3o=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FeAyTQsRGtl8aM3fQGPAFZ9FHpvY8LeECyunW8v7+4HmsziWPpG69iVDI2owTckwg
-         LyjhM5gjMAVypPwBkX6+lBgWWlfj29VrY8SUjxpG0stXqgv1oOecmBJE3S8oEyyG9y
-         HRdoayXQciyog9AVzc5O/Et9JwRDLf9vdnEDWeD0sMTj56oCYzNY3vg8mxjafHVPyo
-         NMA8BgvJJYgbdY7OZ4Vtn5kuQZa5j/lKakXDc47zs0nkmW4MgyQo2e5wDjzJ7JodQM
-         GvAzWonvMfdMYhh+wEMZG2zFRlKObbP4rX7deFPyov/+QONPvy7pRuWar+cgLC2GQe
-         4DYfJj8qJvKNw==
+        s=mail; t=1642778487;
+        bh=80BI0zXGQTgN05p6AlFLM+LNKFXJZZRY/BLdFYtbkxU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hdCia6B48T1WyJRbqV8VBwL8L2R4Mj6Sw4lTyCXLVSo94MEaVq9cYJvp4oeh9pqra
+         1zekUD/QHR8DuhwX2Zg2l61JWosNxZt0mRn1E3geN5WYG8seWBlIVemUy4FaawJ+k+
+         nZdFTEJSgHILOWJDPNnrgSiscwifKIVCTZYSttAJ2Owk1PtttB8ss7FXbKoS1MIVtA
+         YOM8JVI6xmKd/MJLm1dCsXV40UvfKUDbgPqrF1emPZZe7TebDxpJDifjWw2rjLO1B+
+         bikzjN31KuCgwBSCrgCmT+k/dCERzwt4S5D4XeouWFd95VhoD96g2R1JIVTsD57RK9
+         l2joZQtTCl12A==
 From:   Detlev Casanova <detlev.casanova@collabora.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Detlev Casanova <detlev.casanova@collabora.com>
-Subject: [PATCH v2 0/9] regulator: rpi-panel: Support official Raspberry Pi 7 inches touchscreen
-Date:   Fri, 21 Jan 2022 10:20:47 -0500
-Message-Id: <20220121152056.2044551-1-detlev.casanova@collabora.com>
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2 1/9] regulator: rpi-panel: Register with a unique backlight name
+Date:   Fri, 21 Jan 2022 10:20:48 -0500
+Message-Id: <20220121152056.2044551-2-detlev.casanova@collabora.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220121152056.2044551-1-detlev.casanova@collabora.com>
+References: <20220121152056.2044551-1-detlev.casanova@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset provides different fixes to the rpi-panel-attiny-regulator driver.
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-This is a preparation patchset for supporting the official Raspberry Pi 7
-inches touchscreen.
+There's no reason why 2 Raspberry Pi DSI displays can't be
+attached to a Pi Compute Module, so the backlight names need to
+be unique.
 
-It has been tested with a Raspberry Pi 4 B and the official Raspberry Pi 7
-inches touchscreen.
+Use the parent dev_name. It's not as readable, but is unique.
 
-Changes in v2:
- * Add a dependency on OF_GPIO for GPIO controlled resets
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+---
+ drivers/regulator/rpi-panel-attiny-regulator.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Dave Stevenson (9):
-  regulator: rpi-panel: Register with a unique backlight name
-  regulator: rpi-panel: Handle I2C errors/timing to the Atmel
-  regulator: rpi-panel: Serialise operations.
-  regulator: rpi-panel: Ensure the backlight is off during probe.
-  regulator: rpi-panel: Convert to drive lines directly
-  regulator: rpi-panel: Add GPIO control for panel and touch resets
-  regulator: rpi-panel: Remove get_brightness hook
-  regulator/rpi-panel-attiny: Don't read the LCD power status
-  regulator/rpi-panel-attiny: Use two transactions for I2C read
-
- drivers/regulator/Kconfig                     |   1 +
- .../regulator/rpi-panel-attiny-regulator.c    | 285 +++++++++++++++---
- 2 files changed, 237 insertions(+), 49 deletions(-)
-
+diff --git a/drivers/regulator/rpi-panel-attiny-regulator.c b/drivers/regulator/rpi-panel-attiny-regulator.c
+index ee46bfbf5eee..370b9ae363dd 100644
+--- a/drivers/regulator/rpi-panel-attiny-regulator.c
++++ b/drivers/regulator/rpi-panel-attiny-regulator.c
+@@ -181,8 +181,7 @@ static int attiny_i2c_probe(struct i2c_client *i2c,
+ 
+ 	props.type = BACKLIGHT_RAW;
+ 	props.max_brightness = 0xff;
+-	bl = devm_backlight_device_register(&i2c->dev,
+-					    "7inch-touchscreen-panel-bl",
++	bl = devm_backlight_device_register(&i2c->dev, dev_name(&i2c->dev),
+ 					    &i2c->dev, regmap, &attiny_bl,
+ 					    &props);
+ 	if (IS_ERR(bl))
 -- 
 2.34.1
 

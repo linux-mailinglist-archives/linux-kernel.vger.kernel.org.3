@@ -2,149 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7776A495B92
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 09:06:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5452495B98
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 09:09:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379398AbiAUIGl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 21 Jan 2022 03:06:41 -0500
-Received: from mail-eopbgr120071.outbound.protection.outlook.com ([40.107.12.71]:35744
-        "EHLO FRA01-PR2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1379411AbiAUIGk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 03:06:40 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F+Eu7XgumGBGJYMG9OQuuJgSviT8MT6O1kmxJ4ycwEo0/i6KCC1q4pOA65NT3Ai5rqqPZTdkR1xAYUUkoRm4uQ5RknLxZCf8DUezFNWJmdlsCuZGGTSHgTnDRTSgZGXT9CU6mUAH6Eue30zoVhFVJedIZwlWellJqFxax1tpSRQczMJsEGp++9w1EK8ogIyFEnFha++Kq3r6CZooODpdGdL2IPdXdbRaFYOYPvVavCgtiyNzeuD+gFf5APzS/FDqlfxde1ydeTkXUCeryp+89mYeQnk5L54IWVA+4lpIswKL50H/LfjGtUHhwWu3B2w0hjZlDPK8mqxWfIRKT5RvNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z3wjFFjEQNoPJejY4efQOtpANBEP8Aka2DcsdMne6ew=;
- b=PpuL+P7xKe4X0Vd/AKKF0kixHbiGi8y7H9HLdvLuzlzlm/nFMo/2qk3CcRKCIRZIcpmEp4bfTPkVqga8fHlUk8lVGBEYrEa+K6SeZ9pGmilcyUPs5ygg1aa7d3x0aaGY15eaWqtPqbyJ31ltVztHoqEGko1dVRufeFSmpHEnkVhlHS3zU+7/0rwe7htYQ2vXZbqiC94BdUQSqbjDpkZpGldrTmnCeBRjSCihxjTGjS44F3oYIU4J7I0d7KPdV7phWJRRj3Kzi9hy8gR9OGzYujIQcbI+6Q8TpkwxjKmx4XdhKAIjUXFY1AVIsHf9ckokz+IplvsYuZGvxjmqVtblQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB3475.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:20::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Fri, 21 Jan
- 2022 08:06:38 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::9d4f:1090:9b36:3fc5]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::9d4f:1090:9b36:3fc5%5]) with mapi id 15.20.4909.008; Fri, 21 Jan 2022
- 08:06:38 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: [PATCH 3/3] powerpc/lib/sstep: use truncate_if_32bit()
-Thread-Topic: [PATCH 3/3] powerpc/lib/sstep: use truncate_if_32bit()
-Thread-Index: AQHYDp3Q3+1McVpc502dpiOkuseC5g==
-Date:   Fri, 21 Jan 2022 08:06:38 +0000
-Message-ID: <7e1c07123f13156d4a27991a2e2694fb584bc068.1642752375.git.christophe.leroy@csgroup.eu>
-References: <6c608fd4795e2d8ea1a0a449405a0087f76d8bb3.1642752375.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <6c608fd4795e2d8ea1a0a449405a0087f76d8bb3.1642752375.git.christophe.leroy@csgroup.eu>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: abd9737e-da2f-4cef-f6a8-08d9dcb4f337
-x-ms-traffictypediagnostic: MR1P264MB3475:EE_
-x-microsoft-antispam-prvs: <MR1P264MB3475540F24ACBB1F86924904ED5B9@MR1P264MB3475.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:2201;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JOcieOOe3gH4y243gra0ka+S/lp0IJPBmTypyZ47bkyRcxN5CHNxCkQflt+Erebk7hp+7MXIUWXQTHxGaLbjwqN0cZ3bsah+w1pX1J4u83afmd6pCBRut/VNPLBQqcx+wOroMWgoLDI+IEv7Zq09EwL+x6gTD3lnRso3ZmFjQfGVNWzBLX9PFw263TT67zFYUCdTgASiaTF/xgW+G4FNY54Od4dMR4ZrOT2ESkzgUZdEQyiAUrq50yrIsAwdnrlNwP3KbXVCO30+xgzIDLwti8VO4yFmfKfaAh9R1kNCEuEFEP8dotFlAfDjog7vCOiR6Y2L5TnCY+KA9paI0k4FLlQ4uR4A/ItBTeKOG/isDtjtL9BFWCgwrBcRpFx/ZHWxUUIJctptjbAZcigYielVgXE4VzT//xVqXejSa5gqFSRa8CR7y3GZaoTBWANTn0bdwcwnKIQ4deM2hGEIyoG/ar3rfrEt0GoqBmWRxQigO2CYIVO3ttzlJ75e+cfUzBfCNaQd1P77jiJobToA2s6Pnf6LQtNpJmv1/Kuk5rQgbZxfrDG6pbSUyFsu8EUNTKo+Z/gNwF5IKKacz+GveuLmMX8eszbYIpqk0DIqE6yqcEXkLyiEB/CmdWHk+PYxRfVd6cgljvoNVP8QV7xXKT429hKd20Upn6Dm/SknQSzZSVNKIvuhIV5U31hyeA5pmpjYC6L7zvYS3yaMwCprJmcvzA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(83380400001)(38100700002)(8936002)(38070700005)(186003)(4326008)(508600001)(36756003)(2906002)(8676002)(6486002)(86362001)(122000001)(316002)(2616005)(26005)(66446008)(66556008)(6512007)(5660300002)(110136005)(64756008)(91956017)(54906003)(6506007)(76116006)(66476007)(71200400001)(66946007)(44832011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?tlVQjN3VblvdG2sIwzSLDVb6imyFapeTNC33EmwaQO+kUW0+GyB5GMoqJq?=
- =?iso-8859-1?Q?q9yISLO7WKWfXZBnaBm5/i86PgT9YAv1vGcwunRcwpBmbOP6fwVEZ9zuYU?=
- =?iso-8859-1?Q?Esb6fmVew/BqKkVyz5DukR7NI569F5eD9wSyhz5M4zKqSUUmW20llacIVn?=
- =?iso-8859-1?Q?cVNRljFAdgUk1+sQSO53akMcvKv6rSbeWQ7rbevr3Wya0E+t0Vs/xcn85+?=
- =?iso-8859-1?Q?X8z9X6//C5PWPVB3kXRaydfrUiAc1SXWAc9aTZ7dnPAv4W6rqvOQI7Ck+a?=
- =?iso-8859-1?Q?cj2D6T85alLLrKlJ3rtfnqzZriC/JKHAcltlwwr5yXrrVlKtfdvTs/+8zU?=
- =?iso-8859-1?Q?Hov0ePYt5p9j5E9Q3RdyXWNg4xWoOFDWBH44nDoAJa1fnOA/jJGn86yZw8?=
- =?iso-8859-1?Q?bWjU5TyigUdDUSHHRnmB49CZSfug9PAClr6s50Hsw2Qucko5qKNwlImNvi?=
- =?iso-8859-1?Q?p5l2CSni1d+aJtDgv2Ew5wZ+C6bMondZ3sEu5dKVoRd564oVPzPZCRv5zG?=
- =?iso-8859-1?Q?koecu82wRQ2aeDdl5Iu/z2GOKyCg8NHwz3+Lxo0mYunYSmf1KsZ/Ge5jta?=
- =?iso-8859-1?Q?WWIzuDw+70D6DAIMRTxsox5VOT9l1jdioNVk0KQ+yxIMXn5E5ShkkC/78R?=
- =?iso-8859-1?Q?MxLI94P8jIre4GlXxpRtbNM7unU64u853hS5RgmOMj0AkEnDnYepUdksED?=
- =?iso-8859-1?Q?QhSPLIpjGX9qgBjuvqrGSrFvdPAEg8pkdjw+Kv7wvULMorE+RdTS3poQp3?=
- =?iso-8859-1?Q?eJAwUfVuRp9Uw7QsU1gqM5uTMegFqioUTjvNZpHvBoPRpa5gBaIXxzRDaw?=
- =?iso-8859-1?Q?Kz+f60G9i/Fv6eF3mF0tX7Cp6SOQ+S9M7NvzJizvBaEseFJA0a/viihMG4?=
- =?iso-8859-1?Q?lK7xtvAzArRGj2mUdOauRVeMfnEW/YqXojUpGC+t9zZNufPryo3rNNdiMs?=
- =?iso-8859-1?Q?tAi5kBjlr03RRtPvWx6k6Xt3TJL85dnrK5zCvqcp0FRGHaYpsGl033Tnl8?=
- =?iso-8859-1?Q?n5p5fCYhgfuNkkYm8I/j02p59S1btSDOTXywmF+jjRJOpZmtyqBqDwmbut?=
- =?iso-8859-1?Q?ao9hSytJ2yz8sSgZTU0lCVZjcoDC6kCAT3kBYhhLdqIDc4UXyOxniLnnkj?=
- =?iso-8859-1?Q?eyOUjzjgRJDglc722FhAd4lblytmwxaxxQQW4dYtSMojbRyMynYE4v4H0+?=
- =?iso-8859-1?Q?uUxQ3EnIrjrj7qWZv3ShKTsVQUVf2WGSQKiX2ujk3iAp+6y8/TWtXJLEKL?=
- =?iso-8859-1?Q?I3LpQm7pkc/DEC2XNb2Clbae8Xn94iSvSfixeZ0uhpOOLGyupcIx+sKz0P?=
- =?iso-8859-1?Q?eWP3ViWBWdQLUwtc4k87nJEsG78AKZ5H/FriVdr2sTFEK+ctgLXnAPvv8L?=
- =?iso-8859-1?Q?eMtPE+n7vCIXBg7N6ZbnDpZghzmASkOKRQK06EHIH7mvtZuJBUOVd7k1Ig?=
- =?iso-8859-1?Q?AMmfKc3km8YAOQbSpE3wPVOA753YLcyMQM4j751ogx6QyqM6B4K9CLTs/X?=
- =?iso-8859-1?Q?Yn/k1dtDuICLdKE8mea70fY58j8PTuKTIejVKlMtKC/eYcYWhJ+Xfyi2vY?=
- =?iso-8859-1?Q?rTo1muN8PuqNA5hp2zMvBGb4RCZDlvq2um1wjlcGI84gfKxLTv+wemRQq+?=
- =?iso-8859-1?Q?Vh5ljTlygeAM/zUt2eHjcZQ5UxPlyOsq8h9vDekuR2LlUmb3NObCGFxTQg?=
- =?iso-8859-1?Q?786sl2iruCkYO4JEMK2JoOu/SeJA8a7Ml5IVdQ5jyaLIgM5bXge5geCpm/?=
- =?iso-8859-1?Q?0yohu9o5gj2VRxXQWb4CIr/ls=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        id S1379365AbiAUIJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 03:09:46 -0500
+Received: from mga07.intel.com ([134.134.136.100]:6594 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1343642AbiAUIJp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 03:09:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642752585; x=1674288585;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OQeW5rUFYNb1LuME3+2ja/Sqh0ku+Ix4Xf4t/BS3sDs=;
+  b=evP4d2trlkyu0esCpgFOGnGcwws4MvgEiaQmNL48hWDQ87S3XeE9T9Jf
+   5yL0QXrfmjmQlBCF9/5CeG4cm84zyneMXPG6xe+z6O+p0H0jCpS9/4njt
+   XatfsTljLirGXPNWnZWD5S3lUI7cxml97M4p2bM0WbHwJSohY+juVJEsH
+   rwFIpohBiNobKlGU1808smE0gQjMGf07eQ6xTX+vDWHYg3bQlw2tLLvrR
+   KbtjzlrRjEg8p9RW6am0bqrltpDmZLJhCeAqCVePtXWPmeAPtCaSy5SDj
+   is9KVdStqZQTcwynGGQKf3KMvsUpw7q3jtSVyCl4HsFJ14+AzT54JTqVi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="308926049"
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="308926049"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 00:09:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="579529041"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Jan 2022 00:09:39 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nAozK-000F5O-6L; Fri, 21 Jan 2022 08:09:38 +0000
+Date:   Fri, 21 Jan 2022 16:08:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     ycaibb <ycaibb@gmail.com>, davem@davemloft.net,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org, kuba@kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ycaibb@gmail.com
+Subject: Re: [PATCH] net: missing lock releases in ipmr_base.c
+Message-ID: <202201211524.XaQUNPO4-lkp@intel.com>
+References: <20220121032210.5829-1-ycaibb@gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: abd9737e-da2f-4cef-f6a8-08d9dcb4f337
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jan 2022 08:06:38.1297
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: iOMSFWAHqEtBcZeKgHPcfCl1PMYUmVG6HhG0+j/1Nu64i9aXGO5LcyzjuojY7AgcYBs3ve55Qn/sOUEsK+4ylgHmH4HPs7chMqUSwkNAqNs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB3475
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220121032210.5829-1-ycaibb@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use truncate_if_32bit() when possible instead of open coding.
+Hi ycaibb,
 
-truncate_if_32bit() returns an unsigned long, so don't use it when
-a signed value is expected.
+Thank you for the patch! Perhaps something to improve:
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+[auto build test WARNING on net-next/master]
+[also build test WARNING on net/master horms-ipvs/master linus/master v5.16 next-20220121]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/ycaibb/net-missing-lock-releases-in-ipmr_base-c/20220121-112603
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 8aaaf2f3af2ae212428f4db1af34214225f5cec3
+config: mips-bmips_stb_defconfig (https://download.01.org/0day-ci/archive/20220121/202201211524.XaQUNPO4-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d4baf3b1322b84816aa623d8e8cb45a49cb68b84)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/0day-ci/linux/commit/33b03feacaf2155323b031274d2d67dab0cf561c
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review ycaibb/net-missing-lock-releases-in-ipmr_base-c/20220121-112603
+        git checkout 33b03feacaf2155323b031274d2d67dab0cf561c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/ipv4/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> net/ipv4/ipmr_base.c:158:4: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
+                           return mfc;
+                           ^
+   net/ipv4/ipmr_base.c:156:3: note: previous statement is here
+                   if (pos-- == 0)
+                   ^
+   net/ipv4/ipmr_base.c:166:4: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
+                           return mfc;
+                           ^
+   net/ipv4/ipmr_base.c:164:3: note: previous statement is here
+                   if (pos-- == 0)
+                   ^
+   2 warnings generated.
+
+
+vim +/if +158 net/ipv4/ipmr_base.c
+
+3feda6b46f7347 Yuval Mintz 2018-02-28  146  
+c8d61968032654 Yuval Mintz 2018-02-28  147  void *mr_mfc_seq_idx(struct net *net,
+c8d61968032654 Yuval Mintz 2018-02-28  148  		     struct mr_mfc_iter *it, loff_t pos)
+c8d61968032654 Yuval Mintz 2018-02-28  149  {
+c8d61968032654 Yuval Mintz 2018-02-28  150  	struct mr_table *mrt = it->mrt;
+c8d61968032654 Yuval Mintz 2018-02-28  151  	struct mr_mfc *mfc;
+c8d61968032654 Yuval Mintz 2018-02-28  152  
+c8d61968032654 Yuval Mintz 2018-02-28  153  	rcu_read_lock();
+c8d61968032654 Yuval Mintz 2018-02-28  154  	it->cache = &mrt->mfc_cache_list;
+c8d61968032654 Yuval Mintz 2018-02-28  155  	list_for_each_entry_rcu(mfc, &mrt->mfc_cache_list, list)
+c8d61968032654 Yuval Mintz 2018-02-28  156  		if (pos-- == 0)
+33b03feacaf215 Ryan Cai    2022-01-21  157  			rcu_read_unlock();
+c8d61968032654 Yuval Mintz 2018-02-28 @158  			return mfc;
+c8d61968032654 Yuval Mintz 2018-02-28  159  	rcu_read_unlock();
+c8d61968032654 Yuval Mintz 2018-02-28  160  
+c8d61968032654 Yuval Mintz 2018-02-28  161  	spin_lock_bh(it->lock);
+c8d61968032654 Yuval Mintz 2018-02-28  162  	it->cache = &mrt->mfc_unres_queue;
+c8d61968032654 Yuval Mintz 2018-02-28  163  	list_for_each_entry(mfc, it->cache, list)
+c8d61968032654 Yuval Mintz 2018-02-28  164  		if (pos-- == 0)
+33b03feacaf215 Ryan Cai    2022-01-21  165  			spin_unlock_bh(it->lock);
+c8d61968032654 Yuval Mintz 2018-02-28  166  			return mfc;
+c8d61968032654 Yuval Mintz 2018-02-28  167  	spin_unlock_bh(it->lock);
+c8d61968032654 Yuval Mintz 2018-02-28  168  
+c8d61968032654 Yuval Mintz 2018-02-28  169  	it->cache = NULL;
+c8d61968032654 Yuval Mintz 2018-02-28  170  	return NULL;
+c8d61968032654 Yuval Mintz 2018-02-28  171  }
+c8d61968032654 Yuval Mintz 2018-02-28  172  EXPORT_SYMBOL(mr_mfc_seq_idx);
+c8d61968032654 Yuval Mintz 2018-02-28  173  
+
 ---
- arch/powerpc/lib/sstep.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
-
-diff --git a/arch/powerpc/lib/sstep.c b/arch/powerpc/lib/sstep.c
-index 4aabe3854484..ca38d026fd88 100644
---- a/arch/powerpc/lib/sstep.c
-+++ b/arch/powerpc/lib/sstep.c
-@@ -1065,8 +1065,7 @@ int emulate_dcbz(unsigned long ea, struct pt_regs *regs)
- 	int err;
- 	unsigned long size = l1_dcache_bytes();
- 
--	if (!(regs->msr & MSR_64BIT))
--		ea &= 0xffffffffUL;
-+	ea = truncate_if_32bit(regs->msr, ea);
- 	ea &= ~(size - 1);
- 	if (!address_ok(regs, ea, size))
- 		return -EFAULT;
-@@ -1164,10 +1163,8 @@ static nokprobe_inline void add_with_carry(const struct pt_regs *regs,
- 	op->type = COMPUTE + SETREG + SETXER;
- 	op->reg = rd;
- 	op->val = val;
--	if (!(regs->msr & MSR_64BIT)) {
--		val = (unsigned int) val;
--		val1 = (unsigned int) val1;
--	}
-+	val = truncate_if_32bit(regs->msr, val);
-+	val1 = truncate_if_32bit(regs->msr, val1);
- 	op->xerval = regs->xer;
- 	if (val < val1 || (carry_in && val == val1))
- 		op->xerval |= XER_CA;
--- 
-2.33.1
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

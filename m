@@ -2,81 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E3B496814
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 00:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E4B496818
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 00:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232033AbiAUXGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 18:06:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48476 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbiAUXG3 (ORCPT
+        id S231209AbiAUXGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 18:06:42 -0500
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:35663 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232091AbiAUXGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 18:06:29 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F273C06173D
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 15:06:29 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id w12-20020a17090a528c00b001b276aa3aabso14904810pjh.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 15:06:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ANWEnOEwRLJlp79+wbMeS29MVJAChClz5fjV1hvINyI=;
-        b=UMzMmME6YQM93ZegCmxvTaK8yDVTGMc5Q15DZ2uDfdyCb5IWrcnBIOlirriJLYlMGd
-         GuJXsyUpWu7hl02nmjX17kjPp7aO5oVwzSGxzEqBeNZm6WzZ3DkdbAor5H0AtKQufoRQ
-         r5e6sXYSEL9KYqsnWYB96KlxJd29GZx64JPNrURQf4fOnRjKaWPD4QU/vm1c21k4xB2B
-         /jXobUhPMr6QLO08qIzRsqwDpZTcs1vorOvZnEzwWq0frsPh529dBU13YbY0u06BDE23
-         WhmYx7qHMeMYMIxxrO1rLw7N641JcMhshQ7uuoZeVZpgoLfKVBTQMVHXchHB1n8mS4/3
-         xubQ==
+        Fri, 21 Jan 2022 18:06:38 -0500
+Received: by mail-ot1-f43.google.com with SMTP id n22-20020a9d2016000000b0059bd79f7777so13214896ota.2;
+        Fri, 21 Jan 2022 15:06:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ANWEnOEwRLJlp79+wbMeS29MVJAChClz5fjV1hvINyI=;
-        b=1Lijv8Ijo8BsWymP/SohtKlG1k14d+KgJJ/RulimWjLxhTWOf6c8iTWYksdqhy68CL
-         +13l3vGFTcFin5blvS/5unHkoHOPpAsRXFI12mXWEPvT8b73XqqmCGK1oevWkuSAsYVq
-         MnaSeo6E49C+ZOEdj6XW5andKDeYWHpaOv0Vl1i9ijqcnU35JJtupo072kLiU5NznQBb
-         POIXS1IjJe4F+6IvSNu9n9XrfBUkRjJk8IAvBwax0iSGCy16fKkzCuNzH168EwTAVCze
-         /UjSW7jPjRktDyGL/GtQkLoD09bhuJ4KJC6lryg2+ztbNZIdZBsAZ4AobY4dCXq9Uhv3
-         CbPA==
-X-Gm-Message-State: AOAM530RRV5GRfoh03ydpUqUPtRp3+iIH9bpoVyS8Ti1EQoX9MLJoGdz
-        QLR4RehG/O07gc6P/kZgjEnua7HSqKwaYKCamCBQbw==
-X-Google-Smtp-Source: ABdhPJwgNyFh3Dzr5eTuQ+YcjzkH9S8Gi6DDU4AePnpkIiPZ7nkAy5BxDyL50VHCC+M3wP/4/XN5qIrYq98jGleP5TM=
-X-Received: by 2002:a17:902:8601:b0:149:ee23:890a with SMTP id
- f1-20020a170902860100b00149ee23890amr5877920plo.12.1642806388722; Fri, 21 Jan
- 2022 15:06:28 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=U3KFtSOIoFQkJaMXpVUGbHma41rNEP+UMGRX2A7AnZ8=;
+        b=8FBdshQ9DnvHSGwl9dcc85d04wbzK6BCAWfszWyIMCK/9UJGoM9G2n3oc6JqjUtl2X
+         xng/ymADYwn15YXxk5gQt7gsjrNDAFjiBhOrh2a6oPbN8uS2p7jrGH9tSVWm/wtqAzLG
+         duzYExToKZbfZbnpWpAxmKAiCqF3bCkkHQtXvTxPQi28f/azLtJL0uPZ7m0BG1x7ps/2
+         usqbUADkg6LjlJVnOixcqf/smGUb2eImNFSqp/HwLf7wav/C5cy4TCAE9uwe6yq6xYpv
+         FnOxc5zMMWHXayaQsqgS2bD2bOYr0sLL5Cqt0Nkzo+jRJDPM3PfBukIKirMbBFPlfGu6
+         9HJw==
+X-Gm-Message-State: AOAM531eVMZf5yziCHEqyqvE5p5fJoG6A8eTR9t8mSj3H60eU0z5vHiJ
+        FodxpFB7TrH1oeN2lsEqhg==
+X-Google-Smtp-Source: ABdhPJzwprq+qaYkBUXeGWOp4u401K45nG3rji4PuYIE9gxcgDj1Hw4ccnC1n7QVjxWm1RDH4j6Cbg==
+X-Received: by 2002:a05:6830:8c:: with SMTP id a12mr4317805oto.153.1642806398105;
+        Fri, 21 Jan 2022 15:06:38 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bj19sm2111505oib.9.2022.01.21.15.06.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jan 2022 15:06:37 -0800 (PST)
+Received: (nullmailer pid 1777253 invoked by uid 1000);
+        Fri, 21 Jan 2022 23:06:36 -0000
+Date:   Fri, 21 Jan 2022 17:06:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Maulik Shah <quic_mkshah@quicinc.com>
+Cc:     quic_lsrao@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, daniel.lezcano@linaro.org,
+        ulf.hansson@linaro.org, quic_rjendra@quicinc.com,
+        devicetree@vger.kernel.org, rafael@kernel.org,
+        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org
+Subject: Re: [PATCH 05/10] dt-bindings: soc: qcom: Update devicetree binding
+ document for rpmh-rsc
+Message-ID: <Yes8fLEld8i66ZWB@robh.at.kernel.org>
+References: <1641749107-31979-1-git-send-email-quic_mkshah@quicinc.com>
+ <1641749107-31979-6-git-send-email-quic_mkshah@quicinc.com>
 MIME-Version: 1.0
-References: <20220112233657.15886-1-michal.winiarski@intel.com>
-In-Reply-To: <20220112233657.15886-1-michal.winiarski@intel.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 21 Jan 2022 18:06:17 -0500
-Message-ID: <CAFd5g467Yub=uRoRw_cS8Z4pCyjesAeMxc6yN4-1Qwj0Xwu1NA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: Import missing importlib.abc
-To:     =?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1641749107-31979-6-git-send-email-quic_mkshah@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 6:35 PM Micha=C5=82 Winiarski
-<michal.winiarski@intel.com> wrote:
->
-> Python 3.10.0 contains:
-> 9e09849d20 ("bpo-41006: importlib.util no longer imports typing (GH-20938=
-)")
->
-> It causes importlib.util to no longer import importlib.abs, which leads
-> to the following error when trying to use kunit with qemu:
-> AttributeError: module 'importlib' has no attribute 'abc'. Did you mean: =
-'_abc'?
->
-> Add the missing import.
->
-> Signed-off-by: Micha=C5=82 Winiarski <michal.winiarski@intel.com>
+On Sun, 09 Jan 2022 22:55:02 +0530, Maulik Shah wrote:
+> The change documents power-domains property for RSC device.
+> This optional property points to corresponding PM domain node.
+> 
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/soc/qcom/rpmh-rsc.txt | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
 
-Thanks!
-
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Acked-by: Rob Herring <robh@kernel.org>

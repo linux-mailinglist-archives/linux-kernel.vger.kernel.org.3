@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E9049646A
+	by mail.lfdr.de (Postfix) with ESMTP id 5486449646B
 	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 18:48:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381891AbiAURr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 12:47:59 -0500
+        id S1381908AbiAURsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 12:48:01 -0500
 Received: from mga11.intel.com ([192.55.52.93]:56027 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1381849AbiAURrw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S1381864AbiAURrw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 21 Jan 2022 12:47:52 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1642787272; x=1674323272;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=nWX0k/Ycng9nd3KVMoKJdljWJ4mHhaMHhIgKvclEDPw=;
-  b=kQ/PJj7Z/D/AcIgH4i1kuPjw1Z6oqyZaKPUVgBWMZJV8P9cVM6u+KMK7
-   CxQ5qOXpgjefgDwy8+krF6RHEUjrmEVQ/xkWLcDNcHeVXQxKY7lAMgYTw
-   sBYMhouqzVc1J1jh1Nlj9IO/agKi/VIzAvclyJbH5vY/68kGYZlgPokDL
-   D9eNj0iVHZAL6wHzH+mds7FzU0rIHugjrUlmDHOPiKprBbKXr49tHultT
-   hzuo8IUMqGL8a/t0ExzjhVIecC5Ku1VM+WzYveGBHWoBOV2Dy9tXcfI65
-   mKfQcBywiFVjY3KqRvxc6QUAGgNAeGZTMeZ2gsZhqMcfBPVM01szWQaUy
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="243302304"
+  bh=QxJ1Z8BS1hZL8whFuL6RPwtcoEig2y1OhfDG0d4TBGA=;
+  b=NVePwGBIdXl2dpSNudMBLrA0pqQxu9fWJvOTbwCzPFqTA43aJl+E4gNO
+   wnrCAiB6ovqDGpZIWXJU3i+bbZx+JMLpTIRm5HQA+rbAa5OBZl0ik0iR6
+   JjAm/xuzFFKT4tAknIiZ39Ksc38vHofwzjJCaxvMKyE1LTwPc6o52leC4
+   YzlmTwZTSzpgZAP8kJOkEAnGu+YiczatPHh44SXjovw+qa2Lnoz2UO2TJ
+   KLcfAHl1+By0emWYUDftqODofl3a5IDOpSMRsbuyk27cdW1xSX303335B
+   2JsTTaUKzvUbt6J7XnclrsZ70Nfx3S0yUujKCdveCKtYbEGve5ZtXgCzc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="243302305"
 X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
-   d="scan'208";a="243302304"
+   d="scan'208";a="243302305"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 09:47:51 -0800
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 09:47:52 -0800
 X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
-   d="scan'208";a="623394795"
+   d="scan'208";a="623394799"
 Received: from agluck-desk2.sc.intel.com ([10.3.52.146])
   by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 09:47:51 -0800
 From:   Tony Luck <tony.luck@intel.com>
@@ -42,9 +42,9 @@ Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
         Wei Huang <wei.huang2@amd.com>,
         Tom Lendacky <thomas.lendacky@amd.com>,
         patches@lists.linux.dev, Tony Luck <tony.luck@intel.com>
-Subject: [PATCH v2 3/6] x86/cpu: X86_FEATURE_INTEL_PPIN finally has a CPUID bit
-Date:   Fri, 21 Jan 2022 09:47:40 -0800
-Message-Id: <20220121174743.1875294-4-tony.luck@intel.com>
+Subject: [PATCH v2 4/6] x86/cpu: Read/save PPIN MSR during initialization
+Date:   Fri, 21 Jan 2022 09:47:41 -0800
+Message-Id: <20220121174743.1875294-5-tony.luck@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220121174743.1875294-1-tony.luck@intel.com>
 References: <20220107225442.1690165-1-tony.luck@intel.com>
@@ -55,45 +55,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After nine generations of adding to model specific list of CPUs that
-support PPIN (Protected Processor Inventory Number) Intel allocated
-a CPUID bit to enumerate the MSRs.
+Currently the PPIN (Protected Processor Inventory Number) MSR is read by
+every CPU that processes a machine check, CMCI, or just polls machine
+check banks from a periodic timer. This is not a "fast" MSR, so this
+adds to overhead of processing errors.
 
-CPUID(EAX=7, ECX=1).EBX bit 0 enumerates presence of MSR_PPIN_CTL and
-MSR_PPIN. Add it to the "scattered" CPUID bits and add an entry to the
-ppin_cpuids[] x86_match_cpu() array to catch Intel CPUs that implement
-it.
+Add a new "ppin" field to the cpuinfo_x86 structure. Read and save the
+PPIN during initialization. Use this copy in mce_setup() instead of
+reading the MSR.
 
 Signed-off-by: Tony Luck <tony.luck@intel.com>
 ---
- arch/x86/kernel/cpu/common.c    | 1 +
- arch/x86/kernel/cpu/scattered.c | 1 +
- 2 files changed, 2 insertions(+)
+ arch/x86/include/asm/processor.h | 2 ++
+ arch/x86/kernel/cpu/common.c     | 2 ++
+ arch/x86/kernel/cpu/mce/core.c   | 7 +------
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 2c5f12ae7d04..a87e7c33d5ac 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -119,6 +119,8 @@ struct cpuinfo_x86 {
+ 	int			x86_cache_mbm_width_offset;
+ 	int			x86_power;
+ 	unsigned long		loops_per_jiffy;
++	/* protected processor identification number */
++	u64			ppin;
+ 	/* cpuid returned max cores value: */
+ 	u16			x86_max_cores;
+ 	u16			apicid;
 diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index b7700a47eadd..8a039d1ea57f 100644
+index 8a039d1ea57f..64deb7727d00 100644
 --- a/arch/x86/kernel/cpu/common.c
 +++ b/arch/x86/kernel/cpu/common.c
-@@ -106,6 +106,7 @@ static struct ppin_info {
+@@ -91,6 +91,7 @@ DEFINE_PER_CPU_READ_MOSTLY(u16, cpu_l2c_id) = BAD_APICID;
+ static struct ppin_info {
+ 	int	feature;
+ 	int	msr_ppin_ctl;
++	int	msr_ppin;
+ } ppin_info[] = {
+ 	[X86_VENDOR_INTEL] = {
+ 		.feature = X86_FEATURE_INTEL_PPIN,
+@@ -155,6 +156,7 @@ static void ppin_init(struct cpuinfo_x86 *c)
  
- static const struct x86_cpu_id ppin_cpuids[] = {
- 	X86_MATCH_FEATURE(X86_FEATURE_AMD_PPIN, &ppin_info[X86_VENDOR_AMD]),
-+	X86_MATCH_FEATURE(X86_FEATURE_INTEL_PPIN, &ppin_info[X86_VENDOR_INTEL]),
+ 	/* Is the enable bit set? */
+ 	if (val & 2UL) {
++		c->ppin = __rdmsr(info->msr_ppin);
+ 		set_cpu_cap(c, info->feature);
+ 		return;
+ 	}
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 5818b837fd4d..4f1e825033ce 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -138,12 +138,7 @@ void mce_setup(struct mce *m)
+ 	m->socketid = cpu_data(m->extcpu).phys_proc_id;
+ 	m->apicid = cpu_data(m->extcpu).initial_apicid;
+ 	m->mcgcap = __rdmsr(MSR_IA32_MCG_CAP);
+-
+-	if (this_cpu_has(X86_FEATURE_INTEL_PPIN))
+-		m->ppin = __rdmsr(MSR_PPIN);
+-	else if (this_cpu_has(X86_FEATURE_AMD_PPIN))
+-		m->ppin = __rdmsr(MSR_AMD_PPIN);
+-
++	m->ppin = cpu_data(m->extcpu).ppin;
+ 	m->microcode = boot_cpu_data.microcode;
+ }
  
- 	/* Legacy models without CPUID enumeration */
- 	X86_MATCH_INTEL_FAM6_MODEL(IVYBRIDGE_X, &ppin_info[X86_VENDOR_INTEL]),
-diff --git a/arch/x86/kernel/cpu/scattered.c b/arch/x86/kernel/cpu/scattered.c
-index 21d1f062895a..4143b1e4c5c6 100644
---- a/arch/x86/kernel/cpu/scattered.c
-+++ b/arch/x86/kernel/cpu/scattered.c
-@@ -26,6 +26,7 @@ struct cpuid_bit {
- static const struct cpuid_bit cpuid_bits[] = {
- 	{ X86_FEATURE_APERFMPERF,       CPUID_ECX,  0, 0x00000006, 0 },
- 	{ X86_FEATURE_EPB,		CPUID_ECX,  3, 0x00000006, 0 },
-+	{ X86_FEATURE_INTEL_PPIN,	CPUID_EBX,  0, 0x00000007, 1 },
- 	{ X86_FEATURE_CQM_LLC,		CPUID_EDX,  1, 0x0000000f, 0 },
- 	{ X86_FEATURE_CQM_OCCUP_LLC,	CPUID_EDX,  0, 0x0000000f, 1 },
- 	{ X86_FEATURE_CQM_MBM_TOTAL,	CPUID_EDX,  1, 0x0000000f, 1 },
 -- 
 2.31.1
 

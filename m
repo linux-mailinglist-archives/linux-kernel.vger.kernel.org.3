@@ -2,103 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 318D44959D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 07:19:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0DF4959D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 07:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378656AbiAUGT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 01:19:26 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:31173 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378646AbiAUGTY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 01:19:24 -0500
-Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Jg8K85KYwz8wKy;
-        Fri, 21 Jan 2022 14:16:28 +0800 (CST)
-Received: from kwepeml100004.china.huawei.com (7.221.188.19) by
- kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 21 Jan 2022 14:19:20 +0800
-Received: from dggpeml500011.china.huawei.com (7.185.36.84) by
- kwepeml100004.china.huawei.com (7.221.188.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 21 Jan 2022 14:19:20 +0800
-Received: from dggpeml500011.china.huawei.com ([7.185.36.84]) by
- dggpeml500011.china.huawei.com ([7.185.36.84]) with mapi id 15.01.2308.020;
- Fri, 21 Jan 2022 14:19:19 +0800
-From:   "zhudi (E)" <zhudi2@huawei.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "Luzhihao (luzhihao, Euler)" <luzhihao@huawei.com>,
-        "Chenxiang (EulerOS)" <rose.chen@huawei.com>
-Subject: Re: [PATCH bpf-next v6 2/2] selftests: bpf: test BPF_PROG_QUERY for
- progs attached to sockmap
-Thread-Topic: [PATCH bpf-next v6 2/2] selftests: bpf: test BPF_PROG_QUERY for
- progs attached to sockmap
-Thread-Index: AdgOjsCnZ7gsBn94CUmhFdecz7qCWw==
-Date:   Fri, 21 Jan 2022 06:19:19 +0000
-Message-ID: <6853c9b97c334daeb7c2c1b35661f5a2@huawei.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.136.114.155]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1378679AbiAUGUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 01:20:15 -0500
+Received: from box.trvn.ru ([194.87.146.52]:44607 "EHLO box.trvn.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1348613AbiAUGUN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 01:20:13 -0500
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by box.trvn.ru (Postfix) with ESMTPSA id 8B36E40476;
+        Fri, 21 Jan 2022 11:20:09 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+        t=1642746009; bh=2CidME6x0fybVf+aalDZ4OpJwBktpzpKSQN/DQ4ehc8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EoJjp6uKp5z7kaCwcG6Loccy+WqAsFDffvnZ7Hjfe7a6pEz04MJx1tzsR/xUzEdy6
+         EYGLSqqKCsMPJPey4sBRQDgy9xJMFuGzL8uDwOR/TpsNnX9PM+W7aLZmdKYnHg2Hnn
+         h899/ZaLaJs4Y/rl5rPqpmLzJxF3UASSuC5dy9FSBoCPFXD2sq/trpNw1YEdIV0Xjy
+         lk7n5/26FXQSb94dAMSLET+Qm+yzr4bLzMR9/E+D1nubXw0BTtQ8qlc28gr6KKR9Oe
+         HcudSi+5mdZqQnAsOAANKLay/XJoA5pExxbZV/uqwgHezoiaz9u8wTWUi6cxBAqhhN
+         68YHcKujjQdYA==
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Date:   Fri, 21 Jan 2022 11:20:05 +0500
+From:   Nikita Travkin <nikita@trvn.ru>
+To:     Rob Herring <robh@kernel.org>
+Cc:     thierry.reding@gmail.com, lee.jones@linaro.org,
+        u.kleine-koenig@pengutronix.de, sboyd@kernel.org, krzk@kernel.org,
+        linus.walleij@linaro.org, masneyb@onstation.org,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH v3 1/3] dt-bindings: pwm: Fix node name pattern
+In-Reply-To: <Yem0wtltC/6FklZu@robh.at.kernel.org>
+References: <20220120161442.140800-1-nikita@trvn.ru>
+ <20220120161442.140800-2-nikita@trvn.ru>
+ <Yem0wtltC/6FklZu@robh.at.kernel.org>
+Message-ID: <174803bf1ea1e71a0dfdd1d5365946ca@trvn.ru>
+X-Sender: nikita@trvn.ru
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiA+IEFkZCB0ZXN0IGZvciBxdWVyeWluZyBwcm9ncyBhdHRhY2hlZCB0byBzb2NrbWFwLiB3ZSB1
-c2UgYW4gZXhpc3RpbmcNCj4gPiBsaWJicGYgcXVlcnkgaW50ZXJmYWNlIHRvIHF1ZXJ5IHByb2cg
-Y250IGJlZm9yZSBhbmQgYWZ0ZXIgcHJvZ3MNCj4gPiBhdHRhY2hpbmcgdG8gc29ja21hcCBhbmQg
-Y2hlY2sgd2hldGhlciB0aGUgcXVlcmllZCBwcm9nIGlkIGlzIHJpZ2h0Lg0KPiA+DQo+ID4gU2ln
-bmVkLW9mZi1ieTogRGkgWmh1IDx6aHVkaTJAaHVhd2VpLmNvbT4NCj4gPiBBY2tlZC1ieTogWW9u
-Z2hvbmcgU29uZyA8eWhzQGZiLmNvbT4NCj4gPiAtLS0NCj4gPiAgLi4uL3NlbGZ0ZXN0cy9icGYv
-cHJvZ190ZXN0cy9zb2NrbWFwX2Jhc2ljLmMgIHwgNjYgKysrKysrKysrKysrKysrKysrKw0KPiA+
-ICAuLi4vYnBmL3Byb2dzL3Rlc3Rfc29ja21hcF9wcm9nc19xdWVyeS5jICAgICAgfCAyNCArKysr
-KysrDQo+ID4gIDIgZmlsZXMgY2hhbmdlZCwgOTAgaW5zZXJ0aW9ucygrKQ0KPiA+ICBjcmVhdGUg
-bW9kZSAxMDA2NDQNCj4gdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dzL3Rlc3Rfc29j
-a21hcF9wcm9nc19xdWVyeS5jDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9z
-ZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvc29ja21hcF9iYXNpYy5jDQo+IGIvdG9vbHMvdGVzdGlu
-Zy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvc29ja21hcF9iYXNpYy5jDQo+ID4gaW5kZXggODVk
-YjBmNGNkZDk1Li4xYWI1N2NkYzRhZTQgMTAwNjQ0DQo+ID4gLS0tIGEvdG9vbHMvdGVzdGluZy9z
-ZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvc29ja21hcF9iYXNpYy5jDQo+ID4gKysrIGIvdG9vbHMv
-dGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvc29ja21hcF9iYXNpYy5jDQo+ID4gQEAg
-LTgsNiArOCw3IEBADQo+ID4gICNpbmNsdWRlICJ0ZXN0X3NvY2ttYXBfdXBkYXRlLnNrZWwuaCIN
-Cj4gPiAgI2luY2x1ZGUgInRlc3Rfc29ja21hcF9pbnZhbGlkX3VwZGF0ZS5za2VsLmgiDQo+ID4g
-ICNpbmNsdWRlICJ0ZXN0X3NvY2ttYXBfc2tiX3ZlcmRpY3RfYXR0YWNoLnNrZWwuaCINCj4gPiAr
-I2luY2x1ZGUgInRlc3Rfc29ja21hcF9wcm9nc19xdWVyeS5za2VsLmgiDQo+ID4gICNpbmNsdWRl
-ICJicGZfaXRlcl9zb2NrbWFwLnNrZWwuaCINCj4gPg0KPiA+ICAjZGVmaW5lIFRDUF9SRVBBSVIg
-ICAgICAgICAgICAgMTkgICAgICAvKiBUQ1Agc29jayBpcyB1bmRlciByZXBhaXINCj4gcmlnaHQg
-bm93ICovDQo+ID4gQEAgLTMxNSw2ICszMTYsNjMgQEAgc3RhdGljIHZvaWQgdGVzdF9zb2NrbWFw
-X3NrYl92ZXJkaWN0X2F0dGFjaChlbnVtDQo+IGJwZl9hdHRhY2hfdHlwZSBmaXJzdCwNCj4gPiAg
-ICAgICAgIHRlc3Rfc29ja21hcF9za2JfdmVyZGljdF9hdHRhY2hfX2Rlc3Ryb3koc2tlbCk7DQo+
-ID4gIH0NCj4gPg0KPiA+ICtzdGF0aWMgX191MzIgcXVlcnlfcHJvZ19pZChpbnQgcHJvZ19mZCkN
-Cj4gPiArew0KPiA+ICsgICAgICAgc3RydWN0IGJwZl9wcm9nX2luZm8gaW5mbyA9IHt9Ow0KPiA+
-ICsgICAgICAgX191MzIgaW5mb19sZW4gPSBzaXplb2YoaW5mbyk7DQo+ID4gKyAgICAgICBpbnQg
-ZXJyOw0KPiA+ICsNCj4gPiArICAgICAgIGVyciA9IGJwZl9vYmpfZ2V0X2luZm9fYnlfZmQocHJv
-Z19mZCwgJmluZm8sICZpbmZvX2xlbik7DQo+ID4gKyAgICAgICBpZiAoIUFTU0VSVF9PSyhlcnIs
-ICJicGZfb2JqX2dldF9pbmZvX2J5X2ZkIikgfHwNCj4gPiArICAgICAgICAgICAhQVNTRVJUX0VR
-KGluZm9fbGVuLCBzaXplb2YoaW5mbyksICJicGZfb2JqX2dldF9pbmZvX2J5X2ZkIikpDQo+ID4g
-KyAgICAgICAgICAgICAgIHJldHVybiAwOw0KPiA+ICsNCj4gPiArICAgICAgIHJldHVybiBpbmZv
-LmlkOw0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMgdm9pZCB0ZXN0X3NvY2ttYXBfcHJvZ3Nf
-cXVlcnkoZW51bSBicGZfYXR0YWNoX3R5cGUgYXR0YWNoX3R5cGUpDQo+ID4gK3sNCj4gPiArICAg
-ICAgIHN0cnVjdCB0ZXN0X3NvY2ttYXBfcHJvZ3NfcXVlcnkgKnNrZWw7DQo+ID4gKyAgICAgICBp
-bnQgZXJyLCBtYXBfZmQsIHZlcmRpY3RfZmQsIGR1cmF0aW9uID0gMDsNCj4gDQo+IFRoZSAnZHVy
-YXRpb24nIGlzIHVudXNlZC4NCj4gWW91IHNob3VsZCBoYXZlIHNlZW4gYSB3YXJuaW5nIHdoaWxl
-IGNvbXBpbGluZyB0aGUgc2VsZnRlc3RzPw0KPiANCj4gQW55d2F5LiBJJ3ZlIGZpeGVkIGl0IHdo
-aWxlIGFwcGx5aW5nLg0KDQpUaGFuayB5b3UuIEknbGwgYmUgbW9yZSBjYXJlZnVsIG5leHQgdGlt
-ZS4NCg0K
+Rob Herring писал(а) 21.01.2022 00:15:
+> On Thu, Jan 20, 2022 at 09:14:40PM +0500, Nikita Travkin wrote:
+>> It looks like it was intended to allow two types of node names with the
+>> binding:
+>>
+>>  - With unit address, e.g. pwm@1f000000
+> 
+> Yes, but the format of the unit-address is up to the parent bus which is 
+> outside the scope of this binding.
+> 
+>>  - With a suffix, e.g. pwm-clk
+> 
+> No. pwm-0, pwm-1, etc. only to cover the few cases with no unit-address. 
+> 
+> Third is just 'pwm' as the '*' on the end means 0 or more. Though a '?' 
+> would have been more correct.
+> 
+
+Oh, thanks for clarifying that. My assumption was that just numbering
+the nodes is not informative enough, but if it's the agreed way to do
+it, I will use this format instead.
+
+I will drop this commit and correct the bindings to use 'pwm' with
+no suffix as an example. (Though I still think that having a
+meaningful suffix is nicer in the DT so one could see what the
+node is used for)
+
+Thanks
+Nikita
+
+>>
+>> However the pattern regex only correctly matches the first variant,
+>> as well as some incorrect ones.
+>>
+>> Fix the regex to match only two patterns shown above. (Either unit
+>> address starting with @ and following with one or more hexademical
+>> digit or arbitrary suffix stating with - and at least one symbol long)
+>>
+>> Fixes: 89650a1e3b6f ("dt-bindings: pwm: Convert PWM bindings to json-schema")
+>> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+>> ---
+>>  Documentation/devicetree/bindings/pwm/pwm.yaml | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/pwm/pwm.yaml b/Documentation/devicetree/bindings/pwm/pwm.yaml
+>> index 3c01f85029e5..4926fe65886f 100644
+>> --- a/Documentation/devicetree/bindings/pwm/pwm.yaml
+>> +++ b/Documentation/devicetree/bindings/pwm/pwm.yaml
+>> @@ -13,7 +13,7 @@ select: false
+>>
+>>  properties:
+>>    $nodename:
+>> -    pattern: "^pwm(@.*|-[0-9a-f])*$"
+>> +    pattern: "^pwm(@[0-9a-f]+|-.+)?$"
+>>
+>>    "#pwm-cells":
+>>      description:
+>> --
+>> 2.30.2
+>>
+>>

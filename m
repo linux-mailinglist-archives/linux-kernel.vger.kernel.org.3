@@ -2,118 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5472495A08
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 07:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D89D3495A0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 07:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378738AbiAUGgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 01:36:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378720AbiAUGgI (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 01:36:08 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3126C061574;
-        Thu, 20 Jan 2022 22:36:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 11A9CCE2221;
-        Fri, 21 Jan 2022 06:36:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C982C340EA;
-        Fri, 21 Jan 2022 06:36:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642746964;
-        bh=OapTYucU006/664lVqAyS8BT5iSkNJKlZLbM69QQ02s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GyeoGBec3Mxxwihc80e8LN96Gzd5XeBsuNCOi7xxq0OUlO7wI66J+kph/004N5YlM
-         ZphpsSdABXAW0cGfBs8tDJ2kaQt1QFdvMTjCMTyr6Bg8OcqIWKmeOaRmmnBE13F1EM
-         AuEdwDMswd2hT0y57hMztgmKAEzQCaUypXzFkzAxSJ0+w8Q/Xs8m4tpDWn+VYnqnnN
-         z9Ejp2Exvg1liCnyEAPgNaaENyPLldmhKZgF1KSYkIDtAxyFKfemjvExbxV5m4Xmou
-         +f+05ibW2RAfW0HnazvCqTXvAO8o7EkoN+/B2BScAQl+D+PHtXxrtHd+6loQi9uk+g
-         TzEikaKl0BY1Q==
-Received: by mail-ua1-f41.google.com with SMTP id w21so15156096uan.7;
-        Thu, 20 Jan 2022 22:36:04 -0800 (PST)
-X-Gm-Message-State: AOAM53068lAFo1d1oYGEHQPov6DrJv1z3ZlPyfBGculqPESW1Zl1iGMQ
-        d147kzLAW058K9nO5QrvmHe+/X2UKQSAmRsVUSM=
-X-Google-Smtp-Source: ABdhPJwE7D6l9CEOckPMqifjprc+HPS6gXhdx42Itd64DW8S7D8rq3j2EK3bHxYHAPm3yMKSrqoSRwZpgjSjhZ4KQwc=
-X-Received: by 2002:ab0:728c:: with SMTP id w12mr1223277uao.108.1642746963165;
- Thu, 20 Jan 2022 22:36:03 -0800 (PST)
+        id S1378743AbiAUGhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 01:37:39 -0500
+Received: from mga03.intel.com ([134.134.136.65]:52154 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1348774AbiAUGhi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 01:37:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642747058; x=1674283058;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PrB7+txqACOqvxAdRJEN6Ri06z0Sf+hn/heR9Ndq8fo=;
+  b=dsm/XPkFuzKxhf5oocuMDuxQTJb2gHgjVKcEw032lDG0lS5v4xIAKOEv
+   zawatnrYfAkAuBLqnCtDMbAD24k9Ob4nhmDC9xwng+CcQlEZmvmRLQ6y8
+   exStfBflh7zl3nQe/KkxPnygLx6Jvj63iOWIh0h0e5lRc77PiQ+MaVBb+
+   z3kNt5q8Nl5UIdgx35egGcHSgNnlYukIzXEjbjiLoXlsGhuM/6kQPXMgQ
+   bzyMBeippg0iW+NVJ0UlNUjnOg2vpTk42+H0Iguu2IbVq2fDO/jjUB9vJ
+   U5VM8esYZWXnvPtlz01XOyQfTNA8d7YbHiobt5nsG+0435QHdtIuQxrmh
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="245530561"
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="245530561"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 22:37:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="616400090"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Jan 2022 22:37:35 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nAnYE-000F0y-Qp; Fri, 21 Jan 2022 06:37:34 +0000
+Date:   Fri, 21 Jan 2022 14:36:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     zhenwei pi <pizhenwei@bytedance.com>, mst@redhat.com,
+        arei.gonglei@huawei.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, jasowang@redhat.com,
+        virtualization@lists.linux-foundation.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        helei.sig11@bytedance.com, zhenwei pi <pizhenwei@bytedance.com>
+Subject: Re: [PATCH 3/3] virtio-crypto: implement RSA algorithm
+Message-ID: <202201211427.TgczsUOo-lkp@intel.com>
+References: <20220121022438.1042547-4-pizhenwei@bytedance.com>
 MIME-Version: 1.0
-References: <20220120073911.99857-18-guoren@kernel.org> <CAK8P3a1_qwRpfHRyF75WEqfxGxgVnfB15vNS-egQctx7R5-DvA@mail.gmail.com>
-In-Reply-To: <CAK8P3a1_qwRpfHRyF75WEqfxGxgVnfB15vNS-egQctx7R5-DvA@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 21 Jan 2022 14:35:52 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTCwOiTPJO1B6Asa2NUNR0D624t26nnA8S4vrSSax8R-Q@mail.gmail.com>
-Message-ID: <CAJF2gTTCwOiTPJO1B6Asa2NUNR0D624t26nnA8S4vrSSax8R-Q@mail.gmail.com>
-Subject: Re: [PATCH V3 17/17] KVM: compat: riscv: Prevent KVM_COMPAT from
- being selected
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        inux-parisc@vger.kernel.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220121022438.1042547-4-pizhenwei@bytedance.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 6:32 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Thu, Jan 20, 2022 at 8:39 AM <guoren@kernel.org> wrote:
-> >
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Current riscv doesn't support the 32bit KVM/arm API. Let's make it
-> > clear by not selecting KVM_COMPAT.
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > ---
-> >  virt/kvm/Kconfig | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
-> > index f4834c20e4a6..a8c5c9f06b3c 100644
-> > --- a/virt/kvm/Kconfig
-> > +++ b/virt/kvm/Kconfig
-> > @@ -53,7 +53,7 @@ config KVM_GENERIC_DIRTYLOG_READ_PROTECT
-> >
-> >  config KVM_COMPAT
-> >         def_bool y
-> > -       depends on KVM && COMPAT && !(S390 || ARM64)
-> > +       depends on KVM && COMPAT && !(S390 || ARM64 || RISCV)
->
-> Maybe this should be flipped around into a positive list now?
-I think it's another patch to do that. Not in this series.
+Hi zhenwei,
 
-> The remaining architectures would be mips, powerpc and x86, but it's unclear
-> if this actually meant to work on all of them, or any potential ones
-> added in the
-Yes, it's unclear and arch maintainers need to confirm that.
+Thank you for the patch! Perhaps something to improve:
 
-> future.
->
->        Arnd
+[auto build test WARNING on herbert-cryptodev-2.6/master]
+[also build test WARNING on herbert-crypto-2.6/master linux/master linus/master v5.16 next-20220121]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/zhenwei-pi/Introduce-akcipher-service-for-virtio-crypto/20220121-102730
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+config: hexagon-randconfig-r026-20220120 (https://download.01.org/0day-ci/archive/20220121/202201211427.TgczsUOo-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d4baf3b1322b84816aa623d8e8cb45a49cb68b84)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/fa1045d13dd16399ab0287c599719a977892cf05
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review zhenwei-pi/Introduce-akcipher-service-for-virtio-crypto/20220121-102730
+        git checkout fa1045d13dd16399ab0287c599719a977892cf05
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/crypto/virtio/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/crypto/virtio/virtio_crypto_akcipher_algo.c:276:5: warning: no previous prototype for function 'virtio_crypto_rsa_do_req' [-Wmissing-prototypes]
+   int virtio_crypto_rsa_do_req(struct crypto_engine *engine, void *vreq)
+       ^
+   drivers/crypto/virtio/virtio_crypto_akcipher_algo.c:276:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int virtio_crypto_rsa_do_req(struct crypto_engine *engine, void *vreq)
+   ^
+   static 
+   1 warning generated.
 
 
+vim +/virtio_crypto_rsa_do_req +276 drivers/crypto/virtio/virtio_crypto_akcipher_algo.c
 
--- 
-Best Regards
- Guo Ren
+   275	
+ > 276	int virtio_crypto_rsa_do_req(struct crypto_engine *engine, void *vreq)
+   277	{
+   278		struct akcipher_request *req = container_of(vreq, struct akcipher_request, base);
+   279		struct virtio_crypto_akcipher_request *vc_akcipher_req = akcipher_request_ctx(req);
+   280		struct virtio_crypto_request *vc_req = &vc_akcipher_req->base;
+   281		struct virtio_crypto_akcipher_ctx *ctx = vc_akcipher_req->akcipher_ctx;
+   282		struct virtio_crypto *vcrypto = ctx->vcrypto;
+   283		struct data_queue *data_vq = vc_req->dataq;
+   284		struct virtio_crypto_op_header *header;
+   285		struct virtio_crypto_akcipher_data_req *akcipher_req;
+   286		int ret;
+   287	
+   288		vc_req->sgs = NULL;
+   289		vc_req->req_data = kzalloc_node(sizeof(*vc_req->req_data),
+   290			GFP_KERNEL, dev_to_node(&vcrypto->vdev->dev));
+   291		if (!vc_req->req_data)
+   292			return -ENOMEM;
+   293	
+   294		/* build request header */
+   295		header = &vc_req->req_data->header;
+   296		header->opcode = cpu_to_le32(vc_akcipher_req->opcode);
+   297		header->algo = cpu_to_le32(VIRTIO_CRYPTO_AKCIPHER_RSA);
+   298		header->session_id = cpu_to_le64(ctx->session_id);
+   299	
+   300		/* build request akcipher data */
+   301		akcipher_req = &vc_req->req_data->u.akcipher_req;
+   302		akcipher_req->para.src_data_len = cpu_to_le32(req->src_len);
+   303		akcipher_req->para.dst_data_len = cpu_to_le32(req->dst_len);
+   304	
+   305		ret = __virtio_crypto_akcipher_do_req(vc_akcipher_req, req, data_vq);
+   306		if (ret < 0) {
+   307			kfree_sensitive(vc_req->req_data);
+   308			vc_req->req_data = NULL;
+   309			return ret;
+   310		}
+   311	
+   312		return 0;
+   313	}
+   314	
 
-ML: https://lore.kernel.org/linux-csky/
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

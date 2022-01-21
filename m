@@ -2,122 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 714FA495D09
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 10:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA88495D0B
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 10:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379608AbiAUJrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 04:47:06 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25772 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231417AbiAUJrG (ORCPT
+        id S1379706AbiAUJrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 04:47:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36972 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231417AbiAUJrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 04:47:06 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20L7g08x015892;
-        Fri, 21 Jan 2022 09:46:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=f4JHYwcMV4e54zOcpahbFz7a636zX1CrTjpqpd0Hni4=;
- b=k5f0xmhwIzf/2+N+cuwvATMnZTef9Fw4GlsvDQPZYuakpxxiiBDobA0sC+NWNThrHAan
- VAHEcKR8ndldzGKxcpgQTttczQ7vc21p0Kfo9UNJpVH9UC0BcV9A/UwK6ah+8aenTCHM
- VqSv0xKN3F6NJpkRapzAEQI87bazEPYLCLsDCVl8Av2kBxozVV+hUSx2JbcNLKEjAdO7
- Vvtp+zHr9h4qRz3febws7sA0cr1QqeOvhWT6Z7R3HaX3Y1uFA+aa/75rWhgFRcf237Ig
- j9oL0qTqgRVwBXR7lYRJZXt1ix66dkR8IuUoWyfsgg7be8qDgQQWCwCRgU6IAZ45o3Bw bg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dqrnmt7ps-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Jan 2022 09:46:42 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20L9ba1T028069;
-        Fri, 21 Jan 2022 09:46:42 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dqrnmt7p8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Jan 2022 09:46:41 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20L9bwBf010145;
-        Fri, 21 Jan 2022 09:46:39 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3dqj37u66m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Jan 2022 09:46:39 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20L9kbJE33489330
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 21 Jan 2022 09:46:37 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4F5FF5204F;
-        Fri, 21 Jan 2022 09:46:37 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 0AA785204E;
-        Fri, 21 Jan 2022 09:46:37 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Yinan Liu <yinan@linux.alibaba.com>
-Cc:     rostedt@goodmis.org, peterz@infradead.org,
-        mark-pk.tsai@mediatek.com, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, hca@linux.ibm.com,
-        linux-s390@vger.kernel.org
-Subject: Re: [PATCH v8] scripts: ftrace - move the sort-processing in
- ftrace_init
-References: <20210911135043.16014-1-yinan@linux.alibaba.com>
-        <20211212113358.34208-1-yinan@linux.alibaba.com>
-        <20211212113358.34208-2-yinan@linux.alibaba.com>
-Date:   Fri, 21 Jan 2022 10:46:36 +0100
-In-Reply-To: <20211212113358.34208-2-yinan@linux.alibaba.com> (Yinan Liu's
-        message of "Sun, 12 Dec 2021 19:33:58 +0800")
-Message-ID: <yt9dee51ctfn.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        Fri, 21 Jan 2022 04:47:41 -0500
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52723C061574;
+        Fri, 21 Jan 2022 01:47:41 -0800 (PST)
+Received: by mail-qk1-x735.google.com with SMTP id o135so9304784qke.8;
+        Fri, 21 Jan 2022 01:47:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4alRYNA0bZSUpUO0RvXdY6tMCVcCPN7Mpy2jJJWzikQ=;
+        b=YaQKORsMB2bdN1W4/mkTZKwGRaWhrXkJgweMN8CATucj7B1cciRG8rekkt1b2xDg9t
+         OR1nB307gTVwzXqlANGyg69IAd0VlVH0rlTuwJpiPftztRO4wBKaRE8uwXpORtGswc0I
+         +UXoFLN0sgWTItAvwTNYmQv3ktrsows6ugjMzl0GYxmFQZJWph4XKwIJYiZo/DQEDW0c
+         HwL+EV9JTiHIgenYsVZya3r9Kh8uN+ihjvL0Wl5scRy/FHgM8KUsHQ4+O6DKdjqo5h9r
+         uqvn9lvnrkhsJRG/Ks+eanMv1gsfEtCNTlWdc35zYnUW3i/rjAcsvXFYU1xoKcJ7IllY
+         Q5iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4alRYNA0bZSUpUO0RvXdY6tMCVcCPN7Mpy2jJJWzikQ=;
+        b=oN7uwx1ZPZgZP1ffZ5d0fIXMmf2PGoT5RllLqiKAJV4VDZXQ49FWwjwMuj70pmP/fJ
+         c9WsfQxJ1WLwJsmo4Bk/KVHsVSUiKXDtjTcP8OOj4W5Wpcy//hKORc8BUzCp0IpkfkLZ
+         9GFNJbB58X+kX36DEi6EAM1uz8CZLIKAUD8FGFyMivJlJu4D4L9afnhIITHV4IZtaQzG
+         km6O3Tb+taJw90UVZuNpRW3ER/tg0rbQR2e3JcixSaS9wgvXef6hiontgEN/ZSzZqZSp
+         aK6t1MgRQtUGuraq1on54L2rvfwcN4PmMrrbZ4BN8bqxl8uaqDbwuQ0NxPB5uVUrjeTt
+         t57g==
+X-Gm-Message-State: AOAM5323iAtXTiq+0N0PQ0paWkUumdbZx41PN0l2qYe4e8esDgZ8y5lj
+        cP7iH9sxa4oMC7tmGtyygMg=
+X-Google-Smtp-Source: ABdhPJx1gI5f8FBHlXxXyrC9Ba766FCQ1GJNTMXVKJGTEMUCTEJMioQKkaqdjQTjXF1cBIYyZAGQjA==
+X-Received: by 2002:a05:620a:1991:: with SMTP id bm17mr2090145qkb.132.1642758460482;
+        Fri, 21 Jan 2022 01:47:40 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id l22sm2941282qkp.92.2022.01.21.01.47.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jan 2022 01:47:40 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: deng.changcheng@zte.com.cn
+To:     axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] block: fix boolreturn.cocci warning
+Date:   Fri, 21 Jan 2022 09:47:32 +0000
+Message-Id: <20220121094732.1002257-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: zVbhHmFDTo2cvPeVVJLmshdKet41wDXE
-X-Proofpoint-ORIG-GUID: ctD1dqNde2JwWJCSjezwvpQYBEa-03Hp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-21_06,2022-01-20_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
- suspectscore=0 mlxscore=0 adultscore=0 mlxlogscore=999 lowpriorityscore=0
- bulkscore=0 priorityscore=1501 malwarescore=0 impostorscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2201210063
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yinan,
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-Yinan Liu <yinan@linux.alibaba.com> writes:
+./block/bio.c: 1057: 9-10: WARNING:
+return of 0/1 in function 'bio_add_folio' with return type bool
 
-> When the kernel starts, the initialization of ftrace takes
-> up a portion of the time (approximately 6~8ms) to sort mcount
-> addresses. We can save this time by moving mcount-sorting to
-> compile time.
->
-> Signed-off-by: Yinan Liu <yinan@linux.alibaba.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> ---
->  kernel/trace/ftrace.c   |  11 +++-
->  scripts/Makefile        |   6 +-
->  scripts/link-vmlinux.sh |   6 +-
->  scripts/sorttable.c     |   2 +
->  scripts/sorttable.h     | 120 +++++++++++++++++++++++++++++++++++++++-
->  5 files changed, 137 insertions(+), 8 deletions(-)
+Return statements in functions returning bool should use true/false
+instead of 1/0.
 
-while i like the idea, this unfortunately breaks ftrace on s390. The
-reason for that is that the compiler generates relocation entries for
-all the addresses in __mcount_loc. During boot, the s390 decompressor
-iterates through all the relocations and overwrites the nicely
-sorted list between __start_mcount_loc and __stop_mcount_loc with
-the unsorted list because the relocations entries are not adjusted.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+---
+ block/bio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Of course we could just disable that option, but that would make us
-different compared to x86 which i don't like. Adding code to sort the
-relocation would of course also fix that, but i don't think it is a good
-idea to rely on the order of relocations.
+diff --git a/block/bio.c b/block/bio.c
+index 4312a8085396..108b11106c8d 100644
+--- a/block/bio.c
++++ b/block/bio.c
+@@ -1054,7 +1054,7 @@ bool bio_add_folio(struct bio *bio, struct folio *folio, size_t len,
+ 		   size_t off)
+ {
+ 	if (len > UINT_MAX || off > UINT_MAX)
+-		return 0;
++		return false;
+ 	return bio_add_page(bio, &folio->page, len, off) > 0;
+ }
+ 
+-- 
+2.25.1
 
-Any thoughts how a fix could look like, and whether that could also be a
-problem on other architectures?
-
-Thanks
-Sven

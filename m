@@ -2,165 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16556495917
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 06:19:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3136349591A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 06:19:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbiAUFLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 00:11:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33728 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229608AbiAUFLk (ORCPT
+        id S230360AbiAUFRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 00:17:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229608AbiAUFRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 00:11:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642741899;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L0wOMdBYCyHlL69KsDd6YPdAUhkVTm6hlziUz50KanQ=;
-        b=RhmzszADGXsHu+YCINZp7IU7r1ZbOdmmFr++7LU/YoXVwx7D6OZ4eGxpATLE7aL3SU4rSm
-        /0hkLRsCTNuI14f/B1ymCL8LajliDN8jkre0Y2LrM205jg3LM/leuwKUnNLL4KO9obO2jD
-        wZq4OloWb6hRioRG0iJ/YcNdhIzFXFg=
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
- [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-50-FHHKSs1kMn-6PnCdiQ8SVg-1; Fri, 21 Jan 2022 00:11:38 -0500
-X-MC-Unique: FHHKSs1kMn-6PnCdiQ8SVg-1
-Received: by mail-pg1-f198.google.com with SMTP id g12-20020a63200c000000b00342cd03227aso4996249pgg.19
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 21:11:38 -0800 (PST)
+        Fri, 21 Jan 2022 00:17:39 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE49DC061574;
+        Thu, 20 Jan 2022 21:17:38 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id l16so8388040pjl.4;
+        Thu, 20 Jan 2022 21:17:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bunDHCeKO61OtYgL6XTkwDh49ksDeJZwuYnkiCJjD/k=;
+        b=NUJtW1USk5ESjbrnfPaFxNndMaw6rESK9PforxuBh8OPDpgNPt3uf9069PBe0f9lX3
+         8qX7sJ3m3HWKQrbkG0yOSFJp3afKkgda+Vx9/SA2/aybRD7yH0y3aGmCTtzoStvNO1KX
+         7TzDMFicsgTRZrDcQNc3ukXTSL7jHbTYA/ZUliv2wmxhSzg8sVdXjBeJ08gDqJPtDKSU
+         gIDuP9XR61LcQcpOWJ3/ZpoURnwbgeDdRYXvkj/CMCsBT3KuMqIXrC4QJXbMvR1+CW3C
+         cWSXG73DQtkjfIDIHkcEAAs/D3mnfK0PVbMDiLag2NdySjUMU9JTJYyKZDWBqRSH03BW
+         tfeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=L0wOMdBYCyHlL69KsDd6YPdAUhkVTm6hlziUz50KanQ=;
-        b=ht0fAiUDzoMjA7VOskK4smoeWbsy/MPRZulZzb1mqX1qKIs7cFv/ba1f1mk4pUmttk
-         CJS9ssS3n72J5hgt6bRqb4SKnATputLneCuXsmVb2PDbkO11mG8mHnF2TCT6DQLGEg82
-         8FzfpsPpSSRWr8rUI4CmExGXTj/vPXqJyqny3kkWbVYVPgqyWRU7GEYmtAMwQRLOoUsG
-         A+zkZb57tP55zaMZwhzXrsG6+8cEbNiAQjtHByvpxxnxUUHawoMxcFlxGvMdSs+6r3Zi
-         DXsuLH3HJghmc5+to+8SO18mNpl8J47NLGf5vY+stT87kyEKPDI2tBkQTAt59yOfklIh
-         FmSA==
-X-Gm-Message-State: AOAM532lW1m+V/xBtg1r342qZhazb7k05NUIGAnzcfGMw8Aa3szlS9/8
-        riW8kU1/iidsftjdAKiA2MYX1j2k6ytojrIwCgDyO1Oy8oiiRUUrOwfTpiQVV1T13slTFqNNNgt
-        j+bEywB7GgleBq89LhOXVUCNL
-X-Received: by 2002:a17:902:ce8d:b0:14a:70dc:2050 with SMTP id f13-20020a170902ce8d00b0014a70dc2050mr2244417plg.11.1642741897052;
-        Thu, 20 Jan 2022 21:11:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzRcsiVOFuX+avW7yYJ2HGJbIr7G7j9yQrgquRGZxjg0u6Uup+RYwh35T8s1mSwkgOQ53IHjw==
-X-Received: by 2002:a17:902:ce8d:b0:14a:70dc:2050 with SMTP id f13-20020a170902ce8d00b0014a70dc2050mr2244386plg.11.1642741896537;
-        Thu, 20 Jan 2022 21:11:36 -0800 (PST)
-Received: from xz-m1.local ([94.177.118.81])
-        by smtp.gmail.com with ESMTPSA id n4sm3778295pjf.0.2022.01.20.21.11.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 21:11:35 -0800 (PST)
-Date:   Fri, 21 Jan 2022 13:11:28 +0800
-From:   Peter Xu <peterx@redhat.com>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        David Hildenbrand <david@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH RFC v2 1/2] mm: Don't skip swap entry even if zap_details
- specified
-Message-ID: <YepAgBz4EUXc/jrM@xz-m1.local>
-References: <20211115134951.85286-1-peterx@redhat.com>
- <20211115134951.85286-2-peterx@redhat.com>
- <9937aaa-d9ab-2839-b0b7-691d85c9141@google.com>
- <Yd7VEXI+/Lu8MVOo@xz-m1.local>
- <Yd7W6ndSPkXQjurY@xz-m1.local>
- <391aa58d-ce84-9d4-d68d-d98a9c533255@google.com>
- <Yek6PaW8fAXY4Bft@xz-m1.local>
- <YeokbrpCdAGAYHEl@xz-m1.local>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bunDHCeKO61OtYgL6XTkwDh49ksDeJZwuYnkiCJjD/k=;
+        b=vPNBtqC2ohqtRcXC+wefwgTKGK8JSEZ5eGC3AebJ9vgl6KKrdDlALGXuXfzaiAMvXx
+         Mtmweln5/zMKftgBz/K+Yw/y/cPSq0WLoClxLrpoyHOdITzzNtX7Z5uL4PbT3IuWqYSK
+         I+M0n1rplnyMWsC4g5I35UaUdbZ1vDmP25q2SYMhXaHbqSNq48d6TgajCPeo4G6ZjGTK
+         Z6vf2NyxWqaI95a6bK/P4V7TZx3BxzqNbAX3dbh2MKGPfFtLoNeCIn4w76bLmRWrlkMW
+         8+6/k0bphU+Pau+SUVVhSXzPEPdwHsud2G/0+FNpPQh4cByDeaxT2XBgHl5JbdW82Sbl
+         06hQ==
+X-Gm-Message-State: AOAM5330bX1qXP7MRt9EJnjWrRVUXr7xAqSJmEdNFLgdyMRiRp057QKo
+        P11s/CJk5bNz8PI2gRIEQsmFgWhFNxy1dmw/8l5Asf6OgYY=
+X-Google-Smtp-Source: ABdhPJxpL6VhKWBKwersAkHVm8gNgOSr/yFy2odoJ2PQAxJmS1cW2PZsEZ1sFbbQteV7LQTBmFnx+uqkPeMZsDhX870=
+X-Received: by 2002:a17:90a:de8e:: with SMTP id n14mr14803977pjv.122.1642742258116;
+ Thu, 20 Jan 2022 21:17:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YeokbrpCdAGAYHEl@xz-m1.local>
+References: <20220113070245.791577-1-imagedong@tencent.com>
+ <CAADnVQKNCqUzPJAjSHMFr-Ewwtv5Cs3UCQpthaKDTd+YNRWqqg@mail.gmail.com>
+ <CADxym3bJZrcGHKH8=kKBkxh848dijAZ56n0fm_DvEh6Bbnrezg@mail.gmail.com>
+ <20220120041754.scj3hsrxmwckl7pd@ast-mbp.dhcp.thefacebook.com> <CADxym3b-Q6LyjKqTFcrssK9dVJ8hL6QkMb0MzLyn64r4LS=xtw@mail.gmail.com>
+In-Reply-To: <CADxym3b-Q6LyjKqTFcrssK9dVJ8hL6QkMb0MzLyn64r4LS=xtw@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 20 Jan 2022 21:17:27 -0800
+Message-ID: <CAADnVQKaaPKPkqYfhcM=YNCxodBL_ME6CMk3DPXF_Kq2zoyM=w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Add document for 'dst_port' of 'struct bpf_sock'
+To:     Menglong Dong <menglong8.dong@gmail.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Mengen Sun <mengensun@tencent.com>, flyingpeng@tencent.com,
+        mungerjiang@tencent.com, Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 11:11:42AM +0800, Peter Xu wrote:
-> On Thu, Jan 20, 2022 at 06:32:29PM +0800, Peter Xu wrote:
-> > > Except that here we have no page to check, so it looks like you'll
-> > > have to change should_zap_page() to deal with this case too, or just
-> > > check details->check_mapping directly.
-> > 
-> > Yeah I prefer this, as we don't have the page* pointer anyway.
-> > 
-> > > Which raises the question again
-> > > of why I did not just use a boolean flag there originally: aah, I think
-> > > I've found why.  In those days there was a horrible "optimization", for
-> > > better performance on some benchmark I guess, which when you read from
-> > > /dev/zero into a private mapping, would map the zero page there (look
-> > > up read_zero_pagealigned() and zeromap_page_range() if you dare).  So
-> > > there was another category of page to be skipped along with the anon
-> > > COWs, and I didn't want multiple tests in the zap loop, so checking
-> > > check_mapping against page->mapping did both.  I think nowadays you
-> > > could do it by checking for PageAnon page (or genuine swap entry)
-> > > instead.
-> > 
-> > It must be PageAnon already, isn't it?
-> 
-> I think I see what you meant now..
-> 
-> I assume the special case is gone, how about I switch zap_mappings back into
-> a boolean altogether in this patchset?  Thanks,
+On Thu, Jan 20, 2022 at 6:18 AM Menglong Dong <menglong8.dong@gmail.com> wrote:
+>
+> On Thu, Jan 20, 2022 at 12:17 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Thu, Jan 20, 2022 at 11:02:27AM +0800, Menglong Dong wrote:
+> > > Hello!
+> > >
+> > > On Thu, Jan 20, 2022 at 6:03 AM Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >
+> > > [...]
+> > > >
+> > > > Looks like
+> > > >  __sk_buff->remote_port
+> > > >  bpf_sock_ops->remote_port
+> > > >  sk_msg_md->remote_port
+> > > > are doing the right thing,
+> > > > but bpf_sock->dst_port is not correct?
+> > > >
+> > > > I think it's better to fix it,
+> > > > but probably need to consolidate it with
+> > > > convert_ctx_accesses() that deals with narrow access.
+> > > > I suspect reading u8 from three flavors of 'remote_port'
+> > > > won't be correct.
+> > >
+> > > What's the meaning of 'narrow access'? Do you mean to
+> > > make 'remote_port' u16? Or 'remote_port' should be made
+> > > accessible with u8? In fact, '*((u16 *)&skops->remote_port + 1)'
+> > > won't work, as it only is accessible with u32.
+> >
+> > u8 access to remote_port won't pass the verifier,
+> > but u8 access to dst_port will.
+> > Though it will return incorrect data.
+> > See how convert_ctx_accesses() handles narrow loads.
+> > I think we need to generalize it for different endian fields.
+>
+> Yeah, I understand narrower load in convert_ctx_accesses()
+> now. Seems u8 access to dst_port can't pass the verifier too,
+> which can be seen form bpf_sock_is_valid_access():
+>
+> $    switch (off) {
+> $    case offsetof(struct bpf_sock, state):
+> $    case offsetof(struct bpf_sock, family):
+> $    case offsetof(struct bpf_sock, type):
+> $    case offsetof(struct bpf_sock, protocol):
+> $    case offsetof(struct bpf_sock, dst_port):  // u8 access is not allowed
+> $    case offsetof(struct bpf_sock, src_port):
+> $    case offsetof(struct bpf_sock, rx_queue_mapping):
+> $    case bpf_ctx_range(struct bpf_sock, src_ip4):
+> $    case bpf_ctx_range_till(struct bpf_sock, src_ip6[0], src_ip6[3]):
+> $    case bpf_ctx_range(struct bpf_sock, dst_ip4):
+> $    case bpf_ctx_range_till(struct bpf_sock, dst_ip6[0], dst_ip6[3]):
+> $        bpf_ctx_record_field_size(info, size_default);
+> $        return bpf_ctx_narrow_access_ok(off, size, size_default);
+> $    }
+>
+> I'm still not sure what should we do now. Should we make all
+> remote_port and dst_port narrower accessable and endianness
+> right? For example the remote_port in struct bpf_sock_ops:
+>
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -8414,6 +8414,7 @@ static bool sock_ops_is_valid_access(int off, int size,
+>                                 return false;
+>                         info->reg_type = PTR_TO_PACKET_END;
+>                         break;
+> +               case bpf_ctx_range(struct bpf_sock_ops, remote_port):
 
-Oh, one more thing..
+Ahh. bpf_sock_ops don't have it.
+But bpf_sk_lookup and sk_msg_md have it.
 
-When reading the history and also your explanations above, I figured one thing
-that may not be right for a long time, on zero page handling of zapping.
+bpf_sk_lookup->remote_port
+supports narrow access.
 
-If to quote your comment above, we should keep the zero page entries too if
-zap_details.zap_mapping is specified.  However it's not true for a long time, I
-guess starting from when vm_normal_page() returns NULL for zero pfns.  I also
-have a very strong feeling that in the old world the "page*" is non-NULL for
-zero pages here.
+When it accesses sport from bpf_sk_lookup_kern.
 
-So... I'm boldly thinking whether we should also need another fix upon the zero
-page handling here too, probably before this whole patchset (so it'll be the
-1st patch, it should directly apply to master) because if I'm right on above it
-can be seen as another separate bug fix:
+and we have tests that do u8 access from remote_port.
+See verifier/ctx_sk_lookup.c
 
----8<---
-diff --git a/mm/memory.c b/mm/memory.c
-index f306e698a1e3..9b8348746e0b 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -1320,11 +1320,18 @@ struct zap_details {
- static inline bool
- zap_skip_check_mapping(struct zap_details *details, struct page *page)
- {
--       if (!details || !page)
-+       /* No detail pointer or no zap_mapping pointer, zap all */
-+       if (!details || !details->zap_mapping)
-                return false;
- 
--       return details->zap_mapping &&
--               (details->zap_mapping != page_rmapping(page));
-+       /*
-+        * For example, the zero page.  If the user wants to keep the private
-+        * pages, zero page should also be in count.
-+        */
-+       if (!page)
-+               return true;
-+
-+       return details->zap_mapping != page_rmapping(page);
- }
- 
- static unsigned long zap_pte_range(struct mmu_gather *tlb,
----8<---
+>                 case offsetof(struct bpf_sock_ops, skb_tcp_flags):
+>                         bpf_ctx_record_field_size(info, size_default);
+>                         return bpf_ctx_narrow_access_ok(off, size,
+>
+> If remote_port/dst_port are made narrower accessable, the
+> result will be right. Therefore, *((u16*)&sk->remote_port) will
+> be the port with network byte order. And the port in host byte
+> order can be get with:
+> bpf_ntohs(*((u16*)&sk->remote_port))
+> or
+> bpf_htonl(sk->remote_port)
 
-page can be NULL for e.g. PFNMAP and when error occured too above.  I assume we
-don't need to bother with them (e.g., I don't think PFNMAP or MIXED should
-specify even_cows=false at all, because there's no page cache layer), though.
-Mostly it's about how we should handle zero page right.
+So u8, u16, u32 will work if we make them narrow-accessible, right?
 
-Thanks,
+The summary if I understood it:
+. only bpf_sk_lookup->remote_port is doing it correctly for u8,u16,u32 ?
+. bpf_sock->dst_port is not correct for u32,
+  since it's missing bpf_ctx_range() ?
+. __sk_buff->remote_port
+ bpf_sock_ops->remote_port
+ sk_msg_md->remote_port
+ correct for u32 access only. They don't support narrow access.
 
--- 
-Peter Xu
+but wait
+we have a test for bpf_sock->dst_port in progs/test_sock_fields.c.
+How does it work then?
 
+I think we need more eyes on the problem.
+cc-ing more experts.

@@ -2,59 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD13E4958A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 04:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4790B4958AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 04:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233613AbiAUDrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Jan 2022 22:47:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41620 "EHLO
+        id S233652AbiAUDvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Jan 2022 22:51:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232662AbiAUDrj (ORCPT
+        with ESMTP id S232662AbiAUDvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Jan 2022 22:47:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E31C061574;
-        Thu, 20 Jan 2022 19:47:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4DEDB81EBD;
-        Fri, 21 Jan 2022 03:47:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D172EC340E1;
-        Fri, 21 Jan 2022 03:47:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642736855;
-        bh=YDuyQkVmbuc2qf5yPjTcF9uLN8no0wj1OEdJl9khO5o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FUOKjZhJNMMxQrUmpHwb1nEsx06Q87ZendqFezA1/yWcTBDIsDEKwnY84wkcPVRSb
-         mO0Zvzpp5VmHU7F9xEIq+wEBdvZRYhM4FbynFjvakxsKqwePBbvxCJcX1wOmwo1hyi
-         PpR5EAiBoP+wZ4ZOm/prMWoaLwSsxi2YpNEq1ErxDqFSJqbOAxn2aHvhiHzfATtGsj
-         C1unOWwH+ckzWw5Fb3TA+udGZ/qwwPpc57z8oC1FM3/KBR3hmysYP98m9rsvqtUxYR
-         aPXNP9aWD7EAXIaoSRtFj0KPvysJ/FNV+0Sw3yDevIvktdapWM3gDxVAzMxZYe3QpX
-         w4ZRilrVRoGEA==
-Date:   Thu, 20 Jan 2022 19:47:33 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     ycaibb <ycaibb@gmail.com>
-Cc:     edumazet@google.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH] ipv4: fix lock leaks
-Message-ID: <20220120194733.6a8b13e6@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20220121031108.4813-1-ycaibb@gmail.com>
-References: <20220121031108.4813-1-ycaibb@gmail.com>
+        Thu, 20 Jan 2022 22:51:49 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1502C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 19:51:48 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id n22-20020a9d2016000000b0059bd79f7777so9848654ota.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Jan 2022 19:51:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=Zw1xGM3pPLEzfNT4ahmA+22OV1IFhkPDNDA/xee9U6A=;
+        b=Fohh4ir2XtxYGDzTYT3a1zOzmn7NemInzjufhZGhE9kjaycZw3rvx/ZTOJMWAql8+u
+         kjWXZNqWBTkh9C7rHMoQbzUi5zy88CG5B1mj9ubIOiYH94ZxbWuVjysjy10qmPvIK31v
+         yat5XS6hJlkC47ErkXZpKGpn0rf2V0uEoSJUg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=Zw1xGM3pPLEzfNT4ahmA+22OV1IFhkPDNDA/xee9U6A=;
+        b=klNaz7nfkyRXNLBdqAi+9QJchN5bBuzE3AMDQc+WgCnaGUdOht6qdr7/EhIcLQaAGJ
+         T/fJ/2xANel2buR9PBkQxnesfdAznK9upJduVQYPVAoqU258P7r4Nhpa7dqWBM0Uc51G
+         xKFU5MX9sm9hVOcvaJk3mbCESDA0wsKY2EBVOl8CadrNYf8RVocO+KGcoc8OddeTpNbg
+         zqGRzFcfQYEs3OLBb+66m46HnjjEh9nvxUX/bD904Icn4DDScSoZ73WkHPX4Hv8H78Ko
+         hQQV8Xomv+EdmsdcNu2yKkCqxEG489ZxhuGrB/AE8P1BPRL9enwwIZyX3mR+D/+TNhYh
+         wY4Q==
+X-Gm-Message-State: AOAM533CNxKog+eVDocVc0lkTJVwDnOyNHPJWAgmun5Yg8AGFDOmYQeC
+        H1NDzX5ZutIhIGtI6xXExk79U4fOD6BmrZV0+SttCQ==
+X-Google-Smtp-Source: ABdhPJzOelKqjZaLkZxZNxOOsZNh2/VT97M0GdTnwWRDH9mrRyfMV1pVkXwDFHR/qX7u73GKaERNQBUCZpdLMd7EyYo=
+X-Received: by 2002:a9d:7f93:: with SMTP id t19mr1422121otp.159.1642737108375;
+ Thu, 20 Jan 2022 19:51:48 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 20 Jan 2022 19:51:48 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20220120204132.17875-1-quic_amelende@quicinc.com>
+References: <20220120204132.17875-1-quic_amelende@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 20 Jan 2022 19:51:47 -0800
+Message-ID: <CAE-0n530ddsusCO7ZB1X2GZ8NN4dPphdhAYCbexEr5jRPoACVA@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Add support for pm8941-pwrkey.c
+To:     Anjelique Melendez <quic_amelende@quicinc.com>,
+        dmitry.torokhov@gmail.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, collinsd@codeaurora.org,
+        bjorn.andersson@linaro.org, skakit@codeaurora.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Jan 2022 11:11:08 +0800 ycaibb wrote:
->  			if (seq_sk_match(seq, sk))
-> +				spin_unlock_bh(lock);
->  				return sk;
+"Add support" in the subject sounds like it is new. Maybe "extend
+pm8941-pwrkey driver" would be more appropriate.
 
-Heh, also you're missing brackets so this is patently buggy.
+Quoting Anjelique Melendez (2022-01-20 12:41:30)
+> This change series includes support and fixes in pm8941-pwrkey.c.
+> Change details and description can be found in each patch. Thanks!
+>
+> David Collins (3):
+>   input: misc: pm8941-pwrkey: simulate missed key press events
+>   input: misc: pm8941-pwrkey: add software key press debouncing support
+>   input: misc: pm8941-pwrkey: avoid potential null pointer dereference

@@ -2,105 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1764965D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 20:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD51C4965DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 20:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbiAUTqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 14:46:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
+        id S231397AbiAUTr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 14:47:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiAUTqM (ORCPT
+        with ESMTP id S229454AbiAUTrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 14:46:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F67C06173B;
-        Fri, 21 Jan 2022 11:46:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BAFB7B820D9;
-        Fri, 21 Jan 2022 19:46:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 407D7C340E1;
-        Fri, 21 Jan 2022 19:46:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642794369;
-        bh=s8CFfVkEFgCYwCsZ61/HoZHTy/2PzVbQ2BSmTJdrEdI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=uHTdVgBy9ezeNTbMzWmnwiE6TI3L/I6fJoGLt3SRePP0x9NdGjgSkMNUVS+C7n8QY
-         qkWdTdB85ezcr5jWrn7/T4hj+B+dvoz+VCZC9yTXSTbKsOkQC8Z20ucKjx/Im8u6q4
-         QWwOOSkatByCFnRPQqqYJLiiUwygpgY4zl3LB/ndV8hnPtJ5use8gf3nThTNv7CCrY
-         Dq9GuN6EXV4+CgaeoZ4UqGd71T9tDIdXF9pQ/qWyWyZwCRWPjrwu6lDCBANIy8yV7B
-         Dk6r369J3f01rlNvnZINN93F5fdDna0T31skPTlNyRTaNXRoTyo1PRUkAM8/5fLwQR
-         TYAMEcskIrt3Q==
-Date:   Fri, 21 Jan 2022 13:46:07 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Shuai Xue <xueshuai@linux.alibaba.com>
-Cc:     rafael@kernel.org, bp@alien8.de, tony.luck@intel.com,
-        james.morse@arm.com, lenb@kernel.org, rjw@rjwysocki.net,
-        bhelgaas@google.com, zhangliguang@linux.alibaba.com,
-        zhuo.song@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v6] ACPI: explicit init HEST, SDEI and GHES in apci_init
-Message-ID: <20220121194607.GA1146355@bhelgaas>
+        Fri, 21 Jan 2022 14:47:25 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5B6C06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 11:47:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Content-Type:
+        References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID
+        :Content-Description; bh=Ru23K7nav+OHjyymO8CSjGmREtw3kKts4vIZNTASfAQ=; b=s0O0
+        /UXqV9obxQwXq3xNCrUbPc8jZaPlneD+lUOrEoxSL04tAiZ/XTPuAt59zKIQOtQFHOqUSB/UnqBa+
+        7izh4iMATFCXMFO3CeGx2DEMqs2OT1hSeCB0eOAdNNORNwzYM6BjOqvnmcc7euLdkinWJh+85RFPm
+        vJTrmZ/GVhXd6deDhX5VWSzagcPhZ9L3UgggdJuCpvgJQrWJQ5i4T/ZXaNIEJyJ4i97o4AUeCgsgE
+        KcyyI+O2kBQPUNJAixbt8frQMiq7PNoFe26zKaP4FIqWEpupIWVDYDtjetLrckELc39BRQNxR/7gd
+        EgYdyTWnu1S5PrTV8pmxlQETJ9/8xQ==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1nAzsU-0001sS-UZ; Fri, 21 Jan 2022 19:47:19 +0000
+Date:   Fri, 21 Jan 2022 19:47:18 +0000
+From:   John Keeping <john@metanate.com>
+To:     Valentin Schneider <valentin.schneider@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: Re: [PATCH] sched/rt: Plug rt_mutex_setprio() vs push_rt_task()
+ race
+Message-ID: <20220121194718.5e32bc19.john@metanate.com>
+In-Reply-To: <8735li6vgq.mognet@arm.com>
+References: <20220120194037.650433-1-valentin.schneider@arm.com>
+        <8735li6vgq.mognet@arm.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4c34906a-244e-3956-0ca7-7131b268cf60@linux.alibaba.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 11:43:25AM +0800, Shuai Xue wrote:
-> 在 2022/1/21 AM12:22, Bjorn Helgaas 写道:
-> > On Thu, Jan 20, 2022 at 01:05:22PM +0800, Shuai Xue wrote:
-> >> From commit e147133a42cb ("ACPI / APEI: Make hest.c manage the estatus
-> >> memory pool") was merged, ghes_init() relies on acpi_hest_init() to manage
-> >> the estatus memory pool. On the other hand, ghes_init() relies on
-> >> sdei_init() to detect the SDEI version and (un)register events. The
-> >> dependencies are as follows:
-> >>
-> >>     ghes_init() => acpi_hest_init() => acpi_bus_init() => acpi_init()
-> >>     ghes_init() => sdei_init()
-> >>
-> >> HEST is not PCI-specific and initcall ordering is implicit and not
-> >> well-defined within a level.
-> >>
-> >> Based on above, remove acpi_hest_init() from acpi_pci_root_init() and
-> >> convert ghes_init() and sdei_init() from initcalls to explicit calls in the
-> >> following order:
-> >>
-> >>     acpi_hest_init()
-> >>     sdei_init()
-> >>     ghes_init()
+On Thu, 20 Jan 2022 19:47:01 +0000
+Valentin Schneider <valentin.schneider@arm.com> wrote:
 
-> >> --- a/drivers/acpi/bus.c
-> >> +++ b/drivers/acpi/bus.c
-> >> @@ -30,6 +30,7 @@
-> >>  #include <linux/acpi_viot.h>
-> >>  #include <linux/pci.h>
-> >>  #include <acpi/apei.h>
-> >> +#include <linux/arm_sdei.h>
-> > 
-> > This "arm" looks a little out of place in this supposedly arch-generic
-> > code.  Not really a new thing with this patch, since this #include
-> > already appears in drivers/acpi/apei/ghes.c.  Maybe it's unavoidable.
+> On 20/01/22 19:40, Valentin Schneider wrote:
+> > Link: http://lore.kernel.org/r/Yb3vXx3DcqVOi+EA@donbot
+> > Fixes: a7c81556ec4d ("sched: Fix migrate_disable() vs rt/dl balancing")
+> > Reported-by: John Keeping <john@metanate.com>
+> > Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>  
 > 
-> Yep, should we move sdei_init() into the beginning of ghes_init()?
-> ...
+> @John: it's slightly different than the few things we got you to try out,
+> so I didn't keep your tested-by, sorry!
 
-> > Software Delegated Exception Interface (|SDEI|) is an Arm specification for
-> > Non-secure world to register handlers with firmware to receive notifications
-> > about system events.
-> > LINK: https://github.com/ARM-software/arm-trusted-firmware/blob/master/docs/components/sdei.rst
-> 
-> I think SDEI is not a ACPI Specification but Arm specification so we should
-> not rename sdei_init() with an "acpi_" prefix.  If we move sdei_init() into
-> ghes_init(), and rename ghes_init() to acpi_ghes_init(), then all looks
-> fine? What's your opinion, Bjorn?
+I ran a test with this version as well and as expected this does indeed
+fix the issue, so this is also:
 
-Makes sense to me, especially since drivers/acpi/apei/ghes.c already
-includes linux/arm_sdei.h.  This is Rafael's area.
-
-Bjorn
+Tested-by: John Keeping <john@metanate.com>

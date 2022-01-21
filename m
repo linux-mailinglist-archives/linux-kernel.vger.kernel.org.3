@@ -2,120 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B503E49686F
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 00:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA7A496870
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 00:59:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbiAUX6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 18:58:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiAUX6P (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 18:58:15 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C5CC06173B;
-        Fri, 21 Jan 2022 15:58:14 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jgbt83SYnz4xgt;
-        Sat, 22 Jan 2022 10:58:08 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642809489;
-        bh=JiV/hnVkXRpcVEe7nCNuSsgZesl3ivyla4N8B2l1iWU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QFOWxx78aa3BQa/UD55Q1yjHdFbJ/kxpNdr3Iat6r4/CjypsZbqaktqfqrDcY6s+b
-         44paF6xlm82/2ZS13+4ZOuoIry0wqgSYkMZEjAl0fs+n3BeG77l8wwCSWsA+rbMull
-         8bSSnw0bH5eyV71Pgyere69Ptr6Ltt68+OOgWGLrIPDKW+9s/C4f9387BDu+xGFbK/
-         bThTjPlttKRXPDjAak7LoPFkzVxVDjuu7xvEKSC8jcjB9ozy4HHbMeohtwFr+AhkNz
-         Gxd/UKqBWeSX4nVIHCjBdEa0c/uRrYngSq/m8LsjLxXS5RQEl8W2fpvTQ1BYRGBSrp
-         qm8ifjb3pL2Qw==
-Date:   Sat, 22 Jan 2022 10:58:06 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the tip tree
-Message-ID: <20220122105806.3b710900@canb.auug.org.au>
-In-Reply-To: <20211217144004.0c00fabc@canb.auug.org.au>
-References: <20211217144004.0c00fabc@canb.auug.org.au>
+        id S229951AbiAUX7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 18:59:10 -0500
+Received: from mga06.intel.com ([134.134.136.31]:4739 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229647AbiAUX7J (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 18:59:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642809549; x=1674345549;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BwKfyZTR9pd4F5ZvbwcXYeoggEr6vNtt/61NARKWbvI=;
+  b=kH+mCa5Up89FA0mSMRvS2MYV3nGiXCJQxTR/XwW4YDZame7UjN5TDuLX
+   fBhb5hP8dTgCQ/iKwOLIHgghEbRY3PEzPMHn3M++XMPlikhEHty8kRwRA
+   emqFCKt3pFcq3X6taegDKidAMYFPJPgfYvkTtsSoOhXZkgk+BmBbhqWqv
+   6Y9UKSVYmJA00z8c3bij53TutEcBaHXD1jsXty2w2Y3nM4gxDT1L5osAW
+   95klWdLIONXLS/Q5YxijcUxcVdOrYdyiLudLfVuOzDcCwXZlL/VXkVz99
+   aEM6LBHoHflGiL6+SBBwiS+kiSr3iIDGshP8Vve5fHnO8T/0keNlJGTPl
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="306485666"
+X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
+   d="scan'208";a="306485666"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 15:59:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
+   d="scan'208";a="478413870"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 21 Jan 2022 15:59:07 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nB3oA-000Fmt-K2; Fri, 21 Jan 2022 23:59:06 +0000
+Date:   Sat, 22 Jan 2022 07:58:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Quentin Perret <qperret@google.com>
+Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Saravana Kannan <saravanak@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
+ 204/9999] kernel/sched/stubs.c:8:5: warning: no previous prototype for
+ 'sched_isolate_cpu'
+Message-ID: <202201220740.3itLwKmy-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Um4Yb3+Do9hb8+1U/ngUN2Z";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Um4Yb3+Do9hb8+1U/ngUN2Z
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Quentin,
 
-Hi all,
+FYI, the error/warning still remains.
 
-On Fri, 17 Dec 2021 14:40:04 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-> produced these warnings:
->=20
-> lib/strnlen_user.o: warning: objtool: strnlen_user()+0xc9: call to do_str=
-nlen_user() with UACCESS enabled
-> lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x129: cal=
-l to do_strncpy_from_user() with UACCESS enabled
-> vmlinux.o: warning: objtool: mce_start()+0x5c: call to __kasan_check_writ=
-e() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: mce_gather_info()+0x5f: call to v8086_mode.c=
-onstprop.0() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: mce_read_aux()+0x8a: call to mca_msr_reg() l=
-eaves .noinstr.text section
-> vmlinux.o: warning: objtool: do_machine_check()+0x192: call to mce_no_way=
-_out() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: mce_severity_amd.constprop.0()+0xca: call to=
- mce_severity_amd_smca() leaves .noinstr.text section
->=20
-> I am not sure which changes caused the above.
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
+head:   90a691fca4c2525068d9908ac203e9f09e4e33c0
+commit: eead51495c8760858c32d9ad0332ffc94397aa82 [204/9999] ANDROID: GKI: sched: stub sched_isolate symbols
+config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220122/202201220740.3itLwKmy-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/eead51495c8760858c32d9ad0332ffc94397aa82
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
+        git checkout eead51495c8760858c32d9ad0332ffc94397aa82
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvmem/ kernel/sched/
 
-I currently still get the following warnings from an x86_64
-allmodconfig build fo Linus' tree:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-vmlinux.o: warning: objtool: mce_start()+0x5c: call to __kasan_check_write(=
-) leaves .noinstr.text section
-vmlinux.o: warning: objtool: mce_gather_info()+0x5f: call to v8086_mode.con=
-stprop.0() leaves .noinstr.text section
-vmlinux.o: warning: objtool: mce_read_aux()+0x8a: call to mca_msr_reg() lea=
-ves .noinstr.text section
-vmlinux.o: warning: objtool: do_machine_check()+0x192: call to mce_no_way_o=
-ut() leaves .noinstr.text section
-vmlinux.o: warning: objtool: mce_severity_amd.constprop.0()+0xca: call to m=
-ce_severity_amd_smca() leaves .noinstr.text section
+All warnings (new ones prefixed by >>):
 
-$ x86_64-linux-gnu-gcc --version
-x86_64-linux-gnu-gcc (Debian 11.2.0-9) 11.2.0
-$ x86_64-linux-gnu-ld --version
-GNU ld (GNU Binutils for Debian) 2.37
+>> kernel/sched/stubs.c:8:5: warning: no previous prototype for 'sched_isolate_cpu' [-Wmissing-prototypes]
+       8 | int sched_isolate_cpu(int cpu)
+         |     ^~~~~~~~~~~~~~~~~
+>> kernel/sched/stubs.c:14:5: warning: no previous prototype for 'sched_unisolate_cpu_unlocked' [-Wmissing-prototypes]
+      14 | int sched_unisolate_cpu_unlocked(int cpu)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/sched/stubs.c:20:5: warning: no previous prototype for 'sched_unisolate_cpu' [-Wmissing-prototypes]
+      20 | int sched_unisolate_cpu(int cpu)
+         |     ^~~~~~~~~~~~~~~~~~~
+>> kernel/sched/stubs.c:26:5: warning: no previous prototype for 'set_task_boost' [-Wmissing-prototypes]
+      26 | int set_task_boost(int boost, u64 period)
+         |     ^~~~~~~~~~~~~~
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/Um4Yb3+Do9hb8+1U/ngUN2Z
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+vim +/sched_isolate_cpu +8 kernel/sched/stubs.c
 
------BEGIN PGP SIGNATURE-----
+     7	
+   > 8	int sched_isolate_cpu(int cpu)
+     9	{
+    10		return -EINVAL;
+    11	}
+    12	EXPORT_SYMBOL_GPL(sched_isolate_cpu);
+    13	
+  > 14	int sched_unisolate_cpu_unlocked(int cpu)
+    15	{
+    16		return -EINVAL;
+    17	}
+    18	EXPORT_SYMBOL_GPL(sched_unisolate_cpu_unlocked);
+    19	
+  > 20	int sched_unisolate_cpu(int cpu)
+    21	{
+    22		return -EINVAL;
+    23	}
+    24	EXPORT_SYMBOL_GPL(sched_unisolate_cpu);
+    25	
+  > 26	int set_task_boost(int boost, u64 period)
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHrSI4ACgkQAVBC80lX
-0GzOcwf/Y6JGKwHFTnpj3CXpVJ5dxRNy1W2LnM6qM1cZwPhyAVDKS3A2xkXBImMB
-bMFneIxc7F0hRUZzJ0RQjQA57sH3b4eXm9g+pSr6yE4LxZGBAhtMVtRKFOe4juLy
-5ANhY+rCGWqP/nHv7LefX6daid3FZCOscQFLFwFI52fQCK6sK1N8B9azB2araG7A
-eT0eYBG78FE9L3gnfdj1RFqUmLtSmRmo1rhTMBTPxR/inkKe33uDio0QBsEb6KXG
-itRvQ30PeHZDVCtEuXbRPtR3gb8Uhjhq1PxnxsLQ9qnkiFIN9RnZnm612x/YRY8U
-XL+scqTcR/+ddbrhXQxkx5fNxv7VJQ==
-=g2EN
------END PGP SIGNATURE-----
-
---Sig_/Um4Yb3+Do9hb8+1U/ngUN2Z--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,85 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62494496397
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 18:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 186B249639A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 18:14:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378788AbiAURMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 12:12:23 -0500
-Received: from sonic311-31.consmr.mail.ir2.yahoo.com ([77.238.176.163]:36614
-        "EHLO sonic311-31.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1351670AbiAURMU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 12:12:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1642785139; bh=SqWKv1UkNybJAVp7fOrKrSj64oAhTfKfR9pjRgvlnlE=; h=Date:From:Reply-To:To:Cc:Subject:References:From:Subject:Reply-To; b=NvX4GzeeuqN3oFLhkSztSUtZ5oSOCge/G6eLhO35ufnJSTTFsdaC4dH1npSIyNnlx1EBRmPn2gxNe2mB2ryxixgFItGYvFFupINJM27XhDj4mhgbRY/VuO2Vh71gHsxsfdY8qd8eZPCg6vZ98ME+t4/ytpubO0D8sbadiajKaoMg0Cj1aM4sKo8CjGwFwbdas4srgHIxnAy9vnZR4U9ApBSUlUsE1BCjxKWQegOY9lUaseeDkU6CCU2mMMXr6QFeNVP3XId6cFwzuzVg1BOpPhCjW1H0BnYdVlIL5TOdllBixpU8Hc4aiFxj/aHMg96hkFEzQcAY81WRNuty2zRRIg==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1642785139; bh=MKwZq94j1m2T4Dv7ZLiTRT4yg7ZpyKhxSRbmjERnhG/=; h=X-Sonic-MF:Date:From:To:Subject:From:Subject; b=fNryayNt23cyCinjqZUbgFcxRh7Rr2+03uTvjrInT3OxKBq2Ux9k/zn+YKV7YgqiPwzwZH7tzV7FdOkvs6B20i1QLQHNBk/ah0RCNoruV/qWUGxvcxj7HwLRfdsEAIJtcq1FTe+JaBujp+4raY7ojLoG2Wj2cZtkvO1nuOzFnW3pZIxX9vcNnJUJ2w1xf6C9K1JqRkV0HYOHSlacCuF63EORNBER7pRsHgHXXva9rwsq3qY7wCPlT3RmTI2ZiM7/EtGHJBqZcZoO8vnGHVwf2xqozjA7SNwXVOYW5+PU9pWmU9X/niY5X00cS4paLkZyviKWMUyjNBB2pTeL1sLy8g==
-X-YMail-OSG: h8__cZwVM1mOsf7y_8Ty2VFMz_Ek5p3FsS.qp_F34Isj4UIgeYWBrtcqp13z6RC
- dW0RyPTAJR7h1rPwYyWmL53twXWyYSm8TL1xqugd_bs6_g7Q7xrB8wDM_Eg7xrDQxx0HaeBhLlVh
- LdQzsS24wcnuIS.HNHXNl8NjvESLHte73Rc5eE80XL_tlpYHlYIjdUjWiVZL3BTfTl.GSQn642WW
- _xdpIuvFzec3_eRDoMn4YSgOydLu35lRW67MijhJsFZBFy9DLPyVg9fSPMO_Z5sb92oU6yVl_u0T
- p.ibu9xKvcyzkkwY19u0u91zI.5_rzmotecLA.om5VWAA.G7WN74Vd6QawWejeJyxfYfmtrIYQfD
- dTTa2qXkrOApyVcPyXn6ra6qez.9NwabIzdCSP.cTRPUi6t7l_YfTTQ8ZrnUVphOLgb6PrwqBS6.
- _wp4aVJO7vdvV8tddqJ9VdLNUCO7Y8ujAXO_xRpsp99lTP.n0Nt3cQs7_p0W1JJdjYpptcIlDsvk
- YBDqygjEKXL7QyKXKaxqW8jNBlu0e4cSzIMY72W3AvrFlEuxKsgdRi_LoXyJbLGQKqIsHOggKF1G
- wUd4mddw6N9vUfCHlMz._ymCdCSMycqM_DhATG3a0oHmxBi9mk4SyM3G8mvx7YPA58Jyuk2YrX5r
- T4DQd8_mk0wjBokWkq9KX3O5TAgDkN7IU1ZPpM_lAkvysia4vmzRD16G.Y2TLAB.unv48MOXbf.O
- o2PdJdQo7n1MUFTq1rIpR5_B9guniVc334BdRpeBj6smaej.mm2b4PlkTeKr6sJlu2HSKyFa_QjP
- J0rMUf91kXfLTwSrotanZYOfBsWb6TSL9PiGB.pBgiDhWqXA4qqvsddPi_na6amH0JvH3ETWvXef
- eEUQDSsEjUHz4kp5O.GCuwcquSfz6ViYC7XEzdmF5V0shEue.NZed81xPB86bplw.D1OIrMlOS.i
- TDxIRhuDP6ydWdDqZL.9CjD8q8jH.96Ia3uxdO_fA3gUfwe.UngqYE2MkqnPKXoYV8lmFu2KgQYr
- lFfczGexyV3zOCfpfzv6XMowyOtdjrGH94IZ6R7FgTvdueqAZfC.536e5AlIbvHrNtpBLKa3Luy8
- y56G2HSdIvXOBL9izwCbpFM8CbuNwbABig1.N60vKjC84o031IwHV0ZwDyn8L9DnU.Xlz6mZmSAc
- gXVUpy2fSleHj4NH_JYon908QwIIHksivzVmqek7MoKkNP4dn8qHbx7.h5romL.8KKoJsWfrMMpx
- e1nVqz.SoHhhgj7guFqhz2KCIKYnsA1veuq2T2HQolt38HBs4lS0RQtphor0gLI3VrO0THIIZS0F
- k5jqu89Qk241Ph9mQ7IfBnJaJjj.wsv.JLNAMxc9EVBUkxsHLs5ctAiDDw0C4eVSoMuolNWGgj61
- y5mG5jQtQFMTDczvw3kGIrUCNw2keKLoWsvsw.UsQo9jyKEzXtLCPYONDTTH8fWpW_BhonEEOpE.
- V6BFEnoCDTmX8GZEf9YCS2jcUHY3q8Ln71RkFqurqAqZ9rMvD5WfIM1PF9CrUA5riBc0rU4AI9Qb
- NbdYPoAMSJ4_fVA1HRFvXZUFyhCANXNdI_FOXarQAiQunc.we70izx1czAo8PrgzqBr3LUFXpTub
- v62r2hKawEMtti2aWRCg2lYz2jKJa2mRNV4fCyFYimIdm7PbvAGdIZfg367YjDAd.9ncFXeLWlUS
- odubro_jkck.bq7hxcsqQLIhNPzV.xvV2iVFQcY9u4AdGARtYhSCEiQQo_OTIvVshRAdkohxRXTw
- 7uRpn4CAlLwP_7CT0fuB4wVMAzK8uKfdZ31DHIVP16dsxpDZuGXM.QckQDaFk.zMvUKOXkUxQX8j
- G9yIGua_WrnQ3QRUMqs6Ug40QOzxtzDHQWo5tGm8pYRMpYspAff5k3FtDeSagkFNMxfDnXsfJavQ
- pHy3l960muTtDwb904OjEyuUUX4.FMA4jGqJr_0FOoECd1KEDSeWSsOCSqJq1sz4iDtvwdwZYEUm
- dLDyigFZehkM7CidDxNtTNyZRU1YUc3C3vKW.rQCyZc9u64RCZJxSCfdOTzeQbzNzidd4ymCTlF9
- HnqcghnoRxL4Xb2EDlj7kTjpqdzfkoHieLmRAgpiMISD8PzdHL.ERETZS3hPlVce_zjGxH4S0yPA
- nKTQMcbiIW9RpEpF07scAFUHGv_r5qldmdkyvPMhheWxiKBFZAjnNe_niwW0uAIz8_51EGNSIhI_
- 41rb8j0b5z9P3CbwSQUgSYI_9qUQN4m0BVE2ZYl2AlJQdXu0jXpCROsL8uhVK5IkDtHnqouUoDp8
- TiWk-
-X-Sonic-MF: <htl10@users.sourceforge.net>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ir2.yahoo.com with HTTP; Fri, 21 Jan 2022 17:12:19 +0000
-Date:   Fri, 21 Jan 2022 17:12:40 +0000 (UTC)
-From:   Hin-Tak Leung <htl10@users.sourceforge.net>
-Reply-To: htl10@users.sourceforge.net
-To:     Luiz Sampaio <sampaio.ime@gmail.com>,
-        Herton Ronaldo Krzesinski <herton@canonical.com>,
-        Hin-Tak Leung <htl10@users.sourceforge.net>,
-        Larry Finger <larry.finger@lwfinger.net>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Luiz Sampaio <sampaio.ime@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-Message-ID: <1735835679.1273895.1642785160493@mail.yahoo.com>
-Subject: Re: [PATCH 19/31] net: realtek: changing LED_* from enum
- led_brightness to actual value
-MIME-Version: 1.0
+        id S1378980AbiAUROS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 12:14:18 -0500
+Received: from mail-bn1nam07on2046.outbound.protection.outlook.com ([40.107.212.46]:24699
+        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231567AbiAUROR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 12:14:17 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aQv0PsjU4w9MEwrY4Da4el8UrFepL/YktwBdIKbz+LmEJxyTJrnZFXNebv1yrvh1v3TCma+Kn56LLljyez77qNbcn3s0EQJGxZGY+cFceYNmLnhsxKQ95MwJ3mXzTlEu8kid7vGyGzX9VzbxysVJ2WR65DHsvsquQ2Q7GnShQ1kBQ86oRHD0uWT/2AbuKEEhkSO170uCsEAWTxjk1qe1JNuwEsGxXQnQJ3rGcwQMQci6PLL0anIfCRhrhUaaWyP1GzFqSaNC02g4LLL2EtyxlBZIRT8ceOJEmfiDCgfC+v035LPc+nz7/UnkU0QCbXvhWxeBMheyJyPd1qRq3opggg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8wynW7sCUe7/Ggs+t9f5YntYbce8yRZjJase/jHdAT0=;
+ b=B8y1JHJh9/S20etnDdA60rwumUN8wkKoY5V7SbaYhQ+E1cX+E1rHpB4EIGFqGYdV5VJ+mU5oz7RW0C3KTZGRz/z5uFtmPoVd6X+w69CNIAIeYuLehSTnlYyijoA6RCbwNjrXtIizmSYis9eqoS6SiWA6whhX658dWuVWOZZBFoGZcdSQvQNKoTOPvWu8MHOHsirsKpwS/Xy3j/eKPTAiobLpU/1Xdk2DFsSznIAJhkw8rQZlE7TMwBmS7Rgy6x2F191M8NEiw6RXKWGos9/cQpgwuDWRKGA6Emb+nDV8Y6EGFi12usrI/P4uQN4PHLibEn4aBo2Cu2aSj/aVzLJ8iw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8wynW7sCUe7/Ggs+t9f5YntYbce8yRZjJase/jHdAT0=;
+ b=NmnCXyP86RJj89Qb8H8wJNZsjaYiVrn3AfUWOnR9LqSqDxzyCFE3QCJ3iqRy3+aNJOY2+4wT3hjw7C6Bcn1s0dtXe8+dbvuJV85C+BFg2f3QmrNHFvnTYWJTBq27uOBOeur0KKfkMdw1Xgsx/pe3HI3m8+DI9uiuWKB6IuNrNdQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM5PR12MB2470.namprd12.prod.outlook.com (2603:10b6:4:b4::39) by
+ DM5PR12MB1803.namprd12.prod.outlook.com (2603:10b6:3:10d::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4909.10; Fri, 21 Jan 2022 17:14:15 +0000
+Received: from DM5PR12MB2470.namprd12.prod.outlook.com
+ ([fe80::f110:6f08:2156:15dc]) by DM5PR12MB2470.namprd12.prod.outlook.com
+ ([fe80::f110:6f08:2156:15dc%7]) with mapi id 15.20.4909.011; Fri, 21 Jan 2022
+ 17:14:15 +0000
+Message-ID: <33da2a09-603e-dca9-7f93-a481fe6cbccf@amd.com>
+Date:   Fri, 21 Jan 2022 22:44:05 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bharata B Rao <bharata@amd.com>
+Subject: Re: [RFC PATCH 6/6] KVM: SVM: Pin SEV pages in MMU during
+ sev_launch_update_data()
+Content-Language: en-US
+To:     Peter Gonda <pgonda@google.com>
+References: <20220118110621.62462-1-nikunj@amd.com>
+ <20220118110621.62462-7-nikunj@amd.com>
+ <CAMkAt6p1-82LTRNB3pkPRwYh=wGpreUN=jcUeBj_dZt8ss9w0Q@mail.gmail.com>
+ <4e68ae1c-e0ed-2620-fbd1-0f0f7eb28c4f@amd.com>
+ <CAMkAt6pnk8apG4VAdM3NRUokBH32pZx-VOrnhzq+7qJu+ubJ3A@mail.gmail.com>
+From:   "Nikunj A. Dadhania" <nikunj@amd.com>
+In-Reply-To: <CAMkAt6pnk8apG4VAdM3NRUokBH32pZx-VOrnhzq+7qJu+ubJ3A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-References: <1735835679.1273895.1642785160493.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.19615 YMailNodin
+X-ClientProxiedBy: PN2PR01CA0162.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:26::17) To DM5PR12MB2470.namprd12.prod.outlook.com
+ (2603:10b6:4:b4::39)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e753017d-ea7d-4660-8dc1-08d9dd017326
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1803:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB18033E66299C2B7838F73781E25B9@DM5PR12MB1803.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6bUAUKxkdEMqHv4pNz5gQbvPgzUCVb7IWYJdSsbDBfB5SNpotLxNQZiV4a7Ht6JdrWlY8QRKYywp8CiwKJxDC9emToIfLC+ropSVX11D6j2hv9M4+FRHGdr1HwFvxRkxlTY1qAZPAaiz4w2aZw4ivsignj/VflHOIXZjPu8Fo9AljysMopgyrPgrMrEBJRdRC2IfLwtAy6/L/HCID2EWB1uRRb9x84OIRp+KG7Y3SxoF+4JJntCw/EQIhSlA93zB31yRRn0WEAdGVo+zmRwGMw0qUByhC42BXsWC/qdFn0+7g4NaKZZ9Jr9fSZNwvloOHF6sYn0oEObWoAm+y5S8JJtYvPlZmLbiHJURTpPoSpTci0lmpBxjkO9Q3p65pqMgaj9oB0S779/CsY/VwkRiQsf5e+dduqZrHI7iuQ3QDj7iTI6P2l10h1r1TS+uemVaaOt1q0AnKeu+zDkdftFsMz/Ivm20YI53sRVcxwHJnYqXjPpoLxAtXaYFTA64tVaqzD36TVQE3vd/0tLeEl0116C2TJ0xtydmobXsl2AibS9UdjX+QnhUfkvhh1DAXxTl1bCml+4ST6Y61beA4rJn/86Ti5c+o4DmiE1OQfJkPOfBhmLotQxRI1Q/OdJVY29nRDjFZzTwc+XsRKgNBypB4OPlbhmcjIpwvh+2MuE3sjQaFdo/zgmaY5XglrcBfS37lksW1V9rUJruswq+gqdZGpOe2OkiSm86GxL5CRDiNBw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2470.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(36756003)(2906002)(4326008)(6666004)(66556008)(66476007)(53546011)(66946007)(8936002)(6512007)(38100700002)(6486002)(6916009)(6506007)(26005)(186003)(31686004)(2616005)(8676002)(54906003)(5660300002)(316002)(508600001)(31696002)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UkVXT1d1bnh4Ui9pVkFNVG9MeU1iMVExZStKbXpkcC9BelB1S1pnVGJvdTZT?=
+ =?utf-8?B?d1FObC9CYnpOckpLTnJnS2h5Um4ycXovWW9KU2hhVW9MUlVtbVgrQ3Z1NzVz?=
+ =?utf-8?B?QWFqdEhXakYzNldIRzVkbmNxVHRXTDBKM3dvVTF1WTk0bm1DQ2NoQTloTjFm?=
+ =?utf-8?B?QUJtQWFQU0QwYWhQVlViNnlCZHg0cTNkUlYvS2dwMGt0K1RFVkRKL3J1dlAy?=
+ =?utf-8?B?eVF6enZld2lLVjllNjJaaXJIS3VHaWY1WE1QU1JJTGIwWWxJZzE4UUsvRFhE?=
+ =?utf-8?B?YXM2dUFaajFJYTNxZ2d1TVJyOWtYUDhncXdidUxBRXh0c0tBc29QUWNGMXhH?=
+ =?utf-8?B?c240clhDdlkwaTcwT2QyZVI2Ky90bkpySGNOTzIzdEFMMzc4bHFxTE1hTmE5?=
+ =?utf-8?B?eVh0NWphZlloMi96c1UvUjYzdkpPYzg1T1NybTZiRld5TlVnK1FZaVltNmsw?=
+ =?utf-8?B?UmxMdDY0aGt0b1g2WFBuUkRDb2Ewdlg4M2YzS0ExWHRNdGYxMFpXNFlmY2Qw?=
+ =?utf-8?B?cW1OVUZkRHEvNFBUTUNuMmd4SEpia0RScllEUlNQSnYwekQyZnZGNVR4MFpR?=
+ =?utf-8?B?NWNzWTZoQ3FNcnZpcG5LNW9zYTgxL1YwVnl6bHVCRk9SOFV2MFRYeUpQUHAv?=
+ =?utf-8?B?aGpxVHdKdU9NYVB2QkZxM1g0N0o4VnZSSXNDQkRPSFVpaDhRekZ4VTNRcDBz?=
+ =?utf-8?B?aU9ZQkwyeUQ0bkdJc1pUWWkwODhhNWc5b0tOTTF4ZjR5UHNqdTRaRURvZ0pu?=
+ =?utf-8?B?dzB2L3ExeGFIYUM3QityUFVTd3JrVVFTdVppZGYrYnp4R2pPMk5FRFRBZUhk?=
+ =?utf-8?B?YkI2VlhtRjdVQXN1QkVuZjJyNmtiSEJQOUtnRWZjQmpVL1UyQkxMY0FHUW1T?=
+ =?utf-8?B?OU1XZlVzSTV5RkovK0xkaGpXTzJzWkU5VWF3cUw1SUZZajh3aC9NNVZYWDVH?=
+ =?utf-8?B?Nzc2b2xyUFA3cXdrTXlMeGNnTFBwR3JNRE4wOHNtM0xtU251Mm8vVUY5Z3VF?=
+ =?utf-8?B?QWcrVTJ5aTkxMS9NNVdXNFl2RElROEZQdjRRWDZFOXFoZDhkUHNOcnVvNlVi?=
+ =?utf-8?B?S1l3VFdMUWVHY253UktrTlZ0NTFuUGJIQlNOM0hDd0JEMWRNWUlxOUFsVnMr?=
+ =?utf-8?B?bnJKV1BaODYzK3dSZGZDTXkrVStlS2FBQ1hZalRabW5TWThnQTFESFZMa3la?=
+ =?utf-8?B?NmhTY2JBYWh2Zkt4VDRIam9vaWpHTVhnZVdkd21vV0Z4ZVRKNG9LcGV6bUJy?=
+ =?utf-8?B?akFpU0I5Tmw0VUZuRERvSEIxMDhQSVFkWDMwS0VtWVdzNGw1a1FKOE9hOFhn?=
+ =?utf-8?B?U0VzckZ1cjdVbkZvalJzekgxNnVBU01QVkhwbFdOUlQzLzc3Rk5rOVFqcFcx?=
+ =?utf-8?B?K0hpVXo2b3RYR0lLSnBHeUxQTWhVVkNRVmRvT3luUGp4MUhxZ2t5d1NaSGRZ?=
+ =?utf-8?B?eEh6TUhHRGVCSzBkcTVPRXBjRTFkL1o5a1JKSWNxdU0yTVVvZVd2ZURDUmFy?=
+ =?utf-8?B?YjNja2FYUHhtR1ZIaGM0dmJ3MXZ6bkxMd1E4S09HWHV6NXVSUmExdjdVMVUr?=
+ =?utf-8?B?cDVqTUtFTXlOQXBUSThzVEFoNW5nMFVla3VsYmZ2elRxaGtKQTNOUmhNVFRi?=
+ =?utf-8?B?QWkvYlNTMUpqUlFLQzNQOEFoTms5QVh6Yi9BTjFGUVJzcVlzczRKNDhHbmV3?=
+ =?utf-8?B?VTFtTXRpdXJieXJXU2NVYUJ5VVByVzJ6RlVqcHpLSVpMamRmcUFHVUJTazl5?=
+ =?utf-8?B?a0JXL0RuL3lkMUdyYmt0eUlIcXBRN0IvNXNHc2ZGMlZjV3RaTkdaV3B3S3I0?=
+ =?utf-8?B?WnM1ZmE3enZWRlhhL01DOFY5OUpJeWhkTDhKTWRSWFo5M1cwclhNNisrNXZU?=
+ =?utf-8?B?dzkxL0oreURIUklISTlLZG5jYVRSTEhIYytjK0d1UUlzZ3p6djdlOFRhMWh1?=
+ =?utf-8?B?b2tLUnQzOGwyQVN2SVRNUXlhWDMxUXpzRmtXY2NDREpKNS9xUVl6Mm5SRlN4?=
+ =?utf-8?B?VzVWdi9VcDNQZGV6UUFZdktuNVByeVV1TWxIRzFtYkhtS29tdDZQQk9sUmZD?=
+ =?utf-8?B?WTZwbXN6OHBCbFZhSDBmZzFXNm1PTVJDUGpObFIrMllOak5BbVV0ZUtTTU00?=
+ =?utf-8?B?MXpvOXpucWo2b1JiTXpBTWJKZ1pqUnNpWU9kd1lYNytiWUZkckVEc3pQbXd4?=
+ =?utf-8?Q?QIfIzNECs6dxA0SieMtC5uY=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e753017d-ea7d-4660-8dc1-08d9dd017326
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2470.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2022 17:14:15.1247
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mOuwD/nMQ2lPR3f+EKy7Dhw3Ihqv0OTzYYBXgrrOKw/ruJGo26Ug6w8yE5IxRQeqrPA1ZXq22tbWUTea6uNhEQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1803
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -        if (brightness == LED_FULL) {
-> +        if (brightness == 255) {
+On 1/21/2022 9:30 PM, Peter Gonda wrote:
+> On Thu, Jan 20, 2022 at 9:08 PM Nikunj A. Dadhania <nikunj@amd.com> wrote:
+>>
+>> On 1/20/2022 9:47 PM, Peter Gonda wrote:
+>>> On Tue, Jan 18, 2022 at 4:07 AM Nikunj A Dadhania <nikunj@amd.com> wrote:
 
-> -        if (brightness == LED_OFF) {
-> +        if (brightness == 0) {
+>>>>  static int sev_launch_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>>>>  {
+>>>>         unsigned long vaddr, vaddr_end, next_vaddr, npages, pages, size, i;
+>>>> @@ -510,15 +615,21 @@ static int sev_launch_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>>>>         vaddr_end = vaddr + size;
+>>>>
+>>>>         /* Lock the user memory. */
+>>>> -       inpages = sev_pin_memory(kvm, vaddr, size, &npages, 1);
+>>>> +       if (atomic_read(&kvm->online_vcpus))
+>>>> +               inpages = sev_pin_memory_in_mmu(kvm, vaddr, size, &npages);
+>>>
+>>> IIUC we can only use the sev_pin_memory_in_mmu() when there is an
+>>> online vCPU because that means the MMU has been setup enough to use?
+>>> Can we add a variable and a comment to help explain that?
+>>>
+>>> bool mmu_usable = atomic_read(&kvm->online_vcpus) > 0;
+>>
+>> Sure, will add comment and the variable.
+>>
+>>>
+>>>> +       else
+>>>> +               inpages = sev_pin_memory(kvm, vaddr, size, &npages, 1);
+>>>
+>>> So I am confused about this case. Since svm_register_enc_region() is
+>>> now a NOOP how can a user ensure that memory remains pinned from
+>>> sev_launch_update_data() to when the memory would be demand pinned?
+>>>
+>>> Before users could svm_register_enc_region() which pins the region,
+>>> then sev_launch_update_data(), then the VM could run an the data from
+>>> sev_launch_update_data() would have never moved. I don't think that
+>>> same guarantee is held here?
+>>
+>> Yes, you are right. One way is to error out of this call if MMU is not setup.
+>> Other one would require us to maintain all list of pinned memory via sev_pin_memory()
+>> and unpin them in the destroy path.
+> 
+> Got it. So we'll probably still need regions_list to track those
+> pinned regions and free them on destruction.
+>
+Yes, I will have to bring that structure back.
+ 
+> Also similar changes are probably needed in sev_receive_update_data()?
 
-NAKed. I haven't received the other 30 patches in this series so I don't know the full context, but I don't think replacing meaningful enum names with numerical values is an improvement. If the ENUMs are gone from a common include (and why is the ENUM removed, if drivers use them??), and the realtek driver still have such a functionality, it probably should be defined in one of the rtl818*.h as RTL818X_LED_FULL and RTL818X_LED_OFF .
+Right, there are multiple locations where sev_pin_memory() is used, I will go through each 
+case and make changes. Alternatively, add to the region_list in sev_pin_memory() and free in 
+destruction.
 
-My $0.02, based on this one only of the 31.
-
-Regards,
-Hin-Tak
+Regards
+Nikunj

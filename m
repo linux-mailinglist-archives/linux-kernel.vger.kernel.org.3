@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66703495B0F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B39C495B1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Jan 2022 08:46:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379121AbiAUHpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 02:45:21 -0500
-Received: from mail-sz.amlogic.com ([211.162.65.117]:14996 "EHLO
+        id S1379133AbiAUHp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 02:45:27 -0500
+Received: from mail-sz.amlogic.com ([211.162.65.117]:15116 "EHLO
         mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348992AbiAUHpP (ORCPT
+        with ESMTP id S1379093AbiAUHpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 02:45:15 -0500
+        Fri, 21 Jan 2022 02:45:19 -0500
 Received: from droid11-sz.amlogic.com (10.28.8.21) by mail-sz.amlogic.com
  (10.28.11.5) with Microsoft SMTP Server id 15.1.2176.2; Fri, 21 Jan 2022
- 15:45:14 +0800
+ 15:45:17 +0800
 From:   Liang Yang <liang.yang@amlogic.com>
 To:     Neil Armstrong <narmstrong@baylibre.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
@@ -31,11 +31,10 @@ CC:     Liang Yang <liang.yang@amlogic.com>,
         BiChao Zheng <bichao.zheng@amlogic.com>,
         YongHui Yu <yonghui.yu@amlogic.com>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH v10 1/4] clk: meson: add one based divider support for sclk
-Date:   Fri, 21 Jan 2022 15:45:05 +0800
-Message-ID: <20220121074508.42168-2-liang.yang@amlogic.com>
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v10 2/4] clk: meson: add emmc sub clock phase delay driver
+Date:   Fri, 21 Jan 2022 15:45:06 +0800
+Message-ID: <20220121074508.42168-3-liang.yang@amlogic.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220121074508.42168-1-liang.yang@amlogic.com>
 References: <20220121074508.42168-1-liang.yang@amlogic.com>
@@ -47,189 +46,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When MESON_SCLK_ONE_BASED flag is set, the sclk divider will be:
-one based divider (div = val), and zero value gates the clock
+Export the emmc sub clock phase delay ops which will be used
+by the emmc sub clock driver itself.
 
 Signed-off-by: Liang Yang <liang.yang@amlogic.com>
 ---
- drivers/clk/meson/sclk-div.c | 59 ++++++++++++++++++++++--------------
- drivers/clk/meson/sclk-div.h |  3 ++
- 2 files changed, 40 insertions(+), 22 deletions(-)
+ drivers/clk/meson/Kconfig           |  4 ++
+ drivers/clk/meson/Makefile          |  1 +
+ drivers/clk/meson/clk-phase-delay.c | 69 +++++++++++++++++++++++++++++
+ drivers/clk/meson/clk-phase-delay.h | 20 +++++++++
+ 4 files changed, 94 insertions(+)
+ create mode 100644 drivers/clk/meson/clk-phase-delay.c
+ create mode 100644 drivers/clk/meson/clk-phase-delay.h
 
-diff --git a/drivers/clk/meson/sclk-div.c b/drivers/clk/meson/sclk-div.c
-index 76d31c0a3342..4ddc1763a12d 100644
---- a/drivers/clk/meson/sclk-div.c
-+++ b/drivers/clk/meson/sclk-div.c
-@@ -4,16 +4,17 @@
-  * Author: Jerome Brunet <jbrunet@baylibre.com>
-  *
-  * Sample clock generator divider:
-- * This HW divider gates with value 0 but is otherwise a zero based divider:
-+ * This HW divider gates with value 0:
-  *
-  * val >= 1
-- * divider = val + 1
-+ * divider = val + 1 if ONE_BASED is not set, otherwise divider = val.
-  *
-  * The duty cycle may also be set for the LR clock variant. The duty cycle
-  * ratio is:
-  *
-  * hi = [0 - val]
-- * duty_cycle = (1 + hi) / (1 + val)
-+ * duty_cycle = (1 + hi) / (1 + val) if ONE_BASED is not set, otherwise:
-+ * duty_cycle = hi / (1 + val)
-  */
+diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
+index 3014e2f1fbb4..bb0f59eea366 100644
+--- a/drivers/clk/meson/Kconfig
++++ b/drivers/clk/meson/Kconfig
+@@ -18,6 +18,10 @@ config COMMON_CLK_MESON_PHASE
+ 	tristate
+ 	select COMMON_CLK_MESON_REGMAP
  
- #include <linux/clk-provider.h>
-@@ -28,22 +29,37 @@ meson_sclk_div_data(struct clk_regmap *clk)
- 	return (struct meson_sclk_div_data *)clk->data;
- }
++config COMMON_CLK_MESON_PHASE_DELAY
++	tristate
++	select COMMON_CLK_MESON_REGMAP
++
+ config COMMON_CLK_MESON_PLL
+ 	tristate
+ 	select COMMON_CLK_MESON_REGMAP
+diff --git a/drivers/clk/meson/Makefile b/drivers/clk/meson/Makefile
+index b3ef5f67820f..99fe4eeed000 100644
+--- a/drivers/clk/meson/Makefile
++++ b/drivers/clk/meson/Makefile
+@@ -9,6 +9,7 @@ obj-$(CONFIG_COMMON_CLK_MESON_MPLL) += clk-mpll.o
+ obj-$(CONFIG_COMMON_CLK_MESON_PHASE) += clk-phase.o
+ obj-$(CONFIG_COMMON_CLK_MESON_PLL) += clk-pll.o
+ obj-$(CONFIG_COMMON_CLK_MESON_REGMAP) += clk-regmap.o
++obj-$(CONFIG_COMMON_CLK_MESON_PHASE_DELAY) += clk-phase-delay.o
+ obj-$(CONFIG_COMMON_CLK_MESON_SCLK_DIV) += sclk-div.o
+ obj-$(CONFIG_COMMON_CLK_MESON_VID_PLL_DIV) += vid-pll-div.o
  
--static int sclk_div_maxval(struct meson_sclk_div_data *sclk)
-+static inline int sclk_get_reg(int val, unsigned char flag)
- {
--	return (1 << sclk->div.width) - 1;
-+	if ((flag & MESON_SCLK_ONE_BASED) || !val)
-+		return val;
-+	return val - 1;
+diff --git a/drivers/clk/meson/clk-phase-delay.c b/drivers/clk/meson/clk-phase-delay.c
+new file mode 100644
+index 000000000000..3c1ae0ee2a24
+--- /dev/null
++++ b/drivers/clk/meson/clk-phase-delay.c
+@@ -0,0 +1,69 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
++ */
++
++#include <linux/clk-provider.h>
++#include <linux/module.h>
++
++#include "clk-regmap.h"
++#include "clk-phase-delay.h"
++
++static inline struct meson_clk_phase_delay_data *
++meson_clk_get_phase_delay_data(struct clk_regmap *clk)
++{
++	return clk->data;
 +}
 +
-+static inline int sclk_get_divider(int reg, unsigned char flag)
++static int meson_clk_phase_delay_get_phase(struct clk_hw *hw)
 +{
-+	if (flag & MESON_SCLK_ONE_BASED)
-+		return reg;
-+	return reg + 1;
- }
- 
- static int sclk_div_maxdiv(struct meson_sclk_div_data *sclk)
- {
--	return sclk_div_maxval(sclk) + 1;
-+	unsigned int reg = (1 << sclk->div.width) - 1;
-+
-+	return sclk_get_divider(reg, sclk->flags);
- }
- 
- static int sclk_div_getdiv(struct clk_hw *hw, unsigned long rate,
--			   unsigned long prate, int maxdiv)
-+			   unsigned long prate)
- {
- 	int div = DIV_ROUND_CLOSEST_ULL((u64)prate, rate);
 +	struct clk_regmap *clk = to_clk_regmap(hw);
-+	struct meson_sclk_div_data *sclk = meson_sclk_div_data(clk);
-+	int mindiv = sclk_get_divider(1, sclk->flags);
-+	int maxdiv = sclk_div_maxdiv(sclk);
- 
--	return clamp(div, 2, maxdiv);
-+	return clamp(div, mindiv, maxdiv);
- }
- 
- static int sclk_div_bestdiv(struct clk_hw *hw, unsigned long rate,
-@@ -51,25 +67,25 @@ static int sclk_div_bestdiv(struct clk_hw *hw, unsigned long rate,
- 			    struct meson_sclk_div_data *sclk)
- {
- 	struct clk_hw *parent = clk_hw_get_parent(hw);
--	int bestdiv = 0, i;
-+	int bestdiv = 0, i, mindiv;
- 	unsigned long maxdiv, now, parent_now;
- 	unsigned long best = 0, best_parent = 0;
- 
- 	if (!rate)
- 		rate = 1;
- 
--	maxdiv = sclk_div_maxdiv(sclk);
--
- 	if (!(clk_hw_get_flags(hw) & CLK_SET_RATE_PARENT))
--		return sclk_div_getdiv(hw, rate, *prate, maxdiv);
-+		return sclk_div_getdiv(hw, rate, *prate);
- 
- 	/*
- 	 * The maximum divider we can use without overflowing
- 	 * unsigned long in rate * i below
- 	 */
-+	maxdiv = sclk_div_maxdiv(sclk);
- 	maxdiv = min(ULONG_MAX / rate, maxdiv);
-+	mindiv = sclk_get_divider(1, sclk->flags);
- 
--	for (i = 2; i <= maxdiv; i++) {
-+	for (i = mindiv; i <= maxdiv; i++) {
- 		/*
- 		 * It's the most ideal case if the requested rate can be
- 		 * divided from parent clock without needing to change
-@@ -115,10 +131,7 @@ static void sclk_apply_ratio(struct clk_regmap *clk,
- 					    sclk->cached_duty.num,
- 					    sclk->cached_duty.den);
- 
--	if (hi)
--		hi -= 1;
--
--	meson_parm_write(clk->map, &sclk->hi, hi);
-+	meson_parm_write(clk->map, &sclk->hi, sclk_get_reg(hi, sclk->flags));
- }
- 
- static int sclk_div_set_duty_cycle(struct clk_hw *hw,
-@@ -149,7 +162,7 @@ static int sclk_div_get_duty_cycle(struct clk_hw *hw,
- 	}
- 
- 	hi = meson_parm_read(clk->map, &sclk->hi);
--	duty->num = hi + 1;
-+	duty->num = sclk_get_divider(hi, sclk->flags);
- 	duty->den = sclk->cached_div;
- 	return 0;
- }
-@@ -157,10 +170,13 @@ static int sclk_div_get_duty_cycle(struct clk_hw *hw,
- static void sclk_apply_divider(struct clk_regmap *clk,
- 			       struct meson_sclk_div_data *sclk)
- {
-+	unsigned int div;
++	struct meson_clk_phase_delay_data *ph;
++	unsigned long period_ps, p, d;
++	int degrees;
 +
- 	if (MESON_PARM_APPLICABLE(&sclk->hi))
- 		sclk_apply_ratio(clk, sclk);
- 
--	meson_parm_write(clk->map, &sclk->div, sclk->cached_div - 1);
-+	div = sclk_get_reg(sclk->cached_div, sclk->flags);
-+	meson_parm_write(clk->map, &sclk->div, div);
- }
- 
- static int sclk_div_set_rate(struct clk_hw *hw, unsigned long rate,
-@@ -168,9 +184,8 @@ static int sclk_div_set_rate(struct clk_hw *hw, unsigned long rate,
- {
- 	struct clk_regmap *clk = to_clk_regmap(hw);
- 	struct meson_sclk_div_data *sclk = meson_sclk_div_data(clk);
--	unsigned long maxdiv = sclk_div_maxdiv(sclk);
- 
--	sclk->cached_div = sclk_div_getdiv(hw, rate, prate, maxdiv);
-+	sclk->cached_div = sclk_div_getdiv(hw, rate, prate);
- 
- 	if (clk_hw_is_enabled(hw))
- 		sclk_apply_divider(clk, sclk);
-@@ -228,7 +243,7 @@ static int sclk_div_init(struct clk_hw *hw)
- 	if (!val)
- 		sclk->cached_div = sclk_div_maxdiv(sclk);
- 	else
--		sclk->cached_div = val + 1;
-+		sclk->cached_div = sclk_get_divider(val, sclk->flags);
- 
- 	sclk_div_get_duty_cycle(hw, &sclk->cached_duty);
- 
-diff --git a/drivers/clk/meson/sclk-div.h b/drivers/clk/meson/sclk-div.h
-index b64b2a32005f..944dab5ec0cf 100644
---- a/drivers/clk/meson/sclk-div.h
-+++ b/drivers/clk/meson/sclk-div.h
-@@ -10,11 +10,14 @@
- #include <linux/clk-provider.h>
- #include "parm.h"
- 
-+#define MESON_SCLK_ONE_BASED	BIT(0)
++	ph = meson_clk_get_phase_delay_data(clk);
++	p = meson_parm_read(clk->map, &ph->phase);
++	degrees = p * 360 / (1 << (ph->phase.width));
 +
- struct meson_sclk_div_data {
- 	struct parm div;
- 	struct parm hi;
- 	unsigned int cached_div;
- 	struct clk_duty cached_duty;
-+	u8 flags;
- };
- 
- extern const struct clk_ops meson_sclk_div_ops;
++	period_ps = DIV_ROUND_UP_ULL(NSEC_PER_SEC * 1000ull,
++				     clk_hw_get_rate(hw));
++
++	d = meson_parm_read(clk->map, &ph->delay);
++	degrees += d * ph->delay_step_ps * 360 / period_ps;
++	degrees %= 360;
++
++	return degrees;
++}
++
++static int meson_clk_phase_delay_set_phase(struct clk_hw *hw, int degrees)
++{
++	struct clk_regmap *clk = to_clk_regmap(hw);
++	struct meson_clk_phase_delay_data *ph;
++	unsigned long period_ps, d = 0;
++	unsigned int p;
++
++	ph = meson_clk_get_phase_delay_data(clk);
++	period_ps = DIV_ROUND_UP_ULL(NSEC_PER_SEC * 1000ull,
++				     clk_hw_get_rate(hw));
++
++	/*
++	 * First compute the phase index (p), the remainder (r) is the
++	 * part we'll try to acheive using the delays (d).
++	 */
++	p = 360 / 1 << (ph->phase.width);
++	degrees = degrees / p;
++	d = DIV_ROUND_CLOSEST((degrees % p) * period_ps,
++			      360 * ph->delay_step_ps);
++	d = min(d, PMASK(ph->delay.width));
++
++	meson_parm_write(clk->map, &ph->phase, degrees);
++	meson_parm_write(clk->map, &ph->delay, d);
++	return 0;
++}
++
++const struct clk_ops meson_clk_phase_delay_ops = {
++	.get_phase = meson_clk_phase_delay_get_phase,
++	.set_phase = meson_clk_phase_delay_set_phase,
++};
++EXPORT_SYMBOL_GPL(meson_clk_phase_delay_ops);
+diff --git a/drivers/clk/meson/clk-phase-delay.h b/drivers/clk/meson/clk-phase-delay.h
+new file mode 100644
+index 000000000000..b4f211d02c84
+--- /dev/null
++++ b/drivers/clk/meson/clk-phase-delay.h
+@@ -0,0 +1,20 @@
++/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
++/*
++ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
++ */
++
++#ifndef __MESON_CLK_PHASE_DELAY_H
++#define __MESON_CLK_PHASE_DELAY_H
++
++#include <linux/clk-provider.h>
++#include "parm.h"
++
++struct meson_clk_phase_delay_data {
++	struct parm     phase;
++	struct parm     delay;
++	unsigned int    delay_step_ps;
++};
++
++extern const struct clk_ops meson_clk_phase_delay_ops;
++
++#endif /* __MESON_CLK_PHASE_DELAY_H */
 -- 
 2.34.1
 

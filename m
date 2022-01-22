@@ -2,164 +2,442 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5A3496D8A
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 20:09:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72302496D84
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 20:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234774AbiAVTJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 14:09:13 -0500
-Received: from mail-bn8nam11on2065.outbound.protection.outlook.com ([40.107.236.65]:49344
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234766AbiAVTJM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 14:09:12 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YHycadUMDug7nkzV4icXVtxnV/GVSBybvcLhCT8DIiKXjwpnem8WsRLmdgS2ClxK3xAnupGp5YCwoWA4fTN0swU+z1L0UXULuVOcHx2SDfwmsThAK/zwWBJzoW5V2D51v3VtO4oRhSereKH6qpaTOSfWrq9rEmPm9qaY/GimKltgZ4TmwvpIqJnCcpfOyT7Z+xgpWTuGi6snFa7GMvpM6KxXdBlLfFXlOA1a2lJo2YhgGx6U+3WzV7QbAJrlK/ykoisZMl/KEhANgttqOloAaiXBCRCELLkvmm60B2OhHvtyjiB4Z1ZntGrpI40hgpyrZm065Vi1Q6/McFzZ0FgaLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/9l3wDNaRs0IrZvbTSq+23ySfGduxXR6uUViAPqXECs=;
- b=JfcEN4yQSTjiZg/wFWKMPEd+kcX8dWyqVaVRns/iX2MzooQL5+Pmpwhq16O8WiwOOAukWrwNKlSquqaz3L5o9J2bZi3L8FWxvzQtjD7TjiAWvX3Q/f4va4MQpaQl0sOhKalKPU/p6FRO4EiSk/nkxklat2r+0gYeHpcZ1z+kDtT0wB0gtLiPrbb/Zy6U1l2jfKhLrGwQvWrtNKf9ygUWwORTmgF1/1abUZK1riNlKvsyB7YomeYThWOn7CtH5aMmLwKP7HVVDFqw3MQd2FauztbeiT4bLmzxi6NnbuPj9p0u67JCfvVKxvpHo3RFiFY4z+jBLLyUihd9woNQHorMDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/9l3wDNaRs0IrZvbTSq+23ySfGduxXR6uUViAPqXECs=;
- b=q+/smBfTrdK3InJ5qcvdZP8xvIB+ezTLhLmLBJwzmWOifyW541s99ry1Hj3xjMIZtobya5Z/VKzPnQgbpQJpwTnSO1QmtAVgbjmSvdgL+LSTPVsuBdNKw+P0TiJVmVjZbsizPUhR+yFjlW30dDoMuajgJYp1S2dT0r4/Sw8/Ls4=
-Received: from PH0PR05MB8510.namprd05.prod.outlook.com (2603:10b6:510:a7::23)
- by SN6PR05MB5805.namprd05.prod.outlook.com (2603:10b6:805:f4::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.10; Sat, 22 Jan
- 2022 19:09:10 +0000
-Received: from PH0PR05MB8510.namprd05.prod.outlook.com
- ([fe80::5490:3d56:8317:5965]) by PH0PR05MB8510.namprd05.prod.outlook.com
- ([fe80::5490:3d56:8317:5965%4]) with mapi id 15.20.4909.014; Sat, 22 Jan 2022
- 19:09:09 +0000
-From:   Vikash Bansal <bvikas@vmware.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Srivatsa Bhat <srivatsab@vmware.com>,
-        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Srinidhi Rao <srinidhir@vmware.com>,
-        Anish Swaminathan <anishs@vmware.com>,
-        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
-        Ajay Kaher <akaher@vmware.com>
-Subject: Re: [PATCH] PCI: Speed up device init by parsing capabilities all at
- once
-Thread-Topic: [PATCH] PCI: Speed up device init by parsing capabilities all at
- once
-Thread-Index: AQHYDI9PHjjBXmLhA0GwF8F8yaRAo6xrdBqAgAEWJICAAz/mAA==
-Date:   Sat, 22 Jan 2022 19:09:09 +0000
-Message-ID: <F4FA5791-E19A-4D6D-9EE7-705CEC174BA1@vmware.com>
-References: <1642526161-22499-1-git-send-email-bvikas@vmware.com>
- <YekAgfkDgV6z6hYV@kroah.com>
- <195F50E8-2E4D-416B-A24A-4602321FABB7@vmware.com>
-In-Reply-To: <195F50E8-2E4D-416B-A24A-4602321FABB7@vmware.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Microsoft-MacOutlook/16.56.21121100
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ec46f1d8-8a4f-4520-eae5-08d9dddaab7e
-x-ms-traffictypediagnostic: SN6PR05MB5805:EE_
-x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
-x-microsoft-antispam-prvs: <SN6PR05MB580576AEB1B92B65E4B3085AAB5C9@SN6PR05MB5805.namprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8sdopj+kJzbtYZzoNfebZPj+Gf+mMdvIpSG+NgS8HUR89FPDMeJy8MngrWR3QF/01cBUkREw1AUlLZ6EXCYnZFkDN0SI8k+ouAZ/UiUK/WHDQ6Shi/rSh7JqxbFW9WyNFw57DdCZltMQXsrpuAPSXa+ZX14ZrDShdklJUEEiVX5Q3g6T479EgrgKabakS7vtASwMbbaB+jPM8+lQFOqpCdKIhDmH4wcFPS4QH6Go33XVtqc/20VeEWQVmnkN3+2tqFo9XwmLauYzDeaYgpsp39mVZL1q05Jq/8XNhBgO4arYFbtPg1k9uj7/vl6fmeCemgIW/R9ByygB0WXImXRbOi+B447raRZyPvoC5U8Ie62jk3Hla8kvWJMHW3+chIhw8fNi5yjFKFEub0wojhWq+m2JVFti+NF6MUkqRfF7UldgAABuM+AMZN8UHDbFXlPX2YxouP0PlgiH3L6GAR41BoZUGJ/GenuGRsq7ChQZb9vROc7hYQ/5ahNzO4VFKBG3gbVyJpFF9w/IJPgsnii2RIwtrZRN+bLGDJg529iz0B19eWvLXflQzgJQByBPEiT9ZZz3WdcsHmNL7ZSgp5LVXtzgVPoBGqjh6gk6S5N+VDVqFko/q4Q1+k/YVm5Bi98YIdZnDvhw1QWoKn6RsmCVAnX8T6JrZi1MichefDK3z46ZpwX3QaV/cc0xmfOtcViwiaCrKj3v/0jsbQVQVVQ9l9oJIfl3KWBpeiLSTL3SXfRdWPtle0U/BfHH8rn40MzjkYuWb23S0ZtFfR8ijgZwlyYYCRxRgNMyKR4tn5PvQAg=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR05MB8510.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(53546011)(6506007)(6486002)(71200400001)(76116006)(66946007)(66446008)(8936002)(33656002)(66556008)(66476007)(64756008)(38070700005)(86362001)(316002)(91956017)(54906003)(6916009)(8676002)(4326008)(38100700002)(122000001)(508600001)(26005)(2616005)(83380400001)(186003)(36756003)(5660300002)(107886003)(6512007)(2906002)(45980500001)(20210929001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Tm1RRUMrYXNKUVl1dCtSeThTZmJzSDZ6bkhTTFh0U2pNNFlNTlFRUmI0Ni9F?=
- =?utf-8?B?ajVTYW5lMXcrQ0hYcXB4ZjIrem92cWhLRjI1K0dDNUlGS0lxYXZLdlpvK1hJ?=
- =?utf-8?B?b1lOYm4rdXRZaTkxTWdvNGkzUUI3a3RRWHBzRFBvVVZ2VDRXWGRwajB1UmdV?=
- =?utf-8?B?a1Q4RURUakpMZ0JqTTFsVE5BbjBHaGxBZWJ6SCtYNFNPeUtrQmM1dE1pSFIy?=
- =?utf-8?B?eFdMZEFmWHlROFNxd3doU0xSVHpGU3JhYW12ZVcwemRaRFEzcXY0SmVoMlVx?=
- =?utf-8?B?VG1RME5GRGpRZjJpSzJUck1MZ3FiV2FZRUREcDdaeG8rQjBxTFFMc3BCYWFY?=
- =?utf-8?B?T0lZYTQ4d3k0d0x3dXJ4RUJuVzJPc0xtWGpxVDl5NWNIdUtVQyt3NE9qNXlv?=
- =?utf-8?B?WDdhSEZaekRscXc4NWxvUlEyVlY2dU1WZ2E2WnI0Vlk4aW1LdllxZ3BQZEVC?=
- =?utf-8?B?Z2FQRmd1VzRSaU9iWVkvZ1FVbnNHZmhxSTZRZkthdVBwKzNHcWl6dmxESGtj?=
- =?utf-8?B?RzNXbEJScTBaUy9semg2S2I1NG1ML1BIbTJ6MGFzV3pmeWlBL0F5OU1WNk1m?=
- =?utf-8?B?MUlsNTJaUmZjTkllQWFwL2I1SkdBUnBKbGxWVzhqN1FtajRlUkJaeGRmaGsv?=
- =?utf-8?B?MFZnMUNSQjlIdTU5VnZuM2VmU0RXOEZMMThnYUsrSUtSUHJONHZzdkVweEYv?=
- =?utf-8?B?OWdGc0xOdlQxM29iZndvZGNJK3U5dHlLQkdxZHVTY0R6ZmFGNG1jdVRwdXF5?=
- =?utf-8?B?dkp6cVFFMjZ4MjVkaDF6bVV2NExiRDlFVFNsOEJwdk9WWGFsK0J6RW5EbW5r?=
- =?utf-8?B?bjRWUkVNRjgvbGprTjB1NlQxWVFScm15Ri82bGNUS3VvY1RhSHlydzJwQUtY?=
- =?utf-8?B?dTR1a0p1QzJwaVlKYTNCWE1FNTBrc0xPVXA4OHRkVHlvY1R1SmlGUy9aQ0Fl?=
- =?utf-8?B?ZzBRb1lDcjl6V3FKYnVlV3dNYUticEh6eGdxUVNqNGtDTWxuZzBvcUtQUkk5?=
- =?utf-8?B?NzdFZTlvSzFaTXg5cXozOW5zOENieTVlcHdTaDFGRjVhcitzTVE4dGV5elk4?=
- =?utf-8?B?RllIN2pFdGF6TE0xL3pZWWlvNllYNFd0a01HWS95RXVqSUpGQ2VaWTl6V2U4?=
- =?utf-8?B?ZkJqQ3FITGJ6Y2VvNlU2elowZStqZzVaTG9BRzZ6bThLb2RFQm1wb1p4QkNo?=
- =?utf-8?B?a2hTUytpM1BDWTl5cVdQaVhiQ0w1blJMQUNtZ21iRnhUVXpZdjRlQkx2UHZn?=
- =?utf-8?B?b3pxd1dheEkwMVExUTBwUjZBbGtmUnRIakluY3BWZnA3bGprK3BacjVoc1FL?=
- =?utf-8?B?d3EvMU43YTZySlA3MFVDT3hIbFd2OXNSMDFxUmRWWFM1bThDb2ZWM3h1OTJy?=
- =?utf-8?B?SFhIb1NVT3dGd2JqYmU0L1c2OFF4Unh1RHpaWWY1S3VKck4xb0J4Wno3cHZZ?=
- =?utf-8?B?Y2pEZmNWa3ZRcU5DbnJGZUMzSHpUZUJPUHhLWVFQM0Z4aUlIWGg0anIxcHpu?=
- =?utf-8?B?RUwzZDBVUmxDRmhwRmZEYlgvem5KU0tXNUg1R2R2Y2dBYnIxWG4wTzJiUFRx?=
- =?utf-8?B?N0NwenoxK0MveWlPK0hXMkRUU0dwZDhydll5RTFqeEZCNll1Nm50S3FkUVhT?=
- =?utf-8?B?c2RwRWtwQ3lXS2JHbUFzR3Z3dnRaSko1RnIxdGpiTmY5K0pqZkFlUGRONnFw?=
- =?utf-8?B?RjBUSVQ0K0FXTUU0WDhzRkRtclBtd3ZxeVhjeE5acmhmeEVGUHFOejdsT1dl?=
- =?utf-8?B?dmtZcTN2VldzOTArdlZsNVhiUVQ1N2ZPeVgwMTEya2Q5SzJMbnE1eExRZ21D?=
- =?utf-8?B?T0ZWYnQ5ZDhGRjJtTXVQM3doZm1MMXNNMFNlazBCYTlDa284UEo0bk5Hajlu?=
- =?utf-8?B?b09KZnlyMlFvZDBSUzBPa0duNllnLytCdThUdlZaNUNJb2dJVmlHQXFlRGE3?=
- =?utf-8?B?eVpWWFVTSU90cHlMd29heVhRTllMTGp2RGFwQ0lTLzQ5UGZ5cDd1WmZRZkFj?=
- =?utf-8?B?UWZYdDh2WHdKN2FvZU5JT29HbjFPUHZOQ1JVaDBnSE95WkQ1NjJST1pLT2RD?=
- =?utf-8?B?WVBpUmJ3NS9BUUUwWkhwQWVuZkx1aGRKYmRydjlkOGVvcEZiMWtRZkNsQnNG?=
- =?utf-8?B?WlZHbzNVc09QQnlQbWxyWjkrVGNvajhIYjZnZDNhb20xdEVPWlBTSWJzUkJo?=
- =?utf-8?Q?yj911LDXdMsExaL4YGLv23E=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <10C88E8DAC08754BBCC56523C9FD4D4F@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S234762AbiAVTE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 14:04:28 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35586 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229472AbiAVTE1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 22 Jan 2022 14:04:27 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9482560EAE;
+        Sat, 22 Jan 2022 19:04:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95733C004E1;
+        Sat, 22 Jan 2022 19:04:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642878266;
+        bh=Rlio+Y9TAi3gHzpWJlgXWKrKeaNXUUWbBqc0KyT9kKo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TJ/ZdAg1DNVH5eeb0RH9NItE6E0ocpTfutTw6H+pE6Cq8OyefbTQHjBO0TCdFHtgp
+         KMGzk0BUuiJZTnekIqx6t6dTq66ypyY+eztZeDXnWGmv8NapVfhYaaJxRSkGuTzweF
+         2tfnh4EMD4SLBvIPRNUEk/Gzj46onllJiQIWjgG9c7gR3s3HsB0GPaYzVgN4hch0Nz
+         kvClN6eAf5AtzK5I4CmNVN1hBwkxY+C7/lZF7vQ7mIapJT92hPxutsZTk/u0G/w/ym
+         1/hQ5G3v5qODRt3XzewIWFZJeDD/aUKDG3zLtycYRJpDK3vZMj/Tu+awbgwwt03nWx
+         Pz+kkpjrR12Lw==
+Date:   Sat, 22 Jan 2022 19:10:34 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Daniel Beer <daniel.beer@igorinstitute.com>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Derek Simkowiak <derek.simkowiak@igorinstitute.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] iio: adc: ad_sigma_delta: IRQ sharing mechanism.
+Message-ID: <20220122191034.74cb89c4@jic23-huawei>
+In-Reply-To: <61dd3e0c.1c69fb81.cea15.8d98@mx.google.com>
+References: <61dd3e0c.1c69fb81.cea15.8d98@mx.google.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR05MB8510.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec46f1d8-8a4f-4520-eae5-08d9dddaab7e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jan 2022 19:09:09.8060
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6F5YcRiZR5MCwH4o3BXnTjs61KMaveGXyhiud0dBY2oiQz+B3cjxOzSodKAbZ+EG75LcWaIt/7HjK8D+Q5H74A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR05MB5805
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ICAgICAgICBJbiBteSBlYXJsaWVyIHJlc3BvbnNlLCBJIGFncmVlZCB0byBmZXcgY2hhbmdlcyBz
-dWdnZXN0ZWQgYnkgR3JlZy4NCiAgICAgICAgSSBvYnNlcnZlZCBzb21lIGlzc3VlIHdoaWxlIGlt
-cGxlbWVudGluZyAyIG9mIHRob3NlIGNoYW5nZXMuIA0KDQogICAgICAgIE9uIDIwLzAxLzIyLCAx
-MTowMSBQTSwgIlZpa2FzaCBCYW5zYWwiIDxidmlrYXNAdm13YXJlLmNvbT4gd3JvdGU6DQogICAg
-ICAgID4+PiArCQlwY2lfYnVzX3JlYWRfY29uZmlnX3dvcmQoZGV2LT5idXMsIGRldi0+ZGV2Zm4s
-IHBvcywgJmVudCk7DQogICAgICAgID4+PiArCQlpZCA9IGVudCAmIDB4ZmY7DQogICAgICAgID4+
-PiArCQlpZiAoaWQgPT0gMHhmZikNCiAgICAgICAgPj4+ICsJCQlicmVhazsNCiAgICAgICAgPj4+
-ICsNCiAgICAgICAgPj4+ICsJCS8qIFJlYWQgZmlyc3QgaW5zdGFuY2Ugb2YgY2FwYWJpbGl0eSAq
-Lw0KICAgICAgICA+Pj4gKwkJaWYgKCEoZGV2LT5jYXBfb2ZmW2lkXSkpDQogICAgICAgID4+PiAr
-CQkJZGV2LT5jYXBfb2ZmW2lkXSA9IHBvczsNCiAgICAgICAgPj4NCiAgICAgICAgPj5TaG91bGRu
-J3QgeW91IGhhdmUgY2hlY2tlZCB0aGlzIGJlZm9yZSB5b3UgcmVhZCB0aGUgdmFsdWU/DQogICAg
-ICAgID4+DQogICAgICAgID4NCiAgICAgICAgPlllcywgd2lsbCBtb3ZlIHRoaXMgY29kZQ0KICAg
-ICAgICA+DQoNCiAgICAgICAgQ2Fubm90IGJlIG1vdmVkIGJlZm9yZSByZWFkLCBiZWNhdXNlICJp
-ZCIgdXNlZCBpbiB0aGlzICJpZiIgY29uZGl0aW9ucyBpcw0KICAgICAgICByZXR1cm5lZCBieSBs
-YXN0IHJlYWQuDQogICAgICAgIA0KICAgICAgICA+Pj4gQEAgLTExMjgsNiArMTEyOSw3IEBAIHZv
-aWQgcGNpX3NvcnRfYnJlYWR0aGZpcnN0KHZvaWQpOw0KICAgICAgICA+Pj4gIA0KICAgICAgICA+
-Pj4gIHU4IHBjaV9idXNfZmluZF9jYXBhYmlsaXR5KHN0cnVjdCBwY2lfYnVzICpidXMsIHVuc2ln
-bmVkIGludCBkZXZmbiwgaW50IGNhcCk7DQogICAgICAgID4+PiAgdTggcGNpX2ZpbmRfY2FwYWJp
-bGl0eShzdHJ1Y3QgcGNpX2RldiAqZGV2LCBpbnQgY2FwKTsNCiAgICAgICAgPj4+ICt2b2lkIHBj
-aV9maW5kX2FsbF9jYXBhYmlsaXRpZXMoc3RydWN0IHBjaV9kZXYgKmRldik7DQogICAgICAgID4+
-DQogICAgICAgID4+V2h5IGlzIHRoaXMgbm93IGEgZ2xvYmFsIGZ1bmN0aW9uIGFuZCBub3Qgb25l
-IGp1c3QgbG9jYWwgdG8gdGhlIHBjaQ0KICAgICAgICA+PmNvcmU/ICBXaG8gZWxzZSB3b3VsZCBl
-dmVyIG5lZWQgdG8gY2FsbCBpdD8NCiAgICAgICAgPg0KICAgICAgICA+V2lsbCBtYWtlIHBjaV9m
-aW5kX2FsbF9jYXBhYmlsaXRpZSBsb2NhbCBhbmQgbW92ZSBpdCB0byBwcm9iZS5jDQogICAgICAg
-ID4NCg0KICAgICAgICBwY2lfZmluZF9hbGxfY2FwYWJpbGl0aWVzIGZ1bmN0aW9uIGlzIGNhbGxl
-ZCBvbmx5IG9uY2UgaW4gcHJvYmUuYyBmaWxlLA0KICAgICAgICBidXQgdGhpcyBmdW5jdGlvbiBp
-cyBjYWxsaW5nIF9fcGNpX2J1c19maW5kX2NhcF9zdGFydCB3aGljaCBpcyBkZWZpbmVkIGluIHBj
-aS5jLA0KICAgICAgICBzbyBuZWVkIHRvIGltcGxlbWVudCB0aGlzIGZ1bmN0aW9uIGluIHBjaS5j
-IGFuZCBtYWtlIGl0IGdsb2JhbC4NCg0KICAgICAgICBUaGFua3MNCiAgICAgICAgVmlrYXNoDQog
-ICAgICAgIA0KDQoNCg0KDQo=
+On Tue, 11 Jan 2022 21:07:47 +1300
+Daniel Beer <daniel.beer@igorinstitute.com> wrote:
+
+> This patch allows for multiple Analog Devices ADCs to be placed on the
+> same SPI bus. While it's not possible for them to share interrupts
+> arbitrarily, a special restricted form of sharing for this special case
+> is implemented here.
+> 
+> The first instance of an ADC using a given interrupt will acquire the
+> IRQ and register an object in a global list. Any subsequent instances
+> will increment a reference count on this object.
+> 
+> During a conversion, the active instance indicates that it is the
+> recipient of the interrupt by setting a pointer on the object shared
+> among it and the other instances.
+> 
+> The existing CS locking mechanism guarantees that no more than one
+> instance per bus will be expecting the interrupt at any time.
+> 
+> Signed-off-by: Daniel Beer <daniel.beer@igorinstitute.com>
+
+Hi Daniel,
+
+So for this problem I'm definitely looking for inputs from others
+on how 'best' to handle it.
+
+Lars, this is the sort of crazy stuff you "like" :).  Any thoughts?
+
+For others not familiar with these parts they don't have separate
+interrupt lines, but instead use the SPI data out line both
+as the data out wire when clocking out data and as a data ready
+signal.  The driver then has to call enable_irq()
+only when an ADC data acquisition has started and disable_irq()
+whenever the acquisition is finished and we want to use the SPI bus.
+
+When I first read the description I wondered if we should think about
+representing this as an IRQ chip with some unusual restrictions.
+Note irq_chip infrastructure is how we handle triggers causing
+capture on multiple devices in IIO, another case where it's
+convenient to harness this infrastructure when it's really just
+software stuff going on - there isn't any hardware.
+
+So effectively a "one-hot" IRQ chip. It would only allow one
+driver at a time to have enabled the IRQ they are getting.
+
+'wiring' wise it would pretend we had.
+
+  __________________ SPI Data Out.
+ | ___________
+ ||           |---- ADC0_int
+--| IRQ chip  |---- ADC1_int
+  |___________|---- ADC2_int
+
+If none of the ADCX_int irqs are enabled, then the input IRQ would
+also be disabled.  Any attempt to enable two ADCX_int lines at
+the same time is an error.  We can continue to rely on bus locking
+on the SPI bus to avoid sync issues between different devices
+though that will need some clear documentation in the IRQ chip
+driver as it won't be 'locally' obvious.
+
+We don't strictly speaking 'need' to enforce the one-hot condition
+because the ADC drivers won't break it anyway due to the SPI
+bus locking needed when the interrupts are enabled so that would just
+be informational / hardening against bugs.
+
+So in short, we would have an irq chip which would always disable
+it's source interrupt if no downstream interrupts are enabled.
+
+The advantage of this is we can do it as a layer in front of the
+ADC drivers in a separate driver with appropriate description
+in firmware.  That might be a bit controversial though.
+
+That driver may be more generally useful for other SPI devices
+doing something similar to this.  There may be other ADCs though
+I'm not aware of any we support today other than via the
+ad_sigma_delta common code.
+
++CC Mark and Thomas who may well tell me this approach would be crazy
+from SPI or IRQ chip end of things.
+
+Other options I can think of that 'might' work are:
+1) mediation layer as you have in this patch.
+2) shared interrupt and harden the interrupt handlers to know if it
+   is 'not' their interrupt which is a bit nasty as that is just a software
+   thing.  I'm not sure how calling enable_irq()/disable_irq() will work with
+   a shared interrupt.  The irq chip approach would mask it so the ADC driver
+   never sees someone else's interrupt.
+
+Thanks,
+
+Jonathan
+
+
+> ---
+>  drivers/iio/adc/ad_sigma_delta.c       | 191 +++++++++++++++++++++++--
+>  include/linux/iio/adc/ad_sigma_delta.h |   4 +
+>  2 files changed, 181 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/ad_sigma_delta.c b/drivers/iio/adc/ad_sigma_delta.c
+> index cd418bd8bd87..cd593af6ef3a 100644
+> --- a/drivers/iio/adc/ad_sigma_delta.c
+> +++ b/drivers/iio/adc/ad_sigma_delta.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/spi/spi.h>
+>  #include <linux/err.h>
+>  #include <linux/module.h>
+> +#include <linux/list.h>
+>  
+>  #include <linux/iio/iio.h>
+>  #include <linux/iio/sysfs.h>
+> @@ -24,6 +25,161 @@
+>  
+>  #include <asm/unaligned.h>
+>  
+> +static irqreturn_t ad_sd_data_rdy_trig_poll(int irq, void *private);
+> +
+> +struct ad_sigma_delta_interrupt {
+> +	/* Constant from time of creation */
+> +	int			irq;
+> +	struct spi_master	*master;
+> +
+> +	/* Protected by global lock */
+> +	struct list_head	list;
+> +	int			refcnt;
+> +
+> +	/* Protected by lock on corresponding SPI bus */
+> +	struct ad_sigma_delta	*active;
+> +};
+> +
+> +static DEFINE_MUTEX(interrupt_lock);
+> +static LIST_HEAD(interrupt_list);
+> +
+> +static void adsdi_enable(struct ad_sigma_delta *a)
+> +{
+> +	struct ad_sigma_delta_interrupt *intr = a->interrupt;
+> +
+> +	WARN_ON(intr->active);
+> +	intr->active = a;
+> +	pr_debug("ad_sigma_delta: enable %d for %p\n", intr->irq, a);
+> +	enable_irq(intr->irq);
+> +}
+> +
+> +static void adsdi_disable(struct ad_sigma_delta *a, int nosync)
+> +{
+> +	struct ad_sigma_delta_interrupt *intr = a->interrupt;
+> +
+> +	if (nosync)
+> +		disable_irq_nosync(intr->irq);
+> +	else
+> +		disable_irq(intr->irq);
+> +
+> +	pr_debug("ad_sigma_delta: disable %d for %p\n", intr->irq, intr->active);
+> +
+> +	/* In the case of a timeout, it's possible for adsdi_disable to
+> +	 * be called twice by the same instance (if the interrupt runs
+> +	 * between the call to check and the call to disable).
+> +	 *
+> +	 * We still need to disable first before checking intr->active.
+> +	 * Then we can roll back if we've done it twice.
+> +	 */
+> +	if (intr->active != a) {
+> +		WARN_ON(intr->active);
+> +		pr_debug("ad_sigma_delta: double-disable\n");
+> +		enable_irq(intr->irq);
+> +	}
+> +
+> +	intr->active = NULL;
+> +}
+> +
+> +static int adsdi_get(struct ad_sigma_delta_interrupt **intr_ret,
+> +		     int irq, struct spi_master *master,
+> +		     int flags)
+> +{
+> +	struct ad_sigma_delta_interrupt *intr = NULL;
+> +	struct list_head *ptr;
+> +	int ret = 0;
+> +
+> +	mutex_lock(&interrupt_lock);
+> +
+> +	/* Try to find an existing instance */
+> +	list_for_each(ptr, &interrupt_list) {
+> +		struct ad_sigma_delta_interrupt *i = list_entry(ptr,
+> +			struct ad_sigma_delta_interrupt, list);
+> +
+> +		if (i->irq == irq) {
+> +			/* No instance will attempt to wait for the
+> +			 * interrupt without the SPI bus locked, which
+> +			 * we can rely on to ensure correct operation.
+> +			 * However, we would like to detect
+> +			 * misconfiguration that would lead to unsafe
+> +			 * access.
+> +			 */
+> +			if (i->master != master) {
+> +				pr_err(
+> +				    "ad_sigma_delta: SPI master mismatch on IRQ %d\n",
+> +				    irq);
+> +				ret = -EINVAL;
+> +				goto fail_search;
+> +			}
+> +
+> +			intr = i;
+> +			break;
+> +		}
+> +	}
+> +
+> +	/* Allocate a new one if necessary */
+> +	if (!intr) {
+> +		intr = kmalloc(sizeof(*intr), GFP_KERNEL);
+> +		if (!intr) {
+> +			ret = -ENOMEM;
+> +			pr_err("ad_sigma_delta: can't allocate memory\n");
+> +			goto fail_search;
+> +		}
+> +
+> +		intr->irq = irq;
+> +		intr->refcnt = 0;
+> +		intr->active = NULL;
+> +		intr->master = master;
+> +
+> +		ret = request_irq(irq,
+> +				  ad_sd_data_rdy_trig_poll,
+> +				  flags | IRQF_NO_AUTOEN,
+> +				  "ad_sigma_delta",
+> +				  intr);
+> +		if (ret)
+> +			goto fail_search;
+> +
+> +		pr_debug("ad_sigma_delta: sharing interrupt %d\n", irq);
+> +		list_add(&intr->list, &interrupt_list);
+> +	}
+> +
+> +	intr->refcnt++;
+> +	*intr_ret = intr;
+> +
+> +fail_search:
+> +	mutex_unlock(&interrupt_lock);
+> +	return ret;
+> +}
+> +
+> +static void adsdi_put(struct ad_sigma_delta_interrupt *intr)
+> +{
+> +	mutex_lock(&interrupt_lock);
+> +	if (!--intr->refcnt) {
+> +		pr_debug("ad_sigma_delta: interrupt %d deallocated\n",
+> +			intr->irq);
+> +		free_irq(intr->irq, intr);
+> +		list_del(&intr->list);
+> +		kfree(intr);
+> +	}
+> +	mutex_unlock(&interrupt_lock);
+> +}
+> +
+> +static void devm_adsdi_release(void *arg)
+> +{
+> +	adsdi_put(arg);
+> +}
+> +
+> +static int devm_adsdi_get(struct device *dev,
+> +			  struct ad_sigma_delta_interrupt **intr_ret,
+> +			  int irq, struct spi_master *master,
+> +			  int flags)
+> +{
+> +	const int ret = adsdi_get(intr_ret, irq, master, flags);
+> +
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return devm_add_action_or_reset(dev, devm_adsdi_release, *intr_ret);
+> +}
+>  
+>  #define AD_SD_COMM_CHAN_MASK	0x3
+>  
+> @@ -221,11 +377,11 @@ int ad_sd_calibrate(struct ad_sigma_delta *sigma_delta,
+>  		goto out;
+>  
+>  	sigma_delta->irq_dis = false;
+> -	enable_irq(sigma_delta->spi->irq);
+> +	adsdi_enable(sigma_delta);
+>  	timeout = wait_for_completion_timeout(&sigma_delta->completion, 2 * HZ);
+>  	if (timeout == 0) {
+>  		sigma_delta->irq_dis = true;
+> -		disable_irq_nosync(sigma_delta->spi->irq);
+> +		adsdi_disable(sigma_delta, 0);
+>  		ret = -EIO;
+>  	} else {
+>  		ret = 0;
+> @@ -294,7 +450,7 @@ int ad_sigma_delta_single_conversion(struct iio_dev *indio_dev,
+>  	ad_sigma_delta_set_mode(sigma_delta, AD_SD_MODE_SINGLE);
+>  
+>  	sigma_delta->irq_dis = false;
+> -	enable_irq(sigma_delta->spi->irq);
+> +	adsdi_enable(sigma_delta);
+>  	ret = wait_for_completion_interruptible_timeout(
+>  			&sigma_delta->completion, HZ);
+>  
+> @@ -314,7 +470,7 @@ int ad_sigma_delta_single_conversion(struct iio_dev *indio_dev,
+>  
+>  out:
+>  	if (!sigma_delta->irq_dis) {
+> -		disable_irq_nosync(sigma_delta->spi->irq);
+> +		adsdi_disable(sigma_delta, 0);
+>  		sigma_delta->irq_dis = true;
+>  	}
+>  
+> @@ -361,7 +517,7 @@ static int ad_sd_buffer_postenable(struct iio_dev *indio_dev)
+>  		goto err_unlock;
+>  
+>  	sigma_delta->irq_dis = false;
+> -	enable_irq(sigma_delta->spi->irq);
+> +	adsdi_enable(sigma_delta);
+>  
+>  	return 0;
+>  
+> @@ -379,7 +535,7 @@ static int ad_sd_buffer_postdisable(struct iio_dev *indio_dev)
+>  	wait_for_completion_timeout(&sigma_delta->completion, HZ);
+>  
+>  	if (!sigma_delta->irq_dis) {
+> -		disable_irq_nosync(sigma_delta->spi->irq);
+> +		adsdi_disable(sigma_delta, 0);
+>  		sigma_delta->irq_dis = true;
+>  	}
+>  
+> @@ -425,7 +581,7 @@ static irqreturn_t ad_sd_trigger_handler(int irq, void *p)
+>  
+>  	iio_trigger_notify_done(indio_dev->trig);
+>  	sigma_delta->irq_dis = false;
+> -	enable_irq(sigma_delta->spi->irq);
+> +	adsdi_enable(sigma_delta);
+>  
+>  	return IRQ_HANDLED;
+>  }
+> @@ -438,10 +594,17 @@ static const struct iio_buffer_setup_ops ad_sd_buffer_setup_ops = {
+>  
+>  static irqreturn_t ad_sd_data_rdy_trig_poll(int irq, void *private)
+>  {
+> -	struct ad_sigma_delta *sigma_delta = private;
+> +	struct ad_sigma_delta_interrupt *intr = private;
+> +	struct ad_sigma_delta *sigma_delta = intr->active;
+> +
+> +	WARN_ON(!sigma_delta);
+> +	if (!sigma_delta)
+> +		return IRQ_NONE;
+>  
+> +	pr_debug("ad_sigma_delta: interrupt %d fired for %p\n",
+> +		intr->irq, sigma_delta);
+>  	complete(&sigma_delta->completion);
+> -	disable_irq_nosync(irq);
+> +	adsdi_disable(sigma_delta, 1);
+>  	sigma_delta->irq_dis = true;
+>  	iio_trigger_poll(sigma_delta->trig);
+>  
+> @@ -486,11 +649,11 @@ static int devm_ad_sd_probe_trigger(struct device *dev, struct iio_dev *indio_de
+>  	init_completion(&sigma_delta->completion);
+>  
+>  	sigma_delta->irq_dis = true;
+> -	ret = devm_request_irq(dev, sigma_delta->spi->irq,
+> -			       ad_sd_data_rdy_trig_poll,
+> -			       sigma_delta->info->irq_flags | IRQF_NO_AUTOEN,
+> -			       indio_dev->name,
+> -			       sigma_delta);
+> +	ret = devm_adsdi_get(dev,
+> +			&sigma_delta->interrupt,
+> +			sigma_delta->spi->irq,
+> +			sigma_delta->spi->master,
+> +			sigma_delta->info->irq_flags);
+>  	if (ret)
+>  		return ret;
+>  
+> diff --git a/include/linux/iio/adc/ad_sigma_delta.h b/include/linux/iio/adc/ad_sigma_delta.h
+> index c525fd51652f..62f38cfe807b 100644
+> --- a/include/linux/iio/adc/ad_sigma_delta.h
+> +++ b/include/linux/iio/adc/ad_sigma_delta.h
+> @@ -54,6 +54,9 @@ struct ad_sigma_delta_info {
+>  	unsigned long irq_flags;
+>  };
+>  
+> +/* Data relating to interrupt sharing */
+> +struct ad_sigma_delta_interrupt;
+> +
+>  /**
+>   * struct ad_sigma_delta - Sigma Delta device struct
+>   * @spi: The spi device associated with the Sigma Delta device.
+> @@ -76,6 +79,7 @@ struct ad_sigma_delta {
+>  	uint8_t			comm;
+>  
+>  	const struct ad_sigma_delta_info *info;
+> +	struct ad_sigma_delta_interrupt *interrupt;
+>  
+>  	/*
+>  	 * DMA (thus cache coherency maintenance) requires the
+

@@ -2,143 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E159496B18
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 09:47:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD7E496B1B
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 09:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233910AbiAVIro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 03:47:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33414 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229935AbiAVIrn (ORCPT
+        id S233918AbiAVIs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 03:48:57 -0500
+Received: from tkylinode-sdnproxy-1.icoremail.net ([139.162.70.28]:44470 "HELO
+        tkylinode-sdnproxy-1.icoremail.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with SMTP id S229935AbiAVIs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 03:47:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642841262;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iGN4qqFYiv0lpiiUFsTnq5KQGW53nV75SIlvAOABdv8=;
-        b=dT7WTWlZK1GGj9F9X5zol6Qw20xWJ3QxTRFhTxySRW1uRMv9SNreWEuzwk6n058GIzO9NX
-        HOPRV1MWRWBoPoWPeY+8ageSEwtYBpde8j2vsIGJvOUKercEMNDIffc+C+f0Xa8R9WzzOE
-        EwpahXBIWQd5nIew/ZupCjsw4qpTeFI=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-197-bgtfsf4BMAeZNq3c0NkjAA-1; Sat, 22 Jan 2022 03:47:41 -0500
-X-MC-Unique: bgtfsf4BMAeZNq3c0NkjAA-1
-Received: by mail-wr1-f72.google.com with SMTP id g6-20020adfbc86000000b001a2d62be244so844044wrh.23
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 00:47:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=iGN4qqFYiv0lpiiUFsTnq5KQGW53nV75SIlvAOABdv8=;
-        b=vhOcWy7T4MQLXy8knjJJve0/UNRqFYZ90+ELKxyK9M6aKamMgL93q6zxYPUbwD/kZf
-         NUL2ZHuz9wP65nhKZs+j0XFZoZtnj0iDvUS6CEzIxvwbKqdTBnLP1jj7VlQTXN+07FdX
-         gCIzfOuXLaripvg4QgL4+uFNjfb24ULtTbzaCjW1RjP9wjsOs5Ta09711n9uwcdPE2Gg
-         QFGsZNrmVuUv2NAh2VZzVyy5Ujydtocq1y3TBSndRy8XvH1yQLl+xMZKeTMtFfMcSJUt
-         RPtu4LzdW9VC73CueNmuh4aMUCKXi6esshw02Pz3TubchRHviRnSiDz90B2GJOFMhak/
-         ovlw==
-X-Gm-Message-State: AOAM531lxSLtw3IWBmVBE1URy9DggDraiKI1zAJhNelpFO7aM/iPhvSv
-        1D6IlcxDjJKEDayvmYHcpcDUe3gOWSshQvPwThZIdmJaV6fRHci4l2jr2ERh8A8HEIxwAIZcGtg
-        3Xb3tCIi5s0t98inZTFE63Rss
-X-Received: by 2002:adf:9f14:: with SMTP id l20mr6793366wrf.65.1642841259930;
-        Sat, 22 Jan 2022 00:47:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw7SV8+A5JIpyNSQkYvEz5OrginBETLq8ApjSAS4DgxW3t8BvqQP+dgvekHt5uF/fSwWMErbA==
-X-Received: by 2002:adf:9f14:: with SMTP id l20mr6793347wrf.65.1642841259709;
-        Sat, 22 Jan 2022 00:47:39 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id f8sm7752202wmg.44.2022.01.22.00.47.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Jan 2022 00:47:39 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lai Jiangshan <laijs@linux.alibaba.com>
-Subject: Re: [PATCH] KVM: VMX: Zero host's SYSENTER_ESP iff SYSENTER is NOT
- used
-In-Reply-To: <20220122015211.1468758-1-seanjc@google.com>
-References: <20220122015211.1468758-1-seanjc@google.com>
-Date:   Sat, 22 Jan 2022 09:47:38 +0100
-Message-ID: <8735lgjgwl.fsf@redhat.com>
+        Sat, 22 Jan 2022 03:48:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pku.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
+        In-Reply-To:References:Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-ID; bh=cUi7kGdbvfGPc8ZcvTG0IA+aJjRDTmLl//7L
+        dxOF41o=; b=PEXmcAwE4YPosOKbdNHBbUVjC8U86J8ldK8+f9ulU3Wk9ib5cfBm
+        cd0DhuORZgQKMZajeWMSdZqE1kieI3sPE7QbdukykdXjNZExNUeOsiJ3IAnqPzVr
+        ofIelwFwGj4m5funp4K85OMVgMYmRBCzaX7pn/lGmL0z/DmcigqQVFs=
+Received: by ajax-webmail-front01 (Coremail) ; Sat, 22 Jan 2022 16:47:39
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.129.37.75]
+Date:   Sat, 22 Jan 2022 16:47:39 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?5YiY5rC45b+X?= <lyz_cs@pku.edu.cn>
+To:     =?UTF-8?Q?p=C3=A9ter_ujfalusi?= <peter.ujfalusi@gmail.com>
+Cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dmaengine: ti: Fix runtime PM imbalance on error
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn
+ mispb-1ea67e80-64e4-49d5-bd9f-3beeae24b9f2-pku.edu.cn
+In-Reply-To: <6169df3d-3d04-644c-fc70-a184ecfa97c8@gmail.com>
+References: <1642332702-126304-1-git-send-email-lyz_cs@pku.edu.cn>
+ <6169df3d-3d04-644c-fc70-a184ecfa97c8@gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain
+Message-ID: <37b99b59.2d9e6.17e80f83cbc.Coremail.lyz_cs@pku.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: 5oFpogBXOrirxOthpA2bAA--.24001W
+X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEOBlPy7uCwlwABsD
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
-
-> Zero vmcs.HOST_IA32_SYSENTER_ESP when initializing *constant* host state
-> if and only if SYSENTER cannot be used, i.e. the kernel is a 64-bit
-> kernel and is not emulating 32-bit syscalls.  As the name suggests,
-> vmx_set_constant_host_state() is intended for state that is *constant*.
-> When SYSENTER is used, SYSENTER_ESP isn't constant because stacks are
-> per-CPU, and the VMCS must be updated whenever the vCPU is migrated to a
-> new CPU.  The logic in vmx_vcpu_load_vmcs() doesn't differentiate between
-> "never loaded" and "loaded on a different CPU", i.e. setting SYSENTER_ESP
-> on VMCS load also handles setting correct host state when the VMCS is
-> first loaded.
->
-> Because a VMCS must be loaded before it is initialized during vCPU RESET,
-> zeroing the field in vmx_set_constant_host_state() obliterates the value
-> that was written when the VMCS was loaded.  If the vCPU is run before it
-> is migrated, the subsequent VM-Exit will zero out MSR_IA32_SYSENTER_ESP,
-> leading to a #DF on the next 32-bit syscall.
->
->   double fault: 0000 [#1] SMP
->   CPU: 0 PID: 990 Comm: stable Not tainted 5.16.0+ #97
->   Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
->   EIP: entry_SYSENTER_32+0x0/0xe7
->   Code: <9c> 50 eb 17 0f 20 d8 a9 00 10 00 00 74 0d 25 ff ef ff ff 0f 22 d8
->   EAX: 000000a2 EBX: a8d1300c ECX: a8d13014 EDX: 00000000
->   ESI: a8f87000 EDI: a8d13014 EBP: a8d12fc0 ESP: 00000000
->   DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 0068 EFLAGS: 00210093
->   CR0: 80050033 CR2: fffffffc CR3: 02c3b000 CR4: 00152e90
->
-> Fixes: 6ab8a4053f71 ("KVM: VMX: Avoid to rdmsrl(MSR_IA32_SYSENTER_ESP)")
-> Cc: Lai Jiangshan <laijs@linux.alibaba.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/vmx/vmx.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index a02a28ce7cc3..ce2aae12fcc5 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -4094,10 +4094,13 @@ void vmx_set_constant_host_state(struct vcpu_vmx *vmx)
->  	vmcs_write32(HOST_IA32_SYSENTER_CS, low32);
->  
->  	/*
-> -	 * If 32-bit syscall is enabled, vmx_vcpu_load_vcms rewrites
-> -	 * HOST_IA32_SYSENTER_ESP.
-> +	 * SYSENTER is used only for (emulating) 32-bit kernels, zero out
-> +	 * SYSENTER.ESP if it is NOT used.  When SYSENTER is used, the per-CPU
-> +	 * stack is set when the VMCS is loaded (and may already be set!).
-
-For an unprepared reader, I'd suggest adding something like "This pairs
-with how HOST_IA32_SYSENTER_ESP is written in vmx_vcpu_load_vmcs()".
-
->  	 */
-> -	vmcs_writel(HOST_IA32_SYSENTER_ESP, 0);
-> +	if (!IS_ENABLED(CONFIG_IA32_EMULATION) && !IS_ENABLED(CONFIG_X86_32))
-
-Isn't it the same as "!IS_ENABLED(CONFIG_COMPAT_32)"? (same goes to the
-check in vmx_vcpu_load_vmcs())
-
-> +		vmcs_writel(HOST_IA32_SYSENTER_ESP, 0);
-> +
->  	rdmsrl(MSR_IA32_SYSENTER_EIP, tmpl);
->  	vmcs_writel(HOST_IA32_SYSENTER_EIP, tmpl);   /* 22.2.3 */
->  
-
-Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-
--- 
-Vitaly
-
+PiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4g5Y+R5Lu25Lq6OiAiUMOpdGVyIFVqZmFsdXNpIiA8
+cGV0ZXIudWpmYWx1c2lAZ21haWwuY29tPgo+IOWPkemAgeaXtumXtDogMjAyMi0wMS0yMiAxNjow
+OTo1MyAo5pif5pyf5YWtKQo+IOaUtuS7tuS6ujogIllvbmd6aGkgTGl1IiA8bHl6X2NzQHBrdS5l
+ZHUuY24+LCB2a291bEBrZXJuZWwub3JnCj4g5oqE6YCBOiBkbWFlbmdpbmVAdmdlci5rZXJuZWwu
+b3JnLCBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnCj4g5Li76aKYOiBSZTogW1BBVENIXSBk
+bWFlbmdpbmU6IHRpOiBGaXggcnVudGltZSBQTSBpbWJhbGFuY2Ugb24gZXJyb3IKPiAKPiAKPiAK
+PiBPbiAxLzE2LzIyIDEzOjMxLCBZb25nemhpIExpdSB3cm90ZToKPiA+IHBtX3J1bnRpbWVfZ2V0
+X3N5bmMoKSBpbmNyZW1lbnRzIHRoZSBydW50aW1lIFBNIHVzYWdlIGNvdW50ZXIgZXZlbgo+ID4g
+d2hlbiBpdCByZXR1cm5zIGFuIGVycm9yIGNvZGUsIHRodXMgYSBtYXRjaGluZyBkZWNyZW1lbnQg
+aXMgbmVlZGVkIG9uCj4gPiB0aGUgZXJyb3IgaGFuZGxpbmcgcGF0aCB0byBrZWVwIHRoZSBjb3Vu
+dGVyIGJhbGFuY2VkLgo+IAo+IFRoZSBwYXRjaCBpcyBjb3JyZWN0LCBob3dldmVyIHRoZSBjb21t
+aXQgbWVzc2FnZSBpcyBhIGJpdCBpbmNvcnJlY3QuCj4gCj4gV2UgYXJlIG5vdCBhZGRpbmcgYW55
+IHZpc2libGUgbWF0Y2hpbmcgZGVjcmVtZW50LCB3ZSBhcmUgc3dpdGNoaW5nIHRvCj4gcG1fcnVu
+dGltZV9yZXN1bWVfYW5kX2dldCgpIHdoaWNoIG9ubHkgaW5jcmVtZW50cyB0aGUgdXNhZ2UgY291
+bnRlciBpZgo+IHBtX3J1bnRpbWVfcmVzdW1lKCkgaXMgc3VjY2Vzc2Z1bC4KPiBHcmFudGVkIGlu
+dGVybmFsbHkgaXQgZG9lcyBhIHBtX3J1bnRpbWVfcHV0X25vaWRsZSgpIGlmIHJlc3VtZSBjYWxs
+IGZhaWxzLgo+IAo+IFN3aXRjaCB0byBwbV9ydW50aW1lX3Jlc3VtZV9hbmRfZ2V0KCkgdG8ga2Vl
+cCB0aGUgZGV2aWNlJ3MgdXNlIGNhdW50Cj4gYmFsYW5jZWQ/Cj4gCgpUaGFua3MgZm9yIHlvdXIg
+cmVwbHkuIEkgYWdyZWUgd2l0aCB5b3VyIGNoYW5nZSBhbmQgcmV3cml0ZSB0aGUgY29tbWl0IG1l
+c3NhZ2UgYXMgZm9sbG93cy4KClt3aHldCnBtX3J1bnRpbWVfZ2V0X3N5bmMoKSBpbmNyZW1lbnRz
+IHRoZSBydW50aW1lIFBNIHVzYWdlIGNvdW50ZXIgZXZlbgp3aGVuIGl0IHJldHVybnMgYW4gZXJy
+b3IgY29kZSwgaG93ZXZlciBwbV9ydW50aW1lX3Jlc3VtZV9hbmRfZ2V0KCkgCm9ubHkgaW5jcmVt
+ZW50cyB0aGUgdXNhZ2UgY291bnRlciBpZiBwbV9ydW50aW1lX3Jlc3VtZSgpIGlzIHN1Y2Nlc3Nm
+dWwsCndoaWNoIGdyYW50ZWQgaW50ZXJuYWxseSBkb2VzIGEgcG1fcnVudGltZV9wdXRfbm9pZGxl
+KCkgaWYgcmVzdW1lIGNhbGwgZmFpbHMuCgpbaG93XQpGaXggdGhpcyBieSBzd2l0Y2hpbmcgdG8g
+cG1fcnVudGltZV9yZXN1bWVfYW5kX2dldCgpIHRvIGtlZXAgdGhlIGRldmljZSdzIHVzZSBjb3Vu
+dApiYWxhbmNlZC4KCgo+ID4gCj4gPiBTaWduZWQtb2ZmLWJ5OiBZb25nemhpIExpdSA8bHl6X2Nz
+QHBrdS5lZHUuY24+Cj4gPiAtLS0KPiA+ICBkcml2ZXJzL2RtYS90aS9lZG1hLmMgfCA0ICsrLS0K
+PiA+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQo+ID4g
+Cj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9kbWEvdGkvZWRtYS5jIGIvZHJpdmVycy9kbWEvdGkv
+ZWRtYS5jCj4gPiBpbmRleCAwOGU0N2Y0Li5hNzNmNzc5IDEwMDY0NAo+ID4gLS0tIGEvZHJpdmVy
+cy9kbWEvdGkvZWRtYS5jCj4gPiArKysgYi9kcml2ZXJzL2RtYS90aS9lZG1hLmMKPiA+IEBAIC0y
+Mzk4LDkgKzIzOTgsOSBAQCBzdGF0aWMgaW50IGVkbWFfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2Rl
+dmljZSAqcGRldikKPiA+ICAJcGxhdGZvcm1fc2V0X2RydmRhdGEocGRldiwgZWNjKTsKPiA+ICAK
+PiA+ICAJcG1fcnVudGltZV9lbmFibGUoZGV2KTsKPiA+IC0JcmV0ID0gcG1fcnVudGltZV9nZXRf
+c3luYyhkZXYpOwo+ID4gKwlyZXQgPSBwbV9ydW50aW1lX3Jlc3VtZV9hbmRfZ2V0KGRldik7Cj4g
+PiAgCWlmIChyZXQgPCAwKSB7Cj4gPiAtCQlkZXZfZXJyKGRldiwgInBtX3J1bnRpbWVfZ2V0X3N5
+bmMoKSBmYWlsZWRcbiIpOwo+ID4gKwkJZGV2X2VycihkZXYsICJwbV9ydW50aW1lX3Jlc3VtZV9h
+bmRfZ2V0KCkgZmFpbGVkXG4iKTsKPiA+ICAJCXBtX3J1bnRpbWVfZGlzYWJsZShkZXYpOwo+ID4g
+IAkJcmV0dXJuIHJldDsKPiA+ICAJfQo+IAo+IC0tIAo+IFDDqXRlcgo=

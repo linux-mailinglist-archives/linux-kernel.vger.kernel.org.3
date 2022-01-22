@@ -2,41 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32086496DC4
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 20:58:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF23496DC5
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 20:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235109AbiAVT6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 14:58:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234915AbiAVT54 (ORCPT
+        id S235002AbiAVT6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 14:58:24 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:40594 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234956AbiAVT6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 14:57:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73082C06173D
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 11:57:56 -0800 (PST)
+        Sat, 22 Jan 2022 14:58:00 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10CB060F06
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 19:57:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C536BC340E5
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 19:57:54 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8258ACE09EC
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 19:57:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C68DC004E1;
+        Sat, 22 Jan 2022 19:57:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642881475;
-        bh=iRTJVaYGd7Y6vRUiEAAlp1PTyrRBTe9D6yc7/go2g5M=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=s5my+j5dO3AOrv2zkF5FTVXOdfQhFGxSTeQhyjY/OiP+2AEct1kdEijlIQJCmIX2p
-         Y4Tv2qfR0HICYPwz3QL+xEfoQDyZgKX2kswEeaGWHKrW+oFIR/jW5RLGDceNKWMoTH
-         BdkXAat0xJ6/xmH9VcjYulStuBCcC1o5MjqpMFeNga2sjYw7+vXZ3HPjSDbo7zalYL
-         ffP77hOYbKQN652ftvVWldOpCHec4Ty3kkVTCf5VwXCTW5FvTR5IyStFtKk9PmZlxk
-         kY2dmlXwre102Vf8nNedS7uBkBQhpIPKKuPlst6FGUn7DM0G2GOHx/H+AcaUceBkcz
-         pRfBKU+f9imGQ==
+        s=k20201202; t=1642881477;
+        bh=IXIbUqJGHmg3ojfwHCdVG4hBWMeEp3Aaeq5o+Fa7dkE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bHp+dyaScu7jdKwfUTR7iYnWb2EwLLdcNpQU2ixNB78GuQjgMjrVbXp8wrwBcclWi
+         cCB6u7iLqm24n5uuo+Z6jEh+v7nuX9AQhYR5ur5aP4rpbmS7ZwozeZ2tPwFkJqQNiG
+         TuUVcaLNWTiRrAocHqVhdVdgUrK4HoZ2cTpdo8Inp5Bo/u4LuuDttAtPU1Yj0rmoW0
+         J/4LEZj1r/iW/Qj4YcpINmA3aaUMnH+1KlmN9pAmfGkMDUmxRfy7Zwt4LPaapAI902
+         4/lAhzVLj41RyvjBZp9uN4u/D46yQ0LAwX5Cnz0Rr6OQ85tBbyhfT9ssfF/YZh2LgN
+         0uDUD0xmAQJrg==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Subject: [PATCH 15/30] habanalabs: use common wrapper for MMU cache invalidation
-Date:   Sat, 22 Jan 2022 21:57:16 +0200
-Message-Id: <20220122195731.934494-15-ogabbay@kernel.org>
+Cc:     Rajaravi Krishna Katta <rkatta@habana.ai>
+Subject: [PATCH 16/30] habanalabs: sysfs support for fw os version
+Date:   Sat, 22 Jan 2022 21:57:17 +0200
+Message-Id: <20220122195731.934494-16-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220122195731.934494-1-ogabbay@kernel.org>
 References: <20220122195731.934494-1-ogabbay@kernel.org>
@@ -46,71 +44,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have a common function that wraps the call to the MMU cache
-invalidation function, which is ASIC-specific. The wrapper checks
-the return value and prints error if necessary. For consistency, try
-to use the wrapper when possible.
+From: Rajaravi Krishna Katta <rkatta@habana.ai>
 
+Adds new sysfs entry to display firmware os version
+/sys/class/habanalabs/hl<n>/fw_os_ver
+
+Signed-off-by: Rajaravi Krishna Katta <rkatta@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/gaudi/gaudi.c | 6 +++---
- drivers/misc/habanalabs/goya/goya.c   | 5 ++---
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ Documentation/ABI/testing/sysfs-driver-habanalabs |  6 ++++++
+ drivers/misc/habanalabs/common/sysfs.c            | 10 ++++++++++
+ drivers/misc/habanalabs/include/common/cpucp_if.h |  2 ++
+ 3 files changed, 18 insertions(+)
 
-diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-index 66c90164be6b..c58e21e2db3b 100644
---- a/drivers/misc/habanalabs/gaudi/gaudi.c
-+++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-@@ -3855,7 +3855,7 @@ static int gaudi_mmu_init(struct hl_device *hdev)
- 	/* mem cache invalidation */
- 	WREG32(mmSTLB_MEM_CACHE_INVALIDATION, 1);
+diff --git a/Documentation/ABI/testing/sysfs-driver-habanalabs b/Documentation/ABI/testing/sysfs-driver-habanalabs
+index c16a573eb680..96646fb2e7a1 100644
+--- a/Documentation/ABI/testing/sysfs-driver-habanalabs
++++ b/Documentation/ABI/testing/sysfs-driver-habanalabs
+@@ -69,6 +69,12 @@ KernelVersion:  5.1
+ Contact:        ogabbay@kernel.org
+ Description:    Displays the device's version from the eFuse
  
--	hdev->asic_funcs->mmu_invalidate_cache(hdev, true, 0);
-+	hl_mmu_invalidate_cache(hdev, true, 0);
- 
- 	WREG32(mmMMU_UP_MMU_ENABLE, 1);
- 	WREG32(mmMMU_UP_SPI_MASK, 0xF);
-@@ -8595,7 +8595,7 @@ static int gaudi_internal_cb_pool_init(struct hl_device *hdev,
- 			hdev->internal_cb_pool_dma_addr,
- 			HOST_SPACE_INTERNAL_CB_SZ);
- 
--	hdev->asic_funcs->mmu_invalidate_cache(hdev, false, MMU_OP_USERPTR);
-+	hl_mmu_invalidate_cache(hdev, false, MMU_OP_USERPTR);
- 	mutex_unlock(&ctx->mmu_lock);
- 
- 	if (rc)
-@@ -8630,7 +8630,7 @@ static void gaudi_internal_cb_pool_fini(struct hl_device *hdev,
- 			HOST_SPACE_INTERNAL_CB_SZ);
- 	hl_unreserve_va_block(hdev, ctx, hdev->internal_cb_va_base,
- 			HOST_SPACE_INTERNAL_CB_SZ);
--	hdev->asic_funcs->mmu_invalidate_cache(hdev, true, MMU_OP_USERPTR);
-+	hl_mmu_invalidate_cache(hdev, true, MMU_OP_USERPTR);
- 	mutex_unlock(&ctx->mmu_lock);
- 
- 	gen_pool_destroy(hdev->internal_cb_pool);
-diff --git a/drivers/misc/habanalabs/goya/goya.c b/drivers/misc/habanalabs/goya/goya.c
-index 1bd23578cb83..d8c6dea7c809 100644
---- a/drivers/misc/habanalabs/goya/goya.c
-+++ b/drivers/misc/habanalabs/goya/goya.c
-@@ -2700,8 +2700,7 @@ int goya_mmu_init(struct hl_device *hdev)
- 	WREG32_AND(mmSTLB_STLB_FEATURE_EN,
- 			(~STLB_STLB_FEATURE_EN_FOLLOWER_EN_MASK));
- 
--	hdev->asic_funcs->mmu_invalidate_cache(hdev, true,
--					MMU_OP_USERPTR | MMU_OP_PHYS_PACK);
-+	hl_mmu_invalidate_cache(hdev, true, MMU_OP_USERPTR | MMU_OP_PHYS_PACK);
- 
- 	WREG32(mmMMU_MMU_ENABLE, 1);
- 	WREG32(mmMMU_SPI_MASK, 0xF);
-@@ -5341,7 +5340,7 @@ static int goya_mmu_invalidate_cache_range(struct hl_device *hdev,
- 	/* Treat as invalidate all because there is no range invalidation
- 	 * in Goya
- 	 */
--	return hdev->asic_funcs->mmu_invalidate_cache(hdev, is_hard, flags);
-+	return hl_mmu_invalidate_cache(hdev, is_hard, flags);
++What:           /sys/class/habanalabs/hl<n>/fw_os_ver
++Date:           Dec 2021
++KernelVersion:  5.18
++Contact:        ogabbay@kernel.org
++Description:    Version of the firmware OS running on the device's CPU
++
+ What:           /sys/class/habanalabs/hl<n>/hard_reset
+ Date:           Jan 2019
+ KernelVersion:  5.1
+diff --git a/drivers/misc/habanalabs/common/sysfs.c b/drivers/misc/habanalabs/common/sysfs.c
+index 65b132fa6dbd..3f220dd3b6b2 100644
+--- a/drivers/misc/habanalabs/common/sysfs.c
++++ b/drivers/misc/habanalabs/common/sysfs.c
+@@ -156,6 +156,14 @@ static ssize_t thermal_ver_show(struct device *dev,
+ 	return sprintf(buf, "%s", hdev->asic_prop.cpucp_info.thermal_version);
  }
  
- int goya_send_heartbeat(struct hl_device *hdev)
++static ssize_t fw_os_ver_show(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct hl_device *hdev = dev_get_drvdata(dev);
++
++	return sprintf(buf, "%s", hdev->asic_prop.cpucp_info.fw_os_version);
++}
++
+ static ssize_t preboot_btl_ver_show(struct device *dev,
+ 				struct device_attribute *attr, char *buf)
+ {
+@@ -370,6 +378,7 @@ static DEVICE_ATTR_RO(soft_reset_cnt);
+ static DEVICE_ATTR_RO(status);
+ static DEVICE_ATTR_RO(thermal_ver);
+ static DEVICE_ATTR_RO(uboot_ver);
++static DEVICE_ATTR_RO(fw_os_ver);
+ 
+ static struct bin_attribute bin_attr_eeprom = {
+ 	.attr = {.name = "eeprom", .mode = (0444)},
+@@ -393,6 +402,7 @@ static struct attribute *hl_dev_attrs[] = {
+ 	&dev_attr_status.attr,
+ 	&dev_attr_thermal_ver.attr,
+ 	&dev_attr_uboot_ver.attr,
++	&dev_attr_fw_os_ver.attr,
+ 	NULL,
+ };
+ 
+diff --git a/drivers/misc/habanalabs/include/common/cpucp_if.h b/drivers/misc/habanalabs/include/common/cpucp_if.h
+index 737c39f33f05..f00db22f98fb 100644
+--- a/drivers/misc/habanalabs/include/common/cpucp_if.h
++++ b/drivers/misc/habanalabs/include/common/cpucp_if.h
+@@ -780,6 +780,7 @@ struct cpucp_security_info {
+  *                     (0 = functional 1 = binned)
+  * @xbar_binning_mask: Xbar binning mask, 1 bit per Xbar instance
+  *                     (0 = functional 1 = binned)
++ * @fw_os_version: Firmware OS Version
+  */
+ struct cpucp_info {
+ 	struct cpucp_sensor sensors[CPUCP_MAX_SENSORS];
+@@ -807,6 +808,7 @@ struct cpucp_info {
+ 	__le32 reserved6;
+ 	__u8 pll_map[PLL_MAP_LEN];
+ 	__le64 mme_binning_mask;
++	__u8 fw_os_version[VERSION_MAX_LEN];
+ };
+ 
+ struct cpucp_mac_addr {
 -- 
 2.25.1
 

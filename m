@@ -2,164 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F744968EA
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 01:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4974968F2
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 01:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbiAVAxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 19:53:15 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:35675 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiAVAxN (ORCPT
+        id S231378AbiAVA5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 19:57:10 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:28680 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231206AbiAVA5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 19:53:13 -0500
-Received: by mail-ot1-f41.google.com with SMTP id n22-20020a9d2016000000b0059bd79f7777so13440664ota.2;
-        Fri, 21 Jan 2022 16:53:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NwEsLoY/zSy6+8ww4zg4hbAmBeGUwDI4bJpwjmotxhw=;
-        b=Dtan1CUsWJkMAMqArFn70vhAn0T5iXrSLZRc4aCUoZIhGIIbsa/K4P8kxNKeisZNLO
-         1SGzR/R/vqQk9G3TnJgT++G1Y37jhpwBaPc7XxQCwdBDQJoEjJzRxTiuLirMzd+wT8ZQ
-         XW8oStnN3nGOHoqfQt2yO/1ew4yZajCJ4RAaD1V2oFH3uMzWkWANh637DqPJuoptrPzn
-         LyUF5VR+1X5X+LawK/f8R3UVYWG7AlP1E3IECVHVMopSERWWbbG7ns20dPCe8v9u9WUx
-         1jc2DmIc9W31OU0F/E+/+oWHAAKUKyZqMAafZE3ucQ8tXmaw4AlIkPVQORdh8fzUYJZt
-         +OlQ==
-X-Gm-Message-State: AOAM531z0L+S4K9QuTBw72UhNid1Tns+D9HAiYlYjXku1zLEG3UpGQKs
-        8xL21DgoA/S31wJ4ab16OA==
-X-Google-Smtp-Source: ABdhPJxtvDyzMhYHyXQ+iSpTb2lRwqvIuBsflwOHWmHmO5EdG97wJnvBRPsDourd04+3nSBlNcks0Q==
-X-Received: by 2002:a9d:7d11:: with SMTP id v17mr4619824otn.34.1642812792929;
-        Fri, 21 Jan 2022 16:53:12 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id k17sm1771351otk.80.2022.01.21.16.53.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 16:53:12 -0800 (PST)
-Received: (nullmailer pid 1949948 invoked by uid 1000);
-        Sat, 22 Jan 2022 00:53:11 -0000
-Date:   Fri, 21 Jan 2022 18:53:11 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Leilk Liu <leilk.liu@mediatek.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH V2 1/3] dt-bindings: spi: Convert spi-slave-mt27xx to
- json-schema
-Message-ID: <YetVd7IR7FDt+nz3@robh.at.kernel.org>
-References: <20220112103609.17421-1-leilk.liu@mediatek.com>
- <20220112103609.17421-2-leilk.liu@mediatek.com>
+        Fri, 21 Jan 2022 19:57:03 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20LL5gAE013827;
+        Sat, 22 Jan 2022 00:56:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=s/JXOWKByKkIT9+XKOfqX5/U2DNopOrY8Pl+/w9acnA=;
+ b=KUPHG5TL/P9dlZ1TRPoBYtDoPZpnf8TVt+j0SQ3JpYtX2GlVopYPHHhshYAOnjiEDvsp
+ 49wDzYfqGja+YBK2dt9Aeullo89N+NuWb9qsdqaCX5KP0+b3u5b73ddTTvnT0NuLTL9U
+ K4/0PnESP5aFDFGhEFXiUUkAcGP0Mi7cc3H8CGrHvjJ1mo0cwlM9RhbUGLrfpocPWOel
+ +fA/idSF6rwBkTrYHE3XJGMRXudDx5isQkSFYJrC01ghwni1/xlewpLEp4Arw017N4bT
+ kIK7LJaXQggMsUe4QZhs+DnLLqXvl6v6CV7073j6RSS40ZewMCgLnxcVBhExquwzfJ8A GQ== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dr1w3xm5u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 22 Jan 2022 00:56:52 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20M0WW35002286;
+        Sat, 22 Jan 2022 00:56:49 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04fra.de.ibm.com with ESMTP id 3dqj1k89mb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 22 Jan 2022 00:56:49 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20M0lLlM38797646
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 22 Jan 2022 00:47:21 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6236BA4055;
+        Sat, 22 Jan 2022 00:56:46 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 25083A4053;
+        Sat, 22 Jan 2022 00:56:44 +0000 (GMT)
+Received: from li-4b5937cc-25c4-11b2-a85c-cea3a66903e4.ibm.com.com (unknown [9.211.59.92])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sat, 22 Jan 2022 00:56:43 +0000 (GMT)
+From:   Nayna Jain <nayna@linux.ibm.com>
+To:     linuxppc-dev@lists.ozlabs.org
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Daniel Axtens <dja@axtens.net>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Douglas Miller <dougmill@linux.vnet.ibm.com>, gjoyce@ibm.com,
+        linux-kernel@vger.kernel.org, Nayna Jain <nayna@linux.ibm.com>
+Subject: [RFC PATCH 0/2] powerpc/pseries: add support for local secure storage called Platform Keystore(PKS) 
+Date:   Fri, 21 Jan 2022 19:56:35 -0500
+Message-Id: <20220122005637.28199-1-nayna@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220112103609.17421-2-leilk.liu@mediatek.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: O4D5XP9l9J-q0IX33lPXhlnkhDgUmuJS
+X-Proofpoint-ORIG-GUID: O4D5XP9l9J-q0IX33lPXhlnkhDgUmuJS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-21_10,2022-01-21_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ mlxscore=0 clxscore=1011 priorityscore=1501 malwarescore=0 mlxlogscore=770
+ lowpriorityscore=0 bulkscore=0 suspectscore=0 impostorscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2201220001
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 06:36:07PM +0800, Leilk Liu wrote:
-> Convert Mediatek ARM SOC's SPI Slave controller binding
-> to json-schema format.
-> 
-> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
-> ---
->  .../spi/mediatek,spi-slave-mt27xx.yaml        | 73 +++++++++++++++++++
->  .../bindings/spi/spi-slave-mt27xx.txt         | 33 ---------
->  2 files changed, 73 insertions(+), 33 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml
->  delete mode 100644 Documentation/devicetree/bindings/spi/spi-slave-mt27xx.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml
-> new file mode 100644
-> index 000000000000..3364fff08cca
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml
-> @@ -0,0 +1,73 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/mediatek,spi-slave-mt27xx.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: SPI Slave controller for MediaTek ARM SoCs
-> +
-> +maintainers:
-> +  - Leilk Liu <leilk.liu@mediatek.com>
-> +
-> +allOf:
-> +  - $ref: /spi/spi-controller.yaml#
-> +
-> +properties:
-> +  compatible:
+PowerVM provides an isolated Platform Keystore(PKS) storage allocation
+for each partition with individually managed access controls to store
+sensitive information securely. Linux Kernel can access this storage by
+interfacing with hypervisor using a new set of hypervisor calls. 
 
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt2712-spi-slave
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt8195-spi-slave
+PowerVM guest secure boot intend to use Platform Keystore for the
+purpose of storing public keys. Secure boot requires public keys to
+be able to verify the grub and boot kernel. To allow authenticated
+ manipulation of keys, it supports variables to store key authorities
+- PK/KEK and code signing keys - db. It also supports denied list to
+disallow booting even if signed with valid key. This is done via
+denied list database - dbx or sbat. These variables would be stored in
+PKS, and are managed and controlled by firmware.
 
-Just:
+The purpose of this patchset is to add support for users to
+read/write/add/delete variables required for secure boot on PowerVM.
 
-       enum:
-         - mediatek,mt2712-spi-slave
-         - mediatek,mt8195-spi-slave
+Nayna Jain (2):
+  pseries: define driver for Platform Keystore
+  pseries: define sysfs interface to expose PKS variables
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: clock used for the clock gate
+ Documentation/ABI/testing/sysfs-pksvar        |  77 +++
+ arch/powerpc/include/asm/hvcall.h             |  13 +-
+ arch/powerpc/include/asm/pks.h                |  84 +++
+ arch/powerpc/platforms/pseries/Kconfig        |  17 +
+ arch/powerpc/platforms/pseries/Makefile       |   2 +
+ arch/powerpc/platforms/pseries/pks.c          | 494 ++++++++++++++++++
+ arch/powerpc/platforms/pseries/pksvar-sysfs.c | 356 +++++++++++++
+ 7 files changed, 1042 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-pksvar
+ create mode 100644 arch/powerpc/include/asm/pks.h
+ create mode 100644 arch/powerpc/platforms/pseries/pks.c
+ create mode 100644 arch/powerpc/platforms/pseries/pksvar-sysfs.c
 
-Just 'maxItems: 1'
-
-> +
-> +  clock-names:
-> +    items:
-> +      - const: spi
-> +
-> +  assigned-clocks:
-> +    maxItems: 1
-> +    description: |
-> +      The mux clock for the given platform.
-> +
-> +  assigned-clock-parents:
-> +    maxItems: 1
-> +    description: |
-> +      The parent of mux clock for the given platform.
-
-You can drop assigned-clocks. They are always allowed on nodes with 
-'clocks'.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/mt2712-clk.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    spi@10013000 {
-> +      compatible = "mediatek,mt2712-spi-slave";
-> +      reg = <0x10013000 0x100>;
-> +      interrupts = <GIC_SPI 283 IRQ_TYPE_LEVEL_LOW>;
-> +      clocks = <&infracfg CLK_INFRA_AO_SPI1>;
-> +      clock-names = "spi";
-> +      assigned-clocks = <&topckgen CLK_TOP_SPISLV_SEL>;
-> +      assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL1_D2>;
-> +    };
+-- 
+2.27.0

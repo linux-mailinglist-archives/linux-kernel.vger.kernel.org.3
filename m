@@ -2,261 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B74496A05
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 05:35:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07496496A06
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 05:38:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbiAVEeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 23:34:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:24475 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232303AbiAVEeJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 23:34:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642826048;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jKIa7CImFTTM4VBT4MgLvf3rD55GTUYAJRDTIjiPvwI=;
-        b=Ndw9myMViB/oN4VZbqgmfFMSPJJHjE8eOKAvFW17sWuPs4YVdBYqTEYeqrXlK6EqaEAOkk
-        NuSaFsazOE1sIpgVXCgWHrS4wJZAAk+IR1Tyehv87os+AgStDHidXTw077Hxg5FuDAbGVl
-        vBawuKrzUttdJxSJnUNg8V0dIiCVZWg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-649-EpHi4ZZWNeyCL9GgSFRtwA-1; Fri, 21 Jan 2022 23:34:02 -0500
-X-MC-Unique: EpHi4ZZWNeyCL9GgSFRtwA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 59F171853022;
-        Sat, 22 Jan 2022 04:34:00 +0000 (UTC)
-Received: from localhost (ovpn-12-78.pek2.redhat.com [10.72.12.78])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 95B394697D;
-        Sat, 22 Jan 2022 04:33:53 +0000 (UTC)
-Date:   Sat, 22 Jan 2022 12:33:51 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Petr Mladek <pmladek@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "dyoung@redhat.com" <dyoung@redhat.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "anton@enomsg.org" <anton@enomsg.org>,
-        "ccross@android.com" <ccross@android.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>
-Subject: Re: [PATCH V3] panic: Move panic_print before kmsg dumpers
-Message-ID: <20220122043351.GA2596@MiWiFi-R3L-srv>
-References: <20220114183046.428796-1-gpiccoli@igalia.com>
- <20220119071318.GA4977@MiWiFi-R3L-srv>
- <YegytkfED+QI56Y8@alley>
- <20220120085115.GB18398@MiWiFi-R3L-srv>
- <63621138-2a41-26c2-524e-d889068f157a@igalia.com>
- <20220121023119.GB4579@MiWiFi-R3L-srv>
- <MWHPR21MB1593A32A3433F5F262796FCFD75B9@MWHPR21MB1593.namprd21.prod.outlook.com>
+        id S232740AbiAVEiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 23:38:20 -0500
+Received: from mga05.intel.com ([192.55.52.43]:64759 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232303AbiAVEiT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 23:38:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642826299; x=1674362299;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=S+nUIaCfMLL+mVL2TRXy/z0BUimqRFpYyNprNfq6rLg=;
+  b=RDM141XfDvT8T72ASP8CdRbyKGOOnnn0/0VUWyGLy9cdaAE6FMKWBOSR
+   nMR7+QKhnR8gpA4emJ/uLF18FWCuCTEGVxqu89NGS4wvs7dLE7vQojyzr
+   CF169y1jffSFgHLrM5lmtqAfucihWG+7MatYbZRQj7m1UWpFLttWXc/yd
+   9l3XG9JHAB1KOcuRitAuKubelyfSlxhO+Qj5BQ9IL2EW69/7XEMUkvm77
+   LKcniCjw7fwvMJd0W94Mp5P1M+NFas1YpRnfOIymiE2Af1HbEmU7uyPqH
+   cqoZls4LI4bus1O+FKNks//dI9PgtpIAIe6uD/+68V0befeVEyUV7U0gU
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="332143546"
+X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
+   d="scan'208";a="332143546"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 20:38:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
+   d="scan'208";a="623527651"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 21 Jan 2022 20:38:17 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nB8AK-000G2k-KE; Sat, 22 Jan 2022 04:38:16 +0000
+Date:   Sat, 22 Jan 2022 12:37:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lukas Czerner <lczerner@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        Carlos Maiolino <cmaiolino@redhat.com>
+Subject: fs/ext4/super.c:2295:1: warning: unused function 'ctx_test_flags'
+Message-ID: <202201221207.g5vwf1MI-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <MWHPR21MB1593A32A3433F5F262796FCFD75B9@MWHPR21MB1593.namprd21.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/21/22 at 03:00pm, Michael Kelley (LINUX) wrote:
-> From: Baoquan He <bhe@redhat.com> Sent: Thursday, January 20, 2022 6:31 PM
-> > 
-> > On 01/20/22 at 06:36pm, Guilherme G. Piccoli wrote:
-> > > Hi Baoquan, some comments inline below:
-> > >
-> > >
-> > > On 20/01/2022 05:51, Baoquan He wrote:
-> > > > [...]
-> > > >> From my POV, the function of panic notifiers is not well defined. They
-> > > >> do various things, for example:
-> > > >> [...]
-> > > >> The do more that just providing information. Some are risky. It is not
-> > > >> easy to disable a particular one.
-> > > >
-> > > > Yes, agree. Not all of them just provide information.
-> > > >
-> > > > Now panic_notifier_filter Guilherme added can help to disable some of
-> > > > them.
-> > >
-> > > So, just for completeness, worth to mention Petr had some interesting
-> > > suggestions in the other thread (about the filter) and we may end-up not
-> > > having this implemented - in other words, maybe a refactor of that
-> > > mechanism is going to be proposed.
-> > 
-> > OK, saw that. We can continue discuss that there.
-> > 
-> > >
-> > >
-> > > > [...]
-> > > >>
-> > > >>   + Guilherme uses crash dump only to dump the kernel log. It might
-> > > >>     be more reliable than kmsg_dump. In this case, panic_print_sys_info()
-> > > >>     is the only way to get the extra information.
-> > > >
-> > > > Hmm, I haven't made clear what Guilherme really wants in his recent
-> > > > post. In this patch he wants to get panic print info into pstore. He
-> > > > also want to dump the kernel log poked by panic_print in kdump kernel.
-> > > > And it's very weird people try to collect kernel log via crash dump
-> > > > mechnism, that is obviously using a sledgehammer to crack a nut.
-> > > > Sometime, we should not add or change code to a too specific corner
-> > > > case.
-> > >
-> > > OK, I'll try to be really clear, hopefully I can explain the use case in
-> > > better and simpler words. First of all, I wouldn't call it a corner case
-> > > - it's just a valid use case that, in my opinion, should be allowed. Why
-> > > not, right? Kernel shouldn't push policy on users, we should instead let
-> > > the users decide how to use the tools/options.
-> > 
-> > Agree, sorry about my wrong expression.
-> > 
-> > >
-> > > So imagine you cannot collect a vmcore, due to the lack of storage
-> > > space. Yet, you want the most information as possible to investigate the
-> > > cause of a panic. The kernel flag "panic_print" is the perfect fit, we
-> > > can dump backtraces, task list, memory info...right on a panic event.
-> > >
-> > > But then, how to save this panic log with lots of information after a
-> > > reboot? There are 2 ways in my understanding:
-> > >
-> > > (a) pstore/kmsg_dump()
-> > > (b) kdump
-> > >
-> > > The option (a) is easily the best - we don't need to reserve lots of
-> > > memory, then boot another kernel, etc. This patch (being hereby
-> > > discussed) aims to enable the "panic_print" output for this case!
-> > > But...there are cases in which option (a) cannot work. We need a backend
-> > > of persistent storage, either a block device or, more common, RAM memory
-> > > that is persistent across a reboot. What if it's not available?
-> > >
-> > > Then, we fallback to option (b) - kind of a sledgehammer, in your words heh
-> > > It's not ideal, but might be a last resort for users wanting to collect
-> > > the most information they can without saving a full vmcore. And for
-> > > that, we need to be able to invoke "panic_print" function before the
-> > > __crash_kexec() call. Continue below...
-> > 
-> > OK, pstore via kmsg_dump is first option, then fallback to kdump.
-> > This is what I suggested at below. This is what panic notifier has done
-> > at below. I think both of them are similar, thus should take the same
-> > way to handle.
-> > 
-> >  void panic()
-> >  {
-> >          if (!_crash_kexec_post_notifiers && !panic_print) {
-> >                  __crash_kexec(NULL);
-> >                  smp_send_stop();
-> >          } else {
-> >                  crash_smp_send_stop();
-> >          }
-> > 
-> >  	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
-> >  	panic_print_sys_info(false);
-> >  	kmsg_dump(KMSG_DUMP_PANIC);
-> >  	if (_crash_kexec_post_notifiers || panic_print)
-> >                  __crash_kexec(NULL);
-> >  	...
-> >  	debug_locks_off();
-> >          console_flush_on_panic(CONSOLE_FLUSH_PENDING);
-> > 
-> >          panic_print_sys_info(true);
-> >  	......
-> >  }
-> > > >
-> > >
-> > > So, your idea is good and it mostly works, except it *requires* users to
-> > > make use of "crash_kexec_post_notifiers" in order to use "panic_print"
-> > > in the case (b) above discussed.
-> > 
-> > I don't get. Why it has to *require* users to make use of
-> > "crash_kexec_post_notifiers" in order to use "panic_print"?
-> > To enable panic notifiers and panic_print, we need add below parameter
-> > to kernel cmdline separately.
-> > 
-> > 	crash_kexec_post_notifiers=1
-> >         panic_print=0x7f
-> > 
-> > With above code, we have:
-> > 1) None specified in cmdline, only kdump enabled.
-> >    Crash dump will work to get vmcore.
-> > 2) crash_kexec_post_notifiers=1 , kdump enabled
-> >    panic_notifers are executed, then crash dump
-> > 3) panic_print=0x7f, kdump enabled,
-> >    Panic_print get system info printed, then crash dump
-> > 4) crash_kexec_post_notifiers=1 panic_print=0x7f, kdump enabled
-> >    panic_notifers are executed firstly, then panic_print, at last crash dump
-> > 
-> > Here I don't list the no kdump enabled case. Please help point out if I
-> > misunderstood anything.
-> > >
-> > > Do you think it should be necessary?
-> > > How about if we allow users to just "panic_print" with or without the
-> > > "crash_kexec_post_notifiers", then we pursue Petr suggestion of
-> > > refactoring the panic notifiers? So, after this future refactor, we
-> > > might have a much clear code.
-> > 
-> > I haven't read Petr's reply in another panic notifier filter thread. For
-> > panic notifier, it's only enforced to use on HyperV platform, excepto of
-> > that, users need to explicitly add "crash_kexec_post_notifiers=1" to enable
-> > it. And we got bug report on the HyperV issue. In our internal discussion,
-> > we strongly suggest HyperV dev to change the default enablement, instead
-> > leave it to user to decide.
-> >
-> 
-> Regarding Hyper-V:   Invoking the Hyper-V notifier prior to running the
-> kdump kernel is necessary for correctness.  During initial boot of the
-> main kernel, the Hyper-V and VMbus code in Linux sets up several guest
-> physical memory pages that are shared with Hyper-V, and that Hyper-V
-> may write to.   A VMbus connection is also established. Before kexec'ing
-> into the kdump kernel, the sharing of these pages must be rescinded
-> and the VMbus connection must be terminated.   If this isn't done, the
-> kdump kernel will see strange memory overwrites if these shared guest
-> physical memory pages get used for something else.
-> 
-> I hope we've found and fixed all the problems where the Hyper-V
-> notifier could get hung.  Unfortunately, the Hyper-V interfaces were
-> designed long ago without the Linux kexec scenario in mind, and they
-> don't provide a simple way to reset everything except by doing a
-> reboot that goes back through the virtual BIOS/UEFI.  So the Hyper-V
-> notifier code is more complicated than would be desirable, and in
-> particular, terminating the VMbus connection is tricky.
-> 
-> This has been an evolving area of understanding.  It's only been the last
-> couple of years that we've fully understood the implications of these
-> shared memory pages on the kexec/kdump scenario and what it takes
-> to reset everything so the kexec'ed kernel will work.
+Hi Lukas,
 
-Glad to know these background details, thx, Michael. While from the
-commit which introduced it and the code comment above code, I thought
-Hyper-V wants to collect data before crash dump. If this is the true,
-it might be helpful to add these in commit log or add as code comment,
-and also help to defend you when people question it.
+FYI, the error/warning still remains.
 
-int __init hv_common_init(void)
-{
-        int i;
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git =
+master
+head:   9b57f458985742bd1c585f4c7f36d04634ce1143
+commit: 6e47a3cc68fc525428297a00524833361ebbb0e9 ext4: get rid of super blo=
+ck and sbi from handle_mount_ops()
+date:   6 weeks ago
+config: mips-randconfig-c004-20220118 (https://download.01.org/0day-ci/arch=
+ive/20220122/202201221207.g5vwf1MI-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d=
+25a742302d25ef3c8b84b54f7483c2deb9)
+reproduce (this is a W=3D1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/=
+make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
+t/commit/?id=3D6e47a3cc68fc525428297a00524833361ebbb0e9
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/gi=
+t/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 6e47a3cc68fc525428297a00524833361ebbb0e9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D=
+1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash
 
-        /*
-         * Hyper-V expects to get crash register data or kmsg when
-         * crash enlightment is available and system crashes. Set
-         * crash_kexec_post_notifiers to be true to make sure that
-         * calling crash enlightment interface before running kdump
-         * kernel.
-         */
-        if (ms_hyperv.misc_features & HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE)
-                crash_kexec_post_notifiers = true;
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-	......
-}
+All warnings (new ones prefixed by >>):
 
+>> fs/ext4/super.c:2295:1: warning: unused function 'ctx_test_flags'
+   EXT4_SET_CTX(flags);
+   ^
+   fs/ext4/super.c:2290:20: note: expanded from macro 'EXT4_SET_CTX'
+   static inline bool ctx_test_##name(struct ext4_fs_context int flag) ^
+   <scratch space>:85:1: note: expanded from here
+   ctx_test_flags
+   ^
+>> fs/ext4/super.c:2298:1: warning: unused function 'ctx_clear_mount_flags'
+   EXT4_SET_CTX(mount_flags);
+   ^
+   fs/ext4/super.c:2285:20: note: expanded from macro 'EXT4_SET_CTX'
+   static inline void ctx_clear_##name(struct ext4_fs_context int flag) ^
+   <scratch space>:106:1: note: expanded from here
+   ctx_clear_mount_flags
+   ^
+>> fs/ext4/super.c:2298:1: warning: unused function 'ctx_test_mount_flags'
+   fs/ext4/super.c:2290:20: note: expanded from macro 'EXT4_SET_CTX'
+   static inline bool ctx_test_##name(struct ext4_fs_context int flag) ^
+   <scratch space>:109:1: note: expanded from here
+   ctx_test_mount_flags
+   ^
+   fatal error: error in backend: Nested variants found in inline asm strin=
+g: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) !=3D -1)) 0x00 ) !=3D -1)) : ($( static struct ftrace_branc=
+h_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_=
+branch"))) __if_trace =3D $( .func =3D __func__, .file =3D "arch/mips/inclu=
+de/asm/bitops.h", .line =3D 105, $); 0x00 ) !=3D -1)) : $))) ) && ( 0 ); .s=
+et push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $0, $1
+   or $0, $2
+   sc $0, $1
+   beqz $0, 1b
+   .set pop
+   '
+   PLEASE submit a bug report to https://github.com/llvm/llvm-project/issue=
+s/ and include the crash backtrace, preprocessed source, and associated run=
+ script.
+   Stack dump:
+   0. Program arguments: clang -Wp,-MMD,fs/ext4/.super.o.d -nostdinc -Iarch=
+/mips/include -I./arch/mips/include/generated -Iinclude -I./include -Iarch/=
+mips/include/uapi -I./arch/mips/include/generated/uapi -Iinclude/uapi -I./i=
+nclude/generated/uapi -include include/linux/compiler-version.h -include in=
+clude/linux/kconfig.h -include include/linux/compiler_types.h -D__KERNEL__ =
+-DVMLINUX_LOAD_ADDRESS=3D0xffffffff80100000 -DLINKER_LOAD_ADDRESS=3D0x80100=
+000 -DDATAOFFSET=3D0 -Qunused-arguments -fmacro-prefix-map=3D=3D -DKBUILD_E=
+XTRA_WARN1 -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-trigraphs -fno-st=
+rict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Dimplicit-functio=
+n-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -Wno-format-secu=
+rity -std=3Dgnu89 --target=3Dmips-linux -fintegrated-as -Werror=3Dunknown-w=
+arning-option -Werror=3Dignored-optimization-argument -mno-check-zero-divis=
+ion -mabi=3D32 -G 0 -mno-abicalls -fno-pic -pipe -msoft-float -DGAS_HAS_SET=
+_HARDFLOAT -Wa,-msoft-float -ffreestanding -EB -fno-stack-check -march=3Dmi=
+ps32 -Wa,--trap -DTOOLCHAIN_SUPPORTS_VIRT -Iarch/mips/include/asm/mach-gene=
+ric -Iarch/mips/include/asm/mach-generic -fno-asynchronous-unwind-tables -f=
+no-delete-null-pointer-checks -Wno-frame-address -Wno-address-of-packed-mem=
+ber -O2 -Wframe-larger-than=3D1024 -fno-stack-protector -Wimplicit-fallthro=
+ugh -Wno-gnu -mno-global-merge -Wno-unused-but-set-variable -Wno-unused-con=
+st-variable -fno-stack-clash-protection -pg -Wdeclaration-after-statement -=
+Wvla -Wno-pointer-sign -Wno-array-bounds -fno-strict-overflow -fno-stack-ch=
+eck -Werror=3Ddate-time -Werror=3Dincompatible-pointer-types -Wextra -Wunus=
+ed -Wno-unused-parameter -Wmissing-declarations -Wmissing-format-attribute =
+-Wmissing-prototypes -Wold-style-definition -Wmissing-include-dirs -Wunused=
+-but-set-variable -Wunused-const-variable -Wno-missing-field-initializers -=
+Wno-sign-compare -Wno-type-limits -I fs/ext4 -I ./fs/ext4 -DKBUILD_MODFILE=
+=3D"fs/ext4/ext4" -DKBUILD_BASENAME=3D"super" -DKBUILD_MODNAME=3D"ext4" -D_=
+_KBUILD_MODNAME=3Dkmod_ext4 -c -o fs/ext4/super.o fs/ext4/super.c
+   1. <eof> parser at end of file
+   2. Code generation
+   3. Running pass 'Function Pass Manager' on module 'fs/ext4/super.c'.
+   4. Running pass 'Mips Assembly Printer' on function '@ext4_read_bh_nowai=
+t'
+   #0 0x000056120809e14f Signals.cpp:0:0
+   #1 0x000056120809c02c llvm::sys::CleanupOnSignal(unsigned long) (/opt/cr=
+oss/clang-7b3d307288/bin/clang-14+0x342202c)
+   #2 0x0000561207fdb747 llvm::CrashRecoveryContext::HandleExit(int) (/opt/=
+cross/clang-7b3d307288/bin/clang-14+0x3361747)
+   #3 0x00005612080946de llvm::sys::Process::Exit(int, bool) (/opt/cross/cl=
+ang-7b3d307288/bin/clang-14+0x341a6de)
+   #4 0x0000561205d04bcb (/opt/cross/clang-7b3d307288/bin/clang-14+0x108abc=
+b)
+   #5 0x0000561207fe21fc llvm::report_fatal_error(llvm::Twine const&, bool)=
+ (/opt/cross/clang-7b3d307288/bin/clang-14+0x33681fc)
+   #6 0x0000561208cc6487 llvm::AsmPrinter::emitInlineAsm(llvm::MachineInstr=
+ const (/opt/cross/clang-7b3d307288/bin/clang-14+0x404c487)
+   #7 0x0000561208cc23e4 llvm::AsmPrinter::emitFunctionBody() (/opt/cross/c=
+lang-7b3d307288/bin/clang-14+0x40483e4)
+   #8 0x00005612067617e7 llvm::MipsAsmPrinter::runOnMachineFunction(llvm::M=
+achineFunction&) (/opt/cross/clang-7b3d307288/bin/clang-14+0x1ae77e7)
+   #9 0x0000561207405ced llvm::MachineFunctionPass::runOnFunction(llvm::Fun=
+ction&) (.part.53) MachineFunctionPass.cpp:0:0
+   #10 0x000056120783e8a7 llvm::FPPassManager::runOnFunction(llvm::Function=
+&) (/opt/cross/clang-7b3d307288/bin/clang-14+0x2bc48a7)
+   #11 0x000056120783ea21 llvm::FPPassManager::runOnModule(llvm::Module&) (=
+/opt/cross/clang-7b3d307288/bin/clang-14+0x2bc4a21)
+   #12 0x000056120783fcff llvm::legacy::PassManagerImpl::run(llvm::Module&)=
+ (/opt/cross/clang-7b3d307288/bin/clang-14+0x2bc5cff)
+   #13 0x00005612083adb7a clang::EmitBackendOutput(clang::DiagnosticsEngine=
+&, clang::HeaderSearchOptions const&, clang::CodeGenOptions const&, clang::=
+TargetOptions const&, clang::LangOptions const&, llvm::StringRef, clang::Ba=
+ckendAction, std::unique_ptr<llvm::raw_pwrite_stream, std::default_delete<l=
+lvm::raw_pwrite_stream> >) (/opt/cross/clang-7b3d307288/bin/clang-14+0x3733=
+b7a)
+   #14 0x0000561208fdde53 clang::BackendConsumer::HandleTranslationUnit(cla=
+ng::ASTContext&) (/opt/cross/clang-7b3d307288/bin/clang-14+0x4363e53)
+   #15 0x0000561209ae8769 clang::ParseAST(clang::Sema&, bool, bool) (/opt/c=
+ross/clang-7b3d307288/bin/clang-14+0x4e6e769)
+   #16 0x0000561208fdcc9f clang::CodeGenAction::ExecuteAction() (/opt/cross=
+/clang-7b3d307288/bin/clang-14+0x4362c9f)
+   #17 0x00005612089dcca1 clang::FrontendAction::Execute() (/opt/cross/clan=
+g-7b3d307288/bin/clang-14+0x3d62ca1)
+   #18 0x000056120897432a clang::CompilerInstance::ExecuteAction(clang::Fro=
+ntendAction&) (/opt/cross/clang-7b3d307288/bin/clang-14+0x3cfa32a)
+   #19 0x0000561208aa0e0b (/opt/cross/clang-7b3d307288/bin/clang-14+0x3e26e=
+0b)
+   #20 0x0000561205d05914 cc1_main(llvm::ArrayRef<char char (/opt/cross/cla=
+ng-7b3d307288/bin/clang-14+0x108b914)
+   #21 0x0000561205d02e5b ExecuteCC1Tool(llvm::SmallVectorImpl<char driver.=
+cpp:0:0
+   #22 0x000056120880f8a5 void llvm::function_ref<void ()>::callback_fn<cla=
+ng::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringR=
+ef> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::alloca=
+tor<char> const::'lambda'()>(long) Job.cpp:0:0
+   #23 0x0000561207fdb603 llvm::CrashRecoveryContext::RunSafely(llvm::funct=
+ion_ref<void ()>) (/opt/cross/clang-7b3d307288/bin/clang-14+0x3361603)
+   #24 0x000056120881019e clang::driver::CC1Command::Execute(llvm::ArrayRef=
+<llvm::Optional<llvm::StringRef> >, std::__cxx11::basic_string<char, std::c=
+har_traits<char>, std::allocator<char> const (.part.216) Job.cpp:0:0
+   #25 0x00005612087e6877 clang::driver::Compilation::ExecuteCommand(clang:=
+:driver::Command const&, clang::driver::Command const (/opt/cross/clang-7b3=
+d307288/bin/clang-14+0x3b6c877)
+   #26 0x00005612087e7257 clang::driver::Compilation::ExecuteJobs(clang::dr=
+iver::JobList const&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
+ommand >&) const (/opt/cross/clang-7b3d307288/bin/clang-14+0x3b6d257)
+   #27 0x00005612087f0bc9 clang::driver::Driver::ExecuteCompilation(clang::=
+driver::Compilation&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
+ommand >&) (/opt/cross/clang-7b3d307288/bin/clang-14+0x3b76bc9)
+   #28 0x0000561205c2d25f main (/opt/cross/clang-7b3d307288/bin/clang-14+0x=
+fb325f)
+   #29 0x00007faabc246d0a __libc_start_main (/lib/x86_64-linux-gnu/libc.so.=
+6+0x26d0a)
+   #30 0x0000561205d0297a _start (/opt/cross/clang-7b3d307288/bin/clang-14+=
+0x108897a)
+   clang-14: error: clang frontend command failed with exit code 70 (use -v=
+ to see invocation)
+   clang version 14.0.0 (git://gitmirror/llvm_project 7b3d30728816403d1fd73=
+cc5082e9fb761262bce)
+   Target: mips-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-7b3d307288/bin
+   clang-14: note: diagnostic msg:
+   Makefile arch block certs crypto drivers fs include init ipc kernel lib =
+mm net scripts security sound source usr virt
+
+
+vim +/ctx_test_flags +2295 fs/ext4/super.c
+
+  2294=09
+> 2295	EXT4_SET_CTX(flags);
+  2296	EXT4_SET_CTX(mount_opt);
+  2297	EXT4_SET_CTX(mount_opt2);
+> 2298	EXT4_SET_CTX(mount_flags);
+  2299=09
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

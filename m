@@ -2,229 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 365E24968BD
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 01:29:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAD774968C0
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 01:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbiAVA3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 19:29:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38644 "EHLO
+        id S230347AbiAVAaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 19:30:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbiAVA3o (ORCPT
+        with ESMTP id S230010AbiAVA37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 19:29:44 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D50C06173B;
-        Fri, 21 Jan 2022 16:29:43 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id v6so2529601wra.8;
-        Fri, 21 Jan 2022 16:29:43 -0800 (PST)
+        Fri, 21 Jan 2022 19:29:59 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8277C06173B;
+        Fri, 21 Jan 2022 16:29:58 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id f21so45409458eds.11;
+        Fri, 21 Jan 2022 16:29:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SHqrfd9sy/yN49JyRRsO4/8Iw6OMhpCdQTfoy31cjlc=;
-        b=JnVSoPOLUHimvz2pK2xDoNjRURHgcIUSyDfPb/ICe0DUlTovejvBMawmEcmmPt+CZT
-         Sl6AAJd+W55ST45racBlS7cE3E6EDR+WGAUuoKQ5W91LvLGXrLbU0v4VJxzOkeo7g+L6
-         Bsl3noAq0mwiyIhi90eJe3o1nYyWAcKBrov5k8eFJ9RCfOIZKjlX3sx2vhPvo7a/vQP+
-         M0lt5/gdG4QL6ClJR/IXeI485hteIsPJpvMid3EZ/KDyRfFssRG/RcThHcKhNNmekW45
-         0/fn8moc6F1uhoriGC0NvVc5ctwyRc1lZWOZo9Hz/lRuPUVI50at+kS8bThAY5Qw0WCq
-         wabg==
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mhD6j/BV1CQACD/fChlzg0PMSKEU6I+hrwON9lOSoaA=;
+        b=g50zwZ2TmnjXt74lE/EXTPRa3IITbq/SiEjWV1PgYyj5+i6Wq1FQW2/R0Jwe1K0iFN
+         zB1eCkLt4GFHtD/M3qfnj+ue8IS/rUa9VpD8a2PQlhh2DPeiFt41Gmq5HY432AIo6W8S
+         fL0B9KIdr1uguqx1eKi9XHlE+Q/jQVHHR5ey14DqXDHkx368Dr1BpjL9N9ZCQLzmMD5K
+         P2hpb7/PvIGYxdv4qAchBOFbPbd4qH51JMVQQJ9oKzjVRySskUWKdF8Mg17LqtNJHGIp
+         stGLHuYyU8/wmeIK12G2tDWuU7TCbT71+dSwb3zVEcJOgBXlUrdYv9b6ckPbLj3mDDgJ
+         O5XQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SHqrfd9sy/yN49JyRRsO4/8Iw6OMhpCdQTfoy31cjlc=;
-        b=dQkC4nHD0ncxi8GkNL5Cg81+ug4v4zhLnww8c7OGuRXmqSxUJ6MsevU20xOGHwyeR7
-         BYSfBCRnTS31zNDSzq5WNzHQQ1503B6hHlpVMB1zEJXOJyjgDTQSJeWtm3TtvP0meXwt
-         0EfWUtXk+bfSuTDL+QfSNAYBPJv4FJYOn8chlh9SGj1hTEEOrHGKV7HJM+FxzW43EuzA
-         KJzL6P8QNXKoVMzbSlEbxy0USdPj82687tnMZkypChzTQ8pvSpBwkPfDQ3grW53oP6xP
-         lX4Pw2c1fgIarXtHft08zT9YyaoUXp41jRYVM6HoJQR+M+JohIu+i5YxFoven14hsD5b
-         0tdg==
-X-Gm-Message-State: AOAM532vmPy61dagCo8yYn7J86HXVhhuVYzW1GgZ7UV+IrIRjTmnInho
-        Nmq4RDOJXvBsxMaoKD/mVeIwgyESV3kTawAIhGCwb02J1xA=
-X-Google-Smtp-Source: ABdhPJwz2IFvpQu2c5xxORdI4s+Brf5ES6SuNTKLRl4w/iv1UAU4flLCsPIjfaqPtM2HGrOagqIom/Jq3RSnp/lt1Rg=
-X-Received: by 2002:a5d:45cf:: with SMTP id b15mr2083069wrs.140.1642811381270;
- Fri, 21 Jan 2022 16:29:41 -0800 (PST)
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mhD6j/BV1CQACD/fChlzg0PMSKEU6I+hrwON9lOSoaA=;
+        b=i6Z90d7IiFqlkZKk9ujDDgYLVDF5cTdPBwZyoQ4ybKICzk7Z36nfhlcwPMlQY4Jz/g
+         4EcrqhSuGoMiODVhZ/UxEswCam1yczMzLZIHEw0DwmkLNsAKavIrgI5v7PmwHDDEjHbZ
+         nB4plZKUpsdHsV1psQaIJx+UueBkeXrO8daGBdttp5Ycgmbzr4NjOdlNd4V4iGkhP3df
+         5tXZlW8GRbiN/ZwJrSYYtuxDMpyDlsR0vrV7+n7/nxYLPr1RXQ3L9Zx2W8RgrLzkndEc
+         2EOUJoQx2vzt7epdzdRlpBVZqU87P+NCkVj9SG6YV3J+7yc2AC03IsoVAFIkxXJDEpzW
+         h9Yg==
+X-Gm-Message-State: AOAM531sZUIVaxYDxZ6ZkwwWDvc7ND+Oc+5mFjncFpLJa5+p/KqW6kRe
+        qrTENB4H4o/UyC4rbkgFt1RYG7zjbCQ=
+X-Google-Smtp-Source: ABdhPJzln0O4ug/lcLhyvm40eWjLPCGLP1BzVZ2x6EKwVhPolqK4Jw7UDqb94ZXrvHPPUc9y2zoXDQ==
+X-Received: by 2002:a05:6402:4490:: with SMTP id er16mr6153231edb.203.1642811397071;
+        Fri, 21 Jan 2022 16:29:57 -0800 (PST)
+Received: from Ansuel-xps. (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
+        by smtp.gmail.com with ESMTPSA id r15sm2426733ejz.72.2022.01.21.16.29.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jan 2022 16:29:56 -0800 (PST)
+Message-ID: <61eb5004.1c69fb81.43dc1.b0f4@mx.google.com>
+X-Google-Original-Message-ID: <YetQAqxfEctby2cl@Ansuel-xps.>
+Date:   Sat, 22 Jan 2022 01:29:54 +0100
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/2] dt-bindings: mtd: partitions: Document new
+ dynamic-partitions node
+References: <20220120202615.28076-1-ansuelsmth@gmail.com>
+ <20220120202615.28076-2-ansuelsmth@gmail.com>
+ <YeoRJlTbILNtZgoW@robh.at.kernel.org>
 MIME-Version: 1.0
-References: <20220118160451.879092022@linuxfoundation.org>
-In-Reply-To: <20220118160451.879092022@linuxfoundation.org>
-From:   Allen <allen.lkml@gmail.com>
-Date:   Fri, 21 Jan 2022 16:29:30 -0800
-Message-ID: <CAOMdWSJXT-jUFpGt5BGTyNLyYmEhFmbCoyYxgLDTnSDC3ZvpzQ@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/28] 5.15.16-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux@roeck-us.net,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        Florian Fainelli <f.fainelli@gmail.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YeoRJlTbILNtZgoW@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This is the start of the stable review cycle for the 5.15.16 release.
-> There are 28 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 20 Jan 2022 16:04:42 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.16-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Thu, Jan 20, 2022 at 07:49:26PM -0600, Rob Herring wrote:
+> On Thu, Jan 20, 2022 at 09:26:14PM +0100, Ansuel Smith wrote:
+> > Document new dynamic-partitions node used to provide an of node for
+> > partition registred at runtime by parsers. This is required for nvmem
+> > system to declare and detect nvmem-cells.
+> 
+> So you have some discoverable way to find all the partitions and the 
+> nvmem cells are at an unknown (to the DT) location, but still need to be 
+> described in DT?
 >
 
-Build and boot tested. No dmesg regressions.
+Example: smem partition layout is saved in the bootloader and static. To
+know the layout just boot the device and extract it. Aside from this the
+naming convention is ""standard"" (example the standard nvmem location
+for this is named 0:art)
 
-Tested-by: Allen Pais <apais@linux.microsoft.com>
+What needs to be described in the DT is the cell offset and the
+partition name (the location)
 
-Thanks,
-- Allen
+NVMEM doesn't support this and honestly I can't think of a simple and
+direct way to solve this. Considering partition in this case are just
+filled at runtime and they doesn't change (or at worst the partition
+offset change but NEVER the name) it seems a good way to fix this by
+describing a nvmem cells partition name and assign a of node to the
+runtime filled partition.
 
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > ---
+> >  .../mtd/partitions/dynamic-partitions.yaml    | 59 +++++++++++++++++++
+> >  1 file changed, 59 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/mtd/partitions/dynamic-partitions.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mtd/partitions/dynamic-partitions.yaml b/Documentation/devicetree/bindings/mtd/partitions/dynamic-partitions.yaml
+> > new file mode 100644
+> > index 000000000000..7528e49f2d7e
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/mtd/partitions/dynamic-partitions.yaml
+> > @@ -0,0 +1,59 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/mtd/partitions/dynamic-partitions.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Dynamic partitions
+> > +
+> > +description: |
+> > +  This binding can be used on platforms which have partitions registered at
+> > +  runtime by parsers or partition table present on the flash. Example are
+> > +  partitions declared from smem parser or cmdlinepart. This will create an
+> 
+> Some information in DT and some on the cmdline seems broken to me. Pick 
+> one or the other.
+> 
 
-> -------------
-> Pseudo-Shortlog of commits:
->
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->     Linux 5.15.16-rc1
->
-> Arnd Bergmann <arnd@arndb.de>
->     mtd: fixup CFI on ixp4xx
->
-> Takashi Iwai <tiwai@suse.de>
->     ALSA: hda/realtek: Re-order quirk entries for Lenovo
->
-> Baole Fang <fbl718@163.com>
->     ALSA: hda/realtek: Add quirk for Legion Y9000X 2020
->
-> Sameer Pujar <spujar@nvidia.com>
->     ALSA: hda/tegra: Fix Tegra194 HDA reset failure
->
-> Bart Kroon <bart@tarmack.eu>
->     ALSA: hda: ALC287: Add Lenovo IdeaPad Slim 9i 14ITL5 speaker quirk
->
-> Christian Lachner <gladiac@gmail.com>
->     ALSA: hda/realtek - Fix silent output on Gigabyte X570 Aorus Master after reboot from Windows
->
-> Kai-Heng Feng <kai.heng.feng@canonical.com>
->     ALSA: hda/realtek: Use ALC285_FIXUP_HP_GPIO_LED on another HP laptop
->
-> Arie Geiger <arsgeiger@gmail.com>
->     ALSA: hda/realtek: Add speaker fixup for some Yoga 15ITL5 devices
->
-> Wei Wang <wei.w.wang@intel.com>
->     KVM: x86: remove PMU FIXED_CTR3 from msrs_to_save_all
->
-> Dario Petrillo <dario.pk1@gmail.com>
->     perf annotate: Avoid TUI crash when navigating in the annotation of recursive functions
->
-> Johan Hovold <johan@kernel.org>
->     firmware: qemu_fw_cfg: fix kobject leak in probe error path
->
-> Johan Hovold <johan@kernel.org>
->     firmware: qemu_fw_cfg: fix NULL-pointer deref on duplicate entries
->
-> Johan Hovold <johan@kernel.org>
->     firmware: qemu_fw_cfg: fix sysfs information leak
->
-> Larry Finger <Larry.Finger@lwfinger.net>
->     rtlwifi: rtl8192cu: Fix WARNING when calling local_irq_restore() with interrupts enabled
->
-> Johan Hovold <johan@kernel.org>
->     media: uvcvideo: fix division by zero at stream start
->
-> Javier Martinez Canillas <javierm@redhat.com>
->     video: vga16fb: Only probe for EGA and VGA 16 color graphic cards
->
-> Christian Brauner <christian.brauner@ubuntu.com>
->     9p: only copy valid iattrs in 9P2000.L setattr implementation
->
-> Sibi Sankar <sibis@codeaurora.org>
->     remoteproc: qcom: pas: Add missing power-domain "mxc" for CDSP
->
-> Eric Farman <farman@linux.ibm.com>
->     KVM: s390: Clarify SIGP orders versus STOP/RESTART
->
-> Li RongQing <lirongqing@baidu.com>
->     KVM: x86: don't print when fail to read/write pv eoi memory
->
-> Sean Christopherson <seanjc@google.com>
->     KVM: x86: Register Processor Trace interrupt hook iff PT enabled in guest
->
-> Sean Christopherson <seanjc@google.com>
->     KVM: x86: Register perf callbacks after calling vendor's hardware_setup()
->
-> Sean Christopherson <seanjc@google.com>
->     perf: Protect perf_guest_cbs with RCU
->
-> Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
->     vfs: fs_context: fix up param length parsing in legacy_parse_param
->
-> Stephen Boyd <swboyd@chromium.org>
->     remoteproc: qcom: pil_info: Don't memcpy_toio more than is provided
->
-> Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->     orangefs: Fix the size of a memory allocation in orangefs_bufmap_alloc()
->
-> Mario Limonciello <mario.limonciello@amd.com>
->     drm/amd/display: explicitly set is_dsc_supported to false before use
->
-> NeilBrown <neilb@suse.de>
->     devtmpfs regression fix: reconfigure on each mount
->
->
-> -------------
->
-> Diffstat:
->
->  Makefile                                           |  4 +-
->  arch/arm/kernel/perf_callchain.c                   | 17 ++++---
->  arch/arm64/kernel/perf_callchain.c                 | 18 +++++---
->  arch/csky/kernel/perf_callchain.c                  |  6 ++-
->  arch/nds32/kernel/perf_event_cpu.c                 | 17 ++++---
->  arch/riscv/kernel/perf_callchain.c                 |  7 ++-
->  arch/s390/kvm/interrupt.c                          |  7 +++
->  arch/s390/kvm/kvm-s390.c                           |  9 +++-
->  arch/s390/kvm/kvm-s390.h                           |  1 +
->  arch/s390/kvm/sigp.c                               | 28 ++++++++++++
->  arch/x86/events/core.c                             | 17 ++++---
->  arch/x86/events/intel/core.c                       |  9 ++--
->  arch/x86/include/asm/kvm_host.h                    |  1 +
->  arch/x86/kvm/lapic.c                               | 18 +++-----
->  arch/x86/kvm/vmx/vmx.c                             |  1 +
->  arch/x86/kvm/x86.c                                 | 14 +++---
->  drivers/base/devtmpfs.c                            |  7 +++
->  drivers/firmware/qemu_fw_cfg.c                     | 20 ++++-----
->  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  |  1 +
->  drivers/media/usb/uvc/uvc_video.c                  |  4 ++
->  drivers/mtd/chips/Kconfig                          |  2 +
->  drivers/mtd/maps/Kconfig                           |  2 +-
->  .../net/wireless/realtek/rtlwifi/rtl8192cu/hw.c    |  1 +
->  drivers/remoteproc/qcom_pil_info.c                 |  2 +-
->  drivers/remoteproc/qcom_q6v5_pas.c                 |  1 +
->  drivers/video/fbdev/vga16fb.c                      | 24 ++++++++++
->  fs/9p/vfs_inode_dotl.c                             | 29 ++++++++----
->  fs/fs_context.c                                    |  2 +-
->  fs/orangefs/orangefs-bufmap.c                      |  7 ++-
->  fs/super.c                                         |  4 +-
->  include/linux/fs_context.h                         |  2 +
->  include/linux/perf_event.h                         | 13 +++++-
->  kernel/events/core.c                               | 13 ++++--
->  sound/pci/hda/hda_tegra.c                          | 43 ++++++++++++++----
->  sound/pci/hda/patch_realtek.c                      | 52 ++++++++++++++++++++--
->  tools/perf/ui/browsers/annotate.c                  | 23 ++++++----
->  36 files changed, 319 insertions(+), 107 deletions(-)
->
->
+Converting a system from cmdline to fixedpartition is problematic
+if the cmdline is dynamic. Example some system have dual partition and
+are handled by editing the cmdline partition description. In this
+cmdline tho the nvmem cell of our interest doesn't change and we can use
+this new implemenation to add support for nvmem cells.
 
+So really there are some case where nvmem won't work and it's not
+possible to provide a correct configuration for nvmem to work correctly.
+
+Is it that bad to have information in the DT about nvmem cells for a
+partition named with a particular label that won't change.
+
+> > +  of node for these dynamic partition where systems like Nvmem can get a
+> > +  reference to register nvmem-cells.
+> > +
+> > +  The partition table should be a node named "dynamic-partitions".
+> > +  Partitions are then defined as subnodes. Only the label is required
+> > +  as any other data will be taken from the parser.
+> > +
+> > +maintainers:
+> > +  - Ansuel Smith <ansuelsmth@gmail.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: dynamic-partitions
+> 
+> This is useless. This tells me nothing about the what's in the 
+> partitions.
+> 
+> > +
+> > +patternProperties:
+> > +  "@[0-9a-f]+$":
+> > +    $ref: "partition.yaml#"
+> > +
+> > +additionalProperties: true
+> > +
+> > +examples:
+> > +  - |
+> > +    partitions {
+> > +        compatible = "qcom,smem";
+> > +        #address-cells = <1>;
+> > +        #size-cells = <1>;
+> > +    };
+> > +
+> > +    dynamic-partitions {
+> > +      compatible = "dynamic-partitions";
+> > +
+> > +      art: art {
+> > +        label = "0:art";
+> > +        read-only;
+> > +        compatible = "nvmem-cells";
+> > +        #address-cells = <1>;
+> > +        #size-cells = <1>;
+> > +
+> > +        macaddr_art_0: macaddr@0 {
+> > +          reg = <0x0 0x6>;
+> > +        };
+> > +
+> > +        macaddr_art_6: macaddr@6 {
+> > +          reg = <0x6 0x6>;
+> > +        };
+> > +      };
+> > +    };
+> > -- 
+> > 2.33.1
+> > 
+> > 
 
 -- 
-       - Allen
+	Ansuel

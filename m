@@ -2,157 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40ECE496C25
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 12:31:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4630B496C2B
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 12:33:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232411AbiAVLbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 06:31:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiAVLbv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 06:31:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B961C06173B;
-        Sat, 22 Jan 2022 03:31:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4207FB81B92;
-        Sat, 22 Jan 2022 11:31:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A5D6C004E1;
-        Sat, 22 Jan 2022 11:31:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642851108;
-        bh=HtNO+2aP+hLfR7kko7wp4Sh1BYzwP5JmAlneWcplnlM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Yi7ITWAnt+8dIrwl6C4im5eAypjXA/ysWibCASfh2lF///wsibYvltLEkR2uVV++M
-         DE0PXCWSxlkgwa1sYXLX8S41VAJAw4vA2oTHtEt0BWe6ar5pz6g+vnFgsypU7ItHiF
-         4EG1xnZPFooWqParakQndHAxNLDxezSkzXX6wGFAb4S2eqhTyr1FKoIRDDddqm2tqW
-         jhyreAmxp32DozdV8XxMcWlp92WxcwCYuCX+HxWOnmgugJ+KEUnHJSaoxI/ngtLI3s
-         YHxasM/F8inDn+rd6iC82d7jpC1X23nhCJyKp5zMaqyKGm++AP8+FuMOvx1j2K8imU
-         5kDV3OVB0Iu9g==
-Date:   Sat, 22 Jan 2022 13:31:38 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Khalid Aziz <khalid.aziz@oracle.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org,
-        longpeng2@huawei.com, arnd@arndb.de, dave.hansen@linux.intel.com,
-        david@redhat.com, surenb@google.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org
-Subject: Re: [RFC PATCH 0/6] Add support for shared PTEs across processes
-Message-ID: <YevrGs3WE7ywB+lH@kernel.org>
-References: <cover.1642526745.git.khalid.aziz@oracle.com>
+        id S234416AbiAVLdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 06:33:07 -0500
+Received: from mail-mw2nam12on2051.outbound.protection.outlook.com ([40.107.244.51]:60330
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229678AbiAVLdE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 22 Jan 2022 06:33:04 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LB5r8JS5fvc3rpJv6Sz9rzQ03ya/Gs4P6OyKl6o9TtCLWZB0UOwLXfdlXF7/H8IwrzovVKJLvZn4Jp7sx4nlpxx7XKAsIgU02UQG0NDEHrtbcQv1CaNdKh3f32ZK87vJQmApgR+TjGtu7kX5MfMj2lno5t4tEy/TZi4GQ0o4qaQsrN65Vb+6obR0iqK5CVaXZJ1TbOXXIBz28q/uc8wKMJB2pYCGNpjcQAj25m9r6bL5cDkls+OGBF/p01HqxHDfLfJYqsc1L/BxrsozTSH1Io6Rlbp+xbfxYbzasXou71rUJVRBrLytl1v8qqDDMvdzQvOzSqGvDO7FKKObejJS9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xLmuF3o2KXD3Oy3S+0aQq20AB5vK7E0/S9PyXvvrWQA=;
+ b=D4E9TgKbSyyHmXMPAKo2jIWPRoYfr6TRt6tlOkU3w6UEcR7OM/xdT1S6ctGZnauphK1kc4frlLo38Yv8RgWBYei2HTShXp+dmyBieTmmtCWBxKW9+OdGjU71j+BZ8KZrgERgCAXNPxgZ6b5xtZ08Juc4IRVFXiXUHjym1rsby/uY3vDGvY4SyX4rg8f0R7zTtSAnWHTaSl9tZYaNTUWvrGZ5VH5Zz7csFGGTVD0c/99/7DaanIkVybFIIpFLzZbX1WqSZVk+su1z4uIPPVg59vYJhrhFqDQgQ4f4KhEXg5QbX3cWrRCDpwbsna1S+zqgof324ZQ2fjHkSiYkJOHMqg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xLmuF3o2KXD3Oy3S+0aQq20AB5vK7E0/S9PyXvvrWQA=;
+ b=VsEHQCrEvmK6qDuRIcUZBdarYaQjcivKWKvCyDMbLPK3obZk/ybTFVQRmlJ/DFighjcO246mc49TvKhc8Qy782D+2FO92IMw+oILjyFbKOWaeirkr5Sj9CK1n6AymKcOs2q3T9P1qGvZSHP63m5Pn5j0NzfSYM/1k1CLdkkmHO8qTxqPG3FmmPm7hCcl8OUMQNNhtu28Q+4BT/gVQgbaT1ew83gqW5EwSYpB8/v2gK3SfPpW6eVwbYQsORfym6UEq2JAQa69GD7jnMQn7pqjUjq2R1/pXj0RNFRll5TFtxejhcuhL3UupiZ6qxe8uhY/eenHaIe5MS4Dz+EE6Nn7wQ==
+Received: from DM5PR06CA0060.namprd06.prod.outlook.com (2603:10b6:3:37::22) by
+ CH2PR12MB3830.namprd12.prod.outlook.com (2603:10b6:610:2f::30) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4909.8; Sat, 22 Jan 2022 11:33:01 +0000
+Received: from DM6NAM11FT009.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:3:37:cafe::3b) by DM5PR06CA0060.outlook.office365.com
+ (2603:10b6:3:37::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7 via Frontend
+ Transport; Sat, 22 Jan 2022 11:33:01 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.235) by
+ DM6NAM11FT009.mail.protection.outlook.com (10.13.173.20) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4909.7 via Frontend Transport; Sat, 22 Jan 2022 11:33:01 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ DRHQMAIL107.nvidia.com (10.27.9.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.18; Sat, 22 Jan 2022 11:33:00 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9;
+ Sat, 22 Jan 2022 03:32:59 -0800
+Received: from kyarlagadda-linux.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.986.9 via Frontend
+ Transport; Sat, 22 Jan 2022 03:32:55 -0800
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     <u.kleine-koenig@pengutronix.de>, <andy.shevchenko@gmail.com>,
+        <christian.koenig@amd.com>, <digetx@gmail.com>,
+        <gregkh@linuxfoundation.org>, <jonathanh@nvidia.com>,
+        <ldewangan@nvidia.com>, <lenb@kernel.org>,
+        <linux-acpi@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <rafael@kernel.org>, <sumit.semwal@linaro.org>,
+        <thierry.reding@gmail.com>, <wsa@kernel.org>
+CC:     <akhilrajeev@nvidia.com>
+Subject: [PATCH v4 0/3] Enable named interrupt smbus-alert for ACPI
+Date:   Sat, 22 Jan 2022 17:02:43 +0530
+Message-ID: <1642851166-27096-1-git-send-email-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1642526745.git.khalid.aziz@oracle.com>
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6d390b81-0054-47ab-f264-08d9dd9af2aa
+X-MS-TrafficTypeDiagnostic: CH2PR12MB3830:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR12MB3830DAAA49F6CABC04FB916DC05C9@CH2PR12MB3830.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: O92PQq7mPidZ2ZWu6nSVWOUjDBDWhWSmJBNhdkmKGMClb9VOsZMo3Erp27iZXZKhn4C4gS2PujNyO8Xxrji8pvYjqzGdhGH9w+2luZ4C+z/E7pICyBiSt/NQHE8PqFsKrQDi3QRs/YPFRG4+VT4mcSTpGH4egm+A3Q5keykVuIuZf3KzDcv/y5WJU+/127+AsSKuCeMjuIs/n3Sfk/902U61I5QNupqFT5e+TC9zmLwo9+n97pm0yZwkrH0tMkaxohvEzBIJpmwyfNPE3PdnO6piued8EBo137eHYpqrGv14A1oijn6j5DLXc9lELdLTXR/U0baBe9x1JIF30AnI32OnxEZObaJFSHJ/+H/j7L4oL6kzg0ojZI2E92GwJ0vQeag2LYjEGmgf+7itnPQR6F33U2FJIdXQ/4Nfyryz3Av+3hsTH2X2J2JGIzdUJTqy9JXL0EoXB3O5yrZQIr7/TD7G2GoELo70/gQ+UJ8otC7G7Nu+L01VNd8HUEdYAhUoWbkasGNE7VB9pkaqPEugzEIo335wwX68UheUn3q1gLR8ki9JAcZSoLgy73fbn5dvwTCFBLd3/2OvtsOoqyirwFV/+wWq05+h1wTRyA5rmdOggB753Y/9h24BumWfiDw+yJHnGerSo8GG8psiGbKmFuBUTmrCXzkAZmxbdckOEh/T2I4TjY/abis0BFDz8KGGCY/lQCGY/xvXwPIFwBOqU4Gh7FXE4wRFWG+3Qx3pvJrYCT9U7RelmGCnNzFSyrNqe2zqXA4mb/eKVoacYqB5q0rO1JIKkgVhAZWu3ro8i/l9awR8SJJEB/y6BldL4hoFsPewxg01F6tzCunghn/EoB+x6QB+9gVWxRLINpY9IVg=
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(36840700001)(40470700004)(46966006)(8936002)(7416002)(40460700003)(316002)(5660300002)(86362001)(336012)(186003)(8676002)(82310400004)(83380400001)(47076005)(6666004)(7696005)(426003)(81166007)(508600001)(36860700001)(2906002)(15650500001)(356005)(2616005)(107886003)(110136005)(921005)(4326008)(70206006)(70586007)(36756003)(26005)(83996005)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2022 11:33:01.4221
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d390b81-0054-47ab-f264-08d9dd9af2aa
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT009.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB3830
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(added linux-api)
+I2C - SMBus core drivers use named interrupts to support smbus_alert.
+As named interrupts are not available for ACPI based systems, it was
+required to change the i2c bus controller driver if to use smbus alert.
+These patches provide option for named interrupts in ACPI and  make the
+implementation similar to DT. This will enable use of interrupt named
+'smbus-alert' in ACPI as well which will be taken during i2c adapter
+register.
 
-On Tue, Jan 18, 2022 at 02:19:12PM -0700, Khalid Aziz wrote:
-> Page tables in kernel consume some of the memory and as long as
-> number of mappings being maintained is small enough, this space
-> consumed by page tables is not objectionable. When very few memory
-> pages are shared between processes, the number of page table entries
-> (PTEs) to maintain is mostly constrained by the number of pages of
-> memory on the system. As the number of shared pages and the number
-> of times pages are shared goes up, amount of memory consumed by page
-> tables starts to become significant.
-> 
-> Some of the field deployments commonly see memory pages shared
-> across 1000s of processes. On x86_64, each page requires a PTE that
-> is only 8 bytes long which is very small compared to the 4K page
-> size. When 2000 processes map the same page in their address space,
-> each one of them requires 8 bytes for its PTE and together that adds
-> up to 8K of memory just to hold the PTEs for one 4K page. On a
-> database server with 300GB SGA, a system carsh was seen with
-> out-of-memory condition when 1500+ clients tried to share this SGA
-> even though the system had 512GB of memory. On this server, in the
-> worst case scenario of all 1500 processes mapping every page from
-> SGA would have required 878GB+ for just the PTEs. If these PTEs
-> could be shared, amount of memory saved is very significant.
-> 
-> This is a proposal to implement a mechanism in kernel to allow
-> userspace processes to opt into sharing PTEs. The proposal is to add
-> a new system call - mshare(), which can be used by a process to
-> create a region (we will call it mshare'd region) which can be used
-> by other processes to map same pages using shared PTEs. Other
-> process(es), assuming they have the right permissions, can then make
-> the mashare() system call to map the shared pages into their address
-> space using the shared PTEs.  When a process is done using this
-> mshare'd region, it makes a mshare_unlink() system call to end its
-> access. When the last process accessing mshare'd region calls
-> mshare_unlink(), the mshare'd region is torn down and memory used by
-> it is freed.
-> 
-> 
-> API Proposal
-> ============
-> 
-> The mshare API consists of two system calls - mshare() and mshare_unlink()
-> 
-> --
-> int mshare(char *name, void *addr, size_t length, int oflags, mode_t mode)
-> 
-> mshare() creates and opens a new, or opens an existing mshare'd
-> region that will be shared at PTE level. "name" refers to shared object
-> name that exists under /sys/fs/mshare. "addr" is the starting address
-> of this shared memory area and length is the size of this area.
-> oflags can be one of:
-> 
-> - O_RDONLY opens shared memory area for read only access by everyone
-> - O_RDWR opens shared memory area for read and write access
-> - O_CREAT creates the named shared memory area if it does not exist
-> - O_EXCL If O_CREAT was also specified, and a shared memory area
->   exists with that name, return an error.
-> 
-> mode represents the creation mode for the shared object under
-> /sys/fs/mshare.
-> 
-> mshare() returns an error code if it fails, otherwise it returns 0.
+v3->v4:
+  * Removed device_irq_get_byname()
+  * Updates in comments and document.
+v2->v3:
+  * Grammar/spelling corrections.
+  * Added description in function comments.
+  * Removed 'unlikely' from NULL check on 'name'
+v1->v2:
+  * Added firmware guide documentation for ACPI named interrupts
+  * Updates in function description comments
 
-Did you consider returning a file descriptor from mshare() system call?
-Then there would be no need in mshare_unlink() as close(fd) would work.
- 
-> PTEs are shared at pgdir level and hence it imposes following
-> requirements on the address and size given to the mshare():
-> 
-> - Starting address must be aligned to pgdir size (512GB on x86_64)
-> - Size must be a multiple of pgdir size
-> - Any mappings created in this address range at any time become
->   shared automatically
-> - Shared address range can have unmapped addresses in it. Any access
->   to unmapped address will result in SIGBUS
-> 
-> Mappings within this address range behave as if they were shared
-> between threads, so a write to a MAP_PRIVATE mapping will create a
-> page which is shared between all the sharers. The first process that
-> declares an address range mshare'd can continue to map objects in
-> the shared area. All other processes that want mshare'd access to
-> this memory area can do so by calling mshare(). After this call, the
-> address range given by mshare becomes a shared range in its address
-> space. Anonymous mappings will be shared and not COWed.
-> 
-> A file under /sys/fs/mshare can be opened and read from. A read from
-> this file returns two long values - (1) starting address, and (2)
-> size of the mshare'd region.
+Akhil R (3):
+  device property: Add fwnode_irq_get_byname
+  docs: firmware-guide: ACPI: Add named interrupt doc
+  i2c: smbus: Use device_*() functions instead of of_*()
 
-Maybe read should return a structure containing some data identifier and
-the data itself, so that it could be extended in the future.
- 
-> --
-> int mshare_unlink(char *name)
-> 
-> A shared address range created by mshare() can be destroyed using
-> mshare_unlink() which removes the  shared named object. Once all
-> processes have unmapped the shared object, the shared address range
-> references are de-allocated and destroyed.
-> 
-> mshare_unlink() returns 0 on success or -1 on error.
+ Documentation/firmware-guide/acpi/enumeration.rst | 39 +++++++++++++++++++++++
+ drivers/base/property.c                           | 29 +++++++++++++++++
+ drivers/i2c/i2c-core-base.c                       |  2 +-
+ drivers/i2c/i2c-core-smbus.c                      | 10 +++---
+ drivers/i2c/i2c-smbus.c                           |  3 +-
+ include/linux/i2c-smbus.h                         |  6 ++--
+ include/linux/property.h                          |  1 +
+ 7 files changed, 80 insertions(+), 10 deletions(-)
 
 -- 
-Sincerely yours,
-Mike.
+2.7.4
+

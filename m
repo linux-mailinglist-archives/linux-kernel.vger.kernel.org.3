@@ -2,113 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B05496AA2
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 08:31:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D1B496AA4
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 08:32:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233530AbiAVHb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 02:31:28 -0500
-Received: from mga04.intel.com ([192.55.52.120]:17637 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230174AbiAVHb1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 02:31:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642836687; x=1674372687;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aDISvBZXMUfO0SORADaUXKCHNtIiOsJ9nERw1/1sykQ=;
-  b=aC9jW2oxm8kXl2ZFMzg1Bs1IE3JlEeW2Q5+cMq+X2A3es8UqU7smiYSa
-   3+KZVW+JMEbYMgr639iiRMrOd9qERCtKTQQGHfy6tEahLqssI14xOAq/v
-   GGgRkJNDv4KDgCzre3u0s7V7fQG6SA+uMI8VijQbYhO+6aGxJwEiVexWF
-   xCPiXT9NveqPCpWlf1thjNaJd6Lx9KCdWs18sdfafAJlsjALfY3SAtq9j
-   c6XNSRdHCpvK0oG2c0yxgX5G6rHpww24j5rJSQqDOwCm1zy/ASNt+1H2N
-   DrQcv0df3wfKXRczZjGUeVtoPLAjQatUKo/px6Fi0z7R0AeChng8gbrc7
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="244622083"
-X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
-   d="scan'208";a="244622083"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 23:31:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
-   d="scan'208";a="562137549"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 21 Jan 2022 23:31:25 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nBArs-000GAQ-M3; Sat, 22 Jan 2022 07:31:24 +0000
-Date:   Sat, 22 Jan 2022 15:31:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Isaku Yamahata <isaku.yamahata@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Chenyi Qiang <chenyi.qiang@intel.com>
-Subject: [intel-tdx:kvm-upstream 24/135] arch/x86/kernel/cpu/tsx.c:186:5:
- warning: no previous prototype for function 'tsx_ctrl_clear'
-Message-ID: <202201221535.WyckJlw0-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S233558AbiAVHc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 02:32:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230174AbiAVHc2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 22 Jan 2022 02:32:28 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741F8C06173B;
+        Fri, 21 Jan 2022 23:32:27 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id o1-20020a1c4d01000000b0034d95625e1fso16228081wmh.4;
+        Fri, 21 Jan 2022 23:32:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=eLJ1e0t7pNb7/jsmEfgWimt9GUNNFZcrb7wADH/t7SE=;
+        b=bl2Q4lLV4EuYLIeOTG8HyAaoPmk6wvVq5hZGZJQf8OGbqPct7X2b2Afb2Nm9M/Inkt
+         zqwcLuz1yuTqFCJ0bQDM1b+9JQ+2Zw1bh4Uy/K1G9Vtn3Y/T9nzSxAGJZ3LdBq+DWBs6
+         G60lBnB/sVJxvHNNbalhh0uOOwSKqgXn4ENyFEO4WGnkuVBmOuxH51nTtB5ewzUmJaW5
+         qtORYOG4sJqoNcnFkLE41glfyilh2b0fDmy1cGx3S0wJpyVll1sO7nm44XAHmNl2r9f8
+         Tsgn9CI2p3toUmRlCWamjTPL/e+ltWjDI4B0RhIycZ8AnfIM6lrUMDiIciWjKt+nslgY
+         S7/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=eLJ1e0t7pNb7/jsmEfgWimt9GUNNFZcrb7wADH/t7SE=;
+        b=ud0p881S7K6gCZlMrrm3vxkR8tqagtcIuCBoMQBfDAnI0y2Zyk0c/xtnZu0/N3cPOv
+         E42ox+iMpdNScsG09l1gWaGDpQnaydPS2eoSUSFROvhZGcJKswDmXt19nlenAdJqh9O6
+         0erpTE6/hgOSy1FjNYmAwpxgyXWwBh1MXIFdC3sxo1OwzmnMA5jfhg3Q2a8nrgDtS5QO
+         hnTBaW0sKOpQLG/1l/HgSz8CZPNJtkMHIJ3mdK9ulWUP/uJ43Vbl5+RdPtzzHP8qb+rB
+         JfDkSHHjV2Owj0dHF+TqFZgSurce6U+7a/g9WNadwputGEwg6itDYDP0Bw5X3O/vMtsy
+         iIoA==
+X-Gm-Message-State: AOAM530BDhi7exNiQAHjHM3qP5mP9oeUHcKd6MPhVphd7eW4mlWQh+3Z
+        DUYWsZFbK9jRhahpK+UEYAdbQFl902TpG2F5
+X-Google-Smtp-Source: ABdhPJxETDu2LPO+h9VYZACT8m+jzuSr6/A2dMQSNAwgOT7t2iW47JBiA/7I6Nrnq495CccE0/Vn9Q==
+X-Received: by 2002:a05:600c:3caa:: with SMTP id bg42mr1667733wmb.193.1642836745883;
+        Fri, 21 Jan 2022 23:32:25 -0800 (PST)
+Received: from localhost.localdomain ([87.200.95.144])
+        by smtp.gmail.com with ESMTPSA id i8sm8970485wmq.23.2022.01.21.23.32.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jan 2022 23:32:25 -0800 (PST)
+From:   Christian Hewitt <christianshewitt@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Christian Hewitt <christianshewitt@gmail.com>,
+        Furkan Kardame <furkan@fkardame.com>
+Subject: [PATCH 0/3] arm64: dts: meson: add BL32 reserved region to Beelink g12b devices
+Date:   Sat, 22 Jan 2022 07:32:18 +0000
+Message-Id: <20220122073221.2398-1-christianshewitt@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git kvm-upstream
-head:   cf0e0f3ada8796602d986a2b3b5c91bb2d6126e3
-commit: b4ba4adc54d3790157953208dc4deecc7d24005c [24/135] x86/cpu/tsx: Add helper functions to save/restore IA32_TSX_CTRL MSR
-config: i386-randconfig-a001-20220117 (https://download.01.org/0day-ci/archive/20220122/202201221535.WyckJlw0-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/b4ba4adc54d3790157953208dc4deecc7d24005c
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream
-        git checkout b4ba4adc54d3790157953208dc4deecc7d24005c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/cpu/
+This resolves a long-running issue where Beelink GT-King/Pro and
+GS-King-X wedge on boot or shortly after when booting from vendor
+u-boot. In some distros the issue is often reported as triggered
+by large file transfers to/from USB or SD cards. Reserving the
+BL32 memory region prevents the issue.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Christian Hewitt (3):
+  arm64: dts: meson: add BL32 reserved-memory region to GT-King
+  arm64: dts: meson: add BL32 reserved-memory region to GT-King Pro
+  arm64: dts: meson: add BL32 reserved-memory region to GS-King-X
 
-All warnings (new ones prefixed by >>):
+ arch/arm64/boot/dts/amlogic/meson-g12b-gsking-x.dts   | 8 ++++++++
+ arch/arm64/boot/dts/amlogic/meson-g12b-gtking-pro.dts | 8 ++++++++
+ arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dts     | 8 ++++++++
+ 3 files changed, 24 insertions(+)
 
->> arch/x86/kernel/cpu/tsx.c:186:5: warning: no previous prototype for function 'tsx_ctrl_clear' [-Wmissing-prototypes]
-   u64 tsx_ctrl_clear(void)
-       ^
-   arch/x86/kernel/cpu/tsx.c:186:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   u64 tsx_ctrl_clear(void)
-   ^
-   static 
->> arch/x86/kernel/cpu/tsx.c:199:6: warning: no previous prototype for function 'tsx_ctrl_restore' [-Wmissing-prototypes]
-   void tsx_ctrl_restore(u64 tsx_ctrl)
-        ^
-   arch/x86/kernel/cpu/tsx.c:199:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void tsx_ctrl_restore(u64 tsx_ctrl)
-   ^
-   static 
-   2 warnings generated.
+-- 
+2.17.1
 
-
-vim +/tsx_ctrl_clear +186 arch/x86/kernel/cpu/tsx.c
-
-   184	
-   185	/* Clear the MSR_TSX_CTRL and return the old value if supported */
- > 186	u64 tsx_ctrl_clear(void)
-   187	{
-   188		u64 tsx_ctrl = 0;
-   189	
-   190		if (ia32_tsx_ctrl_supported) {
-   191			rdmsrl(MSR_IA32_TSX_CTRL, tsx_ctrl);
-   192			if (tsx_ctrl & MSR_TSX_CTRL_MASK)
-   193				wrmsrl(MSR_IA32_TSX_CTRL, tsx_ctrl & ~MSR_TSX_CTRL_MASK);
-   194		}
-   195		return tsx_ctrl;
-   196	}
-   197	EXPORT_SYMBOL_GPL(tsx_ctrl_clear);
-   198	
- > 199	void tsx_ctrl_restore(u64 tsx_ctrl)
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

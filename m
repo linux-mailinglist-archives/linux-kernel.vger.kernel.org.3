@@ -2,176 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B66F496B15
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 09:43:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E159496B18
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 09:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233903AbiAVIna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 03:43:30 -0500
-Received: from mga07.intel.com ([134.134.136.100]:8135 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233568AbiAVIn3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 03:43:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642841009; x=1674377009;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ha1x4IBwH8NNgU5EYpJkbx23jYd+R3OMmHVKQetOyQE=;
-  b=MXnxgK+lmmfWO4XoBMc248IgaV35BZubUbz88GihUbp9eCCOiR8qx1uR
-   aEPPHixnP9Uhw18YHx4W6H+UKXF0BNFUgqp9mUluHNhobpD4OcDbab/Rw
-   DY8xIDFGufcluY9XkISIaKNV/urCi/5znxqOD8pv+KcAreRtKHaBebz1H
-   v3XFVHhbWYhehThtGn0UhQ99wFssZXTnupATuEoKC1Mq/0MDBdgK0kBwC
-   JFaektflChMAbY3HRD01xkkKacgGnKDi2JGN8/J1ld9L5KbFYyGlE7YjW
-   EyxYlAaE+ul2U49aXosTYOWPhv1LqrmeDx2HMdLeklHpjJdu98xKYe9kQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="309132749"
-X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
-   d="scan'208";a="309132749"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2022 00:43:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
-   d="scan'208";a="616759985"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Jan 2022 00:43:27 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nBBza-000GDl-St; Sat, 22 Jan 2022 08:43:26 +0000
-Date:   Sat, 22 Jan 2022 16:42:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander K <ak@tempesta-tech.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Chuck Lever <chuck.lever@oracle.com>
-Subject: [cel:topic-rpc-with-tls 9991/9999]
- arch/x86/crypto/sha1_ssse3_glue.c:105:6: error: implicit declaration of
- function 'boot_cpu_has'
-Message-ID: <202201221614.YmhmBHxe-lkp@intel.com>
+        id S233910AbiAVIro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 03:47:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33414 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229935AbiAVIrn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 22 Jan 2022 03:47:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642841262;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iGN4qqFYiv0lpiiUFsTnq5KQGW53nV75SIlvAOABdv8=;
+        b=dT7WTWlZK1GGj9F9X5zol6Qw20xWJ3QxTRFhTxySRW1uRMv9SNreWEuzwk6n058GIzO9NX
+        HOPRV1MWRWBoPoWPeY+8ageSEwtYBpde8j2vsIGJvOUKercEMNDIffc+C+f0Xa8R9WzzOE
+        EwpahXBIWQd5nIew/ZupCjsw4qpTeFI=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-197-bgtfsf4BMAeZNq3c0NkjAA-1; Sat, 22 Jan 2022 03:47:41 -0500
+X-MC-Unique: bgtfsf4BMAeZNq3c0NkjAA-1
+Received: by mail-wr1-f72.google.com with SMTP id g6-20020adfbc86000000b001a2d62be244so844044wrh.23
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 00:47:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=iGN4qqFYiv0lpiiUFsTnq5KQGW53nV75SIlvAOABdv8=;
+        b=vhOcWy7T4MQLXy8knjJJve0/UNRqFYZ90+ELKxyK9M6aKamMgL93q6zxYPUbwD/kZf
+         NUL2ZHuz9wP65nhKZs+j0XFZoZtnj0iDvUS6CEzIxvwbKqdTBnLP1jj7VlQTXN+07FdX
+         gCIzfOuXLaripvg4QgL4+uFNjfb24ULtTbzaCjW1RjP9wjsOs5Ta09711n9uwcdPE2Gg
+         QFGsZNrmVuUv2NAh2VZzVyy5Ujydtocq1y3TBSndRy8XvH1yQLl+xMZKeTMtFfMcSJUt
+         RPtu4LzdW9VC73CueNmuh4aMUCKXi6esshw02Pz3TubchRHviRnSiDz90B2GJOFMhak/
+         ovlw==
+X-Gm-Message-State: AOAM531lxSLtw3IWBmVBE1URy9DggDraiKI1zAJhNelpFO7aM/iPhvSv
+        1D6IlcxDjJKEDayvmYHcpcDUe3gOWSshQvPwThZIdmJaV6fRHci4l2jr2ERh8A8HEIxwAIZcGtg
+        3Xb3tCIi5s0t98inZTFE63Rss
+X-Received: by 2002:adf:9f14:: with SMTP id l20mr6793366wrf.65.1642841259930;
+        Sat, 22 Jan 2022 00:47:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw7SV8+A5JIpyNSQkYvEz5OrginBETLq8ApjSAS4DgxW3t8BvqQP+dgvekHt5uF/fSwWMErbA==
+X-Received: by 2002:adf:9f14:: with SMTP id l20mr6793347wrf.65.1642841259709;
+        Sat, 22 Jan 2022 00:47:39 -0800 (PST)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id f8sm7752202wmg.44.2022.01.22.00.47.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Jan 2022 00:47:39 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lai Jiangshan <laijs@linux.alibaba.com>
+Subject: Re: [PATCH] KVM: VMX: Zero host's SYSENTER_ESP iff SYSENTER is NOT
+ used
+In-Reply-To: <20220122015211.1468758-1-seanjc@google.com>
+References: <20220122015211.1468758-1-seanjc@google.com>
+Date:   Sat, 22 Jan 2022 09:47:38 +0100
+Message-ID: <8735lgjgwl.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander,
+Sean Christopherson <seanjc@google.com> writes:
 
-First bad commit (maybe != root cause):
+> Zero vmcs.HOST_IA32_SYSENTER_ESP when initializing *constant* host state
+> if and only if SYSENTER cannot be used, i.e. the kernel is a 64-bit
+> kernel and is not emulating 32-bit syscalls.  As the name suggests,
+> vmx_set_constant_host_state() is intended for state that is *constant*.
+> When SYSENTER is used, SYSENTER_ESP isn't constant because stacks are
+> per-CPU, and the VMCS must be updated whenever the vCPU is migrated to a
+> new CPU.  The logic in vmx_vcpu_load_vmcs() doesn't differentiate between
+> "never loaded" and "loaded on a different CPU", i.e. setting SYSENTER_ESP
+> on VMCS load also handles setting correct host state when the VMCS is
+> first loaded.
+>
+> Because a VMCS must be loaded before it is initialized during vCPU RESET,
+> zeroing the field in vmx_set_constant_host_state() obliterates the value
+> that was written when the VMCS was loaded.  If the vCPU is run before it
+> is migrated, the subsequent VM-Exit will zero out MSR_IA32_SYSENTER_ESP,
+> leading to a #DF on the next 32-bit syscall.
+>
+>   double fault: 0000 [#1] SMP
+>   CPU: 0 PID: 990 Comm: stable Not tainted 5.16.0+ #97
+>   Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
+>   EIP: entry_SYSENTER_32+0x0/0xe7
+>   Code: <9c> 50 eb 17 0f 20 d8 a9 00 10 00 00 74 0d 25 ff ef ff ff 0f 22 d8
+>   EAX: 000000a2 EBX: a8d1300c ECX: a8d13014 EDX: 00000000
+>   ESI: a8f87000 EDI: a8d13014 EBP: a8d12fc0 ESP: 00000000
+>   DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 0068 EFLAGS: 00210093
+>   CR0: 80050033 CR2: fffffffc CR3: 02c3b000 CR4: 00152e90
+>
+> Fixes: 6ab8a4053f71 ("KVM: VMX: Avoid to rdmsrl(MSR_IA32_SYSENTER_ESP)")
+> Cc: Lai Jiangshan <laijs@linux.alibaba.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/vmx/vmx.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index a02a28ce7cc3..ce2aae12fcc5 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -4094,10 +4094,13 @@ void vmx_set_constant_host_state(struct vcpu_vmx *vmx)
+>  	vmcs_write32(HOST_IA32_SYSENTER_CS, low32);
+>  
+>  	/*
+> -	 * If 32-bit syscall is enabled, vmx_vcpu_load_vcms rewrites
+> -	 * HOST_IA32_SYSENTER_ESP.
+> +	 * SYSENTER is used only for (emulating) 32-bit kernels, zero out
+> +	 * SYSENTER.ESP if it is NOT used.  When SYSENTER is used, the per-CPU
+> +	 * stack is set when the VMCS is loaded (and may already be set!).
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux topic-rpc-with-tls
-head:   a72d5318846d67a7f3f5f2bcb4c0c09c4f8907d1
-commit: a0a99a10f4f0e3e1e35e566687137669da78abcd [9991/9999] Port of Tempesta TLS handshakes to the Linux 5.10.68
-config: um-allyesconfig (https://download.01.org/0day-ci/archive/20220122/202201221614.YmhmBHxe-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=a0a99a10f4f0e3e1e35e566687137669da78abcd
-        git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-        git fetch --no-tags cel topic-rpc-with-tls
-        git checkout a0a99a10f4f0e3e1e35e566687137669da78abcd
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=um SHELL=/bin/bash
+For an unprepared reader, I'd suggest adding something like "This pairs
+with how HOST_IA32_SYSENTER_ESP is written in vmx_vcpu_load_vmcs()".
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+>  	 */
+> -	vmcs_writel(HOST_IA32_SYSENTER_ESP, 0);
+> +	if (!IS_ENABLED(CONFIG_IA32_EMULATION) && !IS_ENABLED(CONFIG_X86_32))
 
-All errors (new ones prefixed by >>):
+Isn't it the same as "!IS_ENABLED(CONFIG_COMPAT_32)"? (same goes to the
+check in vmx_vcpu_load_vmcs())
 
-   cc1: warning: arch/um/include/uapi: No such file or directory [-Wmissing-include-dirs]
-   arch/x86/crypto/sha1_ssse3_glue.c: In function 'register_sha1_ssse3':
->> arch/x86/crypto/sha1_ssse3_glue.c:105:6: error: implicit declaration of function 'boot_cpu_has' [-Werror=implicit-function-declaration]
-     105 |  if (boot_cpu_has(X86_FEATURE_SSSE3))
-         |      ^~~~~~~~~~~~
-   arch/x86/crypto/sha1_ssse3_glue.c: In function 'avx_usable':
->> arch/x86/crypto/sha1_ssse3_glue.c:154:25: error: 'XFEATURE_MASK_SSE' undeclared (first use in this function)
-     154 |  if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM, NULL)) {
-         |                         ^~~~~~~~~~~~~~~~~
-   arch/x86/crypto/sha1_ssse3_glue.c:154:25: note: each undeclared identifier is reported only once for each function it appears in
->> arch/x86/crypto/sha1_ssse3_glue.c:154:45: error: 'XFEATURE_MASK_YMM' undeclared (first use in this function)
-     154 |  if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM, NULL)) {
-         |                                             ^~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+> +		vmcs_writel(HOST_IA32_SYSENTER_ESP, 0);
+> +
+>  	rdmsrl(MSR_IA32_SYSENTER_EIP, tmpl);
+>  	vmcs_writel(HOST_IA32_SYSENTER_EIP, tmpl);   /* 22.2.3 */
+>  
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MFD_CORE
-   Depends on HAS_IOMEM
-   Selected by
-   - MFD_HI6421_SPMI && STAGING && OF && SPMI
-   WARNING: unmet direct dependencies detected for CRYPTO_SHA1_SSSE3
-   Depends on CRYPTO && X86 && 64BIT
-   Selected by
-   - TLS_HANDSHAKE && NET && TLS
+Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 
+-- 
+Vitaly
 
-vim +/boot_cpu_has +105 arch/x86/crypto/sha1_ssse3_glue.c
-
-66be895158886a Mathias Krause  2011-08-04  102  
-85c66ecd6f2144 tim             2015-09-16  103  static int register_sha1_ssse3(void)
-85c66ecd6f2144 tim             2015-09-16  104  {
-85c66ecd6f2144 tim             2015-09-16 @105  	if (boot_cpu_has(X86_FEATURE_SSSE3))
-85c66ecd6f2144 tim             2015-09-16  106  		return crypto_register_shash(&sha1_ssse3_alg);
-85c66ecd6f2144 tim             2015-09-16  107  	return 0;
-85c66ecd6f2144 tim             2015-09-16  108  }
-85c66ecd6f2144 tim             2015-09-16  109  
-85c66ecd6f2144 tim             2015-09-16  110  static void unregister_sha1_ssse3(void)
-85c66ecd6f2144 tim             2015-09-16  111  {
-85c66ecd6f2144 tim             2015-09-16  112  	if (boot_cpu_has(X86_FEATURE_SSSE3))
-85c66ecd6f2144 tim             2015-09-16  113  		crypto_unregister_shash(&sha1_ssse3_alg);
-85c66ecd6f2144 tim             2015-09-16  114  }
-85c66ecd6f2144 tim             2015-09-16  115  
-41419a28901083 Kees Cook       2020-01-14  116  asmlinkage void sha1_transform_avx(struct sha1_state *state,
-41419a28901083 Kees Cook       2020-01-14  117  				   const u8 *data, int blocks);
-85c66ecd6f2144 tim             2015-09-16  118  
-85c66ecd6f2144 tim             2015-09-16  119  static int sha1_avx_update(struct shash_desc *desc, const u8 *data,
-85c66ecd6f2144 tim             2015-09-16  120  			     unsigned int len)
-85c66ecd6f2144 tim             2015-09-16  121  {
-41419a28901083 Kees Cook       2020-01-14  122  	return sha1_update(desc, data, len, sha1_transform_avx);
-85c66ecd6f2144 tim             2015-09-16  123  }
-85c66ecd6f2144 tim             2015-09-16  124  
-85c66ecd6f2144 tim             2015-09-16  125  static int sha1_avx_finup(struct shash_desc *desc, const u8 *data,
-85c66ecd6f2144 tim             2015-09-16  126  			      unsigned int len, u8 *out)
-85c66ecd6f2144 tim             2015-09-16  127  {
-41419a28901083 Kees Cook       2020-01-14  128  	return sha1_finup(desc, data, len, out, sha1_transform_avx);
-85c66ecd6f2144 tim             2015-09-16  129  }
-85c66ecd6f2144 tim             2015-09-16  130  
-85c66ecd6f2144 tim             2015-09-16  131  static int sha1_avx_final(struct shash_desc *desc, u8 *out)
-85c66ecd6f2144 tim             2015-09-16  132  {
-85c66ecd6f2144 tim             2015-09-16  133  	return sha1_avx_finup(desc, NULL, 0, out);
-85c66ecd6f2144 tim             2015-09-16  134  }
-85c66ecd6f2144 tim             2015-09-16  135  
-85c66ecd6f2144 tim             2015-09-16  136  static struct shash_alg sha1_avx_alg = {
-85c66ecd6f2144 tim             2015-09-16  137  	.digestsize	=	SHA1_DIGEST_SIZE,
-85c66ecd6f2144 tim             2015-09-16  138  	.init		=	sha1_base_init,
-85c66ecd6f2144 tim             2015-09-16  139  	.update		=	sha1_avx_update,
-85c66ecd6f2144 tim             2015-09-16  140  	.final		=	sha1_avx_final,
-85c66ecd6f2144 tim             2015-09-16  141  	.finup		=	sha1_avx_finup,
-85c66ecd6f2144 tim             2015-09-16  142  	.descsize	=	sizeof(struct sha1_state),
-85c66ecd6f2144 tim             2015-09-16  143  	.base		=	{
-85c66ecd6f2144 tim             2015-09-16  144  		.cra_name	=	"sha1",
-85c66ecd6f2144 tim             2015-09-16  145  		.cra_driver_name =	"sha1-avx",
-85c66ecd6f2144 tim             2015-09-16  146  		.cra_priority	=	160,
-85c66ecd6f2144 tim             2015-09-16  147  		.cra_blocksize	=	SHA1_BLOCK_SIZE,
-85c66ecd6f2144 tim             2015-09-16  148  		.cra_module	=	THIS_MODULE,
-85c66ecd6f2144 tim             2015-09-16  149  	}
-85c66ecd6f2144 tim             2015-09-16  150  };
-85c66ecd6f2144 tim             2015-09-16  151  
-85c66ecd6f2144 tim             2015-09-16  152  static bool avx_usable(void)
-66be895158886a Mathias Krause  2011-08-04  153  {
-d91cab78133d33 Dave Hansen     2015-09-02 @154  	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM, NULL)) {
-da154e82af4d0c Borislav Petkov 2016-04-04  155  		if (boot_cpu_has(X86_FEATURE_AVX))
-66be895158886a Mathias Krause  2011-08-04  156  			pr_info("AVX detected but unusable.\n");
-66be895158886a Mathias Krause  2011-08-04  157  		return false;
-66be895158886a Mathias Krause  2011-08-04  158  	}
-66be895158886a Mathias Krause  2011-08-04  159  
-66be895158886a Mathias Krause  2011-08-04  160  	return true;
-66be895158886a Mathias Krause  2011-08-04  161  }
-6ca5afb8c26991 Mathias Krause  2014-03-24  162  
-
-:::::: The code at line 105 was first introduced by commit
-:::::: 85c66ecd6f2144c075044292359e179b20af1f2d crypto: x86/sha - Restructure x86 sha1 glue code to expose all the available sha1 transforms
-
-:::::: TO: tim <tim.c.chen@linux.intel.com>
-:::::: CC: Herbert Xu <herbert@gondor.apana.org.au>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

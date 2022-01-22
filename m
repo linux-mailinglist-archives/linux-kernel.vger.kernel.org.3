@@ -2,224 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99BE8496A00
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 05:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E68496A02
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 05:22:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232564AbiAVEUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 23:20:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
+        id S232640AbiAVEW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 23:22:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiAVEUn (ORCPT
+        with ESMTP id S232592AbiAVEW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 23:20:43 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB177C06173B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 20:20:42 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id v11-20020a17090a520b00b001b512482f36so7928460pjh.3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 20:20:42 -0800 (PST)
+        Fri, 21 Jan 2022 23:22:26 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD87C06173B;
+        Fri, 21 Jan 2022 20:22:26 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id f21so3029835ljc.2;
+        Fri, 21 Jan 2022 20:22:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=eQYWldVl/v8iAXB+fYB/Iz87WMpFSCsjxuQmCfoPJFA=;
-        b=RZh3YysjdgtBkVCYtWANxCaUNoozzJOYx9qMNHT/wumvd/DpBfEej/M/VgKv8MzXg0
-         9C/X7m28FDD9qCzqi60NirzP2Rb4Q9bTHTRBezh/hQSH3rsPWdR4xjhsDY4P4Pt7ABWa
-         So4CDIXSdPi3gMtpP0+O/fmqx97sejMwAgWvOH5m+YwCK9u0sOjz92IoGbbcUzZj2dc4
-         0ap/rYb1o3nWlajqUuilJdjo9zlMsF+MbFOL7JQsKm1+KkLD//zJJDGJJ/Fncs++zr4c
-         8pA06ExlEj/LS7SWExMGpvhMy0EuoJvEt+DNdc93x/kCu20LlQv8Wh4rnStNRzWlU6f6
-         iuJg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WSl0n+WwVjP76UBPGcTgsvP7+rrxq9Ric0OqJhwHSkg=;
+        b=Ifz1AWXrSg+wgkYOmdBm1iMMJyLipcIzsywwWvL28u7TFV6c2w+oQn70f5wHbm7bjy
+         8pOqbS9n8ZsaagYrjRrYi6KrjdoRuuk5auolsU7jzm67aqVLfvUIklnVXV3pr2GanjfE
+         UNBI7kxvS8znxD9CxpqcFgrSQJTjXqUAFeode9QFaEz9b2Vh/DJFs7jtQ4HOfB6nYL37
+         6ol8AtPht+nBQKwMLVjp9p3dv6sl9kkT6Pzd8OXABDtkiCveZP6d7BJwdU7ECpvtojQF
+         WPZBmNP/x6c6K9XEjUIOpJPlEV5SN3Shm3rksWd0q7Xmh7lS5WLH0/v42OWsikmV/fIs
+         41NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=eQYWldVl/v8iAXB+fYB/Iz87WMpFSCsjxuQmCfoPJFA=;
-        b=CHhd/76kgncvlmrmm1H/gUw58VILX+xzfAA5QE2N8yqaZshxAfeIDUmwftzP3BDbnP
-         5RlaA52dvhr1xVJX8grd87w0WSqQR3LmUpCkFH0DtK5NsNz3Jh3MrPIhXHL4d1CzOmIn
-         YhMtL/wcogsU5UnK4aXxOPkDN3D9Z69dQixMSnjcatyWSELaVpQn8uhBXt8M0szjjEIT
-         FwSz9aCv6EdkPjOhfJYZdtSLCzTC1kPMisEb1sDWV6yRusV5ffbYw6s6onIZGQW7Py8e
-         GZjTRK/0HrAJIGvpwGnaP5TLghf5mFXiiOEFikcbrfzmgpjXGFbaWtuPxR3YNvxwBhAd
-         dETQ==
-X-Gm-Message-State: AOAM5309VPbL9FyMrhR+YCz8D+AKXZnyTVmXmEakNMLVdsKGrTtmbM29
-        lD8M2W5sWx5QgMmgnqqQRZT3AKv/XPA=
-X-Google-Smtp-Source: ABdhPJz2N6aXWY+JmIYOg9QgH03BEFlnj38XM8mlmxFjofqrDd+izJYVhVC2Bm13gpx/g5tNb/j6zA==
-X-Received: by 2002:a17:902:d50c:b0:14a:fcde:b3b2 with SMTP id b12-20020a170902d50c00b0014afcdeb3b2mr6271998plg.87.1642825242263;
-        Fri, 21 Jan 2022 20:20:42 -0800 (PST)
-Received: from localhost ([103.220.76.197])
-        by smtp.gmail.com with ESMTPSA id ms14sm6646686pjb.15.2022.01.21.20.20.40
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 21 Jan 2022 20:20:42 -0800 (PST)
-Date:   Sat, 22 Jan 2022 12:18:27 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] erofs: avoid unnecessary z_erofs_decompressqueue_work()
- declaration
-Message-ID: <20220122121827.0000243c.zbestahu@gmail.com>
-In-Reply-To: <20220121091412.86086-1-hsiangkao@linux.alibaba.com>
-References: <20220121091412.86086-1-hsiangkao@linux.alibaba.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WSl0n+WwVjP76UBPGcTgsvP7+rrxq9Ric0OqJhwHSkg=;
+        b=T+WF313fzc9W0s3pMTNn2JgBdIW2rjogXJ8dVVv6YJSJLW1hE4CkT6tOeCSSwzo8+7
+         puZqgEWR8A4HJq8sd2PUhgkRJcoec+6AoLhQbYMGj+NnlZrpw9NsehgEK33ay2iLAuqp
+         JF/lgG36bucyAuQ9q7QDv7Abv5vz1uhnftzsHnA3v1oHQd4mW2L6wCfBl6I46PBWC9aa
+         axhvhByCZBunm02jBeILo8KQCcii7aE+tcltAbsoA0TiXVtBjtkQuoU36ypQqHsS+dR2
+         rHNSkuRmSiBJZ0yVqFJeOw5Ehzx89V1ibrqM0trRb/1MOZkQpyfvE+6qInbODaFWefEX
+         cwrg==
+X-Gm-Message-State: AOAM530kydZ4Hsch2fYNIQ5+cPajINLGflVAFEQ85hOn4WW+rGbSailz
+        KCOHf353T/FpiIfeYncdc4K+zNrEPr7Mq8YOm2c=
+X-Google-Smtp-Source: ABdhPJwiGYOcyqqKUP3LR31Yz846qneduAyOw2NJAiB3r7G6Bp7VYLQAC+HwdkKvTYKdtTBJ1fNArj7SN5apWT13fvI=
+X-Received: by 2002:a05:651c:1a06:: with SMTP id by6mr4909100ljb.244.1642825344529;
+ Fri, 21 Jan 2022 20:22:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <3192BC90-D082-472B-B310-6E09A14A77C6@hust.edu.cn> <CAD-N9QUqfq+0UeMjQALUmGpX5xgjS6=BXvsqcXQpJRzhB6hHLw@mail.gmail.com>
+In-Reply-To: <CAD-N9QUqfq+0UeMjQALUmGpX5xgjS6=BXvsqcXQpJRzhB6hHLw@mail.gmail.com>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Sat, 22 Jan 2022 13:22:12 +0900
+Message-ID: <CAKFNMokdB+Zph-1OyC1-Xnyi93r+yKSusgaEaa=CkuUBttwRZA@mail.gmail.com>
+Subject: Re: Fw:Re: [PATCH] fs: nilfs2: fix memory leak in nilfs sysfs create
+ device group
+To:     Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     Pavel Skripkin <paskripkin@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-nilfs <linux-nilfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nanyong Sun <sunnanyong@huawei.com>,
+        =?UTF-8?B?5oWV5Yas5Lqu?= <dzm91@hust.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Jan 2022 17:14:12 +0800
-Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
+Hi Dongliang,
 
-> Just code rearrange. No logic changes.
-> 
-> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-> ---
->  fs/erofs/zdata.c | 113 +++++++++++++++++++++++------------------------
->  1 file changed, 56 insertions(+), 57 deletions(-)
-> 
-> diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-> index 498b7666efe8..423bc1a61da5 100644
-> --- a/fs/erofs/zdata.c
-> +++ b/fs/erofs/zdata.c
-> @@ -810,68 +810,11 @@ static bool z_erofs_get_sync_decompress_policy(struct erofs_sb_info *sbi,
->  	return false;
->  }
->  
-> -static void z_erofs_decompressqueue_work(struct work_struct *work);
-> -static void z_erofs_decompress_kickoff(struct z_erofs_decompressqueue *io,
-> -				       bool sync, int bios)
-> -{
-> -	struct erofs_sb_info *const sbi = EROFS_SB(io->sb);
-> -
-> -	/* wake up the caller thread for sync decompression */
-> -	if (sync) {
-> -		unsigned long flags;
-> -
-> -		spin_lock_irqsave(&io->u.wait.lock, flags);
-> -		if (!atomic_add_return(bios, &io->pending_bios))
-> -			wake_up_locked(&io->u.wait);
-> -		spin_unlock_irqrestore(&io->u.wait.lock, flags);
-> -		return;
-> -	}
-> -
-> -	if (atomic_add_return(bios, &io->pending_bios))
-> -		return;
-> -	/* Use workqueue and sync decompression for atomic contexts only */
-> -	if (in_atomic() || irqs_disabled()) {
-> -		queue_work(z_erofs_workqueue, &io->u.work);
-> -		/* enable sync decompression for readahead */
-> -		if (sbi->opt.sync_decompress == EROFS_SYNC_DECOMPRESS_AUTO)
-> -			sbi->opt.sync_decompress = EROFS_SYNC_DECOMPRESS_FORCE_ON;
-> -		return;
-> -	}
-> -	z_erofs_decompressqueue_work(&io->u.work);
-> -}
-> -
->  static bool z_erofs_page_is_invalidated(struct page *page)
->  {
->  	return !page->mapping && !z_erofs_is_shortlived_page(page);
->  }
->  
-> -static void z_erofs_decompressqueue_endio(struct bio *bio)
-> -{
-> -	tagptr1_t t = tagptr_init(tagptr1_t, bio->bi_private);
-> -	struct z_erofs_decompressqueue *q = tagptr_unfold_ptr(t);
-> -	blk_status_t err = bio->bi_status;
-> -	struct bio_vec *bvec;
-> -	struct bvec_iter_all iter_all;
-> -
-> -	bio_for_each_segment_all(bvec, bio, iter_all) {
-> -		struct page *page = bvec->bv_page;
-> -
-> -		DBG_BUGON(PageUptodate(page));
-> -		DBG_BUGON(z_erofs_page_is_invalidated(page));
-> -
-> -		if (err)
-> -			SetPageError(page);
-> -
-> -		if (erofs_page_is_managed(EROFS_SB(q->sb), page)) {
-> -			if (!err)
-> -				SetPageUptodate(page);
-> -			unlock_page(page);
-> -		}
-> -	}
-> -	z_erofs_decompress_kickoff(q, tagptr_unfold_tags(t), -1);
-> -	bio_put(bio);
-> -}
-> -
->  static int z_erofs_decompress_pcluster(struct super_block *sb,
->  				       struct z_erofs_pcluster *pcl,
->  				       struct page **pagepool)
-> @@ -1123,6 +1066,35 @@ static void z_erofs_decompressqueue_work(struct work_struct *work)
->  	kvfree(bgq);
->  }
->  
-> +static void z_erofs_decompress_kickoff(struct z_erofs_decompressqueue *io,
-> +				       bool sync, int bios)
-> +{
-> +	struct erofs_sb_info *const sbi = EROFS_SB(io->sb);
-> +
-> +	/* wake up the caller thread for sync decompression */
-> +	if (sync) {
-> +		unsigned long flags;
-> +
-> +		spin_lock_irqsave(&io->u.wait.lock, flags);
-> +		if (!atomic_add_return(bios, &io->pending_bios))
-> +			wake_up_locked(&io->u.wait);
-> +		spin_unlock_irqrestore(&io->u.wait.lock, flags);
-> +		return;
-> +	}
-> +
-> +	if (atomic_add_return(bios, &io->pending_bios))
-> +		return;
-> +	/* Use workqueue and sync decompression for atomic contexts only */
-> +	if (in_atomic() || irqs_disabled()) {
-> +		queue_work(z_erofs_workqueue, &io->u.work);
-> +		/* enable sync decompression for readahead */
-> +		if (sbi->opt.sync_decompress == EROFS_SYNC_DECOMPRESS_AUTO)
-> +			sbi->opt.sync_decompress = EROFS_SYNC_DECOMPRESS_FORCE_ON;
-> +		return;
-> +	}
-> +	z_erofs_decompressqueue_work(&io->u.work);
-> +}
-> +
->  static struct page *pickup_page_for_submission(struct z_erofs_pcluster *pcl,
->  					       unsigned int nr,
->  					       struct page **pagepool,
-> @@ -1300,6 +1272,33 @@ static void move_to_bypass_jobqueue(struct z_erofs_pcluster *pcl,
->  	qtail[JQ_BYPASS] = &pcl->next;
->  }
->  
-> +static void z_erofs_decompressqueue_endio(struct bio *bio)
-> +{
-> +	tagptr1_t t = tagptr_init(tagptr1_t, bio->bi_private);
-> +	struct z_erofs_decompressqueue *q = tagptr_unfold_ptr(t);
-> +	blk_status_t err = bio->bi_status;
-> +	struct bio_vec *bvec;
-> +	struct bvec_iter_all iter_all;
-> +
-> +	bio_for_each_segment_all(bvec, bio, iter_all) {
-> +		struct page *page = bvec->bv_page;
-> +
-> +		DBG_BUGON(PageUptodate(page));
-> +		DBG_BUGON(z_erofs_page_is_invalidated(page));
-> +
-> +		if (err)
-> +			SetPageError(page);
-> +
-> +		if (erofs_page_is_managed(EROFS_SB(q->sb), page)) {
-> +			if (!err)
-> +				SetPageUptodate(page);
-> +			unlock_page(page);
-> +		}
-> +	}
-> +	z_erofs_decompress_kickoff(q, tagptr_unfold_tags(t), -1);
-> +	bio_put(bio);
-> +}
-> +
+On Sat, Jan 22, 2022 at 9:31 AM Dongliang Mu <mudongliangabcd@gmail.com> wrote:
+> > (added Nanyong Sun to CC)
+> > Hi Dongliang,
+> >
+> > On Thu, Jan 20, 2022 at 11:07 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
+> >
+> >
+> > Hi Dongliang,
+> >
+> > On 1/20/22 16:44, Dongliang Mu wrote:
+> >
+> > The preivous commit 8fd0c1b0647a ("nilfs2: fix memory leak in
+> > nilfs_sysfs_delete_device_group") only handles the memory leak in the
+> > nilfs_sysfs_delete_device_group. However, the similar memory leak still
+> > occurs in the nilfs_sysfs_create_device_group.
+> >
+> > Fix it by adding kobject_del when
+> > kobject_init_and_add succeeds, but one of the following calls fails.
+> >
+> > Fixes: 8fd0c1b0647a ("nilfs2: fix memory leak in nilfs_sysfs_delete_device_group")
+> >
+> >
+> > Why Fixes tag points to my commit? This issue was introduced before my patch
+> >
+> >
+> > As Pavel pointed out, this patch is independent of his patch.
+> > The following one ?
+>
+> Hi Pavel,
+>
+> This is an incorrect fixes tag. I need to dig more about `git log -p
+> fs/nilfs2/sysfs.c`.
+>
+> I wonder if there are any automatic or semi-automatic ways to capture
+> this fixes tag. Or how do you guys identify the fixes tag?
 
-Reviewed-by: Yue Hu <huyue2@yulong.com>
+I guess `git blame fs/nilfs2/sysfs.c` may help you to confirm where the change
+came from.   It shows information of commits for every line of the input file.
+If you are using github, 'blame button' is available.
 
->  static void z_erofs_submit_queue(struct super_block *sb,
->  				 struct z_erofs_decompress_frontend *f,
->  				 struct page **pagepool,
+If an issue is reproducible, we use `git bisect` to identify the patch
+that caused the
+issue, however, even then, try to understand why and how it affected
+by looking at
+source code and the commit.
 
+>
+> >
+> > 5f5dec07aca7 ("nilfs2: fix memory leak in nilfs_sysfs_create_device_group")
+> >
+> > Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+> > ---
+> > fs/nilfs2/sysfs.c | 5 ++++-
+> > 1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> >
+> > Can you describe what memory leak issue does this patch actually fix ?
+> >
+> > It looks like kobject_put() can call __kobject_del() unless circular
+> > references exist.
+> >
+> > kobject_put() -> kref_put() -> kobject_release() ->
+> > kobject_cleanup() -> __kobject_del()
+> >
+> > As explained in Documentation/core-api/kobject.rst,
+> >
+> > kobject_del() can be used to drop the reference to the parent object, if
+> > circular references are constructed.
+> >
+> > But, at least, the parent object is NULL in this case.
+> > I really want to understand what the real problem is.
+> >
+> > Thanks,
+> > Ryusuke Konishi
+>
+> I know where my problem is. From the disconnect function, I think the
+> kobject_del and kobject_put are both necessary without checking the
+> documentation of kobjects.
+>
+> Then I think the current error handling may miss kobject_del, and this
+> patch is generated.
+>
+> As a result, I think we can ignore this patch. Sorry for my false alarm.
+
+Okay, thank you for your reply.
+If you notice anything we missed on this difference, please let us know.
+
+Regards,
+Ryusuke Konishi

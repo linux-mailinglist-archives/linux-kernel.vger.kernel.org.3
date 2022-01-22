@@ -2,252 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE2F496B0D
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 09:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E5C496B11
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 09:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233868AbiAVIjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 03:39:05 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:32898 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233816AbiAVIjD (ORCPT
+        id S233880AbiAVIku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 03:40:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233816AbiAVIkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 03:39:03 -0500
-Received: from [IPV6:2a01:e0a:169:7140:a515:e501:be6c:97ef] (unknown [IPv6:2a01:e0a:169:7140:a515:e501:be6c:97ef])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E62F0E1E;
-        Sat, 22 Jan 2022 09:39:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1642840742;
-        bh=evzgVhPAgz9fv2fBHEP5bnakTif7d1szPrJCUYPiTe0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mSw+7PZ6ArfGwqONEvoR/OxE/LOdBebsVprBBSNP+xMm7ryPMJ+5lTEH4qNSfIXI6
-         N3msU2IOVAe8Rd/c3DJGGEpXfUOfMk1aJlYZqe5JH2bHq+q3E4U4Yl8v4zB4JmMqq0
-         U+7RaMDw1bX36PRcKcXU4CLrdjohhvGsEuZUVluM=
-Message-ID: <63dcc000-1d7f-d504-4a1a-e8559a596c9e@ideasonboard.com>
-Date:   Sat, 22 Jan 2022 09:38:59 +0100
+        Sat, 22 Jan 2022 03:40:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42676C06173B;
+        Sat, 22 Jan 2022 00:40:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CBCF6020F;
+        Sat, 22 Jan 2022 08:40:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08149C004E1;
+        Sat, 22 Jan 2022 08:40:45 +0000 (UTC)
+Message-ID: <7af52d61-47c7-581d-62ed-76a7f8315b16@xs4all.nl>
+Date:   Sat, 22 Jan 2022 09:40:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH v2 3/7] media: dt-bindings: media: Add bindings for
- bcm2835-unicam
+ Thunderbird/91.3.2
 Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
-        kernel-list@raspberrypi.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org, lukasz@jany.st,
-        mchehab@kernel.org, naush@raspberrypi.com, robh@kernel.org,
-        tomi.valkeinen@ideasonboard.com
-References: <20220121081810.155500-1-jeanmichel.hautbois@ideasonboard.com>
- <20220121081810.155500-4-jeanmichel.hautbois@ideasonboard.com>
- <YetBdVY57T3QrUNa@pendragon.ideasonboard.com>
-From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-In-Reply-To: <YetBdVY57T3QrUNa@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Yong Wu <yong.wu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        David Airlie <airlied@linux.ie>,
+        iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel@vger.kernel.org
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [GIT PULL FOR v5.18] Clean up "mediatek,larb"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+Hi Mauro,
 
-On 22/01/2022 00:27, Laurent Pinchart wrote:
-> Hi Jean-Michel,
-> 
-> Thank you for the patch.
-> 
-> On Fri, Jan 21, 2022 at 09:18:06AM +0100, Jean-Michel Hautbois wrote:
->> Introduce the dt-bindinds documentation for bcm2835 CCP2/CSI2 camera
-> 
-> s/bindinds/bindings/
-> 
-> I'd mention "Unicam" somewhere here.
-> 
->> interface. Also add a MAINTAINERS entry for it.
+This is the PR of v10 of this series, minus patches 12 and 13 (Matthias will take those
+once this is merged for 5.18):
 
-Oh my, I tis not the right dts bindings patch, I mixed up my trees... :-/
+https://patchwork.linuxtv.org/project/linux-media/cover/20220117070510.17642-1-yong.wu@mediatek.com/
 
-Sorry for this I will send a v2.1 soon...
+The first two patches are from:
 
->>
->> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
->> Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
->> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
->> ---
->> Dave: I assumed you were the maintainer for this file, as I based it on the
->> bcm2835-unicam.txt file. Are  you happy to be added directly as the
->> maintainer, or should this be specified as "Raspberry Pi Kernel
->> Maintenance <kernel-list@raspberrypi.com>"
->> - in v2: multiple corrections to pass the bot checking as Rob kindly
->>    told me.
->> ---
->>   .../bindings/media/brcm,bcm2835-unicam.yaml   | 103 ++++++++++++++++++
->>   MAINTAINERS                                   |   6 +
->>   2 files changed, 109 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
->> new file mode 100644
->> index 000000000000..1427514142cf
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
->> @@ -0,0 +1,103 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/media/brcm,bcm2835-unicam.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Broadcom BCM283x Camera Interface (Unicam)
->> +
->> +maintainers:
->> +  - Dave Stevenson <dave.stevenson@raspberrypi.com>
->> +
->> +description: |-
->> +  The Unicam block on BCM283x SoCs is the receiver for either
->> +  CSI-2 or CCP2 data from image sensors or similar devices.
->> +
->> +  The main platform using this SoC is the Raspberry Pi family of boards.
->> +  On the Pi the VideoCore firmware can also control this hardware block,
->> +  and driving it from two different processors will cause issues.
->> +  To avoid this, the firmware checks the device tree configuration
->> +  during boot. If it finds device tree nodes called csi0 or csi1 then
->> +  it will stop the firmware accessing the block, and it can then
->> +  safely be used via the device tree binding.
-> 
-> As mentioned in the review of the DT integration, the nodes should
-> ideally be called just "csi", not "csi0" and "csi1" (maybe Rob could
-> confirm this ?). Dave, is there a way the firmware could be updated to
-> also hand over control of the Unicam instances to Linux when a "csi"
-> node is found, not just "csi0" or "csi1" ?
-> 
-> Given that the node names are significant, they should be enforced in
-> the YAML schema.
-> 
->> +
->> +properties:
->> +  compatible:
->> +    const: brcm,bcm2835-unicam
->> +
->> +  reg:
->> +    description:
->> +      physical base address and length of the register sets for the device.
-> 
-> This can be dropped.
-> 
->> +    maxItems: 1
-> 
-> There are two items in the example below. How does this validate ?
-> 
->> +
->> +  interrupts:
->> +    description: the IRQ line for this Unicam instance.
-> 
-> This can be dropped.
-> 
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    description: |-
->> +      list of clock specifiers, corresponding to entries in clock-names
->> +      property.
-> 
->    clocks:
->      items:
->        - description: The clock for ...
->        - description: The clock for ...
-> 
-> (with the two descriptions matching the LP and VPU clocks, I don't know
-> what they are).
-> 
->> +
->> +  clock-names:
->> +    items:
->> +      - const: lp
->> +      - const: vpu
->> +
->> +  port:
->> +    $ref: /schemas/graph.yaml#/properties/port
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +  - clocks
->> +  - clock-names
->> +  - port
->> +
->> +additionalProperties: False
->> +
->> +examples:
->> +  - |
->> +    csi1: csi1@7e801000 {
->> +        compatible = "brcm,bcm2835-unicam";
->> +        reg = <0x7e801000 0x800>,
->> +              <0x7e802004 0x4>;
->> +        interrupts = <2 7>;
-> 
-> Let's use the Pi 4 device tree as an example, as that's what we're
-> upstreaming first.
-> 
->> +        clocks = <&clocks BCM2835_CLOCK_CAM1>,
-> 
-> This will fail to compile without a proper #include, did you get this to
-> pass validation ?
-> 
->> +                 <&firmware_clocks 4>;
->> +        clock-names = "lp", "vpu";
->> +        port {
->> +                csi1_ep: endpoint {
->> +                        remote-endpoint = <&tc358743_0>;
->> +                        data-lanes = <1 2>;
->> +                };
->> +        };
->> +    };
->> +
->> +    i2c0: i2c@7e205000 {
->> +        tc358743: csi-hdmi-bridge@0f {
->> +            compatible = "toshiba,tc358743";
->> +            reg = <0x0f>;
->> +            clocks = <&tc358743_clk>;
->> +            clock-names = "refclk";
->> +
->> +            tc358743_clk: bridge-clk {
->> +                    compatible = "fixed-clock";
->> +                    #clock-cells = <0>;
->> +                    clock-frequency = <27000000>;
->> +            };
->> +
->> +            port {
->> +                    tc358743_0: endpoint {
->> +                            remote-endpoint = <&csi1_ep>;
->> +                            clock-lanes = <0>;
->> +                            data-lanes = <1 2>;
->> +                            clock-noncontinuous;
->> +                            link-frequencies =
->> +                                /bits/ 64 <297000000>;
->> +                    };
->> +            };
->> +        };
->> +    };
-> 
-> I'd drop this node completely.
-> 
->> +...
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 33f75892f98e..07f238fd5ff9 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -3679,6 +3679,12 @@ F:	Documentation/media/v4l-drivers/bcm2835-isp.rst
->>   F:	drivers/staging/vc04_services/bcm2835-isp
->>   F:	include/uapi/linux/bcm2835-isp.h
->>   
->> +BROADCOM BCM2835 CAMERA DRIVER
->> +M:	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>
->> +L:	linux-media@vger.kernel.org
->> +S:	Maintained
->> +F:	Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
->> +
->>   BROADCOM BCM47XX MIPS ARCHITECTURE
->>   M:	Hauke Mehrtens <hauke@hauke-m.de>
->>   M:	Rafał Miłecki <zajec5@gmail.com>
-> 
+https://patchwork.linuxtv.org/project/linux-media/patch/20211206130425.184420-1-hsinyi@chromium.org/
+https://patchwork.linuxtv.org/project/linux-media/patch/20211206130425.184420-2-hsinyi@chromium.org/
+
+since the v10 series depends on that yaml conversion.
+
+This series touches on several subsystems. I believe I have all the relevant Acks etc.
+It made the most sense to merge this through the media subsystem since that's the main
+target for these changes.
+
+Regards,
+
+	Hans
+
+
+The following changes since commit 216a6d4965287400d40227601abb6cedcd2addd3:
+
+  media: mtk-vcodec: Remove mtk_vcodec_release_enc_pm (2022-01-21 12:23:48 +0100)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.18g
+
+for you to fetch changes up to ae04f1335521a2d8b917c0e4708280e9819ed0e9:
+
+  memory: mtk-smi: Get rid of mtk_smi_larb_get/put (2022-01-22 09:20:30 +0100)
+
+----------------------------------------------------------------
+Tag branch
+
+----------------------------------------------------------------
+Hsin-Yi Wang (2):
+      dt-bindings: mediatek: convert mtk jpeg decoder/encoder to yaml
+      dt-bindings: mediatek: Add mediatek, mt8183-jpgenc compatible
+
+Yong Wu (10):
+      dt-binding: mediatek: Get rid of mediatek,larb for multimedia HW
+      iommu/mediatek-v1: Free the existed fwspec if the master dev already has
+      iommu/mediatek: Return ENODEV if the device is NULL
+      iommu/mediatek: Add probe_defer for smi-larb
+      iommu/mediatek: Add device_link between the consumer and the larb devices
+      media: mtk-jpeg: Get rid of mtk_smi_larb_get/put
+      media: mtk-mdp: Get rid of mtk_smi_larb_get/put
+      drm/mediatek: Get rid of mtk_smi_larb_get/put
+      media: mtk-vcodec: Get rid of mtk_smi_larb_get/put
+      memory: mtk-smi: Get rid of mtk_smi_larb_get/put
+
+Yongqiang Niu (1):
+      drm/mediatek: Add pm runtime support for ovl and rdma
+
+ Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt |  9 ------
+ Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml |  7 -----
+ Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml |  8 ------
+ Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt    | 38 ------------------------
+ Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.yaml   | 80 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.txt    | 35 ----------------------
+ Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml   | 72 ++++++++++++++++++++++++++++++++++++++++++++++
+ Documentation/devicetree/bindings/media/mediatek-mdp.txt             |  8 ------
+ drivers/gpu/drm/mediatek/mtk_disp_ovl.c                              |  8 +++++-
+ drivers/gpu/drm/mediatek/mtk_disp_rdma.c                             |  9 +++++-
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.c                              | 15 +++++-----
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c                          | 36 ++---------------------
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h                          |  1 -
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c                               |  5 +---
+ drivers/iommu/mtk_iommu.c                                            | 34 ++++++++++++++++++++++
+ drivers/iommu/mtk_iommu_v1.c                                         | 42 ++++++++++++++++++++++++++-
+ drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c                      | 45 ++---------------------------
+ drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h                      |  2 --
+ drivers/media/platform/mtk-mdp/mtk_mdp_comp.c                        | 40 --------------------------
+ drivers/media/platform/mtk-mdp/mtk_mdp_comp.h                        |  2 --
+ drivers/media/platform/mtk-mdp/mtk_mdp_core.c                        |  1 -
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c               |  2 --
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.c                |  1 -
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c                | 41 ++++----------------------
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h                   |  3 --
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c                   |  1 -
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c               |  2 --
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c                | 45 ++++-------------------------
+ drivers/memory/mtk-smi.c                                             | 14 ---------
+ include/soc/mediatek/smi.h                                           | 20 -------------
+ 30 files changed, 267 insertions(+), 359 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.yaml
+ delete mode 100644 Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.txt
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml

@@ -2,115 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF901496C44
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 13:07:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02785496C62
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 13:39:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234479AbiAVMGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 07:06:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49632 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiAVMGx (ORCPT
+        id S231985AbiAVMjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 07:39:05 -0500
+Received: from server.atrad.com.au ([150.101.241.2]:41382 "EHLO
+        server.atrad.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230360AbiAVMjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 07:06:53 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304D6C06173B
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 04:06:53 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nBFAM-00043F-3N; Sat, 22 Jan 2022 13:06:46 +0100
-Received: from pengutronix.de (unknown [195.138.59.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 80CE61FDB0;
-        Sat, 22 Jan 2022 12:06:44 +0000 (UTC)
-Date:   Sat, 22 Jan 2022 13:06:41 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH] arm64: vdso: Fix "no previous prototype" warning
-Message-ID: <20220122120641.h7p4xujjolkxe52o@pengutronix.de>
-References: <20220109113504.1921017-1-mkl@pengutronix.de>
- <20220121121234.47273-1-vincenzo.frascino@arm.com>
+        Sat, 22 Jan 2022 07:39:04 -0500
+X-Greylist: delayed 1781 seconds by postgrey-1.27 at vger.kernel.org; Sat, 22 Jan 2022 07:39:02 EST
+Received: from marvin.atrad.com.au (IDENT:1008@marvin.atrad.com.au [192.168.0.2])
+        by server.atrad.com.au (8.17.1/8.17.1) with ESMTPS id 20MC7UKQ032381
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Sat, 22 Jan 2022 22:37:32 +1030
+Date:   Sat, 22 Jan 2022 22:37:30 +1030
+From:   Jonathan Woithe <jwoithe@just42.net>
+To:     Luiz Sampaio <sampaio.ime@gmail.com>
+Cc:     "Lee, Chun-Yi" <jlee@suse.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Corentin Chary <corentin.chary@gmail.com>,
+        =?iso-8859-1?Q?Jo=E3o?= Paulo Rechi Vita <jprvita@gmail.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Matan Ziv-Av <matan@svgalib.org>,
+        Jeremy Soller <jeremy@system76.com>,
+        System76 Product Development <productdev@system76.com>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Herton Ronaldo Krzesinski <herton@canonical.com>,
+        Azael Avalos <coproscefalo@gmail.com>,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        acpi4asus-user@lists.sourceforge.net,
+        ibm-acpi-devel@lists.sourceforge.net
+Subject: Re: [PATCH 20/31] platform: x86: changing LED_* from enum
+ led_brightness to actual value
+Message-ID: <20220122120730.GA12371@marvin.atrad.com.au>
+References: <20220121165436.30956-1-sampaio.ime@gmail.com>
+ <20220121165436.30956-21-sampaio.ime@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="v3wc56hczuai2w67"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220121121234.47273-1-vincenzo.frascino@arm.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+In-Reply-To: <20220121165436.30956-21-sampaio.ime@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MIMEDefang-action: accept
+X-Scanned-By: MIMEDefang 2.86 on 192.168.0.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 21, 2022 at 01:54:25PM -0300, Luiz Sampaio wrote:
+> The enum led_brightness, which contains the declaration of LED_OFF,
+> LED_ON, LED_HALF and LED_FULL is obsolete, as the led class now supports
+> max_brightness.
+> ---
+>  drivers/platform/x86/acer-wmi.c          |  6 ++---
+>  drivers/platform/x86/asus-wireless.c     |  6 ++---
+>  drivers/platform/x86/dell/dell-laptop.c  |  2 +-
+>  drivers/platform/x86/dell/dell-wmi-led.c |  4 ++--
+>  drivers/platform/x86/fujitsu-laptop.c    | 28 ++++++++++++------------
+>  drivers/platform/x86/lg-laptop.c         | 18 +++++++--------
+>  drivers/platform/x86/system76_acpi.c     |  4 ++--
+>  drivers/platform/x86/thinkpad_acpi.c     | 14 ++++++------
+>  drivers/platform/x86/topstar-laptop.c    |  4 ++--
+>  drivers/platform/x86/toshiba_acpi.c      | 24 ++++++++++----------
+>  10 files changed, 55 insertions(+), 55 deletions(-)
+> 
+> ...
+> diff --git a/drivers/platform/x86/fujitsu-laptop.c b/drivers/platform/x86/fujitsu-laptop.c
+> index 80929380ec7e..6ebfda771209 100644
+> --- a/drivers/platform/x86/fujitsu-laptop.c
+> +++ b/drivers/platform/x86/fujitsu-laptop.c
+> @@ -584,10 +584,10 @@ static int logolamp_set(struct led_classdev *cdev,
+>  	int poweron = FUNC_LED_ON, always = FUNC_LED_ON;
+>  	int ret;
+>  
+> -	if (brightness < LED_HALF)
+> +	if (brightness < 127)
+>  		poweron = FUNC_LED_OFF;
+>  
+> -	if (brightness < LED_FULL)
+> +	if (brightness < 255)
+>  		always = FUNC_LED_OFF;
+>  
+>  	ret = call_fext_func(device, FUNC_LEDS, 0x1, LOGOLAMP_POWERON, poweron);
+> @@ -604,13 +604,13 @@ static enum led_brightness logolamp_get(struct led_classdev *cdev)
+>  
+>  	ret = call_fext_func(device, FUNC_LEDS, 0x2, LOGOLAMP_ALWAYS, 0x0);
+>  	if (ret == FUNC_LED_ON)
+> -		return LED_FULL;
+> +		return 255;
+>  
+>  	ret = call_fext_func(device, FUNC_LEDS, 0x2, LOGOLAMP_POWERON, 0x0);
+>  	if (ret == FUNC_LED_ON)
+> -		return LED_HALF;
+> +		return 127;
+>  
+> -	return LED_OFF;
+> +	return 0;
+>  }
+>  
+>  static int kblamps_set(struct led_classdev *cdev,
+> @@ -618,7 +618,7 @@ static int kblamps_set(struct led_classdev *cdev,
+>  {
+>  	struct acpi_device *device = to_acpi_device(cdev->dev->parent);
+>  
+> -	if (brightness >= LED_FULL)
+> +	if (brightness >= 255)
+>  		return call_fext_func(device, FUNC_LEDS, 0x1, KEYBOARD_LAMPS,
+>  				      FUNC_LED_ON);
+>  	else
+> @@ -629,11 +629,11 @@ static int kblamps_set(struct led_classdev *cdev,
+>  static enum led_brightness kblamps_get(struct led_classdev *cdev)
+>  {
+>  	struct acpi_device *device = to_acpi_device(cdev->dev->parent);
+> -	enum led_brightness brightness = LED_OFF;
+> +	unsigned int brightness = 0;
+>  
+>  	if (call_fext_func(device,
+>  			   FUNC_LEDS, 0x2, KEYBOARD_LAMPS, 0x0) == FUNC_LED_ON)
+> -		brightness = LED_FULL;
+> +		brightness = 255;
+>  
+>  	return brightness;
+>  }
+> @@ -643,7 +643,7 @@ static int radio_led_set(struct led_classdev *cdev,
+>  {
+>  	struct acpi_device *device = to_acpi_device(cdev->dev->parent);
+>  
+> -	if (brightness >= LED_FULL)
+> +	if (brightness >= 255)
+>  		return call_fext_func(device, FUNC_FLAGS, 0x5, RADIO_LED_ON,
+>  				      RADIO_LED_ON);
+>  	else
+> @@ -654,10 +654,10 @@ static int radio_led_set(struct led_classdev *cdev,
+>  static enum led_brightness radio_led_get(struct led_classdev *cdev)
+>  {
+>  	struct acpi_device *device = to_acpi_device(cdev->dev->parent);
+> -	enum led_brightness brightness = LED_OFF;
+> +	unsigned int brightness = 0;
+>  
+>  	if (call_fext_func(device, FUNC_FLAGS, 0x4, 0x0, 0x0) & RADIO_LED_ON)
+> -		brightness = LED_FULL;
+> +		brightness = 255;
+>  
+>  	return brightness;
+>  }
+> @@ -669,7 +669,7 @@ static int eco_led_set(struct led_classdev *cdev,
+>  	int curr;
+>  
+>  	curr = call_fext_func(device, FUNC_LEDS, 0x2, ECO_LED, 0x0);
+> -	if (brightness >= LED_FULL)
+> +	if (brightness >= 255)
+>  		return call_fext_func(device, FUNC_LEDS, 0x1, ECO_LED,
+>  				      curr | ECO_LED_ON);
+>  	else
+> @@ -680,10 +680,10 @@ static int eco_led_set(struct led_classdev *cdev,
+>  static enum led_brightness eco_led_get(struct led_classdev *cdev)
+>  {
+>  	struct acpi_device *device = to_acpi_device(cdev->dev->parent);
+> -	enum led_brightness brightness = LED_OFF;
+> +	unsigned int brightness = 0;
+>  
+>  	if (call_fext_func(device, FUNC_LEDS, 0x2, ECO_LED, 0x0) & ECO_LED_ON)
+> -		brightness = LED_FULL;
+> +		brightness = 255;
+>  
+>  	return brightness;
+>  }
 
---v3wc56hczuai2w67
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In a way it's less descriptive to revert from the identifiers to what amount
+to seemingly magic numbers.  However, since the value attributed to maximum
+LED brightness in the LED class is now variable I can see why the global
+enum no longer makes sense.  We could define a suitable enum within
+fujitsu-laptop.c, but there's probably little to be gained in the long run.
 
-On 21.01.2022 12:12:34, Vincenzo Frascino wrote:
-> If compiling the arm64 kernel with W=3D1 the following warning is produce=
-d:
->=20
-> | arch/arm64/kernel/vdso/vgettimeofday.c:9:5: error: no previous prototyp=
-e for =E2=80=98__kernel_clock_gettime=E2=80=99 [-Werror=3Dmissing-prototype=
-s]
-> |     9 | int __kernel_clock_gettime(clockid_t clock,
-> |       |     ^~~~~~~~~~~~~~~~~~~~~~
-> | arch/arm64/kernel/vdso/vgettimeofday.c:15:5: error: no previous prototy=
-pe for =E2=80=98__kernel_gettimeofday=E2=80=99 [-Werror=3Dmissing-prototype=
-s]
-> |    15 | int __kernel_gettimeofday(struct __kernel_old_timeval *tv,
-> |       |     ^~~~~~~~~~~~~~~~~~~~~
-> | arch/arm64/kernel/vdso/vgettimeofday.c:21:5: error: no previous prototy=
-pe for =E2=80=98__kernel_clock_getres=E2=80=99 [-Werror=3Dmissing-prototype=
-s]
-> |    21 | int __kernel_clock_getres(clockid_t clock_id,
-> |       |     ^~~~~~~~~~~~~~~~~~~~~
->=20
-> This patch removes "-Wmissing-prototypes" and "-Wmissing-declarations" co=
-mpilers
-> flags from the compilation of vgettimeofday.c to make possible to build t=
-he
-> kernel with CONFIG_WERROR enabled.
->=20
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+To make the patch description a little clearer, could I suggest you add the
+word "variable" before "max_brightness", or even just use the phrase
+"variable maximum brightness"?
 
-Tested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+For the fujitsu-laptop.c portion of this patch:
+    Acked-by: Jonathan Woithe <jwoithe@just42.net>
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---v3wc56hczuai2w67
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHr804ACgkQqclaivrt
-76lrEggAqM1dSpWkhhPT/0GqJ26yMtySWRcxr8pTM1k4+vRl8ZtWH65MeuKqI0hv
-hhlZuQHbmke4L0/bsnrQPIjbYglJL6uUNP5ZSPE/S/SGb+f4a2kdx4V0xENfdjXi
-ZXUNU7tLNAOq3v14TeijAkvJXEMETHz2Asy37mKJruqLRnUcdRKDc3Okam+XJfVC
-EVD4Fkn4B9iisomiT3u9mm6U729ZbgXc4mXl1aH78H/zT1I9UmbblecyCJUtCD+M
-5a4/NtVCYH1DjZMF1b75PCVJOBef21HP85wUUEOEPLqleILvqlcRvKRP4P0KZzMv
-mbIyvUDhm1Unp+VgB8WcmbhmpVE8uw==
-=v0d+
------END PGP SIGNATURE-----
-
---v3wc56hczuai2w67--
+Regards
+  jonathan

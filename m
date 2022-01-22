@@ -2,104 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFDE1496D17
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 18:31:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E09F9496D16
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 18:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234622AbiAVRbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 12:31:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34742 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbiAVRbH (ORCPT
+        id S234618AbiAVR0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 12:26:39 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54506 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231655AbiAVR0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 12:31:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B87C06173B
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 09:31:06 -0800 (PST)
+        Sat, 22 Jan 2022 12:26:37 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C82EB80AB0
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 17:31:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4540EC004E1;
-        Sat, 22 Jan 2022 17:31:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D75660E07;
+        Sat, 22 Jan 2022 17:26:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13F4FC004E1;
+        Sat, 22 Jan 2022 17:26:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642872664;
-        bh=0hN1VsC/xpkg7gWRCxW4wR6tPARMWomUHwGf0DD6mXU=;
+        s=k20201202; t=1642872396;
+        bh=JKOyBIBEtQl1RLmxtU+7ibAOozBWhlW6qQd4TiIiKmo=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ubdqqI4nBASfgeMaxVdxA6FHmngMdGeULanaOyEDlKxugdVhdmPObkFYNDCyjnUOn
-         j3zf8E1KkYFmbiJqpccKwStxHv02f1E8tK6AHPfe5m9d24gnwxRElxbnPvqLur44zb
-         ueik0+BaJ1NIYtOahOwDtWYlRyrSHDTkz5C4f5c0DZJLpEPhaKjK2By7ylmBZJ6SJm
-         rEgVJRxd9WxV1mardJRXLXua1ZOOzV4lDfjsblVCAUWT8N5D8kX6TH3CZI31wAOKkH
-         DEvyDasN1nYli1f/RvPa5KF+plgbnjhhPzZHkNHRfms019FkKSzJnqbSQUUPWtbcsF
-         o3DFXEX2g1orA==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nBKEA-00270F-A5; Sat, 22 Jan 2022 17:31:02 +0000
+        b=Rswjyo00WTr/Ld1rwCHlo3T5fv9BLKGkkba++/cHPBXvUC5IA7XhdXlcWRZVbx1Hz
+         YndgiozDqKoRiLXiugZ4YA1DdONVMbzqOhDd0RBX3r1wtLuFEJSHqrqaSyF1RRa9Jg
+         TWi6bsG+IQpAMPbhG3envozCFYKq91tpaBVFqERcHlz/rpTkocgwi9p2ou9lRTSGte
+         lcNkbvLJ6I+r+m0T1+IUU3vvjXflCOJs0jc07ebJ1Yi/Nw37KtMdZjTNvBGMYHd184
+         GRjcaSdP6ar8Me0cH2TBnkwQP+ZsfxjAJrCQ+OjZ/wkPUZndRvHz51Du+uZpiYcMLB
+         f2rs3ojtlcvmA==
+Date:   Sat, 22 Jan 2022 17:32:46 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
+Cc:     <robh+dt@kernel.org>, <linux-iio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/4] dt-bindings:iio:frequency: add admv1014 binding
+Message-ID: <20220122173246.48f52792@jic23-huawei>
+In-Reply-To: <20220119081838.70210-2-antoniu.miclaus@analog.com>
+References: <20220119081838.70210-1-antoniu.miclaus@analog.com>
+        <20220119081838.70210-2-antoniu.miclaus@analog.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Date:   Sat, 22 Jan 2022 17:31:02 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>, kernel-team@android.com,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jay Chen <jkchen@linux.alibaba.com>
-Subject: Re: [PATCH v2] irqchip/gic-v3-its: Reset each ITS's BASERn register
- before probe
-In-Reply-To: <20220122163712.1141635-1-maz@kernel.org>
-References: <20220122163712.1141635-1-maz@kernel.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <a19d7f44abfd38eb429e33d4886518e3@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, tglx@linutronix.de, kernel-team@android.com, lorenzo.pieralisi@arm.com, jkchen@linux.alibaba.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-22 16:37, Marc Zyngier wrote:
-> A recent bug report outlined that the way GICv4.1 is handled across
-> kexec is pretty bad. We can end-up in a situation where ITSs share
-> memory (this is the case when SVPET==1) and reprogram the base
-> registers, creating a situation where ITSs that are part of a given
-> affinity group see different pointers. Which is illegal. Boo.
+On Wed, 19 Jan 2022 10:18:36 +0200
+Antoniu Miclaus <antoniu.miclaus@analog.com> wrote:
+
+> Add device tree bindings for the ADMV1014 Upconverter.
 > 
-> In order to restore some sanity, reset the BASERn registers to 0
-> *before* probing any ITS. Although this isn't optimised at all,
-> this is only a once-per-boot cost, which shouldn't show up on
-> anyone's radar.
-> 
-> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> Cc: Jay Chen <jkchen@linux.alibaba.com>
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> Link: https://lore.kernel.org/r/20211216190315.GA14220@lpieralisi
+> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+> changes in v3:
+>  - change clock description as suggested
 > ---
+
+Change log below the --- 
+
+We don't want it in the permanent git history.  There will
+be a link tag to this thread to allow anyone who happens to 
+want to known more to find the version change log.
+
+Given you got it right in the other 3 patches, I'm guessing you
+just missed here.
+
+If that is all that turns up in review, I can fix it whilst applying.
+
+Thanks,
+
+Jonathan
+
+
+>  .../bindings/iio/frequency/adi,admv1014.yaml  | 129 ++++++++++++++++++
+>  1 file changed, 129 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
 > 
-> Notes:
->     * From v1: Fail probing if any ITS fails to reset.
-> 
->  drivers/irqchip/irq-gic-v3-its.c | 111 +++++++++++++++++++++++++------
->  1 file changed, 92 insertions(+), 19 deletions(-)
-> 
+> diff --git a/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml b/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
+> new file mode 100644
+> index 000000000000..864093f6a29a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
+> @@ -0,0 +1,129 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/frequency/adi,admv1014.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ADMV1014 Microwave Downconverter
+> +
+> +maintainers:
+> +  - Antoniu Miclaus <antoniu.miclaus@analog.com>
+> +
+> +description: |
+> +   Wideband, microwave downconverter optimized for point to point microwave
+> +   radio designs operating in the 24 GHz to 44 GHz frequency range.
+> +
+> +   https://www.analog.com/en/products/admv1014.html
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,admv1014
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  spi-max-frequency:
+> +    maximum: 1000000
+> +
+> +  clocks:
+> +    minItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: lo_in
+> +    description:
+> +      External clock that provides the Local Oscilator input.
+> +
+> +  vcm-supply:
+> +    description:
+> +      Common-mode voltage regulator.
+> +
+> +  vcc-if-bb-supply:
+> +    description:
+> +      BB and IF supply voltage regulator.
+> +
+> +  vcc-vga-supply:
+> +    description:
+> +      RF Amplifier supply voltage regulator.
+> +
+> +  vcc-vva-supply:
+> +    description:
+> +      VVA Control Circuit supply voltage regulator.
+> +
+> +  vcc-lna-3p3-supply:
+> +    description:
+> +      Low Noise Amplifier 3.3V supply voltage regulator.
+> +
+> +  vcc-lna-1p5-supply:
+> +    description:
+> +      Low Noise Amplifier 1.5V supply voltage regulator.
+> +
+> +  vcc-bg-supply:
+> +    description:
+> +      Band Gap Circuit supply voltage regulator.
+> +
+> +  vcc-quad-supply:
+> +    description:
+> +      Quadruple supply voltage regulator.
+> +
+> +  vcc-mixer-supply:
+> +    description:
+> +      Mixer supply voltage regulator.
+> +
+> +  adi,input-mode:
+> +    description:
+> +      Select the input mode.
+> +      iq - in-phase quadrature (I/Q) input
+> +      if - complex intermediate frequency (IF) input
+> +    enum: [iq, if]
+> +
+> +  adi,detector-enable:
+> +    description:
+> +      Digital Rx Detector Enable. The Square Law Detector output is
+> +      available at output pin VDET.
+> +    type: boolean
+> +
+> +  adi,p1db-compensation-enable:
+> +    description:
+> +      Turn on bits to optimize P1dB.
+> +    type: boolean
+> +
+> +  adi,quad-se-mode:
+> +    description:
+> +      Switch the LO path from differential to single-ended operation.
+> +      se-neg - Single-Ended Mode, Negative Side Disabled.
+> +      se-pos - Single-Ended Mode, Positive Side Disabled.
+> +      diff - Differential Mode.
+> +    enum: [se-neg, se-pos, diff]
+> +
+> +  '#clock-cells':
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - vcm-supply
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    spi {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +      admv1014@0{
+> +        compatible = "adi,admv1014";
+> +        reg = <0>;
+> +        spi-max-frequency = <1000000>;
+> +        clocks = <&admv1014_lo>;
+> +        clock-names = "lo_in";
+> +        vcm-supply = <&vcm>;
+> +        adi,quad-se-mode = "diff";
+> +        adi,detector-enable;
+> +        adi,p1db-compensation-enable;
+> +      };
+> +    };
+> +...
 
-[...]
-
->  static void __init its_acpi_probe(void)
->  {
->  	acpi_table_parse_srat_its();
-> +	if (acpi_table_parse_madt(ACPI_MADT_TYPE_GENERIC_TRANSLATOR,
-> +				  its_acpi_reset, 0))
-> +		return;
-
-Nah. This is obviously broken.
-
-I'll repost something once I have actually tested it on an ACPI box.
-
-         M.
--- 
-Jazz is not dead. It just smells funny...

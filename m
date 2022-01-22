@@ -2,97 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 635D6496B1F
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 09:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE309496B25
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 10:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233926AbiAVIxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 03:53:32 -0500
-Received: from mga07.intel.com ([134.134.136.100]:24299 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232330AbiAVIxa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 03:53:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642841610; x=1674377610;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fvnk/x/WTDcjZ8a7QWLw+S3Fy/cMiGNI0U5gn7a9HyA=;
-  b=ZwHp/oc1yFM1UzLx2nYdNV5+UgUnu6qqGC7WtREaJu5psPanmAmDxoEr
-   DvO9SVJz4V2VwGO31ODR1r1vIL9XOJpeBQYacd5+xwmsV+DiLT8J8IR9N
-   0m1MqRDasiJ6cK4HvQV6PpgvlamoVNgHcdGeVzDN/urW3ZoOan1KW0PnI
-   /XoRY3EHhGwUI6WmfqsTImdsOdbboKrsudiYsc8xyxViEW4Gdp1oRLNKs
-   3WPGolY3LZhR4UA1rJV7/H5zdN7G/Wdrzl25oZqtXTN6DTr1fZY97+Xev
-   TVeZ3rFeSHaPf+qypOjEkMvU+rQ/x12VpDLWQIoUB9AhtqoKOytIS/aOL
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="309133211"
-X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
-   d="scan'208";a="309133211"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2022 00:53:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
-   d="scan'208";a="531624385"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 22 Jan 2022 00:53:27 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nBC9H-000GEZ-BN; Sat, 22 Jan 2022 08:53:27 +0000
-Date:   Sat, 22 Jan 2022 16:52:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, bhupesh.sharma@linaro.org,
-        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        bjorn.andersson@linaro.org, agross@kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH] arm64: dts: qcom: sm8150: Add ufs power-domain entries
-Message-ID: <202201221606.gzXiP4VV-lkp@intel.com>
-References: <20220120082803.15535-1-bhupesh.sharma@linaro.org>
+        id S233936AbiAVJFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 04:05:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232330AbiAVJFB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 22 Jan 2022 04:05:01 -0500
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050::465:101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021DDC06173B;
+        Sat, 22 Jan 2022 01:05:00 -0800 (PST)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [80.241.60.245])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4Jgr153n5tz9svd;
+        Sat, 22 Jan 2022 10:04:57 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Date:   Sat, 22 Jan 2022 20:04:41 +1100
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Kir Kolyshkin <kolyshkin@gmail.com>
+Cc:     linux-man@vger.kernel.org,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        David Herrmann <dh.herrmann@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fcntl.2: document F_GET_SEALS on tmpfs peculiarity
+Message-ID: <20220122090441.ktxh43lpgsd2dxj4@senku>
+References: <20220122005251.1441343-1-kolyshkin@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="envdxlah4rr2kem4"
 Content-Disposition: inline
-In-Reply-To: <20220120082803.15535-1-bhupesh.sharma@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220122005251.1441343-1-kolyshkin@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bhupesh,
 
-Thank you for the patch! Yet something to improve:
+--envdxlah4rr2kem4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on v5.16 next-20220121]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Adding the maintainers of mm/{shmem,memfd}.c and fs/hugetlbfs/ just in
+case this was not intended behaviour.
 
-url:    https://github.com/0day-ci/linux/commits/Bhupesh-Sharma/arm64-dts-qcom-sm8150-Add-ufs-power-domain-entries/20220120-162925
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: arm64-randconfig-s032-20220117 (https://download.01.org/0day-ci/archive/20220122/202201221606.gzXiP4VV-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/e9cea3a4d3c4706f9cef18f55b07d3bc389a051a
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Bhupesh-Sharma/arm64-dts-qcom-sm8150-Add-ufs-power-domain-entries/20220120-162925
-        git checkout e9cea3a4d3c4706f9cef18f55b07d3bc389a051a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash
+On 2022-01-21, Kir Kolyshkin <kolyshkin@gmail.com> wrote:
+> Currently, from the description of file sealing it can be deduced that
+> unless the fd is a memfd, all sealing operations fail with EINVAL.
+>=20
+> Apparently, it's not true for tmpfs or hugetlbfs -- F_GET_SEALS returns
+> 1 (F_SEAL_SEAL) for an fd opened on these filesystems (probably because
+> those are used to back memfd files).
+>=20
+> Fix the description to mention that peculiarity. Not knowing this can
+> result in incorrect code logic (see [1], where the code mistook a
+> descriptor of a file opened on on tmpfs for a memfd).
+>=20
+> While at it, clarify that fcntl does not actually return EINVAL, but
+> sets errno to it (as it is usually said elsewhere).
+>=20
+> [1] https://github.com/opencontainers/runc/pull/3342
+>=20
+> Cc: Aleksa Sarai <cyphar@cyphar.com>
+> Cc: David Herrmann <dh.herrmann@gmail.com>
+> Signed-off-by: Kir Kolyshkin <kolyshkin@gmail.com>
+> ---
+>  man2/fcntl.2 | 17 +++++++++++++++--
+>  1 file changed, 15 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/man2/fcntl.2 b/man2/fcntl.2
+> index 7b5604e3a..f951b05ff 100644
+> --- a/man2/fcntl.2
+> +++ b/man2/fcntl.2
+> @@ -1402,10 +1402,23 @@ file seals can be applied only to a file descript=
+or returned by
+>  (if the
+>  .B MFD_ALLOW_SEALING
+>  was employed).
+> -On other filesystems, all
+> +On all other filesystems, except
+> +.BR tmpfs (5)
+> +and
+> +.BR hugetlbfs ,
+> +all
+>  .BR fcntl ()
+> -operations that operate on seals will return
+> +operations that operate on seals will fail with
+> +.I errno
+> +set to
+>  .BR EINVAL .
+> +For a descriptor from a file on
+> +.BR tmpfs (5)
+> +or
+> +.BR hugetlbfs ,
+> +.B F_GET_SEALS
+> +returns
+> +.BR F_SEAL_SEAL .
+>  .PP
+>  Seals are a property of an inode.
+>  Thus, all open file descriptors referring to the same inode share
+> --=20
+> 2.33.1
+>=20
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
 
-All errors (new ones prefixed by >>):
+--envdxlah4rr2kem4
+Content-Type: application/pgp-signature; name="signature.asc"
 
->> Error: arch/arm64/boot/dts/qcom/sm8150.dtsi:1641.26-27 syntax error
-   FATAL ERROR: Unable to parse input tree
+-----BEGIN PGP SIGNATURE-----
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+iHUEABYKAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCYevIpgAKCRCdlLljIbnQ
+EmUiAQDTNHQDDzlD7fS/Xwxwk5Zxh73/hn1PZUcq5/8zkcummgD/SaHHLa8KogLj
+nc5oNbmQK9xoMMbju8mARw7LIpqLmg8=
+=sgIs
+-----END PGP SIGNATURE-----
+
+--envdxlah4rr2kem4--

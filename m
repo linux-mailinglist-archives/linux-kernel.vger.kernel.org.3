@@ -2,78 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 462B4496AB1
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 08:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F30D3496AB2
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 08:38:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232801AbiAVHhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 02:37:35 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:31176 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbiAVHhf (ORCPT
+        id S233582AbiAVHij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 02:38:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229651AbiAVHii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 02:37:35 -0500
-Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Jgp0w2JFGz8wQH;
-        Sat, 22 Jan 2022 15:34:40 +0800 (CST)
-Received: from dggpeml500018.china.huawei.com (7.185.36.186) by
- dggpeml500022.china.huawei.com (7.185.36.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 22 Jan 2022 15:37:33 +0800
-Received: from [10.67.111.186] (10.67.111.186) by
- dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 22 Jan 2022 15:37:32 +0800
-Message-ID: <eab13a50-463d-3d45-d58a-77dfebd3b4dd@huawei.com>
-Date:   Sat, 22 Jan 2022 15:37:32 +0800
+        Sat, 22 Jan 2022 02:38:38 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFADC06173B
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 23:38:37 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id a21so12914406qkn.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 23:38:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=4LVxHtzmhByQ4U/dSb68NhLXMVvIEPZo6dVOi9vo43g=;
+        b=iw6o85YVGMGcIMT0yZv2GCzB0yEp7C4Z4kc+uQFT0ZlYjSrTB4KKU6T7Vl5z5FQDIc
+         xEPpr38EwdfTkd+7fkn6ohAc/Zdr+Z4vvu8d++o4C1+37VTQg2Z0c1kL9oYnOu5Lfl3B
+         /1Vp3VE8meUbEV/gepWAW6Ax534arWT4qKcdkxBOTG4JUL+F1SWn4Y6fTdHXFgcuBKdw
+         U3lqTf8Ik88s7GXAk51IzFAu6tpq3E4UE0LDGeRls5/ESvk5xo+nyotnTlNClMjEDgAk
+         kTZJAvRsdSCd9KrzNopkoyJWL1kY4FYqrYGJfHyW/rIuTuBIqt5VXkfsoQiutyFGKczL
+         INug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=4LVxHtzmhByQ4U/dSb68NhLXMVvIEPZo6dVOi9vo43g=;
+        b=6waBoAIjM6l72au6k5p6mmeQyPQq3M0SLI7acjGZ+fJLvoXZ0GrGHBx8KYvhL98s2F
+         OxxKafAn6ON2nLHf1PdgExXJF9E3JVlV7zj25jpBNLyvNn/8VmN+4+y0oqxfGCgCPbJz
+         jp889aMNoCG2+75A7skS5C5YstninJIH3ADJEKRtnzMXXMvc3NEjpxEDLldhxmhb1xbD
+         rHcdQF6xGlQurh3AUB7p9IJr4KPTF2lfL7L00XYuM6poVsTmaBnir2I9h/YmHxWpnCHV
+         4doJWR/6vutbcAXhEXVO4mrdOx1Xe626wU/cw+o+v3FpFaknzeMLVS0vX3n5PAYrMisY
+         pSbA==
+X-Gm-Message-State: AOAM530M+3TH085viWoF9NPNMacS5Pe5Unu69561XU2me5ln+jAGE4WR
+        4z6kefqvNZYcV/uas1py1ysG1jIpdmcCkPvLPG0=
+X-Google-Smtp-Source: ABdhPJwlWccvYoK21EDvGhl+na7BlL0cxgMiXqu2jNVn/BIOPog9qIlH3slhQz3mnCkHPgQe/wLZXwzbiDtItMgUd0s=
+X-Received: by 2002:a37:a68f:: with SMTP id p137mr5115020qke.696.1642837116660;
+ Fri, 21 Jan 2022 23:38:36 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
-Subject: Re: [PATCH] cgroup/cpuset: Fix a race between cpuset_attach() and cpu
- hotplug
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-CC:     <linux-kernel@vger.kernel.org>, <cgroups@vger.kernel.org>,
-        <tj@kernel.org>, <lizefan.x@bytedance.com>, <hannes@cmpxchg.org>,
-        <matthltc@us.ibm.com>, <bblum@google.com>, <menage@google.com>,
-        <akpm@linux-foundation.org>, <longman@redhat.com>,
-        <zhaogongyi@huawei.com>
-References: <20220121101210.84926-1-zhangqiao22@huawei.com>
- <20220121155705.GA2394@blackbody.suse.cz>
-From:   Zhang Qiao <zhangqiao22@huawei.com>
-In-Reply-To: <20220121155705.GA2394@blackbody.suse.cz>
+Received: by 2002:ad4:5ecb:0:0:0:0:0 with HTTP; Fri, 21 Jan 2022 23:38:36
+ -0800 (PST)
+Reply-To: maddahabdwabbo@gmail.com
+From:   Abd-Jafaari Maddah <mackshawn74@gmail.com>
+Date:   Fri, 21 Jan 2022 23:38:36 -0800
+Message-ID: <CAJ=jc=GU_9rLZR2Z1g_9i+RZ1DP82TvT93STh537JLakzmmw4w@mail.gmail.com>
+Subject: OK
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.186]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500018.china.huawei.com (7.185.36.186)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/1/21 23:57, Michal Koutný 写道:
-> On Fri, Jan 21, 2022 at 06:12:10PM +0800, Zhang Qiao <zhangqiao22@huawei.com> wrote:
->> Fixes: be367d099270 ("cgroups: let ss->can_attach and ss->attach do whole threadgroups at a time")
-> 
-> What a deep stratigraphy (not sure if it's this one but anything else
-> would likely come from eras ago too).
-
-Yes, I checked again and this bug may have existed since the tag Linux-2.6.12-rc2.
->> Reported-by: Zhao Gongyi <zhaogongyi@huawei.com>
->> Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
->> ---
->>  kernel/cgroup/cpuset.c | 2 ++
->>  1 file changed, 2 insertions(+)
-> 
-> Feel free to include
-> Reviewed-by: Michal Koutný <mkoutny@suse.com>
-> 
-Thanks for your review!
-
-Regards,
-Qiao
-.
-
-> .
-> 
+-- 
+Dear,
+I had sent you a mail but i don't think you received it that's why am
+writing you again so we discuss,it's important.
+Am waiting,
+Abd-jafaari Maddah

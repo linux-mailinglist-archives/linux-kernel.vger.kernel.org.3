@@ -2,109 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AD0496909
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 02:03:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B96F496915
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 02:08:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbiAVBDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 20:03:13 -0500
-Received: from mga04.intel.com ([192.55.52.120]:24982 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231226AbiAVBDM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 20:03:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642813392; x=1674349392;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=p6CtIuYmB9Knh+YaUvh8oW7TYmjlpEYCbWhZuupQWhI=;
-  b=GWlzAl3tKgjOyHQoWURqW+003bFHIDmt7ptlcuQwOl5ZWk5FZtiWZhHg
-   0ANxtJMP4Va7PfGenAPj9uTWukOY3mmpfcvNyuvAQFy0ljDDefNl7/tzr
-   vClZ2bbZz1+ppfcFHvP4F/jknYJESLfN14Q4XZHyLE5vju9iCPBx9CpRe
-   k3/rHyWYSjVTG2CE0lHdeYN8N9MscZHBYaB9HmjJ/h77oWPpBCrUdeUb+
-   HWiBJp4LFUuXmUcTFSoYGGf5hQQ04V+G/oM/m6lh83N5kezNV4wOAen7u
-   Y7Xk55VXug/kSxBBdtid4haxpIV6f4IEchJj71cmr5TjUPwFzTzGDhHoT
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="244597661"
-X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
-   d="scan'208";a="244597661"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 17:03:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,306,1635231600"; 
-   d="scan'208";a="562059812"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 21 Jan 2022 17:03:10 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nB4oA-000Fpz-3V; Sat, 22 Jan 2022 01:03:10 +0000
-Date:   Sat, 22 Jan 2022 09:03:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [rt-devel:linux-5.16.y-rt-rebase 16/132]
- kernel/printk/printk.c:2979:7: warning: variable 'any_usable' set but not
- used
-Message-ID: <202201220837.EAj9Nrqa-lkp@intel.com>
+        id S231465AbiAVBIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 20:08:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41544 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230465AbiAVBII (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 20:08:08 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 313CC61A51;
+        Sat, 22 Jan 2022 01:08:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 894A2C340E1;
+        Sat, 22 Jan 2022 01:08:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642813687;
+        bh=f9nzyluFJ8M82ikvyQwK1d+zkmtgOnVsNbb6WktqI+I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=r57AwOIEYM7jTOQoJo3qdJjJpnlPplkLZmY6lhw0smep+o63Zwppz6bX0HlsoySNR
+         7xWW4FpbKBGdc6muDVERe3qvDQ/NFOkOKKL3bYmX38sT/SXZZpqJ7Z+8m+D8KM69Xw
+         ecaLMqLZKEBpvZGKJgwtSf6muf75PIZ25RZylvRu9P6bftkJ6MJZD5uO3GzqcSLL4/
+         ja0OF3i+97Z+FxgjbSp8qTsmm7MJbI2ZHVKXwVsUTOpp/PcP3zOnjFlNA1ziTOMOhB
+         rlda+uuw5F7z4FXceN1mA1Tc+VNpN/5m9PNk+G/9YrfSxF0M2iS+ifzqXCOwVtpz81
+         6YlRFGIJnuKRQ==
+Date:   Fri, 21 Jan 2022 17:08:07 -0800
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        david@fromorbit.com, linux-kernel@vger.kernel.org,
+        sandeen@sandeen.net, hch@lst.de
+Subject: [GIT PULL] xfs: fixes for 5.17-rc1
+Message-ID: <20220122010807.GT13540@magnolia>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-5.16.y-rt-rebase
-head:   1722f531f5244c70dcd9687c40729860bb254e8d
-commit: e1fd5438186d729df636919574f08231f7ecdd1d [16/132] serial: 8250: implement write_atomic
-config: arm-randconfig-r016-20220121 (https://download.01.org/0day-ci/archive/20220122/202201220837.EAj9Nrqa-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/commit/?id=e1fd5438186d729df636919574f08231f7ecdd1d
-        git remote add rt-devel https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
-        git fetch --no-tags rt-devel linux-5.16.y-rt-rebase
-        git checkout e1fd5438186d729df636919574f08231f7ecdd1d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/printk/
+Hi Linus,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Please pull this branch of minor corrections for 5.17-rc1.  One of the
+patches removes some dead code from xfs_ioctl32.h and the other fixes
+broken workqueue flushing in the inode garbage collector.
 
-All warnings (new ones prefixed by >>):
+As usual, I did a test-merge with upstream master as of a few minutes
+ago, and didn't see any conflicts.  Please let me know if you encounter
+any problems.
 
->> kernel/printk/printk.c:2979:7: warning: variable 'any_usable' set but not used [-Wunused-but-set-variable]
-           bool any_usable = false;
-                ^
-   1 warning generated.
+--D
 
+The following changes since commit b3bb9413e717b44e4aea833d07f14e90fb91cf97:
 
-vim +/any_usable +2979 kernel/printk/printk.c
+  xfs: remove the XFS_IOC_{ALLOC,FREE}SP* definitions (2022-01-17 09:17:11 -0800)
 
-fe3d8ad31cf51b kernel/printk.c        Feng Tang   2011-03-22  2975  
-02489ebe320634 kernel/printk/printk.c John Ogness 2021-12-22  2976  #ifdef CONFIG_HAVE_ATOMIC_CONSOLE
-02489ebe320634 kernel/printk/printk.c John Ogness 2021-12-22  2977  static void atomic_console_flush_all(void)
-02489ebe320634 kernel/printk/printk.c John Ogness 2021-12-22  2978  {
-02489ebe320634 kernel/printk/printk.c John Ogness 2021-12-22 @2979  	bool any_usable = false;
-02489ebe320634 kernel/printk/printk.c John Ogness 2021-12-22  2980  	unsigned long flags;
-02489ebe320634 kernel/printk/printk.c John Ogness 2021-12-22  2981  	struct console *con;
-02489ebe320634 kernel/printk/printk.c John Ogness 2021-12-22  2982  	bool any_progress;
-02489ebe320634 kernel/printk/printk.c John Ogness 2021-12-22  2983  	int index = 0;
-02489ebe320634 kernel/printk/printk.c John Ogness 2021-12-22  2984  
-02489ebe320634 kernel/printk/printk.c John Ogness 2021-12-22  2985  	if (console_suspended)
-02489ebe320634 kernel/printk/printk.c John Ogness 2021-12-22  2986  		return;
-02489ebe320634 kernel/printk/printk.c John Ogness 2021-12-22  2987  
+are available in the Git repository at:
 
-:::::: The code at line 2979 was first introduced by commit
-:::::: 02489ebe320634155c5ddb3110d7d456fa68d304 printk: add infrastucture for atomic consoles
+  git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.17-merge-7
 
-:::::: TO: John Ogness <john.ogness@linutronix.de>
-:::::: CC: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+for you to fetch changes up to 6191cf3ad59fda5901160633fef8e41b064a5246:
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+  xfs: flush inodegc workqueue tasks before cancel (2022-01-19 14:58:26 -0800)
+
+----------------------------------------------------------------
+New code for 5.17:
+- Minor cleanup of ioctl32 cruft
+- Clean up open coded inodegc workqueue function calls
+
+----------------------------------------------------------------
+Brian Foster (1):
+      xfs: flush inodegc workqueue tasks before cancel
+
+Darrick J. Wong (1):
+      xfs: remove unused xfs_ioctl32.h declarations
+
+ fs/xfs/xfs_icache.c  | 22 ++++------------------
+ fs/xfs/xfs_ioctl32.h | 18 ------------------
+ 2 files changed, 4 insertions(+), 36 deletions(-)

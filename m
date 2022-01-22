@@ -2,205 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06929496DED
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 21:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A818C496DFA
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 21:19:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbiAVUQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 15:16:13 -0500
-Received: from mga06.intel.com ([134.134.136.31]:2429 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230249AbiAVUQF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 15:16:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642882565; x=1674418565;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Fv9ShTXTlW5ip9qfoUSrs20qShJNziFb25OcWo9VPck=;
-  b=I1zANBX35OKDo5eIrqn1jdYDDm6+FZigI1/m/lt6i5RE4fXgCIOrNFrY
-   6sbRRJAG5bX6ex2HKj8F0XhtT/z6haHaTSiXcPxGASuIAZXnXm32MjdhM
-   K6JKA9JnaSvTAiwRTp1Q5slThnKdnoHKtToj7lQy+j65QiE5jsBHLEMIp
-   NXX9WqtkfJLFdlIWCGpeWd0/mtZsCf/rZSF66IDxSkaiz99JFRpTlefqY
-   T5XN0/awPDoLfaxIU9bTFKSnvgLsiw2uzemDvLz2bjoNx0KVqDT+Wbg/0
-   V+Jg9euRedXzioeY198D67ZMOHVhRxcbFUqGgkSivAfyuInBrS2KYhflQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10235"; a="306563076"
-X-IronPort-AV: E=Sophos;i="5.88,308,1635231600"; 
-   d="scan'208";a="306563076"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2022 12:16:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,308,1635231600"; 
-   d="scan'208";a="562238699"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 22 Jan 2022 12:16:03 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nBMnq-000GjH-BC; Sat, 22 Jan 2022 20:16:02 +0000
-Date:   Sun, 23 Jan 2022 04:15:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: drivers/net/dsa/microchip/ksz8795_spi.c:87:34: warning: unused
- variable 'ksz8795_dt_ids'
-Message-ID: <202201230139.E1dqQNmn-lkp@intel.com>
+        id S231200AbiAVUTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 15:19:45 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43978 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231285AbiAVUTm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 22 Jan 2022 15:19:42 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EFAA360F58;
+        Sat, 22 Jan 2022 20:19:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DB8FC004E1;
+        Sat, 22 Jan 2022 20:19:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642882781;
+        bh=kX+aJj/Ez7j/vGpPEOXOs3QVeKathCgDdsMowcP72ek=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GpS+AGrD/Yl+Gw9+O9UCzo/+EfJJHUeH4MOgVMMbmRNf0ldRSK0UqEIpx82OM+vlv
+         rA8K4wgWuyUAfmTc6i0a0rwyO8Ec9XA/p2kztjH02F+RKL+PZRAbbKHGoCCi3AiWPv
+         ZkcVKs9P/Pr+VgnlHfTWO0VY8mNw+I4suK4/sZE1iPMeHu3LtzHIxT8b5EyTvuLl+k
+         JuvaBvxBvWY+YPJblogxtvD5o8TJJ5qgMT1+z+e3oCfl4imrpbfpTuTSHupDBsCMQH
+         NJIFJj6FyfQBuE31nsAE/TkyrZNMfoOZqhCylT2QMSw3N3qggjdx6Ss/FQLCqLjHM/
+         WjLH3sYWdbbZQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 6933D40C99; Sat, 22 Jan 2022 17:17:39 -0300 (-03)
+Date:   Sat, 22 Jan 2022 17:17:39 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     German Gomez <german.gomez@arm.com>,
+        James Clark <james.clark@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Chase Conklin <chase.conklin@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Stephane Eranian <eranian@google.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH] perf record/arm-spe: Override attr->sample_period for
+ non-libpfm4 events
+Message-ID: <YexmY89WKpz0TwNK@kernel.org>
+References: <20220114212102.179209-1-german.gomez@arm.com>
+ <c2b960eb-a25e-7ce7-ee4b-2be557d8a213@arm.com>
+ <35a4f70f-d7ef-6e3c-dc79-aa09d87f0271@arm.com>
+ <CAP-5=fUHT29Z8Y5pMdTWK4mLKAXrNTtC5RBpet6UsAy4TLDfDw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAP-5=fUHT29Z8Y5pMdTWK4mLKAXrNTtC5RBpet6UsAy4TLDfDw@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1c52283265a462a100ae63ddf58b4e5884acde86
-commit: 227d72063fccb2d19b30fb4197fba478514f7d83 dsa: simplify Kconfig symbols and dependencies
-date:   10 months ago
-config: s390-randconfig-c005-20220120 (https://download.01.org/0day-ci/archive/20220123/202201230139.E1dqQNmn-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=227d72063fccb2d19b30fb4197fba478514f7d83
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 227d72063fccb2d19b30fb4197fba478514f7d83
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/dsa/microchip/
+Em Mon, Jan 17, 2022 at 08:28:07AM -0800, Ian Rogers escreveu:
+> On Mon, Jan 17, 2022 at 2:27 AM German Gomez <german.gomez@arm.com> wrote:
+> >
+> > Hi James,
+> >
+> > On 17/01/2022 09:59, James Clark wrote:
+> > >
+> > > On 14/01/2022 21:21, German Gomez wrote:
+> > >> A previous commit preventing attr->sample_period values from being
+> > >> overridden in pfm events changed a related behaviour in arm_spe.
+> > >>
+> > >> Before this patch:
+> > >> perf record -c 10000 -e arm_spe_0// -- sleep 1
+> > >>
+> > >> Would not yield an SPE event with period=10000, because the arm-spe code
+> > > Just to clarify, this seems like it should say "Would yield", not "Would not yield",
+> > > as in it was previously working?
+> >
+> > "this patch" refers to the patch I'm sending, not the one it's fixing.
+> > I might have to rewrite this to make it more clear. How about:
+> >
+> > ===
+> > A previous patch preventing "attr->sample_period" values from being
+> > overridden in pfm events changed a related behaviour in arm-spe.
+> >
+> > Before said patch:
+> > perf record -c 10000 -e arm_spe_0// -- sleep 1
+> >
+> > Would yield an SPE event with period=10000. After the patch, the period
+> > in "-c 10000" was being ignored because the arm-spe code initializes
+> > sample_period to a non-zero value.
+> >
+> > This patch restores the previous behaviour for non-libpfm4 events.
+> > ===
+> 
+> Thanks for fixing this, I can add an acked-by for the v2 patch. Could
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Ian,
 
-All warnings (new ones prefixed by >>):
+	He posted a v2, can I add your Acked-by?
 
-   include/uapi/linux/swab.h:19:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x000000ffUL) << 24) |            \
-                     ^
-   In file included from drivers/net/dsa/microchip/ksz8795_spi.c:14:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:20:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |            \
-                     ^
-   In file included from drivers/net/dsa/microchip/ksz8795_spi.c:14:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
-                     ^
-   In file included from drivers/net/dsa/microchip/ksz8795_spi.c:14:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
-                     ^
-   In file included from drivers/net/dsa/microchip/ksz8795_spi.c:14:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
-           __fswab32(x))
-                     ^
-   In file included from drivers/net/dsa/microchip/ksz8795_spi.c:14:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/net/dsa/microchip/ksz8795_spi.c:87:34: warning: unused variable 'ksz8795_dt_ids' [-Wunused-const-variable]
-   static const struct of_device_id ksz8795_dt_ids[] = {
-                                    ^
-   21 warnings generated.
+- Arnaldo
 
+> we add a test for this to avoid future regressions? There are similar
+> tests for frequency like:
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/tests/attr/test-record-freq
+> based on the attr.py test:
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/tests/attr.py
+> The test specifies a base type of event attribute and then what is
+> modified by the test. It takes a little to get your head around but
+> having a test for this would be a welcome addition.
+> 
+> Thanks!
+> Ian
+> 
+> > Thanks for the review,
+> > German
 
-vim +/ksz8795_dt_ids +87 drivers/net/dsa/microchip/ksz8795_spi.c
+-- 
 
-e66f840c08a237 Tristram Ha 2019-07-29  86  
-e66f840c08a237 Tristram Ha 2019-07-29 @87  static const struct of_device_id ksz8795_dt_ids[] = {
-e66f840c08a237 Tristram Ha 2019-07-29  88  	{ .compatible = "microchip,ksz8765" },
-e66f840c08a237 Tristram Ha 2019-07-29  89  	{ .compatible = "microchip,ksz8794" },
-e66f840c08a237 Tristram Ha 2019-07-29  90  	{ .compatible = "microchip,ksz8795" },
-e66f840c08a237 Tristram Ha 2019-07-29  91  	{},
-e66f840c08a237 Tristram Ha 2019-07-29  92  };
-e66f840c08a237 Tristram Ha 2019-07-29  93  MODULE_DEVICE_TABLE(of, ksz8795_dt_ids);
-e66f840c08a237 Tristram Ha 2019-07-29  94  
-
-:::::: The code at line 87 was first introduced by commit
-:::::: e66f840c08a237acfbb981592047b53e7411012f net: dsa: ksz: Add Microchip KSZ8795 DSA driver
-
-:::::: TO: Tristram Ha <Tristram.Ha@microchip.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+- Arnaldo

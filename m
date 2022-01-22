@@ -2,71 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D261496B71
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 10:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF819496B78
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 10:40:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbiAVJf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 04:35:56 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:17360 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiAVJfx (ORCPT
+        id S234062AbiAVJkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 04:40:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45942 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232237AbiAVJkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 04:35:53 -0500
-Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JgrgH22kmz9rxh;
-        Sat, 22 Jan 2022 17:34:35 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 22 Jan 2022 17:35:51 +0800
-Received: from huawei.com (10.67.165.24) by dggpeml100012.china.huawei.com
- (7.185.36.121) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Sat, 22 Jan
- 2022 17:35:51 +0800
-From:   Kai Ye <yekai13@huawei.com>
-To:     <herbert@gondor.apana.org.au>
-CC:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <wangzhou1@hisilicon.com>, <yekai13@huawei.com>
-Subject: [PATCH v2] crypto: hisilicon/qm - cleanup warning in qm_vf_read_qos
-Date:   Sat, 22 Jan 2022 17:30:42 +0800
-Message-ID: <20220122093042.40131-1-yekai13@huawei.com>
-X-Mailer: git-send-email 2.33.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
+        Sat, 22 Jan 2022 04:40:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75CA7C06173B;
+        Sat, 22 Jan 2022 01:40:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE813B81785;
+        Sat, 22 Jan 2022 09:40:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 44C43C004E1;
+        Sat, 22 Jan 2022 09:40:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642844405;
+        bh=henkmRl3HfTRAowTOP/RK23Q67yuCV3HA56VhpKoBks=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=NKM6qjRQaQm4rNU9/RrE7JODEuKQEHJpghqkSS1311lLhHxtdUZm4BSjgz+h8z2zQ
+         QSVYgZs739kQqWfPYOZDTRxBUjgy7GeH/n1McqDHhBOWT21dqXVsuyyGty53wWjvOQ
+         TSPqLmRCdBD3sU8D1PqbcKdPA1skGg89V0ZLvieurJbQjRbaa79MvZDYTxQcWJ8d/L
+         Ym3D/50s55/IJ2MkUuZxH9Z4ppCLnNkOeAFoKvpxj3hLFn2yiYOHqY5PNTkquUSmK8
+         fk5jmGpQN7/QEagAqziftFzzvkIN8iBFWOjl20RuaR7K8NCcZCZEiB+X+REN4HBN6H
+         uNehTqqPl+qVA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 23234F60796;
+        Sat, 22 Jan 2022 09:40:05 +0000 (UTC)
+Subject: Re: [GIT PULL] fscache: Fixes and minor updates for rewrite
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <1339462.1642802244@warthog.procyon.org.uk>
+References: <1339462.1642802244@warthog.procyon.org.uk>
+X-PR-Tracked-List-Id: <linux-nfs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <1339462.1642802244@warthog.procyon.org.uk>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags/fscache-fixes-20220121
+X-PR-Tracked-Commit-Id: cef0223191452b3c493a1070baad9ffe806babac
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 7fd350f6ff846f788ba5f6668bacf2ce4257ed8f
+Message-Id: <164284440509.7666.8294766242390570357.pr-tracker-bot@kernel.org>
+Date:   Sat, 22 Jan 2022 09:40:05 +0000
+To:     David Howells <dhowells@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
+        Steve French <smfrench@gmail.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>, dhowells@redhat.com,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>, linux-cachefs@redhat.com,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        ceph-devel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kernel test rebot report this warning: Uninitialized variable: ret.
-The code flow may return value of ret directly. This value is an
-uninitialized variable, here is fix it.
+The pull request you sent on Fri, 21 Jan 2022 21:57:24 +0000:
 
-Signed-off-by: Kai Ye <yekai13@huawei.com>
----
-changes v1->v2:
-	modfiy the comments.
+> git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags/fscache-fixes-20220121
 
- drivers/crypto/hisilicon/qm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/7fd350f6ff846f788ba5f6668bacf2ce4257ed8f
 
-diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
-index c5b84a5ea350..3b29c8993b8c 100644
---- a/drivers/crypto/hisilicon/qm.c
-+++ b/drivers/crypto/hisilicon/qm.c
-@@ -4295,7 +4295,7 @@ static void qm_vf_get_qos(struct hisi_qm *qm, u32 fun_num)
- static int qm_vf_read_qos(struct hisi_qm *qm)
- {
- 	int cnt = 0;
--	int ret;
-+	int ret = -EINVAL;
- 
- 	/* reset mailbox qos val */
- 	qm->mb_qos = 0;
+Thank you!
+
 -- 
-2.33.0
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

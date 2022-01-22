@@ -2,128 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2654A496D56
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 19:35:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D7B496D5C
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 19:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234704AbiAVSfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 13:35:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48724 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiAVSfq (ORCPT
+        id S232230AbiAVSjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 13:39:36 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53950 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229379AbiAVSje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 13:35:46 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0AE0C06173B;
-        Sat, 22 Jan 2022 10:35:45 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id n8so457097lfq.4;
-        Sat, 22 Jan 2022 10:35:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=6Am4YnD9KTFo9pgUgTrDTzYozeoflnXjTOGZfWwTWNg=;
-        b=LdXLQBcP16CDu2nIYF2Azo7Av+b/1I2icMbcKKKtft2AhWt1OVafHCZ0EoqmiGk8OC
-         z7NT+rP++ZyAk06vip5VCxfX/E7n4m0EgGcIXDJ+dyUFS9fKqm2Qni3t6FAqJCUrZWCY
-         PfUZekBxgNILwSFVSuCxE633qyGztuc34Qnz5KDZ4tR6Zw2YGEbxr2tEy7bjmDZUooU1
-         5nH5/YMz6mMDDrO8rQu4bU5maeRlW8cVdZZLZM4BHAuU6H9WpOWCQGbev3Gxz+/o+T4f
-         VrCvZXDU4ZRfl/IRRf/ZnaSOPoDUV+3s/9DAE4LuryvQyBoUQFtRBEQh2vBRMnq7CM/F
-         8lyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6Am4YnD9KTFo9pgUgTrDTzYozeoflnXjTOGZfWwTWNg=;
-        b=cUS//jZwoAIG1cbCPuPOjqiDOyr+qHJR2NbfOnkamQM5YtTsxAocHnNpUpiEmQodGG
-         jhuF5RFEiA582XnGgRl2jQWtITNclRMQbzvh32hJlt3yk3mdo7MUQsQJKISQufc9BuQQ
-         jL2bqXrPqyu9Lf1fKyV+OBINhA8mNdTbMSGbj18q297COd/kUI4Hph4l1DNYlVreX4o/
-         MGa/v+rUDUjyye1yaojJlNahhUmASJYrOEfv3pxhn3n2Kt2e6Ft+5PVbeJc8VH08YmgQ
-         u/VXnjCt/VmFb1koN4okSDOb129BXos9mAmtTZfhOSZD7PabNJs+NRhBSyK+39pjknid
-         y9HQ==
-X-Gm-Message-State: AOAM5315zJe6a2l00UxvMrr94ppzloGDHf0rC0AiMfA7htJwGbFEQIhZ
-        KVCfWfYv7PDmFPq5kbJP5P0=
-X-Google-Smtp-Source: ABdhPJz0YZ2QnjDZa7kIRynR+NtfAWdMkk12sGInhaKzgGmmsKoRb+QC4ym6a5KovS5Ned/ZAfHQAw==
-X-Received: by 2002:a05:6512:1290:: with SMTP id u16mr7561566lfs.151.1642876543901;
-        Sat, 22 Jan 2022 10:35:43 -0800 (PST)
-Received: from [192.168.2.145] (109-252-139-36.dynamic.spd-mgts.ru. [109.252.139.36])
-        by smtp.googlemail.com with ESMTPSA id j18sm633773lfm.56.2022.01.22.10.35.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Jan 2022 10:35:43 -0800 (PST)
-Message-ID: <103960bf-ed5c-4a0c-9142-65ffc2e4bca0@gmail.com>
-Date:   Sat, 22 Jan 2022 21:35:42 +0300
+        Sat, 22 Jan 2022 13:39:34 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58D4C60EA1;
+        Sat, 22 Jan 2022 18:39:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88A4FC004E1;
+        Sat, 22 Jan 2022 18:39:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642876773;
+        bh=n/B1FmyEoA1G3JCa6y+KvNFQMmHR9BMvLjaGYR7WJAo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Pz/YJD7W27+/z+O5KGHaCzHgh/dhwn9TP0dG8pYxyvv1ELB8OMLl+otmXC3zKiD3t
+         nHHKotzH6ewZmjHh55JM4Jr6lHTKDMrhYyh8M0zA3zJmUUe4KD74HWcyNEaoTsKsEk
+         EvIlYldlhW5vvP7iHpz69Ae6SKezkRcAO+7o+6d5BIAXjrOk/bT6lVCp8Nhu1ndDq6
+         z4FsozrFXyc0kYctK+o44AzkfdK3b7Db1bHwfPaVRDCCzcBjJbmIxZalMw/xZYXHg+
+         xfhU8fMj9KMrMSLKGBKhWvYilMStz50N3YRQi/gH2w/HDHTU7muhuOgGxQLTGfJTGt
+         I7kiMvZLFMAJQ==
+Date:   Sat, 22 Jan 2022 13:39:30 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        tomasz.figa@gmail.com, cw00.choi@samsung.com,
+        mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH AUTOSEL 5.16 02/52] clk: samsung: exynos850: Register
+ clocks early
+Message-ID: <YexPYoPd5CTfNuId@sashalap>
+References: <20220117165853.1470420-1-sashal@kernel.org>
+ <20220117165853.1470420-2-sashal@kernel.org>
+ <b75a0bc9-0423-83cc-11e1-d5e08952cc93@canonical.com>
+ <CAPLW+4mPnktJTBeokhbmSGTZTqOa3-rkpThYHZ-Y0=_40bbLtA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 1/4] dt-bindings: Add headers for Tegra234 I2C
-Content-Language: en-US
-To:     Akhil R <akhilrajeev@nvidia.com>, devicetree@vger.kernel.org,
-        jonathanh@nvidia.com, ldewangan@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, mperttunen@nvidia.com,
-        robh+dt@kernel.org, thierry.reding@gmail.com
-References: <1642850607-20664-1-git-send-email-akhilrajeev@nvidia.com>
- <1642850607-20664-2-git-send-email-akhilrajeev@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <1642850607-20664-2-git-send-email-akhilrajeev@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAPLW+4mPnktJTBeokhbmSGTZTqOa3-rkpThYHZ-Y0=_40bbLtA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-22.01.2022 14:23, Akhil R пишет:
-> Add dt-bindings header files for I2C controllers for Tegra234
-> 
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> ---
->  include/dt-bindings/clock/tegra234-clock.h | 19 +++++++++++++++++++
->  include/dt-bindings/reset/tegra234-reset.h |  8 ++++++++
->  2 files changed, 27 insertions(+)
-> 
-> diff --git a/include/dt-bindings/clock/tegra234-clock.h b/include/dt-bindings/clock/tegra234-clock.h
-> index 8d7e66e..5d05c19 100644
-> --- a/include/dt-bindings/clock/tegra234-clock.h
-> +++ b/include/dt-bindings/clock/tegra234-clock.h
-> @@ -30,5 +30,24 @@
->  #define TEGRA234_CLK_PLLC4			237U
->  /** @brief 32K input clock provided by PMIC */
->  #define TEGRA234_CLK_CLK_32K			289U
-> +/** @brief output of mux controlled by CLK_RST_CONTROLLER_CLK_SOURCE_I2C1 */
-> +#define TEGRA234_CLK_I2C1			48U
-> +/** @brief output of mux controlled by CLK_RST_CONTROLLER_CLK_SOURCE_I2C2 */
-> +#define TEGRA234_CLK_I2C2			49U
-> +/** @brief output of mux controlled by CLK_RST_CONTROLLER_CLK_SOURCE_I2C3 */
-> +#define TEGRA234_CLK_I2C3			50U
-> +/** output of mux controlled by CLK_RST_CONTROLLER_CLK_SOURCE_I2C4 */
-> +#define TEGRA234_CLK_I2C4			51U
-> +/** @brief output of mux controlled by CLK_RST_CONTROLLER_CLK_SOURCE_I2C6 */
-> +#define TEGRA234_CLK_I2C6			52U
-> +/** @brief output of mux controlled by CLK_RST_CONTROLLER_CLK_SOURCE_I2C7 */
-> +#define TEGRA234_CLK_I2C7			53U
-> +/** @brief output of mux controlled by CLK_RST_CONTROLLER_CLK_SOURCE_I2C8 */
-> +#define TEGRA234_CLK_I2C8			54U
-> +/** @brief output of mux controlled by CLK_RST_CONTROLLER_CLK_SOURCE_I2C9 */
-> +#define TEGRA234_CLK_I2C9			55U
-> +
-> +/** @brief PLLP clk output */
-> +#define TEGRA234_CLK_PLLP_OUT0			102U
->  
->  #endif
-> diff --git a/include/dt-bindings/reset/tegra234-reset.h b/include/dt-bindings/reset/tegra234-reset.h
-> index 50e13bc..e07e898 100644
-> --- a/include/dt-bindings/reset/tegra234-reset.h
-> +++ b/include/dt-bindings/reset/tegra234-reset.h
-> @@ -12,6 +12,14 @@
->   */
->  #define TEGRA234_RESET_SDMMC4			85U
->  #define TEGRA234_RESET_UARTA			100U
-> +#define TEGRA234_RESET_I2C1			24U
-> +#define TEGRA234_RESET_I2C2			29U
-> +#define TEGRA234_RESET_I2C3			30U
-> +#define TEGRA234_RESET_I2C4			31U
-> +#define TEGRA234_RESET_I2C6			32U
-> +#define TEGRA234_RESET_I2C7			33U
-> +#define TEGRA234_RESET_I2C8			34U
-> +#define TEGRA234_RESET_I2C9			35U
+On Mon, Jan 17, 2022 at 09:18:43PM +0200, Sam Protsenko wrote:
+>On Mon, 17 Jan 2022 at 19:11, Krzysztof Kozlowski
+><krzysztof.kozlowski@canonical.com> wrote:
+>>
+>> On 17/01/2022 17:58, Sasha Levin wrote:
+>> > From: Sam Protsenko <semen.protsenko@linaro.org>
+>> >
+>> > [ Upstream commit bcda841f9bf2cddcf2f000cba96f2e27f6f2bdbf ]
+>> >
+>> > Some clocks must be registered before init calls. For example MCT clock
+>> > (from CMU_PERI) is needed for MCT timer driver, which is registered
+>> > with TIMER_OF_DECLARE(). By the time we get to core_initcall() used for
+>> > clk-exynos850 platform driver init, it's already too late. Inability to
+>> > get "mct" clock in MCT driver leads to kernel panic, as functions
+>> > registered with *_OF_DECLARE() can't do deferred calls. MCT timer driver
+>> > can't be fixed either, as it's acting as a clock source and it's
+>> > essential to register it in start_kernel() -> time_init().
+>> >
+>> > Let's register CMU_PERI clocks early, using CLK_OF_DECLARE(). CMU_TOP
+>> > generates clocks needed for CMU_PERI, but it's already registered early.
+>> >
+>> > While at it, let's cleanup the code a bit, by extracting everything
+>> > related to CMU initialization and registration to the separate function.
+>> >
+>> > Similar issue was discussed at [1] and addressed in commit 1f7db7bbf031
+>> > ("clk: renesas: cpg-mssr: Add early clock support"), as well as in
+>> > drivers/clk/mediatek/clk-mt2712.c.
+>> >
+>> > [1] https://patchwork.kernel.org/project/linux-renesas-soc/patch/20180829132954.64862-2-chris.brandt@renesas.com/
+>> >
+>> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+>> > Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+>> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> > Link: https://lore.kernel.org/r/20211122144206.23134-1-semen.protsenko@linaro.org
+>> > Signed-off-by: Sasha Levin <sashal@kernel.org>
+>> > ---
+>> >  drivers/clk/samsung/clk-exynos850.c | 70 ++++++++++++++++++++---------
+>> >  1 file changed, 49 insertions(+), 21 deletions(-)
+>> >
+>>
+>> I propose to skip this one.
+>>
+>> Backporting it to v5.16 does not hurt but also does not bring any
+>> benefits for the upstream kernel users. There is no support for
+>> mentioned Exynos850 in v5.16.
+>>
+>> It could have only meaning for some downstream, out-of-tree kernels
+>> which apply Exynos850 support on top of v5.16, but then they can just
+>> take this patch as well.
+>>
+>
+>Agreed. DTS patches will be merged only in v5.17, hopefully. Till that
+>time the whole clock driver is floating with no users. That's
+>historical thing -- I didn't have "Ack" to submit board dts at the
+>time, and SoC dts couldn't be applied without users (board dts). So I
+>focused on driver work, isolated. Not much sense to backport something
+>without having real users.
 
-Why ID order isn't maintained?
+Dropped, thanks!
+
+-- 
+Thanks,
+Sasha

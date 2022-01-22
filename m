@@ -2,43 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE1E496DD8
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 21:02:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 685A9496D80
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 20:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbiAVUCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 15:02:53 -0500
-Received: from [36.155.112.122] ([36.155.112.122]:45630 "EHLO
-        ecs-42a4.novalocal" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229517AbiAVUCw (ORCPT
+        id S234759AbiAVTCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 14:02:42 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34912 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229472AbiAVTCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 15:02:52 -0500
-Received: from User (localhost [127.0.0.1])
-        by ecs-42a4.novalocal (Postfix) with SMTP id F0FE6284A79;
-        Sun,  9 Jan 2022 04:16:18 +0800 (CST)
-Reply-To: <andbaill228@mail2world.com>
-From:   "Vlieghe" <andbaill228@mail2world.com>
-Subject: Very Importante Notice
-Date:   Sat, 8 Jan 2022 22:14:46 +0200
+        Sat, 22 Jan 2022 14:02:41 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D888E60EA8;
+        Sat, 22 Jan 2022 19:02:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20E6BC340E2;
+        Sat, 22 Jan 2022 19:02:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642878160;
+        bh=SO36fcd9Ftwvt4jmydGyHNgBsA+Y6OnFF6+xWBsSfKY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JqEq5dbtbupfQ1SYtPOUX4Ef5KzYeLROmvNiDA7hScXrZepO6w0KRtCGBeqjAyFsU
+         SsIdypZIp+hSWpz8GyM1i6dCxp66Ahg7bw6uToNoAnjvEuEZTzRDK9O8J+SuNk2HtM
+         RLA4xQfrgR8Dnc/kc1rg42hIXk0yg1gnr0PCfiQ0nFJuELVSuaLLOePGD5T/LHX3UD
+         dM+BJeKfQm//v1iFKi1F6iUA4+Mfs0QLT4xq0LRCaKz/bQJIcr2vFEz4xRqUBgLtEI
+         4EpcqIi9UF03ABM4VZMU8/KNtO0wzKat/jpb//vql3vkRtOvuw4Gu+/qcN947Cir0c
+         a/zwz+RXibktQ==
+Date:   Sat, 22 Jan 2022 14:02:36 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        "andrew@lunn.ch" <andrew@lunn.ch>,
+        "vivien.didelot@gmail.com" <vivien.didelot@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH AUTOSEL 5.16 108/217] net: dsa: ocelot: felix: Remove
+ requirement for PCS in felix devices
+Message-ID: <YexUzGPZVZrJ7RP2@sashalap>
+References: <20220118021940.1942199-1-sashal@kernel.org>
+ <20220118021940.1942199-108-sashal@kernel.org>
+ <20220118122316.yas6mmyzog6said3@skbuf>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <20220108201619.F0FE6284A79@ecs-42a4.novalocal>
-To:     undisclosed-recipients:;
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220118122316.yas6mmyzog6said3@skbuf>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sir/Madam,
+On Tue, Jan 18, 2022 at 12:23:17PM +0000, Vladimir Oltean wrote:
+>Hello Sasha,
+>
+>On Mon, Jan 17, 2022 at 09:17:51PM -0500, Sasha Levin wrote:
+>> From: Colin Foster <colin.foster@in-advantage.com>
+>>
+>> [ Upstream commit 49af6a7620c53b779572abfbfd7778e113154330 ]
+>>
+>> Existing felix devices all have an initialized pcs array. Future devices
+>> might not, so running a NULL check on the array before dereferencing it
+>> will allow those future drivers to not crash at this point
+>>
+>> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+>> Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+>> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+>> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>> ---
+>>  drivers/net/dsa/ocelot/felix.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/net/dsa/ocelot/felix.c b/drivers/net/dsa/ocelot/felix.c
+>> index f1a05e7dc8181..221440a61e17e 100644
+>> --- a/drivers/net/dsa/ocelot/felix.c
+>> +++ b/drivers/net/dsa/ocelot/felix.c
+>> @@ -823,7 +823,7 @@ static void felix_phylink_mac_config(struct dsa_switch *ds, int port,
+>>  	struct felix *felix = ocelot_to_felix(ocelot);
+>>  	struct dsa_port *dp = dsa_to_port(ds, port);
+>>
+>> -	if (felix->pcs[port])
+>> +	if (felix->pcs && felix->pcs[port])
+>>  		phylink_set_pcs(dp->pl, &felix->pcs[port]->pcs);
+>>  }
+>>
+>> --
+>> 2.34.1
+>>
+>
+>Please drop this patch from all stable branches (5.16, 5.15, 5.10).
 
-Good day to you.
+Dropped, thanks!
 
-I am Dr.Gertjan Vlieghe personal Secretary to Andrew Bailey who double as the Governor, Bank of England (https://en.wikipedia.org/wiki/Andrew_Bailey_%28banker%29). We have an inheritance of a deceased client, who bear the same name  with your surname. kindly contact Andrew Bailey through his personal email ( andbaill228@mail2world.com ) with your details for more information.
-
-Thank you.
-
-Dr.Gertjan Vlieghe
+-- 
+Thanks,
+Sasha

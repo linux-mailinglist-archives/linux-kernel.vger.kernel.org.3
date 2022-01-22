@@ -2,272 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E144968A8
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 01:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0664968B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 01:25:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbiAVAXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 19:23:30 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:36178 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230077AbiAVAX2 (ORCPT
+        id S230245AbiAVAZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 19:25:50 -0500
+Received: from mail-ot1-f54.google.com ([209.85.210.54]:33377 "EHLO
+        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230077AbiAVAZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 19:23:28 -0500
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20LFnHdN016346;
-        Fri, 21 Jan 2022 16:23:28 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : mime-version; s=facebook;
- bh=BQBv8Adx6AdODV7JAq5BNMzcVF6LkYlRMoY/L7EDorw=;
- b=NcznKvELA30fIc8AVQpqIEYgElqh3ejeSIUvgPIFxz7u5j6ZiG5W6uKD35SPhomDZCav
- H+jhCnVjREqJZwCrR/FUbw0+X1LY1o+0Zt8XT15d2tT1uebDAP6ZkcHYhQoKCQfq3DH2
- PRkp1gvm7t6FRFwh/cyMzDvXu1GOYlSOHc4= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dqj0gq00g-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 21 Jan 2022 16:23:28 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.35.173) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 21 Jan 2022 16:23:26 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ni79JgELR5mckKcIZZrMRWLBtaf1xcQywhsRw52+bZaC3/CVcS5P9xCE7kZ0B7BQOnjLwMVyXH/+baJfWag50nC/zOH0Dx7F5OpdkTadYTQGhTEFWH+ju2lu/MVfOZWV8QtCZL/5lqJuG+/EiPeCw8H0MyJVbMioiDOp9DsvdeE0EzWTPRNwMQ4igxeiznOzk4nLxAdCmMeZhQHEJZ/+YHuyi2I4ckiMUwo2uorVRKlviFPbrMiVWGHEepdkBpHl8j2QhRvHDgsc2qfqFNXo4Leg6dxLPhgerlcsR8kuAYfggc58+81QELDl+PG9LqbjDhB1ZpqJDvTaS5k/I7SmkA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BQBv8Adx6AdODV7JAq5BNMzcVF6LkYlRMoY/L7EDorw=;
- b=J5OOy2bHimssr9LvjOpThYuj0mAWBBgtNKz60LoCbXIwQM1Qb4L7A8fcCiOF8sy1bE9WzFsqZ3XeDIvJzehKqnMbsuOGr3/Qg70Q7+h0UkOn66HVwsU6M1aC7AY4no9hD5NLVdRl8QURjw5yNdxw5J8g/qKU8hUqZRfsxbl1nWwuvvX0dAbNS5EQ4BJB6lMZuHWs9gDxHk4AvjbQw4GpaPVxDgShz1DQtQqxt+UuAzJnNV8DdfekqikqCZmnd7xzZ9Ugg+vCc7lzVQASY7bln4UW53yIO+OjtuECELdDeFOsYObnQAo+1lJKvapmcN1s53KbxhAxvWyhEJIo57xmRA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
- by SA1PR15MB5139.namprd15.prod.outlook.com (2603:10b6:806:233::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Sat, 22 Jan
- 2022 00:23:24 +0000
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::1d7e:c02b:ebe1:bf5e]) by SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::1d7e:c02b:ebe1:bf5e%7]) with mapi id 15.20.4909.012; Sat, 22 Jan 2022
- 00:23:24 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Alexei Starovoitov" <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "Peter Zijlstra" <peterz@infradead.org>, X86 ML <x86@kernel.org>
-Subject: Re: [PATCH v6 bpf-next 6/7] bpf: introduce bpf_prog_pack allocator
-Thread-Topic: [PATCH v6 bpf-next 6/7] bpf: introduce bpf_prog_pack allocator
-Thread-Index: AQHYDwA7v2eTErzZP02KrqTA2Ue2qKxuJqkAgAAH3QA=
-Date:   Sat, 22 Jan 2022 00:23:24 +0000
-Message-ID: <7393B983-3295-4B14-9528-B7BD04A82709@fb.com>
-References: <20220121194926.1970172-1-song@kernel.org>
- <20220121194926.1970172-7-song@kernel.org>
- <CAADnVQK6+gWTUDo2z1H6AE5_DtuBBetW+VTwwKz03tpVdfuoHA@mail.gmail.com>
-In-Reply-To: <CAADnVQK6+gWTUDo2z1H6AE5_DtuBBetW+VTwwKz03tpVdfuoHA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3693.40.0.1.81)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5e8a0135-1cb1-4200-0abf-08d9dd3d6773
-x-ms-traffictypediagnostic: SA1PR15MB5139:EE_
-x-microsoft-antispam-prvs: <SA1PR15MB51391FFAC5462FCDA25BA5DAB35C9@SA1PR15MB5139.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 52+QRrqSE4t04ylddxvj/lsxJvkdrTRDMthHc5ezUMPxKvnP4lLZnl7j9un3ncx5l5/wV5gWNVvrHVGlT4lSHwXWN7FqBXDTBOKurkyVRrAol9YAz+F2fORAIHue5lorg5XDOs78RM/4l6+xPvjMoDgCrHdC1Oj0+IPw/T38vDlwaPWgzR0iPnlBC2nrl2O4EmkcdXZne7v1//Ncpv6Q+yZSZa8PcYEBaPAMgfqMBpbFETt5Rtht/qbInL698TagZMW7aZLJYSfijUYOHtGDYgsgFxwzJX/YikB9xZv8VlFUCj5srlEQj9j7i2rthYb9NDKXg/NV9DcpFxePSPm6Fasypl1TC/Ne33rbE1d5rfurI4PQouxVGUW2Mh6scuocEP1EsnG5mTzfikcH96b8ETBqVI3ImLbf+PkQTCEKZirx5Ca01yj0W7HIykBVzYyDeS3hcbhdLAMH6iOC7MgdTnXTWjEcqCHgMa6IXg1nn8XfzCmV49x5DcPX9b6OS40Bycviy2WE+VNeYelDi18YGkC9bVqOVRYtMyF7ofQN7j/zg7ThEj52jVgk97CsxOc0ys6hNzN9nr1BMU25QY+O+8DoXsHUmXhlIF8DsuChVQw2I62gpwvHv/Hctqe1q1WftcZNo/pZqdUA8lMQbW8KKLvO5ivRz+d+Jgbt/gpoTca0wfacnm36/MLuZ3U6oiNGueybKw1X8RtO7iVRzKqjt2qacCeUK9dDeD90QP9CxPC0wbY83EwRuXS35ZDUmiqD
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(122000001)(8936002)(8676002)(6512007)(64756008)(4326008)(86362001)(38070700005)(2906002)(508600001)(7416002)(53546011)(2616005)(6486002)(54906003)(91956017)(33656002)(186003)(66446008)(6506007)(66476007)(66556008)(76116006)(5660300002)(66946007)(6916009)(71200400001)(38100700002)(316002)(36756003)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Hv9ciaurmXQiJLRFTRIcTI2AFc9Q9WMV5airu3TGUGdJ8ytxPFDEduaoQzM0?=
- =?us-ascii?Q?CH1Gf2qmabK8PKag8gBegN24qVBO6QIhsR79Eax6TLqGykMRdhRisDVMglmw?=
- =?us-ascii?Q?jK/iFMEUIDQ2wn0/bgq+yAr8Y+vJJx2KnXHzBy3tusCu5cIqLoFwPmgnfwcD?=
- =?us-ascii?Q?haoxxgLgNfmNajw3SBu19RHXEtfi4EGda88XjhUQN/2GFgjcZX5/cdj28Yp9?=
- =?us-ascii?Q?x8Dm5yBROrI10nyQ68emywRUJNJqf+QkE/kFPZ3kUTKigX5clL33Uq2pzF4j?=
- =?us-ascii?Q?SjoJQHtUlY6RYiIBUazd9H7goX23FUVgQEBxsBKhfxa/OWhZLRBt+hwHIYD6?=
- =?us-ascii?Q?LUXjShDCU8PD5XXHlD9fTBjlR87QXnI0zZd1uZCpo3xFB6eMVMDMpinliMV6?=
- =?us-ascii?Q?8PofqRTZEur4Z2UL/DTR4/SWbmzybDTOF3T/TJXzx0fgHrkT8KivTPcpYXou?=
- =?us-ascii?Q?rHuYX81zFSEn0H78lgcOcXn0j0KuhV8dOleVxtHlTytg+VpaAD4ANwjosST3?=
- =?us-ascii?Q?PRaAvydim708zVdIQDRVJ2O9daKFTUQNNtH/iQADSIvtapw30OJXdNlBFTSB?=
- =?us-ascii?Q?tT/KdMPceK07rU/iHz1fVF5A85Cyn5T3urkl8y0emuPyuAo91BKIj+lBE3K1?=
- =?us-ascii?Q?U0RK/SyYRkrZ83R7nPUgI0IbSZncvTYpBjINT5IUesschrAayv66u5a52lyR?=
- =?us-ascii?Q?MZR3LAnScRNGgUfS4CC/QhmRvtTfj4kjqCMvUFam5lHNHydcTf6Z/Z7WE054?=
- =?us-ascii?Q?2KApP22TArkUVPrWkaW1SHQV/na6NIsQRuHmERLi3N5JHpIeye24RcvTLei5?=
- =?us-ascii?Q?ivt1b7aQprdztO0JtSHwVm+rcoxY7VryYG2n1xPDqQ63pUHV03rZIs45zb/9?=
- =?us-ascii?Q?9ZIzrht3UpW8nJNdAwSXQpbKb6CPamNQA5u1JqYaaEnTp8vuEfokXUo/UX/8?=
- =?us-ascii?Q?Qrey2MMXF19YD/ooUhSIXqvL36QwoVMUZCgcbi0/Rho1iZXKUwydb0lF693F?=
- =?us-ascii?Q?mb8L3ZpJAtetdB/S5Kp0Ce5omnCLwXIxoj5Dhoc7msVRWCNi/9yQ7ygg9k7+?=
- =?us-ascii?Q?JaLBS2SXLuxKMIcJySPleiSItbHfOXJhYeTD4zsw6WZkIkz13nPea67ksr7M?=
- =?us-ascii?Q?lLuszrUHuM+8ZZkbI6odCepLv4HZ+0FcWk7WZT759qL7i5TIqd5sG9C5PBZt?=
- =?us-ascii?Q?9cD5DQt+HOEA7EnkLBI/0ArjQ73HKfuwB1m+QtEWFovv3odnSQhGRd/f4BB3?=
- =?us-ascii?Q?/C+T2Q6EaBK3VXFx001k2hfzf3g30yfUBt6hn03i+eWC3xdXtaVurOecLRIB?=
- =?us-ascii?Q?hTwkmZl6cPrzJwPuMza14eRGGZQF0PoS+H2ydifdS+dsqGUQzn6762STEZiz?=
- =?us-ascii?Q?AVLw7gjnHU9qe23E3NESVA7QvnDeyKuFo05VSszhPkA1BSZhXfF5ubpOBsDA?=
- =?us-ascii?Q?kzLUpY3CQgOZdBvINvCrAsQcn6TZxamnjOFQteCyfyPbmABXvWKprKK2YNYF?=
- =?us-ascii?Q?SpFbfBGX0fAAjKjKwo4p/NcYHWJWsOSo5kcvN1K4PsxUTZ1PhUzzR2tXt7lH?=
- =?us-ascii?Q?RkhZEpCfivyw0J6DiOhkKgzWsH9u54gNHoecoU7Z2T0HgsrdvUCUV/FjLzdh?=
- =?us-ascii?Q?1oX1Op4rCO9Aj5kpWrT5RzBxTahk7QibQc07HMBTu1lzZ7tqdzYLTuHPO71a?=
- =?us-ascii?Q?yQVQ1w=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <5EBEEC1949F64F4E9681AB26F1875A06@namprd15.prod.outlook.com>
+        Fri, 21 Jan 2022 19:25:49 -0500
+Received: by mail-ot1-f54.google.com with SMTP id y11-20020a0568302a0b00b0059a54d66106so13885546otu.0;
+        Fri, 21 Jan 2022 16:25:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vnvsBi6j4QlS4pFCiK5E8vYWQqq9vF/OarQfMrfrUoU=;
+        b=vQO7cDMOxlgsRHTTNO/GOr81PIhfaSinJDuM/yIyPRyFkSOPxv81vnab35NKHX0Dad
+         RezxbJZHTVb/76V3R4H1SRjLQTiW3OVP9l8pY0MwYKQHAQCnxgdbs5a82w57MpY7wBHZ
+         oSQd100A3Nm2d6Zv29+UStr4l3Evacs6YADM3ecgiFSAvK19ICORmVS3sdfbQthVm+r9
+         87mwyk3oPbJW+i1J6WETcyhvM1ox5KqHjngmMbywpC75hiWqbPEreqsKsFvc4T6aWVbS
+         w6uxsH60ATW2wSrC4APQanhv4G0AGeFRjDZ7QfrsY8na65+bBGunrGyL9I7Lk84Lqfpy
+         3j1g==
+X-Gm-Message-State: AOAM531YcP1i+mljKS1jNjsora7RUXR+sYRXmrzhQxFLJqrUfjlBikeK
+        GH+5i8CxXhd6pFcZmF7/AQ==
+X-Google-Smtp-Source: ABdhPJyIRwb1uKhM2T0nBmqMzLQYSw3XjKvixBZjdgNMxJ07YX+aRKLlfHPvnDBRvZmeKfO84OYM8w==
+X-Received: by 2002:a05:6830:40af:: with SMTP id x47mr4629544ott.193.1642811148336;
+        Fri, 21 Jan 2022 16:25:48 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id e26sm1868700oiy.16.2022.01.21.16.25.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jan 2022 16:25:47 -0800 (PST)
+Received: (nullmailer pid 1904240 invoked by uid 1000);
+        Sat, 22 Jan 2022 00:25:46 -0000
+Date:   Fri, 21 Jan 2022 18:25:46 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Chun-Jie Chen <chun-jie.chen@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, srv_heupstream@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [v1 01/16] dt-bindings: ARM: Mediatek: Add new document bindings
+ of MT8186 clock
+Message-ID: <YetPCgSSRiWpDtcc@robh.at.kernel.org>
+References: <20220110134416.5191-1-chun-jie.chen@mediatek.com>
+ <20220110134416.5191-2-chun-jie.chen@mediatek.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e8a0135-1cb1-4200-0abf-08d9dd3d6773
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jan 2022 00:23:24.7347
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XUTtrYg4w+dpuw0V+jQ6tt4mqtC4jl0nELMLAomG0mV5bmc1oWRTiaRGOEUcswOjAyxOLYry4oXUJrkTLvtpcg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR15MB5139
-X-OriginatorOrg: fb.com
-X-Proofpoint-GUID: 3pU-bjwfzLOwQRgO2FTaBvvcENID6FX8
-X-Proofpoint-ORIG-GUID: 3pU-bjwfzLOwQRgO2FTaBvvcENID6FX8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-21_10,2022-01-21_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 mlxlogscore=999
- adultscore=0 suspectscore=0 phishscore=0 mlxscore=0 bulkscore=0
- spamscore=0 priorityscore=1501 lowpriorityscore=0 impostorscore=0
- clxscore=1015 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2201110000 definitions=main-2201220000
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220110134416.5191-2-chun-jie.chen@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> On Jan 21, 2022, at 3:55 PM, Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+On Mon, Jan 10, 2022 at 09:44:01PM +0800, Chun-Jie Chen wrote:
+> This patch adds the new binding documentation for system clock
+> and functional clock on Mediatek MT8186.
 > 
-> On Fri, Jan 21, 2022 at 11:49 AM Song Liu <song@kernel.org> wrote:
->> 
->> +static struct bpf_binary_header *
->> +__bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
->> +                      unsigned int alignment,
->> +                      bpf_jit_fill_hole_t bpf_fill_ill_insns,
->> +                      u32 round_up_to)
->> +{
->> +       struct bpf_binary_header *hdr;
->> +       u32 size, hole, start;
->> +
->> +       WARN_ON_ONCE(!is_power_of_2(alignment) ||
->> +                    alignment > BPF_IMAGE_ALIGNMENT);
->> +
->> +       /* Most of BPF filters are really small, but if some of them
->> +        * fill a page, allow at least 128 extra bytes to insert a
->> +        * random section of illegal instructions.
->> +        */
->> +       size = round_up(proglen + sizeof(*hdr) + 128, round_up_to);
->> +
->> +       if (bpf_jit_charge_modmem(size))
->> +               return NULL;
->> +       hdr = bpf_jit_alloc_exec(size);
->> +       if (!hdr) {
->> +               bpf_jit_uncharge_modmem(size);
->> +               return NULL;
->> +       }
->> +
->> +       /* Fill space with illegal/arch-dep instructions. */
->> +       bpf_fill_ill_insns(hdr, size);
->> +
->> +       hdr->size = size;
->> +       hole = min_t(unsigned int, size - (proglen + sizeof(*hdr)),
->> +                    PAGE_SIZE - sizeof(*hdr));
+> Signed-off-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
+> ---
+>  .../arm/mediatek/mediatek,mt8186-clock.yaml   | 133 ++++++++++++++++++
+>  .../mediatek/mediatek,mt8186-sys-clock.yaml   |  74 ++++++++++
+>  2 files changed, 207 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-clock.yaml
+>  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-sys-clock.yaml
 > 
-> It probably should be 'round_up_to' instead of PAGE_SIZE ?
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-clock.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-clock.yaml
+> new file mode 100644
+> index 000000000000..fc39101bc9b0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-clock.yaml
+> @@ -0,0 +1,133 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,mt8186-clock.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Mediatek Functional Clock Controller for MT8186
+> +
+> +maintainers:
+> +  - Chun-Jie Chen <chun-jie.chen@mediatek.com>
+> +
+> +description:
+> +  The clock architecture in Mediatek like below
+> +  PLLs -->
+> +          dividers -->
+> +                      muxes
+> +                           -->
+> +                              clock gate
+> +
+> +  The devices provide clock gate control in different IP blocks.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - mediatek,mt8186-imp_iic_wrap
+> +          - mediatek,mt8186-mfgsys
+> +          - mediatek,mt8186-wpesys
+> +          - mediatek,mt8186-imgsys1
+> +          - mediatek,mt8186-imgsys2
+> +          - mediatek,mt8186-vdecsys
+> +          - mediatek,mt8186-vencsys
+> +          - mediatek,mt8186-camsys
+> +          - mediatek,mt8186-camsys_rawa
+> +          - mediatek,mt8186-camsys_rawb
+> +          - mediatek,mt8186-mdpsys
+> +          - mediatek,mt8186-ipesys
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    imp_iic_wrap: clock-controller@11017000 {
+> +        compatible = "mediatek,mt8186-imp_iic_wrap";
+> +        reg = <0x11017000 0x1000>;
+> +        #clock-cells = <1>;
+> +    };
+> +
+> +  - |
+> +    mfgsys: clock-controller@13000000 {
+> +        compatible = "mediatek,mt8186-mfgsys";
+> +        reg = <0x13000000 0x1000>;
+> +        #clock-cells = <1>;
+> +    };
+> +
+> +  - |
+> +    wpesys: clock-controller@14020000 {
+> +        compatible = "mediatek,mt8186-wpesys";
+> +        reg = <0x14020000 0x1000>;
+> +        #clock-cells = <1>;
+> +    };
+> +
+> +  - |
+> +    imgsys1: clock-controller@15020000 {
+> +        compatible = "mediatek,mt8186-imgsys1";
+> +        reg = <0x15020000 0x1000>;
+> +        #clock-cells = <1>;
+> +    };
+> +
+> +  - |
+> +    imgsys2: clock-controller@15820000 {
+> +        compatible = "mediatek,mt8186-imgsys2";
+> +        reg = <0x15820000 0x1000>;
+> +        #clock-cells = <1>;
+> +    };
+> +
+> +  - |
+> +    vdecsys: clock-controller@1602f000 {
+> +        compatible = "mediatek,mt8186-vdecsys";
+> +        reg = <0x1602f000 0x1000>;
+> +        #clock-cells = <1>;
+> +    };
+> +
+> +  - |
+> +    vencsys: clock-controller@17000000 {
+> +        compatible = "mediatek,mt8186-vencsys";
+> +        reg = <0x17000000 0x1000>;
+> +        #clock-cells = <1>;
+> +    };
+> +
+> +  - |
+> +    camsys: clock-controller@1a000000 {
+> +        compatible = "mediatek,mt8186-camsys";
+> +        reg = <0x1a000000 0x1000>;
+> +        #clock-cells = <1>;
+> +    };
+> +
+> +  - |
+> +    camsys_rawa: clock-controller@1a04f000 {
+> +        compatible = "mediatek,mt8186-camsys_rawa";
+> +        reg = <0x1a04f000 0x1000>;
+> +        #clock-cells = <1>;
+> +    };
+> +
+> +  - |
+> +    camsys_rawb: clock-controller@1a06f000 {
+> +        compatible = "mediatek,mt8186-camsys_rawb";
+> +        reg = <0x1a06f000 0x1000>;
+> +        #clock-cells = <1>;
+> +    };
+> +
+> +  - |
+> +    mdpsys: clock-controller@1b000000 {
+> +        compatible = "mediatek,mt8186-mdpsys";
+> +        reg = <0x1b000000 0x1000>;
+> +        #clock-cells = <1>;
+> +    };
+> +
+> +  - |
+> +    ipesys: clock-controller@1c000000 {
+> +        compatible = "mediatek,mt8186-ipesys";
+> +        reg = <0x1c000000 0x1000>;
+> +        #clock-cells = <1>;
+> +    };
 
-Actually, some of these change is not longer needed after the following
-change in v6:
+There's little point in enumerating every possible compatible. 1 example 
+is more than enough.
 
-  4. Change fall back round_up_to in bpf_jit_binary_alloc_pack() from
-     BPF_PROG_MAX_PACK_PROG_SIZE to PAGE_SIZE.
 
-My initial thought (last year) was if we allocate more than 2MB (either 
-2.1MB or 3.9MB), we round up to 4MB to save page table entries. 
-However, when I revisited this earlier today, I thought we should still
-round up to PAGE_SIZE to save memory
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-sys-clock.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-sys-clock.yaml
+> new file mode 100644
+> index 000000000000..11473971a165
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-sys-clock.yaml
+> @@ -0,0 +1,74 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,mt8186-sys-clock.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Mediatek System Clock Controller for MT8186
+> +
+> +maintainers:
+> +  - Chun-Jie Chen <chun-jie.chen@mediatek.com>
+> +
+> +description:
+> +  The clock architecture in Mediatek like below
+> +  PLLs -->
+> +          dividers -->
+> +                      muxes
+> +                           -->
+> +                              clock gate
+> +
+> +  The apmixedsys provides most of PLLs which generated from SoC 26m.
+> +  The topckgen provides dividers and muxes which provide the clock source to other IP blocks.
+> +  The infracfg_ao provides clock gate in peripheral and infrastructure IP blocks.
+> +  The mcusys provides mux control to select the clock source in AP MCU.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - mediatek,mt8186-mcusys
+> +          - mediatek,mt8186-topckgen
+> +          - mediatek,mt8186-infracfg_ao
+> +          - mediatek,mt8186-apmixedsys
+> +      - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    mcusys: syscon@c53a000 {
 
-Right now, I am not sure which way is better. What do you think? If we
-round up to PAGE_SIZE, we don't need split out __bpf_jit_binary_alloc().
+clock-controller@...
 
-> 
->> +       start = (get_random_int() % hole) & ~(alignment - 1);
->> +
->> +       /* Leave a random number of instructions before BPF code. */
->> +       *image_ptr = &hdr->image[start];
->> +
->> +       return hdr;
->> +}
->> +
->> struct bpf_binary_header *
->> bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
->>                     unsigned int alignment,
->>                     bpf_jit_fill_hole_t bpf_fill_ill_insns)
->> +{
->> +       return __bpf_jit_binary_alloc(proglen, image_ptr, alignment,
->> +                                     bpf_fill_ill_insns, PAGE_SIZE);
->> +}
->> +
->> +struct bpf_binary_header *
->> +bpf_jit_binary_alloc_pack(unsigned int proglen, u8 **image_ptr,
->> +                         unsigned int alignment,
->> +                         bpf_jit_fill_hole_t bpf_fill_ill_insns)
->> {
->>        struct bpf_binary_header *hdr;
->>        u32 size, hole, start;
->> @@ -875,11 +1034,16 @@ bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
->>         * fill a page, allow at least 128 extra bytes to insert a
->>         * random section of illegal instructions.
->>         */
->> -       size = round_up(proglen + sizeof(*hdr) + 128, PAGE_SIZE);
->> +       size = round_up(proglen + sizeof(*hdr) + 128, BPF_PROG_CHUNK_SIZE);
->> +
->> +       /* for too big program, use __bpf_jit_binary_alloc. */
->> +       if (size > BPF_PROG_MAX_PACK_PROG_SIZE)
->> +               return __bpf_jit_binary_alloc(proglen, image_ptr, alignment,
->> +                                             bpf_fill_ill_insns, PAGE_SIZE);
->> 
->>        if (bpf_jit_charge_modmem(size))
->>                return NULL;
->> -       hdr = bpf_jit_alloc_exec(size);
->> +       hdr = bpf_prog_pack_alloc(size);
->>        if (!hdr) {
->>                bpf_jit_uncharge_modmem(size);
->>                return NULL;
->> @@ -888,9 +1052,8 @@ bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
->>        /* Fill space with illegal/arch-dep instructions. */
->>        bpf_fill_ill_insns(hdr, size);
->> 
->> -       hdr->size = size;
-> 
-> I'm missing where it's assigned.
-> Looks like hdr->size stays zero, so free is never performed?
+Drop unused labels.
 
-This is read only memory, so we set it in bpf_fill_ill_insns(). There was a 
-comment in x86/bpf_jit_comp.c. I guess we also need a comment here. 
+> +        compatible = "mediatek,mt8186-mcusys", "syscon";
+> +        reg = <0xc53a000 0x1000>;
+> +        #clock-cells = <1>;
+> +    };
+> +
+> +  - |
+> +    topckgen: syscon@10000000 {
+> +        compatible = "mediatek,mt8186-topckgen", "syscon";
+> +        reg = <0x10000000 0x1000>;
+> +        #clock-cells = <1>;
+> +    };
+> +
+> +  - |
+> +    infracfg_ao: syscon@10001000 {
+> +        compatible = "mediatek,mt8186-infracfg_ao", "syscon";
+> +        reg = <0x10001000 0x1000>;
+> +        #clock-cells = <1>;
+> +    };
+> +
+> +  - |
+> +    apmixedsys: syscon@1000c000 {
+> +        compatible = "mediatek,mt8186-apmixedsys", "syscon";
+> +        reg = <0x1000c000 0x1000>;
+> +        #clock-cells = <1>;
+> +    };
 
-> 
->>        hole = min_t(unsigned int, size - (proglen + sizeof(*hdr)),
->> -                    PAGE_SIZE - sizeof(*hdr));
->> +                    BPF_PROG_CHUNK_SIZE - sizeof(*hdr));
-> 
-> Before this change size - (proglen + sizeof(*hdr)) would
-> be at least 128 and potentially bigger than PAGE_SIZE
-> when extra 128 crossed page boundary.
-> Hence min() was necessary with the 2nd arg being PAGE_SIZE - sizeof(*hdr).
-> 
-> With new code size - (proglen + sizeof(*hdr)) would
-> be between 128 and 128+64
-> while BPF_PROG_CHUNK_SIZE - sizeof(*hdr) is a constant less than 64.
-> What is the point of min() ?
-
-Yeah, I guess I didn't finish my math homework here. Will fix it in the
-next version. 
-
+Again, 1 example is enough.

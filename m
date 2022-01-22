@@ -2,94 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B2D0496D49
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 19:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EC37496D4F
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 19:31:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234686AbiAVSaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 13:30:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
+        id S234694AbiAVSbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 13:31:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231531AbiAVSaA (ORCPT
+        with ESMTP id S231531AbiAVSbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 13:30:00 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E214C06173B
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 10:30:00 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id b13so48785563edn.0
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 10:30:00 -0800 (PST)
+        Sat, 22 Jan 2022 13:31:44 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA5FC06173B;
+        Sat, 22 Jan 2022 10:31:43 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id bu18so40853177lfb.5;
+        Sat, 22 Jan 2022 10:31:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=KVS5Vv9x4j1rYlAUHDutrpOGh/PFnNue3zM94McKQco=;
-        b=kholFSU9WGDaL/0mgovS14dARJabt548SLamMinuPddwYwVdJRCCSLmO1TwfadRZO9
-         bCI30s7DEqnwPVnSZuYXuGZpAuitnKfYNWxbnL5Dj7z4yzh90gbmjba5aIVJATxhhxnF
-         A7PhNMSYUKRTgnpG/XnU1Lk/mFqyftkzWynXnr/2DeKMXGm0vbqk1aX9GeXl9A7n1TMs
-         zK0Y9t7dE3jNTo4QIp3lkW4nOz+ckYfbzbf9XDbcbVChm/yuKhFg6WZY/V2djeS05Qv+
-         X3coRp0gpFQMiKaH4Nm1bjM8dRmmq2JbaivIhBdZPkCU4fIobe62NABBKHuux9jRjqlI
-         s7Ig==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=yh82ozfSM6oapqGRh4z7IM/xoIpSwq0P7Nnmuai8gxg=;
+        b=CAFwyQ77R2H6RYwpu0aR7vj2GXGa6gLhHNaq/FMOVKUwB9TSdOV1niGlNkrMDkuIDg
+         WU9BqxwnUgKILKeA6hPbuOX6TW/AXfNcT9UGGpeka8FaqEHbf0el5u8kebmCg65dulz9
+         SqpWcsrMguDTbHPpMlMc6LxC/Ua3lNuNr2yvJxp4zma6wb9fJ8FLyt3RlR83T/OutSlb
+         MnJPvr+8atYvWA/ohHEvKjqfV9xbcBX2NNEnYNNxjNjAa0p5rGNdjL0WHutWsnMpvSlQ
+         q2Tlua+vE/qx8rLjxnnFcqiuextgJHNbxdfZjFp11AtHU3NWkVwIsT5hOugAe3ZUK28u
+         G6JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KVS5Vv9x4j1rYlAUHDutrpOGh/PFnNue3zM94McKQco=;
-        b=mKqUMoX5bOqIzwu8edrDOKWXXGKD0wHRzaIV1+JpOQvoDsaONnWbW/dJ1W4lXDpX1v
-         jIXVOHQUBLQzF2C14KMwITBpUEeDAGCMl/anJW4Vdw2axX8dl1Feq9twoqF0TvXteRbR
-         ozIwQPvdu/AgLcBuifp5L2nZS2SJER5gS3o8kNuz3W/CQywOgrCHSIbw17aILteS7aRl
-         MyMTfbBAQW7djaQ3RkD/BTkaSnd+w4MRJ/Ppj4pffaGelgE5fEu192xUbk4w/livWDL7
-         JpFNPZU2N3Y7+MXx/t9YRqloR9iTe+S0P3HsEcP/pmq/XnGRzMKuAuGHF/4Q9kAscMwJ
-         hiZg==
-X-Gm-Message-State: AOAM533DB9oA0ma9eWSUCE9GBu1xdCPeWgVYRz0F0mVzXdN5FL5Nm5Oy
-        8kfDM/PG/vwUzylYFyJz4yjMwmkmZ+zB0i+YYhnlGA==
-X-Google-Smtp-Source: ABdhPJxRjsZwdzd5a5cG5hKLAE10zuNJrJIajhUwS3LhZ6WtAz8ve8XMfwHxy+cTCfuabmxgnkTfSZtlmJvuMGOFu6w=
-X-Received: by 2002:a50:d709:: with SMTP id t9mr400764edi.50.1642876198379;
- Sat, 22 Jan 2022 10:29:58 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yh82ozfSM6oapqGRh4z7IM/xoIpSwq0P7Nnmuai8gxg=;
+        b=W+90WSc3Yc2sVkNrTrvtJXAcKnDXTNsfeBByz19Yt25czIdLngbahOysq2rFCzAaEB
+         HuAX/ZqkCl5SmanW5B5VOBQiotu4YS8ZbiIxX9dWV2NWkTyGXQMTDu6bM+6fBYLaverQ
+         U5ieonYfE1nxfgXVjUMoeaby9EP3gmgzTIygRTsViqb+IbhNA/OR0Dm5JvolyfPW87wm
+         BbMTqp/MGkvuAy9p3pptZJXWb8VAhs1qN6SWdhwcGsH16TNYNyAuxHrQZ2+krZ4P01dx
+         OF+DYEUdT4EMssQa5vFf8WK9WGvbLlF5liXb50eCZPPW51WXqom/pad1LWWaJnQrLEKk
+         MFWA==
+X-Gm-Message-State: AOAM532b+TxIDaYG1vB2EgP5/hAtVA4UrlojVm5VE1lcNUDukfMH4/R9
+        Bahua1FVh8ZWgR9ZpMfQhyY=
+X-Google-Smtp-Source: ABdhPJx0tROet2YXOw/bq3Yumcg02rCbq0PE56juLvkeoXb/+YoZ1Jt9J9SY8lhUIYVvmxkFAIIHIQ==
+X-Received: by 2002:a05:6512:207:: with SMTP id a7mr5440742lfo.208.1642876301886;
+        Sat, 22 Jan 2022 10:31:41 -0800 (PST)
+Received: from [192.168.2.145] (109-252-139-36.dynamic.spd-mgts.ru. [109.252.139.36])
+        by smtp.googlemail.com with ESMTPSA id q16sm631365lfg.170.2022.01.22.10.31.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Jan 2022 10:31:41 -0800 (PST)
+Message-ID: <31ba2627-65c7-1340-e6b9-7c328a485456@gmail.com>
+Date:   Sat, 22 Jan 2022 21:31:39 +0300
 MIME-Version: 1.0
-References: <cover.1642526745.git.khalid.aziz@oracle.com> <YevrGs3WE7ywB+lH@kernel.org>
-In-Reply-To: <YevrGs3WE7ywB+lH@kernel.org>
-From:   Andy Lutomirski <luto@amacapital.net>
-Date:   Sat, 22 Jan 2022 10:29:36 -0800
-Message-ID: <CALCETrWUwn=STQpXZuXpE43UAy_2PeEDkv-FvHU+kCDur2qB9g@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/6] Add support for shared PTEs across processes
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Khalid Aziz <khalid.aziz@oracle.com>, akpm@linux-foundation.org,
-        willy@infradead.org, longpeng2@huawei.com, arnd@arndb.de,
-        dave.hansen@linux.intel.com, david@redhat.com, surenb@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-api@vger.kernel.org, Andy Lutomirski <luto@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v16 2/4] dmaengine: tegra: Add tegra gpcdma driver
+Content-Language: en-US
+To:     Akhil R <akhilrajeev@nvidia.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        Rajesh Gumasta <rgumasta@nvidia.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>
+Cc:     Pavan Kunapuli <pkunapuli@nvidia.com>
+References: <1641830718-23650-1-git-send-email-akhilrajeev@nvidia.com>
+ <1641830718-23650-3-git-send-email-akhilrajeev@nvidia.com>
+ <16c73e83-b990-7d8e-ddfd-7cbbe7e407ea@gmail.com>
+ <DM5PR12MB1850A5F5ABA9CD5D04C37086C0579@DM5PR12MB1850.namprd12.prod.outlook.com>
+ <1db14c3d-6a96-96dd-be76-b81b3a48a2b1@gmail.com>
+ <DM5PR12MB1850FF1DC4DC1714E31AADB5C0589@DM5PR12MB1850.namprd12.prod.outlook.com>
+ <683a71b1-049a-bddf-280d-5d5141b59686@gmail.com>
+ <DM5PR12MB1850D67F9B5640943F1AEB2EC05B9@DM5PR12MB1850.namprd12.prod.outlook.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <DM5PR12MB1850D67F9B5640943F1AEB2EC05B9@DM5PR12MB1850.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Jan 22, 2022, at 3:31 AM, Mike Rapoport <rppt@kernel.org> wrote:
->
-> =EF=BB=BF(added linux-api)
->
->> On Tue, Jan 18, 2022 at 02:19:12PM -0700, Khalid Aziz wrote:
->> Page tables in kernel consume some of the memory and as long as
->> number of mappings being maintained is small enough, this space
->> consumed by page tables is not objectionable. When very few memory
->> pages are shared between processes, the number of page table entries
->> (PTEs) to maintain is mostly constrained by the number of pages of
->> memory on the system. As the number of shared pages and the number
->> of times pages are shared goes up, amount of memory consumed by page
->> tables starts to become significant.
+21.01.2022 19:24, Akhil R пишет:
+>>>>>>> +static int tegra_dma_terminate_all(struct dma_chan *dc)
+>>>>>>> +{
+>>>>>>> +     struct tegra_dma_channel *tdc = to_tegra_dma_chan(dc);
+>>>>>>> +     unsigned long flags;
+>>>>>>> +     LIST_HEAD(head);
+>>>>>>> +     int err;
+>>>>>>> +
+>>>>>>> +     if (tdc->dma_desc) {
+>>>>>>
+>>>>>> Needs locking protection against racing with the interrupt handler.
+>>>>> tegra_dma_stop_client() waits for the in-flight transfer
+>>>>> to complete and prevents any additional transfer to start.
+>>>>> Wouldn't it manage the race? Do you see any potential issue there?
+>>>>
+>>>> You should consider interrupt handler like a process running in a
+>>>> parallel thread. The interrupt handler sets tdc->dma_desc to NULL, hence
+>>>> you'll get NULL dereference in tegra_dma_stop_client().
+>>>
+>>> Is it better if I remove the below part from tegra_dma_stop_client() so
+>>> that dma_desc is not accessed at all?
+>>>
+>>> +     wcount = tdc_read(tdc, TEGRA_GPCDMA_CHAN_XFER_COUNT);
+>>> +     tdc->dma_desc->bytes_transferred +=
+>>> +                     tdc->dma_desc->bytes_requested - (wcount * 4);
+>>>
+>>> Because I don't see a point in updating the value there. dma_desc is set
+>>> to NULL in the next step in terminate_all() anyway.
+>>
+>> That isn't going help you much because you also can't release DMA
+>> descriptor while interrupt handler still may be running and using that
+>> descriptor.
+> 
+> Does the below functions look good to resolve the issue, provided
+> tegra_dma_stop_client() doesn't access dma_desc?
 
-Sharing PTEs is nice, but merely sharing a chunk of address space
-regardless of optimizations is nontrivial.  It=E2=80=99s also quite useful,
-potentially.  So I think a good way to start would be to make a nice
-design for just sharing address space and then, on top of it, figure
-out how to share page tables.
+Stop shall not race with the start.
 
-See here for an earlier proposal:
+> +static int tegra_dma_terminate_all(struct dma_chan *dc)
+> +{
+> +       struct tegra_dma_channel *tdc = to_tegra_dma_chan(dc);
+> +       unsigned long flags;
+> +       LIST_HEAD(head);
+> +       int err;
+> +
+> +       err = tegra_dma_stop_client(tdc);
+> +       if (err)
+> +               return err;
+> +
+> +       tegra_dma_stop(tdc);
+> +
+> +       spin_lock_irqsave(&tdc->vc.lock, flags);
+> +       tegra_dma_sid_free(tdc);
+> +       tdc->dma_desc = NULL;
+> +
+> +       vchan_get_all_descriptors(&tdc->vc, &head);
+> +       spin_unlock_irqrestore(&tdc->vc.lock, flags);
+> +
+> +       vchan_dma_desc_free_list(&tdc->vc, &head);
+> +
+> +       return 0;
+> +}
+> 
+> +static irqreturn_t tegra_dma_isr(int irq, void *dev_id)
+> +{
+> +       struct tegra_dma_channel *tdc = dev_id;
+> +       struct tegra_dma_desc *dma_desc = tdc->dma_desc;
+> +       struct tegra_dma_sg_req *sg_req;
+> +       u32 status;
+> +
+> +       /* Check channel error status register */
+> +       status = tdc_read(tdc, TEGRA_GPCDMA_CHAN_ERR_STATUS);
+> +       if (status) {
+> +               tegra_dma_chan_decode_error(tdc, status);
+> +               tegra_dma_dump_chan_regs(tdc);
+> +               tdc_write(tdc, TEGRA_GPCDMA_CHAN_ERR_STATUS, 0xFFFFFFFF);
+> +       }
+> +
+> +       status = tdc_read(tdc, TEGRA_GPCDMA_CHAN_STATUS);
+> +       if (!(status & TEGRA_GPCDMA_STATUS_ISE_EOC))
+> +               return IRQ_HANDLED;
+> +
+> +       tdc_write(tdc, TEGRA_GPCDMA_CHAN_STATUS,
+> +                 TEGRA_GPCDMA_STATUS_ISE_EOC);
+> +
+> +       spin_lock(&tdc->vc.lock);
+> +       if (!dma_desc)
+All checks and assignments must be done inside of critical section.
 
-https://lore.kernel.org/all/CALCETrUSUp_7svg8EHNTk3nQ0x9sdzMCU=3Dh8G-Sy6=3D=
-SODq5GHg@mail.gmail.com/
 
-Alternatively, one could try to optimize memfd so that large similarly
-aligned mappings in different processes could share page tables.
-
-Any of the above will require some interesting thought as to whether
-TLB shootdowns are managed by the core rmap code or by mmu notifiers.
+> +               goto irq_done;

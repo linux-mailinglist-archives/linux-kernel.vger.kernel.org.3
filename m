@@ -2,202 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2998496E1E
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 22:39:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F21496E1A
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 22:19:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234943AbiAVViy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 16:38:54 -0500
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:60923 "EHLO
-        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230339AbiAVViw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 16:38:52 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id B31AA5802A6;
-        Sat, 22 Jan 2022 16:38:51 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sat, 22 Jan 2022 16:38:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=turner.link; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; bh=MsViZzLF8Kq6HOdr8iHnwG72oVaccjfy8JbG24
-        /A8XM=; b=BaVO64CFNCl14UaN1iXZ5HD7QFcdTRYaBRpbTDciSr3gyP7ujk9Vmx
-        B6MFRCT6GKfuvsr1QiJ1eMtFE6ZW/uNTPhsiZPKd3IY0ElAcB0ubjGQ7IEIymtQh
-        n+1xCJy1RqQljRrRi1yK2mwhbu2P2Vb+1VCIRe2ROLWAgPrMffBYfTFyFIxX/oNw
-        /uAfakYLKqROBYc/XHjL3PwjpignZkAao/QvG7DrQV6WpBTgJj0y0HdFbK/PjNOo
-        oQiDUtXYZ/wmIaSShFoZ0AR078ztRtk7kGnKTYH3LsNlaqUFjgL9TzbWdfXDlHQf
-        4+3rMHNmnPmPwR9PQV5kyZdSm8pAcUOw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=MsViZzLF8Kq6HOdr8
-        iHnwG72oVaccjfy8JbG24/A8XM=; b=KFEkrIVKNzlC5WO9zT68QI+pffxmYHKRl
-        +TcDFrUZh+xL1dRc/ucNnZwGca1Y8k2XKK7IWMwvBAQurhqBlfjBAtJHX03pkC0h
-        3Qckz2ghniY4pisdXEjke+rB4D6PB6TX5rHFTlEgniQzN4UTrV0NDDJospwgetE7
-        2IVmniPay70zbZZxGotOff1f/NqNYNWBeVeO/wRqIgxzPVd/V0qTKq/eQWJjw5Vc
-        Ilnakbupl0/9zqz3UneLsDrJu3rPi+BciK/ssHG+c3rgjInUNKHj0kAE/F4JkbbQ
-        fQu3Z1QpA7n54ldPxk2wihngZVnCW8R71TGb8ndikvw5EWK1YRQEw==
-X-ME-Sender: <xms:a3nsYRcAVeLoznYBFOIN9rAomBHI__VSU3Q9KBKlCzAfhPJ3UP7uCg>
-    <xme:a3nsYfPPbwuqtLAxyO89nP-9SbFv8pVsJ4YEFomX08lU8Ocd97NYJqgObR0gHbAcq
-    dmx9JdtHiVc4BRs7Q>
-X-ME-Received: <xmr:a3nsYag01LgO-MrezA50wVPoMpLgXXcd4u71q_Gml9S5iRZwpWiG0tH0GnHw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvddvgdduhedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfhfhvffuffgjkfggtgesthdtredttddttdenucfhrhhomheplfgrmhgvshcu
-    vfhurhhnvghruceolhhinhhugihkvghrnhgvlhdrfhhoshhssegumhgrrhgtqdhnohhnvg
-    drthhurhhnvghrrdhlihhnkheqnecuggftrfgrthhtvghrnheptedvfeduheeiueefgffh
-    vdetiedttdevhfeiteeuhfelveduvedttdffgffggfetnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheplhhinhhugihkvghrnhgvlhdrfhhoshhs
-    segumhgrrhgtqdhnohhnvgdrthhurhhnvghrrdhlihhnkh
-X-ME-Proxy: <xmx:a3nsYa_HbNlh01OToipZGyFTiZrDRc15AEX9OKOAv4UqcdFsrSfvIg>
-    <xmx:a3nsYdsDUGLZZHE5gStW8bNSqOmEeoYU0FvXNgdVn-7KaU1MwdaS7g>
-    <xmx:a3nsYZECU7jeWJJqxgXEsSeqAXlz6MNXqWMSCQBZG4LLivcwQBjRSQ>
-    <xmx:a3nsYeOYkJCmJ45IwgFYSH84jAHm5CKnMkMX9QQqZC7a3hdeigzGww>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 22 Jan 2022 16:38:51 -0500 (EST)
-References: <87ee57c8fu.fsf@turner.link>
- <acd2fd5e-d622-948c-82ef-629a8030c9d8@leemhuis.info>
- <87a6ftk9qy.fsf@dmarc-none.turner.link> <87zgnp96a4.fsf@turner.link>
- <fc2b7593-db8f-091c-67a0-ae5ffce71700@leemhuis.info>
- <CADnq5_Nr5-FR2zP1ViVsD_ZMiW=UHC1wO8_HEGm26K_EG2KDoA@mail.gmail.com>
- <87czkk1pmt.fsf@dmarc-none.turner.link>
- <BYAPR12MB46140BE09E37244AE129C01A975C9@BYAPR12MB4614.namprd12.prod.outlook.com>
-From:   James Turner <linuxkernel.foss@dmarc-none.turner.link>
-To:     "Lazar, Lijo" <Lijo.Lazar@amd.com>
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>
-Subject: Re: [REGRESSION] Too-low frequency limit for AMD GPU
- PCI-passed-through to Windows VM
-Date:   Sat, 22 Jan 2022 16:11:13 -0500
-In-reply-to: <BYAPR12MB46140BE09E37244AE129C01A975C9@BYAPR12MB4614.namprd12.prod.outlook.com>
-Message-ID: <87sftfqwlx.fsf@dmarc-none.turner.link>
+        id S234904AbiAVVSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 16:18:54 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:49048 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230339AbiAVVSw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 22 Jan 2022 16:18:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=EILhThOZz6AMIrApvuxhh7LQsxC+OdGSS/Ijnj3VP0U=; b=czU7ZQLFY1/OHBtJ3uZuH0jVhQ
+        x96bcmr5U1aRSCAN/9mMvscMKWMSP9bgXSOxU/0h5ho22cVjiX5IKtPW2rUCjFtDFuD2B1ubFvhlJ
+        SkJqPcOf2PM4AwW7IcDUeFduxquF4i/Gyrqj4CIR6ABtVJmxny0tmtk3Hgw1KBFsuylA=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nBNmP-002KKW-Jz; Sat, 22 Jan 2022 22:18:37 +0100
+Date:   Sat, 22 Jan 2022 22:18:37 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>, linux@armlinux.org.uk,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: phy: marvell: Honor phy LED set by system
+ firmware on a Dell hardware
+Message-ID: <Yex0rZ0wRWQH/L4n@lunn.ch>
+References: <20220120051929.1625791-1-kai.heng.feng@canonical.com>
+ <YelxMFOiqnfIVmyy@lunn.ch>
+ <CAAd53p7NjvzsBs2aWTP-3GMjoyefMmLB3ou+7fDcrNVfKwALHw@mail.gmail.com>
+ <Yeqzhx3GbMzaIbj6@lunn.ch>
+ <CAAd53p5pF+SRfwGfJaBTPkH7+9Z6vhPHcuk-c=w8aPTzMBxPcg@mail.gmail.com>
+ <YerOIXi7afbH/3QJ@lunn.ch>
+ <3d7b1ff0-6776-6480-ed20-c9ad61b400f7@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3d7b1ff0-6776-6480-ed20-c9ad61b400f7@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lijo,
+> One more idea:
+> The hw reset default for register 16 is 0x101e. If the current value
+> is different when entering config_init then we could preserve it
+> because intentionally a specific value has been set.
+> Only if we find the hw reset default we'd set the values according
+> to the current code.
 
-> Could you provide the pp_dpm_* values in sysfs with and without the
-> patch? Also, could you try forcing PCIE to gen3 (through pp_dpm_pcie)
-> if it's not in gen3 when the issue happens?
+We can split the problem into two.
 
-AFAICT, I can't access those values while the AMD GPU PCI devices are
-bound to `vfio-pci`. However, I can at least access the link speed and
-width elsewhere in sysfs. So, I gathered what information I could for
-two different cases:
+1) I think saving LED configuration over suspend/resume is not an
+issue. It is probably something we will be needed if we ever get PHY
+LED configuration via sys/class/leds.
 
-- With the PCI devices bound to `vfio-pci`. With this configuration, I
-  can start the VM, but the `pp_dpm_*` values are not available since
-  the devices are bound to `vfio-pci` instead of `amdgpu`.
+2) Knowing something else has configured the LEDs and the Linux driver
+should not touch it. In general, Linux tries not to trust the
+bootloader, because experience has shown bad things can happen when
+you do. We cannot tell if the LED configuration is different to
+defaults because something has deliberately set it, or it is just
+messed up, maybe from the previous boot/kexec, maybe by the
+bootloader. Even this Dell system BIOS gets it wrong, it configures
+the LED on power on, but not resume !?!?!. And what about reboot?
 
-- Without the PCI devices bound to `vfio-pci` (i.e. after removing the
-  `vfio-pci.ids=...` kernel command line argument). With this
-  configuration, I can access the `pp_dpm_*` values, since the PCI
-  devices are bound to `amdgpu`. However, I cannot use the VM. If I try
-  to start the VM, the display (both the external monitors attached to
-  the AMD GPU and the built-in laptop display attached to the Intel
-  iGPU) completely freezes.
+So i really would like the bootloader to explicitly say it has
+configured the LEDs and it takes full responsibility for any and all
+bad behaviour as a result.
 
-The output shown below was identical for both the good commit:
-f1688bd69ec4 ("drm/amd/amdgpu:save psp ring wptr to avoid attack")
-and the commit which introduced the issue:
-f9b7f3703ff9 ("drm/amdgpu/acpi: make ATPX/ATCS structures global (v2)")
-
-Note that the PCI link speed increased to 8.0 GT/s when the GPU was
-under heavy load for both versions, but the clock speeds of the GPU were
-different under load. (For the good commit, it was 1295 MHz; for the bad
-commit, it was 501 MHz.)
-
-
-# With the PCI devices bound to `vfio-pci`
-
-## Before starting the VM
-
-% ls /sys/module/amdgpu/drivers/pci:amdgpu
-module  bind  new_id  remove_id  uevent  unbind
-
-% find /sys/bus/pci/devices/0000:01:00.0/ -type f -name 'current_link*' -print -exec cat {} \;
-/sys/bus/pci/devices/0000:01:00.0/current_link_width
-8
-/sys/bus/pci/devices/0000:01:00.0/current_link_speed
-8.0 GT/s PCIe
-
-## While running the VM, before placing the AMD GPU under heavy load
-
-% find /sys/bus/pci/devices/0000:01:00.0/ -type f -name 'current_link*' -print -exec cat {} \;
-/sys/bus/pci/devices/0000:01:00.0/current_link_width
-8
-/sys/bus/pci/devices/0000:01:00.0/current_link_speed
-2.5 GT/s PCIe
-
-## While running the VM, with the AMD GPU under heavy load
-
-% find /sys/bus/pci/devices/0000:01:00.0/ -type f -name 'current_link*' -print -exec cat {} \;
-/sys/bus/pci/devices/0000:01:00.0/current_link_width
-8
-/sys/bus/pci/devices/0000:01:00.0/current_link_speed
-8.0 GT/s PCIe
-
-## While running the VM, after stopping the heavy load on the AMD GPU
-
-% find /sys/bus/pci/devices/0000:01:00.0/ -type f -name 'current_link*' -print -exec cat {} \;
-/sys/bus/pci/devices/0000:01:00.0/current_link_width
-8
-/sys/bus/pci/devices/0000:01:00.0/current_link_speed
-2.5 GT/s PCIe
-
-## After stopping the VM
-
-% find /sys/bus/pci/devices/0000:01:00.0/ -type f -name 'current_link*' -print -exec cat {} \;
-/sys/bus/pci/devices/0000:01:00.0/current_link_width
-8
-/sys/bus/pci/devices/0000:01:00.0/current_link_speed
-2.5 GT/s PCIe
-
-
-# Without the PCI devices bound to `vfio-pci`
-
-% ls /sys/module/amdgpu/drivers/pci:amdgpu
-0000:01:00.0  module  bind  new_id  remove_id  uevent  unbind
-
-% for f in /sys/module/amdgpu/drivers/pci:amdgpu/*/pp_dpm_*; do echo "$f"; cat "$f"; echo; done
-/sys/module/amdgpu/drivers/pci:amdgpu/0000:01:00.0/pp_dpm_mclk
-0: 300Mhz
-1: 625Mhz
-2: 1500Mhz *
-
-/sys/module/amdgpu/drivers/pci:amdgpu/0000:01:00.0/pp_dpm_pcie
-0: 2.5GT/s, x8
-1: 8.0GT/s, x16 *
-
-/sys/module/amdgpu/drivers/pci:amdgpu/0000:01:00.0/pp_dpm_sclk
-0: 214Mhz
-1: 501Mhz
-2: 850Mhz
-3: 1034Mhz
-4: 1144Mhz
-5: 1228Mhz
-6: 1275Mhz
-7: 1295Mhz *
-
-% find /sys/bus/pci/devices/0000:01:00.0/ -type f -name 'current_link*' -print -exec cat {} \;
-/sys/bus/pci/devices/0000:01:00.0/current_link_width
-8
-/sys/bus/pci/devices/0000:01:00.0/current_link_speed
-8.0 GT/s PCIe
-
-
-James
+	  Andrew

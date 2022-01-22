@@ -2,106 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A45FB496C60
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 13:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCBC496C68
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 13:49:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231845AbiAVMiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 07:38:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56492 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230360AbiAVMiV (ORCPT
+        id S232294AbiAVMtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 07:49:50 -0500
+Received: from polaris.svanheule.net ([84.16.241.116]:56014 "EHLO
+        polaris.svanheule.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232171AbiAVMts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 07:38:21 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74D0C06173D
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 04:38:20 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id r15so21904998uao.3
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 04:38:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=k4uslepZlx+doJxsNKmyezSBQMtw/R3k+N4S5l4lrBo=;
-        b=BsOpApkNdWIaU/sRtOQjwh4eUZx+LBSaRTuxHUaQyNWCQyCl8bai1Wx1qwWnoNC27H
-         UMptAV67VXy6USh28okTjWJFOwzkUvxxcLMSLabutXTFPFkNtnBbMa7eeEuwDF9073we
-         fZ42v9DyP2u9LYxoNaoBkYFla0cFFWJTgKvbYKo6jtRIKNaRM4r9fnxMTi2N2LASC/k9
-         X39719sqIGKXjMPBleMQhBU6ZNT6uQtRYekkR4ZsEjG8s5q28dme/sNuxTeRGLrTi/+J
-         rYybXofWvCBIJpgUyR+L0PKRAlkQvadEp4ZKYSPYub9VCRQ08Tx0DtOa0OrsEetEIl6F
-         +IBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=k4uslepZlx+doJxsNKmyezSBQMtw/R3k+N4S5l4lrBo=;
-        b=QLn0/ZDOPDqCOnpxO5TFzkW7gkN6xPoY7nIy8bqw9yDTD9qILLK1vIzD5EwRhF2/N6
-         oBZg5ari7R83w+iGv5bGFq0wBcFX3uuPG3j9GVIqXiQUUgg0D+/yyDZqkTOr8uKkoiRB
-         Tznl1BrF3ulIot5Jtmg/7xSu7P5wQf2Fe18HrWq3Whqf/AEIQn7ztJ1XmOmHpEf2ryv2
-         IfzzZdhwQhJz2xD7D9iH62QivkMNOqyDdWB1m/+2pBAYw4HZys4NjQiAQOzgh8lzLs5v
-         iBl05Nbpmtpq43VzTMDELdMPpq0+u4TdgsQdHVxQGRmkWOzjeZ8/zlpHuW/HebDc1AjW
-         Krvw==
-X-Gm-Message-State: AOAM5302aYJK1o5fGA3BzC77fEu/NNjpDQiPDfiLNzakHxmfocW3dFOQ
-        3ks5LgDtGAfjc8xyEitwP7qFnjLxAF9VJ3bqRIBmZA==
-X-Google-Smtp-Source: ABdhPJxAkMtrFRW4Pnd6Ntwnglxpjg12Vi1yx2PNmdt/WUzgwtaT1gqfGWUrAGaiAKvIFUvMWfcsFCo1mDlwWWDzqJ0=
-X-Received: by 2002:a67:c093:: with SMTP id x19mr1768383vsi.20.1642855099794;
- Sat, 22 Jan 2022 04:38:19 -0800 (PST)
-MIME-Version: 1.0
-References: <20211227112959.7325-1-krzysztof.kozlowski@canonical.com>
- <CAPLW+4n-1H5Yu3wQaus-UJ_VW_TjHrNUHaPCGCMURXg8EqxjyA@mail.gmail.com>
- <CAK8P3a1ou-ZdrXN0MHQoJ+gGbvhXT-e2qt96_f9M8VwrdX0pAg@mail.gmail.com> <CAOesGMgF3S5_XsWjEqq=-zfYXwOWFpFNA6afL81wceRUA_0FeQ@mail.gmail.com>
-In-Reply-To: <CAOesGMgF3S5_XsWjEqq=-zfYXwOWFpFNA6afL81wceRUA_0FeQ@mail.gmail.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Sat, 22 Jan 2022 14:38:08 +0200
-Message-ID: <CAPLW+4k8=ymx56R7bKOt8kMVG_uUgrTsCkVd5wiY_rkYq8dYbQ@mail.gmail.com>
-Subject: Re: [GIT PULL] arm64: dts: samsung: Second pull for v5.17
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Cc:     arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+        Sat, 22 Jan 2022 07:49:48 -0500
+Received: from [IPv6:2a02:a03f:eafe:c901:3b3e:e0dc:8977:dea9] (unknown [IPv6:2a02:a03f:eafe:c901:3b3e:e0dc:8977:dea9])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id E02842957CC;
+        Sat, 22 Jan 2022 13:49:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1642855787;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QscYBHZxlHkC2HC1UmZnZl4VMPEmIVWTy6UCSMo7XgQ=;
+        b=yVD02cxeEg+MBpVnagvus0FCjRNVKF7sT9Rhc/FW2stXlIAQVECAU/SwSG1A5N/Qvwh86w
+        ykYxRvnr36m2c50ypVhymG0NdxeKeeQahf99VEa9+BF4/sS7+m16iO7V3I/hFkmR++U0gV
+        MBWmEhaPkVG8WG1B7lFfftTTU23v/fd2uG5FH3V/o7fJ079MAxN04E7AILtjqUoDKs4AZl
+        4fdJa1ltU2vPdSq6hUa96sticTiGAw/bEYW65EsaT+bmZQq6jWcxghobuA54X6MBm5GY3r
+        ay9QqyHg1dpR2ARx2cvZYQ0MK+SvDSi9YaPBV6YDngw3Kj7Yp+25xMUslESuMw==
+Message-ID: <d291855a36f200b178aa9e7fb6e41ff438773e38.camel@svanheule.net>
+Subject: Re: [PATCH v3 4/6] dt-bindings: interrupt-controller:
+ realtek,rtl-intc: require parents
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Bert Vermeulen <bert@biot.com>, John Crispin <john@phrozen.org>
+Date:   Sat, 22 Jan 2022 13:49:44 +0100
+In-Reply-To: <Yes6NFgUmcIcc5mm@robh.at.kernel.org>
+References: <cover.1641739718.git.sander@svanheule.net>
+         <e043a9faa4a8f71efdf8b7849ec7911f16207fb0.1641739718.git.sander@svanheule.net>
+         <Yes6NFgUmcIcc5mm@robh.at.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Jan 2022 at 18:53, Olof Johansson <olof@lixom.net> wrote:
->
-> On Wed, Jan 19, 2022 at 8:07 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Wed, Jan 19, 2022 at 4:11 PM Sam Protsenko
-> > <semen.protsenko@linaro.org> wrote:
-> > > On Mon, 27 Dec 2021 at 13:30, Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
-> > >
-> > > Hi Olof, Arnd,
-> > >
-> > > Just want to check if it's possible for those patches to be applied in
-> > > v5.17? Sorry for the noise, but that's important to me.
-> >
-> > I can see that Olof merged merged this into the "arm/late" branch in
-> > the soc tree,
-> > so I assume he still plans to send it in the next few days.
->
-> Yep, will be sent up today most likely.
->
+Hi Rob,
 
-Thanks for detailed answer! Glad to hear it's still a possibility.
-Please let me know if you need any actions on my side (like rebasing,
-etc).
+On Fri, 2022-01-21 at 16:56 -0600, Rob Herring wrote:
+> On Sun, Jan 09, 2022 at 03:54:35PM +0100, Sander Vanheule wrote:
+> > The interrupt router has 32 inputs and up to 15 outputs, and the way
+> > these are mapped to each other is runtime configurable. The outputs of
+> > this interrupt router on the other hand, are connected to a fixed set of
+> > parent interrupts. This means that "interrupt-map" is inappropriate, and
+> > rather a list of parent interrupts should be specified.
+> 
+> I'm not sure why interrupt-map is not appropriate. It is not appropriate 
+> if you have to touch the interrupt router h/w in servicing the 
+> interrupts. If you just need one time configuration of the mapping, then 
+> it should be fine to use I think.
 
-> > With the timing over Christmas, I sent out the large bulk of the
-> > contents (anything
-> > I merged before Dec 23) last year, and Linus already merged it, the rest ended
-> > up in the "late" branch.
-> >
-> > As usual, there is no guarantee that late changes make it in, but I have seen
-> > no indication of any problems so far.
->
-> Correct. Been sitting on it for a while in case there were fixes
-> coming in for the first pieces that got merged, but in traditional
-> fashion I'm guessing those will start to show up a few days after the
-> late branch gets merged. :)
->
->
-> -Olof
+If interrupt-map is used, then AFAICT there are no hooks to inform the driver that a
+translation has occurred. How should the interrupt controller driver then know how to set
+up the routing? Commit de4adddcbcc2 ("of/irq: Add a quirk for controllers with their own
+definition of interrupt-map") added a quirk for the original binding/driver, but that
+requires open-coding an interrupt-map parser in the driver.
+
+What this binding doesn't mention (I can add it), is that there are also two IRQ status
+registers to:
+  - unmask/mask SoC interrupts
+  - read the current status of the SoC interrupts
+
+In theory, if the routing is set up correctly (and the IRQ permanently unmasked), I think
+one could treat interrupt-map as intended, and connect SoC peripheral IRQ handlers
+directly to the parent interrupts. But then the interrupt subsystem would need to check
+all attached handlers. This interrupt router/controller allows to check which peripheral
+is triggering the parent IRQ, which should be more efficient.
+
+These interrupt controllers are also used on multi-threaded systems, where each hardware
+thread has its own IRQ controller. I'm still experimenting with the implementation, but 
+there the routing registers would be used to set the CPU affinity of SoC interrupts.
+
+I have to say that I'm not very familiar with the kernel code that handles all this
+though, so maybe I'm just missing something?
+
+> > Two-part compatibles are introduced to be able to require "interrupts"
+> > for new devicetrees. The relevant descriptions are extended or added to
+> > more clearly describe the inputs and outputs of this router.  The old
+> > compatible, "interrupt-map" and "#address-cells", is deprecated.
+> > Interrupt specifiers for new compatibles will require two cells, to
+> > indicate the output selection.
+> > 
+> > To prevent spurious changes when more SoCs are added, "allOf" is used
+> > with one "if", and the compatible enum only has one item.
+> > 
+> > The example is updated to provide a correct example for RTL8380 SoCs.
+> > 
+> > Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> > ---
+> >  .../realtek,rtl-intc.yaml                     | 78 ++++++++++++++-----
+> >  1 file changed, 58 insertions(+), 20 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-
+> > intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-
+> > intc.yaml
+> > index 9e76fff20323..aab8d44010af 100644
+> > --- a/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
+> > +++ b/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
+> > @@ -6,6 +6,10 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+> >  
+> >  title: Realtek RTL SoC interrupt controller devicetree bindings
+> >  
+> > +description:
+> > +  Interrupt router for Realtek MIPS SoCs, allowing each SoC interrupt to be
+> > +  routed to one parent interrupt, or left disconnected.
+> > +
+> >  maintainers:
+> >    - Birger Koblitz <mail@birger-koblitz.de>
+> >    - Bert Vermeulen <bert@biot.com>
+> > @@ -13,45 +17,79 @@ maintainers:
+> >  
+> >  properties:
+> >    compatible:
+> > -    const: realtek,rtl-intc
+> > +    oneOf:
+> > +      - items:
+> > +          - enum:
+> > +              - realtek,rtl8380-intc
+> > +          - const: realtek,rtl-intc
+> > +      - const: realtek,rtl-intc
+> > +        deprecated: true
+> >  
+> > -  "#interrupt-cells":
+> > -    const: 1
+> > +  "#interrupt-cells": true
+> >  
+> >    reg:
+> >      maxItems: 1
+> >  
+> >    interrupts:
+> > -    maxItems: 1
+> > +    minItems: 1
+> > +    maxItems: 15
+> > +    description:
+> > +      List of parent interrupts, in the order that they are connected to this
+> > +      interrupt router's outputs.
+> >  
+> >    interrupt-controller: true
+> >  
+> > -  "#address-cells":
+> > -    const: 0
+> > -
+> > -  interrupt-map:
+> > -    description: Describes mapping from SoC interrupts to CPU interrupts
+> > -
+> >  required:
+> >    - compatible
+> >    - reg
+> >    - "#interrupt-cells"
+> >    - interrupt-controller
+> > -  - "#address-cells"
+> > -  - interrupt-map
+> > +
+> > +allOf:
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          const: realtek,rtl-intc
+> > +    then:
+> > +      properties:
+> > +        "#interrupt-cells":
+> > +          const: 1
+> > +
+> > +        "#address-cells":
+> > +          const: 0
+> > +
+> > +        interrupt-map: true
+> > +      required:
+> > +        - "#address-cells"
+> > +        - interrupt-map
+> > +    else:
+> > +      properties:
+> > +        "#interrupt-cells":
+> > +          description:
+> > +            Two cells to specify which line to connect to, and which output it should
+> > +            be routed to. Both cells use a zero-based index.
+> 
+> Picking the index picks the priority? Which is higher priority?
+
+Yes, picking an output will select the (implied) priority. If the parent interrupts are
+the six MIPS CPU HW interrupts, then CPU IRQ7 has the highest priority, and IRQ2 has the
+lowest priority. All known implementations connect output (0..5) to CPU IRQ(2..7), so 
+lower output index then means lower priority.
+
+
+Best,
+Sander
+
+> 
+> 
+> > +          const: 2
+> > +      required:
+> > +        - interrupts
+> >  
+> >  additionalProperties: false
+> >  
+> >  examples:
+> >    - |
+> >      intc: interrupt-controller@3000 {
+> > -      compatible = "realtek,rtl-intc";
+> > -      #interrupt-cells = <1>;
+> > +      compatible = "realtek,rtl8380-intc", "realtek,rtl-intc";
+> > +      #interrupt-cells = <2>;
+> >        interrupt-controller;
+> > -      reg = <0x3000 0x20>;
+> > -      #address-cells = <0>;
+> > -      interrupt-map =
+> > -              <31 &cpuintc 2>,
+> > -              <30 &cpuintc 1>,
+> > -              <29 &cpuintc 5>;
+> > +      reg = <0x3000 0x18>;
+> > +
+> > +      interrupt-parent = <&cpuintc>;
+> > +      interrupts = <2>, <3>, <4>, <5>, <6>;
+> > +    };
+> > +
+> > +    irq-consumer@0 {
+> > +      reg = <0 4>;
+> > +      interrupt-parent = <&intc>;
+> > +      interrupts =
+> > +        <19 3>, /* IRQ 19, routed to output 3 (cpuintc 5) */
+> > +        <18 4>; /* IRQ 18, routed to output 4 (cpuintc 6) */
+> >      };
+> > -- 
+> > 2.33.1
+> > 
+> > 
+

@@ -2,39 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88718496DC6
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 20:58:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DEB6496DC8
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 20:58:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235120AbiAVT6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 14:58:25 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33248 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234888AbiAVT6A (ORCPT
+        id S235150AbiAVT6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 14:58:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234938AbiAVT6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 14:58:00 -0500
+        Sat, 22 Jan 2022 14:58:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD558C06174E
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 11:58:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4109260E04
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CFC460EC6
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 19:58:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43A60C004E1
         for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 19:58:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1197C340E4;
-        Sat, 22 Jan 2022 19:57:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642881479;
-        bh=UyhmqyYYymp4D+POO9zvg+tN/Lot2LylB9i/7P3+08k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S+IIKE2al4zl9JX7qwSEeJGTefY3Hk8vg2V8z2jc+B05doo8K5neTJKRw0rQTUZbc
-         J8xvcO2cbKDTW3Ko6htI5XBaySNBkbj1CGIl/WMl4XAj/fpBYdoEUe89B7SghYBX5m
-         CTSI7wUqilftdaujclO+7tHp6PoHWsvJuv/uJWSE9kGPJY6A509phYLg83vXUpqiSP
-         hp1TIaCq+j1ketIWNsixuYyVqJQEQnAop5BJYI7EhfLQ25zvndQhy5O0KGwgOY+zq5
-         tphnVU6hedmI55H0cyOkjvWHi/E3bRuBA6vBEfiX5ujJUVWKLSe/3XN7JoxkSfabP8
-         3/YDkzsHgD2tQ==
+        s=k20201202; t=1642881480;
+        bh=9KRxCq7hfWexZ4iTmqxltCzhJkE71ELLg8bzhDixBgI=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=UU8oNebY8eIY6+yx/O8kJ8iy1RaKLv9ul01WsfSRGi50k/9Rqm8XgJGRS4vP6MORY
+         uZ6Ah77txLhKwDQpw4og0cn/SD+TyYep/8KQDBRbk+gnN4fxCma8GownoyqXuqlhXL
+         k047FMM893slqGqc+XCCs5uP0FTtu6rB4sVYs7t5v6El2A8sTF7u/H9ugOTBDvp3Ip
+         mgSdsqvuwvwSMoXKnMQ+lVcXbGCqUMK/zfVBEQID+KTeG311Q/MSf1lYiajsq8MmJD
+         59aL1Cxn/BeHwjPanBX+qksr877YsQK38CwGOYXBgWz1oURyTq15J8JgwVjnjm5heU
+         sbpWt85gNgpJA==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Ohad Sharabi <osharabi@habana.ai>
-Subject: [PATCH 18/30] habanalabs: duplicate HOP table props to MMU props
-Date:   Sat, 22 Jan 2022 21:57:19 +0200
-Message-Id: <20220122195731.934494-18-ogabbay@kernel.org>
+Subject: [PATCH 19/30] habanalabs: don't free phys_pg_pack inside lock
+Date:   Sat, 22 Jan 2022 21:57:20 +0200
+Message-Id: <20220122195731.934494-19-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220122195731.934494-1-ogabbay@kernel.org>
 References: <20220122195731.934494-1-ogabbay@kernel.org>
@@ -44,67 +46,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ohad Sharabi <osharabi@habana.ai>
+Freeing phys_pg_pack includes calling to scrubbing functions of the
+device's memory, taking locks and possibly even calling reset.
 
-In order to support several device MMU blocks with different
-architectures (e.g. different HOP table size) we need to move to
-per-MMU properties rather than keeping those properties as ASIC
-properties.
+This is not something that should be done while holding a device-wide
+spinlock.
 
-Refactoring the code to use "per-MMU proprties" is a major effort.
+Therefore, save the relevant objects on a local linked-list and after
+releasing the spinlock, traverse that list and free the phys_pg_pack
+objects.
 
-To start making the transition towards this goal but still support
-taking the properties from ASIC properties (for code that currently
-uses them) this patch copies some of the properties to the "per-MMU"
-properties and later, when implementing the per-MMU properties, we
-would be able to delete the MMU props from the ASIC props.
-
-Signed-off-by: Ohad Sharabi <osharabi@habana.ai>
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/gaudi/gaudi.c | 3 +++
- drivers/misc/habanalabs/goya/goya.c   | 6 ++++++
- 2 files changed, 9 insertions(+)
+ drivers/misc/habanalabs/common/habanalabs.h |  3 +++
+ drivers/misc/habanalabs/common/memory.c     | 16 +++++++++++-----
+ 2 files changed, 14 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-index c58e21e2db3b..f2242aa3baa2 100644
---- a/drivers/misc/habanalabs/gaudi/gaudi.c
-+++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-@@ -613,6 +613,9 @@ static int gaudi_set_fixed_properties(struct hl_device *hdev)
- 	prop->pmmu.page_size = PAGE_SIZE_4KB;
- 	prop->pmmu.num_hops = MMU_ARCH_5_HOPS;
- 	prop->pmmu.last_mask = LAST_MASK;
-+	/* TODO: will be duplicated until implementing per-MMU props */
-+	prop->pmmu.hop_table_size = prop->mmu_hop_table_size;
-+	prop->pmmu.hop0_tables_total_size = prop->mmu_hop0_tables_total_size;
+diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
+index 6c7a60210416..9c8374d88907 100644
+--- a/drivers/misc/habanalabs/common/habanalabs.h
++++ b/drivers/misc/habanalabs/common/habanalabs.h
+@@ -1738,6 +1738,8 @@ struct hl_vm_hw_block_list_node {
+  * @pages: the physical page array.
+  * @npages: num physical pages in the pack.
+  * @total_size: total size of all the pages in this list.
++ * @node: used to attach to deletion list that is used when all the allocations are cleared
++ *        at the teardown of the context.
+  * @mapping_cnt: number of shared mappings.
+  * @exporting_cnt: number of dma-buf exporting.
+  * @asid: the context related to this list.
+@@ -1753,6 +1755,7 @@ struct hl_vm_phys_pg_pack {
+ 	u64			*pages;
+ 	u64			npages;
+ 	u64			total_size;
++	struct list_head	node;
+ 	atomic_t		mapping_cnt;
+ 	u32			exporting_cnt;
+ 	u32			asid;
+diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+index c1eefaebacb6..4a5d3a179765 100644
+--- a/drivers/misc/habanalabs/common/memory.c
++++ b/drivers/misc/habanalabs/common/memory.c
+@@ -2607,11 +2607,12 @@ int hl_vm_ctx_init(struct hl_ctx *ctx)
+  */
+ void hl_vm_ctx_fini(struct hl_ctx *ctx)
+ {
+-	struct hl_device *hdev = ctx->hdev;
+-	struct hl_vm *vm = &hdev->vm;
+ 	struct hl_vm_phys_pg_pack *phys_pg_list;
++	struct hl_device *hdev = ctx->hdev;
+ 	struct hl_vm_hash_node *hnode;
++	struct hl_vm *vm = &hdev->vm;
+ 	struct hlist_node *tmp_node;
++	struct list_head free_list;
+ 	struct hl_mem_in args;
+ 	int i;
  
- 	/* PMMU and HPMMU are the same except of page size */
- 	memcpy(&prop->pmmu_huge, &prop->pmmu, sizeof(prop->pmmu));
-diff --git a/drivers/misc/habanalabs/goya/goya.c b/drivers/misc/habanalabs/goya/goya.c
-index d8c6dea7c809..3785fb33260d 100644
---- a/drivers/misc/habanalabs/goya/goya.c
-+++ b/drivers/misc/habanalabs/goya/goya.c
-@@ -430,6 +430,9 @@ int goya_set_fixed_properties(struct hl_device *hdev)
- 	prop->dmmu.page_size = PAGE_SIZE_2MB;
- 	prop->dmmu.num_hops = MMU_ARCH_5_HOPS;
- 	prop->dmmu.last_mask = LAST_MASK;
-+	/* TODO: will be duplicated until implementing per-MMU props */
-+	prop->dmmu.hop_table_size = prop->mmu_hop_table_size;
-+	prop->dmmu.hop0_tables_total_size = prop->mmu_hop0_tables_total_size;
+@@ -2644,19 +2645,24 @@ void hl_vm_ctx_fini(struct hl_ctx *ctx)
  
- 	/* shifts and masks are the same in PMMU and DMMU */
- 	memcpy(&prop->pmmu, &prop->dmmu, sizeof(prop->dmmu));
-@@ -438,6 +441,9 @@ int goya_set_fixed_properties(struct hl_device *hdev)
- 	prop->pmmu.page_size = PAGE_SIZE_4KB;
- 	prop->pmmu.num_hops = MMU_ARCH_5_HOPS;
- 	prop->pmmu.last_mask = LAST_MASK;
-+	/* TODO: will be duplicated until implementing per-MMU props */
-+	prop->pmmu.hop_table_size = prop->mmu_hop_table_size;
-+	prop->pmmu.hop0_tables_total_size = prop->mmu_hop0_tables_total_size;
+ 	mutex_unlock(&ctx->mmu_lock);
  
- 	/* PMMU and HPMMU are the same except of page size */
- 	memcpy(&prop->pmmu_huge, &prop->pmmu, sizeof(prop->pmmu));
++	INIT_LIST_HEAD(&free_list);
++
+ 	spin_lock(&vm->idr_lock);
+ 	idr_for_each_entry(&vm->phys_pg_pack_handles, phys_pg_list, i)
+ 		if (phys_pg_list->asid == ctx->asid) {
+ 			dev_dbg(hdev->dev,
+ 				"page list 0x%px of asid %d is still alive\n",
+ 				phys_pg_list, ctx->asid);
+-			atomic64_sub(phys_pg_list->total_size,
+-					&hdev->dram_used_mem);
+-			free_phys_pg_pack(hdev, phys_pg_list);
++
++			atomic64_sub(phys_pg_list->total_size, &hdev->dram_used_mem);
+ 			idr_remove(&vm->phys_pg_pack_handles, i);
++			list_add(&phys_pg_list->node, &free_list);
+ 		}
+ 	spin_unlock(&vm->idr_lock);
+ 
++	list_for_each_entry(phys_pg_list, &free_list, node)
++		free_phys_pg_pack(hdev, phys_pg_list);
++
+ 	va_range_fini(hdev, ctx->va_range[HL_VA_RANGE_TYPE_DRAM]);
+ 	va_range_fini(hdev, ctx->va_range[HL_VA_RANGE_TYPE_HOST]);
+ 
 -- 
 2.25.1
 

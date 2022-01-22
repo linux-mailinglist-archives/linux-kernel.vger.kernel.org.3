@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1DD496B6C
+	by mail.lfdr.de (Postfix) with ESMTP id B6065496B6D
 	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 10:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234420AbiAVJUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 04:20:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41426 "EHLO
+        id S230007AbiAVJUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 04:20:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231331AbiAVJT4 (ORCPT
+        with ESMTP id S234093AbiAVJT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 22 Jan 2022 04:19:56 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DA5C06178A
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 01:18:51 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id q75so10262864pgq.5
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 01:18:51 -0800 (PST)
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DC2C061793
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 01:18:53 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id l17so4686151plg.1
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 01:18:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2tVyD3kCR8VI41xLDJPrU9Qy3ho9fuGcyr93woETCtQ=;
-        b=eOG+9BqGEp9yE6If/djlk8qPoDc9YyJud438PAYl0npRctcACveC92QRCKlaJfRRwK
-         FhJoFkugw+IrHJljeBXz1R046xaB4XIpF0OrsCUYkk2Ma/RPDluCpN4Yw/8R6z6O39wq
-         ls1PrMpFi6S6SnEVEQDTNxg2gdKqWj4Ior96s=
+        bh=x4l7SdSy/ZXICUFfVEpfugcTxefmMymFj4v54f2ETqQ=;
+        b=ZtWNhNbC7GUN2q0P8diAFmhrWmdYlpRqqosydKBUFWfUVfCAzBHykWE2mm3SNWMcbt
+         hLqFzAAmx9ZIv0Cd/Qs/0SZ5jFQ+DVHCB/jXrjLgOzlb1ZPwJefdOp1lRBYZCTFC9wNx
+         QhICe9kzg1brGAAj4mFqYZofkdvjCsNcdEdOk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2tVyD3kCR8VI41xLDJPrU9Qy3ho9fuGcyr93woETCtQ=;
-        b=wi7l4UK+tt7lZnMObYFGusM83DsJ+jb/uinEgUcT3m7T0dteZgVO8SeLsrNVIvqzLI
-         BviOHYC1/CsAiMr46dBMSLKPpySpUMeQjyRSQ40fZSK6J46RUlQOdk2hvrw6zNwYhjS+
-         PuQGPDP6SXlc9LXb1YRMfAsLIYlZfJSy2lTz3E8YaYZ6VHCFL0ZmpkOlYvxgjDHdVchu
-         YXyg5T78Dli9EK34xidxVTKuLpJl6LZwIG9JX9FLXSK9y4KpiBIiv8g75pOKFpFaSWnT
-         x1h0mYuomsV5fE94oZuttRrYnrLFBaFUXTe8u8vSR1qNCCjCzUq+Ijl2bujQEXP9+SPm
-         8n7w==
-X-Gm-Message-State: AOAM531Tz77Goy8osd2v79mWOMrTVJGx8Y8eFp6FYU0zr89VoGGHNKME
-        q/CLrsNbxIuoQM3YL9uDwsUNyQ==
-X-Google-Smtp-Source: ABdhPJw3ygJrl6yteSRDfjOvQdB2WYEUn+GrOoTwni+HNy/7bK2tJUwjJ+Tq1xzBp18rW197UKqTfQ==
-X-Received: by 2002:a05:6a00:2186:b0:4c6:50ea:6701 with SMTP id h6-20020a056a00218600b004c650ea6701mr6649364pfi.12.1642843131254;
-        Sat, 22 Jan 2022 01:18:51 -0800 (PST)
+        bh=x4l7SdSy/ZXICUFfVEpfugcTxefmMymFj4v54f2ETqQ=;
+        b=BPi+a1rSdTZMUNqIlCqoCZd7A4weMnT/vKJX/EiWiKx4QlnrKrU6IVDQWgE3ywk0Rw
+         EPIDnXtFP1k2O9oppfloiEa+D1cRwZC409Qw5bAGjZPhfT9YjnzLz7pf4h3BJx6s1bnZ
+         iKRU8pJmx/1glEmdCDjkD32VT6dFCqItHkei+i/Az6wa+BKGmCISTMUj7ajFgp3H5oKR
+         SJ6CwVtGPx4qb7JLJNZaFzxl8lhVGBTajSRDQMyLn3xZIfr5rKE2vZxBIxmoZjmuDdPY
+         bGOE2fwILZlBuoU/csqS21WA+t1pgCHbXkupdFbAs/UUD23AQpmIbZf+oqZHk2OuwONa
+         nCMg==
+X-Gm-Message-State: AOAM530d44wr6NuLCH8ciPcXCg9SK8T0C19Isy+Rn/P5vKysxvLlb125
+        T8tTt1PjKXzG4Vln1amrU2d5fQ==
+X-Google-Smtp-Source: ABdhPJwFPbv1eHMv9uXQ0J/1PfctmAALEU6cuguU/AUEcVHQb3vKL3KFeX3jg4pkUAvKg6vM1e63lA==
+X-Received: by 2002:a17:90b:4f46:: with SMTP id pj6mr4441477pjb.213.1642843133462;
+        Sat, 22 Jan 2022 01:18:53 -0800 (PST)
 Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:349f:9373:45d9:eb26])
-        by smtp.gmail.com with ESMTPSA id s1sm1608100pjn.42.2022.01.22.01.18.49
+        by smtp.gmail.com with ESMTPSA id s1sm1608100pjn.42.2022.01.22.01.18.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Jan 2022 01:18:50 -0800 (PST)
+        Sat, 22 Jan 2022 01:18:53 -0800 (PST)
 From:   Chen-Yu Tsai <wenst@chromium.org>
 To:     Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -53,9 +53,9 @@ Cc:     Chen-Yu Tsai <wenst@chromium.org>,
         Chun-Jie Chen <chun-jie.chen@mediatek.com>,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 30/31] clk: mediatek: mt8195: Implement remove functions
-Date:   Sat, 22 Jan 2022 17:17:30 +0800
-Message-Id: <20220122091731.283592-31-wenst@chromium.org>
+Subject: [PATCH 31/31] clk: mediatek: Warn if clk IDs are duplicated
+Date:   Sat, 22 Jan 2022 17:17:31 +0800
+Message-Id: <20220122091731.283592-32-wenst@chromium.org>
 X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
 In-Reply-To: <20220122091731.283592-1-wenst@chromium.org>
 References: <20220122091731.283592-1-wenst@chromium.org>
@@ -65,201 +65,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Until now the mediatek clk driver library did not have any way to
-unregister clks, and so none of the drivers implemented remove
-functions.
+The Mediatek clk driver library handles duplicate clock IDs in two
+different ways: either ignoring the duplicate entry, or overwriting
+the old clk. Either way may cause unexpected behavior, and the latter
+also causes an orphan clk that cannot be cleaned up.
 
-Now that the library does have APIs to unregister clks, use them
-to implement remove functions for the mt8195 clk drivers.
+Align the behavior so that later duplicate entries are ignored, and
+a warning printed. The warning will also aid in making the issue
+noticeable.
 
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- drivers/clk/mediatek/clk-mt8195-apmixedsys.c | 16 ++++++++++++++++
- drivers/clk/mediatek/clk-mt8195-apusys_pll.c | 13 +++++++++++++
- drivers/clk/mediatek/clk-mt8195-topckgen.c   | 20 ++++++++++++++++++++
- drivers/clk/mediatek/clk-mt8195-vdo0.c       | 16 ++++++++++++++++
- drivers/clk/mediatek/clk-mt8195-vdo1.c       | 16 ++++++++++++++++
- 5 files changed, 81 insertions(+)
+ drivers/clk/mediatek/clk-cpumux.c |  6 ++++++
+ drivers/clk/mediatek/clk-gate.c   |  5 ++++-
+ drivers/clk/mediatek/clk-mtk.c    | 18 ++++++++++++++----
+ drivers/clk/mediatek/clk-mux.c    |  5 ++++-
+ drivers/clk/mediatek/clk-pll.c    |  6 ++++++
+ 5 files changed, 34 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/clk/mediatek/clk-mt8195-apmixedsys.c b/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-index af8d80f25f30..29cac3cf5f53 100644
---- a/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-+++ b/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-@@ -132,6 +132,8 @@ static int clk_mt8195_apmixed_probe(struct platform_device *pdev)
- 	if (r)
- 		goto unregister_gates;
+diff --git a/drivers/clk/mediatek/clk-cpumux.c b/drivers/clk/mediatek/clk-cpumux.c
+index 499c60432280..c11b3fae622e 100644
+--- a/drivers/clk/mediatek/clk-cpumux.c
++++ b/drivers/clk/mediatek/clk-cpumux.c
+@@ -120,6 +120,12 @@ int mtk_clk_register_cpumuxes(struct device_node *node,
+ 	for (i = 0; i < num; i++) {
+ 		const struct mtk_composite *mux = &clks[i];
  
-+	platform_set_drvdata(pdev, clk_data);
++		if (!IS_ERR_OR_NULL(clk_data->clks[mux->id])) {
++			pr_warn("%pOF: Trying to register duplicate clock ID: %d\n",
++				node, mux->id);
++			continue;
++		}
 +
- 	return r;
+ 		clk = mtk_clk_register_cpumux(mux, regmap);
+ 		if (IS_ERR(clk)) {
+ 			pr_err("Failed to register clk %s: %pe\n", mux->name, clk);
+diff --git a/drivers/clk/mediatek/clk-gate.c b/drivers/clk/mediatek/clk-gate.c
+index 631ff170b7b9..da52023f8455 100644
+--- a/drivers/clk/mediatek/clk-gate.c
++++ b/drivers/clk/mediatek/clk-gate.c
+@@ -224,8 +224,11 @@ int mtk_clk_register_gates_with_dev(struct device_node *node,
+ 	for (i = 0; i < num; i++) {
+ 		const struct mtk_gate *gate = &clks[i];
  
- unregister_gates:
-@@ -143,8 +145,22 @@ static int clk_mt8195_apmixed_probe(struct platform_device *pdev)
- 	return r;
- }
+-		if (!IS_ERR_OR_NULL(clk_data->clks[gate->id]))
++		if (!IS_ERR_OR_NULL(clk_data->clks[gate->id])) {
++			pr_warn("%pOF: Trying to register duplicate clock ID: %d\n",
++				node, gate->id);
+ 			continue;
++		}
  
-+static int clk_mt8195_apmixed_remove(struct platform_device *pdev)
-+{
-+	struct device_node *node = pdev->dev.of_node;
-+	struct clk_onecell_data *clk_data = platform_get_drvdata(pdev);
-+
-+	of_clk_del_provider(node);
-+	mtk_clk_unregister_gates(apmixed_clks, ARRAY_SIZE(apmixed_clks), clk_data);
-+	mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
-+	mtk_free_clk_data(clk_data);
-+
-+	return 0;
-+}
-+
- static struct platform_driver clk_mt8195_apmixed_drv = {
- 	.probe = clk_mt8195_apmixed_probe,
-+	.remove = clk_mt8195_apmixed_remove,
- 	.driver = {
- 		.name = "clk-mt8195-apmixed",
- 		.of_match_table = of_match_clk_mt8195_apmixed,
-diff --git a/drivers/clk/mediatek/clk-mt8195-apusys_pll.c b/drivers/clk/mediatek/clk-mt8195-apusys_pll.c
-index 1fff6f3d2dc7..8cd88dfc3283 100644
---- a/drivers/clk/mediatek/clk-mt8195-apusys_pll.c
-+++ b/drivers/clk/mediatek/clk-mt8195-apusys_pll.c
-@@ -85,6 +85,18 @@ static int clk_mt8195_apusys_pll_probe(struct platform_device *pdev)
- 	return r;
- }
+ 		clk = mtk_clk_register_gate(gate->name, gate->parent_name,
+ 					    regmap,
+diff --git a/drivers/clk/mediatek/clk-mtk.c b/drivers/clk/mediatek/clk-mtk.c
+index 6d0b8842971b..b2a3568922b2 100644
+--- a/drivers/clk/mediatek/clk-mtk.c
++++ b/drivers/clk/mediatek/clk-mtk.c
+@@ -65,8 +65,10 @@ int mtk_clk_register_fixed_clks(const struct mtk_fixed_clk *clks, int num,
+ 	for (i = 0; i < num; i++) {
+ 		const struct mtk_fixed_clk *rc = &clks[i];
  
-+static int clk_mt8195_apusys_pll_remove(struct platform_device *pdev)
-+{
-+	struct clk_onecell_data *clk_data = platform_get_drvdata(pdev);
-+	struct device_node *node = pdev->dev.of_node;
-+
-+	of_clk_del_provider(node);
-+	mtk_clk_unregister_plls(apusys_plls, ARRAY_SIZE(apusys_plls), clk_data);
-+	mtk_free_clk_data(clk_data);
-+
-+	return 0;
-+}
-+
- static const struct of_device_id of_match_clk_mt8195_apusys_pll[] = {
- 	{ .compatible = "mediatek,mt8195-apusys_pll", },
- 	{}
-@@ -92,6 +104,7 @@ static const struct of_device_id of_match_clk_mt8195_apusys_pll[] = {
+-		if (!IS_ERR_OR_NULL(clk_data->clks[rc->id]))
++		if (!IS_ERR_OR_NULL(clk_data->clks[rc->id])) {
++			pr_warn("Trying to register duplicate clock ID: %d\n", rc->id);
+ 			continue;
++		}
  
- static struct platform_driver clk_mt8195_apusys_pll_drv = {
- 	.probe = clk_mt8195_apusys_pll_probe,
-+	.remove = clk_mt8195_apusys_pll_remove,
- 	.driver = {
- 		.name = "clk-mt8195-apusys_pll",
- 		.of_match_table = of_match_clk_mt8195_apusys_pll,
-diff --git a/drivers/clk/mediatek/clk-mt8195-topckgen.c b/drivers/clk/mediatek/clk-mt8195-topckgen.c
-index 3631f49a5e5a..b602fcd7f1d1 100644
---- a/drivers/clk/mediatek/clk-mt8195-topckgen.c
-+++ b/drivers/clk/mediatek/clk-mt8195-topckgen.c
-@@ -1271,6 +1271,8 @@ static int clk_mt8195_topck_probe(struct platform_device *pdev)
- 	if (r)
- 		goto unregister_gates;
+ 		clk = clk_register_fixed_rate(NULL, rc->name, rc->parent, 0,
+ 					      rc->rate);
+@@ -128,8 +130,10 @@ int mtk_clk_register_factors(const struct mtk_fixed_factor *clks, int num,
+ 	for (i = 0; i < num; i++) {
+ 		const struct mtk_fixed_factor *ff = &clks[i];
  
-+	platform_set_drvdata(pdev, top_clk_data);
-+
- 	return r;
+-		if (!IS_ERR_OR_NULL(clk_data->clks[ff->id]))
++		if (!IS_ERR_OR_NULL(clk_data->clks[ff->id])) {
++			pr_warn("Trying to register duplicate clock ID: %d\n", ff->id);
+ 			continue;
++		}
  
- unregister_gates:
-@@ -1290,8 +1292,26 @@ static int clk_mt8195_topck_probe(struct platform_device *pdev)
- 	return r;
- }
+ 		clk = clk_register_fixed_factor(NULL, ff->name, ff->parent_name,
+ 				CLK_SET_RATE_PARENT, ff->mult, ff->div);
+@@ -300,8 +304,11 @@ int mtk_clk_register_composites(const struct mtk_composite *mcs, int num,
+ 	for (i = 0; i < num; i++) {
+ 		const struct mtk_composite *mc = &mcs[i];
  
-+static int clk_mt8195_topck_remove(struct platform_device *pdev)
-+{
-+	struct clk_onecell_data *top_clk_data = platform_get_drvdata(pdev);
-+	struct device_node *node = pdev->dev.of_node;
-+
-+	of_clk_del_provider(node);
-+	mtk_clk_unregister_gates(top_clks, ARRAY_SIZE(top_clks), top_clk_data);
-+	mtk_clk_unregister_composites(top_adj_divs, ARRAY_SIZE(top_adj_divs), top_clk_data);
-+	mtk_clk_unregister_composites(top_muxes, ARRAY_SIZE(top_muxes), top_clk_data);
-+	mtk_clk_unregister_muxes(top_mtk_muxes, ARRAY_SIZE(top_mtk_muxes), top_clk_data);
-+	mtk_clk_unregister_factors(top_divs, ARRAY_SIZE(top_divs), top_clk_data);
-+	mtk_clk_unregister_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks), top_clk_data);
-+	mtk_free_clk_data(top_clk_data);
-+
-+	return 0;
-+}
-+
- static struct platform_driver clk_mt8195_topck_drv = {
- 	.probe = clk_mt8195_topck_probe,
-+	.remove = clk_mt8195_topck_remove,
- 	.driver = {
- 		.name = "clk-mt8195-topck",
- 		.of_match_table = of_match_clk_mt8195_topck,
-diff --git a/drivers/clk/mediatek/clk-mt8195-vdo0.c b/drivers/clk/mediatek/clk-mt8195-vdo0.c
-index af34eb564b1d..3bc7ed19d550 100644
---- a/drivers/clk/mediatek/clk-mt8195-vdo0.c
-+++ b/drivers/clk/mediatek/clk-mt8195-vdo0.c
-@@ -107,6 +107,8 @@ static int clk_mt8195_vdo0_probe(struct platform_device *pdev)
- 	if (r)
- 		goto unregister_gates;
+-		if (clk_data && !IS_ERR_OR_NULL(clk_data->clks[mc->id]))
++		if (!IS_ERR_OR_NULL(clk_data->clks[mc->id])) {
++			pr_warn("Trying to register duplicate clock ID: %d\n",
++				mc->id);
+ 			continue;
++		}
  
-+	platform_set_drvdata(pdev, clk_data);
-+
- 	return r;
+ 		clk = mtk_clk_register_composite(mc, base, lock);
  
- unregister_gates:
-@@ -116,8 +118,22 @@ static int clk_mt8195_vdo0_probe(struct platform_device *pdev)
- 	return r;
- }
+@@ -363,8 +370,11 @@ int mtk_clk_register_dividers(const struct mtk_clk_divider *mcds, int num,
+ 	for (i = 0; i <  num; i++) {
+ 		const struct mtk_clk_divider *mcd = &mcds[i];
  
-+static int clk_mt8195_vdo0_remove(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct device_node *node = dev->parent->of_node;
-+	struct clk_onecell_data *clk_data = platform_get_drvdata(pdev);
-+
-+	of_clk_del_provider(node);
-+	mtk_clk_unregister_gates(vdo0_clks, ARRAY_SIZE(vdo0_clks), clk_data);
-+	mtk_free_clk_data(clk_data);
-+
-+	return 0;
-+}
-+
- static struct platform_driver clk_mt8195_vdo0_drv = {
- 	.probe = clk_mt8195_vdo0_probe,
-+	.remove = clk_mt8195_vdo0_remove,
- 	.driver = {
- 		.name = "clk-mt8195-vdo0",
- 	},
-diff --git a/drivers/clk/mediatek/clk-mt8195-vdo1.c b/drivers/clk/mediatek/clk-mt8195-vdo1.c
-index 6b502bbc730c..90c738a85ff1 100644
---- a/drivers/clk/mediatek/clk-mt8195-vdo1.c
-+++ b/drivers/clk/mediatek/clk-mt8195-vdo1.c
-@@ -124,6 +124,8 @@ static int clk_mt8195_vdo1_probe(struct platform_device *pdev)
- 	if (r)
- 		goto unregister_gates;
+-		if (!IS_ERR_OR_NULL(clk_data->clks[mcd->id]))
++		if (!IS_ERR_OR_NULL(clk_data->clks[mcd->id])) {
++			pr_warn("Trying to register duplicate clock ID: %d\n",
++				mcd->id);
+ 			continue;
++		}
  
-+	platform_set_drvdata(pdev, clk_data);
-+
- 	return r;
+ 		clk = clk_register_divider(NULL, mcd->name, mcd->parent_name,
+ 			mcd->flags, base +  mcd->div_reg, mcd->div_shift,
+diff --git a/drivers/clk/mediatek/clk-mux.c b/drivers/clk/mediatek/clk-mux.c
+index f51e67650f03..21ad5a4afd65 100644
+--- a/drivers/clk/mediatek/clk-mux.c
++++ b/drivers/clk/mediatek/clk-mux.c
+@@ -208,8 +208,11 @@ int mtk_clk_register_muxes(const struct mtk_mux *muxes,
+ 	for (i = 0; i < num; i++) {
+ 		const struct mtk_mux *mux = &muxes[i];
  
- unregister_gates:
-@@ -133,8 +135,22 @@ static int clk_mt8195_vdo1_probe(struct platform_device *pdev)
- 	return r;
- }
+-		if (!IS_ERR_OR_NULL(clk_data->clks[mux->id]))
++		if (!IS_ERR_OR_NULL(clk_data->clks[mux->id])) {
++			pr_warn("%pOF: Trying to register duplicate clock ID: %d\n",
++				node, mux->id);
+ 			continue;
++		}
  
-+static int clk_mt8195_vdo1_remove(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct device_node *node = dev->parent->of_node;
-+	struct clk_onecell_data *clk_data = platform_get_drvdata(pdev);
+ 		clk = mtk_clk_register_mux(mux, regmap, lock);
+ 
+diff --git a/drivers/clk/mediatek/clk-pll.c b/drivers/clk/mediatek/clk-pll.c
+index 1dd15f560659..e5e9c188be99 100644
+--- a/drivers/clk/mediatek/clk-pll.c
++++ b/drivers/clk/mediatek/clk-pll.c
+@@ -386,6 +386,12 @@ int mtk_clk_register_plls(struct device_node *node,
+ 	for (i = 0; i < num_plls; i++) {
+ 		const struct mtk_pll_data *pll = &plls[i];
+ 
++		if (!IS_ERR_OR_NULL(clk_data->clks[pll->id])) {
++			pr_warn("%pOF: Trying to register duplicate clock ID: %d\n",
++				node, pll->id);
++			continue;
++		}
 +
-+	of_clk_del_provider(node);
-+	mtk_clk_unregister_gates(vdo1_clks, ARRAY_SIZE(vdo1_clks), clk_data);
-+	mtk_free_clk_data(clk_data);
-+
-+	return 0;
-+}
-+
- static struct platform_driver clk_mt8195_vdo1_drv = {
- 	.probe = clk_mt8195_vdo1_probe,
-+	.remove = clk_mt8195_vdo1_remove,
- 	.driver = {
- 		.name = "clk-mt8195-vdo1",
- 	},
+ 		clk = mtk_clk_register_pll(pll, base);
+ 
+ 		if (IS_ERR(clk)) {
 -- 
 2.35.0.rc0.227.g00780c9af4-goog
 

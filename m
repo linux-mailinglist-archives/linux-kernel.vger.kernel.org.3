@@ -2,129 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D37CF496A62
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 06:58:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08562496A63
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 07:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233169AbiAVF6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 00:58:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbiAVF6S (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 00:58:18 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510ECC06173B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 21:58:17 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id x12so1331889qts.5
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 21:58:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IG2uYbeAw0J8no4s9+Rii+S0/l/uuRucFzJMibxwnfI=;
-        b=j5DXGs9tZ8lab48TS5g3l9waeEUrlK7x7D97mNx4UQ1j9IoAxv0EBlKGOjuhIrw4ii
-         p1PbA8n3ROk/ulzkoYNmO5Xn7I4suV+IzeAd4heDMyAkybHTa3xYSYGHlNcPcWgpGiK6
-         fJOKzY+QfL+1DOZ9f4zx0vxbQb/F8ZCRtUBWJfJVbOEwFkv76N3z9UNxANXS+UvX0JBg
-         Mdc0E4AspZ1IwmlMKIQ79wC9kcnEKf4spFWsnphutdK7BpakilplFQJjKcqb/zwaVRz3
-         WHCsd2f7OM5o5rb78osfKupS/YsWbzTLKe8fWWw+q5Y+pPoVWuM+o0LDLZ7HvwnlEVT0
-         7gYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=IG2uYbeAw0J8no4s9+Rii+S0/l/uuRucFzJMibxwnfI=;
-        b=uT16tYOe0QeYu9M3/+fQLDYFlsKA1K/38OCxFQo9vWKyOgc1Cp0iXcIlMW5Meu7D/B
-         C8hrA0eOfg0qqF7fMWKzauYX22l3h2IXpPzV6uyHkIxa+djl3b8uRtksefixw9hWHY31
-         mrZsPwicdxhCDONq1lsJIldj2prGHueXBxmTDgDsa9x5xeRf8Dp1bWBC3tsVjnGnFMYc
-         yzVlSolbSM9LeUirU2q1buS6f7+LoyAR/wBqFcA4l3BoscroPBdSjzxUBLgXcTEdihKp
-         UKii9M1RkY1BAntCEyeBSNCMLiqbvUcIkIaHC+XRxFakEZpra4rI3P/aavRYGrTiOQSW
-         iK9g==
-X-Gm-Message-State: AOAM5316F1wrL8dh3JM6LeObV9QVQIX/wJnBlk93NuqXBqAiMuvgtPVZ
-        /dsRR/AIiDSk4zZVTxrjRfA=
-X-Google-Smtp-Source: ABdhPJygrerBkN8vdQz7GfBqP31GXGwMPPsz8nIEO3Ycj1bP62HKFFELrWs9ws6uNIzBcrFMK2jJbw==
-X-Received: by 2002:ac8:7f15:: with SMTP id f21mr5795034qtk.603.1642831096025;
-        Fri, 21 Jan 2022 21:58:16 -0800 (PST)
-Received: from Gentoo ([37.19.198.230])
-        by smtp.gmail.com with ESMTPSA id s11sm4361923qtw.2.2022.01.21.21.58.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 21:58:15 -0800 (PST)
-Date:   Sat, 22 Jan 2022 11:28:00 +0530
-From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     LinuxKernel <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: lore certificate error in browsers for past 2 days
-Message-ID: <Yeuc6Lc7gLXqrRVX@Gentoo>
-Mail-Followup-To: Bhaskar Chowdhury <unixbhaskar@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        LinuxKernel <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <YeuXV0Qv0NUZ0l84@Gentoo>
- <bda6130a-8e19-0e8a-fbfe-c6e6fd962411@infradead.org>
+        id S233390AbiAVGJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 01:09:24 -0500
+Received: from mga11.intel.com ([192.55.52.93]:58926 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233130AbiAVGJX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 22 Jan 2022 01:09:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642831763; x=1674367763;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6urHQV109JrsxIHRd0xz2vSMZ5CUJSiuumgsKimJBSo=;
+  b=NShGoZVGtO5meV3j/jG9EvuYKvX4lFjyFmuiKNlVBzutIU9P7R3Nfezs
+   xoD64J5bHIgTuyowJxf4ZuTdGxoOMexuY5N9yw4TQ8fItsQvmKb5NefsT
+   +KVW17HgeRr3hWOgXUX7rXsUAzKTN3ZMbwbXbWWP2oQ+njK6JkCKYVqiK
+   RkX0J1pV4YABfzttImIfU+Qo1qoVwBgGC368mizC9x7L4TTqtH5L0Husq
+   Vafyk0cjwS7qEV193n1vocFMMly3D3fTPHv2j5sKtlBMMd/DmmTtvDkln
+   TS+2/KVBCUlBRAkfMAiln3+qP43ge2tFqh6n6WgigNeuA8482XsOoEHHP
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="243390691"
+X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
+   d="scan'208";a="243390691"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 22:09:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
+   d="scan'208";a="694869233"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 21 Jan 2022 22:09:21 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nB9aS-000G6O-En; Sat, 22 Jan 2022 06:09:20 +0000
+Date:   Sat, 22 Jan 2022 14:09:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] soc: bcm: brcmstb: Added support for PSCI system
+ suspend operations
+Message-ID: <202201221442.7bCTuqul-lkp@intel.com>
+References: <20220122035421.4086618-4-f.fainelli@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="9GIfRdm4EvTZOyBi"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bda6130a-8e19-0e8a-fbfe-c6e6fd962411@infradead.org>
+In-Reply-To: <20220122035421.4086618-4-f.fainelli@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Florian,
 
---9GIfRdm4EvTZOyBi
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I love your patch! Perhaps something to improve:
 
-On 21:39 Fri 21 Jan 2022, Randy Dunlap wrote:
->
->
->On 1/21/22 21:34, Bhaskar Chowdhury wrote:
->> =C2=A0Hey,
->>
->> =C2=A0Not sure who needs to fix the damn thing ...but I am seeing the ce=
-rtificate
->> =C2=A0expiration on various browsers ....namely, Firefox, Vimb, Nyxt
->>
->>
->> =C2=A0Can someone kindly look in?
->>
->> =C2=A0~Bhaskar
->
->
->Hi,
->
->Have you read/tried any of these?
->
->https://letsencrypt.org/2019/04/15/transitioning-to-isrg-root.html
->
->https://letsencrypt.org/docs/dst-root-ca-x3-expiration-september-2021/
->
->https://www.openssl.org/blog/blog/2021/09/13/LetsEncryptRootCertExpire/
->
->
->cheers.
->--
->~Randy
+[auto build test WARNING on arm/for-next]
+[also build test WARNING on soc/for-next arm64/for-next/core clk/clk-next linus/master v5.16 next-20220121]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Thanks , Randy. Nope, I didn't ,but now I can.
+url:    https://github.com/0day-ci/linux/commits/Florian-Fainelli/Broadcom-STB-PM-PSCI-extensions/20220122-115551
+base:   git://git.armlinux.org.uk/~rmk/linux-arm.git for-next
+config: arm64-randconfig-r011-20220120 (https://download.01.org/0day-ci/archive/20220122/202201221442.7bCTuqul-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/30bf64821ad5d3cbbc91770b3927905d10d3bdf3
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Florian-Fainelli/Broadcom-STB-PM-PSCI-extensions/20220122-115551
+        git checkout 30bf64821ad5d3cbbc91770b3927905d10d3bdf3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/soc/bcm/brcmstb/pm/
 
-~Bhaskar
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
---9GIfRdm4EvTZOyBi
-Content-Type: application/pgp-signature; name="signature.asc"
+All warnings (new ones prefixed by >>):
 
------BEGIN PGP SIGNATURE-----
+>> drivers/soc/bcm/brcmstb/pm/pm-psci.c:95:6: warning: no previous prototype for function 'brcmstb_psci_sys_poweroff' [-Wmissing-prototypes]
+   void brcmstb_psci_sys_poweroff(void)
+        ^
+   drivers/soc/bcm/brcmstb/pm/pm-psci.c:95:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void brcmstb_psci_sys_poweroff(void)
+   ^
+   static 
+   1 warning generated.
 
-iQEzBAABCAAdFiEEnwF+nWawchZUPOuwsjqdtxFLKRUFAmHrnOQACgkQsjqdtxFL
-KRWkTwf+OEtceVDH/btLPqOOCf8SIPv0G3ZuXyBx/L9cOqWNrL14O0GXFYaJbnZG
-yQAuo+6OeeC8GPPFfGKuy8eKxxBaRVUvYMFqNFRzL/QQJruoRn40jB/LN9BBromU
-Za4oOKRzGAuCVOyp/EMCWoFFxUJ4Aw2G2SUNCQydk9w7LllkPeV7TeFfwbMzlSlA
-xv0O7v4Q9BDcTsrCwZSvRzu36LjRqeGs7mJnerBHNg7CBDOkh2deR9ySPBsd/j0h
-xWRGMIzpRdoo4JLd9/f3jbPggFDMvRYKyr6MS8PkP6VBi49pEYgPyRnihfqdqdcA
-B46L45VRxUEkHzWkDmv+2RUZdR8qoA==
-=sKAV
------END PGP SIGNATURE-----
 
---9GIfRdm4EvTZOyBi--
+vim +/brcmstb_psci_sys_poweroff +95 drivers/soc/bcm/brcmstb/pm/pm-psci.c
+
+    94	
+  > 95	void brcmstb_psci_sys_poweroff(void)
+    96	{
+    97		invoke_psci_fn(PSCI_0_2_FN_SYSTEM_OFF, 0, 0, 0);
+    98	}
+    99	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D390A496893
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 01:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E7A496894
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 01:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiAVAQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 19:16:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
+        id S230155AbiAVAQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 19:16:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbiAVAQX (ORCPT
+        with ESMTP id S230099AbiAVAQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 19:16:23 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C55C06173B;
-        Fri, 21 Jan 2022 16:16:23 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id a18so45366867edj.7;
-        Fri, 21 Jan 2022 16:16:23 -0800 (PST)
+        Fri, 21 Jan 2022 19:16:25 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84263C06173B;
+        Fri, 21 Jan 2022 16:16:24 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id ah7so4286590ejc.4;
+        Fri, 21 Jan 2022 16:16:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=GwuVH4I59eQaG7p98/FZiWJJ0iSClS0+NYlBxkqRKh4=;
-        b=PURVrcWLjZgtzaQZlZ/rVdY5MuNokOUVc4E5tg2wlx73lXCJbObGzQd5IRdtaqARKw
-         PFZS4QhyddtOqlTx7p0OhAQQVdEZZzYVESPgIrlTmFIg9msxgpKe21bCJojVqyCASHXo
-         mDQIrNLHf5MP2WK67mtg83ade/OVJDVz3XL4qShSa4aHl1hxYvHNVf92+5bB1VE7vdNl
-         k5GNZpjudNVderryUvC3CwqLHNviSGEVmYabxjoWtf5cr+/4Fg13A/GtV8MK5V75vqoa
-         kLzzfLPKRV45blDaaZFigmxk3oajMJKPmeDPdi0WhzguLOSL/68nRcyPQJ7FJVB8DkRl
-         5eog==
+        bh=QcioYZ2uutzsqiNbfCJ7lyogIcgRTK3T1r6j6Yl7F2Q=;
+        b=PeLqSAMF6VftXW1rFvOH0iFD4Lp8jpqlkq1Uqe6PRwumPqTNYsmzjo330154immXBf
+         qfp2bTF0MNygBIkfBJueE0KaPay/5lMWArF27ghKMkLnUcb5AXZtLBu14vbzuE62wW9E
+         b2W2DQPVh8D1pQTpRq0wbQJ6BEq4cjQx8q/5QKsvBUX+Zs80mP4f9gKMP22Yi9ExKtNi
+         AvRe8daSxbSAOhuZuzVHMM6nnANbN2MeBwJJCx4dGctmHjgHeR11kZGv4CPp0fM6o9F3
+         l+qg7yw1VC/d59W0UTYe0Z4PxRVwFyk3M21i2vNs4kidgD9GA6dUBWf8ATLwJmeLE3Tz
+         7Y8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=GwuVH4I59eQaG7p98/FZiWJJ0iSClS0+NYlBxkqRKh4=;
-        b=m/LQXBL8O/gFRXS8VI//vknj6DMEZ7M/IrU3bQ9Gi7G61kToA3S5BLSgrtSGIDAn5f
-         c++TmbeUFX/d8Lb9DZpi1wAcvWMp5bf9O2R5UusWcpelQ1k2VE6lLp8HwBHA0otdiIRn
-         FXA4KWFg5vkPZlrcHvvC/NAD1v9d/Pn/3xRKM71uAotvL9DJP/t+Rdat9pR2ANPpkrOl
-         8zG2LsZO5dVW6gdM4CCwhmFVguW3r0ZRcndrkf3962J8nPUv1v1f5ZvBPOGE23PNH77X
-         GxfCZaUo0UGZTbLY4lQcrvdYQgVFxvAPYoelu4+nqIfPvPJAs7bSVUzGstcF2kmuU+Y8
-         1Yig==
-X-Gm-Message-State: AOAM530da4kRMIzeK7Cj7V5RDDlJqgz+KzeEoUmpolGO7IaV4rqghF3g
-        OepeemNU5iLiJPWVlhc67M8=
-X-Google-Smtp-Source: ABdhPJxqlVb+yKTVVWqSaSaxUaQ3uZVPdy1kI+x2f3SZYEH0uxkKLNYf2mPXan4OCPJ/Z79kSaujXA==
-X-Received: by 2002:aa7:cb82:: with SMTP id r2mr6309976edt.47.1642810581963;
-        Fri, 21 Jan 2022 16:16:21 -0800 (PST)
+        bh=QcioYZ2uutzsqiNbfCJ7lyogIcgRTK3T1r6j6Yl7F2Q=;
+        b=wwwR+qFmScuD0jV9q1QCZjzUXWzyKhRupBFT7cKqEwTeBW3VNi9N7OoT7inpa1ZTTg
+         I7v5raVWT/Dwek301C+Z/bGv9BmBR7hcTSKtLS/VSkZwXUBbHvmm2KaO5gP5nSyJ/xA8
+         hi4VlsfhbdUoZne9WYgFyRlMZ7V2zSYTrJWt6VpBp3Enup6ytG4tmqwCLwFzdkrgahls
+         yFsNCGBGTl0/nYtw8a1wHK3OTiY1VNhzTNbc2KAD1NF4QwPZSfMy6fZ6/HoW198O0po5
+         /0UXHlg9dd1WT9sBF/bdzwAv+mO7zysfRqK+yTjuSqpVfzxR+JoWAWFiF1FDHPGy0wkY
+         6Jvg==
+X-Gm-Message-State: AOAM531MxhTR2fIOifd40cbM5lLk+6dA1sNEcrBs4FkL2g/oLW+N1k+o
+        p400qmdduQCC+yosCJ49ptw=
+X-Google-Smtp-Source: ABdhPJxAJrwXRcSW5rFonsgmbKTYHr23MFFr+/ad0ww8fMUmSdEOyJw7LYlg93jx7AqdO56DM4MB0Q==
+X-Received: by 2002:a17:907:960f:: with SMTP id gb15mr51526ejc.583.1642810582953;
+        Fri, 21 Jan 2022 16:16:22 -0800 (PST)
 Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.googlemail.com with ESMTPSA id d8sm2445525ejy.107.2022.01.21.16.16.21
+        by smtp.googlemail.com with ESMTPSA id d8sm2445525ejy.107.2022.01.21.16.16.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 16:16:21 -0800 (PST)
+        Fri, 21 Jan 2022 16:16:22 -0800 (PST)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -55,9 +55,9 @@ To:     Andy Gross <agross@kernel.org>,
         Ansuel Smith <ansuelsmth@gmail.com>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] dt-bindings: soc: qcom: add qcom,tcsr bindings
-Date:   Sat, 22 Jan 2022 01:16:08 +0100
-Message-Id: <20220122001609.15904-2-ansuelsmth@gmail.com>
+Subject: [PATCH 2/2] drivers: soc: qcom: add TCSR driver
+Date:   Sat, 22 Jan 2022 01:16:09 +0100
+Message-Id: <20220122001609.15904-3-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220122001609.15904-1-ansuelsmth@gmail.com>
 References: <20220122001609.15904-1-ansuelsmth@gmail.com>
@@ -67,170 +67,251 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add qcom,tcsr-ipq8064 and qcom,tcsr-ipq4019 Documentation for the
-tcsr present in ipq8064 and ipa4019 required to configure and
-set various peripherals present in the SoC.
+Add QCOM Top Control and Status Registers driver required to control and
+configure various peripherals for ipq8064 and ipq4019. This is required
+to configure usb3 mode, gsbi configuration for ipq8064 and various
+devices (WiFi, USB mode, WiFi memtype, ESS interface mode) for ipq4019.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 ---
- .../bindings/soc/qcom/qcom,tcsr-ipq4019.yaml  | 93 +++++++++++++++++++
- .../bindings/soc/qcom/qcom,tcsr-ipq8064.yaml  | 47 ++++++++++
- 2 files changed, 140 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq4019.yaml
- create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq8064.yaml
+ drivers/soc/qcom/Kconfig     |   8 ++
+ drivers/soc/qcom/Makefile    |   1 +
+ drivers/soc/qcom/qcom_tcsr.c | 198 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 207 insertions(+)
+ create mode 100644 drivers/soc/qcom/qcom_tcsr.c
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq4019.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq4019.yaml
+diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+index e718b8735444..20dd341ae369 100644
+--- a/drivers/soc/qcom/Kconfig
++++ b/drivers/soc/qcom/Kconfig
+@@ -209,6 +209,14 @@ config QCOM_STATS
+ 	  various SoC level low power modes statistics and export to debugfs
+ 	  interface.
+ 
++config QCOM_TCSR
++	tristate "QCOM Top Control and Status Registers"
++	depends on ARCH_QCOM || COMPILE_TEST
++	select MFD_SYSCON
++	help
++	  Say y here to enable TCSR support. The TCSR provides control
++	  functions for various peripherals (USB, WiFi, ESS).
++
+ config QCOM_WCNSS_CTRL
+ 	tristate "Qualcomm WCNSS control driver"
+ 	depends on ARCH_QCOM || COMPILE_TEST
+diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
+index 70d5de69fd7b..b17dd46ed1fa 100644
+--- a/drivers/soc/qcom/Makefile
++++ b/drivers/soc/qcom/Makefile
+@@ -28,3 +28,4 @@ obj-$(CONFIG_QCOM_LLCC) += llcc-qcom.o
+ obj-$(CONFIG_QCOM_RPMHPD) += rpmhpd.o
+ obj-$(CONFIG_QCOM_RPMPD) += rpmpd.o
+ obj-$(CONFIG_QCOM_KRYO_L2_ACCESSORS) +=	kryo-l2-accessors.o
++obj-$(CONFIG_QCOM_TCSR)	 += qcom_tcsr.o
+diff --git a/drivers/soc/qcom/qcom_tcsr.c b/drivers/soc/qcom/qcom_tcsr.c
 new file mode 100644
-index 000000000000..3a82ccbb6588
+index 000000000000..dc80768d57c2
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq4019.yaml
-@@ -0,0 +1,93 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/soc/qcom/qcom,tcsr-ipq4019.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++++ b/drivers/soc/qcom/qcom_tcsr.c
+@@ -0,0 +1,198 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+title: Qualcomm Top Control and Status Registers binding for IPQ4019
++#include <linux/clk.h>
++#include <linux/err.h>
++#include <linux/io.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_platform.h>
++#include <linux/platform_device.h>
++#include <linux/bitfield.h>
++#include <linux/regmap.h>
++#include <linux/mfd/syscon.h>
 +
-+maintainers:
-+  - Ansuel Smith <ansuelsmth@gmail.com>
++#define TCSR_USB_PORT_SEL_REG			0xb0
++#define TCSR_USB_PORT_SEL_MASK			GENMASK(1, 0)
 +
-+description: |
-+  This binding describes the Qualcomm Top Control and Status Registers, used
-+  for accessing configuration and mux settings for a variety of peripherals
-+  for ipq4019.
++#define TCSR_USB_SELECT_USB3_P0			FIELD_PREP(TCSR_USB_PORT_SEL_MASK, 0x1)
++#define TCSR_USB_SELECT_USB3_P1			FIELD_PREP(TCSR_USB_PORT_SEL_MASK, 0x2)
++#define TCSR_USB_SELECT_USB3_DUAL		FIELD_PREP(TCSR_USB_PORT_SEL_MASK, 0x3)
 +
-+properties:
-+  compatible:
-+    items:
-+      - const: qcom,tcsr-ipq4019
-+      - const: syscon
++/* IPQ40xx HS PHY Mode Select */
++#define TCSR_USB_HSPHY_CONFIG_REG		0xc
++#define TCSR_USB_HSPHY_MODE_MASK		BIT(21)
++#define TCSR_USB_HSPHY_MODE_HOST_MODE		FIELD_PREP(TCSR_USB_HSPHY_MODE_MASK, 0x0)
++#define TCSR_USB_HSPHY_MODE_DEVICE_MODE		FIELD_PREP(TCSR_USB_HSPHY_MODE_MASK, 0x1)
 +
-+  reg:
-+    maxItems: 1
++/* IPQ40xx ess interface mode select */
++#define TCSR_ESS_INTERFACE_SEL_REG		0x0
++#define TCSR_ESS_INTERFACE_SEL_MASK		GENMASK(3, 0)
++#define TCSR_ESS_PSGMII				FIELD_PREP(TCSR_ESS_INTERFACE_SEL_MASK, 0x0)
++#define TCSR_ESS_PSGMII_RGMII5			FIELD_PREP(TCSR_ESS_INTERFACE_SEL_MASK, 0x1)
++#define TCSR_ESS_PSGMII_RMII0			FIELD_PREP(TCSR_ESS_INTERFACE_SEL_MASK, 0x2)
++#define TCSR_ESS_PSGMII_RMII1			FIELD_PREP(TCSR_ESS_INTERFACE_SEL_MASK, 0x4)
++#define TCSR_ESS_PSGMII_RMII0_RMII1		FIELD_PREP(TCSR_ESS_INTERFACE_SEL_MASK, 0x6)
++#define TCSR_ESS_PSGMII_RGMII4			FIELD_PREP(TCSR_ESS_INTERFACE_SEL_MASK, 0x9)
 +
-+  qcom,usb-hsphy-mode-select:
-+    description: Select usb hsphy mode for ipq4019
-+    enum:
-+      - 'host'
-+      - 'device'
++/* IPQ40xx WiFi Global Config */
++#define TCSR_WIFI0_GLB_CFG_OFFSET_REG		0x0
++#define TCSR_WIFI1_GLB_CFG_OFFSET_REG		0x4
++/* Enable AXI master bus Axid translating to confirm all txn submitted by order */
++#define TCSR_WIFI_GLB_CFG_AXID_EN		BIT(30)
++/* 1:  use locally generate socslv_wxi_bvalid for performance.
++ * 0:  use SNOC socslv_wxi_bvalid.
++ */
++#define TCSR_WIFI_GLB_CFG_SOCSLV_WXI_BVALID	BIT(24)
++#define TCSR_WIFI_GLB_CFG_SOCSLV_SNOC		FIELD_PREP(TCSR_WIFI_GLB_CFG_SOCSLV_WXI_BVALID, 0x0)
++#define TCSR_WIFI_GLB_CFG_SOCSLV_LOCAL		FIELD_PREP(TCSR_WIFI_GLB_CFG_SOCSLV_WXI_BVALID, 0x1)
 +
-+  qcom,ess-interface-select:
-+    description: Select ess interface mode for ipq4019
-+    enum:
-+      - 'psgmii'
-+      - 'rgmii5'
-+      - 'rmii0'
-+      - 'rmii1'
-+      - 'rmii0_rmii1'
-+      - 'rgmii4'
++/* Configure special wifi memory type needed for some IPQ40xx devices */
++#define TCSR_PNOC_SNOC_MEMTYPE_M0_M2_REG	0x4
++#define TCSR_WIFI_NOC_MEMTYPE_MASK		GENMASK(26, 24)
++#define TCSR_WIFI_NOC_MEMTYPE_M0_M2		FIELD_PREP(TCSR_WIFI_NOC_MEMTYPE_MASK, 0x2)
 +
-+  qcom,wifi-glb-cfg-enable-axid:
-+    description: Enable AXI master bus Axid translating
-+                  to confirm all txn submitted by order for ipq4019
-+    type: boolean
++static int qcom_tcsr_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct device_node *node;
++	struct regmap *tcsr;
++	int ret, val;
 +
-+  qcom,wifi-glb-cfg-socslv-mode:
-+    description: Select wifi socslv mode for ipq4019
-+                  snoc use SNOC socslv_wxi_bvalid.
-+                  local use locally generate socslv_wxi_bvalid for performance.
-+    enum:
-+      - 'snoc'
-+      - 'local'
++	node = dev->of_node;
++	tcsr = syscon_node_to_regmap(node);
++	if (IS_ERR(tcsr))
++		return PTR_ERR(tcsr);
 +
-+  qcom,wifi_noc_memtype_m0_m2:
-+    description: Configure special wifi memory type needed for
-+                  some IPQ40xx devicesfor ipq4019
-+    type: boolean
++	if (of_find_property(node, "qcom,usb-ctrl-select", NULL) &&
++	    of_device_is_compatible(node, "qcom,tcsr-ipq8064")) {
++		if (of_property_match_string(node, "qcom,usb-ctrl-select",
++					     "p0")) {
++			val = TCSR_USB_SELECT_USB3_P0;
++		} else if (of_property_match_string(node, "qcom,usb-ctrl-select",
++						  "p1")) {
++			val = TCSR_USB_SELECT_USB3_P1;
++		} else if (of_property_match_string(node, "qcom,usb-ctrl-select",
++						  "dual")) {
++			val = TCSR_USB_SELECT_USB3_DUAL;
++		} else {
++			dev_err(dev, "invalid value for qcom,usb-ctrl-select");
++			return -EINVAL;
++		}
 +
-+required:
-+  - compatible
-+  - reg
++		ret = regmap_update_bits(tcsr, TCSR_USB_PORT_SEL_REG,
++					 TCSR_USB_PORT_SEL_MASK, val);
++		if (ret)
++			return ret;
++	}
 +
-+additionalProperties: false
++	if (of_find_property(node, "qcom,usb-hsphy-mode-select", NULL) &&
++	    of_device_is_compatible(node, "qcom,tcsr-ipq4019")) {
++		if (of_property_match_string(node, "qcom,usb-hsphy-mode-select",
++					     "host")) {
++			val = TCSR_USB_HSPHY_MODE_HOST_MODE;
++		} else if (of_property_match_string(node, "qcom,usb-hsphy-mode-select",
++						  "device")) {
++			val = TCSR_USB_HSPHY_MODE_DEVICE_MODE;
++		} else {
++			dev_err(dev, "invalid value for qcom,usb-hsphy-mode-select");
++			return -EINVAL;
++		}
 +
-+examples:
-+  - |
-+    tcsr@194b000 {
-+      compatible = "qcom,tcsr-ipq4019", "syscon";
-+      reg = <0x194b000 0x100>;
-+      qcom,usb-hsphy-mode-select = "host";
-+    };
++		ret = regmap_update_bits(tcsr, TCSR_USB_HSPHY_CONFIG_REG,
++					 TCSR_USB_HSPHY_MODE_MASK, val);
++		if (ret)
++			return ret;
++	}
 +
-+    tcsr@1949000 {
-+      compatible = "qcom,tcsr-ipq4019", "syscon";
-+      reg = <0x1949000 0x100>;
-+      qcom,wifi-glb-cfg-enable-axid;
-+      qcom,wifi-glb-cfg-socslv-mode = "local";
-+    };
++	if (of_find_property(node, "qcom,ess-interface-select", NULL) &&
++	    of_device_is_compatible(node, "qcom,tcsr-ipq4019")) {
++		if (of_property_match_string(node, "qcom,ess-interface-select",
++					     "psgmii")) {
++			val = TCSR_ESS_PSGMII;
++		} else if (of_property_match_string(node, "qcom,ess-interface-select",
++						  "rgmii5")) {
++			val = TCSR_ESS_PSGMII_RGMII5;
++		} else if (of_property_match_string(node, "qcom,ess-interface-select",
++						  "rmii0")) {
++			val = TCSR_ESS_PSGMII_RMII0;
++		} else if (of_property_match_string(node, "qcom,ess-interface-select",
++						  "rmii1")) {
++			val = TCSR_ESS_PSGMII_RMII1;
++		} else if (of_property_match_string(node, "qcom,ess-interface-select",
++						  "rmii0_rmii1")) {
++			val = TCSR_ESS_PSGMII_RMII0_RMII1;
++		} else if (of_property_match_string(node, "qcom,ess-interface-select",
++						  "rgmii4")) {
++			val = TCSR_ESS_PSGMII_RGMII4;
++		} else {
++			dev_err(dev, "invalid value for qcom,ess-interface-select");
++			return -EINVAL;
++		}
 +
-+    ess_tcsr@1953000 {
-+      compatible = "qcom,tcsr-ipq4019", "syscon";
-+      reg = <0x1953000 0x1000>;
-+      qcom,ess-interface-select = "psgmii";
-+    };
++		ret = regmap_update_bits(tcsr, TCSR_ESS_INTERFACE_SEL_REG,
++					 TCSR_ESS_INTERFACE_SEL_MASK, val);
++		if (ret)
++			return ret;
++	}
 +
-+    tcsr@1957000 {
-+      compatible = "qcom,tcsr-ipq4019", "syscon";
-+      reg = <0x1957000 0x100>;
-+      qcom,wifi_noc_memtype_m0_m2;
-+    };
++	if (of_find_property(node, "qcom,wifi-glb-cfg-enable-axid", NULL) &&
++	    of_device_is_compatible(node, "qcom,tcsr-ipq4019")) {
++		ret = regmap_set_bits(tcsr, TCSR_WIFI0_GLB_CFG_OFFSET_REG,
++				      TCSR_WIFI_GLB_CFG_AXID_EN);
++		ret = regmap_set_bits(tcsr, TCSR_WIFI1_GLB_CFG_OFFSET_REG,
++				      TCSR_WIFI_GLB_CFG_AXID_EN);
++		if (ret)
++			return ret;
++	}
 +
-+...
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq8064.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq8064.yaml
-new file mode 100644
-index 000000000000..4ccc0bfccec5
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,tcsr-ipq8064.yaml
-@@ -0,0 +1,47 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/soc/qcom/qcom,tcsr-ipq8064.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++	if (of_find_property(node, "qcom,wifi-glb-cfg-socslv-mode", NULL) &&
++	    of_device_is_compatible(node, "qcom,tcsr-ipq4019")) {
++		if (of_property_match_string(node, "qcom,wifi-glb-cfg-socslv-mode",
++					     "snoc")) {
++			val = TCSR_WIFI_GLB_CFG_SOCSLV_SNOC;
++		} else if (of_property_match_string(node, "qcom,wifi-glb-cfg-socslv-mode",
++						  "local")) {
++			val = TCSR_WIFI_GLB_CFG_SOCSLV_SNOC;
++		} else {
++			dev_err(dev, "invalid value for qcom,wifi-glb-cfg-socslv-mode");
++			return -EINVAL;
++		}
 +
-+title: Qualcomm Top Control and Status Registers binding for IPQ8064
++		ret = regmap_update_bits(tcsr, TCSR_WIFI0_GLB_CFG_OFFSET_REG,
++					 TCSR_WIFI_GLB_CFG_SOCSLV_WXI_BVALID, val);
++		ret = regmap_update_bits(tcsr, TCSR_WIFI1_GLB_CFG_OFFSET_REG,
++					 TCSR_WIFI_GLB_CFG_SOCSLV_WXI_BVALID, val);
++	}
 +
-+maintainers:
-+  - Ansuel Smith <ansuelsmth@gmail.com>
++	if (of_find_property(node, "qcom,wifi_noc_memtype_m0_m2", NULL) &&
++	    of_device_is_compatible(node, "qcom,tcsr-ipq4019")) {
++		ret = regmap_update_bits(tcsr, TCSR_PNOC_SNOC_MEMTYPE_M0_M2_REG,
++					 TCSR_WIFI_NOC_MEMTYPE_MASK,
++					 TCSR_WIFI_NOC_MEMTYPE_M0_M2);
++		if (ret)
++			return ret;
++	}
 +
-+description: |
-+  This binding describes the Qualcomm Top Control and Status Registers, used
-+  for accessing configuration and mux settings for a variety of peripherals
-+  for ipq8064.
++	return 0;
++}
 +
-+properties:
-+  compatible:
-+    items:
-+      - const: qcom,tcsr-ipq8064
-+      - const: syscon
++static const struct of_device_id qcom_tcsr_dt_match[] = {
++	{ .compatible = "qcom,tcsr-ipq8064", },
++	{ .compatible = "qcom,tcsr-ipq4019", },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, qcom_tcsr_dt_match);
 +
-+  reg:
-+    maxItems: 1
++static struct platform_driver qcom_tcsr_driver = {
++	.probe = qcom_tcsr_probe,
++	.driver = {
++		.name		= "qcom-tcsr",
++		.of_match_table	= qcom_tcsr_dt_match,
++	},
++};
 +
-+  qcom,usb-ctrl-select:
-+    description: Select usb3 ctrl type for ipq8064
-+    enum:
-+      - 'p0'
-+      - 'p1'
-+      - 'dual'
++module_platform_driver(qcom_tcsr_driver);
 +
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    tcsr: syscon@1a400000 {
-+      compatible = "qcom,tcsr-ipq8064", "syscon";
-+      reg = <0x1a400000 0x100>;
-+      qcom,usb-ctrl-select = "dual";
-+    };
-+
-+...
++MODULE_AUTHOR("Ansuel Smith <ansuelsmth@gmail.com>");
++MODULE_DESCRIPTION("QCOM TCSR driver");
++MODULE_LICENSE("GPL v2");
 -- 
 2.33.1
 

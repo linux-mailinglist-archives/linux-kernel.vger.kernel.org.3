@@ -2,117 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE94496DE4
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 21:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 259AA496DEB
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 21:16:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbiAVUNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 15:13:34 -0500
-Received: from vulcan.natalenko.name ([104.207.131.136]:39310 "EHLO
-        vulcan.natalenko.name" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiAVUNd (ORCPT
+        id S230211AbiAVUQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 15:16:01 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35176 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229970AbiAVUP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 15:13:33 -0500
-Received: from spock.localnet (unknown [83.148.33.151])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Sat, 22 Jan 2022 15:15:56 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 71D58D7ABB3;
-        Sat, 22 Jan 2022 21:13:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1642882411;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fvFOCrOmpieqrSSeZEK934k3aSXDn2f7mqxg0GSc1BQ=;
-        b=KGrgtajbzM+3wtMuXhnH/UEQLn8QdaRml0rIKIDwVtH57pq6G2goXUCzFM1kFiZrWdfruw
-        8kg/ZNhk+eaFJbzgPrgLaZ3I6zveh7yHj+VAY0qjJlNoR5ODvfh19I2/dic62lQ8FNSgHr
-        /BJ1BrXEhLvnRDhiiwPgnS6TsYN6X5c=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Denis Pauk <pauk.denis@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [ASUS EC Sensors v7 1/3] hwmon: (asus-ec-sensors) add driver for ASUS EC
-Date:   Sat, 22 Jan 2022 21:13:29 +0100
-Message-ID: <2614116.mvXUDI8C0e@natalenko.name>
-In-Reply-To: <20220120004540.GD3474033@roeck-us.net>
-References: <20220118165316.412735-1-eugene.shalygin@gmail.com> <CAB95QATvQPZ-s4dCWeqKcSZ9Rfx9uK1AyoM9Kk3biPfvXh5r5g@mail.gmail.com> <20220120004540.GD3474033@roeck-us.net>
+        by ams.source.kernel.org (Postfix) with ESMTPS id CDD02B80AD7;
+        Sat, 22 Jan 2022 20:15:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55593C004E1;
+        Sat, 22 Jan 2022 20:15:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642882553;
+        bh=S8xrHwYwZk79eQ+RDxQMDrtwZJSz9IW+n5Un7rxCUsw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IkAwb0PSCsWEW7IfjBNh6z/Q9kYbJQkZVgzpojQyJx6sK5gWmKxyu9P3blyqKQWxB
+         6d+jwr8cxMeBzrc+CVz97zQHWoBXqC4TGJ/5uMrYSwmVNdrC70oAeDA9wxbM36KCsA
+         fXgFmvyoPG30v0sCf0RWUbfGe6zT9/VjaLNUxEnR/hPwhbkZc8LgiDdzgDk/brtpDb
+         9XkpIfHRe2c+5fVICyxl4lLhk3nU22aMEyWtdjqMgfdl+zMSX4Y8QW9mhM+7zH/+og
+         m8sjvN0UZp1pdJHLwzBZzQ1pW9s1AuVIeQ2bv89roLu6AIX5YTfc9r4XH926sNdBe+
+         2SjHwOKF8j5lQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5E08F40C99; Sat, 22 Jan 2022 17:13:51 -0300 (-03)
+Date:   Sat, 22 Jan 2022 17:13:51 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     cgel.zte@gmail.com, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, james.clark@arm.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] perf cpumap: remove duplicate include in cpumap.h
+Message-ID: <Yexlf2Fuk6BZVuzp@kernel.org>
+References: <20220117083730.863200-1-lv.ruyi@zte.com.cn>
+ <CAP-5=fXxwCjcsej5QJMoAz1kvoy5LLKUDMop0GzBMuj8oc3mmA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fXxwCjcsej5QJMoAz1kvoy5LLKUDMop0GzBMuj8oc3mmA@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+Em Mon, Jan 17, 2022 at 08:31:12AM -0800, Ian Rogers escreveu:
+> On Mon, Jan 17, 2022 at 12:37 AM <cgel.zte@gmail.com> wrote:
+> >
+> > From: Lv Ruyi <lv.ruyi@zte.com.cn>
+> >
+> > Remove all but the first include of stdbool.h from cpumap.h.
+> >
+> > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> > Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+> > Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+> 
+> Acked-by: Ian Rogers <irogers@google.com>
 
-On =C4=8Dtvrtek 20. ledna 2022 1:45:40 CET Guenter Roeck wrote:
-> On Wed, Jan 19, 2022 at 04:25:41AM +0100, Eugene Shalygin wrote:
-> > I did not read carefully what I committed and now two small
-> > corrections are required (see inline). Should I resend again?
-> >=20
->=20
-> Wait for a couple of days in case there is test coverage
-> or other feedback.
+Thanks, applied.
 
-Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+- Arnaldo
 
-along with line break/comments fixes.
+ 
+> Thanks,
+> Ian
+> 
+> > ---
+> >  tools/perf/util/cpumap.h | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/tools/perf/util/cpumap.h b/tools/perf/util/cpumap.h
+> > index 0d3c2006a15d..240db1da370c 100644
+> > --- a/tools/perf/util/cpumap.h
+> > +++ b/tools/perf/util/cpumap.h
+> > @@ -4,7 +4,6 @@
+> >
+> >  #include <stdbool.h>
+> >  #include <stdio.h>
+> > -#include <stdbool.h>
+> >  #include <internal/cpumap.h>
+> >  #include <perf/cpumap.h>
+> >
+> > --
+> > 2.25.1
+> >
 
-I'd also appreciate Cc'ing me on this submission.
+-- 
 
-Thanks.
-
->=20
-> Guenter
->=20
-> > On Tue, 18 Jan 2022 at 17:53, Eugene Shalygin <eugene.shalygin@gmail.co=
-m> wrote:
-> > > +       DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX X570=
-=2DF GAMING",
-> > > +               SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> > > +               SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET
-> > Redundant line break.
-> > > +       ),
-> > > +       DMI_EXACT_MATCH_BOARD(VENDOR_ASUS_UPPER_CASE, "ROG STRIX X570=
-=2DI GAMING",
-> > > +               SENSOR_TEMP_T_SENSOR | SENSOR_FAN_VRM_HS |
-> > > +               SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU),
-> >=20
-> >=20
-> > > +struct ec_sensors_data {
-> > > +       unsigned long board_sensors;
-> > > +       struct ec_sensor *sensors;
-> > > +       /** EC registers to read from */
-> > > +       u16 *registers;
-> > > +       u8 *read_buffer;
-> > > +       /** sorted list of unique register banks */
-> > > +       u8 banks[ASUS_EC_MAX_BANK + 1];
-> > > +       /** in jiffies */
-> > > +       unsigned long last_updated;
-> > > +       acpi_handle aml_mutex;
-> > > +       /** number of board EC sensors */
-> > > +       u8 nr_sensors;
-> > > +       /** number of EC registers to read (sensor might span more th=
-an 1 register) */
-> > > +       u8 nr_registers;
-> > > +       /** number of unique register banks */
-> > > +       u8 nr_banks;
-> > > +};
-> >=20
-> > Forgot to remove doc-comments.
-> >=20
-> > Thanks,
-> > Eugene
->=20
->=20
-
-
-=2D-=20
-Oleksandr Natalenko (post-factum)
-
-
+- Arnaldo

@@ -2,96 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5E7496CCD
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 16:18:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B453496CD3
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 16:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234113AbiAVPSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 10:18:51 -0500
-Received: from conssluserg-05.nifty.com ([210.131.2.90]:50789 "EHLO
-        conssluserg-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233950AbiAVPSt (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 10:18:49 -0500
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 20MFIZF3021588;
-        Sun, 23 Jan 2022 00:18:36 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 20MFIZF3021588
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1642864716;
-        bh=vtxhSxgWZauK31VQ+JzIFDuJH0VqZNP5FvASN3RMRQE=;
-        h=From:Date:Subject:To:Cc:From;
-        b=AbQB+MPC7aybdHZgGMC99Y2NFTphZI1AY1q+pr2X+lXK3lpHtB0xp4AcG9QtdKYAo
-         L8K+OOQHhdc6g+tXFXi8NkfbkAoJ1/Vvfnmt8Gv9pWHca6UppZ4pRl2HiUrMoB4i3p
-         YliduxpbGniFUhcN7aT0jvZ3kZotrSdgFZeqDB2xMBUvWI7x0mufAXrzOXBhWXzSTa
-         B4eUvd10nhwaX7W03KcxKgXunHZsfbHcWk8jCZ3XSKNU6ENL1FCPPG9NupyB8tMcdn
-         anYZR6LSsFmOD9qRq3ZcYj+sdWXOpGK5ED/ThWwFezFkFW69XOl43B87IMaAulqXsK
-         n2/DSuIfRmQYQ==
-X-Nifty-SrcIP: [209.85.215.181]
-Received: by mail-pg1-f181.google.com with SMTP id e16so1497238pgn.4;
-        Sat, 22 Jan 2022 07:18:36 -0800 (PST)
-X-Gm-Message-State: AOAM532a5Tu1e/Ve80juj9i61pbKTBOnFHxy4BJjOdras32cl1x1g42J
-        Y+X7KTGgqoIiKUrlFSoVTIlgIonM6Ng3IsVNgAY=
-X-Google-Smtp-Source: ABdhPJycp1naosm2wQCbiCmcaaIi5n3CRrIFf5KBwH5N+y9k3UimPFBiyAliLFeaSLQF9McXng3zTTZLTxbQqGDTU68=
-X-Received: by 2002:a63:7148:: with SMTP id b8mr6359140pgn.616.1642864715434;
- Sat, 22 Jan 2022 07:18:35 -0800 (PST)
+        id S233256AbiAVPqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 10:46:46 -0500
+Received: from mga01.intel.com ([192.55.52.88]:20369 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229581AbiAVPqp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 22 Jan 2022 10:46:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642866405; x=1674402405;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3fQYjG67Q8nFzNITh6l5ntrDGpTwyY1xfN+uUa/j/Ps=;
+  b=L8yv3ASjf5tijqeJrkDoFPdAtPW88oGBCBupmLazY1EdoQhZ0bB/6Uwa
+   D+c++U2Z0WsUZXLyaHMXNo4mM11/izMy5F+vN3ePrmmKAGby/MFVtB1gi
+   k7ahuMkSO5Zlg77Fs66N6LQafv3mPDpKfuG3yrX6GFygh5dFiSeyXSYT9
+   tSpN0nl1QCYh5JraBMVaDMQoubu8EZuAb5TgjKMOdW16Vht3cZR/rrOyE
+   JGOfoUpMEgUKTGKxgcQB1MrLSUpm0rrz1YxNfHamuTqL4XGNUgl/Q+WXp
+   ZMX3gNNRd4vmBVsH0Cg3V8vsoW/ZEDsq3YTQ3oyFDKEKCfYgyAjsuIT00
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="270263172"
+X-IronPort-AV: E=Sophos;i="5.88,308,1635231600"; 
+   d="scan'208";a="270263172"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2022 07:46:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,308,1635231600"; 
+   d="scan'208";a="476265484"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 22 Jan 2022 07:46:42 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nBIbB-000GYF-PT; Sat, 22 Jan 2022 15:46:41 +0000
+Date:   Sat, 22 Jan 2022 23:46:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: [cxl:preview 34/53] drivers/cxl/core/pci.c:48:31: error: use of
+ undeclared identifier 'CXL_REGLOC_RBI_COMPONENT'
+Message-ID: <202201222342.XT0vW1nO-lkp@intel.com>
 MIME-Version: 1.0
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 23 Jan 2022 00:17:58 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASs0jntOj63GoE9Lhasb-7zmVzBcq35CDeKnBqjG_v+kw@mail.gmail.com>
-Message-ID: <CAK7LNASs0jntOj63GoE9Lhasb-7zmVzBcq35CDeKnBqjG_v+kw@mail.gmail.com>
-Subject: [GIT PULL] Kbuild fixes for v5.17-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git preview
+head:   e675fabdbbcdb6e32dba688a20fb0bd42e0e2d5d
+commit: 2b7a34a480122fb652df99554f6d59c5d9f3ef24 [34/53] cxl/core: Generalize dport enumeration in the core
+config: mips-randconfig-c004-20220120 (https://download.01.org/0day-ci/archive/20220122/202201222342.XT0vW1nO-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=2b7a34a480122fb652df99554f6d59c5d9f3ef24
+        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
+        git fetch --no-tags cxl preview
+        git checkout 2b7a34a480122fb652df99554f6d59c5d9f3ef24
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/cxl/core/
 
-Please pull Kbuild fixes.
-Thanks.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/cxl/core/pci.c:48:31: error: use of undeclared identifier 'CXL_REGLOC_RBI_COMPONENT'
+           rc = cxl_find_regblock(pdev, CXL_REGLOC_RBI_COMPONENT, &map);
+                                        ^
+>> drivers/cxl/core/pci.c:55:8: error: implicit declaration of function 'cxl_regmap_to_base' [-Werror,-Wimplicit-function-declaration]
+                                      cxl_regmap_to_base(pdev, &map));
+                                      ^
+>> drivers/cxl/core/pci.c:76:5: warning: no previous prototype for function 'devm_cxl_port_enumerate_dports' [-Wmissing-prototypes]
+   int devm_cxl_port_enumerate_dports(struct device *host, struct cxl_port *port)
+       ^
+   drivers/cxl/core/pci.c:76:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int devm_cxl_port_enumerate_dports(struct device *host, struct cxl_port *port)
+   ^
+   static 
+   1 warning and 2 errors generated.
 
 
+vim +/CXL_REGLOC_RBI_COMPONENT +48 drivers/cxl/core/pci.c
 
-The following changes since commit 1c52283265a462a100ae63ddf58b4e5884acde86:
+    24	
+    25	static int match_add_dports(struct pci_dev *pdev, void *data)
+    26	{
+    27		struct cxl_walk_context *ctx = data;
+    28		struct cxl_port *port = ctx->port;
+    29		struct device *host = ctx->host;
+    30		struct pci_bus *bus = ctx->bus;
+    31		int type = pci_pcie_type(pdev);
+    32		struct cxl_register_map map;
+    33		int match_type = ctx->type;
+    34		struct cxl_dport *dport;
+    35		u32 lnkcap, port_num;
+    36		int rc;
+    37	
+    38		if (pdev->bus != bus)
+    39			return 0;
+    40		if (!pci_is_pcie(pdev))
+    41			return 0;
+    42		if (type != match_type)
+    43			return 0;
+    44		if (pci_read_config_dword(pdev, pci_pcie_cap(pdev) + PCI_EXP_LNKCAP,
+    45					  &lnkcap) != PCIBIOS_SUCCESSFUL)
+    46			return 0;
+    47	
+  > 48		rc = cxl_find_regblock(pdev, CXL_REGLOC_RBI_COMPONENT, &map);
+    49		if (rc)
+    50			dev_dbg(&port->dev, "failed to find component registers\n");
+    51	
+    52		port_num = FIELD_GET(PCI_EXP_LNKCAP_PN, lnkcap);
+    53		cxl_device_lock(&port->dev);
+    54		dport = devm_cxl_add_dport(host, port, &pdev->dev, port_num,
+  > 55					   cxl_regmap_to_base(pdev, &map));
+    56		cxl_device_unlock(&port->dev);
+    57		if (IS_ERR(dport)) {
+    58			ctx->error = PTR_ERR(dport);
+    59			return PTR_ERR(dport);
+    60		}
+    61		ctx->count++;
+    62	
+    63		dev_dbg(&port->dev, "add dport%d: %s\n", port_num, dev_name(&pdev->dev));
+    64	
+    65		return 0;
+    66	}
+    67	
+    68	/**
+    69	 * devm_cxl_port_enumerate_dports - enumerate downstream ports of the upstream port
+    70	 * @host: devm context
+    71	 * @port: cxl_port whose ->uport is the upstream of dports to be enumerated
+    72	 *
+    73	 * Returns a positive number of dports enumerated or a negative error
+    74	 * code.
+    75	 */
+  > 76	int devm_cxl_port_enumerate_dports(struct device *host, struct cxl_port *port)
 
-  Merge branch 'akpm' (patches from Andrew) (2022-01-22 11:28:23 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-tags/kbuild-fixes-v5.17
-
-for you to fetch changes up to e6340b6526eeec5a00fe26a6ff515afe7d0affa4:
-
-  certs: Fix build error when CONFIG_MODULE_SIG_KEY is empty
-(2022-01-23 00:08:44 +0900)
-
-----------------------------------------------------------------
-Kbuild fixes for v5.17
-
- - Bring include/uapi/linux/nfc.h into the UAPI compile-test coverage
-
- - Revert the workaround of CONFIG_CC_IMPLICIT_FALLTHROUGH
-
- - Fix build errors in certs/Makefile
-
-----------------------------------------------------------------
-Dmitry V. Levin (1):
-      usr/include/Makefile: add linux/nfc.h to the compile-test coverage
-
-Masahiro Yamada (3):
-      Revert "Makefile: Do not quote value for CONFIG_CC_IMPLICIT_FALLTHROUGH"
-      certs: Fix build error when CONFIG_MODULE_SIG_KEY is PKCS#11 URI
-      certs: Fix build error when CONFIG_MODULE_SIG_KEY is empty
-
- Makefile             | 2 +-
- certs/Makefile       | 4 ++--
- usr/include/Makefile | 1 -
- 3 files changed, 3 insertions(+), 4 deletions(-)
-
--- 
-Best Regards
-Masahiro Yamada
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

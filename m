@@ -2,133 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2AF496CAA
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 14:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80561496CB1
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 15:14:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233647AbiAVNuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 08:50:09 -0500
-Received: from fanzine2.igalia.com ([213.97.179.56]:42842 "EHLO
-        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233294AbiAVNuH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 08:50:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=M85Dp1PCDT5EATRSGMkaq8YE1CWlkb1P8zz5WRSMb1M=; b=V+tpx26mZ9hfX8uVUPwzbJl+iZ
-        Lbmf1b3dHlkOFC2YHPA09pXixS4y/tnfaEGlm8F+I2ffqyULD8E/HbBrAuKvi81d7F2kIXFGArYqp
-        YNpd3H2KlprHPPv/hDsa3ikbkT17egjsMbZ3SqtRmVV8NMixvJMGLaP2OPg3R23E14PLpRBEuH+bT
-        xs0AfkM4E2Li4MNacMWWAwQkcyTi1O8CGVceiMW5/no24obwr59TQEbeb4z8DDWJlbjBYlDGc8VlR
-        SNuFLxe2LT6E3zwS5qmwTvKSOUypKIotMMU/LYuoRawPwprj+xXZOO2tjqTTi+dcsOVQU3y9EwbLU
-        UZ63sR1g==;
-Received: from [179.98.77.138] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nBGmD-0002nY-S2; Sat, 22 Jan 2022 14:49:58 +0100
-Message-ID: <ed18ba1e-4792-22c5-3ece-4d518a8a4a2d@igalia.com>
-Date:   Sat, 22 Jan 2022 10:49:38 -0300
+        id S233869AbiAVOOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 09:14:42 -0500
+Received: from mga04.intel.com ([192.55.52.120]:27571 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233792AbiAVOOl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 22 Jan 2022 09:14:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642860881; x=1674396881;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=f0Prtj+CZTne/z/9+yKeVngrXfjH6ffCd25xFCC88jA=;
+  b=WYxuYIiUUZaamol8jC46ZTNRINguY2RogmexgPn3esK91p4+uwFKswbo
+   xD9AJbT+5YDjDOk4x+yBcKphA8if+7tH6jGCpJROUph9csC5vOoFWo19F
+   BhEkujTabLiDjphxUzk0oNuo4evgrWzxjJFr1HyLLW/6GUIgTiPj4edJF
+   mXh1NN6WG96n05qgALbaCq3t8v4IMfq2qKD7NXwcr/M+Urx9ieG5UQfqR
+   Y8+ugNnU3wH2LGW8PyrtgFTSJRLG9RDgJ80aI9nLXiuj6THzYJq37D5PC
+   mGRZbs/PvQU2uqlkUW0UNLQnLfQjedAvk8pC4jU9ZpBaW4j53bZ6+jlKG
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="244647878"
+X-IronPort-AV: E=Sophos;i="5.88,308,1635231600"; 
+   d="scan'208";a="244647878"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2022 06:14:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,308,1635231600"; 
+   d="scan'208";a="533643069"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 22 Jan 2022 06:14:39 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nBHA6-000GTL-Mt; Sat, 22 Jan 2022 14:14:38 +0000
+Date:   Sat, 22 Jan 2022 22:14:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexander K <ak@tempesta-tech.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Chuck Lever <chuck.lever@oracle.com>
+Subject: [cel:topic-rpc-with-tls 9995/9999] net/tls/ttls.c:2148:9: error: too
+ few arguments to function 'kernel_fpu_begin'
+Message-ID: <202201222234.oGj9OPe6-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V3] panic: Move panic_print before kmsg dumpers
-Content-Language: en-US
-To:     Baoquan He <bhe@redhat.com>
-Cc:     Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, kernel@gpiccoli.net,
-        senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, feng.tang@intel.com,
-        kexec@lists.infradead.org, dyoung@redhat.com,
-        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
-        tony.luck@intel.com
-References: <20220114183046.428796-1-gpiccoli@igalia.com>
- <20220119071318.GA4977@MiWiFi-R3L-srv> <YegytkfED+QI56Y8@alley>
- <20220120085115.GB18398@MiWiFi-R3L-srv>
- <63621138-2a41-26c2-524e-d889068f157a@igalia.com>
- <20220121023119.GB4579@MiWiFi-R3L-srv>
- <c7796467-ee32-942f-6011-860a3600f4ef@igalia.com>
- <20220122103121.GB2596@MiWiFi-R3L-srv>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20220122103121.GB2596@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/01/2022 07:31, Baoquan He wrote:
-> [...]
-> From my old POV, I took pstore as a necessity on handheld devices or
-> embeded system, e.g on Andriod. In that case, reserving crashkernel
-> memory to enable kdump to save kernel log, it sounds not so
-> cost-effective, since memory on those systems is usually not big.
-> I am also interested in any new use case where people deploy these
-> and why it's needed, to widen my view.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux topic-rpc-with-tls
+head:   a72d5318846d67a7f3f5f2bcb4c0c09c4f8907d1
+commit: 88772cc15e58e3bb69ab319d7fb2ed0cdce5a5a1 [9995/9999] Introduce CONFIG_TLS_SOFTIRQ to perform all TLS routines in softirq (fixes #1446).
+config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20220122/202201222234.oGj9OPe6-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=88772cc15e58e3bb69ab319d7fb2ed0cdce5a5a1
+        git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
+        git fetch --no-tags cel topic-rpc-with-tls
+        git checkout 88772cc15e58e3bb69ab319d7fb2ed0cdce5a5a1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Hi Baoquan, that's great to hear. Indeed, I feel pstore is unfortunately
-not very used in non-embedded devices - if you see kdump/error-report
-userspace tooling, like on Red Hat/Fedora, Debian/Ubuntu and so on, they
-never rely on pstore. And the configuration is not straightforward for
-the users...I think that's a good thing to change, since pstore is much
-less resource consuming than kdump.
-But of course, not a discussion related to this patch specifically, just
-me thinking out loud heh
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from net/tls/ttls.c:28:
+   arch/s390/include/asm/fpu/api.h: In function 'kernel_fpu_begin':
+   arch/s390/include/asm/fpu/api.h:97:14: error: invalid use of undefined type 'struct kernel_fpu'
+      97 |         state->mask = S390_lowcore.fpu_flags;
+         |              ^~
+   arch/s390/include/asm/fpu/api.h:98:14: error: implicit declaration of function 'test_cpu_flag' [-Werror=implicit-function-declaration]
+      98 |         if (!test_cpu_flag(CIF_FPU))
+         |              ^~~~~~~~~~~~~
+   arch/s390/include/asm/fpu/api.h:98:28: error: 'CIF_FPU' undeclared (first use in this function)
+      98 |         if (!test_cpu_flag(CIF_FPU))
+         |                            ^~~~~~~
+   arch/s390/include/asm/fpu/api.h:98:28: note: each undeclared identifier is reported only once for each function it appears in
+   arch/s390/include/asm/fpu/api.h:101:23: error: invalid use of undefined type 'struct kernel_fpu'
+     101 |         else if (state->mask & flags)
+         |                       ^~
+   arch/s390/include/asm/fpu/api.h: In function 'kernel_fpu_end':
+   arch/s390/include/asm/fpu/api.h:109:39: error: invalid use of undefined type 'struct kernel_fpu'
+     109 |         S390_lowcore.fpu_flags = state->mask;
+         |                                       ^~
+   arch/s390/include/asm/fpu/api.h:110:18: error: invalid use of undefined type 'struct kernel_fpu'
+     110 |         if (state->mask & flags)
+         |                  ^~
+   In file included from arch/s390/include/asm/smp.h:13,
+                    from include/linux/smp.h:85,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/spinlock.h:59,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/slab.h:15,
+                    from include/linux/crypto.h:20,
+                    from include/crypto/aead.h:11,
+                    from net/tls/ttls.c:29:
+   arch/s390/include/asm/processor.h: At top level:
+   arch/s390/include/asm/processor.h:58:19: error: static declaration of 'test_cpu_flag' follows non-static declaration
+      58 | static inline int test_cpu_flag(int flag)
+         |                   ^~~~~~~~~~~~~
+   In file included from net/tls/ttls.c:28:
+   arch/s390/include/asm/fpu/api.h:98:14: note: previous implicit declaration of 'test_cpu_flag' with type 'int()'
+      98 |         if (!test_cpu_flag(CIF_FPU))
+         |              ^~~~~~~~~~~~~
+   net/tls/ttls.c: In function '__ttls_send_record':
+   net/tls/ttls.c:1031:57: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
+    1031 |                 T_DBG("TLS send callback error %d\n", r);
+         |                                                         ^
+   net/tls/ttls.c: At top level:
+   net/tls/ttls.c:1290:1: warning: no previous prototype for 'ttls_handle_alert' [-Wmissing-prototypes]
+    1290 | ttls_handle_alert(TlsCtx *tls)
+         | ^~~~~~~~~~~~~~~~~
+   net/tls/ttls.c: In function 'ttls_parse_certificate':
+   net/tls/ttls.c:1582:74: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
+    1582 |                         T_DBG("client cert verification status: %d\n", r);
+         |                                                                          ^
+   net/tls/ttls.c: In function 'ttls_recv':
+>> net/tls/ttls.c:2148:9: error: too few arguments to function 'kernel_fpu_begin'
+    2148 |         kernel_fpu_begin();
+         |         ^~~~~~~~~~~~~~~~
+   In file included from net/tls/ttls.c:28:
+   arch/s390/include/asm/fpu/api.h:94:20: note: declared here
+      94 | static inline void kernel_fpu_begin(struct kernel_fpu *state, u32 flags)
+         |                    ^~~~~~~~~~~~~~~~
+>> net/tls/ttls.c:2270:9: error: too few arguments to function 'kernel_fpu_end'
+    2270 |         kernel_fpu_end();
+         |         ^~~~~~~~~~~~~~
+   In file included from net/tls/ttls.c:28:
+   arch/s390/include/asm/fpu/api.h:107:20: note: declared here
+     107 | static inline void kernel_fpu_end(struct kernel_fpu *state, u32 flags)
+         |                    ^~~~~~~~~~~~~~
+   net/tls/ttls.c: At top level:
+   net/tls/ttls.c:2470:1: warning: no previous prototype for 'ttls_sig_hash_set_has' [-Wmissing-prototypes]
+    2470 | ttls_sig_hash_set_has(TlsSigHashSet *set, ttls_pk_type_t sig_alg,
+         | ^~~~~~~~~~~~~~~~~~~~~
+   net/tls/ttls.c:2484:1: warning: no previous prototype for 'ttls_sig_hash_set_const' [-Wmissing-prototypes]
+    2484 | ttls_sig_hash_set_const(TlsSigHashSet *set, ttls_pk_type_t sig_alg,
+         | ^~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for CRYPTO_SHA1_SSSE3
+   Depends on CRYPTO && X86 && 64BIT
+   Selected by
+   - TLS_HANDSHAKE && NET && TLS && TLS_SOFTIRQ
 
 
-> [...] 
-> It's my bad. My thought is panic_print and kmsg_dump can be coupled, but
-> they should decouple with panic_notifier. When panic_print is enabled,
-> we do not expect to execute panic_notifier? My personal opinion.
-> 
-> I missed the change at line 8, sorry for the caused misunderstanding. 
-> Now the chance of holding C-programmer-prize of the year comes back
-> again.
-> 
->   void panic()
->   {
-> 1         if (!_crash_kexec_post_notifiers && !panic_print) {
-> 2                 __crash_kexec(NULL);
-> 3                 smp_send_stop();
-> 4         } else {
-> 5                 crash_smp_send_stop();
-> 6         }
->   
->   	if (_crash_kexec_post_notifiers)
-> 8  		atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
-> 9  	panic_print_sys_info(false);
-> 10  	kmsg_dump(KMSG_DUMP_PANIC);
-> 11  	if (_crash_kexec_post_notifiers || panic_print)
-> 12                 __crash_kexec(NULL);
->   	...
->   	debug_locks_off();
->           console_flush_on_panic(CONSOLE_FLUSH_PENDING);
->           panic_print_sys_info(true);
+vim +/kernel_fpu_begin +2148 net/tls/ttls.c
 
-Hmm, yeah, I still don't think I'm a brilliant C programmer heh
-Again, in the code above, I can't see how we would reach
-"__crash_kexec(NULL)" after printing the extra info of panic_print, if
-we don't have panic notifiers enabled.
+  2111	
+  2112	/**
+  2113	 * Main TLS receive routine.
+  2114	 *
+  2115	 * Read a record, only one. A caller will call us again if a following record,
+  2116	 * or it's part, is left in @buf.
+  2117	 *
+  2118	 * Silently ignore non-fatal alert and continue reading until a valid record is
+  2119	 * found.
+  2120	 *
+  2121	 * @buf and @len defines a chunk of ingress network data, probably containing
+  2122	 * parts of several TLS messages, e.g. a tail of last message, a short full
+  2123	 * message and a begin of a next message.
+  2124	 *
+  2125	 * @return -EAGAIN if there is no ready data for upper layer (e.g. during
+  2126	 * handshake or current record isn't fully read) and T_PASS if a record is ready
+  2127	 * for upper layer protocol processing. Other negative values are returned on
+  2128	 * errors.
+  2129	 * The function adds the number of bytes parsed in @buf to @read.
+  2130	 */
+  2131	int
+  2132	ttls_recv(void *tls_data, unsigned char *buf, size_t len, unsigned int *read)
+  2133	{
+  2134		int r;
+  2135		unsigned int hh_len = 0, parsed = *read;
+  2136		TlsCtx *tls = (TlsCtx *)tls_data;
+  2137		TlsIOCtx *io = &tls->io_in;
+  2138	
+  2139		BUG_ON(!tls || !tls->conf);
+  2140		T_DBG3("%s: tls=%pK len=%lu read=%u\n", __func__, tls, len, *read);
+  2141	
+  2142		/*
+  2143		 * There are many code executed under the saved FPU context and
+  2144		 * probably we won't call SIMD at all. However, in normal case
+  2145		 * we do several crypto operations requiring SIMD and we do our
+  2146		 * best to minimize the number of FPU context savings and restorings.
+  2147		 */
+> 2148		kernel_fpu_begin();
+  2149	
+  2150		if (!(io->st_flags & TTLS_F_ST_HDRIV)) {
+  2151			unsigned int delta;
+  2152	
+  2153			if ((r = ttls_parse_record_hdr(tls, buf, len, read)))
+  2154				goto out;
+  2155			delta = *read - parsed;
+  2156			len -= delta;
+  2157			buf += delta;
+  2158			parsed = *read;
+  2159	
+  2160			if (io->msgtype == TTLS_MSG_HANDSHAKE
+  2161			    && ttls_hs_checksumable(tls))
+  2162			{
+  2163				if (likely(delta >= TTLS_HS_HDR_LEN && len > 0)) {
+  2164					/*
+  2165					 * Compute handshake checksum for the message
+  2166					 * body and handshake header in one shot.
+  2167					 */
+  2168					hh_len = TTLS_HS_HDR_LEN;
+  2169				} else {
+  2170					ttls_update_checksum(tls, io->hs_hdr,
+  2171							     TTLS_HS_HDR_LEN);
+  2172				}
+  2173			}
+  2174		}
+  2175		WARN_ON_ONCE(!io->msglen);
+  2176	
+  2177		/*
+  2178		 * Current record is fully read and decrypted if necessary.
+  2179		 * Skip alerts and empty records and read a next one.
+  2180		 */
+  2181		switch (io->msgtype) {
+  2182		case TTLS_MSG_ALERT:
+  2183			if (unlikely(!ttls_xfrm_ready(tls))) {
+  2184				r = ttls_handle_alert(tls);
+  2185				goto out;
+  2186			}
+  2187			break;
+  2188	
+  2189		case TTLS_MSG_CHANGE_CIPHER_SPEC:
+  2190			/* Parsed as part of handshake FSM. */
+  2191		case TTLS_MSG_HANDSHAKE:
+  2192			if (!len) {
+  2193				r = -EAGAIN;
+  2194				goto out;
+  2195			}
+  2196			if (unlikely(tls->state == TTLS_HANDSHAKE_OVER)) {
+  2197				T_DBG("refusing renegotiation, sending alert\n");
+  2198				ttls_send_alert(tls, TTLS_ALERT_LEVEL_FATAL,
+  2199						TTLS_ALERT_MSG_NO_RENEGOTIATION);
+  2200				r = TTLS_ERR_UNEXPECTED_MESSAGE;
+  2201				goto out;
+  2202			}
+  2203	
+  2204			/*
+  2205			 * We add ingress messages to the handshake session checksum
+  2206			 * in two different places: here for message chunks and inside
+  2207			 * the handshake state machine. @hh_len is used for the
+  2208			 * checksumming only. We can not compute checksum for complete
+  2209			 * messages here (either before or after the FSM call) because
+  2210			 * before Hello message we have no idea which hash algorithm
+  2211			 * we should use, but key derieval on KeyExchange phase may
+  2212			 * require complete checksum for all the messages including
+  2213			 * the KeyExchange one.
+  2214			 */
+  2215			r = ttls_handshake_step(tls, buf, len, hh_len, read);
+  2216	
+  2217			/* Cleanup security sensitive temporary data. */
+  2218			ttls_mpi_pool_cleanup_ctx(0, true);
+  2219	
+  2220			if (r == -EAGAIN) {
+  2221				/* Add the handshake message chunk to the checksum. */
+  2222				BUG_ON(!tls->hs && tls->state != TTLS_HANDSHAKE_OVER);
+  2223				if (ttls_hs_checksumable(tls)) {
+  2224					size_t n = *read - (int)parsed + hh_len;
+  2225					ttls_update_checksum(tls, buf - hh_len, n);
+  2226				}
+  2227			}
+  2228			else if (r) {
+  2229				T_DBG("handshake error: %d\n", r);
+  2230			}
+  2231			goto out;
+  2232	
+  2233		case TTLS_MSG_APPLICATION_DATA:
+  2234			/*
+  2235			 * Don't allow application data before secured connection is
+  2236			 * established.
+  2237			 */
+  2238			if (unlikely(tls->state != TTLS_HANDSHAKE_OVER)) {
+  2239				T_WARN("TLS context isn't ready after handshake\n");
+  2240				r = -EPROTO;
+  2241				goto out;
+  2242			}
+  2243			break;
+  2244		}
+  2245	
+  2246		if (!len) {
+  2247			r = -EAGAIN;
+  2248			goto out;
+  2249		}
+  2250	
+  2251		/* Encrypted data, crypto context is guaranteed to be ready here. */
+  2252		if (io->msglen > io->rlen + len) {
+  2253			*read += len;
+  2254			io->rlen += len;
+  2255			r = -EAGAIN;
+  2256			goto out;
+  2257		}
+  2258		*read += io->msglen - io->rlen;
+  2259		if ((r = ttls_decrypt(tls, NULL))) {
+  2260			T_DBG("cannot decrypt msg on state %x, ret=%d%s\n",
+  2261			      tls->state, r, r == -EBADMSG ? "(bad ciphertext)" : "");
+  2262			r = -EPROTO;
+  2263			goto out;
+  2264		}
+  2265	
+  2266		if (io->msgtype == TTLS_MSG_ALERT)
+  2267			r = ttls_handle_alert(tls);
+  2268	
+  2269	out:
+> 2270		kernel_fpu_end();
+  2271	
+  2272		return r;
+  2273	}
+  2274	EXPORT_SYMBOL(ttls_recv);
+  2275	
 
-So, indeed the code currently don't really tightly couple "panic_print"
-with the panic notifiers. We could change that in another patch series,
-based on what Petr suggested in the filter thread (I know you're
-following there as well, thanks bu the way!), but for now, they are
-completely independent. My plan, following Petr suggestions here and if
-you agree, is to re-submit this patch with some changes, but in the end
-the code will allow users that have kdump enabled + panic_print
--"crash_kexec_post_notifiers" to have "panic_print_sys_info(false)"
-executing before the "__crash_kexec(NULL)".
-
-But also, we can add "crash_kexec_post_notifiers" and it will still
-work; finally, pstore is gonna be able to collect the logs from
-"panic_print" as well (the main purpose of this patch).
-
-Once that's all resolved, my goal is to jump into the panic notifiers
-refactor suggested in the other thread. Let me know if you agree with
-these steps/plans, and I'll work them.
-Cheers,
-
-
-Guilherme
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

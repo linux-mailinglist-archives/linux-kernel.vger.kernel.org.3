@@ -2,169 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA5E4969A2
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 04:46:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD8C4969A5
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 04:47:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231977AbiAVDqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 22:46:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53446 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbiAVDqE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 22:46:04 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7692DC06173D
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 19:46:04 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id o80so33206831yba.6
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 19:46:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GK+DRe45zgKVXKFo8gPG6uGiKgyXp2cTD0RJLmCvZSY=;
-        b=QGr+ig/1NkNSQ/DVpGfdNvXcytkEpcUB2Z3Lt1CjofEcwFvFzBHGWU/x6bjfbD+BJM
-         28sNmiu9uZQkQfT183g4IwINmBs6qBDPjmUX9tPWIkCpWWqqVLq8KPBLi/4G28cYL2Qc
-         XGeEdtOfShkYp+2YRobhPxXvQANlnoodCC1rs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GK+DRe45zgKVXKFo8gPG6uGiKgyXp2cTD0RJLmCvZSY=;
-        b=Gz6/qoo4IGscTKcWeVzy1awheirQa/8gTtG0KNoyawlENmFw8UMqd5k2PiHYkqTWjZ
-         Hn7wgE1kjrXTzbm3zwPnIci0nrLv592ZF5l6n694vLxzHzXV3iUyK75cXFsmy++vmz2Z
-         KaVNDG3/1dlRNZIXRIE/mzXRNVsSp//WBtn0Q5N92hlBVPFXqRzP4SefIzA/q+hLjIOw
-         jPqYBuW7VdpkmoDig6O4Ml/Kzra3I7Be9xH8BaYo4twjkaq++UieDU6mzFy/MZ3RVgUo
-         4hDp/18wvZ7whQsJTmZ7RJpNLslLy1VS//sFdPtLLJEtEqxZX5CMzBbf7k1ZDHP9UT6N
-         Uf3g==
-X-Gm-Message-State: AOAM531Kryw32LpWOzQVK3Rb9Ognuwy+valoR+JaUITWoIqCeukkesbB
-        bK3F0JTIEBREiiAAay/m2YSWMZSriPBoxYJcGUVQ
-X-Google-Smtp-Source: ABdhPJxqUxGbofs9AyGZqKNuQHUzAvH8Oar5nZINBL0NQkR2tr89y472EbgCFBjmW5/Z2aBrOhhnBxjAZN3ITVL7G/c=
-X-Received: by 2002:a25:b852:: with SMTP id b18mr10998199ybm.651.1642823163252;
- Fri, 21 Jan 2022 19:46:03 -0800 (PST)
+        id S232186AbiAVDrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 22:47:18 -0500
+Received: from mga14.intel.com ([192.55.52.115]:31597 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230347AbiAVDrR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 22:47:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642823237; x=1674359237;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aGHcF/2ucf/TbgGhtV3tDg8WPFI9aEzawM+5gAAXR5k=;
+  b=WXgK5QA4pVfXvHec6LG0k+JchXO5/U7uE9ksoJIOMOgAk1PLWBcgFe7v
+   Mlrt7Wav3fAZgjnfTv8ISSgm1qboNlKYoFLXoYHNzxtaRpyqV44rGDCPZ
+   xzK4Nj1OcVuYO0JRn/Hcin165J7Vxz8y8O1s+Zz6aLkt8tSKKtvWFkFfR
+   3lCxdEU8AlBKB5V797JIK9dhsu5ERq4Ak/FOJh15lmH+lp/8OwiXRAPmI
+   Eodvk4Qf8LUeVlnyyu2dWSzYbpA7Mq1iyrNXAb9hXZmLoqXikftSoMQtf
+   RQeShjTDt8//2WZLzgmaxGlryUaGPqgF3OA4DDL1B+Lz6LZeZagc3tR93
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="246005674"
+X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
+   d="scan'208";a="246005674"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 19:47:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
+   d="scan'208";a="626942866"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 21 Jan 2022 19:47:15 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nB7Mx-000Fz4-1O; Sat, 22 Jan 2022 03:47:15 +0000
+Date:   Sat, 22 Jan 2022 11:46:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hridya Valsaraju <hridya@google.com>
+Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Will McVicker <willmcvicker@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
+ 350/9999] drivers/cpuidle/cpuidle.c:598:27: sparse: sparse: incorrect type
+ in initializer (different address spaces)
+Message-ID: <202201221155.oQX7vOxx-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220121163618.351934-1-heiko@sntech.de> <20220121163618.351934-2-heiko@sntech.de>
-In-Reply-To: <20220121163618.351934-2-heiko@sntech.de>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Fri, 21 Jan 2022 19:45:52 -0800
-Message-ID: <CAOnJCU+NR_hOrvS_+B+OKXeg4s+uh37gYWGVTs_kDd3LQDVEkQ@mail.gmail.com>
-Subject: Re: [PATCH v5 01/14] riscv: only use IPIs to handle cache-flushes on
- remote cpus
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Wei Fu <wefu@redhat.com>,
-        liush <liush@allwinnertech.com>, Guo Ren <guoren@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Drew Fustini <drew@beagleboard.org>,
-        Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Greg Favor <gfavor@ventanamicro.com>,
-        Andrea Mondelli <andrea.mondelli@huawei.com>,
-        Jonathan Behrens <behrensj@mit.edu>,
-        Xinhaoqu <xinhaoqu@huawei.com>,
-        Bill Huffman <huffman@cadence.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Allen Baum <allen.baum@esperantotech.com>,
-        Josh Scheid <jscheid@ventanamicro.com>,
-        Richard Trauben <rtrauben@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Christoph Muellner <cmuellner@linux.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 8:37 AM Heiko Stuebner <heiko@sntech.de> wrote:
->
-> Right now, the flush_icache functions always use the SBI remote-fence
-> when SBI is available, leaving using IPIs as a fallback mechanism.
->
-> IPIs on the other hand are more flexible, as the ipi_ops are initially
-> set to go through SBI but later will be overwritten to go through the
-> ACLINT/CLINT.
->
-> In a discussion we had, Nick was of the opinion that "In general we
-> should prefer doing IPIs on S-mode through CLINT instead of going
-> through SBI/M-mode,
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
+head:   90a691fca4c2525068d9908ac203e9f09e4e33c0
+commit: 02f88aaaac53929e0cf4fe50f807cdea4b9e224d [350/9999] ANDROID: GKI: Export symbols arm_cpuidle_suspend, cpuidle_dev and cpuidle_register_governor
+config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20220122/202201221155.oQX7vOxx-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/02f88aaaac53929e0cf4fe50f807cdea4b9e224d
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
+        git checkout 02f88aaaac53929e0cf4fe50f807cdea4b9e224d
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/cpuidle/
 
-Yes. Once Anup's ACLINT drivers are merged, that should be the
-preferred approach.
-
-https://github.com/avpatel/linux/commit/416c667fd77d6f1fc310cbf727ec127aaf96cae2
-
->so IMHO we should only be using
-> on_each_cpu_mask(ipi_remote_fence_i) on flush_icache_all()/
-> flush_icache_mm() and remove any explicit calls to sbi_remote_fence_i(),
-
-That's a bit confusing because we will be using SBI calls for all other fences
-while using IPIs for fence.i
-
-> because this way we continue using SBI for doing remote fences even after
-> CLINT/ACLINT driver is registered, instead of using direct IPIs through
-> CLINT/ACLINT."
->
-> So follow this suggestion and just do ipi calls to have the proper kernel
-> parts do them,
->
-> This also fixes the null-ptr dereference happening when flush_icache_all()
-> is called before sbi_init().
->
-
-IMHO, this series should only fix the null-ptr dereference issue.
-The IPI based fence (for all) should only be disabled along with the
-ACLINT driver
-that actually enables S-mode IPIs.
-
-> Suggested-by: Nick Kossifidis <mick@ics.forth.gr>
-> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> ---
->  arch/riscv/mm/cacheflush.c | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
->
-> diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
-> index 6cb7d96ad9c7..c35375cd52ec 100644
-> --- a/arch/riscv/mm/cacheflush.c
-> +++ b/arch/riscv/mm/cacheflush.c
-> @@ -17,11 +17,7 @@ static void ipi_remote_fence_i(void *info)
->  void flush_icache_all(void)
->  {
->         local_flush_icache_all();
-> -
-> -       if (IS_ENABLED(CONFIG_RISCV_SBI))
-> -               sbi_remote_fence_i(NULL);
-> -       else
-> -               on_each_cpu(ipi_remote_fence_i, NULL, 1);
-> +       on_each_cpu(ipi_remote_fence_i, NULL, 1);
->  }
->  EXPORT_SYMBOL(flush_icache_all);
->
-> @@ -66,8 +62,6 @@ void flush_icache_mm(struct mm_struct *mm, bool local)
->                  * with flush_icache_deferred().
->                  */
->                 smp_mb();
-> -       } else if (IS_ENABLED(CONFIG_RISCV_SBI)) {
-> -               sbi_remote_fence_i(&others);
->         } else {
->                 on_each_cpu_mask(&others, ipi_remote_fence_i, NULL, 1);
->         }
-> --
-> 2.30.2
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
+sparse warnings: (new ones prefixed by >>)
+>> drivers/cpuidle/cpuidle.c:598:27: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] <asn:3> *__vpp_verify @@     got struct cpuidle_device * @@
+   drivers/cpuidle/cpuidle.c:598:27: sparse:     expected void const [noderef] <asn:3> *__vpp_verify
+   drivers/cpuidle/cpuidle.c:598:27: sparse:     got struct cpuidle_device *
+   drivers/cpuidle/cpuidle.c:630:27: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] <asn:3> *__vpp_verify @@     got struct cpuidle_device * @@
+   drivers/cpuidle/cpuidle.c:630:27: sparse:     expected void const [noderef] <asn:3> *__vpp_verify
+   drivers/cpuidle/cpuidle.c:630:27: sparse:     got struct cpuidle_device *
 
--- 
-Regards,
-Atish
+vim +598 drivers/cpuidle/cpuidle.c
+
+4f86d3a8e29720 Len Brown      2007-10-03  584  
+1c192d047a0ddc Daniel Lezcano 2013-04-23  585  /**
+4c637b2175a0dc Daniel Lezcano 2013-04-23  586   * cpuidle_unregister: unregister a driver and the devices. This function
+4c637b2175a0dc Daniel Lezcano 2013-04-23  587   * can be used only if the driver has been previously registered through
+4c637b2175a0dc Daniel Lezcano 2013-04-23  588   * the cpuidle_register function.
+4c637b2175a0dc Daniel Lezcano 2013-04-23  589   *
+4c637b2175a0dc Daniel Lezcano 2013-04-23  590   * @drv: a valid pointer to a struct cpuidle_driver
+4c637b2175a0dc Daniel Lezcano 2013-04-23  591   */
+4c637b2175a0dc Daniel Lezcano 2013-04-23  592  void cpuidle_unregister(struct cpuidle_driver *drv)
+4c637b2175a0dc Daniel Lezcano 2013-04-23  593  {
+4c637b2175a0dc Daniel Lezcano 2013-04-23  594  	int cpu;
+4c637b2175a0dc Daniel Lezcano 2013-04-23  595  	struct cpuidle_device *device;
+4c637b2175a0dc Daniel Lezcano 2013-04-23  596  
+82467a5a885ddd Daniel Lezcano 2013-06-07  597  	for_each_cpu(cpu, drv->cpumask) {
+4c637b2175a0dc Daniel Lezcano 2013-04-23 @598  		device = &per_cpu(cpuidle_dev, cpu);
+4c637b2175a0dc Daniel Lezcano 2013-04-23  599  		cpuidle_unregister_device(device);
+4c637b2175a0dc Daniel Lezcano 2013-04-23  600  	}
+4c637b2175a0dc Daniel Lezcano 2013-04-23  601  
+4c637b2175a0dc Daniel Lezcano 2013-04-23  602  	cpuidle_unregister_driver(drv);
+4c637b2175a0dc Daniel Lezcano 2013-04-23  603  }
+4c637b2175a0dc Daniel Lezcano 2013-04-23  604  EXPORT_SYMBOL_GPL(cpuidle_unregister);
+4c637b2175a0dc Daniel Lezcano 2013-04-23  605  
+
+:::::: The code at line 598 was first introduced by commit
+:::::: 4c637b2175a0dc65d533494225525c6c82d73293 cpuidle: make a single register function for all
+
+:::::: TO: Daniel Lezcano <daniel.lezcano@linaro.org>
+:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

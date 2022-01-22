@@ -2,172 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7BB49693E
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 02:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E45749693F
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 02:41:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231761AbiAVBju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 20:39:50 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:31112 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbiAVBjs (ORCPT
+        id S231777AbiAVBlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 20:41:01 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59414 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230416AbiAVBlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 20:39:48 -0500
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Jgf320Hpxz1FDh5;
-        Sat, 22 Jan 2022 09:35:58 +0800 (CST)
-Received: from dggpeml500013.china.huawei.com (7.185.36.41) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 22 Jan 2022 09:39:46 +0800
-Received: from dggpeml100016.china.huawei.com (7.185.36.216) by
- dggpeml500013.china.huawei.com (7.185.36.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 22 Jan 2022 09:39:46 +0800
-Received: from dggpeml100016.china.huawei.com ([7.185.36.216]) by
- dggpeml100016.china.huawei.com ([7.185.36.216]) with mapi id 15.01.2308.020;
- Sat, 22 Jan 2022 09:39:46 +0800
-From:   "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
-        <longpeng2@huawei.com>
-To:     Khalid Aziz <khalid.aziz@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Barry Song <21cnbao@gmail.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, Mike Rapoport <rppt@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: RE: [RFC PATCH 0/6] Add support for shared PTEs across processes
-Thread-Topic: [RFC PATCH 0/6] Add support for shared PTEs across processes
-Thread-Index: AQHYDLEywcVuC0qO4EqMIGSpQCwQFKxsJzIAgAASYACAAFnOgIAAeK6AgAAf+ACAARrnEA==
-Date:   Sat, 22 Jan 2022 01:39:46 +0000
-Message-ID: <b34ded1e11154eabbce07618bf0a6676@huawei.com>
-References: <cover.1642526745.git.khalid.aziz@oracle.com>
- <20220121010806.5607-1-21cnbao@gmail.com>
- <YeoW4CMiU8qbRFST@casper.infradead.org>
- <CAGsJ_4wv144TUSQPNOnHnmNmJrXe4Fn8d14JeAJ5ka-S+dRxRA@mail.gmail.com>
- <YerHceldiYXLk2DE@casper.infradead.org>
- <0ec88ae7-9740-835d-1f07-60bd57081fcd@oracle.com>
-In-Reply-To: <0ec88ae7-9740-835d-1f07-60bd57081fcd@oracle.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.148.223]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 21 Jan 2022 20:41:01 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87F7261AC4
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 01:41:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA73AC340E8
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 01:40:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642815659;
+        bh=2N5YrILHS5ceu4+jWfQFwtxpuu3lUpp8FDDcghKzmLQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nD5qBM/bt55NQW51x+CQTE1FGnclwBjf1R4Nw7PWZ7GRR9/ltDjcRZmST1cFi3rwM
+         xzFNEL0IoOocvdcEOqthv9j3a3OYKhxGWvw0Fh2AzeQX0B2JRDVz9cYlPhbdEtrm3c
+         Do+LaatyoFjSrlKy5E4cR/AcA0r9fhfRGHqj2szJhmrp9Df8ZaK7A7Yl+GX1T4Zpf/
+         XZsQWhL+YYjkY8Zf/6ogsu040JSZEZA9c+S8oUqdlKueqiyzQQw8nNuuvfY8tBNzDz
+         PaRoR7PkHzwCQAvpEvYybuECu4Scf6uLWQ7H8RSjEgy/Akictsm3kxy+jx575Wqp8k
+         X78trr1zAAmuA==
+Received: by mail-ed1-f52.google.com with SMTP id f21so45602021eds.11
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 17:40:59 -0800 (PST)
+X-Gm-Message-State: AOAM531CozYXPhswcBx9UGQxHUtv2sbH7iW2544BgkEfX1SIRxA6kIeD
+        Z+gyhCAXSf+ZHM5wUNmFrHOm0mRloXY1uNgf/A==
+X-Google-Smtp-Source: ABdhPJwBhdgXoY3T9SQ1PCB8hLQfTa/L/ej2L/TDO5lS+k0Ku8sS2rzv+UehEghwTlMbxpYR0tTpJJ1LZ7FTukYTfaw=
+X-Received: by 2002:aa7:dc44:: with SMTP id g4mr6490540edu.109.1642815658154;
+ Fri, 21 Jan 2022 17:40:58 -0800 (PST)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+References: <CAMdYzYquceSBrOsvO8rW9wmJA_RO=HSwv_waVoS=0hsP414T-A@mail.gmail.com>
+ <YesxfEDbK/qFizFG@robh.at.kernel.org> <CAMdYzYrnahMuZTBjwNRrHnnNhn4wB7Ze=UA_HhzurqHC9U6oJg@mail.gmail.com>
+In-Reply-To: <CAMdYzYrnahMuZTBjwNRrHnnNhn4wB7Ze=UA_HhzurqHC9U6oJg@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 21 Jan 2022 19:40:46 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJfK5A7aH7oeGS+3MBoPBHKP=ZBADVpx4mcU53roYe+MA@mail.gmail.com>
+Message-ID: <CAL_JsqJfK5A7aH7oeGS+3MBoPBHKP=ZBADVpx4mcU53roYe+MA@mail.gmail.com>
+Subject: Re: [BUG] device_property_read_u16 reads out only zero
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogS2hhbGlkIEF6aXogW21h
-aWx0bzpraGFsaWQuYXppekBvcmFjbGUuY29tXQ0KPiBTZW50OiBTYXR1cmRheSwgSmFudWFyeSAy
-MiwgMjAyMiAxMjo0MiBBTQ0KPiBUbzogTWF0dGhldyBXaWxjb3ggPHdpbGx5QGluZnJhZGVhZC5v
-cmc+OyBCYXJyeSBTb25nIDwyMWNuYmFvQGdtYWlsLmNvbT4NCj4gQ2M6IEFuZHJldyBNb3J0b24g
-PGFrcG1AbGludXgtZm91bmRhdGlvbi5vcmc+OyBBcm5kIEJlcmdtYW5uIDxhcm5kQGFybmRiLmRl
-PjsNCj4gRGF2ZSBIYW5zZW4gPGRhdmUuaGFuc2VuQGxpbnV4LmludGVsLmNvbT47IERhdmlkIEhp
-bGRlbmJyYW5kDQo+IDxkYXZpZEByZWRoYXQuY29tPjsgTEtNTCA8bGludXgta2VybmVsQHZnZXIu
-a2VybmVsLm9yZz47IExpbnV4LU1NDQo+IDxsaW51eC1tbUBrdmFjay5vcmc+OyBMb25ncGVuZyAo
-TWlrZSwgQ2xvdWQgSW5mcmFzdHJ1Y3R1cmUgU2VydmljZSBQcm9kdWN0DQo+IERlcHQuKSA8bG9u
-Z3BlbmcyQGh1YXdlaS5jb20+OyBNaWtlIFJhcG9wb3J0IDxycHB0QGtlcm5lbC5vcmc+OyBTdXJl
-bg0KPiBCYWdoZGFzYXJ5YW4gPHN1cmVuYkBnb29nbGUuY29tPg0KPiBTdWJqZWN0OiBSZTogW1JG
-QyBQQVRDSCAwLzZdIEFkZCBzdXBwb3J0IGZvciBzaGFyZWQgUFRFcyBhY3Jvc3MgcHJvY2Vzc2Vz
-DQo+IA0KPiBPbiAxLzIxLzIyIDA3OjQ3LCBNYXR0aGV3IFdpbGNveCB3cm90ZToNCj4gPiBPbiBG
-cmksIEphbiAyMSwgMjAyMiBhdCAwODozNToxN1BNICsxMzAwLCBCYXJyeSBTb25nIHdyb3RlOg0K
-PiA+PiBPbiBGcmksIEphbiAyMSwgMjAyMiBhdCAzOjEzIFBNIE1hdHRoZXcgV2lsY294IDx3aWxs
-eUBpbmZyYWRlYWQub3JnPiB3cm90ZToNCj4gPj4+IE9uIEZyaSwgSmFuIDIxLCAyMDIyIGF0IDA5
-OjA4OjA2QU0gKzA4MDAsIEJhcnJ5IFNvbmcgd3JvdGU6DQo+ID4+Pj4+IEEgZmlsZSB1bmRlciAv
-c3lzL2ZzL21zaGFyZSBjYW4gYmUgb3BlbmVkIGFuZCByZWFkIGZyb20uIEEgcmVhZCBmcm9tDQo+
-ID4+Pj4+IHRoaXMgZmlsZSByZXR1cm5zIHR3byBsb25nIHZhbHVlcyAtICgxKSBzdGFydGluZyBh
-ZGRyZXNzLCBhbmQgKDIpDQo+ID4+Pj4+IHNpemUgb2YgdGhlIG1zaGFyZSdkIHJlZ2lvbi4NCj4g
-Pj4+Pj4NCj4gPj4+Pj4gLS0NCj4gPj4+Pj4gaW50IG1zaGFyZV91bmxpbmsoY2hhciAqbmFtZSkN
-Cj4gPj4+Pj4NCj4gPj4+Pj4gQSBzaGFyZWQgYWRkcmVzcyByYW5nZSBjcmVhdGVkIGJ5IG1zaGFy
-ZSgpIGNhbiBiZSBkZXN0cm95ZWQgdXNpbmcNCj4gPj4+Pj4gbXNoYXJlX3VubGluaygpIHdoaWNo
-IHJlbW92ZXMgdGhlICBzaGFyZWQgbmFtZWQgb2JqZWN0LiBPbmNlIGFsbA0KPiA+Pj4+PiBwcm9j
-ZXNzZXMgaGF2ZSB1bm1hcHBlZCB0aGUgc2hhcmVkIG9iamVjdCwgdGhlIHNoYXJlZCBhZGRyZXNz
-IHJhbmdlDQo+ID4+Pj4+IHJlZmVyZW5jZXMgYXJlIGRlLWFsbG9jYXRlZCBhbmQgZGVzdHJveWVk
-Lg0KPiA+Pj4+DQo+ID4+Pj4+IG1zaGFyZV91bmxpbmsoKSByZXR1cm5zIDAgb24gc3VjY2VzcyBv
-ciAtMSBvbiBlcnJvci4NCj4gPj4+Pg0KPiA+Pj4+IEkgYW0gc3RpbGwgc3RydWdnbGluZyB3aXRo
-IHRoZSB1c2VyIHNjZW5hcmlvcyBvZiB0aGVzZSBuZXcgQVBJcy4gVGhpcyBwYXRjaA0KPiA+Pj4+
-IHN1cHBvc2VzIG11bHRpcGxlIHByb2Nlc3NlcyB3aWxsIGhhdmUgc2FtZSB2aXJ0dWFsIGFkZHJl
-c3MgZm9yIHRoZSBzaGFyZWQNCj4gPj4+PiBhcmVhPyBIb3cgY2FuIHRoaXMgYmUgZ3VhcmFudGVl
-ZCB3aGlsZSBkaWZmZXJlbnQgcHJvY2Vzc2VzIGNhbiBtYXAgZGlmZmVyZW50DQo+ID4+Pj4gc3Rh
-Y2ssIGhlYXAsIGxpYnJhcmllcywgZmlsZXM/DQo+ID4+Pg0KPiA+Pj4gVGhlIHR3byBwcm9jZXNz
-ZXMgY2hvb3NlIHRvIHNoYXJlIGEgY2h1bmsgb2YgdGhlaXIgYWRkcmVzcyBzcGFjZS4NCj4gPj4+
-IFRoZXkgY2FuIG1hcCBhbnl0aGluZyB0aGV5IGxpa2UgaW4gdGhhdCBzaGFyZWQgYXJlYSwgYW5k
-IHRoZW4gYWxzbw0KPiA+Pj4gYW55dGhpbmcgdGhleSBsaWtlIGluIHRoZSBhcmVhcyB0aGF0IGFy
-ZW4ndCBzaGFyZWQuICBUaGV5IGNhbiBjaG9vc2UNCj4gPj4+IGZvciB0aGF0IHNoYXJlZCBhcmVh
-IHRvIGhhdmUgdGhlIHNhbWUgYWRkcmVzcyBpbiBib3RoIHByb2Nlc3Nlcw0KPiA+Pj4gb3IgZGlm
-ZmVyZW50IGxvY2F0aW9ucyBpbiBlYWNoIHByb2Nlc3MuDQo+ID4+Pg0KPiA+Pj4gSWYgdHdvIHBy
-b2Nlc3NlcyB3YW50IHRvIHB1dCBhIHNoYXJlZCBsaWJyYXJ5IGluIHRoYXQgc2hhcmVkIGFkZHJl
-c3MNCj4gPj4+IHNwYWNlLCB0aGF0IHNob3VsZCB3b3JrLiAgVGhleSBwcm9iYWJseSB3b3VsZCBu
-ZWVkIHRvIGFncmVlIHRvIHVzZQ0KPiA+Pj4gdGhlIHNhbWUgdmlydHVhbCBhZGRyZXNzIGZvciB0
-aGUgc2hhcmVkIHBhZ2UgdGFibGVzIGZvciB0aGF0IHRvIHdvcmsuDQo+ID4+DQo+ID4+IHdlIGFy
-ZSBkZXBlbmRpbmcgb24gYW4gZWxmIGxvYWRlciBhbmQgbGQgdG8gbWFwIHRoZSBsaWJyYXJ5DQo+
-ID4+IGR5bmFtaWNhbGx5ICwgc28gaGFyZGx5DQo+ID4+IGNhbiB3ZSBmaW5kIGEgY2hhbmNlIGlu
-IHVzZXJzJyBjb2RlIHRvIGNhbGwgbXNoYXJlKCkgdG8gbWFwIGxpYnJhcmllcw0KPiA+PiBpbiBh
-cHBsaWNhdGlvbg0KPiA+PiBsZXZlbD8NCj4gPg0KPiA+IElmIHNvbWVib2R5IHdhbnRzIHRvIG1v
-ZGlmeSBsZC5zbyB0byB0YWtlIGFkdmFudGFnZSBvZiBtc2hhcmUoKSwgdGhleQ0KPiA+IGNvdWxk
-LiAgVGhhdCB3YXNuJ3Qgb3VyIHByaW1hcnkgbW90aXZhdGlvbiBoZXJlLCBzbyBpZiBpdCB0dXJu
-cyBvdXQgdG8NCj4gPiBub3Qgd29yayBmb3IgdGhhdCB1c2VjYXNlLCB3ZWxsLCB0aGF0J3MgYSBz
-aGFtZS4NCj4gPg0KPiA+Pj4gVGhpbmsgb2YgdGhpcyBsaWtlIGh1Z2V0bGJmcywgb25seSBpbnN0
-ZWFkIG9mIHNoYXJpbmcgaHVnZXRsYmZzDQo+ID4+PiBtZW1vcnksIHlvdSBjYW4gc2hhcmUgX2Fu
-eXRoaW5nXyB0aGF0J3MgbW1hcGFibGUuDQo+ID4+DQo+ID4+IHllcCwgd2UgY2FuIGNhbGwgbXNo
-YXJlKCkgb24gYW55IGtpbmQgb2YgbWVtb3J5LiBmb3IgZXhhbXBsZSwgaWYgbXVsdGlwbGUNCj4g
-Pj4gcHJvY2Vzc2VzIHVzZSBTWVNWIHNobWVtLCBwb3NpeCBzaG1lbSBvciBtbWFwIHRoZSBzYW1l
-IGZpbGUuIGJ1dA0KPiA+PiBpdCBzZWVtcyBpdCBpcyBtb3JlIHNlbnNpYmxlIHRvIGxldCBrZXJu
-ZWwgZG8gaXQgYXV0b21hdGljYWxseSByYXRoZXIgdGhhbg0KPiA+PiBkZXBlbmRpbmcgb24gY2Fs
-bGluZyBtc2hhcmUoKSBmcm9tIHVzZXJzPyBJdCBpcyBkaWZmaWN1bHQgZm9yIHVzZXJzIHRvDQo+
-ID4+IGRlY2lkZSB3aGljaCBhcmVhcyBzaG91bGQgYmUgYXBwbGllZCBtc2hhcmUoKS4gdXNlcnMg
-bWlnaHQgd2FudCB0byBjYWxsDQo+ID4+IG1zaGFyZSgpIGZvciBhbGwgc2hhcmVkIGFyZWFzIHRv
-IHNhdmUgbWVtb3J5IGNvbWluZyBmcm9tIGR1cGxpY2F0ZWQgUFRFcz8NCj4gPj4gdW5saWtlIFNZ
-U1Ygc2htZW0gYW5kIFBPU0lYIHNobWVtIHdoaWNoIGFyZSBhIGZlYXR1cmUgZm9yIGludGVyLXBy
-b2Nlc3Nlcw0KPiA+PiBjb21tdW5pY2F0aW9ucywgIG1zaGFyZSgpIGxvb2tzIG5vdCBsaWtlIGEg
-ZmVhdHVyZSBmb3IgYXBwbGljYXRpb25zLA0KPiA+PiBidXQgbGlrZSBhIGZlYXR1cmUNCj4gPj4g
-Zm9yIHRoZSB3aG9sZSBzeXN0ZW0gbGV2ZWw/IHdoeSB3b3VsZCBhcHBsaWNhdGlvbnMgaGF2ZSB0
-byBjYWxsIHNvbWV0aGluZw0KPiB3aGljaA0KPiA+PiBkb2Vzbid0IGRpcmVjdGx5IGhlbHAgdGhl
-bT8gd2l0aG91dCBtc2hhcmUoKSwgdGhvc2UgYXBwbGljYXRpb25zDQo+ID4+IHdpbGwgc3RpbGwg
-d29yayB3aXRob3V0IGFueSBwcm9ibGVtLCByaWdodD8gaXMgdGhlcmUgYW55dGhpbmcgaW4NCj4g
-Pj4gbXNoYXJlKCkgd2hpY2ggaXMNCj4gPj4gYSBtdXN0LWhhdmUgZm9yIGFwcGxpY2F0aW9ucz8g
-b3IgbXNoYXJlKCkgaXMgb25seSBhIHN1Z2dlc3Rpb24gZnJvbQ0KPiBhcHBsaWNhdGlvbnMNCj4g
-Pj4gbGlrZSBtYWR2aXNlKCk/DQo+ID4NCj4gPiBPdXIgdXNlIGNhc2UgaXMgdGhhdCB3ZSBoYXZl
-IHNvbWUgdmVyeSBsYXJnZSBmaWxlcyBzdG9yZWQgb24gcGVyc2lzdGVudA0KPiA+IG1lbW9yeSB3
-aGljaCB3ZSB3YW50IHRvIG1tYXAgaW4gdGhvdXNhbmRzIG9mIHByb2Nlc3Nlcy4gIFNvIHRoZSBm
-aXJzdA0KPiA+IG9uZSBzaGFyZXMgYSBjaHVuayBvZiBpdHMgYWRkcmVzcyBzcGFjZSBhbmQgbW1h
-cHMgYWxsIHRoZSBmaWxlcyBpbnRvDQo+ID4gdGhhdCBjaHVuayBvZiBhZGRyZXNzIHNwYWNlLiAg
-U3Vic2VxdWVudCBwcm9jZXNzZXMgZmluZCB0aGF0IGEgc3VpdGFibGUNCj4gPiBhZGRyZXNzIHNw
-YWNlIGFscmVhZHkgZXhpc3RzIGFuZCB1c2UgaXQsIHNoYXJpbmcgdGhlIHBhZ2UgdGFibGVzIGFu
-ZA0KPiA+IGF2b2lkaW5nIHRoZSBjYWxscyB0byBtbWFwLg0KPiA+DQo+ID4gU2hhcmluZyBwYWdl
-IHRhYmxlcyBpcyBha2luIHRvIHJ1bm5pbmcgbXVsdGlwbGUgdGhyZWFkcyBpbiBhIHNpbmdsZQ0K
-PiA+IGFkZHJlc3Mgc3BhY2U7IGV4Y2VwdCB0aGF0IG9ubHkgcGFydCBvZiB0aGUgYWRkcmVzcyBz
-cGFjZSBpcyB0aGUgc2FtZS4NCj4gPiBUaGVyZSBkb2VzIG5lZWQgdG8gYmUgYSBjZXJ0YWluIGFt
-b3VudCBvZiB0cnVzdCBiZXR3ZWVuIHRoZSBwcm9jZXNzZXMNCj4gPiBzaGFyaW5nIHRoZSBhZGRy
-ZXNzIHNwYWNlLiAgWW91IGRvbid0IHdhbnQgdG8gZG8gaXQgdG8gYW4gdW5zdXNwZWN0aW5nDQo+
-ID4gcHJvY2Vzcy4NCj4gPg0KPiANCj4gSGVsbG8gQmFycnksDQo+IA0KPiBtc2hhcmUoKSBpcyBy
-ZWFsbHkgbWVhbnQgZm9yIHNoYXJpbmcgZGF0YSBhY3Jvc3MgdW5yZWxhdGVkIHByb2Nlc3NlcyBi
-eSBzaGFyaW5nDQo+IGFkZHJlc3Mgc3BhY2UgZXhwbGljaXRseSBhbmQgaGVuY2UNCj4gb3B0LWlu
-IGlzIHJlcXVpcmVkLiBBcyBNYXR0aGV3IHNhaWQsIHRoZSBwcm9jZXNzZXMgc2hhcmluZyB0aGlz
-IHZpcnR1YWwgYWRkcmVzcw0KPiBzcGFjZSBuZWVkIHRvIGhhdmUgYSBsZXZlbCBvZiB0cnVzdC4N
-Cj4gUGVybWlzc2lvbnMgb24gdGhlIG1zaGFyZWZzIGZpbGVzIGNvbnRyb2wgd2hvIGNhbiBhY2Nl
-c3MgdGhpcyBzaGFyZWQgYWRkcmVzcw0KPiBzcGFjZS4gSXQgaXMgcG9zc2libGUgdG8gYWRhcHQg
-dGhpcw0KPiBtZWNoYW5pc20gdG8gc2hhcmUgc3RhY2ssIGxpYnJhcmllcyBldGMgYnV0IHRoYXQg
-aXMgbm90IHRoZSBpbnRlbnQuIFRoaXMgZmVhdHVyZQ0KPiB3aWxsIGJlIHVzZWQgYnkgYXBwbGlj
-YXRpb25zIHRoYXQgc2hhcmUNCj4gZGF0YSB3aXRoIG11bHRpcGxlIHByb2Nlc3NlcyB1c2luZyBz
-aGFyZWQgbWFwcGluZyBub3JtYWxseSBhbmQgaXQgaGVscHMgdGhlbQ0KPiBhdm9pZCB0aGUgb3Zl
-cmhlYWQgb2YgbGFyZ2UgbnVtYmVyIG9mDQo+IGR1cGxpY2F0ZWQgUFRFcyB3aGljaCBjb25zdW1l
-IG1lbW9yeS4gVGhpcyBleHRyYSBtZW1vcnkgY29uc3VtZWQgYnkgUFRFcyByZWR1Y2VzDQo+IGFt
-b3VudCBvZiBtZW1vcnkgYXZhaWxhYmxlIGZvcg0KPiBhcHBsaWNhdGlvbnMgYW5kIGNhbiByZXN1
-bHQgaW4gb3V0LW9mLW1lbW9yeSBjb25kaXRpb24uIEFuIGV4YW1wbGUgZnJvbSB0aGUgcGF0Y2gN
-Cj4gMC82Og0KPiANCj4gIk9uIGEgZGF0YWJhc2Ugc2VydmVyIHdpdGggMzAwR0IgU0dBLCBhIHN5
-c3RlbSBjcmFzaCB3YXMgc2VlbiB3aXRoDQo+IG91dC1vZi1tZW1vcnkgY29uZGl0aW9uIHdoZW4g
-MTUwMCsgY2xpZW50cyB0cmllZCB0byBzaGFyZSB0aGlzIFNHQQ0KPiBldmVuIHRob3VnaCB0aGUg
-c3lzdGVtIGhhZCA1MTJHQiBvZiBtZW1vcnkuIE9uIHRoaXMgc2VydmVyLCBpbiB0aGUNCj4gd29y
-c3QgY2FzZSBzY2VuYXJpbyBvZiBhbGwgMTUwMCBwcm9jZXNzZXMgbWFwcGluZyBldmVyeSBwYWdl
-IGZyb20NCj4gU0dBIHdvdWxkIGhhdmUgcmVxdWlyZWQgODc4R0IrIGZvciBqdXN0IHRoZSBQVEVz
-LiBJZiB0aGVzZSBQVEVzDQo+IGNvdWxkIGJlIHNoYXJlZCwgYW1vdW50IG9mIG1lbW9yeSBzYXZl
-ZCBpcyB2ZXJ5IHNpZ25pZmljYW50LiINCj4gDQoNClRoZSBtZW1vcnkgb3ZlcmhlYWQgb2YgUFRF
-cyB3b3VsZCBiZSBzaWduaWZpY2FudGx5IHNhdmVkIGlmIHdlIHVzZQ0KaHVnZXRsYmZzIGluIHRo
-aXMgY2FzZSwgYnV0IHdoeSBub3Q/DQoNCj4gLS0NCj4gS2hhbGlkDQo=
+On Fri, Jan 21, 2022 at 7:27 PM Peter Geis <pgwipeout@gmail.com> wrote:
+>
+> On Fri, Jan 21, 2022 at 5:19 PM Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Fri, Jan 14, 2022 at 05:48:52PM -0500, Peter Geis wrote:
+> > > Good Evening,
+> > >
+> > > I seem to have come across a strange bug with drivers/base/property.c
+> > > while expanding the new cyttsp5 driver to handle device-tree
+> > > overrides.
+> > >
+> > > With the property:
+> > > touchscreen-size-x = <1863>;
+> > > The following code:
+> > > u32 test_u32 = 32; /* canary to catch writing a zero */
+> > > u16 test_u16 = 16; /* canary to catch writing a zero */
+> > > int ret;
+> > >
+> > > ret = device_property_read_u32(ts->dev, "touchscreen-size-x", &test_u32);
+> > > if(ret)
+> > > dev_err(ts->dev, "read_u32 failed ret: %d\n", ret);
+> > >
+> > > ret = device_property_read_u16(ts->dev, "touchscreen-size-x", &test_u16);
+> > > if(ret)
+> > > dev_err(ts->dev, "read_u16 failed ret: %d\n", ret);
+> > >
+> > > dev_err(ts->dev, "read_u32: %d, read_u16: %d\n", test_u32, test_u16);
+> > >
+> > > returns the following:
+> > > [    1.010876] cyttsp5 5-0024: read_u32: 1863, read_u16: 0
+> > >
+> > > This was as of 5.16-rc8, using the
+> > > gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu compiler.
+> > > I honestly am at a loss here, any insight you can provide here would
+> > > be appreciated.
+> >
+> > The property "touchscreen-size-x" is a u32. Calling
+> > device_property_read_u16 is an error though one is not returned here.
+> > You get 0 because that is what the first 2 bytes of the property
+> > contain. DT data is big-endian.
+>
+> I figured this was the case, but I was hopeful the operators would be
+> smart enough to handle endian translations.
+> Wouldn't all DT numeric properties be u32, meaning
+> device_property_read_u16 and device_property_read_u8 are meaningless
+> on little endian devices?
+
+No.
+
+> Or is there a way to force smaller values in the DT?
+
+Yes. [ 0 1 2 ] notation is 8-bit. Or you can use the /bits/ 8|16|64 directive.
+
+> > I suspect making this a hard error would break some users, but we could
+> > try a WARN.
+>
+> I don't suspect it would be trivial to implement endian translation
+> for these functions?
+
+They do endian translation already. In your case byte 0 and byte 1 are swapped.
+
+The DT data is purely a byte array once it's in the dtb. It's up to
+the caller with specific knowledge about a property to know how to
+interpret it. It would be nice if all the size and type information
+was maintained in the dtb format, but it's not and no one has stepped
+up to do a new format (changing would be painful too).
+
+Rob

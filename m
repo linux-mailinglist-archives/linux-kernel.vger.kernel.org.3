@@ -2,105 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22E81496C79
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 14:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66DE5496C7E
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 14:15:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232764AbiAVNNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 08:13:44 -0500
-Received: from mga06.intel.com ([134.134.136.31]:2895 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230329AbiAVNNk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 08:13:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642857220; x=1674393220;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2sJ0wbIgA19cnk5VVCPT1WO+w96chFBBiTgVZNwfn80=;
-  b=Z7vU2BGU9aHlqjdmxs1jd2+xTZT338dsTx6CKrt2KROVPlSSBPGvgr6a
-   mMj7254tF6gMxenJiCmRF0X8ovODpuLV3l+6CqfuD4MG319ScwnPE1fum
-   hoIjb+eby4HL3n/dL/pkR80lSgqbsocRpuxvh1ixSKYYhC6FkoEqEhXfR
-   zdnPRqIRaB+I/kbJk/wqO0wPqm5CEtHXFH/j2pLkE260T2Uqak4WMoC3p
-   933IhNUT/vCHONR7Q5L00Jpo4gRgZlaEq7pa3+r+Y6cDBj0GBVTS/6jxE
-   pic9bnU6dEB4bbYC5B+PDgQvnBDzgYBjBG25lt5covuNn3kBAph1A4rTw
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="306537613"
-X-IronPort-AV: E=Sophos;i="5.88,308,1635231600"; 
-   d="scan'208";a="306537613"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2022 05:13:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,308,1635231600"; 
-   d="scan'208";a="478547731"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 22 Jan 2022 05:13:37 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nBGD3-000GQ3-2u; Sat, 22 Jan 2022 13:13:37 +0000
-Date:   Sat, 22 Jan 2022 21:13:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ben Widawsky <ben.widawsky@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [cxl:preview 46/53] drivers/cxl/core/memdev.c:222:6: warning: no
- previous prototype for function 'detach_memdev'
-Message-ID: <202201222155.g7TX2HHO-lkp@intel.com>
+        id S232861AbiAVNPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 08:15:06 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:49198
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230329AbiAVNPE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 22 Jan 2022 08:15:04 -0500
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A877940045
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 13:15:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642857303;
+        bh=sq+GqGoHGm/8ryzGZ8Mwkyq3rI/NbpNjgK3K63Ee+P8=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=bM6D4ueVZSs4micVd1HbbXDpXx8iPO4QeNglB/kaRoQdUTe4VlZ6WVl1X6J19v+zK
+         FsFw257c1NRV0EBwUUU9FFIWmM2uVDMAIrrNpJxPiv3kQkaaF35i06P2O3LMbzHXfi
+         gnBiuYMMkmEYwBBKacrs8Iy/tu9Io+OclDQX4NvY0k/0zdeHfuDXMgEWh2TEjMdOqT
+         8EwQQ0R7v5UKGn6wCxOsXSW9pJFZV8g3sT/92/PEdMteWCiTWZc8uC9Cvm/m8MED5r
+         ywhxf40yOlTyjbBu59ZXOM4wJCF6B1SgYFJuic9LfL30b3kuSkhf/GfGxbG8d4VEr7
+         +ZdgoN/lLOPZQ==
+Received: by mail-ej1-f72.google.com with SMTP id x16-20020a170906135000b006b5b4787023so943432ejb.12
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 05:15:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sq+GqGoHGm/8ryzGZ8Mwkyq3rI/NbpNjgK3K63Ee+P8=;
+        b=kbZtiuHyt0xp+BkXL2pBELxMpi4H3eMG9tPMC3Qx7tQQwzpAdWqk1BD4ll6O8pI4b5
+         wYKGA6zoZ2EmgVxVFVKOTBHUf2KdykHG2KV6L/Rot5k0C3A9iSr7rlPvxOKWAwnaLkXB
+         OCrqkF9tkFfPRNOK9E3VVKLMUqEz9gvDhd/OEyIMfdWYBSkiH+1bFxr6bQ5tTGOy1qJX
+         I743XYpxs80/fZZsTSHxLcJTpu7tGtr6BQbbAFpJRo1I5FLp6DI5unYoj3KN5MR2TLbx
+         DUXw7dIL2COZLlGBN1CHi/7eTxw/SNegMcDgha/a6bFO4d9q3iDh3Q8lqRzxkvJYMSKs
+         HCzQ==
+X-Gm-Message-State: AOAM533Di9VDjIYMkVp/FjQuPD5+GYWUzX/663ghyELMyFgMIaGt0l81
+        gDKgETh4vNNLs0lp++okcg6fIthn+/d7ewFaBVmo6RRmDnS5jwazyq01ZY44z75crwtSMX/7ciQ
+        56FjQY+vC5mNqGeoIdYN7coW3pqtVuYLvNTZWr79r5Q==
+X-Received: by 2002:a05:6402:1d4d:: with SMTP id dz13mr8232527edb.80.1642857303217;
+        Sat, 22 Jan 2022 05:15:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyVyWY/MniL6pE8Qvx42ZDYAQcz+ygoyMbJ7Fg2vbPe6otymoWSlG8GropeNe8ENplv5ATIdA==
+X-Received: by 2002:a05:6402:1d4d:: with SMTP id dz13mr8232515edb.80.1642857303023;
+        Sat, 22 Jan 2022 05:15:03 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id k20sm2914823eja.14.2022.01.22.05.15.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Jan 2022 05:15:02 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: dts: exynos: use define for TMU clock on Exynos4412
+Date:   Sat, 22 Jan 2022 14:14:57 +0100
+Message-Id: <20220122131457.63304-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git preview
-head:   e675fabdbbcdb6e32dba688a20fb0bd42e0e2d5d
-commit: 2b2d6579d0ee25b92d9af10c407c11cb4e3e0afe [46/53] cxl/mem: Add the cxl_mem driver
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220122/202201222155.g7TX2HHO-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=2b2d6579d0ee25b92d9af10c407c11cb4e3e0afe
-        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
-        git fetch --no-tags cxl preview
-        git checkout 2b2d6579d0ee25b92d9af10c407c11cb4e3e0afe
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cxl/core/
+Replace clock hard-coded number with a define from bindings.  No
+functional change.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/cxl/core/memdev.c:222:6: warning: no previous prototype for function 'detach_memdev' [-Wmissing-prototypes]
-   void detach_memdev(struct work_struct *work)
-        ^
-   drivers/cxl/core/memdev.c:222:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void detach_memdev(struct work_struct *work)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/detach_memdev +222 drivers/cxl/core/memdev.c
-
-   221	
- > 222	void detach_memdev(struct work_struct *work)
-   223	{
-   224		struct cxl_memdev *cxlmd;
-   225	
-   226		cxlmd = container_of(work, typeof(*cxlmd), detach_work);
-   227		device_release_driver(&cxlmd->dev);
-   228		put_device(&cxlmd->dev);
-   229	}
-   230	
-
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ arch/arm/boot/dts/exynos4412.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/exynos4412.dtsi b/arch/arm/boot/dts/exynos4412.dtsi
+index d3802046c8b8..aa0b61b59970 100644
+--- a/arch/arm/boot/dts/exynos4412.dtsi
++++ b/arch/arm/boot/dts/exynos4412.dtsi
+@@ -813,7 +813,7 @@ &tmu {
+ 	interrupt-parent = <&combiner>;
+ 	interrupts = <2 4>;
+ 	reg = <0x100C0000 0x100>;
+-	clocks = <&clock 383>;
++	clocks = <&clock CLK_TMU_APBIF>;
+ 	clock-names = "tmu_apbif";
+ 	status = "disabled";
+ };
+-- 
+2.32.0
+

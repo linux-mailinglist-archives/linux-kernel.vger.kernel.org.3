@@ -2,102 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02DDE496D97
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 20:19:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1FDA496D9A
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 20:19:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234811AbiAVTTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 14:19:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58198 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiAVTTG (ORCPT
+        id S234816AbiAVTTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 14:19:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42322 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229582AbiAVTTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 14:19:06 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260F5C06173B
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 11:19:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=iFBuaE4otMAYJfH5b2i7kwfnQaRdpq/cX0lkHyia+Vg=; b=V/ipXv88zeDj4TChE7RqFhRWiQ
-        U5+c8xRykqDGFDIejnR8q/m6SPqxhzouvBS+7CGQC+Bip6LvDXPqczynU4ObOfaWgSUolNlCaxqbT
-        xo15B8j8soJ0OCaLBKA0yQJ8/hdxQoX6oe647aernEjOquqKfaw11sStEcMSqveKD1X6fFIzW0sQD
-        DwhcKZlVQ9X5twVsdXv/GbAk6ekStTxeA/sWxGTD8k5bz6OXPiZXQBNCE/LdoGj7kEkRWUZd6f5Be
-        d1Sk1ChJ6zy6L736QVnWeX4Ijji5fU/9v64vOQG85vZm3oPatlybVFaULxJoay9ajZ7xbY7y2ZnmO
-        hn/YtDwQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nBLua-00GYkG-TV; Sat, 22 Jan 2022 19:18:57 +0000
-Message-ID: <91901e7b-7d82-116c-aaf2-c74c6a6b999c@infradead.org>
-Date:   Sat, 22 Jan 2022 11:18:52 -0800
+        Sat, 22 Jan 2022 14:19:41 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CF2760EAE;
+        Sat, 22 Jan 2022 19:19:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65EDBC004E1;
+        Sat, 22 Jan 2022 19:19:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642879180;
+        bh=d6wiWoWrFFvd/k9Xxg/m5banf7LANNWYSravrHpAk4A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ezh915L8ebkT+JcGDTWwADrEndB1O+U/VqfPAwUdrM5k9glY7ZBm063vgOQopxnHw
+         3Il9usv97f7rY2fXCf4sIDaJ2EAaJe4QnVY0SE06KBoxZ3g4mTqpXfBW6Mxtz0UBbT
+         nGImBEHY+9UBiaoVPya0iiDkky2I6pfF5PwgVepNSBR8gh+w6Mp5/QWefzHAEcd1Jn
+         QOTGgzqhHQFeH5POAiuMEPCTpJMfSB89wMgLbJK7AU6IjXyDKijVaFdAUiDHkYiFxY
+         mJ6mBSYmGaXq0DL1CxNePwKN4vfttxKg98k70GwUSeGDlXjEh7YpPep/7jVfaQkUb0
+         AMaxLn/o6/0tA==
+Date:   Sat, 22 Jan 2022 14:19:39 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Thierry Reding <treding@nvidia.com>, thierry.reding@gmail.com,
+        airlied@linux.ie, daniel@ffwll.ch, jonathanh@nvidia.com,
+        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.15 123/188] drm/tegra: dc: rgb: Allow changing
+ PLLD rate on Tegra30+
+Message-ID: <YexYywTFEkQWEw/e@sashalap>
+References: <20220118023152.1948105-1-sashal@kernel.org>
+ <20220118023152.1948105-123-sashal@kernel.org>
+ <1fa23a4d-f647-c3ae-df8c-4cbd91f5a4c6@gmail.com>
+ <3bfdaf7b-c34d-1396-c6c7-2e22996b7643@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: fs/dlm/midcomms.c:913:22: sparse: sparse: restricted __le32
- degrades to integer
-Content-Language: en-US
-To:     Alexander Aring <aahringo@redhat.com>,
-        kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        David Teigland <teigland@redhat.com>,
-        cluster-devel <cluster-devel@redhat.com>
-References: <202201221028.YKA8kSdm-lkp@intel.com>
- <CAK-6q+h_hb94J3DSXPk=E44kCxiwZ+BE3kMJe09iShRzMb=vzQ@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAK-6q+h_hb94J3DSXPk=E44kCxiwZ+BE3kMJe09iShRzMb=vzQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3bfdaf7b-c34d-1396-c6c7-2e22996b7643@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/22/22 10:28, Alexander Aring wrote:
-> Hi,
-> 
-> On Fri, Jan 21, 2022 at 9:45 PM kernel test robot <lkp@intel.com> wrote:
+On Tue, Jan 18, 2022 at 12:39:43PM +0300, Dmitry Osipenko wrote:
+>18.01.2022 12:37, Dmitry Osipenko пишет:
+>> 18.01.2022 05:30, Sasha Levin пишет:
+>>> From: Dmitry Osipenko <digetx@gmail.com>
+>>>
+>>> [ Upstream commit 0c921b6d4ba06bc899fd84d3ce1c1afd3d00bc1c ]
+>>>
+>>> Asus Transformer TF700T is a Tegra30 tablet device which uses RGB->DSI
+>>> bridge that requires a precise clock rate in order to operate properly.
+>>> Tegra30 has a dedicated PLL for each display controller, hence the PLL
+>>> rate can be changed freely. Allow PLL rate changes on Tegra30+ for RGB
+>>> output. Configure the clock rate before display controller is enabled
+>>> since DC itself may be running off this PLL and it's not okay to change
+>>> the rate of the active PLL that doesn't support dynamic frequency
+>>> switching since hardware will hang.
+>>>
+>>> Tested-by: Maxim Schwalm <maxim.schwalm@gmail.com> #TF700T
+>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>>> Signed-off-by: Thierry Reding <treding@nvidia.com>
+>>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>>> ---
+>>>  drivers/gpu/drm/tegra/dc.c  | 27 ++++++++++++--------
+>>>  drivers/gpu/drm/tegra/dc.h  |  1 +
+>>>  drivers/gpu/drm/tegra/rgb.c | 49 +++++++++++++++++++++++++++++++++++--
+>>>  3 files changed, 65 insertions(+), 12 deletions(-)
 >>
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->> head:   9b57f458985742bd1c585f4c7f36d04634ce1143
->> commit: 658bd576f95ed597e519cdadf1c86ac87c17aea5 fs: dlm: move version conversion to compile time
->> date:   3 months ago
->> config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220122/202201221028.YKA8kSdm-lkp@intel.com/config)
->> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
->> reproduce:
->>         # apt-get install sparse
->>         # sparse version: v0.6.4-dirty
->>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=658bd576f95ed597e519cdadf1c86ac87c17aea5
->>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>         git fetch --no-tags linus master
->>         git checkout 658bd576f95ed597e519cdadf1c86ac87c17aea5
->>         # save the config file to linux build tree
->>         mkdir build_dir
->>         make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
+>> Hi,
 >>
->> If you fix the issue, kindly add following tag as appropriate
-> 
-> I have it on my list but it isn't easy to make sparse happy here...
-> this is the second time the robot reported this issue. Is there a way
-> to turn the robot off in that case?
-> 
-> Maybe some human who reads that knows the answer?
+>> This patch shouldn't be ported to any stable kernel because h/w that
+>> needs this patch was just merged to the 5.17.
+>
+>* support of h/w that needs..
 
-Hi Alex,
-
-In the source file, you can surround the "offending" line(s) with
-
-#ifndef __CHECKER__
- ...
-#endif
-
-to prevent sparse from checking those lines.
-Sometimes there needs to be an "#else" branch also.
-
-'git grep __CHECKER__' will show you quite a few other examples.
-
-kernel test robot might have a different way to disable this test
-for a specific source file. I dunno.
+I'll drop it, thanks!
 
 -- 
-~Randy
+Thanks,
+Sasha

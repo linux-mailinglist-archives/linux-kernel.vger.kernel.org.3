@@ -2,208 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00574496DEE
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 21:16:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06929496DED
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 21:16:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbiAVUQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 15:16:15 -0500
-Received: from mga17.intel.com ([192.55.52.151]:47675 "EHLO mga17.intel.com"
+        id S230311AbiAVUQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 15:16:13 -0500
+Received: from mga06.intel.com ([134.134.136.31]:2429 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230262AbiAVUQF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S230249AbiAVUQF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 22 Jan 2022 15:16:05 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1642882565; x=1674418565;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6cDpzKEP+djJhWstrzK5T9awOgBJZ4bZORnAZis/OM4=;
-  b=gDZtnwTqzSQY4ZNzoH9oq7fL10Wjwhy5svhj0oaBpn1yDieAxzuY8ebK
-   wa7a1rWyIMkiKcoCB+TjsuNkV/95S/71YbjU7lDfKfcCpyTv0ufXy+jr+
-   19AWEAx0UZK4gg3cn1LliNHquwxt6vOnC6Pnm1+j4RvJv9MkFmFOvcOA7
-   0PPRSDywoGr98NvO3P6a6vIA7vyIueATiWqgYKhFh5YrMRbTuPbBsuAob
-   EZo8UhN1pIfeJQJ4JZlzB+Ftc6+bFAjPdIXZ09iAhfIW8hUydGAFfhChj
-   LwN39cgZHdzGE6rJXj2+08j4bqnR0Ec9goP2X2qM8t4devxoHR+Pv/fQV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10235"; a="226521608"
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Fv9ShTXTlW5ip9qfoUSrs20qShJNziFb25OcWo9VPck=;
+  b=I1zANBX35OKDo5eIrqn1jdYDDm6+FZigI1/m/lt6i5RE4fXgCIOrNFrY
+   6sbRRJAG5bX6ex2HKj8F0XhtT/z6haHaTSiXcPxGASuIAZXnXm32MjdhM
+   K6JKA9JnaSvTAiwRTp1Q5slThnKdnoHKtToj7lQy+j65QiE5jsBHLEMIp
+   NXX9WqtkfJLFdlIWCGpeWd0/mtZsCf/rZSF66IDxSkaiz99JFRpTlefqY
+   T5XN0/awPDoLfaxIU9bTFKSnvgLsiw2uzemDvLz2bjoNx0KVqDT+Wbg/0
+   V+Jg9euRedXzioeY198D67ZMOHVhRxcbFUqGgkSivAfyuInBrS2KYhflQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10235"; a="306563076"
 X-IronPort-AV: E=Sophos;i="5.88,308,1635231600"; 
-   d="scan'208";a="226521608"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2022 12:16:05 -0800
+   d="scan'208";a="306563076"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2022 12:16:04 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,308,1635231600"; 
-   d="scan'208";a="531709586"
+   d="scan'208";a="562238699"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 22 Jan 2022 12:16:03 -0800
+  by orsmga001.jf.intel.com with ESMTP; 22 Jan 2022 12:16:03 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nBMnq-000GjN-Co; Sat, 22 Jan 2022 20:16:02 +0000
-Date:   Sun, 23 Jan 2022 04:15:33 +0800
+        id 1nBMnq-000GjH-BC; Sat, 22 Jan 2022 20:16:02 +0000
+Date:   Sun, 23 Jan 2022 04:15:35 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     "Michael T. Kloos" <michael@michaelkloos.com>,
-        paul.walmsley@sifive.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        "Michael T. Kloos" <michael@michaelkloos.com>
-Subject: Re: [PATCH] Fixed: Misaligned memory access.  Fixed pointer
- comparison.
-Message-ID: <202201230123.GN7Kvrlq-lkp@intel.com>
-References: <20220120233427.262098-1-michael@michaelkloos.com>
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: drivers/net/dsa/microchip/ksz8795_spi.c:87:34: warning: unused
+ variable 'ksz8795_dt_ids'
+Message-ID: <202201230139.E1dqQNmn-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220120233427.262098-1-michael@michaelkloos.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Michael,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.16 next-20220121]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Michael-T-Kloos/Fixed-Misaligned-memory-access-Fixed-pointer-comparison/20220121-074148
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
-config: riscv-randconfig-r021-20220120 (https://download.01.org/0day-ci/archive/20220123/202201230123.GN7Kvrlq-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1c52283265a462a100ae63ddf58b4e5884acde86
+commit: 227d72063fccb2d19b30fb4197fba478514f7d83 dsa: simplify Kconfig symbols and dependencies
+date:   10 months ago
+config: s390-randconfig-c005-20220120 (https://download.01.org/0day-ci/archive/20220123/202201230139.E1dqQNmn-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/c1930afcc76babc4e2313f67d0fe103a26f07712
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Michael-T-Kloos/Fixed-Misaligned-memory-access-Fixed-pointer-comparison/20220121-074148
-        git checkout c1930afcc76babc4e2313f67d0fe103a26f07712
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=227d72063fccb2d19b30fb4197fba478514f7d83
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 227d72063fccb2d19b30fb4197fba478514f7d83
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/dsa/microchip/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/riscv/lib/memmove.S:113:16: error: operand must be a symbol with %lo/%pcrel_lo/%tprel_lo modifier or an integer in the range [-2048, 2047]
-    1: jalr zero, (t0)
-                  ^
+   include/uapi/linux/swab.h:19:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x000000ffUL) << 24) |            \
+                     ^
+   In file included from drivers/net/dsa/microchip/ksz8795_spi.c:14:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:20:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |            \
+                     ^
+   In file included from drivers/net/dsa/microchip/ksz8795_spi.c:14:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
+                     ^
+   In file included from drivers/net/dsa/microchip/ksz8795_spi.c:14:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
+                     ^
+   In file included from drivers/net/dsa/microchip/ksz8795_spi.c:14:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
+           __fswab32(x))
+                     ^
+   In file included from drivers/net/dsa/microchip/ksz8795_spi.c:14:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/net/dsa/microchip/ksz8795_spi.c:87:34: warning: unused variable 'ksz8795_dt_ids' [-Wunused-const-variable]
+   static const struct of_device_id ksz8795_dt_ids[] = {
+                                    ^
+   21 warnings generated.
 
 
-vim +113 arch/riscv/lib/memmove.S
+vim +/ksz8795_dt_ids +87 drivers/net/dsa/microchip/ksz8795_spi.c
 
-     8	
-     9	SYM_FUNC_START(__memmove)
-    10	SYM_FUNC_START_ALIAS(memmove)
-    11		/*
-    12		 * Returns
-    13		 *   a0 - dest
-    14		 *
-    15		 * Parameters
-    16		 *   a0 - Inclusive first byte of dest
-    17		 *   a1 - Inclusive first byte of src
-    18		 *   a2 - Length of copy
-    19		 *
-    20		 * Because the return matches the parameter register a0,
-    21		 * we will not clobber or modify that register.
-    22		 */
-    23	
-    24		/* Return if nothing to do */
-    25		beq a0, a1, exit_memmove
-    26		beqz a2, exit_memmove
-    27	
-    28		/*
-    29		 * Register Uses
-    30		 *   a3 - Inclusive first multibyte of src
-    31		 *   a4 - Non-inclusive last multibyte of src
-    32		 *   a5 - Non-inclusive last byte of src
-    33		 *
-    34		 * During the copy
-    35		 *      Forward Copy: a1 - Index counter of src
-    36		 *      Reverse Copy: a5 - Index counter of src
-    37		 *   Both Copy Modes: t2 - Index counter of dest
-    38		 *   Both Copy Modes: t1 - Temporary for load-store
-    39		 *   Both Copy Modes: t0 - Link
-    40		 */
-    41	
-    42		/*
-    43		 * Solve for last byte now.  We will solve the rest when
-    44		 * they are needed for the copy because either byte copy
-    45		 * does not require any of the others (Wasted effort if
-    46		 * byte copy gets used) or we do not yet have enough
-    47		 * information to solve them.
-    48		 */
-    49		add  a5, a1, a2
-    50	
-    51		/*
-    52		 * Byte copy if copying less than SZREG bytes.
-    53		 * This can cause problems with the bulk copy
-    54		 * implementation below and is small enough not
-    55		 * to bother.
-    56		 */
-    57		andi t0, a2, -SZREG
-    58		beqz t0, byte_copy
-    59	
-    60		/* Determine the maximum granularity of co-alignment. */
-    61		xor  t0, a0, a1
-    62	#if   SZREG >= 8
-    63		andi t1, t0, 0x7
-    64		beqz t1, doubleword_copy
-    65	#endif
-    66		andi t1, t0, 0x3
-    67		beqz t1, word_copy
-    68		andi t1, t0, 0x1
-    69		beqz t1, halfword_copy
-    70		/* Fall through to byte copy if nothing larger is found. */
-    71	
-    72	byte_copy:
-    73		bltu a1, a0, byte_copy_reverse
-    74	
-    75	byte_copy_forward:
-    76		add  t2, a0, zero
-    77	byte_copy_fw_callin:
-    78		beq  a1, a5, exit_memmove
-    79		lb   t1, (a1)
-    80		sb   t1, (t2)
-    81		addi a1, a1, 1
-    82		addi t2, t2, 1
-    83		j byte_copy_fw_callin
-    84	
-    85	byte_copy_reverse:
-    86		add  t2, a0, a2
-    87	byte_copy_rv_callin:
-    88		beq  a1, a5, exit_memmove
-    89		addi a5, a5, -1
-    90		addi t2, t2, -1
-    91		lb   t1, (a5)
-    92		sb   t1, (t2)
-    93		j byte_copy_rv_callin
-    94	
-    95	exit_memmove:
-    96		ret
-    97	
-    98	copy_bytes_until_aligned_fw:
-    99		beq  a1, a3, 1f /* Reuse the return from the other copy loop */
-   100		lb   t1, (a1)
-   101		sb   t1, (t2)
-   102		addi a1, a1, 1
-   103		addi t2, t2, 1
-   104		j copy_bytes_until_aligned_fw
-   105	
-   106	copy_bytes_until_aligned_rv:
-   107		beq  a4, a5, 1f
-   108		addi a5, a5, -1
-   109		addi t2, t2, -1
-   110		lb   t1, (a5)
-   111		sb   t1, (t2)
-   112		j copy_bytes_until_aligned_rv
- > 113		1: jalr zero, (t0) /* Return */
-   114	
+e66f840c08a237 Tristram Ha 2019-07-29  86  
+e66f840c08a237 Tristram Ha 2019-07-29 @87  static const struct of_device_id ksz8795_dt_ids[] = {
+e66f840c08a237 Tristram Ha 2019-07-29  88  	{ .compatible = "microchip,ksz8765" },
+e66f840c08a237 Tristram Ha 2019-07-29  89  	{ .compatible = "microchip,ksz8794" },
+e66f840c08a237 Tristram Ha 2019-07-29  90  	{ .compatible = "microchip,ksz8795" },
+e66f840c08a237 Tristram Ha 2019-07-29  91  	{},
+e66f840c08a237 Tristram Ha 2019-07-29  92  };
+e66f840c08a237 Tristram Ha 2019-07-29  93  MODULE_DEVICE_TABLE(of, ksz8795_dt_ids);
+e66f840c08a237 Tristram Ha 2019-07-29  94  
+
+:::::: The code at line 87 was first introduced by commit
+:::::: e66f840c08a237acfbb981592047b53e7411012f net: dsa: ksz: Add Microchip KSZ8795 DSA driver
+
+:::::: TO: Tristram Ha <Tristram.Ha@microchip.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

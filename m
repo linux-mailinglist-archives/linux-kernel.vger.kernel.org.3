@@ -2,148 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89EBB496A1D
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 06:08:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3BF496A22
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 06:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiAVFIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 00:08:21 -0500
-Received: from mga04.intel.com ([192.55.52.120]:37322 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229469AbiAVFIU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 00:08:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642828100; x=1674364100;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EUpygQ/F8ZOi3Xpsg2yPj/2oIACnLY59yGgn/ZDJKQY=;
-  b=iE7z4fa06fuAI7qX8CYiT64BXxdp0suz7yluIcJ2l3IFBy/pPYhSkyc3
-   oL4LnqXq7IUBuRIY03cUkZ1dpwZyf6nzl4aDJNLW74rDtgNMDX15wDflE
-   MXAmSnZgJLE7vSe71E0ynYMqdwZzqQkpNRvoTy9bmba7TZR1p9w5N+Lb0
-   d8riHClGMi1iQvY1E8FNp9VW1PFPI4GUMno+unHIqtguhGHKSW8ftvb0s
-   y4m5/sbg8LUiA8NuktL7Z+MbtfwILY4WLTSfTDKZXfdIgqhEkkyzC6ZsV
-   FqKGAb0hxwI4J2iB7ugJCJy/akkRokzixPdXhwY2mKkduJHRNMRRSbGoW
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="244614823"
-X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
-   d="scan'208";a="244614823"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 21:08:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
-   d="scan'208";a="519321517"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 21 Jan 2022 21:08:18 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nB8dO-000G4I-CK; Sat, 22 Jan 2022 05:08:18 +0000
-Date:   Sat, 22 Jan 2022 13:08:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander K <ak@tempesta-tech.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Chuck Lever <chuck.lever@oracle.com>
-Subject: [cel:topic-rpc-with-tls 9991/9999] net/tls/ecdh.c:144:1: warning: no
- previous prototype for 'ttls_ecdh_read_params'
-Message-ID: <202201221357.AwLCo8LM-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S231358AbiAVFU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 00:20:57 -0500
+Received: from mx2.supremebox.com ([198.23.53.42]:48921 "EHLO
+        mx1.supremebox.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230287AbiAVFU4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 22 Jan 2022 00:20:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jilayne.com
+        ; s=default; h=To:References:Message-Id:Content-Transfer-Encoding:Cc:Date:
+        In-Reply-To:From:Subject:Mime-Version:Content-Type:Sender:Reply-To:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
+        :List-Post:List-Owner:List-Archive;
+        bh=5FYKB111pb8xtaFI9Q+oHKrMPS1x5Vtz4UWDNuEAXD0=; b=VNB+ryfQcVUN/qTlbD+h4NkKid
+        taphaXvKEW+UctFaXgBvt8xRheHR4e3nIdtklmSykZj24c6d0yu8E2LfsrtZ/G9P+6mmCAI9Zi5hq
+        zA5b/Imi5nbfZd8koFkmQ28DIKzyUyDWeV/F7Axz0ku9/djguV865WKarkOAMk3sblmI=;
+Received: from 071-094-058-251.res.spectrum.com ([71.94.58.251] helo=smtpclient.apple)
+        by mx1.supremebox.com with esmtpa (Exim 4.92)
+        (envelope-from <opensource@jilayne.com>)
+        id 1nB8pZ-0001O3-CS; Sat, 22 Jan 2022 05:20:53 +0000
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
+Subject: Re: [PATCH v3] powerpc: Add missing SPDX license identifiers
+From:   J Lovejoy <opensource@jilayne.com>
+In-Reply-To: <CAC1cPGypAKcAAia4ipgTWNu33HLW=fb0CSroqR=SK-umrOJb-Q@mail.gmail.com>
+Date:   Fri, 21 Jan 2022 21:20:49 -0800
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-spdx@vger.kernel.org" <linux-spdx@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <E0A69FEE-9889-4DF2-AC39-3E8638E5BFEE@jilayne.com>
+References: <d2c52284244d6dcb3472d2041abe43b456d116df.1642762977.git.christophe.leroy@csgroup.eu>
+ <CAC1cPGypAKcAAia4ipgTWNu33HLW=fb0CSroqR=SK-umrOJb-Q@mail.gmail.com>
+To:     Richard Fontana <rfontana@redhat.com>
+X-Mailer: Apple Mail (2.3654.120.0.1.13)
+X-Sender-Ident-agJab5osgicCis: opensource@jilayne.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux topic-rpc-with-tls
-head:   a72d5318846d67a7f3f5f2bcb4c0c09c4f8907d1
-commit: a0a99a10f4f0e3e1e35e566687137669da78abcd [9991/9999] Port of Tempesta TLS handshakes to the Linux 5.10.68
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220122/202201221357.AwLCo8LM-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=a0a99a10f4f0e3e1e35e566687137669da78abcd
-        git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-        git fetch --no-tags cel topic-rpc-with-tls
-        git checkout a0a99a10f4f0e3e1e35e566687137669da78abcd
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash net/
+(trying this again, as first time, my message bounced)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I just saw this and have not followed the entire thread from the =
+beginning, but if you are unsure if a given license text to something on =
+the SPDX License List, I highly recommend using the SPDX License-diff =
+browser extension / add-on (for Chrome or Firefox) - once you have that, =
+you can simply highlight a text in your browser window and it will tell =
+you if it matches or how far off it is if not.
 
-All warnings (new ones prefixed by >>):
-
->> net/tls/ecdh.c:144:1: warning: no previous prototype for 'ttls_ecdh_read_params' [-Wmissing-prototypes]
-     144 | ttls_ecdh_read_params(TlsECDHCtx *ctx, const unsigned char **buf,
-         | ^~~~~~~~~~~~~~~~~~~~~
---
-   In file included from include/asm-generic/bug.h:5,
-                    from arch/m68k/include/asm/bug.h:32,
-                    from include/linux/bug.h:5,
-                    from include/linux/random.h:10,
-                    from net/tls/bignum.h:28,
-                    from net/tls/error.c:25:
-   include/linux/scatterlist.h: In function 'sg_set_buf':
-   arch/m68k/include/asm/page_mm.h:169:50: warning: ordered comparison of pointer with null pointer [-Wextra]
-     169 | #define virt_addr_valid(kaddr)  ((void *)(kaddr) >= (void *)PAGE_OFFSET && (void *)(kaddr) < high_memory)
-         |                                                  ^~
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/linux/scatterlist.h:143:9: note: in expansion of macro 'BUG_ON'
-     143 |         BUG_ON(!virt_addr_valid(buf));
-         |         ^~~~~~
-   include/linux/scatterlist.h:143:17: note: in expansion of macro 'virt_addr_valid'
-     143 |         BUG_ON(!virt_addr_valid(buf));
-         |                 ^~~~~~~~~~~~~~~
-   net/tls/error.c: At top level:
->> net/tls/error.c:40:6: warning: no previous prototype for 'ttls_strerror' [-Wmissing-prototypes]
-      40 | void ttls_strerror(int ret, char *buf, size_t buflen)
-         |      ^~~~~~~~~~~~~
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for CRYPTO_SHA1_SSSE3
-   Depends on CRYPTO && X86 && 64BIT
-   Selected by
-   - TLS_HANDSHAKE && NET && TLS
-   WARNING: unmet direct dependencies detected for NEED_MULTIPLE_NODES
-   Depends on DISCONTIGMEM || NUMA
-   Selected by
-   - SINGLE_MEMORY_CHUNK && MMU
+If a license is NOT a match to anything on the SPDX License List, please =
+submit it to the SPDX legal team here: =
+https://tools.spdx.org/app/submit_new_license/ (and preferably then tag =
+me in the Github issue, my Github ide is @jlovejoy ) Please make sure to =
+include that it's in the LInux kernel and a link to where you found it.=20=
 
 
-vim +/ttls_ecdh_read_params +144 net/tls/ecdh.c
+More about requesting a new license be added to the SPDX License List =
+can be found here: =
+https://github.com/spdx/license-list-XML/blob/master/DOCS/request-new-lice=
+nse.md
 
-   135	
-   136	/**
-   137	 * Read the ServerKeyExhange parameters (RFC 8422 5.4)
-   138	 *	struct {
-   139	 *		ECParameters	curve_params;
-   140	 *		ECPoint		public;
-   141	 *	} ServerECDHParams;
-   142	 */
-   143	int
- > 144	ttls_ecdh_read_params(TlsECDHCtx *ctx, const unsigned char **buf,
-   145			      const unsigned char *end)
-   146	{
-   147		int r;
-   148	
-   149		if (!(ctx->grp = ttls_ecp_tls_read_group(buf, end - *buf)))
-   150			return -EINVAL;
-   151	
-   152		/*
-   153		 * Import a point from a TLS ECPoint record (RFC 8443 5.4)
-   154		 *	struct {
-   155		 *		opaque point <1..2^8-1>;
-   156		 *	} ECPoint;
-   157		 */
-   158		if (!(r = ttls_ecdh_read_public(ctx, *buf, end - *buf)))
-   159			*buf += end - *buf;
-   160	
-   161		return r;
-   162	}
-   163	
+Thanks!
+Jilayne
+SPDX legal team co-lead
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> On Jan 21, 2022, at 10:17 AM, Richard Fontana <rfontana@redhat.com> =
+wrote:
+>=20
+> On Fri, Jan 21, 2022 at 6:03 AM Christophe Leroy
+> <christophe.leroy@csgroup.eu> wrote:
+>>=20
+>> Several files are missing SPDX license identifiers.
+>>=20
+>> Following files are given the following SPDX identifier based on the =
+comments in the top of the file:
+>>=20
+>>        include/asm/ibmebus.h:/* SPDX-License-Identifier: GPL-2.0 OR =
+OpenIB BSD */
+> [...]
+>>        platforms/pseries/ibmebus.c:// SPDX-License-Identifier: =
+GPL-2.0 OR OpenIB BSD
+>=20
+> "OpenIB BSD" is not a defined SPDX identifier. There is an SPDX
+> identifier "Linux-OpenIB"
+> https://spdx.org/licenses/Linux-OpenIB.html
+> but I believe that is not a match to what's in these files
+> (specifically, the wording of the disclaimer), rather I believe what
+> you want here is BSD-2-Clause, but you may want to check that.
+>=20
+> Richard
+>=20
+

@@ -2,84 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A38496929
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 02:23:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C1449692D
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 02:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbiAVBXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 20:23:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiAVBXq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 20:23:46 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B8DC06173B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 17:23:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=F5pt9JgLdr4Wt09YxIeWvRa1yduJ52oBErRZQRDvD3I=; b=YBrpMg8T57kIzcczs9zrSPN4dM
-        5TvhMuYyeUEQ2YO55Q8ONS3DCYFj7kK5s8KxRvQ197CS1OqKrdNMgsnpHU0oHgYPAjvWAAiMoxtI9
-        CveuBA750aASMYsODhDK5lqNjfO7eYxLU4zwIzuk2+6LKXanPyL7IuzGnBfWvFc3A0AxoOWylcXRa
-        VRswZoqEz3t4AbTKtcKdXV+KYpmww/O7UKvkJxE/hOr7gWDuj0+NwJxt38JaBcNsFE73niSm0nwHf
-        X6L/hDzxcQ6COIiDHqBhKf5HtMM7zTURjsGKNm32MMRhq4TeEpPE+Bce2l8YoWIRvGhtcYawfXOIG
-        hi7B91sA==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nB584-00GNGI-9h; Sat, 22 Jan 2022 01:23:44 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH -next] drm/amd/display: don't use /** for non-kernel-doc comments
-Date:   Fri, 21 Jan 2022 17:23:43 -0800
-Message-Id: <20220122012343.32540-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        id S231660AbiAVB1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 20:27:05 -0500
+Received: from mga02.intel.com ([134.134.136.20]:64619 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231601AbiAVB1C (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 20:27:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642814822; x=1674350822;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UD7s7Zcefoz9ISDKfMgvrzcYY3klPxvRu6niB2q8PFE=;
+  b=PLv4uIOZxav2Ac0ou0AtCLq/5vbaNOph40YAq/TAJqqH1ObpfuLKo/zu
+   XHDD0yjGIMoLyUUHqTakWCVn6X6rCdXlDU4yokufQHP/LUj9rg6GukVPU
+   EwM86oawSOCpXmUCNhCDvXLfr+y/iWM5N+NGNIoLw1KypBLS8rhGEoGaM
+   6978gZJ7sBHlzK5g+FoZY456HnmmKeDvDPaLRvvMaU5AmhhbbLUf5+9K5
+   Wk+ggPdtKXX+waHJ57offewDkpW5M+I9e2uBAGckuRO5pZ8wPb+xVEdqt
+   Bp5qzMHmG1U9VYL30XZr0zlZ3jotYl7gaiRKW/9nX5YkdHexXn4Ol1wyl
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="233133928"
+X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
+   d="scan'208";a="233133928"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 17:27:01 -0800
+X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
+   d="scan'208";a="694827753"
+Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.146])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 17:27:01 -0800
+Date:   Fri, 21 Jan 2022 17:27:00 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Jane Chu <jane.chu@oracle.com>
+Cc:     "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "bp@alien8.de >> Borislav Petkov" <bp@alien8.de>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: Phantom PMEM poison issue
+Message-ID: <YetdZBbt0P/QBHDr@agluck-desk2.amr.corp.intel.com>
+References: <1737f707-7743-4898-37d4-03098d7aaa57@oracle.com>
+ <0aab10e0-6f1d-d67b-8aef-7e3d18e26544@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0aab10e0-6f1d-d67b-8aef-7e3d18e26544@oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change a static function's comment from "/**" (indicating kernel-doc
-notation) to "/*" (indicating a regular C language comment).
-This prevents multiple kernel-doc warnings:
+On Sat, Jan 22, 2022 at 12:40:18AM +0000, Jane Chu wrote:
+> On 1/21/2022 4:31 PM, Jane Chu wrote:
+> > On baremetal Intel platform with DCPMEM installed and configured to
+> > provision daxfs, say a poison was consumed by a load from a user thread,
+> > and then daxfs takes action and clears the poison, confirmed by "ndctl
+> > -NM".
+> > 
+> > Now, depends on the luck, after sometime(from a few seconds to 5+ hours)
+> > the ghost of the previous poison will surface, and it takes
+> > unload/reload the libnvdimm drivers in order to drive the phantom poison
+> > away, confirmed by ARS.
+> > 
+> > Turns out, the issue is quite reproducible with the latest stable Linux.
+> > 
+> > Here is the relevant console message after injected 8 poisons in one
+> > page via
+> >     # ndctl inject-error namespace0.0 -n 2 -B 8210
+> 
+> There is a cut-n-paste error, the above line should be
+>    "# ndctl inject-error namespace0.0 -n 8 -B 8210"
 
-  drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:4343: warning: Function parameter or member 'max_supported_frl_bw_in_kbps' not described in 'intersect_frl_link_bw_support'
-  drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:4343: warning: Function parameter or member 'hdmi_encoded_link_bw' not described in 'intersect_frl_link_bw_support'
-  drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:4343: warning: expecting prototype for Return PCON's post FRL link training supported BW if its non(). Prototype was for intersect_frl_link_bw_support() instead
+You say "in one page" here. What is the page size? 
+> 
+> -jane
+> 
+> > then, cleared them all, and wait for 5+ hours, notice the time stamp.
+> > BTW, the system is idle otherwise.
+> > 
+> > [ 2439.742296] mce: Uncorrected hardware memory error in user-access at
+> > 1850602400
+> > [ 2439.742420] Memory failure: 0x1850602: Sending SIGBUS to
+> > fsdax_poison_v1:8457 due to hardware memory corruption
+> > [ 2439.761866] Memory failure: 0x1850602: recovery action for dax page:
+> > Recovered
+> > [ 2439.769949] mce: [Hardware Error]: Machine check events logged
+> > -1850603000 uncached-minus<->write-back
+> > [ 2439.769984] x86/PAT: memtype_reserve failed [mem
+> > 0x1850602000-0x1850602fff], track uncached-minus, req uncached-minus
+> > [ 2439.769985] Could not invalidate pfn=0x1850602 from 1:1 map
+> > [ 2440.856351] x86/PAT: fsdax_poison_v1:8457 freeing invalid memtype
+> > [mem 0x1850602000-0x1850602fff]
 
-Fixes: c022375ae095 ("drm/amd/display: Add DP-HDMI FRL PCON Support in DC")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Fangzhi Zuo <Jerry.Zuo@amd.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
-Cc: Harry Wentland <harry.wentland@amd.com>
-Cc: Leo Li <sunpeng.li@amd.com>
-Cc: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Cc: amd-gfx@lists.freedesktop.org
-Cc: dri-devel@lists.freedesktop.org
----
- drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This error is reported in PFN=1850602 (at offset 0x400 = 1K)
 
---- linux-next-20220121.orig/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-+++ linux-next-20220121/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-@@ -4970,7 +4970,7 @@ uint32_t dc_link_bw_kbps_from_raw_frl_li
- 	return 0;
- }
- 
--/**
-+/*
-  * Return PCON's post FRL link training supported BW if its non-zero, otherwise return max_supported_frl_bw.
-  */
- static uint32_t intersect_frl_link_bw_support(
+> > 
+> > At this point,
+> > # ndctl list -NMu -r 0
+> > {
+> >     "dev":"namespace0.0",
+> >     "mode":"fsdax",
+> >     "map":"dev",
+> >     "size":"15.75 GiB (16.91 GB)",
+> >     "uuid":"2ccc540a-3c7b-4b91-b87b-9e897ad0b9bb",
+> >     "sector_size":4096,
+> >     "align":2097152,
+> >     "blockdev":"pmem0"
+> > }
+> > 
+> > [21351.992296] {2}[Hardware Error]: Hardware error from APEI Generic
+> > Hardware Error Source: 1
+> > [21352.001528] {2}[Hardware Error]: event severity: recoverable
+> > [21352.007838] {2}[Hardware Error]:  Error 0, type: recoverable
+> > [21352.014156] {2}[Hardware Error]:   section_type: memory error
+> > [21352.020572] {2}[Hardware Error]:   physical_address: 0x0000001850603200
+
+This error is in the following page: PFN=1850603 (at offset 0x200 = 512b)
+
+Is that what you mean by "phantom error" ... from a different
+address from those that were injected?
+
+-Tony

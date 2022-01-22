@@ -2,74 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9228B496C5B
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 13:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A45FB496C60
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 13:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbiAVMfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 07:35:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55820 "EHLO
+        id S231845AbiAVMiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 07:38:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231407AbiAVMfV (ORCPT
+        with ESMTP id S230360AbiAVMiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 07:35:21 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00336C06173D
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 04:35:20 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id h23so13859024iol.11
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 04:35:20 -0800 (PST)
+        Sat, 22 Jan 2022 07:38:21 -0500
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74D0C06173D
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 04:38:20 -0800 (PST)
+Received: by mail-ua1-x92a.google.com with SMTP id r15so21904998uao.3
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 04:38:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=2iWP8dND/hBdoQEpMTeRlZ2WLJHbeFPxHgpL541vuc0=;
-        b=CCRKtQqyBNN5RGPN2DIW0IjO8I5eVwa+ibECUlN+TJpLHhKaBAj4ctuBoQV3eMtIjx
-         jwPD/NBGWC5Jk0nN5nl0uj+e0PJF6hWs4X4O/2InSqNeiSQjzwAfHEpnwpZ75afrMptR
-         2WrB81dwjI8+oF10xwA1V/SNoHi56ixr8xrcCRuUGyQ5woCQWZylAOuHWMdbvNnxDzcM
-         tTtgwSBvLlXdJG3TXfUdiiJslosPCxhAoFBu2T8UGq+sEMC1aYnVCajQ9kOPcrLoTcsl
-         UYaNUlW4ffRShKEJD5cQE0n9AEgdfRbcCf9G+0m65LF29JrDXRG2YBABq10uznfEmhwo
-         fmTA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=k4uslepZlx+doJxsNKmyezSBQMtw/R3k+N4S5l4lrBo=;
+        b=BsOpApkNdWIaU/sRtOQjwh4eUZx+LBSaRTuxHUaQyNWCQyCl8bai1Wx1qwWnoNC27H
+         UMptAV67VXy6USh28okTjWJFOwzkUvxxcLMSLabutXTFPFkNtnBbMa7eeEuwDF9073we
+         fZ42v9DyP2u9LYxoNaoBkYFla0cFFWJTgKvbYKo6jtRIKNaRM4r9fnxMTi2N2LASC/k9
+         X39719sqIGKXjMPBleMQhBU6ZNT6uQtRYekkR4ZsEjG8s5q28dme/sNuxTeRGLrTi/+J
+         rYybXofWvCBIJpgUyR+L0PKRAlkQvadEp4ZKYSPYub9VCRQ08Tx0DtOa0OrsEetEIl6F
+         +IBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=2iWP8dND/hBdoQEpMTeRlZ2WLJHbeFPxHgpL541vuc0=;
-        b=hCw1R7RH9OenjlSVSLduiQK5Z3rfjU5vod4ma9buVe6LeBzAp39kdOwl53lAtYyLX0
-         pzcdBWRD0m6k4ieyRmy9ADPTLL1k1dGGekFuj9epI4aRA4Wo2XhVW9Y45OEOFFwXw7zi
-         zHgq1EJM/eJsA33AE6/f5YgerwyTs3JXSwC/lpU1v0/9Mw2lCNsan3oAgD5PEKwIldhf
-         V1/yX/2EMQ/LG5QZ/jPBN1528mxDIH5jwiH3IOxt7xSyZc1QJrmFDahlDBSh0RYlZqnC
-         4buw8zMMt5AFKK8ayhECbVmjb3GcQApeOQy/FZmfiqAB7paqZhWdXCK8VRGjwUoQHOUr
-         +Xcw==
-X-Gm-Message-State: AOAM531B2FNqivGXrx+cegNmNJwPWhf44gEW1mA5aLX22T67ejArkws+
-        jO3Byr9ZtOKzSlyEW39v97nl93ciY2KA8lAsOcU=
-X-Google-Smtp-Source: ABdhPJzKqyEPuqOBLQwAQwJEl4bF+rQbFLRbU40tTDvyHcDHDKBHYmJ4USViriQew5uXpo+2lEUorc6vKw0jm5HDdV8=
-X-Received: by 2002:a05:6638:613:: with SMTP id g19mr3516859jar.20.1642854920359;
- Sat, 22 Jan 2022 04:35:20 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=k4uslepZlx+doJxsNKmyezSBQMtw/R3k+N4S5l4lrBo=;
+        b=QLn0/ZDOPDqCOnpxO5TFzkW7gkN6xPoY7nIy8bqw9yDTD9qILLK1vIzD5EwRhF2/N6
+         oBZg5ari7R83w+iGv5bGFq0wBcFX3uuPG3j9GVIqXiQUUgg0D+/yyDZqkTOr8uKkoiRB
+         Tznl1BrF3ulIot5Jtmg/7xSu7P5wQf2Fe18HrWq3Whqf/AEIQn7ztJ1XmOmHpEf2ryv2
+         IfzzZdhwQhJz2xD7D9iH62QivkMNOqyDdWB1m/+2pBAYw4HZys4NjQiAQOzgh8lzLs5v
+         iBl05Nbpmtpq43VzTMDELdMPpq0+u4TdgsQdHVxQGRmkWOzjeZ8/zlpHuW/HebDc1AjW
+         Krvw==
+X-Gm-Message-State: AOAM5302aYJK1o5fGA3BzC77fEu/NNjpDQiPDfiLNzakHxmfocW3dFOQ
+        3ks5LgDtGAfjc8xyEitwP7qFnjLxAF9VJ3bqRIBmZA==
+X-Google-Smtp-Source: ABdhPJxAkMtrFRW4Pnd6Ntwnglxpjg12Vi1yx2PNmdt/WUzgwtaT1gqfGWUrAGaiAKvIFUvMWfcsFCo1mDlwWWDzqJ0=
+X-Received: by 2002:a67:c093:: with SMTP id x19mr1768383vsi.20.1642855099794;
+ Sat, 22 Jan 2022 04:38:19 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1707:0:0:0:0 with HTTP; Sat, 22 Jan 2022 04:35:19
- -0800 (PST)
-Reply-To: anthonyloanfunds@gmail.com
-From:   "Mr. Anthony Rolle" <tumwiinebrians@gmail.com>
-Date:   Sat, 22 Jan 2022 04:35:19 -0800
-Message-ID: <CAFjafY3MS2aRTQOHnOExqAeys9w-h4Nj8GbpT2WRoBq-USj9jA@mail.gmail.com>
-Subject: FINANZIELLE HILFE
-To:     undisclosed-recipients:;
+References: <20211227112959.7325-1-krzysztof.kozlowski@canonical.com>
+ <CAPLW+4n-1H5Yu3wQaus-UJ_VW_TjHrNUHaPCGCMURXg8EqxjyA@mail.gmail.com>
+ <CAK8P3a1ou-ZdrXN0MHQoJ+gGbvhXT-e2qt96_f9M8VwrdX0pAg@mail.gmail.com> <CAOesGMgF3S5_XsWjEqq=-zfYXwOWFpFNA6afL81wceRUA_0FeQ@mail.gmail.com>
+In-Reply-To: <CAOesGMgF3S5_XsWjEqq=-zfYXwOWFpFNA6afL81wceRUA_0FeQ@mail.gmail.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Sat, 22 Jan 2022 14:38:08 +0200
+Message-ID: <CAPLW+4k8=ymx56R7bKOt8kMVG_uUgrTsCkVd5wiY_rkYq8dYbQ@mail.gmail.com>
+Subject: Re: [GIT PULL] arm64: dts: samsung: Second pull for v5.17
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-BEN=C3=96TIGEN SIE EIN PERS=C3=96NLICHES DARLEHEN ODER EIN GESCH=C3=84FTSDA=
-RLEHEN,
-EIN DARLEHEN VON =E2=82=AC5000 BIS =E2=82=AC90.000.000? WENN JA, KONTAKTIER=
-EN SIE UNS
-PER E-MAIL: anthonyloanfunds@gmail.com MIT DEN UNTENSTEHENDEN
-INFORMATIONEN.
+On Wed, 19 Jan 2022 at 18:53, Olof Johansson <olof@lixom.net> wrote:
+>
+> On Wed, Jan 19, 2022 at 8:07 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > On Wed, Jan 19, 2022 at 4:11 PM Sam Protsenko
+> > <semen.protsenko@linaro.org> wrote:
+> > > On Mon, 27 Dec 2021 at 13:30, Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
+> > >
+> > > Hi Olof, Arnd,
+> > >
+> > > Just want to check if it's possible for those patches to be applied in
+> > > v5.17? Sorry for the noise, but that's important to me.
+> >
+> > I can see that Olof merged merged this into the "arm/late" branch in
+> > the soc tree,
+> > so I assume he still plans to send it in the next few days.
+>
+> Yep, will be sent up today most likely.
+>
 
-Ihr vollst=C3=A4ndiger Name: ...
-Ben=C3=B6tigte Menge:...
-Dauer: ..
-Telefon: ....
-Land: ..
-Kontakt =C3=BCber: anthonyloanfunds@gmail.com
+Thanks for detailed answer! Glad to hear it's still a possibility.
+Please let me know if you need any actions on my side (like rebasing,
+etc).
+
+> > With the timing over Christmas, I sent out the large bulk of the
+> > contents (anything
+> > I merged before Dec 23) last year, and Linus already merged it, the rest ended
+> > up in the "late" branch.
+> >
+> > As usual, there is no guarantee that late changes make it in, but I have seen
+> > no indication of any problems so far.
+>
+> Correct. Been sitting on it for a while in case there were fixes
+> coming in for the first pieces that got merged, but in traditional
+> fashion I'm guessing those will start to show up a few days after the
+> late branch gets merged. :)
+>
+>
+> -Olof

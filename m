@@ -2,103 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A2B496CEA
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 17:32:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDEAA496CED
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 17:37:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234533AbiAVQcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 11:32:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
+        id S234539AbiAVQhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 11:37:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234470AbiAVQcr (ORCPT
+        with ESMTP id S231142AbiAVQhH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 11:32:47 -0500
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F628C061401
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 08:32:46 -0800 (PST)
-Received: by mail-qv1-xf33.google.com with SMTP id o9so10485390qvy.13
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 08:32:46 -0800 (PST)
+        Sat, 22 Jan 2022 11:37:07 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98138C06173D
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 08:37:07 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id l64-20020a9d1b46000000b005983a0a8aaaso16020389otl.3
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 08:37:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=marek-ca.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xi6Epe+O63qC2bPYwLhP+7XAxexroUTZOcN3RjcdwYc=;
-        b=zZiWJkEJj7gkgpFfiL8+Qcq3iYCvUKc4tQa1qAYdIa4FzHEprH5jH3QbvhRB9OV0H3
-         NYvDLa3z02FmjRs/pdWWyPtMolo32YfSQztd1ETs7yydgO+HAKRdvPlUM58iRk1VQGjQ
-         9H0iiIoGR1EQm2nuOIhswXYyj8FFD90Slnvk5nRbXkOiRlm5gVlzD1phJXKRf0der5WK
-         w7TgmoYFlG2etXShrW3MnokTMiCOmIXWUHOmGZmUN1/9KQBzCM6vAJah7MMVTcnLtUDi
-         r6IHTISIhhAX8iYe44o8VklWfb3Y0/ILg4mLgu3xo4gSip4E96tPgGgoDuqMHHWITKxr
-         tdjQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=nQfnDsNAwBhiTzvcCVWAW+CtmC1+ndx2xo4KA92H/eA=;
+        b=lOvmxgmq9GpbTSQfd+ZMOUCrgP2Z9ebtFKrmDF53dJYX/c8icafiNfu59uSvoiRP+z
+         r7/hjR0alstPoPV+L4rI8i7DP05RowYcJzdW3a8KGKOYCkeqmbt22FJJ7iHOE/HCHAka
+         DTIb66/8K+Mfo/fk7Hu5LFZPIPWpZtjW8jD8WfoQTJokDY82ulKFPJLLGMOWJ/DjAH5K
+         2mI2lg/2FIU5yG2bgvH/a5v136ZvJEbt4rTCTLFJpSNBAIhV2b1VyDaKBZIkPPL2ZEo0
+         NjL6qI/s/1hStAug11rd5vhsFgbFq8zV8BXks3AOPk2uRhE00UCLALehecChc+3YEiUE
+         Vh8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xi6Epe+O63qC2bPYwLhP+7XAxexroUTZOcN3RjcdwYc=;
-        b=wFldeBm6F2pUQHQgQs1zkFSZA7ZHCR8OX9aNxIn1eT5ILYY5Yd/vTI/BNolQs9FrXn
-         Oo/IX/vVcj1LdVX3ex8EH+Aj2atrGWWWFm6mxM4sg31/MtDj1jAwYqc1jgdcx7plRMd+
-         fB2S6vBuOY4OLIwjt68PBNafeDilkLV8vST5zP/6enL51p9JbuhJRXvs+HWmjR6ugOFs
-         ZvI7gwUoYJ11QH6K40GDJfUl9sEARe0+HLn6qL5e6fVIYK5GF1OqzkkmaxpHOxKFKTz0
-         DwSX4Guy5tBfppYujhMlKrWZi4n60jPEkBBGG5FZk/4Zm03feq+eRXlKM5RRS4zPDhed
-         mM5A==
-X-Gm-Message-State: AOAM532+NUwngyVPCpofTZOE+qPVInGxT6pyzkfwW7H0cn+aTz/XjHJy
-        Ss5+KzUSoiMPpKjUi3D12RbuUw==
-X-Google-Smtp-Source: ABdhPJwb/Jm99YoLQ3/xxKudwqDLeXqNgcKFveEo5sXqa3tcV0J1phIo5ww72GLZhP9AFEiuthcbKA==
-X-Received: by 2002:a05:6214:4008:: with SMTP id kd8mr8123868qvb.5.1642869165665;
-        Sat, 22 Jan 2022 08:32:45 -0800 (PST)
-Received: from localhost.localdomain (modemcable134.222-177-173.mc.videotron.ca. [173.177.222.134])
-        by smtp.gmail.com with ESMTPSA id b140sm4806440qkg.108.2022.01.22.08.32.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Jan 2022 08:32:45 -0800 (PST)
-From:   Jonathan Marek <jonathan@marek.ca>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 2/2] arm64: dts: qcom: sm8450: fix apps_smmu interrupts
-Date:   Sat, 22 Jan 2022 11:29:32 -0500
-Message-Id: <20220122162932.7686-2-jonathan@marek.ca>
-X-Mailer: git-send-email 2.26.1
-In-Reply-To: <20220122162932.7686-1-jonathan@marek.ca>
-References: <20220122162932.7686-1-jonathan@marek.ca>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=nQfnDsNAwBhiTzvcCVWAW+CtmC1+ndx2xo4KA92H/eA=;
+        b=VibyL6Gb5oDTDS190Cw6fn/lp0PTYVZvC0IUbSOYxQkW5nn1vxHLrlx7QrxfBr40kB
+         33GpQnn/SFelvDxISfbfxUKytWZ8ZOsN95njNU44xxs8m6Fe6CYXIHuSbMkFLfHFgDcB
+         GEQCC1+q6/TUa+hOgbLvuogPPUlVKLmsDZz+wAqtxm17FBt2VAPR4YXZokntAuiypDdE
+         AypGbRGRPWfeMI0CO1xVaSiMijUk+oXrXxHtFDdXjszIfSbgU1ZhGDKG4uMirE1/4IwX
+         A7QtDVd49Y/dbAJf7kGXmssuAwHACEN0qtVTL1GxG92f7H9ZC3Ji3u2yRm6lnUeWwgo8
+         4gAw==
+X-Gm-Message-State: AOAM531WfaiEq4Phpe/jvzlLCvPI8iYbG5nC4xRQXt8vJ/LKrP/fOjZt
+        OxDpAxxlxYn6X0oZIfZf6BB0USb9S+Xj7A4lYGk=
+X-Google-Smtp-Source: ABdhPJy45GdFGFWqtDRRnY6spEsR1CPXS4Ge8WGwaFz4ageK291v+0ix2Hyj3ZAvMWfg7wze84c8x70U1VKXNRrbU2I=
+X-Received: by 2002:a9d:6e94:: with SMTP id a20mr6245428otr.378.1642869426734;
+ Sat, 22 Jan 2022 08:37:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:ac9:56d7:0:0:0:0:0 with HTTP; Sat, 22 Jan 2022 08:37:06
+ -0800 (PST)
+Reply-To: nelsonbile450@gmail.com
+From:   Nelson Bile <addamss.petter19@gmail.com>
+Date:   Sat, 22 Jan 2022 17:37:06 +0100
+Message-ID: <CA+gU1v3=xjMo0tNZUVw-rNnwrhRsAhkGsc5s-KmgBxTVM5F2Eg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update interrupts in apps_smmu to match downstream. This is fixes apps_smmu
-failing to probe when running at EL2 (expects 96 context interrupts)
-
-Fixes: 892d5395396d ("arm64: dts: qcom: sm8450: add smmu nodes")
-Signed-off-by: Jonathan Marek <jonathan@marek.ca>
----
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 5a98f2aad7099..aef8b6814cda0 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -1076,7 +1076,7 @@ apps_smmu: iommu@15000000 {
- 			compatible = "qcom,sm8450-smmu-500", "arm,mmu-500";
- 			reg = <0 0x15000000 0 0x100000>;
- 			#iommu-cells = <2>;
--			#global-interrupts = <2>;
-+			#global-interrupts = <1>;
- 			interrupts =    <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>,
- 					<GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
- 					<GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
-@@ -1163,6 +1163,7 @@ apps_smmu: iommu@15000000 {
- 					<GIC_SPI 412 IRQ_TYPE_LEVEL_HIGH>,
- 					<GIC_SPI 421 IRQ_TYPE_LEVEL_HIGH>,
- 					<GIC_SPI 707 IRQ_TYPE_LEVEL_HIGH>,
-+					<GIC_SPI 423 IRQ_TYPE_LEVEL_HIGH>,
- 					<GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>,
- 					<GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH>,
- 					<GIC_SPI 690 IRQ_TYPE_LEVEL_HIGH>,
--- 
-2.26.1
-
+Greetings I sent you an email a few days ago. Did you receive my
+message? urgent response please

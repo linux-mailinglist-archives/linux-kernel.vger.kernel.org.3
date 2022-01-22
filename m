@@ -2,54 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0A6496C57
+	by mail.lfdr.de (Postfix) with ESMTP id 73839496C56
 	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 13:34:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbiAVMds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 07:33:48 -0500
-Received: from mga07.intel.com ([134.134.136.100]:19903 "EHLO mga07.intel.com"
+        id S230288AbiAVMdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 07:33:39 -0500
+Received: from mga03.intel.com ([134.134.136.65]:62848 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230360AbiAVMdr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 07:33:47 -0500
+        id S229546AbiAVMdi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 22 Jan 2022 07:33:38 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642854827; x=1674390827;
+  t=1642854818; x=1674390818;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WKFuPNcSR+vwWACjgcND8o2TodQ+eOV6DGxhxnH90oE=;
-  b=H/SczYzv/bQuU7hkakhpFXPcRxmIQlTITTF4cNm435bU2/PmmVuCbe1O
-   /9V3ryP4JOfANzqaG1FQYxxPUzB5heFZ27VQFX/YFRSm3+miCiHGtrK92
-   TnAwUCN54EQ14AzB3La8iosBFfpIxQ/c/EEksxd9eiC4qd5YsCHKrGHoD
-   riY0uDzMCrEw5wdL717Cm3lbNsafJEpu7Q3eFcrinMyrzEqDOtEsGOx8a
-   R+87j1luT2S9U2lsrpOEw53mt4Xis0DH86/Yg/tecpjxw513zOyRBDHLy
-   K/kX7N+Ke4qw5v1/iqwe2MjXpGCoLjL7qP7PQThGJ3LEMe3JxFvDSGVmm
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="309143974"
+  bh=+yaefs6b7kFOOgjdhrJt0kz2hkELKlXLSjmwxnu5UPk=;
+  b=KaJHcHTIJEbqNSmn/ycuNvv9oQjN7wiGunUUZIzWvVPKX9gjVEDlvnd8
+   5mJ4/O3edciXWjuUmJpFQYpy9dfHn7+m2XAnX2WOuuj47IP2fu0yYhCRL
+   LQ1FOcm4YmKCS+9xnnI4l6cmgZ4bk0o4hwWBmPzDBcLm78h6DIYLoOPc5
+   9Ig9UA4Oe+uzB0RgaOsdiQv9JLoJ1MfxiordrsuFvddJp4tvlfFaqzet2
+   qo1lqseCH4IiJwn4t18O6o1DgUmnhuQ0RWIDE92Any9OqBGd50JINrqNu
+   erVidZvIqWLd7yf02wk9lDgwi7ao73Iwn3b9Tz3XbOS+rX2mqnRcKmy1c
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="245763133"
 X-IronPort-AV: E=Sophos;i="5.88,308,1635231600"; 
-   d="scan'208";a="309143974"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2022 04:33:39 -0800
+   d="scan'208";a="245763133"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2022 04:33:38 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,308,1635231600"; 
-   d="scan'208";a="519395351"
+   d="scan'208";a="494135000"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 22 Jan 2022 04:33:37 -0800
+  by orsmga002.jf.intel.com with ESMTP; 22 Jan 2022 04:33:37 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nBFaK-000GOQ-C1; Sat, 22 Jan 2022 12:33:36 +0000
-Date:   Sat, 22 Jan 2022 20:32:40 +0800
+        id 1nBFaK-000GOV-DR; Sat, 22 Jan 2022 12:33:36 +0000
+Date:   Sat, 22 Jan 2022 20:32:53 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     kbuild-all@lists.01.org,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [cxl:preview 34/53] drivers/cxl/cxl.h:285:38: warning: 'struct
- pci_bus' declared inside parameter list will not be visible outside of this
- definition or declaration
-Message-ID: <202201222055.733L3u7d-lkp@intel.com>
+To:     Chuck Lever <chuck.lever@oracle.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [cel:topic-rpc-with-tls-upcall 15/18] net/tls/af_tlsh.c:243:
+ undefined reference to `inet6_release'
+Message-ID: <202201222037.SQYbQlzI-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -58,65 +51,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git preview
-head:   e675fabdbbcdb6e32dba688a20fb0bd42e0e2d5d
-commit: 2b7a34a480122fb652df99554f6d59c5d9f3ef24 [34/53] cxl/core: Generalize dport enumeration in the core
-config: arc-randconfig-r043-20220122 (https://download.01.org/0day-ci/archive/20220122/202201222055.733L3u7d-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux topic-rpc-with-tls-upcall
+head:   da4c27539d2deaa2b9624c470a903b880497e398
+commit: 2d835a81bb38c6378f4cc53d0eb2320248a11a4c [15/18] net/tls: Add support for PF_TLSH (a TLS handshake listener)
+config: i386-randconfig-a005 (https://download.01.org/0day-ci/archive/20220122/202201222037.SQYbQlzI-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=2b7a34a480122fb652df99554f6d59c5d9f3ef24
-        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
-        git fetch --no-tags cxl preview
-        git checkout 2b7a34a480122fb652df99554f6d59c5d9f3ef24
+        # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=2d835a81bb38c6378f4cc53d0eb2320248a11a4c
+        git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
+        git fetch --no-tags cel topic-rpc-with-tls-upcall
+        git checkout 2d835a81bb38c6378f4cc53d0eb2320248a11a4c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/cxl/cxlmem.h:7,
-                    from drivers/cxl/core/pmem.c:6:
->> drivers/cxl/cxl.h:285:38: warning: 'struct pci_bus' declared inside parameter list will not be visible outside of this definition or declaration
-     285 |                               struct pci_bus *bus);
-         |                                      ^~~~~~~
+   ld: net/tls/af_tlsh.o: in function `tlsh_recvmsg':
+   net/tls/af_tlsh.c:594: undefined reference to `inet6_recvmsg'
+   ld: net/tls/af_tlsh.o: in function `tlsh_sendmsg':
+   net/tls/af_tlsh.c:564: undefined reference to `inet6_sendmsg'
+   ld: net/tls/af_tlsh.o: in function `tlsh_getname':
+   net/tls/af_tlsh.c:404: undefined reference to `inet6_getname'
+   ld: net/tls/af_tlsh.o: in function `tlsh_release':
+>> net/tls/af_tlsh.c:243: undefined reference to `inet6_release'
 
 
-vim +285 drivers/cxl/cxl.h
+vim +243 net/tls/af_tlsh.c
 
-24be641caabe25 Ben Widawsky 2021-12-01  281  
-42c377a63d21df Dan Williams 2022-01-05  282  bool is_cxl_port(struct device *dev);
-4812be97c015bd Dan Williams 2021-06-09  283  struct cxl_port *to_cxl_port(struct device *dev);
-7237f27228ec66 Dan Williams 2022-01-18  284  int devm_cxl_register_pci_bus(struct device *host, struct device *uport,
-7237f27228ec66 Dan Williams 2022-01-18 @285  			      struct pci_bus *bus);
-7237f27228ec66 Dan Williams 2022-01-18  286  struct pci_bus *cxl_port_to_pci_bus(struct cxl_port *port);
-4812be97c015bd Dan Williams 2021-06-09  287  struct cxl_port *devm_cxl_add_port(struct device *host, struct device *uport,
-4812be97c015bd Dan Williams 2021-06-09  288  				   resource_size_t component_reg_phys,
-4812be97c015bd Dan Williams 2021-06-09  289  				   struct cxl_port *parent_port);
-3c39e157b25e0c Dan Williams 2022-01-18  290  struct cxl_port *find_cxl_root(struct device *dev);
-2b7a34a480122f Dan Williams 2022-01-18  291  struct cxl_dport *devm_cxl_add_dport(struct device *host, struct cxl_port *port,
-2b7a34a480122f Dan Williams 2022-01-18  292  				     struct device *dport, int port_id,
-2b7a34a480122f Dan Williams 2022-01-18  293  				     resource_size_t component_reg_phys);
-40ba17afdfabb0 Dan Williams 2021-06-09  294  struct cxl_decoder *to_cxl_decoder(struct device *dev);
-8fdcb1704f61a8 Dan Williams 2021-06-15  295  bool is_root_decoder(struct device *dev);
-42c377a63d21df Dan Williams 2022-01-05  296  bool is_cxl_decoder(struct device *dev);
-24be641caabe25 Ben Widawsky 2021-12-01  297  struct cxl_decoder *cxl_root_decoder_alloc(struct cxl_port *port,
-24be641caabe25 Ben Widawsky 2021-12-01  298  					   unsigned int nr_targets);
-24be641caabe25 Ben Widawsky 2021-12-01  299  struct cxl_decoder *cxl_switch_decoder_alloc(struct cxl_port *port,
-24be641caabe25 Ben Widawsky 2021-12-01  300  					     unsigned int nr_targets);
-48667f676189ec Dan Williams 2021-09-21  301  int cxl_decoder_add(struct cxl_decoder *cxld, int *target_map);
-48667f676189ec Dan Williams 2021-09-21  302  int cxl_decoder_autoremove(struct device *host, struct cxl_decoder *cxld);
-40ba17afdfabb0 Dan Williams 2021-06-09  303  
-
-:::::: The code at line 285 was first introduced by commit
-:::::: 7237f27228ec660f73924f38e553e1d2b2ff65c4 cxl/port: Introduce cxl_port_to_pci_bus()
-
-:::::: TO: Dan Williams <dan.j.williams@intel.com>
-:::::: CC: Dan Williams <dan.j.williams@intel.com>
+   223	
+   224	/**
+   225	 * tlsh_release - free an AF_TLSH socket
+   226	 * @sock: socket to release
+   227	 *
+   228	 * Return values:
+   229	 *   %0: success
+   230	 */
+   231	static int tlsh_release(struct socket *sock)
+   232	{
+   233		struct sock *sk = sock->sk;
+   234	
+   235		if (!sk)
+   236			return 0;
+   237	
+   238		switch (sk->sk_family) {
+   239		case AF_INET:
+   240			return inet_release(sock);
+   241	#if IS_ENABLED(CONFIG_IPV6)
+   242		case AF_INET6:
+ > 243			return inet6_release(sock);
+   244	#endif
+   245		case AF_TLSH:
+   246			break;
+   247		default:
+   248			return 0;
+   249		}
+   250	
+   251		sock_hold(sk);	/* Ref: D */
+   252		sock_orphan(sk);
+   253		lock_sock(sk);
+   254	
+   255		tlsh_unregister_listener(sk);
+   256		tlsh_accept_drain(sk);
+   257	
+   258		sk->sk_state = TCP_CLOSE;
+   259		sk->sk_shutdown |= SEND_SHUTDOWN;
+   260		sk->sk_state_change(sk);
+   261	
+   262		sk->sk_tls_bind_family = AF_UNSPEC;
+   263		sock->sk = NULL;
+   264		release_sock(sk);
+   265		sock_put(sk);	/* Ref: D */
+   266	
+   267		sock_put(sk);	/* Ref: A */
+   268		return 0;
+   269	}
+   270	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

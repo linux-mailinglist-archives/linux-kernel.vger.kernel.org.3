@@ -2,64 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F30D3496AB2
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 08:38:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDE8496ABA
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 08:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233582AbiAVHij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 02:38:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47332 "EHLO
+        id S233587AbiAVHpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 02:45:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiAVHii (ORCPT
+        with ESMTP id S229651AbiAVHpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 02:38:38 -0500
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFADC06173B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 23:38:37 -0800 (PST)
-Received: by mail-qk1-x72b.google.com with SMTP id a21so12914406qkn.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Jan 2022 23:38:37 -0800 (PST)
+        Sat, 22 Jan 2022 02:45:07 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B3DC06173B;
+        Fri, 21 Jan 2022 23:45:07 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id w7so13435672ioj.5;
+        Fri, 21 Jan 2022 23:45:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=4LVxHtzmhByQ4U/dSb68NhLXMVvIEPZo6dVOi9vo43g=;
-        b=iw6o85YVGMGcIMT0yZv2GCzB0yEp7C4Z4kc+uQFT0ZlYjSrTB4KKU6T7Vl5z5FQDIc
-         xEPpr38EwdfTkd+7fkn6ohAc/Zdr+Z4vvu8d++o4C1+37VTQg2Z0c1kL9oYnOu5Lfl3B
-         /1Vp3VE8meUbEV/gepWAW6Ax534arWT4qKcdkxBOTG4JUL+F1SWn4Y6fTdHXFgcuBKdw
-         U3lqTf8Ik88s7GXAk51IzFAu6tpq3E4UE0LDGeRls5/ESvk5xo+nyotnTlNClMjEDgAk
-         kTZJAvRsdSCd9KrzNopkoyJWL1kY4FYqrYGJfHyW/rIuTuBIqt5VXkfsoQiutyFGKczL
-         INug==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wEf9kuxtfK6g6ywXgOShXcpDo4hATUcEmxi4FaLoa70=;
+        b=DmqilS8lvUSSrQeTKd8ECtxJLZjCSJQoZ4gRS32wLlH9v1a4ACq+XQhTIVWw80oyxa
+         NHqDsbuPIOECgXZ400JU9bmA2anrvJi4OSp+TIfGEV2iFTC55t//tQOFtrPoqPday9tf
+         FF6T1j8TPN3GGiab+ow2g9t7D1gHfOuq06+OCtDnzSUDMkPOWq+PdLolIETi8CmhHVyP
+         tyAzczg7/1cJ3bkG66SkYVMKECp1rPCzP6GAcPAVnKhdHnVck8fxNaUCaMdPZ9FOGCQV
+         An0glZWAmwdxc3W9Uwr8f3ruQzO5YDTTHimPifYLJlz5hvVFZrGx7a9iOmzifXArpC8K
+         CKlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=4LVxHtzmhByQ4U/dSb68NhLXMVvIEPZo6dVOi9vo43g=;
-        b=6waBoAIjM6l72au6k5p6mmeQyPQq3M0SLI7acjGZ+fJLvoXZ0GrGHBx8KYvhL98s2F
-         OxxKafAn6ON2nLHf1PdgExXJF9E3JVlV7zj25jpBNLyvNn/8VmN+4+y0oqxfGCgCPbJz
-         jp889aMNoCG2+75A7skS5C5YstninJIH3ADJEKRtnzMXXMvc3NEjpxEDLldhxmhb1xbD
-         rHcdQF6xGlQurh3AUB7p9IJr4KPTF2lfL7L00XYuM6poVsTmaBnir2I9h/YmHxWpnCHV
-         4doJWR/6vutbcAXhEXVO4mrdOx1Xe626wU/cw+o+v3FpFaknzeMLVS0vX3n5PAYrMisY
-         pSbA==
-X-Gm-Message-State: AOAM530M+3TH085viWoF9NPNMacS5Pe5Unu69561XU2me5ln+jAGE4WR
-        4z6kefqvNZYcV/uas1py1ysG1jIpdmcCkPvLPG0=
-X-Google-Smtp-Source: ABdhPJwlWccvYoK21EDvGhl+na7BlL0cxgMiXqu2jNVn/BIOPog9qIlH3slhQz3mnCkHPgQe/wLZXwzbiDtItMgUd0s=
-X-Received: by 2002:a37:a68f:: with SMTP id p137mr5115020qke.696.1642837116660;
- Fri, 21 Jan 2022 23:38:36 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wEf9kuxtfK6g6ywXgOShXcpDo4hATUcEmxi4FaLoa70=;
+        b=4hpat10jXw3At2UXOvw/70juc5+56VsZnMZisjzl05d+S1ZYjqHdvffBwBRSL3LcWW
+         H/aiQ/KByoNr0sDxgs8ahjv97YvlO6VueEklfjjZ8Kw4yasdcv1xztQ//DJGPtj8gQZn
+         HKYMz4vfIKAMaUyHIlB+sf0RYmmqHwOS0Ccj7p4yij8oqp4qqLhUENSlb0YFtZnPY46Q
+         sb/hqmiZrEWUNwVpC2cU3aVLegpJlBCk+tjhgeZeKMrgMI4hi7J8OAICDFkb6a7dERuR
+         nU6xr/k78206VZSbvyGMEhhehmcZaI/JWGU9fv2y9zw5P49+Qz/Y09cQYoOp9vEyi2H/
+         rDvA==
+X-Gm-Message-State: AOAM533G0c5Uw8rIbygGXflOMbYc+qWxO3ItOXihr6yWT3DaAPVYcHWJ
+        zxS7pptBRvnyAlclWekIhpn/uLE25tkxIpMNgOagT5ChgU0=
+X-Google-Smtp-Source: ABdhPJzB3PVYUkq5WX3h4+KNsUkQ9PkVnl2PRIgfacRuSEw3+UU4/EpV8+mNg5mQuDcQ6Ppb76X1LrE04bNSb9lsNt8=
+X-Received: by 2002:a02:a896:: with SMTP id l22mr3167660jam.69.1642837506811;
+ Fri, 21 Jan 2022 23:45:06 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:ad4:5ecb:0:0:0:0:0 with HTTP; Fri, 21 Jan 2022 23:38:36
- -0800 (PST)
-Reply-To: maddahabdwabbo@gmail.com
-From:   Abd-Jafaari Maddah <mackshawn74@gmail.com>
-Date:   Fri, 21 Jan 2022 23:38:36 -0800
-Message-ID: <CAJ=jc=GU_9rLZR2Z1g_9i+RZ1DP82TvT93STh537JLakzmmw4w@mail.gmail.com>
-Subject: OK
-To:     undisclosed-recipients:;
+References: <20220121080246.459804-1-hch@lst.de>
+In-Reply-To: <20220121080246.459804-1-hch@lst.de>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Sat, 22 Jan 2022 09:44:55 +0200
+Message-ID: <CAOQ4uxhaM1XpfQBenMLmh2_i9EbwRQ+E9qU8hqbKCbZmibBerA@mail.gmail.com>
+Subject: Re: [PATCH] fs: rename S_KERNEL_FILE
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        David Howells <dhowells@redhat.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Dear,
-I had sent you a mail but i don't think you received it that's why am
-writing you again so we discuss,it's important.
-Am waiting,
-Abd-jafaari Maddah
+On Sat, Jan 22, 2022 at 2:40 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> S_KERNEL_FILE is grossly misnamed.  We have plenty of files hold open by
+> the kernel kernel using filp_open.  This flag OTOH signals the inode as
+> being a special snowflage that cachefiles holds onto that can't be
+
+^^^^^^^^^^^^^^^^snowflake
+
+> unlinked becaue of ..., erm, pixie dust.  So clearly mark it as such.
+>
+^^^^^^^^^^because
+
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+
+That's a much better name IMO.
+
+Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+
+> ---
+>  fs/cachefiles/namei.c | 12 ++++++------
+>  fs/namei.c            |  2 +-
+>  include/linux/fs.h    |  2 +-
+>  3 files changed, 8 insertions(+), 8 deletions(-)
+>
+> diff --git a/fs/cachefiles/namei.c b/fs/cachefiles/namei.c
+> index 9bd692870617c..599dc13a7d9ab 100644
+> --- a/fs/cachefiles/namei.c
+> +++ b/fs/cachefiles/namei.c
+> @@ -20,8 +20,8 @@ static bool __cachefiles_mark_inode_in_use(struct cachefiles_object *object,
+>         struct inode *inode = d_backing_inode(dentry);
+>         bool can_use = false;
+>
+> -       if (!(inode->i_flags & S_KERNEL_FILE)) {
+> -               inode->i_flags |= S_KERNEL_FILE;
+> +       if (!(inode->i_flags & S_CACHEFILE)) {
+> +               inode->i_flags |= S_CACHEFILE;
+>                 trace_cachefiles_mark_active(object, inode);
+>                 can_use = true;
+>         } else {
+> @@ -51,7 +51,7 @@ static void __cachefiles_unmark_inode_in_use(struct cachefiles_object *object,
+>  {
+>         struct inode *inode = d_backing_inode(dentry);
+>
+> -       inode->i_flags &= ~S_KERNEL_FILE;
+> +       inode->i_flags &= ~S_CACHEFILE;
+>         trace_cachefiles_mark_inactive(object, inode);
+>  }
+>
+> @@ -742,7 +742,7 @@ static struct dentry *cachefiles_lookup_for_cull(struct cachefiles_cache *cache,
+>                 goto lookup_error;
+>         if (d_is_negative(victim))
+>                 goto lookup_put;
+> -       if (d_inode(victim)->i_flags & S_KERNEL_FILE)
+> +       if (d_inode(victim)->i_flags & S_CACHEFILE)
+>                 goto lookup_busy;
+>         return victim;
+>
+> @@ -789,11 +789,11 @@ int cachefiles_cull(struct cachefiles_cache *cache, struct dentry *dir,
+>         /* check to see if someone is using this object */
+>         inode = d_inode(victim);
+>         inode_lock(inode);
+> -       if (inode->i_flags & S_KERNEL_FILE) {
+> +       if (inode->i_flags & S_CACHEFILE) {
+>                 ret = -EBUSY;
+>         } else {
+>                 /* Stop the cache from picking it back up */
+> -               inode->i_flags |= S_KERNEL_FILE;
+> +               inode->i_flags |= S_CACHEFILE;
+>                 ret = 0;
+>         }
+>         inode_unlock(inode);
+> diff --git a/fs/namei.c b/fs/namei.c
+> index d81f04f8d8188..7402277ecc1f5 100644
+> --- a/fs/namei.c
+> +++ b/fs/namei.c
+> @@ -3959,7 +3959,7 @@ int vfs_rmdir(struct user_namespace *mnt_userns, struct inode *dir,
+>
+>         error = -EBUSY;
+>         if (is_local_mountpoint(dentry) ||
+> -           (dentry->d_inode->i_flags & S_KERNEL_FILE))
+> +           (dentry->d_inode->i_flags & S_CACHEFILE))
+>                 goto out;
+>
+>         error = security_inode_rmdir(dir, dentry);
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index c8510da6cc6dc..099d7e03d46e6 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -2173,7 +2173,7 @@ struct super_operations {
+>  #define S_ENCRYPTED    (1 << 14) /* Encrypted file (using fs/crypto/) */
+>  #define S_CASEFOLD     (1 << 15) /* Casefolded file */
+>  #define S_VERITY       (1 << 16) /* Verity file (using fs/verity/) */
+> -#define S_KERNEL_FILE  (1 << 17) /* File is in use by the kernel (eg. fs/cachefiles) */
+> +#define S_CACHEFILE    (1 << 17) /* In use as cachefile, can't be unlinked */
+>
+>  /*
+>   * Note that nosuid etc flags are inode-specific: setting some file-system
+> --
+> 2.30.2
+>

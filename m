@@ -2,684 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA084968F4
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 01:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F01274968EC
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 01:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbiAVA5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 19:57:19 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:2230 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231226AbiAVA5E (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 19:57:04 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20M0JshU022408;
-        Sat, 22 Jan 2022 00:56:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=nh6umd63qUzlSvRT/ybRdDx08XVhgaa35SL8UEjjSo8=;
- b=kqAK3Bl/6nFIGHGy3YKsbQV1fY6waXn1XIfZLo6AqMvzkrzwLYVg4RTMnd1QsjKDQjtl
- ZKHeYpQu1kaPaq2gQCRS2OiI9lBk+XHGYmtZPSH2FzhqSWkn4rWLggOuEoi9D1Iqruye
- QYgESJLi2y514JzvPnwi/kYnp1H0c9uQKbJ0iAg7pbahVY8cIyPPWjMSewMMMVeOac35
- 8bqAEhu4jYBb7I+TkMezl2yNOafgIGzqoDftg52PlbZ9yeXYHdgMu4aw2GoQ0bM6MUNv
- WS3FOXs5lwo4GSzKow3mT3Op45Mh6uPgVMsY82LHGHnyAD0Yacr4eIWOGf6cnZ1GpQUs nw== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dr79s0dvb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 22 Jan 2022 00:56:57 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20M0Y5fC028235;
-        Sat, 22 Jan 2022 00:56:55 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3dqj380nv5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 22 Jan 2022 00:56:55 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20M0uqfH46792980
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 22 Jan 2022 00:56:52 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E31A3A4040;
-        Sat, 22 Jan 2022 00:56:51 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 86756A404D;
-        Sat, 22 Jan 2022 00:56:49 +0000 (GMT)
-Received: from li-4b5937cc-25c4-11b2-a85c-cea3a66903e4.ibm.com.com (unknown [9.211.59.92])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sat, 22 Jan 2022 00:56:49 +0000 (GMT)
-From:   Nayna Jain <nayna@linux.ibm.com>
-To:     linuxppc-dev@lists.ozlabs.org
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Daniel Axtens <dja@axtens.net>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Douglas Miller <dougmill@linux.vnet.ibm.com>, gjoyce@ibm.com,
-        linux-kernel@vger.kernel.org, Nayna Jain <nayna@linux.ibm.com>
-Subject: [RFC PATCH 2/2] pseries: define sysfs interface to expose PKS variables
-Date:   Fri, 21 Jan 2022 19:56:37 -0500
-Message-Id: <20220122005637.28199-3-nayna@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220122005637.28199-1-nayna@linux.ibm.com>
-References: <20220122005637.28199-1-nayna@linux.ibm.com>
-MIME-Version: 1.0
+        id S231196AbiAVA5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 19:57:00 -0500
+Received: from mail-bn8nam08on2114.outbound.protection.outlook.com ([40.107.100.114]:63832
+        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229457AbiAVA46 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 19:56:58 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D3OlRgJWRiGIfXO1c1YtCVdEiEBmf7HxfH6ewbhr877RLANDPRmV6JPiZBfhU5PFnXhjwRXN+yJkKo/HGZTHDnGtZUVxUNliML5prLtgFr0mRVmC60JP1VbPQHsEPDZ3SJOsZAVObr5tYynfFbWIfZ1XgWPzc2ONwuGUrK3PMcEk5/k9WTy+bUj3bqmXL+Zo01f2O3NQreHKpoB5+OvxuLBEwPKIQ2EZ5XSQw5WVgVr+Z78Vsx6UxzA6iMEYeJ47yKDTXkxp8i5kYzEAD+R25S5WQrOKjiQa338bNw16ieRwAB057VnzNTtzlWX1wpzhsJPIDS6JFqF/+A5OvJjwFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=csOGeUerndB/exQwBHTXHTvA3zR/xmGXpFV4dZIU2wQ=;
+ b=WhEIMsyhOG70zWOuk1uSNIzYt3SJL6skFzlE+1vhsGZ+efQdAvvuTriI0Vy8x4zSQwiaAzCloNNmE/da75VroEZJaL9GTh4OHahc1z9ia+WIp9QbfAaqUvMPv4UXNg7Fy95wIs/rgJwzbWOwb+BbjtMFXiAaAJMaAmUNt5jz+9LQhFM5l+1UO2zUUYlzMGaY/O0FLQzIgxZz7OHzIMzbKilk2fZjAxZFNIlKArc6XzVzq4cMdo62DIP6ElSTgtDr82KPTUuR6DWHQzH8GKeJZiDhvLz3+U7EedEJweksNz2p2GgczB2LfAyjaYa4AXiF8wXU5O2CBsWURFtOvpHVkA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=csOGeUerndB/exQwBHTXHTvA3zR/xmGXpFV4dZIU2wQ=;
+ b=rV1v+7Hc5lN5mrIlZPZN95ll9aTK8iSgFop0ZrMUgtidcb7t3DGJLDCTomtQ48/aNp1XBov7y7gfenF+07Swfn033lQnrDzl0QogvoXP0nlnjIoxaTI5em0t3i9TKymbs/izLbmzArG+5AGBTxZf6X75pmqx1K1xBXxJ8K2A/2U=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by CH2PR10MB4022.namprd10.prod.outlook.com
+ (2603:10b6:610:9::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Sat, 22 Jan
+ 2022 00:56:56 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::2d52:2a96:7e6c:460f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::2d52:2a96:7e6c:460f%4]) with mapi id 15.20.4888.014; Sat, 22 Jan 2022
+ 00:56:56 +0000
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>
+Subject: [net RFC v1 0/1] Fix NULL pointer dereference in page_pool
+Date:   Fri, 21 Jan 2022 16:56:43 -0800
+Message-Id: <20220122005644.802352-1-colin.foster@in-advantage.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 0Fzu8-wiAN7YBXV8W_rWBssgqqd-dC92
-X-Proofpoint-ORIG-GUID: 0Fzu8-wiAN7YBXV8W_rWBssgqqd-dC92
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-21_10,2022-01-21_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 priorityscore=1501 phishscore=0 mlxscore=0 malwarescore=0
- clxscore=1015 impostorscore=0 mlxlogscore=999 adultscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201220001
+Content-Type: text/plain
+X-ClientProxiedBy: MWHPR13CA0030.namprd13.prod.outlook.com
+ (2603:10b6:300:95::16) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 30ce11d3-6d89-49b1-c4a6-08d9dd421642
+X-MS-TrafficTypeDiagnostic: CH2PR10MB4022:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR10MB40227BBEE64E46689CB2DA94A45C9@CH2PR10MB4022.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: R+vJo7dz34uFzwGnDuDWhHc9Z92CGv027799U84gADJWXqzpxSwHIlbHRP56Aijge95pCni+/lTiZF+p3PNKILodeZfI9nmn9aG2FIvjtoUrb4b2DIFQusvmXksy1ybCsAUZ6O7m3kFaWmAnBavF2AXeF/+ON2s7iE1mwzOn9hgBayuM2UBGAb+E8mhco9E0mmE3IGVOIKNtRa3zdZuuJ2QEmg1hL5SY56udCOYMyQad7WjPMzBfxccFu5CKdbZtNc6QIx5AmF+fWBW4r2Ch1v/1Es5dt+RXH9XMNHQ5Ja3YUGLyOG0L2oEHsDOVGTmO6/KDCoRb4iAE6WmqIPz3ApTl/286O3YbZZ49Ucx4T4cithwct6flKUAoL79RPqqF6heLdRDiatIZP2GaAuva4AxZev6J6ikTT5O5TvHG+BiWl1hU1Zp/eZrdjnlVcUIMduoXiSPUILkR9E+LQvkO6nHFzW1OKnnOSROwQpoJRFapg/pAxCbY+URgh8GcF2DppZoB5k4uD6mHbh6IzLAoTPOQUi7qAS9WA7C6STllTRAQ25wNRg2XGX6qIsKOlARzUpQO+AHbQiqH2YSChj1CRYa0YRad5dzdD/7QjYqe7sXqTZ8pVMdOjlJYQhgsJmzFvGVgJlErJOFmPVaZVrpfOF6/j12IWhdCGhcTz84KVhf5dSUO16Ujp56l77dHhT/BFesNqIOVhI2KIoDtpbDwVQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(42606007)(39830400003)(376002)(366004)(136003)(346002)(396003)(2616005)(52116002)(2906002)(44832011)(6486002)(186003)(316002)(8676002)(6512007)(26005)(54906003)(8936002)(66946007)(66556008)(4326008)(66476007)(6666004)(4744005)(83380400001)(5660300002)(86362001)(38350700002)(38100700002)(6506007)(1076003)(508600001)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?C0MSiNsITuz7Y0YO7jfZ5P2AMzOhZBwiRhM1gIfceVj+ZXCOMLGwueN3QAYj?=
+ =?us-ascii?Q?rJm/hDyH07rFTPzJDCXJw5rJO+ddJtXvDL7/fGTbmGeSAD/+Pf3xKyir0BzM?=
+ =?us-ascii?Q?Hqe3QFdDNb20wbJJ6482xoeQZV/Tp8lJvINF28eQE0GwhWlleSIly0tDZhSp?=
+ =?us-ascii?Q?4CfC8XH5/3fC5DSgbqTUnGTR+gik+NbfoKU4FkN5C/Kt/TQMcV6XgnpaZV/o?=
+ =?us-ascii?Q?mf+KNiLf4cb7122ft/WypKa2JxbpmtJ17FxNKUNsDJ2J3Ds0HaVtLeJzhvpI?=
+ =?us-ascii?Q?VnrPpx11ydF/V3a9+18MZqQOG7kBsCywgOA1x2jBYNiHXWff38FxlipNp49/?=
+ =?us-ascii?Q?yXYmh4ZNhr4dvw+bCtlbrECFqP5HRl64rBWWcVW7S3+WnfYgEBdQdo4emhIF?=
+ =?us-ascii?Q?Syx3g5xTCHpjngvx2/UpisAKC5GAHfcX6/gGx/FOkSLXaht19QNgO20HwGmJ?=
+ =?us-ascii?Q?wMgQUURqWGpuDbSsUUpdqgb9vLoSFeaOL7Fo5ZQqIhZ0BdxcCwiLtJ3Xiyhd?=
+ =?us-ascii?Q?1BBaOm/MiWHZBqLrMI5NMt3EdfK9w7XJVVzbmW0CyYJFWsKDohWf71DoIkLj?=
+ =?us-ascii?Q?uoF4ZpXwuqJoLAe20bOEMnovJ2020bgQNYfPYdeGs+e4lJjYR5mGPAzBfMPx?=
+ =?us-ascii?Q?GhjNsFVruMsDxI9i6gxR1Wo69MgEZtLpS5sWTVaN5n2VFTeLuYevjoqHp+mn?=
+ =?us-ascii?Q?Rb4xvJZDEFITthAK96Y0vXdCo39WUkFWOFeL2JE8kiTbS+rk7fdpy2rmfZYM?=
+ =?us-ascii?Q?4t2pauYZE42yi/lCjyDPSJEiarsV2bf4AQy727KDnjJTZwwrXnDBVlSzJnyf?=
+ =?us-ascii?Q?mDllrAsEsawmjDUzVlEh55Gh4f4yeFg8558O0FkwVg+5tw0LXg3xHgVhgGjl?=
+ =?us-ascii?Q?UxsUd8HAMo5fesQlAN30e02M5Rv1PrPYjHTRkk/Vm9wfH4KIfd0aIbCTNtoE?=
+ =?us-ascii?Q?YoDTek2mIt4pYOI9pc4VQn7V4EPl+zU3/rpCEL7yB7wtJUn78U2TrJn7wp1y?=
+ =?us-ascii?Q?v3wE30eJgu33j3sXtncCrXijYJVWVBlE3MVv/zXzGN9sx2BzLyxWdhnq64lE?=
+ =?us-ascii?Q?34eGZePG4kERF4RSazLslK8ujGa3fEaPYt5NRO8/jWl4eOLlGP4aB4uSSH5i?=
+ =?us-ascii?Q?Hf4a1RFjZp5TW6dixVEBbAfYSwQHplKs3t8WIG5dGCOQFGyEgGENi50Pkb6n?=
+ =?us-ascii?Q?vPre9h3No7djRhqNySVrW33hCSDa7RBLvMZwPqNwPLkR90idjSvdauh5HrnB?=
+ =?us-ascii?Q?qdL5WffN6VoZds7bp85x0gXm9xbOkM7LM36v3yAw5r7Tpdi//0wcwXcWM5aN?=
+ =?us-ascii?Q?uL4Uz9kZAO1kG1RJ22aDfK1Al91/hmh7vdxn2gQMm/ymAsutQLuvP16nmVRD?=
+ =?us-ascii?Q?C3rfJrz1iMIowZ/GzJHsSU0OJLV0YwznY1bomnID9CQmpPHUTR1UgRi5fooU?=
+ =?us-ascii?Q?1ktlnzrukIXmBkmGkNKQ99dCLvZGrRt7idgiU0/iWy4e6Bec2KcgvLXNUvzi?=
+ =?us-ascii?Q?LcGZ7kcDC7EGOJGPG2TXbRppcU/zJ/ycwhgfzvQWcD64aiE15MXRsQfgP4wS?=
+ =?us-ascii?Q?9OaPNobalIauPG/8sf9PL8jXziNbXcDFzrD7EeGeihLsnVZxtTdaVJfHwK6J?=
+ =?us-ascii?Q?yg31RsnqgZdKaCZKpR6Oc7oxt4FNcyQ9f+v9MFbY1+7qIfuebV3EDhxtQ9sh?=
+ =?us-ascii?Q?bAQfxA=3D=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 30ce11d3-6d89-49b1-c4a6-08d9dd421642
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2022 00:56:56.3971
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: g6bYoowf37FopHv4deTvw1oIBsM/mYblV+kneUnnaA06xzM3Thr1JctU2/P7S7hNwPJBHdmif9pEjnS18AggueAIbIDP+I5CMLghfDTxGwU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB4022
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PowerVM guest secure boot intend to use Platform Keystore(PKS) for the
-purpose of storing public keys to verify digital signature.
+I'm not sure if there's something wrong with my config, but as soon as I
+run "ip link set eth0 up" I would get a crash that would invoke a
+seemingly endless memory dump.
 
-Define sysfs interface to expose PKS variables to userspace to allow
-read/write/add/delete operations. Each variable is shown as a read/write
-attribute file. The size of the file represents the size of the current
-content of the variable.
+git bisect led me to the page_pool, where there isn't the existence of
+page_pool_params inside of the pool. Therefore the check of
+if (pool->p.init_callback) would cause a crash.
 
-create_var and delete_var attribute files are always present which allow
-users to create/delete variables. These are write only attributes.The
-design has tried to be compliant with sysfs semantic to represent single
-value per attribute. Thus, rather than mapping a complete data structure
-representation to create_var, it only accepts a single formatted string
-to create an empty variable.
+I have some out-of-tree patches currently, so I'm not sure if my case is
+valid. Specifically the MTU of cpsw_new has been updated to 1520 to
+account for my setup (beaglebone with eth0 as the CPU port of a DSA).
+I'm also not familiar with much of net/core.
 
-The sysfs interface is designed such as to expose PKS configuration
-properties, operating system variables and firmware variables.
-Current version exposes configuration and operating system variables.
-The support for exposing firmware variables will be added in the future
-version.
+If it is valid that page_pool might not have page_pool_params in a DSA
+scenario, then hopefully this patch is sufficient. If it isn't valid and
+something I'm doing is invoking a memory issue - then I've got my work
+cut out for me :-)
 
-Example of pksvar sysfs interface:
 
-# cd /sys/firmware/pksvar/
-# ls
-config  os
+Colin Foster (1):
+  page_pool: fix NULL dereference crash
 
-# cd config
+ net/core/page_pool.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-# ls -ltrh
-total 0
--r--r--r-- 1 root root 64K Jan 21 17:55 version
--r--r--r-- 1 root root 64K Jan 21 17:55 used_space
--r--r--r-- 1 root root 64K Jan 21 17:55 total_size
--r--r--r-- 1 root root 64K Jan 21 17:55 supported_policies
--r--r--r-- 1 root root 64K Jan 21 17:55 max_object_size
--r--r--r-- 1 root root 64K Jan 21 17:55 max_object_label_size
--r--r--r-- 1 root root 64K Jan 21 17:55 flags
-
-# cd os
-
-# ls -ltrh
-total 0
--rw------- 1 root root 104 Jan 21 17:56 var4
--rw------- 1 root root 104 Jan 21 17:56 var3
--rw------- 1 root root 831 Jan 21 17:56 GLOBAL_PK
--rw------- 1 root root 831 Jan 21 17:56 GLOBAL_KEK
--rw------- 1 root root  76 Jan 21 17:56 GLOBAL_dbx
--rw------- 1 root root 831 Jan 21 17:56 GLOBAL_db
---w------- 1 root root 64K Jan 21 17:56 delete_var
---w------- 1 root root 64K Jan 21 17:56 create_var
-
-1. Read variable
-
-# hexdump -C GLOBAL_db
-00000000  00 00 00 00 a1 59 c0 a5  e4 94 a7 4a 87 b5 ab 15  |.....Y.....J....|
-00000010  5c 2b f0 72 3f 03 00 00  00 00 00 00 23 03 00 00  |\+.r?.......#...|
-....
-00000330  02 a8 e8 ed 0f 20 60 3f  40 04 7c a8 91 21 37 eb  |..... `?@.|..!7.|
-00000340  f3 f1 4e                                          |..N|
-00000343
-
-2. Write variable
-
-cat /tmp/data.bin > <variable_name>
-
-3. Create variable
-
-# echo "var1" > create_var
-# ls -ltrh
-total 0
--rw------- 1 root root 104 Jan 21 17:56 var4
--rw------- 1 root root 104 Jan 21 17:56 var3
--rw------- 1 root root 831 Jan 21 17:56 GLOBAL_PK
--rw------- 1 root root 831 Jan 21 17:56 GLOBAL_KEK
--rw------- 1 root root  76 Jan 21 17:56 GLOBAL_dbx
--rw------- 1 root root 831 Jan 21 17:56 GLOBAL_db
---w------- 1 root root 64K Jan 21 17:56 delete_var
---w------- 1 root root 64K Jan 21 17:57 create_var
--rw------- 1 root root   0 Jan 21 17:57 var1.tmp
-
-Current design creates a zero size temporary variable. This implies
-it is not yet persisted to PKS. Only once data is written to newly
-created temporary variable and if it is successfully stored in the
-PKS, that the variable is permanent. The temporary variable will get
-removed on reboot. The code currently doesn't remove .tmp suffix
-immediately when persisted. The future version will fix this.
-
-To avoid the additional .tmp semantic, alternative option is to consider
-any zero size variable as temporary variable. This option is under
-evaluation. This would avoid any runtime sysfs magic to replace .tmp
-variable with real variable.
-
-Also, the formatted string to pass to create_var will have following
-format in the future version:
-<variable_name>:<comma-separated-policy strings>
-
-4. Delete variable
-# echo "var3" > delete_var
-# ls -ltrh
-total 0
--rw------- 1 root root 104 Jan 21 17:56 var4
--rw------- 1 root root 831 Jan 21 17:56 GLOBAL_PK
--rw------- 1 root root 831 Jan 21 17:56 GLOBAL_KEK
--rw------- 1 root root  76 Jan 21 17:56 GLOBAL_dbx
--rw------- 1 root root 831 Jan 21 17:56 GLOBAL_db
---w------- 1 root root 64K Jan 21 17:57 create_var
--rw------- 1 root root   0 Jan 21 17:57 var1.tmp
---w------- 1 root root 64K Jan 21 17:58 delete_var
-
-The var3 file is removed at runtime, if variable is successfully
-removed from the PKS storage.
-
-NOTE: We are evaluating two design for userspace interface: using the
-sysfs or defining a new filesystem based. Any feedback on this sysfs based
-approach would be highly appreciated. We have tried to follow one value
-per attribute semantic. If that or any other semantics aren't followed
-properly, please let us know.
-
-Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
----
- Documentation/ABI/testing/sysfs-pksvar        |  77 ++++
- arch/powerpc/platforms/pseries/Kconfig        |   7 +
- arch/powerpc/platforms/pseries/Makefile       |   1 +
- arch/powerpc/platforms/pseries/pksvar-sysfs.c | 356 ++++++++++++++++++
- 4 files changed, 441 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-pksvar
- create mode 100644 arch/powerpc/platforms/pseries/pksvar-sysfs.c
-
-diff --git a/Documentation/ABI/testing/sysfs-pksvar b/Documentation/ABI/testing/sysfs-pksvar
-new file mode 100644
-index 000000000000..fe5327f5bd70
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-pksvar
-@@ -0,0 +1,77 @@
-+What:		/sys/firmware/pksvar
-+Date:		August 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	This directory is created if the POWER firmware supports
-+		Platform Keystore (PKS). It exposes interface for reading/writing
-+		variables which are persisted in PKS.
-+
-+What:		/sys/firmware/pksvar/config
-+Date:		August 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	This directory lists the configuration properties of Platform
-+		Keystore.
-+
-+What:		/sys/firmware/pksvar/os
-+Date:		August 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	This directory lists all the variables owned by operating system
-+		users and stored in Platform Keystore.
-+
-+What:		/sys/firmware/pksvar/config/version
-+Date:		August 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	A value indicating version of Firmware Platform Keystore.
-+
-+What:		/sys/firmware/pksvar/config/used_space
-+Date:		August 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	The value specifying amount of space used in Platform Keystore.
-+
-+What:		/sys/firmware/pksvar/config/total_size
-+Date:		August 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	The value specifying total size of Platform Keystore.
-+
-+What:		/sys/firmware/pksvar/config/supported_policies
-+Date:		August 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	The value specifying policies supported by Platform Keystore semantics.
-+
-+What:		/sys/firmware/pksvar/config/max_object_size
-+Date:		August 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	The value specifies the maximum object size that can be supported.
-+
-+What:		/sys/firmware/pksvar/config/max_object_label_size
-+Date:		August 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:    The value specifies the maximum object label size that is supported.
-+
-+What:		/sys/firmware/pksvar/config/flags
-+Date:		August 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:    The value specifies the flags supported by Platform Keystore.
-+
-+What:		/sys/firmware/pksvar/os/<attribute_file>
-+Date:		August 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:    A read-write file indicating the variable stored in the Platform Keystore.
-+		The size of the file represents the size of the actual data stored for
-+		this variable in PKS.
-+
-+What:		/sys/firmware/pksvar/os/create_var
-+Date:		August 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:    A write only file used to create new variables. The user should write
-+		formatted string containing name to this file. It creates at runtime
-+		zero size read-write <variable-name>.tmp temporary attribute file. The
-+		temporary variable name is not persisted to Platform Keystore until
-+		data is updated to it.
-+
-+What:		/sys/firmware/pksvar/os/delete_var
-+Date:		August 2022
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:    A write only file used to delete existing variable. The user should
-+		write variable name to this file. If the variable is successfully
-+		deleted from Platform Keystore, the corresponding attribute file is
-+		also removed at runtime.
-diff --git a/arch/powerpc/platforms/pseries/Kconfig b/arch/powerpc/platforms/pseries/Kconfig
-index 32d0df84e611..9310876d201d 100644
---- a/arch/powerpc/platforms/pseries/Kconfig
-+++ b/arch/powerpc/platforms/pseries/Kconfig
-@@ -157,6 +157,13 @@ config PSERIES_PKS
- 	  this config to enable operating system interface to hypervisor to
- 	  access this space.
- 
-+config PSERIES_PKS_SYSFS
-+	depends on PSERIES_PKS
-+	tristate "Support for sysfs interface the Platform Key Storage"
-+	help
-+	  Enable sysfs based user interace to add/delete/modify variables
-+	  stored in Platform Keystore.
-+
- config PAPR_SCM
- 	depends on PPC_PSERIES && MEMORY_HOTPLUG && LIBNVDIMM
- 	tristate "Support for the PAPR Storage Class Memory interface"
-diff --git a/arch/powerpc/platforms/pseries/Makefile b/arch/powerpc/platforms/pseries/Makefile
-index 83eb665a742f..27f9aafbd08b 100644
---- a/arch/powerpc/platforms/pseries/Makefile
-+++ b/arch/powerpc/platforms/pseries/Makefile
-@@ -34,3 +34,4 @@ obj-$(CONFIG_PPC_VAS)		+= vas.o
- 
- obj-$(CONFIG_ARCH_HAS_CC_PLATFORM)	+= cc_platform.o
- obj-$(CONFIG_PSERIES_PKS)      += pks.o
-+obj-$(CONFIG_PSERIES_PKS_SYSFS) += pksvar-sysfs.o
-diff --git a/arch/powerpc/platforms/pseries/pksvar-sysfs.c b/arch/powerpc/platforms/pseries/pksvar-sysfs.c
-new file mode 100644
-index 000000000000..2e53daaf6e9f
---- /dev/null
-+++ b/arch/powerpc/platforms/pseries/pksvar-sysfs.c
-@@ -0,0 +1,356 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2019 IBM Corporation <nayna@linux.ibm.com>
-+ *
-+ * This code exposes variables stored in Platform Keystore via sysfs
-+ */
-+
-+#define pr_fmt(fmt) "pksvar-sysfs: " fmt
-+
-+#include <linux/slab.h>
-+#include <linux/compat.h>
-+#include <linux/string.h>
-+#include <linux/of.h>
-+#include <asm/pks.h>
-+
-+static struct kobject *pks_kobj;
-+static struct kobject *prop_kobj;
-+static struct kobject *os_kobj;
-+
-+static struct pks_config *config;
-+
-+struct osvar_sysfs_attr {
-+	struct bin_attribute bin_attr;
-+	struct list_head node;
-+};
-+
-+static LIST_HEAD(osvar_sysfs_list);
-+
-+
-+static ssize_t osvar_sysfs_read(struct file *file, struct kobject *kobj,
-+				struct bin_attribute *bin_attr, char *buf,
-+				loff_t off, size_t count)
-+{
-+	struct pks_var var;
-+	char *out;
-+	u32 outlen;
-+	int rc;
-+
-+	var.name = (char *)bin_attr->attr.name;
-+	var.namelen = strlen(var.name) + 1;
-+	var.prefix = NULL;
-+	rc = pks_read_var(&var);
-+	if (rc) {
-+		pr_err("Error reading object %d\n", rc);
-+		return rc;
-+	}
-+
-+	outlen = sizeof(var.policy) + var.datalen;
-+	out = kzalloc(outlen, GFP_KERNEL);
-+	memcpy(out, &var.policy, sizeof(var.policy));
-+	memcpy(out + sizeof(var.policy), var.data, var.datalen);
-+
-+	count = outlen;
-+	memcpy(buf, out, outlen);
-+
-+	kfree(out);
-+	return count;
-+}
-+
-+static ssize_t osvar_sysfs_write(struct file *file, struct kobject *kobj,
-+				 struct bin_attribute *bin_attr, char *buf,
-+				 loff_t off, size_t count)
-+{
-+	struct pks_var *var = NULL;
-+	int rc = 0;
-+	char *p;
-+	char *name = (char *)bin_attr->attr.name;
-+	struct osvar_sysfs_attr *osvar_sysfs = NULL;
-+
-+	list_for_each_entry(osvar_sysfs, &osvar_sysfs_list, node) {
-+		if (strncmp(name, osvar_sysfs->bin_attr.attr.name,
-+			    strlen(name)) == 0) {
-+			var = osvar_sysfs->bin_attr.private;
-+			break;
-+		}
-+	}
-+
-+	p = strsep(&name, ".");
-+
-+	var->datalen = count;
-+	var->data = kzalloc(count, GFP_KERNEL);
-+	if (!var->data)
-+		return -ENOMEM;
-+
-+	memcpy(var->data, buf, count);
-+	var->name = p;
-+	var->namelen = strlen(p) + 1;
-+
-+	pr_info("var %s of length %d to be written\n", var->name, var->namelen);
-+	var->prefix = NULL;
-+	rc = pks_update_signed_var(*var);
-+
-+	if (rc) {
-+		pr_err(" write failed with rc is %d\n", rc);
-+		var->datalen = 0;
-+		count = rc;
-+		goto err;
-+	}
-+
-+err:
-+	kfree(var->data);
-+	return count;
-+}
-+
-+
-+
-+static ssize_t version_show(struct kobject *kobj, struct kobj_attribute *attr,
-+			    char *buf)
-+{
-+	return sprintf(buf, "%d\n", config->version);
-+}
-+
-+static ssize_t flags_show(struct kobject *kobj, struct kobj_attribute *attr,
-+			  char *buf)
-+{
-+	return sprintf(buf, "%02x\n", config->flags);
-+}
-+
-+static ssize_t max_object_label_size_show(struct kobject *kobj,
-+					  struct kobj_attribute *attr, char *buf)
-+{
-+	return sprintf(buf, "%u\n", config->maxobjlabelsize);
-+}
-+
-+static ssize_t max_object_size_show(struct kobject *kobj,
-+				    struct kobj_attribute *attr, char *buf)
-+{
-+	return sprintf(buf, "%u\n", config->maxobjsize);
-+}
-+
-+static ssize_t total_size_show(struct kobject *kobj,
-+			       struct kobj_attribute *attr, char *buf)
-+{
-+	return sprintf(buf, "%u\n", config->totalsize);
-+}
-+
-+static ssize_t used_space_show(struct kobject *kobj,
-+			       struct kobj_attribute *attr, char *buf)
-+{
-+	return sprintf(buf, "%u\n", config->usedspace);
-+}
-+
-+static ssize_t supported_policies_show(struct kobject *kobj,
-+				       struct kobj_attribute *attr, char *buf)
-+{
-+	return sprintf(buf, "%u\n", config->supportedpolicies);
-+}
-+
-+static ssize_t create_var_store(struct kobject *kobj,
-+				struct kobj_attribute *attr,
-+				const char *buf, size_t count)
-+{
-+	int rc;
-+	struct pks_var *var;
-+	char *suffix = ".tmp";
-+	char *name;
-+	u16 namelen = 0;
-+	struct osvar_sysfs_attr *osvar_sysfs = NULL;
-+
-+	namelen = count + strlen(suffix);
-+	name = kzalloc(namelen, GFP_KERNEL);
-+	if (!name)
-+		return -ENOMEM;
-+	memcpy(name, buf, count-1);
-+	memcpy(name + (count-1), suffix, strlen(suffix));
-+	name[namelen] = '\0';
-+
-+	pr_debug("var %s of length %d to be added\n", name, namelen);
-+
-+	osvar_sysfs = kzalloc(sizeof(struct osvar_sysfs_attr), GFP_KERNEL);
-+	if (!osvar_sysfs) {
-+		rc = -ENOMEM;
-+		goto err;
-+	}
-+
-+	var = kzalloc(sizeof(struct pks_var), GFP_KERNEL);
-+
-+	if (!var) {
-+		rc = -ENOMEM;
-+		goto err;
-+	}
-+
-+	var->name = name;
-+	var->namelen = namelen;
-+	var->prefix = NULL;
-+	var->policy = 0;
-+
-+	sysfs_bin_attr_init(&osvar_sysfs->bin_attr);
-+	osvar_sysfs->bin_attr.private = var;
-+	osvar_sysfs->bin_attr.attr.name = name;
-+	osvar_sysfs->bin_attr.attr.mode = 0600;
-+	osvar_sysfs->bin_attr.size = 0;
-+	osvar_sysfs->bin_attr.read = osvar_sysfs_read;
-+	osvar_sysfs->bin_attr.write = osvar_sysfs_write;
-+
-+	rc = sysfs_create_bin_file(os_kobj,
-+			&osvar_sysfs->bin_attr);
-+	if (rc)
-+		goto err;
-+
-+	list_add_tail(&osvar_sysfs->node, &osvar_sysfs_list);
-+	rc = count;
-+err:
-+	return rc;
-+}
-+
-+static ssize_t delete_var_store(struct kobject *kobj,
-+				struct kobj_attribute *attr,
-+				const char *buf, size_t count)
-+{
-+	int rc;
-+	struct pks_var_name vname;
-+	struct osvar_sysfs_attr *osvar_sysfs = NULL;
-+
-+	vname.name = kzalloc(count, GFP_KERNEL);
-+	if (!vname.name)
-+		return -ENOMEM;
-+
-+	memcpy(vname.name, buf, count-1);
-+	vname.name[count] = '\0';
-+	vname.namelen = count;
-+
-+	pr_debug("var %s of length %lu to be deleted\n", buf, count);
-+
-+	rc = pks_remove_var(NULL, vname);
-+
-+	if (!rc) {
-+		list_for_each_entry(osvar_sysfs, &osvar_sysfs_list, node) {
-+			if (strncmp(vname.name, osvar_sysfs->bin_attr.attr.name,
-+				    strlen(vname.name)) == 0) {
-+				list_del(&osvar_sysfs->node);
-+				sysfs_remove_bin_file(os_kobj, &osvar_sysfs->bin_attr);
-+				break;
-+			}
-+		}
-+		rc = count;
-+	}
-+
-+	return rc;
-+}
-+
-+static struct kobj_attribute version_attr = __ATTR_RO(version);
-+static struct kobj_attribute flags_attr = __ATTR_RO(flags);
-+static struct kobj_attribute max_object_label_size_attr = __ATTR_RO(max_object_label_size);
-+static struct kobj_attribute max_object_size_attr = __ATTR_RO(max_object_size);
-+static struct kobj_attribute total_size_attr = __ATTR_RO(total_size);
-+static struct kobj_attribute used_space_attr = __ATTR_RO(used_space);
-+static struct kobj_attribute supported_policies_attr = __ATTR_RO(supported_policies);
-+static struct kobj_attribute create_var_attr = __ATTR_WO(create_var);
-+static struct kobj_attribute delete_var_attr = __ATTR_WO(delete_var);
-+
-+static int __init pks_sysfs_prop_load(void)
-+{
-+	int rc;
-+
-+	config = pks_get_config();
-+	if (!config)
-+		return -ENODEV;
-+
-+	rc = sysfs_create_file(prop_kobj, &version_attr.attr);
-+	rc = sysfs_create_file(prop_kobj, &flags_attr.attr);
-+	rc = sysfs_create_file(prop_kobj, &max_object_label_size_attr.attr);
-+	rc = sysfs_create_file(prop_kobj, &max_object_size_attr.attr);
-+	rc = sysfs_create_file(prop_kobj, &total_size_attr.attr);
-+	rc = sysfs_create_file(prop_kobj, &used_space_attr.attr);
-+	rc = sysfs_create_file(prop_kobj, &supported_policies_attr.attr);
-+
-+	return 0;
-+}
-+
-+static int __init pks_sysfs_os_load(void)
-+{
-+	struct osvar_sysfs_attr *osvar_sysfs = NULL;
-+	struct pks_var_name_list namelist;
-+	struct pks_var *var;
-+	int rc;
-+	int i;
-+
-+	rc = sysfs_create_file(os_kobj, &create_var_attr.attr);
-+	rc = sysfs_create_file(os_kobj, &delete_var_attr.attr);
-+	rc = pks_get_var_ids_for_type(NULL, &namelist);
-+	if (rc)
-+		return rc;
-+
-+	for (i = 0; i < namelist.varcount; i++) {
-+		var = kzalloc(sizeof(struct pks_var), GFP_KERNEL);
-+		var->name = namelist.varlist[i].name;
-+		var->namelen = namelist.varlist[i].namelen;
-+		var->prefix = NULL;
-+		rc = pks_read_var(var);
-+		if (rc) {
-+			pr_err("Error %d reading object %s\n", rc, var->name);
-+			continue;
-+		}
-+
-+		osvar_sysfs = kzalloc(sizeof(struct osvar_sysfs_attr), GFP_KERNEL);
-+		if (!osvar_sysfs) {
-+			rc = -ENOMEM;
-+			break;
-+		}
-+
-+		sysfs_bin_attr_init(&osvar_sysfs->bin_attr);
-+		osvar_sysfs->bin_attr.private = var;
-+		osvar_sysfs->bin_attr.attr.name = namelist.varlist[i].name;
-+		osvar_sysfs->bin_attr.attr.mode = 0600;
-+		osvar_sysfs->bin_attr.size = var->datalen;
-+		osvar_sysfs->bin_attr.read = osvar_sysfs_read;
-+		osvar_sysfs->bin_attr.write = osvar_sysfs_write;
-+
-+		rc = sysfs_create_bin_file(os_kobj,
-+				&osvar_sysfs->bin_attr);
-+
-+		if (rc)
-+			continue;
-+
-+		list_add_tail(&osvar_sysfs->node, &osvar_sysfs_list);
-+	}
-+
-+	return rc;
-+}
-+
-+static int pks_sysfs_init(void)
-+{
-+	int rc;
-+
-+	pks_kobj = kobject_create_and_add("pksvar", firmware_kobj);
-+	if (!pks_kobj) {
-+		pr_err("pksvar: Failed to create pks kobj\n");
-+		return -ENOMEM;
-+	}
-+
-+	prop_kobj = kobject_create_and_add("config", pks_kobj);
-+	if (!prop_kobj) {
-+		pr_err("secvar: config kobject registration failed.\n");
-+		kobject_put(pks_kobj);
-+		return -ENOMEM;
-+	}
-+
-+	rc = pks_sysfs_prop_load();
-+	if (rc)
-+		return rc;
-+
-+	os_kobj = kobject_create_and_add("os", pks_kobj);
-+	if (!os_kobj) {
-+		pr_err("pksvar: os kobject registration failed.\n");
-+		kobject_put(os_kobj);
-+		return -ENOMEM;
-+	}
-+
-+	rc = pks_sysfs_os_load();
-+	if (rc)
-+		return rc;
-+
-+	return 0;
-+}
-+late_initcall(pks_sysfs_init);
 -- 
-2.27.0
+2.25.1
 

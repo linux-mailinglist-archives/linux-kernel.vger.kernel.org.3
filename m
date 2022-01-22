@@ -2,81 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C16FA49691C
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 02:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A490496920
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 02:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbiAVBM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 20:12:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiAVBM0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 20:12:26 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8107EC06173B;
-        Fri, 21 Jan 2022 17:12:26 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id d15-20020a17090a110f00b001b4e7d27474so10491193pja.2;
-        Fri, 21 Jan 2022 17:12:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eF7l1EMItic8HXnzow8ikDlVmQVMga9j0gwwj6e0+xM=;
-        b=dWpRwR6M3nZvqcY9+bWAl0nwignbdlGztsjsncKa4yrawHasah4JG1vHWpgpc/rfIf
-         NMjQLSVdOjy4kb5OcH/y/+OsnyIo0uTAi3lDgS/if7CRQ+zH6OcCcsaiv18e/OD5SutY
-         78P1Ta5IwKc9s1RLpiCcCO/UkiEyeKWnJuSPu5Ajzaz5saCA/cYFbfTv6X0HrmHJE3c1
-         ZuKO0f4hsbVq9RV7UOrkD6Nr4rS2wISEsNB06o039rzlEJhMcB9tMc3r9A9CFVf4sTeL
-         xTqUWse/LJaqp9KHIX8yXSi6geEnbSOkYHeVjZvQxTHHLXdjkXj3OQpGYmzSbvnD7x63
-         X1zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eF7l1EMItic8HXnzow8ikDlVmQVMga9j0gwwj6e0+xM=;
-        b=aVEju8f+yAPnHgbJDEAWuuQSI3sDO8btYSSyFuZcFQNR/OcfO21tlPoiMzHR4/EQvs
-         mp3nVnyZv9pj5JkKViaoVHRoTjWmWiZmfyjJpUZ76/zydmPHtGMTJZpL0iBzJFuRmfKp
-         IkWyrkNpGXxdjg1PEDQt0OxL5tTWOI3XBWTl51+GD1gS36FrAZTDpOURRqN89wZf0wXm
-         rOLczY1zATI1OazGODjsjT0QO1h9UyzaIz57hBMii6hdT1DSIVYgUpTzla6Q6pjuqjHD
-         12VscRhbjdBHkdE6+mu2ZEddkYqkCh+htonFNHVnAo58bukEb76LA4YyPV86iVILqdVR
-         QMrg==
-X-Gm-Message-State: AOAM533M1OGYLoowz+6UbwyF8rFDe1OQVEmjTYnUqzBZGetdqpO/+UDv
-        qh7oSSaoqHTSMm70oo87TCS1CyXeoC4AvLzyIXM=
-X-Google-Smtp-Source: ABdhPJxBtkUY5VxHayzinqRPe3mhFLFzbt7okZ57+l7dRyZrjrNeGXiUfy7isgaQaCHYw7X9/d0Rlqcu76vMGjYx1kA=
-X-Received: by 2002:a17:90a:c78b:: with SMTP id gn11mr3243207pjb.138.1642813945938;
- Fri, 21 Jan 2022 17:12:25 -0800 (PST)
+        id S231556AbiAVBOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 20:14:20 -0500
+Received: from mga04.intel.com ([192.55.52.120]:25689 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231402AbiAVBOT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 20:14:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642814059; x=1674350059;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Qoq1MmcTuCqBoRSYXHzaPXvF4EDXlLhVzxwfvR2wQQY=;
+  b=GzTuHdVhXmt123wOHSeDZTYD9dpXSFaIYljZUHZVhXwhVMHmf9KPzYR9
+   /E8az3dQhkZj77bkYLYi3+zsLvwvJcNKTpqQxeP46WUeS0tyJ/r+NCGmw
+   0JlJR/1IB+sEx1UhBbZCd7CUAv4T9XawlKl+zbu/AgBfYBRjm3ViPit9e
+   uRWrEytHBwYxE1fI5HtdLLrOEhMA58yUfjJDhRx8reM3279qw95Rx+pcD
+   qvZndVwoGfgeg9fZJKp5X3EvAzdDsBQ+BevDLIcYwOAV3y17wr8QmwW50
+   CE5WT6lGoU+BlUEaUd5s6/Gqzn5qpLCwsKIvFJVfQuOrOmmjzTmQ/Xd8q
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="244598778"
+X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
+   d="scan'208";a="244598778"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 17:14:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
+   d="scan'208";a="562062285"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 21 Jan 2022 17:14:10 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nB4yo-000FqZ-92; Sat, 22 Jan 2022 01:14:10 +0000
+Date:   Sat, 22 Jan 2022 09:13:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [rt-devel:linux-5.16.y-rt-rebase 8/132]
+ kernel/printk/printk.c:2628:2: error: implicit declaration of function
+ 'boot_delay_msec'
+Message-ID: <202201220950.sysXbxm5-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220121194926.1970172-1-song@kernel.org> <20220121194926.1970172-7-song@kernel.org>
- <CAADnVQK6+gWTUDo2z1H6AE5_DtuBBetW+VTwwKz03tpVdfuoHA@mail.gmail.com>
- <7393B983-3295-4B14-9528-B7BD04A82709@fb.com> <CAADnVQJLHXaU7tUJN=EM-Nt28xtu4vw9+Ox_uQsjh-E-4VNKoA@mail.gmail.com>
- <5407DA0E-C0F8-4DA9-B407-3DE657301BB2@fb.com>
-In-Reply-To: <5407DA0E-C0F8-4DA9-B407-3DE657301BB2@fb.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 21 Jan 2022 17:12:14 -0800
-Message-ID: <CAADnVQLOpgGG9qfR4EAgzrdMrfSg9ftCY=9psR46GeBWP7aDvQ@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 6/7] bpf: introduce bpf_prog_pack allocator
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 5:01 PM Song Liu <songliubraving@fb.com> wrote:
->
-> In this way, we need to allocate rw_image here, and free it in
-> bpf_jit_comp.c. This feels a little weird to me, but I guess that
-> is still the cleanest solution for now.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-5.16.y-rt-rebase
+head:   1722f531f5244c70dcd9687c40729860bb254e8d
+commit: 75ade2af49f22287257530b6ba838efe2b6dfb56 [8/132] printk: refactor and rework printing logic
+config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20220122/202201220950.sysXbxm5-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/commit/?id=75ade2af49f22287257530b6ba838efe2b6dfb56
+        git remote add rt-devel https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
+        git fetch --no-tags rt-devel linux-5.16.y-rt-rebase
+        git checkout 75ade2af49f22287257530b6ba838efe2b6dfb56
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/printk/
 
-You mean inside bpf_jit_binary_alloc?
-That won't be arch independent.
-It needs to be split into generic piece that stays in core.c
-and callbacks like bpf_jit_fill_hole_t
-or into multiple helpers with prep in-between.
-Don't worry if all archs need to be touched.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   kernel/printk/printk.c:175:5: warning: no previous prototype for 'devkmsg_sysctl_set_loglvl' [-Wmissing-prototypes]
+     175 | int devkmsg_sysctl_set_loglvl(struct ctl_table *table, int write,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/printk/printk.c: In function 'console_emit_next_record':
+>> kernel/printk/printk.c:2628:2: error: implicit declaration of function 'boot_delay_msec' [-Werror=implicit-function-declaration]
+    2628 |  boot_delay_msec(r.info->level);
+         |  ^~~~~~~~~~~~~~~
+>> kernel/printk/printk.c:2629:2: error: implicit declaration of function 'printk_delay'; did you mean 'print_dev_t'? [-Werror=implicit-function-declaration]
+    2629 |  printk_delay();
+         |  ^~~~~~~~~~~~
+         |  print_dev_t
+   cc1: some warnings being treated as errors
+
+
+vim +/boot_delay_msec +2628 kernel/printk/printk.c
+
+  2556	
+  2557	/*
+  2558	 * Print one record for the given console. The record printed is whatever
+  2559	 * record is the next available record for the given console.
+  2560	 *
+  2561	 * Requires the console_lock.
+  2562	 *
+  2563	 * Returns false if the given console has no next record to print, otherwise
+  2564	 * true.
+  2565	 *
+  2566	 * @handover will be set to true if a printk waiter has taken over the
+  2567	 * console_lock, in which case the caller is no longer holding the
+  2568	 * console_lock.
+  2569	 */
+  2570	static bool console_emit_next_record(struct console *con, bool *handover)
+  2571	{
+  2572		static char ext_text[CONSOLE_EXT_LOG_MAX];
+  2573		static char text[CONSOLE_LOG_MAX];
+  2574		struct printk_info info;
+  2575		struct printk_record r;
+  2576		unsigned long flags;
+  2577		char *write_text;
+  2578		size_t len;
+  2579	
+  2580		prb_rec_init_rd(&r, &info, text, sizeof(text));
+  2581	
+  2582		if (!prb_read_valid(prb, con->seq, &r))
+  2583			return false;
+  2584	
+  2585		if (con->seq != r.info->seq) {
+  2586			con->dropped += r.info->seq - con->seq;
+  2587			con->seq = r.info->seq;
+  2588		}
+  2589	
+  2590		/* Skip record that has level above the console loglevel. */
+  2591		if (suppress_message_printing(r.info->level)) {
+  2592			con->seq++;
+  2593			goto skip;
+  2594		}
+  2595	
+  2596		if (con->flags & CON_EXTENDED) {
+  2597			write_text = &ext_text[0];
+  2598			len = info_print_ext_header(ext_text, sizeof(ext_text), r.info);
+  2599			len += msg_print_ext_body(ext_text + len, sizeof(ext_text) - len,
+  2600						  &r.text_buf[0], r.info->text_len, &r.info->dev_info);
+  2601		} else {
+  2602			write_text = &text[0];
+  2603			len = record_print_text(&r, console_msg_format & MSG_FORMAT_SYSLOG, printk_time);
+  2604		}
+  2605	
+  2606		/*
+  2607		 * While actively printing out messages, if another printk()
+  2608		 * were to occur on another CPU, it may wait for this one to
+  2609		 * finish. This task can not be preempted if there is a
+  2610		 * waiter waiting to take over.
+  2611		 *
+  2612		 * Interrupts are disabled because the hand over to a waiter
+  2613		 * must not be interrupted until the hand over is completed
+  2614		 * (@console_waiter is cleared).
+  2615		 */
+  2616		printk_safe_enter_irqsave(flags);
+  2617		console_lock_spinning_enable();
+  2618	
+  2619		stop_critical_timings();	/* don't trace print latency */
+  2620		call_console_driver(con, write_text, len);
+  2621		start_critical_timings();
+  2622	
+  2623		con->seq++;
+  2624	
+  2625		*handover = console_lock_spinning_disable_and_check();
+  2626		printk_safe_exit_irqrestore(flags);
+  2627	
+> 2628		boot_delay_msec(r.info->level);
+> 2629		printk_delay();
+  2630	skip:
+  2631		return true;
+  2632	}
+  2633	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

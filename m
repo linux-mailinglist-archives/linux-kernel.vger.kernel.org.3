@@ -2,128 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B114496A71
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 07:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5E3496A8A
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 08:15:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233507AbiAVGpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 01:45:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35988 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232277AbiAVGpw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 01:45:52 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C4DC06173B;
-        Fri, 21 Jan 2022 22:45:52 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id n10so30898086edv.2;
-        Fri, 21 Jan 2022 22:45:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QwuaQPQKdwpntLOw3U/dmEKgtZuaEKWLD4sSokt9D4M=;
-        b=Q6E3I7OGISdYO6P+7aODtKtC48H7rcdxw/7YJnsADwNgrk0TQvDVxyDnec9rXF+2t8
-         wwjo2ZRb456KLnEIGe+IbK8+V/UfrgTnj6DfZHYuyqpI7GlGP/5mn8tScuNjeOs84ytR
-         qc5dC5HkB4GWceh+jE0tgicIUJ8oFKQD2eg0xc/fZEIFoLstczsbLFkRDRFxULBoMoL4
-         E6WlSZOF3tsio/ItvTROVry0oPUuejT3h2pB81p4kVl8rvuObAtC8kkfJdz8Wq0wtDX5
-         J0JafO+HcXozBDOm1vseOnmgJ+vDXdVEBI8W5C3PJzcF25I4jz3DCe2aXQwVQKK8kWbR
-         JNoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QwuaQPQKdwpntLOw3U/dmEKgtZuaEKWLD4sSokt9D4M=;
-        b=o78kqE3Q8v4zAE+maSUOfCA5mlG/fdWKxBf3CYGkzU4gwX0K8Fg3KXEjZxRxTL1K3+
-         C7GVR4SYZF9adsCX3yOpmZLghU/Ipntvta3sjTZKQP8dWmcgqez7AM64ol9keGwN/3TO
-         puTjRE1yQBXSuoqJ3NXEG1HGilexKEL+ltJvmk5v3Fzz4K0UmXQfTGc+pIi9TuHwth0n
-         OHh6NkruFQSySzP8es1TLopgxwuufYhg7YTxFJGbL0tRbtOnEbrn4ej87BgCFc9yjWO6
-         Mg+jlrqK/AMwicQA4lwoiN7WD8KfYhoo1RQTHBFQtwYVHod1GXNXo/OGESTfGXjVafWP
-         augA==
-X-Gm-Message-State: AOAM531V2SMXh1EOYC7QsYWow2BNreNkICkWb93DDnIyHvhMVbePbd7T
-        GlrITRej+Jvlt1med0/SjqfTErTBuhBHNu4vNWo=
-X-Google-Smtp-Source: ABdhPJx/n61gyq121bC6LdWTNMtp4/dzy7Ks9PKYshu71QF8P21ULrFYsp9U/8/W5ySUS9hTuhkQ2CSWUP5MeYUrBzg=
-X-Received: by 2002:a05:6402:1604:: with SMTP id f4mr7172406edv.352.1642833950508;
- Fri, 21 Jan 2022 22:45:50 -0800 (PST)
+        id S233519AbiAVHKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 02:10:31 -0500
+Received: from mga14.intel.com ([192.55.52.115]:47911 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232277AbiAVHKa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 22 Jan 2022 02:10:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642835430; x=1674371430;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=f7faM8+Ihwp2zYBbHZ9/W4SYTYEw7bFEIZKV5anVTyc=;
+  b=ZlQ5sWVgShoGrp6HBmMEnCW2fdRiRIje/9vwfTEBo8flYn7rBk/Vxb/X
+   eZqz2Zm4qTYpSs/wHEqKSfj137MwpzWPbhADgFu37Ii910eHCiJUWOdVN
+   F01srSgZsW8C964FxS65oY67o/F3kay5ioTV6/rtB1bT1Vj2osuZV0sZw
+   UcS2T+SL5pZU5oL2y1FrfCvdTUb50HQPPKkz4xHYYnCSkeiFXKQp698C/
+   +xy78H3bt7KV8XJMio4AdMVEUA4ftABkSohoOI1kPs1x6J4OeAj1UsRcm
+   0kpY9FA6zHDJ0qJDRSJ2F9mEygAen0vKqBNLea7eehGHaThzl+3saw36M
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="246016780"
+X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
+   d="scan'208";a="246016780"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 23:10:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
+   d="scan'208";a="579831490"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Jan 2022 23:10:29 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nBAXY-000G9B-43; Sat, 22 Jan 2022 07:10:24 +0000
+Date:   Sat, 22 Jan 2022 15:10:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] soc: bcm: brcmstb: Added support for PSCI system
+ suspend operations
+Message-ID: <202201221439.RaZlgS8d-lkp@intel.com>
+References: <20220122035421.4086618-4-f.fainelli@gmail.com>
 MIME-Version: 1.0
-References: <20220120130605.55741-1-dzm91@hust.edu.cn> <b5cb1132-2f6b-e2da-78c7-1828b3617bc3@gmail.com>
- <CAD-N9QWvfoo_HtQ+KT-7JNFumQMaq8YqMkHGR2t7pDKsDW0hkQ@mail.gmail.com>
- <CAD-N9QUfiTNqs7uOH3C99oMNdqFXh+MKLQ94BkQou_T7-yU_mg@mail.gmail.com>
- <CAD-N9QUZ95zqboe=58gybue6ssSO-M-raijd3XnGXkXnp3wiqQ@mail.gmail.com> <8d4b0822-4e94-d124-e191-bec3effaf97c@gmail.com>
-In-Reply-To: <8d4b0822-4e94-d124-e191-bec3effaf97c@gmail.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Sat, 22 Jan 2022 14:45:24 +0800
-Message-ID: <CAD-N9QUATFcaOO2reg=Y0jum83UJGOzMhcX3ukCY+cY-XCJaPA@mail.gmail.com>
-Subject: Re: [PATCH] drivers: net: remove a dangling pointer in peak_usb_create_dev
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Stephane Grosjean <s.grosjean@peak-system.com>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220122035421.4086618-4-f.fainelli@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 22, 2022 at 3:36 AM Pavel Skripkin <paskripkin@gmail.com> wrote:
->
-> Hi Dongliang,
->
-> On 1/21/22 08:58, Dongliang Mu wrote:
-> [...]>> BTW, as you mentioned, dev->next_siblings is used in struct
-> >> peak_usb_adapter::dev_free() (i.e., pcan_usb_fd_free or
-> >> pcan_usb_pro_free), how about the following path?
-> >>
-> >> peak_usb_probe
-> >> -> peak_usb_create_dev (goto adap_dev_free;)
-> >>    -> dev->adapter->dev_free()
-> >>       -> pcan_usb_fd_free or pcan_usb_pro_free (This function uses
-> >> next_siblings as condition elements)
-> >>
-> >> static void pcan_usb_fd_free(struct peak_usb_device *dev)
-> >> {
-> >>         /* last device: can free shared objects now */
-> >>         if (!dev->prev_siblings && !dev->next_siblings) {
-> >>                 struct pcan_usb_fd_device *pdev =
-> >>                         container_of(dev, struct pcan_usb_fd_device, dev);
-> >>
-> >>                 /* free commands buffer */
-> >>                 kfree(pdev->cmd_buffer_addr);
-> >>
-> >>                 /* free usb interface object */
-> >>                 kfree(pdev->usb_if);
-> >>         }
-> >> }
-> >>
-> >> If next_siblings is not NULL, will it lead to the missing free of
-> >> cmd_buffer_addr and usb_if?
-> >
-> > The answer is No. Forget my silly thought.
-> >
->
-> Yeah, it seems like (at least based on code), that this dangling pointer
-> is not dangerous, since nothing accesses it. And next_siblings
-> _guaranteed_ to be NULL, since dev->next_siblings is set NULL in
-> disconnect()
+Hi Florian,
 
-Yes, you're right. As a security researcher, I am sensitive to such
-dangling pointers.
+I love your patch! Perhaps something to improve:
 
-As its nullifying site is across functions, I suggest developers
-remove this dangling pointer in case that any newly added code in this
-function or before the nullifying location would touch next_siblings.
+[auto build test WARNING on arm/for-next]
+[also build test WARNING on soc/for-next arm64/for-next/core clk/clk-next linus/master v5.16 next-20220121]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-If Pavel and others think it's fine, then it's time to close this patch.
+url:    https://github.com/0day-ci/linux/commits/Florian-Fainelli/Broadcom-STB-PM-PSCI-extensions/20220122-115551
+base:   git://git.armlinux.org.uk/~rmk/linux-arm.git for-next
+config: arm-multi_v7_defconfig (https://download.01.org/0day-ci/archive/20220122/202201221439.RaZlgS8d-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/30bf64821ad5d3cbbc91770b3927905d10d3bdf3
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Florian-Fainelli/Broadcom-STB-PM-PSCI-extensions/20220122-115551
+        git checkout 30bf64821ad5d3cbbc91770b3927905d10d3bdf3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/soc/bcm/brcmstb/pm/
 
->
->
->
->
-> With regards,
-> Pavel Skripkin
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/soc/bcm/brcmstb/pm/pm-psci.c:95:6: warning: no previous prototype for 'brcmstb_psci_sys_poweroff' [-Wmissing-prototypes]
+      95 | void brcmstb_psci_sys_poweroff(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/brcmstb_psci_sys_poweroff +95 drivers/soc/bcm/brcmstb/pm/pm-psci.c
+
+    94	
+  > 95	void brcmstb_psci_sys_poweroff(void)
+    96	{
+    97		invoke_psci_fn(PSCI_0_2_FN_SYSTEM_OFF, 0, 0, 0);
+    98	}
+    99	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

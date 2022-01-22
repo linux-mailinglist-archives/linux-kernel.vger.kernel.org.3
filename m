@@ -2,124 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4979496DFB
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 21:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00737496DFC
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 21:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231350AbiAVUY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 15:24:28 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37976 "EHLO
+        id S230242AbiAVU2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 15:28:40 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:38910 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiAVUY1 (ORCPT
+        with ESMTP id S229908AbiAVU2j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 15:24:27 -0500
+        Sat, 22 Jan 2022 15:28:39 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA5C3B80AD8;
-        Sat, 22 Jan 2022 20:24:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 580ABC004E1;
-        Sat, 22 Jan 2022 20:24:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CBB13B80947;
+        Sat, 22 Jan 2022 20:28:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6104AC004E1;
+        Sat, 22 Jan 2022 20:28:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642883064;
-        bh=J7d62QJaNgCNwU/L/WAxtc1M4v8AXpbCa/rwZzH4Qo0=;
+        s=k20201202; t=1642883316;
+        bh=xmDMeNg/NONl8eeLAcu1cyqBPjJkOu5tR9cVzTOe3pg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YqFvwQxQeRpZak5KkoNehcEftfSvz0CFBnCU5TSzRiWZg04jApG29obtOza5iDeLA
-         iRVnglTw45Jkwfo4deAdioXWQc67ONzZ/b68itYBDRRzi7uD+x+QlBmai2L7jwpC/M
-         I60LAkDWYjONxNEVt+0pBMJkVBKqM01BIVSKw7+z4zibN8iGgMSfp5qd1tM3Fl9g0u
-         wS6SJYyQ8Lgtl7ph5YK6NAszKWV58zc33okzErmemB0EsisAx3IlzFlRI7nEjCnL8Q
-         LBNN1CFDD/BiX1OJIlWPMHCgz08O/Mm01jHvqrMHYNiuA/bjVtgO53aqSn2RU/18EE
-         t7C3bmFrtCTSA==
+        b=G5Uxj6quF9F6/UX1Ap20bpLQLByoYvWXaqOMSi7l2x1H1pF4zaZwgcjceEG3wMMhQ
+         3OPd3U8buiEZPBd92erixUnyI1VwWetSMJRwI4kT9EkAK7JpLZL2rfkmHY5TefZU/f
+         N/jbTFuxVVtMUc9oQv3A7An0IuEnMLaShztXpHP5rVelN9qZGupFIF3gvITL7RNd+y
+         jDulDAHH+v9d/NBcFG/ls/2IkPq3GEEdYhBf9fAguoizRgeo08qDaaSH5JO+Mg90eX
+         NJ5hBBRTDkUQkiqSrla9f0IbhFux43H7UAq7Kwg8oJ5gEDOmQIic96hlK2CGUKUUus
+         5IqEr/NqpmPZg==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 56D4B40C99; Sat, 22 Jan 2022 17:22:22 -0300 (-03)
-Date:   Sat, 22 Jan 2022 17:22:22 -0300
+        id 80F2540C99; Sat, 22 Jan 2022 17:26:34 -0300 (-03)
+Date:   Sat, 22 Jan 2022 17:26:34 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     John Garry <john.garry@huawei.com>, peterz@infradead.org,
-        mingo@redhat.com, mark.rutland@arm.com,
+To:     cgel.zte@gmail.com
+Cc:     mingo@redhat.com, mark.rutland@arm.com,
         alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org, kjain@linux.ibm.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com, liuqi115@huawei.com,
-        zhangshaokun@hisilicon.com
-Subject: Re: [PATCH 0/3] perf: Support event alias in form foo-bar-baz
-Message-ID: <YexnfryaVyyYVuIi@kernel.org>
-References: <1642432215-234089-1-git-send-email-john.garry@huawei.com>
- <CAP-5=fXONfbx6GzWaT21XzDyCcPkSR2hjEOO0ARVhwiSY5oKjA@mail.gmail.com>
+        namhyung@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] tools/perf: remove redundant err variable
+Message-ID: <Yexoer05bRAb9G/o@kernel.org>
+References: <20220112080109.666800-1-chi.minghao@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAP-5=fXONfbx6GzWaT21XzDyCcPkSR2hjEOO0ARVhwiSY5oKjA@mail.gmail.com>
+In-Reply-To: <20220112080109.666800-1-chi.minghao@zte.com.cn>
 X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jan 17, 2022 at 08:21:42AM -0800, Ian Rogers escreveu:
-> On Mon, Jan 17, 2022 at 7:15 AM John Garry <john.garry@huawei.com> wrote:
-> >
-> > Currently event aliases in the form foo-bar-baz are not supported.
-> >
-> > The HiSilicon D06 platform has uncore event aliases in that form, and
-> > using those aliases fail:
-> >
-> > $ ./perf list sdir-home-migrate
-> >
-> > List of pre-defined events (to be used in -e):
-> >
-> > uncore hha:
-> >   sdir-home-migrate
-> >  [Unit: hisi_sccl,hha]
-> >
-> > $ sudo ./perf stat -e sdir-home-migrate
-> > event syntax error: 'sdir-home-migrate'
-> >                         \___ parser error
-> > Run 'perf list' for a list of valid events
-> >
-> >  Usage: perf stat [<options>] [<command>]
-> >
-> >  -e, --event <event>event selector. use 'perf list' to list available events
-> >
-> > This series added support for such an event alias form.
-> >
-> > I am no expert on l+y, so any and all review here would be appreciated,
-> > especially the last patch which is marked as RFC (for that same reason).
-> >
-> > The series is based on acme perf/core @ 9bce13ea88f8.
-> >
-> > John Garry (3):
-> >   perf parse-events: Support event alias in form foo-bar-baz
-> >   perf test: Add pmu-events test for aliases with hyphens
-> >   perf test: Add parse-events test for aliases with hyphens
+Em Wed, Jan 12, 2022 at 08:01:09AM +0000, cgel.zte@gmail.com escreveu:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
-> The whole set:
-> 
-> Acked-by: Ian Rogers <irogers@google.com>
-> 
-> The additional code is no worse than the existing code. The testing is
-> a great addition!
-
-Indeed, thanks a lot!
+> Return value from perf_event__process_tracing_data() directly instead
+> of taking this in another redundant variable.
 
 Thanks, applied.
 
 - Arnaldo
 
  
-> Thanks,
-> Ian
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+> ---
+>  tools/perf/builtin-inject.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
 > 
-> >  .../arch/test/test_soc/cpu/uncore.json        | 16 +++++
-> >  tools/perf/tests/parse-events.c               | 49 ++++++++++++++
-> >  tools/perf/tests/pmu-events.c                 | 32 +++++++++
-> >  tools/perf/util/parse-events.c                | 67 ++++++++++++++++---
-> >  tools/perf/util/parse-events.h                |  1 +
-> >  tools/perf/util/parse-events.l                |  2 +
-> >  tools/perf/util/parse-events.y                | 17 ++++-
-> >  7 files changed, 171 insertions(+), 13 deletions(-)
-> >
-> > --
-> > 2.26.2
-> >
+> diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+> index 409b721666cb..fbf43a454cba 100644
+> --- a/tools/perf/builtin-inject.c
+> +++ b/tools/perf/builtin-inject.c
+> @@ -535,12 +535,9 @@ static int perf_event__repipe_exit(struct perf_tool *tool,
+>  static int perf_event__repipe_tracing_data(struct perf_session *session,
+>  					   union perf_event *event)
+>  {
+> -	int err;
+> -
+>  	perf_event__repipe_synth(session->tool, event);
+> -	err = perf_event__process_tracing_data(session, event);
+>  
+> -	return err;
+> +	return perf_event__process_tracing_data(session, event);
+>  }
+>  
+>  static int dso__read_build_id(struct dso *dso)
+> -- 
+> 2.25.1
 
 -- 
 

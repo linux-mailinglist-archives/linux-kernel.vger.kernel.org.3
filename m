@@ -2,179 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC37496D4F
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 19:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2654A496D56
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 19:35:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234694AbiAVSbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 13:31:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
+        id S234704AbiAVSfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 13:35:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231531AbiAVSbo (ORCPT
+        with ESMTP id S229446AbiAVSfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 13:31:44 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA5FC06173B;
-        Sat, 22 Jan 2022 10:31:43 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id bu18so40853177lfb.5;
-        Sat, 22 Jan 2022 10:31:43 -0800 (PST)
+        Sat, 22 Jan 2022 13:35:46 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0AE0C06173B;
+        Sat, 22 Jan 2022 10:35:45 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id n8so457097lfq.4;
+        Sat, 22 Jan 2022 10:35:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=yh82ozfSM6oapqGRh4z7IM/xoIpSwq0P7Nnmuai8gxg=;
-        b=CAFwyQ77R2H6RYwpu0aR7vj2GXGa6gLhHNaq/FMOVKUwB9TSdOV1niGlNkrMDkuIDg
-         WU9BqxwnUgKILKeA6hPbuOX6TW/AXfNcT9UGGpeka8FaqEHbf0el5u8kebmCg65dulz9
-         SqpWcsrMguDTbHPpMlMc6LxC/Ua3lNuNr2yvJxp4zma6wb9fJ8FLyt3RlR83T/OutSlb
-         MnJPvr+8atYvWA/ohHEvKjqfV9xbcBX2NNEnYNNxjNjAa0p5rGNdjL0WHutWsnMpvSlQ
-         q2Tlua+vE/qx8rLjxnnFcqiuextgJHNbxdfZjFp11AtHU3NWkVwIsT5hOugAe3ZUK28u
-         G6JQ==
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=6Am4YnD9KTFo9pgUgTrDTzYozeoflnXjTOGZfWwTWNg=;
+        b=LdXLQBcP16CDu2nIYF2Azo7Av+b/1I2icMbcKKKtft2AhWt1OVafHCZ0EoqmiGk8OC
+         z7NT+rP++ZyAk06vip5VCxfX/E7n4m0EgGcIXDJ+dyUFS9fKqm2Qni3t6FAqJCUrZWCY
+         PfUZekBxgNILwSFVSuCxE633qyGztuc34Qnz5KDZ4tR6Zw2YGEbxr2tEy7bjmDZUooU1
+         5nH5/YMz6mMDDrO8rQu4bU5maeRlW8cVdZZLZM4BHAuU6H9WpOWCQGbev3Gxz+/o+T4f
+         VrCvZXDU4ZRfl/IRRf/ZnaSOPoDUV+3s/9DAE4LuryvQyBoUQFtRBEQh2vBRMnq7CM/F
+         8lyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=yh82ozfSM6oapqGRh4z7IM/xoIpSwq0P7Nnmuai8gxg=;
-        b=W+90WSc3Yc2sVkNrTrvtJXAcKnDXTNsfeBByz19Yt25czIdLngbahOysq2rFCzAaEB
-         HuAX/ZqkCl5SmanW5B5VOBQiotu4YS8ZbiIxX9dWV2NWkTyGXQMTDu6bM+6fBYLaverQ
-         U5ieonYfE1nxfgXVjUMoeaby9EP3gmgzTIygRTsViqb+IbhNA/OR0Dm5JvolyfPW87wm
-         BbMTqp/MGkvuAy9p3pptZJXWb8VAhs1qN6SWdhwcGsH16TNYNyAuxHrQZ2+krZ4P01dx
-         OF+DYEUdT4EMssQa5vFf8WK9WGvbLlF5liXb50eCZPPW51WXqom/pad1LWWaJnQrLEKk
-         MFWA==
-X-Gm-Message-State: AOAM532b+TxIDaYG1vB2EgP5/hAtVA4UrlojVm5VE1lcNUDukfMH4/R9
-        Bahua1FVh8ZWgR9ZpMfQhyY=
-X-Google-Smtp-Source: ABdhPJx0tROet2YXOw/bq3Yumcg02rCbq0PE56juLvkeoXb/+YoZ1Jt9J9SY8lhUIYVvmxkFAIIHIQ==
-X-Received: by 2002:a05:6512:207:: with SMTP id a7mr5440742lfo.208.1642876301886;
-        Sat, 22 Jan 2022 10:31:41 -0800 (PST)
+        bh=6Am4YnD9KTFo9pgUgTrDTzYozeoflnXjTOGZfWwTWNg=;
+        b=cUS//jZwoAIG1cbCPuPOjqiDOyr+qHJR2NbfOnkamQM5YtTsxAocHnNpUpiEmQodGG
+         jhuF5RFEiA582XnGgRl2jQWtITNclRMQbzvh32hJlt3yk3mdo7MUQsQJKISQufc9BuQQ
+         jL2bqXrPqyu9Lf1fKyV+OBINhA8mNdTbMSGbj18q297COd/kUI4Hph4l1DNYlVreX4o/
+         MGa/v+rUDUjyye1yaojJlNahhUmASJYrOEfv3pxhn3n2Kt2e6Ft+5PVbeJc8VH08YmgQ
+         u/VXnjCt/VmFb1koN4okSDOb129BXos9mAmtTZfhOSZD7PabNJs+NRhBSyK+39pjknid
+         y9HQ==
+X-Gm-Message-State: AOAM5315zJe6a2l00UxvMrr94ppzloGDHf0rC0AiMfA7htJwGbFEQIhZ
+        KVCfWfYv7PDmFPq5kbJP5P0=
+X-Google-Smtp-Source: ABdhPJz0YZ2QnjDZa7kIRynR+NtfAWdMkk12sGInhaKzgGmmsKoRb+QC4ym6a5KovS5Ned/ZAfHQAw==
+X-Received: by 2002:a05:6512:1290:: with SMTP id u16mr7561566lfs.151.1642876543901;
+        Sat, 22 Jan 2022 10:35:43 -0800 (PST)
 Received: from [192.168.2.145] (109-252-139-36.dynamic.spd-mgts.ru. [109.252.139.36])
-        by smtp.googlemail.com with ESMTPSA id q16sm631365lfg.170.2022.01.22.10.31.40
+        by smtp.googlemail.com with ESMTPSA id j18sm633773lfm.56.2022.01.22.10.35.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Jan 2022 10:31:41 -0800 (PST)
-Message-ID: <31ba2627-65c7-1340-e6b9-7c328a485456@gmail.com>
-Date:   Sat, 22 Jan 2022 21:31:39 +0300
+        Sat, 22 Jan 2022 10:35:43 -0800 (PST)
+Message-ID: <103960bf-ed5c-4a0c-9142-65ffc2e4bca0@gmail.com>
+Date:   Sat, 22 Jan 2022 21:35:42 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v16 2/4] dmaengine: tegra: Add tegra gpcdma driver
+Subject: Re: [PATCH v2 1/4] dt-bindings: Add headers for Tegra234 I2C
 Content-Language: en-US
-To:     Akhil R <akhilrajeev@nvidia.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        Rajesh Gumasta <rgumasta@nvidia.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>
-Cc:     Pavan Kunapuli <pkunapuli@nvidia.com>
-References: <1641830718-23650-1-git-send-email-akhilrajeev@nvidia.com>
- <1641830718-23650-3-git-send-email-akhilrajeev@nvidia.com>
- <16c73e83-b990-7d8e-ddfd-7cbbe7e407ea@gmail.com>
- <DM5PR12MB1850A5F5ABA9CD5D04C37086C0579@DM5PR12MB1850.namprd12.prod.outlook.com>
- <1db14c3d-6a96-96dd-be76-b81b3a48a2b1@gmail.com>
- <DM5PR12MB1850FF1DC4DC1714E31AADB5C0589@DM5PR12MB1850.namprd12.prod.outlook.com>
- <683a71b1-049a-bddf-280d-5d5141b59686@gmail.com>
- <DM5PR12MB1850D67F9B5640943F1AEB2EC05B9@DM5PR12MB1850.namprd12.prod.outlook.com>
+To:     Akhil R <akhilrajeev@nvidia.com>, devicetree@vger.kernel.org,
+        jonathanh@nvidia.com, ldewangan@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, mperttunen@nvidia.com,
+        robh+dt@kernel.org, thierry.reding@gmail.com
+References: <1642850607-20664-1-git-send-email-akhilrajeev@nvidia.com>
+ <1642850607-20664-2-git-send-email-akhilrajeev@nvidia.com>
 From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <DM5PR12MB1850D67F9B5640943F1AEB2EC05B9@DM5PR12MB1850.namprd12.prod.outlook.com>
+In-Reply-To: <1642850607-20664-2-git-send-email-akhilrajeev@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-21.01.2022 19:24, Akhil R пишет:
->>>>>>> +static int tegra_dma_terminate_all(struct dma_chan *dc)
->>>>>>> +{
->>>>>>> +     struct tegra_dma_channel *tdc = to_tegra_dma_chan(dc);
->>>>>>> +     unsigned long flags;
->>>>>>> +     LIST_HEAD(head);
->>>>>>> +     int err;
->>>>>>> +
->>>>>>> +     if (tdc->dma_desc) {
->>>>>>
->>>>>> Needs locking protection against racing with the interrupt handler.
->>>>> tegra_dma_stop_client() waits for the in-flight transfer
->>>>> to complete and prevents any additional transfer to start.
->>>>> Wouldn't it manage the race? Do you see any potential issue there?
->>>>
->>>> You should consider interrupt handler like a process running in a
->>>> parallel thread. The interrupt handler sets tdc->dma_desc to NULL, hence
->>>> you'll get NULL dereference in tegra_dma_stop_client().
->>>
->>> Is it better if I remove the below part from tegra_dma_stop_client() so
->>> that dma_desc is not accessed at all?
->>>
->>> +     wcount = tdc_read(tdc, TEGRA_GPCDMA_CHAN_XFER_COUNT);
->>> +     tdc->dma_desc->bytes_transferred +=
->>> +                     tdc->dma_desc->bytes_requested - (wcount * 4);
->>>
->>> Because I don't see a point in updating the value there. dma_desc is set
->>> to NULL in the next step in terminate_all() anyway.
->>
->> That isn't going help you much because you also can't release DMA
->> descriptor while interrupt handler still may be running and using that
->> descriptor.
+22.01.2022 14:23, Akhil R пишет:
+> Add dt-bindings header files for I2C controllers for Tegra234
 > 
-> Does the below functions look good to resolve the issue, provided
-> tegra_dma_stop_client() doesn't access dma_desc?
-
-Stop shall not race with the start.
-
-> +static int tegra_dma_terminate_all(struct dma_chan *dc)
-> +{
-> +       struct tegra_dma_channel *tdc = to_tegra_dma_chan(dc);
-> +       unsigned long flags;
-> +       LIST_HEAD(head);
-> +       int err;
-> +
-> +       err = tegra_dma_stop_client(tdc);
-> +       if (err)
-> +               return err;
-> +
-> +       tegra_dma_stop(tdc);
-> +
-> +       spin_lock_irqsave(&tdc->vc.lock, flags);
-> +       tegra_dma_sid_free(tdc);
-> +       tdc->dma_desc = NULL;
-> +
-> +       vchan_get_all_descriptors(&tdc->vc, &head);
-> +       spin_unlock_irqrestore(&tdc->vc.lock, flags);
-> +
-> +       vchan_dma_desc_free_list(&tdc->vc, &head);
-> +
-> +       return 0;
-> +}
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> ---
+>  include/dt-bindings/clock/tegra234-clock.h | 19 +++++++++++++++++++
+>  include/dt-bindings/reset/tegra234-reset.h |  8 ++++++++
+>  2 files changed, 27 insertions(+)
 > 
-> +static irqreturn_t tegra_dma_isr(int irq, void *dev_id)
-> +{
-> +       struct tegra_dma_channel *tdc = dev_id;
-> +       struct tegra_dma_desc *dma_desc = tdc->dma_desc;
-> +       struct tegra_dma_sg_req *sg_req;
-> +       u32 status;
+> diff --git a/include/dt-bindings/clock/tegra234-clock.h b/include/dt-bindings/clock/tegra234-clock.h
+> index 8d7e66e..5d05c19 100644
+> --- a/include/dt-bindings/clock/tegra234-clock.h
+> +++ b/include/dt-bindings/clock/tegra234-clock.h
+> @@ -30,5 +30,24 @@
+>  #define TEGRA234_CLK_PLLC4			237U
+>  /** @brief 32K input clock provided by PMIC */
+>  #define TEGRA234_CLK_CLK_32K			289U
+> +/** @brief output of mux controlled by CLK_RST_CONTROLLER_CLK_SOURCE_I2C1 */
+> +#define TEGRA234_CLK_I2C1			48U
+> +/** @brief output of mux controlled by CLK_RST_CONTROLLER_CLK_SOURCE_I2C2 */
+> +#define TEGRA234_CLK_I2C2			49U
+> +/** @brief output of mux controlled by CLK_RST_CONTROLLER_CLK_SOURCE_I2C3 */
+> +#define TEGRA234_CLK_I2C3			50U
+> +/** output of mux controlled by CLK_RST_CONTROLLER_CLK_SOURCE_I2C4 */
+> +#define TEGRA234_CLK_I2C4			51U
+> +/** @brief output of mux controlled by CLK_RST_CONTROLLER_CLK_SOURCE_I2C6 */
+> +#define TEGRA234_CLK_I2C6			52U
+> +/** @brief output of mux controlled by CLK_RST_CONTROLLER_CLK_SOURCE_I2C7 */
+> +#define TEGRA234_CLK_I2C7			53U
+> +/** @brief output of mux controlled by CLK_RST_CONTROLLER_CLK_SOURCE_I2C8 */
+> +#define TEGRA234_CLK_I2C8			54U
+> +/** @brief output of mux controlled by CLK_RST_CONTROLLER_CLK_SOURCE_I2C9 */
+> +#define TEGRA234_CLK_I2C9			55U
 > +
-> +       /* Check channel error status register */
-> +       status = tdc_read(tdc, TEGRA_GPCDMA_CHAN_ERR_STATUS);
-> +       if (status) {
-> +               tegra_dma_chan_decode_error(tdc, status);
-> +               tegra_dma_dump_chan_regs(tdc);
-> +               tdc_write(tdc, TEGRA_GPCDMA_CHAN_ERR_STATUS, 0xFFFFFFFF);
-> +       }
-> +
-> +       status = tdc_read(tdc, TEGRA_GPCDMA_CHAN_STATUS);
-> +       if (!(status & TEGRA_GPCDMA_STATUS_ISE_EOC))
-> +               return IRQ_HANDLED;
-> +
-> +       tdc_write(tdc, TEGRA_GPCDMA_CHAN_STATUS,
-> +                 TEGRA_GPCDMA_STATUS_ISE_EOC);
-> +
-> +       spin_lock(&tdc->vc.lock);
-> +       if (!dma_desc)
-All checks and assignments must be done inside of critical section.
+> +/** @brief PLLP clk output */
+> +#define TEGRA234_CLK_PLLP_OUT0			102U
+>  
+>  #endif
+> diff --git a/include/dt-bindings/reset/tegra234-reset.h b/include/dt-bindings/reset/tegra234-reset.h
+> index 50e13bc..e07e898 100644
+> --- a/include/dt-bindings/reset/tegra234-reset.h
+> +++ b/include/dt-bindings/reset/tegra234-reset.h
+> @@ -12,6 +12,14 @@
+>   */
+>  #define TEGRA234_RESET_SDMMC4			85U
+>  #define TEGRA234_RESET_UARTA			100U
+> +#define TEGRA234_RESET_I2C1			24U
+> +#define TEGRA234_RESET_I2C2			29U
+> +#define TEGRA234_RESET_I2C3			30U
+> +#define TEGRA234_RESET_I2C4			31U
+> +#define TEGRA234_RESET_I2C6			32U
+> +#define TEGRA234_RESET_I2C7			33U
+> +#define TEGRA234_RESET_I2C8			34U
+> +#define TEGRA234_RESET_I2C9			35U
 
-
-> +               goto irq_done;
+Why ID order isn't maintained?

@@ -2,156 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E68496A02
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 05:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF2B4496A04
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 05:28:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232640AbiAVEW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 23:22:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33228 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232592AbiAVEW0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 23:22:26 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD87C06173B;
-        Fri, 21 Jan 2022 20:22:26 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id f21so3029835ljc.2;
-        Fri, 21 Jan 2022 20:22:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WSl0n+WwVjP76UBPGcTgsvP7+rrxq9Ric0OqJhwHSkg=;
-        b=Ifz1AWXrSg+wgkYOmdBm1iMMJyLipcIzsywwWvL28u7TFV6c2w+oQn70f5wHbm7bjy
-         8pOqbS9n8ZsaagYrjRrYi6KrjdoRuuk5auolsU7jzm67aqVLfvUIklnVXV3pr2GanjfE
-         UNBI7kxvS8znxD9CxpqcFgrSQJTjXqUAFeode9QFaEz9b2Vh/DJFs7jtQ4HOfB6nYL37
-         6ol8AtPht+nBQKwMLVjp9p3dv6sl9kkT6Pzd8OXABDtkiCveZP6d7BJwdU7ECpvtojQF
-         WPZBmNP/x6c6K9XEjUIOpJPlEV5SN3Shm3rksWd0q7Xmh7lS5WLH0/v42OWsikmV/fIs
-         41NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WSl0n+WwVjP76UBPGcTgsvP7+rrxq9Ric0OqJhwHSkg=;
-        b=T+WF313fzc9W0s3pMTNn2JgBdIW2rjogXJ8dVVv6YJSJLW1hE4CkT6tOeCSSwzo8+7
-         puZqgEWR8A4HJq8sd2PUhgkRJcoec+6AoLhQbYMGj+NnlZrpw9NsehgEK33ay2iLAuqp
-         JF/lgG36bucyAuQ9q7QDv7Abv5vz1uhnftzsHnA3v1oHQd4mW2L6wCfBl6I46PBWC9aa
-         axhvhByCZBunm02jBeILo8KQCcii7aE+tcltAbsoA0TiXVtBjtkQuoU36ypQqHsS+dR2
-         rHNSkuRmSiBJZ0yVqFJeOw5Ehzx89V1ibrqM0trRb/1MOZkQpyfvE+6qInbODaFWefEX
-         cwrg==
-X-Gm-Message-State: AOAM530kydZ4Hsch2fYNIQ5+cPajINLGflVAFEQ85hOn4WW+rGbSailz
-        KCOHf353T/FpiIfeYncdc4K+zNrEPr7Mq8YOm2c=
-X-Google-Smtp-Source: ABdhPJwiGYOcyqqKUP3LR31Yz846qneduAyOw2NJAiB3r7G6Bp7VYLQAC+HwdkKvTYKdtTBJ1fNArj7SN5apWT13fvI=
-X-Received: by 2002:a05:651c:1a06:: with SMTP id by6mr4909100ljb.244.1642825344529;
- Fri, 21 Jan 2022 20:22:24 -0800 (PST)
+        id S232680AbiAVE15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 23:27:57 -0500
+Received: from mail-bn8nam12on2046.outbound.protection.outlook.com ([40.107.237.46]:48609
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232303AbiAVE14 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 23:27:56 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fpQ8WeTkvFQUUjitusjLtdkepWbVAqa0oRvOuCepFBgr60CjMEeLwFJRR1VJewjGiLRLfMm7zCgP7zYfrw3Fvwd61yU47gOyrsaNtcaFAG7LM/k7H+JQx9nM2n18GwKvtdWlwuYswwnsH81wF/WAHw4OA93la9B67Mr0t4e/uFWm8RZWKtTkW3MKG8BzRHkFzB2etjQ5w76t6PvSYNpivTTdbUJdcNZufJofFJ2UQWoiZVLqKTGHN3A6u0/Oo6uZ8k+2YtxUYSuEJvKJPUmhcNilclkqoyR/NFY4XvqM8kJRQKtJKpGn/rFHdGvDbcpxvHAgZaRBLUWVusnXWn4WeQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/j/RG+BEUxWPDgJokLtPdHM3mmPOS9t6KLTs8jChMOY=;
+ b=FIMdSCJJFumG8qbaMA6PQaxestlJyTGwIVE0Q7m8YPwi72QY+XY4o7p7a7u98SnIIt7UEu46ZSouIJ88pVBkeXh58+gubelJ669LQ7/a3Sn9PGtAyggwy1NtNoI6U2KGtKRawVvqihnrXlwhIe8UCWDkVHkVKXVBZxt+k5W+WZrIBUhAj005ocgOV4wDoL6U9I5VVWvrXTR62HGQO4guFfdAQmSPQnCLNOD4I3og9nOShxC6QRi0Wq0uPPPzsEKkvrN8qvbU072cr7IjINcL7M0opVLX3EWXa9tHi1jtrqI9z+DYjiyFDbhYm0chyANyyImH3In8gLK1v3Gh14sViw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/j/RG+BEUxWPDgJokLtPdHM3mmPOS9t6KLTs8jChMOY=;
+ b=OIU58v4eeObELStMtM9MhusVSTeKXbOrWyanBRHX6egid0W/fszbFnoG8OuYyjqohr/pZbrairJDQkNORMjh8ZyaXn2uJJZoe1x6ie6fgoW+ST8QQd9WvniR2uGNKrwRZdnyJWTIWAKEbS7YiS7IqnfsWmILPMW6/XHL3lOU1DtUIyYxutFXBnSJn443i3EVHtzNOTANMaRcqz8V3t0EjHR85HeE3Oi3zmXm8+Ig/nyMD9va/rggYlujWTZuAYORL4pYwttUdezsX1BGL9udcuYOV6lNEtDu5K52VKJGo4QivtUUUUJBUQSJbsKwnvTMWceV0V/X5vnRBbcTq0yUxA==
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
+ by MW3PR12MB4411.namprd12.prod.outlook.com (2603:10b6:303:5e::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Sat, 22 Jan
+ 2022 04:27:53 +0000
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::75e8:6970:bbc9:df6f]) by MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::75e8:6970:bbc9:df6f%6]) with mapi id 15.20.4909.012; Sat, 22 Jan 2022
+ 04:27:53 +0000
+From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
+To:     kernel test robot <lkp@intel.com>, Hannes Reinecke <hare@suse.de>
+CC:     "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>
+Subject: Re: [PATCH] nvme-fabrics: fix returnvar.cocci warnings
+Thread-Topic: [PATCH] nvme-fabrics: fix returnvar.cocci warnings
+Thread-Index: AQHYDz626tDTsLRGYkOekKj26MfBjKxuclkA
+Date:   Sat, 22 Jan 2022 04:27:53 +0000
+Message-ID: <f4c2f81c-eafe-6fef-88c9-952b668e7e23@nvidia.com>
+References: <202201221116.hWZkKqts-lkp@intel.com>
+ <20220122031737.GA31599@fba2a898af35>
+In-Reply-To: <20220122031737.GA31599@fba2a898af35>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 63052ae7-4276-49b5-df6a-08d9dd5f8e9f
+x-ms-traffictypediagnostic: MW3PR12MB4411:EE_
+x-microsoft-antispam-prvs: <MW3PR12MB44119C3FC7A760B556F12C8FA35C9@MW3PR12MB4411.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:651;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: XTTjON1DARp9LikZUBFKaQorhgxrWEqCwuKH2DEhQP1DzhSBT/n6u0dHnHmZfeIjevCSAXNO2Mhs1ePiraOBpSXLTPmRL9erw7A8HcDEpuMcPtUDGjvCVj4aZGNaRJVlYhBaC/QncEMfKZNTwWVL9whjb6c69Xn32rvbzgiifxq3DaLwp/JDuaBHTjuttbPSRDdAVJLUsBWg7Y5lrdZwjHePY8E5TbftMF4SwFDt5SysH2AKQtptH8imTqWxSFvEu2oq5q4dCacPHMsGYbpCVaeB3MN5AMEQ+C93wL4IZB7evIf9WJqPxiP6RVLDCGi9kX/Klcy/WG1az4xCf+bTH+tCXyAoHF9yIMQRWNO42tpJ2MilemlPF09U+4WnP+86VoeaBfVOMzBsNprTkTkCNcxvJkBzG+BbrLctw5IAvIkPdSsO6ZXcPfUFSaTHN74BFvM5D5QFs+MSUqTRlG2VqeAf6YUw+apfF5Tvxj9BeBvqvxOdFbU+mMdvVP8sm4GfgzJqt4MgXkaEQMql6D7FL/77UjswDwwH0aHGpvLt8ANdBVBzETWl0J9a1mJydDIYo1iNWgKszFYb1I0nFJCDgflX59Voq5tYFCA60coYsgSFYGhvksOxs73LVFqM/c4KC9Xe4lWce3KcUhzWXA2UlJ42oA0iwAknDx95/uR4F08jKmweVMg9vGKUfgV2W/nMduhfiqvgE7aTCkArmTwxAH1283DKK6iKEuwb19uz/iFqMHHVk2/QLhiE0WPnwZG0cApA+gwxvtgkbYn+Juztfg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(122000001)(38100700002)(38070700005)(316002)(31686004)(53546011)(31696002)(4744005)(6506007)(5660300002)(86362001)(8936002)(76116006)(2616005)(6512007)(110136005)(54906003)(91956017)(36756003)(2906002)(508600001)(8676002)(66446008)(64756008)(66556008)(71200400001)(66946007)(66476007)(6486002)(4326008)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bFM3YjMvQVR3Y2oxZGtzbkNncGNVZldmaFpQc1Z5MHVqZWdqcWx6ZTBXUG0y?=
+ =?utf-8?B?cmlJYWpQNUFUWDVFVkpQYzVKT0hTMTZxZzhjdXQzUDhCdWZJZ1RaeWd6WUlu?=
+ =?utf-8?B?RTNJTitBdUx0OHArODlodUtYeVB3UTJWOURKeVAwc1NUd0RXZVJPTjdXVHBn?=
+ =?utf-8?B?L1VHcTl2WWM1dFlzMjBNOXlneVcxeGwvczNrdHQ2dUx4M2RreWEzYzl3aFZs?=
+ =?utf-8?B?eWQwUHkrTWwxcFpTa2YrVm5YM2Q5VE5JMm4vR2dscHZFenRSK0pFOVU1VGho?=
+ =?utf-8?B?Y2JkWmVXS2VheWwvVm1RcVVNZUNVTDcrL3pFVkxTNEVjSWd6Q0FKZGU0dTQ3?=
+ =?utf-8?B?L2MzYktFV0xUNzdHTWdQVE1mMVV5b085NVRJVlp2VkNzNWJUcGNiTWNCSThs?=
+ =?utf-8?B?YzJsaGZ0aXdnbUh2dU1HcE1PSmQzdWw0NGJuSzhCb2hsUGJuekpzM25TeFNk?=
+ =?utf-8?B?a2RlcFVYYkQ1N1pkdHNhdTdlTFF4aUdlYkVvNHZZaDNmdlFBVThSNUo3R3lC?=
+ =?utf-8?B?VGQvZHBYTjJhcmtrR1pwemkxcjlOL0RJYUlYcVFReVhYcVlaRlNDMVJuNTJK?=
+ =?utf-8?B?SkNicDk2dmo4WlNLUHJwZzZMVFRYMDkxWkViTDFWTlJ3MjJMQUJQWlBHMXpz?=
+ =?utf-8?B?TkdlNjRGV0ZBOE0vbEVzeTNZSXFuSTJPN3U3cFh0UTJzTGJVa2o4MnZNenZT?=
+ =?utf-8?B?dEx1dktlZXhWTHNQL1ozcjlaT0pZaVJYWkpSODNYSG5oR1JyN3IrNlJkTUhz?=
+ =?utf-8?B?MHFrTzUrR0I0V3V0ZmxWSVQ1d1FWaGhNanlJVTBZQVI5V01OcjNodmVsR3hQ?=
+ =?utf-8?B?NFU0ZkJYMTR4Ujl5L1Z4R1plZ3FMem94aHppakI0YUQramFUVVZ5R1VZeEdR?=
+ =?utf-8?B?dHo5NXF3Q2IwU05ZNU9PeFo2VytMeCs1RlE5QkdQSHFUYVZQUklHZTZnT1Bh?=
+ =?utf-8?B?SnNlc29tUEIyc0VXb0w1RjBKdzhqRGNFNWcwWkpyNU1rWWpDenFGYmFYREJa?=
+ =?utf-8?B?eEx4anZXUVhnOTFydUdFYWJTNi9tSTU2S1lvTkk5TDUxZzQ2WXVncE9vaTlB?=
+ =?utf-8?B?dDdua0NiUGRHMFdxa2hsNlRxUzZ1VXNzQitOLzFXWjd0ZnRnWW5hUGtxRlM2?=
+ =?utf-8?B?TXlUM1BmWnRWZkF3dVA5UTgrRzExU1dySUpLZ1pmZCtueWdxQnBzTitlUCsy?=
+ =?utf-8?B?alpkUUY4VHFkSXNMajcvbEtSQjRuOU5Va2dqUno5blE0L2tNQU15MHlVYTRu?=
+ =?utf-8?B?SmdmZFZiWGVpUkpnVnFPeXhtaTNNRzNVQnJQQnF1OWRDV1BwK0RDNVNTZXpj?=
+ =?utf-8?B?djUwTHJyTGRaRldaenFHRnYxbStIcGZjMm5qQW04UGthek5oODFGaFhIQjRQ?=
+ =?utf-8?B?VzQ0NDVPNTRVTTh3RlcrUXBYb1BjdkdUWmhwZXVtTE5vc3JXaHpxT2FaMm9u?=
+ =?utf-8?B?UE1tbDJpSG85OVVJZ2s3RXdBRi90VHRycUNsZWRFSWRyK2dyaDJISmdGbWY0?=
+ =?utf-8?B?VUo1U0ZJb0o1N3Z2NldLcFRMOS9Xb1V5U3hOOEptWUZIaGowazNxTzBzWHRR?=
+ =?utf-8?B?NkVSTG81T29zZXl1eHFCSGRVSmFEYzZ3UWYrRVpCV1NPb3QxSDBiSWtNMndI?=
+ =?utf-8?B?dWZFalpGVVh6YkNpWlYwRlFORSs4NlpQL2NPb1R2ZDhyVXhMVWhZUkwxSUVh?=
+ =?utf-8?B?R1BZOUJycHEzTlE5WUhnaFhDNmc5SThsK0RFZGFwUGx0cjJQdGpOQlRZYUFE?=
+ =?utf-8?B?SFBsV2I2aHh5Um5Fc1pQREdPOHFHQ1poR2tDTHMzTVRWV1dqTjdtZThmcHZa?=
+ =?utf-8?B?Q0RiZEc5ZUNXVytxaDJCU3pYS2xKZWlqdkRWUHkybWRDSTVKT0tCOC91UHJi?=
+ =?utf-8?B?a2s3RmdmcXRMQTFDc0R5dkJVY3lrZENxWkNMbFBKdjFFNEtNVjVzSFdMNFVS?=
+ =?utf-8?B?WUJuSFN1QnpadmNWV1RHcUV1bmp5UGtBaFR3OG9taENQZTJPMEtnM0tmU2hp?=
+ =?utf-8?B?dW9ORXFvQUtESDFLSS9FdXNWR0ZqMGdxNXBudkJFeWx1VEoxbnp5VEIvamM2?=
+ =?utf-8?B?OG50dnFScDVkRlNzZnZLeUVvQkZVOUxXY1VWclVQSFR4ZUprb3pSSklqT1Iw?=
+ =?utf-8?B?eCtDU3ZlaXNoTmtTMStUWk8xd05tUVZzalA4aU1hY2d0UTVxd2ppclJ1elJF?=
+ =?utf-8?Q?gwAHKupNKr/5UJi54NsE+wodz64frrxFgwBs+4+jaQ7y?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3226D65F4C734346B56FBEA70763C76A@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <3192BC90-D082-472B-B310-6E09A14A77C6@hust.edu.cn> <CAD-N9QUqfq+0UeMjQALUmGpX5xgjS6=BXvsqcXQpJRzhB6hHLw@mail.gmail.com>
-In-Reply-To: <CAD-N9QUqfq+0UeMjQALUmGpX5xgjS6=BXvsqcXQpJRzhB6hHLw@mail.gmail.com>
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Date:   Sat, 22 Jan 2022 13:22:12 +0900
-Message-ID: <CAKFNMokdB+Zph-1OyC1-Xnyi93r+yKSusgaEaa=CkuUBttwRZA@mail.gmail.com>
-Subject: Re: Fw:Re: [PATCH] fs: nilfs2: fix memory leak in nilfs sysfs create
- device group
-To:     Dongliang Mu <mudongliangabcd@gmail.com>
-Cc:     Pavel Skripkin <paskripkin@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-nilfs <linux-nilfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nanyong Sun <sunnanyong@huawei.com>,
-        =?UTF-8?B?5oWV5Yas5Lqu?= <dzm91@hust.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 63052ae7-4276-49b5-df6a-08d9dd5f8e9f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jan 2022 04:27:53.3328
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 2v4JDz4YfTi8OGU+rOG/3EswqGI2lG5JPpFvf1Tl2PwwVXO5CAMrYKIsW5tncYAbbYLIxZM9QxPV5K12lcLbRw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4411
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dongliang,
-
-On Sat, Jan 22, 2022 at 9:31 AM Dongliang Mu <mudongliangabcd@gmail.com> wrote:
-> > (added Nanyong Sun to CC)
-> > Hi Dongliang,
-> >
-> > On Thu, Jan 20, 2022 at 11:07 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
-> >
-> >
-> > Hi Dongliang,
-> >
-> > On 1/20/22 16:44, Dongliang Mu wrote:
-> >
-> > The preivous commit 8fd0c1b0647a ("nilfs2: fix memory leak in
-> > nilfs_sysfs_delete_device_group") only handles the memory leak in the
-> > nilfs_sysfs_delete_device_group. However, the similar memory leak still
-> > occurs in the nilfs_sysfs_create_device_group.
-> >
-> > Fix it by adding kobject_del when
-> > kobject_init_and_add succeeds, but one of the following calls fails.
-> >
-> > Fixes: 8fd0c1b0647a ("nilfs2: fix memory leak in nilfs_sysfs_delete_device_group")
-> >
-> >
-> > Why Fixes tag points to my commit? This issue was introduced before my patch
-> >
-> >
-> > As Pavel pointed out, this patch is independent of his patch.
-> > The following one ?
->
-> Hi Pavel,
->
-> This is an incorrect fixes tag. I need to dig more about `git log -p
-> fs/nilfs2/sysfs.c`.
->
-> I wonder if there are any automatic or semi-automatic ways to capture
-> this fixes tag. Or how do you guys identify the fixes tag?
-
-I guess `git blame fs/nilfs2/sysfs.c` may help you to confirm where the change
-came from.   It shows information of commits for every line of the input file.
-If you are using github, 'blame button' is available.
-
-If an issue is reproducible, we use `git bisect` to identify the patch
-that caused the
-issue, however, even then, try to understand why and how it affected
-by looking at
-source code and the commit.
-
->
-> >
-> > 5f5dec07aca7 ("nilfs2: fix memory leak in nilfs_sysfs_create_device_group")
-> >
-> > Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
-> > ---
-> > fs/nilfs2/sysfs.c | 5 ++++-
-> > 1 file changed, 4 insertions(+), 1 deletion(-)
-> >
-> >
-> > Can you describe what memory leak issue does this patch actually fix ?
-> >
-> > It looks like kobject_put() can call __kobject_del() unless circular
-> > references exist.
-> >
-> > kobject_put() -> kref_put() -> kobject_release() ->
-> > kobject_cleanup() -> __kobject_del()
-> >
-> > As explained in Documentation/core-api/kobject.rst,
-> >
-> > kobject_del() can be used to drop the reference to the parent object, if
-> > circular references are constructed.
-> >
-> > But, at least, the parent object is NULL in this case.
-> > I really want to understand what the real problem is.
-> >
-> > Thanks,
-> > Ryusuke Konishi
->
-> I know where my problem is. From the disconnect function, I think the
-> kobject_del and kobject_put are both necessary without checking the
-> documentation of kobjects.
->
-> Then I think the current error handling may miss kobject_del, and this
-> patch is generated.
->
-> As a result, I think we can ignore this patch. Sorry for my false alarm.
-
-Okay, thank you for your reply.
-If you notice anything we missed on this difference, please let us know.
-
-Regards,
-Ryusuke Konishi
+T24gMS8yMS8yMiAxOToxNywga2VybmVsIHRlc3Qgcm9ib3Qgd3JvdGU6DQo+IEV4dGVybmFsIGVt
+YWlsOiBVc2UgY2F1dGlvbiBvcGVuaW5nIGxpbmtzIG9yIGF0dGFjaG1lbnRzDQo+IA0KPiANCj4g
+RnJvbToga2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+DQo+IA0KPiBkcml2ZXJzL252
+bWUvaG9zdC9mYWJyaWNzLmM6MTA5NTo1LTg6IFVubmVlZGVkIHZhcmlhYmxlOiAicmV0Ii4gUmV0
+dXJuICIwIiBvbiBsaW5lIDExMDkNCj4gDQo+IA0KPiAgIFJlbW92ZSB1bm5lZWRlZCB2YXJpYWJs
+ZSB1c2VkIHRvIHN0b3JlIHJldHVybiB2YWx1ZS4NCj4gDQo+IEdlbmVyYXRlZCBieTogc2NyaXB0
+cy9jb2NjaW5lbGxlL21pc2MvcmV0dXJudmFyLmNvY2NpDQo+IA0KPiBGaXhlczogZjE4ZWUzZDk4
+ODE1ICgibnZtZS1mYWJyaWNzOiBwcmludCBvdXQgdmFsaWQgYXJndW1lbnRzIHdoZW4gcmVhZGlu
+ZyBmcm9tIC9kZXYvbnZtZS1mYWJyaWNzIikNCj4gQ0M6IEhhbm5lcyBSZWluZWNrZSA8aGFyZUBz
+dXNlLmRlPg0KPiBSZXBvcnRlZC1ieToga2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+
+DQo+IFNpZ25lZC1vZmYtYnk6IGtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPg0KPiAt
+LS0NCg0KDQpMb29rcyBnb29kLg0KDQpSZXZpZXdlZC1ieTogQ2hhaXRhbnlhIEt1bGthcm5pIDxr
+Y2hAbnZpZGlhLmNvbT4NCg0KDQo=

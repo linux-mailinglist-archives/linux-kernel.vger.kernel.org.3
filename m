@@ -2,91 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD7E496B1B
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 09:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 635D6496B1F
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 09:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233918AbiAVIs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 03:48:57 -0500
-Received: from tkylinode-sdnproxy-1.icoremail.net ([139.162.70.28]:44470 "HELO
-        tkylinode-sdnproxy-1.icoremail.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with SMTP id S229935AbiAVIs4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 03:48:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
-        In-Reply-To:References:Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-ID; bh=cUi7kGdbvfGPc8ZcvTG0IA+aJjRDTmLl//7L
-        dxOF41o=; b=PEXmcAwE4YPosOKbdNHBbUVjC8U86J8ldK8+f9ulU3Wk9ib5cfBm
-        cd0DhuORZgQKMZajeWMSdZqE1kieI3sPE7QbdukykdXjNZExNUeOsiJ3IAnqPzVr
-        ofIelwFwGj4m5funp4K85OMVgMYmRBCzaX7pn/lGmL0z/DmcigqQVFs=
-Received: by ajax-webmail-front01 (Coremail) ; Sat, 22 Jan 2022 16:47:39
- +0800 (GMT+08:00)
-X-Originating-IP: [10.129.37.75]
-Date:   Sat, 22 Jan 2022 16:47:39 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5YiY5rC45b+X?= <lyz_cs@pku.edu.cn>
-To:     =?UTF-8?Q?p=C3=A9ter_ujfalusi?= <peter.ujfalusi@gmail.com>
-Cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dmaengine: ti: Fix runtime PM imbalance on error
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn
- mispb-1ea67e80-64e4-49d5-bd9f-3beeae24b9f2-pku.edu.cn
-In-Reply-To: <6169df3d-3d04-644c-fc70-a184ecfa97c8@gmail.com>
-References: <1642332702-126304-1-git-send-email-lyz_cs@pku.edu.cn>
- <6169df3d-3d04-644c-fc70-a184ecfa97c8@gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        id S233926AbiAVIxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 03:53:32 -0500
+Received: from mga07.intel.com ([134.134.136.100]:24299 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232330AbiAVIxa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 22 Jan 2022 03:53:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642841610; x=1674377610;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fvnk/x/WTDcjZ8a7QWLw+S3Fy/cMiGNI0U5gn7a9HyA=;
+  b=ZwHp/oc1yFM1UzLx2nYdNV5+UgUnu6qqGC7WtREaJu5psPanmAmDxoEr
+   DvO9SVJz4V2VwGO31ODR1r1vIL9XOJpeBQYacd5+xwmsV+DiLT8J8IR9N
+   0m1MqRDasiJ6cK4HvQV6PpgvlamoVNgHcdGeVzDN/urW3ZoOan1KW0PnI
+   /XoRY3EHhGwUI6WmfqsTImdsOdbboKrsudiYsc8xyxViEW4Gdp1oRLNKs
+   3WPGolY3LZhR4UA1rJV7/H5zdN7G/Wdrzl25oZqtXTN6DTr1fZY97+Xev
+   TVeZ3rFeSHaPf+qypOjEkMvU+rQ/x12VpDLWQIoUB9AhtqoKOytIS/aOL
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="309133211"
+X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
+   d="scan'208";a="309133211"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2022 00:53:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
+   d="scan'208";a="531624385"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 22 Jan 2022 00:53:27 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nBC9H-000GEZ-BN; Sat, 22 Jan 2022 08:53:27 +0000
+Date:   Sat, 22 Jan 2022 16:52:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, bhupesh.sharma@linaro.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        bjorn.andersson@linaro.org, agross@kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH] arm64: dts: qcom: sm8150: Add ufs power-domain entries
+Message-ID: <202201221606.gzXiP4VV-lkp@intel.com>
+References: <20220120082803.15535-1-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
-Message-ID: <37b99b59.2d9e6.17e80f83cbc.Coremail.lyz_cs@pku.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: 5oFpogBXOrirxOthpA2bAA--.24001W
-X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEOBlPy7uCwlwABsD
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220120082803.15535-1-bhupesh.sharma@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4g5Y+R5Lu25Lq6OiAiUMOpdGVyIFVqZmFsdXNpIiA8
-cGV0ZXIudWpmYWx1c2lAZ21haWwuY29tPgo+IOWPkemAgeaXtumXtDogMjAyMi0wMS0yMiAxNjow
-OTo1MyAo5pif5pyf5YWtKQo+IOaUtuS7tuS6ujogIllvbmd6aGkgTGl1IiA8bHl6X2NzQHBrdS5l
-ZHUuY24+LCB2a291bEBrZXJuZWwub3JnCj4g5oqE6YCBOiBkbWFlbmdpbmVAdmdlci5rZXJuZWwu
-b3JnLCBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnCj4g5Li76aKYOiBSZTogW1BBVENIXSBk
-bWFlbmdpbmU6IHRpOiBGaXggcnVudGltZSBQTSBpbWJhbGFuY2Ugb24gZXJyb3IKPiAKPiAKPiAK
-PiBPbiAxLzE2LzIyIDEzOjMxLCBZb25nemhpIExpdSB3cm90ZToKPiA+IHBtX3J1bnRpbWVfZ2V0
-X3N5bmMoKSBpbmNyZW1lbnRzIHRoZSBydW50aW1lIFBNIHVzYWdlIGNvdW50ZXIgZXZlbgo+ID4g
-d2hlbiBpdCByZXR1cm5zIGFuIGVycm9yIGNvZGUsIHRodXMgYSBtYXRjaGluZyBkZWNyZW1lbnQg
-aXMgbmVlZGVkIG9uCj4gPiB0aGUgZXJyb3IgaGFuZGxpbmcgcGF0aCB0byBrZWVwIHRoZSBjb3Vu
-dGVyIGJhbGFuY2VkLgo+IAo+IFRoZSBwYXRjaCBpcyBjb3JyZWN0LCBob3dldmVyIHRoZSBjb21t
-aXQgbWVzc2FnZSBpcyBhIGJpdCBpbmNvcnJlY3QuCj4gCj4gV2UgYXJlIG5vdCBhZGRpbmcgYW55
-IHZpc2libGUgbWF0Y2hpbmcgZGVjcmVtZW50LCB3ZSBhcmUgc3dpdGNoaW5nIHRvCj4gcG1fcnVu
-dGltZV9yZXN1bWVfYW5kX2dldCgpIHdoaWNoIG9ubHkgaW5jcmVtZW50cyB0aGUgdXNhZ2UgY291
-bnRlciBpZgo+IHBtX3J1bnRpbWVfcmVzdW1lKCkgaXMgc3VjY2Vzc2Z1bC4KPiBHcmFudGVkIGlu
-dGVybmFsbHkgaXQgZG9lcyBhIHBtX3J1bnRpbWVfcHV0X25vaWRsZSgpIGlmIHJlc3VtZSBjYWxs
-IGZhaWxzLgo+IAo+IFN3aXRjaCB0byBwbV9ydW50aW1lX3Jlc3VtZV9hbmRfZ2V0KCkgdG8ga2Vl
-cCB0aGUgZGV2aWNlJ3MgdXNlIGNhdW50Cj4gYmFsYW5jZWQ/Cj4gCgpUaGFua3MgZm9yIHlvdXIg
-cmVwbHkuIEkgYWdyZWUgd2l0aCB5b3VyIGNoYW5nZSBhbmQgcmV3cml0ZSB0aGUgY29tbWl0IG1l
-c3NhZ2UgYXMgZm9sbG93cy4KClt3aHldCnBtX3J1bnRpbWVfZ2V0X3N5bmMoKSBpbmNyZW1lbnRz
-IHRoZSBydW50aW1lIFBNIHVzYWdlIGNvdW50ZXIgZXZlbgp3aGVuIGl0IHJldHVybnMgYW4gZXJy
-b3IgY29kZSwgaG93ZXZlciBwbV9ydW50aW1lX3Jlc3VtZV9hbmRfZ2V0KCkgCm9ubHkgaW5jcmVt
-ZW50cyB0aGUgdXNhZ2UgY291bnRlciBpZiBwbV9ydW50aW1lX3Jlc3VtZSgpIGlzIHN1Y2Nlc3Nm
-dWwsCndoaWNoIGdyYW50ZWQgaW50ZXJuYWxseSBkb2VzIGEgcG1fcnVudGltZV9wdXRfbm9pZGxl
-KCkgaWYgcmVzdW1lIGNhbGwgZmFpbHMuCgpbaG93XQpGaXggdGhpcyBieSBzd2l0Y2hpbmcgdG8g
-cG1fcnVudGltZV9yZXN1bWVfYW5kX2dldCgpIHRvIGtlZXAgdGhlIGRldmljZSdzIHVzZSBjb3Vu
-dApiYWxhbmNlZC4KCgo+ID4gCj4gPiBTaWduZWQtb2ZmLWJ5OiBZb25nemhpIExpdSA8bHl6X2Nz
-QHBrdS5lZHUuY24+Cj4gPiAtLS0KPiA+ICBkcml2ZXJzL2RtYS90aS9lZG1hLmMgfCA0ICsrLS0K
-PiA+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQo+ID4g
-Cj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9kbWEvdGkvZWRtYS5jIGIvZHJpdmVycy9kbWEvdGkv
-ZWRtYS5jCj4gPiBpbmRleCAwOGU0N2Y0Li5hNzNmNzc5IDEwMDY0NAo+ID4gLS0tIGEvZHJpdmVy
-cy9kbWEvdGkvZWRtYS5jCj4gPiArKysgYi9kcml2ZXJzL2RtYS90aS9lZG1hLmMKPiA+IEBAIC0y
-Mzk4LDkgKzIzOTgsOSBAQCBzdGF0aWMgaW50IGVkbWFfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2Rl
-dmljZSAqcGRldikKPiA+ICAJcGxhdGZvcm1fc2V0X2RydmRhdGEocGRldiwgZWNjKTsKPiA+ICAK
-PiA+ICAJcG1fcnVudGltZV9lbmFibGUoZGV2KTsKPiA+IC0JcmV0ID0gcG1fcnVudGltZV9nZXRf
-c3luYyhkZXYpOwo+ID4gKwlyZXQgPSBwbV9ydW50aW1lX3Jlc3VtZV9hbmRfZ2V0KGRldik7Cj4g
-PiAgCWlmIChyZXQgPCAwKSB7Cj4gPiAtCQlkZXZfZXJyKGRldiwgInBtX3J1bnRpbWVfZ2V0X3N5
-bmMoKSBmYWlsZWRcbiIpOwo+ID4gKwkJZGV2X2VycihkZXYsICJwbV9ydW50aW1lX3Jlc3VtZV9h
-bmRfZ2V0KCkgZmFpbGVkXG4iKTsKPiA+ICAJCXBtX3J1bnRpbWVfZGlzYWJsZShkZXYpOwo+ID4g
-IAkJcmV0dXJuIHJldDsKPiA+ICAJfQo+IAo+IC0tIAo+IFDDqXRlcgo=
+Hi Bhupesh,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on v5.16 next-20220121]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Bhupesh-Sharma/arm64-dts-qcom-sm8150-Add-ufs-power-domain-entries/20220120-162925
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: arm64-randconfig-s032-20220117 (https://download.01.org/0day-ci/archive/20220122/202201221606.gzXiP4VV-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/e9cea3a4d3c4706f9cef18f55b07d3bc389a051a
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Bhupesh-Sharma/arm64-dts-qcom-sm8150-Add-ufs-power-domain-entries/20220120-162925
+        git checkout e9cea3a4d3c4706f9cef18f55b07d3bc389a051a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> Error: arch/arm64/boot/dts/qcom/sm8150.dtsi:1641.26-27 syntax error
+   FATAL ERROR: Unable to parse input tree
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

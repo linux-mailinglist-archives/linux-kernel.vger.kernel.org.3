@@ -2,120 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0985496BBD
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 11:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 224B7496BC9
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 11:55:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233875AbiAVKoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 05:44:38 -0500
-Received: from mga06.intel.com ([134.134.136.31]:65310 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233835AbiAVKoh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 05:44:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642848277; x=1674384277;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+QvsIxeGcYkl/A1U5Osq5yeMqcCLUOrLGPqPG8HZ4+E=;
-  b=exfRd9JnzCDlVW7l9YltnXZ774POl+ocyeCyPUfUHc7H2hoKB25sk4Xa
-   FFG7Lohgqkii+gK8ds7Ujd9s6hArrSTPDJQC61Y9X/kE2GydSjz1IRH9P
-   qh748rGfM9CwY0Gle0mYuwzvxvHAUnuIM46PRM0LL24q4GorQ5HqKnacj
-   CCh4RGv09eH+naExsfw+rghvVJNMhSikJvK90whqoj7ksbK9SCNq/+g55
-   lZzbKGq1xVl51VlP17i/NLVvZQj2cbBt0LxAM/5ZyJUpVYiVaZjc+EEdl
-   dKDYMleoXAKBVZ2LhVKhQGPSoSpFw3WlqBvNXTT8KmO4vlod7JVDC3U4K
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="306529998"
-X-IronPort-AV: E=Sophos;i="5.88,308,1635231600"; 
-   d="scan'208";a="306529998"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2022 02:44:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,308,1635231600"; 
-   d="scan'208";a="579872984"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 22 Jan 2022 02:44:34 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nBDsn-000GJM-SW; Sat, 22 Jan 2022 10:44:33 +0000
-Date:   Sat, 22 Jan 2022 18:44:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Quinn Tran <qutran@marvell.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Larry Wisneski <Larry.Wisneski@marvell.com>,
-        Duane Grigsby <duane.grigsby@marvell.com>,
-        Rick Hicksted Jr <rhicksted@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>
-Subject: drivers/scsi/qla2xxx/qla_edif_bsg.h:93:12: warning: field remote_pid
- within 'struct app_pinfo_req' is less aligned than 'port_id_t' and is
- usually due to 'struct app_pinfo_req' being packed, which can lead to
- unaligned accesses
-Message-ID: <202201221855.aplqWaqk-lkp@intel.com>
+        id S233941AbiAVKz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 05:55:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23923 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232530AbiAVKzZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 22 Jan 2022 05:55:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642848924;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=S/aKIEWGP20c/FB8xyA/aRtZKWYn2S9+h6FmEWLndug=;
+        b=fzwil8o7xoy3WfykIm9v8LlwDmmHvXt5YpdYVE+WqtGw2qOMe2NR+X5H3H0+qH5XYz2fWV
+        0M+Y7tZADVB+Cc7EIANY5uu0v2nIvGjoDiOzftDiDDljyiRNCpCXd9W5aILWLpvcEJg6+5
+        hsQHnLSAu68C1ufOu0mrKW9QtpAw864=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-630-QYK4v5prPBi61kryn1pFCA-1; Sat, 22 Jan 2022 05:55:20 -0500
+X-MC-Unique: QYK4v5prPBi61kryn1pFCA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D5BBE1006AA4;
+        Sat, 22 Jan 2022 10:55:17 +0000 (UTC)
+Received: from localhost (ovpn-12-78.pek2.redhat.com [10.72.12.78])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 655A3752CE;
+        Sat, 22 Jan 2022 10:55:16 +0000 (UTC)
+Date:   Sat, 22 Jan 2022 18:55:14 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        HATAYAMA Daisuke <d.hatayama@jp.fujitsu.com>
+Cc:     Petr Mladek <pmladek@suse.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, dyoung@redhat.com,
+        linux-doc@vger.kernel.org, vgoyal@redhat.com,
+        stern@rowland.harvard.edu, akpm@linux-foundation.org,
+        andriy.shevchenko@linux.intel.com, corbet@lwn.net,
+        halves@canonical.com, kernel@gpiccoli.net,
+        Will Deacon <will@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Hidehiro Kawai <hidehiro.kawai.ez@hitachi.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juergen Gross <jgross@suse.com>, mikelley@microsoft.com
+Subject: Re: [PATCH V4] notifier/panic: Introduce panic_notifier_filter
+Message-ID: <20220122105514.GA18258@MiWiFi-R3L-srv>
+References: <20220108153451.195121-1-gpiccoli@igalia.com>
+ <Yel8WQiBn/HNQN83@alley>
+ <ccd9332e-2917-3020-3590-447fa660ff56@igalia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <ccd9332e-2917-3020-3590-447fa660ff56@igalia.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9b57f458985742bd1c585f4c7f36d04634ce1143
-commit: 7878f22a2e03b69baf792f74488962981a1c9547 scsi: qla2xxx: edif: Add getfcinfo and statistic bsgs
-date:   6 months ago
-config: arm-randconfig-r036-20220122 (https://download.01.org/0day-ci/archive/20220122/202201221855.aplqWaqk-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7878f22a2e03b69baf792f74488962981a1c9547
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7878f22a2e03b69baf792f74488962981a1c9547
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/scsi/
+On 01/21/22 at 05:31pm, Guilherme G. Piccoli wrote:
+......
+> > IMHO, the right solution is to split the callbacks into 2 or more
+> > notifier list. Then we might rework panic() to do:
+> > 
+> > void panic(void)
+> > {
+> > 	[...]
+> > 
+> > 	/* stop watchdogs + extra info */
+> > 	atomic_notifier_call_chain(&panic_disable_watchdogs_notifier_list, 0, buf);
+> > 	atomic_notifier_call_chain(&panic_info_notifier_list, 0, buf);
+> > 	panic_print_sys_info();
+> > 
+> > 	/* crash_kexec + kmsg_dump in configurable order */
+> > 	if (!_crash_kexec_post_kmsg_dump) {
+> > 		__crash_kexec(NULL);
+> > 		smp_send_stop();
+> > 	} else {
+> > 		crash_smp_send_stop();
+> > 	}
+> > 
+> > 	kmsg_dump();
+> > 	if (_crash_kexec_post_kmsg_dump)
+> > 		__crash_kexec(NULL);
+> > 
+> > 	/* infinite loop or reboot */
+> > 	atomic_notifier_call_chain(&panic_hypervisor_notifier_list, 0, buf);
+> > 	atomic_notifier_call_chain(&panic_rest_notifier_list, 0, buf);
+> > 
+> > 	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
+> > [...] 
+> > Two notifier lists might be enough in the above scenario. I would call
+> > them:
+> > 
+> > 	panic_pre_dump_notifier_list
+> > 	panic_post_dump_notifier_list
+> > 
+> > 
+> > It is a real solution that will help everyone. It is more complicated now
+> > but it will makes things much easier in the long term. And it might be done
+> > step by step:
+> > 
+> >      1. introduce the two notifier lists
+> >      2. convert all users: one by one
+> >      3. remove the original notifier list when there is no user
+> 
+> That's a great idea! I'm into it, if we have a consensus. The thing that
+> scares me most here is that this is a big change and consumes time to
+> implement - I'd not risk such time if somebody is really against that.
+> So, let's see more opinions, maybe the kdump maintainers have good input.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I am fine with it. As long as thing is made clear, glad to see code is
+refactored to be more understandable and improved. Earlier, during several
+rounds of discussion between you and Petr, seveal pitfalls have been
+pointed out and avoided.
 
-All warnings (new ones prefixed by >>):
+Meanwhile, I would suggest Masa and HATAYAMA to help give input about
+panic_notifier usage and refactory. AFAIK, they contributed code and use
+panic_notifier in their product or environment a lot, that will be very
+helpful to get the first hand information from them.
 
-   In file included from drivers/scsi/qla2xxx/qla_edif.c:6:
-   In file included from drivers/scsi/qla2xxx/qla_def.h:34:
-   include/uapi/scsi/scsi_bsg_fc.h:280:4: warning: field rqst_data within 'struct fc_bsg_request' is less aligned than 'union (unnamed union at include/uapi/scsi/scsi_bsg_fc.h:271:2)' and is usually due to 'struct fc_bsg_request' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } rqst_data;
-             ^
-   In file included from drivers/scsi/qla2xxx/qla_edif.c:6:
-   In file included from drivers/scsi/qla2xxx/qla_def.h:74:
-   In file included from drivers/scsi/qla2xxx/qla_bsg.h:298:
->> drivers/scsi/qla2xxx/qla_edif_bsg.h:93:12: warning: field remote_pid within 'struct app_pinfo_req' is less aligned than 'port_id_t' and is usually due to 'struct app_pinfo_req' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           port_id_t remote_pid;
-                     ^
-   2 warnings generated.
+Hi Masa, HATAYANA,
 
+Any comment on this? (Please ignore this if it's not in your care.)
 
-vim +93 drivers/scsi/qla2xxx/qla_edif_bsg.h
-
-7ebb336e45ef1c Quinn Tran 2021-06-23  89  
-7ebb336e45ef1c Quinn Tran 2021-06-23  90  struct app_pinfo_req {
-7ebb336e45ef1c Quinn Tran 2021-06-23  91  	struct app_id app_info;
-7ebb336e45ef1c Quinn Tran 2021-06-23  92  	uint8_t	 num_ports;
-7ebb336e45ef1c Quinn Tran 2021-06-23 @93  	port_id_t remote_pid;
-7ebb336e45ef1c Quinn Tran 2021-06-23  94  	uint8_t	 reserved[VND_CMD_APP_RESERVED_SIZE];
-7ebb336e45ef1c Quinn Tran 2021-06-23  95  } __packed;
-7ebb336e45ef1c Quinn Tran 2021-06-23  96  
-
-:::::: The code at line 93 was first introduced by commit
-:::::: 7ebb336e45ef1ce23462c3bbd03779929008901f scsi: qla2xxx: edif: Add start + stop bsgs
-
-:::::: TO: Quinn Tran <qutran@marvell.com>
-:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

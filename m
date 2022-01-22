@@ -2,157 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38764496D36
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 19:07:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9FB496D40
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 19:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234667AbiAVSH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 13:07:29 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41324 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234633AbiAVSH2 (ORCPT
+        id S234678AbiAVSPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 13:15:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231812AbiAVSPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 13:07:28 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7E3F60E83;
-        Sat, 22 Jan 2022 18:07:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06F23C004E1;
-        Sat, 22 Jan 2022 18:07:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642874847;
-        bh=ed4KbG0a448WkbpZMG7EtToBILwDJdJNmhrkkL9oYHs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dcybovW4OlYGu+qDAhf4CHjsnfKHuFl30wagBG4FIQGi+sP64xX8pL+20Hce7C1CA
-         usRuCttijOh60IWec7d1SsAy5FmstJBUM1/e+1CUXm2dPaaj/KLc6FV+Et/3wx45S5
-         4xGnsU6FH9uDYka3blYl78arRt8fOFDJe2JjT73ZU8pjVDmCAhzWfZMgYGc4p53heG
-         1IEJ7ar3Mt9ABYgFFViySjJ3qBa8SCBHrKfsi+0F7N3WDhzOUcFhai4cQ8tERfOGfu
-         G/ohHXPwSdxIyAPkyxUf8nqaFKU5wkhTBvJEtP72MKBEpy0NbARxIKDHzB2PhEOpnK
-         z5Y+nuWBb8JrQ==
-Date:   Sat, 22 Jan 2022 18:13:36 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Sean Nyekjaer <sean@geanix.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: accel: fxls8962af: add padding to regmap for SPI
-Message-ID: <20220122181336.61bed571@jic23-huawei>
-In-Reply-To: <20220117074600.gmfonh35ptx6kqbs@skn-laptop.hadsten>
-References: <20211220125144.3630539-1-sean@geanix.com>
-        <20220117074600.gmfonh35ptx6kqbs@skn-laptop.hadsten>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sat, 22 Jan 2022 13:15:12 -0500
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BC9C06173B
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 10:15:12 -0800 (PST)
+Received: by mail-ej1-x642.google.com with SMTP id m4so9421214ejb.9
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 10:15:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=d/EaOgZiI3pd95TnMQX5PIgNDADajIG4/cbjtV/wgVQ=;
+        b=EPkcb12oW0QC/IxLANrTZ53/kKKeP627f3l42Xv0S4EL2yr9aaGzU7sgPU2eA7dhuC
+         pqc4DmuPOogOaI3GmGd9L7nwimmUhs/UUwkr44qKaiYnUs/nyOtpEl0NU/ky3BTxFzpf
+         M09FL2lsvnNcmLDI6tAGAYu2P5Ls/5CspnlfM6ZQPZVYdsnGB2hL+1Qg3eZEtPh3O4HO
+         Xed6Zhc7qU5CZWW/18V0w4rkF+4TEVcxAKVhPFvH2tjkmBOFzUM/cjkeap1BvKVXwOL7
+         zgYFkrwHAKTfMs6mJEyzVN3ppRQw4sm2fRe1V6e1HfTueYA/Z9CSHXcM1IFVUSNXCnun
+         e1nA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=d/EaOgZiI3pd95TnMQX5PIgNDADajIG4/cbjtV/wgVQ=;
+        b=MdB8ifov9dDyBpAUeivoDmd45Mx/BVmqAuFSEmf6qjL907T+l4yFVFgY4UvzRUg4bt
+         nlttqMSn/dCG804gaJ71+Xnx5teCi1DsLOKijhxaj4UfqcMQIXMdmXcuOWPZyGbsGMRo
+         Jq3KeuH1fFW04G1bWiITW8D3+prALfEDcZ40JgcMscSu66BBZ/Yvp6wJU82fWu8dNVUT
+         TfJQ5PUZuDt3wEFyyLtFkMICVB4utoh1QrMIBpUnjWR3HrL+L35zQwQ+C0grVeUKv+tP
+         69BY0IIXeN2OCZnluD+3bgzsI69noqO496FzhVPIq/Lu+bS0aZFXwvgldi8/XV71oy/X
+         8ATA==
+X-Gm-Message-State: AOAM5313VkJOzPkN936w0QrUHtauANnPELA8/EUnb+XQ+laVvYMfxf1i
+        LOfliKQh1mqgDuKsPDveSdBs9NXn3uKU3rThUzY=
+X-Google-Smtp-Source: ABdhPJyfbUhRAXrKobKBMZRZWxJrnM6eNjvdBtB5PM0smYvNZLR7zvSl5wa4vmXGs+0CrEBNM98xmzOr6UxiQFbVzJ8=
+X-Received: by 2002:a17:907:1b1f:: with SMTP id mp31mr6997085ejc.247.1642875310527;
+ Sat, 22 Jan 2022 10:15:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a7c:9c8d:0:b0:13b:bf75:e6ec with HTTP; Sat, 22 Jan 2022
+ 10:15:09 -0800 (PST)
+Reply-To: sigmondhelvig@gmail.com
+From:   Sigmond Helvig <geneva.nickerson0012231@gmail.com>
+Date:   Sat, 22 Jan 2022 20:15:09 +0200
+Message-ID: <CALtBGMhDHgSfEahxPGF7-H+Da93AbjeEjZr51c3W4gBN9LBubQ@mail.gmail.com>
+Subject: Business Opportunity
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Jan 2022 08:46:00 +0100
-Sean Nyekjaer <sean@geanix.com> wrote:
+Hello ,
 
-> On Mon, Dec 20, 2021 at 01:51:43PM +0100, Sean Nyekjaer wrote:
-> > Add missing don't care padding between address and
-> > data for SPI transfers
-> > 
-> > Fixes: a3e0b51884ee ("iio: accel: add support for FXLS8962AF/FXLS8964AF accelerometers")
-> > Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-> > ---
-> >  drivers/iio/accel/fxls8962af-core.c | 12 ++++++++++--
-> >  drivers/iio/accel/fxls8962af-i2c.c  |  2 +-
-> >  drivers/iio/accel/fxls8962af-spi.c  |  2 +-
-> >  drivers/iio/accel/fxls8962af.h      |  3 ++-
-> >  4 files changed, 14 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/iio/accel/fxls8962af-core.c b/drivers/iio/accel/fxls8962af-core.c
-> > index 32989d91b982..f7fd9e046588 100644
-> > --- a/drivers/iio/accel/fxls8962af-core.c
-> > +++ b/drivers/iio/accel/fxls8962af-core.c
-> > @@ -173,12 +173,20 @@ struct fxls8962af_data {
-> >  	u16 upper_thres;
-> >  };
-> >  
-> > -const struct regmap_config fxls8962af_regmap_conf = {
-> > +const struct regmap_config fxls8962af_i2c_regmap_conf = {
-> >  	.reg_bits = 8,
-> >  	.val_bits = 8,
-> >  	.max_register = FXLS8962AF_MAX_REG,
-> >  };
-> > -EXPORT_SYMBOL_GPL(fxls8962af_regmap_conf);
-> > +EXPORT_SYMBOL_GPL(fxls8962af_i2c_regmap_conf);
-> > +
-> > +const struct regmap_config fxls8962af_spi_regmap_conf = {
-> > +	.reg_bits = 8,
-> > +	.pad_bits = 8,
-> > +	.val_bits = 8,
-> > +	.max_register = FXLS8962AF_MAX_REG,
-> > +};
-> > +EXPORT_SYMBOL_GPL(fxls8962af_spi_regmap_conf);
-> >  
-> >  enum {
-> >  	fxls8962af_idx_x,
-> > diff --git a/drivers/iio/accel/fxls8962af-i2c.c b/drivers/iio/accel/fxls8962af-i2c.c
-> > index cfb004b20455..6bde9891effb 100644
-> > --- a/drivers/iio/accel/fxls8962af-i2c.c
-> > +++ b/drivers/iio/accel/fxls8962af-i2c.c
-> > @@ -18,7 +18,7 @@ static int fxls8962af_probe(struct i2c_client *client)
-> >  {
-> >  	struct regmap *regmap;
-> >  
-> > -	regmap = devm_regmap_init_i2c(client, &fxls8962af_regmap_conf);
-> > +	regmap = devm_regmap_init_i2c(client, &fxls8962af_i2c_regmap_conf);
-> >  	if (IS_ERR(regmap)) {
-> >  		dev_err(&client->dev, "Failed to initialize i2c regmap\n");
-> >  		return PTR_ERR(regmap);
-> > diff --git a/drivers/iio/accel/fxls8962af-spi.c b/drivers/iio/accel/fxls8962af-spi.c
-> > index 57108d3d480b..6f4dff3238d3 100644
-> > --- a/drivers/iio/accel/fxls8962af-spi.c
-> > +++ b/drivers/iio/accel/fxls8962af-spi.c
-> > @@ -18,7 +18,7 @@ static int fxls8962af_probe(struct spi_device *spi)
-> >  {
-> >  	struct regmap *regmap;
-> >  
-> > -	regmap = devm_regmap_init_spi(spi, &fxls8962af_regmap_conf);
-> > +	regmap = devm_regmap_init_spi(spi, &fxls8962af_spi_regmap_conf);
-> >  	if (IS_ERR(regmap)) {
-> >  		dev_err(&spi->dev, "Failed to initialize spi regmap\n");
-> >  		return PTR_ERR(regmap);
-> > diff --git a/drivers/iio/accel/fxls8962af.h b/drivers/iio/accel/fxls8962af.h
-> > index b67572c3ef06..9cbe98c3ba9a 100644
-> > --- a/drivers/iio/accel/fxls8962af.h
-> > +++ b/drivers/iio/accel/fxls8962af.h
-> > @@ -17,6 +17,7 @@ int fxls8962af_core_probe(struct device *dev, struct regmap *regmap, int irq);
-> >  int fxls8962af_core_remove(struct device *dev);
-> >  
-> >  extern const struct dev_pm_ops fxls8962af_pm_ops;
-> > -extern const struct regmap_config fxls8962af_regmap_conf;
-> > +extern const struct regmap_config fxls8962af_i2c_regmap_conf;
-> > +extern const struct regmap_config fxls8962af_spi_regmap_conf;
-> >  
-> >  #endif				/* _FXLS8962AF_H_ */
-> > -- 
-> > 2.34.1
-> >   
-> 
-> Hi Jonathan,
-> 
-> Did you have time to look at this?
+I viewed your profile on Linkedin regarding a proposal that has
+something in common with you, reply for more details via the email bellow.
 
-Sorry, saw it go by but bad timing wrt to opening of merge window
-so it was still in my 'to apply' queue.
-
-Anyhow, now done so and it is in the fixes-togreg branch of iio.git +
-marked for stable.
-
-Note I'll probably rebase that tree after rc1 though as we have a few
-other fixes I'd like in the same pull request for stuff that only
-went in this cycle.
-
-Thanks,
-
-Jonathan
-
-> 
-> /Sean
-
+Claire Cordell,
+claircordell5@gmail.com

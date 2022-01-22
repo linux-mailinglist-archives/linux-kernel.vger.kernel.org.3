@@ -2,155 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B568496972
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 03:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE73496975
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 03:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbiAVClC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 21:41:02 -0500
-Received: from mail-bn8nam12on2114.outbound.protection.outlook.com ([40.107.237.114]:38102
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229603AbiAVClB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 21:41:01 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iUC5+NbE1e94xU4yzXm1tjhZrwUSHUmHUSPd/YLEZYO/wzaWM9TiLiCNpMj0oE35xohwHNcXkTUmk6q0200+ceowXAutzb1bru5hNJ1AD9tVVbisM2B7mK6C/f9phyR0xuYXAJ9l9hZw6FFZR1tsRKcGOIxrNvMRHiBxALsFH9pJOGEJsZzg+LoHxVosOhgSx+qBaEhn3e2mG2d3kp1c01UttWy+ZWTRAOji+r6NpaxNSawLu0A+rMcA/pdIbDArboayQ3xZMEs/LUogtz01f4/w3s+DOZL8OOeKVI7PUAIBXOuTbDMRq0vttFBdowTRZfeYS4F1k0697kBQ+G4gpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=j9BoLsPO+w5iMqzv1V8UMsCDJ7hsdYtEGuw7b+EzV6c=;
- b=RFtcrqZrAeTgVRzzMUx62lB4NnAfmN9d6ZVMIOp+zymI36qhdJMmUpr5+4sM55keFPAFvGV+YgrRnbNIkaw5spL5uoUXuHz3toHGF7iHjelGlvx9hJwV2LYUZpLEIeCgdxmugB48ptwRb46bcxtaWAz5XUF/UvSNOrzHsCyJHyAw9nKBCvchiJFXXEciiBjzil5ZtVNCp4ENUmb4z3LucAQl6TUpTK9UxA+uYrmEj6k9OHUMsjougsVu7/pi5D59i+44/9yP3sMAm3QYgzgrKSBQQ9KyIlyYRmlOqRum3nkxn73/sOpPSpx1f/km469lnoX2n0xJPfpUdXzt+Rh8EA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j9BoLsPO+w5iMqzv1V8UMsCDJ7hsdYtEGuw7b+EzV6c=;
- b=WoBs6cUJpfo6gwWjPxs5fICfASy5VpyzYaELekJsGq3wI4sTL/2hLrIuM4v3qyML1oF19Ud/t8pQTUyMQJf8fDKjZfEnChcoj1faPlKm82XTAWIUFe2XDsUT7vmazdaYmpVfHtlCRQBiNw6mbAN1eUSMpkSkjprQfEKOl4VPNqA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by DM5PR10MB1596.namprd10.prod.outlook.com
- (2603:10b6:3:14::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Sat, 22 Jan
- 2022 02:40:58 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::2d52:2a96:7e6c:460f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::2d52:2a96:7e6c:460f%4]) with mapi id 15.20.4888.014; Sat, 22 Jan 2022
- 02:40:58 +0000
-Date:   Fri, 21 Jan 2022 18:40:51 -0800
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>
-Subject: Re: [net RFC v1 1/1] page_pool: fix NULL dereference crash
-Message-ID: <20220122024051.GA905413@euler>
-References: <20220122005644.802352-1-colin.foster@in-advantage.com>
- <20220122005644.802352-2-colin.foster@in-advantage.com>
- <CAADnVQK8xrQ92+=wm8AoDkC93SEKz3G=CoOnkPgvs=spJk5UZA@mail.gmail.com>
+        id S231519AbiAVCpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 21:45:17 -0500
+Received: from mga05.intel.com ([192.55.52.43]:57595 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229603AbiAVCpQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 21:45:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642819516; x=1674355516;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/FAvEJy+ecSk2ijDnTewYyrrTLdpqmyZKmoL/n5AaNA=;
+  b=MrepAoFMqs663HwFT87WI9IhWTXk5hNby/oMYOtBrzRhWEOAYOfeE/Zo
+   UEcq6gnDYOzGvKJLvn8shxbXtPrUY7acN9DWBQ5YXm3JLZjFsQMtpJ7NW
+   8hMISRlWMNBiKxQmU/8L6liXZVduTlVRRAIzo3Mq57ogm4TICmG0rV2fM
+   cE5FnIcMW3HZ4g89W7ZsD6W3sC1L+NwS9znye6HRxV06ySJRrs01CkD2R
+   qj4nYyzFPEdkygnU57liHOgOzNQhu0oZkoT1TAjvd7AuX4ZKbW+SsT3OB
+   PjJ+BSrEm59helbnHiNEAPfFqfox/IcG3cSnRkDU6qEtUlQg4gNLkLfJy
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10234"; a="332136261"
+X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
+   d="scan'208";a="332136261"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 18:45:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,307,1635231600"; 
+   d="scan'208";a="626933198"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 21 Jan 2022 18:45:14 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nB6Ov-000Fvc-PM; Sat, 22 Jan 2022 02:45:13 +0000
+Date:   Sat, 22 Jan 2022 10:45:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexander Aring <aahringo@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        David Teigland <teigland@redhat.com>
+Subject: fs/dlm/midcomms.c:913:22: sparse: sparse: restricted __le32 degrades
+ to integer
+Message-ID: <202201221028.YKA8kSdm-lkp@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAADnVQK8xrQ92+=wm8AoDkC93SEKz3G=CoOnkPgvs=spJk5UZA@mail.gmail.com>
-X-ClientProxiedBy: MWHPR15CA0033.namprd15.prod.outlook.com
- (2603:10b6:300:ad::19) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 66dbdd6e-d597-48b4-6dc2-08d9dd509eef
-X-MS-TrafficTypeDiagnostic: DM5PR10MB1596:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR10MB1596ABE141B37601DB4C19E0A45C9@DM5PR10MB1596.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: w3l4RMv8CjpMmAjns5cYFLrTSzzaYEQGUEpPffjaFs1VDat48/zhvjkS6Yp85zXNE9p4rpQmkyFxaK1NPhJPZNvsyJkaSYuXEVqN2hBEmYE+hgMxtBYq/MoxzO++OAd3OqFvQmu81ij4e357pfgzRVZo5zO0FXJc6ys4FSDo35h2sl3fNgwGPoWGgLiRR4bq/g8WcLr0lrOSmU6DVwBIGiqECu7dKQTmP3Mxtvq48CsZB7KrNz5rtEwXHNzgV5FrLK4GnM2GqJ5NhEpCtDW17C8YK9qJZziCTnIDgY1C7YgYbs5Dh7aeS4TtqvdTzjUY88HRTdXtoSlFemGki07h3EeaV1jpC+quQMb0sEHPUDTAbI5VsS1CyP7q7L6yDMEeYNKQcoW3tFlrPoV3cTxhyQP1MzZQtnxlK2fovQchCVWtdD9UeupqgtsTW6/Si26Qxrv4Oj9FWjs3dLryvJcrlJxPWeHuUL3Yn6EznqXWGz4jjm2R2wiqPzTKM6wxCopwVhXvblmb79VqWl9AH3Np0//R3pt5HfKOnhytmi9vpIoMV9jgJka5acES3Pcg+lbq+/jKNaVwijd0U586H4lbMNMGq6ge3j/idtVTQ1tLB+HubiCfUBoSVdqGccOJKThMfSFxYxR0B0j/3HHZoD2CCIt3s56X8HieOzd0op5o+dR5il5j2oHfyNAIypUZy3fdwDmvBCBEz599iwAKlLOjBw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(136003)(376002)(346002)(42606007)(366004)(39830400003)(396003)(33716001)(5660300002)(33656002)(6486002)(4326008)(66476007)(8936002)(38100700002)(44832011)(38350700002)(2906002)(66556008)(186003)(8676002)(53546011)(54906003)(7416002)(6506007)(316002)(9686003)(6512007)(52116002)(66946007)(508600001)(86362001)(26005)(6666004)(6916009)(83380400001)(1076003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mMtSS6OdGpKEDmE4XiM9Styg2lhHcGKOUtrM5lEthT/Om/idK1NyP1UF6o4U?=
- =?us-ascii?Q?ydyAV4cmcLbAphyCL2MQFpK0paN/LuNFQaStkwMMhqgJSB+bTgFDTrEkAie6?=
- =?us-ascii?Q?j2LmgUXxUjed81Zcqq3nvtvGOKfajTrN8/LJkFHBJ0cx4KcHbDQ+smH33onM?=
- =?us-ascii?Q?SrFINbVb9MZykcNqK3er6PK8BDUDluzFongQ2Hrmedy8WD4b2iDKRVznI5cV?=
- =?us-ascii?Q?QSrAysCg66KzBjjZzga6S5U17EhP99epUlQ0qvrfUQnZViSGkWg/RxlJYcqF?=
- =?us-ascii?Q?2RZxgSfVh9fCH4tvN73PHM26yNrHCEEqwC1HEXNkzrUh2UmdCRKKfQEzZl22?=
- =?us-ascii?Q?tGF3Ec2RmNRhNtOoSoQvKPchuUDmYU5GXjC6eJIDdfc25fzCu0XZAt5Cbx8t?=
- =?us-ascii?Q?arjC7ngf4uq41oQUCEEfmZa6pXi4bDC8yyw/Kdft6hCC852OHa5ZPpUZ/SY1?=
- =?us-ascii?Q?bN7uV+snG6qRnH0AlXrmZUjJA+ITC59S9/MaCnwZzYCWI9+hZz3gidRBcupm?=
- =?us-ascii?Q?vpCfvmkgGLZTgSIou/9V8Lo9Ple1eYR41T2jXLrBksnPM96q9BgJr92mvong?=
- =?us-ascii?Q?szPyyjFozQuCKeljpQSXw926QFxFeQmed1P9d9Ox7mXJgJTgvedVUCc5fyGu?=
- =?us-ascii?Q?emSjdr/+gYeq8J8Mhoyh6pAunhOI3r3FAwlbTLcMim1h2uQUoJfHn7kim+tS?=
- =?us-ascii?Q?hXgoUeRt6SZwVWQ9IWVoBy1ERDfbw7z6XjpvEVFebPkaUOonN9bk+loRG6X1?=
- =?us-ascii?Q?JxQamM44Jy8cmx3CLLeIez21W8ZSGviS3XWJGesSQfuk/vHhz9c9SV66U5a2?=
- =?us-ascii?Q?o6ie9DgUnJNhimtBqTEgy0Tc5W/tfUdKb4NCIq2Mqi2Z/XnZdyDg+cmglXz4?=
- =?us-ascii?Q?ijAh5VDcHtrWhA9b4MJWe0EzGr5Ky2M2YYDUvyGuSLnb+t1KHluULdaZcntb?=
- =?us-ascii?Q?45Dralu+VSl8j0u2Ok40EQjVP5R5NeOaPIvinBkE+ojm3odLWV5CnnkQ7ucX?=
- =?us-ascii?Q?x/xx3CRyewDjqR+HE3vTk2tqQ+t+Vh6b7i2As4vc98eWzoQQ/y43+VMs7YQ0?=
- =?us-ascii?Q?4RC+5vQ3y+9CogZGM80z22nlaCmPTORgkmKSf1QRg2/kcrFmbDfBb+qbmgLJ?=
- =?us-ascii?Q?BYeRRlTmVJoAao/tzsKyEx9gDmJMcsdkswpL38nykkjtG8m7vd8AWRowlja+?=
- =?us-ascii?Q?wj2LVzlFvWd8xbRhv5isQ36bvdrUoNilJcc+tgSiUrvKhONkGxkItTcJJmpF?=
- =?us-ascii?Q?u/mCNhbccCl5tdogOv6Nj99IDQNpP8Ax+RjosC0EvQNYs+Vcd2YViSFA5Mqb?=
- =?us-ascii?Q?DMiFAjIkYlpNAlDR2kxORxnfirvuDhDG+sl2a7om3qC6leS6pk9jsgnuqBR/?=
- =?us-ascii?Q?SBGXXSiTdgI/eABI/8kP7ZxiQ01laiagCBRhcrRYIUQo75FoPzqEEBvRdoLn?=
- =?us-ascii?Q?ChWmmXrlk5efz0Z2O1voumoX0LSIYMY7EOwhJXkRR961hdkPTcNrbglah2GW?=
- =?us-ascii?Q?P01R4rSNMRrux6PTXHKDOaxQUQYB2/CTHle69b9+XwOLnuExcGuguUUEBeY9?=
- =?us-ascii?Q?YOBZuopp5Y6BwrOxn0HV7qNzbl2sSaoPmQrwz93NNSI7ToWPV9Jt3gK77XHH?=
- =?us-ascii?Q?glerE2V1NY2uNLyGrLyHo9H1TYxUS/ImX64cNHUZdVPll78+f7DzDnL6WQ1s?=
- =?us-ascii?Q?B1vyt7QcLpt9joTbwgSiRgahS9c=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 66dbdd6e-d597-48b4-6dc2-08d9dd509eef
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2022 02:40:58.6530
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qZTknn6VO8FZ7XNfwZLzbFGohNxR6ad9jdLVfvWb5O8Hsz8Qu9RbOHvhR/Mjl6rGLUd0yGrmKbiyb1LSeA2y7KRTcKq1DPriF/U3zmaDfNA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR10MB1596
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 05:13:28PM -0800, Alexei Starovoitov wrote:
-> On Fri, Jan 21, 2022 at 4:57 PM Colin Foster
-> <colin.foster@in-advantage.com> wrote:
-> >
-> > Check for the existence of page pool params before dereferencing. This can
-> > cause crashes in certain conditions.
-> 
-> In what conditions?
-> Out of tree driver?
-> 
-> > Fixes: 35b2e549894b ("page_pool: Add callback to init pages when they are
-> > allocated")
-> >
-> > Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> > ---
-> >  net/core/page_pool.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-> > index bd62c01a2ec3..641f849c95e7 100644
-> > --- a/net/core/page_pool.c
-> > +++ b/net/core/page_pool.c
-> > @@ -213,7 +213,7 @@ static void page_pool_set_pp_info(struct page_pool *pool,
-> >  {
-> >         page->pp = pool;
-> >         page->pp_magic |= PP_SIGNATURE;
-> > -       if (pool->p.init_callback)
-> > +       if (pool->p && pool->p.init_callback)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9b57f458985742bd1c585f4c7f36d04634ce1143
+commit: 658bd576f95ed597e519cdadf1c86ac87c17aea5 fs: dlm: move version conversion to compile time
+date:   3 months ago
+config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220122/202201221028.YKA8kSdm-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=658bd576f95ed597e519cdadf1c86ac87c17aea5
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 658bd576f95ed597e519cdadf1c86ac87c17aea5
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-And my apologies - this should be if (pool... not if (pool->p. kernelbot
-will be sure to tell me of this blunder soon
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> >                 pool->p.init_callback(page, pool->p.init_arg);
-> >  }
-> >
-> > --
-> > 2.25.1
-> >
+
+sparse warnings: (new ones prefixed by >>)
+   fs/dlm/midcomms.c:213:1: sparse: sparse: symbol '__srcu_struct_nodes_srcu' was not declared. Should it be static?
+   fs/dlm/midcomms.c:570:25: sparse: sparse: cast to restricted __le32
+   fs/dlm/midcomms.c:678:19: sparse: sparse: cast to restricted __le16
+   fs/dlm/midcomms.c:680:16: sparse: sparse: cast to restricted __le16
+   fs/dlm/midcomms.c:718:27: sparse: sparse: cast to restricted __le16
+   fs/dlm/midcomms.c:737:25: sparse: sparse: cast to restricted __le32
+   fs/dlm/midcomms.c:747:25: sparse: sparse: cast to restricted __le32
+   fs/dlm/midcomms.c:756:23: sparse: sparse: cast to restricted __le32
+   fs/dlm/midcomms.c:766:42: sparse: sparse: cast to restricted __le16
+   fs/dlm/midcomms.c:769:26: sparse: sparse: cast to restricted __le16
+   fs/dlm/midcomms.c:804:23: sparse: sparse: cast to restricted __le32
+   fs/dlm/midcomms.c:838:27: sparse: sparse: cast to restricted __le16
+   fs/dlm/midcomms.c:898:26: sparse: sparse: cast to restricted __le16
+   fs/dlm/midcomms.c:920:25: sparse: sparse: cast to restricted __le32
+>> fs/dlm/midcomms.c:913:22: sparse: sparse: restricted __le32 degrades to integer
+   fs/dlm/midcomms.c:916:22: sparse: sparse: restricted __le32 degrades to integer
+   fs/dlm/midcomms.c:1056:20: sparse: sparse: context imbalance in 'dlm_midcomms_get_mhandle' - wrong count at exit
+   fs/dlm/midcomms.c: note: in included file (through include/linux/notifier.h, arch/x86/include/asm/uprobes.h, include/linux/uprobes.h, ...):
+   include/linux/srcu.h:188:9: sparse: sparse: context imbalance in 'dlm_midcomms_commit_mhandle' - unexpected unlock
+
+vim +913 fs/dlm/midcomms.c
+
+   871	
+   872	/*
+   873	 * Called from the low-level comms layer to process a buffer of
+   874	 * commands.
+   875	 */
+   876	
+   877	int dlm_process_incoming_buffer(int nodeid, unsigned char *buf, int len)
+   878	{
+   879		const unsigned char *ptr = buf;
+   880		const struct dlm_header *hd;
+   881		uint16_t msglen;
+   882		int ret = 0;
+   883	
+   884		while (len >= sizeof(struct dlm_header)) {
+   885			hd = (struct dlm_header *)ptr;
+   886	
+   887			/* no message should be more than DLM_MAX_SOCKET_BUFSIZE or
+   888			 * less than dlm_header size.
+   889			 *
+   890			 * Some messages does not have a 8 byte length boundary yet
+   891			 * which can occur in a unaligned memory access of some dlm
+   892			 * messages. However this problem need to be fixed at the
+   893			 * sending side, for now it seems nobody run into architecture
+   894			 * related issues yet but it slows down some processing.
+   895			 * Fixing this issue should be scheduled in future by doing
+   896			 * the next major version bump.
+   897			 */
+   898			msglen = le16_to_cpu(hd->h_length);
+   899			if (msglen > DLM_MAX_SOCKET_BUFSIZE ||
+   900			    msglen < sizeof(struct dlm_header)) {
+   901				log_print("received invalid length header: %u from node %d, will abort message parsing",
+   902					  msglen, nodeid);
+   903				return -EBADMSG;
+   904			}
+   905	
+   906			/* caller will take care that leftover
+   907			 * will be parsed next call with more data
+   908			 */
+   909			if (msglen > len)
+   910				break;
+   911	
+   912			switch (hd->h_version) {
+ > 913			case cpu_to_le32(DLM_VERSION_3_1):
+   914				dlm_midcomms_receive_buffer_3_1((union dlm_packet *)ptr, nodeid);
+   915				break;
+   916			case cpu_to_le32(DLM_VERSION_3_2):
+   917				dlm_midcomms_receive_buffer_3_2((union dlm_packet *)ptr, nodeid);
+   918				break;
+   919			default:
+   920				log_print("received invalid version header: %u from node %d, will skip this message",
+   921					  le32_to_cpu(hd->h_version), nodeid);
+   922				break;
+   923			}
+   924	
+   925			ret += msglen;
+   926			len -= msglen;
+   927			ptr += msglen;
+   928		}
+   929	
+   930		return ret;
+   931	}
+   932	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

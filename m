@@ -2,136 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 224B7496BC9
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 11:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ACC1496C6D
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 13:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233941AbiAVKz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 05:55:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23923 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232530AbiAVKzZ (ORCPT
+        id S232523AbiAVM6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 07:58:09 -0500
+Received: from 6.mo582.mail-out.ovh.net ([87.98.177.69]:43669 "EHLO
+        6.mo582.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232360AbiAVM6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 05:55:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642848924;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=S/aKIEWGP20c/FB8xyA/aRtZKWYn2S9+h6FmEWLndug=;
-        b=fzwil8o7xoy3WfykIm9v8LlwDmmHvXt5YpdYVE+WqtGw2qOMe2NR+X5H3H0+qH5XYz2fWV
-        0M+Y7tZADVB+Cc7EIANY5uu0v2nIvGjoDiOzftDiDDljyiRNCpCXd9W5aILWLpvcEJg6+5
-        hsQHnLSAu68C1ufOu0mrKW9QtpAw864=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-630-QYK4v5prPBi61kryn1pFCA-1; Sat, 22 Jan 2022 05:55:20 -0500
-X-MC-Unique: QYK4v5prPBi61kryn1pFCA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D5BBE1006AA4;
-        Sat, 22 Jan 2022 10:55:17 +0000 (UTC)
-Received: from localhost (ovpn-12-78.pek2.redhat.com [10.72.12.78])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 655A3752CE;
-        Sat, 22 Jan 2022 10:55:16 +0000 (UTC)
-Date:   Sat, 22 Jan 2022 18:55:14 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        HATAYAMA Daisuke <d.hatayama@jp.fujitsu.com>
-Cc:     Petr Mladek <pmladek@suse.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, dyoung@redhat.com,
-        linux-doc@vger.kernel.org, vgoyal@redhat.com,
-        stern@rowland.harvard.edu, akpm@linux-foundation.org,
-        andriy.shevchenko@linux.intel.com, corbet@lwn.net,
-        halves@canonical.com, kernel@gpiccoli.net,
-        Will Deacon <will@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Hidehiro Kawai <hidehiro.kawai.ez@hitachi.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juergen Gross <jgross@suse.com>, mikelley@microsoft.com
-Subject: Re: [PATCH V4] notifier/panic: Introduce panic_notifier_filter
-Message-ID: <20220122105514.GA18258@MiWiFi-R3L-srv>
-References: <20220108153451.195121-1-gpiccoli@igalia.com>
- <Yel8WQiBn/HNQN83@alley>
- <ccd9332e-2917-3020-3590-447fa660ff56@igalia.com>
+        Sat, 22 Jan 2022 07:58:08 -0500
+X-Greylist: delayed 4199 seconds by postgrey-1.27 at vger.kernel.org; Sat, 22 Jan 2022 07:58:08 EST
+Received: from player789.ha.ovh.net (unknown [10.108.16.91])
+        by mo582.mail-out.ovh.net (Postfix) with ESMTP id 540F520D6B
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 10:28:27 +0000 (UTC)
+Received: from etezian.org (82-181-27-157.bb.dnainternet.fi [82.181.27.157])
+        (Authenticated sender: andi@etezian.org)
+        by player789.ha.ovh.net (Postfix) with ESMTPSA id DEB73269A5523;
+        Sat, 22 Jan 2022 10:28:11 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-102R004083ec7c4-2316-4ca6-8030-7f2f6f6c0c61,
+                    47613193A4C2821AFA139AF0D7345AE9E747044F) smtp.auth=andi@etezian.org
+X-OVh-ClientIp: 82.181.27.157
+Date:   Sat, 22 Jan 2022 12:28:10 +0200
+From:   Andi Shyti <andi@etezian.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linus.walleij@linaro.org,
+        robh+dt@kernel.org, linux-samsung-soc@vger.kernel.org,
+        pankaj.dubey@samsung.com, broonie@kernel.org, andi@etezian.org,
+        linux-spi@vger.kernel.org, linux-fsd@tesla.com,
+        Adithya K V <adithya.kv@samsung.com>
+Subject: Re: [PATCH v2 1/3] spi: dt-bindings: samsung: Add fsd spi compatible
+Message-ID: <YevcOlARxNcBeDJE@jack.zhora.eu>
+References: <20220120192438.25555-1-alim.akhtar@samsung.com>
+ <CGME20220120193613epcas5p238851849d212e01d7d830d78ca7d6379@epcas5p2.samsung.com>
+ <20220120192438.25555-2-alim.akhtar@samsung.com>
+ <aa172f14-2328-fc7c-0063-5c0033970d1d@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ccd9332e-2917-3020-3590-447fa660ff56@igalia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+In-Reply-To: <aa172f14-2328-fc7c-0063-5c0033970d1d@canonical.com>
+X-Ovh-Tracer-Id: 15873781313358400152
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrvddvgddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvuffkfhggtggujgesthdtrodttddtvdenucfhrhhomheptehnughiucfuhhihthhiuceorghnughisegvthgviihirghnrdhorhhgqeenucggtffrrghtthgvrhhnpeevkeejgedvvdehveeuledtvdfgvdfggfehveekffffveekkeehkeegheeileefleenucfkpheptddrtddrtddrtddpkedvrddukedurddvjedrudehjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeekledrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegrnhguihesvghtvgiiihgrnhdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/21/22 at 05:31pm, Guilherme G. Piccoli wrote:
-......
-> > IMHO, the right solution is to split the callbacks into 2 or more
-> > notifier list. Then we might rework panic() to do:
+Hi Krzysztof and Alim,
+
+On Fri, Jan 21, 2022 at 07:33:15PM +0100, Krzysztof Kozlowski wrote:
+> On 20/01/2022 20:24, Alim Akhtar wrote:
+> > Adds spi controller dt-binding compatible information for
+> > Tesla Full Self-Driving (FSD) SoC.
 > > 
-> > void panic(void)
-> > {
-> > 	[...]
-> > 
-> > 	/* stop watchdogs + extra info */
-> > 	atomic_notifier_call_chain(&panic_disable_watchdogs_notifier_list, 0, buf);
-> > 	atomic_notifier_call_chain(&panic_info_notifier_list, 0, buf);
-> > 	panic_print_sys_info();
-> > 
-> > 	/* crash_kexec + kmsg_dump in configurable order */
-> > 	if (!_crash_kexec_post_kmsg_dump) {
-> > 		__crash_kexec(NULL);
-> > 		smp_send_stop();
-> > 	} else {
-> > 		crash_smp_send_stop();
-> > 	}
-> > 
-> > 	kmsg_dump();
-> > 	if (_crash_kexec_post_kmsg_dump)
-> > 		__crash_kexec(NULL);
-> > 
-> > 	/* infinite loop or reboot */
-> > 	atomic_notifier_call_chain(&panic_hypervisor_notifier_list, 0, buf);
-> > 	atomic_notifier_call_chain(&panic_rest_notifier_list, 0, buf);
-> > 
-> > 	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
-> > [...] 
-> > Two notifier lists might be enough in the above scenario. I would call
-> > them:
-> > 
-> > 	panic_pre_dump_notifier_list
-> > 	panic_post_dump_notifier_list
-> > 
-> > 
-> > It is a real solution that will help everyone. It is more complicated now
-> > but it will makes things much easier in the long term. And it might be done
-> > step by step:
-> > 
-> >      1. introduce the two notifier lists
-> >      2. convert all users: one by one
-> >      3. remove the original notifier list when there is no user
+> > Cc: linux-fsd@tesla.com
+> > Signed-off-by: Adithya K V <adithya.kv@samsung.com>
+> > Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> > ---
+> >  Documentation/devicetree/bindings/spi/samsung,spi.yaml | 1 +
+> >  1 file changed, 1 insertion(+)
 > 
-> That's a great idea! I'm into it, if we have a consensus. The thing that
-> scares me most here is that this is a big change and consumes time to
-> implement - I'd not risk such time if somebody is really against that.
-> So, let's see more opinions, maybe the kdump maintainers have good input.
+> I think you forgot to mention - in cover letter - that this depends on
+> my Samsung SPI bindings conversion to dtschema.
 
-I am fine with it. As long as thing is made clear, glad to see code is
-refactored to be more understandable and improved. Earlier, during several
-rounds of discussion between you and Petr, seveal pitfalls have been
-pointed out and avoided.
+It's written in the cover letter:
 
-Meanwhile, I would suggest Masa and HATAYAMA to help give input about
-panic_notifier usage and refactory. AFAIK, they contributed code and use
-panic_notifier in their product or environment a lot, that will be very
-helpful to get the first hand information from them.
+"Note: This series is depended on [1] patches which adds
+support of FSD SoC and on Krzysztof's v5 [2] of spi schema
+changes"
 
-Hi Masa, HATAYANA,
+Alim, you can also add:
 
-Any comment on this? (Please ignore this if it's not in your care.)
+Reviewed-by: Andi Shyti <andi@etezian.org>
 
+Thank you,
+Andi

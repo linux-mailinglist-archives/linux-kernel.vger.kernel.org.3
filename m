@@ -2,69 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55835496C20
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 12:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B57EE496C23
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 12:25:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234409AbiAVLZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 06:25:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40552 "EHLO
+        id S234386AbiAVLZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 06:25:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234411AbiAVLZB (ORCPT
+        with ESMTP id S232127AbiAVLZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 06:25:01 -0500
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B47C06173D;
-        Sat, 22 Jan 2022 03:25:01 -0800 (PST)
-Received: by mail-pj1-x1044.google.com with SMTP id d5so9100797pjk.5;
-        Sat, 22 Jan 2022 03:25:01 -0800 (PST)
+        Sat, 22 Jan 2022 06:25:21 -0500
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE07C06173B;
+        Sat, 22 Jan 2022 03:25:21 -0800 (PST)
+Received: by mail-pf1-x442.google.com with SMTP id e28so6806781pfj.5;
+        Sat, 22 Jan 2022 03:25:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e3XDyDuJWLpYr5zIqFPpqMNaYaotTwu4a/tdKPuNOtE=;
-        b=cJr/FGdgF4L8mYXHBz/YzvOe7NyfV+045gFKZe2TvhElvpQjh7HTL7isZakkE4BvQx
-         hfSeusngDzdqrBBVu54ykdF93uP9K/QUFr+ZScs4k2Y484nNdFS5rIgH9P3CU4ZfB096
-         5m5yyHthYmjEbXNbtM9vZGGRNNsIiwMDeFP78Ah87Ek7uknUiuXkcMleLLj6UTcB3q5M
-         4yQYngQvkCmd7r5d28dAFBQJeHnpHWiAjh/sNwRezCH0cjLzefw2uJKI/OY+Lf7/qgML
-         MtRD/9w11JZcTNpo6+G3iOIwYzF9wMshO0KdHHKMEfNbCNBDsSj6jeYjMz83qDNk6cEa
-         f3rQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=f/4VnUAXL5ONgzX9ydAg0PKaB9FlIr5gjgL4EP+vufg=;
+        b=EOeXh5KxL7YK0fjfhOeEkIJhpNFS3FvfkSVD70lf8dWn+iAknt9bZFwdbqrBcQLX5o
+         uytSN74w4KCBlB8mNuPeb5EUbudUiP3N2s/V/s9D1JANH0y/MI6P8TM6oOaNtwqDhWTa
+         McvIZKJ+n5YipFlJ5snVBRG4DEz9Qn3PJqKdEJhRMRIQvkYXz91scJ697es8xvF1oIQo
+         6x7eTQo9FcT7XvCXQcsBYRM3FuYzYSRWuGN9g5CKO4UL5aCjuNn6s7iXKJuU5gBdwF9P
+         CSXo8YNoeX84jkIxGVWcBIeWhRZIeHI+9edGkoMBfvrZWk3nPJNEi1Pe1GHhq2LguAR3
+         K0hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e3XDyDuJWLpYr5zIqFPpqMNaYaotTwu4a/tdKPuNOtE=;
-        b=ior9sENpLQA+SQVP8StLsUjsbS9HrUAmMDXKmqD06xyIssV0xm67Rc8u40v+XwY6YE
-         9Ukt+4UXVajTSYBMIwi+c3tQFPJIvRyjYUT3fF6KkOM4BARp3qaOWHCaFMIrfqv5J1Fs
-         wjW1K1CX14E7wMxeaHhnNfMHwiobr51YmGSxE5mRA8mUF2/jFWfmT5+C2TyXtyhxuc/0
-         dl+Z+41bxo5WK1ATU9t68/TDWeRx74wqnldBZwic30wyNqXBXeOMBinFaWZ5M87bHnIQ
-         XVTygv6XQrARG8BcUkU8/roJtWh1X5hsTNHxW5WtHp9ThQXdeWV6CcOJ6GZn2WyE9FHS
-         dGNA==
-X-Gm-Message-State: AOAM530eYK4LKxDYQc3xsOka6AHvv1RpmJuHokkRlUE+8GFf6jl9UK8F
-        GSkNVU8fYczXFvivYkXURuS/0bhwbnYzFA==
-X-Google-Smtp-Source: ABdhPJxzSnHKNLdAdzjvrSCvdh0WN9EClPUthGwLkPn022xWPQyGcPocoNbFkvvc1XkZekDMpmfNnA==
-X-Received: by 2002:a17:90b:380f:: with SMTP id mq15mr1651973pjb.106.1642850700612;
-        Sat, 22 Jan 2022 03:25:00 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=f/4VnUAXL5ONgzX9ydAg0PKaB9FlIr5gjgL4EP+vufg=;
+        b=YeRMlYuB5yBFjeRgQRzB8TY/58x5S8IvhCQmI+6mlyaodHnN03MIvsgqlZHzTUu5c/
+         NIiH/AwqBkBFVGdrFLVyp8j57KPoqg9Ik5rVxt8RTJj46vsT+Jc/NVqCzVQkZNM5k8IS
+         lc4zTk5xh+jj944AvZ+iadpjSnI2L9mCRfkUmh92qKT/kZb4jXcqvzfS8u4XLk0jHm0c
+         LJy7k76uBCwgger7chK/BXObNCQqONbKN5/Zv9v1R1bPW0vfG/Zi99QyhvENgGpB8zRS
+         TF+a0+o2fNohGG2kW/sv7+6Npvtzx6yrwYEZdx3iVnLqL14mDG4aL3/LB543jahOLC4C
+         xWOA==
+X-Gm-Message-State: AOAM533YboK2QnW6wBNfMfVgnJwJ54CBe0rfZ60tquO20JICOmkEzl6o
+        WLW4SNAIq3Oy6aCGiBekEQyDVu+0qBkWIA==
+X-Google-Smtp-Source: ABdhPJxIifEA7bEf/l5XYeIOQ7mP5nOrp06jkC+e6x5uUaFIjgXldGwIs7Z3yJ3dmp7Zr2GJYdKBrw==
+X-Received: by 2002:a63:4456:: with SMTP id t22mr5739132pgk.52.1642850720651;
+        Sat, 22 Jan 2022 03:25:20 -0800 (PST)
 Received: from lxb-server.lan ([2605:52c0:2:32c::])
-        by smtp.gmail.com with ESMTPSA id f6sm9862935pfv.48.2022.01.22.03.24.56
+        by smtp.gmail.com with ESMTPSA id f6sm9862935pfv.48.2022.01.22.03.25.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Jan 2022 03:25:00 -0800 (PST)
+        Sat, 22 Jan 2022 03:25:20 -0800 (PST)
 From:   Yunhao Tian <t123yh.xyz@gmail.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Yunhao Tian <t123yh.xyz@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Felipe Balbi <balbi@kernel.org>,
-        Pavel Hofman <pavel.hofman@ivitera.com>,
         Ruslan Bilovol <ruslan.bilovol@gmail.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
+        Pavel Hofman <pavel.hofman@ivitera.com>,
         Jack Pham <jackp@codeaurora.org>,
-        Pawel Laszczak <pawell@cadence.com>,
         Colin Ian King <colin.king@canonical.com>,
+        Pawel Laszczak <pawell@cadence.com>,
         linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH 1/2] usb: gadget: f_uac1: allow changing interface name via configfs
-Date:   Sat, 22 Jan 2022 19:24:40 +0800
-Message-Id: <20220122112446.1415547-1-t123yh.xyz@gmail.com>
+Subject: [PATCH 2/2] usb: gadget: f_uac2: allow changing interface name via configfs
+Date:   Sat, 22 Jan 2022 19:24:41 +0800
+Message-Id: <20220122112446.1415547-2-t123yh.xyz@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220122112446.1415547-1-t123yh.xyz@gmail.com>
+References: <20220122112446.1415547-1-t123yh.xyz@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -74,69 +76,69 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 This adds "function_name" configfs entry to change string value
 of the iInterface field. This field will be shown in Windows' audio
 settings panel, so being able to change it is useful. It will default
-to "AC Interface" just as before if unchanged.
+to "Source/Sink" just as before.
 
 Signed-off-by: Yunhao Tian <t123yh.xyz@gmail.com>
 ---
- .../ABI/testing/configfs-usb-gadget-uac1      |  1 +
+ .../ABI/testing/configfs-usb-gadget-uac2      |  1 +
  Documentation/usb/gadget-testing.rst          |  1 +
- drivers/usb/gadget/function/f_uac1.c          | 46 ++++++++++++++++++-
- drivers/usb/gadget/function/u_uac1.h          |  2 +
+ drivers/usb/gadget/function/f_uac2.c          | 46 ++++++++++++++++++-
+ drivers/usb/gadget/function/u_uac2.h          |  2 +
  4 files changed, 49 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uac1 b/Documentation/ABI/testing/configfs-usb-gadget-uac1
-index dd647d44d975..ca66623a7700 100644
---- a/Documentation/ABI/testing/configfs-usb-gadget-uac1
-+++ b/Documentation/ABI/testing/configfs-usb-gadget-uac1
+diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uac2 b/Documentation/ABI/testing/configfs-usb-gadget-uac2
+index cfd160ff8b56..3524f2b8446a 100644
+--- a/Documentation/ABI/testing/configfs-usb-gadget-uac2
++++ b/Documentation/ABI/testing/configfs-usb-gadget-uac2
 @@ -23,4 +23,5 @@ Description:
+ 		p_volume_min	playback volume control min value (in 1/256 dB)
+ 		p_volume_max	playback volume control max value (in 1/256 dB)
  		p_volume_res	playback volume control resolution (in 1/256 dB)
- 		req_number	the number of pre-allocated request
- 				for both capture and playback
 +		function_name	name of the interface
- 		==========	===================================
+ 		=========  ============================
 diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
-index c18113077889..2cdb59411929 100644
+index 2cdb59411929..6df834f87bf2 100644
 --- a/Documentation/usb/gadget-testing.rst
 +++ b/Documentation/usb/gadget-testing.rst
-@@ -745,6 +745,7 @@ The uac2 function provides these attributes in its function directory:
+@@ -934,6 +934,7 @@ The uac1 function provides these attributes in its function directory:
  	p_volume_res     playback volume control resolution (in 1/256 dB)
  	req_number       the number of pre-allocated request for both capture
  	                 and playback
-+    function_name    name of the interface
++	function_name    name of the interface
  	================ ====================================================
  
  The attributes have sane default values.
-diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
-index 5b3502df4e13..b1f9f4d36abb 100644
---- a/drivers/usb/gadget/function/f_uac1.c
-+++ b/drivers/usb/gadget/function/f_uac1.c
-@@ -303,7 +303,7 @@ enum {
- };
+diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+index ef55b8bb5870..8f72ef361882 100644
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -107,7 +107,7 @@ static char clksrc_in[8];
+ static char clksrc_out[8];
  
- static struct usb_string strings_uac1[] = {
--	[STR_AC_IF].s = "AC Interface",
-+	/* [STR_AC_IF].s = DYNAMIC, */
- 	[STR_USB_OUT_IT].s = "Playback Input terminal",
- 	[STR_USB_OUT_IT_CH_NAMES].s = "Playback Channels",
- 	[STR_IO_OUT_OT].s = "Playback Output terminal",
-@@ -1129,6 +1129,8 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ static struct usb_string strings_fn[] = {
+-	[STR_ASSOC].s = "Source/Sink",
++	/* [STR_ASSOC].s = DYNAMIC, */
+ 	[STR_IF_CTRL].s = "Topology Control",
+ 	[STR_CLKSRC_IN].s = clksrc_in,
+ 	[STR_CLKSRC_OUT].s = clksrc_out,
+@@ -959,6 +959,8 @@ afunc_bind(struct usb_configuration *cfg, struct usb_function *fn)
+ 	if (ret)
+ 		return ret;
  
- 	audio_opts = container_of(f->fi, struct f_uac1_opts, func_inst);
- 
-+	strings_uac1[STR_AC_IF].s = audio_opts->function_name;
++	strings_fn[STR_ASSOC].s = uac2_opts->function_name;
 +
- 	us = usb_gstrings_attach(cdev, uac1_strings, ARRAY_SIZE(strings_uac1));
+ 	us = usb_gstrings_attach(cdev, fn_strings, ARRAY_SIZE(strings_fn));
  	if (IS_ERR(us))
  		return PTR_ERR(us);
-@@ -1413,6 +1415,42 @@ end:									\
+@@ -1834,6 +1836,42 @@ end:									\
  									\
- CONFIGFS_ATTR(f_uac1_opts_, name)
+ CONFIGFS_ATTR(f_uac2_opts_, name)
  
-+#define UAC1_ATTRIBUTE_STRING(name)					\
-+static ssize_t f_uac1_opts_##name##_show(struct config_item *item,	\
++#define UAC2_ATTRIBUTE_STRING(name)					\
++static ssize_t f_uac2_opts_##name##_show(struct config_item *item,	\
 +					 char *page)			\
 +{									\
-+	struct f_uac1_opts *opts = to_f_uac1_opts(item);		\
++	struct f_uac2_opts *opts = to_f_uac2_opts(item);		\
 +	int result;							\
 +									\
 +	mutex_lock(&opts->lock);					\
@@ -146,10 +148,10 @@ index 5b3502df4e13..b1f9f4d36abb 100644
 +	return result;							\
 +}									\
 +									\
-+static ssize_t f_uac1_opts_##name##_store(struct config_item *item,	\
++static ssize_t f_uac2_opts_##name##_store(struct config_item *item,	\
 +					  const char *page, size_t len)	\
 +{									\
-+	struct f_uac1_opts *opts = to_f_uac1_opts(item);		\
++	struct f_uac2_opts *opts = to_f_uac2_opts(item);		\
 +	int ret = 0;							\
 +									\
 +	mutex_lock(&opts->lock);					\
@@ -166,45 +168,45 @@ index 5b3502df4e13..b1f9f4d36abb 100644
 +	return ret;							\
 +}									\
 +									\
-+CONFIGFS_ATTR(f_uac1_opts_, name)
++CONFIGFS_ATTR(f_uac2_opts_, name)
 +
- UAC1_ATTRIBUTE(u32, c_chmask);
- UAC1_ATTRIBUTE(u32, c_srate);
- UAC1_ATTRIBUTE(u32, c_ssize);
-@@ -1432,6 +1470,7 @@ UAC1_ATTRIBUTE(bool, c_volume_present);
- UAC1_ATTRIBUTE(s16, c_volume_min);
- UAC1_ATTRIBUTE(s16, c_volume_max);
- UAC1_ATTRIBUTE(s16, c_volume_res);
-+UAC1_ATTRIBUTE_STRING(function_name);
+ UAC2_ATTRIBUTE(u32, p_chmask);
+ UAC2_ATTRIBUTE(u32, p_srate);
+ UAC2_ATTRIBUTE(u32, p_ssize);
+@@ -1855,6 +1893,7 @@ UAC2_ATTRIBUTE(s16, c_volume_min);
+ UAC2_ATTRIBUTE(s16, c_volume_max);
+ UAC2_ATTRIBUTE(s16, c_volume_res);
+ UAC2_ATTRIBUTE(u32, fb_max);
++UAC2_ATTRIBUTE_STRING(function_name);
  
- static struct configfs_attribute *f_uac1_attrs[] = {
- 	&f_uac1_opts_attr_c_chmask,
-@@ -1453,6 +1492,8 @@ static struct configfs_attribute *f_uac1_attrs[] = {
- 	&f_uac1_opts_attr_c_volume_min,
- 	&f_uac1_opts_attr_c_volume_max,
- 	&f_uac1_opts_attr_c_volume_res,
+ static struct configfs_attribute *f_uac2_attrs[] = {
+ 	&f_uac2_opts_attr_p_chmask,
+@@ -1879,6 +1918,8 @@ static struct configfs_attribute *f_uac2_attrs[] = {
+ 	&f_uac2_opts_attr_c_volume_max,
+ 	&f_uac2_opts_attr_c_volume_res,
+ 
++	&f_uac2_opts_attr_function_name,
 +
-+	&f_uac1_opts_attr_function_name,
- 
  	NULL,
  };
-@@ -1505,6 +1546,9 @@ static struct usb_function_instance *f_audio_alloc_inst(void)
- 	opts->c_volume_res = UAC1_DEF_RES_DB;
  
- 	opts->req_number = UAC1_DEF_REQ_NUM;
+@@ -1932,6 +1973,9 @@ static struct usb_function_instance *afunc_alloc_inst(void)
+ 
+ 	opts->req_number = UAC2_DEF_REQ_NUM;
+ 	opts->fb_max = UAC2_DEF_FB_MAX;
 +
-+	snprintf(opts->function_name, sizeof(opts->function_name), "AC Interface");
++	snprintf(opts->function_name, sizeof(opts->function_name), "Source/Sink");
 +
  	return &opts->func_inst;
  }
  
-diff --git a/drivers/usb/gadget/function/u_uac1.h b/drivers/usb/gadget/function/u_uac1.h
-index 589fae861141..c94b6da16b68 100644
---- a/drivers/usb/gadget/function/u_uac1.h
-+++ b/drivers/usb/gadget/function/u_uac1.h
-@@ -51,6 +51,8 @@ struct f_uac1_opts {
- 	int				req_number;
- 	unsigned			bound:1;
+diff --git a/drivers/usb/gadget/function/u_uac2.h b/drivers/usb/gadget/function/u_uac2.h
+index a73b35774c44..4df23262db6e 100644
+--- a/drivers/usb/gadget/function/u_uac2.h
++++ b/drivers/usb/gadget/function/u_uac2.h
+@@ -59,6 +59,8 @@ struct f_uac2_opts {
+ 	int				fb_max;
+ 	bool			bound;
  
 +	char			function_name[32];
 +

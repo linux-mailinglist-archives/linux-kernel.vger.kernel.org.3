@@ -2,108 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF533496E4A
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 00:28:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E54496E4B
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 00:43:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235112AbiAVX24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 18:28:56 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44576 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231288AbiAVX2z (ORCPT
+        id S235127AbiAVXk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 18:40:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235117AbiAVXk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 18:28:55 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B536C60F7D;
-        Sat, 22 Jan 2022 23:28:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6050C004E1;
-        Sat, 22 Jan 2022 23:28:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642894134;
-        bh=fIMBrpZsNSL+7wOEXqwisY/AlTXSeb18kfGGZW2XUz8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RQ5H8ws3JKlZWObkllwL1+ZklXBdtDK9vtvBLjQNs19LQo4lJPEVpmrHdR+PXKZhQ
-         ubCQGSzk2j+H6jAT+p6Vdw8gkz3CjwPnO6esqVZb9uETHvADnbnYH9wSrX9wMGXTfB
-         DKvNcDMKyLU99cl5vk6QWLWdh8HLpzdZ37vQhZZF0bdlf6Ac39Qfk8aH68yiYztN6d
-         7GxcpUdsCdmmiuw3g8zE0yFNO7awca9xO/Ar2LKjI8ZGOOy20n58InnGGR+671LqEX
-         1sJ/bG7eOvun3AcaDCTgpJmUSvr6z4fPVN8ykCQrIJ5+gJEXoAlRYhVOgxzpLB3cbr
-         xEFstH0hbTX6Q==
-Date:   Sun, 23 Jan 2022 01:28:36 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     tony.luck@intel.com, dave.hansen@linux.intel.com,
-        tglx@linutronix.de, bp@alien8.de, luto@kernel.org,
-        mingo@redhat.com, linux-sgx@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] x86/sgx: Add poison handling to reclaimer
-Message-ID: <YeyTJCmIi/R94d9S@iki.fi>
-References: <be5af586f667c7bcb8ef01286ce75675de5d100f.1642630582.git.reinette.chatre@intel.com>
- <3bfe66204ee84a0bbccaf7cd20af0d8300fb9f26.camel@kernel.org>
- <8ac3fc3e-9d90-48cf-d84e-40f9cbddd9ac@intel.com>
- <YeySy2lGjEbNbK1G@iki.fi>
+        Sat, 22 Jan 2022 18:40:58 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59734C06173B
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 15:40:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=+gXQH3ALH4LYdIHoBa7Tkg7RviZom2y8b9WvEFeHe6U=; b=LfpAmKQkAEdl4V0rv4MxuIZy/s
+        rvNDvu4/JXEds4Wfr8B9ouFS/+BF9Bi6bt6qUBIn7etor3lxdm1R1fTepvJTdtez4AzG66THkgG59
+        mPcDDZSb0BumUgNUGxugiyPRb4t1fbo+92kyMNbfVn+Tu3em32o45WN/q7UQt3fT/F9xTVTGfAhs4
+        DQ/22U7i2ftHhhtIMADnX/PDTxaEM+ssAMhr8n67Pouwiy98ip1+qIUX2qT/ubUxg7XNidFxoQLqP
+        nKjcvOc+1rPm6niBWb9/jwo5oljSzMjLLTSLNhvJ4jNc2n9FLQtUfRYpk3bhseDsNAUBWFSdPwi1/
+        qKC4htBw==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nBQ08-0007hm-1E; Sat, 22 Jan 2022 23:40:56 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH -next] irqchip/gic-v3-its: protect reference to cpus_booted_once_mask
+Date:   Sat, 22 Jan 2022 15:40:55 -0800
+Message-Id: <20220122234055.647-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YeySy2lGjEbNbK1G@iki.fi>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 23, 2022 at 01:27:10AM +0200, Jarkko Sakkinen wrote:
-> On Thu, Jan 20, 2022 at 10:20:01AM -0800, Reinette Chatre wrote:
-> > Hi Jarkko,
-> > 
-> > On 1/20/2022 5:09 AM, Jarkko Sakkinen wrote:
-> > > On Wed, 2022-01-19 at 14:23 -0800, Reinette Chatre wrote:
-> > >> The SGX reclaimer code lacks page poison handling in its main
-> > >> free path. This can lead to avoidable machine checks if a
-> > >> poisoned page is freed and reallocated instead of being
-> > >> isolated.
-> > >>
-> > >> A troublesome scenario is:
-> > >>  1. Machine check (#MC) occurs (asynchronous, !MF_ACTION_REQUIRED)
-> > >>  2. arch_memory_failure() is eventually called
-> > >>  3. (SGX) page->poison set to 1
-> > >>  4. Page is reclaimed
-> > >>  5. Page added to normal free lists by sgx_reclaim_pages()
-> > >>     ^ This is the bug (poison pages should be isolated on the
-> > >>     sgx_poison_page_list instead)
-> > >>  6. Page is reallocated by some innocent enclave, a second
-> > >> (synchronous)
-> > >>     in-kernel #MC is induced, probably during EADD instruction.
-> > >>     ^ This is the fallout from the bug
-> > >>
-> > >> (6) is unfortunate and can be avoided by replacing the open coded
-> > >> enclave page freeing code in the reclaimer with sgx_free_epc_page()
-> > >> to obtain support for poison page handling that includes placing the
-> > >> poisoned page on the correct list.
-> > >>
-> > >> Fixes: d6d261bded8a ("x86/sgx: Add new sgx_epc_page flag bit to mark
-> > >> free pages")
-> > >> Fixes: 992801ae9243 ("x86/sgx: Initial poison handling for dirty and
-> > >> free pages")
-> > > 
-> > > Same comment as for the first version: remove the first fixes tag.
-> > > 
-> > 
-> > For completeness I'll duplicate my response also:
-> > 
-> > The commit you refer to, commit d6d261bded8a ("x86/sgx: Add new
-> > sgx_epc_page flag bit to mark free pages", introduced a new page flag bit
-> > (SGX_EPC_PAGE_IS_FREE) that should be set when an EPC page is freed. The
-> > commit also sets the bit in sgx_free_epc_page() when an EPC page is freed.
-> > The commit should also have set that bit when the EPC page is freed in the
-> > reclaimer, which contains an open coded version of sgx_free_epc_page(),
-> > but it did not. This fix adds the snippet that was omitted from that
-> > commit.
-> > 
-> > Reinette
-> 
-> Let me check. Yes, I can see it in lore, but somehow it has slipped out
-> of my inbox. My apologies.
+When CONFIG_SMP is not set/enabled, the reference in irq-gic-v3-its.c
+to 'cpus_booted_once_mask' causes a build error. Fix this by
+first checking for !CONFIG_SMP in the 'if' test.
 
-And thanks for re-elaborating this.
+Fixes this build error:
 
-/Jarkko
+arm-linux-gnueabi-ld: drivers/irqchip/irq-gic-v3-its.o: in function `its_cpu_memreserve_lpi':
+irq-gic-v3-its.c:(.text+0x45d0): undefined reference to `cpus_booted_once_mask'
+
+Fixes: 835f442fdbce3 ("irqchip/gic-v3-its: Limit memreserve cpuhp state lifetime")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Valentin Schneider <valentin.schneider@arm.com>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+---
+ drivers/irqchip/irq-gic-v3-its.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+--- linux-next-20220121.orig/drivers/irqchip/irq-gic-v3-its.c
++++ linux-next-20220121/drivers/irqchip/irq-gic-v3-its.c
+@@ -5241,7 +5241,8 @@ static int its_cpu_memreserve_lpi(unsign
+ 
+ out:
+ 	/* Last CPU being brought up gets to issue the cleanup */
+-	if (cpumask_equal(&cpus_booted_once_mask, cpu_possible_mask))
++	if (!IS_ENABLED(CONFIG_SMP) ||
++	    cpumask_equal(&cpus_booted_once_mask, cpu_possible_mask))
+ 		schedule_work(&rdist_memreserve_cpuhp_cleanup_work);
+ 
+ 	gic_data_rdist()->flags |= RD_LOCAL_MEMRESERVE_DONE;

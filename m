@@ -2,100 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E82496CD4
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 16:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0B7496CD8
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 16:55:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233410AbiAVPr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 10:47:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiAVPr1 (ORCPT
+        id S234241AbiAVPzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 10:55:42 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47946 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229581AbiAVPzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 10:47:27 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5193FC06173B
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 07:47:26 -0800 (PST)
-Date:   Sat, 22 Jan 2022 15:47:21 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1642866443;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=P7LYtWjnmOWm9O6Tp/rKPOU/6hdKUmLFGLwf0O/U5pY=;
-        b=GwMIQz4W1MtWLwZxFoKXbUBvl8CUMnoVb8VvygIbGeB2vzaXRlEMkS5J5fhgoGqnS1tz4S
-        QNp+1Iq704lxkb5Uuo7QPC9Y+Wf1qfJhwQMLYkStHcazLgc3SusF5lPSCN7YhFN/vCvhei
-        ewr3anyauUtffBo2MgfpBO4U22yl5z+XkEXyAyks9FcLlwgTqRE2s/19VXvp7Jq8qPCKAn
-        /WZ3X6tSt6ywmsH2hHYRQqIXDQ7dhT0hspzi42RDeFbWAdiZMDkRyubM6Amsnzi+fXQX+P
-        ra3ta4pXYFAT2T13sXQ+xlHlqVppYbyqJr3Ghq/r0sD9Nc0zBJZ7x4vpvegLRA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1642866443;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=P7LYtWjnmOWm9O6Tp/rKPOU/6hdKUmLFGLwf0O/U5pY=;
-        b=at+AKb0iyaUjpXB1b8pH/h9sD5nCRtxFaaRbJDEsR7mtJ9CAxLUL0bfisBbYDxr+HaZaNZ
-        SwJtzaGb8jnEaxAA==
-From:   "irqchip-bot for Ard Biesheuvel" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-fixes] irqchip/gic-v3-its: Fix build for !SMP
-Cc:     Valentin Schneider <valentin.schneider@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220122151614.133766-1-ardb@kernel.org>
-References: <20220122151614.133766-1-ardb@kernel.org>
-MIME-Version: 1.0
-Message-ID: <164286644146.16921.176569436183181304.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Sat, 22 Jan 2022 10:55:41 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D9D460C79
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 15:55:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA554C004E1;
+        Sat, 22 Jan 2022 15:55:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642866940;
+        bh=o/gbjG7CLyDl4wjteegHiccjC2J1O9bHqP7ccL9sifk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AmD9w1QZVcbtWK0tFQD/tuALcqwCm2UolozTKA8Popw8dVOvimewmioJvPOI4nAWh
+         NO2Q8Ecc1EeZpUpKu5xN/vVtA3biD27IguqtnBuxlLrk4l+3jJFh+NxC0tzb9UbACt
+         s5/uFEciycxBGboHkuBAKjWMjBl+iGZB+AAkv9xHqycmZpmOCXPEmfmhHh25/lnD+h
+         GyWKdmdAMGlchJce/H73L9APCei+KHOLv8rvM2Sg0xMBlhUufXDxXyERhuXXK7Bsy+
+         4j+gLNkpx+O2muLnVZwh5lruKvM+wuqWX0DoIIEOhjLx0oz//EnUIoMYHAWIKKCSxw
+         B8tBGJYs7AcSw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nBIjq-0026WA-Hq; Sat, 22 Jan 2022 15:55:38 +0000
+Date:   Sat, 22 Jan 2022 15:55:38 +0000
+Message-ID: <87tudvydc5.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        kernel-team@android.com, Jay Chen <jkchen@linux.alibaba.com>
+Subject: Re: [PATCH] irqchip/gic-v3-its: Reset each ITS's BASERn register before probe
+In-Reply-To: <20220118122113.GA18876@lpieralisi>
+References: <20220117161910.2041761-1-maz@kernel.org>
+        <20220118122113.GA18876@lpieralisi>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lorenzo.pieralisi@arm.com, linux-kernel@vger.kernel.org, tglx@linutronix.de, kernel-team@android.com, jkchen@linux.alibaba.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
+On Tue, 18 Jan 2022 12:21:13 +0000,
+Lorenzo Pieralisi <lorenzo.pieralisi@arm.com> wrote:
+> 
+> On Mon, Jan 17, 2022 at 04:19:10PM +0000, Marc Zyngier wrote:
+> > A recent bug report outlined that the way GICv4.1 is handled across
+> > kexec is pretty bad. We can end-up in a situation where ITSs share
+> > memory (this is the case when SVPEPT==1) and reprogram the base
+> 
+> SVPET
 
-Commit-ID:     16436f70abeebb29cd99444e27b310755806c1fa
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/16436f70abeebb29cd99444e27b310755806c1fa
-Author:        Ard Biesheuvel <ardb@kernel.org>
-AuthorDate:    Sat, 22 Jan 2022 16:16:14 +01:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Sat, 22 Jan 2022 15:42:49 
+Too many acronyms... ;-)
 
-irqchip/gic-v3-its: Fix build for !SMP
+> 
+> > registers, creating a situation where ITSs that are part of a given
+> > affinity group see different pointers. Which is illegal. Boo.
+> > 
+> > In order to restore some sanity, reset the BASERn registers to 0
+> > *before* probing any ITS. Although this isn't optimised at all,
+> > this is only a once-per-boot cost, which shouldn't show up on
+> > anyone's radar.
+> > 
+> > Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> > Cc: Jay Chen <jkchen@linux.alibaba.com>
+> > Signed-off-by: Marc Zyngier <maz@kernel.org>
+> > Link: https://lore.kernel.org/r/20211216190315.GA14220@lpieralisi
+> > ---
+> >  drivers/irqchip/irq-gic-v3-its.c | 106 +++++++++++++++++++++++++------
+> >  1 file changed, 87 insertions(+), 19 deletions(-)
+> 
+> Thank you for the patch Marc.
+> 
+> > diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+> > index ee83eb377d7e..9d68afe9fa86 100644
+> > --- a/drivers/irqchip/irq-gic-v3-its.c
+> > +++ b/drivers/irqchip/irq-gic-v3-its.c
+> > @@ -4856,6 +4856,38 @@ static struct syscore_ops its_syscore_ops = {
+> >  	.resume = its_restore_enable,
+> >  };
+> >  
+> > +static void __init __iomem *its_map_one(struct resource *res, int *err)
+> > +{
+> > +	void __iomem *its_base;
+> > +	u32 val;
+> > +
+> > +	its_base = ioremap(res->start, SZ_64K);
+> > +	if (!its_base) {
+> > +		pr_warn("ITS@%pa: Unable to map ITS registers\n", &res->start);
+> > +		*err = -ENOMEM;
+> > +		return NULL;
+> > +	}
+> > +
+> > +	val = readl_relaxed(its_base + GITS_PIDR2) & GIC_PIDR2_ARCH_MASK;
+> > +	if (val != 0x30 && val != 0x40) {
+> > +		pr_warn("ITS@%pa: No ITS detected, giving up\n", &res->start);
+> > +		*err = -ENODEV;
+> > +		goto out_unmap;
+> > +	}
+> > +
+> > +	*err = its_force_quiescent(its_base);
+> > +	if (*err) {
+> > +		pr_warn("ITS@%pa: Failed to quiesce, giving up\n", &res->start);
+> > +		goto out_unmap;
+> > +	}
+> > +
+> > +	return its_base;
+> > +
+> > +out_unmap:
+> > +	iounmap(its_base);
+> > +	return NULL;
+> > +}
+> > +
+> >  static int its_init_domain(struct fwnode_handle *handle, struct its_node *its)
+> >  {
+> >  	struct irq_domain *inner_domain;
+> > @@ -4963,29 +4995,14 @@ static int __init its_probe_one(struct resource *res,
+> >  {
+> >  	struct its_node *its;
+> >  	void __iomem *its_base;
+> > -	u32 val, ctlr;
+> >  	u64 baser, tmp, typer;
+> >  	struct page *page;
+> > +	u32 ctlr;
+> >  	int err;
+> >  
+> > -	its_base = ioremap(res->start, SZ_64K);
+> > -	if (!its_base) {
+> > -		pr_warn("ITS@%pa: Unable to map ITS registers\n", &res->start);
+> > -		return -ENOMEM;
+> > -	}
+> > -
+> > -	val = readl_relaxed(its_base + GITS_PIDR2) & GIC_PIDR2_ARCH_MASK;
+> > -	if (val != 0x30 && val != 0x40) {
+> > -		pr_warn("ITS@%pa: No ITS detected, giving up\n", &res->start);
+> > -		err = -ENODEV;
+> > -		goto out_unmap;
+> > -	}
+> > -
+> > -	err = its_force_quiescent(its_base);
+> > -	if (err) {
+> > -		pr_warn("ITS@%pa: Failed to quiesce, giving up\n", &res->start);
+> > -		goto out_unmap;
+> > -	}
+> > +	its_base = its_map_one(res, &err);
+> > +	if (!its_base)
+> > +		return err;
+> >  
+> >  	pr_info("ITS %pR\n", res);
+> >  
+> > @@ -5248,6 +5265,22 @@ static int its_cpu_memreserve_lpi(unsigned int cpu)
+> >  	return ret;
+> >  }
+> >  
+> > +/* Mark all the BASER registers as invalid before they get reprogrammed */
+> > +static void __init its_reset_one(struct resource *res)
+> > +{
+> > +	void __iomem *its_base;
+> > +	int err, i;
+> > +
+> > +	its_base = its_map_one(res, &err);
+> > +	if (!its_base)
+> > +		return;
+> > +
+> > +	for (i = 0; i < GITS_BASER_NR_REGS; i++)
+> > +		gits_write_baser(0, its_base + GITS_BASER + (i << 3));
+> > +
+> > +	iounmap(its_base);
+> > +}
+> > +
+> >  static const struct of_device_id its_device_id[] = {
+> >  	{	.compatible	= "arm,gic-v3-its",	},
+> >  	{},
+> > @@ -5258,6 +5291,22 @@ static int __init its_of_probe(struct device_node *node)
+> >  	struct device_node *np;
+> >  	struct resource res;
+> >  
+> > +	/*
+> > +	 * Make sure *all* the ITS are reset before we probe any, as
+> > +	 * they may be sharing memory. Don't bother warning on the
+> > +	 * first iteration, as any error will be caught on the second
+> > +	 * one.
+> > +	 */
+> > +	for (np = of_find_matching_node(node, its_device_id); np;
+> > +	     np = of_find_matching_node(np, its_device_id)) {
+> > +		if (!of_device_is_available(np) ||
+> > +		    !of_property_read_bool(np, "msi-controller") ||
+> > +		    of_address_to_resource(np, 0, &res))
+> > +			continue;
+> > +
+> > +		its_reset_one(&res);
+> 
+> This all makes sense to me, only one question (commenting on the DT
+> path but that's obviously valid for ACPI below as well).
+> 
+> We are not checking whether the reset was successful. Is it remotely
+> possible that we fail to quiesce an ITS (and reset its GITS_BASER)
+> while being able to probe other ITSes within the same affinity ?
 
-Commit 835f442fdbce ("irqchip/gic-v3-its: Limit memreserve cpuhp state
-lifetime") added a reference to cpus_booted_once_mask, which does not
-exist on !SMP builds, breaking the build for such configurations.
+I guess it is always possible if an ITS is somewhat wedged.
 
-Given the intent of the check, short circuit it to always pass.
+> Overthinking, agreed, just asking if we should not just bail
+> out whenever *any* ITS reset fails (though that looks a tad harsh,
+> we don't know at this stage whether some ITSes are siblings).
 
-Cc: Valentin Schneider <valentin.schneider@arm.com>
-Fixes: 835f442fdbce ("irqchip/gic-v3-its: Limit memreserve cpuhp state lifetime")
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220122151614.133766-1-ardb@kernel.org
----
- drivers/irqchip/irq-gic-v3-its.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+I'm all for that. If an ITS doesn't reply anymore, who knows what it
+is capable of. I'll respin the patch with that in mind.
 
-diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
-index ee83eb3..7b8f1ec 100644
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -5241,7 +5241,8 @@ static int its_cpu_memreserve_lpi(unsigned int cpu)
- 
- out:
- 	/* Last CPU being brought up gets to issue the cleanup */
--	if (cpumask_equal(&cpus_booted_once_mask, cpu_possible_mask))
-+	if (!IS_ENABLED(CONFIG_SMP) ||
-+	    cpumask_equal(&cpus_booted_once_mask, cpu_possible_mask))
- 		schedule_work(&rdist_memreserve_cpuhp_cleanup_work);
- 
- 	gic_data_rdist()->flags |= RD_LOCAL_MEMRESERVE_DONE;
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,49 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB4D496CF8
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 17:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA24496CFD
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 17:58:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234552AbiAVQuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 11:50:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
+        id S234565AbiAVQ6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 11:58:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231697AbiAVQun (ORCPT
+        with ESMTP id S230136AbiAVQ6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 11:50:43 -0500
+        Sat, 22 Jan 2022 11:58:39 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64712C06173B;
-        Sat, 22 Jan 2022 08:50:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8A4C06173B;
+        Sat, 22 Jan 2022 08:58:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13A3060C8A;
-        Sat, 22 Jan 2022 16:50:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ABF7C004E1;
-        Sat, 22 Jan 2022 16:50:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F7D760E05;
+        Sat, 22 Jan 2022 16:58:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 179B0C004E1;
+        Sat, 22 Jan 2022 16:58:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642870241;
-        bh=ai0bdkmLLaUZQn85MEo6wjda/B1Gn0TYIt50xX7bav8=;
+        s=k20201202; t=1642870718;
+        bh=5gZrthvBYcROpsTd1AT/pYU+NE8D3dCyafqvhAjkSbE=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=a1WB4UCC3y3FTy844pQGgaXTRuTQKxiha1wcVBV+APvTA5S6Pzs12czlWURM9+Gyx
-         IIn774d4IUkBgLqmGUe6FWxkFbJmgDAmCQdt+9rzlDc5C+YfO1v0YKig01cWZeSqRO
-         rQB5MDYGyT2eQDj5hSTE7/XK20aUNqsOx/8o46VhHwKrktxo+i5zLsajdMJpFNonX7
-         XllWDkmWZqg8/EIbvsXMFBJb/5zJQPP+uku9iK4LhuoyEigqU36QnQHCZWi7hqVo7D
-         2EBsRzOW+UDkkpvfe8pbeliIh6VADIgduSsvAVbXYm6Dyzh/K1nF8OAkX7p7b+ox7O
-         UgY7ucYVDly+A==
-Date:   Sat, 22 Jan 2022 16:56:49 +0000
+        b=ubCZ6QK/l5hO08fFvQC6kHaZfg54zz+sd3tf33Vgt+8rlc15U9flFt33uKbnyw2Vw
+         DpDAlUjh3wVJ+KyQadOWmB3GM2jGQ+yDGtSidIknmwDO1hny35k9tcAQ2JhzfDetoA
+         Ck6NyazaZcgz9PueYUdwshSJDFu/yqGAv0ybOszQmVx9pm4+c3idNBQQ38YZxjYZtJ
+         qWrLaI+6U7cE929FWqyWq79WSJqFgJp2ueShCiOfzvVbFeU+0lWDic9K15Qg3dG2iw
+         LwGBEa7gqFPTy6zNxdn+/SNn/+vNsqpZGHWkXnsbpoT5o5xk5iRfFrd57cIjDwdaJ/
+         DFtPbOTFWTRdA==
+Date:   Sat, 22 Jan 2022 17:04:47 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] iio: hw_consumer: Use struct_size() helper in
- kzalloc()
-Message-ID: <20220122165649.4c3a3f9e@jic23-huawei>
-In-Reply-To: <202201201532.1F9C5BD@keescook>
-References: <20220120225243.GA37225@embeddedor>
-        <202201201532.1F9C5BD@keescook>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>
+Subject: Re: [PATCH 2/2] iio: at91-sama5d2: Limit requested watermark value
+ to hwfifo size
+Message-ID: <20220122170447.68f35cfa@jic23-huawei>
+In-Reply-To: <20220117102512.31725-2-paul@crapouillou.net>
+References: <20220117102512.31725-1-paul@crapouillou.net>
+        <20220117102512.31725-2-paul@crapouillou.net>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -53,35 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Jan 2022 15:33:14 -0800
-Kees Cook <keescook@chromium.org> wrote:
+On Mon, 17 Jan 2022 10:25:12 +0000
+Paul Cercueil <paul@crapouillou.net> wrote:
 
-> On Thu, Jan 20, 2022 at 04:52:43PM -0600, Gustavo A. R. Silva wrote:
-> > Make use of the struct_size() helper instead of an open-coded version,
-> > in order to avoid any potential type mistakes or integer overflows that,
-> > in the worst scenario, could lead to heap overflows.
-> > 
-> > Also, address the following sparse warnings:
-> > drivers/iio/buffer/industrialio-hw-consumer.c:63:23: warning: using sizeof on a flexible structure
-> > 
-> > Link: https://github.com/KSPP/linux/issues/174
-> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>  
-> 
-> Looks good to me.
-> 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> 
-Good thing to tidy up, but I'm a little curious why I'm not
-seeing these reports with latest sparse?
-Ah. Found it via the report linked
-CF='-Wflexible-array-sizeof'
+> Instead of returning an error if the watermark value is too high, which
+> the core will silently ignore anyway, limit the value to the hardware
+> FIFO size; a lower-than-requested value is still better than using the
+> default, which is usually 1.
 
-Probably worth mentioned that in the patch descriptions. I've added it
-to this one. 
+There is another potential error condition in this function which will
+also be ignored by the core.
 
-I'm still setting the sparse report even with this patch.
+As such whilst I agree this is a sensible thing to do in this
+particular case I think we should also be handling the error in the core.
 
-What am I missing?
+I think it would be better to clean that up at the same time
+as these improvements - particularly as I'd guess you have a convenient
+test setup to check the error unwind is correct?
+
+Thanks,
 
 Jonathan
+
+> 
+> Cc: Eugen Hristev <eugen.hristev@microchip.com>
+> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  drivers/iio/adc/at91-sama5d2_adc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iio/adc/at91-sama5d2_adc.c b/drivers/iio/adc/at91-sama5d2_adc.c
+> index 854b1f81d807..5cc84f4a17bb 100644
+> --- a/drivers/iio/adc/at91-sama5d2_adc.c
+> +++ b/drivers/iio/adc/at91-sama5d2_adc.c
+> @@ -1752,7 +1752,7 @@ static int at91_adc_set_watermark(struct iio_dev *indio_dev, unsigned int val)
+>  	int ret;
+>  
+>  	if (val > AT91_HWFIFO_MAX_SIZE)
+> -		return -EINVAL;
+> +		val = AT91_HWFIFO_MAX_SIZE;
+>  
+>  	if (!st->selected_trig->hw_trig) {
+>  		dev_dbg(&indio_dev->dev, "we need hw trigger for DMA\n");
 

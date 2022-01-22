@@ -2,141 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F387C4968F0
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 01:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8CB4968F3
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 01:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbiAVA5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 19:57:06 -0500
-Received: from mail-bn8nam08on2114.outbound.protection.outlook.com ([40.107.100.114]:63832
-        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231176AbiAVA47 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 19:56:59 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dUO04d5Cs2NmyrefcduTlEdgKhsACIQdnoIVG+TUWk/OR437Qf21oSnMzqjLa5W78q5YrY5RtHrfBupvkJdi3S8lJaSTeh65/uUC22e6v9tEwfMHIRZzcDMiTUphhbIKK2Pqy77mkBp+EUYTZ7vNR2c13nKRX78QNbVNWXXE18pf+Jidq6S5Goq7+mzLRfcLXfUtLihzpWUq/0gBg+3NzCzVQqJ9g3iZSvXInIwrB1+AULwbCCOYqk8+eppFwgpFJYGSl8IBCbHGQ5Bf6z7+ErXYyMsYEq7QRR0CzfuKw5Ki3x86Nqv1rIbEnxdkLbTCGNj2S/aRfbXs40doDUXfUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V5sSXDpwZywJqIs52lS3AJHxZvX8PsfKexFxT4gu9nk=;
- b=DRUMzxS1435Q/Kv8TdZb0tGRzJfaJDWsYyMtAyUxLKvC9GBmRTZ+oG78ha4H1ldFWHXUmfVfRru0bN+5j/bD2A8DFIpFVhtkIKItCd8pOu5LCU6W+Ji+HkzjoxH4UsywuOmLOFgJ/dsaAPXCcNdQ/83a/N3V3NOatlSXVC0JudKHxc/BTbUwsEdwM9joI9ercjYvN3ckw/mbEP0sMyp1/by5kWsg3whT6kaw20pu46j18RgPRFtRy1wWHhoLqSkJmo6tkQI5JgyLy+KzFjH8kkWTdkXQVNFRKtB4xCOwZl8N4NKrwQV5z4N5pIWbb4Y4HN2fieWjeB2H+rXY7xc+hQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=V5sSXDpwZywJqIs52lS3AJHxZvX8PsfKexFxT4gu9nk=;
- b=ViF8sUObTyjSm3vO20hvRyjA4smPQba1udbdWVX4aJZ420bpP3h2g00wgX3S9kTmYOUpB+xyhab0Z0PAklOh5Ky7NCcKWwoFrH4NWaq+hmoV9yuAt+eNZdMuBqKQP2KxvlUj9GQBpUENGSJh79uJB1IWHcN97nSwKmNESy0/bzI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by CH2PR10MB4022.namprd10.prod.outlook.com
- (2603:10b6:610:9::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Sat, 22 Jan
- 2022 00:56:57 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::2d52:2a96:7e6c:460f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::2d52:2a96:7e6c:460f%4]) with mapi id 15.20.4888.014; Sat, 22 Jan 2022
- 00:56:57 +0000
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>
-Subject: [net RFC v1 1/1] page_pool: fix NULL dereference crash
-Date:   Fri, 21 Jan 2022 16:56:44 -0800
-Message-Id: <20220122005644.802352-2-colin.foster@in-advantage.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220122005644.802352-1-colin.foster@in-advantage.com>
-References: <20220122005644.802352-1-colin.foster@in-advantage.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MWHPR13CA0030.namprd13.prod.outlook.com
- (2603:10b6:300:95::16) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        id S231404AbiAVA5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 19:57:11 -0500
+Received: from mail-oo1-f41.google.com ([209.85.161.41]:35655 "EHLO
+        mail-oo1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231215AbiAVA5D (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 21 Jan 2022 19:57:03 -0500
+Received: by mail-oo1-f41.google.com with SMTP id p4-20020a4a8e84000000b002e598a51d60so508022ook.2;
+        Fri, 21 Jan 2022 16:57:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=L8s5mBf0UpHtEY/qnha+jJ91j6Jh+IbHCl/z4sZacfE=;
+        b=hcTBlz6j2XwvR23/hdn8m3atHq4bb5X1fwJJR+fJ0g/YNqjBUonhhCAoEcqMOi10hR
+         DvkKocF/Drw+ZUl8hx5Qty3n3Cm/irYU1j0yLXFuynW5c3oNhSsMUblWpUrEHnQxrvH3
+         0sKk9ivyF5elryU57+f5C5G40L6cG8jl/e1dvA6EELu3obZStKBtl8NmY3/RZdKTBBay
+         2POJ9Z/TWRiwRd1sYduxhVVr9DzAI3dLu7PFEUJwKXpLfMRAjBoAF0iXX4nw4bVvGp7J
+         m0yY3yhOH823dloISYdG1UpkiyPYdi+vP7UzmxXcaq9uQlv4bHIN6SgMY2MD2Z2TwOSP
+         MBnQ==
+X-Gm-Message-State: AOAM5301n9Q1iuj0cKEM3rIrWPbeBooDNqh/ya+GbHJYCHE3B+JZk+0h
+        HXTvjl4AxK1vFrsUIEV+3A==
+X-Google-Smtp-Source: ABdhPJwoE6llKf4bLoRmQCX2d407a5SUn2SLcLtJmjJSCrEoydcDf0xzWqmXAlbXvD+PJuNn4xBZJA==
+X-Received: by 2002:a4a:c57:: with SMTP id n23mr4154768ooe.55.1642813023151;
+        Fri, 21 Jan 2022 16:57:03 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id q25sm1916041oiw.27.2022.01.21.16.57.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jan 2022 16:57:02 -0800 (PST)
+Received: (nullmailer pid 1955852 invoked by uid 1000);
+        Sat, 22 Jan 2022 00:57:01 -0000
+Date:   Fri, 21 Jan 2022 18:57:01 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Leilk Liu <leilk.liu@mediatek.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH V2 2/3] dt-bindings: spi: Convert spi-mt65xx to
+ json-schema
+Message-ID: <YetWXSzugRwKb+xA@robh.at.kernel.org>
+References: <20220112103609.17421-1-leilk.liu@mediatek.com>
+ <20220112103609.17421-3-leilk.liu@mediatek.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0f740f91-3131-4724-95eb-08d9dd4216b7
-X-MS-TrafficTypeDiagnostic: CH2PR10MB4022:EE_
-X-Microsoft-Antispam-PRVS: <CH2PR10MB4022E867D9E6F2146EC3BA89A45C9@CH2PR10MB4022.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3826;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +R8JoeIAv1wjn7ts0qbVzimsvKCLloe7qQMeIskZ1prECSwZ1Yo98er6+3V9MgOuRs8yRzFFaXxuO95dSxagfaEHlMjtq8uErSt4SNXCCjHflCmFrHgbZ3nvZVO1uLtA5+Waz+U8PgfhWfBreaDSeAMkaXfxSRQ0PDP8toA4C0mEGlZqBHW43F/fn2j8DGjRBJj+SsuaN++mnXz7sfDhpB/6RZUe+yVsqMP6HKQQLT55uFs3U46jUKP9t+tbFWTbHLwdHsNUTSHci6bWCwtDUhJbXOOdU3m77MgbMP7/tXZ0wuirBVj2rB8JTHIGanpqWfjpzKzv6DdfPPCfaR1z6LsYmpKWMwEvPwxazovr1JohAKGdOtzg7CwDR+043qogkeUZGa9+99i6TDnchEO0jysVLrehsuVhurKA3+rQCImIgsMbqpJehsD3zWmVeR1pEz+dZduhP8t6TS/CJIGJ20Q5jIZaVJ6Cgwf3D5IWY4O7pVYVrbdGA2/5G9I9dPOPGguPNgYEdemGaFt3OsaEL28nJQsaMgeH+YTPZeuRmR6sNR/VBAS+BzJFVcUlyHLmCaS4OPNPdC6hUK+vGIjfsARAB5NClTM3D56JGkQ9uroClmYnoVwmyGx/H6MMo0sgla8AYNElb4fg2PvGWD/Kshv0TE0QKuoKRhbLIUDCQxR3G/5rSt3OV3VjvUgViuZZfrWGY7O8E9bGhwQ4nsS/2A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(42606007)(39830400003)(376002)(366004)(136003)(346002)(396003)(2616005)(52116002)(2906002)(44832011)(6486002)(186003)(316002)(8676002)(6512007)(26005)(54906003)(8936002)(66946007)(66556008)(4326008)(66476007)(6666004)(4744005)(83380400001)(5660300002)(86362001)(38350700002)(38100700002)(6506007)(1076003)(508600001)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6ten8WLISnGr4S6lg4SEzkqCv/rPiXhtkle3veCmLk5jlCBHDow7xNij9fOg?=
- =?us-ascii?Q?rdkwL77Kz5cVYH3/R6XoIdBm2z+293Wyj7b/pHbzgIbRfckosdcGwzKNP5Vv?=
- =?us-ascii?Q?X38+r4O9oszyNhkrNFKFxqurdR79LgZ8HtOGDKLhFbQb32VkcPRyH6EMKGqC?=
- =?us-ascii?Q?261DLeUkJh1f7luAbkQsJ1GS7sm1GmJok4Fqf5dBOje6qgKy9UzB3QRZo9Ma?=
- =?us-ascii?Q?KYi9A13nwprmeLXmwmZDEEPI/YHrg9zgsqdYxz660usgnuWVEX77Cbiz3aFj?=
- =?us-ascii?Q?Hhi7mXLPfYBmon58LItx9xIMz3NcLQ5HZUNF53htsQoYNF/Wj1mxaES+1Hmj?=
- =?us-ascii?Q?tJtFEBopSlO3Kvw3ikzP9GpC5rBxc+xhTrOP9cFeniH4tVFy+1tDpbBZqsSF?=
- =?us-ascii?Q?nqv9DbC9Zs8ae+QTBvIkjb0WxoOwi+7xePpKh6bV9G30a/SrEZTwTwinnvFs?=
- =?us-ascii?Q?PB2bJ7z+kbC+jgLrnW3Nn7bl3DPuGNqHrfvKyb9X62T+4WUzMIfuHPGII+QY?=
- =?us-ascii?Q?4DFndn640ylO4xtKYRh6xAP/SegpIDa/so6nEN22hHQvJ+alLPC3BqWPVkrH?=
- =?us-ascii?Q?p+ZL4H6TDLI4yZlTxpz2uObjDkEAflBNAN7S2gkbau85ucpHVd4VO7x2c/5j?=
- =?us-ascii?Q?WxcQBn3mXaRgPwTZIb6TZrj4Q5LHbRpEK+eIoQv9tzUcXNczpHOcob5YCwXl?=
- =?us-ascii?Q?U5IP0ysCqiM5U9KZkAjiejrBr+WmuF95f9atxF6eJ4BGxihyZVPLoyJGLge+?=
- =?us-ascii?Q?34IdDoySsSBoIrrUgu4MgQSPQLJhbbquhDmhd0Fr5XiJDlPRs2rt/bjOZNx2?=
- =?us-ascii?Q?mwWkGTkHxDDd1faEcAUd9mMtZ7QWTBjMAp1jJQZHD6KH9MQYVCRenuiGVqmI?=
- =?us-ascii?Q?FRfT2Pzrq2SMx0qWMY131RXYdwALQ+p5aPbbX5pYfhCgS6fYward6zLUWxZm?=
- =?us-ascii?Q?G5ImRZKErH3y4uGI6KqSAoiZzLkg7Fpg2OZvgSWisPUDhcU8RI4xoWS8n+0r?=
- =?us-ascii?Q?kGd+9nvFBpLVRsMDbpxjebBoAByjvUZilDw8bgeDSLcMIgtOFMDtwgwAlpEI?=
- =?us-ascii?Q?RYy5jC+P5cawID5auv8/wrzUgBKO/PFaSokx8b/njuSOl+GsPuKl4+Lr8SXm?=
- =?us-ascii?Q?j5VUhL02mgXyzNx57IQXy+mizldo6OLrQHXHt9V3eLn7UikcB9qlv+klU8iZ?=
- =?us-ascii?Q?T+XeFdQULWrEPfWLtBHE3k+inCxKnbp8xFb8U8UhJqyVjOx2ERrk6uyQrDi0?=
- =?us-ascii?Q?c6ol/w9g8mBHrwKhHU5PZlXoVvl9tbkjo/qxO4CJfEdj6NkaOtVWK0xANKB5?=
- =?us-ascii?Q?lA53LLSM11zxMpuLAjDMF3lI1tjlAi1x/fObsKe0oT9+87mGEwZjP8IYnWC9?=
- =?us-ascii?Q?KTAd5kNuKqUlVxXp6Df8AG/dxEyb7HUNZkPWI8s6XHIf9yTXVFl6ceRlWFuj?=
- =?us-ascii?Q?ttD0g9HktQnIrZYicZu5cdWvJ8C8aE9BnxS4PgfcEYLjqQ1xVXylHydn0vD2?=
- =?us-ascii?Q?Ri8irO7DEO4IR8nwHXoXPVbi6yl5meoX+rNnLmqmm5Sm2ZPSX/T0FPNLHKuS?=
- =?us-ascii?Q?aoLws9+CbqqTfzsGnSPMgg3pvQp5f7/+owoBPzJBSDv7KP0t+qDqz0C1ET4b?=
- =?us-ascii?Q?qyo1yqOOLKQ2xfsz3thL8N+rQrhEJ81Mc4fX1Qy6bglOhuvEPR0Xx96GvQwe?=
- =?us-ascii?Q?jiOmJg=3D=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0f740f91-3131-4724-95eb-08d9dd4216b7
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2022 00:56:57.0377
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uCYP22+cH1KkrIulK2KC7JmC6PkOJrMuLr72FO5Hc2kK6hSa+6kZGhaimMgahZ7TIabl0ItIL4vTraKs/844TsGiZVvmFJrtMpVoLg8wKaM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB4022
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220112103609.17421-3-leilk.liu@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check for the existence of page pool params before dereferencing. This can
-cause crashes in certain conditions.
+On Wed, Jan 12, 2022 at 06:36:08PM +0800, Leilk Liu wrote:
+> Convert Mediatek ARM SOC's SPI Master controller binding
+> to json-schema format.
+> 
+> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> ---
+>  .../bindings/spi/mediatek,spi-mt65xx.yaml     | 99 +++++++++++++++++++
+>  .../devicetree/bindings/spi/spi-mt65xx.txt    | 68 -------------
+>  2 files changed, 99 insertions(+), 68 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-mt65xx.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+> new file mode 100644
+> index 000000000000..71f0cf6e5d70
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+> @@ -0,0 +1,99 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/mediatek,spi-mt65xx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: SPI Bus controller for MediaTek ARM SoCs
+> +
+> +maintainers:
+> +  - Leilk Liu <leilk.liu@mediatek.com>
+> +
+> +allOf:
+> +  - $ref: /spi/spi-controller.yaml#
 
-Fixes: 35b2e549894b ("page_pool: Add callback to init pages when they are
-allocated")
+/schemas/spi/spi-controller.yaml#
 
-Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
----
- net/core/page_pool.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt7629-spi
+> +          - const: mediatek,mt7622-spi
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt8516-spi
+> +          - const: mediatek,mt2712-spi
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt6779-spi
+> +              - mediatek,mt8192-spi
+> +              - mediatek,mt8195-spi
+> +          - const: mediatek,mt6765-spi
 
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index bd62c01a2ec3..641f849c95e7 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -213,7 +213,7 @@ static void page_pool_set_pp_info(struct page_pool *pool,
- {
- 	page->pp = pool;
- 	page->pp_magic |= PP_SIGNATURE;
--	if (pool->p.init_callback)
-+	if (pool->p && pool->p.init_callback)
- 		pool->p.init_callback(page, pool->p.init_arg);
- }
- 
--- 
-2.25.1
+> +      - const: mediatek,mt2701-spi
+> +      - const: mediatek,mt2712-spi
+> +      - const: mediatek,mt6589-spi
+> +      - const: mediatek,mt6765-spi
+> +      - const: mediatek,mt6893-spi
+> +      - const: mediatek,mt7622-spi
+> +      - const: mediatek,mt8135-spi
+> +      - const: mediatek,mt8173-spi
+> +      - const: mediatek,mt8183-spi
 
+All these can be 1 enum.
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: clock used for the parent clock
+> +      - description: clock used for the muxes clock
+> +      - description: clock used for the clock gate
+> +
+> +  clock-names:
+> +    items:
+> +      - const: parent-clk
+> +      - const: sel-clk
+> +      - const: spi-clk
+> +
+> +  mediatek,pad-select:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    maxItems: 4
+> +    items:
+> +      enum: [0, 1, 2, 3]
+> +    description:
+> +      specify which pins group(ck/mi/mo/cs) spi controller used.
+> +      This is an array.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - '#address-cells'
+> +  - '#size-cells'
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/mt8173-clk.h>
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    spi@1100a000 {
+> +      compatible = "mediatek,mt8173-spi";
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +      reg = <0x1100a000 0x1000>;
+> +      interrupts = <GIC_SPI 110 IRQ_TYPE_LEVEL_LOW>;
+> +      clocks = <&topckgen CLK_TOP_SYSPLL3_D2>,
+> +               <&topckgen CLK_TOP_SPI_SEL>,
+> +               <&pericfg CLK_PERI_SPI0>;
+> +      clock-names = "parent-clk", "sel-clk", "spi-clk";
+> +      cs-gpios = <&pio 105 GPIO_ACTIVE_LOW>, <&pio 72 GPIO_ACTIVE_LOW>;
+> +      mediatek,pad-select = <1>, <0>;
+> +    };

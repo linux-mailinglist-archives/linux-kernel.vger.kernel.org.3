@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 227E4496D75
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 19:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B12B496D78
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 19:58:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234747AbiAVSyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 13:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52876 "EHLO
+        id S234749AbiAVS6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 13:58:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiAVSyg (ORCPT
+        with ESMTP id S230070AbiAVS6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 13:54:36 -0500
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633DBC06173B
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 10:54:36 -0800 (PST)
-Received: by mail-pf1-x444.google.com with SMTP id h5so3561381pfv.13
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 10:54:36 -0800 (PST)
+        Sat, 22 Jan 2022 13:58:14 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1AFC06173D
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 10:58:13 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id t18so11746527plg.9
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 10:58:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:sender:from:date:message-id:subject:to;
         bh=dY71NLd2odIGCqoV5Xs6eXVkEoQhnfK5Y92j96KZ6U4=;
-        b=m87csxDjIu6oEYPbASPPL4j/VkjeZkC1N7fR/rOkeXP5I72ifTzjuRwBEJ0eurUHuH
-         5xM4HEpFpbbuDRiTUom6aQ65Hus+tXJzACQm/GBOCj/rJlTzv62AKyExSJNUymUN5Xnx
-         xTOPTaLwmf9xXB8CxSlpGZoEBRwXO/ys+dutArFl/uH0bSWHHQpOT6xWsjie03soFXeb
-         k5UCdcAlv6qyjZ6ZJTPm+8Yj+li/xKzL909edHsbSSZRrLROWTZ1NEywx0Nk1B8KZ6gu
-         2sw9LNhRQaOHiX/UVtgNpdr7XfYbsOnhykjcrudZCD514bVi+V0a4eonQi3OdiQd/Dto
-         ZFjg==
+        b=kAiyRzTVvK0lVDuHIrC7q4gXkbRwmRSXMgHz1c5/k6ApWI8+EAAGv9pbu/EKoNudyZ
+         0g/5kgvqQzMBgFd1uifEuFHe1EZvwhlRGtRbKNCrviV6m0dnHx8yKmknUn7iYCn9F/hm
+         XshbOwvfSgELEaIZOKYRuMvUn+h6KaFU7DIxqWlkS4WLi7A80abqocfeBqV4uQ4Nwr3n
+         iMj7FlNUYaSGB3uvFvjsHFnTMo9bGPF1aDje6fZz5JUabxSsCDTK9/RxoCuNcPku9WiJ
+         D0M7EjKBUf0Epn4kZh55+1sCvb/Okf4KgcYa/1XT/e+T4y84clHMr0hCX4b1SogbT0Wj
+         icIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
          :to;
         bh=dY71NLd2odIGCqoV5Xs6eXVkEoQhnfK5Y92j96KZ6U4=;
-        b=kNlTVNOe1oH6IwaQ2AFcYglLAkdeYI9pWlLnee3LR86nZ78W+dA8AuozMEg8TQcTzc
-         IPUTdQ4SsJmPcKkHZUneqlNwSmsvbbYjj8E09VtZkoHG0+q34GO1GBJZAFXPSdvjLn2A
-         xkNRbq4uq/rxa29aV/RvQ4TimYk/MqoFJV+BrIEc2wOnbRzo1yzK+JHIsXXLdHco1jq+
-         UV+ZXp9BeEYLaqB74q1kv+2A4dLfH/nMmyCHmJKKdAWu+HAztcVIg0BQMJLWpYXC+FmC
-         0tLTRaoXsTbYmxhBP8qlulAI/o36vR41oIiuGMaiClXnn6VP+eaJTxwj58ZIyfIKUcva
-         OdYw==
-X-Gm-Message-State: AOAM530dSa0dDW0ON/3IwNYyP+nX/1FUVwyNlhG3s8vHDf9eeKf6OTaI
-        UccEY062vZ2GOXRqNqo1vGL4Z7WK1FHU+EX+hqY=
-X-Google-Smtp-Source: ABdhPJxUDGC/aL2SItHS7Xk2N93mGvnEiMtjEe4Iqa4IN4+8yDDhTie5IXsSqGqk1jjNPUCKXTWnKFMs+VrjOsdK6iU=
-X-Received: by 2002:a05:6a00:168b:b0:4a8:d88:9cd with SMTP id
- k11-20020a056a00168b00b004a80d8809cdmr8356511pfc.11.1642877675857; Sat, 22
- Jan 2022 10:54:35 -0800 (PST)
+        b=UiL15FCLSEdLVE2zJzyITc1xIzUYkizJMBVB49gE2z0qFgyuN++1Prh2Aw4mjaInYG
+         vg386KkN2TjJnx6FEWK/RcChSlXvbhN+w+v2z8EsnTPMNl6g9od5xU3VhN311gKnar0N
+         lQKSUOwU1TS9ltyazZQs06UxnvLFFXPLh6AQKi+F1BChnnklV4VwrgUfJx7n/vUeiGv4
+         Sbsf+MkrDmkgY4iiUZ57e7z8nBTOcXiomrjcOn3UgcX8qrVtOzEi+R8EokCSZtZ4TiGI
+         ACtJ3ba5ZWQMDzJikMlrQ14YXeJTdlhakzUBQDWNYuhVwMIWzoUmnohfY/Jem7OQROpf
+         PElg==
+X-Gm-Message-State: AOAM531MGcMPoIgjGkzwyepgyJE9nSkW90p9a5XuI11fe7nlTkVRBnz3
+        5Y7BzHRQ3JEzej832rbaOdYLd00ujDl2oIjXES4=
+X-Google-Smtp-Source: ABdhPJymLbMmTfUC26+zehKv1BIRR8hUev+bEKgpJyIlQ44iIDZKbf6f/3Ef9NdU7Nj+BcMihM5LtSqOcWUFJRmlZIY=
+X-Received: by 2002:a17:902:db04:b0:14a:912c:de20 with SMTP id
+ m4-20020a170902db0400b0014a912cde20mr8673302plx.125.1642877892149; Sat, 22
+ Jan 2022 10:58:12 -0800 (PST)
 MIME-Version: 1.0
 Sender: danielphilips50@gmail.com
-Received: by 2002:a17:90b:1e4d:0:0:0:0 with HTTP; Sat, 22 Jan 2022 10:54:35
+Received: by 2002:a17:90b:1e4d:0:0:0:0 with HTTP; Sat, 22 Jan 2022 10:58:11
  -0800 (PST)
 From:   Aisha Al-Qaddafi <aishagaddafi1894@gmail.com>
-Date:   Sat, 22 Jan 2022 18:54:35 +0000
-X-Google-Sender-Auth: 6EASqxLRUzV81BO1jQ-2Mqwq2fI
-Message-ID: <CAG2TK_3aW+eocKbX4SeZ14qEg7k6vSw7ZXCogo3-eUXSp3-kiw@mail.gmail.com>
+Date:   Sat, 22 Jan 2022 18:58:11 +0000
+X-Google-Sender-Auth: zcOBWPOXUOA73Ikpv1lEG61PHCs
+Message-ID: <CAG2TK_3GPh7=LQKXmL-uGNgncp9tBBYjado5Y1jC2fGv67WM0Q@mail.gmail.com>
 Subject: Investment offer,
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"

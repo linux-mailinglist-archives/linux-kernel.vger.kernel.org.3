@@ -2,93 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66DE5496C7E
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 14:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD34496C80
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 14:16:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232861AbiAVNPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 08:15:06 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:49198
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230329AbiAVNPE (ORCPT
+        id S232937AbiAVNQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Jan 2022 08:16:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36436 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230329AbiAVNQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 08:15:04 -0500
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A877940045
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 13:15:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642857303;
-        bh=sq+GqGoHGm/8ryzGZ8Mwkyq3rI/NbpNjgK3K63Ee+P8=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=bM6D4ueVZSs4micVd1HbbXDpXx8iPO4QeNglB/kaRoQdUTe4VlZ6WVl1X6J19v+zK
-         FsFw257c1NRV0EBwUUU9FFIWmM2uVDMAIrrNpJxPiv3kQkaaF35i06P2O3LMbzHXfi
-         gnBiuYMMkmEYwBBKacrs8Iy/tu9Io+OclDQX4NvY0k/0zdeHfuDXMgEWh2TEjMdOqT
-         8EwQQ0R7v5UKGn6wCxOsXSW9pJFZV8g3sT/92/PEdMteWCiTWZc8uC9Cvm/m8MED5r
-         ywhxf40yOlTyjbBu59ZXOM4wJCF6B1SgYFJuic9LfL30b3kuSkhf/GfGxbG8d4VEr7
-         +ZdgoN/lLOPZQ==
-Received: by mail-ej1-f72.google.com with SMTP id x16-20020a170906135000b006b5b4787023so943432ejb.12
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 05:15:03 -0800 (PST)
+        Sat, 22 Jan 2022 08:16:25 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D540C06173B
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 05:16:25 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id f24so14091121ioc.0
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 05:16:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cw8oAeTADjmoJN3cZNiurSuYAXwioROhV2ueLKFr/Q8=;
+        b=Ja/bcenQsj94P7yALHaIcE63sVm4fcMxCZBvqEMdmQuRKX5VN9HhhF3npkq6RZU3c9
+         DXrm7hTkHBiV72Xl9tESTx+wC2FTh2KNU45uzYNGgzLknL2GV4zyl3OQgkjwCyOe8+bv
+         8cCyDc7V5UP6au3SY1x9yqX2AYBf82ZLarThNEEQ7Y0Zb3dAfijfWfqrGG8azN8CQINF
+         wGsKgi6Cr1arnjnpeqEaKpIY7xjK7a8KjPkc2ripB4aJ2LnHoLGtu+qz6/YyJCTTU3Kz
+         7n9SG99Xbh360iHzcbPcdd2Zgx0WOku9c2rpq3r1Tnw9VW9/q531WDG8bSBDLxHdpf4I
+         +Ceg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sq+GqGoHGm/8ryzGZ8Mwkyq3rI/NbpNjgK3K63Ee+P8=;
-        b=kbZtiuHyt0xp+BkXL2pBELxMpi4H3eMG9tPMC3Qx7tQQwzpAdWqk1BD4ll6O8pI4b5
-         wYKGA6zoZ2EmgVxVFVKOTBHUf2KdykHG2KV6L/Rot5k0C3A9iSr7rlPvxOKWAwnaLkXB
-         OCrqkF9tkFfPRNOK9E3VVKLMUqEz9gvDhd/OEyIMfdWYBSkiH+1bFxr6bQ5tTGOy1qJX
-         I743XYpxs80/fZZsTSHxLcJTpu7tGtr6BQbbAFpJRo1I5FLp6DI5unYoj3KN5MR2TLbx
-         DUXw7dIL2COZLlGBN1CHi/7eTxw/SNegMcDgha/a6bFO4d9q3iDh3Q8lqRzxkvJYMSKs
-         HCzQ==
-X-Gm-Message-State: AOAM533Di9VDjIYMkVp/FjQuPD5+GYWUzX/663ghyELMyFgMIaGt0l81
-        gDKgETh4vNNLs0lp++okcg6fIthn+/d7ewFaBVmo6RRmDnS5jwazyq01ZY44z75crwtSMX/7ciQ
-        56FjQY+vC5mNqGeoIdYN7coW3pqtVuYLvNTZWr79r5Q==
-X-Received: by 2002:a05:6402:1d4d:: with SMTP id dz13mr8232527edb.80.1642857303217;
-        Sat, 22 Jan 2022 05:15:03 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyVyWY/MniL6pE8Qvx42ZDYAQcz+ygoyMbJ7Fg2vbPe6otymoWSlG8GropeNe8ENplv5ATIdA==
-X-Received: by 2002:a05:6402:1d4d:: with SMTP id dz13mr8232515edb.80.1642857303023;
-        Sat, 22 Jan 2022 05:15:03 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id k20sm2914823eja.14.2022.01.22.05.15.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Jan 2022 05:15:02 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: exynos: use define for TMU clock on Exynos4412
-Date:   Sat, 22 Jan 2022 14:14:57 +0100
-Message-Id: <20220122131457.63304-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cw8oAeTADjmoJN3cZNiurSuYAXwioROhV2ueLKFr/Q8=;
+        b=T5EmtqQazAyh6M3KUoEPvQjC7J0xyiNM3S0e+QNstohgatgsz8pF6gt2dCpxUkzcF6
+         ar+tAt7NpJZnyIZ8mME1K0bSiKiJ6HAiUHGMLNE5sjrotpzYTHQQQP82/b+nsrAbAlQk
+         N4L2VRSn/us2jv9i8eKG7rnBtNzw9HknGxsBHL0vMV2BslBwhDa0e9SHScWFJrozVDGQ
+         AYx1w+pRxGfhMRCEBEHwGjyAx3MOJLCE5pO2CaR/9RdqNoJBD6crLm8y8O07Ugs82U5o
+         QFXxHQk1HWirq6N7gKQXaijjb4qjNEARn9FPXHr6njTlLHNYIuSxlBSChKtnr6bPdsV4
+         P37Q==
+X-Gm-Message-State: AOAM532mzTOj+6NxsTphHkJDmccZmJffGMolt5KtnrI1EisrhXBeT6PV
+        VCylYBTXqL/Fa0j4lyrdg1NaI7bnnVaJqoUR5bnNvgVe
+X-Google-Smtp-Source: ABdhPJwBUkJHYgYALboncKIpReYuC45b7zGZ62CgNr/YMXLDZMIMeKLTT52BjoLT+YQyAxfbscDVy9ssZZFXhJkeeHo=
+X-Received: by 2002:a05:6638:242:: with SMTP id w2mr3039454jaq.256.1642857385060;
+ Sat, 22 Jan 2022 05:16:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAHmME9ofzanQTBD_WYBRW49d+gM77rCdh8Utdk4+PM9n_bmKwA@mail.gmail.com>
+ <CANiq72=hXXvzfYz-1EdgDNBVfYMiRp2RbjjNF=wwiiPVU+jmuQ@mail.gmail.com>
+ <3cbaf145ee577f017cf7aea953c9dd1eb88ed4b4.camel@perches.com>
+ <CANiq72=bfYHM6XjQZ9dG_auahA_w59naEXM+VZHGm0m=_7nOqA@mail.gmail.com>
+ <CAHmME9pWGsc5wLzNK5pe4gVLPNb4uUWYF8AARK8_K=WYLwdGfQ@mail.gmail.com>
+ <CAHmME9p6q5MxLy-_1KaDWz8ksQYAUev1UvaQ-fHhetmy0sNHOg@mail.gmail.com> <CANiq72=HdsTfQt5DWKf065pENN0xrOwvKq+T3JpHdyyRkPVx8w@mail.gmail.com>
+In-Reply-To: <CANiq72=HdsTfQt5DWKf065pENN0xrOwvKq+T3JpHdyyRkPVx8w@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sat, 22 Jan 2022 14:16:14 +0100
+Message-ID: <CANiq72mmFn8KUjhcOHhTbWGCktK-HEvAQ+nz8HZhM598XqO2aw@mail.gmail.com>
+Subject: Re: list iterator spacing: clang-format vs checkpatch
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Joe Perches <joe@perches.com>, Andrew Lunn <andrew@lunn.ch>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace clock hard-coded number with a define from bindings.  No
-functional change.
+On Mon, Jan 17, 2022 at 10:41 PM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> So it is coming -- the question is whether we wait a bit until LLVM 11
+> is the minimum supported version (nowadays LLVM 10) or we are willing
+> to require LLVM 11.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- arch/arm/boot/dts/exynos4412.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+LLVM 11 is now the minimum with commit df05c0e9496c ("Documentation:
+Raise the minimum supported version of LLVM to 11.0.0"), so I will
+give this a go.
 
-diff --git a/arch/arm/boot/dts/exynos4412.dtsi b/arch/arm/boot/dts/exynos4412.dtsi
-index d3802046c8b8..aa0b61b59970 100644
---- a/arch/arm/boot/dts/exynos4412.dtsi
-+++ b/arch/arm/boot/dts/exynos4412.dtsi
-@@ -813,7 +813,7 @@ &tmu {
- 	interrupt-parent = <&combiner>;
- 	interrupts = <2 4>;
- 	reg = <0x100C0000 0x100>;
--	clocks = <&clock 383>;
-+	clocks = <&clock CLK_TMU_APBIF>;
- 	clock-names = "tmu_apbif";
- 	status = "disabled";
- };
--- 
-2.32.0
-
+Cheers,
+Miguel

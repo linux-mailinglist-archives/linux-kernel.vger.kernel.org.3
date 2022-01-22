@@ -2,83 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D954968D1
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 01:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A4E4968D4
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Jan 2022 01:39:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbiAVAiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Jan 2022 19:38:54 -0500
-Received: from mail-ot1-f48.google.com ([209.85.210.48]:33344 "EHLO
-        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiAVAix (ORCPT
+        id S230401AbiAVAjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Jan 2022 19:39:22 -0500
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:37853 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229457AbiAVAjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Jan 2022 19:38:53 -0500
-Received: by mail-ot1-f48.google.com with SMTP id y11-20020a0568302a0b00b0059a54d66106so13912633otu.0;
-        Fri, 21 Jan 2022 16:38:53 -0800 (PST)
+        Fri, 21 Jan 2022 19:39:15 -0500
+Received: by mail-oi1-f172.google.com with SMTP id bf5so15974383oib.4;
+        Fri, 21 Jan 2022 16:39:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=S+3p2SJcrYn8xFmvYiSl/F4mMZLK5YnF3daHv/z1kxU=;
-        b=10hyHK7AVKTw3UjoRf7MMqL+x9I2y8mBolIhujWPB4y9UzD4foqEMbi559nsTxGPT7
-         hyQaxm8UcC3tLH92hzAUv5RwB9+3H5bTwWn7dxIvbOUbs/SUeLQdNIS3/9XXitwyUN8s
-         b/Z8IPbpoEILluCCgYKFMXgVmLjI6VXa0h0KalLpcpIsLWtRSbv/C6HtwrqpZ1bi9U4S
-         OPre7I+B+eGBlSCSVkEqTjNvvtApk7GlJlvH5lUU0YODfKtkYilosy6FLqS0UFY/LLRH
-         TCCrlTj98QvRaorL7jvyGajDSTbi5n6nW2r/WdKQi6qTKWmaJNpGK68t5mSRrz5Z6Tgy
-         D+GA==
-X-Gm-Message-State: AOAM533Rlileb43eJy4UwfJ4HHjVxVLk95xaqpsK/F2wEfFeHaCuMBlw
-        GTz4elu/aFLKT8JT5tmOG0r3+91h6w==
-X-Google-Smtp-Source: ABdhPJzK+wd0MzbZ5Z+M5ZSJ9jYz0Y8qeBMJVaPqjkyqFw7wXCi772Nh2NpnzOHh20oIyEoyK3foQw==
-X-Received: by 2002:a9d:4047:: with SMTP id o7mr4857367oti.190.1642811932574;
-        Fri, 21 Jan 2022 16:38:52 -0800 (PST)
+        bh=MYFfRxyC4/E24cPaOBbxiA9I+dxbpUwW+WISu/4l9BY=;
+        b=i0qYNupwn5TrHzQjdIgDNkFmQb5tCoKojFwQ+eUOnXEIrwTAhBS3AyWkGilsZ4Up1R
+         Wz5GpC9fiFen5/K93/EEBAfAIp6KRtrq4mBRJmrFui2xRlaQkN6nDO7dhQbSiF0Zb99/
+         B2aIOt9o/lUDSUZuFJfMXfBSGuYnPgXpZek/lDWvtQE3f4pEQDv9hRdaH+oD/mXUCmsv
+         k2d4SBdJw1u1G67bf9gBqTOEGho4k93sGHiaFFWRMoCaJJA0HbSWx2uIH8FRuReQh4GC
+         V3enoYLxJhpjMeJAQSiG276EJmiQPoF7QUXnlUIdr6+TwrCPY6h8lkzpl3O02zKo2WKG
+         kQVw==
+X-Gm-Message-State: AOAM533ZBoDQrmzFP8acC3b+zCiAmZS6YDZaS8yznUkd/l00dHFVcZ9o
+        tkFLWZgTOrXWKzLjhQNjTA==
+X-Google-Smtp-Source: ABdhPJyITZIGAwa7fWMYPph1L8G2l6rJPXFKTQA03WvWmJwPA1lfLra+7k6DRH04YzXilPiNzgMMRg==
+X-Received: by 2002:aca:f241:: with SMTP id q62mr2632353oih.64.1642811954964;
+        Fri, 21 Jan 2022 16:39:14 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id u12sm1669893otq.68.2022.01.21.16.38.51
+        by smtp.gmail.com with ESMTPSA id y64sm1969847oig.54.2022.01.21.16.39.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 16:38:52 -0800 (PST)
-Received: (nullmailer pid 1925979 invoked by uid 1000);
-        Sat, 22 Jan 2022 00:38:50 -0000
-Date:   Fri, 21 Jan 2022 18:38:50 -0600
+        Fri, 21 Jan 2022 16:39:14 -0800 (PST)
+Received: (nullmailer pid 1926684 invoked by uid 1000);
+        Sat, 22 Jan 2022 00:39:13 -0000
+Date:   Fri, 21 Jan 2022 18:39:13 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     devicetree@vger.kernel.org, sakari.ailus@linux.intel.com,
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         geert@linux-m68k.org, mchehab@kernel.org,
-        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-binding: media: hynix,hi846: use
- $defs/port-base port description
-Message-ID: <YetSGqLmPH1HBQMP@robh.at.kernel.org>
+        linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        sakari.ailus@linux.intel.com
+Subject: Re: [PATCH v2 2/2] dt-bindings: media: hynix,hi846: add
+ link-frequencies description
+Message-ID: <YetSMV9CIcIo8yLp@robh.at.kernel.org>
 References: <20220111133937.1099917-1-martin.kepplinger@puri.sm>
+ <20220111133937.1099917-2-martin.kepplinger@puri.sm>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220111133937.1099917-1-martin.kepplinger@puri.sm>
+In-Reply-To: <20220111133937.1099917-2-martin.kepplinger@puri.sm>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jan 2022 14:39:36 +0100, Martin Kepplinger wrote:
-> This is supposed to fix "make dt_binding_check":
-> 
->     Documentation/devicetree/bindings/media/i2c/hynix,hi846.example.dt.yaml:
-> camera@20: port:endpoint: Unevaluated properties are not allowed
-> ('link-frequencies', 'data-lanes' were unexpected)
->     From schema: Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+On Tue, 11 Jan 2022 14:39:37 +0100, Martin Kepplinger wrote:
+> link-frequencies is required but only mentioned in the example. Add
+> it to the description.
 > 
 > Fixes: f3ce7200ca18 ("media: dt-bindings: media: document SK Hynix Hi-846 MIPI CSI-2 8M pixel sensor")
-> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
 > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > ---
-> 
-> 
-> revision history
-> ----------------
-> v2: thank you, Laurent
->  * add unevaluatedProperties: false
-> v1:
-> https://lore.kernel.org/linux-media/20220110123804.377944-1-martin.kepplinger@puri.sm/
-> 
-> 
->  Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>

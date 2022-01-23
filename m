@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D4D497477
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 19:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE4A497479
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 19:41:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239669AbiAWSkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 13:40:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
+        id S239734AbiAWSko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 13:40:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239622AbiAWSkU (ORCPT
+        with ESMTP id S239764AbiAWSkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 13:40:20 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8451BC06173D;
-        Sun, 23 Jan 2022 10:40:20 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id y17so3130522plg.7;
-        Sun, 23 Jan 2022 10:40:20 -0800 (PST)
+        Sun, 23 Jan 2022 13:40:35 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFBDC06174E
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 10:40:23 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id i8so13106807pgt.13
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 10:40:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=QqjEcwh/Vt3ob/xyYzKK4XDGLqNzTDbmtmru+0FTCuE=;
-        b=QirWg+lweofM9kFw4lQkoYZAFuKzZxOxrfW4krFfMwzWQOQc828Kg4wUFu/CnyQyYo
-         jXMbk78JyjVnL00jc+K6b7IKZaGBiJkUZRjZhvTWLZjdoGe7Rmc5Ld5gBMmQE4h8CBwc
-         2nZWoOHGLABDxeInZgxPd1zaaerdmwx1uw/CoJ2KNxMrjYLyYAlHX6xP1WQspeALHNbo
-         sOmk6CFE7AWiAd2Uop6Jh9ZUqhP1IiO6WNhmYk8AGo4PvVqdXR12F00sDQVaFHhrZT3G
-         cr4x4N9BbO3MSVwZxJWjB2Lb76qglUp3ZalrE3oh0Bi001lr9e34A5qeWoVSN8j9CeP2
-         22Zg==
+        bh=QmvdvRYrU0pccxZjPQvOPFahs5Q0IVqksGfZERujS/w=;
+        b=fEMWqJ0non1/1G7N6hoyBkFO73hoqLatan184u4QZ+CXOWfIxa+mKWmDZWQ330NtrL
+         79a4csmu1WrP8S5N3nNrCuH8lsqH8E0i37IaLhihnfxVCBlGpZ2fIrpdpj0Sf/sxDVCm
+         SD1AIe7Vg0kK9S/RYVeb5lJ1TkJynGTztkTNtNc6fjgN8wXC13OCBbb3Yjz2/2uYMPif
+         zlhj6Q8IPowwVu8vMseCCqQVQa4umcM/Hzid4RgLiZfxYjowX4xiAAPFyMkcjLChRCh+
+         JugaXNORXRbfPA4WwAdsVX5PX3vxTJsaiYITdOJiuCO+CTZSTYJLrDCdMCbCYWgff9A+
+         TYkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=QqjEcwh/Vt3ob/xyYzKK4XDGLqNzTDbmtmru+0FTCuE=;
-        b=p47GPAYHS8CCalQoJs3WgeqGZhSSgzX6BHuCUYwcJIX062oZaFkdnkEevSvive1aRX
-         TIO0DoJj4Q3VnUAnSERJYGxixGb6Ut3uj/22NChLlmbSFy2ZqSzvHQ/fZ6aqC2lnJu5t
-         8EMNpuyZJzvQd6m4JfHiEkKeq4C/1r5YbuXdi2MyjK7atWZVqf3Bu8Zn/nXImGRhgX4S
-         poeM4iQ3xAFDZ+bnDwzd8ipZzB3PrsH/dt8bLDgEkTd6JXvDVYk5frjixffgIbH+DCv8
-         D+mgOM3/r0pqh35hBkIgetXZLswdf+8Q9mW7NRCI9PBFXBrIuVjCXRd2HHY65JobQ7sO
-         dxJw==
-X-Gm-Message-State: AOAM533Ge3zwx7u9AMz4ij+jhXICuBvGvwJe6FNTixrs/hRhV5X3SF6Z
-        vEcCK7QG9p9S9EkHFJZ86rs=
-X-Google-Smtp-Source: ABdhPJwbVELe7QC7MMVE53A+dZrALuLWXks3kDspFFg5RnGQ+U6L1gKvdNAVlETCFY4gN45eIP7tHg==
-X-Received: by 2002:a17:902:b185:b0:149:fccf:1cf3 with SMTP id s5-20020a170902b18500b00149fccf1cf3mr11659042plr.77.1642963220019;
-        Sun, 23 Jan 2022 10:40:20 -0800 (PST)
+        bh=QmvdvRYrU0pccxZjPQvOPFahs5Q0IVqksGfZERujS/w=;
+        b=2nrsf2sKcCkKcOY0Im7NwEqJDSFT2sOpFLkNEuqaJ571c8fA0qA4p937yZItu8Sb+w
+         hSDtIBKzyahzIcawcqro1B8GSj3VA9wPZfGOytdWEsCFbw9Zt4yppyWCnRQCpPvl+Llm
+         a2L2BdxG5/IQcRoyA6KqNsQ2QRzouKl2ipRucaKKjmTfOCHCfUtHa/4ycLxEIkB3Ag35
+         rfqTN8FDrTXbPtcdZ4VukPymzRCDYa7J9z+7jLAMoAWovE6ocFbnGVRXE0hjUBPYRzUi
+         QmP9cP4I2XeO1Oeaxayj0izVKJD8+dybpy5o4KyC/+pYmDYXemalJV65tI/B27aLaN3c
+         JUhQ==
+X-Gm-Message-State: AOAM533aFoOjJCpKAkdwI2QvNZ0tmG/b/QBk4FLcqc0aG3gdDIxPcAoH
+        Cnfub98SLGEExZ1e8KqHBZs=
+X-Google-Smtp-Source: ABdhPJxe9Mdrm++g1fWsFijEPfG65qpS18BjZ5G1v3x54Dtr9GF+uWdZkbmUM6P3YG36cjhhM695Fg==
+X-Received: by 2002:a63:7543:: with SMTP id f3mr9431653pgn.360.1642963223187;
+        Sun, 23 Jan 2022 10:40:23 -0800 (PST)
 Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id r19sm10615026pjz.6.2022.01.23.10.40.19
+        by smtp.gmail.com with ESMTPSA id y42sm5575467pfw.157.2022.01.23.10.40.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 10:40:19 -0800 (PST)
+        Sun, 23 Jan 2022 10:40:22 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -62,13 +62,15 @@ To:     Yury Norov <yury.norov@gmail.com>,
         Nicholas Piggin <npiggin@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
-Subject: [PATCH 10/54] net: ethernet: replace bitmap_weight with bitmap_empty for qlogic
-Date:   Sun, 23 Jan 2022 10:38:41 -0800
-Message-Id: <20220123183925.1052919-11-yury.norov@gmail.com>
+        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 11/54] perf: replace bitmap_weight with bitmap_empty where appropriate
+Date:   Sun, 23 Jan 2022 10:38:42 -0800
+Message-Id: <20220123183925.1052919-12-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220123183925.1052919-1-yury.norov@gmail.com>
 References: <20220123183925.1052919-1-yury.norov@gmail.com>
@@ -78,52 +80,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-qlogic/qed code calls bitmap_weight() to check if any bit of a given
-bitmap is set. It's better to use bitmap_empty() in that case because
-bitmap_empty() stops traversing the bitmap as soon as it finds first
-set bit, while bitmap_weight() counts all bits unconditionally.
+In some places, drivers/perf code calls bitmap_weight() to check if any
+bit of a given bitmap is set. It's better to use bitmap_empty() in that
+case because bitmap_empty() stops traversing the bitmap as soon as it
+finds first set bit, while bitmap_weight() counts all bits unconditionally.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- drivers/net/ethernet/qlogic/qed/qed_rdma.c | 4 ++--
- drivers/net/ethernet/qlogic/qed/qed_roce.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/perf/arm-cci.c                   | 2 +-
+ drivers/perf/arm_pmu.c                   | 4 ++--
+ drivers/perf/hisilicon/hisi_uncore_pmu.c | 2 +-
+ drivers/perf/xgene_pmu.c                 | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_rdma.c b/drivers/net/ethernet/qlogic/qed/qed_rdma.c
-index 23b668de4640..b6e2e17bac04 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_rdma.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_rdma.c
-@@ -336,7 +336,7 @@ void qed_rdma_bmap_free(struct qed_hwfn *p_hwfn,
+diff --git a/drivers/perf/arm-cci.c b/drivers/perf/arm-cci.c
+index 54aca3a62814..96e09fa40909 100644
+--- a/drivers/perf/arm-cci.c
++++ b/drivers/perf/arm-cci.c
+@@ -1096,7 +1096,7 @@ static void cci_pmu_enable(struct pmu *pmu)
+ {
+ 	struct cci_pmu *cci_pmu = to_cci_pmu(pmu);
+ 	struct cci_pmu_hw_events *hw_events = &cci_pmu->hw_events;
+-	int enabled = bitmap_weight(hw_events->used_mask, cci_pmu->num_cntrs);
++	bool enabled = !bitmap_empty(hw_events->used_mask, cci_pmu->num_cntrs);
+ 	unsigned long flags;
  
- 	/* print aligned non-zero lines, if any */
- 	for (item = 0, line = 0; line < last_line; line++, item += 8)
--		if (bitmap_weight((unsigned long *)&pmap[item], 64 * 8))
-+		if (!bitmap_empty((unsigned long *)&pmap[item], 64 * 8))
- 			DP_NOTICE(p_hwfn,
- 				  "line 0x%04x: 0x%016llx 0x%016llx 0x%016llx 0x%016llx 0x%016llx 0x%016llx 0x%016llx 0x%016llx\n",
- 				  line,
-@@ -350,7 +350,7 @@ void qed_rdma_bmap_free(struct qed_hwfn *p_hwfn,
+ 	if (!enabled)
+diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
+index 295cc7952d0e..a31b302b0ade 100644
+--- a/drivers/perf/arm_pmu.c
++++ b/drivers/perf/arm_pmu.c
+@@ -524,7 +524,7 @@ static void armpmu_enable(struct pmu *pmu)
+ {
+ 	struct arm_pmu *armpmu = to_arm_pmu(pmu);
+ 	struct pmu_hw_events *hw_events = this_cpu_ptr(armpmu->hw_events);
+-	int enabled = bitmap_weight(hw_events->used_mask, armpmu->num_events);
++	bool enabled = !bitmap_empty(hw_events->used_mask, armpmu->num_events);
  
- 	/* print last unaligned non-zero line, if any */
- 	if ((bmap->max_count % (64 * 8)) &&
--	    (bitmap_weight((unsigned long *)&pmap[item],
-+	    (!bitmap_empty((unsigned long *)&pmap[item],
- 			   bmap->max_count - item * 64))) {
- 		offset = sprintf(str_last_line, "line 0x%04x: ", line);
- 		for (; item < last_item; item++)
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_roce.c b/drivers/net/ethernet/qlogic/qed/qed_roce.c
-index 071b4aeaddf2..134ecfca96a3 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_roce.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_roce.c
-@@ -76,7 +76,7 @@ void qed_roce_stop(struct qed_hwfn *p_hwfn)
- 	 * We delay for a short while if an async destroy QP is still expected.
- 	 * Beyond the added delay we clear the bitmap anyway.
- 	 */
--	while (bitmap_weight(rcid_map->bitmap, rcid_map->max_count)) {
-+	while (!bitmap_empty(rcid_map->bitmap, rcid_map->max_count)) {
- 		/* If the HW device is during recovery, all resources are
- 		 * immediately reset without receiving a per-cid indication
- 		 * from HW. In this case we don't expect the cid bitmap to be
+ 	/* For task-bound events we may be called on other CPUs */
+ 	if (!cpumask_test_cpu(smp_processor_id(), &armpmu->supported_cpus))
+@@ -785,7 +785,7 @@ static int cpu_pm_pmu_notify(struct notifier_block *b, unsigned long cmd,
+ {
+ 	struct arm_pmu *armpmu = container_of(b, struct arm_pmu, cpu_pm_nb);
+ 	struct pmu_hw_events *hw_events = this_cpu_ptr(armpmu->hw_events);
+-	int enabled = bitmap_weight(hw_events->used_mask, armpmu->num_events);
++	bool enabled = !bitmap_empty(hw_events->used_mask, armpmu->num_events);
+ 
+ 	if (!cpumask_test_cpu(smp_processor_id(), &armpmu->supported_cpus))
+ 		return NOTIFY_DONE;
+diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pmu.c
+index a738aeab5c04..358e4e284a62 100644
+--- a/drivers/perf/hisilicon/hisi_uncore_pmu.c
++++ b/drivers/perf/hisilicon/hisi_uncore_pmu.c
+@@ -393,7 +393,7 @@ EXPORT_SYMBOL_GPL(hisi_uncore_pmu_read);
+ void hisi_uncore_pmu_enable(struct pmu *pmu)
+ {
+ 	struct hisi_pmu *hisi_pmu = to_hisi_pmu(pmu);
+-	int enabled = bitmap_weight(hisi_pmu->pmu_events.used_mask,
++	bool enabled = !bitmap_empty(hisi_pmu->pmu_events.used_mask,
+ 				    hisi_pmu->num_counters);
+ 
+ 	if (!enabled)
+diff --git a/drivers/perf/xgene_pmu.c b/drivers/perf/xgene_pmu.c
+index 2b6d476bd213..88bd100a9633 100644
+--- a/drivers/perf/xgene_pmu.c
++++ b/drivers/perf/xgene_pmu.c
+@@ -867,7 +867,7 @@ static void xgene_perf_pmu_enable(struct pmu *pmu)
+ {
+ 	struct xgene_pmu_dev *pmu_dev = to_pmu_dev(pmu);
+ 	struct xgene_pmu *xgene_pmu = pmu_dev->parent;
+-	int enabled = bitmap_weight(pmu_dev->cntr_assign_mask,
++	bool enabled = !bitmap_empty(pmu_dev->cntr_assign_mask,
+ 			pmu_dev->max_counters);
+ 
+ 	if (!enabled)
 -- 
 2.30.2
 

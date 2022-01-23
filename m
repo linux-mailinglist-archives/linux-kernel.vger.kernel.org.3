@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22EC84972AE
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 16:43:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 435454972AF
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 16:44:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237968AbiAWPnW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 23 Jan 2022 10:43:22 -0500
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:41097 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235231AbiAWPnV (ORCPT
+        id S237984AbiAWPnv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 23 Jan 2022 10:43:51 -0500
+Received: from relay11.mail.gandi.net ([217.70.178.231]:57577 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235306AbiAWPnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 10:43:21 -0500
+        Sun, 23 Jan 2022 10:43:50 -0500
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id EDAF1FF802;
-        Sun, 23 Jan 2022 15:43:19 +0000 (UTC)
-Date:   Sun, 23 Jan 2022 16:43:18 +0100
+        by mail.gandi.net (Postfix) with ESMTPSA id 9E36C100002;
+        Sun, 23 Jan 2022 15:43:45 +0000 (UTC)
+Date:   Sun, 23 Jan 2022 16:43:44 +0100
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc:     <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] mtd: rawnand: Remove of_get_nand_on_flash_bbt()
- wrapper
-Message-ID: <20220123164250.6ff0e49e@xps13>
-In-Reply-To: <20220106131610.225661-1-tudor.ambarus@microchip.com>
-References: <20220106131610.225661-1-tudor.ambarus@microchip.com>
+To:     s921975628@gmail.com
+Cc:     richard@nod.at, vigneshr@ti.com, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] mtd: rawnand: nandsim: Replace overflow check with
+ kzalloc to single kcalloc
+Message-ID: <20220123164344.015f1447@xps13>
+In-Reply-To: <20211225100607.118932-1-s921975628@gmail.com>
+References: <20211225100607.118932-1-s921975628@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
@@ -34,16 +34,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tudor,
+Hello,
 
-tudor.ambarus@microchip.com wrote on Thu, 6 Jan 2022 15:16:09 +0200:
+s921975628@gmail.com wrote on Sat, 25 Dec 2021 18:06:07 +0800:
 
-> Remove the wrapper as it hides for no reason what we really want: find an
-> of_property. Removing the wrapper makes the code easier to read.
+> From: RinHizakura <s921975628@gmail.com>
 > 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> Instead of self-checking overflow and allocating an array of specific size
+> by counting the total required space handy, we already have existed kernel
+> API which responses for all these works.
+> 
+> Signed-off-by: RinHizakura <s921975628@gmail.com>
 
-Series applies to nand/next.
+Series applied to nand/next.
 
 Thanks,
 Miquèl

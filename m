@@ -2,37 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A0649718B
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 13:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DAB649718E
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 13:57:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236353AbiAWMzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 07:55:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59718 "EHLO
+        id S236373AbiAWM5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 07:57:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232712AbiAWMzv (ORCPT
+        with ESMTP id S236356AbiAWM5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 07:55:51 -0500
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28BCC06173D
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 04:55:50 -0800 (PST)
+        Sun, 23 Jan 2022 07:57:30 -0500
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9A8C061401
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 04:57:28 -0800 (PST)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:20cc:b383:efc8:c1b8])
-        by xavier.telenet-ops.be with bizsmtp
-        id mCvl2600U4688xB01Cvl6g; Sun, 23 Jan 2022 13:55:46 +0100
+        by baptiste.telenet-ops.be with bizsmtp
+        id mCxK2600D4688xB01CxKR4; Sun, 23 Jan 2022 13:57:27 +0100
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <geert@linux-m68k.org>)
-        id 1nBcPJ-00B8r2-Aj; Sun, 23 Jan 2022 13:55:45 +0100
+        id 1nBcQp-00B8uY-Fz; Sun, 23 Jan 2022 13:57:19 +0100
 Received: from geert by rox.of.borg with local (Exim 4.93)
         (envelope-from <geert@linux-m68k.org>)
-        id 1nBcPI-00B9aw-Mh; Sun, 23 Jan 2022 13:55:44 +0100
+        id 1nBcQo-00B9ed-Uy; Sun, 23 Jan 2022 13:57:18 +0100
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-m68k@lists.linux-m68k.org
-Cc:     linux-kernel@vger.kernel.org,
+To:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH] m68k: defconfig: Update defconfigs for v5.17-rc1
-Date:   Sun, 23 Jan 2022 13:55:43 +0100
-Message-Id: <20220123125543.2658445-1-geert@linux-m68k.org>
+Subject: [PATCH] netfilter: Remove flowtable relics
+Date:   Sun, 23 Jan 2022 13:57:17 +0100
+Message-Id: <20220123125717.2658676-1-geert@linux-m68k.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -40,477 +47,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  - Drop CONFIG_NFT_COUNTER=m (removed in commit 023223dfbfb34fcc
-    ("netfilter: nf_tables: make counter support built-in")),
-  - Drop CONFIG_NF_FLOW_TABLE_IPV4=m and CONFIG_NF_FLOW_TABLE_IPV6=m
-    (can no longer be enabled since commit c42ba4290b2147aa ("netfilter:
-    flowtable: remove ipv4/ipv6 modules")),
-  - Drop CONFIG_TEST_HASH=m (replaced by auto-modular HASH_KUNIT_TEST in
-    commit 0acc968f352336a4 ("test_hash.c: refactor into kunit")),
-  - Enable modular build of the new siphash selftest.
+NF_FLOW_TABLE_IPV4 and NF_FLOW_TABLE_IPV6 are invisble, selected by
+nothing (so they can no longer be enabled), and their last real users
+have been removed (nf_flow_table_ipv6.c is empty).
 
+Clean up the leftovers.
+
+Fixes: c42ba4290b2147aa ("netfilter: flowtable: remove ipv4/ipv6 modules")
 Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 ---
-To be queued in the m68k for-v5.18 branch.
+ net/ipv4/netfilter/Kconfig              | 4 ----
+ net/ipv6/netfilter/Kconfig              | 4 ----
+ net/ipv6/netfilter/Makefile             | 3 ---
+ net/ipv6/netfilter/nf_flow_table_ipv6.c | 0
+ 4 files changed, 11 deletions(-)
+ delete mode 100644 net/ipv6/netfilter/nf_flow_table_ipv6.c
 
- arch/m68k/configs/amiga_defconfig    | 5 +----
- arch/m68k/configs/apollo_defconfig   | 5 +----
- arch/m68k/configs/atari_defconfig    | 5 +----
- arch/m68k/configs/bvme6000_defconfig | 5 +----
- arch/m68k/configs/hp300_defconfig    | 5 +----
- arch/m68k/configs/mac_defconfig      | 5 +----
- arch/m68k/configs/multi_defconfig    | 5 +----
- arch/m68k/configs/mvme147_defconfig  | 5 +----
- arch/m68k/configs/mvme16x_defconfig  | 5 +----
- arch/m68k/configs/q40_defconfig      | 5 +----
- arch/m68k/configs/sun3_defconfig     | 5 +----
- arch/m68k/configs/sun3x_defconfig    | 5 +----
- 12 files changed, 12 insertions(+), 48 deletions(-)
-
-diff --git a/arch/m68k/configs/amiga_defconfig b/arch/m68k/configs/amiga_defconfig
-index bc9952f8be6675d7..eb930b9633602aff 100644
---- a/arch/m68k/configs/amiga_defconfig
-+++ b/arch/m68k/configs/amiga_defconfig
-@@ -104,7 +104,6 @@ CONFIG_NF_TABLES_NETDEV=y
- CONFIG_NFT_NUMGEN=m
- CONFIG_NFT_CT=m
- CONFIG_NFT_FLOW_OFFLOAD=m
--CONFIG_NFT_COUNTER=m
- CONFIG_NFT_CONNLIMIT=m
- CONFIG_NFT_LOG=m
- CONFIG_NFT_LIMIT=m
-@@ -204,7 +203,6 @@ CONFIG_IP_SET_LIST_SET=m
- CONFIG_NFT_DUP_IPV4=m
- CONFIG_NFT_FIB_IPV4=m
- CONFIG_NF_TABLES_ARP=y
--CONFIG_NF_FLOW_TABLE_IPV4=m
- CONFIG_NF_LOG_ARP=m
- CONFIG_NF_LOG_IPV4=m
- CONFIG_IP_NF_IPTABLES=m
-@@ -229,7 +227,6 @@ CONFIG_IP_NF_ARPFILTER=m
- CONFIG_IP_NF_ARP_MANGLE=m
- CONFIG_NFT_DUP_IPV6=m
- CONFIG_NFT_FIB_IPV6=m
--CONFIG_NF_FLOW_TABLE_IPV6=m
- CONFIG_IP6_NF_IPTABLES=m
- CONFIG_IP6_NF_MATCH_AH=m
- CONFIG_IP6_NF_MATCH_EUI64=m
-@@ -643,7 +640,7 @@ CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_OVERFLOW=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_HASH=m
-+CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/apollo_defconfig b/arch/m68k/configs/apollo_defconfig
-index a77269c6e5bacfc1..5acd495c83ceb756 100644
---- a/arch/m68k/configs/apollo_defconfig
-+++ b/arch/m68k/configs/apollo_defconfig
-@@ -100,7 +100,6 @@ CONFIG_NF_TABLES_NETDEV=y
- CONFIG_NFT_NUMGEN=m
- CONFIG_NFT_CT=m
- CONFIG_NFT_FLOW_OFFLOAD=m
--CONFIG_NFT_COUNTER=m
- CONFIG_NFT_CONNLIMIT=m
- CONFIG_NFT_LOG=m
- CONFIG_NFT_LIMIT=m
-@@ -200,7 +199,6 @@ CONFIG_IP_SET_LIST_SET=m
- CONFIG_NFT_DUP_IPV4=m
- CONFIG_NFT_FIB_IPV4=m
- CONFIG_NF_TABLES_ARP=y
--CONFIG_NF_FLOW_TABLE_IPV4=m
- CONFIG_NF_LOG_ARP=m
- CONFIG_NF_LOG_IPV4=m
- CONFIG_IP_NF_IPTABLES=m
-@@ -225,7 +223,6 @@ CONFIG_IP_NF_ARPFILTER=m
- CONFIG_IP_NF_ARP_MANGLE=m
- CONFIG_NFT_DUP_IPV6=m
- CONFIG_NFT_FIB_IPV6=m
--CONFIG_NF_FLOW_TABLE_IPV6=m
- CONFIG_IP6_NF_IPTABLES=m
- CONFIG_IP6_NF_MATCH_AH=m
- CONFIG_IP6_NF_MATCH_EUI64=m
-@@ -599,7 +596,7 @@ CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_OVERFLOW=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_HASH=m
-+CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/atari_defconfig b/arch/m68k/configs/atari_defconfig
-index 4a570c3c307f02e9..95016ccea1fc25db 100644
---- a/arch/m68k/configs/atari_defconfig
-+++ b/arch/m68k/configs/atari_defconfig
-@@ -107,7 +107,6 @@ CONFIG_NF_TABLES_NETDEV=y
- CONFIG_NFT_NUMGEN=m
- CONFIG_NFT_CT=m
- CONFIG_NFT_FLOW_OFFLOAD=m
--CONFIG_NFT_COUNTER=m
- CONFIG_NFT_CONNLIMIT=m
- CONFIG_NFT_LOG=m
- CONFIG_NFT_LIMIT=m
-@@ -207,7 +206,6 @@ CONFIG_IP_SET_LIST_SET=m
- CONFIG_NFT_DUP_IPV4=m
- CONFIG_NFT_FIB_IPV4=m
- CONFIG_NF_TABLES_ARP=y
--CONFIG_NF_FLOW_TABLE_IPV4=m
- CONFIG_NF_LOG_ARP=m
- CONFIG_NF_LOG_IPV4=m
- CONFIG_IP_NF_IPTABLES=m
-@@ -232,7 +230,6 @@ CONFIG_IP_NF_ARPFILTER=m
- CONFIG_IP_NF_ARP_MANGLE=m
- CONFIG_NFT_DUP_IPV6=m
- CONFIG_NFT_FIB_IPV6=m
--CONFIG_NF_FLOW_TABLE_IPV6=m
- CONFIG_IP6_NF_IPTABLES=m
- CONFIG_IP6_NF_MATCH_AH=m
- CONFIG_IP6_NF_MATCH_EUI64=m
-@@ -632,7 +629,7 @@ CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_OVERFLOW=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_HASH=m
-+CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/bvme6000_defconfig b/arch/m68k/configs/bvme6000_defconfig
-index a5323bf2eb3336a8..e6de6b4dff86eddb 100644
---- a/arch/m68k/configs/bvme6000_defconfig
-+++ b/arch/m68k/configs/bvme6000_defconfig
-@@ -97,7 +97,6 @@ CONFIG_NF_TABLES_NETDEV=y
- CONFIG_NFT_NUMGEN=m
- CONFIG_NFT_CT=m
- CONFIG_NFT_FLOW_OFFLOAD=m
--CONFIG_NFT_COUNTER=m
- CONFIG_NFT_CONNLIMIT=m
- CONFIG_NFT_LOG=m
- CONFIG_NFT_LIMIT=m
-@@ -197,7 +196,6 @@ CONFIG_IP_SET_LIST_SET=m
- CONFIG_NFT_DUP_IPV4=m
- CONFIG_NFT_FIB_IPV4=m
- CONFIG_NF_TABLES_ARP=y
--CONFIG_NF_FLOW_TABLE_IPV4=m
- CONFIG_NF_LOG_ARP=m
- CONFIG_NF_LOG_IPV4=m
- CONFIG_IP_NF_IPTABLES=m
-@@ -222,7 +220,6 @@ CONFIG_IP_NF_ARPFILTER=m
- CONFIG_IP_NF_ARP_MANGLE=m
- CONFIG_NFT_DUP_IPV6=m
- CONFIG_NFT_FIB_IPV6=m
--CONFIG_NF_FLOW_TABLE_IPV6=m
- CONFIG_IP6_NF_IPTABLES=m
- CONFIG_IP6_NF_MATCH_AH=m
- CONFIG_IP6_NF_MATCH_EUI64=m
-@@ -592,7 +589,7 @@ CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_OVERFLOW=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_HASH=m
-+CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/hp300_defconfig b/arch/m68k/configs/hp300_defconfig
-index 5e80aa0869d54109..89dd800e7ad24354 100644
---- a/arch/m68k/configs/hp300_defconfig
-+++ b/arch/m68k/configs/hp300_defconfig
-@@ -99,7 +99,6 @@ CONFIG_NF_TABLES_NETDEV=y
- CONFIG_NFT_NUMGEN=m
- CONFIG_NFT_CT=m
- CONFIG_NFT_FLOW_OFFLOAD=m
--CONFIG_NFT_COUNTER=m
- CONFIG_NFT_CONNLIMIT=m
- CONFIG_NFT_LOG=m
- CONFIG_NFT_LIMIT=m
-@@ -199,7 +198,6 @@ CONFIG_IP_SET_LIST_SET=m
- CONFIG_NFT_DUP_IPV4=m
- CONFIG_NFT_FIB_IPV4=m
- CONFIG_NF_TABLES_ARP=y
--CONFIG_NF_FLOW_TABLE_IPV4=m
- CONFIG_NF_LOG_ARP=m
- CONFIG_NF_LOG_IPV4=m
- CONFIG_IP_NF_IPTABLES=m
-@@ -224,7 +222,6 @@ CONFIG_IP_NF_ARPFILTER=m
- CONFIG_IP_NF_ARP_MANGLE=m
- CONFIG_NFT_DUP_IPV6=m
- CONFIG_NFT_FIB_IPV6=m
--CONFIG_NF_FLOW_TABLE_IPV6=m
- CONFIG_IP6_NF_IPTABLES=m
- CONFIG_IP6_NF_MATCH_AH=m
- CONFIG_IP6_NF_MATCH_EUI64=m
-@@ -601,7 +598,7 @@ CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_OVERFLOW=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_HASH=m
-+CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/mac_defconfig b/arch/m68k/configs/mac_defconfig
-index e84326a3f62db53c..4e5b32ba00dfcedc 100644
---- a/arch/m68k/configs/mac_defconfig
-+++ b/arch/m68k/configs/mac_defconfig
-@@ -98,7 +98,6 @@ CONFIG_NF_TABLES_NETDEV=y
- CONFIG_NFT_NUMGEN=m
- CONFIG_NFT_CT=m
- CONFIG_NFT_FLOW_OFFLOAD=m
--CONFIG_NFT_COUNTER=m
- CONFIG_NFT_CONNLIMIT=m
- CONFIG_NFT_LOG=m
- CONFIG_NFT_LIMIT=m
-@@ -198,7 +197,6 @@ CONFIG_IP_SET_LIST_SET=m
- CONFIG_NFT_DUP_IPV4=m
- CONFIG_NFT_FIB_IPV4=m
- CONFIG_NF_TABLES_ARP=y
--CONFIG_NF_FLOW_TABLE_IPV4=m
- CONFIG_NF_LOG_ARP=m
- CONFIG_NF_LOG_IPV4=m
- CONFIG_IP_NF_IPTABLES=m
-@@ -223,7 +221,6 @@ CONFIG_IP_NF_ARPFILTER=m
- CONFIG_IP_NF_ARP_MANGLE=m
- CONFIG_NFT_DUP_IPV6=m
- CONFIG_NFT_FIB_IPV6=m
--CONFIG_NF_FLOW_TABLE_IPV6=m
- CONFIG_IP6_NF_IPTABLES=m
- CONFIG_IP6_NF_MATCH_AH=m
- CONFIG_IP6_NF_MATCH_EUI64=m
-@@ -623,7 +620,7 @@ CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_OVERFLOW=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_HASH=m
-+CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/multi_defconfig b/arch/m68k/configs/multi_defconfig
-index 337552f433390aae..00757de800b62c90 100644
---- a/arch/m68k/configs/multi_defconfig
-+++ b/arch/m68k/configs/multi_defconfig
-@@ -118,7 +118,6 @@ CONFIG_NF_TABLES_NETDEV=y
- CONFIG_NFT_NUMGEN=m
- CONFIG_NFT_CT=m
- CONFIG_NFT_FLOW_OFFLOAD=m
--CONFIG_NFT_COUNTER=m
- CONFIG_NFT_CONNLIMIT=m
- CONFIG_NFT_LOG=m
- CONFIG_NFT_LIMIT=m
-@@ -218,7 +217,6 @@ CONFIG_IP_SET_LIST_SET=m
- CONFIG_NFT_DUP_IPV4=m
- CONFIG_NFT_FIB_IPV4=m
- CONFIG_NF_TABLES_ARP=y
--CONFIG_NF_FLOW_TABLE_IPV4=m
- CONFIG_NF_LOG_ARP=m
- CONFIG_NF_LOG_IPV4=m
- CONFIG_IP_NF_IPTABLES=m
-@@ -243,7 +241,6 @@ CONFIG_IP_NF_ARPFILTER=m
- CONFIG_IP_NF_ARP_MANGLE=m
- CONFIG_NFT_DUP_IPV6=m
- CONFIG_NFT_FIB_IPV6=m
--CONFIG_NF_FLOW_TABLE_IPV6=m
- CONFIG_IP6_NF_IPTABLES=m
- CONFIG_IP6_NF_MATCH_AH=m
- CONFIG_IP6_NF_MATCH_EUI64=m
-@@ -708,7 +705,7 @@ CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_OVERFLOW=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_HASH=m
-+CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/mvme147_defconfig b/arch/m68k/configs/mvme147_defconfig
-index 7b688f7d272a2980..80922fe80d9dec66 100644
---- a/arch/m68k/configs/mvme147_defconfig
-+++ b/arch/m68k/configs/mvme147_defconfig
-@@ -96,7 +96,6 @@ CONFIG_NF_TABLES_NETDEV=y
- CONFIG_NFT_NUMGEN=m
- CONFIG_NFT_CT=m
- CONFIG_NFT_FLOW_OFFLOAD=m
--CONFIG_NFT_COUNTER=m
- CONFIG_NFT_CONNLIMIT=m
- CONFIG_NFT_LOG=m
- CONFIG_NFT_LIMIT=m
-@@ -196,7 +195,6 @@ CONFIG_IP_SET_LIST_SET=m
- CONFIG_NFT_DUP_IPV4=m
- CONFIG_NFT_FIB_IPV4=m
- CONFIG_NF_TABLES_ARP=y
--CONFIG_NF_FLOW_TABLE_IPV4=m
- CONFIG_NF_LOG_ARP=m
- CONFIG_NF_LOG_IPV4=m
- CONFIG_IP_NF_IPTABLES=m
-@@ -221,7 +219,6 @@ CONFIG_IP_NF_ARPFILTER=m
- CONFIG_IP_NF_ARP_MANGLE=m
- CONFIG_NFT_DUP_IPV6=m
- CONFIG_NFT_FIB_IPV6=m
--CONFIG_NF_FLOW_TABLE_IPV6=m
- CONFIG_IP6_NF_IPTABLES=m
- CONFIG_IP6_NF_MATCH_AH=m
- CONFIG_IP6_NF_MATCH_EUI64=m
-@@ -591,7 +588,7 @@ CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_OVERFLOW=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_HASH=m
-+CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/mvme16x_defconfig b/arch/m68k/configs/mvme16x_defconfig
-index 7c2cb31d63dd8ebb..530c4cf7c59ba6d9 100644
---- a/arch/m68k/configs/mvme16x_defconfig
-+++ b/arch/m68k/configs/mvme16x_defconfig
-@@ -97,7 +97,6 @@ CONFIG_NF_TABLES_NETDEV=y
- CONFIG_NFT_NUMGEN=m
- CONFIG_NFT_CT=m
- CONFIG_NFT_FLOW_OFFLOAD=m
--CONFIG_NFT_COUNTER=m
- CONFIG_NFT_CONNLIMIT=m
- CONFIG_NFT_LOG=m
- CONFIG_NFT_LIMIT=m
-@@ -197,7 +196,6 @@ CONFIG_IP_SET_LIST_SET=m
- CONFIG_NFT_DUP_IPV4=m
- CONFIG_NFT_FIB_IPV4=m
- CONFIG_NF_TABLES_ARP=y
--CONFIG_NF_FLOW_TABLE_IPV4=m
- CONFIG_NF_LOG_ARP=m
- CONFIG_NF_LOG_IPV4=m
- CONFIG_IP_NF_IPTABLES=m
-@@ -222,7 +220,6 @@ CONFIG_IP_NF_ARPFILTER=m
- CONFIG_IP_NF_ARP_MANGLE=m
- CONFIG_NFT_DUP_IPV6=m
- CONFIG_NFT_FIB_IPV6=m
--CONFIG_NF_FLOW_TABLE_IPV6=m
- CONFIG_IP6_NF_IPTABLES=m
- CONFIG_IP6_NF_MATCH_AH=m
- CONFIG_IP6_NF_MATCH_EUI64=m
-@@ -592,7 +589,7 @@ CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_OVERFLOW=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_HASH=m
-+CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/q40_defconfig b/arch/m68k/configs/q40_defconfig
-index ca43897af26de2c8..d3f371e490ec058a 100644
---- a/arch/m68k/configs/q40_defconfig
-+++ b/arch/m68k/configs/q40_defconfig
-@@ -98,7 +98,6 @@ CONFIG_NF_TABLES_NETDEV=y
- CONFIG_NFT_NUMGEN=m
- CONFIG_NFT_CT=m
- CONFIG_NFT_FLOW_OFFLOAD=m
--CONFIG_NFT_COUNTER=m
- CONFIG_NFT_CONNLIMIT=m
- CONFIG_NFT_LOG=m
- CONFIG_NFT_LIMIT=m
-@@ -198,7 +197,6 @@ CONFIG_IP_SET_LIST_SET=m
- CONFIG_NFT_DUP_IPV4=m
- CONFIG_NFT_FIB_IPV4=m
- CONFIG_NF_TABLES_ARP=y
--CONFIG_NF_FLOW_TABLE_IPV4=m
- CONFIG_NF_LOG_ARP=m
- CONFIG_NF_LOG_IPV4=m
- CONFIG_IP_NF_IPTABLES=m
-@@ -223,7 +221,6 @@ CONFIG_IP_NF_ARPFILTER=m
- CONFIG_IP_NF_ARP_MANGLE=m
- CONFIG_NFT_DUP_IPV6=m
- CONFIG_NFT_FIB_IPV6=m
--CONFIG_NF_FLOW_TABLE_IPV6=m
- CONFIG_IP6_NF_IPTABLES=m
- CONFIG_IP6_NF_MATCH_AH=m
- CONFIG_IP6_NF_MATCH_EUI64=m
-@@ -610,7 +607,7 @@ CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_OVERFLOW=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_HASH=m
-+CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/sun3_defconfig b/arch/m68k/configs/sun3_defconfig
-index e3d515f37144aa33..f214f277c55a18a1 100644
---- a/arch/m68k/configs/sun3_defconfig
-+++ b/arch/m68k/configs/sun3_defconfig
-@@ -94,7 +94,6 @@ CONFIG_NF_TABLES_NETDEV=y
- CONFIG_NFT_NUMGEN=m
- CONFIG_NFT_CT=m
- CONFIG_NFT_FLOW_OFFLOAD=m
--CONFIG_NFT_COUNTER=m
- CONFIG_NFT_CONNLIMIT=m
- CONFIG_NFT_LOG=m
- CONFIG_NFT_LIMIT=m
-@@ -194,7 +193,6 @@ CONFIG_IP_SET_LIST_SET=m
- CONFIG_NFT_DUP_IPV4=m
- CONFIG_NFT_FIB_IPV4=m
- CONFIG_NF_TABLES_ARP=y
--CONFIG_NF_FLOW_TABLE_IPV4=m
- CONFIG_NF_LOG_ARP=m
- CONFIG_NF_LOG_IPV4=m
- CONFIG_IP_NF_IPTABLES=m
-@@ -219,7 +217,6 @@ CONFIG_IP_NF_ARPFILTER=m
- CONFIG_IP_NF_ARP_MANGLE=m
- CONFIG_NFT_DUP_IPV6=m
- CONFIG_NFT_FIB_IPV6=m
--CONFIG_NF_FLOW_TABLE_IPV6=m
- CONFIG_IP6_NF_IPTABLES=m
- CONFIG_IP6_NF_MATCH_AH=m
- CONFIG_IP6_NF_MATCH_EUI64=m
-@@ -593,7 +590,7 @@ CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_OVERFLOW=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_HASH=m
-+CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
-diff --git a/arch/m68k/configs/sun3x_defconfig b/arch/m68k/configs/sun3x_defconfig
-index d601606c969b894e..73b4c61394a2a306 100644
---- a/arch/m68k/configs/sun3x_defconfig
-+++ b/arch/m68k/configs/sun3x_defconfig
-@@ -94,7 +94,6 @@ CONFIG_NF_TABLES_NETDEV=y
- CONFIG_NFT_NUMGEN=m
- CONFIG_NFT_CT=m
- CONFIG_NFT_FLOW_OFFLOAD=m
--CONFIG_NFT_COUNTER=m
- CONFIG_NFT_CONNLIMIT=m
- CONFIG_NFT_LOG=m
- CONFIG_NFT_LIMIT=m
-@@ -194,7 +193,6 @@ CONFIG_IP_SET_LIST_SET=m
- CONFIG_NFT_DUP_IPV4=m
- CONFIG_NFT_FIB_IPV4=m
- CONFIG_NF_TABLES_ARP=y
--CONFIG_NF_FLOW_TABLE_IPV4=m
- CONFIG_NF_LOG_ARP=m
- CONFIG_NF_LOG_IPV4=m
- CONFIG_IP_NF_IPTABLES=m
-@@ -219,7 +217,6 @@ CONFIG_IP_NF_ARPFILTER=m
- CONFIG_IP_NF_ARP_MANGLE=m
- CONFIG_NFT_DUP_IPV6=m
- CONFIG_NFT_FIB_IPV6=m
--CONFIG_NF_FLOW_TABLE_IPV6=m
- CONFIG_IP6_NF_IPTABLES=m
- CONFIG_IP6_NF_MATCH_AH=m
- CONFIG_IP6_NF_MATCH_EUI64=m
-@@ -593,7 +590,7 @@ CONFIG_TEST_UUID=m
- CONFIG_TEST_XARRAY=m
- CONFIG_TEST_OVERFLOW=m
- CONFIG_TEST_RHASHTABLE=m
--CONFIG_TEST_HASH=m
-+CONFIG_TEST_SIPHASH=m
- CONFIG_TEST_IDA=m
- CONFIG_TEST_BITOPS=m
- CONFIG_TEST_VMALLOC=m
+diff --git a/net/ipv4/netfilter/Kconfig b/net/ipv4/netfilter/Kconfig
+index 67087f95579fdea6..aab384126f61ffb9 100644
+--- a/net/ipv4/netfilter/Kconfig
++++ b/net/ipv4/netfilter/Kconfig
+@@ -58,10 +58,6 @@ config NF_TABLES_ARP
+ 
+ endif # NF_TABLES
+ 
+-config NF_FLOW_TABLE_IPV4
+-	tristate
+-	select NF_FLOW_TABLE_INET
+-
+ config NF_DUP_IPV4
+ 	tristate "Netfilter IPv4 packet duplication to alternate destination"
+ 	depends on !NF_CONNTRACK || NF_CONNTRACK
+diff --git a/net/ipv6/netfilter/Kconfig b/net/ipv6/netfilter/Kconfig
+index 97d3d1b36dbceb60..0ba62f4868f97695 100644
+--- a/net/ipv6/netfilter/Kconfig
++++ b/net/ipv6/netfilter/Kconfig
+@@ -47,10 +47,6 @@ config NFT_FIB_IPV6
+ endif # NF_TABLES_IPV6
+ endif # NF_TABLES
+ 
+-config NF_FLOW_TABLE_IPV6
+-	tristate
+-	select NF_FLOW_TABLE_INET
+-
+ config NF_DUP_IPV6
+ 	tristate "Netfilter IPv6 packet duplication to alternate destination"
+ 	depends on !NF_CONNTRACK || NF_CONNTRACK
+diff --git a/net/ipv6/netfilter/Makefile b/net/ipv6/netfilter/Makefile
+index b85383606df71b5c..b8d6dc9aeeb6f403 100644
+--- a/net/ipv6/netfilter/Makefile
++++ b/net/ipv6/netfilter/Makefile
+@@ -28,9 +28,6 @@ obj-$(CONFIG_NFT_REJECT_IPV6) += nft_reject_ipv6.o
+ obj-$(CONFIG_NFT_DUP_IPV6) += nft_dup_ipv6.o
+ obj-$(CONFIG_NFT_FIB_IPV6) += nft_fib_ipv6.o
+ 
+-# flow table support
+-obj-$(CONFIG_NF_FLOW_TABLE_IPV6) += nf_flow_table_ipv6.o
+-
+ # matches
+ obj-$(CONFIG_IP6_NF_MATCH_AH) += ip6t_ah.o
+ obj-$(CONFIG_IP6_NF_MATCH_EUI64) += ip6t_eui64.o
+diff --git a/net/ipv6/netfilter/nf_flow_table_ipv6.c b/net/ipv6/netfilter/nf_flow_table_ipv6.c
+deleted file mode 100644
+index e69de29bb2d1d643..0000000000000000
 -- 
 2.25.1
 

@@ -2,150 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2B5497337
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 17:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CECF1497345
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 17:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238940AbiAWQux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 11:50:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57288 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231686AbiAWQuw (ORCPT
+        id S238957AbiAWQxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 11:53:36 -0500
+Received: from m228-6.mailgun.net ([159.135.228.6]:50887 "EHLO
+        m228-6.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238947AbiAWQxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 11:50:52 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9743CC06173B;
-        Sun, 23 Jan 2022 08:50:52 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id m6so43666171ybc.9;
-        Sun, 23 Jan 2022 08:50:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4yvJHbE2HNxARartPgZEnI7KYUuo7OOg2+KzBkUFctc=;
-        b=TRdQfaW2Z7xnVudanl7EA+d7B2tn85qLJ5/aXAqkqaOiQq4Hpi1o8AGHlamyUp0yxg
-         JSKT6wwEIeXFzAeRM2Rk0EY4UTEAhHT40Xp2mwND6wvwILkTXP4ImMmnAJZVk+gGZ5Ey
-         4sOceV/4pPbztkoYGz6WaCEikMbUcNJj5UC5yP3vEkT3kSy2rFqM3IdZWk6krdLse5rB
-         14RPQvRPVdZmEdRnEbxu2iZlEYsEt+knqWwN/3bvE5Pu28kOeQy1BetLpsKwfh+GyDLK
-         ZGg+r2d1vMGNwASJLzj1BH1wYtXT+mr5xjb0mF+OzxhoU9LoVwNP9u2VP8kEn+aTz4AF
-         jPaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4yvJHbE2HNxARartPgZEnI7KYUuo7OOg2+KzBkUFctc=;
-        b=uXcbC4zAR75D3zq3ivtXrKcNs8NQjzsIJZZpBGJmMXOpOa1CVSbkX9wcXg3OfXIFdA
-         yqPjTY0GjMQuWVB0PTv9Ne6tpIOkHzQw/0Lw7lJ9GMpqjJtkP8PfnYX/vr2qvVMg27zo
-         jd1mhUCb41ZkIVTC4v/UOgsGonofNWsYIK2jra5feCTCgwHlBlHWgFZFVj8m88A2SSa6
-         gnx4zYVh0jwutxjF82/6mAC33aa8JMSKwK3/F7+7LegPsAYTGcYgLEc5/Lfgs34p5GkV
-         w9N4pep+ChNGkonthDu18B6fHiTV8KI+Wi5C1jZOJylde40HzKGvumKp7bD7rwUMehvO
-         t1wg==
-X-Gm-Message-State: AOAM532RAhBRfUQUUI3VAk7em4i2Lu7G+DBeV4fgjpCm16ijTIH9tRde
-        4C4sr2szwNymzuHw6U85tu1u2VYtmeORzfnAarkA6gIC
-X-Google-Smtp-Source: ABdhPJwP4FgFRN4pOx7j4L3eY61ISzlzIn/vKBLTzNodrzsTgBeqRru9rQ0A1+4jIr5FMupyrd7C71w3rxvg4m/Ww9U=
-X-Received: by 2002:a25:8d10:: with SMTP id n16mr18024350ybl.696.1642956651654;
- Sun, 23 Jan 2022 08:50:51 -0800 (PST)
+        Sun, 23 Jan 2022 11:53:35 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=michaelkloos.com; q=dns/txt;
+ s=k1; t=1642956814; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: From: References: Cc: To: Subject: MIME-Version: Date:
+ Message-ID: Sender; bh=IHqd7yX1XGLLOu24CAliRnIh4Fy6X/3R/a7MUMsmKr8=; b=Yx2elFfEhNDd4sz+huIEXMySE0x4XHgOHg9q1kKo/EaSzgGK4j8gCRO91VZKargoay0XPngU
+ YmQje69X27/O546uoPF5zQNtm6KpP8MC/jdTPYXjYFliGn032r2mIdsT+EaDIPkpEMd5X4tb
+ t49bOaB4YNDJcraoRpRVrEGz5K8=
+X-Mailgun-Sending-Ip: 159.135.228.6
+X-Mailgun-Sid: WyI5NjYzNiIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgIjQ4Y2MwIl0=
+Received: from drop1.michaelkloos.com (drop1.michaelkloos.com
+ [67.205.190.89]) by smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
+ 61ed880d7e1ee9b1c1ae3a18 (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
+ Sun, 23 Jan 2022 16:53:33 GMT
+Sender: michael@michaelkloos.com
+Received: from [192.168.0.104] (cpe-173-88-115-50.columbus.res.rr.com [173.88.115.50])
+        by drop1.michaelkloos.com (Postfix) with ESMTPSA id AD4AC40249;
+        Sun, 23 Jan 2022 16:53:31 +0000 (UTC)
+Message-ID: <c184c65e-c960-8ecc-7cfe-d58af1cde0a3@michaelkloos.com>
+Date:   Sun, 23 Jan 2022 11:53:31 -0500
 MIME-Version: 1.0
-References: <20220107051335.3812535-1-pgwipeout@gmail.com> <20220107051335.3812535-5-pgwipeout@gmail.com>
- <5747938.922zgog0jt@phil>
-In-Reply-To: <5747938.922zgog0jt@phil>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Sun, 23 Jan 2022 11:50:39 -0500
-Message-ID: <CAMdYzYrByfe6s3oKvJDN3skGXh7x=YSxQ4BKwySKhPzyEUEGQA@mail.gmail.com>
-Subject: Re: [PATCH 4/4] arm64: dts: rockchip: enable the pine64 touch screen
- on rockpro64
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] Fixed: Misaligned memory access. Fixed pointer
+ comparison.
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>
+Cc:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220123034518.3717116-1-michael@michaelkloos.com>
+ <fed7ee473044432180c67b4adc0eb45d@AcuMS.aculab.com>
+From:   "Michael T. Kloos" <michael@michaelkloos.com>
+In-Reply-To: <fed7ee473044432180c67b4adc0eb45d@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 23, 2022 at 10:30 AM Heiko Stuebner <heiko@sntech.de> wrote:
->
-> Hi Peter,
->
-> Am Freitag, 7. Januar 2022, 06:13:35 CET schrieb Peter Geis:
-> > Enable the touch screen, backlight, and dsi nodes for the Pine64 touch panel
-> > attached to the rockpro64.
->
-> can you please also include me in the other patches of the series?
-> I.e. they introduce a new property for the display, so it's nice to know
-> when they get applied.
+No.  It only uses tabs.  The previous version used spaces.
+Make sure that you are not looking at a line with a '-'.
+The only place that spaces, perhaps combined with tabs, appear
+at the start of a line in my patch is to align the '*' character
+for a multi-line comment.  In this case, tab(s) are followed by
+a single space for alignment.  I believe this is correct per
+the coding style.  If I am wrong, please let me know.
 
-Apologies, I use get-maintainers.pl automatically and it seems to need
-some help with tagging you in some Rockchip elements.
-I'll be sure to always manually include you and the rockchip mailing
-list on all patches in future series of this sort.
+	----Michael
 
->
-> While I do agree with patch 3/4, I'm hesistant about this one.
-> The display/touchscreen will probably not be connected on every rockpro64
-> so what happens if it doesn't?
+On 1/23/22 08:31, David Laight wrote:
 
-This was supposed to be tagged as Do-Not-Merge, but it seems I failed
-to do so on the actual patch.
-It's here for purely completeness and testing purposes.
-
+> From: michael@michaelkloos.com
+>> Sent: 23 January 2022 03:45
+>>
+>> Rewrote the riscv memmove() assembly implementation.  The
+>> previous implementation did not check memory alignment and it
+>> compared 2 pointers with a signed comparison.  The misaligned
+>> memory access would cause the kernel to crash on systems that
+>> did not emulate it in firmware and did not support it in hardware.
+>> Firmware emulation is slow and may not exist.  Additionally,
+>> hardware support may not exist and would likely still run slower
+>> than aligned accesses even if it did.  The RISC-V spec does not
+>> guarantee that support for misaligned memory accesses will exist.
+>> It should not be depended on.
+> ...
 >
-> I.e are there alternative uses for the affected pins, that may get fried
-> when this is always enabled?
+> From the way my email client display the patch I think it is
+> using both tabs and spaces for indentation.
 >
-> So part of me would think that an dt-overlay enabling this might be the
-> nicer way to go?
-
-Absolutely.
-
+> 	David
 >
->
-> Heiko
-
-Thanks,
-Peter
-
->
->
-> > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> > ---
-> >  arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi
-> > index 158befb9a48c..f6c36fcd6db3 100644
-> > --- a/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi
-> > +++ b/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi
-> > @@ -26,7 +26,7 @@ backlight: backlight {
-> >               pwms = <&pwm0 0 1000000 0>;
-> >               brightness-levels = <0 4 8 16 32 64 128 255>;
-> >               default-brightness-level = <5>;
-> > -             status = "disabled";
-> > +             status = "okay";
-> >       };
-> >
-> >       clkin_gmac: external-gmac-clock {
-> > @@ -594,7 +594,7 @@ touch: touchscreen@5d {
-> >               interrupts = <RK_PD5 IRQ_TYPE_EDGE_FALLING>;
-> >               irq-gpios = <&gpio4 RK_PD5 GPIO_ACTIVE_HIGH>;
-> >               reset-gpios = <&gpio4 RK_PD6 GPIO_ACTIVE_HIGH>;
-> > -             status = "disabled";
-> > +             status = "okay";
-> >       };
-> >  };
-> >
-> > @@ -633,7 +633,7 @@ &io_domains {
-> >
-> >  /* enable for pine64 panel display support */
-> >  &mipi_dsi {
-> > -     status = "disabled";
-> > +     status = "okay";
-> >       clock-master;
-> >
-> >       ports {
-> >
->
->
->
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
 >

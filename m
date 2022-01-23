@@ -2,189 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EC5F4975E1
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 23:02:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CD9D4975ED
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 23:15:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240292AbiAWWCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 17:02:15 -0500
-Received: from mail-eus2azon11021022.outbound.protection.outlook.com ([52.101.57.22]:39991
-        "EHLO na01-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234697AbiAWWCN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 17:02:13 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YcwdRVr0vjzJLCqjEDYaZY4rqh9rNwPmIxHXSManxsOP9x1LxElXjRYVC9ULvo0ql9aCvMCboGR/9zPQVG6jadr9kaqSIhZJSu2z+16ZsKFHv1JzV5qfeWUpYo/EPY6XESSmF2XY+B43lcSg2giPwpixvFy0xESNv5UA7V4SxZ3LWDQ7OM1Et4Hkh4qQRQIjXUXIgpGebvypQJ3qcoO5lvqKJ5gJD+50VvHRrKqOdOJg89y1Lrc8TG6q9F4yeiL51lqG9RjHhKgJbJBiNzoHbR8QAtBp7417LEGoGLOvuDbtoSdS3S3Cww6s61LowsbXNSh856ULwrMo4hSGLlIrbA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wTTA3TYawVIIlVINYsewsKqMNU2XcOBfcKBpYbj7TBA=;
- b=kbgdQF3A/+G7UWBl1loEPglCB5lw6sTc4rGNHqEtWM8YdjapYjB5LDbfb6tACPY35j3FylvV7xr65SLz/6C3RY2KBbInDBBoMLXfKTe6qe3xPXOgNmbA09KItOeJhTaJsPE/DAE2wfNjqgYDA/yH/lxK0NKa84EeR4IZeciHmAzqVfgMb0V/nE9n3YI9khdYQ+mAtm+73/38YgOua8+wzDQZ7ZxQqqv0Kv3zReEqGtBPbfLwSm7vZ0CB8v9UK0LNXyXx41gRWfr6sjGQxbAmUt0NTqT2qqPs1Q5z4dERZddQ2kHyvRDJe4EdcKR3I6tudEVJAwylebELMZQShCV4Dw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wTTA3TYawVIIlVINYsewsKqMNU2XcOBfcKBpYbj7TBA=;
- b=F2U+oLzHjbgKskd36V+18KyWNl3a93VNdQXGzttboMvspki+rhturCsVA4IiEiAvQcbk8L4YhkTZfXL/2/dk3vmbISq7QHQSHvKeRXrcYBl2WmFhKEWbzHZIanaa0VSF6ShTsRE2gHGFA6beKKgdFM+WeVenJ/SIyvZXi9jQnko=
-Received: from MN2PR21MB1295.namprd21.prod.outlook.com (2603:10b6:208:3e::25)
- by SJ0PR21MB1999.namprd21.prod.outlook.com (2603:10b6:a03:299::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.7; Sun, 23 Jan
- 2022 22:02:09 +0000
-Received: from MN2PR21MB1295.namprd21.prod.outlook.com
- ([fe80::d1ac:adcd:9b00:28fc]) by MN2PR21MB1295.namprd21.prod.outlook.com
- ([fe80::d1ac:adcd:9b00:28fc%8]) with mapi id 15.20.4909.004; Sun, 23 Jan 2022
- 22:02:09 +0000
-From:   Haiyang Zhang <haiyangz@microsoft.com>
-To:     Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        KY Srinivasan <kys@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-Subject: RE: [PATCH 43/54] drivers/hv: replace cpumask_weight with
- cpumask_weight_eq
-Thread-Topic: [PATCH 43/54] drivers/hv: replace cpumask_weight with
- cpumask_weight_eq
-Thread-Index: AQHYEIjseMEfWodowkK36SzktkggO6xxKAqg
-Date:   Sun, 23 Jan 2022 22:02:09 +0000
-Message-ID: <MN2PR21MB12954BFF215726B0E6C3C253CA5D9@MN2PR21MB1295.namprd21.prod.outlook.com>
-References: <20220123183925.1052919-1-yury.norov@gmail.com>
- <20220123183925.1052919-44-yury.norov@gmail.com>
-In-Reply-To: <20220123183925.1052919-44-yury.norov@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=4119fcae-a908-4af5-bb81-945771b82db6;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-01-23T21:59:54Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 28965adb-ef8a-4ffc-a93a-08d9debc00ac
-x-ms-traffictypediagnostic: SJ0PR21MB1999:EE_
-x-ms-exchange-atpmessageproperties: SA|SL
-x-microsoft-antispam-prvs: <SJ0PR21MB1999B8DCA12CF1D668F45E6CCA5D9@SJ0PR21MB1999.namprd21.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0rPFrixneQS1Y0ym7D3Um09h0kMJXgD66YPlwS0QVKp3Kg6uOkCSh/4mtigWtjWPwwd0d6Airib8SHNd1eYpmChYfwfsULJUf8cD8IBNcytghJBkWtxM4RrJ8LpE1Ahd9mlwV+ZCKJOqw+S+NmBe6Es12BdQAWYEZfurH7PcOGd0y+aEE1EE6NytY1qcdrxtaUXufWvA2HqqS+PINmcmhqtMEYPSUKj7WGnI763/ji3eymnEOR8G6vxxvjIiaRM5tSrYW/0oTKeSaLDoYBirIRq8cDM/UJTheYjzX/ekC26YgMQ2c0cNUEVw8/Nu+ycgBqn5dWYoUtRevXX7HnH7po2aeyfwecv4GE6KcpUJPms7oWpFT21ZJuMTp3yqw9jn0ew7g8SopmSdl3ARHPymxdZK1sDJGOwCLb9SaUZTylRXdxEbFyhsbEIBQ2g+hltxHNi3DlVQikk+VWxD7Z6RQs+bElfaxRUdZCOU+Q1o8JrD4jZyy0lqMdSsxyzxvS4kV9f9AXdRg+yLhWadu+y9PIevdp+JxpA++1Uv7Un++l25ROcv28uWMuz9JURTqoKKrJ9sUjDjpOciyNvFptugIQqzIH5/jqWPOw7GmbGVDyt3sgqL0u3e5rJ2PmtgRl5VX6aJU/oHzr8fBHj+9oajKwl6wjv096inRAf9uGLid3Myxlz1glrySOaDbLBgy4wa9Y4v86pEK9Qfa42/7AI0CVSdePd09m7Gm2YLxYNGfbRUMQNXac0w5BqAwk1bxJuHqHpLgJqaXw4gXkhX7dG4Muue4FdeFawITSZQFply5Ng=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR21MB1295.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(110136005)(921005)(316002)(38070700005)(83380400001)(82950400001)(82960400001)(26005)(76116006)(186003)(38100700002)(7416002)(66556008)(8676002)(2906002)(9686003)(8936002)(52536014)(55016003)(86362001)(66446008)(8990500004)(6506007)(53546011)(33656002)(71200400001)(66946007)(5660300002)(7696005)(10290500003)(508600001)(66476007)(64756008)(122000001)(16393002)(20210929001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?J7TM2GxxQeKoTaHmR1O9ixgicfilw9rZHmDnYkwyg4KlQY0DzBFwTBqCS5?=
- =?iso-8859-2?Q?XilsA19vhC4dsrBNv1JxDGoX0URcHF5FGT01EpAP9d99h7e5H/fO/QsypV?=
- =?iso-8859-2?Q?hWAwXAwc4V8HE32935PQ4kCulAjUlAzxDf05H/E9rXthtt7wTfEXFb+NOB?=
- =?iso-8859-2?Q?sZ2JyDhn9iO3AuvQOz4fl13jE5ofAUs0q1F+QqNEbsIuynvvaNxcQVQgoh?=
- =?iso-8859-2?Q?rrPArFPabEy/N9WLuM19HSnvEU3p1PnBlydB95SnGi0Xsh0HaglxGSujkx?=
- =?iso-8859-2?Q?kBshDR8xjq+ddtVtRH4CR3LFwv7NyLn/0d7MSg37aOJgu+59IZh0b3fzvv?=
- =?iso-8859-2?Q?HVORR2oDiaDMwXKZKwslRWGgDK+nCU0wpkftN6P2kyUCLZp04VmuNwLvTc?=
- =?iso-8859-2?Q?UMqkw4D4CxfLiPWOrf89bbKDEfjjKBVQ+O5ykybvDP2KuRsEfo9viFKUpE?=
- =?iso-8859-2?Q?l6FPCsKeZP+mZ9hfi0lDYPuD3kAhPUg/OJCOBM86UWrAo/QiU8INs/oORQ?=
- =?iso-8859-2?Q?fKfm9s2iC44N/W7hfJSKU8/ZDTN9ZJusvo3qi1dB+UuWAM92U16yxUVddN?=
- =?iso-8859-2?Q?bd1Tue67M5XK6HX12uGWHp8IUaVyyQTzGTt9Oj/bsnJ9MPNUc42aCqARDI?=
- =?iso-8859-2?Q?RPQpizOVlKzotVnoEt2IQAHpfZ/yHnQBMiZe0KgzlgG/AXgoz8ToLD5BF9?=
- =?iso-8859-2?Q?BLSPZLLhkcuEtJiyu+fnHtRY6IKjrZXdhdshEeRtqUabehpkTfTf8Wy2IK?=
- =?iso-8859-2?Q?IYQdBKRNi5hgD3Jd8oxMsh/ccuSp52V9KUDYOHPErqxv5SP9yCvAyQti7N?=
- =?iso-8859-2?Q?/0OpKzCgnJUWigWmFHViu3lLkJfBwflGr1iO5NJDKwWhvkBEXB89L2BHM/?=
- =?iso-8859-2?Q?z0h0+6EbbYpzgetX6VGoAIDHNhFLK+d7LCDU7TvoDL8XWh1rtn5ikq9vRX?=
- =?iso-8859-2?Q?5kk4G8nKuW2M7zcuuRvSVoECiJwV1pB5o3oua1HDBksdFT+v73i9d9xLlt?=
- =?iso-8859-2?Q?bDQTqvO063VWUpzOJg91wi+W64CqZK85OzEVl5Ytp4hrVjKq0xLXNekRJS?=
- =?iso-8859-2?Q?bNPiw2C4fFseSQ2uA4DreqmNcfFPCJgvhBt77Q1wAEfxHaZVEGPKfojlqC?=
- =?iso-8859-2?Q?V5srZpQpif8Gl2C4KvnPjqyHf27XSpqtceYhYesg4LAqzBhkhyUegSVpC+?=
- =?iso-8859-2?Q?hmp9/ntcrApNQmrgqPjpMIvVylJjS6L1O3GWnSplbQKFGow5zUupORQXKF?=
- =?iso-8859-2?Q?KMM8vJuln9SkHXr7GrYqA9TzUWefPmhIaM6MeqIqwacGcWMsHF5wcI+5RC?=
- =?iso-8859-2?Q?3uELUIRUy1zxgd/fQnZvjaQzrTBk74x3rGBeYumzW14S6TQAEeWVN/dQ1J?=
- =?iso-8859-2?Q?ThxRWgKD/Cm0+dA9S51/ya5Z7IFIEPnVPCcuk7ppc6ECCuQ1QzTBn3ZPpV?=
- =?iso-8859-2?Q?CmRV5BvymKBlOjpHWDH3UEsjYki7qt4pmio3iCOsABnLTjUmydcppLAkJ6?=
- =?iso-8859-2?Q?O+wX4zw2YQTA22vGRMhMcH9AV72CtHr44jC87vuyfift+VIIu2L1YN4/mH?=
- =?iso-8859-2?Q?7AhRwR4ecaLNUZVIEj1nspPbgwhlyiXhCqbkuTHxI8GKlNJbFLucieVPRQ?=
- =?iso-8859-2?Q?3DWsKU1aYGs4QdTCrx3i6qnhFuAZqfTBXmYGG4577aamZs4NO3+xuEtg?=
- =?iso-8859-2?Q?=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+        id S240311AbiAWWP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 17:15:29 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:47120 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234697AbiAWWP1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 23 Jan 2022 17:15:27 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 46B18D41;
+        Sun, 23 Jan 2022 23:15:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1642976125;
+        bh=3e5VjeTTkMsfqxw5yEi8BbHUU+H6A0I7t1EmI/SDYO8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cCS1sI0EoNJmpdWtKo3/Yh/9L7yKt9Y3kxCEB7B7VoaTQA9cpIidtM41soSY0OEZ7
+         tS7zjn8EHa9ZkCq3Vu9cztiChlt7AeFfr6n7MVs86LV/EnpMXyXzvgWrrGb8uAJc0j
+         Y6IeXAFEvlnmHt6FqzKRJ6R9/UvyywlEKvD1QsDU=
+Date:   Mon, 24 Jan 2022 00:15:08 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Liu Ying <victor.liu@nxp.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-imx@nxp.com,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Guido =?utf-8?Q?G=C3=BCnther?= <agx@sigxcpu.org>
+Subject: Re: [PATCH v2] phy: dphy: Correct clk_pre parameter
+Message-ID: <Ye3TbIj5LMvGVRIg@pendragon.ideasonboard.com>
+References: <20220119023714.1498508-1-victor.liu@nxp.com>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR21MB1295.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 28965adb-ef8a-4ffc-a93a-08d9debc00ac
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2022 22:02:09.4269
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: f8/DrsV77PqlQv65XetkBIfENf8Lwl072yZ8RdyLIZ3UV/cO7sb9glVRPyw76Zg/31fOIyP6uPTRggOXlnJQVQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR21MB1999
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220119023714.1498508-1-victor.liu@nxp.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Liu,
 
+Thank you for the patch.
 
-> -----Original Message-----
-> From: Yury Norov <yury.norov@gmail.com>
-> Sent: Sunday, January 23, 2022 1:39 PM
-> To: Yury Norov <yury.norov@gmail.com>; Andy Shevchenko <andriy.shevchenko=
-@linux.intel.com>;
-> Rasmus Villemoes <linux@rasmusvillemoes.dk>; Andrew Morton <akpm@linux-fo=
-undation.org>;
-> Micha=B3 Miros=B3aw <mirq-linux@rere.qmqm.pl>; Greg Kroah-Hartman <gregkh=
-@linuxfoundation.org>;
-> Peter Zijlstra <peterz@infradead.org>; David Laight <David.Laight@aculab.=
-com>; Joe Perches
-> <joe@perches.com>; Dennis Zhou <dennis@kernel.org>; Emil Renner Berthing =
-<kernel@esmil.dk>;
-> Nicholas Piggin <npiggin@gmail.com>; Matti Vaittinen <matti.vaittinen@fi.=
-rohmeurope.com>;
-> Alexey Klimov <aklimov@redhat.com>; linux-kernel@vger.kernel.org; KY Srin=
-ivasan
-> <kys@microsoft.com>; Haiyang Zhang <haiyangz@microsoft.com>; Stephen Hemm=
-inger
-> <sthemmin@microsoft.com>; Wei Liu <wei.liu@kernel.org>; Dexuan Cui <decui=
-@microsoft.com>;
-> linux-hyperv@vger.kernel.org
-> Subject: [PATCH 43/54] drivers/hv: replace cpumask_weight with cpumask_we=
-ight_eq
->=20
-> init_vp_index() calls cpumask_weight() to compare the weights of cpumasks
-> We can do it more efficiently with cpumask_weight_eq because conditional
-> cpumask_weight may stop traversing the cpumask earlier (at least one), as
-> soon as condition is met.
->=20
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+On Wed, Jan 19, 2022 at 10:37:14AM +0800, Liu Ying wrote:
+> The D-PHY specification (v1.2) explicitly mentions that the T-CLK-PRE
+> parameter's unit is Unit Interval(UI) and the minimum value is 8.  Also,
+> kernel doc of the 'clk_pre' member of struct phy_configure_opts_mipi_dphy
+> mentions that it should be in UI.  However, the dphy core driver wrongly
+> sets 'clk_pre' to 8000, which seems to hint that it's in picoseconds.
+> And, the kernel doc of the 'clk_pre' member wrongly says the minimum value
+> is '8 UI', instead of 8.
+
+I'm not sure I'd change the kernel doc. Other fields that are documented
+as "Time, in picoseconds" have min/max values expressed in ps, so
+clk_pre, documented as "Time, in UI" doesn't appear wrong if the minimum
+value is "8 UI".
+
+Otherwise, this patch looks fine to me. With or without dropping that
+documentation change,
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> So, let's fix both the dphy core driver and the kernel doc of the 'clk_pre'
+> member to correctly reflect the T-CLK-PRE parameter's unit and the minimum
+> value according to the D-PHY specification.
+> 
+> I'm assuming that all impacted custom drivers shall program values in
+> TxByteClkHS cycles into hardware for the T-CLK-PRE parameter.  The D-PHY
+> specification mentions that the frequency of TxByteClkHS is exactly 1/8
+> the High-Speed(HS) bit rate(each HS bit consumes one UI).  So, relevant
+> custom driver code is changed to program those values as
+> DIV_ROUND_UP(cfg->clk_pre, BITS_PER_BYTE), then.
+> 
+> Note that I've only tested the patch with RM67191 DSI panel on i.MX8mq EVK.
+> Help is needed to test with other i.MX8mq, Meson and Rockchip platforms,
+> as I don't have the hardwares.
+> 
+> Fixes: 2ed869990e14 ("phy: Add MIPI D-PHY configuration options")
+> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+> Cc: Neil Armstrong <narmstrong@baylibre.com>
+> Cc: Robert Foss <robert.foss@linaro.org>
+> Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+> Cc: Jonas Karlman <jonas@kwiboo.se>
+> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Kevin Hilman <khilman@baylibre.com>
+> Cc: Jerome Brunet <jbrunet@baylibre.com>
+> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Cc: Heiko Stuebner <heiko@sntech.de>
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Guido Günther <agx@sigxcpu.org>
+> Tested-by: Liu Ying <victor.liu@nxp.com> # RM67191 DSI panel on i.MX8mq EVK
+> Signed-off-by: Liu Ying <victor.liu@nxp.com>
 > ---
->  drivers/hv/channel_mgmt.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
-> index 60375879612f..7420a5fd47b5 100644
-> --- a/drivers/hv/channel_mgmt.c
-> +++ b/drivers/hv/channel_mgmt.c
-> @@ -762,8 +762,8 @@ static void init_vp_index(struct vmbus_channel *chann=
-el)
->  		}
->  		alloced_mask =3D &hv_context.hv_numa_map[numa_node];
->=20
-> -		if (cpumask_weight(alloced_mask) =3D=3D
-> -		    cpumask_weight(cpumask_of_node(numa_node))) {
-> +		if (cpumask_weight_eq(alloced_mask,
-> +			    cpumask_weight(cpumask_of_node(numa_node)))) {
->  			/*
->  			 * We have cycled through all the CPUs in the node;
->  			 * reset the alloced map.
+> v1->v2:
+> * Use BITS_PER_BYTE macro. (Andrzej)
+> * Drop dsi argument from ui2bc() in nwl-dsi.c.
+> 
+>  drivers/gpu/drm/bridge/nwl-dsi.c                 | 12 +++++-------
+>  drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c    |  3 ++-
+>  drivers/phy/phy-core-mipi-dphy.c                 |  4 ++--
+>  drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c |  3 ++-
+>  include/linux/phy/phy-mipi-dphy.h                |  2 +-
+>  5 files changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
+> index a7389a0facfb..af07eeb47ca0 100644
+> --- a/drivers/gpu/drm/bridge/nwl-dsi.c
+> +++ b/drivers/gpu/drm/bridge/nwl-dsi.c
+> @@ -7,6 +7,7 @@
+>   */
+>  
+>  #include <linux/bitfield.h>
+> +#include <linux/bits.h>
+>  #include <linux/clk.h>
+>  #include <linux/irq.h>
+>  #include <linux/math64.h>
+> @@ -196,12 +197,9 @@ static u32 ps2bc(struct nwl_dsi *dsi, unsigned long long ps)
+>  /*
+>   * ui2bc - UI time periods to byte clock cycles
+>   */
+> -static u32 ui2bc(struct nwl_dsi *dsi, unsigned long long ui)
+> +static u32 ui2bc(unsigned int ui)
+>  {
+> -	u32 bpp = mipi_dsi_pixel_format_to_bpp(dsi->format);
+> -
+> -	return DIV64_U64_ROUND_UP(ui * dsi->lanes,
+> -				  dsi->mode.clock * 1000 * bpp);
+> +	return DIV_ROUND_UP(ui, BITS_PER_BYTE);
+>  }
+>  
+>  /*
+> @@ -232,12 +230,12 @@ static int nwl_dsi_config_host(struct nwl_dsi *dsi)
+>  	}
+>  
+>  	/* values in byte clock cycles */
+> -	cycles = ui2bc(dsi, cfg->clk_pre);
+> +	cycles = ui2bc(cfg->clk_pre);
+>  	DRM_DEV_DEBUG_DRIVER(dsi->dev, "cfg_t_pre: 0x%x\n", cycles);
+>  	nwl_dsi_write(dsi, NWL_DSI_CFG_T_PRE, cycles);
+>  	cycles = ps2bc(dsi, cfg->lpx + cfg->clk_prepare + cfg->clk_zero);
+>  	DRM_DEV_DEBUG_DRIVER(dsi->dev, "cfg_tx_gap (pre): 0x%x\n", cycles);
+> -	cycles += ui2bc(dsi, cfg->clk_pre);
+> +	cycles += ui2bc(cfg->clk_pre);
+>  	DRM_DEV_DEBUG_DRIVER(dsi->dev, "cfg_t_post: 0x%x\n", cycles);
+>  	nwl_dsi_write(dsi, NWL_DSI_CFG_T_POST, cycles);
+>  	cycles = ps2bc(dsi, cfg->hs_exit);
+> diff --git a/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c b/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c
+> index cd2332bf0e31..fdbd64c03e12 100644
+> --- a/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c
+> +++ b/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c
+> @@ -9,6 +9,7 @@
+>  
+>  #include <linux/bitfield.h>
+>  #include <linux/bitops.h>
+> +#include <linux/bits.h>
+>  #include <linux/clk.h>
+>  #include <linux/delay.h>
+>  #include <linux/io.h>
+> @@ -250,7 +251,7 @@ static int phy_meson_axg_mipi_dphy_power_on(struct phy *phy)
+>  		     (DIV_ROUND_UP(priv->config.clk_zero, temp) << 16) |
+>  		     (DIV_ROUND_UP(priv->config.clk_prepare, temp) << 24));
+>  	regmap_write(priv->regmap, MIPI_DSI_CLK_TIM1,
+> -		     DIV_ROUND_UP(priv->config.clk_pre, temp));
+> +		     DIV_ROUND_UP(priv->config.clk_pre, BITS_PER_BYTE));
+>  
+>  	regmap_write(priv->regmap, MIPI_DSI_HS_TIM,
+>  		     DIV_ROUND_UP(priv->config.hs_exit, temp) |
+> diff --git a/drivers/phy/phy-core-mipi-dphy.c b/drivers/phy/phy-core-mipi-dphy.c
+> index 288c9c67aa74..ccb4045685cd 100644
+> --- a/drivers/phy/phy-core-mipi-dphy.c
+> +++ b/drivers/phy/phy-core-mipi-dphy.c
+> @@ -36,7 +36,7 @@ int phy_mipi_dphy_get_default_config(unsigned long pixel_clock,
+>  
+>  	cfg->clk_miss = 0;
+>  	cfg->clk_post = 60000 + 52 * ui;
+> -	cfg->clk_pre = 8000;
+> +	cfg->clk_pre = 8;
+>  	cfg->clk_prepare = 38000;
+>  	cfg->clk_settle = 95000;
+>  	cfg->clk_term_en = 0;
+> @@ -97,7 +97,7 @@ int phy_mipi_dphy_config_validate(struct phy_configure_opts_mipi_dphy *cfg)
+>  	if (cfg->clk_post < (60000 + 52 * ui))
+>  		return -EINVAL;
+>  
+> -	if (cfg->clk_pre < 8000)
+> +	if (cfg->clk_pre < 8)
+>  		return -EINVAL;
+>  
+>  	if (cfg->clk_prepare < 38000 || cfg->clk_prepare > 95000)
+> diff --git a/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c b/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
+> index 347dc79a18c1..630e01b5c19b 100644
+> --- a/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
+> +++ b/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
+> @@ -5,6 +5,7 @@
+>   * Author: Wyon Bi <bivvy.bi@rock-chips.com>
+>   */
+>  
+> +#include <linux/bits.h>
+>  #include <linux/kernel.h>
+>  #include <linux/clk.h>
+>  #include <linux/iopoll.h>
+> @@ -364,7 +365,7 @@ static void inno_dsidphy_mipi_mode_enable(struct inno_dsidphy *inno)
+>  	 * The value of counter for HS Tclk-pre
+>  	 * Tclk-pre = Tpin_txbyteclkhs * value
+>  	 */
+> -	clk_pre = DIV_ROUND_UP(cfg->clk_pre, t_txbyteclkhs);
+> +	clk_pre = DIV_ROUND_UP(cfg->clk_pre, BITS_PER_BYTE);
+>  
+>  	/*
+>  	 * The value of counter for HS Tlpx Time
+> diff --git a/include/linux/phy/phy-mipi-dphy.h b/include/linux/phy/phy-mipi-dphy.h
+> index a877ffee845d..59a5e77ab409 100644
+> --- a/include/linux/phy/phy-mipi-dphy.h
+> +++ b/include/linux/phy/phy-mipi-dphy.h
+> @@ -42,7 +42,7 @@ struct phy_configure_opts_mipi_dphy {
+>  	 * the transmitter prior to any associated Data Lane beginning
+>  	 * the transition from LP to HS mode.
+>  	 *
+> -	 * Minimum value: 8 UI
+> +	 * Minimum value: 8
+>  	 */
+>  	unsigned int		clk_pre;
+>  
 
-Thanks.
+-- 
+Regards,
 
-Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
-
+Laurent Pinchart

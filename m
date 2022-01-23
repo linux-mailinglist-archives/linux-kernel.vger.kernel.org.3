@@ -2,123 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C925349710B
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 12:07:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C6549710D
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 12:08:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236175AbiAWLGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 06:06:42 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:51238 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236162AbiAWLGl (ORCPT
+        id S236191AbiAWLIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 06:08:01 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37876 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236162AbiAWLIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 06:06:41 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Sun, 23 Jan 2022 06:08:00 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CE80E212BC;
-        Sun, 23 Jan 2022 11:06:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1642936000; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=8eNWFnpGFqiO4g2o4X7Zt+x6qEEq4MmO+SyRS37X1dk=;
-        b=mQXqi+LGN7XCs/oHMDAyODw8YIbdqV7SmAb8pT94RCvN/1nMXxi/0t+5ojjKdw9zZIWVx9
-        ExiQ4hoqgx+VKOWopttmILDig0Hs+k0mQ31V0+m9NcUE7/c2lB05noFmVSMQjHnOs8ihA6
-        JjNW0UQN6mAGEHDXlIZD1lGhxcRnK0w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1642936000;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=8eNWFnpGFqiO4g2o4X7Zt+x6qEEq4MmO+SyRS37X1dk=;
-        b=ZEY7UXTLa+bKXLpftpFkksrcvb5s7yOveDUJvpjxguqNqplYhh3LQPtagf9jZPubmCCI+0
-        kGuefoiWbZiTuWDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AEB3F1333C;
-        Sun, 23 Jan 2022 11:06:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id +Zw4KsA27WGiIwAAMHmgww
-        (envelope-from <bp@suse.de>); Sun, 23 Jan 2022 11:06:40 +0000
-Date:   Sun, 23 Jan 2022 12:06:35 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] sched/urgent for v5.17-rc2
-Message-ID: <Ye02u8jFsitJqSO7@zn.tnic>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4B9860BA7;
+        Sun, 23 Jan 2022 11:07:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA01FC340E2;
+        Sun, 23 Jan 2022 11:07:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1642936079;
+        bh=Ziajwqy7kzLRP1YgkI4QjrtuZSGrHBYFiprova5on80=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AzG5N2hqCbOO5r1AwIPjZcjKOdaxly3FjZdBn+k9iPqwWDi2BMEfE4/D6INssGTFi
+         cryhitdcEfvQChGr7vvSmZl7ujUajTRrcbOCCcb5dQywTZHmrEi04mDPp0Oi6C6CYk
+         lnXoa7HhtYh1CSDEZWIhMB4m/YLXRvZ3g+R5N/lQ=
+Date:   Sun, 23 Jan 2022 12:07:55 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Helge Deller <deller@gmx.de>
+Cc:     linux-usb@vger.kernel.org,
+        Linux Kernel Development <linux-kernel@vger.kernel.org>
+Subject: Re: kernel crash/disc errors when unbinding USB devices
+Message-ID: <Ye03Cz7fHFJ3bPmO@kroah.com>
+References: <7865ae26-2df0-892b-eb65-ce341eb9daea@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <7865ae26-2df0-892b-eb65-ce341eb9daea@gmx.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Sun, Jan 23, 2022 at 11:40:01AM +0100, Helge Deller wrote:
+> On all kernels 5.15.x and 5.16.x I noticed that resetting
+> the USB devices with this shell script:
+> 
+>        for i in $(ls /sys/bus/pci/drivers/ahci/|grep :)
+>          do
+>          echo $i
+>          echo $i >/sys/bus/pci/drivers/ahci/unbind
+>          sleep 1
+>          echo $i >/sys/bus/pci/drivers/ahci/bind
+>         done
 
-please pull a bunch of scheduler fixes for v5.17-rc2.
+That is dangerous to do, why do this?  All of your block devices might
+have disappeard.
 
-Thx.
+>         # reseting USB3 ports (if there none you'll get errors)
+>         for i in $(ls /sys/bus/pci/drivers/xhci_hcd/|grep :)
+>          do
+>          echo $i
+>          echo $i >/sys/bus/pci/drivers/xhci_hcd/unbind
+>          sleep 1
+>          echo $i >/sys/bus/pci/drivers/xhci_hcd/bind
+>         done
 
----
+Again, why do this at all?
 
-The following changes since commit fb3b0673b7d5b477ed104949450cd511337ba3c6:
+> immediately leads to a non-functional system, because the discs
+> face I/O errors and will switch to read-only mode.
 
-  Merge tag 'mailbox-v5.17' of git://git.linaro.org/landing-teams/working/fujitsu/integration (2022-01-13 11:19:07 -0800)
+Sure, the disks are gone, this is expected.
 
-are available in the Git repository at:
+> Effectively I have to reboot the machine.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/sched_urgent_for_v5.17_rc2
+I'm amazed it keeps working at all.
 
-for you to fetch changes up to 0e3872499de1a1230cef5221607d71aa09264bd5:
+> It's reproduceable for me on two completely different x86 machines with
+> different USB devices.
 
-  kernel/sched: Remove dl_boosted flag comment (2022-01-18 12:10:00 +0100)
+What do you expect this to do instead?  You just disabled all block
+controllers in your system, followed by all USB controllers.  And then
+attempted to add them back, but given that the old devices still had
+userspace references on them, the devices will come back with different
+names and so you need to mount them again.
 
-----------------------------------------------------------------
-- A bunch of fixes: forced idle time accounting, utilization values
-propagation in the sched hierarchies and other minor cleanups and
-improvements
+So this looks like it is working as intended.  Just don't do this :)
 
-----------------------------------------------------------------
-Cruz Zhao (1):
-      sched/core: Accounting forceidle time for all tasks except idle task
-
-Hui Su (1):
-      kernel/sched: Remove dl_boosted flag comment
-
-Peter Zijlstra (1):
-      sched: Avoid double preemption in __cond_resched_*lock*()
-
-Randy Dunlap (1):
-      sched/fair: Fix all kernel-doc warnings
-
-Suren Baghdasaryan (1):
-      psi: Fix uaf issue when psi trigger is destroyed while being polled
-
-Vincent Guittot (4):
-      sched/pelt: Relax the sync of util_sum with util_avg
-      sched/pelt: Continue to relax the sync of util_sum with util_avg
-      sched/pelt: Relax the sync of runnable_sum with runnable_avg
-      sched/pelt: Relax the sync of load_sum with load_avg
-
- Documentation/accounting/psi.rst |   3 +-
- include/linux/psi.h              |   2 +-
- include/linux/psi_types.h        |   3 -
- include/linux/sched.h            |   4 --
- kernel/cgroup/cgroup.c           |  11 +++-
- kernel/sched/core.c              |  15 ++---
- kernel/sched/core_sched.c        |   2 +-
- kernel/sched/fair.c              | 118 +++++++++++++++++++++++++--------------
- kernel/sched/pelt.h              |   4 +-
- kernel/sched/psi.c               |  66 ++++++++++------------
- 10 files changed, 125 insertions(+), 103 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+greg k-h

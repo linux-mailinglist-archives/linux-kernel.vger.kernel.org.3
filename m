@@ -2,93 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5833C497602
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 23:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E89EC497601
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 23:30:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240365AbiAWWaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 17:30:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47616 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240329AbiAWWad (ORCPT
+        id S240355AbiAWWaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 17:30:35 -0500
+Received: from mail-wm1-f47.google.com ([209.85.128.47]:40845 "EHLO
+        mail-wm1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230345AbiAWWae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 17:30:33 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A43C06173B;
+        Sun, 23 Jan 2022 17:30:34 -0500
+Received: by mail-wm1-f47.google.com with SMTP id r132-20020a1c448a000000b0034e043aaac7so9014143wma.5;
         Sun, 23 Jan 2022 14:30:33 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id l35-20020a05600c1d2300b0034d477271c1so26355108wms.3;
-        Sun, 23 Jan 2022 14:30:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=05N9uh+4Ak2VGTM8SLSYA5VF5ZUwizJAzi30P4Q0iRw=;
-        b=NPt3mdSMhrv9lsWtnCpYgVJT+P4r6DvFFVhWMEF+qsCMv8p/KM3MY7GzS08yOUteuT
-         LHagLw8sHXlFvgO5E7F0DAzgxBgUTrPXv4yXumLELORCfCMPHjN8lGSSHuPtwArbJ4gO
-         1jTCF5oZteYXfjGjloKP2mmrwgvDAwkUgZ84SYQSMyAS1HoiT+6+FUNVUwjhz1wjAoLc
-         +Lp5xCdC1CF9p6d0fn0sfbk4L00rrxkJrARp+FqqNrhtdPvhnNDq0jZS4DQfr5STlSVu
-         LjaqfnKEDhI+29JSc07xts8njJhV1vUV5PirqvK/+XRuIqasz7YESbIHXaA7SxlgDQjv
-         MtSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=05N9uh+4Ak2VGTM8SLSYA5VF5ZUwizJAzi30P4Q0iRw=;
-        b=T/ECKjksK96pHKgW40x1DSukEggG5Y0gcR1CtFSXCVz3vwtLQ47L3B6sALGnJraIKC
-         5hwrTDuKbpgvqydDCrG4AVWX070+8KU9LNLFFAcnK7m9KlwFR8ZXlvw3r1mePatx25ck
-         888IDsUVPSeBd+XziP45YseUZfsBkQZocAvLhoPYl6ZtcvKIPrsIO3UQ1OxLPF4zFcDe
-         km2SBpu8GNZnFLzUB4oCFEXQMUMZOxe9GyknIVjir3PnDee2BlCniiKYj3WJQUBIPlWE
-         +4zd6j+M7yS7Eb3T3XTFa1Ko6FWKi/4v5jLHc9Xr9UyNg7Qryiq+CBs21t22bh6e+sxp
-         NJAQ==
-X-Gm-Message-State: AOAM532SxBBST7bMQaNjoblZh+4vN8op2jfvUTkgxC3KdXqWX3JGsPPV
-        Mo9hPympNhyMUKn7iZ6CihY=
-X-Google-Smtp-Source: ABdhPJyMJ8VXx50B3SxP9I2RY6ip0w1a1Kzi1Kf73vVfrPUNQ54IUDnlElLRNFHeZuitW7cwxfi/eA==
-X-Received: by 2002:a1c:7316:: with SMTP id d22mr9132678wmb.5.1642977032008;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qMH3aROspB/kgllwn4/SStZwIDe9KDuajbHnkcsYmUQ=;
+        b=giK/dYEJjhuERGZ6h4zgx9yD6xZJ69QgyAcsd2BF30WmN3n++agcOLFnJuIo0xgAH5
+         Db3rYSM8S0CQZhee7TK/3TzhUQrbqJ3+pRGqij+6XeyvtKJwsKm4IG/+QFktB53A+fRg
+         H9W0EJZPf/ibgzrgw+ib1DnqyGtTuP/Lbt8kCXtEGyPCDqJ20FvInteXArP0S8HkZjM9
+         N4w3crXkV2NC506uJivEPC1TGgDTPRT4FCmgGisUVdNaYsrTyoyI5TC9hMsGKlL40SI+
+         U5W198+NqxYlMDAS+XGnCfj7t18tkbc9pgBtZaLx95mgyPQIAKbilgV37kM/KeL2bA1f
+         rq9A==
+X-Gm-Message-State: AOAM5314cxGISZeKK3vRT6t1SnlhR4KCwhoRoCsLbXQb/jAgoPoAej94
+        e7MT3SxFCS6XTchZxFcUg1w=
+X-Google-Smtp-Source: ABdhPJw9NDCc2PhiY0fqwi7UBdUEmkYOshWw6VstDZdEF0SSKkrBdnOtRGFJx0y/nPspBxYjZZpipw==
+X-Received: by 2002:a1c:7402:: with SMTP id p2mr9217508wmc.53.1642977032623;
         Sun, 23 Jan 2022 14:30:32 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id n10sm14436700wrf.96.2022.01.23.14.30.31
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id y14sm6165356wrd.91.2022.01.23.14.30.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 14:30:31 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/i915/selftests: make static read-only array page_count const
+        Sun, 23 Jan 2022 14:30:32 -0800 (PST)
 Date:   Sun, 23 Jan 2022 22:30:30 +0000
-Message-Id: <20220123223030.6005-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+From:   Wei Liu <wei.liu@kernel.org>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Wei Liu <wei.liu@kernel.org>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Hu <weh@microsoft.com>, Dexuan Cui <decui@microsoft.com>,
+        "drawat.floss@gmail.com" <drawat.floss@gmail.com>,
+        hhei <hhei@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+Subject: Re: [PATCH 1/1] video: hyperv_fb: Fix validation of screen resolution
+Message-ID: <20220123223030.ijdzrunduww76jiq@liuwe-devbox-debian-v2>
+References: <1642360711-2335-1-git-send-email-mikelley@microsoft.com>
+ <MN2PR21MB1295CE3BD15D4EB257A158DCCA569@MN2PR21MB1295.namprd21.prod.outlook.com>
+ <20220123215606.fzycryooluavtar4@liuwe-devbox-debian-v2>
+ <MWHPR21MB1593ED650DA82BC3009F66CED75D9@MWHPR21MB1593.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MWHPR21MB1593ED650DA82BC3009F66CED75D9@MWHPR21MB1593.namprd21.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The static array page_count is read-only so it make sense to make
-it const.
+On Sun, Jan 23, 2022 at 10:27:56PM +0000, Michael Kelley (LINUX) wrote:
+> From: Wei Liu <wei.liu@kernel.org> Sent: Sunday, January 23, 2022 1:56 PM
+> > 
+> > On Sun, Jan 16, 2022 at 09:53:06PM +0000, Haiyang Zhang wrote:
+> > >
+> > >
+> > > > -----Original Message-----
+> > > > From: Michael Kelley (LINUX) <mikelley@microsoft.com>
+> > > > Sent: Sunday, January 16, 2022 2:19 PM
+> > > > To: KY Srinivasan <kys@microsoft.com>; Haiyang Zhang
+> > <haiyangz@microsoft.com>; Stephen
+> > > > Hemminger <sthemmin@microsoft.com>; wei.liu@kernel.org; Wei Hu
+> > <weh@microsoft.com>; Dexuan
+> > > > Cui <decui@microsoft.com>; drawat.floss@gmail.com; hhei <hhei@redhat.com>;
+> > linux-
+> > > > kernel@vger.kernel.org; linux-hyperv@vger.kernel.org; linux-
+> > fbdev@vger.kernel.org; dri-
+> > > > devel@lists.freedesktop.org
+> > > > Cc: Michael Kelley (LINUX) <mikelley@microsoft.com>
+> > > > Subject: [PATCH 1/1] video: hyperv_fb: Fix validation of screen resolution
+> > > >
+> > > > In the WIN10 version of the Synthetic Video protocol with Hyper-V,
+> > > > Hyper-V reports a list of supported resolutions as part of the protocol
+> > > > negotiation. The driver calculates the maximum width and height from
+> > > > the list of resolutions, and uses those maximums to validate any screen
+> > > > resolution specified in the video= option on the kernel boot line.
+> > > >
+> > > > This method of validation is incorrect. For example, the list of
+> > > > supported resolutions could contain 1600x1200 and 1920x1080, both of
+> > > > which fit in an 8 Mbyte frame buffer.  But calculating the max width
+> > > > and height yields 1920 and 1200, and 1920x1200 resolution does not fit
+> > > > in an 8 Mbyte frame buffer.  Unfortunately, this resolution is accepted,
+> > > > causing a kernel fault when the driver accesses memory outside the
+> > > > frame buffer.
+> > > >
+> > > > Instead, validate the specified screen resolution by calculating
+> > > > its size, and comparing against the frame buffer size.  Delete the
+> > > > code for calculating the max width and height from the list of
+> > > > resolutions, since these max values have no use.  Also add the
+> > > > frame buffer size to the info message to aid in understanding why
+> > > > a resolution might be rejected.
+> > > >
+> > > > Fixes: 67e7cdb4829d ("video: hyperv: hyperv_fb: Obtain screen resolution from Hyper-V
+> > > > host")
+> > > > Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+> > [...]
+> > >
+> > > Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
+> > >
+> > 
+> > Applied to hyperv-fixes. Thanks.
+> 
+> This fix got pulled into the fbdev/for-next tree by a new maintainer, Helge Deller.
+> See https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git/commit/?h=for-next&id=bcc48f8d980b12e66a3d59dfa1041667db971d86
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/gpu/drm/i915/selftests/scatterlist.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+OK. I will drop it from hyperv-fixes. Thanks for letting me know!
 
-diff --git a/drivers/gpu/drm/i915/selftests/scatterlist.c b/drivers/gpu/drm/i915/selftests/scatterlist.c
-index d599186d5b71..a4f2fbb451e2 100644
---- a/drivers/gpu/drm/i915/selftests/scatterlist.c
-+++ b/drivers/gpu/drm/i915/selftests/scatterlist.c
-@@ -195,7 +195,7 @@ static unsigned int random_page_size_pages(unsigned long n,
- 					   struct rnd_state *rnd)
- {
- 	/* 4K, 64K, 2M */
--	static unsigned int page_count[] = {
-+	static const unsigned int page_count[] = {
- 		BIT(12) >> PAGE_SHIFT,
- 		BIT(16) >> PAGE_SHIFT,
- 		BIT(21) >> PAGE_SHIFT,
--- 
-2.33.1
-
+> 
+> Michael

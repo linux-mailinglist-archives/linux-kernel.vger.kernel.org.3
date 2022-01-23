@@ -2,88 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1057349737F
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 18:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6AE497381
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 18:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239207AbiAWRLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 12:11:03 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:43176
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239182AbiAWRKt (ORCPT
+        id S239172AbiAWRPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 12:15:07 -0500
+Received: from m228-6.mailgun.net ([159.135.228.6]:55877 "EHLO
+        m228-6.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239108AbiAWRPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 12:10:49 -0500
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EB7344000F
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 17:10:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642957848;
-        bh=/2OIXme4ALl4DAjdA85FQwEEgnqTTVJ2eyUW6QlD2T8=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=mvxsgIO2Qs/YGLDagSPcsnxDTvLpndq/7NfXVTsXmaNphrZxCncWSqDEKRs5y+DDZ
-         MadWqrbZVlgLFQ49GL34miEZKYpFJIJGGfMtj395/T8d3dVoS5LyljJSCH0Uxcr9BG
-         EfXX5WZcFTJWGpbVi6rjqeuik6gm3sxZQAjEtttBWTTZoML2skP7G4RerHPk95OTyb
-         Q0qp4X1rNRgr3UbEkMB2uje/emkoJ0RIUgdWO9x8BM6+a168cKjAOvoXESs/BdqoAh
-         vhwQCdUOtR5ixKIvJuVD11dDc93WvvNki2U1I09rwzA9/0l3D6HZHugI2PWcrp1xGG
-         +U7aC15VWLPZA==
-Received: by mail-ed1-f70.google.com with SMTP id en7-20020a056402528700b00404aba0a6ffso10442964edb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 09:10:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/2OIXme4ALl4DAjdA85FQwEEgnqTTVJ2eyUW6QlD2T8=;
-        b=E/DFqXJvgPMA2RI7kzihJMsuc+QTSWl48oLJd0RBa4jz4iuuMtTMfM/kUe8f6HzGN8
-         vquCwe1J0J+1FDvgqgRk0JuYEdzRkqgOtz0SwK8MlQyXN49GJmk/pQ7BzJoWaVT/NqK+
-         drAP1hLZzzsXH6qIGrZjXzeZWvAhOLrW4CF1ciXWHwoW7i+FBVcH+esbs/iqxDbSxsmi
-         SL6sFN+gSmD6q4nQCLc/A4+HlMvu3hQ9rZyE62ThMONwARkrHXLKF4rAGpYobg5HXiNH
-         OD/c2jDoljuf/hkJY4uzFiRyQ09f0x6g+sgjoqDNxVQtbm6HBpblgTj+9IqGTxOj4bUz
-         xuGw==
-X-Gm-Message-State: AOAM530XJDVQJCF3hsOQKrcJGPmjBOXw4RbORPh8TEgrwC6cPkMTB/P+
-        z9DwO8ilN0EhzquixPbMZ/Oru0rdRbsOiAqPSFrnvFpVC8hegbKS7cCZGEhIeZhh9pqX8yGwsX+
-        TEAhkgMFxQiwf4DHUuHqA4IF9CQTXehHG4mfxkiuvAA==
-X-Received: by 2002:a17:907:c01:: with SMTP id ga1mr9855504ejc.719.1642957848622;
-        Sun, 23 Jan 2022 09:10:48 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy9xL/Mcl66pAOPBWGwufPt3D01t+dIls2WZgVjeMInLwmxcYSEx9LO5kA2ZiiRVdxKHoHp1Q==
-X-Received: by 2002:a17:907:c01:: with SMTP id ga1mr9855501ejc.719.1642957848428;
-        Sun, 23 Jan 2022 09:10:48 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id l2sm5208665eds.28.2022.01.23.09.10.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 09:10:47 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>
-Subject: Re: [PATCH v2] soc: samsung: Fix typo in CONFIG_EXYNOS_USI description
-Date:   Sun, 23 Jan 2022 18:10:40 +0100
-Message-Id: <164295777264.25838.905366806236166301.b4-ty@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220114144606.24358-1-semen.protsenko@linaro.org>
-References: <20220114144606.24358-1-semen.protsenko@linaro.org>
+        Sun, 23 Jan 2022 12:15:06 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=michaelkloos.com; q=dns/txt;
+ s=k1; t=1642958106; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: From: References: Cc: To: Subject: MIME-Version: Date:
+ Message-ID: Sender; bh=KMCKo4cpOIFU5Z2gsr3EOOcDEAmZ5XEZ/k/AX4zaDbA=; b=bBjK088xo1ObtreG6xEsbIqQcjZZvwloJ/7WIwD51x/E9qj1cBQ2HRSZTWhhvCh/sQF2AfcA
+ LArShW7hQnzW8U70B+GEPoT1HwLL0LKLnN2x0ntNjQS8mluD4hsWXXbGDat5Nk2QBReNigca
+ t+EPclzBoH33dCczyB8+vV3RlR8=
+X-Mailgun-Sending-Ip: 159.135.228.6
+X-Mailgun-Sid: WyI5NjYzNiIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgIjQ4Y2MwIl0=
+Received: from drop1.michaelkloos.com (drop1.michaelkloos.com
+ [67.205.190.89]) by smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
+ 61ed8d16e0071250cf5a03b8 (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
+ Sun, 23 Jan 2022 17:15:02 GMT
+Sender: michael@michaelkloos.com
+Received: from [192.168.0.104] (cpe-173-88-115-50.columbus.res.rr.com [173.88.115.50])
+        by drop1.michaelkloos.com (Postfix) with ESMTPSA id 425B240249;
+        Sun, 23 Jan 2022 17:15:01 +0000 (UTC)
+Message-ID: <3607326c-9d39-a9e7-8e14-65aaef2094fd@michaelkloos.com>
+Date:   Sun, 23 Jan 2022 12:15:00 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] Fixed: Misaligned memory access. Fixed pointer
+ comparison.
+Content-Language: en-US
+To:     Jessica Clarke <jrtc27@jrtc27.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-kernel@vger.kernel.org
+References: <20220123034518.3717116-1-michael@michaelkloos.com>
+ <485047B2-E566-4679-87CF-C4B3CAFEF108@jrtc27.com>
+From:   "Michael T. Kloos" <michael@michaelkloos.com>
+In-Reply-To: <485047B2-E566-4679-87CF-C4B3CAFEF108@jrtc27.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Jan 2022 16:46:06 +0200, Sam Protsenko wrote:
-> The proper name is Exynos Auto V9, not V0. It was the typo slipped in
-> unnoticed, fix it.
-> 
-> 
+Yes, you are correct, but while I am not that knowledgeable in the kernel
+build system, I believe that in many build systems, binutils "as" is usually
+called by the "gcc" wrapper, rather than being executed directly.  This
+allows for the C preprocessor to be easily and automatically run over *.S
+files first.  Binutils "as" doesn't care about suffix.  It just assembles.
+"gcc" will check and call the other tools as necessary to build.
 
-Applied, thanks!
+Perhaps I should have been more specific in my language.  However,
+I was trying to refer to the 2 different build systems in their entirety,
+not their individually sub-components because I had originally test
+built with gcc, not clang.
 
-[1/1] soc: samsung: Fix typo in CONFIG_EXYNOS_USI description
-      commit: 442b0c08db7e35980bed6af091877f4dda72ffca
+	Michael
 
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+On 1/23/22 10:44, Jessica Clarke wrote:
+
+> On 23 Jan 2022, at 03:45, Michael T. Kloos <michael@michaelkloos.com> wrote:
+>> Rewrote the riscv memmove() assembly implementation.  The
+>> previous implementation did not check memory alignment and it
+>> compared 2 pointers with a signed comparison.  The misaligned
+>> memory access would cause the kernel to crash on systems that
+>> did not emulate it in firmware and did not support it in hardware.
+>> Firmware emulation is slow and may not exist.  Additionally,
+>> hardware support may not exist and would likely still run slower
+>> than aligned accesses even if it did.  The RISC-V spec does not
+>> guarantee that support for misaligned memory accesses will exist.
+>> It should not be depended on.
+>>
+>> This patch now checks for the maximum granularity of co-alignment
+>> between the pointers and copies them with that, using single-byte
+>> copy for any unaligned data at their terminations.  It also now uses
+>> unsigned comparison for the pointers.
+>>
+>> Added half-word and, if built for 64-bit, double-word copy.
+>>
+>> Migrated to the	newer assembler annotations from the now deprecated
+>> ones.
+>>
+>> Commit Message Edited on Jan 22 2022: Fixed some typos.
+>>
+>> [v2]
+>>
+>> Per kernel test robot, I have fixed the build under clang.  This
+>> was broken due to a difference between gcc and clang, clang requiring
+>> explict zero offsets the jalr instruction. gcc allowed them to be
+>> omitted if zero.
+> Unlike LLVM, GCC does not have an assembler, that’s binutils’s GNU as.
+>
+> Jess
+>

@@ -2,144 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A020497195
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 14:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D30497197
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 14:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236400AbiAWNHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 08:07:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232822AbiAWNHV (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 08:07:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DCDC06173B;
-        Sun, 23 Jan 2022 05:07:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 626C060C3E;
-        Sun, 23 Jan 2022 13:07:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34E0EC340E2;
-        Sun, 23 Jan 2022 13:07:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642943239;
-        bh=BxRaDiPr6cRH66AV0Yija/RCD3QlZ9vVEudJ4scQQsI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hwgKvPwuYEaOu2BKbuEUJ7Kp32LDYAg8qNugAprE0WJ0/8mYe6+K5qR7pBs62wekG
-         HtDv8yrJuf4JYknNquvuFYt9dZysD7QlxpPy5OzipBYcXuOiNGtzMuRh0+dFy0vmla
-         E/Ody41EjcVaCjtkhtnx1aLos+tftHIBAsAKUkYsejbilA2B3bF/UDovsj71oSbw1E
-         eucnld3DDKIDsLRjTUB6Xg+vinQ8hZKdJjqtBtLJf54obVQBGUPVd/+ZvgT1qfFQnL
-         v/+9nyfG33d7MU5XqUSUxGyT6lYJzfmoctDjd2znIrPLdMv6eD4WaOm+3PnspeWHsA
-         c1cmlGcQOTG3A==
-Date:   Sun, 23 Jan 2022 22:07:11 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        HATAYAMA Daisuke <d.hatayama@jp.fujitsu.com>,
-        Petr Mladek <pmladek@suse.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, dyoung@redhat.com,
-        linux-doc@vger.kernel.org, vgoyal@redhat.com,
-        stern@rowland.harvard.edu, akpm@linux-foundation.org,
-        andriy.shevchenko@linux.intel.com, corbet@lwn.net,
-        halves@canonical.com, kernel@gpiccoli.net,
-        Will Deacon <will@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Hidehiro Kawai <hidehiro.kawai.ez@hitachi.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juergen Gross <jgross@suse.com>, mikelley@microsoft.com
-Subject: Re: [PATCH V4] notifier/panic: Introduce panic_notifier_filter
-Message-Id: <20220123220711.44f1484c9b510eea8cda9c47@kernel.org>
-In-Reply-To: <20220122105514.GA18258@MiWiFi-R3L-srv>
-References: <20220108153451.195121-1-gpiccoli@igalia.com>
-        <Yel8WQiBn/HNQN83@alley>
-        <ccd9332e-2917-3020-3590-447fa660ff56@igalia.com>
-        <20220122105514.GA18258@MiWiFi-R3L-srv>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S236414AbiAWNIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 08:08:35 -0500
+Received: from mout.gmx.net ([212.227.17.20]:37521 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232822AbiAWNIe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 23 Jan 2022 08:08:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1642943312;
+        bh=aj8DhUaaDv08tU9DJpj36L9Kt6ubO2eQXui4kDAaAuU=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=gDzasPGbLU/m5LE281jnybqmvnSmv5q9BOH7iGATFYQDY8gQKymZWDUsub9WdzWBv
+         ri0wX/l5UHikkAdKomORPQSIebmQBx1h1zxJDKK70oyWbHmYS1Sp1Vq+vK7kMkLnAP
+         2WTMWp0C7DqRsSbC7we61Ca6DpF8yD//vJ494YeU=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.169.228]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MC34X-1mzIHV19Kv-00CSZX; Sun, 23
+ Jan 2022 14:08:32 +0100
+Message-ID: <1a5d9e02-856c-8e2d-4eae-cb5a1b5c4652@gmx.de>
+Date:   Sun, 23 Jan 2022 14:07:24 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: kernel crash/disc errors when unbinding USB devices
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org,
+        Linux Kernel Development <linux-kernel@vger.kernel.org>
+References: <7865ae26-2df0-892b-eb65-ce341eb9daea@gmx.de>
+ <Ye03Cz7fHFJ3bPmO@kroah.com> <2ce0e792-ac09-a973-6751-6ed187b6fae6@gmx.de>
+ <Ye1LCATpTIRr/yZt@kroah.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <Ye1LCATpTIRr/yZt@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:TvpEaKDq9MiKg7jBT8rJ3ycuo5euXn8Fabk/UD+dJexZ9IOHayB
+ i119k458E0COup8mMSKIPvUwL7lOPs5TCTAKChXERFdm21kNcH7qElUjdM1cWmYlw86vKJd
+ PYiMQXpv4ApWbL70mv0Jf+flwNLI+I9av8dVQNzCM8LM/g6qbU+Eky2+B9VCW6/temW3Bnt
+ lfy7Etafqu8ZEUHaC0v3w==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9jkXdklqkA0=:9LMWRozWHAlauiM5hsoEy8
+ zzr3hmLwrYkoDP960HxPBwzQxPIBWaTbnV1SH98ei1Akcz1UKexlIN0p1fLGsD+pd/cuPmNER
+ VRaTnYaWP6rcc97Dr7PRW9K3f55hbNZNsehzMcwVCqY9hKcIhUZ39P2glqRSKj2KsjBD7i39D
+ XwxWcAlAWVwLK7pIJi7wooAE0Tng1dlO5kG1oPp2G5qlFZ+NvpteTGSAOoxTKpH4GomtzczrO
+ FYiYdpx0jD6SVK8qhfRocnl+sNcdmgX4L21MvVuyKg5/nP+b8uHOc8PG66w9sFGu4OoAYD7rg
+ 7ltfLG0VYY+fvhT1BKaJv0MYZbWlapSnsTZS7UJBuc8CTtQOvKjA+IxCqHlky8JoMBECDneYm
+ IVEGbhuCU0Pj5Iu76r+WI6fnqeGdy+sNUeYA5pnp13oHefc274Bx+Y3kp2n9ieEXgbPgZltjv
+ WGzsZEddMPXKVo/ciTdAiF5DqgF1jH6wSKHfKExKQIcIrhpFB2MoG6D2vgwsLMuNonlCYdoOQ
+ U5PpvQYFIXLePRELuDLorHW4btlJnZ4wnD7rDyaiPCt1BkHC1er3rApBLueuK/4Ihau2caRP2
+ u4F/lIOiNN2+fr2o7bR5vU9Yl/HL0dpTxeJk8MTIT8+kN+pZU0SV9liqn3GoGbPB/6K+wfoqc
+ rl+AwK7JPIScjJfv/TM9t2414XOWv6snD2I/zXnkl5hdgwt83G96I3kkUe4Dj/885zAy3GmG+
+ cmgGFfx1h6JpXHHPD0ijPAPjNk1N5oU1Q6gMpFKVitm8KhgFNd8HXjBXSYiLrseMaCuQi+r35
+ 0evv4tg6I37hxara3PRJsaPth7UaVn1FZAGkBHqpVzHTl479f4f//nIpfVplh+IDzvBIqEmH1
+ PATaRAhT77wKohWUHUhkFH3Z1ClpX/CNqQAShCWHXpy1FElMe/si8H+lWk/nVDMEgzsRY/iis
+ dMyNcs3oyKjTpuxVnCY7PUSZ6ofYvbozaI5OP0BNpLFwMZazJUFcxW5/C/uRA5KNf3xOMLnrc
+ RSiYMrYLWjZiCHl0SpBjD/YBr/3HNJvXbSillTqP12Dpuu+LFPCTTUrF34weSzoYndAca/fOy
+ OPLHJnPQGbzwGs=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 22 Jan 2022 18:55:14 +0800
-Baoquan He <bhe@redhat.com> wrote:
+On 1/23/22 13:33, Greg Kroah-Hartman wrote:
+> On Sun, Jan 23, 2022 at 12:59:21PM +0100, Helge Deller wrote:
+>> On 1/23/22 12:07, Greg Kroah-Hartman wrote:
+>>> On Sun, Jan 23, 2022 at 11:40:01AM +0100, Helge Deller wrote:
+>>>> On all kernels 5.15.x and 5.16.x I noticed that resetting
+>>>> the USB devices with this shell script:
+>>>>
+>>>>        for i in $(ls /sys/bus/pci/drivers/ahci/|grep :)
+>>>>          do
+>>>>          echo $i
+>>>>          echo $i >/sys/bus/pci/drivers/ahci/unbind
+>>>>          sleep 1
+>>>>          echo $i >/sys/bus/pci/drivers/ahci/bind
+>>>>         done
+>>>
+>>> That is dangerous to do, why do this?  All of your block devices might
+>>> have disappeard.
+>>>
+>>>>         # reseting USB3 ports (if there none you'll get errors)
+>>>>         for i in $(ls /sys/bus/pci/drivers/xhci_hcd/|grep :)
+>>>>          do
+>>>>          echo $i
+>>>>          echo $i >/sys/bus/pci/drivers/xhci_hcd/unbind
+>>>>          sleep 1
+>>>>          echo $i >/sys/bus/pci/drivers/xhci_hcd/bind
+>>>>         done
+>>>
+>>> Again, why do this at all?
+>>
+>> I need to reset some of the USB devices after a suspend/resume cycle.
+>
+> The devices, or the host controllers?  They are different things.
+>
+>> The problem is, that some of the USB devices are
+>> handed over into a running VirtualBox VM and after
+>> the suspend/resume they need to be virtually plugged out/in
+>> so that the running Windows VM will reconnect them.
+>
+> unbind/bind is a very harsh way of doing this.  but do it on the USB
+> devics, not the host controllers.
+>
+>> If you search in the internet, you will find many places
+>> where this unbind/bind process is mentioned, e.g.:
+>> https://askubuntu.com/questions/645/how-do-you-reset-a-usb-device-from-=
+the-command-line
+>> This procedure did worked in the past.
+>
+> Never trust the internet :)
+>
+> But note, there is a usbreset program mentioned there, which is part of
+> 'usbutils' and should already be installed on your machine.  Why not
+> just use that?
+>
+>> I think the main problem is, that it's somehow unexpected that
+>> the SATA controllers are logically attached to the USB
+>> controllers.
+>
+> Huh?  No they are not.
+>
+> 'ahci' is a SATA controller.
+> 'xhci' is a USB controller.
+>
+> Two totally different things.
 
-> On 01/21/22 at 05:31pm, Guilherme G. Piccoli wrote:
-> ......
-> > > IMHO, the right solution is to split the callbacks into 2 or more
-> > > notifier list. Then we might rework panic() to do:
-> > > 
-> > > void panic(void)
-> > > {
-> > > 	[...]
-> > > 
-> > > 	/* stop watchdogs + extra info */
-> > > 	atomic_notifier_call_chain(&panic_disable_watchdogs_notifier_list, 0, buf);
-> > > 	atomic_notifier_call_chain(&panic_info_notifier_list, 0, buf);
-> > > 	panic_print_sys_info();
-> > > 
-> > > 	/* crash_kexec + kmsg_dump in configurable order */
-> > > 	if (!_crash_kexec_post_kmsg_dump) {
-> > > 		__crash_kexec(NULL);
-> > > 		smp_send_stop();
-> > > 	} else {
-> > > 		crash_smp_send_stop();
-> > > 	}
-> > > 
-> > > 	kmsg_dump();
-> > > 	if (_crash_kexec_post_kmsg_dump)
-> > > 		__crash_kexec(NULL);
-> > > 
-> > > 	/* infinite loop or reboot */
-> > > 	atomic_notifier_call_chain(&panic_hypervisor_notifier_list, 0, buf);
-> > > 	atomic_notifier_call_chain(&panic_rest_notifier_list, 0, buf);
-> > > 
-> > > 	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
-> > > [...] 
-> > > Two notifier lists might be enough in the above scenario. I would call
-> > > them:
-> > > 
-> > > 	panic_pre_dump_notifier_list
-> > > 	panic_post_dump_notifier_list
-> > > 
-> > > 
-> > > It is a real solution that will help everyone. It is more complicated now
-> > > but it will makes things much easier in the long term. And it might be done
-> > > step by step:
-> > > 
-> > >      1. introduce the two notifier lists
-> > >      2. convert all users: one by one
-> > >      3. remove the original notifier list when there is no user
-> > 
-> > That's a great idea! I'm into it, if we have a consensus. The thing that
-> > scares me most here is that this is a big change and consumes time to
-> > implement - I'd not risk such time if somebody is really against that.
-> > So, let's see more opinions, maybe the kdump maintainers have good input.
-> 
-> I am fine with it. As long as thing is made clear, glad to see code is
-> refactored to be more understandable and improved. Earlier, during several
-> rounds of discussion between you and Petr, seveal pitfalls have been
-> pointed out and avoided.
-> 
-> Meanwhile, I would suggest Masa and HATAYAMA to help give input about
-> panic_notifier usage and refactory. AFAIK, they contributed code and use
-> panic_notifier in their product or environment a lot, that will be very
-> helpful to get the first hand information from them.
-> 
-> Hi Masa, HATAYANA,
-> 
-> Any comment on this? (Please ignore this if it's not in your care.)
+Right, and that was my fault.
+I mixed up "ahci" and "ehci" (the USB2.0 controller).
 
-No, that looks good idea to me. BTW, the 'dump' in the new notifieers
-means both kmsg_dump and crash dump, right?
+So, my report was bogus.
+Please ignore.
 
-Thank you,
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Helge

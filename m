@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBDD349746C
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 19:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C14B49746E
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 19:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239609AbiAWSkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 13:40:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53408 "EHLO
+        id S239600AbiAWSkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 13:40:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239622AbiAWSkC (ORCPT
+        with ESMTP id S239588AbiAWSkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 13:40:02 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5123AC061744;
-        Sun, 23 Jan 2022 10:40:02 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id d15-20020a17090a110f00b001b4e7d27474so14267008pja.2;
-        Sun, 23 Jan 2022 10:40:02 -0800 (PST)
+        Sun, 23 Jan 2022 13:40:05 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441E5C061401;
+        Sun, 23 Jan 2022 10:40:05 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id n32so4678122pfv.11;
+        Sun, 23 Jan 2022 10:40:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=zfgimupqB4xhJIvLvGgrer31y9tj8J1RXghy7qnKugc=;
-        b=gxMhHOGPzZikvHKNf5etkD8h5zwamCQvFvYm0T3TfrFpDLfs91aCsHtI+xqcPa8URu
-         FFjowqDhhJ69tQF4OsI04OdzbE5H9ypOLCLw0BtlXsPReQihAHoMJCWdJw5zE4jVLwhO
-         g1nviPaL/KLA6cJWfPzd19d6k4Ji+gex9ZTZO6W3Zaz3jY8H7L8ePhgHrqIqtcKI37r7
-         cowwVtPoBOznRQ1kol1AgbR+qWyIdu3IGSHuMqs4JxjKQY8qyAQLqRH8r0wbcItyWyPo
-         E6MFahxwAjE0Bt/rxvJ7psK8eynqLBYQJQKjMtYYJccVf+NgvivqphIBCiCRJT/6TI3g
-         RrSQ==
+        bh=CMyb+uatsmk9qk9XVLHK9qLtTawikXiv3prI/J8nsYM=;
+        b=FEb+34HTho0mKP3DvocyY5vmMMIY0jI+I0rv7W6aUWsRjGVGKae9x0632mvuE0VukX
+         zea1g8JwnWdhuggaBW8Y/WdgbU1N97zxV/0lc6CVl6kbSLEu1CjejIFbnLW9WV32C1kU
+         FEkKIt5A0hJfgPODT6AEm0bK2BqHK75ha9fyOYv/j+Ck8z034STtFPkqMtYK4YAyK09y
+         B5tPcb3PlT/dgTM3UlBOIsFXEQ9fL4+wKUAhRQZHjGkf7umylX7mr7nvGMt8Cfb0SjUH
+         m+xIEdg2rox44nz7G2yru3pMJuVJZnJeffn9C9FJnbibfqOZnCaDstrg3EG1S4ajlJf2
+         y5TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zfgimupqB4xhJIvLvGgrer31y9tj8J1RXghy7qnKugc=;
-        b=UejStlkhzuhx+lQNLhnf6qYMHBvkJ6yjLtghEAmZXMf+LBgRrInK7XpHi3KKXh4vOe
-         jhpDWfbBGJiYYL0CDxmnSHIj0Mm2Jgz4snGLQQsIXLv+TdM622OhTaOMePNLhEfLRLXp
-         6ASkFtykNOeH994+XtTlx5dl5VPrhjkkgOTGN7jRhRismz40AVDEKNt4s+JxlYs3oNY/
-         EnrY4uFoE3qKKiMvA6BSsuSMlFtY0J9f3zB+o5F8V7MTwHLya+9XQFNIyd/B7/96dYqa
-         el3yfkQMiUVncJOi0fHxA89d7nXXvDlKlvwGIY0azNZnj6mFCNRS42mpCxEBT9UipC7m
-         DTnQ==
-X-Gm-Message-State: AOAM5317ks6D9UURsd+ougE+pSX77B017RQc+8qxuo8p8TIdlJe0wjpj
-        R93f73LTPxm7JEWogSakeYs=
-X-Google-Smtp-Source: ABdhPJxLWQjXfOWkcABvAW38WG6KUSqa6hXvCSlwZOr+ADYOSoQ4eSLrZHymWaTH90oODMTjxHWQng==
-X-Received: by 2002:a17:902:ea0d:b0:14b:4c26:f43d with SMTP id s13-20020a170902ea0d00b0014b4c26f43dmr2267545plg.135.1642963201797;
-        Sun, 23 Jan 2022 10:40:01 -0800 (PST)
+        bh=CMyb+uatsmk9qk9XVLHK9qLtTawikXiv3prI/J8nsYM=;
+        b=ufjsuJ4ls1F6hi8WyIyfzbjo8FtAyp+LJyBCSnXuj41DDsc9bfdY1v2PCCi6n238zc
+         /NOeyVc2TEeATQCpeB+m13D+XyONmKkfBEW8ck+7Z3/Kfo8vt3xti39Kj6JwZ77OxtPA
+         wZp7DsEWCEo6gvwF0i/XizAFhzs0oZaHPcklZ+M0pko6sazUHGCFSeClNSzVoz9E1BIZ
+         8jev3mMlZ1hPG8eBZneDMBiozxzSLsYyoR6Lsri7GOTiLB1scG5Nzs1fmgMpqiWNEnxc
+         np/DmN6Jxk9MY1EYqZTTKiGtuG6InA80pr3col9Mb7b64i+i7DAM4w7FROgdeU+H5Myc
+         H7nQ==
+X-Gm-Message-State: AOAM530Mxt3ikBG+imDDgBQyMGxyRG2yGnfmd+HivjwHsgOLBjSXgCMn
+        +HgJHMz+GbuMEAAbF0TGBEE=
+X-Google-Smtp-Source: ABdhPJwf5QI0SPNdOnucozcNruZiu59ZtsANYNvXFoEq6uEFbg5cEgIjFW+kxBeTM2iWtFnYw5haWw==
+X-Received: by 2002:a63:6f87:: with SMTP id k129mr9529438pgc.248.1642963204752;
+        Sun, 23 Jan 2022 10:40:04 -0800 (PST)
 Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id pj7sm1940960pjb.50.2022.01.23.10.40.00
+        by smtp.gmail.com with ESMTPSA id a1sm9996929pgg.18.2022.01.23.10.40.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 10:40:01 -0800 (PST)
+        Sun, 23 Jan 2022 10:40:04 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -62,13 +62,19 @@ To:     Yury Norov <yury.norov@gmail.com>,
         Nicholas Piggin <npiggin@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, Tariq Toukan <tariqt@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Subject: [PATCH 04/54] net: mellanox: fix open-coded for_each_set_bit()
-Date:   Sun, 23 Jan 2022 10:38:35 -0800
-Message-Id: <20220123183925.1052919-5-yury.norov@gmail.com>
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH 05/54] nds32: perf: replace bitmap_weight with bitmap_empty where appropriate
+Date:   Sun, 23 Jan 2022 10:38:36 -0800
+Message-Id: <20220123183925.1052919-6-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220123183925.1052919-1-yury.norov@gmail.com>
 References: <20220123183925.1052919-1-yury.norov@gmail.com>
@@ -78,65 +84,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mellanox driver has an open-coded for_each_set_bit(). Fix it.
+nds32_pmu_enable calls bitmap_weight() to check if any bit of a given
+bitmap is set. It's better to use bitmap_empty() in that case because
+bitmap_empty() stops traversing the bitmap as soon as it finds first
+set bit, while bitmap_weight() counts all bits unconditionally.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- drivers/net/ethernet/mellanox/mlx4/cmd.c | 23 ++++++-----------------
- 1 file changed, 6 insertions(+), 17 deletions(-)
+ arch/nds32/kernel/perf_event_cpu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx4/cmd.c b/drivers/net/ethernet/mellanox/mlx4/cmd.c
-index e10b7b04b894..c56d2194cbfc 100644
---- a/drivers/net/ethernet/mellanox/mlx4/cmd.c
-+++ b/drivers/net/ethernet/mellanox/mlx4/cmd.c
-@@ -1994,21 +1994,16 @@ static void mlx4_allocate_port_vpps(struct mlx4_dev *dev, int port)
- 
- static int mlx4_master_activate_admin_state(struct mlx4_priv *priv, int slave)
+diff --git a/arch/nds32/kernel/perf_event_cpu.c b/arch/nds32/kernel/perf_event_cpu.c
+index a78a879e7ef1..ea44e9ecb5c7 100644
+--- a/arch/nds32/kernel/perf_event_cpu.c
++++ b/arch/nds32/kernel/perf_event_cpu.c
+@@ -695,7 +695,7 @@ static void nds32_pmu_enable(struct pmu *pmu)
  {
--	int port, err;
-+	int p, port, err;
- 	struct mlx4_vport_state *vp_admin;
- 	struct mlx4_vport_oper_state *vp_oper;
- 	struct mlx4_slave_state *slave_state =
- 		&priv->mfunc.master.slave_state[slave];
- 	struct mlx4_active_ports actv_ports = mlx4_get_active_ports(
- 			&priv->dev, slave);
--	int min_port = find_first_bit(actv_ports.ports,
--				      priv->dev.caps.num_ports) + 1;
--	int max_port = min_port - 1 +
--		bitmap_weight(actv_ports.ports, priv->dev.caps.num_ports);
+ 	struct nds32_pmu *nds32_pmu = to_nds32_pmu(pmu);
+ 	struct pmu_hw_events *hw_events = nds32_pmu->get_hw_events();
+-	int enabled = bitmap_weight(hw_events->used_mask,
++	bool enabled = !bitmap_empty(hw_events->used_mask,
+ 				    nds32_pmu->num_events);
  
--	for (port = min_port; port <= max_port; port++) {
--		if (!test_bit(port - 1, actv_ports.ports))
--			continue;
-+	for_each_set_bit(p, actv_ports.ports, priv->dev.caps.num_ports) {
-+		port = p + 1;
- 		priv->mfunc.master.vf_oper[slave].smi_enabled[port] =
- 			priv->mfunc.master.vf_admin[slave].enable_smi[port];
- 		vp_oper = &priv->mfunc.master.vf_oper[slave].vport[port];
-@@ -2063,19 +2058,13 @@ static int mlx4_master_activate_admin_state(struct mlx4_priv *priv, int slave)
- 
- static void mlx4_master_deactivate_admin_state(struct mlx4_priv *priv, int slave)
- {
--	int port;
-+	int p, port;
- 	struct mlx4_vport_oper_state *vp_oper;
- 	struct mlx4_active_ports actv_ports = mlx4_get_active_ports(
- 			&priv->dev, slave);
--	int min_port = find_first_bit(actv_ports.ports,
--				      priv->dev.caps.num_ports) + 1;
--	int max_port = min_port - 1 +
--		bitmap_weight(actv_ports.ports, priv->dev.caps.num_ports);
- 
--
--	for (port = min_port; port <= max_port; port++) {
--		if (!test_bit(port - 1, actv_ports.ports))
--			continue;
-+	for_each_set_bit(p, actv_ports.ports, priv->dev.caps.num_ports) {
-+		port = p + 1;
- 		priv->mfunc.master.vf_oper[slave].smi_enabled[port] =
- 			MLX4_VF_SMI_DISABLED;
- 		vp_oper = &priv->mfunc.master.vf_oper[slave].vport[port];
+ 	if (enabled)
 -- 
 2.30.2
 

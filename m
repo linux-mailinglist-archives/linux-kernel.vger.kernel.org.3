@@ -2,92 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70DEF4972BC
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 16:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB714972BD
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 16:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238191AbiAWPwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 10:52:42 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:49648 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238181AbiAWPwk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 10:52:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=EMC6Ft10JXwi16PGGMWQ1pe3LM0kkBsvwtaXhgSs0wM=; b=EO0tRbP4Cm6mmtzSNEUjPEe+fN
-        gEll1aTSwCLFqWNaKAehFMt6LO3f3TV6EsNHAZGABi4xyxeHb8Tpf+vbNq26LfSK0KL9iDpWUzJZI
-        +kQE8nHGPjqqqISIy1/DC/Yk4uQ+cxG41jqOjV8AQAKzMk3WcnoirV20gNJSx7do3ELU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nBfAL-002OLT-JC; Sun, 23 Jan 2022 16:52:29 +0100
-Date:   Sun, 23 Jan 2022 16:52:29 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: stmmac: don't stop RXC during LPI
-Message-ID: <Ye15va7tFWMgKPEE@lunn.ch>
-References: <20220123141245.1060-1-jszhang@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220123141245.1060-1-jszhang@kernel.org>
+        id S238217AbiAWPyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 10:54:20 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53616 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231433AbiAWPyU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 23 Jan 2022 10:54:20 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C93A360F58
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 15:54:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 38B9BC340E5;
+        Sun, 23 Jan 2022 15:54:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642953259;
+        bh=Th+PLbbNy5T4YFh+V4R6iFv998g+5yQmP8ZBiq7owbU=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=CkF2J3CN8xk4OUwz9+oklmU6n6uBUW8mOkrOxUZaGELZS5B2dbr9pq7RgVWsvAYmE
+         yGnhzqGfDr4cFFvady3gVDyTPQF/RG/ul3iHScmeFoAqyVaXhFwRvN0OUq9S+XgTmg
+         ogU5GhBWDkeLhkU4PDGsPna0WkMCPxvIv5KlyHfVaeD+QqJhqXqY5G5Zfq8wQaZDlG
+         w2HacEv8YPUGOG0is3DH/a16b6IyLCxLKkxorgepwMt1P7gElJfCi7xhIgbHJPF3c0
+         mxtPHqz2UfRnXTF07rlrAY5wS4lMcmMEWexQmi3NKb9zw0+e/3/8IlZl5dvLq9Aqa6
+         753sUkE4ruwzg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 262CDF6079D;
+        Sun, 23 Jan 2022 15:54:19 +0000 (UTC)
+Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-5.17-2 tag
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <877daqu2bv.fsf@mpe.ellerman.id.au>
+References: <877daqu2bv.fsf@mpe.ellerman.id.au>
+X-PR-Tracked-List-Id: Linux on PowerPC Developers Mail List <linuxppc-dev.lists.ozlabs.org>
+X-PR-Tracked-Message-Id: <877daqu2bv.fsf@mpe.ellerman.id.au>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-5.17-2
+X-PR-Tracked-Commit-Id: aee101d7b95a03078945681dd7f7ea5e4a1e7686
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
+Message-Id: <164295325914.31951.8078413507540454113.pr-tracker-bot@kernel.org>
+Date:   Sun, 23 Jan 2022 15:54:19 +0000
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        atrajeev@linux.vnet.ibm.com, daniel@iogearbox.net,
+        johan.almbladh@anyfinetworks.com, linux-kernel@vger.kernel.org,
+        npiggin@gmail.com, naveen.n.rao@linux.vnet.ibm.com,
+        linuxppc-dev@lists.ozlabs.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 23, 2022 at 10:12:45PM +0800, Jisheng Zhang wrote:
-> I met can't receive rx pkt issue with below steps:
-> 0.plug in ethernet cable then boot normal and get ip from dhcp server
-> 1.quickly hotplug out then hotplug in the ethernet cable
-> 2.trigger the dhcp client to renew lease
-> 
-> tcpdump shows that the request tx pkt is sent out successfully,
-> but the mac can't receive the rx pkt.
-> 
-> The issue can easily be reproduced on platforms with PHY_POLL external
-> phy. If we don't allow the phy to stop the RXC during LPI, the issue
-> is gone. I think it's unsafe to stop the RXC during LPI because the mac
-> needs RXC clock to support RX logic.
-> 
-> And the 2nd param clk_stop_enable of phy_init_eee() is a bool, so use
-> false instead of 0.
-> 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 6708ca2aa4f7..92a9b0b226b1 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -1162,7 +1162,7 @@ static void stmmac_mac_link_up(struct phylink_config *config,
->  
->  	stmmac_mac_set(priv, priv->ioaddr, true);
->  	if (phy && priv->dma_cap.eee) {
-> -		priv->eee_active = phy_init_eee(phy, 1) >= 0;
-> +		priv->eee_active = phy_init_eee(phy, false) >= 0;
+The pull request you sent on Sun, 23 Jan 2022 22:19:16 +1100:
 
-This has not caused issues in the past. So i'm wondering if this is
-somehow specific to your system? Does everybody else use a PHY which
-does not implement this bit? Does your synthesis of the stmmac have a
-different clock tree?
+> https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-5.17-2
 
-By changing this value for every instance of the stmmac, you are
-potentially causing a power regression for stmmac implementations
-which don't need the clock. So we need a clear understanding, stopping
-the clock is wrong in general and so the change is correct in
-general. Or this is specific to your system, and you probably need to
-add priv->dma_cap.keep_rx_clock_ticking, which you set in your glue
-driver,and use here to decide what to pass to phy_init_eee().
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
 
-	   Andrew
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

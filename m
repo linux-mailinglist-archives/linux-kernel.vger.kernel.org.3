@@ -2,99 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C074972F2
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 17:17:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE234972F8
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 17:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238528AbiAWQRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 11:17:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49278 "EHLO
+        id S238557AbiAWQSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 11:18:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238520AbiAWQRC (ORCPT
+        with ESMTP id S232645AbiAWQR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 11:17:02 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07B7C06173B;
-        Sun, 23 Jan 2022 08:17:02 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id y84so314471iof.0;
-        Sun, 23 Jan 2022 08:17:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LAyle5M8Yin1J588XMzvsyR2yrP3PbLy64Gkk1kIsNU=;
-        b=BT6HCKGUg1XaJmawU3N80eef4GpsPRceNHPfAiBnNVPss4Wk4Brum6pYMRSAFr4vBX
-         wqV9G/5usKDIPlOcR/hNQES/QRa35HWNd6DwLAvXBeUc7CVhZPai7eFzBUYsvJoah5In
-         aTSySG60Ptuax9Bh/jwUfvaa4HurmS/e0OrpAbmO3R8Dhxe9jsm7LS7ZoTV9fiTMbBhk
-         aSnLNZbMgI8fLrFaILyq2eNLePrZpVkGzEbTnD6ieDXqsIZLqLLj4SX5BkhJ6P1bpR4Y
-         zqgdkVmCXQjbs0f2S//pzs/oK9cnGkTEUQrvRdk66GAZlAuhHs8A9SQjC8WTdBlzKD1p
-         J8MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LAyle5M8Yin1J588XMzvsyR2yrP3PbLy64Gkk1kIsNU=;
-        b=lLW1HPuno5ZN0FaId3C1AsNvdSMSbphKluY+MF3HP3gprv+gNWI/jhKOGsa4g5Jhvc
-         X3zFB7u2+zcDMdgLDPZABQzSbxkwe9fFCaZf3Hral5/MlUjZQOaoJCyN3SuUbvel0EW7
-         lliUNnrMZyKOVnmsyzujISPhRsDXQ6TayKTm2hCarbYLJqmeIBqVRiKZBw5VS67naGnj
-         pyxh3zVEW1zUYFmo8cNBay+bmNGZLRnyR6e3T6g8/oW9y2s3AUmT49q8Xaj0pSyg/JGh
-         DWaGtwdHbSBw7UbILL9OrQDN1tFIsHDpgdnsG8RPMLWNto6fza0rMZH7msTaiMJU9glk
-         qd/Q==
-X-Gm-Message-State: AOAM531Lw1al9t7UlRid/p0aTFRkl/Xqv58bDJdgCuoRdfYhnTaGiuiW
-        NQ1rCE/06LNV96JdONeVqHr6n9CZVlfhl4klmxL2VA0TwQM=
-X-Google-Smtp-Source: ABdhPJyXRfHSon1CXbaeMo3p6YKqpoPWYPu2kMaMvmCp9dGwvNgi2GKe58hHXdwt5kM5S6JYuKLpW8Pk81s5WB3f1Eg=
-X-Received: by 2002:a02:a485:: with SMTP id d5mr1206959jam.167.1642954621876;
- Sun, 23 Jan 2022 08:17:01 -0800 (PST)
+        Sun, 23 Jan 2022 11:17:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7AFC06173B
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 08:17:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C28960F64
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 16:17:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 572CCC340E8;
+        Sun, 23 Jan 2022 16:17:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1642954676;
+        bh=8ocM8NfepuzO2PWIYLNWmobi6Q6duWrlTkUf4R4FV0E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R5IMIFv2wv6h4HftGg4BVqs19rrewU+nA7IM/RpiI5vxOe63/QraPYFDMEexMEZyy
+         dzOK9BkLmdthfs3sAj4NVaDmNz6yrQxIGz+MbJbA2yrDQ5tR5T8RMc99fvuKyFMaHE
+         NywGfo+TZf2ii3JzjjKJuckjYMShmPbs4N7xizcU=
+Date:   Sun, 23 Jan 2022 17:17:32 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Oded Gabbay <ogabbay@kernel.org>
+Cc:     Cai Huoqing <cai.huoqing@linux.dev>, Arnd Bergmann <arnd@arndb.de>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] habanalabs: Remove unused enum member DMA_SRAM_TO_SRAM
+Message-ID: <Ye1/nECWs9XtUzoJ@kroah.com>
+References: <20220111114724.7987-1-cai.huoqing@linux.dev>
+ <CAFCwf10GWN_hdsvUf+7dFFK=CwjuGxXPZZt8c2dkVOb24VZxcQ@mail.gmail.com>
+ <Ye1ua3ixuSfdhiRc@kroah.com>
+ <CAFCwf12H4Nz-dPrYwJFyygWUn0tvoLKpHfmBCHmqpX6Fs02cSw@mail.gmail.com>
+ <Ye19hz9r0poT5wUe@kroah.com>
+ <CAFCwf11ahKse1MYcBFfSBvFf1WnG3rxR6dmJiUhZUu2rZQBB-Q@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220122131457.63304-1-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220122131457.63304-1-krzysztof.kozlowski@canonical.com>
-From:   Alim Akhtar <alim.akhtar@gmail.com>
-Date:   Sun, 23 Jan 2022 21:46:28 +0530
-Message-ID: <CAGOxZ53gMpmxtxjk5K0PsZYUxTC9W9Y1vNOU1aY9WgdG1-c0Hw@mail.gmail.com>
-Subject: Re: [PATCH] ARM: dts: exynos: use define for TMU clock on Exynos4412
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFCwf11ahKse1MYcBFfSBvFf1WnG3rxR6dmJiUhZUu2rZQBB-Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof
+On Sun, Jan 23, 2022 at 06:11:54PM +0200, Oded Gabbay wrote:
+> On Sun, Jan 23, 2022 at 6:08 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Sun, Jan 23, 2022 at 06:01:53PM +0200, Oded Gabbay wrote:
+> > > On Sun, Jan 23, 2022 at 5:04 PM Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org> wrote:
+> > > >
+> > > > On Sun, Jan 23, 2022 at 04:43:15PM +0200, Oded Gabbay wrote:
+> > > > > On Tue, Jan 11, 2022 at 1:47 PM Cai Huoqing <cai.huoqing@linux.dev> wrote:
+> > > > > >
+> > > > > > The driver don't support the SRAM-to-SRAM translation of DMA,
+> > > > > > so remove 'DMA_SRAM_TO_SRAM'.
+> > > > > >
+> > > > > > Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+> > > > > > ---
+> > > > > >  drivers/misc/habanalabs/include/goya/goya_packets.h | 1 -
+> > > > > >  1 file changed, 1 deletion(-)
+> > > > > >
+> > > > > > diff --git a/drivers/misc/habanalabs/include/goya/goya_packets.h b/drivers/misc/habanalabs/include/goya/goya_packets.h
+> > > > > > index ef54bad20509..25fbebdc6143 100644
+> > > > > > --- a/drivers/misc/habanalabs/include/goya/goya_packets.h
+> > > > > > +++ b/drivers/misc/habanalabs/include/goya/goya_packets.h
+> > > > > > @@ -36,7 +36,6 @@ enum goya_dma_direction {
+> > > > > >         DMA_SRAM_TO_HOST,
+> > > > > >         DMA_DRAM_TO_HOST,
+> > > > > >         DMA_DRAM_TO_DRAM,
+> > > > > > -       DMA_SRAM_TO_SRAM,
+> > > > > >         DMA_ENUM_MAX
+> > > > > >  };
+> > > > > >
+> > > > > > --
+> > > > > > 2.25.1
+> > > > > >
+> > > > >
+> > > > > This is a general spec file in our s/w stack, and therefore a change
+> > > > > in it in the driver will cause our driver to be out of sync with our
+> > > > > user-space stack. i.e. the value of DMA_ENUM_MAX will be different in
+> > > > > the driver and in the user-space stack. I don't know if there will be
+> > > > > any consequences but I prefer not to risk it.
+> > > >
+> > > > If this is synced to userspace, shouldn't it be in a uapi file with a
+> > > > specific value associated with it?
+> > > >
+> > > > thanks,
+> > > >
+> > > > greg k-h
+> > >
+> > > Yes, it was a mistake from day 1. A mistake we didn't repeat in future ASICs.
+> > > I take great care of putting anything that is synced between driver
+> > > and userspace in our uapi file.
+> > >
+> > > Having said that, after almost 3 years of having this mistake, I feel
+> > > it is not too disastrous to leave it as is.
+> > > Our Goya s/w stack is pretty much stable and I don't want to make
+> > > changes without good reason.
+> >
+> > You should just move this to a uapi file to show that it is something
+> > that can't be changed.  Can't you do that without breaking anything on
+> > the kernel side?
+> On the kernel side there isn't any problem with moving it.
+> What I'm afraid of, is that the userspace will now have a duplicate
+> definition of this enum.
+> Both in the original file, which is included in the user space stack
+> from day 1, and from our uapi file.
+> In short, I'm afraid of breaking its compilation.
+> If you think that's acceptable, I don't have a problem moving it.
+> 
+> >
+> > Otherwise maintaining this is going to be hard as no one has a clue that
+> > this is a value that userspace uses.
+> 
+> I can document it with a BIG comment in the file.
+> And as I said, Goya s/w stack is pretty much fixed and I don't believe
+> is going to change anymore.
 
-On Sun, Jan 23, 2022 at 8:42 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> Replace clock hard-coded number with a define from bindings.  No
-> functional change.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+The trick is long-term maintaince for the next 20+ years of this code in
+the kernel.  A huge comment would help, but even better to move this
+where it needs to go in a uapi file so that it makes it obvious we can
+not change this.
 
+thanks,
 
->  arch/arm/boot/dts/exynos4412.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/arm/boot/dts/exynos4412.dtsi b/arch/arm/boot/dts/exynos4412.dtsi
-> index d3802046c8b8..aa0b61b59970 100644
-> --- a/arch/arm/boot/dts/exynos4412.dtsi
-> +++ b/arch/arm/boot/dts/exynos4412.dtsi
-> @@ -813,7 +813,7 @@ &tmu {
->         interrupt-parent = <&combiner>;
->         interrupts = <2 4>;
->         reg = <0x100C0000 0x100>;
-> -       clocks = <&clock 383>;
-> +       clocks = <&clock CLK_TMU_APBIF>;
->         clock-names = "tmu_apbif";
->         status = "disabled";
->  };
-> --
-> 2.32.0
->
-
-
--- 
-Regards,
-Alim
+greg k-h

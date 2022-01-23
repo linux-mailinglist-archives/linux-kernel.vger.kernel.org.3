@@ -2,136 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE844970C9
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 10:48:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F14B14970DC
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 11:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235955AbiAWJsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 04:48:30 -0500
-Received: from mail-dm6nam11on2089.outbound.protection.outlook.com ([40.107.223.89]:62784
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235974AbiAWJsX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 04:48:23 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XKIFo9h0mAGV9jxEKn34gVT58BbC14Kxu0PHrah6vxDTNfLnbgMLkCp6vsmxcNdiuc2A43NwMe0bLHZQmBMevy2pG9xEtz9EybtCUTkLkpH9uU9T7+3NuNkye2baHFerLS1z4ELMjzXL7vyzXcBJQTNrCixON8OQKEaFzR6sZC2AVjn0OW/X0GZvO3GWQ2aOok+yLZqlKMCY0bNZNRfsRU0dWbEIjq/AhO37FLuRTjStmk5oxrAJHB4G3G3rnWyTC6HsiPOysucoMshYbiTukbRWgznep0kofu7YVB2tAqVviwfyWqq+IrMFsVG8mufyBX7XU5pDbOJtydJlkpFv0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eVIPrBrkgmSchQG/nRiU0fxiSFlbnrJOu3wewXaT6Lk=;
- b=OAyQPdQ6MF9yej7WJBP/TCKID77gDEDYNQmqK9ghp81QQC5G24UiWD+JnqA2jlyiBYM5w2/Md0f0ykbzDJob88FK0twbNEGNl06ExD1vOCTFHDSONQPVmdUg+kY2Stt/gPpHuad4Gd9FgRVQ6giKmzEUpxgrV3jadLHQxip8WpkmrN+oVkq8rewTifCcDdY9NfUGg3zLbbjFIBxIUB0V5VGhnIrG0lJ8nJNX4FqedXmadlbbLLsuDqBk4wwWI0yT1gVRw8Qje25W/oX2ZZAtD7kvfJuZSIBzj5G5Bjsgh7cUPbNKBgTT2pDthqOnjylgqfiiatqNfgxcKRrriIWtAg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=gondor.apana.org.au
- smtp.mailfrom=xilinx.com; dmarc=pass (p=none sp=none pct=100) action=none
- header.from=xilinx.com; dkim=none (message not signed); arc=none
+        id S236039AbiAWKEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 05:04:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232476AbiAWKEw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 23 Jan 2022 05:04:52 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACC8C06173B;
+        Sun, 23 Jan 2022 02:04:52 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id n32so3969876pfv.11;
+        Sun, 23 Jan 2022 02:04:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eVIPrBrkgmSchQG/nRiU0fxiSFlbnrJOu3wewXaT6Lk=;
- b=iHNEzaEx9TSxcpXaLaHNj4lNmVjy/qoAERDLMplNJ4bBVCBsJSdb4shSFbcZQvvGkXMRqbLHb9dufV2HA4b+9riiYVMuqpTM3SLvOh5tHUaq5Nsrky+mCVPVswoFcYGd0JMO3QYwHwVP2wvn3LbjcIJPwUwTmmcm1LClKmXF40U=
-Received: from BN6PR17CA0053.namprd17.prod.outlook.com (2603:10b6:405:75::42)
- by BY5PR02MB6370.namprd02.prod.outlook.com (2603:10b6:a03:1b3::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.12; Sun, 23 Jan
- 2022 09:48:19 +0000
-Received: from BN1NAM02FT049.eop-nam02.prod.protection.outlook.com
- (2603:10b6:405:75:cafe::e3) by BN6PR17CA0053.outlook.office365.com
- (2603:10b6:405:75::42) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.17 via Frontend
- Transport; Sun, 23 Jan 2022 09:48:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT049.mail.protection.outlook.com (10.13.2.89) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4909.8 via Frontend Transport; Sun, 23 Jan 2022 09:48:18 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Sun, 23 Jan 2022 01:47:57 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Sun, 23 Jan 2022 01:47:57 -0800
-Envelope-to: git@xilinx.com,
- herbert@gondor.apana.org.au,
- davem@davemloft.net,
- linux-crypto@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- robh+dt@kernel.org,
- devicetree@vger.kernel.org
-Received: from [10.140.6.15] (port=60078 helo=xhdharshah40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <harsha.harsha@xilinx.com>)
-        id 1nBZTZ-0001bj-2M; Sun, 23 Jan 2022 01:47:57 -0800
-From:   Harsha <harsha.harsha@xilinx.com>
-To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <michals@xilinx.com>, <linux-arm-kernel@lists.infradead.org>,
-        <robh+dt@kernel.org>, <devicetree@vger.kernel.org>
-CC:     <saratcha@xilinx.com>, <harshj@xilinx.com>, <git@xilinx.com>,
-        Harsha <harsha.harsha@xilinx.com>
-Subject: [PATCH 4/4] MAINTAINERS: Add maintainer for Xilinx ZynqMP SHA3 driver
-Date:   Sun, 23 Jan 2022 15:17:07 +0530
-Message-ID: <1642931227-20706-5-git-send-email-harsha.harsha@xilinx.com>
-X-Mailer: git-send-email 1.8.2.1
-In-Reply-To: <1642931227-20706-1-git-send-email-harsha.harsha@xilinx.com>
-References: <1642931227-20706-1-git-send-email-harsha.harsha@xilinx.com>
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=MscxeP9jVOV6TslkZGhXdbAV5hOvpg7KQ67+Vz0+QMo=;
+        b=R6IYRhf0hhPKze9peIoUZLw1K5oGHzKO0XK5dktPb9Edp7WyCHIZVA8Pj/gZP2BYnE
+         PaQWAkWgRr+LvIWiNyJHbMIPm2XrOWOGU9evksNgcIf4I4sWw2/VymHjfqAIMnQKk7Or
+         UIBmj2/8Makd8PD9hB2hEugZZq9VX0j5UJOA30nGnNz68xj/Ta1ChN/C/gPqn9ekZJZi
+         3GVQejNmVhigcPbqhIw24gk4/Gbw7E6N1LdSoai+OuPmFd3e+uMHhA+0l4bM20k2PBeE
+         ZSSHq8lQFdWvbjuH9geIT/QzNIcCgtaRWTNGKytKxyVLRd0+Eu5n1ymXbJnW/ZinYhaX
+         DSNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=MscxeP9jVOV6TslkZGhXdbAV5hOvpg7KQ67+Vz0+QMo=;
+        b=FnN457AKo5c6NVmrazUh6N5NQQNKVrGI7CgdJDY8Seqc36MjdYfrMKCxGZYsjyG5oH
+         ZTJhdj5GRSVwC+Jz3DSiK8Amaup44GweOSth0TB8VwM5cCZijgTJQd1C/hGYED0mQQTg
+         oPDFlucCJeXCL54uCjRMMXJ/WT+lKOq4wFDDSGYGAIcGkQeqO0yxiI/SW129v/+oNuYN
+         AeOzTH2OqWX+UN/elCte2XWUKhHOo9R19bbbVV+jCd2pwawTCVF0mT1Es4w0IhXtfFh1
+         I6WFKFEjP44wrYGdP6ABI+U0MeFHMcy8BcJbDlsg7hcM7YXJZ5HzSLU9wsuyASlVRlGL
+         qF9g==
+X-Gm-Message-State: AOAM5326h0hNsaY+8ZJ5ELxOrMuroDwQdJYH6VftLhfXjJBbF3OwLpog
+        nkvsdUt4fUD+gjkxtqwzgbs/W5vPA/8=
+X-Google-Smtp-Source: ABdhPJzrK8EKCJCB7oh1K3hVnKM531t5nD+Uzy+9rYUgghlEjDduIY+IofPig/s0HXE9Autioj3Y9A==
+X-Received: by 2002:aa7:91d1:0:b0:4c0:27ac:4d6b with SMTP id z17-20020aa791d1000000b004c027ac4d6bmr9729667pfa.85.1642932291577;
+        Sun, 23 Jan 2022 02:04:51 -0800 (PST)
+Received: from haolee.io ([2600:3c01::f03c:91ff:fe02:b162])
+        by smtp.gmail.com with ESMTPSA id b23sm9821038pjz.34.2022.01.23.02.04.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Jan 2022 02:04:50 -0800 (PST)
+Date:   Sun, 23 Jan 2022 10:04:48 +0000
+From:   Hao Lee <haolee.swjtu@gmail.com>
+To:     viro@zeniv.linux.org.uk
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        haolee.swjtu@gmail.com
+Subject: [PATCH] fs/namespace: eliminate unnecessary mount counting
+Message-ID: <20220123100448.GA1468@haolee.io>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 36784839-fdb9-4eb8-ac4d-08d9de557c67
-X-MS-TrafficTypeDiagnostic: BY5PR02MB6370:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR02MB6370DC9174ED721322E2BF71DE5D9@BY5PR02MB6370.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:2657;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RQqWgy1yfltnZrVc53TTlbYycDyd7geYzm6keG3BzrtZpFqL2JmC3ML4KGOruoCbZ+3Ka83eND/LIKb3ma6v0jN3ulpHoj3Vtk2Xu1Ulko1z3WwJPyXxPzVmwEt03snS0BpkMiNCmtJ9BOsXoDiI9igv6a4jOGuaO77JbZwy87F73pZkq8CVAb9g64h65JyE54TMxqt3fMHY8F9ibFgCiD1fD5znjZrDX5Dk8xnk3hHF0E7zAmcB1luzz7zAc4jm1U99FhK3NxTP7n/VtS5bxtRubw7mO36RqfID/C9sQt/8if8IOtIyv5q9e8lIGeekMXE5F8CPc60SjgfhlD26oJOYyuQNt2kY3jspXPMWD7sSzZ7UV/zCmLcxf6KXCAkUB18Zhdp/fkYE6ZNcjBqoiHUJov/F6ZAaVI+NsCI20DZmrl1HUchYmDitb0KAumADX4ECqHmG/iT6SH3+10wAY5wr/S4neNvMXDtjatXFt1EU1k3YCC4ajGjw7Zd3bF9jbGxV8MFVYS8Z50XHon+fUnkqoUr/oktnqsuUtrAhFRP4mZ7mTAFtbUHJR+bnELKaOfpkqmB5zx2SdNXUKTYri7MGiS2lMsS3WveqKYPe2ILaeVLfswR9i6fQWxUsfbqWbMrVYoTIOBH+TOn7ElCzbHpV7BvL5+ppuL7p92gP7cclo3QpbpFtsvw5TOpwIE9wkW/CRyiZrHZ+J8MgZ5/pUQB924iEytyKZWggvHfMkcFkuYqsKKtqhIat473GrlTEQ1P8dgME1hWk+v4VEPOcHHwtTqLxK/2sP4Z5ZJuNjh9gvj/51tWfAiRBFZDC3lpC
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(7636003)(4744005)(356005)(966005)(2616005)(8676002)(426003)(8936002)(6666004)(186003)(316002)(336012)(36756003)(26005)(47076005)(9786002)(110136005)(54906003)(107886003)(7696005)(36860700001)(82310400004)(70206006)(5660300002)(2906002)(70586007)(4326008)(508600001)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2022 09:48:18.8985
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 36784839-fdb9-4eb8-ac4d-08d9de557c67
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT049.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR02MB6370
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds an entry for ZynqMP SHA3 driver in the list of
-Maintainers.
+propagate_one() counts the number of propagated mounts in each
+propagation. We can count them in advance and use the number in
+subsequent propagation.
 
-Signed-off-by: Harsha <harsha.harsha@xilinx.com>
+Signed-off-by: Hao Lee <haolee.swjtu@gmail.com>
 ---
- MAINTAINERS | 5 +++++
- 1 file changed, 5 insertions(+)
+ fs/namespace.c | 27 +++++++++++++++++++--------
+ fs/pnode.c     | 12 +++++++-----
+ fs/pnode.h     |  5 +++--
+ 3 files changed, 29 insertions(+), 15 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4fb3a88..cf2da60 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20931,6 +20931,11 @@ T:	git https://github.com/Xilinx/linux-xlnx.git
- F:	Documentation/devicetree/bindings/phy/xlnx,zynqmp-psgtr.yaml
- F:	drivers/phy/xilinx/phy-zynqmp.c
+diff --git a/fs/namespace.c b/fs/namespace.c
+index c6feb92209a6..5d05392854ca 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -2082,18 +2082,15 @@ static int invent_group_ids(struct mount *mnt, bool recurse)
+ 	return 0;
+ }
  
-+XILINX ZYNQMP SHA3 DRIVER
-+M:	Harsha <harsha.harsha@xilinx.com>
-+S:	Maintained
-+F:	drivers/crypto/xilinx/zynqmp-sha.c
+-int count_mounts(struct mnt_namespace *ns, struct mount *mnt)
++int update_pending_mounts(struct mnt_namespace *ns, unsigned int mounts)
+ {
+ 	unsigned int max = READ_ONCE(sysctl_mount_max);
+-	unsigned int mounts = 0, old, pending, sum;
+-	struct mount *p;
+-
+-	for (p = mnt; p; p = next_mnt(p, mnt))
+-		mounts++;
++	unsigned int old, pending, sum;
+ 
+ 	old = ns->mounts;
+ 	pending = ns->pending_mounts;
+ 	sum = old + pending;
 +
- XILLYBUS DRIVER
- M:	Eli Billauer <eli.billauer@gmail.com>
- L:	linux-kernel@vger.kernel.org
+ 	if ((old > sum) ||
+ 	    (pending > sum) ||
+ 	    (max < sum) ||
+@@ -2104,6 +2101,17 @@ int count_mounts(struct mnt_namespace *ns, struct mount *mnt)
+ 	return 0;
+ }
+ 
++unsigned int count_mounts(struct mount *mnt)
++{
++	unsigned int mounts = 0;
++	struct mount *p;
++
++	for (p = mnt; p; p = next_mnt(p, mnt))
++		mounts++;
++
++	return mounts;
++}
++
+ /*
+  *  @source_mnt : mount tree to be attached
+  *  @nd         : place the mount tree @source_mnt is attached
+@@ -2178,6 +2186,7 @@ static int attach_recursive_mnt(struct mount *source_mnt,
+ 	struct mountpoint *smp;
+ 	struct mount *child, *p;
+ 	struct hlist_node *n;
++	unsigned int nr_mounts;
+ 	int err;
+ 
+ 	/* Preallocate a mountpoint in case the new mounts need
+@@ -2187,9 +2196,10 @@ static int attach_recursive_mnt(struct mount *source_mnt,
+ 	if (IS_ERR(smp))
+ 		return PTR_ERR(smp);
+ 
++	nr_mounts = count_mounts(source_mnt);
+ 	/* Is there space to add these mounts to the mount namespace? */
+ 	if (!moving) {
+-		err = count_mounts(ns, source_mnt);
++		err = update_pending_mounts(ns, nr_mounts);
+ 		if (err)
+ 			goto out;
+ 	}
+@@ -2198,7 +2208,8 @@ static int attach_recursive_mnt(struct mount *source_mnt,
+ 		err = invent_group_ids(source_mnt, true);
+ 		if (err)
+ 			goto out;
+-		err = propagate_mnt(dest_mnt, dest_mp, source_mnt, &tree_list);
++		err = propagate_mnt(dest_mnt, dest_mp, source_mnt, nr_mounts,
++				    &tree_list);
+ 		lock_mount_hash();
+ 		if (err)
+ 			goto out_cleanup_ids;
+diff --git a/fs/pnode.c b/fs/pnode.c
+index 1106137c747a..877de718fc35 100644
+--- a/fs/pnode.c
++++ b/fs/pnode.c
+@@ -222,7 +222,7 @@ static inline bool peers(struct mount *m1, struct mount *m2)
+ 	return m1->mnt_group_id == m2->mnt_group_id && m1->mnt_group_id;
+ }
+ 
+-static int propagate_one(struct mount *m)
++static int propagate_one(struct mount *m, unsigned int nr_mounts)
+ {
+ 	struct mount *child;
+ 	int type;
+@@ -269,7 +269,7 @@ static int propagate_one(struct mount *m)
+ 	last_dest = m;
+ 	last_source = child;
+ 	hlist_add_head(&child->mnt_hash, list);
+-	return count_mounts(m->mnt_ns, child);
++	return update_pending_mounts(m->mnt_ns, nr_mounts);
+ }
+ 
+ /*
+@@ -284,9 +284,11 @@ static int propagate_one(struct mount *m)
+  * @dest_dentry: destination dentry.
+  * @source_mnt: source mount.
+  * @tree_list : list of heads of trees to be attached.
++ * @nr_mounts : the number of mounts in source_mnt
+  */
+ int propagate_mnt(struct mount *dest_mnt, struct mountpoint *dest_mp,
+-		    struct mount *source_mnt, struct hlist_head *tree_list)
++		    struct mount *source_mnt, unsigned int nr_mounts,
++		    struct hlist_head *tree_list)
+ {
+ 	struct mount *m, *n;
+ 	int ret = 0;
+@@ -305,7 +307,7 @@ int propagate_mnt(struct mount *dest_mnt, struct mountpoint *dest_mp,
+ 
+ 	/* all peers of dest_mnt, except dest_mnt itself */
+ 	for (n = next_peer(dest_mnt); n != dest_mnt; n = next_peer(n)) {
+-		ret = propagate_one(n);
++		ret = propagate_one(n, nr_mounts);
+ 		if (ret)
+ 			goto out;
+ 	}
+@@ -316,7 +318,7 @@ int propagate_mnt(struct mount *dest_mnt, struct mountpoint *dest_mp,
+ 		/* everything in that slave group */
+ 		n = m;
+ 		do {
+-			ret = propagate_one(n);
++			ret = propagate_one(n, nr_mounts);
+ 			if (ret)
+ 				goto out;
+ 			n = next_peer(n);
+diff --git a/fs/pnode.h b/fs/pnode.h
+index 988f1aa9b02a..005355c0dd49 100644
+--- a/fs/pnode.h
++++ b/fs/pnode.h
+@@ -38,7 +38,7 @@ static inline void set_mnt_shared(struct mount *mnt)
+ 
+ void change_mnt_propagation(struct mount *, int);
+ int propagate_mnt(struct mount *, struct mountpoint *, struct mount *,
+-		struct hlist_head *);
++		  unsigned int, struct hlist_head *);
+ int propagate_umount(struct list_head *);
+ int propagate_mount_busy(struct mount *, int);
+ void propagate_mount_unlock(struct mount *);
+@@ -52,5 +52,6 @@ void mnt_change_mountpoint(struct mount *parent, struct mountpoint *mp,
+ struct mount *copy_tree(struct mount *, struct dentry *, int);
+ bool is_path_reachable(struct mount *, struct dentry *,
+ 			 const struct path *root);
+-int count_mounts(struct mnt_namespace *ns, struct mount *mnt);
++int update_pending_mounts(struct mnt_namespace *ns, unsigned int mounts);
++unsigned int count_mounts(struct mount *mnt);
+ #endif /* _LINUX_PNODE_H */
 -- 
-1.8.2.1
+2.34.1
 

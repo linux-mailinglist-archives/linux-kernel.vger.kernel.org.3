@@ -2,115 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A3D4971D2
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 14:58:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0D64971D8
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 15:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236475AbiAWN6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 08:58:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233067AbiAWN6j (ORCPT
+        id S236670AbiAWOHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 09:07:52 -0500
+Received: from giacobini.uberspace.de ([185.26.156.129]:60826 "EHLO
+        giacobini.uberspace.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236662AbiAWOHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 08:58:39 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB843C06173B;
-        Sun, 23 Jan 2022 05:58:38 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id l5so34585607edv.3;
-        Sun, 23 Jan 2022 05:58:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=95TazuZQsQAb+6+Cyn0Q0lj2p+IE58JHP/Lpdw7ffK8=;
-        b=efMzwR2tClrVr3brfSTRr+G73je8UTrP3vx0tDzw+VCmWGzQIRkBbd7F024hmuY7BG
-         0IVBQA0tjZRWFMEmlqOVdo/bMQ1vtBBrmxawXfe4iMaAHUSVMpp51/U+SVXzi1kHwKh2
-         URBDzGT70YIT29f5ca2+b8Zeuw5/QJQbeUhXUlAMnW/Jm3rvV3B70k+xkt1M5WrBDKMd
-         IHjxQ5OTD3YZv1sRmWYcMBBS2hFsvI7jMwZh5U7gAmhydnNkbBbw0dgmK+Tzk45GHFJt
-         5u7bz5g+Cy/lU16UogB6vWiXhFtlRh6bpx+XjO4JGawmbNIMRSWnNk2wSMEMpuUpQH6p
-         697g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=95TazuZQsQAb+6+Cyn0Q0lj2p+IE58JHP/Lpdw7ffK8=;
-        b=6Dd/Xiw+jSeDCwX5UkPpwq7CRFwKPrhooySRfoSgMHOHTm2mntDh+ozdKLjtJ5KPBY
-         t33WEoNFcXGPkV7wHSLc+NpLklk06tj+gjWSwOv5kkb4RtgMmGzduWw3ynrPPWJp2c+b
-         Df5/+fZ9xcIjeHC6xDxPO37YaQCsxQ5fvtHzALrt103B8FhK5EWtmJdaWTt4j83q0JYk
-         vT486dV5fvNLfVMfs1EQsgxFLH15gNoT0/WJ8r0FPR6qeHCNyZ+7Vivtj5K2rZtiIKuy
-         A2qqjhxZkm4wQ8aHrNoKxLjJTRt2ChkHRm0ROLLjlvTB9JowkEnMkkQ2f2FlmNbKl3ww
-         x4Vw==
-X-Gm-Message-State: AOAM532spLTiiDX8tIBr33uokc1l8sdNNClp/iUx8nd7TdnU+IZsFt/h
-        vm5daYzAPKk1UGoMqzBnta/WHs9HWg==
-X-Google-Smtp-Source: ABdhPJwTjIp5EcAnrbSKUGrz0qUthK4X5rBWJUKfcOoMToyw8eevp0ZvscaxYOxpce3qbLWRYnI7nw==
-X-Received: by 2002:a05:6402:50d3:: with SMTP id h19mr11670245edb.346.1642946317280;
-        Sun, 23 Jan 2022 05:58:37 -0800 (PST)
-Received: from localhost.localdomain ([46.53.248.28])
-        by smtp.gmail.com with ESMTPSA id ch27sm960587edb.74.2022.01.23.05.58.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 05:58:36 -0800 (PST)
-Date:   Sun, 23 Jan 2022 16:58:35 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     christian.brauner@ubuntu.com, keescook@chromium.org,
-        jamorris@linux.microsoft.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hao Lee <haolee.swjtu@gmail.com>
-Subject: [PATCH v2] proc: alloc PATH_MAX bytes for /proc/${pid}/fd/ symlinks
-Message-ID: <Ye1fCxyZZ0I5lgOL@localhost.localdomain>
-References: <20220123100837.GA1491@haolee.io>
- <Ye1eZ5rl2E/jy8Tk@localhost.localdomain>
+        Sun, 23 Jan 2022 09:07:51 -0500
+Received: (qmail 32133 invoked by uid 990); 23 Jan 2022 14:07:49 -0000
+Authentication-Results: giacobini.uberspace.de;
+        auth=pass (plain)
+From:   Soenke Huster <soenke.huster@eknoes.de>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Soenke Huster <soenke.huster@eknoes.de>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH v2] Bluetooth: hci_event: Ignore multiple conn complete events
+Date:   Sun, 23 Jan 2022 15:06:24 +0100
+Message-Id: <20220123140624.30005-1-soenke.huster@eknoes.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Ye1eZ5rl2E/jy8Tk@localhost.localdomain>
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Bar: /
+X-Rspamd-Report: BAYES_HAM(-3) R_MISSING_CHARSET(0.5) MIME_GOOD(-0.1) MID_CONTAINS_FROM(1) SUSPICIOUS_RECIPS(1.5)
+X-Rspamd-Score: -0.1
+Received: from unknown (HELO unkown) (::1)
+        by giacobini.uberspace.de (Haraka/2.8.28) with ESMTPSA; Sun, 23 Jan 2022 15:07:49 +0100
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hao Lee <haolee.swjtu@gmail.com>
+When one of the three connection complete events is received multiple
+times for the same handle, the device is registered multiple times which
+leads to memory corruptions. Therefore, consequent events for a single
+connection are ignored.
 
-It's not a standard approach that use __get_free_page() to alloc path
-buffer directly. We'd better use kmalloc and PATH_MAX.
+The conn->state can hold different values, therefore HCI_CONN_HANDLE_UNSET
+is introduced to identify new connections. To make sure the events do not
+contain this or another invalid handle HCI_CONN_HANDLE_MAX and checks
+are introduced.
 
-	PAGE_SIZE is different on different archs. An unlinked file
-	with very long canonical pathname will readlink differently
-	because "(deleted)" eats into a buffer.	--adobriyan
-
-Signed-off-by: Hao Lee <haolee.swjtu@gmail.com>
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+Buglink: https://bugzilla.kernel.org/show_bug.cgi?id=215497
+Signed-off-by: Soenke Huster <soenke.huster@eknoes.de>
 ---
+v2: 
+- Introduce HCI_CONN_HANDLE_UNSET for new connections
+- Introduce HCI_CONN_HANDLE_MAX to check for valid handles
 
- fs/proc/base.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+While fuzzing I found several UAFs or null pointer dereferences
+due to multiple connection complete events. They occur due to
+multiple calls to device_register in one of the three connection
+complete events. See the bugreport for a more in-depth description.
 
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -1764,25 +1764,25 @@ static const char *proc_pid_get_link(struct dentry *dentry,
+ include/net/bluetooth/hci_core.h |  3 ++
+ net/bluetooth/hci_conn.c         |  1 +
+ net/bluetooth/hci_event.c        | 63 ++++++++++++++++++++++++--------
+ 3 files changed, 52 insertions(+), 15 deletions(-)
+
+diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/hci_core.h
+index 21eadb113a31..f5caff1ddb29 100644
+--- a/include/net/bluetooth/hci_core.h
++++ b/include/net/bluetooth/hci_core.h
+@@ -303,6 +303,9 @@ struct adv_monitor {
  
- static int do_proc_readlink(struct path *path, char __user *buffer, int buflen)
- {
--	char *tmp = (char *)__get_free_page(GFP_KERNEL);
-+	char *tmp = (char *)kmalloc(PATH_MAX, GFP_KERNEL);
- 	char *pathname;
- 	int len;
+ #define HCI_MAX_SHORT_NAME_LENGTH	10
  
- 	if (!tmp)
- 		return -ENOMEM;
++#define HCI_CONN_HANDLE_UNSET		0xffff
++#define HCI_CONN_HANDLE_MAX		0x0eff
++
+ /* Min encryption key size to match with SMP */
+ #define HCI_MIN_ENC_KEY_SIZE		7
  
--	pathname = d_path(path, tmp, PAGE_SIZE);
-+	pathname = d_path(path, tmp, PATH_MAX);
- 	len = PTR_ERR(pathname);
- 	if (IS_ERR(pathname))
- 		goto out;
--	len = tmp + PAGE_SIZE - 1 - pathname;
-+	len = tmp + PATH_MAX - 1 - pathname;
+diff --git a/net/bluetooth/hci_conn.c b/net/bluetooth/hci_conn.c
+index 04ebe901e86f..d10651108033 100644
+--- a/net/bluetooth/hci_conn.c
++++ b/net/bluetooth/hci_conn.c
+@@ -689,6 +689,7 @@ struct hci_conn *hci_conn_add(struct hci_dev *hdev, int type, bdaddr_t *dst,
  
- 	if (len > buflen)
- 		len = buflen;
- 	if (copy_to_user(buffer, pathname, len))
- 		len = -EFAULT;
-  out:
--	free_page((unsigned long)tmp);
-+	kfree(tmp);
- 	return len;
- }
+ 	bacpy(&conn->dst, dst);
+ 	bacpy(&conn->src, &hdev->bdaddr);
++	conn->handle = HCI_CONN_HANDLE_UNSET;
+ 	conn->hdev  = hdev;
+ 	conn->type  = type;
+ 	conn->role  = role;
+diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+index 681c623aa380..664ccf1d8d93 100644
+--- a/net/bluetooth/hci_event.c
++++ b/net/bluetooth/hci_event.c
+@@ -3068,6 +3068,11 @@ static void hci_conn_complete_evt(struct hci_dev *hdev, void *data,
+ 	struct hci_ev_conn_complete *ev = data;
+ 	struct hci_conn *conn;
  
++	if (__le16_to_cpu(ev->handle) > HCI_CONN_HANDLE_MAX) {
++		bt_dev_err(hdev, "Ignoring HCI_Connection_Complete for invalid handle");
++		return;
++	}
++
+ 	bt_dev_dbg(hdev, "status 0x%2.2x", ev->status);
+ 
+ 	hci_dev_lock(hdev);
+@@ -3106,6 +3111,17 @@ static void hci_conn_complete_evt(struct hci_dev *hdev, void *data,
+ 		}
+ 	}
+ 
++	/* The HCI_Connection_Complete event is only sent once per connection.
++	 * Processing it more than once per connection can corrupt kernel memory.
++	 *
++	 * As the connection handle is set here for the first time, it indicates
++	 * whether the connection is already set up.
++	 */
++	if (conn->handle != HCI_CONN_HANDLE_UNSET) {
++		bt_dev_err(hdev, "Ignoring HCI_Connection_Complete for existing connection");
++		goto unlock;
++	}
++
+ 	if (!ev->status) {
+ 		conn->handle = __le16_to_cpu(ev->handle);
+ 
+@@ -4674,6 +4690,11 @@ static void hci_sync_conn_complete_evt(struct hci_dev *hdev, void *data,
+ 		return;
+ 	}
+ 
++	if (__le16_to_cpu(ev->handle) > HCI_CONN_HANDLE_MAX) {
++		bt_dev_err(hdev, "Ignoring HCI_Sync_Conn_Complete for invalid handle");
++		return;
++	}
++
+ 	bt_dev_dbg(hdev, "status 0x%2.2x", ev->status);
+ 
+ 	hci_dev_lock(hdev);
+@@ -4697,23 +4718,19 @@ static void hci_sync_conn_complete_evt(struct hci_dev *hdev, void *data,
+ 			goto unlock;
+ 	}
+ 
++	/* The HCI_Synchronous_Connection_Complete event is only sent once per connection.
++	 * Processing it more than once per connection can corrupt kernel memory.
++	 *
++	 * As the connection handle is set here for the first time, it indicates
++	 * whether the connection is already set up.
++	 */
++	if (conn->handle != HCI_CONN_HANDLE_UNSET) {
++		bt_dev_err(hdev, "Ignoring HCI_Sync_Conn_Complete event for existing connection");
++		goto unlock;
++	}
++
+ 	switch (ev->status) {
+ 	case 0x00:
+-		/* The synchronous connection complete event should only be
+-		 * sent once per new connection. Receiving a successful
+-		 * complete event when the connection status is already
+-		 * BT_CONNECTED means that the device is misbehaving and sent
+-		 * multiple complete event packets for the same new connection.
+-		 *
+-		 * Registering the device more than once can corrupt kernel
+-		 * memory, hence upon detecting this invalid event, we report
+-		 * an error and ignore the packet.
+-		 */
+-		if (conn->state == BT_CONNECTED) {
+-			bt_dev_err(hdev, "Ignoring connect complete event for existing connection");
+-			goto unlock;
+-		}
+-
+ 		conn->handle = __le16_to_cpu(ev->handle);
+ 		conn->state  = BT_CONNECTED;
+ 		conn->type   = ev->link_type;
+@@ -5509,6 +5526,11 @@ static void le_conn_complete_evt(struct hci_dev *hdev, u8 status,
+ 	struct smp_irk *irk;
+ 	u8 addr_type;
+ 
++	if (handle > HCI_CONN_HANDLE_MAX) {
++		bt_dev_err(hdev, "Ignoring HCI_LE_Connection_Complete for invalid handle");
++		return;
++	}
++
+ 	hci_dev_lock(hdev);
+ 
+ 	/* All controllers implicitly stop advertising in the event of a
+@@ -5550,6 +5572,17 @@ static void le_conn_complete_evt(struct hci_dev *hdev, u8 status,
+ 		cancel_delayed_work(&conn->le_conn_timeout);
+ 	}
+ 
++	/* The HCI_LE_Connection_Complete event is only sent once per connection.
++	 * Processing it more than once per connection can corrupt kernel memory.
++	 *
++	 * As the connection handle is set here for the first time, it indicates
++	 * whether the connection is already set up.
++	 */
++	if (conn->handle != HCI_CONN_HANDLE_UNSET) {
++		bt_dev_err(hdev, "Ignoring HCI_Connection_Complete for existing connection");
++		goto unlock;
++	}
++
+ 	le_conn_update_addr(conn, bdaddr, bdaddr_type, local_rpa);
+ 
+ 	/* Lookup the identity address from the stored connection
+-- 
+2.34.1
+

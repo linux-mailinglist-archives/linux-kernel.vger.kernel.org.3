@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 188D3497467
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 19:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E16D49746B
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 19:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239569AbiAWSkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 13:40:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53360 "EHLO
+        id S239585AbiAWSkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 13:40:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239584AbiAWSjz (ORCPT
+        with ESMTP id S239588AbiAWSj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 13:39:55 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58292C06173B;
-        Sun, 23 Jan 2022 10:39:55 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id l16so14124384pjl.4;
-        Sun, 23 Jan 2022 10:39:55 -0800 (PST)
+        Sun, 23 Jan 2022 13:39:58 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47680C06173D;
+        Sun, 23 Jan 2022 10:39:58 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id c9so13468678plg.11;
+        Sun, 23 Jan 2022 10:39:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=JVlgIOfm3MirYG6wT3KmStCSBcBsfAc0KKMNuO1EDBQ=;
-        b=IRJeAZll5KWb5nZplfSeU6guRB4GiFVlmwRWN5THO4+nOHnkye//P3+ooMx1qU0Idu
-         fFZVRqj/QyGAVXmatp5tgfaYpJXYAtpnjBBxRWu5Wvkmnwsx3g8Tjgh9oQwBR2wPW++P
-         wLdOy3uqaoPu+EyqNkH5kZ+fUz4ohWrcIVJxTC3MCifIpKCWGz1qFS6FNHxpXxFe0PoC
-         AT3uXJOngA4y0EhtxI53KfYaPrJAqJrWOBT1HOtR03NOY7P0vt4kZgHhC2coLJKo7Us3
-         W80ZyTrpVomG2skPaPmorlVBJwVUANQ70fcVX6xsG5vtQhhZlfbAeqKRjnknAq4cVDJ8
-         6T7Q==
+        bh=6Y67UpGJgCeGI3YjkkCV3h1RWBz0EaSLMoBqw+YNaKM=;
+        b=fj2Be3j4ZXRuOSxn0ZBVfLiLCyC1T7HgxLBl1dbJ+1GQMBP1uFWdWTNbPb+uWf/xrO
+         fEq/nS9cpgMQq4Z/EeGzuaSIb6mOIrZ7LgCI/XoIPnvJf3RsIJv7y1hkMvE+QnCq9zKA
+         JMV8tbR5pot6iHL3EBKW2XXAqJM5+ApGwCvEnj7iWYw02WTqJjO0ci1TnCiThd9Xg445
+         pcSMonvfQBFpKb5hWyBaJtMySDLtJzDJSIYoXZXdot1LheibM6eHhYHQWrtYShBnp/K+
+         iwi8TcO5n5tk0ketawzGGBBDDj8oY+p4hunGEj1VW3/rokkCis1vkQfda195htV4ArRP
+         EnQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JVlgIOfm3MirYG6wT3KmStCSBcBsfAc0KKMNuO1EDBQ=;
-        b=LY27OMni/Ch9QPMSY9/fawSBd29VXXhViJjf7V5KOlyuU5a5Z0hVdoHGUVlkjOnoiJ
-         6E2TaawilckyX6XMpXTXUO9qcdgNGpgf/gLelj7ekTSZlP3e3wdCmwilKSMt/PVRwAwI
-         H945s3KkQKZDuNSy2eid0mXDhohxrB5gIMHhs21TW9jLC0zQ1rghGes0NG3p0rlbF45I
-         zOQ7DeKqs5JhhUIkEWAXmXcazyU0syqxqAsYtOirvlIUVxFhKSTY1TFIZw15ETsXk+4+
-         vqKMOV3v24tbaKbtm5euFuOs9DTbo5O5NgMog3NUWIHZ1F0g6GVQe7NxmHxRn/P/IQHE
-         QXCw==
-X-Gm-Message-State: AOAM532vCQX9D/SVJ6A5fFxxob4yc7SlO/E4k+uvqZDn0pepd9vdvjN3
-        HaY7Gs9xANKkLwitvctgqkU=
-X-Google-Smtp-Source: ABdhPJxoxLg5zqGpwJYdAVGDViNYQ/g58elCQIgqh6DVg5oaESBFyRvjiA+IS22GevMehG0R2Obh9g==
-X-Received: by 2002:a17:90b:1e05:: with SMTP id pg5mr9787026pjb.188.1642963194829;
-        Sun, 23 Jan 2022 10:39:54 -0800 (PST)
+        bh=6Y67UpGJgCeGI3YjkkCV3h1RWBz0EaSLMoBqw+YNaKM=;
+        b=i4JhkczdiVAZxbJ8/hC6I8OSUtGal6kftEu+QieyBk9lIMir0JiKqkGmS47QamLxjL
+         d1PTX72aJDrGjfcI2t7eqlliwGSEZP5ZBKdTYv8VGwOz4YJAg1fAe6kG+E3K2BjUhl34
+         HvuBuo/++8dU60Mlc8RxpN3f8AIJV7kyNL/NguW8+Sfx/zBkxDAgB6Qz1S+t+b7XcArI
+         PkgYC629xqLOPEuJEUsw2+m7RMIO5lYciiX9GZN0mvvSmc5CVoK1Qx48/A7upEeQ/Sfp
+         edzkxutQsYlzu0wezb1PmK7Iv/dKhrhhiV8MwhQvHRwxtp63JVrrp1Qp+En5wJk3mM5x
+         LQqA==
+X-Gm-Message-State: AOAM532JgeIgVfGsW9BTN3PPcCuIhFrcrilQkQquuTcuz/r05gfQwh+h
+        oE7qPyIX/Vj0h3ZHoCzHaIg=
+X-Google-Smtp-Source: ABdhPJxGVSXvOUZjhokqqNWOPu2slOcHKradSt7jDO2Wwih5XKmhc8jCE0q6lk4Znh/tsr/lxxzGbw==
+X-Received: by 2002:a17:90b:1b0e:: with SMTP id nu14mr9710263pjb.39.1642963197744;
+        Sun, 23 Jan 2022 10:39:57 -0800 (PST)
 Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id h9sm2038248pfi.54.2022.01.23.10.39.54
+        by smtp.gmail.com with ESMTPSA id d8sm9389575pjz.32.2022.01.23.10.39.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 10:39:54 -0800 (PST)
+        Sun, 23 Jan 2022 10:39:57 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -63,13 +63,17 @@ To:     Yury Norov <yury.norov@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Alexey Klimov <aklimov@redhat.com>,
         linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S . Miller " <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org
-Subject: [PATCH 02/54] net/ethernet: don't use bitmap_weight() in bcm_sysport_rule_set()
-Date:   Sun, 23 Jan 2022 10:38:33 -0800
-Message-Id: <20220123183925.1052919-3-yury.norov@gmail.com>
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH 03/54] thermal/intel: don't use bitmap_weight() in end_power_clamp()
+Date:   Sun, 23 Jan 2022 10:38:34 -0800
+Message-Id: <20220123183925.1052919-4-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220123183925.1052919-1-yury.norov@gmail.com>
 References: <20220123183925.1052919-1-yury.norov@gmail.com>
@@ -84,28 +88,29 @@ without it.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- drivers/net/ethernet/broadcom/bcmsysport.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/thermal/intel/intel_powerclamp.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/bcmsysport.c b/drivers/net/ethernet/broadcom/bcmsysport.c
-index 60dde29974bf..5284a5c961db 100644
---- a/drivers/net/ethernet/broadcom/bcmsysport.c
-+++ b/drivers/net/ethernet/broadcom/bcmsysport.c
-@@ -2180,13 +2180,9 @@ static int bcm_sysport_rule_set(struct bcm_sysport_priv *priv,
- 	if (nfc->fs.ring_cookie != RX_CLS_FLOW_WAKE)
- 		return -EOPNOTSUPP;
+diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+index 14256421d98c..c841ab37e7c6 100644
+--- a/drivers/thermal/intel/intel_powerclamp.c
++++ b/drivers/thermal/intel/intel_powerclamp.c
+@@ -556,12 +556,9 @@ static void end_power_clamp(void)
+ 	 * stop faster.
+ 	 */
+ 	clamping = false;
+-	if (bitmap_weight(cpu_clamping_mask, num_possible_cpus())) {
+-		for_each_set_bit(i, cpu_clamping_mask, num_possible_cpus()) {
+-			pr_debug("clamping worker for cpu %d alive, destroy\n",
+-				 i);
+-			stop_power_clamp_worker(i);
+-		}
++	for_each_set_bit(i, cpu_clamping_mask, num_possible_cpus()) {
++		pr_debug("clamping worker for cpu %d alive, destroy\n", i);
++		stop_power_clamp_worker(i);
+ 	}
+ }
  
--	/* All filters are already in use, we cannot match more rules */
--	if (bitmap_weight(priv->filters, RXCHK_BRCM_TAG_MAX) ==
--	    RXCHK_BRCM_TAG_MAX)
--		return -ENOSPC;
--
- 	index = find_first_zero_bit(priv->filters, RXCHK_BRCM_TAG_MAX);
- 	if (index >= RXCHK_BRCM_TAG_MAX)
-+		/* All filters are already in use, we cannot match more rules */
- 		return -ENOSPC;
- 
- 	/* Location is the classification ID, and index is the position
 -- 
 2.30.2
 

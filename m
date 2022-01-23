@@ -2,160 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D04B49717C
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 13:33:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C85B497183
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 13:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236319AbiAWMdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 07:33:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
+        id S236342AbiAWMmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 07:42:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbiAWMdR (ORCPT
+        with ESMTP id S231757AbiAWMme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 07:33:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D2DC06173B;
-        Sun, 23 Jan 2022 04:33:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B99D60BAC;
-        Sun, 23 Jan 2022 12:33:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC3A4C340E2;
-        Sun, 23 Jan 2022 12:33:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642941195;
-        bh=CtWcco0BMqT7FNN3g0VMv1nc9Id3y/Xf4ZM5JVL28g4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cSyS6xxNfW6CcqKY0pTjpFPj3BT//A9qKbw3w0ieXHNpXm3VdwhFR4y2v8cXNlHo2
-         HcOqRmR8Lk4iciXNCGoeJTyQ8qDCrgrE3u8HuZopjkZfQ8Mrkq+48mJ93xg57wFbLk
-         MBX8dgCFLYcQlKVIXB3kthlnWuh1qoD+bge4qPxs=
-Date:   Sun, 23 Jan 2022 13:33:12 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Helge Deller <deller@gmx.de>
-Cc:     linux-usb@vger.kernel.org,
-        Linux Kernel Development <linux-kernel@vger.kernel.org>
-Subject: Re: kernel crash/disc errors when unbinding USB devices
-Message-ID: <Ye1LCATpTIRr/yZt@kroah.com>
-References: <7865ae26-2df0-892b-eb65-ce341eb9daea@gmx.de>
- <Ye03Cz7fHFJ3bPmO@kroah.com>
- <2ce0e792-ac09-a973-6751-6ed187b6fae6@gmx.de>
+        Sun, 23 Jan 2022 07:42:34 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28227C06173B
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 04:42:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=Sg6z/rpvEyqSVZeO10t9Tkl5j1ljD3oRNlpBgyr2ooI=; b=V+h+Yi7G1dzQhMn2Aisq3AMJAW
+        yBg4cj+ByfzfO18RzLTC4XL/SHYX8g39hC2ldvelreErZanbGljjZOqFhJrzad6ftbmnqUFw3iyex
+        9N392tvblJ0AUtnCMsDtnB1bIBcEyfDpO8VYrYvXzW+qXktfWAuZxMbvGljZFnabSAYinnvciiULf
+        VCNzuRnsbIQWUf/DPqqrsUgsUy6733JT0FDfO6nPLCBaF00y2a6LKhS+xaQSg1G0J/Bc7JSvI45oH
+        /hTQuDTneUS3Gdb97+ZmMkuuH6W2bmgTPMpzMTYQ5kQvYEAM2HsriP2/i8o7tNZFTlhN5g4zy4jEn
+        04h9LkLg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nBcCL-002wCU-8A; Sun, 23 Jan 2022 12:42:21 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B04BA98624A; Sun, 23 Jan 2022 13:42:19 +0100 (CET)
+Date:   Sun, 23 Jan 2022 13:42:19 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     x86@kernel.org
+Cc:     dwmw@amazon.co.uk, pbonzini@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] x86,kvm/xen: Remove superfluous .fixup usage
+Message-ID: <20220123124219.GH20638@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2ce0e792-ac09-a973-6751-6ed187b6fae6@gmx.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 23, 2022 at 12:59:21PM +0100, Helge Deller wrote:
-> On 1/23/22 12:07, Greg Kroah-Hartman wrote:
-> > On Sun, Jan 23, 2022 at 11:40:01AM +0100, Helge Deller wrote:
-> >> On all kernels 5.15.x and 5.16.x I noticed that resetting
-> >> the USB devices with this shell script:
-> >>
-> >>        for i in $(ls /sys/bus/pci/drivers/ahci/|grep :)
-> >>          do
-> >>          echo $i
-> >>          echo $i >/sys/bus/pci/drivers/ahci/unbind
-> >>          sleep 1
-> >>          echo $i >/sys/bus/pci/drivers/ahci/bind
-> >>         done
-> >
-> > That is dangerous to do, why do this?  All of your block devices might
-> > have disappeard.
-> >
-> >>         # reseting USB3 ports (if there none you'll get errors)
-> >>         for i in $(ls /sys/bus/pci/drivers/xhci_hcd/|grep :)
-> >>          do
-> >>          echo $i
-> >>          echo $i >/sys/bus/pci/drivers/xhci_hcd/unbind
-> >>          sleep 1
-> >>          echo $i >/sys/bus/pci/drivers/xhci_hcd/bind
-> >>         done
-> >
-> > Again, why do this at all?
-> 
-> I need to reset some of the USB devices after a suspend/resume cycle.
 
-The devices, or the host controllers?  They are different things.
+Commit 14243b387137 ("KVM: x86/xen: Add KVM_IRQ_ROUTING_XEN_EVTCHN and
+event channel delivery") adds superfluous .fixup usage after the whole
+.fixup section was removed in commit e5eefda5aa51 ("x86: Remove .fixup
+section").
 
-> The problem is, that some of the USB devices are
-> handed over into a running VirtualBox VM and after
-> the suspend/resume they need to be virtually plugged out/in
-> so that the running Windows VM will reconnect them.
+Fixes: 14243b387137 ("KVM: x86/xen: Add KVM_IRQ_ROUTING_XEN_EVTCHN and event channel delivery")
+Reported-by: Borislav Petkov <bp@alien8.de>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ arch/x86/kvm/xen.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-unbind/bind is a very harsh way of doing this.  but do it on the USB
-devics, not the host controllers.
-
-> If you search in the internet, you will find many places
-> where this unbind/bind process is mentioned, e.g.:
-> https://askubuntu.com/questions/645/how-do-you-reset-a-usb-device-from-the-command-line
-> This procedure did worked in the past.
-
-Never trust the internet :)
-
-But note, there is a usbreset program mentioned there, which is part of
-'usbutils' and should already be installed on your machine.  Why not
-just use that?
-
-> I think the main problem is, that it's somehow unexpected that
-> the SATA controllers are logically attached to the USB
-> controllers.
-
-Huh?  No they are not.
-
-'ahci' is a SATA controller.
-'xhci' is a USB controller.
-
-Two totally different things.
-
-> So, if you believe to unbind "just" the USB devices you
-> suddenly unbind SATA controllers too.
-
-Again, no, you are unbinding two different things here.  And a USB host
-controller is different than individual USB devices as well.
-
-> >> immediately leads to a non-functional system, because the discs
-> >> face I/O errors and will switch to read-only mode.
-> >
-> > Sure, the disks are gone, this is expected.
-> 
-> Ok.
-> 
-> >> Effectively I have to reboot the machine.
-> >
-> > I'm amazed it keeps working at all.
-> 
-> :-)
-> 
-> >> It's reproduceable for me on two completely different x86 machines with
-> >> different USB devices.
-> >
-> > What do you expect this to do instead?  You just disabled all block
-> > controllers in your system, followed by all USB controllers.  And then
-> > attempted to add them back, but given that the old devices still had
-> > userspace references on them, the devices will come back with different
-> > names and so you need to mount them again.
-> >
-> > So this looks like it is working as intended.  Just don't do this :)
-> 
-> Ok, sure, but I think it's unexpected that the SATA ports are listed
-> beneath the USB controllers, beside USB devices.
-
-Where are they listed like that?
-
-> If I run "lsusb", the SATA controllers don't show up either.
-
-That is because they are independant and have nothing to do with each
-otner.
-
-> They are listed when I run "lspci".
-> Shouldn't they maybe show up somewhere else, e.g.
-> /sys/bus/pci/drivers/sata/*
-
-The controllers are PCI drivers.  The block devices they create are
-scsi devices (through the ata system).  This has nothing to do with USB.
-
-confused,
-
-greg k-h
+diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+index 0e3f7d6e9fd7..bad57535fad0 100644
+--- a/arch/x86/kvm/xen.c
++++ b/arch/x86/kvm/xen.c
+@@ -316,10 +316,7 @@ int __kvm_xen_has_interrupt(struct kvm_vcpu *v)
+ 				     "\tnotq %0\n"
+ 				     "\t" LOCK_PREFIX "andq %0, %2\n"
+ 				     "2:\n"
+-				     "\t.section .fixup,\"ax\"\n"
+-				     "3:\tjmp\t2b\n"
+-				     "\t.previous\n"
+-				     _ASM_EXTABLE_UA(1b, 3b)
++				     _ASM_EXTABLE_UA(1b, 2b)
+ 				     : "=r" (evtchn_pending_sel),
+ 				       "+m" (vi->evtchn_pending_sel),
+ 				       "+m" (v->arch.xen.evtchn_pending_sel)
+@@ -335,10 +332,7 @@ int __kvm_xen_has_interrupt(struct kvm_vcpu *v)
+ 				     "\tnotl %0\n"
+ 				     "\t" LOCK_PREFIX "andl %0, %2\n"
+ 				     "2:\n"
+-				     "\t.section .fixup,\"ax\"\n"
+-				     "3:\tjmp\t2b\n"
+-				     "\t.previous\n"
+-				     _ASM_EXTABLE_UA(1b, 3b)
++				     _ASM_EXTABLE_UA(1b, 2b)
+ 				     : "=r" (evtchn_pending_sel32),
+ 				       "+m" (vi->evtchn_pending_sel),
+ 				       "+m" (v->arch.xen.evtchn_pending_sel)

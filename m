@@ -2,78 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C48D4974F0
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 20:19:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF68C497527
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 20:22:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239651AbiAWTTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 14:19:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34312 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233294AbiAWTTh (ORCPT
+        id S239943AbiAWTUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 14:20:46 -0500
+Received: from forward101o.mail.yandex.net ([37.140.190.181]:50542 "EHLO
+        forward101o.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239856AbiAWTUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 14:19:37 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666A3C06173B;
-        Sun, 23 Jan 2022 11:19:37 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8EC531EC0104;
-        Sun, 23 Jan 2022 20:19:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1642965570;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=2+PHYFr09/Oh98ANEvj4yzndpd/gXrp2phgkiFnwhAI=;
-        b=oi7xsbvCjsTm3P4q3KKiqS4XGVN4MlweB+FjapipuEY7ZEkWEBYokdu92Pq5KF68G8dKvY
-        u9TV5M+ATfk98gaS27QfKEdyLlMfTDOI/A+xVDTwCR8Pa93/n5MWmE7ugjxxCXoOFiIONT
-        R364vpbuIODRY3lb94LV2XLdbBExR+s=
-Date:   Sun, 23 Jan 2022 20:19:25 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] EDAC: use proper list of struct attribute for
- attributes
-Message-ID: <Ye2qPXZZEvK/b8jO@zn.tnic>
-References: <20220104112401.1067148-1-gregkh@linuxfoundation.org>
+        Sun, 23 Jan 2022 14:20:32 -0500
+Received: from forward102q.mail.yandex.net (forward102q.mail.yandex.net [IPv6:2a02:6b8:c0e:1ba:0:640:516:4e7d])
+        by forward101o.mail.yandex.net (Yandex) with ESMTP id 55EAF369C258;
+        Sun, 23 Jan 2022 22:20:29 +0300 (MSK)
+Received: from vla1-4e4ee944ff6b.qloud-c.yandex.net (vla1-4e4ee944ff6b.qloud-c.yandex.net [IPv6:2a02:6b8:c0d:3192:0:640:4e4e:e944])
+        by forward102q.mail.yandex.net (Yandex) with ESMTP id 51394BF00002;
+        Sun, 23 Jan 2022 22:20:29 +0300 (MSK)
+Received: from vla5-445dc1c4c112.qloud-c.yandex.net (vla5-445dc1c4c112.qloud-c.yandex.net [2a02:6b8:c18:3609:0:640:445d:c1c4])
+        by vla1-4e4ee944ff6b.qloud-c.yandex.net (mxback/Yandex) with ESMTP id N586EWrcrw-KSfaudax;
+        Sun, 23 Jan 2022 22:20:29 +0300
+Authentication-Results: vla1-4e4ee944ff6b.qloud-c.yandex.net; dkim=pass
+Received: by vla5-445dc1c4c112.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id TJMeNIfkIw-KQQKhsVM;
+        Sun, 23 Jan 2022 22:20:27 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+X-Yandex-Fwd: 2
+From:   Yaroslav Bolyukin <iam@lach.pw>
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Yaroslav Bolyukin <iam@lach.pw>
+Subject: [PATCH v2] drm/edid: Support type 7 timings
+Date:   Sun, 23 Jan 2022 22:19:55 +0300
+Message-Id: <20220123191955.57994-1-iam@lach.pw>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220118215956.17229-1-iam@lach.pw>
+References: <20220118215956.17229-1-iam@lach.pw>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220104112401.1067148-1-gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 12:24:00PM +0100, Greg Kroah-Hartman wrote:
-> The edac sysfs code is doing some crazy casting of the list of
-> attributes that is not necessary at all.  Instead, properly point to the
-> correct attribute structure in the lists, which removes the need to cast
-> anything and the code is now properly typesafe (as much as sysfs
-> attribute logic is typesafe...)
-> 
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Tony Luck <tony.luck@intel.com>
-> Cc: James Morse <james.morse@arm.com>
-> Cc: Robert Richter <rric@kernel.org>
-> Cc: linux-edac@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
-> v2: do the same thing in edac_pci_sysfs.c
-> 
->  drivers/edac/edac_device_sysfs.c | 28 ++++++++++++++--------------
->  drivers/edac/edac_pci_sysfs.c    | 24 ++++++++++++------------
->  2 files changed, 26 insertions(+), 26 deletions(-)
+Per VESA DisplayID Standard v2.0: Type VII Timing – Detailed Timing Data
 
-Both applied, thanks.
+Definitions were already provided as type I, but not used
 
+Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
+---
+ drivers/gpu/drm/drm_edid.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
+index 12893e7be..5f2ae5bfa 100644
+--- a/drivers/gpu/drm/drm_edid.c
++++ b/drivers/gpu/drm/drm_edid.c
+@@ -5405,7 +5405,8 @@ u32 drm_add_display_info(struct drm_connector *connector, const struct edid *edi
+ }
+ 
+ static struct drm_display_mode *drm_mode_displayid_detailed(struct drm_device *dev,
+-							    struct displayid_detailed_timings_1 *timings)
++							    struct displayid_detailed_timings_1 *timings,
++							    bool type_7)
+ {
+ 	struct drm_display_mode *mode;
+ 	unsigned pixel_clock = (timings->pixel_clock[0] |
+@@ -5426,7 +5427,8 @@ static struct drm_display_mode *drm_mode_displayid_detailed(struct drm_device *d
+ 	if (!mode)
+ 		return NULL;
+ 
+-	mode->clock = pixel_clock * 10;
++	/* resolution is kHz for type VII, and 10 kHz for type I */
++	mode->clock = type_7 ? pixel_clock : pixel_clock * 10;
+ 	mode->hdisplay = hactive;
+ 	mode->hsync_start = mode->hdisplay + hsync;
+ 	mode->hsync_end = mode->hsync_start + hsync_width;
+@@ -5457,6 +5459,7 @@ static int add_displayid_detailed_1_modes(struct drm_connector *connector,
+ 	int num_timings;
+ 	struct drm_display_mode *newmode;
+ 	int num_modes = 0;
++	bool type_7 = block->tag == DATA_BLOCK_2_TYPE_7_DETAILED_TIMING;
+ 	/* blocks must be multiple of 20 bytes length */
+ 	if (block->num_bytes % 20)
+ 		return 0;
+@@ -5465,7 +5468,7 @@ static int add_displayid_detailed_1_modes(struct drm_connector *connector,
+ 	for (i = 0; i < num_timings; i++) {
+ 		struct displayid_detailed_timings_1 *timings = &det->timings[i];
+ 
+-		newmode = drm_mode_displayid_detailed(connector->dev, timings);
++		newmode = drm_mode_displayid_detailed(connector->dev, timings, type_7);
+ 		if (!newmode)
+ 			continue;
+ 
+@@ -5484,7 +5487,8 @@ static int add_displayid_detailed_modes(struct drm_connector *connector,
+ 
+ 	displayid_iter_edid_begin(edid, &iter);
+ 	displayid_iter_for_each(block, &iter) {
+-		if (block->tag == DATA_BLOCK_TYPE_1_DETAILED_TIMING)
++		if (block->tag == DATA_BLOCK_TYPE_1_DETAILED_TIMING ||
++		    block->tag == DATA_BLOCK_2_TYPE_7_DETAILED_TIMING)
+ 			num_modes += add_displayid_detailed_1_modes(connector, block);
+ 	}
+ 	displayid_iter_end(&iter);
+
+base-commit: 99613159ad749543621da8238acf1a122880144e
 -- 
-Regards/Gruss,
-    Boris.
+2.34.1
 
-https://people.kernel.org/tglx/notes-about-netiquette

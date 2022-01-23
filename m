@@ -2,181 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B4749734C
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 17:56:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75782497360
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 18:09:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238966AbiAWQ40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 11:56:26 -0500
-Received: from mail-bn8nam08on2068.outbound.protection.outlook.com ([40.107.100.68]:32864
-        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232705AbiAWQ4Y (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 11:56:24 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eYb8ZS1f6hf3oBVd5/afAKBv3N6CeSqp9TVwu2k7AT1XAZkPZGj5Sl6p6RytQ59DK8GDlzy7ToRR8KWFkW6hsAwXFAyZjyGxn0hyulwjlTAAPXoRvo2fio3srvq6zgw3MZiESCyCLT2dHOEILmcCeBRVWNSkOSey/r7UYxKEqmO8Xw9OxO9yNenqd2oDkcb2mwis2sSNkcmlWghJQhbcipgwZ6jHSAuWxBrSPDGt8gZKk8ifygJSD/5WojVGA2WLzt2GGrS7/SyNWcPfiKEDaUu9ScUnOUL5AuDgJPpy1uaF/7n3K1MpHX06td75lHcbvKXDcz23zJ6TnQ7LPurUfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wHYoj+ReethEoTeLc40yNn7EtwGg//2xqEkhgKx+JLg=;
- b=NJSkeT+8qY6RN1cUst9RB0EHhLWf0vFjdePX9cNdL8WWxvmJW/bACeSs5VNRZsHe/USk3dTlPJ/Ciqxs6lzsQyhG2qyQ1CTY3fChqj+SElagDJP6dUNDrMAXO/sjGOe+yZZeQ3J/2xoOlfRNWRP9Q+ya8NlU7nUYxItqYCNhgMU0EeAwFdF2WH+lcpf5px+m9SZS2SRj5b5YQEOgzC4ViuKkYOGJXPVCyYCpUw5ed8Jmlt/OHQP+cmru8MiVwVG4wXo1ZBmpwbKcevCIOUBuNtMIvU9lyJTdI0AAz4M3jd7GQy/WP/8DB9G9VCjER5pVFd+hMVoeEivBu+zKeZ26Ww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wHYoj+ReethEoTeLc40yNn7EtwGg//2xqEkhgKx+JLg=;
- b=ETEYQDr1NOEISlpQHqVnWfiHtYea+JSMq2qJOaJREVnLUP0Jw72La/u0LlT23inSxEZSWOX4EC12g1hXdf89vEp+GT1YX77TovXAvJ2Uz87VWtiNe6OQx6pRci7HRM/KbMn33E3Pvh2evI2PfnyRlEu6qllT8K374hHoHiKaiM1Oulm471l7T7AQ6o/4NzSvXsyRI99ZNjo+jp+4R8BA8p/+ggkvoouSn9TaP/LGEZ3JvFoBF47U47+fkFscG7tmxQvYuy9B3F1Pq239QIS6eJZbJGWJPOukL58oMxgCZerrBEz1FbvmsIdv6xgQZ43Z/t6vpoMH1J9uvePu/I6hPw==
-Received: from DM5PR12MB1850.namprd12.prod.outlook.com (2603:10b6:3:108::23)
- by CH2PR12MB4822.namprd12.prod.outlook.com (2603:10b6:610:6::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Sun, 23 Jan
- 2022 16:56:22 +0000
-Received: from DM5PR12MB1850.namprd12.prod.outlook.com
- ([fe80::880d:1407:db31:5851]) by DM5PR12MB1850.namprd12.prod.outlook.com
- ([fe80::880d:1407:db31:5851%11]) with mapi id 15.20.4909.017; Sun, 23 Jan
- 2022 16:56:22 +0000
-From:   Akhil R <akhilrajeev@nvidia.com>
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>
-Subject: RE: [PATCH v2 1/4] dt-bindings: Add headers for Tegra234 I2C
-Thread-Topic: [PATCH v2 1/4] dt-bindings: Add headers for Tegra234 I2C
-Thread-Index: AQHYD4KdQ6UBs7iRtkCNyJkjnwt5l6xvXrMAgAFe3cA=
-Date:   Sun, 23 Jan 2022 16:56:22 +0000
-Message-ID: <DM5PR12MB18503A9968008AE5E25D328BC05D9@DM5PR12MB1850.namprd12.prod.outlook.com>
-References: <1642850607-20664-1-git-send-email-akhilrajeev@nvidia.com>
- <1642850607-20664-2-git-send-email-akhilrajeev@nvidia.com>
- <103960bf-ed5c-4a0c-9142-65ffc2e4bca0@gmail.com>
-In-Reply-To: <103960bf-ed5c-4a0c-9142-65ffc2e4bca0@gmail.com>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 25645ec7-32be-4ca0-7f11-08d9de91491f
-x-ms-traffictypediagnostic: CH2PR12MB4822:EE_
-x-microsoft-antispam-prvs: <CH2PR12MB482260AD424C8C747DF611F1C05D9@CH2PR12MB4822.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1186;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: UMLpBQtAmD3dcTJR15ave72WGLzNziVmB3G7n91ec5XrBp0d7RzvWEmA8K04fmo3KupIhDiyZninL938Ix4uTeJvVoJp/sP9co9UsfB/lJvEnE2kx+6Qv6eS8ggfhKPlgBSyd7wBTEN9uBugILo+55fOAixCY/PPiYFMN/CPZxO1s0WEdzW+UDcK2lcLuCjN5w4m9RB3vZK1grBFYj7Z+azvQSbJM0rbEOL4bSr2eEH4NcZLdtPU9AyfadwWAQsBbzR+H1goiTKPPmCjLomlcuNSDZj8zilGzCumeYGi2+2Cdm+FHbfDcGeBiSa+db4/n1QtRPVWtX8N6Gc6nomAzgdCtS0YMwNDnGTtrupdrSgG4FEi8TzcLG3WETyJ33sIB/sjt9Tsog9ZEXgGCCwY2rvqraRCPmtsKITbClJDaWIb/990LSp/opN3p+ak8tq81afEo1q/FESbKwf6keyrnW0vfBL6FIjF28w2S9D516SFecd6PITpKoCYryBKjc2CPQ+nrLJlaeI8M8nzkKABJrgmo+nON8fO7bGVB7iDeh/iHN6DwvUqDxN6cMLjEJbgkzPJfQM40OVgU/sC8/3fKSfRSLkz4ib2KEEWWu3RRyDg9StBhY5g9X9HI94S2vht3T14jIeaxyoKs4r1CJd50cmkxREozrNonkm7j30AIFjRlZr2yNLrf+XfBcn5eVzC5lHqKpoaUhTRuVPHmPZ79nUR3oKQak66N7S6IqMUqr0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1850.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66446008)(76116006)(8676002)(5660300002)(8936002)(52536014)(921005)(64756008)(2906002)(9686003)(66946007)(316002)(110136005)(66556008)(508600001)(33656002)(66476007)(55016003)(71200400001)(7696005)(6506007)(83380400001)(86362001)(186003)(122000001)(26005)(38100700002)(38070700005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?K09ISXNDQmwyLzFDR21GaUE2R2xNZS93ZmF6ZHVaNkh4Z1hRTC8wNXJoQXFP?=
- =?utf-8?B?eFVaVXlSWW5aNHZ3dzNZWXZEQzM3d05jenpjTkMyTFNCZ2JiSUNLcDUxZXR3?=
- =?utf-8?B?SXFSanF6QzBWcCtmTnpGeTIxdnhEcmZaT3B3UTRJSWhqSHUzYWNJNEZ6RzNF?=
- =?utf-8?B?eUM4dlJFbldsVTJ5cEdsc2FZdXpCVy9YQ3dxY0J2akUyZWl5ZGMvUVNaeGN5?=
- =?utf-8?B?bXM4OGUyaVduNXd2S3NLV2RpditjeVlxRnMxbExZeFUwYWRvWkRVLzhlNWNL?=
- =?utf-8?B?RFN6S3k5YXZ2U0FESElBdFkwTndpWWxmZHdYQ0EvN3Z2Z1dlOENJV280MXVH?=
- =?utf-8?B?NHhFZXEyK0t3OWo4RW15WDMxYWlVcDlNekU4anZiRnJ0ZHVDTENkY1Q4cnRs?=
- =?utf-8?B?emd5Y1pzRmN6czlpZkxFNGFKWnQranEvY0pUT3BRZDNsZklRTkgrZ3hMd3JL?=
- =?utf-8?B?L21uWlgwUksrQ3REMStaTGhhdTB6ZjR3L3JEeFJVZzZHR1E4SnhWdU9od201?=
- =?utf-8?B?RTFBbmV0RDhaaFAxSElsc0pCOUxxb2tHSmJGSENvaUNQKzU0QmhOOG5ZOUF3?=
- =?utf-8?B?Y0o5NlhOOHNhTkRHa2drbUxqR3RSeXMvcWt2aXFCeEpJSHlWcnVISUwrOTNu?=
- =?utf-8?B?aERRaGhnSkRjSGhKRCtueGRWcmVFWU93bzkwSE5jaFFpd1k2clZGdmhhUXdQ?=
- =?utf-8?B?cVF2RkYrbWFJV2c5eDA1MmhMMnp4ZC9NaDBuTXY1QTBCNXhyd2xjQWdBbWZO?=
- =?utf-8?B?RzN3bFh6S2czYTBEQU1XMU9QU0k1bHVNbUpVSzNSRGU2dkVJSkJFYUhFOHFi?=
- =?utf-8?B?cXpwengrQkRTcmQya0U4dEpQay9jV2F4RFAxVE1JVDk5WEdidm9vdENOMVJP?=
- =?utf-8?B?dktwbWhyTnAreEN3ZkpqWEREemhpcjNBTGQ1RncvbnhQbTBZTWRHa0NjOUdY?=
- =?utf-8?B?dDMxUERYeWZQek5MNUgyRHZ0SHg1YStGM2g5eGZmNjNZRWxVNVluc29SMnNv?=
- =?utf-8?B?RGQxUGhzVWdZdGxFOVhkdEpyOUg3UkpybkxTSUhwcjhJUHVvVnZqcE5wSTN5?=
- =?utf-8?B?enhqMFdDRVJXYUlXZGdOM0gwN0ZqZFF3TnA4dDdkTHNuUzRJUndZemJxRTRz?=
- =?utf-8?B?cktkRWZwM25RQzBmeTZTUHVRZDh0US9ZcVlBRndJRTN6dFEvLy9ZeUcwTjlo?=
- =?utf-8?B?ZGhqRXFHUlA1cFBteVdRVlVQL05tVGQ2eEJjWm1UWEhwWmRSTjlweVJDek1j?=
- =?utf-8?B?ck9kZU1RbytrbndXRW1SUWp3RXlGaGJXbThBakQ2cHFzNm1WS1BZdXM5V3Uz?=
- =?utf-8?B?Wk1aMjdwK1FIMkpOakpOUmR1SUxaWTBvV3BmL2U3UGZ6UWdhbzFSWS9tSmdI?=
- =?utf-8?B?SHN4ay9IbHpzdEduMjRQNUhPNFhEMGRRQytPckVLS2JLTm9mYXhYRW96MkxP?=
- =?utf-8?B?dUtCYXdxMFRxbEFEb1BhL1YvdG8yZ2YwMWhBZDlVbW9yT3NUUGJFWVUySEdE?=
- =?utf-8?B?cHNrdFlLL3Zic1Ezd1A5Tm1pZW9HZUhXOFlWR2NXOThQck05WFJNTThxUmZR?=
- =?utf-8?B?T3VSY01xRnhXeEZ4NnhkOTBBV1BqalhaYXBLTXJrZFBhZWsvMkY3TkpPR1pK?=
- =?utf-8?B?cjdGU1djL251WWVyV3JPcUhZQ1cvVTVObVBnbEluaGEwMUVlZXNMb2NOR1Zh?=
- =?utf-8?B?VmZMcGtIZ3ZsbTdyV0VHMU9OcndyVmdNamhGV3NPSkFxa1Z4N3dscnhTVHdM?=
- =?utf-8?B?VDl5cWhCM0JOVlRhaFRtUzhVUXlFVFZWOTEzNGVXbWxyR1JuNXhlNTJvVTJo?=
- =?utf-8?B?Ris4M1ZhNWpCY04zbzVpaFZQd2svcW43dnBKdm5TNXFpWEhQdmEySmQ4WkZu?=
- =?utf-8?B?Y0Q5VkR5dk5HQ2pOS3JBZVFJM3hVZ0pyaFNROG5zTEkxRktmaTBlSE5rVzhq?=
- =?utf-8?B?bDh1WGxVNGd4aVNwK0FROHhsSnRyZTlXVlltcFNFaHE2bHhDVXd2aU53ekNQ?=
- =?utf-8?B?SVQ3bGVIZlQ0anJkTldBODdPbjZUYmFpeDRzSzRyRDlUWXdibzhrNTJpNTJG?=
- =?utf-8?B?ZUsvN3lTRGxLNFZlcG9jdTNJMHVoemRMTEc1WGxQTmhrbEFpTDNZcUVWbGtK?=
- =?utf-8?B?UXhBN2tBTWFoZDRxT2s4WUE2Y3ZjMFF3TFo1bWFJemQ4RUxKaDRUcTZpWjFP?=
- =?utf-8?B?RkE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S239105AbiAWRJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 12:09:31 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:59104
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237659AbiAWRJ2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 23 Jan 2022 12:09:28 -0500
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 72C053F1C9
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 17:09:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642957767;
+        bh=FaifMX+EZOHeqFOH0mC+iaZH1b4BUvHDBCCkl/PmcMY=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=RFOQGHlpJBuWCoAKwhWBSL1PC3sDVD7k6NGUqDjuWQi3pKP13F2r0WdqCrGNr12jd
+         n/3uTeFgv/xIzzx7eSpWsLh7jCyAOW19lDztoZnrD6RJblQ0C8azkjBJDnV7IV2y7R
+         y0ZjRQ8+8m9B+kwBUMX8uT5bQmjQOfnG0aCMPDIPqgH/cmD19CvSf2Qyki5sz2OXcS
+         ibh/RoUosmdtnZ+DTtr4ncA2uQuRzBi8WjkN8RY73Lfn2bTdELDkwj9MUXlAqTVA0C
+         sFWiPk2hcIZ0/5r7Ejidi3SNGi7uhFSZtS2iqBacm4gZqWMD0ZEaBMKXNrUS0CHPZP
+         izmiomvLNDTnA==
+Received: by mail-ej1-f72.google.com with SMTP id 13-20020a170906328d00b006982d0888a4so1519512ejw.9
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 09:09:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=FaifMX+EZOHeqFOH0mC+iaZH1b4BUvHDBCCkl/PmcMY=;
+        b=PZ/in77S1PcHTnHhQMGOW6ksMtFqjQl4ODhZY46edTCvm6SZ9o443vnn6KoQcU0ESP
+         gUFHioUrSOMFK0jX2uHWYf+5j2VIFMDjt67S1FdzVn6jql8EPZTCuJqH8v3ulQa6wLD4
+         PZp+ix4p16lJ5CS+OnJ5u/JpAeN18WX9XDdM6WVn2s4PBOg23k12YrjyM++ftQimYlnk
+         Rr0cdkdyw2y8ev8Nor1MUu82qkf0q4InuNXkAQ8zz8EU/N9FlnzwnAQFYRmTmL6uCxOk
+         XCc71d1UtP7KZciG2RD4z8rK1jYijSIHL8YobQoOm/BaA/EYwjq5USaAJ+5OSW9WMc4x
+         l3Yw==
+X-Gm-Message-State: AOAM531QNXjPVpsoTdSeLNV0iDlK8lbePpQXWj3iN0lE+VlY9UXYwbBw
+        Hjpu1AsmE7JbEtrVunVkdxk0Uvplp1W8U9ZbKqYx1AmY/2lW/UNrO60wHoiZ78RU8uXyxu2tSqy
+        JK3h1R4wr+VAcb/sDo26J0siDqAjlsWpiKcuWN3C/lg==
+X-Received: by 2002:a05:6402:848:: with SMTP id b8mr12161414edz.79.1642957766853;
+        Sun, 23 Jan 2022 09:09:26 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJysQjuJXR6vDAY3DSDqkbdhGZsDj4a5MgHVE/SEUY6pjq+/f9+HtYqzjvLNhWASo0Oc/p4w3A==
+X-Received: by 2002:a05:6402:848:: with SMTP id b8mr12161402edz.79.1642957766717;
+        Sun, 23 Jan 2022 09:09:26 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id lt23sm4051370ejb.173.2022.01.23.09.09.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Jan 2022 09:09:26 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-gpio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Alim Akhtar <alim.akhtar@gmail.com>
+Subject: Re: [PATCH v2 00/28] pinctrl: dt-bindings: samsung: convert to dtschema
+Date:   Sun, 23 Jan 2022 18:09:24 +0100
+Message-Id: <164293835975.31601.16562955007803362485.b4-ty@canonical.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220111201426.326777-1-krzysztof.kozlowski@canonical.com>
+References: <20220111201426.326777-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1850.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 25645ec7-32be-4ca0-7f11-08d9de91491f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2022 16:56:22.6811
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xN2VVQkIwlumi5PPMTOJsgvzWVRaYM38cSDYWsyF052RayDkO4T7DVjHJrGTiq4tTl9EyiCn2I4vB5WTrzmyBw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4822
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiA+IEFkZCBkdC1iaW5kaW5ncyBoZWFkZXIgZmlsZXMgZm9yIEkyQyBjb250cm9sbGVycyBmb3Ig
-VGVncmEyMzQNCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IEFraGlsIFIgPGFraGlscmFqZWV2QG52
-aWRpYS5jb20+DQo+ID4gLS0tDQo+ID4gIGluY2x1ZGUvZHQtYmluZGluZ3MvY2xvY2svdGVncmEy
-MzQtY2xvY2suaCB8IDE5ICsrKysrKysrKysrKysrKysrKysNCj4gPiBpbmNsdWRlL2R0LWJpbmRp
-bmdzL3Jlc2V0L3RlZ3JhMjM0LXJlc2V0LmggfCAgOCArKysrKysrKw0KPiA+ICAyIGZpbGVzIGNo
-YW5nZWQsIDI3IGluc2VydGlvbnMoKykNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2R0
-LWJpbmRpbmdzL2Nsb2NrL3RlZ3JhMjM0LWNsb2NrLmgNCj4gPiBiL2luY2x1ZGUvZHQtYmluZGlu
-Z3MvY2xvY2svdGVncmEyMzQtY2xvY2suaA0KPiA+IGluZGV4IDhkN2U2NmUuLjVkMDVjMTkgMTAw
-NjQ0DQo+ID4gLS0tIGEvaW5jbHVkZS9kdC1iaW5kaW5ncy9jbG9jay90ZWdyYTIzNC1jbG9jay5o
-DQo+ID4gKysrIGIvaW5jbHVkZS9kdC1iaW5kaW5ncy9jbG9jay90ZWdyYTIzNC1jbG9jay5oDQo+
-ID4gQEAgLTMwLDUgKzMwLDI0IEBADQo+ID4gICNkZWZpbmUgVEVHUkEyMzRfQ0xLX1BMTEM0ICAg
-ICAgICAgICAgICAgICAgIDIzN1UNCj4gPiAgLyoqIEBicmllZiAzMksgaW5wdXQgY2xvY2sgcHJv
-dmlkZWQgYnkgUE1JQyAqLw0KPiA+ICAjZGVmaW5lIFRFR1JBMjM0X0NMS19DTEtfMzJLICAgICAg
-ICAgICAgICAgICAyODlVDQo+ID4gKy8qKiBAYnJpZWYgb3V0cHV0IG9mIG11eCBjb250cm9sbGVk
-IGJ5DQo+IENMS19SU1RfQ09OVFJPTExFUl9DTEtfU09VUkNFX0kyQzEgKi8NCj4gPiArI2RlZmlu
-ZSBURUdSQTIzNF9DTEtfSTJDMSAgICAgICAgICAgICAgICAgICAgNDhVDQo+ID4gKy8qKiBAYnJp
-ZWYgb3V0cHV0IG9mIG11eCBjb250cm9sbGVkIGJ5DQo+IENMS19SU1RfQ09OVFJPTExFUl9DTEtf
-U09VUkNFX0kyQzIgKi8NCj4gPiArI2RlZmluZSBURUdSQTIzNF9DTEtfSTJDMiAgICAgICAgICAg
-ICAgICAgICAgNDlVDQo+ID4gKy8qKiBAYnJpZWYgb3V0cHV0IG9mIG11eCBjb250cm9sbGVkIGJ5
-DQo+IENMS19SU1RfQ09OVFJPTExFUl9DTEtfU09VUkNFX0kyQzMgKi8NCj4gPiArI2RlZmluZSBU
-RUdSQTIzNF9DTEtfSTJDMyAgICAgICAgICAgICAgICAgICAgNTBVDQo+ID4gKy8qKiBvdXRwdXQg
-b2YgbXV4IGNvbnRyb2xsZWQgYnkgQ0xLX1JTVF9DT05UUk9MTEVSX0NMS19TT1VSQ0VfSTJDNA0K
-PiAqLw0KPiA+ICsjZGVmaW5lIFRFR1JBMjM0X0NMS19JMkM0ICAgICAgICAgICAgICAgICAgICA1
-MVUNCj4gPiArLyoqIEBicmllZiBvdXRwdXQgb2YgbXV4IGNvbnRyb2xsZWQgYnkNCj4gQ0xLX1JT
-VF9DT05UUk9MTEVSX0NMS19TT1VSQ0VfSTJDNiAqLw0KPiA+ICsjZGVmaW5lIFRFR1JBMjM0X0NM
-S19JMkM2ICAgICAgICAgICAgICAgICAgICA1MlUNCj4gPiArLyoqIEBicmllZiBvdXRwdXQgb2Yg
-bXV4IGNvbnRyb2xsZWQgYnkNCj4gQ0xLX1JTVF9DT05UUk9MTEVSX0NMS19TT1VSQ0VfSTJDNyAq
-Lw0KPiA+ICsjZGVmaW5lIFRFR1JBMjM0X0NMS19JMkM3ICAgICAgICAgICAgICAgICAgICA1M1UN
-Cj4gPiArLyoqIEBicmllZiBvdXRwdXQgb2YgbXV4IGNvbnRyb2xsZWQgYnkNCj4gQ0xLX1JTVF9D
-T05UUk9MTEVSX0NMS19TT1VSQ0VfSTJDOCAqLw0KPiA+ICsjZGVmaW5lIFRFR1JBMjM0X0NMS19J
-MkM4ICAgICAgICAgICAgICAgICAgICA1NFUNCj4gPiArLyoqIEBicmllZiBvdXRwdXQgb2YgbXV4
-IGNvbnRyb2xsZWQgYnkNCj4gQ0xLX1JTVF9DT05UUk9MTEVSX0NMS19TT1VSQ0VfSTJDOSAqLw0K
-PiA+ICsjZGVmaW5lIFRFR1JBMjM0X0NMS19JMkM5ICAgICAgICAgICAgICAgICAgICA1NVUNCj4g
-PiArDQo+ID4gKy8qKiBAYnJpZWYgUExMUCBjbGsgb3V0cHV0ICovDQo+ID4gKyNkZWZpbmUgVEVH
-UkEyMzRfQ0xLX1BMTFBfT1VUMCAgICAgICAgICAgICAgICAgICAgICAgMTAyVQ0KPiA+DQo+ID4g
-ICNlbmRpZg0KPiA+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2R0LWJpbmRpbmdzL3Jlc2V0L3RlZ3Jh
-MjM0LXJlc2V0LmgNCj4gPiBiL2luY2x1ZGUvZHQtYmluZGluZ3MvcmVzZXQvdGVncmEyMzQtcmVz
-ZXQuaA0KPiA+IGluZGV4IDUwZTEzYmMuLmUwN2U4OTggMTAwNjQ0DQo+ID4gLS0tIGEvaW5jbHVk
-ZS9kdC1iaW5kaW5ncy9yZXNldC90ZWdyYTIzNC1yZXNldC5oDQo+ID4gKysrIGIvaW5jbHVkZS9k
-dC1iaW5kaW5ncy9yZXNldC90ZWdyYTIzNC1yZXNldC5oDQo+ID4gQEAgLTEyLDYgKzEyLDE0IEBA
-DQo+ID4gICAqLw0KPiA+ICAjZGVmaW5lIFRFR1JBMjM0X1JFU0VUX1NETU1DNCAgICAgICAgICAg
-ICAgICAgICAgICAgIDg1VQ0KPiA+ICAjZGVmaW5lIFRFR1JBMjM0X1JFU0VUX1VBUlRBICAgICAg
-ICAgICAgICAgICAxMDBVDQo+ID4gKyNkZWZpbmUgVEVHUkEyMzRfUkVTRVRfSTJDMSAgICAgICAg
-ICAgICAgICAgIDI0VQ0KPiA+ICsjZGVmaW5lIFRFR1JBMjM0X1JFU0VUX0kyQzIgICAgICAgICAg
-ICAgICAgICAyOVUNCj4gPiArI2RlZmluZSBURUdSQTIzNF9SRVNFVF9JMkMzICAgICAgICAgICAg
-ICAgICAgMzBVDQo+ID4gKyNkZWZpbmUgVEVHUkEyMzRfUkVTRVRfSTJDNCAgICAgICAgICAgICAg
-ICAgIDMxVQ0KPiA+ICsjZGVmaW5lIFRFR1JBMjM0X1JFU0VUX0kyQzYgICAgICAgICAgICAgICAg
-ICAzMlUNCj4gPiArI2RlZmluZSBURUdSQTIzNF9SRVNFVF9JMkM3ICAgICAgICAgICAgICAgICAg
-MzNVDQo+ID4gKyNkZWZpbmUgVEVHUkEyMzRfUkVTRVRfSTJDOCAgICAgICAgICAgICAgICAgIDM0
-VQ0KPiA+ICsjZGVmaW5lIFRFR1JBMjM0X1JFU0VUX0kyQzkgICAgICAgICAgICAgICAgICAzNVUN
-Cj4gDQo+IFdoeSBJRCBvcmRlciBpc24ndCBtYWludGFpbmVkPw0KRG8geW91IG1lYW4gUkVTRVRf
-VUFSVDQsIFNETU1DNCBldGMgc2hvdWxkIGJlDQpiZWxvdyBSRVNFVF9JMkMqPw0KDQpSZWdhcmRz
-LA0KQWtoaWwNCg0KLS0NCm52cHVibGljDQo=
+On Tue, 11 Jan 2022 21:13:58 +0100, Krzysztof Kozlowski wrote:
+> Changes since v1
+> ================
+> 1. Patch #1: add missing pin assignment (Alim).
+> 2. Patch #2: correct double sizeof() (Alim).
+> 3. Patch #7, #8: put label-override in proper patch (Alim).
+> 4. Patch #24: Extend doc, change the 'if' clause for wake-up interrupts.
+> 5. New patches: #25 - #28.
+>    Exynos850 and ExynosAutov9 seems to be different in pin ctrl interrupt
+>    handling, so they need their own compatibles.
+>    Please kindly review and provide feedback on these as I do not have
+>    details.
+> 6. Add review tags.
+> 
+> [...]
+
+Applied, thanks!
+
+To Samsung SoC tree (Exynos850 is skipped because it was not merged into
+v5.17-rc1):
+
+[03/28] ARM: dts: exynos: drop unused pinctrl defines in Exynos3250
+        (no commit info)
+[04/28] ARM: dts: exynos: simplify PMIC DVS pin configuration in Odroid XU
+        (no commit info)
+[05/28] ARM: dts: exynos: override pins by label in Peach Pit
+        (no commit info)
+[06/28] ARM: dts: exynos: simplify PMIC DVS pin configuration in Peach Pit
+        (no commit info)
+[07/28] ARM: dts: exynos: override pins by label in Peach Pi
+        (no commit info)
+[08/28] ARM: dts: exynos: simplify PMIC DVS pin configuration in Peach Pi
+        (no commit info)
+[09/28] ARM: dts: s3c64xx: drop unneeded pinctrl wake-up interrupt mapping
+        (no commit info)
+[10/28] ARM: dts: exynos: align pinctrl with dtschema in Exynos3250
+        (no commit info)
+[11/28] ARM: dts: exynos: align pinctrl with dtschema in Exynos4210
+        (no commit info)
+[12/28] ARM: dts: exynos: align pinctrl with dtschema in Exynos4412
+        (no commit info)
+[13/28] ARM: dts: exynos: align pinctrl with dtschema in Exynos5250
+        (no commit info)
+[14/28] ARM: dts: exynos: align pinctrl with dtschema in Exynos5260
+        (no commit info)
+[15/28] ARM: dts: exynos: align pinctrl with dtschema in Exynos5410
+        (no commit info)
+[16/28] ARM: dts: exynos: align pinctrl with dtschema in Exynos542x/5800
+        (no commit info)
+[17/28] arm64: dts: exynos: align pinctrl with dtschema in Exynos5433
+        (no commit info)
+[18/28] arm64: dts: exynos: align pinctrl with dtschema in Exynos7
+        (no commit info)
+[20/28] arm64: dts: exynos: align pinctrl with dtschema in ExynosAutov9
+        (no commit info)
+[21/28] ARM: dts: s3c24xx: align pinctrl with dtschema
+        (no commit info)
+[22/28] ARM: dts: s3c64xx: align pinctrl with dtschema
+        (no commit info)
+[23/28] ARM: dts: s5pv210: align pinctrl with dtschema
+        (no commit info)
+[28/28] arm64: dts: exynos: use dedicated wake-up pinctrl compatible in ExynosAutov9
+        (no commit info)
+
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>

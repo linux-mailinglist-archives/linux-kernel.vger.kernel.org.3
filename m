@@ -2,279 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2DEF497147
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 12:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A76497148
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 12:22:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbiAWLVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 06:21:02 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43336 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiAWLVB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 06:21:01 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F0CF60BBE
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 11:21:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E051AC340E2;
-        Sun, 23 Jan 2022 11:20:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642936860;
-        bh=j6L0awpaUy8W+1Dut/K6oVZ7q9Gq/P1OiHHmseBHsgo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NNIZoUMYxvuubuHZaXWTLGPBjH5hfUPVjldzBJDOoqvlFhlfWHI5eWsAd+Cqe/Ckb
-         4QaK2crcxWDVjwSCIbq8Y+qH+A8ZPF/wKv7Pn8OvrJHGpcDoARkaW/SaGfyR/kFZfA
-         AJ+VjY90dnQgIOW9VMdbQI+yYhHAFVyb27kwaDjs=
-Date:   Sun, 23 Jan 2022 12:20:57 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-Cc:     realwakka@gmail.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] staging: pi433: add debugfs interface
-Message-ID: <Ye06GfUzwzQBvfLy@kroah.com>
-References: <20220123073855.GA79453@mail.google.com>
- <20220123074029.GA79722@mail.google.com>
+        id S232900AbiAWLWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 06:22:55 -0500
+Received: from mga07.intel.com ([134.134.136.100]:20775 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229699AbiAWLWy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 23 Jan 2022 06:22:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642936974; x=1674472974;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=So3UoZ2Zr5F1X5/R3sOMbQvlJJoyJHcL9ULCs0OBhZo=;
+  b=UDwqUiDHhLpHkqRcwebRHChP/MrL68/KTxr3m0KpxRnJV49Y9LQQs6ob
+   2v9uqbqf9iC/GLWa999z/dwuI0PwVuO/GFt5tLxrv7xuyqSDACnRB2eYt
+   KJpSaZ76Y1G319FBD2sXr3uXGIGFdwA/ET256u0MZrLoSfUffSI39HYa9
+   wTdkNHqMBK5S3/pFLbeOljq1SzuGCtFp3jPrt5Bap6kSEVYxj+QDaKXR3
+   /vLRHaZ1cSPRI9Z4O+fC5NXJi1n9cMccsKNtDLmVFMLOmiMD8Z8vaeoP4
+   xXekGCjSUZt7Uu+Wc4ldB3CE4sKzSuKknKzDMUP39v4ra8k4D73j3x0zy
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10235"; a="309210738"
+X-IronPort-AV: E=Sophos;i="5.88,310,1635231600"; 
+   d="scan'208";a="309210738"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2022 03:22:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,310,1635231600"; 
+   d="scan'208";a="616955888"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Jan 2022 03:22:52 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nBaxP-000HD9-Rf; Sun, 23 Jan 2022 11:22:51 +0000
+Date:   Sun, 23 Jan 2022 19:22:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Kees Cook <keescook@chromium.org>
+Subject: ERROR: modpost: "bcsr_mod" [drivers/pcmcia/db1xxx_ss.ko] undefined!
+Message-ID: <202201231941.OMnmf2JQ-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220123074029.GA79722@mail.google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 23, 2022 at 08:40:29PM +1300, Paulo Miguel Almeida wrote:
-> This adds debugfs interface that can be used for debugging possible
-> hardware/software issues.
-> 
-> It currently exposes the following debugfs entries for each SPI device
-> probed:
-> 
->   /sys/kernel/debug/pi433/<DEVICE>/regs
->   ...
-> 
-> The 'regs' file contains all rf69 uC registers values that are useful
-> for troubleshooting misconfigurations between 2 devices. It contains one
-> register per line so it should be easy to use normal filtering tools to
-> find the registers of interest if needed.
-> 
-> Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-> ---
-> Meta-comments:
-> 
-> - I'm not entirely sure if I'm allowed to add additional dependencies to Kconfig
-> the way I did or if I should surround debugfs routines with 
-> #ifdef CONFIG_DEBUG_FS. I saw both approaches couldn't put my finger on which 
-> one is the 'right' way here. I'm taking suggestions :)
+Hi Arnd,
 
-Neither is really needed at all.  The debugfs api will work properly if
-the main config option is not enabled, and the code will be compiled
-away properly.
+First bad commit (maybe != root cause):
 
-So no need to add any dependancy to your driver at all.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e783362eb54cd99b2cac8b3a9aeac942e6f6ac07
+commit: 606b102876e3741851dfb09d53f3ee57f650a52c drm: fb_helper: fix CONFIG_FB dependency
+date:   4 months ago
+config: mips-randconfig-r002-20220120 (https://download.01.org/0day-ci/archive/20220123/202201231941.OMnmf2JQ-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=606b102876e3741851dfb09d53f3ee57f650a52c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 606b102876e3741851dfb09d53f3ee57f650a52c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-debugfs was designed to be simple to use, and adding dependancies is not
-simple.  Same goes for my comments below, the goal is to keep it simple
-and not worry about any error handling.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> - I saw that in some other drivers there is a tendency to have debugfs routines
-> in a separate file such as debugfs.c and in that way this allows for smaller 
-> files (which I do like) and Makefile that build files based on selected 
-> configs such as:
-> 
-> pi433-$(CONFIG_DEBUG_FS) += debugfs.o 
+All error/warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-Again, not needed.
+>> ERROR: modpost: "bcsr_mod" [drivers/pcmcia/db1xxx_ss.ko] undefined!
+>> ERROR: modpost: "bcsr_read" [drivers/pcmcia/db1xxx_ss.ko] undefined!
+--
+arch/mips/boot/compressed/decompress.c:42:6: warning: no previous prototype for function 'error' [-Wmissing-prototypes]
+void error(char *x)
+^
+arch/mips/boot/compressed/decompress.c:42:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+void error(char *x)
+^
+static
+In file included from arch/mips/boot/compressed/decompress.c:64:
+In file included from arch/mips/boot/compressed/../../../../lib/decompress_unlz4.c:10:
+>> arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:506:5: warning: no previous prototype for function 'LZ4_decompress_safe_forceExtDict' [-Wmissing-prototypes]
+int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
+^
+arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:506:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
+^
+static
+arch/mips/boot/compressed/decompress.c:85:6: warning: no previous prototype for function '__stack_chk_fail' [-Wmissing-prototypes]
+void __stack_chk_fail(void)
+^
+arch/mips/boot/compressed/decompress.c:85:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+void __stack_chk_fail(void)
+^
+static
+arch/mips/boot/compressed/decompress.c:90:6: warning: no previous prototype for function 'decompress_kernel' [-Wmissing-prototypes]
+void decompress_kernel(unsigned long boot_heap_start)
+^
+arch/mips/boot/compressed/decompress.c:90:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+void decompress_kernel(unsigned long boot_heap_start)
+^
+static
+4 warnings generated.
 
-> The only way I could achieve such thing would be if I moved pi433_device struct
-> to pi433_if.h but I wanted to double check if reviewers would agree with this 
-> approach first.
-> 
-> ---
->  drivers/staging/pi433/Kconfig    |  2 +-
->  drivers/staging/pi433/pi433_if.c | 82 ++++++++++++++++++++++++++++++++
->  drivers/staging/pi433/rf69.c     |  2 +-
->  drivers/staging/pi433/rf69.h     |  1 +
->  4 files changed, 85 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/staging/pi433/Kconfig b/drivers/staging/pi433/Kconfig
-> index dd9e4709d1a8..9a8b7ef3e670 100644
-> --- a/drivers/staging/pi433/Kconfig
-> +++ b/drivers/staging/pi433/Kconfig
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
->  config PI433
->  	tristate "Pi433 - a 433MHz radio module for Raspberry Pi"
-> -	depends on SPI
-> +	depends on SPI && DEBUG_FS
-
-You can drop this.
-
->  	help
->  	  This option allows you to enable support for the radio module Pi433.
->  
-> diff --git a/drivers/staging/pi433/pi433_if.c b/drivers/staging/pi433/pi433_if.c
-> index 17ff51f6a9da..e3a0d78385c0 100644
-> --- a/drivers/staging/pi433/pi433_if.c
-> +++ b/drivers/staging/pi433/pi433_if.c
-> @@ -41,6 +41,9 @@
->  #ifdef CONFIG_COMPAT
->  #include <linux/compat.h>
->  #endif
-> +#include <linux/debugfs.h>
-> +#include <linux/seq_file.h>
-> +
->  
->  #include "pi433_if.h"
->  #include "rf69.h"
-> @@ -56,6 +59,8 @@ static DEFINE_MUTEX(minor_lock); /* Protect idr accesses */
->  
->  static struct class *pi433_class; /* mainly for udev to create /dev/pi433 */
->  
-> +static struct dentry *dbgfs_root_entry;
-
-There is no need for this dentry.  Just look it up if you care about it.
-
-> +
->  /*
->   * tx config is instance specific
->   * so with each open a new tx config struct is needed
-> @@ -103,6 +108,9 @@ struct pi433_device {
->  	bool			rx_active;
->  	bool			tx_active;
->  	bool			interrupt_rx_allowed;
-> +
-> +	/* debug fs */
-> +	struct dentry		*entry;
-
-Again, no need for this, look it up if you need it.
-
->  };
->  
->  struct pi433_instance {
-> @@ -1102,6 +1110,72 @@ static const struct file_operations pi433_fops = {
->  	.llseek =	no_llseek,
->  };
->  
-> +static int pi433_debugfs_regs_show(struct seq_file *m, void *p)
-> +{
-> +	struct pi433_device *dev;
-> +	u8 reg_data[114];
-> +	size_t i;
-> +	char *fmt = "0x%02x, 0x%02x\n";
-> +
-> +	// obtain pi433_device reference
-> +	dev = m->private;
-
-That is not a "reference", that is just a normal empty pointer.  No need
-to call it something else, that's just confusing.
-
-> +
-> +	// acquire locks to avoid race conditions
-> +	mutex_lock(&dev->tx_fifo_lock);
-> +	mutex_lock(&dev->rx_lock);
-> +
-> +	// wait for on-going operations to finish
-> +	if (dev->tx_active)
-> +		wait_event_interruptible(dev->rx_wait_queue, !dev->tx_active);
-> +
-> +	if (dev->rx_active)
-> +		wait_event_interruptible(dev->tx_wait_queue, !dev->rx_active);
-> +
-> +	// read contiguous regs
-> +	// skip FIFO register (0x0) otherwise this can affect some of uC ops
-> +	for (i = 1; i < 0x50; i++)
-> +		reg_data[i] = rf69_read_reg(dev->spi, i);
-> +
-> +	// read non-contiguous regs
-> +	reg_data[REG_TESTLNA] = rf69_read_reg(dev->spi, REG_TESTLNA);
-> +	reg_data[REG_TESTPA1] = rf69_read_reg(dev->spi, REG_TESTPA1);
-> +	reg_data[REG_TESTPA2] = rf69_read_reg(dev->spi, REG_TESTPA2);
-> +	reg_data[REG_TESTDAGC] = rf69_read_reg(dev->spi, REG_TESTDAGC);
-> +	reg_data[REG_TESTAFC] = rf69_read_reg(dev->spi, REG_TESTAFC);
-> +
-> +	seq_puts(m, "# reg, val\n");
-> +
-> +	// print contiguous regs
-> +	for (i = 1; i < 0x50; i++)
-> +		seq_printf(m, fmt, i, reg_data[i]);
-> +
-> +	// print non-contiguous regs
-> +	seq_printf(m, fmt, REG_TESTLNA, reg_data[REG_TESTLNA]);
-> +	seq_printf(m, fmt, REG_TESTPA1, reg_data[REG_TESTPA1]);
-> +	seq_printf(m, fmt, REG_TESTPA2, reg_data[REG_TESTPA2]);
-> +	seq_printf(m, fmt, REG_TESTDAGC, reg_data[REG_TESTDAGC]);
-> +	seq_printf(m, fmt, REG_TESTAFC, reg_data[REG_TESTAFC]);
-> +
-> +	// release locks
-> +	mutex_unlock(&dev->tx_fifo_lock);
-> +	mutex_unlock(&dev->rx_lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static ssize_t pi433_debugfs_regs_open(struct inode *inode, struct file *filp)
-> +{
-> +	return single_open(filp, pi433_debugfs_regs_show, inode->i_private);
-> +}
-> +
-> +static const struct file_operations debugfs_fops = {
-> +	.llseek =	seq_lseek,
-> +	.open =		pi433_debugfs_regs_open,
-> +	.owner =	THIS_MODULE,
-> +	.read =		seq_read,
-> +	.release =	single_release
-> +};
-> +
->  /*-------------------------------------------------------------------------*/
->  
->  static int pi433_probe(struct spi_device *spi)
-> @@ -1256,6 +1330,10 @@ static int pi433_probe(struct spi_device *spi)
->  	/* spi setup */
->  	spi_set_drvdata(spi, device);
->  
-> +	/* debugfs setup */
-> +	device->entry = debugfs_create_dir(dev_name(device->dev), dbgfs_root_entry);
-
-Make "entry" a local variable, and then pass it to the next call.
-
-And look up dbgfs_root_entry as well.  This can be rewritten as:
-	entry = debugfs_create_dir(dev_name(device->dev,
-					    debugfs_lookup("pi433", NULL);
-
-> +	debugfs_create_file("regs", 0400, device->entry, device, &debugfs_fops);
-
-When do you ever remove the debugfs entry for the device?  I do not see
-that in any release function here.  Did you forget about that?
-
-> +
->  	return 0;
->  
->  del_cdev:
-> @@ -1353,6 +1431,8 @@ static int __init pi433_init(void)
->  		return PTR_ERR(pi433_class);
->  	}
->  
-> +	dbgfs_root_entry = debugfs_create_dir("pi433", NULL);
-
-Again, no need to keep this around, see above.
-
-> +
->  	status = spi_register_driver(&pi433_spi_driver);
->  	if (status < 0) {
->  		class_destroy(pi433_class);
-> @@ -1370,6 +1450,8 @@ static void __exit pi433_exit(void)
->  	spi_unregister_driver(&pi433_spi_driver);
->  	class_destroy(pi433_class);
->  	unregister_chrdev(MAJOR(pi433_dev), pi433_spi_driver.driver.name);
-> +	debugfs_remove_recursive(dbgfs_root_entry);
-
-Can be rewritten as:
-	debugfs_remove_recursive(debugfs_lookup("pi433", NULL));
-
-Or better yet:
-	debugfs_remove_recursive(debugfs_lookup(KBUILD_MODULE_NAME, NULL));
-
-thanks,
-
-greg k-h
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

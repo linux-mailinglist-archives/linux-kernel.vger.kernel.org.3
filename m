@@ -2,94 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B2A04971AC
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 14:36:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 798134971AF
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 14:38:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236474AbiAWNga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 08:36:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40264 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233027AbiAWNg3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 08:36:29 -0500
-X-Greylist: delayed 60 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 23 Jan 2022 05:36:28 PST
-Received: from mxout4.routing.net (mxout4.routing.net [IPv6:2a03:2900:1:a::9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E78C06173B;
-        Sun, 23 Jan 2022 05:36:28 -0800 (PST)
-Received: from mxbox1.masterlogin.de (unknown [192.168.10.88])
-        by mxout4.routing.net (Postfix) with ESMTP id DADED1007A0;
-        Sun, 23 Jan 2022 13:36:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1642944987;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=fqfsP/ntZCKwYdbau/pTlmwRTLdGLdcEXAGWnn9giqI=;
-        b=gAOEs/4TfYv8tuAtd3KTUIySFXCQX0Vzs+odxOinxZLZdsF9G0QDDtpr27anUPfivaWxb/
-        6AZPN5H/rbLUyt5AblDGZMehfhlKBoGoMDuAZiqB7VFotoTNpdezAFKsIn3P41pTgftHxy
-        JHaPyL5blKZomc4pDTgIffONFcf1SvM=
-Received: from localhost.localdomain (fttx-pool-80.245.79.232.bambit.de [80.245.79.232])
-        by mxbox1.masterlogin.de (Postfix) with ESMTPSA id 35C9F402ED;
-        Sun, 23 Jan 2022 13:36:26 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-rockchip@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        id S236481AbiAWNiP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 23 Jan 2022 08:38:15 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:46334 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229513AbiAWNiO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 23 Jan 2022 08:38:14 -0500
+Received: from p508fcdea.dip0.t-ipconnect.de ([80.143.205.234] helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nBd4J-0004q2-V2; Sun, 23 Jan 2022 14:38:07 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Peter Geis <pgwipeout@gmail.com>, Johan Jonker <jbx6244@gmail.com>,
+        Frank Wunderlich <linux@fw-web.de>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1] arm64: dts: rk356x: fix dma-controller warning
-Date:   Sun, 23 Jan 2022 14:36:15 +0100
-Message-Id: <20220123133615.135789-1-linux@fw-web.de>
-X-Mailer: git-send-email 2.25.1
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Aw: Re: [PATCH v1 1/3] dts64: rk3568: drop pclk_xpcs from gmac0
+Date:   Sun, 23 Jan 2022 14:38:09 +0100
+Message-ID: <8763546.c4FMd9deqZ@phil>
+In-Reply-To: <trinity-d0efbf68-ed45-47d4-97b3-d3788c5a9de6-1642863025116@3c-app-gmx-bap44>
+References: <20220116124911.65203-1-linux@fw-web.de> <236548630.RelmrRfzIS@diego> <trinity-d0efbf68-ed45-47d4-97b3-d3788c5a9de6-1642863025116@3c-app-gmx-bap44>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mail-ID: 3a9c0cd5-7e83-47e6-9c3e-403b1c0a467c
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+Hi Frank,
 
-DMA-Cotrollers defined in rk356x.dtsi do not match the pattern in bindings.
+Am Samstag, 22. Januar 2022, 15:50:25 CET schrieb Frank Wunderlich:
+> i plan to send a v2 of the series after 5.17-rc1 is out, because i have now verified
+> the functions from gpio header and found some pinctrl-changes. V1 had only prepared
+> the nodes to know which devices are present on this header.
+> 
+> should i include this patch again or do you pull it from v1 (maybe as fix)?
 
-arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dt.yaml:
-  dmac@fe530000: $nodename:0: 'dmac@fe530000' does not match '^dma-controller(@.*)?$'
-	From schema: Documentation/devicetree/bindings/dma/arm,pl330.yaml
-arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dt.yaml:
-  dmac@fe550000: $nodename:0: 'dmac@fe550000' does not match '^dma-controller(@.*)?$'
-	From schema: Documentation/devicetree/bindings/dma/arm,pl330.yaml
+I do plan to include this as fix after -rc1, but I just saw that you already sent
+a separate patch of it, so I'll take that one instead :-)
 
-This Patch fixes it.
+Heiko
 
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
----
- arch/arm64/boot/dts/rockchip/rk356x.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> regards Frank
+> 
+> 
+> > Gesendet: Montag, 17. Januar 2022 um 22:05 Uhr
+> > Von: "Heiko Stübner" <heiko@sntech.de>
+> 
+> > From looking at the documentation I got the impression that the
+> > pclk_xpcs is related to the separate qsgmii_pcs in the memory map.
+> > 
+> > So yes, I fully agree to dropping this clock from here and then adding
+> > them to whatever ip block really needs it.
+> 
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-index a68033a23975..8ccce54ee8e7 100644
---- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-@@ -651,7 +651,7 @@ &i2s1m0_sdo0   &i2s1m0_sdo1
- 		status = "disabled";
- 	};
- 
--	dmac0: dmac@fe530000 {
-+	dmac0: dma-controller@fe530000 {
- 		compatible = "arm,pl330", "arm,primecell";
- 		reg = <0x0 0xfe530000 0x0 0x4000>;
- 		interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>,
-@@ -662,7 +662,7 @@ dmac0: dmac@fe530000 {
- 		#dma-cells = <1>;
- 	};
- 
--	dmac1: dmac@fe550000 {
-+	dmac1: dma-controller@fe550000 {
- 		compatible = "arm,pl330", "arm,primecell";
- 		reg = <0x0 0xfe550000 0x0 0x4000>;
- 		interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>,
--- 
-2.25.1
+
+
 

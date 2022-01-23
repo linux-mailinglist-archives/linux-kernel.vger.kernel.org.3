@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE43B49748A
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 19:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1464F49748B
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 19:41:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239792AbiAWSlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 13:41:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
+        id S239940AbiAWSlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 13:41:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239629AbiAWSko (ORCPT
+        with ESMTP id S239801AbiAWSkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 13:40:44 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2414AC061748
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 10:40:42 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id e8so13479916plh.8
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 10:40:42 -0800 (PST)
+        Sun, 23 Jan 2022 13:40:52 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E54C061756;
+        Sun, 23 Jan 2022 10:40:45 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id d15-20020a17090a110f00b001b4e7d27474so14268037pja.2;
+        Sun, 23 Jan 2022 10:40:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=475Re6o4qrxmTY2+dJD1szR+aZ9ztNBAVJwVf2XomiQ=;
-        b=jmVObv+DHvV/nfgWMGm7G0AiVWxWK811CYrpCGiHV6xY0cRphRK/F1bxcyarhazE7G
-         QO3y6iESjwSCWQV4XxfbN0VGrGzLnz+MQAZouCPpYGATGaaGpx/xFlQQHIUbUBuvRRw5
-         0P/sPgZ/Zob1yCiUwsGdNVWUVVlgMqpf+xC55wv1WQFaeiZGDLCbtdTLECSRwzD1BwDr
-         5hJchQzstXRUP379uF+B/2jyU8zwFVQtEt3XnUASMZLgJzQPBHWzsJ7NMd9Pe5Hmto0M
-         h6UFu1fpTLkx6o30OssQidiED5LGIyGRgU4+4B2Dhf6WKpYvcVZFv0Kk+WkaLBOUlnoc
-         3Wyw==
+        bh=geJcDF7eG8EOHs97ZbucxlWSNBb9ica7os3IO5WyQsk=;
+        b=HZ5wFq5vKklf9YkTPPXH/lZMPEpCXNyoVqeQMYs5eSx898mpi8WLmcz/f0KpKVFBeW
+         csCQYfbmltl4T3oVDVfzDu4v5mpUC6d+uWCx1BKMIrwjNVXkvy/oBKMa98kAw6vNd+BZ
+         RVKXg0LetIuDEYO2OW3Zzx9ar3qZzetE1p3RxXMGVGXPU+PsDMqz8DRwZ2tm9YMbZWAw
+         TH//sNAOe6+1oHsRcVNo4paHLUKJNoRfSdoRzqdFGgQdIrkpmbhkoc0NqiMsDUwRRfIN
+         9iVDq8wrBejuUjKzUcXbb6RDNssoqskWFcbdbeYQfLdz3jJqRtd/vRp/SMnfQdvMBYi2
+         BWWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=475Re6o4qrxmTY2+dJD1szR+aZ9ztNBAVJwVf2XomiQ=;
-        b=IgPEElMhsrwOZyqBIF6X1X3A2GiUz8JltvaSiye4L5nlMNr7f9as3XlpC5ufxV/1W0
-         FaHotqvrScV3VtyXf1BbeCL7VhpYjP1TF3TyFaYV+A+5earT0aRfy9uxOiRcebjbVxOS
-         4n9DKpTzSoX0Li/UtMurY/LN3VAItmXF8CBmA7qBTO+xmwtRFbYGdBZiSg8SAWicPiY6
-         1OpVGbf1r2fE3d3+LIMeRckJgDgLEMOgEQD9sDXRC/PFHzM1E6Qw6kILVWo/eXmH7fp6
-         mYI0uZg9R8D6aCDvxsLu+9K7uAEpUhTV4OyXCEevBLydmmFfdnR5VJEdb2gDFBvOhV5w
-         VUYg==
-X-Gm-Message-State: AOAM533ML7IKXq8PPDxPeMFDiW+R0NPf0EQg+JY6HIe0qGkAADQEp7Ic
-        +l3xuEaGLYnB8J7mCxLv/xE=
-X-Google-Smtp-Source: ABdhPJyghkxvVhznkwLCfy/A1+7acBwkBZ1BlnfDfQwJqPCZvzndSaF4vpp9USN1uOTwz9n3zy27xQ==
-X-Received: by 2002:a17:90a:460f:: with SMTP id w15mr9814786pjg.123.1642963241641;
-        Sun, 23 Jan 2022 10:40:41 -0800 (PST)
+        bh=geJcDF7eG8EOHs97ZbucxlWSNBb9ica7os3IO5WyQsk=;
+        b=IcQ5DbsQJojZ9y2Bi/8zowQtHIoYnv9ZvokUd4Cn0jvHFJrqAkkwMAycXH1mZP9+b8
+         NzclidjnMtKCepNLrTHHkXIEP0Df8iJJ+qoB0/LVusltKDmyn4Cj1KdXxSSmdeG1o2nF
+         RoXxzvOpDKapslS/X+8YB+E1O5MuvSvXcbbumJOlfP3N3TkYhrlqdS9w57xaPYypKBer
+         2Nl2u+cUODwPM+uPCQhpN2CKeFVzqs24Wnsu/NpuJFsJgmio43U7/Gd986FYSJZvZYKl
+         KIZqWEr2VHxljqBwSK4BIy9pp9B3jo/2ueIEmiskyw0jB4Lvzf3HQn5WlpVmttf2SlMP
+         FLIA==
+X-Gm-Message-State: AOAM533FhfnZQwrzitdu0JQ8tIfYZ72egRBoiqr3KO0zQll278SIQGPy
+        YuZNrti5rkNG8qiEpzIT06Q=
+X-Google-Smtp-Source: ABdhPJymK27TH5kGJL/EoV+91cYg2zsWinqPXBG6oJtzEAWeUpTPZAAzN7lPEF4QI4wEaGLrxdCnkQ==
+X-Received: by 2002:a17:90b:4ad1:: with SMTP id mh17mr9873766pjb.160.1642963244937;
+        Sun, 23 Jan 2022 10:40:44 -0800 (PST)
 Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id q9sm13712586pfk.137.2022.01.23.10.40.40
+        by smtp.gmail.com with ESMTPSA id rj9sm11344424pjb.49.2022.01.23.10.40.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 10:40:41 -0800 (PST)
+        Sun, 23 Jan 2022 10:40:44 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -63,16 +63,12 @@ To:     Yury Norov <yury.norov@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Alexey Klimov <aklimov@redhat.com>,
         linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH 17/54] gpu: drm: replace cpumask_weight with cpumask_empty where appropriate
-Date:   Sun, 23 Jan 2022 10:38:48 -0800
-Message-Id: <20220123183925.1052919-18-yury.norov@gmail.com>
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-rdma@vger.kernel.org
+Subject: [PATCH 18/54] drivers/infiniband: replace cpumask_weight with cpumask_empty where appropriate
+Date:   Sun, 23 Jan 2022 10:38:49 -0800
+Message-Id: <20220123183925.1052919-19-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220123183925.1052919-1-yury.norov@gmail.com>
 References: <20220123183925.1052919-1-yury.norov@gmail.com>
@@ -82,29 +78,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-i915_pmu_cpu_online() calls cpumask_weight() to check if any bit of a
-given cpumask is set. We can do it more efficiently with cpumask_empty()
-because cpumask_empty() stops traversing the cpumask as soon as it finds
-first set bit, while cpumask_weight() counts all bits unconditionally.
+drivers/infiniband/hw/hfi1/affinity.c code calls cpumask_weight() to check
+if any bit of a given cpumask is set. We can do it more efficiently with
+cpumask_empty() because cpumask_empty() stops traversing the cpumask as
+soon as it finds first set bit, while cpumask_weight() counts all bits
+unconditionally.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- drivers/gpu/drm/i915/i915_pmu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/infiniband/hw/hfi1/affinity.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/i915_pmu.c b/drivers/gpu/drm/i915/i915_pmu.c
-index ea655161793e..1894c876b31d 100644
---- a/drivers/gpu/drm/i915/i915_pmu.c
-+++ b/drivers/gpu/drm/i915/i915_pmu.c
-@@ -1048,7 +1048,7 @@ static int i915_pmu_cpu_online(unsigned int cpu, struct hlist_node *node)
- 	GEM_BUG_ON(!pmu->base.event_init);
- 
- 	/* Select the first online CPU as a designated reader. */
--	if (!cpumask_weight(&i915_pmu_cpumask))
-+	if (cpumask_empty(&i915_pmu_cpumask))
- 		cpumask_set_cpu(cpu, &i915_pmu_cpumask);
- 
- 	return 0;
+diff --git a/drivers/infiniband/hw/hfi1/affinity.c b/drivers/infiniband/hw/hfi1/affinity.c
+index 98c813ba4304..38eee675369a 100644
+--- a/drivers/infiniband/hw/hfi1/affinity.c
++++ b/drivers/infiniband/hw/hfi1/affinity.c
+@@ -667,7 +667,7 @@ int hfi1_dev_affinity_init(struct hfi1_devdata *dd)
+ 			 * engines, use the same CPU cores as general/control
+ 			 * context.
+ 			 */
+-			if (cpumask_weight(&entry->def_intr.mask) == 0)
++			if (cpumask_empty(&entry->def_intr.mask))
+ 				cpumask_copy(&entry->def_intr.mask,
+ 					     &entry->general_intr_mask);
+ 		}
+@@ -687,7 +687,7 @@ int hfi1_dev_affinity_init(struct hfi1_devdata *dd)
+ 		 * vectors, use the same CPU core as the general/control
+ 		 * context.
+ 		 */
+-		if (cpumask_weight(&entry->comp_vect_mask) == 0)
++		if (cpumask_empty(&entry->comp_vect_mask))
+ 			cpumask_copy(&entry->comp_vect_mask,
+ 				     &entry->general_intr_mask);
+ 	}
 -- 
 2.30.2
 

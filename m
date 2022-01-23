@@ -2,138 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FB1497145
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 12:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2DEF497147
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 12:21:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232736AbiAWLTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 06:19:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiAWLTY (ORCPT
+        id S232778AbiAWLVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 06:21:02 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43336 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229699AbiAWLVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 06:19:24 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E97EC06173B
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 03:19:24 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 23 Jan 2022 06:21:01 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JhVxh3rF5z4xkH;
-        Sun, 23 Jan 2022 22:19:20 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1642936762;
-        bh=rjiXIAoujbqKcL6bu1UAXJuKBGJPBbV6NTCD/DODPuc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=CIWtkFV1KPYsCJBegjyHovnQTEK0CgrZDkz/fLMO3ChM6hrmp9lETUzn7Q+c6cXK/
-         u5TlM3xNOwapFFmKakK7Ofu5cTZUEU+hOgvKKawnim4TPEJA3KPGjahgWynhFOdX7c
-         5XRlssJuxGxyYoQKgx8/Mhq/R8oeP3zk0y/MxSGGp1aivIe1TkKqXdXzil3Dg1CSp8
-         10/8Zeabrx5blc4wJCdApbdJscVbm3t7SZ5/DSIZZiD2ZohYdQMHvIoLfTK+agyMSx
-         +S+moaX+0vAmydQbJMX0mYEL4GR2P7aSXe4dSf/jBRzb0FkaRS3Z0MzS18GqxqCkdH
-         lAMgzTvqaWOzQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     atrajeev@linux.vnet.ibm.com, christophe.leroy@csgroup.eu,
-        daniel@iogearbox.net, johan.almbladh@anyfinetworks.com,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        naveen.n.rao@linux.vnet.ibm.com, npiggin@gmail.com
-Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-5.17-2 tag
-Date:   Sun, 23 Jan 2022 22:19:16 +1100
-Message-ID: <877daqu2bv.fsf@mpe.ellerman.id.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F0CF60BBE
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 11:21:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E051AC340E2;
+        Sun, 23 Jan 2022 11:20:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1642936860;
+        bh=j6L0awpaUy8W+1Dut/K6oVZ7q9Gq/P1OiHHmseBHsgo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NNIZoUMYxvuubuHZaXWTLGPBjH5hfUPVjldzBJDOoqvlFhlfWHI5eWsAd+Cqe/Ckb
+         4QaK2crcxWDVjwSCIbq8Y+qH+A8ZPF/wKv7Pn8OvrJHGpcDoARkaW/SaGfyR/kFZfA
+         AJ+VjY90dnQgIOW9VMdbQI+yYhHAFVyb27kwaDjs=
+Date:   Sun, 23 Jan 2022 12:20:57 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+Cc:     realwakka@gmail.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] staging: pi433: add debugfs interface
+Message-ID: <Ye06GfUzwzQBvfLy@kroah.com>
+References: <20220123073855.GA79453@mail.google.com>
+ <20220123074029.GA79722@mail.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220123074029.GA79722@mail.google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA256
+On Sun, Jan 23, 2022 at 08:40:29PM +1300, Paulo Miguel Almeida wrote:
+> This adds debugfs interface that can be used for debugging possible
+> hardware/software issues.
+> 
+> It currently exposes the following debugfs entries for each SPI device
+> probed:
+> 
+>   /sys/kernel/debug/pi433/<DEVICE>/regs
+>   ...
+> 
+> The 'regs' file contains all rf69 uC registers values that are useful
+> for troubleshooting misconfigurations between 2 devices. It contains one
+> register per line so it should be easy to use normal filtering tools to
+> find the registers of interest if needed.
+> 
+> Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+> ---
+> Meta-comments:
+> 
+> - I'm not entirely sure if I'm allowed to add additional dependencies to Kconfig
+> the way I did or if I should surround debugfs routines with 
+> #ifdef CONFIG_DEBUG_FS. I saw both approaches couldn't put my finger on which 
+> one is the 'right' way here. I'm taking suggestions :)
 
-Hi Linus,
+Neither is really needed at all.  The debugfs api will work properly if
+the main config option is not enabled, and the code will be compiled
+away properly.
 
-Please pull powerpc fixes for 5.17.
+So no need to add any dependancy to your driver at all.
 
-There's a change to kernel/bpf and one in tools/bpf, both have Daniel's ack.
+debugfs was designed to be simple to use, and adding dependancies is not
+simple.  Same goes for my comments below, the goal is to keep it simple
+and not worry about any error handling.
 
-cheers
+> - I saw that in some other drivers there is a tendency to have debugfs routines
+> in a separate file such as debugfs.c and in that way this allows for smaller 
+> files (which I do like) and Makefile that build files based on selected 
+> configs such as:
+> 
+> pi433-$(CONFIG_DEBUG_FS) += debugfs.o 
 
+Again, not needed.
 
-The following changes since commit 29ec39fcf11e4583eb8d5174f756ea109c77cc44:
+> The only way I could achieve such thing would be if I moved pi433_device struct
+> to pi433_if.h but I wanted to double check if reviewers would agree with this 
+> approach first.
+> 
+> ---
+>  drivers/staging/pi433/Kconfig    |  2 +-
+>  drivers/staging/pi433/pi433_if.c | 82 ++++++++++++++++++++++++++++++++
+>  drivers/staging/pi433/rf69.c     |  2 +-
+>  drivers/staging/pi433/rf69.h     |  1 +
+>  4 files changed, 85 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/staging/pi433/Kconfig b/drivers/staging/pi433/Kconfig
+> index dd9e4709d1a8..9a8b7ef3e670 100644
+> --- a/drivers/staging/pi433/Kconfig
+> +++ b/drivers/staging/pi433/Kconfig
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  config PI433
+>  	tristate "Pi433 - a 433MHz radio module for Raspberry Pi"
+> -	depends on SPI
+> +	depends on SPI && DEBUG_FS
 
-  Merge tag 'powerpc-5.17-1' of git://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux (2022-01-14 15:17:26 +0100)
+You can drop this.
 
-are available in the git repository at:
+>  	help
+>  	  This option allows you to enable support for the radio module Pi433.
+>  
+> diff --git a/drivers/staging/pi433/pi433_if.c b/drivers/staging/pi433/pi433_if.c
+> index 17ff51f6a9da..e3a0d78385c0 100644
+> --- a/drivers/staging/pi433/pi433_if.c
+> +++ b/drivers/staging/pi433/pi433_if.c
+> @@ -41,6 +41,9 @@
+>  #ifdef CONFIG_COMPAT
+>  #include <linux/compat.h>
+>  #endif
+> +#include <linux/debugfs.h>
+> +#include <linux/seq_file.h>
+> +
+>  
+>  #include "pi433_if.h"
+>  #include "rf69.h"
+> @@ -56,6 +59,8 @@ static DEFINE_MUTEX(minor_lock); /* Protect idr accesses */
+>  
+>  static struct class *pi433_class; /* mainly for udev to create /dev/pi433 */
+>  
+> +static struct dentry *dbgfs_root_entry;
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-5.17-2
+There is no need for this dentry.  Just look it up if you care about it.
 
-for you to fetch changes up to aee101d7b95a03078945681dd7f7ea5e4a1e7686:
+> +
+>  /*
+>   * tx config is instance specific
+>   * so with each open a new tx config struct is needed
+> @@ -103,6 +108,9 @@ struct pi433_device {
+>  	bool			rx_active;
+>  	bool			tx_active;
+>  	bool			interrupt_rx_allowed;
+> +
+> +	/* debug fs */
+> +	struct dentry		*entry;
 
-  powerpc/64s: Mask SRR0 before checking against the masked NIP (2022-01-18 10:25:18 +1100)
+Again, no need for this, look it up if you need it.
 
-- ------------------------------------------------------------------
-powerpc fixes for 5.17 #2
+>  };
+>  
+>  struct pi433_instance {
+> @@ -1102,6 +1110,72 @@ static const struct file_operations pi433_fops = {
+>  	.llseek =	no_llseek,
+>  };
+>  
+> +static int pi433_debugfs_regs_show(struct seq_file *m, void *p)
+> +{
+> +	struct pi433_device *dev;
+> +	u8 reg_data[114];
+> +	size_t i;
+> +	char *fmt = "0x%02x, 0x%02x\n";
+> +
+> +	// obtain pi433_device reference
+> +	dev = m->private;
 
- - A series of bpf fixes, including an oops fix and some codegen fixes.
+That is not a "reference", that is just a normal empty pointer.  No need
+to call it something else, that's just confusing.
 
- - Fix a regression in syscall_get_arch() for compat processes.
+> +
+> +	// acquire locks to avoid race conditions
+> +	mutex_lock(&dev->tx_fifo_lock);
+> +	mutex_lock(&dev->rx_lock);
+> +
+> +	// wait for on-going operations to finish
+> +	if (dev->tx_active)
+> +		wait_event_interruptible(dev->rx_wait_queue, !dev->tx_active);
+> +
+> +	if (dev->rx_active)
+> +		wait_event_interruptible(dev->tx_wait_queue, !dev->rx_active);
+> +
+> +	// read contiguous regs
+> +	// skip FIFO register (0x0) otherwise this can affect some of uC ops
+> +	for (i = 1; i < 0x50; i++)
+> +		reg_data[i] = rf69_read_reg(dev->spi, i);
+> +
+> +	// read non-contiguous regs
+> +	reg_data[REG_TESTLNA] = rf69_read_reg(dev->spi, REG_TESTLNA);
+> +	reg_data[REG_TESTPA1] = rf69_read_reg(dev->spi, REG_TESTPA1);
+> +	reg_data[REG_TESTPA2] = rf69_read_reg(dev->spi, REG_TESTPA2);
+> +	reg_data[REG_TESTDAGC] = rf69_read_reg(dev->spi, REG_TESTDAGC);
+> +	reg_data[REG_TESTAFC] = rf69_read_reg(dev->spi, REG_TESTAFC);
+> +
+> +	seq_puts(m, "# reg, val\n");
+> +
+> +	// print contiguous regs
+> +	for (i = 1; i < 0x50; i++)
+> +		seq_printf(m, fmt, i, reg_data[i]);
+> +
+> +	// print non-contiguous regs
+> +	seq_printf(m, fmt, REG_TESTLNA, reg_data[REG_TESTLNA]);
+> +	seq_printf(m, fmt, REG_TESTPA1, reg_data[REG_TESTPA1]);
+> +	seq_printf(m, fmt, REG_TESTPA2, reg_data[REG_TESTPA2]);
+> +	seq_printf(m, fmt, REG_TESTDAGC, reg_data[REG_TESTDAGC]);
+> +	seq_printf(m, fmt, REG_TESTAFC, reg_data[REG_TESTAFC]);
+> +
+> +	// release locks
+> +	mutex_unlock(&dev->tx_fifo_lock);
+> +	mutex_unlock(&dev->rx_lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t pi433_debugfs_regs_open(struct inode *inode, struct file *filp)
+> +{
+> +	return single_open(filp, pi433_debugfs_regs_show, inode->i_private);
+> +}
+> +
+> +static const struct file_operations debugfs_fops = {
+> +	.llseek =	seq_lseek,
+> +	.open =		pi433_debugfs_regs_open,
+> +	.owner =	THIS_MODULE,
+> +	.read =		seq_read,
+> +	.release =	single_release
+> +};
+> +
+>  /*-------------------------------------------------------------------------*/
+>  
+>  static int pi433_probe(struct spi_device *spi)
+> @@ -1256,6 +1330,10 @@ static int pi433_probe(struct spi_device *spi)
+>  	/* spi setup */
+>  	spi_set_drvdata(spi, device);
+>  
+> +	/* debugfs setup */
+> +	device->entry = debugfs_create_dir(dev_name(device->dev), dbgfs_root_entry);
 
- - Fix boot failure on some 32-bit systems with KASAN enabled.
+Make "entry" a local variable, and then pass it to the next call.
 
- - A couple of other build/minor fixes.
+And look up dbgfs_root_entry as well.  This can be rewritten as:
+	entry = debugfs_create_dir(dev_name(device->dev,
+					    debugfs_lookup("pi433", NULL);
 
-Thanks to: Athira Rajeev, Christophe Leroy, Dmitry V. Levin, Jiri Olsa, Johan Almbladh,
-Maxime Bizon, Naveen N. Rao, Nicholas Piggin.
+> +	debugfs_create_file("regs", 0400, device->entry, device, &debugfs_fops);
 
-- ------------------------------------------------------------------
-Athira Rajeev (1):
-      powerpc/perf: Only define power_pmu_wants_prompt_pmi() for CONFIG_PPC64
+When do you ever remove the debugfs entry for the device?  I do not see
+that in any release function here.  Did you forget about that?
 
-Christophe Leroy (3):
-      powerpc/audit: Fix syscall_get_arch()
-      powerpc/time: Fix build failure due to do_hard_irq_enable() on PPC32
-      powerpc/32s: Fix kasan_init_region() for KASAN
+> +
+>  	return 0;
+>  
+>  del_cdev:
+> @@ -1353,6 +1431,8 @@ static int __init pi433_init(void)
+>  		return PTR_ERR(pi433_class);
+>  	}
+>  
+> +	dbgfs_root_entry = debugfs_create_dir("pi433", NULL);
 
-Naveen N. Rao (5):
-      bpf: Guard against accessing NULL pt_regs in bpf_get_task_stack()
-      powerpc32/bpf: Fix codegen for bpf-to-bpf calls
-      powerpc/bpf: Update ldimm64 instructions during extra pass
-      tools/bpf: Rename 'struct event' to avoid naming conflict
-      powerpc64/bpf: Limit 'ldbrx' to processors compliant with ISA v2.06
+Again, no need to keep this around, see above.
 
-Nicholas Piggin (1):
-      powerpc/64s: Mask SRR0 before checking against the masked NIP
+> +
+>  	status = spi_register_driver(&pi433_spi_driver);
+>  	if (status < 0) {
+>  		class_destroy(pi433_class);
+> @@ -1370,6 +1450,8 @@ static void __exit pi433_exit(void)
+>  	spi_unregister_driver(&pi433_spi_driver);
+>  	class_destroy(pi433_class);
+>  	unregister_chrdev(MAJOR(pi433_dev), pi433_spi_driver.driver.name);
+> +	debugfs_remove_recursive(dbgfs_root_entry);
 
+Can be rewritten as:
+	debugfs_remove_recursive(debugfs_lookup("pi433", NULL));
 
- arch/powerpc/include/asm/book3s/32/mmu-hash.h |  2 +
- arch/powerpc/include/asm/hw_irq.h             |  2 +-
- arch/powerpc/include/asm/ppc-opcode.h         |  1 +
- arch/powerpc/include/asm/syscall.h            |  4 +-
- arch/powerpc/include/asm/thread_info.h        |  2 +
- arch/powerpc/kernel/interrupt_64.S            |  2 +
- arch/powerpc/mm/book3s32/mmu.c                | 10 ++--
- arch/powerpc/mm/kasan/book3s_32.c             | 59 ++++++++++----------
- arch/powerpc/net/bpf_jit_comp.c               | 29 ++++++++--
- arch/powerpc/net/bpf_jit_comp32.c             |  9 +++
- arch/powerpc/net/bpf_jit_comp64.c             | 29 ++++++----
- arch/powerpc/perf/core-book3s.c               | 58 ++++++++++---------
- kernel/bpf/stackmap.c                         |  5 +-
- tools/bpf/runqslower/runqslower.bpf.c         |  2 +-
- tools/bpf/runqslower/runqslower.c             |  2 +-
- tools/bpf/runqslower/runqslower.h             |  2 +-
- 16 files changed, 131 insertions(+), 87 deletions(-)
------BEGIN PGP SIGNATURE-----
+Or better yet:
+	debugfs_remove_recursive(debugfs_lookup(KBUILD_MODULE_NAME, NULL));
 
-iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmHtOYQACgkQUevqPMjh
-pYAZHw//UQj2TYAqdcrkDE2tz81s6/ifbnHsypz4vU9YV8muJUFsXpt9MPbvQhoq
-gvUnG3gkMNoXxQ+YDKa2ygN/MLC78ch+4VYWyGGzNcpqVxKWhPqbH/Gt7KvMGOZr
-LtnUCYjw462GBGrU7VI+yg9ki4c/pRzcSGoU4w346Q2/xIWdcNDb2aZ9a9MiYMCw
-/SBOpwj2hPhFQsAINVujXgrIHlybon+cDGJdPQptBSqvEq24wFu+F+elzXBcJvfm
-tVoAe81C077AhT8EGwyM9mTvTmBie+0jgZAkGVsvrUsbJJJY3FV/s923Fc9+lm/m
-SMD4Pn8ZaN+dPMRUgCMaUZFjCKTyBx182ELlqraZtTTZvFXXt/ZtM5BCvXZqreZU
-6XPFs+xMvJN4ZatdVM724hKhR9UoDaDer0zDcMvj1Yqr5E5LL1cl9ZG0fPeIYPdg
-+tMKCWxvx64OWYwZNyeGr12JNvtrzWruvO/2TD60gGdqXIQH39ds8voaW6AUJOeX
-xWP5UdEeh1LUPTb5HIEloy7K9QsUlE+fJ+3McbPk2vL01TBbrAjLymPdqCKEDGWe
-Z74u7iRjggXEopUOLQPQS4L60P/T6a+5oq2j0eUh4NCWXlJA4Iyfez/76BIiov3L
-qHNn4PjNXNQzR5r9xuhTe+WSZselnCnaVZgqsYnptkfdps5Yd6w=
-=bxy0
------END PGP SIGNATURE-----
+thanks,
+
+greg k-h

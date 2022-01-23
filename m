@@ -2,68 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3744972B4
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 16:47:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DEF4972BC
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 16:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238109AbiAWPrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 10:47:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238086AbiAWPrQ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 10:47:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CFAC06173B
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 07:47:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 519F560F5A
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 15:47:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B3D6DC340E8;
-        Sun, 23 Jan 2022 15:47:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642952835;
-        bh=SOm/0xQ2I4KXwkM9f+frAOPkHLXKCkDxtFLIXMSPm7w=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=EFgjEUcSa62EmWFqhVnF8ogJz5fGh/0Lew+2l5H1pr0zF+PkPX4VN0JXg6bxQLZ+H
-         0zYCEQPsklY59aZSdixv0zlWCYOALs+5QMx+sRkWSHi6+rnQAHM62981FbBNFQYKQl
-         QiOgLGPw4vm8hTQKMnki0IFW462TXz0VCzzS3DBwBDtX0Lno3qO6/0cdB7tED5TuF4
-         ZI5GB/1k0FJmS15lwhAGjE/BRd5hzhMNBrHOxg9bF3jKb84R2809LXoyYrpVxwAGcG
-         9YUHmgqoWS18GN4K70wzhYpfmfMfCVMJFMi9jOcnqdoJr/vso/CL4KfM6obz/vh/D3
-         oKQCQqzX2/e1A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9F0ABF60797;
-        Sun, 23 Jan 2022 15:47:15 +0000 (UTC)
-Subject: Re: [GIT PULL] sched/urgent for v5.17-rc2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Ye02u8jFsitJqSO7@zn.tnic>
-References: <Ye02u8jFsitJqSO7@zn.tnic>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Ye02u8jFsitJqSO7@zn.tnic>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/sched_urgent_for_v5.17_rc2
-X-PR-Tracked-Commit-Id: 0e3872499de1a1230cef5221607d71aa09264bd5
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 10c64a0f280636652ec63bb1ddd34b6c8e2f5584
-Message-Id: <164295283564.26749.10678833503862600525.pr-tracker-bot@kernel.org>
-Date:   Sun, 23 Jan 2022 15:47:15 +0000
-To:     Borislav Petkov <bp@suse.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+        id S238191AbiAWPwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 10:52:42 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:49648 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238181AbiAWPwk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 23 Jan 2022 10:52:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=EMC6Ft10JXwi16PGGMWQ1pe3LM0kkBsvwtaXhgSs0wM=; b=EO0tRbP4Cm6mmtzSNEUjPEe+fN
+        gEll1aTSwCLFqWNaKAehFMt6LO3f3TV6EsNHAZGABi4xyxeHb8Tpf+vbNq26LfSK0KL9iDpWUzJZI
+        +kQE8nHGPjqqqISIy1/DC/Yk4uQ+cxG41jqOjV8AQAKzMk3WcnoirV20gNJSx7do3ELU=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nBfAL-002OLT-JC; Sun, 23 Jan 2022 16:52:29 +0100
+Date:   Sun, 23 Jan 2022 16:52:29 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: stmmac: don't stop RXC during LPI
+Message-ID: <Ye15va7tFWMgKPEE@lunn.ch>
+References: <20220123141245.1060-1-jszhang@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220123141245.1060-1-jszhang@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 23 Jan 2022 12:06:35 +0100:
+On Sun, Jan 23, 2022 at 10:12:45PM +0800, Jisheng Zhang wrote:
+> I met can't receive rx pkt issue with below steps:
+> 0.plug in ethernet cable then boot normal and get ip from dhcp server
+> 1.quickly hotplug out then hotplug in the ethernet cable
+> 2.trigger the dhcp client to renew lease
+> 
+> tcpdump shows that the request tx pkt is sent out successfully,
+> but the mac can't receive the rx pkt.
+> 
+> The issue can easily be reproduced on platforms with PHY_POLL external
+> phy. If we don't allow the phy to stop the RXC during LPI, the issue
+> is gone. I think it's unsafe to stop the RXC during LPI because the mac
+> needs RXC clock to support RX logic.
+> 
+> And the 2nd param clk_stop_enable of phy_init_eee() is a bool, so use
+> false instead of 0.
+> 
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index 6708ca2aa4f7..92a9b0b226b1 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -1162,7 +1162,7 @@ static void stmmac_mac_link_up(struct phylink_config *config,
+>  
+>  	stmmac_mac_set(priv, priv->ioaddr, true);
+>  	if (phy && priv->dma_cap.eee) {
+> -		priv->eee_active = phy_init_eee(phy, 1) >= 0;
+> +		priv->eee_active = phy_init_eee(phy, false) >= 0;
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/sched_urgent_for_v5.17_rc2
+This has not caused issues in the past. So i'm wondering if this is
+somehow specific to your system? Does everybody else use a PHY which
+does not implement this bit? Does your synthesis of the stmmac have a
+different clock tree?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/10c64a0f280636652ec63bb1ddd34b6c8e2f5584
+By changing this value for every instance of the stmmac, you are
+potentially causing a power regression for stmmac implementations
+which don't need the clock. So we need a clear understanding, stopping
+the clock is wrong in general and so the change is correct in
+general. Or this is specific to your system, and you probably need to
+add priv->dma_cap.keep_rx_clock_ticking, which you set in your glue
+driver,and use here to decide what to pass to phy_init_eee().
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+	   Andrew

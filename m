@@ -2,87 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0365497561
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 20:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CA6497568
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 20:57:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239895AbiAWTxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 14:53:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41948 "EHLO
+        id S239906AbiAWT5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 14:57:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239859AbiAWTxt (ORCPT
+        with ESMTP id S234957AbiAWT5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 14:53:49 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCD4C06173D
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 11:53:49 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id g7-20020a25bdc7000000b00611c616bc76so30719482ybk.5
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 11:53:49 -0800 (PST)
+        Sun, 23 Jan 2022 14:57:46 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7507CC06173B;
+        Sun, 23 Jan 2022 11:57:46 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id f5so17155322qtp.11;
+        Sun, 23 Jan 2022 11:57:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=G+EhAKbY6DFw5XB3K4os9OgHDZdCp+FPmNNLsxXLstI=;
-        b=CoZz9LsO9Gom2K1s2rB89xuZGmideRn4NGKPkalZ+udaG74U4f9/FG26ldc7audHlk
-         DG1tfcg36NfqzDHFcMYPQNg9MA7JFa2uIa+xb21JBOb0ALkKSX/lI4ZDxpRbd4E2jneE
-         Bg2WJ4TrATycVwefpWaknARkh4pV1H5rvETR7cqvdXfovukG8xaptAGkxYWi5ARJllLB
-         w3BG0h2723ViAq9DAz8y5da6u5bjRguy76t/rwdr0Y94a9MchRdkmo3bLvY3BIFbKl0+
-         aMu+cLkMoXOZyJUywVAYnFtPYobwcxN0JaZURsPcfbEHT/48YaCYHVbc8ncp2how9hfw
-         K7Sw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vUBxUoo0e8G16QaWMdWu9QFYTFLGS+0ehY8WAD+BN28=;
+        b=UGmommU6ZoC0S/JBVlhZvYrIDgZPcAa1UVMldu69+OUVlqjN/GRRQNq07y2VykwWng
+         3OwXXRp3RepsuVS7pmbXTCoKqYFUpGd1FGUyUYlZ9kUwkVMYzQMVshkLdbU5xEjnIZJE
+         97/dAjXtf/DZvB0uO0iI25yfZCQ4P9rDkna5tjPMvHPlhuBivWNt6LmGX33hvPjCPTMQ
+         ZdIrOwilzxGt8T8lggcSI2pKLjf80D2TJ8sdKUXRMHYDb73VD66kp0SbE/oGMuE0GsE2
+         SY7ZjItWctaonHBePFO/eFGK4BoHpSUu+quEmOyRYrl++VNNgaDzWc91RVYTzwC0BT+n
+         WiBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=G+EhAKbY6DFw5XB3K4os9OgHDZdCp+FPmNNLsxXLstI=;
-        b=h4r74yRgeg05PwP8OSaab6+QHV45ofOzIAR+wLI0SuQL5CJ6tjBCLYBPCh3Et2vptD
-         8nBChgXQo6/ZOmhhyQsNtrbkK9T9qLzX4GZmCsiqUtNbT0NW32J3DuBOTPuT/KX6RbTx
-         hEISdFMbXr2pwLNkCeMe6TvUi1hoP+5vOEfE5UKKcVDWQo/eRvNZHVIYQ/5NDba2iWc/
-         BWMB12N7R5SxuOe+Tb8j7EWuY6B8h2UJAF1IQLUyAlnIb0rcz6AGSCF85/KzdY/JW770
-         xdIfSlesyyTkaKx1mas+M+34g8lcc0ZHoOsqTw6wIrvWSCik+aJ5+h/CJiluIpYWcTRu
-         l9kQ==
-X-Gm-Message-State: AOAM531j58knotDWlYQm52w2RDnq/+xx9NR3hxDE5d9gFsMblFzsjKL5
-        GYqpCmZhzX2EOYFHIfAGYPv8UTbPq2DSMxz8RA==
-X-Google-Smtp-Source: ABdhPJz6kUr3qCHrhOQvH5B2AKGZs2ICLGLD8hRMqESDxiBYocxqi3sqqTQrff1pHAtmGyfwIDdsjM0KCHWS+Mb09Q==
-X-Received: from ayushranjan-desktop0.svl.corp.google.com ([2620:15c:2c4:203:9c4d:cd55:e8a3:9536])
- (user=ayushranjan job=sendgmr) by 2002:a25:23cd:: with SMTP id
- j196mr18236580ybj.476.1642967628910; Sun, 23 Jan 2022 11:53:48 -0800 (PST)
-Date:   Sun, 23 Jan 2022 11:53:37 -0800
-Message-Id: <20220123195337.509882-1-ayushranjan@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-Subject: [PATCH] gvisor: add some missing definitions to vmx.h
-From:   Ayush Ranjan <ayushranjan@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ben Gardon <bgardon@google.com>, Jim Mattson <jmattson@google.com>,
-        Andrei Vagin <avagin@gmail.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Michael Davidson <md@google.com>,
-        Ayush Ranjan <ayushranjan@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vUBxUoo0e8G16QaWMdWu9QFYTFLGS+0ehY8WAD+BN28=;
+        b=TfARsEUggyn3iv0fyG1+tdABcYbQIepDEX0IeyQ3tck+IgZlpa9fBADJB1Q1MpI2WL
+         Z6pYW/wnZkwdm/tjccgk0HA0SIrUfmPrr6vZon8h4vB5UxlTAmfWkrwPjCSG+RKrX+O6
+         HVTpqZj+49XOAToCuDzg9CRtJET0tkktuB15aPIaLnmLU8YRBOMoyvDEDf46sCbbc+Tp
+         jdPQHdGBvSFilo1+nK45oLrbRdKk5YKhUgPsSTIxxEDvVc74uHp6xZ6xtGePLRqUmC+5
+         S00u6R1xvBTRCp5UWeJSTrgtNYADQrLwcSHI5WjDheL0g+2f8VIhAhX7eyy0PRF8f8tr
+         vhKQ==
+X-Gm-Message-State: AOAM531Nh8w+wFQ2pgvPngDLnFZD29kbnCqtLmBqxy37/g+c3TLOLfJU
+        10wJWZJOkQJSwwBwVC9jVX0=
+X-Google-Smtp-Source: ABdhPJwVw1TX+Yob6QtHJ6Mqb0oIqdp/TuqrFris3bv+LUL4oUT69O9qdgISfZxTCJzioVx3caAKJA==
+X-Received: by 2002:a05:622a:14a:: with SMTP id v10mr10395206qtw.446.1642967865549;
+        Sun, 23 Jan 2022 11:57:45 -0800 (PST)
+Received: from localhost ([2600:1700:65a0:ab60:4388:ab9b:beec:5dea])
+        by smtp.gmail.com with ESMTPSA id y5sm1466588qkj.28.2022.01.23.11.57.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Jan 2022 11:57:45 -0800 (PST)
+Date:   Sun, 23 Jan 2022 11:57:43 -0800
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+To:     ycaibb <ycaibb@gmail.com>
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH] inet: missing lock releases in udp.c
+Message-ID: <Ye2zN0R/R9uKEUNa@pop-os.localdomain>
+References: <20220121031553.5342-1-ycaibb@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220121031553.5342-1-ycaibb@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Davidson <md@google.com>
+On Fri, Jan 21, 2022 at 11:15:53AM +0800, ycaibb wrote:
+> From: Ryan Cai <ycaibb@gmail.com>
+> 
+> In method udp_get_first, the lock hslot->lock is not released when afinfo->family == AF_UNSPEC || sk->sk_family == afinfo->family is true. This patch fixes the problem by adding the unlock statement.
+> 
 
-gvisor needs definitions for some additional secondary exec controls.
+It should be unlocked by udp_seq_stop(). Do you see any real lockdep
+warning or bug report?
 
-Tested: builds
-Signed-off-by: Ayush Ranjan <ayushranjan@google.com>
-Signed-off-by: Michael Davidson <md@google.com>
----
- arch/x86/include/asm/vmx.h | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
-index c77ad687cdf7..df40dc568eb9 100644
---- a/arch/x86/include/asm/vmx.h
-+++ b/arch/x86/include/asm/vmx.h
-@@ -67,6 +67,7 @@
- #define SECONDARY_EXEC_ENCLS_EXITING		VMCS_CONTROL_BIT(ENCLS_EXITING)
- #define SECONDARY_EXEC_RDSEED_EXITING		VMCS_CONTROL_BIT(RDSEED_EXITING)
- #define SECONDARY_EXEC_ENABLE_PML               VMCS_CONTROL_BIT(PAGE_MOD_LOGGING)
-+#define SECONDARY_EXEC_EPT_VE			VMCS_CONTROL_BIT(EPT_VIOLATION_VE)
- #define SECONDARY_EXEC_PT_CONCEAL_VMX		VMCS_CONTROL_BIT(PT_CONCEAL_VMX)
- #define SECONDARY_EXEC_XSAVES			VMCS_CONTROL_BIT(XSAVES)
- #define SECONDARY_EXEC_MODE_BASED_EPT_EXEC	VMCS_CONTROL_BIT(MODE_BASED_EPT_EXEC)
--- 
-2.35.0.rc0.227.g00780c9af4-goog
-
+Thanks.

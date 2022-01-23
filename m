@@ -2,103 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69EFB497639
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 00:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E989449763C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 00:03:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240433AbiAWXCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 18:02:43 -0500
-Received: from smtpout2.mo529.mail-out.ovh.net ([79.137.123.220]:55623 "EHLO
-        smtpout2.mo529.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232478AbiAWXCm (ORCPT
+        id S240447AbiAWXCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 18:02:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54664 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240437AbiAWXCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 18:02:42 -0500
-X-Greylist: delayed 1111 seconds by postgrey-1.27 at vger.kernel.org; Sun, 23 Jan 2022 18:02:42 EST
-Received: from mxplan5.mail.ovh.net (unknown [10.109.146.173])
-        by mo529.mail-out.ovh.net (Postfix) with ESMTPS id 8337FD984D66;
-        Sun, 23 Jan 2022 23:44:07 +0100 (CET)
-Received: from kaod.org (37.59.142.102) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Sun, 23 Jan
- 2022 23:44:05 +0100
-Authentication-Results: garm.ovh; auth=pass (GARM-102R004b7e6303c-d087-4cdd-8e9a-f381c1422b65,
-                    90EAC8BD64EA4EE21D802F9E5F0AC1C4B4718499) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 82.64.250.170
-Message-ID: <d4ba6413-57ce-14c1-ed48-d00db2f74bd3@kaod.org>
-Date:   Sun, 23 Jan 2022 23:44:05 +0100
+        Sun, 23 Jan 2022 18:02:45 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EBCC06173B;
+        Sun, 23 Jan 2022 15:02:45 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id f17so10348032wrx.1;
+        Sun, 23 Jan 2022 15:02:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BX1VS/CBb7A8+2aiy4TYSuWVNfw4jVGiWVZT5XSWvJ4=;
+        b=qGU1T0XTDrseSlfsMDhcD+LUWDcwzpTxKiADon3N5gnEX1q50GW2YzUh47mjYjZ83A
+         ROrvsGNlAIwDSBRUSbZYyn57Iaw+IZ5NHh1tiCEslZrNEwCVPvx1aVhSsGxSFJjqyamN
+         JAQMzEeD9w/km5e4Cxf1L1iD6wKnzPkHMt2/xCsaAijQW8x3sA8dFgmnaBh/Ry9DP6AD
+         M+GEeWNaWVDW5IpgOPo/q4MjyoMAOKuFfyoKa7TGaV2Ik+cGNMxChiyo43IuV5bURmiD
+         oRZH1u/OO9Qyrk82N5MJnWNhBuMKTh5ribP+3TSNzCIx5PSX68aLSXNTPPXksioSbWRg
+         7B+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BX1VS/CBb7A8+2aiy4TYSuWVNfw4jVGiWVZT5XSWvJ4=;
+        b=SElxOf14/jPSdzCvZBbZPh7EX/c94JeUJ8ELITt4LQ6C2MlmHbEvQcXjsdWGQ18Tnv
+         d/vm2AEJmrrAfrqy5R4YCubuQztbaKhmYGy963hG5DuXc/ffamUgCE+a6ILtM+GtsOsH
+         ByIUgqTF6ZLoQtag+xyq2iyq6nRj5/QMuz+0V9XbAo3MdXmhvJsOmo3PJbjPW2zrWRFA
+         tfaZDSL66BeQHQKf2i1+E2MNnePMeNyVJRLO6fcsuk3/EnSdKvCluj5guTZSi1U9JvH1
+         rrdf8GURFOFsLB2RY2ZsyRUqXvBxfzHcMnlzcNWp1ROsl2wuLfmK3aOJBuhC3vyr+qI+
+         NPAQ==
+X-Gm-Message-State: AOAM532ha5vJTIt3KMC79D4Wm5SeGGxg4BiO4UJOXI0UD+08y0UqLDgq
+        05s4f+vtxAbHgUVuGjRM72w=
+X-Google-Smtp-Source: ABdhPJz6v2C+dWn1iDjqGGb2eSi85+c+lYUBPxEsWTl8s4BNvOrPYoffZUy7ziXCuXbx3+52lKh3jg==
+X-Received: by 2002:adf:db4a:: with SMTP id f10mr2917791wrj.117.1642978963730;
+        Sun, 23 Jan 2022 15:02:43 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id b2sm2068317wri.88.2022.01.23.15.02.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Jan 2022 15:02:43 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: dvb_frontends: make static read-only array fec_tab const
+Date:   Sun, 23 Jan 2022 23:02:42 +0000
+Message-Id: <20220123230242.7519-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] mtd: aspeed-smc: improve probe resilience
-Content-Language: en-US
-To:     Pratyush Yadav <p.yadav@ti.com>,
-        Patrick Williams <patrick@stwcx.xyz>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-aspeed@lists.ozlabs.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Richard Weinberger <richard@nod.at>,
-        Potin Lai <potin.lai@quantatw.com>,
-        <linux-kernel@vger.kernel.org>, Michael Walle <michael@walle.cc>,
-        <linux-mtd@lists.infradead.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20211229143334.297305-1-patrick@stwcx.xyz>
- <20211229173411.l2bipmi4x3arqjoo@ti.com> <Yc3Qav+ULNdF5zRT@heinlein>
- <20211231102623.izaqlzjvracbbgmp@ti.com> <20220103171721.46c8e697@xps13>
- <YdSP6tKyQ2ZRUC+2@heinlein> <20220105063244.lno3xur64uepa7i5@ti.com>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <20220105063244.lno3xur64uepa7i5@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [37.59.142.102]
-X-ClientProxiedBy: DAG4EX1.mxp5.local (172.16.2.31) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: 62bc6a40-d1d1-4864-991d-9b803c761a1a
-X-Ovh-Tracer-Id: 15724036627872713720
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrvdehgddtvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgihesthejredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpefhhfelgeeukedtteffvdffueeiuefgkeekleehleetfedtgfetffefheeugeelheenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddruddtvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrgh
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> I had an offline discussion with someone who knew more history on this driver.
->> My understanding is that the linux-aspeed team is aware of this being deprecated
->> but that there was some missing support for interface training that nobody has
->> gotten around to write?  If that is the case this really isn't even a "simple"
->> port to a new API at this point.
-> 
-> Unless the controller needs some unique feature (I don't think it does
-> on a quick glance), the conversion should not be too difficult. For any
-> experienced developer, even if they are unfamiliar with the SPI MEM API,
-> I don't think it should take more than 2-3 days to do the conversion.
-> The code to program the registers would stay the same, all that needs to
-> change is the API through which it is accessed.
+The static array fec_tab is read-only so it make sense to make
+it const.
 
-Writing a spimem driver is not a problem, I think people have done
-that in house. Aspeed has one for AST2600. We have one for u-boot
-I wrote sometime ago. I even have one for Linux but training comes
-with ugly hacks to fit in the current stack.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/media/dvb-frontends/stv0299.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-All Aspeed SoCs need training and that has been the problem for the
-last 4 years or so because we can not do training without knowing
-a minimum about the flash being trained :/ The previous framework
-offered a way to do a first scan and tune the delay settings
-afterwards. It worked pretty well on AST2400, AST2500 and AST2600
-even if more complex.
+diff --git a/drivers/media/dvb-frontends/stv0299.c b/drivers/media/dvb-frontends/stv0299.c
+index 421395ea3334..fbfc912c1071 100644
+--- a/drivers/media/dvb-frontends/stv0299.c
++++ b/drivers/media/dvb-frontends/stv0299.c
+@@ -161,8 +161,9 @@ static int stv0299_set_FEC(struct stv0299_state *state, enum fe_code_rate fec)
+ 
+ static enum fe_code_rate stv0299_get_fec(struct stv0299_state *state)
+ {
+-	static enum fe_code_rate fec_tab[] = { FEC_2_3, FEC_3_4, FEC_5_6,
+-					       FEC_7_8, FEC_1_2 };
++	static const enum fe_code_rate fec_tab[] = {
++		FEC_2_3, FEC_3_4, FEC_5_6, FEC_7_8, FEC_1_2
++	};
+ 	u8 index;
+ 
+ 	dprintk ("%s\n", __func__);
+-- 
+2.33.1
 
-One alternative was to include the setting in the DT but the flash
-modules are not always soldered on the boards, at least on OpenPOWER
-systems which have sockets for them. The board are large, the wires
-long, the need is real, some chips freak out if not tuned correctly.
-
-spimem needs an extension I think. Sorry I have not been able to
-push that forward. Lack of time and other tasks to address on the
-host side of the machine. This is really a software problem, we
-have the HW procedures ready. If a spimem expert could get involved
-to make a few proposals, I would be happy to help and do some testing.
-QEMU models are good enough for the software part. We can do the
-training validation on real HW when ready.
-
-Thanks,
-
-C.

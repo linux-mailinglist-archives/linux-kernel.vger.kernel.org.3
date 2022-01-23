@@ -2,77 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2455B49737A
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 18:10:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB69449737E
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 18:11:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239195AbiAWRKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 12:10:51 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:43136
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239161AbiAWRKr (ORCPT
+        id S239234AbiAWRLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 12:11:00 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:59304
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239169AbiAWRKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 12:10:47 -0500
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        Sun, 23 Jan 2022 12:10:48 -0500
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 40EBA3FFFC
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 17:10:46 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 69F3E3F1CF
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 17:10:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642957846;
-        bh=xDXKi7JGbcFAIN75n+fskAz4fLROZVWhmg1xwTYWTaM=;
+        s=20210705; t=1642957847;
+        bh=la1WFYXOpR980qBpdVlXWePzrUe/p8xwwZIz/t/dobQ=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version:Content-Type;
-        b=vFHlFNPcWzZN3i48+prT9iLU9UcWWm9/wUdeswEtzF1sluDTAMVuqxD21SVMfMNnt
-         xftHaxXY7eHvG1brn5ZFq4A8Nb86c/o94cv0dOVHHud+WHl3+myTpVzgb+HDsmCXeZ
-         mQD3We8Zjm+pz+1J4wB2TI2DbMrjnOtqaXZ0WrwuC8FIfDimXuIe4UAAz8MrkPu5IV
-         jACLzHZ+8JJU6Ktzt17Ktbzkl6kqh1af42BSF3WCGd4pvubbKuGpV4yYZIXhww9n83
-         SBDnG2iFRvKy8vtn0XuZUCFnsgY0Ljq8Sr3PyMWyWXQud5FlKgvyCoLb3oCeMQ5dDA
-         xA3XoE3z8rbXg==
-Received: by mail-ed1-f72.google.com with SMTP id a18-20020aa7d752000000b00403d18712beso11588592eds.17
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 09:10:46 -0800 (PST)
+        b=qBxNMQeLQGHuY2T2ZXUlGYSyZ78z/Q1nbwNE1rN3rRh9fy/rmMNYi3doJYgE8ImK2
+         iRD9lc3CHamYtgJhH5uvx4GA+Deqmy41bKzKrEBMZxLZTarM7Zx7s+MCjGGWpqX7S0
+         JRvPxCp4NXkIKtzOMEmkriix/8v6tZMHBb26Gy8Uzpypt4C+X0sEWyCL5iDYUnf+7C
+         O5cprVExNq2e5zpHFDsaRGNl/GLEJ1HSXZqSl+c54+9klyMjVYoGq7vEJ6qcEfXoCt
+         GHocSt9qmc+C1+ZeS0B51jWKcy6f/uRidJuNwLE0PwER/91v3AdXe0PygWYGct6HDS
+         lpucwI8XATmug==
+Received: by mail-ed1-f71.google.com with SMTP id c23-20020a056402159700b00406aa42973eso4432668edv.2
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 09:10:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xDXKi7JGbcFAIN75n+fskAz4fLROZVWhmg1xwTYWTaM=;
-        b=gRIiX/QCTkNKlp6vsKC8SoGeBVRxcDk6fLT2nUeMN2MDj+uldQCjhGGmmCMhkgw93H
-         9uK4NNKakzg1cGkYe3j/phSTJmn0JGCSafII3lJ6OQ74XbRjlEyXGHKuOd6lsaUHlpGB
-         VNfs0Mn7cUlZtN8kRhHpzk1Vo+cYJF/U2LdNNW+W8qdFWEy86DmwY5+qjAZM7841U0G6
-         kYFlUCj7gArF5e+ySUYX46NLwT3Ocjil8GRtf4JuxSiYvVUmLYTZKlhhZDk1ZC6VUx4k
-         tWdCezuiUM0uYsOoGLu5tKdJW6bJGiyZYXKRk2wFBx60zDW4JPXAGIAvAbhqhrAZIGSh
-         ko1w==
-X-Gm-Message-State: AOAM531vBpM3hKrOEAAiWoTiQHoigD4AmUJaYMFOBsV7rlqHk6vL+DV6
-        kwUNPe0RMciQtYiwd3dVA2slDgGiXLyii0l50ebgc+WLV0IqpGJhrvQrhrIfd0sysXJTjOceuQv
-        tX3RAFBSEv4KpkrLtBCd5Gij4ZVZtTZ3wYEz3CPBKxw==
-X-Received: by 2002:a17:906:c0d3:: with SMTP id bn19mr5822210ejb.617.1642957846007;
+        bh=la1WFYXOpR980qBpdVlXWePzrUe/p8xwwZIz/t/dobQ=;
+        b=ZJZZoi1BaB3JFLhZHOu5L6YaHBeI82IKzAI+vUt8lIVq6WK8OvhfCreROUlAcVdW1B
+         rHVMr36evoNDo0ISpBs620qausQVCMc/f6RJJ5pOScbHr5Z3n7VIA2qHkUwi/lmx983U
+         06xFNn5K12qGsMAV1qJsJazkVO/vEA7HjS1w/HcafGlrC933oXgvHCBLEK/JCsmC14O2
+         Ys1QavrUnFPtz4xu4qwluBycs5+p+hFLZKzDV3XX7ps8Xb+Jzv2UhgaLSd/0OlCRNA0B
+         mdhWLtEket43U7Ht5LZGLpGRgUJu/X1kUSCzj/vYq+LzEFHZoRdDk8dBOPRiXRgnyiiM
+         E8nQ==
+X-Gm-Message-State: AOAM532x1VrV3itroJkfXVawqPfU0LawcNzQOf70Kwjsd4PF4IJNc8+u
+        ieZ1ZIxkTFI1qQMjICRxRZYSP6yda18jtfNxQywlkcSgkifhAwep3QrAOqwF9mmVaITrgvQjMa4
+        xV2Xk0P+RIfaWkihD7KIJ2YKRElyrYNQbDp4SzvEmvQ==
+X-Received: by 2002:a17:907:97cd:: with SMTP id js13mr10256965ejc.196.1642957847127;
+        Sun, 23 Jan 2022 09:10:47 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxl8TtHBHfcwF5UxjxV3/HnBay1hEnttjPhYwLLhuOy7PgFM4dopOI0Hwjx40uaPmIRHsxnFQ==
+X-Received: by 2002:a17:907:97cd:: with SMTP id js13mr10256950ejc.196.1642957846981;
         Sun, 23 Jan 2022 09:10:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzEwgwyC6py20Us9CXTtk8hy7gvk7QbsUsT9zTj+fmJrSTrQrjp6cdTGsUPJFslHAJdT1BKlg==
-X-Received: by 2002:a17:906:c0d3:: with SMTP id bn19mr5822197ejb.617.1642957845861;
-        Sun, 23 Jan 2022 09:10:45 -0800 (PST)
 Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id l2sm5208665eds.28.2022.01.23.09.10.44
+        by smtp.gmail.com with ESMTPSA id l2sm5208665eds.28.2022.01.23.09.10.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 09:10:45 -0800 (PST)
+        Sun, 23 Jan 2022 09:10:46 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-samsung-soc@vger.kernel.org, Pratyush Yadav <p.yadav@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andi Shyti <andi@etezian.org>, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Sam Protsenko <semen.protsenko@linaro.org>,
         linux-kernel@vger.kernel.org
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>
-Subject: Re: (subset) [PATCH v5 1/4] ARM: dts: exynos: split dmas into array of phandles in Exynos5250
-Date:   Sun, 23 Jan 2022 18:10:38 +0100
-Message-Id: <164295777263.25838.3565314490773058737.b4-ty@canonical.com>
+Cc:     stable@vger.kernel.org, Sylwester Nawrocki <snawrocki@kernel.org>
+Subject: Re: (subset) [RFT][PATCH 1/3] ARM: dts: exynos: fix UART3 pins configuration in Exynos5250
+Date:   Sun, 23 Jan 2022 18:10:39 +0100
+Message-Id: <164295777263.25838.13469745668860262642.b4-ty@canonical.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220120175747.43403-2-krzysztof.kozlowski@canonical.com>
-References: <20220120175747.43403-1-krzysztof.kozlowski@canonical.com> <20220120175747.43403-2-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211230195325.328220-1-krzysztof.kozlowski@canonical.com>
+References: <20211230195325.328220-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -80,16 +77,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Jan 2022 18:57:44 +0100, Krzysztof Kozlowski wrote:
-> "dmas" property should be rather an array of phandles, as dtschema
-> points.
+On Thu, 30 Dec 2021 20:53:23 +0100, Krzysztof Kozlowski wrote:
+> The gpa1-4 pin was put twice in UART3 pin configuration of Exynos5250,
+> instead of proper pin gpa1-5.
 > 
 > 
 
 Applied, thanks!
 
-[1/4] ARM: dts: exynos: split dmas into array of phandles in Exynos5250
-      commit: 88829baee3db050a06fd5ce8a2be0c39992f90da
+[1/3] ARM: dts: exynos: fix UART3 pins configuration in Exynos5250
+      commit: 372d7027fed43c8570018e124cf78b89523a1f8e
 
 Best regards,
 -- 

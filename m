@@ -2,120 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A76497148
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 12:22:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7186E49714A
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 12:24:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232900AbiAWLWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 06:22:55 -0500
-Received: from mga07.intel.com ([134.134.136.100]:20775 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229699AbiAWLWy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 06:22:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642936974; x=1674472974;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=So3UoZ2Zr5F1X5/R3sOMbQvlJJoyJHcL9ULCs0OBhZo=;
-  b=UDwqUiDHhLpHkqRcwebRHChP/MrL68/KTxr3m0KpxRnJV49Y9LQQs6ob
-   2v9uqbqf9iC/GLWa999z/dwuI0PwVuO/GFt5tLxrv7xuyqSDACnRB2eYt
-   KJpSaZ76Y1G319FBD2sXr3uXGIGFdwA/ET256u0MZrLoSfUffSI39HYa9
-   wTdkNHqMBK5S3/pFLbeOljq1SzuGCtFp3jPrt5Bap6kSEVYxj+QDaKXR3
-   /vLRHaZ1cSPRI9Z4O+fC5NXJi1n9cMccsKNtDLmVFMLOmiMD8Z8vaeoP4
-   xXekGCjSUZt7Uu+Wc4ldB3CE4sKzSuKknKzDMUP39v4ra8k4D73j3x0zy
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10235"; a="309210738"
-X-IronPort-AV: E=Sophos;i="5.88,310,1635231600"; 
-   d="scan'208";a="309210738"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2022 03:22:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,310,1635231600"; 
-   d="scan'208";a="616955888"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Jan 2022 03:22:52 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nBaxP-000HD9-Rf; Sun, 23 Jan 2022 11:22:51 +0000
-Date:   Sun, 23 Jan 2022 19:22:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Kees Cook <keescook@chromium.org>
-Subject: ERROR: modpost: "bcsr_mod" [drivers/pcmcia/db1xxx_ss.ko] undefined!
-Message-ID: <202201231941.OMnmf2JQ-lkp@intel.com>
+        id S232912AbiAWLYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 06:24:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40156 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229699AbiAWLYW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 23 Jan 2022 06:24:22 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EA9C06173B;
+        Sun, 23 Jan 2022 03:24:21 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JhW3S1Ss8z4xNq;
+        Sun, 23 Jan 2022 22:24:20 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1642937060;
+        bh=AXqTBcO/JQOfYg0JjB8y47Tymg3zAnj4rj1Hr3uw2sQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kDf0RgzN5aMBMcChu8mUaXYqGZEySy/H1izEgPl1BiDkrbARh6RQR+Deo3Y6YWst/
+         EIhFXnoJwelNXE8EhcjQcaVke5fX3iKXaRgoiAcEz1+i+RUtXDhG96PeYVUsYrwcIB
+         NCCVfkGawevaMTrYTvjgdfaCXNnqfuk8dvlmzpH1GYAfEO1XxNcRC4dXGAkJg/3xsY
+         lSRZJ23/fSuG73wxKer7mFPXkz4RRY7c/UoGVswKki/fT62WHBkI7Mo6ywZvebhOIJ
+         rNpGjey6lu6CCJDY6ZKvY3f1l82674nIWLphgCOg0HMN/SEdrwfXkwc4dgB2HirNpZ
+         srW1cEk6UrTIw==
+Date:   Sun, 23 Jan 2022 22:24:19 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Subject: Re: [PATCH 1/1] sysctl: Fix 'one_thousand' defined but not used
+ warning
+Message-ID: <20220123222419.1f948e8a@canb.auug.org.au>
+In-Reply-To: <Ye0bUGBJWRp+abEF@xhacker>
+References: <20220117012317.21168-1-surenb@google.com>
+        <Ye0bUGBJWRp+abEF@xhacker>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/QPlZWTPGr0k1gtB4pQ6ulNl";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+--Sig_/QPlZWTPGr0k1gtB4pQ6ulNl
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-First bad commit (maybe != root cause):
+Hi Jisheng,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e783362eb54cd99b2cac8b3a9aeac942e6f6ac07
-commit: 606b102876e3741851dfb09d53f3ee57f650a52c drm: fb_helper: fix CONFIG_FB dependency
-date:   4 months ago
-config: mips-randconfig-r002-20220120 (https://download.01.org/0day-ci/archive/20220123/202201231941.OMnmf2JQ-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=606b102876e3741851dfb09d53f3ee57f650a52c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 606b102876e3741851dfb09d53f3ee57f650a52c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+On Sun, 23 Jan 2022 17:09:36 +0800 Jisheng Zhang <jszhang@kernel.org> wrote:
+>
+> On Sun, Jan 16, 2022 at 05:23:17PM -0800, Suren Baghdasaryan wrote:
+> > Fix the following warning issued when CONFIG_PERF_EVENTS is not
+> > defined:
+> >=20
+> > kernel/sysctl.c:125:12: warning: 'one_thousand' defined but not used [-=
+Wunused-variable]
+> >=20
+> > Fixes: 39c65a94cd96 ("mm/pagealloc: sysctl: change watermark_scale_fact=
+or max limit to 30%")
+> > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  kernel/sysctl.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >=20
+> > diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> > index ef77be575d87..81a6f2d47f77 100644
+> > --- a/kernel/sysctl.c
+> > +++ b/kernel/sysctl.c
+> > @@ -122,7 +122,9 @@ static unsigned long one_ul =3D 1;
+> >  static unsigned long long_max =3D LONG_MAX;
+> >  static int one_hundred =3D 100;
+> >  static int two_hundred =3D 200;
+> > +#ifdef CONFIG_PERF_EVENTS
+> >  static int one_thousand =3D 1000; =20
+>=20
+> what about moving one_thousand definition below to group it with
+> six_hundred_forty_kb var together, so that we can avoid one
+> #ifdef CONFIG_PERF_EVENTS ... #endif
+>=20
+> > +#endif
+> >  static int three_thousand =3D 3000;
+> >  #ifdef CONFIG_PRINTK
+> >  static int ten_thousand =3D 10000;
+> > --=20
+> > 2.34.1.703.g22d0c6ccf7-goog
+> >  =20
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This has been fixed in Linus' current tree.
 
-All error/warnings (new ones prefixed by >>, old ones prefixed by <<):
+--=20
+Cheers,
+Stephen Rothwell
 
->> ERROR: modpost: "bcsr_mod" [drivers/pcmcia/db1xxx_ss.ko] undefined!
->> ERROR: modpost: "bcsr_read" [drivers/pcmcia/db1xxx_ss.ko] undefined!
---
-arch/mips/boot/compressed/decompress.c:42:6: warning: no previous prototype for function 'error' [-Wmissing-prototypes]
-void error(char *x)
-^
-arch/mips/boot/compressed/decompress.c:42:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-void error(char *x)
-^
-static
-In file included from arch/mips/boot/compressed/decompress.c:64:
-In file included from arch/mips/boot/compressed/../../../../lib/decompress_unlz4.c:10:
->> arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:506:5: warning: no previous prototype for function 'LZ4_decompress_safe_forceExtDict' [-Wmissing-prototypes]
-int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
-^
-arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:506:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
-^
-static
-arch/mips/boot/compressed/decompress.c:85:6: warning: no previous prototype for function '__stack_chk_fail' [-Wmissing-prototypes]
-void __stack_chk_fail(void)
-^
-arch/mips/boot/compressed/decompress.c:85:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-void __stack_chk_fail(void)
-^
-static
-arch/mips/boot/compressed/decompress.c:90:6: warning: no previous prototype for function 'decompress_kernel' [-Wmissing-prototypes]
-void decompress_kernel(unsigned long boot_heap_start)
-^
-arch/mips/boot/compressed/decompress.c:90:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-void decompress_kernel(unsigned long boot_heap_start)
-^
-static
-4 warnings generated.
+--Sig_/QPlZWTPGr0k1gtB4pQ6ulNl
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHtOuMACgkQAVBC80lX
+0GyK/Qf/RxIoUc6kNwRGfkw1R+LbpkZEI6NDetkWhkFFyxCsaoKdwFadKGFPtGkD
+Uw+V73WlNlMGknsMV5t5TdZqflsVsmt+9lbL4wTBSm9Hdd8We6zR6rBdIbg6fJm+
+vLx908fdT7n7NGGSmocNl4+JcvkXhjpjlULTEtISJjuG3VdrIleq2EZ/uCeDCeF9
+NnpvzCzDH6u1Nv2tlGltGBCIhvu6IhYjELeoDskxztidFPFcIfATQTCeSFK2dqOJ
+bDw16gLG+NXQTqiLL5+LXVLt+eE07NYGc5oVh0B1a3JkPDufbrfPLD22cU0yKHwY
+qymRvV1JSD9p2jq4yRHdPJTy8/sKKw==
+=CS/l
+-----END PGP SIGNATURE-----
+
+--Sig_/QPlZWTPGr0k1gtB4pQ6ulNl--

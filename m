@@ -2,82 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B589849707F
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 08:38:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55937497081
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 08:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235931AbiAWHiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 02:38:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47884 "EHLO
+        id S235939AbiAWHjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 02:39:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbiAWHiN (ORCPT
+        with ESMTP id S230499AbiAWHjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 02:38:13 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48673C06173B;
-        Sat, 22 Jan 2022 23:38:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=UdcNAIMjc7ztcdEzpkZME12kbVR0giTdEThicNaiALE=; b=h2Iov9K0l/0xc+iIcsHlD4A+Ny
-        mPCCi0FlPDpDuDfEhOCB93DOsWV9g9PTIQcdqFpt4EMh9xepudI0ELmD88hkQFLQwLgnJTOrqOtmf
-        hmXfndKZLrQrPXsfIXa+cyw4KKojdf9UNwBqvLUfeIBnOld++sQAqMUdRZu3BJF7Uq/fE0Ri4wcew
-        rbZ7z0w2mj1OJ6otqjNteNz7YKQJTwmlaYftYM+5FPnMyELeS2Mx2RASnNeXl8grhVLIZUYiTwXXA
-        X2iX+GqYbksBWpFv5JDk2eLeyYQwUTDAUa2P3JsdUtrpUzD5xwS0uYVkQz/0m4w3Aut8J9VIgy/Fm
-        9+85VOig==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nBXRx-00GulY-LZ; Sun, 23 Jan 2022 07:38:10 +0000
-Message-ID: <44959d7e-a930-cd5a-1113-b5bfc6da7782@infradead.org>
-Date:   Sat, 22 Jan 2022 23:38:03 -0800
+        Sun, 23 Jan 2022 02:39:01 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86627C06173B
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 23:39:01 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id i1so2963646pla.0
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 23:39:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=uhRfBYr+QspbVT8yLaJrPUXP2Z6/BOSZ8fDX9dfoTa4=;
+        b=Qo1CRKU0nmS3Z+DuG+KK6MQE0+MsHldMbHb0EM2b0eu0z7cJ3RJ3j7xZBcy901s0CB
+         nxv7hm5WqYedXjS6YN+4DaW6licZCrGNj1QnPCgUQvJhvpVTNUocRAU87Twx02jDZlOc
+         Y5cCytgPA2K0T5VXvnOW87RPcormIA/0j6YUSe5baikRp1NgV7rQ3RgbMTbRX5a87X39
+         7iTiFPL+P2eX3Sk/GrlyVNdZ3RIsnEbEq0tdB/WaFxV0L2Hz52vjvVrBXktDU7EutcZE
+         RGG4kaX3NExkqieFZ0zHx4r+eiVJcOvC961yV7qzpaDN1G43CLPKUDpWUYE3EaHzvzTW
+         N+9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=uhRfBYr+QspbVT8yLaJrPUXP2Z6/BOSZ8fDX9dfoTa4=;
+        b=OS4rIOe+6aGjU0FhVdWgP+lrRc0nCfkYBOTyQpaCxRm+H6Uk9c4WPgOIasxyNSluWF
+         oq2tHgLdNFsUc42bKt7XYYe9SX2/1jAerdcR522UzE9HaEUVIN7vki4Q6noQSs2C44G0
+         UX0YyoVzi65iPpCYvYcey9eydXFYLFcYs512U/nodO3j4iAoqIg214kAs9onK7lpWx1z
+         y2V4CfFaTIrOvP8Y6JjqClvwZ5m8nsPhrodQWQZbXWj/A8GF9hOnaCizaAI/oLK8Q/Z8
+         wZcTFvWK+bosKP84Tn4Lrgyt/2WNQY5n8/bT7CviOTjaBLeD9eE6Ue6c1pojvA4JCJOk
+         fLIQ==
+X-Gm-Message-State: AOAM531499I/EItLHtGn3obBjBX1GUVdyD1LMRAijcwGeCQYwWGnIOma
+        bRCEOMXlI5ZEejOYoKpYvXk=
+X-Google-Smtp-Source: ABdhPJyJPbInC92Cnl9KOmoACPzxsCxjYf9t+u3So/gmoRz8o6odpR+nXdj3dCD0J8YFcYsI/U/Rag==
+X-Received: by 2002:a17:90a:e541:: with SMTP id ei1mr7840048pjb.91.1642923540933;
+        Sat, 22 Jan 2022 23:39:00 -0800 (PST)
+Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
+        by smtp.gmail.com with ESMTPSA id n2sm8878979pga.39.2022.01.22.23.38.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Jan 2022 23:39:00 -0800 (PST)
+Date:   Sun, 23 Jan 2022 20:38:55 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com,
+        realwakka@gmail.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] staging: pi433: add debugfs interface
+Message-ID: <20220123073855.GA79453@mail.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH ?next?] gpio: sim: add doc file to index file
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        linux-gpio@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20220123073536.12193-1-rdunlap@infradead.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220123073536.12193-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oops. Yes, the subject should say: [PATCH -next].
-Sorry about that.
+When troubleshooting RF applications, one of the most common approaches is to
+ensure that both sides of the communication path are using the same 
+configuration such as bit rate, frequency deviation, encryption key, sync words
+and so on.
 
+The existing driver implementation doesn't allow the user to see which values
+have been configured onto the uC which makes trobleshooting more painful than
+it needs to be.
 
-On 1/22/22 23:35, Randy Dunlap wrote:
-> Include the gpio-sim.rst file in the GPIO index (toc/table of contents).
-> 
-> Quietens this doc build warning:
-> 
-> Documentation/admin-guide/gpio/gpio-sim.rst: WARNING: document isn't included in any toctree
-> 
-> Fixes: b48f6b466e44 ("gpio: sim: new testing module")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  Documentation/admin-guide/gpio/index.rst |    1 +
->  1 file changed, 1 insertion(+)
-> 
-> --- linux-next-20220121.orig/Documentation/admin-guide/gpio/index.rst
-> +++ linux-next-20220121/Documentation/admin-guide/gpio/index.rst
-> @@ -10,6 +10,7 @@ gpio
->      gpio-aggregator
->      sysfs
->      gpio-mockup
-> +    gpio-sim
->  
->  .. only::  subproject and html
->  
+This patchset adds debugfs interface to this driver and exposes a read-only
+access to uC reg values to address that problem.
+
+Patch dependency:
+
+This series depend on these patches as they change the same set of files:
+
+- https://lore.kernel.org/lkml/20220108212728.GA7784@mail.google.com/
+- https://lore.kernel.org/lkml/20220114221643.GA7843@mail.google.com/ 
+- https://lore.kernel.org/lkml/20220118230312.GA4826@mail.google.com/
+
+Paulo Miguel Almeida (2):
+  staging: pi433: add missing register contants
+  staging: pi433: add debugfs interface
+
+ drivers/staging/pi433/Kconfig          |  2 +-
+ drivers/staging/pi433/pi433_if.c       | 82 ++++++++++++++++++++++++++
+ drivers/staging/pi433/rf69.c           |  2 +-
+ drivers/staging/pi433/rf69.h           |  1 +
+ drivers/staging/pi433/rf69_registers.h |  2 +
+ 5 files changed, 87 insertions(+), 2 deletions(-)
 
 -- 
-~Randy
+2.25.4
+

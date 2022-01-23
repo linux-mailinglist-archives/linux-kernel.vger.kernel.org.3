@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7889449729D
+	by mail.lfdr.de (Postfix) with ESMTP id F1BF249729E
 	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 16:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237892AbiAWPjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 10:39:40 -0500
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:54361 "EHLO
+        id S237914AbiAWPjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 10:39:44 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:56145 "EHLO
         relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237899AbiAWPji (ORCPT
+        with ESMTP id S237913AbiAWPjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 10:39:38 -0500
+        Sun, 23 Jan 2022 10:39:43 -0500
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8BC0B60004;
-        Sun, 23 Jan 2022 15:39:36 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 69B2560003;
+        Sun, 23 Jan 2022 15:39:41 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
         linux-kernel@vger.kernel.org
@@ -24,71 +24,40 @@ Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         linux-mtd@lists.infradead.org
-Subject: Re: [PATCH 4/4] mtd: rawnand: gpmi: support fast edo timings for mx28
-Date:   Sun, 23 Jan 2022 16:39:36 +0100
-Message-Id: <20220123153936.673237-1-miquel.raynal@bootlin.com>
+Subject: Re: [PATCH 3/4] mtd: rawnand: gpmi: validate controller clock rate
+Date:   Sun, 23 Jan 2022 16:39:41 +0100
+Message-Id: <20220123153941.673301-1-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220118095434.35081-5-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20220118095434.35081-4-dario.binacchi@amarulasolutions.com>
 References: 
 MIME-Version: 1.0
 X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'ac178a21754cf720b27e82965c2f11e71e9e5968'
-Content-Type: text/plain; charset=UTF-8
+X-linux-mtd-patch-commit: b'15e27d197a7ea69b4643791ca2f8467fdd998359'
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-01-18 at 09:54:34 UTC, Dario Binacchi wrote:
-> In the i.MX28 manual (MCIMX28RM, Rev. 1, 2010) you can find an example
-> (15.2.4 High-Speed NAND Timing) of how to configure the GPMI controller
-> to manage High-Speed ​​NAND devices, so it was wrong to assume that only
-> i.MX6 can achieve EDO timings.
+On Tue, 2022-01-18 at 09:54:33 UTC, Dario Binacchi wrote:
+> What to do when the real rate of the gpmi clock is not equal to the
+> required one? The solutions proposed in [1] did not lead to a conclusion
+> on how to validate the clock rate, so, inspired by the document [2], I
+> consider the rate correct only if not lower or equal to the rate of the
+> previous edo mode. In fact, in chapter 4.16.2 (NV-DDR) of the document [2],
+> it is written that "If the host selects timing mode n, then its clock
+> period shall be faster than the clock period of timing mode n-1 and
+> slower than or equal to the clock period of timing mode n.". I thought
+> that it could therefore also be used in this case, without therefore
+> having to define the valid rate ranges empirically.
 > 
-> This patch has been tested on a 2048/64 byte NAND (Micron MT29F2G08ABAEAH4).
-> Kernel mtd tests:
->  - mtd_nandbiterrs
->  - mtd_nandecctest
->  - mtd_oobtest
->  - mtd_pagetest
->  - mtd_readtest
->  - mtd_speedtest
->  - mtd_stresstest
->  - mtd_subpagetest
->  - mtd_torturetest [cycles_count = 10000000]
-> run without errors.
+> For example, suppose that gpmi_nfc_compute_timings() is called to set
+> edo mode 5 (100MHz) but the rate returned by clk_round_rate() is 80MHz
+> (edo mode 4). In this case gpmi_nfc_compute_timings() will return error,
+> and will be called again to set edo mode 4, which this time will be
+> successful.
 > 
-> Before this patch (mode 0):
-> ---------------------------
-> eraseblock write speed is 2098 KiB/s
-> eraseblock read speed is 2680 KiB/s
-> page write speed is 1689 KiB/s
-> page read speed is 2522 KiB/s
-> 2 page write speed is 1899 KiB/s
-> 2 page read speed is 2579 KiB/s
-> erase speed is 128000 KiB/s
-> 2x multi-block erase speed is 73142 KiB/s
-> 4x multi-block erase speed is 204800 KiB/s
-> 8x multi-block erase speed is 256000 KiB/s
-> 16x multi-block erase speed is 256000 KiB/s
-> 32x multi-block erase speed is 256000 KiB/s
-> 64x multi-block erase speed is 256000 KiB/s
-> 
-> After this patch (mode 5):
-> -------------------------
-> eraseblock write speed is 3390 KiB/s
-> eraseblock read speed is 5688 KiB/s
-> page write speed is 2680 KiB/s
-> page read speed is 4876 KiB/s
-> 2 page write speed is 2909 KiB/s
-> 2 page read speed is 5224 KiB/s
-> erase speed is 170666 KiB/s
-> 2x multi-block erase speed is 204800 KiB/s
-> 4x multi-block erase speed is 256000 KiB/s
-> 8x multi-block erase speed is 256000 KiB/s
-> 16x multi-block erase speed is 256000 KiB/s
-> 32x multi-block erase speed is 256000 KiB/s
-> 64x multi-block erase speed is 256000 KiB/s
+> [1] https://lore.kernel.org/r/20210702065350.209646-5-ebiggers@kernel.org
+> [2] http://www.onfi.org/-/media/client/onfi/specs/onfi_3_0_gold.pdf?la=en
 > 
 > Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
 > Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>

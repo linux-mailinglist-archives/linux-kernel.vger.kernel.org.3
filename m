@@ -2,136 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE96349723B
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 15:46:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DAF849723C
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 15:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236820AbiAWOqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 09:46:34 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:45565 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233533AbiAWOqb (ORCPT
+        id S236828AbiAWOqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 09:46:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233563AbiAWOqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 23 Jan 2022 09:46:31 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FFCC06173B;
+        Sun, 23 Jan 2022 06:46:30 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id d10so14255328eje.10;
+        Sun, 23 Jan 2022 06:46:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1642949191; x=1674485191;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=mycJ8+dHfD1xjVxrdmxmttz3DlLMs0BIC5UpIx3conI=;
-  b=uX2QxqOzUr0aitJ1yvfTtHjgOL5lSKV3ZAOV+DtZSNJPLK3+lNu8hBtL
-   mUgRYJiKSOKZF3274lDsolz6tR/hwuMrG7HaWfweDYCfxyr3Pg6yQAdUH
-   4da428md+3IXFfEJGv/mwLKtCNo3Z+jE/eVxgQIQ4B+6alufm2T6EPfKN
-   0=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 23 Jan 2022 06:46:30 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2022 06:46:29 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Sun, 23 Jan 2022 06:46:29 -0800
-Received: from [10.216.26.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Sun, 23 Jan
- 2022 06:46:19 -0800
-Message-ID: <6eed66b8-a04b-fa1e-49ec-d1051641b2e9@quicinc.com>
-Date:   Sun, 23 Jan 2022 20:16:14 +0530
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hgWH+WcZXMlxkNrNUYeXrIrZsOUs50NokRp+9lLtuio=;
+        b=bDhWIjq4PSVUuW00XfoEI+VZpml2rFKFdisJ2LLFq8a1sSibrFjyit2wIZICRAUFO+
+         DhVT9lY/F3n4ExOnUAze5+POY5jimBX6KmmBYPRbOMcTYlu9RhQpRlqjdN6Ye+Zob2Oe
+         KtDA3UWwMV3t5QWy7GZb5q0jlPpio1Ii5r4Zb8nMmoru3/iInyCr0nsS0WN8g9/v3Qnq
+         kyMrggZZ6exW11xnsSRDbj6CNMmb+ijowaXXMvRQEVUd+Uf0dN1zDFyp5BYRBVN08Kvv
+         b4S3niqnvX40jpGKzkdgghk8q/i9f2je6zoQU2rG0D52trZm/4I/hOiR30e9IKtjd/yl
+         OB5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hgWH+WcZXMlxkNrNUYeXrIrZsOUs50NokRp+9lLtuio=;
+        b=r6hFXciTKwzffK4VxEVnp+rcodURAUSao7kiOZOo9xBXQ5whX36mENfvC9M3Pz7B3o
+         piMeh4SiDMKukI87ijPME79ijPPF+LkwG9HkVzKq3FEXC2F+ERnHKxfvUk3OYfyowZaX
+         Z9VStG2caGn0flEgZS6gDlfWXOkQb6BZIz6mKMvzdZztqGGZcGQU+KFx/vDlizYEgCf4
+         LV6Ib7Cabmnl1l2kkEoznexyWaWNwJe76JdNu9+/OkeqNJfD3Tur7oYtjRh4wExM17Su
+         RIWrg1h5sdXL64M0amsuLOGpZEO7aTlnYkfXqsW5gxGLyN03kTzyYwO9O884o3+YEhLl
+         COKw==
+X-Gm-Message-State: AOAM531hGysYFlBll54PT5qzzeB/Kom/dJ0U4UMfVWQowlpnlLoaguW4
+        FF/ZDMgvNOPltYlaW2UYAuM=
+X-Google-Smtp-Source: ABdhPJxexb6SNOjl8nBjHlVlmuVMQjSS2rGSKoTXvLvQSz0ZlvWRxzDR85vXwWCoH5fcXKWhZHmGIQ==
+X-Received: by 2002:a17:907:3fa1:: with SMTP id hr33mr6694895ejc.239.1642949189039;
+        Sun, 23 Jan 2022 06:46:29 -0800 (PST)
+Received: from Ansuel-xps. (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
+        by smtp.gmail.com with ESMTPSA id f26sm5019979eds.69.2022.01.23.06.46.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Jan 2022 06:46:28 -0800 (PST)
+Message-ID: <61ed6a44.1c69fb81.35728.5e8b@mx.google.com>
+X-Google-Original-Message-ID: <Ye1qQYTvGt7C1FFF@Ansuel-xps.>
+Date:   Sun, 23 Jan 2022 15:46:25 +0100
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] drivers: phy: qcom: ipq806x-usb: conver latch
+ function to pool macro
+References: <20220117002641.26773-1-ansuelsmth@gmail.com>
+ <20220117002641.26773-2-ansuelsmth@gmail.com>
+ <Ye1BcvaneH0sWeQV@matsya>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V3 4/4] thermal: qcom: add support for PMIC5 Gen2 ADCTM
-Content-Language: en-US
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <devicetree@vger.kernel.org>, <mka@chromium.org>,
-        <dmitry.baryshkov@linaro.org>, <robh+dt@kernel.org>,
-        <knaack.h@gmx.de>, <lars@metafoo.de>, <pmeerw@pmeerw.net>,
-        <manivannan.sadhasivam@linaro.org>, <linus.walleij@linaro.org>,
-        <quic_kgunda@quicinc.com>, <quic_aghayal@quicinc.com>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <quic_subbaram@quicinc.com>, <jic23@kernel.org>,
-        <amitk@kernel.org>, Thara Gopinath <thara.gopinath@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm-owner@vger.kernel.org>, <linux-iio@vger.kernel.org>
-References: <1637647025-20409-1-git-send-email-quic_jprakash@quicinc.com>
- <1637647025-20409-5-git-send-email-quic_jprakash@quicinc.com>
- <20211126184613.00002816@Huawei.com>
-From:   Jishnu Prakash <quic_jprakash@quicinc.com>
-In-Reply-To: <20211126184613.00002816@Huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ye1BcvaneH0sWeQV@matsya>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
-
-On 11/27/2021 12:16 AM, Jonathan Cameron wrote:
-> On Tue, 23 Nov 2021 11:27:04 +0530
-> Jishnu Prakash <quic_jprakash@quicinc.com> wrote:
+On Sun, Jan 23, 2022 at 05:22:18PM +0530, Vinod Koul wrote:
+> On 17-01-22, 01:26, Ansuel Smith wrote:
+> > Convert latch function to readl pool macro to tidy things up.
+> > 
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > ---
+> >  drivers/phy/qualcomm/phy-qcom-ipq806x-usb.c | 17 +++++------------
+> >  1 file changed, 5 insertions(+), 12 deletions(-)
+> > 
+> > diff --git a/drivers/phy/qualcomm/phy-qcom-ipq806x-usb.c b/drivers/phy/qualcomm/phy-qcom-ipq806x-usb.c
+> > index 6788e0e8272a..ab2d1431546d 100644
+> > --- a/drivers/phy/qualcomm/phy-qcom-ipq806x-usb.c
+> > +++ b/drivers/phy/qualcomm/phy-qcom-ipq806x-usb.c
+> > @@ -112,6 +112,9 @@
+> >  #define SS_CR_READ_REG				BIT(0)
+> >  #define SS_CR_WRITE_REG				BIT(0)
+> >  
+> > +#define LATCH_SLEEP				40
+> > +#define LATCH_TIMEOUT				100
+> > +
+> >  struct usb_phy {
+> >  	void __iomem		*base;
+> >  	struct device		*dev;
+> > @@ -156,19 +159,9 @@ static inline void usb_phy_write_readback(struct usb_phy *phy_dwc3,
+> >  
+> >  static int wait_for_latch(void __iomem *addr)
+> >  {
+> > -	u32 retry = 10;
+> > -
+> > -	while (true) {
+> > -		if (!readl(addr))
+> > -			break;
+> 
+> we break if read returns non zero value...
+> 
+> Do you know what is the value expected?
 >
->> Add support for PMIC5 Gen2 ADC_TM, used on PMIC7 chips. It is a
->> close counterpart of PMIC7 ADC and has the same functionality as
->> PMIC5 ADC_TM, for threshold monitoring and interrupt generation.
->> It is present on PMK8350 alone, like PMIC7 ADC and can be used
->> to monitor up to 8 ADC channels, from any of the PMIC7 PMICs
->> having ADC on a target, through PBS(Programmable Boot Sequence).
->>
->> Signed-off-by: Jishnu Prakash <quic_jprakash@quicinc.com>
-> Just one note on using put_unaligned_le16() below.  Otherwise, from
-> a drive by review point of view it looks fine to someone not that
-> familiar with the driver or thermal :)
->
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->
->> ---
->>   drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 375 ++++++++++++++++++++++++++++++-
->>   1 file changed, 372 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
->> index fc8cd45..a7b33a8 100644
->> --- a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
->> +++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
->> @@ -4,7 +4,10 @@
->>    *
->>    * Based on original driver:
->>    * Copyright (c) 2012-2020, The Linux Foundation. All rights reserved.
->> + *
->> + * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
->>    */
 
->> +
->> +	/* Low temperature corresponds to high voltage threshold */
->> +	if (low != -INT_MAX) {
->> +		channel->high_thr_en = true;
->> +		adc_code = qcom_adc_tm5_gen2_temp_res_scale(low);
->> +
->> +		buf[11] = adc_code & 0xff;
->> +		buf[12] = adc_code >> 8;
-> looks like a little endian put though not necessarily aligned so
-> put_unaligned_le16() preferred to open coding it. Same in similar places.
-> Not my area though so maintainer may not care as much.
+If I understand the logic here, we write a value and we wait for it to
+get applied. To confirm that we execute a writel and then we readl the
+same address until it does return a value. That is the way used to
+understand that the write process has finished and that the value has
+been applied/we can write again.
 
+> > -
+> > -		if (--retry == 0)
+> > -			return -ETIMEDOUT;
+> > -
+> > -		usleep_range(10, 20);
+> > -	}
+> > +	u32 val;
+> 
+> Okay this contains garbage..
 
-I'll use put_unaligned_le16 as suggested, in similar places in the next 
-post.
+I think I didn't understand, val value will get replaced by readl in
+the pool_timeout function.
 
+> >  
+> > -	return 0;
+> > +	return readl_poll_timeout(addr, val, !val, LATCH_SLEEP, LATCH_TIMEOUT);
+> 
+> and we are waiting for it read a garbage value!
+> 
 
->> +	} else {
->> +		channel->high_thr_en = false;
->> +	}
->> +
->> +	buf[13] = ADC_TM_GEN2_MEAS_EN;
->> +	if (channel->high_thr_en)
->> +		buf[13] |= ADC_TM5_GEN2_HIGH_THR_INT_EN;
+Again could be very confused and wrong but the pool_timeout macro does
+the exact same thing of the wait_for_latch function with th only
+difference of handling the sleep differently. We put in val the return
+of readl and the break condition as !val. Or I didn't understand the
+concern about garbage value.
 
-Thanks,
+> 
+> -- 
+> ~Vinod
 
-Jishnu
-
+-- 
+	Ansuel

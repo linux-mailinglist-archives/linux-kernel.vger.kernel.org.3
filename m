@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E498E49757A
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 21:24:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4406249757D
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 21:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240062AbiAWUYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 15:24:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239824AbiAWUYe (ORCPT
+        id S240042AbiAWU2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 15:28:04 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:42241 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239722AbiAWU2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 15:24:34 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7271FC06173B;
-        Sun, 23 Jan 2022 12:24:29 -0800 (PST)
+        Sun, 23 Jan 2022 15:28:03 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jhl2d2RvLz4xNp;
-        Mon, 24 Jan 2022 07:24:24 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jhl6n0zK2z4xcF;
+        Mon, 24 Jan 2022 07:28:00 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642969465;
-        bh=7wjl80U+njEwMXV1/vX38G0FRHWH79agiKblFR7hqQg=;
+        s=201702; t=1642969681;
+        bh=eYNGmPU6PXILWtNM4ANHpXx96IbVfYKSd0bqdtxx2fg=;
         h=Date:From:To:Cc:Subject:From;
-        b=hUyaysxZ88jg2szAgcYnD65m/zV3eE5FR0UDRSvN85k9Kq/S5o4mApcx4HjRZlbyo
-         /bDFsZ1QtqxjNMoreZ9UZQYqURkWXTwxy/r3UW6oelXaOFBsvxvqtqbjvV9WJ7tLLs
-         tKK3Kx0zMWbm5HnM+TCth/2D3FBK60VR51NCophWyup8V/bquteBZCZxZU48zGS2uV
-         Zh6oD9HNWXlWi+oQnQ0bkyr2GJXj8FnAHB1ukBJfZ0dX3zp3zchs50YBQl5P5lpGr2
-         kV8sSiT6Ogq95jTwf5iROtBvrBkxgDgwqwtkMWxJqPNF9CMJ3DLIfNUq/LIzfYYwVq
-         YVkQn9WMvgx5w==
-Date:   Mon, 24 Jan 2022 07:24:22 +1100
+        b=bILo7eoQsziL4LJB3O9/y1+GPAFxwEm/jKFBOmWH0wm8LbPcayQ3gKXXkHoPTbVma
+         WlLeYLrTYnAKtzQ9ulfDhw8diC5SpFcZrNtHpfTC7wqE8Utm2WiKnTZ4aWNu3xAFmu
+         wzEHOs4RLO05b2O9dG9kdA/skgAcal8QjXP03lCuxArnO3jqtssuEudGF90EP7Atm0
+         09WzljLHJxqQR4An5/VZKSRcV9oqtg8fs8vXxXho81DAOYred2APB3PScpqkIpTOuP
+         hL+N5Yu0UAvz4xUsK4FynMqUOQLOkACskw3ug4q5Emba4loBaSeJuDnIc9ziDPgcxL
+         SP7YcdKW6tj5w==
+Date:   Mon, 24 Jan 2022 07:28:00 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the phy tree
-Message-ID: <20220124072422.3cf483a1@canb.auug.org.au>
+Subject: linux-next: Fixes tags need some work in the mtd-fixes tree
+Message-ID: <20220124072800.14c492a5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Vxe92CtCaC60/oFCKTMHL=p";
+Content-Type: multipart/signed; boundary="Sig_/O6UNn/M2Ub3eiT.=UXs_3VD";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Vxe92CtCaC60/oFCKTMHL=p
+--Sig_/O6UNn/M2Ub3eiT.=UXs_3VD
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -54,39 +53,54 @@ Hi all,
 
 In commit
 
-  760e61025158 ("phy: ti: Fix "BUG: KASAN: global-out-of-bounds in _get_max=
-div" issue")
+  2b3d77cb5ce3 ("mtd: parsers: qcom: Fix kernel panic on skipped partition")
 
 Fixes tag
 
-  Fixes: 091876cc35 ("phy: ti: j721e-wiz: Add support for WIZ module presen=
-t in TI J721E SoC")
+  Fixes: 803eb12 ("mtd: parsers: Add Qcom SMEM parser")
 
 has these problem(s):
 
   - SHA1 should be at least 12 digits long
-    Can be fixed in the future by setting core.abbrev to 12 (or more) or
-    (for git v2.11 or later) just making sure it is not set (or set to
+    Can be fixed in the futrure by setting core.abbrev to 12 (or more)
+    or (for git v2.11 or later) just making sure it is not set (or set to
+    "auto").
+
+In commit
+
+  7815173a7ccb ("mtd: rawnand: ingenic: Fix missing put_device in ingenic_e=
+cc_get")
+
+Fixes tag
+
+  Fixes: 15de8c6 ("mtd: rawnand: ingenic: Separate top-level and SoC specif=
+ic code")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    Can be fixed in the futrure by setting core.abbrev to 12 (or more)
+    or (for git v2.11 or later) just making sure it is not set (or set to
     "auto").
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Vxe92CtCaC60/oFCKTMHL=p
+--Sig_/O6UNn/M2Ub3eiT.=UXs_3VD
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHtuXYACgkQAVBC80lX
-0Gxc6Af6AnsUiPCEyKIQljdINcAq4R2b93Idc3uG8KMEGb9kJOj5Bqd+wwhYX5ZK
-gy1yRObFETBrplhgPBKZamL7sti5G3r8CC/OXPW32HoRxCdQyNqQH4UlDChP0zgA
-WtF4w5g/d66x9FW/SSHyXzRrtp2CEob7juUvMFj4HPTPZJ1T+p57fgprIpolWpBL
-ZRBEkSjimoKPfx8gGXyFFF9BThKBetFrD4jjyRiViNQUFY8Cae+4x1Iliovp4PLf
-CWUdjU6mOulGeEiSnVCL3+5/tXU1ZUOqWRzKRyEZBzae4CpYoa9zLsYR8dRMkOal
-XzdNWEKjAByTl6bRAfJ5Hyntm873Pg==
-=4WcS
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHtulAACgkQAVBC80lX
+0GysBwf/YZj6d57CPKZt6KLnmIvkHZmVrZINSP5UNZ3IY5xqdxFKi9QPNY/qRszF
+LEpfktX0Imx3qp5Yt53xLH9o8rAYiGXyW689INbftSoLGr7lUgE31Be/gEd6OkhT
+UNjxV8J4X8C+Velbu2mff2UAHTOkmTYE47jWMNpSiIwbG0J9+VIbDx9L6LxnL1QF
+NA8hn95CppK8YjyfVauX8CkK/pfMOCUtVEB1mG6dbojkcC1tM+FePwt/YSPBX+E7
+FtJyuTKttXmo00d5yeZtj1TapXHngZylRKhYbwWvYCV60ZsgNKBEDb0+fV3gsAVJ
+/n2Q/kqueDxEEmxOtx6tS5fOEdQ6BA==
+=9jYZ
 -----END PGP SIGNATURE-----
 
---Sig_/Vxe92CtCaC60/oFCKTMHL=p--
+--Sig_/O6UNn/M2Ub3eiT.=UXs_3VD--

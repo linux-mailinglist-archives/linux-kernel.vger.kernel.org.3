@@ -2,88 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49189497611
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 23:41:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A11C497616
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 23:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240388AbiAWWlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 17:41:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
+        id S240383AbiAWWol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 17:44:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiAWWlq (ORCPT
+        with ESMTP id S230163AbiAWWok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 17:41:46 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7227C06173B;
-        Sun, 23 Jan 2022 14:41:45 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id q9-20020a7bce89000000b00349e697f2fbso33026639wmj.0;
-        Sun, 23 Jan 2022 14:41:45 -0800 (PST)
+        Sun, 23 Jan 2022 17:44:40 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05116C06173D
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 14:44:39 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id s9so22634755oib.11
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 14:44:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FnoUpruS07e9SliOMBRd2B9mJrCRv0Zfw7LhMPxVu6s=;
-        b=kg0Jqz/pJCi7QBRbj36+52ElSW/YbjVvXQdKUmD/cL0yPHmnl/NlfGzaPESB3mFixz
-         IJZ9JRIuWZ43wnrQ834ZfNT9dIbFnot4jNSHwYk7D6IBLDQ6JqrTsSZqSWKblEDl/WFl
-         mXWSJGYK7M07ulzXtyMs7Zpv7hqLbXk0zmy1R7a6M+y9UNECqJm+9/XdBCuwh9bVnBE1
-         FGqwnsRg85Q0YX/vUVZME2T4vycLKom1sLxwS076lwlk8qeTaSZk4R37TjubW9hoNUVi
-         FSBqSoZh6emLtfpu2agRJlprOXN8lw+ZFt0mvBFGlhbus5WILA+4mCqT5R9w/pkWEajG
-         Vecw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=s9IGPqOTuFEFxKMxMPq1P/MfyJrhGXNasZNiCUUGkGw=;
+        b=lBO77NgEyUbA5FeN7Ju3TqhHRhjGCFVpvSQbnSXvkYjqdSHiBUh9jwu7VOgwEJ25yD
+         gKLQUzXbcxxIIsSoQS2I2YNMkKNaVzWzegp2KzPTjfJrYwjdtblhwnrK57nLfaoDBseT
+         WMsdpTR1wv3CQV2RPxArxgybg2hKxrKq5fkSGR+qhCqQpFFQzQU8nCxAgnc2X3Ikw9Bm
+         qEA5L1FJrlf2TBuFTvuEj3lQgF6CGR3+VrgP1te8WRmVRNFLrcAkMBRocSfpTeKOYYiV
+         loek4dhlNmtk55gwFvpGVUqWL6EC1i6IaUbAea+PKyux72OeW0O/gwnLTPd2tQC/gNk8
+         FVHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FnoUpruS07e9SliOMBRd2B9mJrCRv0Zfw7LhMPxVu6s=;
-        b=ht8+NV9KfFKM56TKlpbPIrrj97X6GZmrxrg37vHdtf/JWp+bzryxM9S4tHIhZxO0VV
-         S64GKlCpGeaF1MXNrJ37cCkMAmqwAdRIaXg9c2iCt3AfseVe/k2BkReLYIkoMyvs5UHj
-         B/pG+sykY0+KtMGsS1z7SoIisQQasSMiQIUV4toI9vskMAu1W78IheCxkF3TmzXHMvvu
-         X5C2RDg5WitwAFigGWWffvvzulYYckjlO4Wj8Nwf3Shb/UykTkiFSM7LvT3uTtb9X7+c
-         jyUJVnR4cAP2a88whqJfxo7614H1lhOk55tP7T7R29IL2b8iIxRDN400n+2EdbjbEMqM
-         kDvA==
-X-Gm-Message-State: AOAM530Mtb+QcdE4NAgkLHJDqdNM6CFPbXLWPRaFZT9rZkbP18Ef0TfA
-        QYZnwHLbrGWddUfrR1lRObDprJ7yEGyhww==
-X-Google-Smtp-Source: ABdhPJz/GDl8nKFqCDuTOIS5Tcd/O6yx8D7cCNU/Us+Wog3rwAYnPRWhEjqSgv2MF06UW9JNew6h2w==
-X-Received: by 2002:a05:600c:218f:: with SMTP id e15mr953069wme.187.1642977704477;
-        Sun, 23 Jan 2022 14:41:44 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id v124sm17395157wme.30.2022.01.23.14.41.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 14:41:44 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Input: magellan: make static read-only array nibbles const
-Date:   Sun, 23 Jan 2022 22:41:43 +0000
-Message-Id: <20220123224143.6583-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=s9IGPqOTuFEFxKMxMPq1P/MfyJrhGXNasZNiCUUGkGw=;
+        b=QwaBzLTSQNMuNozjeLEAH3K1l5n7fQcEgvdv8g8hpqS3PxF4yzhwCfHAjsR2KWCsQW
+         tpOh/r3SN7/rICXTeYx5AxCPdXkI8/AjE1lyauSPRcsWmmtsVHh4c9ig0bdzU6T+T3iT
+         AK2ufAf0ZHgoCNlupM71GGWwV3CXAS2r6txEbNm5sgfqqoSW+idtezxnq4g0/UXYMeaE
+         rBZixnHt6LupRpKBxXorjSw9eG+6Ra/ONNBoHcGhgYJvM6bnxVSvknYkWSo2S7XlIomv
+         tXOPZqFg+pM5i0CSwuwkaOsB0NlDljrXrp2Q2o836ihy+ZOiw5xSQocIeKIVz7N31Mrs
+         gEiw==
+X-Gm-Message-State: AOAM533rP1cOv2pu7hU3+r+EAshh66w6C/+Iuidqiln36jGwa5H84Rx0
+        jDBm0khpHlbz6OiYAmo0LgGYQIl9DYW3p5EXzak=
+X-Google-Smtp-Source: ABdhPJxvci7UPSXIXlDwsES57lFymegNJjKZycdQsWzqrvXr2Jibyym9K8MnNs8sBNgWUrTGJ28e4EOJpafsbFqgTDk=
+X-Received: by 2002:a54:469a:: with SMTP id k26mr7642109oic.147.1642977879175;
+ Sun, 23 Jan 2022 14:44:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6838:f808:0:0:0:0 with HTTP; Sun, 23 Jan 2022 14:44:38
+ -0800 (PST)
+Reply-To: lawrencetansanco.y@gmail.com
+From:   Lawrence Tansanco Y <mmzee006@gmail.com>
+Date:   Sun, 23 Jan 2022 22:44:38 +0000
+Message-ID: <CAFmpBSjMA997-7rJfjoK0zX7w1KAQPjJ5jEO5in6-PYFkqtDfw@mail.gmail.com>
+Subject: THANKS FOR YOUR RESPONSE AND GOD BLESS
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The static array nibbles is read-only so it make sense to make
-it const.
+.
+I will like to disclose something very important to you,
+get back for more details please.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/input/joystick/magellan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/input/joystick/magellan.c b/drivers/input/joystick/magellan.c
-index edb8e1982e26..653a09362a1e 100644
---- a/drivers/input/joystick/magellan.c
-+++ b/drivers/input/joystick/magellan.c
-@@ -51,7 +51,7 @@ struct magellan {
- 
- static int magellan_crunch_nibbles(unsigned char *data, int count)
- {
--	static unsigned char nibbles[16] = "0AB3D56GH9:K<MN?";
-+	static const unsigned char nibbles[16] = "0AB3D56GH9:K<MN?";
- 
- 	do {
- 		if (data[count] == nibbles[data[count] & 0xf])
--- 
-2.33.1
-
+Regards.
+Mr Lawrence Tansanco Y.

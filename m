@@ -2,103 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6AE497381
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 18:15:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C436B497388
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 18:23:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239172AbiAWRPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 12:15:07 -0500
-Received: from m228-6.mailgun.net ([159.135.228.6]:55877 "EHLO
-        m228-6.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239108AbiAWRPG (ORCPT
+        id S239224AbiAWRXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 12:23:47 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:31992 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239209AbiAWRXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 12:15:06 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=michaelkloos.com; q=dns/txt;
- s=k1; t=1642958106; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: From: References: Cc: To: Subject: MIME-Version: Date:
- Message-ID: Sender; bh=KMCKo4cpOIFU5Z2gsr3EOOcDEAmZ5XEZ/k/AX4zaDbA=; b=bBjK088xo1ObtreG6xEsbIqQcjZZvwloJ/7WIwD51x/E9qj1cBQ2HRSZTWhhvCh/sQF2AfcA
- LArShW7hQnzW8U70B+GEPoT1HwLL0LKLnN2x0ntNjQS8mluD4hsWXXbGDat5Nk2QBReNigca
- t+EPclzBoH33dCczyB8+vV3RlR8=
-X-Mailgun-Sending-Ip: 159.135.228.6
-X-Mailgun-Sid: WyI5NjYzNiIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgIjQ4Y2MwIl0=
-Received: from drop1.michaelkloos.com (drop1.michaelkloos.com
- [67.205.190.89]) by smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 61ed8d16e0071250cf5a03b8 (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
- Sun, 23 Jan 2022 17:15:02 GMT
-Sender: michael@michaelkloos.com
-Received: from [192.168.0.104] (cpe-173-88-115-50.columbus.res.rr.com [173.88.115.50])
-        by drop1.michaelkloos.com (Postfix) with ESMTPSA id 425B240249;
-        Sun, 23 Jan 2022 17:15:01 +0000 (UTC)
-Message-ID: <3607326c-9d39-a9e7-8e14-65aaef2094fd@michaelkloos.com>
-Date:   Sun, 23 Jan 2022 12:15:00 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] Fixed: Misaligned memory access. Fixed pointer
- comparison.
-Content-Language: en-US
-To:     Jessica Clarke <jrtc27@jrtc27.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-kernel@vger.kernel.org
-References: <20220123034518.3717116-1-michael@michaelkloos.com>
- <485047B2-E566-4679-87CF-C4B3CAFEF108@jrtc27.com>
-From:   "Michael T. Kloos" <michael@michaelkloos.com>
-In-Reply-To: <485047B2-E566-4679-87CF-C4B3CAFEF108@jrtc27.com>
-Content-Type: text/plain; charset=UTF-8
+        Sun, 23 Jan 2022 12:23:46 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20NBC4mM027485;
+        Sun, 23 Jan 2022 17:23:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=i3Vh3XJA6JQ+zfpjlnzzTalkQ5lrX4tuvsm5X/IloMg=;
+ b=I78wS8Z1iva8xJ672h2oUp9d6GRCSXz9e3z3ieTd0ONoP5euTaAzQzi0e3yCyN9+LjS4
+ vwCW0B4UQZnXaWLVbwXQMbhWq3ZXeTpci/Zg1diLUpfSms/KtKXQPfYSGQ+Dgf70TXRe
+ FrT2IWeiLe0mmiofv6UyCSepyWrGokfR9yNzF0A08/z3zur5vIf+4tnV8YWfut3XVe/J
+ I1RHKlFNNjpMYFE+1KQjHQfXyGq3mk4bisxZX6aGyr7WcU5hYFgW+PTVtRFmLAnXIELl
+ PWYe8gAnM1wzq3c11o8c2pFkK41ryXXxB7CGyKRVC1H6S2I86ioi9Mc4NVlzL4/di01K eA== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ds5x8m41d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 23 Jan 2022 17:23:40 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20NHCxC7006389;
+        Sun, 23 Jan 2022 17:23:38 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma01fra.de.ibm.com with ESMTP id 3dr9j8x6e7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 23 Jan 2022 17:23:38 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20NHNZ1q19464466
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 23 Jan 2022 17:23:35 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B3AF3A4055;
+        Sun, 23 Jan 2022 17:23:35 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BF0B7A4053;
+        Sun, 23 Jan 2022 17:23:33 +0000 (GMT)
+Received: from localhost (unknown [9.43.59.179])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun, 23 Jan 2022 17:23:33 +0000 (GMT)
+From:   Ritesh Harjani <riteshh@linux.ibm.com>
+To:     linux-ext4@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Jan Kara <jack@suse.com>, tytso@mit.edu,
+        Ritesh Harjani <riteshh@linux.ibm.com>
+Subject: [PATCHv1 0/2] jbd2: Kill age-old t_handle_lock transaction spinlock
+Date:   Sun, 23 Jan 2022 22:53:26 +0530
+Message-Id: <cover.1642953021.git.riteshh@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: U_bWx-XDLp1vBi3cF9Oz4_kcPdQ2jas8
+X-Proofpoint-GUID: U_bWx-XDLp1vBi3cF9Oz4_kcPdQ2jas8
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-23_05,2022-01-21_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 adultscore=0 mlxscore=0 mlxlogscore=658 malwarescore=0
+ impostorscore=0 clxscore=1015 bulkscore=0 lowpriorityscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201230132
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yes, you are correct, but while I am not that knowledgeable in the kernel
-build system, I believe that in many build systems, binutils "as" is usually
-called by the "gcc" wrapper, rather than being executed directly.  This
-allows for the C preprocessor to be easily and automatically run over *.S
-files first.  Binutils "as" doesn't care about suffix.  It just assembles.
-"gcc" will check and call the other tools as necessary to build.
+Hello,
 
-Perhaps I should have been more specific in my language.  However,
-I was trying to refer to the 2 different build systems in their entirety,
-not their individually sub-components because I had originally test
-built with gcc, not clang.
+This small patch series kills the age-old t_handle_lock transaction spinlock,
+which on careful inspection, came out to be not very useful anymore.
+At some of the places it isn't required at all now and for the rest
+(e.g. update_t_max_wait()), we could make use of atomic cmpxchg to make the
+code path lockless.
 
-	Michael
+This was tested with fstests with -g quick and -g log on my qemu setup.
+I had also done some extensive fsmark testing to see that we don't see any
+bottleneck resulting from removal of CONFIG_JBD2_DEBUG to update t_max_wait
+in patch-2. None of my test showed any bottleneck.
 
-On 1/23/22 10:44, Jessica Clarke wrote:
+Note that there had been several patches in the past over time which had led to
+t_handle_lock becoming obselete now e.g. [1-2]
+In this work, couple of the code paths to remove this spinlock were observed
+while doing code review and to get completely rid of it was something which was
+suggested by Jan [3].
+Thanks to Jan for thorough review and suggestions :)
 
-> On 23 Jan 2022, at 03:45, Michael T. Kloos <michael@michaelkloos.com> wrote:
->> Rewrote the riscv memmove() assembly implementation.  The
->> previous implementation did not check memory alignment and it
->> compared 2 pointers with a signed comparison.  The misaligned
->> memory access would cause the kernel to crash on systems that
->> did not emulate it in firmware and did not support it in hardware.
->> Firmware emulation is slow and may not exist.  Additionally,
->> hardware support may not exist and would likely still run slower
->> than aligned accesses even if it did.  The RISC-V spec does not
->> guarantee that support for misaligned memory accesses will exist.
->> It should not be depended on.
->>
->> This patch now checks for the maximum granularity of co-alignment
->> between the pointers and copies them with that, using single-byte
->> copy for any unaligned data at their terminations.  It also now uses
->> unsigned comparison for the pointers.
->>
->> Added half-word and, if built for 64-bit, double-word copy.
->>
->> Migrated to the	newer assembler annotations from the now deprecated
->> ones.
->>
->> Commit Message Edited on Jan 22 2022: Fixed some typos.
->>
->> [v2]
->>
->> Per kernel test robot, I have fixed the build under clang.  This
->> was broken due to a difference between gcc and clang, clang requiring
->> explict zero offsets the jalr instruction. gcc allowed them to be
->> omitted if zero.
-> Unlike LLVM, GCC does not have an assembler, that’s binutils’s GNU as.
->
-> Jess
->
+
+[1]: https://lore.kernel.org/linux-ext4/1280939957-3277-4-git-send-email-tytso@mit.edu/
+[2]: https://lore.kernel.org/linux-ext4/20120103153245.GE31457@quack.suse.cz/
+[3]: https://lore.kernel.org/linux-ext4/20220113112749.d5tfszcksvxvshnn@quack3.lan/
+
+Ritesh Harjani (2):
+  jbd2: Kill t_handle_lock transaction spinlock
+  jbd2: Remove CONFIG_JBD2_DEBUG to update t_max_wait
+
+ fs/jbd2/transaction.c | 36 ++++++++++++------------------------
+ include/linux/jbd2.h  |  3 ---
+ 2 files changed, 12 insertions(+), 27 deletions(-)
+
+--
+2.31.1
+

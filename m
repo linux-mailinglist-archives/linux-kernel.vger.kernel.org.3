@@ -2,125 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2645E4975C2
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 22:40:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 246644975C9
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 22:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240242AbiAWVko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 16:40:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
+        id S240252AbiAWVpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 16:45:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240234AbiAWVkm (ORCPT
+        with ESMTP id S240234AbiAWVpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 16:40:42 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2A5C06173D
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 13:40:42 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id e79so17250284iof.13
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 13:40:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IyKNPXR0xXBAL80gtxnxeT19PyLCAGmnDeiaMG7++bM=;
-        b=ZMlU5JvaMGRzZqWwhMytbclyq2hK+DR3jCfjxiTok0CS8FFyYCsm/UFaEtOyfdSk5d
-         kdtDiVMulhEgRlVhTMXABPMK7hLpwFGzeajhi/W9rVzcnuu9ME4FK9ShDLgi/D0BXH+O
-         PQiTqpuxJngULJ6oaET3u7sRaihthGRaApk0q5G5fZTetiQ/60Kocm74RrILXTUc1tT8
-         SAaEc8KTvcOMSd3QUG+gAnOEsETBwbGBmdvn/pETf8PFCVxiQtnjoA9jMVbQeparWeJ+
-         sRpsptQQ0obvOnaqu5N0/rjQ/Zg1xGqcTus8V6e1Ykc2aqAFUi9zfKZ/IYjWxqn2tSr2
-         ifSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IyKNPXR0xXBAL80gtxnxeT19PyLCAGmnDeiaMG7++bM=;
-        b=QoJdJ1hTk685tsGvvcys2oYa6X9jDQGawqi83MCUw1CLDImt00pRvw4TiRSm5YQCTd
-         WHoGaq0AcDcI5px3hQj9JDY/F4KZdtZMoKtVVJfcHApdm9dvpMuBNTrk870GG3gtM2NT
-         yldgwZonA3qi2Hj6Y/F99gc4PK6QfdkhaB14MS6Pxddd7VKYQDAciti2dB3eERz33ykD
-         VH2M5kXMBg5SN9sGKQpBYyRMUyPFFW0RqhcSJcmfwGneBmYC4lvGsB5qTzcwDTSfnV6I
-         QH8++fWRIr/nu+8BUJ/amzKHzRUzIDeOmM/ivAlQycvCpO1/EA0JX6alr1wHDkr3sM6A
-         Y2+A==
-X-Gm-Message-State: AOAM530h4V6VFz4ELFp6rLBkxGHzrkFeFz2ybbXRVV3aAKKaLWE7cs85
-        +o42UA7GdWt8IDerrwWZHMPUKQ==
-X-Google-Smtp-Source: ABdhPJzxHVZd/U5xuji1+wbXuf3oi0S1JW3F72Mw005SIgUl8rEA/x+DErKmKSlc6HG3ZjPbcd2wog==
-X-Received: by 2002:a05:6638:ec7:: with SMTP id q7mr5992263jas.210.1642974041316;
-        Sun, 23 Jan 2022 13:40:41 -0800 (PST)
-Received: from google.com ([2620:15c:183:200:b551:d37:7fd2:5a1a])
-        by smtp.gmail.com with ESMTPSA id w19sm5474492iov.16.2022.01.23.13.40.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 13:40:40 -0800 (PST)
-Date:   Sun, 23 Jan 2022 14:40:36 -0700
-From:   Yu Zhao <yuzhao@google.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Subject: Re: [PATCH v6 6/9] mm: multigenerational lru: aging
-Message-ID: <Ye3LVBuWBcPGd1Es@google.com>
-References: <20220104202227.2903605-1-yuzhao@google.com>
- <20220104202227.2903605-7-yuzhao@google.com>
- <Ydxlg5rI4ZvODQvF@dhcp22.suse.cz>
- <Yd4oaUwHkpadAKwe@google.com>
- <Yd6q0QdLVTS53vu4@dhcp22.suse.cz>
- <Yd9nk0qlK3jK9baN@google.com>
- <YeATr//U6XD87fWF@dhcp22.suse.cz>
+        Sun, 23 Jan 2022 16:45:54 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188C9C06173B;
+        Sun, 23 Jan 2022 13:45:53 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 64061D41;
+        Sun, 23 Jan 2022 22:45:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1642974351;
+        bh=SUGQ4I/NfdTXsFSCHUc16iN2+6Zmi855cTdPMbrW0xk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lemnulwLjp4/JNUpfjeKFYDBS+1W2dBX6VSsIU6t6TLuOxLLf8I20kgVO5+BKNGPm
+         WBUnOrUKT0HfLUgxCMd34crq2Zm8GagdJEjaktk4mOlaYrWoyn6C/ZEt1oOsS3R4i1
+         edcu4cfpyewLZtZypNuVS/b2Hvhi4LoQT6qo4OhA=
+Date:   Sun, 23 Jan 2022 23:45:34 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] media: vsp1: mask interrupts before enabling
+Message-ID: <Ye3MfnICIv0PeqT9@pendragon.ideasonboard.com>
+References: <20220120081530.799399-1-nikita.yoush@cogentembedded.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YeATr//U6XD87fWF@dhcp22.suse.cz>
+In-Reply-To: <20220120081530.799399-1-nikita.yoush@cogentembedded.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 12:57:35PM +0100, Michal Hocko wrote:
-> On Wed 12-01-22 16:43:15, Yu Zhao wrote:
-> > On Wed, Jan 12, 2022 at 11:17:53AM +0100, Michal Hocko wrote:
-> [...]
-> > > Is there any reason you are not using folio_memcg_lock in the
-> > > pte walk instead?
-> > 
-> > We have a particular lruvec (the first arg), hence a particular memcg
-> > to lock. But we don't have a particular page to lock.
+Hi Nikita,
+
+Thank you for the patch.
+
+On Thu, Jan 20, 2022 at 11:15:30AM +0300, Nikita Yushchenko wrote:
+> VSP hardware could be used (e.g. by the bootloader) before driver load,
+> and some interrupts could be left in enabled and pending state. In this
+> case, setting up VSP interrupt handler without masking interrupts before
+> causes interrupt handler to be immediately called (and crash due to null
+> vsp->info dereference).
 > 
-> That is certainly true at this layer but the locking should be needed
-> only for specific pages, no?
+> Fix that by explicitly masking all interrupts before setting the interrupt
+> handler. To do so, have to set the interrupt handler later, after hw
+> revision is already detected and number of interrupts to mask gets
+> known.
+> 
+> Based on patch by Koji Matsuoka <koji.matsuoka.xm@renesas.com> included
+> in the Renesas BSP kernel.
+> 
+> Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+> ---
+> v1: https://lore.kernel.org/all/20210926155356.23861-1-nikita.yoush@cogentembedded.com/
+> Changes since v1:
+> - move interrupt masking to a dedicated routine
+> - update comments and patch description
+> 
+> > I think I would rather see the code to reset them done in
+> > vsp1_reset_wpf(), rather than in probe directly as that is what we are
+> > doing, and is I believe already in the call path.
+> 
+> First, vsp1_reset_wpf() does not get called on driver early init.
+> 
+> It is normally called from within vsp1_device_get() when device is powered
+> on, but vsp1_probe() calls vsp1_device_get() when vsp1->info is not yet set,
+> and in this case call from vsp1_pm_runtime_resume() to vsp1_device_init() 
+> is skipped.
+> 
+> I've tried to add extra vsp1_device_put() / vsp1_device_get() calls to the
+> probe path, and dumped related registers in vsp1_pm_runtime_resume() after
+> return from vsp1_device_init(), and got
+> 
+> [    2.477315][    T1] vsp1 fea28000.vsp: VI6_DISP_IRQ_ENB(0) = 0x00000100
+> [    2.483933][    T1] vsp1 fea28000.vsp: VI6_DISP_IRQ_STA(0) = 0x00000121
+> [    2.490556][    T1] vsp1 fea28000.vsp: VI6_WPF_IRQ_ENB(0) = 0x00010002
+> [    2.497088][    T1] vsp1 fea28000.vsp: VI6_WPF_IRQ_STA(0) = 0x00010003
+> [    2.503618][    T1] vsp1 fea28000.vsp: VI6_WPF_IRQ_ENB(1) = 0x00000000
+> [    2.510148][    T1] vsp1 fea28000.vsp: VI6_WPF_IRQ_STA(1) = 0x00000000
+> 
+> which shows that
+> (1) WPF interrupt is not cleared by WPF reset,
+> (2) also DISP interrupt is enabled and pending, and driver does not seem
+> to control it at all.
+> 
+> Given that, I think it is safer to explicitly mask all interrupts before
+> setting the handler. I've moved interrupt masking to a separate routine.
+> 
+> > (But I'm reallly ... reallly concerned that the hardware is not really
+> > getting reset when it should, and that might merit some further
+> > investigation).
+> 
+> The documentation for WFP reset bit has notes that under some situations,
+> reset is postponed for a long time, and reported via interrupt. I'm not
+> sure what exactly goes on there, but I'd assume that such logic implies
+> that interrupt subsystem is not reset.
+> 
+> I agree that not having exact understand of hardware state is not good.
+> But, given that no signs of misfunction have been detected for a long time
+> (the patch was in vendor BSP for years), I think we can assume it is
+> "safe enough".
 
-Yes.
+We could also use the reset provided by the SRCR registers in the CPG.
+In the meantime, this patch seems to go in the right direction, it fixes
+the problem without being too intrusive.
 
-> So you can move the lock down to the
-> callback which examines respective pages. Or is there anything
-> preventing that?
+>  drivers/media/platform/vsp1/vsp1_drv.c | 34 ++++++++++++++++++++------
+>  1 file changed, 26 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/media/platform/vsp1/vsp1_drv.c b/drivers/media/platform/vsp1/vsp1_drv.c
+> index c9044785b903..92a95e2c21c7 100644
+> --- a/drivers/media/platform/vsp1/vsp1_drv.c
+> +++ b/drivers/media/platform/vsp1/vsp1_drv.c
+> @@ -550,6 +550,16 @@ static int vsp1_device_init(struct vsp1_device *vsp1)
+>  	return 0;
+>  }
+>  
+> +static void vsp1_mask_all_interrupts(struct vsp1_device *vsp1)
+> +{
+> +	int i;
 
-No.
+This should be unsigned int as it never takes negative values.
 
-> To be honest, and that is the reason I am asking, I really do not like
-> to open code the migration synchronization outside of the memcg proper.
+> +
+> +	for (i = 0; i < vsp1->info->lif_count; ++i)
+> +		vsp1_write(vsp1, VI6_DISP_IRQ_ENB(i), 0);
+> +	for (i = 0; i < vsp1->info->wpf_count; ++i)
+> +		vsp1_write(vsp1, VI6_WPF_IRQ_ENB(i), 0);
+> +}
+> +
+>  /*
+>   * vsp1_device_get - Acquire the VSP1 device
+>   *
+> @@ -819,13 +829,6 @@ static int vsp1_probe(struct platform_device *pdev)
+>  		return -EINVAL;
+>  	}
+>  
+> -	ret = devm_request_irq(&pdev->dev, irq->start, vsp1_irq_handler,
+> -			      IRQF_SHARED, dev_name(&pdev->dev), vsp1);
+> -	if (ret < 0) {
+> -		dev_err(&pdev->dev, "failed to request IRQ\n");
+> -		return ret;
+> -	}
+> -
+>  	/* FCP (optional). */
+>  	fcp_node = of_parse_phandle(pdev->dev.of_node, "renesas,fcp", 0);
+>  	if (fcp_node) {
+> @@ -855,7 +858,6 @@ static int vsp1_probe(struct platform_device *pdev)
+>  		goto done;
+>  
+>  	vsp1->version = vsp1_read(vsp1, VI6_IP_VERSION);
+> -	vsp1_device_put(vsp1);
+>  
+>  	for (i = 0; i < ARRAY_SIZE(vsp1_device_infos); ++i) {
+>  		if ((vsp1->version & VI6_IP_VERSION_MODEL_MASK) ==
+> @@ -868,12 +870,28 @@ static int vsp1_probe(struct platform_device *pdev)
+>  	if (!vsp1->info) {
+>  		dev_err(&pdev->dev, "unsupported IP version 0x%08x\n",
+>  			vsp1->version);
+> +		vsp1_device_put(vsp1);
+>  		ret = -ENXIO;
+>  		goto done;
+>  	}
+>  
+>  	dev_dbg(&pdev->dev, "IP version 0x%08x\n", vsp1->version);
+>  
+> +	/*
+> +	 * Previous use of the hardware (e.g. by the bootloader) could leave
+> +	 * some interrupts enabled and pending.
 
-Agreed.
+I would add
 
-> Code paths which need a stable memcg are supposed to be using
-> folio_memcg_lock for the specific examination time.
+	 * TODO: Investigate if this shouldn't be better handled by using the
+	 * device reset provided by the CPG.
 
-No argument here, just a clarification: when possible I prefer to
-lock a batch of pages rather than individual ones.
+to avoid forgetting about it.
 
-> If you prefer a
-> trylock approach for this usecase then we can add one.
+If you're fine with those two changes, there's no need for a v3, I can
+handle this when applying the patch.
 
-Done. Thanks.
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> +	 */
+> +	vsp1_mask_all_interrupts(vsp1);
+> +
+> +	vsp1_device_put(vsp1);
+> +
+> +	ret = devm_request_irq(&pdev->dev, irq->start, vsp1_irq_handler,
+> +			       IRQF_SHARED, dev_name(&pdev->dev), vsp1);
+> +	if (ret < 0) {
+> +		dev_err(&pdev->dev, "failed to request IRQ\n");
+> +		goto done;
+> +	}
+> +
+>  	/* Instantiate entities. */
+>  	ret = vsp1_create_entities(vsp1);
+>  	if (ret < 0) {
+
+-- 
+Regards,
+
+Laurent Pinchart

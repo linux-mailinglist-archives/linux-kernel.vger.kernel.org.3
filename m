@@ -2,179 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C61497540
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 20:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 210EC497542
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 20:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234736AbiAWTcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 14:32:21 -0500
-Received: from mail.efficios.com ([167.114.26.124]:59614 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiAWTcT (ORCPT
+        id S234794AbiAWThz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 14:37:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38426 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229681AbiAWThy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 14:32:19 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id E826533CF67;
-        Sun, 23 Jan 2022 14:32:16 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id h6IzOI8ey4hQ; Sun, 23 Jan 2022 14:32:15 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id BEC2B33CF66;
-        Sun, 23 Jan 2022 14:32:15 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com BEC2B33CF66
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1642966335;
-        bh=zzzUGnQTdXdaz95fMULZVWKGcJHsP+p8zelCLBiuEaA=;
-        h=From:To:Date:Message-Id;
-        b=RCQIiVl0Wyi30ejckwUYhClp8AMBdlKC2h4B+7YvKGGwsgUBN2P2qZISEu1A02zJy
-         1zSTr9GESwsLAkduavn4r/MqRl61UCPqmjgp+qvEaDAkrlRTtw7O0JkwsJGpLeQwBZ
-         CTf49W7bC3sVbXst+qVk4gNk4TZdglTydQJpWDMeWMSzLjyIXq2t3TB9RqkJ/EbD7c
-         azOztK9yq8+friXdUSnHmUkHSFk51san3eS/XeAZ8+WQC14Lu0cK7tsqoHLyWU2gMx
-         11sGO6iQr4R+AyydP9rEmUDE7pK1VtPN6WLSEJwgieaJOTZrN15DzRuCwo3OggOdmS
-         U5xGqlvzOsqvQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id NbSC7Oyozs_q; Sun, 23 Jan 2022 14:32:15 -0500 (EST)
-Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by mail.efficios.com (Postfix) with ESMTPSA id 1D2BE33D136;
-        Sun, 23 Jan 2022 14:32:15 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org, stable@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Florian Weimer <fw@deneb.enyo.de>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Dave Watson <davejwatson@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Russell King <linux@arm.linux.org.uk>,
-        Andi Kleen <andi@firstfloor.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Ben Maurer <bmaurer@fb.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Joel Fernandes <joelaf@google.com>
-Subject: [RFC PATCH] rseq: Fix broken uapi field layout on 32-bit little endian
-Date:   Sun, 23 Jan 2022 14:31:54 -0500
-Message-Id: <20220123193154.14565-1-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.17.1
+        Sun, 23 Jan 2022 14:37:54 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E34C06173B;
+        Sun, 23 Jan 2022 11:37:53 -0800 (PST)
+Date:   Sun, 23 Jan 2022 19:37:49 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1642966670;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j9PJDDGsX+Gax6Ee5O2DMpYclOzeeXo4NHkRhjXmFkg=;
+        b=w9L1mGHIFt1oEMN/iWi8/Ai06qHwvRpW7/lWnnLp/MK+/SSEn2EjKO2ccPpW4IneBSy0lD
+        TzosknGcUqrLbd2Wxfid1OOoXMzcmBnCt03oU0dAw7x81btefiwp2QkhfgDNj9dfOskAqx
+        L/nIbfWMOsCwzXwoYJJHU+tETSTRXaay++trOWurnayDC5SW+7YpNtUUMwz0hJ2roza76y
+        RFAZNy+2AdHUPkd8I8hblA1lx4fBtmhSvZaR7Xj41t00rYznD4idow1zUrQhfgL1WnhMFy
+        vseDuloYe068cKSOMgYKkX8R8e4C+0rG0zjNMqIkgMUZCBqgyyDe5wWc7FWajw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1642966670;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j9PJDDGsX+Gax6Ee5O2DMpYclOzeeXo4NHkRhjXmFkg=;
+        b=YM2yOecwL9FDKJ+K/XIhTfM+ao78yIyhZdNXlCCU8vA5yjJv+II8MSK4wKUE0nplVPjQpZ
+        YCOM2nLPH7oTKECQ==
+From:   "tip-bot2 for Greg Kroah-Hartman" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cpu] x86/CPU/AMD: Use default_groups in kobj_type
+Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Borislav Petkov <bp@suse.de>,
+        Yazen Ghannam <yazen.ghannam@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220106103537.3663852-1-gregkh@linuxfoundation.org>
+References: <20220106103537.3663852-1-gregkh@linuxfoundation.org>
+MIME-Version: 1.0
+Message-ID: <164296666966.16921.15499044589039584350.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rseq rseq_cs.ptr.{ptr32,padding} uapi endianness handling is
-entirely wrong on 32-bit little endian: a preprocessor logic mistake
-wrongly uses the big endian field layout on 32-bit little endian
-architectures.
+The following commit has been merged into the x86/cpu branch of tip:
 
-Fortunately, those ptr32 accessors were never used within the kernel,
-and only meant as a convenience for user-space.
+Commit-ID:     7237727f8c4415fa925c723fc03be373834c21b9
+Gitweb:        https://git.kernel.org/tip/7237727f8c4415fa925c723fc03be373834c21b9
+Author:        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+AuthorDate:    Thu, 06 Jan 2022 11:35:37 +01:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Sun, 23 Jan 2022 20:30:27 +01:00
 
-While working on fixing the ppc32 support in librseq [1], I made sure
-all 32-bit little endian architectures stopped depending on little
-endian byte ordering by using the ptr32 field. It led me to discover
-this wrong ptr32 field ordering on little endian.
+x86/CPU/AMD: Use default_groups in kobj_type
 
-Because it is already exposed as a UAPI, all we can do for the existing
-fields is document the wrong behavior and encourage users to use
-alternative mechanisms.
+There are currently 2 ways to create a set of sysfs files for a
+kobj_type, through the default_attrs field, and the default_groups
+field. Move the AMD mce sysfs code to use default_groups field which has
+been the preferred way since
 
-Introduce a new rseq_cs.arch field with correct field ordering. Use this
-opportunity to improve the layout so accesses to architecture fields on
-both 32-bit and 64-bit architectures are done through the same field
-hierarchy, which is much nicer than the previous scheme.
+  aa30f47cf666 ("kobject: Add support for default attribute groups to kobj_type")
 
-The intended use is now:
+so that the obsolete default_attrs field can be removed soon.
 
-* rseq_thread_area->rseq_cs.ptr64: Access the 64-bit value of the rseq_cs
-				   pointer. Available on all
-                                   architectures (unchanged).
-
-* rseq_thread_area->rseq_cs.arch.ptr: Access the architecture specific
-				      layout of the rseq_cs pointer. This
-				      is a 32-bit field on 32-bit
-				      architectures, and a 64-bit field on
-                                      64-bit architectures.
-
-Link: https://git.kernel.org/pub/scm/libs/librseq/librseq.git/ [1]
-Fixes: ec9c82e03a74 ("rseq: uapi: Declare rseq_cs field as union, update includes")
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Florian Weimer <fw@deneb.enyo.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: linux-api@vger.kernel.org
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Andy Lutomirski <luto@amacapital.net>
-Cc: Dave Watson <davejwatson@fb.com>
-Cc: Paul Turner <pjt@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Russell King <linux@arm.linux.org.uk>
-Cc: "H . Peter Anvin" <hpa@zytor.com>
-Cc: Andi Kleen <andi@firstfloor.org>
-Cc: Christian Brauner <christian.brauner@ubuntu.com>
-Cc: Ben Maurer <bmaurer@fb.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Josh Triplett <josh@joshtriplett.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will.deacon@arm.com>
-Cc: Michael Kerrisk <mtk.manpages@gmail.com>
-Cc: Joel Fernandes <joelaf@google.com>
-Cc: Paul E. McKenney <paulmck@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Tested-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Link: https://lore.kernel.org/r/20220106103537.3663852-1-gregkh@linuxfoundation.org
 ---
- include/uapi/linux/rseq.h | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ arch/x86/kernel/cpu/mce/amd.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
-index 9a402fdb60e9..68f61cdb45db 100644
---- a/include/uapi/linux/rseq.h
-+++ b/include/uapi/linux/rseq.h
-@@ -108,6 +108,12 @@ struct rseq {
- 	 */
- 	union {
- 		__u64 ptr64;
-+
-+		/*
-+		 * The "ptr" field layout is broken on little-endian
-+		 * 32-bit architectures due to wrong preprocessor logic.
-+		 * DO NOT USE.
-+		 */
- #ifdef __LP64__
- 		__u64 ptr;
- #else
-@@ -121,6 +127,23 @@ struct rseq {
- #endif /* ENDIAN */
- 		} ptr;
- #endif
-+
-+		/*
-+		 * The "arch" field provides architecture accessor for
-+		 * the ptr field based on architecture pointer size and
-+		 * endianness.
-+		 */
-+		struct {
-+#ifdef __LP64__
-+			__u64 ptr;
-+#elif defined(__BYTE_ORDER) ? (__BYTE_ORDER == __BIG_ENDIAN) : defined(__BIG_ENDIAN)
-+			__u32 padding;		/* Initialized to zero. */
-+			__u32 ptr;
-+#else
-+			__u32 ptr;
-+			__u32 padding;		/* Initialized to zero. */
-+#endif
-+		} arch;
- 	} rseq_cs;
+diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+index a1e2f41..c0660c1 100644
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -993,6 +993,7 @@ static struct attribute *default_attrs[] = {
+ 	NULL,	/* possibly interrupt_enable if supported, see below */
+ 	NULL,
+ };
++ATTRIBUTE_GROUPS(default);
  
- 	/*
--- 
-2.17.1
-
+ #define to_block(k)	container_of(k, struct threshold_block, kobj)
+ #define to_attr(a)	container_of(a, struct threshold_attr, attr)
+@@ -1029,7 +1030,7 @@ static void threshold_block_release(struct kobject *kobj);
+ 
+ static struct kobj_type threshold_ktype = {
+ 	.sysfs_ops		= &threshold_ops,
+-	.default_attrs		= default_attrs,
++	.default_groups		= default_groups,
+ 	.release		= threshold_block_release,
+ };
+ 
+@@ -1101,10 +1102,10 @@ static int allocate_threshold_blocks(unsigned int cpu, struct threshold_bank *tb
+ 	b->threshold_limit	= THRESHOLD_MAX;
+ 
+ 	if (b->interrupt_capable) {
+-		threshold_ktype.default_attrs[2] = &interrupt_enable.attr;
++		default_attrs[2] = &interrupt_enable.attr;
+ 		b->interrupt_enable = 1;
+ 	} else {
+-		threshold_ktype.default_attrs[2] = NULL;
++		default_attrs[2] = NULL;
+ 	}
+ 
+ 	INIT_LIST_HEAD(&b->miscj);

@@ -2,124 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3807A4972F5
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 17:17:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B04EF4972E5
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 17:12:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbiAWQRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 11:17:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238531AbiAWQRK (ORCPT
+        id S238477AbiAWQMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 11:12:24 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43860 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230007AbiAWQMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 11:17:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1F6C06173B;
-        Sun, 23 Jan 2022 08:17:10 -0800 (PST)
+        Sun, 23 Jan 2022 11:12:23 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F50F60FAA;
-        Sun, 23 Jan 2022 16:17:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B101AC340EC;
-        Sun, 23 Jan 2022 16:17:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC94CB80DBE
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 16:12:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88ADEC340E5
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 16:12:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642954629;
-        bh=jt+I++u3hLF8P1Vv8OE/63F2UYfze6jfRP/OKUEOIWA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qrh5KgBWB5pyQI9U2dql4DCgzJQ9MPF1O0ETp+QiCqvgrxWTchAQXIICAbJfcb7av
-         X6iwOvH7FXKNyPMFmM4DAqWK6icaZvQbW+HnyDtYvN4Sd7bAPaSkeOmJVdAo9c6hQi
-         xfuW9mPIix2CIz3Vx+gxH/hT/89jjYqHvqea176vrmy1I04cX3lWJkbItL0V48JRyD
-         NIHyzG1r5lA0jM1nJFpcRaggv7sgoUK/XlLP+/g9VyWWJVfOSlUU92BoNxAPkPCq/u
-         dyY35wJy9NrxgX1VZEx/URczjNAlZOFdBZUxld1Ml5MGqpj1iMh1tTvyMKJkW25VNe
-         q8NI2km6sozNw==
-Date:   Mon, 24 Jan 2022 00:09:34 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: stmmac: don't stop RXC during LPI
-Message-ID: <Ye19vpFWXR8wJQVH@xhacker>
-References: <20220123141245.1060-1-jszhang@kernel.org>
- <Ye15va7tFWMgKPEE@lunn.ch>
- <Ye19bHxcQ5Plx0v9@xhacker>
+        s=k20201202; t=1642954341;
+        bh=6NtAXxaOwFwMGUS7pA4qLbB/J3E9TF2I6pwG0CRZGdk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kV9U4eEndy8waODpnPzSgx0OPmRS1x/cA4W0KYpLBEFD4Qa5NUG8eyyQuAmNVyLLX
+         agdfECE44Cb2m3A0ysbKuzB8DZodBM+bfYSAI61kATLZcM/7e2skZiVb6iEFton629
+         Yrmtml0ecSW3OyPKjtCeRHOeml7a44L5KsdDEhU01Ji5kJVaP8uVg17kgQKhergpNi
+         kvyaL2tjMN+SV+xXEBRCaKX3GQpNcoem4Iz1w/BgU/4stv/ZwTr0cY+flW0bA+uljd
+         wjZNkcAn6EEH4QZ3FvZOJ6pkcOCgvD51POIbePCQRCsBvA3s3kD8bJlkr7Gt5dxKeO
+         pHY/X+P350oOA==
+Received: by mail-yb1-f178.google.com with SMTP id 23so43441324ybf.7
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 08:12:21 -0800 (PST)
+X-Gm-Message-State: AOAM530xL4AHedKsscXTKwvuZflpC0BObWvN9v042AKV/lXr+AKQBw9I
+        wow5TUrGnKkII4cZekiNsaPDyEO/5Z+qMekXSas=
+X-Google-Smtp-Source: ABdhPJyL5MPGHFK035DoTtPlxOvpmiVj/u+utynifDkO2KD4MZGotP0Vtf37ciNLt73kkgmSYTXTTkZSI0IrlR9gxc8=
+X-Received: by 2002:a5b:20c:: with SMTP id z12mr17156535ybl.64.1642954340637;
+ Sun, 23 Jan 2022 08:12:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Ye19bHxcQ5Plx0v9@xhacker>
+References: <20220111114724.7987-1-cai.huoqing@linux.dev> <CAFCwf10GWN_hdsvUf+7dFFK=CwjuGxXPZZt8c2dkVOb24VZxcQ@mail.gmail.com>
+ <Ye1ua3ixuSfdhiRc@kroah.com> <CAFCwf12H4Nz-dPrYwJFyygWUn0tvoLKpHfmBCHmqpX6Fs02cSw@mail.gmail.com>
+ <Ye19hz9r0poT5wUe@kroah.com>
+In-Reply-To: <Ye19hz9r0poT5wUe@kroah.com>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Sun, 23 Jan 2022 18:11:54 +0200
+X-Gmail-Original-Message-ID: <CAFCwf11ahKse1MYcBFfSBvFf1WnG3rxR6dmJiUhZUu2rZQBB-Q@mail.gmail.com>
+Message-ID: <CAFCwf11ahKse1MYcBFfSBvFf1WnG3rxR6dmJiUhZUu2rZQBB-Q@mail.gmail.com>
+Subject: Re: [PATCH] habanalabs: Remove unused enum member DMA_SRAM_TO_SRAM
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Cai Huoqing <cai.huoqing@linux.dev>, Arnd Bergmann <arnd@arndb.de>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 12:08:22AM +0800, Jisheng Zhang wrote:
-> On Sun, Jan 23, 2022 at 04:52:29PM +0100, Andrew Lunn wrote:
-> > On Sun, Jan 23, 2022 at 10:12:45PM +0800, Jisheng Zhang wrote:
-> > > I met can't receive rx pkt issue with below steps:
-> > > 0.plug in ethernet cable then boot normal and get ip from dhcp server
-> > > 1.quickly hotplug out then hotplug in the ethernet cable
-> > > 2.trigger the dhcp client to renew lease
-> > > 
-> > > tcpdump shows that the request tx pkt is sent out successfully,
-> > > but the mac can't receive the rx pkt.
-> > > 
-> > > The issue can easily be reproduced on platforms with PHY_POLL external
-> > > phy. If we don't allow the phy to stop the RXC during LPI, the issue
-> > > is gone. I think it's unsafe to stop the RXC during LPI because the mac
-> > > needs RXC clock to support RX logic.
-> > > 
-> > > And the 2nd param clk_stop_enable of phy_init_eee() is a bool, so use
-> > > false instead of 0.
-> > > 
-> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > > ---
-> > >  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > > index 6708ca2aa4f7..92a9b0b226b1 100644
-> > > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > > @@ -1162,7 +1162,7 @@ static void stmmac_mac_link_up(struct phylink_config *config,
-> > >  
-> > >  	stmmac_mac_set(priv, priv->ioaddr, true);
-> > >  	if (phy && priv->dma_cap.eee) {
-> > > -		priv->eee_active = phy_init_eee(phy, 1) >= 0;
-> > > +		priv->eee_active = phy_init_eee(phy, false) >= 0;
-> > 
-> > This has not caused issues in the past. So i'm wondering if this is
-> > somehow specific to your system? Does everybody else use a PHY which
-> > does not implement this bit? Does your synthesis of the stmmac have a
-> > different clock tree?
-> > 
-> > By changing this value for every instance of the stmmac, you are
-> > potentially causing a power regression for stmmac implementations
-> > which don't need the clock. So we need a clear understanding, stopping
-> > the clock is wrong in general and so the change is correct in
-> 
-> I think this is a common issue because the MAC needs phy's RXC for RX
-> logic. But it's better to let other stmmac users verify. The issue
-> can easily be reproduced on platforms with PHY_POLL external phy.
-> Or other platforms use a dedicated clock rather than clock from phy
-> for MAC's RX logic?
-> 
-> If the issue turns out specific to my system, then I will send out
-> a new patch to adopt your suggestion.
+On Sun, Jan 23, 2022 at 6:08 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
+> On Sun, Jan 23, 2022 at 06:01:53PM +0200, Oded Gabbay wrote:
+> > On Sun, Jan 23, 2022 at 5:04 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Sun, Jan 23, 2022 at 04:43:15PM +0200, Oded Gabbay wrote:
+> > > > On Tue, Jan 11, 2022 at 1:47 PM Cai Huoqing <cai.huoqing@linux.dev> wrote:
+> > > > >
+> > > > > The driver don't support the SRAM-to-SRAM translation of DMA,
+> > > > > so remove 'DMA_SRAM_TO_SRAM'.
+> > > > >
+> > > > > Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+> > > > > ---
+> > > > >  drivers/misc/habanalabs/include/goya/goya_packets.h | 1 -
+> > > > >  1 file changed, 1 deletion(-)
+> > > > >
+> > > > > diff --git a/drivers/misc/habanalabs/include/goya/goya_packets.h b/drivers/misc/habanalabs/include/goya/goya_packets.h
+> > > > > index ef54bad20509..25fbebdc6143 100644
+> > > > > --- a/drivers/misc/habanalabs/include/goya/goya_packets.h
+> > > > > +++ b/drivers/misc/habanalabs/include/goya/goya_packets.h
+> > > > > @@ -36,7 +36,6 @@ enum goya_dma_direction {
+> > > > >         DMA_SRAM_TO_HOST,
+> > > > >         DMA_DRAM_TO_HOST,
+> > > > >         DMA_DRAM_TO_DRAM,
+> > > > > -       DMA_SRAM_TO_SRAM,
+> > > > >         DMA_ENUM_MAX
+> > > > >  };
+> > > > >
+> > > > > --
+> > > > > 2.25.1
+> > > > >
+> > > >
+> > > > This is a general spec file in our s/w stack, and therefore a change
+> > > > in it in the driver will cause our driver to be out of sync with our
+> > > > user-space stack. i.e. the value of DMA_ENUM_MAX will be different in
+> > > > the driver and in the user-space stack. I don't know if there will be
+> > > > any consequences but I prefer not to risk it.
+> > >
+> > > If this is synced to userspace, shouldn't it be in a uapi file with a
+> > > specific value associated with it?
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
+> >
+> > Yes, it was a mistake from day 1. A mistake we didn't repeat in future ASICs.
+> > I take great care of putting anything that is synced between driver
+> > and userspace in our uapi file.
+> >
+> > Having said that, after almost 3 years of having this mistake, I feel
+> > it is not too disastrous to leave it as is.
+> > Our Goya s/w stack is pretty much stable and I don't want to make
+> > changes without good reason.
+>
+> You should just move this to a uapi file to show that it is something
+> that can't be changed.  Can't you do that without breaking anything on
+> the kernel side?
+On the kernel side there isn't any problem with moving it.
+What I'm afraid of, is that the userspace will now have a duplicate
+definition of this enum.
+Both in the original file, which is included in the user space stack
+from day 1, and from our uapi file.
+In short, I'm afraid of breaking its compilation.
+If you think that's acceptable, I don't have a problem moving it.
 
-+ Joakim
+>
+> Otherwise maintaining this is going to be hard as no one has a clue that
+> this is a value that userspace uses.
 
-> Hi Joakim, IIRC, you have stmmac + external RTL8211F phy platform, but
-> I'm not sure whether your platform have an irq for the phy. could you
-> help me to check whether you can reproduce the issue on your platform?
-> 
-> > general. Or this is specific to your system, and you probably need to
-> > add priv->dma_cap.keep_rx_clock_ticking, which you set in your glue
-> > driver,and use here to decide what to pass to phy_init_eee().
-> 
-> Thanks a lot for the suggestion.
+I can document it with a BIG comment in the file.
+And as I said, Goya s/w stack is pretty much fixed and I don't believe
+is going to change anymore.
+
+Oded
+
+>
+> thanks,
+>
+> greg k-h

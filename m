@@ -2,302 +2,402 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB2949754B
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 20:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79824497550
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 20:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234957AbiAWTnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 14:43:43 -0500
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:35877 "EHLO
-        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229681AbiAWTnl (ORCPT
+        id S239507AbiAWTo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 14:44:56 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:38808 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232401AbiAWToz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 14:43:41 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 7193C580184;
-        Sun, 23 Jan 2022 14:43:40 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sun, 23 Jan 2022 14:43:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; bh=EFbHgP1ovNNSIN
-        eqDOwdunGEhSdHZrRaKajbYfYzJmo=; b=IGRrkElaRVMSL8rKWASTluHXPoTffQ
-        jqnpitQ8q8cWfDHkSgQ2SPNHL+RpgIxPh61PnEeR5wuRByFmzeC+94f+igxCcW2S
-        6wLYFUgVGBTrtpZ32GoIBpuHgEs0518mnvZNAd5PzYaiBJNhefVpW+pQeKrVpKBL
-        Bw0fssGY/y8TcAUnplQ6TTessMre/VwDeF65NViGHE91TPOR8eKLIf1OoreqRmex
-        0aZpZHVa5E+G+Gt9z2D4nw+WpQnJNk3PYevMvns6vv1GB1SaLliXamyQ7Hq/Esg5
-        qKcym0vwbKL32AsocEkVFxK4YOWQ545R76R2X+dXuZEy1KxIwkiSqmLA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=EFbHgP1ovNNSINeqDOwdunGEhSdHZrRaKajbYfYzJ
-        mo=; b=IuqOK87zYABLnyMDMRCN6/QFxsz5AyCBr2TU+k4Et9/fqRisK/PQe8NU5
-        1QY0VDs+6/J5OeIR/km8a09AFz9BUkOUBqVYwinonyQEUrg8J5bjuMOYyydzcS87
-        dBbRCtftBMtNx3dr2wDo2WvKyMaIm5DeP9O3IPaGhuucHMsxv4n2ypJuEBFrI2nQ
-        97T+Qc/4ovqf/lVV6IU6nkOx5wZmW0ND7P7p2+b1kHmnFzPtY9m/XXOYI5d6BJqk
-        YeI+j/Y2u6lea//cNAuLIG+kSsU3Xqp3VVIevMkD4meoQ+n9/nop7Sy9AMdJGFfA
-        +ftESuPdWoVt9CXJnQfrwJN1DopyA==
-X-ME-Sender: <xms:6q_tYf1wsZtiMnFfKPRi0IuFBQQCAByVlNy-Kp7vVUBqSb8I2RwnGw>
-    <xme:6q_tYeGFQo1ALxg5v1rFpUDyqQ3gG6O_wAd29Rslz3ZSe4QyprnGZ-3wkCk1OGy6A
-    wvpie-1oGzarjUH-g>
-X-ME-Received: <xmr:6q_tYf5-Z2oKvAgsKKPKPDjZ8E7_VtR4GTKB7zfRxYWWsvXNG1knSl1hT6drSjX_v1oX1KQvVJ-sLBeoyrPU6c8DkJ9omGOsEgUfYaucEIFUn17NOgN8PVq62Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvdeggdduvdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepgfevffetleehffejueekvdekvdeitdehveegfeekheeuieeiueet
-    uefgtedtgeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:6q_tYU2yNOVzl0PtXeQIoRWWCohgcYdvSdHDa01ib9UXqFSIkMWVug>
-    <xmx:6q_tYSHd4FAKdcFHdQroC6-_v_4IvfQMA9__01cIIX3XZehEh2uuKA>
-    <xmx:6q_tYV9pvG8vuuI3s_wYBOtsvepHo3BBOzaNpiTxLWKlG-Snv7DAlA>
-    <xmx:7K_tYfco6x4b4SY8IGAvtbGxgxJVshN0a8opq63QZgpE5do5k3Tqpw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 23 Jan 2022 14:43:38 -0500 (EST)
-Subject: Re: [PATCH] net: stmmac: dwmac-sun8i: fix double disable and
- unprepare "stmmaceth" clk
-To:     Jisheng Zhang <jszhang@kernel.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org,
-        Joakim Zhang <qiangqing.zhang@nxp.com>
-References: <20220123132805.758-1-jszhang@kernel.org>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <38c41c04-abde-4d55-ed7c-515b6bba9c54@sholland.org>
-Date:   Sun, 23 Jan 2022 13:43:37 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Sun, 23 Jan 2022 14:44:55 -0500
+Date:   Sun, 23 Jan 2022 19:44:53 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1642967094;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1meVO5lrjft6NsXyGfiNyAFxIRzeuqJeCTu7gvicFvE=;
+        b=aMlBLO4FJtkIDzmO9yoMhD+qNAIcwRF8csI33ZQ6tE+0qZ0SVflzM+Otzcm6Y+BHBDvfX5
+        jg1QanQS5jUGAledDK7FISCiv7VkEmGEwgCAfNIYkj0LnN4vjDcn7KdLdAyVZRrhiiBEJx
+        ln0zct+wYM9kOyPPe+l5lgfBoBnlQfodYNK9XjqYRJYmVg29HitmnxXlVvBlHMJtiP/kBN
+        XzH/UmBq+zFGXiP0lu8HYIsWd7k5ecFMKb+y7Wcxn1MK+pnHRfPa70cDvh3kKfCZUnpzea
+        6trSAWRzhsCe+BSnp8F8NK///dJ8IyPfRFM0PocN4x6UyXbZM5+336vNMIaMDQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1642967094;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1meVO5lrjft6NsXyGfiNyAFxIRzeuqJeCTu7gvicFvE=;
+        b=I3mw/FjJlLMQ8eYmVb7EuwIt1UFv/acuclcWXNbZxcWabMbaOqnYzWCFZ89enqSSyKxXph
+        pbRMHs5NJKoWG5DA==
+From:   "tip-bot2 for Adrian Hunter" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/misc] x86/insn: Add AVX512-FP16 instructions to the x86
+ instruction decoder
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211202095029.2165714-7-adrian.hunter@intel.com>
+References: <20211202095029.2165714-7-adrian.hunter@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220123132805.758-1-jszhang@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Message-ID: <164296709318.16921.7836678925763420554.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/23/22 7:28 AM, Jisheng Zhang wrote:
-> Fix warnings on Allwinner D1 platform:
-> 
-> [    1.604695] ------------[ cut here ]------------
-> [    1.609328] bus-emac already disabled
-> [    1.613015] WARNING: CPU: 0 PID: 38 at drivers/clk/clk.c:952 clk_core_disable+0xcc/0xec
-> [    1.621039] CPU: 0 PID: 38 Comm: kworker/u2:1 Not tainted 5.14.0-rc4#1
-> [    1.627653] Hardware name: Allwinner D1 NeZha (DT)
-> [    1.632443] Workqueue: events_unbound deferred_probe_work_func
-> [    1.638286] epc : clk_core_disable+0xcc/0xec
-> [    1.642561]  ra : clk_core_disable+0xcc/0xec
-> [    1.646835] epc : ffffffff8023c2ec ra : ffffffff8023c2ec sp : ffffffd00411bb10
-> [    1.654054]  gp : ffffffff80ec9988 tp : ffffffe00143a800 t0 : ffffffff80ed6a6f
-> [    1.661272]  t1 : ffffffff80ed6a60 t2 : 0000000000000000 s0 : ffffffe001509e00
-> [    1.668489]  s1 : 0000000000000001 a0 : 0000000000000019 a1 : ffffffff80e80bd8
-> [    1.675707]  a2 : 00000000ffffefff a3 : 00000000000000f4 a4 : 0000000000000002
-> [    1.682924]  a5 : 0000000000000001 a6 : 0000000000000030 a7 : 00000000028f5c29
-> [    1.690141]  s2 : 0000000000000800 s3 : ffffffe001375000 s4 : ffffffe01fdf7a80
-> [    1.697358]  s5 : ffffffe001375010 s6 : ffffffff8001fc10 s7 : ffffffffffffffff
-> [    1.704577]  s8 : 0000000000000001 s9 : ffffffff80ecb248 s10: ffffffe001b80000
-> [    1.711794]  s11: ffffffe001b80760 t3 : 0000000000000062 t4 : ffffffffffffffff
-> [    1.719012]  t5 : ffffffff80e0f6d8 t6 : ffffffd00411b8f0
-> [    1.724321] status: 8000000201800100 badaddr: 0000000000000000 cause: 0000000000000003
-> [    1.732233] [<ffffffff8023c2ec>] clk_core_disable+0xcc/0xec
-> [    1.737810] [<ffffffff80240430>] clk_disable+0x38/0x78
-> [    1.742956] [<ffffffff8001fc0c>] worker_thread+0x1a8/0x4d8
-> [    1.748451] [<ffffffff8031a500>] stmmac_remove_config_dt+0x1c/0x4c
-> [    1.754646] [<ffffffff8031c8ec>] sun8i_dwmac_probe+0x378/0x82c
-> [    1.760484] [<ffffffff8001fc0c>] worker_thread+0x1a8/0x4d8
-> [    1.765975] [<ffffffff8029a6c8>] platform_probe+0x64/0xf0
-> [    1.771382] [<ffffffff8029833c>] really_probe.part.0+0x8c/0x30c
-> [    1.777305] [<ffffffff8029865c>] __driver_probe_device+0xa0/0x148
-> [    1.783402] [<ffffffff8029873c>] driver_probe_device+0x38/0x138
-> [    1.789324] [<ffffffff802989cc>] __device_attach_driver+0xd0/0x170
-> [    1.795508] [<ffffffff802988f8>] __driver_attach_async_helper+0xbc/0xc0
-> [    1.802125] [<ffffffff802965ac>] bus_for_each_drv+0x68/0xb4
-> [    1.807701] [<ffffffff80298d1c>] __device_attach+0xd8/0x184
-> [    1.813277] [<ffffffff802967b0>] bus_probe_device+0x98/0xbc
-> [    1.818852] [<ffffffff80297904>] deferred_probe_work_func+0x90/0xd4
-> [    1.825122] [<ffffffff8001f8b8>] process_one_work+0x1e4/0x390
-> [    1.830872] [<ffffffff8001fd80>] worker_thread+0x31c/0x4d8
-> [    1.836362] [<ffffffff80026bf4>] kthreadd+0x94/0x188
-> [    1.841335] [<ffffffff80026bf4>] kthreadd+0x94/0x188
-> [    1.846304] [<ffffffff8001fa60>] process_one_work+0x38c/0x390
-> [    1.852054] [<ffffffff80026564>] kthread+0x124/0x160
-> [    1.857021] [<ffffffff8002643c>] set_kthread_struct+0x5c/0x60
-> [    1.862770] [<ffffffff80001f08>] ret_from_syscall_rejected+0x8/0xc
-> [    1.868956] ---[ end trace 8d5c6046255f84a0 ]---
-> [    1.873675] ------------[ cut here ]------------
-> [    1.878366] bus-emac already unprepared
-> [    1.882378] WARNING: CPU: 0 PID: 38 at drivers/clk/clk.c:810 clk_core_unprepare+0xe4/0x168
-> [    1.890673] CPU: 0 PID: 38 Comm: kworker/u2:1 Tainted: G        W	5.14.0-rc4 #1
-> [    1.898674] Hardware name: Allwinner D1 NeZha (DT)
-> [    1.903464] Workqueue: events_unbound deferred_probe_work_func
-> [    1.909305] epc : clk_core_unprepare+0xe4/0x168
-> [    1.913840]  ra : clk_core_unprepare+0xe4/0x168
-> [    1.918375] epc : ffffffff8023d6cc ra : ffffffff8023d6cc sp : ffffffd00411bb10
-> [    1.925593]  gp : ffffffff80ec9988 tp : ffffffe00143a800 t0 : 0000000000000002
-> [    1.932811]  t1 : ffffffe01f743be0 t2 : 0000000000000040 s0 : ffffffe001509e00
-> [    1.940029]  s1 : 0000000000000001 a0 : 000000000000001b a1 : ffffffe00143a800
-> [    1.947246]  a2 : 0000000000000000 a3 : 00000000000000f4 a4 : 0000000000000001
-> [    1.954463]  a5 : 0000000000000000 a6 : 0000000005fce2a5 a7 : 0000000000000001
-> [    1.961680]  s2 : 0000000000000800 s3 : ffffffff80afeb90 s4 : ffffffe01fdf7a80
-> [    1.968898]  s5 : ffffffe001375010 s6 : ffffffff8001fc10 s7 : ffffffffffffffff
-> [    1.976115]  s8 : 0000000000000001 s9 : ffffffff80ecb248 s10: ffffffe001b80000
-> [    1.983333]  s11: ffffffe001b80760 t3 : ffffffff80b39120 t4 : 0000000000000001
-> [    1.990550]  t5 : 0000000000000000 t6 : ffffffe001600002
-> [    1.995859] status: 8000000201800120 badaddr: 0000000000000000 cause: 0000000000000003
-> [    2.003771] [<ffffffff8023d6cc>] clk_core_unprepare+0xe4/0x168
-> [    2.009609] [<ffffffff802403a0>] clk_unprepare+0x24/0x3c
-> [    2.014929] [<ffffffff8031a508>] stmmac_remove_config_dt+0x24/0x4c
-> [    2.021125] [<ffffffff8031c8ec>] sun8i_dwmac_probe+0x378/0x82c
-> [    2.026965] [<ffffffff8001fc0c>] worker_thread+0x1a8/0x4d8
-> [    2.032463] [<ffffffff8029a6c8>] platform_probe+0x64/0xf0
-> [    2.037871] [<ffffffff8029833c>] really_probe.part.0+0x8c/0x30c
-> [    2.043795] [<ffffffff8029865c>] __driver_probe_device+0xa0/0x148
-> [    2.049892] [<ffffffff8029873c>] driver_probe_device+0x38/0x138
-> [    2.055815] [<ffffffff802989cc>] __device_attach_driver+0xd0/0x170
-> [    2.061999] [<ffffffff802988f8>] __driver_attach_async_helper+0xbc/0xc0
-> [    2.068616] [<ffffffff802965ac>] bus_for_each_drv+0x68/0xb4
-> [    2.074193] [<ffffffff80298d1c>] __device_attach+0xd8/0x184
-> [    2.079769] [<ffffffff802967b0>] bus_probe_device+0x98/0xbc
-> [    2.085345] [<ffffffff80297904>] deferred_probe_work_func+0x90/0xd4
-> [    2.091616] [<ffffffff8001f8b8>] process_one_work+0x1e4/0x390
-> [    2.097367] [<ffffffff8001fd80>] worker_thread+0x31c/0x4d8
-> [    2.102858] [<ffffffff80026bf4>] kthreadd+0x94/0x188
-> [    2.107830] [<ffffffff80026bf4>] kthreadd+0x94/0x188
-> [    2.112800] [<ffffffff8001fa60>] process_one_work+0x38c/0x390
-> [    2.118551] [<ffffffff80026564>] kthread+0x124/0x160
-> [    2.123520] [<ffffffff8002643c>] set_kthread_struct+0x5c/0x60
-> [    2.129268] [<ffffffff80001f08>] ret_from_syscall_rejected+0x8/0xc
-> [    2.135455] ---[ end trace 8d5c6046255f84a1 ]---
-> 
-> the dwmmac-sun8i driver will get the "stmmaceth" clk as tx_clk during
-> driver initialization. If stmmac_dvr_probe() fails due to various
-> reasons, sun8i_dwmac_exit() will disable and unprepare the "stmmaceth"
-> clk, then stmmac_remove_config_dt() will disable and unprepare the
-> clk again.
+The following commit has been merged into the x86/misc branch of tip:
 
-This should still be balanced, because both stmmac_probe_config_dt and
-sun8i_dwmac_init prepare/enable the clock, so the dwmac-sun8i glue layer calls
-stmmac_dvr_probe with the clock having an enable count of 2. It looks like the
-underlying issue is that commit 5ec55823438e ("net: stmmac: add clocks
-management for gmac driver") introduces unbalanced runtime PM.
- - stmmac_dvr_probe calls pm_runtime_get_noresume and pm_runtime_set_active,
-since it assumes the clocks are already enabled. This is fine.
- - If stmmac_dvr_probe fails, it calls stmmac_bus_clks_config(priv, false),
-which drops the enable count down to 1. This is a bug, not just in this case,
-but also because it will unbalance the clocks if runtime PM is disabled.
- - If stmmac_dvr_probe fails, it never calls pm_runtime_disable if the failure
-occurs after the call to pm_runtime_enable. This is also a bug.
+Commit-ID:     16273fa4f3a2dc2c64dd8a28fe30f255a4de0e4c
+Gitweb:        https://git.kernel.org/tip/16273fa4f3a2dc2c64dd8a28fe30f255a4de0e4c
+Author:        Adrian Hunter <adrian.hunter@intel.com>
+AuthorDate:    Thu, 02 Dec 2021 11:50:29 +02:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Sun, 23 Jan 2022 20:38:01 +01:00
 
-It looks like at some point stmmac_dvr_remove was expected to leave all of the
-clocks disabled, but it must leave them enabled as of commit 8f269102baf7 ("net:
-stmmac: disable clocks in stmmac_remove_config_dt()"), since
-stmmac_remove_config_dt is called after stmmac_dvr_remove in stmmac_pltfr_remove.
- - If stmmac_dvr_probe succeeds, it calls pm_runtime_put. This allows runtime PM
-to suspend the device, dropping the clock enable count to 1. This is fine.
- - But then stmmac_dvr_remove calls pm_runtime_put as well. It needs to do the
-opposite. It must ensure the device is runtime resumed, so the clock enable
-count matches what it was before stmmac_dvr_probe was called (in this case: 2).
+x86/insn: Add AVX512-FP16 instructions to the x86 instruction decoder
 
-> Currently, there's no other usage of tx_clk except preparing and
-> enabling, we can fix the above warnings by simply removing the tx_clk
-> and all its usage, we rely on the common stmmac_probe_config_dt()
-> routine to prepare and enable the stmmaceth clk.
+The x86 instruction decoder is used for both kernel instructions and
+user space instructions (e.g. uprobes, perf tools Intel PT), so it is
+good to update it with new instructions.
 
-This is a good change to make, as indeed this code is now unnecessary, and
-removing it will allow runtime PM to actually disable the clock. But I am not
-sure how this resolves the warnings you are seeing, as the sun8i_dwmac_init/exit
-calls should have been balanced already.
+Add AVX512-FP16 instructions to x86 instruction decoder.
 
-Can you check if the PHY regulator is also getting unbalanced? Unbalanced calls
-to sun8i_dwmac_exit would also underflow the regulator use count, which should
-trigger its own warning.
+Note the EVEX map field is extended by 1 bit, and most instructions are in
+map 5 and map 6.
 
-Regards,
-Samuel
+Reference:
+Intel AVX512-FP16 Architecture Specification
+June 2021
+Revision 1.0
+Document Number: 347407-001US
 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  .../net/ethernet/stmicro/stmmac/dwmac-sun8i.c | 20 +------------------
->  1 file changed, 1 insertion(+), 19 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
-> index 617d0e4c6495..d97469825e53 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
-> @@ -57,7 +57,6 @@ struct emac_variant {
->  };
->  
->  /* struct sunxi_priv_data - hold all sunxi private data
-> - * @tx_clk:	reference to MAC TX clock
->   * @ephy_clk:	reference to the optional EPHY clock for the internal PHY
->   * @regulator:	reference to the optional regulator
->   * @rst_ephy:	reference to the optional EPHY reset for the internal PHY
-> @@ -68,7 +67,6 @@ struct emac_variant {
->   * @mux_handle:	Internal pointer used by mdio-mux lib
->   */
->  struct sunxi_priv_data {
-> -	struct clk *tx_clk;
->  	struct clk *ephy_clk;
->  	struct regulator *regulator;
->  	struct reset_control *rst_ephy;
-> @@ -579,22 +577,14 @@ static int sun8i_dwmac_init(struct platform_device *pdev, void *priv)
->  		}
->  	}
->  
-> -	ret = clk_prepare_enable(gmac->tx_clk);
-> -	if (ret) {
-> -		dev_err(&pdev->dev, "Could not enable AHB clock\n");
-> -		goto err_disable_regulator;
-> -	}
-> -
->  	if (gmac->use_internal_phy) {
->  		ret = sun8i_dwmac_power_internal_phy(netdev_priv(ndev));
->  		if (ret)
-> -			goto err_disable_clk;
-> +			goto err_disable_regulator;
->  	}
->  
->  	return 0;
->  
-> -err_disable_clk:
-> -	clk_disable_unprepare(gmac->tx_clk);
->  err_disable_regulator:
->  	if (gmac->regulator)
->  		regulator_disable(gmac->regulator);
-> @@ -1043,8 +1033,6 @@ static void sun8i_dwmac_exit(struct platform_device *pdev, void *priv)
->  	if (gmac->variant->soc_has_internal_phy)
->  		sun8i_dwmac_unpower_internal_phy(gmac);
->  
-> -	clk_disable_unprepare(gmac->tx_clk);
-> -
->  	if (gmac->regulator)
->  		regulator_disable(gmac->regulator);
->  }
-> @@ -1167,12 +1155,6 @@ static int sun8i_dwmac_probe(struct platform_device *pdev)
->  		return -EINVAL;
->  	}
->  
-> -	gmac->tx_clk = devm_clk_get(dev, "stmmaceth");
-> -	if (IS_ERR(gmac->tx_clk)) {
-> -		dev_err(dev, "Could not get TX clock\n");
-> -		return PTR_ERR(gmac->tx_clk);
-> -	}
-> -
->  	/* Optional regulator for PHY */
->  	gmac->regulator = devm_regulator_get_optional(dev, "phy");
->  	if (IS_ERR(gmac->regulator)) {
-> 
+Example using perf tools' x86 instruction decoder test:
 
+  $ perf test -v "x86 instruction decoder" |& grep vfcmaddcph | head -2
+  Decoded ok: 62 f6 6f 48 56 cb           vfcmaddcph %zmm3,%zmm2,%zmm1
+  Decoded ok: 62 f6 6f 48 56 8c c8 78 56 34 12    vfcmaddcph 0x12345678(%eax,%ecx,8),%zmm2,%zmm1
+
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+Link: https://lore.kernel.org/r/20211202095029.2165714-7-adrian.hunter@intel.com
+---
+ arch/x86/include/asm/insn.h           |  2 +-
+ arch/x86/lib/x86-opcode-map.txt       | 95 +++++++++++++++++++++++---
+ tools/arch/x86/include/asm/insn.h     |  2 +-
+ tools/arch/x86/lib/x86-opcode-map.txt | 95 +++++++++++++++++++++++---
+ 4 files changed, 176 insertions(+), 18 deletions(-)
+
+diff --git a/arch/x86/include/asm/insn.h b/arch/x86/include/asm/insn.h
+index 05a6ab9..1b29f58 100644
+--- a/arch/x86/include/asm/insn.h
++++ b/arch/x86/include/asm/insn.h
+@@ -124,7 +124,7 @@ struct insn {
+ #define X86_VEX_B(vex)	((vex) & 0x20)	/* VEX3 Byte1 */
+ #define X86_VEX_L(vex)	((vex) & 0x04)	/* VEX3 Byte2, VEX2 Byte1 */
+ /* VEX bit fields */
+-#define X86_EVEX_M(vex)	((vex) & 0x03)		/* EVEX Byte1 */
++#define X86_EVEX_M(vex)	((vex) & 0x07)		/* EVEX Byte1 */
+ #define X86_VEX3_M(vex)	((vex) & 0x1f)		/* VEX3 Byte1 */
+ #define X86_VEX2_M	1			/* VEX2.M always 1 */
+ #define X86_VEX_V(vex)	(((vex) & 0x78) >> 3)	/* VEX3 Byte2, VEX2 Byte1 */
+diff --git a/arch/x86/lib/x86-opcode-map.txt b/arch/x86/lib/x86-opcode-map.txt
+index 591797a..d12d135 100644
+--- a/arch/x86/lib/x86-opcode-map.txt
++++ b/arch/x86/lib/x86-opcode-map.txt
+@@ -828,9 +828,9 @@ AVXcode: 3
+ 05: vpermilpd Vx,Wx,Ib (66),(v)
+ 06: vperm2f128 Vqq,Hqq,Wqq,Ib (66),(v)
+ 07:
+-08: vroundps Vx,Wx,Ib (66) | vrndscaleps Vx,Wx,Ib (66),(evo)
++08: vroundps Vx,Wx,Ib (66) | vrndscaleps Vx,Wx,Ib (66),(evo) | vrndscaleph Vx,Wx,Ib (evo)
+ 09: vroundpd Vx,Wx,Ib (66) | vrndscalepd Vx,Wx,Ib (66),(evo)
+-0a: vroundss Vss,Wss,Ib (66),(v1) | vrndscaless Vx,Hx,Wx,Ib (66),(evo)
++0a: vroundss Vss,Wss,Ib (66),(v1) | vrndscaless Vx,Hx,Wx,Ib (66),(evo) | vrndscalesh Vx,Hx,Wx,Ib (evo)
+ 0b: vroundsd Vsd,Wsd,Ib (66),(v1) | vrndscalesd Vx,Hx,Wx,Ib (66),(evo)
+ 0c: vblendps Vx,Hx,Wx,Ib (66)
+ 0d: vblendpd Vx,Hx,Wx,Ib (66)
+@@ -852,8 +852,8 @@ AVXcode: 3
+ 22: vpinsrd/q Vdq,Hdq,Ey,Ib (66),(v1)
+ 23: vshuff32x4/64x2 Vx,Hx,Wx,Ib (66),(ev)
+ 25: vpternlogd/q Vx,Hx,Wx,Ib (66),(ev)
+-26: vgetmantps/d Vx,Wx,Ib (66),(ev)
+-27: vgetmantss/d Vx,Hx,Wx,Ib (66),(ev)
++26: vgetmantps/d Vx,Wx,Ib (66),(ev) | vgetmantph Vx,Wx,Ib (ev)
++27: vgetmantss/d Vx,Hx,Wx,Ib (66),(ev) | vgetmantsh Vx,Hx,Wx,Ib (ev)
+ 30: kshiftrb/w Vk,Uk,Ib (66),(v)
+ 31: kshiftrd/q Vk,Uk,Ib (66),(v)
+ 32: kshiftlb/w Vk,Uk,Ib (66),(v)
+@@ -877,18 +877,19 @@ AVXcode: 3
+ 51: vrangess/d Vx,Hx,Wx,Ib (66),(ev)
+ 54: vfixupimmps/d Vx,Hx,Wx,Ib (66),(ev)
+ 55: vfixupimmss/d Vx,Hx,Wx,Ib (66),(ev)
+-56: vreduceps/d Vx,Wx,Ib (66),(ev)
+-57: vreducess/d Vx,Hx,Wx,Ib (66),(ev)
++56: vreduceps/d Vx,Wx,Ib (66),(ev) | vreduceph Vx,Wx,Ib (ev)
++57: vreducess/d Vx,Hx,Wx,Ib (66),(ev) | vreducesh Vx,Hx,Wx,Ib (ev)
+ 60: vpcmpestrm Vdq,Wdq,Ib (66),(v1)
+ 61: vpcmpestri Vdq,Wdq,Ib (66),(v1)
+ 62: vpcmpistrm Vdq,Wdq,Ib (66),(v1)
+ 63: vpcmpistri Vdq,Wdq,Ib (66),(v1)
+-66: vfpclassps/d Vk,Wx,Ib (66),(ev)
+-67: vfpclassss/d Vk,Wx,Ib (66),(ev)
++66: vfpclassps/d Vk,Wx,Ib (66),(ev) | vfpclassph Vx,Wx,Ib (ev)
++67: vfpclassss/d Vk,Wx,Ib (66),(ev) | vfpclasssh Vx,Wx,Ib (ev)
+ 70: vpshldw Vx,Hx,Wx,Ib (66),(ev)
+ 71: vpshldd/q Vx,Hx,Wx,Ib (66),(ev)
+ 72: vpshrdw Vx,Hx,Wx,Ib (66),(ev)
+ 73: vpshrdd/q Vx,Hx,Wx,Ib (66),(ev)
++c2: vcmpph Vx,Hx,Wx,Ib (ev) | vcmpsh Vx,Hx,Wx,Ib (F3),(ev)
+ cc: sha1rnds4 Vdq,Wdq,Ib
+ ce: vgf2p8affineqb Vx,Wx,Ib (66)
+ cf: vgf2p8affineinvqb Vx,Wx,Ib (66)
+@@ -896,6 +897,84 @@ df: VAESKEYGEN Vdq,Wdq,Ib (66),(v1)
+ f0: RORX Gy,Ey,Ib (F2),(v) | HRESET Gv,Ib (F3),(000),(11B)
+ EndTable
+ 
++Table: EVEX map 5
++Referrer:
++AVXcode: 5
++10: vmovsh Vx,Hx,Wx (F3),(ev) | vmovsh Vx,Wx (F3),(ev)
++11: vmovsh Wx,Hx,Vx (F3),(ev) | vmovsh Wx,Vx (F3),(ev)
++1d: vcvtps2phx Vx,Wx (66),(ev) | vcvtss2sh Vx,Hx,Wx (ev)
++2a: vcvtsi2sh Vx,Hx,Wx (F3),(ev)
++2c: vcvttsh2si Vx,Wx (F3),(ev)
++2d: vcvtsh2si Vx,Wx (F3),(ev)
++2e: vucomish Vx,Wx (ev)
++2f: vcomish Vx,Wx (ev)
++51: vsqrtph Vx,Wx (ev) | vsqrtsh Vx,Hx,Wx (F3),(ev)
++58: vaddph Vx,Hx,Wx (ev) | vaddsh Vx,Hx,Wx (F3),(ev)
++59: vmulph Vx,Hx,Wx (ev) | vmulsh Vx,Hx,Wx (F3),(ev)
++5a: vcvtpd2ph Vx,Wx (66),(ev) | vcvtph2pd Vx,Wx (ev) | vcvtsd2sh Vx,Hx,Wx (F2),(ev) | vcvtsh2sd Vx,Hx,Wx (F3),(ev)
++5b: vcvtdq2ph Vx,Wx (ev) | vcvtph2dq Vx,Wx (66),(ev) | vcvtqq2ph Vx,Wx (ev) | vcvttph2dq Vx,Wx (F3),(ev)
++5c: vsubph Vx,Hx,Wx (ev) | vsubsh Vx,Hx,Wx (F3),(ev)
++5d: vminph Vx,Hx,Wx (ev) | vminsh Vx,Hx,Wx (F3),(ev)
++5e: vdivph Vx,Hx,Wx (ev) | vdivsh Vx,Hx,Wx (F3),(ev)
++5f: vmaxph Vx,Hx,Wx (ev) | vmaxsh Vx,Hx,Wx (F3),(ev)
++6e: vmovw Vx,Wx (66),(ev)
++78: vcvttph2udq Vx,Wx (ev) | vcvttph2uqq Vx,Wx (66),(ev) | vcvttsh2usi Vx,Wx (F3),(ev)
++79: vcvtph2udq Vx,Wx (ev) | vcvtph2uqq Vx,Wx (66),(ev) | vcvtsh2usi Vx,Wx (F3),(ev)
++7a: vcvttph2qq Vx,Wx (66),(ev) | vcvtudq2ph Vx,Wx (F2),(ev) | vcvtuqq2ph Vx,Wx (F2),(ev)
++7b: vcvtph2qq Vx,Wx (66),(ev) | vcvtusi2sh Vx,Hx,Wx (F3),(ev)
++7c: vcvttph2uw Vx,Wx (ev) | vcvttph2w Vx,Wx (66),(ev)
++7d: vcvtph2uw Vx,Wx (ev) | vcvtph2w Vx,Wx (66),(ev) | vcvtuw2ph Vx,Wx (F2),(ev) | vcvtw2ph Vx,Wx (F3),(ev)
++7e: vmovw Wx,Vx (66),(ev)
++EndTable
++
++Table: EVEX map 6
++Referrer:
++AVXcode: 6
++13: vcvtph2psx Vx,Wx (66),(ev) | vcvtsh2ss Vx,Hx,Wx (ev)
++2c: vscalefph Vx,Hx,Wx (66),(ev)
++2d: vscalefsh Vx,Hx,Wx (66),(ev)
++42: vgetexpph Vx,Wx (66),(ev)
++43: vgetexpsh Vx,Hx,Wx (66),(ev)
++4c: vrcpph Vx,Wx (66),(ev)
++4d: vrcpsh Vx,Hx,Wx (66),(ev)
++4e: vrsqrtph Vx,Wx (66),(ev)
++4f: vrsqrtsh Vx,Hx,Wx (66),(ev)
++56: vfcmaddcph Vx,Hx,Wx (F2),(ev) | vfmaddcph Vx,Hx,Wx (F3),(ev)
++57: vfcmaddcsh Vx,Hx,Wx (F2),(ev) | vfmaddcsh Vx,Hx,Wx (F3),(ev)
++96: vfmaddsub132ph Vx,Hx,Wx (66),(ev)
++97: vfmsubadd132ph Vx,Hx,Wx (66),(ev)
++98: vfmadd132ph Vx,Hx,Wx (66),(ev)
++99: vfmadd132sh Vx,Hx,Wx (66),(ev)
++9a: vfmsub132ph Vx,Hx,Wx (66),(ev)
++9b: vfmsub132sh Vx,Hx,Wx (66),(ev)
++9c: vfnmadd132ph Vx,Hx,Wx (66),(ev)
++9d: vfnmadd132sh Vx,Hx,Wx (66),(ev)
++9e: vfnmsub132ph Vx,Hx,Wx (66),(ev)
++9f: vfnmsub132sh Vx,Hx,Wx (66),(ev)
++a6: vfmaddsub213ph Vx,Hx,Wx (66),(ev)
++a7: vfmsubadd213ph Vx,Hx,Wx (66),(ev)
++a8: vfmadd213ph Vx,Hx,Wx (66),(ev)
++a9: vfmadd213sh Vx,Hx,Wx (66),(ev)
++aa: vfmsub213ph Vx,Hx,Wx (66),(ev)
++ab: vfmsub213sh Vx,Hx,Wx (66),(ev)
++ac: vfnmadd213ph Vx,Hx,Wx (66),(ev)
++ad: vfnmadd213sh Vx,Hx,Wx (66),(ev)
++ae: vfnmsub213ph Vx,Hx,Wx (66),(ev)
++af: vfnmsub213sh Vx,Hx,Wx (66),(ev)
++b6: vfmaddsub231ph Vx,Hx,Wx (66),(ev)
++b7: vfmsubadd231ph Vx,Hx,Wx (66),(ev)
++b8: vfmadd231ph Vx,Hx,Wx (66),(ev)
++b9: vfmadd231sh Vx,Hx,Wx (66),(ev)
++ba: vfmsub231ph Vx,Hx,Wx (66),(ev)
++bb: vfmsub231sh Vx,Hx,Wx (66),(ev)
++bc: vfnmadd231ph Vx,Hx,Wx (66),(ev)
++bd: vfnmadd231sh Vx,Hx,Wx (66),(ev)
++be: vfnmsub231ph Vx,Hx,Wx (66),(ev)
++bf: vfnmsub231sh Vx,Hx,Wx (66),(ev)
++d6: vfcmulcph Vx,Hx,Wx (F2),(ev) | vfmulcph Vx,Hx,Wx (F3),(ev)
++d7: vfcmulcsh Vx,Hx,Wx (F2),(ev) | vfmulcsh Vx,Hx,Wx (F3),(ev)
++EndTable
++
+ GrpTable: Grp1
+ 0: ADD
+ 1: OR
+diff --git a/tools/arch/x86/include/asm/insn.h b/tools/arch/x86/include/asm/insn.h
+index dc632b4..65c0d9c 100644
+--- a/tools/arch/x86/include/asm/insn.h
++++ b/tools/arch/x86/include/asm/insn.h
+@@ -124,7 +124,7 @@ struct insn {
+ #define X86_VEX_B(vex)	((vex) & 0x20)	/* VEX3 Byte1 */
+ #define X86_VEX_L(vex)	((vex) & 0x04)	/* VEX3 Byte2, VEX2 Byte1 */
+ /* VEX bit fields */
+-#define X86_EVEX_M(vex)	((vex) & 0x03)		/* EVEX Byte1 */
++#define X86_EVEX_M(vex)	((vex) & 0x07)		/* EVEX Byte1 */
+ #define X86_VEX3_M(vex)	((vex) & 0x1f)		/* VEX3 Byte1 */
+ #define X86_VEX2_M	1			/* VEX2.M always 1 */
+ #define X86_VEX_V(vex)	(((vex) & 0x78) >> 3)	/* VEX3 Byte2, VEX2 Byte1 */
+diff --git a/tools/arch/x86/lib/x86-opcode-map.txt b/tools/arch/x86/lib/x86-opcode-map.txt
+index 591797a..d12d135 100644
+--- a/tools/arch/x86/lib/x86-opcode-map.txt
++++ b/tools/arch/x86/lib/x86-opcode-map.txt
+@@ -828,9 +828,9 @@ AVXcode: 3
+ 05: vpermilpd Vx,Wx,Ib (66),(v)
+ 06: vperm2f128 Vqq,Hqq,Wqq,Ib (66),(v)
+ 07:
+-08: vroundps Vx,Wx,Ib (66) | vrndscaleps Vx,Wx,Ib (66),(evo)
++08: vroundps Vx,Wx,Ib (66) | vrndscaleps Vx,Wx,Ib (66),(evo) | vrndscaleph Vx,Wx,Ib (evo)
+ 09: vroundpd Vx,Wx,Ib (66) | vrndscalepd Vx,Wx,Ib (66),(evo)
+-0a: vroundss Vss,Wss,Ib (66),(v1) | vrndscaless Vx,Hx,Wx,Ib (66),(evo)
++0a: vroundss Vss,Wss,Ib (66),(v1) | vrndscaless Vx,Hx,Wx,Ib (66),(evo) | vrndscalesh Vx,Hx,Wx,Ib (evo)
+ 0b: vroundsd Vsd,Wsd,Ib (66),(v1) | vrndscalesd Vx,Hx,Wx,Ib (66),(evo)
+ 0c: vblendps Vx,Hx,Wx,Ib (66)
+ 0d: vblendpd Vx,Hx,Wx,Ib (66)
+@@ -852,8 +852,8 @@ AVXcode: 3
+ 22: vpinsrd/q Vdq,Hdq,Ey,Ib (66),(v1)
+ 23: vshuff32x4/64x2 Vx,Hx,Wx,Ib (66),(ev)
+ 25: vpternlogd/q Vx,Hx,Wx,Ib (66),(ev)
+-26: vgetmantps/d Vx,Wx,Ib (66),(ev)
+-27: vgetmantss/d Vx,Hx,Wx,Ib (66),(ev)
++26: vgetmantps/d Vx,Wx,Ib (66),(ev) | vgetmantph Vx,Wx,Ib (ev)
++27: vgetmantss/d Vx,Hx,Wx,Ib (66),(ev) | vgetmantsh Vx,Hx,Wx,Ib (ev)
+ 30: kshiftrb/w Vk,Uk,Ib (66),(v)
+ 31: kshiftrd/q Vk,Uk,Ib (66),(v)
+ 32: kshiftlb/w Vk,Uk,Ib (66),(v)
+@@ -877,18 +877,19 @@ AVXcode: 3
+ 51: vrangess/d Vx,Hx,Wx,Ib (66),(ev)
+ 54: vfixupimmps/d Vx,Hx,Wx,Ib (66),(ev)
+ 55: vfixupimmss/d Vx,Hx,Wx,Ib (66),(ev)
+-56: vreduceps/d Vx,Wx,Ib (66),(ev)
+-57: vreducess/d Vx,Hx,Wx,Ib (66),(ev)
++56: vreduceps/d Vx,Wx,Ib (66),(ev) | vreduceph Vx,Wx,Ib (ev)
++57: vreducess/d Vx,Hx,Wx,Ib (66),(ev) | vreducesh Vx,Hx,Wx,Ib (ev)
+ 60: vpcmpestrm Vdq,Wdq,Ib (66),(v1)
+ 61: vpcmpestri Vdq,Wdq,Ib (66),(v1)
+ 62: vpcmpistrm Vdq,Wdq,Ib (66),(v1)
+ 63: vpcmpistri Vdq,Wdq,Ib (66),(v1)
+-66: vfpclassps/d Vk,Wx,Ib (66),(ev)
+-67: vfpclassss/d Vk,Wx,Ib (66),(ev)
++66: vfpclassps/d Vk,Wx,Ib (66),(ev) | vfpclassph Vx,Wx,Ib (ev)
++67: vfpclassss/d Vk,Wx,Ib (66),(ev) | vfpclasssh Vx,Wx,Ib (ev)
+ 70: vpshldw Vx,Hx,Wx,Ib (66),(ev)
+ 71: vpshldd/q Vx,Hx,Wx,Ib (66),(ev)
+ 72: vpshrdw Vx,Hx,Wx,Ib (66),(ev)
+ 73: vpshrdd/q Vx,Hx,Wx,Ib (66),(ev)
++c2: vcmpph Vx,Hx,Wx,Ib (ev) | vcmpsh Vx,Hx,Wx,Ib (F3),(ev)
+ cc: sha1rnds4 Vdq,Wdq,Ib
+ ce: vgf2p8affineqb Vx,Wx,Ib (66)
+ cf: vgf2p8affineinvqb Vx,Wx,Ib (66)
+@@ -896,6 +897,84 @@ df: VAESKEYGEN Vdq,Wdq,Ib (66),(v1)
+ f0: RORX Gy,Ey,Ib (F2),(v) | HRESET Gv,Ib (F3),(000),(11B)
+ EndTable
+ 
++Table: EVEX map 5
++Referrer:
++AVXcode: 5
++10: vmovsh Vx,Hx,Wx (F3),(ev) | vmovsh Vx,Wx (F3),(ev)
++11: vmovsh Wx,Hx,Vx (F3),(ev) | vmovsh Wx,Vx (F3),(ev)
++1d: vcvtps2phx Vx,Wx (66),(ev) | vcvtss2sh Vx,Hx,Wx (ev)
++2a: vcvtsi2sh Vx,Hx,Wx (F3),(ev)
++2c: vcvttsh2si Vx,Wx (F3),(ev)
++2d: vcvtsh2si Vx,Wx (F3),(ev)
++2e: vucomish Vx,Wx (ev)
++2f: vcomish Vx,Wx (ev)
++51: vsqrtph Vx,Wx (ev) | vsqrtsh Vx,Hx,Wx (F3),(ev)
++58: vaddph Vx,Hx,Wx (ev) | vaddsh Vx,Hx,Wx (F3),(ev)
++59: vmulph Vx,Hx,Wx (ev) | vmulsh Vx,Hx,Wx (F3),(ev)
++5a: vcvtpd2ph Vx,Wx (66),(ev) | vcvtph2pd Vx,Wx (ev) | vcvtsd2sh Vx,Hx,Wx (F2),(ev) | vcvtsh2sd Vx,Hx,Wx (F3),(ev)
++5b: vcvtdq2ph Vx,Wx (ev) | vcvtph2dq Vx,Wx (66),(ev) | vcvtqq2ph Vx,Wx (ev) | vcvttph2dq Vx,Wx (F3),(ev)
++5c: vsubph Vx,Hx,Wx (ev) | vsubsh Vx,Hx,Wx (F3),(ev)
++5d: vminph Vx,Hx,Wx (ev) | vminsh Vx,Hx,Wx (F3),(ev)
++5e: vdivph Vx,Hx,Wx (ev) | vdivsh Vx,Hx,Wx (F3),(ev)
++5f: vmaxph Vx,Hx,Wx (ev) | vmaxsh Vx,Hx,Wx (F3),(ev)
++6e: vmovw Vx,Wx (66),(ev)
++78: vcvttph2udq Vx,Wx (ev) | vcvttph2uqq Vx,Wx (66),(ev) | vcvttsh2usi Vx,Wx (F3),(ev)
++79: vcvtph2udq Vx,Wx (ev) | vcvtph2uqq Vx,Wx (66),(ev) | vcvtsh2usi Vx,Wx (F3),(ev)
++7a: vcvttph2qq Vx,Wx (66),(ev) | vcvtudq2ph Vx,Wx (F2),(ev) | vcvtuqq2ph Vx,Wx (F2),(ev)
++7b: vcvtph2qq Vx,Wx (66),(ev) | vcvtusi2sh Vx,Hx,Wx (F3),(ev)
++7c: vcvttph2uw Vx,Wx (ev) | vcvttph2w Vx,Wx (66),(ev)
++7d: vcvtph2uw Vx,Wx (ev) | vcvtph2w Vx,Wx (66),(ev) | vcvtuw2ph Vx,Wx (F2),(ev) | vcvtw2ph Vx,Wx (F3),(ev)
++7e: vmovw Wx,Vx (66),(ev)
++EndTable
++
++Table: EVEX map 6
++Referrer:
++AVXcode: 6
++13: vcvtph2psx Vx,Wx (66),(ev) | vcvtsh2ss Vx,Hx,Wx (ev)
++2c: vscalefph Vx,Hx,Wx (66),(ev)
++2d: vscalefsh Vx,Hx,Wx (66),(ev)
++42: vgetexpph Vx,Wx (66),(ev)
++43: vgetexpsh Vx,Hx,Wx (66),(ev)
++4c: vrcpph Vx,Wx (66),(ev)
++4d: vrcpsh Vx,Hx,Wx (66),(ev)
++4e: vrsqrtph Vx,Wx (66),(ev)
++4f: vrsqrtsh Vx,Hx,Wx (66),(ev)
++56: vfcmaddcph Vx,Hx,Wx (F2),(ev) | vfmaddcph Vx,Hx,Wx (F3),(ev)
++57: vfcmaddcsh Vx,Hx,Wx (F2),(ev) | vfmaddcsh Vx,Hx,Wx (F3),(ev)
++96: vfmaddsub132ph Vx,Hx,Wx (66),(ev)
++97: vfmsubadd132ph Vx,Hx,Wx (66),(ev)
++98: vfmadd132ph Vx,Hx,Wx (66),(ev)
++99: vfmadd132sh Vx,Hx,Wx (66),(ev)
++9a: vfmsub132ph Vx,Hx,Wx (66),(ev)
++9b: vfmsub132sh Vx,Hx,Wx (66),(ev)
++9c: vfnmadd132ph Vx,Hx,Wx (66),(ev)
++9d: vfnmadd132sh Vx,Hx,Wx (66),(ev)
++9e: vfnmsub132ph Vx,Hx,Wx (66),(ev)
++9f: vfnmsub132sh Vx,Hx,Wx (66),(ev)
++a6: vfmaddsub213ph Vx,Hx,Wx (66),(ev)
++a7: vfmsubadd213ph Vx,Hx,Wx (66),(ev)
++a8: vfmadd213ph Vx,Hx,Wx (66),(ev)
++a9: vfmadd213sh Vx,Hx,Wx (66),(ev)
++aa: vfmsub213ph Vx,Hx,Wx (66),(ev)
++ab: vfmsub213sh Vx,Hx,Wx (66),(ev)
++ac: vfnmadd213ph Vx,Hx,Wx (66),(ev)
++ad: vfnmadd213sh Vx,Hx,Wx (66),(ev)
++ae: vfnmsub213ph Vx,Hx,Wx (66),(ev)
++af: vfnmsub213sh Vx,Hx,Wx (66),(ev)
++b6: vfmaddsub231ph Vx,Hx,Wx (66),(ev)
++b7: vfmsubadd231ph Vx,Hx,Wx (66),(ev)
++b8: vfmadd231ph Vx,Hx,Wx (66),(ev)
++b9: vfmadd231sh Vx,Hx,Wx (66),(ev)
++ba: vfmsub231ph Vx,Hx,Wx (66),(ev)
++bb: vfmsub231sh Vx,Hx,Wx (66),(ev)
++bc: vfnmadd231ph Vx,Hx,Wx (66),(ev)
++bd: vfnmadd231sh Vx,Hx,Wx (66),(ev)
++be: vfnmsub231ph Vx,Hx,Wx (66),(ev)
++bf: vfnmsub231sh Vx,Hx,Wx (66),(ev)
++d6: vfcmulcph Vx,Hx,Wx (F2),(ev) | vfmulcph Vx,Hx,Wx (F3),(ev)
++d7: vfcmulcsh Vx,Hx,Wx (F2),(ev) | vfmulcsh Vx,Hx,Wx (F3),(ev)
++EndTable
++
+ GrpTable: Grp1
+ 0: ADD
+ 1: OR

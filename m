@@ -2,160 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5978C49761A
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 23:45:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 191DC49761B
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 23:46:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240391AbiAWWpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 17:45:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50832 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbiAWWpM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 17:45:12 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C136C06173B
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 14:45:12 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6358FD89;
-        Sun, 23 Jan 2022 23:45:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1642977909;
-        bh=Tpd2xJOyPUYI9Yn817WlPsinNuoRZkReK2xzPz5Iv2s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jg+2+jLNXiq4Q8S/HfrbfExWW9Pzdl4nt5YHUe4P+NC3z3LMcaSgqtpgwljZSTd4I
-         R6DOvk3xa6aAc9HhxoKyUi6jQh3Xv6+aRjrIvZnyiqD10dioGmArr3NnRKCCBeIefx
-         xzYp0RAAKqcrdCREPNF4P/yFmEw9GsNLSPus8fPQ=
-Date:   Mon, 24 Jan 2022 00:44:52 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomohito Esaki <etom@igel.co.jp>
-Cc:     dri-devel@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Michel =?utf-8?Q?D=C3=A4nzer?= <mdaenzer@redhat.com>,
-        Simon Ser <contact@emersion.fr>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        Mark Yacoub <markyacoub@chromium.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Evan Quan <evan.quan@amd.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org, Daniel Stone <daniel@fooishbar.org>,
-        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
-        Takanari Hayama <taki@igel.co.jp>
-Subject: Re: [RFC PATCH v3 3/3] drm: remove allow_fb_modifiers
-Message-ID: <Ye3aZHFQQux4brrc@pendragon.ideasonboard.com>
-References: <20220114101753.24996-1-etom@igel.co.jp>
- <20220114101753.24996-4-etom@igel.co.jp>
+        id S240396AbiAWWqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 17:46:02 -0500
+Received: from foss.arm.com ([217.140.110.172]:38140 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230077AbiAWWqA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 23 Jan 2022 17:46:00 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 79BB71FB;
+        Sun, 23 Jan 2022 14:45:59 -0800 (PST)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5CD1F3F774;
+        Sun, 23 Jan 2022 14:45:57 -0800 (PST)
+Date:   Sun, 23 Jan 2022 22:45:54 +0000
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Peter Hilber <peter.hilber@opensynergy.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        souvik.chakravarty@arm.com, igor.skalkin@opensynergy.com,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v9 09/11] firmware: arm_scmi: Add atomic mode support to
+ virtio transport
+Message-ID: <20220123224554.GG6113@e120937-lin>
+References: <20211220195646.44498-10-cristian.marussi@arm.com>
+ <20211221140027.41524-1-cristian.marussi@arm.com>
+ <f231094a-6f34-3dc1-237d-97218e8fde91@opensynergy.com>
+ <20220119122338.GE6113@e120937-lin>
+ <2f1ea794-a0b9-2099-edc0-b2aeb3ca6b92@opensynergy.com>
+ <20220120150418-mutt-send-email-mst@kernel.org>
+ <20220123200254.GF6113@e120937-lin>
+ <20220123172950-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220114101753.24996-4-etom@igel.co.jp>
+In-Reply-To: <20220123172950-mutt-send-email-mst@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Esaki-san,
-
-Thank you for the patch.
-
-On Fri, Jan 14, 2022 at 07:17:53PM +0900, Tomohito Esaki wrote:
-> The allow_fb_modifiers flag is unnecessary since it has been replaced
-> with cannot_support_modifiers flag.
-
-The new flag is fb_modifiers_not_supported, not
-cannot_support_modifiers.
-
-> Signed-off-by: Tomohito Esaki <etom@igel.co.jp>
-> ---
->  drivers/gpu/drm/drm_plane.c                      |  9 ---------
->  drivers/gpu/drm/selftests/test-drm_framebuffer.c |  1 -
->  include/drm/drm_mode_config.h                    | 16 ----------------
->  3 files changed, 26 deletions(-)
+On Sun, Jan 23, 2022 at 05:40:08PM -0500, Michael S. Tsirkin wrote:
+> On Sun, Jan 23, 2022 at 08:02:54PM +0000, Cristian Marussi wrote:
+> > I was thinking...keeping the current virtqueue_poll interface, since our
+> > possible issue arises from the used_index wrapping around exactly on top
+> > of the same polled index and given that currently the API returns an
+> > unsigned "opaque" value really carrying just the 16-bit index (and possibly
+> > the wrap bit as bit15 for packed vq) that is supposed to be fed back as
+> > it is to the virtqueue_poll() function....
+> > 
+> > ...why don't we just keep an internal full fledged per-virtqueue wrap-counter
+> > and return that as the MSB 16-bit of the opaque value returned by
+> > virtqueue_prepare_enable_cb and then check it back in virtqueue_poll when the
+> > opaque is fed back ? (filtering it out from the internal helpers machinery)
+> > 
+> > As in the example below the scissors.
+> > 
+> > I mean if the internal wrap count is at that point different from the
+> > one provided to virtqueue_poll() via the opaque poll_idx value previously
+> > provided, certainly there is something new to fetch without even looking
+> > at the indexes: at the same time, exposing an opaque index built as
+> > (wraps << 16 | idx) implicitly 'binds' each index to a specific
+> > wrap-iteration, so they can be distiguished (..ok until the wrap-count
+> > upper 16bit wraps too....but...)
+> > 
+> > I am not really extremely familiar with the internals of virtio so I
+> > could be missing something obvious...feel free to insult me :P
+> > 
+> > (..and I have not made any perf measurements or consideration at this
+> > point....nor considered the redundancy of the existent packed
+> > used_wrap_counter bit...)
+> > 
+> > Thanks,
+> > Cristian
+> > 
+> > ----
+> > 
+> > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> > index 00f64f2f8b72..bda6af121cd7 100644
+> > --- a/drivers/virtio/virtio_ring.c
+> > +++ b/drivers/virtio/virtio_ring.c
+> > @@ -117,6 +117,8 @@ struct vring_virtqueue {
+> >         /* Last used index we've seen. */
+> >         u16 last_used_idx;
+> >  
+> > +       u16 wraps;
+> > +
+> >         /* Hint for event idx: already triggered no need to disable. */
+> >         bool event_triggered;
+> >  
+> > @@ -806,6 +808,8 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue *_vq,
+> >         ret = vq->split.desc_state[i].data;
+> >         detach_buf_split(vq, i, ctx);
+> >         vq->last_used_idx++;
+> > +       if (unlikely(!vq->last_used_idx))
+> > +               vq->wraps++;
 > 
-> diff --git a/drivers/gpu/drm/drm_plane.c b/drivers/gpu/drm/drm_plane.c
-> index 5aa7e241971e..89a3d044ab59 100644
-> --- a/drivers/gpu/drm/drm_plane.c
-> +++ b/drivers/gpu/drm/drm_plane.c
-> @@ -288,15 +288,6 @@ static int __drm_universal_plane_init(struct drm_device *dev,
->  		}
->  	}
->  
-> -	/* autoset the cap and check for consistency across all planes */
-> -	if (format_modifier_count) {
-> -		drm_WARN_ON(dev, !config->allow_fb_modifiers &&
-> -			    !list_empty(&config->plane_list));
-> -		config->allow_fb_modifiers = true;
-> -	} else {
-> -		drm_WARN_ON(dev, config->allow_fb_modifiers);
-> -	}
-> -
+> I wonder whether
+>                vq->wraps += !vq->last_used_idx;
+> is faster or slower. No branch but OTOH a dependency.
+> 
+> 
+> >         /* If we expect an interrupt for the next entry, tell host
+> >          * by writing event index and flush out the write before
+> >          * the read in the next get_buf call. */
+> > @@ -1508,6 +1512,7 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
+> >         if (unlikely(vq->last_used_idx >= vq->packed.vring.num)) {
+> >                 vq->last_used_idx -= vq->packed.vring.num;
+> >                 vq->packed.used_wrap_counter ^= 1;
+> > +               vq->wraps++;
+> >         }
+> >  
+> >         /*
+> > @@ -1744,6 +1749,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
+> >         vq->weak_barriers = weak_barriers;
+> >         vq->broken = false;
+> >         vq->last_used_idx = 0;
+> > +       vq->wraps = 0;
+> >         vq->event_triggered = false;
+> >         vq->num_added = 0;
+> >         vq->packed_ring = true;
+> > @@ -2092,13 +2098,17 @@ EXPORT_SYMBOL_GPL(virtqueue_disable_cb);
+> >   */
+> >  unsigned virtqueue_enable_cb_prepare(struct virtqueue *_vq)
+> >  {
+> > +       unsigned last_used_idx;
+> >         struct vring_virtqueue *vq = to_vvq(_vq);
+> >  
+> >         if (vq->event_triggered)
+> >                 vq->event_triggered = false;
+> >  
+> > -       return vq->packed_ring ? virtqueue_enable_cb_prepare_packed(_vq) :
+> > -                                virtqueue_enable_cb_prepare_split(_vq);
+> > +       last_used_idx = vq->packed_ring ?
+> > +                       virtqueue_enable_cb_prepare_packed(_vq) :
+> > +                       virtqueue_enable_cb_prepare_split(_vq);
+> > +
+> > +       return VRING_BUILD_OPAQUE(last_used_idx, vq->wraps);
+> >  }
+> >  EXPORT_SYMBOL_GPL(virtqueue_enable_cb_prepare);
+> >  
+> > @@ -2118,9 +2128,13 @@ bool virtqueue_poll(struct virtqueue *_vq, unsigned last_used_idx)
+> >         if (unlikely(vq->broken))
+> >                 return false;
+> >  
+> > +       if (unlikely(vq->wraps != VRING_GET_WRAPS(last_used_idx)))
+> > +               return true;
+> > +
+> >         virtio_mb(vq->weak_barriers);
+> > -       return vq->packed_ring ? virtqueue_poll_packed(_vq, last_used_idx) :
+> > -                                virtqueue_poll_split(_vq, last_used_idx);
+> > +       return vq->packed_ring ?
+> > +               virtqueue_poll_packed(_vq, VRING_GET_IDX(last_used_idx)) :
+> > +                       virtqueue_poll_split(_vq, VRING_GET_IDX(last_used_idx));
+> >  }
+> >  EXPORT_SYMBOL_GPL(virtqueue_poll);
+> >  
+> > @@ -2245,6 +2259,7 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
+> >         vq->weak_barriers = weak_barriers;
+> >         vq->broken = false;
+> >         vq->last_used_idx = 0;
+> > +       vq->wraps = 0;
+> >         vq->event_triggered = false;
+> >         vq->num_added = 0;
+> >         vq->use_dma_api = vring_use_dma_api(vdev);
+> > diff --git a/include/uapi/linux/virtio_ring.h b/include/uapi/linux/virtio_ring.h
+> > index 476d3e5c0fe7..e6b03017ebd7 100644
+> > --- a/include/uapi/linux/virtio_ring.h
+> > +++ b/include/uapi/linux/virtio_ring.h
+> > @@ -77,6 +77,17 @@
+> >   */
+> >  #define VRING_PACKED_EVENT_F_WRAP_CTR  15
+> >  
+> > +#define VRING_IDX_MASK                                 GENMASK(15, 0)
+> > +#define VRING_GET_IDX(opaque)                          \
+> > +       ((u16)FIELD_GET(VRING_IDX_MASK, (opaque)))
+> > +
+> > +#define VRING_WRAPS_MASK                               GENMASK(31, 16)
+> > +#define VRING_GET_WRAPS(opaque)                                \
+> > +       ((u16)FIELD_GET(VRING_WRAPS_MASK, (opaque)))
+> > +
+> > +#define VRING_BUILD_OPAQUE(idx, wraps)                 \
+> > +       (FIELD_PREP(VRING_WRAPS_MASK, (wraps)) | ((idx) & VRING_IDX_MASK))
+> > +
+> >  /* We support indirect buffer descriptors */
+> >  #define VIRTIO_RING_F_INDIRECT_DESC    28
+> 
+> Yea I think this patch increases the time it takes to wrap around from
+> 2^16 to 2^32 which seems good enough.
+> Need some comments to explain the logic.
+> Would be interesting to see perf data.
+> 
 
-Shouldn't we keep a sanity check to ensure that drivers setting
-fb_modifiers_not_supported do not pass modifiers ?
+Thanks for your feedback !
 
-	drm_WARN_ON(dev, config->fb_modifiers_not_supported &&
-		    format_modifier_count);
+I'll try to gather some perf data around it next days.
+(and eventually cleanup and adding comments if it is god enough...)
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Thanks,
+Cristian
 
->  	plane->modifier_count = format_modifier_count;
->  	plane->modifiers = kmalloc_array(format_modifier_count,
->  					 sizeof(format_modifiers[0]),
-> diff --git a/drivers/gpu/drm/selftests/test-drm_framebuffer.c b/drivers/gpu/drm/selftests/test-drm_framebuffer.c
-> index 61b44d3a6a61..f6d66285c5fc 100644
-> --- a/drivers/gpu/drm/selftests/test-drm_framebuffer.c
-> +++ b/drivers/gpu/drm/selftests/test-drm_framebuffer.c
-> @@ -323,7 +323,6 @@ static struct drm_device mock_drm_device = {
->  		.max_width = MAX_WIDTH,
->  		.min_height = MIN_HEIGHT,
->  		.max_height = MAX_HEIGHT,
-> -		.allow_fb_modifiers = true,
->  		.funcs = &mock_config_funcs,
->  	},
->  };
-> diff --git a/include/drm/drm_mode_config.h b/include/drm/drm_mode_config.h
-> index da82f45351c7..5001bda9f9af 100644
-> --- a/include/drm/drm_mode_config.h
-> +++ b/include/drm/drm_mode_config.h
-> @@ -917,22 +917,6 @@ struct drm_mode_config {
->  	 */
->  	bool async_page_flip;
->  
-> -	/**
-> -	 * @allow_fb_modifiers:
-> -	 *
-> -	 * Whether the driver supports fb modifiers in the ADDFB2.1 ioctl call.
-> -	 * Note that drivers should not set this directly, it is automatically
-> -	 * set in drm_universal_plane_init().
-> -	 *
-> -	 * IMPORTANT:
-> -	 *
-> -	 * If this is set the driver must fill out the full implicit modifier
-> -	 * information in their &drm_mode_config_funcs.fb_create hook for legacy
-> -	 * userspace which does not set modifiers. Otherwise the GETFB2 ioctl is
-> -	 * broken for modifier aware userspace.
-> -	 */
-> -	bool allow_fb_modifiers;
-> -
->  	/**
->  	 * @fb_modifiers_not_supported:
->  	 *
-
--- 
-Regards,
-
-Laurent Pinchart

@@ -2,63 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6821449705B
+	by mail.lfdr.de (Postfix) with ESMTP id B3BBF49705C
 	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 07:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235876AbiAWGSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 01:18:30 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39764 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235788AbiAWGSW (ORCPT
+        id S235909AbiAWGSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 01:18:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59104 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235790AbiAWGS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 01:18:22 -0500
+        Sun, 23 Jan 2022 01:18:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFF2C06173B
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 22:18:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 603206114F;
-        Sun, 23 Jan 2022 06:18:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C8263C340E3;
-        Sun, 23 Jan 2022 06:18:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0E6360EC8
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 06:18:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 34164C340E3;
+        Sun, 23 Jan 2022 06:18:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642918701;
-        bh=jIF52wPB5rWGB5zQ+RKVpdDwIHaInkE5/sNQVP+4GTY=;
+        s=k20201202; t=1642918707;
+        bh=lxqLX3wNQhXzGCNqTInPhaw9ohxNG4JOfr0ve6ikGQs=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=vCRkFgwVeDb3bdBXFd9N2KzuRmsJ0WM3Mw7DXj/7RCSM7t7fOdV3gLU27ZXKsVVUx
-         5Lc6ddFgNe8kWMn34Bh4EDfK5QeRT15qFtev7AQBcc8jgfi1QjLDHk4CCTH5BvA6Qd
-         H5jC3SBusT5vqOVLpA+pr2tOjtpXCRNRdXnkLc5RGsU8Xb/BZWkWMPQC9uJcJRjiPS
-         GVbQspvrR2LIvMW55aJZ20rI6aNst4ZndtR3IvkXqMaOeYh317X7n56LvmCFQzecI8
-         gfroXBO7toHeyEwMIBg5LGVhIvPuZifPTCHjOowGV7juz2eleckggJYtQbZ3Fg9QO1
-         KljJeeBywjK5Q==
+        b=ivGAf5jnRr463VO5cSRtjS0hzvRUP9mpRSUG1rSIXGjRG9ile22P7Vn/oC4erUCPD
+         bvug+ViTjhp0yPOymRXnonsjPvxnDByuQyPqpU0Ybh/MZ9RcwBPjLNOtVMZAa4TnNY
+         4eqTWtnjvq40xXPsd9seU3gErVH/TK2z/j5O+X9WyWKa6uBtT+ndip1AEz7PwiUwfM
+         WdTO7deRUPJ+I7STsSRftCkCcSlXch27NI8yUvadQOd9D3NAZyJvavF8VwZ5VC1uKC
+         vm8iYm2NK9aM9GrsXum63q+fVrFI5mokSg2nGIfTzMu2jBDPexqQMoOooYC8Jxv9Ti
+         +DYGb+eaAwZfQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B7232F60795;
-        Sun, 23 Jan 2022 06:18:21 +0000 (UTC)
-Subject: Re: [GIT PULL] Kbuild fixes for v5.17-rc1
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 234E7F6079A;
+        Sun, 23 Jan 2022 06:18:27 +0000 (UTC)
+Subject: Re: [GIT PULL] ftrace: Fix of s390 breakage
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAK7LNASs0jntOj63GoE9Lhasb-7zmVzBcq35CDeKnBqjG_v+kw@mail.gmail.com>
-References: <CAK7LNASs0jntOj63GoE9Lhasb-7zmVzBcq35CDeKnBqjG_v+kw@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kbuild.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAK7LNASs0jntOj63GoE9Lhasb-7zmVzBcq35CDeKnBqjG_v+kw@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git tags/kbuild-fixes-v5.17
-X-PR-Tracked-Commit-Id: e6340b6526eeec5a00fe26a6ff515afe7d0affa4
+In-Reply-To: <20220123002519.6f693e08@rorschach.local.home>
+References: <20220123002519.6f693e08@rorschach.local.home>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220123002519.6f693e08@rorschach.local.home>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git trace-v5.17-3
+X-PR-Tracked-Commit-Id: 6b9b6413700e104934734b72a3be622a76923b98
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 473aec0e1f84be97c7ea52c4266b7ef13ce36af3
-Message-Id: <164291870174.10836.13232297867466149802.pr-tracker-bot@kernel.org>
-Date:   Sun, 23 Jan 2022 06:18:21 +0000
-To:     Masahiro Yamada <masahiroy@kernel.org>
+X-PR-Merge-Commit-Id: 67bfce0e01927859618b76ff5a36a7f23b412cef
+Message-Id: <164291870713.10836.299557364124917411.pr-tracker-bot@kernel.org>
+Date:   Sun, 23 Jan 2022 06:18:27 +0000
+To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+        LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Yinan Liu <yinan@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 23 Jan 2022 00:17:58 +0900:
+The pull request you sent on Sun, 23 Jan 2022 00:25:19 -0500:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git tags/kbuild-fixes-v5.17
+> git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git trace-v5.17-3
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/473aec0e1f84be97c7ea52c4266b7ef13ce36af3
+https://git.kernel.org/torvalds/c/67bfce0e01927859618b76ff5a36a7f23b412cef
 
 Thank you!
 

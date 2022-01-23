@@ -2,24 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B5A4973A1
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 18:37:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 509024973A5
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 18:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239266AbiAWRh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 12:37:29 -0500
-Received: from mail-0301.mail-europe.com ([188.165.51.139]:42873 "EHLO
-        mail-0301.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbiAWRh2 (ORCPT
+        id S239278AbiAWRhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 12:37:32 -0500
+Received: from mail-4022.proton.ch ([185.70.40.22]:54117 "EHLO
+        mail-4022.proton.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239269AbiAWRhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 12:37:28 -0500
-Date:   Sun, 23 Jan 2022 17:37:20 +0000
+        Sun, 23 Jan 2022 12:37:31 -0500
+Date:   Sun, 23 Jan 2022 17:37:27 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
-        s=protonmail; t=1642959445;
-        bh=EG8WM13QcPrV2AZ3laZQJnqld2O70XozKuQoHTXOykA=;
-        h=Date:To:From:Reply-To:Subject:Message-ID:From:To:Cc;
-        b=no9GFqAecOd2zVW/NKbjqQ6dAkxhAnyQVsIpGamsco/5BHwbufZ584C65Y/k4QVNC
-         gC1vLEs+2VpeXG3F4EKWfU4ZKpMwl6q45GE1X8CP8uJ/6qP46AttvNokVDVjBzrGjV
-         23pJqhjXzQQ/EsMvnOe7VGQBYY9A2fAHyoPFJr9U=
+        s=protonmail; t=1642959449;
+        bh=RHM16+MmceCNT6uhKBo2gtAGjdHH8oLW9fjQXzk/4OU=;
+        h=Date:To:From:Reply-To:Subject:Message-ID:In-Reply-To:References:
+         From:To:Cc;
+        b=cxB4KY5DJAAwKNBDIAvSzd5kzvDGoWpJjFA3SM5JpQk3rnRzF3B68WXywt3E9Zwfk
+         W2Vyhnq2L6lCW1DEQw/VnG0Xty5y50bwxkfACsZyFjGb3w0w8lXjLLE7l1r1gVtbRs
+         wb63Fd1PB9MD+jEcirvUE60dGHFT181MPAF3zlYE=
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Sam Ravnborg <sam@ravnborg.org>,
         David Airlie <airlied@linux.ie>,
@@ -41,8 +42,10 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Alexander Martinz <amartinz@shiftphones.com>
 From:   Caleb Connolly <caleb@connolly.tech>
 Reply-To: Caleb Connolly <caleb@connolly.tech>
-Subject: [PATCH 0/6] Add support for the SHIFT SHIFT6mq
-Message-ID: <20220123173650.290349-1-caleb@connolly.tech>
+Subject: [PATCH 1/6] dt-bindings: input: touchscreen: add bindings for focaltech,fts
+Message-ID: <20220123173650.290349-2-caleb@connolly.tech>
+In-Reply-To: <20220123173650.290349-1-caleb@connolly.tech>
+References: <20220123173650.290349-1-caleb@connolly.tech>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -55,53 +58,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds initial support for the SHIFT6mq. SHIFT are a sustainably
-oriented device manufacturer who aim to build repairable devices with long
-lifespans.
+Add devicetree bindings for the Focaltech FTS touchscreen drivers.
 
-The SHIFT6mq is a Snapdragon 845 based device, it features a 1080p OLED pan=
-el,
-8GB of RAM, 128GB of UFS storage and display port alt mode. The device also
-ships with secure-boot off, potentially allowing end-users to modify usuall=
-y
-inaccesible parts of the device like the bootloader. They've been keen to s=
-ee
-their devices supported upstream kernels!
-
-This brings up initial support for the device, with all core features worki=
-ng:
-
-* Display / GPU / touch
-* WIFI
-* Modem (sms and mobile data are supported with ModemManager)
-
-- Caleb
-
-Alexander Martinz (1):
-  arm64: dts: qcom: sdm845: add device tree for SHIFT6mq
-
-Caleb Connolly (5):
-  dt-bindings: input: touchscreen: add bindings for focaltech,fts
-  input: touchscreen: add focaltech FTS driver
-  dt-bindings: display: visionox-rm69299: document new compatible string
-  drm/panel: visionox-rm69299: support the variant found in the SHIFT6mq
-  dt-bindings: vendor-prefixes: add vendor prefix for SHIFT
-
- .../display/panel/visionox,rm69299.yaml       |   4 +-
- .../input/touchscreen/focaltech,fts.yaml      |  78 ++
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- arch/arm64/boot/dts/qcom/Makefile             |   1 +
- .../boot/dts/qcom/sdm845-shift-axolotl.dts    | 736 +++++++++++++++
- .../gpu/drm/panel/panel-visionox-rm69299.c    | 281 ++++--
- drivers/input/touchscreen/Kconfig             |   9 +
- drivers/input/touchscreen/Makefile            |   1 +
- drivers/input/touchscreen/focaltech_fts.c     | 870 ++++++++++++++++++
- 9 files changed, 1921 insertions(+), 61 deletions(-)
+Signed-off-by: Caleb Connolly <caleb@connolly.tech>
+---
+ .../input/touchscreen/focaltech,fts.yaml      | 78 +++++++++++++++++++
+ 1 file changed, 78 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/input/touchscreen/foc=
 altech,fts.yaml
- create mode 100644 arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
- create mode 100644 drivers/input/touchscreen/focaltech_fts.c
 
+diff --git a/Documentation/devicetree/bindings/input/touchscreen/focaltech,=
+fts.yaml b/Documentation/devicetree/bindings/input/touchscreen/focaltech,ft=
+s.yaml
+new file mode 100644
+index 000000000000..bb25a4f8ad71
+--- /dev/null
++++ b/Documentation/devicetree/bindings/input/touchscreen/focaltech,fts.yam=
+l
+@@ -0,0 +1,78 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/input/touchscreen/focaltech,fts.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Focaltech FTS I2C Touchscreen Controller
++
++maintainers:
++  - Caleb Connolly <caleb@connolly.tech>
++
++allOf:
++  - $ref: touchscreen.yaml#
++
++properties:
++  compatible:
++    enum:
++      - focaltech,fts5452
++      - focaltech,fts8719
++  reg:
++    const: 0x38
++
++  interrupts:
++    maxItems: 1
++
++  reset-gpios:
++    maxItems: 1
++
++  wakeup-source:
++    type: boolean
++    description: touchscreen can be used as a wakeup source.
++
++  focaltech,max-touch-number:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: max number of fingers supported
++    minimum: 2
++    maximum: 10
++
++  touchscreen-size-x: true
++  touchscreen-size-y: true
++
++additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - reset-gpios
++  - focaltech,max-touch-number
++  - touchscreen-size-x
++  - touchscreen-size-y
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/gpio/gpio.h>
++    &i2c5 {
++      status=3D"okay";
++
++      touchscreen: focaltech@38 {
++        compatible =3D "focaltech,fts8719";
++        reg =3D <0x38>;
++        wakeup-source;
++        interrupt-parent =3D <&tlmm>;
++        interrupts =3D <125 0x2>;
++        vdd-supply =3D <&vreg_l28a_3p0>;
++        vcc-i2c-supply =3D <&vreg_l14a_1p88>;
++
++        pinctrl-names =3D "default", "suspend";
++        pinctrl-0 =3D <&ts_int_active &ts_reset_active>;
++        pinctrl-1 =3D <&ts_int_suspend &ts_reset_suspend>;
++
++        reset-gpio =3D <&tlmm 99 GPIO_ACTIVE_HIGH>;
++        irq-gpio =3D <&tlmm 125 GPIO_TRANSITORY>;
++        touchscreen-size-x =3D <1080>;
++        touchscreen-size-y =3D <2160>;
++        focaltech,max-touch-number =3D <5>;
++      };
++    };
 --
 2.34.1
 

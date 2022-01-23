@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC1E497487
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 19:41:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE43B49748A
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 19:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239601AbiAWSlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 13:41:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53626 "EHLO
+        id S239792AbiAWSlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 13:41:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239683AbiAWSkn (ORCPT
+        with ESMTP id S239629AbiAWSko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 13:40:43 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BCBC061765;
-        Sun, 23 Jan 2022 10:40:39 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id 187so12949541pga.10;
-        Sun, 23 Jan 2022 10:40:39 -0800 (PST)
+        Sun, 23 Jan 2022 13:40:44 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2414AC061748
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 10:40:42 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id e8so13479916plh.8
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 10:40:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=eBCqVqROfO1n2GtvmaN8kb1rlmDqWZOnUSJDskEB5Oo=;
-        b=mJpgWld2B5wbHhAvTMo/0gMGWx3ZGMwlFDlFyfSZigS6cUmCqMZhCmhhnpUtMwHQvy
-         U7vEWX2yv0mK4/592AvEUhGR8Bcq1qSOtPDaE68Fcx0iEHXFXSw+JfHNJwvdbsEQU8Nk
-         Tzi0/XyxcEtaa0BR1NACnnrVqmbASiYnUX6wAv39ETD9AwBjexOS8Dq6D28L55v1DIeA
-         z8LGQVXZcM/fQX5tf8gJB52u4N9LngjlLpLvLwTz9zLbczSKPpNuB1og0VOis8OQopte
-         HszK8h97b+7fUeV0fxI+/kNFpek6zXMX2TbaxxRH0Jpoxd5rkk3XDT7S9kduvAKZlNGN
-         xX/w==
+        bh=475Re6o4qrxmTY2+dJD1szR+aZ9ztNBAVJwVf2XomiQ=;
+        b=jmVObv+DHvV/nfgWMGm7G0AiVWxWK811CYrpCGiHV6xY0cRphRK/F1bxcyarhazE7G
+         QO3y6iESjwSCWQV4XxfbN0VGrGzLnz+MQAZouCPpYGATGaaGpx/xFlQQHIUbUBuvRRw5
+         0P/sPgZ/Zob1yCiUwsGdNVWUVVlgMqpf+xC55wv1WQFaeiZGDLCbtdTLECSRwzD1BwDr
+         5hJchQzstXRUP379uF+B/2jyU8zwFVQtEt3XnUASMZLgJzQPBHWzsJ7NMd9Pe5Hmto0M
+         h6UFu1fpTLkx6o30OssQidiED5LGIyGRgU4+4B2Dhf6WKpYvcVZFv0Kk+WkaLBOUlnoc
+         3Wyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=eBCqVqROfO1n2GtvmaN8kb1rlmDqWZOnUSJDskEB5Oo=;
-        b=IRZxEoCn+McUkhmywm3VzhKsR0s2yfCfPa7cI8dcmn5LgWwy/ZiGAdJj6LpHLrRONb
-         tjcaFMpBPVxk7hduAfYsYcUAARDqtwLzl5Kwvy5V8Yl7S4a7frEkZ3XEEKGHrdJ0kewQ
-         Ai3xCpHzyodY3A0IlNiWWoEWd3xGNpFJqsJozKpdrbkf3aXaxvCphy/pkXE/3mtY7mob
-         9ufx3FdXt9lzcv1CVIyEjtCr6cozWAeh6IcFSmxaGk45FwdisVzwso1AXIkHDg2AV8p0
-         4YtyyxDhWcTtf0cFZk8z8Yt49dP3oV5dUey/vm+/JNbxzNeBe0w3PyePkQ0pWWmZmoQ4
-         WwZw==
-X-Gm-Message-State: AOAM533OKRVq4kq+drMIlfKCwt1g+Gyh2FR6GI1RmWsWIMIAWp6mpKgB
-        KlRBZNFkqyIJKvQlMaVGX1QOK5DX42U=
-X-Google-Smtp-Source: ABdhPJwRbsW8Pwf2wNB+Tms82WHgGwFZKC0sf8JW2mhyRDN3TsdWwUbRPyPzecSyKFotLcUKv7t4fA==
-X-Received: by 2002:a62:4c3:0:b0:4c2:7817:7360 with SMTP id 186-20020a6204c3000000b004c278177360mr11429381pfe.24.1642963238546;
-        Sun, 23 Jan 2022 10:40:38 -0800 (PST)
+        bh=475Re6o4qrxmTY2+dJD1szR+aZ9ztNBAVJwVf2XomiQ=;
+        b=IgPEElMhsrwOZyqBIF6X1X3A2GiUz8JltvaSiye4L5nlMNr7f9as3XlpC5ufxV/1W0
+         FaHotqvrScV3VtyXf1BbeCL7VhpYjP1TF3TyFaYV+A+5earT0aRfy9uxOiRcebjbVxOS
+         4n9DKpTzSoX0Li/UtMurY/LN3VAItmXF8CBmA7qBTO+xmwtRFbYGdBZiSg8SAWicPiY6
+         1OpVGbf1r2fE3d3+LIMeRckJgDgLEMOgEQD9sDXRC/PFHzM1E6Qw6kILVWo/eXmH7fp6
+         mYI0uZg9R8D6aCDvxsLu+9K7uAEpUhTV4OyXCEevBLydmmFfdnR5VJEdb2gDFBvOhV5w
+         VUYg==
+X-Gm-Message-State: AOAM533ML7IKXq8PPDxPeMFDiW+R0NPf0EQg+JY6HIe0qGkAADQEp7Ic
+        +l3xuEaGLYnB8J7mCxLv/xE=
+X-Google-Smtp-Source: ABdhPJyghkxvVhznkwLCfy/A1+7acBwkBZ1BlnfDfQwJqPCZvzndSaF4vpp9USN1uOTwz9n3zy27xQ==
+X-Received: by 2002:a17:90a:460f:: with SMTP id w15mr9814786pjg.123.1642963241641;
+        Sun, 23 Jan 2022 10:40:41 -0800 (PST)
 Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id h5sm13043609pfi.111.2022.01.23.10.40.37
+        by smtp.gmail.com with ESMTPSA id q9sm13712586pfk.137.2022.01.23.10.40.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 10:40:38 -0800 (PST)
+        Sun, 23 Jan 2022 10:40:41 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -62,17 +62,17 @@ To:     Yury Norov <yury.norov@gmail.com>,
         Nicholas Piggin <npiggin@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 16/54] cpufreq: replace cpumask_weight with cpumask_empty where appropriate
-Date:   Sun, 23 Jan 2022 10:38:47 -0800
-Message-Id: <20220123183925.1052919-17-yury.norov@gmail.com>
+        linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH 17/54] gpu: drm: replace cpumask_weight with cpumask_empty where appropriate
+Date:   Sun, 23 Jan 2022 10:38:48 -0800
+Message-Id: <20220123183925.1052919-18-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220123183925.1052919-1-yury.norov@gmail.com>
 References: <20220123183925.1052919-1-yury.norov@gmail.com>
@@ -82,43 +82,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/cpufreq calls cpumask_weight() to check if any bit of a given
-cpumask is set. We can do it more efficiently with cpumask_empty() because
-cpumask_empty() stops traversing the cpumask as soon as it finds first set
-bit, while cpumask_weight() counts all bits unconditionally.
+i915_pmu_cpu_online() calls cpumask_weight() to check if any bit of a
+given cpumask is set. We can do it more efficiently with cpumask_empty()
+because cpumask_empty() stops traversing the cpumask as soon as it finds
+first set bit, while cpumask_weight() counts all bits unconditionally.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- drivers/cpufreq/qcom-cpufreq-hw.c | 2 +-
- drivers/cpufreq/scmi-cpufreq.c    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/i915/i915_pmu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 05f3d7876e44..95a0c57ab5bb 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -482,7 +482,7 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- 	}
+diff --git a/drivers/gpu/drm/i915/i915_pmu.c b/drivers/gpu/drm/i915/i915_pmu.c
+index ea655161793e..1894c876b31d 100644
+--- a/drivers/gpu/drm/i915/i915_pmu.c
++++ b/drivers/gpu/drm/i915/i915_pmu.c
+@@ -1048,7 +1048,7 @@ static int i915_pmu_cpu_online(unsigned int cpu, struct hlist_node *node)
+ 	GEM_BUG_ON(!pmu->base.event_init);
  
- 	qcom_get_related_cpus(index, policy->cpus);
--	if (!cpumask_weight(policy->cpus)) {
-+	if (cpumask_empty(policy->cpus)) {
- 		dev_err(dev, "Domain-%d failed to get related CPUs\n", index);
- 		ret = -ENOENT;
- 		goto error;
-diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-index 1e0cd4d165f0..919fa6e3f462 100644
---- a/drivers/cpufreq/scmi-cpufreq.c
-+++ b/drivers/cpufreq/scmi-cpufreq.c
-@@ -154,7 +154,7 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
- 	 * table and opp-shared.
- 	 */
- 	ret = dev_pm_opp_of_get_sharing_cpus(cpu_dev, priv->opp_shared_cpus);
--	if (ret || !cpumask_weight(priv->opp_shared_cpus)) {
-+	if (ret || cpumask_empty(priv->opp_shared_cpus)) {
- 		/*
- 		 * Either opp-table is not set or no opp-shared was found.
- 		 * Use the CPU mask from SCMI to designate CPUs sharing an OPP
+ 	/* Select the first online CPU as a designated reader. */
+-	if (!cpumask_weight(&i915_pmu_cpumask))
++	if (cpumask_empty(&i915_pmu_cpumask))
+ 		cpumask_set_cpu(cpu, &i915_pmu_cpumask);
+ 
+ 	return 0;
 -- 
 2.30.2
 

@@ -2,135 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91127496FBD
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 05:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C90496FC8
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 06:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235498AbiAWEh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Jan 2022 23:37:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37466 "EHLO
+        id S231782AbiAWFK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 00:10:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231782AbiAWEhy (ORCPT
+        with ESMTP id S229485AbiAWFK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Jan 2022 23:37:54 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9DCC06173B;
-        Sat, 22 Jan 2022 20:37:54 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id e16so2615060pgn.4;
-        Sat, 22 Jan 2022 20:37:54 -0800 (PST)
+        Sun, 23 Jan 2022 00:10:26 -0500
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D97C06173B
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 21:10:25 -0800 (PST)
+Received: by mail-ua1-x935.google.com with SMTP id r15so24703187uao.3
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 21:10:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=Z7WC5NjZUKpTj1BBeWz8gN9vQw+7O/2G5yuYAPcm9OY=;
-        b=cjoN6JRc7jkX5/oY20bfCxyYg9ldOXK51Xr6FU8WcHdaqR0TVADpQOA7ilUXj5Y544
-         L8hM5v7w2hbkvOmA5BlZN5+7w7yk/K/ohXW9wimgCpC4sPLASoZJvRlIOArsRHM4M0rO
-         h9BLCGcPMasCiCix56sWL3PDxAgN8UH7vTglSZrZUTRXJ296NHxTgShyLhDM4v5P6R7u
-         qUbLTLscpW5aLUVrFMx6Dzzmx5pTBoK9pLvBXZZbpoz4xeeXee2rWCeSQqcr08bSFPD1
-         y5nhNHhR4Vux196dvHGC+w8c+D9c8NF61Hk3x7D1wW6eO3PDsKIS6LYb/Noz5WyJJbxo
-         X2hg==
+        d=0x0f.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=L0I9JpiDO39RUjCBeN2pfI72csyh/weIor+yFnevV54=;
+        b=YeLxWALEglUczTZRa4Qdnktyv387v83n4okwro11MxhmoOuV/QEX4DuqGa7wJqdUXd
+         NscwOiySXq3uwDRcImlB06aI4ZVloEPKq1gNq9aqZpNU+CVgIb43rknAbqqhSWt3aokq
+         cFhtGyhQGdXkU41m9mNgiBwn8zn0wj157CiXQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=Z7WC5NjZUKpTj1BBeWz8gN9vQw+7O/2G5yuYAPcm9OY=;
-        b=nXGypYbIFzlnq5oT+iMvnd9KDWOZGZBJUx8SSRyHaPoQ+V3oPhQ5WtpCURS+0lEKc0
-         9SxjlgjbOMwFGYQAvo/kwSrQUhASg6cW9XctgmhO5WhmqOpOg2sfigEchsncyILOIA4K
-         pwEoLE3fiwRppxMc0Tk9/lVvyV+o9PdgYNhAB37wsmp6IKcWJelCsbrVEe9XudZ5fbBZ
-         dyRNtLYbHXmyzDmnBw3rvW3zk7G4OBuT0iUQ6HitQqqzytUtmMB/ZswIYRbAgiGrk7Xp
-         uNvXrZ3WOMPO3bDZ+sVgd+82qPTAvigCyUj8J2EXJDFKhV8RybN+C2u2l1ANUmK1EmX0
-         riNQ==
-X-Gm-Message-State: AOAM531t31E2qloIhR2re77/ZVp47520byZfqMdABbMAmSnQIdihOrIP
-        AlMGcZOb0RMPjeu4Dcps1K/yDuLz/fM4Zw==
-X-Google-Smtp-Source: ABdhPJx9SSyf7IKXWm4ICLTwrhwMxO1MhjZc94gQitLaOOLnGOknKKo2lwgYsU6/hXGxVWN28J/izw==
-X-Received: by 2002:a65:6a0f:: with SMTP id m15mr7903559pgu.391.1642912674183;
-        Sat, 22 Jan 2022 20:37:54 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id g2sm516447pfv.11.2022.01.22.20.37.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Jan 2022 20:37:53 -0800 (PST)
-Message-ID: <dc8c75a6-a39f-be1d-6cf3-024b88bdf5fe@gmail.com>
-Date:   Sun, 23 Jan 2022 12:37:44 +0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=L0I9JpiDO39RUjCBeN2pfI72csyh/weIor+yFnevV54=;
+        b=BhE+kpNe+uj2/Y+B0AJMULO4dSgQ0QWA5F1xbhFxzZMj1PUPSu9DL8ZGR2k0Guwstc
+         F3JujCZcw0dMw3MP55lmgEP9lPQNlSC0Ier7TaqtJpscj+MqQUa6PJic+JZwSX9sMqIB
+         GZbb325jssoAWU9wAm+6j9BOxqJ33VsvQc//qsUXRJwRDHqja4mH0jZtijr7kOAWC/4E
+         Yc60sd63rJ+1v7eqmEhtld+qYy3Mz59Zs7i6uE+lHfILVzXCngPREbUnbhoPIneDQ7/o
+         ZsRHHKbCuSyTBOPhgYBi476Md07sGOC9i7J4VtLKrQ9edVyZIhWppRl70uA9aPEE7spr
+         wz1w==
+X-Gm-Message-State: AOAM5325AVcxz/bSNnwznb5SA4DtDMfi0bAZH8kzva4YImbggdofQAiv
+        d7p/kQHsu0m6zbGY9eyK4zUkcAfNB1+kbl4QfjxuCw==
+X-Google-Smtp-Source: ABdhPJyqefgEWiUZuQRUr5p43Mx2YS3LrVPhG7vsnbKEMI2TMaFUiz9EolrL5Rd4KlI5keraJKKs5KwekYydKSA1Y5w=
+X-Received: by 2002:a67:d983:: with SMTP id u3mr1114253vsj.55.1642914623709;
+ Sat, 22 Jan 2022 21:10:23 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Subject: [PATCH v3] KVM: x86: Sync the states size with the XCR0/IA32_XSS at,
- any time
-Content-Language: en-US
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>
-References: <20220117082631.86143-1-likexu@tencent.com>
- <f9edf9b5-0f84-a424-f8e9-73cad901d993@redhat.com>
- <eacf3f83-96f5-301e-de54-8a0f6c8f9fe5@gmail.com>
- <YerUQa+SN/xWMhvB@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-Organization: Tencent
-In-Reply-To: <YerUQa+SN/xWMhvB@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220121193544.23231-1-romain.perier@gmail.com> <20220121193544.23231-4-romain.perier@gmail.com>
+In-Reply-To: <20220121193544.23231-4-romain.perier@gmail.com>
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Sun, 23 Jan 2022 14:10:12 +0900
+Message-ID: <CAFr9PXkWpQqgnNV4+6s-ENwRepHxxm6R0htHkoVYEgjZN5nGkQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/9] ARM: mstar: Add cpupll to base dtsi
+To:     Romain Perier <romain.perier@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+Hi Romain,
 
-XCR0 is reset to 1 by RESET but not INIT and IA32_XSS is zeroed by
-both RESET and INIT. The kvm_set_msr_common()'s handling of MSR_IA32_XSS
-also needs to update kvm_update_cpuid_runtime(). In the above cases, the
-size in bytes of the XSAVE area containing all states enabled by XCR0 or
-(XCRO | IA32_XSS) needs to be updated.
+On Sat, 22 Jan 2022 at 04:35, Romain Perier <romain.perier@gmail.com> wrote:
+>
+> From: Daniel Palmer <daniel@0x0f.com>
+>
+> All MStar/SigmaStar ARMv7 SoCs have the CPU PLL at the same
+> place so add it to the base dtsi.
+>
+> Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+> ---
+>  arch/arm/boot/dts/mstar-v7.dtsi | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/arch/arm/boot/dts/mstar-v7.dtsi b/arch/arm/boot/dts/mstar-v7.dtsi
+> index 89ebfe4f29da..2249faaa3aa7 100644
+> --- a/arch/arm/boot/dts/mstar-v7.dtsi
+> +++ b/arch/arm/boot/dts/mstar-v7.dtsi
+> @@ -155,6 +155,13 @@ mpll: mpll@206000 {
+>                                 clocks = <&xtal>;
+>                         };
+>
+> +                       cpupll: cpupll@206400 {
+> +                               compatible = "mstar,msc313-cpupll";
+> +                               reg = <0x206400 0x200>;
+> +                               #clock-cells = <0>;
+> +                               clocks = <&mpll MSTAR_MSC313_MPLL_DIV2>;
+> +                       };
+> +
+>                         gpio: gpio@207800 {
+>                                 #gpio-cells = <2>;
+>                                 reg = <0x207800 0x200>;
+> --
+> 2.34.1
+>
 
-For simplicity and consistency, existing helpers are used to write values
-and call kvm_update_cpuid_runtime(), and it's not exactly a fast path.
+I guess I can't add a reviewed by for my own commit but this looks good to me.
+The same CPUPLL is present on all of the chips seen so far so this is
+the right place for this.
 
-Fixes: a554d207dc46 ("KVM: X86: Processor States following Reset or INIT")
-Signed-off-by: Like Xu <likexu@tencent.com>
----
-v2 -> v3 Changelog:
-- Apply s/legacy/existing in the commit message; (Sean)
-- Invoke kvm_update_cpuid_runtime() for MSR_IA32_XSS; (Sean)
+Cheers,
 
-  arch/x86/kvm/x86.c | 5 +++--
-  1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 55518b7d3b96..4b509b26d9ab 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -3535,6 +3535,7 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct 
-msr_data *msr_info)
-  		if (data & ~supported_xss)
-  			return 1;
-  		vcpu->arch.ia32_xss = data;
-+		kvm_update_cpuid_runtime(vcpu);
-  		break;
-  	case MSR_SMI_COUNT:
-  		if (!msr_info->host_initiated)
-@@ -11256,7 +11257,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
-
-  		vcpu->arch.msr_misc_features_enables = 0;
-
--		vcpu->arch.xcr0 = XFEATURE_MASK_FP;
-+		__kvm_set_xcr(vcpu, 0, XFEATURE_MASK_FP);
-  	}
-
-  	/* All GPRs except RDX (handled below) are zeroed on RESET/INIT. */
-@@ -11273,7 +11274,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
-  	cpuid_0x1 = kvm_find_cpuid_entry(vcpu, 1, 0);
-  	kvm_rdx_write(vcpu, cpuid_0x1 ? cpuid_0x1->eax : 0x600);
-
--	vcpu->arch.ia32_xss = 0;
-+	__kvm_set_msr(vcpu, MSR_IA32_XSS, 0, true);
-
-  	static_call(kvm_x86_vcpu_reset)(vcpu, init_event);
-
--- 
-2.33.1
-
-
+Daniel

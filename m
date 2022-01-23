@@ -2,180 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1D34975CC
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 22:48:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B00D4975D2
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 22:55:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240261AbiAWVsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 16:48:06 -0500
-Received: from mout02.posteo.de ([185.67.36.66]:53559 "EHLO mout02.posteo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240234AbiAWVsE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 16:48:04 -0500
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 927C7240105
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 22:48:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1642974483; bh=twScTrUhs7Zg7H8SAP05UMjgUOoyiLmLUs+1hsNNGos=;
-        h=Date:From:To:Cc:Subject:From;
-        b=UT/DlyTHTkYmchpwXrJZiKFI1FYTS0IpMibuPj+REt1H+jgw6cUnlym6IpOQVj1l3
-         FG0dOQy94HARJ2e4gK0QUWa4coInqTj3pDi0P6r47JhyLiPbM98Hp19WBvBxo0tMJ7
-         DzV5/DNKWQTKj1Hb5XP2Fr8QgAS1OlerFE+8QatCaUS0ejQyG1A2n+C+0YdySEfeQ+
-         MgM52XOjDrtysvWPEyfoSnfEbKJvSY3t9mNzepZCdTiaMdT44f1fRXZPscCMVBA94c
-         xSvFCppD60/WYhsWs5T+cmEzviwPPfnslSNXabXRC9655L87HxPxbFLuFdPRkL327W
-         z7kmP2ZwPq6sg==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4Jhmv65GQxz6tnv;
-        Sun, 23 Jan 2022 22:48:02 +0100 (CET)
-Date:   Sun, 23 Jan 2022 21:49:01 +0000
-From:   xaizek <xaizek@posteo.net>
-To:     Ian Rogers <irogers@google.com>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] perf tui: Only support --tui with slang
-Message-ID: <Ye3NTTt7CctUFRmk@zx-spectrum.none>
-References: <20220123191849.3655855-1-irogers@google.com>
+        id S240273AbiAWVzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 16:55:40 -0500
+Received: from mail-wr1-f52.google.com ([209.85.221.52]:44591 "EHLO
+        mail-wr1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234697AbiAWVzj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 23 Jan 2022 16:55:39 -0500
+Received: by mail-wr1-f52.google.com with SMTP id k18so10155232wrg.11;
+        Sun, 23 Jan 2022 13:55:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FtCZGMVCEzvzcuj9uIT9ybSsEia//PiD1l8+cmaI4f4=;
+        b=cEk+i0WGCyRUjUvmjZxs5orB5/WGe+Rvu8BC7M2hwO728lNOnpuCzT3O2aGotrKhVo
+         33xT/aDgBRoBp80lWfE9WmNHC0CmbRtmAGa3cS4M/x3whKj3TxjpmF3VMsMsQ9lwm1aX
+         QV3dXMt85KwnoH9s91Obr/G4OrjZsM/FXTluyhbNSyPGRzqPgBPydeIkrSewYdZ+bCuO
+         V90SI10+jsRTO8OCCq0TWC8obSytM9j0VH6fO/GedD/RA2Nb5U0HszzPkWNlh7OhgYen
+         Do4F2k/p+XSBSH/kwlj8kjp5Q0Aa8nwjoTRn61Zb95raTuKWPGwaw8K8wFmyAmXflcAH
+         SjqA==
+X-Gm-Message-State: AOAM530tFzS7iN1kFCEJtLN7PQu90i0i0FjvsazKo5I33HzCucQXK/gQ
+        mnYhf/gFHMAXig+k9mPwK8hxj34X7N0=
+X-Google-Smtp-Source: ABdhPJyxn5VXglHfrRkeM0Qt816asL38uYi6WsiHvqw5MUJumobgjb9yK1GNHIeJ6QM5lhD34k+2Fw==
+X-Received: by 2002:adf:e0c6:: with SMTP id m6mr12016980wri.525.1642974938554;
+        Sun, 23 Jan 2022 13:55:38 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id h127sm19625046wmh.27.2022.01.23.13.55.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Jan 2022 13:55:38 -0800 (PST)
+Date:   Sun, 23 Jan 2022 21:55:36 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Yanming Liu <yanminglr@gmail.com>
+Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
+        Andres Beltran <lkmlabelt@gmail.com>,
+        Dexuan Cui <decui@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: Re: [PATCH] Drivers: hv: balloon: account for vmbus packet header in
+ max_pkt_size
+Message-ID: <20220123215536.vsbv7n36govrzqbd@liuwe-devbox-debian-v2>
+References: <20220119202052.3006981-1-yanminglr@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220123191849.3655855-1-irogers@google.com>
+In-Reply-To: <20220119202052.3006981-1-yanminglr@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you, Ian.  The patch works as expected on 5.15.12 (--gtk patch
-didn't apply on this revision).
-
-Regards,
-xaizek
-
-On Sun, Jan 23, 2022 at 11:18:48AM -0800, Ian Rogers wrote:
-> Make the --tui command line flags dependent HAVE_SLANG_SUPPORT. This was
-> reported as confusing in:
-> https://lore.kernel.org/linux-perf-users/YevaTkzdXmFKdGpc@zx-spectrum.none/
+On Thu, Jan 20, 2022 at 04:20:52AM +0800, Yanming Liu wrote:
+> Commit adae1e931acd ("Drivers: hv: vmbus: Copy packets sent by Hyper-V
+> out of the ring buffer") introduced a notion of maximum packet size in
+> vmbus channel and used that size to initialize a buffer holding all
+> incoming packet along with their vmbus packet header. hv_balloon uses
+> the default maximum packet size VMBUS_DEFAULT_MAX_PKT_SIZE which matches
+> its maximum message size, however vmbus_open expects this size to also
+> include vmbus packet header. This leads to 4096 bytes
+> dm_unballoon_request messages being truncated to 4080 bytes. When the
+> driver tries to read next packet it starts from a wrong read_index,
+> receives garbage and prints a lot of "Unhandled message: type:
+> <garbage>" in dmesg.
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/builtin-annotate.c | 10 +++++++++-
->  tools/perf/builtin-report.c   | 10 +++++++++-
->  tools/perf/builtin-top.c      |  4 ++++
->  tools/perf/util/top.h         |  5 ++++-
->  4 files changed, 26 insertions(+), 3 deletions(-)
+> Allocate the buffer with HV_HYP_PAGE_SIZE more bytes to make room for
+> the header.
 > 
-> diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
-> index 490bb9b8cf17..5e038d9bab05 100644
-> --- a/tools/perf/builtin-annotate.c
-> +++ b/tools/perf/builtin-annotate.c
-> @@ -46,7 +46,11 @@ struct perf_annotate {
->  	struct perf_tool tool;
->  	struct perf_session *session;
->  	struct annotation_options opts;
-> -	bool	   use_tui, use_stdio, use_stdio2, use_gtk;
-> +#ifdef HAVE_SLANG_SUPPORT
-> +	bool	   use_tui;
-> +#endif
-> +	bool	   use_stdio, use_stdio2;
-> +	bool	   use_gtk;
->  	bool	   skip_missing;
->  	bool	   has_br_stack;
->  	bool	   group_set;
-> @@ -503,7 +507,9 @@ int cmd_annotate(int argc, const char **argv)
->  	OPT_BOOLEAN('D', "dump-raw-trace", &dump_trace,
->  		    "dump raw trace in ASCII"),
->  	OPT_BOOLEAN(0, "gtk", &annotate.use_gtk, "Use the GTK interface"),
-> +#ifdef HAVE_SLANG_SUPPORT
->  	OPT_BOOLEAN(0, "tui", &annotate.use_tui, "Use the TUI interface"),
-> +#endif
->  	OPT_BOOLEAN(0, "stdio", &annotate.use_stdio, "Use the stdio interface"),
->  	OPT_BOOLEAN(0, "stdio2", &annotate.use_stdio2, "Use the stdio interface"),
->  	OPT_BOOLEAN(0, "ignore-vmlinux", &symbol_conf.ignore_vmlinux,
-> @@ -624,8 +630,10 @@ int cmd_annotate(int argc, const char **argv)
->  
->  	if (annotate.use_stdio || annotate.use_stdio2)
->  		use_browser = 0;
-> +#ifdef HAVE_SLANG_SUPPORT
->  	else if (annotate.use_tui)
->  		use_browser = 1;
-> +#endif
->  	else if (annotate.use_gtk)
->  		use_browser = 2;
->  
-> diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
-> index 1dd92d8c9279..1ad75c7ba074 100644
-> --- a/tools/perf/builtin-report.c
-> +++ b/tools/perf/builtin-report.c
-> @@ -71,7 +71,11 @@ struct report {
->  	struct perf_tool	tool;
->  	struct perf_session	*session;
->  	struct evswitch		evswitch;
-> -	bool			use_tui, use_gtk, use_stdio;
-> +#ifdef HAVE_SLANG_SUPPORT
-> +	bool			use_tui;
-> +#endif
-> +	bool			use_gtk;
-> +	bool			use_stdio;
->  	bool			show_full_info;
->  	bool			show_threads;
->  	bool			inverted_callchain;
-> @@ -1206,7 +1210,9 @@ int cmd_report(int argc, const char **argv)
->  		    "Show per-thread event counters"),
->  	OPT_STRING(0, "pretty", &report.pretty_printing_style, "key",
->  		   "pretty printing style key: normal raw"),
-> +#ifdef HAVE_SLANG_SUPPORT
->  	OPT_BOOLEAN(0, "tui", &report.use_tui, "Use the TUI interface"),
-> +#endif
->  	OPT_BOOLEAN(0, "gtk", &report.use_gtk, "Use the GTK2 interface"),
->  	OPT_BOOLEAN(0, "stdio", &report.use_stdio,
->  		    "Use the stdio interface"),
-> @@ -1492,8 +1498,10 @@ int cmd_report(int argc, const char **argv)
->  
->  	if (report.use_stdio)
->  		use_browser = 0;
-> +#ifdef HAVE_SLANG_SUPPORT
->  	else if (report.use_tui)
->  		use_browser = 1;
-> +#endif
->  	else if (report.use_gtk)
->  		use_browser = 2;
->  
-> diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-> index 1fc390f136dd..e1a134a0a377 100644
-> --- a/tools/perf/builtin-top.c
-> +++ b/tools/perf/builtin-top.c
-> @@ -1486,7 +1486,9 @@ int cmd_top(int argc, const char **argv)
->  		    "display this many functions"),
->  	OPT_BOOLEAN('U', "hide_user_symbols", &top.hide_user_symbols,
->  		    "hide user symbols"),
-> +#ifdef HAVE_SLANG_SUPPORT
->  	OPT_BOOLEAN(0, "tui", &top.use_tui, "Use the TUI interface"),
-> +#endif
->  	OPT_BOOLEAN(0, "stdio", &top.use_stdio, "Use the stdio interface"),
->  	OPT_INCR('v', "verbose", &verbose,
->  		    "be more verbose (show counter open errors, etc)"),
-> @@ -1667,8 +1669,10 @@ int cmd_top(int argc, const char **argv)
->  
->  	if (top.use_stdio)
->  		use_browser = 0;
-> +#ifdef HAVE_SLANG_SUPPORT
->  	else if (top.use_tui)
->  		use_browser = 1;
-> +#endif
->  
->  	setup_browser(false);
->  
-> diff --git a/tools/perf/util/top.h b/tools/perf/util/top.h
-> index ff8391208ecd..1c2c0a838430 100644
-> --- a/tools/perf/util/top.h
-> +++ b/tools/perf/util/top.h
-> @@ -33,7 +33,10 @@ struct perf_top {
->  	int		   print_entries, count_filter, delay_secs;
->  	int		   max_stack;
->  	bool		   hide_kernel_symbols, hide_user_symbols, zero;
-> -	bool		   use_tui, use_stdio;
-> +#ifdef HAVE_SLANG_SUPPORT
-> +	bool		   use_tui;
-> +#endif
-> +	bool		   use_stdio;
->  	bool		   vmlinux_warned;
->  	bool		   dump_symtab;
->  	bool		   stitch_lbr;
-> -- 
-> 2.35.0.rc0.227.g00780c9af4-goog
+> Fixes: adae1e931acd ("Drivers: hv: vmbus: Copy packets sent by Hyper-V out of the ring buffer")
+> Suggested-by: Michael Kelley (LINUX) <mikelley@microsoft.com>
+> Suggested-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
+> Signed-off-by: Yanming Liu <yanminglr@gmail.com>
+
+Applied to hyperv-fixes. Thanks.

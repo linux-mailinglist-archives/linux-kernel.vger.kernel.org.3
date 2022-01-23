@@ -2,99 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C1C497291
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 16:30:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D82497293
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 16:31:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237648AbiAWPag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 10:30:36 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:46812 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237637AbiAWPad (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 10:30:33 -0500
-Received: from p508fcdea.dip0.t-ipconnect.de ([80.143.205.234] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nBep2-0005KV-40; Sun, 23 Jan 2022 16:30:28 +0100
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Rob Herring <robh+dt@kernel.org>, Peter Geis <pgwipeout@gmail.com>
-Cc:     Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] arm64: dts: rockchip: enable the pine64 touch screen on rockpro64
-Date:   Sun, 23 Jan 2022 16:30:29 +0100
-Message-ID: <5747938.922zgog0jt@phil>
-In-Reply-To: <20220107051335.3812535-5-pgwipeout@gmail.com>
-References: <20220107051335.3812535-1-pgwipeout@gmail.com> <20220107051335.3812535-5-pgwipeout@gmail.com>
+        id S237684AbiAWPbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 10:31:48 -0500
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:53113 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237676AbiAWPbr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 23 Jan 2022 10:31:47 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B5981FF802;
+        Sun, 23 Jan 2022 15:31:42 +0000 (UTC)
+Date:   Sun, 23 Jan 2022 16:31:40 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Harvey Hunt <harveyhuntnexus@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mips@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtd: rawnand: ingenic: Fix missing put_device in
+ ingenic_ecc_get
+Message-ID: <20220123163140.557a251b@xps13>
+In-Reply-To: <20220123152332.529757-1-miquel.raynal@bootlin.com>
+References: <20211230072751.21622-1-linmq006@gmail.com>
+        <20220123152332.529757-1-miquel.raynal@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
 
-Am Freitag, 7. Januar 2022, 06:13:35 CET schrieb Peter Geis:
-> Enable the touch screen, backlight, and dsi nodes for the Pine64 touch panel
-> attached to the rockpro64.
+miquel.raynal@bootlin.com wrote on Sun, 23 Jan 2022 16:23:32 +0100:
 
-can you please also include me in the other patches of the series?
-I.e. they introduce a new property for the display, so it's nice to know
-when they get applied.
-
-While I do agree with patch 3/4, I'm hesistant about this one.
-The display/touchscreen will probably not be connected on every rockpro64
-so what happens if it doesn't?
-
-I.e are there alternative uses for the affected pins, that may get fried
-when this is always enabled?
-
-So part of me would think that an dt-overlay enabling this might be the
-nicer way to go?
-
-
-Heiko
-
-
-> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> ---
->  arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> On Thu, 2021-12-30 at 07:27:51 UTC, Miaoqian Lin wrote:
+> > If of_find_device_by_node() succeeds, ingenic_ecc_get() doesn't have
+> > a corresponding put_device(). Thus add put_device() to fix the exception
+> > handling.
+> > 
+> > Fixes: 15de8c6 ("mtd: rawnand: ingenic: Separate top-level and SoC specific code")
+> > Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> > Reviewed-by: Paul Cercueil <paul@crapouillou.net>  
 > 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi
-> index 158befb9a48c..f6c36fcd6db3 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi
-> @@ -26,7 +26,7 @@ backlight: backlight {
->  		pwms = <&pwm0 0 1000000 0>;
->  		brightness-levels = <0 4 8 16 32 64 128 255>;
->  		default-brightness-level = <5>;
-> -		status = "disabled";
-> +		status = "okay";
->  	};
->  
->  	clkin_gmac: external-gmac-clock {
-> @@ -594,7 +594,7 @@ touch: touchscreen@5d {
->  		interrupts = <RK_PD5 IRQ_TYPE_EDGE_FALLING>;
->  		irq-gpios = <&gpio4 RK_PD5 GPIO_ACTIVE_HIGH>;
->  		reset-gpios = <&gpio4 RK_PD6 GPIO_ACTIVE_HIGH>;
-> -		status = "disabled";
-> +		status = "okay";
->  	};
->  };
->  
-> @@ -633,7 +633,7 @@ &io_domains {
->  
->  /* enable for pine64 panel display support */
->  &mipi_dsi {
-> -	status = "disabled";
-> +	status = "okay";
->  	clock-master;
->  
->  	ports {
-> 
+> Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
 
-
-
-
+Pushed on mtd/fixes, actually.

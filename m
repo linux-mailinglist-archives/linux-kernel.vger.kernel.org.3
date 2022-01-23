@@ -2,163 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F844970B9
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 10:28:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0174970C0
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 10:47:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236101AbiAWJ2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 04:28:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiAWJ23 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 04:28:29 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0060C06173B;
-        Sun, 23 Jan 2022 01:28:28 -0800 (PST)
-Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nBZAc-0002u8-K7; Sun, 23 Jan 2022 10:28:22 +0100
-Message-ID: <7672718f-b34e-225d-ff53-1199026728b7@leemhuis.info>
-Date:   Sun, 23 Jan 2022 10:28:21 +0100
+        id S236109AbiAWJru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 04:47:50 -0500
+Received: from mail-dm3nam07on2048.outbound.protection.outlook.com ([40.107.95.48]:52193
+        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229453AbiAWJrt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 23 Jan 2022 04:47:49 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cS0miKA6pce0cr3S5g3EVj+YJVvlFaAS1IqukA9ldeBes6qV3zXcAnKqmnYnNJss1Y763BwG2uu2YldKdA8SCRwMNoVkHs5bRLM2f502mIhhUxZpJWG5qcUV3XZG2elr9XvPTx0gNeenZYQETRbDIHGAKdJ1Y9momovEc+mCN9YkvNgtjAo5JqeHF/Qo1qkmmCBaGhtktNZ1nzYLpL+PsllV1bbwY6QC4fSgdzXhj5YEhpngGFO4F1aBgUmQIDfSWvZMrdwgvgjrcosvX5QRNkRiGNh7TUb0PmJMZxbGQsX3AmBmMVSJReUhgPXd0c/kXOz95mimbSCFwVTs5UBN1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7oYz+yOpO5fZWjwhrq2haRf5AwCMeX0yNDQBW+j72E0=;
+ b=Lk1DCr7K61jNi0+Z685J32yp9XOIV8bXz8yfEbnD+rEKOE11g2/Gkmg84le/4w/crpWzMtPncQ631NTUyPhT1XpuTx2N24sUv9Wu3B2qDRl0scfQvtG9wjdvEocSVQnHeejBUJ6IcjidUDtT1hJcw3WwaKkKXjT28C7CE5/TFqvZrSrRmdantxzSC+WWBvPAjT8vw2R8/N27FTlZhjbSbgB7Z9PzcXE8UvGwpD+bt8VPKrnTwXFOYFllQYyboAL/6+2SvC4pKlbFYG3OqQ/ClEUdxJXCXKabEWIoi/E/tjAV+jP2ilaDpbOj7br1uSZmgNr4Ivx7c6D7seR+DV2ZTQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=gondor.apana.org.au
+ smtp.mailfrom=xilinx.com; dmarc=pass (p=none sp=none pct=100) action=none
+ header.from=xilinx.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7oYz+yOpO5fZWjwhrq2haRf5AwCMeX0yNDQBW+j72E0=;
+ b=BVWYdpjQxPab7IWJJ45471qFxIlHuFgMVjwHLBht9Z/e0CUkAhgH+V3PsyQ3bfsFoluXyKSG9cTM7hkJCagBYjbnQ3egsZwLH3UjxanisKyb5nDubGgo3kl9Vt2uwONQfKuCQ65CTrr8jWLdFyOUqTLGLQ/tHMTJnVn1KohpOYI=
+Received: from BN0PR02CA0010.namprd02.prod.outlook.com (2603:10b6:408:e4::15)
+ by CH2PR02MB6839.namprd02.prod.outlook.com (2603:10b6:610:af::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8; Sun, 23 Jan
+ 2022 09:47:46 +0000
+Received: from BN1NAM02FT024.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:e4:cafe::5a) by BN0PR02CA0010.outlook.office365.com
+ (2603:10b6:408:e4::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10 via Frontend
+ Transport; Sun, 23 Jan 2022 09:47:46 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT024.mail.protection.outlook.com (10.13.2.138) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4909.8 via Frontend Transport; Sun, 23 Jan 2022 09:47:45 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Sun, 23 Jan 2022 01:47:44 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Sun, 23 Jan 2022 01:47:44 -0800
+Envelope-to: git@xilinx.com,
+ herbert@gondor.apana.org.au,
+ davem@davemloft.net,
+ linux-crypto@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ robh+dt@kernel.org,
+ devicetree@vger.kernel.org
+Received: from [10.140.6.15] (port=60078 helo=xhdharshah40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <harsha.harsha@xilinx.com>)
+        id 1nBZTL-0001bj-Sj; Sun, 23 Jan 2022 01:47:44 -0800
+From:   Harsha <harsha.harsha@xilinx.com>
+To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <michals@xilinx.com>, <linux-arm-kernel@lists.infradead.org>,
+        <robh+dt@kernel.org>, <devicetree@vger.kernel.org>
+CC:     <saratcha@xilinx.com>, <harshj@xilinx.com>, <git@xilinx.com>,
+        Harsha <harsha.harsha@xilinx.com>
+Subject: [PATCH 0/4] crypto: Add Xilinx ZynqMP SHA3 driver support
+Date:   Sun, 23 Jan 2022 15:17:03 +0530
+Message-ID: <1642931227-20706-1-git-send-email-harsha.harsha@xilinx.com>
+X-Mailer: git-send-email 1.8.2.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [REGRESSION] Bluetooth not working on 5.15+ since "Bluetooth:
- Move shutdown callback before flushing tx and rx queue"
-Content-Language: en-BS
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     "An, Tedd" <tedd.an@intel.com>,
-        "kai.heng.feng@canonical.com" <kai.heng.feng@canonical.com>,
-        "andypalmadi@gmail.com" <andypalmadi@gmail.com>,
-        "marcel@holtmann.org" <marcel@holtmann.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <CAJvGw+AJ5dHSb50RtJHnjbhMVQa+rJgYznFV4t-iaO0qx+W-jw@mail.gmail.com>
- <fbc36e8ebdd9222f84322d54d9114f58c225547e.camel@intel.com>
- <e3e7147e-dd4c-59a9-5dba-5ddcd2e3130f@leemhuis.info>
- <38b569e4-2e9f-0155-4a5c-52876e8ca38a@leemhuis.info>
-In-Reply-To: <38b569e4-2e9f-0155-4a5c-52876e8ca38a@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1642930108;3c323245;
-X-HE-SMSGID: 1nBZAc-0002u8-K7
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8e804ffd-6b8e-4adc-8f67-08d9de55686b
+X-MS-TrafficTypeDiagnostic: CH2PR02MB6839:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR02MB6839FC5400E32C7DCEB34321DE5D9@CH2PR02MB6839.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nMrzagI2au+uCHp9L7ag043Ep+czDE8OhZugbxbgREQ1JUjL4qkik53D+nPG+xyaK84nhYYfYDfjADwPdBctra79neBywnO8jBml0AtbUCZPEL79CePHIp+2KLRYZtZ+Kx4V1AlS+mExOXKCGkT329cnbTaGSxpMf56TD4MYPDc3tAap6Hduuv8cciQf4Eh7CgeC8Vy7+tVJjtTNLc1r5lBJkv7EKGRTpdP8SWVNGaxl6Z21LoOHUmWrrbguD1glXB57VPmd7mWaZJvReqKk2yTC/ge81CuYEVmf7ETgTJ5lM2klz8hEUFeM2QFKq9g8CDN7LtripQRYJXlqPkgGn1mTQPgzfTm53unRAjjy7ZPURkD4G4JJntC9MPIcQwz+4/19p/nravo30DWqNwn3oPmykRnQa/R5GP5c/6gG0NlB0uXS8FIVEdoscXnnSOWSi9eVWV/9PsuuQmeQ7hxUde5PVUZ66ROalsHInFRFDq0MELPEobeGVXIrTcuWzDqH34NGKxEGlpUGUqdk3nuoFlLObqc/e3HhoWkF7sABo3Raugb54ymk/6ociYUwAz9g+pqIWOBHg2VQruDtAuDiGWo3ZnLf8g6w9fUxU2DvZoiUAcyNGWxsZdOoin/N6tnhngLFjTrBHLPZkbJOJpHukqCJZDRc8+WioT6Sx5eKHP8ejAx4XcKmHIpXBeJjPMvceT3eH5yKr7qN50W5BEn6R23pwiDrqKdQvRsmpn3sy3k=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(426003)(2616005)(4326008)(2906002)(5660300002)(110136005)(4744005)(47076005)(26005)(6666004)(9786002)(7636003)(336012)(7696005)(82310400004)(107886003)(36860700001)(356005)(8676002)(83380400001)(54906003)(8936002)(186003)(36756003)(316002)(70586007)(70206006)(508600001)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2022 09:47:45.3851
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e804ffd-6b8e-4adc-8f67-08d9de55686b
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT024.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB6839
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Top-posting for once, to make this easy accessible to everyone.
+This patch set does the following:
+  - Updates the Makefile for xilinx subdirectory
+  - Adds communication layer support for sha_hash in zynqmp.c
+  - Adds Xilinx ZynqMP driver for SHA3 Algorithm
+  - Updates the list of MAINTAINERS
 
-Coldolt, could you please check if this regression is still in 5.17-rc1
-or 5.16.2? I wonder if this patch fixed things:
+Harsha (4):
+  drivers: crypto: Updated Makefile for xilinx subdirectory
+  firmware: xilinx: Add ZynqMP SHA API for SHA3 functionality
+  crypto: xilinx: Add Xilinx SHA3 driver
+  MAINTAINERS: Add maintainer for Xilinx ZynqMP SHA3 driver
 
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-5.16.y&id=8e8cae520210139aab4b701a822bbefb13b8f007
+ MAINTAINERS                          |   5 +
+ drivers/crypto/Kconfig               |  10 ++
+ drivers/crypto/Makefile              |   2 +-
+ drivers/crypto/xilinx/Makefile       |   1 +
+ drivers/crypto/xilinx/zynqmp-sha.c   | 285 +++++++++++++++++++++++++++++++++++
+ drivers/firmware/xilinx/zynqmp.c     |  26 ++++
+ include/linux/firmware/xlnx-zynqmp.h |   8 +
+ 7 files changed, 336 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/crypto/xilinx/zynqmp-sha.c
 
-Ciao, Thorsten
+-- 
+1.8.2.1
 
-#regzbot poke
-
-On 20.01.22 14:08, Thorsten Leemhuis wrote:
-> On 10.12.21 10:16, Thorsten Leemhuis wrote:
->> Hi, this is your Linux kernel regression tracker speaking.
-> 
-> /me again
-> 
->> On 10.12.21 02:10, An, Tedd wrote:
->>> On Fri, 2021-12-10 at 01:36 +0200, coldolt wrote:
->>>> After a restart, bluetooth doesn't work since commit 0ea53674d07f
->>>> "Bluetooth: Move shutdown callback before flushing tx and rx queue"
->>>>
->>>> bluetoothctl doesn't list any controllers and I get the following in
->>>> dmesg | grep -i bluetooth
->>>>
->>>> [    2.634812] Bluetooth: Core ver 2.22
->>>> [    2.634843] NET: Registered PF_BLUETOOTH protocol family
->>>> [    2.634845] Bluetooth: HCI device and connection manager initialized
->>>> [    2.634850] Bluetooth: HCI socket layer initialized
->>>> [    2.634853] Bluetooth: L2CAP socket layer initialized
->>>> [    2.634858] Bluetooth: SCO socket layer initialized
->>>> [    4.077788] Bluetooth: BNEP (Ethernet Emulation) ver 1.3
->>>> [    4.077794] Bluetooth: BNEP filters: protocol multicast
->>>> [    4.077799] Bluetooth: BNEP socket layer initialized
->>>> [    4.078219] random: bluetoothd: uninitialized urandom read (4 bytes read)
->>>> [    4.852835] Bluetooth: hci0: Reading Intel version command failed (-110)
->>>> [    4.852838] Bluetooth: hci0: command 0xfc05 tx timeout
->>>>
->>>> However, it works after a cold start or after putting the computer to sleep.
->>>>
->>>> Before 83f2dafe2a62 "Bluetooth: btintel: Refactoring setup routine for
->>>> legacy ROM sku", it always works after a restart, but from that commit
->>>> up until before 0ea53674d07f it either works or doesn't work after a
->>>> restart depending on if before restart it was working or not, meaning
->>>> it stays working or stays not working.
->>>>
->>>> Also on the first restart from before 83f2dafe2a62 into 0ea53674d07f
->>>> or later it works, but then restarting again into 0ea53674d07f or
->>>> later it no longer works. So it seems that 0ea53674d07f and later puts
->>>> the bluetooth in a nonworking state if you restart from it, but before
->>>> 83f2dafe2a62 it puts it back into a working state at startup, and in
->>>> between it doesn't do either, i.e. it stays the way it was.
->>>>
->>>> I have a Dell Latitude E5550 laptop with an Intel 7265 wifi/bluetooth
->>>> card REV=0x210 firmware version 29.4063824552.0 7265D-29. I'm on Arch
->>>> Linux, the problem is still there on 5.16-rc4.
->>>>
->>>> Here is a thread on the Arch Linux forums with several people with the
->>>> same problem, for some of them it got fixed with a kernel update or by
->>>> reloading modules, but not for everybody, including me
->>>> https://bbs.archlinux.org/viewtopic.php?id=271459
->>>>
->>>> #regzbot introduced 0ea53674d07f
->>
->> Many thx for directly getting regzbot involved! :-D
->>
->>> This issue is under investigation to find the root cause and proper solution.
->>
->> Only internally? Or are there any other related public discussions that
->> are relevant to this and thus good to be aware of?
-> 
-> What's the status here? It looks like there was no progress since 41
-> days, which is awfully long even with the festive season in between.
-> Could anyone provide a status update please?
-> 
-> Ciao, Thorsten
-> 
-> #regzbot poke
-> 
-> P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
-> on my table. I can only look briefly into most of them. Unfortunately
-> therefore I sometimes will get things wrong or miss something important.
-> I hope that's not the case here; if you think it is, don't hesitate to
-> tell me about it in a public reply, that's in everyone's interest.
-> 
-> BTW, I have no personal interest in this issue, which is tracked using
-> regzbot, my Linux kernel regression tracking bot
-> (https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
-> this mail to get things rolling again and hence don't need to be CC on
-> all further activities wrt to this regression.
-> 
->>> The downloaded firmware breaks the behavior though, we need to investigate
->>> further to see if it can be fixed in firmware or fix in the driver.
->>
->> The answer from my point is simple: it needs to be fixed in the kernel,
->> not just in the firmware, otherwise people that update the kernel
->> without updating the firmware at the same time will run into a
->> regression -- and that is not acceptable by kernel development standards.
->>
->> Ciao, Thorsten
->>
->> P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
->> on my table. I can only look briefly into most of them. Unfortunately
->> therefore I sometimes will get things wrong or miss something important.
->> I hope that's not the case here; if you think it is, don't hesitate to
->> tell me about it in a public reply. That's in everyone's interest, as
->> what I wrote above might be misleading to everyone reading this; any
->> suggestion I gave they thus might sent someone reading this down the
->> wrong rabbit hole, which none of us wants.
->>
->> BTW, I have no personal interest in this issue, which is tracked using
->> regzbot, my Linux kernel regression tracking bot
->> (https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
->> this mail to get things rolling again and hence don't need to be CC on
->> all further activities wrt to this regression.

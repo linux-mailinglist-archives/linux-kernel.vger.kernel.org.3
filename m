@@ -2,93 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A36D14970B6
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 10:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4196F4970B1
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 10:17:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236096AbiAWJUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 04:20:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbiAWJUT (ORCPT
+        id S236058AbiAWJQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 04:16:56 -0500
+Received: from mail-ed1-f52.google.com ([209.85.208.52]:46070 "EHLO
+        mail-ed1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230401AbiAWJQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 04:20:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BD3C06173B;
-        Sun, 23 Jan 2022 01:20:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21ACE60921;
-        Sun, 23 Jan 2022 09:20:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42B53C340E2;
-        Sun, 23 Jan 2022 09:20:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642929618;
-        bh=Dj6LQFC0Rt8FZEOhmYI8OL38h0K/bUpUPb0UB+tnZ04=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ddr8J3QFItYLfJ90lbG74ECaXAThq37UnIESGdmin4cpD9hObbT2Cgnl6QXBZu0wZ
-         7X8ny859qZekzDnAR+PZFii/Dc2plkluME3Iojpn1I8lXW+DD/X4UEmXSuVM/c6ipW
-         fg9cjBd5mHlYdPMm5TgLfx3+CBC9gXnmg/W5WQFmWOUvSWqmjsjHn2lb8UTOo6wC5G
-         5sbrvSdT0tW9/pXelP1ff15Vucl4z/A05TNtsTnwuLykCh6X6uqbx5U03GaRo3Fco0
-         Ym4jHSzh6PdZDqQMGifzu/ucMrwGXPHo45QnR3yJgCHcMGc2+ExHNR6i7anFhFBObl
-         Lq8VP3PWdxmWQ==
-Date:   Sun, 23 Jan 2022 17:12:40 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Mayuresh Chitale <mchitale@ventanamicro.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH 11/12] riscv: extable: add a dedicated uaccess handler
-Message-ID: <Ye0cCI8aAC8rL1IE@xhacker>
-References: <20211118192130.48b8f04c@xhacker>
- <20211118192651.605d0c80@xhacker>
- <CAN37VV6vfee+T18UkbDLe1ts87+Zvg25oQR1+VJD3e6SJFPPiA@mail.gmail.com>
- <YeqkIKUsdHH0ORxf@xhacker>
+        Sun, 23 Jan 2022 04:16:53 -0500
+Received: by mail-ed1-f52.google.com with SMTP id z22so50657752edd.12
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 01:16:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=nWpDQmZNg8zKVk12QskQ7NNS05C4fI/JmZBKLdKyu8Q=;
+        b=2fyFS+Y1m2887LqgERIyKSAM0LubJDu9Epu/X8cfikKj9QmnAg3vzBentIBcTSVm74
+         rGhaS7/Ax+OggRJ2pzJrDRGKfXszTjAYzGrT3B+9sYIvUCvXKiSHDwtc4OKAO1/oi8+8
+         rg+xLWe0tXaCeoYdLx8XR3NQX4XmFXy5eZ/zmHVC0Pho2yzFQegTP1BqDEfsPRI1bqi2
+         DhAxmdkTXQdv6lqbb88ojIr3GPzIsbo+i8XF9UCnw22gxHKFMQRYDW/+6W+OIk/1zS7B
+         IAbjLG1lNYmbDiveEYz5MSc6ys1RLXh1GNsWbcwSm2lHvMQd9zoGDWccl4vt3IibsWOh
+         qKzw==
+X-Gm-Message-State: AOAM532WJTD6MVOGORxJDfds5oGIQihbuUeplB9phz+j4MvEOkHnUc/X
+        lMcGQy/uDJEAobNDpf0V/n4=
+X-Google-Smtp-Source: ABdhPJyroPfnQDhcyUbsYHUCBLYt3vcMzY1QM2dwnvS0gKlL7IS1UHY+k/HyYe/nTILXTOVTS8Qu7Q==
+X-Received: by 2002:a50:d0dc:: with SMTP id g28mr10810282edf.25.1642929412330;
+        Sun, 23 Jan 2022 01:16:52 -0800 (PST)
+Received: from [10.100.102.14] (46-117-116-119.bb.netvision.net.il. [46.117.116.119])
+        by smtp.gmail.com with ESMTPSA id ch27sm643434edb.74.2022.01.23.01.16.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 23 Jan 2022 01:16:51 -0800 (PST)
+Subject: Re: [PATCH] nvme-fabrics: fix returnvar.cocci warnings
+To:     kernel test robot <lkp@intel.com>, Hannes Reinecke <hare@suse.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        linux-nvme@lists.infradead.org
+References: <202201221116.hWZkKqts-lkp@intel.com>
+ <20220122031737.GA31599@fba2a898af35>
+From:   Sagi Grimberg <sagi@grimberg.me>
+Message-ID: <aa0e01c1-4d3e-eed2-d32f-d1ecb9a97e90@grimberg.me>
+Date:   Sun, 23 Jan 2022 11:16:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YeqkIKUsdHH0ORxf@xhacker>
+In-Reply-To: <20220122031737.GA31599@fba2a898af35>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 08:16:51PM +0800, Jisheng Zhang wrote:
-> On Thu, Jan 20, 2022 at 11:45:34PM +0530, Mayuresh Chitale wrote:
-> > Hello Jisheng,
-> 
-> Hi,
-> 
-> > 
-> > Just wanted to inform you that this patch breaks the writev02 test
-> > case in LTP and if it is reverted then the test passes. If we run the
-> > test through strace then we see that the test hangs and following is
-> > the last line printed by strace:
-> > 
-> > "writev(3, [{iov_base=0x7fff848a6000, iov_len=8192}, {iov_base=NULL,
-> > iov_len=0}]"
-> > 
-> 
-> Thanks for the bug report. I will try to fix it.
-
-Hi Mayuresh,
-
-I just sent out a fix for this bug. Per my test, the issue is fixed.
-Could you please try?
-
-Thanks
+Reviewed-by: Sagi Grimberg <sagi@grimberg.me>

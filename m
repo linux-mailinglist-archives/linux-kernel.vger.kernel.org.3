@@ -2,129 +2,1236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5989497443
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 19:26:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E815497446
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 19:26:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239468AbiAWSSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 13:18:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
+        id S239498AbiAWS0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 13:26:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232006AbiAWSSg (ORCPT
+        with ESMTP id S232006AbiAWS0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 13:18:36 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F94C06173B
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 10:18:36 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id p37so13751397pfh.4
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 10:18:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LM0mMzefnSfZje8daSUkdPFi8UkMvseVamFzoxFU/CQ=;
-        b=IVrpsy/tjwu0SUk9J+FsWyANxgvEcSBSx88SqsySONb7XLsdhdErMEkGSlPbPrwezu
-         qCSxGGQaZire7aSWgQRB4kwjbweDZKy2B7O9IL/DNzJ/tS+4lajPiESJJ6EQ7vuneAj3
-         pFqz7ATwHq2S5BdvA+ZGIzd17UjvLWTMqUdB1VM7bYRgjm8EhSL88eXBQZfpscahRj6Y
-         Ny28p4SHvptgYDqvSxznzqytARJi3bIaEV17cQMxWYODRWPxYkjTPhpXTFR8XJk1VUya
-         apiQFrOUEEKfbPW5WwzAfbC4OwoYPDviVPvfH0mWjithQOtZlIE6ng3vcN5Bl9hLfR0h
-         XyPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LM0mMzefnSfZje8daSUkdPFi8UkMvseVamFzoxFU/CQ=;
-        b=iCr4qCFtfKYFlAGO0/sj5IN4p5ATR57Lu0VtJKylExJuT7nd/xlxJX/gj1RqDNtYcP
-         P+lnfzfu/FWfpaIDShEbV39Q2IC15eLEDjGk7DH4DJ9ldlAnKxqv3OInPCTSRkP6bn1K
-         bTloHxbo56Q1AtrrKuat8fps56x0UMDAsJLVa5xPiuAY3IcXAZ8g8Oqn4/lv3Zj7BDuf
-         cBQvkhilFKJqZR8po8C44P6KZRQhwH6w+bRqGfnmKmY5HI2qiiapDaBPuklizBFKGPvG
-         Hhkh9ni4L/SN7PFtowLiy2DQDtYlH0VhGHWp68rhrz495B20w+muJk8aL2ClaSQ9yJ3n
-         NbnQ==
-X-Gm-Message-State: AOAM531gUeiYJcEX7zaRVNmZ4UiAiTiYeAn+guzaTvFWD5cr9ppQtzjI
-        39+phAZ+sUxOe8mPkE8cp30=
-X-Google-Smtp-Source: ABdhPJxNugxrCfpZDi11NGkw2Bzh4uFDeQ7gOSmsfifv+0dTKuSstL00nrlFPomTYwAyQorNFtz8DQ==
-X-Received: by 2002:a62:3003:0:b0:4c1:6983:f1c3 with SMTP id w3-20020a623003000000b004c16983f1c3mr10974880pfw.20.1642961915949;
-        Sun, 23 Jan 2022 10:18:35 -0800 (PST)
-Received: from localhost.localdomain ([103.85.11.151])
-        by smtp.gmail.com with ESMTPSA id h6sm2634220pfk.110.2022.01.23.10.18.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 10:18:35 -0800 (PST)
-From:   Vihas Mak <makvihas@gmail.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Straube <straube.linux@gmail.com>,
-        Martin Kaiser <martin@kaiser.cx>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Vihas Mak <makvihas@gmail.com>
-Subject: [PATCH v2] staging: r8188eu: handle rtw_init_netdev_name() failure appropriately
-Date:   Sun, 23 Jan 2022 23:47:35 +0530
-Message-Id: <20220123181734.10402-1-makvihas@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Sun, 23 Jan 2022 13:26:23 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50B4C06173B;
+        Sun, 23 Jan 2022 10:26:19 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7B74525E;
+        Sun, 23 Jan 2022 19:26:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1642962375;
+        bh=WuDlHru0MazxFd/zPHqDXkrilSbU9kTV9TTWRwEe9ys=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jCXuk1cwk6d/qds6D4VBRh6A+A4/sqh93mYizVOFy3HjSnEypcMwafy2lsmVY1dZb
+         RnC2bA+j1Omi+H2uIfuTyx1134vf1VSKtCzRezHNUPDzxlSUAAJVBt2m4gd/ULUZg/
+         82QYr6tYA0B5wGo3vG8PvcZVH1unsCQdcexeygKE=
+Date:   Sun, 23 Jan 2022 20:25:59 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Nikhil Devshatwar <nikhil.nd@ti.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Benoit Parrot <bparrot@ti.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v6 11/14] media: ti: Add CSI2RX support for J721E
+Message-ID: <Ye2dtyiqu15tRA6y@pendragon.ideasonboard.com>
+References: <20220121142904.4091481-1-p.yadav@ti.com>
+ <20220121142904.4091481-12-p.yadav@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220121142904.4091481-12-p.yadav@ti.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rtw_init_netdev_name() calls dev_alloc_name() which allocates the name
-for the device as per the given name format.
-The name format is specified by the module parameter "ifname".
-It returns a negative err code if the format is invalid. Handle this
-error appropriately.
-Cancel the timers ininitliazed by rtw_init_drv_sw() before calling
-rtw_free_drv_sw() and then proceed to free the adapter.
+Hi Pratyush,
 
-Also, if register_netdev() fails then goto free_drv_sw instead of
-goto handle_dualmac.
+Thank you for the patch.
 
-Signed-off-by: Vihas Mak <makvihas@gmail.com>
----
-v1->v2:
-    free the adapter and netdev instead of warning the user about 
-    allocation failure.
+On Fri, Jan 21, 2022 at 07:59:01PM +0530, Pratyush Yadav wrote:
+> TI's J721E uses the Cadence CSI2RX and DPHY peripherals to facilitate
+> capture over a CSI-2 bus.
+> 
+> The Cadence CSI2RX IP acts as a bridge between the TI specific parts and
+> the CSI-2 protocol parts. TI then has a wrapper on top of this bridge
+> called the SHIM layer. It takes in data from stream 0, repacks it, and
+> sends it to memory over PSI-L DMA.
+> 
+> This driver acts as the "front end" to V4L2 client applications. It
+> implements the required ioctls and buffer operations, passes the
+> necessary calls on to the bridge, programs the SHIM layer, and performs
+> DMA via the dmaengine API to finally return the data to a buffer
+> supplied by the application.
+> 
+> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+> 
+> ---
+> 
+> (no changes since v5)
+> 
+> Changes in v5:
+> - Add dependency on PHY_CADENCE_DPHY_RX instead of PHY_CADENCE_DPHY
+>   since the Rx mode DPHY now has a separate driver.
+> - Drop ti_csi2rx_validate_pipeline(). Pipeline validation should be done
+>   at media_pipeline_start().
+> - Do not assign flags.
+> - Fix error handling in ti_csi2rx_start_streaming(). Free up vb2 buffers
+>   when media_pipeline_start() fails.
+> 
+> Changes in v4:
+> - Acquire the media device's graph_mutex before starting the graph walk.
+> - Call media_graph_walk_init() and media_graph_walk_cleanup() when
+>   starting and ending the graph walk respectively.
+> - Reduce max frame height and width in enum_framesizes. Currently they
+>   are set to UINT_MAX but they must be a multiple of step_width, so they
+>   need to be rounded down. Also, these values are absurdly large which
+>   causes some userspace applications like gstreamer to trip up. While it
+>   is not generally right to change the kernel for an application bug, it
+>   is not such a big deal here. This change is replacing one set of
+>   absurdly large arbitrary values with another set of smaller but still
+>   absurdly large arbitrary values. Both limits are unlikely to be hit in
+>   practice.
+> 
+> Changes in v3:
+> - Move DMA related fields in struct ti_csi2rx_dma.
+> - Protect DMA buffer queue with a spinlock to make sure the queue buffer
+>   and DMA callback don't race on it.
+> - Track the current DMA state. It might go idle because of a lack of
+>   buffers. This state can be used to restart it if needed.
+> - Do not include the current buffer in the pending queue. It is slightly
+>   better modelling than leaving it at the head of the pending queue.
+> - Use the buffer as the callback argument, and add a reference to csi in it.
+> - If queueing a buffer to DMA fails, the buffer gets leaked and DMA gets
+>   stalled with. Instead, report the error to vb2 and queue the next
+>   buffer in the pending queue.
+> - DMA gets stalled if we run out of buffers since the callback is the
+>   only one that fires subsequent transfers and it is no longer being
+>   called. Check for that when queueing buffers and restart DMA if
+>   needed.
+> - Do not put of node until we are done using the fwnode.
+> - Set inital format to UYVY 640x480.
+> 
+> Changes in v2:
+> - Use dmaengine_get_dma_device() instead of directly accessing
+>   dma->device->dev.
+> - Do not set dst_addr_width when configuring slave DMA.
+> - Move to a separate subdir and rename to j721e-csi2rx.c
+> - Convert compatible to ti,j721e-csi2rx.
+> - Move to use Media Controller centric APIs.
+> - Improve cleanup in probe when one of the steps fails.
+> - Add colorspace to formats database.
+> - Set hw_revision on media_device.
+> - Move video device initialization to probe time instead of register time.
+> 
+>  MAINTAINERS                                   |   6 +
+>  drivers/media/platform/Kconfig                |  12 +
+>  drivers/media/platform/ti/Makefile            |   1 +
+>  .../media/platform/ti/j721e-csi2rx/Makefile   |   2 +
+>  .../platform/ti/j721e-csi2rx/j721e-csi2rx.c   | 913 ++++++++++++++++++
+>  5 files changed, 934 insertions(+)
+>  create mode 100644 drivers/media/platform/ti/j721e-csi2rx/Makefile
+>  create mode 100644 drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 3b8fa4e5047f..2a8ebf17462e 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19181,6 +19181,12 @@ S:	Odd Fixes
+>  F:	drivers/clk/ti/
+>  F:	include/linux/clk/ti.h
+>  
+> +TI J721E CSI2RX DRIVER
+> +M:	Pratyush Yadav <p.yadav@ti.com>
+> +L:	linux-media@vger.kernel.org
+> +S:	Supported
+> +F:	drivers/media/platform/ti/j721e-csi2rx/
+> +
+>  TI DAVINCI MACHINE SUPPORT
+>  M:	Sekhar Nori <nsekhar@ti.com>
+>  R:	Bartosz Golaszewski <brgl@bgdev.pl>
+> diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+> index 9fbdba0fd1e7..0fa58563d93b 100644
+> --- a/drivers/media/platform/Kconfig
+> +++ b/drivers/media/platform/Kconfig
+> @@ -216,6 +216,18 @@ config VIDEO_RCAR_ISP
+>  	  To compile this driver as a module, choose M here: the
+>  	  module will be called rcar-isp.
+>  
+> +config VIDEO_TI_J721E_CSI2RX
+> +	tristate "TI J721E CSI2RX wrapper layer driver"
+> +	depends on VIDEO_DEV && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
+> +	depends on MEDIA_SUPPORT && MEDIA_CONTROLLER
+> +	depends on PHY_CADENCE_DPHY_RX && VIDEO_CADENCE_CSI2RX
+> +	depends on ARCH_K3 || COMPILE_TEST
+> +	select VIDEOBUF2_DMA_CONTIG
+> +	select V4L2_FWNODE
+> +	help
+> +	  Support for TI CSI2RX wrapper layer. This just enables the wrapper driver.
+> +	  The Cadence CSI2RX bridge driver needs to be enabled separately.
+> +
+>  endif # V4L_PLATFORM_DRIVERS
+>  
+>  menuconfig V4L_MEM2MEM_DRIVERS
+> diff --git a/drivers/media/platform/ti/Makefile b/drivers/media/platform/ti/Makefile
+> index bbc737ccbbea..17c9cfb74f66 100644
+> --- a/drivers/media/platform/ti/Makefile
+> +++ b/drivers/media/platform/ti/Makefile
+> @@ -1,3 +1,4 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  obj-y += cal/
+>  obj-y += vpe/
+> +obj-y += j721e-csi2rx/
 
- drivers/staging/r8188eu/os_dep/usb_intf.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+Alphabetical order maybe ?
 
-diff --git a/drivers/staging/r8188eu/os_dep/usb_intf.c b/drivers/staging/r8188eu/os_dep/usb_intf.c
-index 91792dfd3..85b5d0bd7 100644
---- a/drivers/staging/r8188eu/os_dep/usb_intf.c
-+++ b/drivers/staging/r8188eu/os_dep/usb_intf.c
-@@ -399,7 +399,11 @@ static struct adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
- 			DBG_88E("can't get autopm:\n");
- 
- 	/*  alloc dev name after read efuse. */
--	rtw_init_netdev_name(pnetdev, padapter->registrypriv.ifname);
-+	if (rtw_init_netdev_name(pnetdev, padapter->registrypriv.ifname) < 0) {
-+		DBG_88E("rtw_init_netdev_name failed, ifname:%s\n",
-+			padapter->registrypriv.ifname);
-+		goto free_drv_sw;
-+	}
- 	rtw_macaddr_cfg(padapter->eeprompriv.mac_addr);
- 	rtw_init_wifidirect_addrs(padapter, padapter->eeprompriv.mac_addr,
- 				  padapter->eeprompriv.mac_addr);
-@@ -409,7 +413,7 @@ static struct adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
- 
- 	/* step 6. Tell the network stack we exist */
- 	if (register_netdev(pnetdev) != 0)
--		goto handle_dualmac;
-+		goto free_drv_sw;
- 
- 	DBG_88E("bDriverStopped:%d, bSurpriseRemoved:%d, bup:%d, hw_init_completed:%d\n"
- 		, padapter->bDriverStopped
-@@ -420,6 +424,11 @@ static struct adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
- 
- 	status = _SUCCESS;
- 
-+free_drv_sw:
-+	if (status != _SUCCESS) {
-+		rtw_cancel_all_timer(padapter);
-+		rtw_free_drv_sw(padapter);
-+	}
- handle_dualmac:
- 	if (status != _SUCCESS)
- 		rtw_handle_dualmac(padapter, 0);
+> diff --git a/drivers/media/platform/ti/j721e-csi2rx/Makefile b/drivers/media/platform/ti/j721e-csi2rx/Makefile
+> new file mode 100644
+> index 000000000000..377afc1d6280
+> --- /dev/null
+> +++ b/drivers/media/platform/ti/j721e-csi2rx/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +obj-$(CONFIG_VIDEO_TI_J721E_CSI2RX) += j721e-csi2rx.o
+> diff --git a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
+> new file mode 100644
+> index 000000000000..43f31f161f43
+> --- /dev/null
+> +++ b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
+> @@ -0,0 +1,913 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * TI CSI2 RX driver.
+> + *
+> + * Copyright (C) 2021 Texas Instruments Incorporated - https://www.ti.com/
+> + *
+> + * Author: Pratyush Yadav <p.yadav@ti.com>
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/dmaengine.h>
+> +#include <linux/of_platform.h>
+
+Alphabetical order would be nice here too.
+
+> +
+> +#include <media/v4l2-device.h>
+> +#include <media/v4l2-ioctl.h>
+> +#include <media/videobuf2-dma-contig.h>
+> +
+> +#define TI_CSI2RX_MODULE_NAME		"j721e-csi2rx"
+> +
+> +#define SHIM_CNTL			0x10
+> +#define SHIM_CNTL_PIX_RST		BIT(0)
+> +
+> +#define SHIM_DMACNTX			0x20
+> +#define SHIM_DMACNTX_EN			BIT(31)
+> +#define SHIM_DMACNTX_YUV422		GENMASK(27, 26)
+> +#define SHIM_DMACNTX_FMT		GENMASK(5, 0)
+> +#define SHIM_DMACNTX_UYVY		0
+> +#define SHIM_DMACNTX_VYUY		1
+> +#define SHIM_DMACNTX_YUYV		2
+> +#define SHIM_DMACNTX_YVYU		3
+> +
+> +#define SHIM_PSI_CFG0			0x24
+> +#define SHIM_PSI_CFG0_SRC_TAG		GENMASK(15, 0)
+> +#define SHIM_PSI_CFG0_DST_TAG		GENMASK(31, 15)
+> +
+> +#define CSI_DF_YUV420			0x18
+> +#define CSI_DF_YUV422			0x1e
+> +#define CSI_DF_RGB444			0x20
+> +#define CSI_DF_RGB888			0x24
+
+https://lore.kernel.org/linux-media/20220123160857.24161-2-laurent.pinchart+renesas@ideasonboard.com/
+
+:-)
+
+> +
+> +#define PSIL_WORD_SIZE_BYTES		16
+> +/*
+> + * There are no hard limits on the width or height. The DMA engine can handle
+> + * all sizes. The max width and height are arbitrary numbers for this driver.
+> + * Use 16M * 16M as the arbitrary limit. It is large enough that it is unlikely
+> + * the limit will be hit in practice.
+> + */
+> +#define MAX_WIDTH_BYTES			SZ_16M
+> +#define MAX_HEIGHT_BYTES		SZ_16M
+> +
+> +struct ti_csi2rx_fmt {
+> +	u32				fourcc;	/* Four character code. */
+> +	u32				code;	/* Mbus code. */
+> +	enum v4l2_colorspace		colorspace;
+> +	u32				csi_df;	/* CSI Data format. */
+
+It's called data type in CSI-2, not data format.
+
+> +	u8				bpp;	/* Bits per pixel. */
+> +};
+> +
+> +struct ti_csi2rx_buffer {
+> +	/* Common v4l2 buffer. Must be first. */
+> +	struct vb2_v4l2_buffer		vb;
+> +	struct list_head		list;
+> +	struct ti_csi2rx_dev		*csi;
+> +};
+> +
+> +enum ti_csi2rx_dma_state {
+> +	TI_CSI2RX_DMA_STOPPED,	/* Streaming not started yet. */
+> +	TI_CSI2RX_DMA_IDLE,	/* Streaming but no pending DMA operation. */
+> +	TI_CSI2RX_DMA_ACTIVE,	/* Streaming and pending DMA operation. */
+> +};
+> +
+> +struct ti_csi2rx_dma {
+> +	/* Protects all fields in this struct. */
+> +	spinlock_t			lock;
+> +	struct dma_chan			*chan;
+> +	/* Buffers queued to the driver, waiting to be processed by DMA. */
+> +	struct list_head		queue;
+> +	enum ti_csi2rx_dma_state	state;
+> +	/*
+> +	 * Current buffer being processed by DMA. NULL if no buffer is being
+> +	 * processed.
+> +	 */
+> +	struct ti_csi2rx_buffer		*curr;
+> +};
+> +
+> +struct ti_csi2rx_dev {
+> +	struct device			*dev;
+> +	void __iomem			*shim;
+> +	struct v4l2_device		v4l2_dev;
+> +	struct video_device		vdev;
+> +	struct media_device		mdev;
+> +	struct media_pipeline		pipe;
+> +	struct media_pad		pad;
+> +	struct v4l2_async_notifier	notifier;
+> +	struct v4l2_subdev		*subdev;
+> +	struct vb2_queue		vidq;
+> +	struct mutex			mutex; /* To serialize ioctls. */
+> +	struct v4l2_format		v_fmt;
+> +	struct ti_csi2rx_dma		dma;
+> +	u32				sequence;
+> +};
+> +
+> +static const struct ti_csi2rx_fmt formats[] = {
+> +	{
+> +		.fourcc			= V4L2_PIX_FMT_YUYV,
+> +		.code			= MEDIA_BUS_FMT_YUYV8_2X8,
+> +		.colorspace		= V4L2_COLORSPACE_SRGB,
+> +		.csi_df			= CSI_DF_YUV422,
+> +		.bpp			= 16,
+> +	}, {
+> +		.fourcc			= V4L2_PIX_FMT_UYVY,
+> +		.code			= MEDIA_BUS_FMT_UYVY8_2X8,
+> +		.colorspace		= V4L2_COLORSPACE_SRGB,
+> +		.csi_df			= CSI_DF_YUV422,
+> +		.bpp			= 16,
+> +	}, {
+> +		.fourcc			= V4L2_PIX_FMT_YVYU,
+> +		.code			= MEDIA_BUS_FMT_YVYU8_2X8,
+> +		.colorspace		= V4L2_COLORSPACE_SRGB,
+> +		.csi_df			= CSI_DF_YUV422,
+> +		.bpp			= 16,
+> +	}, {
+> +		.fourcc			= V4L2_PIX_FMT_VYUY,
+> +		.code			= MEDIA_BUS_FMT_VYUY8_2X8,
+> +		.colorspace		= V4L2_COLORSPACE_SRGB,
+> +		.csi_df			= CSI_DF_YUV422,
+> +		.bpp			= 16,
+> +	},
+> +
+> +	/* More formats can be supported but they are not listed for now. */
+> +};
+> +
+> +static const unsigned int num_formats = ARRAY_SIZE(formats);
+> +
+> +/* Forward declaration needed by ti_csi2rx_dma_callback. */
+> +static int ti_csi2rx_start_dma(struct ti_csi2rx_dev *csi,
+> +			       struct ti_csi2rx_buffer *buf);
+> +
+> +static const struct ti_csi2rx_fmt *find_format_by_pix(u32 pixelformat)
+> +{
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < num_formats; i++) {
+> +		if (formats[i].fourcc == pixelformat)
+> +			return &formats[i];
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +static void ti_csi2rx_fill_fmt(const struct ti_csi2rx_fmt *csi_fmt,
+> +			       struct v4l2_format *v4l2_fmt)
+> +{
+> +	struct v4l2_pix_format *pix = &v4l2_fmt->fmt.pix;
+> +	u32 bpl;
+> +
+> +	v4l2_fmt->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+> +	pix->pixelformat = csi_fmt->fourcc;
+> +	pix->colorspace = csi_fmt->colorspace;
+
+I'd drop this (and the colorspace field in ti_csi2rx_fmt). This driver
+doesn't care about colorspaces, it should accept any value set by
+userspace, which should match the colorspace produced by the source
+subdev.
+
+ti_csi2rx_v4l2_init() will have to set a default colorspace explicitly.
+
+> +	pix->sizeimage = pix->height * pix->width * (csi_fmt->bpp / 8);
+> +
+> +	bpl = (pix->width * ALIGN(csi_fmt->bpp, 8)) >> 3;
+> +	pix->bytesperline = ALIGN(bpl, 16);
+> +}
+> +
+> +static int ti_csi2rx_querycap(struct file *file, void *priv,
+> +			      struct v4l2_capability *cap)
+> +{
+> +	struct ti_csi2rx_dev *csi = video_drvdata(file);
+> +
+> +	strscpy(cap->driver, TI_CSI2RX_MODULE_NAME, sizeof(cap->driver));
+> +	strscpy(cap->card, TI_CSI2RX_MODULE_NAME, sizeof(cap->card));
+> +
+> +	snprintf(cap->bus_info, sizeof(cap->bus_info), "platform:%s",
+> +		 dev_name(csi->dev));
+
+Depending on which series gets merged, you can drop this line:
+
+https://lore.kernel.org/linux-media/20220122163656.168440-1-sakari.ailus@linux.intel.com/
+
+> +	return 0;
+> +}
+> +
+> +static int ti_csi2rx_enum_fmt_vid_cap(struct file *file, void *priv,
+> +				      struct v4l2_fmtdesc *f)
+> +{
+> +	if (f->index >= num_formats)
+> +		return -EINVAL;
+> +
+> +	memset(f->reserved, 0, sizeof(f->reserved));
+> +	f->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+> +	f->pixelformat = formats[f->index].fourcc;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ti_csi2rx_g_fmt_vid_cap(struct file *file, void *prov,
+> +				   struct v4l2_format *f)
+> +{
+> +	struct ti_csi2rx_dev *csi = video_drvdata(file);
+> +
+> +	*f = csi->v_fmt;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ti_csi2rx_try_fmt_vid_cap(struct file *file, void *priv,
+> +				     struct v4l2_format *f)
+> +{
+> +	const struct ti_csi2rx_fmt *fmt;
+> +
+> +	/*
+> +	 * Default to the first format if the requested pixel format code isn't
+> +	 * supported.
+> +	 */
+> +	fmt = find_format_by_pix(f->fmt.pix.pixelformat);
+> +	if (!fmt)
+> +		fmt = &formats[0];
+> +
+> +	if (f->fmt.pix.field == V4L2_FIELD_ANY)
+> +		f->fmt.pix.field = V4L2_FIELD_NONE;
+> +
+> +	if (f->fmt.pix.field != V4L2_FIELD_NONE)
+> +		return -EINVAL;
+
+You should adjust the field, not return an error, so this can just
+become
+
+	/* Interlaced formats are not supported. */
+	f->fmt.pix.field = V4L2_FIELD_NONE;
+
+> +
+> +	ti_csi2rx_fill_fmt(fmt, f);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ti_csi2rx_s_fmt_vid_cap(struct file *file, void *priv,
+> +				   struct v4l2_format *f)
+> +{
+> +	struct ti_csi2rx_dev *csi = video_drvdata(file);
+> +	struct vb2_queue *q = &csi->vidq;
+> +	int ret;
+> +
+> +	if (vb2_is_busy(q))
+> +		return -EBUSY;
+> +
+> +	ret = ti_csi2rx_try_fmt_vid_cap(file, priv, f);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	csi->v_fmt = *f;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ti_csi2rx_enum_framesizes(struct file *file, void *fh,
+> +				     struct v4l2_frmsizeenum *fsize)
+> +{
+> +	const struct ti_csi2rx_fmt *fmt;
+> +	unsigned int pixels_in_word;
+> +	u8 bpp;
+> +
+> +	fmt = find_format_by_pix(fsize->pixel_format);
+> +	if (!fmt)
+> +		return -EINVAL;
+> +
+> +	bpp = ALIGN(fmt->bpp, 8);
+> +
+> +	/*
+> +	 * Number of pixels in one PSI-L word. The transfer happens in multiples
+> +	 * of PSI-L word sizes.
+> +	 */
+> +	pixels_in_word = PSIL_WORD_SIZE_BYTES * 8 / bpp;
+> +
+> +	fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
+> +	fsize->stepwise.min_width = pixels_in_word;
+> +	fsize->stepwise.max_width = rounddown(MAX_WIDTH_BYTES, pixels_in_word);
+> +	fsize->stepwise.step_width = pixels_in_word;
+> +	fsize->stepwise.min_height = 1;
+> +	fsize->stepwise.max_height = MAX_HEIGHT_BYTES;
+> +	fsize->stepwise.step_height = 1;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct v4l2_ioctl_ops csi_ioctl_ops = {
+> +	.vidioc_querycap      = ti_csi2rx_querycap,
+> +	.vidioc_enum_fmt_vid_cap = ti_csi2rx_enum_fmt_vid_cap,
+> +	.vidioc_try_fmt_vid_cap = ti_csi2rx_try_fmt_vid_cap,
+> +	.vidioc_g_fmt_vid_cap = ti_csi2rx_g_fmt_vid_cap,
+> +	.vidioc_s_fmt_vid_cap = ti_csi2rx_s_fmt_vid_cap,
+> +	.vidioc_enum_framesizes = ti_csi2rx_enum_framesizes,
+> +	.vidioc_reqbufs       = vb2_ioctl_reqbufs,
+> +	.vidioc_create_bufs   = vb2_ioctl_create_bufs,
+> +	.vidioc_prepare_buf   = vb2_ioctl_prepare_buf,
+> +	.vidioc_querybuf      = vb2_ioctl_querybuf,
+> +	.vidioc_qbuf          = vb2_ioctl_qbuf,
+> +	.vidioc_dqbuf         = vb2_ioctl_dqbuf,
+> +	.vidioc_expbuf        = vb2_ioctl_expbuf,
+> +	.vidioc_streamon      = vb2_ioctl_streamon,
+> +	.vidioc_streamoff     = vb2_ioctl_streamoff,
+> +};
+> +
+> +static const struct v4l2_file_operations csi_fops = {
+> +	.owner = THIS_MODULE,
+> +	.open = v4l2_fh_open,
+> +	.release = vb2_fop_release,
+> +	.read = vb2_fop_read,
+> +	.poll = vb2_fop_poll,
+> +	.unlocked_ioctl = video_ioctl2,
+> +	.mmap = vb2_fop_mmap,
+> +};
+> +
+> +static int ti_csi2rx_video_register(struct ti_csi2rx_dev *csi)
+> +{
+> +	struct video_device *vdev = &csi->vdev;
+> +	int ret, src_pad;
+> +
+> +	ret = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
+> +	if (ret)
+> +		return ret;
+> +
+> +	src_pad = media_entity_get_fwnode_pad(&csi->subdev->entity,
+> +					      csi->subdev->fwnode,
+> +					      MEDIA_PAD_FL_SOURCE);
+> +	if (src_pad < 0) {
+> +		dev_err(csi->dev, "Couldn't find source pad for subdev\n");
+> +		return src_pad;
+> +	}
+> +
+> +	ret = media_create_pad_link(&csi->subdev->entity, src_pad,
+> +				    &vdev->entity, 0,
+> +				    MEDIA_LNK_FL_IMMUTABLE |
+> +				    MEDIA_LNK_FL_ENABLED);
+> +	if (ret) {
+> +		video_unregister_device(vdev);
+> +		return ret;
+> +	}
+
+This can be simplified by using v4l2_create_fwnode_links_to_pad().
+
+> +
+> +	return 0;
+> +}
+> +
+> +static int csi_async_notifier_bound(struct v4l2_async_notifier *notifier,
+> +				    struct v4l2_subdev *subdev,
+> +				    struct v4l2_async_subdev *asd)
+> +{
+> +	struct ti_csi2rx_dev *csi = dev_get_drvdata(notifier->v4l2_dev->dev);
+> +
+> +	csi->subdev = subdev;
+> +
+> +	return 0;
+> +}
+> +
+> +static int csi_async_notifier_complete(struct v4l2_async_notifier *notifier)
+> +{
+> +	struct ti_csi2rx_dev *csi = dev_get_drvdata(notifier->v4l2_dev->dev);
+> +	int ret;
+> +
+> +	ret = ti_csi2rx_video_register(csi);
+
+I would inline the ti_csi2rx_video_register() function here, it's not
+large, and it's only called in a single place.
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	return v4l2_device_register_subdev_nodes(&csi->v4l2_dev);
+> +}
+> +
+> +static const struct v4l2_async_notifier_operations csi_async_notifier_ops = {
+> +	.bound = csi_async_notifier_bound,
+> +	.complete = csi_async_notifier_complete,
+> +};
+> +
+> +static int ti_csi2rx_init_subdev(struct ti_csi2rx_dev *csi)
+> +{
+> +	struct fwnode_handle *fwnode;
+> +	struct v4l2_async_subdev *asd;
+> +	struct device_node *node;
+> +	int ret;
+> +
+> +	node = of_get_child_by_name(csi->dev->of_node, "csi-bridge");
+> +	if (!node)
+> +		return -EINVAL;
+> +
+> +	fwnode = of_fwnode_handle(node);
+> +	if (!fwnode) {
+> +		of_node_put(node);
+> +		return -EINVAL;
+> +	}
+> +
+> +	v4l2_async_nf_init(&csi->notifier);
+> +	csi->notifier.ops = &csi_async_notifier_ops;
+> +
+> +	asd = v4l2_async_nf_add_fwnode(&csi->notifier, fwnode,
+> +				       struct v4l2_async_subdev);
+> +	of_node_put(node);
+> +	if (IS_ERR(asd)) {
+> +		v4l2_async_nf_cleanup(&csi->notifier);
+> +		return PTR_ERR(asd);
+> +	}
+> +
+> +	ret = v4l2_async_nf_register(&csi->v4l2_dev, &csi->notifier);
+> +	if (ret) {
+> +		v4l2_async_nf_cleanup(&csi->notifier);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void ti_csi2rx_setup_shim(struct ti_csi2rx_dev *csi)
+> +{
+> +	const struct ti_csi2rx_fmt *fmt;
+> +	unsigned int reg;
+> +
+> +	fmt = find_format_by_pix(csi->v_fmt.fmt.pix.pixelformat);
+> +	if (!fmt) {
+> +		dev_err(csi->dev, "Unknown format\n");
+> +		return;
+> +	}
+> +
+> +	/* De-assert the pixel interface reset. */
+> +	reg = SHIM_CNTL_PIX_RST;
+> +	writel(reg, csi->shim + SHIM_CNTL);
+> +
+> +	reg = SHIM_DMACNTX_EN;
+> +	reg |= FIELD_PREP(SHIM_DMACNTX_FMT, fmt->csi_df);
+> +
+> +	/*
+> +	 * Using the values from the documentation gives incorrect ordering for
+> +	 * the luma and chroma components. In practice, the "reverse" format
+> +	 * gives the correct image. So for example, if the image is in UYVY, the
+> +	 * reverse would be YVYU.
+
+Are you sure this is an issue in the documentation, not in the
+implementation of the source subdev ?
+
+> +	 */
+> +	switch (fmt->fourcc) {
+> +	case V4L2_PIX_FMT_UYVY:
+> +		reg |= FIELD_PREP(SHIM_DMACNTX_YUV422,
+> +					SHIM_DMACNTX_YVYU);
+> +		break;
+> +	case V4L2_PIX_FMT_VYUY:
+> +		reg |= FIELD_PREP(SHIM_DMACNTX_YUV422,
+> +					SHIM_DMACNTX_YUYV);
+> +		break;
+> +	case V4L2_PIX_FMT_YUYV:
+> +		reg |= FIELD_PREP(SHIM_DMACNTX_YUV422,
+> +					SHIM_DMACNTX_VYUY);
+> +		break;
+> +	case V4L2_PIX_FMT_YVYU:
+> +		reg |= FIELD_PREP(SHIM_DMACNTX_YUV422,
+> +					SHIM_DMACNTX_UYVY);
+> +		break;
+> +	default:
+> +		/* Ignore if not YUV 4:2:2 */
+> +		break;
+> +	}
+> +
+> +	writel(reg, csi->shim + SHIM_DMACNTX);
+> +
+> +	reg = FIELD_PREP(SHIM_PSI_CFG0_SRC_TAG, 0) |
+> +	      FIELD_PREP(SHIM_PSI_CFG0_DST_TAG, 1);
+> +	writel(reg, csi->shim + SHIM_PSI_CFG0);
+> +}
+> +
+> +static void ti_csi2rx_dma_callback(void *param)
+> +{
+> +	struct ti_csi2rx_buffer *buf = param;
+> +	struct ti_csi2rx_dev *csi = buf->csi;
+> +	struct ti_csi2rx_dma *dma = &csi->dma;
+> +	unsigned long flags = 0;
+
+No need to initialize flags to 0.
+
+> +
+> +	buf->vb.vb2_buf.timestamp = ktime_get_ns();
+> +	buf->vb.sequence = csi->sequence++;
+
+Is there any hardware frame counter that could be used, to detect
+dropped frames ? Or maybe a SOF hardware interrupt somewhere (either in
+the SHIM or the CSI-2 receiver) ?
+
+> +
+> +	spin_lock_irqsave(&dma->lock, flags);
+> +
+> +	WARN_ON(dma->curr != buf);
+> +	vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
+> +
+> +	/* If there are more buffers to process then start their transfer. */
+> +	dma->curr = NULL;
+> +	while (!list_empty(&dma->queue)) {
+> +		buf = list_entry(dma->queue.next, struct ti_csi2rx_buffer, list);
+> +		list_del(&buf->list);
+> +
+> +		if (ti_csi2rx_start_dma(csi, buf)) {
+> +			dev_err(csi->dev, "Failed to queue the next buffer for DMA\n");
+> +			vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
+
+If this buffer fails to be queued, do you expect that the next buffer in
+the list would succeed ? It seems to be a fatal error to me.
+
+> +		} else {
+> +			dma->curr = buf;
+> +			break;
+
+Shouldn't all pending buffers be queued to the DMA engine ? It seems
+that you're queuing one buffer at a time, which would cause an underrun
+if the system is too slow to queue the next buffer during vertical
+blanking. It defeats the point of having multiple buffers in the V4L2
+queue. You should instead queue the buffers to the DMA engine as soon as
+they're received by the driver.
+
+> +		}
+> +	}
+> +
+> +	if (!dma->curr)
+> +		dma->state = TI_CSI2RX_DMA_IDLE;
+> +
+> +	spin_unlock_irqrestore(&dma->lock, flags);
+> +}
+> +
+> +static int ti_csi2rx_start_dma(struct ti_csi2rx_dev *csi,
+> +			       struct ti_csi2rx_buffer *buf)
+> +{
+> +	unsigned long addr;
+> +	struct dma_async_tx_descriptor *desc;
+> +	size_t len = csi->v_fmt.fmt.pix.sizeimage;
+> +	dma_cookie_t cookie;
+> +	int ret = 0;
+> +
+> +	addr = vb2_dma_contig_plane_dma_addr(&buf->vb.vb2_buf, 0);
+> +	desc = dmaengine_prep_slave_single(csi->dma.chan, addr, len,
+> +					   DMA_DEV_TO_MEM,
+> +					   DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+> +	if (!desc)
+> +		return -EIO;
+> +
+> +	desc->callback = ti_csi2rx_dma_callback;
+> +	desc->callback_param = buf;
+> +
+> +	cookie = dmaengine_submit(desc);
+> +	ret = dma_submit_error(cookie);
+> +	if (ret)
+> +		return ret;
+> +
+> +	dma_async_issue_pending(csi->dma.chan);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ti_csi2rx_queue_setup(struct vb2_queue *q, unsigned int *nbuffers,
+> +				 unsigned int *nplanes, unsigned int sizes[],
+> +				 struct device *alloc_devs[])
+> +{
+> +	struct ti_csi2rx_dev *csi = vb2_get_drv_priv(q);
+> +	unsigned int size = csi->v_fmt.fmt.pix.sizeimage;
+> +
+> +	if (*nplanes) {
+> +		if (sizes[0] < size)
+> +			return -EINVAL;
+> +		size = sizes[0];
+> +	}
+> +
+> +	*nplanes = 1;
+> +	sizes[0] = size;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ti_csi2rx_buffer_prepare(struct vb2_buffer *vb)
+> +{
+> +	struct ti_csi2rx_dev *csi = vb2_get_drv_priv(vb->vb2_queue);
+> +	unsigned long size = csi->v_fmt.fmt.pix.sizeimage;
+> +
+> +	if (vb2_plane_size(vb, 0) < size) {
+> +		dev_err(csi->dev, "Data will not fit into plane\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	vb2_set_plane_payload(vb, 0, size);
+> +	return 0;
+> +}
+> +
+> +static void ti_csi2rx_buffer_queue(struct vb2_buffer *vb)
+> +{
+> +	struct ti_csi2rx_dev *csi = vb2_get_drv_priv(vb->vb2_queue);
+> +	struct ti_csi2rx_buffer *buf;
+> +	struct ti_csi2rx_dma *dma = &csi->dma;
+> +	unsigned long flags = 0;
+> +	int ret;
+> +
+> +	buf = container_of(vb, struct ti_csi2rx_buffer, vb.vb2_buf);
+> +	buf->csi = csi;
+> +
+> +	spin_lock_irqsave(&dma->lock, flags);
+> +	/*
+> +	 * Usually the DMA callback takes care of queueing the pending buffers.
+> +	 * But if DMA has stalled due to lack of buffers, restart it now.
+> +	 */
+> +	if (dma->state == TI_CSI2RX_DMA_IDLE) {
+> +		ret = ti_csi2rx_start_dma(csi, buf);
+> +		if (ret) {
+> +			dev_err(csi->dev, "Failed to start DMA: %d\n", ret);
+> +			vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_QUEUED);
+> +			goto unlock;
+> +		}
+> +
+> +		dma->curr = buf;
+> +		dma->state = TI_CSI2RX_DMA_ACTIVE;
+> +	} else {
+> +		list_add_tail(&buf->list, &dma->queue);
+> +	}
+> +
+> +unlock:
+> +	spin_unlock_irqrestore(&dma->lock, flags);
+> +}
+> +
+> +static int ti_csi2rx_start_streaming(struct vb2_queue *vq, unsigned int count)
+> +{
+> +	struct ti_csi2rx_dev *csi = vb2_get_drv_priv(vq);
+> +	struct ti_csi2rx_dma *dma = &csi->dma;
+> +	struct ti_csi2rx_buffer *buf, *tmp;
+> +	unsigned long flags;
+> +	int ret = 0;
+> +
+> +	spin_lock_irqsave(&dma->lock, flags);
+> +	if (list_empty(&dma->queue))
+> +		ret = -EIO;
+> +	spin_unlock_irqrestore(&dma->lock, flags);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = media_pipeline_start(&csi->vdev.entity, &csi->pipe);
+> +	if (ret)
+> +		goto err;
+> +
+> +	ti_csi2rx_setup_shim(csi);
+> +
+> +	ret = v4l2_subdev_call(csi->subdev, video, s_stream, 1);
+> +	if (ret)
+> +		goto err_pipeline;
+> +
+> +	csi->sequence = 0;
+> +
+> +	spin_lock_irqsave(&dma->lock, flags);
+> +	buf = list_entry(dma->queue.next, struct ti_csi2rx_buffer, list);
+> +	list_del(&buf->list);
+> +	dma->state = TI_CSI2RX_DMA_ACTIVE;
+> +
+> +	ret = ti_csi2rx_start_dma(csi, buf);
+
+Shouldn't you start DMA before starting the source subdev ? You may miss
+the first frame otherwise.
+
+> +	if (ret) {
+> +		dev_err(csi->dev, "Failed to start DMA: %d\n", ret);
+> +		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_QUEUED);
+> +		spin_unlock_irqrestore(&dma->lock, flags);
+> +		goto err_stream;
+> +	}
+> +
+> +	dma->curr = buf;
+> +	spin_unlock_irqrestore(&dma->lock, flags);
+> +
+> +	return 0;
+> +
+> +err_stream:
+> +	v4l2_subdev_call(csi->subdev, video, s_stream, 0);
+> +err_pipeline:
+> +	media_pipeline_stop(&csi->vdev.entity);
+> +err:
+> +	spin_lock_irqsave(&dma->lock, flags);
+> +	list_for_each_entry_safe(buf, tmp, &dma->queue, list) {
+> +		list_del(&buf->list);
+> +		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_QUEUED);
+> +	}
+> +	csi->dma.state = TI_CSI2RX_DMA_STOPPED;
+> +	spin_unlock_irqrestore(&dma->lock, flags);
+> +
+> +	return ret;
+> +}
+> +
+> +static void ti_csi2rx_stop_streaming(struct vb2_queue *vq)
+> +{
+> +	struct ti_csi2rx_dev *csi = vb2_get_drv_priv(vq);
+> +	struct ti_csi2rx_buffer *buf = NULL, *tmp;
+> +	struct ti_csi2rx_dma *dma = &csi->dma;
+> +	unsigned long flags = 0;
+> +	int ret;
+> +
+> +	media_pipeline_stop(&csi->vdev.entity);
+> +
+> +	ret = v4l2_subdev_call(csi->subdev, video, s_stream, 0);
+> +	if (ret)
+> +		dev_err(csi->dev, "Failed to stop subdev stream\n");
+> +
+> +	writel(0, csi->shim + SHIM_CNTL);
+> +
+> +	ret = dmaengine_terminate_sync(csi->dma.chan);
+> +	if (ret)
+> +		dev_err(csi->dev, "Failed to stop DMA\n");
+> +
+> +	writel(0, csi->shim + SHIM_DMACNTX);
+> +
+
+Code from here...
+
+> +	spin_lock_irqsave(&dma->lock, flags);
+> +	list_for_each_entry_safe(buf, tmp, &csi->dma.queue, list) {
+> +		list_del(&buf->list);
+> +		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
+> +	}
+> +
+> +	if (dma->curr)
+> +		vb2_buffer_done(&dma->curr->vb.vb2_buf, VB2_BUF_STATE_ERROR);
+> +
+> +	dma->curr = NULL;
+
+... to here could be moved to a separate function that takes a VB2 buf
+state parameter, to be also used in the error path of
+ti_csi2rx_start_streaming().
+
+> +	dma->state = TI_CSI2RX_DMA_STOPPED;
+> +	spin_unlock_irqrestore(&dma->lock, flags);
+> +}
+> +
+> +static const struct vb2_ops csi_vb2_qops = {
+> +	.queue_setup = ti_csi2rx_queue_setup,
+> +	.buf_prepare = ti_csi2rx_buffer_prepare,
+> +	.buf_queue = ti_csi2rx_buffer_queue,
+> +	.start_streaming = ti_csi2rx_start_streaming,
+> +	.stop_streaming = ti_csi2rx_stop_streaming,
+> +	.wait_prepare = vb2_ops_wait_prepare,
+> +	.wait_finish = vb2_ops_wait_finish,
+> +};
+> +
+> +static int ti_csi2rx_init_vb2q(struct ti_csi2rx_dev *csi)
+> +{
+> +	struct vb2_queue *q = &csi->vidq;
+> +	int ret;
+> +
+> +	q->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+> +	q->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF | VB2_READ;
+
+Usage of USERPTR and READ is not recommended, I'd drop them from the
+driver.
+
+> +	q->drv_priv = csi;
+> +	q->buf_struct_size = sizeof(struct ti_csi2rx_buffer);
+> +	q->ops = &csi_vb2_qops;
+> +	q->mem_ops = &vb2_dma_contig_memops;
+> +	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+> +	q->dev = dmaengine_get_dma_device(csi->dma.chan);
+
+That's interesting, why do you use the dmaengine device and not csi->dev
+?
+
+> +	q->lock = &csi->mutex;
+> +
+> +	ret = vb2_queue_init(q);
+> +	if (ret)
+> +		return ret;
+> +
+> +	csi->vdev.queue = q;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ti_csi2rx_init_dma(struct ti_csi2rx_dev *csi)
+> +{
+> +	struct dma_slave_config cfg;
+
+	struct dma_slave_config cfg = { };
+
+and you can drop the memset below. Or possibly even better,
+
+	struct dma_slave_config cfg = {
+		.src_addr_with = DMA_SLAVE_BUSWIDTH_16_BYTES,
+	};
+
+> +	int ret;
+> +
+> +	INIT_LIST_HEAD(&csi->dma.queue);
+> +	spin_lock_init(&csi->dma.lock);
+> +
+> +	csi->dma.state = TI_CSI2RX_DMA_STOPPED;
+> +
+> +	csi->dma.chan = dma_request_chan(csi->dev, "rx0");
+> +	if (IS_ERR(csi->dma.chan))
+> +		return PTR_ERR(csi->dma.chan);
+> +
+> +	memset(&cfg, 0, sizeof(cfg));
+> +
+> +	cfg.src_addr_width = DMA_SLAVE_BUSWIDTH_16_BYTES;
+> +
+> +	ret = dmaengine_slave_config(csi->dma.chan, &cfg);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ti_csi2rx_v4l2_init(struct ti_csi2rx_dev *csi)
+> +{
+> +	struct media_device *mdev = &csi->mdev;
+> +	struct video_device *vdev = &csi->vdev;
+> +	const struct ti_csi2rx_fmt *fmt;
+> +	struct v4l2_pix_format *pix_fmt = &csi->v_fmt.fmt.pix;
+> +	int ret;
+> +
+> +	fmt = find_format_by_pix(V4L2_PIX_FMT_UYVY);
+> +	if (!fmt)
+> +		return -EINVAL;
+> +
+> +	pix_fmt->width = 640;
+> +	pix_fmt->height = 480;
+
+Should you initialize ->field too ?
+
+> +
+> +	ti_csi2rx_fill_fmt(fmt, &csi->v_fmt);
+> +
+> +	mdev->dev = csi->dev;
+> +	mdev->hw_revision = 1;
+> +	strscpy(mdev->model, "TI-CSI2RX", sizeof(mdev->model));
+> +	snprintf(mdev->bus_info, sizeof(mdev->bus_info), "platform:%s",
+> +		 dev_name(mdev->dev));
+> +
+> +	media_device_init(mdev);
+> +
+> +	strscpy(vdev->name, TI_CSI2RX_MODULE_NAME, sizeof(vdev->name));
+> +	vdev->v4l2_dev = &csi->v4l2_dev;
+> +	vdev->vfl_dir = VFL_DIR_RX;
+> +	vdev->fops = &csi_fops;
+> +	vdev->ioctl_ops = &csi_ioctl_ops;
+> +	vdev->release = video_device_release_empty;
+> +	vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_READWRITE |
+
+You can also drop V4L2_CAP_READWRITE if you drop VB2_READ above.
+
+> +			    V4L2_CAP_STREAMING | V4L2_CAP_IO_MC;
+> +	vdev->lock = &csi->mutex;
+> +	video_set_drvdata(vdev, csi);
+> +
+> +	csi->pad.flags = MEDIA_PAD_FL_SINK;
+> +	ret = media_entity_pads_init(&csi->vdev.entity, 1, &csi->pad);
+> +	if (ret)
+> +		return ret;
+> +
+> +	csi->v4l2_dev.mdev = mdev;
+> +
+> +	ret = v4l2_device_register(csi->dev, &csi->v4l2_dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = media_device_register(mdev);
+> +	if (ret) {
+> +		v4l2_device_unregister(&csi->v4l2_dev);
+> +		media_device_cleanup(mdev);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void ti_csi2rx_cleanup_dma(struct ti_csi2rx_dev *csi)
+> +{
+> +	dma_release_channel(csi->dma.chan);
+> +}
+> +
+> +static void ti_csi2rx_cleanup_v4l2(struct ti_csi2rx_dev *csi)
+> +{
+> +	media_device_unregister(&csi->mdev);
+> +	v4l2_device_unregister(&csi->v4l2_dev);
+> +	media_device_cleanup(&csi->mdev);
+> +}
+> +
+> +static void ti_csi2rx_cleanup_subdev(struct ti_csi2rx_dev *csi)
+> +{
+> +	v4l2_async_nf_unregister(&csi->notifier);
+> +	v4l2_async_nf_cleanup(&csi->notifier);
+> +}
+> +
+> +static void ti_csi2rx_cleanup_vb2q(struct ti_csi2rx_dev *csi)
+> +{
+> +	vb2_queue_release(&csi->vidq);
+> +}
+> +
+> +static int ti_csi2rx_probe(struct platform_device *pdev)
+> +{
+> +	struct ti_csi2rx_dev *csi;
+> +	struct resource *res;
+> +	int ret;
+> +
+> +	csi = devm_kzalloc(&pdev->dev, sizeof(*csi), GFP_KERNEL);
+
+Don't use devm_kzalloc() here (see the explanation in the remove
+function).
+
+> +	if (!csi)
+> +		return -ENOMEM;
+> +
+> +	csi->dev = &pdev->dev;
+> +	platform_set_drvdata(pdev, csi);
+> +
+> +	mutex_init(&csi->mutex);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	csi->shim = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(csi->shim))
+> +		return PTR_ERR(csi->shim);
+> +
+> +	ret = ti_csi2rx_init_dma(csi);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = ti_csi2rx_v4l2_init(csi);
+> +	if (ret)
+> +		goto err_dma;
+> +
+> +	ret = ti_csi2rx_init_vb2q(csi);
+> +	if (ret)
+> +		goto err_v4l2;
+> +
+> +	ret = ti_csi2rx_init_subdev(csi);
+> +	if (ret)
+> +		goto err_vb2q;
+> +
+> +	ret = of_platform_populate(csi->dev->of_node, NULL, NULL, csi->dev);
+> +	if (ret) {
+> +		dev_err(csi->dev, "Failed to create children: %d\n", ret);
+> +		goto err_subdev;
+> +	}
+> +
+> +	return 0;
+> +
+> +err_subdev:
+> +	ti_csi2rx_cleanup_subdev(csi);
+> +err_vb2q:
+> +	ti_csi2rx_cleanup_vb2q(csi);
+> +err_v4l2:
+> +	ti_csi2rx_cleanup_v4l2(csi);
+> +err_dma:
+> +	ti_csi2rx_cleanup_dma(csi);
+> +	return ret;
+> +}
+> +
+> +static int ti_csi2rx_remove(struct platform_device *pdev)
+> +{
+> +	struct ti_csi2rx_dev *csi = platform_get_drvdata(pdev);
+> +
+> +	if (vb2_is_busy(&csi->vidq))
+> +		return -EBUSY;
+
+That's not right, capture should instead be stopped.
+
+The right way to handle this is to call all the unregister functions
+here, but not the cleanup functions, and to implement a real
+vdev->release handler that will perform all the cleanup and kfree() the
+ti_csi2rx_dev.
+
+> +
+> +	video_unregister_device(&csi->vdev);
+> +
+> +	ti_csi2rx_cleanup_vb2q(csi);
+> +	ti_csi2rx_cleanup_subdev(csi);
+> +	ti_csi2rx_cleanup_v4l2(csi);
+> +	ti_csi2rx_cleanup_dma(csi);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id ti_csi2rx_of_match[] = {
+> +	{ .compatible = "ti,j721e-csi2rx", },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, ti_csi2rx_of_match);
+> +
+> +static struct platform_driver ti_csi2rx_pdrv = {
+> +	.probe = ti_csi2rx_probe,
+> +	.remove = ti_csi2rx_remove,
+> +	.driver = {
+> +		.name = TI_CSI2RX_MODULE_NAME,
+> +		.of_match_table = ti_csi2rx_of_match,
+> +	},
+> +};
+> +
+> +module_platform_driver(ti_csi2rx_pdrv);
+> +
+> +MODULE_DESCRIPTION("TI J721E CSI2 RX Driver");
+> +MODULE_AUTHOR("Pratyush Yadav <p.yadav@ti.com>");
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_VERSION("1.0");
+
+I'd drop the version, it will never change, so it's quite pointless. If
+userspace needs to know if the driver implements a particular feature or
+includes a bug fix, it can use the kernel version.
+
 -- 
-2.30.2
+Regards,
 
+Laurent Pinchart

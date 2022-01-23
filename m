@@ -2,79 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87CA6497568
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 20:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BDC949756B
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 20:58:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239906AbiAWT5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 14:57:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
+        id S239970AbiAWT6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 14:58:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234957AbiAWT5q (ORCPT
+        with ESMTP id S239911AbiAWT6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 14:57:46 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7507CC06173B;
-        Sun, 23 Jan 2022 11:57:46 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id f5so17155322qtp.11;
-        Sun, 23 Jan 2022 11:57:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vUBxUoo0e8G16QaWMdWu9QFYTFLGS+0ehY8WAD+BN28=;
-        b=UGmommU6ZoC0S/JBVlhZvYrIDgZPcAa1UVMldu69+OUVlqjN/GRRQNq07y2VykwWng
-         3OwXXRp3RepsuVS7pmbXTCoKqYFUpGd1FGUyUYlZ9kUwkVMYzQMVshkLdbU5xEjnIZJE
-         97/dAjXtf/DZvB0uO0iI25yfZCQ4P9rDkna5tjPMvHPlhuBivWNt6LmGX33hvPjCPTMQ
-         ZdIrOwilzxGt8T8lggcSI2pKLjf80D2TJ8sdKUXRMHYDb73VD66kp0SbE/oGMuE0GsE2
-         SY7ZjItWctaonHBePFO/eFGK4BoHpSUu+quEmOyRYrl++VNNgaDzWc91RVYTzwC0BT+n
-         WiBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vUBxUoo0e8G16QaWMdWu9QFYTFLGS+0ehY8WAD+BN28=;
-        b=TfARsEUggyn3iv0fyG1+tdABcYbQIepDEX0IeyQ3tck+IgZlpa9fBADJB1Q1MpI2WL
-         Z6pYW/wnZkwdm/tjccgk0HA0SIrUfmPrr6vZon8h4vB5UxlTAmfWkrwPjCSG+RKrX+O6
-         HVTpqZj+49XOAToCuDzg9CRtJET0tkktuB15aPIaLnmLU8YRBOMoyvDEDf46sCbbc+Tp
-         jdPQHdGBvSFilo1+nK45oLrbRdKk5YKhUgPsSTIxxEDvVc74uHp6xZ6xtGePLRqUmC+5
-         S00u6R1xvBTRCp5UWeJSTrgtNYADQrLwcSHI5WjDheL0g+2f8VIhAhX7eyy0PRF8f8tr
-         vhKQ==
-X-Gm-Message-State: AOAM531Nh8w+wFQ2pgvPngDLnFZD29kbnCqtLmBqxy37/g+c3TLOLfJU
-        10wJWZJOkQJSwwBwVC9jVX0=
-X-Google-Smtp-Source: ABdhPJwVw1TX+Yob6QtHJ6Mqb0oIqdp/TuqrFris3bv+LUL4oUT69O9qdgISfZxTCJzioVx3caAKJA==
-X-Received: by 2002:a05:622a:14a:: with SMTP id v10mr10395206qtw.446.1642967865549;
-        Sun, 23 Jan 2022 11:57:45 -0800 (PST)
-Received: from localhost ([2600:1700:65a0:ab60:4388:ab9b:beec:5dea])
-        by smtp.gmail.com with ESMTPSA id y5sm1466588qkj.28.2022.01.23.11.57.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 11:57:45 -0800 (PST)
-Date:   Sun, 23 Jan 2022 11:57:43 -0800
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-To:     ycaibb <ycaibb@gmail.com>
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH] inet: missing lock releases in udp.c
-Message-ID: <Ye2zN0R/R9uKEUNa@pop-os.localdomain>
-References: <20220121031553.5342-1-ycaibb@gmail.com>
+        Sun, 23 Jan 2022 14:58:04 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EF3C06173B;
+        Sun, 23 Jan 2022 11:58:03 -0800 (PST)
+Date:   Sun, 23 Jan 2022 19:58:01 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1642967882;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qy935+STtZcetGgcKtrF9n+5wmvO4Pa6KwGNf6TOHXo=;
+        b=Y+MrMdV4DpvFEvKcU7JrfaPN75oWgiAEJiIybO4GO/6TH5HgPkCkQ9amzFvBjoyMqNYOUm
+        OkHRdcKwwGXKnQW9p5R8vpmx1bUbASc0nIzOR0Rtt41c5KqpH0lR8o6nHIoDfAyBDxRzj3
+        qcMMvu0LHpR7/I1kkJ3B6nlUD3Tt3YMLr++/TFOmTIl7i0NivLLi1tD7wAKd0UzVcmQYdg
+        YizTWDQsi0Z5Ijvxoznn8tTexJLoU0FiHtWAhoZIV6DfI7FqtjSGKQ0sXe10Pq/Qap7r4g
+        3huZjogxE650upGEz9LdEo+dYGGn/e7YeoQ8PDJ9PZibl6J+JwZItvWx/QYIWg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1642967882;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qy935+STtZcetGgcKtrF9n+5wmvO4Pa6KwGNf6TOHXo=;
+        b=adUF8WnmpwGycJD7emJeUT3u73BpNRAweZiZoqgel4Ga8fv56gvug+wrslzaZzt9yS+JtS
+        zzxR9MF1OmS6jUDg==
+From:   "tip-bot2 for Yazen Ghannam" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/MCE/AMD: Allow thresholding interface updates
+ after init
+Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
+        Borislav Petkov <bp@suse.de>, <stable@vger.kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220117161328.19148-1-yazen.ghannam@amd.com>
+References: <20220117161328.19148-1-yazen.ghannam@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220121031553.5342-1-ycaibb@gmail.com>
+Message-ID: <164296788110.16921.15198014097333837407.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 11:15:53AM +0800, ycaibb wrote:
-> From: Ryan Cai <ycaibb@gmail.com>
-> 
-> In method udp_get_first, the lock hslot->lock is not released when afinfo->family == AF_UNSPEC || sk->sk_family == afinfo->family is true. This patch fixes the problem by adding the unlock statement.
-> 
+The following commit has been merged into the x86/urgent branch of tip:
 
-It should be unlocked by udp_seq_stop(). Do you see any real lockdep
-warning or bug report?
+Commit-ID:     1f52b0aba6fd37653416375cb8a1ca673acf8d5f
+Gitweb:        https://git.kernel.org/tip/1f52b0aba6fd37653416375cb8a1ca673acf8d5f
+Author:        Yazen Ghannam <yazen.ghannam@amd.com>
+AuthorDate:    Mon, 17 Jan 2022 16:13:28 
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Sun, 23 Jan 2022 20:50:18 +01:00
 
-Thanks.
+x86/MCE/AMD: Allow thresholding interface updates after init
+
+Changes to the AMD Thresholding sysfs code prevents sysfs writes from
+updating the underlying registers once CPU init is completed, i.e.
+"threshold_banks" is set.
+
+Allow the registers to be updated if the thresholding interface is
+already initialized or if in the init path. Use the "set_lvt_off" value
+to indicate if running in the init path, since this value is only set
+during init.
+
+Fixes: a037f3ca0ea0 ("x86/mce/amd: Make threshold bank setting hotplug robust")
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220117161328.19148-1-yazen.ghannam@amd.com
+---
+ arch/x86/kernel/cpu/mce/amd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+index a1e2f41..9f4b508 100644
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -423,7 +423,7 @@ static void threshold_restart_bank(void *_tr)
+ 	u32 hi, lo;
+ 
+ 	/* sysfs write might race against an offline operation */
+-	if (this_cpu_read(threshold_banks))
++	if (!this_cpu_read(threshold_banks) && !tr->set_lvt_off)
+ 		return;
+ 
+ 	rdmsr(tr->b->address, lo, hi);

@@ -2,135 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A94A496FCB
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 06:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0B8497004
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 06:31:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232448AbiAWFMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 00:12:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
+        id S235525AbiAWFZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 00:25:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiAWFMT (ORCPT
+        with ESMTP id S229776AbiAWFZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 00:12:19 -0500
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14AF0C06173B
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 21:12:19 -0800 (PST)
-Received: by mail-vk1-xa30.google.com with SMTP id l196so5185252vki.5
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 21:12:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sV5/zsVQ9W5YHObVzBiwKq568WngDohUQy31mRglxWI=;
-        b=Fy17yNS7qU0UurQUefh5Oj8BZDHtILqI9uLVnodEwN8kY8KKZdUpMvotIssRvj0a0O
-         IogRyB4qXlQUP0iRGvT3nQSPcpW9FoXR3bMJovq5Y0vYljfjTnE1XRXaXDW79zx2TUXK
-         7smviGpR9gHztmPWoNYBVateyTsK0qlm7n52g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sV5/zsVQ9W5YHObVzBiwKq568WngDohUQy31mRglxWI=;
-        b=3iCc5Ti/ULqeXgyuhaOLm4/L6ek2VDIOr/yeia/dpH1RPMPVo/ifJF6LsZKEGCPqxD
-         XUjft2BkOHwKfNQDhHB+FdMh8SbVnxqbVIgqANlXEcyYL5dn6cXzcjxf06VhzDNQYBh6
-         u/41NaNGa4dj5eQD2fmTFyQTSX2ykQvPw7PsEu/gGK/tpctm0cYL5Ch6XxNEe1bYx0mC
-         JXEawLHwrOvMewR7efHdae3F4LEzcztniEYWkqCoriI4LAonA6EeFUf3BYaliaXbxI8w
-         mr3Od5M0KMvkSmRL0DdZKtOfGQduOGwgBdLRik3JJb/3ClxLa4ZYus1Nt+YqnNzOhNPu
-         mPEQ==
-X-Gm-Message-State: AOAM530SlqmnPq9x8DGkaVFdk1r5H+EGmD8f6I9NRTFMOKh5dUlKg+jn
-        hr6dqXs+GLe1Ncf0GxC3vFJXd+2jEKnQdyupNe98Ew==
-X-Google-Smtp-Source: ABdhPJxQbDhgagJOEoacTsnBOmnvqzQJBTerbM4mHQrW0myOKWXrAt9QHxugz6DwehjoM8NkiRaVPbUIUhndFUf/53A=
-X-Received: by 2002:a05:6122:887:: with SMTP id 7mr4029514vkf.34.1642914738231;
- Sat, 22 Jan 2022 21:12:18 -0800 (PST)
+        Sun, 23 Jan 2022 00:25:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D754DC06173B
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Jan 2022 21:25:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB4346113A
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 05:25:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D82DDC340E3;
+        Sun, 23 Jan 2022 05:25:20 +0000 (UTC)
+Date:   Sun, 23 Jan 2022 00:25:19 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Yinan Liu <yinan@linux.alibaba.com>
+Subject: [GIT PULL] ftrace: Fix of s390 breakage
+Message-ID: <20220123002519.6f693e08@rorschach.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220121193544.23231-1-romain.perier@gmail.com> <20220121193544.23231-9-romain.perier@gmail.com>
-In-Reply-To: <20220121193544.23231-9-romain.perier@gmail.com>
-From:   Daniel Palmer <daniel@0x0f.com>
-Date:   Sun, 23 Jan 2022 14:12:07 +0900
-Message-ID: <CAFr9PXki+_qsPiX90ZaLcJeQhdo-rfUDMTL2D5Zv8Pk=G0Lo+w@mail.gmail.com>
-Subject: Re: [PATCH v3 8/9] ARM: mstar: Add OPP table for mercury5
-To:     Romain Perier <romain.perier@gmail.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Romain,
 
-On Sat, 22 Jan 2022 at 04:35, Romain Perier <romain.perier@gmail.com> wrote:
->
-> From: Daniel Palmer <daniel@0x0f.com>
->
-> Add an OPP table for mercury5 so that cpu frequency scaling can
-> happen.
->
-> Signed-off-by: Daniel Palmer <daniel@0x0f.com>
-> ---
->  arch/arm/boot/dts/mstar-mercury5.dtsi | 36 +++++++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
->
-> diff --git a/arch/arm/boot/dts/mstar-mercury5.dtsi b/arch/arm/boot/dts/mstar-mercury5.dtsi
-> index a7d0dd9d6132..80a19bd23c9c 100644
-> --- a/arch/arm/boot/dts/mstar-mercury5.dtsi
-> +++ b/arch/arm/boot/dts/mstar-mercury5.dtsi
-> @@ -6,6 +6,42 @@
->
->  #include "mstar-v7.dtsi"
->
-> +/ {
-> +       cpu0_opp_table: opp_table0 {
-> +               compatible = "operating-points-v2";
-> +               opp-shared;
-> +
-> +               opp-100000000 {
-> +                       opp-hz = /bits/ 64 <100000000>;
-> +                       opp-microvolt = <800000 800000 850000>;
-> +                       clock-latency-ns = <300000>;
-> +               };
-> +
-> +               opp-200000000 {
-> +                       opp-hz = /bits/ 64 <200000000>;
-> +                       opp-microvolt = <850000 850000 880000>;
-> +                       clock-latency-ns = <300000>;
-> +               };
-> +
-> +               opp-400000000 {
-> +                       opp-hz = /bits/ 64 <400000000>;
-> +                       opp-microvolt = <880000 880000 890000>;
-> +                       clock-latency-ns = <300000>;
-> +               };
-> +               opp-600000000 {
-> +                       opp-hz = /bits/ 64 <600000000>;
-> +                       opp-microvolt = <900000 900000 1000000>;
-> +                       clock-latency-ns = <300000>;
-> +               };
-> +
-> +               opp-800000000 {
-> +                       opp-hz = /bits/ 64 <800000000>;
-> +                       opp-microvolt = <900000 900000 1000000>;
-> +                       clock-latency-ns = <300000>;
-> +               };
-> +       };
-> +};
-> +
->  &imi {
->         reg = <0xa0000000 0x20000>;
->  };
-> --
-> 2.34.1
->
 
-I think we should drop this one when applying as the frequencies need
-to be checked on the hardware again.
-I think they should probably match the msc313e settings that Willy verified.
+Linus,
 
-Cheers,
+ftrace: Fix s390 breakage from sorting mcount tables
 
-Daniel
+The latest merge of the tracing tree sorts the mcount table at build time.
+But s390 appears to do things differently (like always) and replaces the
+sorted table back to the original unsorted one. As the ftrace algorithm
+depends on it being sorted, bad things happen when it is not, and s390
+experienced those bad things.
+
+Add a new config to tell the boot if the mcount table is sorted or not,
+and allow s390 to opt out of it.
+
+
+Please pull the latest trace-v5.17-3 tree, which can be found at:
+
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
+trace-v5.17-3
+
+Tag SHA1: d749b00c1ef5fb0ea77fd9f28350b32d27faafde
+Head SHA1: 6b9b6413700e104934734b72a3be622a76923b98
+
+
+Steven Rostedt (Google) (1):
+      ftrace: Fix assuming build time sort works for s390
+
+----
+ kernel/trace/Kconfig  | 9 ++++++++-
+ kernel/trace/ftrace.c | 4 ++--
+ 2 files changed, 10 insertions(+), 3 deletions(-)
+---------------------------
+commit 6b9b6413700e104934734b72a3be622a76923b98
+Author: Steven Rostedt (Google) <rostedt@goodmis.org>
+Date:   Sat Jan 22 09:17:10 2022 -0500
+
+    ftrace: Fix assuming build time sort works for s390
+    
+    To speed up the boot process, as mcount_loc needs to be sorted for ftrace
+    to work properly, sorting it at build time is more efficient than boot up
+    and can save milliseconds of time. Unfortunately, this change broke s390
+    as it will modify the mcount_loc location after the sorting takes place
+    and will put back the unsorted locations. Since the sorting is skipped at
+    boot up if it is believed that it was sorted at run time, ftrace can crash
+    as its algorithms are dependent on the list being sorted.
+    
+    Add a new config BUILDTIME_MCOUNT_SORT that is set when
+    BUILDTIME_TABLE_SORT but not if S390 is set. Use this config to determine
+    if sorting should take place at boot up.
+    
+    Link: https://lore.kernel.org/all/yt9dee51ctfn.fsf@linux.ibm.com/
+    
+    Fixes: 72b3942a173c ("scripts: ftrace - move the sort-processing in ftrace_init")
+    Reported-by: Sven Schnelle <svens@linux.ibm.com>
+    Tested-by: Heiko Carstens <hca@linux.ibm.com>
+    Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+index f468767bc287..752ed89a293b 100644
+--- a/kernel/trace/Kconfig
++++ b/kernel/trace/Kconfig
+@@ -70,6 +70,13 @@ config HAVE_C_RECORDMCOUNT
+ 	help
+ 	  C version of recordmcount available?
+ 
++config BUILDTIME_MCOUNT_SORT
++       bool
++       default y
++       depends on BUILDTIME_TABLE_SORT && !S390
++       help
++         Sort the mcount_loc section at build time.
++
+ config TRACER_MAX_TRACE
+ 	bool
+ 
+@@ -918,7 +925,7 @@ config EVENT_TRACE_TEST_SYSCALLS
+ config FTRACE_SORT_STARTUP_TEST
+        bool "Verify compile time sorting of ftrace functions"
+        depends on DYNAMIC_FTRACE
+-       depends on BUILDTIME_TABLE_SORT
++       depends on BUILDTIME_MCOUNT_SORT
+        help
+ 	 Sorting of the mcount_loc sections that is used to find the
+ 	 where the ftrace knows where to patch functions for tracing
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 403e485bf091..b01e1fa62193 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -6429,10 +6429,10 @@ static int ftrace_process_locs(struct module *mod,
+ 
+ 	/*
+ 	 * Sorting mcount in vmlinux at build time depend on
+-	 * CONFIG_BUILDTIME_TABLE_SORT, while mcount loc in
++	 * CONFIG_BUILDTIME_MCOUNT_SORT, while mcount loc in
+ 	 * modules can not be sorted at build time.
+ 	 */
+-	if (!IS_ENABLED(CONFIG_BUILDTIME_TABLE_SORT) || mod) {
++	if (!IS_ENABLED(CONFIG_BUILDTIME_MCOUNT_SORT) || mod) {
+ 		sort(start, count, sizeof(*start),
+ 		     ftrace_cmp_ips, NULL);
+ 	} else {

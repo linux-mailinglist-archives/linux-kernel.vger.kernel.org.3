@@ -2,157 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 366534971A5
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 14:32:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A7004971B0
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 14:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236458AbiAWNcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 08:32:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236445AbiAWNcu (ORCPT
+        id S236441AbiAWNkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 08:40:04 -0500
+Received: from mxwww.masterlogin.de ([95.129.51.170]:46452 "EHLO
+        mxwww.masterlogin.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231578AbiAWNkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 08:32:50 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C54C061401
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 05:32:49 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id n8so3487443lfq.4
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 05:32:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=embecosm.com; s=google;
-        h=date:from:to:cc:subject:message-id:user-agent:mime-version;
-        bh=DgJZK3cUl7BMrj5rlxlO6UlwlkM/loYjlJWdtr0GJoY=;
-        b=Q0O21Re8JnLPbxfUWerN6Lg3yQOZSe0u+2lQHRn5RekRR4lXL0nHUTWDUanrP+Y57x
-         Ql1a3vpNS95JzGzHJiSepRiaHym3Z9HTtHSuqvxUz/KEkMkwf4NRluDtccNfIXm7MmTZ
-         SeLetTmfIGHwZtYbojObJ2ypFD6i17zrlBZMHq4PsTdOHr3FmRY9Ky1PFdeOylhCYriW
-         18qHnP52hn6H1hZccUBpNJbMPQz0kSTFJhDfSm/Htlp61N0xtnVlYRPX3S0Y1NvraSLU
-         aVww7pE6O7gtf5OwvtvEPyXhhvEpQoPu7FKoUN79sVk6FAfg93RFcvoGooeqBzaoQ9Ln
-         qjgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:user-agent
-         :mime-version;
-        bh=DgJZK3cUl7BMrj5rlxlO6UlwlkM/loYjlJWdtr0GJoY=;
-        b=Orz1xBqREzoqEuaSjlf5+GX3+iCQl2e7F/2bB6XVnIvAvd4yIiuKegiTnH/LdY91D7
-         jCqJ9s3q6U9eg6gHzvokDY5hRaNfG9i+kMdhFHdYDa8D/P18W5WDCoCUDFHq41zaGtoW
-         79O3K7eqTIUhV9fptGHSh2X2LKYX10qE5Bz4GVY0WD1pVfH4IZcO89ynfkNwDc3zHAUr
-         aX4dsFFceC/2lqjrhKt7o/UoDVCJ/cPUIQNAsbvmOZYgDhjxaTkthbCrxk7bO5+UyQRB
-         7Ov2MG6Wwla+1JXjYWbMcHqvNlXubDiYWldSnmLiXbON1b1ACYFLq5UhyaldiiND2bgy
-         +Edw==
-X-Gm-Message-State: AOAM533l7GCO/vL4rpOekrlnJIJv6E7GvwAlxaIdW0/3EfOZW/k9MlM2
-        146amYLY3lGGXkSl7S5Xb66lqw==
-X-Google-Smtp-Source: ABdhPJxrrBThy4A7zTLsSM+XjyuOA3Msy67kGLUf3itrmMeHkGymJqIByspP1XpbbkustgvVhSiOmQ==
-X-Received: by 2002:ac2:5442:: with SMTP id d2mr2734150lfn.482.1642944768092;
-        Sun, 23 Jan 2022 05:32:48 -0800 (PST)
-Received: from [192.168.219.3] ([78.8.192.131])
-        by smtp.gmail.com with ESMTPSA id b18sm52831lff.109.2022.01.23.05.32.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 23 Jan 2022 05:32:47 -0800 (PST)
-Date:   Sun, 23 Jan 2022 13:32:45 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@embecosm.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH v2] tty: Partially revert the removal of the Cyclades public
- API
-Message-ID: <alpine.DEB.2.20.2201230148120.11348@tpp.orcam.me.uk>
-User-Agent: Alpine 2.20 (DEB 67 2015-01-07)
+        Sun, 23 Jan 2022 08:40:02 -0500
+Received: from mxout2.routing.net (unknown [192.168.10.82])
+        by backup.mxwww.masterlogin.de (Postfix) with ESMTPS id E8DB32C420;
+        Sun, 23 Jan 2022 13:35:29 +0000 (UTC)
+Received: from mxbox3.masterlogin.de (unknown [192.168.10.78])
+        by mxout2.routing.net (Postfix) with ESMTP id 75F2C5FD36;
+        Sun, 23 Jan 2022 13:35:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1642944924;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=kyAI46PXFZta1W1LeVBMj4Z45GAo6fYKangEavewQgg=;
+        b=AgK/n/8ym395X77+aJoMETITWME7G0FhMd2RmvbRvOAxSxI/lPKExo4HQIrSDSZGiLfOjA
+        X8SCBvNUn0ObIrMRMVqeKaEdIKpdhubp1F5e111mLBrJfEz+/+sq4cEGAJ2k7GzkDgPa0e
+        PSpHg9y8Pltqo8JfFXaoN339IJgBYAA=
+Received: from localhost.localdomain (fttx-pool-80.245.79.232.bambit.de [80.245.79.232])
+        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id AC2CC36019F;
+        Sun, 23 Jan 2022 13:35:23 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-rockchip@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Peter Geis <pgwipeout@gmail.com>
+Subject: [PATCH v2] arm64: dts: rk3568: drop pclk_xpcs from gmac0
+Date:   Sun, 23 Jan 2022 14:35:10 +0100
+Message-Id: <20220123133510.135651-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: 0bbcd62c-25de-453c-b067-23a97143c961
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix a user API regression introduced with commit f76edd8f7ce0 ("tty: 
-cyclades, remove this orphan"), which removed a part of the API and 
-caused compilation errors for user programs using said part, such as 
-GCC 9 in its libsanitizer component[1]:
+From: Frank Wunderlich <frank-w@public-files.de>
 
-.../libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc:160:10: fatal error: linux/cyclades.h: No such file or directory
-  160 | #include <linux/cyclades.h>
-      |          ^~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[4]: *** [Makefile:664: sanitizer_platform_limits_posix.lo] Error 1
+pclk_xpcs is not supported by mainline driver and breaks dtbs_check
 
-As the absolute minimum required bring `struct cyclades_monitor' and 
-ioctl numbers back then so as to make the library build again.
+following warnings occour, and many more
 
-References:
+rk3568-evb1-v10.dt.yaml: ethernet@fe2a0000: clocks:
+    [[15, 386], [15, 389], [15, 389], [15, 184], [15, 180], [15, 181],
+    [15, 389], [15, 185], [15, 172]] is too long
+	From schema: Documentation/devicetree/bindings/net/snps,dwmac.yaml
+rk3568-evb1-v10.dt.yaml: ethernet@fe2a0000: clock-names:
+    ['stmmaceth', 'mac_clk_rx', 'mac_clk_tx', 'clk_mac_refout', 'aclk_mac',
+    'pclk_mac', 'clk_mac_speed', 'ptp_ref', 'pclk_xpcs'] is too long
+	From schema: Documentation/devicetree/bindings/net/snps,dwmac.yaml
 
-[1] GCC PR sanitizer/100379, "cyclades.h is removed from linux kernel 
-    header files", <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100379>
+after removing it, the clock and other warnings are gone.
 
-Signed-off-by: Maciej W. Rozycki <macro@embecosm.com>
-Fixes: f76edd8f7ce0 ("tty: cyclades, remove this orphan")
-Cc: stable@vger.kernel.org # v5.13+
+pclk_xpcs on gmac is used to support QSGMII, but this requires a driver
+supporting it.
+Once xpcs support is introduced, the clock can be added to the
+documentation and both controllers.
+
+Fixes: b8d41e5053cd ("arm64: dts: rockchip: add gmac0 node to rk3568")
+Co-developed-by: Peter Geis <pgwipeout@gmail.com>
+Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+Acked-by: Michael Riesch <michael.riesch@wolfvision.net>
 ---
-Hi Greg,
+changes in v2:
+  - rebase on 5.17-rc1
+  - separate from bpi-r2pro series
+  - changed commit-message
 
- Only these ioctl numbers are referred by libsanitizer (quoted with source
-line numbers as printed by GCC):
-
-  836 |   unsigned IOCTL_CYGETDEFTHRESH = CYGETDEFTHRESH;
-  837 |   unsigned IOCTL_CYGETDEFTIMEOUT = CYGETDEFTIMEOUT;
-  838 |   unsigned IOCTL_CYGETMON = CYGETMON;
-  839 |   unsigned IOCTL_CYGETTHRESH = CYGETTHRESH;
-  840 |   unsigned IOCTL_CYGETTIMEOUT = CYGETTIMEOUT;
-  841 |   unsigned IOCTL_CYSETDEFTHRESH = CYSETDEFTHRESH;
-  842 |   unsigned IOCTL_CYSETDEFTIMEOUT = CYSETDEFTIMEOUT;
-  843 |   unsigned IOCTL_CYSETTHRESH = CYSETTHRESH;
-  844 |   unsigned IOCTL_CYSETTIMEOUT = CYSETTIMEOUT;
-
--- however I don't think it makes sense to bring them back selectively.  
-
- Please apply.
-
-  Maciej
-
-Changes from v1:
-
-- Adjust heading from "tty: Revert the removal of the Cyclades public API".
-
-- Only revert `struct cyclades_monitor' and ioctl numbers.
-
-- Properly format the change given that it's not a plain revert anymore.
 ---
- include/uapi/linux/cyclades.h |   32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ arch/arm64/boot/dts/rockchip/rk3568.dtsi | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-linux-uapi-cyclades.diff
-Index: linux/include/uapi/linux/cyclades.h
-===================================================================
---- /dev/null
-+++ linux/include/uapi/linux/cyclades.h
-@@ -0,0 +1,32 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+
-+#ifndef _UAPI_LINUX_CYCLADES_H
-+#define _UAPI_LINUX_CYCLADES_H
-+
-+struct cyclades_monitor {
-+	unsigned long int_count;
-+	unsigned long char_count;
-+	unsigned long char_max;
-+	unsigned long char_last;
-+};
-+
-+#define CYGETMON		0x435901
-+#define CYGETTHRESH		0x435902
-+#define CYSETTHRESH		0x435903
-+#define CYGETDEFTHRESH		0x435904
-+#define CYSETDEFTHRESH		0x435905
-+#define CYGETTIMEOUT		0x435906
-+#define CYSETTIMEOUT		0x435907
-+#define CYGETDEFTIMEOUT		0x435908
-+#define CYSETDEFTIMEOUT		0x435909
-+#define CYSETRFLOW		0x43590a
-+#define CYGETRFLOW		0x43590b
-+#define CYSETRTSDTR_INV		0x43590c
-+#define CYGETRTSDTR_INV		0x43590d
-+#define CYZSETPOLLCYCLE		0x43590e
-+#define CYZGETPOLLCYCLE		0x43590f
-+#define CYGETCD1400VER		0x435910
-+#define CYSETWAIT		0x435912
-+#define CYGETWAIT		0x435913
-+
-+#endif /* _UAPI_LINUX_CYCLADES_H */
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568.dtsi b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+index 2fd313a295f8..d91df1cde736 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3568.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+@@ -32,13 +32,11 @@ gmac0: ethernet@fe2a0000 {
+ 		clocks = <&cru SCLK_GMAC0>, <&cru SCLK_GMAC0_RX_TX>,
+ 			 <&cru SCLK_GMAC0_RX_TX>, <&cru CLK_MAC0_REFOUT>,
+ 			 <&cru ACLK_GMAC0>, <&cru PCLK_GMAC0>,
+-			 <&cru SCLK_GMAC0_RX_TX>, <&cru CLK_GMAC0_PTP_REF>,
+-			 <&cru PCLK_XPCS>;
++			 <&cru SCLK_GMAC0_RX_TX>, <&cru CLK_GMAC0_PTP_REF>;
+ 		clock-names = "stmmaceth", "mac_clk_rx",
+ 			      "mac_clk_tx", "clk_mac_refout",
+ 			      "aclk_mac", "pclk_mac",
+-			      "clk_mac_speed", "ptp_ref",
+-			      "pclk_xpcs";
++			      "clk_mac_speed", "ptp_ref";
+ 		resets = <&cru SRST_A_GMAC0>;
+ 		reset-names = "stmmaceth";
+ 		rockchip,grf = <&grf>;
+-- 
+2.25.1
+

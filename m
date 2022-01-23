@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69AA2497495
+	by mail.lfdr.de (Postfix) with ESMTP id B3F8E497496
 	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 19:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239754AbiAWSly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 13:41:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53752 "EHLO
+        id S239767AbiAWSlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 13:41:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239902AbiAWSlI (ORCPT
+        with ESMTP id S239923AbiAWSlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 13:41:08 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012D4C061765
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 10:41:08 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id s2-20020a17090ad48200b001b501977b23so13568216pju.2
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 10:41:07 -0800 (PST)
+        Sun, 23 Jan 2022 13:41:11 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED325C06176A
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 10:41:10 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id n8so13503017plc.3
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 10:41:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=/VgvGoSrjM7RHhvz4oz6UhP4t05IzW+FafmG/hxmK+g=;
-        b=LtksDaUoKFgi6fsMPm0LDpUgQbJ1garCGl3knzuF4lCLaZ3c+Yrsn7OJJn4xT3yZMz
-         qsEjgH5T23Sp6vKj0Xf98AkY37c6l52KvNWIc9u+gUXjEquq5MdjBegeB3QhUjG9VeoK
-         kHMzkjDe3KwpVy01jvSDVT4RTAFNuKoRpg9WQ+bXRSqKI7x3EREi1itGAmmnmMX9zyAb
-         OgfvbBkheON1V3OLU/a7FTndsUWqMzFAPMeI5mkD9gnX41YSkLDgoF6gMv8ptI1H9ksB
-         gq+VEGbDrkrXDa2G0Fs0rQSEvAOsF2abSE0i4tOqxQTeF+nuNpz4uuApyqxnnvsc2ctR
-         mUFw==
+        bh=Va/u2iX1YVOINaxIuJLKJ3LTGOLOqvsNjPRhFp+Rqeo=;
+        b=eagkQ6Q6MYIyUa2gGTCr0XP5Aj+BdjWz9lZgHECpuGLi3hniUg1vL04exTfY56Hd1E
+         UQYcD0Az1f9gMpbExHH7+zle8nBUUcfkZnNB1N4d7yIalhSNXjF7FSmEJjs4Bo0exVu/
+         YCP495oGvt7PpQvBlyvD+w0qqqR7r/LG0ES5OU2Ogjc+uci4x3heIZYQMjeVZ4FrQ5FV
+         1W2RBQfKY1WNoTa6PY8XqJk7Lc3XawRe+hoQeiDVpxs8buZgdFT9jX1YsYXTbCfAQ6br
+         vBCq01+NLc+plLrUmN/sZDmpb91ldk9OK1uKeec/eXNC3RqATlokAapxKDgOge4P9Aat
+         X3Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/VgvGoSrjM7RHhvz4oz6UhP4t05IzW+FafmG/hxmK+g=;
-        b=ZrxLW4dY87+plWGg5teMhR+hj2Y4dR1xeuxNvv7fd4MpmO28zgahhxxMms9P7L+W4I
-         HHz7WvIfkMM695j2+fmmKBPNHDEYlJdbaCdQHO3wV22tgPkhQkCqQxC3GwziGt6z7UHe
-         LVhLAvtsCHhpoI/PJigAt3bdLrBumoHbr9jrwOcarFaTps4t6YEsKuOFn4LVr0AQdJvM
-         G8CyHBo5UMedSvpnD8FvN9DPtPZo2XsmaLT7vi+/a6QRPP6bLchTQRMx+PjTky5V1+sx
-         Y6q/r8WFPC9CCsPsp3couLf35zQtRiLgSGwGT3ZRLss9YVtpGplEsK/DkiRjcuxNSC+x
-         hvQw==
-X-Gm-Message-State: AOAM533nogohVX8ybw0z9EAsqfn6D4XLTKmUUrRomjJV0FbWO5ijAGtn
-        UkVfNEzHIbIrUdM05wGubkE=
-X-Google-Smtp-Source: ABdhPJxM5+OvTM7zV5jkK8eH28BzzoNvH/Nv9KCuB2FTZ9Fcl9QZ0o8NEWTqi1guXckSoVXq6LTshg==
-X-Received: by 2002:a17:902:b489:b0:14a:4747:9917 with SMTP id y9-20020a170902b48900b0014a47479917mr11450174plr.26.1642963267529;
-        Sun, 23 Jan 2022 10:41:07 -0800 (PST)
+        bh=Va/u2iX1YVOINaxIuJLKJ3LTGOLOqvsNjPRhFp+Rqeo=;
+        b=PdRLn2Bn+P4bZCI4VgP2+EBlRH+xTr+tSh1W8QIRXmfZ4OYZv/GmoCT2yi9uQg6q9l
+         Dj9ZTI8FpFGXEqZVNqodheTgJnVWK77L9flxFCTToOTVDfzhqOcKFBoWTXdz2QY1erUm
+         OSs1LETZq9iIt9xBcBMPRK5jKHBweceMWs3sLWYllYbnmY7lPeOg7T6/VNXJPGd0jM11
+         nR1K+npjbgilKxZenigqeL4BQTEZncS77YQCZ3rYKO+C1SB+9w81y0ejxeJkM+XncKBL
+         MgMfZVWSJIM3urHbovqBAcMIgsoS43sHZixVyzG5Pv3+s6HatFoRQSubFkFjQ/Y+uICe
+         Q1dQ==
+X-Gm-Message-State: AOAM531VtPKLmNtwNfk77u4iaSpJYjz2uE2xLQQxwEhNLgB6ABcxKZCa
+        txLYfNjGF26Z5xiSe48Wm04=
+X-Google-Smtp-Source: ABdhPJxvxbe+z7NuSUkqm9rEuKdHdlkqT/vD80MI3bNETHPdwJquHkS8H8ObhnEdYy/07LJ3AxKonQ==
+X-Received: by 2002:a17:90a:4601:: with SMTP id w1mr10006540pjg.113.1642963270445;
+        Sun, 23 Jan 2022 10:41:10 -0800 (PST)
 Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id l13sm10214049pgs.16.2022.01.23.10.41.06
+        by smtp.gmail.com with ESMTPSA id l17sm216332pfu.61.2022.01.23.10.41.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 10:41:07 -0800 (PST)
+        Sun, 23 Jan 2022 10:41:10 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -62,10 +62,15 @@ To:     Yury Norov <yury.norov@gmail.com>,
         Nicholas Piggin <npiggin@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 25/54] mm/vmstat: replace cpumask_weight with cpumask_empty where appropriate
-Date:   Sun, 23 Jan 2022 10:38:56 -0800
-Message-Id: <20220123183925.1052919-26-yury.norov@gmail.com>
+        linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org
+Subject: [PATCH 26/54] arch/x86: replace nodes_weight with nodes_empty where appropriate
+Date:   Sun, 23 Jan 2022 10:38:57 -0800
+Message-Id: <20220123183925.1052919-27-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220123183925.1052919-1-yury.norov@gmail.com>
 References: <20220123183925.1052919-1-yury.norov@gmail.com>
@@ -75,38 +80,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mm/vmstat.c code calls cpumask_weight() to check if any bit of a given
-cpumask is set. We can do it more efficiently with cpumask_empty() because
-cpumask_empty() stops traversing the cpumask as soon as it finds first set
-bit, while cpumask_weight() counts all bits unconditionally.
+mm code calls nodes_weight() to check if any bit of a given nodemask is
+set. We can do it more efficiently with nodes_empty() because nodes_empty()
+stops traversing the nodemask as soon as it finds first set bit, while
+nodes_weight() counts all bits unconditionally.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- mm/vmstat.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/mm/amdtopology.c    | 2 +-
+ arch/x86/mm/numa_emulation.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/mm/vmstat.c b/mm/vmstat.c
-index 4057372745d0..f56f11e3eef5 100644
---- a/mm/vmstat.c
-+++ b/mm/vmstat.c
-@@ -2035,7 +2035,7 @@ static void __init init_cpu_node_state(void)
- 	int node;
- 
- 	for_each_online_node(node) {
--		if (cpumask_weight(cpumask_of_node(node)) > 0)
-+		if (!cpumask_empty(cpumask_of_node(node)))
- 			node_set_state(node, N_CPU);
+diff --git a/arch/x86/mm/amdtopology.c b/arch/x86/mm/amdtopology.c
+index 058b2f36b3a6..b3ca7d23e4b0 100644
+--- a/arch/x86/mm/amdtopology.c
++++ b/arch/x86/mm/amdtopology.c
+@@ -154,7 +154,7 @@ int __init amd_numa_init(void)
+ 		node_set(nodeid, numa_nodes_parsed);
  	}
- }
-@@ -2062,7 +2062,7 @@ static int vmstat_cpu_dead(unsigned int cpu)
  
- 	refresh_zone_stat_thresholds();
- 	node_cpus = cpumask_of_node(node);
--	if (cpumask_weight(node_cpus) > 0)
-+	if (!cpumask_empty(node_cpus))
- 		return 0;
+-	if (!nodes_weight(numa_nodes_parsed))
++	if (nodes_empty(numa_nodes_parsed))
+ 		return -ENOENT;
  
- 	node_clear_state(node, N_CPU);
+ 	/*
+diff --git a/arch/x86/mm/numa_emulation.c b/arch/x86/mm/numa_emulation.c
+index 1a02b791d273..9a9305367fdd 100644
+--- a/arch/x86/mm/numa_emulation.c
++++ b/arch/x86/mm/numa_emulation.c
+@@ -123,7 +123,7 @@ static int __init split_nodes_interleave(struct numa_meminfo *ei,
+ 	 * Continue to fill physical nodes with fake nodes until there is no
+ 	 * memory left on any of them.
+ 	 */
+-	while (nodes_weight(physnode_mask)) {
++	while (!nodes_empty(physnode_mask)) {
+ 		for_each_node_mask(i, physnode_mask) {
+ 			u64 dma32_end = PFN_PHYS(MAX_DMA32_PFN);
+ 			u64 start, limit, end;
+@@ -270,7 +270,7 @@ static int __init split_nodes_size_interleave_uniform(struct numa_meminfo *ei,
+ 	 * Fill physical nodes with fake nodes of size until there is no memory
+ 	 * left on any of them.
+ 	 */
+-	while (nodes_weight(physnode_mask)) {
++	while (!nodes_empty(physnode_mask)) {
+ 		for_each_node_mask(i, physnode_mask) {
+ 			u64 dma32_end = PFN_PHYS(MAX_DMA32_PFN);
+ 			u64 start, limit, end;
 -- 
 2.30.2
 

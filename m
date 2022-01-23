@@ -2,251 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD9D4975ED
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 23:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3464975F0
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 23:16:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240311AbiAWWP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 17:15:29 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:47120 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234697AbiAWWP1 (ORCPT
+        id S240324AbiAWWQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 17:16:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44574 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234697AbiAWWQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 17:15:27 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 46B18D41;
-        Sun, 23 Jan 2022 23:15:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1642976125;
-        bh=3e5VjeTTkMsfqxw5yEi8BbHUU+H6A0I7t1EmI/SDYO8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cCS1sI0EoNJmpdWtKo3/Yh/9L7yKt9Y3kxCEB7B7VoaTQA9cpIidtM41soSY0OEZ7
-         tS7zjn8EHa9ZkCq3Vu9cztiChlt7AeFfr6n7MVs86LV/EnpMXyXzvgWrrGb8uAJc0j
-         Y6IeXAFEvlnmHt6FqzKRJ6R9/UvyywlEKvD1QsDU=
-Date:   Mon, 24 Jan 2022 00:15:08 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Liu Ying <victor.liu@nxp.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-imx@nxp.com,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Guido =?utf-8?Q?G=C3=BCnther?= <agx@sigxcpu.org>
-Subject: Re: [PATCH v2] phy: dphy: Correct clk_pre parameter
-Message-ID: <Ye3TbIj5LMvGVRIg@pendragon.ideasonboard.com>
-References: <20220119023714.1498508-1-victor.liu@nxp.com>
+        Sun, 23 Jan 2022 17:16:25 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED829C06173B;
+        Sun, 23 Jan 2022 14:16:24 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id s18so10223853wrv.7;
+        Sun, 23 Jan 2022 14:16:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JkiEYCh+nlDFeOW7dAXi5U5ovMgv7RIgGZQmqUFLweQ=;
+        b=Y782NLyzUAydn5rTsHO+uIIA35+kBDOAFG8Zd2Lu5HN6bEOm5f2St6kdME1mBVIFLT
+         B05i2B8sv0VgbPfkXV1FDqDFtCOUESixO47CrbpuJ5Xqdj5AzsaT2tIq5cOCWxfW3z56
+         QyN314pioZxtgPX2Bd0dMovoddq1ziX8RfT6b2ecLPAol13gyJZgeYcrQ9jbjTzvIHK+
+         +fsAdfSs/ptxA/A4s+Hr7NLP4vNMorVREsAaf5k3O+giohF0qXOK0gaHIlCn3N+C9jiG
+         VFrtVlmc6ldZ81aVzigMx0OHnwFofzqrj17Wc4julsgY810Sm8QCkdG5UhrUBaDtqNhp
+         AZjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JkiEYCh+nlDFeOW7dAXi5U5ovMgv7RIgGZQmqUFLweQ=;
+        b=qy0GHRgw1P60ZrFUM4wwLcF99HF0oVk/guPwmJKye0VoaTSKnsPQcworN+1AlXEtBE
+         YcRwQHqcIwPmomhM7+ocfAtwPu1SL5vMf3hWrjuksClI3WfRoPmBC3aHhqVpa0fqBqBS
+         XTqydH9ONyhGMHZdjcGeW1akXkjM8pMktnzbpAh0A5Xu2jcCF0AmJ9AqY4YUpEhRzJSU
+         /Eu2CN9F7wXM/Rzvx2PJ5xeD1NI6fffQD/7sOqOi+xD7Lt9UM0ZquUjN9JavMFlLbNo+
+         usrFJFaCqQff7FHcrPG52Mhwt+KQk/krnMt9S0EeJRvITIYEGv7rbeJTkB27C/8we3jv
+         4RKQ==
+X-Gm-Message-State: AOAM530zXCTN1DHl+6lsFCpl7IdIIKPXuZ+8wXDn34WEl+HybGdnorid
+        JJ3jU7HND+5NZ2pggB+P5uGeaw4th2pDrQ==
+X-Google-Smtp-Source: ABdhPJzwzD52JrriVt7nBB3oT3qBFQV1/vCle9VYKW48x0qDjIxIgzgos4imjnz6DAzLb+8xcDKi0Q==
+X-Received: by 2002:a5d:6750:: with SMTP id l16mr5731495wrw.196.1642976183468;
+        Sun, 23 Jan 2022 14:16:23 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id b11sm1238229wmq.46.2022.01.23.14.16.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Jan 2022 14:16:23 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-ide@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ata: pata_atiixp: make static read-only arrays const
+Date:   Sun, 23 Jan 2022 22:16:22 +0000
+Message-Id: <20220123221622.5543-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220119023714.1498508-1-victor.liu@nxp.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Liu,
+The static arrays pio_timings and mwdma_timings are read-only so
+it make sense to make them const.
 
-Thank you for the patch.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/ata/pata_atiixp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Wed, Jan 19, 2022 at 10:37:14AM +0800, Liu Ying wrote:
-> The D-PHY specification (v1.2) explicitly mentions that the T-CLK-PRE
-> parameter's unit is Unit Interval(UI) and the minimum value is 8.  Also,
-> kernel doc of the 'clk_pre' member of struct phy_configure_opts_mipi_dphy
-> mentions that it should be in UI.  However, the dphy core driver wrongly
-> sets 'clk_pre' to 8000, which seems to hint that it's in picoseconds.
-> And, the kernel doc of the 'clk_pre' member wrongly says the minimum value
-> is '8 UI', instead of 8.
-
-I'm not sure I'd change the kernel doc. Other fields that are documented
-as "Time, in picoseconds" have min/max values expressed in ps, so
-clk_pre, documented as "Time, in UI" doesn't appear wrong if the minimum
-value is "8 UI".
-
-Otherwise, this patch looks fine to me. With or without dropping that
-documentation change,
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> So, let's fix both the dphy core driver and the kernel doc of the 'clk_pre'
-> member to correctly reflect the T-CLK-PRE parameter's unit and the minimum
-> value according to the D-PHY specification.
-> 
-> I'm assuming that all impacted custom drivers shall program values in
-> TxByteClkHS cycles into hardware for the T-CLK-PRE parameter.  The D-PHY
-> specification mentions that the frequency of TxByteClkHS is exactly 1/8
-> the High-Speed(HS) bit rate(each HS bit consumes one UI).  So, relevant
-> custom driver code is changed to program those values as
-> DIV_ROUND_UP(cfg->clk_pre, BITS_PER_BYTE), then.
-> 
-> Note that I've only tested the patch with RM67191 DSI panel on i.MX8mq EVK.
-> Help is needed to test with other i.MX8mq, Meson and Rockchip platforms,
-> as I don't have the hardwares.
-> 
-> Fixes: 2ed869990e14 ("phy: Add MIPI D-PHY configuration options")
-> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-> Cc: Neil Armstrong <narmstrong@baylibre.com>
-> Cc: Robert Foss <robert.foss@linaro.org>
-> Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-> Cc: Jonas Karlman <jonas@kwiboo.se>
-> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Kevin Hilman <khilman@baylibre.com>
-> Cc: Jerome Brunet <jbrunet@baylibre.com>
-> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Cc: Heiko Stuebner <heiko@sntech.de>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Guido Günther <agx@sigxcpu.org>
-> Tested-by: Liu Ying <victor.liu@nxp.com> # RM67191 DSI panel on i.MX8mq EVK
-> Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> ---
-> v1->v2:
-> * Use BITS_PER_BYTE macro. (Andrzej)
-> * Drop dsi argument from ui2bc() in nwl-dsi.c.
-> 
->  drivers/gpu/drm/bridge/nwl-dsi.c                 | 12 +++++-------
->  drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c    |  3 ++-
->  drivers/phy/phy-core-mipi-dphy.c                 |  4 ++--
->  drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c |  3 ++-
->  include/linux/phy/phy-mipi-dphy.h                |  2 +-
->  5 files changed, 12 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
-> index a7389a0facfb..af07eeb47ca0 100644
-> --- a/drivers/gpu/drm/bridge/nwl-dsi.c
-> +++ b/drivers/gpu/drm/bridge/nwl-dsi.c
-> @@ -7,6 +7,7 @@
->   */
->  
->  #include <linux/bitfield.h>
-> +#include <linux/bits.h>
->  #include <linux/clk.h>
->  #include <linux/irq.h>
->  #include <linux/math64.h>
-> @@ -196,12 +197,9 @@ static u32 ps2bc(struct nwl_dsi *dsi, unsigned long long ps)
->  /*
->   * ui2bc - UI time periods to byte clock cycles
->   */
-> -static u32 ui2bc(struct nwl_dsi *dsi, unsigned long long ui)
-> +static u32 ui2bc(unsigned int ui)
->  {
-> -	u32 bpp = mipi_dsi_pixel_format_to_bpp(dsi->format);
-> -
-> -	return DIV64_U64_ROUND_UP(ui * dsi->lanes,
-> -				  dsi->mode.clock * 1000 * bpp);
-> +	return DIV_ROUND_UP(ui, BITS_PER_BYTE);
->  }
->  
->  /*
-> @@ -232,12 +230,12 @@ static int nwl_dsi_config_host(struct nwl_dsi *dsi)
->  	}
->  
->  	/* values in byte clock cycles */
-> -	cycles = ui2bc(dsi, cfg->clk_pre);
-> +	cycles = ui2bc(cfg->clk_pre);
->  	DRM_DEV_DEBUG_DRIVER(dsi->dev, "cfg_t_pre: 0x%x\n", cycles);
->  	nwl_dsi_write(dsi, NWL_DSI_CFG_T_PRE, cycles);
->  	cycles = ps2bc(dsi, cfg->lpx + cfg->clk_prepare + cfg->clk_zero);
->  	DRM_DEV_DEBUG_DRIVER(dsi->dev, "cfg_tx_gap (pre): 0x%x\n", cycles);
-> -	cycles += ui2bc(dsi, cfg->clk_pre);
-> +	cycles += ui2bc(cfg->clk_pre);
->  	DRM_DEV_DEBUG_DRIVER(dsi->dev, "cfg_t_post: 0x%x\n", cycles);
->  	nwl_dsi_write(dsi, NWL_DSI_CFG_T_POST, cycles);
->  	cycles = ps2bc(dsi, cfg->hs_exit);
-> diff --git a/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c b/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c
-> index cd2332bf0e31..fdbd64c03e12 100644
-> --- a/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c
-> +++ b/drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c
-> @@ -9,6 +9,7 @@
->  
->  #include <linux/bitfield.h>
->  #include <linux/bitops.h>
-> +#include <linux/bits.h>
->  #include <linux/clk.h>
->  #include <linux/delay.h>
->  #include <linux/io.h>
-> @@ -250,7 +251,7 @@ static int phy_meson_axg_mipi_dphy_power_on(struct phy *phy)
->  		     (DIV_ROUND_UP(priv->config.clk_zero, temp) << 16) |
->  		     (DIV_ROUND_UP(priv->config.clk_prepare, temp) << 24));
->  	regmap_write(priv->regmap, MIPI_DSI_CLK_TIM1,
-> -		     DIV_ROUND_UP(priv->config.clk_pre, temp));
-> +		     DIV_ROUND_UP(priv->config.clk_pre, BITS_PER_BYTE));
->  
->  	regmap_write(priv->regmap, MIPI_DSI_HS_TIM,
->  		     DIV_ROUND_UP(priv->config.hs_exit, temp) |
-> diff --git a/drivers/phy/phy-core-mipi-dphy.c b/drivers/phy/phy-core-mipi-dphy.c
-> index 288c9c67aa74..ccb4045685cd 100644
-> --- a/drivers/phy/phy-core-mipi-dphy.c
-> +++ b/drivers/phy/phy-core-mipi-dphy.c
-> @@ -36,7 +36,7 @@ int phy_mipi_dphy_get_default_config(unsigned long pixel_clock,
->  
->  	cfg->clk_miss = 0;
->  	cfg->clk_post = 60000 + 52 * ui;
-> -	cfg->clk_pre = 8000;
-> +	cfg->clk_pre = 8;
->  	cfg->clk_prepare = 38000;
->  	cfg->clk_settle = 95000;
->  	cfg->clk_term_en = 0;
-> @@ -97,7 +97,7 @@ int phy_mipi_dphy_config_validate(struct phy_configure_opts_mipi_dphy *cfg)
->  	if (cfg->clk_post < (60000 + 52 * ui))
->  		return -EINVAL;
->  
-> -	if (cfg->clk_pre < 8000)
-> +	if (cfg->clk_pre < 8)
->  		return -EINVAL;
->  
->  	if (cfg->clk_prepare < 38000 || cfg->clk_prepare > 95000)
-> diff --git a/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c b/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
-> index 347dc79a18c1..630e01b5c19b 100644
-> --- a/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
-> +++ b/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
-> @@ -5,6 +5,7 @@
->   * Author: Wyon Bi <bivvy.bi@rock-chips.com>
->   */
->  
-> +#include <linux/bits.h>
->  #include <linux/kernel.h>
->  #include <linux/clk.h>
->  #include <linux/iopoll.h>
-> @@ -364,7 +365,7 @@ static void inno_dsidphy_mipi_mode_enable(struct inno_dsidphy *inno)
->  	 * The value of counter for HS Tclk-pre
->  	 * Tclk-pre = Tpin_txbyteclkhs * value
->  	 */
-> -	clk_pre = DIV_ROUND_UP(cfg->clk_pre, t_txbyteclkhs);
-> +	clk_pre = DIV_ROUND_UP(cfg->clk_pre, BITS_PER_BYTE);
->  
->  	/*
->  	 * The value of counter for HS Tlpx Time
-> diff --git a/include/linux/phy/phy-mipi-dphy.h b/include/linux/phy/phy-mipi-dphy.h
-> index a877ffee845d..59a5e77ab409 100644
-> --- a/include/linux/phy/phy-mipi-dphy.h
-> +++ b/include/linux/phy/phy-mipi-dphy.h
-> @@ -42,7 +42,7 @@ struct phy_configure_opts_mipi_dphy {
->  	 * the transmitter prior to any associated Data Lane beginning
->  	 * the transition from LP to HS mode.
->  	 *
-> -	 * Minimum value: 8 UI
-> +	 * Minimum value: 8
->  	 */
->  	unsigned int		clk_pre;
->  
-
+diff --git a/drivers/ata/pata_atiixp.c b/drivers/ata/pata_atiixp.c
+index c3a65ccd4b79..efdb94cff68b 100644
+--- a/drivers/ata/pata_atiixp.c
++++ b/drivers/ata/pata_atiixp.c
+@@ -102,7 +102,7 @@ static int atiixp_prereset(struct ata_link *link, unsigned long deadline)
+ 
+ static void atiixp_set_pio_timing(struct ata_port *ap, struct ata_device *adev, int pio)
+ {
+-	static u8 pio_timings[5] = { 0x5D, 0x47, 0x34, 0x22, 0x20 };
++	static const u8 pio_timings[5] = { 0x5D, 0x47, 0x34, 0x22, 0x20 };
+ 
+ 	struct pci_dev *pdev = to_pci_dev(ap->host->dev);
+ 	int dn = 2 * ap->port_no + adev->devno;
+@@ -149,7 +149,7 @@ static void atiixp_set_piomode(struct ata_port *ap, struct ata_device *adev)
+ 
+ static void atiixp_set_dmamode(struct ata_port *ap, struct ata_device *adev)
+ {
+-	static u8 mwdma_timings[5] = { 0x77, 0x21, 0x20 };
++	static const u8 mwdma_timings[5] = { 0x77, 0x21, 0x20 };
+ 
+ 	struct pci_dev *pdev = to_pci_dev(ap->host->dev);
+ 	int dma = adev->dma_mode;
 -- 
-Regards,
+2.33.1
 
-Laurent Pinchart

@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFB714972BD
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 16:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C929A4972BE
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Jan 2022 16:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238217AbiAWPyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 10:54:20 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:53616 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231433AbiAWPyU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 10:54:20 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C93A360F58
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 15:54:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 38B9BC340E5;
-        Sun, 23 Jan 2022 15:54:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642953259;
-        bh=Th+PLbbNy5T4YFh+V4R6iFv998g+5yQmP8ZBiq7owbU=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=CkF2J3CN8xk4OUwz9+oklmU6n6uBUW8mOkrOxUZaGELZS5B2dbr9pq7RgVWsvAYmE
-         yGnhzqGfDr4cFFvady3gVDyTPQF/RG/ul3iHScmeFoAqyVaXhFwRvN0OUq9S+XgTmg
-         ogU5GhBWDkeLhkU4PDGsPna0WkMCPxvIv5KlyHfVaeD+QqJhqXqY5G5Zfq8wQaZDlG
-         w2HacEv8YPUGOG0is3DH/a16b6IyLCxLKkxorgepwMt1P7gElJfCi7xhIgbHJPF3c0
-         mxtPHqz2UfRnXTF07rlrAY5wS4lMcmMEWexQmi3NKb9zw0+e/3/8IlZl5dvLq9Aqa6
-         753sUkE4ruwzg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 262CDF6079D;
-        Sun, 23 Jan 2022 15:54:19 +0000 (UTC)
-Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-5.17-2 tag
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <877daqu2bv.fsf@mpe.ellerman.id.au>
-References: <877daqu2bv.fsf@mpe.ellerman.id.au>
-X-PR-Tracked-List-Id: Linux on PowerPC Developers Mail List <linuxppc-dev.lists.ozlabs.org>
-X-PR-Tracked-Message-Id: <877daqu2bv.fsf@mpe.ellerman.id.au>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-5.17-2
-X-PR-Tracked-Commit-Id: aee101d7b95a03078945681dd7f7ea5e4a1e7686
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
-Message-Id: <164295325914.31951.8078413507540454113.pr-tracker-bot@kernel.org>
-Date:   Sun, 23 Jan 2022 15:54:19 +0000
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        atrajeev@linux.vnet.ibm.com, daniel@iogearbox.net,
-        johan.almbladh@anyfinetworks.com, linux-kernel@vger.kernel.org,
-        npiggin@gmail.com, naveen.n.rao@linux.vnet.ibm.com,
-        linuxppc-dev@lists.ozlabs.org
+        id S238225AbiAWPym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 10:54:42 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:49670 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235172AbiAWPyk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 23 Jan 2022 10:54:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=7QuzV0xUqMcqlybybHjjxruT8uYyoncKxFO84jO3pZw=; b=6RDIz5HpE/Hb76XWRZjGAksyKY
+        ufq2ZfMZbZYskeE/CyfAwTIw7uqHxUZEbhvswZ5Lel1yuQFp33k+ktJTuvvmzj0+psykPL+FQwnMc
+        n9oI4RcEi1LB5i5ImrzjA1iffn8B+LF1DOrstaDmET1hM0Isb4BRjw7xRix1PR+7LMkI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nBfCC-002OMg-QW; Sun, 23 Jan 2022 16:54:24 +0100
+Date:   Sun, 23 Jan 2022 16:54:24 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Bryan Whitehead <bryan.whitehead@microchip.com>,
+        UNGLinuxDriver@microchip.com, Byungho An <bh74.an@samsung.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com
+Subject: Re: [PATCH] net: dsa|ethernet: use bool values to pass bool param of
+ phy_init_eee
+Message-ID: <Ye16MDZ/Bp2KZcJq@lunn.ch>
+References: <20220123152241.1480-1-jszhang@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220123152241.1480-1-jszhang@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 23 Jan 2022 22:19:16 +1100:
+On Sun, Jan 23, 2022 at 11:22:41PM +0800, Jisheng Zhang wrote:
+> The 2nd param of phy_init_eee(): clk_stop_enable is a bool param, use
+> true or false instead of 1/0.
+> 
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-5.17-2
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+    Andrew

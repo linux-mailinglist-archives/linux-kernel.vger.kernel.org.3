@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12FB6499EF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:11:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8E6499F1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:15:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838791AbiAXWsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:48:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56576 "EHLO
+        id S1839998AbiAXWwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:52:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1458141AbiAXVmr (ORCPT
+        with ESMTP id S1458145AbiAXVmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 16:42:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1316C07A953;
-        Mon, 24 Jan 2022 12:30:45 -0800 (PST)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458E7C07A954;
+        Mon, 24 Jan 2022 12:30:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8288B61383;
-        Mon, 24 Jan 2022 20:30:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D5BCC340E5;
-        Mon, 24 Jan 2022 20:30:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01A85B8122A;
+        Mon, 24 Jan 2022 20:30:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 399A8C340E5;
+        Mon, 24 Jan 2022 20:30:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056244;
-        bh=lHp066GqEuWHuPWqIDH4N1W547qnHtwjWomtPz60+2M=;
+        s=korg; t=1643056247;
+        bh=lk34w8WMdUL6l4PL5XdnwhuS4losa8tnQTL3Rj/ZblM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z6y2vvacceplFWuIxh5IRUeUNeTDzhC4LfmpY4FzifwCsvSogPnQ3BLfMKxv4VZ83
-         n2zsw44Tq7DVbVgAGQ/DC8+X9wnNI8iUfuztlyhqVE1mVnBF0s5htSRENGub5s2dnz
-         uhxEsiooxjySBoEZqNZQ+k+3aBjn7MJilQAeKANw=
+        b=rfx2Wup2blfcMAFl5LZcVIRSCNWBB/yVGcpZiob3MdpLsFeqjnXs76MDhmXuVrrCg
+         LQJMqZL8CCtO8YQdpHKmPAuYfXMtgyephYfawLXlkfLQtN33F2RKYeRUGBGCK68ZDB
+         zwH1Z2rftyeZrCeOYhRwivruYWeakT8IYKLDvrcM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
         Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 419/846] iommu/amd: Restore GA log/tail pointer on host resume
-Date:   Mon, 24 Jan 2022 19:38:56 +0100
-Message-Id: <20220124184115.426600618@linuxfoundation.org>
+Subject: [PATCH 5.15 420/846] iommu/amd: X2apic mode: re-enable after resume
+Date:   Mon, 24 Jan 2022 19:38:57 +0100
+Message-Id: <20220124184115.468706093@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -50,91 +50,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Maxim Levitsky <mlevitsk@redhat.com>
 
-[ Upstream commit a8d4a37d1bb93608501d0d0545f902061152669a ]
+[ Upstream commit 01b297a48a26bcb96769505ac948db4603b72bd1 ]
 
-This will give IOMMU GA log a chance to work after resume
-from s3/s4.
+Otherwise it is guaranteed to not work after the resume...
 
-Fixes: 8bda0cfbdc1a6 ("iommu/amd: Detect and initialize guest vAPIC log")
+Fixes: 66929812955bb ("iommu/amd: Add support for X2APIC IOMMU interrupts")
 
 Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-Link: https://lore.kernel.org/r/20211123161038.48009-2-mlevitsk@redhat.com
+Link: https://lore.kernel.org/r/20211123161038.48009-3-mlevitsk@redhat.com
 Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/amd/init.c | 31 +++++++++++++++----------------
- 1 file changed, 15 insertions(+), 16 deletions(-)
+ drivers/iommu/amd/init.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
-index 2a822b229bd05..9b12a2f7548ac 100644
+index 9b12a2f7548ac..c1d4e66d2747b 100644
 --- a/drivers/iommu/amd/init.c
 +++ b/drivers/iommu/amd/init.c
-@@ -804,16 +804,27 @@ static int iommu_ga_log_enable(struct amd_iommu *iommu)
- {
- #ifdef CONFIG_IRQ_REMAP
- 	u32 status, i;
-+	u64 entry;
- 
- 	if (!iommu->ga_log)
- 		return -EINVAL;
- 
--	status = readl(iommu->mmio_base + MMIO_STATUS_OFFSET);
--
- 	/* Check if already running */
--	if (status & (MMIO_STATUS_GALOG_RUN_MASK))
-+	status = readl(iommu->mmio_base + MMIO_STATUS_OFFSET);
-+	if (WARN_ON(status & (MMIO_STATUS_GALOG_RUN_MASK)))
- 		return 0;
- 
-+	entry = iommu_virt_to_phys(iommu->ga_log) | GA_LOG_SIZE_512;
-+	memcpy_toio(iommu->mmio_base + MMIO_GA_LOG_BASE_OFFSET,
-+		    &entry, sizeof(entry));
-+	entry = (iommu_virt_to_phys(iommu->ga_log_tail) &
-+		 (BIT_ULL(52)-1)) & ~7ULL;
-+	memcpy_toio(iommu->mmio_base + MMIO_GA_LOG_TAIL_OFFSET,
-+		    &entry, sizeof(entry));
-+	writel(0x00, iommu->mmio_base + MMIO_GA_HEAD_OFFSET);
-+	writel(0x00, iommu->mmio_base + MMIO_GA_TAIL_OFFSET);
-+
-+
- 	iommu_feature_enable(iommu, CONTROL_GAINT_EN);
- 	iommu_feature_enable(iommu, CONTROL_GALOG_EN);
- 
-@@ -823,7 +834,7 @@ static int iommu_ga_log_enable(struct amd_iommu *iommu)
- 			break;
+@@ -2169,7 +2169,6 @@ static int iommu_setup_intcapxt(struct amd_iommu *iommu)
+ 		return ret;
  	}
  
--	if (i >= LOOP_TIMEOUT)
-+	if (WARN_ON(i >= LOOP_TIMEOUT))
- 		return -EINVAL;
- #endif /* CONFIG_IRQ_REMAP */
+-	iommu_feature_enable(iommu, CONTROL_INTCAPXT_EN);
  	return 0;
-@@ -832,8 +843,6 @@ static int iommu_ga_log_enable(struct amd_iommu *iommu)
- static int iommu_init_ga_log(struct amd_iommu *iommu)
- {
- #ifdef CONFIG_IRQ_REMAP
--	u64 entry;
--
- 	if (!AMD_IOMMU_GUEST_IR_VAPIC(amd_iommu_guest_ir))
- 		return 0;
+ }
  
-@@ -847,16 +856,6 @@ static int iommu_init_ga_log(struct amd_iommu *iommu)
- 	if (!iommu->ga_log_tail)
- 		goto err_out;
+@@ -2192,6 +2191,10 @@ static int iommu_init_irq(struct amd_iommu *iommu)
  
--	entry = iommu_virt_to_phys(iommu->ga_log) | GA_LOG_SIZE_512;
--	memcpy_toio(iommu->mmio_base + MMIO_GA_LOG_BASE_OFFSET,
--		    &entry, sizeof(entry));
--	entry = (iommu_virt_to_phys(iommu->ga_log_tail) &
--		 (BIT_ULL(52)-1)) & ~7ULL;
--	memcpy_toio(iommu->mmio_base + MMIO_GA_LOG_TAIL_OFFSET,
--		    &entry, sizeof(entry));
--	writel(0x00, iommu->mmio_base + MMIO_GA_HEAD_OFFSET);
--	writel(0x00, iommu->mmio_base + MMIO_GA_TAIL_OFFSET);
--
- 	return 0;
- err_out:
- 	free_ga_log(iommu);
+ 	iommu->int_enabled = true;
+ enable_faults:
++
++	if (amd_iommu_xt_mode == IRQ_REMAP_X2APIC_MODE)
++		iommu_feature_enable(iommu, CONTROL_INTCAPXT_EN);
++
+ 	iommu_feature_enable(iommu, CONTROL_EVT_INT_EN);
+ 
+ 	if (iommu->ppr_log != NULL)
 -- 
 2.34.1
 

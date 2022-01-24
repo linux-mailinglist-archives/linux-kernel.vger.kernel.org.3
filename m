@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B830D499B08
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:59:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7163C499B0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355280AbiAXVtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:49:06 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:36628 "EHLO
+        id S1359513AbiAXVtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:49:12 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36738 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448735AbiAXVNn (ORCPT
+        with ESMTP id S1448811AbiAXVNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:13:43 -0500
+        Mon, 24 Jan 2022 16:13:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09BFB60C60;
-        Mon, 24 Jan 2022 21:13:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD7E9C340E5;
-        Mon, 24 Jan 2022 21:13:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 62342614A8;
+        Mon, 24 Jan 2022 21:13:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A40AC36AE2;
+        Mon, 24 Jan 2022 21:13:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058822;
-        bh=LiungtrnGfVSW2X2GPi7o4c/ZYIPirnCDi7gCObCpHo=;
+        s=korg; t=1643058828;
+        bh=l6Ni9v689sSDYi8RGWJ0Fvwu5bh71a7KQRIO9ThqCxY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qPUDwhPLNIQr4vdGONMRyJFTGm0IYF2Jghdcj+ovrJTF6ZRS2V/cXF2Dzn5/2XW8B
-         qj1TuQvNZl6DwmWJ4taqM53e06C7zu+pEoj13/FF5iwt1O1a/vpiB0yysGl9MUtzsd
-         UBN3NrvlJ+WC4gogGm2CXyA4bkOwzlc+Ra6v2aqA=
+        b=W38MF4DRlAkuJ1I1UNwujiD9JLwIcbpPhuuLsFOY05J+M+O0j3hfCoX8rfuMOb+Go
+         wtjKyP/wE/pKDAzlfTC+FLATmh2ykrlejUZVaZHyMcI/tJbW/mwYrmOvTnHyuMmwut
+         6nGKfHsc08vjiJ3gjD30S4TlVu3hnlNHISN8ADaA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Moshe Shemesh <moshe@nvidia.com>,
-        Eran Ben Elisha <eranbe@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0414/1039] net/mlx5: Set command entry semaphore up once got index free
-Date:   Mon, 24 Jan 2022 19:36:43 +0100
-Message-Id: <20220124184139.230822450@linuxfoundation.org>
+Subject: [PATCH 5.16 0416/1039] Bluetooth: L2CAP: uninitialized variables in l2cap_sock_setsockopt()
+Date:   Mon, 24 Jan 2022 19:36:45 +0100
+Message-Id: <20220124184139.296305819@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -47,70 +46,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Moshe Shemesh <moshe@nvidia.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 8e715cd613a1e872b9d918e912d90b399785761a ]
+[ Upstream commit 2b70d4f9b20635ac328836e50d183632e1930f94 ]
 
-Avoid a race where command work handler may fail to allocate command
-entry index, by holding the command semaphore down till command entry
-index is being freed.
+The "opt" variable is a u32, but on some paths only the top bytes
+were initialized and the others contained random stack data.
 
-Fixes: 410bd754cd73 ("net/mlx5: Add retry mechanism to the command entry index allocation")
-Signed-off-by: Moshe Shemesh <moshe@nvidia.com>
-Reviewed-by: Eran Ben Elisha <eranbe@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Fixes: a7b75c5a8c41 ("net: pass a sockptr_t into ->setsockopt")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/cmd.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ net/bluetooth/l2cap_sock.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/cmd.c b/drivers/net/ethernet/mellanox/mlx5/core/cmd.c
-index a46284ca51720..f588503157d04 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/cmd.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/cmd.c
-@@ -148,8 +148,12 @@ static void cmd_ent_put(struct mlx5_cmd_work_ent *ent)
- 	if (!refcount_dec_and_test(&ent->refcnt))
- 		return;
+diff --git a/net/bluetooth/l2cap_sock.c b/net/bluetooth/l2cap_sock.c
+index 251017c69ab7f..d2c6785205992 100644
+--- a/net/bluetooth/l2cap_sock.c
++++ b/net/bluetooth/l2cap_sock.c
+@@ -903,6 +903,8 @@ static int l2cap_sock_setsockopt(struct socket *sock, int level, int optname,
+ 	struct l2cap_conn *conn;
+ 	int len, err = 0;
+ 	u32 opt;
++	u16 mtu;
++	u8 mode;
  
--	if (ent->idx >= 0)
--		cmd_free_index(ent->cmd, ent->idx);
-+	if (ent->idx >= 0) {
-+		struct mlx5_cmd *cmd = ent->cmd;
-+
-+		cmd_free_index(cmd, ent->idx);
-+		up(ent->page_queue ? &cmd->pages_sem : &cmd->sem);
-+	}
+ 	BT_DBG("sk %p", sk);
  
- 	cmd_free_ent(ent);
- }
-@@ -1602,8 +1606,6 @@ static void mlx5_cmd_comp_handler(struct mlx5_core_dev *dev, u64 vec, bool force
- 	vector = vec & 0xffffffff;
- 	for (i = 0; i < (1 << cmd->log_sz); i++) {
- 		if (test_bit(i, &vector)) {
--			struct semaphore *sem;
--
- 			ent = cmd->ent_arr[i];
- 
- 			/* if we already completed the command, ignore it */
-@@ -1626,10 +1628,6 @@ static void mlx5_cmd_comp_handler(struct mlx5_core_dev *dev, u64 vec, bool force
- 			    dev->state == MLX5_DEVICE_STATE_INTERNAL_ERROR)
- 				cmd_ent_put(ent);
- 
--			if (ent->page_queue)
--				sem = &cmd->pages_sem;
--			else
--				sem = &cmd->sem;
- 			ent->ts2 = ktime_get_ns();
- 			memcpy(ent->out->first.data, ent->lay->out, sizeof(ent->lay->out));
- 			dump_command(dev, ent, 0);
-@@ -1683,7 +1681,6 @@ static void mlx5_cmd_comp_handler(struct mlx5_core_dev *dev, u64 vec, bool force
- 				 */
- 				complete(&ent->done);
- 			}
--			up(sem);
+@@ -1085,16 +1087,16 @@ static int l2cap_sock_setsockopt(struct socket *sock, int level, int optname,
+ 			break;
  		}
- 	}
- }
+ 
+-		if (copy_from_sockptr(&opt, optval, sizeof(u16))) {
++		if (copy_from_sockptr(&mtu, optval, sizeof(u16))) {
+ 			err = -EFAULT;
+ 			break;
+ 		}
+ 
+ 		if (chan->mode == L2CAP_MODE_EXT_FLOWCTL &&
+ 		    sk->sk_state == BT_CONNECTED)
+-			err = l2cap_chan_reconfigure(chan, opt);
++			err = l2cap_chan_reconfigure(chan, mtu);
+ 		else
+-			chan->imtu = opt;
++			chan->imtu = mtu;
+ 
+ 		break;
+ 
+@@ -1116,14 +1118,14 @@ static int l2cap_sock_setsockopt(struct socket *sock, int level, int optname,
+ 			break;
+ 		}
+ 
+-		if (copy_from_sockptr(&opt, optval, sizeof(u8))) {
++		if (copy_from_sockptr(&mode, optval, sizeof(u8))) {
+ 			err = -EFAULT;
+ 			break;
+ 		}
+ 
+-		BT_DBG("opt %u", opt);
++		BT_DBG("mode %u", mode);
+ 
+-		err = l2cap_set_mode(chan, opt);
++		err = l2cap_set_mode(chan, mode);
+ 		if (err)
+ 			break;
+ 
 -- 
 2.34.1
 

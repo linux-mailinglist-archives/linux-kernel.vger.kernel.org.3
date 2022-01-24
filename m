@@ -2,76 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 651BB49973B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:27:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 220BE499721
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447718AbiAXVLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:11:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41416 "EHLO
+        id S1446845AbiAXVJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:09:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358210AbiAXUn6 (ORCPT
+        with ESMTP id S1390642AbiAXUp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:43:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E270EC04188A;
-        Mon, 24 Jan 2022 11:53:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA40CB810BD;
-        Mon, 24 Jan 2022 19:53:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50C97C340E5;
-        Mon, 24 Jan 2022 19:53:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643054021;
-        bh=yLbz/AC2wjap7OdNsxdmDXBEPOrm5DJ62HNkpKHDaRE=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=YqP+5Pu8CLPGLQYonv8c5mI2Wp6Turrr2DjU4sM5owJF/mETT2Y3RvkrrfSMAhUK3
-         QcCdA7tDxRBj6ZBuxFD315wp5Hsv+1lPeSvDH2xoHVGtOXwFhpFEyjMZbLWr3TX+gZ
-         AaJ+6bctkogAfKT2Q4HXAnzAdbeRHEA9uZ+hnt163ovtT2IwYFCruVHwMq59L4WYst
-         vEos8xNT4eX7/HE8IHVMQFU7TKiZyHTWc82s4kIRkIeyTiSe49MaLVqLwM7BOm69Nb
-         5MmcjYS6JFe3icdc9Lvanvyju1XBpw15/OZX/HNxXMCphCIVSb6yuT2RkhoFUE9/0P
-         u3vWaw7IKw94A==
-Content-Type: text/plain; charset="utf-8"
+        Mon, 24 Jan 2022 15:45:59 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D671C061340
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:55:57 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id e17so338778ljk.5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:55:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CsGwBiMEkwe4bLg19ywjdJZ3/5M1hRBHlVRcQEjbGmo=;
+        b=rtbY+gqfHYd5dj6xP5LOP4QpTVnE0wZG3g8n7uzpDUJ4jVInle5CceB62w4oNxWy8u
+         xXN8vN7IrBOKmQcgtvQFaTfgpVvlZ1C7rg8TWBiysAfRSiqHZV5kZTrpHFseJFjMV4Od
+         +Jk5BAqTQjingEkJlsAfH3x7sfC03xhNfh0ADDu2Y2dMke7fwHzLmPKHUaTG7d2OKHNx
+         fysiqoVSVENsXqjTFvu/VWsdgDVMLFS6QU1EAZh0HnTGPYzaozPOI7hgaS4vbnNHE24k
+         ov5CQ5YvZP7tmNZBSSD6kToX7EO1i/6HTOWafDrGLNTOSJU6Ciew4FpN1aYt0fGglLwQ
+         8/vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CsGwBiMEkwe4bLg19ywjdJZ3/5M1hRBHlVRcQEjbGmo=;
+        b=0iNCbLh1iZBgrpmCa/BfneWnmFginOLYGf2hJRxdY1SiRwvCaArA7vlxdw5K8GOyEW
+         PSKxIaHNaxYYEl/TZyFbbXTcl5zthV/Btz3HdHSKz92lPomR5gUsXDHw/HmpsvOz4pQL
+         c1nVcDK758rlgMWBdez2UmbD2QBoQNFLs7lTKxPy57Vsnt8zdcraiKkP3tSXK7ShZLbI
+         V7zJr54YZMydCrKRrUVfICmg44Cda0H6scSsz1+uvGGMXhWEI/HlNXf67x/pPSEPEMXY
+         JgvHriXZNGTxAIfFzdWaxWsGgXkvf+86H3Y0RDp9YKxpLwvMt3pFEY8WEtvRAfA5xlVE
+         KLLg==
+X-Gm-Message-State: AOAM531b1EAwTokuS3HhkjsORZaeNJAWrmDtExRr7iYQ2CKaRLhr928I
+        BY/v3224VR40G3tF9rPoThwmfJY20nzKgpA1HPX02g==
+X-Google-Smtp-Source: ABdhPJyOtLsKZqsENjScci++5Pp4Q0kOx1naLw57dM5+mMcu04T6dj7bnpqZLaem4TA31GMKPuqL3D7+h16zW5aDmyc=
+X-Received: by 2002:a2e:8283:: with SMTP id y3mr12029632ljg.128.1643054155425;
+ Mon, 24 Jan 2022 11:55:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220124165316.55449-1-zhou1615@umn.edu>
-References: <20220124165316.55449-1-zhou1615@umn.edu>
-Subject: Re: [PATCH] clk: socfpga: Fix a memory leak bug in socfpga_gate_init()
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     kjlu@umn.edu, Dinh Nguyen <dinguyen@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-To:     zhou1615@umn.edu
-Date:   Mon, 24 Jan 2022 11:53:39 -0800
-User-Agent: alot/0.10
-Message-Id: <20220124195341.50C97C340E5@smtp.kernel.org>
+References: <20220120053100.408816-1-masahiroy@kernel.org>
+In-Reply-To: <20220120053100.408816-1-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 24 Jan 2022 11:55:43 -0800
+Message-ID: <CAKwvOd=52G2J2nXRbefjJ57B_ySZaZ6SD8UwwHziZMPoR6ABHQ@mail.gmail.com>
+Subject: Re: [PATCH] Revert "Makefile: Do not quote value for CONFIG_CC_IMPLICIT_FALLTHROUGH"
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, Michal Marek <michal.lkml@markovi.net>,
+        carnil@debian.org, Kees Cook <keescook@chromium.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Zhou Qingyang (2022-01-24 08:53:16)
-> diff --git a/drivers/clk/socfpga/clk-gate.c b/drivers/clk/socfpga/clk-gat=
-e.c
-> index 53d6e3ec4309..0ca5e0000925 100644
-> --- a/drivers/clk/socfpga/clk-gate.c
-> +++ b/drivers/clk/socfpga/clk-gate.c
-> @@ -188,8 +188,10 @@ void __init socfpga_gate_init(struct device_node *no=
-de)
->                 return;
-> =20
->         ops =3D kmemdup(&gateclk_ops, sizeof(gateclk_ops), GFP_KERNEL);
-> -       if (WARN_ON(!ops))
-> +       if (WARN_ON(!ops)) {
++ Salvatore, Kees, Gustavo, Nathan
 
-A WARN_ON() after an allocation failure will lead to double stacktraces.
-Can you remove the WARN_ON()?
-
-Furthermore, it looks like 'ops' is never freed on failure in this
-function. Did the SA tool figure that out? There are more problems with
-this function and error paths. Seems like nobody cares.
-
-> +               kfree(socfpga_clk);
->                 return;
-> +       }
+On Wed, Jan 19, 2022 at 9:31 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
+> This reverts commit cd8c917a56f20f48748dd43d9ae3caff51d5b987.
+>
+> Commit 129ab0d2d9f3 ("kbuild: do not quote string values in
+> include/config/auto.conf") provided the final solution.
+>
+> Now reverting the temporary workaround.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+> ---
+>
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 3f07f0f04475..c94559a97dca 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -778,7 +778,7 @@ stackp-flags-$(CONFIG_STACKPROTECTOR_STRONG)      := -fstack-protector-strong
+>  KBUILD_CFLAGS += $(stackp-flags-y)
+>
+>  KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
+> -KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH:"%"=%)
+> +KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+>
+>  ifdef CONFIG_CC_IS_CLANG
+>  KBUILD_CPPFLAGS += -Qunused-arguments
+> --
+> 2.32.0
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers

@@ -2,46 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 280E4498A90
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:06:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 639C4498CC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:32:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346202AbiAXTFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:05:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44224 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344772AbiAXS7M (ORCPT
+        id S1350363AbiAXTYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:24:53 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40546 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343943AbiAXTPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:59:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BD8C06127B;
-        Mon, 24 Jan 2022 10:56:21 -0800 (PST)
+        Mon, 24 Jan 2022 14:15:34 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51E5D61416;
-        Mon, 24 Jan 2022 18:56:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FD98C340E5;
-        Mon, 24 Jan 2022 18:56:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF3D9B8122A;
+        Mon, 24 Jan 2022 19:15:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A8F8C340E5;
+        Mon, 24 Jan 2022 19:15:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050580;
-        bh=Oo2lX6416TxPeLNk85BzSqjJdoOIIwJmRJQe4N3bdMg=;
+        s=korg; t=1643051729;
+        bh=H+TtTiaS+wXHHNh6mrbg38+/ZuFn+N7M8uOJBPK0OBQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M0BVcOeJ+nfxQhXf65FCIfG+HFwaBwPDzjDJwH8/3Z+f1/58rsARlO5z6XV2Bb3+8
-         TO4R7OjvkydxD/j3gyb6HjlzKm3vA9OG5C9Az1yhlDy+ETcxjZhGScUigjsTngqUIz
-         A1imRAj9yJR0NwU0H5iPOGLBr3xNMMd752u3kAkg=
+        b=WGkN14v/pSxcuBofLN5tA3mwCuDjolgI9jA+9qKz94GxSC+jFJdnZDNc8CxsU3r6f
+         JR6zAr3asBCTGXRWYRlytS7UvAIMDIylEfkjcSWwWcIdmV1XfKm7478xIl/Hp9kmSu
+         4vvxZa9irRILZF8tAeMVJDIOdvyuGX+vOR5Cpnnw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        syzbot+7f23bcddf626e0593a39@syzkaller.appspotmail.com
-Subject: [PATCH 4.9 015/157] nfc: llcp: fix NULL error pointer dereference on sendmsg() after failed bind()
+        stable@vger.kernel.org, Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 067/239] serial: amba-pl011: do not request memory region twice
 Date:   Mon, 24 Jan 2022 19:41:45 +0100
-Message-Id: <20220124183933.281022426@linuxfoundation.org>
+Message-Id: <20220124183945.267710790@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,102 +45,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+From: Lino Sanfilippo <LinoSanfilippo@gmx.de>
 
-commit dded08927ca3c31a5c37f8e7f95fe98770475dd4 upstream.
+[ Upstream commit d1180405c7b5c7a1c6bde79d5fc24fe931430737 ]
 
-Syzbot detected a NULL pointer dereference of nfc_llcp_sock->dev pointer
-(which is a 'struct nfc_dev *') with calls to llcp_sock_sendmsg() after
-a failed llcp_sock_bind(). The message being sent is a SOCK_DGRAM.
+With commit 3873e2d7f63a ("drivers: PL011: refactor pl011_probe()") the
+function devm_ioremap() called from pl011_setup_port() was replaced with
+devm_ioremap_resource(). Since this function not only remaps but also
+requests the ports io memory region it now collides with the .config_port()
+callback which requests the same region at uart port registration.
 
-KASAN report:
+Since devm_ioremap_resource() already claims the memory successfully, the
+request in .config_port() fails.
 
-  BUG: KASAN: null-ptr-deref in nfc_alloc_send_skb+0x2d/0xc0
-  Read of size 4 at addr 00000000000005c8 by task llcp_sock_nfc_a/899
+Later at uart port deregistration the attempt to release the unclaimed
+memory also fails. The failure results in a “Trying to free nonexistent
+resource" warning.
 
-  CPU: 5 PID: 899 Comm: llcp_sock_nfc_a Not tainted 5.16.0-rc6-next-20211224-00001-gc6437fbf18b0 #125
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
-  Call Trace:
-   <TASK>
-   dump_stack_lvl+0x45/0x59
-   ? nfc_alloc_send_skb+0x2d/0xc0
-   __kasan_report.cold+0x117/0x11c
-   ? mark_lock+0x480/0x4f0
-   ? nfc_alloc_send_skb+0x2d/0xc0
-   kasan_report+0x38/0x50
-   nfc_alloc_send_skb+0x2d/0xc0
-   nfc_llcp_send_ui_frame+0x18c/0x2a0
-   ? nfc_llcp_send_i_frame+0x230/0x230
-   ? __local_bh_enable_ip+0x86/0xe0
-   ? llcp_sock_connect+0x470/0x470
-   ? llcp_sock_connect+0x470/0x470
-   sock_sendmsg+0x8e/0xa0
-   ____sys_sendmsg+0x253/0x3f0
-   ...
+Fix these issues by removing the callbacks that implement the redundant
+memory allocation/release. Also make sure that changing the drivers io
+memory base address via TIOCSSERIAL is not allowed any more.
 
-The issue was visible only with multiple simultaneous calls to bind() and
-sendmsg(), which resulted in most of the bind() calls to fail.  The
-bind() was failing on checking if there is available WKS/SDP/SAP
-(respective bit in 'struct nfc_llcp_local' fields).  When there was no
-available WKS/SDP/SAP, the bind returned error but the sendmsg() to such
-socket was able to trigger mentioned NULL pointer dereference of
-nfc_llcp_sock->dev.
-
-The code looks simply racy and currently it protects several paths
-against race with checks for (!nfc_llcp_sock->local) which is NULL-ified
-in error paths of bind().  The llcp_sock_sendmsg() did not have such
-check but called function nfc_llcp_send_ui_frame() had, although not
-protected with lock_sock().
-
-Therefore the race could look like (same socket is used all the time):
-  CPU0                                     CPU1
-  ====                                     ====
-  llcp_sock_bind()
-  - lock_sock()
-    - success
-  - release_sock()
-  - return 0
-                                           llcp_sock_sendmsg()
-                                           - lock_sock()
-                                           - release_sock()
-  llcp_sock_bind(), same socket
-  - lock_sock()
-    - error
-                                           - nfc_llcp_send_ui_frame()
-                                             - if (!llcp_sock->local)
-    - llcp_sock->local = NULL
-    - nfc_put_device(dev)
-                                             - dereference llcp_sock->dev
-  - release_sock()
-  - return -ERRNO
-
-The nfc_llcp_send_ui_frame() checked llcp_sock->local outside of the
-lock, which is racy and ineffective check.  Instead, its caller
-llcp_sock_sendmsg(), should perform the check inside lock_sock().
-
-Reported-and-tested-by: syzbot+7f23bcddf626e0593a39@syzkaller.appspotmail.com
-Fixes: b874dec21d1c ("NFC: Implement LLCP connection less Tx path")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 3873e2d7f63a ("drivers: PL011: refactor pl011_probe()")
+Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Link: https://lore.kernel.org/r/20211129174238.8333-1-LinoSanfilippo@gmx.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/nfc/llcp_sock.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/tty/serial/amba-pl011.c | 27 +++------------------------
+ 1 file changed, 3 insertions(+), 24 deletions(-)
 
---- a/net/nfc/llcp_sock.c
-+++ b/net/nfc/llcp_sock.c
-@@ -796,6 +796,11 @@ static int llcp_sock_sendmsg(struct sock
+diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
+index 3d63e9a71c376..5edc3813a9b99 100644
+--- a/drivers/tty/serial/amba-pl011.c
++++ b/drivers/tty/serial/amba-pl011.c
+@@ -2094,32 +2094,13 @@ static const char *pl011_type(struct uart_port *port)
+ 	return uap->port.type == PORT_AMBA ? uap->type : NULL;
+ }
  
- 	lock_sock(sk);
+-/*
+- * Release the memory region(s) being used by 'port'
+- */
+-static void pl011_release_port(struct uart_port *port)
+-{
+-	release_mem_region(port->mapbase, SZ_4K);
+-}
+-
+-/*
+- * Request the memory region(s) being used by 'port'
+- */
+-static int pl011_request_port(struct uart_port *port)
+-{
+-	return request_mem_region(port->mapbase, SZ_4K, "uart-pl011")
+-			!= NULL ? 0 : -EBUSY;
+-}
+-
+ /*
+  * Configure/autoconfigure the port.
+  */
+ static void pl011_config_port(struct uart_port *port, int flags)
+ {
+-	if (flags & UART_CONFIG_TYPE) {
++	if (flags & UART_CONFIG_TYPE)
+ 		port->type = PORT_AMBA;
+-		pl011_request_port(port);
+-	}
+ }
  
-+	if (!llcp_sock->local) {
-+		release_sock(sk);
-+		return -ENODEV;
-+	}
-+
- 	if (sk->sk_type == SOCK_DGRAM) {
- 		DECLARE_SOCKADDR(struct sockaddr_nfc_llcp *, addr,
- 				 msg->msg_name);
+ /*
+@@ -2134,6 +2115,8 @@ static int pl011_verify_port(struct uart_port *port, struct serial_struct *ser)
+ 		ret = -EINVAL;
+ 	if (ser->baud_base < 9600)
+ 		ret = -EINVAL;
++	if (port->mapbase != (unsigned long) ser->iomem_base)
++		ret = -EINVAL;
+ 	return ret;
+ }
+ 
+@@ -2151,8 +2134,6 @@ static const struct uart_ops amba_pl011_pops = {
+ 	.flush_buffer	= pl011_dma_flush_buffer,
+ 	.set_termios	= pl011_set_termios,
+ 	.type		= pl011_type,
+-	.release_port	= pl011_release_port,
+-	.request_port	= pl011_request_port,
+ 	.config_port	= pl011_config_port,
+ 	.verify_port	= pl011_verify_port,
+ #ifdef CONFIG_CONSOLE_POLL
+@@ -2182,8 +2163,6 @@ static const struct uart_ops sbsa_uart_pops = {
+ 	.shutdown	= sbsa_uart_shutdown,
+ 	.set_termios	= sbsa_uart_set_termios,
+ 	.type		= pl011_type,
+-	.release_port	= pl011_release_port,
+-	.request_port	= pl011_request_port,
+ 	.config_port	= pl011_config_port,
+ 	.verify_port	= pl011_verify_port,
+ #ifdef CONFIG_CONSOLE_POLL
+-- 
+2.34.1
+
 
 

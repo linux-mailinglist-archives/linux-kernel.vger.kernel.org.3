@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8DA49A0A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C4A49A106
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:34:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1846380AbiAXXPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:15:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
+        id S1849289AbiAXXZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:25:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1584691AbiAXWVd (ORCPT
+        with ESMTP id S1587755AbiAXW3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:21:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C111AC041883;
-        Mon, 24 Jan 2022 12:52:55 -0800 (PST)
+        Mon, 24 Jan 2022 17:29:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A699FC095410;
+        Mon, 24 Jan 2022 12:55:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6190F611F9;
-        Mon, 24 Jan 2022 20:52:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F3CDC340EA;
-        Mon, 24 Jan 2022 20:52:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D196B811FB;
+        Mon, 24 Jan 2022 20:55:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07D9CC340E5;
+        Mon, 24 Jan 2022 20:55:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057574;
-        bh=jfuQ8/SSqqyyt5xvg642+GN2e1J3uMhRUlEhGKuxvSs=;
+        s=korg; t=1643057716;
+        bh=IgHUHKKQzYCKAcKqsjwDkEbLcCrTpp0xgZ/idz6puKc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sbYd6o4OTYEelV+sjCyH77yhzhsV5Sv9M6aQcgzAXs3QohWNE8pNTCOy3++9xm/DD
-         xdmJc176xvEXfS0q0IHLbmlRY4SHy+EIlBqAoTGJRKkAv3nlAPW0ZwAWEKB31MsgU/
-         y6k33IMzrPRjRBLUtNd+OyuyIScK2sKSVatvMUBw=
+        b=JXmLUO7tcuEqok3wReiCViXl0hkF4tlIKJBjOdoDTgmyNpiAa18fW+fmJ8oz2hLqX
+         ZJG59v3pNJC3IbYApdni3w1B6nC8j9mJMbNugezCKEnR/MhiWR5ovDUZlNNY1myabb
+         vV1tecXB7BfK8J+pfkYv1LrNyWZ/mgvQ1/ciOrfs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chao Yu <chao@kernel.org>,
-        Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH 5.16 0011/1039] f2fs: fix to do sanity check in is_alive()
-Date:   Mon, 24 Jan 2022 19:30:00 +0100
-Message-Id: <20220124184125.525171284@linuxfoundation.org>
+        stable@vger.kernel.org, Wenqing Liu <wenqingliu0120@gmail.com>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 5.16 0012/1039] f2fs: fix to do sanity check on last xattr entry in __f2fs_setxattr()
+Date:   Mon, 24 Jan 2022 19:30:01 +0100
+Message-Id: <20220124184125.560804776@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -50,32 +50,82 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Chao Yu <chao@kernel.org>
 
-commit 77900c45ee5cd5da63bd4d818a41dbdf367e81cd upstream.
+commit 645a3c40ca3d40cc32b4b5972bf2620f2eb5dba6 upstream.
 
-In fuzzed image, SSA table may indicate that a data block belongs to
-invalid node, which node ID is out-of-range (0, 1, 2 or max_nid), in
-order to avoid migrating inconsistent data in such corrupted image,
-let's do sanity check anyway before data block migration.
+As Wenqing Liu reported in bugzilla:
+
+https://bugzilla.kernel.org/show_bug.cgi?id=215235
+
+- Overview
+page fault in f2fs_setxattr() when mount and operate on corrupted image
+
+- Reproduce
+tested on kernel 5.16-rc3, 5.15.X under root
+
+1. unzip tmp7.zip
+2. ./single.sh f2fs 7
+
+Sometimes need to run the script several times
+
+- Kernel dump
+loop0: detected capacity change from 0 to 131072
+F2FS-fs (loop0): Found nat_bits in checkpoint
+F2FS-fs (loop0): Mounted with checkpoint version = 7548c2ee
+BUG: unable to handle page fault for address: ffffe47bc7123f48
+RIP: 0010:kfree+0x66/0x320
+Call Trace:
+ __f2fs_setxattr+0x2aa/0xc00 [f2fs]
+ f2fs_setxattr+0xfa/0x480 [f2fs]
+ __f2fs_set_acl+0x19b/0x330 [f2fs]
+ __vfs_removexattr+0x52/0x70
+ __vfs_removexattr_locked+0xb1/0x140
+ vfs_removexattr+0x56/0x100
+ removexattr+0x57/0x80
+ path_removexattr+0xa3/0xc0
+ __x64_sys_removexattr+0x17/0x20
+ do_syscall_64+0x37/0xb0
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+The root cause is in __f2fs_setxattr(), we missed to do sanity check on
+last xattr entry, result in out-of-bound memory access during updating
+inconsistent xattr data of target inode.
+
+After the fix, it can detect such xattr inconsistency as below:
+
+F2FS-fs (loop11): inode (7) has invalid last xattr entry, entry_size: 60676
+F2FS-fs (loop11): inode (8) has corrupted xattr
+F2FS-fs (loop11): inode (8) has corrupted xattr
+F2FS-fs (loop11): inode (8) has invalid last xattr entry, entry_size: 47736
 
 Cc: stable@vger.kernel.org
+Reported-by: Wenqing Liu <wenqingliu0120@gmail.com>
 Signed-off-by: Chao Yu <chao@kernel.org>
 Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/f2fs/gc.c |    3 +++
- 1 file changed, 3 insertions(+)
+ fs/f2fs/xattr.c |   11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
---- a/fs/f2fs/gc.c
-+++ b/fs/f2fs/gc.c
-@@ -1026,6 +1026,9 @@ static bool is_alive(struct f2fs_sb_info
- 		set_sbi_flag(sbi, SBI_NEED_FSCK);
+--- a/fs/f2fs/xattr.c
++++ b/fs/f2fs/xattr.c
+@@ -684,8 +684,17 @@ static int __f2fs_setxattr(struct inode
  	}
  
-+	if (f2fs_check_nid_range(sbi, dni->ino))
-+		return false;
-+
- 	*nofs = ofs_of_node(node_page);
- 	source_blkaddr = data_blkaddr(NULL, node_page, ofs_in_node);
- 	f2fs_put_page(node_page, 1);
+ 	last = here;
+-	while (!IS_XATTR_LAST_ENTRY(last))
++	while (!IS_XATTR_LAST_ENTRY(last)) {
++		if ((void *)(last) + sizeof(__u32) > last_base_addr ||
++			(void *)XATTR_NEXT_ENTRY(last) > last_base_addr) {
++			f2fs_err(F2FS_I_SB(inode), "inode (%lu) has invalid last xattr entry, entry_size: %zu",
++					inode->i_ino, ENTRY_SIZE(last));
++			set_sbi_flag(F2FS_I_SB(inode), SBI_NEED_FSCK);
++			error = -EFSCORRUPTED;
++			goto exit;
++		}
+ 		last = XATTR_NEXT_ENTRY(last);
++	}
+ 
+ 	newsize = XATTR_ALIGN(sizeof(struct f2fs_xattr_entry) + len + size);
+ 
 
 

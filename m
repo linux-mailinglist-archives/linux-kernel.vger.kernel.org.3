@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EDAF499741
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3A0499D05
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:15:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447947AbiAXVLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:11:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390234AbiAXUpD (ORCPT
+        id S1581523AbiAXWL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:11:58 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:46924 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1452794AbiAXV0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:45:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00A7C0613A0;
-        Mon, 24 Jan 2022 11:55:42 -0800 (PST)
+        Mon, 24 Jan 2022 16:26:37 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E0E0B80FA1;
-        Mon, 24 Jan 2022 19:55:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83E73C340E5;
-        Mon, 24 Jan 2022 19:55:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1302661320;
+        Mon, 24 Jan 2022 21:26:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20732C340E4;
+        Mon, 24 Jan 2022 21:26:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054140;
-        bh=b8G62tcbZ+RNUVrSWREkGXkwEKGfu9XRr04Yuz48NHM=;
+        s=korg; t=1643059595;
+        bh=syKAXgGkNN/cd6e1sptDYNJgaiCH3RcEKn5+Joj72mU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q3Cjrwpj4AgUKhn5ap+CsR5t8jxQLLJQQ+0CYihpHAvhz/CZKKn2qwMoir+94/gGw
-         caPKlkoj/3iWgNEFL/BgkJpeV1oKVKC+mR9wuZgKQkqowA2+wlfmqQqqa4pGmC9C3G
-         F1BQLPuSMf4YQvgvmoNCZny8bfXWjXygQ3GAlIcI=
+        b=WwL7mIcRKNrtdRnVhXugrE7R6u7XLI+qBs6BWTgZ/D3IQFdBisEBlgxpnBqdhyJdI
+         hETtNEJYu4nqYFijQ8INpb0BCw/lYycFgY/rKHcNiZ47Z8N0J5sl7Udymfuc5GOK1y
+         k8quSd+1LKbTms3RLOtgFvoZfLi/tul/s34h5bUc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alyssa Ross <hi@alyssa.is>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 292/563] ASoC: fsl_mqs: fix MODULE_ALIAS
-Date:   Mon, 24 Jan 2022 19:40:57 +0100
-Message-Id: <20220124184034.547453892@linuxfoundation.org>
+        stable@vger.kernel.org, Peter Chiu <chui-hao.chiu@mediatek.com>,
+        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0669/1039] mt76: mt7615: fix possible deadlock while mt7615_register_ext_phy()
+Date:   Mon, 24 Jan 2022 19:40:58 +0100
+Message-Id: <20220124184147.862142126@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,31 +45,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alyssa Ross <hi@alyssa.is>
+From: Peter Chiu <chui-hao.chiu@mediatek.com>
 
-[ Upstream commit 9f3d45318dd9e739ed62e4218839a7a824d3cced ]
+[ Upstream commit 8c55516de3f9b76b9d9444e7890682ec2efc809f ]
 
-modprobe can't handle spaces in aliases.
+ieee80211_register_hw() is called with rtnl_lock held, and this could be
+caused lockdep from a work item that's on a workqueue that is flushed
+with the rtnl held.
 
-Fixes: 9e28f6532c61 ("ASoC: fsl_mqs: Add MQS component driver")
-Signed-off-by: Alyssa Ross <hi@alyssa.is>
-Link: https://lore.kernel.org/r/20220104132218.1690103-1-hi@alyssa.is
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Move mt7615_register_ext_phy() outside the init_work().
+
+Signed-off-by: Peter Chiu <chui-hao.chiu@mediatek.com>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/fsl/fsl_mqs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/wireless/mediatek/mt76/mt7615/pci_init.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/fsl/fsl_mqs.c b/sound/soc/fsl/fsl_mqs.c
-index 69aeb0e71844d..0d4efbed41dab 100644
---- a/sound/soc/fsl/fsl_mqs.c
-+++ b/sound/soc/fsl/fsl_mqs.c
-@@ -337,4 +337,4 @@ module_platform_driver(fsl_mqs_driver);
- MODULE_AUTHOR("Shengjiu Wang <Shengjiu.Wang@nxp.com>");
- MODULE_DESCRIPTION("MQS codec driver");
- MODULE_LICENSE("GPL v2");
--MODULE_ALIAS("platform: fsl-mqs");
-+MODULE_ALIAS("platform:fsl-mqs");
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/pci_init.c b/drivers/net/wireless/mediatek/mt76/mt7615/pci_init.c
+index a2465b49ecd0c..87b4aa52ee0f9 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7615/pci_init.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7615/pci_init.c
+@@ -28,8 +28,6 @@ static void mt7615_pci_init_work(struct work_struct *work)
+ 		return;
+ 
+ 	mt7615_init_work(dev);
+-	if (dev->dbdc_support)
+-		mt7615_register_ext_phy(dev);
+ }
+ 
+ static int mt7615_init_hardware(struct mt7615_dev *dev)
+@@ -160,6 +158,12 @@ int mt7615_register_device(struct mt7615_dev *dev)
+ 	mt7615_init_txpower(dev, &dev->mphy.sband_2g.sband);
+ 	mt7615_init_txpower(dev, &dev->mphy.sband_5g.sband);
+ 
++	if (dev->dbdc_support) {
++		ret = mt7615_register_ext_phy(dev);
++		if (ret)
++			return ret;
++	}
++
+ 	return mt7615_init_debugfs(dev);
+ }
+ 
 -- 
 2.34.1
 

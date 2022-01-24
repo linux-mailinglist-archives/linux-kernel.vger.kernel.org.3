@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E874A498CC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:32:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1443F4991FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350343AbiAXTYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:24:51 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44614 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345000AbiAXTPg (ORCPT
+        id S1380640AbiAXUQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:16:38 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:42774 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245216AbiAXT6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:15:36 -0500
+        Mon, 24 Jan 2022 14:58:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44C7960010;
-        Mon, 24 Jan 2022 19:15:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57CA2C340E5;
-        Mon, 24 Jan 2022 19:15:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1CF86B811F9;
+        Mon, 24 Jan 2022 19:58:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F10AC36AEB;
+        Mon, 24 Jan 2022 19:58:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051735;
-        bh=suquYQEhvvhQdPUfWh50Vlo6qQzW8pXNTM+Kg+H+w6o=;
+        s=korg; t=1643054298;
+        bh=qDhR74ah9joXahceyFh9WO/6szkMtojGpRt+7xDLEdM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DGLhGXgNrWNP3fVaH6j5g6wQZ0E1N3XbdecnDc7r9s9QmgGAmcDy618EiFJStnBVm
-         f5hxtQquaj9N81AJO58DI+UkmGFK1lfFbSGNKjvMWaOVCt7PZCb8o0j8uCMHPNR2y1
-         P8LEe/i3vQ2ZfVPsmsknuvppnT2HBJzPJ49rp9m8=
+        b=P0/EHm9o5X2igDsYwgKZ/QNcG5/pVIn2Farmc7d2o+QjSkHnwhNk+rSGtgA+Aw+WG
+         5z00aryneVgdqTGzN7FnglUlOPhXihJ18ed0Rq/rIncQgwcypjXnLxcwbtBtgBY+vh
+         zFplSCtfaYLWKy51kglZMB29BSKSJW+QKxMF1t/4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 069/239] media: dib8000: Fix a memleak in dib8000_init()
-Date:   Mon, 24 Jan 2022 19:41:47 +0100
-Message-Id: <20220124183945.326162430@linuxfoundation.org>
+Subject: [PATCH 5.10 343/563] media: rcar-vin: Update format alignment constraints
+Date:   Mon, 24 Jan 2022 19:41:48 +0100
+Message-Id: <20220124184036.289671836@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,53 +49,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-[ Upstream commit 8dbdcc7269a83305ee9d677b75064d3530a48ee2 ]
+[ Upstream commit da6911f330d40cfe115a37249e47643eff555e82 ]
 
-In dib8000_init(), the variable fe is not freed or passed out on the
-failure of dib8000_identify(&state->i2c), which could lead to a memleak.
+This change fixes two issues with the size constraints for buffers.
 
-Fix this bug by adding a kfree of fe in the error path.
+- There is no width alignment constraint for RGB formats. Prior to this
+  change they were treated as YUV and as a result were more restricted
+  than needed. Add a new check to differentiate between the two.
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+- The minimum width and height supported is 5x2, not 2x4, this is an
+  artifact from the driver's soc-camera days. Fix this incorrect
+  assumption.
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_DVB_DIB8000=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: 77e2c0f5d471 ("V4L/DVB (12900): DiB8000: added support for DiBcom ISDB-T/ISDB-Tsb demodulator DiB8000")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-frontends/dib8000.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/media/platform/rcar-vin/rcar-v4l2.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/dib8000.c b/drivers/media/dvb-frontends/dib8000.c
-index 5fa787e023c7e..4b9e4afa4c61f 100644
---- a/drivers/media/dvb-frontends/dib8000.c
-+++ b/drivers/media/dvb-frontends/dib8000.c
-@@ -4476,8 +4476,10 @@ static struct dvb_frontend *dib8000_init(struct i2c_adapter *i2c_adap, u8 i2c_ad
+diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+index 3e7a3ae2a6b97..0bbe6f9f92062 100644
+--- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
++++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+@@ -175,20 +175,27 @@ static void rvin_format_align(struct rvin_dev *vin, struct v4l2_pix_format *pix)
+ 		break;
+ 	}
  
- 	state->timf_default = cfg->pll->timf;
+-	/* HW limit width to a multiple of 32 (2^5) for NV12/16 else 2 (2^1) */
++	/* Hardware limits width alignment based on format. */
+ 	switch (pix->pixelformat) {
++	/* Multiple of 32 (2^5) for NV12/16. */
+ 	case V4L2_PIX_FMT_NV12:
+ 	case V4L2_PIX_FMT_NV16:
+ 		walign = 5;
+ 		break;
+-	default:
++	/* Multiple of 2 (2^1) for YUV. */
++	case V4L2_PIX_FMT_YUYV:
++	case V4L2_PIX_FMT_UYVY:
+ 		walign = 1;
+ 		break;
++	/* No multiple for RGB. */
++	default:
++		walign = 0;
++		break;
+ 	}
  
--	if (dib8000_identify(&state->i2c) == 0)
-+	if (dib8000_identify(&state->i2c) == 0) {
-+		kfree(fe);
- 		goto error;
-+	}
+ 	/* Limit to VIN capabilities */
+-	v4l_bound_align_image(&pix->width, 2, vin->info->max_width, walign,
+-			      &pix->height, 4, vin->info->max_height, 2, 0);
++	v4l_bound_align_image(&pix->width, 5, vin->info->max_width, walign,
++			      &pix->height, 2, vin->info->max_height, 0, 0);
  
- 	dibx000_init_i2c_master(&state->i2c_master, DIB8000, state->i2c.adap, state->i2c.addr);
- 
+ 	pix->bytesperline = rvin_format_bytesperline(vin, pix);
+ 	pix->sizeimage = rvin_format_sizeimage(pix);
 -- 
 2.34.1
 

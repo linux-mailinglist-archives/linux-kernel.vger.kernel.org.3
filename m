@@ -2,95 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1436449A629
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BAB149A63E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:20:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3412126AbiAYAfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:35:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57218 "EHLO
+        id S3412745AbiAYAhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:37:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2364487AbiAXXsQ (ORCPT
+        with ESMTP id S1385568AbiAXXsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:48:16 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBE1C07E314
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 13:43:19 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id h23so21217727iol.11
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 13:43:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Bwyi05nr6wT2ZFWR22PTFFEqIa15MbmZhLkPDJsvpx0=;
-        b=RHC6VLVvqaubbaCRsVngcmpEX70I5qMnda30/M7WCCZwC5f0cqpQ3RymomMsBkULmw
-         nf5/S3hSqeRVgjITKXpsUWSCPJ1zSs0WErq91oJeo4EwKAl5NWPxbZD95UmjUoLTZfxV
-         UKqLgKCXjmYxAMpQTBGbu1bs6koOmgR3YMUPA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Bwyi05nr6wT2ZFWR22PTFFEqIa15MbmZhLkPDJsvpx0=;
-        b=6cPymeRT6BCdDl6P7iiFy3RTqold7GzMp2qT1Cepa1A2B19PdlVo3cFNlZxosKPtJp
-         xEEL4f0z49QNxthTOm5H3dRXzNxoVFiGcq1X49lYYTLsxYkfFeyVIA63ACtppZ61G5je
-         TqXglz4goMuFxFvOKqFzZbIAcXcb4nJ0PAE4jBVStLk0rL1DQpQ3RCLD6XF0GcOoa/fR
-         ykrDkxohi4DXvTukJ2B9XxGNYdj0neB1yAsJY/lF8CLNoAFnidgbtk6zI1YDSPTbqY9J
-         Ewcc1D6od9oPFpVV0495oCOF4LDgeT0UG4ITXd+y7tqM/Q1EJa9r4qGbhlWhuX4ep+1M
-         6vHQ==
-X-Gm-Message-State: AOAM533O5ffZwjM+6MHCcr/ZCDPl29q/fgU2TDs5K90ywji1lT6NGiiH
-        gU89tr8ZflF/aA0SaPB7bJmJAkIhWouveg==
-X-Google-Smtp-Source: ABdhPJzP3SKMw6dJ3Zfo3bzJE6hSPN73uestrc9Uen95HaFscPCPvoo/ub7M749/85Rn7AAw8Hz5Aw==
-X-Received: by 2002:a5d:9f4c:: with SMTP id u12mr9335789iot.22.1643060598977;
-        Mon, 24 Jan 2022 13:43:18 -0800 (PST)
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com. [209.85.166.47])
-        by smtp.gmail.com with ESMTPSA id k9sm7437748iow.48.2022.01.24.13.43.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jan 2022 13:43:17 -0800 (PST)
-Received: by mail-io1-f47.google.com with SMTP id h7so3354468iof.3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 13:43:17 -0800 (PST)
-X-Received: by 2002:a02:9043:: with SMTP id y3mr7723156jaf.263.1643060597485;
- Mon, 24 Jan 2022 13:43:17 -0800 (PST)
+        Mon, 24 Jan 2022 18:48:46 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B090C0419C8;
+        Mon, 24 Jan 2022 13:44:00 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JjNlv5dl4z4yHs;
+        Tue, 25 Jan 2022 08:43:55 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643060636;
+        bh=ZkOTg+PQZOto/jxd0gHdYNssTz91wrZxO1zggumS00Q=;
+        h=Date:From:To:Cc:Subject:From;
+        b=aln8qIoFF8b8KzHXY4Ci3oIfL6C1CflWgj/Rd1bbUyjAYboOiMCqSt1iMZNIgY9Mb
+         2zacFBL0uPBLgFcOiLMlqUt2BkwpYgnv3Ma6eY9zdrOkRzIl2Lca4qfgff8B63wPRX
+         HKxJkqTKuWGuKesruP490b6DNV6bPCulmf954D2m1UpaljwTlDbSSZ4uVLVwGKrpof
+         LoRkIP7CR7mB5Wne52fRbW+FjF+mXDgHgqJn1ag8JGuqNR6QDPut905gBJvLTy9cQG
+         PXd3EPgxjiyghPVMWF1h+C2AvwY1o6SX+RJ0cmNTrn4AqQnfsKLKE5te05vvbSKOLn
+         cfiRVxW7Zh3Dw==
+Date:   Tue, 25 Jan 2022 08:43:53 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the bpf-next tree with Linus' tree
+Message-ID: <20220125084353.5fc682d9@canb.auug.org.au>
 MIME-Version: 1.0
-References: <cover.1643015752.git.christophe.leroy@csgroup.eu> <848d857871f457f4df37e80fad468d615b237c24.1643015752.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <848d857871f457f4df37e80fad468d615b237c24.1643015752.git.christophe.leroy@csgroup.eu>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 24 Jan 2022 13:43:06 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=VMUA+8RFOSkVQTmBDrHPSYSG5VBVA_EKKQuBjF0ZZKpQ@mail.gmail.com>
-Message-ID: <CAD=FV=VMUA+8RFOSkVQTmBDrHPSYSG5VBVA_EKKQuBjF0ZZKpQ@mail.gmail.com>
-Subject: Re: [PATCH 6/7] modules: Add CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "kgdb-bugreport@lists.sourceforge.net" 
-        <kgdb-bugreport@lists.sourceforge.net>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/xJqTwuSaouszgSpnNlM3wk0";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+--Sig_/xJqTwuSaouszgSpnNlM3wk0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 24, 2022 at 1:22 AM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
-> --- a/kernel/debug/kdb/kdb_main.c
-> +++ b/kernel/debug/kdb/kdb_main.c
-> @@ -2022,8 +2022,11 @@ static int kdb_lsmod(int argc, const char **argv)
->                 if (mod->state == MODULE_STATE_UNFORMED)
->                         continue;
->
-> -               kdb_printf("%-20s%8u  0x%px ", mod->name,
-> -                          mod->core_layout.size, (void *)mod);
-> +               kdb_printf("%-20s%8u", mod->name, mod->core_layout.size);
-> +#ifdef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
-> +               kdb_printf("/%8u  0x%px ", mod->data_layout.size);
+Hi all,
 
-Just counting percentages and arguments, it seems like something's
-wrong in the above print statement.
+Today's linux-next merge of the bpf-next tree got a conflict in:
 
--Doug
+  include/linux/bpf_verifier.h
+
+between commit:
+
+  be80a1d3f9db ("bpf: Generalize check_ctx_reg for reuse with other types")
+
+from Linus' tree and commit:
+
+  d583691c47dc ("bpf: Introduce mem, size argument pair support for kfunc")
+
+from the bpf-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/linux/bpf_verifier.h
+index e9993172f892,ac4797155412..000000000000
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@@ -519,8 -519,10 +519,10 @@@ bpf_prog_offload_replace_insn(struct bp
+  void
+  bpf_prog_offload_remove_insns(struct bpf_verifier_env *env, u32 off, u32 =
+cnt);
+ =20
+ -int check_ctx_reg(struct bpf_verifier_env *env,
+ -		  const struct bpf_reg_state *reg, int regno);
+ +int check_ptr_off_reg(struct bpf_verifier_env *env,
+ +		      const struct bpf_reg_state *reg, int regno);
++ int check_kfunc_mem_size_reg(struct bpf_verifier_env *env, struct bpf_reg=
+_state *reg,
++ 			     u32 regno);
+  int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+  		   u32 regno, u32 mem_size);
+ =20
+
+--Sig_/xJqTwuSaouszgSpnNlM3wk0
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHvHZoACgkQAVBC80lX
+0GyjPAf/afQFcqFrWODtd6LIcDAuOpFlLbPE4b//f8oTwsJZvWIMmE8i50CFSf5u
+UnAgolVEivNANlUmGfGF98sYvv06b9q0VIE63u1B2suV9J9OsFtzTtmCF9Sw8Gsi
+zY8Gq8mShYOETKpwEf3deRDx6JC7sp5M7kQtg9W+75RNZfvvUvu2r0DAErxJsvhg
+mR91JCR2o6QrJhRN7MsYVs506632Gc00sPx3gk32aRyEhEwmxXEGG0wbTNqcykz4
+X79YDv90iopGuwofTvUPEAbDhOyyeajDgJLxALleROKh/dg6MZ9oI+0yENnJyjHR
+t7GtJbtQUV+NkWJUi6q9oJ1p+Hi4lg==
+=HokY
+-----END PGP SIGNATURE-----
+
+--Sig_/xJqTwuSaouszgSpnNlM3wk0--

@@ -2,42 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E4D499EA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:10:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E8E49A0CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1836759AbiAXWkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:40:45 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:59772 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457483AbiAXVln (ORCPT
+        id S1847736AbiAXXUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:20:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36664 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1584597AbiAXWV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:41:43 -0500
+        Mon, 24 Jan 2022 17:21:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC54C0424E7;
+        Mon, 24 Jan 2022 12:52:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 11C7C61526;
-        Mon, 24 Jan 2022 21:41:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED0F0C340E4;
-        Mon, 24 Jan 2022 21:41:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76509B81218;
+        Mon, 24 Jan 2022 20:52:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A030C340E5;
+        Mon, 24 Jan 2022 20:51:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060502;
-        bh=hgTMhcKXn0qipvk81yvlR5VaiWMS55P9EIckJyt9sxo=;
+        s=korg; t=1643057519;
+        bh=RwgNWwgC6tm4OmIYkTg6If1aFsmpPow52E85Zp5Xwvo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GdO2GWewTxxGm2rMqqELfQ++O/fS7YKP2+9gy+z4GMFfM1bC1ndCrbJFalFlXQxaf
-         mgDl8rA+MRwmY7mQNv8PiQo3ZnqdBlLuIh/HohkOHZfp1GDZ9TmREilxVJVizORs4B
-         dFdZQC4wB0mLeNIkgaGtAorpp+TATUbhs9Ih8If4=
+        b=ZEVoA2hFwIKhYwJp/dSeVtIgHAoQP1WZs/I5TmLSQV3qlHjFBlb5XpIeZcuPPqcwE
+         a5z9DhU6OqYtr1fudBe1wa1VOqPC9LKvhk3YgyNMI84KbYrEiI2IyovSC7C2LlgeKx
+         Umgl5X5BUDoM5ROm6/jzJMlb5S8/ctl4vTtsdBkE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.16 0968/1039] net: axienet: Wait for PhyRstCmplt after core reset
+        stable@vger.kernel.org, Sam Protsenko <semen.protsenko@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Subject: [PATCH 5.15 840/846] dt-bindings: watchdog: Require samsung,syscon-phandle for Exynos7
 Date:   Mon, 24 Jan 2022 19:45:57 +0100
-Message-Id: <20220124184157.828788785@linuxfoundation.org>
+Message-Id: <20220124184129.880609350@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,51 +51,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Sam Protsenko <semen.protsenko@linaro.org>
 
-commit b400c2f4f4c53c86594dd57098970d97d488bfde upstream.
+commit 33950f9a36aca55c2b1e6062d9b29f3e97f91c40 upstream.
 
-When resetting the device, wait for the PhyRstCmplt bit to be set
-in the interrupt status register before continuing initialization, to
-ensure that the core is actually ready. When using an external PHY, this
-also ensures we do not start trying to access the PHY while it is still
-in reset. The PHY reset is initiated by the core reset which is
-triggered just above, but remains asserted for 5ms after the core is
-reset according to the documentation.
+Exynos7 watchdog driver is clearly indicating that its dts node must
+define syscon phandle property. That was probably forgotten, so add it.
 
-The MgtRdy bit could also be waited for, but unfortunately when using
-7-series devices, the bit does not appear to work as documented (it
-seems to behave as some sort of link state indication and not just an
-indication the transceiver is ready) so it can't really be relied on for
-this purpose.
-
-Fixes: 8a3b7a252dca9 ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+Fixes: 2b9366b66967 ("watchdog: s3c2410_wdt: Add support for Watchdog device on Exynos7")
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/20211107202943.8859-2-semen.protsenko@linaro.org
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/xilinx/xilinx_axienet_main.c |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+ Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-@@ -516,6 +516,16 @@ static int __axienet_device_reset(struct
- 		return ret;
- 	}
+--- a/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
+@@ -39,8 +39,8 @@ properties:
+   samsung,syscon-phandle:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description:
+-      Phandle to the PMU system controller node (in case of Exynos5250
+-      and Exynos5420).
++      Phandle to the PMU system controller node (in case of Exynos5250,
++      Exynos5420 and Exynos7).
  
-+	/* Wait for PhyRstCmplt bit to be set, indicating the PHY reset has finished */
-+	ret = read_poll_timeout(axienet_ior, value,
-+				value & XAE_INT_PHYRSTCMPLT_MASK,
-+				DELAY_OF_ONE_MILLISEC, 50000, false, lp,
-+				XAE_IS_OFFSET);
-+	if (ret) {
-+		dev_err(lp->dev, "%s: timeout waiting for PhyRstCmplt\n", __func__);
-+		return ret;
-+	}
-+
- 	return 0;
- }
- 
+ required:
+   - compatible
+@@ -58,6 +58,7 @@ allOf:
+             enum:
+               - samsung,exynos5250-wdt
+               - samsung,exynos5420-wdt
++              - samsung,exynos7-wdt
+     then:
+       required:
+         - samsung,syscon-phandle
 
 

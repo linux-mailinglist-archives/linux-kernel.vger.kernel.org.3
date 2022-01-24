@@ -2,127 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF0049996C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:44:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11793499835
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1455282AbiAXVfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:35:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45162 "EHLO
+        id S1451379AbiAXVWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:22:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442666AbiAXUzE (ORCPT
+        with ESMTP id S1442669AbiAXUzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 15:55:04 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F661C095421
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:59:34 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id b12-20020a9d754c000000b0059eb935359eso7475632otl.8
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:59:34 -0800 (PST)
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D82C047CE6
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:00:02 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id p27so52313042lfa.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:00:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=w+lZqp5VkPjN0faGgSSPKZ3zUhREnNDGIkuhzUCrVAU=;
-        b=CSAtIjx4L+ZkJciYlaWlmCBX6UHmUCvw1LCMR3LfRIGvEjh3fERyo+hkCxZVzZVBsC
-         CgSeSRBEHJ02dBKUqKVxK6XFAAcuOQ4HPqrhCT0oM/R6lZoVCbPvRX8v0CD5P6hmoT/+
-         L58y+kpGl8c7DIBbCzp6UolIERAa6i9T8H7vLoRLfxa3bX0GRY3NSj//B756aVhSNbhp
-         G3j4knVTvzCoKjLC++e7sAY/UarFC0XGY1l2esyRVCnHuD+dnsdNaC3fDALkIi4oZvL7
-         N/XrfocLShB4Ad0AqhzV2I9DzafUi1yimxXNA6kNHy4Wki4vd57iuwzOA1Hc/MXKK3Uo
-         3RpA==
+        bh=X1fspDfOZTRESHgvCsTpy0M+wXpoDo9iEK0jnJXDU5Y=;
+        b=liPSw+oHKbLKt49NG7WwlravT+ecqQGWP3Y1Q8azHjQmV39vlahZekjyxHrUorHG/s
+         lgHi+ZN/pKPrXARZMuuyXAiagpmQ754zvGdFo3GwVY1mEUx8JkonDBNdCBKtOm/CsO0H
+         l57Gfv77T9qgQK8hck4Gu9uzAdq07iWfS/Nn0d18+937IolDJ4rDoR6RYdCIOAMkGGiT
+         o86l+PSF7Bih3oEb7/WysNBmRTnzCpUJ46UIpdYMj/oPP3A3W2RSItFoPKkWjpDdyRT2
+         pVIUwn2blEfUxS8k8l1bWErFN2xPD3V9KfxdKz0wOpdP13mwNeNWhey02A8C1wkng6w0
+         P6Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=w+lZqp5VkPjN0faGgSSPKZ3zUhREnNDGIkuhzUCrVAU=;
-        b=7y2HVvaPFUDu9/3M81lSU/ygLJ2tiyiTIpfsonte5kAm+Ikv81zQHWujTSY/fNGlHG
-         Ps+w5b9VMgYG5U65a9EJTt9a/0blJPVBEsjbLsQzBoGVuPND3w9djPjloZuxsakim0Vd
-         d2Yg3kEDZLVbwMinUkU8BsMcBM47ntv9wpfFXiq84IQXn5NBg924F9+BTV4edGwamLDv
-         MSK4vqdy7TibT6p1cfiD+4ZQznsNstEt36KcKF10WpDzGyvDq/KqGCd12wymxoGh3K9T
-         tf71ee04nIqU/A9cnrQSdvUobX5e/95oG0Fi71IXZNK/nM43NN++HgfX410wX7kTXudx
-         7XLw==
-X-Gm-Message-State: AOAM531nHsoMtBSTnl4o3z9VhnhCKa/AgMQ7kisUbbTI1XrH2oYMGh2+
-        uGuwbrjpH2Q0x8kFYWwyTbGqC18zGZenC7VyY2c=
-X-Google-Smtp-Source: ABdhPJyInPhzcrJLNRrdGV5Euq2uJFvwa+CtjDpOWM0SbP+p9pyHaSW7USbPxxFYzNmwKNu6aqwl8ruO9MIIWHs9TGI=
-X-Received: by 2002:a05:6830:1d90:: with SMTP id y16mr12820867oti.200.1643054373917;
- Mon, 24 Jan 2022 11:59:33 -0800 (PST)
+        bh=X1fspDfOZTRESHgvCsTpy0M+wXpoDo9iEK0jnJXDU5Y=;
+        b=A6EKXfcKxwUZwn8vNkgXIV6klGVTuHPNr3YLILFZKEk6TQTsD/1X6homgglY++uXFb
+         w2ZYNbENVdY6oORucxgFbYwdWWdOSr5dxcaYDeU+IBZv2vtBtMHSATQCMpRyPr8IrgGf
+         WxLIOhYgOZz1VBMt9huhBtXOuz2gIzPDjTmJ+KbBuCZ6n0So1Lyo1gkC+9zKQVLEEdsl
+         QlVGn1ME/CY/Zpl9AxNm7nHO+NdWfEv7udrZML0nDKVGvJiwgYmtvEBewwN/8FrMcMLd
+         7hdkzF8gwKY+FzTm0kuY9RGQ49LIVY2FTdbyemptMvgKmmzgqL2kxHxT+opfTnKHxO4M
+         cloA==
+X-Gm-Message-State: AOAM530H+pR/ZLfIa5rYsHorTgK4wOP6z+F/U691UxXRGiEewQBYf5f7
+        Ws0RfvepxnSxarSqe2otQJfdhO8rpmRoIPUcmgrFgA==
+X-Google-Smtp-Source: ABdhPJyR9U54DVM3ct2LPaeHjq5X1d2P4BRZ/v7s+ft4w68F9k24e6xs01fvMqO6kK5J5ovEHtn/qv7W3jzDWk3bGTA=
+X-Received: by 2002:a05:6512:308d:: with SMTP id z13mr13877780lfd.523.1643054401020;
+ Mon, 24 Jan 2022 12:00:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20220124165732.56587-1-zhou1615@umn.edu>
-In-Reply-To: <20220124165732.56587-1-zhou1615@umn.edu>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 24 Jan 2022 14:59:22 -0500
-Message-ID: <CADnq5_P9cnxi27FM6cU1sf1FjkV2sZdHjJciuuDd9ZZ92qyxeg@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: Fix a NULL pointer dereference in amdgpu_dm_connector_add_common_modes()
-To:     Zhou Qingyang <zhou1615@umn.edu>
-Cc:     Wayne Lin <Wayne.Lin@amd.com>, Leo Li <sunpeng.li@amd.com>,
-        Kangjie Lu <kjlu@umn.edu>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Roman Li <Roman.Li@amd.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Tony Cheng <Tony.Cheng@amd.com>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>, Jude Shih <shenshih@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Nikola Cornij <nikola.cornij@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220119135450.564115-1-Jason@zx2c4.com> <20220124192849.14755-1-Jason@zx2c4.com>
+In-Reply-To: <20220124192849.14755-1-Jason@zx2c4.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 24 Jan 2022 11:59:48 -0800
+Message-ID: <CAKwvOd=hGx4WEFTNKFSwkk_VZgNd01a+OZR78TMmKfK5stpBbQ@mail.gmail.com>
+Subject: Re: [PATCH v2] lib/crypto: blake2s: avoid indirect calls to
+ compression function for Clang CFI
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Ard Biesheuvel <ardb@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On Mon, Jan 24, 2022 at 11:29 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> blake2s_compress_generic is weakly aliased by blake2s_generic. The
+> current harness for function selection uses a function pointer, which is
+> ordinarily inlined and resolved at compile time. But when Clang's CFI is
+> enabled, CFI still triggers when making an indirect call via a weak
+> symbol. This seems like a bug in Clang's CFI, as though it's bucketing
+> weak symbols and strong symbols differently. It also only seems to
+> trigger when "full LTO" mode is used, rather than "thin LTO".
+>
+> [    0.000000][    T0] Kernel panic - not syncing: CFI failure (target: blake2s_compress_generic+0x0/0x1444)
+> [    0.000000][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.16.0-mainline-06981-g076c855b846e #1
+> [    0.000000][    T0] Hardware name: MT6873 (DT)
+> [    0.000000][    T0] Call trace:
+> [    0.000000][    T0]  dump_backtrace+0xfc/0x1dc
+> [    0.000000][    T0]  dump_stack_lvl+0xa8/0x11c
+> [    0.000000][    T0]  panic+0x194/0x464
+> [    0.000000][    T0]  __cfi_check_fail+0x54/0x58
+> [    0.000000][    T0]  __cfi_slowpath_diag+0x354/0x4b0
+> [    0.000000][    T0]  blake2s_update+0x14c/0x178
+> [    0.000000][    T0]  _extract_entropy+0xf4/0x29c
+> [    0.000000][    T0]  crng_initialize_primary+0x24/0x94
+> [    0.000000][    T0]  rand_initialize+0x2c/0x6c
+> [    0.000000][    T0]  start_kernel+0x2f8/0x65c
+> [    0.000000][    T0]  __primary_switched+0xc4/0x7be4
+> [    0.000000][    T0] Rebooting in 5 seconds..
+>
+> Nonetheless, the function pointer method isn't so terrific anyway, so
+> this patch replaces it with a simple boolean, which also gets inlined
+> away. This successfully works around the Clang bug.
 
-Alex
+Acked-by: Nick Desaulniers <ndesaulniers@google.com>
 
-On Mon, Jan 24, 2022 at 12:05 PM Zhou Qingyang <zhou1615@umn.edu> wrote:
+Thanks for the report. Once we have a fix in hand for LLVM, we can
+revisit removing this and raising the required LLVM version for CFI.
+
 >
-> In amdgpu_dm_connector_add_common_modes(), amdgpu_dm_create_common_mode()
-> is assigned to mode and is passed to drm_mode_probed_add() directly after
-> that. drm_mode_probed_add() passes &mode->head to list_add_tail(), and
-> there is a dereference of it in list_add_tail() without recoveries, which
-> could lead to NULL pointer dereference on failure of
-> amdgpu_dm_create_common_mode().
+> In general, I'm not too keen on all of the indirection involved here; it
+> clearly does more harm than good. Hopefully the whole thing can get
+> cleaned up down the road when lib/crypto is overhauled more
+> comprehensively. But for now, we go with a simple bandaid.
 >
-> Fix this by adding a NULL check of mode.
->
-> This bug was found by a static analyzer.
->
-> Builds with 'make allyesconfig' show no new warnings,
-> and our static analyzer no longer warns about this code.
->
-> Fixes: e7b07ceef2a6 ("drm/amd/display: Merge amdgpu_dm_types and amdgpu_dm")
-> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+> Fixes: 6048fdcc5f26 ("lib/crypto: blake2s: include as built-in")
+> Reported-by: Miles Chen <miles.chen@mediatek.com>
+> Tested-by: Miles Chen <miles.chen@mediatek.com>
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1567
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Sami Tolvanen <samitolvanen@google.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 > ---
-> The analysis employs differential checking to identify inconsistent
-> security operations (e.g., checks or kfrees) between two code paths
-> and confirms that the inconsistent operations are not recovered in the
-> current function or the callers, so they constitute bugs.
+> Changes v1->v2:
+> - Wrapped columns at 80 for Eric.
 >
-> Note that, as a bug found by static analysis, it can be a false
-> positive or hard to trigger. Multiple researchers have cross-reviewed
-> the bug.
+>  arch/arm/crypto/blake2s-shash.c   |  4 ++--
+>  arch/x86/crypto/blake2s-shash.c   |  4 ++--
+>  crypto/blake2s_generic.c          |  4 ++--
+>  include/crypto/internal/blake2s.h | 40 +++++++++++++++++++------------
+>  lib/crypto/blake2s.c              |  4 ++--
+>  5 files changed, 33 insertions(+), 23 deletions(-)
 >
->  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 3 +++
->  1 file changed, 3 insertions(+)
+> diff --git a/arch/arm/crypto/blake2s-shash.c b/arch/arm/crypto/blake2s-shash.c
+> index 17c1c3bfe2f5..763c73beea2d 100644
+> --- a/arch/arm/crypto/blake2s-shash.c
+> +++ b/arch/arm/crypto/blake2s-shash.c
+> @@ -13,12 +13,12 @@
+>  static int crypto_blake2s_update_arm(struct shash_desc *desc,
+>                                      const u8 *in, unsigned int inlen)
+>  {
+> -       return crypto_blake2s_update(desc, in, inlen, blake2s_compress);
+> +       return crypto_blake2s_update(desc, in, inlen, false);
+>  }
 >
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> index 7f9773f8dab6..9ad94186b146 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> @@ -8143,6 +8143,9 @@ static void amdgpu_dm_connector_add_common_modes(struct drm_encoder *encoder,
->                 mode = amdgpu_dm_create_common_mode(encoder,
->                                 common_modes[i].name, common_modes[i].w,
->                                 common_modes[i].h);
-> +               if (!mode)
-> +                       continue;
-> +
->                 drm_mode_probed_add(connector, mode);
->                 amdgpu_dm_connector->num_modes++;
+>  static int crypto_blake2s_final_arm(struct shash_desc *desc, u8 *out)
+>  {
+> -       return crypto_blake2s_final(desc, out, blake2s_compress);
+> +       return crypto_blake2s_final(desc, out, false);
+>  }
+>
+>  #define BLAKE2S_ALG(name, driver_name, digest_size)                    \
+> diff --git a/arch/x86/crypto/blake2s-shash.c b/arch/x86/crypto/blake2s-shash.c
+> index f9e2fecdb761..59ae28abe35c 100644
+> --- a/arch/x86/crypto/blake2s-shash.c
+> +++ b/arch/x86/crypto/blake2s-shash.c
+> @@ -18,12 +18,12 @@
+>  static int crypto_blake2s_update_x86(struct shash_desc *desc,
+>                                      const u8 *in, unsigned int inlen)
+>  {
+> -       return crypto_blake2s_update(desc, in, inlen, blake2s_compress);
+> +       return crypto_blake2s_update(desc, in, inlen, false);
+>  }
+>
+>  static int crypto_blake2s_final_x86(struct shash_desc *desc, u8 *out)
+>  {
+> -       return crypto_blake2s_final(desc, out, blake2s_compress);
+> +       return crypto_blake2s_final(desc, out, false);
+>  }
+>
+>  #define BLAKE2S_ALG(name, driver_name, digest_size)                    \
+> diff --git a/crypto/blake2s_generic.c b/crypto/blake2s_generic.c
+> index 72fe480f9bd6..5f96a21f8788 100644
+> --- a/crypto/blake2s_generic.c
+> +++ b/crypto/blake2s_generic.c
+> @@ -15,12 +15,12 @@
+>  static int crypto_blake2s_update_generic(struct shash_desc *desc,
+>                                          const u8 *in, unsigned int inlen)
+>  {
+> -       return crypto_blake2s_update(desc, in, inlen, blake2s_compress_generic);
+> +       return crypto_blake2s_update(desc, in, inlen, true);
+>  }
+>
+>  static int crypto_blake2s_final_generic(struct shash_desc *desc, u8 *out)
+>  {
+> -       return crypto_blake2s_final(desc, out, blake2s_compress_generic);
+> +       return crypto_blake2s_final(desc, out, true);
+>  }
+>
+>  #define BLAKE2S_ALG(name, driver_name, digest_size)                    \
+> diff --git a/include/crypto/internal/blake2s.h b/include/crypto/internal/blake2s.h
+> index d39cfa0d333e..52363eee2b20 100644
+> --- a/include/crypto/internal/blake2s.h
+> +++ b/include/crypto/internal/blake2s.h
+> @@ -24,14 +24,11 @@ static inline void blake2s_set_lastblock(struct blake2s_state *state)
+>         state->f[0] = -1;
+>  }
+>
+> -typedef void (*blake2s_compress_t)(struct blake2s_state *state,
+> -                                  const u8 *block, size_t nblocks, u32 inc);
+> -
+>  /* Helper functions for BLAKE2s shared by the library and shash APIs */
+>
+> -static inline void __blake2s_update(struct blake2s_state *state,
+> -                                   const u8 *in, size_t inlen,
+> -                                   blake2s_compress_t compress)
+> +static __always_inline void
+> +__blake2s_update(struct blake2s_state *state, const u8 *in, size_t inlen,
+> +                bool force_generic)
+>  {
+>         const size_t fill = BLAKE2S_BLOCK_SIZE - state->buflen;
+>
+> @@ -39,7 +36,12 @@ static inline void __blake2s_update(struct blake2s_state *state,
+>                 return;
+>         if (inlen > fill) {
+>                 memcpy(state->buf + state->buflen, in, fill);
+> -               (*compress)(state, state->buf, 1, BLAKE2S_BLOCK_SIZE);
+> +               if (force_generic)
+> +                       blake2s_compress_generic(state, state->buf, 1,
+> +                                                BLAKE2S_BLOCK_SIZE);
+> +               else
+> +                       blake2s_compress(state, state->buf, 1,
+> +                                        BLAKE2S_BLOCK_SIZE);
+>                 state->buflen = 0;
+>                 in += fill;
+>                 inlen -= fill;
+> @@ -47,7 +49,12 @@ static inline void __blake2s_update(struct blake2s_state *state,
+>         if (inlen > BLAKE2S_BLOCK_SIZE) {
+>                 const size_t nblocks = DIV_ROUND_UP(inlen, BLAKE2S_BLOCK_SIZE);
+>                 /* Hash one less (full) block than strictly possible */
+> -               (*compress)(state, in, nblocks - 1, BLAKE2S_BLOCK_SIZE);
+> +               if (force_generic)
+> +                       blake2s_compress_generic(state, in, nblocks - 1,
+> +                                                BLAKE2S_BLOCK_SIZE);
+> +               else
+> +                       blake2s_compress(state, in, nblocks - 1,
+> +                                        BLAKE2S_BLOCK_SIZE);
+>                 in += BLAKE2S_BLOCK_SIZE * (nblocks - 1);
+>                 inlen -= BLAKE2S_BLOCK_SIZE * (nblocks - 1);
 >         }
-> --
-> 2.25.1
+> @@ -55,13 +62,16 @@ static inline void __blake2s_update(struct blake2s_state *state,
+>         state->buflen += inlen;
+>  }
 >
+> -static inline void __blake2s_final(struct blake2s_state *state, u8 *out,
+> -                                  blake2s_compress_t compress)
+> +static __always_inline void
+> +__blake2s_final(struct blake2s_state *state, u8 *out, bool force_generic)
+>  {
+>         blake2s_set_lastblock(state);
+>         memset(state->buf + state->buflen, 0,
+>                BLAKE2S_BLOCK_SIZE - state->buflen); /* Padding */
+> -       (*compress)(state, state->buf, 1, state->buflen);
+> +       if (force_generic)
+> +               blake2s_compress_generic(state, state->buf, 1, state->buflen);
+> +       else
+> +               blake2s_compress(state, state->buf, 1, state->buflen);
+>         cpu_to_le32_array(state->h, ARRAY_SIZE(state->h));
+>         memcpy(out, state->h, state->outlen);
+>  }
+> @@ -99,20 +109,20 @@ static inline int crypto_blake2s_init(struct shash_desc *desc)
+>
+>  static inline int crypto_blake2s_update(struct shash_desc *desc,
+>                                         const u8 *in, unsigned int inlen,
+> -                                       blake2s_compress_t compress)
+> +                                       bool force_generic)
+>  {
+>         struct blake2s_state *state = shash_desc_ctx(desc);
+>
+> -       __blake2s_update(state, in, inlen, compress);
+> +       __blake2s_update(state, in, inlen, force_generic);
+>         return 0;
+>  }
+>
+>  static inline int crypto_blake2s_final(struct shash_desc *desc, u8 *out,
+> -                                      blake2s_compress_t compress)
+> +                                      bool force_generic)
+>  {
+>         struct blake2s_state *state = shash_desc_ctx(desc);
+>
+> -       __blake2s_final(state, out, compress);
+> +       __blake2s_final(state, out, force_generic);
+>         return 0;
+>  }
+>
+> diff --git a/lib/crypto/blake2s.c b/lib/crypto/blake2s.c
+> index 9364f79937b8..c71c09621c09 100644
+> --- a/lib/crypto/blake2s.c
+> +++ b/lib/crypto/blake2s.c
+> @@ -18,14 +18,14 @@
+>
+>  void blake2s_update(struct blake2s_state *state, const u8 *in, size_t inlen)
+>  {
+> -       __blake2s_update(state, in, inlen, blake2s_compress);
+> +       __blake2s_update(state, in, inlen, false);
+>  }
+>  EXPORT_SYMBOL(blake2s_update);
+>
+>  void blake2s_final(struct blake2s_state *state, u8 *out)
+>  {
+>         WARN_ON(IS_ENABLED(DEBUG) && !out);
+> -       __blake2s_final(state, out, blake2s_compress);
+> +       __blake2s_final(state, out, false);
+>         memzero_explicit(state, sizeof(*state));
+>  }
+>  EXPORT_SYMBOL(blake2s_final);
+> --
+> 2.34.1
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers

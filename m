@@ -2,410 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6024982CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:02:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E7A4982D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:02:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238895AbiAXPCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 10:02:15 -0500
-Received: from mga01.intel.com ([192.55.52.88]:64635 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238258AbiAXPCO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 10:02:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643036533; x=1674572533;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YfNJ+Z5jmbyRfVApmGRzvisUXCbBpskwPlYNL4Rp32I=;
-  b=iDfVQSGeR40frPkkWaDvpLIVa4Ro1e0uwReQ490czglyovf4/e9cSimN
-   0pO9fYg9wrEZwZ4aH7y/bqFuBL1sAx9/pte8IUbYJ5hqqMNaZBt6YDFv8
-   Oi2Hbch+nPpLvdp/b6/y5eMPNLRmCYMbvC8Y7suYGlQ/6TdCh/wHBqdRK
-   s0HCD5J5/FbU5gw63lLKSDb0/4rn+BWBYvviOp3CAHX+0QuMNA4R9SnQ4
-   WKYmTj+XhYNFiVhjslUKMFbmxN3xMsfkZfgJBbGt5HScXQif2qBKXLun5
-   GZgXrfdr2behni0oykr5KT8AD3823WA72fMG0uoeMIfXcllmVnMxGn62y
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="270498501"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="270498501"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 07:02:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="580395540"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Jan 2022 07:02:06 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 78AC449F; Mon, 24 Jan 2022 17:02:19 +0200 (EET)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: [PATCHv2 04/29] x86/traps: Add #VE support for TDX guest
-Date:   Mon, 24 Jan 2022 18:01:50 +0300
-Message-Id: <20220124150215.36893-5-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
-References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S234477AbiAXPC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 10:02:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239164AbiAXPCV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 10:02:21 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8603C061744
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 07:02:19 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id o131-20020a25d789000000b00614957c60dfso20236713ybg.15
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 07:02:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=P9O4S8d3oVVuE/vD4lm4oLLN+5OcE1ItgKs9PC2D6EQ=;
+        b=RbOoDBHdS9Mk6OK3SJ9PPM+mCNh2UAhlNARXtgZVfAm7zlUQUtozE/n3XqLGmcfFGM
+         CoWrEidql331DXpXkWFFAHflk7wghEreatdUUOkWnWToIoQJqUbXPsutn4a1VCLohRbm
+         HrdbE9Bcr7mOchpdYl0YCr3Y1B0NOW+SL6a0WfyG8rkRIeEB3PyCCFVHYFw2W21DePfX
+         7oLxN64x6OejuSlIzDEEcVo3qI3QS+9qGgydEao6YFkYgqlDVieQd+dolWJlzu54+Hys
+         5dbPOyOmqyC4zgXYXkybvf31WpK94c+X5lCH+CXB01IpxGzQxlL7jH7u4hNkLG0c+qNH
+         pLyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=P9O4S8d3oVVuE/vD4lm4oLLN+5OcE1ItgKs9PC2D6EQ=;
+        b=2JsRQdi+OTAJgOhglIeRu5CQdkaz3hcmjoCKiBLxtE+djFbl5QgN3uBudLQZoh33Vk
+         0JcLkgAo/0Z/MPrO9+dob7+iTy+OJa0AXnhtPJ62sPU0ZMVLwFXKdyNQgYe+6ZJCtevS
+         fwmFI2ObryPGE6TJuCqaAqkbTJR8z3lQmmzqwqeEBnXxOOxf10Q6YhnljQA+/0y0qKuS
+         0r/ozeN3L+Tum7oVAwQ1HrjP2RnVp2D55iXOtY2Z4qQjjjRj8UIifnGlhytZlxBRyZKz
+         btHwPOA9Fy+vLys5aR4g6ptxWWrWyAEpL0q9ikELbXocgtxUTyildq8CQgxCPGPffSW8
+         L9Ug==
+X-Gm-Message-State: AOAM530LimS6OlENRoNH/P+Tw1GyRtn0qJCTiQ4D8ysV1qG2QPNvy6GE
+        mB4W630BG9PPdWtnEtWrwLUoaCEVS7x/
+X-Google-Smtp-Source: ABdhPJxEDxMzU3Yk4N5L5onA4XuAOtA/Fbwxz6Je+TTJqD3UwlmWmOg3jITYTUdrlKYe14tuDKOK/3SDtfDw
+X-Received: from bg.sfo.corp.google.com ([2620:15c:11a:202:9491:3e69:9a74:1f3])
+ (user=bgeffon job=sendgmr) by 2002:a25:bb0e:: with SMTP id
+ z14mr26156550ybg.762.1643036538880; Mon, 24 Jan 2022 07:02:18 -0800 (PST)
+Date:   Mon, 24 Jan 2022 07:02:09 -0800
+Message-Id: <20220124150209.22202-1-bgeffon@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+Subject: [PATCH] dm: introduce a no open flag for deferred remove
+From:   Brian Geffon <bgeffon@google.com>
+To:     Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@redhat.com>
+Cc:     dm-devel@redhat.com, linux-kernel@vger.kernel.org,
+        Brian Geffon <bgeffon@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Virtualization Exceptions (#VE) are delivered to TDX guests due to
-specific guest actions which may happen in either user space or the
-kernel:
+When a device is being removed with deferred remove it's
+still possible to open and use the device. This change
+introduces a flag called DM_DEFERRED_REMOVE_NO_OPEN_FLAG
+which when used with DM_DEFERRED_REMOVE will cause any
+new opens to fail with -ENXIO.
 
- * Specific instructions (WBINVD, for example)
- * Specific MSR accesses
- * Specific CPUID leaf accesses
- * Access to unmapped pages (EPT violation)
+If this flag is used without DM_DEFERRED_REMOVE it will
+result in an -EINVAL.
 
-In the settings that Linux will run in, virtualization exceptions are
-never generated on accesses to normal, TD-private memory that has been
-accepted.
-
-Syscall entry code has a critical window where the kernel stack is not
-yet set up. Any exception in this window leads to hard to debug issues
-and can be exploited for privilege escalation. Exceptions in the NMI
-entry code also cause issues. Returning from the exception handler with
-IRET will re-enable NMIs and nested NMI will corrupt the NMI stack.
-
-For these reasons, the kernel avoids #VEs during the syscall gap and
-the NMI entry code. Entry code paths do not access TD-shared memory,
-MMIO regions, use #VE triggering MSRs, instructions, or CPUID leaves
-that might generate #VE. VMM can remove memory from TD at any point,
-but access to unaccepted (or missing) private memory leads to VM
-termination, not to #VE.
-
-Similarly to page faults and breakpoints, #VEs are allowed in NMI
-handlers once the kernel is ready to deal with nested NMIs.
-
-During #VE delivery, all interrupts, including NMIs, are blocked until
-TDGETVEINFO is called. It prevents #VE nesting until the kernel reads
-the VE info.
-
-If a guest kernel action which would normally cause a #VE occurs in
-the interrupt-disabled region before TDGETVEINFO, a #DF (fault
-exception) is delivered to the guest which will result in an oops.
-
-Add basic infrastructure to handle any #VE which occurs in the kernel
-or userspace. Later patches will add handling for specific #VE
-scenarios.
-
-For now, convert unhandled #VE's (everything, until later in this
-series) so that they appear just like a #GP by calling the
-ve_raise_fault() directly. The ve_raise_fault() function is similar
-to #GP handler and is responsible for sending SIGSEGV to userspace
-and CPU die and notifying debuggers and other die chain users.
-
-Co-developed-by: Sean Christopherson <sean.j.christopherson@intel.com>
-Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-Co-developed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Signed-off-by: Brian Geffon <bgeffon@google.com>
 ---
- arch/x86/include/asm/idtentry.h |   4 ++
- arch/x86/include/asm/tdx.h      |  21 ++++++
- arch/x86/kernel/idt.c           |   3 +
- arch/x86/kernel/tdx.c           |  63 ++++++++++++++++++
- arch/x86/kernel/traps.c         | 110 ++++++++++++++++++++++++++++++++
- 5 files changed, 201 insertions(+)
+ drivers/md/dm-core.h          |  1 +
+ drivers/md/dm-ioctl.c         | 39 +++++++++++++++++++++++++++--------
+ drivers/md/dm.c               | 21 ++++++++++++++++---
+ drivers/md/dm.h               |  9 +++++++-
+ include/uapi/linux/dm-ioctl.h | 12 +++++++++--
+ 5 files changed, 67 insertions(+), 15 deletions(-)
 
-diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-index 1345088e9902..8ccc81d653b3 100644
---- a/arch/x86/include/asm/idtentry.h
-+++ b/arch/x86/include/asm/idtentry.h
-@@ -625,6 +625,10 @@ DECLARE_IDTENTRY_XENCB(X86_TRAP_OTHER,	exc_xen_hypervisor_callback);
- DECLARE_IDTENTRY_RAW(X86_TRAP_OTHER,	exc_xen_unknown_trap);
- #endif
+diff --git a/drivers/md/dm-core.h b/drivers/md/dm-core.h
+index b855fef4f38a..b30e59deb4a8 100644
+--- a/drivers/md/dm-core.h
++++ b/drivers/md/dm-core.h
+@@ -139,6 +139,7 @@ struct mapped_device {
+ #define DMF_SUSPENDED_INTERNALLY 7
+ #define DMF_POST_SUSPENDING 8
+ #define DMF_EMULATE_ZONE_APPEND 9
++#define DMF_DEFERRED_REMOVE_NO_OPEN 10
  
-+#ifdef CONFIG_INTEL_TDX_GUEST
-+DECLARE_IDTENTRY(X86_TRAP_VE,		exc_virtualization_exception);
-+#endif
-+
- /* Device interrupts common/spurious */
- DECLARE_IDTENTRY_IRQ(X86_TRAP_OTHER,	common_interrupt);
- #ifdef CONFIG_X86_LOCAL_APIC
-diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-index 5107a4d9ba8f..d17143290f0a 100644
---- a/arch/x86/include/asm/tdx.h
-+++ b/arch/x86/include/asm/tdx.h
-@@ -4,6 +4,7 @@
- #define _ASM_X86_TDX_H
+ void disable_discard(struct mapped_device *md);
+ void disable_write_same(struct mapped_device *md);
+diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
+index 21fe8652b095..07bb679880de 100644
+--- a/drivers/md/dm-ioctl.c
++++ b/drivers/md/dm-ioctl.c
+@@ -60,7 +60,8 @@ struct vers_iter {
+ static struct rb_root name_rb_tree = RB_ROOT;
+ static struct rb_root uuid_rb_tree = RB_ROOT;
  
- #include <linux/init.h>
-+#include <asm/ptrace.h>
- 
- #define TDX_CPUID_LEAF_ID	0x21
- #define TDX_IDENT		"IntelTDX    "
-@@ -40,6 +41,22 @@ struct tdx_hypercall_output {
- 	u64 r15;
- };
- 
-+/*
-+ * Used by the #VE exception handler to gather the #VE exception
-+ * info from the TDX module. This is a software only structure
-+ * and not part of the TDX module/VMM ABI.
-+ */
-+struct ve_info {
-+	u64 exit_reason;
-+	u64 exit_qual;
-+	/* Guest Linear (virtual) Address */
-+	u64 gla;
-+	/* Guest Physical (virtual) Address */
-+	u64 gpa;
-+	u32 instr_len;
-+	u32 instr_info;
-+};
-+
- #ifdef CONFIG_INTEL_TDX_GUEST
- 
- void __init tdx_early_init(void);
-@@ -53,6 +70,10 @@ u64 __tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
- u64 __tdx_hypercall(u64 type, u64 fn, u64 r12, u64 r13, u64 r14,
- 		    u64 r15, struct tdx_hypercall_output *out);
- 
-+bool tdx_get_ve_info(struct ve_info *ve);
-+
-+bool tdx_handle_virt_exception(struct pt_regs *regs, struct ve_info *ve);
-+
- #else
- 
- static inline void tdx_early_init(void) { };
-diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
-index df0fa695bb09..1da074123c16 100644
---- a/arch/x86/kernel/idt.c
-+++ b/arch/x86/kernel/idt.c
-@@ -68,6 +68,9 @@ static const __initconst struct idt_data early_idts[] = {
- 	 */
- 	INTG(X86_TRAP_PF,		asm_exc_page_fault),
- #endif
-+#ifdef CONFIG_INTEL_TDX_GUEST
-+	INTG(X86_TRAP_VE,		asm_exc_virtualization_exception),
-+#endif
- };
+-static void dm_hash_remove_all(bool keep_open_devices, bool mark_deferred, bool only_deferred);
++static void dm_hash_remove_all(bool keep_open_devices, bool mark_deferred,
++		bool deferred_no_open, bool only_deferred);
  
  /*
-diff --git a/arch/x86/kernel/tdx.c b/arch/x86/kernel/tdx.c
-index d40b6df51e26..5a5b25f9c4d3 100644
---- a/arch/x86/kernel/tdx.c
-+++ b/arch/x86/kernel/tdx.c
-@@ -7,6 +7,9 @@
- #include <linux/cpufeature.h>
- #include <asm/tdx.h>
+  * Guards access to both hash tables.
+@@ -74,7 +75,7 @@ static DEFINE_MUTEX(dm_hash_cells_mutex);
  
-+/* TDX module Call Leaf IDs */
-+#define TDX_GET_VEINFO			3
-+
- static bool tdx_guest_detected __ro_after_init;
- 
- /*
-@@ -32,6 +35,66 @@ static inline u64 _tdx_hypercall(u64 fn, u64 r12, u64 r13, u64 r14,
- 	return out->r10;
- }
- 
-+bool tdx_get_ve_info(struct ve_info *ve)
-+{
-+	struct tdx_module_output out;
-+
-+	/*
-+	 * NMIs and machine checks are suppressed. Before this point any
-+	 * #VE is fatal. After this point (TDGETVEINFO call), NMIs and
-+	 * additional #VEs are permitted (but it is expected not to
-+	 * happen unless kernel panics).
-+	 */
-+	if (__tdx_module_call(TDX_GET_VEINFO, 0, 0, 0, 0, &out))
-+		return false;
-+
-+	ve->exit_reason = out.rcx;
-+	ve->exit_qual   = out.rdx;
-+	ve->gla         = out.r8;
-+	ve->gpa         = out.r9;
-+	ve->instr_len   = lower_32_bits(out.r10);
-+	ve->instr_info  = upper_32_bits(out.r10);
-+
-+	return true;
-+}
-+
-+/*
-+ * Handle the user initiated #VE.
-+ *
-+ * For example, executing the CPUID instruction from user space
-+ * is a valid case and hence the resulting #VE has to be handled.
-+ *
-+ * For dis-allowed or invalid #VE just return failure.
-+ */
-+static bool tdx_virt_exception_user(struct pt_regs *regs, struct ve_info *ve)
-+{
-+	pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
-+	return false;
-+}
-+
-+/* Handle the kernel #VE */
-+static bool tdx_virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
-+{
-+	pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
-+	return false;
-+}
-+
-+bool tdx_handle_virt_exception(struct pt_regs *regs, struct ve_info *ve)
-+{
-+	bool ret;
-+
-+	if (user_mode(regs))
-+		ret = tdx_virt_exception_user(regs, ve);
-+	else
-+		ret = tdx_virt_exception_kernel(regs, ve);
-+
-+	/* After successful #VE handling, move the IP */
-+	if (ret)
-+		regs->ip += ve->instr_len;
-+
-+	return ret;
-+}
-+
- bool is_tdx_guest(void)
+ static void dm_hash_exit(void)
  {
- 	return tdx_guest_detected;
-diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-index c9d566dcf89a..428504535912 100644
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -61,6 +61,7 @@
- #include <asm/insn.h>
- #include <asm/insn-eval.h>
- #include <asm/vdso.h>
-+#include <asm/tdx.h>
- 
- #ifdef CONFIG_X86_64
- #include <asm/x86_init.h>
-@@ -1212,6 +1213,115 @@ DEFINE_IDTENTRY(exc_device_not_available)
- 	}
+-	dm_hash_remove_all(false, false, false);
++	dm_hash_remove_all(false, false, false, false);
  }
  
-+#ifdef CONFIG_INTEL_TDX_GUEST
-+
-+#define VE_FAULT_STR "VE fault"
-+
-+static void ve_raise_fault(struct pt_regs *regs, long error_code)
-+{
-+	struct task_struct *tsk = current;
-+
-+	if (user_mode(regs)) {
-+		tsk->thread.error_code = error_code;
-+		tsk->thread.trap_nr = X86_TRAP_VE;
-+		show_signal(tsk, SIGSEGV, "", VE_FAULT_STR, regs, error_code);
-+		force_sig(SIGSEGV);
-+		return;
+ /*-----------------------------------------------------------------
+@@ -315,7 +316,8 @@ static struct dm_table *__hash_remove(struct hash_cell *hc)
+ 	return table;
+ }
+ 
+-static void dm_hash_remove_all(bool keep_open_devices, bool mark_deferred, bool only_deferred)
++static void dm_hash_remove_all(bool keep_open_devices, bool mark_deferred,
++		bool deferred_no_open, bool only_deferred)
+ {
+ 	int dev_skipped;
+ 	struct rb_node *n;
+@@ -334,7 +336,8 @@ static void dm_hash_remove_all(bool keep_open_devices, bool mark_deferred, bool
+ 		dm_get(md);
+ 
+ 		if (keep_open_devices &&
+-		    dm_lock_for_deletion(md, mark_deferred, only_deferred)) {
++		    dm_lock_for_deletion(md, mark_deferred, deferred_no_open,
++				    only_deferred)) {
+ 			dm_put(md);
+ 			dev_skipped++;
+ 			continue;
+@@ -496,7 +499,7 @@ static struct mapped_device *dm_hash_rename(struct dm_ioctl *param,
+ 
+ void dm_deferred_remove(void)
+ {
+-	dm_hash_remove_all(true, false, true);
++	dm_hash_remove_all(true, false, false, true);
+ }
+ 
+ /*-----------------------------------------------------------------
+@@ -510,7 +513,13 @@ typedef int (*ioctl_fn)(struct file *filp, struct dm_ioctl *param, size_t param_
+ 
+ static int remove_all(struct file *filp, struct dm_ioctl *param, size_t param_size)
+ {
+-	dm_hash_remove_all(true, !!(param->flags & DM_DEFERRED_REMOVE), false);
++	if (param->flags & DM_DEFERRED_REMOVE_NO_OPEN_FLAG &&
++			!(param->flags & DM_DEFERRED_REMOVE)) {
++		return -EINVAL;
 +	}
 +
-+	/*
-+	 * Attempt to recover from #VE exception failure without
-+	 * triggering OOPS (useful for MSR read/write failures)
-+	 */
-+	if (fixup_exception(regs, X86_TRAP_VE, error_code, 0))
-+		return;
++	dm_hash_remove_all(true, !!(param->flags & DM_DEFERRED_REMOVE),
++			!!(param->flags & DM_DEFERRED_REMOVE_NO_OPEN_FLAG), false);
+ 	param->data_size = 0;
+ 	return 0;
+ }
+@@ -811,9 +820,13 @@ static void __dev_status(struct mapped_device *md, struct dm_ioctl *param)
+ 	if (dm_suspended_internally_md(md))
+ 		param->flags |= DM_INTERNAL_SUSPEND_FLAG;
+ 
+-	if (dm_test_deferred_remove_flag(md))
++	if (dm_test_deferred_remove_flag(md)) {
+ 		param->flags |= DM_DEFERRED_REMOVE;
+ 
++		if (dm_test_deferred_remove_no_open_flag(md))
++			param->flags |= DM_DEFERRED_REMOVE_NO_OPEN_FLAG;
++	}
 +
-+	tsk->thread.error_code = error_code;
-+	tsk->thread.trap_nr = X86_TRAP_VE;
+ 	param->dev = huge_encode_dev(disk_devt(disk));
+ 
+ 	/*
+@@ -960,10 +973,18 @@ static int dev_remove(struct file *filp, struct dm_ioctl *param, size_t param_si
+ 
+ 	md = hc->md;
+ 
++	if (param->flags & DM_DEFERRED_REMOVE_NO_OPEN_FLAG &&
++			!(param->flags & DM_DEFERRED_REMOVE)) {
++		up_write(&_hash_lock);
++		dm_put(md);
++		return -EINVAL;
++	}
 +
-+	/*
-+	 * To be potentially processing a kprobe fault and to trust the result
-+	 * from kprobe_running(), it should be non-preemptible.
-+	 */
-+	if (!preemptible() && kprobe_running() &&
-+	    kprobe_fault_handler(regs, X86_TRAP_VE))
-+		return;
-+
-+	/* Notify about #VE handling failure, useful for debugger hooks */
-+	if (notify_die(DIE_GPF, VE_FAULT_STR, regs, error_code,
-+		       X86_TRAP_VE, SIGSEGV) == NOTIFY_STOP)
-+		return;
-+
-+	/* Trigger OOPS and panic */
-+	die_addr(VE_FAULT_STR, regs, error_code, 0);
-+}
-+
-+/*
-+ * Virtualization Exceptions (#VE) are delivered to TDX guests due to
-+ * specific guest actions which may happen in either user space or the
-+ * kernel:
-+ *
-+ *  * Specific instructions (WBINVD, for example)
-+ *  * Specific MSR accesses
-+ *  * Specific CPUID leaf accesses
-+ *  * Access to unmapped pages (EPT violation)
-+ *
-+ * In the settings that Linux will run in, virtualization exceptions are
-+ * never generated on accesses to normal, TD-private memory that has been
-+ * accepted.
-+ *
-+ * Syscall entry code has a critical window where the kernel stack is not
-+ * yet set up. Any exception in this window leads to hard to debug issues
-+ * and can be exploited for privilege escalation. Exceptions in the NMI
-+ * entry code also cause issues. Returning from the exception handler with
-+ * IRET will re-enable NMIs and nested NMI will corrupt the NMI stack.
-+ *
-+ * For these reasons, the kernel avoids #VEs during the syscall gap and
-+ * the NMI entry code. Entry code paths do not access TD-shared memory,
-+ * MMIO regions, use #VE triggering MSRs, instructions, or CPUID leaves
-+ * that might generate #VE. VMM can remove memory from TD at any point,
-+ * but access to unaccepted (or missing) private memory leads to VM
-+ * termination, not to #VE.
-+ *
-+ * Similarly to page faults and breakpoints, #VEs are allowed in NMI
-+ * handlers once the kernel is ready to deal with nested NMIs.
-+ *
-+ * During #VE delivery, all interrupts, including NMIs, are blocked until
-+ * TDGETVEINFO is called. It prevents #VE nesting until the kernel reads
-+ * the VE info.
-+ *
-+ * If a guest kernel action which would normally cause a #VE occurs in
-+ * the interrupt-disabled region before TDGETVEINFO, a #DF (fault
-+ * exception) is delivered to the guest which will result in an oops.
-+ */
-+DEFINE_IDTENTRY(exc_virtualization_exception)
-+{
-+	struct ve_info ve;
-+	bool ret;
-+
-+	/*
-+	 * NMIs/Machine-checks/Interrupts will be in a disabled state
-+	 * till TDGETVEINFO TDCALL is executed. This ensures that VE
-+	 * info cannot be overwritten by a nested #VE.
-+	 */
-+	ret = tdx_get_ve_info(&ve);
-+
-+	cond_local_irq_enable(regs);
-+
-+	if (ret)
-+		ret = tdx_handle_virt_exception(regs, &ve);
-+	/*
-+	 * If tdx_handle_virt_exception() could not process
-+	 * it successfully, treat it as #GP(0) and handle it.
-+	 */
-+	if (!ret)
-+		ve_raise_fault(regs, 0);
-+
-+	cond_local_irq_disable(regs);
-+}
-+
-+#endif
-+
- #ifdef CONFIG_X86_32
- DEFINE_IDTENTRY_SW(iret_error)
+ 	/*
+ 	 * Ensure the device is not open and nothing further can open it.
+ 	 */
+-	r = dm_lock_for_deletion(md, !!(param->flags & DM_DEFERRED_REMOVE), false);
++	r = dm_lock_for_deletion(md, !!(param->flags & DM_DEFERRED_REMOVE),
++			!!(param->flags & DM_DEFERRED_REMOVE_NO_OPEN_FLAG), false);
+ 	if (r) {
+ 		if (r == -EBUSY && param->flags & DM_DEFERRED_REMOVE) {
+ 			up_write(&_hash_lock);
+@@ -984,7 +1005,7 @@ static int dev_remove(struct file *filp, struct dm_ioctl *param, size_t param_si
+ 		dm_table_destroy(t);
+ 	}
+ 
+-	param->flags &= ~DM_DEFERRED_REMOVE;
++	param->flags &= ~(DM_DEFERRED_REMOVE | DM_DEFERRED_REMOVE_NO_OPEN_FLAG);
+ 
+ 	dm_ima_measure_on_device_remove(md, false);
+ 
+diff --git a/drivers/md/dm.c b/drivers/md/dm.c
+index c0ae8087c602..90b74043e162 100644
+--- a/drivers/md/dm.c
++++ b/drivers/md/dm.c
+@@ -315,7 +315,10 @@ static int dm_blk_open(struct block_device *bdev, fmode_t mode)
+ 		goto out;
+ 
+ 	if (test_bit(DMF_FREEING, &md->flags) ||
++	    test_bit(DMF_DEFERRED_REMOVE_NO_OPEN, &md->flags) ||
+ 	    dm_deleting_md(md)) {
++		BUG_ON(test_bit(DMF_DEFERRED_REMOVE_NO_OPEN, &md->flags) &&
++		       !test_bit(DMF_DEFERRED_REMOVE, &md->flags));
+ 		md = NULL;
+ 		goto out;
+ 	}
+@@ -355,7 +358,8 @@ int dm_open_count(struct mapped_device *md)
+ /*
+  * Guarantees nothing is using the device before it's deleted.
+  */
+-int dm_lock_for_deletion(struct mapped_device *md, bool mark_deferred, bool only_deferred)
++int dm_lock_for_deletion(struct mapped_device *md, bool mark_deferred,
++		bool deferred_no_open, bool only_deferred)
  {
+ 	int r = 0;
+ 
+@@ -363,8 +367,12 @@ int dm_lock_for_deletion(struct mapped_device *md, bool mark_deferred, bool only
+ 
+ 	if (dm_open_count(md)) {
+ 		r = -EBUSY;
+-		if (mark_deferred)
++		if (mark_deferred) {
+ 			set_bit(DMF_DEFERRED_REMOVE, &md->flags);
++
++			if (deferred_no_open)
++				set_bit(DMF_DEFERRED_REMOVE_NO_OPEN, &md->flags);
++		}
+ 	} else if (only_deferred && !test_bit(DMF_DEFERRED_REMOVE, &md->flags))
+ 		r = -EEXIST;
+ 	else
+@@ -383,8 +391,10 @@ int dm_cancel_deferred_remove(struct mapped_device *md)
+ 
+ 	if (test_bit(DMF_DELETING, &md->flags))
+ 		r = -EBUSY;
+-	else
++	else {
+ 		clear_bit(DMF_DEFERRED_REMOVE, &md->flags);
++		clear_bit(DMF_DEFERRED_REMOVE_NO_OPEN, &md->flags);
++	}
+ 
+ 	spin_unlock(&_minor_lock);
+ 
+@@ -2718,6 +2728,11 @@ int dm_test_deferred_remove_flag(struct mapped_device *md)
+ 	return test_bit(DMF_DEFERRED_REMOVE, &md->flags);
+ }
+ 
++int dm_test_deferred_remove_no_open_flag(struct mapped_device *md)
++{
++	return test_bit(DMF_DEFERRED_REMOVE_NO_OPEN, &md->flags);
++}
++
+ int dm_suspended(struct dm_target *ti)
+ {
+ 	return dm_suspended_md(ti->table->md);
+diff --git a/drivers/md/dm.h b/drivers/md/dm.h
+index 9013dc1a7b00..8d0d4344f882 100644
+--- a/drivers/md/dm.h
++++ b/drivers/md/dm.h
+@@ -158,6 +158,12 @@ void dm_internal_resume(struct mapped_device *md);
+  */
+ int dm_test_deferred_remove_flag(struct mapped_device *md);
+ 
++/*
++ * Test if the device is scheduled for deferred remove while
++ * disallowing opens.
++ */
++int dm_test_deferred_remove_no_open_flag(struct mapped_device *md);
++
+ /*
+  * Try to remove devices marked for deferred removal.
+  */
+@@ -198,7 +204,8 @@ void dm_stripe_exit(void);
+ void dm_destroy(struct mapped_device *md);
+ void dm_destroy_immediate(struct mapped_device *md);
+ int dm_open_count(struct mapped_device *md);
+-int dm_lock_for_deletion(struct mapped_device *md, bool mark_deferred, bool only_deferred);
++int dm_lock_for_deletion(struct mapped_device *md, bool mark_deferred,
++			 bool deferred_no_open, bool only_deferred);
+ int dm_cancel_deferred_remove(struct mapped_device *md);
+ int dm_request_based(struct mapped_device *md);
+ int dm_get_table_device(struct mapped_device *md, dev_t dev, fmode_t mode,
+diff --git a/include/uapi/linux/dm-ioctl.h b/include/uapi/linux/dm-ioctl.h
+index c12ce30b52df..c0fee607b827 100644
+--- a/include/uapi/linux/dm-ioctl.h
++++ b/include/uapi/linux/dm-ioctl.h
+@@ -286,9 +286,9 @@ enum {
+ #define DM_DEV_SET_GEOMETRY	_IOWR(DM_IOCTL, DM_DEV_SET_GEOMETRY_CMD, struct dm_ioctl)
+ 
+ #define DM_VERSION_MAJOR	4
+-#define DM_VERSION_MINOR	45
++#define DM_VERSION_MINOR	46
+ #define DM_VERSION_PATCHLEVEL	0
+-#define DM_VERSION_EXTRA	"-ioctl (2021-03-22)"
++#define DM_VERSION_EXTRA	"-ioctl (2022-01-21)"
+ 
+ /* Status bits */
+ #define DM_READONLY_FLAG	(1 << 0) /* In/Out */
+@@ -382,4 +382,12 @@ enum {
+  */
+ #define DM_IMA_MEASUREMENT_FLAG	(1 << 19) /* In */
+ 
++/* If set with DF_DEFERRED_REMOVE if an immediate remove is not
++ * possible because the device is still open any new additional
++ * opens will also be rejected.
++ *
++ * It is an error to specify this flag without DM_DEFERRED_REMOVE.
++ */
++#define DM_DEFERRED_REMOVE_NO_OPEN_FLAG	(1 << 20) /* In/Out */
++
+ #endif				/* _LINUX_DM_IOCTL_H */
 -- 
-2.34.1
+2.35.0.rc0.227.g00780c9af4-goog
 

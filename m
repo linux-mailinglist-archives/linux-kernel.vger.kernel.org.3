@@ -2,83 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E2849A031
+	by mail.lfdr.de (Postfix) with ESMTP id 0929549A030
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1842486AbiAXXB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:01:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
+        id S1842467AbiAXXBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:01:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457394AbiAXVzE (ORCPT
+        with ESMTP id S1457247AbiAXVzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 16:55:04 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E34C07E296
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:36:03 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643056560;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZkeR8sx1uJfYl5V+1hDn7Z+OR1HYkHbw79HjnsAp4QY=;
-        b=nkPJpLA2yOi+yzdNLC/2FWxejeY1zVZkgybDhWNcCuaClcSm2bzt7VcV1MQvPYNqFSo4+Q
-        WHwstVrTl643QT6MMv2QwtlaHQ2QmQUyVTOX0A5i+DLaM0QGE/hv87T5+M9VjRhmijVtvs
-        mud10TcJ3WSiYPn0nSuSprneTlnF/PRe/QB6adeMkUmsWnmel/Ig8eO53OIIH8ZrRvc8W7
-        5l1g8VRInKtciwBJEh0eV8qVpDD4jfWXXCHTsS6Jt3B0iPNU2lurEpfjlNCv30gyTiIDlR
-        vBV8TAKvfJcZ6G99jgEuC0BxiV0Da5jFhMfB7VozCkSDOqizG5z5xp5/oVk3Jg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643056560;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZkeR8sx1uJfYl5V+1hDn7Z+OR1HYkHbw79HjnsAp4QY=;
-        b=h4ZLp5bKuVRuCYbVfeAOg6IS9CjOLBsFAmTC0ad9+KDBLUtxmYqHYPptNWjZhlF6uk2VLc
-        bdMceZqau2ihH1BQ==
-To:     Fenghua Yu <fenghua.yu@intel.com>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>
-Cc:     iommu@lists.linux-foundation.org, x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>
-Subject: Re: [PATCH v2 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-In-Reply-To: <87ee4w6g1n.ffs@tglx>
-References: <20211217220136.2762116-1-fenghua.yu@intel.com>
- <20211217220136.2762116-6-fenghua.yu@intel.com> <87ee4w6g1n.ffs@tglx>
-Date:   Mon, 24 Jan 2022 21:36:00 +0100
-Message-ID: <87bl006fdb.ffs@tglx>
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E0EC07E29C
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:36:15 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id s6-20020a0568301e0600b0059ea5472c98so8171695otr.11
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:36:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=PkiyCREFdDaGIz9ootXkRn4vBH0SG43WzFjcqohSdxE=;
+        b=biOqTlThtS/kKRPHpFYqWrxAwuQaMZI15zc24si1Wm+TD/mrKND7TxExKoLi2+9kp0
+         FcdKYe5w1fL/KrNuHAszHjMF5cLUTcYTjpC3AhiqtQBy2K9FJa2FroQF7dtYyh2lJjIs
+         h/KYnGpCPUjgUVSn7HLCzgEVPJlCyZqISWZsU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=PkiyCREFdDaGIz9ootXkRn4vBH0SG43WzFjcqohSdxE=;
+        b=IA36Ewr6SirPvbJmBo+R9PRnj/aV1XFAKp8ivrLI4DII0SpM3/8urdoZJ5O4MUFuF9
+         bcPQ8tLzpZGP4Ac2ycK9JAsDQel/H69eu0SoO/REZ4Q55CpOtFRVJAbMXFgWRgIZViWQ
+         2mJgtQj+umOwZZ5NpCu6MCGl5v2ng26N87kJGHPxnct7DmAzGfTkehvnAYTPfYW5A9gB
+         x8Sg5rtUCqD8X0SL22btt4KmfeEf2ch3vyYMWAi50uFQz0QC5Fcj1R8TI2tkI4qaLqTP
+         u3Qp6qsMIXt1isn5NI9k3PmPUrRg/EYupSzygHNX4deyu98ttYp5nCVBYvYKGQoSXhen
+         d8wQ==
+X-Gm-Message-State: AOAM533RUj+sSYzOT35FbG1LA+poY4S4a8KFsAV1akSqLqA+yQzD7v82
+        VzfaYuY2iJhbfont+H7x770qBK/itJv+93K5v8qefA==
+X-Google-Smtp-Source: ABdhPJyxhFIp4/kCVNQxrNu/5xh5KN6eRGvC7N5UC82evKraUAWIo6YaGg5L86kMXzG26rnOtUUc/TxoeGmN9iLqz7o=
+X-Received: by 2002:a05:6830:30ba:: with SMTP id g26mr6147866ots.159.1643056574994;
+ Mon, 24 Jan 2022 12:36:14 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 24 Jan 2022 12:36:14 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <CAD=FV=X3+MDOMEidLbdgvcHVSObO=_x3KSLe31hr-TP6B2jCEg@mail.gmail.com>
+References: <20220124165745.16277-1-tdas@codeaurora.org> <CAD=FV=X3+MDOMEidLbdgvcHVSObO=_x3KSLe31hr-TP6B2jCEg@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 24 Jan 2022 12:36:14 -0800
+Message-ID: <CAE-0n50aF9tvYFy+_zV1R00KG1T4oKsrNt6LLL5Hi_uiLFVCNA@mail.gmail.com>
+Subject: Re: [PATCH v1] arm64: dts: qcom: sc7280: Add lpasscore & lpassaudio
+ clock controllers
+To:     Doug Anderson <dianders@chromium.org>,
+        Taniya Das <tdas@codeaurora.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24 2022 at 21:21, Thomas Gleixner wrote:
+Quoting Doug Anderson (2022-01-24 12:33:06)
+> Hi,
 >
-> Hrm. This is odd.
+> On Mon, Jan 24, 2022 at 8:58 AM Taniya Das <tdas@codeaurora.org> wrote:
+> >
+> > Add the low pass audio clock controller device nodes.
+> >
+> > Signed-off-by: Taniya Das <tdas@codeaurora.org>
+> > ---
+> > Dependent onLPASS clock controller change: https://lkml.org/lkml/2022/1/24/772
+> >
+> >  arch/arm64/boot/dts/qcom/sc7280.dtsi | 43 ++++++++++++++++++++++++++++
+> >  1 file changed, 43 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> > index 937c2e0e93eb..0aa834ce6b61 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> > @@ -8,6 +8,8 @@
+> >  #include <dt-bindings/clock/qcom,dispcc-sc7280.h>
+> >  #include <dt-bindings/clock/qcom,gcc-sc7280.h>
+> >  #include <dt-bindings/clock/qcom,gpucc-sc7280.h>
+> > +#include <dt-bindings/clock/qcom,lpassaudiocc-sc7280.h>
+> > +#include <dt-bindings/clock/qcom,lpasscorecc-sc7280.h>
 >
->> +/* Associate a PASID with an mm_struct: */
->> +static inline void mm_pasid_get(struct mm_struct *mm, u32 pasid)
->> +{
->> +	mm->pasid = pasid;
->> +}
+> Presumably using these two include files means a dependency on things
+> landing in the clk tree [1]. Unless Stephen and Bjorn want to work
+> something out, I'd guess you'll need to re-post with just hardcoded
+> numbers for now?
 >
-> This does not get anything. It sets the allocated PASID in the mm. The
-> refcount on the PASID was already taken by the allocation. So this
-> should be mm_pasid_set() or mm_pasid_install(), right?
 
-And as a result of all this ioasid_get() is now left without users...
-
-Thanks,
-
-        tglx
+Bjorn will apply both patches so the dts patch can live atop the clk
+one.

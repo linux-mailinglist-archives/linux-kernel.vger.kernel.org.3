@@ -2,100 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E472497DF8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 12:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E410C497E0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 12:32:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237564AbiAXLaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 06:30:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237517AbiAXLaK (ORCPT
+        id S237615AbiAXLcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 06:32:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54412 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237573AbiAXLcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 06:30:10 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00128C06173D;
-        Mon, 24 Jan 2022 03:30:09 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id o1-20020a1c4d01000000b0034d95625e1fso19454024wmh.4;
-        Mon, 24 Jan 2022 03:30:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=rFXh+U6gV0rVqtSI/fZKKaMEH8mcFoZZQHL/CbCcpBo=;
-        b=KNdG6zMcSoQbEg7btkjR6HFyycn3hKVkO4BEMKu/Hj9UYIrPTNmzUfwjRi4yUSZPZE
-         OB21fvLtDoS3r3oKoQ+rD9hwpsCyBqeNejsuYXidz7XHQetWohUhhJcWNy6ds28eBAc9
-         4bf39waGmNwKy6eBgivy0qbDf9TwULE4RIlFxf4dx2YoN2NVOV4GmN95e6rfD6b07xvm
-         Y30Qnxo750wUzIh7n3TI4HM29stcFoJ8HxhvmEjKp68Aat+JAxKqhhnZ4LbTv9U304YD
-         5wUqiyhtkj/vkrfhwyYe/JkulV7QGQKcXO36KY7gWCM81FzRb7ng98eMV/LML64z9Ux+
-         fpAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rFXh+U6gV0rVqtSI/fZKKaMEH8mcFoZZQHL/CbCcpBo=;
-        b=18clPgBdjAukG3wx+geJF/uCN5nW1rbKe1IJHLcaWrx/i7s+h7zIzOmTd8Coe8TED7
-         ko01b7hbseAdwlL94f9HHMDxjO2JMLW3itXz/zZQk1cSRS0PreUXslerRg1GbPQ7S00e
-         8Bsl/tlZm7kcR7yFb+SVSlWYL6vF3cauJ8TUPNif/+rmc7FKzMMtWpLvMLUjg0sxj9Hy
-         4H/2Xz7e/BHDO/Td5wOHfoV9WF6YGQH/b8bWdGGGRF1fwT1B6RcdHr9l9UpA9NCn6RRb
-         kfqXRI1EGSyEm6aHA85ltux3XSd16Y0rcU+L7VeUYj33oRJ928TDIHHsy4/pXyNQVpck
-         qeZQ==
-X-Gm-Message-State: AOAM533a9Vwtv7HyNtG7Sygz33tRY/3WIljYdV73pQbmjGyZ+Ekxewny
-        XxxytoIBQNAT7c2zs/MnIJgbgqA1qF7irw==
-X-Google-Smtp-Source: ABdhPJz4Ghnx0dAKrBXjPFAxC1JWCHgIsTFyxuiiHD4dALOuhlNNZWjRlN3BKMYdMSVrXR8b2Mis0g==
-X-Received: by 2002:a1c:c917:: with SMTP id f23mr1463435wmb.10.1643023808401;
-        Mon, 24 Jan 2022 03:30:08 -0800 (PST)
-Received: from localhost.localdomain (198.red-81-44-130.dynamicip.rima-tde.net. [81.44.130.198])
-        by smtp.gmail.com with ESMTPSA id y15sm3328927wrd.51.2022.01.24.03.30.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 03:30:07 -0800 (PST)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     linux-pci@vger.kernel.org
-Cc:     lorenzo.pieralisi@arm.com, bhelgaas@google.com,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: [PATCH 2/2] PCI: mt7621: remove unused function pcie_rmw()
-Date:   Mon, 24 Jan 2022 12:30:03 +0100
-Message-Id: <20220124113003.406224-3-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220124113003.406224-1-sergio.paracuellos@gmail.com>
-References: <20220124113003.406224-1-sergio.paracuellos@gmail.com>
+        Mon, 24 Jan 2022 06:32:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643023926;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qORMnoIdgKPzaKMb6YWMbi2BpiXpkDZcr/xPk+9njEw=;
+        b=RisK8b27MWALvW7aE8fwyK5165hPJBeG7Q13Ei6xkp1rGtbunMmhJG2Ye+FnirPa8C+swD
+        n2ygv3nBQMw/PREAKRXOo77Vx9l61WsNjjljA4nfZw4yfrd0BpBigT3Xh2ROEpkBVq5HGE
+        I1TyGrEBkasilOJJKJI73j8eDZ7/vRw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-564-CSH3-giRNCe3megBcHYkmA-1; Mon, 24 Jan 2022 06:32:02 -0500
+X-MC-Unique: CSH3-giRNCe3megBcHYkmA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BE2B4814243;
+        Mon, 24 Jan 2022 11:32:01 +0000 (UTC)
+Received: from localhost (unknown [10.39.195.53])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8CF3410589B1;
+        Mon, 24 Jan 2022 11:31:50 +0000 (UTC)
+Date:   Mon, 24 Jan 2022 11:31:49 +0000
+From:   Stefan Hajnoczi <stefanha@redhat.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org,
+        netdev@vger.kernel.org, Jason Wang <jasowang@redhat.com>
+Subject: Re: [PATCH v1] vhost: cache avail index in vhost_enable_notify()
+Message-ID: <Ye6OJdi2M1EBx7b3@stefanha-x1.localdomain>
+References: <20220114090508.36416-1-sgarzare@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="MUPe2nEeErvXt6ea"
+Content-Disposition: inline
+In-Reply-To: <20220114090508.36416-1-sgarzare@redhat.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Function pcie_rmw() is not being used at all and be deleted. Hence get rid
-of it. This fix the following complain warning:
 
-drivers/pci/controller/pcie-mt7621.c:112:20: warning: unused function 'pcie_rmw' [-Wunused-function]
+--MUPe2nEeErvXt6ea
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver")
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- drivers/pci/controller/pcie-mt7621.c | 9 ---------
- 1 file changed, 9 deletions(-)
+On Fri, Jan 14, 2022 at 10:05:08AM +0100, Stefano Garzarella wrote:
+> In vhost_enable_notify() we enable the notifications and we read
+> the avail index to check if new buffers have become available in
+> the meantime.
+>=20
+> We are not caching the avail index, so when the device will call
+> vhost_get_vq_desc(), it will find the old value in the cache and
+> it will read the avail index again.
 
-diff --git a/drivers/pci/controller/pcie-mt7621.c b/drivers/pci/controller/pcie-mt7621.c
-index f2e567282d3e..33eb37a2225c 100644
---- a/drivers/pci/controller/pcie-mt7621.c
-+++ b/drivers/pci/controller/pcie-mt7621.c
-@@ -109,15 +109,6 @@ static inline void pcie_write(struct mt7621_pcie *pcie, u32 val, u32 reg)
- 	writel_relaxed(val, pcie->base + reg);
- }
- 
--static inline void pcie_rmw(struct mt7621_pcie *pcie, u32 reg, u32 clr, u32 set)
--{
--	u32 val = readl_relaxed(pcie->base + reg);
--
--	val &= ~clr;
--	val |= set;
--	writel_relaxed(val, pcie->base + reg);
--}
--
- static inline u32 pcie_port_read(struct mt7621_pcie_port *port, u32 reg)
- {
- 	return readl_relaxed(port->base + reg);
--- 
-2.25.1
+I think this wording is clearer because we do keep a cached the avail
+index value, but the issue is we don't update it:
+s/We are not caching the avail index/We do not update the cached avail
+index value/
+
+>=20
+> It would be better to refresh the cache every time we read avail
+> index, so let's change vhost_enable_notify() caching the value in
+> `avail_idx` and compare it with `last_avail_idx` to check if there
+> are new buffers available.
+>=20
+> Anyway, we don't expect a significant performance boost because
+> the above path is not very common, indeed vhost_enable_notify()
+> is often called with unlikely(), expecting that avail index has
+> not been updated.
+>=20
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> ---
+> v1:
+> - improved the commit description [MST, Jason]
+> ---
+>  drivers/vhost/vhost.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+> index 59edb5a1ffe2..07363dff559e 100644
+> --- a/drivers/vhost/vhost.c
+> +++ b/drivers/vhost/vhost.c
+> @@ -2543,8 +2543,9 @@ bool vhost_enable_notify(struct vhost_dev *dev, str=
+uct vhost_virtqueue *vq)
+>  		       &vq->avail->idx, r);
+>  		return false;
+>  	}
+> +	vq->avail_idx =3D vhost16_to_cpu(vq, avail_idx);
+> =20
+> -	return vhost16_to_cpu(vq, avail_idx) !=3D vq->avail_idx;
+> +	return vq->avail_idx !=3D vq->last_avail_idx;
+
+vhost_vq_avail_empty() has a fast path that's missing in
+vhost_enable_notify():
+
+  if (vq->avail_idx !=3D vq->last_avail_idx)
+      return false;
+
+--MUPe2nEeErvXt6ea
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmHujiUACgkQnKSrs4Gr
+c8j4FQgAqGNimsQXmBYd5xvOIaFAPOU7K643vUM2nqHYrdNnPg2GVtVXiyulBb0N
+gyajwW3HtC/CjTsb0mTXhAeHHiHJ+0ImiFGCsPrYhwwDQE9fK9QTwVNW0P++Suc1
+yvHSZtUCHzoy9MxvTtfzPGFFZvyCnFCAM+VR3mTPvV6d5X9kM1iMMb4SOMP3eEJ5
+Sr56/F6EgVy6IRHk5jw4b50dv/PXGkemVBToPYM1lJKpk6QItPkhO1Oz6cju47+l
+/sEYr52mKCa+j4HT4wg9cOZQwrP9FzDmr41yDHQsz/4hLllTilrz4WxiwMU5hUsc
+HGd9PcRpzj36BwxUcI3kzjr6yf9Sjw==
+=t889
+-----END PGP SIGNATURE-----
+
+--MUPe2nEeErvXt6ea--
 

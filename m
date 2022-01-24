@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C9149A18D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 809AB499E14
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383078AbiAXXh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:37:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
+        id S1587553AbiAXW2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:28:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382486AbiAXW6D (ORCPT
+        with ESMTP id S1455566AbiAXVfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:58:03 -0500
+        Mon, 24 Jan 2022 16:35:39 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DFEC02B87A;
-        Mon, 24 Jan 2022 13:12:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1319C05A184;
+        Mon, 24 Jan 2022 12:22:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6ABC7B810BD;
-        Mon, 24 Jan 2022 21:12:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 886CFC340E8;
-        Mon, 24 Jan 2022 21:12:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 99AC7B81229;
+        Mon, 24 Jan 2022 20:22:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D099DC340EB;
+        Mon, 24 Jan 2022 20:22:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058775;
-        bh=v3CmNcQuVcLWxRTsj4bwVZeaXhS0Z8OOc7cj1SIMdtw=;
+        s=korg; t=1643055743;
+        bh=cGgoof5YZQNjDLD4VVh3KObatYUecWRFuj1h/IvavaI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lkGObqf0TrgCuysKmhe0ylJ31x6t1YcFEBHVF7p3p3wkaNUZV6mrSlZlOT3ryBTWO
-         YATr9MXhB1htWreU2QacRPyVuCitmb3s1WCDa/NP+kChlUPp5aUNlTcg3s3Zn//y3Q
-         STztndIPgtQodcr/zfkeoxrAnJcwwpVODbpE9neM=
+        b=gGD+t2ekRJDx67fvkh7cEPhyhGBO/fHk12S3nRIe2Zsowelp4dKe+HRIYisYvexr1
+         K3tmR4eHgdeln7HBUVXXeRnqdwiD/AsC4/XcIKvLyT1n13qWB2BlHg94MAAbtmjykj
+         ldQRCXt0UmimdgTrC74ssbDEEqktyzEEDbKRZv2w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xin Xiong <xiongx18@fudan.edu.cn>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Kurt Kanzenbach <kurt@linutronix.de>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0371/1039] netfilter: ipt_CLUSTERIP: fix refcount leak in clusterip_tg_check()
-Date:   Mon, 24 Jan 2022 19:36:00 +0100
-Message-Id: <20220124184137.776664213@linuxfoundation.org>
+Subject: [PATCH 5.15 250/846] net: dsa: hellcreek: Add missing PTP via UDP rules
+Date:   Mon, 24 Jan 2022 19:36:07 +0100
+Message-Id: <20220124184109.573560127@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,46 +50,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Xiong <xiongx18@fudan.edu.cn>
+From: Kurt Kanzenbach <kurt@linutronix.de>
 
-[ Upstream commit d94a69cb2cfa77294921aae9afcfb866e723a2da ]
+[ Upstream commit 6cf01e451599da630ff1af529d61c5e4db4550ab ]
 
-The issue takes place in one error path of clusterip_tg_check(). When
-memcmp() returns nonzero, the function simply returns the error code,
-forgetting to decrease the reference count of a clusterip_config
-object, which is bumped earlier by clusterip_config_find_get(). This
-may incur reference count leak.
+The switch supports PTP for UDP transport too. Therefore, add the missing static
+FDB entries to ensure correct forwarding of these packets.
 
-Fix this issue by decrementing the refcount of the object in specific
-error path.
-
-Fixes: 06aa151ad1fc74 ("netfilter: ipt_CLUSTERIP: check MAC address when duplicate config is set")
-Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
-Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: ddd56dfe52c9 ("net: dsa: hellcreek: Add PTP clock support")
+Signed-off-by: Kurt Kanzenbach <kurt@linutronix.de>
+Acked-by: Richard Cochran <richardcochran@gmail.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/netfilter/ipt_CLUSTERIP.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/dsa/hirschmann/hellcreek.c | 64 ++++++++++++++++++++++++--
+ 1 file changed, 60 insertions(+), 4 deletions(-)
 
-diff --git a/net/ipv4/netfilter/ipt_CLUSTERIP.c b/net/ipv4/netfilter/ipt_CLUSTERIP.c
-index 8fd1aba8af31c..b518f20c9a244 100644
---- a/net/ipv4/netfilter/ipt_CLUSTERIP.c
-+++ b/net/ipv4/netfilter/ipt_CLUSTERIP.c
-@@ -520,8 +520,11 @@ static int clusterip_tg_check(const struct xt_tgchk_param *par)
- 			if (IS_ERR(config))
- 				return PTR_ERR(config);
- 		}
--	} else if (memcmp(&config->clustermac, &cipinfo->clustermac, ETH_ALEN))
-+	} else if (memcmp(&config->clustermac, &cipinfo->clustermac, ETH_ALEN)) {
-+		clusterip_config_entry_put(config);
-+		clusterip_config_put(config);
- 		return -EINVAL;
-+	}
+diff --git a/drivers/net/dsa/hirschmann/hellcreek.c b/drivers/net/dsa/hirschmann/hellcreek.c
+index 2dd1227e0c357..950a54ec4b59b 100644
+--- a/drivers/net/dsa/hirschmann/hellcreek.c
++++ b/drivers/net/dsa/hirschmann/hellcreek.c
+@@ -1052,7 +1052,7 @@ static void hellcreek_setup_tc_identity_mapping(struct hellcreek *hellcreek)
  
- 	ret = nf_ct_netns_get(par->net, par->family);
- 	if (ret < 0) {
+ static int hellcreek_setup_fdb(struct hellcreek *hellcreek)
+ {
+-	static struct hellcreek_fdb_entry ptp = {
++	static struct hellcreek_fdb_entry l2_ptp = {
+ 		/* MAC: 01-1B-19-00-00-00 */
+ 		.mac	      = { 0x01, 0x1b, 0x19, 0x00, 0x00, 0x00 },
+ 		.portmask     = 0x03,	/* Management ports */
+@@ -1063,7 +1063,29 @@ static int hellcreek_setup_fdb(struct hellcreek *hellcreek)
+ 		.reprio_tc    = 6,	/* TC: 6 as per IEEE 802.1AS */
+ 		.reprio_en    = 1,
+ 	};
+-	static struct hellcreek_fdb_entry p2p = {
++	static struct hellcreek_fdb_entry udp4_ptp = {
++		/* MAC: 01-00-5E-00-01-81 */
++		.mac	      = { 0x01, 0x00, 0x5e, 0x00, 0x01, 0x81 },
++		.portmask     = 0x03,	/* Management ports */
++		.age	      = 0,
++		.is_obt	      = 0,
++		.pass_blocked = 0,
++		.is_static    = 1,
++		.reprio_tc    = 6,
++		.reprio_en    = 1,
++	};
++	static struct hellcreek_fdb_entry udp6_ptp = {
++		/* MAC: 33-33-00-00-01-81 */
++		.mac	      = { 0x33, 0x33, 0x00, 0x00, 0x01, 0x81 },
++		.portmask     = 0x03,	/* Management ports */
++		.age	      = 0,
++		.is_obt	      = 0,
++		.pass_blocked = 0,
++		.is_static    = 1,
++		.reprio_tc    = 6,
++		.reprio_en    = 1,
++	};
++	static struct hellcreek_fdb_entry l2_p2p = {
+ 		/* MAC: 01-80-C2-00-00-0E */
+ 		.mac	      = { 0x01, 0x80, 0xc2, 0x00, 0x00, 0x0e },
+ 		.portmask     = 0x03,	/* Management ports */
+@@ -1074,6 +1096,28 @@ static int hellcreek_setup_fdb(struct hellcreek *hellcreek)
+ 		.reprio_tc    = 6,	/* TC: 6 as per IEEE 802.1AS */
+ 		.reprio_en    = 1,
+ 	};
++	static struct hellcreek_fdb_entry udp4_p2p = {
++		/* MAC: 01-00-5E-00-00-6B */
++		.mac	      = { 0x01, 0x00, 0x5e, 0x00, 0x00, 0x6b },
++		.portmask     = 0x03,	/* Management ports */
++		.age	      = 0,
++		.is_obt	      = 0,
++		.pass_blocked = 1,
++		.is_static    = 1,
++		.reprio_tc    = 6,
++		.reprio_en    = 1,
++	};
++	static struct hellcreek_fdb_entry udp6_p2p = {
++		/* MAC: 33-33-00-00-00-6B */
++		.mac	      = { 0x33, 0x33, 0x00, 0x00, 0x00, 0x6b },
++		.portmask     = 0x03,	/* Management ports */
++		.age	      = 0,
++		.is_obt	      = 0,
++		.pass_blocked = 1,
++		.is_static    = 1,
++		.reprio_tc    = 6,
++		.reprio_en    = 1,
++	};
+ 	static struct hellcreek_fdb_entry stp = {
+ 		/* MAC: 01-80-C2-00-00-00 */
+ 		.mac	      = { 0x01, 0x80, 0xc2, 0x00, 0x00, 0x00 },
+@@ -1088,10 +1132,22 @@ static int hellcreek_setup_fdb(struct hellcreek *hellcreek)
+ 	int ret;
+ 
+ 	mutex_lock(&hellcreek->reg_lock);
+-	ret = __hellcreek_fdb_add(hellcreek, &ptp);
++	ret = __hellcreek_fdb_add(hellcreek, &l2_ptp);
++	if (ret)
++		goto out;
++	ret = __hellcreek_fdb_add(hellcreek, &udp4_ptp);
++	if (ret)
++		goto out;
++	ret = __hellcreek_fdb_add(hellcreek, &udp6_ptp);
++	if (ret)
++		goto out;
++	ret = __hellcreek_fdb_add(hellcreek, &l2_p2p);
++	if (ret)
++		goto out;
++	ret = __hellcreek_fdb_add(hellcreek, &udp4_p2p);
+ 	if (ret)
+ 		goto out;
+-	ret = __hellcreek_fdb_add(hellcreek, &p2p);
++	ret = __hellcreek_fdb_add(hellcreek, &udp6_p2p);
+ 	if (ret)
+ 		goto out;
+ 	ret = __hellcreek_fdb_add(hellcreek, &stp);
 -- 
 2.34.1
 

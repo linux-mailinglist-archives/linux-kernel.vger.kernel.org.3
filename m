@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D67C49956B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:12:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C6049962E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:17:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1441832AbiAXUvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:51:43 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35208 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384001AbiAXU2h (ORCPT
+        id S1444126AbiAXVAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:00:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39934 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385755AbiAXUeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:28:37 -0500
+        Mon, 24 Jan 2022 15:34:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 161F3C07E2B1;
+        Mon, 24 Jan 2022 11:47:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5637EB8119E;
-        Mon, 24 Jan 2022 20:28:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60E79C340E5;
-        Mon, 24 Jan 2022 20:28:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6F8360909;
+        Mon, 24 Jan 2022 19:47:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B5AFC340E5;
+        Mon, 24 Jan 2022 19:47:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056114;
-        bh=Md4ZH5I6rM15jQTYj4f4nWYyhIsKhAhF5qdEF3guwUA=;
+        s=korg; t=1643053642;
+        bh=JN2ZtrlZZq+lwbPgYdIfw0YhHsPwbNVgX/I78M3ZIJw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=euRQ3hnDFtaiGd4JawNGRIbpvAXZFkyUSHQDqmJkjwOh5c/vy9Veau01tF4xNclOp
-         XSewu//ybOBrmL3OfZXfxEVS8frMCQdc/xfpD4fAWMbrXVGte7El6z8+YSzoBF/tne
-         yaNCSxMRJm9lVK6WdO+ELBB02aCNf/12yg/i+JQE=
+        b=Jha/f0B6gv2A7Pi19Hhp9PxoCokJI8cCxWPUDTFW2Q2Ybk53/Ouz57xplWfOsc3qs
+         Bqkj6P/ln0I0dD/ctuG5z7+KlCg6ub86fxl4U86OXItb20Qje+S+HGYZZjCUVuaJaF
+         ezGzot8m8bNwfNm8DRisUk3ApFJIMSm/m149cH2U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 376/846] ALSA: hda: Add missing rwsem around snd_ctl_remove() calls
-Date:   Mon, 24 Jan 2022 19:38:13 +0100
-Message-Id: <20220124184113.898915453@linuxfoundation.org>
+        stable@vger.kernel.org, Tasos Sahanidis <tasos@tasossah.com>,
+        Denis Efremov <efremov@linux.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 130/563] floppy: Fix hang in watchdog when disk is ejected
+Date:   Mon, 24 Jan 2022 19:38:15 +0100
+Message-Id: <20220124184028.889999633@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,38 +49,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Tasos Sahanidis <tasos@tasossah.com>
 
-[ Upstream commit 80bd64af75b4bb11c0329bc66c35da2ddfb66d88 ]
+[ Upstream commit fb48febce7e30baed94dd791e19521abd2c3fd83 ]
 
-snd_ctl_remove() has to be called with card->controls_rwsem held (when
-called after the card instantiation).  This patch add the missing
-rwsem calls around it.
+When the watchdog detects a disk change, it calls cancel_activity(),
+which in turn tries to cancel the fd_timer delayed work.
 
-Fixes: d13bd412dce2 ("ALSA: hda - Manage kcontrol lists")
-Link: https://lore.kernel.org/r/20211116071314.15065-3-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+In the above scenario, fd_timer_fn is set to fd_watchdog(), meaning
+it is trying to cancel its own work.
+This results in a hang as cancel_delayed_work_sync() is waiting for the
+watchdog (itself) to return, which never happens.
+
+This can be reproduced relatively consistently by attempting to read a
+broken floppy, and ejecting it while IO is being attempted and retried.
+
+To resolve this, this patch calls cancel_delayed_work() instead, which
+cancels the work without waiting for the watchdog to return and finish.
+
+Before this regression was introduced, the code in this section used
+del_timer(), and not del_timer_sync() to delete the watchdog timer.
+
+Link: https://lore.kernel.org/r/399e486c-6540-db27-76aa-7a271b061f76@tasossah.com
+Fixes: 070ad7e793dc ("floppy: convert to delayed work and single-thread wq")
+Signed-off-by: Tasos Sahanidis <tasos@tasossah.com>
+Signed-off-by: Denis Efremov <efremov@linux.com>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/hda_codec.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/block/floppy.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/pci/hda/hda_codec.c b/sound/pci/hda/hda_codec.c
-index 0c4a337c9fc0d..eda70814369bd 100644
---- a/sound/pci/hda/hda_codec.c
-+++ b/sound/pci/hda/hda_codec.c
-@@ -1727,8 +1727,11 @@ void snd_hda_ctls_clear(struct hda_codec *codec)
+diff --git a/drivers/block/floppy.c b/drivers/block/floppy.c
+index 7df79ae6b0a1e..eb4f841902aee 100644
+--- a/drivers/block/floppy.c
++++ b/drivers/block/floppy.c
+@@ -1015,7 +1015,7 @@ static DECLARE_DELAYED_WORK(fd_timer, fd_timer_workfn);
+ static void cancel_activity(void)
  {
- 	int i;
- 	struct hda_nid_item *items = codec->mixers.list;
-+
-+	down_write(&codec->card->controls_rwsem);
- 	for (i = 0; i < codec->mixers.used; i++)
- 		snd_ctl_remove(codec->card, items[i].kctl);
-+	up_write(&codec->card->controls_rwsem);
- 	snd_array_free(&codec->mixers);
- 	snd_array_free(&codec->nids);
+ 	do_floppy = NULL;
+-	cancel_delayed_work_sync(&fd_timer);
++	cancel_delayed_work(&fd_timer);
+ 	cancel_work_sync(&floppy_work);
  }
+ 
 -- 
 2.34.1
 

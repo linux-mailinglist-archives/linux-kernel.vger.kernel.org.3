@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B4349A66A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:21:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9B749A669
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:21:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3413649AbiAYAjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:39:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47086 "EHLO
+        id S3413635AbiAYAjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:39:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444873AbiAXVHP (ORCPT
+        with ESMTP id S1444932AbiAXVHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 16:07:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01780C061377;
-        Mon, 24 Jan 2022 12:07:32 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BEAC061A11;
+        Mon, 24 Jan 2022 12:07:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE45CB8119E;
-        Mon, 24 Jan 2022 20:07:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9154C340E5;
-        Mon, 24 Jan 2022 20:07:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44CEB6131F;
+        Mon, 24 Jan 2022 20:07:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C63CC340E5;
+        Mon, 24 Jan 2022 20:07:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054849;
-        bh=DKaIZ44jXhAHBBxgsqnKrT5Vc0etjfMDYpjpcuu0RIM=;
+        s=korg; t=1643054852;
+        bh=Yz34gZFrUHF1zddU6TD8TqbiJ7HLufaVp9r91pYmln8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KtdbmNFy0IGXeZ7UE1+eqyxzrDkITwfsHxsvuRoHEA9mtrezOxOMuC0I4nxaw8PPr
-         6VrSWxdpBz5k+GlvMJ+OwSBEHQJ0tvU7/Y/yYGzPGRVtvwA4Pu6eBvjOpyeMaOPAQ3
-         56BCs7KPUXZrms0CkDMzxRCNLF4XqNXyuYex3o8E=
+        b=nH24LWsFcWa8MqTDrseuAzQhLB3f2Z5O1iEjO2v7GzpgwXjs++yCDs4uCHVGIOIre
+         ZRwQC1oJJ30W/jnPJqUY6+5EA60ME511hHEW7g5QtC4SH/acwsMxLRFt02h89B/iTH
+         bmumXL6Skni2PauhOFq1n/iWHN7WerSzgQQmPYqY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 523/563] net: axienet: add missing memory barriers
-Date:   Mon, 24 Jan 2022 19:44:48 +0100
-Message-Id: <20220124184042.530924435@linuxfoundation.org>
+Subject: [PATCH 5.10 524/563] net: axienet: limit minimum TX ring size
+Date:   Mon, 24 Jan 2022 19:44:49 +0100
+Message-Id: <20220124184042.563314333@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -50,65 +50,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Robert Hancock <robert.hancock@calian.com>
 
-commit 95978df6fa328df619c15312e65ece469c2be2d2 upstream.
+commit 70f5817deddbc6ef3faa35841cab83c280cc653a upstream.
 
-This driver was missing some required memory barriers:
+The driver will not work properly if the TX ring size is set to below
+MAX_SKB_FRAGS + 1 since it needs to hold at least one full maximally
+fragmented packet in the TX ring. Limit setting the ring size to below
+this value.
 
-Use dma_rmb to ensure we see all updates to the descriptor after we see
-that an entry has been completed.
-
-Use wmb and rmb to avoid stale descriptor status between the TX path and
-TX complete IRQ path.
-
-Fixes: 8a3b7a252dca9 ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
+Fixes: 8b09ca823ffb4 ("net: axienet: Make RX/TX ring sizes configurable")
 Signed-off-by: Robert Hancock <robert.hancock@calian.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/xilinx/xilinx_axienet_main.c |   11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 --- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
 +++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-@@ -632,6 +632,8 @@ static int axienet_free_tx_chain(struct
- 		if (nr_bds == -1 && !(status & XAXIDMA_BD_STS_COMPLETE_MASK))
- 			break;
+@@ -43,6 +43,7 @@
+ /* Descriptors defines for Tx and Rx DMA */
+ #define TX_BD_NUM_DEFAULT		64
+ #define RX_BD_NUM_DEFAULT		1024
++#define TX_BD_NUM_MIN			(MAX_SKB_FRAGS + 1)
+ #define TX_BD_NUM_MAX			4096
+ #define RX_BD_NUM_MAX			4096
  
-+		/* Ensure we see complete descriptor update */
-+		dma_rmb();
- 		phys = desc_get_phys_addr(lp, cur_p);
- 		dma_unmap_single(ndev->dev.parent, phys,
- 				 (cur_p->cntrl & XAXIDMA_BD_CTRL_LENGTH_MASK),
-@@ -645,8 +647,10 @@ static int axienet_free_tx_chain(struct
- 		cur_p->app1 = 0;
- 		cur_p->app2 = 0;
- 		cur_p->app4 = 0;
--		cur_p->status = 0;
- 		cur_p->skb = NULL;
-+		/* ensure our transmit path and device don't prematurely see status cleared */
-+		wmb();
-+		cur_p->status = 0;
+@@ -1373,7 +1374,8 @@ static int axienet_ethtools_set_ringpara
+ 	if (ering->rx_pending > RX_BD_NUM_MAX ||
+ 	    ering->rx_mini_pending ||
+ 	    ering->rx_jumbo_pending ||
+-	    ering->rx_pending > TX_BD_NUM_MAX)
++	    ering->tx_pending < TX_BD_NUM_MIN ||
++	    ering->tx_pending > TX_BD_NUM_MAX)
+ 		return -EINVAL;
  
- 		if (sizep)
- 			*sizep += status & XAXIDMA_BD_STS_ACTUAL_LEN_MASK;
-@@ -704,6 +708,9 @@ static inline int axienet_check_tx_bd_sp
- 					    int num_frag)
- {
- 	struct axidma_bd *cur_p;
-+
-+	/* Ensure we see all descriptor updates from device or TX IRQ path */
-+	rmb();
- 	cur_p = &lp->tx_bd_v[(lp->tx_bd_tail + num_frag) % lp->tx_bd_num];
- 	if (cur_p->status & XAXIDMA_BD_STS_ALL_MASK)
- 		return NETDEV_TX_BUSY;
-@@ -843,6 +850,8 @@ static void axienet_recv(struct net_devi
- 
- 		tail_p = lp->rx_bd_p + sizeof(*lp->rx_bd_v) * lp->rx_bd_ci;
- 
-+		/* Ensure we see complete descriptor update */
-+		dma_rmb();
- 		phys = desc_get_phys_addr(lp, cur_p);
- 		dma_unmap_single(ndev->dev.parent, phys, lp->max_frm_size,
- 				 DMA_FROM_DEVICE);
+ 	if (netif_running(ndev))
 
 

@@ -2,170 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEAFD497C3D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:42:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFDB7497C4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:44:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234655AbiAXJmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 04:42:50 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:47177 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231812AbiAXJmt (ORCPT
+        id S236654AbiAXJn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 04:43:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48232 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229823AbiAXJny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 04:42:49 -0500
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 87BD758011C;
-        Mon, 24 Jan 2022 04:42:48 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 24 Jan 2022 04:42:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=P8UmLlHN9BGZ+esvPmRpvSz5It+8CW0B+z+h7m
-        qv6Lk=; b=ecJJLXJ/Kp+Nil5/vc883vHJk0/KIyb7hhP6iSXTTwzya3ojRgChVc
-        DBSgFpaUJvhlR19igIj7rP/8a6b9U7Zfao78fE3uAiC7OPTs9WBOg3OXKEgTq6As
-        yHWL6V27q4Pc5wakooL62EM9Ay571LdJnWIN+vB5Sz2OWOGhF0qQlZ016kF6Ypjk
-        e44rbAzwp20w7Swk6267ZY64ny1/KyVT1Zfiqzo1mi2GaFRRJzOnFANlrqVPz2oc
-        9NWd9GmZ6lOCEgVWj9+7EC2r3UOVkR48J9ZfUiVNMaVXOAAlOveCtbaMbLQsLxjE
-        KOTQihe1Gdg5irRZGN5ygmaXnn80t1EQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=P8UmLlHN9BGZ+esvP
-        mRpvSz5It+8CW0B+z+h7mqv6Lk=; b=CQdazKNEiq2FcHTlFL0uPMb5vLW/qC86C
-        o7moITxwIk/AdB90Xz1k1g9FpRlBS60WhckuoXzIh6ee7yQZOfcp1fvi7Lhv180Z
-        RRDN2wsC5LP0twXOE842WI4MMRtGDwajK5p1LWPjO34veG/oH+NJ25WfhQ3fK+rd
-        P4vWqFj6dPQlkm74sxZqhpdjoYNL/eD4woYay8uEELNkVbwPSYpqT3npzcElZIos
-        tbcSHbcyqMIGuJYagh05xZ6tz+QgNe9ZwhSrBGAq4E2u5MmafmcEauaTBtaZxtXT
-        9jKZbqWnRTA8zuiUmr2nCwSE4ZnTJdrX04g6Ug+/JdEiNsj+r5qUQ==
-X-ME-Sender: <xms:l3TuYZs4WYtzYXKGvUmlQZ6qTEAL0VXvL83nP6AfxPNEYavh0ZIqUA>
-    <xme:l3TuYSd4sl5uGKM2T9fKLT8vT4LXROUpCdQNG8XXrlczU6aewlHw3STG3ZPtbab43
-    XikM_8TVBRYeQ>
-X-ME-Received: <xmr:l3TuYcyKRDeVDHiosVw6unhQ6Vw3IaTpC6SmyCbW2zDAXJo3CLbqDNcF6cWeUfKkhs93civ1pSfqVBhj9xtUPX875W7G2DN2>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvdeigddtjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
-    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
-    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhsthgv
-    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
-    gtohhm
-X-ME-Proxy: <xmx:l3TuYQPN1T0BEGzqQVp5X59NbIZEWA_RehUCZ7K4JsdrYy9FlZur4g>
-    <xmx:l3TuYZ_AQD8MtjTxP_2h-y5A68SyWBzDsHAN5SeMho1BCLjw78wTCg>
-    <xmx:l3TuYQV6GxHEv58_OUO5trHPu3PteZtoWQDNmeDSWRPb86Z5vwBQyA>
-    <xmx:mHTuYfPCJPPU7ZpKL8-FeKWHVMnp3DfwfihodT2qB4adsocIWEcQlg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 24 Jan 2022 04:42:47 -0500 (EST)
-Date:   Mon, 24 Jan 2022 10:42:45 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Will McVicker <willmcvicker@google.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        kernel-team@android.com,
-        KaiChieh Chuang <kaichieh.chuang@mediatek.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, stable@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] ASoC: dpcm: prevent snd_soc_dpcm use after free
-Message-ID: <Ye50ldr/4/TW7S/3@kroah.com>
-References: <20220121231644.1732744-1-willmcvicker@google.com>
+        Mon, 24 Jan 2022 04:43:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643017434;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5whi9gy34EzBT6oRXdsnI40HJtniV5XtISLyrn/RpLs=;
+        b=Uhir02p3Liv9ZFaF036aDLpUA/HqakbGy7K74p5zlJmGoJ4WJo1S9JVXWq5rrOa3uEADta
+        IxFBgSqUMtFkCWYv1CWQ1AX1ZpYydZXDDNZvWHgnVUo8pKmJHttVPA2vlz1ocst1CIH/4B
+        147Inm313vqOPZIpvl1Evw0D8ai5mhI=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-26-XOep8lhpO_KTgrHmxeJ4Ow-1; Mon, 24 Jan 2022 04:43:52 -0500
+X-MC-Unique: XOep8lhpO_KTgrHmxeJ4Ow-1
+Received: by mail-ej1-f69.google.com with SMTP id b12-20020a17090630cc00b006a7190bdfbaso1854114ejb.18
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 01:43:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5whi9gy34EzBT6oRXdsnI40HJtniV5XtISLyrn/RpLs=;
+        b=vgnnCNsD2MfyoUv1GwhmyRgFZH73woz5Se1A+jRILqXlEQRaRV1OKWEoBwy/UmNmSW
+         A6GiapOAnOb0xkYb86K/VJylLXrvImmiCfrHTerbFEXdqKVyn6isA+t7nuu+GeutE+ZM
+         zeXrGwuJ31rxmQZt5HMlmLYZpzAIa06CcN2wqjheeVR/xNM+sxY2IL6xbNURvwvXwTOp
+         ZNnKLUx129imxSpIYx/8Wvcva7sCKcbIq/tUfa2HeJ/o1PlaAqcNpFdnkk3mNLhCcJyE
+         U9P83nXXj079TEx7ijjcrP67mz6dgVK5ys6qZPdlCIZQrgihYl/XkudDD92Dx2iK7gWB
+         Uzkw==
+X-Gm-Message-State: AOAM533hOJ48NDpc9aeAcj2zzrY3a5uSddeSdbXcN22oOQNf8i3QXb7F
+        R+A1ja51lPPntXp2w2+Wm+zZ74YlvJWnrgQRN2yCSMVXCkJBeyyMGcKfEYTRBu2yGnzfkr3EaPO
+        GokJPzpvO6q7YMsOKk8d4yw8j
+X-Received: by 2002:a05:6402:354f:: with SMTP id f15mr4093525edd.212.1643017431606;
+        Mon, 24 Jan 2022 01:43:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyrbHSLz/9hTpbyF7mWrMWTzXf6TYNvdE6O7WNdnYuPlfpzw9OQ+RpHcZ9j93eeAVLsA5Sprw==
+X-Received: by 2002:a05:6402:354f:: with SMTP id f15mr4093514edd.212.1643017431429;
+        Mon, 24 Jan 2022 01:43:51 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id j20sm4606280eje.81.2022.01.24.01.43.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Jan 2022 01:43:50 -0800 (PST)
+Message-ID: <45a6395e-63f3-12b2-e6d1-52ccf00272e7@redhat.com>
+Date:   Mon, 24 Jan 2022 10:43:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220121231644.1732744-1-willmcvicker@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] gvisor: add some missing definitions to vmx.h
+Content-Language: en-US
+To:     Ayush Ranjan <ayushranjan@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ben Gardon <bgardon@google.com>, Jim Mattson <jmattson@google.com>,
+        Andrei Vagin <avagin@gmail.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Michael Davidson <md@google.com>
+References: <20220123195337.509882-1-ayushranjan@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220123195337.509882-1-ayushranjan@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 11:16:44PM +0000, Will McVicker wrote:
-> From: KaiChieh Chuang <kaichieh.chuang@mediatek.com>
+On 1/23/22 20:53, Ayush Ranjan wrote:
+> From: Michael Davidson <md@google.com>
 > 
-> [ Upstream commit a9764869779081e8bf24da07ac040e8f3efcf13a ]
+> gvisor needs definitions for some additional secondary exec controls.
 > 
-> The dpcm get from fe_clients/be_clients
-> may be free before use
-> 
-> Add a spin lock at snd_soc_card level,
-> to protect the dpcm instance.
-> The lock may be used in atomic context, so use spin lock.
-> 
-> Use irq spin lock version,
-> since the lock may be used in interrupts.
-> 
-> possible race condition between
-> void dpcm_be_disconnect(
-> 	...
-> 	list_del(&dpcm->list_be);
-> 	list_del(&dpcm->list_fe);
-> 	kfree(dpcm);
-> 	...
-> 
-> and
-> 	for_each_dpcm_fe()
-> 	for_each_dpcm_be*()
-> 
-> race condition example
-> Thread 1:
->     snd_soc_dapm_mixer_update_power()
->         -> soc_dpcm_runtime_update()
->             -> dpcm_be_disconnect()
->                 -> kfree(dpcm);
-> Thread 2:
->     dpcm_fe_dai_trigger()
->         -> dpcm_be_dai_trigger()
->             -> snd_soc_dpcm_can_be_free_stop()
->                 -> if (dpcm->fe == fe)
-> 
-> Excpetion Scenario:
-> 	two FE link to same BE
-> 	FE1 -> BE
-> 	FE2 ->
-> 
-> 	Thread 1: switch of mixer between FE2 -> BE
-> 	Thread 2: pcm_stop FE1
-> 
-> Exception:
-> 
-> Unable to handle kernel paging request at virtual address dead0000000000e0
-> 
-> pc=<> [<ffffff8960e2cd10>] dpcm_be_dai_trigger+0x29c/0x47c
-> 	sound/soc/soc-pcm.c:3226
-> 		if (dpcm->fe == fe)
-> lr=<> [<ffffff8960e2f694>] dpcm_fe_dai_do_trigger+0x94/0x26c
-> 
-> Backtrace:
-> [<ffffff89602dba80>] notify_die+0x68/0xb8
-> [<ffffff896028c7dc>] die+0x118/0x2a8
-> [<ffffff89602a2f84>] __do_kernel_fault+0x13c/0x14c
-> [<ffffff89602a27f4>] do_translation_fault+0x64/0xa0
-> [<ffffff8960280cf8>] do_mem_abort+0x4c/0xd0
-> [<ffffff8960282ad0>] el1_da+0x24/0x40
-> [<ffffff8960e2cd10>] dpcm_be_dai_trigger+0x29c/0x47c
-> [<ffffff8960e2f694>] dpcm_fe_dai_do_trigger+0x94/0x26c
-> [<ffffff8960e2edec>] dpcm_fe_dai_trigger+0x3c/0x44
-> [<ffffff8960de5588>] snd_pcm_do_stop+0x50/0x5c
-> [<ffffff8960dded24>] snd_pcm_action+0xb4/0x13c
-> [<ffffff8960ddfdb4>] snd_pcm_drop+0xa0/0x128
-> [<ffffff8960de69bc>] snd_pcm_common_ioctl+0x9d8/0x30f0
-> [<ffffff8960de1cac>] snd_pcm_ioctl_compat+0x29c/0x2f14
-> [<ffffff89604c9d60>] compat_SyS_ioctl+0x128/0x244
-> [<ffffff8960283740>] el0_svc_naked+0x34/0x38
-> [<ffffffffffffffff>] 0xffffffffffffffff
-> 
-> Signed-off-by: KaiChieh Chuang <kaichieh.chuang@mediatek.com>
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> [willmcvicker: move spinlock to bottom of struct snd_soc_card]
-> Signed-off-by: Will McVicker <willmcvicker@google.com>
-> Cc: stable@vger.kernel.org # 4.19+
+> Tested: builds
+> Signed-off-by: Ayush Ranjan <ayushranjan@google.com>
+> Signed-off-by: Michael Davidson <md@google.com>
+
+Incorrect order of the Signed-off-by header (author goes first, 
+submitter goes last).
+
 > ---
->  include/sound/soc.h  |  2 ++
->  sound/soc/soc-core.c |  1 +
->  sound/soc/soc-pcm.c  | 40 +++++++++++++++++++++++++++++++++-------
->  3 files changed, 36 insertions(+), 7 deletions(-)
+>   arch/x86/include/asm/vmx.h | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
+> index c77ad687cdf7..df40dc568eb9 100644
+> --- a/arch/x86/include/asm/vmx.h
+> +++ b/arch/x86/include/asm/vmx.h
+> @@ -67,6 +67,7 @@
+>   #define SECONDARY_EXEC_ENCLS_EXITING		VMCS_CONTROL_BIT(ENCLS_EXITING)
+>   #define SECONDARY_EXEC_RDSEED_EXITING		VMCS_CONTROL_BIT(RDSEED_EXITING)
+>   #define SECONDARY_EXEC_ENABLE_PML               VMCS_CONTROL_BIT(PAGE_MOD_LOGGING)
+> +#define SECONDARY_EXEC_EPT_VE			VMCS_CONTROL_BIT(EPT_VIOLATION_VE)
+>   #define SECONDARY_EXEC_PT_CONCEAL_VMX		VMCS_CONTROL_BIT(PT_CONCEAL_VMX)
+>   #define SECONDARY_EXEC_XSAVES			VMCS_CONTROL_BIT(XSAVES)
+>   #define SECONDARY_EXEC_MODE_BASED_EPT_EXEC	VMCS_CONTROL_BIT(MODE_BASED_EPT_EXEC)
 
-Now queued up, thanks.
+I'm not sure why gvisor would care about an internal Linux header. 
+gvisor should only use arch/x86/include/uapi headers.
 
-greg k-h
+Paolo
+

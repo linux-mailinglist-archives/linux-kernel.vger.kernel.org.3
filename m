@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37F21497830
+	by mail.lfdr.de (Postfix) with ESMTP id 7BAA9497831
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 05:32:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241435AbiAXEcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 23:32:13 -0500
-Received: from foss.arm.com ([217.140.110.172]:47182 "EHLO foss.arm.com"
+        id S241452AbiAXEcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 23:32:14 -0500
+Received: from foss.arm.com ([217.140.110.172]:47200 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241437AbiAXEcJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 23:32:09 -0500
+        id S241428AbiAXEcM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 23 Jan 2022 23:32:12 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 91F28113E;
-        Sun, 23 Jan 2022 20:32:08 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5FFE9ED1;
+        Sun, 23 Jan 2022 20:32:12 -0800 (PST)
 Received: from p8cg001049571a15.arm.com (unknown [10.119.34.209])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E32203F73B;
-        Sun, 23 Jan 2022 20:32:00 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2346E3F73B;
+        Sun, 23 Jan 2022 20:32:08 -0800 (PST)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
@@ -27,9 +27,9 @@ Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         linux-perf-users@vger.kernel.org
-Subject: [RFC V1 04/11] arm64/perf: Update struct pmu_hw_events for BRBE
-Date:   Mon, 24 Jan 2022 10:00:46 +0530
-Message-Id: <1642998653-21377-5-git-send-email-anshuman.khandual@arm.com>
+Subject: [RFC V1 05/11] arm64/perf: Detect support for BRBE
+Date:   Mon, 24 Jan 2022 10:00:47 +0530
+Message-Id: <1642998653-21377-6-git-send-email-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1642998653-21377-1-git-send-email-anshuman.khandual@arm.com>
 References: <1642998653-21377-1-git-send-email-anshuman.khandual@arm.com>
@@ -37,9 +37,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A single perf event instance BRBE related contexts and data will be tracked
-in struct pmu_hw_events. Hence update the structure to accommodate required
-details related to BRBE.
+CPU specific BRBE entries, cycle count, format support gets detected during
+PMU init. This information gets saved in per-cpu struct pmu_hw_events which
+later helps in operating BRBE during a perf event context.
 
 Cc: Will Deacon <will@kernel.org>
 Cc: Mark Rutland <mark.rutland@arm.com>
@@ -47,49 +47,61 @@ Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- include/linux/perf/arm_pmu.h | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ drivers/perf/arm_pmu_platform.c | 34 +++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
-index c0dd0d6c5883..c4a705d3d054 100644
---- a/include/linux/perf/arm_pmu.h
-+++ b/include/linux/perf/arm_pmu.h
-@@ -41,6 +41,11 @@
- 	},								\
+diff --git a/drivers/perf/arm_pmu_platform.c b/drivers/perf/arm_pmu_platform.c
+index 513de1f54e2d..800e4a6e8bc3 100644
+--- a/drivers/perf/arm_pmu_platform.c
++++ b/drivers/perf/arm_pmu_platform.c
+@@ -172,6 +172,36 @@ static int armpmu_request_irqs(struct arm_pmu *armpmu)
+ 	return err;
  }
  
-+/*
-+ * Maximum branch records in BRBE
-+ */
-+#define BRBE_MAX_ENTRIES 64
++static void arm_brbe_probe_cpu(void *info)
++{
++	struct pmu_hw_events *hw_events;
++	struct arm_pmu *armpmu = info;
 +
- /* The events for a given PMU register set. */
- struct pmu_hw_events {
- 	/*
-@@ -67,6 +72,23 @@ struct pmu_hw_events {
- 	struct arm_pmu		*percpu_pmu;
++	/*
++	 * Return from here, if BRBE driver has not been
++	 * implemented for this PMU. This helps prevent
++	 * kernel crash later when brbe_probe() will be
++	 * called on the PMU.
++	 */
++	if (!armpmu->brbe_probe)
++		return;
++
++	hw_events = per_cpu_ptr(armpmu->hw_events, smp_processor_id());
++	armpmu->brbe_probe(hw_events);
++}
++
++static int armpmu_request_brbe(struct arm_pmu *armpmu)
++{
++	int cpu, err = 0;
++
++	for_each_cpu(cpu, &armpmu->supported_cpus) {
++		err = smp_call_function_single(cpu, arm_brbe_probe_cpu, armpmu, 1);
++		if (err)
++			return err;
++	}
++	return err;
++}
++
+ static void armpmu_free_irqs(struct arm_pmu *armpmu)
+ {
+ 	int cpu;
+@@ -229,6 +259,10 @@ int arm_pmu_device_probe(struct platform_device *pdev,
+ 	if (ret)
+ 		goto out_free_irqs;
  
- 	int irq;
++	ret = armpmu_request_brbe(pmu);
++	if (ret)
++		goto out_free_irqs;
 +
-+	/* Detected BRBE attributes */
-+	bool				v1p1;
-+	int				brbe_cc;
-+	int				brbe_nr;
-+
-+	/* Evaluated BRBE configuration */
-+	u64				brbfcr;
-+	u64				brbcr;
-+
-+	/* Tracked BRBE context */
-+	unsigned int			brbe_users;
-+	void				*brbe_context;
-+
-+	/* Captured BRBE buffer - copied as is into perf_sample_data */
-+	struct perf_branch_stack	brbe_stack;
-+	struct perf_branch_entry	brbe_entries[BRBE_MAX_ENTRIES];
- };
- 
- enum armpmu_attr_groups {
+ 	ret = armpmu_register(pmu);
+ 	if (ret) {
+ 		dev_err(dev, "failed to register PMU devices!\n");
 -- 
 2.25.1
 

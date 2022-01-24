@@ -2,54 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F15F4991F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:19:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F4C498DBF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:37:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380419AbiAXUQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:16:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347390AbiAXT4p (ORCPT
+        id S1353919AbiAXTfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:35:34 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50798 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351577AbiAXT1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:56:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E14DC02B865;
-        Mon, 24 Jan 2022 11:27:30 -0800 (PST)
+        Mon, 24 Jan 2022 14:27:35 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A067F60917;
-        Mon, 24 Jan 2022 19:27:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88966C340E5;
-        Mon, 24 Jan 2022 19:27:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42F11B81236;
+        Mon, 24 Jan 2022 19:27:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E9FDC340E5;
+        Mon, 24 Jan 2022 19:27:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052449;
-        bh=LzOJr1Lqq1Nnk+HbsxiGbGTjhccq7HG785DI4oHNG5k=;
+        s=korg; t=1643052452;
+        bh=qNKlem9v4fNlTk6Ry4S3P7h+PCGrP7GM4X1sOXf7q+k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KZqy3sSK2ptgYZ9Hd3gixHVfz4r6yOi2lwOZf9d8gSaPQ97PH7n0jpBJ5c/vr0KMl
-         399exZce/aEVzqifNx9NPUIb9ucT6y0WRmkcXVHQi2g6lIAu47O8R5SA2SftZ5/34Q
-         Uc5BeduLpb5u+tRC+0RRaCHT1AYpq5mE0bNn6/Nk=
+        b=eS17yUyGLM+gM/ajiYF9PM5xLNo9OaQK4X/Q9IX27JM4hQLc5KEAK/veOkMl8dubT
+         5QFJtsyT44EG4kiei+yOafRWY9NFJzWfEwsqAIkRjG9mEobgXZCZuaFYsM7UU9f4qW
+         trdTTgPuGiXMzgcI546s5jIYkcCtvusBp2UtZ5NM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baoquan He <bhe@redhat.com>,
-        John Donnelly <john.p.donnelly@oracle.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Borislav Petkov <bp@alien8.de>, Christoph Hellwig <hch@lst.de>,
-        David Hildenbrand <david@redhat.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
+        stable@vger.kernel.org, Gang Li <ligang.bdlg@bytedance.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Hugh Dickins <hughd@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.4 030/320] mm/page_alloc.c: do not warn allocation failure on zone DMA if no managed pages
-Date:   Mon, 24 Jan 2022 19:40:14 +0100
-Message-Id: <20220124183954.783058722@linuxfoundation.org>
+Subject: [PATCH 5.4 031/320] shmem: fix a race between shmem_unused_huge_shrink and shmem_evict_inode
+Date:   Mon, 24 Jan 2022 19:40:15 +0100
+Message-Id: <20220124183954.812075129@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
 References: <20220124183953.750177707@linuxfoundation.org>
@@ -61,98 +49,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baoquan He <bhe@redhat.com>
+From: Gang Li <ligang.bdlg@bytedance.com>
 
-commit c4dc63f0032c77464fbd4e7a6afc22fa6913c4a7 upstream.
+commit 62c9827cbb996c2c04f615ecd783ce28bcea894b upstream.
 
-In kdump kernel of x86_64, page allocation failure is observed:
+Fix a data race in commit 779750d20b93 ("shmem: split huge pages beyond
+i_size under memory pressure").
 
- kworker/u2:2: page allocation failure: order:0, mode:0xcc1(GFP_KERNEL|GFP_DMA), nodemask=(null),cpuset=/,mems_allowed=0
- CPU: 0 PID: 55 Comm: kworker/u2:2 Not tainted 5.16.0-rc4+ #5
- Hardware name: AMD Dinar/Dinar, BIOS RDN1505B 06/05/2013
- Workqueue: events_unbound async_run_entry_fn
- Call Trace:
-  <TASK>
-  dump_stack_lvl+0x48/0x5e
-  warn_alloc.cold+0x72/0xd6
-  __alloc_pages_slowpath.constprop.0+0xc69/0xcd0
-  __alloc_pages+0x1df/0x210
-  new_slab+0x389/0x4d0
-  ___slab_alloc+0x58f/0x770
-  __slab_alloc.constprop.0+0x4a/0x80
-  kmem_cache_alloc_trace+0x24b/0x2c0
-  sr_probe+0x1db/0x620
-  ......
-  device_add+0x405/0x920
-  ......
-  __scsi_add_device+0xe5/0x100
-  ata_scsi_scan_host+0x97/0x1d0
-  async_run_entry_fn+0x30/0x130
-  process_one_work+0x1e8/0x3c0
-  worker_thread+0x50/0x3b0
-  ? rescuer_thread+0x350/0x350
-  kthread+0x16b/0x190
-  ? set_kthread_struct+0x40/0x40
-  ret_from_fork+0x22/0x30
-  </TASK>
- Mem-Info:
- ......
+Here are call traces causing race:
 
-The above failure happened when calling kmalloc() to allocate buffer with
-GFP_DMA.  It requests to allocate slab page from DMA zone while no managed
-pages at all in there.
+   Call Trace 1:
+     shmem_unused_huge_shrink+0x3ae/0x410
+     ? __list_lru_walk_one.isra.5+0x33/0x160
+     super_cache_scan+0x17c/0x190
+     shrink_slab.part.55+0x1ef/0x3f0
+     shrink_node+0x10e/0x330
+     kswapd+0x380/0x740
+     kthread+0xfc/0x130
+     ? mem_cgroup_shrink_node+0x170/0x170
+     ? kthread_create_on_node+0x70/0x70
+     ret_from_fork+0x1f/0x30
 
- sr_probe()
- --> get_capabilities()
-     --> buffer = kmalloc(512, GFP_KERNEL | GFP_DMA);
+   Call Trace 2:
+     shmem_evict_inode+0xd8/0x190
+     evict+0xbe/0x1c0
+     do_unlinkat+0x137/0x330
+     do_syscall_64+0x76/0x120
+     entry_SYSCALL_64_after_hwframe+0x3d/0xa2
 
-Because in the current kernel, dma-kmalloc will be created as long as
-CONFIG_ZONE_DMA is enabled.  However, kdump kernel of x86_64 doesn't have
-managed pages on DMA zone since commit 6f599d84231f ("x86/kdump: Always
-reserve the low 1M when the crashkernel option is specified").  The
-failure can be always reproduced.
+A simple explanation:
 
-For now, let's mute the warning of allocation failure if requesting pages
-from DMA zone while no managed pages.
+Image there are 3 items in the local list (@list).  In the first
+traversal, A is not deleted from @list.
 
-[akpm@linux-foundation.org: fix warning]
+  1)    A->B->C
+        ^
+        |
+        pos (leave)
 
-Link: https://lkml.kernel.org/r/20211223094435.248523-4-bhe@redhat.com
-Fixes: 6f599d84231f ("x86/kdump: Always reserve the low 1M when the crashkernel option is specified")
-Signed-off-by: Baoquan He <bhe@redhat.com>
-Acked-by: John Donnelly  <john.p.donnelly@oracle.com>
-Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc: Christoph Lameter <cl@linux.com>
-Cc: Pekka Enberg <penberg@kernel.org>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: David Laight <David.Laight@ACULAB.COM>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Robin Murphy <robin.murphy@arm.com>
+In the second traversal, B is deleted from @list.  Concurrently, A is
+deleted from @list through shmem_evict_inode() since last reference
+counter of inode is dropped by other thread.  Then the @list is corrupted.
+
+  2)    A->B->C
+        ^  ^
+        |  |
+     evict pos (drop)
+
+We should make sure the inode is either on the global list or deleted from
+any local list before iput().
+
+Fixed by moving inodes back to global list before we put them.
+
+[akpm@linux-foundation.org: coding style fixes]
+
+Link: https://lkml.kernel.org/r/20211125064502.99983-1-ligang.bdlg@bytedance.com
+Fixes: 779750d20b93 ("shmem: split huge pages beyond i_size under memory pressure")
+Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Cc: Hugh Dickins <hughd@google.com>
 Cc: <stable@vger.kernel.org>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/page_alloc.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ mm/shmem.c |   37 +++++++++++++++++++++----------------
+ 1 file changed, 21 insertions(+), 16 deletions(-)
 
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -3767,7 +3767,9 @@ void warn_alloc(gfp_t gfp_mask, nodemask
- 	va_list args;
- 	static DEFINE_RATELIMIT_STATE(nopage_rs, 10*HZ, 1);
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -466,7 +466,7 @@ static unsigned long shmem_unused_huge_s
+ 	struct shmem_inode_info *info;
+ 	struct page *page;
+ 	unsigned long batch = sc ? sc->nr_to_scan : 128;
+-	int removed = 0, split = 0;
++	int split = 0;
  
--	if ((gfp_mask & __GFP_NOWARN) || !__ratelimit(&nopage_rs))
-+	if ((gfp_mask & __GFP_NOWARN) ||
-+	     !__ratelimit(&nopage_rs) ||
-+	     ((gfp_mask & __GFP_DMA) && !has_managed_dma()))
- 		return;
+ 	if (list_empty(&sbinfo->shrinklist))
+ 		return SHRINK_STOP;
+@@ -481,7 +481,6 @@ static unsigned long shmem_unused_huge_s
+ 		/* inode is about to be evicted */
+ 		if (!inode) {
+ 			list_del_init(&info->shrinklist);
+-			removed++;
+ 			goto next;
+ 		}
  
- 	va_start(args, fmt);
+@@ -489,12 +488,12 @@ static unsigned long shmem_unused_huge_s
+ 		if (round_up(inode->i_size, PAGE_SIZE) ==
+ 				round_up(inode->i_size, HPAGE_PMD_SIZE)) {
+ 			list_move(&info->shrinklist, &to_remove);
+-			removed++;
+ 			goto next;
+ 		}
+ 
+ 		list_move(&info->shrinklist, &list);
+ next:
++		sbinfo->shrinklist_len--;
+ 		if (!--batch)
+ 			break;
+ 	}
+@@ -514,7 +513,7 @@ next:
+ 		inode = &info->vfs_inode;
+ 
+ 		if (nr_to_split && split >= nr_to_split)
+-			goto leave;
++			goto move_back;
+ 
+ 		page = find_get_page(inode->i_mapping,
+ 				(inode->i_size & HPAGE_PMD_MASK) >> PAGE_SHIFT);
+@@ -528,38 +527,44 @@ next:
+ 		}
+ 
+ 		/*
+-		 * Leave the inode on the list if we failed to lock
+-		 * the page at this time.
++		 * Move the inode on the list back to shrinklist if we failed
++		 * to lock the page at this time.
+ 		 *
+ 		 * Waiting for the lock may lead to deadlock in the
+ 		 * reclaim path.
+ 		 */
+ 		if (!trylock_page(page)) {
+ 			put_page(page);
+-			goto leave;
++			goto move_back;
+ 		}
+ 
+ 		ret = split_huge_page(page);
+ 		unlock_page(page);
+ 		put_page(page);
+ 
+-		/* If split failed leave the inode on the list */
++		/* If split failed move the inode on the list back to shrinklist */
+ 		if (ret)
+-			goto leave;
++			goto move_back;
+ 
+ 		split++;
+ drop:
+ 		list_del_init(&info->shrinklist);
+-		removed++;
+-leave:
++		goto put;
++move_back:
++		/*
++		 * Make sure the inode is either on the global list or deleted
++		 * from any local list before iput() since it could be deleted
++		 * in another thread once we put the inode (then the local list
++		 * is corrupted).
++		 */
++		spin_lock(&sbinfo->shrinklist_lock);
++		list_move(&info->shrinklist, &sbinfo->shrinklist);
++		sbinfo->shrinklist_len++;
++		spin_unlock(&sbinfo->shrinklist_lock);
++put:
+ 		iput(inode);
+ 	}
+ 
+-	spin_lock(&sbinfo->shrinklist_lock);
+-	list_splice_tail(&list, &sbinfo->shrinklist);
+-	sbinfo->shrinklist_len -= removed;
+-	spin_unlock(&sbinfo->shrinklist_lock);
+-
+ 	return split;
+ }
+ 
 
 

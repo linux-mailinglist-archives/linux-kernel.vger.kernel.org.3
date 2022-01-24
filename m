@@ -2,238 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FDCA49765F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 00:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D791497663
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 01:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240479AbiAWXuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 18:50:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:30844 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240466AbiAWXuT (ORCPT
+        id S240529AbiAXAC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 19:02:59 -0500
+Received: from smtp-fw-80006.amazon.com ([99.78.197.217]:32056 "EHLO
+        smtp-fw-80006.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235204AbiAXAC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 18:50:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642981818;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jfrf32ebUcI4fzNTSsB+v8qDSQo+mJTSIXb8h4iPDuo=;
-        b=H4UQMmJPVYonSIGfyETyEjZwNZ8cxNB//ooq07A0DFctjNTOyyYkYQ9IaI/gXxdgULtYBC
-        8OIaVDkHcxdSuou4xqowo/mwcyQA35L228SxsICrLk7YEDulFG9HL51+/ANghVyjJhb2WN
-        D+VyvN4BbXjz5w8S50amri9hPa0vh4o=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-371-HaeZQPDMPMCpcGKJk_w-mA-1; Sun, 23 Jan 2022 18:50:17 -0500
-X-MC-Unique: HaeZQPDMPMCpcGKJk_w-mA-1
-Received: by mail-ej1-f71.google.com with SMTP id gb4-20020a170907960400b0069d1ebc4538so1563396ejc.2
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 15:50:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jfrf32ebUcI4fzNTSsB+v8qDSQo+mJTSIXb8h4iPDuo=;
-        b=6IoPeLShri8hBF5NxVM6/hHl3XiRW3VqYQBuKxy0rDpI5+6syIWJk/asvEAZeKPC0x
-         dcJpJSEp3xVdaltKk57VQgaAE17ha6ms0SwVk2CplnEIIKaqS2whP33ITsBjqdrn/9f3
-         Be93aTmS3yS35SceaR3wiA4UDVCtTSg26S4geGEhQTu5FwPCN7UdfEQtCogZoq/tpA1I
-         /McGsm7u91RU0Aa6CSH5eixIyyWRCUTNQxbFxepkdZD7JGB/s/eB/XbuJTiN0vCZJ0Z5
-         jYajq5OyTf3ZNCbEiZYzmiwWjTzfsn4D72G1Q9V4d0hrAox+x5FgOX/0DztMlUHWN9RW
-         iyMQ==
-X-Gm-Message-State: AOAM5302nQ4xCGOYzU3xdCnrfOPvsJbUjlZfp1pqxhy0agYCZKQ60Y0+
-        a4mQ98eyf83agzdRqHgjBTCsO4YlZejgasjnV8fQT9VldTLl7vXyzub/pCqrZ02vBSlEZkkhcWM
-        09d3hDjW85J9ky28NG+ruRV76
-X-Received: by 2002:a17:906:150c:: with SMTP id b12mr10315373ejd.284.1642981816141;
-        Sun, 23 Jan 2022 15:50:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzyI8gSDYyfKUB5y85emmByYt4UvTUbXDVOoEsmUF4APQ5/ZGGjg8scmXOsHaagfRzzgthnSA==
-X-Received: by 2002:a17:906:150c:: with SMTP id b12mr10315356ejd.284.1642981815887;
-        Sun, 23 Jan 2022 15:50:15 -0800 (PST)
-Received: from krava ([83.240.63.12])
-        by smtp.gmail.com with ESMTPSA id w25sm5594985edv.68.2022.01.23.15.50.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 15:50:15 -0800 (PST)
-Date:   Mon, 24 Jan 2022 00:50:13 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [RFC PATCH v3 0/9] fprobe: Introduce fprobe function entry/exit
- probe
-Message-ID: <Ye3ptcW0eAFRYm58@krava>
-References: <164260419349.657731.13913104835063027148.stgit@devnote2>
- <CAEf4Bzbbimea3ydwafXSHFiEffYx5zAcwGNKk8Zi6QZ==Vn0Ug@mail.gmail.com>
- <20220121135510.7cfa6540e31824aa39b1c1b8@kernel.org>
- <CAEf4Bza0eTft2kjcm9HhKpAm=AuXnGwZfZ+sYpVVBvj93PBreQ@mail.gmail.com>
+        Sun, 23 Jan 2022 19:02:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
+  s=amazon201209; t=1642982577; x=1674518577;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=884EPx7zeLdONILeLA66h3ygMwUbXySanvZ39llmgO4=;
+  b=TOD+OLNeYlk0ouJ1ouncPyWLDPG4rL+Yl8fd+NymAviHihc1eCihUUnq
+   EmHwJ2alfnmLSRn6V3i2Ax7x1VWQdgCP1EBkmQYAGq7NBZAyLf4Q4ULJA
+   rVSoeQjFiJeutXFvoNe/ICejMqjUcn6O4lRWuC6S0EURsTkn1wbvp2Fy4
+   E=;
+X-IronPort-AV: E=Sophos;i="5.88,311,1635206400"; 
+   d="scan'208";a="57429041"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-e6c05252.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP; 24 Jan 2022 00:02:57 +0000
+Received: from EX13MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-e6c05252.us-west-2.amazon.com (Postfix) with ESMTPS id EE8794199F;
+        Mon, 24 Jan 2022 00:02:56 +0000 (UTC)
+Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
+ EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.28; Mon, 24 Jan 2022 00:02:56 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.160.114) by
+ EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.28; Mon, 24 Jan 2022 00:02:53 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+To:     <shorne@gmail.com>
+CC:     <benh@amazon.com>, <jonas@southpole.se>, <kuni1840@gmail.com>,
+        <kuniyu@amazon.co.jp>, <linux-kernel@vger.kernel.org>,
+        <openrisc@lists.librecores.org>,
+        <stefan.kristiansson@saunalahti.fi>
+Subject: Re: [PATCH] openrisc/boot: Remove unnecessary initialisation in memcpy().
+Date:   Mon, 24 Jan 2022 09:02:49 +0900
+Message-ID: <20220124000249.4295-1-kuniyu@amazon.co.jp>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <Ye3keps4aHhkbYzr@antec>
+References: <Ye3keps4aHhkbYzr@antec>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4Bza0eTft2kjcm9HhKpAm=AuXnGwZfZ+sYpVVBvj93PBreQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.160.114]
+X-ClientProxiedBy: EX13D03UWC003.ant.amazon.com (10.43.162.79) To
+ EX13D04ANC001.ant.amazon.com (10.43.157.89)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 09:29:00AM -0800, Andrii Nakryiko wrote:
-> On Thu, Jan 20, 2022 at 8:55 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > On Thu, 20 Jan 2022 14:24:15 -0800
-> > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> >
-> > > On Wed, Jan 19, 2022 at 6:56 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > > >
-> > > > Hello Jiri,
-> > > >
-> > > > Here is the 3rd version of fprobe. I added some comments and
-> > > > fixed some issues. But I still saw some problems when I add
-> > > > your selftest patches.
-> > > >
-> > > > This series introduces the fprobe, the function entry/exit probe
-> > > > with multiple probe point support. This also introduces the rethook
-> > > > for hooking function return as same as kretprobe does. This
-> > > > abstraction will help us to generalize the fgraph tracer,
-> > > > because we can just switch it from rethook in fprobe, depending
-> > > > on the kernel configuration.
-> > > >
-> > > > The patch [1/9] and [7/9] are from Jiri's series[1]. Other libbpf
-> > > > patches will not be affected by this change.
-> > > >
-> > > > [1] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#u
-> > > >
-> > > > However, when I applied all other patches on top of this series,
-> > > > I saw the "#8 bpf_cookie" test case has been stacked (maybe related
-> > > > to the bpf_cookie issue which Andrii and Jiri talked?) And when I
-> > > > remove the last selftest patch[2], the selftest stopped at "#112
-> > > > raw_tp_test_run".
-> > > >
-> > > > [2] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#m242d2b3a3775eeb5baba322424b15901e5e78483
-> > > >
-> > > > Note that I used tools/testing/selftests/bpf/vmtest.sh to check it.
-> > > >
-> > > > This added 2 more out-of-tree patches. [8/9] is for adding wildcard
-> > > > support to the sample program, [9/9] is a testing patch for replacing
-> > > > kretprobe trampoline with rethook.
-> > > > According to this work, I noticed that using rethook in kretprobe
-> > > > needs 2 steps.
-> > > >  1. port the rethook on all architectures which supports kretprobes.
-> > > >     (some arch requires CONFIG_KPROBES for rethook)
-> > > >  2. replace kretprobe trampoline with rethook for all archs, at once.
-> > > >     This must be done by one treewide patch.
-> > > >
-> > > > Anyway, I'll do the kretprobe update in the next step as another series.
-> > > > (This testing patch is just for confirming the rethook is correctly
-> > > >  implemented.)
-> > > >
-> > > > BTW, on the x86, ftrace (with fentry) location address is same as
-> > > > symbol address. But on other archs, it will be different (e.g. arm64
-> > > > will need 2 instructions to save link-register and call ftrace, the
-> > > > 2nd instruction will be the ftrace location.)
-> > > > Does libbpf correctly handle it?
-
-hm, I'm probably missing something, but should this be handled by arm
-specific kernel code? user passes whatever is found in kallsyms, right?
-
-
-> > >
-> > > libbpf doesn't do anything there. The interface for kprobe is based on
-> > > function name and kernel performs name lookups internally to resolve
-> > > IP. For fentry it's similar (kernel handles IP resolution), but
-> > > instead of function name we specify BTF ID of a function type.
-> >
-> > Hmm, according to Jiri's original patch, it seems to pass an array of
-> > addresses. So I thought that has been resolved by libbpf.
-> >
-> > +                       struct {
-> > +                               __aligned_u64   addrs;
+From:   Stafford Horne <shorne@gmail.com>
+Date:   Mon, 24 Jan 2022 08:27:54 +0900
+> On Sun, Jan 23, 2022 at 11:01:00AM +0900, Kuniyuki Iwashima wrote:
+> > 'd' and 's' are initialised later with 'dest_w' and 'src_w', so we need not
+> > initialise them before that.
+> > 
+> > Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
 > 
-> I think this is a pointer to an array of pointers to zero-terminated C strings
+> This looks fine to me.  I will queue this for the next release.
 
-I used direct addresses, because bpftrace already has them, so there was
-no point passing strings, I cann add support for that
+Thank you.
 
-jirka
 
 > 
-> > +                               __u32           cnt;
-> > +                               __u64           bpf_cookie;
-> > +                       } kprobe;
-> >
-> > Anyway, fprobe itself also has same issue. I'll try to fix it.
-> >
-> > Thank you!
-> >
-> > >
-> > > >
-> > > > Thank you,
-> > > >
-> > > > ---
-> > > >
-> > > > Jiri Olsa (2):
-> > > >       ftrace: Add ftrace_set_filter_ips function
-> > > >       bpf: Add kprobe link for attaching raw kprobes
-> > > >
-> > > > Masami Hiramatsu (7):
-> > > >       fprobe: Add ftrace based probe APIs
-> > > >       rethook: Add a generic return hook
-> > > >       rethook: x86: Add rethook x86 implementation
-> > > >       fprobe: Add exit_handler support
-> > > >       fprobe: Add sample program for fprobe
-> > > >       [DO NOT MERGE] Out-of-tree: Support wildcard symbol option to sample
-> > > >       [DO NOT MERGE] out-of-tree: kprobes: Use rethook for kretprobe
-> > > >
-> > > >
-> > > >  arch/x86/Kconfig                |    1
-> > > >  arch/x86/include/asm/unwind.h   |    8 +
-> > > >  arch/x86/kernel/Makefile        |    1
-> > > >  arch/x86/kernel/kprobes/core.c  |  106 --------------
-> > > >  arch/x86/kernel/rethook.c       |  115 +++++++++++++++
-> > > >  include/linux/bpf_types.h       |    1
-> > > >  include/linux/fprobe.h          |   84 +++++++++++
-> > > >  include/linux/ftrace.h          |    3
-> > > >  include/linux/kprobes.h         |   85 +----------
-> > > >  include/linux/rethook.h         |   99 +++++++++++++
-> > > >  include/linux/sched.h           |    4 -
-> > > >  include/uapi/linux/bpf.h        |   12 ++
-> > > >  kernel/bpf/syscall.c            |  195 +++++++++++++++++++++++++-
-> > > >  kernel/exit.c                   |    3
-> > > >  kernel/fork.c                   |    4 -
-> > > >  kernel/kallsyms.c               |    1
-> > > >  kernel/kprobes.c                |  265 +++++------------------------------
-> > > >  kernel/trace/Kconfig            |   22 +++
-> > > >  kernel/trace/Makefile           |    2
-> > > >  kernel/trace/fprobe.c           |  179 ++++++++++++++++++++++++
-> > > >  kernel/trace/ftrace.c           |   54 ++++++-
-> > > >  kernel/trace/rethook.c          |  295 +++++++++++++++++++++++++++++++++++++++
-> > > >  kernel/trace/trace_kprobe.c     |    4 -
-> > > >  kernel/trace/trace_output.c     |    2
-> > > >  samples/Kconfig                 |    7 +
-> > > >  samples/Makefile                |    1
-> > > >  samples/fprobe/Makefile         |    3
-> > > >  samples/fprobe/fprobe_example.c |  154 ++++++++++++++++++++
-> > > >  tools/include/uapi/linux/bpf.h  |   12 ++
-> > > >  29 files changed, 1283 insertions(+), 439 deletions(-)
-> > > >  create mode 100644 arch/x86/kernel/rethook.c
-> > > >  create mode 100644 include/linux/fprobe.h
-> > > >  create mode 100644 include/linux/rethook.h
-> > > >  create mode 100644 kernel/trace/fprobe.c
-> > > >  create mode 100644 kernel/trace/rethook.c
-> > > >  create mode 100644 samples/fprobe/Makefile
-> > > >  create mode 100644 samples/fprobe/fprobe_example.c
-> > > >
-> > > > --
-> > > > Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
-> >
-> >
-> > --
-> > Masami Hiramatsu <mhiramat@kernel.org>
-> 
+> Just curious why are you working on OpenRISC?
 
+While reading memcpy() variants, I found a nit to fix in x86 boot-time
+memcpy() [0].  While I'm at it, I just started reading all arch ones ;)
+
+[0]: https://lore.kernel.org/lkml/20220123015807.45005-1-kuniyu@amazon.co.jp/
+
+
+> 
+> -Stafford
+> 
+> > ---
+> >  arch/openrisc/lib/memcpy.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/openrisc/lib/memcpy.c b/arch/openrisc/lib/memcpy.c
+> > index fe2177628..e2af9b510 100644
+> > --- a/arch/openrisc/lib/memcpy.c
+> > +++ b/arch/openrisc/lib/memcpy.c
+> > @@ -101,7 +101,7 @@ void *memcpy(void *dest, __const void *src, __kernel_size_t n)
+> >   */
+> >  void *memcpy(void *dest, __const void *src, __kernel_size_t n)
+> >  {
+> > -	unsigned char *d = (unsigned char *)dest, *s = (unsigned char *)src;
+> > +	unsigned char *d, *s;
+> >  	uint32_t *dest_w = (uint32_t *)dest, *src_w = (uint32_t *)src;
+> >  
+> >  	/* If both source and dest are word aligned copy words */
+> > -- 
+> > 2.30.2

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7ED49A71A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:36:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA0A49A252
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 02:59:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3423315AbiAYCd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:33:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
+        id S2362024AbiAXXlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:41:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356859AbiAXU2c (ORCPT
+        with ESMTP id S1841813AbiAXXAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:28:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C506CC07A959;
-        Mon, 24 Jan 2022 11:42:06 -0800 (PST)
+        Mon, 24 Jan 2022 18:00:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABC1C09D322;
+        Mon, 24 Jan 2022 13:13:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6508661488;
-        Mon, 24 Jan 2022 19:42:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23C3FC340E5;
-        Mon, 24 Jan 2022 19:42:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A24A4B81142;
+        Mon, 24 Jan 2022 21:13:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1DE8C340E5;
+        Mon, 24 Jan 2022 21:13:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053325;
-        bh=237rbF9pS7DmapYAq12bvUaL8GTC3vSFTf2z40fMX3E=;
+        s=korg; t=1643058819;
+        bh=h2FlKSl0WAXSPEKWoJS3EvlZl717LALX1016o4oT2YM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IB3dskKLnVy6YOh7m0W8tuvJYu84V7J2D8EWRwIsRrrjSJy3W3OOl0RoxGAfNogKm
-         i8Af/a11VSttHdQtilwl8cpq6uNx6JiPiVJaeVCKV3sx1NViUQ9U3T+nPo46M+YZRY
-         2QPvm6SooX+VUOQTWPRLBEFiWDjFGdTx3RT5CGWQ=
+        b=oforqcSWeXmpFqKTu9RYhUw+hxfZCa8uGzvp0Xb29SYRPBm5NNYPfqalyQS1ea5wI
+         qjk3IkENINEUDxcghzUgzVZfr+Sk1hkgzI5kfGcxPhHHoQmrNKPU3i/p4IRisCB/o4
+         9IXTA0IYw3tDLN5/BQLbz/YyRXbhKbupljXd2mVQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 5.10 028/563] media: stk1160: fix control-message timeouts
-Date:   Mon, 24 Jan 2022 19:36:33 +0100
-Message-Id: <20220124184025.402106800@linuxfoundation.org>
+        stable@vger.kernel.org, Aya Levin <ayal@nvidia.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0405/1039] net/mlx5e: Fix page DMA map/unmap attributes
+Date:   Mon, 24 Jan 2022 19:36:34 +0100
+Message-Id: <20220124184138.928021863@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,42 +50,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Aya Levin <ayal@nvidia.com>
 
-commit 6aa6e70cdb5b863a57bad61310bf89b6617a5d2d upstream.
+[ Upstream commit 0b7cfa4082fbf550595bc0e40f05614bd83bf0cd ]
 
-USB control-message timeouts are specified in milliseconds and should
-specifically not vary with CONFIG_HZ.
+Driver initiates DMA sync, hence it may skip CPU sync. Add
+DMA_ATTR_SKIP_CPU_SYNC as input attribute both to dma_map_page and
+dma_unmap_page to avoid redundant sync with the CPU.
+When forcing the device to work with SWIOTLB, the extra sync might cause
+data corruption. The driver unmaps the whole page while the hardware
+used just a part of the bounce buffer. So syncing overrides the entire
+page with bounce buffer that only partially contains real data.
 
-Fixes: 9cb2173e6ea8 ("[media] media: Add stk1160 new driver (easycap replacement)")
-Cc: stable@vger.kernel.org      # 3.7
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: bc77b240b3c5 ("net/mlx5e: Add fragmented memory support for RX multi packet WQE")
+Fixes: db05815b36cb ("net/mlx5e: Add XSK zero-copy support")
+Signed-off-by: Aya Levin <ayal@nvidia.com>
+Reviewed-by: Gal Pressman <gal@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/stk1160/stk1160-core.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en/xsk/pool.c | 4 ++--
+ drivers/net/ethernet/mellanox/mlx5/core/en_rx.c       | 7 ++++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
---- a/drivers/media/usb/stk1160/stk1160-core.c
-+++ b/drivers/media/usb/stk1160/stk1160-core.c
-@@ -65,7 +65,7 @@ int stk1160_read_reg(struct stk1160 *dev
- 		return -ENOMEM;
- 	ret = usb_control_msg(dev->udev, pipe, 0x00,
- 			USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
--			0x00, reg, buf, sizeof(u8), HZ);
-+			0x00, reg, buf, sizeof(u8), 1000);
- 	if (ret < 0) {
- 		stk1160_err("read failed on reg 0x%x (%d)\n",
- 			reg, ret);
-@@ -85,7 +85,7 @@ int stk1160_write_reg(struct stk1160 *de
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/pool.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/pool.c
+index 7b562d2c8a196..279cd8f4e79f7 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/pool.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/pool.c
+@@ -11,13 +11,13 @@ static int mlx5e_xsk_map_pool(struct mlx5e_priv *priv,
+ {
+ 	struct device *dev = mlx5_core_dma_dev(priv->mdev);
  
- 	ret =  usb_control_msg(dev->udev, pipe, 0x01,
- 			USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
--			value, reg, NULL, 0, HZ);
-+			value, reg, NULL, 0, 1000);
- 	if (ret < 0) {
- 		stk1160_err("write failed on reg 0x%x (%d)\n",
- 			reg, ret);
+-	return xsk_pool_dma_map(pool, dev, 0);
++	return xsk_pool_dma_map(pool, dev, DMA_ATTR_SKIP_CPU_SYNC);
+ }
+ 
+ static void mlx5e_xsk_unmap_pool(struct mlx5e_priv *priv,
+ 				 struct xsk_buff_pool *pool)
+ {
+-	return xsk_pool_dma_unmap(pool, 0);
++	return xsk_pool_dma_unmap(pool, DMA_ATTR_SKIP_CPU_SYNC);
+ }
+ 
+ static int mlx5e_xsk_get_pools(struct mlx5e_xsk *xsk)
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+index 793511d5ee4cd..dfc6604b9538b 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+@@ -278,8 +278,8 @@ static inline int mlx5e_page_alloc_pool(struct mlx5e_rq *rq,
+ 	if (unlikely(!dma_info->page))
+ 		return -ENOMEM;
+ 
+-	dma_info->addr = dma_map_page(rq->pdev, dma_info->page, 0,
+-				      PAGE_SIZE, rq->buff.map_dir);
++	dma_info->addr = dma_map_page_attrs(rq->pdev, dma_info->page, 0, PAGE_SIZE,
++					    rq->buff.map_dir, DMA_ATTR_SKIP_CPU_SYNC);
+ 	if (unlikely(dma_mapping_error(rq->pdev, dma_info->addr))) {
+ 		page_pool_recycle_direct(rq->page_pool, dma_info->page);
+ 		dma_info->page = NULL;
+@@ -300,7 +300,8 @@ static inline int mlx5e_page_alloc(struct mlx5e_rq *rq,
+ 
+ void mlx5e_page_dma_unmap(struct mlx5e_rq *rq, struct mlx5e_dma_info *dma_info)
+ {
+-	dma_unmap_page(rq->pdev, dma_info->addr, PAGE_SIZE, rq->buff.map_dir);
++	dma_unmap_page_attrs(rq->pdev, dma_info->addr, PAGE_SIZE, rq->buff.map_dir,
++			     DMA_ATTR_SKIP_CPU_SYNC);
+ }
+ 
+ void mlx5e_page_release_dynamic(struct mlx5e_rq *rq,
+-- 
+2.34.1
+
 
 

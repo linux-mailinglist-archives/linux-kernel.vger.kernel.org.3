@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D796B499FFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E17499F36
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1842789AbiAXXCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:02:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59504 "EHLO
+        id S1840409AbiAXWx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1450740AbiAXVyz (ORCPT
+        with ESMTP id S1574952AbiAXVuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:54:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA90C0C0910;
-        Mon, 24 Jan 2022 12:35:02 -0800 (PST)
+        Mon, 24 Jan 2022 16:50:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF23C0885A2;
+        Mon, 24 Jan 2022 12:33:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BBB2B614EC;
-        Mon, 24 Jan 2022 20:35:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A47E3C340E5;
-        Mon, 24 Jan 2022 20:35:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7C52FB81229;
+        Mon, 24 Jan 2022 20:33:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95F58C340E5;
+        Mon, 24 Jan 2022 20:33:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056501;
-        bh=vIl/gclyF80YoCxy9zzgOrGGbUlqzJB+spj0los22ZY=;
+        s=korg; t=1643056414;
+        bh=eSOZJjsod7JXBVDUOGZX0mGYhD7AX7qWZXKijpCydxQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v3KSrniHtHmtx401ynOYyIc5O5VRlTSD1YZOSlNmLe864Ze04hh0chowweu8L5i7e
-         uRmtTFEcZwwFrLT7B3eakrGzP9JjCyJ3blVlIZclAMuVQY1VbpKbuac7QA15qNPTh2
-         OMUky1v9xytSmChCI7wLhLUUuQCF37e9xcc5eJ+U=
+        b=nUuoS53NbokrU/t7mxrwIJeG8D+r2Q489HOPZHkCAGs9tVFmu+a9GcIBHPgFVArgA
+         Lvx/S43aBMwoIXFqg0Hk2mx7TrrGUbssU44A2NPN4k9m79eLhQcEvyQpKP5SXvK18/
+         gnuEhDP0dwWdNd41vJGp+Fs+UinR3knQnNVb7Wsg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tsuchiya Yuto <kitakar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, Tycho Andersen <tycho@tycho.pizza>,
+        =?UTF-8?q?Linus=20L=C3=BCssing?= <linus.luessing@c0d3.blue>,
+        Sven Eckelmann <sven@narfation.org>,
+        Simon Wunderlich <sw@simonwunderlich.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 473/846] media: atomisp: set per-devices default mode
-Date:   Mon, 24 Jan 2022 19:39:50 +0100
-Message-Id: <20220124184117.319775146@linuxfoundation.org>
+Subject: [PATCH 5.15 477/846] batman-adv: allow netlink usage in unprivileged containers
+Date:   Mon, 24 Jan 2022 19:39:54 +0100
+Message-Id: <20220124184117.471049406@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -49,156 +51,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Linus Lüssing <linus.luessing@c0d3.blue>
 
-[ Upstream commit 2c45e343c581091835c9047ed5298518aa133163 ]
+[ Upstream commit 9057d6c23e7388ee9d037fccc9a7bc8557ce277b ]
 
-The atomisp driver originally used the s_parm command to
-initialize the run_mode type to the driver. So, before start
-setting up the streaming, s_parm should be called.
+Currently, creating a batman-adv interface in an unprivileged LXD
+container and attaching secondary interfaces to it with "ip" or "batctl"
+works fine. However all batctl debug and configuration commands
+fail:
 
-So, even having 5 "normal" video devices, one meant to be used
-for each type, the run_mode was actually selected when
-s_parm is called.
+  root@container:~# batctl originators
+  Error received: Operation not permitted
+  root@container:~# batctl orig_interval
+  1000
+  root@container:~# batctl orig_interval 2000
+  root@container:~# batctl orig_interval
+  1000
 
-Without setting the run mode, applications that don't call
-VIDIOC_SET_PARM with a custom atomisp parameters won't work, as
-the pipeline won't be set:
+To fix this change the generic netlink permissions from GENL_ADMIN_PERM
+to GENL_UNS_ADMIN_PERM. This way a batman-adv interface is fully
+maintainable as root from within a user namespace, from an unprivileged
+container.
 
-	atomisp-isp2 0000:00:03.0: can't create streams
-	atomisp-isp2 0000:00:03.0: __get_frame_info 1600x1200 (padded to 0) returned -22
+All except one batman-adv netlink setting are per interface and do not
+leak information or change settings from the host system and are
+therefore save to retrieve or modify as root from within an unprivileged
+container.
 
-However, commit 8a7c5594c020 ("media: v4l2-ioctl: clear fields in s_parm")
-broke support for it, with a good reason, as drivers shoudn't be
-extending the API for their own purposes.
+"batctl routing_algo" / BATADV_CMD_GET_ROUTING_ALGOS is the only
+exception: It provides the batman-adv kernel module wide default routing
+algorithm. However it is read-only from netlink and an unprivileged
+container is still not allowed to modify
+/sys/module/batman_adv/parameters/routing_algo. Instead it is advised to
+use the newly introduced "batctl if create routing_algo RA_NAME" /
+IFLA_BATADV_ALGO_NAME to set the routing algorithm on interface
+creation, which already works fine in an unprivileged container.
 
-So, as an step to allow generic apps to use this driver, put
-the device's run_mode in preview after open.
-
-After this patch, using v4l2grab starts to work on preview
-mode (/dev/video2):
-
-	$ v4l2grab -f YUYV -x 1600 -y 1200 -d /dev/video2 -n 1 -u
-	$ feh out000.pnm
-
-So, let's just setup the default run_mode that each video devnode
-should assume, setting it at open() time.
-
-Reported-by: Tsuchiya Yuto <kitakar@gmail.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: Tycho Andersen <tycho@tycho.pizza>
+Signed-off-by: Linus Lüssing <linus.luessing@c0d3.blue>
+Signed-off-by: Sven Eckelmann <sven@narfation.org>
+Signed-off-by: Simon Wunderlich <sw@simonwunderlich.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/atomisp_fops.c  |  5 +++++
- .../staging/media/atomisp/pci/atomisp_subdev.c    | 15 ++++++++++-----
- .../staging/media/atomisp/pci/atomisp_subdev.h    |  3 +++
- drivers/staging/media/atomisp/pci/atomisp_v4l2.c  |  4 +++-
- drivers/staging/media/atomisp/pci/atomisp_v4l2.h  |  3 ++-
- 5 files changed, 23 insertions(+), 7 deletions(-)
+ net/batman-adv/netlink.c | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-index 02c19b92bdccb..18fff47bd25d2 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-@@ -877,6 +877,11 @@ done:
- 	else
- 		pipe->users++;
- 	rt_mutex_unlock(&isp->mutex);
-+
-+	/* Ensure that a mode is set */
-+	if (asd)
-+		v4l2_ctrl_s_ctrl(asd->run_mode, pipe->default_run_mode);
-+
- 	return 0;
- 
- css_error:
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.c b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-index 12f22ad007c73..ffaf11e0b0ad8 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-@@ -1164,23 +1164,28 @@ static int isp_subdev_init_entities(struct atomisp_sub_device *asd)
- 
- 	atomisp_init_acc_pipe(asd, &asd->video_acc);
- 
--	ret = atomisp_video_init(&asd->video_in, "MEMORY");
-+	ret = atomisp_video_init(&asd->video_in, "MEMORY",
-+				 ATOMISP_RUN_MODE_SDV);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = atomisp_video_init(&asd->video_out_capture, "CAPTURE");
-+	ret = atomisp_video_init(&asd->video_out_capture, "CAPTURE",
-+				 ATOMISP_RUN_MODE_STILL_CAPTURE);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = atomisp_video_init(&asd->video_out_vf, "VIEWFINDER");
-+	ret = atomisp_video_init(&asd->video_out_vf, "VIEWFINDER",
-+				 ATOMISP_RUN_MODE_CONTINUOUS_CAPTURE);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = atomisp_video_init(&asd->video_out_preview, "PREVIEW");
-+	ret = atomisp_video_init(&asd->video_out_preview, "PREVIEW",
-+				 ATOMISP_RUN_MODE_PREVIEW);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = atomisp_video_init(&asd->video_out_video_capture, "VIDEO");
-+	ret = atomisp_video_init(&asd->video_out_video_capture, "VIDEO",
-+				 ATOMISP_RUN_MODE_VIDEO);
- 	if (ret < 0)
- 		return ret;
- 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.h b/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-index d6fcfab6352d7..a8d210ea5f8be 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-+++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-@@ -81,6 +81,9 @@ struct atomisp_video_pipe {
- 	/* the link list to store per_frame parameters */
- 	struct list_head per_frame_params;
- 
-+	/* Store here the initial run mode */
-+	unsigned int default_run_mode;
-+
- 	unsigned int buffers_in_css;
- 
- 	/* irq_lock is used to protect video buffer state change operations and
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-index 7982cc143374a..14c39b8987c95 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-@@ -447,7 +447,8 @@ const struct atomisp_dfs_config dfs_config_cht_soc = {
- 	.dfs_table_size = ARRAY_SIZE(dfs_rules_cht_soc),
- };
- 
--int atomisp_video_init(struct atomisp_video_pipe *video, const char *name)
-+int atomisp_video_init(struct atomisp_video_pipe *video, const char *name,
-+		       unsigned int run_mode)
- {
- 	int ret;
- 	const char *direction;
-@@ -478,6 +479,7 @@ int atomisp_video_init(struct atomisp_video_pipe *video, const char *name)
- 		 "ATOMISP ISP %s %s", name, direction);
- 	video->vdev.release = video_device_release_empty;
- 	video_set_drvdata(&video->vdev, video->isp);
-+	video->default_run_mode = run_mode;
- 
- 	return 0;
- }
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.h b/drivers/staging/media/atomisp/pci/atomisp_v4l2.h
-index 81bb356b81720..72611b8286a4a 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.h
-+++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.h
-@@ -27,7 +27,8 @@ struct v4l2_device;
- struct atomisp_device;
- struct firmware;
- 
--int atomisp_video_init(struct atomisp_video_pipe *video, const char *name);
-+int atomisp_video_init(struct atomisp_video_pipe *video, const char *name,
-+		       unsigned int run_mode);
- void atomisp_acc_init(struct atomisp_acc_pipe *video, const char *name);
- void atomisp_video_unregister(struct atomisp_video_pipe *video);
- void atomisp_acc_unregister(struct atomisp_acc_pipe *video);
+diff --git a/net/batman-adv/netlink.c b/net/batman-adv/netlink.c
+index 29276284d281c..00875e1d8c44c 100644
+--- a/net/batman-adv/netlink.c
++++ b/net/batman-adv/netlink.c
+@@ -1368,21 +1368,21 @@ static const struct genl_small_ops batadv_netlink_ops[] = {
+ 	{
+ 		.cmd = BATADV_CMD_TP_METER,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.doit = batadv_netlink_tp_meter_start,
+ 		.internal_flags = BATADV_FLAG_NEED_MESH,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_TP_METER_CANCEL,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.doit = batadv_netlink_tp_meter_cancel,
+ 		.internal_flags = BATADV_FLAG_NEED_MESH,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_ROUTING_ALGOS,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_algo_dump,
+ 	},
+ 	{
+@@ -1397,68 +1397,68 @@ static const struct genl_small_ops batadv_netlink_ops[] = {
+ 	{
+ 		.cmd = BATADV_CMD_GET_TRANSTABLE_LOCAL,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_tt_local_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_TRANSTABLE_GLOBAL,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_tt_global_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_ORIGINATORS,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_orig_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_NEIGHBORS,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_hardif_neigh_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_GATEWAYS,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_gw_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_BLA_CLAIM,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_bla_claim_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_BLA_BACKBONE,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_bla_backbone_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_DAT_CACHE,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_dat_cache_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_MCAST_FLAGS,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_mcast_flags_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_SET_MESH,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.doit = batadv_netlink_set_mesh,
+ 		.internal_flags = BATADV_FLAG_NEED_MESH,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_SET_HARDIF,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.doit = batadv_netlink_set_hardif,
+ 		.internal_flags = BATADV_FLAG_NEED_MESH |
+ 				  BATADV_FLAG_NEED_HARDIF,
+@@ -1474,7 +1474,7 @@ static const struct genl_small_ops batadv_netlink_ops[] = {
+ 	{
+ 		.cmd = BATADV_CMD_SET_VLAN,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.doit = batadv_netlink_set_vlan,
+ 		.internal_flags = BATADV_FLAG_NEED_MESH |
+ 				  BATADV_FLAG_NEED_VLAN,
 -- 
 2.34.1
 

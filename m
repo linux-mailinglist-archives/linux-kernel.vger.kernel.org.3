@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E9449A73D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CEA549A265
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 02:59:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358176AbiAYCgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:36:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39176 "EHLO
+        id S2362273AbiAXXmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:42:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385053AbiAXUbZ (ORCPT
+        with ESMTP id S1842547AbiAXXCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:31:25 -0500
+        Mon, 24 Jan 2022 18:02:05 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45844C07A96F;
-        Mon, 24 Jan 2022 11:43:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9ECC0F057C;
+        Mon, 24 Jan 2022 13:14:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7FD66153B;
-        Mon, 24 Jan 2022 19:43:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0592C340E8;
-        Mon, 24 Jan 2022 19:43:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F91F614FC;
+        Mon, 24 Jan 2022 21:14:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27A8BC340E5;
+        Mon, 24 Jan 2022 21:14:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053391;
-        bh=RSMJmFAYFn44dqCpz6Ef7WGavdzCauuu95FS6ErIU1g=;
+        s=korg; t=1643058862;
+        bh=hPGCHYzswTPBY7Jbzbp86wCDznBp1EHftpZ+lmBxNp8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kvsgo2YtIWJ/mJfmTDqMNCQOXHevbyS90knen1gBpfnR+OyZ+LLvIgjo6A5VEEqY4
-         f1+EshkVXWf0Pb5eAA6KmCdFkyoKjHFfl8+t7h9cfubbpQUenAevsSaBX+9mc35ANY
-         2y8lxFPnYxGkX/CuPFMdLRMfd7tOtQl0F8SZRZrM=
+        b=nGOYJoBo9bhZkZjROE9x79p7kEtC0H78faIKbh304F9xG8KmCgV8nluiWSkhPvrRg
+         lJiBE9/qPumtRssI1I929pvhBxNmahQ41IKwddbat+XzETD2FAwAlwLj3NKfOe5Hz+
+         gAsR+8/dxCIWcImYSlH1RbAKY5TYsZ03c/oHEx9M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        "=?UTF-8?q?N=C3=ADcolas=20F . =20R . =20A . =20Prado?=" 
-        <nfraprado@collabora.com>, Heiko Stuebner <heiko@sntech.de>
-Subject: [PATCH 5.10 050/563] drm/rockchip: dsi: Reconfigure hardware on resume()
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0426/1039] netrom: fix api breakage in nr_setsockopt()
 Date:   Mon, 24 Jan 2022 19:36:55 +0100
-Message-Id: <20220124184026.156578432@linuxfoundation.org>
+Message-Id: <20220124184139.620652801@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,112 +49,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Norris <briannorris@chromium.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit e584cdc1549932f87a2707b56bc588cfac5d89e0 upstream.
+[ Upstream commit dc35616e6c2907b0c0c391a205802d8880f7fd85 ]
 
-Since commit 43c2de1002d2 ("drm/rockchip: dsi: move all lane config except
-LCDC mux to bind()"), we perform most HW configuration in the bind()
-function. This configuration may be lost on suspend/resume, so we
-need to call it again. That may lead to errors like this after system
-suspend/resume:
+This needs to copy an unsigned int from user space instead of a long to
+avoid breaking user space with an API change.
 
-  dw-mipi-dsi-rockchip ff968000.mipi: failed to write command FIFO
-  panel-kingdisplay-kd097d04 ff960000.mipi.0: failed write init cmds: -110
+I have updated all the integer overflow checks from ULONG to UINT as
+well.  This is a slight API change but I do not expect it to affect
+anything in real life.
 
-Tested on Acer Chromebook Tab 10 (RK3399 Gru-Scarlet).
-
-Note that early mailing list versions of this driver borrowed Rockchip's
-downstream/BSP solution, to do HW configuration in mode_set() (which
-*is* called at the appropriate pre-enable() times), but that was
-discarded along the way. I've avoided that still, because mode_set()
-documentation doesn't suggest this kind of purpose as far as I can tell.
-
-Fixes: 43c2de1002d2 ("drm/rockchip: dsi: move all lane config except LCDC mux to bind()")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Link: https://patchwork.freedesktop.org/patch/msgid/20210928143413.v3.2.I4e9d93aadb00b1ffc7d506e3186a25492bf0b732@changeid
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 3087a6f36ee0 ("netrom: fix copying in user data in nr_setsockopt")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c |   37 ++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ net/netrom/af_netrom.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
---- a/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c
-+++ b/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c
-@@ -243,6 +243,8 @@ struct dw_mipi_dsi_rockchip {
- 	struct dw_mipi_dsi *dmd;
- 	const struct rockchip_dw_dsi_chip_data *cdata;
- 	struct dw_mipi_dsi_plat_data pdata;
-+
-+	bool dsi_bound;
- };
- 
- struct dphy_pll_parameter_map {
-@@ -944,6 +946,8 @@ static int dw_mipi_dsi_rockchip_bind(str
- 		goto out_pll_clk;
- 	}
- 
-+	dsi->dsi_bound = true;
-+
- 	return 0;
- 
- out_pll_clk:
-@@ -965,6 +969,8 @@ static void dw_mipi_dsi_rockchip_unbind(
- 	if (dsi->is_slave)
- 		return;
- 
-+	dsi->dsi_bound = false;
-+
- 	dw_mipi_dsi_unbind(dsi->dmd);
- 
- 	clk_disable_unprepare(dsi->pllref_clk);
-@@ -1029,6 +1035,36 @@ static const struct dw_mipi_dsi_host_ops
- 	.detach = dw_mipi_dsi_rockchip_host_detach,
- };
- 
-+static int __maybe_unused dw_mipi_dsi_rockchip_resume(struct device *dev)
-+{
-+	struct dw_mipi_dsi_rockchip *dsi = dev_get_drvdata(dev);
-+	int ret;
-+
-+	/*
-+	 * Re-configure DSI state, if we were previously initialized. We need
-+	 * to do this before rockchip_drm_drv tries to re-enable() any panels.
-+	 */
-+	if (dsi->dsi_bound) {
-+		ret = clk_prepare_enable(dsi->grf_clk);
-+		if (ret) {
-+			DRM_DEV_ERROR(dsi->dev, "Failed to enable grf_clk: %d\n", ret);
-+			return ret;
-+		}
-+
-+		dw_mipi_dsi_rockchip_config(dsi);
-+		if (dsi->slave)
-+			dw_mipi_dsi_rockchip_config(dsi->slave);
-+
-+		clk_disable_unprepare(dsi->grf_clk);
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops dw_mipi_dsi_rockchip_pm_ops = {
-+	SET_LATE_SYSTEM_SLEEP_PM_OPS(NULL, dw_mipi_dsi_rockchip_resume)
-+};
-+
- static int dw_mipi_dsi_rockchip_probe(struct platform_device *pdev)
+diff --git a/net/netrom/af_netrom.c b/net/netrom/af_netrom.c
+index f1ba7dd3d253d..fa9dc2ba39418 100644
+--- a/net/netrom/af_netrom.c
++++ b/net/netrom/af_netrom.c
+@@ -298,7 +298,7 @@ static int nr_setsockopt(struct socket *sock, int level, int optname,
  {
- 	struct device *dev = &pdev->dev;
-@@ -1248,6 +1284,7 @@ struct platform_driver dw_mipi_dsi_rockc
- 	.remove		= dw_mipi_dsi_rockchip_remove,
- 	.driver		= {
- 		.of_match_table = dw_mipi_dsi_rockchip_dt_ids,
-+		.pm	= &dw_mipi_dsi_rockchip_pm_ops,
- 		.name	= "dw-mipi-dsi-rockchip",
- 	},
- };
+ 	struct sock *sk = sock->sk;
+ 	struct nr_sock *nr = nr_sk(sk);
+-	unsigned long opt;
++	unsigned int opt;
+ 
+ 	if (level != SOL_NETROM)
+ 		return -ENOPROTOOPT;
+@@ -306,18 +306,18 @@ static int nr_setsockopt(struct socket *sock, int level, int optname,
+ 	if (optlen < sizeof(unsigned int))
+ 		return -EINVAL;
+ 
+-	if (copy_from_sockptr(&opt, optval, sizeof(unsigned long)))
++	if (copy_from_sockptr(&opt, optval, sizeof(opt)))
+ 		return -EFAULT;
+ 
+ 	switch (optname) {
+ 	case NETROM_T1:
+-		if (opt < 1 || opt > ULONG_MAX / HZ)
++		if (opt < 1 || opt > UINT_MAX / HZ)
+ 			return -EINVAL;
+ 		nr->t1 = opt * HZ;
+ 		return 0;
+ 
+ 	case NETROM_T2:
+-		if (opt < 1 || opt > ULONG_MAX / HZ)
++		if (opt < 1 || opt > UINT_MAX / HZ)
+ 			return -EINVAL;
+ 		nr->t2 = opt * HZ;
+ 		return 0;
+@@ -329,13 +329,13 @@ static int nr_setsockopt(struct socket *sock, int level, int optname,
+ 		return 0;
+ 
+ 	case NETROM_T4:
+-		if (opt < 1 || opt > ULONG_MAX / HZ)
++		if (opt < 1 || opt > UINT_MAX / HZ)
+ 			return -EINVAL;
+ 		nr->t4 = opt * HZ;
+ 		return 0;
+ 
+ 	case NETROM_IDLE:
+-		if (opt > ULONG_MAX / (60 * HZ))
++		if (opt > UINT_MAX / (60 * HZ))
+ 			return -EINVAL;
+ 		nr->idle = opt * 60 * HZ;
+ 		return 0;
+-- 
+2.34.1
+
 
 

@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F544990C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:07:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98C204990CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:07:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353834AbiAXUEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:04:24 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37190 "EHLO
+        id S1376961AbiAXUEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:04:41 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37244 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356508AbiAXTqd (ORCPT
+        with ESMTP id S1356567AbiAXTql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:46:33 -0500
+        Mon, 24 Jan 2022 14:46:41 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BAAB6B81142;
-        Mon, 24 Jan 2022 19:46:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD543C340E7;
-        Mon, 24 Jan 2022 19:46:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 930DDB81229;
+        Mon, 24 Jan 2022 19:46:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB5A9C340E7;
+        Mon, 24 Jan 2022 19:46:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053590;
-        bh=/Bn2b5Me1W2LVtHE9oXQZpnca875ifPrsY/ztqa5e34=;
+        s=korg; t=1643053599;
+        bh=GSPw2tC2/aZH08CgCYUriKjqTe1XdPeZhekrHeV1OJU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ysamgb6qDDBpSf6fQ64DGlyUBoTpEBQGjRI4E3lwr8nBixmjotcWI8qes6yO6PJqS
-         iLIOUH+FLRcihgmIMrxEVBW5K7CHIkk+ZjqtWaKtScvudo//FEQm6BXX1Miq9iXCxL
-         cka3b7Mdkz/gNVLz2IglgFC2fayPlPASdX1j7Ra0=
+        b=XgE7S6a8Z6NGVc9R2SfmGrjYos9ly1WslKonY0uKj3cuE4+JhOjeQqIXlCordyxHM
+         h6OrBSaBXsWI6ERYpryvLd87AJ5zemirUbX2+D5f9lBo0ThfqOL5oKQJKUGn6GSe4V
+         SM6JGiieQPIYovwE1NDIOXj30zzCYg9dCHPQtTUE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
+        =?UTF-8?q?Petr=20Bene=C5=A1?= <petr.benes@ysoft.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 114/563] media: venus: core, venc, vdec: Fix probe dependency error
-Date:   Mon, 24 Jan 2022 19:37:59 +0100
-Message-Id: <20220124184028.363198382@linuxfoundation.org>
+Subject: [PATCH 5.10 117/563] thermal/drivers/imx: Implement runtime PM support
+Date:   Mon, 24 Jan 2022 19:38:02 +0100
+Message-Id: <20220124184028.461979914@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -49,341 +47,303 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+From: Oleksij Rempel <o.rempel@pengutronix.de>
 
-[ Upstream commit 08b1cf474b7f72750adebe0f0a35f8e9a3eb75f6 ]
+[ Upstream commit 4cf2ddf16e175ee18c5c29865c32da7d6269cf44 ]
 
-Commit aaaa93eda64b ("media] media: venus: venc: add video encoder files")
-is the last in a series of three commits to add core.c vdec.c and venc.c
-adding core, encoder and decoder.
+Starting with commit d92ed2c9d3ff ("thermal: imx: Use driver's local
+data to decide whether to run a measurement") this driver stared using
+irq_enabled flag to make decision to power on/off the thermal
+core. This triggered a regression, where after reaching critical
+temperature, alarm IRQ handler set irq_enabled to false, disabled
+thermal core and was not able read temperature and disable cooling
+sequence.
 
-The encoder and decoder check for core drvdata as set and return -EPROBE_DEFER
-if it has not been set, however both the encoder and decoder rely on
-core.v4l2_dev as valid.
+In case the cooling device is "CPU/GPU freq", the system will run with
+reduce performance until next reboot.
 
-core.v4l2_dev will not be valid until v4l2_device_register() has completed
-in core.c's probe().
+To solve this issue, we need to move all parts implementing hand made
+runtime power management and let it handle actual runtime PM framework.
 
-Normally this is never seen however, Dmitry reported the following
-backtrace when compiling drivers and firmware directly into a kernel image.
-
-[    5.259968] Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
-[    5.269850] sd 0:0:0:3: [sdd] Optimal transfer size 524288 bytes
-[    5.275505] Workqueue: events deferred_probe_work_func
-[    5.275513] pstate: 60400005 (nZCv daif +PAN -UAO -TCO BTYPE=--)
-[    5.441211] usb 2-1: new SuperSpeedPlus Gen 2 USB device number 2 using xhci-hcd
-[    5.442486] pc : refcount_warn_saturate+0x140/0x148
-[    5.493756] hub 2-1:1.0: USB hub found
-[    5.496266] lr : refcount_warn_saturate+0x140/0x148
-[    5.500982] hub 2-1:1.0: 4 ports detected
-[    5.503440] sp : ffff80001067b730
-[    5.503442] x29: ffff80001067b730
-[    5.592660] usb 1-1: new high-speed USB device number 2 using xhci-hcd
-[    5.598478] x28: ffff6c6bc1c379b8
-[    5.598480] x27: ffffa5c673852960 x26: ffffa5c673852000
-[    5.598484] x25: ffff6c6bc1c37800 x24: 0000000000000001
-[    5.810652] x23: 0000000000000000 x22: ffffa5c673bc7118
-[    5.813777] hub 1-1:1.0: USB hub found
-[    5.816108] x21: ffffa5c674440000 x20: 0000000000000001
-[    5.820846] hub 1-1:1.0: 4 ports detected
-[    5.825415] x19: ffffa5c6744f4000 x18: ffffffffffffffff
-[    5.825418] x17: 0000000000000000 x16: 0000000000000000
-[    5.825421] x15: 00000a4810c193ba x14: 0000000000000000
-[    5.825424] x13: 00000000000002b8 x12: 000000000000f20a
-[    5.825427] x11: 000000000000f20a x10: 0000000000000038
-[    5.845447] usb 2-1.1: new SuperSpeed Gen 1 USB device number 3 using xhci-hcd
-[    5.845904]
-[    5.845905] x9 : 0000000000000000 x8 : ffff6c6d36fae780
-[    5.871208] x7 : ffff6c6d36faf240 x6 : 0000000000000000
-[    5.876664] x5 : 0000000000000004 x4 : 0000000000000085
-[    5.882121] x3 : 0000000000000119 x2 : ffffa5c6741ef478
-[    5.887578] x1 : 3acbb3926faf5f00 x0 : 0000000000000000
-[    5.893036] Call trace:
-[    5.895551]  refcount_warn_saturate+0x140/0x148
-[    5.900202]  __video_register_device+0x64c/0xd10
-[    5.904944]  venc_probe+0xc4/0x148
-[    5.908444]  platform_probe+0x68/0xe0
-[    5.912210]  really_probe+0x118/0x3e0
-[    5.915977]  driver_probe_device+0x5c/0xc0
-[    5.920187]  __device_attach_driver+0x98/0xb8
-[    5.924661]  bus_for_each_drv+0x68/0xd0
-[    5.928604]  __device_attach+0xec/0x148
-[    5.932547]  device_initial_probe+0x14/0x20
-[    5.936845]  bus_probe_device+0x9c/0xa8
-[    5.940788]  device_add+0x3e8/0x7c8
-[    5.944376]  of_device_add+0x4c/0x60
-[    5.948056]  of_platform_device_create_pdata+0xbc/0x140
-[    5.953425]  of_platform_bus_create+0x17c/0x3c0
-[    5.958078]  of_platform_populate+0x80/0x110
-[    5.962463]  venus_probe+0x2ec/0x4d8
-[    5.966143]  platform_probe+0x68/0xe0
-[    5.969907]  really_probe+0x118/0x3e0
-[    5.973674]  driver_probe_device+0x5c/0xc0
-[    5.977882]  __device_attach_driver+0x98/0xb8
-[    5.982356]  bus_for_each_drv+0x68/0xd0
-[    5.986298]  __device_attach+0xec/0x148
-[    5.990242]  device_initial_probe+0x14/0x20
-[    5.994539]  bus_probe_device+0x9c/0xa8
-[    5.998481]  deferred_probe_work_func+0x74/0xb0
-[    6.003132]  process_one_work+0x1e8/0x360
-[    6.007254]  worker_thread+0x208/0x478
-[    6.011106]  kthread+0x150/0x158
-[    6.014431]  ret_from_fork+0x10/0x30
-[    6.018111] ---[ end trace f074246b1ecdb466 ]---
-
-This patch fixes by
-
-- Only setting drvdata after v4l2_device_register() completes
-- Moving v4l2_device_register() so that suspend/reume in core::probe()
-  stays as-is
-- Changes pm_ops->core_function() to take struct venus_core not struct
-  device
-- Minimal rework of v4l2_device_*register in probe/remove
-
-Reported-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Fixes: d92ed2c9d3ff ("thermal: imx: Use driver's local data to decide whether to run a measurement")
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Tested-by: Petr Beneš <petr.benes@ysoft.com>
+Link: https://lore.kernel.org/r/20211117103426.81813-1-o.rempel@pengutronix.de
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/qcom/venus/core.c      | 30 +++++++++++--------
- .../media/platform/qcom/venus/pm_helpers.c    | 30 ++++++++-----------
- .../media/platform/qcom/venus/pm_helpers.h    |  7 +++--
- 3 files changed, 34 insertions(+), 33 deletions(-)
+ drivers/thermal/imx_thermal.c | 145 +++++++++++++++++++++-------------
+ 1 file changed, 91 insertions(+), 54 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index 58ddebbb84468..bad553bf9f304 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -222,7 +222,6 @@ static int venus_probe(struct platform_device *pdev)
+diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+index 2c7473d86a59b..16663373b6829 100644
+--- a/drivers/thermal/imx_thermal.c
++++ b/drivers/thermal/imx_thermal.c
+@@ -15,6 +15,7 @@
+ #include <linux/regmap.h>
+ #include <linux/thermal.h>
+ #include <linux/nvmem-consumer.h>
++#include <linux/pm_runtime.h>
+ 
+ #define REG_SET		0x4
+ #define REG_CLR		0x8
+@@ -194,6 +195,7 @@ static struct thermal_soc_data thermal_imx7d_data = {
+ };
+ 
+ struct imx_thermal_data {
++	struct device *dev;
+ 	struct cpufreq_policy *policy;
+ 	struct thermal_zone_device *tz;
+ 	struct thermal_cooling_device *cdev;
+@@ -252,44 +254,15 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
+ 	const struct thermal_soc_data *soc_data = data->socdata;
+ 	struct regmap *map = data->tempmon;
+ 	unsigned int n_meas;
+-	bool wait, run_measurement;
+ 	u32 val;
++	int ret;
+ 
+-	run_measurement = !data->irq_enabled;
+-	if (!run_measurement) {
+-		/* Check if a measurement is currently in progress */
+-		regmap_read(map, soc_data->temp_data, &val);
+-		wait = !(val & soc_data->temp_valid_mask);
+-	} else {
+-		/*
+-		 * Every time we measure the temperature, we will power on the
+-		 * temperature sensor, enable measurements, take a reading,
+-		 * disable measurements, power off the temperature sensor.
+-		 */
+-		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+-			    soc_data->power_down_mask);
+-		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+-			    soc_data->measure_temp_mask);
+-
+-		wait = true;
+-	}
+-
+-	/*
+-	 * According to the temp sensor designers, it may require up to ~17us
+-	 * to complete a measurement.
+-	 */
+-	if (wait)
+-		usleep_range(20, 50);
++	ret = pm_runtime_resume_and_get(data->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	regmap_read(map, soc_data->temp_data, &val);
+ 
+-	if (run_measurement) {
+-		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+-			     soc_data->measure_temp_mask);
+-		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+-			     soc_data->power_down_mask);
+-	}
+-
+ 	if ((val & soc_data->temp_valid_mask) == 0) {
+ 		dev_dbg(&tz->device, "temp measurement never finished\n");
+ 		return -EAGAIN;
+@@ -328,6 +301,8 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
+ 		enable_irq(data->irq);
+ 	}
+ 
++	pm_runtime_put(data->dev);
++
+ 	return 0;
+ }
+ 
+@@ -335,24 +310,16 @@ static int imx_change_mode(struct thermal_zone_device *tz,
+ 			   enum thermal_device_mode mode)
+ {
+ 	struct imx_thermal_data *data = tz->devdata;
+-	struct regmap *map = data->tempmon;
+-	const struct thermal_soc_data *soc_data = data->socdata;
+ 
+ 	if (mode == THERMAL_DEVICE_ENABLED) {
+-		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+-			     soc_data->power_down_mask);
+-		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+-			     soc_data->measure_temp_mask);
++		pm_runtime_get(data->dev);
+ 
+ 		if (!data->irq_enabled) {
+ 			data->irq_enabled = true;
+ 			enable_irq(data->irq);
+ 		}
+ 	} else {
+-		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+-			     soc_data->measure_temp_mask);
+-		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+-			     soc_data->power_down_mask);
++		pm_runtime_put(data->dev);
+ 
+ 		if (data->irq_enabled) {
+ 			disable_irq(data->irq);
+@@ -393,6 +360,11 @@ static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip,
+ 			     int temp)
+ {
+ 	struct imx_thermal_data *data = tz->devdata;
++	int ret;
++
++	ret = pm_runtime_resume_and_get(data->dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	/* do not allow changing critical threshold */
+ 	if (trip == IMX_TRIP_CRITICAL)
+@@ -406,6 +378,8 @@ static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip,
+ 
+ 	imx_set_alarm_temp(data, temp);
+ 
++	pm_runtime_put(data->dev);
++
+ 	return 0;
+ }
+ 
+@@ -681,6 +655,8 @@ static int imx_thermal_probe(struct platform_device *pdev)
+ 	if (!data)
  		return -ENOMEM;
  
- 	core->dev = dev;
--	platform_set_drvdata(pdev, core);
++	data->dev = &pdev->dev;
++
+ 	map = syscon_regmap_lookup_by_phandle(pdev->dev.of_node, "fsl,tempmon");
+ 	if (IS_ERR(map)) {
+ 		ret = PTR_ERR(map);
+@@ -800,6 +776,16 @@ static int imx_thermal_probe(struct platform_device *pdev)
+ 		     data->socdata->power_down_mask);
+ 	regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
+ 		     data->socdata->measure_temp_mask);
++	/* After power up, we need a delay before first access can be done. */
++	usleep_range(20, 50);
++
++	/* the core was configured and enabled just before */
++	pm_runtime_set_active(&pdev->dev);
++	pm_runtime_enable(data->dev);
++
++	ret = pm_runtime_resume_and_get(data->dev);
++	if (ret < 0)
++		goto disable_runtime_pm;
  
- 	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	core->base = devm_ioremap_resource(dev, r);
-@@ -252,7 +251,7 @@ static int venus_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 
- 	if (core->pm_ops->core_get) {
--		ret = core->pm_ops->core_get(dev);
-+		ret = core->pm_ops->core_get(core);
- 		if (ret)
- 			return ret;
+ 	data->irq_enabled = true;
+ 	ret = thermal_zone_device_enable(data->tz);
+@@ -814,10 +800,15 @@ static int imx_thermal_probe(struct platform_device *pdev)
+ 		goto thermal_zone_unregister;
  	}
-@@ -277,6 +276,12 @@ static int venus_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err_core_put;
  
-+	ret = v4l2_device_register(dev, &core->v4l2_dev);
++	pm_runtime_put(data->dev);
++
+ 	return 0;
+ 
+ thermal_zone_unregister:
+ 	thermal_zone_device_unregister(data->tz);
++disable_runtime_pm:
++	pm_runtime_put_noidle(data->dev);
++	pm_runtime_disable(data->dev);
+ clk_disable:
+ 	clk_disable_unprepare(data->thermal_clk);
+ legacy_cleanup:
+@@ -829,13 +820,9 @@ legacy_cleanup:
+ static int imx_thermal_remove(struct platform_device *pdev)
+ {
+ 	struct imx_thermal_data *data = platform_get_drvdata(pdev);
+-	struct regmap *map = data->tempmon;
+ 
+-	/* Disable measurements */
+-	regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
+-		     data->socdata->power_down_mask);
+-	if (!IS_ERR(data->thermal_clk))
+-		clk_disable_unprepare(data->thermal_clk);
++	pm_runtime_put_noidle(data->dev);
++	pm_runtime_disable(data->dev);
+ 
+ 	thermal_zone_device_unregister(data->tz);
+ 	imx_thermal_unregister_legacy_cooling(data);
+@@ -858,29 +845,79 @@ static int __maybe_unused imx_thermal_suspend(struct device *dev)
+ 	ret = thermal_zone_device_disable(data->tz);
+ 	if (ret)
+ 		return ret;
++
++	return pm_runtime_force_suspend(data->dev);
++}
++
++static int __maybe_unused imx_thermal_resume(struct device *dev)
++{
++	struct imx_thermal_data *data = dev_get_drvdata(dev);
++	int ret;
++
++	ret = pm_runtime_force_resume(data->dev);
 +	if (ret)
-+		goto err_core_deinit;
++		return ret;
++	/* Enabled thermal sensor after resume */
++	return thermal_zone_device_enable(data->tz);
++}
 +
-+	platform_set_drvdata(pdev, core);
++static int __maybe_unused imx_thermal_runtime_suspend(struct device *dev)
++{
++	struct imx_thermal_data *data = dev_get_drvdata(dev);
++	const struct thermal_soc_data *socdata = data->socdata;
++	struct regmap *map = data->tempmon;
++	int ret;
 +
- 	pm_runtime_enable(dev);
++	ret = regmap_write(map, socdata->sensor_ctrl + REG_CLR,
++			   socdata->measure_temp_mask);
++	if (ret)
++		return ret;
++
++	ret = regmap_write(map, socdata->sensor_ctrl + REG_SET,
++			   socdata->power_down_mask);
++	if (ret)
++		return ret;
++
+ 	clk_disable_unprepare(data->thermal_clk);
  
- 	ret = pm_runtime_get_sync(dev);
-@@ -311,10 +316,6 @@ static int venus_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-static int __maybe_unused imx_thermal_resume(struct device *dev)
++static int __maybe_unused imx_thermal_runtime_resume(struct device *dev)
+ {
+ 	struct imx_thermal_data *data = dev_get_drvdata(dev);
++	const struct thermal_soc_data *socdata = data->socdata;
++	struct regmap *map = data->tempmon;
+ 	int ret;
+ 
+ 	ret = clk_prepare_enable(data->thermal_clk);
  	if (ret)
- 		goto err_venus_shutdown;
- 
--	ret = v4l2_device_register(dev, &core->v4l2_dev);
--	if (ret)
--		goto err_core_deinit;
--
- 	ret = pm_runtime_put_sync(dev);
- 	if (ret) {
- 		pm_runtime_get_noresume(dev);
-@@ -327,8 +328,6 @@ static int venus_probe(struct platform_device *pdev)
- 
- err_dev_unregister:
- 	v4l2_device_unregister(&core->v4l2_dev);
--err_core_deinit:
--	hfi_core_deinit(core, false);
- err_venus_shutdown:
- 	venus_shutdown(core);
- err_runtime_disable:
-@@ -336,9 +335,11 @@ err_runtime_disable:
- 	pm_runtime_set_suspended(dev);
- 	pm_runtime_disable(dev);
- 	hfi_destroy(core);
-+err_core_deinit:
-+	hfi_core_deinit(core, false);
- err_core_put:
- 	if (core->pm_ops->core_put)
--		core->pm_ops->core_put(dev);
-+		core->pm_ops->core_put(core);
- 	return ret;
- }
- 
-@@ -364,11 +365,14 @@ static int venus_remove(struct platform_device *pdev)
- 	pm_runtime_disable(dev);
- 
- 	if (pm_ops->core_put)
--		pm_ops->core_put(dev);
-+		pm_ops->core_put(core);
+ 		return ret;
+-	/* Enabled thermal sensor after resume */
+-	ret = thermal_zone_device_enable(data->tz);
 +
-+	v4l2_device_unregister(&core->v4l2_dev);
- 
- 	hfi_destroy(core);
- 
- 	v4l2_device_unregister(&core->v4l2_dev);
++	ret = regmap_write(map, socdata->sensor_ctrl + REG_CLR,
++			   socdata->power_down_mask);
++	if (ret)
++		return ret;
 +
- 	mutex_destroy(&core->pm_lock);
- 	mutex_destroy(&core->lock);
- 	venus_dbgfs_deinit(core);
-@@ -387,7 +391,7 @@ static __maybe_unused int venus_runtime_suspend(struct device *dev)
++	ret = regmap_write(map, socdata->sensor_ctrl + REG_SET,
++			   socdata->measure_temp_mask);
+ 	if (ret)
  		return ret;
  
- 	if (pm_ops->core_power) {
--		ret = pm_ops->core_power(dev, POWER_OFF);
-+		ret = pm_ops->core_power(core, POWER_OFF);
- 		if (ret)
- 			return ret;
- 	}
-@@ -405,7 +409,7 @@ static __maybe_unused int venus_runtime_suspend(struct device *dev)
- err_video_path:
- 	icc_set_bw(core->cpucfg_path, kbps_to_icc(1000), 0);
- err_cpucfg_path:
--	pm_ops->core_power(dev, POWER_ON);
-+	pm_ops->core_power(core, POWER_ON);
- 
- 	return ret;
- }
-@@ -425,7 +429,7 @@ static __maybe_unused int venus_runtime_resume(struct device *dev)
- 		return ret;
- 
- 	if (pm_ops->core_power) {
--		ret = pm_ops->core_power(dev, POWER_ON);
-+		ret = pm_ops->core_power(core, POWER_ON);
- 		if (ret)
- 			return ret;
- 	}
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index bce9a370015fb..63095d70f8d82 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -276,16 +276,13 @@ set_freq:
++	/*
++	 * According to the temp sensor designers, it may require up to ~17us
++	 * to complete a measurement.
++	 */
++	usleep_range(20, 50);
++
  	return 0;
  }
  
--static int core_get_v1(struct device *dev)
-+static int core_get_v1(struct venus_core *core)
- {
--	struct venus_core *core = dev_get_drvdata(dev);
--
- 	return core_clks_get(core);
- }
+-static SIMPLE_DEV_PM_OPS(imx_thermal_pm_ops,
+-			 imx_thermal_suspend, imx_thermal_resume);
++static const struct dev_pm_ops imx_thermal_pm_ops = {
++	SET_SYSTEM_SLEEP_PM_OPS(imx_thermal_suspend, imx_thermal_resume)
++	SET_RUNTIME_PM_OPS(imx_thermal_runtime_suspend,
++			   imx_thermal_runtime_resume, NULL)
++};
  
--static int core_power_v1(struct device *dev, int on)
-+static int core_power_v1(struct venus_core *core, int on)
- {
--	struct venus_core *core = dev_get_drvdata(dev);
- 	int ret = 0;
- 
- 	if (on == POWER_ON)
-@@ -752,12 +749,12 @@ static int venc_power_v4(struct device *dev, int on)
- 	return ret;
- }
- 
--static int vcodec_domains_get(struct device *dev)
-+static int vcodec_domains_get(struct venus_core *core)
- {
- 	int ret;
- 	struct opp_table *opp_table;
- 	struct device **opp_virt_dev;
--	struct venus_core *core = dev_get_drvdata(dev);
-+	struct device *dev = core->dev;
- 	const struct venus_resources *res = core->res;
- 	struct device *pd;
- 	unsigned int i;
-@@ -808,9 +805,8 @@ opp_attach_err:
- 	return ret;
- }
- 
--static void vcodec_domains_put(struct device *dev)
-+static void vcodec_domains_put(struct venus_core *core)
- {
--	struct venus_core *core = dev_get_drvdata(dev);
- 	const struct venus_resources *res = core->res;
- 	unsigned int i;
- 
-@@ -833,9 +829,9 @@ skip_pmdomains:
- 	dev_pm_opp_detach_genpd(core->opp_table);
- }
- 
--static int core_get_v4(struct device *dev)
-+static int core_get_v4(struct venus_core *core)
- {
--	struct venus_core *core = dev_get_drvdata(dev);
-+	struct device *dev = core->dev;
- 	const struct venus_resources *res = core->res;
- 	int ret;
- 
-@@ -874,7 +870,7 @@ static int core_get_v4(struct device *dev)
- 		}
- 	}
- 
--	ret = vcodec_domains_get(dev);
-+	ret = vcodec_domains_get(core);
- 	if (ret) {
- 		if (core->has_opp_table)
- 			dev_pm_opp_of_remove_table(dev);
-@@ -885,14 +881,14 @@ static int core_get_v4(struct device *dev)
- 	return 0;
- }
- 
--static void core_put_v4(struct device *dev)
-+static void core_put_v4(struct venus_core *core)
- {
--	struct venus_core *core = dev_get_drvdata(dev);
-+	struct device *dev = core->dev;
- 
- 	if (legacy_binding)
- 		return;
- 
--	vcodec_domains_put(dev);
-+	vcodec_domains_put(core);
- 
- 	if (core->has_opp_table)
- 		dev_pm_opp_of_remove_table(dev);
-@@ -901,9 +897,9 @@ static void core_put_v4(struct device *dev)
- 
- }
- 
--static int core_power_v4(struct device *dev, int on)
-+static int core_power_v4(struct venus_core *core, int on)
- {
--	struct venus_core *core = dev_get_drvdata(dev);
-+	struct device *dev = core->dev;
- 	struct device *pmctrl = core->pmdomains[0];
- 	int ret = 0;
- 
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.h b/drivers/media/platform/qcom/venus/pm_helpers.h
-index aa2f6afa23544..a492c50c5543c 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.h
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.h
-@@ -4,14 +4,15 @@
- #define __VENUS_PM_HELPERS_H__
- 
- struct device;
-+struct venus_core;
- 
- #define POWER_ON	1
- #define POWER_OFF	0
- 
- struct venus_pm_ops {
--	int (*core_get)(struct device *dev);
--	void (*core_put)(struct device *dev);
--	int (*core_power)(struct device *dev, int on);
-+	int (*core_get)(struct venus_core *core);
-+	void (*core_put)(struct venus_core *core);
-+	int (*core_power)(struct venus_core *core, int on);
- 
- 	int (*vdec_get)(struct device *dev);
- 	void (*vdec_put)(struct device *dev);
+ static struct platform_driver imx_thermal = {
+ 	.driver = {
 -- 
 2.34.1
 

@@ -2,170 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A2A498109
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:30:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69875498107
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243166AbiAXNaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 08:30:20 -0500
-Received: from mga07.intel.com ([134.134.136.100]:10513 "EHLO mga07.intel.com"
+        id S243159AbiAXNaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 08:30:03 -0500
+Received: from foss.arm.com ([217.140.110.172]:34318 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239975AbiAXNaS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 08:30:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643031018; x=1674567018;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=s3MS9jlacq/GjKUc1J7BgRzARDrYpUsH/uofSxi2lpg=;
-  b=KLRPcaAbDHrNZpMyBof98siiy0gAuPPtlI4CKpGuBwNxzRetDKWphdC2
-   M1oo/sIUZg4nrBGVO7nf9hlVbZSIAk28FR33u2qrrLP8crYqrxVoqC1Ve
-   cmSg8ewfLxDCphmv31A8o4+OaeeCPJMYavnkHXm3z2TtHIiLW5PkXs9Z5
-   v7X0BUG/w3HXdktUQLGkGqIqKHVxb2InaeKZh+1njd7FhTt6wRy/BI88k
-   W4hfEndP3MtbUrRgJ698e30lU51j0NlhN71QgYKyLSWHo8nzZT3ZksVNr
-   Oh95EDet0nyKSanTgNQsC+shQhzmHA0UFcS5Sx7sUpfC/zB+Iyx2PqSPz
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="309362579"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="309362579"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 05:30:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="532077916"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by fmsmga007.fm.intel.com with ESMTP; 24 Jan 2022 05:30:05 -0800
-Date:   Mon, 24 Jan 2022 21:29:36 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Steven Price <steven.price@arm.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com
-Subject: Re: [PATCH v4 02/12] mm/memfd: Introduce MFD_INACCESSIBLE flag
-Message-ID: <20220124132936.GA55051@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220118132121.31388-1-chao.p.peng@linux.intel.com>
- <20220118132121.31388-3-chao.p.peng@linux.intel.com>
- <8f1eba03-e5e9-e9fc-084d-0ef683093d65@arm.com>
+        id S243148AbiAXNaB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 08:30:01 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 41F41D6E;
+        Mon, 24 Jan 2022 05:30:01 -0800 (PST)
+Received: from e113632-lin (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C8D363F774;
+        Mon, 24 Jan 2022 05:29:59 -0800 (PST)
+From:   Valentin Schneider <valentin.schneider@arm.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-kernel@vger.kernel.org
+Cc:     John Keeping <john@metanate.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: Re: [PATCH] sched/rt: Plug rt_mutex_setprio() vs push_rt_task() race
+In-Reply-To: <aa5bf2d0-bef7-485a-9a51-0da7df67d8c5@arm.com>
+References: <20220120194037.650433-1-valentin.schneider@arm.com> <aa5bf2d0-bef7-485a-9a51-0da7df67d8c5@arm.com>
+Date:   Mon, 24 Jan 2022 13:29:57 +0000
+Message-ID: <875yq945yi.mognet@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8f1eba03-e5e9-e9fc-084d-0ef683093d65@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 03:50:55PM +0000, Steven Price wrote:
-> On 18/01/2022 13:21, Chao Peng wrote:
-> > Introduce a new memfd_create() flag indicating the content of the
-> > created memfd is inaccessible from userspace. It does this by force
-> > setting F_SEAL_INACCESSIBLE seal when the file is created. It also set
-> > F_SEAL_SEAL to prevent future sealing, which means, it can not coexist
-> > with MFD_ALLOW_SEALING.
-> > 
-> > The pages backed by such memfd will be used as guest private memory in
-> > confidential computing environments such as Intel TDX/AMD SEV. Since
-> > page migration/swapping is not yet supported for such usages so these
-> > pages are currently marked as UNMOVABLE and UNEVICTABLE which makes
-> > them behave like long-term pinned pages.
-> > 
-> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> > ---
-> >  include/uapi/linux/memfd.h |  1 +
-> >  mm/memfd.c                 | 20 +++++++++++++++++++-
-> >  2 files changed, 20 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/include/uapi/linux/memfd.h b/include/uapi/linux/memfd.h
-> > index 7a8a26751c23..48750474b904 100644
-> > --- a/include/uapi/linux/memfd.h
-> > +++ b/include/uapi/linux/memfd.h
-> > @@ -8,6 +8,7 @@
-> >  #define MFD_CLOEXEC		0x0001U
-> >  #define MFD_ALLOW_SEALING	0x0002U
-> >  #define MFD_HUGETLB		0x0004U
-> > +#define MFD_INACCESSIBLE	0x0008U
-> >  
-> >  /*
-> >   * Huge page size encoding when MFD_HUGETLB is specified, and a huge page
-> > diff --git a/mm/memfd.c b/mm/memfd.c
-> > index 9f80f162791a..26998d96dc11 100644
-> > --- a/mm/memfd.c
-> > +++ b/mm/memfd.c
-> > @@ -245,16 +245,19 @@ long memfd_fcntl(struct file *file, unsigned int cmd, unsigned long arg)
-> >  #define MFD_NAME_PREFIX_LEN (sizeof(MFD_NAME_PREFIX) - 1)
-> >  #define MFD_NAME_MAX_LEN (NAME_MAX - MFD_NAME_PREFIX_LEN)
-> >  
-> > -#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB)
-> > +#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB | \
-> > +		       MFD_INACCESSIBLE)
-> >  
-> >  SYSCALL_DEFINE2(memfd_create,
-> >  		const char __user *, uname,
-> >  		unsigned int, flags)
-> >  {
-> > +	struct address_space *mapping;
-> >  	unsigned int *file_seals;
-> >  	struct file *file;
-> >  	int fd, error;
-> >  	char *name;
-> > +	gfp_t gfp;
-> >  	long len;
-> >  
-> >  	if (!(flags & MFD_HUGETLB)) {
-> > @@ -267,6 +270,10 @@ SYSCALL_DEFINE2(memfd_create,
-> >  			return -EINVAL;
-> >  	}
-> >  
-> > +	/* Disallow sealing when MFD_INACCESSIBLE is set. */
-> > +	if (flags & MFD_INACCESSIBLE && flags & MFD_ALLOW_SEALING)
-> > +		return -EINVAL;
-> > +
-> >  	/* length includes terminating zero */
-> >  	len = strnlen_user(uname, MFD_NAME_MAX_LEN + 1);
-> >  	if (len <= 0)
-> > @@ -315,6 +322,17 @@ SYSCALL_DEFINE2(memfd_create,
-> >  		*file_seals &= ~F_SEAL_SEAL;
-> >  	}
-> >  
-> > +	if (flags & MFD_INACCESSIBLE) {
-> > +		mapping = file_inode(file)->i_mapping;
-> > +		gfp = mapping_gfp_mask(mapping);
-> > +		gfp &= ~__GFP_MOVABLE;
-> > +		mapping_set_gfp_mask(mapping, gfp);
-> > +		mapping_set_unevictable(mapping);
-> > +
-> > +		file_seals = memfd_file_seals_ptr(file);
-> > +		*file_seals &= F_SEAL_SEAL | F_SEAL_INACCESSIBLE;
-> 
-> This looks backwards - the flags should be set on *file_seals, but here
-> you are unsetting all other flags.
+On 24/01/22 10:37, Dietmar Eggemann wrote:
+> On 20/01/2022 20:40, Valentin Schneider wrote:
+>
+> [...]
+>
+>> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+>> index 7b4f4fbbb404..48fc8c04b038 100644
+>> --- a/kernel/sched/rt.c
+>> +++ b/kernel/sched/rt.c
+>> @@ -2026,6 +2026,16 @@ static int push_rt_task(struct rq *rq, bool pull)
+>>  		return 0;
+>>  
+>>  retry:
+>> +	/*
+>> +	 * It's possible that the next_task slipped in of
+>> +	 * higher priority than current. If that's the case
+>> +	 * just reschedule current.
+>> +	 */
+>> +	if (unlikely(next_task->prio < rq->curr->prio)) {
+>> +		resched_curr(rq);
+>> +		return 0;
+>> +	}
+>
+> If we do this before `is_migration_disabled(next_task), shouldn't then
+> the related condition in push_dl_task() also be moved up?
+>
+>   if (dl_task(rq->curr) &&
+>     dl_time_before(next_task->dl.deadline, rq->curr->dl.deadline) &&
+>     rq->curr->nr_cpus_allowed > 1)
+>
+> To enforce resched_curr(rq) in the `is_migration_disabled(next_task)`
+> case there as well?
+>
 
-Thanks Steve. '|=' actually should be used here.
+I'm not sure if we can hit the same issue with DL since DL doesn't have the
+push irqwork. If there are DL tasks on the rq when current gets demoted,
+switched_from_dl() won't queue pull_dl_task().
 
-Chao
-> 
-> Steve
-> 
-> > +	}
-> > +
-> >  	fd_install(fd, file);
-> >  	kfree(name);
-> >  	return fd;
-> > 
+That said, if say we have DL tasks on the rq and demote the current DL task
+to RT, do we currently have anything that will call resched_curr() (I'm
+looking at the rt_mutex path)?
+switched_to_fair() has a resched_curr() (which helps for the RT -> CFS
+case), I don't see anything that would give us that in switched_from_dl() /
+switched_to_rt(), or am I missing something?
+
+>> +
+>>  	if (is_migration_disabled(next_task)) {
+>>  		struct task_struct *push_task = NULL;
+>>  		int cpu;
+>> @@ -2033,6 +2043,17 @@ static int push_rt_task(struct rq *rq, bool pull)
+>>  		if (!pull || rq->push_busy)
+>>  			return 0;
+>>  
+>> +		/*
+>> +		 * Per the above priority check, curr is at least RT. If it's
+>> +		 * of a higher class than RT, invoking find_lowest_rq() on it
+>> +		 * doesn't make sense.
+>> +		 *
+>> +		 * Note that the stoppers are masqueraded as SCHED_FIFO
+>> +		 * (cf. sched_set_stop_task()), so we can't rely on rt_task().
+>> +		 */
+>> +		if (rq->curr->sched_class != &rt_sched_class)
+>
+> s/ != / > / ... since the `unlikely(next_task->prio < rq->curr->prio)`
+> already filters tasks from lower sched classes (CFS)?
+>
+
+!= points out we won't invoke find_lowest_rq() on anything that isn't RT,
+which makes it a bit clearer IMO, and it's not like either of those
+comparisons is more expensive than the other :)
+
+>> +			return 0;
+>> +
+>
+> [...]

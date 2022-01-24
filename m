@@ -2,120 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02534497F13
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC552497F4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242774AbiAXMPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 07:15:52 -0500
-Received: from mga11.intel.com ([192.55.52.93]:63891 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241954AbiAXMOn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:14:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643026483; x=1674562483;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FR/Plqwyf6P+JXGAx4Yblw5sOsYQlSfhlYedmM/BhpI=;
-  b=It3GvrS4HsbnwOAl9k9BxeAmnNFPLkYcoUt7DYeG1atxtJyvOxi3r388
-   N6xz97Up10aOq6P3iaQzf19+IkWFRj0nYmUtCPRjxH3fw6a8nPsW33c82
-   9g1nc0Y+mxB85s9g9IDAGpUI7sJUdTQt8ocookAjndJxMFmyIGVFdc7KG
-   riXbHaLrotnJjY7ZmRgk//+1NFHXy7ziHk4pIM/nayCaszrfOO3P17rjy
-   4gDU8UZMuXE5cw1p3MCoWMHARV1g5fmhC+z88w+T7oQqwJR3PZa/Bq9/t
-   /LzOKoPyJNTmRRRU3rb1Z9gdRsDHNgmyZKxNAeIsRI6Esc3Li+XmJe4Ln
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="243626687"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="243626687"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 04:14:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="617214240"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 Jan 2022 04:14:39 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nByF5-000II9-52; Mon, 24 Jan 2022 12:14:39 +0000
-Date:   Mon, 24 Jan 2022 20:14:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tong Zhang <ztong0001@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Tong Zhang <ztong0001@gmail.com>
-Subject: Re: [PATCH v1] binfmt_misc: fix crash when load/unload module
-Message-ID: <202201242006.cqM8NznF-lkp@intel.com>
-References: <20220124003342.1457437-1-ztong0001@gmail.com>
+        id S239475AbiAXMYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 07:24:05 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:52336 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S239140AbiAXMYE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 07:24:04 -0500
+X-UUID: 7495296568a1467ab7ba9ce6c7b92a5f-20220124
+X-UUID: 7495296568a1467ab7ba9ce6c7b92a5f-20220124
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <derong.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1179741836; Mon, 24 Jan 2022 20:24:00 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 24 Jan 2022 20:23:59 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 24 Jan 2022 20:23:58 +0800
+From:   Derong Liu <derong.liu@mediatek.com>
+To:     Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-mmc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <wsp_upstream@mediatek.com>,
+        Peng Zhou <peng.zhou@mediatek.com>,
+        Derong Liu <derong.liu@mediatek.com>
+Subject: [PATCH] mmc: mediatek: Add cmd polling mode
+Date:   Mon, 24 Jan 2022 20:18:14 +0800
+Message-ID: <20220124121814.17452-1-derong.liu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124003342.1457437-1-ztong0001@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tong,
+We found sdcard can gain more read/write performance
+when using cmd polling mode instead of interrupt mode, in the meantime,
+there are much more devices have equipped with high frequency cpu,
+so it is necessary to support cmd polling mode.
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.17-rc1 next-20220124]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Tong-Zhang/binfmt_misc-fix-crash-when-load-unload-module/20220124-083500
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
-config: arm-randconfig-c002-20220124 (https://download.01.org/0day-ci/archive/20220124/202201242006.cqM8NznF-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/d649008f3214eb4d94760873831ef5e53c292976
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Tong-Zhang/binfmt_misc-fix-crash-when-load-unload-module/20220124-083500
-        git checkout d649008f3214eb4d94760873831ef5e53c292976
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   fs/binfmt_misc.c: In function 'init_misc_binfmt':
->> fs/binfmt_misc.c:828:28: error: assignment to 'struct ctl_table_header *' from incompatible pointer type 'struct sysctl_header *' [-Werror=incompatible-pointer-types]
-     828 |         binfmt_misc_header = register_sysctl_mount_point("fs/binfmt_misc");
-         |                            ^
-   cc1: some warnings being treated as errors
-
-
-vim +828 fs/binfmt_misc.c
-
-   821	
-   822	static int __init init_misc_binfmt(void)
-   823	{
-   824		int err = register_filesystem(&bm_fs_type);
-   825		if (!err)
-   826			insert_binfmt(&misc_format);
-   827	
- > 828		binfmt_misc_header = register_sysctl_mount_point("fs/binfmt_misc");
-   829		if (!binfmt_misc_header) {
-   830			pr_warn("Failed to create fs/binfmt_misc sysctl mount point");
-   831			return -ENOMEM;
-   832		}
-   833		return 0;
-   834	}
-   835	
-
+Signed-off-by: Derong Liu <derong.liu@mediatek.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/mmc/host/mtk-sd.c | 92 +++++++++++++++++++++++++++++++++++----
+ 1 file changed, 83 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+index 65037e1d7723..612f5115ca4b 100644
+--- a/drivers/mmc/host/mtk-sd.c
++++ b/drivers/mmc/host/mtk-sd.c
+@@ -465,6 +465,7 @@ struct msdc_host {
+ 	bool hs400_tuning;	/* hs400 mode online tuning */
+ 	bool internal_cd;	/* Use internal card-detect logic */
+ 	bool cqhci;		/* support eMMC hw cmdq */
++	bool cmd_polling_mode;	/* support cmd polling mode */
+ 	struct msdc_save_para save_para; /* used when gate HCLK */
+ 	struct msdc_tune_para def_tune_para; /* default tune setting */
+ 	struct msdc_tune_para saved_tune_para; /* tune result of CMD21/CMD19 */
+@@ -1250,6 +1251,63 @@ static inline bool msdc_cmd_is_ready(struct msdc_host *host,
+ 	return true;
+ }
+ 
++static inline int use_cmd_polling_mode(struct msdc_host *host,
++	struct mmc_command *cmd)
++{
++	/* R1B use interrupt mode */
++	return (host->cmd_polling_mode &&
++			((mmc_from_priv(host))->caps2 & MMC_CAP2_NO_SDIO) &&
++			(mmc_resp_type(cmd) != MMC_RSP_R1B));
++}
++
++static bool msdc_command_resp_polling(struct msdc_host *host,
++	struct mmc_request *mrq, struct mmc_command *cmd,
++	unsigned long timeout)
++{
++	bool ret = false;
++	unsigned long tmo;
++	int events;
++	unsigned long flags;
++
++	if (!use_cmd_polling_mode(host, cmd))
++		goto exit;
++
++retry:
++	tmo = jiffies + timeout;
++	while (1) {
++		spin_lock_irqsave(&host->lock, flags);
++		events = readl(host->base + MSDC_INT);
++		if (events & cmd_ints_mask) {
++			/* clear all int flag */
++			events &= cmd_ints_mask;
++			writel(events, host->base + MSDC_INT);
++			spin_unlock_irqrestore(&host->lock, flags);
++			break;
++		}
++		spin_unlock_irqrestore(&host->lock, flags);
++
++		if (time_after(jiffies, tmo) &&
++			((events & cmd_ints_mask) == 0)) {
++			dev_info(host->dev, "[%s]: CMD<%d> polling_for_completion timeout ARG<0x%.8x>\n",
++				__func__, cmd->opcode, cmd->arg);
++			ret = msdc_cmd_done(host, MSDC_INT_CMDTMO, mrq, cmd);
++			goto exit;
++		}
++	}
++
++	if (cmd) {
++		ret = msdc_cmd_done(host, events, mrq, cmd);
++		/* if only autocmd23 done,
++		 * it needs to polling the continue read/write cmd directly.
++		 */
++		if (!ret)
++			goto retry;
++	}
++
++exit:
++	return ret;
++}
++
+ static void msdc_start_command(struct msdc_host *host,
+ 		struct mmc_request *mrq, struct mmc_command *cmd)
+ {
+@@ -1273,7 +1331,10 @@ static void msdc_start_command(struct msdc_host *host,
+ 	rawcmd = msdc_cmd_prepare_raw_cmd(host, mrq, cmd);
+ 
+ 	spin_lock_irqsave(&host->lock, flags);
+-	sdr_set_bits(host->base + MSDC_INTEN, cmd_ints_mask);
++	if (use_cmd_polling_mode(host, cmd))
++		sdr_clr_bits(host->base + MSDC_INTEN, cmd_ints_mask);
++	else
++		sdr_set_bits(host->base + MSDC_INTEN, cmd_ints_mask);
+ 	spin_unlock_irqrestore(&host->lock, flags);
+ 
+ 	writel(cmd->arg, host->base + SDC_ARG);
+@@ -1290,9 +1351,11 @@ static void msdc_cmd_next(struct msdc_host *host,
+ 	       host->hs400_tuning))) ||
+ 	    (mrq->sbc && mrq->sbc->error))
+ 		msdc_request_done(host, mrq);
+-	else if (cmd == mrq->sbc)
++	else if (cmd == mrq->sbc) {
+ 		msdc_start_command(host, mrq, mrq->cmd);
+-	else if (!cmd->data)
++		msdc_command_resp_polling(host, mrq,
++				mrq->cmd, CMD_TIMEOUT);
++	} else if (!cmd->data)
+ 		msdc_request_done(host, mrq);
+ 	else
+ 		msdc_start_data(host, cmd, cmd->data);
+@@ -1314,10 +1377,15 @@ static void msdc_ops_request(struct mmc_host *mmc, struct mmc_request *mrq)
+ 	 * use HW option,  otherwise use SW option
+ 	 */
+ 	if (mrq->sbc && (!mmc_card_mmc(mmc->card) ||
+-	    (mrq->sbc->arg & 0xFFFF0000)))
++	    (mrq->sbc->arg & 0xFFFF0000))) {
+ 		msdc_start_command(host, mrq, mrq->sbc);
+-	else
++		msdc_command_resp_polling(host, mrq,
++				mrq->sbc, CMD_TIMEOUT);
++	} else {
+ 		msdc_start_command(host, mrq, mrq->cmd);
++		msdc_command_resp_polling(host, mrq,
++				mrq->cmd, CMD_TIMEOUT);
++	}
+ }
+ 
+ static void msdc_pre_req(struct mmc_host *mmc, struct mmc_request *mrq)
+@@ -1350,9 +1418,11 @@ static void msdc_post_req(struct mmc_host *mmc, struct mmc_request *mrq,
+ static void msdc_data_xfer_next(struct msdc_host *host, struct mmc_request *mrq)
+ {
+ 	if (mmc_op_multi(mrq->cmd->opcode) && mrq->stop && !mrq->stop->error &&
+-	    !mrq->sbc)
++	    !mrq->sbc) {
+ 		msdc_start_command(host, mrq, mrq->stop);
+-	else
++		msdc_command_resp_polling(host, mrq,
++				mrq->stop, CMD_TIMEOUT);
++	} else
+ 		msdc_request_done(host, mrq);
+ }
+ 
+@@ -2492,11 +2562,15 @@ static void msdc_of_property_parse(struct platform_device *pdev,
+ 	else
+ 		host->hs400_cmd_resp_sel_rising = false;
+ 
+-	if (of_property_read_bool(pdev->dev.of_node,
+-				  "supports-cqe"))
++	if (of_property_read_bool(pdev->dev.of_node, "supports-cqe"))
+ 		host->cqhci = true;
+ 	else
+ 		host->cqhci = false;
++
++	if (of_property_read_bool(pdev->dev.of_node, "mediatek,cmd-polling-mode"))
++		host->cmd_polling_mode = true;
++	else
++		host->cmd_polling_mode = false;
+ }
+ 
+ static int msdc_of_clock_parse(struct platform_device *pdev,
+-- 
+2.18.0
+

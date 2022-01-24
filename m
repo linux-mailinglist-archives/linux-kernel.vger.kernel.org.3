@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E504996E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:20:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEEA64996CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:20:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446316AbiAXVHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:07:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42276 "EHLO
+        id S1377053AbiAXVGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:06:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390196AbiAXUpD (ORCPT
+        with ESMTP id S1389805AbiAXUo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:45:03 -0500
+        Mon, 24 Jan 2022 15:44:28 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C64C061395;
-        Mon, 24 Jan 2022 11:55:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DD6C04188D;
+        Mon, 24 Jan 2022 11:53:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4B972B8124F;
-        Mon, 24 Jan 2022 19:55:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67528C340E5;
-        Mon, 24 Jan 2022 19:55:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F0866B8121C;
+        Mon, 24 Jan 2022 19:53:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FF11C340E5;
+        Mon, 24 Jan 2022 19:53:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054128;
-        bh=th4VKO5Ug+nK9IqtFEODJ6OwStYjXRjMQK8H8lx4WDQ=;
+        s=korg; t=1643054031;
+        bh=4bgj3UJ+SB6aSXL1iZwnfhSoYSwQqqjJV/7MYe/jTug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J/t/eJ7c0uoezgJvaT6LXdo2LzEy/IX410IzigQMUGZ4arXjCfZMIomzefj6oMNEt
-         x3PJa1bFLQbIGVL6YqyPBZOGsfiNTG7iHrvtdOfqnXaicp7J07uEEbrhCOFyKMKS8J
-         LRw4MSD59m84uPEV0jPJceIH1nxgmp6AZXWWHOo8=
+        b=euZWi1V72rC8Zseo9pslyURSmUUJS+etyGY7ujmDK+SIjbc3AjgGskhgyeDEP42cW
+         C2oIgHfcZ0mEmf7TRtk/dzG3h24shMSfohSP+Wm/2ifRT46yAUdRCF1LLWW3AZPySx
+         WW0CxrqiE2lt8AgKnQiEWR6DX8Gb5GQ7czZznTYM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Erhard Furtner <erhard_f@mailbox.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 254/563] powerpc/32s: Fix shift-out-of-bounds in KASAN init
-Date:   Mon, 24 Jan 2022 19:40:19 +0100
-Message-Id: <20220124184033.209947453@linuxfoundation.org>
+        stable@vger.kernel.org, Bixuan Cui <cuibixuan@linux.alibaba.com>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 257/563] ALSA: oss: fix compile error when OSS_DEBUG is enabled
+Date:   Mon, 24 Jan 2022 19:40:22 +0100
+Message-Id: <20220124184033.306236446@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -50,54 +48,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+From: Bixuan Cui <cuibixuan@linux.alibaba.com>
 
-[ Upstream commit af11dee4361b3519981fa04d014873f9d9edd6ac ]
+[ Upstream commit 8e7daf318d97f25e18b2fc7eb5909e34cd903575 ]
 
-================================================================================
-UBSAN: shift-out-of-bounds in arch/powerpc/mm/kasan/book3s_32.c:22:23
-shift exponent -1 is negative
-CPU: 0 PID: 0 Comm: swapper Not tainted 5.15.5-gentoo-PowerMacG4 #9
-Call Trace:
-[c214be60] [c0ba0048] dump_stack_lvl+0x80/0xb0 (unreliable)
-[c214be80] [c0b99288] ubsan_epilogue+0x10/0x5c
-[c214be90] [c0b98fe0] __ubsan_handle_shift_out_of_bounds+0x94/0x138
-[c214bf00] [c1c0f010] kasan_init_region+0xd8/0x26c
-[c214bf30] [c1c0ed84] kasan_init+0xc0/0x198
-[c214bf70] [c1c08024] setup_arch+0x18/0x54c
-[c214bfc0] [c1c037f0] start_kernel+0x90/0x33c
-[c214bff0] [00003610] 0x3610
-================================================================================
+Fix compile error when OSS_DEBUG is enabled:
+    sound/core/oss/pcm_oss.c: In function 'snd_pcm_oss_set_trigger':
+    sound/core/oss/pcm_oss.c:2055:10: error: 'substream' undeclared (first
+    use in this function); did you mean 'csubstream'?
+      pcm_dbg(substream->pcm, "pcm_oss: trigger = 0x%x\n", trigger);
+              ^
 
-This happens when the directly mapped memory is a power of 2.
-
-Fix it by checking the shift and set the result to 0 when shift is -1
-
-Fixes: 7974c4732642 ("powerpc/32s: Implement dedicated kasan_init_region()")
-Reported-by: Erhard Furtner <erhard_f@mailbox.org>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215169
-Link: https://lore.kernel.org/r/15cbc3439d4ad988b225e2119ec99502a5cc6ad3.1638261744.git.christophe.leroy@csgroup.eu
+Fixes: 61efcee8608c ("ALSA: oss: Use standard printk helpers")
+Signed-off-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
+Link: https://lore.kernel.org/r/1638349134-110369-1-git-send-email-cuibixuan@linux.alibaba.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/mm/kasan/book3s_32.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ sound/core/oss/pcm_oss.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/mm/kasan/book3s_32.c b/arch/powerpc/mm/kasan/book3s_32.c
-index 202bd260a0095..35b287b0a8da4 100644
---- a/arch/powerpc/mm/kasan/book3s_32.c
-+++ b/arch/powerpc/mm/kasan/book3s_32.c
-@@ -19,7 +19,8 @@ int __init kasan_init_region(void *start, size_t size)
- 	block = memblock_alloc(k_size, k_size_base);
+diff --git a/sound/core/oss/pcm_oss.c b/sound/core/oss/pcm_oss.c
+index 77727a69c3c4e..d79febeebf0c5 100644
+--- a/sound/core/oss/pcm_oss.c
++++ b/sound/core/oss/pcm_oss.c
+@@ -2056,7 +2056,7 @@ static int snd_pcm_oss_set_trigger(struct snd_pcm_oss_file *pcm_oss_file, int tr
+ 	int err, cmd;
  
- 	if (block && k_size_base >= SZ_128K && k_start == ALIGN(k_start, k_size_base)) {
--		int k_size_more = 1 << (ffs(k_size - k_size_base) - 1);
-+		int shift = ffs(k_size - k_size_base);
-+		int k_size_more = shift ? 1 << (shift - 1) : 0;
- 
- 		setbat(-1, k_start, __pa(block), k_size_base, PAGE_KERNEL);
- 		if (k_size_more >= SZ_128K)
+ #ifdef OSS_DEBUG
+-	pcm_dbg(substream->pcm, "pcm_oss: trigger = 0x%x\n", trigger);
++	pr_debug("pcm_oss: trigger = 0x%x\n", trigger);
+ #endif
+ 	
+ 	psubstream = pcm_oss_file->streams[SNDRV_PCM_STREAM_PLAYBACK];
 -- 
 2.34.1
 

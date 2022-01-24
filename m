@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 058AC49A775
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:44:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD0F49A58D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:12:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356216AbiAYCoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:44:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
+        id S2373382AbiAYANm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:13:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444559AbiAXVBI (ORCPT
+        with ESMTP id S1585430AbiAXX2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:01:08 -0500
+        Mon, 24 Jan 2022 18:28:16 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9553CC055A84;
-        Mon, 24 Jan 2022 12:02:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D882CC06137A;
+        Mon, 24 Jan 2022 13:33:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35D076130D;
-        Mon, 24 Jan 2022 20:02:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15E25C340E5;
-        Mon, 24 Jan 2022 20:02:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 766EA61305;
+        Mon, 24 Jan 2022 21:33:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55D0FC340E4;
+        Mon, 24 Jan 2022 21:33:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054534;
-        bh=LxtqiCU/HnTQBi7Y6RaZ5mzfJ2enE8ac2ayAJ6KDquo=;
+        s=korg; t=1643059992;
+        bh=1gE0J90otQHDAvwfXnYKScuN2a71uYD8y8dwjg4ylJE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MiJRrYFzm/cSjxF+/wzmcWYO+AbWlh8A3aSmUQx/ANk837ZrX2SaxXwLQhFfb1HOC
-         1dgc8nL/ZGzupU8ru+akJw40jabh5duKirQVMkkSpO4zwGCTLbpNrU3/Gst7bOgCTF
-         xlTW7ereVAXFoR8l8FO5yxWG8zoIsPgKgrVRDShw=
+        b=KqUoJFtGiS6sb395vkGUK5NbzkXNDj6BO0UvNs9rkI/MKIq/wBVEWoBqJRq3LvFeX
+         npw2vmYLaq9KrvJjTbLFMZLOid8iWXbciFOjUqNb8ZkWISmCOIu3/zjoF6P6Tf7eQh
+         sL0kaTvsmZTV8CvA72j3ldShAm+iGiEPc2qZIrN0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 419/563] KVM: PPC: Book3S: Suppress warnings when allocating too big memory slots
-Date:   Mon, 24 Jan 2022 19:43:04 +0100
-Message-Id: <20220124184038.943871029@linuxfoundation.org>
+Subject: [PATCH 5.16 0796/1039] tracing: Do not let synth_events block other dyn_event systems during create
+Date:   Mon, 24 Jan 2022 19:43:05 +0100
+Message-Id: <20220124184152.059694230@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,50 +50,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexey Kardashevskiy <aik@ozlabs.ru>
+From: Beau Belgrave <beaub@linux.microsoft.com>
 
-[ Upstream commit 511d25d6b789fffcb20a3eb71899cf974a31bd9d ]
+[ Upstream commit 4f67cca70c0f615e9cfe6ac42244f3416ec60877 ]
 
-The userspace can trigger "vmalloc size %lu allocation failure: exceeds
-total pages" via the KVM_SET_USER_MEMORY_REGION ioctl.
+synth_events is returning -EINVAL if the dyn_event create command does
+not contain ' \t'. This prevents other systems from getting called back.
+synth_events needs to return -ECANCELED in these cases when the command
+is not targeting the synth_event system.
 
-This silences the warning by checking the limit before calling vzalloc()
-and returns ENOMEM if failed.
+Link: https://lore.kernel.org/linux-trace-devel/20210930223821.11025-1-beaub@linux.microsoft.com
 
-This does not call underlying valloc helpers as __vmalloc_node() is only
-exported when CONFIG_TEST_VMALLOC_MODULE and __vmalloc_node_range() is
-not exported at all.
-
-Spotted by syzkaller.
-
-Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
-[mpe: Use 'size' for the variable rather than 'cb']
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20210901084512.1658628-1-aik@ozlabs.ru
+Fixes: c9e759b1e8456 ("tracing: Rework synthetic event command parsing")
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kvm/book3s_hv.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ kernel/trace/trace_events_synth.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
-index 175967a195c44..527c205d5a5f5 100644
---- a/arch/powerpc/kvm/book3s_hv.c
-+++ b/arch/powerpc/kvm/book3s_hv.c
-@@ -4557,8 +4557,12 @@ static int kvmppc_core_prepare_memory_region_hv(struct kvm *kvm,
- 	unsigned long npages = mem->memory_size >> PAGE_SHIFT;
+diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
+index ca9c13b2ecf4b..4b5a637d3ec00 100644
+--- a/kernel/trace/trace_events_synth.c
++++ b/kernel/trace/trace_events_synth.c
+@@ -2054,6 +2054,13 @@ static int create_synth_event(const char *raw_command)
  
- 	if (change == KVM_MR_CREATE) {
--		slot->arch.rmap = vzalloc(array_size(npages,
--					  sizeof(*slot->arch.rmap)));
-+		unsigned long size = array_size(npages, sizeof(*slot->arch.rmap));
+ 	last_cmd_set(raw_command);
+ 
++	name = raw_command;
 +
-+		if ((size >> PAGE_SHIFT) > totalram_pages())
-+			return -ENOMEM;
++	/* Don't try to process if not our system */
++	if (name[0] != 's' || name[1] != ':')
++		return -ECANCELED;
++	name += 2;
 +
-+		slot->arch.rmap = vzalloc(size);
- 		if (!slot->arch.rmap)
- 			return -ENOMEM;
- 	}
+ 	p = strpbrk(raw_command, " \t");
+ 	if (!p) {
+ 		synth_err(SYNTH_ERR_INVALID_CMD, 0);
+@@ -2062,12 +2069,6 @@ static int create_synth_event(const char *raw_command)
+ 
+ 	fields = skip_spaces(p);
+ 
+-	name = raw_command;
+-
+-	if (name[0] != 's' || name[1] != ':')
+-		return -ECANCELED;
+-	name += 2;
+-
+ 	/* This interface accepts group name prefix */
+ 	if (strchr(name, '/')) {
+ 		len = str_has_prefix(name, SYNTH_SYSTEM "/");
 -- 
 2.34.1
 

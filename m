@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72578499694
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E84499CCA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:13:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445823AbiAXVFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:05:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358023AbiAXUnA (ORCPT
+        id S1580133AbiAXWIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:08:51 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44732 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1452215AbiAXVYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:43:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1172EC019B2B;
-        Mon, 24 Jan 2022 11:53:26 -0800 (PST)
+        Mon, 24 Jan 2022 16:24:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFDCAB8122F;
-        Mon, 24 Jan 2022 19:53:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 097C8C340E5;
-        Mon, 24 Jan 2022 19:53:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C60E861320;
+        Mon, 24 Jan 2022 21:24:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7A5AC340E4;
+        Mon, 24 Jan 2022 21:24:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054003;
-        bh=81xl3sgM260UXnSFz+zCoNVTk3dN1gWBm6MwUjmOT7A=;
+        s=korg; t=1643059459;
+        bh=iJWsnEH3EqlFoyUdRdRa/2WUrAEJb4H3pNL5VUzpUbM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jjLuGwQTbfL7qXzMfJMQ4qc1jz+WRbPAGZ8xBpXf/XLYkTlhvBPwxGa+0TfF7k6Bn
-         +gTBNztk3Tpf/Y+vZQ1MHMCRQyEFSTi8LVReBd+sxZt+R89rtzbHzKPkprpS2rMnuz
-         671wwAPEXuwqjZiJ5G2acF4Vid0ilrkE0/Ghr1iY=
+        b=qd57NVl2iUDNZZFn5WQxJaKWFUHPdtDsKahxmeuikE+73gH3KdAFAZanjyNqsDvba
+         s96ayB3WYgtjekQcIKiyTax2Pqh6/C498Preb3MHYMh2f1gVKhGiHZYnG/K00u7s1B
+         Gh04ZePS0+BDoGcCGxBK3IJIqk/bHXLuEnFP1sZE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        stable@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 214/563] usb: dwc3: qcom: Fix NULL vs IS_ERR checking in dwc3_qcom_probe
+Subject: [PATCH 5.16 0590/1039] mxser: increase buf_overrun if tty_insert_flip_char() fails
 Date:   Mon, 24 Jan 2022 19:39:39 +0100
-Message-Id: <20220124184031.855228474@linuxfoundation.org>
+Message-Id: <20220124184145.165420298@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,42 +45,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Jiri Slaby <jslaby@suse.cz>
 
-[ Upstream commit b52fe2dbb3e655eb1483000adfab68a219549e13 ]
+[ Upstream commit eb68ac0462bffc2ceb63b3a76737d6c9f186e6de ]
 
-Since the acpi_create_platform_device() function may return error
-pointers, dwc3_qcom_create_urs_usb_platdev() function may return error
-pointers too. Using IS_ERR_OR_NULL() to check the return value to fix this.
+mxser doesn't increase port->icount.buf_overrun at all. Do so if overrun
+happens, so that it can be read from the stats.
 
-Fixes: c25c210f590e ("usb: dwc3: qcom: add URS Host support for sdm845 ACPI boot")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20211222111823.22887-1-linmq006@gmail.com
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Link: https://lore.kernel.org/r/20211118073125.12283-17-jslaby@suse.cz
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/dwc3-qcom.c | 7 +++++--
+ drivers/tty/mxser.c | 7 +++++--
  1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 2a29e2f681fe6..504f8af4d0f80 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -764,9 +764,12 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
+index 3b5d193b7f245..39458b42df7b0 100644
+--- a/drivers/tty/mxser.c
++++ b/drivers/tty/mxser.c
+@@ -1536,7 +1536,8 @@ static bool mxser_receive_chars_new(struct tty_struct *tty,
  
- 		if (qcom->acpi_pdata->is_urs) {
- 			qcom->urs_usb = dwc3_qcom_create_urs_usb_platdev(dev);
--			if (!qcom->urs_usb) {
-+			if (IS_ERR_OR_NULL(qcom->urs_usb)) {
- 				dev_err(dev, "failed to create URS USB platdev\n");
--				return -ENODEV;
-+				if (!qcom->urs_usb)
-+					return -ENODEV;
-+				else
-+					return PTR_ERR(qcom->urs_usb);
- 			}
- 		}
+ 	while (gdl--) {
+ 		u8 ch = inb(port->ioaddr + UART_RX);
+-		tty_insert_flip_char(&port->port, ch, 0);
++		if (!tty_insert_flip_char(&port->port, ch, 0))
++			port->icount.buf_overrun++;
  	}
+ 
+ 	return true;
+@@ -1582,8 +1583,10 @@ static u8 mxser_receive_chars_old(struct tty_struct *tty,
+ 					port->icount.overrun++;
+ 				}
+ 			}
+-			if (!tty_insert_flip_char(&port->port, ch, flag))
++			if (!tty_insert_flip_char(&port->port, ch, flag)) {
++				port->icount.buf_overrun++;
+ 				break;
++			}
+ 		}
+ 
+ 		if (hwid)
 -- 
 2.34.1
 

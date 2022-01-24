@@ -2,30 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B00499D01
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:15:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D554996CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581383AbiAXWLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:11:40 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40640 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452629AbiAXVZ7 (ORCPT
+        id S1444232AbiAXVG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:06:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1390166AbiAXUpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:25:59 -0500
+        Mon, 24 Jan 2022 15:45:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16915C0617BC;
+        Mon, 24 Jan 2022 11:54:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6B35B81188;
-        Mon, 24 Jan 2022 21:25:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE34CC340E4;
-        Mon, 24 Jan 2022 21:25:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D217BB81229;
+        Mon, 24 Jan 2022 19:54:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0B12C340E5;
+        Mon, 24 Jan 2022 19:54:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059557;
-        bh=4DGqvUVNgCI1oxIPLP0J8vXnSD8dR9XxMPl+oh1CnQA=;
+        s=korg; t=1643054059;
+        bh=1yWpEKWsnxvzT9qXhc23Xqk5jPQ5wA/WL2CuYle5s9Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R4ZtlUJGu4MGWm/JUR3KszMiTA26doCPbL87CZZhuzGViU3fWakVR6K9/65Tc3MRK
-         kDVca+pbQ6vN713/OYG7RvNlp6BeFQ+PIwvD9NjjoClSD7kczOoCg/hO4psIwuk7sl
-         OWQx/odaSnTXflIra+FrZGu64DIBbI+7uAyfBZac=
+        b=vSqtI6WQBOkbn7uqz0o5zwgtz9lmp/u1OU2/gzHgYRwNR2UOpN0b/xf2Q0bfFEAS3
+         iihx8PtZzjgsCPWPiDmsfuJjBJuAtS/QD1RD/fdMKvzC1NjTHaQWhigoOBSAhUffTl
+         ooxA6hMl2zF9VMPkuO9yimlpZUL0bBGPf3YJDShs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -33,14 +36,13 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0623/1039] arm64: dts: renesas: Fix thermal bindings
-Date:   Mon, 24 Jan 2022 19:40:12 +0100
-Message-Id: <20220124184146.281546297@linuxfoundation.org>
+        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 248/563] dt-bindings: thermal: Fix definition of cooling-maps contribution property
+Date:   Mon, 24 Jan 2022 19:40:13 +0100
+Message-Id: <20220124184032.992904339@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,322 +51,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+From: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-[ Upstream commit 82ce79391d0ec25ec8aaae3c0617b71048ff0836 ]
+[ Upstream commit 49bcb1506f2e095262c01bda7fd1c0db524c91e2 ]
 
-The binding node names for the thermal zones are not successfully
-validated by the dt-schemas.
+When converting the thermal-zones bindings to yaml the definition of the
+contribution property changed. The intention is the same, an integer
+value expressing a ratio of a sum on how much cooling is provided by the
+device to the zone. But after the conversion the integer value is
+limited to the range 0 to 100 and expressed as a percentage.
 
-Fix the validation by changing from sensor-thermalN or thermal-sensor-N
-to sensorN-thermal.  Provide node labels of the form sensorN_thermal to
-ensure consistency with the other platform implementations.
+This is problematic for two reasons.
 
-Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Link: https://lore.kernel.org/r/20211104224033.3997504-1-kieran.bingham+renesas@ideasonboard.com
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+- This do not match how the binding is used. Out of the 18 files that
+  make use of the property only two (ste-dbx5x0.dtsi and
+  ste-hrefv60plus.dtsi) sets it at a value that satisfy the binding,
+  100. The remaining 16 files set the value higher and fail to validate.
+
+- Expressing the value as a percentage instead of a ratio of the sum is
+  confusing as there is nothing to enforce the sum in the zone is not
+  greater then 100.
+
+This patch restore the pre yaml conversion description and removes the
+value limitation allowing the usage of the bindings to validate.
+
+Fixes: 1202a442a31fd2e5 ("dt-bindings: thermal: Add yaml bindings for thermal zones")
+Reported-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Link: https://lore.kernel.org/r/20211109103045.1403686-1-niklas.soderlund+renesas@ragnatech.se
+Signed-off-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/renesas/r8a774a1.dtsi |  6 +++---
- arch/arm64/boot/dts/renesas/r8a774b1.dtsi |  6 +++---
- arch/arm64/boot/dts/renesas/r8a774e1.dtsi |  6 +++---
- arch/arm64/boot/dts/renesas/r8a77951.dtsi |  6 +++---
- arch/arm64/boot/dts/renesas/r8a77960.dtsi |  6 +++---
- arch/arm64/boot/dts/renesas/r8a77961.dtsi |  6 +++---
- arch/arm64/boot/dts/renesas/r8a77965.dtsi |  6 +++---
- arch/arm64/boot/dts/renesas/r8a77980.dtsi |  4 ++--
- arch/arm64/boot/dts/renesas/r8a779a0.dtsi | 10 +++++-----
- 9 files changed, 28 insertions(+), 28 deletions(-)
+ .../devicetree/bindings/thermal/thermal-zones.yaml       | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/renesas/r8a774a1.dtsi b/arch/arm64/boot/dts/renesas/r8a774a1.dtsi
-index 6f4fffacfca21..e70aa5a087402 100644
---- a/arch/arm64/boot/dts/renesas/r8a774a1.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a774a1.dtsi
-@@ -2784,7 +2784,7 @@
- 	};
+diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+index 164f71598c595..1b3954aa71c15 100644
+--- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
++++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+@@ -199,12 +199,11 @@ patternProperties:
  
- 	thermal-zones {
--		sensor_thermal1: sensor-thermal1 {
-+		sensor1_thermal: sensor1-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 0>;
-@@ -2799,7 +2799,7 @@
- 			};
- 		};
+               contribution:
+                 $ref: /schemas/types.yaml#/definitions/uint32
+-                minimum: 0
+-                maximum: 100
+                 description:
+-                  The percentage contribution of the cooling devices at the
+-                  specific trip temperature referenced in this map
+-                  to this thermal zone
++                  The cooling contribution to the thermal zone of the referred
++                  cooling device at the referred trip point. The contribution is
++                  a ratio of the sum of all cooling contributions within a
++                  thermal zone.
  
--		sensor_thermal2: sensor-thermal2 {
-+		sensor2_thermal: sensor2-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 1>;
-@@ -2814,7 +2814,7 @@
- 			};
- 		};
- 
--		sensor_thermal3: sensor-thermal3 {
-+		sensor3_thermal: sensor3-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 2>;
-diff --git a/arch/arm64/boot/dts/renesas/r8a774b1.dtsi b/arch/arm64/boot/dts/renesas/r8a774b1.dtsi
-index 0f7bdfc90a0dc..6c5694fa66900 100644
---- a/arch/arm64/boot/dts/renesas/r8a774b1.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a774b1.dtsi
-@@ -2629,7 +2629,7 @@
- 	};
- 
- 	thermal-zones {
--		sensor_thermal1: sensor-thermal1 {
-+		sensor1_thermal: sensor1-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 0>;
-@@ -2644,7 +2644,7 @@
- 			};
- 		};
- 
--		sensor_thermal2: sensor-thermal2 {
-+		sensor2_thermal: sensor2-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 1>;
-@@ -2659,7 +2659,7 @@
- 			};
- 		};
- 
--		sensor_thermal3: sensor-thermal3 {
-+		sensor3_thermal: sensor3-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 2>;
-diff --git a/arch/arm64/boot/dts/renesas/r8a774e1.dtsi b/arch/arm64/boot/dts/renesas/r8a774e1.dtsi
-index 379a1300272ba..62209ab6deb9a 100644
---- a/arch/arm64/boot/dts/renesas/r8a774e1.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a774e1.dtsi
-@@ -2904,7 +2904,7 @@
- 	};
- 
- 	thermal-zones {
--		sensor_thermal1: sensor-thermal1 {
-+		sensor1_thermal: sensor1-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 0>;
-@@ -2919,7 +2919,7 @@
- 			};
- 		};
- 
--		sensor_thermal2: sensor-thermal2 {
-+		sensor2_thermal: sensor2-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 1>;
-@@ -2934,7 +2934,7 @@
- 			};
- 		};
- 
--		sensor_thermal3: sensor-thermal3 {
-+		sensor3_thermal: sensor3-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 2>;
-diff --git a/arch/arm64/boot/dts/renesas/r8a77951.dtsi b/arch/arm64/boot/dts/renesas/r8a77951.dtsi
-index 1768a3e6bb8da..193d81be40fc4 100644
---- a/arch/arm64/boot/dts/renesas/r8a77951.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a77951.dtsi
-@@ -3375,7 +3375,7 @@
- 	};
- 
- 	thermal-zones {
--		sensor_thermal1: sensor-thermal1 {
-+		sensor1_thermal: sensor1-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 0>;
-@@ -3390,7 +3390,7 @@
- 			};
- 		};
- 
--		sensor_thermal2: sensor-thermal2 {
-+		sensor2_thermal: sensor2-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 1>;
-@@ -3405,7 +3405,7 @@
- 			};
- 		};
- 
--		sensor_thermal3: sensor-thermal3 {
-+		sensor3_thermal: sensor3-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 2>;
-diff --git a/arch/arm64/boot/dts/renesas/r8a77960.dtsi b/arch/arm64/boot/dts/renesas/r8a77960.dtsi
-index 2bd8169735d35..b526e4f0ee6a8 100644
---- a/arch/arm64/boot/dts/renesas/r8a77960.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a77960.dtsi
-@@ -2972,7 +2972,7 @@
- 	};
- 
- 	thermal-zones {
--		sensor_thermal1: sensor-thermal1 {
-+		sensor1_thermal: sensor1-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 0>;
-@@ -2987,7 +2987,7 @@
- 			};
- 		};
- 
--		sensor_thermal2: sensor-thermal2 {
-+		sensor2_thermal: sensor2-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 1>;
-@@ -3002,7 +3002,7 @@
- 			};
- 		};
- 
--		sensor_thermal3: sensor-thermal3 {
-+		sensor3_thermal: sensor3-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 2>;
-diff --git a/arch/arm64/boot/dts/renesas/r8a77961.dtsi b/arch/arm64/boot/dts/renesas/r8a77961.dtsi
-index 86d59e7e1a876..b1a00f5df4311 100644
---- a/arch/arm64/boot/dts/renesas/r8a77961.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a77961.dtsi
-@@ -2730,7 +2730,7 @@
- 	};
- 
- 	thermal-zones {
--		sensor_thermal1: sensor-thermal1 {
-+		sensor1_thermal: sensor1-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 0>;
-@@ -2745,7 +2745,7 @@
- 			};
- 		};
- 
--		sensor_thermal2: sensor-thermal2 {
-+		sensor2_thermal: sensor2-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 1>;
-@@ -2760,7 +2760,7 @@
- 			};
- 		};
- 
--		sensor_thermal3: sensor-thermal3 {
-+		sensor3_thermal: sensor3-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 2>;
-diff --git a/arch/arm64/boot/dts/renesas/r8a77965.dtsi b/arch/arm64/boot/dts/renesas/r8a77965.dtsi
-index 08df75606430b..f9679a4dd85fa 100644
---- a/arch/arm64/boot/dts/renesas/r8a77965.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a77965.dtsi
-@@ -2784,7 +2784,7 @@
- 	};
- 
- 	thermal-zones {
--		sensor_thermal1: sensor-thermal1 {
-+		sensor1_thermal: sensor1-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 0>;
-@@ -2799,7 +2799,7 @@
- 			};
- 		};
- 
--		sensor_thermal2: sensor-thermal2 {
-+		sensor2_thermal: sensor2-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 1>;
-@@ -2814,7 +2814,7 @@
- 			};
- 		};
- 
--		sensor_thermal3: sensor-thermal3 {
-+		sensor3_thermal: sensor3-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 2>;
-diff --git a/arch/arm64/boot/dts/renesas/r8a77980.dtsi b/arch/arm64/boot/dts/renesas/r8a77980.dtsi
-index 6347d15e66b64..21fe602bd25af 100644
---- a/arch/arm64/boot/dts/renesas/r8a77980.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a77980.dtsi
-@@ -1580,7 +1580,7 @@
- 	};
- 
- 	thermal-zones {
--		thermal-sensor-1 {
-+		sensor1_thermal: sensor1-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 0>;
-@@ -1599,7 +1599,7 @@
- 			};
- 		};
- 
--		thermal-sensor-2 {
-+		sensor2_thermal: sensor2-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 1>;
-diff --git a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
-index 43bf2cbfbd8f7..770a23b769d86 100644
---- a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
-@@ -2607,7 +2607,7 @@
- 	};
- 
- 	thermal-zones {
--		sensor_thermal1: sensor-thermal1 {
-+		sensor1_thermal: sensor1-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 0>;
-@@ -2621,7 +2621,7 @@
- 			};
- 		};
- 
--		sensor_thermal2: sensor-thermal2 {
-+		sensor2_thermal: sensor2-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 1>;
-@@ -2635,7 +2635,7 @@
- 			};
- 		};
- 
--		sensor_thermal3: sensor-thermal3 {
-+		sensor3_thermal: sensor3-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 2>;
-@@ -2649,7 +2649,7 @@
- 			};
- 		};
- 
--		sensor_thermal4: sensor-thermal4 {
-+		sensor4_thermal: sensor4-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 3>;
-@@ -2663,7 +2663,7 @@
- 			};
- 		};
- 
--		sensor_thermal5: sensor-thermal5 {
-+		sensor5_thermal: sensor5-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 			thermal-sensors = <&tsc 4>;
+             required:
+               - trip
 -- 
 2.34.1
 

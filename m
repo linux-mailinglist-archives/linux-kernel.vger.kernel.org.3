@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C15499F4C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:18:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4288149A017
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838754AbiAXW4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:56:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59566 "EHLO
+        id S1843395AbiAXXDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:03:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1458030AbiAXVzG (ORCPT
+        with ESMTP id S1457894AbiAXVzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 16:55:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF27C07E2A1;
-        Mon, 24 Jan 2022 12:36:21 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0085C07E2A4;
+        Mon, 24 Jan 2022 12:36:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4048FB8121A;
-        Mon, 24 Jan 2022 20:36:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E370C340E5;
-        Mon, 24 Jan 2022 20:36:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9178961535;
+        Mon, 24 Jan 2022 20:36:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CDAAC340E5;
+        Mon, 24 Jan 2022 20:36:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056580;
-        bh=c7/XBWzsaYmWU+H2uCUZADGkTpa6wfvO5HYwbEXPfCU=;
+        s=korg; t=1643056598;
+        bh=cIVsYXY5t94PiqfXWViR/Oi0njjK/oBXtpCVnbK2xrY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lKKDyrGbG/6rAXWwEProfEBcWSqwbMLW7zzAOwlRo7YNh8RqORu92RTU9I9KxXh+d
-         6m4t6Rq8S+6rbN4S+YTZw/v5K/ElzTJuD4ncNjIsKqiSL4GfqMTsjessE3BuoCiWxj
-         36byYMG2C19s2KaXWAueMgLmyJNTJDtiYx92uutY=
+        b=vDCuDoLYb1l6mtmbdUKZ45Jml+amoKLjOYlekNvNdBMRp04LIqFRneVNFau08DQPi
+         ymUUJ4Uhu2/qgbr0g7d/kzOZTxdacLYIKC2H8hu6Zw0H2f6Ry/Yexv+haBVzDi1A2p
+         B5ZVoRrkGQGKceZ5Ik6p7n9uE9na2MaYJAI+nRrA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shaul Triebitz <shaul.triebitz@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
+        stable@vger.kernel.org, Tom Lendacky <thomas.lendacky@amd.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 531/846] iwlwifi: mvm: avoid clearing a just saved session protection id
-Date:   Mon, 24 Jan 2022 19:40:48 +0100
-Message-Id: <20220124184119.319040568@linuxfoundation.org>
+Subject: [PATCH 5.15 536/846] net: phy: prefer 1000baseT over 1000baseKX
+Date:   Mon, 24 Jan 2022 19:40:53 +0100
+Message-Id: <20220124184119.489770077@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -49,57 +52,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shaul Triebitz <shaul.triebitz@intel.com>
+From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-[ Upstream commit 8e967c137df3b236d2075f9538cb888129425d1a ]
+[ Upstream commit f20f94f7f52c4685c81754f489ffcc72186e8bdb ]
 
-When scheduling a session protection the id is saved but
-then it may be cleared when calling iwl_mvm_te_clear_data
-(if a previous session protection is currently active).
-Fix it by saving the id after calling iwl_mvm_te_clear_data.
+The PHY settings table is supposed to be sorted by descending match
+priority - in other words, earlier entries are preferred over later
+entries.
 
-Signed-off-by: Shaul Triebitz <shaul.triebitz@intel.com>
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Link: https://lore.kernel.org/r/iwlwifi.20211204130722.b0743a588d14.I098fef6677d0dab3ef1b6183ed206a10bab01eb2@changeid
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+The order of 1000baseKX/Full and 1000baseT/Full is such that we
+prefer 1000baseKX/Full over 1000baseT/Full, but 1000baseKX/Full is
+a lot rarer than 1000baseT/Full, and thus is much less likely to
+be preferred.
+
+This causes phylink problems - it means a fixed link specifying a
+speed of 1G and full duplex gets an ethtool linkmode of 1000baseKX/Full
+rather than 1000baseT/Full as would be expected - and since we offer
+userspace a software emulation of a conventional copper PHY, we want
+to offer copper modes in preference to anything else. However, we do
+still want to allow the rarer modes as well.
+
+Hence, let's reorder these two modes to prefer copper.
+
+Tested-by: Tom Lendacky <thomas.lendacky@amd.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Reported-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/E1muvFO-00F6jY-1K@rmk-PC.armlinux.org.uk
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/mvm/time-event.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/net/phy/phy-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/time-event.c b/drivers/net/wireless/intel/iwlwifi/mvm/time-event.c
-index f93f15357a3f8..b8c645b9880fc 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/time-event.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/time-event.c
-@@ -1167,15 +1167,10 @@ void iwl_mvm_schedule_session_protection(struct iwl_mvm *mvm,
- 			cpu_to_le32(FW_CMD_ID_AND_COLOR(mvmvif->id,
- 							mvmvif->color)),
- 		.action = cpu_to_le32(FW_CTXT_ACTION_ADD),
-+		.conf_id = cpu_to_le32(SESSION_PROTECT_CONF_ASSOC),
- 		.duration_tu = cpu_to_le32(MSEC_TO_TU(duration)),
- 	};
- 
--	/* The time_event_data.id field is reused to save session
--	 * protection's configuration.
--	 */
--	mvmvif->time_event_data.id = SESSION_PROTECT_CONF_ASSOC;
--	cmd.conf_id = cpu_to_le32(mvmvif->time_event_data.id);
--
- 	lockdep_assert_held(&mvm->mutex);
- 
- 	spin_lock_bh(&mvm->time_event_lock);
-@@ -1189,6 +1184,11 @@ void iwl_mvm_schedule_session_protection(struct iwl_mvm *mvm,
- 	}
- 
- 	iwl_mvm_te_clear_data(mvm, te_data);
-+	/*
-+	 * The time_event_data.id field is reused to save session
-+	 * protection's configuration.
-+	 */
-+	te_data->id = le32_to_cpu(cmd.conf_id);
- 	te_data->duration = le32_to_cpu(cmd.duration_tu);
- 	te_data->vif = vif;
- 	spin_unlock_bh(&mvm->time_event_lock);
+diff --git a/drivers/net/phy/phy-core.c b/drivers/net/phy/phy-core.c
+index 2870c33b8975d..271fc01f7f7fd 100644
+--- a/drivers/net/phy/phy-core.c
++++ b/drivers/net/phy/phy-core.c
+@@ -162,11 +162,11 @@ static const struct phy_setting settings[] = {
+ 	PHY_SETTING(   2500, FULL,   2500baseT_Full		),
+ 	PHY_SETTING(   2500, FULL,   2500baseX_Full		),
+ 	/* 1G */
+-	PHY_SETTING(   1000, FULL,   1000baseKX_Full		),
+ 	PHY_SETTING(   1000, FULL,   1000baseT_Full		),
+ 	PHY_SETTING(   1000, HALF,   1000baseT_Half		),
+ 	PHY_SETTING(   1000, FULL,   1000baseT1_Full		),
+ 	PHY_SETTING(   1000, FULL,   1000baseX_Full		),
++	PHY_SETTING(   1000, FULL,   1000baseKX_Full		),
+ 	/* 100M */
+ 	PHY_SETTING(    100, FULL,    100baseT_Full		),
+ 	PHY_SETTING(    100, FULL,    100baseT1_Full		),
 -- 
 2.34.1
 

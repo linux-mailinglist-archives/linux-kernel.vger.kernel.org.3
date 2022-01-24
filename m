@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14ABC49A718
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:36:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBD049A2BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:01:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3423175AbiAYCdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:33:07 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:48630 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349338AbiAXUWn (ORCPT
+        id S2364182AbiAXXqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:46:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45280 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376814AbiAXWz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:22:43 -0500
+        Mon, 24 Jan 2022 17:55:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22772C0698C1;
+        Mon, 24 Jan 2022 13:10:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A23D61232;
-        Mon, 24 Jan 2022 20:22:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7FBAC340E5;
-        Mon, 24 Jan 2022 20:22:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC29BB80FA3;
+        Mon, 24 Jan 2022 21:10:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDA15C340E5;
+        Mon, 24 Jan 2022 21:10:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055755;
-        bh=j9dt6hXW5l1S9dvtzJQJskZSb1b6kG2Bxkt0mnoPWbA=;
+        s=korg; t=1643058624;
+        bh=hPhM26oCQNd5VfkDgqvT9SQOy2C1lCfjkGP4zmnbAwc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ysktzoqN93yeKKOrHYRNh3/NN6oqGiYckCr4+QGIG+FUPBEMsRSKGoTqq+wD8fvQf
-         5cqVarfALSlpCXJcMbMcK4NySM44kpTGmeTRaX3z6bwkM2WsQa4xywC4e7VuyepgAw
-         CXOqD4HYzpHFHjGb1V1En6NM8ZHKohTq+GM38PqM=
+        b=l2I9JPLuLvNwN3R4CAnPMN78DOmL21PUxUJIurO4A9XFY2J6W+zZhgMNW4DD2wr6P
+         c8SdAm7T3FQKpSu6Ssobpd0dxwACeQW6DOUba+yZDR67y48HYxrTVUmhkdTQWnTTsI
+         kAE/Qsr0GDih8an4sH4NlOK+kWBWUSu1C/4sccrc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernelbot <kernel-bot@kylinos.cn>,
-        Jackie Liu <liuyun01@kylinos.cn>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 222/846] drm/msm/dp: displayPort driver need algorithm rational
+Subject: [PATCH 5.16 0350/1039] software node: fix wrong node passed to find nargs_prop
 Date:   Mon, 24 Jan 2022 19:35:39 +0100
-Message-Id: <20220124184108.573059964@linuxfoundation.org>
+Message-Id: <20220124184137.054641625@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,39 +53,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jackie Liu <liuyun01@kylinos.cn>
+From: Clément Léger <clement.leger@bootlin.com>
 
-[ Upstream commit 53d22794711ad630f40d59dd726bd260d77d585f ]
+[ Upstream commit c5fc5ba8b6b7bebc05e45036a33405b4c5036c2f ]
 
-Let's select RATIONAL with dp driver. avoid like:
+nargs_prop refers to a property located in the reference that is found
+within the nargs property. Use the correct reference node in call to
+property_entry_read_int_array() to retrieve the correct nargs value.
 
-[...]
-x86_64-linux-gnu-ld: drivers/gpu/drm/msm/dp/dp_catalog.o: in function `dp_catalog_ctrl_config_msa':
-dp_catalog.c:(.text+0x57e): undefined reference to `rational_best_approximation'
-
-Fixes: c943b4948b58 ("drm/msm/dp: add displayPort driver support")
-Reported-by: kernelbot <kernel-bot@kylinos.cn>
-Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
-Link: https://lore.kernel.org/r/20211110070950.3355597-2-liu.yun@linux.dev
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Rob Clark <robdclark@chromium.org>
+Fixes: b06184acf751 ("software node: Add software_node_get_reference_args()")
+Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Daniel Scally <djrscally@gmail.com>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/base/swnode.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/Kconfig b/drivers/gpu/drm/msm/Kconfig
-index 3ddf739a6f9b8..c49b239231190 100644
---- a/drivers/gpu/drm/msm/Kconfig
-+++ b/drivers/gpu/drm/msm/Kconfig
-@@ -63,6 +63,7 @@ config DRM_MSM_HDMI_HDCP
- config DRM_MSM_DP
- 	bool "Enable DisplayPort support in MSM DRM driver"
- 	depends on DRM_MSM
-+	select RATIONAL
- 	default y
- 	help
- 	  Compile in support for DP driver in MSM DRM driver. DP external
+diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
+index 4debcea4fb12d..0a482212c7e8e 100644
+--- a/drivers/base/swnode.c
++++ b/drivers/base/swnode.c
+@@ -529,7 +529,7 @@ software_node_get_reference_args(const struct fwnode_handle *fwnode,
+ 		return -ENOENT;
+ 
+ 	if (nargs_prop) {
+-		error = property_entry_read_int_array(swnode->node->properties,
++		error = property_entry_read_int_array(ref->node->properties,
+ 						      nargs_prop, sizeof(u32),
+ 						      &nargs_prop_val, 1);
+ 		if (error)
 -- 
 2.34.1
 

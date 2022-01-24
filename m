@@ -2,236 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE192498393
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:32:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4251A498399
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235569AbiAXPcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 10:32:55 -0500
-Received: from mga05.intel.com ([192.55.52.43]:21800 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233010AbiAXPcy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 10:32:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643038374; x=1674574374;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/N7wfLow10MDvZWbjcrnYxRRIYUPADVRbu5mKH8flZs=;
-  b=lKQCAS44w342YauCVeRS8Kf0b5sSjM12fLrmQ/J4e871V/9MNq12bk5b
-   o5VYSyegAj8E8ivnsND54PXoPAPajePBkdazGOMPlfHvYSR7TkREiyEOE
-   2Dp75sf69a0uTcwi7wjuZ+ujTUKJngVN+7iT1NvCPG1Ito8vwOhK6gJO9
-   uHUc6+Ww+DJnSuFpuf3dsCqTkitXmZZ5FIRKfku3NIT6xKHbcx9fPXIi3
-   JQLSoAhRLbgyoz2s3nPouMhuwdW2ZWDC5e+4WSsdaqNCCp0V36h23Gtfn
-   PWkf0d83VJy2dd4KoY9v7O2QzAhCxgEku1yTteeb5gFXRzP9r4EM93+hh
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="332424014"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="332424014"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 07:32:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="479114879"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 24 Jan 2022 07:32:52 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nC1Ku-000IWh-1I; Mon, 24 Jan 2022 15:32:52 +0000
-Date:   Mon, 24 Jan 2022 23:32:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jinyang He <hejinyang@loongson.cn>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: arch/mips/kernel/relocate.c:41:12: warning: no previous prototype
- for function 'plat_post_relocation'
-Message-ID: <202201242332.W7XuI6gI-lkp@intel.com>
+        id S235422AbiAXPdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 10:33:24 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:36699 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235688AbiAXPdU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 10:33:20 -0500
+Received: by mail-io1-f69.google.com with SMTP id b15-20020a056602330f00b006109348c3daso2516394ioz.3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 07:33:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Mry99N6iPIKy3cjwP5Cz2+xI8pMASkNhENwJAhEUElM=;
+        b=KbLZk4mGgZ3uu5dsK4af3N7Q5eRVC/AwOk/S3bjSqqtdyl6J2FYHzV+/W3yFNKShHk
+         ahXfJgIVUcN9wScYp4ctSEY8YN58zxIdHT/ON5s3ts0Tw5m4jdyi4S3z/vrKclfi/kkP
+         8EiDU7h7J/FV06g/o/mpBdAnxxDW4fxHKcjmqHB2rn+zipUgSvbZwV7T3+dVhvfR6t/l
+         xj754rKrgF2nbUkaRR3j3xINibr7x8PyQzSrm6hlpNwShFsi6bFjxsBu0YH9jIvFkWTp
+         hQnoWteFR/Vc3kvWZyeqGSXaAEEMhVIMeGaDOvAOLWB7XeyuujKOpxdIAHYWK50sPUkX
+         n+PQ==
+X-Gm-Message-State: AOAM533jORn+uNLcDQFKB/ibd8Zvo1uQJ5keq6pU3jkb+KEfSHFtS8TW
+        zPJ4n3ZkSWQ53g45uRfPbo4iJkS9Z83K70NnzntQ/m27j4RQ
+X-Google-Smtp-Source: ABdhPJzhUPkKA7cUxXakLctP8xEq5DBmQoVBiEn3H9/v82Whk0G7QSUFIGTrHR5mQBsotDViMgenfJDBsnEITr1RaS8ltnN5U/u0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a05:6e02:144a:: with SMTP id p10mr9296910ilo.152.1643038399809;
+ Mon, 24 Jan 2022 07:33:19 -0800 (PST)
+Date:   Mon, 24 Jan 2022 07:33:19 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002c4f0905d655b052@google.com>
+Subject: [syzbot] WARNING in free_loaded_vmcs (3)
+From:   syzbot <syzbot+8112db3ab20e70d50c31@syzkaller.appspotmail.com>
+To:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        pbonzini@redhat.com, seanjc@google.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jinyang,
+Hello,
 
-FYI, the error/warning still remains.
+syzbot found the following issue on:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
-commit: a307a4ce9ecd2e23c71318201330d9d648b3f818 MIPS: Loongson64: Add KASLR support
-date:   1 year, 2 months ago
-config: mips-randconfig-c004-20220120 (https://download.01.org/0day-ci/archive/20220124/202201242332.W7XuI6gI-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a307a4ce9ecd2e23c71318201330d9d648b3f818
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a307a4ce9ecd2e23c71318201330d9d648b3f818
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/
+HEAD commit:    dd81e1c7d5fb Merge tag 'powerpc-5.17-2' of git://git.kerne..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11a31ae0700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=916d34c0d501b86
+dashboard link: https://syzkaller.appspot.com/bug?extid=8112db3ab20e70d50c31
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16c7b51fb00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1212815bb00000
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Bisection is inconclusive: the issue happens on the oldest tested release.
 
-All warnings (new ones prefixed by >>):
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1736d857b00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=14b6d857b00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=10b6d857b00000
 
-   In file included from include/asm-generic/preempt.h:5:
-   In file included from include/linux/thread_info.h:38:
-   In file included from arch/mips/include/asm/thread_info.h:16:
-   In file included from arch/mips/include/asm/processor.h:14:
-   In file included from include/linux/atomic.h:7:
-   arch/mips/include/asm/atomic.h:257:1: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
-   ATOMIC_SIP_OP(atomic, int, subu, ll, sc)
-   ^
-   arch/mips/include/asm/atomic.h:251:7: note: expanded from macro 'ATOMIC_SIP_OP'
-           if (!__SYNC_loongson3_war)                                      \
-                ^
-   arch/mips/include/asm/sync.h:147:34: note: expanded from macro '__SYNC_loongson3_war'
-   # define __SYNC_loongson3_war   (1 << 31)
-                                      ^
-   In file included from arch/mips/kernel/relocate.c:12:
-   In file included from arch/mips/include/asm/cacheflush.h:13:
-   In file included from include/linux/mm.h:10:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:8:
-   In file included from include/linux/spinlock.h:51:
-   In file included from include/linux/preempt.h:78:
-   In file included from ./arch/mips/include/generated/asm/preempt.h:1:
-   In file included from include/asm-generic/preempt.h:5:
-   In file included from include/linux/thread_info.h:38:
-   In file included from arch/mips/include/asm/thread_info.h:16:
-   In file included from arch/mips/include/asm/processor.h:14:
-   In file included from include/linux/atomic.h:7:
-   arch/mips/include/asm/atomic.h:261:1: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
-   ATOMIC_SIP_OP(atomic64, s64, dsubu, lld, scd)
-   ^
-   arch/mips/include/asm/atomic.h:251:7: note: expanded from macro 'ATOMIC_SIP_OP'
-           if (!__SYNC_loongson3_war)                                      \
-                ^
-   arch/mips/include/asm/sync.h:147:34: note: expanded from macro '__SYNC_loongson3_war'
-   # define __SYNC_loongson3_war   (1 << 31)
-                                      ^
-   In file included from arch/mips/kernel/relocate.c:12:
-   In file included from arch/mips/include/asm/cacheflush.h:13:
-   In file included from include/linux/mm.h:10:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:8:
-   In file included from include/linux/spinlock.h:59:
-   In file included from include/linux/lockdep.h:14:
-   In file included from include/linux/smp.h:15:
-   In file included from include/linux/smp_types.h:5:
-   include/linux/llist.h:222:9: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
-           return xchg(&head->first, NULL);
-                  ^
-   arch/mips/include/asm/cmpxchg.h:102:7: note: expanded from macro 'xchg'
-           if (!__SYNC_loongson3_war)                                      \
-                ^
-   arch/mips/include/asm/sync.h:147:34: note: expanded from macro '__SYNC_loongson3_war'
-   # define __SYNC_loongson3_war   (1 << 31)
-                                      ^
-   In file included from arch/mips/kernel/relocate.c:12:
-   In file included from arch/mips/include/asm/cacheflush.h:13:
-   In file included from include/linux/mm.h:10:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:8:
-   In file included from include/linux/spinlock.h:59:
-   In file included from include/linux/lockdep.h:27:
-   include/linux/debug_locks.h:17:9: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
-           return xchg(&debug_locks, 0);
-                  ^
-   arch/mips/include/asm/cmpxchg.h:102:7: note: expanded from macro 'xchg'
-           if (!__SYNC_loongson3_war)                                      \
-                ^
-   arch/mips/include/asm/sync.h:147:34: note: expanded from macro '__SYNC_loongson3_war'
-   # define __SYNC_loongson3_war   (1 << 31)
-                                      ^
-   In file included from arch/mips/kernel/relocate.c:12:
-   In file included from arch/mips/include/asm/cacheflush.h:13:
-   In file included from include/linux/mm.h:33:
-   In file included from include/linux/pgtable.h:6:
-   arch/mips/include/asm/pgtable.h:200:3: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
-                   cmpxchg64(&buddy->pte, 0, _PAGE_GLOBAL);
-                   ^
-   arch/mips/include/asm/cmpxchg.h:220:2: note: expanded from macro 'cmpxchg64'
-           cmpxchg((ptr), (o), (n));                                       \
-           ^
-   arch/mips/include/asm/cmpxchg.h:194:7: note: expanded from macro 'cmpxchg'
-           if (!__SYNC_loongson3_war)                                      \
-                ^
-   arch/mips/include/asm/sync.h:147:34: note: expanded from macro '__SYNC_loongson3_war'
-   # define __SYNC_loongson3_war   (1 << 31)
-                                      ^
-   In file included from arch/mips/kernel/relocate.c:12:
-   In file included from arch/mips/include/asm/cacheflush.h:13:
-   In file included from include/linux/mm.h:33:
-   In file included from include/linux/pgtable.h:6:
-   arch/mips/include/asm/pgtable.h:200:3: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
-   arch/mips/include/asm/cmpxchg.h:220:2: note: expanded from macro 'cmpxchg64'
-           cmpxchg((ptr), (o), (n));                                       \
-           ^
-   arch/mips/include/asm/cmpxchg.h:204:7: note: expanded from macro 'cmpxchg'
-           if (!__SYNC_loongson3_war)                                      \
-                ^
-   arch/mips/include/asm/sync.h:147:34: note: expanded from macro '__SYNC_loongson3_war'
-   # define __SYNC_loongson3_war   (1 << 31)
-                                      ^
->> arch/mips/kernel/relocate.c:41:12: warning: no previous prototype for function 'plat_post_relocation' [-Wmissing-prototypes]
-   int __weak plat_post_relocation(long offset)
-              ^
-   arch/mips/kernel/relocate.c:41:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __weak plat_post_relocation(long offset)
-   ^
-   static 
-   arch/mips/kernel/relocate.c:135:12: warning: no previous prototype for function 'do_relocations' [-Wmissing-prototypes]
-   int __init do_relocations(void *kbase_old, void *kbase_new, long offset)
-              ^
-   arch/mips/kernel/relocate.c:135:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init do_relocations(void *kbase_old, void *kbase_new, long offset)
-   ^
-   static 
->> arch/mips/kernel/relocate.c:304:14: warning: no previous prototype for function 'relocate_kernel' [-Wmissing-prototypes]
-   void *__init relocate_kernel(void)
-                ^
-   arch/mips/kernel/relocate.c:304:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *__init relocate_kernel(void)
-   ^
-   static 
-   arch/mips/kernel/relocate.c:415:6: warning: no previous prototype for function 'show_kernel_relocation' [-Wmissing-prototypes]
-   void show_kernel_relocation(const char *level)
-        ^
-   arch/mips/kernel/relocate.c:415:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void show_kernel_relocation(const char *level)
-   ^
-   static 
-   16 warnings generated.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8112db3ab20e70d50c31@syzkaller.appspotmail.com
 
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3606 at arch/x86/kvm/vmx/vmx.c:2665 free_loaded_vmcs arch/x86/kvm/vmx/vmx.c:2665 [inline]
+WARNING: CPU: 0 PID: 3606 at arch/x86/kvm/vmx/vmx.c:2665 free_loaded_vmcs+0x158/0x1a0 arch/x86/kvm/vmx/vmx.c:2656
+Modules linked in:
+CPU: 1 PID: 3606 Comm: syz-executor725 Not tainted 5.17.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:free_loaded_vmcs arch/x86/kvm/vmx/vmx.c:2665 [inline]
+RIP: 0010:free_loaded_vmcs+0x158/0x1a0 arch/x86/kvm/vmx/vmx.c:2656
+Code: 81 e8 bc 8c 4c 00 48 89 da 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 80 3c 02 00 75 49 48 8b 2b e9 25 ff ff ff e8 38 17 58 00 <0f> 0b eb b3 e8 8f 4d 9f 00 e9 f7 fe ff ff 48 89 df e8 92 4d 9f 00
+RSP: 0018:ffffc90001d2f890 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff888079c1a2e8 RCX: 0000000000000000
+RDX: ffff888021b65700 RSI: ffffffff81204388 RDI: ffff888079c1a2f0
+RBP: ffff88807594d000 R08: 0000000000000001 R09: 0000000000000001
+R10: ffffffff817ea048 R11: 0000000000000001 R12: 0000000000000000
+R13: ffff888079c18000 R14: 0000000000000003 R15: ffffc90001d2f918
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fc975b8a328 CR3: 000000007f686000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ kvm_arch_vcpu_destroy+0x72/0x2f0 arch/x86/kvm/x86.c:11123
+ kvm_vcpu_destroy arch/x86/kvm/../../../virt/kvm/kvm_main.c:441 [inline]
+ kvm_destroy_vcpus+0x11f/0x290 arch/x86/kvm/../../../virt/kvm/kvm_main.c:460
+ kvm_free_vcpus arch/x86/kvm/x86.c:11564 [inline]
+ kvm_arch_destroy_vm+0x2e8/0x470 arch/x86/kvm/x86.c:11676
+ kvm_destroy_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1217 [inline]
+ kvm_put_kvm+0x4fa/0xb00 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1250
+ kvm_vm_release+0x3f/0x50 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1273
+ __fput+0x286/0x9f0 fs/file_table.c:311
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ exit_task_work include/linux/task_work.h:32 [inline]
+ do_exit+0xb29/0x2a30 kernel/exit.c:806
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:935
+ get_signal+0x4b0/0x28c0 kernel/signal.c:2862
+ arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
+ handle_signal_work kernel/entry/common.c:148 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+ exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fc975b35729
+Code: Unable to access opcode bytes at RIP 0x7fc975b356ff.
+RSP: 002b:00007fc975ae5308 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+RAX: fffffffffffffe00 RBX: 00007fc975bbe408 RCX: 00007fc975b35729
+RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007fc975bbe408
+RBP: 00007fc975bbe400 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fc975bbe40c
+R13: 00007fc975b8b0b8 R14: 6d766b2f7665642f R15: 0000000000022000
+ </TASK>
 
-vim +/plat_post_relocation +41 arch/mips/kernel/relocate.c
-
-4c9fff362261d6 Marcin Nowakowski 2016-11-23  35  
-8cc709d7d4f013 Steven J. Hill    2016-12-09  36  /*
-8cc709d7d4f013 Steven J. Hill    2016-12-09  37   * This function may be defined for a platform to perform any post-relocation
-8cc709d7d4f013 Steven J. Hill    2016-12-09  38   * fixup necessary.
-8cc709d7d4f013 Steven J. Hill    2016-12-09  39   * Return non-zero to abort relocation
-8cc709d7d4f013 Steven J. Hill    2016-12-09  40   */
-8cc709d7d4f013 Steven J. Hill    2016-12-09 @41  int __weak plat_post_relocation(long offset)
-8cc709d7d4f013 Steven J. Hill    2016-12-09  42  {
-8cc709d7d4f013 Steven J. Hill    2016-12-09  43  	return 0;
-8cc709d7d4f013 Steven J. Hill    2016-12-09  44  }
-8cc709d7d4f013 Steven J. Hill    2016-12-09  45  
-
-:::::: The code at line 41 was first introduced by commit
-:::::: 8cc709d7d4f013f51d38ceb2e3c8c82d230cf457 MIPS: Relocatable: Provide plat_post_relocation hook
-
-:::::: TO: Steven J. Hill <Steven.Hill@cavium.com>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

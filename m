@@ -2,69 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E056F49828E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 15:41:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A84498292
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 15:41:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239083AbiAXOlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 09:41:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39860 "EHLO
+        id S239970AbiAXOlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 09:41:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234489AbiAXOli (ORCPT
+        with ESMTP id S239199AbiAXOln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 09:41:38 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA544C061401
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 06:41:37 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id bu18so49964464lfb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 06:41:37 -0800 (PST)
+        Mon, 24 Jan 2022 09:41:43 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BA7C06173D
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 06:41:43 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id b14so50004988lff.3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 06:41:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Wg0ttvOmNzUCKMJpAQZugVwCO5/3smshq/aGj4egwOg=;
-        b=Wp0LxdiOrl+wg2qT9oFIKDtA5gMtHLDTOJMOVUgX1bEunFSnzbRKoI9qmqvt67Mkwb
-         yHd14RiKMyRMmXdY4y38nneFkTwe+F1vn6yEtHyB0Qq5884EoCob1pNanPPKQMQGoMNu
-         ZyReVOXyitgoHzwd1bQUHyj7ijc6EYcOgyIC9aq2gFDXoEDSQ4abHkqMlXlV+RtzCt+F
-         qg9PViWziHY6wpkZ6jsm12kmHtYyYXeUFxwExVuLfmS4ZtyQYS6h0COdeXgooSVPWuqc
-         JH1PsfudN+sBpJJnXDEXj8+PMTNoq7jIduoeMAcB3dEoW6IGj7ZIEN70taKzBRCR8tOg
-         OMEg==
+        bh=rDkr/Rong6odf/l1FFKK3Zb5bf9I7lsmuK7pJ15wG/8=;
+        b=izNxEl4a4luZq6cAnVCYJYeJCBaH/+ylbFkis8xjyq2EVPulVDm/13IQnTAmpI/mus
+         UhiOghVn5UaSRpWdmmql/c+kfngWx/b/He3B+uvxQh74afMny8DmnF6yRvkZJgEf0bRX
+         c8SXS9Gavk67xeZ9D+czOQ6t6YuCXNrgAy/cLtsRwf2xeM4KXNqkgil1JoQooqS2nMzo
+         fZBRRu8/nrdPYR6A+k/J4400eLhoydqKx9SyYJJL6zuW/g28dQrgMexNgW3KhaaM8uAj
+         ClRMlU89W+PSqkYODhn1Kl74k3gyLEjXm+RzBQpAudOrqQIiDmYFGXfLgxo4vYz3ZePt
+         JUQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Wg0ttvOmNzUCKMJpAQZugVwCO5/3smshq/aGj4egwOg=;
-        b=T9q1uGOCfvP96XJPtHzpWCEiaXH2ECWjUw/iDJscFzW6m/KZRTM7eGpfLhTV/gwzou
-         GYRarYyfurZSsYfnRedlou9cWWztbiVuwmjSHfb4IrHzj0dNCXizdx0+15Y8a6EXcH0I
-         blgfMVJL4BqGi0rGqTV2EEKCR4bTwBLv7elaDEXP7GmLcdQixKr6EY0B/DulbCTOn9dD
-         CthNkx0EKDVNz8YoPv9XwXiH3OJEtd2WhZ5JkHGkovjPBXdpg2CHGx+l8gQCEgqxV1BL
-         Q/MruAwl9kdeR4qkuVcy76uwu0l0sD+eOEJqcwbDCitnujYnWMeVhRIuoFih92ML3qXS
-         Y1xA==
-X-Gm-Message-State: AOAM533WFAH+qFKx00ajVc+sDbA75jh1r3M9uiDc/NUXKAKibEt2+Eqf
-        fB8RcwZsU51+pLnWu6WI+GcUohtrK61ZyyoXU3OIyw==
-X-Google-Smtp-Source: ABdhPJxE76Lsos/B2pPpQIXHVEITCQqEVHfC7Zn5R2ND1w7O2NoHm/yF0L3WSyKH+SsdxpOTiczmbhM5lvQeiJztFIU=
-X-Received: by 2002:a05:6512:1293:: with SMTP id u19mr13141789lfs.373.1643035296045;
- Mon, 24 Jan 2022 06:41:36 -0800 (PST)
+        bh=rDkr/Rong6odf/l1FFKK3Zb5bf9I7lsmuK7pJ15wG/8=;
+        b=oRG7Z+MdOKPHMUdkXwgB+Lz7XhnmIMgqLo7NTaohX5K+0PO/8LrI6Npd5zG0g6V2yk
+         JKxMfNlERQEGpfmB3ttFYTCbgDQhoPAoE6wHZ0U53IsQq4SpT6jZFOTDy187bWJYRqAr
+         II5EARQWZjOUAvRQGBUpwM7g9CmYv/7xUW16UVxIE5DD3HbZR8307/nNIeYuFsWnQI1X
+         ZP+Ds6/XzUwrX+4ojHg5YEBDfRhkZGHc/1LnE9k9O168oo6dAvRjULivpoLdkhhA9IPR
+         458nmBiVqrqaKK7Js3mHMBQ7e+ch4QwFSJjRofoU0+25ucXYSSsXDKE46ZCs834JQ0UC
+         /1Iw==
+X-Gm-Message-State: AOAM53042wWHJihtjk55hN1l14c1yBHbOmJnxWJswFE/yqW0IlFxIV+r
+        dKOmI3JCGsHcibc7IEifyOaAaSUrdwcEC3H2/DcPmA==
+X-Google-Smtp-Source: ABdhPJzXA8eX9kSAZ+l1b4fqeGXQBWRlv4PCBNL3A0MBPY5wxd/KuKJMuGGcR+7kkjOsBL8YOX8Q+FuJkFMs3RAVtDk=
+X-Received: by 2002:a05:6512:32c9:: with SMTP id f9mr12756249lfg.184.1643035301614;
+ Mon, 24 Jan 2022 06:41:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20211229023814.53372-1-wenzhiwei@kylinos.cn>
-In-Reply-To: <20211229023814.53372-1-wenzhiwei@kylinos.cn>
+References: <20220112194118.178026-1-luca@z3ntu.xyz> <20220112194118.178026-6-luca@z3ntu.xyz>
+In-Reply-To: <20220112194118.178026-6-luca@z3ntu.xyz>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 24 Jan 2022 15:40:59 +0100
-Message-ID: <CAPDyKFo_c2vNf+p4pYubeu0OLCUbAQD=5aAHeVMq5eXEqr20Nw@mail.gmail.com>
-Subject: Re: [PATCH] mmc: dw_mmc: Fix potential null pointer risk
-To:     Wen Zhiwei <wenzhiwei@kylinos.cn>
-Cc:     jh80.chung@samsung.com, p.zabel@pengutronix.de,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 24 Jan 2022 15:41:05 +0100
+Message-ID: <CAPDyKFr+BjF8_rEv0RG8aH3FmnKtngkrbfNmNSo=WPmz==uDfw@mail.gmail.com>
+Subject: Re: [PATCH 05/15] dt-bindings: mmc: sdhci-msm: Add msm8953 compatible
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Dec 2021 at 03:38, Wen Zhiwei <wenzhiwei@kylinos.cn> wrote:
+On Wed, 12 Jan 2022 at 20:42, Luca Weiss <luca@z3ntu.xyz> wrote:
 >
-> we previously assumed 'host->slot' could be null,
-> null pointer judgment should be added
+> Add msm8953 SoC specific compatible strings for qcom-sdhci controller.
 >
-> Signed-off-by: Wen Zhiwei <wenzhiwei@kylinos.cn>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> Acked-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
 Applied for next, thanks!
 
@@ -73,22 +76,21 @@ Uffe
 
 
 > ---
->  drivers/mmc/host/dw_mmc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/mmc/sdhci-msm.txt | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> diff --git a/drivers/mmc/host/dw_mmc.c b/drivers/mmc/host/dw_mmc.c
-> index d977f34f6b55..c9dc8c168efb 100644
-> --- a/drivers/mmc/host/dw_mmc.c
-> +++ b/drivers/mmc/host/dw_mmc.c
-> @@ -3518,7 +3518,7 @@ int dw_mci_runtime_resume(struct device *dev)
->         mci_writel(host, CTRL, SDMMC_CTRL_INT_ENABLE);
->
->
-> -       if (host->slot->mmc->pm_flags & MMC_PM_KEEP_POWER)
-> +       if (host->slot && host->slot->mmc->pm_flags & MMC_PM_KEEP_POWER)
->                 dw_mci_set_ios(host->slot->mmc, &host->slot->mmc->ios);
->
->         /* Force setup bus to guarantee available clock output */
+> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-msm.txt b/Documentation/devicetree/bindings/mmc/sdhci-msm.txt
+> index 50841e2843fc..a62eaade5d97 100644
+> --- a/Documentation/devicetree/bindings/mmc/sdhci-msm.txt
+> +++ b/Documentation/devicetree/bindings/mmc/sdhci-msm.txt
+> @@ -14,6 +14,7 @@ Required properties:
+>         full compatible strings with SoC and version:
+>                 "qcom,apq8084-sdhci", "qcom,sdhci-msm-v4"
+>                 "qcom,msm8226-sdhci", "qcom,sdhci-msm-v4"
+> +               "qcom,msm8953-sdhci", "qcom,sdhci-msm-v4"
+>                 "qcom,msm8974-sdhci", "qcom,sdhci-msm-v4"
+>                 "qcom,msm8916-sdhci", "qcom,sdhci-msm-v4"
+>                 "qcom,msm8992-sdhci", "qcom,sdhci-msm-v4"
 > --
-> 2.30.0
+> 2.34.1
 >

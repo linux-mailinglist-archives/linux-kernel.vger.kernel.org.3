@@ -2,149 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3509E4979FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F2D497A05
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236267AbiAXIHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 03:07:07 -0500
-Received: from mga06.intel.com ([134.134.136.31]:57796 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242042AbiAXIHC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 03:07:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643011622; x=1674547622;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=aGhr0XEO9VPwRxOpRqA9HczBGMg1NP/T3MGP3BCkwAo=;
-  b=gVb9dLun5Qn3FVanTFMrj99CP0+x8BuhI2KVEoa58iHmfrBk9x082zZD
-   BzGAtTuiBdQHSfe7CUiRhEWNze4+cRpxT+JTihZY7r8qTrV3WeJkq/Lxe
-   LCeZBKfEg5gxa2pdIpKbUXorVuIYD2Tci+1gK2u4PPacA5oUlV8dPdMsS
-   LLql2+GJajNi1gdDzBcNWNvfq/u+Z428DDlDWhy67IOdVZ6ekCS1pk/Ir
-   1AQqERTQv4heEIbQl4y5gGVGVgmD1FLomB4L+YDcfZn29+WWAk8rwzkkQ
-   f4LZvFawmBBvBeU5L7Jqc85UEzdSOfnDysNBEbnxEryFjh7x4t2BDudXF
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="306707287"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="306707287"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 00:07:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="478981232"
-Received: from ahunter-desktop.fi.intel.com ([10.237.72.92])
-  by orsmga006.jf.intel.com with ESMTP; 24 Jan 2022 00:06:58 -0800
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        H Peter Anvin <hpa@zytor.com>
-Subject: [PATCH 2/2] perf/x86/intel/pt: Add a capability and config bit for disabling TNTs
-Date:   Mon, 24 Jan 2022 10:06:51 +0200
-Message-Id: <20220124080651.2699107-3-adrian.hunter@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220124080651.2699107-1-adrian.hunter@intel.com>
-References: <20220124080651.2699107-1-adrian.hunter@intel.com>
+        id S242050AbiAXIHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 03:07:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236251AbiAXIHg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 03:07:36 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14399C06173B;
+        Mon, 24 Jan 2022 00:07:36 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id i67so1347964wma.0;
+        Mon, 24 Jan 2022 00:07:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=IQyuoyAjn/3wnjleMO1fKTfmVMZ//kX3WpenfwhdQ+Q=;
+        b=hUpsGt9ymnkI/AxNgOljMYzNT6vLangFj0ZRKSTmPXZcV94YAFpN+1Vtkm9yVFzS+M
+         frdxdiRARclmW1sXd3LmydJ1ON2a85UKm0sUjBA3FUAIUq//Xd9yuBWkuNzCgt6uVCVk
+         KA5CHm4gO8C81DSmc3/GtYJ46O3Y2TPqEE3DO31OmaBW0/GHfU3Xl1rkEs+nHEomthHh
+         llHyvMT5a13OwJTxDUS8hgZWq8yMzJBrIwMMvPUSh6irSgjP2lCibdD4irfxe0x+0+pf
+         MilvlAi1PZZj3dzyzGl7bVp1AYF8rFCfttlbfwz47FALIPBbYV37Os2yfjVQvY5fR5HM
+         rhPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=IQyuoyAjn/3wnjleMO1fKTfmVMZ//kX3WpenfwhdQ+Q=;
+        b=6xK0pOHsSHWnifUbPzga9h/X/nGXx45MvER9t91C/qiMxXeJXQtyHbhjz+eQoBTCme
+         ggeqK6JHlPpHS00ht/6UaxuWj+He8jGSMbi/Pct3KgPG3HI1GfNwfvos7zU01E2YpEdZ
+         noSgb67aELWHsAg/A8ZFe0olas6nEzuAnOduIutQmDN+V2DzikZehorHV2bJuuZ7EXUo
+         neH+kornnHei54IUhf6w6iXh2ycmSuMGT60vilQlUh8vubTNL1zQtsq8rhn9IoAhHCeD
+         uEilaSTRCD7DUHSL63OE9dR/PWXNO0WJ0Fps3Cd3LUOqKiWwpxAvIoVYDP7VZ9Xn50vK
+         fxXw==
+X-Gm-Message-State: AOAM531h66QTk3npsb/nBYHTZ5Ss52hafZXTLPmbF1LPO/xl0BuaQNaU
+        HBeofigRL+nM/ON9HBRixU9HNR8fWDZhO/AKCtjsnrEZ+Xw=
+X-Google-Smtp-Source: ABdhPJzBWgOyq5fcOqLBNzKDVqnz6kg6sCApziJLKCTdO7kOegqYUGJjRBOkso4fQGDZggX/w9RHdGxqOdwHJ8twHwM=
+X-Received: by 2002:a05:600c:1e0e:: with SMTP id ay14mr673702wmb.77.1643011654496;
+ Mon, 24 Jan 2022 00:07:34 -0800 (PST)
 MIME-Version: 1.0
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Content-Transfer-Encoding: 8bit
+References: <20220106125947.139523-1-gengcixi@gmail.com> <20220106125947.139523-4-gengcixi@gmail.com>
+ <CADBw62pBCdrbRspTV9Yck4DP8DE=ECGmEtD74NOtm1YRT3DM8w@mail.gmail.com>
+ <CAF12kFu6O-gfiqp4j24zxC_GqCwJ2Q5KGYYaCtnagmUFB_bsVg@mail.gmail.com> <CADBw62rSdWN-L8HbnyMrUNp=x0pDdKR6MyKO4yfu00MnrN4L-g@mail.gmail.com>
+In-Reply-To: <CADBw62rSdWN-L8HbnyMrUNp=x0pDdKR6MyKO4yfu00MnrN4L-g@mail.gmail.com>
+From:   Cixi Geng <gengcixi@gmail.com>
+Date:   Mon, 24 Jan 2022 16:06:58 +0800
+Message-ID: <CAF12kFvUfykKfeRAJACFRk31pmEBQEPw402x0JN4i1uv0EK1zg@mail.gmail.com>
+Subject: Re: [PATCH 3/7] iio: adc: sc27xx: structure adjuststment and optimization
+To:     Baolin Wang <baolin.wang7@gmail.com>
+Cc:     Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>, jic23@kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>, lgirdwood@gmail.com,
+        Mark Brown <broonie@kernel.org>,
+        =?UTF-8?B?5pyx546J5piOIChZdW1pbmcgWmh1LzExNDU3KQ==?= 
+        <yuming.zhu1@unisoc.com>, linux-iio@vger.kernel.org,
+        Devicetree List <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-
-As of Intel SDM (https://www.intel.com/sdm) version 076, there is a new
-Intel PT feature called TNT-Disable which is enabled config bit 55.
-
-TNT-Disable disables TNT packets to reduce the tracing overhead, but with
-the result that exact control flow information is lost.
-
-Add a capability and config bit for TNT-Disable.
-
-Signed-off-by: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
----
- arch/x86/events/intel/pt.c       | 8 ++++++++
- arch/x86/include/asm/intel_pt.h  | 1 +
- arch/x86/include/asm/msr-index.h | 1 +
- 3 files changed, 10 insertions(+)
-
-diff --git a/arch/x86/events/intel/pt.c b/arch/x86/events/intel/pt.c
-index 02727b9b3c8a..ae396fdfabab 100644
---- a/arch/x86/events/intel/pt.c
-+++ b/arch/x86/events/intel/pt.c
-@@ -58,6 +58,7 @@ static struct pt_cap_desc {
- 	PT_CAP(ptwrite,			0, CPUID_EBX, BIT(4)),
- 	PT_CAP(power_event_trace,	0, CPUID_EBX, BIT(5)),
- 	PT_CAP(event_trace,		0, CPUID_EBX, BIT(7)),
-+	PT_CAP(tnt_disable,		0, CPUID_EBX, BIT(8)),
- 	PT_CAP(topa_output,		0, CPUID_ECX, BIT(0)),
- 	PT_CAP(topa_multiple_entries,	0, CPUID_ECX, BIT(1)),
- 	PT_CAP(single_range_output,	0, CPUID_ECX, BIT(2)),
-@@ -110,6 +111,7 @@ PMU_FORMAT_ATTR(noretcomp,	"config:11"	);
- PMU_FORMAT_ATTR(ptw,		"config:12"	);
- PMU_FORMAT_ATTR(branch,		"config:13"	);
- PMU_FORMAT_ATTR(event,		"config:31"	);
-+PMU_FORMAT_ATTR(notnt,		"config:55"	);
- PMU_FORMAT_ATTR(mtc_period,	"config:14-17"	);
- PMU_FORMAT_ATTR(cyc_thresh,	"config:19-22"	);
- PMU_FORMAT_ATTR(psb_period,	"config:24-27"	);
-@@ -119,6 +121,7 @@ static struct attribute *pt_formats_attr[] = {
- 	&format_attr_cyc.attr,
- 	&format_attr_pwr_evt.attr,
- 	&format_attr_event.attr,
-+	&format_attr_notnt.attr,
- 	&format_attr_fup_on_ptw.attr,
- 	&format_attr_mtc.attr,
- 	&format_attr_tsc.attr,
-@@ -300,6 +303,7 @@ static int __init pt_pmu_hw_init(void)
- 			RTIT_CTL_MTC		| \
- 			RTIT_CTL_PWR_EVT_EN	| \
- 			RTIT_CTL_EVENT_EN	| \
-+			RTIT_CTL_NOTNT		| \
- 			RTIT_CTL_FUP_ON_PTW	| \
- 			RTIT_CTL_PTW_EN)
- 
-@@ -358,6 +362,10 @@ static bool pt_event_valid(struct perf_event *event)
- 	    !intel_pt_validate_hw_cap(PT_CAP_event_trace))
- 		return false;
- 
-+	if (config & RTIT_CTL_NOTNT &&
-+	    !intel_pt_validate_hw_cap(PT_CAP_tnt_disable))
-+		return false;
-+
- 	if (config & RTIT_CTL_PTW) {
- 		if (!intel_pt_validate_hw_cap(PT_CAP_ptwrite))
- 			return false;
-diff --git a/arch/x86/include/asm/intel_pt.h b/arch/x86/include/asm/intel_pt.h
-index d1ef9cb58847..c796e9bc98b6 100644
---- a/arch/x86/include/asm/intel_pt.h
-+++ b/arch/x86/include/asm/intel_pt.h
-@@ -14,6 +14,7 @@ enum pt_capabilities {
- 	PT_CAP_ptwrite,
- 	PT_CAP_power_event_trace,
- 	PT_CAP_event_trace,
-+	PT_CAP_tnt_disable,
- 	PT_CAP_topa_output,
- 	PT_CAP_topa_multiple_entries,
- 	PT_CAP_single_range_output,
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index 79b392d893e3..efd34cfa1720 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -206,6 +206,7 @@
- #define RTIT_CTL_PTW_EN			BIT(12)
- #define RTIT_CTL_BRANCH_EN		BIT(13)
- #define RTIT_CTL_EVENT_EN		BIT(31)
-+#define RTIT_CTL_NOTNT			BIT_ULL(55)
- #define RTIT_CTL_MTC_RANGE_OFFSET	14
- #define RTIT_CTL_MTC_RANGE		(0x0full << RTIT_CTL_MTC_RANGE_OFFSET)
- #define RTIT_CTL_CYC_THRESH_OFFSET	19
--- 
-2.25.1
-
+Baolin Wang <baolin.wang7@gmail.com> =E4=BA=8E2022=E5=B9=B41=E6=9C=8817=E6=
+=97=A5=E5=91=A8=E4=B8=80 14:15=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Thu, Jan 13, 2022 at 9:54 AM Cixi Geng <gengcixi@gmail.com> wrote:
+> >
+> > Baolin Wang <baolin.wang7@gmail.com> =E4=BA=8E2022=E5=B9=B41=E6=9C=887=
+=E6=97=A5=E5=91=A8=E4=BA=94 15:03=E5=86=99=E9=81=93=EF=BC=9A
+> > >
+> > > On Thu, Jan 6, 2022 at 9:00 PM Cixi Geng <gengcixi@gmail.com> wrote:
+> > > >
+> > > > From: Cixi Geng <cixi.geng1@unisoc.com>
+> > > >
+> > > > Introduce one variant device data structure to be compatible
+> > > > with SC2731 PMIC since it has different scale and ratio calculation
+> > > > and so on.
+> > > >
+> > > > Signed-off-by: Yuming Zhu <yuming.zhu1@unisoc.com>
+> > > > Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+> > > > ---
+> > > >  drivers/iio/adc/sc27xx_adc.c | 94 ++++++++++++++++++++++++++++++--=
+----
+> > > >  1 file changed, 79 insertions(+), 15 deletions(-)
+> > > >
+> > > > diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_=
+adc.c
+> > > > index aee076c8e2b1..d2712e54ee79 100644
+> > > > --- a/drivers/iio/adc/sc27xx_adc.c
+> > > > +++ b/drivers/iio/adc/sc27xx_adc.c
+> > > > @@ -12,9 +12,9 @@
+> > > >  #include <linux/slab.h>
+> > > >
+> > > >  /* PMIC global registers definition */
+> > > > -#define SC27XX_MODULE_EN               0xc08
+> > > > +#define SC2731_MODULE_EN               0xc08
+> > > >  #define SC27XX_MODULE_ADC_EN           BIT(5)
+> > > > -#define SC27XX_ARM_CLK_EN              0xc10
+> > > > +#define SC2731_ARM_CLK_EN              0xc10
+> > > >  #define SC27XX_CLK_ADC_EN              BIT(5)
+> > > >  #define SC27XX_CLK_ADC_CLK_EN          BIT(6)
+> > > >
+> > > > @@ -78,6 +78,23 @@ struct sc27xx_adc_data {
+> > > >         int channel_scale[SC27XX_ADC_CHANNEL_MAX];
+> > > >         u32 base;
+> > > >         int irq;
+> > > > +       const struct sc27xx_adc_variant_data *var_data;
+> > > > +};
+> > > > +
+> > > > +/*
+> > > > + * Since different PMICs of SC27xx series can have different
+> > > > + * address and ratio, we should save ratio config and base
+> > > > + * in the device data structure.
+> > > > + */
+> > > > +struct sc27xx_adc_variant_data {
+> > > > +       u32 module_en;
+> > > > +       u32 clk_en;
+> > > > +       u32 scale_shift;
+> > > > +       u32 scale_mask;
+> > > > +       const struct sc27xx_adc_linear_graph *bscale_cal;
+> > > > +       const struct sc27xx_adc_linear_graph *sscale_cal;
+> > > > +       void (*init_scale)(struct sc27xx_adc_data *data);
+> > > > +       int (*get_ratio)(int channel, int scale);
+> > > >  };
+> > > >
+> > > >  struct sc27xx_adc_linear_graph {
+> > > > @@ -103,6 +120,16 @@ static struct sc27xx_adc_linear_graph small_sc=
+ale_graph =3D {
+> > > >         100, 341,
+> > > >  };
+> > > >
+> > > > +static const struct sc27xx_adc_linear_graph sc2731_big_scale_graph=
+_calib =3D {
+> > > > +       4200, 850,
+> > > > +       3600, 728,
+> > > > +};
+> > > > +
+> > > > +static const struct sc27xx_adc_linear_graph sc2731_small_scale_gra=
+ph_calib =3D {
+> > > > +       1000, 838,
+> > > > +       100, 84,
+> > > > +};
+> > >
+> > > The original big_scale_graph_calib and small_scale_graph_calib are fo=
+r
+> > > SC2731 PMIC, why add new structure definition for SC2731?
+> > >
+> > > > +
+> > > >  static const struct sc27xx_adc_linear_graph big_scale_graph_calib =
+=3D {
+> > > >         4200, 856,
+> > > >         3600, 733,
+> > > > @@ -130,11 +157,11 @@ static int sc27xx_adc_scale_calibration(struc=
+t sc27xx_adc_data *data,
+> > > >         size_t len;
+> > > >
+> > > >         if (big_scale) {
+> > > > -               calib_graph =3D &big_scale_graph_calib;
+> > > > +               calib_graph =3D data->var_data->bscale_cal;
+> > > >                 graph =3D &big_scale_graph;
+> > > >                 cell_name =3D "big_scale_calib";
+> > > >         } else {
+> > > > -               calib_graph =3D &small_scale_graph_calib;
+> > > > +               calib_graph =3D data->var_data->sscale_cal;
+> > > >                 graph =3D &small_scale_graph;
+> > > >                 cell_name =3D "small_scale_calib";
+> > > >         }
+> > > > @@ -160,7 +187,7 @@ static int sc27xx_adc_scale_calibration(struct =
+sc27xx_adc_data *data,
+> > > >         return 0;
+> > > >  }
+> > > >
+> > > > -static int sc27xx_adc_get_ratio(int channel, int scale)
+> > > > +static int sc2731_adc_get_ratio(int channel, int scale)
+> > > >  {
+> > > >         switch (channel) {
+> > > >         case 1:
+> > > > @@ -185,6 +212,21 @@ static int sc27xx_adc_get_ratio(int channel, i=
+nt scale)
+> > > >         return SC27XX_VOLT_RATIO(1, 1);
+> > > >  }
+> > > >
+> > > > +/*
+> > > > + * According to the datasheet set specific value on some channel.
+> > > > + */
+> > > > +static void sc2731_adc_scale_init(struct sc27xx_adc_data *data)
+> > > > +{
+> > > > +       int i;
+> > > > +
+> > > > +       for (i =3D 0; i < SC27XX_ADC_CHANNEL_MAX; i++) {
+> > > > +               if (i =3D=3D 5)
+> > > > +                       data->channel_scale[i] =3D 1;
+> > > > +               else
+> > > > +                       data->channel_scale[i] =3D 0;
+> > > > +       }
+> > > > +}
+> > >
+> > > This is unnecessary I think, please see sc27xx_adc_write_raw() that
+> > > can set the channel scale.
+> > Did you mean that all the PMIC's scale_init function should put into
+> > the sc27xx_adc_write_raw?
+>
+> No.
+>
+> > but the scale_init is all different by each PMIC, if implemented in
+> > the write_raw, will add a lot of
+> > if or switch_case branch
+>
+> What I mean is we should follow the original method to set the channel
+> scale by iio_info. Please also refer to other drivers how ot handle
+> the channel scale.
+Hi Baolin,  I understand the adc_write_raw() function is the method to set
+channal scale for the userspace, we can change the channel scale by write
+a value on a user code. did i understand right?
+out  scale_init is to set scale value when the driver probe stage, and I al=
+so
+did not found other adc driver use the adc_write_raw() during the driver
+ initialization phase.
+>
+> --
+> Baolin Wang

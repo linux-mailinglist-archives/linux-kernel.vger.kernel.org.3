@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 294AB499340
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB3B498D48
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356642AbiAXUcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:32:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
+        id S1352455AbiAXTab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:30:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355389AbiAXUNh (ORCPT
+        with ESMTP id S1349827AbiAXTVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:13:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F26ABC06175B;
-        Mon, 24 Jan 2022 11:35:05 -0800 (PST)
+        Mon, 24 Jan 2022 14:21:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7771BC02B853;
+        Mon, 24 Jan 2022 11:08:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B1ABB8122C;
-        Mon, 24 Jan 2022 19:35:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4694C340E5;
-        Mon, 24 Jan 2022 19:35:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18F966124F;
+        Mon, 24 Jan 2022 19:08:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D244AC340E5;
+        Mon, 24 Jan 2022 19:08:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052904;
-        bh=YMTmdgspCZHdunm2O2C28dMwUyvgjGcIM5w9bO9muWc=;
+        s=korg; t=1643051308;
+        bh=aqE45ZncD4ShHp9LawZTZ++ERYNd1W4VEqKGNcMwVXY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DpiRk5FcO17xLe1ezQXBLK3xGzLsukQMYIktdhhGYSbeGsm5ItZcRYcUnoTbj7LhE
-         Lt89OWZ4yaIWhGUjuHlkBOEjoX+YOQVb3n6fvRGAbYeQQAKLIERgyPK4l3K7dCrxz5
-         FbRB8aECi0W83QIm8ZjyzLD9mELdFRSCbPC39r8s=
+        b=rrQx0qg5P3QhmQUlcX2HiUmdPQ87P226marZvuq1IaX6KOc65YKduU5G91aq1iD8I
+         MTbaeXFefcgRBqxIUd1lBO9eeC4fQEHHrdqWfbhdfC28QxLoBzzfRPKg5LqtMk+GJV
+         TiLvF+U3ZKDC/tF0HKgKKCTEp3QBzEOAaeluRdvA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
+        stable@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Bob Moore <robert.moore@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 212/320] btrfs: remove BUG_ON(!eie) in find_parent_nodes
+Subject: [PATCH 4.14 121/186] ACPICA: Hardware: Do not flush CPU cache when entering S4 and S5
 Date:   Mon, 24 Jan 2022 19:43:16 +0100
-Message-Id: <20220124184000.839504289@linuxfoundation.org>
+Message-Id: <20220124183941.004363663@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,52 +51,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josef Bacik <josef@toxicpanda.com>
+From: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-[ Upstream commit 9f05c09d6baef789726346397438cca4ec43c3ee ]
+[ Upstream commit 1d4e0b3abb168b2ee1eca99c527cffa1b80b6161 ]
 
-If we're looking for leafs that point to a data extent we want to record
-the extent items that point at our bytenr.  At this point we have the
-reference and we know for a fact that this leaf should have a reference
-to our bytenr.  However if there's some sort of corruption we may not
-find any references to our leaf, and thus could end up with eie == NULL.
-Replace this BUG_ON() with an ASSERT() and then return -EUCLEAN for the
-mortals.
+ACPICA commit 3dd7e1f3996456ef81bfe14cba29860e8d42949e
 
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+According to ACPI 6.4, Section 16.2, the CPU cache flushing is
+required on entering to S1, S2, and S3, but the ACPICA code
+flushes the CPU cache regardless of the sleep state.
+
+Blind cache flush on entering S5 causes problems for TDX.
+
+Flushing happens with WBINVD that is not supported in the TDX
+environment.
+
+TDX only supports S5 and adjusting ACPICA code to conform to the
+spec more strictly fixes the issue.
+
+Link: https://github.com/acpica/acpica/commit/3dd7e1f3
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+[ rjw: Subject and changelog edits ]
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/backref.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ drivers/acpi/acpica/hwesleep.c  | 4 +++-
+ drivers/acpi/acpica/hwsleep.c   | 4 +++-
+ drivers/acpi/acpica/hwxfsleep.c | 2 --
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/fs/btrfs/backref.c b/fs/btrfs/backref.c
-index 9044e7282d0b2..c701a19fac533 100644
---- a/fs/btrfs/backref.c
-+++ b/fs/btrfs/backref.c
-@@ -1361,10 +1361,18 @@ again:
- 				goto out;
- 			if (!ret && extent_item_pos) {
- 				/*
--				 * we've recorded that parent, so we must extend
--				 * its inode list here
-+				 * We've recorded that parent, so we must extend
-+				 * its inode list here.
-+				 *
-+				 * However if there was corruption we may not
-+				 * have found an eie, return an error in this
-+				 * case.
- 				 */
--				BUG_ON(!eie);
-+				ASSERT(eie);
-+				if (!eie) {
-+					ret = -EUCLEAN;
-+					goto out;
-+				}
- 				while (eie->next)
- 					eie = eie->next;
- 				eie->next = ref->inode_list;
+diff --git a/drivers/acpi/acpica/hwesleep.c b/drivers/acpi/acpica/hwesleep.c
+index 7f8c57177819f..45b392fa36657 100644
+--- a/drivers/acpi/acpica/hwesleep.c
++++ b/drivers/acpi/acpica/hwesleep.c
+@@ -138,7 +138,9 @@ acpi_status acpi_hw_extended_sleep(u8 sleep_state)
+ 
+ 	/* Flush caches, as per ACPI specification */
+ 
+-	ACPI_FLUSH_CPU_CACHE();
++	if (sleep_state < ACPI_STATE_S4) {
++		ACPI_FLUSH_CPU_CACHE();
++	}
+ 
+ 	status = acpi_os_enter_sleep(sleep_state, sleep_control, 0);
+ 	if (status == AE_CTRL_TERMINATE) {
+diff --git a/drivers/acpi/acpica/hwsleep.c b/drivers/acpi/acpica/hwsleep.c
+index 2c54d08b20ca6..9e50529bb3cc9 100644
+--- a/drivers/acpi/acpica/hwsleep.c
++++ b/drivers/acpi/acpica/hwsleep.c
+@@ -149,7 +149,9 @@ acpi_status acpi_hw_legacy_sleep(u8 sleep_state)
+ 
+ 	/* Flush caches, as per ACPI specification */
+ 
+-	ACPI_FLUSH_CPU_CACHE();
++	if (sleep_state < ACPI_STATE_S4) {
++		ACPI_FLUSH_CPU_CACHE();
++	}
+ 
+ 	status = acpi_os_enter_sleep(sleep_state, pm1a_control, pm1b_control);
+ 	if (status == AE_CTRL_TERMINATE) {
+diff --git a/drivers/acpi/acpica/hwxfsleep.c b/drivers/acpi/acpica/hwxfsleep.c
+index 827c3242225d9..b3c7736611908 100644
+--- a/drivers/acpi/acpica/hwxfsleep.c
++++ b/drivers/acpi/acpica/hwxfsleep.c
+@@ -223,8 +223,6 @@ acpi_status acpi_enter_sleep_state_s4bios(void)
+ 		return_ACPI_STATUS(status);
+ 	}
+ 
+-	ACPI_FLUSH_CPU_CACHE();
+-
+ 	status = acpi_hw_write_port(acpi_gbl_FADT.smi_command,
+ 				    (u32)acpi_gbl_FADT.s4_bios_request, 8);
+ 
 -- 
 2.34.1
 

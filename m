@@ -2,59 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D8A497AD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:57:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6B9497AD8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242535AbiAXI5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 03:57:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44048 "EHLO
+        id S242533AbiAXI55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 03:57:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232822AbiAXI5j (ORCPT
+        with ESMTP id S232822AbiAXI5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 03:57:39 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035D6C06173B;
-        Mon, 24 Jan 2022 00:57:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=asCzRIoppSmO4QZ+TuOt/SZMZHwp70x1LmUoq7XNu7Q=; b=wkisxQoTZF4xxUhI4XNl0vmyAb
-        NaQNpYi3/atnNwVIRwialv+9VcPJBMjLRySEa8ydT6FiRSbl3p+KlrMFOb8aEszRtMn3Njn84hhTb
-        MWmCM0HL65mpZm9l8tb+eLPX/hfVz50HuZg3Fvchqe7NxMVrELHqms3SDzFEKhVqrkewzcmlcKI5f
-        jJuRh2H3JzAT7C3+N1jwFYKo3Ue93W1sUv1zjcmfb7VQOi3Vtl1pEiUrVs0S878556JItPFPjaQXm
-        4l0u5c/SWH9uOUFgZAz48eeh+MpxA+ZQBgTF1GErn6OCo393nweUWLLiHH7rZfe1k2W7itdFBHo96
-        XeVt/e9w==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nBvAM-002hYe-PY; Mon, 24 Jan 2022 08:57:34 +0000
-Date:   Mon, 24 Jan 2022 00:57:34 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        David Howells <dhowells@redhat.com>, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 13/23] NFS: rename nfs_direct_IO and use as ->swap_rw
-Message-ID: <Ye5p/n8EF2dzV8ch@infradead.org>
-References: <164299573337.26253.7538614611220034049.stgit@noble.brown>
- <164299611281.26253.6497855219394305186.stgit@noble.brown>
+        Mon, 24 Jan 2022 03:57:55 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81018C06173B;
+        Mon, 24 Jan 2022 00:57:55 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id b14so4806402ljb.0;
+        Mon, 24 Jan 2022 00:57:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mSKXyc98nYLlNnODsXW67iNaHjhwuGUH6qhzM605fN4=;
+        b=PCd9xx8GHchBs73B7IKdooCUpV1yfFBvt+aZThklWhAIVftOL2III86q03e40OYuR4
+         l/1BiZwj2tGJ46+91Wf8dAkOv1gZOux+Jr94pbuSHub4WIuYBAnm29P3jlHIc+kStokl
+         HBy9Wa+qpalOgEhVAf60Pl9TSbuv6gd6pw7mowPWpGB7v4fymAxfZP1moUl3+f3CkUhi
+         MsLxh5y05K02NgoTkVSSAdGyfFZ4RBQNkgpF1aJuZg+XHp429epfMwBB7+//MgOFsNl2
+         qbbkJwHepfe8+zoGa3t+M/M5gqIKVQjTpqe9RAKwqwinEOhS7FRiSQxzwXlvtoUBK6oi
+         1mcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mSKXyc98nYLlNnODsXW67iNaHjhwuGUH6qhzM605fN4=;
+        b=wV1gGYFfxWqjCp8xilZicOoTDhiO1zQ1W0vIlFGKa0NLuAk6Zro8Z0p1wz6oqBdhsY
+         99sqMfdMjh/D+kagL58oGzvXZP0uYYf7IAlA7qWnmHmXsR3yV/Nnp26G64DAgdr62uly
+         yvUZgBuiV21fWZ/p7pLjfw4Bv99qIfqZ/B0dFjj3SI3PrRT78ISQhkUSxDuX276ujE6w
+         9NTTlt68fry5Nf/gfPkG9XKgqrkd5C2/nZufcAr2pDwFL9+CgMnsWzFLtIJ6Dp3QWiCj
+         /8CGq7oxrza9BgnGFEpjVyo0crKQjhjQ1LS2k401IzFKRQYOIM0VymVPf/JS6kReqms3
+         S8Bw==
+X-Gm-Message-State: AOAM531sUT+oiUj5sicKUgum44ISaVWJXRGveR0Z32KRf8+7tmUl2DJP
+        e0fOSPY/VVEixJCjJWEGxn8=
+X-Google-Smtp-Source: ABdhPJzapDw1xK0D+2skY071iWUkjaj7XLWYugtvI7+czEPcLVZWrvbKqS2TAjz7uU6jjxh9S5rlyQ==
+X-Received: by 2002:a05:651c:10d2:: with SMTP id l18mr4866693ljn.39.1643014673828;
+        Mon, 24 Jan 2022 00:57:53 -0800 (PST)
+Received: from [192.168.8.103] (m91-129-103-86.cust.tele2.ee. [91.129.103.86])
+        by smtp.gmail.com with ESMTPSA id w21sm1099073lfu.249.2022.01.24.00.57.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Jan 2022 00:57:53 -0800 (PST)
+Message-ID: <f835cbb3-a028-1daf-c038-516dd47ce47c@gmail.com>
+Date:   Mon, 24 Jan 2022 10:57:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <164299611281.26253.6497855219394305186.stgit@noble.brown>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] net: ena: Do not waste napi skb cache
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, netdev@vger.kernel.org
+Cc:     Shay Agroskin <shayagr@amazon.com>,
+        Arthur Kiyanovski <akiyano@amazon.com>,
+        David Arinzon <darinzon@amazon.com>,
+        Noam Dagan <ndagan@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sameeh Jubran <sameehj@amazon.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20220123115623.94843-1-42.hyeyoo@gmail.com>
+From:   Julian Wiedmann <jwiedmann.dev@gmail.com>
+In-Reply-To: <20220123115623.94843-1-42.hyeyoo@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +extern int nfs_swap_rw(struct kiocb *, struct iov_iter *);
+On 23.01.22 13:56, Hyeonggon Yoo wrote:
+> By profiling, discovered that ena device driver allocates skb by
+> build_skb() and frees by napi_skb_cache_put(). Because the driver
+> does not use napi skb cache in allocation path, napi skb cache is
+> periodically filled and flushed. This is waste of napi skb cache.
+> 
+> As ena_alloc_skb() is called only in napi, Use napi_build_skb()
+> instead of build_skb() to when allocating skb.
+> 
+> This patch was tested on aws a1.metal instance.
+> 
+> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> ---
+>  drivers/net/ethernet/amazon/ena/ena_netdev.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+> index c72f0c7ff4aa..2c67fb1703c5 100644
+> --- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
+> +++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+> @@ -1407,7 +1407,7 @@ static struct sk_buff *ena_alloc_skb(struct ena_ring *rx_ring, void *first_frag)
+>  		skb = netdev_alloc_skb_ip_align(rx_ring->netdev,
+>  						rx_ring->rx_copybreak);
 
-Might be worth to drop the pointless extern while you're at it.
+To keep things consistent, this should then also be napi_alloc_skb().
 
-Otherwise looks good:
+>  	else
+> -		skb = build_skb(first_frag, ENA_PAGE_SIZE);
+> +		skb = napi_build_skb(first_frag, ENA_PAGE_SIZE);
+>  
+>  	if (unlikely(!skb)) {
+>  		ena_increase_stat(&rx_ring->rx_stats.skb_alloc_fail, 1,
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>

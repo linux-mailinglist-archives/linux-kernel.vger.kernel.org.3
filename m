@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17387498E89
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F139498A8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:06:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349981AbiAXTmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:42:43 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33078 "EHLO
+        id S1346041AbiAXTE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:04:58 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:55670 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348370AbiAXTeO (ORCPT
+        with ESMTP id S1344468AbiAXS6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:34:14 -0500
+        Mon, 24 Jan 2022 13:58:32 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0245D614DA;
-        Mon, 24 Jan 2022 19:34:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 132E2C340E5;
-        Mon, 24 Jan 2022 19:34:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 007CF61566;
+        Mon, 24 Jan 2022 18:58:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B521FC340E5;
+        Mon, 24 Jan 2022 18:58:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052853;
-        bh=LrpabL+wuM/+nyKF87fxZioZKj1x5/6s1eLkOzRY2fU=;
+        s=korg; t=1643050711;
+        bh=+XtKoOjpVtsjzrCJegCHfhUIBfJ+lHSZtrtZyDlAyA4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TI8YxfgyLtVTpnlopVBY9o34bsZzUNfE8xgjfm0RlcUnM9Zc/989kFdzGFc1zjAXo
-         0SIeF6MJE3DEBBhEUqo6QdlANhAMXSXQWJjBb53Jh1O0ktJiNPN8af8I1Ig0CtROcZ
-         cf/FIhkomdfl5mxHecRUW4CVSJSwdwaV+Puak+5Y=
+        b=EEgP12C5wTXb0f+sotmAXuaGiuurV3UwXaGvPnWiJNkv981ipzjZ3SfHddzLSOgV1
+         I6Hl1yk/KGRw8y3gntfvfKDgS1MfUeOt2RwgQKbtImBU36f3YYDDLgEXpbFVgd1ILX
+         yECXRDYmBO5WdC6A9BJKc6f994x7UbbHS1ihFrj8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thierry Reding <treding@nvidia.com>,
+        stable@vger.kernel.org, Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 195/320] arm64: tegra: Adjust length of CCPLEX cluster MMIO region
+Subject: [PATCH 4.9 089/157] media: igorplugusb: receiver overflow should be reported
 Date:   Mon, 24 Jan 2022 19:42:59 +0100
-Message-Id: <20220124184000.275002434@linuxfoundation.org>
+Message-Id: <20220124183935.608122385@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,33 +46,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+From: Sean Young <sean@mess.org>
 
-[ Upstream commit 2b14cbd643feea5fc17c6e8bead4e71088c69acd ]
+[ Upstream commit 8fede658e7ddb605bbd68ed38067ddb0af033db4 ]
 
-The Tegra186 CCPLEX cluster register region is 4 MiB is length, not 4
-MiB - 1. This was likely presumed to be the "limit" rather than length.
-Fix it up.
+Without this, some IR will be missing mid-stream and we might decode
+something which never really occurred.
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
+Signed-off-by: Sean Young <sean@mess.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/nvidia/tegra186.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/rc/igorplugusb.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra186.dtsi b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
-index 9abf0cb1dd67f..4457262750734 100644
---- a/arch/arm64/boot/dts/nvidia/tegra186.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
-@@ -709,7 +709,7 @@
+diff --git a/drivers/media/rc/igorplugusb.c b/drivers/media/rc/igorplugusb.c
+index 5cf983be07a20..0f4c4c39bf6da 100644
+--- a/drivers/media/rc/igorplugusb.c
++++ b/drivers/media/rc/igorplugusb.c
+@@ -73,9 +73,11 @@ static void igorplugusb_irdata(struct igorplugusb *ir, unsigned len)
+ 	if (start >= len) {
+ 		dev_err(ir->dev, "receive overflow invalid: %u", overflow);
+ 	} else {
+-		if (overflow > 0)
++		if (overflow > 0) {
+ 			dev_warn(ir->dev, "receive overflow, at least %u lost",
+ 								overflow);
++			ir_raw_event_reset(ir->rc);
++		}
  
- 	ccplex@e000000 {
- 		compatible = "nvidia,tegra186-ccplex-cluster";
--		reg = <0x0 0x0e000000 0x0 0x3fffff>;
-+		reg = <0x0 0x0e000000 0x0 0x400000>;
- 
- 		nvidia,bpmp = <&bpmp>;
- 	};
+ 		do {
+ 			rawir.duration = ir->buf_in[i] * 85333;
 -- 
 2.34.1
 

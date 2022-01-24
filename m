@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F69B499A4E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:54:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44229499B90
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:04:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1457302AbiAXVl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:41:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56860 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359775AbiAXVDz (ORCPT
+        id S1576491AbiAXVxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:53:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1450631AbiAXVVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:03:55 -0500
+        Mon, 24 Jan 2022 16:21:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14356C028C25;
+        Mon, 24 Jan 2022 12:14:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 037DCB8121C;
-        Mon, 24 Jan 2022 21:03:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 078DAC340E5;
-        Mon, 24 Jan 2022 21:03:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AD1BAB8124F;
+        Mon, 24 Jan 2022 20:14:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5FFEC340E5;
+        Mon, 24 Jan 2022 20:14:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058232;
-        bh=VKX05wfh6KhMj0LJnraims849/IJbL0sepFPZ7AWILw=;
+        s=korg; t=1643055261;
+        bh=6yOJ5HGX4s/hvqyokoZbRAiRTadbNajAI/pYKePkIRM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hnFhl39v3Wx9Uo/TM9zcXZiiyG7R1roaw8hH6kMuMDqDnxEwVbCLMePeLsVLyZbkj
-         2KZQPKtbCDoXdrTT2Y/Jt11mPM8m9Wx0sWnmvE/YKSf7QDuh6dv+yGp//1hSTvNyXJ
-         8hKxg5RSmzMvwV2ilnPlGcAgJZeGw3qKoN5fe+Ng=
+        b=XL+3YYzgF8i1dHRq/EdKF3OHDobkB1glVt4Q/F6GoKG4YZ4EHI1n2vhWI0Y46MkPK
+         zQGSjDCo1ygGzS8JYzvgqmlhYdr9t9yAfPIA7XqeAOH17GwLMRRedakfT/gxMhsOOR
+         TYljONwQHQK2HWezC3TAekdnvkbDk2EzKiaDFWsE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        Nishanth Menon <nm@ti.com>, Pratyush Yadav <p.yadav@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
+        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0221/1039] arm64: dts: ti: k3-j7200: Correct the d-cache-sets info
-Date:   Mon, 24 Jan 2022 19:33:30 +0100
-Message-Id: <20220124184132.769976712@linuxfoundation.org>
+Subject: [PATCH 5.15 094/846] drm/vc4: crtc: Make sure the HDMI controller is powered when disabling
+Date:   Mon, 24 Jan 2022 19:33:31 +0100
+Message-Id: <20220124184104.232099114@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,56 +49,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nishanth Menon <nm@ti.com>
+From: Maxime Ripard <maxime@cerno.tech>
 
-[ Upstream commit a172c86931709d6663318609d71a811333bdf4b0 ]
+[ Upstream commit bca10db67bdaf15997a5a2a276e7aa9b6eea1393 ]
 
-A72 Cluster (chapter 1.3.1 [1]) has 48KB Icache, 32KB Dcache and 1MB L2 Cache
- - ICache is 3-way set-associative
- - Dcache is 2-way set-associative
- - Line size are 64bytes
+Since commit 875a4d536842 ("drm/vc4: drv: Disable the CRTC at boot
+time"), during the initial setup of the driver we call into the VC4 HDMI
+controller hooks to make sure the controller is properly disabled.
 
-32KB (Dcache)/64 (fixed line length of 64 bytes) = 512 ways
-512 ways / 2 (Dcache is 2-way per set) = 256 sets.
+However, we were never making sure that the device was properly powered
+while doing so. This never resulted in any (reported) issue in practice,
+but since the introduction of commit 4209f03fcb8e ("drm/vc4: hdmi: Warn
+if we access the controller while disabled") we get a loud complaint
+when we do that kind of access.
 
-So, correct the d-cache-sets info.
+Let's make sure we have the HDMI controller properly powered while
+disabling it.
 
-[1] https://www.ti.com/lit/pdf/spruiu1
-
-Fixes: d361ed88455f ("arm64: dts: ti: Add support for J7200 SoC")
-Reported-by: Peng Fan <peng.fan@nxp.com>
-Signed-off-by: Nishanth Menon <nm@ti.com>
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
-Reviewed-by: Kishon Vijay Abraham I <kishon@ti.com>
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-Link: https://lore.kernel.org/r/20211113042640.30955-1-nm@ti.com
+Fixes: 875a4d536842 ("drm/vc4: drv: Disable the CRTC at boot time")
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Reviewed-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
+Tested-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20210923185013.826679-1-maxime@cerno.tech
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/ti/k3-j7200.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/vc4/vc4_crtc.c | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200.dtsi b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-index a99a4d305b7ec..64fef4e67d76a 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-@@ -62,7 +62,7 @@
- 			i-cache-sets = <256>;
- 			d-cache-size = <0x8000>;
- 			d-cache-line-size = <64>;
--			d-cache-sets = <128>;
-+			d-cache-sets = <256>;
- 			next-level-cache = <&L2_0>;
- 		};
+diff --git a/drivers/gpu/drm/vc4/vc4_crtc.c b/drivers/gpu/drm/vc4/vc4_crtc.c
+index 18f5009ce90e3..c0df11e5fcf2b 100644
+--- a/drivers/gpu/drm/vc4/vc4_crtc.c
++++ b/drivers/gpu/drm/vc4/vc4_crtc.c
+@@ -32,6 +32,7 @@
+ #include <linux/clk.h>
+ #include <linux/component.h>
+ #include <linux/of_device.h>
++#include <linux/pm_runtime.h>
  
-@@ -76,7 +76,7 @@
- 			i-cache-sets = <256>;
- 			d-cache-size = <0x8000>;
- 			d-cache-line-size = <64>;
--			d-cache-sets = <128>;
-+			d-cache-sets = <256>;
- 			next-level-cache = <&L2_0>;
- 		};
- 	};
+ #include <drm/drm_atomic.h>
+ #include <drm/drm_atomic_helper.h>
+@@ -42,6 +43,7 @@
+ #include <drm/drm_vblank.h>
+ 
+ #include "vc4_drv.h"
++#include "vc4_hdmi.h"
+ #include "vc4_regs.h"
+ 
+ #define HVS_FIFO_LATENCY_PIX	6
+@@ -496,8 +498,10 @@ int vc4_crtc_disable_at_boot(struct drm_crtc *crtc)
+ 	enum vc4_encoder_type encoder_type;
+ 	const struct vc4_pv_data *pv_data;
+ 	struct drm_encoder *encoder;
++	struct vc4_hdmi *vc4_hdmi;
+ 	unsigned encoder_sel;
+ 	int channel;
++	int ret;
+ 
+ 	if (!(of_device_is_compatible(vc4_crtc->pdev->dev.of_node,
+ 				      "brcm,bcm2711-pixelvalve2") ||
+@@ -525,7 +529,20 @@ int vc4_crtc_disable_at_boot(struct drm_crtc *crtc)
+ 	if (WARN_ON(!encoder))
+ 		return 0;
+ 
+-	return vc4_crtc_disable(crtc, encoder, NULL, channel);
++	vc4_hdmi = encoder_to_vc4_hdmi(encoder);
++	ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
++	if (ret)
++		return ret;
++
++	ret = vc4_crtc_disable(crtc, encoder, NULL, channel);
++	if (ret)
++		return ret;
++
++	ret = pm_runtime_put(&vc4_hdmi->pdev->dev);
++	if (ret)
++		return ret;
++
++	return 0;
+ }
+ 
+ static void vc4_crtc_atomic_disable(struct drm_crtc *crtc,
 -- 
 2.34.1
 

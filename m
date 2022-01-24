@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 363EE49A4C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:10:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 193B149A6D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:34:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3407956AbiAYAVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:21:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2360363AbiAXXgi (ORCPT
+        id S3421675AbiAYC1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:27:30 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:33768 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378349AbiAXUGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:36:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E69EC05A180;
-        Mon, 24 Jan 2022 13:37:34 -0800 (PST)
+        Mon, 24 Jan 2022 15:06:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C28636150D;
-        Mon, 24 Jan 2022 21:37:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5DFAC340E4;
-        Mon, 24 Jan 2022 21:37:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6CBA6131E;
+        Mon, 24 Jan 2022 20:06:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96DFFC340E5;
+        Mon, 24 Jan 2022 20:06:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060253;
-        bh=cLHPf/JCXUTYGxqtShabK2y0tmu9p4jwP5/5jvaPxHI=;
+        s=korg; t=1643054813;
+        bh=X8v3YWVXZicOC7ikzRWWDSDNRdYKZm6bnipEV3B3dsE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hvajUePxWQrNOWB2mN6TaXXNGtyYKCltkRYk3ATrVnHziaCKU/JtJfU5DsPJ1zyEY
-         P89fh2LmuOcs7YNHxycVtlJW5+AQ1aUm5tNKZzQTwW75AyuVlHWgPoiE3+kKJOjHfp
-         GXUhYPjLWv9FXKoiStpukBIzzr6+uQA53Kd+eEDQ=
+        b=PsZa9qXJn7KnMaDKo0SuZi5V2Fq+Ph5k035jOPgyAYxE7DEhak1yoj38a5RUJqACc
+         eNyp34qJMH2rNgKGCHNa2vapK6eZUgLPbeicnSFkoVJdJZOgw7KerS0OrkWB9jDgmx
+         RuBvjIVMeQwhGqXHsH8KCe8HkPeCRO2QPmF8QSuc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.16 0888/1039] btrfs: respect the max size in the header when activating swap file
+        stable@vger.kernel.org, Tobias Waldekranz <tobias@waldekranz.com>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 512/563] net/fsl: xgmac_mdio: Fix incorrect iounmap when removing module
 Date:   Mon, 24 Jan 2022 19:44:37 +0100
-Message-Id: <20220124184155.141168606@linuxfoundation.org>
+Message-Id: <20220124184042.167854518@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,65 +45,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Filipe Manana <fdmanana@suse.com>
+From: Tobias Waldekranz <tobias@waldekranz.com>
 
-commit c2f822635df873c510bda6fb7fd1b10b7c31be2d upstream.
+commit 3f7c239c7844d2044ed399399d97a5f1c6008e1b upstream.
 
-If we extended the size of a swapfile after its header was created (by the
-mkswap utility) and then try to activate it, we will map the entire file
-when activating the swap file, instead of limiting to the max size defined
-in the swap file's header.
+As reported by sparse: In the remove path, the driver would attempt to
+unmap its own priv pointer - instead of the io memory that it mapped
+in probe.
 
-Currently test case generic/643 from fstests fails because we do not
-respect that size limit defined in the swap file's header.
-
-So fix this by not mapping file ranges beyond the max size defined in the
-swap header.
-
-This is the same type of bug that iomap used to have, and was fixed in
-commit 36ca7943ac18ae ("mm/swap: consider max pages in
-iomap_swapfile_add_extent").
-
-Fixes: ed46ff3d423780 ("Btrfs: support swap files")
-CC: stable@vger.kernel.org # 5.4+
-Reviewed-and-tested-by: Josef Bacik <josef@toxicpanda.com
-Signed-off-by: Filipe Manana <fdmanana@suse.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Fixes: 9f35a7342cff ("net/fsl: introduce Freescale 10G MDIO driver")
+Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/inode.c |   11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/net/ethernet/freescale/xgmac_mdio.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/fs/btrfs/inode.c
-+++ b/fs/btrfs/inode.c
-@@ -10595,9 +10595,19 @@ static int btrfs_add_swap_extent(struct
- 				 struct btrfs_swap_info *bsi)
+--- a/drivers/net/ethernet/freescale/xgmac_mdio.c
++++ b/drivers/net/ethernet/freescale/xgmac_mdio.c
+@@ -320,9 +320,10 @@ err_ioremap:
+ static int xgmac_mdio_remove(struct platform_device *pdev)
  {
- 	unsigned long nr_pages;
-+	unsigned long max_pages;
- 	u64 first_ppage, first_ppage_reported, next_ppage;
- 	int ret;
+ 	struct mii_bus *bus = platform_get_drvdata(pdev);
++	struct mdio_fsl_priv *priv = bus->priv;
  
-+	/*
-+	 * Our swapfile may have had its size extended after the swap header was
-+	 * written. In that case activating the swapfile should not go beyond
-+	 * the max size set in the swap header.
-+	 */
-+	if (bsi->nr_pages >= sis->max)
-+		return 0;
-+
-+	max_pages = sis->max - bsi->nr_pages;
- 	first_ppage = ALIGN(bsi->block_start, PAGE_SIZE) >> PAGE_SHIFT;
- 	next_ppage = ALIGN_DOWN(bsi->block_start + bsi->block_len,
- 				PAGE_SIZE) >> PAGE_SHIFT;
-@@ -10605,6 +10615,7 @@ static int btrfs_add_swap_extent(struct
- 	if (first_ppage >= next_ppage)
- 		return 0;
- 	nr_pages = next_ppage - first_ppage;
-+	nr_pages = min(nr_pages, max_pages);
+ 	mdiobus_unregister(bus);
+-	iounmap(bus->priv);
++	iounmap(priv->mdio_base);
+ 	mdiobus_free(bus);
  
- 	first_ppage_reported = first_ppage;
- 	if (bsi->start == 0)
+ 	return 0;
 
 

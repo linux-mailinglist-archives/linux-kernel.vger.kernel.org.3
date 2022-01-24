@@ -2,157 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AAAA49A393
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF25B49A5CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:13:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2368425AbiAXX7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:59:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
+        id S2374235AbiAYAQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:16:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1847649AbiAXXUP (ORCPT
+        with ESMTP id S1385512AbiAXX2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:20:15 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F0EC028C26;
-        Mon, 24 Jan 2022 13:28:14 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id r14so1812532qtt.5;
-        Mon, 24 Jan 2022 13:28:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=slA4hKk3SRch55eW3a2SaAckanXwGcMXYthRdgb6F60=;
-        b=StyMdhim9hb/9ea2tVx958yAlIb9nMm7Edt1qSWsnGyh/fBU4p3xeiq7Z+BPkrxhzx
-         hvkt/JspEakv9QGMOvyic0F7+5XriBZUYv9A1C+VyvGSfDxp2bcKcCL2K4Bg20NJNpa1
-         CzWsW1Upz6eaEOlHU6sg84RdhrB2yVynS1UM4ga0CgHRymCi8OPdZ2UG8NtYqzutsgPB
-         /igRscwNvxqKQClIVHj7Ie/QrOhfnzIq5ZWebJU+fWJBmHcnl2P7F8HRwiIfJWgJJSJG
-         iU/RqM5ts6AHks+pVyyyOSVLdNOeOIYTUH0Pep4R6SGPkyxu1A1ZS8YcxkKxez99mijz
-         gQqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=slA4hKk3SRch55eW3a2SaAckanXwGcMXYthRdgb6F60=;
-        b=CdLQK+nxOfIX2lwz/i9mJHlmcNGo/dFArWLgIFMuiTIeoHf2FhTUJE3Pt39dVehbW6
-         ubGrfWjvRaswU0ZP+6LWajFuZYQkdrd1fLIrORiuJgTAq4vWK0UZpF+0aBElN78OyWqy
-         gl4tK3BuAtQB7tM542dNciDSRQ2PuH7b8pAApnEDQqUyeSYzBiqOB3rgzw/8LHkITYie
-         heyRiwEnyNul20qUKYlrkamtJNJTNpanOLB8FeoJSmoZXxp+EXDMb793XX0NX7Y0PC9a
-         jqCmFYczDNFF/1DM4ySzIeK4P/HT+v2MNJcwXMh8NWZjTioZsRCPjvmwTW02LMlEgWZR
-         V+Qg==
-X-Gm-Message-State: AOAM533KE26K9GwhanBdeNDFtGniXKK0S7y5wfz4vi0+U9a21M+7/xox
-        mwtbzqPiyaPw/hMQr8AmHNo=
-X-Google-Smtp-Source: ABdhPJxr1X9COMZLR6jW4yup+IW6IyJRcstvSb5FoEcZSfZWyozW2KfzV0ISVXICiVD3Akpz9hnNCg==
-X-Received: by 2002:ac8:5b51:: with SMTP id n17mr2893765qtw.594.1643059693753;
-        Mon, 24 Jan 2022 13:28:13 -0800 (PST)
-Received: from shaak (69-165-204-82.cable.teksavvy.com. [69.165.204.82])
-        by smtp.gmail.com with ESMTPSA id d13sm5486316qtx.35.2022.01.24.13.28.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 13:28:12 -0800 (PST)
-Date:   Mon, 24 Jan 2022 16:28:09 -0500
-From:   Liam Beguin <liambeguin@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Rosin <peda@axentia.se>
-Subject: Re: [PATCH v2 5/5] iio: afe: iio-rescale: Re-use generic struct
- s32_fract
-Message-ID: <Ye8Z6dS5cCji9LNQ@shaak>
-References: <20220110193104.75225-1-andriy.shevchenko@linux.intel.com>
- <20220110193104.75225-5-andriy.shevchenko@linux.intel.com>
- <20220115185203.567780e8@jic23-huawei>
- <Ye7DSAN4gdhXfEUs@smile.fi.intel.com>
+        Mon, 24 Jan 2022 18:28:04 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648D4C01D7F5;
+        Mon, 24 Jan 2022 13:31:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=0s5qsJ6CO8DHG5dILS8ndyGrYhqvc3LsWkk+L8HKEI0=; b=gJFxnAsU44AByjE9wITE9i1Tjw
+        FJwXhpBr5nd/5sGygmwrjDEglZZaBdUDof9zwV6r2VI3sFRCXlTH+vkU4BLoRJRR9ZFFxsMPt0S0D
+        hAfl2O+bJNZp4cNOKTYPYW9CSKYwC5QQt0WMY3wZp6KBbetSaf5z+KgQdoERNWcGBBG3IrcSpHkDx
+        kDPVaa7rSpVcSGvnLexZCuqzPQgOcZ4MZ5oUufxETQuZfoMSmHtzdJp4vgN9w3YN5+zujDh7S8GrK
+        JF5t9Fp2icGJt/Hx5/uxP/c1yciGxw+uS0A6jRe9ftYdUQ7AFQnclzNQQUcB3CCyE3CUWCvJ109AS
+        Plb+5iEA==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nC6vy-005Kjw-Dl; Mon, 24 Jan 2022 21:31:30 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-ia64@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        kernel test robot <lkp@intel.com>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: [PATCH -next v2] ia64: make IA64_MCA_RECOVERY bool instead of tristate
+Date:   Mon, 24 Jan 2022 13:31:29 -0800
+Message-Id: <20220124213129.29306-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ye7DSAN4gdhXfEUs@smile.fi.intel.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+In linux-next, IA64_MCA_RECOVERY uses the (new) function make_task_dead(),
+which is not exported for use by modules. Instead of exporting it for
+one user, convert IA64_MCA_RECOVERY to be a bool Kconfig symbol.
 
-On Mon, Jan 24, 2022 at 05:18:32PM +0200, Andy Shevchenko wrote:
-> On Sat, Jan 15, 2022 at 06:52:03PM +0000, Jonathan Cameron wrote:
-> > On Mon, 10 Jan 2022 21:31:04 +0200
-> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > 
-> > > Instead of custom data type re-use generic struct s32_fract.
-> > > No changes intended.
-> > > 
-> > > The new member is put to be the first one to avoid additional
-> > > pointer arithmetic. Besides that one may switch to use fract
-> > > member to perform container_of(), which will be no-op in this
-> > > case, to get struct rescale.
-> > > 
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > 
-> > I'm not totally sold on this series showing there is a strong case for
-> > these macros so interested to hear what others think.
-> 
-> So far no news :-)
+In a config file from "kernel test robot <lkp@intel.com>" for a
+different problem, this linker error was exposed when
+CONFIG_IA64_MCA_RECOVERY=m.
 
-Like I mentioned briefly in the other thread[1], I don't really see the
-advantage for the AFE driver given that it's almost just like renaming
-the parameters.
+Fixes this build error:
 
-For the other drivers affected by the change, it drops the definition of
-the structure which is nice. So overall, it's a plus IMO :-)
+ERROR: modpost: "make_task_dead" [arch/ia64/kernel/mca_recovery.ko] undefined!
 
-[1] https://lore.kernel.org/linux-iio/20220108205319.2046348-1-liambeguin@gmail.com/
+Fixes: 0e25498f8cd4 ("exit: Add and use make_task_dead.")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: "Eric W. Biederman" <ebiederm@xmission.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-ia64@vger.kernel.org
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: kernel test robot <lkp@intel.com>
+Suggested-by: Christoph Hellwig <hch@infradead.org>
+---
+v1 was [PATCH -next] exit: export make_task_dead().
+Christoph suggests and prefers that IA64 MCA recovery code just be
+forced to be builtin if it is enabled.
 
-Cheers,
-Liam
+ arch/ia64/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > Boiler plate removal is always nice of course...
-> 
-> That's what I considered nice as well.
-> 
-> ...
-> 
-> > > I found this better in order how code is structurally (re)organized.
-> > > I may rebase this on top of ongoing AFE series.
-> > > 
-> > > Also reveals possibility to switch to rational best approximation.
-> > > But this is another story...
-> > 
-> > Now that may well justify introducing this shared infrastructure :)
-> 
-> We also have mult_frac() macro which can be extended by mult_fract() for
-> these structures.
-> 
-> ...
-> 
-> > >  	rescale = iio_priv(indio_dev);
-> > > -
-> > > +	rescale->source = source;
-> > 
-> > There seems to be more reorganizing going on in here than is necessary
-> > for the function of this patch. At very least, description should
-> > call it out.  Why move setting source?
-> 
-> Yeah, I agree that this may be in a separate change before of after the series.
-> I will split.
-> 
-> > >  	rescale->cfg = of_device_get_match_data(dev);
-> > > -	rescale->numerator = 1;
-> > > -	rescale->denominator = 1;
-> > >  
-> > > -	ret = rescale->cfg->props(dev, rescale);
-> > > +	fract = &rescale->fract;
-> > > +	fract->numerator = 1;
-> > > +	fract->denominator = 1;
-> 
-> > > -	rescale->source = source;
-> > > -
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+--- linux-next-20220121.orig/arch/ia64/Kconfig
++++ linux-next-20220121/arch/ia64/Kconfig
+@@ -318,7 +318,7 @@ config ARCH_PROC_KCORE_TEXT
+ 	depends on PROC_KCORE
+ 
+ config IA64_MCA_RECOVERY
+-	tristate "MCA recovery from errors other than TLB."
++	bool "MCA recovery from errors other than TLB."
+ 
+ config IA64_PALINFO
+ 	tristate "/proc/pal support"

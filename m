@@ -2,42 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5496498B6F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:13:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC66498A91
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:06:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346453AbiAXTNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:13:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346179AbiAXTFJ (ORCPT
+        id S1346278AbiAXTFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:05:15 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58564 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344910AbiAXS7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:05:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F48DC0401FA;
-        Mon, 24 Jan 2022 10:59:34 -0800 (PST)
+        Mon, 24 Jan 2022 13:59:36 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 495F6B81236;
-        Mon, 24 Jan 2022 18:59:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7511CC340EA;
-        Mon, 24 Jan 2022 18:59:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE2AE60909;
+        Mon, 24 Jan 2022 18:59:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EDD5C340E5;
+        Mon, 24 Jan 2022 18:59:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050772;
-        bh=nRljK2iWbb10p4w6RFd1lQ40Hofhpav2Nn+BCIRYQ08=;
+        s=korg; t=1643050775;
+        bh=ehxo8YQgznHOl0EbViewbaIP5NiLJZCNpNXsawUryR8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yrdujnL5g8LcruFa6Euut5oINMfQgOoiCk2e+zLYAL0y7ArGK6iWDqwn6NLOggbYP
-         CJD3cU6q1PUsk5rvRamJJPOSwDTkKI/tm9wqNVHUmf+8XIo6c0ILudAjx9Yn+jEp4g
-         neRizVS0+ySoI0zH/i2rG2aXzggoxOhIaePw5BtM=
+        b=d0Hj4omVSC/gbT5VkWrXoDeAft0RgdnaWh75xGAFmBhj5eFI1UlCQyuftjjqChv7l
+         fq8mBZ+gMse6fVab1ubiJb6fPydtfEADykPUvpbr2RslMAtRhIoSijlElNrO2oSD2/
+         FX1Zx7te5hAdfi3ZsbxJ/tOdRgJPNfJKESbtm73Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Julia Lawall <Julia.Lawall@lip6.fr>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 106/157] powerpc/powernv: add missing of_node_put
-Date:   Mon, 24 Jan 2022 19:43:16 +0100
-Message-Id: <20220124183936.133978740@linuxfoundation.org>
+Subject: [PATCH 4.9 107/157] powerpc/cell: add missing of_node_put
+Date:   Mon, 24 Jan 2022 19:43:17 +0100
+Message-Id: <20220124183936.163649241@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
 References: <20220124183932.787526760@linuxfoundation.org>
@@ -51,9 +48,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Julia Lawall <Julia.Lawall@lip6.fr>
 
-[ Upstream commit 7d405a939ca960162eb30c1475759cb2fdf38f8c ]
+[ Upstream commit a841fd009e51c8c0a8f07c942e9ab6bb48da8858 ]
 
-for_each_compatible_node performs an of_node_get on each iteration, so
+for_each_node_by_name performs an of_node_get on each iteration, so
 a break out of the loop requires an of_node_put.
 
 A simplified version of the semantic patch that fixes this problem is as
@@ -61,45 +58,43 @@ follows (http://coccinelle.lip6.fr):
 
 // <smpl>
 @@
+expression e,e1;
 local idexpression n;
-expression e;
 @@
 
- for_each_compatible_node(n,...) {
-   ...
+ for_each_node_by_name(n, e1) {
+   ... when != of_node_put(n)
+       when != e = n
 (
-   of_node_put(n);
-|
-   e = n
+   return n;
 |
 +  of_node_put(n);
-?  break;
+?  return ...;
 )
    ...
  }
-... when != n
 // </smpl>
 
 Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/1448051604-25256-4-git-send-email-Julia.Lawall@lip6.fr
+Link: https://lore.kernel.org/r/1448051604-25256-7-git-send-email-Julia.Lawall@lip6.fr
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/platforms/powernv/opal-lpc.c | 1 +
+ arch/powerpc/platforms/cell/iommu.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/powerpc/platforms/powernv/opal-lpc.c b/arch/powerpc/platforms/powernv/opal-lpc.c
-index e4169d68cb328..d28c4a9269c38 100644
---- a/arch/powerpc/platforms/powernv/opal-lpc.c
-+++ b/arch/powerpc/platforms/powernv/opal-lpc.c
-@@ -401,6 +401,7 @@ void opal_lpc_init(void)
- 		if (!of_get_property(np, "primary", NULL))
- 			continue;
- 		opal_lpc_chip_id = of_get_ibm_chip_id(np);
-+		of_node_put(np);
- 		break;
- 	}
- 	if (opal_lpc_chip_id < 0)
+diff --git a/arch/powerpc/platforms/cell/iommu.c b/arch/powerpc/platforms/cell/iommu.c
+index 7ff51f96a00e8..8df43781f5db9 100644
+--- a/arch/powerpc/platforms/cell/iommu.c
++++ b/arch/powerpc/platforms/cell/iommu.c
+@@ -1107,6 +1107,7 @@ static int __init cell_iommu_fixed_mapping_init(void)
+ 			if (hbase < dbase || (hend > (dbase + dsize))) {
+ 				pr_debug("iommu: hash window doesn't fit in"
+ 					 "real DMA window\n");
++				of_node_put(np);
+ 				return -1;
+ 			}
+ 		}
 -- 
 2.34.1
 

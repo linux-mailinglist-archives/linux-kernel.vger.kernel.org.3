@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA436498C2E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 948E84992E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349101AbiAXTUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:20:14 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41358 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238472AbiAXTLs (ORCPT
+        id S1382666AbiAXU0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:26:04 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47992 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348481AbiAXUDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:11:48 -0500
+        Mon, 24 Jan 2022 15:03:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CD5F6124E;
-        Mon, 24 Jan 2022 19:11:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AF3EC340E5;
-        Mon, 24 Jan 2022 19:11:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 03253B810AF;
+        Mon, 24 Jan 2022 20:03:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 285A3C340E5;
+        Mon, 24 Jan 2022 20:03:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051507;
-        bh=BhvH5FYxPJNi12cUpjUBB71t6MBUCKzlBxAp22IT8s0=;
+        s=korg; t=1643054631;
+        bh=LQm4QQc6Vgl5DIjwrQyP6wFXQa7I4UmfCDLYWKaa/SU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EbHcCYbKg8eFahWRvxC5A1tgtV3/OcLX+8a8vbmEGkIW/VyhpucRzdEMwWNiUtTyw
-         2c1QsW39w/vfpym9nyydRTMWunyhpDmjhfTXClLdvcXPaot6MsSBdkPDkpzMv0S1Px
-         heczi8I8QcqMz6rVyyZFOuAfAyjgud+uT28NzZ6Q=
+        b=asi5nIvn7/ti63HNTs9rs9D7q6oK59Y8XYvWNZTGLFeLVtQj1p5MUlPUt0VruZcYu
+         B5dZLUt97sSN8hWLGOHih7vsYP3HN78b9XEAAhh+ujPF8Ab+TnxZKRrOw85sogPzsZ
+         rwR8YCa0vi8wMfhNQw3jJqeoNyY35nGT9GWUfKqg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Ye Guojin <ye.guojin@zte.com.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 142/186] MIPS: OCTEON: add put_device() after of_find_device_by_node()
+        stable@vger.kernel.org, Ilan Peer <ilan.peer@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>
+Subject: [PATCH 5.10 452/563] iwlwifi: mvm: Increase the scan timeout guard to 30 seconds
 Date:   Mon, 24 Jan 2022 19:43:37 +0100
-Message-Id: <20220124183941.670941363@linuxfoundation.org>
+Message-Id: <20220124184040.077391893@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,67 +45,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Guojin <ye.guojin@zte.com.cn>
+From: Ilan Peer <ilan.peer@intel.com>
 
-[ Upstream commit 858779df1c0787d3fec827fb705708df9ebdb15b ]
+commit ced50f1133af12f7521bb777fcf4046ca908fb77 upstream.
 
-This was found by coccicheck:
-./arch/mips/cavium-octeon/octeon-platform.c, 332, 1-7, ERROR missing
-put_device; call of_find_device_by_node on line 324, but without a
-corresponding object release within this function.
-./arch/mips/cavium-octeon/octeon-platform.c, 395, 1-7, ERROR missing
-put_device; call of_find_device_by_node on line 387, but without a
-corresponding object release within this function.
-./arch/mips/cavium-octeon/octeon-usb.c, 512, 3-9, ERROR missing
-put_device; call of_find_device_by_node on line 515, but without a
-corresponding object release within this function.
-./arch/mips/cavium-octeon/octeon-usb.c, 543, 1-7, ERROR missing
-put_device; call of_find_device_by_node on line 515, but without a
-corresponding object release within this function.
+With the introduction of 6GHz channels the scan guard timeout should
+be adjusted to account for the following extreme case:
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Ye Guojin <ye.guojin@zte.com.cn>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+- All 6GHz channels are scanned passively: 58 channels.
+- The scan is fragmented with the following parameters: 3 fragments,
+  95 TUs suspend time, 44 TUs maximal out of channel time.
+
+The above would result with scan time of more than 24 seconds. Thus,
+set the timeout to 30 seconds.
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Ilan Peer <ilan.peer@intel.com>
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/iwlwifi.20211210090244.3c851b93aef5.I346fa2e1d79220a6770496e773c6f87a2ad9e6c4@changeid
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/mips/cavium-octeon/octeon-platform.c | 2 ++
- arch/mips/cavium-octeon/octeon-usb.c      | 1 +
- 2 files changed, 3 insertions(+)
+ drivers/net/wireless/intel/iwlwifi/mvm/scan.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/cavium-octeon/octeon-platform.c b/arch/mips/cavium-octeon/octeon-platform.c
-index e1e24118c169e..ed42fc27033c4 100644
---- a/arch/mips/cavium-octeon/octeon-platform.c
-+++ b/arch/mips/cavium-octeon/octeon-platform.c
-@@ -328,6 +328,7 @@ static int __init octeon_ehci_device_init(void)
- 
- 	pd->dev.platform_data = &octeon_ehci_pdata;
- 	octeon_ehci_hw_start(&pd->dev);
-+	put_device(&pd->dev);
- 
- 	return ret;
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
+@@ -2157,7 +2157,7 @@ static int iwl_mvm_check_running_scans(s
+ 	return -EIO;
  }
-@@ -391,6 +392,7 @@ static int __init octeon_ohci_device_init(void)
  
- 	pd->dev.platform_data = &octeon_ohci_pdata;
- 	octeon_ohci_hw_start(&pd->dev);
-+	put_device(&pd->dev);
+-#define SCAN_TIMEOUT 20000
++#define SCAN_TIMEOUT 30000
  
- 	return ret;
- }
-diff --git a/arch/mips/cavium-octeon/octeon-usb.c b/arch/mips/cavium-octeon/octeon-usb.c
-index 75189ff2f3c78..3465452e28195 100644
---- a/arch/mips/cavium-octeon/octeon-usb.c
-+++ b/arch/mips/cavium-octeon/octeon-usb.c
-@@ -543,6 +543,7 @@ static int __init dwc3_octeon_device_init(void)
- 			devm_iounmap(&pdev->dev, base);
- 			devm_release_mem_region(&pdev->dev, res->start,
- 						resource_size(res));
-+			put_device(&pdev->dev);
- 		}
- 	} while (node != NULL);
- 
--- 
-2.34.1
-
+ void iwl_mvm_scan_timeout_wk(struct work_struct *work)
+ {
 
 

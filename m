@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F04CF49A23B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 02:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB0149A2A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:00:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387738AbiAXXis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:38:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45800 "EHLO
+        id S2363066AbiAXXnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:43:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382562AbiAXW6F (ORCPT
+        with ESMTP id S1843477AbiAXXED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:58:05 -0500
+        Mon, 24 Jan 2022 18:04:03 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B0EC02B742;
-        Mon, 24 Jan 2022 13:13:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D168C06C5AF;
+        Mon, 24 Jan 2022 13:15:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AFD5FB8122A;
-        Mon, 24 Jan 2022 21:13:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6214C340E5;
-        Mon, 24 Jan 2022 21:13:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0738FB811FB;
+        Mon, 24 Jan 2022 21:15:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D194C340E5;
+        Mon, 24 Jan 2022 21:15:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058791;
-        bh=1nFGUXS5uHMg5lFL3K/RPXk6Rgm9bRxx6BTr9LD/yQA=;
+        s=korg; t=1643058923;
+        bh=/EESlIcy4u19W/9Xq1u2Tkvy0QQYoel1/VtuLRwMchQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kzA2QvwqLtIk8l6BmVKnZPvCQqBt2LTV9cFtLXACODwAsScw6msWlZwMVc5/7Cf9O
-         UEoMfNwMzkNewsbnmhQyQz/XMdD5NWJctgVrkFLteFuDvNl6SbuZIgD6uywYgLJkbn
-         Os9INxLbbQe37LSWI5cytpc6ME/JH0rGbwrkaqzI=
+        b=1FKCDMZe0MSK4bRfM3CWQMihOcsUwahnydDrxAPqyGmG+tEgVdcpafip4SNtTfprf
+         d5iFf0W5gahP1d9g2GNAHEz79befP4IbAmQb03LfVjIUhjwqWIjc74Xe3rUqhhzqTq
+         oLmULhXZ8FiQpF3TcUPKogI0jujgChpkhssxWDe8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Huang Rui <ray.huang@amd.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0402/1039] spi: qcom: geni: set the error code for gpi transfer
-Date:   Mon, 24 Jan 2022 19:36:31 +0100
-Message-Id: <20220124184138.825523450@linuxfoundation.org>
+Subject: [PATCH 5.16 0404/1039] x86, sched: Fix undefined reference to init_freq_invariance_cppc() build error
+Date:   Mon, 24 Jan 2022 19:36:33 +0100
+Message-Id: <20220124184138.888274826@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -50,54 +52,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vinod Koul <vkoul@kernel.org>
+From: Huang Rui <ray.huang@amd.com>
 
-[ Upstream commit 74b86d6af81be73bb74995ebeba74417e84b6b6f ]
+[ Upstream commit 6c4ab1b86dac3954d15c00c1a6396d60a1023fab ]
 
-Before we invoke spi_finalize_current_transfer() in
-spi_gsi_callback_result() we should set the spi->cur_msg->status as
-appropriate (0 for success, error otherwise).
+The init_freq_invariance_cppc function is implemented in smpboot and depends on
+CONFIG_SMP.
 
-The helps to return error on transfer and not wait till it timesout on
-error
+  MODPOST vmlinux.symvers
+  MODINFO modules.builtin.modinfo
+  GEN     modules.builtin
+  LD      .tmp_vmlinux.kallsyms1
+ld: drivers/acpi/cppc_acpi.o: in function `acpi_cppc_processor_probe':
+/home/ray/brahma3/linux/drivers/acpi/cppc_acpi.c:819: undefined reference to `init_freq_invariance_cppc'
+make: *** [Makefile:1161: vmlinux] Error 1
 
-Fixes: b59c122484ec ("spi: spi-geni-qcom: Add support for GPI dma")
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Link: https://lore.kernel.org/r/20220103071118.27220-1-vkoul@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+See https://lore.kernel.org/lkml/484af487-7511-647e-5c5b-33d4429acdec@infradead.org/.
+
+Fixes: 41ea667227ba ("x86, sched: Calculate frequency invariance for AMD systems")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Huang Rui <ray.huang@amd.com>
+[ rjw: Subject edits ]
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-geni-qcom.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/topology.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-index e2affaee4e769..69e71aac85129 100644
---- a/drivers/spi/spi-geni-qcom.c
-+++ b/drivers/spi/spi-geni-qcom.c
-@@ -350,17 +350,21 @@ spi_gsi_callback_result(void *cb, const struct dmaengine_result *result)
- {
- 	struct spi_master *spi = cb;
- 
-+	spi->cur_msg->status = -EIO;
- 	if (result->result != DMA_TRANS_NOERROR) {
- 		dev_err(&spi->dev, "DMA txn failed: %d\n", result->result);
-+		spi_finalize_current_transfer(spi);
- 		return;
- 	}
- 
- 	if (!result->residue) {
-+		spi->cur_msg->status = 0;
- 		dev_dbg(&spi->dev, "DMA txn completed\n");
--		spi_finalize_current_transfer(spi);
- 	} else {
- 		dev_err(&spi->dev, "DMA xfer has pending: %d\n", result->residue);
- 	}
-+
-+	spi_finalize_current_transfer(spi);
+diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
+index cc164777e6619..2f0b6be8eaabc 100644
+--- a/arch/x86/include/asm/topology.h
++++ b/arch/x86/include/asm/topology.h
+@@ -221,7 +221,7 @@ static inline void arch_set_max_freq_ratio(bool turbo_disabled)
  }
+ #endif
  
- static int setup_gsi_xfer(struct spi_transfer *xfer, struct spi_geni_master *mas,
+-#ifdef CONFIG_ACPI_CPPC_LIB
++#if defined(CONFIG_ACPI_CPPC_LIB) && defined(CONFIG_SMP)
+ void init_freq_invariance_cppc(void);
+ #define init_freq_invariance_cppc init_freq_invariance_cppc
+ #endif
 -- 
 2.34.1
 

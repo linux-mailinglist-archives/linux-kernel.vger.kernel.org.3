@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51725499F0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF57499EF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:11:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1839589AbiAXWvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:51:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
+        id S1382152AbiAXWsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:48:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1458106AbiAXVmp (ORCPT
+        with ESMTP id S1458140AbiAXVmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:42:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40E3C0612A9;
-        Mon, 24 Jan 2022 12:30:27 -0800 (PST)
+        Mon, 24 Jan 2022 16:42:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C210C0612AB;
+        Mon, 24 Jan 2022 12:30:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7207561531;
-        Mon, 24 Jan 2022 20:30:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52AE9C340E5;
-        Mon, 24 Jan 2022 20:30:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38EAEB8119E;
+        Mon, 24 Jan 2022 20:30:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66175C340E5;
+        Mon, 24 Jan 2022 20:30:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056226;
-        bh=4kDAZJSYjqU7WDjd8+sdFj7h1cSKrs5tQjpUpiG2R98=;
+        s=korg; t=1643056238;
+        bh=PqkSAnQ+TpeSlwQ/kMZ40aT8mDkYSbgSAXARGL2d10c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eSPBnFK404nMnLQvpuCBKEdaOoIDEAgyMdYv+QD10lgWktZ2aSncNboU3EF4XMjBq
-         bBWb/+Wq5vjv8CqQzmGLfwZXlz12zxBqw3bu0TYkbR6o1TAy5cav9J/i9WVeXEPw8V
-         G337G1cm4yWe6wCFu7hCdEF7yKJ4QcCU/Hl+WADo=
+        b=nbK742EC7MX3q1EmVOxibw0TKWYSA0TTMmSBbhhVpKx6YtuuxJmb3mYGcA9BrmS8B
+         6pb9k7H40Kh6Crg/TjSmJ1CFPuMY0WYu/2YFmruGi07l/Bqzk1rnVQuX3tkxX1+bJf
+         s7j9xYghxOvpB+aajC16F6g4uxxuoZTEx+Ins+4U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Frank Rowand <frank.rowand@sony.com>,
-        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 414/846] of: unittest: 64 bit dma address test requires arch support
-Date:   Mon, 24 Jan 2022 19:38:51 +0100
-Message-Id: <20220124184115.252756385@linuxfoundation.org>
+        stable@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 417/846] mips: fix Kconfig reference to PHYS_ADDR_T_64BIT
+Date:   Mon, 24 Jan 2022 19:38:54 +0100
+Message-Id: <20220124184115.362381445@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -48,38 +50,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Rowand <frank.rowand@sony.com>
+From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-[ Upstream commit 9fd4cf5d3571b27d746b8ead494a3f051485b679 ]
+[ Upstream commit a670c82d9ca4f1e7385d9d6f26ff41a50fbdd944 ]
 
-If an architecture does not support 64 bit dma addresses then testing
-for an expected dma address >= 0x100000000 will fail.
+Commit d4a451d5fc84 ("arch: remove the ARCH_PHYS_ADDR_T_64BIT config
+symbol") removes config ARCH_PHYS_ADDR_T_64BIT with all instances of that
+config refactored appropriately. Since then, it is recommended to use the
+config PHYS_ADDR_T_64BIT instead.
 
-Fixes: e0d072782c73 ("dma-mapping: introduce DMA range map, supplanting dma_pfn_offset")
-Signed-off-by: Frank Rowand <frank.rowand@sony.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20211212221852.233295-1-frowand.list@gmail.com
+Commit 171543e75272 ("MIPS: Disallow CPU_SUPPORTS_HUGEPAGES for XPA,EVA")
+introduces the expression "!(32BIT && (ARCH_PHYS_ADDR_T_64BIT || EVA))"
+for config CPU_SUPPORTS_HUGEPAGES, which unintentionally refers to the
+non-existing symbol ARCH_PHYS_ADDR_T_64BIT instead of the intended
+PHYS_ADDR_T_64BIT.
+
+Fix this Kconfig reference to the intended PHYS_ADDR_T_64BIT.
+
+This issue was identified with the script ./scripts/checkkconfigsymbols.py.
+I then reported it on the mailing list and Paul confirmed the mistake in
+the linked email thread.
+
+Link: https://lore.kernel.org/lkml/H8IU3R.H5QVNRA077PT@crapouillou.net/
+Suggested-by: Paul Cercueil <paul@crapouillou.net>
+Fixes: 171543e75272 ("MIPS: Disallow CPU_SUPPORTS_HUGEPAGES for XPA,EVA")
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/of/unittest.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ arch/mips/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
-index 242381568f13c..2bee1d992408f 100644
---- a/drivers/of/unittest.c
-+++ b/drivers/of/unittest.c
-@@ -942,8 +942,9 @@ static void __init of_unittest_parse_dma_ranges(void)
- {
- 	of_unittest_dma_ranges_one("/testcase-data/address-tests/device@70000000",
- 		0x0, 0x20000000);
--	of_unittest_dma_ranges_one("/testcase-data/address-tests/bus@80000000/device@1000",
--		0x100000000, 0x20000000);
-+	if (IS_ENABLED(CONFIG_ARCH_DMA_ADDR_T_64BIT))
-+		of_unittest_dma_ranges_one("/testcase-data/address-tests/bus@80000000/device@1000",
-+			0x100000000, 0x20000000);
- 	of_unittest_dma_ranges_one("/testcase-data/address-tests/pci@90000000",
- 		0x80000000, 0x20000000);
- }
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 0200ebb7a0144..393eb2133243f 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -2161,7 +2161,7 @@ config CPU_SUPPORTS_ADDRWINCFG
+ 	bool
+ config CPU_SUPPORTS_HUGEPAGES
+ 	bool
+-	depends on !(32BIT && (ARCH_PHYS_ADDR_T_64BIT || EVA))
++	depends on !(32BIT && (PHYS_ADDR_T_64BIT || EVA))
+ config MIPS_PGD_C0_CONTEXT
+ 	bool
+ 	depends on 64BIT
 -- 
 2.34.1
 

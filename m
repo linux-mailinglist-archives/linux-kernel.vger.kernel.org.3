@@ -2,94 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89316497FC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 818F2497FC3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:45:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241718AbiAXMoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 07:44:44 -0500
-Received: from mga11.intel.com ([192.55.52.93]:1399 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239476AbiAXMom (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:44:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643028282; x=1674564282;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wpyH6xBCGYGqD5iKqVi6uZSO5z87rUEfXYqTwajDbh8=;
-  b=eAzSfwKyXccveLYa+QvHHBQwqJeavLcx03qUeBSOYPreQc4fxHzgWRV0
-   MMxKCm83b+F/MQ/0DhXN8cXXBbk5KvghiZkXSNSiG/mfzlOI6I1GGgRQB
-   dNjYwMs6wSvaAGeK8P0dL8VJPrnUWdUM9E7882qgCMp46HzHn1nebwRz0
-   q4Uzotu7Lklsg/CWjXV37vR26YBtzTAKL0wmMTvOPluGL98euWf7Zi4+M
-   EEhbNymx1w9Maul8fr8Z31VLWNaDh74VFMlubmzU0uFy5On++JJEyvjS9
-   VM+cga5A2xzSp6EWh2n6K/mA+IYaCK2mOIyAnnQB5gGTQ1mvlRNMSyUwf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="243631494"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="243631494"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 04:44:41 -0800
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="562645121"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 04:44:38 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nByh0-00DtEW-O1;
-        Mon, 24 Jan 2022 14:43:30 +0200
-Date:   Mon, 24 Jan 2022 14:43:30 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 27/54] lib/bitmap: add bitmap_weight_{cmp, eq, gt, ge,
- lt, le} functions
-Message-ID: <Ye6e8lhJ5rLm+iDl@smile.fi.intel.com>
-References: <20220123183925.1052919-1-yury.norov@gmail.com>
- <20220123183925.1052919-28-yury.norov@gmail.com>
- <Ye6egq/6It3LZs19@smile.fi.intel.com>
+        id S241825AbiAXMpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 07:45:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234462AbiAXMpl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 07:45:41 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58334C06173B;
+        Mon, 24 Jan 2022 04:45:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EMEz1rACRULVBrKHzXgo2kunk9zl7ssga+Po9YSgMds=; b=GIX/sPYE/AU2KLF59arUOB3Wx8
+        DDIu/x/4XnAmMZHkDHwFbUEV3sEEEIKiBGQpTkmog4sxOBFCNx5bZGnOgVaWFOALZG5ZBDKjTfcpH
+        pwEMEbPs71j6SwllrDW4vQGJWi1lTADrzrDJPomOzzVQ4We1muqPai912uGbmdjnPKeBT1kshPhXo
+        heAMRMKe+gW2WsSFZk261JczqbK2UA3mlN2gwPkejmBulCWb3KheBHerXhaVqP2aoRdR7fhGZ0HX/
+        cPPuHNB2K+OCdC9DBgnrTu1pfhZQ+Nm6N3Rcgy8FE/j9AXLIqYOCisA7pzrTrSRP9A2Gsl1S7oqZq
+        yxy6hDWA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nByip-000dUC-R8; Mon, 24 Jan 2022 12:45:24 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 41CCE300222;
+        Mon, 24 Jan 2022 13:45:22 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 23B282027C5FC; Mon, 24 Jan 2022 13:45:22 +0100 (CET)
+Date:   Mon, 24 Jan 2022 13:45:22 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Kernel Team <Kernel-team@fb.com>, X86 ML <x86@kernel.org>
+Subject: Re: [PATCH v6 bpf-next 6/7] bpf: introduce bpf_prog_pack allocator
+Message-ID: <Ye6fYhwF9f+0NvhI@hirez.programming.kicks-ass.net>
+References: <20220121194926.1970172-1-song@kernel.org>
+ <20220121194926.1970172-7-song@kernel.org>
+ <CAADnVQK6+gWTUDo2z1H6AE5_DtuBBetW+VTwwKz03tpVdfuoHA@mail.gmail.com>
+ <7393B983-3295-4B14-9528-B7BD04A82709@fb.com>
+ <CAADnVQJLHXaU7tUJN=EM-Nt28xtu4vw9+Ox_uQsjh-E-4VNKoA@mail.gmail.com>
+ <5407DA0E-C0F8-4DA9-B407-3DE657301BB2@fb.com>
+ <CAADnVQLOpgGG9qfR4EAgzrdMrfSg9ftCY=9psR46GeBWP7aDvQ@mail.gmail.com>
+ <5F4DEFB2-5F5A-4703-B5E5-BBCE05CD3651@fb.com>
+ <CAADnVQLXGu_eF8VT6NmxKVxOHmfx7C=mWmmWF8KmsjFXg6P5OA@mail.gmail.com>
+ <5E70BF53-E3FB-4F7A-B55D-199C54A8FDCA@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ye6egq/6It3LZs19@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <5E70BF53-E3FB-4F7A-B55D-199C54A8FDCA@fb.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 02:41:38PM +0200, Andy Shevchenko wrote:
-> On Sun, Jan 23, 2022 at 10:38:58AM -0800, Yury Norov wrote:
+On Sun, Jan 23, 2022 at 01:03:25AM +0000, Song Liu wrote:
 
-...
+> I guess we can introduce something similar to bpf_arch_text_poke() 
+> for this? 
 
-> > +	if (num > (int)nbits || num < 0)
-> 
-> Wonder if
-> 
-> 	if (abs(num) > nbits)
-> 
-> would be sufficient.
-
-Scratch it. Of course it won't work.
-
-It may be other way around:
-
-	if ((unsigned int)num > nbits)
-
-> > +		return -num;
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+IIRC the s390 version of the text_poke_copy() function is called
+s390_kernel_write().

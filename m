@@ -2,148 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AA149A81C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C986049A820
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:07:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3415580AbiAYC4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:56:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42138 "EHLO
+        id S1316448AbiAYC5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:57:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3413946AbiAYAl3 (ORCPT
+        with ESMTP id S3414736AbiAYAtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 19:41:29 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD73EC054308
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:26:06 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id v67so9702596oie.9
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:26:06 -0800 (PST)
+        Mon, 24 Jan 2022 19:49:18 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17C2C019B2F
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:33:24 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id a12so21446164iod.9
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:33:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0f9IE0661xn75d7FB58FYRPdONZNDHV3u2RCDMrfPKY=;
-        b=EWlkmAb7Ul4Ffei88oljh0OwBQEwXbmzrxbR/cnGeD2jWgIqm1x1KwqYS68Rgb1UpZ
-         8zCdBgfypwTTgPupSEvLCx3qBU/5wIdCu8uixoRm8q2AEZmXjd3B7gB9VuwFN8RHdlsr
-         +JESdkZq/QKiaKYrgnN9u/fAlBCXT6PgYz1QcN/9md4yVQkf2His7KOOIeVIHpIbFvRD
-         nQ9kDegKOZznR6QXRAT4Xir/RNdEaQ1sDDIHclh15BDAs8QtnqLk5V7CohXfp235MqQZ
-         rDbU9ZZomLnuc9j+1cWayOUsbH0JqZtSXGiOFBVxNfEDodifeOk/127iUu8AvkpbVWA2
-         cXvw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=O5eAllqBOa11gWFD3bXB1J+EOSlOaRJV9IqmWOlMTeg=;
+        b=mZ8GIjqKlbyGbHcWuckMtiS7gKOlMpKxC7hZWh/iO2P8cynLvAoygZ4nVcYXtWBqEK
+         yXnvs78VRi2AVpaPxic3Da8Rdvbfk0Gx1Sl+D5bCKNzPYX+78J4PEekCs+WpCXRT1bIs
+         h+IODWW4o5GikCt1BfBBe2rIQlJTQKGrc8VMUJDpNJAv7n6CV8h1MyxDmQi/ASPJNMle
+         1p2uVxiI7o7pKJjwqSmOnpWhNlhLUTpkZB5gL/smlOMXFSknQVrOrJ10YgsUuVvGuUM/
+         VNi0lSVQK7vwKLBjxoYszlTwCOg/2j4eYPunGo+J4/hejVB9jTybk4ygfXngVS11Br9C
+         Cotg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0f9IE0661xn75d7FB58FYRPdONZNDHV3u2RCDMrfPKY=;
-        b=V/mHhims+vfzGl3yex+AHlEmiqRDabQxOcGZ7S4nuGvo6wOcBB5asEUSz3QzsWY6zv
-         h6mzj+w+Q+oG/AXy0b25ccEYkZOxlHS7yyzlGhYB6Llg/yyqDcv86PwKdOCqbJxV7X+H
-         U78UokFNN5bZ05WOPI/U4gF5lzzwqyz4c/ICXQTlRkrLTm0zyKc0cI7hY52zYQnR03G9
-         ZLbIpiXyl0QX+9giZGBm9eq5CsdopIab4TFGGyICaNTY4AwL69Wvc8cLtf2dTkkqqN8g
-         wAbjuCxch3c+dv7SS2HR5HWUSeL4fYlW2lS8pROGcbmdIAl+8y7asFCiKmje00gIGiyo
-         Kh/g==
-X-Gm-Message-State: AOAM532M/G4uA1tkdrBEqyKvFAbeqsm3+QFaIfcsm7b844xUvlayBgYS
-        bT6mXtLZ/gHov+yatATf2jnAgQ==
-X-Google-Smtp-Source: ABdhPJxXbqFIHTkb9LGW/rQzTM3c48C2VAmE9h9yQupw4WHAdviB6jCOJ4HVxKbwi1TqoSS6qMzF4w==
-X-Received: by 2002:a54:460a:: with SMTP id p10mr3214270oip.163.1643063166131;
-        Mon, 24 Jan 2022 14:26:06 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id w191sm3496715oiw.42.2022.01.24.14.26.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 14:26:05 -0800 (PST)
-Date:   Mon, 24 Jan 2022 14:26:34 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Anjelique Melendez <quic_amelende@quicinc.com>,
-        dmitry.torokhov@gmail.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        collinsd@codeaurora.org, skakit@codeaurora.org
-Subject: Re: [PATCH 3/3] input: misc: pm8941-pwrkey: avoid potential null
- pointer dereference
-Message-ID: <Ye8nmnQ3F4QcTIJs@ripper>
-References: <20220120204132.17875-1-quic_amelende@quicinc.com>
- <20220120204132.17875-4-quic_amelende@quicinc.com>
- <YenpwnE3WrIEAOlm@ripper>
- <e2015c19-b73b-39a7-ba73-708b2c4552c7@quicinc.com>
- <CAE-0n50+1OU2yt2gihHHCEn-cE-CZuqa_U9W=xWCuYeCQdzExw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=O5eAllqBOa11gWFD3bXB1J+EOSlOaRJV9IqmWOlMTeg=;
+        b=vfDC2A5SCJp084ONDUwHUddcC3NP3rBIawo5ZYiGyOUEYUpPj4Zf5lZj9F9bw2REBR
+         fYT9dAgowH10/AqYSKXJhLNZtWgD4AvO1OjhPiNgau+RMxk2jPBWnQwkEbU19Yr8Io+2
+         5aTz02JQKCPa58ifY1g/MyPhdQxUJQQe7rAYy1Jr4Mfw4I0HUyB+ZdSazjSDRIMaH2sV
+         Ez9bgxNm4z2OGhD7v9qvouhQOecZGyLI5x5y3BNkD/HJg1wLQGpWAXP3Tpd7OnDFLqfo
+         haH9Hns4DtzH/ffEqez8jctobHTyGLfzSdn5XJjUPbJv1jCS6ljSPm9Id3u2Y1da1dKx
+         X/9A==
+X-Gm-Message-State: AOAM530fF0kSUDJz4WTPm+zY+oUzPv4oXwMKIi4G/A81/mkTBl/BUDd+
+        weg7eszGczGSfq2ZUQLJl/22MCVYSlZAZP4Bbbc=
+X-Google-Smtp-Source: ABdhPJxFbA6Zq1Z8vTr0k3ZuhPjH509Th+YwDuK9pA2VuP/4E7BwpA+rY/FzE1UmjoTYxecGQGo6baHiZ/LXBf5dHxo=
+X-Received: by 2002:a02:bb98:: with SMTP id g24mr8335227jan.22.1643063604155;
+ Mon, 24 Jan 2022 14:33:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE-0n50+1OU2yt2gihHHCEn-cE-CZuqa_U9W=xWCuYeCQdzExw@mail.gmail.com>
+References: <20220117153634.150357-1-nogikh@google.com> <20220117153634.150357-2-nogikh@google.com>
+In-Reply-To: <20220117153634.150357-2-nogikh@google.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Mon, 24 Jan 2022 23:33:13 +0100
+Message-ID: <CA+fCnZdO+oOLQSfH=+H8wKNv1+hYasyyyNHxumWa5ex1P0xp0g@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] kcov: split ioctl handling into locked and
+ unlocked parts
+To:     Aleksandr Nogikh <nogikh@google.com>
+Cc:     kasan-dev <kasan-dev@googlegroups.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 20 Jan 20:18 PST 2022, Stephen Boyd wrote:
+.On Mon, Jan 17, 2022 at 4:36 PM Aleksandr Nogikh <nogikh@google.com> wrote:
+>
+> Currently all ioctls are de facto processed under a spinlock in order
+> to serialise them. This, however, prohibits the use of vmalloc and other
+> memory management functions in the implementations of those ioctls,
+> unnecessary complicating any further changes to the code.
+>
+> Let all ioctls first be processed inside the kcov_ioctl() function
+> which should execute the ones that are not compatible with spinlock
+> and then pass control to kcov_ioctl_locked() for all other ones.
+> KCOV_REMOTE_ENABLE is processed both in kcov_ioctl() and
+> kcov_ioctl_locked() as the steps are easily separable.
+>
+> Although it is still compatible with a spinlock, move KCOV_INIT_TRACE
+> handling to kcov_ioctl(), so that the changes from the next commit are
+> easier to follow.
+>
+> Signed-off-by: Aleksandr Nogikh <nogikh@google.com>
+> ---
+>  kernel/kcov.c | 68 ++++++++++++++++++++++++++++-----------------------
+>  1 file changed, 37 insertions(+), 31 deletions(-)
+>
+> diff --git a/kernel/kcov.c b/kernel/kcov.c
+> index 36ca640c4f8e..e1be7301500b 100644
+> --- a/kernel/kcov.c
+> +++ b/kernel/kcov.c
+> @@ -564,31 +564,12 @@ static int kcov_ioctl_locked(struct kcov *kcov, unsigned int cmd,
+>                              unsigned long arg)
+>  {
+>         struct task_struct *t;
+> -       unsigned long size, unused;
+> +       unsigned long flags, unused;
+>         int mode, i;
+>         struct kcov_remote_arg *remote_arg;
+>         struct kcov_remote *remote;
+> -       unsigned long flags;
+>
+>         switch (cmd) {
+> -       case KCOV_INIT_TRACE:
+> -               /*
+> -                * Enable kcov in trace mode and setup buffer size.
+> -                * Must happen before anything else.
+> -                */
+> -               if (kcov->mode != KCOV_MODE_DISABLED)
+> -                       return -EBUSY;
+> -               /*
+> -                * Size must be at least 2 to hold current position and one PC.
+> -                * Later we allocate size * sizeof(unsigned long) memory,
+> -                * that must not overflow.
+> -                */
+> -               size = arg;
+> -               if (size < 2 || size > INT_MAX / sizeof(unsigned long))
+> -                       return -EINVAL;
+> -               kcov->size = size;
+> -               kcov->mode = KCOV_MODE_INIT;
+> -               return 0;
+>         case KCOV_ENABLE:
+>                 /*
+>                  * Enable coverage for the current task.
+> @@ -692,9 +673,32 @@ static long kcov_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
+>         struct kcov_remote_arg *remote_arg = NULL;
+>         unsigned int remote_num_handles;
+>         unsigned long remote_arg_size;
+> -       unsigned long flags;
+> +       unsigned long size, flags;
+>
+> -       if (cmd == KCOV_REMOTE_ENABLE) {
+> +       kcov = filep->private_data;
+> +       switch (cmd) {
+> +       case KCOV_INIT_TRACE:
+> +               /*
+> +                * Enable kcov in trace mode and setup buffer size.
+> +                * Must happen before anything else.
+> +                *
+> +                * First check the size argument - it must be at least 2
+> +                * to hold the current position and one PC. Later we allocate
+> +                * size * sizeof(unsigned long) memory, that must not overflow.
+> +                */
+> +               size = arg;
+> +               if (size < 2 || size > INT_MAX / sizeof(unsigned long))
+> +                       return -EINVAL;
+> +               spin_lock_irqsave(&kcov->lock, flags);
 
-> Quoting Anjelique Melendez (2022-01-20 16:25:26)
-> >
-> > On 1/20/2022 3:01 PM, Bjorn Andersson wrote:
-> > > On Thu 20 Jan 12:41 PST 2022, Anjelique Melendez wrote:
-> > >
-> > >> From: David Collins <collinsd@codeaurora.org>
-> > >>
-> > >> Add a null check for the pwrkey->data pointer after it is assigned
-> > >> in pm8941_pwrkey_probe().  This avoids a potential null pointer
-> > >> dereference when pwrkey->data->has_pon_pbs is accessed later in
-> > >> the probe function.
-> > >>
-> > >> Change-Id: I589c4851e544d79a1863fd110b32a0b45ac03caf
-> > >> Signed-off-by: David Collins <collinsd@codeaurora.org>
-> > >> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
-> > >> ---
-> > >>  drivers/input/misc/pm8941-pwrkey.c | 4 ++++
-> > >>  1 file changed, 4 insertions(+)
-> > >>
-> > >> diff --git a/drivers/input/misc/pm8941-pwrkey.c b/drivers/input/misc/pm8941-pwrkey.c
-> > >> index 0ce00736e695..ac08ed025802 100644
-> > >> --- a/drivers/input/misc/pm8941-pwrkey.c
-> > >> +++ b/drivers/input/misc/pm8941-pwrkey.c
-> > >> @@ -263,6 +263,10 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
-> > >>
-> > >>      pwrkey->dev = &pdev->dev;
-> > >>      pwrkey->data = of_device_get_match_data(&pdev->dev);
-> > >> +    if (!pwrkey->data) {
-> > > The only way this can happen is if you add a new compatible and forget
-> > > to specify data and when that happens you will get a print in the log
-> > > somewhere, which once you realize that you don't have your pwrkey you
-> > > might be able to find among all the other prints.
-> > >
-> > > If you instead don't NULL check this pointer you will get a large splat
-> > > in the log, with callstack and all, immediately hinting you that
-> > > pwrkey->data is NULL.
-> > >
-> > >
-> > > In other words, there's already a print, a much larger print and I don't
-> > > think there's value in handling this mistake gracefully.
-> > >
-> > > Regards,
-> > > Bjorn
-> >
-> >
-> > We would like to the null pointer check in place to avoid static analysis
-> >
-> > warnings that can be easily fixed.
-> >
-> 
-> Many drivers check that their device_get_match_data() returns a valid
-> pointer. I'd like to see that API used in addition to checking the
-> return value for NULL so that we can keep the static analysis tools
-> happy. Yes it's an impossible case assuming the driver writer didn't
-> mess up but it shuts SA up and we don't really have a better solution
-> to tell tools that device_get_match_data() can't return NULL.
+Arguably, we could keep the part of the KCOV_INIT_TRACE handler that
+happens under the lock in kcov_ioctl_locked(). In a similar way as
+it's done for KCOV_REMOTE_ENABLE. This would get rid of the asymmetric
+fallthrough usage.
 
-I'm not saying that device_get_match_data() can't return NULL, I'm
-saying that in the very specific cases that it would return NULL it's
-useful to have a kernel panic - as that's a much faster way to figure
-out that something is wrong.
+But I'll leave this up to you, either way looks acceptable to me.
 
-And as a timely coincidence I tried to introduce such a check last week,
-for a case where the cause of the dereference issue definitely wasn't
-obvious to me and Greg among others told me that it's wrong:
+> +               if (kcov->mode != KCOV_MODE_DISABLED) {
+> +                       spin_unlock_irqrestore(&kcov->lock, flags);
+> +                       return -EBUSY;
+> +               }
+> +               kcov->size = size;
+> +               kcov->mode = KCOV_MODE_INIT;
+> +               spin_unlock_irqrestore(&kcov->lock, flags);
+> +               return 0;
+> +       case KCOV_REMOTE_ENABLE:
+>                 if (get_user(remote_num_handles, (unsigned __user *)(arg +
+>                                 offsetof(struct kcov_remote_arg, num_handles))))
+>                         return -EFAULT;
+> @@ -710,16 +714,18 @@ static long kcov_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
+>                         return -EINVAL;
+>                 }
+>                 arg = (unsigned long)remote_arg;
+> +               fallthrough;
+> +       default:
+> +               /*
+> +                * All other commands can be normally executed under a spin lock, so we
+> +                * obtain and release it here in order to simplify kcov_ioctl_locked().
+> +                */
+> +               spin_lock_irqsave(&kcov->lock, flags);
+> +               res = kcov_ioctl_locked(kcov, cmd, arg);
+> +               spin_unlock_irqrestore(&kcov->lock, flags);
+> +               kfree(remote_arg);
+> +               return res;
+>         }
+> -
+> -       kcov = filep->private_data;
+> -       spin_lock_irqsave(&kcov->lock, flags);
+> -       res = kcov_ioctl_locked(kcov, cmd, arg);
+> -       spin_unlock_irqrestore(&kcov->lock, flags);
+> -
+> -       kfree(remote_arg);
+> -
+> -       return res;
+>  }
+>
+>  static const struct file_operations kcov_fops = {
+> --
+> 2.34.1.703.g22d0c6ccf7-goog
+>
 
-https://lore.kernel.org/linux-arm-msm/20220118185612.2067031-2-bjorn.andersson@linaro.org/
-
-
-And just to be clear, I don't care about this case in particular, but I
-fear that we have a lot of SA warnings to shut up throughout the kernel.
-
-Regards,
-Bjorn
+Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>

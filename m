@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC407499C3D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68DE4499A38
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578874AbiAXWDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:03:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1450849AbiAXVVf (ORCPT
+        id S1457732AbiAXVmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:42:12 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58514 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354232AbiAXVFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:21:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B3FC0617AA;
-        Mon, 24 Jan 2022 12:16:16 -0800 (PST)
+        Mon, 24 Jan 2022 16:05:49 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A35D1B8122A;
-        Mon, 24 Jan 2022 20:16:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC720C340E5;
-        Mon, 24 Jan 2022 20:16:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51A8161317;
+        Mon, 24 Jan 2022 21:05:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 352E6C340E5;
+        Mon, 24 Jan 2022 21:05:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055374;
-        bh=WZ3y8zEoAZCa0dRNCAuVij8BF5EdE9FA38K3vuCAJqE=;
+        s=korg; t=1643058348;
+        bh=Ae6xcvFdnKy3FwdPmiKqRI4OXQ4zHeuRYY0s4+yvNzc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ISL+wimExMxRsQgONtqYfPK3aN2wi05YQteVJM0+fUGE/SEdCobAAZrXG15w+8FZS
-         cSAHp9t/5tZP08OdO2DBgjTS3TDsLZQLapiydW4rnC8t/BZ374DiWjwA8fiksLKArQ
-         Sg3CMmTY4IiEW19RF67XbQS4VfBA4IS4mJzvnA+Y=
+        b=TpiXxUIsoAD2t9TfB9w1DZdU9sD5d3Z/hBsARP22sgwCjVRFMGXFQvBDqx2Qpaacc
+         vpGjk5kATnBahR9sLtyITNOSBzZp0ax6OKWLiTmKlRq5LWwSzpvN6wiJqDgQ4U/Iwx
+         qQyYaM5FDZS2K4PPQXhwneLGBGV9Np8flBJuC7Wo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, oujiefeng <oujiefeng@huawei.com>,
-        Jay Fang <f.fangjian@huawei.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Harry Wentland <harry.wentland@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 130/846] spi: hisi-kunpeng: Fix the debugfs directory name incorrect
-Date:   Mon, 24 Jan 2022 19:34:07 +0100
-Message-Id: <20220124184105.477739229@linuxfoundation.org>
+Subject: [PATCH 5.16 0259/1039] drm/amd/display: Fix out of bounds access on DNC31 stream encoder regs
+Date:   Mon, 24 Jan 2022 19:34:08 +0100
+Message-Id: <20220124184134.017744254@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,82 +47,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: oujiefeng <oujiefeng@huawei.com>
+From: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
 
-[ Upstream commit 40fafc8eca3f0d41b9dade5c10afb2dad723aad7 ]
+[ Upstream commit d374d3b493215d637b9e7be12a93f22caf4c1f97 ]
 
-Change the debugfs directory name from hisi_spi65535 to hisi_spi0.
+[Why]
+During dcn31_stream_encoder_create, if PHYC/D get remapped to F/G on B0
+then we'll index 5 or 6 into a array of length 5 - leading to an
+access violation on some configs during device creation.
 
-Fixes: 2b2142f247eb ("spi: hisi-kunpeng: Add debugfs support")
-Signed-off-by: oujiefeng <oujiefeng@huawei.com>
-Signed-off-by: Jay Fang <f.fangjian@huawei.com>
-Link: https://lore.kernel.org/r/20211117012119.55558-1-f.fangjian@huawei.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+[How]
+Software won't be touching PHYF/PHYG directly, so just extend the
+array to cover all possible engine IDs.
+
+Even if it does by try to access one of these registers by accident
+the offset will be 0 and we'll get a warning during the access.
+
+Fixes: 2fe9a0e1173f ("drm/amd/display: Fix DCN3 B0 DP Alt Mapping")
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+Signed-off-by: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-hisi-kunpeng.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-hisi-kunpeng.c b/drivers/spi/spi-hisi-kunpeng.c
-index 58b823a16fc4d..525cc0143a305 100644
---- a/drivers/spi/spi-hisi-kunpeng.c
-+++ b/drivers/spi/spi-hisi-kunpeng.c
-@@ -127,7 +127,6 @@ struct hisi_spi {
- 	void __iomem		*regs;
- 	int			irq;
- 	u32			fifo_len; /* depth of the FIFO buffer */
--	u16			bus_num;
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
+index 27afbe6ec0fee..f969ff65f802b 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
+@@ -493,7 +493,8 @@ static const struct dcn31_apg_mask apg_mask = {
+ 	SE_DCN3_REG_LIST(id)\
+ }
  
- 	/* Current message transfer state info */
- 	const void		*tx;
-@@ -165,7 +164,10 @@ static int hisi_spi_debugfs_init(struct hisi_spi *hs)
- {
- 	char name[32];
- 
--	snprintf(name, 32, "hisi_spi%d", hs->bus_num);
-+	struct spi_controller *master;
-+
-+	master = container_of(hs->dev, struct spi_controller, dev);
-+	snprintf(name, 32, "hisi_spi%d", master->bus_num);
- 	hs->debugfs = debugfs_create_dir(name, NULL);
- 	if (!hs->debugfs)
- 		return -ENOMEM;
-@@ -467,7 +469,6 @@ static int hisi_spi_probe(struct platform_device *pdev)
- 	hs = spi_controller_get_devdata(master);
- 	hs->dev = dev;
- 	hs->irq = irq;
--	hs->bus_num = pdev->id;
- 
- 	hs->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(hs->regs))
-@@ -490,7 +491,7 @@ static int hisi_spi_probe(struct platform_device *pdev)
- 	master->use_gpio_descriptors = true;
- 	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LOOP;
- 	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
--	master->bus_num = hs->bus_num;
-+	master->bus_num = pdev->id;
- 	master->setup = hisi_spi_setup;
- 	master->cleanup = hisi_spi_cleanup;
- 	master->transfer_one = hisi_spi_transfer_one;
-@@ -506,15 +507,15 @@ static int hisi_spi_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	if (hisi_spi_debugfs_init(hs))
--		dev_info(dev, "failed to create debugfs dir\n");
--
- 	ret = spi_register_controller(master);
- 	if (ret) {
- 		dev_err(dev, "failed to register spi master, ret=%d\n", ret);
- 		return ret;
- 	}
- 
-+	if (hisi_spi_debugfs_init(hs))
-+		dev_info(dev, "failed to create debugfs dir\n");
-+
- 	dev_info(dev, "hw version:0x%x max-freq:%u kHz\n",
- 		readl(hs->regs + HISI_SPI_VERSION),
- 		master->max_speed_hz / 1000);
+-static const struct dcn10_stream_enc_registers stream_enc_regs[] = {
++/* Some encoders won't be initialized here - but they're logical, not physical. */
++static const struct dcn10_stream_enc_registers stream_enc_regs[ENGINE_ID_COUNT] = {
+ 	stream_enc_regs(0),
+ 	stream_enc_regs(1),
+ 	stream_enc_regs(2),
 -- 
 2.34.1
 

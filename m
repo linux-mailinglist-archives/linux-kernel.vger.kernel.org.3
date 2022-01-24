@@ -2,77 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08EC3498692
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B6949868A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244463AbiAXRYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:24:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:32845 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244468AbiAXRYD (ORCPT
+        id S244437AbiAXRXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:23:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235230AbiAXRXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:24:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643045043;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TEjsu4aunQGUMYaLa6nuwmN8nXhBS2tjSAJpIcjrtF4=;
-        b=Y5BvFnaT7Zqx9lY/ILYgWJZEfn+vL7SN4T0UpLBt+vrnZzf2aq4sDP6xU7DlJVlQ9DEA1X
-        +2C5iRJ3MefRaTeFTEOsgmtpOI7vKqNSXjGZXap+PkHxsCAMFFUBuWFwLZ2J586uGXbsNw
-        wqDSZ0w9yfY/DQM4+tvD1UYUMNhX63M=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-32-kl7BYfteMv2xB_WYqoB8DQ-1; Mon, 24 Jan 2022 12:23:21 -0500
-X-MC-Unique: kl7BYfteMv2xB_WYqoB8DQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2098981C9A6;
-        Mon, 24 Jan 2022 17:23:18 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.5])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A41562D70;
-        Mon, 24 Jan 2022 17:23:01 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220118131216.85338-1-jefflexu@linux.alibaba.com>
-References: <20220118131216.85338-1-jefflexu@linux.alibaba.com>
-To:     Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
-        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
-        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 00/20] fscache,erofs: fscache-based demand-read semantics
+        Mon, 24 Jan 2022 12:23:38 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5782C06173D
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:23:37 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id z5so2306733plg.8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:23:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=YOodipSwkyC1u3HokpbW+U+Y82CsBkjsjPXcSmRJBxk=;
+        b=fxXgr17pimK6Ax4IgUKECOiE9WQhsVRmSkgJA7y+X+CC25lvNHGUrpTpR18PCP7nor
+         9KpT/GzfGVVDQ2CZVXAgiaaYQzUxqcS7/MZE0FI7kFsp+UGHawUxZ0V0pefEnbK9NNbv
+         WtYbX1AK1DYf+5lD4RwHIwfldJP3vZUdQgjOg+lgcBkg0DyAzPwU5Nz67onM5tiS5lJo
+         7EE0eOKV9MhK/OOUbGeZJxxZrCoAEgqM1fMEnZQCmGe3oOPCpvgx6s8Zx8hc3h4O7Fh8
+         ZeskfbviZXWfiSlwyuavtGsq+I4egURpApMb2vS0GSG0ub1tOk0WsXoDzFX9Wv4eGy2L
+         np6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=YOodipSwkyC1u3HokpbW+U+Y82CsBkjsjPXcSmRJBxk=;
+        b=nSVDwK3hOEjiiLdrfEI4jsCM71D1lXHXWr+ojy6ZWaVa16t8iBYSe9Wp8FUl2zSy3Z
+         HC05np1iixmhVsDzSFndupyuvLFLHMiVx2C5mezQXF6jSV2j6r0TN+B1056rnVE3Q6gn
+         Y+wDDGjuGoFgdFNxQZJG1QgB5QljDhQPb77nHoFdBbLKJ9I2VPRPMW9wOI2qz4hAlSKv
+         FV8bezM72NeHx12242lcb2PZD8iupyh/WmdZU5QPPS8K3+53w+O9RcLr1H8QOQd0qUj2
+         YTXbAoPeluSue1A8R8H8yQOI2IfFvOcPIN7wXh/ZpbsvCLadyqAb5uYAKf7Wz118ScPM
+         r20A==
+X-Gm-Message-State: AOAM531c1p9j9Ye5JzBwOTkjkYansQ4XR+9/m1E3h/n/nIbpeBylqYsr
+        DyTvRCWxjxo+MSymP8hAFwReGaS/LmgRrPhKZkw=
+X-Google-Smtp-Source: ABdhPJzCI+D44b/q7FjCpcSHp/VkNjU4MVsttCuijVxz8tg9VTP5xwnDGgUTh9ZR0XE9eWGvOnc7XxI/xjoOA16JOWQ=
+X-Received: by 2002:a17:902:e844:b0:14a:ef67:ed96 with SMTP id
+ t4-20020a170902e84400b0014aef67ed96mr14866605plg.104.1643045017346; Mon, 24
+ Jan 2022 09:23:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2351230.1643044980.1@warthog.procyon.org.uk>
+Received: by 2002:a05:6a11:111:0:0:0:0 with HTTP; Mon, 24 Jan 2022 09:23:36
+ -0800 (PST)
+Reply-To: akpaomaji1@hotmail.com
+From:   MR MALICK <mrwilliamogbha1@gmail.com>
+Date:   Mon, 24 Jan 2022 18:23:36 +0100
+Message-ID: <CABGi1U8K+ZT-Hok8cAAKNdxoOV1ah2jMknB42fJvPT1+QMUcVA@mail.gmail.com>
+Subject: CONGRATULATION
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 24 Jan 2022 17:23:00 +0000
-Message-ID: <2351231.1643044980@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
+OZN=C3=81MENIE O V=C3=9DHERNOM FONDE,
 
-> You could start a quick test by
-> https://github.com/lostjeffle/demand-read-cachefilesd
+V=C3=A1=C5=A1 e-mail vyhral 2 600 000 mili=C3=B3nov dol=C3=A1rov, kontaktuj=
+te advok=C3=A1ta
+Edwarda Raymonda prostredn=C3=ADctvom jeho =C4=8D=C3=ADsla WhatsaPP (+22870=
+887037),
+aby ste z=C3=ADskali svoj v=C3=BDhern=C3=BD fond s nasleduj=C3=BAcimi =C3=
+=BAdajmi, cel=C3=BDm menom,
+va=C5=A1ou krajinou, dom=C3=A1cou adresou a telef=C3=B3nnym =C4=8D=C3=ADslo=
+m.
 
-Can you pull this up to v5.17-rc1 or my netfs-lib branch?
-
-	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log=
-/?h=3Dnetfs-lib
-
-I'll do my best to have a look at it tomorrow.
-
-Thanks,
-David
-
+S pozdravom,
+P=C3=A1n Malick Samba.

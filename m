@@ -2,127 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB764980AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7D24980B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234808AbiAXNOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 08:14:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47330 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbiAXNOJ (ORCPT
+        id S234938AbiAXNOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 08:14:18 -0500
+Received: from h02mx15.reliablemail.org ([185.76.66.168]:62218 "EHLO
+        h02mx15.reliablemail.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234746AbiAXNOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 08:14:09 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26752C06173B;
-        Mon, 24 Jan 2022 05:14:09 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id s5so21228090ejx.2;
-        Mon, 24 Jan 2022 05:14:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ztKNOXqsYnv3mPaTYSeul9OsaQPxd0GOtreezP6Z464=;
-        b=aPh/ZfB2WE0ftAvP8aWmco8HHjLOoDhNR3oMdB+XduNWJT+Pb9Fe5BCkReL1NFg/Fh
-         JOCkEPQuB1QHe0mHdqSNUQyh9LQdoKkeDxYqVwcEl3/pHqVQMTOfAjAtC0mE2k8fS0cc
-         9VmbsV/P0mbP0Yu/rU352tLgwI7pR/9/CorK7bun+nG831CBceCrCgKv3OJV92g3swaD
-         5pYg9RON8NgbwR3vPwQMNe6f9s2jBD4i7EG8YmcxvbsNrtLaDOXkAiBX7HGrqa/53ler
-         kM9GLlcodBN+1caT+FlUHpIl7kvsftCIiYqW+SR7NRKHJH5r5Ygi2bT1YPEaAeXNHjn5
-         berw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ztKNOXqsYnv3mPaTYSeul9OsaQPxd0GOtreezP6Z464=;
-        b=lKzDCCTmNaaVpqnLnqXR7HFLOkWMFAMeouTTjBF7mZsSV+I3Ei2V2bzfbehxKSuacS
-         6OnXn/AWnKZ5gZ9y6VEKSHTlNy2SamQw+ZIwc9ulWKhD4+4V9hJYIguQLlS1cXOkq4Z6
-         hMTt1KiHUvGkfvqZc5Ch/Hdku+OIlUxtdNzdE4yGC+V7GwJ/2uwjunRvIv4WpHGBdSr9
-         oLB68d2QCIaRnQbbmGapeOK6K4TKAXBpzqbz9o3pqjIhIDjTG4rsfVv+Hnw4ddYfV2mg
-         E+d8oJi5MtLbodjyV0t5isuVmaWwu3RdarehmPw0c2X6DvLsKpY7acVr42da0Ipny7QC
-         l/LA==
-X-Gm-Message-State: AOAM531YdzS4IXfIRNISAEzmhL8DyzMJiWeqrsQCjo64EA7ZCe+IyU/+
-        njcI/qBIqqh1/4sGu7L1jUy7UN1IY9EFpC+NL+c=
-X-Google-Smtp-Source: ABdhPJxRDinQzNxBVqaPGOj/MDn6x4KGc725mg+vlfvFCsrzWIV0MhxBOK7suP+mIq/TsjD4HeYXjfjYlCLesFV29xQ=
-X-Received: by 2002:a17:906:3004:: with SMTP id 4mr11940180ejz.579.1643030047686;
- Mon, 24 Jan 2022 05:14:07 -0800 (PST)
+        Mon, 24 Jan 2022 08:14:15 -0500
+X-Halon-Out: 86062a3b-7d17-11ec-930f-f5be715b97e5
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=grimler.se;
+        s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=Hs30SCQ/jWxFUDw4ns4z3eTZCUhu8c8Ibsh6oaOmo7I=; b=skw+mAqvoL6kZ2FCFZ2CnS6/o1
+        Vu1P2rMWDSx4Jpy1wFPSu1Vzh8jKXIZTUJS56fSHZxTwUeU/xJxaTefdP8Czb4HdRzFllW3yyuQDf
+        7rV7yjfTOsgXiqjB0AXp8T0d8AxjgmLx/L0Rmv2xLdsUaoZF0uzxeRmo10lltMQrbFkPtovuMFEXr
+        Jm1GwnysLVNH6HXD7SX1tG/RP4kAas9KtGqIJ80jF8hvUYi4AKxQV3xBhT0hkVZg54yJk46TEi5pD
+        QusVetw59GAOUGyY7QWZQwFCC6jx2lFnQIssuOZlMicYKBVXrshnH2V+WP2YSrCLTl6rRw9YXupfi
+        QAJZmw3g==;
+From:   Henrik Grimler <henrik@grimler.se>
+To:     krzysztof.kozlowski@canonical.com, semen.protsenko@linaro.org,
+        virag.david003@gmail.com, cw00.choi@samsung.com,
+        m.szyprowski@samsung.com, alim.akhtar@samsung.com,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     Henrik Grimler <henrik@grimler.se>
+Subject: [PATCH 0/2] ARM: dts: exynos: Add support for Samsung Klimt WiFi
+Date:   Mon, 24 Jan 2022 14:12:39 +0100
+Message-Id: <20220124131241.29946-1-henrik@grimler.se>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220124093912.2429190-1-Qing-wu.Li@leica-geosystems.com.cn> <20220124093912.2429190-5-Qing-wu.Li@leica-geosystems.com.cn>
-In-Reply-To: <20220124093912.2429190-5-Qing-wu.Li@leica-geosystems.com.cn>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 24 Jan 2022 15:12:27 +0200
-Message-ID: <CAHp75Vc9Ef4uZR505yRGm1vzMiZUEBp0Hdc9qs=BbiAwwEqLyw@mail.gmail.com>
-Subject: Re: [PATCH V1 4/6] iio: accel: sca3300: Add support for SCL3300
-To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tomas Melin <tomas.melin@vaisala.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpsrv07.misshosting.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - grimler.se
+X-Get-Message-Sender-Via: cpsrv07.misshosting.com: authenticated_id: henrik@grimler.se
+X-Authenticated-Sender: cpsrv07.misshosting.com: henrik@grimler.se
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 11:39 AM LI Qingwu
-<Qing-wu.Li@leica-geosystems.com.cn> wrote:
->
-> Add support for Murata SCL3300, a 3-axis MEMS inclination.
-> same as SCA3300, it has accel and temperature output.
+Klimt WiFi has product name Samsung Galaxy Tab S 8.4" and was released
+in 2014.  It has similar hardware to exynos5420-chagall-wifi and the
+two devices can hence share a common base dtsi. 
 
-accelerometer
+Same issues as for Chagall Wifi applies: CCI has to be disabled and
+only 4 out of 8 CPUs are brought up at boot (see
+https://lore.kernel.org/r/20220118185746.299832-4-henrik@grimler.se).
 
-> Datasheet link:
-> www.murata.com/en-us/products/sensor/inclinometer/overview/lineup/scl3300
->
+Henrik Grimler (2):
+  dt-bindings: arm: samsung: document Klimt WiFi board binding
+  ARM: dts: Add support for Samsung Klimt WiFi
 
-Make this a Datasheet: tag (change name and drop blank line(s) in the
-tag block).
+ .../bindings/arm/samsung/samsung-boards.yaml  |  1 +
+ arch/arm/boot/dts/Makefile                    |  1 +
+ arch/arm/boot/dts/exynos5420-klimt-wifi.dts   | 75 +++++++++++++++++++
+ 3 files changed, 77 insertions(+)
+ create mode 100644 arch/arm/boot/dts/exynos5420-klimt-wifi.dts
 
-> Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
 
-...
-
-> @@ -68,7 +68,6 @@ static const struct iio_enum sca3300_op_mode_enum = {
->         .get = sca3300_get_op_mode,
->         .set = sca3300_set_op_mode,
->  };
-> -
-
-Stray change.
-
-...
-
-> +};
-> +
-> +
-
-One blank line is enough.
-
-...
-
->  static const int sca3300_accel_scale[CHIP_CNT][OP_MOD_CNT][2] = {
->         [CHIP_SCA3300] = {{0, 370}, {0, 741}, {0, 185}, {0, 185}},
-> +       [CHIP_SCL3300] = {{0, 167}, {0, 333}, {0, 83}, {0, 83}}
-
-+ Comma.
-
->  };
-
-...
-
-> +                       /*SCL3300 freq.tied to accel scale, not allowed to set separately.*/
-
-Missed spaces.
-
-...
-
->         struct sca3300_data *data = iio_priv(indio_dev);
-> -
-
-This even checkpatch should complain of, besides being a stray change.
-
->         switch (mask) {
-
+base-commit: e758cdb29e81cee1d53e1a06bb3db0a32fc8c347
 -- 
-With Best Regards,
-Andy Shevchenko
+2.34.1
+

@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 467E1498D86
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:34:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C1D4993FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243041AbiAXTcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:32:55 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:51338 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349910AbiAXTWy (ORCPT
+        id S1387745AbiAXUhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:37:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356214AbiAXUOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:22:54 -0500
+        Mon, 24 Jan 2022 15:14:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E892C09B052;
+        Mon, 24 Jan 2022 11:37:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B0E061317;
-        Mon, 24 Jan 2022 19:22:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C643C340E5;
-        Mon, 24 Jan 2022 19:22:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26BF8B81238;
+        Mon, 24 Jan 2022 19:37:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A7D2C340E5;
+        Mon, 24 Jan 2022 19:37:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052172;
-        bh=cBBZ8JPUy6BY7CZDXyLC6eF5svJh0zfrQtIgk2t0K3Y=;
+        s=korg; t=1643053070;
+        bh=kEkyCNZBvcElxWMg8I/Xi3Hk6q+Di49XLMC0Q1kRaME=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0J/Y9Z0s8MpgpVlYnogvejAzkWdh9TLvtJP3Lv9VbYXQZ7iVSZDzDi39UmAPM2Ks3
-         tdsxpJ32wDanJIZXNgCUhSeRtJUh9sT5YrbXkqj55+F8P9pZsWsMXHDaPmC/p/bAzk
-         5zxTamde5eFKMiuiU/xVjsbIut8Wb8xfRN8tVlsE=
+        b=iuGGVG6wLLETne1DU8lgcs5UzwxuDc9Dndio352zTUQl6nFfAoy+WIRIUnBKiaxTX
+         IvzFQSBBWsZIbNgVHl1xDl2vL1Gde0jAqTQS9zFVAbRpuqj653FV22taKLxScA7Yh2
+         rJnFr/8LufcM5NQZvpyuv2dmJwKsCy6inCCe8KzU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Merlijn Wajer <merlijn@wizzup.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Sebastian Reichel <sre@kernel.org>,
-        Tony Lindgren <tony@atomide.com>
-Subject: [PATCH 4.19 211/239] ARM: dts: Fix vcsi regulator to be always-on for droid4 to prevent hangs
-Date:   Mon, 24 Jan 2022 19:44:09 +0100
-Message-Id: <20220124183949.823156871@linuxfoundation.org>
+        stable@vger.kernel.org, Nikolay Borisov <nborisov@suse.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.4 266/320] btrfs: check the root node for uptodate before returning it
+Date:   Mon, 24 Jan 2022 19:44:10 +0100
+Message-Id: <20220124184003.027352454@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,53 +49,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Lindgren <tony@atomide.com>
+From: Josef Bacik <josef@toxicpanda.com>
 
-commit ddb52945999dcf35787bf221b62108806182578d upstream.
+commit 120de408e4b97504a2d9b5ca534b383de2c73d49 upstream.
 
-In addition to using vcsi regulator for the display, looks like droid4 is
-using vcsi regulator to trigger off mode internally with the PMIC firmware
-when the SoC enters deeper idle states. This is configured in the Motorola
-Mapphone Linux kernel sources as "zerov_regulator".
+Now that we clear the extent buffer uptodate if we fail to write it out
+we need to check to see if our root node is uptodate before we search
+down it.  Otherwise we could return stale data (or potentially corrupt
+data that was caught by the write verification step) and think that the
+path is OK to search down.
 
-As we currently don't support off mode during idle for omap4, we must
-prevent vcsi from being disabled when the display is blanked to prevent
-the PMIC change to off mode. Otherwise the device will hang on entering
-idle when the display is blanked.
-
-Before commit 089b3f61ecfc ("regulator: core: Let boot-on regulators be
-powered off"), the boot-on regulators never got disabled like they should
-and vcsi did not get turned off on idle.
-
-Let's fix the issue by setting vcsi to always-on for now. Later on we may
-want to claim the vcsi regulator also in the PM code if needed.
-
-Fixes: 089b3f61ecfc ("regulator: core: Let boot-on regulators be powered off")
-Cc: Merlijn Wajer <merlijn@wizzup.org>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Sebastian Reichel <sre@kernel.org>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
+CC: stable@vger.kernel.org # 5.4+
+Reviewed-by: Nikolay Borisov <nborisov@suse.com>
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/motorola-cpcap-mapphone.dtsi |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/btrfs/ctree.c |   19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
 
---- a/arch/arm/boot/dts/motorola-cpcap-mapphone.dtsi
-+++ b/arch/arm/boot/dts/motorola-cpcap-mapphone.dtsi
-@@ -165,12 +165,12 @@
- 		regulator-enable-ramp-delay = <1000>;
- 	};
+--- a/fs/btrfs/ctree.c
++++ b/fs/btrfs/ctree.c
+@@ -2658,12 +2658,9 @@ static struct extent_buffer *btrfs_searc
+ {
+ 	struct btrfs_fs_info *fs_info = root->fs_info;
+ 	struct extent_buffer *b;
+-	int root_lock;
++	int root_lock = 0;
+ 	int level = 0;
  
--	/* Used by DSS */
-+	/* Used by DSS and is the "zerov_regulator" trigger for SoC off mode */
- 	vcsi: VCSI {
- 		regulator-min-microvolt = <1800000>;
- 		regulator-max-microvolt = <1800000>;
- 		regulator-enable-ramp-delay = <1000>;
--		regulator-boot-on;
-+		regulator-always-on;
- 	};
+-	/* We try very hard to do read locks on the root */
+-	root_lock = BTRFS_READ_LOCK;
+-
+ 	if (p->search_commit_root) {
+ 		/*
+ 		 * The commit roots are read only so we always do read locks,
+@@ -2701,6 +2698,9 @@ static struct extent_buffer *btrfs_searc
+ 		goto out;
+ 	}
  
- 	vdac: VDAC {
++	/* We try very hard to do read locks on the root */
++	root_lock = BTRFS_READ_LOCK;
++
+ 	/*
+ 	 * If the level is set to maximum, we can skip trying to get the read
+ 	 * lock.
+@@ -2727,6 +2727,17 @@ static struct extent_buffer *btrfs_searc
+ 	level = btrfs_header_level(b);
+ 
+ out:
++	/*
++	 * The root may have failed to write out at some point, and thus is no
++	 * longer valid, return an error in this case.
++	 */
++	if (!extent_buffer_uptodate(b)) {
++		if (root_lock)
++			btrfs_tree_unlock_rw(b, root_lock);
++		free_extent_buffer(b);
++		return ERR_PTR(-EIO);
++	}
++
+ 	p->nodes[level] = b;
+ 	if (!p->skip_locking)
+ 		p->locks[level] = root_lock;
 
 

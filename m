@@ -2,162 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD80498D31
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E7FB498FEB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232102AbiAXT2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:28:43 -0500
-Received: from m228-4.mailgun.net ([159.135.228.4]:44881 "EHLO
-        m228-4.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348712AbiAXTTi (ORCPT
+        id S1358588AbiAXTzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:55:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349080AbiAXTlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:19:38 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=michaelkloos.com; q=dns/txt;
- s=k1; t=1643051978; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: From: References: Cc: To: Subject: MIME-Version: Date:
- Message-ID: Sender; bh=RTodLktL3fNAjheW8U0upEQdJu2uLplUIyzBCEj09YA=; b=cF05KFg5tyH8uIlazoZiHqScEu8+sbt3Zq7skpmpqfiuevXd5HMfQjsCb4hhzy4LKhsK/XnJ
- /4L9Js2zS2vkl8CHK9LcLbKoKTHeMMa2HYzkuZlktp3C8+TcrcXJHlyKhPVI+Lvy9cL8KCkm
- BoCMbU78FAgQHfQMZS4NzHb1K5Y=
-X-Mailgun-Sending-Ip: 159.135.228.4
-X-Mailgun-Sid: WyI5NjYzNiIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgIjQ4Y2MwIl0=
-Received: from drop1.michaelkloos.com (drop1.michaelkloos.com
- [67.205.190.89]) by smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
- 61eefbb98a34df816bef9458 (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
- Mon, 24 Jan 2022 19:19:21 GMT
-Sender: michael@michaelkloos.com
-Received: from [192.168.0.104] (cpe-173-88-115-50.columbus.res.rr.com [173.88.115.50])
-        by drop1.michaelkloos.com (Postfix) with ESMTPSA id 661DA40266;
-        Mon, 24 Jan 2022 19:19:20 +0000 (UTC)
-Message-ID: <fdbf6e1c-6ed1-bb82-1a56-f7188de7f83f@michaelkloos.com>
-Date:   Mon, 24 Jan 2022 14:19:18 -0500
+        Mon, 24 Jan 2022 14:41:00 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5763AC07A96D
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:20:09 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id y23so8784971oia.13
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:20:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y8UlOKPL4x0I+w9FvmczKZQzjM11WitOpHu1NnDd7hI=;
+        b=EIvsCF/shkSJKYfdjXZKNXCsVd70UCSlAARnO6sDbsxiWBHwhD/82BOJnQrXDl9IOz
+         PFcMdh5ibyXsaAQcTPODkOpuxlRpW6Ykx3+iaL0mfu3o/5TQuzEDx8ce/CsAPrzpsBH0
+         Aq1xw2ZjdD9sgudMll8flbupKTmKPw8pARBNeIt/gt3ZmOXc0U4ez/5KDdbtmSmdJ/cY
+         A7Z4/te+96euwxEnd8/NJBr/0001w5zlvvzIJi/j/otI7/zc1nWeoYlU4o4Pp+0rrOEb
+         sMg62TePWcfT120HGmcpZPJ+W8BC4DVZ60OxaL1hE3s2BVUOxqLUUgtgRqjyoHlrl8LB
+         UFGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y8UlOKPL4x0I+w9FvmczKZQzjM11WitOpHu1NnDd7hI=;
+        b=VFGyM+gedOMfU45UPgkWdCuK45LG3TLpJeTFyrMiCEl0dUKG7SucsG6dVuJ21vshMJ
+         Y6eseNs/fyZ9wD57AtUGaDDXbgEj5z8yESQY1J/J5tN6SSxLLCQT6ETLfiV+OqTADgts
+         X42O+rUQfeeSFzFnhde/CSH6yJ/vQV/5NdzMBfpZdb7xhSPoQZ4KzK1PxvHcOZP132Nv
+         Vk0UCjH7kUa5vFdGtqt4QQYmrN1OqbpkwoWW8HBROfEOxr4vBxRlLvP1NWOb27N8wkul
+         uCg1EBJnS5qqYdefY4rfS9S2jDPvyaxTy8uyTLTgbX0BTgIxBbTq1xmYvu+fYAftfhjn
+         mH1Q==
+X-Gm-Message-State: AOAM533yM20s9Dae1HfIIvOSANHRF/SODuVsp5UgaW/9wAUoWuo/E09O
+        7D6jXnm+f0djFCJXET3US+gh2c9+h5yL6/LpKDuWzGQc
+X-Google-Smtp-Source: ABdhPJwS85QtnAAmIxiRJFhdMAqQlvW1zcZquOPGUFZLskhO60Qo5Zms8Ge28nzBDwYGw0SYuP/P8X5DerGCwVBWtfo=
+X-Received: by 2002:a05:6808:300b:: with SMTP id ay11mr2766540oib.120.1643052008712;
+ Mon, 24 Jan 2022 11:20:08 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] Fixed: Misaligned memory access. Fixed pointer
- comparison.
-Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>
-Cc:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220123034518.3717116-1-michael@michaelkloos.com>
- <4fa1c4bbf27242cf9835dde0abdc89d5@AcuMS.aculab.com>
-From:   "Michael T. Kloos" <michael@michaelkloos.com>
-In-Reply-To: <4fa1c4bbf27242cf9835dde0abdc89d5@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220124165552.56106-1-zhou1615@umn.edu>
+In-Reply-To: <20220124165552.56106-1-zhou1615@umn.edu>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 24 Jan 2022 14:19:57 -0500
+Message-ID: <CADnq5_MPvHgnW-Rpv-caNrgg+9XkVFZs2Oes1gKPyj=TesBKXw@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display/dc/calcs/dce_calcs: Fix a memleak in calculate_bandwidth()
+To:     Zhou Qingyang <zhou1615@umn.edu>
+Cc:     Leo Li <sunpeng.li@amd.com>, Kangjie Lu <kjlu@umn.edu>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        David Airlie <airlied@linux.ie>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> That may not be true.
-> On x86 the cost of misaligned accesses only just measurable.
-> It isn't even one clock per cache line for reads (eg ipcsum).
-I know that the Intel manuals still recommend alignment on x86.  I
-haven't tried to measure performance differences yet.
+Applied.  Thanks!
 
-I think the issue here is that RISC-V is designed as a modular
-architecture.  Unlike x86, we don't know that misaligned accesses
-will or will not be supported.  I will grant you that if they are
-supported by hardware, it will probably be faster to let the hardware
-natively take care of it.  However, if the hardware doesn't support
-it, the kernel won't be compatible with that hardware.
+Alex
 
-Now this could be worked around by having the firmware emulate it.
-This is not specified in the RISC-V SBI spec.  So depending on this
-would mean that the Linux kernel needs additional support from the
-firmware than the bare SBI specifies.  The counter argument for this
-is that it is a hardware implementation detail and that the firmware
-should therefore handle the translation.  This is already the case
-for the time CSRs where the CSRs are implemented in memory rather
-than as CSRs.  However I don't think that this can be considered 
-the same thing as memory accesses, which in my opinion, are a much
-more common and primitive operation.  The RISC-V Privileged spec
-also lists the time CSRs with the associated CSR addresses.
-The CSRs provide needed special functionality that can not be
-achieved without specific driver support for alternative
-implementations.  I would consider memory accesses and the stuff
-controlled by CSRs to be in very different categories.  Memory 
-accesses are considered a basic part of a program, listed in the
-base rv32i implementation specs.
-
-Firmware emulation would also be dramatically slower.  We are
-talking about trapping the exception, saving context, determining
-cause, checking permissions, emulating behavior, restoring context,
-and finally returning from the trap.  I would be strongly opposed to
-requiring this for misaligned memory accesses where the hardware
-doesn't support it.  It is likely that we are already dealing with
-slower, less capable hardware in that case anyway.  So I would not
-recommend adding the additional overhead.
-
-If people are strongly in favor of allowing native handing of
-misaligned memory accesses, a possible compromise is the addition
-of a CONFIG option such as "Allow Kernel Misaligned Memory Access",
-probably under the "Platform Type" section in menuconfig.  This
-could be enabled for hardware which supported it, turning on
-alternative code-paths that didn't care about alignment, allowing
-the hardware or firmware to handle it as needed.  I would
-recommend, at least until RISC-V hardware matures, this CONFIG
-option default to disabled.
-
-Anyone who has feedback on this, please let me know.
-
-> If the performance of misaligned copies ever matters it is probably
-> better to use:
-> 	*dst++ = src[0] >> n | src[1] << (64 - n);
-> for the body of the misaligned loop.
-> You can always read the aligned src[] even if outside the buffer.
-> So the only difficult part is writing the odd bytes
-> and getting 'n' and the direction of the shifts right!
-I had considered this.  I wondered if it would really be faster due
-to the additional instructions required on each iteration and avoided
-shifts due to the possible use of a barrel shifter vs a clocked shift
-register in hardware.  But you are probably correct.  It would
-probably still be faster.  Using that instead would also greatly
-simplify my code since I wouldn't need a bunch of different loops
-for each level of granularity.  I would just do it at the native
-XLEN size.  I'll start working on this change.
-
-	Michael
-
-On 1/24/22 04:21, David Laight wrote:
-
-> From: michael@michaelkloos.com
->> Sent: 23 January 2022 03:45
->>
->> Rewrote the riscv memmove() assembly implementation.  The
->> previous implementation did not check memory alignment and it
->> compared 2 pointers with a signed comparison.  The misaligned
->> memory access would cause the kernel to crash on systems that
->> did not emulate it in firmware and did not support it in hardware.
->> Firmware emulation is slow and may not exist.  Additionally,
->> hardware support may not exist and would likely still run slower
->> than aligned accesses even if it did.
-> That may not be true.
-> On x86 the cost of misaligned accesses only just measurable.
-> It isn't even one clock per cache line for reads (eg ipcsum).
+On Mon, Jan 24, 2022 at 12:05 PM Zhou Qingyang <zhou1615@umn.edu> wrote:
 >
->> The RISC-V spec does not
->> guarantee that support for misaligned memory accesses will exist.
->> It should not be depended on.
->>
->> This patch now checks for the maximum granularity of co-alignment
->> between the pointers and copies them with that, using single-byte
->> copy for any unaligned data at their terminations.  It also now uses
->> unsigned comparison for the pointers.
-> If the performance of misaligned copies ever matters it is probably
-> better to use:
-> 	*dst++ = src[0] >> n | src[1] << (64 - n);
-> for the body of the misaligned loop.
-> You can always read the aligned src[] even if outside the buffer.
-> So the only difficult part is writing the odd bytes
-> and getting 'n' and the direction of the shifts right!
+> In calculate_bandwidth(), the tag free_sclk and free_yclk are reversed,
+> which could lead to a memory leak of yclk.
 >
-> 	David
+> Fix this bug by changing the location of free_sclk and free_yclk.
 >
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+> This bug was found by a static analyzer.
+>
+> Builds with 'make allyesconfig' show no new warnings,
+> and our static analyzer no longer warns about this code.
+>
+> Fixes: 2be8989d0fc2 ("drm/amd/display/dc/calcs/dce_calcs: Move some large variables from the stack to the heap")
+> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+> ---
+> The analysis employs differential checking to identify inconsistent
+> security operations (e.g., checks or kfrees) between two code paths
+> and confirms that the inconsistent operations are not recovered in the
+> current function or the callers, so they constitute bugs.
+>
+> Note that, as a bug found by static analysis, it can be a false
+> positive or hard to trigger. Multiple researchers have cross-reviewed
+> the bug.
+>
+>  drivers/gpu/drm/amd/display/dc/calcs/dce_calcs.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/calcs/dce_calcs.c b/drivers/gpu/drm/amd/display/dc/calcs/dce_calcs.c
+> index ff5bb152ef49..e6ef36de0825 100644
+> --- a/drivers/gpu/drm/amd/display/dc/calcs/dce_calcs.c
+> +++ b/drivers/gpu/drm/amd/display/dc/calcs/dce_calcs.c
+> @@ -2033,10 +2033,10 @@ static void calculate_bandwidth(
+>         kfree(surface_type);
+>  free_tiling_mode:
+>         kfree(tiling_mode);
+> -free_yclk:
+> -       kfree(yclk);
+>  free_sclk:
+>         kfree(sclk);
+> +free_yclk:
+> +       kfree(yclk);
+>  }
+>
+>  /*******************************************************************************
+> --
+> 2.25.1
 >

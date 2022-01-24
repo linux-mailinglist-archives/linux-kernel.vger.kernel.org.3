@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA61549A0E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:33:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E859749A0A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1848329AbiAXXWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:22:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37658 "EHLO
+        id S1846408AbiAXXPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:15:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1584676AbiAXWVc (ORCPT
+        with ESMTP id S1584735AbiAXWVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:21:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D89C041881;
-        Mon, 24 Jan 2022 12:52:49 -0800 (PST)
+        Mon, 24 Jan 2022 17:21:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFD6C054303;
+        Mon, 24 Jan 2022 12:53:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 564CB611C2;
-        Mon, 24 Jan 2022 20:52:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CECAC340E5;
-        Mon, 24 Jan 2022 20:52:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0516AB811FB;
+        Mon, 24 Jan 2022 20:53:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EC66C36AE2;
+        Mon, 24 Jan 2022 20:53:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057568;
-        bh=PV3zTcZoEZBIfBNhE05GCrsJQVwhbmMUXbm4kUtn8zI=;
+        s=korg; t=1643057587;
+        bh=xnUn7jNRsQgFINae2Fala1LuQT7IMhQfr7FYju3KQAc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oG/h7ez1OU3vlzJLnvHfQH70PrRtUmnD0jHOiULPorwOcKbVXdfkssgvAdLj4GW1Y
-         DQyZ19Ka8etfAj9Wo+mhLlmMZ4c+ebzZDgj/VPR3Me5iR96zfTiW4ZgrNJE4MNbAip
-         p31Whvr18iKC7cMVw3gFAB0l915hbRVf1P38e2UI=
+        b=dGlzzuTNSt1IwoJ7HbD9sEcqcMDWVluwANkOfdqZ57tINOdLIqopiDZzd1ZxfcCdN
+         Qc2j5ZHDvIg7cdSSD6cZmObTVFCMKhI4/j42hYA81e1aUdplb98YZqP8YbT08/ZyqJ
+         /0nhEZHJN0nx4OISSjmtDVihAFyEq3LDeCns3tjM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.16 0001/1039] KVM: x86/mmu: Fix write-protection of PTs mapped by the TDP MMU
-Date:   Mon, 24 Jan 2022 19:29:50 +0100
-Message-Id: <20220124184125.179384891@linuxfoundation.org>
+        stable@vger.kernel.org, Jason Gerecke <jason.gerecke@wacom.com>,
+        Ping Cheng <ping.cheng@wacom.com>,
+        Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH 5.16 0005/1039] HID: wacom: Reset expected and received contact counts at the same time
+Date:   Mon, 24 Jan 2022 19:29:54 +0100
+Message-Id: <20220124184125.320093581@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -51,56 +49,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Matlack <dmatlack@google.com>
+From: Jason Gerecke <killertofu@gmail.com>
 
-commit 7c8a4742c4abe205ec9daf416c9d42fd6b406e8e upstream.
+commit 546e41ac994cc185ef3de610ca849a294b5df3ba upstream.
 
-When the TDP MMU is write-protection GFNs for page table protection (as
-opposed to for dirty logging, or due to the HVA not being writable), it
-checks if the SPTE is already write-protected and if so skips modifying
-the SPTE and the TLB flush.
+These two values go hand-in-hand and must be valid for the driver to
+behave correctly. We are currently lazy about updating the values and
+rely on the "expected" code flow to take care of making sure they're
+valid at the point they're needed. The "expected" flow changed somewhat
+with commit f8b6a74719b5 ("HID: wacom: generic: Support multiple tools
+per report"), however. This led to problems with the DTH-2452 due (in
+part) to *all* contacts being fully processed -- even those past the
+expected contact count. Specifically, the received count gets reset to
+0 once all expected fingers are processed, but not the expected count.
+The rest of the contacts in the report are then *also* processed since
+now the driver thinks we've only processed 0 of N expected contacts.
 
-This behavior is incorrect because it fails to check if the SPTE
-is write-protected for page table protection, i.e. fails to check
-that MMU-writable is '0'.  If the SPTE was write-protected for dirty
-logging but not page table protection, the SPTE could locklessly be made
-writable, and vCPUs could still be running with writable mappings cached
-in their TLB.
+Later commits such as 7fb0413baa7f (HID: wacom: Use "Confidence" flag to
+prevent reporting invalid contacts) worked around the DTH-2452 issue by
+skipping the invalid contacts at the end of the report, but this is not
+a complete fix. The confidence flag cannot be relied on when a contact
+is removed (see the following patch), and dealing with that condition
+re-introduces the DTH-2452 issue unless we also address this contact
+count laziness. By resetting expected and received counts at the same
+time we ensure the driver understands that there are 0 more contacts
+expected in the report. Similarly, we also make sure to reset the
+received count if for some reason we're out of sync in the pre-report
+phase.
 
-Fix this by only skipping setting the SPTE if the SPTE is already
-write-protected *and* MMU-writable is already clear.  Technically,
-checking only MMU-writable would suffice; a SPTE cannot be writable
-without MMU-writable being set.  But check both to be paranoid and
-because it arguably yields more readable code.
-
-Fixes: 46044f72c382 ("kvm: x86/mmu: Support write protection for nesting in tdp MMU")
-Cc: stable@vger.kernel.org
-Signed-off-by: David Matlack <dmatlack@google.com>
-Message-Id: <20220113233020.3986005-2-dmatlack@google.com>
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Link: https://github.com/linuxwacom/input-wacom/issues/288
+Fixes: f8b6a74719b5 ("HID: wacom: generic: Support multiple tools per report")
+CC: stable@vger.kernel.org
+Signed-off-by: Jason Gerecke <jason.gerecke@wacom.com>
+Reviewed-by: Ping Cheng <ping.cheng@wacom.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/mmu/tdp_mmu.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/hid/wacom_wac.c |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -1442,12 +1442,12 @@ static bool write_protect_gfn(struct kvm
- 		    !is_last_spte(iter.old_spte, iter.level))
- 			continue;
- 
--		if (!is_writable_pte(iter.old_spte))
--			break;
--
- 		new_spte = iter.old_spte &
- 			~(PT_WRITABLE_MASK | shadow_mmu_writable_mask);
- 
-+		if (new_spte == iter.old_spte)
-+			break;
-+
- 		tdp_mmu_set_spte(kvm, &iter, new_spte);
- 		spte_set = true;
+--- a/drivers/hid/wacom_wac.c
++++ b/drivers/hid/wacom_wac.c
+@@ -2692,11 +2692,14 @@ static void wacom_wac_finger_pre_report(
+ 	    hid_data->cc_index >= 0) {
+ 		struct hid_field *field = report->field[hid_data->cc_index];
+ 		int value = field->value[hid_data->cc_value_index];
+-		if (value)
++		if (value) {
+ 			hid_data->num_expected = value;
++			hid_data->num_received = 0;
++		}
  	}
+ 	else {
+ 		hid_data->num_expected = wacom_wac->features.touch_max;
++		hid_data->num_received = 0;
+ 	}
+ }
+ 
+@@ -2724,6 +2727,7 @@ static void wacom_wac_finger_report(stru
+ 
+ 	input_sync(input);
+ 	wacom_wac->hid_data.num_received = 0;
++	wacom_wac->hid_data.num_expected = 0;
+ 
+ 	/* keep touch state for pen event */
+ 	wacom_wac->shared->touch_down = wacom_wac_finger_count_touches(wacom_wac);
 
 

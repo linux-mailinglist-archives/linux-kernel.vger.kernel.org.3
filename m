@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 426DD499F49
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:18:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C0C3499F27
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381769AbiAXWz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:55:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57022 "EHLO
+        id S1840180AbiAXWwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:52:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573880AbiAXVqs (ORCPT
+        with ESMTP id S1354658AbiAXVqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:46:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27799C08B4CE;
-        Mon, 24 Jan 2022 12:32:27 -0800 (PST)
+        Mon, 24 Jan 2022 16:46:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D6DC00365E;
+        Mon, 24 Jan 2022 12:32:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FDDE6157D;
-        Mon, 24 Jan 2022 20:32:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 877D5C340E5;
-        Mon, 24 Jan 2022 20:32:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A05EB812A4;
+        Mon, 24 Jan 2022 20:32:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61CD3C340E5;
+        Mon, 24 Jan 2022 20:32:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056346;
-        bh=oFIl2lMl4yMt8gerjJ+NCCv4bVevmsWfQhKTrOw/WJY=;
+        s=korg; t=1643056348;
+        bh=MVdRqYa1p9ZJ0mIo1ZiaJWdNN13LKLT2GhdK1wfH3g8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HvLC/q5i1AWyJhSXadqc2sp1+lNWSlTDgO/Sex18iHV7tQC/OXFzFwv5ksmoIqOsC
-         QU+fVQ3rc/1Blnc5Kf8EbiEqc4wMBMyQEkuq+wuOEeqtHMyI56HS6kU0vSadLP7Q/1
-         21FU90gzZSHPOBZA3nq+E0qEFOPHSgw9zCtX1Hd8=
+        b=ql97tln4FsYfckKDQCr0S7FShIhdCMxO3IKtBKvVnokqZ9bffiLy6jHfDXFuvsfkk
+         q3PjFuCoo6Am4UYrODzWL54lDKgLasF3r+QxmQgmrkiGKizcE3ZmSxVznEQcCjU+Z+
+         QyzZMqAP/Lf2BXAvF5Om5pNFJdjtlNaltl+S0Gfs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Quentin Perret <qperret@google.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 453/846] of/fdt: Dont worry about non-memory region overlap for no-map
-Date:   Mon, 24 Jan 2022 19:39:30 +0100
-Message-Id: <20220124184116.611818964@linuxfoundation.org>
+        stable@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 454/846] MIPS: boot/compressed/: add __ashldi3 to target for ZSTD compression
+Date:   Mon, 24 Jan 2022 19:39:31 +0100
+Message-Id: <20220124184116.641582776@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -53,89 +50,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephen Boyd <swboyd@chromium.org>
+From: Paul Cercueil <paul@crapouillou.net>
 
-[ Upstream commit da17d6905d29ddcdc04b2fdc37ed8cf1e8437cc8 ]
+[ Upstream commit fbf3bce458214bb971d3d571515b3b129eac290b ]
 
-In commit 8a5a75e5e9e5 ("of/fdt: Make sure no-map does not remove
-already reserved regions") we returned -EBUSY when trying to mark
-regions as no-map when they intersect with reserved memory. The goal was
-to find bad no-map reserved memory DT nodes that would unmap the kernel
-text/data sections.
+Just like before with __bswapdi2(), for MIPS pre-boot when
+CONFIG_KERNEL_ZSTD=y the decompressor function will use __ashldi3(), so
+the object file should be added to the target object file.
 
-The problem is the reserved memory check will still trigger if the DT
-has a /memreserve/ that completely subsumes the no-map memory carveouts
-in the reserved memory node _and_ that region is also not part of the
-memory reg property. For example in sc7180.dtsi we have the following
-reserved-memory and memory node:
+Fixes these build errors:
 
-      memory@80000000 {
-          /* We expect the bootloader to fill in the size */
-          reg = <0 0x80000000 0 0>;
-      };
+mipsel-linux-ld: arch/mips/boot/compressed/decompress.o: in function `FSE_buildDTable_internal':
+decompress.c:(.text.FSE_buildDTable_internal+0x48): undefined reference to `__ashldi3'
+mipsel-linux-ld: arch/mips/boot/compressed/decompress.o: in function `FSE_decompress_wksp_body_default':
+decompress.c:(.text.FSE_decompress_wksp_body_default+0xa8): undefined reference to `__ashldi3'
+mipsel-linux-ld: arch/mips/boot/compressed/decompress.o: in function `ZSTD_getFrameHeader_advanced':
+decompress.c:(.text.ZSTD_getFrameHeader_advanced+0x134): undefined reference to `__ashldi3'
 
-      smem_mem: memory@80900000 {
-              reg = <0x0 0x80900000 0x0 0x200000>;
-              no-map;
-      };
-
-and the memreserve filled in by the bootloader is
-
-      /memreserve/ 0x80800000 0x400000;
-
-while the /memory node is transformed into
-
-      memory@80000000 {
-          /* The bootloader fills in the size, and adds another region */
-          reg = <0 0x80000000 0 0x00800000>,
-                <0 0x80c00000 0 0x7f200000>;
-      };
-
-The smem region is doubly reserved via /memreserve/ and by not being
-part of the /memory reg property. This leads to the following warning
-printed at boot.
-
- OF: fdt: Reserved memory: failed to reserve memory for node 'memory@80900000': base 0x0000000080900000, size 2 MiB
-
-Otherwise nothing really goes wrong because the smem region is not going
-to be mapped by the kernel's direct linear mapping given that it isn't
-part of the memory node. Therefore, let's only consider this to be a
-problem if we're trying to mark a region as no-map and it is actually
-memory that we're intending to keep out of the kernel's direct mapping
-but it's already been reserved.
-
-Acked-by: Mike Rapoport <rppt@kernel.org>
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: Nicolas Boichat <drinkcat@chromium.org>
-Cc: Quentin Perret <qperret@google.com>
-Cc: Jan Kiszka <jan.kiszka@siemens.com>
-Fixes: 8a5a75e5e9e5 ("of/fdt: Make sure no-map does not remove already reserved regions")
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-Signed-off-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20220107194233.2793146-1-swboyd@chromium.org
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/of/fdt.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ arch/mips/boot/compressed/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index 32e5e782d43da..59a7a9ee58ef7 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -482,9 +482,11 @@ static int __init early_init_dt_reserve_memory_arch(phys_addr_t base,
- 	if (nomap) {
- 		/*
- 		 * If the memory is already reserved (by another region), we
--		 * should not allow it to be marked nomap.
-+		 * should not allow it to be marked nomap, but don't worry
-+		 * if the region isn't memory as it won't be mapped.
- 		 */
--		if (memblock_is_region_reserved(base, size))
-+		if (memblock_overlaps_region(&memblock.memory, base, size) &&
-+		    memblock_is_region_reserved(base, size))
- 			return -EBUSY;
+diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
+index 9112bdb86be45..f53510d2f6296 100644
+--- a/arch/mips/boot/compressed/Makefile
++++ b/arch/mips/boot/compressed/Makefile
+@@ -56,7 +56,7 @@ $(obj)/uart-ath79.c: $(srctree)/arch/mips/ath79/early_printk.c
  
- 		return memblock_mark_nomap(base, size);
+ vmlinuzobjs-$(CONFIG_KERNEL_XZ) += $(obj)/ashldi3.o
+ 
+-vmlinuzobjs-$(CONFIG_KERNEL_ZSTD) += $(obj)/bswapdi.o
++vmlinuzobjs-$(CONFIG_KERNEL_ZSTD) += $(obj)/bswapdi.o $(obj)/ashldi3.o
+ 
+ extra-y += ashldi3.c
+ $(obj)/ashldi3.c: $(obj)/%.c: $(srctree)/lib/%.c FORCE
 -- 
 2.34.1
 

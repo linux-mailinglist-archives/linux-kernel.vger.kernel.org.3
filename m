@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25BEB498C64
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:23:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA614992F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245712AbiAXTV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:21:57 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41504 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345281AbiAXTN4 (ORCPT
+        id S1382992AbiAXU0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:26:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359630AbiAXT75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:13:56 -0500
+        Mon, 24 Jan 2022 14:59:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D647C04D63B;
+        Mon, 24 Jan 2022 11:28:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C54461320;
-        Mon, 24 Jan 2022 19:13:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6954CC340E5;
-        Mon, 24 Jan 2022 19:13:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4579AB8119D;
+        Mon, 24 Jan 2022 19:28:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DDB8C340E5;
+        Mon, 24 Jan 2022 19:28:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051636;
-        bh=u7PT4VEBoCpl1z4UKdzURqBUvQQ7yDGByyBCzgv/Jh8=;
+        s=korg; t=1643052497;
+        bh=f9JKyd9rol/S9GiU0MrQzzrG3hpPdnm2HGeVfi+YH18=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=py9OTItyD5c5AJsP+bJuSLZ/i75F+VcKxcBuOJg+ULZy6c1J2/nifW+arH1+emBoL
-         7fA9J3Cmw4WiztNlTlpaOZUeKcT3NN3+T7bm6dtYYFjky6UUC123K6zaSc90PRFT3R
-         6T+KiVU4132tx1wwMhPbmm6DoX8twEzo6lMl0Q5I=
+        b=EpzoPg5OHAXl7SlfhfbsvrXD4iDYoeB9SUr6zfsLyvbACBLjKhC4GTGS3mbVRPNOR
+         DYRKf+0x8kE6hZvsB+1DlYDpkGwsripCuQt4AguEUVRBnV2jdwy2fV8PhKfis/AYug
+         KzhGnJDmcwfwqeQB+faynSJGwSy7bYn1L+ZsZbNg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Aditya Garg <gargaditya08@live.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH 4.19 006/239] mfd: intel-lpss: Fix too early PM enablement in the ACPI ->probe()
-Date:   Mon, 24 Jan 2022 19:40:44 +0100
-Message-Id: <20220124183943.317102196@linuxfoundation.org>
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 061/320] arm64: dts: qcom: msm8916: fix MMC controller aliases
+Date:   Mon, 24 Jan 2022 19:40:45 +0100
+Message-Id: <20220124183955.808212535@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,61 +50,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-commit c9e143084d1a602f829115612e1ec79df3727c8b upstream.
+[ Upstream commit b0293c19d42f6d6951c2fab9a47fed50baf2c14d ]
 
-The runtime PM callback may be called as soon as the runtime PM facility
-is enabled and activated. It means that ->suspend() may be called before
-we finish probing the device in the ACPI case. Hence, NULL pointer
-dereference:
+Change sdhcN aliases to mmcN to make them actually work. Currently the
+board uses non-standard aliases sdhcN, which do not work, resulting in
+mmc0 and mmc1 hosts randomly changing indices between boots.
 
-  intel-lpss INT34BA:00: IRQ index 0 not found
-  BUG: kernel NULL pointer dereference, address: 0000000000000030
-  ...
-  Workqueue: pm pm_runtime_work
-  RIP: 0010:intel_lpss_suspend+0xb/0x40 [intel_lpss]
-
-To fix this, first try to register the device and only after that enable
-runtime PM facility.
-
-Fixes: 4b45efe85263 ("mfd: Add support for Intel Sunrisepoint LPSS devices")
-Reported-by: Orlando Chamberlain <redecorating@protonmail.com>
-Reported-by: Aditya Garg <gargaditya08@live.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Tested-by: Aditya Garg <gargaditya08@live.com>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Link: https://lore.kernel.org/r/20211101190008.86473-1-andriy.shevchenko@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: c4da5a561627 ("arm64: dts: qcom: Add msm8916 sdhci configuration nodes")
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20211201020559.1611890-1-dmitry.baryshkov@linaro.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/intel-lpss-acpi.c |    7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/msm8916.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/mfd/intel-lpss-acpi.c
-+++ b/drivers/mfd/intel-lpss-acpi.c
-@@ -80,6 +80,7 @@ static int intel_lpss_acpi_probe(struct
- {
- 	struct intel_lpss_platform_info *info;
- 	const struct acpi_device_id *id;
-+	int ret;
+diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+index 449843f2184d8..301c1c467c0b7 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+@@ -16,8 +16,8 @@
+ 	#size-cells = <2>;
  
- 	id = acpi_match_device(intel_lpss_acpi_ids, &pdev->dev);
- 	if (!id)
-@@ -93,10 +94,14 @@ static int intel_lpss_acpi_probe(struct
- 	info->mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	info->irq = platform_get_irq(pdev, 0);
+ 	aliases {
+-		sdhc1 = &sdhc_1; /* SDC1 eMMC slot */
+-		sdhc2 = &sdhc_2; /* SDC2 SD card slot */
++		mmc0 = &sdhc_1; /* SDC1 eMMC slot */
++		mmc1 = &sdhc_2; /* SDC2 SD card slot */
+ 	};
  
-+	ret = intel_lpss_probe(&pdev->dev, info);
-+	if (ret)
-+		return ret;
-+
- 	pm_runtime_set_active(&pdev->dev);
- 	pm_runtime_enable(&pdev->dev);
- 
--	return intel_lpss_probe(&pdev->dev, info);
-+	return 0;
- }
- 
- static int intel_lpss_acpi_remove(struct platform_device *pdev)
+ 	chosen { };
+-- 
+2.34.1
+
 
 

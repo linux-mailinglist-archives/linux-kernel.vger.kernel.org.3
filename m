@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C46B04990E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:08:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC61D4990ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:08:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347374AbiAXUHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:07:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56638 "EHLO
+        id S1356831AbiAXUH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:07:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346820AbiAXTsl (ORCPT
+        with ESMTP id S1350541AbiAXTtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:48:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3802C02B8E2;
-        Mon, 24 Jan 2022 11:23:43 -0800 (PST)
+        Mon, 24 Jan 2022 14:49:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87A8C02B8F1;
+        Mon, 24 Jan 2022 11:23:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 649906121F;
-        Mon, 24 Jan 2022 19:23:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4628EC340E5;
-        Mon, 24 Jan 2022 19:23:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F772B8122A;
+        Mon, 24 Jan 2022 19:23:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 469FBC340E8;
+        Mon, 24 Jan 2022 19:23:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052222;
-        bh=XvKunCyUTqhoDJttVMh5EWZ4rnj0JNBQ0NSEL9yv4Ak=;
+        s=korg; t=1643052225;
+        bh=1pszC8haO9AcQCNEv/+zUuqg25w5JfFjf7bNYenSnDA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BZuPRJQb3930e/gGI83wQTHQ/xHjQxwXHMAyaaVEicelT4diMxYKaGAezsVX1iRdZ
-         JQSnWRIdxA/dfZWg7SSD/0fW+jNpIOY15Z5WsqMi2gcijDtVaS9s3SgYFp0iLID/OP
-         WmDA+hOPU7GWi2hxM2OjIKm4CbXIGLL79fzzj4fE=
+        b=uqZdcdCbo2RCuMtKSNRv9WQLP+/3gexJSjlStLp5/VM+6rvGK3lYS6eBdluuCg58j
+         Z4fM7kbsnM5mxRojJ1gQHB+Mqz1FeY7lIZiciU6l6K+rlAHDcAD8oCocfJ2gqiYj42
+         0ZXCjLdreVtCYD/QZQtI8/6KuGjEJST4Tcpzvn5M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Tudor Ambarus <tudor.ambarus@microchip.com>,
         Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 4.19 229/239] dmaengine: at_xdmac: Print debug message after realeasing the lock
-Date:   Mon, 24 Jan 2022 19:44:27 +0100
-Message-Id: <20220124183950.387625015@linuxfoundation.org>
+Subject: [PATCH 4.19 230/239] dmaengine: at_xdmac: Fix lld view setting
+Date:   Mon, 24 Jan 2022 19:44:28 +0100
+Message-Id: <20220124183950.417192507@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
 References: <20220124183943.102762895@linuxfoundation.org>
@@ -51,36 +51,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Tudor Ambarus <tudor.ambarus@microchip.com>
 
-commit 5edc24ac876a928f36f407a0fcdb33b94a3a210f upstream.
+commit 1385eb4d14d447cc5d744bc2ac34f43be66c9963 upstream.
 
-It is desirable to do the prints without the lock held if possible, so
-move the print after the lock is released.
+AT_XDMAC_CNDC_NDVIEW_NDV3 was set even for AT_XDMAC_MBR_UBC_NDV2,
+because of the wrong bit handling. Fix it.
 
-Fixes: e1f7c9eee707 ("dmaengine: at_xdmac: creation of the atmel eXtended DMA Controller driver")
+Fixes: ee0fe35c8dcd ("dmaengine: xdmac: Handle descriptor's view 3 registers")
 Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Link: https://lore.kernel.org/r/20211215110115.191749-4-tudor.ambarus@microchip.com
+Link: https://lore.kernel.org/r/20211215110115.191749-10-tudor.ambarus@microchip.com
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/at_xdmac.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/dma/at_xdmac.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 --- a/drivers/dma/at_xdmac.c
 +++ b/drivers/dma/at_xdmac.c
-@@ -424,10 +424,12 @@ static dma_cookie_t at_xdmac_tx_submit(s
- 	spin_lock_irqsave(&atchan->lock, irqflags);
- 	cookie = dma_cookie_assign(tx);
- 
--	dev_vdbg(chan2dev(tx->chan), "%s: atchan 0x%p, add desc 0x%p to xfers_list\n",
--		 __func__, atchan, desc);
- 	list_add_tail(&desc->xfer_node, &atchan->xfers_list);
- 	spin_unlock_irqrestore(&atchan->lock, irqflags);
-+
-+	dev_vdbg(chan2dev(tx->chan), "%s: atchan 0x%p, add desc 0x%p to xfers_list\n",
-+		 __func__, atchan, desc);
-+
- 	return cookie;
- }
- 
+@@ -100,6 +100,7 @@
+ #define		AT_XDMAC_CNDC_NDE		(0x1 << 0)		/* Channel x Next Descriptor Enable */
+ #define		AT_XDMAC_CNDC_NDSUP		(0x1 << 1)		/* Channel x Next Descriptor Source Update */
+ #define		AT_XDMAC_CNDC_NDDUP		(0x1 << 2)		/* Channel x Next Descriptor Destination Update */
++#define		AT_XDMAC_CNDC_NDVIEW_MASK	GENMASK(28, 27)
+ #define		AT_XDMAC_CNDC_NDVIEW_NDV0	(0x0 << 3)		/* Channel x Next Descriptor View 0 */
+ #define		AT_XDMAC_CNDC_NDVIEW_NDV1	(0x1 << 3)		/* Channel x Next Descriptor View 1 */
+ #define		AT_XDMAC_CNDC_NDVIEW_NDV2	(0x2 << 3)		/* Channel x Next Descriptor View 2 */
+@@ -359,7 +360,8 @@ static void at_xdmac_start_xfer(struct a
+ 	 */
+ 	if (at_xdmac_chan_is_cyclic(atchan))
+ 		reg = AT_XDMAC_CNDC_NDVIEW_NDV1;
+-	else if (first->lld.mbr_ubc & AT_XDMAC_MBR_UBC_NDV3)
++	else if ((first->lld.mbr_ubc &
++		  AT_XDMAC_CNDC_NDVIEW_MASK) == AT_XDMAC_MBR_UBC_NDV3)
+ 		reg = AT_XDMAC_CNDC_NDVIEW_NDV3;
+ 	else
+ 		reg = AT_XDMAC_CNDC_NDVIEW_NDV2;
 
 

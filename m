@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C618499C2E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1CE499593
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:13:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578168AbiAXWBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:01:54 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38794 "EHLO
+        id S1359175AbiAXUxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:53:06 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36204 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1450358AbiAXVUW (ORCPT
+        with ESMTP id S1384721AbiAXUa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:20:22 -0500
+        Mon, 24 Jan 2022 15:30:26 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95021B81188;
-        Mon, 24 Jan 2022 21:20:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2258AC340E4;
-        Mon, 24 Jan 2022 21:20:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C37BB8122D;
+        Mon, 24 Jan 2022 20:30:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EDDFC340E5;
+        Mon, 24 Jan 2022 20:30:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059218;
-        bh=KgD6qxy+fP2fvSM/3e8PrWESYFntT/ISgWQqCE2FJS0=;
+        s=korg; t=1643056224;
+        bh=03Wqyse5WbMn58IU7wn8cQE9JWvTPxZxaYwH/cNb67A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dtQziMlkN1DA1sQX3v5vYrP8o3b5jNuuGHhWUe+hoo2Opw/aF8hmNApSfRaau6+6c
-         yhsn+WTGaBHqcJeUrkbborYVSmzGtDzuLLudrOMIh8Lsqj6RWZxCWLMt83xvfQxmoE
-         zyAlgB3oL2OFgbTHRSJGurzBukFVMe8CdLuV8fZg=
+        b=PHRVMFtep2t1qpDp5W8ue1yHw0Y7wm0/ZXOi46+sJRPB9XQkul6vSmacwoPMS5Dbv
+         cJAqgXr64x/D5WMdYfkOyo+xUSqorO4uQBJfaEFUp9EavSKLute+TyOHJvXf1Uo0n+
+         4xYrwimmu3nbr5fihXU9bRUhTo9fVPTM6b+tv24o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wei Yongjun <weiyongjun1@huawei.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0541/1039] Bluetooth: Fix memory leak of hci device
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Jim Quinlan <jim2101024@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Frank Rowand <frank.rowand@sony.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 413/846] of: unittest: fix warning on PowerPC frame size warning
 Date:   Mon, 24 Jan 2022 19:38:50 +0100
-Message-Id: <20220124184143.466693673@linuxfoundation.org>
+Message-Id: <20220124184115.216029653@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,64 +49,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wei Yongjun <weiyongjun1@huawei.com>
+From: Jim Quinlan <jim2101024@gmail.com>
 
-[ Upstream commit 75d9b8559ac36e059238ee4f8e33cd86086586ba ]
+[ Upstream commit a8d61a9112ad0c9216ab45d050991e07bc4f3408 ]
 
-Fault injection test reported memory leak of hci device as follows:
+The struct device variable "dev_bogus" was triggering this warning
+on a PowerPC build:
 
-unreferenced object 0xffff88800b858000 (size 8192):
-  comm "kworker/0:2", pid 167, jiffies 4294955747 (age 557.148s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 ad 4e ad de  .............N..
-  backtrace:
-    [<0000000070eb1059>] kmem_cache_alloc_trace mm/slub.c:3208
-    [<00000000015eb521>] hci_alloc_dev_priv include/linux/slab.h:591
-    [<00000000dcfc1e21>] bpa10x_probe include/net/bluetooth/hci_core.h:1240
-    [<000000005d3028c7>] usb_probe_interface drivers/usb/core/driver.c:397
-    [<00000000cbac9243>] really_probe drivers/base/dd.c:517
-    [<0000000024cab3f0>] __driver_probe_device drivers/base/dd.c:751
-    [<00000000202135cb>] driver_probe_device drivers/base/dd.c:782
-    [<000000000761f2bc>] __device_attach_driver drivers/base/dd.c:899
-    [<00000000f7d63134>] bus_for_each_drv drivers/base/bus.c:427
-    [<00000000c9551f0b>] __device_attach drivers/base/dd.c:971
-    [<000000007f79bd16>] bus_probe_device drivers/base/bus.c:487
-    [<000000007bb8b95a>] device_add drivers/base/core.c:3364
-    [<000000009564d9ea>] usb_set_configuration drivers/usb/core/message.c:2171
-    [<00000000e4657087>] usb_generic_driver_probe drivers/usb/core/generic.c:239
-    [<0000000071ede518>] usb_probe_device drivers/usb/core/driver.c:294
-    [<00000000cbac9243>] really_probe drivers/base/dd.c:517
+    drivers/of/unittest.c: In function 'of_unittest_dma_ranges_one.constprop':
+    [...] >> The frame size of 1424 bytes is larger than 1024 bytes
+             [-Wframe-larger-than=]
 
-hci_alloc_dev() do not init the device's flag. And hci_free_dev()
-using put_device() to free the memory allocated for this device,
-but it calls just put_device(dev) only in case of HCI_UNREGISTER
-flag is set, So any error handing before hci_register_dev() success
-will cause memory leak.
+This variable is now dynamically allocated.
 
-To avoid this behaviour we can using kfree() to release dev before
-hci_register_dev() success.
-
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Fixes: e0d072782c734 ("dma-mapping: introduce DMA range map, supplanting dma_pfn_offset")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Frank Rowand <frank.rowand@sony.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20211210184636.7273-2-jim2101024@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/hci_sysfs.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/of/unittest.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/net/bluetooth/hci_sysfs.c b/net/bluetooth/hci_sysfs.c
-index 7827639ecf5c3..4e3e0451b08c1 100644
---- a/net/bluetooth/hci_sysfs.c
-+++ b/net/bluetooth/hci_sysfs.c
-@@ -86,6 +86,8 @@ static void bt_host_release(struct device *dev)
+diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+index 5b85a2a3792ae..242381568f13c 100644
+--- a/drivers/of/unittest.c
++++ b/drivers/of/unittest.c
+@@ -911,11 +911,18 @@ static void __init of_unittest_dma_ranges_one(const char *path,
+ 	if (!rc) {
+ 		phys_addr_t	paddr;
+ 		dma_addr_t	dma_addr;
+-		struct device	dev_bogus;
++		struct device	*dev_bogus;
  
- 	if (hci_dev_test_flag(hdev, HCI_UNREGISTER))
- 		hci_release_dev(hdev);
-+	else
-+		kfree(hdev);
- 	module_put(THIS_MODULE);
- }
+-		dev_bogus.dma_range_map = map;
+-		paddr = dma_to_phys(&dev_bogus, expect_dma_addr);
+-		dma_addr = phys_to_dma(&dev_bogus, expect_paddr);
++		dev_bogus = kzalloc(sizeof(struct device), GFP_KERNEL);
++		if (!dev_bogus) {
++			unittest(0, "kzalloc() failed\n");
++			kfree(map);
++			return;
++		}
++
++		dev_bogus->dma_range_map = map;
++		paddr = dma_to_phys(dev_bogus, expect_dma_addr);
++		dma_addr = phys_to_dma(dev_bogus, expect_paddr);
  
+ 		unittest(paddr == expect_paddr,
+ 			 "of_dma_get_range: wrong phys addr %pap (expecting %llx) on node %pOF\n",
+@@ -925,6 +932,7 @@ static void __init of_unittest_dma_ranges_one(const char *path,
+ 			 &dma_addr, expect_dma_addr, np);
+ 
+ 		kfree(map);
++		kfree(dev_bogus);
+ 	}
+ 	of_node_put(np);
+ #endif
 -- 
 2.34.1
 

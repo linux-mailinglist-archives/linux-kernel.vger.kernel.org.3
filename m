@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96293498CBF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E029498C53
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239048AbiAXTYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:24:15 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40326 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348225AbiAXTPE (ORCPT
+        id S1348835AbiAXTTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:19:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47626 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345898AbiAXTLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:15:04 -0500
+        Mon, 24 Jan 2022 14:11:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0E5C061A0F;
+        Mon, 24 Jan 2022 11:03:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D9E9B8121A;
-        Mon, 24 Jan 2022 19:15:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9400C340E5;
-        Mon, 24 Jan 2022 19:15:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40C7FB8119D;
+        Mon, 24 Jan 2022 19:03:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 543AEC340E7;
+        Mon, 24 Jan 2022 19:03:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051702;
-        bh=C/D2h9OZPFVVIfo9DacnrUoGpxJYsOFF0b8+7wbpPCo=;
+        s=korg; t=1643051001;
+        bh=mzhVvtZbKKTuMHdTT/tTcCrIaSXjHW7htVq1Q5kYpyE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nt6A8gjDkrTmtkIuyIznDf0/p/PjInc+3Ep2X13TOEvDvXrGlm9Tp1oTl/p8D3x0R
-         E5iwQ0IRQHz1pKa9zReNAeqw2uRfjRQXx4XVv5bMFsIQmpWRiqh+eBAtO+9QhD14LW
-         3tLXgKUiSxgMqVxvCJQVuMV+iX0E38lk03ZUSN0s=
+        b=vTH4Beebbo25udXVnOH09t9pAYXqjEvScI/9qnKCXCwg7K9z8hGchJGT3LWsDReiX
+         21SNRytawUdMHOtnh4lvr/sCGxULFejk6u59TsKWg6ogYd+IF5LlONIs4cs/uOtqtO
+         5zvKZpUuNvpn2jEa3MDhmv1v0HJyMSrofR0vPd18=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Suresh Udipi <sudipi@jp.adit-jv.com>,
-        Kazuyoshi Akiyama <akiyama@nds-osk.co.jp>,
-        Michael Rodin <mrodin@de.adit-jv.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
+        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 059/239] media: rcar-csi2: Correct the selection of hsfreqrange
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH 4.14 022/186] media: mceusb: fix control-message timeouts
 Date:   Mon, 24 Jan 2022 19:41:37 +0100
-Message-Id: <20220124183945.017599609@linuxfoundation.org>
+Message-Id: <20220124183937.834475984@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,80 +49,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Suresh Udipi <sudipi@jp.adit-jv.com>
+From: Johan Hovold <johan@kernel.org>
 
-[ Upstream commit cee44d4fbacbbdfe62697ec94e76c6e4f726c5df ]
+commit 16394e998cbb050730536bdf7e89f5a70efbd974 upstream.
 
-hsfreqrange should be chosen based on the calculated mbps which
-is closer to the default bit rate  and within the range as per
-table[1]. But current calculation always selects first value which
-is greater than or equal to the calculated mbps which may lead
-to chosing a wrong range in some cases.
+USB control-message timeouts are specified in milliseconds and should
+specifically not vary with CONFIG_HZ.
 
-For example for 360 mbps for H3/M3N
-Existing logic selects
-Calculated value 360Mbps : Default 400Mbps Range [368.125 -433.125 mbps]
-
-This hsfreqrange is out of range.
-
-The logic is changed to get the default value which is closest to the
-calculated value [1]
-
-Calculated value 360Mbps : Default 350Mbps  Range [320.625 -380.625 mpbs]
-
-[1] specs r19uh0105ej0200-r-car-3rd-generation.pdf [Table 25.9]
-
-Please note that According to Renesas in Table 25.9 the range for
-220 default value is corrected as below
-
- |Range (Mbps)     |  Default  Bit rate (Mbps) |
- -----------------------------------------------
- | 197.125-244.125 |     220                   |
- -----------------------------------------------
-
-Fixes: 769afd212b16 ("media: rcar-csi2: add Renesas R-Car MIPI CSI-2 receiver driver")
-Signed-off-by: Suresh Udipi <sudipi@jp.adit-jv.com>
-Signed-off-by: Kazuyoshi Akiyama <akiyama@nds-osk.co.jp>
-Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Fixes: 66e89522aff7 ("V4L/DVB: IR: add mceusb IR receiver driver")
+Cc: stable@vger.kernel.org      # 2.6.36
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/platform/rcar-vin/rcar-csi2.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/media/rc/mceusb.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
-index 23f55514b002a..bdcddc48e2f08 100644
---- a/drivers/media/platform/rcar-vin/rcar-csi2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
-@@ -416,16 +416,23 @@ static int rcsi2_wait_phy_start(struct rcar_csi2 *priv)
- static int rcsi2_set_phypll(struct rcar_csi2 *priv, unsigned int mbps)
- {
- 	const struct rcsi2_mbps_reg *hsfreq;
-+	const struct rcsi2_mbps_reg *hsfreq_prev = NULL;
+--- a/drivers/media/rc/mceusb.c
++++ b/drivers/media/rc/mceusb.c
+@@ -1124,7 +1124,7 @@ static void mceusb_gen1_init(struct mceu
+ 	 */
+ 	ret = usb_control_msg(ir->usbdev, usb_rcvctrlpipe(ir->usbdev, 0),
+ 			      USB_REQ_SET_ADDRESS, USB_TYPE_VENDOR, 0, 0,
+-			      data, USB_CTRL_MSG_SZ, HZ * 3);
++			      data, USB_CTRL_MSG_SZ, 3000);
+ 	dev_dbg(dev, "set address - ret = %d", ret);
+ 	dev_dbg(dev, "set address - data[0] = %d, data[1] = %d",
+ 						data[0], data[1]);
+@@ -1132,20 +1132,20 @@ static void mceusb_gen1_init(struct mceu
+ 	/* set feature: bit rate 38400 bps */
+ 	ret = usb_control_msg(ir->usbdev, usb_sndctrlpipe(ir->usbdev, 0),
+ 			      USB_REQ_SET_FEATURE, USB_TYPE_VENDOR,
+-			      0xc04e, 0x0000, NULL, 0, HZ * 3);
++			      0xc04e, 0x0000, NULL, 0, 3000);
  
--	for (hsfreq = priv->info->hsfreqrange; hsfreq->mbps != 0; hsfreq++)
-+	for (hsfreq = priv->info->hsfreqrange; hsfreq->mbps != 0; hsfreq++) {
- 		if (hsfreq->mbps >= mbps)
- 			break;
-+		hsfreq_prev = hsfreq;
-+	}
+ 	dev_dbg(dev, "set feature - ret = %d", ret);
  
- 	if (!hsfreq->mbps) {
- 		dev_err(priv->dev, "Unsupported PHY speed (%u Mbps)", mbps);
- 		return -ERANGE;
- 	}
+ 	/* bRequest 4: set char length to 8 bits */
+ 	ret = usb_control_msg(ir->usbdev, usb_sndctrlpipe(ir->usbdev, 0),
+ 			      4, USB_TYPE_VENDOR,
+-			      0x0808, 0x0000, NULL, 0, HZ * 3);
++			      0x0808, 0x0000, NULL, 0, 3000);
+ 	dev_dbg(dev, "set char length - retB = %d", ret);
  
-+	if (hsfreq_prev &&
-+	    ((mbps - hsfreq_prev->mbps) <= (hsfreq->mbps - mbps)))
-+		hsfreq = hsfreq_prev;
-+
- 	rcsi2_write(priv, PHYPLL_REG, PHYPLL_HSFREQRANGE(hsfreq->reg));
+ 	/* bRequest 2: set handshaking to use DTR/DSR */
+ 	ret = usb_control_msg(ir->usbdev, usb_sndctrlpipe(ir->usbdev, 0),
+ 			      2, USB_TYPE_VENDOR,
+-			      0x0000, 0x0100, NULL, 0, HZ * 3);
++			      0x0000, 0x0100, NULL, 0, 3000);
+ 	dev_dbg(dev, "set handshake  - retC = %d", ret);
  
- 	return 0;
--- 
-2.34.1
-
+ 	/* device resume */
 
 

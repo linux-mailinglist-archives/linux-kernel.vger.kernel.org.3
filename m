@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B03D3498EB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51101498AE8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242121AbiAXTry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:47:54 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34544 "EHLO
+        id S1344689AbiAXTHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:07:44 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59964 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354633AbiAXTgy (ORCPT
+        with ESMTP id S1343931AbiAXTB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:36:54 -0500
+        Mon, 24 Jan 2022 14:01:26 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D236E6141C;
-        Mon, 24 Jan 2022 19:36:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABC58C340E5;
-        Mon, 24 Jan 2022 19:36:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 748EB6090A;
+        Mon, 24 Jan 2022 19:01:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54F45C340E5;
+        Mon, 24 Jan 2022 19:01:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053013;
-        bh=N9z9CA+DDyeJ2G05kqCDHc2y8kstWZPWxKWqeGhvqvs=;
+        s=korg; t=1643050885;
+        bh=wPbWj41fVhAncbHUubc2p8HpbyvviYRKFxe/qjP5LuY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C/4mcIM8BDORH1AMLuJUQcUCnZgzBmXUp9o28BnK96r5Mz0vv5zYtI/PAzUcXF3y6
-         Dkebau1MxwmCTxu9FCNl0AZbkXUQod1dXm6eIup8fz6QAoWdRiuKXfIOiQ4k4EDDE/
-         7lrOPL9lYOMVZZZClDoAEZuAvrd1IsrlMnuSQDLU=
+        b=otbGtsh06I1ifYrHM5wbt/nwDcwqoZgG4JJeQpw0jO1EKQweMF9bYy6SrPhEsUJGD
+         MHSVFflZJ366+vzB4pOSM6XdOlO0qRY4eZlPWDrHLRgO6w4RP5PTISO3OA4aRdDviN
+         FLK4ARpHcrhhPmSBIwtIjwkG9zupHicgoJLgczTA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Meng Li <Meng.Li@windriver.com>,
-        =?UTF-8?q?Horia=20Geant=C4=83?= <horia.geanta@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH 5.4 248/320] crypto: caam - replace this_cpu_ptr with raw_cpu_ptr
+        stable@vger.kernel.org, Kevin Bracey <kevin@bracey.fi>,
+        Eric Dumazet <edumazet@google.com>,
+        Jiri Pirko <jiri@resnulli.us>, Vimalkumar <j.vimal@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.9 142/157] net_sched: restore "mpu xxx" handling
 Date:   Mon, 24 Jan 2022 19:43:52 +0100
-Message-Id: <20220124184002.429181031@linuxfoundation.org>
+Message-Id: <20220124183937.272967858@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,54 +47,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Meng Li <Meng.Li@windriver.com>
+From: Kevin Bracey <kevin@bracey.fi>
 
-commit efd21e10fc3bf4c6da122470a5ae89ec4ed8d180 upstream.
+commit fb80445c438c78b40b547d12b8d56596ce4ccfeb upstream.
 
-When enable the kernel debug config, there is below calltrace detected:
-BUG: using smp_processor_id() in preemptible [00000000] code: cryptomgr_test/339
-caller is debug_smp_processor_id+0x20/0x30
-CPU: 9 PID: 339 Comm: cryptomgr_test Not tainted 5.10.63-yocto-standard #1
-Hardware name: NXP Layerscape LX2160ARDB (DT)
-Call trace:
- dump_backtrace+0x0/0x1a0
- show_stack+0x24/0x30
- dump_stack+0xf0/0x13c
- check_preemption_disabled+0x100/0x110
- debug_smp_processor_id+0x20/0x30
- dpaa2_caam_enqueue+0x10c/0x25c
- ......
- cryptomgr_test+0x38/0x60
- kthread+0x158/0x164
- ret_from_fork+0x10/0x38
-According to the comment in commit ac5d15b4519f("crypto: caam/qi2
- - use affine DPIOs "), because preemption is no longer disabled
-while trying to enqueue an FQID, it might be possible to run the
-enqueue on a different CPU(due to migration, when in process context),
-however this wouldn't be a functionality issue. But there will be
-above calltrace when enable kernel debug config. So, replace this_cpu_ptr
-with raw_cpu_ptr to avoid above call trace.
+commit 56b765b79e9a ("htb: improved accuracy at high rates") broke
+"overhead X", "linklayer atm" and "mpu X" attributes.
 
-Fixes: ac5d15b4519f ("crypto: caam/qi2 - use affine DPIOs")
-Cc: stable@vger.kernel.org
-Signed-off-by: Meng Li <Meng.Li@windriver.com>
-Reviewed-by: Horia Geantă <horia.geanta@nxp.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+"overhead X" and "linklayer atm" have already been fixed. This restores
+the "mpu X" handling, as might be used by DOCSIS or Ethernet shaping:
+
+    tc class add ... htb rate X overhead 4 mpu 64
+
+The code being fixed is used by htb, tbf and act_police. Cake has its
+own mpu handling. qdisc_calculate_pkt_len still uses the size table
+containing values adjusted for mpu by user space.
+
+iproute2 tc has always passed mpu into the kernel via a tc_ratespec
+structure, but the kernel never directly acted on it, merely stored it
+so that it could be read back by `tc class show`.
+
+Rather, tc would generate length-to-time tables that included the mpu
+(and linklayer) in their construction, and the kernel used those tables.
+
+Since v3.7, the tables were no longer used. Along with "mpu", this also
+broke "overhead" and "linklayer" which were fixed in 01cb71d2d47b
+("net_sched: restore "overhead xxx" handling", v3.10) and 8a8e3d84b171
+("net_sched: restore "linklayer atm" handling", v3.11).
+
+"overhead" was fixed by simply restoring use of tc_ratespec::overhead -
+this had originally been used by the kernel but was initially omitted
+from the new non-table-based calculations.
+
+"linklayer" had been handled in the table like "mpu", but the mode was
+not originally passed in tc_ratespec. The new implementation was made to
+handle it by getting new versions of tc to pass the mode in an extended
+tc_ratespec, and for older versions of tc the table contents were analysed
+at load time to deduce linklayer.
+
+As "mpu" has always been given to the kernel in tc_ratespec,
+accompanying the mpu-based table, we can restore system functionality
+with no userspace change by making the kernel act on the tc_ratespec
+value.
+
+Fixes: 56b765b79e9a ("htb: improved accuracy at high rates")
+Signed-off-by: Kevin Bracey <kevin@bracey.fi>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jiri Pirko <jiri@resnulli.us>
+Cc: Vimalkumar <j.vimal@gmail.com>
+Link: https://lore.kernel.org/r/20220112170210.1014351-1-kevin@bracey.fi
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/crypto/caam/caamalg_qi2.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/net/sch_generic.h |    5 +++++
+ net/sched/sch_generic.c   |    1 +
+ 2 files changed, 6 insertions(+)
 
---- a/drivers/crypto/caam/caamalg_qi2.c
-+++ b/drivers/crypto/caam/caamalg_qi2.c
-@@ -5421,7 +5421,7 @@ int dpaa2_caam_enqueue(struct device *de
- 	dpaa2_fd_set_len(&fd, dpaa2_fl_get_len(&req->fd_flt[1]));
- 	dpaa2_fd_set_flc(&fd, req->flc_dma);
+--- a/include/net/sch_generic.h
++++ b/include/net/sch_generic.h
+@@ -837,6 +837,7 @@ struct psched_ratecfg {
+ 	u64	rate_bytes_ps; /* bytes per second */
+ 	u32	mult;
+ 	u16	overhead;
++	u16	mpu;
+ 	u8	linklayer;
+ 	u8	shift;
+ };
+@@ -846,6 +847,9 @@ static inline u64 psched_l2t_ns(const st
+ {
+ 	len += r->overhead;
  
--	ppriv = this_cpu_ptr(priv->ppriv);
-+	ppriv = raw_cpu_ptr(priv->ppriv);
- 	for (i = 0; i < (priv->dpseci_attr.num_tx_queues << 1); i++) {
- 		err = dpaa2_io_service_enqueue_fq(ppriv->dpio, ppriv->req_fqid,
- 						  &fd);
++	if (len < r->mpu)
++		len = r->mpu;
++
+ 	if (unlikely(r->linklayer == TC_LINKLAYER_ATM))
+ 		return ((u64)(DIV_ROUND_UP(len,48)*53) * r->mult) >> r->shift;
+ 
+@@ -868,6 +872,7 @@ static inline void psched_ratecfg_getrat
+ 	res->rate = min_t(u64, r->rate_bytes_ps, ~0U);
+ 
+ 	res->overhead = r->overhead;
++	res->mpu = r->mpu;
+ 	res->linklayer = (r->linklayer & TC_LINKLAYER_MASK);
+ }
+ 
+--- a/net/sched/sch_generic.c
++++ b/net/sched/sch_generic.c
+@@ -996,6 +996,7 @@ void psched_ratecfg_precompute(struct ps
+ {
+ 	memset(r, 0, sizeof(*r));
+ 	r->overhead = conf->overhead;
++	r->mpu = conf->mpu;
+ 	r->rate_bytes_ps = max_t(u64, conf->rate, rate64);
+ 	r->linklayer = (conf->linklayer & TC_LINKLAYER_MASK);
+ 	r->mult = 1;
 
 

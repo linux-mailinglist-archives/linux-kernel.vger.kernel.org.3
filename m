@@ -2,107 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4989C49A652
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9869A49A812
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:07:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3413177AbiAYAid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:38:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42802 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2368892AbiAYAAd (ORCPT
+        id S1316219AbiAYCzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:55:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S3412679AbiAYAh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 19:00:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643068825;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HVEOi3JfLG07H4d80rMuAmt9ScZ2srvvDue0ndS/BKY=;
-        b=UEBlveCPYKYCW95UTHz0kPgIawFYPCtfAHg+cedWLjYggs47rKMii1su8M12W/TlWaIv7y
-        Rwrs1xM9+4xuimXsxUVP0FSBk40kJe1G5a9EaNXMLzccZrGAtBzjH8Rkm17CebCISjRgX1
-        KDdYxGj3BZD1q/wsY+qgu6+vEdZZA88=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-192-U3MDzZnaMZ-IHjlhMiodGQ-1; Mon, 24 Jan 2022 19:00:23 -0500
-X-MC-Unique: U3MDzZnaMZ-IHjlhMiodGQ-1
-Received: by mail-oi1-f198.google.com with SMTP id s131-20020acac289000000b002c6a61fd43fso10034375oif.23
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:00:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HVEOi3JfLG07H4d80rMuAmt9ScZ2srvvDue0ndS/BKY=;
-        b=rb207SfU2GFBCYU2gLMB6yxdLOl0NMJ+sWZ1UdIw2m4hpkzKbjgZbuMi7DcyvdqmT4
-         oJefOss9UFIBpxmKjaK5AUy0dHAzBFWtqONPinQQCVPRonoMs2d+7H2QVzuUccnwU9g2
-         lIWthmC6jVHCV3pCQ2TNcrZeqj9nbHdF2j2HqKe1IPvQ/cHgsYvXHD4TaPoSvZbNOL9k
-         tXVeoQdh1CwuG0+xLyXHjvZxkbcldNDPh2lXnQ/PTVJw41KyP4+IyBOdgoMlf3rb5nMt
-         ZlnMUDiskHZ+qxdzeV5ppcl+9gaozHpO+H/CJttLzYW2gEazPQuonQssdTkuhnghKpuh
-         0xkg==
-X-Gm-Message-State: AOAM530P/xh3ekRTgtXakPfLc1UXOifJ3Ok3UWh5jwYkZ6VC6xdy2qxj
-        NCegndIoVLWgA0aeQIEhy6rEtUe9YXvh1PqwxeHIXq9gZ4gCAgNvwpz4bWoSsOQ8g/rb6+UGL28
-        9jPcMF+bPerrql059Whv7bwoo
-X-Received: by 2002:a4a:d51a:: with SMTP id m26mr5125956oos.1.1643068822874;
-        Mon, 24 Jan 2022 16:00:22 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyNLHUrHkZ0VgdUS81Fer4PLBA/LSFqmOEBwroF1KbQGd41b07ynHntqxgpZ6oKP+0FbdIuog==
-X-Received: by 2002:a4a:d51a:: with SMTP id m26mr5125950oos.1.1643068822654;
-        Mon, 24 Jan 2022 16:00:22 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id x1sm452732oto.38.2022.01.24.16.00.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 16:00:22 -0800 (PST)
-Date:   Mon, 24 Jan 2022 17:00:21 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: Build regressions/improvements in v5.17-rc1
-Message-ID: <20220124170021.011b6a0e.alex.williamson@redhat.com>
-In-Reply-To: <20220123125737.2658758-1-geert@linux-m68k.org>
-References: <20220123125737.2658758-1-geert@linux-m68k.org>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        Mon, 24 Jan 2022 19:37:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7747EC06E02E;
+        Mon, 24 Jan 2022 12:11:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15E326131F;
+        Mon, 24 Jan 2022 20:11:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE9BBC340E5;
+        Mon, 24 Jan 2022 20:11:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643055101;
+        bh=jZOafWWMuI7qC5ok5OnC/wzopcarTqkPtJd27tHyN14=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=WpmUelHvCk1Mij77DhAFgp9kCQGiXkN3jewdlsW0bSXqJUcobb5+4MG6Rh/avDSoI
+         +QZ4sPQKAROI+HW6paNkLhucRNjOB8gDJ5Kl3JInC3U7rwhpzMxkgYnRDw6rfPOzZF
+         GkJAQnMngn6woHxF+qoiRltenSv1Lw/AV3NrdtRA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Wenqing Liu <wenqingliu0120@gmail.com>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 5.15 009/846] f2fs: fix to do sanity check on inode type during garbage collection
+Date:   Mon, 24 Jan 2022 19:32:06 +0100
+Message-Id: <20220124184101.224220597@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 23 Jan 2022 13:57:37 +0100
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+From: Chao Yu <chao@kernel.org>
 
-> Below is the list of build error/warning regressions/improvements in
-> v5.17-rc1[1] compared to v5.16[2].
-> 
-> Summarized:
->   - build errors: +17/-2
->   - build warnings: +23/-25
-> 
-> Note that there may be false regressions, as some logs are incomplete.
-> Still, they're build errors/warnings.
-> 
-> Happy fixing! ;-)
-> 
-> Thanks to the linux-next team for providing the build service.
-> 
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/e783362eb54cd99b2cac8b3a9aeac942e6f6ac07/ (all 99 configs)
-> [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/df0cc57e057f18e44dac8e6c18aba47ab53202f9/ (98 out of 99 configs)
-> 
-> 
-> *** ERRORS ***
-> 
-> 17 error regressions:
-...
->   + /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: assignment makes pointer from integer without a cast [-Werror=int-conversion]:  => 324:9, 317:9
->   + /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: implicit declaration of function 'ioport_map' [-Werror=implicit-function-declaration]:  => 317:11
->   + /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: implicit declaration of function 'ioport_unmap' [-Werror=implicit-function-declaration]:  => 338:15
+commit 9056d6489f5a41cfbb67f719d2c0ce61ead72d9f upstream.
 
-Patch posted:
+As report by Wenqing Liu in bugzilla:
 
-https://lore.kernel.org/all/164306582968.3758255.15192949639574660648.stgit@omen/
+https://bugzilla.kernel.org/show_bug.cgi?id=215231
 
-Sorry I forgot to list Geert in Reported-by, I've done that in the
-local copy that I'll use for a pull request.  Thanks,
+- Overview
+kernel NULL pointer dereference triggered  in folio_mark_dirty() when mount and operate on a crafted f2fs image
 
-Alex
+- Reproduce
+tested on kernel 5.16-rc3, 5.15.X under root
+
+1. mkdir mnt
+2. mount -t f2fs tmp1.img mnt
+3. touch tmp
+4. cp tmp mnt
+
+F2FS-fs (loop0): sanity_check_inode: inode (ino=49) extent info [5942, 4294180864, 4] is incorrect, run fsck to fix
+F2FS-fs (loop0): f2fs_check_nid_range: out-of-range nid=31340049, run fsck to fix.
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+ folio_mark_dirty+0x33/0x50
+ move_data_page+0x2dd/0x460 [f2fs]
+ do_garbage_collect+0xc18/0x16a0 [f2fs]
+ f2fs_gc+0x1d3/0xd90 [f2fs]
+ f2fs_balance_fs+0x13a/0x570 [f2fs]
+ f2fs_create+0x285/0x840 [f2fs]
+ path_openat+0xe6d/0x1040
+ do_filp_open+0xc5/0x140
+ do_sys_openat2+0x23a/0x310
+ do_sys_open+0x57/0x80
+
+The root cause is for special file: e.g. character, block, fifo or socket file,
+f2fs doesn't assign address space operations pointer array for mapping->a_ops field,
+so, in a fuzzed image, SSA table indicates a data block belong to special file, when
+f2fs tries to migrate that block, it causes NULL pointer access once move_data_page()
+calls a_ops->set_dirty_page().
+
+Cc: stable@vger.kernel.org
+Reported-by: Wenqing Liu <wenqingliu0120@gmail.com>
+Signed-off-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ fs/f2fs/gc.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1454,7 +1454,8 @@ next_step:
+ 
+ 		if (phase == 3) {
+ 			inode = f2fs_iget(sb, dni.ino);
+-			if (IS_ERR(inode) || is_bad_inode(inode))
++			if (IS_ERR(inode) || is_bad_inode(inode) ||
++					special_file(inode->i_mode))
+ 				continue;
+ 
+ 			if (!down_write_trylock(
+
 

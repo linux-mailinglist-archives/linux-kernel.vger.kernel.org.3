@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C321C49A6D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 512C349A52E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:11:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3421656AbiAYC1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:27:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
+        id S2372704AbiAYAMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:12:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377325AbiAXUFR (ORCPT
+        with ESMTP id S1849617AbiAXX0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:05:17 -0500
+        Mon, 24 Jan 2022 18:26:16 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3533C061378;
-        Mon, 24 Jan 2022 11:31:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C473EC01D7E5;
+        Mon, 24 Jan 2022 13:30:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5075661318;
-        Mon, 24 Jan 2022 19:31:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 225D0C340E5;
-        Mon, 24 Jan 2022 19:31:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F9C160C44;
+        Mon, 24 Jan 2022 21:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 373D6C340E4;
+        Mon, 24 Jan 2022 21:30:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052700;
-        bh=mgxWZWBc0Eucoc+hoIoXSz+Ix0iMdTBDwuB1PKnJCCk=;
+        s=korg; t=1643059818;
+        bh=uC02QHBoKcdv9ttW/OShKG68uyhUyvnpqZMr6byhIJ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KyQ/xIIPUL0fktyDtNXio+ounmH1MkzXxCs4tJm9BlrTF7OF1sse4HRO1inwNouc1
-         n49/rCAqKQ1pAPXV3TeTBj6aDQ95UiA3ErYWZq+zWPxBKQc1iZK+sqClrBMILPiOtt
-         kYSUA9HIHnDsdgaJf+46V4i3Yn+5H2CgqP6YdaA8=
+        b=AlzLalvQqRHz7XlCccJVvgo+okXE+vE2qA1qC6xIbQxjWceuwQ84HyoYeJzRaESU3
+         j6nf54HXmGwf63uEdhbcUwd1LYbEuAK56oEBp8KgVnhDzng1aZNgALt7gI7QAPP4aX
+         Ch6L0YSDVjiaEkYB62zgPH50Nlt29162fRRwlog0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
+        stable@vger.kernel.org, Erhard Furtner <erhard_f@mailbox.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 147/320] misc: lattice-ecp3-config: Fix task hung when firmware load failed
-Date:   Mon, 24 Jan 2022 19:42:11 +0100
-Message-Id: <20220124183958.645541290@linuxfoundation.org>
+Subject: [PATCH 5.16 0744/1039] powerpc/powermac: Add missing lockdep_register_key()
+Date:   Mon, 24 Jan 2022 19:42:13 +0100
+Message-Id: <20220124184150.342455460@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,93 +50,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wei Yongjun <weiyongjun1@huawei.com>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-[ Upstream commit fcee5ce50bdb21116711e38635e3865594af907e ]
+[ Upstream commit df1f679d19edb9eeb67cc2f96b29375f21991945 ]
 
-When firmware load failed, kernel report task hung as follows:
+KeyWest i2c @0xf8001003 irq 42 /uni-n@f8000000/i2c@f8001000
+BUG: key c2d00cbc has not been registered!
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(1)
+WARNING: CPU: 0 PID: 1 at kernel/locking/lockdep.c:4801 lockdep_init_map_type+0x4c0/0xb4c
+Modules linked in:
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.15.5-gentoo-PowerMacG4 #9
+NIP:  c01a9428 LR: c01a9428 CTR: 00000000
+REGS: e1033cf0 TRAP: 0700   Not tainted  (5.15.5-gentoo-PowerMacG4)
+MSR:  00029032 <EE,ME,IR,DR,RI>  CR: 24002002  XER: 00000000
 
-INFO: task xrun:5191 blocked for more than 147 seconds.
-      Tainted: G        W         5.16.0-rc5-next-20211220+ #11
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:xrun            state:D stack:    0 pid: 5191 ppid:   270 flags:0x00000004
+GPR00: c01a9428 e1033db0 c2d1cf20 00000016 00000004 00000001 c01c0630 e1033a73
+GPR08: 00000000 00000000 00000000 e1033db0 24002004 00000000 f8729377 00000003
+GPR16: c1829a9c 00000000 18305357 c1416fc0 c1416f80 c006ac60 c2d00ca8 c1416f00
+GPR24: 00000000 c21586f0 c2160000 00000000 c2d00cbc c2170000 c216e1a0 c2160000
+NIP [c01a9428] lockdep_init_map_type+0x4c0/0xb4c
+LR [c01a9428] lockdep_init_map_type+0x4c0/0xb4c
 Call Trace:
- __schedule+0xc12/0x4b50 kernel/sched/core.c:4986
- schedule+0xd7/0x260 kernel/sched/core.c:6369 (discriminator 1)
- schedule_timeout+0x7aa/0xa80 kernel/time/timer.c:1857
- wait_for_completion+0x181/0x290 kernel/sched/completion.c:85
- lattice_ecp3_remove+0x32/0x40 drivers/misc/lattice-ecp3-config.c:221
- spi_remove+0x72/0xb0 drivers/spi/spi.c:409
+[e1033db0] [c01a9428] lockdep_init_map_type+0x4c0/0xb4c (unreliable)
+[e1033df0] [c1c177b8] kw_i2c_add+0x334/0x424
+[e1033e20] [c1c18294] pmac_i2c_init+0x9ec/0xa9c
+[e1033e80] [c1c1a790] smp_core99_probe+0xbc/0x35c
+[e1033eb0] [c1c03cb0] kernel_init_freeable+0x190/0x5a4
+[e1033f10] [c000946c] kernel_init+0x28/0x154
+[e1033f30] [c0035148] ret_from_kernel_thread+0x14/0x1c
 
-lattice_ecp3_remove() wait for signals from firmware loading, but when
-load failed, firmware_load() does not send this signal. This cause
-device remove hung. Fix it by sending signal even if load failed.
+Add missing lockdep_register_key()
 
-Fixes: 781551df57c7 ("misc: Add Lattice ECP3 FPGA configuration via SPI")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
-Link: https://lore.kernel.org/r/20211228125522.3122284-1-weiyongjun1@huawei.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Erhard Furtner <erhard_f@mailbox.org>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/69e4f55565bb45ebb0843977801b245af0c666fe.1638264741.git.christophe.leroy@csgroup.eu
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/lattice-ecp3-config.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ arch/powerpc/platforms/powermac/low_i2c.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/misc/lattice-ecp3-config.c b/drivers/misc/lattice-ecp3-config.c
-index 884485c3f7232..3a0d2b052ed29 100644
---- a/drivers/misc/lattice-ecp3-config.c
-+++ b/drivers/misc/lattice-ecp3-config.c
-@@ -77,12 +77,12 @@ static void firmware_load(const struct firmware *fw, void *context)
- 
- 	if (fw == NULL) {
- 		dev_err(&spi->dev, "Cannot load firmware, aborting\n");
--		return;
-+		goto out;
- 	}
- 
- 	if (fw->size == 0) {
- 		dev_err(&spi->dev, "Error: Firmware size is 0!\n");
--		return;
-+		goto out;
- 	}
- 
- 	/* Fill dummy data (24 stuffing bits for commands) */
-@@ -104,7 +104,7 @@ static void firmware_load(const struct firmware *fw, void *context)
- 		dev_err(&spi->dev,
- 			"Error: No supported FPGA detected (JEDEC_ID=%08x)!\n",
- 			jedec_id);
--		return;
-+		goto out;
- 	}
- 
- 	dev_info(&spi->dev, "FPGA %s detected\n", ecp3_dev[i].name);
-@@ -117,7 +117,7 @@ static void firmware_load(const struct firmware *fw, void *context)
- 	buffer = kzalloc(fw->size + 8, GFP_KERNEL);
- 	if (!buffer) {
- 		dev_err(&spi->dev, "Error: Can't allocate memory!\n");
--		return;
-+		goto out;
- 	}
- 
- 	/*
-@@ -156,7 +156,7 @@ static void firmware_load(const struct firmware *fw, void *context)
- 			"Error: Timeout waiting for FPGA to clear (status=%08x)!\n",
- 			status);
- 		kfree(buffer);
--		return;
-+		goto out;
- 	}
- 
- 	dev_info(&spi->dev, "Configuring the FPGA...\n");
-@@ -182,7 +182,7 @@ static void firmware_load(const struct firmware *fw, void *context)
- 	release_firmware(fw);
- 
- 	kfree(buffer);
--
-+out:
- 	complete(&data->fw_loaded);
- }
- 
+diff --git a/arch/powerpc/platforms/powermac/low_i2c.c b/arch/powerpc/platforms/powermac/low_i2c.c
+index 09bfe4b8f25aa..df89d916236d9 100644
+--- a/arch/powerpc/platforms/powermac/low_i2c.c
++++ b/arch/powerpc/platforms/powermac/low_i2c.c
+@@ -582,6 +582,7 @@ static void __init kw_i2c_add(struct pmac_i2c_host_kw *host,
+ 	bus->close = kw_i2c_close;
+ 	bus->xfer = kw_i2c_xfer;
+ 	mutex_init(&bus->mutex);
++	lockdep_register_key(&bus->lock_key);
+ 	lockdep_set_class(&bus->mutex, &bus->lock_key);
+ 	if (controller == busnode)
+ 		bus->flags = pmac_i2c_multibus;
 -- 
 2.34.1
 

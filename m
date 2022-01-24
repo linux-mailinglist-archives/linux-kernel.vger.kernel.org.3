@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E7F499DDB
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:04:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF4849A013
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1586398AbiAXW0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:26:22 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41100 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359700AbiAXV07 (ORCPT
+        id S1843305AbiAXXDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:03:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1458136AbiAXVzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:26:59 -0500
+        Mon, 24 Jan 2022 16:55:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1014FC07E2A9;
+        Mon, 24 Jan 2022 12:37:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F024B811A2;
-        Mon, 24 Jan 2022 21:26:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B74DFC340E4;
-        Mon, 24 Jan 2022 21:26:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C2981B80FA3;
+        Mon, 24 Jan 2022 20:37:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1835CC340E5;
+        Mon, 24 Jan 2022 20:37:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059616;
-        bh=0NPR2GEkXmlKshR2DCdw5F1yXLjr3XEZ5JAnE8LMcEk=;
+        s=korg; t=1643056637;
+        bh=liI5oHo+hy1bS9c8mmeSTwJK7B/DrVx+fsHTX63n/SY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YlN9bp9oMRbjuGrcQktLgo20UfiOkYFRw0fqE8ITFyF+EaG4/8W2xIu7s5H4LdtKm
-         mPCW/6NP1pmzF5fmoOOt0dtuuFR+Qm2sVZKUFsZpaAelv9InkIH2rxfpZPyRy9El+m
-         aimCXK+ZweAMvKqnGkgEYYIfRiqhBymCLtX2IkUw=
+        b=sqvJ0j4JvbDVEsdihX1lYt+qPBjPhpFeQUa1MGnKYSPhQfmXPm9PeZ9MEgo/4BGd+
+         crXzGGO/E6Be6qnkA2FSrb0WzvBhpONmN66hDGR8p2J0288GZ5pIqrNrWr2wqIQsj8
+         ia36E/5sbwmRnDt6489l2gO3Dgc79gWA0F315tdw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot <syzbot+4d2d56175b934b9a7bf9@syzkaller.appspotmail.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        stable@vger.kernel.org, Alistair Francis <alistair@alistair23.me>,
+        Rob Herring <robh@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0675/1039] ath9k_htc: fix NULL pointer dereference at ath9k_htc_rxep()
-Date:   Mon, 24 Jan 2022 19:41:04 +0100
-Message-Id: <20220124184148.057636054@linuxfoundation.org>
+Subject: [PATCH 5.15 551/846] HID: i2c-hid-of: Expose the touchscreen-inverted properties
+Date:   Mon, 24 Jan 2022 19:41:08 +0100
+Message-Id: <20220124184120.040406055@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,72 +50,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+From: Alistair Francis <alistair@alistair23.me>
 
-[ Upstream commit b0ec7e55fce65f125bd1d7f02e2dc4de62abee34 ]
+[ Upstream commit b60d3c803d7603432a08aeaf988aff53b3a5ec64 ]
 
-syzbot is reporting lockdep warning followed by kernel panic at
-ath9k_htc_rxep() [1], for ath9k_htc_rxep() depends on ath9k_rx_init()
-being already completed.
+Allow the touchscreen-inverted-x/y device tree properties to control the
+HID_QUIRK_X_INVERT/HID_QUIRK_Y_INVERT quirks for the hid-input device.
 
-Since ath9k_htc_rxep() is set by ath9k_htc_connect_svc(WMI_BEACON_SVC)
- from ath9k_init_htc_services(), it is possible that ath9k_htc_rxep() is
-called via timer interrupt before ath9k_rx_init() from ath9k_init_device()
-is called.
-
-Since we can't call ath9k_init_device() before ath9k_init_htc_services(),
-let's hold ath9k_htc_rxep() no-op until ath9k_rx_init() completes.
-
-Link: https://syzkaller.appspot.com/bug?extid=4d2d56175b934b9a7bf9 [1]
-Reported-by: syzbot <syzbot+4d2d56175b934b9a7bf9@syzkaller.appspotmail.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Tested-by: syzbot <syzbot+4d2d56175b934b9a7bf9@syzkaller.appspotmail.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/2b88f416-b2cb-7a18-d688-951e6dc3fe92@i-love.sakura.ne.jp
+Signed-off-by: Alistair Francis <alistair@alistair23.me>
+Acked-by: Rob Herring <robh@kernel.org>
+[bentiss: silence checkpatch warnings]
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Link: https://lore.kernel.org/r/20211208124045.61815-3-alistair@alistair23.me
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath9k/htc.h          | 1 +
- drivers/net/wireless/ath/ath9k/htc_drv_txrx.c | 8 ++++++++
- 2 files changed, 9 insertions(+)
+ .../devicetree/bindings/input/hid-over-i2c.txt         |  2 ++
+ drivers/hid/i2c-hid/i2c-hid-acpi.c                     |  2 +-
+ drivers/hid/i2c-hid/i2c-hid-core.c                     |  4 +++-
+ drivers/hid/i2c-hid/i2c-hid-of-goodix.c                |  2 +-
+ drivers/hid/i2c-hid/i2c-hid-of.c                       | 10 +++++++++-
+ drivers/hid/i2c-hid/i2c-hid.h                          |  2 +-
+ 6 files changed, 17 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath9k/htc.h b/drivers/net/wireless/ath/ath9k/htc.h
-index 0a1634238e673..4f71e962279af 100644
---- a/drivers/net/wireless/ath/ath9k/htc.h
-+++ b/drivers/net/wireless/ath/ath9k/htc.h
-@@ -281,6 +281,7 @@ struct ath9k_htc_rxbuf {
- struct ath9k_htc_rx {
- 	struct list_head rxbuf;
- 	spinlock_t rxbuflock;
-+	bool initialized;
- };
+diff --git a/Documentation/devicetree/bindings/input/hid-over-i2c.txt b/Documentation/devicetree/bindings/input/hid-over-i2c.txt
+index c76bafaf98d2f..34c43d3bddfd1 100644
+--- a/Documentation/devicetree/bindings/input/hid-over-i2c.txt
++++ b/Documentation/devicetree/bindings/input/hid-over-i2c.txt
+@@ -32,6 +32,8 @@ device-specific compatible properties, which should be used in addition to the
+ - vdd-supply: phandle of the regulator that provides the supply voltage.
+ - post-power-on-delay-ms: time required by the device after enabling its regulators
+   or powering it on, before it is ready for communication.
++- touchscreen-inverted-x: See touchscreen.txt
++- touchscreen-inverted-y: See touchscreen.txt
  
- #define ATH9K_HTC_TX_CLEANUP_INTERVAL 50 /* ms */
-diff --git a/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c b/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
-index 8e69e8989f6d3..e7a21eaf3a68d 100644
---- a/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
-+++ b/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
-@@ -1130,6 +1130,10 @@ void ath9k_htc_rxep(void *drv_priv, struct sk_buff *skb,
- 	struct ath9k_htc_rxbuf *rxbuf = NULL, *tmp_buf = NULL;
- 	unsigned long flags;
+ Example:
  
-+	/* Check if ath9k_rx_init() completed. */
-+	if (!data_race(priv->rx.initialized))
-+		goto err;
-+
- 	spin_lock_irqsave(&priv->rx.rxbuflock, flags);
- 	list_for_each_entry(tmp_buf, &priv->rx.rxbuf, list) {
- 		if (!tmp_buf->in_process) {
-@@ -1185,6 +1189,10 @@ int ath9k_rx_init(struct ath9k_htc_priv *priv)
- 		list_add_tail(&rxbuf->list, &priv->rx.rxbuf);
+diff --git a/drivers/hid/i2c-hid/i2c-hid-acpi.c b/drivers/hid/i2c-hid/i2c-hid-acpi.c
+index a6f0257a26de3..b96ae15e0ad91 100644
+--- a/drivers/hid/i2c-hid/i2c-hid-acpi.c
++++ b/drivers/hid/i2c-hid/i2c-hid-acpi.c
+@@ -111,7 +111,7 @@ static int i2c_hid_acpi_probe(struct i2c_client *client)
  	}
  
-+	/* Allow ath9k_htc_rxep() to operate. */
-+	smp_wmb();
-+	priv->rx.initialized = true;
+ 	return i2c_hid_core_probe(client, &ihid_acpi->ops,
+-				  hid_descriptor_address);
++				  hid_descriptor_address, 0);
+ }
+ 
+ static const struct acpi_device_id i2c_hid_acpi_match[] = {
+diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid/i2c-hid-core.c
+index 517141138b007..4804d71e5293a 100644
+--- a/drivers/hid/i2c-hid/i2c-hid-core.c
++++ b/drivers/hid/i2c-hid/i2c-hid-core.c
+@@ -912,7 +912,7 @@ static void i2c_hid_core_shutdown_tail(struct i2c_hid *ihid)
+ }
+ 
+ int i2c_hid_core_probe(struct i2c_client *client, struct i2chid_ops *ops,
+-		       u16 hid_descriptor_address)
++		       u16 hid_descriptor_address, u32 quirks)
+ {
+ 	int ret;
+ 	struct i2c_hid *ihid;
+@@ -1009,6 +1009,8 @@ int i2c_hid_core_probe(struct i2c_client *client, struct i2chid_ops *ops,
+ 		goto err_mem_free;
+ 	}
+ 
++	hid->quirks |= quirks;
 +
  	return 0;
  
- err:
+ err_mem_free:
+diff --git a/drivers/hid/i2c-hid/i2c-hid-of-goodix.c b/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
+index 52674149a2750..b4dad66fa954d 100644
+--- a/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
++++ b/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
+@@ -150,7 +150,7 @@ static int i2c_hid_of_goodix_probe(struct i2c_client *client,
+ 		goodix_i2c_hid_deassert_reset(ihid_goodix, true);
+ 	mutex_unlock(&ihid_goodix->regulator_mutex);
+ 
+-	return i2c_hid_core_probe(client, &ihid_goodix->ops, 0x0001);
++	return i2c_hid_core_probe(client, &ihid_goodix->ops, 0x0001, 0);
+ }
+ 
+ static const struct goodix_i2c_hid_timing_data goodix_gt7375p_timing_data = {
+diff --git a/drivers/hid/i2c-hid/i2c-hid-of.c b/drivers/hid/i2c-hid/i2c-hid-of.c
+index 4bf7cea926379..97a27a803f58d 100644
+--- a/drivers/hid/i2c-hid/i2c-hid-of.c
++++ b/drivers/hid/i2c-hid/i2c-hid-of.c
+@@ -21,6 +21,7 @@
+ 
+ #include <linux/delay.h>
+ #include <linux/device.h>
++#include <linux/hid.h>
+ #include <linux/i2c.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+@@ -71,6 +72,7 @@ static int i2c_hid_of_probe(struct i2c_client *client,
+ 	struct device *dev = &client->dev;
+ 	struct i2c_hid_of *ihid_of;
+ 	u16 hid_descriptor_address;
++	u32 quirks = 0;
+ 	int ret;
+ 	u32 val;
+ 
+@@ -105,8 +107,14 @@ static int i2c_hid_of_probe(struct i2c_client *client,
+ 	if (ret)
+ 		return ret;
+ 
++	if (device_property_read_bool(dev, "touchscreen-inverted-x"))
++		quirks |= HID_QUIRK_X_INVERT;
++
++	if (device_property_read_bool(dev, "touchscreen-inverted-y"))
++		quirks |= HID_QUIRK_Y_INVERT;
++
+ 	return i2c_hid_core_probe(client, &ihid_of->ops,
+-				  hid_descriptor_address);
++				  hid_descriptor_address, quirks);
+ }
+ 
+ static const struct of_device_id i2c_hid_of_match[] = {
+diff --git a/drivers/hid/i2c-hid/i2c-hid.h b/drivers/hid/i2c-hid/i2c-hid.h
+index 05a7827d211af..236cc062d5ef8 100644
+--- a/drivers/hid/i2c-hid/i2c-hid.h
++++ b/drivers/hid/i2c-hid/i2c-hid.h
+@@ -32,7 +32,7 @@ struct i2chid_ops {
+ };
+ 
+ int i2c_hid_core_probe(struct i2c_client *client, struct i2chid_ops *ops,
+-		       u16 hid_descriptor_address);
++		       u16 hid_descriptor_address, u32 quirks);
+ int i2c_hid_core_remove(struct i2c_client *client);
+ 
+ void i2c_hid_core_shutdown(struct i2c_client *client);
 -- 
 2.34.1
 

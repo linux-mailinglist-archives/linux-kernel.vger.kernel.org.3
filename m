@@ -2,133 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52369497DCD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 12:19:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A2C497DCF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 12:20:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237319AbiAXLTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 06:19:52 -0500
-Received: from mail-dm6nam08on2063.outbound.protection.outlook.com ([40.107.102.63]:43584
-        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S237295AbiAXLTf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 06:19:35 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aitdtpCABwcwKn/RC7G28L900Tdu/Yh+4Hhe3VRQiJ2WushyyJ/s3j99C2f/Nta6eLTPet8EJQ7k2Nd95TeTNZTuQcSo7KNPTV8re+72r3IwfdmRzkafAAroqpUoJcoDqVVpr0n0efILC5CwQQC8aS/eSKiJVVRhxclbbXDkJsZq2HPp5d+lb1cSFNy6CWifEEPWwxtWPkexTWJkeKFn8GgwH2/0++G6WsTuEJm45kwrUPxlWU51BEvwZYR93kYjv2wMA2YcrvjIfYsT+WJzJZ4hfShgty/l7P6IKVpyfKCoBksk8ERw/cJ8Vy32ilxkBBdF4QjtVFQVcV++pJPZAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C9gUmGe0z5wMoAeC1F8d3rEE4N836HjO7oZZK2HL3RU=;
- b=m4tZniqxBbxUXN9xvmzbfN9+f7mz2wINIAvd4zVrhV+DV8Rqg+t4JSVxV9tQyqgyTSLRQiyw13GItjIzV298NaOMKx6tITHCD+J7BQ9uZzw8WTKVQHSE7AY8+4OeJAJtRVJPsES4O1Sr6RL6tc76sPcvtv42jGTLFnJgOeJg7W1ZVUvU3knAPeGFESEENhKxrjSAChtQdciKKqiA32JVUYVLc/7k9WLEFPwP8DV8EEA/TC9GRBmNib4IRYy95PdB+FQ9cyrWV290h34CDA3V5QVtQuvtENlYKIdmjL85TRn1Jntd2uGr8gpTraCGSoMGc4pr0KGILcbmbu/eeRZDQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C9gUmGe0z5wMoAeC1F8d3rEE4N836HjO7oZZK2HL3RU=;
- b=ExA5z8iHGF8BNkYqYaPOIcIIMU8oW/DTygNi40z1LigKolK5mCyKzauyJDUbJN3aKwsogt2sXkbf8f5hEWNpnqmMv3XAiCfBotfBPyX9TGTTbmmiBac8Ep592kDegELgZuhv8HwmjVCwPCi5U9uEWb9sheYBr4OQD+W2MgGLJIAG18hKZ9tqLINpXKgRu8NERss8t5VtjxRus7HbL8PpJ3t/PfFLpdgp859Os7KeAA54nT+2gZrVllID8SGt9eroIpT6zramNZDc8wyHkS4aZYohUpzsHz92CvIn2dBftPfwywYMbiEUrJLYcgk5ItAveyDUxIE5F7pnw6qoL9tVBQ==
-Received: from BN0PR02CA0021.namprd02.prod.outlook.com (2603:10b6:408:e4::26)
- by BY5PR12MB4194.namprd12.prod.outlook.com (2603:10b6:a03:210::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Mon, 24 Jan
- 2022 11:19:33 +0000
-Received: from BN8NAM11FT058.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e4:cafe::ed) by BN0PR02CA0021.outlook.office365.com
- (2603:10b6:408:e4::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10 via Frontend
- Transport; Mon, 24 Jan 2022 11:19:33 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.236) by
- BN8NAM11FT058.mail.protection.outlook.com (10.13.177.58) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4909.7 via Frontend Transport; Mon, 24 Jan 2022 11:19:32 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- DRHQMAIL109.nvidia.com (10.27.9.19) with Microsoft SMTP Server (TLS) id
- 15.0.1497.18; Mon, 24 Jan 2022 11:19:00 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9;
- Mon, 24 Jan 2022 03:19:00 -0800
-Received: from kyarlagadda-linux.nvidia.com (10.127.8.10) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server id 15.2.986.9 via Frontend
- Transport; Mon, 24 Jan 2022 03:18:56 -0800
-From:   Akhil R <akhilrajeev@nvidia.com>
-To:     <devicetree@vger.kernel.org>, <digetx@gmail.com>,
-        <jonathanh@nvidia.com>, <ldewangan@nvidia.com>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <mperttunen@nvidia.com>,
-        <robh+dt@kernel.org>, <thierry.reding@gmail.com>
-CC:     <akhilrajeev@nvidia.com>
-Subject: [PATCH v3 4/4] arm64: tegra: Add Tegra234 PWM devicetree nodes
-Date:   Mon, 24 Jan 2022 16:48:17 +0530
-Message-ID: <1643023097-5221-5-git-send-email-akhilrajeev@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1643023097-5221-1-git-send-email-akhilrajeev@nvidia.com>
-References: <1643023097-5221-1-git-send-email-akhilrajeev@nvidia.com>
-X-NVConfidentiality: public
+        id S237337AbiAXLUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 06:20:42 -0500
+Received: from mga04.intel.com ([192.55.52.120]:6204 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237305AbiAXLUl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 06:20:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643023240; x=1674559240;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=z5+zKDyv2t6O/MjLljgEyWIANm+BRD/wDU22TyFSZvw=;
+  b=bv8Fw8xLuxmSY2ZrKUlHYL/vLauG7MlHiu7RjkSbBbcimuIx1/q/Se3Y
+   SfGgtNjUDfnmCTa3n0Rp2tPxfXVaD1uLh9iwtyY9qJtc/rOAd+2XDbmU1
+   QiI1PyaQKVIADU+Ti8EFhp74tv08xugeNG6Nz+EkLeu9aD2oAsn4KhLC1
+   srbyXG1nYsHoHEgINAuG7mgbVjGEJsbW/jYWzFSX9ipNUdQXMVwhLz9h9
+   uCNg//FjdhOCz56E004aaIwzWVCA6eYHxNRaCNZBS8alghvJeZ+lHhzD2
+   l+ZMrgXQvMa0YCHCxsnv0DLfe9zG327hDCrxeC3wfNIWUllO09DLWgV2V
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="244856743"
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="244856743"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 03:20:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="580334598"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 24 Jan 2022 03:20:38 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nBxOn-000IEl-EG; Mon, 24 Jan 2022 11:20:37 +0000
+Date:   Mon, 24 Jan 2022 19:20:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     ratnesh-r1 <me.ratnesh682@gmail.com>
+Cc:     kbuild-all@lists.01.org, me.ratnesh682@gmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <christian@brauner.io>,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: android: ashmem: Declared file operation with
+ const keyword
+Message-ID: <202201241907.69JG769L-lkp@intel.com>
+References: <1643008187-75859-1-git-send-email-me.ratnesh682@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 521b2fdb-6a2c-417a-61f6-08d9df2b6589
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4194:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR12MB4194F280E51EEE6C34A291C3C05E9@BY5PR12MB4194.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1079;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OMaEryZTNfNRKNYM9QtDdbsv/fDeQ27VGnyPgi3DmLBCRsXoafMpHfd5wmxY032hJAI56NIWyhMD5nnlYGns5ts2HSRNUEH0fJgzhrKP5aGyirNa1Bw6FRYDKda4O48qu41F2T5wntxCivxZwzSJ7CkZ8/t6lppkcym5rcHdaGuuYBQQp6TbDAevDr1moCzyjs8K69aWeBr30kEQQ74pOYzJ8ZTJ7O1IgthwkH0+zEDfnU6A7detvIFZHR71d4oMB/7IH3waM/3AaY0mDfLHmwWQqjPke7P8QrcGAZDSWnR5Kn8pY6AI4nSGPLwGRTXe56tWjYUqlGBjL2zh564pDYc3CdvfBWon1rKRGLuS/9gyjnYX7rW3S877xt32D066QqZtW64r7D/UGcybUT8s5Rq4C8H/31zMgGIMKNqm7sKQ1sTp9gVYgTy+/eLVumjP36U9uYSUqGNHpQTeLV+lauAxolHCIS1hHlzUB1nlM+5l2EdK7y1RmAjfVDIwHeJa8yzemzvqaEYr386PMOvntvfeOP0YnyxpDVMX1XatM2htpDvP+2weCkKqjKh5E8a9qcJ9zUn056iAQgOL6bQ+2X5EHml91q4zlx8JhFeLDLre3YZjkoHXx3ivmMHRve+ui9DtzjUV4f6850U80a46qMyyycdka+bVpZdU0CDW3uK6EGQuk3xffseHUy8Icek8iOogJfXConphPNusshBUlIBiF0ZUG8w+wE8yPOT4ukpw3TgKRuPOrrOyRKhpH360jLuA5z667ikklD9c1sj0+Cwn+ZZz3dL87L1OCYnqW+gNIwYuExQY8HxQ/XZ9GjRh4za7vhKmNjLR4FybCC+Rtn6sTxaW0Jin1k/uwRqujta9/S8Pf3E5FmM1fyQ6CZ3c
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700004)(8676002)(47076005)(4744005)(81166007)(6666004)(508600001)(26005)(107886003)(110136005)(83380400001)(86362001)(356005)(40460700003)(2906002)(7696005)(4326008)(8936002)(70586007)(426003)(2616005)(921005)(36756003)(336012)(186003)(5660300002)(36860700001)(316002)(82310400004)(70206006)(36900700001)(2101003)(83996005)(357404004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2022 11:19:32.8007
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 521b2fdb-6a2c-417a-61f6-08d9df2b6589
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT058.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4194
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1643008187-75859-1-git-send-email-me.ratnesh682@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree nodes for Tegra234 PWM
+Hi ratnesh-r1,
 
-Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on staging/staging-testing]
+
+url:    https://github.com/0day-ci/linux/commits/ratnesh-r1/staging-android-ashmem-Declared-file-operation-with-const-keyword/20220124-151116
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git fa783154524a71ab74e293cd8251155e5971952b
+config: x86_64-randconfig-a002-20220124 (https://download.01.org/0day-ci/archive/20220124/202201241907.69JG769L-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/c24fe2afe4abdf6436628abd13a0109ec420f373
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review ratnesh-r1/staging-android-ashmem-Declared-file-operation-with-const-keyword/20220124-151116
+        git checkout c24fe2afe4abdf6436628abd13a0109ec420f373
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/staging/android/ashmem.c: In function 'ashmem_mmap':
+>> drivers/staging/android/ashmem.c:431:16: error: assignment of read-only variable 'vmfile_fops'
+     431 |    vmfile_fops = *vmfile->f_op;
+         |                ^
+>> drivers/staging/android/ashmem.c:432:21: error: assignment of member 'mmap' in read-only object
+     432 |    vmfile_fops.mmap = ashmem_vmfile_mmap;
+         |                     ^
+>> drivers/staging/android/ashmem.c:433:34: error: assignment of member 'get_unmapped_area' in read-only object
+     433 |    vmfile_fops.get_unmapped_area =
+         |                                  ^
+
+
+vim +/vmfile_fops +431 drivers/staging/android/ashmem.c
+
+6d67b0290b4b84 Suren Baghdasaryan 2020-01-27  377  
+11980c2ac4ccfa Robert Love        2011-12-20  378  static int ashmem_mmap(struct file *file, struct vm_area_struct *vma)
+11980c2ac4ccfa Robert Love        2011-12-20  379  {
+c24fe2afe4abdf ratnesh-r1         2022-01-23  380  	static const struct file_operations vmfile_fops;
+11980c2ac4ccfa Robert Love        2011-12-20  381  	struct ashmem_area *asma = file->private_data;
+11980c2ac4ccfa Robert Love        2011-12-20  382  	int ret = 0;
+11980c2ac4ccfa Robert Love        2011-12-20  383  
+11980c2ac4ccfa Robert Love        2011-12-20  384  	mutex_lock(&ashmem_mutex);
+11980c2ac4ccfa Robert Love        2011-12-20  385  
+11980c2ac4ccfa Robert Love        2011-12-20  386  	/* user needs to SET_SIZE before mapping */
+59848d6aded59a Alistair Strachan  2018-06-19  387  	if (!asma->size) {
+11980c2ac4ccfa Robert Love        2011-12-20  388  		ret = -EINVAL;
+11980c2ac4ccfa Robert Love        2011-12-20  389  		goto out;
+11980c2ac4ccfa Robert Love        2011-12-20  390  	}
+11980c2ac4ccfa Robert Love        2011-12-20  391  
+8632c614565d0c Alistair Strachan  2018-06-19  392  	/* requested mapping size larger than object size */
+8632c614565d0c Alistair Strachan  2018-06-19  393  	if (vma->vm_end - vma->vm_start > PAGE_ALIGN(asma->size)) {
+11980c2ac4ccfa Robert Love        2011-12-20  394  		ret = -EINVAL;
+11980c2ac4ccfa Robert Love        2011-12-20  395  		goto out;
+11980c2ac4ccfa Robert Love        2011-12-20  396  	}
+11980c2ac4ccfa Robert Love        2011-12-20  397  
+11980c2ac4ccfa Robert Love        2011-12-20  398  	/* requested protection bits must match our allowed protection mask */
+59848d6aded59a Alistair Strachan  2018-06-19  399  	if ((vma->vm_flags & ~calc_vm_prot_bits(asma->prot_mask, 0)) &
+59848d6aded59a Alistair Strachan  2018-06-19  400  	    calc_vm_prot_bits(PROT_MASK, 0)) {
+11980c2ac4ccfa Robert Love        2011-12-20  401  		ret = -EPERM;
+11980c2ac4ccfa Robert Love        2011-12-20  402  		goto out;
+11980c2ac4ccfa Robert Love        2011-12-20  403  	}
+56f76fc68492af Arve Hjønnevåg     2011-12-20  404  	vma->vm_flags &= ~calc_vm_may_flags(~asma->prot_mask);
+11980c2ac4ccfa Robert Love        2011-12-20  405  
+11980c2ac4ccfa Robert Love        2011-12-20  406  	if (!asma->file) {
+11980c2ac4ccfa Robert Love        2011-12-20  407  		char *name = ASHMEM_NAME_DEF;
+11980c2ac4ccfa Robert Love        2011-12-20  408  		struct file *vmfile;
+3e338d3c95c735 Suren Baghdasaryan 2020-07-30  409  		struct inode *inode;
+11980c2ac4ccfa Robert Love        2011-12-20  410  
+11980c2ac4ccfa Robert Love        2011-12-20  411  		if (asma->name[ASHMEM_NAME_PREFIX_LEN] != '\0')
+11980c2ac4ccfa Robert Love        2011-12-20  412  			name = asma->name;
+11980c2ac4ccfa Robert Love        2011-12-20  413  
+11980c2ac4ccfa Robert Love        2011-12-20  414  		/* ... and allocate the backing shmem file */
+11980c2ac4ccfa Robert Love        2011-12-20  415  		vmfile = shmem_file_setup(name, asma->size, vma->vm_flags);
+7f44cb0ba88b40 Viresh Kumar       2015-07-31  416  		if (IS_ERR(vmfile)) {
+11980c2ac4ccfa Robert Love        2011-12-20  417  			ret = PTR_ERR(vmfile);
+11980c2ac4ccfa Robert Love        2011-12-20  418  			goto out;
+11980c2ac4ccfa Robert Love        2011-12-20  419  		}
+97fbfef6bd5978 Shuxiao Zhang      2017-04-06  420  		vmfile->f_mode |= FMODE_LSEEK;
+3e338d3c95c735 Suren Baghdasaryan 2020-07-30  421  		inode = file_inode(vmfile);
+3e338d3c95c735 Suren Baghdasaryan 2020-07-30  422  		lockdep_set_class(&inode->i_rwsem, &backing_shmem_inode_class);
+11980c2ac4ccfa Robert Love        2011-12-20  423  		asma->file = vmfile;
+6d67b0290b4b84 Suren Baghdasaryan 2020-01-27  424  		/*
+6d67b0290b4b84 Suren Baghdasaryan 2020-01-27  425  		 * override mmap operation of the vmfile so that it can't be
+6d67b0290b4b84 Suren Baghdasaryan 2020-01-27  426  		 * remapped which would lead to creation of a new vma with no
+6d67b0290b4b84 Suren Baghdasaryan 2020-01-27  427  		 * asma permission checks. Have to override get_unmapped_area
+6d67b0290b4b84 Suren Baghdasaryan 2020-01-27  428  		 * as well to prevent VM_BUG_ON check for f_ops modification.
+6d67b0290b4b84 Suren Baghdasaryan 2020-01-27  429  		 */
+6d67b0290b4b84 Suren Baghdasaryan 2020-01-27  430  		if (!vmfile_fops.mmap) {
+6d67b0290b4b84 Suren Baghdasaryan 2020-01-27 @431  			vmfile_fops = *vmfile->f_op;
+6d67b0290b4b84 Suren Baghdasaryan 2020-01-27 @432  			vmfile_fops.mmap = ashmem_vmfile_mmap;
+6d67b0290b4b84 Suren Baghdasaryan 2020-01-27 @433  			vmfile_fops.get_unmapped_area =
+6d67b0290b4b84 Suren Baghdasaryan 2020-01-27  434  					ashmem_vmfile_get_unmapped_area;
+6d67b0290b4b84 Suren Baghdasaryan 2020-01-27  435  		}
+6d67b0290b4b84 Suren Baghdasaryan 2020-01-27  436  		vmfile->f_op = &vmfile_fops;
+11980c2ac4ccfa Robert Love        2011-12-20  437  	}
+11980c2ac4ccfa Robert Love        2011-12-20  438  	get_file(asma->file);
+11980c2ac4ccfa Robert Love        2011-12-20  439  
+11980c2ac4ccfa Robert Love        2011-12-20  440  	/*
+11980c2ac4ccfa Robert Love        2011-12-20  441  	 * XXX - Reworked to use shmem_zero_setup() instead of
+11980c2ac4ccfa Robert Love        2011-12-20  442  	 * shmem_set_file while we're in staging. -jstultz
+11980c2ac4ccfa Robert Love        2011-12-20  443  	 */
+11980c2ac4ccfa Robert Love        2011-12-20  444  	if (vma->vm_flags & VM_SHARED) {
+11980c2ac4ccfa Robert Love        2011-12-20  445  		ret = shmem_zero_setup(vma);
+11980c2ac4ccfa Robert Love        2011-12-20  446  		if (ret) {
+11980c2ac4ccfa Robert Love        2011-12-20  447  			fput(asma->file);
+11980c2ac4ccfa Robert Love        2011-12-20  448  			goto out;
+11980c2ac4ccfa Robert Love        2011-12-20  449  		}
+44960f2a7b63e2 John Stultz        2018-07-31  450  	} else {
+44960f2a7b63e2 John Stultz        2018-07-31  451  		vma_set_anonymous(vma);
+11980c2ac4ccfa Robert Love        2011-12-20  452  	}
+11980c2ac4ccfa Robert Love        2011-12-20  453  
+295992fb815e79 Christian König    2020-09-14  454  	vma_set_file(vma, asma->file);
+295992fb815e79 Christian König    2020-09-14  455  	/* XXX: merge this with the get_file() above if possible */
+295992fb815e79 Christian König    2020-09-14  456  	fput(asma->file);
+11980c2ac4ccfa Robert Love        2011-12-20  457  
+11980c2ac4ccfa Robert Love        2011-12-20  458  out:
+11980c2ac4ccfa Robert Love        2011-12-20  459  	mutex_unlock(&ashmem_mutex);
+11980c2ac4ccfa Robert Love        2011-12-20  460  	return ret;
+11980c2ac4ccfa Robert Love        2011-12-20  461  }
+11980c2ac4ccfa Robert Love        2011-12-20  462  
+
 ---
- arch/arm64/boot/dts/nvidia/tegra234.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-index c686827..cbebf1e 100644
---- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-@@ -234,6 +234,18 @@
- 			reset-names = "i2c";
- 		};
- 
-+		pwm1: pwm@3280000 {
-+			compatible = "nvidia,tegra194-pwm",
-+				     "nvidia,tegra186-pwm";
-+			reg = <0x3280000 0x10000>;
-+			clocks = <&bpmp TEGRA234_CLK_PWM1>;
-+			clock-names = "pwm";
-+			resets = <&bpmp TEGRA234_RESET_PWM1>;
-+			reset-names = "pwm";
-+			status = "disabled";
-+			#pwm-cells = <2>;
-+		};
-+
- 		mmc@3460000 {
- 			compatible = "nvidia,tegra234-sdhci", "nvidia,tegra186-sdhci";
- 			reg = <0x03460000 0x20000>;
--- 
-2.7.4
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

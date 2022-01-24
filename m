@@ -2,143 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 038E1497910
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 07:56:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEA23497918
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 08:05:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235789AbiAXG4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 01:56:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235782AbiAXG4L (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 01:56:11 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34528C06173D
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 22:56:11 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id q22so2471081ljh.7
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 22:56:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6eCEcMeA9Fkb0FluXxSrK7i6IfK5ynhLkp1exKbEon8=;
-        b=OGBcMOrV1Z0m2tOW1AiBcywVQKzyrsnU/JUIawoJ4prFqLdEjMc7dVWmXZBcH7FxaY
-         4qo4K6XAAa2LyDI0c+fvoiJ53fa0kXDxguZyrHyL4XJreVdSXHd27L1i52qw0X/ZNzoE
-         sQr7Uzxq4SgmFQOEfr759mutd41cl50vHxVFQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6eCEcMeA9Fkb0FluXxSrK7i6IfK5ynhLkp1exKbEon8=;
-        b=JGoGnhS9gN9rGEIah2z/JmBkF2A19RJq7k4NYVD9w6mPsjiT3UOZ5eyAOOoK0yeS4y
-         irexfsGg00M+ALomg4+b1F5tYl+Oddbge+2uTFrQea6OqDbD+dMezLCBuf6nAllyS5fq
-         wYT+eK7zPqmpVIz/f6Ut/9yGkedfjXynLkkoQVMSk61KL4QZOzArvsiMw5JCdyVGAS0+
-         ALuLHviVOzl/KUfhR7rRIslXSIXnUCm8YREhzkvBNC0IGT87o3py1DKTOUyePOyvqr9I
-         mDWDTOCUEEF2TL4mef1+G8j4s00ihYi294IePPin0p+RfvCc3VSonfRa29XSRE9FxtNb
-         cUMQ==
-X-Gm-Message-State: AOAM533aoCWmbqBMdOCNLBc3dLm6aHFuLes5sRi9q9r/b3LY5fQZlLkj
-        UZ5ZGLGpC+fnyUBO3WhYvC0xnaHrcWUHBWsDeDAXqg==
-X-Google-Smtp-Source: ABdhPJyQX8kByoNsnhzYvi39UHrRBNLJT8x4eB8dLRIbLqUY9db041EKQT+HEsVFbuzf9bwzlZzkdhG3mdce8oTvEiU=
-X-Received: by 2002:a2e:b70a:: with SMTP id j10mr10465200ljo.376.1643007369423;
- Sun, 23 Jan 2022 22:56:09 -0800 (PST)
+        id S235771AbiAXHFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 02:05:08 -0500
+Received: from [58.34.33.2] ([58.34.33.2]:26524 "EHLO MAIL-SVR"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229776AbiAXHFG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 02:05:06 -0500
+X-Greylist: delayed 3724 seconds by postgrey-1.27 at vger.kernel.org; Mon, 24 Jan 2022 02:05:05 EST
+Received: from ubuntu.localdomain (Unknown [192.168.110.22])
+        by MAIL-SVR with ESMTPA
+        ; Mon, 24 Jan 2022 14:02:03 +0800
+From:   Ley Foon Tan <leyfoon.tan@linux.starfivetech.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>
+Cc:     Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ley Foon Tan <lftan.linux@gmail.com>
+Subject: [PATCH] mtd: spi-nor: macronix: Add support for mx66u1g45g
+Date:   Mon, 24 Jan 2022 14:02:25 +0800
+Message-Id: <20220124060225.149007-1-leyfoon.tan@linux.starfivetech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220123033306.29799-1-qizhong.cheng@mediatek.com>
- <CAGXv+5EcAXFTnjkbeU4f3J2s4Ue5zxrN4QgS=t54BnLX8Gkw2w@mail.gmail.com> <bddf917f241a6628d43ddd95b577024c9ddf9931.camel@mediatek.com>
-In-Reply-To: <bddf917f241a6628d43ddd95b577024c9ddf9931.camel@mediatek.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Mon, 24 Jan 2022 14:55:58 +0800
-Message-ID: <CAGXv+5GUW6qcxwnfj3dsn7Lb1yY5bNv+v+PQ2VN1NX9yPmGd2A@mail.gmail.com>
-Subject: Re: [PATCH] PCI: mediatek: Change MSI interrupt processing sequence
-To:     "qizhong.cheng" <qizhong.cheng@mediatek.com>
-Cc:     Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, chuanjia.liu@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 2:27 PM qizhong.cheng
-<qizhong.cheng@mediatek.com> wrote:
->
-> Hi chenYu,
->
-> On Mon, 2022-01-24 at 11:12 +0800, Chen-Yu Tsai wrote:
-> > Hi,
-> >
-> > On Sun, Jan 23, 2022 at 11:34 AM qizhong cheng
-> > <qizhong.cheng@mediatek.com> wrote:
-> > >
-> > > As an edge-triggered interrupts, its interrupt status should be
-> > > cleared
-> > > before dispatch to the handler of device.
-> >
-> > I'm curious, is this just a code correction or are there real world
-> > cases where something fails?
->
-> Yes, we found a failure when used iperf tool for wifi and network cards
-> performance testing. The function of "while" has just been executed,
-> and the EP sent an MSI before executing "Clear MSI interrupt status".
-> After executing "Clear MSI interrupt status", this edge-triggered
-> interrupt status is cleared, but EP is still waiting for interrupt
-> handler.
+The Macronix mx66u1g45g [1] is a 1.8V, 1Gbit (128MB) flash device that
+supports x1, x2, or x4 operation.
 
-Can you also include this in the commit log?  It would be nice to record
-the exact scenario that this fix targets.
+The mx66u1g45g is the smaller sibling of the mx66u2g45g that is
+already supported.
 
-ChenYu
+Tested on StarFive Dubhe hardware on FPGA.
+Validated by erase and read back, write and read back.
 
-> >
-> > Also, please add a Fixes tag and maybe Cc stable so this gets
-> > backported
-> > automatically.
->
-> Thanks for your review, I will fix it in the next version.
->
-> >
-> > ChenYu
-> >
-> > > Signed-off-by: qizhong cheng <qizhong.cheng@mediatek.com>
-> > > ---
-> > >  drivers/pci/controller/pcie-mediatek.c | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/pci/controller/pcie-mediatek.c
-> > > b/drivers/pci/controller/pcie-mediatek.c
-> > > index 2f3f974977a3..705ea33758b1 100644
-> > > --- a/drivers/pci/controller/pcie-mediatek.c
-> > > +++ b/drivers/pci/controller/pcie-mediatek.c
-> > > @@ -624,12 +624,12 @@ static void mtk_pcie_intr_handler(struct
-> > > irq_desc *desc)
-> > >                 if (status & MSI_STATUS){
-> > >                         unsigned long imsi_status;
-> > >
-> > > +                       /* Clear MSI interrupt status */
-> > > +                       writel(MSI_STATUS, port->base +
-> > > PCIE_INT_STATUS);
-> > >                         while ((imsi_status = readl(port->base +
-> > > PCIE_IMSI_STATUS))) {
-> > >                                 for_each_set_bit(bit, &imsi_status,
-> > > MTK_MSI_IRQS_NUM)
-> > >                                         generic_handle_domain_irq(p
-> > > ort->inner_domain, bit);
-> > >                         }
-> > > -                       /* Clear MSI interrupt status */
-> > > -                       writel(MSI_STATUS, port->base +
-> > > PCIE_INT_STATUS);
-> > >                 }
-> > >         }
-> > >
-> > > --
-> > > 2.25.1
-> > >
-> > >
-> > > _______________________________________________
-> > > Linux-mediatek mailing list
-> > > Linux-mediatek@lists.infradead.org
-> > > http://lists.infradead.org/mailman/listinfo/linux-mediatek
->
+[1] https://www.macronix.com/Lists/Datasheet/Attachments/7877/MX66U1G45G,%201.8V,%201Gb,%20v1.4.pdf
+
+Signed-off-by: Ley Foon Tan <leyfoon.tan@linux.starfivetech.com>
+---
+ drivers/mtd/spi-nor/macronix.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macronix.c
+index 97dba1ae7fb1..79ee808c5442 100644
+--- a/drivers/mtd/spi-nor/macronix.c
++++ b/drivers/mtd/spi-nor/macronix.c
+@@ -97,6 +97,9 @@ static const struct flash_info macronix_parts[] = {
+ 			      SPI_NOR_QUAD_READ) },
+ 	{ "mx66l1g55g",  INFO(0xc2261b, 0, 64 * 1024, 2048)
+ 		NO_SFDP_FLAGS(SPI_NOR_QUAD_READ) },
++	{ "mx66u1g45g",  INFO(0xc2253b, 0, 64 * 1024, 2048)
++		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
++		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
+ 	{ "mx66u2g45g",	 INFO(0xc2253c, 0, 64 * 1024, 4096)
+ 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
+ 		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
+-- 
+2.25.1
+
+

@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF87449A6F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:35:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1292849A5D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:13:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3421888AbiAYC3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:29:14 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49536 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351363AbiAXUIo (ORCPT
+        id S1449591AbiAYA3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:29:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2363514AbiAXXop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:08:44 -0500
+        Mon, 24 Jan 2022 18:44:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4935C05A19B;
+        Mon, 24 Jan 2022 13:39:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C20EB81229;
-        Mon, 24 Jan 2022 20:08:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC83BC340E5;
-        Mon, 24 Jan 2022 20:08:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 835F0614DC;
+        Mon, 24 Jan 2022 21:39:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ED46C340E4;
+        Mon, 24 Jan 2022 21:39:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054920;
-        bh=jvYhz8YpNmkbER86BXrSZ5adwkxgPvr1U2vrZuzY4l0=;
+        s=korg; t=1643060369;
+        bh=YlEiyxyqTNYwmSha/fJ9ajhtW4rM+zQ7a+BoGfI6+YY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=czipoAkGJYyveVf7IL9wl73IRdvtibGHmYo4EGf4vAVpAbbhVeefwhu8ZhSblFiLr
-         7anz73k2KDNntG1NZ51mxGjKIyKB3MkOFxmxDOeCayUwDJtw108FTGPFA3ZAVziLon
-         Llp/1vrnoNImXF8Itb52jpE+H6/zqf11PjPT+G/o=
+        b=WHW7zCekR8ZIBPgNNZf60JqymO0IIKAM3DCEJAQMTwIGNPVLoVtk4o4uOZaNatWCn
+         ezW6lgbAajHErGRCSICyyr3YwrX17RkWFKjgTDqX2VRTzMle/Y0tbUNEZTai5COETu
+         KmykzZZrzirohQffqVZnRueQbdMK5C6q+0i9FK+A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 547/563] devlink: Remove misleading internal_flags from health reporter dump
-Date:   Mon, 24 Jan 2022 19:45:12 +0100
-Message-Id: <20220124184043.346118706@linuxfoundation.org>
+        stable@vger.kernel.org, Yixing Liu <liuyixing1@huawei.com>,
+        Wenpeng Liang <liangwenpeng@huawei.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 5.16 0925/1039] RDMA/hns: Modify the mapping attribute of doorbell to device
+Date:   Mon, 24 Jan 2022 19:45:14 +0100
+Message-Id: <20220124184156.385374522@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,31 +49,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+From: Yixing Liu <liuyixing1@huawei.com>
 
-commit e9538f8270db24d272659e15841854c7ea11119e upstream.
+commit 39d5534b1302189c809e90641ffae8cbdc42a8fc upstream.
 
-DEVLINK_CMD_HEALTH_REPORTER_DUMP_GET command doesn't have .doit callback
-and has no use in internal_flags at all. Remove this misleading assignment.
+It is more general for ARM device drivers to use the device attribute to
+map PCI BAR spaces.
 
-Fixes: e44ef4e4516c ("devlink: Hang reporter's dump method on a dumpit cb")
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 9a4435375cd1 ("IB/hns: Add driver files for hns RoCE driver")
+Link: https://lore.kernel.org/r/20211206133652.27476-1-liangwenpeng@huawei.com
+Signed-off-by: Yixing Liu <liuyixing1@huawei.com>
+Signed-off-by: Wenpeng Liang <liangwenpeng@huawei.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/devlink.c |    2 --
- 1 file changed, 2 deletions(-)
+ drivers/infiniband/hw/hns/hns_roce_main.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/core/devlink.c
-+++ b/net/core/devlink.c
-@@ -7852,8 +7852,6 @@ static const struct genl_small_ops devli
- 			    GENL_DONT_VALIDATE_DUMP_STRICT,
- 		.dumpit = devlink_nl_cmd_health_reporter_dump_get_dumpit,
- 		.flags = GENL_ADMIN_PERM,
--		.internal_flags = DEVLINK_NL_FLAG_NEED_DEVLINK_OR_PORT |
--				  DEVLINK_NL_FLAG_NO_LOCK,
- 	},
- 	{
- 		.cmd = DEVLINK_CMD_HEALTH_REPORTER_DUMP_CLEAR,
+--- a/drivers/infiniband/hw/hns/hns_roce_main.c
++++ b/drivers/infiniband/hw/hns/hns_roce_main.c
+@@ -442,7 +442,7 @@ static int hns_roce_mmap(struct ib_ucont
+ 	prot = vma->vm_page_prot;
+ 
+ 	if (entry->mmap_type != HNS_ROCE_MMAP_TYPE_TPTR)
+-		prot = pgprot_noncached(prot);
++		prot = pgprot_device(prot);
+ 
+ 	ret = rdma_user_mmap_io(uctx, vma, pfn, rdma_entry->npages * PAGE_SIZE,
+ 				prot, rdma_entry);
 
 

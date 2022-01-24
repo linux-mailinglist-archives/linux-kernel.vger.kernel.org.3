@@ -2,97 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2415449779B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 04:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B02E44977A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 04:13:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240999AbiAXDLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 22:11:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
+        id S241004AbiAXDND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 22:13:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240990AbiAXDLq (ORCPT
+        with ESMTP id S240993AbiAXDNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 22:11:46 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57933C06173B;
-        Sun, 23 Jan 2022 19:11:46 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id z131so3001728pgz.12;
-        Sun, 23 Jan 2022 19:11:46 -0800 (PST)
+        Sun, 23 Jan 2022 22:13:02 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7FDBC06173D
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 19:13:01 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id bu18so46367817lfb.5
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 19:13:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=7f6OMCJtFTLxl4ks0t6TGQoK7rbno+Jx4VF8y/4oupU=;
-        b=FeJ/L4SK+FUvjr/nIxOEOd49QMgIaF+wpGxpx0wvt8vZMyU215NmKxwfOD9QgKnaeI
-         uQjRyg0Blp9XeXdp2KmBK0OLU7so05kJBhkyf1tTkCWQT1ldiu71apMDtIGFhEKkM4Hp
-         RmEbaakJSXYAsxf4Bu3/Cz8aWelX7eN7iUU8IXU3oXyvFPjeEGqGjNlw2cAbxATesyMo
-         buFsYZEGQcbdTKJYNAg8/MmoQLpvJ2cAhs7j3UOSP5AHD7jhDQ1rv9wCW3ATpBHQU6kz
-         X4VQXD1IllcvXLT3dX0fSlDhiVyOFq6yAz9i7dC/jptfYEFoykc88Mz7nAbLynJibqXn
-         bJ5A==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5qVRM/Y9KnTf5W/OW47uEzjGsZq7YvdI6MDc82La160=;
+        b=UlGkxmIGFurpQPQLsy3DHRon2/mDjj7Q9J/DY0DCAhxEg6rtDo79bddPp/YOKubJtC
+         /tFIY5HlZAMacqbKHnZQVmNYaH2V6/nYrNDLWnSBq+1jYjZwCpHW8kaLPnpSj9Yzrq8D
+         /zTzYAI+oMwUm37NjaYH0/lr9jk8yjSRqwN7I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7f6OMCJtFTLxl4ks0t6TGQoK7rbno+Jx4VF8y/4oupU=;
-        b=gqM1enUiYPND4eT+I2AN7fXtZCHSvT/3pkmGRPq7RuOerXgvEXBbVzzEnAkZyd0yMK
-         oyswnr1lqGj2ruoCQcpHmMlFgPFc60Lt3I7T1BGGyactweU4gEmfucXW5DGI4xlPPk7w
-         0aFYEQLXcGKkv+Z+oND+Jt/P+gqTxxo67DkOkJmkEFs6WN/OX+Rb6Pa/6B2pGPy8xWnG
-         LFU5yuFTxdKfWukYrX5R8sIZLu/8cPc90dB2J5R2mpVeKvOOVQBRRwH4Ss9Oyqb1vkpL
-         /X1QOmPTWcyrv9zB862/DNAgRi37/Rx/p4HUYo6q0dz//tryM+WObkJL7zUZB16YMsLg
-         n2OA==
-X-Gm-Message-State: AOAM5324JCJ39RCGGNrSLhDVcreqLBPFLqGNH1/aqFBg4/pPUfNquQqY
-        HxFGGBGKEHP4cgZnUnnaKaM=
-X-Google-Smtp-Source: ABdhPJyLclQKoyYIZ6DiSIOXLFhv8CJsn0AAcNW26wdYTaBZ/q3zwKl159edSjZ1niURCx7biUzcCA==
-X-Received: by 2002:a63:6849:: with SMTP id d70mr10468180pgc.116.1642993905086;
-        Sun, 23 Jan 2022 19:11:45 -0800 (PST)
-Received: from ?IPV6:2600:8802:b00:4a48:5d89:db9e:1ac7:6fdc? ([2600:8802:b00:4a48:5d89:db9e:1ac7:6fdc])
-        by smtp.gmail.com with ESMTPSA id y41sm1243112pfa.213.2022.01.23.19.11.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Jan 2022 19:11:44 -0800 (PST)
-Message-ID: <0c4f392f-d18f-812f-b7d5-9184127c6fb7@gmail.com>
-Date:   Sun, 23 Jan 2022 19:11:42 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5qVRM/Y9KnTf5W/OW47uEzjGsZq7YvdI6MDc82La160=;
+        b=y197EhR36jRkLwYP6/iMeDzGgF74NBweQ2mDbxLFuQI3IgckOTtR+GEt+fuGNvFugC
+         OrEk1rnrHfESQpr3vkPW/dbmg3/UwBVg73XJLWy0W9PROfVDDOqUk67TeZWInhRlhkWn
+         nl9k1gkT72INInsxAnXkTFymWrNlGrnRXrnNfMyUVp53wq/1rQjBDUBYyjDVTl9DwPjz
+         1ex/rAijaDcJ6DK6gqZqu1wqdjmZLdUUIqnTqf6gHiu8dAN0fznGWnFU16dN3vLOJlaR
+         FkLCT2nZMk4t8pQnxsAMoTvhzTyBNpxgWtn/ZL6ick3slAGHwNPraiB5RlwKGW47uSnX
+         uTbQ==
+X-Gm-Message-State: AOAM531HF9RVZ9sLQuvseuj5mDb2X5GEjCYR07WPG9QvBYrUq8SUgOdE
+        /899PXyt1lV04HUk6Q5UfEwGw2mgMCv1QCwoKo8cow==
+X-Google-Smtp-Source: ABdhPJzG18l672TgZ/EmECfzrQYf6wq8lGBjSmTvpyYvaqtsPUqWNgNQKmjGEnHknumxN8qo9BV/N9rD/h475wz3Fgo=
+X-Received: by 2002:a05:6512:1320:: with SMTP id x32mr11937257lfu.597.1642993980077;
+ Sun, 23 Jan 2022 19:13:00 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 19/54] drivers/irqchip: replace cpumask_weight with
- cpumask_empty where appropriate
-Content-Language: en-US
-To:     Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org
-References: <20220123183925.1052919-1-yury.norov@gmail.com>
- <20220123183925.1052919-20-yury.norov@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220123183925.1052919-20-yury.norov@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220123033306.29799-1-qizhong.cheng@mediatek.com>
+In-Reply-To: <20220123033306.29799-1-qizhong.cheng@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 24 Jan 2022 11:12:49 +0800
+Message-ID: <CAGXv+5EcAXFTnjkbeU4f3J2s4Ue5zxrN4QgS=t54BnLX8Gkw2w@mail.gmail.com>
+Subject: Re: [PATCH] PCI: mediatek: Change MSI interrupt processing sequence
+To:     qizhong cheng <qizhong.cheng@mediatek.com>
+Cc:     Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, chuanjia.liu@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+On Sun, Jan 23, 2022 at 11:34 AM qizhong cheng
+<qizhong.cheng@mediatek.com> wrote:
+>
+> As an edge-triggered interrupts, its interrupt status should be cleared
+> before dispatch to the handler of device.
 
-On 1/23/2022 10:38 AM, Yury Norov wrote:
-> bcm6345_l1_of_init() calls cpumask_weight() to check if any bit of a given
-> cpumask is set. We can do it more efficiently with cpumask_empty() because
-> cpumask_empty() stops traversing the cpumask as soon as it finds first set
-> bit, while cpumask_weight() counts all bits unconditionally.
-> 
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+I'm curious, is this just a code correction or are there real world
+cases where something fails?
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Also, please add a Fixes tag and maybe Cc stable so this gets backported
+automatically.
+
+ChenYu
+
+> Signed-off-by: qizhong cheng <qizhong.cheng@mediatek.com>
+> ---
+>  drivers/pci/controller/pcie-mediatek.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
+> index 2f3f974977a3..705ea33758b1 100644
+> --- a/drivers/pci/controller/pcie-mediatek.c
+> +++ b/drivers/pci/controller/pcie-mediatek.c
+> @@ -624,12 +624,12 @@ static void mtk_pcie_intr_handler(struct irq_desc *desc)
+>                 if (status & MSI_STATUS){
+>                         unsigned long imsi_status;
+>
+> +                       /* Clear MSI interrupt status */
+> +                       writel(MSI_STATUS, port->base + PCIE_INT_STATUS);
+>                         while ((imsi_status = readl(port->base + PCIE_IMSI_STATUS))) {
+>                                 for_each_set_bit(bit, &imsi_status, MTK_MSI_IRQS_NUM)
+>                                         generic_handle_domain_irq(port->inner_domain, bit);
+>                         }
+> -                       /* Clear MSI interrupt status */
+> -                       writel(MSI_STATUS, port->base + PCIE_INT_STATUS);
+>                 }
+>         }
+>
+> --
+> 2.25.1
+>
+>
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek

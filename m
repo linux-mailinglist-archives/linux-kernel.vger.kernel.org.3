@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A09C497A86
+	by mail.lfdr.de (Postfix) with ESMTP id E3C92497A87
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242371AbiAXIn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 03:43:26 -0500
-Received: from mga09.intel.com ([134.134.136.24]:62668 "EHLO mga09.intel.com"
+        id S242280AbiAXInd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 03:43:33 -0500
+Received: from mga09.intel.com ([134.134.136.24]:62621 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242393AbiAXInK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 03:43:10 -0500
+        id S242283AbiAXInO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 03:43:14 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643013790; x=1674549790;
+  t=1643013794; x=1674549794;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=pqE1c0GPx7HHb6iG99OWBfb5ZGWqVwXg1A1M59qD240=;
-  b=PvP3fBeks3Jap4spwz3VvQYj2RpRCrBXesKRzyKkVGMS6IcwNmtZU3Hr
-   CaS2ffChwuEcPwXALec49GbIkBVVMTOnJKelYe19YG0RrawjRAEU1pUOr
-   LMBQrSbmM0Nk7Dg8Wdb13NBRvCXjCWDiqspWBAsUjQzdMJK64BosPDghs
-   /JWHmcYWW8awcNwMpPHTf2gMuKj+wWQ6QqDGqMLcxyTaUVYAe6nCohpTV
-   FqX9Gy4oukrZ0A54uXwAc8VN/OG9/QncI9kvNfvFUvTFbfdbrLRLktq46
-   pHlsjY/2puw1kagJVKXZWTiujALXXlErTL9O2UvPr5eSlvICLpFEJGPH/
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="245778476"
+  bh=h2h9bHGDewdmOF/SyS/9WfylitAc0QQW5ESIvmQkmic=;
+  b=E+SXK7VRSqIMlNB1gkQSQWjZQ0+5ZRDtIbgpzkr/zlE035TVCHTe+A8h
+   UMdBvhJhwrEE+UirByJs3rGNYZ09p+qxYek6eQXggAbU8VYgaHoDa8h6w
+   Los5ke07vWsStYzz7Vju2BoNHKwPvxCNjhetMieyIThuNN5tZhIdTBYHk
+   6FxE2gVz7KArnKBvqJNU0WCAvYVVUSrbNOqtnnG2WerzcenciUO5x6Z9g
+   /kFYbcptxUh9/SUaGnzq9SFRV+lbVGYcBcx7mVpwxDlMK8GAI9Kz6HBDB
+   JchxSLas6ckxJLAPoB9bIKpUJOEaiePOnk+1ozaKHesuIFsa1eMvFwCYW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="245778488"
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="245778476"
+   d="scan'208";a="245778488"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 00:42:49 -0800
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 00:42:52 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="627417239"
+   d="scan'208";a="627417257"
 Received: from ahunter-desktop.fi.intel.com ([10.237.72.92])
-  by orsmga004.jf.intel.com with ESMTP; 24 Jan 2022 00:42:47 -0800
+  by orsmga004.jf.intel.com with ESMTP; 24 Jan 2022 00:42:49 -0800
 From:   Adrian Hunter <adrian.hunter@intel.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc:     Jiri Olsa <jolsa@redhat.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH 20/25] perf script: Display new D and t flags
-Date:   Mon, 24 Jan 2022 10:41:56 +0200
-Message-Id: <20220124084201.2699795-21-adrian.hunter@intel.com>
+Subject: [PATCH 21/25] perf scripts python: intel-pt-events.py: Add Event Trace
+Date:   Mon, 24 Jan 2022 10:41:57 +0200
+Message-Id: <20220124084201.2699795-22-adrian.hunter@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220124084201.2699795-1-adrian.hunter@intel.com>
 References: <20220124084201.2699795-1-adrian.hunter@intel.com>
@@ -52,98 +52,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Amend the display to include D and t flags in the same way as the x flag.
+Add Event Trace to the intel-pt-events.py script. This shows how to unpack
+the raw data from the new sample events in a Python script.
 
 Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 ---
- tools/perf/Documentation/perf-script.txt | 13 ++++++++-----
- tools/perf/builtin-script.c              | 24 ++++++++++++++++--------
- 2 files changed, 24 insertions(+), 13 deletions(-)
+ tools/perf/scripts/python/intel-pt-events.py | 55 ++++++++++++++++++--
+ 1 file changed, 50 insertions(+), 5 deletions(-)
 
-diff --git a/tools/perf/Documentation/perf-script.txt b/tools/perf/Documentation/perf-script.txt
-index b0070718784d..afd4718475c9 100644
---- a/tools/perf/Documentation/perf-script.txt
-+++ b/tools/perf/Documentation/perf-script.txt
-@@ -195,16 +195,19 @@ OPTIONS
- 	At this point usage is displayed, and perf-script exits.
+diff --git a/tools/perf/scripts/python/intel-pt-events.py b/tools/perf/scripts/python/intel-pt-events.py
+index 66452a8ec358..973bd12b7b40 100644
+--- a/tools/perf/scripts/python/intel-pt-events.py
++++ b/tools/perf/scripts/python/intel-pt-events.py
+@@ -76,16 +76,16 @@ def trace_begin():
+ 	glb_args = ap.parse_args()
+ 	if glb_args.insn_trace:
+ 		print("Intel PT Instruction Trace")
+-		itrace = "i0nsepwx"
++		itrace = "i0nsepwxI"
+ 		glb_insn = True
+ 	elif glb_args.src_trace:
+ 		print("Intel PT Source Trace")
+-		itrace = "i0nsepwx"
++		itrace = "i0nsepwxI"
+ 		glb_insn = True
+ 		glb_src = True
+ 	else:
+-		print("Intel PT Branch Trace, Power Events and PTWRITE")
+-		itrace = "bepwx"
++		print("Intel PT Branch Trace, Power Events, Event Trace and PTWRITE")
++		itrace = "bepwxI"
+ 	global glb_disassembler
+ 	try:
+ 		glb_disassembler = LibXED()
+@@ -149,6 +149,43 @@ def print_psb(raw_buf):
+ 	offset = data[1]
+ 	print("offset: %#x" % (offset), end=' ')
  
- 	The flags field is synthesized and may have a value when Instruction
--	Trace decoding. The flags are "bcrosyiABExgh" which stand for branch,
-+	Trace decoding. The flags are "bcrosyiABExghDt" which stand for branch,
- 	call, return, conditional, system, asynchronous, interrupt,
--	transaction abort, trace begin, trace end, in transaction, VM-Entry, and VM-Exit
--	respectively. Known combinations of flags are printed more nicely e.g.
-+	transaction abort, trace begin, trace end, in transaction, VM-Entry,
-+	VM-Exit, interrupt disabled and interrupt disable toggle respectively.
-+	Known combinations of flags are printed more nicely e.g.
- 	"call" for "bc", "return" for "br", "jcc" for "bo", "jmp" for "b",
- 	"int" for "bci", "iret" for "bri", "syscall" for "bcs", "sysret" for "brs",
- 	"async" for "by", "hw int" for "bcyi", "tx abrt" for "bA", "tr strt" for "bB",
- 	"tr end" for "bE", "vmentry" for "bcg", "vmexit" for "bch".
--	However the "x" flag will be displayed separately in those
--	cases e.g. "jcc     (x)" for a condition branch within a transaction.
-+	However the "x", "D" and "t" flags will be displayed separately in those
-+	cases e.g. "jcc     (xD)" for a condition branch within a transaction
-+	with interrupts disabled. Note, interrupts becoming disabled is "t",
-+	whereas interrupts becoming enabled is "Dt".
- 
- 	The callindent field is synthesized and may have a value when
- 	Instruction Trace decoding. For calls and returns, it will display the
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index 517d5f7a7d39..9e032343f1c6 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -1579,26 +1579,34 @@ static const char *sample_flags_to_name(u32 flags)
- 
- int perf_sample__sprintf_flags(u32 flags, char *str, size_t sz)
- {
-+	u32 xf = PERF_IP_FLAG_IN_TX | PERF_IP_FLAG_INTR_DISABLE |
-+		 PERF_IP_FLAG_INTR_TOGGLE;
- 	const char *chars = PERF_IP_FLAG_CHARS;
- 	const size_t n = strlen(PERF_IP_FLAG_CHARS);
--	bool in_tx = flags & PERF_IP_FLAG_IN_TX;
- 	const char *name = NULL;
- 	size_t i, pos = 0;
-+	char xs[16] = {0};
- 
--	name = sample_flags_to_name(flags & ~PERF_IP_FLAG_IN_TX);
-+	if (flags & xf)
-+		snprintf(xs, sizeof(xs), "(%s%s%s)",
-+			 flags & PERF_IP_FLAG_IN_TX ? "x" : "",
-+			 flags & PERF_IP_FLAG_INTR_DISABLE ? "D" : "",
-+			 flags & PERF_IP_FLAG_INTR_TOGGLE ? "t" : "");
++glb_cfe = ["", "INTR", "IRET", "SMI", "RSM", "SIPI", "INIT", "VMENTRY", "VMEXIT",
++		"VMEXIT_INTR", "SHUTDOWN", "", "UINT", "UIRET"] + [""] * 18
++glb_evd = ["", "PFA", "VMXQ", "VMXR"] + [""] * 60
 +
-+	name = sample_flags_to_name(flags & ~xf);
- 	if (name)
--		return snprintf(str, sz, "%-15s%4s", name, in_tx ? "(x)" : "");
-+		return snprintf(str, sz, "%-15s%6s", name, xs);
++def print_evt(raw_buf):
++	data = struct.unpack_from("<BBH", raw_buf)
++	typ = data[0] & 0x1f
++	ip_flag = (data[0] & 0x80) >> 7
++	vector = data[1]
++	evd_cnt = data[2]
++	s = glb_cfe[typ]
++	if s:
++		print(" cfe: %s IP: %u vector: %u" % (s, ip_flag, vector), end=' ')
++	else:
++		print(" cfe: %u IP: %u vector: %u" % (typ, ip_flag, vector), end=' ')
++	pos = 4
++	for i in range(evd_cnt):
++		data = struct.unpack_from("<QQ", raw_buf)
++		et = data[0] & 0x3f
++		s = glb_evd[et]
++		if s:
++			print("%s: %#x" % (s, data[1]), end=' ')
++		else:
++			print("EVD_%u: %#x" % (et, data[1]), end=' ')
++
++def print_iflag(raw_buf):
++	data = struct.unpack_from("<IQ", raw_buf)
++	iflag = data[0] & 1
++	old_iflag = iflag ^ 1
++	via_branch = data[0] & 2
++	branch_ip = data[1]
++	if via_branch:
++		s = "via"
++	else:
++		s = "non"
++	print("IFLAG: %u->%u %s branch" % (old_iflag, iflag, s), end=' ')
++
+ def common_start_str(comm, sample):
+ 	ts = sample["time"]
+ 	cpu = sample["cpu"]
+@@ -164,7 +201,7 @@ def print_common_start(comm, sample, name):
+ 	# weight      = sample["weight"]
+ 	# transaction = sample["transaction"]
+ 	# cpumode     = get_optional_zero(sample, "cpumode")
+-	print(common_start_str(comm, sample) + "%7s  %19s" % (name, flags_disp), end=' ')
++	print(common_start_str(comm, sample) + "%8s  %21s" % (name, flags_disp), end=' ')
  
- 	if (flags & PERF_IP_FLAG_TRACE_BEGIN) {
--		name = sample_flags_to_name(flags & ~(PERF_IP_FLAG_IN_TX | PERF_IP_FLAG_TRACE_BEGIN));
-+		name = sample_flags_to_name(flags & ~(xf | PERF_IP_FLAG_TRACE_BEGIN));
- 		if (name)
--			return snprintf(str, sz, "tr strt %-7s%4s", name, in_tx ? "(x)" : "");
-+			return snprintf(str, sz, "tr strt %-7s%6s", name, xs);
- 	}
- 
- 	if (flags & PERF_IP_FLAG_TRACE_END) {
--		name = sample_flags_to_name(flags & ~(PERF_IP_FLAG_IN_TX | PERF_IP_FLAG_TRACE_END));
-+		name = sample_flags_to_name(flags & ~(xf | PERF_IP_FLAG_TRACE_END));
- 		if (name)
--			return snprintf(str, sz, "tr end  %-7s%4s", name, in_tx ? "(x)" : "");
-+			return snprintf(str, sz, "tr end  %-7s%6s", name, xs);
- 	}
- 
- 	for (i = 0; i < n; i++, flags >>= 1) {
-@@ -1620,7 +1628,7 @@ static int perf_sample__fprintf_flags(u32 flags, FILE *fp)
- 	char str[SAMPLE_FLAGS_BUF_SIZE];
- 
- 	perf_sample__sprintf_flags(flags, str, sizeof(str));
--	return fprintf(fp, "  %-19s ", str);
-+	return fprintf(fp, "  %-21s ", str);
- }
- 
- struct printer_data {
+ def print_instructions_start(comm, sample):
+ 	if "x" in get_optional_null(sample, "flags"):
+@@ -315,6 +352,14 @@ def do_process_event(param_dict):
+ 		print_common_start(comm, sample, name)
+ 		print_psb(raw_buf)
+ 		print_common_ip(param_dict, sample, symbol, dso)
++	elif name == "evt":
++		print_common_start(comm, sample, name)
++		print_evt(raw_buf)
++		print_common_ip(param_dict, sample, symbol, dso)
++	elif name == "iflag":
++		print_common_start(comm, sample, name)
++		print_iflag(raw_buf)
++		print_common_ip(param_dict, sample, symbol, dso)
+ 	else:
+ 		print_common_start(comm, sample, name)
+ 		print_common_ip(param_dict, sample, symbol, dso)
 -- 
 2.25.1
 

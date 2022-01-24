@@ -2,188 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC961498389
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA07249838B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:30:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243175AbiAXP2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 10:28:22 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:9786 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234124AbiAXP2V (ORCPT
+        id S243205AbiAXPaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 10:30:24 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57190 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243145AbiAXPaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 10:28:21 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20OFKTSt039798;
-        Mon, 24 Jan 2022 15:28:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=kRM/GanzUsfL3rVc/Li147Vx511/1dQpjefk9VYvMg0=;
- b=XCl3PSqyYZCkSektRHeTk4g88ieB1biEBWZDk3uFSXXopaqi4qrVjzBPJvOVdVpSZYvF
- YsuUM29PDqoTO7qvqo2x4yDBrhkJc873XV3iQlzAZ9uVPbIqp1nYjyK53b2fVXZTo0Ma
- MRXt3tmLljLVMjon631hgssF8MZcWkPrnnbCNTK6mE6RNUlevfVZO3S7OMlEgkajS8C4
- VD3KMCIZYWCXFyjZ1m+BXkv7RD5nk11uX2TUk52fIgwdJK/hJSj4gsQDzBpyyZlI444d
- ZRnIhpmGVIEOa70Qsz4kTYDqU0jGqwqWGiI6nkD6HOi/kj8pn2wflvuS/HUbMpOq1rN/ ug== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dsxnx85d8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Jan 2022 15:28:21 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20OFL1I2001440;
-        Mon, 24 Jan 2022 15:28:20 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dsxnx85cw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Jan 2022 15:28:20 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20OFD7xM015089;
-        Mon, 24 Jan 2022 15:28:19 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma04dal.us.ibm.com with ESMTP id 3dr9j9gh8x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Jan 2022 15:28:19 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20OFSIsB19530122
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Jan 2022 15:28:18 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 16BC96A05D;
-        Mon, 24 Jan 2022 15:28:18 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3771B6A054;
-        Mon, 24 Jan 2022 15:28:16 +0000 (GMT)
-Received: from [9.163.21.206] (unknown [9.163.21.206])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 24 Jan 2022 15:28:15 +0000 (GMT)
-Message-ID: <7a1fa398-3304-cb30-10c0-83e12ac9e8ac@linux.ibm.com>
-Date:   Mon, 24 Jan 2022 10:28:15 -0500
+        Mon, 24 Jan 2022 10:30:22 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 397C16148F
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 15:30:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42797C340E5;
+        Mon, 24 Jan 2022 15:30:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643038221;
+        bh=imIbdS9bZRqwq9tKxxFNiH/5EeT1Jb7ncT1Gvs01f+Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SsyMrwPYNdLkHkGLRNMnOV+H1I/ga9IHmIv25OSKDYYd+qhlq7Mq2gZ4hrbvwMFJD
+         KNgJ6xY1Rkzs7UEym/C0f3SroHl+9xrFPt761pxJDj4REId3D+oDe5/Nt/W94tKjDA
+         26zssgpMb+NfkB0GcF1ZvCvGmC7nAqey2gQ7DEG/hH8+XkVptzu2kPzb0OgKYzxxgN
+         MRUz8OAlRTsGs23h1NZKj73oikpdWuPMfp9uogOM3JDolVeOHKndSM/iUQ9zbbiMFO
+         egnjS7rFG0VTEdKwD3/lPSaFIg8ei5xo3stPylunFVTEOaf0qZpdMFTTUi/Tqi6oqK
+         7v6XYeXgZFw1Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 2637040C99; Mon, 24 Jan 2022 12:28:18 -0300 (-03)
+Date:   Mon, 24 Jan 2022 12:28:18 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Antonov <alexander.antonov@linux.intel.com>,
+        Alexei Budankov <abudankov@huawei.com>,
+        Riccardo Mancini <rickyman7@gmail.com>
+Subject: Re: [PATCH v13 11/16] perf record: Introduce data transferred and
+ compressed stats
+Message-ID: <Ye7FkknVAUJjM+oV@kernel.org>
+References: <cover.1642440724.git.alexey.v.bayduraev@linux.intel.com>
+ <b5d598034c507dfb7544d2125500280b7d434764.1642440724.git.alexey.v.bayduraev@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 17/30] KVM: s390: mechanism to enable guest zPCI
- Interpretation
-Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
- <20220114203145.242984-18-mjrosato@linux.ibm.com>
- <7125d611-5440-09ae-429a-7a087dd77868@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <7125d611-5440-09ae-429a-7a087dd77868@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: K7F7amDEbYFy0270m0ORRUS0ArBb4EF6
-X-Proofpoint-ORIG-GUID: 9zHWB8uB2RkfJLOW6FtgV9GDJahOHR7-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-24_08,2022-01-24_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- mlxlogscore=999 lowpriorityscore=0 clxscore=1015 bulkscore=0 mlxscore=0
- impostorscore=0 spamscore=0 malwarescore=0 priorityscore=1501 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2201240101
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b5d598034c507dfb7544d2125500280b7d434764.1642440724.git.alexey.v.bayduraev@linux.intel.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/22 9:24 AM, Pierre Morel wrote:
+Em Mon, Jan 17, 2022 at 09:34:31PM +0300, Alexey Bayduraev escreveu:
+> Introduce bytes_transferred and bytes_compressed stats so they
+> would capture statistics for the related data buffer transfers.
 > 
+> Acked-by: Andi Kleen <ak@linux.intel.com>
+> Acked-by: Namhyung Kim <namhyung@gmail.com>
+> Reviewed-by: Riccardo Mancini <rickyman7@gmail.com>
+> Tested-by: Riccardo Mancini <rickyman7@gmail.com>
+> Signed-off-by: Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
+> ---
+>  tools/perf/builtin-record.c | 25 ++++++++++++++++++++++---
+>  1 file changed, 22 insertions(+), 3 deletions(-)
 > 
-> On 1/14/22 21:31, Matthew Rosato wrote:
->> The guest must have access to certain facilities in order to allow
->> interpretive execution of zPCI instructions and adapter event
->> notifications.  However, there are some cases where a guest might
->> disable interpretation -- provide a mechanism via which we can defer
->> enabling the associated zPCI interpretation facilities until the guest
->> indicates it wishes to use them.
->>
->> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
->> ---
->>   arch/s390/include/asm/kvm_host.h |  4 ++++
->>   arch/s390/kvm/kvm-s390.c         | 40 ++++++++++++++++++++++++++++++++
->>   arch/s390/kvm/kvm-s390.h         | 10 ++++++++
->>   3 files changed, 54 insertions(+)
->>
->> diff --git a/arch/s390/include/asm/kvm_host.h 
->> b/arch/s390/include/asm/kvm_host.h
->> index 3f147b8d050b..38982c1de413 100644
->> --- a/arch/s390/include/asm/kvm_host.h
->> +++ b/arch/s390/include/asm/kvm_host.h
->> @@ -252,7 +252,10 @@ struct kvm_s390_sie_block {
->>   #define ECB2_IEP    0x20
->>   #define ECB2_PFMFI    0x08
->>   #define ECB2_ESCA    0x04
->> +#define ECB2_ZPCI_LSI    0x02
->>       __u8    ecb2;                   /* 0x0062 */
->> +#define ECB3_AISI    0x20
->> +#define ECB3_AISII    0x10
->>   #define ECB3_DEA 0x08
->>   #define ECB3_AES 0x04
->>   #define ECB3_RI  0x01
->> @@ -938,6 +941,7 @@ struct kvm_arch{
->>       int use_cmma;
->>       int use_pfmfi;
->>       int use_skf;
->> +    int use_zpci_interp;
->>       int user_cpu_state_ctrl;
->>       int user_sigp;
->>       int user_stsi;
->> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
->> index ab8b56deed11..b6c32fc3b272 100644
->> --- a/arch/s390/kvm/kvm-s390.c
->> +++ b/arch/s390/kvm/kvm-s390.c
->> @@ -1029,6 +1029,44 @@ static int kvm_s390_vm_set_crypto(struct kvm 
->> *kvm, struct kvm_device_attr *attr)
->>       return 0;
->>   }
->> +static void kvm_s390_vcpu_pci_setup(struct kvm_vcpu *vcpu)
->> +{
->> +    /* Only set the ECB bits after guest requests zPCI interpretation */
->> +    if (!vcpu->kvm->arch.use_zpci_interp)
->> +        return;
->> +
->> +    vcpu->arch.sie_block->ecb2 |= ECB2_ZPCI_LSI;
->> +    vcpu->arch.sie_block->ecb3 |= ECB3_AISII + ECB3_AISI;
-> 
-> As far as I understood, the interpretation is only possible if a gisa 
-> designation is associated with the PCI function via CLP enable.
-> 
+> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> index 7d0338b5a0e3..0f8488d12f44 100644
+> --- a/tools/perf/builtin-record.c
+> +++ b/tools/perf/builtin-record.c
+> @@ -111,6 +111,8 @@ struct record_thread {
+>  	unsigned long long	samples;
+>  	unsigned long		waking;
+>  	u64			bytes_written;
+> +	u64			bytes_transferred;
+> +	u64			bytes_compressed;
+>  };
+>  
+>  static __thread struct record_thread *thread;
+> @@ -1407,8 +1409,13 @@ static size_t zstd_compress(struct perf_session *session, struct mmap *map,
+>  	compressed = zstd_compress_stream_to_records(zstd_data, dst, dst_size, src, src_size,
+>  						     max_record_size, process_comp_header);
+>  
+> -	session->bytes_transferred += src_size;
+> -	session->bytes_compressed  += compressed;
+> +	if (map && map->file) {
+> +		thread->bytes_transferred += src_size;
+> +		thread->bytes_compressed  += compressed;
+> +	} else {
+> +		session->bytes_transferred += src_size;
+> +		session->bytes_compressed  += compressed;
+> +	}
+>  
+>  	return compressed;
+>  }
+> @@ -2098,8 +2105,20 @@ static int record__stop_threads(struct record *rec)
+>  	for (t = 1; t < rec->nr_threads; t++)
+>  		record__terminate_thread(&thread_data[t]);
+>  
+> -	for (t = 0; t < rec->nr_threads; t++)
+> +	for (t = 0; t < rec->nr_threads; t++) {
+>  		rec->samples += thread_data[t].samples;
+> +		if (!record__threads_enabled(rec))
+> +			continue;
+> +		rec->session->bytes_transferred += thread_data[t].bytes_transferred;
+> +		rec->session->bytes_compressed += thread_data[t].bytes_compressed;
+> +		pr_debug("threads[%d]: samples=%lld, wakes=%ld, ", thread_data[t].tid,
+> +			 thread_data[t].samples, thread_data[t].waking);
+> +		if (thread_data[t].bytes_transferred && thread_data[t].bytes_compressed)
+> +			pr_debug("trasferred=%ld, compressed=%ld\n",
+> +				 thread_data[t].bytes_transferred, thread_data[t].bytes_compressed);
+> +		else
+> +			pr_debug("written=%ld\n", thread_data[t].bytes_written);
 
-This is true.  Once ECB is enabled, you must have either a SHM bit on 
-for emulated device support or SHM bits off + a GISA designation 
-registered for interpretation.  Otherwise, PCI instructions will fail.
+In file included from builtin-record.c:22:
+builtin-record.c: In function 'record__stop_threads':
+builtin-record.c:2138:13: error: format '%ld' expects argument of type 'long int', but argument 4 has type 'u64' {aka 'long long unsigned int'} [-Werror=format=]
+ 2138 |    pr_debug("trasferred=%ld, compressed=%ld\n",
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+util/debug.h:18:21: note: in definition of macro 'pr_fmt'
+   18 | #define pr_fmt(fmt) fmt
+      |                     ^~~
+builtin-record.c:2138:4: note: in expansion of macro 'pr_debug'
+ 2138 |    pr_debug("trasferred=%ld, compressed=%ld\n",
+      |    ^~~~~~~~
+builtin-record.c:2138:27: note: format string is defined here
+ 2138 |    pr_debug("trasferred=%ld, compressed=%ld\n",
+      |                         ~~^
+      |                           |
+      |                           long int
+      |                         %lld
+In file included from builtin-record.c:22:
+builtin-record.c:2138:13: error: format '%ld' expects argument of type 'long int', but argument 5 has type 'u64' {aka 'long long unsigned int'} [-Werror=format=]
+ 2138 |    pr_debug("trasferred=%ld, compressed=%ld\n",
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+util/debug.h:18:21: note: in definition of macro 'pr_fmt'
+   18 | #define pr_fmt(fmt) fmt
+      |                     ^~~
+builtin-record.c:2138:4: note: in expansion of macro 'pr_debug'
+ 2138 |    pr_debug("trasferred=%ld, compressed=%ld\n",
+      |    ^~~~~~~~
+  LINK    /tmp/build/perf/libtraceevent.a
+builtin-record.c:2138:43: note: format string is defined here
+ 2138 |    pr_debug("trasferred=%ld, compressed=%ld\n",
+      |                                         ~~^
+      |                                           |
+      |                                           long int
+      |                                         %lld
+In file included from builtin-record.c:22:
+builtin-record.c:2141:13: error: format '%ld' expects argument of type 'long int', but argument 4 has type 'u64' {aka 'long long unsigned int'} [-Werror=format=]
+ 2141 |    pr_debug("written=%ld\n", thread_data[t].bytes_written);
+      |             ^~~~~~~~~~~~~~~
+util/debug.h:18:21: note: in definition of macro 'pr_fmt'
+   18 | #define pr_fmt(fmt) fmt
+      |                     ^~~
+builtin-record.c:2141:4: note: in expansion of macro 'pr_debug'
+ 2141 |    pr_debug("written=%ld\n", thread_data[t].bytes_written);
+      |    ^~~~~~~~
+builtin-record.c:2141:24: note: format string is defined here
+ 2141 |    pr_debug("written=%ld\n", thread_data[t].bytes_written);
+      |                      ~~^
+      |                        |
+      |                        long int
+      |                      %lld
 
-> Why do we setup the SIE ECB only when the guest requests for 
-> interpretation and not systematically in vcpu_setup?
+Fixed with the following patch, no need to resend, I'll fix several
+other similar issues and put the result in a tmp.perf/thread branch
+while I review/test it.
 
-Once the ECB is enabled for a guest, emulated device FHs must have a SHM 
-bit in order to continue working properly (so do passthrough devices 
-that don't setup interpretation).  This was not a requirement before 
-this series -- simply having the ECB bit off would ensure intercepts for 
-all devices regardless of SHM bit settings, so by doing an opt-in once 
-the guest indicates it will be doing interpretation we can preserve 
-backwards-compatibility with an initial mode where SHM bits are not 
-necessarily required.  However once userspace indicates it understands 
-interpretation, we can assume it is will also use SHM bits properly.
+- Arnaldo
 
-> 
-> If ECB2_ZPCI_LSI, ECB3_AISII or ECB3_AISI have an effect when the gisa 
-> designation is not specified shouldn't we have a way to clear these bits?
-> 
-
-I'm not sure that's necessary -- The idea here was for the userspace to 
-indicate 1) that it knows how to setup for interpreted devices and 2) 
-that it has a guest that wants to use at least 1 interpreted device.
-Once we know that userspace understands how to manage interpreted 
-devices (implied by its use of these new vfio feature ioctls) I think it 
-should be OK to leave these bits on and expect userspace to always do 
-the appropriate steps (SHM bits for emulated devices / forced intercept 
-passthrough devices, GISA designation for interpreted devices).
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index 0f8488d12f446b84..d19d0639c3f1abc0 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -2114,10 +2114,10 @@ static int record__stop_threads(struct record *rec)
+ 		pr_debug("threads[%d]: samples=%lld, wakes=%ld, ", thread_data[t].tid,
+ 			 thread_data[t].samples, thread_data[t].waking);
+ 		if (thread_data[t].bytes_transferred && thread_data[t].bytes_compressed)
+-			pr_debug("trasferred=%ld, compressed=%ld\n",
++			pr_debug("transferred=%" PRIu64 ", compressed=%" PRIu64 "\n",
+ 				 thread_data[t].bytes_transferred, thread_data[t].bytes_compressed);
+ 		else
+-			pr_debug("written=%ld\n", thread_data[t].bytes_written);
++			pr_debug("written=%" PRIu64 "\n", thread_data[t].bytes_written);
+ 	}
+ 
+ 	return 0;

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A700D498925
+	by mail.lfdr.de (Postfix) with ESMTP id F34D8498926
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245403AbiAXSxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:53:10 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50702 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245509AbiAXSvj (ORCPT
+        id S1344031AbiAXSxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:53:12 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50970 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343755AbiAXSvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:51:39 -0500
+        Mon, 24 Jan 2022 13:51:43 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 06740614E3;
-        Mon, 24 Jan 2022 18:51:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D28FCC340E5;
-        Mon, 24 Jan 2022 18:51:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B098BB8121A;
+        Mon, 24 Jan 2022 18:51:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7E46C340E5;
+        Mon, 24 Jan 2022 18:51:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050298;
-        bh=ypGe6ZiPObWziSfTo04HOWAK/HNjCmpuxDJ2gVqG6As=;
+        s=korg; t=1643050301;
+        bh=grI4u8o/65l7DGOuYfV+pUOSJnr68kyNlzxbNKNfxLY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LJiPRyOYfYRQ40CQ9xX0+bAS7cEN84nMmPiK/xQ5YqW3aWH9o7tkh4/suK+mZwsVs
-         z72ldc7GxXlss+iFhIv2qdmEGCkFECYH2L6qp8rV1yzkWaBKAxDmx2HCGPeK/0ks53
-         JPGq7rtnYowDzH9wuANcvB/9Oxw7T9D2rEZslsoI=
+        b=1xvG0jiNchsAaaerZkIH686oNJcs2+BUEUyPSN/7kbir1pUmaiZmq3CDNgk4axvf3
+         1vG7hk/hWFZRJDc/Dqx0S0a7XE5VCqiAgTNjOhqm5j8oxTfIA8s6DKrfvadCbBM3Qp
+         1SqD4KTIo++h4KDHQ00M9h72/4TX0Wa2vr2GsTuw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        linux-um@lists.infradead.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.4 073/114] um: registers: Rename function names to avoid conflicts and build problems
-Date:   Mon, 24 Jan 2022 19:42:48 +0100
-Message-Id: <20220124183929.351144409@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Mark Asselstine <mark.asselstine@windriver.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Bob Moore <robert.moore@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.4 074/114] ACPICA: Utilities: Avoid deleting the same object twice in a row
+Date:   Mon, 24 Jan 2022 19:42:49 +0100
+Message-Id: <20220124183929.380763040@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183927.095545464@linuxfoundation.org>
 References: <20220124183927.095545464@linuxfoundation.org>
@@ -48,101 +48,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-[ Upstream commit 077b7320942b64b0da182aefd83c374462a65535 ]
+[ Upstream commit 1cdfe9e346b4c5509ffe19ccde880fd259d9f7a3 ]
 
-The function names init_registers() and restore_registers() are used
-in several net/ethernet/ and gpu/drm/ drivers for other purposes (not
-calls to UML functions), so rename them.
+ACPICA commit c11af67d8f7e3d381068ce7771322f2b5324d687
 
-This fixes multiple build errors.
+If original_count is 0 in acpi_ut_update_ref_count (),
+acpi_ut_delete_internal_obj () is invoked for the target object, which is
+incorrect, because that object has been deleted once already and the
+memory allocated to store it may have been reclaimed and allocated
+for a different purpose by the host OS.  Moreover, a confusing debug
+message following the "Reference Count is already zero, cannot
+decrement" warning is printed in that case.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jeff Dike <jdike@addtoit.com>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Cc: linux-um@lists.infradead.org
-Signed-off-by: Richard Weinberger <richard@nod.at>
+To fix this issue, make acpi_ut_update_ref_count () return after finding
+that original_count is 0 and printing the above warning.
+
+Link: https://github.com/acpica/acpica/commit/c11af67d
+Link: https://github.com/acpica/acpica/pull/652
+Reported-by: Mark Asselstine <mark.asselstine@windriver.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/um/include/shared/registers.h | 4 ++--
- arch/um/os-Linux/registers.c       | 4 ++--
- arch/um/os-Linux/start_up.c        | 2 +-
- arch/x86/um/syscalls_64.c          | 3 ++-
- 4 files changed, 7 insertions(+), 6 deletions(-)
+ drivers/acpi/acpica/utdelete.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/um/include/shared/registers.h b/arch/um/include/shared/registers.h
-index f5b76355ad71a..089f979e112e3 100644
---- a/arch/um/include/shared/registers.h
-+++ b/arch/um/include/shared/registers.h
-@@ -14,8 +14,8 @@ extern int restore_fp_registers(int pid, unsigned long *fp_regs);
- extern int save_fpx_registers(int pid, unsigned long *fp_regs);
- extern int restore_fpx_registers(int pid, unsigned long *fp_regs);
- extern int save_registers(int pid, struct uml_pt_regs *regs);
--extern int restore_registers(int pid, struct uml_pt_regs *regs);
--extern int init_registers(int pid);
-+extern int restore_pid_registers(int pid, struct uml_pt_regs *regs);
-+extern int init_pid_registers(int pid);
- extern void get_safe_registers(unsigned long *regs, unsigned long *fp_regs);
- extern unsigned long get_thread_reg(int reg, jmp_buf *buf);
- extern int get_fp_registers(int pid, unsigned long *regs);
-diff --git a/arch/um/os-Linux/registers.c b/arch/um/os-Linux/registers.c
-index 2ff8d4fe83c4f..34a5963bd7efd 100644
---- a/arch/um/os-Linux/registers.c
-+++ b/arch/um/os-Linux/registers.c
-@@ -21,7 +21,7 @@ int save_registers(int pid, struct uml_pt_regs *regs)
- 	return 0;
- }
+diff --git a/drivers/acpi/acpica/utdelete.c b/drivers/acpi/acpica/utdelete.c
+index 9f8b088e21d7e..d90b2cf310fb1 100644
+--- a/drivers/acpi/acpica/utdelete.c
++++ b/drivers/acpi/acpica/utdelete.c
+@@ -439,6 +439,7 @@ acpi_ut_update_ref_count(union acpi_operand_object *object, u32 action)
+ 			ACPI_WARNING((AE_INFO,
+ 				      "Obj %p, Reference Count is already zero, cannot decrement\n",
+ 				      object));
++			return;
+ 		}
  
--int restore_registers(int pid, struct uml_pt_regs *regs)
-+int restore_pid_registers(int pid, struct uml_pt_regs *regs)
- {
- 	int err;
- 
-@@ -36,7 +36,7 @@ int restore_registers(int pid, struct uml_pt_regs *regs)
- static unsigned long exec_regs[MAX_REG_NR];
- static unsigned long exec_fp_regs[FP_SIZE];
- 
--int init_registers(int pid)
-+int init_pid_registers(int pid)
- {
- 	int err;
- 
-diff --git a/arch/um/os-Linux/start_up.c b/arch/um/os-Linux/start_up.c
-index 22a358ef1b0cd..dc06933ba63d9 100644
---- a/arch/um/os-Linux/start_up.c
-+++ b/arch/um/os-Linux/start_up.c
-@@ -334,7 +334,7 @@ void __init os_early_checks(void)
- 	check_tmpexec();
- 
- 	pid = start_ptraced_child();
--	if (init_registers(pid))
-+	if (init_pid_registers(pid))
- 		fatal("Failed to initialize default registers");
- 	stop_ptraced_child(pid, 1, 1);
- }
-diff --git a/arch/x86/um/syscalls_64.c b/arch/x86/um/syscalls_64.c
-index e6552275320bc..40ecacb2c54b3 100644
---- a/arch/x86/um/syscalls_64.c
-+++ b/arch/x86/um/syscalls_64.c
-@@ -9,6 +9,7 @@
- #include <linux/uaccess.h>
- #include <asm/prctl.h> /* XXX This should get the constants from libc */
- #include <os.h>
-+#include <registers.h>
- 
- long arch_prctl(struct task_struct *task, int code, unsigned long __user *addr)
- {
-@@ -32,7 +33,7 @@ long arch_prctl(struct task_struct *task, int code, unsigned long __user *addr)
- 	switch (code) {
- 	case ARCH_SET_FS:
- 	case ARCH_SET_GS:
--		ret = restore_registers(pid, &current->thread.regs.regs);
-+		ret = restore_pid_registers(pid, &current->thread.regs.regs);
- 		if (ret)
- 			return ret;
- 		break;
+ 		ACPI_DEBUG_PRINT((ACPI_DB_ALLOCATIONS,
 -- 
 2.34.1
 

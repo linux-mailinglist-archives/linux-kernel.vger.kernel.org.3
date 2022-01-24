@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE99849A135
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6466B499E0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:06:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385642AbiAXX26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:28:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449711AbiAXWNN (ORCPT
+        id S1587431AbiAXW2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:28:20 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54158 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1455200AbiAXVe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:13:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663D6C0E03DA;
-        Mon, 24 Jan 2022 12:43:46 -0800 (PST)
+        Mon, 24 Jan 2022 16:34:56 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03CB7608D4;
-        Mon, 24 Jan 2022 20:43:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8245C340E5;
-        Mon, 24 Jan 2022 20:43:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 962E461320;
+        Mon, 24 Jan 2022 21:34:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DA5FC340E4;
+        Mon, 24 Jan 2022 21:34:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057025;
-        bh=9YkuKF8cpwuIWjIHtOGRypGioyQeoLf8mYpkm6MpMf8=;
+        s=korg; t=1643060095;
+        bh=3i2XzHDZD3pXO+yiyPbt7hDEmvflOcH/cdCg0AQj2PA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=drLiPG9n0JHGsbnpMizRpGZmY2JMmgcsLq1egMsnE7xzKI+25+DMpcej5n4x+ChIB
-         JGKGWiYGoPgqABDoQO+AnuQ7xy7JQadLLM/PPiu17FBa+GoE95X9M9x+A9B3IWsN3e
-         vNaD4KEc6Hfp/7LTE+f42z+GhXd37Ky/v48wyJng=
+        b=VIOcCZrBv6EoXt/2KPu5op/U0qqdU7So9rHiNyZGOZOhhIum1o42MuzwU4gnc8UIp
+         6E/uzacCPucefmpBPxIWs6Rp2S5cRV3Mbx0j9tmMuUHxppw4hAbxWPHYxZZvc7S8mt
+         JV3WngkIHRMtZwkA8R3UC7UVd23LYXgQoxvdXTCw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 676/846] spi: uniphier: Fix a bug that doesnt point to private data correctly
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0804/1039] PCI: mvebu: Fix support for PCI_BRIDGE_CTL_BUS_RESET on emulated bridge
 Date:   Mon, 24 Jan 2022 19:43:13 +0100
-Message-Id: <20220124184124.389805122@linuxfoundation.org>
+Message-Id: <20220124184152.336213477@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,46 +47,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+From: Pali Rohár <pali@kernel.org>
 
-commit 80bb73a9fbcde4ecc55e12f10c73fabbe68a24d1 upstream.
+[ Upstream commit d75404cc08832206f173668bd35391c581fea121 ]
 
-In uniphier_spi_remove(), there is a wrong code to get private data from
-the platform device, so the driver can't be removed properly.
+Hardware supports PCIe Hot Reset via PCIE_CTRL_OFF register. Use it for
+implementing PCI_BRIDGE_CTL_BUS_RESET bit of PCI_BRIDGE_CONTROL register on
+emulated bridge.
 
-The driver should get spi_master from the platform device and retrieve
-the private data from it.
+With this change the function pci_reset_secondary_bus() starts working and
+can reset connected PCIe card.
 
-Cc: <stable@vger.kernel.org>
-Fixes: 5ba155a4d4cc ("spi: add SPI controller driver for UniPhier SoC")
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Link: https://lore.kernel.org/r/1640148492-32178-1-git-send-email-hayashi.kunihiko@socionext.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20211125124605.25915-13-pali@kernel.org
+Fixes: 1f08673eef12 ("PCI: mvebu: Convert to PCI emulated bridge config space")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-uniphier.c |   11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ drivers/pci/controller/pci-mvebu.c | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
---- a/drivers/spi/spi-uniphier.c
-+++ b/drivers/spi/spi-uniphier.c
-@@ -767,12 +767,13 @@ out_master_put:
+diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
+index f279471e340ee..aaf6a226f6dba 100644
+--- a/drivers/pci/controller/pci-mvebu.c
++++ b/drivers/pci/controller/pci-mvebu.c
+@@ -56,6 +56,7 @@
+ #define PCIE_CTRL_OFF		0x1a00
+ #define  PCIE_CTRL_X1_MODE		0x0001
+ #define  PCIE_CTRL_RC_MODE		BIT(1)
++#define  PCIE_CTRL_MASTER_HOT_RESET	BIT(24)
+ #define PCIE_STAT_OFF		0x1a04
+ #define  PCIE_STAT_BUS                  0xff00
+ #define  PCIE_STAT_DEV                  0x1f0000
+@@ -462,6 +463,22 @@ mvebu_pci_bridge_emul_base_conf_read(struct pci_bridge_emul *bridge,
+ 		break;
+ 	}
  
- static int uniphier_spi_remove(struct platform_device *pdev)
- {
--	struct uniphier_spi_priv *priv = platform_get_drvdata(pdev);
-+	struct spi_master *master = platform_get_drvdata(pdev);
-+	struct uniphier_spi_priv *priv = spi_master_get_devdata(master);
++	case PCI_INTERRUPT_LINE: {
++		/*
++		 * From the whole 32bit register we support reading from HW only
++		 * one bit: PCI_BRIDGE_CTL_BUS_RESET.
++		 * Other bits are retrieved only from emulated config buffer.
++		 */
++		__le32 *cfgspace = (__le32 *)&bridge->conf;
++		u32 val = le32_to_cpu(cfgspace[PCI_INTERRUPT_LINE / 4]);
++		if (mvebu_readl(port, PCIE_CTRL_OFF) & PCIE_CTRL_MASTER_HOT_RESET)
++			val |= PCI_BRIDGE_CTL_BUS_RESET << 16;
++		else
++			val &= ~(PCI_BRIDGE_CTL_BUS_RESET << 16);
++		*value = val;
++		break;
++	}
++
+ 	default:
+ 		return PCI_BRIDGE_EMUL_NOT_HANDLED;
+ 	}
+@@ -549,6 +566,17 @@ mvebu_pci_bridge_emul_base_conf_write(struct pci_bridge_emul *bridge,
+ 			mvebu_pcie_set_local_bus_nr(port, conf->secondary_bus);
+ 		break;
  
--	if (priv->master->dma_tx)
--		dma_release_channel(priv->master->dma_tx);
--	if (priv->master->dma_rx)
--		dma_release_channel(priv->master->dma_rx);
-+	if (master->dma_tx)
-+		dma_release_channel(master->dma_tx);
-+	if (master->dma_rx)
-+		dma_release_channel(master->dma_rx);
- 
- 	clk_disable_unprepare(priv->clk);
- 
++	case PCI_INTERRUPT_LINE:
++		if (mask & (PCI_BRIDGE_CTL_BUS_RESET << 16)) {
++			u32 ctrl = mvebu_readl(port, PCIE_CTRL_OFF);
++			if (new & (PCI_BRIDGE_CTL_BUS_RESET << 16))
++				ctrl |= PCIE_CTRL_MASTER_HOT_RESET;
++			else
++				ctrl &= ~PCIE_CTRL_MASTER_HOT_RESET;
++			mvebu_writel(port, ctrl, PCIE_CTRL_OFF);
++		}
++		break;
++
+ 	default:
+ 		break;
+ 	}
+-- 
+2.34.1
+
 
 

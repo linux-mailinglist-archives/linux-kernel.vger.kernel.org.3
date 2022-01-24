@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B057499E01
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD6249A0B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587220AbiAXW16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:27:58 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45714 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1454817AbiAXVdp (ORCPT
+        id S1846868AbiAXXRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:17:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1583166AbiAXWRV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:33:45 -0500
+        Mon, 24 Jan 2022 17:17:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD72AC04A2E2;
+        Mon, 24 Jan 2022 12:45:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 922CBB80FA1;
-        Mon, 24 Jan 2022 21:33:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4ADDC340E5;
-        Mon, 24 Jan 2022 21:33:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5715260918;
+        Mon, 24 Jan 2022 20:45:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D89FC340E5;
+        Mon, 24 Jan 2022 20:45:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060023;
-        bh=UmrV72hs4fkCPVZC9sUSZ23FItTS0o2fU/PF43t+HqQ=;
+        s=korg; t=1643057154;
+        bh=i+A0p5YDl/+X2W0iDwOvletNHGtjkJkx/hwzAXm/3HA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HQlSNmprdCr0FL/n0rtHqUGsYjVMJVCSWxyaLkaayugBTH7wrlNzm8zsIj6lXtNKx
-         UGjI1aKCknebtw0AlBAkMbWFmYsKqxTB9iGBdPwJyHiVNJKGDSgJvpi+2ED7UCmcr/
-         XjY73pi/wp5gPpB/cHdGjx3rvWMqzVx0vLWHbWmA=
+        b=XcHTW4A1MLFS1WWquG0Fu2bTPHPZdbdc5CJtxof8UJXFqQ/4x5CNZNdoiKDQM/NwZ
+         SAtDOE98PymrAkeJURqCkbUJTIYY44nqelWHzeoNcP1n1VULUqPT8t0NI8jueeJa6J
+         s/T8whC7CzLUFz1zHMAzNcrsf+eQLQhJSQeU6H/U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Matthew Auld <matthew.auld@intel.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0814/1039] drm/i915: dont call free_mmap_offset when purging
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Peng Fan <peng.fan@nxp.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Subject: [PATCH 5.15 686/846] remoteproc: imx_rproc: Fix a resource leak in the remove function
 Date:   Mon, 24 Jan 2022 19:43:23 +0100
-Message-Id: <20220124184152.665968323@linuxfoundation.org>
+Message-Id: <20220124184124.725359035@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,77 +50,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Auld <matthew.auld@intel.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 4c2602ba8d74c35d550ed3d518809c697de08d88 ]
+commit 4da96175014be67c846fd274eace08066e525d75 upstream.
 
-The TTM backend is in theory the only user here(also purge should only
-be called once we have dropped the pages), where it is setup at object
-creation and is only removed once the object is destroyed. Also
-resetting the node here might be iffy since the ttm fault handler
-uses the stored fake offset to determine the page offset within the pages
-array.
+'priv->workqueue' is destroyed in the error handling path of the probe but
+not in the remove function.
 
-This also blows up in the dontneed-before-mmap test, since the
-expectation is that the vma_node will live on, until the object is
-destroyed:
+Add the missing call to release some resources.
 
-<2> [749.062902] kernel BUG at drivers/gpu/drm/i915/gem/i915_gem_ttm.c:943!
-<4> [749.062923] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-<4> [749.062928] CPU: 0 PID: 1643 Comm: gem_madvise Tainted: G     U  W         5.16.0-rc8-CI-CI_DRM_11046+ #1
-<4> [749.062933] Hardware name: Gigabyte Technology Co., Ltd. GB-Z390 Garuda/GB-Z390 Garuda-CF, BIOS IG1c 11/19/2019
-<4> [749.062937] RIP: 0010:i915_ttm_mmap_offset.cold.35+0x5b/0x5d [i915]
-<4> [749.063044] Code: 00 48 c7 c2 a0 23 4e a0 48 c7 c7 26 df 4a a0 e8 95 1d d0 e0 bf 01 00 00 00 e8 8b ec cf e0 31 f6 bf 09 00 00 00 e8 5f 30 c0 e0 <0f> 0b 48 c7 c1 24 4b 56 a0 ba 5b 03 00 00 48 c7 c6 c0 23 4e a0 48
-<4> [749.063052] RSP: 0018:ffffc90002ab7d38 EFLAGS: 00010246
-<4> [749.063056] RAX: 0000000000000240 RBX: ffff88811f2e61c0 RCX: 0000000000000006
-<4> [749.063060] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000009
-<4> [749.063063] RBP: ffffc90002ab7e58 R08: 0000000000000001 R09: 0000000000000001
-<4> [749.063067] R10: 000000000123d0f8 R11: ffffc90002ab7b20 R12: ffff888112a1a000
-<4> [749.063071] R13: 0000000000000004 R14: ffff88811f2e61c0 R15: ffff888112a1a000
-<4> [749.063074] FS:  00007f6e5fcad500(0000) GS:ffff8884ad600000(0000) knlGS:0000000000000000
-<4> [749.063078] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-<4> [749.063081] CR2: 00007efd264e39f0 CR3: 0000000115fd6005 CR4: 00000000003706f0
-<4> [749.063085] Call Trace:
-<4> [749.063087]  <TASK>
-<4> [749.063089]  __assign_mmap_offset+0x41/0x300 [i915]
-<4> [749.063171]  __assign_mmap_offset_handle+0x159/0x270 [i915]
-<4> [749.063248]  ? i915_gem_dumb_mmap_offset+0x70/0x70 [i915]
-<4> [749.063325]  drm_ioctl_kernel+0xae/0x140
-<4> [749.063330]  drm_ioctl+0x201/0x3d0
-<4> [749.063333]  ? i915_gem_dumb_mmap_offset+0x70/0x70 [i915]
-<4> [749.063409]  ? do_user_addr_fault+0x200/0x670
-<4> [749.063415]  __x64_sys_ioctl+0x6d/0xa0
-<4> [749.063419]  do_syscall_64+0x3a/0xb0
-<4> [749.063423]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-<4> [749.063428] RIP: 0033:0x7f6e5f100317
-
-Testcase: igt/gem_madvise/dontneed-before-mmap
-Fixes: cf3e3e86d779 ("drm/i915: Use ttm mmap handling for ttm bo's.")
-Signed-off-by: Matthew Auld <matthew.auld@intel.com>
-Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220106174910.280616-1-matthew.auld@intel.com
-(cherry picked from commit 658a0c632625e1db51837ff754fe18a6a7f2ccf8)
-Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable <stable@vger.kernel.org>
+Fixes: 2df7062002d0 ("remoteproc: imx_proc: enable virtio/mailbox")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Peng Fan <peng.fan@nxp.com>
+Tested-by: Peng Fan <peng.fan@nxp.com>
+Link: https://lore.kernel.org/r/d28ca94a4031bd7297d47c2164e18885a5a6ec19.1634366546.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/gem/i915_gem_pages.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/remoteproc/imx_rproc.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_pages.c b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
-index 8eb1c3a6fc9cd..1d3f40abd0258 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_pages.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
-@@ -160,7 +160,6 @@ retry:
- /* Immediately discard the backing storage */
- void i915_gem_object_truncate(struct drm_i915_gem_object *obj)
- {
--	drm_gem_free_mmap_offset(&obj->base);
- 	if (obj->ops->truncate)
- 		obj->ops->truncate(obj);
- }
--- 
-2.34.1
-
+--- a/drivers/remoteproc/imx_rproc.c
++++ b/drivers/remoteproc/imx_rproc.c
+@@ -830,6 +830,7 @@ static int imx_rproc_remove(struct platf
+ 	clk_disable_unprepare(priv->clk);
+ 	rproc_del(rproc);
+ 	imx_rproc_free_mbox(rproc);
++	destroy_workqueue(priv->workqueue);
+ 	rproc_free(rproc);
+ 
+ 	return 0;
 
 

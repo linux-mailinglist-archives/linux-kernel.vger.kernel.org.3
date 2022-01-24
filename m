@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 321C849A597
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 892D349A6DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3410173AbiAYA2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:28:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2360146AbiAXXgJ (ORCPT
+        id S1841963AbiAYC2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:28:23 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50618 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353468AbiAXUIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:36:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E325C075D37;
-        Mon, 24 Jan 2022 13:37:04 -0800 (PST)
+        Mon, 24 Jan 2022 15:08:11 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF7036150D;
-        Mon, 24 Jan 2022 21:37:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB009C340E4;
-        Mon, 24 Jan 2022 21:37:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6B43B8159B;
+        Mon, 24 Jan 2022 20:08:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB37C340E5;
+        Mon, 24 Jan 2022 20:08:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060223;
-        bh=YcFsUeslYa8xYA7haRFrlwUsZXiclWBMo3itOg4vcr0=;
+        s=korg; t=1643054886;
+        bh=3U9VP1OuruVXeNmVCUIDrfmA01G3vDMoXgFxbdOhwwE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cxzcgK0v82+wCNtPNr9GT/vwBP0RXE3NPRHzJXsVncM6iBZOdDXbJFM0AZvuRa2Bb
-         bvHSmxT50A6F6bYJOOmpz24MeH/Ulwq+gdcbPvGiAsIjX1ylIlasKe9ybGkWHMy6Jf
-         VXwyczEWSO+f51eCj9nkeFvL8aEF1UtMV7s5hTzc=
+        b=ZqdSBf8oY1aiQmZMKKsMkwY6mY7n01tIbWfY4MueVLRLT0p6agy8m+29ZfSflhZSG
+         5lBBwChQSM6o4kfLWmpsBReNkbaiD/T2lc08xdU2u1VIUxIFZDdgZ7rqzuAyYHGW09
+         XuW2ZUmScSHcKu8HygxZiFspoR3/V+qinE/6y0xY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: [PATCH 5.16 0879/1039] PCI: pci-bridge-emul: Set PCI_STATUS_CAP_LIST for PCIe device
+        stable@vger.kernel.org, Tobias Waldekranz <tobias@waldekranz.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 503/563] powerpc/fsl/dts: Enable WA for erratum A-009885 on fman3l MDIO buses
 Date:   Mon, 24 Jan 2022 19:44:28 +0100
-Message-Id: <20220124184154.845878511@linuxfoundation.org>
+Message-Id: <20220124184041.865223836@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,35 +45,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Tobias Waldekranz <tobias@waldekranz.com>
 
-commit 3be9d243b21724d49b65043d4520d688b6040b36 upstream.
+commit 0d375d610fa96524e2ee2b46830a46a7bfa92a9f upstream.
 
-Since all PCI Express device Functions are required to implement the PCI
-Express Capability structure, Capabilities List bit in PCI Status Register
-must be hardwired to 1b. Capabilities Pointer register (which is already
-set by pci-bride-emul.c driver) is valid only when Capabilities List is set
-to 1b.
+This block is used in (at least) T1024 and T1040, including their
+variants like T1023 etc.
 
-Link: https://lore.kernel.org/r/20211124155944.1290-7-pali@kernel.org
-Fixes: 23a5fba4d941 ("PCI: Introduce PCI bridge emulated config space common logic")
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc: stable@vger.kernel.org
+Fixes: d55ad2967d89 ("powerpc/mpc85xx: Create dts components for the FSL QorIQ DPAA FMan")
+Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/pci-bridge-emul.c |    1 +
- 1 file changed, 1 insertion(+)
+ arch/powerpc/boot/dts/fsl/qoriq-fman3l-0.dtsi |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/pci/pci-bridge-emul.c
-+++ b/drivers/pci/pci-bridge-emul.c
-@@ -296,6 +296,7 @@ int pci_bridge_emul_init(struct pci_brid
+--- a/arch/powerpc/boot/dts/fsl/qoriq-fman3l-0.dtsi
++++ b/arch/powerpc/boot/dts/fsl/qoriq-fman3l-0.dtsi
+@@ -79,6 +79,7 @@ fman0: fman@400000 {
+ 		#size-cells = <0>;
+ 		compatible = "fsl,fman-memac-mdio", "fsl,fman-xmdio";
+ 		reg = <0xfc000 0x1000>;
++		fsl,erratum-a009885;
+ 	};
  
- 	if (bridge->has_pcie) {
- 		bridge->conf.capabilities_pointer = PCI_CAP_PCIE_START;
-+		bridge->conf.status |= cpu_to_le16(PCI_STATUS_CAP_LIST);
- 		bridge->pcie_conf.cap_id = PCI_CAP_ID_EXP;
- 		bridge->pcie_conf.cap |= cpu_to_le16(PCI_EXP_TYPE_ROOT_PORT << 4);
- 		bridge->pcie_cap_regs_behavior =
+ 	xmdio0: mdio@fd000 {
+@@ -86,6 +87,7 @@ fman0: fman@400000 {
+ 		#size-cells = <0>;
+ 		compatible = "fsl,fman-memac-mdio", "fsl,fman-xmdio";
+ 		reg = <0xfd000 0x1000>;
++		fsl,erratum-a009885;
+ 	};
+ };
+ 
 
 

@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6292498CB8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:32:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E6E498CCF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:32:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347554AbiAXTXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:23:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348163AbiAXTO5 (ORCPT
+        id S1350660AbiAXTZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:25:07 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45272 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242895AbiAXTQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:14:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0357BC0612F3;
-        Mon, 24 Jan 2022 11:06:12 -0800 (PST)
+        Mon, 24 Jan 2022 14:16:10 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7611DB8122C;
-        Mon, 24 Jan 2022 19:06:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A966BC340E7;
-        Mon, 24 Jan 2022 19:06:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BC9060B86;
+        Mon, 24 Jan 2022 19:16:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B999C340E5;
+        Mon, 24 Jan 2022 19:16:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051169;
-        bh=Fg6qWsA/2CLDHs+vPCi/HXNiBqMhMXgbsP60Z+tFIFg=;
+        s=korg; t=1643051766;
+        bh=rNFNOaUveDWG3n5enoqmhQglyshTNpn0X82fcUAeWog=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tdsmJFVfsmDB0BaXNdSByFVZEs4tej5YZR6A5NVQmeH2qas03gEFlqiY6hd3cooCG
-         Z1W/3YeJV/pMNsrr4hzEmJthMsREt/G7m0r+1gtqv5aRkU53UBhzEqEf9YWtdHbOoT
-         96+ADwY6PG0KNM0xvzrDbBhnEuXXzElEOz2QwpXk=
+        b=lmlsi0iDp6eG0QK0B/5OVR72g8gx2+eZqz0ng62fFNsWvzoD6aDHDUoCHzUi6R5TJ
+         FFdAx5sUK+cBabfX6zWnXLfKF/YEJ9b+7QF5+2HEA4gQGLVY3lMp0v0igsr4EqJSap
+         QlM1SvYkc/7eKLiO18gcPp79bCgHUur6YY8wkli0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>, Amish Chana <amish@3g.co.za>
-Subject: [PATCH 4.14 044/186] netfilter: bridge: add support for pppoe filtering
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 081/239] usb: ftdi-elan: fix memory leak on device disconnect
 Date:   Mon, 24 Jan 2022 19:41:59 +0100
-Message-Id: <20220124183938.552224017@linuxfoundation.org>
+Message-Id: <20220124183945.699408618@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,75 +46,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Wei Yongjun <weiyongjun1@huawei.com>
 
-[ Upstream commit 28b78ecffea8078d81466b2e01bb5a154509f1ba ]
+[ Upstream commit 1646566b5e0c556f779180a8514e521ac735de1e ]
 
-This makes 'bridge-nf-filter-pppoe-tagged' sysctl work for
-bridged traffic.
+'ftdi' is alloced when probe device, but not free on device disconnect,
+this cause a memory leak as follows:
 
-Looking at the original commit it doesn't appear this ever worked:
+unreferenced object 0xffff88800d584000 (size 8400):
+  comm "kworker/0:2", pid 3809, jiffies 4295453055 (age 13.784s)
+  hex dump (first 32 bytes):
+    00 40 58 0d 80 88 ff ff 00 40 58 0d 80 88 ff ff  .@X......@X.....
+    00 00 00 00 00 00 00 00 00 00 00 00 ad 4e ad de  .............N..
+  backtrace:
+    [<000000000d47f947>] kmalloc_order_trace+0x19/0x110 mm/slab_common.c:960
+    [<000000008548ac68>] ftdi_elan_probe+0x8c/0x880 drivers/usb/misc/ftdi-elan.c:2647
+    [<000000007f73e422>] usb_probe_interface+0x31b/0x800 drivers/usb/core/driver.c:396
+    [<00000000fe8d07fc>] really_probe+0x299/0xc30 drivers/base/dd.c:517
+    [<0000000005da7d32>] __driver_probe_device+0x357/0x500 drivers/base/dd.c:751
+    [<000000003c2c9579>] driver_probe_device+0x4e/0x140 drivers/base/dd.c:781
 
- static unsigned int br_nf_post_routing(unsigned int hook, struct sk_buff **pskb,
-[..]
-        if (skb->protocol == htons(ETH_P_8021Q)) {
-                skb_pull(skb, VLAN_HLEN);
-                skb->network_header += VLAN_HLEN;
-+       } else if (skb->protocol == htons(ETH_P_PPP_SES)) {
-+               skb_pull(skb, PPPOE_SES_HLEN);
-+               skb->network_header += PPPOE_SES_HLEN;
-        }
- [..]
-	NF_HOOK(... POST_ROUTING, ...)
+Fix it by freeing 'ftdi' after nobody use it.
 
-... but the adjusted offsets are never restored.
-
-The alternative would be to rip this code out for good,
-but otoh we'd have to keep this anyway for the vlan handling
-(which works because vlan tag info is in the skb, not the packet
- payload).
-
-Reported-and-tested-by: Amish Chana <amish@3g.co.za>
-Fixes: 516299d2f5b6f97 ("[NETFILTER]: bridge-nf: filter bridged IPv4/IPv6 encapsulated in pppoe traffic")
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: a5c66e4b2418 ("USB: ftdi-elan: client driver for ELAN Uxxx adapters")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Link: https://lore.kernel.org/r/20211217083428.2441-1-weiyongjun1@huawei.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bridge/br_netfilter_hooks.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/usb/misc/ftdi-elan.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/bridge/br_netfilter_hooks.c b/net/bridge/br_netfilter_hooks.c
-index 8155c3d811a14..7e50bd9f36112 100644
---- a/net/bridge/br_netfilter_hooks.c
-+++ b/net/bridge/br_netfilter_hooks.c
-@@ -724,6 +724,9 @@ static int br_nf_dev_queue_xmit(struct net *net, struct sock *sk, struct sk_buff
- 	if (nf_bridge->frag_max_size && nf_bridge->frag_max_size < mtu)
- 		mtu = nf_bridge->frag_max_size;
+diff --git a/drivers/usb/misc/ftdi-elan.c b/drivers/usb/misc/ftdi-elan.c
+index 76c718ac8c78d..adc2a380be79f 100644
+--- a/drivers/usb/misc/ftdi-elan.c
++++ b/drivers/usb/misc/ftdi-elan.c
+@@ -202,6 +202,7 @@ static void ftdi_elan_delete(struct kref *kref)
+ 	mutex_unlock(&ftdi_module_lock);
+ 	kfree(ftdi->bulk_in_buffer);
+ 	ftdi->bulk_in_buffer = NULL;
++	kfree(ftdi);
+ }
  
-+	nf_bridge_update_protocol(skb);
-+	nf_bridge_push_encap_header(skb);
-+
- 	if (skb_is_gso(skb) || skb->len + mtu_reserved <= mtu) {
- 		nf_bridge_info_free(skb);
- 		return br_dev_queue_push_xmit(net, sk, skb);
-@@ -741,8 +744,6 @@ static int br_nf_dev_queue_xmit(struct net *net, struct sock *sk, struct sk_buff
- 
- 		IPCB(skb)->frag_max_size = nf_bridge->frag_max_size;
- 
--		nf_bridge_update_protocol(skb);
--
- 		data = this_cpu_ptr(&brnf_frag_data_storage);
- 
- 		data->vlan_tci = skb->vlan_tci;
-@@ -765,8 +766,6 @@ static int br_nf_dev_queue_xmit(struct net *net, struct sock *sk, struct sk_buff
- 
- 		IP6CB(skb)->frag_max_size = nf_bridge->frag_max_size;
- 
--		nf_bridge_update_protocol(skb);
--
- 		data = this_cpu_ptr(&brnf_frag_data_storage);
- 		data->encap_size = nf_bridge_encap_header_len(skb);
- 		data->size = ETH_HLEN + data->encap_size;
+ static void ftdi_elan_put_kref(struct usb_ftdi *ftdi)
 -- 
 2.34.1
 

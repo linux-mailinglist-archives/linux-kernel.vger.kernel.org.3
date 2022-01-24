@@ -2,105 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF5949A9D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:28:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F1C049A81D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1323728AbiAYD3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 22:29:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49082 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1320978AbiAYDPV (ORCPT
+        id S1316344AbiAYC5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:57:02 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:60353 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S3414335AbiAYAot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 22:15:21 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00DB2C09F4AD
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 15:50:27 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id nn16-20020a17090b38d000b001b56b2bce31so792845pjb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 15:50:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=f3FP9JgWyYmi4QIyCsuY6OM/tB0o/BLBpsR5IrUz/XM=;
-        b=P6PZX545ZUXpKkI678L+NQiT/pwRlfuKiPGT6M4cRgojnr/GAKIC95JwtYam64Y+yQ
-         OqW5IvveUzxAgJlsKddsX+F99m3idv4bXSmhIeeibBHb3wbMZO1bBBW6rGD3hJnLdK5G
-         6oCEvOKWiZrXTy7CHAcS8jpMhRffv8g8ApHCk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=f3FP9JgWyYmi4QIyCsuY6OM/tB0o/BLBpsR5IrUz/XM=;
-        b=CRrwFnp2epxUEdq10bEIylYpDhu5WT1CaQu9t3gU6xmzPNQFyD7cjinxzuSjgNy66E
-         MmZUapUOtVALKfeE9eupuG5lzCHt587CU8+keXLAek2Mc2E/94RrQTVnZcIb4krdjKC1
-         wzNlwc6RZnLetoqJ/lcIipwh4WJYdp4Hgjt1xxYN93I4eOxMpVDqWoh8nU4OBjj0qh09
-         szgKY+YgCrZ2wOP6W8KBetR3yEDHd5/mzX9YLfoo/Ihy+TtK96VC6S/slsSTfxflB2si
-         NrVcwa9OZXrpL+rnUTdER+2knn2zodSTpVDGWna7f7Xv35g/wZ6fDldbe6K8Fx6zZhpq
-         n+sA==
-X-Gm-Message-State: AOAM533BxMnCXUu+rw67qyfsLgfwcqAhFtIlRq6xnhN28LL6/oVVjdBo
-        01LgCKSug7cWCtINjbMZsL+e5A==
-X-Google-Smtp-Source: ABdhPJw5Ja4Md0C8UDgYSkfPXK/6ETnwO5Bfv3xwpa/LnQqIw58wO84wDnKDnDx9aiADoUhX44I1Pg==
-X-Received: by 2002:a17:902:e84b:b0:14b:4aa7:6198 with SMTP id t11-20020a170902e84b00b0014b4aa76198mr7924549plg.10.1643068226511;
-        Mon, 24 Jan 2022 15:50:26 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:e56e:5d31:a06d:e6ae])
-        by smtp.gmail.com with ESMTPSA id g22sm17650183pfj.99.2022.01.24.15.50.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 15:50:25 -0800 (PST)
-Date:   Mon, 24 Jan 2022 15:50:23 -0800
-From:   Brian Norris <briannorris@chromium.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Peng Fan <peng.fan@nxp.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "S.j. Wang" <shengjiu.wang@nxp.com>
-Subject: regmap: mmio: lack of runtime_pm support for debugfs
-Message-ID: <Ye87P19+JOjPEGTY@google.com>
-References: <1587620791-5279-1-git-send-email-peng.fan@nxp.com>
- <20200423104000.GD4808@sirena.org.uk>
- <DB6PR0402MB27600084E4A040609EF620A088D30@DB6PR0402MB2760.eurprd04.prod.outlook.com>
- <20200423112244.GH4808@sirena.org.uk>
- <DB6PR0402MB2760FBCA05C1BADB27F0356488D00@DB6PR0402MB2760.eurprd04.prod.outlook.com>
- <20200424103004.GB5850@sirena.org.uk>
+        Mon, 24 Jan 2022 19:44:49 -0500
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 8BAC1580389;
+        Mon, 24 Jan 2022 19:44:48 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Mon, 24 Jan 2022 19:44:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=turner.link; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; bh=Hg+/kJzRpMwyU8RBBG9lM29Q4G3SCNyE5PQExK
+        Qjrjg=; b=BqhV2/LX+jA/ib0C3suNSFwh8doiJauUSvPVxk+uBbNEorrAZbP1iR
+        5gNpFk2LgQ7cLfef4t7YtlVJSeAE1tg7pNCtVRYvd5IfU96XR2wTMxWkt5EgqN5O
+        xbZYT20AVlZSDY6PPGchtxHvVVZxZh+6cPw4ahe/8gK2gmshQA7Rb5oAruoy5iD9
+        0lpJlFpQzx8xBboXOi81OZfCQl5D2CoNFJMi4EUzEbEORp5XHpGY1Ae0zEJQFMcG
+        irXojU99SQzfbYshiyxeHeKgyKApQLq43HdA+0p7iRoIL+aYSMhIDLLINo475C4T
+        JiMKE71bQGkV8LTe7hWUbRgrjFnaiyOg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=Hg+/kJzRpMwyU8RBB
+        G9lM29Q4G3SCNyE5PQExKQjrjg=; b=NnF9YKvTgV+/CzqonPrhH6bqt2WlJ4u/V
+        0e5EIJr4hxAwC9+fPKCyjMjLQFL7qrbjxjXFIPrdrUTGfM7J6s3SHwnq67rYY35f
+        AAdyTDYdeqWTj4LCnd+TZ70KSgKLAVdSglmbXgwa+ajA6n/uUMX1EpFmSlYkwj/D
+        w8Xjd3ybbGdoY1DGBiQn2dxoQV8DpbD0T3IQ2uw6cxeFgp9p/TCwyaO+BhzpE0mF
+        LxR/XD6IxXdjTGUUAozzYQknbIZf0gvWcm4ExzybZRggNr/xbIys/rnbBcng0jOh
+        pyPxkrjIS0E8x1ywdW+MBOVpvlDmppAIOE3MijQ16LRpMyXnYn9Yw==
+X-ME-Sender: <xms:_0fvYQ-EfYy1x8ckLKQOASpfF1f8VG1P-YWrZzzpxTHBK9WYhNxFsA>
+    <xme:_0fvYYvQ4J3beV2uRjLa31Bh_ODGeg6dL4-lMaqx4Up28gOo3QlSTswv6YiD-Vtpg
+    IJHUY5k-MA4iSAy4w>
+X-ME-Received: <xmr:_0fvYWAFmvUzQxh0iBiGiqD4fBbfMq3-4nNy1vMXlMHn1BXiEot-KL-OXqPk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvdekgddvhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpehfhffvufffjgfkgggtsehttdertddttddtnecuhfhrohhmpeflrghmvghsucfv
+    uhhrnhgvrhcuoehlihhnuhigkhgvrhhnvghlrdhfohhsshesughmrghrtgdqnhhonhgvrd
+    htuhhrnhgvrhdrlhhinhhkqeenucggtffrrghtthgvrhhnpeetvdefudehieeufefghfdv
+    teeitddtvefhieetuefhleevudevtddtfffggffgteenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehlihhnuhigkhgvrhhnvghlrdhfohhsshes
+    ughmrghrtgdqnhhonhgvrdhtuhhrnhgvrhdrlhhinhhk
+X-ME-Proxy: <xmx:AEjvYQf2y2zGcFgoCWUciNn9b9e2Ec0Y-WL5xhNm2ABYSv_7GMV4IA>
+    <xmx:AEjvYVPPma5oQKL6quJ8Jk66URimEX_lrvguofqERLdCMTYsPQQsZQ>
+    <xmx:AEjvYal0LCNI_T_XPDgs4DgaDQO3NOORXHUTsx1RGMbZkpFy197sug>
+    <xmx:AEjvYbv6u5vmUwQ8EAKjckw9E1-Hpdolaz4WyHTPJldFQw-3yZxqSQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 24 Jan 2022 19:44:47 -0500 (EST)
+References: <87ee57c8fu.fsf@turner.link>
+ <acd2fd5e-d622-948c-82ef-629a8030c9d8@leemhuis.info>
+ <87a6ftk9qy.fsf@dmarc-none.turner.link> <87zgnp96a4.fsf@turner.link>
+ <fc2b7593-db8f-091c-67a0-ae5ffce71700@leemhuis.info>
+ <CADnq5_Nr5-FR2zP1ViVsD_ZMiW=UHC1wO8_HEGm26K_EG2KDoA@mail.gmail.com>
+ <87czkk1pmt.fsf@dmarc-none.turner.link>
+ <BYAPR12MB46140BE09E37244AE129C01A975C9@BYAPR12MB4614.namprd12.prod.outlook.com>
+ <87sftfqwlx.fsf@dmarc-none.turner.link>
+ <BYAPR12MB4614E2CFEDDDEAABBAB986A0975E9@BYAPR12MB4614.namprd12.prod.outlook.com>
+From:   James Turner <linuxkernel.foss@dmarc-none.turner.link>
+To:     "Lazar, Lijo" <Lijo.Lazar@amd.com>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>
+Subject: Re: [REGRESSION] Too-low frequency limit for AMD GPU
+ PCI-passed-through to Windows VM
+Date:   Mon, 24 Jan 2022 18:58:10 -0500
+In-reply-to: <BYAPR12MB4614E2CFEDDDEAABBAB986A0975E9@BYAPR12MB4614.namprd12.prod.outlook.com>
+Message-ID: <87ee4wprsx.fsf@turner.link>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200424103004.GB5850@sirena.org.uk>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[[ Retitling from '[PATCH] regmap: mmio: prepare/unprepare clk only when
-   read/write' ]]
+Hi Lijo,
 
-Hi,
+> Not able to relate to how it affects gfx/mem DPM alone. Unless Alex
+> has other ideas, would you be able to enable drm debug messages and
+> share the log?
 
-Sorry to bring up an old thread, but it appears there's an unresolved
-problem in here that I'm also hitting:
+Sure, I'm happy to provide drm debug messages. Enabling everything
+(0x1ff) generates *a lot* of log messages, though. Is there a smaller
+subset that would be useful? Fwiw, I don't see much in the full drm logs
+about the AMD GPU anyway; it's mostly about the Intel GPU.
 
-On Fri, Apr 24, 2020 at 11:30:04AM +0100, Mark Brown wrote:
-> On Fri, Apr 24, 2020 at 01:27:29AM +0000, Peng Fan wrote:
-> 
-> > If we not pass clk to regmap, accessing regmap registers will hang system with
-> > Debugfs enabled.
-> 
-> If you're not using a cache then that'll be a problem, however there is
-> a flag runtime_pm in the regmap config which when set should cause the
-> device to be runtime PM enabled when it's accessed so if you do your
-> clock management in runtime PM it should still get enabled.  I *think*
-> that interacts OK with being in an atomic context but I can't say I've
-> verified.
+All the messages in the system log containing "01:00" or "1002:6981" are
+identical between the two versions.
 
-The only 'runtime_pm' flag I'm finding for regmap is for regmap_irq_chip
--- there isn't anything useful for other kinds of regmaps (like MMIO).
+I've posted below the only places in the logs which contain "amd". The
+commit with the issue (f9b7f3703ff9) has a few drm log messages from
+amdgpu which are not present in the logs for f1688bd69ec4.
 
-If this seems like an expected/useful feature, I'll look at adding it to
-the generic 'struct regmap_config' / drivers/base/regmap/regmap.c.
 
-This could be tricky in theory given the atomic context requirements,
-but in reality, I think it would still be OK: this feature would really
-be useful _only_ for otherwise-unregulated contexts, like debugfs
-access (where we can sleep). For all non-debugfs accesses, we expect to
-already be RPM_ACTIVE, because the driver should already be managing
-runtime PM.
+# f1688bd69ec4 ("drm/amd/amdgpu:save psp ring wptr to avoid attack")
 
-Brian
+[drm] amdgpu kernel modesetting enabled.
+vga_switcheroo: detected switching method \_SB_.PCI0.GFX0.ATPX handle
+ATPX version 1, functions 0x00000033
+amdgpu: CRAT table not found
+amdgpu: Virtual CRAT table created for CPU
+amdgpu: Topology: Add CPU node
+
+
+# f9b7f3703ff9 ("drm/amdgpu/acpi: make ATPX/ATCS structures global (v2)")
+
+[drm] amdgpu kernel modesetting enabled.
+vga_switcheroo: detected switching method \_SB_.PCI0.GFX0.ATPX handle
+ATPX version 1, functions 0x00000033
+[drm:amdgpu_atif_pci_probe_handle.isra.0 [amdgpu]] Found ATIF handle \_SB_.PCI0.GFX0.ATIF
+[drm:amdgpu_atif_pci_probe_handle.isra.0 [amdgpu]] ATIF version 1
+[drm:amdgpu_acpi_detect [amdgpu]] SYSTEM_PARAMS: mask = 0x6, flags = 0x7
+[drm:amdgpu_acpi_detect [amdgpu]] Notification enabled, command code = 0xd9
+amdgpu: CRAT table not found
+amdgpu: Virtual CRAT table created for CPU
+amdgpu: Topology: Add CPU node
+
+
+Other things I'm willing to try if they'd be useful:
+
+- I could update to the 21.Q4 Radeon Pro driver in the Windows VM. (The
+  21.Q3 driver is currently installed.)
+
+- I could set up a Linux guest VM with PCI passthrough to compare to the
+  Windows VM and obtain more debugging information.
+
+- I could build a kernel with a patch applied, e.g. to disable some of
+  the changes in f9b7f3703ff9.
+
+James

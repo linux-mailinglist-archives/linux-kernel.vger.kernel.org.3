@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8281649A511
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:11:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6ED049A274
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:00:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2370579AbiAYAFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:05:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
+        id S2362497AbiAXXm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:42:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1846538AbiAXXQT (ORCPT
+        with ESMTP id S1843530AbiAXXEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:16:19 -0500
+        Mon, 24 Jan 2022 18:04:06 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98003C07E292;
-        Mon, 24 Jan 2022 11:45:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84249C06E007;
+        Mon, 24 Jan 2022 13:16:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36E6A61482;
-        Mon, 24 Jan 2022 19:45:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05D33C340E5;
-        Mon, 24 Jan 2022 19:44:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1500C61484;
+        Mon, 24 Jan 2022 21:16:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C10B9C340E4;
+        Mon, 24 Jan 2022 21:16:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053500;
-        bh=KNMqk2/v7Cqb3mKBohF9ykocCHVkYYWvinM/tQw+06A=;
+        s=korg; t=1643058973;
+        bh=uIlrJieTJOPXrJibd/ldEsy12rV/lAyNi2ogsQpvU0Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OcUtSl0sfffGp8Nnu7XhPh5z4QFcEHs5GTRNdSiD1jl62diX86UjWRdxuYVbiVeFo
-         Mjr8CY8sGx1hXfQNDFljYF3KbVLufCtzMIQVYuMNi4FjkRIrbyNLf44bViTQcIxm5M
-         F/mU1v/pWbkLO/Q77kcFl+CwzxaZiF16+p+QrZqY=
+        b=I7Ev9rctTOUNKCBKZbbDFmjBJgC2E/kN3sZIS5B0vR84M4w04qS+MJnzeOKNbnbCx
+         NgwjlC4Tmofb61+bJ6G4FVmjBe40Am0k5uztJTePX62aivu1cn7W0uuTySyuj+o9p6
+         tcSrWK4HLbYimsmmIACYSq+RtQBNGadJAqq776bM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sven Eckelmann <sven@narfation.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
+        stable@vger.kernel.org, Nageswara R Sastry <nasastry@in.ibm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Nageswara R Sastry <rnsastry@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 086/563] ath11k: Fix ETSI regd with weather radar overlap
+Subject: [PATCH 5.16 0462/1039] powerpc/perf: Fix PMU callbacks to clear pending PMI before resetting an overflown PMC
 Date:   Mon, 24 Jan 2022 19:37:31 +0100
-Message-Id: <20220124184027.375883183@linuxfoundation.org>
+Message-Id: <20220124184140.814234026@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,238 +53,272 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sven Eckelmann <sven@narfation.org>
+From: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
 
-[ Upstream commit 086c921a354089f209318501038d43c98d3f409f ]
+[ Upstream commit 2c9ac51b850d84ee496b0a5d832ce66d411ae552 ]
 
-Some ETSI countries have a small overlap in the wireless-regdb with an ETSI
-channel (5590-5650). A good example is Australia:
+Running perf fuzzer showed below in dmesg logs:
+  "Can't find PMC that caused IRQ"
 
-  country AU: DFS-ETSI
-  	(2400 - 2483.5 @ 40), (36)
-  	(5150 - 5250 @ 80), (23), NO-OUTDOOR, AUTO-BW
-  	(5250 - 5350 @ 80), (20), NO-OUTDOOR, AUTO-BW, DFS
-  	(5470 - 5600 @ 80), (27), DFS
-  	(5650 - 5730 @ 80), (27), DFS
-  	(5730 - 5850 @ 80), (36)
-  	(57000 - 66000 @ 2160), (43), NO-OUTDOOR
+This means a PMU exception happened, but none of the PMC's (Performance
+Monitor Counter) were found to be overflown. There are some corner cases
+that clears the PMCs after PMI gets masked. In such cases, the perf
+interrupt handler will not find the active PMC values that had caused
+the overflow and thus leads to this message while replaying.
 
-If the firmware (or the BDF) is shipped with these rules then there is only
-a 10 MHz overlap with the weather radar:
+Case 1: PMU Interrupt happens during replay of other interrupts and
+counter values gets cleared by PMU callbacks before replay:
 
-* below: 5470 - 5590
-* weather radar: 5590 - 5600
-* above: (none for the rule "5470 - 5600 @ 80")
+During replay of interrupts like timer, __do_irq() and doorbell
+exception, we conditionally enable interrupts via may_hard_irq_enable().
+This could potentially create a window to generate a PMI. Since irq soft
+mask is set to ALL_DISABLED, the PMI will get masked here. We could get
+IPIs run before perf interrupt is replayed and the PMU events could
+be deleted or stopped. This will change the PMU SPR values and resets
+the counters. Snippet of ftrace log showing PMU callbacks invoked in
+__do_irq():
 
-There are several wrong assumption in the ath11k code:
+  <idle>-0 [051] dns. 132025441306354: __do_irq <-call_do_irq
+  <idle>-0 [051] dns. 132025441306430: irq_enter <-__do_irq
+  <idle>-0 [051] dns. 132025441306503: irq_enter_rcu <-__do_irq
+  <idle>-0 [051] dnH. 132025441306599: xive_get_irq <-__do_irq
+  <<>>
+  <idle>-0 [051] dnH. 132025441307770: generic_smp_call_function_single_interrupt <-smp_ipi_demux_relaxed
+  <idle>-0 [051] dnH. 132025441307839: flush_smp_call_function_queue <-smp_ipi_demux_relaxed
+  <idle>-0 [051] dnH. 132025441308057: _raw_spin_lock <-event_function
+  <idle>-0 [051] dnH. 132025441308206: power_pmu_disable <-perf_pmu_disable
+  <idle>-0 [051] dnH. 132025441308337: power_pmu_del <-event_sched_out
+  <idle>-0 [051] dnH. 132025441308407: power_pmu_read <-power_pmu_del
+  <idle>-0 [051] dnH. 132025441308477: read_pmc <-power_pmu_read
+  <idle>-0 [051] dnH. 132025441308590: isa207_disable_pmc <-power_pmu_del
+  <idle>-0 [051] dnH. 132025441308663: write_pmc <-power_pmu_del
+  <idle>-0 [051] dnH. 132025441308787: power_pmu_event_idx <-perf_event_update_userpage
+  <idle>-0 [051] dnH. 132025441308859: rcu_read_unlock_strict <-perf_event_update_userpage
+  <idle>-0 [051] dnH. 132025441308975: power_pmu_enable <-perf_pmu_enable
+  <<>>
+  <idle>-0 [051] dnH. 132025441311108: irq_exit <-__do_irq
+  <idle>-0 [051] dns. 132025441311319: performance_monitor_exception <-replay_soft_interrupts
 
-* there is always a valid range below the weather radar
-  (actually: there could be no range below the weather radar range OR range
-   could be smaller than 20 MHz)
-* intersected range in the weather radar range is valid
-  (actually: the range could be smaller than 20 MHz)
-* range above weather radar is either empty or valid
-  (actually: the range could be smaller than 20 MHz)
+Case 2: PMI's masked during local_* operations, example local_add(). If
+the local_add() operation happens within a local_irq_save(), replay of
+PMI will be during local_irq_restore(). Similar to case 1, this could
+also create a window before replay where PMU events gets deleted or
+stopped.
 
-These wrong assumption will lead in this example to a rule
+Fix it by updating the PMU callback function power_pmu_disable() to
+check for pending perf interrupt. If there is an overflown PMC and
+pending perf interrupt indicated in paca, clear the PMI bit in paca to
+drop that sample. Clearing of PMI bit is done in power_pmu_disable()
+since disable is invoked before any event gets deleted/stopped. With
+this fix, if there are more than one event running in the PMU, there is
+a chance that we clear the PMI bit for the event which is not getting
+deleted/stopped. The other events may still remain active. Hence to make
+sure we don't drop valid sample in such cases, another check is added in
+power_pmu_enable. This checks if there is an overflown PMC found among
+the active events and if so enable back the PMI bit. Two new helper
+functions are introduced to clear/set the PMI, ie
+clear_pmi_irq_pending() and set_pmi_irq_pending(). Helper function
+pmi_irq_pending() is introduced to give a warning if there is pending
+PMI bit in paca, but no PMC is overflown.
 
-  (5590 - 5600 @ 20), (N/A, 27), (600000 ms), DFS, AUTO-BW
+Also there are corner cases which result in performance monitor
+interrupts being triggered during power_pmu_disable(). This happens
+since PMXE bit is not cleared along with disabling of other MMCR0 bits
+in the pmu_disable. Such PMI's could leave the PMU running and could
+trigger PMI again which will set MMCR0 PMAO bit. This could lead to
+spurious interrupts in some corner cases. Example, a timer after
+power_pmu_del() which will re-enable interrupts and triggers a PMI again
+since PMAO bit is still set. But fails to find valid overflow since PMC
+was cleared in power_pmu_del(). Fix that by disabling PMXE along with
+disabling of other MMCR0 bits in power_pmu_disable().
 
-which is invalid according to is_valid_reg_rule() because the freq_diff is
-only 10 MHz but the max_bandwidth is set to 20 MHz. Which results in a
-rejection like:
+We can't just replay PMI any time. Hence this approach is preferred
+rather than replaying PMI before resetting overflown PMC. Patch also
+documents core-book3s on a race condition which can trigger these PMC
+messages during idle path in PowerNV.
 
-  WARNING: at backports-20210222_001-4.4.60-b157d2276/net/wireless/reg.c:3984
-  [...]
-  Call trace:
-  [<ffffffbffc3d2e50>] reg_get_max_bandwidth+0x300/0x3a8 [cfg80211]
-  [<ffffffbffc3d3d0c>] regulatory_set_wiphy_regd_sync+0x3c/0x98 [cfg80211]
-  [<ffffffbffc651598>] ath11k_regd_update+0x1a8/0x210 [ath11k]
-  [<ffffffbffc652108>] ath11k_regd_update_work+0x18/0x20 [ath11k]
-  [<ffffffc0000a93e0>] process_one_work+0x1f8/0x340
-  [<ffffffc0000a9784>] worker_thread+0x25c/0x448
-  [<ffffffc0000aedc8>] kthread+0xd0/0xd8
-  [<ffffffc000085550>] ret_from_fork+0x10/0x40
-  ath11k c000000.wifi: failed to perform regd update : -22
-  Invalid regulatory domain detected
-
-To avoid this, the algorithm has to be changed slightly. Instead of
-splitting a rule which overlaps with the weather radar range into 3 pieces
-and accepting the first two parts blindly, it must actually be checked for
-each piece whether it is a valid range. And only if it is valid, add it to
-the output array.
-
-When these checks are in place, the processed rules for AU would end up as
-
-  country AU: DFS-ETSI
-          (2400 - 2483 @ 40), (N/A, 36), (N/A)
-          (5150 - 5250 @ 80), (6, 23), (N/A), NO-OUTDOOR, AUTO-BW
-          (5250 - 5350 @ 80), (6, 20), (0 ms), NO-OUTDOOR, DFS, AUTO-BW
-          (5470 - 5590 @ 80), (6, 27), (0 ms), DFS, AUTO-BW
-          (5650 - 5730 @ 80), (6, 27), (0 ms), DFS, AUTO-BW
-          (5730 - 5850 @ 80), (6, 36), (N/A), AUTO-BW
-
-and will be accepted by the wireless regulatory code.
-
-Fixes: d5c65159f289 ("ath11k: driver for Qualcomm IEEE 802.11ax devices")
-Signed-off-by: Sven Eckelmann <sven@narfation.org>
-Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
-Link: https://lore.kernel.org/r/20211112153116.1214421-1-sven@narfation.org
+Fixes: f442d004806e ("powerpc/64s: Add support to mask perf interrupts and replay them")
+Reported-by: Nageswara R Sastry <nasastry@in.ibm.com>
+Suggested-by: Nicholas Piggin <npiggin@gmail.com>
+Suggested-by: Madhavan Srinivasan <maddy@linux.ibm.com>
+Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
+Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
+[mpe: Make pmi_irq_pending() return bool, reflow/reword some comments]
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/1626846509-1350-2-git-send-email-atrajeev@linux.vnet.ibm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath11k/reg.c | 103 ++++++++++++++------------
- 1 file changed, 56 insertions(+), 47 deletions(-)
+ arch/powerpc/include/asm/hw_irq.h | 40 +++++++++++++++++++++
+ arch/powerpc/perf/core-book3s.c   | 58 ++++++++++++++++++++++++++++++-
+ 2 files changed, 97 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/reg.c b/drivers/net/wireless/ath/ath11k/reg.c
-index b8f9f34408879..e34311516b958 100644
---- a/drivers/net/wireless/ath/ath11k/reg.c
-+++ b/drivers/net/wireless/ath/ath11k/reg.c
-@@ -456,6 +456,9 @@ ath11k_reg_adjust_bw(u16 start_freq, u16 end_freq, u16 max_bw)
- {
- 	u16 bw;
- 
-+	if (end_freq <= start_freq)
-+		return 0;
-+
- 	bw = end_freq - start_freq;
- 	bw = min_t(u16, bw, max_bw);
- 
-@@ -463,8 +466,10 @@ ath11k_reg_adjust_bw(u16 start_freq, u16 end_freq, u16 max_bw)
- 		bw = 80;
- 	else if (bw >= 40 && bw < 80)
- 		bw = 40;
--	else if (bw < 40)
-+	else if (bw >= 20 && bw < 40)
- 		bw = 20;
-+	else
-+		bw = 0;
- 
- 	return bw;
+diff --git a/arch/powerpc/include/asm/hw_irq.h b/arch/powerpc/include/asm/hw_irq.h
+index 21cc571ea9c2d..5c98a950eca0d 100644
+--- a/arch/powerpc/include/asm/hw_irq.h
++++ b/arch/powerpc/include/asm/hw_irq.h
+@@ -224,6 +224,42 @@ static inline bool arch_irqs_disabled(void)
+ 	return arch_irqs_disabled_flags(arch_local_save_flags());
  }
-@@ -488,73 +493,77 @@ ath11k_reg_update_weather_radar_band(struct ath11k_base *ab,
- 				     struct cur_reg_rule *reg_rule,
- 				     u8 *rule_idx, u32 flags, u16 max_bw)
- {
-+	u32 start_freq;
- 	u32 end_freq;
- 	u16 bw;
- 	u8 i;
  
- 	i = *rule_idx;
- 
-+	/* there might be situations when even the input rule must be dropped */
-+	i--;
++static inline void set_pmi_irq_pending(void)
++{
++	/*
++	 * Invoked from PMU callback functions to set PMI bit in the paca.
++	 * This has to be called with irq's disabled (via hard_irq_disable()).
++	 */
++	if (IS_ENABLED(CONFIG_PPC_IRQ_SOFT_MASK_DEBUG))
++		WARN_ON_ONCE(mfmsr() & MSR_EE);
 +
-+	/* frequencies below weather radar */
- 	bw = ath11k_reg_adjust_bw(reg_rule->start_freq,
- 				  ETSI_WEATHER_RADAR_BAND_LOW, max_bw);
-+	if (bw > 0) {
-+		i++;
++	get_paca()->irq_happened |= PACA_IRQ_PMI;
++}
++
++static inline void clear_pmi_irq_pending(void)
++{
++	/*
++	 * Invoked from PMU callback functions to clear the pending PMI bit
++	 * in the paca.
++	 */
++	if (IS_ENABLED(CONFIG_PPC_IRQ_SOFT_MASK_DEBUG))
++		WARN_ON_ONCE(mfmsr() & MSR_EE);
++
++	get_paca()->irq_happened &= ~PACA_IRQ_PMI;
++}
++
++static inline bool pmi_irq_pending(void)
++{
++	/*
++	 * Invoked from PMU callback functions to check if there is a pending
++	 * PMI bit in the paca.
++	 */
++	if (get_paca()->irq_happened & PACA_IRQ_PMI)
++		return true;
++
++	return false;
++}
++
+ #ifdef CONFIG_PPC_BOOK3S
+ /*
+  * To support disabling and enabling of irq with PMI, set of
+@@ -408,6 +444,10 @@ static inline void do_hard_irq_enable(void)
+ 	BUILD_BUG();
+ }
  
--	ath11k_reg_update_rule(regd->reg_rules + i, reg_rule->start_freq,
--			       ETSI_WEATHER_RADAR_BAND_LOW, bw,
--			       reg_rule->ant_gain, reg_rule->reg_power,
--			       flags);
-+		ath11k_reg_update_rule(regd->reg_rules + i,
-+				       reg_rule->start_freq,
-+				       ETSI_WEATHER_RADAR_BAND_LOW, bw,
-+				       reg_rule->ant_gain, reg_rule->reg_power,
-+				       flags);
- 
--	ath11k_dbg(ab, ATH11K_DBG_REG,
--		   "\t%d. (%d - %d @ %d) (%d, %d) (%d ms) (FLAGS %d)\n",
--		   i + 1, reg_rule->start_freq, ETSI_WEATHER_RADAR_BAND_LOW,
--		   bw, reg_rule->ant_gain, reg_rule->reg_power,
--		   regd->reg_rules[i].dfs_cac_ms,
--		   flags);
--
--	if (reg_rule->end_freq > ETSI_WEATHER_RADAR_BAND_HIGH)
--		end_freq = ETSI_WEATHER_RADAR_BAND_HIGH;
--	else
--		end_freq = reg_rule->end_freq;
-+		ath11k_dbg(ab, ATH11K_DBG_REG,
-+			   "\t%d. (%d - %d @ %d) (%d, %d) (%d ms) (FLAGS %d)\n",
-+			   i + 1, reg_rule->start_freq,
-+			   ETSI_WEATHER_RADAR_BAND_LOW, bw, reg_rule->ant_gain,
-+			   reg_rule->reg_power, regd->reg_rules[i].dfs_cac_ms,
-+			   flags);
-+	}
- 
--	bw = ath11k_reg_adjust_bw(ETSI_WEATHER_RADAR_BAND_LOW, end_freq,
--				  max_bw);
-+	/* weather radar frequencies */
-+	start_freq = max_t(u32, reg_rule->start_freq,
-+			   ETSI_WEATHER_RADAR_BAND_LOW);
-+	end_freq = min_t(u32, reg_rule->end_freq, ETSI_WEATHER_RADAR_BAND_HIGH);
- 
--	i++;
-+	bw = ath11k_reg_adjust_bw(start_freq, end_freq, max_bw);
-+	if (bw > 0) {
-+		i++;
- 
--	ath11k_reg_update_rule(regd->reg_rules + i,
--			       ETSI_WEATHER_RADAR_BAND_LOW, end_freq, bw,
--			       reg_rule->ant_gain, reg_rule->reg_power,
--			       flags);
-+		ath11k_reg_update_rule(regd->reg_rules + i, start_freq,
-+				       end_freq, bw, reg_rule->ant_gain,
-+				       reg_rule->reg_power, flags);
- 
--	regd->reg_rules[i].dfs_cac_ms = ETSI_WEATHER_RADAR_BAND_CAC_TIMEOUT;
-+		regd->reg_rules[i].dfs_cac_ms = ETSI_WEATHER_RADAR_BAND_CAC_TIMEOUT;
- 
--	ath11k_dbg(ab, ATH11K_DBG_REG,
--		   "\t%d. (%d - %d @ %d) (%d, %d) (%d ms) (FLAGS %d)\n",
--		   i + 1, ETSI_WEATHER_RADAR_BAND_LOW, end_freq,
--		   bw, reg_rule->ant_gain, reg_rule->reg_power,
--		   regd->reg_rules[i].dfs_cac_ms,
--		   flags);
--
--	if (end_freq == reg_rule->end_freq) {
--		regd->n_reg_rules--;
--		*rule_idx = i;
--		return;
-+		ath11k_dbg(ab, ATH11K_DBG_REG,
-+			   "\t%d. (%d - %d @ %d) (%d, %d) (%d ms) (FLAGS %d)\n",
-+			   i + 1, start_freq, end_freq, bw,
-+			   reg_rule->ant_gain, reg_rule->reg_power,
-+			   regd->reg_rules[i].dfs_cac_ms, flags);
++static inline void clear_pmi_irq_pending(void) { }
++static inline void set_pmi_irq_pending(void) { }
++static inline bool pmi_irq_pending(void) { return false; }
++
+ static inline void irq_soft_mask_regs_set_state(struct pt_regs *regs, unsigned long val)
+ {
+ }
+diff --git a/arch/powerpc/perf/core-book3s.c b/arch/powerpc/perf/core-book3s.c
+index 73e62e9b179bc..bef6b1abce702 100644
+--- a/arch/powerpc/perf/core-book3s.c
++++ b/arch/powerpc/perf/core-book3s.c
+@@ -857,6 +857,19 @@ static void write_pmc(int idx, unsigned long val)
  	}
- 
-+	/* frequencies above weather radar */
- 	bw = ath11k_reg_adjust_bw(ETSI_WEATHER_RADAR_BAND_HIGH,
- 				  reg_rule->end_freq, max_bw);
-+	if (bw > 0) {
-+		i++;
- 
--	i++;
--
--	ath11k_reg_update_rule(regd->reg_rules + i, ETSI_WEATHER_RADAR_BAND_HIGH,
--			       reg_rule->end_freq, bw,
--			       reg_rule->ant_gain, reg_rule->reg_power,
--			       flags);
-+		ath11k_reg_update_rule(regd->reg_rules + i,
-+				       ETSI_WEATHER_RADAR_BAND_HIGH,
-+				       reg_rule->end_freq, bw,
-+				       reg_rule->ant_gain, reg_rule->reg_power,
-+				       flags);
- 
--	ath11k_dbg(ab, ATH11K_DBG_REG,
--		   "\t%d. (%d - %d @ %d) (%d, %d) (%d ms) (FLAGS %d)\n",
--		   i + 1, ETSI_WEATHER_RADAR_BAND_HIGH, reg_rule->end_freq,
--		   bw, reg_rule->ant_gain, reg_rule->reg_power,
--		   regd->reg_rules[i].dfs_cac_ms,
--		   flags);
-+		ath11k_dbg(ab, ATH11K_DBG_REG,
-+			   "\t%d. (%d - %d @ %d) (%d, %d) (%d ms) (FLAGS %d)\n",
-+			   i + 1, ETSI_WEATHER_RADAR_BAND_HIGH,
-+			   reg_rule->end_freq, bw, reg_rule->ant_gain,
-+			   reg_rule->reg_power, regd->reg_rules[i].dfs_cac_ms,
-+			   flags);
-+	}
- 
- 	*rule_idx = i;
  }
+ 
++static int any_pmc_overflown(struct cpu_hw_events *cpuhw)
++{
++	int i, idx;
++
++	for (i = 0; i < cpuhw->n_events; i++) {
++		idx = cpuhw->event[i]->hw.idx;
++		if ((idx) && ((int)read_pmc(idx) < 0))
++			return idx;
++	}
++
++	return 0;
++}
++
+ /* Called from sysrq_handle_showregs() */
+ void perf_event_print_debug(void)
+ {
+@@ -1281,11 +1294,13 @@ static void power_pmu_disable(struct pmu *pmu)
+ 
+ 		/*
+ 		 * Set the 'freeze counters' bit, clear EBE/BHRBA/PMCC/PMAO/FC56
++		 * Also clear PMXE to disable PMI's getting triggered in some
++		 * corner cases during PMU disable.
+ 		 */
+ 		val  = mmcr0 = mfspr(SPRN_MMCR0);
+ 		val |= MMCR0_FC;
+ 		val &= ~(MMCR0_EBE | MMCR0_BHRBA | MMCR0_PMCC | MMCR0_PMAO |
+-			 MMCR0_FC56);
++			 MMCR0_PMXE | MMCR0_FC56);
+ 		/* Set mmcr0 PMCCEXT for p10 */
+ 		if (ppmu->flags & PPMU_ARCH_31)
+ 			val |= MMCR0_PMCCEXT;
+@@ -1299,6 +1314,23 @@ static void power_pmu_disable(struct pmu *pmu)
+ 		mb();
+ 		isync();
+ 
++		/*
++		 * Some corner cases could clear the PMU counter overflow
++		 * while a masked PMI is pending. One such case is when
++		 * a PMI happens during interrupt replay and perf counter
++		 * values are cleared by PMU callbacks before replay.
++		 *
++		 * If any PMC corresponding to the active PMU events are
++		 * overflown, disable the interrupt by clearing the paca
++		 * bit for PMI since we are disabling the PMU now.
++		 * Otherwise provide a warning if there is PMI pending, but
++		 * no counter is found overflown.
++		 */
++		if (any_pmc_overflown(cpuhw))
++			clear_pmi_irq_pending();
++		else
++			WARN_ON(pmi_irq_pending());
++
+ 		val = mmcra = cpuhw->mmcr.mmcra;
+ 
+ 		/*
+@@ -1390,6 +1422,15 @@ static void power_pmu_enable(struct pmu *pmu)
+ 	 * (possibly updated for removal of events).
+ 	 */
+ 	if (!cpuhw->n_added) {
++		/*
++		 * If there is any active event with an overflown PMC
++		 * value, set back PACA_IRQ_PMI which would have been
++		 * cleared in power_pmu_disable().
++		 */
++		hard_irq_disable();
++		if (any_pmc_overflown(cpuhw))
++			set_pmi_irq_pending();
++
+ 		mtspr(SPRN_MMCRA, cpuhw->mmcr.mmcra & ~MMCRA_SAMPLE_ENABLE);
+ 		mtspr(SPRN_MMCR1, cpuhw->mmcr.mmcr1);
+ 		if (ppmu->flags & PPMU_ARCH_31)
+@@ -2337,6 +2378,14 @@ static void __perf_event_interrupt(struct pt_regs *regs)
+ 				break;
+ 			}
+ 		}
++
++		/*
++		 * Clear PACA_IRQ_PMI in case it was set by
++		 * set_pmi_irq_pending() when PMU was enabled
++		 * after accounting for interrupts.
++		 */
++		clear_pmi_irq_pending();
++
+ 		if (!active)
+ 			/* reset non active counters that have overflowed */
+ 			write_pmc(i + 1, 0);
+@@ -2356,6 +2405,13 @@ static void __perf_event_interrupt(struct pt_regs *regs)
+ 			}
+ 		}
+ 	}
++
++	/*
++	 * During system wide profling or while specific CPU is monitored for an
++	 * event, some corner cases could cause PMC to overflow in idle path. This
++	 * will trigger a PMI after waking up from idle. Since counter values are _not_
++	 * saved/restored in idle path, can lead to below "Can't find PMC" message.
++	 */
+ 	if (unlikely(!found) && !arch_irq_disabled_regs(regs))
+ 		printk_ratelimited(KERN_WARNING "Can't find PMC that caused IRQ\n");
+ 
 -- 
 2.34.1
 

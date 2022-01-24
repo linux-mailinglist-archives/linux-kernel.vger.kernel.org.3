@@ -2,112 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6634983B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C04AF4983C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:45:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240718AbiAXPm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 10:42:58 -0500
-Received: from mga01.intel.com ([192.55.52.88]:4464 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230232AbiAXPm4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 10:42:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643038976; x=1674574976;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=l4HC4Tk2mFFRI4bobeHUuAL3fVQZBu+JxXG9YWXI2ro=;
-  b=CcwlntdscXIx3TSzO1K3wdOX/jBbFXbnXafDHNjjvW4+qzZrGKeUH0cF
-   dXvjGpqFhrL7kqPOYg61NvPeoWcSqffgxfN/igmyHAqGfcWcqWP66pW2J
-   9jGcI5Kr9xEdqhFXG1K6Wiq064Z/IC3/8DLXCcBdpf74YGPK7q0Q31eZ1
-   kix5WVuAeYYNVzlb2Jtgnz5MHYsFlPNjCp0jlzar26FRcnZX2fvTe1+2b
-   lmaLzZylqTOEctzEwM/UvsP8zZ+VNthzM2laJvVZyBnke6Gd4DaGJEi/w
-   KeQGYiwPGV6kBcq6FIRw0hN/nm9D3uC+88ChWzxicQfrQxQlVT5oSphAH
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="270507802"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="270507802"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 07:42:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="627535818"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 24 Jan 2022 07:42:53 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nC1Ua-000IXh-Gb; Mon, 24 Jan 2022 15:42:52 +0000
-Date:   Mon, 24 Jan 2022 23:42:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     SEO HOYOUNG <hy50.seo@samsung.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        asutoshd@codeaurora.org, cang@codeaurora.org, bvanassche@acm.org
-Cc:     kbuild-all@lists.01.org
-Subject: Re: [PATCH v1] scsi: ufs: disable auto hibern8 while entering suspend
-Message-ID: <202201242328.jXmzUj9v-lkp@intel.com>
-References: <20220123234044.163394-1-hy50.seo@samsung.com>
+        id S239049AbiAXPpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 10:45:14 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:37892 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231203AbiAXPpJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 10:45:09 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BBDFD21996;
+        Mon, 24 Jan 2022 15:45:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643039107; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RjA/80OqKTnpvG+7iaVvyP9DqrW+0KIpdaVg1ap2eOE=;
+        b=2TCwQzFJJnx3al7jo0+FElkT1uyARf4BEAwT9wgQ7eIykP6Rlptr1faEj7t3+vHroXxPHE
+        Odmy3kJt9Ev/0iJbP3ok6/YTgbkFDu/2hMlrIbv7UL1SHqiaQ2Y2e9uzNDUcuf6NYgE5e2
+        QrywRykpn7r0o/whMri62uyokOhLgh0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643039107;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RjA/80OqKTnpvG+7iaVvyP9DqrW+0KIpdaVg1ap2eOE=;
+        b=2YAZo15gi+QAyPzuy2ECKu0ZRsf4JS1zT6QReLFoj9Gca5bVqL+ljqhdHE1mXkgoJBFsaP
+        vHPpSng/5bjp76Bw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 69FD713C28;
+        Mon, 24 Jan 2022 15:45:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id CTs9GIPJ7mGNJgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 24 Jan 2022 15:45:07 +0000
+Message-ID: <6b41c8cf-8ab6-7224-8af2-c8c77a6f5d3b@suse.de>
+Date:   Mon, 24 Jan 2022 16:45:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220123234044.163394-1-hy50.seo@samsung.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/2] Revert "fbcon: Disable accelerated scrolling"
+Content-Language: en-US
+To:     Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>
+Cc:     linux-fbdev@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sven Schnelle <svens@stackframe.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Claudio Suarez <cssk@net-c.es>, Pavel Machek <pavel@ucw.cz>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Sam Ravnborg <sam@ravnborg.org>
+References: <20220119110839.33187-1-deller@gmx.de>
+ <20220119110839.33187-3-deller@gmx.de> <YelyGDNDTn1Aq/hm@phenom.ffwll.local>
+ <6c000477-002b-d125-b945-2c4831bad8a5@gmx.de>
+ <20220121072006.ylw2hdl7jbkbwnre@sirius.home.kraxel.org>
+ <64fd46cb-9746-3fd0-ec92-c64dba76875a@gmx.de>
+ <d23800b4-503c-a6e2-2c51-2c07a736dffc@suse.de>
+ <2fc200bb-4b40-7833-31c9-90a78512b601@redhat.com>
+ <de6e06e1-f293-1c98-7898-b5d52c400b59@gmx.de>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <de6e06e1-f293-1c98-7898-b5d52c400b59@gmx.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------IeSeuErc0VVP0phaSXoIJUST"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi SEO,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------IeSeuErc0VVP0phaSXoIJUST
+Content-Type: multipart/mixed; boundary="------------gPnb1oZ4LzJSJF0ihXEV4I8o";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Helge Deller <deller@gmx.de>,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ Gerd Hoffmann <kraxel@redhat.com>
+Cc: linux-fbdev@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Sven Schnelle <svens@stackframe.org>, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Tomi Valkeinen <tomi.valkeinen@ti.com>, Claudio Suarez <cssk@net-c.es>,
+ Pavel Machek <pavel@ucw.cz>, Daniel Vetter <daniel.vetter@intel.com>,
+ Geert Uytterhoeven <geert@linux-m68k.org>, Sam Ravnborg <sam@ravnborg.org>
+Message-ID: <6b41c8cf-8ab6-7224-8af2-c8c77a6f5d3b@suse.de>
+Subject: Re: [PATCH 2/2] Revert "fbcon: Disable accelerated scrolling"
+References: <20220119110839.33187-1-deller@gmx.de>
+ <20220119110839.33187-3-deller@gmx.de> <YelyGDNDTn1Aq/hm@phenom.ffwll.local>
+ <6c000477-002b-d125-b945-2c4831bad8a5@gmx.de>
+ <20220121072006.ylw2hdl7jbkbwnre@sirius.home.kraxel.org>
+ <64fd46cb-9746-3fd0-ec92-c64dba76875a@gmx.de>
+ <d23800b4-503c-a6e2-2c51-2c07a736dffc@suse.de>
+ <2fc200bb-4b40-7833-31c9-90a78512b601@redhat.com>
+ <de6e06e1-f293-1c98-7898-b5d52c400b59@gmx.de>
+In-Reply-To: <de6e06e1-f293-1c98-7898-b5d52c400b59@gmx.de>
 
-Thank you for the patch! Perhaps something to improve:
+--------------gPnb1oZ4LzJSJF0ihXEV4I8o
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-[auto build test WARNING on jejb-scsi/for-next]
-[also build test WARNING on mkp-scsi/for-next linux/master linus/master v5.17-rc1 next-20220124]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+SGkNCg0KQW0gMjQuMDEuMjIgdW0gMTY6Mjkgc2NocmllYiBIZWxnZSBEZWxsZXI6DQo+IE9u
+IDEvMjQvMjIgMTI6NTAsIEphdmllciBNYXJ0aW5leiBDYW5pbGxhcyB3cm90ZToNCj4+IE9u
+IDEvMjQvMjIgMTI6MzMsIFRob21hcyBaaW1tZXJtYW5uIHdyb3RlOg0KPj4NCj4+IFtzbmlw
+XQ0KPj4NCj4+Pj4gVGhvdWdodHM/DQo+Pj4NCj4+PiBJIGNhbid0IHNheSBJIGFwcHJvdmUg
+a2VlcGluZyBmYmRldiBhbGl2ZSwgYnV0Li4uDQo+Pj4NCj4+PiBXaXRoIGZiZGV2IGVtdWxh
+dGlvbiwgZXZlcnkgRFJNIGRyaXZlciBpcyBhbiBmYmRldiBkcml2ZXIgdG9vLiBTbw0KPj4+
+IENPTkZJR19GQl9EUklWRVIgaXMgc29tZXdoYXQgbWlzbGVhZGluZy4gQmV0dGVyIGFkZCBh
+biBvcHRpb24gbGlrZQ0KPj4+IENPTkZJR19GQkNPTl9IV19TQ1JPTExJTkcgYW5kIGhhdmUg
+aXQgc2VsZWN0ZWQgYnkgdGhlIGZiZGV2IGRyaXZlcnMgdGhhdA0KPj4+IGFic29sdXRlbHkg
+bmVlZCBIVyBhY2NlbGVyYXRpb24uIFRoYXQgb3B0aW9uIHdvdWxkIHRoZW4gcHJvdGVjdCB0
+aGUgcnNwDQo+Pj4gY29kZS4NCj4gDQo+IEknbSBub3QgYSBmYW4gb2Ygc29tZXRoaW5nIGxp
+a2UgQ09ORklHX0ZCQ09OX0hXX1NDUk9MTElORywgYnV0IEknbSBub3QNCj4gYWdhaW5zdCBp
+dCBlaXRoZXIuDQo+IEZvciBtZSBpdCBzb3VuZHMgdGhhdCB0aGlzIGlzIG5vdCB0aGUgcmVh
+bCBkaXJlY3Rpb24geW91IHdhbnQgdG8gZ28sDQo+IHdoaWNoIGlzIHRvIHByZXZlbnQgdGhh
+dCBhbnkgb3RoZXIgZHJpdmVycyB0YWtlIHRoZSBmcmFtZWJ1ZmZlciBiZWZvcmUNCj4geW91
+IHRha2UgaXQgd2l0aCBzaW1wbGVkcm0gb3Igc2ltaWxpYXIuDQo+IENPTkZJR19GQkNPTl9I
+V19TQ1JPTExJTkcgSU1ITyBqdXN0IGRpc2FibGVzIHRoZSAoZnJvbSB5b3VyIFBPVikgbmVn
+bGVjdGFibGUgYWNjbGVyYXRpb24gcGFydC4NCj4gV2l0aCBhbiBvcHRpb24gbGlrZSBDT05G
+SUdfRkJfRFJJVkVSIChtYXliZSBiZXR0ZXI6IENPTkZJR19GQl9MRUdBQ1lfRFJJVkVSUykN
+Cj4gaXQncyBhbiBlYXN5IG9wdGlvbiBmb3IgZGlzdHJvcyB0byBkaXNhYmxlIGFsbCBvZiB0
+aGUgbGVnYWN5IGRyaXZlcnMNCj4gZnJvbSBiZWluZyBidWlsdCAmIHNoaXBwZWQuDQoNClRo
+ZXNlIGRyaXZlcnMgaGF2ZSBiZWVuIGRpc2FibGVkIGJ5IG1vc3QgZGlzdHJvcyBhIGxvbmcg
+dGltZSBhZ28uIFRob3NlIA0KdGhhdCBzdGlsbCByZW1haW4gYXJlIHRoZSBnZW5lcmljLCBz
+b29uIHRvIGJlIHJlcGxhY2VkLCBvbmVzOyBhbmQgDQpkcml2ZXJzIGZvciBuaWNoZSBhcmNo
+aXRlY3R1cmVzIHdoZXJlIG5vIERSTS1iYXNlZCByZXBsYWNlbWVudCBleGlzdHMuDQoNCklm
+IEkgcnVuIERSTSB3aXRoIGZiZGV2IGVtdWxhdGlvbiwgSFcgc2Nyb2xsaW5nIGlzIHVudXNl
+ZCwgcG9zc2libHkgDQpidWdneSwgYW5kIEknZCB3YW50IHRvIG5vdCBidWlsdCBpdCBpZiBw
+b3NzaWJsZS4gSSBndWVzcyB0aGF0J3Mgd2hhdCANCm1vc3QgZGlzdHJvcyB3b3VsZCB3YW50
+IGFzIHdlbGwuIFRoYXQncyB0aGUgdXNlIGNhc2UgZm9yIEZCQ09OX0hXX1NDUk9MTElORy4N
+Cg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpH
+cmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJt
+YW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhS
+QiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
-url:    https://github.com/0day-ci/linux/commits/SEO-HOYOUNG/scsi-ufs-disable-auto-hibern8-while-entering-suspend/20220124-195745
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-config: arc-randconfig-r043-20220124 (https://download.01.org/0day-ci/archive/20220124/202201242328.jXmzUj9v-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/07442fb1071785299ef4ec421a37874e0d84babf
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review SEO-HOYOUNG/scsi-ufs-disable-auto-hibern8-while-entering-suspend/20220124-195745
-        git checkout 07442fb1071785299ef4ec421a37874e0d84babf
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/scsi/ufs/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+--------------gPnb1oZ4LzJSJF0ihXEV4I8o--
 
-All warnings (new ones prefixed by >>):
+--------------IeSeuErc0VVP0phaSXoIJUST
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
->> drivers/scsi/ufs/ufshcd.c:4207:6: warning: no previous prototype for 'ufshcd_auto_hibern8_disable' [-Wmissing-prototypes]
-    4207 | void ufshcd_auto_hibern8_disable(struct ufs_hba *hba)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----BEGIN PGP SIGNATURE-----
 
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmHuyYIFAwAAAAAACgkQlh/E3EQov+Az
+SA//Yl/UY00KzpZCWws1qNJy9HqODzkgFTdiLp74CpcBlnaYYRqu0OVBYEeWpyv3SyXj4hEF1Jjl
+ltAgNpgskoU6Nuxw1geABqqqmVAj4xFSorto3ieJsImx1PfVorwqGcRH4lZE+mtQigvRfjYfwEOf
+ZVItvKQYNKAFx42XLbpHMZsvsgP9KwbmCU0pH68GZ4aIDevICeyNj8da9kQvKF1gLBE0ZlLc3svp
+lWQ/eST2gCrK9J/VEZ2G2C3WEqZFiyFSaDXSU8IMuZ2tke/awK/k21a6vev342wxKw+2qb+ct+tf
+Ica3Y/gU6Ds8aCtP4rosx4lU0i1Rv1+z7K+YgXC8gCBZVJfjXt7DSaNB1UXUgDyetqHub5nt5W/T
+TIKRMQFF1IAvGYpMwJN3Al4DpcmOQzCOaHdOUxABIVsGgq/+ONLuKzcJZf5vWkY2DHfGwA+m0yV/
+Sofi8pflDvIVtjkL4iXDgPAIwiM3EnWqqbEJCkuLq+exEnl4NPnuV+mfBviJfhsMivONRTqCjr8D
+jLS8xrxsxPgToWruKg6hZRTrcpQMOAIO4P+HqjcPT2PQ02PfhCQ606wjSiqPfjo67Y/9PRgKU94L
+UXcYKuPJMoQGIY5QBtrHWbePXSN65HBFx9ZYsfN8x8Na7PQYhZNjlFFsm2q4xYp3jlnJtkv9Lcxb
+zx8=
+=YaJW
+-----END PGP SIGNATURE-----
 
-vim +/ufshcd_auto_hibern8_disable +4207 drivers/scsi/ufs/ufshcd.c
-
-  4206	
-> 4207	void ufshcd_auto_hibern8_disable(struct ufs_hba *hba)
-  4208	{
-  4209		unsigned long flags;
-  4210	
-  4211		if (!ufshcd_is_auto_hibern8_supported(hba))
-  4212			return;
-  4213	
-  4214		spin_lock_irqsave(hba->host->host_lock, flags);
-  4215		ufshcd_writel(hba, 0, REG_AUTO_HIBERNATE_IDLE_TIMER);
-  4216		spin_unlock_irqrestore(hba->host->host_lock, flags);
-  4217	}
-  4218	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--------------IeSeuErc0VVP0phaSXoIJUST--

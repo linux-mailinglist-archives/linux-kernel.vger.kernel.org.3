@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C199549A6F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:36:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2851649A5B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3422153AbiAYCaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:30:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
+        id S2373977AbiAYAPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:15:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379374AbiAXULU (ORCPT
+        with ESMTP id S1449269AbiAXX2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:11:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B422C06F8E0;
-        Mon, 24 Jan 2022 11:33:27 -0800 (PST)
+        Mon, 24 Jan 2022 18:28:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7986FC01D7FA;
+        Mon, 24 Jan 2022 13:31:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28EF6B811FC;
-        Mon, 24 Jan 2022 19:33:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5086AC340E5;
-        Mon, 24 Jan 2022 19:33:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 183DD614E1;
+        Mon, 24 Jan 2022 21:31:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9F64C340E4;
+        Mon, 24 Jan 2022 21:31:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052804;
-        bh=QzS4tXh8Kdb+NYlC5nFHkToGbuxguFI/gh7D8iqd0oc=;
+        s=korg; t=1643059912;
+        bh=JGviIA0qFo66pV1MrdQu8TN/MHhkm1Foo3NvPRqNvQM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P1wOvy8Hbe/UQQhFjKIQpwcWFztU2WqXQ81VQ5db290uHArVItTIuCzJyMdCjG8dm
-         UXgTd3Sf3LbM2O8pD+GuZBskXqiiG56t1vHjC/kt3VQwxb8Mm3jiuC+/9bO3AX8MfG
-         NDuUEMi0D/rYbneTLqFcxWi1NQ2hPRY76DKtB/ag=
+        b=GQ0KFCC9wxpwK8A4hfh/6TwuJkzoN4YvMH5sx8a/yamBNAt3k4CHHYJRmJaRl2CQf
+         +EbqezRtoxt+WGNaMMXaupUfd+sR2Jq69lgnD785HnQzPgpoxkBuoMcTflUdZVcTvx
+         nngA84ms4Oc50zjbiNE0fuMC0lNR/VLSRDGx9aqw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sebastian Gottschall <s.gottschall@dd-wrt.com>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        stable@vger.kernel.org, Dani Liberman <dliberman@habana.ai>,
+        Oded Gabbay <ogabbay@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 180/320] ath10k: Fix tx hanging
-Date:   Mon, 24 Jan 2022 19:42:44 +0100
-Message-Id: <20220124183959.787054022@linuxfoundation.org>
+Subject: [PATCH 5.16 0777/1039] habanalabs: change wait for interrupt timeout to 64 bit
+Date:   Mon, 24 Jan 2022 19:42:46 +0100
+Message-Id: <20220124184151.409534616@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,54 +49,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sebastian Gottschall <s.gottschall@dd-wrt.com>
+From: Dani Liberman <dliberman@habana.ai>
 
-[ Upstream commit e8a91863eba3966a447d2daa1526082d52b5db2a ]
+[ Upstream commit 48f31169830f589e4c7ac475ccc7414951ded3f0 ]
 
-While running stress tests in roaming scenarios (switching ap's every 5
-seconds, we discovered a issue which leads to tx hangings of exactly 5
-seconds while or after scanning for new accesspoints. We found out that
-this hanging is triggered by ath10k_mac_wait_tx_complete since the
-empty_tx_wq was not wake when the num_tx_pending counter reaches zero.
-To fix this, we simply move the wake_up call to htt_tx_dec_pending,
-since this call was missed on several locations within the ath10k code.
+In order to increase maximum wait-for-interrupt timeout, change it
+to 64 bit variable. This wait is used only by newer ASICs, so no
+problem in changing this interface at this time.
 
-Signed-off-by: Sebastian Gottschall <s.gottschall@dd-wrt.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20210505085806.11474-1-s.gottschall@dd-wrt.com
+Signed-off-by: Dani Liberman <dliberman@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath10k/htt_tx.c | 3 +++
- drivers/net/wireless/ath/ath10k/txrx.c   | 2 --
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ .../habanalabs/common/command_submission.c    | 22 ++++++++++++++-----
+ include/uapi/misc/habanalabs.h                | 18 +++++++++------
+ 2 files changed, 28 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath10k/htt_tx.c b/drivers/net/wireless/ath/ath10k/htt_tx.c
-index c38e1963ebc05..f73ed1044390c 100644
---- a/drivers/net/wireless/ath/ath10k/htt_tx.c
-+++ b/drivers/net/wireless/ath/ath10k/htt_tx.c
-@@ -147,6 +147,9 @@ void ath10k_htt_tx_dec_pending(struct ath10k_htt *htt)
- 	htt->num_pending_tx--;
- 	if (htt->num_pending_tx == htt->max_num_pending_tx - 1)
- 		ath10k_mac_tx_unlock(htt->ar, ATH10K_TX_PAUSE_Q_FULL);
-+
-+	if (htt->num_pending_tx == 0)
-+		wake_up(&htt->empty_tx_wq);
+diff --git a/drivers/misc/habanalabs/common/command_submission.c b/drivers/misc/habanalabs/common/command_submission.c
+index 4c8000fd246cd..9451e4bae05df 100644
+--- a/drivers/misc/habanalabs/common/command_submission.c
++++ b/drivers/misc/habanalabs/common/command_submission.c
+@@ -2765,8 +2765,23 @@ static int hl_cs_wait_ioctl(struct hl_fpriv *hpriv, void *data)
+ 	return 0;
  }
  
- int ath10k_htt_tx_inc_pending(struct ath10k_htt *htt)
-diff --git a/drivers/net/wireless/ath/ath10k/txrx.c b/drivers/net/wireless/ath/ath10k/txrx.c
-index f46b9083bbf10..2c254f43790d2 100644
---- a/drivers/net/wireless/ath/ath10k/txrx.c
-+++ b/drivers/net/wireless/ath/ath10k/txrx.c
-@@ -80,8 +80,6 @@ int ath10k_txrx_tx_unref(struct ath10k_htt *htt,
++static inline unsigned long hl_usecs64_to_jiffies(const u64 usecs)
++{
++	if (usecs <= U32_MAX)
++		return usecs_to_jiffies(usecs);
++
++	/*
++	 * If the value in nanoseconds is larger than 64 bit, use the largest
++	 * 64 bit value.
++	 */
++	if (usecs >= ((u64)(U64_MAX / NSEC_PER_USEC)))
++		return nsecs_to_jiffies(U64_MAX);
++
++	return nsecs_to_jiffies(usecs * NSEC_PER_USEC);
++}
++
+ static int _hl_interrupt_wait_ioctl(struct hl_device *hdev, struct hl_ctx *ctx,
+-				u32 timeout_us, u64 user_address,
++				u64 timeout_us, u64 user_address,
+ 				u64 target_value, u16 interrupt_offset,
+ 				enum hl_cs_wait_status *status,
+ 				u64 *timestamp)
+@@ -2778,10 +2793,7 @@ static int _hl_interrupt_wait_ioctl(struct hl_device *hdev, struct hl_ctx *ctx,
+ 	long completion_rc;
+ 	int rc = 0;
  
- 	ath10k_htt_tx_free_msdu_id(htt, tx_done->msdu_id);
- 	ath10k_htt_tx_dec_pending(htt);
--	if (htt->num_pending_tx == 0)
--		wake_up(&htt->empty_tx_wq);
- 	spin_unlock_bh(&htt->tx_lock);
+-	if (timeout_us == U32_MAX)
+-		timeout = timeout_us;
+-	else
+-		timeout = usecs_to_jiffies(timeout_us);
++	timeout = hl_usecs64_to_jiffies(timeout_us);
  
- 	rcu_read_lock();
+ 	hl_ctx_get(hdev, ctx);
+ 
+diff --git a/include/uapi/misc/habanalabs.h b/include/uapi/misc/habanalabs.h
+index 00b3095904995..c5760acebdd1d 100644
+--- a/include/uapi/misc/habanalabs.h
++++ b/include/uapi/misc/habanalabs.h
+@@ -911,14 +911,18 @@ struct hl_wait_cs_in {
+ 	 */
+ 	__u32 flags;
+ 
+-	/* Multi CS API info- valid entries in multi-CS array */
+-	__u8 seq_arr_len;
+-	__u8 pad[3];
++	union {
++		struct {
++			/* Multi CS API info- valid entries in multi-CS array */
++			__u8 seq_arr_len;
++			__u8 pad[7];
++		};
+ 
+-	/* Absolute timeout to wait for an interrupt in microseconds.
+-	 * Relevant only when HL_WAIT_CS_FLAGS_INTERRUPT is set
+-	 */
+-	__u32 interrupt_timeout_us;
++		/* Absolute timeout to wait for an interrupt in microseconds.
++		 * Relevant only when HL_WAIT_CS_FLAGS_INTERRUPT is set
++		 */
++		__u64 interrupt_timeout_us;
++	};
+ };
+ 
+ #define HL_WAIT_CS_STATUS_COMPLETED	0
 -- 
 2.34.1
 

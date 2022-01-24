@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C3F49A2B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:00:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D877A49A747
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2364044AbiAXXqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:46:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49640 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1845410AbiAXXMO (ORCPT
+        id S1352289AbiAYCgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:36:46 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54132 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385205AbiAXUbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:12:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29579C067A50;
-        Mon, 24 Jan 2022 13:19:21 -0800 (PST)
+        Mon, 24 Jan 2022 15:31:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCBAA614D9;
-        Mon, 24 Jan 2022 21:19:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6E25C340E4;
-        Mon, 24 Jan 2022 21:19:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EA1861382;
+        Mon, 24 Jan 2022 20:31:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA8B6C340E5;
+        Mon, 24 Jan 2022 20:31:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059160;
-        bh=Q1kC21dAegmZRgPiBknkj/MgOmMj2SG0aFo5rzmAtLA=;
+        s=korg; t=1643056300;
+        bh=jYIRWSiUZSWF2+JFSFBxoVE0otIiJf+SdqOpEdwYg0E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ijf8I1lwug+Q/kVSN3XxQMRw7WEuHyvdYszkCVj8E9n3A7C4azJko1e/2Oe7Taqhk
-         f1WsXLjl32VD/wbrsBthzAXdJ8SryT3f7I3xmz1DKM2radhojXdgKVcGZOJC3AB5Sl
-         kKODdzhJrAIZXjejjdJmdCHSBL3dFLPQSGIlfe9E=
+        b=apku6Q1OctwavvNQ5sjJsMGZlqVWYYk9401xdpKnp3wqe6xu2UEIPYQ0pMvB2GD0X
+         ZzmSjXnbaA/ycgIChNrHcKw7lfXev7A3lNRGn/962kSxdNDUMCFo5YwxDdBRRFAxFZ
+         9NrXzYlmjV4MsiI1hFLw3M8ClandQp/KdwlNiK1M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Taniya Das <tdas@codeaurora.org>,
-        Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0524/1039] clk: qcom: gcc-sc7280: Mark gcc_cfg_noc_lpass_clk always enabled
+Subject: [PATCH 5.15 396/846] misc: at25: Make driver OF independent again
 Date:   Mon, 24 Jan 2022 19:38:33 +0100
-Message-Id: <20220124184142.900566554@linuxfoundation.org>
+Message-Id: <20220124184114.618403515@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,35 +46,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Taniya Das <tdas@codeaurora.org>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-[ Upstream commit 9c337073d9d81a145434b22f42dc3128ecd17730 ]
+[ Upstream commit 5b557298d7d09cce04e0565a535fbca63661724a ]
 
-The gcc cfg noc lpass clock is required to be always enabled for the
-LPASS core and audio drivers to be functional.
+The commit f60e7074902a ("misc: at25: Make use of device property API")
+made a good job by enabling the driver for non-OF platforms, but the
+recent commit 604288bc6196 ("nvmem: eeprom: at25: fix type compiler warnings")
+brought that back.
 
-Fixes: a3cc092196ef ("clk: qcom: Add Global Clock controller (GCC) driver for SC7280")
-Signed-off-by: Taniya Das <tdas@codeaurora.org>
-Link: https://lore.kernel.org/r/1640018638-19436-4-git-send-email-tdas@codeaurora.org
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Restore greatness of the driver once again.
+
+Fixes: eab61fb1cc2e ("nvmem: eeprom: at25: fram discovery simplification")
+Fixes: fd307a4ad332 ("nvmem: prepare basics for FRAM support")
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Link: https://lore.kernel.org/r/20211125212729.86585-2-andriy.shevchenko@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/qcom/gcc-sc7280.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/misc/eeprom/at25.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/clk/qcom/gcc-sc7280.c b/drivers/clk/qcom/gcc-sc7280.c
-index 8fb6bd69f240e..423627d49719c 100644
---- a/drivers/clk/qcom/gcc-sc7280.c
-+++ b/drivers/clk/qcom/gcc-sc7280.c
-@@ -2917,7 +2917,7 @@ static struct clk_branch gcc_cfg_noc_lpass_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_cfg_noc_lpass_clk",
--			.ops = &clk_branch2_ops,
-+			.ops = &clk_branch2_aon_ops,
- 		},
- 	},
- };
+diff --git a/drivers/misc/eeprom/at25.c b/drivers/misc/eeprom/at25.c
+index b38978a3b3ffa..9193b812bc07e 100644
+--- a/drivers/misc/eeprom/at25.c
++++ b/drivers/misc/eeprom/at25.c
+@@ -17,8 +17,6 @@
+ #include <linux/spi/spi.h>
+ #include <linux/spi/eeprom.h>
+ #include <linux/property.h>
+-#include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/math.h>
+ 
+ /*
+@@ -380,13 +378,14 @@ static int at25_probe(struct spi_device *spi)
+ 	int			sr;
+ 	u8 id[FM25_ID_LEN];
+ 	u8 sernum[FM25_SN_LEN];
++	bool is_fram;
+ 	int i;
+-	const struct of_device_id *match;
+-	bool is_fram = 0;
+ 
+-	match = of_match_device(of_match_ptr(at25_of_match), &spi->dev);
+-	if (match && !strcmp(match->compatible, "cypress,fm25"))
+-		is_fram = 1;
++	err = device_property_match_string(&spi->dev, "compatible", "cypress,fm25");
++	if (err >= 0)
++		is_fram = true;
++	else
++		is_fram = false;
+ 
+ 	at25 = devm_kzalloc(&spi->dev, sizeof(struct at25_data), GFP_KERNEL);
+ 	if (!at25)
 -- 
 2.34.1
 

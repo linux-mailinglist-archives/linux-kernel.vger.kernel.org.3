@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D41B4991A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:14:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA4F499187
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354819AbiAXUMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:12:45 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41620 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351561AbiAXTyQ (ORCPT
+        id S1378067AbiAXULh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:11:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356682AbiAXTxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:54:16 -0500
+        Mon, 24 Jan 2022 14:53:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1824C0613A6;
+        Mon, 24 Jan 2022 11:26:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 92AC6B811F3;
-        Mon, 24 Jan 2022 19:54:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA15C340E5;
-        Mon, 24 Jan 2022 19:54:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D6CCB81240;
+        Mon, 24 Jan 2022 19:26:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6E1DC339CC;
+        Mon, 24 Jan 2022 19:26:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054053;
-        bh=gyHa6h3IF00eYz9MNCK5cW5GOUIyi5XlR9+BBKvvDCg=;
+        s=korg; t=1643052398;
+        bh=lUHBLmJPWPHY9xfX0f7oW/LhUvOKBWyNMSXZN69tKvo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P9K1DZFwnkduB+HUVLggpDXLwSx8SNOaLoryM/2YI7vHjiO97Cq8f1suFSynivM9v
-         H8nlNYIh4VI/d+u9BsM33m7Nu0wofFr2pYliyFOWlmIMfhZ1ofCngGfVINQQh0MMO3
-         HNgUa3BtATgrt0TfVe4r5l02Uu/vOx9dmTnLoWhc=
+        b=J1esuzkOf5o2e8ciRTwNfR4YdyyQ6fV3vkARvZxCqG0npTBw/jUuMLUnCF9fLYfuI
+         Gx8XXGsjtdYWpRMeZuFdOhkF4W/dspi4seoyCxlkw9Mj9B1CDF4bX8orH4BizaPRLw
+         YadGTTkNl23zjDvDyqbolR2bLgKRK0NsNcwHoYN4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexey Dobriyan <adobriyan@gmail.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Jammy Huang <jammy_huang@aspeedtech.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 264/563] scsi: ufs: Fix race conditions related to driver data
+Subject: [PATCH 5.4 045/320] media: aspeed: Update signal status immediately to ensure sane hw state
 Date:   Mon, 24 Jan 2022 19:40:29 +0100
-Message-Id: <20220124184033.562806838@linuxfoundation.org>
+Message-Id: <20220124183955.277750504@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,85 +51,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bart Van Assche <bvanassche@acm.org>
+From: Jammy Huang <jammy_huang@aspeedtech.com>
 
-[ Upstream commit 21ad0e49085deb22c094f91f9da57319a97188e4 ]
+[ Upstream commit af6d1bde395cac174ee71adcd3fa43f6435c7206 ]
 
-The driver data pointer must be set before any callbacks are registered
-that use that pointer. Hence move the initialization of that pointer from
-after the ufshcd_init() call to inside ufshcd_init().
+If res-chg, VE_INTERRUPT_MODE_DETECT_WD irq will be raised. But
+v4l2_input_status won't be updated to no-signal immediately until
+aspeed_video_get_resolution() in aspeed_video_resolution_work().
 
-Link: https://lore.kernel.org/r/20211203231950.193369-7-bvanassche@acm.org
-Fixes: 3b1d05807a9a ("[SCSI] ufs: Segregate PCI Specific Code")
-Reported-by: Alexey Dobriyan <adobriyan@gmail.com>
-Tested-by: Bean Huo <beanhuo@micron.com>
-Reviewed-by: Bean Huo <beanhuo@micron.com>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+During the period of time, aspeed_video_start_frame() could be called
+because it doesn't know signal becomes unstable now. If it goes with
+aspeed_video_init_regs() of aspeed_video_irq_res_change()
+simultaneously, it will mess up hw state.
+
+To fix this problem, v4l2_input_status is updated to no-signal
+immediately for VE_INTERRUPT_MODE_DETECT_WD irq.
+
+Fixes: d2b4387f3bdf ("media: platform: Add Aspeed Video Engine driver")
+Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+Acked-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/ufs/tc-dwc-g210-pci.c | 1 -
- drivers/scsi/ufs/ufshcd-pci.c      | 2 --
- drivers/scsi/ufs/ufshcd-pltfrm.c   | 2 --
- drivers/scsi/ufs/ufshcd.c          | 7 +++++++
- 4 files changed, 7 insertions(+), 5 deletions(-)
+ drivers/media/platform/aspeed-video.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/ufs/tc-dwc-g210-pci.c b/drivers/scsi/ufs/tc-dwc-g210-pci.c
-index 67a6a61154b71..4e471484539d2 100644
---- a/drivers/scsi/ufs/tc-dwc-g210-pci.c
-+++ b/drivers/scsi/ufs/tc-dwc-g210-pci.c
-@@ -135,7 +135,6 @@ tc_dwc_g210_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		return err;
- 	}
+diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+index be1238f22b8ae..1e0867016bf37 100644
+--- a/drivers/media/platform/aspeed-video.c
++++ b/drivers/media/platform/aspeed-video.c
+@@ -533,6 +533,8 @@ static void aspeed_video_irq_res_change(struct aspeed_video *video, ulong delay)
+ 	set_bit(VIDEO_RES_CHANGE, &video->flags);
+ 	clear_bit(VIDEO_FRAME_INPRG, &video->flags);
  
--	pci_set_drvdata(pdev, hba);
- 	pm_runtime_put_noidle(&pdev->dev);
- 	pm_runtime_allow(&pdev->dev);
- 
-diff --git a/drivers/scsi/ufs/ufshcd-pci.c b/drivers/scsi/ufs/ufshcd-pci.c
-index fadd566025b86..4bf8ec88676ee 100644
---- a/drivers/scsi/ufs/ufshcd-pci.c
-+++ b/drivers/scsi/ufs/ufshcd-pci.c
-@@ -347,8 +347,6 @@ ufshcd_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		return err;
- 	}
- 
--	pci_set_drvdata(pdev, hba);
--
- 	hba->vops = (struct ufs_hba_variant_ops *)id->driver_data;
- 
- 	err = ufshcd_init(hba, mmio_base, pdev->irq);
-diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
-index 8c92d1bde64be..e49505534d498 100644
---- a/drivers/scsi/ufs/ufshcd-pltfrm.c
-+++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
-@@ -412,8 +412,6 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
- 		goto dealloc_host;
- 	}
- 
--	platform_set_drvdata(pdev, hba);
--
- 	pm_runtime_set_active(&pdev->dev);
- 	pm_runtime_enable(&pdev->dev);
- 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index e3a9a02cadf5a..bf302776340ce 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -9085,6 +9085,13 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *mmio_base, unsigned int irq)
- 	struct device *dev = hba->dev;
- 	char eh_wq_name[sizeof("ufs_eh_wq_00")];
- 
-+	/*
-+	 * dev_set_drvdata() must be called before any callbacks are registered
-+	 * that use dev_get_drvdata() (frequency scaling, clock scaling, hwmon,
-+	 * sysfs).
-+	 */
-+	dev_set_drvdata(dev, hba);
++	video->v4l2_input_status = V4L2_IN_ST_NO_SIGNAL;
 +
- 	if (!mmio_base) {
- 		dev_err(hba->dev,
- 		"Invalid memory reference for mmio_base is NULL\n");
+ 	aspeed_video_off(video);
+ 	aspeed_video_bufs_done(video, VB2_BUF_STATE_ERROR);
+ 
+@@ -1315,7 +1317,6 @@ static void aspeed_video_resolution_work(struct work_struct *work)
+ 	struct delayed_work *dwork = to_delayed_work(work);
+ 	struct aspeed_video *video = container_of(dwork, struct aspeed_video,
+ 						  res_work);
+-	u32 input_status = video->v4l2_input_status;
+ 
+ 	aspeed_video_on(video);
+ 
+@@ -1328,8 +1329,7 @@ static void aspeed_video_resolution_work(struct work_struct *work)
+ 	aspeed_video_get_resolution(video);
+ 
+ 	if (video->detected_timings.width != video->active_timings.width ||
+-	    video->detected_timings.height != video->active_timings.height ||
+-	    input_status != video->v4l2_input_status) {
++	    video->detected_timings.height != video->active_timings.height) {
+ 		static const struct v4l2_event ev = {
+ 			.type = V4L2_EVENT_SOURCE_CHANGE,
+ 			.u.src_change.changes = V4L2_EVENT_SRC_CH_RESOLUTION,
 -- 
 2.34.1
 

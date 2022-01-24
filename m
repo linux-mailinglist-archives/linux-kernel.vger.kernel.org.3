@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC04949958F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80CAE499C3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:07:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351617AbiAXUwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:52:53 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:53096 "EHLO
+        id S1578149AbiAXWBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:01:48 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41660 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384621AbiAXUaP (ORCPT
+        with ESMTP id S1450321AbiAXVUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:30:15 -0500
+        Mon, 24 Jan 2022 16:20:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 813A961512;
-        Mon, 24 Jan 2022 20:30:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F046C340E5;
-        Mon, 24 Jan 2022 20:30:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 327D4611C8;
+        Mon, 24 Jan 2022 21:20:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11F1EC340E4;
+        Mon, 24 Jan 2022 21:20:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056214;
-        bh=eXD3O4QmX5J7aE4pQ1f46f7WdUCuth2V6BwFwk8xKBY=;
+        s=korg; t=1643059214;
+        bh=zJJCjk/TJ9AzJOpeI4ISVaIgitdR7n9T84pedxcLQjQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Huxj35rT2hgAn0hzZDRNXXZ1n0E5Zw9Hcx+DTjQNRycbmB3aVaUT7DZ3huxC2cECN
-         kDOJfRcERZmuCNs0XTCEtrT3A3QLCq3qpe4pqtpy4vlZYKvrA5o7ppfQ5aRvTnELlR
-         SrRjspmGXbF44V0BEXUEouqqI/6RJIy3cot3iVfc=
+        b=nsyH7H/a3X7V93Mt1+YXFjtPExby1OXgbdB59C9E8fR7Fqvj77vpm81x7pf7dLnro
+         xPUF3WQx5xtg4OzGWENTZsWWVqhfrtFcrMF0ZZLHnf09EKSC25LlKpcEk4JI5wflFw
+         PVDICukPPcaVaSXz05QLG4+sHU+bzyqB81H5dzsQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Avihai Horon <avihaih@nvidia.com>,
-        Mark Zhang <markzhang@nvidia.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        stable@vger.kernel.org, Wei Yongjun <weiyongjun1@huawei.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 410/846] RDMA/core: Let ib_find_gid() continue search even after empty entry
-Date:   Mon, 24 Jan 2022 19:38:47 +0100
-Message-Id: <20220124184115.121049627@linuxfoundation.org>
+Subject: [PATCH 5.16 0540/1039] Bluetooth: Fix debugfs entry leak in hci_register_dev()
+Date:   Mon, 24 Jan 2022 19:38:49 +0100
+Message-Id: <20220124184143.426234413@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,45 +46,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Avihai Horon <avihaih@nvidia.com>
+From: Wei Yongjun <weiyongjun1@huawei.com>
 
-[ Upstream commit 483d805191a23191f8294bbf9b4e94836f5d92e4 ]
+[ Upstream commit 5a4bb6a8e981d3d0d492aa38412ee80b21033177 ]
 
-Currently, ib_find_gid() will stop searching after encountering the first
-empty GID table entry. This behavior is wrong since neither IB nor RoCE
-spec enforce tightly packed GID tables.
+Fault injection test report debugfs entry leak as follows:
 
-For example, when a valid GID entry exists at index N, and if a GID entry
-is empty at index N-1, ib_find_gid() will fail to find the valid entry.
+debugfs: Directory 'hci0' with parent 'bluetooth' already present!
 
-Fix it by making ib_find_gid() continue searching even after encountering
-missing entries.
+When register_pm_notifier() failed in hci_register_dev(), the debugfs
+create by debugfs_create_dir() do not removed in the error handing path.
 
-Fixes: 5eb620c81ce3 ("IB/core: Add helpers for uncached GID and P_Key searches")
-Link: https://lore.kernel.org/r/e55d331b96cecfc2cf19803d16e7109ea966882d.1639055490.git.leonro@nvidia.com
-Signed-off-by: Avihai Horon <avihaih@nvidia.com>
-Reviewed-by: Mark Zhang <markzhang@nvidia.com>
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Add the remove debugfs code to fix it.
+
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/core/device.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/bluetooth/hci_core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/infiniband/core/device.c b/drivers/infiniband/core/device.c
-index f4814bb7f082f..6ab46648af909 100644
---- a/drivers/infiniband/core/device.c
-+++ b/drivers/infiniband/core/device.c
-@@ -2461,7 +2461,8 @@ int ib_find_gid(struct ib_device *device, union ib_gid *gid,
- 		     ++i) {
- 			ret = rdma_query_gid(device, port, i, &tmp_gid);
- 			if (ret)
--				return ret;
-+				continue;
-+
- 			if (!memcmp(&tmp_gid, gid, sizeof *gid)) {
- 				*port_num = port;
- 				if (index)
+diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+index 2cf77d76c50be..6c00ce302f095 100644
+--- a/net/bluetooth/hci_core.c
++++ b/net/bluetooth/hci_core.c
+@@ -3883,6 +3883,7 @@ int hci_register_dev(struct hci_dev *hdev)
+ 	return id;
+ 
+ err_wqueue:
++	debugfs_remove_recursive(hdev->debugfs);
+ 	destroy_workqueue(hdev->workqueue);
+ 	destroy_workqueue(hdev->req_workqueue);
+ err:
 -- 
 2.34.1
 

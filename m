@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4D8499A90
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:55:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A51499509
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:08:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573509AbiAXVpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:45:01 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:60440 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447362AbiAXVKd (ORCPT
+        id S1392074AbiAXUuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:50:24 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:48710 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345948AbiAXUWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:10:33 -0500
+        Mon, 24 Jan 2022 15:22:46 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 336E6B80FA3;
-        Mon, 24 Jan 2022 21:10:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67582C340E5;
-        Mon, 24 Jan 2022 21:10:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FBEB61383;
+        Mon, 24 Jan 2022 20:22:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A3BC340E5;
+        Mon, 24 Jan 2022 20:22:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058631;
-        bh=w2KZk+H0QJEvW7PC3K2aXvV3aUrFbePvjqUXTQZJgbs=;
+        s=korg; t=1643055764;
+        bh=LZ+oF8h5/aRb0d/1iD3kpr3uBL7mUhoFezCNIr6lF/E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TwDKjX1sLnaj+XEaA+euhACiwhKojaAKVMJMnQk09wenqmB3/1hpuC4ws25xNn2Wn
-         tQHgx3YXK/jyrbglvBGhhQijLH/kHRLtJbx/RpxhOFSMsMkwsrQecjr9zb+7uBJZVT
-         psjOorLahFUwFlYeEb8aqW+tcat7oYIllwjLUVZo=
+        b=B0ZOxOyu4d7axJpWV5SanvvjU7DDeIlsikQAgal4Zo8sKRlkvH63HuOqEwowZRwrQ
+         kpsyyfhOOKzBJ6m5j1YbO1qp+yWhSYebTnvwvin7NrOSrz1HMffyTgy3tYS3IUTxwl
+         uzEHOzOP0QEicb8RZl2R3Ww73T7hyd4/XWk+LkIQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Deren Wu <deren.wu@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0352/1039] mt76: mt7921: fix a possible race enabling/disabling runtime-pm
-Date:   Mon, 24 Jan 2022 19:35:41 +0100
-Message-Id: <20220124184137.115148951@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 225/846] drm/msm/dsi: fix initialization in the bonded DSI case
+Date:   Mon, 24 Jan 2022 19:35:42 +0100
+Message-Id: <20220124184108.678922106@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,80 +48,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit d430dffbe9dd30759f3c64b65bf85b0245c8d8ab ]
+[ Upstream commit 92cb1bedde9dba78d802fe2510949743a2581aed ]
 
-Fix a possible race enabling/disabling runtime-pm between
-mt7921_pm_set() and mt7921_poll_rx() since mt7921_pm_wake_work()
-always schedules rx-napi callback and it will trigger
-mt7921_pm_power_save_work routine putting chip to in low-power state
-during mt7921_pm_set processing.
+Commit 739b4e7756d3 ("drm/msm/dsi: Fix an error code in
+msm_dsi_modeset_init()") changed msm_dsi_modeset_init() to return an
+error code in case msm_dsi_manager_validate_current_config() returns
+false. However this is not an error case, but a slave DSI of the bonded
+DSI link. In this case msm_dsi_modeset_init() should return 0, but just
+skip connector and bridge initialization.
 
-Suggested-by: Deren Wu <deren.wu@mediatek.com>
-Tested-by: Deren Wu <deren.wu@mediatek.com>
-Fixes: 1d8efc741df8 ("mt76: mt7921: introduce Runtime PM support")
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/0f3e075a2033dc05f09dab4059e5be8cbdccc239.1640094847.git.lorenzo@kernel.org
+To reduce possible confusion, drop the
+msm_dsi_manager_validate_current_config() function, and specif 'bonded
+&& !master' condition directly in the msm_dsi_modeset_init().
+
+Fixes: 739b4e7756d3 ("drm/msm/dsi: Fix an error code in msm_dsi_modeset_init()")
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Link: https://lore.kernel.org/r/20211125180114.561278-1-dmitry.baryshkov@linaro.org
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt76_connac_mac.c |  3 ---
- drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c  | 12 +++++++++---
- 2 files changed, 9 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/msm/dsi/dsi.c         | 10 +++++++---
+ drivers/gpu/drm/msm/dsi/dsi.h         |  1 -
+ drivers/gpu/drm/msm/dsi/dsi_manager.c | 17 -----------------
+ 3 files changed, 7 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt76_connac_mac.c b/drivers/net/wireless/mediatek/mt76/mt76_connac_mac.c
-index af43bcb545781..306e9eaea9177 100644
---- a/drivers/net/wireless/mediatek/mt76/mt76_connac_mac.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt76_connac_mac.c
-@@ -7,9 +7,6 @@ int mt76_connac_pm_wake(struct mt76_phy *phy, struct mt76_connac_pm *pm)
- {
- 	struct mt76_dev *dev = phy->dev;
- 
--	if (!pm->enable)
--		return 0;
--
- 	if (mt76_is_usb(dev))
- 		return 0;
- 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c b/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c
-index 7cdfdf83529f6..86fd7292b229f 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c
-@@ -276,7 +276,7 @@ mt7921_pm_set(void *data, u64 val)
- 	struct mt7921_dev *dev = data;
- 	struct mt76_connac_pm *pm = &dev->pm;
- 
--	mt7921_mutex_acquire(dev);
-+	mutex_lock(&dev->mt76.mutex);
- 
- 	if (val == pm->enable)
- 		goto out;
-@@ -285,7 +285,11 @@ mt7921_pm_set(void *data, u64 val)
- 		pm->stats.last_wake_event = jiffies;
- 		pm->stats.last_doze_event = jiffies;
+diff --git a/drivers/gpu/drm/msm/dsi/dsi.c b/drivers/gpu/drm/msm/dsi/dsi.c
+index 75ae3008b68f4..fc280cc434943 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi.c
++++ b/drivers/gpu/drm/msm/dsi/dsi.c
+@@ -215,9 +215,13 @@ int msm_dsi_modeset_init(struct msm_dsi *msm_dsi, struct drm_device *dev,
+ 		goto fail;
  	}
--	pm->enable = val;
-+	/* make sure the chip is awake here and ps_work is scheduled
-+	 * just at end of the this routine.
-+	 */
-+	pm->enable = false;
-+	mt76_connac_pm_wake(&dev->mphy, pm);
  
- 	ieee80211_iterate_active_interfaces(mt76_hw(dev),
- 					    IEEE80211_IFACE_ITER_RESUME_ALL,
-@@ -293,8 +297,10 @@ mt7921_pm_set(void *data, u64 val)
+-	if (!msm_dsi_manager_validate_current_config(msm_dsi->id)) {
+-		ret = -EINVAL;
+-		goto fail;
++	if (msm_dsi_is_bonded_dsi(msm_dsi) &&
++	    !msm_dsi_is_master_dsi(msm_dsi)) {
++		/*
++		 * Do not return an eror here,
++		 * Just skip creating encoder/connector for the slave-DSI.
++		 */
++		return 0;
+ 	}
  
- 	mt76_connac_mcu_set_deep_sleep(&dev->mt76, pm->ds_enable);
+ 	msm_dsi->encoder = encoder;
+diff --git a/drivers/gpu/drm/msm/dsi/dsi.h b/drivers/gpu/drm/msm/dsi/dsi.h
+index 569c8ff062ba4..a63666e59d19e 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi.h
++++ b/drivers/gpu/drm/msm/dsi/dsi.h
+@@ -82,7 +82,6 @@ int msm_dsi_manager_cmd_xfer(int id, const struct mipi_dsi_msg *msg);
+ bool msm_dsi_manager_cmd_xfer_trigger(int id, u32 dma_base, u32 len);
+ int msm_dsi_manager_register(struct msm_dsi *msm_dsi);
+ void msm_dsi_manager_unregister(struct msm_dsi *msm_dsi);
+-bool msm_dsi_manager_validate_current_config(u8 id);
+ void msm_dsi_manager_tpg_enable(void);
  
-+	pm->enable = val;
-+	mt76_connac_power_save_sched(&dev->mphy, pm);
- out:
--	mt7921_mutex_release(dev);
-+	mutex_unlock(&dev->mt76.mutex);
- 
- 	return 0;
+ /* msm dsi */
+diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+index fb4ccffdcfe13..fa4c396df6a92 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
++++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+@@ -647,23 +647,6 @@ fail:
+ 	return ERR_PTR(ret);
  }
+ 
+-bool msm_dsi_manager_validate_current_config(u8 id)
+-{
+-	bool is_bonded_dsi = IS_BONDED_DSI();
+-
+-	/*
+-	 * For bonded DSI, we only have one drm panel. For this
+-	 * use case, we register only one bridge/connector.
+-	 * Skip bridge/connector initialisation if it is
+-	 * slave-DSI for bonded DSI configuration.
+-	 */
+-	if (is_bonded_dsi && !IS_MASTER_DSI_LINK(id)) {
+-		DBG("Skip bridge registration for slave DSI->id: %d\n", id);
+-		return false;
+-	}
+-	return true;
+-}
+-
+ /* initialize bridge */
+ struct drm_bridge *msm_dsi_manager_bridge_init(u8 id)
+ {
 -- 
 2.34.1
 

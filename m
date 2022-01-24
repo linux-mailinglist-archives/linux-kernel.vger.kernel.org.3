@@ -2,127 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D6FC498684
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E68C498686
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:23:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244435AbiAXRWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:22:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50136 "EHLO
+        id S241269AbiAXRW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:22:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241070AbiAXRWo (ORCPT
+        with ESMTP id S244445AbiAXRWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:22:44 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5041DC061401
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:22:44 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id s61-20020a17090a69c300b001b4d0427ea2so21115624pjj.4
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:22:44 -0800 (PST)
+        Mon, 24 Jan 2022 12:22:54 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DA7C06173B;
+        Mon, 24 Jan 2022 09:22:54 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id v6so20379838iom.6;
+        Mon, 24 Jan 2022 09:22:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MrF7wrhR/r11uhM1Zd7BV21fovtaCNxXQvw8C85WbLY=;
-        b=GLBFXmuYlThw8gVudTodEivYKQS9SKar/0ZJSgx9vZ2jV0i1C2mAs9UMhy+CDEzy5d
-         IFZTJOCLmtmr4tACBXyGpVkTCutTOkPjFKFsiXQuW10B7yMTisNiToMK0lgAYfmQGU2o
-         x5zzA/bx0jdyqosLimsGRim5t9m/10nNbO/oc=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E8MQ4czb3ly2s0ZsHOR2X1HdMa1yeCdwsrvL3BnehgA=;
+        b=Wg2tUc+O43y+Z/MoAaE+dIs/RaMYZg3sY5Qr5LVg3GlCgc4PYr2PKS5NFnGiQjW4/E
+         Xg/e0p94De6lky+3hq+TVAtuI2D+mKpdkNvAAECOKSakxmY9LtOjYTMczIv9I47a0LC1
+         HBjDdJc9vbqBUHUHY0DR75+K4I2j5K8eQpslOyIm1nTgTPcbtMj3NKddE4Wls/j+tgOA
+         O8fIaLFeiXmzv4zKTd3GC1nagNriRzRL+urBT1QGxlw1swAIdBycI78zgT9zB5N1TvLn
+         zmV0n3bSt1HC3AK81NOMCBIbYQ515Gh8IGvP1mqVXHCuT1K2x1pnh1a63Tub/P8o1R/I
+         87wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MrF7wrhR/r11uhM1Zd7BV21fovtaCNxXQvw8C85WbLY=;
-        b=hTockWvTaTY8tCjMncvR+J7t5OMXgRqCLoJwf+gzXtmNiIz/r+wLFhaefz+sK1muU+
-         0Lk1QbN8+ZMxjMPpftdVg8KsRXBwQrwDEWUFDDOR4zlCmfSHQx4Bj//0b51q7LiGhHAW
-         SUsCGlbPNRSnasJU3Mg888V3NKM64mTDh+0v99LvOCnfB5KKNaz947116lXJE1Z+Db+B
-         bukmOwO304V0anFA7j2fSqzdNQKjGtZ7xwPxEI1HOWTl32tKxyrFm+pL86qOfcODfbXy
-         1PpN6BN5S5V7iVrPflrQynj7ZkE1+s4dqu9+4JTt+mQ4O2QfZlNTy+kV3IyhWtMwYQT/
-         MSqw==
-X-Gm-Message-State: AOAM531eHql7/Go69kqBP7Tuo1+BZQue1haUozdcvhtwF7rgqZetqBne
-        aY9NeeULHnXvT+nAdBR2lGz8Wg==
-X-Google-Smtp-Source: ABdhPJzrcJk7jTA+I8Ws2u0wMgyvDme0Vzcmms3hN2SNCAdRMMOG6NzZq8hGBo8rxEKZTG9pux+DpQ==
-X-Received: by 2002:a17:90b:380a:: with SMTP id mq10mr2879344pjb.147.1643044963893;
-        Mon, 24 Jan 2022 09:22:43 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id om12sm8581896pjb.48.2022.01.24.09.22.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 09:22:43 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Saeed Mahameed <saeedm@nvidia.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH RESEND] net/mlx5e: Use struct_group() for memcpy() region
-Date:   Mon, 24 Jan 2022 09:22:41 -0800
-Message-Id: <20220124172242.2410996-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E8MQ4czb3ly2s0ZsHOR2X1HdMa1yeCdwsrvL3BnehgA=;
+        b=N9jSq/+ZLoFnKZQspHm7O6uVybtOu4DRTHiXeL35cK93/0RxCIsGqZczEqpcr1eP2F
+         dFWHDgJ4xpC+i0togHMp1ISR1404poS2COt9urjwlixNMZXTs5wDwRt+/qY8KadFf/xP
+         SNq2p6h9l6NWb09THfh6X7gzvxA6lycy8gklDj7CqmJ+uHf3KAs4zsaxi3RrVfCMV60p
+         ko88wDe6C8tTkDjQbqj5rmhhuH3SgwZygmWLaXmMLS/a1wcp8314d+8QaiPVzUOn73TV
+         4vI4VYxshxCCvBotxc4UbLlbR5oiwc9fde1kc33AADR1e+WaLReqwA896lsXd6fH9Zya
+         NLRg==
+X-Gm-Message-State: AOAM5304ehYKzqhFCymlChTVQ7SsQRFC8DkYI7O/cUraceUoriXpbRvM
+        5yZ96aRC+9gWVspzYT9CmcMGTww+i+AjYKyoinpXxSIbyKk=
+X-Google-Smtp-Source: ABdhPJyQnGtfIbojLhJ7nOqwsG6cQ6YUdbeVqP4NbJ9FV0B/g8EYeQIMJZJ+MT74ICkdxcLPsKBJ+5Yw/kAAzmlA9CA=
+X-Received: by 2002:a02:b382:: with SMTP id p2mr7731338jan.71.1643044973568;
+ Mon, 24 Jan 2022 09:22:53 -0800 (PST)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2499; h=from:subject; bh=1Hy/h6xR6CfzT4qu6mjl1eEfD5rBqmasVCiGJ8yfoaE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh7uBhn8A0lQDkjRJO9V5Sl0KNR5PpwAX0g9yKG64U XkTagiOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYe7gYQAKCRCJcvTf3G3AJrh+D/ 9XD/78mqJDQUOAqNi51dHFcJMTBtQW/5SOOscaza/hl+yTU06iM1xjcDFcsLZb7jaJ4KYcV/EZAnXv l73wUOrNTN38IgVBXoE6OMtjQHaJwjcbzEhxfcnx3ncVKWRelfg1Wcz3UCHgAp621U13ng7iIXtQFg JKnUuwTjUH8vLpNlDdzLwHJqxN7wWA/+r3YU5GGTsWbTGlUZSs4+TPUzhcF48K1Wx5gsWUUBD9lFg5 5oWex5SYi2l7himxmjllot0E3lyw9ot26ak3oWLfRQqqOUet5u4UhWbA1ZBkD6gys1OziqKY2YDzdA L/GNU45qVkr8K5864876AiJ2cFYIFEMng2G2M8xkgH2Pcj0aECmYo+BXt/WC4R5aNKGUbre0I77CKl uCiIH3lTD5mLBNIxe58Lr9ekNwdedX+uNPiZo96/OH0SKqmfp30VohtJJFlB3gauX/slbX9ONDffMR jtuYoEIwR5ODB0gsr3Rku7j/b0nYxJs80sAziKrtJTrlb9tk7RSlanVomFiTGvHxQoI8E8uiRogOG7 7u6sCJqdnF9kLjGpEkjPyi47V741Xkyly/jqjpTJjHzxQHSFinFisqz41YE2HEoINtxxy8kF6n2Rpy +uF1HuWJz6ebx3q5MGvBrhW3cnyzxgaMa1O85G0cJqOg8sujaw7WJe0sV8wQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+References: <20220120020148.1632253-1-pcc@google.com>
+In-Reply-To: <20220120020148.1632253-1-pcc@google.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Mon, 24 Jan 2022 18:22:42 +0100
+Message-ID: <CA+fCnZeC5K+YoFbMg30Gasyq6AXp5WFCxagrsftkT+mJPuBZkQ@mail.gmail.com>
+Subject: Re: [PATCH v3] mm: use compare-exchange operation to set KASAN page tag
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for FORTIFY_SOURCE performing compile-time and run-time
-field bounds checking for memcpy(), memmove(), and memset(), avoid
-intentionally writing across neighboring fields.
+On Thu, Jan 20, 2022 at 3:02 AM Peter Collingbourne <pcc@google.com> wrote:
+>
+> It has been reported that the tag setting operation on newly-allocated
+> pages can cause the page flags to be corrupted when performed
+> concurrently with other flag updates as a result of the use of
+> non-atomic operations. Fix the problem by using a compare-exchange
+> loop to update the tag.
+>
+> Signed-off-by: Peter Collingbourne <pcc@google.com>
+> Link: https://linux-review.googlesource.com/id/I456b24a2b9067d93968d43b4bb3351c0cec63101
+> Fixes: 2813b9c02962 ("kasan, mm, arm64: tag non slab memory allocated via pagealloc")
+> Cc: stable@vger.kernel.org
+> ---
+> v3:
+> - use try_cmpxchg() as suggested by Peter Zijlstra on another
+>   patch
+>
+> v2:
+> - use READ_ONCE()
+>
+>  include/linux/mm.h | 17 ++++++++++++-----
+>  1 file changed, 12 insertions(+), 5 deletions(-)
+>
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index c768a7c81b0b..87473fe52c3f 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -1531,11 +1531,18 @@ static inline u8 page_kasan_tag(const struct page *page)
+>
+>  static inline void page_kasan_tag_set(struct page *page, u8 tag)
+>  {
+> -       if (kasan_enabled()) {
+> -               tag ^= 0xff;
+> -               page->flags &= ~(KASAN_TAG_MASK << KASAN_TAG_PGSHIFT);
+> -               page->flags |= (tag & KASAN_TAG_MASK) << KASAN_TAG_PGSHIFT;
+> -       }
+> +       unsigned long old_flags, flags;
+> +
+> +       if (!kasan_enabled())
+> +               return;
+> +
+> +       tag ^= 0xff;
+> +       old_flags = READ_ONCE(page->flags);
+> +       do {
+> +               flags = old_flags;
+> +               flags &= ~(KASAN_TAG_MASK << KASAN_TAG_PGSHIFT);
+> +               flags |= (tag & KASAN_TAG_MASK) << KASAN_TAG_PGSHIFT;
+> +       } while (unlikely(!try_cmpxchg(&page->flags, &old_flags, flags)));
+>  }
+>
+>  static inline void page_kasan_tag_reset(struct page *page)
+> --
+> 2.34.1.703.g22d0c6ccf7-goog
+>
 
-Use struct_group() in struct vlan_ethhdr around members h_dest and
-h_source, so they can be referenced together. This will allow memcpy()
-and sizeof() to more easily reason about sizes, improve readability,
-and avoid future warnings about writing beyond the end of h_dest.
+Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
 
-"pahole" shows no size nor member offset changes to struct vlan_ethhdr.
-"objdump -d" shows no object code changes.
-
-Cc: Saeed Mahameed <saeedm@nvidia.com>
-Cc: Leon Romanovsky <leon@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org
-Cc: linux-rdma@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-Since this results in no binary differences, I will carry this in my tree
-unless someone else wants to pick it up. It's one of the last remaining
-clean-ups needed for the next step in memcpy() hardening.
----
- drivers/net/ethernet/mellanox/mlx5/core/en_tx.c | 2 +-
- include/linux/if_vlan.h                         | 6 ++++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
-index 7fd33b356cc8..ee7ecb88adc1 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
-@@ -208,7 +208,7 @@ static inline void mlx5e_insert_vlan(void *start, struct sk_buff *skb, u16 ihs)
- 	int cpy1_sz = 2 * ETH_ALEN;
- 	int cpy2_sz = ihs - cpy1_sz;
- 
--	memcpy(vhdr, skb->data, cpy1_sz);
-+	memcpy(&vhdr->addrs, skb->data, cpy1_sz);
- 	vhdr->h_vlan_proto = skb->vlan_proto;
- 	vhdr->h_vlan_TCI = cpu_to_be16(skb_vlan_tag_get(skb));
- 	memcpy(&vhdr->h_vlan_encapsulated_proto, skb->data + cpy1_sz, cpy2_sz);
-diff --git a/include/linux/if_vlan.h b/include/linux/if_vlan.h
-index 8420fe504927..2be4dd7e90a9 100644
---- a/include/linux/if_vlan.h
-+++ b/include/linux/if_vlan.h
-@@ -46,8 +46,10 @@ struct vlan_hdr {
-  *	@h_vlan_encapsulated_proto: packet type ID or len
-  */
- struct vlan_ethhdr {
--	unsigned char	h_dest[ETH_ALEN];
--	unsigned char	h_source[ETH_ALEN];
-+	struct_group(addrs,
-+		unsigned char	h_dest[ETH_ALEN];
-+		unsigned char	h_source[ETH_ALEN];
-+	);
- 	__be16		h_vlan_proto;
- 	__be16		h_vlan_TCI;
- 	__be16		h_vlan_encapsulated_proto;
--- 
-2.30.2
-
+FWIW, try_cmpxchg() doesn't seem to be doing annotated atomic accesses
+when accessing old_flags, so using READ_ONCE() in page_kasan_tag_set()
+seems pointless after all.

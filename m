@@ -2,149 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D241497668
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 01:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C5A49766D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 01:24:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240552AbiAXASj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 19:18:39 -0500
-Received: from mail-bn8nam11on2077.outbound.protection.outlook.com ([40.107.236.77]:26401
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S240530AbiAXASi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 19:18:38 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dzwEvj4ey78DJc7OJUFPNK9Wqa33mIibnIq8ZWScx3f1eSxGizC/ak5UvnDw/gv1sfOYR+dm6R3n4LKzqt9NfBDEbRSoMi2a7pNoNHwpBdHcTXT3qCS354euhs0nsYrr7jui3sLHkhihjucKLO5lJhwV3M1ZdHFA+C0+y0qXumGhEBgEaCWviHIgkjW5kvHz5lodWS3m2bnHGU5Sb+LuW8J1fazxjuD27usRePdnkVIA8ZRYzajFs4GXG1v86cAClawzN+EMiLihBWGL0UKHA/0tJosoCzZZHSp2J09pbPyd7g9UhHukHFyaVizy2cz5HdIAnA1AWmBRqj/4YNSqag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RbM1o7trbnFKNqO5+DrNgQC5CeU0Xj6PmU9C10E33Vw=;
- b=EavaqdZUjqMVPes//W4A2PwUJ9AzLU/gFN5vvHb49VLOHtjw10yHaDZMonKV08TMHErvIYOf1h+CJmRtcfCxDbwt6/X4fQuHkF6EVrnp78znJpAcNappk7tItiz0rWoUPXOuwk95elm0fEfs6EcjZy3fP68Sg0EuusGRHyUxj/Z/TokX4VNXhCGjbP9rFMaXhHLhGJE6CVyIpDZV7fSrWmkrH7t56yX6bnunSPgTtQ2eZjACfLVI2aSuJkXDymwZSlUpMAC4nO526ZPy/3EbjEkbQzlH3vPLtDVQC6wvqZ2RxUBaPWub5xYlz5vzTKOXJK+yb8i+xGjrulwkOAYHlQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=cisco.com smtp.mailfrom=nvidia.com; dmarc=pass
- (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
- (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RbM1o7trbnFKNqO5+DrNgQC5CeU0Xj6PmU9C10E33Vw=;
- b=IcUBKzjDmevhnErF2YnH59XzrjVLGYVHubh1ZBKI48N9LfFxO/PQIOPUduEtbwcfX/ob8mG8fpTFeq50AIL+5B7gbbQv57SISQJOE2G4jw5xQ7NaoYcUUkSNBeN7GC06zfLEa/AolyDU+afabKLgASTStzQGV488ZmssHmg/VM3+vXdip9nKflZkeDBLC0jqZ7kHtr+PynLESbhZfOcsICK5V7uVthlIUwTWYuHMOUfCB/H44KQSrQTZIqi7qbsyNZzJFWP4U4a/Nj6I3ivng27SQkZpA9ETbrKRnYDOOR9+LKMISIqGvAPuwiju6zll2Fv0xciOMlJL/noNtf11gQ==
-Received: from BN9PR03CA0467.namprd03.prod.outlook.com (2603:10b6:408:139::22)
- by MN2PR12MB4047.namprd12.prod.outlook.com (2603:10b6:208:1de::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Mon, 24 Jan
- 2022 00:18:35 +0000
-Received: from BN8NAM11FT051.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:139:cafe::fa) by BN9PR03CA0467.outlook.office365.com
- (2603:10b6:408:139::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7 via Frontend
- Transport; Mon, 24 Jan 2022 00:18:35 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.234) by
- BN8NAM11FT051.mail.protection.outlook.com (10.13.177.66) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4909.7 via Frontend Transport; Mon, 24 Jan 2022 00:18:35 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 24 Jan
- 2022 00:18:34 +0000
-Received: from [172.27.0.119] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Sun, 23 Jan 2022
- 16:18:30 -0800
-Message-ID: <52cb0f32-b705-8d60-71b4-350cc26c5a4b@nvidia.com>
-Date:   Mon, 24 Jan 2022 02:18:27 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH rdma-next 10/11] RDMA/iser: Delete useless module.h
- include
-Content-Language: en-US
-To:     Leon Romanovsky <leon@kernel.org>, Jason Gunthorpe <jgg@nvidia.com>
-CC:     Leon Romanovsky <leonro@nvidia.com>,
-        Christian Benvenuti <benve@cisco.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        <linux-kernel@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        "Zhu Yanjun" <zyjzyj2000@gmail.com>
-References: <cover.1642960861.git.leonro@nvidia.com>
- <bdbf940ca5edbbc649153fa15737b779c073c498.1642960861.git.leonro@nvidia.com>
-From:   Max Gurtovoy <mgurtovoy@nvidia.com>
-In-Reply-To: <bdbf940ca5edbbc649153fa15737b779c073c498.1642960861.git.leonro@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        id S240559AbiAXAYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 19:24:15 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53184 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235008AbiAXAYO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 23 Jan 2022 19:24:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69CB2B80E51;
+        Mon, 24 Jan 2022 00:24:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 440D9C340E3;
+        Mon, 24 Jan 2022 00:24:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642983852;
+        bh=P/lqko8P7xtknEbgcLI6VJ2sVk31CTsnfJpTAf51kzc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lBBXF/Gus2uXDKe22zqfrtIXigjUonbKhX2TOoaBF4bAOru3YrdFtiaLJHLPs5e93
+         KiYidh5zf400FOhYUOfXvD0u187I6gN6oT3i1s/cmvoUZp8OSb2C3glzYdGpXvgjt8
+         UHW/cIV8Pv+37vv1EIAFg34u+si0S8d8H+CHLVkrjPvvx0yuQNAeynDDcsIZlmJo8I
+         mPPdcMSyKY/BADiWiQs/qQtpIOxKA2eu10ZWzhL7NvXnQawm43Vl/UkwCeZgVcfQD2
+         eA8zMx/i2Arw0Ch+v/o3FnaFYI1WwBDj9xQZL1qWhZG7ooTKnU9+rFZi2yYShsvKBu
+         1N6R/xIR7/5vQ==
+Date:   Mon, 24 Jan 2022 09:24:05 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [RFC PATCH v3 0/9] fprobe: Introduce fprobe function entry/exit
+ probe
+Message-Id: <20220124092405.665e9e0fc3ce14b16a1a9fcf@kernel.org>
+In-Reply-To: <Ye3ptcW0eAFRYm58@krava>
+References: <164260419349.657731.13913104835063027148.stgit@devnote2>
+        <CAEf4Bzbbimea3ydwafXSHFiEffYx5zAcwGNKk8Zi6QZ==Vn0Ug@mail.gmail.com>
+        <20220121135510.7cfa6540e31824aa39b1c1b8@kernel.org>
+        <CAEf4Bza0eTft2kjcm9HhKpAm=AuXnGwZfZ+sYpVVBvj93PBreQ@mail.gmail.com>
+        <Ye3ptcW0eAFRYm58@krava>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: drhqmail202.nvidia.com (10.126.190.181) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9d8f1d4e-da8d-4862-3dcf-08d9decf0fc3
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4047:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB4047C6C8915609274A2D797CDE5E9@MN2PR12MB4047.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7cpRthnOyuJdK4mWTQOI/WgpJVPBVtxNuT02F5tMZ1ucc50WD9dEQ4O5j7HoLCBLAR/a4iAHRfxxi5JCcUaF+gVB51WeJMXmiuhDJ8rN0ufzC5TGLsFbNAPmfku6QWQLvO3XxWQAq77FT15L3HBtAibops7R8hh8vQafwosgu6ulVIeigbne9Pts7j0xa25Igu3ANk47vzkwe/cYWzVHuOGKyJAw11D5pZrSR4ellS1TrtZvFC7/e0LfYS+fVDbCq+qVbF9UsB6dmYC4HfWi4xflGzLyuP61Z0b2h5KcqToPZ8Bngd03KTX+Q+x8LJgDtlvyn91fGZlqidQ+S9ThnB2wuu/+RgBSuUOmqJqGKCwmeTz6dZTcTPYN8oFKPSGpSzdPvSVuVMxDSIWPmRONJOCa5VuyaO5PExg51JqmPMH+/67mI29Qrp8e6pFyq4eFKBbj5KvMhPAJH0E5bJpF26byQHxhJDOTccSwqmKMAEfMWN/yUuFlxIF86X5GloxlSF3kAaebiKYG9ZK23shy9DeiNaFCR4bl1zC1bCuyydfA+5qC9FVrzUrRb8kH7P9lGV5BQQw9a2grYPB7nn3Q039G7xpyZBZ4QJrD4iDrVoyTNLMhBfoYBuHMXsQBMM4SQgBl5cItuBK4wgOlrq8jkVCUqvmA6QsIVDZLFcKGtEzNR8e0QEeqImmYZrMOik33LAxyPUUVbJ36DZLktHlmfSjTPZE4LAniwH97EEqZj+HMjv1qj65/+CwmphK8qnwY+2manyJLm6Ipp0dvpfpg/iitRgCKypCOJtss/4EYNPyQatuuedBdrDMqRt9Ur+Wbfw1yAbZw0Clvszd2G+1zNg==
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(40470700004)(46966006)(36840700001)(36756003)(508600001)(186003)(81166007)(86362001)(47076005)(54906003)(83380400001)(4326008)(110136005)(8936002)(70206006)(70586007)(36860700001)(316002)(31696002)(5660300002)(6636002)(16526019)(16576012)(6666004)(82310400004)(426003)(53546011)(40460700003)(8676002)(2906002)(26005)(2616005)(31686004)(336012)(356005)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2022 00:18:35.1967
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9d8f1d4e-da8d-4862-3dcf-08d9decf0fc3
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT051.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4047
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 24 Jan 2022 00:50:13 +0100
+Jiri Olsa <jolsa@redhat.com> wrote:
 
-On 1/23/2022 8:02 PM, Leon Romanovsky wrote:
-> From: Leon Romanovsky <leonro@nvidia.com>
->
-> There is no need in include of module.h in the following files.
->
-> Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-> ---
->   drivers/infiniband/ulp/iser/iser_memory.c | 1 -
->   drivers/infiniband/ulp/iser/iser_verbs.c  | 1 -
->   2 files changed, 2 deletions(-)
->
-> diff --git a/drivers/infiniband/ulp/iser/iser_memory.c b/drivers/infiniband/ulp/iser/iser_memory.c
-> index 660982625488..f1fd05d8609d 100644
-> --- a/drivers/infiniband/ulp/iser/iser_memory.c
-> +++ b/drivers/infiniband/ulp/iser/iser_memory.c
-> @@ -30,7 +30,6 @@
->    * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
->    * SOFTWARE.
->    */
-> -#include <linux/module.h>
->   #include <linux/kernel.h>
->   #include <linux/slab.h>
->   #include <linux/mm.h>
-> diff --git a/drivers/infiniband/ulp/iser/iser_verbs.c b/drivers/infiniband/ulp/iser/iser_verbs.c
-> index 8bf87b073d9b..8893bc27d8f5 100644
-> --- a/drivers/infiniband/ulp/iser/iser_verbs.c
-> +++ b/drivers/infiniband/ulp/iser/iser_verbs.c
-> @@ -32,7 +32,6 @@
->    * SOFTWARE.
->    */
->   #include <linux/kernel.h>
-> -#include <linux/module.h>
->   #include <linux/slab.h>
->   #include <linux/delay.h>
->   
+> On Fri, Jan 21, 2022 at 09:29:00AM -0800, Andrii Nakryiko wrote:
+> > On Thu, Jan 20, 2022 at 8:55 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > >
+> > > On Thu, 20 Jan 2022 14:24:15 -0800
+> > > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> > >
+> > > > On Wed, Jan 19, 2022 at 6:56 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > > > >
+> > > > > Hello Jiri,
+> > > > >
+> > > > > Here is the 3rd version of fprobe. I added some comments and
+> > > > > fixed some issues. But I still saw some problems when I add
+> > > > > your selftest patches.
+> > > > >
+> > > > > This series introduces the fprobe, the function entry/exit probe
+> > > > > with multiple probe point support. This also introduces the rethook
+> > > > > for hooking function return as same as kretprobe does. This
+> > > > > abstraction will help us to generalize the fgraph tracer,
+> > > > > because we can just switch it from rethook in fprobe, depending
+> > > > > on the kernel configuration.
+> > > > >
+> > > > > The patch [1/9] and [7/9] are from Jiri's series[1]. Other libbpf
+> > > > > patches will not be affected by this change.
+> > > > >
+> > > > > [1] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#u
+> > > > >
+> > > > > However, when I applied all other patches on top of this series,
+> > > > > I saw the "#8 bpf_cookie" test case has been stacked (maybe related
+> > > > > to the bpf_cookie issue which Andrii and Jiri talked?) And when I
+> > > > > remove the last selftest patch[2], the selftest stopped at "#112
+> > > > > raw_tp_test_run".
+> > > > >
+> > > > > [2] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#m242d2b3a3775eeb5baba322424b15901e5e78483
+> > > > >
+> > > > > Note that I used tools/testing/selftests/bpf/vmtest.sh to check it.
+> > > > >
+> > > > > This added 2 more out-of-tree patches. [8/9] is for adding wildcard
+> > > > > support to the sample program, [9/9] is a testing patch for replacing
+> > > > > kretprobe trampoline with rethook.
+> > > > > According to this work, I noticed that using rethook in kretprobe
+> > > > > needs 2 steps.
+> > > > >  1. port the rethook on all architectures which supports kretprobes.
+> > > > >     (some arch requires CONFIG_KPROBES for rethook)
+> > > > >  2. replace kretprobe trampoline with rethook for all archs, at once.
+> > > > >     This must be done by one treewide patch.
+> > > > >
+> > > > > Anyway, I'll do the kretprobe update in the next step as another series.
+> > > > > (This testing patch is just for confirming the rethook is correctly
+> > > > >  implemented.)
+> > > > >
+> > > > > BTW, on the x86, ftrace (with fentry) location address is same as
+> > > > > symbol address. But on other archs, it will be different (e.g. arm64
+> > > > > will need 2 instructions to save link-register and call ftrace, the
+> > > > > 2nd instruction will be the ftrace location.)
+> > > > > Does libbpf correctly handle it?
+> 
+> hm, I'm probably missing something, but should this be handled by arm
+> specific kernel code? user passes whatever is found in kallsyms, right?
 
-Looks good thanks,
+In x86, fentry nop is always placed at the first instruction of the function,
+but the other arches couldn't do that if they use LR (link register) for
+storing return address instead of stack. E.g. arm64 saves lr and call the
+ftrace. Then ftrace location address of a function is not the symbol address.
 
-Acked-by: Max Gurtovoy <mgurtovoy@nvidia.com>
+Anyway, I updated fprobe to handle those cases. I also found some issues
+on rethook, so let me update the series again.
 
+> > > >
+> > > > libbpf doesn't do anything there. The interface for kprobe is based on
+> > > > function name and kernel performs name lookups internally to resolve
+> > > > IP. For fentry it's similar (kernel handles IP resolution), but
+> > > > instead of function name we specify BTF ID of a function type.
+> > >
+> > > Hmm, according to Jiri's original patch, it seems to pass an array of
+> > > addresses. So I thought that has been resolved by libbpf.
+> > >
+> > > +                       struct {
+> > > +                               __aligned_u64   addrs;
+> > 
+> > I think this is a pointer to an array of pointers to zero-terminated C strings
+> 
+> I used direct addresses, because bpftrace already has them, so there was
+> no point passing strings, I cann add support for that
+
+So now both direct address array or symbol array are OK.
+
+Thank you,
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

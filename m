@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A8A449A381
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D2B49A745
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2366448AbiAXXwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:52:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1845905AbiAXXNz (ORCPT
+        id S3423839AbiAYCgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:36:38 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56326 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356458AbiAXUbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:13:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0A2C067A6A;
-        Mon, 24 Jan 2022 13:19:48 -0800 (PST)
+        Mon, 24 Jan 2022 15:31:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A08B61320;
-        Mon, 24 Jan 2022 21:19:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2314C340E4;
-        Mon, 24 Jan 2022 21:19:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4806B6153C;
+        Mon, 24 Jan 2022 20:31:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C294C340E7;
+        Mon, 24 Jan 2022 20:31:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059187;
-        bh=BRth5bWhl+JDCIuYfy5CS8sx+fRhAfvxk/XHWkwWoXA=;
+        s=korg; t=1643056297;
+        bh=mGRwhgutD5F/03hC0eC/ggllLNMardUvS9KmQ8CBr2g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Yq0qCppTxvsXdPzCMe3DJgUFi5OHflmySu+R15lCEks/J9WeV7kkk480Wobe/I6Mn
-         Bl0xEU6pLvyYSCn1Y0rumCOTEM4omeOsEfcYMD6Xk8EEs/7mvc7dbLHXanx+z/aFtO
-         6r7z+5758ib6T6gEgvjC6APmKHilckjbCFPY0/1k=
+        b=Juv54I0vYHKa6xOTRTVuAYxcBGL+mnM+2P8zkZwNPni+nVm79j1RJdWq1/laHVc5b
+         5TJ1eE0+LBg/JkNwjn3V37ojk4URet41ZlmTqrPz3h+hHDYcXsskhfo3yFNyW7rpmI
+         RYM12L88JJ7Ty2sZfPN8oXdyUHHsa5keuPbrJGZM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, Alexey Dobriyan <adobriyan@gmail.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0532/1039] MIPS: compressed: Fix build with ZSTD compression
-Date:   Mon, 24 Jan 2022 19:38:41 +0100
-Message-Id: <20220124184143.167822711@linuxfoundation.org>
+Subject: [PATCH 5.15 405/846] scsi: ufs: Fix race conditions related to driver data
+Date:   Mon, 24 Jan 2022 19:38:42 +0100
+Message-Id: <20220124184114.936665356@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,62 +48,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Cercueil <paul@crapouillou.net>
+From: Bart Van Assche <bvanassche@acm.org>
 
-[ Upstream commit c5c7440fe7f74645940d5c9e2c49cd7efb706a4f ]
+[ Upstream commit 21ad0e49085deb22c094f91f9da57319a97188e4 ]
 
-Fix the following build issues:
+The driver data pointer must be set before any callbacks are registered
+that use that pointer. Hence move the initialization of that pointer from
+after the ufshcd_init() call to inside ufshcd_init().
 
-mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `FSE_buildDTable_internal':
- decompress.c:(.text.FSE_buildDTable_internal+0x2cc): undefined reference to `__clzdi2'
-   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `BIT_initDStream':
-   decompress.c:(.text.BIT_initDStream+0x7c): undefined reference to `__clzdi2'
-   mips64el-linux-ld: decompress.c:(.text.BIT_initDStream+0x158): undefined reference to `__clzdi2'
-   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `ZSTD_buildFSETable_body_default.constprop.0':
- decompress.c:(.text.ZSTD_buildFSETable_body_default.constprop.0+0x2a8): undefined reference to `__clzdi2'
-   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `FSE_readNCount_body_default':
- decompress.c:(.text.FSE_readNCount_body_default+0x130): undefined reference to `__ctzdi2'
- mips64el-linux-ld: decompress.c:(.text.FSE_readNCount_body_default+0x1a4): undefined reference to `__ctzdi2'
- mips64el-linux-ld: decompress.c:(.text.FSE_readNCount_body_default+0x2e4): undefined reference to `__clzdi2'
-   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `HUF_readStats_body_default':
- decompress.c:(.text.HUF_readStats_body_default+0x184): undefined reference to `__clzdi2'
- mips64el-linux-ld: decompress.c:(.text.HUF_readStats_body_default+0x1b4): undefined reference to `__clzdi2'
-   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `ZSTD_DCtx_getParameter':
- decompress.c:(.text.ZSTD_DCtx_getParameter+0x60): undefined reference to `__clzdi2'
-
-Fixes: a510b616131f ("MIPS: Add support for ZSTD-compressed kernels")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Nick Terrell <terrelln@fb.com>
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Link: https://lore.kernel.org/r/20211203231950.193369-7-bvanassche@acm.org
+Fixes: 3b1d05807a9a ("[SCSI] ufs: Segregate PCI Specific Code")
+Reported-by: Alexey Dobriyan <adobriyan@gmail.com>
+Tested-by: Bean Huo <beanhuo@micron.com>
+Reviewed-by: Bean Huo <beanhuo@micron.com>
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/boot/compressed/Makefile  | 2 +-
- arch/mips/boot/compressed/clz_ctz.c | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 arch/mips/boot/compressed/clz_ctz.c
+ drivers/scsi/ufs/tc-dwc-g210-pci.c | 1 -
+ drivers/scsi/ufs/ufshcd-pci.c      | 2 --
+ drivers/scsi/ufs/ufshcd-pltfrm.c   | 2 --
+ drivers/scsi/ufs/ufshcd.c          | 7 +++++++
+ 4 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
-index f27cf31b41401..38e233f7fd7a4 100644
---- a/arch/mips/boot/compressed/Makefile
-+++ b/arch/mips/boot/compressed/Makefile
-@@ -52,7 +52,7 @@ endif
+diff --git a/drivers/scsi/ufs/tc-dwc-g210-pci.c b/drivers/scsi/ufs/tc-dwc-g210-pci.c
+index 679289e1a78e6..7b08e2e07cc5f 100644
+--- a/drivers/scsi/ufs/tc-dwc-g210-pci.c
++++ b/drivers/scsi/ufs/tc-dwc-g210-pci.c
+@@ -110,7 +110,6 @@ tc_dwc_g210_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		return err;
+ 	}
  
- vmlinuzobjs-$(CONFIG_KERNEL_XZ) += $(obj)/ashldi3.o
+-	pci_set_drvdata(pdev, hba);
+ 	pm_runtime_put_noidle(&pdev->dev);
+ 	pm_runtime_allow(&pdev->dev);
  
--vmlinuzobjs-$(CONFIG_KERNEL_ZSTD) += $(obj)/bswapdi.o $(obj)/ashldi3.o
-+vmlinuzobjs-$(CONFIG_KERNEL_ZSTD) += $(obj)/bswapdi.o $(obj)/ashldi3.o $(obj)/clz_ctz.o
+diff --git a/drivers/scsi/ufs/ufshcd-pci.c b/drivers/scsi/ufs/ufshcd-pci.c
+index f725248ba57f4..f76692053ca17 100644
+--- a/drivers/scsi/ufs/ufshcd-pci.c
++++ b/drivers/scsi/ufs/ufshcd-pci.c
+@@ -538,8 +538,6 @@ ufshcd_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		return err;
+ 	}
  
- targets := $(notdir $(vmlinuzobjs-y))
+-	pci_set_drvdata(pdev, hba);
+-
+ 	hba->vops = (struct ufs_hba_variant_ops *)id->driver_data;
  
-diff --git a/arch/mips/boot/compressed/clz_ctz.c b/arch/mips/boot/compressed/clz_ctz.c
-new file mode 100644
-index 0000000000000..b4a1b6eb2f8ad
---- /dev/null
-+++ b/arch/mips/boot/compressed/clz_ctz.c
-@@ -0,0 +1,2 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include "../../../../lib/clz_ctz.c"
+ 	err = ufshcd_init(hba, mmio_base, pdev->irq);
+diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
+index eaeae83b999fd..8b16bbbcb806c 100644
+--- a/drivers/scsi/ufs/ufshcd-pltfrm.c
++++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
+@@ -361,8 +361,6 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
+ 		goto dealloc_host;
+ 	}
+ 
+-	platform_set_drvdata(pdev, hba);
+-
+ 	pm_runtime_set_active(&pdev->dev);
+ 	pm_runtime_enable(&pdev->dev);
+ 
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 31adf25e57b0d..300bf00765d5b 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -9366,6 +9366,13 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *mmio_base, unsigned int irq)
+ 	struct device *dev = hba->dev;
+ 	char eh_wq_name[sizeof("ufs_eh_wq_00")];
+ 
++	/*
++	 * dev_set_drvdata() must be called before any callbacks are registered
++	 * that use dev_get_drvdata() (frequency scaling, clock scaling, hwmon,
++	 * sysfs).
++	 */
++	dev_set_drvdata(dev, hba);
++
+ 	if (!mmio_base) {
+ 		dev_err(hba->dev,
+ 		"Invalid memory reference for mmio_base is NULL\n");
 -- 
 2.34.1
 

@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D35499D11
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF39499966
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:44:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381336AbiAXWNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:13:47 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43504 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453682AbiAXVaj (ORCPT
+        id S1455190AbiAXVez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:34:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1442667AbiAXUzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:30:39 -0500
+        Mon, 24 Jan 2022 15:55:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DF5C047CE3;
+        Mon, 24 Jan 2022 11:59:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1A9D5B811A2;
-        Mon, 24 Jan 2022 21:30:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6065C340E4;
-        Mon, 24 Jan 2022 21:30:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22C4660B56;
+        Mon, 24 Jan 2022 19:59:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F388FC340E5;
+        Mon, 24 Jan 2022 19:59:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059836;
-        bh=wpeCaTchYmxiHGGB/zd+aYB5oc+l/iumejBoL0k8dtY=;
+        s=korg; t=1643054394;
+        bh=9ps7Jv4uIYBcpa73FrRpKTB27g2ZiCKS7+v1WkaUAAQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gi1m/iu8RiZOgVLWj48RzufUg7BqR84yD65DfIb571NM7KOFuDil7wbh7J9SY+AFh
-         KLAkWA6IwBUP6sV+MkkfWVZLI+QYzsr5ndiHqNAcnf9IABf9nwLtUTRK5LtcH06H4F
-         TuMHhCx5x1EOhz7ockqfVng7l8yxd4mC9TR7y1ns=
+        b=hPS41ELlAX5Njc9Du3loFrtow/TfRHeEyHCoxnRWPD8vJLf1Y+C9HhhQ0e3Uk2D90
+         Rr3l5fEM1gEq7/mK6D0z3QsYZ8zncy5rbyqdA4eldJbsRvbONUQynpt88nGiyElMNB
+         cK+r1ktBek4Z+FIQxRUbeMP9ZTZ963aCBDWmhrYQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Mike Snitzer <snitzer@redhat.com>,
-        Dan Williams <dan.j.williams@intel.com>,
+        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0750/1039] dm: make the DAX support depend on CONFIG_FS_DAX
-Date:   Mon, 24 Jan 2022 19:42:19 +0100
-Message-Id: <20220124184150.549965594@linuxfoundation.org>
+Subject: [PATCH 5.10 375/563] iwlwifi: fix leaks/bad data after failed firmware load
+Date:   Mon, 24 Jan 2022 19:42:20 +0100
+Message-Id: <20220124184037.391561934@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,125 +49,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Johannes Berg <johannes.berg@intel.com>
 
-[ Upstream commit 5d2a228b9e1319ff188f9ea89006fbe575561921 ]
+[ Upstream commit ab07506b0454bea606095951e19e72c282bfbb42 ]
 
-The device mapper DAX support is all hanging off a block device and thus
-can't be used with device dax.  Make it depend on CONFIG_FS_DAX instead
-of CONFIG_DAX_DRIVER.  This also means that bdev_dax_pgoff only needs to
-be built under CONFIG_FS_DAX now.
+If firmware load fails after having loaded some parts of the
+firmware, e.g. the IML image, then this would leak. For the
+host command list we'd end up running into a WARN on the next
+attempt to load another firmware image.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Acked-by: Mike Snitzer <snitzer@redhat.com>
-Link: https://lore.kernel.org/r/20211129102203.2243509-3-hch@lst.de
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+Fix this by calling iwl_dealloc_ucode() on failures, and make
+that also clear the data so we start fresh on the next round.
+
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/iwlwifi.20211210110539.1f742f0eb58a.I1315f22f6aa632d94ae2069f85e1bca5e734dce0@changeid
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dax/super.c        | 6 ++----
- drivers/md/dm-linear.c     | 2 +-
- drivers/md/dm-log-writes.c | 2 +-
- drivers/md/dm-stripe.c     | 2 +-
- drivers/md/dm-writecache.c | 2 +-
- drivers/md/dm.c            | 2 +-
- 6 files changed, 7 insertions(+), 9 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/iwl-drv.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/dax/super.c b/drivers/dax/super.c
-index b882cf8106ea3..e20d0cef10a18 100644
---- a/drivers/dax/super.c
-+++ b/drivers/dax/super.c
-@@ -63,7 +63,7 @@ static int dax_host_hash(const char *host)
- 	return hashlen_hash(hashlen_string("DAX", host)) % DAX_HASH_SIZE;
+diff --git a/drivers/net/wireless/intel/iwlwifi/iwl-drv.c b/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
+index be214f39f52be..4bdfd6afa7324 100644
+--- a/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
++++ b/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
+@@ -185,6 +185,9 @@ static void iwl_dealloc_ucode(struct iwl_drv *drv)
+ 
+ 	for (i = 0; i < IWL_UCODE_TYPE_MAX; i++)
+ 		iwl_free_fw_img(drv, drv->fw.img + i);
++
++	/* clear the data for the aborted load case */
++	memset(&drv->fw, 0, sizeof(drv->fw));
  }
  
--#ifdef CONFIG_BLOCK
-+#if defined(CONFIG_BLOCK) && defined(CONFIG_FS_DAX)
- #include <linux/blkdev.h>
+ static int iwl_alloc_fw_desc(struct iwl_drv *drv, struct fw_desc *desc,
+@@ -1365,6 +1368,7 @@ static void iwl_req_fw_callback(const struct firmware *ucode_raw, void *context)
+ 	int i;
+ 	bool load_module = false;
+ 	bool usniffer_images = false;
++	bool failure = true;
  
- int bdev_dax_pgoff(struct block_device *bdev, sector_t sector, size_t size,
-@@ -80,7 +80,6 @@ int bdev_dax_pgoff(struct block_device *bdev, sector_t sector, size_t size,
- }
- EXPORT_SYMBOL(bdev_dax_pgoff);
- 
--#if IS_ENABLED(CONFIG_FS_DAX)
- /**
-  * dax_get_by_host() - temporary lookup mechanism for filesystem-dax
-  * @host: alternate name for the device registered by a dax driver
-@@ -219,8 +218,7 @@ bool dax_supported(struct dax_device *dax_dev, struct block_device *bdev,
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(dax_supported);
--#endif /* CONFIG_FS_DAX */
--#endif /* CONFIG_BLOCK */
-+#endif /* CONFIG_BLOCK && CONFIG_FS_DAX */
- 
- enum dax_device_flags {
- 	/* !alive + rcu grace period == no new operations / mappings */
-diff --git a/drivers/md/dm-linear.c b/drivers/md/dm-linear.c
-index 66ba16713f696..0a260c35aeeed 100644
---- a/drivers/md/dm-linear.c
-+++ b/drivers/md/dm-linear.c
-@@ -162,7 +162,7 @@ static int linear_iterate_devices(struct dm_target *ti,
- 	return fn(ti, lc->dev, lc->start, ti->len, data);
- }
- 
--#if IS_ENABLED(CONFIG_DAX_DRIVER)
-+#if IS_ENABLED(CONFIG_FS_DAX)
- static long linear_dax_direct_access(struct dm_target *ti, pgoff_t pgoff,
- 		long nr_pages, void **kaddr, pfn_t *pfn)
- {
-diff --git a/drivers/md/dm-log-writes.c b/drivers/md/dm-log-writes.c
-index 0b3ef977ceeba..3155875d4e5b0 100644
---- a/drivers/md/dm-log-writes.c
-+++ b/drivers/md/dm-log-writes.c
-@@ -901,7 +901,7 @@ static void log_writes_io_hints(struct dm_target *ti, struct queue_limits *limit
- 	limits->io_min = limits->physical_block_size;
- }
- 
--#if IS_ENABLED(CONFIG_DAX_DRIVER)
-+#if IS_ENABLED(CONFIG_FS_DAX)
- static int log_dax(struct log_writes_c *lc, sector_t sector, size_t bytes,
- 		   struct iov_iter *i)
- {
-diff --git a/drivers/md/dm-stripe.c b/drivers/md/dm-stripe.c
-index 6660b6b53d5bf..f084607220293 100644
---- a/drivers/md/dm-stripe.c
-+++ b/drivers/md/dm-stripe.c
-@@ -300,7 +300,7 @@ static int stripe_map(struct dm_target *ti, struct bio *bio)
- 	return DM_MAPIO_REMAPPED;
- }
- 
--#if IS_ENABLED(CONFIG_DAX_DRIVER)
-+#if IS_ENABLED(CONFIG_FS_DAX)
- static long stripe_dax_direct_access(struct dm_target *ti, pgoff_t pgoff,
- 		long nr_pages, void **kaddr, pfn_t *pfn)
- {
-diff --git a/drivers/md/dm-writecache.c b/drivers/md/dm-writecache.c
-index 4b8991cde223d..4f31591d2d25e 100644
---- a/drivers/md/dm-writecache.c
-+++ b/drivers/md/dm-writecache.c
-@@ -38,7 +38,7 @@
- #define BITMAP_GRANULARITY	PAGE_SIZE
+ 	fw->ucode_capa.max_probe_length = IWL_DEFAULT_MAX_PROBE_LENGTH;
+ 	fw->ucode_capa.standard_phy_calibration_size =
+@@ -1634,6 +1638,7 @@ static void iwl_req_fw_callback(const struct firmware *ucode_raw, void *context)
+ 				op->name, err);
  #endif
+ 	}
++	failure = false;
+ 	goto free;
  
--#if IS_ENABLED(CONFIG_ARCH_HAS_PMEM_API) && IS_ENABLED(CONFIG_DAX_DRIVER)
-+#if IS_ENABLED(CONFIG_ARCH_HAS_PMEM_API) && IS_ENABLED(CONFIG_FS_DAX)
- #define DM_WRITECACHE_HAS_PMEM
- #endif
- 
-diff --git a/drivers/md/dm.c b/drivers/md/dm.c
-index acc84dc1bded5..b93fcc91176e5 100644
---- a/drivers/md/dm.c
-+++ b/drivers/md/dm.c
-@@ -1783,7 +1783,7 @@ static struct mapped_device *alloc_dev(int minor)
- 	md->disk->private_data = md;
- 	sprintf(md->disk->disk_name, "dm-%d", minor);
- 
--	if (IS_ENABLED(CONFIG_DAX_DRIVER)) {
-+	if (IS_ENABLED(CONFIG_FS_DAX)) {
- 		md->dax_dev = alloc_dax(md, md->disk->disk_name,
- 					&dm_dax_ops, 0);
- 		if (IS_ERR(md->dax_dev)) {
+  try_again:
+@@ -1649,6 +1654,9 @@ static void iwl_req_fw_callback(const struct firmware *ucode_raw, void *context)
+ 	complete(&drv->request_firmware_complete);
+ 	device_release_driver(drv->trans->dev);
+  free:
++	if (failure)
++		iwl_dealloc_ucode(drv);
++
+ 	if (pieces) {
+ 		for (i = 0; i < ARRAY_SIZE(pieces->img); i++)
+ 			kfree(pieces->img[i].sec);
 -- 
 2.34.1
 

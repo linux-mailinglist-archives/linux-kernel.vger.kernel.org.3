@@ -2,105 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA75499BD3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:05:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43031499CF2
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:15:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1576717AbiAXV4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:56:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50092 "EHLO
+        id S1581929AbiAXWMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:12:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449996AbiAXVRk (ORCPT
+        with ESMTP id S1453227AbiAXV3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:17:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96958C067A6D;
-        Mon, 24 Jan 2022 12:12:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B37D6137A;
-        Mon, 24 Jan 2022 20:12:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D139DC340EB;
-        Mon, 24 Jan 2022 20:12:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643055160;
-        bh=byMO3nYSC2TvSH32oHHrAxbZ7HoV85bYK3g6rU+Vckk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ebm4MB3E88Yqn7BvQzfMhMEsishhVM9UX7r3FPZu846+SL16XmVkZHDFFbeOw/RS9
-         TWWh5aN2GJa/EBJPnVKVQyVHCEiEN+t9tqlBHiUXiznH51+NefoYO/vDxfMVtDU+Hy
-         /aYkJL44EeYBfkj1HjzdzSrRLARG5NjUu/O/NJ3/3uiyNTzZgsl1PlhTh4/4pxuTe/
-         K76MRh7c5RfUO/EgezAlJNQoo89bSIFXn80CR50EIkCRvbTR45TFXXKCuedF3mUVuG
-         dgGYhI5GT/gtzT9eqsWjkPHE+c/uEmFWYa6I5pfHj+4ShNIcjkpkXTNiBMC3CcgOC1
-         K2lDT3qIKpfoA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nC5hf-002Y3f-07; Mon, 24 Jan 2022 20:12:39 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dougall <dougallj@gmail.com>, kernel-team@android.com
-Subject: [PATCH v4 09/10] drivers/perf: arm_pmu: Handle 47 bit counters
-Date:   Mon, 24 Jan 2022 20:12:30 +0000
-Message-Id: <20220124201231.298961-10-maz@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220124201231.298961-1-maz@kernel.org>
-References: <20220124201231.298961-1-maz@kernel.org>
+        Mon, 24 Jan 2022 16:29:05 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B176C01D7F3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:19:05 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id w190so10942714pfw.7
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:19:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EsjxDBMm/CMDAK0wKf2bhoiQ9gqiwqZCH7vh6dCq6Nw=;
+        b=GxbNEjo5OWuFsGAJ6mmDLTkptrYH98ruVoE6emQiNyVh4DXl2855c4/nQnzXH8aPBj
+         kGbHAZd2bG6QzBtjtiEmzffG2UqPBg9D0nGasTg9KFpQKT10+8tQdS8wmLKb1NeMGNrd
+         /kBh1KajfhLWZ9mzXBGIQqfCzQIIT2o+/wQBI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EsjxDBMm/CMDAK0wKf2bhoiQ9gqiwqZCH7vh6dCq6Nw=;
+        b=DEnoX+kuILLx7kvb6dmFNZeLVxusNnby7jzwlsEg1CZ9g4JDkxaD0B1RAPqDl+uFDY
+         Znby2WJSMofvYtNuBlXzgbHjvQMwXIPrMx+RW9YsdkqE7SN147axVIJ/mK7dZMuNd+mx
+         WMAXaru96I4fV0fdpVzQWzN5bXELFptFvsGPyy+3Mf53qJHK/y/vVO/9ccMtiTGxvXDs
+         oFnh/uUQtgNCkvYuq81FdiAHnAzHPpCoSpZzshln88I/dh21uaYc0y0n8sMHHoRWsrnb
+         +Xsgom4MuMdrpsxjTc29YEX1of3Op2buRNMAVjqJm9Os/CYXUqld+bThMz0u3dg9q0th
+         i+kg==
+X-Gm-Message-State: AOAM531PNHMESOKZR68IdOPRT483qXoEL3q1KDj0uzSGC6S4zViQyD22
+        jLK5DXfhwx11dOqc6Jdf8HNkaA==
+X-Google-Smtp-Source: ABdhPJxU9wiN3m+FHgY11ltcXHbduJ5dePRdoXqE1S7KFCWXf/pNbiUloQZQu6GMJjMSw1xiM3hh5w==
+X-Received: by 2002:a63:7c06:: with SMTP id x6mr588413pgc.316.1643055544483;
+        Mon, 24 Jan 2022 12:19:04 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x23sm3833982pfh.178.2022.01.24.12.19.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 12:19:04 -0800 (PST)
+Date:   Mon, 24 Jan 2022 12:19:03 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Johan Hovold <johan@kernel.org>,
+        Alex Elder <elder@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] staging: greybus: i2c: Use struct_size() helper in
+ gb_i2c_operation_create()
+Message-ID: <202201241213.82E7D9F598@keescook>
+References: <20220121222250.GA73021@embeddedor>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, mark.rutland@arm.com, will@kernel.org, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, robh+dt@kernel.org, tglx@linutronix.de, dougallj@gmail.com, kernel-team@android.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220121222250.GA73021@embeddedor>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current ARM PMU framework can only deal with 32 or 64bit counters.
-Teach it about a 47bit flavour.
+On Fri, Jan 21, 2022 at 04:22:50PM -0600, Gustavo A. R. Silva wrote:
+> Make use of the struct_size() helper instead of an open-coded version,
+> in order to avoid any potential type mistakes or integer overflows that,
+> in the worst scenario, could lead to heap overflows.
+> 
+> Also, address the following sparse warnings:
+> drivers/staging/greybus/i2c.c:111:24: warning: using sizeof on a flexible structure
+> 
+> Link: https://github.com/KSPP/linux/issues/174
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+>  drivers/staging/greybus/i2c.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/staging/greybus/i2c.c b/drivers/staging/greybus/i2c.c
+> index de2f6516da09..9dfc6791c20e 100644
+> --- a/drivers/staging/greybus/i2c.c
+> +++ b/drivers/staging/greybus/i2c.c
+> @@ -108,9 +108,7 @@ gb_i2c_operation_create(struct gb_connection *connection,
+>  		else
+>  			data_out_size += (u32)msg->len;
+>  
+> -	request_size = sizeof(*request);
+> -	request_size += msg_count * sizeof(*op);
+> -	request_size += data_out_size;
+> +	request_size = struct_size(request, ops, msg_count) + data_out_size;
 
-Yes, this is odd.
+This could still overflow if struct_size() returns SIZE_MAX. Perhaps:
 
-Reviewed-by: Hector Martin <marcan@marcan.st>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
----
- drivers/perf/arm_pmu.c       | 2 ++
- include/linux/perf/arm_pmu.h | 2 ++
- 2 files changed, 4 insertions(+)
+	if (check_add_overflow(struct_size(request, ops, msg_count),
+			       data_out_size, &request_size))
+		request_size = SIZE_MAX;
 
-diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
-index 295cc7952d0e..0a9ed1a061ac 100644
---- a/drivers/perf/arm_pmu.c
-+++ b/drivers/perf/arm_pmu.c
-@@ -109,6 +109,8 @@ static inline u64 arm_pmu_event_max_period(struct perf_event *event)
- {
- 	if (event->hw.flags & ARMPMU_EVT_64BIT)
- 		return GENMASK_ULL(63, 0);
-+	else if (event->hw.flags & ARMPMU_EVT_47BIT)
-+		return GENMASK_ULL(46, 0);
- 	else
- 		return GENMASK_ULL(31, 0);
- }
-diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
-index 2512e2f9cd4e..0407a38b470a 100644
---- a/include/linux/perf/arm_pmu.h
-+++ b/include/linux/perf/arm_pmu.h
-@@ -26,6 +26,8 @@
-  */
- /* Event uses a 64bit counter */
- #define ARMPMU_EVT_64BIT		1
-+/* Event uses a 47bit counter */
-+#define ARMPMU_EVT_47BIT		2
- 
- #define HW_OP_UNSUPPORTED		0xFFFF
- #define C(_x)				PERF_COUNT_HW_CACHE_##_x
+I should brush off the saturating arithmetic helpers series:
+https://lore.kernel.org/all/20210920180853.1825195-1-keescook@chromium.org/
+
+>  
+>  	/* Response consists only of incoming data */
+>  	operation = gb_operation_create(connection, GB_I2C_TYPE_TRANSFER,
+> -- 
+> 2.27.0
+> 
+
 -- 
-2.30.2
-
+Kees Cook

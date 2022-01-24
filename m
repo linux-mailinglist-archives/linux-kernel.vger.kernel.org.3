@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A000B498D75
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D10E498A8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347821AbiAXTcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:32:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345479AbiAXTXV (ORCPT
+        id S1346167AbiAXTFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:05:08 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56818 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344625AbiAXS7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:23:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E7BC061346;
-        Mon, 24 Jan 2022 11:09:54 -0800 (PST)
+        Mon, 24 Jan 2022 13:59:08 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D817C61298;
-        Mon, 24 Jan 2022 19:09:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC41BC340E5;
-        Mon, 24 Jan 2022 19:09:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79397B8121F;
+        Mon, 24 Jan 2022 18:59:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4568C340E5;
+        Mon, 24 Jan 2022 18:59:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051393;
-        bh=Ev5tX5NfFR/j1wYm53oMVJTmjKW5T16TtnSYsQF+7uk=;
+        s=korg; t=1643050746;
+        bh=03o1csNbjLwxt1ijV6RGrc3lrOSe+NXYg76KWG2DTlI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qnulgZsQgwxVp+6sQnlbGaZUV4Wnz7eg+D8DEMwA390f8Eg6JnthfTcPln4z3Z02m
-         f8mhQNmUlNn4G49xg73fRumO0893IGSBzTb+QXMwlLIe5I6se0tWNyWQqNFxOzkGUq
-         7GN0CzUKa0saCdVJEGu/5DkrXtuKac47P/trlM5w=
+        b=OUPxr3+68NcZ407UMKBgfULUhE/ud0TIpU2dB9DDRpLu5x8nFGM6Fu48P1fZ7UyLp
+         mQxf5ep3rN8P00VutJiwDfy9PAKIFZL/D8Xi58nzw39MKx7D7A5NyvXQF/TnVIPFmC
+         V++QKyObZ8OD7tB31QUgmZCqLLUVMSOJQWbBHgbg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
+        stable@vger.kernel.org, Maxime Bizon <mbizon@freebox.fr>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 114/186] iwlwifi: fix leaks/bad data after failed firmware load
+Subject: [PATCH 4.9 099/157] net: mdio: Demote probed message to debug print
 Date:   Mon, 24 Jan 2022 19:43:09 +0100
-Message-Id: <20220124183940.780099707@linuxfoundation.org>
+Message-Id: <20220124183935.907510934@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,67 +47,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-[ Upstream commit ab07506b0454bea606095951e19e72c282bfbb42 ]
+[ Upstream commit 7590fc6f80ac2cbf23e6b42b668bbeded070850b ]
 
-If firmware load fails after having loaded some parts of the
-firmware, e.g. the IML image, then this would leak. For the
-host command list we'd end up running into a WARN on the next
-attempt to load another firmware image.
+On systems with large numbers of MDIO bus/muxes the message indicating
+that a given MDIO bus has been successfully probed is repeated for as
+many buses we have, which can eat up substantial boot time for no
+reason, demote to a debug print.
 
-Fix this by calling iwl_dealloc_ucode() on failures, and make
-that also clear the data so we start fresh on the next round.
-
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Link: https://lore.kernel.org/r/iwlwifi.20211210110539.1f742f0eb58a.I1315f22f6aa632d94ae2069f85e1bca5e734dce0@changeid
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Reported-by: Maxime Bizon <mbizon@freebox.fr>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220103194024.2620-1-f.fainelli@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/iwl-drv.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/net/phy/mdio_bus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/iwl-drv.c b/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
-index 6c10b8c4ddbe5..95101f66a886e 100644
---- a/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
-+++ b/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
-@@ -182,6 +182,9 @@ static void iwl_dealloc_ucode(struct iwl_drv *drv)
- 
- 	for (i = 0; i < IWL_UCODE_TYPE_MAX; i++)
- 		iwl_free_fw_img(drv, drv->fw.img + i);
-+
-+	/* clear the data for the aborted load case */
-+	memset(&drv->fw, 0, sizeof(drv->fw));
- }
- 
- static int iwl_alloc_fw_desc(struct iwl_drv *drv, struct fw_desc *desc,
-@@ -1271,6 +1274,7 @@ static void iwl_req_fw_callback(const struct firmware *ucode_raw, void *context)
- 	int i;
- 	bool load_module = false;
- 	bool usniffer_images = false;
-+	bool failure = true;
- 
- 	fw->ucode_capa.max_probe_length = IWL_DEFAULT_MAX_PROBE_LENGTH;
- 	fw->ucode_capa.standard_phy_calibration_size =
-@@ -1499,6 +1503,7 @@ static void iwl_req_fw_callback(const struct firmware *ucode_raw, void *context)
- 				op->name, err);
- #endif
+diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
+index 92fb664b56fbb..0fa6e2da4b5a2 100644
+--- a/drivers/net/phy/mdio_bus.c
++++ b/drivers/net/phy/mdio_bus.c
+@@ -347,7 +347,7 @@ int __mdiobus_register(struct mii_bus *bus, struct module *owner)
  	}
-+	failure = false;
- 	goto free;
  
-  try_again:
-@@ -1514,6 +1519,9 @@ static void iwl_req_fw_callback(const struct firmware *ucode_raw, void *context)
- 	complete(&drv->request_firmware_complete);
- 	device_release_driver(drv->trans->dev);
-  free:
-+	if (failure)
-+		iwl_dealloc_ucode(drv);
-+
- 	if (pieces) {
- 		for (i = 0; i < ARRAY_SIZE(pieces->img); i++)
- 			kfree(pieces->img[i].sec);
+ 	bus->state = MDIOBUS_REGISTERED;
+-	pr_info("%s: probed\n", bus->name);
++	dev_dbg(&bus->dev, "probed\n");
+ 	return 0;
+ 
+ error:
 -- 
 2.34.1
 

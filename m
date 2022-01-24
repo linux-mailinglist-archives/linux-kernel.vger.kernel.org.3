@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C9849A804
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBC349A80A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1315894AbiAYCyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:54:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
+        id S1316056AbiAYCzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:55:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3409749AbiAYA1S (ORCPT
+        with ESMTP id S3410181AbiAYA2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 19:27:18 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D0FC046E0D;
-        Mon, 24 Jan 2022 14:10:07 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id n6-20020a9d6f06000000b005a0750019a7so2596237otq.5;
-        Mon, 24 Jan 2022 14:10:07 -0800 (PST)
+        Mon, 24 Jan 2022 19:28:44 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FAAC046E0E
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:12:07 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id s185so10999907oie.3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:12:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=dfQ1Cr8MOGNWzImPgM3FPvJ3DRDIShXaWCzTw2fuiGo=;
-        b=Z+F0etylmIPRLfXkQxHrbCduqN93SYw7wl/ke/YpNeM4rPaukRCnKxTe71ymWVnYxP
-         7Vp4nnlA+M4Rm1eAhkuZw7yqe9BkTYhucCx+9Fsb6LaMeeQg6V2LonO6YxMnEKLTLNWf
-         ThtFvcc/fRFn4UZPlVRhL+vS5U3wQmnxEtFLUPWE3obBRz8H/TwYkyRptXqFHff3vgKB
-         jcy7q9coHrKyr3wha1pNcOuLmgUKjtbpCVRunpmpzDKtiFy4PTDQ6ZyeH6WC1swXj9wH
-         1gUQHxkh7d72RWBkcPCYm2r14IlbhITnuWDjv0rAlIdb7LUIu60GlZpkmIhgWB5EqtZk
-         o1eg==
+        bh=qNPdZuTMGpmraXauVfaM+U1iXWmXev7WNI2qlgKJIbg=;
+        b=nRgyGzE6AxLpCKZz2UD75e4pkIds0FuUBfoftvvaRhjfZ3obN3fcNgGyXjDJ1FUNJK
+         yscYMaxHJNoZuehn/9plEiPHQFli9uS+MiJVAsTYc7Y99J1X0VTPX8pwP4RMy6O9k6+4
+         kmTz3t+nLjdXXoCfa5UIMs3JrxhHUwTvO/wnbllxBZHFWKvHFdDSqzYnYfi5wMKkIAko
+         CwscV3NQuKIuyYsBpzRL4/W9WqMLcbHXkBfF3T4ehrmsnRXNvJKOjJxbrHMGClil0sQ3
+         8cft5Kx4N+nlQwz/ypXl/Q62QRdHGpUMGu/LmmubbtqWbXziTQ6bDV7ZifJNxOpW95Qj
+         qGMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dfQ1Cr8MOGNWzImPgM3FPvJ3DRDIShXaWCzTw2fuiGo=;
-        b=jIjGTjM2GDixBCvyqqZwMd4H8icOPehTYjUxp/co5i3uthLq3AYzK0AdICpvl6M7ij
-         0Mnm/flsHy7Dm88UbWW8A0XjrIKZ+lwSj4oouDGzTV0GecSYpfkDhHELYoi2FD5ObpEr
-         6yfsKzxoJ7drfxQw7FO6keR3x6i2SGFw6q+p3wXxte9XdUR0qxI/b3xWJlJ7M1IAYRCk
-         2XR66nVm8eb0vd6BzrnM6nHqlUX7hdwtz01dky/3MxroK9caHnMdXZTHm5P8UK0Iy8X2
-         3u73KKOdUegjLQnxdc7F6v7XtafHC/P07SyV3EIbRHi+G2aitSKJLPDYlSbEC/wfTMqv
-         W4fw==
-X-Gm-Message-State: AOAM530RfR2LQrZbhbBi/6Oryk/dMwA241tUfYKs2y2/Kw/Of2WHvf43
-        Ii/2bknvfs/Ned2YJJx0EYKsfm9GiT5P21RtgB4=
-X-Google-Smtp-Source: ABdhPJwvLyrL8/z3f3oeYcfh5RaeZB2rvDsalLA+HVQ+FDuwfMu1r9GNC9grwWebJSLxVHBZqstuKTAHNHQYm1JYjGE=
-X-Received: by 2002:a05:6830:1d90:: with SMTP id y16mr13147279oti.200.1643062206810;
- Mon, 24 Jan 2022 14:10:06 -0800 (PST)
+        bh=qNPdZuTMGpmraXauVfaM+U1iXWmXev7WNI2qlgKJIbg=;
+        b=jRBAHhZflViyEkTn+68Rs8MbOgj0tQfNiIhfloMubrrXQvcXlGUcEAaWUtHuuPwUST
+         AlGxMFp/c4IS3HgJ/QlT9/AWkLb6OWdGbwl8Pt8+H6vmVL9qjNLIAtiBot4/dY56SE2/
+         GwN4pNZ3m0K4gYAnULKYzzTiqmD+0PNFuEw2ogztWdvvoMDLg5LnjF0qU9acSI/O/24R
+         kQz4y1oe+BDEZOvK6hIx/nwiGZMw8QCMrjCm8ARFFwPIDM004jp4nlniEdE8+Poe5eZ8
+         NZjXSscFQz7fFzqul78CFxkl06Kh5M6c6AUyXzjWaf0djxWYUcJlHLJrL3fkYAhs5LtL
+         sM1A==
+X-Gm-Message-State: AOAM530HxcO0Xhsq22CDvvATUNMKOX6NuNBXOiGUTdzv0fUkfYyjmT9M
+        9GpM2IwHWUzOwdUMQ4FJtG64DnXF9pYRDuVv/NI=
+X-Google-Smtp-Source: ABdhPJyR03hrjLm79a0g6SkQdoHpkJeL3qMSV6vOsoHri99vsAcedey3FSY1h0XpwgmbhXH5wNFcoPGwNC5355tPXio=
+X-Received: by 2002:a05:6808:300b:: with SMTP id ay11mr3244011oib.120.1643062326701;
+ Mon, 24 Jan 2022 14:12:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20220119224628.123084-1-colin.i.king@gmail.com> <CAKwvOdnMibw77AvvWw7seB2PPamS_OLMUarSjdsa4w4OP1isKg@mail.gmail.com>
-In-Reply-To: <CAKwvOdnMibw77AvvWw7seB2PPamS_OLMUarSjdsa4w4OP1isKg@mail.gmail.com>
+References: <20220122012343.32540-1-rdunlap@infradead.org> <fca36168-d66b-c914-a5c6-fb8d495238ad@amd.com>
+In-Reply-To: <fca36168-d66b-c914-a5c6-fb8d495238ad@amd.com>
 From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 24 Jan 2022 17:09:55 -0500
-Message-ID: <CADnq5_P4F9MqfP2BHSzj7rgXBDxRPtiphh5sqF0+dW7NSTLFVA@mail.gmail.com>
-Subject: Re: [PATCH] drm/radeon: remove redundant assignment to reg
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Colin Ian King <colin.i.king@gmail.com>, llvm@lists.linux.dev,
-        David Airlie <airlied@linux.ie>,
-        xinhui pan <Xinhui.Pan@amd.com>,
-        kernel-janitors@vger.kernel.org,
+Date:   Mon, 24 Jan 2022 17:11:55 -0500
+Message-ID: <CADnq5_OMhZ38b-N=UVC6ckcrzRkh=xBHEMe0UqP2DbqW6-g59Q@mail.gmail.com>
+Subject: Re: [PATCH -next] drm/amd/display: don't use /** for non-kernel-doc comments
+To:     Harry Wentland <harry.wentland@amd.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
         LKML <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
         amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>,
         Maling list - DRI developers 
         <dri-devel@lists.freedesktop.org>,
         Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
@@ -71,46 +72,46 @@ Applied.  Thanks!
 
 Alex
 
-On Mon, Jan 24, 2022 at 3:21 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Mon, Jan 24, 2022 at 10:25 AM Harry Wentland <harry.wentland@amd.com> wrote:
 >
-> On Wed, Jan 19, 2022 at 2:46 PM Colin Ian King <colin.i.king@gmail.com> wrote:
+> On 2022-01-21 20:23, Randy Dunlap wrote:
+> > Change a static function's comment from "/**" (indicating kernel-doc
+> > notation) to "/*" (indicating a regular C language comment).
+> > This prevents multiple kernel-doc warnings:
 > >
-> > The pointer reg is being assigned a value that is not read, the
-> > exit path via label 'out' never accesses it. The assignment is
-> > redundant and can be removed.
+> >   drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:4343: warning: Function parameter or member 'max_supported_frl_bw_in_kbps' not described in 'intersect_frl_link_bw_support'
+> >   drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:4343: warning: Function parameter or member 'hdmi_encoded_link_bw' not described in 'intersect_frl_link_bw_support'
+> >   drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:4343: warning: expecting prototype for Return PCON's post FRL link training supported BW if its non(). Prototype was for intersect_frl_link_bw_support() instead
 > >
-> > Cleans up clang scan build warning:
-> > drivers/gpu/drm/radeon/radeon_object.c:570:3: warning: Value
-> > stored to 'reg' is never read [deadcode.DeadStores]
-> >
-> > Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> > Fixes: c022375ae095 ("drm/amd/display: Add DP-HDMI FRL PCON Support in DC")
+> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Cc: Fangzhi Zuo <Jerry.Zuo@amd.com>
+> > Cc: Alex Deucher <alexander.deucher@amd.com>
+> > Cc: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+> > Cc: Harry Wentland <harry.wentland@amd.com>
+> > Cc: Leo Li <sunpeng.li@amd.com>
+> > Cc: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+> > Cc: amd-gfx@lists.freedesktop.org
+> > Cc: dri-devel@lists.freedesktop.org
 >
-> Thanks for the patch!
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+>
+> Harry
 >
 > > ---
-> >  drivers/gpu/drm/radeon/radeon_object.c | 1 -
-> >  1 file changed, 1 deletion(-)
+> >  drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c |    2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
 > >
-> > diff --git a/drivers/gpu/drm/radeon/radeon_object.c b/drivers/gpu/drm/radeon/radeon_object.c
-> > index 56ede9d63b12..87536d205593 100644
-> > --- a/drivers/gpu/drm/radeon/radeon_object.c
-> > +++ b/drivers/gpu/drm/radeon/radeon_object.c
-> > @@ -567,7 +567,6 @@ int radeon_bo_get_surface_reg(struct radeon_bo *bo)
-> >                 return 0;
+> > --- linux-next-20220121.orig/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+> > +++ linux-next-20220121/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+> > @@ -4970,7 +4970,7 @@ uint32_t dc_link_bw_kbps_from_raw_frl_li
+> >       return 0;
+> >  }
 > >
-> >         if (bo->surface_reg >= 0) {
-> > -               reg = &rdev->surface_regs[bo->surface_reg];
-> >                 i = bo->surface_reg;
-> >                 goto out;
-> >         }
-> > --
-> > 2.33.1
-> >
-> >
+> > -/**
+> > +/*
+> >   * Return PCON's post FRL link training supported BW if its non-zero, otherwise return max_supported_frl_bw.
+> >   */
+> >  static uint32_t intersect_frl_link_bw_support(
 >
->
-> --
-> Thanks,
-> ~Nick Desaulniers

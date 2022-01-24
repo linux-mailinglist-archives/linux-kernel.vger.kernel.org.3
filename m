@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CDEB4990EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:08:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA30499081
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:04:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378512AbiAXUHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:07:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57174 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350567AbiAXTtE (ORCPT
+        id S1353169AbiAXUA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:00:57 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59726 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347434AbiAXTiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:49:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E974C02B8F9;
-        Mon, 24 Jan 2022 11:23:50 -0800 (PST)
+        Mon, 24 Jan 2022 14:38:51 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24B01B8121F;
-        Mon, 24 Jan 2022 19:23:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FAFAC340E5;
-        Mon, 24 Jan 2022 19:23:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C71FB8122A;
+        Mon, 24 Jan 2022 19:38:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55578C340E5;
+        Mon, 24 Jan 2022 19:38:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052228;
-        bh=cM8e0f4FcNE+MacCiN8jXQAKoaEqErh8xnFDFuWA15U=;
+        s=korg; t=1643053128;
+        bh=jWDHRme/ITQfZrL35IpdVL6ftOshaIh0+geEM+S1LeU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Nu02ac7d1AwFUAI5V7pDbsihDnaXDpSUH3ffJAi1pe5RCBpX+x/c3oAraDzAy0CCK
-         HZ1Y6OFTjFcsrpP4E2boA5nS1ZTNFhukFgpd1JZ0IcLmu+/6b3H7D8zGdM4gDoHYNe
-         ltzJW3MyGiwrs9TPMv5Bg7jEOu9/yZNmNzNTyjH0=
+        b=yWEyj7zVcL395Fi/ZBfH/+I9cpbYAoAFVGkZ/h+ndPEG4HntPNkq9VtkcZCKLtwaK
+         y+VJ3MjacJobmaFLK0VRIaAbuk8/QZxXGl0MxyzRYK/ckRoyXIzVYlQfuLSCbqYKws
+         hgh19JuG254xgYZmGxjTiD8siUM1fh3CPcLEeqsc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 4.19 231/239] dmaengine: at_xdmac: Fix at_xdmac_lld struct definition
-Date:   Mon, 24 Jan 2022 19:44:29 +0100
-Message-Id: <20220124183950.447174875@linuxfoundation.org>
+        stable@vger.kernel.org, Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.4 286/320] powerpc/cell: Fix clang -Wimplicit-fallthrough warning
+Date:   Mon, 24 Jan 2022 19:44:30 +0100
+Message-Id: <20220124184003.692330656@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,50 +48,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tudor Ambarus <tudor.ambarus@microchip.com>
+From: Anders Roxell <anders.roxell@linaro.org>
 
-commit 912f7c6f7fac273f40e621447cf17d14b50d6e5b upstream.
+commit e89257e28e844f5d1d39081bb901d9f1183a7705 upstream.
 
-The hardware channel next descriptor view structure contains just
-fields of 32 bits, while dma_addr_t can be of type u64 or u32
-depending on CONFIG_ARCH_DMA_ADDR_T_64BIT. Force u32 to comply with
-what the hardware expects.
+Clang warns:
 
-Fixes: e1f7c9eee707 ("dmaengine: at_xdmac: creation of the atmel eXtended DMA Controller driver")
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Link: https://lore.kernel.org/r/20211215110115.191749-11-tudor.ambarus@microchip.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+arch/powerpc/platforms/cell/pervasive.c:81:2: error: unannotated fall-through between switch labels
+        case SRR1_WAKEEE:
+        ^
+arch/powerpc/platforms/cell/pervasive.c:81:2: note: insert 'break;' to avoid fall-through
+        case SRR1_WAKEEE:
+        ^
+        break;
+1 error generated.
+
+Clang is more pedantic than GCC, which does not warn when failing
+through to a case that is just break or return. Clang's version is more
+in line with the kernel's own stance in deprecated.rst. Add athe missing
+break to silence the warning.
+
+Fixes: 6e83985b0f6e ("powerpc/cbe: Do not process external or decremeter interrupts from sreset")
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20211207110228.698956-1-anders.roxell@linaro.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/at_xdmac.c |   18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ arch/powerpc/platforms/cell/pervasive.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/dma/at_xdmac.c
-+++ b/drivers/dma/at_xdmac.c
-@@ -232,15 +232,15 @@ struct at_xdmac {
- 
- /* Linked List Descriptor */
- struct at_xdmac_lld {
--	dma_addr_t	mbr_nda;	/* Next Descriptor Member */
--	u32		mbr_ubc;	/* Microblock Control Member */
--	dma_addr_t	mbr_sa;		/* Source Address Member */
--	dma_addr_t	mbr_da;		/* Destination Address Member */
--	u32		mbr_cfg;	/* Configuration Register */
--	u32		mbr_bc;		/* Block Control Register */
--	u32		mbr_ds;		/* Data Stride Register */
--	u32		mbr_sus;	/* Source Microblock Stride Register */
--	u32		mbr_dus;	/* Destination Microblock Stride Register */
-+	u32 mbr_nda;	/* Next Descriptor Member */
-+	u32 mbr_ubc;	/* Microblock Control Member */
-+	u32 mbr_sa;	/* Source Address Member */
-+	u32 mbr_da;	/* Destination Address Member */
-+	u32 mbr_cfg;	/* Configuration Register */
-+	u32 mbr_bc;	/* Block Control Register */
-+	u32 mbr_ds;	/* Data Stride Register */
-+	u32 mbr_sus;	/* Source Microblock Stride Register */
-+	u32 mbr_dus;	/* Destination Microblock Stride Register */
- };
- 
- /* 64-bit alignment needed to update CNDA and CUBC registers in an atomic way. */
+--- a/arch/powerpc/platforms/cell/pervasive.c
++++ b/arch/powerpc/platforms/cell/pervasive.c
+@@ -77,6 +77,7 @@ static int cbe_system_reset_exception(st
+ 	switch (regs->msr & SRR1_WAKEMASK) {
+ 	case SRR1_WAKEDEC:
+ 		set_dec(1);
++		break;
+ 	case SRR1_WAKEEE:
+ 		/*
+ 		 * Handle these when interrupts get re-enabled and we take
 
 

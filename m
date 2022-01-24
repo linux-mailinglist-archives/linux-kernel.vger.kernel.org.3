@@ -2,41 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 777C8498B8F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:15:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75726498AAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:07:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347987AbiAXTOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:14:41 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35822 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345431AbiAXTFv (ORCPT
+        id S1345417AbiAXTE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:04:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345268AbiAXS77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:05:51 -0500
+        Mon, 24 Jan 2022 13:59:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74E4C0619D0;
+        Mon, 24 Jan 2022 10:56:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 898C060915;
-        Mon, 24 Jan 2022 19:05:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59D29C340E8;
-        Mon, 24 Jan 2022 19:05:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4663B61416;
+        Mon, 24 Jan 2022 18:56:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A37EC340E5;
+        Mon, 24 Jan 2022 18:56:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051150;
-        bh=GI8rViXqs2bdhiSwCmv3aNUVUSabK0VoZcqOpoSJ5sQ=;
+        s=korg; t=1643050599;
+        bh=tnFxo+X8MhMhJfzopAdktpTd6isKsEkPQG4eerdzgBg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DprSpOEfUqe0sWrAnSRpWK5Lo4kOmPcwOsJbn2axPHKKnUUYh7sOpmgshEM8HFuy4
-         tcfubf/NqN+JYYX+q19Abg8FfugmiSuSx/VsIajztV6waro6mZvrPGYH5xuCGrZzgS
-         E3qvipRKgUITwVjvok2o6evCNnuL3JJ7Ap/icR7s=
+        b=jvlHXLzPptJjz0N4M+7QM3sYEwMqNMIk+u0mmXW8zbIIYvuQKX55cr4rAIprTxxrQ
+         xosC6oqE0jQfvp/cyNGADw7HSx4D6gfZ6eRLi6qI4fiSlQLbLyGmiKHl+iABYqlirh
+         CJw3NodlSxa04THOz3ahfpptDT/qj+vbtQN6p17Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        stable@vger.kernel.org, Al Viro <viro@ZenIV.linux.org.uk>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 069/186] ALSA: jack: Add missing rwsem around snd_ctl_remove() calls
+Subject: [PATCH 4.9 054/157] pcmcia: fix setting of kthread task states
 Date:   Mon, 24 Jan 2022 19:42:24 +0100
-Message-Id: <20220124183939.346173866@linuxfoundation.org>
+Message-Id: <20220124183934.499963137@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,40 +50,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Dominik Brodowski <linux@dominikbrodowski.net>
 
-[ Upstream commit 06764dc931848c3a9bc01a63bbf76a605408bb54 ]
+[ Upstream commit fbb3485f1f931102d8ba606f1c28123f5b48afa3 ]
 
-snd_ctl_remove() has to be called with card->controls_rwsem held (when
-called after the card instantiation).  This patch add the missing
-rwsem calls around it.
+We need to set TASK_INTERRUPTIBLE before calling kthread_should_stop().
+Otherwise, kthread_stop() might see that the pccardd thread is still
+in TASK_RUNNING state and fail to wake it up.
 
-Fixes: 9058cbe1eed2 ("ALSA: jack: implement kctl creating for jack devices")
-Link: https://lore.kernel.org/r/20211116071314.15065-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Additionally, we only need to set the state back to TASK_RUNNING if
+kthread_should_stop() breaks the loop.
+
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Al Viro <viro@ZenIV.linux.org.uk>
+Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Fixes: d3046ba809ce ("pcmcia: fix a boot time warning in pcmcia cs code")
+Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/core/jack.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/pcmcia/cs.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/sound/core/jack.c b/sound/core/jack.c
-index 5ddf81f091fa9..36cfe1c54109d 100644
---- a/sound/core/jack.c
-+++ b/sound/core/jack.c
-@@ -68,10 +68,13 @@ static int snd_jack_dev_free(struct snd_device *device)
- 	struct snd_card *card = device->card;
- 	struct snd_jack_kctl *jack_kctl, *tmp_jack_kctl;
+diff --git a/drivers/pcmcia/cs.c b/drivers/pcmcia/cs.c
+index c3b615c94b4bf..a92cbc952b70b 100644
+--- a/drivers/pcmcia/cs.c
++++ b/drivers/pcmcia/cs.c
+@@ -665,18 +665,16 @@ static int pccardd(void *__skt)
+ 		if (events || sysfs_events)
+ 			continue;
  
-+	down_write(&card->controls_rwsem);
- 	list_for_each_entry_safe(jack_kctl, tmp_jack_kctl, &jack->kctl_list, list) {
- 		list_del_init(&jack_kctl->list);
- 		snd_ctl_remove(card, jack_kctl->kctl);
++		set_current_state(TASK_INTERRUPTIBLE);
+ 		if (kthread_should_stop())
+ 			break;
+ 
+-		set_current_state(TASK_INTERRUPTIBLE);
+-
+ 		schedule();
+ 
+-		/* make sure we are running */
+-		__set_current_state(TASK_RUNNING);
+-
+ 		try_to_freeze();
  	}
-+	up_write(&card->controls_rwsem);
-+
- 	if (jack->private_free)
- 		jack->private_free(jack);
++	/* make sure we are running before we exit */
++	__set_current_state(TASK_RUNNING);
  
+ 	/* shut down socket, if a device is still present */
+ 	if (skt->state & SOCKET_PRESENT) {
 -- 
 2.34.1
 

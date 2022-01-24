@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1FA498C40
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89080499208
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344071AbiAXTVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:21:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47522 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347528AbiAXTNP (ORCPT
+        id S1380885AbiAXURB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:17:01 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44998 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359570AbiAXT7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:13:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AB0C08EAD5;
-        Mon, 24 Jan 2022 11:04:35 -0800 (PST)
+        Mon, 24 Jan 2022 14:59:51 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE99CB8121C;
-        Mon, 24 Jan 2022 19:04:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E18FDC340E5;
-        Mon, 24 Jan 2022 19:04:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7439B8121A;
+        Mon, 24 Jan 2022 19:59:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4ADDC340E5;
+        Mon, 24 Jan 2022 19:59:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051072;
-        bh=1mrzt70eK8Bpjwb9bz0Zpesg7wK3CuPqN4GrLE1sW2U=;
+        s=korg; t=1643054388;
+        bh=7iTssmaqpC1K/Xqd0MdRNMXEmtIL7JRZogdBpi/rGDQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yt9/RG1zBXnpiHnxprVBg5m76cg8F51Qpluk7k2kIpgIAMbJGluc0AOgwAx+QBYNG
-         8zVrGIyUUWrGBgm5ozozobtGCI6CFrrETgertClfOO1l9iM2mYy1sStmIyBlVXr9e6
-         JeWXMomhFVqiS6rIu85fZ7y1FYzIsQMrtux7YYwQ=
+        b=MFmm58sKhK/Ejz9tehtTAhu/DoSMHgHGKiwD/5hQXzG2xYf1GJqwm/oit3NX6mb23
+         HDMkvZP4GTpiQ0gwsDTuyB0tRgvNEnC/5tWhP3/fHiAH127Z80/vsxMxY0IRmxQcng
+         P2cYyPQOUWz62vKzoVQ4qs0fFfO9+9zlZ6sBEiqs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 046/186] drm/amdgpu: Fix a NULL pointer dereference in amdgpu_connector_lcd_native_mode()
+Subject: [PATCH 5.10 356/563] x86/mce: Allow instrumentation during task work queueing
 Date:   Mon, 24 Jan 2022 19:42:01 +0100
-Message-Id: <20220124183938.612322753@linuxfoundation.org>
+Message-Id: <20220124184036.726854688@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,62 +45,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Borislav Petkov <bp@suse.de>
 
-[ Upstream commit b220110e4cd442156f36e1d9b4914bb9e87b0d00 ]
+[ Upstream commit 4fbce464db81a42f9a57ee242d6150ec7f996415 ]
 
-In amdgpu_connector_lcd_native_mode(), the return value of
-drm_mode_duplicate() is assigned to mode, and there is a dereference
-of it in amdgpu_connector_lcd_native_mode(), which will lead to a NULL
-pointer dereference on failure of drm_mode_duplicate().
+Fixes
 
-Fix this bug add a check of mode.
+  vmlinux.o: warning: objtool: do_machine_check()+0xdb1: call to queue_task_work() leaves .noinstr.text section
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_DRM_AMDGPU=m show no new warnings, and
-our static analyzer no longer warns about this code.
-
-Fixes: d38ceaf99ed0 ("drm/amdgpu: add core driver (v4)")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20211208111343.8130-6-bp@alien8.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/x86/kernel/cpu/mce/core.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
-index 54f414279037e..0894bb98dc517 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
-@@ -404,6 +404,9 @@ amdgpu_connector_lcd_native_mode(struct drm_encoder *encoder)
- 	    native_mode->vdisplay != 0 &&
- 	    native_mode->clock != 0) {
- 		mode = drm_mode_duplicate(dev, native_mode);
-+		if (!mode)
-+			return NULL;
-+
- 		mode->type = DRM_MODE_TYPE_PREFERRED | DRM_MODE_TYPE_DRIVER;
- 		drm_mode_set_name(mode);
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 14b34963eb1f7..34fffffaf8730 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -1443,6 +1443,14 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 	if (worst != MCE_AR_SEVERITY && !kill_it)
+ 		goto out;
  
-@@ -418,6 +421,9 @@ amdgpu_connector_lcd_native_mode(struct drm_encoder *encoder)
- 		 * simpler.
- 		 */
- 		mode = drm_cvt_mode(dev, native_mode->hdisplay, native_mode->vdisplay, 60, true, false, false);
-+		if (!mode)
-+			return NULL;
++	/*
++	 * Enable instrumentation around the external facilities like
++	 * task_work_add() (via queue_task_work()), fixup_exception() etc.
++	 * For now, that is. Fixing this properly would need a lot more involved
++	 * reorganization.
++	 */
++	instrumentation_begin();
 +
- 		mode->type = DRM_MODE_TYPE_PREFERRED | DRM_MODE_TYPE_DRIVER;
- 		DRM_DEBUG_KMS("Adding cvt approximation of native panel mode %s\n", mode->name);
+ 	/* Fault was in user mode and we need to take some action */
+ 	if ((m.cs & 3) == 3) {
+ 		/* If this triggers there is no way to recover. Die hard. */
+@@ -1468,6 +1476,9 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 		if (m.kflags & MCE_IN_KERNEL_COPYIN)
+ 			queue_task_work(&m, msg, kill_it);
  	}
++
++	instrumentation_end();
++
+ out:
+ 	mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
+ }
 -- 
 2.34.1
 

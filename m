@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 027AB499E22
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC69849A0A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587677AbiAXW30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:29:26 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55524 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357782AbiAXVhQ (ORCPT
+        id S1846493AbiAXXQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:16:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1583725AbiAXWT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:37:16 -0500
+        Mon, 24 Jan 2022 17:19:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D7FC0619C9;
+        Mon, 24 Jan 2022 12:49:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D9DE6150E;
-        Mon, 24 Jan 2022 21:37:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A42CC340E7;
-        Mon, 24 Jan 2022 21:37:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57025B811A9;
+        Mon, 24 Jan 2022 20:49:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AC10C340E5;
+        Mon, 24 Jan 2022 20:49:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060234;
-        bh=B88h2m79idm4SYEPZYoS03HG4DAKQM2Ij5Q84oDfmyc=;
+        s=korg; t=1643057365;
+        bh=3U9VP1OuruVXeNmVCUIDrfmA01G3vDMoXgFxbdOhwwE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H3Da+9lGhOAKTn+KdBaCaxWg5UxZk1X2NtbuO2UKQgm5cnf7UI2YYbZRNmipKwa99
-         hIOvSxfipNKF4mZoRbFmt+zCv0R7sKSci/DfGWGFbe8h0ylnvXDAJQlkWQkZO92BY9
-         QYB+JR4wH0VjOsDAYObz4B82cOiFqcWEyLU78qU8=
+        b=qdHY+Id+wTWMavVFd6Vn5W3TJlqYvG2USon6TvfHXnyH1MII29HZi2SyKBe9RRORR
+         JGF6PNuGdphsIqcbIdpJLel0GHmQfZwSRVz/q5vAGkhzgOZ9wFaypdv9wYredYGm9m
+         s3CivBDQh0iC+zLfPQ1HMdTHJ8sYwHzCax+WHUOA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Naohiro Aota <naohiro.aota@wdc.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.16 0883/1039] btrfs: zoned: cache reported zone during mount
-Date:   Mon, 24 Jan 2022 19:44:32 +0100
-Message-Id: <20220124184154.976481441@linuxfoundation.org>
+        stable@vger.kernel.org, Tobias Waldekranz <tobias@waldekranz.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 756/846] powerpc/fsl/dts: Enable WA for erratum A-009885 on fman3l MDIO buses
+Date:   Mon, 24 Jan 2022 19:44:33 +0100
+Message-Id: <20220124184127.054924390@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,291 +48,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naohiro Aota <naohiro.aota@wdc.com>
+From: Tobias Waldekranz <tobias@waldekranz.com>
 
-commit 16beac87e95e2fb278b552397c8260637f8a63f7 upstream.
+commit 0d375d610fa96524e2ee2b46830a46a7bfa92a9f upstream.
 
-When mounting a device, we are reporting the zones twice: once for
-checking the zone attributes in btrfs_get_dev_zone_info and once for
-loading block groups' zone info in
-btrfs_load_block_group_zone_info(). With a lot of block groups, that
-leads to a lot of REPORT ZONE commands and slows down the mount
-process.
+This block is used in (at least) T1024 and T1040, including their
+variants like T1023 etc.
 
-This patch introduces a zone info cache in struct
-btrfs_zoned_device_info. The cache is populated while in
-btrfs_get_dev_zone_info() and used for
-btrfs_load_block_group_zone_info() to reduce the number of REPORT ZONE
-commands. The zone cache is then released after loading the block
-groups, as it will not be much effective during the run time.
-
-Benchmark: Mount an HDD with 57,007 block groups
-Before patch: 171.368 seconds
-After patch: 64.064 seconds
-
-While it still takes a minute due to the slowness of loading all the
-block groups, the patch reduces the mount time by 1/3.
-
-Link: https://lore.kernel.org/linux-btrfs/CAHQ7scUiLtcTqZOMMY5kbWUBOhGRwKo6J6wYPT5WY+C=cD49nQ@mail.gmail.com/
-Fixes: 5b316468983d ("btrfs: get zone information of zoned block devices")
-CC: stable@vger.kernel.org
-Signed-off-by: Naohiro Aota <naohiro.aota@wdc.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Fixes: d55ad2967d89 ("powerpc/mpc85xx: Create dts components for the FSL QorIQ DPAA FMan")
+Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/dev-replace.c |    2 -
- fs/btrfs/disk-io.c     |    2 +
- fs/btrfs/volumes.c     |    2 -
- fs/btrfs/zoned.c       |   86 +++++++++++++++++++++++++++++++++++++++++++------
- fs/btrfs/zoned.h       |    8 +++-
- 5 files changed, 87 insertions(+), 13 deletions(-)
+ arch/powerpc/boot/dts/fsl/qoriq-fman3l-0.dtsi |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/fs/btrfs/dev-replace.c
-+++ b/fs/btrfs/dev-replace.c
-@@ -322,7 +322,7 @@ static int btrfs_init_dev_replace_tgtdev
- 	set_blocksize(device->bdev, BTRFS_BDEV_BLOCKSIZE);
- 	device->fs_devices = fs_info->fs_devices;
+--- a/arch/powerpc/boot/dts/fsl/qoriq-fman3l-0.dtsi
++++ b/arch/powerpc/boot/dts/fsl/qoriq-fman3l-0.dtsi
+@@ -79,6 +79,7 @@ fman0: fman@400000 {
+ 		#size-cells = <0>;
+ 		compatible = "fsl,fman-memac-mdio", "fsl,fman-xmdio";
+ 		reg = <0xfc000 0x1000>;
++		fsl,erratum-a009885;
+ 	};
  
--	ret = btrfs_get_dev_zone_info(device);
-+	ret = btrfs_get_dev_zone_info(device, false);
- 	if (ret)
- 		goto error;
- 
---- a/fs/btrfs/disk-io.c
-+++ b/fs/btrfs/disk-io.c
-@@ -3571,6 +3571,8 @@ int __cold open_ctree(struct super_block
- 		goto fail_sysfs;
- 	}
- 
-+	btrfs_free_zone_cache(fs_info);
-+
- 	if (!sb_rdonly(sb) && fs_info->fs_devices->missing_devices &&
- 	    !btrfs_check_rw_degradable(fs_info, NULL)) {
- 		btrfs_warn(fs_info,
---- a/fs/btrfs/volumes.c
-+++ b/fs/btrfs/volumes.c
-@@ -2643,7 +2643,7 @@ int btrfs_init_new_device(struct btrfs_f
- 	device->fs_info = fs_info;
- 	device->bdev = bdev;
- 
--	ret = btrfs_get_dev_zone_info(device);
-+	ret = btrfs_get_dev_zone_info(device, false);
- 	if (ret)
- 		goto error_free_device;
- 
---- a/fs/btrfs/zoned.c
-+++ b/fs/btrfs/zoned.c
-@@ -5,6 +5,7 @@
- #include <linux/blkdev.h>
- #include <linux/sched/mm.h>
- #include <linux/atomic.h>
-+#include <linux/vmalloc.h>
- #include "ctree.h"
- #include "volumes.h"
- #include "zoned.h"
-@@ -213,6 +214,8 @@ static int emulate_report_zones(struct b
- static int btrfs_get_dev_zones(struct btrfs_device *device, u64 pos,
- 			       struct blk_zone *zones, unsigned int *nr_zones)
- {
-+	struct btrfs_zoned_device_info *zinfo = device->zone_info;
-+	u32 zno;
- 	int ret;
- 
- 	if (!*nr_zones)
-@@ -224,6 +227,34 @@ static int btrfs_get_dev_zones(struct bt
- 		return 0;
- 	}
- 
-+	/* Check cache */
-+	if (zinfo->zone_cache) {
-+		unsigned int i;
-+
-+		ASSERT(IS_ALIGNED(pos, zinfo->zone_size));
-+		zno = pos >> zinfo->zone_size_shift;
-+		/*
-+		 * We cannot report zones beyond the zone end. So, it is OK to
-+		 * cap *nr_zones to at the end.
-+		 */
-+		*nr_zones = min_t(u32, *nr_zones, zinfo->nr_zones - zno);
-+
-+		for (i = 0; i < *nr_zones; i++) {
-+			struct blk_zone *zone_info;
-+
-+			zone_info = &zinfo->zone_cache[zno + i];
-+			if (!zone_info->len)
-+				break;
-+		}
-+
-+		if (i == *nr_zones) {
-+			/* Cache hit on all the zones */
-+			memcpy(zones, zinfo->zone_cache + zno,
-+			       sizeof(*zinfo->zone_cache) * *nr_zones);
-+			return 0;
-+		}
-+	}
-+
- 	ret = blkdev_report_zones(device->bdev, pos >> SECTOR_SHIFT, *nr_zones,
- 				  copy_zone_info_cb, zones);
- 	if (ret < 0) {
-@@ -237,6 +268,11 @@ static int btrfs_get_dev_zones(struct bt
- 	if (!ret)
- 		return -EIO;
- 
-+	/* Populate cache */
-+	if (zinfo->zone_cache)
-+		memcpy(zinfo->zone_cache + zno, zones,
-+		       sizeof(*zinfo->zone_cache) * *nr_zones);
-+
- 	return 0;
- }
- 
-@@ -300,7 +336,7 @@ int btrfs_get_dev_zone_info_all_devices(
- 		if (!device->bdev)
- 			continue;
- 
--		ret = btrfs_get_dev_zone_info(device);
-+		ret = btrfs_get_dev_zone_info(device, true);
- 		if (ret)
- 			break;
- 	}
-@@ -309,7 +345,7 @@ int btrfs_get_dev_zone_info_all_devices(
- 	return ret;
- }
- 
--int btrfs_get_dev_zone_info(struct btrfs_device *device)
-+int btrfs_get_dev_zone_info(struct btrfs_device *device, bool populate_cache)
- {
- 	struct btrfs_fs_info *fs_info = device->fs_info;
- 	struct btrfs_zoned_device_info *zone_info = NULL;
-@@ -339,6 +375,8 @@ int btrfs_get_dev_zone_info(struct btrfs
- 	if (!zone_info)
- 		return -ENOMEM;
- 
-+	device->zone_info = zone_info;
-+
- 	if (!bdev_is_zoned(bdev)) {
- 		if (!fs_info->zone_size) {
- 			ret = calculate_emulated_zone_size(fs_info);
-@@ -407,6 +445,23 @@ int btrfs_get_dev_zone_info(struct btrfs
- 		goto out;
- 	}
- 
-+	/*
-+	 * Enable zone cache only for a zoned device. On a non-zoned device, we
-+	 * fill the zone info with emulated CONVENTIONAL zones, so no need to
-+	 * use the cache.
-+	 */
-+	if (populate_cache && bdev_is_zoned(device->bdev)) {
-+		zone_info->zone_cache = vzalloc(sizeof(struct blk_zone) *
-+						zone_info->nr_zones);
-+		if (!zone_info->zone_cache) {
-+			btrfs_err_in_rcu(device->fs_info,
-+				"zoned: failed to allocate zone cache for %s",
-+				rcu_str_deref(device->name));
-+			ret = -ENOMEM;
-+			goto out;
-+		}
-+	}
-+
- 	/* Get zones type */
- 	nactive = 0;
- 	while (sector < nr_sectors) {
-@@ -505,8 +560,6 @@ int btrfs_get_dev_zone_info(struct btrfs
- 
- 	kfree(zones);
- 
--	device->zone_info = zone_info;
--
- 	switch (bdev_zoned_model(bdev)) {
- 	case BLK_ZONED_HM:
- 		model = "host-managed zoned";
-@@ -539,11 +592,7 @@ int btrfs_get_dev_zone_info(struct btrfs
- out:
- 	kfree(zones);
- out_free_zone_info:
--	bitmap_free(zone_info->active_zones);
--	bitmap_free(zone_info->empty_zones);
--	bitmap_free(zone_info->seq_zones);
--	kfree(zone_info);
--	device->zone_info = NULL;
-+	btrfs_destroy_dev_zone_info(device);
- 
- 	return ret;
- }
-@@ -558,6 +607,7 @@ void btrfs_destroy_dev_zone_info(struct
- 	bitmap_free(zone_info->active_zones);
- 	bitmap_free(zone_info->seq_zones);
- 	bitmap_free(zone_info->empty_zones);
-+	vfree(zone_info->zone_cache);
- 	kfree(zone_info);
- 	device->zone_info = NULL;
- }
-@@ -1975,3 +2025,21 @@ void btrfs_clear_data_reloc_bg(struct bt
- 		fs_info->data_reloc_bg = 0;
- 	spin_unlock(&fs_info->relocation_bg_lock);
- }
-+
-+void btrfs_free_zone_cache(struct btrfs_fs_info *fs_info)
-+{
-+	struct btrfs_fs_devices *fs_devices = fs_info->fs_devices;
-+	struct btrfs_device *device;
-+
-+	if (!btrfs_is_zoned(fs_info))
-+		return;
-+
-+	mutex_lock(&fs_devices->device_list_mutex);
-+	list_for_each_entry(device, &fs_devices->devices, dev_list) {
-+		if (device->zone_info) {
-+			vfree(device->zone_info->zone_cache);
-+			device->zone_info->zone_cache = NULL;
-+		}
-+	}
-+	mutex_unlock(&fs_devices->device_list_mutex);
-+}
---- a/fs/btrfs/zoned.h
-+++ b/fs/btrfs/zoned.h
-@@ -28,6 +28,7 @@ struct btrfs_zoned_device_info {
- 	unsigned long *seq_zones;
- 	unsigned long *empty_zones;
- 	unsigned long *active_zones;
-+	struct blk_zone *zone_cache;
- 	struct blk_zone sb_zones[2 * BTRFS_SUPER_MIRROR_MAX];
+ 	xmdio0: mdio@fd000 {
+@@ -86,6 +87,7 @@ fman0: fman@400000 {
+ 		#size-cells = <0>;
+ 		compatible = "fsl,fman-memac-mdio", "fsl,fman-xmdio";
+ 		reg = <0xfd000 0x1000>;
++		fsl,erratum-a009885;
+ 	};
  };
  
-@@ -35,7 +36,7 @@ struct btrfs_zoned_device_info {
- int btrfs_get_dev_zone(struct btrfs_device *device, u64 pos,
- 		       struct blk_zone *zone);
- int btrfs_get_dev_zone_info_all_devices(struct btrfs_fs_info *fs_info);
--int btrfs_get_dev_zone_info(struct btrfs_device *device);
-+int btrfs_get_dev_zone_info(struct btrfs_device *device, bool populate_cache);
- void btrfs_destroy_dev_zone_info(struct btrfs_device *device);
- int btrfs_check_zoned_mode(struct btrfs_fs_info *fs_info);
- int btrfs_check_mountopts_zoned(struct btrfs_fs_info *info);
-@@ -76,6 +77,7 @@ bool btrfs_can_activate_zone(struct btrf
- void btrfs_zone_finish_endio(struct btrfs_fs_info *fs_info, u64 logical,
- 			     u64 length);
- void btrfs_clear_data_reloc_bg(struct btrfs_block_group *bg);
-+void btrfs_free_zone_cache(struct btrfs_fs_info *fs_info);
- #else /* CONFIG_BLK_DEV_ZONED */
- static inline int btrfs_get_dev_zone(struct btrfs_device *device, u64 pos,
- 				     struct blk_zone *zone)
-@@ -88,7 +90,8 @@ static inline int btrfs_get_dev_zone_inf
- 	return 0;
- }
- 
--static inline int btrfs_get_dev_zone_info(struct btrfs_device *device)
-+static inline int btrfs_get_dev_zone_info(struct btrfs_device *device,
-+					  bool populate_cache)
- {
- 	return 0;
- }
-@@ -232,6 +235,7 @@ static inline void btrfs_zone_finish_end
- 
- static inline void btrfs_clear_data_reloc_bg(struct btrfs_block_group *bg) { }
- 
-+static inline void btrfs_free_zone_cache(struct btrfs_fs_info *fs_info) { }
- #endif
- 
- static inline bool btrfs_dev_is_sequential(struct btrfs_device *device, u64 pos)
 
 

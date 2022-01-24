@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE04E499479
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:43:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7400A499319
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389617AbiAXUmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:42:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37224 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356327AbiAXUXP (ORCPT
+        id S1353551AbiAXU2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:28:24 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49364 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378162AbiAXUG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:23:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57368C06124C;
-        Mon, 24 Jan 2022 11:10:28 -0800 (PST)
+        Mon, 24 Jan 2022 15:06:28 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6EE860918;
-        Mon, 24 Jan 2022 19:10:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E607BC340E5;
-        Mon, 24 Jan 2022 19:10:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CE17B8122C;
+        Mon, 24 Jan 2022 20:06:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD79DC340E5;
+        Mon, 24 Jan 2022 20:06:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051427;
-        bh=64djAcdFOZX9lox2mWpaTdgR3LKocNI2zq5giDpMUEs=;
+        s=korg; t=1643054786;
+        bh=+7FxDuO7yr1t9qpl3uSqpYJ359PsLS1FIXDJxNUqOOs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WxDo+Be0Oqwne+MEmHm8qBAoeH9shf1GqmsVfiQq7yK1XBTv6rhm8ZLwb2TFlm8kc
-         rVPmXXEONn9uFs+dLWBsIjWqikxw+zb7SpeAFfDS524dkYiiDD277HkP680bntj5Zv
-         Wpzbr8IUZzHmtV6bR22Rj9HrZY1madrRPHfikbpY=
+        b=BgIziojMZtZdnXFGD5B7n7ouJpbrp5Ztr8gWkCy5FWZJ2oqPcjBYi/EQ6iuc7Y/x6
+         hWaa1u5Lfa4xwVlExQer/CYNsjMKkgrYry0JxJ3t1WkyrQ8L9NFVa5AcULCEQl4Ylw
+         cBknH/Su/qh60N4Hfmjg7HQ/vSBfEpH9OYewhzmg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Julius Werner <jwerner@chromium.org>,
-        Ben Hutchings <ben@decadent.org.uk>
-Subject: [PATCH 4.14 159/186] firmware: Update Kconfig help text for Google firmware
+        stable@vger.kernel.org, Hao Sun <sunhao.th@gmail.com>,
+        Qu Wenruo <wqu@suse.com>, Filipe Manana <fdmanana@suse.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.10 469/563] btrfs: fix deadlock between quota enable and other quota operations
 Date:   Mon, 24 Jan 2022 19:43:54 +0100
-Message-Id: <20220124183942.212796171@linuxfoundation.org>
+Message-Id: <20220124184040.684821809@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,40 +46,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ben Hutchings <ben@decadent.org.uk>
+From: Filipe Manana <fdmanana@suse.com>
 
-commit d185a3466f0cd5af8f1c5c782c53bc0e6f2e7136 upstream.
+commit 232796df8c1437c41d308d161007f0715bac0a54 upstream.
 
-The help text for GOOGLE_FIRMWARE states that it should only be
-enabled when building a kernel for Google's own servers.  However,
-many of the drivers dependent on it are also useful on Chromebooks or
-on any platform using coreboot.
+When enabling quotas, we attempt to commit a transaction while holding the
+mutex fs_info->qgroup_ioctl_lock. This can result on a deadlock with other
+quota operations such as:
 
-Update the help text to reflect this double duty.
+- qgroup creation and deletion, ioctl BTRFS_IOC_QGROUP_CREATE;
 
-Fixes: d384d6f43d1e ("firmware: google memconsole: Add coreboot support")
-Reviewed-by: Julius Werner <jwerner@chromium.org>
-Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
-Link: https://lore.kernel.org/r/20180618225540.GD14131@decadent.org.uk
+- adding and removing qgroup relations, ioctl BTRFS_IOC_QGROUP_ASSIGN.
+
+This is because these operations join a transaction and after that they
+attempt to lock the mutex fs_info->qgroup_ioctl_lock. Acquiring that mutex
+after joining or starting a transaction is a pattern followed everywhere
+in qgroups, so the quota enablement operation is the one at fault here,
+and should not commit a transaction while holding that mutex.
+
+Fix this by making the transaction commit while not holding the mutex.
+We are safe from two concurrent tasks trying to enable quotas because
+we are serialized by the rw semaphore fs_info->subvol_sem at
+btrfs_ioctl_quota_ctl(), which is the only call site for enabling
+quotas.
+
+When this deadlock happens, it produces a trace like the following:
+
+  INFO: task syz-executor:25604 blocked for more than 143 seconds.
+  Not tainted 5.15.0-rc6 #4
+  "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+  task:syz-executor state:D stack:24800 pid:25604 ppid: 24873 flags:0x00004004
+  Call Trace:
+  context_switch kernel/sched/core.c:4940 [inline]
+  __schedule+0xcd9/0x2530 kernel/sched/core.c:6287
+  schedule+0xd3/0x270 kernel/sched/core.c:6366
+  btrfs_commit_transaction+0x994/0x2e90 fs/btrfs/transaction.c:2201
+  btrfs_quota_enable+0x95c/0x1790 fs/btrfs/qgroup.c:1120
+  btrfs_ioctl_quota_ctl fs/btrfs/ioctl.c:4229 [inline]
+  btrfs_ioctl+0x637e/0x7b70 fs/btrfs/ioctl.c:5010
+  vfs_ioctl fs/ioctl.c:51 [inline]
+  __do_sys_ioctl fs/ioctl.c:874 [inline]
+  __se_sys_ioctl fs/ioctl.c:860 [inline]
+  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
+  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+  RIP: 0033:0x7f86920b2c4d
+  RSP: 002b:00007f868f61ac58 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+  RAX: ffffffffffffffda RBX: 00007f86921d90a0 RCX: 00007f86920b2c4d
+  RDX: 0000000020005e40 RSI: 00000000c0109428 RDI: 0000000000000008
+  RBP: 00007f869212bd80 R08: 0000000000000000 R09: 0000000000000000
+  R10: 0000000000000000 R11: 0000000000000246 R12: 00007f86921d90a0
+  R13: 00007fff6d233e4f R14: 00007fff6d233ff0 R15: 00007f868f61adc0
+  INFO: task syz-executor:25628 blocked for more than 143 seconds.
+  Not tainted 5.15.0-rc6 #4
+  "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+  task:syz-executor state:D stack:29080 pid:25628 ppid: 24873 flags:0x00004004
+  Call Trace:
+  context_switch kernel/sched/core.c:4940 [inline]
+  __schedule+0xcd9/0x2530 kernel/sched/core.c:6287
+  schedule+0xd3/0x270 kernel/sched/core.c:6366
+  schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6425
+  __mutex_lock_common kernel/locking/mutex.c:669 [inline]
+  __mutex_lock+0xc96/0x1680 kernel/locking/mutex.c:729
+  btrfs_remove_qgroup+0xb7/0x7d0 fs/btrfs/qgroup.c:1548
+  btrfs_ioctl_qgroup_create fs/btrfs/ioctl.c:4333 [inline]
+  btrfs_ioctl+0x683c/0x7b70 fs/btrfs/ioctl.c:5014
+  vfs_ioctl fs/ioctl.c:51 [inline]
+  __do_sys_ioctl fs/ioctl.c:874 [inline]
+  __se_sys_ioctl fs/ioctl.c:860 [inline]
+  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
+  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Reported-by: Hao Sun <sunhao.th@gmail.com>
+Link: https://lore.kernel.org/linux-btrfs/CACkBjsZQF19bQ1C6=yetF3BvL10OSORpFUcWXTP6HErshDB4dQ@mail.gmail.com/
+Fixes: 340f1aa27f36 ("btrfs: qgroups: Move transaction management inside btrfs_quota_enable/disable")
+CC: stable@vger.kernel.org # 4.19
+Reviewed-by: Qu Wenruo <wqu@suse.com>
+Signed-off-by: Filipe Manana <fdmanana@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/firmware/google/Kconfig |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ fs/btrfs/qgroup.c |   19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
---- a/drivers/firmware/google/Kconfig
-+++ b/drivers/firmware/google/Kconfig
-@@ -2,9 +2,9 @@ menuconfig GOOGLE_FIRMWARE
- 	bool "Google Firmware Drivers"
- 	default n
- 	help
--	  These firmware drivers are used by Google's servers.  They are
--	  only useful if you are working directly on one of their
--	  proprietary servers.  If in doubt, say "N".
-+	  These firmware drivers are used by Google servers,
-+	  Chromebooks and other devices using coreboot firmware.
-+	  If in doubt, say "N".
+--- a/fs/btrfs/qgroup.c
++++ b/fs/btrfs/qgroup.c
+@@ -941,6 +941,14 @@ int btrfs_quota_enable(struct btrfs_fs_i
+ 	int ret = 0;
+ 	int slot;
  
- if GOOGLE_FIRMWARE
++	/*
++	 * We need to have subvol_sem write locked, to prevent races between
++	 * concurrent tasks trying to enable quotas, because we will unlock
++	 * and relock qgroup_ioctl_lock before setting fs_info->quota_root
++	 * and before setting BTRFS_FS_QUOTA_ENABLED.
++	 */
++	lockdep_assert_held_write(&fs_info->subvol_sem);
++
+ 	mutex_lock(&fs_info->qgroup_ioctl_lock);
+ 	if (fs_info->quota_root)
+ 		goto out;
+@@ -1118,8 +1126,19 @@ out_add_root:
+ 		goto out_free_path;
+ 	}
+ 
++	mutex_unlock(&fs_info->qgroup_ioctl_lock);
++	/*
++	 * Commit the transaction while not holding qgroup_ioctl_lock, to avoid
++	 * a deadlock with tasks concurrently doing other qgroup operations, such
++	 * adding/removing qgroups or adding/deleting qgroup relations for example,
++	 * because all qgroup operations first start or join a transaction and then
++	 * lock the qgroup_ioctl_lock mutex.
++	 * We are safe from a concurrent task trying to enable quotas, by calling
++	 * this function, since we are serialized by fs_info->subvol_sem.
++	 */
+ 	ret = btrfs_commit_transaction(trans);
+ 	trans = NULL;
++	mutex_lock(&fs_info->qgroup_ioctl_lock);
+ 	if (ret)
+ 		goto out_free_path;
  
 
 

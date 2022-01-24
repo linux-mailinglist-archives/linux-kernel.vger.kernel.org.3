@@ -2,97 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CE14980AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:14:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC2C4980C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiAXNOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 08:14:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47260 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239609AbiAXNNw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 08:13:52 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF12C061759;
-        Mon, 24 Jan 2022 05:13:51 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id g9-20020a17090a67c900b001b4f1d71e4fso16847465pjm.4;
-        Mon, 24 Jan 2022 05:13:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SuD6sheATFuuLSHiFeUeKDBZFiRvmZlnh/SZkdpgISc=;
-        b=HseGslMxsGF82e3iqYEkb4BTLD/csJH/OgIC5HFuberMikfaDQOBTrzYNNfB9JqlID
-         PB1W2Er3/n2BtnIE9hoLUnmJK+ekPrk0GeIKaajV+aQxT0XgQbqBPKQI3um1na8nW7A4
-         97LKHB62w1blgmzSOLCCKY0dZ5KbHF3hjmbJYY9rK3GN1Jsf5yYnlNRmhFAdtYFVyA5t
-         Zf2dlVnwmV3UqH+Fm6ljGcUt4cWXwHhmbf22cbLq+LSBnr6/ltR3v/Qv76gdi+IGmNwB
-         NWiBubid9GCZ7Jj+WuqllkZzPRvWEvoG27ygtu7UscpbcKZrjmAlE4DxD75APjQeQ7so
-         Iq4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SuD6sheATFuuLSHiFeUeKDBZFiRvmZlnh/SZkdpgISc=;
-        b=LXBAbigrIwkXPEkQ6eQaonlVmUxGk1tsWslBNWu7OSARoD96YOy2YF+9B7Gu9QCfKM
-         u7Gja+sBAGtYMdZPEgZxqKYJp/LG3BDQNKmS1XfMZ4Ntx6Rm8P02TjJPQog5Q9/yIqeo
-         LNK9nOw3vIfg0/ZT0BMwBaD4ow8CoEGecTmJdUzv57Tm2Wi1ldyp7CJkvFMzVirOEeLe
-         iuO0S3Qy447a2WeGPZlD3ThaBaJqg1qIv8DhRi6Hw/k9KO5rVC40PlvAOG/bDmQ3SsQX
-         UEK99Zcw26KO28akIKKLru1MniCKlkUor6Rfn4Gj8q3/iDNBdUI42NblDI296HavTlOT
-         PHrg==
-X-Gm-Message-State: AOAM530c6w4sLJEyitHnI1VjWSJtYeaL1WmroAHIUojkcjtjmjyEYSyA
-        Q1Exn6VEUhOA+yqVnENebetd997yTeXswWZl
-X-Google-Smtp-Source: ABdhPJxEQElMBY55AeZqCVCOFNii4gh3iaEeL/1pcOCdIZGIJkSOZaqbehpCnljKH3rlYpKmeh3YVA==
-X-Received: by 2002:a17:903:32c1:b0:14b:2d82:c05a with SMTP id i1-20020a17090332c100b0014b2d82c05amr10179670plr.55.1643030031319;
-        Mon, 24 Jan 2022 05:13:51 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id kk17sm4819342pjb.21.2022.01.24.05.13.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 05:13:51 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] power: supply: ab8500: Fix memory leak in ab8500_fg_sysfs_init
-Date:   Mon, 24 Jan 2022 13:13:46 +0000
-Message-Id: <20220124131346.12571-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S239975AbiAXNPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 08:15:44 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:50718 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229533AbiAXNPm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 08:15:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=PeFIruRVAx/9fcHZk7SrtQ7xKuJ0YbP5VfyDFWFEJSw=; b=xNaC/FgUnUbJApVTzE3QBM8Djn
+        w16MkgJn3jTsl3IlNpc0Uu7r56sCQIwzpR7BGd/HuczSidjDiif1i+IUYc0NELP8xMK65vYvZCmXe
+        53bERZ7s8V4cinKzRid22A2gaCq4jElkED97VaRNfxWKGsQVeSDwhtrRus9S32iYtoU0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nBzBr-002TB3-P7; Mon, 24 Jan 2022 14:15:23 +0100
+Date:   Mon, 24 Jan 2022 14:15:23 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        Voon Weifeng <weifeng.voon@intel.com>,
+        Wong Vee Khee <vee.khee.wong@intel.com>,
+        Huacai Chen <chenhuacai@kernel.org>, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 2/2] net: stmmac: skip only stmmac_ptp_register when
+ resume from suspend
+Message-ID: <Ye6maxMtt68JlZ9l@lunn.ch>
+References: <20220124095951.23845-1-mohammad.athari.ismail@intel.com>
+ <20220124095951.23845-3-mohammad.athari.ismail@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220124095951.23845-3-mohammad.athari.ismail@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kobject_init_and_add() takes reference even when it fails.
-According to the doc of kobject_init_and_add()：
+> @@ -3308,13 +3309,11 @@ static int stmmac_hw_setup(struct net_device *dev, bool init_ptp)
+>  
+>  	stmmac_mmc_setup(priv);
+>  
+> -	if (init_ptp) {
+> -		ret = stmmac_init_ptp(priv);
+> -		if (ret == -EOPNOTSUPP)
+> -			netdev_warn(priv->dev, "PTP not supported by HW\n");
+> -		else if (ret)
+> -			netdev_warn(priv->dev, "PTP init failed\n");
+> -	}
+> +	ret = stmmac_init_ptp(priv, ptp_register);
+> +	if (ret == -EOPNOTSUPP)
+> +		netdev_warn(priv->dev, "PTP not supported by HW\n");
+> +	else if (ret)
+> +		netdev_warn(priv->dev, "PTP init failed\n");
 
-   If this function returns an error, kobject_put() must be called to
-   properly clean up the memory associated with the object.
+The init_ptp parameter now seems unused? If so, please remove it.
 
-Fix memory leak by calling kobject_put().
-
-Fixes: 8c0984e5a753 ("power: move power supply drivers to power/supply")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/power/supply/ab8500_fg.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index 05fe9724ba50..57799a8079d4 100644
---- a/drivers/power/supply/ab8500_fg.c
-+++ b/drivers/power/supply/ab8500_fg.c
-@@ -2545,8 +2545,10 @@ static int ab8500_fg_sysfs_init(struct ab8500_fg *di)
- 	ret = kobject_init_and_add(&di->fg_kobject,
- 		&ab8500_fg_ktype,
- 		NULL, "battery");
--	if (ret < 0)
-+	if (ret < 0) {
-+		kobject_put(&di->fg_kobject);
- 		dev_err(di->dev, "failed to create sysfs entry\n");
-+	}
- 
- 	return ret;
- }
--- 
-2.17.1
-
+    Andrew

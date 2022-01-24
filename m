@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C32C498DDF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B5B6498DC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353809AbiAXTfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:35:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
+        id S1354038AbiAXTft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:35:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351810AbiAXT2r (ORCPT
+        with ESMTP id S1351849AbiAXT24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:28:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B36AC061A78;
-        Mon, 24 Jan 2022 11:13:02 -0800 (PST)
+        Mon, 24 Jan 2022 14:28:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CACEC029808;
+        Mon, 24 Jan 2022 11:13:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58E26B811F9;
-        Mon, 24 Jan 2022 19:13:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56CDCC340E5;
-        Mon, 24 Jan 2022 19:12:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B183060BFB;
+        Mon, 24 Jan 2022 19:13:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89091C36AE9;
+        Mon, 24 Jan 2022 19:13:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051580;
-        bh=9pdLfRAIC3i+Ov8lz3nUmCShg09W06WgYN964DB+O1w=;
+        s=korg; t=1643051583;
+        bh=ZXmHV626MKlRKHjGTecpf95Tig3baN8fCoHHphGTCvw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mfagK2C1lnL3h/tal9WreCw5fOfgpCoo3m58Pj15wW9Vsk0lbedVaQgazSess+iWg
-         QkeoYYkPCUHho13G4Xef13J0Zn6A4WlTtiIEjcEoq/lu1dP5o5evNDQcQ0zaLJ1ZRW
-         RFBcHWNAF/irHTZHM9uaJI5vCqkrCK9cdQsSJzk4=
+        b=gGpat4eUAtJ/+3P/xfxt7mgRVYPLiG3jddVajW7ftWXL8vaBUP/8oTnhH6WSBUFpv
+         1yVz1PRMhaRJtRsAHfaFg7mZtbw3ReB7k+2DEEcPzlgsU4OCcXASzdqC4DazBR4Hgm
+         cY1X5a6MsgK1A7Cmc4JQc9tSyFl+2p4cYNKucZX4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gabriel Somlo <somlo@cmu.edu>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 4.19 020/239] firmware: qemu_fw_cfg: fix kobject leak in probe error path
-Date:   Mon, 24 Jan 2022 19:40:58 +0100
-Message-Id: <20220124183943.764526428@linuxfoundation.org>
+        stable@vger.kernel.org, Christian Lachner <gladiac@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.19 021/239] ALSA: hda/realtek - Fix silent output on Gigabyte X570 Aorus Master after reboot from Windows
+Date:   Mon, 24 Jan 2022 19:40:59 +0100
+Message-Id: <20220124183943.796509349@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
 References: <20220124183943.102762895@linuxfoundation.org>
@@ -48,67 +48,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Christian Lachner <gladiac@gmail.com>
 
-commit 47a1db8e797da01a1309bf42e0c0d771d4e4d4f3 upstream.
+commit c1933008679586b20437280463110c967d66f865 upstream.
 
-An initialised kobject must be freed using kobject_put() to avoid
-leaking associated resources (e.g. the object name).
+This patch addresses an issue where after rebooting from Windows into Linux
+there would be no audio output.
 
-Commit fe3c60684377 ("firmware: Fix a reference count leak.") "fixed"
-the leak in the first error path of the file registration helper but
-left the second one unchanged. This "fix" would however result in a NULL
-pointer dereference due to the release function also removing the never
-added entry from the fw_cfg_entry_cache list. This has now been
-addressed.
+It turns out that the Realtek Audio driver on Windows changes some coeffs
+which are not being reset/reinitialized when rebooting the machine. As a
+result, there is no audio output until these coeffs are being reset to
+their initial state. This patch takes care of that by setting known-good
+(initial) values to the coeffs.
 
-Fix the remaining kobject leak by restoring the common error path and
-adding the missing kobject_put().
+We initially relied upon alc1220_fixup_clevo_p950() to fix some pins in the
+connection list. However, it also sets coef 0x7 which does not need to be
+touched. Furthermore, to prevent mixing device-specific quirks I introduced
+a new alc1220_fixup_gb_x570() which is heavily based on
+alc1220_fixup_clevo_p950() but does not set coeff 0x7 and fixes the coeffs
+that are actually needed instead.
 
-Fixes: 75f3e8e47f38 ("firmware: introduce sysfs driver for QEMU's fw_cfg device")
-Cc: stable@vger.kernel.org      # 4.6
-Cc: Gabriel Somlo <somlo@cmu.edu>
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Link: https://lore.kernel.org/r/20211201132528.30025-3-johan@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This new alc1220_fixup_gb_x570() is believed to also work for other boards,
+like the Gigabyte X570 Aorus Extreme and the newer Gigabyte Aorus X570S
+Master. However, as there is no way for me to test these I initially only
+enable this new behaviour for the mainboard I have which is the Gigabyte
+X570(non-S) Aorus Master.
+
+I tested this patch on the 5.15 branch as well as on master and it is
+working well for me.
+
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=205275
+Signed-off-by: Christian Lachner <gladiac@gmail.com>
+Fixes: 0d45e86d2267d ("ALSA: hda/realtek - Fix silent output on Gigabyte X570 Aorus Master")
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220103140517.30273-2-gladiac@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/firmware/qemu_fw_cfg.c |   13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ sound/pci/hda/patch_realtek.c |   30 +++++++++++++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
 
---- a/drivers/firmware/qemu_fw_cfg.c
-+++ b/drivers/firmware/qemu_fw_cfg.c
-@@ -600,15 +600,13 @@ static int fw_cfg_register_file(const st
- 	/* register entry under "/sys/firmware/qemu_fw_cfg/by_key/" */
- 	err = kobject_init_and_add(&entry->kobj, &fw_cfg_sysfs_entry_ktype,
- 				   fw_cfg_sel_ko, "%d", entry->select);
--	if (err) {
--		kobject_put(&entry->kobj);
--		return err;
--	}
-+	if (err)
-+		goto err_put_entry;
- 
- 	/* add raw binary content access */
- 	err = sysfs_create_bin_file(&entry->kobj, &fw_cfg_sysfs_attr_raw);
- 	if (err)
--		goto err_add_raw;
-+		goto err_del_entry;
- 
- 	/* try adding "/sys/firmware/qemu_fw_cfg/by_name/" symlink */
- 	fw_cfg_build_symlink(fw_cfg_fname_kset, &entry->kobj, entry->name);
-@@ -617,9 +615,10 @@ static int fw_cfg_register_file(const st
- 	fw_cfg_sysfs_cache_enlist(entry);
- 	return 0;
- 
--err_add_raw:
-+err_del_entry:
- 	kobject_del(&entry->kobj);
--	kfree(entry);
-+err_put_entry:
-+	kobject_put(&entry->kobj);
- 	return err;
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -1910,6 +1910,7 @@ enum {
+ 	ALC887_FIXUP_ASUS_BASS,
+ 	ALC887_FIXUP_BASS_CHMAP,
+ 	ALC1220_FIXUP_GB_DUAL_CODECS,
++	ALC1220_FIXUP_GB_X570,
+ 	ALC1220_FIXUP_CLEVO_P950,
+ 	ALC1220_FIXUP_CLEVO_PB51ED,
+ 	ALC1220_FIXUP_CLEVO_PB51ED_PINS,
+@@ -2099,6 +2100,29 @@ static void alc1220_fixup_gb_dual_codecs
+ 	}
  }
  
++static void alc1220_fixup_gb_x570(struct hda_codec *codec,
++				     const struct hda_fixup *fix,
++				     int action)
++{
++	static const hda_nid_t conn1[] = { 0x0c };
++	static const struct coef_fw gb_x570_coefs[] = {
++		WRITE_COEF(0x1a, 0x01c1),
++		WRITE_COEF(0x1b, 0x0202),
++		WRITE_COEF(0x43, 0x3005),
++		{}
++	};
++
++	switch (action) {
++	case HDA_FIXUP_ACT_PRE_PROBE:
++		snd_hda_override_conn_list(codec, 0x14, ARRAY_SIZE(conn1), conn1);
++		snd_hda_override_conn_list(codec, 0x1b, ARRAY_SIZE(conn1), conn1);
++		break;
++	case HDA_FIXUP_ACT_INIT:
++		alc_process_coef_fw(codec, gb_x570_coefs);
++		break;
++	}
++}
++
+ static void alc1220_fixup_clevo_p950(struct hda_codec *codec,
+ 				     const struct hda_fixup *fix,
+ 				     int action)
+@@ -2401,6 +2425,10 @@ static const struct hda_fixup alc882_fix
+ 		.type = HDA_FIXUP_FUNC,
+ 		.v.func = alc1220_fixup_gb_dual_codecs,
+ 	},
++	[ALC1220_FIXUP_GB_X570] = {
++		.type = HDA_FIXUP_FUNC,
++		.v.func = alc1220_fixup_gb_x570,
++	},
+ 	[ALC1220_FIXUP_CLEVO_P950] = {
+ 		.type = HDA_FIXUP_FUNC,
+ 		.v.func = alc1220_fixup_clevo_p950,
+@@ -2503,7 +2531,7 @@ static const struct snd_pci_quirk alc882
+ 	SND_PCI_QUIRK(0x13fe, 0x1009, "Advantech MIT-W101", ALC886_FIXUP_EAPD),
+ 	SND_PCI_QUIRK(0x1458, 0xa002, "Gigabyte EP45-DS3/Z87X-UD3H", ALC889_FIXUP_FRONT_HP_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1458, 0xa0b8, "Gigabyte AZ370-Gaming", ALC1220_FIXUP_GB_DUAL_CODECS),
+-	SND_PCI_QUIRK(0x1458, 0xa0cd, "Gigabyte X570 Aorus Master", ALC1220_FIXUP_CLEVO_P950),
++	SND_PCI_QUIRK(0x1458, 0xa0cd, "Gigabyte X570 Aorus Master", ALC1220_FIXUP_GB_X570),
+ 	SND_PCI_QUIRK(0x1458, 0xa0ce, "Gigabyte X570 Aorus Xtreme", ALC1220_FIXUP_CLEVO_P950),
+ 	SND_PCI_QUIRK(0x1462, 0x11f7, "MSI-GE63", ALC1220_FIXUP_CLEVO_P950),
+ 	SND_PCI_QUIRK(0x1462, 0x1228, "MSI-GP63", ALC1220_FIXUP_CLEVO_P950),
 
 

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A50499C34
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A0349954B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:09:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1450269AbiAXWD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:03:28 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37392 "EHLO
+        id S1392535AbiAXUv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:51:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33514 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377231AbiAXVRu (ORCPT
+        with ESMTP id S1383483AbiAXU1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:17:50 -0500
+        Mon, 24 Jan 2022 15:27:17 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9BFFB81188;
-        Mon, 24 Jan 2022 21:17:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0571AC340E4;
-        Mon, 24 Jan 2022 21:17:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E49C7B8121A;
+        Mon, 24 Jan 2022 20:27:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 182E3C340E5;
+        Mon, 24 Jan 2022 20:27:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059066;
-        bh=eXld64SAj0/uBme7zFW+YGIPcTAU5bs5ccJa8NjUrcA=;
+        s=korg; t=1643056034;
+        bh=uRj4HgEAsCnAHzPKf43ZhHj4VQSsgEveE66djYWwcfI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mLa9tCdHORe/pKLsgK4jEF02WRtUT1M6we7t/VRZxarZAIiCsH23KxO8dmIxZFyUw
-         i9AUzFpI6HPMcLTJ1PkxXHv5S1Am45jvACsrUKNqP8xYm1ledgASo12ANZUzdf9R0i
-         ZJR99UJKfDpCAwb9HFuSe1mwq1Cukr07WM08/Cqo=
+        b=izsWbj7KTg1TndUvI9gm+v6aH9pSHDslb/iQsYvJsiwA10frIXR39B7Z34WI2J75K
+         YB/Tbtu8wRM3cbpGmAzdHwum6koJivRJHl0kEfTJ+/BO68DGWNXjxEx7ItAZIRevn5
+         C5UqJq0thSMxH9yfW0NztyJ8dU8NW0KI2IwvjeTo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        Hector Martin <marcan@marcan.st>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0476/1039] iommu/io-pgtable-arm: Fix table descriptor paddr formatting
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 348/846] mptcp: fix per socket endpoint accounting
 Date:   Mon, 24 Jan 2022 19:37:45 +0100
-Message-Id: <20220124184141.276711853@linuxfoundation.org>
+Message-Id: <20220124184112.957838912@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,67 +47,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hector Martin <marcan@marcan.st>
+From: Paolo Abeni <pabeni@redhat.com>
 
-[ Upstream commit 9abe2ac834851a7d0b0756e295cf7a292c45ca53 ]
+[ Upstream commit f7d6a237d7422809d458d754016de2844017cb4d ]
 
-Table descriptors were being installed without properly formatting the
-address using paddr_to_iopte, which does not match up with the
-iopte_deref in __arm_lpae_map. This is incorrect for the LPAE pte
-format, as it does not handle the high bits properly.
+Since full-mesh endpoint support, the reception of a single ADD_ADDR
+option can cause multiple subflows creation. When such option is
+accepted we increment 'add_addr_accepted' by one. When we received
+a paired RM_ADDR option, we deleted all the relevant subflows,
+decrementing 'add_addr_accepted' by one for each of them.
 
-This was found on Apple T6000 DARTs, which require a new pte format
-(different shift); adding support for that to
-paddr_to_iopte/iopte_to_paddr caused it to break badly, as even <48-bit
-addresses would end up incorrect in that case.
+We have a similar issue for 'local_addr_used'
 
-Fixes: 6c89928ff7a0 ("iommu/io-pgtable-arm: Support 52-bit physical address")
-Acked-by: Robin Murphy <robin.murphy@arm.com>
-Signed-off-by: Hector Martin <marcan@marcan.st>
-Link: https://lore.kernel.org/r/20211120031343.88034-1-marcan@marcan.st
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Fix them moving the pm endpoint accounting outside the subflow
+traversal.
+
+Fixes: 1a0d6136c5f0 ("mptcp: local addresses fullmesh")
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/io-pgtable-arm.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ net/mptcp/pm_netlink.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/iommu/io-pgtable-arm.c b/drivers/iommu/io-pgtable-arm.c
-index dd9e47189d0d9..94ff319ae8acc 100644
---- a/drivers/iommu/io-pgtable-arm.c
-+++ b/drivers/iommu/io-pgtable-arm.c
-@@ -315,11 +315,12 @@ static int arm_lpae_init_pte(struct arm_lpae_io_pgtable *data,
- static arm_lpae_iopte arm_lpae_install_table(arm_lpae_iopte *table,
- 					     arm_lpae_iopte *ptep,
- 					     arm_lpae_iopte curr,
--					     struct io_pgtable_cfg *cfg)
-+					     struct arm_lpae_io_pgtable *data)
- {
- 	arm_lpae_iopte old, new;
-+	struct io_pgtable_cfg *cfg = &data->iop.cfg;
+diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
+index b79251a36dcbc..d96860053816a 100644
+--- a/net/mptcp/pm_netlink.c
++++ b/net/mptcp/pm_netlink.c
+@@ -710,6 +710,8 @@ static void mptcp_pm_nl_rm_addr_or_subflow(struct mptcp_sock *msk,
+ 		return;
  
--	new = __pa(table) | ARM_LPAE_PTE_TYPE_TABLE;
-+	new = paddr_to_iopte(__pa(table), data) | ARM_LPAE_PTE_TYPE_TABLE;
- 	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_NS)
- 		new |= ARM_LPAE_PTE_NSTABLE;
+ 	for (i = 0; i < rm_list->nr; i++) {
++		bool removed = false;
++
+ 		list_for_each_entry_safe(subflow, tmp, &msk->conn_list, node) {
+ 			struct sock *ssk = mptcp_subflow_tcp_sock(subflow);
+ 			int how = RCV_SHUTDOWN | SEND_SHUTDOWN;
+@@ -729,15 +731,19 @@ static void mptcp_pm_nl_rm_addr_or_subflow(struct mptcp_sock *msk,
+ 			mptcp_close_ssk(sk, ssk, subflow);
+ 			spin_lock_bh(&msk->pm.lock);
  
-@@ -380,7 +381,7 @@ static int __arm_lpae_map(struct arm_lpae_io_pgtable *data, unsigned long iova,
- 		if (!cptep)
- 			return -ENOMEM;
- 
--		pte = arm_lpae_install_table(cptep, ptep, 0, cfg);
-+		pte = arm_lpae_install_table(cptep, ptep, 0, data);
- 		if (pte)
- 			__arm_lpae_free_pages(cptep, tblsz, cfg);
- 	} else if (!cfg->coherent_walk && !(pte & ARM_LPAE_PTE_SW_SYNC)) {
-@@ -592,7 +593,7 @@ static size_t arm_lpae_split_blk_unmap(struct arm_lpae_io_pgtable *data,
- 		__arm_lpae_init_pte(data, blk_paddr, pte, lvl, 1, &tablep[i]);
+-			if (rm_type == MPTCP_MIB_RMADDR) {
+-				msk->pm.add_addr_accepted--;
+-				WRITE_ONCE(msk->pm.accept_addr, true);
+-			} else if (rm_type == MPTCP_MIB_RMSUBFLOW) {
+-				msk->pm.local_addr_used--;
+-			}
++			removed = true;
+ 			msk->pm.subflows--;
+ 			__MPTCP_INC_STATS(sock_net(sk), rm_type);
+ 		}
++		if (!removed)
++			continue;
++
++		if (rm_type == MPTCP_MIB_RMADDR) {
++			msk->pm.add_addr_accepted--;
++			WRITE_ONCE(msk->pm.accept_addr, true);
++		} else if (rm_type == MPTCP_MIB_RMSUBFLOW) {
++			msk->pm.local_addr_used--;
++		}
  	}
+ }
  
--	pte = arm_lpae_install_table(tablep, ptep, blk_pte, cfg);
-+	pte = arm_lpae_install_table(tablep, ptep, blk_pte, data);
- 	if (pte != blk_pte) {
- 		__arm_lpae_free_pages(tablep, tablesz, cfg);
- 		/*
 -- 
 2.34.1
 

@@ -2,49 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4536349A2C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14ABC49A718
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:36:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2364242AbiAXXrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:47:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356421AbiAXWz7 (ORCPT
+        id S3423175AbiAYCdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:33:07 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:48630 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349338AbiAXUWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:55:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F6FC0680BF;
-        Mon, 24 Jan 2022 13:10:23 -0800 (PST)
+        Mon, 24 Jan 2022 15:22:43 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1318B80CCF;
-        Mon, 24 Jan 2022 21:10:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C605FC340E5;
-        Mon, 24 Jan 2022 21:10:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A23D61232;
+        Mon, 24 Jan 2022 20:22:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7FBAC340E5;
+        Mon, 24 Jan 2022 20:22:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058621;
-        bh=C2yRUz42DqSxD6SVZ6vEK2YQtCMvqicsfk/FQJFLEfQ=;
+        s=korg; t=1643055755;
+        bh=j9dt6hXW5l1S9dvtzJQJskZSb1b6kG2Bxkt0mnoPWbA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ik+twVqX/IotTV0XewxqJpaxRlrtLiE2E9KxcU1TXZ7la9SgX3WJWZb1anq37zJ/m
-         K47MdIFEfgSQFs+Bm4aDGIZrjeqpLXdcwp+BQiu7+J353jRKUZrmfRPbPO3I9BQtMU
-         nRLNQ4uP0Qrszy2neSFafyWZCvGk/w/zRONJ6XKI=
+        b=ysktzoqN93yeKKOrHYRNh3/NN6oqGiYckCr4+QGIG+FUPBEMsRSKGoTqq+wD8fvQf
+         5cqVarfALSlpCXJcMbMcK4NySM44kpTGmeTRaX3z6bwkM2WsQa4xywC4e7VuyepgAw
+         CXOqD4HYzpHFHjGb1V1En6NM8ZHKohTq+GM38PqM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
+        stable@vger.kernel.org, kernelbot <kernel-bot@kylinos.cn>,
+        Jackie Liu <liuyun01@kylinos.cn>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0349/1039] backlight: qcom-wled: Respect enabled-strings in set_brightness
-Date:   Mon, 24 Jan 2022 19:35:38 +0100
-Message-Id: <20220124184137.022224835@linuxfoundation.org>
+Subject: [PATCH 5.15 222/846] drm/msm/dp: displayPort driver need algorithm rational
+Date:   Mon, 24 Jan 2022 19:35:39 +0100
+Message-Id: <20220124184108.573059964@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,133 +48,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marijn Suijten <marijn.suijten@somainline.org>
+From: Jackie Liu <liuyun01@kylinos.cn>
 
-[ Upstream commit ec961cf3241153e0f27d850f1bf0f172e7d27a21 ]
+[ Upstream commit 53d22794711ad630f40d59dd726bd260d77d585f ]
 
-The hardware is capable of controlling any non-contiguous sequence of
-LEDs specified in the DT using qcom,enabled-strings as u32
-array, and this also follows from the DT-bindings documentation.  The
-numbers specified in this array represent indices of the LED strings
-that are to be enabled and disabled.
+Let's select RATIONAL with dp driver. avoid like:
 
-Its value is appropriately used to setup and enable string modules, but
-completely disregarded in the set_brightness paths which only iterate
-over the number of strings linearly.
-Take an example where only string 2 is enabled with
-qcom,enabled_strings=<2>: this string is appropriately enabled but
-subsequent brightness changes would have only touched the zero'th
-brightness register because num_strings is 1 here.  This is simply
-addressed by looking up the string for this index in the enabled_strings
-array just like the other codepaths that iterate over num_strings.
+[...]
+x86_64-linux-gnu-ld: drivers/gpu/drm/msm/dp/dp_catalog.o: in function `dp_catalog_ctrl_config_msa':
+dp_catalog.c:(.text+0x57e): undefined reference to `rational_best_approximation'
 
-Likewise enabled_strings is now also used in the autodetection path for
-consistent behaviour: when a list of strings is specified in DT only
-those strings will be probed for autodetection, analogous to how the
-number of strings that need to be probed is already bound by
-qcom,num-strings.  After all autodetection uses the set_brightness
-helpers to set an initial value, which could otherwise end up changing
-brightness on a different set of strings.
-
-Fixes: 775d2ffb4af6 ("backlight: qcom-wled: Restructure the driver for WLED3")
-Fixes: 03b2b5e86986 ("backlight: qcom-wled: Add support for WLED4 peripheral")
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Link: https://lore.kernel.org/r/20211115203459.1634079-10-marijn.suijten@somainline.org
+Fixes: c943b4948b58 ("drm/msm/dp: add displayPort driver support")
+Reported-by: kernelbot <kernel-bot@kylinos.cn>
+Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
+Link: https://lore.kernel.org/r/20211110070950.3355597-2-liu.yun@linux.dev
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/backlight/qcom-wled.c | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+ drivers/gpu/drm/msm/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/video/backlight/qcom-wled.c b/drivers/video/backlight/qcom-wled.c
-index 5306b06044b4f..f12c76d6e61de 100644
---- a/drivers/video/backlight/qcom-wled.c
-+++ b/drivers/video/backlight/qcom-wled.c
-@@ -237,7 +237,7 @@ static int wled3_set_brightness(struct wled *wled, u16 brightness)
- 
- 	for (i = 0;  i < wled->cfg.num_strings; ++i) {
- 		rc = regmap_bulk_write(wled->regmap, wled->ctrl_addr +
--				       WLED3_SINK_REG_BRIGHT(i),
-+				       WLED3_SINK_REG_BRIGHT(wled->cfg.enabled_strings[i]),
- 				       &v, sizeof(v));
- 		if (rc < 0)
- 			return rc;
-@@ -260,7 +260,7 @@ static int wled4_set_brightness(struct wled *wled, u16 brightness)
- 
- 	for (i = 0;  i < wled->cfg.num_strings; ++i) {
- 		rc = regmap_bulk_write(wled->regmap, wled->sink_addr +
--				       WLED4_SINK_REG_BRIGHT(i),
-+				       WLED4_SINK_REG_BRIGHT(wled->cfg.enabled_strings[i]),
- 				       &v, sizeof(v));
- 		if (rc < 0)
- 			return rc;
-@@ -571,7 +571,7 @@ unlock_mutex:
- 
- static void wled_auto_string_detection(struct wled *wled)
- {
--	int rc = 0, i, delay_time_us;
-+	int rc = 0, i, j, delay_time_us;
- 	u32 sink_config = 0;
- 	u8 sink_test = 0, sink_valid = 0, val;
- 	bool fault_set;
-@@ -618,14 +618,15 @@ static void wled_auto_string_detection(struct wled *wled)
- 
- 	/* Iterate through the strings one by one */
- 	for (i = 0; i < wled->cfg.num_strings; i++) {
--		sink_test = BIT((WLED4_SINK_REG_CURR_SINK_SHFT + i));
-+		j = wled->cfg.enabled_strings[i];
-+		sink_test = BIT((WLED4_SINK_REG_CURR_SINK_SHFT + j));
- 
- 		/* Enable feedback control */
- 		rc = regmap_write(wled->regmap, wled->ctrl_addr +
--				  WLED3_CTRL_REG_FEEDBACK_CONTROL, i + 1);
-+				  WLED3_CTRL_REG_FEEDBACK_CONTROL, j + 1);
- 		if (rc < 0) {
- 			dev_err(wled->dev, "Failed to enable feedback for SINK %d rc = %d\n",
--				i + 1, rc);
-+				j + 1, rc);
- 			goto failed_detect;
- 		}
- 
-@@ -634,7 +635,7 @@ static void wled_auto_string_detection(struct wled *wled)
- 				  WLED4_SINK_REG_CURR_SINK, sink_test);
- 		if (rc < 0) {
- 			dev_err(wled->dev, "Failed to configure SINK %d rc=%d\n",
--				i + 1, rc);
-+				j + 1, rc);
- 			goto failed_detect;
- 		}
- 
-@@ -661,7 +662,7 @@ static void wled_auto_string_detection(struct wled *wled)
- 
- 		if (fault_set)
- 			dev_dbg(wled->dev, "WLED OVP fault detected with SINK %d\n",
--				i + 1);
-+				j + 1);
- 		else
- 			sink_valid |= sink_test;
- 
-@@ -701,15 +702,16 @@ static void wled_auto_string_detection(struct wled *wled)
- 	/* Enable valid sinks */
- 	if (wled->version == 4) {
- 		for (i = 0; i < wled->cfg.num_strings; i++) {
-+			j = wled->cfg.enabled_strings[i];
- 			if (sink_config &
--			    BIT(WLED4_SINK_REG_CURR_SINK_SHFT + i))
-+			    BIT(WLED4_SINK_REG_CURR_SINK_SHFT + j))
- 				val = WLED4_SINK_REG_STR_MOD_MASK;
- 			else
- 				/* Disable modulator_en for unused sink */
- 				val = 0;
- 
- 			rc = regmap_write(wled->regmap, wled->sink_addr +
--					  WLED4_SINK_REG_STR_MOD_EN(i), val);
-+					  WLED4_SINK_REG_STR_MOD_EN(j), val);
- 			if (rc < 0) {
- 				dev_err(wled->dev, "Failed to configure MODULATOR_EN rc=%d\n",
- 					rc);
+diff --git a/drivers/gpu/drm/msm/Kconfig b/drivers/gpu/drm/msm/Kconfig
+index 3ddf739a6f9b8..c49b239231190 100644
+--- a/drivers/gpu/drm/msm/Kconfig
++++ b/drivers/gpu/drm/msm/Kconfig
+@@ -63,6 +63,7 @@ config DRM_MSM_HDMI_HDCP
+ config DRM_MSM_DP
+ 	bool "Enable DisplayPort support in MSM DRM driver"
+ 	depends on DRM_MSM
++	select RATIONAL
+ 	default y
+ 	help
+ 	  Compile in support for DP driver in MSM DRM driver. DP external
 -- 
 2.34.1
 

@@ -2,64 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED1DF49815B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:48:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A8D498162
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233939AbiAXNsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 08:48:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55388 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232688AbiAXNsu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 08:48:50 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D687C061401
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 05:48:50 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id i2so13709368wrb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 05:48:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=c0efiEkVxtTkTFENAKnUNGf6D7Eoa+H/DnhrKy6xKHg=;
-        b=Tg5CkEjLXz5RdS6jXIselM6BGUFZAyv2/uh8PIRm2mOT6GGDanufPzz8AnNi22BF1l
-         Ls23vF1rOQH+bfJYL5/ZTXnRFBYV0DHZyZjSFAwBavRDzxhNz4d1uTOpz+G36sfAT+I7
-         7Kifsezes5RuDv6GlWn43Aa1aOKoKf7eDpadI98JM+SJ2nhuVPzRIk3MUA2ymJipLiOb
-         V42FTtYKSjuzTeh2ora3snKnrLopkaxjRhgwYulN/EXpdyOB4yng21fOCjJUJHsLtc/G
-         aTUzjBgoImJKqgyiKLG6Y8s1grHBh4Ga8My97PX2SHxbR3Kl70qDAvan4NclHQb40O8r
-         QaOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=c0efiEkVxtTkTFENAKnUNGf6D7Eoa+H/DnhrKy6xKHg=;
-        b=6leB8iVLBacHhepnR8aBhwbvNObq7P6KBQxWfaMgR6eso/docfSYTzNQonH7zmc+e3
-         aBvEWvcqvydEqmHm8DNj4Jty7uKx7im/bSc6Qx4ghmvayiqplnh9JBxYMAP1OpqAeB9t
-         r41IXDXLhtTraO+AtTj/UnMQfZwTR43bL8U+EsM8h8/fG92REE3cP9k5wPXazP8iAMT+
-         3J61NfCDwnL3JWRFalfh8n/9dTNACxK2Zl5ERaW9dLXc+00T9CoZ/Am0m0Tchw/l4+CB
-         wVnd8P/pP4sIHdB98ce/EG49ozMmwgkRWYgKUkK1g7NzGPXFyWORf7DvrWymWko59Z/Z
-         X2Pw==
-X-Gm-Message-State: AOAM530pQ4lnFh/AEui8a6FrcQ17WDP9Hd0WA19W9eCpsonxuX9ouT9x
-        PSnTImEGezToA7CwJIyd9xKjlFmeTnGxal4i1QM=
-X-Google-Smtp-Source: ABdhPJxpP7qgT9pda7QukogTnQ3jtB41pCQ8d0Uzd+30PH+EODI9yR2WsQmMvI1Dq5f2UxUiTV59lZ4uMbbeEypm4u8=
-X-Received: by 2002:a05:6000:2cc:: with SMTP id o12mr7310553wry.465.1643032128693;
- Mon, 24 Jan 2022 05:48:48 -0800 (PST)
+        id S234375AbiAXNuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 08:50:20 -0500
+Received: from mout.gmx.net ([212.227.17.21]:48773 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230180AbiAXNuT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 08:50:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643032205;
+        bh=u6MPuRG8w20At+22/EV/JwHIFBA05kw/+W1B4GWGYSM=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=HsfSM4HT9oFFqK3KDOdLvrrfu2fDUGadcN/HMOn5BewRp7ZE1gC1zVqK9bPAa0f4G
+         14T8gi84bGtsVjFnG+eyxIzN2tKQIGaljGROiZH7vMFQgicKMSjX1KYJUrXNPfY4Y0
+         gAHpm/z6o6F9CfpyvXeNUITt6HH0+ZAO8V2AiNxM=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.165.96]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MUosT-1mluJA2gqn-00QnjL; Mon, 24
+ Jan 2022 14:50:05 +0100
+Message-ID: <cb4323b6-99f0-c813-502a-2fbe107353ee@gmx.de>
+Date:   Mon, 24 Jan 2022 14:48:57 +0100
 MIME-Version: 1.0
-Received: by 2002:a5d:47ab:0:0:0:0:0 with HTTP; Mon, 24 Jan 2022 05:48:48
- -0800 (PST)
-Reply-To: anwarialima@gmail.com
-From:   Alima Anwari <khuntamar5@gmail.com>
-Date:   Mon, 24 Jan 2022 14:48:48 +0100
-Message-ID: <CAOdLAALmC5zqM1JBYB7rjuDjSaKfzhyWUxLEfwo25hgZkEY29w@mail.gmail.com>
-Subject: GOOD DAY
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 1/1] video: hyperv_fb: Fix validation of screen resolution
+Content-Language: en-US
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Hu <weh@microsoft.com>, Dexuan Cui <decui@microsoft.com>,
+        "drawat.floss@gmail.com" <drawat.floss@gmail.com>,
+        hhei <hhei@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+References: <1642360711-2335-1-git-send-email-mikelley@microsoft.com>
+ <MN2PR21MB1295CE3BD15D4EB257A158DCCA569@MN2PR21MB1295.namprd21.prod.outlook.com>
+ <20220123215606.fzycryooluavtar4@liuwe-devbox-debian-v2>
+ <MWHPR21MB1593ED650DA82BC3009F66CED75D9@MWHPR21MB1593.namprd21.prod.outlook.com>
+ <20220123223030.ijdzrunduww76jiq@liuwe-devbox-debian-v2>
+ <e396a22d-7e0e-73a4-d831-f69dc854bfa8@gmx.de>
+ <20220124133119.3yxfr7ypmmdotm6h@liuwe-devbox-debian-v2>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220124133119.3yxfr7ypmmdotm6h@liuwe-devbox-debian-v2>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:7hhzpZHkF0R/9ndEJOKmMCZI6q1JhRlydqXic/iJUhXN+6ITg0C
+ 7T63RrUJS5kh8xHRYh0rm6ybrg/mvs2WW17GOnir3U3RW8PLsQGZpZHvebMB78RrgaM1eIY
+ GJdjl3nANaoxpK0LSzfD0iM/1NXK2ETjrrw3CaZXO/MWylUu1U3q4cOeGG2b7E9HFN7HesZ
+ +RLbp3pcoqocFb4rbV35A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:udTipb9oxpo=:rXQsJugIhdKVGb7qsOOZrB
+ ZVNfYMDX3ca4OUCR2N4mkGtsGRcmlFzInBc9j/oSMUSS9v8F0TC7f15ipYw2YgtyoFzlccN9m
+ JCUekVGrbC/M3jAyysFj6zsqGLXKt49GrBdYQH2+cZ5ngC8AarVjmiPbadUQToOGCYf10pIG3
+ N+PfgsqHuqnPGTEV5IjZugMSCYCKfULHy6gHTsaW9WrsOGbI675NqyO4g1f8Y31tLhSIYdFzk
+ 04yd6Q/zTvWqmAWpZM9IwrkXtT90991ES1TpUzTYAHOeIaJm3Kemt8XF19m3Dlrn5IHSBsyvl
+ QAN7koOxdoMx/QpgJQ5p/fvBRRX5kA1esALUUgOnOz2db/ttWFCqNVwAptLxJApignbjP5bpU
+ YxcUv2PMwrcw7fEbQgn8lKDYGyuxxLu2zc8IjPwTa80F2PBF4Hf8Ntru2DbcFhvEtNC/THj+t
+ Mc4i3PsuWnpdA57irjCeTafN360wiLv+F/wsOfeK7s2Okj++ipAG+hhpQ8+5hE4yFkUg9bCQs
+ vTKN2KvzZ0/jMROB4+aYmqzV2CnV6DGJf4/to/XPUWPp4bNg40Q4dfy3mTop0EMuZIhZ0UExm
+ zZWbA4UpaTC7uhvoDfOrw+Msg/BeylQYUzXPBgrHUZ1W0KCwnOwOjcF8Qvbu/Ehu5wjOtYvf5
+ G3CG/HREnrPmH6UxQtu3Ah0Hw4Eb1eQPWlQ4twcb+e+MpUrBoRFOudFBiAjSmyWeYUrl2z6j3
+ ndYajLyk8T6LpT0HaLRK1TAu5xvaX9GiTxOdSatE+WxejOLND22SnGzqE765CL5LJB6j/H6S3
+ Tne/leZFR4zGiRg3rWHt8jzLj/WQrFCDCipZMcRyizzJVxzs97nvIetyZCR2aQDixc980Snw5
+ +p4Yhd+C9VO0jr2DNnh6gGxuFC8AioicDWx376v6qe1vaeK0yjNr0LTGtmzRBkgnr/5P8BCOP
+ Mc6ZQ/JUWu1dpvWH6WApLaDxP9GgxJdqySjjubmVYqcXKdtRYrWjIdv1SI5UTVZMlwlpqBf4m
+ +UXDYJ1BTPCAyAu9G1ed9IyDU549n478oypn4xJPAlxrLGu+eh4KT5/goZV/KnBIgIpP6S3HW
+ OzIMatkm6C+l+Y=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello dear friend, i'm Alima Anwari from Afghanistan, please reply
-back to me and have an urgent issue to share with you. I will be waiting
-for your response.
-Thanks.
-Alima.
+On 1/24/22 14:31, Wei Liu wrote:
+> On Mon, Jan 24, 2022 at 10:52:22AM +0100, Helge Deller wrote:
+>> On 1/23/22 23:30, Wei Liu wrote:
+>>> On Sun, Jan 23, 2022 at 10:27:56PM +0000, Michael Kelley (LINUX) wrote=
+:
+>>>> From: Wei Liu <wei.liu@kernel.org> Sent: Sunday, January 23, 2022 1:5=
+6 PM
+>>>>>
+>>>>> On Sun, Jan 16, 2022 at 09:53:06PM +0000, Haiyang Zhang wrote:
+>>>>>>
+>>>>>>
+>>>>>>> -----Original Message-----
+>>>>>>> From: Michael Kelley (LINUX) <mikelley@microsoft.com>
+>>>>>>> Sent: Sunday, January 16, 2022 2:19 PM
+>>>>>>> To: KY Srinivasan <kys@microsoft.com>; Haiyang Zhang
+>>>>> <haiyangz@microsoft.com>; Stephen
+>>>>>>> Hemminger <sthemmin@microsoft.com>; wei.liu@kernel.org; Wei Hu
+>>>>> <weh@microsoft.com>; Dexuan
+>>>>>>> Cui <decui@microsoft.com>; drawat.floss@gmail.com; hhei <hhei@redh=
+at.com>;
+>>>>> linux-
+>>>>>>> kernel@vger.kernel.org; linux-hyperv@vger.kernel.org; linux-
+>>>>> fbdev@vger.kernel.org; dri-
+>>>>>>> devel@lists.freedesktop.org
+>>>>>>> Cc: Michael Kelley (LINUX) <mikelley@microsoft.com>
+>>>>>>> Subject: [PATCH 1/1] video: hyperv_fb: Fix validation of screen re=
+solution
+>>>>>>>
+>>>>>>> In the WIN10 version of the Synthetic Video protocol with Hyper-V,
+>>>>>>> Hyper-V reports a list of supported resolutions as part of the pro=
+tocol
+>>>>>>> negotiation. The driver calculates the maximum width and height fr=
+om
+>>>>>>> the list of resolutions, and uses those maximums to validate any s=
+creen
+>>>>>>> resolution specified in the video=3D option on the kernel boot lin=
+e.
+>>>>>>>
+>>>>>>> This method of validation is incorrect. For example, the list of
+>>>>>>> supported resolutions could contain 1600x1200 and 1920x1080, both =
+of
+>>>>>>> which fit in an 8 Mbyte frame buffer.  But calculating the max wid=
+th
+>>>>>>> and height yields 1920 and 1200, and 1920x1200 resolution does not=
+ fit
+>>>>>>> in an 8 Mbyte frame buffer.  Unfortunately, this resolution is acc=
+epted,
+>>>>>>> causing a kernel fault when the driver accesses memory outside the
+>>>>>>> frame buffer.
+>>>>>>>
+>>>>>>> Instead, validate the specified screen resolution by calculating
+>>>>>>> its size, and comparing against the frame buffer size.  Delete the
+>>>>>>> code for calculating the max width and height from the list of
+>>>>>>> resolutions, since these max values have no use.  Also add the
+>>>>>>> frame buffer size to the info message to aid in understanding why
+>>>>>>> a resolution might be rejected.
+>>>>>>>
+>>>>>>> Fixes: 67e7cdb4829d ("video: hyperv: hyperv_fb: Obtain screen reso=
+lution from Hyper-V
+>>>>>>> host")
+>>>>>>> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+>>>>> [...]
+>>>>>>
+>>>>>> Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
+>>>>>>
+>>>>>
+>>>>> Applied to hyperv-fixes. Thanks.
+>>>>
+>>>> This fix got pulled into the fbdev/for-next tree by a new maintainer,=
+ Helge Deller.
+>>>> See https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbde=
+v.git/commit/?h=3Dfor-next&id=3Dbcc48f8d980b12e66a3d59dfa1041667db971d86
+>>>
+>>> OK. I will drop it from hyperv-fixes. Thanks for letting me know!
+>>
+>> Linus hasn't pulled my tree yet, and he will probably not before the
+>> next merge window. So, if this is an urgent bugfix for you, I can offer
+>> to drop it from the fbdev tree and that you take it through the hyperv-=
+fixes tree.
+>> In that case you may add an Acked-by: Helge Deller <deller@gmx.de>.
+>> Just let me know what you prefer.
+>
+> Hi Helge
+>
+> Yes, I would like to upstream it as soon as possible so that it can
+> propagate to stable trees and be backported by downstream vendors.
+>
+> I will pick it up in hyperv-fixes. Please drop it from your for-next
+> tree.
+
+Dropped now from fbdev tree.
+
+Thanks!
+Helge

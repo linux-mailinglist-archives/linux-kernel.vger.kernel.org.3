@@ -2,138 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15CEE4980F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:23:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A2A498109
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:30:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243145AbiAXNXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 08:23:24 -0500
-Received: from mail-il1-f198.google.com ([209.85.166.198]:48928 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242817AbiAXNXW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 08:23:22 -0500
-Received: by mail-il1-f198.google.com with SMTP id t18-20020a92ca92000000b002b952c60bfbso8125110ilo.15
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 05:23:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=UwVYcwjIbXXhRYDfOcKoTuvxpfCtFVOrX+FsCBnaKME=;
-        b=hkKDbUunrwapTQtKm/s0N/WsKpWwIswT89qku74XzJnNDO0kvLsbvegtphKezlC+gx
-         7/u3bOYMd2sP3i4xNmLuDI0DTZfi41jVFKJB3eX02awzyTh9mbZigw95yN+v/y7c5/6M
-         EmKRDHfo8o/DU0f0xC++fDk/KLHid3GKNLw+v2bBdVLDbff9fJ1IaDtFwoqz12OKe2Z3
-         32aWa+w2w80JGDYBJkYG8mi62DUP9U0KCMROLY7s9s4MJEBVD+cy96EiVYcKD2R8riYy
-         JFraQimEfCiIf1FEDpQY84OJpqxQGCj0rhoFCGud1E3ldr58P/QWPftZ6byxi4Wa2wE8
-         qYxA==
-X-Gm-Message-State: AOAM532QYtihtM4gHPcQN8kee1TXk5ajUC0VBYFlxKeaxjRstFo8D116
-        JOSu5KkPEYkuF36pbzaEbnZ5LUdA7/UwD6n4up0S6cFeaFbd
-X-Google-Smtp-Source: ABdhPJw/vHFHHVex5TcHa8lOoHF8V1vZ9VrUAs3BV26xmI87lZ6a9xYoIt2EDGVC3C152c7Ce+Wxvk7dXV2U5mfeEqex5vLaGosO
+        id S243166AbiAXNaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 08:30:20 -0500
+Received: from mga07.intel.com ([134.134.136.100]:10513 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239975AbiAXNaS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 08:30:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643031018; x=1674567018;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=s3MS9jlacq/GjKUc1J7BgRzARDrYpUsH/uofSxi2lpg=;
+  b=KLRPcaAbDHrNZpMyBof98siiy0gAuPPtlI4CKpGuBwNxzRetDKWphdC2
+   M1oo/sIUZg4nrBGVO7nf9hlVbZSIAk28FR33u2qrrLP8crYqrxVoqC1Ve
+   cmSg8ewfLxDCphmv31A8o4+OaeeCPJMYavnkHXm3z2TtHIiLW5PkXs9Z5
+   v7X0BUG/w3HXdktUQLGkGqIqKHVxb2InaeKZh+1njd7FhTt6wRy/BI88k
+   W4hfEndP3MtbUrRgJ698e30lU51j0NlhN71QgYKyLSWHo8nzZT3ZksVNr
+   Oh95EDet0nyKSanTgNQsC+shQhzmHA0UFcS5Sx7sUpfC/zB+Iyx2PqSPz
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="309362579"
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="309362579"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 05:30:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="532077916"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by fmsmga007.fm.intel.com with ESMTP; 24 Jan 2022 05:30:05 -0800
+Date:   Mon, 24 Jan 2022 21:29:36 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Steven Price <steven.price@arm.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+Subject: Re: [PATCH v4 02/12] mm/memfd: Introduce MFD_INACCESSIBLE flag
+Message-ID: <20220124132936.GA55051@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220118132121.31388-1-chao.p.peng@linux.intel.com>
+ <20220118132121.31388-3-chao.p.peng@linux.intel.com>
+ <8f1eba03-e5e9-e9fc-084d-0ef683093d65@arm.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1213:: with SMTP id a19mr8299952ilq.14.1643030602129;
- Mon, 24 Jan 2022 05:23:22 -0800 (PST)
-Date:   Mon, 24 Jan 2022 05:23:22 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006527b405d653df1f@google.com>
-Subject: [syzbot] INFO: task can't die in show_free_areas
-From:   syzbot <syzbot+8f41dccfb6c03cc36fd6@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8f1eba03-e5e9-e9fc-084d-0ef683093d65@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Jan 21, 2022 at 03:50:55PM +0000, Steven Price wrote:
+> On 18/01/2022 13:21, Chao Peng wrote:
+> > Introduce a new memfd_create() flag indicating the content of the
+> > created memfd is inaccessible from userspace. It does this by force
+> > setting F_SEAL_INACCESSIBLE seal when the file is created. It also set
+> > F_SEAL_SEAL to prevent future sealing, which means, it can not coexist
+> > with MFD_ALLOW_SEALING.
+> > 
+> > The pages backed by such memfd will be used as guest private memory in
+> > confidential computing environments such as Intel TDX/AMD SEV. Since
+> > page migration/swapping is not yet supported for such usages so these
+> > pages are currently marked as UNMOVABLE and UNEVICTABLE which makes
+> > them behave like long-term pinned pages.
+> > 
+> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > ---
+> >  include/uapi/linux/memfd.h |  1 +
+> >  mm/memfd.c                 | 20 +++++++++++++++++++-
+> >  2 files changed, 20 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/include/uapi/linux/memfd.h b/include/uapi/linux/memfd.h
+> > index 7a8a26751c23..48750474b904 100644
+> > --- a/include/uapi/linux/memfd.h
+> > +++ b/include/uapi/linux/memfd.h
+> > @@ -8,6 +8,7 @@
+> >  #define MFD_CLOEXEC		0x0001U
+> >  #define MFD_ALLOW_SEALING	0x0002U
+> >  #define MFD_HUGETLB		0x0004U
+> > +#define MFD_INACCESSIBLE	0x0008U
+> >  
+> >  /*
+> >   * Huge page size encoding when MFD_HUGETLB is specified, and a huge page
+> > diff --git a/mm/memfd.c b/mm/memfd.c
+> > index 9f80f162791a..26998d96dc11 100644
+> > --- a/mm/memfd.c
+> > +++ b/mm/memfd.c
+> > @@ -245,16 +245,19 @@ long memfd_fcntl(struct file *file, unsigned int cmd, unsigned long arg)
+> >  #define MFD_NAME_PREFIX_LEN (sizeof(MFD_NAME_PREFIX) - 1)
+> >  #define MFD_NAME_MAX_LEN (NAME_MAX - MFD_NAME_PREFIX_LEN)
+> >  
+> > -#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB)
+> > +#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB | \
+> > +		       MFD_INACCESSIBLE)
+> >  
+> >  SYSCALL_DEFINE2(memfd_create,
+> >  		const char __user *, uname,
+> >  		unsigned int, flags)
+> >  {
+> > +	struct address_space *mapping;
+> >  	unsigned int *file_seals;
+> >  	struct file *file;
+> >  	int fd, error;
+> >  	char *name;
+> > +	gfp_t gfp;
+> >  	long len;
+> >  
+> >  	if (!(flags & MFD_HUGETLB)) {
+> > @@ -267,6 +270,10 @@ SYSCALL_DEFINE2(memfd_create,
+> >  			return -EINVAL;
+> >  	}
+> >  
+> > +	/* Disallow sealing when MFD_INACCESSIBLE is set. */
+> > +	if (flags & MFD_INACCESSIBLE && flags & MFD_ALLOW_SEALING)
+> > +		return -EINVAL;
+> > +
+> >  	/* length includes terminating zero */
+> >  	len = strnlen_user(uname, MFD_NAME_MAX_LEN + 1);
+> >  	if (len <= 0)
+> > @@ -315,6 +322,17 @@ SYSCALL_DEFINE2(memfd_create,
+> >  		*file_seals &= ~F_SEAL_SEAL;
+> >  	}
+> >  
+> > +	if (flags & MFD_INACCESSIBLE) {
+> > +		mapping = file_inode(file)->i_mapping;
+> > +		gfp = mapping_gfp_mask(mapping);
+> > +		gfp &= ~__GFP_MOVABLE;
+> > +		mapping_set_gfp_mask(mapping, gfp);
+> > +		mapping_set_unevictable(mapping);
+> > +
+> > +		file_seals = memfd_file_seals_ptr(file);
+> > +		*file_seals &= F_SEAL_SEAL | F_SEAL_INACCESSIBLE;
+> 
+> This looks backwards - the flags should be set on *file_seals, but here
+> you are unsetting all other flags.
 
-syzbot found the following issue on:
+Thanks Steve. '|=' actually should be used here.
 
-HEAD commit:    74e5dee6a5b9 Add linux-next specific files for 20220124
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=16fbb967b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2242b42e3f4b745
-dashboard link: https://syzkaller.appspot.com/bug?extid=8f41dccfb6c03cc36fd6
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8f41dccfb6c03cc36fd6@syzkaller.appspotmail.com
-
-INFO: task syz-executor.5:19074 can't die for more than 143 seconds.
-task:syz-executor.5  state:R  running task     stack:26128 pid:19074 ppid:  3634 flags:0x00004004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4986 [inline]
- __schedule+0xab2/0x4db0 kernel/sched/core.c:6295
- preempt_schedule_common+0x45/0xc0 kernel/sched/core.c:6461
- preempt_schedule_thunk+0x16/0x18 arch/x86/entry/thunk_64.S:35
- vprintk_emit+0x1c9/0x4f0 kernel/printk/printk.c:2249
- vprintk+0x80/0x90 kernel/printk/printk_safe.c:50
- _printk+0xba/0xed kernel/printk/printk.c:2269
- show_free_areas+0xc99/0x1120 mm/page_alloc.c:6082
- show_mem+0x31/0x191 lib/show_mem.c:17
- warn_alloc_show_mem mm/page_alloc.c:4214 [inline]
- warn_alloc.cold+0x121/0x189 mm/page_alloc.c:4239
- __vmalloc_area_node mm/vmalloc.c:2982 [inline]
- __vmalloc_node_range+0xe0a/0x1040 mm/vmalloc.c:3110
- __vmalloc_node mm/vmalloc.c:3160 [inline]
- vzalloc+0x67/0x80 mm/vmalloc.c:3238
- n_tty_open+0x16/0x170 drivers/tty/n_tty.c:1813
- tty_ldisc_open+0x9b/0x110 drivers/tty/tty_ldisc.c:433
- tty_ldisc_setup+0x43/0x100 drivers/tty/tty_ldisc.c:740
- tty_init_dev.part.0+0x1f4/0x610 drivers/tty/tty_io.c:1443
- tty_init_dev include/linux/err.h:36 [inline]
- tty_open_by_driver drivers/tty/tty_io.c:2086 [inline]
- tty_open+0xb16/0x1000 drivers/tty/tty_io.c:2133
- chrdev_open+0x266/0x770 fs/char_dev.c:414
- do_dentry_open+0x4b9/0x1240 fs/open.c:824
- do_open fs/namei.c:3476 [inline]
- path_openat+0x1c9e/0x2940 fs/namei.c:3609
- do_filp_open+0x1aa/0x400 fs/namei.c:3636
- do_sys_openat2+0x16d/0x4d0 fs/open.c:1214
- do_sys_open fs/open.c:1230 [inline]
- __do_sys_openat fs/open.c:1246 [inline]
- __se_sys_openat fs/open.c:1241 [inline]
- __x64_sys_openat+0x13f/0x1f0 fs/open.c:1241
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f0116f1e059
-RSP: 002b:00007f01157ee168 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 00007f0117031370 RCX: 00007f0116f1e059
-RDX: 0000000000000000 RSI: 0000000020000200 RDI: ffffffffffffff9c
-RBP: 00007f0116f7808d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd12bd1c4f R14: 00007f01157ee300 R15: 0000000000022000
- </TASK>
-
-Showing all locks held in the system:
-3 locks held by kworker/u4:0/8:
- #0: ffff8880b9d39c58 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2b/0x120 kernel/sched/core.c:489
- #1: ffff8880b9d27948 (&per_cpu_ptr(group->pcpu, cpu)->seq){-.-.}-{0:0}, at: psi_task_switch+0x176/0x4e0 kernel/sched/psi.c:882
- #2: ffff8880b9d28498 (&base->lock){-.-.}-{2:2}, at: lock_timer_base+0x5a/0x1f0 kernel/time/timer.c:946
-1 lock held by khungtaskd/26:
- #0: ffffffff8bb83ae0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6460
-2 locks held by getty/3283:
- #0: ffff888022a54098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x22/0x80 drivers/tty/tty_ldisc.c:244
- #1: ffffc90002b632e8 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xcf0/0x1230 drivers/tty/n_tty.c:2077
-5 locks held by kworker/0:12/18357:
- #0: ffff8880b9c39c58 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2b/0x120 kernel/sched/core.c:489
- #1: ffff8880b9c27948 (&per_cpu_ptr(group->pcpu, cpu)->seq){-.-.}-{0:0}, at: psi_task_switch+0x3e7/0x4e0 kernel/sched/psi.c:891
- #2: ffff8880b9c28498 (&base->lock){-.-.}-{2:2}, at: lock_timer_base+0x5a/0x1f0 kernel/time/timer.c:946
- #3: ffffffff9077a3d0 (&obj_hash[i].lock){-.-.}-{2:2}, at: debug_object_activate+0x12e/0x3e0 lib/debugobjects.c:661
- #4: ffffffff90797a10 (&obj_hash[i].lock){-.-.}-{2:2}, at: __debug_check_no_obj_freed lib/debugobjects.c:980 [inline]
- #4: ffffffff90797a10 (&obj_hash[i].lock){-.-.}-{2:2}, at: debug_check_no_obj_freed+0xc7/0x420 lib/debugobjects.c:1023
-3 locks held by syz-executor.5/19074:
-
-=============================================
-
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Chao
+> 
+> Steve
+> 
+> > +	}
+> > +
+> >  	fd_install(fd, file);
+> >  	kfree(name);
+> >  	return fd;
+> > 

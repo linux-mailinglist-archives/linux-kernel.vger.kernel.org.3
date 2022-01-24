@@ -2,48 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C42B499242
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:20:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1779F4991E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353351AbiAXUSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:18:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376372AbiAXUBc (ORCPT
+        id S1380218AbiAXUPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:15:54 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:42930 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359180AbiAXT4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:01:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1998CC055ABE;
-        Mon, 24 Jan 2022 11:28:48 -0800 (PST)
+        Mon, 24 Jan 2022 14:56:34 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADDA26148F;
-        Mon, 24 Jan 2022 19:28:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B0F3C340E7;
-        Mon, 24 Jan 2022 19:28:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A311B811F3;
+        Mon, 24 Jan 2022 19:56:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C1E5C340E5;
+        Mon, 24 Jan 2022 19:56:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052527;
-        bh=jNhhpFP2tNg+Npy4Crv5614QHwFsd4ldaIklWzBWj20=;
+        s=korg; t=1643054192;
+        bh=enBE6ig5rLsNPHOkyfXqmaui5X7hjG1/VviCzIM8hng=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ncJBAo2PsG3u4k3A+vimOP90FEwhtem6E3chxLDlnL3dH76p/96eFWNAqHumcEyNr
-         ySRtEXFRcj4dZCvUaDhyOZnbr0zJTHhy0zhf0EFLDz7ZWL2QRSt5SUj5qZZPgamGwv
-         KUJXgHEy90bQR3er/+ZdnDIjsfHfvqOs2sCMFf10=
+        b=Qj1PmETPHp8h/x9Drf4j5qoyau9nwuKFRdGuTs15i6YIPswnRMDNX1mKZUh927o8k
+         AheN/DgVRL58TF/xHBh8NiUWWDf2AolgRPF9v7WFMxrxjPPMAMNe4kXauMbWnM7xfl
+         Dw1dq6/gddMA9XtqtBftCqmbaXvIezGYoeAZ7W3Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 088/320] media: hantro: Fix probe func error path
-Date:   Mon, 24 Jan 2022 19:41:12 +0100
-Message-Id: <20220124183956.735090904@linuxfoundation.org>
+Subject: [PATCH 5.10 308/563] media: atomisp-ov2680: Fix ov2680_set_fmt() clobbering the exposure
+Date:   Mon, 24 Jan 2022 19:41:13 +0100
+Message-Id: <20220124184035.093100551@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,49 +46,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jernej Skrabec <jernej.skrabec@gmail.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 37af43b250fda6162005d47bf7c959c70d52b107 ]
+[ Upstream commit 4492289c31364d28c2680b43b18883385a5d216c ]
 
-If clocks for some reason couldn't be enabled, probe function returns
-immediately, without disabling PM. This obviously leaves PM ref counters
-unbalanced.
+Now that we restore the default or last user set exposure setting on
+power_up() there is no need for the registers written by ov2680_set_fmt()
+to write to the exposure register.
 
-Fix that by jumping to appropriate error path, so effects of PM functions
-are reversed.
+Not doing so fixes the exposure always being reset to the value from
+the res->regs array after a set_fmt().
 
-Fixes: 775fec69008d ("media: add Rockchip VPU JPEG encoder driver")
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Acked-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Link: https://lore.kernel.org/linux-media/20211107171549.267583-11-hdegoede@redhat.com
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/hantro/hantro_drv.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/staging/media/atomisp/i2c/ov2680.h | 24 ----------------------
+ 1 file changed, 24 deletions(-)
 
-diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index 32e5966ba5c5f..58cf44045b396 100644
---- a/drivers/staging/media/hantro/hantro_drv.c
-+++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -823,7 +823,7 @@ static int hantro_probe(struct platform_device *pdev)
- 	ret = clk_bulk_prepare(vpu->variant->num_clocks, vpu->clocks);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Failed to prepare clocks\n");
--		return ret;
-+		goto err_pm_disable;
- 	}
+diff --git a/drivers/staging/media/atomisp/i2c/ov2680.h b/drivers/staging/media/atomisp/i2c/ov2680.h
+index 49920245e0647..cafb798a71abe 100644
+--- a/drivers/staging/media/atomisp/i2c/ov2680.h
++++ b/drivers/staging/media/atomisp/i2c/ov2680.h
+@@ -289,8 +289,6 @@ static struct ov2680_reg const ov2680_global_setting[] = {
+  */
+ static struct ov2680_reg const ov2680_QCIF_30fps[] = {
+ 	{0x3086, 0x01},
+-	{0x3501, 0x24},
+-	{0x3502, 0x40},
+ 	{0x370a, 0x23},
+ 	{0x3801, 0xa0},
+ 	{0x3802, 0x00},
+@@ -334,8 +332,6 @@ static struct ov2680_reg const ov2680_QCIF_30fps[] = {
+  */
+ static struct ov2680_reg const ov2680_CIF_30fps[] = {
+ 	{0x3086, 0x01},
+-	{0x3501, 0x24},
+-	{0x3502, 0x40},
+ 	{0x370a, 0x23},
+ 	{0x3801, 0xa0},
+ 	{0x3802, 0x00},
+@@ -377,8 +373,6 @@ static struct ov2680_reg const ov2680_CIF_30fps[] = {
+  */
+ static struct ov2680_reg const ov2680_QVGA_30fps[] = {
+ 	{0x3086, 0x01},
+-	{0x3501, 0x24},
+-	{0x3502, 0x40},
+ 	{0x370a, 0x23},
+ 	{0x3801, 0xa0},
+ 	{0x3802, 0x00},
+@@ -420,8 +414,6 @@ static struct ov2680_reg const ov2680_QVGA_30fps[] = {
+  */
+ static struct ov2680_reg const ov2680_656x496_30fps[] = {
+ 	{0x3086, 0x01},
+-	{0x3501, 0x24},
+-	{0x3502, 0x40},
+ 	{0x370a, 0x23},
+ 	{0x3801, 0xa0},
+ 	{0x3802, 0x00},
+@@ -463,8 +455,6 @@ static struct ov2680_reg const ov2680_656x496_30fps[] = {
+ */
+ static struct ov2680_reg const ov2680_720x592_30fps[] = {
+ 	{0x3086, 0x01},
+-	{0x3501, 0x26},
+-	{0x3502, 0x40},
+ 	{0x370a, 0x23},
+ 	{0x3801, 0x00}, // X_ADDR_START;
+ 	{0x3802, 0x00},
+@@ -508,8 +498,6 @@ static struct ov2680_reg const ov2680_720x592_30fps[] = {
+ */
+ static struct ov2680_reg const ov2680_800x600_30fps[] = {
+ 	{0x3086, 0x01},
+-	{0x3501, 0x26},
+-	{0x3502, 0x40},
+ 	{0x370a, 0x23},
+ 	{0x3801, 0x00},
+ 	{0x3802, 0x00},
+@@ -551,8 +539,6 @@ static struct ov2680_reg const ov2680_800x600_30fps[] = {
+  */
+ static struct ov2680_reg const ov2680_720p_30fps[] = {
+ 	{0x3086, 0x00},
+-	{0x3501, 0x48},
+-	{0x3502, 0xe0},
+ 	{0x370a, 0x21},
+ 	{0x3801, 0xa0},
+ 	{0x3802, 0x00},
+@@ -594,8 +580,6 @@ static struct ov2680_reg const ov2680_720p_30fps[] = {
+  */
+ static struct ov2680_reg const ov2680_1296x976_30fps[] = {
+ 	{0x3086, 0x00},
+-	{0x3501, 0x48},
+-	{0x3502, 0xe0},
+ 	{0x370a, 0x21},
+ 	{0x3801, 0xa0},
+ 	{0x3802, 0x00},
+@@ -637,8 +621,6 @@ static struct ov2680_reg const ov2680_1296x976_30fps[] = {
+ */
+ static struct ov2680_reg const ov2680_1456x1096_30fps[] = {
+ 	{0x3086, 0x00},
+-	{0x3501, 0x48},
+-	{0x3502, 0xe0},
+ 	{0x370a, 0x21},
+ 	{0x3801, 0x90},
+ 	{0x3802, 0x00},
+@@ -682,8 +664,6 @@ static struct ov2680_reg const ov2680_1456x1096_30fps[] = {
  
- 	ret = v4l2_device_register(&pdev->dev, &vpu->v4l2_dev);
-@@ -879,6 +879,7 @@ err_v4l2_unreg:
- 	v4l2_device_unregister(&vpu->v4l2_dev);
- err_clk_unprepare:
- 	clk_bulk_unprepare(vpu->variant->num_clocks, vpu->clocks);
-+err_pm_disable:
- 	pm_runtime_dont_use_autosuspend(vpu->dev);
- 	pm_runtime_disable(vpu->dev);
- 	return ret;
+ static struct ov2680_reg const ov2680_1616x916_30fps[] = {
+ 	{0x3086, 0x00},
+-	{0x3501, 0x48},
+-	{0x3502, 0xe0},
+ 	{0x370a, 0x21},
+ 	{0x3801, 0x00},
+ 	{0x3802, 0x00},
+@@ -726,8 +706,6 @@ static struct ov2680_reg const ov2680_1616x916_30fps[] = {
+ #if 0
+ static struct ov2680_reg const ov2680_1616x1082_30fps[] = {
+ 	{0x3086, 0x00},
+-	{0x3501, 0x48},
+-	{0x3502, 0xe0},
+ 	{0x370a, 0x21},
+ 	{0x3801, 0x00},
+ 	{0x3802, 0x00},
+@@ -769,8 +747,6 @@ static struct ov2680_reg const ov2680_1616x1082_30fps[] = {
+  */
+ static struct ov2680_reg const ov2680_1616x1216_30fps[] = {
+ 	{0x3086, 0x00},
+-	{0x3501, 0x48},
+-	{0x3502, 0xe0},
+ 	{0x370a, 0x21},
+ 	{0x3801, 0x00},
+ 	{0x3802, 0x00},
 -- 
 2.34.1
 

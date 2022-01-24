@@ -2,131 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A5449796F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 08:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C34C4497970
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 08:28:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241842AbiAXH2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 02:28:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241844AbiAXH2d (ORCPT
+        id S241886AbiAXH2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 02:28:39 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:34688 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S241813AbiAXH2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 02:28:33 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AC2C06173D;
-        Sun, 23 Jan 2022 23:28:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=YpJARcXKoGZPiJTfBdQDT9/oQ0nkzXZFh+P1EKhj/Rk=; b=1zmEJAk7pautCE8IyG6nZ+P5DN
-        jcPS/4+RmkEGX01/KBzzlRLnv4Ujbp7wwgKrSXqfwku67x107dWyRcpSaWDJg2eGf0hDMWfsacXFb
-        yRZJcr1xvoDHM7gKnb2AOf5U7uVKNsooqq+S+D5m1p4X/GnRmt2wP472bzUalfgBZNOewWJDqX1jH
-        dFw11VZyBegH/EYSd1cXZwJQmpWxfT/clDdLodgbufqdxJ0oj2JFWUbRjBVSFra1KbbS8rFatUTR5
-        g9gxfWDSGqJhMgnekdc4tCgIhLhAZNbGLyqmIbdSqYI7fa1kbs32J9dYVoNCQULd88p/VI0M8GdoB
-        KM8aRK3Q==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nBtm5-002UAu-N6; Mon, 24 Jan 2022 07:28:25 +0000
-Date:   Sun, 23 Jan 2022 23:28:25 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        David Howells <dhowells@redhat.com>, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH 03/23] MM: drop swap_set_page_dirty
-Message-ID: <Ye5VGY7jy+wXk806@infradead.org>
-References: <164299573337.26253.7538614611220034049.stgit@noble.brown>
- <164299611274.26253.3394253485576079921.stgit@noble.brown>
+        Mon, 24 Jan 2022 02:28:32 -0500
+X-UUID: 707d40179bd543fd8fba229a40cedfab-20220124
+X-UUID: 707d40179bd543fd8fba229a40cedfab-20220124
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1848919182; Mon, 24 Jan 2022 15:28:29 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 24 Jan 2022 15:28:28 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 24 Jan
+ 2022 15:28:27 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 24 Jan 2022 15:28:27 +0800
+Message-ID: <f4fbfc91d2f0abf041f058f191e2b239ac173a1e.camel@mediatek.com>
+Subject: Re: [PATCH v21 4/8] soc: mediatek: SVS: add monitor mode
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Date:   Mon, 24 Jan 2022 15:28:27 +0800
+In-Reply-To: <e118df40-da6b-88f6-fbff-15befb3405d5@collabora.com>
+References: <20220107095200.4389-1-roger.lu@mediatek.com>
+         <20220107095200.4389-5-roger.lu@mediatek.com>
+         <e118df40-da6b-88f6-fbff-15befb3405d5@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <164299611274.26253.3394253485576079921.stgit@noble.brown>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 02:48:32PM +1100, NeilBrown wrote:
-> Pages that are written to swap are owned by the MM subsystem - not any
-> filesystem.
-> 
-> When such a page is passed to a filesystem to be written out to a
-> swap-file, the filesystem handles the data, but the page itself does not
-> belong to the filesystem.  So calling the filesystem's set_page_dirty
-> address_space operation makes no sense.  This is for pages in the given
-> address space, and a page to be written to swap does not exist in the
-> given address space.
-> 
-> So drop swap_set_page_dirty() which calls the address-space's
-> set_page_dirty, and alway use __set_page_dirty_no_writeback, which is
-> appropriate for pages being swapped out.
+Hi AngeloGioacchino,
 
-Yes, this looks sane to me:
+Sorry for the late reply and thanks for the advice.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+On Fri, 2022-01-07 at 15:34 +0100, AngeloGioacchino Del Regno wrote:
+> Il 07/01/22 10:51, Roger Lu ha scritto:
+> > SVS monitor mode is based on different thermal temperature
+> > to provide suitable SVS bank voltages.
+> > 
+> > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> > ---
+> >   drivers/soc/mediatek/mtk-svs.c | 253 ++++++++++++++++++++++++++++++++-
+> >   1 file changed, 247 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+> > index fc7e2ee44a92..042c6e8e9069 100644
+> > --- a/drivers/soc/mediatek/mtk-svs.c
+> > +++ b/drivers/soc/mediatek/mtk-svs.c
+> > @@ -25,6 +25,7 @@
+> >   #include <linux/regulator/consumer.h>
+> >   #include <linux/slab.h>
+> >   #include <linux/spinlock.h>
+> > +#include <linux/thermal.h>
+> >   
+> >   /* svs bank 1-line sw id */
+> >   #define SVSB_CPU_LITTLE			BIT(0)
+> > @@ -36,6 +37,7 @@
+> >   #define SVSB_MODE_ALL_DISABLE		0
+> >   #define SVSB_MODE_INIT01		BIT(1)
+> >   #define SVSB_MODE_INIT02		BIT(2)
+> > +#define SVSB_MODE_MON			BIT(3)
+
+[snip]
+
+> >   /**
+> > @@ -241,6 +254,7 @@ struct svs_platform {
+> >    * @get_volts: function pointer to get bank voltages
+> >    * @name: bank name
+> >    * @buck_name: regulator name
+> > + * @tzone_name: thermal zone name
+> >    * @suspended: suspend flag of this bank
+> >    * @phase: bank current phase
+> >    * @volt_od: bank voltage overdrive
+> > @@ -270,6 +284,13 @@ struct svs_platform {
+> >    * @sw_id: bank software identification
+> >    * @cpu_id: cpu core id for SVS CPU bank use only
+> >    * @ctl0: TS-x selection
+> > + * @temp: bank temperature
+> > + * @tzone_htemp: thermal zone high temperature threshold
+> > + * @tzone_htemp_voffset: thermal zone high temperature voltage offset
+> > + * @tzone_ltemp: thermal zone low temperature threshold
+> > + * @tzone_ltemp_voffset: thermal zone low temperature voltage offset
+> > + * @bts: svs efuse data
+> > + * @mts: svs efuse data
+> >    * @bdes: svs efuse data
+> >    * @mdes: svs efuse data
+> >    * @mtdes: svs efuse data
+> > @@ -292,6 +313,7 @@ struct svs_bank {
+> >   	void (*get_volts)(struct svs_platform *svsp);
+> >   	char *name;
+> >   	char *buck_name;
+> > +	char *tzone_name;
+> >   	bool suspended;
+> >   	enum svsb_phase phase;
+> >   	s32 volt_od;
+> > @@ -321,6 +343,13 @@ struct svs_bank {
+> >   	u32 sw_id;
+> >   	u32 cpu_id;
+> >   	u32 ctl0;
+> > +	u32 temp;
+> > +	u32 tzone_htemp;
+> > +	u32 tzone_htemp_voffset;
+> > +	u32 tzone_ltemp;
+> > +	u32 tzone_ltemp_voffset;
+> > +	u32 bts;
+> > +	u32 mts;
+> >   	u32 bdes;
+> >   	u32 mdes;
+> >   	u32 mtdes;
+> > @@ -361,10 +390,21 @@ static u32 svs_bank_volt_to_opp_volt(u32 svsb_volt,
+> > u32 svsb_volt_step,
+> >   	return (svsb_volt * svsb_volt_step) + svsb_volt_base;
+> >   }
+> >   
+> 
+> I'm sorry for the double review, but this went unnoticed in the previous one.
+> 
+> > +static int svs_get_zone_temperature(const char *tzone_name, int
+> > *tzone_temp)
+> > +{
+> > +	struct thermal_zone_device *tzd;
+> > +
+> > +	tzd = thermal_zone_get_zone_by_name(tzone_name);
+> 
+> This call is expensive, as it's iterating through the (possibly) entire
+> thermal_tz_list (drivers/thermal/thermal_core.c) so, for performance purposes,
+> noting that you're using this in svs_adjust_pm_opp_volts(), it's not a good
+> idea
+> to call it at every ISR.
+> 
+> I would instead propose to get a pointer to the thermal_zone at driver probe
+> time and cache that in struct svs_bank: this function would also be removed
+> as the only thing that you'd need to do then would be just one call...
+> 
+> [read forward...]
+
+No problem. I'll cache thermal_zone at driver probe time and remove this API in
+the next patch. Thanks.
 
 > 
-> Fixes-no-auto-backport: 62c230bc1790 ("mm: add support for a filesystem to activate swap files and use direct_IO for writing swap pages")
-> Signed-off-by: NeilBrown <neilb@suse.de>
-> ---
->  include/linux/swap.h |    1 -
->  mm/page_io.c         |   14 --------------
->  mm/swap_state.c      |    2 +-
->  3 files changed, 1 insertion(+), 16 deletions(-)
+> > +	if (IS_ERR(tzd))
+> > +		return PTR_ERR(tzd);
+> > +
+> > +	return thermal_zone_get_temp(tzd, tzone_temp);
+> > +}
+> > +
+> >   static int svs_adjust_pm_opp_volts(struct svs_bank *svsb, bool
+> > force_update)
+> >   {
+> > -	int ret = -EPERM;
+> > -	u32 i, svsb_volt, opp_volt;
+> > +	int ret = -EPERM, tzone_temp = 0;
+> > +	u32 i, svsb_volt, opp_volt, temp_voffset = 0;
+> >   
+> >   	mutex_lock(&svsb->lock);
+> >   
+> > @@ -378,6 +418,22 @@ static int svs_adjust_pm_opp_volts(struct svs_bank
+> > *svsb, bool force_update)
+> >   		goto unlock_mutex;
+> >   	}
+> >   
+> > +	/* Get thermal effect */
+> > +	if (svsb->phase == SVSB_PHASE_MON) {
+> > +		ret = svs_get_zone_temperature(svsb->tzone_name, &tzone_temp);
 > 
-> diff --git a/include/linux/swap.h b/include/linux/swap.h
-> index 3f54a8941c9d..a43929f7033e 100644
-> --- a/include/linux/swap.h
-> +++ b/include/linux/swap.h
-> @@ -419,7 +419,6 @@ extern void kswapd_stop(int nid);
->  
->  #ifdef CONFIG_SWAP
->  
-> -extern int swap_set_page_dirty(struct page *page);
->  int add_swap_extent(struct swap_info_struct *sis, unsigned long start_page,
->  		unsigned long nr_pages, sector_t start_block);
->  int generic_swapfile_activate(struct swap_info_struct *, struct file *,
-> diff --git a/mm/page_io.c b/mm/page_io.c
-> index f8c26092e869..34b12d6f94d7 100644
-> --- a/mm/page_io.c
-> +++ b/mm/page_io.c
-> @@ -438,17 +438,3 @@ int swap_readpage(struct page *page, bool synchronous)
->  	delayacct_swapin_end();
->  	return ret;
->  }
-> -
-> -int swap_set_page_dirty(struct page *page)
-> -{
-> -	struct swap_info_struct *sis = page_swap_info(page);
-> -
-> -	if (data_race(sis->flags & SWP_FS_OPS)) {
-> -		struct address_space *mapping = sis->swap_file->f_mapping;
-> -
-> -		VM_BUG_ON_PAGE(!PageSwapCache(page), page);
-> -		return mapping->a_ops->set_page_dirty(page);
-> -	} else {
-> -		return __set_page_dirty_no_writeback(page);
-> -	}
-> -}
-> diff --git a/mm/swap_state.c b/mm/swap_state.c
-> index 093ecf864200..d541594be1c3 100644
-> --- a/mm/swap_state.c
-> +++ b/mm/swap_state.c
-> @@ -31,7 +31,7 @@
->   */
->  static const struct address_space_operations swap_aops = {
->  	.writepage	= swap_writepage,
-> -	.set_page_dirty	= swap_set_page_dirty,
-> +	.set_page_dirty	= __set_page_dirty_no_writeback,
->  #ifdef CONFIG_MIGRATION
->  	.migratepage	= migrate_page,
->  #endif
+> ... so you can simply call ...
 > 
 > 
----end quoted text---
+> 	ret = thermal_zone_get_temp(svsb->tzd, tzone_temp);
+> 
+> 
+> ...without any need for any helper.
+
+Sure, I'll call thermal_zone_get_temp() directly after applying this recommended
+change in the next patch. Thanks.
+
+> 
+> > +		if (ret || (svsb->temp > SVSB_TEMP_UPPER_BOUND &&
+> > +			    svsb->temp < SVSB_TEMP_LOWER_BOUND)) {
+> > +			dev_err(svsb->dev, "%s: %d (0x%x), run default volts\n",
+> > +				svsb->tzone_name, ret, svsb->temp);
+> > +			svsb->phase = SVSB_PHASE_ERROR;
+> > +		}
+> > +
+> > +		if (tzone_temp >= svsb->tzone_htemp)
+> > +			temp_voffset += svsb->tzone_htemp_voffset;
+> > +		else if (tzone_temp <= svsb->tzone_ltemp)
+> > +			temp_voffset += svsb->tzone_ltemp_voffset;
+> > +	}
+> > +
+> >   	/* vmin <= svsb_volt (opp_volt) <= default opp voltage */
+> >   	for (i = 0; i < svsb->opp_count; i++) {
+> >   		switch (svsb->phase) {
+> 
+> Apart from that, the commit looks good. Looking forward to review the new
+> version!
+> 
+> Regards,
+> - Angelo
+

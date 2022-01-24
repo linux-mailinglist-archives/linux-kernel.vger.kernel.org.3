@@ -2,189 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A02E24978BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 06:55:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC854978C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 07:05:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235523AbiAXFy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 00:54:58 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:54278 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230091AbiAXFy4 (ORCPT
+        id S241533AbiAXGFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 01:05:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230091AbiAXGFH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 00:54:56 -0500
-X-UUID: 400d38c62b894874a61a68fd3ac278ee-20220124
-X-UUID: 400d38c62b894874a61a68fd3ac278ee-20220124
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <leilk.liu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 260584055; Mon, 24 Jan 2022 13:54:52 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 24 Jan 2022 13:54:51 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 24 Jan
- 2022 13:54:50 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 24 Jan 2022 13:54:49 +0800
-Message-ID: <5b8f822da1dbb7e0d204d6eeccd9cd80b3ef004c.camel@mediatek.com>
-Subject: Re: [PATCH V2 2/3] dt-bindings: spi: Convert spi-mt65xx to
- json-schema
-From:   Leilk Liu <leilk.liu@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
-Date:   Mon, 24 Jan 2022 13:54:49 +0800
-In-Reply-To: <YetWXSzugRwKb+xA@robh.at.kernel.org>
-References: <20220112103609.17421-1-leilk.liu@mediatek.com>
-         <20220112103609.17421-3-leilk.liu@mediatek.com>
-         <YetWXSzugRwKb+xA@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 24 Jan 2022 01:05:07 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C002EC06173B;
+        Sun, 23 Jan 2022 22:05:06 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id jx6so18402350ejb.0;
+        Sun, 23 Jan 2022 22:05:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ElvqKFFJVkkMYsNfH6YMdwcodi4Utdul5mVupZT3qjc=;
+        b=goZniMe/aDJgF/+x+4qLUMWOSzoF3OjjITcvnzQNBM4OWzX8obYYU7RLJ2fKLjuvCd
+         z06EdRf+P2CCDlaJpr7YE9f55Lddk3ixB3s05VoRKIUdq6swUHIEZ+bTSh0+jaNwi9Av
+         PL8W5T94HCiVD9ZlBD8teiXGV0WcozbDcp3kCMRRkeQFC6LbM9WkSMms/nvPtmYJeQ2S
+         I4nsmBLXtydq2FIIMaZNxH528wOCd7EJfov7CGWhFvTtdF3Q2EMtxHdR5C68YBUENQGx
+         NtrOAZlbg2agbKUiZMhHBY8gtzwg1O8hLb5xNNBfIUx8PoVzpra/JwZ6zg76mfxBp2Ei
+         3a4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ElvqKFFJVkkMYsNfH6YMdwcodi4Utdul5mVupZT3qjc=;
+        b=rpVmoffSw3lmpcDEtQPWeBaSeYG9uvJL79T3aC0q1iHjnLkaeQ9T9zr3SNoU51gTp4
+         dRp4d2d2SbNRoXNcKZJg+JkA7gihnixMFJ/X7pDm+k+rgIm4BYCQH9UbEFddYwDdSG5m
+         IJpMfla1gX9pN7ZqX1dKbZLsU7LbWHKN06VRhpyNYjjWXBIJh3v/LNpC5uFCcCcj8HnW
+         9q8WcE8Egr+s3nxI5nGYF+CdyJRrQIQioinI+TyAZsq0u6AQC/y8bPn+1QIFfavTBfpH
+         I7021hJrhmaJtHFuEzHT5MDfcdAoQQCnAucMJ5JtbNWwPSC28vNfS8O4RittedgsnxGE
+         vJ3g==
+X-Gm-Message-State: AOAM5307ZISz8A1GQGHnhqQauBTyFqw9vf+9YIlx2sVCKSEEOcvMItPG
+        eBx4x6Hp+CJJRhT7tzOdf2K0NPuCaePNdZ9i+D8=
+X-Google-Smtp-Source: ABdhPJzDdxb1FdSSR4A9R/DJiHQFvZQDl6v0nS75D0YXwYCTIM4NiwaYGFHUoJmAl0uUHTJDNjOy0i+d0F8wFXWwA6s=
+X-Received: by 2002:a17:907:e8e:: with SMTP id ho14mr4791551ejc.479.1643004304881;
+ Sun, 23 Jan 2022 22:05:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+References: <20220120130605.55741-1-dzm91@hust.edu.cn> <b5cb1132-2f6b-e2da-78c7-1828b3617bc3@gmail.com>
+ <CAD-N9QWvfoo_HtQ+KT-7JNFumQMaq8YqMkHGR2t7pDKsDW0hkQ@mail.gmail.com>
+ <CAD-N9QUfiTNqs7uOH3C99oMNdqFXh+MKLQ94BkQou_T7-yU_mg@mail.gmail.com>
+ <CAD-N9QUZ95zqboe=58gybue6ssSO-M-raijd3XnGXkXnp3wiqQ@mail.gmail.com>
+ <8d4b0822-4e94-d124-e191-bec3effaf97c@gmail.com> <CAD-N9QUATFcaOO2reg=Y0jum83UJGOzMhcX3ukCY+cY-XCJaPA@mail.gmail.com>
+ <192d9115-864f-d2c1-d11b-d75c23c26102@gmail.com>
+In-Reply-To: <192d9115-864f-d2c1-d11b-d75c23c26102@gmail.com>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Mon, 24 Jan 2022 14:04:38 +0800
+Message-ID: <CAD-N9QVwhfcswwSmFW0TUevqH7ehE_r6CWG3Uw9j5T37wPiPZw@mail.gmail.com>
+Subject: Re: [PATCH] drivers: net: remove a dangling pointer in peak_usb_create_dev
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stephane Grosjean <s.grosjean@peak-system.com>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-01-21 at 18:57 -0600, Rob Herring wrote:
-> On Wed, Jan 12, 2022 at 06:36:08PM +0800, Leilk Liu wrote:
-> > Convert Mediatek ARM SOC's SPI Master controller binding
-> > to json-schema format.
-> > 
-> > Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
-> > ---
-> >  .../bindings/spi/mediatek,spi-mt65xx.yaml     | 99
-> > +++++++++++++++++++
-> >  .../devicetree/bindings/spi/spi-mt65xx.txt    | 68 -------------
-> >  2 files changed, 99 insertions(+), 68 deletions(-)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
-> >  delete mode 100644 Documentation/devicetree/bindings/spi/spi-
-> > mt65xx.txt
-> > 
-> > diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-
-> > mt65xx.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-
-> > mt65xx.yaml
-> > new file mode 100644
-> > index 000000000000..71f0cf6e5d70
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-
-> > mt65xx.yaml
-> > @@ -0,0 +1,99 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/spi/mediatek,spi-mt65xx.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: SPI Bus controller for MediaTek ARM SoCs
-> > +
-> > +maintainers:
-> > +  - Leilk Liu <leilk.liu@mediatek.com>
-> > +
-> > +allOf:
-> > +  - $ref: /spi/spi-controller.yaml#
-> 
-> /schemas/spi/spi-controller.yaml#
-> 
-OK, I'll fix it.
+On Sun, Jan 23, 2022 at 9:48 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
+>
+> Hi Dongliang,
+>
+> On 1/22/22 09:45, Dongliang Mu wrote:
+> [...]
+>
+> >> Yeah, it seems like (at least based on code), that this dangling pointer
+> >> is not dangerous, since nothing accesses it. And next_siblings
+> >> _guaranteed_ to be NULL, since dev->next_siblings is set NULL in
+> >> disconnect()
+> >
+> > Yes, you're right. As a security researcher, I am sensitive to such
+> > dangling pointers.
+> >
+> > As its nullifying site is across functions, I suggest developers
+> > remove this dangling pointer in case that any newly added code in this
+> > function or before the nullifying location would touch next_siblings.
+> >
+>
+> Based on git blame this driver is very old (was added in 2012), so, I
+> guess, nothing really new will come up.
+>
+> Anyway, I am absolutely not a security person and if you think, that
+> this dangling pointer can be somehow used in exploitation you should
+> state it in commit message.
+>
+>
+> > If Pavel and others think it's fine, then it's time to close this patch.
+> >
+>
+> I don't have any big objections on the code itself. Maybe only 'if' can
+> be removed to just speed up the code, but I don't see why this change is
+> needed :)
 
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - items:
-> > +          - enum:
-> > +              - mediatek,mt7629-spi
-> > +          - const: mediatek,mt7622-spi
-> > +      - items:
-> > +          - enum:
-> > +              - mediatek,mt8516-spi
-> > +          - const: mediatek,mt2712-spi
-> > +      - items:
-> > +          - enum:
-> > +              - mediatek,mt6779-spi
-> > +              - mediatek,mt8192-spi
-> > +              - mediatek,mt8195-spi
-> > +          - const: mediatek,mt6765-spi
-> > +      - const: mediatek,mt2701-spi
-> > +      - const: mediatek,mt2712-spi
-> > +      - const: mediatek,mt6589-spi
-> > +      - const: mediatek,mt6765-spi
-> > +      - const: mediatek,mt6893-spi
-> > +      - const: mediatek,mt7622-spi
-> > +      - const: mediatek,mt8135-spi
-> > +      - const: mediatek,mt8173-spi
-> > +      - const: mediatek,mt8183-spi
-> 
-> All these can be 1 enum.
-> 
-OK, I'll fix it.
+OK, let's move on. Leave alone this patch.
 
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: clock used for the parent clock
-> > +      - description: clock used for the muxes clock
-> > +      - description: clock used for the clock gate
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: parent-clk
-> > +      - const: sel-clk
-> > +      - const: spi-clk
-> > +
-> > +  mediatek,pad-select:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> > +    maxItems: 4
-> > +    items:
-> > +      enum: [0, 1, 2, 3]
-> > +    description:
-> > +      specify which pins group(ck/mi/mo/cs) spi controller used.
-> > +      This is an array.
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - clocks
-> > +  - clock-names
-> > +  - '#address-cells'
-> > +  - '#size-cells'
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/clock/mt8173-clk.h>
-> > +    #include <dt-bindings/gpio/gpio.h>
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > +
-> > +    spi@1100a000 {
-> > +      compatible = "mediatek,mt8173-spi";
-> > +      #address-cells = <1>;
-> > +      #size-cells = <0>;
-> > +      reg = <0x1100a000 0x1000>;
-> > +      interrupts = <GIC_SPI 110 IRQ_TYPE_LEVEL_LOW>;
-> > +      clocks = <&topckgen CLK_TOP_SYSPLL3_D2>,
-> > +               <&topckgen CLK_TOP_SPI_SEL>,
-> > +               <&pericfg CLK_PERI_SPI0>;
-> > +      clock-names = "parent-clk", "sel-clk", "spi-clk";
-> > +      cs-gpios = <&pio 105 GPIO_ACTIVE_LOW>, <&pio 72
-> > GPIO_ACTIVE_LOW>;
-> > +      mediatek,pad-select = <1>, <0>;
-> > +    };
-
+>
+>
+>
+>
+> With regards,
+> Pavel Skripkin

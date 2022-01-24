@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C7D4992F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA93498EB0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:48:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383044AbiAXU0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:26:45 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:53818 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348708AbiAXT7b (ORCPT
+        id S1356051AbiAXTpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:45:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54006 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354097AbiAXTf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:59:31 -0500
+        Mon, 24 Jan 2022 14:35:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8DDEC0617AE;
+        Mon, 24 Jan 2022 11:16:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85F276090B;
-        Mon, 24 Jan 2022 19:59:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67295C340E5;
-        Mon, 24 Jan 2022 19:59:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 190066135D;
+        Mon, 24 Jan 2022 19:16:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA468C340E5;
+        Mon, 24 Jan 2022 19:16:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054365;
-        bh=t663/92JMy5zMjLaJe1V6EEdgtY92TPBONg80JAqH8E=;
+        s=korg; t=1643051807;
+        bh=PP9uLvzWC9cDcqDXuUVuJjBDEv8xT7ubGng62qaT7qs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qayc/WEN9psYlYUWyuH9erv2oKtgPL7EbLcTzFOdNQ9gjWQmuDSA13hSf0iyOE2YV
-         zQBqiAlGmRDBGxnhPsVPg5RqNR+fFPoCoU96KevVagregXdqZkgDA7skJWI7zHHNf1
-         k4qjI5/cp1oWX/Hk0A8iFRqdlTlFzr79/AUHFpNs=
+        b=ZqqePjufXT6O8AK/Lpg8Kf1nMplipREk1L4j2arAe4kgEZZC99mRKG0rWog2QulJ+
+         KC8pzhzsMAp6fHykYOuQo/vNKpuUyJ5eHpYbvm+24IK7TivIijipTM6S6FreV3WOwL
+         aZIig1ycwwDrLjYKrVAVFH6i/oUw3v/qgIk2GTHc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Richard Guy Briggs <rgb@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
+        stable@vger.kernel.org, Chen Jun <chenjun102@huawei.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 366/563] audit: ensure userspace is penalized the same as the kernel when under pressure
+Subject: [PATCH 4.19 093/239] tpm: add request_locality before write TPM_INT_ENABLE
 Date:   Mon, 24 Jan 2022 19:42:11 +0100
-Message-Id: <20220124184037.079588334@linuxfoundation.org>
+Message-Id: <20220124183946.069737911@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,68 +49,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Moore <paul@paul-moore.com>
+From: Chen Jun <chenjun102@huawei.com>
 
-[ Upstream commit 8f110f530635af44fff1f4ee100ecef0bac62510 ]
+[ Upstream commit 0ef333f5ba7f24f5d8478425c163d3097f1c7afd ]
 
-Due to the audit control mutex necessary for serializing audit
-userspace messages we haven't been able to block/penalize userspace
-processes that attempt to send audit records while the system is
-under audit pressure.  The result is that privileged userspace
-applications have a priority boost with respect to audit as they are
-not bound by the same audit queue throttling as the other tasks on
-the system.
+Locality is not appropriately requested before writing the int mask.
+Add the missing boilerplate.
 
-This patch attempts to restore some balance to the system when under
-audit pressure by blocking these privileged userspace tasks after
-they have finished their audit processing, and dropped the audit
-control mutex, but before they return to userspace.
-
-Reported-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-Tested-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
-Signed-off-by: Paul Moore <paul@paul-moore.com>
+Fixes: e6aef069b6e9 ("tpm_tis: convert to using locality callbacks")
+Signed-off-by: Chen Jun <chenjun102@huawei.com>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/audit.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ drivers/char/tpm/tpm_tis_core.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/kernel/audit.c b/kernel/audit.c
-index d784000921da3..2a38cbaf3ddb7 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -1540,6 +1540,20 @@ static void audit_receive(struct sk_buff  *skb)
- 		nlh = nlmsg_next(nlh, &len);
- 	}
- 	audit_ctl_unlock();
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index c9a5f34097df5..c95ce9323d77a 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -874,7 +874,15 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 	intmask |= TPM_INTF_CMD_READY_INT | TPM_INTF_LOCALITY_CHANGE_INT |
+ 		   TPM_INTF_DATA_AVAIL_INT | TPM_INTF_STS_VALID_INT;
+ 	intmask &= ~TPM_GLOBAL_INT_ENABLE;
 +
-+	/* can't block with the ctrl lock, so penalize the sender now */
-+	if (audit_backlog_limit &&
-+	    (skb_queue_len(&audit_queue) > audit_backlog_limit)) {
-+		DECLARE_WAITQUEUE(wait, current);
-+
-+		/* wake kauditd to try and flush the queue */
-+		wake_up_interruptible(&kauditd_wait);
-+
-+		add_wait_queue_exclusive(&audit_backlog_wait, &wait);
-+		set_current_state(TASK_UNINTERRUPTIBLE);
-+		schedule_timeout(audit_backlog_wait_time);
-+		remove_wait_queue(&audit_backlog_wait, &wait);
++	rc = request_locality(chip, 0);
++	if (rc < 0) {
++		rc = -ENODEV;
++		goto out_err;
 +	}
- }
++
+ 	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
++	release_locality(chip, 0);
  
- /* Log information about who is connecting to the audit multicast socket */
-@@ -1824,7 +1838,9 @@ struct audit_buffer *audit_log_start(struct audit_context *ctx, gfp_t gfp_mask,
- 	 *    task_tgid_vnr() since auditd_pid is set in audit_receive_msg()
- 	 *    using a PID anchored in the caller's namespace
- 	 * 2. generator holding the audit_cmd_mutex - we don't want to block
--	 *    while holding the mutex */
-+	 *    while holding the mutex, although we do penalize the sender
-+	 *    later in audit_receive() when it is safe to block
-+	 */
- 	if (!(auditd_test_task(current) || audit_ctl_owner_current())) {
- 		long stime = audit_backlog_wait_time;
- 
+ 	rc = tpm2_probe(chip);
+ 	if (rc)
 -- 
 2.34.1
 

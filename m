@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7336E499EF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A35E9499F09
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838700AbiAXWry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:47:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56580 "EHLO
+        id S1839548AbiAXWvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:51:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1458144AbiAXVmr (ORCPT
+        with ESMTP id S1458150AbiAXVmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 16:42:47 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8B8C07A955;
-        Mon, 24 Jan 2022 12:31:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4C7C07A959;
+        Mon, 24 Jan 2022 12:31:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29FB661383;
-        Mon, 24 Jan 2022 20:31:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0839AC340E7;
-        Mon, 24 Jan 2022 20:30:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCBE761536;
+        Mon, 24 Jan 2022 20:31:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB8A5C340E5;
+        Mon, 24 Jan 2022 20:31:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056259;
-        bh=e9ukgO2HtZrPpeNCuBBCRIWPjwNXuYeZrknKf0Rh6RA=;
+        s=korg; t=1643056271;
+        bh=31xC9mtUNmT5ViszQgZGChLa+pmB3GlMeXbvgzxJHR8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FgRrmsTKzTTTv/EGe2/6mLZcTDNyzgT2ZkUe4NjXOrhz68EM2VKuJ2JR42Mrod+KR
-         IjJJbCrVTEgw0RFCoJhjmB4aFEGucRNLDWdwZZYaxEHszfWLleRXbwg9HAIvwNLXqj
-         hZfOj8Unhwkj4ZPUDAe3oP5m99tPICIj2FK4Izu8=
+        b=ZEC+ROZ5fwELLGQggQwH3O7XtHiu4BKen5E3aew2BR2HA4n/Dw6lLtTpiUEXwCWcW
+         Gjaja2Yx3flS2bBHQFjpUDI6gdvp27rEwJs2W0O7GTkYiwqvZjxEdRY06UgUjavtwv
+         YBbIyX0hmx7rBuv3Z30GBhW2zVkZ4aV8t3YxElwY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-efi@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kevin Tian <kevin.tian@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Pingfan Liu <kernelfans@gmail.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>,
+        John Donnelly <john.p.donnelly@oracle.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 424/846] ASoC: Intel: catpt: Test dmaengine_submit() result before moving on
-Date:   Mon, 24 Jan 2022 19:39:01 +0100
-Message-Id: <20220124184115.607866287@linuxfoundation.org>
+Subject: [PATCH 5.15 427/846] of: fdt: Aggregate the processing of "linux,usable-memory-range"
+Date:   Mon, 24 Jan 2022 19:39:04 +0100
+Message-Id: <20220124184115.705813438@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -51,63 +56,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cezary Rojewski <cezary.rojewski@intel.com>
+From: Zhen Lei <thunder.leizhen@huawei.com>
 
-[ Upstream commit 2a9a72e290d4a4741e673f86b9fba9bfb319786d ]
+[ Upstream commit 8347b41748c3019157312fbe7f8a6792ae396eb7 ]
 
-After calling dmaengine_submit(), the submitted transfer descriptor
-belongs to the DMA engine. Pointer to that descriptor may no longer be
-valid after the call and should be tested before awaiting transfer
-completion.
+Currently, we parse the "linux,usable-memory-range" property in
+early_init_dt_scan_chosen(), to obtain the specified memory range of the
+crash kernel. We then reserve the required memory after
+early_init_dt_scan_memory() has identified all available physical memory.
+Because the two pieces of code are separated far, the readability and
+maintainability are reduced. So bring them together.
 
-Reported-by: Kevin Tian <kevin.tian@intel.com>
-Suggested-by: Dave Jiang <dave.jiang@intel.com>
-Fixes: 4fac9b31d0b9 ("ASoC: Intel: Add catpt base members")
-Signed-off-by: Cezary Rojewski <cezary.rojewski@intel.com>
-Link: https://lore.kernel.org/r/20211216115743.2130622-2-cezary.rojewski@intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Suggested-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+(change the prototype of early_init_dt_check_for_usable_mem_range(), in
+order to use it outside)
+Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
+Tested-by: Dave Kleikamp <dave.kleikamp@oracle.com>
+Acked-by: John Donnelly <john.p.donnelly@oracle.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+To: devicetree@vger.kernel.org
+To: linux-efi@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/intel/catpt/dsp.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ drivers/of/fdt.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
-diff --git a/sound/soc/intel/catpt/dsp.c b/sound/soc/intel/catpt/dsp.c
-index 9c5fd18f2600f..346bec0003066 100644
---- a/sound/soc/intel/catpt/dsp.c
-+++ b/sound/soc/intel/catpt/dsp.c
-@@ -65,6 +65,7 @@ static int catpt_dma_memcpy(struct catpt_dev *cdev, struct dma_chan *chan,
- {
- 	struct dma_async_tx_descriptor *desc;
- 	enum dma_status status;
-+	int ret;
- 
- 	desc = dmaengine_prep_dma_memcpy(chan, dst_addr, src_addr, size,
- 					 DMA_CTRL_ACK);
-@@ -77,13 +78,22 @@ static int catpt_dma_memcpy(struct catpt_dev *cdev, struct dma_chan *chan,
- 	catpt_updatel_shim(cdev, HMDC,
- 			   CATPT_HMDC_HDDA(CATPT_DMA_DEVID, chan->chan_id),
- 			   CATPT_HMDC_HDDA(CATPT_DMA_DEVID, chan->chan_id));
--	dmaengine_submit(desc);
-+
-+	ret = dma_submit_error(dmaengine_submit(desc));
-+	if (ret) {
-+		dev_err(cdev->dev, "submit tx failed: %d\n", ret);
-+		goto clear_hdda;
-+	}
-+
- 	status = dma_wait_for_async_tx(desc);
-+	ret = (status == DMA_COMPLETE) ? 0 : -EPROTO;
-+
-+clear_hdda:
- 	/* regardless of status, disable access to HOST memory in demand mode */
- 	catpt_updatel_shim(cdev, HMDC,
- 			   CATPT_HMDC_HDDA(CATPT_DMA_DEVID, chan->chan_id), 0);
- 
--	return (status == DMA_COMPLETE) ? 0 : -EPROTO;
-+	return ret;
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index 4546572af24bb..105b1a47905ab 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -969,18 +969,22 @@ static void __init early_init_dt_check_for_elfcorehdr(unsigned long node)
+ 		 elfcorehdr_addr, elfcorehdr_size);
  }
  
- int catpt_dma_memcpy_todsp(struct catpt_dev *cdev, struct dma_chan *chan,
+-static phys_addr_t cap_mem_addr;
+-static phys_addr_t cap_mem_size;
++static unsigned long chosen_node_offset = -FDT_ERR_NOTFOUND;
+ 
+ /**
+  * early_init_dt_check_for_usable_mem_range - Decode usable memory range
+  * location from flat tree
+- * @node: reference to node containing usable memory range location ('chosen')
+  */
+-static void __init early_init_dt_check_for_usable_mem_range(unsigned long node)
++static void __init early_init_dt_check_for_usable_mem_range(void)
+ {
+ 	const __be32 *prop;
+ 	int len;
++	phys_addr_t cap_mem_addr;
++	phys_addr_t cap_mem_size;
++	unsigned long node = chosen_node_offset;
++
++	if ((long)node < 0)
++		return;
+ 
+ 	pr_debug("Looking for usable-memory-range property... ");
+ 
+@@ -993,6 +997,8 @@ static void __init early_init_dt_check_for_usable_mem_range(unsigned long node)
+ 
+ 	pr_debug("cap_mem_start=%pa cap_mem_size=%pa\n", &cap_mem_addr,
+ 		 &cap_mem_size);
++
++	memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
+ }
+ 
+ #ifdef CONFIG_SERIAL_EARLYCON
+@@ -1141,9 +1147,10 @@ int __init early_init_dt_scan_chosen(unsigned long node, const char *uname,
+ 	    (strcmp(uname, "chosen") != 0 && strcmp(uname, "chosen@0") != 0))
+ 		return 0;
+ 
++	chosen_node_offset = node;
++
+ 	early_init_dt_check_for_initrd(node);
+ 	early_init_dt_check_for_elfcorehdr(node);
+-	early_init_dt_check_for_usable_mem_range(node);
+ 
+ 	/* Retrieve command line */
+ 	p = of_get_flat_dt_prop(node, "bootargs", &l);
+@@ -1279,7 +1286,7 @@ void __init early_init_dt_scan_nodes(void)
+ 	of_scan_flat_dt(early_init_dt_scan_memory, NULL);
+ 
+ 	/* Handle linux,usable-memory-range property */
+-	memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
++	early_init_dt_check_for_usable_mem_range();
+ }
+ 
+ bool __init early_init_dt_scan(void *params)
 -- 
 2.34.1
 

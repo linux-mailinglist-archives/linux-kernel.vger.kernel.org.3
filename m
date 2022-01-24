@@ -2,75 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61FE74978D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 07:12:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C766D4978DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 07:19:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241570AbiAXGMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 01:12:50 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:51464 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S241550AbiAXGMq (ORCPT
+        id S241581AbiAXGT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 01:19:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36560 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241551AbiAXGT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 01:12:46 -0500
-X-UUID: 11fdfc74ddf04c0e9cf96408da9d3f60-20220124
-X-UUID: 11fdfc74ddf04c0e9cf96408da9d3f60-20220124
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <leilk.liu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1155236483; Mon, 24 Jan 2022 14:12:43 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 24 Jan 2022 14:12:42 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 24 Jan
- 2022 14:12:42 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 24 Jan 2022 14:12:41 +0800
-From:   Leilk Liu <leilk.liu@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-        Leilk Liu <leilk.liu@mediatek.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH V3 2/2] dt-bindings: spi: Add compatible for Mediatek MT8186
-Date:   Mon, 24 Jan 2022 14:12:38 +0800
-Message-ID: <20220124061238.7854-3-leilk.liu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220124061238.7854-1-leilk.liu@mediatek.com>
-References: <20220124061238.7854-1-leilk.liu@mediatek.com>
+        Mon, 24 Jan 2022 01:19:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AA3C06173B;
+        Sun, 23 Jan 2022 22:19:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DE3E60FA2;
+        Mon, 24 Jan 2022 06:19:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73AD5C340E1;
+        Mon, 24 Jan 2022 06:19:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643005167;
+        bh=nPNbP8694jK2hGU0MGv+hETbDJ1UjxCjyewKjVw2DuY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BpGyY2uzKZcgIswCo896tcGOjc01klnFBZ/HPOW5u3btVHvsjeh+nFfJ2jr8tA5N6
+         XIpYxArtgNYjKegnCvA4G63jz8e7LU4H8GrAj9DxAOJZHTiFHvbDrpzt2FR+Hu7e0w
+         1IDhZ+KhOg8REByh+uflFGsd7SqfF1CYNlM+3/YY=
+Date:   Mon, 24 Jan 2022 07:19:15 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, stable@vger.kernel.org,
+        Florian Weimer <fw@deneb.enyo.de>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Dave Watson <davejwatson@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Russell King <linux@arm.linux.org.uk>,
+        Andi Kleen <andi@firstfloor.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Ben Maurer <bmaurer@fb.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Joel Fernandes <joelaf@google.com>
+Subject: Re: [RFC PATCH] rseq: Fix broken uapi field layout on 32-bit little
+ endian
+Message-ID: <Ye5E46FrGwjlQlps@kroah.com>
+References: <20220123193154.14565-1-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220123193154.14565-1-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds dt-binding documentation of spi bus for Mediatek MT8186 SoC
-Platform.
+On Sun, Jan 23, 2022 at 02:31:54PM -0500, Mathieu Desnoyers wrote:
+> The rseq rseq_cs.ptr.{ptr32,padding} uapi endianness handling is
+> entirely wrong on 32-bit little endian: a preprocessor logic mistake
+> wrongly uses the big endian field layout on 32-bit little endian
+> architectures.
+> 
+> Fortunately, those ptr32 accessors were never used within the kernel,
+> and only meant as a convenience for user-space.
+> 
+> While working on fixing the ppc32 support in librseq [1], I made sure
+> all 32-bit little endian architectures stopped depending on little
+> endian byte ordering by using the ptr32 field. It led me to discover
+> this wrong ptr32 field ordering on little endian.
+> 
+> Because it is already exposed as a UAPI, all we can do for the existing
+> fields is document the wrong behavior and encourage users to use
+> alternative mechanisms.
+> 
+> Introduce a new rseq_cs.arch field with correct field ordering. Use this
+> opportunity to improve the layout so accesses to architecture fields on
+> both 32-bit and 64-bit architectures are done through the same field
+> hierarchy, which is much nicer than the previous scheme.
+> 
+> The intended use is now:
+> 
+> * rseq_thread_area->rseq_cs.ptr64: Access the 64-bit value of the rseq_cs
+> 				   pointer. Available on all
+>                                    architectures (unchanged).
+> 
+> * rseq_thread_area->rseq_cs.arch.ptr: Access the architecture specific
+> 				      layout of the rseq_cs pointer. This
+> 				      is a 32-bit field on 32-bit
+> 				      architectures, and a 64-bit field on
+>                                       64-bit architectures.
+> 
+> Link: https://git.kernel.org/pub/scm/libs/librseq/librseq.git/ [1]
+> Fixes: ec9c82e03a74 ("rseq: uapi: Declare rseq_cs field as union, update includes")
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Florian Weimer <fw@deneb.enyo.de>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: linux-api@vger.kernel.org
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Andy Lutomirski <luto@amacapital.net>
+> Cc: Dave Watson <davejwatson@fb.com>
+> Cc: Paul Turner <pjt@google.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Russell King <linux@arm.linux.org.uk>
+> Cc: "H . Peter Anvin" <hpa@zytor.com>
+> Cc: Andi Kleen <andi@firstfloor.org>
+> Cc: Christian Brauner <christian.brauner@ubuntu.com>
+> Cc: Ben Maurer <bmaurer@fb.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Josh Triplett <josh@joshtriplett.org>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will.deacon@arm.com>
+> Cc: Michael Kerrisk <mtk.manpages@gmail.com>
+> Cc: Joel Fernandes <joelaf@google.com>
+> Cc: Paul E. McKenney <paulmck@kernel.org>
+> ---
+>  include/uapi/linux/rseq.h | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
 
-Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
-Acked-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml | 1 +
- 1 file changed, 1 insertion(+)
+<formletter>
 
-diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
-index ea977fba49a7..bfa44acb1bdd 100644
---- a/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
-+++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
-@@ -26,6 +26,7 @@ properties:
-       - items:
-           - enum:
-               - mediatek,mt6779-spi
-+              - mediatek,mt8186-spi
-               - mediatek,mt8192-spi
-               - mediatek,mt8195-spi
-           - const: mediatek,mt6765-spi
--- 
-2.25.1
+This is not the correct way to submit patches for inclusion in the
+stable kernel tree.  Please read:
+    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+for how to do this properly.
 
+</formletter>

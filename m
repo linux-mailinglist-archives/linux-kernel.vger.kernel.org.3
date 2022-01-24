@@ -2,272 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F8049893E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:54:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6A64988AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344155AbiAXSxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:53:47 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:27152 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343854AbiAXSwM (ORCPT
+        id S241988AbiAXStw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:49:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245375AbiAXSs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:52:12 -0500
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20OI6pDn001330;
-        Mon, 24 Jan 2022 18:50:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=O6zFWpEnjHHc5+KK2xj7ohlt/soSli9wkExlPaMQCB8=;
- b=pRq6AgAcUWFFScWfLajKm9ZEG67OxZEe32Kz0jeBN2QDfCbre645Fb4KBKwIRv6Z1Gwv
- PKpGpqb/JvhyhU4+Kod61A037yTAtaZbHi22nEgrRmiCDWFgAZKBk5k8X69slZVQs+AL
- o+nRW8qQ3X6LkzIa/JrpKopQWU8/Ty52yiLaS/rNr/dycA2TO1LcEzsQgJvwSfZCph4D
- IfsdMNrJRVW6XSxnPTXgIjAJymRFEmSiHNcXBJ7fEdjTqrBrSlTimpWyVfrNeXf/Y1W/
- BL421SOeKnZTwpsMPce1K0A054boKOI57JCHVBjw61m2yeJ8Bcwn1SBwZuz/3VVZEXmd ug== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dsy9s0krc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Jan 2022 18:50:39 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20OIkhMn046589;
-        Mon, 24 Jan 2022 18:50:38 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2102.outbound.protection.outlook.com [104.47.58.102])
-        by aserp3020.oracle.com with ESMTP id 3dr9r4kphp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Jan 2022 18:50:38 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m/pjG5E1NnITtJO+V2H1EK9MRhBx7wo8iFFKh6SbWCOb9IgFpNHtrl9ZlKtsIiGCGlgEqeGRZDOW8d1NamcvS96m3LTaINGx7azljXy1kLJMkMAnnI56Co1mqc763h51KEULrUUJXZomevdgPpP/Aer03Q9P1pqkyUiIZwCj4JNLGxPfXm4b+K2k8/LMhcW2b3/7yeTmjqP103kh4dK3RLHV+wP3+gUhUNjLU3VAFk1yl6SS7zwkRQm1ie0+coPnQor93BygQIunc2bHzLv5Ml+Z/+XCleIxzGMGHw+kmjyeoWCDtmtREXneTc52ZmLMS0wZWuA9/ywADg73rMFgzA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O6zFWpEnjHHc5+KK2xj7ohlt/soSli9wkExlPaMQCB8=;
- b=ECN1oo0t7zJLTv/keX90imjyOATgJ6lbRRPkyi+KdDUpGBpaLGn+KYHEIMHiUFyCxjJXL3sG6Oai/5myV8snGFRiaFLGP4Vwjq+jWQdOn/mqIviI0uZ2vfWWVmNsZHjm0S7XUlhYxDyNnoK11vKyeTqLzD5+eG+GWkMm0u917tPgScPOVVQOivcgkk9WOYcOWXH9sWb8ljXkf726frV7BOisEZhr4n1O0J6G1usDtY9Epe4pe9AH6G6qvo2QWBXTjbU6ozttf3RqDC6ehjT2p9T8JFoDUpR+7NbAExSezpN530tURuJXpo8+GHTXJ8KSU0MsKb8aaDke6qMLPoBDGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
+        Mon, 24 Jan 2022 13:48:58 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29ABDC061751
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:48:58 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id z5so2734594plg.8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:48:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O6zFWpEnjHHc5+KK2xj7ohlt/soSli9wkExlPaMQCB8=;
- b=jJfxZlbi+GU68UXpF+80WuGweuMXOZDdJsK8VPcTknHgvhjfQiUYLCqmIj3CRdiUoryO08iSin6kr13jp8+7runFbXN8RjRdxQitXSI4Y2HuzgsOZiJO8mw0lU9+eFa5ggn9jFZ5CqSTSdcnFxQBImAM36dMql8I6yczAdAFUgg=
-Received: from BN8PR10MB3220.namprd10.prod.outlook.com (2603:10b6:408:c8::18)
- by BYAPR10MB2837.namprd10.prod.outlook.com (2603:10b6:a03:81::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.12; Mon, 24 Jan
- 2022 18:50:35 +0000
-Received: from BN8PR10MB3220.namprd10.prod.outlook.com
- ([fe80::104f:849b:6a11:c5c2]) by BN8PR10MB3220.namprd10.prod.outlook.com
- ([fe80::104f:849b:6a11:c5c2%7]) with mapi id 15.20.4909.017; Mon, 24 Jan 2022
- 18:50:35 +0000
-Message-ID: <4d333527-391f-fe6b-eb2d-123d67242d2c@oracle.com>
-Date:   Mon, 24 Jan 2022 11:48:21 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [RFC PATCH 0/6] Add support for shared PTEs across processes
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     akpm@linux-foundation.org, willy@infradead.org,
-        longpeng2@huawei.com, arnd@arndb.de, dave.hansen@linux.intel.com,
-        david@redhat.com, surenb@google.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org
-References: <cover.1642526745.git.khalid.aziz@oracle.com>
- <YevrGs3WE7ywB+lH@kernel.org>
-From:   Khalid Aziz <khalid.aziz@oracle.com>
-In-Reply-To: <YevrGs3WE7ywB+lH@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN7PR04CA0190.namprd04.prod.outlook.com
- (2603:10b6:806:126::15) To BN8PR10MB3220.namprd10.prod.outlook.com
- (2603:10b6:408:c8::18)
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=Gzn3uL4rVVdIQDAl4BqctHY3PBm5IhFX7n3JXbdsza8=;
+        b=Qh+FuWF89aMBe6tH8YCR707h4Gxwg0Ls7NK8D6oyRrTxLavxgit+eOxbNfYobiPB1P
+         i257nnXOJ8+q5A2mnJooBL3VgJ9yLW8Gt8uzuRkJOzrL4ED+g0coDI1iBYnSaYVekOi/
+         /S3xOTDv41y8sYC00uwEtka6RT+mYC3wDiqifhjjzZiM1HYvcJhgVNvFzbB4Z7K2K6GV
+         FlxVGn/TG9/6zw0KTq50pVnWTnFDMi96DliTDzlOOKV+No0Ji1+Ez50CY9Q3alpzbIsb
+         BLf5lgX6IJ+qdi80fHU8lg8GSB7aVZYkY93NfalIoxT0OpbAd9c5VN2Y9mk2ZirG0HWP
+         lhGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=Gzn3uL4rVVdIQDAl4BqctHY3PBm5IhFX7n3JXbdsza8=;
+        b=zUJeySmM6reT9sGXs+fD/3hwdIb3p+Q7Luo+kn/k0HxHUelcUQml0I7CL+H79mOKOR
+         17cJdRg3EDV7vhrTsnwjLAGHrx9abgzqQ9odbj5pXx0JTAN29qov8Op8auQBSLgNkHrM
+         6SNelHLLH9xzNOVlAHzwzwSvJzNNsAyvMQLLl2xDFpFu2blwmQmky0Tov5KssCBDzjQu
+         fTLphURPRSaKDXSxNWJcn3gS+wh4gbkVZr2BcRMt//8Lqxyopj/OazRlHtY35opCBP3C
+         sZScoYnQ9hgcBfm3+Hx2pAun93FsGGUGTjlMRSLXZRMep4BFUBMAjqEZIXB9ntQa79+H
+         tc+w==
+X-Gm-Message-State: AOAM531XY27yduRiFz9aF/Su3CA99UudRKY3iKJYCEqOSTGJCD32PWGF
+        BSfkDQJ+VH+c5FuRZtU1N7R8fw==
+X-Google-Smtp-Source: ABdhPJxpeHQ7qWhJZyBZR4jcIo1P20Ptn1cZClhGtSKAcWnnaDw6cFV4D/Pth0o3hjutXJnUc8uQnA==
+X-Received: by 2002:a17:90b:1b0e:: with SMTP id nu14mr3174732pjb.39.1643050137402;
+        Mon, 24 Jan 2022 10:48:57 -0800 (PST)
+Received: from [2620:15c:29:204:1f99:bd65:fcbb:146c] ([2620:15c:29:204:1f99:bd65:fcbb:146c])
+        by smtp.gmail.com with ESMTPSA id 20sm12251408pgz.59.2022.01.24.10.48.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 10:48:56 -0800 (PST)
+Date:   Mon, 24 Jan 2022 10:48:55 -0800 (PST)
+From:   David Rientjes <rientjes@google.com>
+To:     Peter Xu <peterx@redhat.com>, Zach O'Keefe <zokeefe@google.com>,
+        SeongJae Park <sj@kernel.org>
+cc:     Shakeel Butt <shakeelb@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: split thp synchronously on MADV_DONTNEED
+In-Reply-To: <YaBevbuNuR+ToJ1o@xz-m1.local>
+Message-ID: <e55d1f78-46c2-9ced-d7ad-c6deba4cb7b8@google.com>
+References: <20211120201230.920082-1-shakeelb@google.com> <25b36a5c-5bbd-5423-0c67-05cd6c1432a7@redhat.com> <CALvZod5L1C1DV_DVs9O3xZm6CJnriunAoj89YLDdCp7ef5yBxA@mail.gmail.com> <YZ9kUD5AG6inbUEg@xz-m1.local> <CALvZod7L5Ga2xZOy_hgocsTxSuOYs840TiviOAhRwz59ATubWg@mail.gmail.com>
+ <YaBevbuNuR+ToJ1o@xz-m1.local>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2632e52e-5645-4845-323d-08d9df6a67d7
-X-MS-TrafficTypeDiagnostic: BYAPR10MB2837:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR10MB2837044FEE812FDFD150CE55865E9@BYAPR10MB2837.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HibGnMIVcRvmVNa+OF1YJcDfGaRc3BO8WxPOcq4FWikYN2CItjArQyaWTfPrjAFrOypq/bP/ia3JBg1qZSgzR7VThS0CtdDC71d6XLCGozg0i5Uk1MGsdp3ni3fnla+veA1iCicSLUPCZ/JnD9av6oEg0aciK6q6heuSJY5V8N3zRV+QLOTWL8M+Yj5M4XIoNl/XjIpXOAEJ4TAa5kYY9YCq78qHiX3rKHCQ9jngPgXsWJ1jSp1M0JsL25uFL16YfPatr+eKRHOP3Sgr6JX0Sh3/MtNnJBngTG5nfFQPjy5p2N8qHX1EOynZanf7a0wKg7mzjayjRqmEfRBlLXibJ9dDWeSjBU5QYaGNWT97ZO9CmJo9PgrmbiALrlP2MkqECwaIPB2K7I3uY7bpnJUaMAi/GUEM0OavvBqyBUnjFuaq8FJeaogAd1+Bu/WjkXjTqEmXrpsj0izK9u9i6iMsru5KpiaG+UHoHZKq33suIWWRZQePfLdxMwcDr/m0M1vdjh9eHz2kcOj/0VX1Y/sIrmjqyxzFMatGa14D/g5xgeIyJ8dsAveIxfsT+lBsOGhvseGIfhh+yggDRwzxRyD1V4s9v2KIddpZ926dBGPlA9cEQgl9t0uj8dBvKlE3WKXiR6dHIM7ZqjAmiWDxkyL+/WGcJwfKBU/C46iWhePE06TQTYgvrmZ0RBCJjCIfslZTqXnusuGyPGxyWnPfYvyNrOYreinCAxt9jFd26zvitQo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR10MB3220.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(2906002)(83380400001)(8676002)(8936002)(66946007)(31696002)(6486002)(508600001)(7416002)(4326008)(66476007)(53546011)(2616005)(66556008)(86362001)(316002)(6916009)(36756003)(6666004)(44832011)(186003)(31686004)(6506007)(38100700002)(6512007)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K1kyekVaemxJNFhBeDczbVNCVmVySVAzV21XTDZ6SndyZ1pBK0YyRjkvbjhM?=
- =?utf-8?B?WlFYK3lWYVgyZktXUS9BZHpxN2grS2NjbE9zRXAzRVllRGFEZmJTVWNoSWhH?=
- =?utf-8?B?US9kcUUwN056Vmt1bEJ0WmxQSHNzN29GdTlobFJSTEJHWk1LdXhuWEhkbDBH?=
- =?utf-8?B?NWxmTWpreFdYOU5BbTZMaWdkSEEvaEtBeTh6WDlWUnA3RTdjd1crMDFHYXcr?=
- =?utf-8?B?R0N3U0ptb2pHSFVVWHpKSXROZEhXOURiL1dFN0p6OHp3ZTVPNUUyMzdnOWgv?=
- =?utf-8?B?TE5RQkVCZGh3d3N4V25wMHlhdXBVaU1uVEttRVdzSEM4UkZnQzRPQ25NZ016?=
- =?utf-8?B?NmsrMXJoelc5bUh2eDhhT2FocjUrZUdLc3ZVWERPSlNFaUZXZlRaK3lhRHRP?=
- =?utf-8?B?aHVsWDdqL05yNmlnaGZBQ1VaWUo1QytQMFFwdUI2Z3hRQ2FhdWZlL2tYSVdv?=
- =?utf-8?B?WnNwWkNkY0xvQ01hMHFnMTVmWVdCT0JpVU5EK1I1bkt2VHVXQlI3dFNReExO?=
- =?utf-8?B?OHdHRWNEU0tpTDhKZHV1ZDdMN216UTg0dituejFwZUk1UXg1Uk41YXhSbmRQ?=
- =?utf-8?B?WFNubGJtSm9TZEtycHFpMG01NHpPV2w4WFl4THhtMStKY2tEaHViMzFoVkdv?=
- =?utf-8?B?U1V2bW1GczdDVUI4QVJxM2VVdWhpaUJjS2ZNNXFVNXNUbGUxNGk3K3NUZWEz?=
- =?utf-8?B?VlpsVkxKMGlGVGI1UG00aVhJclhKMXJDeDVxNzYybzlvNW5reUg4VmtIUEp3?=
- =?utf-8?B?eG5FV01xb0g3d0tUeDF2TWk0UzlrNC9jWXBudzZIL0Q1YkVZWUVyTjBJdHlD?=
- =?utf-8?B?azFqU2lyYVEwTlJtRyt3TEdHRWcxVFVDaFQ5eUhpUDZIMWh4SHFLM1Q1ajk3?=
- =?utf-8?B?WlUxRTRBOVBCKy80Vm5hdFJ3RVJiTmI3a2VwRStPRE5kUDVoR2FtUnc4MUw5?=
- =?utf-8?B?NFZNR3o4eFNmYXgrZUpKY3Ezamt1dDRjZXhQcVVoa3FrdTNTZzFrSSt6bHBN?=
- =?utf-8?B?OHM4NmVvMkUrcmhVY01PUStuUklyWGNQN0tQTWhpYzBGbWNtZXlVQzR4ek1K?=
- =?utf-8?B?Um1iMXZFQnVIUkJOYW1ZVWJyV205OHBYdmI5Z2ZLQ3NTelYxakJCUjlybmdB?=
- =?utf-8?B?Q2Zia1ZUU2Q1bHpjT0NRV2xhWnprelJYNkpNZjVoS1kwUlpONGpibGpZZGhr?=
- =?utf-8?B?QWJiR01XQTNtcXcyNitHbGRoL2F6THk4VjB3QTVQeVUyMUh2b3hWRkpySWtB?=
- =?utf-8?B?NnU3dm5xNGswNUZpN0k4blZYMUh3d2lIdm1GVnNkTjYvVlNYMUprWmV5MzBW?=
- =?utf-8?B?WGhPcitDMTFpNkRKN2Q4UWNVbDluKzk0Q3lQQ1diT1k1d0UyT2xqeU14M0N6?=
- =?utf-8?B?UFhOSlFnUXB4LzRMaHJndHVvVnVNQ1BnVWlGNDZNTlI1ZUxVckZsVytvajUx?=
- =?utf-8?B?Rm9xQWlZZGRJWm5JQVRZNDdDTXB4WXJraHhHVEJNUENtbmlMYktMOEtxbmFP?=
- =?utf-8?B?RnNDd2NTTENENTFsOGVpVnpJcGpEZ2xYQ05zZTY1UGx2RzFLTUh5N04reG5F?=
- =?utf-8?B?UnArc29SeW1LUFNXdUc2TDY1T0ZoaEZPTk4za1BkK2hRSnAxWklYajFybno1?=
- =?utf-8?B?TTNxdEc0dmx2cDlSeExjTjhCTWRENGNSQkxlckg5dUpYc1VhT3o1aXZZMUN4?=
- =?utf-8?B?LzU5cjltTkRtZGZVUXNyYzkxVVdBNFhUWUp4VG41bDlkMHkybkgvZ3IzS1hZ?=
- =?utf-8?B?R3ZCWmVyUzlvOGUzSVR0aUltaHNiU2hwa1c2ZmJkc09IM1VWU3RNODVZc2ZT?=
- =?utf-8?B?aU1XUFJ5M052U0kwZFNaRXVZTkI2RHRLNGhQSWxNWXZtR0E5UnFJL0o0R1dh?=
- =?utf-8?B?TGYzR21lZDZ4Y0lrb1lVclBmUGorQ1JXcU90cmpjVmZEWTdTWEZQR2xUR2hn?=
- =?utf-8?B?d3pHcEYreWhIWm9YdDZvc21lMW9vNGFDdVdxRWJxMnhRVjc1SGdxS2IyeW8w?=
- =?utf-8?B?THJMdHFvaSs0R215dFZkMnNxNnlCb2YzTUJjelJ2SWR3cHRncEZzaTBHNnFs?=
- =?utf-8?B?NzRycHJhR2N3WGhGZjJwaDJJUEtsN3BPWUFCalRNWk82NS9EMWZlZnlVd0tN?=
- =?utf-8?B?MHVEd0hVNUd4T3k0ay9MZkRWc3Nrdi9oaDZyQ0N2dzB3YkFIQU1iODVlVDgy?=
- =?utf-8?Q?ndvMLnhhCdjKi9tQY8oRlxVaYB8TNCmEngFeGrIdPNO5?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2632e52e-5645-4845-323d-08d9df6a67d7
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR10MB3220.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2022 18:50:35.2882
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CxIRNlCWcbEKJqryoIVJHglDO7kfP+OICDpNtk7qilDrkBtssyM2l6Y0Gcb3v8hd9cR2pRCFxVacG768FL19JA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB2837
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10237 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999
- suspectscore=0 spamscore=0 adultscore=0 phishscore=0 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201240123
-X-Proofpoint-GUID: 60hpc5CZNMeXG24HjcPzU18vnZOgW2Wt
-X-Proofpoint-ORIG-GUID: 60hpc5CZNMeXG24HjcPzU18vnZOgW2Wt
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/22/22 04:31, Mike Rapoport wrote:
-> (added linux-api)
+On Fri, 26 Nov 2021, Peter Xu wrote:
+
+> Some side notes: I digged out the old MADV_COLLAPSE proposal right after I
+> thought about MADV_SPLIT (or any of its variance):
 > 
-> On Tue, Jan 18, 2022 at 02:19:12PM -0700, Khalid Aziz wrote:
->> Page tables in kernel consume some of the memory and as long as
->> number of mappings being maintained is small enough, this space
->> consumed by page tables is not objectionable. When very few memory
->> pages are shared between processes, the number of page table entries
->> (PTEs) to maintain is mostly constrained by the number of pages of
->> memory on the system. As the number of shared pages and the number
->> of times pages are shared goes up, amount of memory consumed by page
->> tables starts to become significant.
->>
->> Some of the field deployments commonly see memory pages shared
->> across 1000s of processes. On x86_64, each page requires a PTE that
->> is only 8 bytes long which is very small compared to the 4K page
->> size. When 2000 processes map the same page in their address space,
->> each one of them requires 8 bytes for its PTE and together that adds
->> up to 8K of memory just to hold the PTEs for one 4K page. On a
->> database server with 300GB SGA, a system carsh was seen with
->> out-of-memory condition when 1500+ clients tried to share this SGA
->> even though the system had 512GB of memory. On this server, in the
->> worst case scenario of all 1500 processes mapping every page from
->> SGA would have required 878GB+ for just the PTEs. If these PTEs
->> could be shared, amount of memory saved is very significant.
->>
->> This is a proposal to implement a mechanism in kernel to allow
->> userspace processes to opt into sharing PTEs. The proposal is to add
->> a new system call - mshare(), which can be used by a process to
->> create a region (we will call it mshare'd region) which can be used
->> by other processes to map same pages using shared PTEs. Other
->> process(es), assuming they have the right permissions, can then make
->> the mashare() system call to map the shared pages into their address
->> space using the shared PTEs.  When a process is done using this
->> mshare'd region, it makes a mshare_unlink() system call to end its
->> access. When the last process accessing mshare'd region calls
->> mshare_unlink(), the mshare'd region is torn down and memory used by
->> it is freed.
->>
->>
->> API Proposal
->> ============
->>
->> The mshare API consists of two system calls - mshare() and mshare_unlink()
->>
->> --
->> int mshare(char *name, void *addr, size_t length, int oflags, mode_t mode)
->>
->> mshare() creates and opens a new, or opens an existing mshare'd
->> region that will be shared at PTE level. "name" refers to shared object
->> name that exists under /sys/fs/mshare. "addr" is the starting address
->> of this shared memory area and length is the size of this area.
->> oflags can be one of:
->>
->> - O_RDONLY opens shared memory area for read only access by everyone
->> - O_RDWR opens shared memory area for read and write access
->> - O_CREAT creates the named shared memory area if it does not exist
->> - O_EXCL If O_CREAT was also specified, and a shared memory area
->>    exists with that name, return an error.
->>
->> mode represents the creation mode for the shared object under
->> /sys/fs/mshare.
->>
->> mshare() returns an error code if it fails, otherwise it returns 0.
+> https://lore.kernel.org/all/d098c392-273a-36a4-1a29-59731cdf5d3d@google.com/
 > 
-> Did you consider returning a file descriptor from mshare() system call?
-> Then there would be no need in mshare_unlink() as close(fd) would work.
-
-That is an interesting idea. It could work and eliminates the need for a new system call. It could be confusing though 
-for application writers. A close() call with a side-effect of deleting shared mapping would be odd. One of the use cases 
-for having files for mshare'd regions is to allow for orphaned mshare'd regions to be cleaned up by calling 
-mshare_unlink() with region name. This can require calling mshare_unlink() multiple times in current implementation to 
-bring the refcount for mshare'd region to 0 when mshare_unlink() finally cleans up the region. This would be problematic 
-with a close() semantics though unless there was another way to force refcount to 0. Right?
-
-
->   
->> PTEs are shared at pgdir level and hence it imposes following
->> requirements on the address and size given to the mshare():
->>
->> - Starting address must be aligned to pgdir size (512GB on x86_64)
->> - Size must be a multiple of pgdir size
->> - Any mappings created in this address range at any time become
->>    shared automatically
->> - Shared address range can have unmapped addresses in it. Any access
->>    to unmapped address will result in SIGBUS
->>
->> Mappings within this address range behave as if they were shared
->> between threads, so a write to a MAP_PRIVATE mapping will create a
->> page which is shared between all the sharers. The first process that
->> declares an address range mshare'd can continue to map objects in
->> the shared area. All other processes that want mshare'd access to
->> this memory area can do so by calling mshare(). After this call, the
->> address range given by mshare becomes a shared range in its address
->> space. Anonymous mappings will be shared and not COWed.
->>
->> A file under /sys/fs/mshare can be opened and read from. A read from
->> this file returns two long values - (1) starting address, and (2)
->> size of the mshare'd region.
+> My memory was that there's some issue to be solved so that was blocked, however
+> when I read the thread it sounds like the list was mostly reaching a consensus
+> on considering MADV_COLLAPSE being beneficial.  Still copying DavidR in case I
+> missed something important.
 > 
-> Maybe read should return a structure containing some data identifier and
-> the data itself, so that it could be extended in the future.
+> If we think MADV_COLLAPSE can help to implement an userspace (and more
+> importantly, data-aware) khugepaged, then MADV_SPLIT can be the other side of
+> kcompactd, perhaps.
+> 
+> That's probably a bit off topic of this specific discussion on the specific use
+> case, but so far it seems all reasonable and discussable.
+> 
 
-I like that idea. I will work on it.
+Hi Peter,
+
+Providing a (late) update since we now have some better traction on this, 
+I think we'll be ready to post an RFC soon that introduces MADV_COLLAPSE.  
+The work is being driven by Zach, now cc'd.
+
+Let's also include SeongJae Park <sj@kernel.org> as well and keep him in 
+the loop since DAMON could easily be extended with a DAMOS_COLLAPSE action 
+to use MADV_COLLAPSE for hot regions of memory.
+
+Idea for initial approach:
+
+ - MADV_COLLAPSE core code based on the proposal you cite above for anon 
+   memory as the inaugural support, collapse memory into thp in process 
+   context
+
+ - Batching support to collapse ranges of memory into multiple THP
+
+ - Wire this up for madvise(2) (and process_madvise(2))
+
+ - Enlightenment for file-backed thp
+
+I think Zach's RFC will cover the first three, it could be debated if the 
+initial patch series *must* support file-backed thp.  We'll see based on 
+the feedback to the RFC.
+
+There's also an extension where MADV_COLLAPSE could be potentially useful 
+for hugetlb backed memory.  We have another effort underway that we've 
+been talking with Mike Kravetz about that allows hugetlb memory to be 
+mapped at multiple levels of the page tables.  There are several use cases 
+but one of the driving factors is the performance of post-copy live 
+migration; in this case, you'd be able to send smaller sized pages over 
+the wire rather than, say, a 1GB gigantic page.
+
+In this case, MADV_COLLAPSE could be useful to map smaller pages by 
+a larger page table entry before all of the smaller pages have been live 
+migrated.
+
+That said, we have not invested time into an MADV_SPLIT yet.
+
+Do you (or anybody else) have concerns about this approach?  Ideas for 
+extensions?
 
 Thanks!
-
---
-Khalid
-
->   
->> --
->> int mshare_unlink(char *name)
->>
->> A shared address range created by mshare() can be destroyed using
->> mshare_unlink() which removes the  shared named object. Once all
->> processes have unmapped the shared object, the shared address range
->> references are de-allocated and destroyed.
->>
->> mshare_unlink() returns 0 on success or -1 on error.
-> 
-

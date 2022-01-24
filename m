@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 979E54992DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8D5498CDF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:32:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382285AbiAXUZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:25:25 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:59122 "EHLO
+        id S1351113AbiAXTZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:25:59 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47230 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376550AbiAXUCk (ORCPT
+        with ESMTP id S1347277AbiAXTSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:02:40 -0500
+        Mon, 24 Jan 2022 14:18:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94E0A612F0;
-        Mon, 24 Jan 2022 20:02:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7774AC340E5;
-        Mon, 24 Jan 2022 20:02:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89763613EA;
+        Mon, 24 Jan 2022 19:18:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A31DC340E5;
+        Mon, 24 Jan 2022 19:18:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054556;
-        bh=FaYKt4gnTfuF6TjBBOx0FbqMFJY4EXOhStDyYJlL4e8=;
+        s=korg; t=1643051895;
+        bh=dR6pZiRW7TNa1iTDp9N7qtUKzFnTqgXitlsxGEtbyDs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iKB8KfNX4iAHe6TTPuDB3xahPBC9jaZ8q3WIJ7wQHQ3FYNL6wmJVe9WT5J79Zj8Po
-         9B6Lb+22nrnza0TAvDtOIgcFppGquIEMwN/5VXys7Il5wWhGkmOfqDh7TXr6SIFPKr
-         Qes09vYJbT2zdqI9pa7+jwHaSf76E5p9bQ7j4Vpc=
+        b=AxcIcu9QQC8C2B/94eFLQrDz7gcFq/YvF5d+6orNW+veV+gXe4kFqNY659Obk+ojP
+         2kc6r6UVGRHYEfkl1uEJ90DpZvA3vcPGdEvRBR2qSNaNWxT3vd+X9/p2NVF85UJg6I
+         XkxPsJSB4gNgaemq8kv9pn+1GduG7/PLQWVcezfA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
+        stable@vger.kernel.org, Zekun Shen <bruceshenzk@gmail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 394/563] btrfs: remove BUG_ON(!eie) in find_parent_nodes
-Date:   Mon, 24 Jan 2022 19:42:39 +0100
-Message-Id: <20220124184038.060803830@linuxfoundation.org>
+Subject: [PATCH 4.19 122/239] ar5523: Fix null-ptr-deref with unexpected WDCMSG_TARGET_START reply
+Date:   Mon, 24 Jan 2022 19:42:40 +0100
+Message-Id: <20220124183946.980614135@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,52 +46,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josef Bacik <josef@toxicpanda.com>
+From: Zekun Shen <bruceshenzk@gmail.com>
 
-[ Upstream commit 9f05c09d6baef789726346397438cca4ec43c3ee ]
+[ Upstream commit ae80b6033834342601e99f74f6a62ff5092b1cee ]
 
-If we're looking for leafs that point to a data extent we want to record
-the extent items that point at our bytenr.  At this point we have the
-reference and we know for a fact that this leaf should have a reference
-to our bytenr.  However if there's some sort of corruption we may not
-find any references to our leaf, and thus could end up with eie == NULL.
-Replace this BUG_ON() with an ASSERT() and then return -EUCLEAN for the
-mortals.
+Unexpected WDCMSG_TARGET_START replay can lead to null-ptr-deref
+when ar->tx_cmd->odata is NULL. The patch adds a null check to
+prevent such case.
 
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+ ar5523_cmd+0x46a/0x581 [ar5523]
+ ar5523_probe.cold+0x1b7/0x18da [ar5523]
+ ? ar5523_cmd_rx_cb+0x7a0/0x7a0 [ar5523]
+ ? __pm_runtime_set_status+0x54a/0x8f0
+ ? _raw_spin_trylock_bh+0x120/0x120
+ ? pm_runtime_barrier+0x220/0x220
+ ? __pm_runtime_resume+0xb1/0xf0
+ usb_probe_interface+0x25b/0x710
+ really_probe+0x209/0x5d0
+ driver_probe_device+0xc6/0x1b0
+ device_driver_attach+0xe2/0x120
+
+I found the bug using a custome USBFuzz port. It's a research work
+to fuzz USB stack/drivers. I modified it to fuzz ath9k driver only,
+providing hand-crafted usb descriptors to QEMU.
+
+After fixing the code (fourth byte in usb packet) to WDCMSG_TARGET_START,
+I got the null-ptr-deref bug. I believe the bug is triggerable whenever
+cmd->odata is NULL. After patching, I tested with the same input and no
+longer see the KASAN report.
+
+This was NOT tested on a real device.
+
+Signed-off-by: Zekun Shen <bruceshenzk@gmail.com>
+Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+Link: https://lore.kernel.org/r/YXsmPQ3awHFLuAj2@10-18-43-117.dynapool.wireless.nyu.edu
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/backref.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ drivers/net/wireless/ath/ar5523/ar5523.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/fs/btrfs/backref.c b/fs/btrfs/backref.c
-index 8b471579e26e1..baff31a147e7d 100644
---- a/fs/btrfs/backref.c
-+++ b/fs/btrfs/backref.c
-@@ -1366,10 +1366,18 @@ again:
- 				goto out;
- 			if (!ret && extent_item_pos) {
- 				/*
--				 * we've recorded that parent, so we must extend
--				 * its inode list here
-+				 * We've recorded that parent, so we must extend
-+				 * its inode list here.
-+				 *
-+				 * However if there was corruption we may not
-+				 * have found an eie, return an error in this
-+				 * case.
- 				 */
--				BUG_ON(!eie);
-+				ASSERT(eie);
-+				if (!eie) {
-+					ret = -EUCLEAN;
-+					goto out;
-+				}
- 				while (eie->next)
- 					eie = eie->next;
- 				eie->next = ref->inode_list;
+diff --git a/drivers/net/wireless/ath/ar5523/ar5523.c b/drivers/net/wireless/ath/ar5523/ar5523.c
+index 4c57e79e5779a..58e189ec672f9 100644
+--- a/drivers/net/wireless/ath/ar5523/ar5523.c
++++ b/drivers/net/wireless/ath/ar5523/ar5523.c
+@@ -153,6 +153,10 @@ static void ar5523_cmd_rx_cb(struct urb *urb)
+ 			ar5523_err(ar, "Invalid reply to WDCMSG_TARGET_START");
+ 			return;
+ 		}
++		if (!cmd->odata) {
++			ar5523_err(ar, "Unexpected WDCMSG_TARGET_START reply");
++			return;
++		}
+ 		memcpy(cmd->odata, hdr + 1, sizeof(u32));
+ 		cmd->olen = sizeof(u32);
+ 		cmd->res = 0;
 -- 
 2.34.1
 

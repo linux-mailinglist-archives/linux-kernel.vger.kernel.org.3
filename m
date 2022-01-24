@@ -2,109 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E8C497901
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 07:39:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5CD49790B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 07:49:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232274AbiAXGjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 01:39:43 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:36430 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229788AbiAXGjm (ORCPT
+        id S235628AbiAXGtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 01:49:09 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:57110 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229788AbiAXGtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 01:39:42 -0500
-X-UUID: e0731d60e70742ac87e0b2356132db18-20220124
-X-UUID: e0731d60e70742ac87e0b2356132db18-20220124
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <roger.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 152998873; Mon, 24 Jan 2022 14:39:36 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 24 Jan 2022 14:39:35 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 24 Jan 2022 14:39:34 +0800
-Message-ID: <dc84332f190a8be7d5b004fc4d2a2c1341f9a357.camel@mediatek.com>
-Subject: Re: [PATCH v21 3/8] soc: mediatek: SVS: introduce MTK SVS engine
-From:   Roger Lu <roger.lu@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Date:   Mon, 24 Jan 2022 14:39:34 +0800
-In-Reply-To: <63d8884d-d02d-53f9-8524-4a074ca5bfea@collabora.com>
-References: <20220107095200.4389-1-roger.lu@mediatek.com>
-         <20220107095200.4389-4-roger.lu@mediatek.com>
-         <63d8884d-d02d-53f9-8524-4a074ca5bfea@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 24 Jan 2022 01:49:08 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 535FC1F380;
+        Mon, 24 Jan 2022 06:49:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643006947; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xJg+IkXmgmP8g2ybnmPsLzGXCdIpMZLvBP0eNdIIUPI=;
+        b=hSZmjxvgFvGZOYQllLY4BjoLLu/r1S+gdrnJntoFQz+JB1A4h/JEe4Gp3htth1MJgfLUEi
+        qiMs5Z6LvDr2GFpByStxqMOALM6vWNbelgLzRJbMQjM987Dw+Ex7VsNIBXIzU7aaVfFqeM
+        XJfqN68u3ZWKhZIJM35dTCgxN2HCMRs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643006947;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xJg+IkXmgmP8g2ybnmPsLzGXCdIpMZLvBP0eNdIIUPI=;
+        b=Z7O58UE1FYqMKgeUCSKcmZD+5ch1dGpVqnv62l6kvEmPkVuq0U5k4wdyTKaG3MFgrwZCJs
+        IXtYUM0uOF8aaiDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 134E71332F;
+        Mon, 24 Jan 2022 06:49:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id SKX+AeNL7mFWegAAMHmgww
+        (envelope-from <hare@suse.de>); Mon, 24 Jan 2022 06:49:07 +0000
+Message-ID: <b41aa99d-baf2-0fef-6d01-454a3b8213d2@suse.de>
+Date:   Mon, 24 Jan 2022 07:49:06 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v1] scsi: myrs: fix crash on error case
+Content-Language: en-US
+To:     Tong Zhang <ztong0001@gmail.com>,
+        Hannes Reinecke <hare@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220123225717.1069538-1-ztong0001@gmail.com>
+From:   Hannes Reinecke <hare@suse.de>
+In-Reply-To: <20220123225717.1069538-1-ztong0001@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi AngeloGioacchino,
-
-Sorry for the late reply and thanks for the advice.
-
-On Fri, 2022-01-07 at 15:33 +0100, AngeloGioacchino Del Regno wrote:
-> Il 07/01/22 10:51, Roger Lu ha scritto:
-> > The Smart Voltage Scaling(SVS) engine is a piece of hardware
-> > which calculates suitable SVS bank voltages to OPP voltage table.
-> > Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
-> > when receiving OPP_EVENT_ADJUST_VOLTAGE.
-> > 
-> > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> > ---
-> >   drivers/soc/mediatek/Kconfig   |   10 +
-> >   drivers/soc/mediatek/Makefile  |    1 +
-> >   drivers/soc/mediatek/mtk-svs.c | 1446 ++++++++++++++++++++++++++++++++
-> >   3 files changed, 1457 insertions(+)
-> >   create mode 100644 drivers/soc/mediatek/mtk-svs.c
-
-[snip]
-
-> > +
-> > +struct svs_platform_data {
-> > +	char *name;
-> > +	struct svs_bank *banks;
-> > +	bool (*efuse_parsing)(struct svs_platform *svsp);
-> > +	unsigned long irqflags;
-> > +	const u32 *regs;
-> > +	u32 bank_max;
-> > +	int (*probe)(struct svs_platform *svsp);
-> > +};
-> > +
+On 1/23/22 23:57, Tong Zhang wrote:
+> In myrs_detect(), cs->disable_intr is NULL when privdata->hw_init() fail
+> with non-zero. In this case, myrs_cleanup(cs) will call a NULL ptr and
+> crash kernel.
 > 
-> Please move the definition of struct svs_platform_data at the beginning of
-> the file for increased readability.
-
-Okay. I'll move them at the beginning of the file in the next patch.
-
+> [    1.105606] myrs 0000:00:03.0: Unknown Initialization Error 5A
+> [    1.105872] myrs 0000:00:03.0: Failed to initialize Controller
+> [    1.106082] BUG: kernel NULL pointer dereference, address: 0000000000000000
+> [    1.110774] Call Trace:
+> [    1.110950]  myrs_cleanup+0xe4/0x150 [myrs]
+> [    1.111135]  myrs_probe.cold+0x91/0x56a [myrs]
+> [    1.111302]  ? DAC960_GEM_intr_handler+0x1f0/0x1f0 [myrs]
+> [    1.111500]  local_pci_probe+0x48/0x90
 > 
-> With that done,
+> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+> ---
+>   drivers/scsi/myrs.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
+> diff --git a/drivers/scsi/myrs.c b/drivers/scsi/myrs.c
+> index 253ceca54a84..7eb8c39da366 100644
+> --- a/drivers/scsi/myrs.c
+> +++ b/drivers/scsi/myrs.c
+> @@ -2267,7 +2267,8 @@ static void myrs_cleanup(struct myrs_hba *cs)
+>   	myrs_unmap(cs);
+>   
+>   	if (cs->mmio_base) {
+> -		cs->disable_intr(cs);
+> +		if (cs->disable_intr)
+> +			cs->disable_intr(cs);
+>   		iounmap(cs->mmio_base);
+>   		cs->mmio_base = NULL;
+>   	}
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer

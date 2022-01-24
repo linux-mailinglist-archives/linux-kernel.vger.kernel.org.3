@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D7C4992A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9C6C498D0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354266AbiAXUXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:23:02 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57884 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356460AbiAXUBW (ORCPT
+        id S1346683AbiAXT1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:27:25 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43606 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347155AbiAXTSt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:01:22 -0500
+        Mon, 24 Jan 2022 14:18:49 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA5146091B;
-        Mon, 24 Jan 2022 20:01:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8213DC340E5;
-        Mon, 24 Jan 2022 20:01:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4BBDDB8121F;
+        Mon, 24 Jan 2022 19:18:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F7A6C340E5;
+        Mon, 24 Jan 2022 19:18:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054481;
-        bh=ttfyB81yNQlMenIPGF8dZQXmiBNmpBeJ8w+ZiOjs+5E=;
+        s=korg; t=1643051927;
+        bh=5AK/ZD+OO4TiPDAZvOFjQFvLrOlNWLTVM/ikSQ8BP24=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QVobm+CrnqTJFJfcOo8leq2yvbbbC3sknlInPUL8l9/xi9BH90jkqcKJodLBdnrCS
-         Ylfid4tnaOoaN0DWGuNfNZd/g7GLiI6xIgqRe8sRyt6ZasDEf3g2rqr7g18dtosWx6
-         kHzCHdnqqiNoBDuGMpLjEFXV5RFyYaTAhKFIv9cw=
+        b=W3/8hExv6fh0vWAT6WVi97xrVzev4OR5s5EP4u2PliM/VQyMOcOgpLiiuo8hLTU6t
+         PSnx1hPt4YOf950faLmg/BCFE9bPIsGux8Tshh07zriE5m1tIuktvTPSfvz/KrcRTp
+         DcVmi8IxTM2/VT6UPH+OTIokCHgUJvyyBIRGWbd8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
+        stable@vger.kernel.org, Chengfeng Ye <cyeaa@connect.ust.hk>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 404/563] serial: core: Keep mctrl register state and cached copy in sync
+Subject: [PATCH 4.19 131/239] HSI: core: Fix return freed object in hsi_new_client
 Date:   Mon, 24 Jan 2022 19:42:49 +0100
-Message-Id: <20220124184038.419766592@linuxfoundation.org>
+Message-Id: <20220124183947.273001947@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,51 +46,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Wunner <lukas@wunner.de>
+From: Chengfeng Ye <cyeaa@connect.ust.hk>
 
-[ Upstream commit 93a770b7e16772530196674ffc79bb13fa927dc6 ]
+[ Upstream commit a1ee1c08fcd5af03187dcd41dcab12fd5b379555 ]
 
-struct uart_port contains a cached copy of the Modem Control signals.
-It is used to skip register writes in uart_update_mctrl() if the new
-signal state equals the old signal state.  It also avoids a register
-read to obtain the current state of output signals.
+cl is freed on error of calling device_register, but this
+object is return later, which will cause uaf issue. Fix it
+by return NULL on error.
 
-When a uart_port is registered, uart_configure_port() changes signal
-state but neglects to keep the cached copy in sync.  That may cause
-a subsequent register write to be incorrectly skipped.  Fix it before
-it trips somebody up.
-
-This behavior has been present ever since the serial core was introduced
-in 2002:
-https://git.kernel.org/history/history/c/33c0d1b0c3eb
-
-So far it was never an issue because the cached copy is initialized to 0
-by kzalloc() and when uart_configure_port() is executed, at most DTR has
-been set by uart_set_options() or sunsu_console_setup().  Therefore,
-a stable designation seems unnecessary.
-
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Link: https://lore.kernel.org/r/bceeaba030b028ed810272d55d5fc6f3656ddddb.1641129752.git.lukas@wunner.de
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Chengfeng Ye <cyeaa@connect.ust.hk>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/serial_core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/hsi/hsi_core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index 046bedca7b8f5..55108db5b64bf 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -2414,7 +2414,8 @@ uart_configure_port(struct uart_driver *drv, struct uart_state *state,
- 		 * We probably don't need a spinlock around this, but
- 		 */
- 		spin_lock_irqsave(&port->lock, flags);
--		port->ops->set_mctrl(port, port->mctrl & TIOCM_DTR);
-+		port->mctrl &= TIOCM_DTR;
-+		port->ops->set_mctrl(port, port->mctrl);
- 		spin_unlock_irqrestore(&port->lock, flags);
+diff --git a/drivers/hsi/hsi_core.c b/drivers/hsi/hsi_core.c
+index 71895da63810b..daf2de837a30a 100644
+--- a/drivers/hsi/hsi_core.c
++++ b/drivers/hsi/hsi_core.c
+@@ -115,6 +115,7 @@ struct hsi_client *hsi_new_client(struct hsi_port *port,
+ 	if (device_register(&cl->device) < 0) {
+ 		pr_err("hsi: failed to register client: %s\n", info->name);
+ 		put_device(&cl->device);
++		goto err;
+ 	}
  
- 		/*
+ 	return cl;
 -- 
 2.34.1
 

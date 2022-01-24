@@ -2,81 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0890497BC1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B61C497BC6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbiAXJUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 04:20:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49274 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232774AbiAXJUH (ORCPT
+        id S232636AbiAXJUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 04:20:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:57154 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231851AbiAXJUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 04:20:07 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD0CC061401;
-        Mon, 24 Jan 2022 01:20:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=yAu3ycJAkCMvCvv05qqdk9uFzATo1prXz0NvLjvbSbg=; b=S3zEXfuPEWPt0oS/zAr8ORkJ3y
-        QY/LAKamm8bSqsvuvcpzlTiNTQWSdZgR4945ZcWL8FbT8BSQ4GoZOMDYsBNXVyImYURFgzSYp5wmA
-        yVc3Y63q2krFPqG3t3QqO6NLWPu0X31PEs0bQYumxGSqtVKN5PCw1iQ4i7ORby3GVqMiZ1VHtklwY
-        G03SDo8po0t0CqvAy3ZAwEyHm17XZuEMKQVouYWHaxFnBs8rZyk3+xkMy/QVIFWXCnovUW/YQTbMZ
-        XFnBPjyUy3lgY8/6/nKO5dx5Sy2Xe6oltK8SfV8N3xOeM8Za9wVOPyMS6/W9acavxhu7BihZDL9SY
-        4qZ2ymgA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nBvWB-002lld-6l; Mon, 24 Jan 2022 09:20:07 +0000
-Date:   Mon, 24 Jan 2022 01:20:07 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-ia64@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH -next] exit: export make_task_dead()
-Message-ID: <Ye5vR609miJCKdYa@infradead.org>
-References: <20220122174834.6493-1-rdunlap@infradead.org>
+        Mon, 24 Jan 2022 04:20:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643016033;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JrLz3L3tcI/I3BMhVWiGKT3p97BtzBHRcz9TbUScQEA=;
+        b=iY2NuSFV1q4+9h3OWqL3ukwaXKHzrK2aHNZFxbJhqL/8ugWrvLYKXNWsOtrxHpCUvP34cN
+        7org6r5rQZa0qeG1iZ6YXiVf8dP3W3OH4lYIaxdc8BQGqRMbKqRpXblK7t3EdT0/R+TRmd
+        StPnDEIxauMrshr7EVvld3zSjufO3GE=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-441-sVK2baS2PrO6OtYlEX78Lw-1; Mon, 24 Jan 2022 04:20:32 -0500
+X-MC-Unique: sVK2baS2PrO6OtYlEX78Lw-1
+Received: by mail-wm1-f72.google.com with SMTP id v185-20020a1cacc2000000b0034906580813so14675222wme.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 01:20:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=JrLz3L3tcI/I3BMhVWiGKT3p97BtzBHRcz9TbUScQEA=;
+        b=SYQRDWiRHxlTC9xzwDkaPuDMMDdXAS5E05QU22X6eMGYUMolInh0tt2NalQl3pz8om
+         I6+eF86QpZ9aKwJ36vU2DqFyvjSlJfPpLKpegDNfbMsEAQuRSFvjDQF2W6JxSYWHVFja
+         oc6+UVpSncqHlA32hvzd4w9OTLNPAh/50sQKcXqHJr/NaF2c8CTM5o9mV3FEW/yesgRh
+         wjHG8UxoZ90GRXBDwAGJiOLv/Vsu80PMbcRLM94KqDvfJn1FOpPTXPSHFcRrNVe4DDtF
+         D/s/czsneVuqlndIJTLd89uWxXcKtIYz+s+cq2aDIRZFB5AzYgPgT/GBpGF391OgTfQl
+         yxjQ==
+X-Gm-Message-State: AOAM533LnjSWFabxHr3xHtY67Wr6hgI1BIxucUQvoHu2PYdyOCvLAH3H
+        1eHx/DBCSYTNmeRhVpGw1fh/FNYn+pIYHywkrEMM8/YZagwI/iM+hgcGjPw0K6Qw30F+XAkxmKl
+        X+3dM10+sWSo2wHqCW3OEAGc1
+X-Received: by 2002:a05:6000:15cd:: with SMTP id y13mr8194683wry.717.1643016016240;
+        Mon, 24 Jan 2022 01:20:16 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx4R22u7FIxHqgpdrWuaajXWUTtWvmGkHFSfBJmpgldZHbqSTAVOG6ygBQXND7VsYnOQae8Ww==
+X-Received: by 2002:a05:6000:15cd:: with SMTP id y13mr8194655wry.717.1643016016053;
+        Mon, 24 Jan 2022 01:20:16 -0800 (PST)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id 31sm16657869wrl.27.2022.01.24.01.20.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 01:20:15 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?Q?Micha=C5=82_Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        linux-hyperv@vger.kernel.org
+Subject: Re: [PATCH 43/54] drivers/hv: replace cpumask_weight with
+ cpumask_weight_eq
+In-Reply-To: <20220123183925.1052919-44-yury.norov@gmail.com>
+References: <20220123183925.1052919-1-yury.norov@gmail.com>
+ <20220123183925.1052919-44-yury.norov@gmail.com>
+Date:   Mon, 24 Jan 2022 10:20:13 +0100
+Message-ID: <87sftdij76.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220122174834.6493-1-rdunlap@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 22, 2022 at 09:48:34AM -0800, Randy Dunlap wrote:
-> In a config file from "kernel test robot <lkp@intel.com>" for a
-> different problem, this linker error was exposed when
-> CONFIG_IA64_MCA_RECOVERY=m.
-> 
-> We could either export make_task_dead() or restrict IA64_MCA_RECOVERY
-> to a bool Kconfig symbol instead of a tristate symbol, so go with the
-> EXPORT_SYMBOL() path.
-> 
-> Fixes this build error:
-> 
-> ERROR: modpost: "make_task_dead" [arch/ia64/kernel/mca_recovery.ko] undefined!
-> 
-> Fixes: 0e25498f8cd4 ("exit: Add and use make_task_dead.")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: "Eric W. Biederman" <ebiederm@xmission.com>
-> Cc: linux-ia64@vger.kernel.org
-> Cc: Tony Luck <tony.luck@intel.com>
-> Cc: kernel test robot <lkp@intel.com>
+Yury Norov <yury.norov@gmail.com> writes:
+
+> init_vp_index() calls cpumask_weight() to compare the weights of cpumasks
+> We can do it more efficiently with cpumask_weight_eq because conditional
+> cpumask_weight may stop traversing the cpumask earlier (at least one), as
+> soon as condition is met.
+
+Same comment as for "PATCH 41/54": cpumask_weight_eq() can only stop
+earlier if the condition is not met, to prove the equality all bits need
+always have to be examined.
+
+>
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
 > ---
->  kernel/exit.c |    1 +
->  1 file changed, 1 insertion(+)
-> 
-> --- linux-next-20220121.orig/kernel/exit.c
-> +++ linux-next-20220121/kernel/exit.c
-> @@ -896,6 +896,7 @@ void __noreturn make_task_dead(int signr
+>  drivers/hv/channel_mgmt.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
+> index 60375879612f..7420a5fd47b5 100644
+> --- a/drivers/hv/channel_mgmt.c
+> +++ b/drivers/hv/channel_mgmt.c
+> @@ -762,8 +762,8 @@ static void init_vp_index(struct vmbus_channel *channel)
+>  		}
+>  		alloced_mask = &hv_context.hv_numa_map[numa_node];
 >  
->  	do_exit(signr);
->  }
-> +EXPORT_SYMBOL(make_task_dead);
+> -		if (cpumask_weight(alloced_mask) ==
+> -		    cpumask_weight(cpumask_of_node(numa_node))) {
+> +		if (cpumask_weight_eq(alloced_mask,
+> +			    cpumask_weight(cpumask_of_node(numa_node)))) {
 
-EXPORT_SYMBOL_GPL and restricted, please.
+This code is not performace critical and I prefer the old version:
 
-Or even better: force the mca recovery code to be built in.
+ 	cpumask_weight() == cpumask_weight()
+
+ looks better than
+
+	cpumask_weight_eq(..., cpumask_weight())
+
+(let alone the inner cpumask_of_node()) to me.
+
+>  			/*
+>  			 * We have cycled through all the CPUs in the node;
+>  			 * reset the alloced map.
+
+-- 
+Vitaly
+

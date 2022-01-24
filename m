@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 019C0498A07
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:01:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4374988AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345145AbiAXS7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:59:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44704 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343508AbiAXS5J (ORCPT
+        id S245396AbiAXSt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:49:57 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49342 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245423AbiAXStE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:57:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93977C06175B;
-        Mon, 24 Jan 2022 10:55:26 -0800 (PST)
+        Mon, 24 Jan 2022 13:49:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D71CB8121F;
-        Mon, 24 Jan 2022 18:55:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AE7DC340E5;
-        Mon, 24 Jan 2022 18:55:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23163B81223;
+        Mon, 24 Jan 2022 18:49:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32120C340E5;
+        Mon, 24 Jan 2022 18:49:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050524;
-        bh=Us75XI7l1VTBnBYvjSJriVtvVpSWcfd0l6dAH8GK9QU=;
+        s=korg; t=1643050141;
+        bh=9vaZjvnxBMp4gYkl1f2tAVn1uq9u20HCsga5merISQI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XHKfwLkiCxp6SGf5nQ0g7P41bCeFs3YnQcgcBvmKhsyY3YXayuJ1n6Z7fXMUDqTIS
-         GtL6li6vbN0HnfGMdnYMIS/NpckCaCkUN6AgZhsG93NhRbhaMHHgkN2rmWYqITjE7H
-         hq/URxFKg2O52ZI22HpUhcC/bWRGdcaxlAj2ZWoE=
+        b=gNESAx5b0TJKvUVQ8ze95qV1eCC+r1WBE3+OH6mocZpl8p29WUWfZsz0LasX8y3ZL
+         8aanoyb7EzUjS9gk3whpBiLLSdsGpm8O1Gld2WKLWJqMOqx1KX+bKvA0eWAmuK1Hx0
+         8+uq6Sf+NnzNOut+zxIBW4ygYOIFFRmdljIA37FQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Wang Hai <wanghai38@huawei.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
+        stable@vger.kernel.org,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 029/157] Bluetooth: cmtp: fix possible panic when cmtp_init_sockets() fails
+Subject: [PATCH 4.4 024/114] tty: serial: atmel: Call dma_async_issue_pending()
 Date:   Mon, 24 Jan 2022 19:41:59 +0100
-Message-Id: <20220124183933.720677033@linuxfoundation.org>
+Message-Id: <20220124183927.873185600@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183927.095545464@linuxfoundation.org>
+References: <20220124183927.095545464@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,52 +46,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Hai <wanghai38@huawei.com>
+From: Tudor Ambarus <tudor.ambarus@microchip.com>
 
-[ Upstream commit 2a7ca7459d905febf519163bd9e3eed894de6bb7 ]
+[ Upstream commit 4f4b9b5895614eb2e2b5f4cab7858f44bd113e1b ]
 
-I got a kernel BUG report when doing fault injection test:
+The driver wrongly assummed that tx_submit() will start the transfer,
+which is not the case, now that the at_xdmac driver is fixed. tx_submit
+is supposed to push the current transaction descriptor to a pending queue,
+waiting for issue_pending to be called. issue_pending must start the
+transfer, not tx_submit.
 
-------------[ cut here ]------------
-kernel BUG at lib/list_debug.c:45!
-...
-RIP: 0010:__list_del_entry_valid.cold+0x12/0x4d
-...
-Call Trace:
- proto_unregister+0x83/0x220
- cmtp_cleanup_sockets+0x37/0x40 [cmtp]
- cmtp_exit+0xe/0x1f [cmtp]
- do_syscall_64+0x35/0xb0
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-If cmtp_init_sockets() in cmtp_init() fails, cmtp_init() still returns
-success. This will cause a kernel bug when accessing uncreated ctmp
-related data when the module exits.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wang Hai <wanghai38@huawei.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Fixes: 34df42f59a60 ("serial: at91: add rx dma support")
+Fixes: 08f738be88bb ("serial: at91: add tx dma support")
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+Link: https://lore.kernel.org/r/20211125090028.786832-4-tudor.ambarus@microchip.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/cmtp/core.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/tty/serial/atmel_serial.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/net/bluetooth/cmtp/core.c b/net/bluetooth/cmtp/core.c
-index 0bb150e68c53f..e2e580c747f4b 100644
---- a/net/bluetooth/cmtp/core.c
-+++ b/net/bluetooth/cmtp/core.c
-@@ -499,9 +499,7 @@ static int __init cmtp_init(void)
- {
- 	BT_INFO("CMTP (CAPI Emulation) ver %s", VERSION);
+diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
+index be15061a14479..e49493703179d 100644
+--- a/drivers/tty/serial/atmel_serial.c
++++ b/drivers/tty/serial/atmel_serial.c
+@@ -933,6 +933,8 @@ static void atmel_tx_dma(struct uart_port *port)
+ 				atmel_port->cookie_tx);
+ 			return;
+ 		}
++
++		dma_async_issue_pending(chan);
+ 	}
  
--	cmtp_init_sockets();
--
--	return 0;
-+	return cmtp_init_sockets();
- }
+ 	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
+@@ -1197,6 +1199,8 @@ static int atmel_prepare_rx_dma(struct uart_port *port)
+ 		goto chan_err;
+ 	}
  
- static void __exit cmtp_exit(void)
++	dma_async_issue_pending(atmel_port->chan_rx);
++
+ 	return 0;
+ 
+ chan_err:
 -- 
 2.34.1
 

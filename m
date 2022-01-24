@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A45499A4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:54:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F47499A50
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1457376AbiAXVlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:41:32 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55860 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445574AbiAXVEL (ORCPT
+        id S1457408AbiAXVle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:41:34 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56402 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1445588AbiAXVEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:04:11 -0500
+        Mon, 24 Jan 2022 16:04:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5192CB81233;
-        Mon, 24 Jan 2022 21:04:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84BD7C340E8;
-        Mon, 24 Jan 2022 21:04:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9201260C17;
+        Mon, 24 Jan 2022 21:04:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CB6CC340EC;
+        Mon, 24 Jan 2022 21:04:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058248;
-        bh=RqxmOMV1jbbNks5l2G4rA7iTPry5Lj3BtD4JRhgmkPc=;
+        s=korg; t=1643058251;
+        bh=73OCnF0ijlwNyF0VYdHcUtgcGaBD+/0/qpwxiORDKkk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b5lBW6LUo0/TsAkXJ3LaKAB8l4bPW4MaIOGCURfJoAffsWW7EVAOVRfUg98wJ3ib2
-         tNlSuMf+XZnnH7tu6/mVhdELV82cSULvog6wPr7qqV9z7JBlmrK64HPmwGVjd3sx9P
-         bGhU58QxvHCHBKUtklKQ2t2BYK0hoSozoO27N17Y=
+        b=Cmkeghe4jxYM7AShIs3h/XivWkyFAg5IeFWfwRTMZbkfPY/iQtQ4GMbiFs69UtpKA
+         tkjTh9Y9VDbJHP864PLJ255mzi9I++yGkUUlyK4prI1CoxXbOzyeHlCkZRizws0tp7
+         6VsJtcwSgvfto+n+s/SQ7fnyDR440FyC7JdpmJ8k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Martin Weber <martin.weber@br-automation.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0194/1039] media: coda: fix CODA960 JPEG encoder buffer overflow
-Date:   Mon, 24 Jan 2022 19:33:03 +0100
-Message-Id: <20220124184131.839703630@linuxfoundation.org>
+Subject: [PATCH 5.16 0195/1039] media: venus: correct low power frequency calculation for encoder
+Date:   Mon, 24 Jan 2022 19:33:04 +0100
+Message-Id: <20220124184131.877920159@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -49,92 +48,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philipp Zabel <p.zabel@pengutronix.de>
+From: Mansur Alisha Shaik <mansur@codeaurora.org>
 
-[ Upstream commit 1a59cd88f55068710f6549bee548846661673780 ]
+[ Upstream commit b1f9bb8020783a48151e3a2864fbdc70548566dd ]
 
-Stop the CODA960 JPEG encoder from overflowing capture buffers.
-The bitstream buffer overflow interrupt doesn't seem to be connected,
-so this has to be handled via timeout instead.
+In exististing implimentation, in min_loaded_core() for low_power
+vpp frequency value is considering as vpp_freq instead of low_power_freq.
+Fixed this by correcting vpp frequency calculation for encoder.
 
-Reported-by: Martin Weber <martin.weber@br-automation.com>
-Fixes: 96f6f62c4656 ("media: coda: jpeg: add CODA960 JPEG encoder support")
-Tested-by: Martin Weber <martin.weber@br-automation.com>
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes: 3cfe5815ce0e (media: venus: Enable low power setting for encoder)
+Signed-off-by: Mansur Alisha Shaik <mansur@codeaurora.org>
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/coda/coda-common.c |  8 +++++---
- drivers/media/platform/coda/coda-jpeg.c   | 21 ++++++++++++++++++++-
- 2 files changed, 25 insertions(+), 4 deletions(-)
+ drivers/media/platform/qcom/venus/pm_helpers.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
-index 0e312b0842d7f..9a2640a9c75c6 100644
---- a/drivers/media/platform/coda/coda-common.c
-+++ b/drivers/media/platform/coda/coda-common.c
-@@ -1537,11 +1537,13 @@ static void coda_pic_run_work(struct work_struct *work)
- 
- 	if (!wait_for_completion_timeout(&ctx->completion,
- 					 msecs_to_jiffies(1000))) {
--		dev_err(dev->dev, "CODA PIC_RUN timeout\n");
-+		if (ctx->use_bit) {
-+			dev_err(dev->dev, "CODA PIC_RUN timeout\n");
- 
--		ctx->hold = true;
-+			ctx->hold = true;
- 
--		coda_hw_reset(ctx);
-+			coda_hw_reset(ctx);
-+		}
- 
- 		if (ctx->ops->run_timeout)
- 			ctx->ops->run_timeout(ctx);
-diff --git a/drivers/media/platform/coda/coda-jpeg.c b/drivers/media/platform/coda/coda-jpeg.c
-index b11cfbe166dd3..a72f4655e5ad5 100644
---- a/drivers/media/platform/coda/coda-jpeg.c
-+++ b/drivers/media/platform/coda/coda-jpeg.c
-@@ -1127,7 +1127,8 @@ static int coda9_jpeg_prepare_encode(struct coda_ctx *ctx)
- 	coda_write(dev, 0, CODA9_REG_JPEG_GBU_BT_PTR);
- 	coda_write(dev, 0, CODA9_REG_JPEG_GBU_WD_PTR);
- 	coda_write(dev, 0, CODA9_REG_JPEG_GBU_BBSR);
--	coda_write(dev, 0, CODA9_REG_JPEG_BBC_STRM_CTRL);
-+	coda_write(dev, BIT(31) | ((end_addr - start_addr - header_len) / 256),
-+		   CODA9_REG_JPEG_BBC_STRM_CTRL);
- 	coda_write(dev, 0, CODA9_REG_JPEG_GBU_CTRL);
- 	coda_write(dev, 0, CODA9_REG_JPEG_GBU_FF_RPTR);
- 	coda_write(dev, 127, CODA9_REG_JPEG_GBU_BBER);
-@@ -1257,6 +1258,23 @@ static void coda9_jpeg_finish_encode(struct coda_ctx *ctx)
- 	coda_hw_reset(ctx);
- }
- 
-+static void coda9_jpeg_encode_timeout(struct coda_ctx *ctx)
-+{
-+	struct coda_dev *dev = ctx->dev;
-+	u32 end_addr, wr_ptr;
-+
-+	/* Handle missing BBC overflow interrupt via timeout */
-+	end_addr = coda_read(dev, CODA9_REG_JPEG_BBC_END_ADDR);
-+	wr_ptr = coda_read(dev, CODA9_REG_JPEG_BBC_WR_PTR);
-+	if (wr_ptr >= end_addr - 256) {
-+		v4l2_err(&dev->v4l2_dev, "JPEG too large for capture buffer\n");
-+		coda9_jpeg_finish_encode(ctx);
-+		return;
-+	}
-+
-+	coda_hw_reset(ctx);
-+}
-+
- static void coda9_jpeg_release(struct coda_ctx *ctx)
- {
- 	int i;
-@@ -1276,6 +1294,7 @@ const struct coda_context_ops coda9_jpeg_encode_ops = {
- 	.start_streaming = coda9_jpeg_start_encoding,
- 	.prepare_run = coda9_jpeg_prepare_encode,
- 	.finish_run = coda9_jpeg_finish_encode,
-+	.run_timeout = coda9_jpeg_encode_timeout,
- 	.release = coda9_jpeg_release,
- };
+diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
+index cedc664ba755f..184f0cea2fdb8 100644
+--- a/drivers/media/platform/qcom/venus/pm_helpers.c
++++ b/drivers/media/platform/qcom/venus/pm_helpers.c
+@@ -587,8 +587,8 @@ min_loaded_core(struct venus_inst *inst, u32 *min_coreid, u32 *min_load, bool lo
+ 		if (inst->session_type == VIDC_SESSION_TYPE_DEC)
+ 			vpp_freq = inst_pos->clk_data.vpp_freq;
+ 		else if (inst->session_type == VIDC_SESSION_TYPE_ENC)
+-			vpp_freq = low_power ? inst_pos->clk_data.vpp_freq :
+-				inst_pos->clk_data.low_power_freq;
++			vpp_freq = low_power ? inst_pos->clk_data.low_power_freq :
++				inst_pos->clk_data.vpp_freq;
+ 		else
+ 			continue;
  
 -- 
 2.34.1

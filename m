@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB02D49A39A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9070249A554
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:11:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2366626AbiAXXxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:53:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
+        id S3409433AbiAYA0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:26:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1846073AbiAXXOW (ORCPT
+        with ESMTP id S1449681AbiAXVyz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:14:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AF6C061748;
-        Mon, 24 Jan 2022 13:23:04 -0800 (PST)
+        Mon, 24 Jan 2022 16:54:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D847AC08ED7F;
+        Mon, 24 Jan 2022 12:34:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC59A614B7;
-        Mon, 24 Jan 2022 21:23:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7C66C340E4;
-        Mon, 24 Jan 2022 21:23:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 512ECB80FA1;
+        Mon, 24 Jan 2022 20:34:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 864A4C340E5;
+        Mon, 24 Jan 2022 20:34:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059383;
-        bh=3qRhBNKvmScCvIXd2l25/NHmnMaxhw46rXHT+wEJ4FI=;
+        s=korg; t=1643056495;
+        bh=0tDVZXKr9K09AvgqRFA/1j1lSWqb13QUoRj3scev9K0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tqqjxlXRkJuzmdCP9zbhaJa3BMkgkAXPbl/kN/PEyJAATRu/m9ct8HvKlphw3CzYR
-         o3iBvtm/Cs15ruFyVJzHaw1aJpndpiO4Tzje1mQ+0br4Ee3aphdtTrSlUpiYHPtSV6
-         kG9G9KDdKwLWETv92LaqY7ill68w8kbiBR0qZimA=
+        b=Il6nmK+tgJ9Q8HRYc4b5jpz+c331C9d20wseQcX4Qgn3IzAWSs9pa6gnyTjpU9SpG
+         UC9yUC2XfHEYAhOO0KD3eMue97u4x7NLbPMbOIgVSJsNuMePSeO4s90qKB50Vd+dzX
+         RDcfnqnK/WW98Lv51fqjHM3erglDpEm9CB5fRAP8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brendan Dolan-Gavitt <brendandg@nyu.edu>,
-        Zekun Shen <bruceshenzk@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
+        stable@vger.kernel.org, Diego Viola <diego.viola@gmail.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0598/1039] rsi: Fix use-after-free in rsi_rx_done_handler()
-Date:   Mon, 24 Jan 2022 19:39:47 +0100
-Message-Id: <20220124184145.439873933@linuxfoundation.org>
+Subject: [PATCH 5.15 471/846] drm/nouveau/pmu/gm200-: avoid touching PMU outside of DEVINIT/PREOS/ACR
+Date:   Mon, 24 Jan 2022 19:39:48 +0100
+Message-Id: <20220124184117.255847140@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,86 +50,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zekun Shen <bruceshenzk@gmail.com>
+From: Ben Skeggs <bskeggs@redhat.com>
 
-[ Upstream commit b07e3c6ebc0c20c772c0f54042e430acec2945c3 ]
+[ Upstream commit 1d2271d2fb85e54bfc9630a6c30ac0feb9ffb983 ]
 
-When freeing rx_cb->rx_skb, the pointer is not set to NULL,
-a later rsi_rx_done_handler call will try to read the freed
-address.
-This bug will very likley lead to double free, although
-detected early as use-after-free bug.
+There have been reports of the WFI timing out on some boards, and a
+patch was proposed to just remove it.  This stuff is rather fragile,
+and I believe the WFI might be needed with our FW prior to GM200.
 
-The bug is triggerable with a compromised/malfunctional usb
-device. After applying the patch, the same input no longer
-triggers the use-after-free.
+However, we probably should not be touching PMU during init on GPUs
+where we depend on NVIDIA FW, outside of limited circumstances, so
+this should be a somewhat safer change that achieves the desired
+result.
 
-Attached is the kasan report from fuzzing.
-
-BUG: KASAN: use-after-free in rsi_rx_done_handler+0x354/0x430 [rsi_usb]
-Read of size 4 at addr ffff8880188e5930 by task modprobe/231
-Call Trace:
- <IRQ>
- dump_stack+0x76/0xa0
- print_address_description.constprop.0+0x16/0x200
- ? rsi_rx_done_handler+0x354/0x430 [rsi_usb]
- ? rsi_rx_done_handler+0x354/0x430 [rsi_usb]
- __kasan_report.cold+0x37/0x7c
- ? dma_direct_unmap_page+0x90/0x110
- ? rsi_rx_done_handler+0x354/0x430 [rsi_usb]
- kasan_report+0xe/0x20
- rsi_rx_done_handler+0x354/0x430 [rsi_usb]
- __usb_hcd_giveback_urb+0x1e4/0x380
- usb_giveback_urb_bh+0x241/0x4f0
- ? __usb_hcd_giveback_urb+0x380/0x380
- ? apic_timer_interrupt+0xa/0x20
- tasklet_action_common.isra.0+0x135/0x330
- __do_softirq+0x18c/0x634
- ? handle_irq_event+0xcd/0x157
- ? handle_edge_irq+0x1eb/0x7b0
- irq_exit+0x114/0x140
- do_IRQ+0x91/0x1e0
- common_interrupt+0xf/0xf
- </IRQ>
-
-Reported-by: Brendan Dolan-Gavitt <brendandg@nyu.edu>
-Signed-off-by: Zekun Shen <bruceshenzk@gmail.com>
-Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
-Link: https://lore.kernel.org/r/YXxQL/vIiYcZUu/j@10-18-43-117.dynapool.wireless.nyu.edu
+Reported-by: Diego Viola <diego.viola@gmail.com>
+Signed-off-by: Ben Skeggs <bskeggs@redhat.com>
+Reviewed-by: Karol Herbst <kherbst@redhat.com>
+Signed-off-by: Karol Herbst <kherbst@redhat.com>
+Link: https://gitlab.freedesktop.org/drm/nouveau/-/merge_requests/10
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/rsi/rsi_91x_usb.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ .../gpu/drm/nouveau/nvkm/subdev/pmu/base.c    | 37 +++++++++++--------
+ 1 file changed, 21 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/net/wireless/rsi/rsi_91x_usb.c b/drivers/net/wireless/rsi/rsi_91x_usb.c
-index 6821ea9918956..3cca1823c458a 100644
---- a/drivers/net/wireless/rsi/rsi_91x_usb.c
-+++ b/drivers/net/wireless/rsi/rsi_91x_usb.c
-@@ -269,8 +269,12 @@ static void rsi_rx_done_handler(struct urb *urb)
- 	struct rsi_91x_usbdev *dev = (struct rsi_91x_usbdev *)rx_cb->data;
- 	int status = -EINVAL;
- 
-+	if (!rx_cb->rx_skb)
-+		return;
-+
- 	if (urb->status) {
- 		dev_kfree_skb(rx_cb->rx_skb);
-+		rx_cb->rx_skb = NULL;
- 		return;
- 	}
- 
-@@ -294,8 +298,10 @@ out:
- 	if (rsi_rx_urb_submit(dev->priv, rx_cb->ep_num, GFP_ATOMIC))
- 		rsi_dbg(ERR_ZONE, "%s: Failed in urb submission", __func__);
- 
--	if (status)
-+	if (status) {
- 		dev_kfree_skb(rx_cb->rx_skb);
-+		rx_cb->rx_skb = NULL;
-+	}
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
+index 24382875fb4f3..455e95a89259f 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
+@@ -94,20 +94,13 @@ nvkm_pmu_fini(struct nvkm_subdev *subdev, bool suspend)
+ 	return 0;
  }
  
- static void rsi_rx_urb_kill(struct rsi_hw *adapter, u8 ep_num)
+-static int
++static void
+ nvkm_pmu_reset(struct nvkm_pmu *pmu)
+ {
+ 	struct nvkm_device *device = pmu->subdev.device;
+ 
+ 	if (!pmu->func->enabled(pmu))
+-		return 0;
+-
+-	/* Inhibit interrupts, and wait for idle. */
+-	nvkm_wr32(device, 0x10a014, 0x0000ffff);
+-	nvkm_msec(device, 2000,
+-		if (!nvkm_rd32(device, 0x10a04c))
+-			break;
+-	);
++		return;
+ 
+ 	/* Reset. */
+ 	if (pmu->func->reset)
+@@ -118,25 +111,37 @@ nvkm_pmu_reset(struct nvkm_pmu *pmu)
+ 		if (!(nvkm_rd32(device, 0x10a10c) & 0x00000006))
+ 			break;
+ 	);
+-
+-	return 0;
+ }
+ 
+ static int
+ nvkm_pmu_preinit(struct nvkm_subdev *subdev)
+ {
+ 	struct nvkm_pmu *pmu = nvkm_pmu(subdev);
+-	return nvkm_pmu_reset(pmu);
++	nvkm_pmu_reset(pmu);
++	return 0;
+ }
+ 
+ static int
+ nvkm_pmu_init(struct nvkm_subdev *subdev)
+ {
+ 	struct nvkm_pmu *pmu = nvkm_pmu(subdev);
+-	int ret = nvkm_pmu_reset(pmu);
+-	if (ret == 0 && pmu->func->init)
+-		ret = pmu->func->init(pmu);
+-	return ret;
++	struct nvkm_device *device = pmu->subdev.device;
++
++	if (!pmu->func->init)
++		return 0;
++
++	if (pmu->func->enabled(pmu)) {
++		/* Inhibit interrupts, and wait for idle. */
++		nvkm_wr32(device, 0x10a014, 0x0000ffff);
++		nvkm_msec(device, 2000,
++			if (!nvkm_rd32(device, 0x10a04c))
++				break;
++		);
++
++		nvkm_pmu_reset(pmu);
++	}
++
++	return pmu->func->init(pmu);
+ }
+ 
+ static void *
 -- 
 2.34.1
 

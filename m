@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F27B49911C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:09:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5EE49906A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:04:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347481AbiAXUJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:09:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345252AbiAXTvT (ORCPT
+        id S1359829AbiAXUAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:00:15 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58588 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348601AbiAXTjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:51:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4988C019B3B;
-        Mon, 24 Jan 2022 11:24:17 -0800 (PST)
+        Mon, 24 Jan 2022 14:39:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D857612FA;
-        Mon, 24 Jan 2022 19:24:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4734EC340E5;
-        Mon, 24 Jan 2022 19:24:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24E12B8122C;
+        Mon, 24 Jan 2022 19:39:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38C5BC340E5;
+        Mon, 24 Jan 2022 19:39:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052256;
-        bh=8fEnRPti32v240Rgrcx2wQprpQYqogqlTQ6lb/w3fLk=;
+        s=korg; t=1643053158;
+        bh=VKXK7kYTQZvVjzGQS4SN8dhAG6nk9/Iz3tYU1sWarK0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x0hJoRZC/7xffE2lqPaxB2Y+sJfQpYFUpHVDNJVz8Ce4SuaPD9AwQFHtSIzXbn4rG
-         w/rF15M3quTmiN33r7l0DD/2KjlL2hodeOQFvpAdkpsGNaOwjhpYk68/2b4rFNv21w
-         +ZXTVa2w3RXlLf4sqk9qrRyLOLdRloyYlBo5nCBw=
+        b=BX5S4btgBgMbukpo/LIj5ujx8TxZyNSKjmsJbSvJYKAWr2bvDnwy4y1tzin3AGtGH
+         s9VYrVQ0gvmYGNabyuqD7YZz5K4gT3DUW3Um2Kx88AApWP0+Cw8FLC3dx7WZe1cbxF
+         w1Kf5Wi20c7ImpUAjVVJN08IRsvE3K2yCPhHof3k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Ben Hutchings <ben@decadent.org.uk>
-Subject: [PATCH 4.19 239/239] fuse: fix live lock in fuse_iget()
-Date:   Mon, 24 Jan 2022 19:44:37 +0100
-Message-Id: <20220124183950.693455840@linuxfoundation.org>
+        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.4 295/320] net: axienet: limit minimum TX ring size
+Date:   Mon, 24 Jan 2022 19:44:39 +0100
+Message-Id: <20220124184003.977026219@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,52 +45,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amir Goldstein <amir73il@gmail.com>
+From: Robert Hancock <robert.hancock@calian.com>
 
-commit 775c5033a0d164622d9d10dd0f0a5531639ed3ed upstream.
+commit 70f5817deddbc6ef3faa35841cab83c280cc653a upstream.
 
-Commit 5d069dbe8aaf ("fuse: fix bad inode") replaced make_bad_inode()
-in fuse_iget() with a private implementation fuse_make_bad().
+The driver will not work properly if the TX ring size is set to below
+MAX_SKB_FRAGS + 1 since it needs to hold at least one full maximally
+fragmented packet in the TX ring. Limit setting the ring size to below
+this value.
 
-The private implementation fails to remove the bad inode from inode
-cache, so the retry loop with iget5_locked() finds the same bad inode
-and marks it bad forever.
-
-kmsg snip:
-
-[ ] rcu: INFO: rcu_sched self-detected stall on CPU
-...
-[ ]  ? bit_wait_io+0x50/0x50
-[ ]  ? fuse_init_file_inode+0x70/0x70
-[ ]  ? find_inode.isra.32+0x60/0xb0
-[ ]  ? fuse_init_file_inode+0x70/0x70
-[ ]  ilookup5_nowait+0x65/0x90
-[ ]  ? fuse_init_file_inode+0x70/0x70
-[ ]  ilookup5.part.36+0x2e/0x80
-[ ]  ? fuse_init_file_inode+0x70/0x70
-[ ]  ? fuse_inode_eq+0x20/0x20
-[ ]  iget5_locked+0x21/0x80
-[ ]  ? fuse_inode_eq+0x20/0x20
-[ ]  fuse_iget+0x96/0x1b0
-
-Fixes: 5d069dbe8aaf ("fuse: fix bad inode")
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
-Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+Fixes: 8b09ca823ffb4 ("net: axienet: Make RX/TX ring sizes configurable")
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/fuse/fuse_i.h |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/fs/fuse/fuse_i.h
-+++ b/fs/fuse/fuse_i.h
-@@ -704,6 +704,7 @@ static inline u64 get_node_id(struct ino
+--- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
++++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+@@ -43,6 +43,7 @@
+ /* Descriptors defines for Tx and Rx DMA */
+ #define TX_BD_NUM_DEFAULT		64
+ #define RX_BD_NUM_DEFAULT		1024
++#define TX_BD_NUM_MIN			(MAX_SKB_FRAGS + 1)
+ #define TX_BD_NUM_MAX			4096
+ #define RX_BD_NUM_MAX			4096
  
- static inline void fuse_make_bad(struct inode *inode)
- {
-+	remove_inode_hash(inode);
- 	set_bit(FUSE_I_BAD, &get_fuse_inode(inode)->state);
- }
+@@ -1223,7 +1224,8 @@ static int axienet_ethtools_set_ringpara
+ 	if (ering->rx_pending > RX_BD_NUM_MAX ||
+ 	    ering->rx_mini_pending ||
+ 	    ering->rx_jumbo_pending ||
+-	    ering->rx_pending > TX_BD_NUM_MAX)
++	    ering->tx_pending < TX_BD_NUM_MIN ||
++	    ering->tx_pending > TX_BD_NUM_MAX)
+ 		return -EINVAL;
  
+ 	if (netif_running(ndev))
 
 

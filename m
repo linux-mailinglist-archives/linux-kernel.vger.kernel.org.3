@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C42499CF8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:15:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C22B499748
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:27:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380526AbiAXWNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:13:06 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45014 "EHLO
+        id S1448192AbiAXVMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:12:10 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43838 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453432AbiAXVaJ (ORCPT
+        with ESMTP id S1358462AbiAXUmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:30:09 -0500
+        Mon, 24 Jan 2022 15:42:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4BB83B81057;
-        Mon, 24 Jan 2022 21:30:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 780C6C340E4;
-        Mon, 24 Jan 2022 21:30:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BF2A4B81255;
+        Mon, 24 Jan 2022 20:42:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFCA7C340E5;
+        Mon, 24 Jan 2022 20:42:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059807;
-        bh=KWoGejEVrZUfkV1DJjO87i+BhLl7v3X3Zk9ndV6PkeM=;
+        s=korg; t=1643056929;
+        bh=AOczSnWdWced6oq1iyNUhjT2AeFnG/1hKhyVL7vUbzw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PtP9TKmsI7oRGIQ1JXQgkaaq3Ta/Z+DYhqtH7OSdeIxpe9r/GcMwQgARM5/vptU4o
-         SnnmZr7lXTlSgjuCOsh/IHt0x3Tsspsx9z6KDzwztnmORy7i2x30yVCtMAv91kLyWO
-         2gPOGbIZ0JRbs4x2Rw5VBa+bI0cPgZgTN4LZ1SLc=
+        b=YmzXhUVIT7lXd5e5CiHaM6Kqx08PGuklBchNcnlZz84sQU1HfZ6AUsGghRPJGR2Mu
+         sYzT/Ur6zlvZA5SjgFkN4s6uz8sM4G8SKjkRDabo5J1EwPBlx0xz/qwjQGs7Zk6ez+
+         7a1+T1+IlvlIbYosdgQrEpixecOTBS3sErA/wSsk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0741/1039] powerpc/smp: Move setup_profiling_timer() under CONFIG_PROFILING
+Subject: [PATCH 5.15 613/846] serial: core: Keep mctrl register state and cached copy in sync
 Date:   Mon, 24 Jan 2022 19:42:10 +0100
-Message-Id: <20220124184150.241591333@linuxfoundation.org>
+Message-Id: <20220124184122.182959517@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,39 +45,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+From: Lukas Wunner <lukas@wunner.de>
 
-[ Upstream commit a4ac0d249a5db80e79d573db9e4ad29354b643a8 ]
+[ Upstream commit 93a770b7e16772530196674ffc79bb13fa927dc6 ]
 
-setup_profiling_timer() is only needed when CONFIG_PROFILING is enabled.
+struct uart_port contains a cached copy of the Modem Control signals.
+It is used to skip register writes in uart_update_mctrl() if the new
+signal state equals the old signal state.  It also avoids a register
+read to obtain the current state of output signals.
 
-Fixes the following W=1 warning when CONFIG_PROFILING=n:
-  linux/arch/powerpc/kernel/smp.c:1638:5: error: no previous prototype for ‘setup_profiling_timer’
+When a uart_port is registered, uart_configure_port() changes signal
+state but neglects to keep the cached copy in sync.  That may cause
+a subsequent register write to be incorrectly skipped.  Fix it before
+it trips somebody up.
 
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20211124093254.1054750-5-mpe@ellerman.id.au
+This behavior has been present ever since the serial core was introduced
+in 2002:
+https://git.kernel.org/history/history/c/33c0d1b0c3eb
+
+So far it was never an issue because the cached copy is initialized to 0
+by kzalloc() and when uart_configure_port() is executed, at most DTR has
+been set by uart_set_options() or sunsu_console_setup().  Therefore,
+a stable designation seems unnecessary.
+
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Link: https://lore.kernel.org/r/bceeaba030b028ed810272d55d5fc6f3656ddddb.1641129752.git.lukas@wunner.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kernel/smp.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/tty/serial/serial_core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
-index c23ee842c4c33..aee3a7119f977 100644
---- a/arch/powerpc/kernel/smp.c
-+++ b/arch/powerpc/kernel/smp.c
-@@ -1635,10 +1635,12 @@ void start_secondary(void *unused)
- 	BUG();
- }
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 61e3dd0222af1..9e7e624a6c9db 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -2393,7 +2393,8 @@ uart_configure_port(struct uart_driver *drv, struct uart_state *state,
+ 		 * We probably don't need a spinlock around this, but
+ 		 */
+ 		spin_lock_irqsave(&port->lock, flags);
+-		port->ops->set_mctrl(port, port->mctrl & TIOCM_DTR);
++		port->mctrl &= TIOCM_DTR;
++		port->ops->set_mctrl(port, port->mctrl);
+ 		spin_unlock_irqrestore(&port->lock, flags);
  
-+#ifdef CONFIG_PROFILING
- int setup_profiling_timer(unsigned int multiplier)
- {
- 	return 0;
- }
-+#endif
- 
- static void fixup_topology(void)
- {
+ 		/*
 -- 
 2.34.1
 

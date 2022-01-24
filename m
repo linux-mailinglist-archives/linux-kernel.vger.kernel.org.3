@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8876499D6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A5C4997C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1583943AbiAXWTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:19:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447471AbiAXVKy (ORCPT
+        id S1449619AbiAXVPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:15:54 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48374 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351590AbiAXUtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:10:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A59C09D30D;
-        Mon, 24 Jan 2022 12:08:53 -0800 (PST)
+        Mon, 24 Jan 2022 15:49:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C8B3B8122A;
-        Mon, 24 Jan 2022 20:08:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95FF8C340E5;
-        Mon, 24 Jan 2022 20:08:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95405B81061;
+        Mon, 24 Jan 2022 20:49:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A56B5C340E7;
+        Mon, 24 Jan 2022 20:49:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054932;
-        bh=OLGhyBE3yYUeUqi46/+gVKgkTva0eh9cbOByjskd/PM=;
+        s=korg; t=1643057349;
+        bh=XmiM38+z9vU9eF+cGw0W1GcTqYfEXX41IXLFTK4g0Iw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VFJorSzUtNIUiTxCS1mkwybUhV5w+kj6oM8eon23ji2rSd4daQOG8gVGvLeECVzZ6
-         exM+YXJkhisifPUQ7Q86Y3YzpLWqniMenFQeizB3Iw4DwNUsrlfQHz8RwW19oR/SDY
-         0d3VEgmNCi+bXRrg77shwUEUzDAYlsyP2BlGFxzA=
+        b=sYwbJp9AzgJxP5KO++iyjLFtltdC7Tnm+tmuS+wvPMWNbQ0thEzoeuNuWTp7X9nUA
+         hBV6bSeRfJ6zYOgjN79IBeZubAVrmBu/AxY0SxT8hVh7dg9Nq/9rKfoieUudwsqPeb
+         x6aa66xAJpU2picwLt8cj3KRZlwlXRsV8/XwKzto=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Balbir Singh <bsingharora@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 5.10 533/563] taskstats: Cleanup the use of task->exit_code
-Date:   Mon, 24 Jan 2022 19:44:58 +0100
-Message-Id: <20220124184042.881061424@linuxfoundation.org>
+        stable@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 5.15 782/846] f2fs: fix to check available space of CP area correctly in update_ckpt_flags()
+Date:   Mon, 24 Jan 2022 19:44:59 +0100
+Message-Id: <20220124184127.931729694@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,59 +45,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric W. Biederman <ebiederm@xmission.com>
+From: Chao Yu <chao@kernel.org>
 
-commit 1b5a42d9c85f0e731f01c8d1129001fd8531a8a0 upstream.
+commit b702c83e2eaa2fa2d72e957c55c0321535cc8b9f upstream.
 
-In the function bacct_add_task the code reading task->exit_code was
-introduced in commit f3cef7a99469 ("[PATCH] csa: basic accounting over
-taskstats"), and it is not entirely clear what the taskstats interface
-is trying to return as only returning the exit_code of the first task
-in a process doesn't make a lot of sense.
+Otherwise, nat_bit area may be persisted across boundary of CP area during
+nat_bit rebuilding.
 
-As best as I can figure the intent is to return task->exit_code after
-a task exits.  The field is returned with per task fields, so the
-exit_code of the entire process is not wanted.  Only the value of the
-first task is returned so this is not a useful way to get the per task
-ptrace stop code.  The ordinary case of returning this value is
-returning after a task exits, which also precludes use for getting
-a ptrace value.
-
-It is common to for the first task of a process to also be the last
-task of a process so this field may have done something reasonable by
-accident in testing.
-
-Make ac_exitcode a reliable per task value by always returning it for
-every exited task.
-
-Setting ac_exitcode in a sensible mannter makes it possible to continue
-to provide this value going forward.
-
-Cc: Balbir Singh <bsingharora@gmail.com>
-Fixes: f3cef7a99469 ("[PATCH] csa: basic accounting over taskstats")
-Link: https://lkml.kernel.org/r/20220103213312.9144-5-ebiederm@xmission.com
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Fixes: 94c821fb286b ("f2fs: rebuild nat_bits during umount")
+Signed-off-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/tsacct.c |    7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ fs/f2fs/checkpoint.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/kernel/tsacct.c
-+++ b/kernel/tsacct.c
-@@ -38,11 +38,10 @@ void bacct_add_tsk(struct user_namespace
- 	stats->ac_btime = clamp_t(time64_t, btime, 0, U32_MAX);
- 	stats->ac_btime64 = btime;
+--- a/fs/f2fs/checkpoint.c
++++ b/fs/f2fs/checkpoint.c
+@@ -1305,8 +1305,8 @@ static void update_ckpt_flags(struct f2f
+ 	unsigned long flags;
  
--	if (thread_group_leader(tsk)) {
-+	if (tsk->flags & PF_EXITING)
- 		stats->ac_exitcode = tsk->exit_code;
--		if (tsk->flags & PF_FORKNOEXEC)
--			stats->ac_flag |= AFORK;
--	}
-+	if (thread_group_leader(tsk) && (tsk->flags & PF_FORKNOEXEC))
-+		stats->ac_flag |= AFORK;
- 	if (tsk->flags & PF_SUPERPRIV)
- 		stats->ac_flag |= ASU;
- 	if (tsk->flags & PF_DUMPCORE)
+ 	if (cpc->reason & CP_UMOUNT) {
+-		if (le32_to_cpu(ckpt->cp_pack_total_block_count) >
+-			sbi->blocks_per_seg - NM_I(sbi)->nat_bits_blocks) {
++		if (le32_to_cpu(ckpt->cp_pack_total_block_count) +
++			NM_I(sbi)->nat_bits_blocks > sbi->blocks_per_seg) {
+ 			clear_ckpt_flags(sbi, CP_NAT_BITS_FLAG);
+ 			f2fs_notice(sbi, "Disable nat_bits due to no space");
+ 		} else if (!is_set_ckpt_flags(sbi, CP_NAT_BITS_FLAG) &&
 
 

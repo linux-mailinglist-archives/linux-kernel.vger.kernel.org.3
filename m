@@ -2,39 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E1C499818
+	by mail.lfdr.de (Postfix) with ESMTP id E0A40499819
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1450586AbiAXVVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:21:00 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45560 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358666AbiAXUwD (ORCPT
+        id S1450648AbiAXVVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:21:08 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49674 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1441926AbiAXUwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:52:03 -0500
+        Mon, 24 Jan 2022 15:52:24 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7B3360B03;
-        Mon, 24 Jan 2022 20:52:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2D62C340E7;
-        Mon, 24 Jan 2022 20:52:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE7CFB8121C;
+        Mon, 24 Jan 2022 20:52:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3AE7C340E8;
+        Mon, 24 Jan 2022 20:52:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057522;
-        bh=jHBt4D2LHkfF9t7FKzh7y8T3seROGWJIg2IRNcojcvs=;
+        s=korg; t=1643057541;
+        bh=MHmC5G+aOd3jIodOwStGtnsuWl6x1s8Ye8y6waVER78=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cEZ7efX8PMRmPvtNn3ofDNd+DSqsWKVTIEtlaKuIgi9cbsJATx+jdpl5fO4Xb2gEb
-         hAyYtzY+TWMMbMxwv2BgIe3oBaf8PiHoDgVQjxb1pXRQA3SgMG0un3a+4OMAc5jZAW
-         CX20lDCEDNVPUX/SWsxtW8lXEj6+BK01Ui30hFsE=
+        b=pPIQU1NQNbZYo0euk24REjy4JSTabrv6SzwAQ05SFOSNjfZeyorCMNxoZB3pErxfN
+         KtTN83A/KHn9DRzzgMOkM8D7jPLrYsjR6YvSSQ1cOia1tgB3bJ7xyuZqIEaXhNMAkw
+         VB/lHb1CiMUJpbT6P6gtlEbwgq4XupNVBLbjQebo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 841/846] sch_api: Dont skip qdisc attach on ingress
-Date:   Mon, 24 Jan 2022 19:45:58 +0100
-Message-Id: <20220124184129.919921520@linuxfoundation.org>
+        stable@vger.kernel.org, Andrey Konovalov <andreyknvl@google.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.15 846/846] lib/test_meminit: destroy cache in kmem_cache_alloc_bulk() test
+Date:   Mon, 24 Jan 2022 19:46:03 +0100
+Message-Id: <20220124184130.082412033@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -46,68 +50,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Mikityanskiy <maximmi@nvidia.com>
+From: Andrey Konovalov <andreyknvl@google.com>
 
-commit de2d807b294d3d2ce5e59043ae2634016765d076 upstream.
+commit e073e5ef90298d2d6e5e7f04b545a0815e92110c upstream.
 
-The attach callback of struct Qdisc_ops is used by only a few qdiscs:
-mq, mqprio and htb. qdisc_graft() contains the following logic
-(pseudocode):
+Make do_kmem_cache_size_bulk() destroy the cache it creates.
 
-    if (!qdisc->ops->attach) {
-        if (ingress)
-            do ingress stuff;
-        else
-            do egress stuff;
-    }
-    if (!ingress) {
-        ...
-        if (qdisc->ops->attach)
-            qdisc->ops->attach(qdisc);
-    } else {
-        ...
-    }
-
-As we see, the attach callback is not called if the qdisc is being
-attached to ingress (TC_H_INGRESS). That wasn't a problem for mq and
-mqprio, since they contain a check that they are attached to TC_H_ROOT,
-and they can't be attached to TC_H_INGRESS anyway.
-
-However, the commit cited below added the attach callback to htb. It is
-needed for the hardware offload, but in the non-offload mode it
-simulates the "do egress stuff" part of the pseudocode above. The
-problem is that when htb is attached to ingress, neither "do ingress
-stuff" nor attach() is called. It results in an inconsistency, and the
-following message is printed to dmesg:
-
-unregister_netdevice: waiting for lo to become free. Usage count = 2
-
-This commit addresses the issue by running "do ingress stuff" in the
-ingress flow even in the attach callback is present, which is fine,
-because attach isn't going to be called afterwards.
-
-The bug was found by syzbot and reported by Eric.
-
-Fixes: d03b195b5aa0 ("sch_htb: Hierarchical QoS hardware offload")
-Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
-Reported-by: Eric Dumazet <edumazet@google.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Link: https://lkml.kernel.org/r/aced20a94bf04159a139f0846e41d38a1537debb.1640018297.git.andreyknvl@google.com
+Fixes: 03a9349ac0e0 ("lib/test_meminit: add a kmem_cache_alloc_bulk() test")
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Reviewed-by: Marco Elver <elver@google.com>
+Cc: Alexander Potapenko <glider@google.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>
+Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/sched/sch_api.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ lib/test_meminit.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/net/sched/sch_api.c
-+++ b/net/sched/sch_api.c
-@@ -1062,7 +1062,7 @@ static int qdisc_graft(struct net_device
- 
- 		qdisc_offload_graft_root(dev, new, old, extack);
- 
--		if (new && new->ops->attach)
-+		if (new && new->ops->attach && !ingress)
- 			goto skip;
- 
- 		for (i = 0; i < num_q; i++) {
+--- a/lib/test_meminit.c
++++ b/lib/test_meminit.c
+@@ -337,6 +337,7 @@ static int __init do_kmem_cache_size_bul
+ 		if (num)
+ 			kmem_cache_free_bulk(c, num, objects);
+ 	}
++	kmem_cache_destroy(c);
+ 	*total_failures += fail;
+ 	return 1;
+ }
 
 

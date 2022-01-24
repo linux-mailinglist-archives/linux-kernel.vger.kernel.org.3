@@ -2,82 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE3D4980EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2255A4980ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243137AbiAXNTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 08:19:04 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37486 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243090AbiAXNTE (ORCPT
+        id S243088AbiAXNUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 08:20:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240337AbiAXNUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 08:19:04 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A583AB80FAB;
-        Mon, 24 Jan 2022 13:19:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B266C340E1;
-        Mon, 24 Jan 2022 13:18:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643030341;
-        bh=+MVWVjmHsnFdqdROLxwGRRRLpP1Y39im19Biy0aR7pY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P+5b48gFcOvXNA1kPuEgkWwiohSql6bvOlD4rcDMp1k0RgUBRwGF2R5h8hrbgw2Yj
-         nWkq1CsdUA7gf3tEeHUtiDtKd1ZH/ERYW4cPVpy9YPXGEol6MdKwVNPcB/sK0DVot9
-         C/M9xvOvyoUNTFipB6if0+s79oKaV5YuAYxOSqB2QTO0RRjnYUq7K9AYzNc1ER9aZc
-         KOjxx9IBUruoUfm/XbKe1L/TTtEG+7e1gbyyhjm5dK3TSoSCcQXK5tV0/ErwDquH0U
-         beQu+Em2O21CVew9Ps2Sj3p6klvoKU0FnJfNvcJMQUkj6jXgUyyit9/PrrkV3vwtfv
-         akzESg1XC7vdg==
-Date:   Mon, 24 Jan 2022 13:18:56 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Leilk Liu <leilk.liu@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH V3 1/2] dt-bindings: spi: Convert spi-mt65xx to
- json-schema
-Message-ID: <Ye6nQIVoti5TKh+k@sirena.org.uk>
-References: <20220124061238.7854-1-leilk.liu@mediatek.com>
- <20220124061238.7854-2-leilk.liu@mediatek.com>
+        Mon, 24 Jan 2022 08:20:50 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C86C06173B;
+        Mon, 24 Jan 2022 05:20:50 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id m4so21360888ejb.9;
+        Mon, 24 Jan 2022 05:20:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=CIZGS2SAMR/gpbVGvhy9had6qJchmjOEY265YVA93o4=;
+        b=qE+qaP9sGlHPXM4zqosVFhnWWd23cnDGogF/zAbT8jE9qje/EesNkgIvVAOB53NGwB
+         mBp1jDF46E7uiC1cdkzKq+XEZMvsoow/3YpmPhtmUCIkNQaCbu5O/SaZx5/IZnfwcZX4
+         l3wnqlcUoQ/Wo+SsiVyLzY5MLYaxpHb8a5lSrbtQuhYF123R6JOPhUE2SkJxz+VN105s
+         iM5Fib3rpRqxi+0nxZuQUm2kzufR2uBmMOXPvO3H1VwV5sgo2sQSHqHgo5AuhOTDTvGO
+         JCRHpUu7EGXgjKgyFPVKwq27o97UUmGgwOgz0V0Vr+FxnoQ3xD/OjhqQAfpxFx3DU37j
+         kUDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=CIZGS2SAMR/gpbVGvhy9had6qJchmjOEY265YVA93o4=;
+        b=kw1LUkx29aGIt4CC8mZV6SYarkWSJcI7WGK5bk94ICEdZ6O9A8lpnSYrVibvqLRkIF
+         u6U4vjvAlYOJneG+AZjaqPltIKgZtseNwO81kGHgQJ3Z2ITJZ8GPiSt8QrGV8QFOlMQd
+         A6HrYOdlOH8ZpEJ/h+cYyFyjO5Dm7IhzSppK9QmZr1r1owFWNBvMcyYCHIEFiBDduv1g
+         HRYUqCyhvSXsVFji7msy03t/+JhwZEvVrLBq0ol7nIYaiZxP+iQTGcnWP3y3YH+iekRB
+         KId2h9n1p/2QrjDrUXbIH+edUCD83KwephjMXdsTW7eSeIXDbdIlSMgosPJ68qBw+UQT
+         FC0A==
+X-Gm-Message-State: AOAM531Td/Al/wGQOV/X3jL/NA3wD1dIjYTu/FVO0KAy6jOrefOFy+vn
+        aHnvi5lxSy3uzTn2Cjg5+l4mXSDyrCqUJMcGYsM=
+X-Google-Smtp-Source: ABdhPJyuOM1fzUtCGOlsYlj/L1Xow/TMI76Y0aJT/9jq059RQvhdJ0tUHl1c3iUQ/nh2Hz4ZmN5Sw988XivGP7w1gjE=
+X-Received: by 2002:a17:907:948d:: with SMTP id dm13mr12399566ejc.497.1643030448827;
+ Mon, 24 Jan 2022 05:20:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="v2cofXUm2ThNHvf8"
-Content-Disposition: inline
-In-Reply-To: <20220124061238.7854-2-leilk.liu@mediatek.com>
-X-Cookie: The second best policy is dishonesty.
+References: <20220124093912.2429190-1-Qing-wu.Li@leica-geosystems.com.cn> <20220124093912.2429190-6-Qing-wu.Li@leica-geosystems.com.cn>
+In-Reply-To: <20220124093912.2429190-6-Qing-wu.Li@leica-geosystems.com.cn>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 24 Jan 2022 15:19:09 +0200
+Message-ID: <CAHp75VeNFj3Hz1+quqpuWGuVYhPFngC20Gk=AfG+ZVEsrU9Qeg@mail.gmail.com>
+Subject: Re: [PATCH V1 5/6] iio: accel: sca3300: Add inclination channels.
+To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tomas Melin <tomas.melin@vaisala.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 24, 2022 at 11:39 AM LI Qingwu
+<Qing-wu.Li@leica-geosystems.com.cn> wrote:
+>
+> Different with SCA3300, SCL3300 can output inclination angles.
+> Angles are formed from acceleration with following equations:
+> ANG_X =3D atan2(accx / =E2=88=9A(accy^2 + accz^2)),
+> ANG_Y =3D atan2(accy / =E2=88=9A(accx^2 + accz^2)),
+> ANG_Z =3D atan2(accz / =E2=88=9A(accx^2 + accy^2)),
+>
+> The commit add output of the raw value,scale
+> and scale_available of angles.
+> add interface for enable/disable of the angle output.
+>
+> new interfaces:
 
---v2cofXUm2ThNHvf8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+New
 
-On Mon, Jan 24, 2022 at 02:12:37PM +0800, Leilk Liu wrote:
-> Convert Mediatek ARM SOC's SPI Master controller binding
-> to json-schema format.
+> in_incli_en
+> in_incli_scale
+> in_incli_scale_available
+> in_incli_x_raw
+> in_incli_y_raw
+> in_incli_z_raw
 
-Please make any YAML conversion patches the last patches in a series -
-there's frequently a backlog in reviewing them so having the DT binding
-patches first blocks any progress on everything else in the series.
+Indent them by 2 spaces.
 
---v2cofXUm2ThNHvf8
-Content-Type: application/pgp-signature; name="signature.asc"
+Wondering if these need to be described in ABI documentation.
 
------BEGIN PGP SIGNATURE-----
+...
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHupz8ACgkQJNaLcl1U
-h9B8ZAf5AZ25SlrujmxJNnJRmptUEyQU9a2j8mJ0o6DR8eQGjMHE3n1/ppct/BEv
-LwNcF2C7W0lNKIILFQ+oa0hdHcj74wVsvvKECMD/CqgJxG93v1KlD+KRVQHbAiTJ
-g8kXyvqwsN+YiUkqhbZ1tiHOUVNeB2sLu70wQHXPCLZ2UTz8QAY9Qi5eZ+3XxVDf
-RysYKB8Gfvi3nXwN4UA6ygBWc6W8Ax0r5I1K+GPUqsFjWwatfgVZwIxW2N1+5JHL
-eaQrA5Rg6kg+NINBAtWjhQU+C/QmR2fHj35qJbkjWfY0Yr5P7f02NSl4epEI3FHd
-JuKzOkcS7o8XB29ERzpWfkskxIfbXA==
-=k9qL
------END PGP SIGNATURE-----
+>         SCA3300_ACCEL_CHANNEL(SCA3300_ACC_Y, 0x2, Y),
+>         SCA3300_ACCEL_CHANNEL(SCA3300_ACC_Z, 0x3, Z),
+>         SCA3300_TEMP_CHANNEL(SCA3300_TEMP, 0x05),
+> -       IIO_CHAN_SOFT_TIMESTAMP(4)
 
---v2cofXUm2ThNHvf8--
+> +       IIO_CHAN_SOFT_TIMESTAMP(SCA3300_TIMESTAMP)
+
++ Comma (while at it)?
+
+...
+
+> -       IIO_CHAN_SOFT_TIMESTAMP(4),
+> +       SCA3300_INCLI_CHANNEL(SCA3300_INCLI_X, 0x09, X),
+> +       SCA3300_INCLI_CHANNEL(SCA3300_INCLI_Y, 0x0A, Y),
+> +       SCA3300_INCLI_CHANNEL(SCA3300_INCLI_Z, 0x0B, Z),
+> +       IIO_CHAN_SOFT_TIMESTAMP(SCA3300_TIMESTAMP)
+
+Ditto.
+
+> +static const int sca3300_incli_scale[CHIP_CNT][OP_MOD_CNT][2] =3D {
+> +       [CHIP_SCA3300] =3D {{0, 0}, {0, 0}, {0, 0}, {0, 0}},
+
+> +       [CHIP_SCL3300] =3D {{0, 5495}, {0, 5495}, {0, 5495}, {0, 5495}}
+
++ Comma.
+
+> +};
+
+...
+
+>         struct {
+> -               s16 channels[4];
+> +               s16 channels[SCA3300_TIMESTAMP-1];
+
+Missed spaces around the arithmetic operator.
+
+>                 s64 ts __aligned(sizeof(s64));
+>         } scan;
+>         const struct sca3300_chip_info *chip_info;
+>         u8 txbuf[4] ____cacheline_aligned;
+>         u8 rxbuf[4];
+
+> -
+
+Stray change.
+
+>  };
+
+...
+
+> +               /*Inclination scale info tied to accel scale.*/
+> +               /*not allowed to set separately.      */
+
+Please, follow the proper style for multi-line comments, including
+necessary spaces, periods, starting and ending lines.
+
+...
+
+> +       case IIO_CHAN_INFO_ENABLE:
+> +               if (data->chip_info->chip_type =3D=3D CHIP_SCL3300) {
+
+> +                       if (chan->type =3D=3D IIO_INCLI) {
+
+See below.
+
+> +                               if (val !=3D 0)
+
+   if (val)
+
+> +                                       reg_val =3D 0x1F;
+> +                               else
+> +                                       reg_val =3D 0x00;
+> +                               return sca3300_write_reg(data, SCA3300_RE=
+G_ANG_CTRL, reg_val);
+> +                       }
+> +               }
+
+...
+
+> -               if (chan->type =3D=3D IIO_ACCEL) {
+> +
+> +               if (chan->type =3D=3D IIO_INCLI) {
+
+> +               } else if (chan->type =3D=3D IIO_ACCEL) {
+
+I would recommend using switch-case for channel type as well.
+
+...
+
+> +       case IIO_CHAN_INFO_ENABLE:
+> +               if (chan->type =3D=3D IIO_INCLI) {
+
+> +                       ret =3D sca3300_read_reg(data, SCA3300_REG_ANG_CT=
+RL, &reg_val);
+
+How is ret supposed to be used?
+
+> +                       *val =3D reg_val;
+> +                       return IIO_VAL_INT;
+> +               }
+> +               return -EINVAL;
+
+--=20
+With Best Regards,
+Andy Shevchenko

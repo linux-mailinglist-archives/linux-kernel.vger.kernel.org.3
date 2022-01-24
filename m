@@ -2,46 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A3D499D6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:59:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E124499992
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1584103AbiAXWUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:20:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47106 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445327AbiAXVHQ (ORCPT
+        id S1455795AbiAXVgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:36:14 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42722 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352944AbiAXUs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:07:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18482C0680AB;
-        Mon, 24 Jan 2022 12:07:52 -0800 (PST)
+        Mon, 24 Jan 2022 15:48:59 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB82261342;
-        Mon, 24 Jan 2022 20:07:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 874C8C340E8;
-        Mon, 24 Jan 2022 20:07:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E67E060B28;
+        Mon, 24 Jan 2022 20:48:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8AB7C340E5;
+        Mon, 24 Jan 2022 20:48:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054871;
-        bh=n3qzIhkJTs5Zt29pol17QM7Ob/p00R3z1XaX+um3/So=;
+        s=korg; t=1643057334;
+        bh=bA2NVkNRdfsC9+kYNk0cI6zBu7bM2DrL1aL/zdydw6E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lQT6qKdvrc31rtgLBAB6NYabBNLYnEt3Zz5Z4zfvsgq+3wJUHuQCjFAExA61UKm8X
-         HVnARTy0hk+lBaVuaONX/vs0+LPBd92wA2k9K0uwV10QfSul59M63Ld8FrySIHNivg
-         UJEN9U+g/XcYYh+Wi3zALDQnhUCyYBV3d8Q9wVi0=
+        b=b/fVEkRcbkJe7tPFi9aLqOFs6oksTRlwC2GyHUdQiapjUTlLPQmCYCD7CHHVsmLCV
+         idgkX8JGxSh5otukfH2OXBTtStYO6Q7C8lJ7MTROjLFMVIxNtLxO3pVtegv2/eokeI
+         /HFPlCWM1RTe64EL8KJrlWQanxBWGGfKs43ixqOw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jiri Kosina <jkosina@suse.cz>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: [PATCH 5.10 529/563] HID: vivaldi: fix handling devices not using numbered reports
-Date:   Mon, 24 Jan 2022 19:44:54 +0100
-Message-Id: <20220124184042.736548769@linuxfoundation.org>
+        stable@vger.kernel.org, Fengnan Chang <changfengnan@vivo.com>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 5.15 778/846] f2fs: fix remove page failed in invalidate compress pages
+Date:   Mon, 24 Jan 2022 19:44:55 +0100
+Message-Id: <20220124184127.791801437@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,90 +45,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+From: Fengnan Chang <changfengnan@vivo.com>
 
-commit 3fe6acd4dc922237b30e55473c9349c6ce0690f3 upstream.
+commit d1917865a7906baf6b687e15e8e6195a295a3992 upstream.
 
-Unfortunately details of USB HID transport bled into HID core and
-handling of numbered/unnumbered reports is quite a mess, with
-hid_report_len() calculating the length according to USB rules,
-and hid_hw_raw_request() adding report ID to the buffer for both
-numbered and unnumbered reports.
+Since compress inode not a regular file, generic_error_remove_page in
+f2fs_invalidate_compress_pages will always be failed, set compress
+inode as a regular file to fix it.
 
-Untangling it all requres a lot of changes in HID, so for now let's
-handle this in the driver.
-
-[jkosina@suse.cz: microoptimize field->report->id to report->id]
-Fixes: 14c9c014babe ("HID: add vivaldi HID driver")
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Tested-by: Stephen Boyd <swboyd@chromium.org> # CoachZ
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Fixes: 6ce19aff0b8c ("f2fs: compress: add compress_inode to cache compressed blocks")
+Signed-off-by: Fengnan Chang <changfengnan@vivo.com>
+Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hid-vivaldi.c |   34 ++++++++++++++++++++++++++++------
- 1 file changed, 28 insertions(+), 6 deletions(-)
+ fs/f2fs/inode.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/drivers/hid/hid-vivaldi.c
-+++ b/drivers/hid/hid-vivaldi.c
-@@ -74,10 +74,11 @@ static void vivaldi_feature_mapping(stru
- 				    struct hid_usage *usage)
- {
- 	struct vivaldi_data *drvdata = hid_get_drvdata(hdev);
-+	struct hid_report *report = field->report;
- 	int fn_key;
- 	int ret;
- 	u32 report_len;
--	u8 *buf;
-+	u8 *report_data, *buf;
- 
- 	if (field->logical != HID_USAGE_FN_ROW_PHYSMAP ||
- 	    (usage->hid & HID_USAGE_PAGE) != HID_UP_ORDINAL)
-@@ -89,12 +90,24 @@ static void vivaldi_feature_mapping(stru
- 	if (fn_key > drvdata->max_function_row_key)
- 		drvdata->max_function_row_key = fn_key;
- 
--	buf = hid_alloc_report_buf(field->report, GFP_KERNEL);
--	if (!buf)
-+	report_data = buf = hid_alloc_report_buf(report, GFP_KERNEL);
-+	if (!report_data)
- 		return;
- 
--	report_len = hid_report_len(field->report);
--	ret = hid_hw_raw_request(hdev, field->report->id, buf,
-+	report_len = hid_report_len(report);
-+	if (!report->id) {
+--- a/fs/f2fs/inode.c
++++ b/fs/f2fs/inode.c
+@@ -516,6 +516,11 @@ make_now:
+ 	} else if (ino == F2FS_COMPRESS_INO(sbi)) {
+ #ifdef CONFIG_F2FS_FS_COMPRESSION
+ 		inode->i_mapping->a_ops = &f2fs_compress_aops;
 +		/*
-+		 * hid_hw_raw_request() will stuff report ID (which will be 0)
-+		 * into the first byte of the buffer even for unnumbered
-+		 * reports, so we need to account for this to avoid getting
-+		 * -EOVERFLOW in return.
-+		 * Note that hid_alloc_report_buf() adds 7 bytes to the size
-+		 * so we can safely say that we have space for an extra byte.
++		 * generic_error_remove_page only truncates pages of regular
++		 * inode
 +		 */
-+		report_len++;
-+	}
-+
-+	ret = hid_hw_raw_request(hdev, report->id, report_data,
- 				 report_len, HID_FEATURE_REPORT,
- 				 HID_REQ_GET_REPORT);
- 	if (ret < 0) {
-@@ -103,7 +116,16 @@ static void vivaldi_feature_mapping(stru
- 		goto out;
- 	}
- 
--	ret = hid_report_raw_event(hdev, HID_FEATURE_REPORT, buf,
-+	if (!report->id) {
-+		/*
-+		 * Undo the damage from hid_hw_raw_request() for unnumbered
-+		 * reports.
-+		 */
-+		report_data++;
-+		report_len--;
-+	}
-+
-+	ret = hid_report_raw_event(hdev, HID_FEATURE_REPORT, report_data,
- 				   report_len, 0);
- 	if (ret) {
- 		dev_warn(&hdev->dev, "failed to report feature %d\n",
++		inode->i_mode |= S_IFREG;
+ #endif
+ 		mapping_set_gfp_mask(inode->i_mapping,
+ 			GFP_NOFS | __GFP_HIGHMEM | __GFP_MOVABLE);
 
 

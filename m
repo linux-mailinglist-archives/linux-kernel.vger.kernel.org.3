@@ -2,38 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC354499A42
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:54:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C790499A43
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1458111AbiAXVmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:42:46 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:60620 "EHLO
+        id S1458175AbiAXVms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:42:48 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59368 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446800AbiAXVJ3 (ORCPT
+        with ESMTP id S1446847AbiAXVJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:09:29 -0500
+        Mon, 24 Jan 2022 16:09:32 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 020D6B8105C;
-        Mon, 24 Jan 2022 21:09:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15E1EC340E5;
-        Mon, 24 Jan 2022 21:09:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 421E4B811FB;
+        Mon, 24 Jan 2022 21:09:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 590CEC340E5;
+        Mon, 24 Jan 2022 21:09:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058562;
-        bh=c9RpIW94tVdBjMjoQJSSrE2zBofZpQhOST2oDE4CxCA=;
+        s=korg; t=1643058569;
+        bh=HAxnIYUvZDrbYUQuiX/NRDtGF45GALErTHSE5Q6bXDI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L/jgYzbxLBByDiByf2kIusMDwW6IDzgZAg+rTt3mbwofZIA4Kn0ggnjElRAnGgRhG
-         VM/DL8nyqfBdDGel8E6xp0mtKKmojnMtj1/YIsnTDm3tuzxKTsN83gqw1Luz9oKYB2
-         +hk5CQPuZf9gd2g/AnBvU3V3mTblKju9skGHxDBI=
+        b=baQuRUrvVBNidnL6PACKoGwL++nySnoqvP32gIZ/XMIru3ef027SiL2pD0cHbHnP7
+         dgQ1BZOsO9ij4QQ6K36gF25BWSPgRt34phceq3m8X/jNIo57jF6FYX/Fr4v9Uy0S64
+         d1+ckjXFAj6qqT2D8wVka0jXBv+l/7ed1566M3Hw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Luca Coelho <luciano.coelho@intel.com>,
+        stable@vger.kernel.org, Avraham Stern <avraham.stern@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0328/1039] iwlwifi: dont pass actual WGDS revision number in table_revision
-Date:   Mon, 24 Jan 2022 19:35:17 +0100
-Message-Id: <20220124184136.334863728@linuxfoundation.org>
+Subject: [PATCH 5.16 0330/1039] iwlwifi: mvm: perform 6GHz passive scan after suspend
+Date:   Mon, 24 Jan 2022 19:35:19 +0100
+Message-Id: <20220124184136.406568617@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -45,114 +46,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luca Coelho <luciano.coelho@intel.com>
+From: Avraham Stern <avraham.stern@intel.com>
 
-[ Upstream commit ac9952f6954216be72a8bde210e1ef2c949d8ee0 ]
+[ Upstream commit f4745cbb17572209a7fa27a6796ed70e7ada860b ]
 
-The FW API for PER_CHAIN_LIMIT_OFFSET_CMD is misleading.  The element
-name is table_rev, but it shouldn't actually contain the table
-revision number, but whether we should use the South Korea scheme or
-not.
+The 6GHz passive scan is performed only once every 50 minutes.
+However, in case of suspend/resume, the regulatory information
+is reset, so 6GHz channels may become disabled.
+Fix it by performing a 6GHz passive scan within 60 seconds after
+suspend/resume even if the 50 minutes timeout did not expire yet.
 
-Fix the driver so that we only set this value to either 0 or 1.  It
-will only be 1 (meaning South Korea) if the ACPI WGDS table revision
-is 1.
-
+Signed-off-by: Avraham Stern <avraham.stern@intel.com>
+Fixes: e8fe3b41c3a3 ("iwlwifi: mvm: Add support for 6GHz passive scan")
 Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Fixes: 664c011b763e ("iwlwifi: acpi: support reading and storing WGDS revision 2")
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Link: https://lore.kernel.org/r/iwlwifi.20211219121514.abed3b8119c7.I1fdc2c14577523fcffdfe8fb5902c2d8efde7e09@changeid
+Link: https://lore.kernel.org/r/iwlwifi.20211219121514.6d5c043372cf.I251dd5618a3f0b8febbcca788eb861f1cd6039bc@changeid
 Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/wireless/intel/iwlwifi/fw/api/power.h  |  8 ++++----
- drivers/net/wireless/intel/iwlwifi/mvm/fw.c    | 18 +++++++++++++-----
- 2 files changed, 17 insertions(+), 9 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/mvm/scan.c | 21 ++++++++-----------
+ 1 file changed, 9 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/fw/api/power.h b/drivers/net/wireless/intel/iwlwifi/fw/api/power.h
-index 4d671c878bb7a..23e27afe94a23 100644
---- a/drivers/net/wireless/intel/iwlwifi/fw/api/power.h
-+++ b/drivers/net/wireless/intel/iwlwifi/fw/api/power.h
-@@ -419,7 +419,7 @@ struct iwl_geo_tx_power_profiles_cmd_v1 {
-  * struct iwl_geo_tx_power_profile_cmd_v2 - struct for PER_CHAIN_LIMIT_OFFSET_CMD cmd.
-  * @ops: operations, value from &enum iwl_geo_per_chain_offset_operation
-  * @table: offset profile per band.
-- * @table_revision: BIOS table revision.
-+ * @table_revision: 0 for not-South Korea, 1 for South Korea (the name is misleading)
-  */
- struct iwl_geo_tx_power_profiles_cmd_v2 {
- 	__le32 ops;
-@@ -431,7 +431,7 @@ struct iwl_geo_tx_power_profiles_cmd_v2 {
-  * struct iwl_geo_tx_power_profile_cmd_v3 - struct for PER_CHAIN_LIMIT_OFFSET_CMD cmd.
-  * @ops: operations, value from &enum iwl_geo_per_chain_offset_operation
-  * @table: offset profile per band.
-- * @table_revision: BIOS table revision.
-+ * @table_revision: 0 for not-South Korea, 1 for South Korea (the name is misleading)
-  */
- struct iwl_geo_tx_power_profiles_cmd_v3 {
- 	__le32 ops;
-@@ -443,7 +443,7 @@ struct iwl_geo_tx_power_profiles_cmd_v3 {
-  * struct iwl_geo_tx_power_profile_cmd_v4 - struct for PER_CHAIN_LIMIT_OFFSET_CMD cmd.
-  * @ops: operations, value from &enum iwl_geo_per_chain_offset_operation
-  * @table: offset profile per band.
-- * @table_revision: BIOS table revision.
-+ * @table_revision: 0 for not-South Korea, 1 for South Korea (the name is misleading)
-  */
- struct iwl_geo_tx_power_profiles_cmd_v4 {
- 	__le32 ops;
-@@ -455,7 +455,7 @@ struct iwl_geo_tx_power_profiles_cmd_v4 {
-  * struct iwl_geo_tx_power_profile_cmd_v5 - struct for PER_CHAIN_LIMIT_OFFSET_CMD cmd.
-  * @ops: operations, value from &enum iwl_geo_per_chain_offset_operation
-  * @table: offset profile per band.
-- * @table_revision: BIOS table revision.
-+ * @table_revision: 0 for not-South Korea, 1 for South Korea (the name is misleading)
-  */
- struct iwl_geo_tx_power_profiles_cmd_v5 {
- 	__le32 ops;
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/fw.c b/drivers/net/wireless/intel/iwlwifi/mvm/fw.c
-index 863fec150e536..9eb78461f2800 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/fw.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/fw.c
-@@ -820,6 +820,7 @@ static int iwl_mvm_sar_geo_init(struct iwl_mvm *mvm)
- 	u16 len;
- 	u32 n_bands;
- 	u32 n_profiles;
-+	u32 sk = 0;
- 	int ret;
- 	u8 cmd_ver = iwl_fw_lookup_cmd_ver(mvm->fw, PHY_OPS_GROUP,
- 					   PER_CHAIN_LIMIT_OFFSET_CMD,
-@@ -879,19 +880,26 @@ static int iwl_mvm_sar_geo_init(struct iwl_mvm *mvm)
- 	if (ret)
- 		return 0;
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
+index a138b5c4cce84..ab960f86b940c 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
+@@ -1924,22 +1924,19 @@ static void iwl_mvm_scan_6ghz_passive_scan(struct iwl_mvm *mvm,
+ 	}
  
-+	/* Only set to South Korea if the table revision is 1 */
-+	if (mvm->fwrt.geo_rev == 1)
-+		sk = 1;
-+
  	/*
--	 * Set the revision on versions that contain it.
-+	 * Set the table_revision to South Korea (1) or not (0).  The
-+	 * element name is misleading, as it doesn't contain the table
-+	 * revision number, but whether the South Korea variation
-+	 * should be used.
- 	 * This must be done after calling iwl_sar_geo_init().
+-	 * 6GHz passive scan is allowed while associated in a defined time
+-	 * interval following HW reset or resume flow
++	 * 6GHz passive scan is allowed in a defined time interval following HW
++	 * reset or resume flow, or while not associated and a large interval
++	 * has passed since the last 6GHz passive scan.
  	 */
- 	if (cmd_ver == 5)
--		cmd.v5.table_revision = cpu_to_le32(mvm->fwrt.geo_rev);
-+		cmd.v5.table_revision = cpu_to_le32(sk);
- 	else if (cmd_ver == 4)
--		cmd.v4.table_revision = cpu_to_le32(mvm->fwrt.geo_rev);
-+		cmd.v4.table_revision = cpu_to_le32(sk);
- 	else if (cmd_ver == 3)
--		cmd.v3.table_revision = cpu_to_le32(mvm->fwrt.geo_rev);
-+		cmd.v3.table_revision = cpu_to_le32(sk);
- 	else if (fw_has_api(&mvm->fwrt.fw->ucode_capa,
- 			    IWL_UCODE_TLV_API_SAR_TABLE_VER))
--		cmd.v2.table_revision = cpu_to_le32(mvm->fwrt.geo_rev);
-+		cmd.v2.table_revision = cpu_to_le32(sk);
+-	if (vif->bss_conf.assoc &&
++	if ((vif->bss_conf.assoc ||
++	     time_after(mvm->last_6ghz_passive_scan_jiffies +
++			(IWL_MVM_6GHZ_PASSIVE_SCAN_TIMEOUT * HZ), jiffies)) &&
+ 	    (time_before(mvm->last_reset_or_resume_time_jiffies +
+ 			 (IWL_MVM_6GHZ_PASSIVE_SCAN_ASSOC_TIMEOUT * HZ),
+ 			 jiffies))) {
+-		IWL_DEBUG_SCAN(mvm, "6GHz passive scan: associated\n");
+-		return;
+-	}
+-
+-	/* No need for 6GHz passive scan if not enough time elapsed */
+-	if (time_after(mvm->last_6ghz_passive_scan_jiffies +
+-		       (IWL_MVM_6GHZ_PASSIVE_SCAN_TIMEOUT * HZ), jiffies)) {
+-		IWL_DEBUG_SCAN(mvm,
+-			       "6GHz passive scan: timeout did not expire\n");
++		IWL_DEBUG_SCAN(mvm, "6GHz passive scan: %s\n",
++			       vif->bss_conf.assoc ? "associated" :
++			       "timeout did not expire");
+ 		return;
+ 	}
  
- 	return iwl_mvm_send_cmd_pdu(mvm,
- 				    WIDE_ID(PHY_OPS_GROUP,
 -- 
 2.34.1
 

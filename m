@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA68498DF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5636A498A8D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345898AbiAXTiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:38:09 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60324 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345782AbiAXTc4 (ORCPT
+        id S1346085AbiAXTFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:05:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343948AbiAXS6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:32:56 -0500
+        Mon, 24 Jan 2022 13:58:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC20C0617BD;
+        Mon, 24 Jan 2022 10:55:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DC5B61518;
-        Mon, 24 Jan 2022 19:32:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26316C340E5;
-        Mon, 24 Jan 2022 19:32:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7805B8121F;
+        Mon, 24 Jan 2022 18:55:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0AAFC340E5;
+        Mon, 24 Jan 2022 18:55:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052775;
-        bh=jIFB4DyR65lRtbEr6tbrfuZymy0Zzuv0IAIULieUXJA=;
+        s=korg; t=1643050533;
+        bh=Z4nxAGJ3zNBXE1ZFPZ/Q4sjK2iny9EAwaDNANlUTFik=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BM+DAkhcjtr8kFMl2r/DgPc3UkRnCtr2jYoq/tJ+MiJBKL12t0HC4sgEWHoJ3vGUl
-         TrTLua4CS3JigNsbGKsuk7ZMbwYc1ia6BrScS16j/qLM1N0H77i8fpkgG45m/8YSDH
-         Qyy6DgfGME3LN6wSWWHdnbftGa+y9xsVqgr71roc=
+        b=EM6a3ANhzO9vWEnLRTaqyiMYqiHBNHlbLhCZycGIfWtLqC9Yeisd0wDBHO3HsPep4
+         dBCi8MnI7bgbfjJvFXWoS13NZrNLApgAGNpbLzsmt5cwhm4icTIcegulssPQJlGFm0
+         MBeoCjL9FAzNOdDDBd+VCcQL/wgv4FjAlPMlBRqU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Erhard Furtner <erhard_f@mailbox.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Wang Hai <wanghai38@huawei.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 137/320] powerpc/powermac: Add additional missing lockdep_register_key()
-Date:   Mon, 24 Jan 2022 19:42:01 +0100
-Message-Id: <20220124183958.317521976@linuxfoundation.org>
+Subject: [PATCH 4.9 032/157] media: dmxdev: fix UAF when dvb_register_device() fails
+Date:   Mon, 24 Jan 2022 19:42:02 +0100
+Message-Id: <20220124183933.821294735@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,51 +50,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+From: Wang Hai <wanghai38@huawei.com>
 
-[ Upstream commit b149d5d45ac9171ed699a256f026c8ebef901112 ]
+[ Upstream commit ab599eb11882f834951c436cc080c3455ba32b9b ]
 
-Commit df1f679d19ed ("powerpc/powermac: Add missing
-lockdep_register_key()") fixed a problem that was causing a WARNING.
+I got a use-after-free report:
 
-There are two other places in the same file with the same problem
-originating from commit 9e607f72748d ("i2c_powermac: shut up lockdep
-warning").
+dvbdev: dvb_register_device: failed to create device dvb1.dvr0 (-12)
+...
+==================================================================
+BUG: KASAN: use-after-free in dvb_dmxdev_release+0xce/0x2f0
+...
+Call Trace:
+ dump_stack_lvl+0x6c/0x8b
+ print_address_description.constprop.0+0x48/0x70
+ kasan_report.cold+0x82/0xdb
+ __asan_load4+0x6b/0x90
+ dvb_dmxdev_release+0xce/0x2f0
+...
+Allocated by task 7666:
+ kasan_save_stack+0x23/0x50
+ __kasan_kmalloc+0x83/0xa0
+ kmem_cache_alloc_trace+0x22e/0x470
+ dvb_register_device+0x12f/0x980
+ dvb_dmxdev_init+0x1f3/0x230
+...
+Freed by task 7666:
+ kasan_save_stack+0x23/0x50
+ kasan_set_track+0x20/0x30
+ kasan_set_free_info+0x24/0x40
+ __kasan_slab_free+0xf2/0x130
+ kfree+0xd1/0x5c0
+ dvb_register_device.cold+0x1ac/0x1fa
+ dvb_dmxdev_init+0x1f3/0x230
+...
 
-Add missing lockdep_register_key()
+When dvb_register_device() in dvb_dmxdev_init() fails, dvb_dmxdev_init()
+does not return a failure, and the memory pointed to by dvbdev or
+dvr_dvbdev is invalid at this point. If they are used subsequently, it
+will result in UFA or null-ptr-deref.
 
-Fixes: 9e607f72748d ("i2c_powermac: shut up lockdep warning")
-Reported-by: Erhard Furtner <erhard_f@mailbox.org>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Depends-on: df1f679d19ed ("powerpc/powermac: Add missing lockdep_register_key()")
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=200055
-Link: https://lore.kernel.org/r/2c7e421874e21b2fb87813d768cf662f630c2ad4.1638984999.git.christophe.leroy@csgroup.eu
+If dvb_register_device() in dvb_dmxdev_init() fails, fix the bug by making
+dvb_dmxdev_init() return an error as well.
+
+Link: https://lore.kernel.org/linux-media/20211015085741.1203283-1-wanghai38@huawei.com
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wang Hai <wanghai38@huawei.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/platforms/powermac/low_i2c.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/dvb-core/dmxdev.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
 
-diff --git a/arch/powerpc/platforms/powermac/low_i2c.c b/arch/powerpc/platforms/powermac/low_i2c.c
-index bf4be4b53b44d..a366233d8ac2d 100644
---- a/arch/powerpc/platforms/powermac/low_i2c.c
-+++ b/arch/powerpc/platforms/powermac/low_i2c.c
-@@ -811,6 +811,7 @@ static void __init pmu_i2c_probe(void)
- 		bus->hostdata = bus + 1;
- 		bus->xfer = pmu_i2c_xfer;
- 		mutex_init(&bus->mutex);
-+		lockdep_register_key(&bus->lock_key);
- 		lockdep_set_class(&bus->mutex, &bus->lock_key);
- 		bus->flags = pmac_i2c_multibus;
- 		list_add(&bus->link, &pmac_i2c_busses);
-@@ -934,6 +935,7 @@ static void __init smu_i2c_probe(void)
- 		bus->hostdata = bus + 1;
- 		bus->xfer = smu_i2c_xfer;
- 		mutex_init(&bus->mutex);
-+		lockdep_register_key(&bus->lock_key);
- 		lockdep_set_class(&bus->mutex, &bus->lock_key);
- 		bus->flags = 0;
- 		list_add(&bus->link, &pmac_i2c_busses);
+diff --git a/drivers/media/dvb-core/dmxdev.c b/drivers/media/dvb-core/dmxdev.c
+index 0418b5a0fb645..32a2e6ffdb097 100644
+--- a/drivers/media/dvb-core/dmxdev.c
++++ b/drivers/media/dvb-core/dmxdev.c
+@@ -1225,7 +1225,7 @@ static const struct dvb_device dvbdev_dvr = {
+ };
+ int dvb_dmxdev_init(struct dmxdev *dmxdev, struct dvb_adapter *dvb_adapter)
+ {
+-	int i;
++	int i, ret;
+ 
+ 	if (dmxdev->demux->open(dmxdev->demux) < 0)
+ 		return -EUSERS;
+@@ -1243,14 +1243,26 @@ int dvb_dmxdev_init(struct dmxdev *dmxdev, struct dvb_adapter *dvb_adapter)
+ 					    DMXDEV_STATE_FREE);
+ 	}
+ 
+-	dvb_register_device(dvb_adapter, &dmxdev->dvbdev, &dvbdev_demux, dmxdev,
++	ret = dvb_register_device(dvb_adapter, &dmxdev->dvbdev, &dvbdev_demux, dmxdev,
+ 			    DVB_DEVICE_DEMUX, dmxdev->filternum);
+-	dvb_register_device(dvb_adapter, &dmxdev->dvr_dvbdev, &dvbdev_dvr,
++	if (ret < 0)
++		goto err_register_dvbdev;
++
++	ret = dvb_register_device(dvb_adapter, &dmxdev->dvr_dvbdev, &dvbdev_dvr,
+ 			    dmxdev, DVB_DEVICE_DVR, dmxdev->filternum);
++	if (ret < 0)
++		goto err_register_dvr_dvbdev;
+ 
+ 	dvb_ringbuffer_init(&dmxdev->dvr_buffer, NULL, 8192);
+ 
+ 	return 0;
++
++err_register_dvr_dvbdev:
++	dvb_unregister_device(dmxdev->dvbdev);
++err_register_dvbdev:
++	vfree(dmxdev->filter);
++	dmxdev->filter = NULL;
++	return ret;
+ }
+ 
+ EXPORT_SYMBOL(dvb_dmxdev_init);
 -- 
 2.34.1
 

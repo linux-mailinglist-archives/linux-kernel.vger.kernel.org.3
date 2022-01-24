@@ -2,39 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E3C499709
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD03149970F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:24:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444661AbiAXVIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:08:54 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46552 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390578AbiAXUpv (ORCPT
+        id S1352010AbiAXVJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:09:02 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:40992 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1390629AbiAXUp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:45:51 -0500
+        Mon, 24 Jan 2022 15:45:58 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4CBBB81233;
-        Mon, 24 Jan 2022 20:45:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBFABC340E5;
-        Mon, 24 Jan 2022 20:45:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64DCF60B03;
+        Mon, 24 Jan 2022 20:45:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46FDAC340E7;
+        Mon, 24 Jan 2022 20:45:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057148;
-        bh=5AGW86GgCVBdDSNiNAWaOndxhA3SdVsmWaD0uYtrEB4=;
+        s=korg; t=1643057157;
+        bh=MRBWIGMk4wvN4dvhXjTTqbKf5gDK4zMk09wxmZkr0Ws=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n8Xee6lvQssqFRLpGdAi9CGAodpcrOV5WJW8xo6MhmStsv9kFDXvxMcadxBPLaiWg
-         7lVAAboXwX9iSKY5YEVVa3fvvvBFBOylI0Td6jvUW1lbEa6ux2zwBGGIth7dfW16Cz
-         xQOD79nk0gI6ZhNSTR/ICInLKa/z+vOYzlbiSqRw=
+        b=g0aRYcN5bxNkmhpxnz3UtL93IYTvL0Y/KW8OiDYIqduFB4HOlMfnEFvQesYPLMF9N
+         PfRB7z71UAfZ4M/b1vPEEhaJTvvrK9+HwficIr+XAH8nd/0iNLoSZ94j0yjABhJ2N0
+         vGgCqV2UaOX0vbdR+ciPjAaD5xdn+Tt9GlKr2ZrY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
-        Xiangyang Zhang <xyz.sun.ok@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH 5.15 684/846] tracing/kprobes: nmissed not showed correctly for kretprobe
-Date:   Mon, 24 Jan 2022 19:43:21 +0100
-Message-Id: <20220124184124.661981094@linuxfoundation.org>
+        stable@vger.kernel.org, Ilan Peer <ilan.peer@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>
+Subject: [PATCH 5.15 687/846] iwlwifi: mvm: Increase the scan timeout guard to 30 seconds
+Date:   Mon, 24 Jan 2022 19:43:24 +0100
+Message-Id: <20220124184124.757325618@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -46,48 +45,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiangyang Zhang <xyz.sun.ok@gmail.com>
+From: Ilan Peer <ilan.peer@intel.com>
 
-commit dfea08a2116fe327f79d8f4d4b2cf6e0c88be11f upstream.
+commit ced50f1133af12f7521bb777fcf4046ca908fb77 upstream.
 
-The 'nmissed' column of the 'kprobe_profile' file for kretprobe is
-not showed correctly, kretprobe can be skipped by two reasons,
-shortage of kretprobe_instance which is counted by tk->rp.nmissed,
-and kprobe itself is missed by some reason, so to show the sum.
+With the introduction of 6GHz channels the scan guard timeout should
+be adjusted to account for the following extreme case:
 
-Link: https://lkml.kernel.org/r/20220107150242.5019-1-xyz.sun.ok@gmail.com
+- All 6GHz channels are scanned passively: 58 channels.
+- The scan is fragmented with the following parameters: 3 fragments,
+  95 TUs suspend time, 44 TUs maximal out of channel time.
+
+The above would result with scan time of more than 24 seconds. Thus,
+set the timeout to 30 seconds.
 
 Cc: stable@vger.kernel.org
-Fixes: 4a846b443b4e ("tracing/kprobes: Cleanup kprobe tracer code")
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-Signed-off-by: Xiangyang Zhang <xyz.sun.ok@gmail.com>
-Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Ilan Peer <ilan.peer@intel.com>
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/iwlwifi.20211210090244.3c851b93aef5.I346fa2e1d79220a6770496e773c6f87a2ad9e6c4@changeid
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/trace/trace_kprobe.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/wireless/intel/iwlwifi/mvm/scan.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/kernel/trace/trace_kprobe.c
-+++ b/kernel/trace/trace_kprobe.c
-@@ -1175,15 +1175,18 @@ static int probes_profile_seq_show(struc
- {
- 	struct dyn_event *ev = v;
- 	struct trace_kprobe *tk;
-+	unsigned long nmissed;
- 
- 	if (!is_trace_kprobe(ev))
- 		return 0;
- 
- 	tk = to_trace_kprobe(ev);
-+	nmissed = trace_kprobe_is_return(tk) ?
-+		tk->rp.kp.nmissed + tk->rp.nmissed : tk->rp.kp.nmissed;
- 	seq_printf(m, "  %-44s %15lu %15lu\n",
- 		   trace_probe_name(&tk->tp),
- 		   trace_kprobe_nhit(tk),
--		   tk->rp.kp.nmissed);
-+		   nmissed);
- 
- 	return 0;
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
+@@ -2487,7 +2487,7 @@ static int iwl_mvm_check_running_scans(s
+ 	return -EIO;
  }
+ 
+-#define SCAN_TIMEOUT 20000
++#define SCAN_TIMEOUT 30000
+ 
+ void iwl_mvm_scan_timeout_wk(struct work_struct *work)
+ {
 
 

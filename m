@@ -2,49 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A35E9499F09
+	by mail.lfdr.de (Postfix) with ESMTP id 02382499F08
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1839548AbiAXWvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:51:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
+        id S1839527AbiAXWvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:51:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1458150AbiAXVmr (ORCPT
+        with ESMTP id S1458155AbiAXVms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:42:47 -0500
+        Mon, 24 Jan 2022 16:42:48 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4C7C07A959;
-        Mon, 24 Jan 2022 12:31:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0254EC07A95C;
+        Mon, 24 Jan 2022 12:31:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCBE761536;
-        Mon, 24 Jan 2022 20:31:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB8A5C340E5;
-        Mon, 24 Jan 2022 20:31:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 956ED61505;
+        Mon, 24 Jan 2022 20:31:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AF02C340E5;
+        Mon, 24 Jan 2022 20:31:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056271;
-        bh=31xC9mtUNmT5ViszQgZGChLa+pmB3GlMeXbvgzxJHR8=;
+        s=korg; t=1643056280;
+        bh=eBtV3ryZiXUZattGsksT7BmwOVTZlzKcXHsLCTSvJcc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZEC+ROZ5fwELLGQggQwH3O7XtHiu4BKen5E3aew2BR2HA4n/Dw6lLtTpiUEXwCWcW
-         Gjaja2Yx3flS2bBHQFjpUDI6gdvp27rEwJs2W0O7GTkYiwqvZjxEdRY06UgUjavtwv
-         YBbIyX0hmx7rBuv3Z30GBhW2zVkZ4aV8t3YxElwY=
+        b=mu9ANdvXh7NsOvVONejRR6ig2OfyrIg+yfVQB8E1OnX0XZgfUK91xFewbbKCbiqqL
+         NNN0PUKrEuiWLK5M2667pI4guEse51IUOSUDsYZFCXJs9+50LU29WtgwqyKeql2gES
+         LkcmVrMfvRglI1ST/DLlcExGvokRP14LpjXBMNnY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-efi@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Pingfan Liu <kernelfans@gmail.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>,
-        John Donnelly <john.p.donnelly@oracle.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 427/846] of: fdt: Aggregate the processing of "linux,usable-memory-range"
-Date:   Mon, 24 Jan 2022 19:39:04 +0100
-Message-Id: <20220124184115.705813438@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Ryuta NAKANISHI <nakanishi.ryuta@socionext.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 430/846] phy: uniphier-usb3ss: fix unintended writing zeros to PHY register
+Date:   Mon, 24 Jan 2022 19:39:07 +0100
+Message-Id: <20220124184115.814621705@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -56,97 +50,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhen Lei <thunder.leizhen@huawei.com>
+From: Ryuta NAKANISHI <nakanishi.ryuta@socionext.com>
 
-[ Upstream commit 8347b41748c3019157312fbe7f8a6792ae396eb7 ]
+[ Upstream commit 898c7a9ec81620125f2463714a0f4dea18ad6e54 ]
 
-Currently, we parse the "linux,usable-memory-range" property in
-early_init_dt_scan_chosen(), to obtain the specified memory range of the
-crash kernel. We then reserve the required memory after
-early_init_dt_scan_memory() has identified all available physical memory.
-Because the two pieces of code are separated far, the readability and
-maintainability are reduced. So bring them together.
+Similar to commit 4a90bbb478db ("phy: uniphier-pcie: Fix updating phy
+parameters"), in function uniphier_u3ssphy_set_param(), unintentionally
+write zeros to other fields when writing PHY registers.
 
-Suggested-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-(change the prototype of early_init_dt_check_for_usable_mem_range(), in
-order to use it outside)
-Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
-Tested-by: Dave Kleikamp <dave.kleikamp@oracle.com>
-Acked-by: John Donnelly <john.p.donnelly@oracle.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
-To: devicetree@vger.kernel.org
-To: linux-efi@vger.kernel.org
-Signed-off-by: Rob Herring <robh@kernel.org>
+Fixes: 5ab43d0f8697 ("phy: socionext: add USB3 PHY driver for UniPhier SoC")
+Signed-off-by: Ryuta NAKANISHI <nakanishi.ryuta@socionext.com>
+Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Link: https://lore.kernel.org/r/1640150369-4134-1-git-send-email-hayashi.kunihiko@socionext.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/of/fdt.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+ drivers/phy/socionext/phy-uniphier-usb3ss.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index 4546572af24bb..105b1a47905ab 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -969,18 +969,22 @@ static void __init early_init_dt_check_for_elfcorehdr(unsigned long node)
- 		 elfcorehdr_addr, elfcorehdr_size);
- }
+diff --git a/drivers/phy/socionext/phy-uniphier-usb3ss.c b/drivers/phy/socionext/phy-uniphier-usb3ss.c
+index 6700645bcbe6b..3b5ffc16a6947 100644
+--- a/drivers/phy/socionext/phy-uniphier-usb3ss.c
++++ b/drivers/phy/socionext/phy-uniphier-usb3ss.c
+@@ -22,11 +22,13 @@
+ #include <linux/reset.h>
  
--static phys_addr_t cap_mem_addr;
--static phys_addr_t cap_mem_size;
-+static unsigned long chosen_node_offset = -FDT_ERR_NOTFOUND;
+ #define SSPHY_TESTI		0x0
+-#define SSPHY_TESTO		0x4
+ #define TESTI_DAT_MASK		GENMASK(13, 6)
+ #define TESTI_ADR_MASK		GENMASK(5, 1)
+ #define TESTI_WR_EN		BIT(0)
  
- /**
-  * early_init_dt_check_for_usable_mem_range - Decode usable memory range
-  * location from flat tree
-- * @node: reference to node containing usable memory range location ('chosen')
-  */
--static void __init early_init_dt_check_for_usable_mem_range(unsigned long node)
-+static void __init early_init_dt_check_for_usable_mem_range(void)
- {
- 	const __be32 *prop;
- 	int len;
-+	phys_addr_t cap_mem_addr;
-+	phys_addr_t cap_mem_size;
-+	unsigned long node = chosen_node_offset;
++#define SSPHY_TESTO		0x4
++#define TESTO_DAT_MASK		GENMASK(7, 0)
 +
-+	if ((long)node < 0)
-+		return;
+ #define PHY_F(regno, msb, lsb) { (regno), (msb), (lsb) }
  
- 	pr_debug("Looking for usable-memory-range property... ");
+ #define CDR_CPD_TRIM	PHY_F(7, 3, 0)	/* RxPLL charge pump current */
+@@ -84,12 +86,12 @@ static void uniphier_u3ssphy_set_param(struct uniphier_u3ssphy_priv *priv,
+ 	val  = FIELD_PREP(TESTI_DAT_MASK, 1);
+ 	val |= FIELD_PREP(TESTI_ADR_MASK, p->field.reg_no);
+ 	uniphier_u3ssphy_testio_write(priv, val);
+-	val = readl(priv->base + SSPHY_TESTO);
++	val = readl(priv->base + SSPHY_TESTO) & TESTO_DAT_MASK;
  
-@@ -993,6 +997,8 @@ static void __init early_init_dt_check_for_usable_mem_range(unsigned long node)
- 
- 	pr_debug("cap_mem_start=%pa cap_mem_size=%pa\n", &cap_mem_addr,
- 		 &cap_mem_size);
-+
-+	memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
- }
- 
- #ifdef CONFIG_SERIAL_EARLYCON
-@@ -1141,9 +1147,10 @@ int __init early_init_dt_scan_chosen(unsigned long node, const char *uname,
- 	    (strcmp(uname, "chosen") != 0 && strcmp(uname, "chosen@0") != 0))
- 		return 0;
- 
-+	chosen_node_offset = node;
-+
- 	early_init_dt_check_for_initrd(node);
- 	early_init_dt_check_for_elfcorehdr(node);
--	early_init_dt_check_for_usable_mem_range(node);
- 
- 	/* Retrieve command line */
- 	p = of_get_flat_dt_prop(node, "bootargs", &l);
-@@ -1279,7 +1286,7 @@ void __init early_init_dt_scan_nodes(void)
- 	of_scan_flat_dt(early_init_dt_scan_memory, NULL);
- 
- 	/* Handle linux,usable-memory-range property */
--	memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
-+	early_init_dt_check_for_usable_mem_range();
- }
- 
- bool __init early_init_dt_scan(void *params)
+ 	/* update value */
+-	val &= ~FIELD_PREP(TESTI_DAT_MASK, field_mask);
++	val &= ~field_mask;
+ 	data = field_mask & (p->value << p->field.lsb);
+-	val  = FIELD_PREP(TESTI_DAT_MASK, data);
++	val  = FIELD_PREP(TESTI_DAT_MASK, data | val);
+ 	val |= FIELD_PREP(TESTI_ADR_MASK, p->field.reg_no);
+ 	uniphier_u3ssphy_testio_write(priv, val);
+ 	uniphier_u3ssphy_testio_write(priv, val | TESTI_WR_EN);
 -- 
 2.34.1
 

@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2152499C2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:07:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6A54995E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578128AbiAXWBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:01:45 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38674 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1450269AbiAXVUJ (ORCPT
+        id S1443559AbiAXU5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:57:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1386453AbiAXUfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:20:09 -0500
+        Mon, 24 Jan 2022 15:35:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB05C02B8C0;
+        Mon, 24 Jan 2022 11:49:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03601B81142;
-        Mon, 24 Jan 2022 21:20:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28BFEC340E4;
-        Mon, 24 Jan 2022 21:20:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DFBC60989;
+        Mon, 24 Jan 2022 19:49:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BE3CC340E5;
+        Mon, 24 Jan 2022 19:49:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059205;
-        bh=Me67gsWeV+RFSnXE3+KumzwdeAVvLxMDCMedH2J8DJ4=;
+        s=korg; t=1643053742;
+        bh=gpWjQ0VaBNniP4xA1fEF6HlyF6wN8PjRmBVxu/REmpg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z7cn0C9B4oaPvcEpHKzJc4Z9wtO8aRzYgUHHaedSfDR4r2jCGAZajiqGlbE6Hfm4f
-         LgD/KOaNr3pZW3NvCYzpkIfbHo67m0Njbi7SVQ/3VPaoZP/RhcXmXE/93bt8Q9kQ3A
-         k7+gOTNIvyZhcnTLOj3mixnbr+camGeyNdxP34TY=
+        b=BU5NIXXtueqWxk8+c8bj1b0mkh2llS3dMNt7cpWhmeqac845T4ln5PwD6AJqNKQuM
+         DJifHqM8FbzL7TX3psHqYYOOH5ZCROLILkPzyOBNEpxqoBqLqM4op3I6ODvpS40oXV
+         OlTkSWNA5Ltp5HvTeT1Ggx59abD8hnX1prDqE3cw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Merlijn Wajer <merlijn@wizzup.org>,
+        stable@vger.kernel.org, Steven Maddox <s.maddox@lantizia.me.uk>,
+        Christian Lamparter <chunkeey@gmail.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0538/1039] leds: lp55xx: initialise output direction from dts
+        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 162/563] ARM: dts: gemini: NAS4220-B: fis-index-block with 128 KiB sectors
 Date:   Mon, 24 Jan 2022 19:38:47 +0100
-Message-Id: <20220124184143.361853911@linuxfoundation.org>
+Message-Id: <20220124184030.001834241@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,48 +50,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Merlijn Wajer <merlijn@wizzup.org>
+From: Christian Lamparter <chunkeey@gmail.com>
 
-[ Upstream commit 9e87a8da747bf72365abb79e6f64fcca955b4f56 ]
+[ Upstream commit 4754eab7e5a78bdefe7a960c5c260c95ebbb5fa6 ]
 
-Commit a5d3d1adc95f ("leds: lp55xx: Initialize enable GPIO direction to
-output") attempts to fix this, but the fix did not work since at least
-for the Nokia N900 the value needs to be set to HIGH, per the device
-tree. So rather than hardcoding the value to a potentially invalid value
-for some devices, let's set direction in lp55xx_init_device.
+Steven Maddox reported in the OpenWrt bugzilla, that his
+RaidSonic IB-NAS4220-B was no longer booting with the new
+OpenWrt 21.02 (uses linux 5.10's device-tree). However, it was
+working with the previous OpenWrt 19.07 series (uses 4.14).
 
-Fixes: a5d3d1adc95f ("leds: lp55xx: Initialize enable GPIO direction to output")
-Fixes: 92a81562e695 ("leds: lp55xx: Add multicolor framework support to lp55xx")
-Fixes: ac219bf3c9bd ("leds: lp55xx: Convert to use GPIO descriptors")
-Signed-off-by: Merlijn Wajer <merlijn@wizzup.org>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Pavel Machek <pavel@ucw.cz>
+|[    5.548038] No RedBoot partition table detected in 30000000.flash
+|[    5.618553] Searching for RedBoot partition table in 30000000.flash at offset 0x0
+|[    5.739093] No RedBoot partition table detected in 30000000.flash
+|...
+|[    7.039504] Waiting for root device /dev/mtdblock3...
+
+The provided bootlog shows that the RedBoot partition parser was
+looking for the partition table "at offset 0x0". Which is strange
+since the comment in the device-tree says it should be at 0xfe0000.
+
+Further digging on the internet led to a review site that took
+some useful PCB pictures of their review unit back in February 2009.
+Their picture shows a Spansion S29GL128N11TFI01 flash chip.
+
+>From Spansion's Datasheet:
+"S29GL128N: One hundred twenty-eight 64 Kword (128 Kbyte) sectors"
+Steven also provided a "cat /sys/class/mtd/mtd0/erasesize" from his
+unit: "131072".
+
+With the 128 KiB Sector/Erasesize in mind. This patch changes the
+fis-index-block property to (0xfe0000 / 0x20000) = 0x7f.
+
+Fixes: b5a923f8c739 ("ARM: dts: gemini: Switch to redboot partition parsing")
+Reported-by: Steven Maddox <s.maddox@lantizia.me.uk>
+Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Tested-by: Steven Maddox <s.maddox@lantizia.me.uk>
+Link: https://lore.kernel.org/r/20211206004334.4169408-1-linus.walleij@linaro.org'
+Bugzilla: https://bugs.openwrt.org/index.php?do=details&task_id=4137
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/leds/leds-lp55xx-common.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/gemini-nas4220b.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/leds/leds-lp55xx-common.c b/drivers/leds/leds-lp55xx-common.c
-index d1657c46ee2f8..9fdfc1b9a1a0c 100644
---- a/drivers/leds/leds-lp55xx-common.c
-+++ b/drivers/leds/leds-lp55xx-common.c
-@@ -439,6 +439,8 @@ int lp55xx_init_device(struct lp55xx_chip *chip)
- 		return -EINVAL;
- 
- 	if (pdata->enable_gpiod) {
-+		gpiod_direction_output(pdata->enable_gpiod, 0);
-+
- 		gpiod_set_consumer_name(pdata->enable_gpiod, "LP55xx enable");
- 		gpiod_set_value(pdata->enable_gpiod, 0);
- 		usleep_range(1000, 2000); /* Keep enable down at least 1ms */
-@@ -694,7 +696,7 @@ struct lp55xx_platform_data *lp55xx_of_populate_pdata(struct device *dev,
- 	of_property_read_u8(np, "clock-mode", &pdata->clock_mode);
- 
- 	pdata->enable_gpiod = devm_gpiod_get_optional(dev, "enable",
--						      GPIOD_OUT_LOW);
-+						      GPIOD_ASIS);
- 	if (IS_ERR(pdata->enable_gpiod))
- 		return ERR_CAST(pdata->enable_gpiod);
+diff --git a/arch/arm/boot/dts/gemini-nas4220b.dts b/arch/arm/boot/dts/gemini-nas4220b.dts
+index 13112a8a5dd88..6544c730340fa 100644
+--- a/arch/arm/boot/dts/gemini-nas4220b.dts
++++ b/arch/arm/boot/dts/gemini-nas4220b.dts
+@@ -84,7 +84,7 @@
+ 			partitions {
+ 				compatible = "redboot-fis";
+ 				/* Eraseblock at 0xfe0000 */
+-				fis-index-block = <0x1fc>;
++				fis-index-block = <0x7f>;
+ 			};
+ 		};
  
 -- 
 2.34.1

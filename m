@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E58C49A3CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:03:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3CC49A73E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:38:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2366964AbiAXXxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:53:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49632 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1846001AbiAXXON (ORCPT
+        id S3423818AbiAYCgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:36:17 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36736 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385026AbiAXUbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:14:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A453C067A76;
-        Mon, 24 Jan 2022 13:21:02 -0800 (PST)
+        Mon, 24 Jan 2022 15:31:25 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 31509B8105C;
-        Mon, 24 Jan 2022 21:21:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57DDBC340E4;
-        Mon, 24 Jan 2022 21:20:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53A44B8124F;
+        Mon, 24 Jan 2022 20:31:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D6A9C340E7;
+        Mon, 24 Jan 2022 20:31:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059259;
-        bh=vIl/gclyF80YoCxy9zzgOrGGbUlqzJB+spj0los22ZY=;
+        s=korg; t=1643056277;
+        bh=9OYIhp4tcNcPNdnDiXHPbH5wBCGJndxbPgN1unI9o3Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BLzxC/8g/zsOQCNz407z33fPHuwTV8pQ5ncGigyQSQoUSla446Uh0mGB49rg3LezO
-         +JPv41Q4qpdqlEpkPfISqF9vDYus/r+r5SjPtEj3vK2xBoS0L/xTX/qJjh9IUk/NkT
-         spVVAbUOX08lnUaOmb8fMrusVG6aXyK1zmHRy5T0=
+        b=QJ6r4500TUFeery9Tq0UIkLbuCZ5feWFHAepEMI8k5045lkNigc5QH1Yx3VmyxtoL
+         sjnP2EdxaVTenoY8ovOcRDNb+ymHScedvKFmDdN2MdzVlM6tY+CxUvDQ8AbTRjC2uF
+         bZNROn3XHOzyV3k88PRvX8rzayLnVdOojGpV4LAg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tsuchiya Yuto <kitakar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0557/1039] media: atomisp: set per-devices default mode
+        stable@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Xiang Chen <chenxiang66@hisilicon.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH 5.15 429/846] scsi: block: pm: Always set request queue runtime active in blk_post_runtime_resume()
 Date:   Mon, 24 Jan 2022 19:39:06 +0100
-Message-Id: <20220124184144.030411964@linuxfoundation.org>
+Message-Id: <20220124184115.776860952@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,156 +49,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Alan Stern <stern@rowland.harvard.edu>
 
-[ Upstream commit 2c45e343c581091835c9047ed5298518aa133163 ]
+[ Upstream commit 6e1fcab00a23f7fe9f4fe9704905a790efa1eeab ]
 
-The atomisp driver originally used the s_parm command to
-initialize the run_mode type to the driver. So, before start
-setting up the streaming, s_parm should be called.
+John Garry reported a deadlock that occurs when trying to access a
+runtime-suspended SATA device.  For obscure reasons, the rescan procedure
+causes the link to be hard-reset, which disconnects the device.
 
-So, even having 5 "normal" video devices, one meant to be used
-for each type, the run_mode was actually selected when
-s_parm is called.
+The rescan tries to carry out a runtime resume when accessing the device.
+scsi_rescan_device() holds the SCSI device lock and won't release it until
+it can put commands onto the device's block queue.  This can't happen until
+the queue is successfully runtime-resumed or the device is unregistered.
+But the runtime resume fails because the device is disconnected, and
+__scsi_remove_device() can't do the unregistration because it can't get the
+device lock.
 
-Without setting the run mode, applications that don't call
-VIDIOC_SET_PARM with a custom atomisp parameters won't work, as
-the pipeline won't be set:
+The best way to resolve this deadlock appears to be to allow the block
+queue to start running again even after an unsuccessful runtime resume.
+The idea is that the driver or the SCSI error handler will need to be able
+to use the queue to resolve the runtime resume failure.
 
-	atomisp-isp2 0000:00:03.0: can't create streams
-	atomisp-isp2 0000:00:03.0: __get_frame_info 1600x1200 (padded to 0) returned -22
+This patch removes the err argument to blk_post_runtime_resume() and makes
+the routine act as though the resume was successful always.  This fixes the
+deadlock.
 
-However, commit 8a7c5594c020 ("media: v4l2-ioctl: clear fields in s_parm")
-broke support for it, with a good reason, as drivers shoudn't be
-extending the API for their own purposes.
-
-So, as an step to allow generic apps to use this driver, put
-the device's run_mode in preview after open.
-
-After this patch, using v4l2grab starts to work on preview
-mode (/dev/video2):
-
-	$ v4l2grab -f YUYV -x 1600 -y 1200 -d /dev/video2 -n 1 -u
-	$ feh out000.pnm
-
-So, let's just setup the default run_mode that each video devnode
-should assume, setting it at open() time.
-
-Reported-by: Tsuchiya Yuto <kitakar@gmail.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Link: https://lore.kernel.org/r/1639999298-244569-4-git-send-email-chenxiang66@hisilicon.com
+Fixes: e27829dc92e5 ("scsi: serialize ->rescan against ->remove")
+Reported-and-tested-by: John Garry <john.garry@huawei.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/atomisp_fops.c  |  5 +++++
- .../staging/media/atomisp/pci/atomisp_subdev.c    | 15 ++++++++++-----
- .../staging/media/atomisp/pci/atomisp_subdev.h    |  3 +++
- drivers/staging/media/atomisp/pci/atomisp_v4l2.c  |  4 +++-
- drivers/staging/media/atomisp/pci/atomisp_v4l2.h  |  3 ++-
- 5 files changed, 23 insertions(+), 7 deletions(-)
+ block/blk-pm.c         | 22 +++++++---------------
+ drivers/scsi/scsi_pm.c |  2 +-
+ include/linux/blk-pm.h |  2 +-
+ 3 files changed, 9 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-index 02c19b92bdccb..18fff47bd25d2 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-@@ -877,6 +877,11 @@ done:
- 	else
- 		pipe->users++;
- 	rt_mutex_unlock(&isp->mutex);
-+
-+	/* Ensure that a mode is set */
-+	if (asd)
-+		v4l2_ctrl_s_ctrl(asd->run_mode, pipe->default_run_mode);
-+
- 	return 0;
- 
- css_error:
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.c b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-index 12f22ad007c73..ffaf11e0b0ad8 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-@@ -1164,23 +1164,28 @@ static int isp_subdev_init_entities(struct atomisp_sub_device *asd)
- 
- 	atomisp_init_acc_pipe(asd, &asd->video_acc);
- 
--	ret = atomisp_video_init(&asd->video_in, "MEMORY");
-+	ret = atomisp_video_init(&asd->video_in, "MEMORY",
-+				 ATOMISP_RUN_MODE_SDV);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = atomisp_video_init(&asd->video_out_capture, "CAPTURE");
-+	ret = atomisp_video_init(&asd->video_out_capture, "CAPTURE",
-+				 ATOMISP_RUN_MODE_STILL_CAPTURE);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = atomisp_video_init(&asd->video_out_vf, "VIEWFINDER");
-+	ret = atomisp_video_init(&asd->video_out_vf, "VIEWFINDER",
-+				 ATOMISP_RUN_MODE_CONTINUOUS_CAPTURE);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = atomisp_video_init(&asd->video_out_preview, "PREVIEW");
-+	ret = atomisp_video_init(&asd->video_out_preview, "PREVIEW",
-+				 ATOMISP_RUN_MODE_PREVIEW);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = atomisp_video_init(&asd->video_out_video_capture, "VIDEO");
-+	ret = atomisp_video_init(&asd->video_out_video_capture, "VIDEO",
-+				 ATOMISP_RUN_MODE_VIDEO);
- 	if (ret < 0)
- 		return ret;
- 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.h b/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-index d6fcfab6352d7..a8d210ea5f8be 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-+++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-@@ -81,6 +81,9 @@ struct atomisp_video_pipe {
- 	/* the link list to store per_frame parameters */
- 	struct list_head per_frame_params;
- 
-+	/* Store here the initial run mode */
-+	unsigned int default_run_mode;
-+
- 	unsigned int buffers_in_css;
- 
- 	/* irq_lock is used to protect video buffer state change operations and
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-index 7982cc143374a..14c39b8987c95 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-@@ -447,7 +447,8 @@ const struct atomisp_dfs_config dfs_config_cht_soc = {
- 	.dfs_table_size = ARRAY_SIZE(dfs_rules_cht_soc),
- };
- 
--int atomisp_video_init(struct atomisp_video_pipe *video, const char *name)
-+int atomisp_video_init(struct atomisp_video_pipe *video, const char *name,
-+		       unsigned int run_mode)
+diff --git a/block/blk-pm.c b/block/blk-pm.c
+index 17bd020268d42..2dad62cc15727 100644
+--- a/block/blk-pm.c
++++ b/block/blk-pm.c
+@@ -163,27 +163,19 @@ EXPORT_SYMBOL(blk_pre_runtime_resume);
+ /**
+  * blk_post_runtime_resume - Post runtime resume processing
+  * @q: the queue of the device
+- * @err: return value of the device's runtime_resume function
+  *
+  * Description:
+- *    Update the queue's runtime status according to the return value of the
+- *    device's runtime_resume function. If the resume was successful, call
+- *    blk_set_runtime_active() to do the real work of restarting the queue.
++ *    For historical reasons, this routine merely calls blk_set_runtime_active()
++ *    to do the real work of restarting the queue.  It does this regardless of
++ *    whether the device's runtime-resume succeeded; even if it failed the
++ *    driver or error handler will need to communicate with the device.
+  *
+  *    This function should be called near the end of the device's
+  *    runtime_resume callback.
+  */
+-void blk_post_runtime_resume(struct request_queue *q, int err)
++void blk_post_runtime_resume(struct request_queue *q)
  {
- 	int ret;
- 	const char *direction;
-@@ -478,6 +479,7 @@ int atomisp_video_init(struct atomisp_video_pipe *video, const char *name)
- 		 "ATOMISP ISP %s %s", name, direction);
- 	video->vdev.release = video_device_release_empty;
- 	video_set_drvdata(&video->vdev, video->isp);
-+	video->default_run_mode = run_mode;
- 
- 	return 0;
+-	if (!q->dev)
+-		return;
+-	if (!err) {
+-		blk_set_runtime_active(q);
+-	} else {
+-		spin_lock_irq(&q->queue_lock);
+-		q->rpm_status = RPM_SUSPENDED;
+-		spin_unlock_irq(&q->queue_lock);
+-	}
++	blk_set_runtime_active(q);
  }
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.h b/drivers/staging/media/atomisp/pci/atomisp_v4l2.h
-index 81bb356b81720..72611b8286a4a 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.h
-+++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.h
-@@ -27,7 +27,8 @@ struct v4l2_device;
- struct atomisp_device;
- struct firmware;
+ EXPORT_SYMBOL(blk_post_runtime_resume);
  
--int atomisp_video_init(struct atomisp_video_pipe *video, const char *name);
-+int atomisp_video_init(struct atomisp_video_pipe *video, const char *name,
-+		       unsigned int run_mode);
- void atomisp_acc_init(struct atomisp_acc_pipe *video, const char *name);
- void atomisp_video_unregister(struct atomisp_video_pipe *video);
- void atomisp_acc_unregister(struct atomisp_acc_pipe *video);
+@@ -201,7 +193,7 @@ EXPORT_SYMBOL(blk_post_runtime_resume);
+  * runtime PM status and re-enable peeking requests from the queue. It
+  * should be called before first request is added to the queue.
+  *
+- * This function is also called by blk_post_runtime_resume() for successful
++ * This function is also called by blk_post_runtime_resume() for
+  * runtime resumes.  It does everything necessary to restart the queue.
+  */
+ void blk_set_runtime_active(struct request_queue *q)
+diff --git a/drivers/scsi/scsi_pm.c b/drivers/scsi/scsi_pm.c
+index 3717eea37ecb3..e91a0a5bc7a3e 100644
+--- a/drivers/scsi/scsi_pm.c
++++ b/drivers/scsi/scsi_pm.c
+@@ -262,7 +262,7 @@ static int sdev_runtime_resume(struct device *dev)
+ 	blk_pre_runtime_resume(sdev->request_queue);
+ 	if (pm && pm->runtime_resume)
+ 		err = pm->runtime_resume(dev);
+-	blk_post_runtime_resume(sdev->request_queue, err);
++	blk_post_runtime_resume(sdev->request_queue);
+ 
+ 	return err;
+ }
+diff --git a/include/linux/blk-pm.h b/include/linux/blk-pm.h
+index b80c65aba2493..2580e05a8ab67 100644
+--- a/include/linux/blk-pm.h
++++ b/include/linux/blk-pm.h
+@@ -14,7 +14,7 @@ extern void blk_pm_runtime_init(struct request_queue *q, struct device *dev);
+ extern int blk_pre_runtime_suspend(struct request_queue *q);
+ extern void blk_post_runtime_suspend(struct request_queue *q, int err);
+ extern void blk_pre_runtime_resume(struct request_queue *q);
+-extern void blk_post_runtime_resume(struct request_queue *q, int err);
++extern void blk_post_runtime_resume(struct request_queue *q);
+ extern void blk_set_runtime_active(struct request_queue *q);
+ #else
+ static inline void blk_pm_runtime_init(struct request_queue *q,
 -- 
 2.34.1
 

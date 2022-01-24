@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD9C499F46
+	by mail.lfdr.de (Postfix) with ESMTP id 5CB86499F45
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1840850AbiAXWzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:55:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
+        id S1840798AbiAXWzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:55:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1576017AbiAXVww (ORCPT
+        with ESMTP id S1576067AbiAXVxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:52:52 -0500
+        Mon, 24 Jan 2022 16:53:00 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C226CC08B4EA;
-        Mon, 24 Jan 2022 12:34:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FA1C08B4F0;
+        Mon, 24 Jan 2022 12:34:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3AF4BB81229;
-        Mon, 24 Jan 2022 20:34:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6160FC340E5;
-        Mon, 24 Jan 2022 20:34:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A2F6B81229;
+        Mon, 24 Jan 2022 20:34:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D487C340EA;
+        Mon, 24 Jan 2022 20:34:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056456;
-        bh=bLZe5OoYsGgnPbNAU3HWfa4F/i/GsLBmkpOXd9PxLn0=;
+        s=korg; t=1643056459;
+        bh=EgN3WYwHQlO/nVftIjAlxl6B3bD+NtPV1F3G+g/3siQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N9cp7ChTbTvFD7Nzsr4IgAr6lBsLzQqddz9IxNEx8hWob6HkfbRGYg4auw8TZU+G1
-         Zud9D7khMhbQJlHbKB34mMBQD6+j96xjoPjbv8Qka0XIR6C7EPP1pV+Xflo10hnxCJ
-         QJrJqNNfDx/uxRW7bMlqSMLy9QyWXF12Hn1O6Q7c=
+        b=vmM3VDNGjnV2O953gjsZ9D6jDCzRGMzgShqxOUj94OP1i8OdKokL9lYuGUoQbcIVL
+         51Up6KGIsFgVro8RCjlMP5l08LrLx+Qy6htmRF6xA1NXxYEsD3I6PGMkilzqAAgeqp
+         BeFKdM22xPq/yzajNE9dN8JYZkLYzEuvf9fMuf0A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Michal Simek <michal.simek@xilinx.com>,
+        stable@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 490/846] EDAC/synopsys: Use the quirk for version instead of ddr version
-Date:   Mon, 24 Jan 2022 19:40:07 +0100
-Message-Id: <20220124184117.919126272@linuxfoundation.org>
+Subject: [PATCH 5.15 491/846] arm64: dts: qcom: sm8350: Shorten camera-thermal-bottom name
+Date:   Mon, 24 Jan 2022 19:40:08 +0100
+Message-Id: <20220124184117.950649359@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -50,35 +50,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dinh Nguyen <dinguyen@kernel.org>
+From: Konrad Dybcio <konrad.dybcio@somainline.org>
 
-[ Upstream commit bd1d6da17c296bd005bfa656952710d256e77dd3 ]
+[ Upstream commit f52dd33943ca5f84ae76890f352f6d9e12512c3f ]
 
-Version 2.40a supports DDR_ECC_INTR_SUPPORT for a quirk, so use that
-quirk to determine a call to setup_address_map().
+Thermal zone names should not be longer than 20 names, which is indicated by
+a message at boot. Change "camera-thermal-bottom" to "cam-thermal-bottom" to
+fix it.
 
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Michal Simek <michal.simek@xilinx.com>
-Link: https://lkml.kernel.org/r/20211012190709.1504152-1-dinguyen@kernel.org
+Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20211114012755.112226-6-konrad.dybcio@somainline.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/edac/synopsys_edac.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/sm8350.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index 7d08627e738b3..a5486d86fdd2f 100644
---- a/drivers/edac/synopsys_edac.c
-+++ b/drivers/edac/synopsys_edac.c
-@@ -1352,8 +1352,7 @@ static int mc_probe(struct platform_device *pdev)
- 		}
- 	}
+diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+index e91cd8a5e5356..296ffb0e9888c 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+@@ -2185,7 +2185,7 @@
+ 			};
+ 		};
  
--	if (of_device_is_compatible(pdev->dev.of_node,
--				    "xlnx,zynqmp-ddrc-2.40a"))
-+	if (priv->p_data->quirks & DDR_ECC_INTR_SUPPORT)
- 		setup_address_map(priv);
- #endif
+-		camera-thermal-bottom {
++		cam-thermal-bottom {
+ 			polling-delay-passive = <250>;
+ 			polling-delay = <1000>;
  
 -- 
 2.34.1

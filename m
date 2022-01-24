@@ -2,120 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A66CE497D24
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 11:28:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F51F497D2A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 11:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237079AbiAXK1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 05:27:45 -0500
-Received: from foss.arm.com ([217.140.110.172]:56804 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232516AbiAXK1o (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 05:27:44 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 037446D;
-        Mon, 24 Jan 2022 02:27:44 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.2.109])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DEA203F73B;
-        Mon, 24 Jan 2022 02:27:40 -0800 (PST)
-Date:   Mon, 24 Jan 2022 10:27:32 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, tglx@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
-        pjt@google.com, posk@google.com, avagin@google.com,
-        jannh@google.com, tdelisle@uwaterloo.ca, posk@posk.io
-Subject: Re: [RFC][PATCH v2 5/5] sched: User Mode Concurency Groups
-Message-ID: <Ye5/FIlVcym/Fbjs@FVFF77S0Q05N>
-References: <20220120155517.066795336@infradead.org>
- <20220120160822.914418096@infradead.org>
- <Yerl+ZrZ2qflIMyg@FVFF77S0Q05N>
- <20220124100306.GO20638@worktop.programming.kicks-ass.net>
- <20220124100704.GC22849@worktop.programming.kicks-ass.net>
+        id S237120AbiAXK2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 05:28:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237152AbiAXK2M (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 05:28:12 -0500
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD54C061747
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 02:28:11 -0800 (PST)
+Received: by mail-qk1-x741.google.com with SMTP id s12so19592376qkg.6
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 02:28:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=fcGOhpP2fh4L0P54itv7DpzugvdwboeZoteLAX3ou8w=;
+        b=HxmT7mmT+gLVKhaTHDG/W6ZrjSkp3Gw7Tjf5yv0mvd2v0zP+0AElkpeQ9nu7F97RpN
+         eKFqcXpxOIw9RbA/KuV3Y396zJMrDvf3y2a/YUbzrtfqQclOfCxuQU/u+xfgeHV5wYDt
+         F58RFSRhjhN+9iDhU6pClYIkT/YRoozsSn0MSvpAJEV2RUaiRF0+ujf16fdpFPtbpwwo
+         z5O3pqsGNecLBWnWJWVgcdnEHbqtRWTGkbX6aC+fbI2ghgkNv7YSxf9rhqqE2Etj9A4J
+         uiYJ8X7XtBbuTvWCt07IVOcSQhdQ0riAoui7VVNJG4fVVJxg5ExOL6u1rQX6OL+EHgOc
+         3gow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=fcGOhpP2fh4L0P54itv7DpzugvdwboeZoteLAX3ou8w=;
+        b=RGv27imkwTIUf2h7M3eLrD7fghkFTkO1ejZjHh1R0gOwcjs2QxNln1Yp/kfCZmsuKe
+         Bxj4OtBgP6KHFeI5Kp9KZI6HAcq9z76PdKYBTmSEtwIOxeFW5WmaPvW3WwzIt3iiYO8P
+         RvuLIkjMCSyuh/JQwjww81BzyI+yed+3MpnNxbJtswkwOsQju5eMmTi5vpvUsS2iWBHn
+         t1dNXcHTr/cLhUcCt9d9+hRUanjQfqbipN02SbQBDvCerjGU5fJiRLDPYeUkGWMwpqX4
+         GfaMIvwzikCc5EKxmjtkBMH0T5uwdAUZHjjkQl7uDsnPPDNkfaGGVgR2CjstpeNssUyp
+         ncXg==
+X-Gm-Message-State: AOAM533g6LvB2PBzowsQigtn81+K6Oy/1A/lyYesmK89Xlr1QhMfkai0
+        o3jRd6u1UbWYKaLqmUcgSGT1WcU7VaYWt58UXAQ=
+X-Google-Smtp-Source: ABdhPJwSsd8J4ETfsCwTfGOR/w2MNjfxZJqRYl5w8FMQwngbgMmUt08sUKUrjW1pCJ2EeXWGwtNn7UqRC3DdcyEdLSc=
+X-Received: by 2002:a37:996:: with SMTP id 144mr3031466qkj.247.1643020090648;
+ Mon, 24 Jan 2022 02:28:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124100704.GC22849@worktop.programming.kicks-ass.net>
+Received: by 2002:a05:620a:f01:0:0:0:0 with HTTP; Mon, 24 Jan 2022 02:28:10
+ -0800 (PST)
+Reply-To: aishagaddafi5788@gmail.com
+From:   "Mrs. Aisha Gaddafi" <mrsmithahmed@gmail.com>
+Date:   Mon, 24 Jan 2022 11:28:10 +0100
+Message-ID: <CAPKWrSLqC=kayqhwpNVmkyqXZx8KxV+p80W4VZGCZcxQmNT=Vw@mail.gmail.com>
+Subject: Happy new year!!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 11:07:04AM +0100, Peter Zijlstra wrote:
-> On Mon, Jan 24, 2022 at 11:03:06AM +0100, Peter Zijlstra wrote:
-> 
-> > > Either way, it looks like we'd need helpers along the lines of:
-> > > 
-> > > | static __always_inline void umcg_enter_from_user(struct pt_regs *regs)
-> > > | {
-> > > | 	if (current->flags & PF_UMCG_WORKER)
-> > > | 		umcg_sys_enter(regs, -1);
-> > > | }
-> > > | 
-> > > | static __always_inline void umcg_exit_to_user(struct pt_regs *regs)
-> > > | {
-> > > | 	if (current->flags & PF_UMCG_WORKER)
-> > > | 		umcg_sys_exit(regs);
-> > > | }
-> > 
-> > Would something like:
-> > 
-> > #ifndef arch_irqentry_irq_enter
-> > static __always_inline bool arch_irqentry_irq_enter(struct pt_regs *regs)
-> > {
-> > 	if (!regs_irqs_disabled(regs)) {
-> > 		local_irq_enable();
-> > 		return true;
-> > 	}
-> > 	return false;
-> > }
-> > #endif
-> > 
-> > static __always_inline void irqentry_irq_enter(struct pt_regs *regs)
-> > {
-> > 	if (arch_irqentry_irq_inherit(regs)) {
-> > 		if (user_mode(regs) && (current->flags & PF_UMCG_WORKER))
-> > 			umcg_sys_enter(regs, -1);
-> > 	}
-> > }
-> > 
-> > Work? Then arm64 can do:
-> > 
-> > static __always_inline bool arch_irqentry_irq_enter(struct pt_regs *regs)
-> > {
-> > 	local_daif_inherit();
-> > 	return interrupts_enabled(regs);
-> > }
-> > 
-> > or somesuch...
-> 
-> Ah,.. just read your other email, so your concern is about the
-> user_mode() thing due to ARM64 taking a different exception path for
-> from-user vs from-kernel ?
+Dear Friend,
 
-Yup; it's two-fold:
+I came across your e-mail contact prior a private search while in need
+of your assistance. I am Aisha Al-Qaddafi, the only daughter to Former
+President of Libya Col. Muammar Al-Qaddafi. Am a Widow with Children.
 
-1) We have separate vectors for entry from-user and from-kernel, and I'd like
-   to avoid the conditionality (e.g. the user_mode(regs) checks) where possible. 
-   Having that unconditional and explicit in the from-user code avoids
-   redundant work and is much easier to see that it's correct and balanced.
+I have investment funds worth Twenty Seven Million Five Hundred
+Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
+investment Manager/Partner because of my current refugee status,
+however, I am interested in you for investment project assistance in
+your country, may be from there, we can build business relationship in
+the nearest future.
 
-   We have separate irqentry_from_user() and irqentry_from_kernel() helpers
-   today for this.
+I am willing to negotiate investment/business profit sharing ratio
+with you based on the future investment earning profits.
 
-2) Due to the way we nest classes of exception, on the entry path we manipulate
-   the flags differently depending on which specific exception we've taken. On
-   the return path we always mask everything (necessary due to the way
-   exception return works architecturally).
+If you are willing to handle this project on my behalf, kindly reply
+urgent to enable me provide you more information about the investment
+funds.
 
-   Luckily exceptions from-user don't nest, so those cases are simpler than
-   exceptions from-kernel.
+Your Urgent Reply Will Be Appreciated
 
-> I don't mind too much if arm64 decides to open-code the umcg hooks, but
-> please do it such that's hard to forget a spot.
-
-I'll see what I can do. :)
-
-Thanks,
-Mark.
+Best Regards
+Mrs Aisha Al-Qaddafi
+Email: (  aishagaddafi5788@gmail.com  ).

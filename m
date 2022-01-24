@@ -2,116 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5687497AC8
+	by mail.lfdr.de (Postfix) with ESMTP id 117F0497AC6
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:55:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242494AbiAXIzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 03:55:12 -0500
-Received: from mga07.intel.com ([134.134.136.100]:19950 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242477AbiAXIzK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S242483AbiAXIzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 24 Jan 2022 03:55:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643014510; x=1674550510;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=B7mRVQn3mGN3EOaG2zxuvdC0hKN77JXTeveSRmb0/ZQ=;
-  b=FO4O4sd4KL/7iz7SjW8782ijhREtC042mS4H30znv+TuqxG/dh7ZLgSc
-   Umbmr5mHNkGtZBGuQjzY0keVjLatmOZTyaguA4bTEXnPMJvtpplZGKtUv
-   8DR1QCDkyDCKIvsYrvOoWraBAF7ws6ERoCT4iMY0pNQRaGNHNBhtXiaC4
-   KImH7yZFB5CGJ1NWmtKlDWqR9WQIbv+5eXqn8MW9KwnMjpeBVp6egI+P6
-   C6lcEr+wj1U8oEVwiE23+X/2VgTUTZ5UKgROSsZdi8LKm36xgy2PXr20Y
-   eoOxzoOoHbWblCGVuCQza3HwSqeSU6H5mlJIKDtjdboFTvxpFYWizXZ56
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="309320373"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="309320373"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 00:55:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="673558970"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 24 Jan 2022 00:55:00 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 24 Jan 2022 10:54:59 +0200
-Date:   Mon, 24 Jan 2022 10:54:59 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Robert =?utf-8?B?xZp3acSZY2tp?= <robert@swiecki.net>,
-        Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Subject: Re: [PATCH] usb: typec: Only attempt to link USB ports if there is
- fwnode
-Message-ID: <Ye5pY97VOb4TdZjH@kuha.fi.intel.com>
-References: <20220118093627.74098-1-heikki.krogerus@linux.intel.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242470AbiAXIzJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 03:55:09 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B347C06173B;
+        Mon, 24 Jan 2022 00:55:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=vEv9ZVm4FRM2sWGecomArAPFZr2kyAtBIJ0fxjajhKA=; b=H520EeGELfNL68TKhbR92ln0dj
+        XKvss8VcBEDNoQ8IRsEHC5Wwef5wjYXkCSmd9tPqTyDiUbXXXjcDXRcWvQjsAFzzDMTFN4mMGjmIf
+        SUsKICrwuxD1wFtrjEGhufCiem0oB15dmWprRtT6QOTfvKiR8zrvt6DYpBcQSLmbiggt/CdKWlynh
+        9uR7RpkH9ZF+99bWbuYig7PgQkrSgajZptg0FHNc/7GAsS4/eSsqPxNOPhXKk6/K06V+V6Z6uZNL6
+        5tEqauSzJYFpARpTU4iOgzctaXwD0I4VQ5ddz4A1dpELojqG4BxTGYlVJz18fx3Y7Sh2kAuXgYHMl
+        EnfgFUHA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nBv7u-002gVx-V2; Mon, 24 Jan 2022 08:55:02 +0000
+Date:   Mon, 24 Jan 2022 00:55:02 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     NeilBrown <neilb@suse.de>
+Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        David Howells <dhowells@redhat.com>, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/23] MM: submit multipage write for SWP_FS_OPS
+ swap-space
+Message-ID: <Ye5pZpeiVmCFpgXw@infradead.org>
+References: <164299573337.26253.7538614611220034049.stgit@noble.brown>
+ <164299611279.26253.12350012848236496937.stgit@noble.brown>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220118093627.74098-1-heikki.krogerus@linux.intel.com>
+In-Reply-To: <164299611279.26253.12350012848236496937.stgit@noble.brown>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 12:36:27PM +0300, Heikki Krogerus wrote:
-> The code that creates the links to the USB ports attached to
-> a connector inside the system assumed that the ACPI nodes
-> (fwnodes) always exist for the connectors, but it can not do
-> that.
+On Mon, Jan 24, 2022 at 02:48:32PM +1100, NeilBrown wrote:
+> swap_writepage() is given one page at a time, but may be called repeatedly
+> in succession.
+> For block-device swapspace, the blk_plug functionality allows the
+> multiple pages to be combined together at lower layers.
+> That cannot be used for SWP_FS_OPS as blk_plug may not exist - it is
+> only active when CONFIG_BLOCK=y.  Consequently all swap reads over NFS
+> are single page reads.
 > 
-> There is no guarantee that every USB Type-C connector has
-> ACPI device node representing it in the ACPI tables, and
-> even if there are the nodes in the ACPI tables, the _STA
-> method in those nodes may still return 0 (which means the
-> device does not exist from ACPI PoW).
+> With this patch we pass a pointer-to-pointer via the wbc.
+> swap_writepage can store state between calls - much like the pointer
+> passed explicitly to swap_readpage.  After calling swap_writepage() some
+> number of times, the state will be passed to swap_write_unplug() which
+> can submit the combined request.
 > 
-> This fixes NULL pointer dereference that happens if the
-> nodes are missing.
-
-I'll resend this togher wit the other fix.
-
-thanks,
-
-> Reported-and-tested-by: Robert Święcki <robert@swiecki.net>
-> Reported-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-> Fixes: 730b49aac426 ("usb: typec: port-mapper: Convert to the component framework")
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: NeilBrown <neilb@suse.de>
 > ---
-> Hi guys,
+>  include/linux/writeback.h |    7 +++
+>  mm/page_io.c              |  103 +++++++++++++++++++++++++++++----------------
+>  mm/swap.h                 |    1 
+>  mm/vmscan.c               |    9 +++-
+>  4 files changed, 82 insertions(+), 38 deletions(-)
 > 
-> Mikhail, I got confirmation from Robert that the patch fixes the
-> issue.
-> 
-> thanks,
-> ---
->  drivers/usb/typec/port-mapper.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/port-mapper.c b/drivers/usb/typec/port-mapper.c
-> index 07d307418b470..b6e0c6acc628c 100644
-> --- a/drivers/usb/typec/port-mapper.c
-> +++ b/drivers/usb/typec/port-mapper.c
-> @@ -56,6 +56,9 @@ int typec_link_ports(struct typec_port *con)
->  {
->  	struct each_port_arg arg = { .port = con, .match = NULL };
+> diff --git a/include/linux/writeback.h b/include/linux/writeback.h
+> index fec248ab1fec..6dcaa0639c0d 100644
+> --- a/include/linux/writeback.h
+> +++ b/include/linux/writeback.h
+> @@ -80,6 +80,13 @@ struct writeback_control {
 >  
-> +	if (!has_acpi_companion(&con->dev))
-> +		return 0;
+>  	unsigned punt_to_cgroup:1;	/* cgrp punting, see __REQ_CGROUP_PUNT */
+>  
+> +	/* To enable batching of swap writes to non-block-device backends,
+> +	 * "plug" can be set point to a 'struct swap_iocb *'.  When all swap
+> +	 * writes have been submitted, if with swap_iocb is not NULL,
+> +	 * swap_write_unplug() should be called.
+> +	 */
+> +	struct swap_iocb **plug;
+
+Mayb plug isn't really the best name for something swap-specific in this
+generic structure?
+
+Also the above does not fit the normal kernel comment style with an
+otherwise empty
+
+	/*
+
+line.
+
+> +	for (p = 0; p < sio->pages; p++) {
+> +		struct page *page = sio->bvec[p].bv_page;
 > +
->  	bus_for_each_dev(&acpi_bus_type, NULL, &arg, typec_port_match);
->  
->  	/*
-> @@ -74,5 +77,6 @@ int typec_link_ports(struct typec_port *con)
->  
->  void typec_unlink_ports(struct typec_port *con)
->  {
-> -	component_master_del(&con->dev, &typec_aggregate_ops);
-> +	if (has_acpi_companion(&con->dev))
-> +		component_master_del(&con->dev, &typec_aggregate_ops);
->  }
-> -- 
-> 2.34.1
+> +		if (ret != 0 && ret != PAGE_SIZE * sio->pages) {
+> +			/*
+> +			 * In the case of swap-over-nfs, this can be a
+> +			 * temporary failure if the system has limited
+> +			 * memory for allocating transmit buffers.
+> +			 * Mark the page dirty and avoid
+> +			 * folio_rotate_reclaimable but rate-limit the
+> +			 * messages but do not flag PageError like
+> +			 * the normal direct-to-bio case as it could
+> +			 * be temporary.
+> +			 */
+> +			set_page_dirty(page);
+> +			ClearPageReclaim(page);
+> +			pr_err_ratelimited("Write error %ld on dio swapfile (%llu)\n",
+> +					   ret, page_file_offset(page));
+> +		} else
+> +			count_vm_event(PSWPOUT);
 
--- 
-heikki
+I'd rather check for the error condition ones and have separate loops
+forthe success vs error cases instead of checking the condition again
+and again.
+
+Otherwise looks good:
+
+Reviewed-by: Christoph Hellwig <hch@lst.de>

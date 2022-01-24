@@ -2,40 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E40A4499ED7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27AD949A0CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838177AbiAXWqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:46:02 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51830 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457169AbiAXVlH (ORCPT
+        id S1847670AbiAXXUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:20:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37632 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1584635AbiAXWVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:41:07 -0500
+        Mon, 24 Jan 2022 17:21:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD81C0424F8;
+        Mon, 24 Jan 2022 12:52:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1AB1BB811FB;
-        Mon, 24 Jan 2022 21:41:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47E15C340E4;
-        Mon, 24 Jan 2022 21:41:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6470B811FB;
+        Mon, 24 Jan 2022 20:52:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3EB3C340E5;
+        Mon, 24 Jan 2022 20:52:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060463;
-        bh=YNh9wod2Ccya1/N3xPQytCYqAj6iSH52glEdm7TViB4=;
+        s=korg; t=1643057553;
+        bh=uKxrKBwurW6KlaBqJxOapnKslZue1woeqqPggQ2Rh0I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XgvRhUR/va+inSAMOPmwaZLalqWdXKJcQSDtl5uWgoUN2QM0zUxdxA0wrTze1eCbN
-         paNICceVD8txxd+jNUsmu+cBNf3KHA1muH+Wf1keq04Zr1Sjuwq/rBRr3CPRwX5gS0
-         j0yvixULX8tTIHYQohF/YR/Bviylo48iyGVkUgnE=
+        b=eFckwEfGnTpzRR2yX9uMNtL9rU79ozIQcwPMdEhuBBXdbM2mjDPxyJvZuSkJ53+rc
+         pJdPOkw0gFNnPLpX4gacFWPFR+vQ0xciMItDgvpHDYgs70nYl1f3CNiGPOB9tx6/Z0
+         q8+WWUsSt+D/pv/dRanOCwpuEdjkcfRdksLD+DwA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Subject: [PATCH 5.16 0957/1039] f2fs: fix to reserve space for IO align feature
+        stable@vger.kernel.org, Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 829/846] net: mscc: ocelot: dont let phylink re-enable TX PAUSE on the NPI port
 Date:   Mon, 24 Jan 2022 19:45:46 +0100
-Message-Id: <20220124184157.460240113@linuxfoundation.org>
+Message-Id: <20220124184129.502096589@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -44,155 +50,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Yu <chao@kernel.org>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-commit 300a842937fbcfb5a189cea9ba15374fdb0b5c6b upstream.
+commit 33cb0ff30cff104e753f7882c99e54cf67ea7903 upstream.
 
-https://bugzilla.kernel.org/show_bug.cgi?id=204137
+Since commit b39648079db4 ("net: mscc: ocelot: disable flow control on
+NPI interface"), flow control should be disabled on the DSA CPU port
+when used in NPI mode.
 
-With below script, we will hit panic during new segment allocation:
+However, the commit blamed in the Fixes: tag below broke this, because
+it allowed felix_phylink_mac_link_up() to overwrite SYS_PAUSE_CFG_PAUSE_ENA
+for the DSA CPU port.
 
-DISK=bingo.img
-MOUNT_DIR=/mnt/f2fs
+This issue became noticeable since the device tree update from commit
+8fcea7be5736 ("arm64: dts: ls1028a: mark internal links between Felix
+and ENETC as capable of flow control").
 
-dd if=/dev/zero of=$DISK bs=1M count=105
-mkfs.f2fe -a 1 -o 19 -t 1 -z 1 -f -q $DISK
+The solution is to check whether this is the currently configured NPI
+port from ocelot_phylink_mac_link_up(), and to not modify the statically
+disabled PAUSE frame transmission if it is.
 
-mount -t f2fs $DISK $MOUNT_DIR -o "noinline_dentry,flush_merge,noextent_cache,mode=lfs,io_bits=7,fsync_mode=strict"
+When the port is configured for lossless mode as opposed to tail drop
+mode, but the link partner (DSA master) doesn't observe the transmitted
+PAUSE frames, the switch termination throughput is much worse, as can be
+seen below.
 
-for (( i = 0; i < 4096; i++ )); do
-	name=`head /dev/urandom | tr -dc A-Za-z0-9 | head -c 10`
-	mkdir $MOUNT_DIR/$name
-done
+Before:
 
-umount $MOUNT_DIR
-rm $DISK
+root@debian:~# iperf3 -c 192.168.100.2
+Connecting to host 192.168.100.2, port 5201
+[  5] local 192.168.100.1 port 37504 connected to 192.168.100.2 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec  28.4 MBytes   238 Mbits/sec  357   22.6 KBytes
+[  5]   1.00-2.00   sec  33.6 MBytes   282 Mbits/sec  426   19.8 KBytes
+[  5]   2.00-3.00   sec  34.0 MBytes   285 Mbits/sec  343   21.2 KBytes
+[  5]   3.00-4.00   sec  32.9 MBytes   276 Mbits/sec  354   22.6 KBytes
+[  5]   4.00-5.00   sec  32.3 MBytes   271 Mbits/sec  297   18.4 KBytes
+^C[  5]   5.00-5.06   sec  2.05 MBytes   270 Mbits/sec   45   19.8 KBytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-5.06   sec   163 MBytes   271 Mbits/sec  1822             sender
+[  5]   0.00-5.06   sec  0.00 Bytes  0.00 bits/sec                  receiver
 
+After:
+
+root@debian:~# iperf3 -c 192.168.100.2
+Connecting to host 192.168.100.2, port 5201
+[  5] local 192.168.100.1 port 49470 connected to 192.168.100.2 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec   112 MBytes   941 Mbits/sec  259    143 KBytes
+[  5]   1.00-2.00   sec   110 MBytes   920 Mbits/sec  329    144 KBytes
+[  5]   2.00-3.00   sec   112 MBytes   936 Mbits/sec  255    144 KBytes
+[  5]   3.00-4.00   sec   110 MBytes   927 Mbits/sec  355    105 KBytes
+[  5]   4.00-5.00   sec   110 MBytes   926 Mbits/sec  350    156 KBytes
+[  5]   5.00-6.00   sec   110 MBytes   925 Mbits/sec  305    148 KBytes
+[  5]   6.00-7.00   sec   110 MBytes   924 Mbits/sec  320    143 KBytes
+[  5]   7.00-8.00   sec   110 MBytes   925 Mbits/sec  273   97.6 KBytes
+[  5]   8.00-9.00   sec   109 MBytes   913 Mbits/sec  299    141 KBytes
+[  5]   9.00-10.00  sec   110 MBytes   922 Mbits/sec  287    146 KBytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-10.00  sec  1.08 GBytes   926 Mbits/sec  3032             sender
+[  5]   0.00-10.00  sec  1.08 GBytes   925 Mbits/sec                  receiver
+
+Fixes: de274be32cb2 ("net: dsa: felix: set TX flow control according to the phylink_mac_link_up resolution")
+Reported-by: Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/f2fs/f2fs.h    |   11 +++++++++++
- fs/f2fs/segment.h |    3 ++-
- fs/f2fs/super.c   |   44 ++++++++++++++++++++++++++++++++++++++++++++
- fs/f2fs/sysfs.c   |    4 +++-
- 4 files changed, 60 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/mscc/ocelot.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -1018,6 +1018,7 @@ struct f2fs_sm_info {
- 	unsigned int segment_count;	/* total # of segments */
- 	unsigned int main_segments;	/* # of segments in main area */
- 	unsigned int reserved_segments;	/* # of reserved segments */
-+	unsigned int additional_reserved_segments;/* reserved segs for IO align feature */
- 	unsigned int ovp_segments;	/* # of overprovision segments */
+--- a/drivers/net/ethernet/mscc/ocelot.c
++++ b/drivers/net/ethernet/mscc/ocelot.c
+@@ -555,7 +555,10 @@ void ocelot_phylink_mac_link_up(struct o
  
- 	/* a threshold to reclaim prefree segments */
-@@ -2198,6 +2199,11 @@ static inline int inc_valid_block_count(
+ 	ocelot_write_rix(ocelot, 0, ANA_POL_FLOWC, port);
  
- 	if (!__allow_reserved_blocks(sbi, inode, true))
- 		avail_user_block_count -= F2FS_OPTION(sbi).root_reserved_blocks;
-+
-+	if (F2FS_IO_ALIGNED(sbi))
-+		avail_user_block_count -= sbi->blocks_per_seg *
-+				SM_I(sbi)->additional_reserved_segments;
-+
- 	if (unlikely(is_sbi_flag_set(sbi, SBI_CP_DISABLED))) {
- 		if (avail_user_block_count > sbi->unusable_block_count)
- 			avail_user_block_count -= sbi->unusable_block_count;
-@@ -2444,6 +2450,11 @@ static inline int inc_valid_node_count(s
+-	ocelot_fields_write(ocelot, port, SYS_PAUSE_CFG_PAUSE_ENA, tx_pause);
++	/* Don't attempt to send PAUSE frames on the NPI port, it's broken */
++	if (port != ocelot->npi)
++		ocelot_fields_write(ocelot, port, SYS_PAUSE_CFG_PAUSE_ENA,
++				    tx_pause);
  
- 	if (!__allow_reserved_blocks(sbi, inode, false))
- 		valid_block_count += F2FS_OPTION(sbi).root_reserved_blocks;
-+
-+	if (F2FS_IO_ALIGNED(sbi))
-+		valid_block_count += sbi->blocks_per_seg *
-+				SM_I(sbi)->additional_reserved_segments;
-+
- 	user_block_count = sbi->user_block_count;
- 	if (unlikely(is_sbi_flag_set(sbi, SBI_CP_DISABLED)))
- 		user_block_count -= sbi->unusable_block_count;
---- a/fs/f2fs/segment.h
-+++ b/fs/f2fs/segment.h
-@@ -538,7 +538,8 @@ static inline unsigned int free_segments
- 
- static inline unsigned int reserved_segments(struct f2fs_sb_info *sbi)
- {
--	return SM_I(sbi)->reserved_segments;
-+	return SM_I(sbi)->reserved_segments +
-+			SM_I(sbi)->additional_reserved_segments;
- }
- 
- static inline unsigned int free_sections(struct f2fs_sb_info *sbi)
---- a/fs/f2fs/super.c
-+++ b/fs/f2fs/super.c
-@@ -328,6 +328,46 @@ static inline void limit_reserve_root(st
- 					   F2FS_OPTION(sbi).s_resgid));
- }
- 
-+static inline int adjust_reserved_segment(struct f2fs_sb_info *sbi)
-+{
-+	unsigned int sec_blks = sbi->blocks_per_seg * sbi->segs_per_sec;
-+	unsigned int avg_vblocks;
-+	unsigned int wanted_reserved_segments;
-+	block_t avail_user_block_count;
-+
-+	if (!F2FS_IO_ALIGNED(sbi))
-+		return 0;
-+
-+	/* average valid block count in section in worst case */
-+	avg_vblocks = sec_blks / F2FS_IO_SIZE(sbi);
-+
-+	/*
-+	 * we need enough free space when migrating one section in worst case
-+	 */
-+	wanted_reserved_segments = (F2FS_IO_SIZE(sbi) / avg_vblocks) *
-+						reserved_segments(sbi);
-+	wanted_reserved_segments -= reserved_segments(sbi);
-+
-+	avail_user_block_count = sbi->user_block_count -
-+				sbi->current_reserved_blocks -
-+				F2FS_OPTION(sbi).root_reserved_blocks;
-+
-+	if (wanted_reserved_segments * sbi->blocks_per_seg >
-+					avail_user_block_count) {
-+		f2fs_err(sbi, "IO align feature can't grab additional reserved segment: %u, available segments: %u",
-+			wanted_reserved_segments,
-+			avail_user_block_count >> sbi->log_blocks_per_seg);
-+		return -ENOSPC;
-+	}
-+
-+	SM_I(sbi)->additional_reserved_segments = wanted_reserved_segments;
-+
-+	f2fs_info(sbi, "IO align feature needs additional reserved segment: %u",
-+			 wanted_reserved_segments);
-+
-+	return 0;
-+}
-+
- static inline void adjust_unusable_cap_perc(struct f2fs_sb_info *sbi)
- {
- 	if (!F2FS_OPTION(sbi).unusable_cap_perc)
-@@ -4180,6 +4220,10 @@ try_onemore:
- 		goto free_nm;
- 	}
- 
-+	err = adjust_reserved_segment(sbi);
-+	if (err)
-+		goto free_nm;
-+
- 	/* For write statistics */
- 	sbi->sectors_written_start = f2fs_get_sectors_written(sbi);
- 
---- a/fs/f2fs/sysfs.c
-+++ b/fs/f2fs/sysfs.c
-@@ -415,7 +415,9 @@ out:
- 	if (a->struct_type == RESERVED_BLOCKS) {
- 		spin_lock(&sbi->stat_lock);
- 		if (t > (unsigned long)(sbi->user_block_count -
--				F2FS_OPTION(sbi).root_reserved_blocks)) {
-+				F2FS_OPTION(sbi).root_reserved_blocks -
-+				sbi->blocks_per_seg *
-+				SM_I(sbi)->additional_reserved_segments)) {
- 			spin_unlock(&sbi->stat_lock);
- 			return -EINVAL;
- 		}
+ 	/* Undo the effects of ocelot_phylink_mac_link_down:
+ 	 * enable MAC module
 
 

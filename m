@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFDBF49AB52
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C20FD49A9B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390240AbiAYEsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 23:48:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
+        id S1321241AbiAYD04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 22:26:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S248027AbiAYDz6 (ORCPT
+        with ESMTP id S1321309AbiAYDR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 22:55:58 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1970C0604CE
+        Mon, 24 Jan 2022 22:17:59 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E9FC0604C2
         for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 15:23:44 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id 192so14144079pfz.3
+Received: by mail-pf1-x42f.google.com with SMTP id 192so14144076pfz.3
         for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 15:23:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cd0cSzbqlGWMFGtUrHF/qt14iy77UQsuXoGWHNi86Ms=;
-        b=iXzmxOcGE9j3Wc5NbiYRAm13F2IIUE3mn+buzoErc0JQmRa5Yp0xnR51eiYjcqIDtw
-         wpo4bMu1RmCWVPVmv8+Kc1ggJtB1TWLM3VMJnhIhm/pB/HUpK5ysLKehT0p5x7pzk2Fe
-         J4Y1+03lCGo60qbL3l86x8B5GSlF1AEZsVQBY=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=BUy1cq/aLQFwACsA66qUZgeTjdc6W6p6YIU+kLy4RXI=;
+        b=HMmVLm5Gk4xktbBAU6t3jLyp2yP/6L4jJnClTexhgIce1axDLwVbmNb9kclYALf+x2
+         0eOP9jYiB5WoTm+5qhwtBJz55pfhYca49Ml8+KCXSU5yP+mC++U9lcHxQUOWDgskC1MN
+         2wN/3QGEDEHBI9JYcXZGv9+GYD1bA3s9SGxz8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cd0cSzbqlGWMFGtUrHF/qt14iy77UQsuXoGWHNi86Ms=;
-        b=3o3p5vulq/q7AZ37rkQkQhCKBjPgKjAFfRwUquShO2VjW/R8CeXRW73/Y0cfoZDD1A
-         EKKijisLqqcRRdBzIqiUOAEheN6VPd4Gi8LvJiLy2X8xqGYhCLrZo08zs98j7n+DHriD
-         BJk49yMUUrXKc4rNPBokECbj+4M1Q+okWCIJPQdGhnffF02OUbxaZuufWFLo3HYhZoia
-         /2OovRoL4viOmnl2ZvQvFXal2bXXDqYPqTTlvLfSz6GMzF+1R9WEeOXT9+R/i3N/WYIg
-         8W4Gw7THLOd7bj49353tCCluAEaMOSTF58Th4fsaUFjwKK/rE6+uy5VMVpNessDw256S
-         d70w==
-X-Gm-Message-State: AOAM532jV6w0jOb9ilHF+JmsXyOGjQSvTDguEcGTKzfyVitmKu7i6ttc
-        IL8g3KReakpeMLwZH97meNwkYw==
-X-Google-Smtp-Source: ABdhPJw4fFZbTHJcKxFlrtgLXJyzrkucrW8728E5WGYpmNw4hkQ8hgTnDIBdZpw0gUd/vvwXPQVEBQ==
-X-Received: by 2002:aa7:92c5:0:b0:4bd:9f44:9562 with SMTP id k5-20020aa792c5000000b004bd9f449562mr16161166pfa.80.1643066624431;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=BUy1cq/aLQFwACsA66qUZgeTjdc6W6p6YIU+kLy4RXI=;
+        b=3Az2jDqLMt4Z1Wu5CuzrRTofqOdzaTOg0y4Awj4e0EX2zHVdTEIo7sIbtv5Swq5M6v
+         x+HOsBOypI5Q0+KoI9p2MzEfCypH5JNxNNy/yOdENB/KuiiQniDcNoMeY8l0L7JlYKUf
+         6sAqiSjjw2vk1CB/wF/f7jlPm3jxQstuF3TZuAt7KkVp0vf0kfpGvYKee9xPCWhKLkrl
+         1hqp10NImHsPqzulbXMaNk3V9axSjoVrhYMKOeeMj0+czqgZ2UstXjrtdsXHA5HPT8t/
+         Xts7t4WaUs6ej1YWlA4Qam0RGl1SccMvlV9AIklQLlQ1nCqoiy3GGnNuSJYsJad6jnIQ
+         20tw==
+X-Gm-Message-State: AOAM532We4JYp6gPHiRMAF/fhsvCcKcO3fbrygjo+RfpH/udJdGQtEMd
+        TEvTHq2fmg1GipYpVtXAyKkgIg==
+X-Google-Smtp-Source: ABdhPJzJq/ZflgOy7noX+l1C7fkXGtfuvMQKoRWncNP/9c4/r0pI+i3lo/9e35lzQWKaf5+WOauong==
+X-Received: by 2002:a63:2b01:: with SMTP id r1mr6103116pgr.182.1643066624239;
         Mon, 24 Jan 2022 15:23:44 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f13sm17888522pfc.70.2022.01.24.15.23.43
+        by smtp.gmail.com with ESMTPSA id b4sm17120790pfl.106.2022.01.24.15.23.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 24 Jan 2022 15:23:44 -0800 (PST)
 From:   Kees Cook <keescook@chromium.org>
@@ -56,49 +56,174 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Keith Busch <kbusch@kernel.org>, Len Baker <len.baker@gmx.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v2 0/2] overflow: Implement size_t saturating arithmetic helpers
-Date:   Mon, 24 Jan 2022 15:23:40 -0800
-Message-Id: <20220124232342.3113350-1-keescook@chromium.org>
+Subject: [PATCH v2 1/2] test_overflow: Regularize test reporting output
+Date:   Mon, 24 Jan 2022 15:23:41 -0800
+Message-Id: <20220124232342.3113350-2-keescook@chromium.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220124232342.3113350-1-keescook@chromium.org>
+References: <20220124232342.3113350-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1126; h=from:subject; bh=3g98AxTuMJo50x2uAnHNuJXT9s3Olm5uv7WW3MFAli4=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh7zT98tWGoLQLp9kMHgyuIUDQVdNudI1AkfPnI0p0 /G9+4xOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYe80/QAKCRCJcvTf3G3AJvBpEA CfqRPP4L5Bp3r5ZTKtK+CpVvr8EwkcICcXyaYUGCVpWMytRO3dk3Kqzc4Vibs/IA9TK9WtC9nYd8oy 8jYkMi/WGjLsy6fOuVvm3nAuy1c7DPP8anXkPhw+haGKUhE3iHZ6kGC2Qrdb04ojMGklAMax+H4gMO 5ua1ZW6wBTll+OAD7XbhfIaKeCmk3EBzgnUKsKksV0J0dmzxfdaRpNa6mGwDAaaFcGuS9z/2LeHNzD X0DqkJ3OKMUazeEGpTAOjcz0D+op+nf7uK8LM21tRaznrV5t6ZK3k8rDZrUA291/Jbds3OZAG859gd kJUyZK2O8yjieqaB4Oiskec2uZMDu2oXktCGhOmKenkmEqAlAMK4b2jF3tL4zhMrB+pVA7VvrzTbJ/ AhgbO4amaPz3hPiWMVv0jECq6cOoLHRMs70jbt1HwGzXKUQQwoUSoZzujXu+5LvwdFb0fOIXSkS4iB AC1cn/fyc34xRFO29zyODL71srcfsSNFvnX4lE8DVwxv5jMqhyiKFCZ6dvW7+xTmd/zTXPooeI2vvi wIksZWjkd1EgepfFIPTL8nXy+HJRLzVZbTsrlzJ3BGjGBOMJNpsApkm8Nn8Dy/mXm7LREAaMHxkPvS pBuonMdJICA3H8Rf3sVDDJCXyV8B7F2vxzGzgJ1vph3F7BHF6vC2PPPBZydg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5607; h=from:subject; bh=J3Wsxeg4JzBB1opD2cR25s34lPwyOQCvqPa3Egl9H+E=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh7zT96q6+BfVriBVKq/ZNrGoNFi9S0asAOL9Kgk/1 VRdFiCeJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYe80/QAKCRCJcvTf3G3AJrzNEA CaRpSkCzT5WizfZbk+asSaEUEu4QhmQO7+JkP1dJubjfRmx4SgGUcq3ibh0ZLFAS2PqF2O6kb5vWaS g+kPJWdYWXDGhicKtiDgIc6266pep3/W5XRYgtoaI8vdzstVWNF3LEmw9YtTq04g9PEJ4kHyqJ5xii 3vhCip9Be/SY4UgfDtu9mSFrWTav91Z6qoNOYqmp/RiVsq9xP5ymUteR8aUfzIe/KPO6QNO+zGPh7i BWZckReajeP1l2Ffc83s8Ao7rSdOXERPxjbXxGkE7EDChDPzA2D16pQFGY4acKFJ/STYwnoVs+e5oG LhTCJf+zODcSDrXRPtFY0PVEiWhI0IMKXhhE2uw9Tw2xidIMRxhSzQUWwIXdJ2dYqOgPUSwWx1Yfqe Ezfjl9nXwUgas7bhyy+9dX6orfJx0Y+YVo/f64TpEpWBBlk6Ly9HMhSMoqeXHjwwHS1CZQm6lk49Qc w9Vrms1Z8uyqa6PEeWN2i3qzKvmvG7UBtCf/ML8Sf2Ue+H4uPCMcr4mxmr+r92ZDuaGsSYceEOlSwq Nhle/GEVIXy7HIOBEkHL/67h6FT9dp0tiRSIAlfVAjeEKwNu+Zw3zCuGqVgd/0RBmwd/vQCKA5Tsrk 7pj0u3jxpaN2caO4M/xN65lxaAJs1xG3xJFDl3VY8NUTd5sR+ykFgk0iSN0w==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Report test run summaries more regularly, so it's easier to understand
+the output:
+- Remove noisy "ok" reports for shift and allocator tests.
+- Reorganize per-type output to the end of each type's tests.
+- Replace redundant vmalloc tests with __vmalloc so that __GFP_NO_WARN
+  can be used to keep the expected failure warnings out of dmesg,
+  similar to commit 8e060c21ae2c ("lib/test_overflow.c: avoid tainting
+  the kernel and fix wrap size")
 
-While doing more array_size() scans on the kernel, and reviewing recent[1]
-struct_size() work[2], it became clear we needed helpers to perform
-composed saturating adds and multiplies. This creates those helpers and
-updates the self tests to check them.
+Resulting output:
 
-v1: https://lore.kernel.org/lkml/20210920180853.1825195-1-keescook@chromium.org/
-v2:
- - use static inlines instead of macros (Rasmus)
- - undef local helpers defs in selftest (Rasmus)
- - Make sure to keep saturation for size_sub() arguments
- - update selftests for size_sub() behavior
- - Add reviews
+  test_overflow: 18 u8 arithmetic tests finished
+  test_overflow: 19 s8 arithmetic tests finished
+  test_overflow: 17 u16 arithmetic tests finished
+  test_overflow: 17 s16 arithmetic tests finished
+  test_overflow: 17 u32 arithmetic tests finished
+  test_overflow: 17 s32 arithmetic tests finished
+  test_overflow: 17 u64 arithmetic tests finished
+  test_overflow: 21 s64 arithmetic tests finished
+  test_overflow: 113 shift tests finished
+  test_overflow: 17 overflow size helper tests finished
+  test_overflow: 11 allocation overflow tests finished
+  test_overflow: all tests passed
 
-Thanks,
+Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Link: https://lore.kernel.org/all/eb6d02ae-e2ed-e7bd-c700-8a6d004d84ce@rasmusvillemoes.dk/
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Link: https://lore.kernel.org/all/CAKwvOdnYYa+72VhtJ4ug=SJVFn7w+n7Th+hKYE87BRDt4hvqOg@mail.gmail.com/
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ lib/test_overflow.c | 54 +++++++++++++++++++++++++--------------------
+ 1 file changed, 30 insertions(+), 24 deletions(-)
 
--Kees
-
-[1] https://lore.kernel.org/linux-hardening/202201241213.82E7D9F598@keescook/
-[2] https://lore.kernel.org/lkml/?q=%22open-coded+arithmetic%22
-
-Kees Cook (2):
-  test_overflow: Regularize test reporting output
-  overflow: Implement size_t saturating arithmetic helpers
-
- Documentation/process/deprecated.rst |  20 +++-
- include/linux/overflow.h             | 110 +++++++++++--------
- lib/test_overflow.c                  | 152 ++++++++++++++++++++++-----
- 3 files changed, 214 insertions(+), 68 deletions(-)
-
+diff --git a/lib/test_overflow.c b/lib/test_overflow.c
+index 7a4b6f6c5473..cea37ae82615 100644
+--- a/lib/test_overflow.c
++++ b/lib/test_overflow.c
+@@ -252,10 +252,10 @@ static int __init test_ ## t ## _overflow(void) {			\
+ 	int err = 0;							\
+ 	unsigned i;							\
+ 									\
+-	pr_info("%-3s: %zu arithmetic tests\n", #t,			\
+-		ARRAY_SIZE(t ## _tests));				\
+ 	for (i = 0; i < ARRAY_SIZE(t ## _tests); ++i)			\
+ 		err |= do_test_ ## t(&t ## _tests[i]);			\
++	pr_info("%zu %s arithmetic tests finished\n",			\
++		ARRAY_SIZE(t ## _tests), #t);				\
+ 	return err;							\
+ }
+ 
+@@ -291,6 +291,7 @@ static int __init test_overflow_calculation(void)
+ static int __init test_overflow_shift(void)
+ {
+ 	int err = 0;
++	int count = 0;
+ 
+ /* Args are: value, shift, type, expected result, overflow expected */
+ #define TEST_ONE_SHIFT(a, s, t, expect, of) ({				\
+@@ -313,9 +314,7 @@ static int __init test_overflow_shift(void)
+ 			pr_warn("got %llu\n", (u64)__d);		\
+ 		__failed = 1;						\
+ 	}								\
+-	if (!__failed)							\
+-		pr_info("ok: (%s)(%s << %s) == %s\n", #t, #a, #s,	\
+-			of ? "overflow" : #expect);			\
++	count++;							\
+ 	__failed;							\
+ })
+ 
+@@ -479,6 +478,10 @@ static int __init test_overflow_shift(void)
+ 	err |= TEST_ONE_SHIFT(0, 31, s32, 0, false);
+ 	err |= TEST_ONE_SHIFT(0, 63, s64, 0, false);
+ 
++	pr_info("%d shift tests finished\n", count);
++
++#undef TEST_ONE_SHIFT
++
+ 	return err;
+ }
+ 
+@@ -530,7 +533,6 @@ static int __init test_ ## func (void *arg)				\
+ 		free ## want_arg (free_func, arg, ptr);			\
+ 		return 1;						\
+ 	}								\
+-	pr_info(#func " detected saturation\n");			\
+ 	return 0;							\
+ }
+ 
+@@ -544,10 +546,7 @@ DEFINE_TEST_ALLOC(kmalloc,	 kfree,	     0, 1, 0);
+ DEFINE_TEST_ALLOC(kmalloc_node,	 kfree,	     0, 1, 1);
+ DEFINE_TEST_ALLOC(kzalloc,	 kfree,	     0, 1, 0);
+ DEFINE_TEST_ALLOC(kzalloc_node,  kfree,	     0, 1, 1);
+-DEFINE_TEST_ALLOC(vmalloc,	 vfree,	     0, 0, 0);
+-DEFINE_TEST_ALLOC(vmalloc_node,  vfree,	     0, 0, 1);
+-DEFINE_TEST_ALLOC(vzalloc,	 vfree,	     0, 0, 0);
+-DEFINE_TEST_ALLOC(vzalloc_node,  vfree,	     0, 0, 1);
++DEFINE_TEST_ALLOC(__vmalloc,	 vfree,	     0, 1, 0);
+ DEFINE_TEST_ALLOC(kvmalloc,	 kvfree,     0, 1, 0);
+ DEFINE_TEST_ALLOC(kvmalloc_node, kvfree,     0, 1, 1);
+ DEFINE_TEST_ALLOC(kvzalloc,	 kvfree,     0, 1, 0);
+@@ -559,8 +558,14 @@ static int __init test_overflow_allocation(void)
+ {
+ 	const char device_name[] = "overflow-test";
+ 	struct device *dev;
++	int count = 0;
+ 	int err = 0;
+ 
++#define check_allocation_overflow(alloc)	({	\
++	count++;					\
++	test_ ## alloc(dev);				\
++})
++
+ 	/* Create dummy device for devm_kmalloc()-family tests. */
+ 	dev = root_device_register(device_name);
+ 	if (IS_ERR(dev)) {
+@@ -568,23 +573,24 @@ static int __init test_overflow_allocation(void)
+ 		return 1;
+ 	}
+ 
+-	err |= test_kmalloc(NULL);
+-	err |= test_kmalloc_node(NULL);
+-	err |= test_kzalloc(NULL);
+-	err |= test_kzalloc_node(NULL);
+-	err |= test_kvmalloc(NULL);
+-	err |= test_kvmalloc_node(NULL);
+-	err |= test_kvzalloc(NULL);
+-	err |= test_kvzalloc_node(NULL);
+-	err |= test_vmalloc(NULL);
+-	err |= test_vmalloc_node(NULL);
+-	err |= test_vzalloc(NULL);
+-	err |= test_vzalloc_node(NULL);
+-	err |= test_devm_kmalloc(dev);
+-	err |= test_devm_kzalloc(dev);
++	err |= check_allocation_overflow(kmalloc);
++	err |= check_allocation_overflow(kmalloc_node);
++	err |= check_allocation_overflow(kzalloc);
++	err |= check_allocation_overflow(kzalloc_node);
++	err |= check_allocation_overflow(__vmalloc);
++	err |= check_allocation_overflow(kvmalloc);
++	err |= check_allocation_overflow(kvmalloc_node);
++	err |= check_allocation_overflow(kvzalloc);
++	err |= check_allocation_overflow(kvzalloc_node);
++	err |= check_allocation_overflow(devm_kmalloc);
++	err |= check_allocation_overflow(devm_kzalloc);
+ 
+ 	device_unregister(dev);
+ 
++	pr_info("%d allocation overflow tests finished\n", count);
++
++#undef check_allocation_overflow
++
+ 	return err;
+ }
+ 
 -- 
 2.30.2
 

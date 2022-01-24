@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB9F499D87
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0A1499A56
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:54:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1583366AbiAXWYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:24:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442669AbiAXVZK (ORCPT
+        id S1457918AbiAXVmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:42:31 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59474 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377237AbiAXVHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:25:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266F1C0A1CEE;
-        Mon, 24 Jan 2022 12:18:01 -0800 (PST)
+        Mon, 24 Jan 2022 16:07:40 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3EBAB81255;
-        Mon, 24 Jan 2022 20:17:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08814C36AE7;
-        Mon, 24 Jan 2022 20:17:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C37BB81142;
+        Mon, 24 Jan 2022 21:07:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC9C6C340E5;
+        Mon, 24 Jan 2022 21:07:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055478;
-        bh=fntRpshkPH1kBf19IZiQRtlhXjIeJ4hCEiSlfehiMwY=;
+        s=korg; t=1643058457;
+        bh=ar8hptmGNbDlKZ4ZidwdBp6iuwtu7qWVz0456y+JxaY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JI9WtABl8eZx5lJDdtvI5wsjER8U264XrPbGfeHPa8hWHjL8Ua4DMhoQejmvOWPKg
-         +PdRXeBL9M1E3VntH/BNX6amYh5HuiJ1LUWkhMMbqUBxKowFUHjE5qln0bzMwgXRyP
-         47uf2u4KboCuzKm3DzTaXZHGwlrmIoOKoNR+xxlg=
+        b=QPT+G7vTFHZVX3Cpxc0Vmky8hSYjjZ/HPbjGn2oLNc9tJSnxXSEzNMNxsUu1sR01/
+         rn8EJRLLis4SRfwjiRpB2jiEOwGrnt0AoUD3u+yuT8lmpYor/qpqxbWkt9z9h5V7Td
+         OIAn0LYSKlVaIrirgsGIQLO7v/WTovtAOo73/aco=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, Sricharan R <sricharan@codeaurora.org>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 165/846] media: si470x-i2c: fix possible memory leak in si470x_i2c_probe()
-Date:   Mon, 24 Jan 2022 19:34:42 +0100
-Message-Id: <20220124184106.668730319@linuxfoundation.org>
+Subject: [PATCH 5.16 0294/1039] arm64: dts: qcom: ipq6018: Fix gpio-ranges property
+Date:   Mon, 24 Jan 2022 19:34:43 +0100
+Message-Id: <20220124184135.165730543@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,60 +48,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Baruch Siach <baruch@tkos.co.il>
 
-[ Upstream commit ef054e345ed8c79ce1121a3599b5a2dfd78e57a0 ]
+[ Upstream commit 72cb4c48a46a7cfa58eb5842c0d3672ddd5bd9ad ]
 
-n the 'radio->hdl.error' error handling, ctrl handler allocated by
-v4l2_ctrl_new_std() does not released, and caused memory leak as
-follows:
+There must be three parameters in gpio-ranges property. Fixes this not
+very helpful error message:
 
-unreferenced object 0xffff888033d54200 (size 256):
-  comm "i2c-si470x-19", pid 909, jiffies 4294914203 (age 8.072s)
-  hex dump (first 32 bytes):
-    e8 69 11 03 80 88 ff ff 00 46 d5 33 80 88 ff ff  .i.......F.3....
-    10 42 d5 33 80 88 ff ff 10 42 d5 33 80 88 ff ff  .B.3.....B.3....
-  backtrace:
-    [<00000000086bd4ed>] __kmalloc_node+0x1eb/0x360
-    [<00000000bdb68871>] kvmalloc_node+0x66/0x120
-    [<00000000fac74e4c>] v4l2_ctrl_new+0x7b9/0x1c60 [videodev]
-    [<00000000693bf940>] v4l2_ctrl_new_std+0x19b/0x270 [videodev]
-    [<00000000c0cb91bc>] si470x_i2c_probe+0x2d3/0x9a0 [radio_si470x_i2c]
-    [<0000000056a6f01f>] i2c_device_probe+0x4d8/0xbe0
+  OF: /soc/pinctrl@1000000: (null) = 3 found 3
 
-Fix the error handling path to avoid memory leak.
-
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Fixes: 8c081b6f9a9b ("media: radio: Critical v4l2 registration...")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Fixes: 1e8277854b49 ("arm64: dts: Add ipq6018 SoC and CP01 board support")
+Cc: Sricharan R <sricharan@codeaurora.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/8a744cfd96aff5754bfdcf7298d208ddca5b319a.1638862030.git.baruch@tkos.co.il
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/radio/si470x/radio-si470x-i2c.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/ipq6018.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/radio/si470x/radio-si470x-i2c.c b/drivers/media/radio/si470x/radio-si470x-i2c.c
-index a972c0705ac79..76d39e2e87706 100644
---- a/drivers/media/radio/si470x/radio-si470x-i2c.c
-+++ b/drivers/media/radio/si470x/radio-si470x-i2c.c
-@@ -368,7 +368,7 @@ static int si470x_i2c_probe(struct i2c_client *client)
- 	if (radio->hdl.error) {
- 		retval = radio->hdl.error;
- 		dev_err(&client->dev, "couldn't register control\n");
--		goto err_dev;
-+		goto err_all;
- 	}
+diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+index 933b56103a464..66ec5615651d4 100644
+--- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
++++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+@@ -220,7 +220,7 @@
+ 			interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
+ 			gpio-controller;
+ 			#gpio-cells = <2>;
+-			gpio-ranges = <&tlmm 0 80>;
++			gpio-ranges = <&tlmm 0 0 80>;
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
  
- 	/* video device initialization */
-@@ -463,7 +463,6 @@ static int si470x_i2c_probe(struct i2c_client *client)
- 	return 0;
- err_all:
- 	v4l2_ctrl_handler_free(&radio->hdl);
--err_dev:
- 	v4l2_device_unregister(&radio->v4l2_dev);
- err_initial:
- 	return retval;
 -- 
 2.34.1
 

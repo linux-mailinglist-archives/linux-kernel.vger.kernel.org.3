@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0873A499B38
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:00:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 401F44994C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:06:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574831AbiAXVua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:50:30 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35284 "EHLO
+        id S1390002AbiAXUon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:44:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:51508 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448850AbiAXVN7 (ORCPT
+        with ESMTP id S1382495AbiAXUZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:13:59 -0500
+        Mon, 24 Jan 2022 15:25:49 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9713F61469;
-        Mon, 24 Jan 2022 21:13:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CE87C340E5;
-        Mon, 24 Jan 2022 21:13:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D928A61382;
+        Mon, 24 Jan 2022 20:25:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B210AC340E5;
+        Mon, 24 Jan 2022 20:25:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058838;
-        bh=4Xtodu3zTAwAMpuKMCIK/bIZ2u4C1XrKH2z0fYjbXBA=;
+        s=korg; t=1643055948;
+        bh=7DICeP7dnUYHT+NLnmghG3OMqLh6wkc1OgzolyJEbeE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qchwmpts16Qt1u53wOHHjfgdjcwZj1Vyi86ugZaUYws1lM2gaWW/i8K31ZUacDLij
-         /7/gX8EKsjSRWOsu0iK/0mYD21ecErM2yfOGpXkh21vhp7YZzqgTqGq1gSZmjhNkn8
-         ZBso9g0lKXt1lM5LTP2qnqf9/gIKazhIG4nso/TQ=
+        b=VtEk6vC0nHnHTLs4S2Dgr230I0XnI6M1DdV9LoCJT+V33mY4T0S9+hfoRXE5hrhKq
+         9hV5QtczVxXcqgcNanL5qWdMMdyGLZ2Q18GKn3zuSESM5K33sRaAT4nTPS+U9hiyyl
+         IciIX0hiMocl7mJYaj9JF/miJGf2MZL2LVv2VlKI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>,
-        Geliang Tang <geliang.tang@suse.com>
-Subject: [PATCH 5.16 0419/1039] mptcp: fix opt size when sending DSS + MP_FAIL
-Date:   Mon, 24 Jan 2022 19:36:48 +0100
-Message-Id: <20220124184139.391651474@linuxfoundation.org>
+        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 292/846] software node: fix wrong node passed to find nargs_prop
+Date:   Mon, 24 Jan 2022 19:36:49 +0100
+Message-Id: <20220124184111.003587646@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,51 +50,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthieu Baerts <matthieu.baerts@tessares.net>
+From: Clément Léger <clement.leger@bootlin.com>
 
-[ Upstream commit 04fac2cae9422a3401c172571afbcfdd58fa5c7e ]
+[ Upstream commit c5fc5ba8b6b7bebc05e45036a33405b4c5036c2f ]
 
-When these two options had to be sent -- which is not common -- the DSS
-size was not being taken into account in the remaining size.
+nargs_prop refers to a property located in the reference that is found
+within the nargs property. Use the correct reference node in call to
+property_entry_read_int_array() to retrieve the correct nargs value.
 
-Additionally in this situation, the reported size was only the one of
-the MP_FAIL which can cause issue if at the end, we need to write more
-in the TCP options than previously said.
-
-Here we use a dedicated variable for MP_FAIL size to keep the
-WARN_ON_ONCE() just after.
-
-Fixes: c25aeb4e0953 ("mptcp: MP_FAIL suboption sending")
-Acked-and-tested-by: Geliang Tang <geliang.tang@suse.com>
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: b06184acf751 ("software node: Add software_node_get_reference_args()")
+Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Daniel Scally <djrscally@gmail.com>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mptcp/options.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/base/swnode.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/mptcp/options.c b/net/mptcp/options.c
-index fe98e4f475baa..96c6efdd48bcc 100644
---- a/net/mptcp/options.c
-+++ b/net/mptcp/options.c
-@@ -821,10 +821,13 @@ bool mptcp_established_options(struct sock *sk, struct sk_buff *skb,
- 	if (mptcp_established_options_mp(sk, skb, snd_data_fin, &opt_size, remaining, opts))
- 		ret = true;
- 	else if (mptcp_established_options_dss(sk, skb, snd_data_fin, &opt_size, remaining, opts)) {
-+		unsigned int mp_fail_size;
-+
- 		ret = true;
--		if (mptcp_established_options_mp_fail(sk, &opt_size, remaining, opts)) {
--			*size += opt_size;
--			remaining -= opt_size;
-+		if (mptcp_established_options_mp_fail(sk, &mp_fail_size,
-+						      remaining - opt_size, opts)) {
-+			*size += opt_size + mp_fail_size;
-+			remaining -= opt_size - mp_fail_size;
- 			return true;
- 		}
- 	}
+diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
+index c46f6a8e14d23..3ba1232ce8451 100644
+--- a/drivers/base/swnode.c
++++ b/drivers/base/swnode.c
+@@ -535,7 +535,7 @@ software_node_get_reference_args(const struct fwnode_handle *fwnode,
+ 		return -ENOENT;
+ 
+ 	if (nargs_prop) {
+-		error = property_entry_read_int_array(swnode->node->properties,
++		error = property_entry_read_int_array(ref->node->properties,
+ 						      nargs_prop, sizeof(u32),
+ 						      &nargs_prop_val, 1);
+ 		if (error)
 -- 
 2.34.1
 

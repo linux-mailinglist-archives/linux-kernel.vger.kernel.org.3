@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0462049A41D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 040B549A71C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:36:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2369377AbiAYABi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:01:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1582577AbiAXXSL (ORCPT
+        id S1346157AbiAYCdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:33:36 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35530 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356240AbiAXU3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:18:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F57DC07E2B6;
-        Mon, 24 Jan 2022 11:47:49 -0800 (PST)
+        Mon, 24 Jan 2022 15:29:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2921AB811FB;
-        Mon, 24 Jan 2022 19:47:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB6CCC340E5;
-        Mon, 24 Jan 2022 19:47:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33606B81257;
+        Mon, 24 Jan 2022 20:29:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 677C2C340E5;
+        Mon, 24 Jan 2022 20:29:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053666;
-        bh=NIojz0mwTHuakUmqbFqSQLDvgevWrG2IYU8Sb4U4LNI=;
+        s=korg; t=1643056150;
+        bh=QcleD3Xl2DWJeZNgOOnzuLP8XHdGsxum61Y2eVgQT0k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TlTs+cbkx0l4wm+GjDh3NlYKU/RiGbYxErmGbmAiIify5E8oTrJXNSuUvPFgJJpkp
-         EPlTYYUI2XiOKxPuuG6pVDOmT2gOjJB27WzSxvIhFVGWSpSez5xIxMxWOUagjXjN2i
-         HZ1uPpSIj0JuIGrRM+rj+yuGQwOvh5lpW6uwp9Fg=
+        b=npKK6PbX2NbsTAQH3L6aXsUBb1QjD4i7Mqx9YoK1K0P5hw+gpwm4wbIjHNbSNSwGz
+         VSbAYHIaflidNSnmobq13Z/lIS6om2pZtwmcO994MNU2T29W88qVmVXbcnQseV/OYd
+         pajJaiw8u1OMv3P+xsBUSAx1QnNB1R9UyKuVejZY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hou Tao <houtao1@huawei.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
+        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
+        Guoqing Jiang <Guoqing.Jiang@linux.dev>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 137/563] bpf: Disallow BPF_LOG_KERNEL log level for bpf(BPF_BTF_LOAD)
-Date:   Mon, 24 Jan 2022 19:38:22 +0100
-Message-Id: <20220124184029.137867989@linuxfoundation.org>
+Subject: [PATCH 5.15 387/846] RDMA/rtrs-clt: Fix the initial value of min_latency
+Date:   Mon, 24 Jan 2022 19:38:24 +0100
+Message-Id: <20220124184114.287284065@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,79 +47,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hou Tao <houtao1@huawei.com>
+From: Jack Wang <jinpu.wang@ionos.com>
 
-[ Upstream commit 866de407444398bc8140ea70de1dba5f91cc34ac ]
+[ Upstream commit 925cac6358677d3d64f9b25f205eeb3d31c9f7f8 ]
 
-BPF_LOG_KERNEL is only used internally, so disallow bpf_btf_load()
-to set log level as BPF_LOG_KERNEL. The same checking has already
-been done in bpf_check(), so factor out a helper to check the
-validity of log attributes and use it in both places.
+The type of min_latency is ktime_t, so use KTIME_MAX to initialize the
+initial value.
 
-Fixes: 8580ac9404f6 ("bpf: Process in-kernel BTF")
-Signed-off-by: Hou Tao <houtao1@huawei.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Yonghong Song <yhs@fb.com>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Link: https://lore.kernel.org/bpf/20211203053001.740945-1-houtao1@huawei.com
+Fixes: dc3b66a0ce70 ("RDMA/rtrs-clt: Add a minimum latency multipath policy")
+Link: https://lore.kernel.org/r/20211124081040.19533-1-jinpu.wang@ionos.com
+Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
+Reviewed-by: Guoqing Jiang <Guoqing.Jiang@linux.dev>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/bpf_verifier.h | 7 +++++++
- kernel/bpf/btf.c             | 3 +--
- kernel/bpf/verifier.c        | 6 +++---
- 3 files changed, 11 insertions(+), 5 deletions(-)
+ drivers/infiniband/ulp/rtrs/rtrs-clt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 6e330ff2f28df..391bc1480dfb1 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -367,6 +367,13 @@ static inline bool bpf_verifier_log_needed(const struct bpf_verifier_log *log)
- 		 log->level == BPF_LOG_KERNEL);
- }
+diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+index bc8824b4ee0d4..55ebe01ec9951 100644
+--- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
++++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+@@ -867,7 +867,7 @@ static struct rtrs_clt_sess *get_next_path_min_latency(struct path_it *it)
+ 	struct rtrs_clt_sess *min_path = NULL;
+ 	struct rtrs_clt *clt = it->clt;
+ 	struct rtrs_clt_sess *sess;
+-	ktime_t min_latency = INT_MAX;
++	ktime_t min_latency = KTIME_MAX;
+ 	ktime_t latency;
  
-+static inline bool
-+bpf_verifier_log_attr_valid(const struct bpf_verifier_log *log)
-+{
-+	return log->len_total >= 128 && log->len_total <= UINT_MAX >> 2 &&
-+	       log->level && log->ubuf && !(log->level & ~BPF_LOG_MASK);
-+}
-+
- #define BPF_MAX_SUBPROGS 256
- 
- struct bpf_subprog_info {
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 72534a6f4b96e..dc497eaf22663 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -4135,8 +4135,7 @@ static struct btf *btf_parse(void __user *btf_data, u32 btf_data_size,
- 		log->len_total = log_size;
- 
- 		/* log attributes have to be sane */
--		if (log->len_total < 128 || log->len_total > UINT_MAX >> 2 ||
--		    !log->level || !log->ubuf) {
-+		if (!bpf_verifier_log_attr_valid(log)) {
- 			err = -EINVAL;
- 			goto errout;
- 		}
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b43c9de34a2c2..c623c3e549210 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -12349,11 +12349,11 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
- 		log->ubuf = (char __user *) (unsigned long) attr->log_buf;
- 		log->len_total = attr->log_size;
- 
--		ret = -EINVAL;
- 		/* log attributes have to be sane */
--		if (log->len_total < 128 || log->len_total > UINT_MAX >> 2 ||
--		    !log->level || !log->ubuf || log->level & ~BPF_LOG_MASK)
-+		if (!bpf_verifier_log_attr_valid(log)) {
-+			ret = -EINVAL;
- 			goto err_unlock;
-+		}
- 	}
- 
- 	if (IS_ERR(btf_vmlinux)) {
+ 	list_for_each_entry_rcu(sess, &clt->paths_list, s.entry) {
 -- 
 2.34.1
 

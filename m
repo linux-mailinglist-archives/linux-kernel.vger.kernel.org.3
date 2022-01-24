@@ -2,127 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B38264983B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:37:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 873094983AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243242AbiAXPhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 10:37:38 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:43756 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239036AbiAXPhg (ORCPT
+        id S238758AbiAXPhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 10:37:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53020 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232541AbiAXPhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 10:37:36 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20OFajLq114967;
-        Mon, 24 Jan 2022 09:36:45 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1643038605;
-        bh=JQ59ooByHFX9y5XTd/tJSN1GuEDWKpebJJU65HBNeBA=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=bZrTz87D9CVyTjjwWqE31ni4e0RQQmQHVHzz4fImkPqdRK/2JeGpqIq2MnPMaqF50
-         piFl3zlbu0kJD8Pv2Fk+ZscwatRJXdGokLtwvZ0+FeOXI/2sJ64NMi4N132H/Wx7I0
-         +UCP4YjnqHGj+RtTaSiLDhLYUtfRooBqiafu3I8Q=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20OFajBB072291
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 24 Jan 2022 09:36:45 -0600
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 24
- Jan 2022 09:36:45 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 24 Jan 2022 09:36:45 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20OFaiWw019720;
-        Mon, 24 Jan 2022 09:36:44 -0600
-Date:   Mon, 24 Jan 2022 21:06:44 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>
-CC:     Patrick Williams <patrick@stwcx.xyz>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-aspeed@lists.ozlabs.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Richard Weinberger <richard@nod.at>,
-        Potin Lai <potin.lai@quantatw.com>,
-        <linux-kernel@vger.kernel.org>, Michael Walle <michael@walle.cc>,
-        <linux-mtd@lists.infradead.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] mtd: aspeed-smc: improve probe resilience
-Message-ID: <20220124153644.m3iwlvq5ld5cpbyz@ti.com>
-References: <20211229143334.297305-1-patrick@stwcx.xyz>
- <20211229173411.l2bipmi4x3arqjoo@ti.com>
- <Yc3Qav+ULNdF5zRT@heinlein>
- <20211231102623.izaqlzjvracbbgmp@ti.com>
- <20220103171721.46c8e697@xps13>
- <YdSP6tKyQ2ZRUC+2@heinlein>
- <20220105063244.lno3xur64uepa7i5@ti.com>
- <d4ba6413-57ce-14c1-ed48-d00db2f74bd3@kaod.org>
+        Mon, 24 Jan 2022 10:37:21 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F29C06173B;
+        Mon, 24 Jan 2022 07:37:20 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id s2-20020a17090ad48200b001b501977b23so16190385pju.2;
+        Mon, 24 Jan 2022 07:37:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=9OMf/40UVFi8Z23FZR/rr9aBU90w2IsNflq/1Hwh6Ss=;
+        b=Mti2Rsw/zwpT+S4lV1SrNr5YfsrgGaPusGo4uOT90M0E5O0TfgAnO9RyHxNGBvIqnr
+         RYHcm9L7/rto98Zd4szt5yeo9e2YM3aWkmarnYQoFobEDci4xiNOufWc7y/WGbnp5A7I
+         hmrNeEvxJUHCN3s1vFSixXAfO4GzFmJDSyOvOPse9oYrRIzECZcw8/0UZ3w/Y6QKe/bb
+         WXK0PdrRCxkFPhYEDPqpyD78zZSmifC1LYaIq9342QpAkQilwKWffpa0/3ZF7JCVZWcD
+         3i5OeST9BoAmGe5qt4gDB0BGxVPs0+1iWcrX2somfsgkoVz4/i2XmdijxBuCigwu2vY/
+         A2Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=9OMf/40UVFi8Z23FZR/rr9aBU90w2IsNflq/1Hwh6Ss=;
+        b=xawN4NU5J5CheJ8inIWa5SgFJXNt1nIDxct1Y1Xn6hHJlNMx8s1dXJFLeY+gnbYK5h
+         N0tpEvaRvTKYMcBCho5hlu6aOracKZLurzin75PBAPCMIQPYTAs+BW/5zuLu3xbNVroD
+         i++h8yDvenlp4XmlwlCov+PD4o+BBfJOtUtu7fTZ063NXYdQeES4NizVaVoQAB5K7ELV
+         KQs/WvwtmFGAiytYoMdzVW4rPRcQnc2nRaNbEJYygMFi+JPGw5roUoNPZXt5DHpO0JRx
+         vRtkcrzsHklNdHEtwI5ly3tt0bFbuoBOttsvBNrNDtkmrKmoBobN2EDIn4kLe+bFvRYf
+         ExqQ==
+X-Gm-Message-State: AOAM533nZGYaCmR3M7RFIzKJVv2VlPs4OuceFEU9ywQeZZ6dFeP7dDG4
+        NSU3Bx3U621I+yX5pYwLYJY=
+X-Google-Smtp-Source: ABdhPJyuAko6BqHAbwc+WyfRV8cOUqe0bLDeMt5BMhvXJgCwrGmCCFWNdwJ4EbxclP5ElRf5M3QaYg==
+X-Received: by 2002:a17:90a:50f:: with SMTP id h15mr2479903pjh.78.1643038640499;
+        Mon, 24 Jan 2022 07:37:20 -0800 (PST)
+Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id r14sm20000509pjo.39.2022.01.24.07.37.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 07:37:19 -0800 (PST)
+Date:   Mon, 24 Jan 2022 07:37:16 -0800
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Miroslav Lichvar <mlichvar@redhat.com>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Russell King <linux@arm.linux.org.uk>
+Subject: Re: [PATCH RFC V1 net-next 3/4] net: Let the active time stamping
+ layer be selectable.
+Message-ID: <20220124153716.GB28194@hoboy.vegasvil.org>
+References: <20220103232555.19791-4-richardcochran@gmail.com>
+ <20220120164832.xdebp5vykib6h6dp@skbuf>
+ <Yeoqof1onvrcWGNp@lunn.ch>
+ <20220121040508.GA7588@hoboy.vegasvil.org>
+ <20220121145035.z4yv2qsub5mr7ljs@skbuf>
+ <20220121152820.GA15600@hoboy.vegasvil.org>
+ <Ye5xN6sQvsfX1lmn@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d4ba6413-57ce-14c1-ed48-d00db2f74bd3@kaod.org>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <Ye5xN6sQvsfX1lmn@localhost>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/01/22 11:44PM, Cédric Le Goater wrote:
-> > > I had an offline discussion with someone who knew more history on this driver.
-> > > My understanding is that the linux-aspeed team is aware of this being deprecated
-> > > but that there was some missing support for interface training that nobody has
-> > > gotten around to write?  If that is the case this really isn't even a "simple"
-> > > port to a new API at this point.
-> > 
-> > Unless the controller needs some unique feature (I don't think it does
-> > on a quick glance), the conversion should not be too difficult. For any
-> > experienced developer, even if they are unfamiliar with the SPI MEM API,
-> > I don't think it should take more than 2-3 days to do the conversion.
-> > The code to program the registers would stay the same, all that needs to
-> > change is the API through which it is accessed.
-> 
-> Writing a spimem driver is not a problem, I think people have done
-> that in house. Aspeed has one for AST2600. We have one for u-boot
-> I wrote sometime ago. I even have one for Linux but training comes
-> with ugly hacks to fit in the current stack.
-> 
-> All Aspeed SoCs need training and that has been the problem for the
-> last 4 years or so because we can not do training without knowing
-> a minimum about the flash being trained :/ The previous framework
-> offered a way to do a first scan and tune the delay settings
-> afterwards. It worked pretty well on AST2400, AST2500 and AST2600
-> even if more complex.
-> 
-> One alternative was to include the setting in the DT but the flash
-> modules are not always soldered on the boards, at least on OpenPOWER
-> systems which have sockets for them. The board are large, the wires
-> long, the need is real, some chips freak out if not tuned correctly.
-> 
-> spimem needs an extension I think. Sorry I have not been able to
-> push that forward. Lack of time and other tasks to address on the
-> host side of the machine. This is really a software problem, we
-> have the HW procedures ready. If a spimem expert could get involved
-> to make a few proposals, I would be happy to help and do some testing.
-> QEMU models are good enough for the software part. We can do the
-> training validation on real HW when ready.
+On Mon, Jan 24, 2022 at 10:28:23AM +0100, Miroslav Lichvar wrote:
 
-What information about the flash do you need for this training? I 
-proposed a patch series [0] some time ago trying to implement training 
-for TI SoCs. It did not get merged but I do intend to respin it and get 
-it through. Would this API work for your tuning as well?
+> FWIW, scm_timestamping has three fields and the middle one no longer
+> seems to be used. If a new socket/timestamping option enabled all
+> three (SW, MAC, PHY) timestamps in the cmsg, I think that would be a
+> nice feature.
 
-Also, I am curious how your training works. What data do you read for 
-training delays? Where is it stored? In our case we need to flash a 
-known pattern at some location (which is passed in via DT). Do you need 
-to run it for every read transaction or just once after the flash is 
-initialized?
+This won't work because:
 
-[0] https://patchwork.ozlabs.org/project/linux-mtd/list/?series=233504&state=%2A&archive=both
+- There would need to be seven^W eight, not three slots.
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+- Even with just three, the CMSG would have to have a bit that clearly
+  identifies the new format.
+ 
+> From an admin point of view, it makes sense to me to have an option to
+> disable PHY timestamps for the whole device if there are issues with
+> it. For debugging and applications, it would be nice to have an option
+> to get all of them at the same time.
+
+Right.  Those are two different use cases.  The present series
+addresses the first one.  The second one entails making a new flavor
+of time stamping API.
+
+Thanks,
+Richard

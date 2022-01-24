@@ -2,99 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E7C497D44
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 11:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51FEC497D47
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 11:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234671AbiAXKh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 05:37:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:47435 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233480AbiAXKhW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 05:37:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643020642;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=76KFo7+F7q/+fa6TW0D3p4zQquAYFcS3k3/N/jXiLDk=;
-        b=CePoUTeJdnvqAOOp7lll1AbJCV/HDBpdCMGmmJDOVKbHLgV5buRb90kvUHn0jf2gcJcxBh
-        005OdcOHJmH8CE84HoRWRk0xohLMjs1qMhCilmwsUBA88T4yHtnnX7D0ofPJEtUe7jnsNj
-        IMpYALlQAtH3Iq3Dfwh2Vi+g7OLQMn4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-185-_QmXsZ7vPhWpAkpRBoH_XA-1; Mon, 24 Jan 2022 05:37:16 -0500
-X-MC-Unique: _QmXsZ7vPhWpAkpRBoH_XA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9FCDC425DB;
-        Mon, 24 Jan 2022 10:37:15 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.194.235])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8FC401F305;
-        Mon, 24 Jan 2022 10:37:13 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Igor Mammedov <imammedo@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] KVM: x86: Use memcmp in kvm_cpuid_check_equal()
-Date:   Mon, 24 Jan 2022 11:36:06 +0100
-Message-Id: <20220124103606.2630588-3-vkuznets@redhat.com>
-In-Reply-To: <20220124103606.2630588-1-vkuznets@redhat.com>
-References: <20220124103606.2630588-1-vkuznets@redhat.com>
+        id S235103AbiAXKhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 05:37:38 -0500
+Received: from foss.arm.com ([217.140.110.172]:57092 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234250AbiAXKhg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 05:37:36 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 152B16D;
+        Mon, 24 Jan 2022 02:37:36 -0800 (PST)
+Received: from [10.57.86.86] (unknown [10.57.86.86])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ED9653F73B;
+        Mon, 24 Jan 2022 02:37:34 -0800 (PST)
+Message-ID: <ecfce441-d79d-4a6b-b8b1-c45619eff78f@arm.com>
+Date:   Mon, 24 Jan 2022 10:37:33 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [PATCH V2 0/2] coresight: trbe: Update existing errata for
+ Cortex-X2
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        coresight@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <1642994138-25887-1-git-send-email-anshuman.khandual@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <1642994138-25887-1-git-send-email-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kvm_cpuid_check_equal() should also check .flags equality but instead
-of adding it to the existing check, just switch to using memcmp() for
-the whole 'struct kvm_cpuid_entry2'.
+On 24/01/2022 03:15, Anshuman Khandual wrote:
+> Errata ARM64_ERRATUM_[2119858|2224489] also affect some Cortex-X2 ranges as
+> well. This series updates the errata definition and detection as required.
+> This series applies on v5.17-rc1.
+> 
+> Relevant identification document can be found here.
+> 
+> https://developer.arm.com/documentation/101803/0200/AArch64-system-registers/
+> AArch64-identification-register-summary/MIDR-EL1--Main-ID-Register
+> 
+> Relevant errata document can be found here.
+> 
+> https://developer.arm.com/documentation/SDEN1775100
+> 
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+> Cc: coresight@lists.linaro.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> 
 
-When .flags are not checked, kvm_cpuid_check_equal() may allow an update
-which it shouldn't but kvm_set_cpuid() does not actually update anything
-and just returns success.
+For the series:
 
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- arch/x86/kvm/cpuid.c | 13 ++-----------
- 1 file changed, 2 insertions(+), 11 deletions(-)
-
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 89d7822a8f5b..7dd9c8f4f46e 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -123,20 +123,11 @@ static int kvm_check_cpuid(struct kvm_vcpu *vcpu,
- static int kvm_cpuid_check_equal(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
- 				 int nent)
- {
--	struct kvm_cpuid_entry2 *orig;
--	int i;
--
- 	if (nent != vcpu->arch.cpuid_nent)
- 		return -EINVAL;
- 
--	for (i = 0; i < nent; i++) {
--		orig = &vcpu->arch.cpuid_entries[i];
--		if (e2[i].function != orig->function ||
--		    e2[i].index != orig->index ||
--		    e2[i].eax != orig->eax || e2[i].ebx != orig->ebx ||
--		    e2[i].ecx != orig->ecx || e2[i].edx != orig->edx)
--			return -EINVAL;
--	}
-+	if (memcmp(e2, vcpu->arch.cpuid_entries, nent * sizeof(*e2)))
-+		return -EINVAL;
- 
- 	return 0;
- }
--- 
-2.34.1
-
+Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>

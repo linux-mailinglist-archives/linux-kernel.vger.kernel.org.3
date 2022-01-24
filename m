@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2976498C2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E727498E9E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349058AbiAXTUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:20:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47982 "EHLO
+        id S1347835AbiAXTnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:43:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347811AbiAXTLL (ORCPT
+        with ESMTP id S1345683AbiAXTb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:11:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5575C061363;
-        Mon, 24 Jan 2022 11:02:53 -0800 (PST)
+        Mon, 24 Jan 2022 14:31:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97428C028BE3;
+        Mon, 24 Jan 2022 11:14:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 653D460E8D;
-        Mon, 24 Jan 2022 19:02:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ED0BC340E5;
-        Mon, 24 Jan 2022 19:02:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54FC7B81235;
+        Mon, 24 Jan 2022 19:14:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 696EFC340E5;
+        Mon, 24 Jan 2022 19:14:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050972;
-        bh=hVdfrHB2ZSWoX/hpKALbnPJ5Gr6TKGq80beaN5XyGN8=;
+        s=korg; t=1643051674;
+        bh=25Ko4hpiWyy/zvu15EXPbYLOPKyb4DyarnzWm4qNq5I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SXHn/NFAUzYo/91exB1K28JlxVviXTqMF4xmNvfxD40uJFr6M/puJpGJ1yi346df9
-         8I2PfwWjtFQhtZa6K33ToivTDlSWp59K3r01UhW8bl3dn5Cen1Bw+XVtBHM/GfGMrU
-         rinzvK5rL2VK/pn8FBSiQ4+IBF+ESjraQXIgdr4s=
+        b=Mkg9+6uegJMj4yEP6PdvYLvLhWME6uMKRFscxs4aHZTIqXi5Zuz47cv7zRNMHcpB1
+         W+QWIYVbwDFZ6IEPkJ6m4olNjc0a9tGdJ5BTFUocw4BT9TRu/Zs92HfMT3OOvL9ezT
+         m1GCDzHMaXCgKmhbvt1pesgWuvVSnocW7Rer/yw4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+2f6d7c28bb4bf7e82060@syzkaller.appspotmail.com,
-        Desmond Cheong Zhi Xi <desmondcheongzx@gmail.com>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>
-Subject: [PATCH 4.14 014/186] Bluetooth: schedule SCO timeouts with delayed_work
+        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 051/239] media: em28xx: fix memory leak in em28xx_init_dev
 Date:   Mon, 24 Jan 2022 19:41:29 +0100
-Message-Id: <20220124183937.568318274@linuxfoundation.org>
+Message-Id: <20220124183944.759591047@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,146 +52,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Desmond Cheong Zhi Xi <desmondcheongzx@gmail.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-commit ba316be1b6a00db7126ed9a39f9bee434a508043 upstream.
+[ Upstream commit 22be5a10d0b24eec9e45decd15d7e6112b25f080 ]
 
-struct sock.sk_timer should be used as a sock cleanup timer. However,
-SCO uses it to implement sock timeouts.
+In the em28xx_init_rev, if em28xx_audio_setup fails, this function fails
+to deallocate the media_dev allocated in the em28xx_media_device_init.
 
-This causes issues because struct sock.sk_timer's callback is run in
-an IRQ context, and the timer callback function sco_sock_timeout takes
-a spin lock on the socket. However, other functions such as
-sco_conn_del and sco_conn_ready take the spin lock with interrupts
-enabled.
+Fix this by adding em28xx_unregister_media_device to free media_dev.
 
-This inconsistent {SOFTIRQ-ON-W} -> {IN-SOFTIRQ-W} lock usage could
-lead to deadlocks as reported by Syzbot [1]:
-       CPU0
-       ----
-  lock(slock-AF_BLUETOOTH-BTPROTO_SCO);
-  <Interrupt>
-    lock(slock-AF_BLUETOOTH-BTPROTO_SCO);
+BTW, this patch is tested in my local syzkaller instance, and it can
+prevent the memory leak from occurring again.
 
-To fix this, we use delayed work to implement SCO sock timouts
-instead. This allows us to avoid taking the spin lock on the socket in
-an IRQ context, and corrects the misuse of struct sock.sk_timer.
-
-As a note, cancel_delayed_work is used instead of
-cancel_delayed_work_sync in sco_sock_set_timer and
-sco_sock_clear_timer to avoid a deadlock. In the future, the call to
-bh_lock_sock inside sco_sock_timeout should be changed to lock_sock to
-synchronize with other functions using lock_sock. However, since
-sco_sock_set_timer and sco_sock_clear_timer are sometimes called under
-the locked socket (in sco_connect and __sco_sock_close),
-cancel_delayed_work_sync might cause them to sleep until an
-sco_sock_timeout that has started finishes running. But
-sco_sock_timeout would also sleep until it can grab the lock_sock.
-
-Using cancel_delayed_work is fine because sco_sock_timeout does not
-change from run to run, hence there is no functional difference
-between:
-1. waiting for a timeout to finish running before scheduling another
-timeout
-2. scheduling another timeout while a timeout is running.
-
-Link: https://syzkaller.appspot.com/bug?id=9089d89de0502e120f234ca0fc8a703f7368b31e [1]
-Reported-by: syzbot+2f6d7c28bb4bf7e82060@syzkaller.appspotmail.com
-Tested-by: syzbot+2f6d7c28bb4bf7e82060@syzkaller.appspotmail.com
-Signed-off-by: Desmond Cheong Zhi Xi <desmondcheongzx@gmail.com>
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-[OP: adjusted context for 4.14]
-Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Pavel Skripkin <paskripkin@gmail.com>
+Fixes: 37ecc7b1278f ("[media] em28xx: add media controller support")
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/sco.c |   35 +++++++++++++++++++++++++++++------
- 1 file changed, 29 insertions(+), 6 deletions(-)
+ drivers/media/usb/em28xx/em28xx-cards.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
---- a/net/bluetooth/sco.c
-+++ b/net/bluetooth/sco.c
-@@ -48,6 +48,8 @@ struct sco_conn {
- 	spinlock_t	lock;
- 	struct sock	*sk;
+diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
+index ec608f60d2c75..06da08f8efdb1 100644
+--- a/drivers/media/usb/em28xx/em28xx-cards.c
++++ b/drivers/media/usb/em28xx/em28xx-cards.c
+@@ -3515,8 +3515,10 @@ static int em28xx_init_dev(struct em28xx *dev, struct usb_device *udev,
  
-+	struct delayed_work	timeout_work;
-+
- 	unsigned int    mtu;
- };
+ 	if (dev->is_audio_only) {
+ 		retval = em28xx_audio_setup(dev);
+-		if (retval)
+-			return -ENODEV;
++		if (retval) {
++			retval = -ENODEV;
++			goto err_deinit_media;
++		}
+ 		em28xx_init_extension(dev);
  
-@@ -73,9 +75,20 @@ struct sco_pinfo {
- #define SCO_CONN_TIMEOUT	(HZ * 40)
- #define SCO_DISCONN_TIMEOUT	(HZ * 2)
- 
--static void sco_sock_timeout(unsigned long arg)
-+static void sco_sock_timeout(struct work_struct *work)
- {
--	struct sock *sk = (struct sock *)arg;
-+	struct sco_conn *conn = container_of(work, struct sco_conn,
-+					     timeout_work.work);
-+	struct sock *sk;
-+
-+	sco_conn_lock(conn);
-+	sk = conn->sk;
-+	if (sk)
-+		sock_hold(sk);
-+	sco_conn_unlock(conn);
-+
-+	if (!sk)
-+		return;
- 
- 	BT_DBG("sock %p state %d", sk, sk->sk_state);
- 
-@@ -89,14 +102,21 @@ static void sco_sock_timeout(unsigned lo
- 
- static void sco_sock_set_timer(struct sock *sk, long timeout)
- {
-+	if (!sco_pi(sk)->conn)
-+		return;
-+
- 	BT_DBG("sock %p state %d timeout %ld", sk, sk->sk_state, timeout);
--	sk_reset_timer(sk, &sk->sk_timer, jiffies + timeout);
-+	cancel_delayed_work(&sco_pi(sk)->conn->timeout_work);
-+	schedule_delayed_work(&sco_pi(sk)->conn->timeout_work, timeout);
- }
- 
- static void sco_sock_clear_timer(struct sock *sk)
- {
-+	if (!sco_pi(sk)->conn)
-+		return;
-+
- 	BT_DBG("sock %p state %d", sk, sk->sk_state);
--	sk_stop_timer(sk, &sk->sk_timer);
-+	cancel_delayed_work(&sco_pi(sk)->conn->timeout_work);
- }
- 
- /* ---- SCO connections ---- */
-@@ -176,6 +196,9 @@ static void sco_conn_del(struct hci_conn
- 		sco_chan_del(sk, err);
- 		bh_unlock_sock(sk);
- 		sock_put(sk);
-+
-+		/* Ensure no more work items will run before freeing conn. */
-+		cancel_delayed_work_sync(&conn->timeout_work);
+ 		return 0;
+@@ -3535,7 +3537,7 @@ static int em28xx_init_dev(struct em28xx *dev, struct usb_device *udev,
+ 		dev_err(&dev->intf->dev,
+ 			"%s: em28xx_i2c_register bus 0 - error [%d]!\n",
+ 		       __func__, retval);
+-		return retval;
++		goto err_deinit_media;
  	}
  
- 	hcon->sco_data = NULL;
-@@ -190,6 +213,8 @@ static void __sco_chan_add(struct sco_co
- 	sco_pi(sk)->conn = conn;
- 	conn->sk = sk;
+ 	/* register i2c bus 1 */
+@@ -3551,9 +3553,7 @@ static int em28xx_init_dev(struct em28xx *dev, struct usb_device *udev,
+ 				"%s: em28xx_i2c_register bus 1 - error [%d]!\n",
+ 				__func__, retval);
  
-+	INIT_DELAYED_WORK(&conn->timeout_work, sco_sock_timeout);
-+
- 	if (parent)
- 		bt_accept_enqueue(parent, sk, true);
- }
-@@ -466,8 +491,6 @@ static struct sock *sco_sock_alloc(struc
- 
- 	sco_pi(sk)->setting = BT_VOICE_CVSD_16BIT;
- 
--	setup_timer(&sk->sk_timer, sco_sock_timeout, (unsigned long)sk);
+-			em28xx_i2c_unregister(dev, 0);
 -
- 	bt_sock_link(&sco_sk_list, sk);
- 	return sk;
+-			return retval;
++			goto err_unreg_i2c;
+ 		}
+ 	}
+ 
+@@ -3561,6 +3561,12 @@ static int em28xx_init_dev(struct em28xx *dev, struct usb_device *udev,
+ 	em28xx_card_setup(dev);
+ 
+ 	return 0;
++
++err_unreg_i2c:
++	em28xx_i2c_unregister(dev, 0);
++err_deinit_media:
++	em28xx_unregister_media_device(dev);
++	return retval;
  }
+ 
+ static int em28xx_duplicate_dev(struct em28xx *dev)
+-- 
+2.34.1
+
 
 

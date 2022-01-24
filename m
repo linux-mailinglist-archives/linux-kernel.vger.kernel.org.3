@@ -2,120 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FE0497F15
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB2F497F1C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238940AbiAXMQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 07:16:22 -0500
-Received: from mga05.intel.com ([192.55.52.43]:4341 "EHLO mga05.intel.com"
+        id S241102AbiAXMRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 07:17:22 -0500
+Received: from mga06.intel.com ([134.134.136.31]:10615 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242216AbiAXMPc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:15:32 -0500
+        id S241810AbiAXMQU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 07:16:20 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643026532; x=1674562532;
+  t=1643026580; x=1674562580;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=sYibUVZxAIos3Y+42FqhQ+3de5FeeBaOdC4uBXCfPlA=;
-  b=dsS6CZC2d7qvYf3myzizZqybidQonlAEtIPCOA8eU5fBppxGWOaj4JTy
-   tCejUrjUgA6i79NHUp8rpgI98pa6SUcZmaSo54BEC3DBX3BlGWqbUEAOz
-   U/XEdmSOkcGie9OLIGqa2XPVli4HNFlCwX1OEeYw8FDdqiaQNUepaEob/
-   PiuJVlHe8JenpfE+vsZyx1WZaNRQYUgYONEW9wcU35onD5aQCvzCh4qe3
-   oLM+LOln10pwiT9xXCej0MrOWiNd2tkZ3rtYQeJ8yMUT7zTgGEi4upJgb
-   X3eIsS4Uo4FE25y9XhNWw4D3ZPBnMV3HWV8H/OjeLnKhv9Nkl0YYgrCvg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="332385123"
+  bh=oSJpUR7qQooZpsgnfNqCcxKzq86iTJ3y0QT5ivH1Jg8=;
+  b=kQ9GuXdYG2uV/TK4pn/i2+fsh4gffga6BBIUe8BPioJ8cXwyVPXIiv1k
+   s68A3MFVY9vulzgh/1KGrmgKpG2b+5wvR8kx0mhlAuM66G9LogipZeMvs
+   voIblaYe06LJ+jSpZlG5lyvhmJp6qRwISQIzONglUc5uzlFeoucZkyiso
+   KFNkpOAJE+v5uITBZHSxgJoo6O1VJRnAlwUCtOFgUrlDqHBAa961hSnqT
+   hxVAc99x/E7GTQFc/LefbZVz1y2KCeH7XGqYkgMdUKu2VimJgvdQJw6WW
+   FbmDjd11Z+y8mT/iqGMjWKKJr/gBeZnywyvDUc3XsnwWG50PWVXugd3yd
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="306746283"
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="332385123"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 04:14:42 -0800
+   d="scan'208";a="306746283"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 04:14:42 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="766378082"
+   d="scan'208";a="479052944"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Jan 2022 04:14:39 -0800
+  by orsmga006.jf.intel.com with ESMTP; 24 Jan 2022 04:14:39 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nByF5-000IHz-1N; Mon, 24 Jan 2022 12:14:39 +0000
-Date:   Mon, 24 Jan 2022 20:14:13 +0800
+        id 1nByF5-000II4-3F; Mon, 24 Jan 2022 12:14:39 +0000
+Date:   Mon, 24 Jan 2022 20:14:16 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Xin Ji <xji@analogixsemi.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kbuild-all@lists.01.org, bliang@analogixsemi.com,
-        qwen@analogixsemi.com, jli@analogixsemi.com,
-        Xin Ji <xji@analogixsemi.com>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] usb: typec: anx7411: Add Analogix PD ANX7411
- support
-Message-ID: <202201242014.N4URst2I-lkp@intel.com>
-References: <20220121061856.2038958-2-xji@analogixsemi.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     kbuild-all@lists.01.org, Chen-Yu Tsai <wenst@chromium.org>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 25/31] clk: mediatek: pll: Implement error handling in
+ register API
+Message-ID: <202201242043.D1yrOE9S-lkp@intel.com>
+References: <20220122091731.283592-26-wenst@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220121061856.2038958-2-xji@analogixsemi.com>
+In-Reply-To: <20220122091731.283592-26-wenst@chromium.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xin,
+Hi Chen-Yu,
 
-Thank you for the patch! Perhaps something to improve:
+I love your patch! Perhaps something to improve:
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on robh/for-next peter-chen-usb/for-usb-next v5.17-rc1 next-20220124]
-[cannot apply to balbi-usb/testing/next]
+[auto build test WARNING on clk/clk-next]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Xin-Ji/dt-bindings-usb-Add-analogix-anx7411-PD-binding/20220121-142000
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: s390-randconfig-s031-20220124 (https://download.01.org/0day-ci/archive/20220124/202201242014.N4URst2I-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/f75d15d4f011dabf8a702d85fb788f9aefb326e2
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Xin-Ji/dt-bindings-usb-Add-analogix-anx7411-PD-binding/20220121-142000
-        git checkout f75d15d4f011dabf8a702d85fb788f9aefb326e2
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash drivers/irqchip/ drivers/usb/typec/
+url:    https://github.com/0day-ci/linux/commits/Chen-Yu-Tsai/clk-mediatek-Cleanups-and-Improvements-Part-1/20220122-172158
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+config: h8300-randconfig-c003-20220124 (https://download.01.org/0day-ci/archive/20220124/202201242043.D1yrOE9S-lkp@intel.com/config)
+compiler: h8300-linux-gcc (GCC) 11.2.0
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/usb/typec/anx7411.c:636:28: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] @@     got restricted __le32 [usertype] @@
-   drivers/usb/typec/anx7411.c:636:28: sparse:     expected unsigned int [usertype]
-   drivers/usb/typec/anx7411.c:636:28: sparse:     got restricted __le32 [usertype]
+cocci warnings: (new ones prefixed by >>)
+>> drivers/clk/mediatek/clk-pll.c:407:2-3: Unneeded semicolon
 
-vim +636 drivers/usb/typec/anx7411.c
-
-   621	
-   622	static void anx7411_translate_payload(struct device *dev, u32 *payload,
-   623					      u32 *pdo, int nr, const char *type)
-   624	{
-   625		int i;
-   626	
-   627		dev_info(dev, "convert %s pdos to little endian format\n", type);
-   628		if (nr > PDO_MAX_OBJECTS) {
-   629			dev_err(dev, "nr(%d) exceed PDO_MAX_OBJECTS(%d)\n",
-   630				nr, PDO_MAX_OBJECTS);
-   631	
-   632			return;
-   633		}
-   634	
-   635		for (i = 0; i < nr; i++)
- > 636			payload[i] = cpu_to_le32(pdo[i]);
-   637	}
-   638	
+Please review and possibly fold the followup patch.
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

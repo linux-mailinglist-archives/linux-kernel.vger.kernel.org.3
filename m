@@ -2,137 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF0E2499833
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:35:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D313499982
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:45:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1451316AbiAXVWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:22:39 -0500
-Received: from smtp-fw-80007.amazon.com ([99.78.197.218]:23591 "EHLO
-        smtp-fw-80007.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442619AbiAXUzA (ORCPT
+        id S1455564AbiAXVfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:35:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32393 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1392240AbiAXUuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:55:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1643057699; x=1674593699;
-  h=references:from:to:cc:subject:date:in-reply-to:
-   message-id:mime-version;
-  bh=nHiNLCkgEf9z5Kqzg4eastfyk3dGxgQ262HjhHcEk5Q=;
-  b=CGOgA295K8VEuVh85zh/u4tl9FHeiPBo1PowaZKtgwnVv8DlqSyKHYZI
-   L+18X652n+CO+Mcs6gPxHt++zl5oqpu74OG+8oBu8DLY62zJ8xEvFCiFP
-   FwLjucUnzOwRJGFbgqv1A/y9C+nJnDydoBGmqkJaA+WJ19M63FTkVRx18
-   g=;
-X-IronPort-AV: E=Sophos;i="5.88,313,1635206400"; 
-   d="scan'208";a="57694596"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-28a78e3f.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 24 Jan 2022 20:50:55 +0000
-Received: from EX13D28EUC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-28a78e3f.us-west-2.amazon.com (Postfix) with ESMTPS id E7B30A275E;
-        Mon, 24 Jan 2022 20:50:54 +0000 (UTC)
-Received: from u570694869fb251.ant.amazon.com.amazon.com (10.43.160.209) by
- EX13D28EUC001.ant.amazon.com (10.43.164.4) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Mon, 24 Jan 2022 20:50:47 +0000
-References: <20220123115623.94843-1-42.hyeyoo@gmail.com>
- <f835cbb3-a028-1daf-c038-516dd47ce47c@gmail.com>
- <5cca8bdd-bed0-f26a-6c96-d18947d3a50b@gmail.com>
-User-agent: mu4e 1.7.5; emacs 28.0.50
-From:   Shay Agroskin <shayagr@amazon.com>
-To:     Julian Wiedmann <jwiedmann.dev@gmail.com>
-CC:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, <netdev@vger.kernel.org>,
-        "Arthur Kiyanovski" <akiyano@amazon.com>,
-        David Arinzon <darinzon@amazon.com>,
-        "Noam Dagan" <ndagan@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        Sameeh Jubran <sameehj@amazon.com>,
-        "Wei Yongjun" <weiyongjun1@huawei.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: ena: Do not waste napi skb cache
-Date:   Mon, 24 Jan 2022 22:50:05 +0200
-In-Reply-To: <5cca8bdd-bed0-f26a-6c96-d18947d3a50b@gmail.com>
-Message-ID: <pj41zlmtjk7t9a.fsf@u570694869fb251.ant.amazon.com>
+        Mon, 24 Jan 2022 15:50:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643057451;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W5c5UK/SJnH0GNmhSmScmYGQtLKcq6CRrf3IVpkQpYk=;
+        b=bERgZotDNF3uBtRN5dm90botcvVebA2zmgOmHu9iGk32hDGiTvA+Yk/P4JFKSNngyehMkT
+        cPR85KPlL7Pmfm0YPbBnbSwzPFVoMIXK/dSC2K64ds5rWFVbCkwrnfzeXU5F3fyXCG9Lz4
+        BOI8Cvb+sfjJAwesaxu5ATB9pHtdG3M=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-250-FaeU1DAhMQmTHL3PgqhTjw-1; Mon, 24 Jan 2022 15:50:50 -0500
+X-MC-Unique: FaeU1DAhMQmTHL3PgqhTjw-1
+Received: by mail-oi1-f197.google.com with SMTP id r17-20020a056808211100b002cda6863beaso1641551oiw.14
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:50:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=W5c5UK/SJnH0GNmhSmScmYGQtLKcq6CRrf3IVpkQpYk=;
+        b=sI1Gy6R4ub3LYOSMkw26zqxxs6yTzu/fjlXC1rkxJj+ZMIN9qKI8ykjXtha9AhkGYe
+         YNtTirY5Ol28WMwG/WDdUToz2czrCYxbH4qIKX7xmgBkDqeepxY1py0ZPCj68BshXJet
+         htq16gpFcm6b70WokmSd3EhN+HALL5mytAomhdrfCIuWSf+hli+oIZx69TnMMI2bQlY3
+         illE+2gZ5Uhl2oLwB/tv/YiS5NZIEWPRqbtzyPQCW+LBvehc6dSDhOojXsTU7ywcWWTB
+         /PeG6488AIskZchpm0gq+uGkwXqUkAEtKPU1nt7z6IwO81U6beidfBoFWMT3yXSCJ7wf
+         G3fw==
+X-Gm-Message-State: AOAM530OQVLx6GwBYFeF1h1C1OqZbZuVyfGlWCvAlbeGFHlo6zkLVpkY
+        8JhAoRsWSNp2ZAV7di1wBbBQhK0odv+r14j8UeTLXxMP2nh+LHfvukqr5EocFd/7e8KQQqNHOCn
+        KvYOocFve+3lT0UvLdF+bVtRfYNWSCX78v35v+gFuH+H8MyvOTPaP3Xl7XNEZssj4UhYyxog=
+X-Received: by 2002:a4a:4584:: with SMTP id y126mr4402248ooa.80.1643057449485;
+        Mon, 24 Jan 2022 12:50:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzAYU9XhxKMknK71q/gt6tjzBlHExLAImx5gFnEHVWq6mED4gVTXkTaRslPZ563SVTMYqb27g==
+X-Received: by 2002:a4a:4584:: with SMTP id y126mr4402228ooa.80.1643057449212;
+        Mon, 24 Jan 2022 12:50:49 -0800 (PST)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id s11sm2531756otq.69.2022.01.24.12.50.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Jan 2022 12:50:48 -0800 (PST)
+Subject: Re: [PATCH] lib: zstd: clean up double word in comment.
+To:     Nick Terrell <terrelln@fb.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220120132006.749016-1-trix@redhat.com>
+ <BFE23560-5B80-4876-9FAA-726E0E9AADC1@fb.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <0e972d79-aeb0-670f-ba1f-0adea7306084@redhat.com>
+Date:   Mon, 24 Jan 2022 12:50:47 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed
-X-Originating-IP: [10.43.160.209]
-X-ClientProxiedBy: EX13D16UWB003.ant.amazon.com (10.43.161.194) To
- EX13D28EUC001.ant.amazon.com (10.43.164.4)
+In-Reply-To: <BFE23560-5B80-4876-9FAA-726E0E9AADC1@fb.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Julian Wiedmann <jwiedmann.dev@gmail.com> writes:
-
-> On 24.01.22 10:57, Julian Wiedmann wrote:
->> On 23.01.22 13:56, Hyeonggon Yoo wrote:
->>> By profiling, discovered that ena device driver allocates skb 
->>> by
->>> build_skb() and frees by napi_skb_cache_put(). Because the 
->>> driver
->>> does not use napi skb cache in allocation path, napi skb cache 
->>> is
->>> periodically filled and flushed. This is waste of napi skb 
->>> cache.
->>>
->>> As ena_alloc_skb() is called only in napi, Use 
->>> napi_build_skb()
->>> instead of build_skb() to when allocating skb.
->>>
->>> This patch was tested on aws a1.metal instance.
->>>
->>> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
->>> ---
->>>  drivers/net/ethernet/amazon/ena/ena_netdev.c | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c 
->>> b/drivers/net/ethernet/amazon/ena/ena_netdev.c
->>> index c72f0c7ff4aa..2c67fb1703c5 100644
->>> --- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
->>> +++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
->>> @@ -1407,7 +1407,7 @@ static struct sk_buff 
->>> *ena_alloc_skb(struct ena_ring *rx_ring, void *first_frag)
->>>  		skb = netdev_alloc_skb_ip_align(rx_ring->netdev,
->>>  						rx_ring->rx_copybreak);
->> 
->> To keep things consistent, this should then also be 
->> napi_alloc_skb().
->> 
+On 1/24/22 12:18 PM, Nick Terrell wrote:
 >
-> And on closer look, this copybreak path also looks buggy. If 
-> rx_copybreak
-> gets reduced _while_ receiving a frame, the allocated skb can 
-> end up too
-> small to take all the data.
+>> On Jan 20, 2022, at 5:20 AM, trix@redhat.com wrote:
+>>
+>> From: Tom Rix <trix@redhat.com>
+>>
+>> Remove the second 'a' and 'into'.
+> Thanks for the patch!
 >
-> @ ena maintainers: can you please fix this?
+> I'll merge this into my tree and get this into the 5.18 merge window.
 >
+> If you are able to, can you please submit this patch as a PR upstream [0]?
+> Else, I will backport it before my next update. Either way I'll merge this patch.
 
-Updating the copybreak value is done through ena_ethtool.c 
-(ena_set_tunable()) which updates `adapter->rx_copybreak`.
-The adapter->rx_copybreak value is "propagated back" to the ring 
-local attributes (rx_ring->rx_copybreak) only after an interface 
-toggle which stops the napi routine first.
+yes, here it is
 
-Unless I'm missing something here I don't think the bug you're 
-describing exists.
+https://github.com/facebook/zstd/pull/3026
 
-I agree that the netdev_alloc_skb_ip_align() can become 
-napi_alloc_skb(). Hyeonggon Yoo, can you please apply this change 
-as well to this patch?
+Tom
 
-Thanks,
-Shay
+>
+> Best,
+> Nick Terrell
+>
+> [0] https://github.com/facebook/zstd/blob/dev/lib/zstd.h#L1396-L1407
+>
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+>> ---
+>> include/linux/zstd_lib.h | 4 ++--
+>> 1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/include/linux/zstd_lib.h b/include/linux/zstd_lib.h
+>> index b8c7dbf98390f..6b91758b61af9 100644
+>> --- a/include/linux/zstd_lib.h
+>> +++ b/include/linux/zstd_lib.h
+>> @@ -1330,7 +1330,7 @@ ZSTDLIB_API size_t ZSTD_generateSequences(ZSTD_CCtx* zc, ZSTD_Sequence* outSeqs,
+>>
+>> /*! ZSTD_mergeBlockDelimiters() :
+>>   * Given an array of ZSTD_Sequence, remove all sequences that represent block delimiters/last literals
+>> - * by merging them into into the literals of the next sequence.
+>> + * by merging them into the literals of the next sequence.
+>>   *
+>>   * As such, the final generated result has no explicit representation of block boundaries,
+>>   * and the final last literals segment is not represented in the sequences.
+>> @@ -1377,7 +1377,7 @@ ZSTDLIB_API size_t ZSTD_compressSequences(ZSTD_CCtx* const cctx, void* dst, size
+>> /*! ZSTD_writeSkippableFrame() :
+>>   * Generates a zstd skippable frame containing data given by src, and writes it to dst buffer.
+>>   *
+>> - * Skippable frames begin with a a 4-byte magic number. There are 16 possible choices of magic number,
+>> + * Skippable frames begin with a 4-byte magic number. There are 16 possible choices of magic number,
+>>   * ranging from ZSTD_MAGIC_SKIPPABLE_START to ZSTD_MAGIC_SKIPPABLE_START+15.
+>>   * As such, the parameter magicVariant controls the exact skippable frame magic number variant used, so
+>>   * the magic number used will be ZSTD_MAGIC_SKIPPABLE_START + magicVariant.
+>> -- 
+>> 2.26.3
+>>
 
-
->>>  	else
->>> -		skb = build_skb(first_frag, ENA_PAGE_SIZE);
->>> +		skb = napi_build_skb(first_frag, ENA_PAGE_SIZE);
->>>  
->>>  	if (unlikely(!skb)) {
->>>  		ena_increase_stat(&rx_ring->rx_stats.skb_alloc_fail, 
->>>  1,
->> 

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B12EE49A6AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD6D49A4E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:10:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353240AbiAYCVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:21:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
+        id S3408243AbiAYAWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:22:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345378AbiAXTJO (ORCPT
+        with ESMTP id S1381874AbiAXXeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:09:14 -0500
+        Mon, 24 Jan 2022 18:34:09 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B10C08C5C8;
-        Mon, 24 Jan 2022 11:02:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC343C07596F;
+        Mon, 24 Jan 2022 13:35:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4270B60B88;
-        Mon, 24 Jan 2022 19:02:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BF9CC340E5;
-        Mon, 24 Jan 2022 19:02:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C0A1612D6;
+        Mon, 24 Jan 2022 21:35:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 313BFC340E4;
+        Mon, 24 Jan 2022 21:35:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050929;
-        bh=QCtmgIcGnpfCyyzcV5Uihv/WnmLZGb5ICQw+jPbJ7zQ=;
+        s=korg; t=1643060136;
+        bh=lwmo3Kp9Lf9a9yqto9dD7w/To7cLK85iygXK9u4mjjU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lfOllt7y4kt6cl8JiDFcmBh3RD8gXxTYUNJid4Je3l8LtVJFw8MQ00QzYYEi8PemF
-         RWrAZTJfj5801+6xC66HOENXaqLwlucRaorV+1gmCOMqzMJ3sL6hOhvJOIQVleG6K0
-         b/o9yiMOfRupgMoIlUwX3w7UgMNOqsclc44l2KHI=
+        b=iGncU4nnstaW734ZP1+sROy4zT2ybnsOkCfADf6BbMCjS6q+lBRk3Gj+VmgIU7CjR
+         9CJQ+4Wrx6zn8sNseO+bZ63mLxRfuv5M3ohB5qYCvNBR4/BmBIRIa818gqVsC67fon
+         RZ7aUKL8Psu4V93n4pRFPnI28EktljofFTzcd9/U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andy Spencer <aspencer@spacex.com>,
-        Jim Gruen <jgruen@spacex.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ben Hutchings <ben@decadent.org.uk>
-Subject: [PATCH 4.9 149/157] gianfar: simplify FCS handling and fix memory leak
-Date:   Mon, 24 Jan 2022 19:43:59 +0100
-Message-Id: <20220124183937.491196016@linuxfoundation.org>
+        stable@vger.kernel.org, Andrey Ryabinin <arbn@yandex-team.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Tejun Heo <tj@kernel.org>
+Subject: [PATCH 5.16 0851/1039] sched/cpuacct: Fix user/system in shown cpuacct.usage*
+Date:   Mon, 24 Jan 2022 19:44:00 +0100
+Message-Id: <20220124184153.885119284@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,73 +50,212 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Spencer <aspencer@spacex.com>
+From: Andrey Ryabinin <arbn@yandex-team.com>
 
-commit d903ec77118c09f93a610b384d83a6df33a64fe6 upstream.
+commit dd02d4234c9a2214a81c57a16484304a1a51872a upstream.
 
-Previously, buffer descriptors containing only the frame check sequence
-(FCS) were skipped and not added to the skb. However, the page reference
-count was still incremented, leading to a memory leak.
+cpuacct has 2 different ways of accounting and showing user
+and system times.
 
-Fixing this inside gfar_add_rx_frag() is difficult due to reserved
-memory handling and page reuse. Instead, move the FCS handling to
-gfar_process_frame() and trim off the FCS before passing the skb up the
-networking stack.
+The first one uses cpuacct_account_field() to account times
+and cpuacct.stat file to expose them. And this one seems to work ok.
 
-Signed-off-by: Andy Spencer <aspencer@spacex.com>
-Signed-off-by: Jim Gruen <jgruen@spacex.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Cc: Ben Hutchings <ben@decadent.org.uk>
+The second one is uses cpuacct_charge() function for accounting and
+set of cpuacct.usage* files to show times. Despite some attempts to
+fix it in the past it still doesn't work. Sometimes while running KVM
+guest the cpuacct_charge() accounts most of the guest time as
+system time. This doesn't match with user&system times shown in
+cpuacct.stat or proc/<pid>/stat.
+
+Demonstration:
+ # git clone https://github.com/aryabinin/kvmsample
+ # make
+ # mkdir /sys/fs/cgroup/cpuacct/test
+ # echo $$ > /sys/fs/cgroup/cpuacct/test/tasks
+ # ./kvmsample &
+ # for i in {1..5}; do cat /sys/fs/cgroup/cpuacct/test/cpuacct.usage_sys; sleep 1; done
+ 1976535645
+ 2979839428
+ 3979832704
+ 4983603153
+ 5983604157
+
+Use cpustats accounted in cpuacct_account_field() as the source
+of user/sys times for cpuacct.usage* files. Make cpuacct_charge()
+to account only summary execution time.
+
+Fixes: d740037fac70 ("sched/cpuacct: Split usage accounting into user_usage and sys_usage")
+Signed-off-by: Andrey Ryabinin <arbn@yandex-team.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Daniel Jordan <daniel.m.jordan@oracle.com>
+Acked-by: Tejun Heo <tj@kernel.org>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20211115164607.23784-3-arbn@yandex-team.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/freescale/gianfar.c |   23 +++++++----------------
- 1 file changed, 7 insertions(+), 16 deletions(-)
+ kernel/sched/cpuacct.c |   79 +++++++++++++++++++------------------------------
+ 1 file changed, 32 insertions(+), 47 deletions(-)
 
---- a/drivers/net/ethernet/freescale/gianfar.c
-+++ b/drivers/net/ethernet/freescale/gianfar.c
-@@ -2939,29 +2939,17 @@ static bool gfar_add_rx_frag(struct gfar
- {
- 	int size = lstatus & BD_LENGTH_MASK;
- 	struct page *page = rxb->page;
--	bool last = !!(lstatus & BD_LFLAG(RXBD_LAST));
+--- a/kernel/sched/cpuacct.c
++++ b/kernel/sched/cpuacct.c
+@@ -21,15 +21,11 @@ static const char * const cpuacct_stat_d
+ 	[CPUACCT_STAT_SYSTEM] = "system",
+ };
+ 
+-struct cpuacct_usage {
+-	u64	usages[CPUACCT_STAT_NSTATS];
+-};
 -
--	/* Remove the FCS from the packet length */
--	if (last)
--		size -= ETH_FCS_LEN;
+ /* track CPU usage of a group of tasks and its child groups */
+ struct cpuacct {
+ 	struct cgroup_subsys_state	css;
+ 	/* cpuusage holds pointer to a u64-type object on every CPU */
+-	struct cpuacct_usage __percpu	*cpuusage;
++	u64 __percpu	*cpuusage;
+ 	struct kernel_cpustat __percpu	*cpustat;
+ };
  
- 	if (likely(first)) {
- 		skb_put(skb, size);
- 	} else {
- 		/* the last fragments' length contains the full frame length */
--		if (last)
-+		if (lstatus & BD_LFLAG(RXBD_LAST))
- 			size -= skb->len;
+@@ -49,7 +45,7 @@ static inline struct cpuacct *parent_ca(
+ 	return css_ca(ca->css.parent);
+ }
  
--		/* Add the last fragment if it contains something other than
--		 * the FCS, otherwise drop it and trim off any part of the FCS
--		 * that was already received.
--		 */
--		if (size > 0)
--			skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags, page,
--					rxb->page_offset + RXBUF_ALIGNMENT,
--					size, GFAR_RXB_TRUESIZE);
--		else if (size < 0)
--			pskb_trim(skb, skb->len + size);
-+		skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags, page,
-+				rxb->page_offset + RXBUF_ALIGNMENT,
-+				size, GFAR_RXB_TRUESIZE);
+-static DEFINE_PER_CPU(struct cpuacct_usage, root_cpuacct_cpuusage);
++static DEFINE_PER_CPU(u64, root_cpuacct_cpuusage);
+ static struct cpuacct root_cpuacct = {
+ 	.cpustat	= &kernel_cpustat,
+ 	.cpuusage	= &root_cpuacct_cpuusage,
+@@ -68,7 +64,7 @@ cpuacct_css_alloc(struct cgroup_subsys_s
+ 	if (!ca)
+ 		goto out;
+ 
+-	ca->cpuusage = alloc_percpu(struct cpuacct_usage);
++	ca->cpuusage = alloc_percpu(u64);
+ 	if (!ca->cpuusage)
+ 		goto out_free_ca;
+ 
+@@ -99,7 +95,8 @@ static void cpuacct_css_free(struct cgro
+ static u64 cpuacct_cpuusage_read(struct cpuacct *ca, int cpu,
+ 				 enum cpuacct_stat_index index)
+ {
+-	struct cpuacct_usage *cpuusage = per_cpu_ptr(ca->cpuusage, cpu);
++	u64 *cpuusage = per_cpu_ptr(ca->cpuusage, cpu);
++	u64 *cpustat = per_cpu_ptr(ca->cpustat, cpu)->cpustat;
+ 	u64 data;
+ 
+ 	/*
+@@ -115,14 +112,17 @@ static u64 cpuacct_cpuusage_read(struct
+ 	raw_spin_rq_lock_irq(cpu_rq(cpu));
+ #endif
+ 
+-	if (index == CPUACCT_STAT_NSTATS) {
+-		int i = 0;
+-
+-		data = 0;
+-		for (i = 0; i < CPUACCT_STAT_NSTATS; i++)
+-			data += cpuusage->usages[i];
+-	} else {
+-		data = cpuusage->usages[index];
++	switch (index) {
++	case CPUACCT_STAT_USER:
++		data = cpustat[CPUTIME_USER] + cpustat[CPUTIME_NICE];
++		break;
++	case CPUACCT_STAT_SYSTEM:
++		data = cpustat[CPUTIME_SYSTEM] + cpustat[CPUTIME_IRQ] +
++			cpustat[CPUTIME_SOFTIRQ];
++		break;
++	case CPUACCT_STAT_NSTATS:
++		data = *cpuusage;
++		break;
  	}
  
- 	/* try reuse page */
-@@ -3074,6 +3062,9 @@ static void gfar_process_frame(struct ne
- 	if (priv->padding)
- 		skb_pull(skb, priv->padding);
+ #ifndef CONFIG_64BIT
+@@ -132,10 +132,14 @@ static u64 cpuacct_cpuusage_read(struct
+ 	return data;
+ }
  
-+	/* Trim off the FCS */
-+	pskb_trim(skb, skb->len - ETH_FCS_LEN);
+-static void cpuacct_cpuusage_write(struct cpuacct *ca, int cpu, u64 val)
++static void cpuacct_cpuusage_write(struct cpuacct *ca, int cpu)
+ {
+-	struct cpuacct_usage *cpuusage = per_cpu_ptr(ca->cpuusage, cpu);
+-	int i;
++	u64 *cpuusage = per_cpu_ptr(ca->cpuusage, cpu);
++	u64 *cpustat = per_cpu_ptr(ca->cpustat, cpu)->cpustat;
 +
- 	if (ndev->features & NETIF_F_RXCSUM)
- 		gfar_rx_checksum(skb, fcb);
++	/* Don't allow to reset global kernel_cpustat */
++	if (ca == &root_cpuacct)
++		return;
  
+ #ifndef CONFIG_64BIT
+ 	/*
+@@ -143,9 +147,10 @@ static void cpuacct_cpuusage_write(struc
+ 	 */
+ 	raw_spin_rq_lock_irq(cpu_rq(cpu));
+ #endif
+-
+-	for (i = 0; i < CPUACCT_STAT_NSTATS; i++)
+-		cpuusage->usages[i] = val;
++	*cpuusage = 0;
++	cpustat[CPUTIME_USER] = cpustat[CPUTIME_NICE] = 0;
++	cpustat[CPUTIME_SYSTEM] = cpustat[CPUTIME_IRQ] = 0;
++	cpustat[CPUTIME_SOFTIRQ] = 0;
+ 
+ #ifndef CONFIG_64BIT
+ 	raw_spin_rq_unlock_irq(cpu_rq(cpu));
+@@ -196,7 +201,7 @@ static int cpuusage_write(struct cgroup_
+ 		return -EINVAL;
+ 
+ 	for_each_possible_cpu(cpu)
+-		cpuacct_cpuusage_write(ca, cpu, 0);
++		cpuacct_cpuusage_write(ca, cpu);
+ 
+ 	return 0;
+ }
+@@ -243,25 +248,10 @@ static int cpuacct_all_seq_show(struct s
+ 	seq_puts(m, "\n");
+ 
+ 	for_each_possible_cpu(cpu) {
+-		struct cpuacct_usage *cpuusage = per_cpu_ptr(ca->cpuusage, cpu);
+-
+ 		seq_printf(m, "%d", cpu);
+-
+-		for (index = 0; index < CPUACCT_STAT_NSTATS; index++) {
+-#ifndef CONFIG_64BIT
+-			/*
+-			 * Take rq->lock to make 64-bit read safe on 32-bit
+-			 * platforms.
+-			 */
+-			raw_spin_rq_lock_irq(cpu_rq(cpu));
+-#endif
+-
+-			seq_printf(m, " %llu", cpuusage->usages[index]);
+-
+-#ifndef CONFIG_64BIT
+-			raw_spin_rq_unlock_irq(cpu_rq(cpu));
+-#endif
+-		}
++		for (index = 0; index < CPUACCT_STAT_NSTATS; index++)
++			seq_printf(m, " %llu",
++				   cpuacct_cpuusage_read(ca, cpu, index));
+ 		seq_puts(m, "\n");
+ 	}
+ 	return 0;
+@@ -339,16 +329,11 @@ static struct cftype files[] = {
+ void cpuacct_charge(struct task_struct *tsk, u64 cputime)
+ {
+ 	struct cpuacct *ca;
+-	int index = CPUACCT_STAT_SYSTEM;
+-	struct pt_regs *regs = get_irq_regs() ? : task_pt_regs(tsk);
+-
+-	if (regs && user_mode(regs))
+-		index = CPUACCT_STAT_USER;
+ 
+ 	rcu_read_lock();
+ 
+ 	for (ca = task_ca(tsk); ca; ca = parent_ca(ca))
+-		__this_cpu_add(ca->cpuusage->usages[index], cputime);
++		__this_cpu_add(*ca->cpuusage, cputime);
+ 
+ 	rcu_read_unlock();
+ }
 
 

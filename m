@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19BC14997B1
+	by mail.lfdr.de (Postfix) with ESMTP id BE8A44997B2
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:29:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449089AbiAXVOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:14:54 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41754 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391341AbiAXUr2 (ORCPT
+        id S1449124AbiAXVO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:14:57 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46552 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1391365AbiAXUrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:47:28 -0500
+        Mon, 24 Jan 2022 15:47:32 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA42C60B11;
-        Mon, 24 Jan 2022 20:47:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84496C340E5;
-        Mon, 24 Jan 2022 20:47:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79C0BB81218;
+        Mon, 24 Jan 2022 20:47:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85AC8C340E5;
+        Mon, 24 Jan 2022 20:47:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057247;
-        bh=jV0MshI0Oglx5/JEM82uxpfw09EeJcTyjtUKUjYzzBQ=;
+        s=korg; t=1643057250;
+        bh=x7S04SykEtkNO6jyz+/ia/IfgXn8OU6ejHj5ebXM5TE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oGRHszkwpX0nyq+OHqGtdRbxXVLLoprmH9eEoVLDqPRiBQ89jAVVigbR89jq5xXJ7
-         gva1jN26Qm605uPBIInmM0ZWhuzlXJXkhAHUwoi0wJjozLQn2ABtcRRgZgol8RNj38
-         UoRUc79hDKnkOLNNpgFYtbkuBJGPt/DdDzfsvQY4=
+        b=tJFua6t6a3RYgoRVtmbYmPhGvaDHMrbPfJ4ZwEjOXKEaTtceAstv9ecsILRvCEfNX
+         b200FjfI3YyiBUpMiY6PG23ZtSz1C1jsUvXJaqb9nDVakckUXZEp0ss+AIqe9cCdEq
+         VrLzfnsqzzGTOOiBfXRFBVK5mxqkHIwZFOlZA09s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.15 748/846] RDMA/cma: Remove open coding of overflow checking for private_data_len
-Date:   Mon, 24 Jan 2022 19:44:25 +0100
-Message-Id: <20220124184126.787599256@linuxfoundation.org>
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.15 749/846] dmaengine: uniphier-xdmac: Fix type of address variables
+Date:   Mon, 24 Jan 2022 19:44:26 +0100
+Message-Id: <20220124184126.819817518@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -47,44 +46,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Håkon Bugge <haakon.bugge@oracle.com>
+From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 
-commit 8d0d2b0f41b1b2add8a30dbd816051a964efa497 upstream.
+commit 105a8c525675bb7d4d64871f9b2edf39460de881 upstream.
 
-The existing tests are a little hard to comprehend. Use
-check_add_overflow() instead.
+The variables src_addr and dst_addr handle DMA addresses, so these should
+be declared as dma_addr_t.
 
-Fixes: 04ded1672402 ("RDMA/cma: Verify private data length")
-Link: https://lore.kernel.org/r/1637661978-18770-1-git-send-email-haakon.bugge@oracle.com
-Signed-off-by: Håkon Bugge <haakon.bugge@oracle.com>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Fixes: 667b9251440b ("dmaengine: uniphier-xdmac: Add UniPhier external DMA controller driver")
+Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Link: https://lore.kernel.org/r/1639456963-10232-1-git-send-email-hayashi.kunihiko@socionext.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/core/cma.c |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/dma/uniphier-xdmac.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/infiniband/core/cma.c
-+++ b/drivers/infiniband/core/cma.c
-@@ -4037,8 +4037,7 @@ static int cma_resolve_ib_udp(struct rdm
+--- a/drivers/dma/uniphier-xdmac.c
++++ b/drivers/dma/uniphier-xdmac.c
+@@ -131,8 +131,9 @@ uniphier_xdmac_next_desc(struct uniphier
+ static void uniphier_xdmac_chan_start(struct uniphier_xdmac_chan *xc,
+ 				      struct uniphier_xdmac_desc *xd)
+ {
+-	u32 src_mode, src_addr, src_width;
+-	u32 dst_mode, dst_addr, dst_width;
++	u32 src_mode, src_width;
++	u32 dst_mode, dst_width;
++	dma_addr_t src_addr, dst_addr;
+ 	u32 val, its, tnum;
+ 	enum dma_slave_buswidth buswidth;
  
- 	memset(&req, 0, sizeof req);
- 	offset = cma_user_data_offset(id_priv);
--	req.private_data_len = offset + conn_param->private_data_len;
--	if (req.private_data_len < conn_param->private_data_len)
-+	if (check_add_overflow(offset, conn_param->private_data_len, &req.private_data_len))
- 		return -EINVAL;
- 
- 	if (req.private_data_len) {
-@@ -4097,8 +4096,7 @@ static int cma_connect_ib(struct rdma_id
- 
- 	memset(&req, 0, sizeof req);
- 	offset = cma_user_data_offset(id_priv);
--	req.private_data_len = offset + conn_param->private_data_len;
--	if (req.private_data_len < conn_param->private_data_len)
-+	if (check_add_overflow(offset, conn_param->private_data_len, &req.private_data_len))
- 		return -EINVAL;
- 
- 	if (req.private_data_len) {
 
 

@@ -2,57 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E50DD498F52
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:52:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C17C74990E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:08:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237213AbiAXTv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:51:59 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:36706 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349170AbiAXTlG (ORCPT
+        id S1377422AbiAXUF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:05:28 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:58300 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356915AbiAXTrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:41:06 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C648F6153C;
-        Mon, 24 Jan 2022 19:41:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 260A1C36AE2;
-        Mon, 24 Jan 2022 19:41:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643053265;
-        bh=oprGMI/K+YqT86d7ztdKp23qNaPKO+vEI0XjzYsXDaw=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=X2M6cVNicD7eeYBg+29gG6dP2NJnkKavYPtaNgIcKaGYhgcvAMtQlDTNSn5R8rvcO
-         8Po8Od7KSdzu9afJjnDXYUT3RQ+2tIc+3Uv5xm3NsTOgeuwJHgbWWrgUrHCzDbUZPt
-         GdEZKjomjYMT+4xgXLmTtrMbsvBr8DjfwGOmkKbZgxslBiBdY6TWbs++fwZ5atZJVK
-         waRV+25l8Xg6tS5NK9hDCJGuW1qznGdcM/UdmTr1HfLqLOewdqvpi5inV+qbbAla/A
-         skPKA8GyQ4SfZrRYGgsUYQr4VYQERxYcCKReKsBMyjauHZdN31keMH2xO56o+lHfmd
-         GDuFiF5/aBD9g==
-Content-Type: text/plain; charset="utf-8"
+        Mon, 24 Jan 2022 14:47:39 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 6F7FE21999;
+        Mon, 24 Jan 2022 19:42:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1643053350;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Uk4yJXt5bU5Zj9U01tGsXKXIzarJNnJJ/xFI3TIiBoM=;
+        b=xkY7eOJES7BjCHlJTRH4JbxrgF0LCTKv9dKbQ5tYUEV7xi9y5DhEe7zPQB9rTUt/NIPSO9
+        PVQafygGeXO7H00IegrAnUcU+suZJNHlIrOxinCx0Lm+rzGk63VNtyA2ak9g0vVkJTaOna
+        81ymFH75eNw3z05/SzbEfGjtmlwG/Js=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1643053350;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Uk4yJXt5bU5Zj9U01tGsXKXIzarJNnJJ/xFI3TIiBoM=;
+        b=eJRB+hsY11bzgiBAkX8cKR7FV7wgFKY7T/JEljfNT1Ec4pmQ7cSuLnZ7IK2M912KE84sy/
+        DxF9d/DTurpNl9Ag==
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 57883A3BF6;
+        Mon, 24 Jan 2022 19:42:30 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 44F7EDA7A3; Mon, 24 Jan 2022 20:41:50 +0100 (CET)
+Date:   Mon, 24 Jan 2022 20:41:49 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH v2] btrfs: zoned: Remove redundant initialization of
+ to_add
+Message-ID: <20220124194149.GD14046@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, clm@fb.com,
+        josef@toxicpanda.com, dsterba@suse.com, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+References: <20220121114351.93220-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220124171415.12293-1-tdas@codeaurora.org>
-References: <20220124171415.12293-1-tdas@codeaurora.org>
-Subject: Re: [PATCH v1] clk: qcom: clk-rcg2: Update logic to calculate D value for RCG
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Taniya Das <tdas@codeaurora.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <tdas@codeaurora.org>
-Date:   Mon, 24 Jan 2022 11:41:03 -0800
-User-Agent: alot/0.10
-Message-Id: <20220124194105.260A1C36AE2@smtp.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220121114351.93220-1-jiapeng.chong@linux.alibaba.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Taniya Das (2022-01-24 09:14:15)
-> The current implementation does not check for D value is within
-> the accepted range for a given M & N value. Update the logic to
-> calculate the final D value based on the range. While at it, add
-> support for 2/3 divider in frac_table_pixel.
+On Fri, Jan 21, 2022 at 07:43:51PM +0800, Jiapeng Chong wrote:
+> to_add is being initialized to len but this is never read as
+> to_add is overwritten later on. Remove the redundant
+> initialization.
+> 
+> Cleans up the following clang-analyzer warning:
+> 
+> fs/btrfs/extent-tree.c:2769:8: warning: Value stored to 'to_add' during
+> its initialization is never read [clang-analyzer-deadcode.DeadStores].
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-Please split this into two patches (at the "while at it") and add
-Fixes tag.
+Added to misc-next, thanks.

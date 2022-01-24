@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E45A349A123
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7728749A040
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1849429AbiAXXZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:25:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
+        id S1843581AbiAXXFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:05:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1581148AbiAXWLS (ORCPT
+        with ESMTP id S1581211AbiAXWLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:11:18 -0500
+        Mon, 24 Jan 2022 17:11:24 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430BCC0DF2F1;
-        Mon, 24 Jan 2022 12:43:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924AEC0DF2FE;
+        Mon, 24 Jan 2022 12:43:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D3E546090C;
-        Mon, 24 Jan 2022 20:43:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA9F8C340E5;
-        Mon, 24 Jan 2022 20:43:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E164360907;
+        Mon, 24 Jan 2022 20:43:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABA5DC340E5;
+        Mon, 24 Jan 2022 20:43:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057010;
-        bh=BsOquwzcCQW5R6uppJmiiyzG8hpOx4nUbKNuwlUKS3A=;
+        s=korg; t=1643057013;
+        bh=ddcl4cBea324E6KzDBct/pV9ygz8c88MAFzgAN9niJk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=slca4f3nvMem03wbe6K5ewPpg2GqldX9bWRw87wMFE09WrGa4Qt3HL9hQW7pAGo9I
-         OCEnE28xRe8yi98Zz1tE3+AwpT1k+op50/kLhKMDpHL2zOnK/DiJEzEnq2EAApzMIA
-         9pRfnSGlQLJn4DlIQ+YnNizDJgOmRHpapU743mrw=
+        b=fCS3moWeixOMvs3MW9U7sILYSO73qsoLA1n2geE3c2TvS8MghnhBJ4WzkN7ZJOPzs
+         xvsAGvtB+sJvuqbxcV0t+miLP/AKXDd1G2gBRrwmNA+8aFMsRR6kRvWXSPV++oKapN
+         keeJsAOkNAeAL6lxcBUqP8Xmtdead9vPmj8SUFkM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Petr Cvachoucek <cvachoucek@gmail.com>,
-        Richard Weinberger <richard@nod.at>
-Subject: [PATCH 5.15 672/846] ubifs: Error path in ubifs_remount_rw() seems to wrongly free write buffers
-Date:   Mon, 24 Jan 2022 19:43:09 +0100
-Message-Id: <20220124184124.261949131@linuxfoundation.org>
+        stable@vger.kernel.org, Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Subject: [PATCH 5.15 673/846] tpm: fix potential NULL pointer access in tpm_del_char_device
+Date:   Mon, 24 Jan 2022 19:43:10 +0100
+Message-Id: <20220124184124.292354647@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -48,105 +49,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Petr Cvachoucek <cvachoucek@gmail.com>
+From: Lino Sanfilippo <LinoSanfilippo@gmx.de>
 
-commit 3fea4d9d160186617ff40490ae01f4f4f36b28ff upstream.
+commit eabad7ba2c752392ae50f24a795093fb115b686d upstream.
 
-it seems freeing the write buffers in the error path of the
-ubifs_remount_rw() is wrong. It leads later to a kernel oops like this:
+Some SPI controller drivers unregister the controller in the shutdown
+handler (e.g. BCM2835). If such a controller is used with a TPM 2 slave
+chip->ops may be accessed when it is already NULL:
 
-[10016.431274] UBIFS (ubi0:0): start fixing up free space
-[10090.810042] UBIFS (ubi0:0): free space fixup complete
-[10090.814623] UBIFS error (ubi0:0 pid 512): ubifs_remount_fs: cannot
-spawn "ubifs_bgt0_0", error -4
-[10101.915108] UBIFS (ubi0:0): background thread "ubifs_bgt0_0" started,
-PID 517
-[10105.275498] Unable to handle kernel NULL pointer dereference at
-virtual address 0000000000000030
-[10105.284352] Mem abort info:
-[10105.287160]   ESR = 0x96000006
-[10105.290252]   EC = 0x25: DABT (current EL), IL = 32 bits
-[10105.295592]   SET = 0, FnV = 0
-[10105.298652]   EA = 0, S1PTW = 0
-[10105.301848] Data abort info:
-[10105.304723]   ISV = 0, ISS = 0x00000006
-[10105.308573]   CM = 0, WnR = 0
-[10105.311564] user pgtable: 4k pages, 48-bit VAs, pgdp=00000000f03d1000
-[10105.318034] [0000000000000030] pgd=00000000f6cee003,
-pud=00000000f4884003, pmd=0000000000000000
-[10105.326783] Internal error: Oops: 96000006 [#1] PREEMPT SMP
-[10105.332355] Modules linked in: ath10k_pci ath10k_core ath mac80211
-libarc4 cfg80211 nvme nvme_core cryptodev(O)
-[10105.342468] CPU: 3 PID: 518 Comm: touch Tainted: G           O
-5.4.3 #1
-[10105.349517] Hardware name: HYPEX CPU (DT)
-[10105.353525] pstate: 40000005 (nZcv daif -PAN -UAO)
-[10105.358324] pc : atomic64_try_cmpxchg_acquire.constprop.22+0x8/0x34
-[10105.364596] lr : mutex_lock+0x1c/0x34
-[10105.368253] sp : ffff000075633aa0
-[10105.371563] x29: ffff000075633aa0 x28: 0000000000000001
-[10105.376874] x27: ffff000076fa80c8 x26: 0000000000000004
-[10105.382185] x25: 0000000000000030 x24: 0000000000000000
-[10105.387495] x23: 0000000000000000 x22: 0000000000000038
-[10105.392807] x21: 000000000000000c x20: ffff000076fa80c8
-[10105.398119] x19: ffff000076fa8000 x18: 0000000000000000
-[10105.403429] x17: 0000000000000000 x16: 0000000000000000
-[10105.408741] x15: 0000000000000000 x14: fefefefefefefeff
-[10105.414052] x13: 0000000000000000 x12: 0000000000000fe0
-[10105.419364] x11: 0000000000000fe0 x10: ffff000076709020
-[10105.424675] x9 : 0000000000000000 x8 : 00000000000000a0
-[10105.429986] x7 : ffff000076fa80f4 x6 : 0000000000000030
-[10105.435297] x5 : 0000000000000000 x4 : 0000000000000000
-[10105.440609] x3 : 0000000000000000 x2 : ffff00006f276040
-[10105.445920] x1 : ffff000075633ab8 x0 : 0000000000000030
-[10105.451232] Call trace:
-[10105.453676]  atomic64_try_cmpxchg_acquire.constprop.22+0x8/0x34
-[10105.459600]  ubifs_garbage_collect+0xb4/0x334
-[10105.463956]  ubifs_budget_space+0x398/0x458
-[10105.468139]  ubifs_create+0x50/0x180
-[10105.471712]  path_openat+0x6a0/0x9b0
-[10105.475284]  do_filp_open+0x34/0x7c
-[10105.478771]  do_sys_open+0x78/0xe4
-[10105.482170]  __arm64_sys_openat+0x1c/0x24
-[10105.486180]  el0_svc_handler+0x84/0xc8
-[10105.489928]  el0_svc+0x8/0xc
-[10105.492808] Code: 52800013 17fffffb d2800003 f9800011 (c85ffc05)
-[10105.498903] ---[ end trace 46b721d93267a586 ]---
+At system shutdown the pre-shutdown handler tpm_class_shutdown() shuts down
+TPM 2 and sets chip->ops to NULL. Then at SPI controller unregistration
+tpm_tis_spi_remove() is called and eventually calls tpm_del_char_device()
+which tries to shut down TPM 2 again. Thereby it accesses chip->ops again:
+(tpm_del_char_device calls tpm_chip_start which calls tpm_clk_enable which
+calls chip->ops->clk_enable).
 
-To reproduce the problem:
+Avoid the NULL pointer access by testing if chip->ops is valid and skipping
+the TPM 2 shutdown procedure in case it is NULL.
 
-1. Filesystem initially mounted read-only, free space fixup flag set.
-
-2. mount -o remount,rw <mountpoint>
-
-3. it takes some time (free space fixup running)
-    ... try to terminate running mount by CTRL-C
-    ... does not respond, only after free space fixup is complete
-    ... then "ubifs_remount_fs: cannot spawn "ubifs_bgt0_0", error -4"
-
-4. mount -o remount,rw <mountpoint>
-    ... now finished instantly (fixup already done).
-
-5. Create file or just unmount the filesystem and we get the oops.
-
-Cc: <stable@vger.kernel.org>
-Fixes: b50b9f408502 ("UBIFS: do not free write-buffers when in R/O mode")
-Signed-off-by: Petr Cvachoucek <cvachoucek@gmail.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Cc: stable@vger.kernel.org
+Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Fixes: 39d0099f9439 ("powerpc/pseries: Add shutdown() to vio_driver and vio_bus")
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+Tested-by: Stefan Berger <stefanb@linux.ibm.com>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ubifs/super.c |    1 -
- 1 file changed, 1 deletion(-)
+ drivers/char/tpm/tpm-chip.c |   18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
---- a/fs/ubifs/super.c
-+++ b/fs/ubifs/super.c
-@@ -1853,7 +1853,6 @@ out:
- 		kthread_stop(c->bgt);
- 		c->bgt = NULL;
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -474,13 +474,21 @@ static void tpm_del_char_device(struct t
+ 
+ 	/* Make the driver uncallable. */
+ 	down_write(&chip->ops_sem);
+-	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+-		if (!tpm_chip_start(chip)) {
+-			tpm2_shutdown(chip, TPM2_SU_CLEAR);
+-			tpm_chip_stop(chip);
++
++	/*
++	 * Check if chip->ops is still valid: In case that the controller
++	 * drivers shutdown handler unregisters the controller in its
++	 * shutdown handler we are called twice and chip->ops to NULL.
++	 */
++	if (chip->ops) {
++		if (chip->flags & TPM_CHIP_FLAG_TPM2) {
++			if (!tpm_chip_start(chip)) {
++				tpm2_shutdown(chip, TPM2_SU_CLEAR);
++				tpm_chip_stop(chip);
++			}
+ 		}
++		chip->ops = NULL;
  	}
--	free_wbufs(c);
- 	kfree(c->write_reserve_buf);
- 	c->write_reserve_buf = NULL;
- 	vfree(c->ileb_buf);
+-	chip->ops = NULL;
+ 	up_write(&chip->ops_sem);
+ }
+ 
 
 

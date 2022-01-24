@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D11649912E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:12:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E385499132
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376411AbiAXUJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:09:38 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49566 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357858AbiAXTwF (ORCPT
+        id S1376942AbiAXUJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:09:41 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40434 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351587AbiAXTwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:52:05 -0500
+        Mon, 24 Jan 2022 14:52:09 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 537D260FDD;
-        Mon, 24 Jan 2022 19:52:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28638C340E5;
-        Mon, 24 Jan 2022 19:52:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09C34B811FB;
+        Mon, 24 Jan 2022 19:52:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39B44C36AE9;
+        Mon, 24 Jan 2022 19:52:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053923;
-        bh=HQl6YcXziRLQm+WPUb+jMGqqFQhdR6u6srb+Q89n8GY=;
+        s=korg; t=1643053926;
+        bh=yBJBbtwUqcN2I3MOKeskrjlDtzT79TeZeDKBZRp+q3M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BhE5ctBPU3hjE6SmCqotHh1FyhfELWhbKztH+EiCF93DyPSPq3Ko2c/Gs7/E2KGQm
-         fsPYbpS5wVFjdSYeDceUQyUkugvUQXj1W7GfWDH7z+A6Z7IbpZoZ+5g2EXm6Lz7jM/
-         pQmFOHDMm+l+Tbm2mta94shEh/yRBMx7HtAH4/7k=
+        b=xg098aAEU/lkgt1chTDUfuMfcxr9MMBJCcUZMFL2C4rVmz0Ezp5IpAB6NuxPZ4cZj
+         pwew/ffamAAKxzmLn+8RrgipjdQMaw2Y5iEo643zEhzlKq/CUrdflpDDP1sE7LUtVr
+         a66jXWjTJUHkB6WGd8ur5QBd2xDK+U4QQIY5CqrM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aya Levin <ayal@nvidia.com>,
-        Gal Pressman <gal@nvidia.com>,
+        stable@vger.kernel.org, Moshe Shemesh <moshe@nvidia.com>,
+        Eran Ben Elisha <eranbe@nvidia.com>,
         Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 222/563] Revert "net/mlx5e: Block offload of outer header csum for UDP tunnels"
-Date:   Mon, 24 Jan 2022 19:39:47 +0100
-Message-Id: <20220124184032.128483270@linuxfoundation.org>
+Subject: [PATCH 5.10 223/563] net/mlx5: Set command entry semaphore up once got index free
+Date:   Mon, 24 Jan 2022 19:39:48 +0100
+Message-Id: <20220124184032.160638281@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -47,48 +47,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aya Levin <ayal@nvidia.com>
+From: Moshe Shemesh <moshe@nvidia.com>
 
-[ Upstream commit 64050cdad0983ad8060e33c3f4b5aee2366bcebd ]
+[ Upstream commit 8e715cd613a1e872b9d918e912d90b399785761a ]
 
-This reverts commit 6d6727dddc7f93fcc155cb8d0c49c29ae0e71122.
+Avoid a race where command work handler may fail to allocate command
+entry index, by holding the command semaphore down till command entry
+index is being freed.
 
-Although the NIC doesn't support offload of outer header CSUM, using
-gso_partial_features allows offloading the tunnel's segmentation. The
-driver relies on the stack CSUM calculation of the outer header. For
-this, NETIF_F_GSO_UDP_TUNNEL_CSUM must be a member of the device's
-features.
-
-Fixes: 6d6727dddc7f ("net/mlx5e: Block offload of outer header csum for UDP tunnels")
-Signed-off-by: Aya Levin <ayal@nvidia.com>
-Reviewed-by: Gal Pressman <gal@nvidia.com>
+Fixes: 410bd754cd73 ("net/mlx5: Add retry mechanism to the command entry index allocation")
+Signed-off-by: Moshe Shemesh <moshe@nvidia.com>
+Reviewed-by: Eran Ben Elisha <eranbe@nvidia.com>
 Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en_main.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/cmd.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-index 2f6c3a5813ed1..16e98ac47624c 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -5024,9 +5024,13 @@ static void mlx5e_build_nic_netdev(struct net_device *netdev)
- 	}
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/cmd.c b/drivers/net/ethernet/mellanox/mlx5/core/cmd.c
+index 2e55e00888715..20e3f8cd074a1 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/cmd.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/cmd.c
+@@ -147,8 +147,12 @@ static void cmd_ent_put(struct mlx5_cmd_work_ent *ent)
+ 	if (!refcount_dec_and_test(&ent->refcnt))
+ 		return;
  
- 	if (mlx5_vxlan_allowed(mdev->vxlan) || mlx5_geneve_tx_allowed(mdev)) {
--		netdev->hw_features     |= NETIF_F_GSO_UDP_TUNNEL;
--		netdev->hw_enc_features |= NETIF_F_GSO_UDP_TUNNEL;
--		netdev->vlan_features |= NETIF_F_GSO_UDP_TUNNEL;
-+		netdev->hw_features     |= NETIF_F_GSO_UDP_TUNNEL |
-+					   NETIF_F_GSO_UDP_TUNNEL_CSUM;
-+		netdev->hw_enc_features |= NETIF_F_GSO_UDP_TUNNEL |
-+					   NETIF_F_GSO_UDP_TUNNEL_CSUM;
-+		netdev->gso_partial_features = NETIF_F_GSO_UDP_TUNNEL_CSUM;
-+		netdev->vlan_features |= NETIF_F_GSO_UDP_TUNNEL |
-+					 NETIF_F_GSO_UDP_TUNNEL_CSUM;
- 	}
+-	if (ent->idx >= 0)
+-		cmd_free_index(ent->cmd, ent->idx);
++	if (ent->idx >= 0) {
++		struct mlx5_cmd *cmd = ent->cmd;
++
++		cmd_free_index(cmd, ent->idx);
++		up(ent->page_queue ? &cmd->pages_sem : &cmd->sem);
++	}
  
- 	if (mlx5e_tunnel_proto_supported(mdev, IPPROTO_GRE)) {
+ 	cmd_free_ent(ent);
+ }
+@@ -1582,8 +1586,6 @@ static void mlx5_cmd_comp_handler(struct mlx5_core_dev *dev, u64 vec, bool force
+ 	vector = vec & 0xffffffff;
+ 	for (i = 0; i < (1 << cmd->log_sz); i++) {
+ 		if (test_bit(i, &vector)) {
+-			struct semaphore *sem;
+-
+ 			ent = cmd->ent_arr[i];
+ 
+ 			/* if we already completed the command, ignore it */
+@@ -1606,10 +1608,6 @@ static void mlx5_cmd_comp_handler(struct mlx5_core_dev *dev, u64 vec, bool force
+ 			    dev->state == MLX5_DEVICE_STATE_INTERNAL_ERROR)
+ 				cmd_ent_put(ent);
+ 
+-			if (ent->page_queue)
+-				sem = &cmd->pages_sem;
+-			else
+-				sem = &cmd->sem;
+ 			ent->ts2 = ktime_get_ns();
+ 			memcpy(ent->out->first.data, ent->lay->out, sizeof(ent->lay->out));
+ 			dump_command(dev, ent, 0);
+@@ -1663,7 +1661,6 @@ static void mlx5_cmd_comp_handler(struct mlx5_core_dev *dev, u64 vec, bool force
+ 				 */
+ 				complete(&ent->done);
+ 			}
+-			up(sem);
+ 		}
+ 	}
+ }
 -- 
 2.34.1
 

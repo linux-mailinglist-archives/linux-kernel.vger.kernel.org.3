@@ -2,154 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E96497B1E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:11:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83AC1497B7F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:12:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242597AbiAXJLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 04:11:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:48871 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242495AbiAXJLT (ORCPT
+        id S242661AbiAXJMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 04:12:24 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:42420 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236503AbiAXJLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 04:11:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643015478;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 24 Jan 2022 04:11:53 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id BE5831F38F;
+        Mon, 24 Jan 2022 09:11:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1643015510; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=OMYGpin1GmNWwbbojqUVpe990D8pktHZFFcCMALRStg=;
-        b=Qxf+qyNbCFwzV0dDYx0RHHaSgsE8BSOZQvwNZNfSoARuSg0oad6ALkFwndvWdyqbFmv5EF
-        6mlvDKwFS76vkP4NTQ6QUK5tj3uu5Yx/P0FAWLTf7L637ICetVF7t/2CVJBU+zdmmvcMn2
-        vG3/d7qMgnOzUK23cpCV3XWzvsYz25A=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-183-r0nWPPzbMRelsuvEWwVEzw-1; Mon, 24 Jan 2022 04:11:16 -0500
-X-MC-Unique: r0nWPPzbMRelsuvEWwVEzw-1
-Received: by mail-wr1-f69.google.com with SMTP id j26-20020adfb31a000000b001d8e22f75fbso1594766wrd.20
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 01:11:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=OMYGpin1GmNWwbbojqUVpe990D8pktHZFFcCMALRStg=;
-        b=miSC4PXm2AHGJlvukUyqs7XNLVrfbtTq/QV1kszal9eSCi/vyfCHExDyxqMdBsOxz7
-         f2kmDPmg5T6W1vT69NFGpltlC5Q5PFmZb8X+BPThZpcLJ68rsmpnVhHvXpipqtzRt1oj
-         YrcbIsDYzPnuddkmpBAg+AkUuDgn1VVwBHWElEuRmnv8hczT6iz71+M5P7a7ucChKQRy
-         ocC6NmY7jRRobFf7hPDoBNJDJkgadq+1yreP5K7qZzBnJ1Me2j/AWmYqvvlit7dmNq2L
-         px28mlxSV6/mGMOqEdBqYr2D2kcJn0hyCwd48VFt0EJO0vukO0sl/dCnqoGy/N8Wk5fs
-         /7Tw==
-X-Gm-Message-State: AOAM533D/6sFTDwfyGLtK/v2fAaWoB15pYjvAP7HGUeg14KVpDgiYUQR
-        lljjD9onE3um7wu5rMW5lEQwi1R/JDaMGgoVyScDu8lavE368Wjz1dfEjt+Cz/U1PCqWIHOpo9z
-        trFO04D4WPEhL1xDoTIhNdnfE
-X-Received: by 2002:a5d:598a:: with SMTP id n10mr13089714wri.582.1643015475062;
-        Mon, 24 Jan 2022 01:11:15 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzhROMhxI51amPelFZSuWBFEYDzDjRJZl5mQ1KWe926i8sMhv1aUBQfdX4YJbP2yysVszrsOQ==
-X-Received: by 2002:a5d:598a:: with SMTP id n10mr13089684wri.582.1643015474784;
-        Mon, 24 Jan 2022 01:11:14 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id v5sm18175419wmh.19.2022.01.24.01.11.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 01:11:14 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?Q?Micha=C5=82_Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH 06/54] x86/kvm: replace bitmap_weight with bitmap_empty
- where appropriate
-In-Reply-To: <20220123183925.1052919-7-yury.norov@gmail.com>
-References: <20220123183925.1052919-1-yury.norov@gmail.com>
- <20220123183925.1052919-7-yury.norov@gmail.com>
-Date:   Mon, 24 Jan 2022 10:11:12 +0100
-Message-ID: <87y235ijm7.fsf@redhat.com>
+        bh=pclTjgWx5vU3/PoEZ8sdrQgqpdal8p/gNWrmseRwR/M=;
+        b=zvdxcU0TNbcrU6ysCWVa42iphoQkkHSCL1ZALnKgwFUEpomZ0gmbYwb7t4wgRG834fDJk3
+        TldzlVhRvp5Q0Q7TSA4BhBZTOsBIOkEmucSVYuel0N4J03gcH6SNKMJbaoL3XbF+3rvemi
+        nnRmFj4zqBjZ4D0aTHtJZc18PeG33F8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1643015510;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pclTjgWx5vU3/PoEZ8sdrQgqpdal8p/gNWrmseRwR/M=;
+        b=ZNGRDfh87zOEwMUThSLKEbE2fuuM1DuCPdIl7CiSkv+EQKkEV3BPW3Bwz4znO1g5A07wtz
+        kwSVYSus2mTNnQAQ==
+Received: from quack3.suse.cz (unknown [10.163.43.118])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id A42DCA3BDB;
+        Mon, 24 Jan 2022 09:11:50 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 44151A05E7; Mon, 24 Jan 2022 10:11:50 +0100 (CET)
+Date:   Mon, 24 Jan 2022 10:11:50 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ritesh Harjani <riteshh@linux.ibm.com>
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jan Kara <jack@suse.com>,
+        tytso@mit.edu, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCHv1 1/2] jbd2: Kill t_handle_lock transaction spinlock
+Message-ID: <20220124091150.4zwj4hxpego4zl6w@quack3.lan>
+References: <cover.1642953021.git.riteshh@linux.ibm.com>
+ <089b38635884e95cfd858c003630bdc8bd7f22b0.1642953021.git.riteshh@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <089b38635884e95cfd858c003630bdc8bd7f22b0.1642953021.git.riteshh@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yury Norov <yury.norov@gmail.com> writes:
+On Sun 23-01-22 22:53:27, Ritesh Harjani wrote:
+> This patch kills t_handle_lock transaction spinlock completely from
+> jbd2.
+> To explain the reasoning, currently there were three sites at which this
+> spinlock was used.
+> 1. jbd2_journal_wait_updates()
+>    a. Based on careful code review it can be seen that, we don't need this
+>       lock here. This is since we wait for any currently ongoing updates
+>       based on a atomic variable t_updates. And we anyway don't take any
+>       t_handle_lock while in stop_this_handle().
+>       i.e.
+> 
+> 	write_lock(&journal->j_state_lock()
+> 	jbd2_journal_wait_updates() 			stop_this_handle()
+> 		while (atomic_read(txn->t_updates) { 		|
+> 		DEFINE_WAIT(wait); 				|
+> 		prepare_to_wait(); 				|
+> 		if (atomic_read(txn->t_updates) 		if (atomic_dec_and_test(txn->t_updates))
+> 			write_unlock(&journal->j_state_lock);
+> 			schedule();					wake_up()
+> 			write_lock(&journal->j_state_lock);
+> 		finish_wait();
+> 	   }
+> 	txn->t_state = T_COMMIT
+> 	write_unlock(&journal->j_state_lock);
+> 
+>    b.  Also note that between atomic_inc(&txn->t_updates) in
+>        start_this_handle() and jbd2_journal_wait_updates(), the
+>        synchronization happens via read_lock(journal->j_state_lock) in
+>        start_this_handle();
+> 
+> 2. jbd2_journal_extend()
+>    a. jbd2_journal_extend() is called with the handle of each process from
+>       task_struct. So no lock required in updating member fields of handle_t
+> 
+>    b. For member fields of h_transaction, all updates happens only via
+>       atomic APIs (which is also within read_lock()).
+>       So, no need of this transaction spinlock.
+> 
+> 3. update_t_max_wait()
+>    Based on Jan suggestion, this can be carefully removed using atomic
+>    cmpxchg API.
+>    Note that there can be several processes which are waiting for a new
+>    transaction to be allocated and started. For doing this only one
+>    process will succeed in taking write_lock() and allocating a new txn.
+>    After that all of the process will be updating the t_max_wait (max
+>    transaction wait time). This can be done via below method w/o taking
+>    any locks using atomic cmpxchg.
+>    For more details refer [1]
+> 
+> 	   new = get_new_val();
+> 	   old = READ_ONCE(ptr->max_val);
+> 	   while (old < new)
+> 		old = cmpxchg(&ptr->max_val, old, new);
+> 
+> [1]: https://lwn.net/Articles/849237/
+> Suggested-by: Jan Kara <jack@suse.cz>
+> Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
 
-> In some places kvm/hyperv.c code calls bitmap_weight() to check if any bit
-> of a given bitmap is set. It's better to use bitmap_empty() in that case
-> because bitmap_empty() stops traversing the bitmap as soon as it finds
-> first set bit, while bitmap_weight() counts all bits unconditionally.
->
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+Looks good. Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
 > ---
->  arch/x86/kvm/hyperv.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index 6e38a7d22e97..2c3400dea4b3 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -90,7 +90,7 @@ static void synic_update_vector(struct kvm_vcpu_hv_synic *synic,
+>  fs/jbd2/transaction.c | 29 +++++++++--------------------
+>  include/linux/jbd2.h  |  3 ---
+>  2 files changed, 9 insertions(+), 23 deletions(-)
+> 
+> diff --git a/fs/jbd2/transaction.c b/fs/jbd2/transaction.c
+> index 8e2f8275a253..68dd7de49aff 100644
+> --- a/fs/jbd2/transaction.c
+> +++ b/fs/jbd2/transaction.c
+> @@ -107,7 +107,6 @@ static void jbd2_get_transaction(journal_t *journal,
+>  	transaction->t_start_time = ktime_get();
+>  	transaction->t_tid = journal->j_transaction_sequence++;
+>  	transaction->t_expires = jiffies + journal->j_commit_interval;
+> -	spin_lock_init(&transaction->t_handle_lock);
+>  	atomic_set(&transaction->t_updates, 0);
+>  	atomic_set(&transaction->t_outstanding_credits,
+>  		   jbd2_descriptor_blocks_per_trans(journal) +
+> @@ -139,24 +138,21 @@ static void jbd2_get_transaction(journal_t *journal,
+>  /*
+>   * Update transaction's maximum wait time, if debugging is enabled.
+>   *
+> - * In order for t_max_wait to be reliable, it must be protected by a
+> - * lock.  But doing so will mean that start_this_handle() can not be
+> - * run in parallel on SMP systems, which limits our scalability.  So
+> - * unless debugging is enabled, we no longer update t_max_wait, which
+> - * means that maximum wait time reported by the jbd2_run_stats
+> - * tracepoint will always be zero.
+> + * t_max_wait is carefully updated here with use of atomic compare exchange.
+> + * Note that there could be multiplre threads trying to do this simultaneously
+> + * hence using cmpxchg to avoid any use of locks in this case.
+>   */
+>  static inline void update_t_max_wait(transaction_t *transaction,
+>  				     unsigned long ts)
 >  {
->  	struct kvm_vcpu *vcpu = hv_synic_to_vcpu(synic);
->  	struct kvm_hv *hv = to_kvm_hv(vcpu->kvm);
-> -	int auto_eoi_old, auto_eoi_new;
-> +	bool auto_eoi_old, auto_eoi_new;
->  
->  	if (vector < HV_SYNIC_FIRST_VALID_VECTOR)
+>  #ifdef CONFIG_JBD2_DEBUG
+> +	unsigned long oldts, newts;
+>  	if (jbd2_journal_enable_debug &&
+>  	    time_after(transaction->t_start, ts)) {
+> -		ts = jbd2_time_diff(ts, transaction->t_start);
+> -		spin_lock(&transaction->t_handle_lock);
+> -		if (ts > transaction->t_max_wait)
+> -			transaction->t_max_wait = ts;
+> -		spin_unlock(&transaction->t_handle_lock);
+> +		newts = jbd2_time_diff(ts, transaction->t_start);
+> +		oldts = READ_ONCE(transaction->t_max_wait);
+> +		while (oldts < newts)
+> +			oldts = cmpxchg(&transaction->t_max_wait, oldts, newts);
+>  	}
+>  #endif
+>  }
+> @@ -690,7 +686,6 @@ int jbd2_journal_extend(handle_t *handle, int nblocks, int revoke_records)
+>  		DIV_ROUND_UP(
+>  			handle->h_revoke_credits_requested,
+>  			journal->j_revoke_records_per_block);
+> -	spin_lock(&transaction->t_handle_lock);
+>  	wanted = atomic_add_return(nblocks,
+>  				   &transaction->t_outstanding_credits);
+> 
+> @@ -698,7 +693,7 @@ int jbd2_journal_extend(handle_t *handle, int nblocks, int revoke_records)
+>  		jbd_debug(3, "denied handle %p %d blocks: "
+>  			  "transaction too large\n", handle, nblocks);
+>  		atomic_sub(nblocks, &transaction->t_outstanding_credits);
+> -		goto unlock;
+> +		goto error_out;
+>  	}
+> 
+>  	trace_jbd2_handle_extend(journal->j_fs_dev->bd_dev,
+> @@ -714,8 +709,6 @@ int jbd2_journal_extend(handle_t *handle, int nblocks, int revoke_records)
+>  	result = 0;
+> 
+>  	jbd_debug(3, "extended handle %p by %d\n", handle, nblocks);
+> -unlock:
+> -	spin_unlock(&transaction->t_handle_lock);
+>  error_out:
+>  	read_unlock(&journal->j_state_lock);
+>  	return result;
+> @@ -847,22 +840,18 @@ void jbd2_journal_wait_updates(journal_t *journal)
+>  	if (!commit_transaction)
 >  		return;
-> @@ -100,16 +100,16 @@ static void synic_update_vector(struct kvm_vcpu_hv_synic *synic,
->  	else
->  		__clear_bit(vector, synic->vec_bitmap);
->  
-> -	auto_eoi_old = bitmap_weight(synic->auto_eoi_bitmap, 256);
-> +	auto_eoi_old = bitmap_empty(synic->auto_eoi_bitmap, 256);
-
-I would've preferred this written as 
-
-	auto_eoi_old = !bitmap_empty(synic->auto_eoi_bitmap, 256);
-
-so the variable would indicate wether AutoEOI was previosly enabled, not
-disabled.
-
->  
->  	if (synic_has_vector_auto_eoi(synic, vector))
->  		__set_bit(vector, synic->auto_eoi_bitmap);
->  	else
->  		__clear_bit(vector, synic->auto_eoi_bitmap);
->  
-> -	auto_eoi_new = bitmap_weight(synic->auto_eoi_bitmap, 256);
-> +	auto_eoi_new = bitmap_empty(synic->auto_eoi_bitmap, 256);
-
-Same here, of course. "auto_eoi_new = true" sounds like "AutoEOI is now
-enabled".
-
->  
-> -	if (!!auto_eoi_old == !!auto_eoi_new)
-> +	if (auto_eoi_old == auto_eoi_new)
->  		return;
->  
->  	down_write(&vcpu->kvm->arch.apicv_update_lock);
-
-The change look good to me otherwise, feel free to add
-
-Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-
+> 
+> -	spin_lock(&commit_transaction->t_handle_lock);
+>  	while (atomic_read(&commit_transaction->t_updates)) {
+>  		DEFINE_WAIT(wait);
+> 
+>  		prepare_to_wait(&journal->j_wait_updates, &wait,
+>  					TASK_UNINTERRUPTIBLE);
+>  		if (atomic_read(&commit_transaction->t_updates)) {
+> -			spin_unlock(&commit_transaction->t_handle_lock);
+>  			write_unlock(&journal->j_state_lock);
+>  			schedule();
+>  			write_lock(&journal->j_state_lock);
+> -			spin_lock(&commit_transaction->t_handle_lock);
+>  		}
+>  		finish_wait(&journal->j_wait_updates, &wait);
+>  	}
+> -	spin_unlock(&commit_transaction->t_handle_lock);
+>  }
+> 
+>  /**
+> diff --git a/include/linux/jbd2.h b/include/linux/jbd2.h
+> index 575c3057a98a..500a95f8c914 100644
+> --- a/include/linux/jbd2.h
+> +++ b/include/linux/jbd2.h
+> @@ -554,9 +554,6 @@ struct transaction_chp_stats_s {
+>   *    ->j_list_lock
+>   *
+>   *    j_state_lock
+> - *    ->t_handle_lock
+> - *
+> - *    j_state_lock
+>   *    ->j_list_lock			(journal_unmap_buffer)
+>   *
+>   */
+> --
+> 2.31.1
+> 
 -- 
-Vitaly
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

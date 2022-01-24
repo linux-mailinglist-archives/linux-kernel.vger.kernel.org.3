@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ABAB49959F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9BB6499B17
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442140AbiAXUxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:53:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384767AbiAXUad (ORCPT
+        id S1574457AbiAXVte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:49:34 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36992 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1448888AbiAXVOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:30:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542D0C08B4D9;
-        Mon, 24 Jan 2022 11:42:54 -0800 (PST)
+        Mon, 24 Jan 2022 16:14:09 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D2BE36135E;
-        Mon, 24 Jan 2022 19:42:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4073C340E5;
-        Mon, 24 Jan 2022 19:42:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1B9C6149E;
+        Mon, 24 Jan 2022 21:14:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9AC2C340E7;
+        Mon, 24 Jan 2022 21:14:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053373;
-        bh=q06pqYo6uEXuUELP82UDgfcUYfD4+EybH2C9KbzgQ4I=;
+        s=korg; t=1643058844;
+        bh=pwnwnU/LAdzSlH5GmWQH3agJIXJJWSc13ZnYoVB68hs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GcacAnTQH76Ha4NCVjylc/LJ/dIeHx73uBkXPtSUGhUvm9N+GcklEHii2GXzY18L8
-         Y7YTNYIcarxf2/KtWea6e4zCriTEQ9HJrg8iDNxohR1eQ8myCaSHA3jAwbXIq852Y9
-         q5Mcxr6J4fUCh6SHwZPL6o02BzyV0F1vt9+jVTQg=
+        b=gl+S+cVirc9DvgeO3U+5UpmJb/vZoN9Y+dLpiN8EMKftFBj3bkDotNbb7x3x9G6nJ
+         lLme0AHQt7pjhfzUOJqB9ggoQafqMT+nO9eDqwReI2SPLibTbRYP0aKZgpTLBvh5IB
+         OG7lyN8sUDqHtqxCw93hAtOSgOrdXLAeumbkNdF0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Wang Hai <wanghai38@huawei.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 044/563] drm: fix null-ptr-deref in drm_dev_init_release()
-Date:   Mon, 24 Jan 2022 19:36:49 +0100
-Message-Id: <20220124184025.937609654@linuxfoundation.org>
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>,
+        syzbot+bc9e2d2dbcb347dd215a@syzkaller.appspotmail.com
+Subject: [PATCH 5.16 0421/1039] mptcp: Check reclaim amount before reducing allocation
+Date:   Mon, 24 Jan 2022 19:36:50 +0100
+Message-Id: <20220124184139.452884444@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,84 +50,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Hai <wanghai38@huawei.com>
+From: Mat Martineau <mathew.j.martineau@linux.intel.com>
 
-[ Upstream commit acf20ed020ffa4d6cc8347e8d356509b95df3cbe ]
+[ Upstream commit 269bda9e7da48eafb599d01c96199caa2f7547e5 ]
 
-I got a null-ptr-deref report:
+syzbot found a page counter underflow that was triggered by MPTCP's
+reclaim code:
 
-[drm:drm_dev_init [drm]] *ERROR* Cannot allocate anonymous inode: -12
-==================================================================
-BUG: KASAN: null-ptr-deref in iput+0x3c/0x4a0
-...
+page_counter underflow: -4294964789 nr_pages=4294967295
+WARNING: CPU: 2 PID: 3785 at mm/page_counter.c:56 page_counter_cancel+0xcf/0xe0 mm/page_counter.c:56
+Modules linked in:
+CPU: 2 PID: 3785 Comm: kworker/2:6 Not tainted 5.16.0-rc1-syzkaller #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Workqueue: events mptcp_worker
+
+RIP: 0010:page_counter_cancel+0xcf/0xe0 mm/page_counter.c:56
+Code: c7 04 24 00 00 00 00 45 31 f6 eb 97 e8 2a 2b b5 ff 4c 89 ea 48 89 ee 48 c7 c7 00 9e b8 89 c6 05 a0 c1 ba 0b 01 e8 95 e4 4b 07 <0f> 0b eb a8 4c 89 e7 e8 25 5a fb ff eb c7 0f 1f 00 41 56 41 55 49
+RSP: 0018:ffffc90002d4f918 EFLAGS: 00010082
+
+RAX: 0000000000000000 RBX: ffff88806a494120 RCX: 0000000000000000
+RDX: ffff8880688c41c0 RSI: ffffffff815e8f28 RDI: fffff520005a9f15
+RBP: ffffffff000009cb R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff815e2cfe R11: 0000000000000000 R12: ffff88806a494120
+R13: 00000000ffffffff R14: 0000000000000000 R15: 0000000000000001
+FS:  0000000000000000(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b2de21000 CR3: 000000005ad59000 CR4: 0000000000150ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
- dump_stack_lvl+0x6c/0x8b
- kasan_report.cold+0x64/0xdb
- __asan_load8+0x69/0x90
- iput+0x3c/0x4a0
- drm_dev_init_release+0x39/0xb0 [drm]
- drm_managed_release+0x158/0x2d0 [drm]
- drm_dev_init+0x3a7/0x4c0 [drm]
- __devm_drm_dev_alloc+0x55/0xd0 [drm]
- mi0283qt_probe+0x8a/0x2b5 [mi0283qt]
- spi_probe+0xeb/0x130
-...
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+ <TASK>
+ page_counter_uncharge+0x2e/0x60 mm/page_counter.c:160
+ drain_stock+0xc1/0x180 mm/memcontrol.c:2219
+ refill_stock+0x139/0x2f0 mm/memcontrol.c:2271
+ __sk_mem_reduce_allocated+0x24d/0x550 net/core/sock.c:2945
+ __mptcp_rmem_reclaim net/mptcp/protocol.c:167 [inline]
+ __mptcp_mem_reclaim_partial+0x124/0x410 net/mptcp/protocol.c:975
+ mptcp_mem_reclaim_partial net/mptcp/protocol.c:982 [inline]
+ mptcp_alloc_tx_skb net/mptcp/protocol.c:1212 [inline]
+ mptcp_sendmsg_frag+0x18c6/0x2190 net/mptcp/protocol.c:1279
+ __mptcp_push_pending+0x232/0x720 net/mptcp/protocol.c:1545
+ mptcp_release_cb+0xfe/0x200 net/mptcp/protocol.c:2975
+ release_sock+0xb4/0x1b0 net/core/sock.c:3306
+ mptcp_worker+0x51e/0xc10 net/mptcp/protocol.c:2443
+ process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
+ worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
 
-If drm_fs_inode_new() fails in drm_dev_init(), dev->anon_inode will point
-to PTR_ERR(...) instead of NULL. This will result in null-ptr-deref when
-drm_fs_inode_free(dev->anon_inode) is called.
+__mptcp_mem_reclaim_partial() could call __mptcp_rmem_reclaim() with a
+negative value, which passed that negative value to
+__sk_mem_reduce_allocated() and triggered the splat above.
 
-drm_dev_init()
-	drm_fs_inode_new() // fail, dev->anon_inode = PTR_ERR(...)
-	drm_managed_release()
-		drm_dev_init_release()
-			drm_fs_inode_free() // access non-existent anon_inode
+Check for a reclaim amount that is positive and large enough for
+__mptcp_rmem_reclaim() to actually adjust rmem_fwd_alloc (much like
+the sk_mem_reclaim_partial() code the function is based on).
 
-Define a temp variable and assign it to dev->anon_inode if the temp
-variable is not PTR_ERR.
+v2: Use '>' instead of '>=', since SK_MEM_QUANTUM - 1 would get
+right-shifted into nothing by __mptcp_rmem_reclaim.
 
-Fixes: 2cbf7fc6718b ("drm: Use drmm_ for drm_dev_init cleanup")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wang Hai <wanghai38@huawei.com>
-Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211013114139.4042207-1-wanghai38@huawei.com
+Fixes: 6511882cdd82 ("mptcp: allocate fwd memory separately on the rx and tx path")
+Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/252
+Reported-and-tested-by: syzbot+bc9e2d2dbcb347dd215a@syzkaller.appspotmail.com
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Michal Hocko <mhocko@suse.com>
+Acked-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/drm_drv.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ net/mptcp/protocol.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
-index cd162d406078a..006e3b896caea 100644
---- a/drivers/gpu/drm/drm_drv.c
-+++ b/drivers/gpu/drm/drm_drv.c
-@@ -577,6 +577,7 @@ static int drm_dev_init(struct drm_device *dev,
- 			struct drm_driver *driver,
- 			struct device *parent)
- {
-+	struct inode *inode;
- 	int ret;
+diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
+index 54613f5b75217..0cd55e4c30fab 100644
+--- a/net/mptcp/protocol.c
++++ b/net/mptcp/protocol.c
+@@ -972,7 +972,9 @@ static void __mptcp_mem_reclaim_partial(struct sock *sk)
  
- 	if (!drm_core_init_complete) {
-@@ -613,13 +614,15 @@ static int drm_dev_init(struct drm_device *dev,
- 	if (ret)
- 		return ret;
+ 	lockdep_assert_held_once(&sk->sk_lock.slock);
  
--	dev->anon_inode = drm_fs_inode_new();
--	if (IS_ERR(dev->anon_inode)) {
--		ret = PTR_ERR(dev->anon_inode);
-+	inode = drm_fs_inode_new();
-+	if (IS_ERR(inode)) {
-+		ret = PTR_ERR(inode);
- 		DRM_ERROR("Cannot allocate anonymous inode: %d\n", ret);
- 		goto err;
- 	}
- 
-+	dev->anon_inode = inode;
+-	__mptcp_rmem_reclaim(sk, reclaimable - 1);
++	if (reclaimable > SK_MEM_QUANTUM)
++		__mptcp_rmem_reclaim(sk, reclaimable - 1);
 +
- 	if (drm_core_check_feature(dev, DRIVER_RENDER)) {
- 		ret = drm_minor_alloc(dev, DRM_MINOR_RENDER);
- 		if (ret)
+ 	sk_mem_reclaim_partial(sk);
+ }
+ 
 -- 
 2.34.1
 

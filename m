@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 508364990A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:04:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7360498D55
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:34:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245638AbiAXUCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:02:24 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57844 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354020AbiAXTfq (ORCPT
+        id S1352821AbiAXTbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:31:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349989AbiAXTXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:35:46 -0500
+        Mon, 24 Jan 2022 14:23:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C265C06138F;
+        Mon, 24 Jan 2022 11:09:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7C7BB81238;
-        Mon, 24 Jan 2022 19:35:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE938C340E5;
-        Mon, 24 Jan 2022 19:35:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0C6F60B86;
+        Mon, 24 Jan 2022 19:09:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2A41C340E5;
+        Mon, 24 Jan 2022 19:09:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052944;
-        bh=ETddzE3Lq3EU9bMSDlE2ShnRd8iiKQWFS2i5TL7wyWA=;
+        s=korg; t=1643051353;
+        bh=eRQgN6+6B/sk/4CSMI+LPdFbwm4PJOHQJ/Ld8kx8M0M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uDouDohxeLZIRD//iDkQ7g+t1TKCYLIbl+fQNhqd6V17UL9MicLWcEbtHs8Ybfw1b
-         gfoZCr+syRAtHz0z4c0gQQhWhmVZpId7hrP/fblgPacYGYPpy+L0Zp/pOkr7xhx6Ra
-         9gfWqR1c7eHYQfOjRERka3NSvhDo/6Yri90RUNII=
+        b=tvgDF5DmSdxdG1Cg9CJCdOXhLnknpb9+RHSXP0UbzXb4KUnm2qUiUU60EFon8a7+C
+         Dmzf5i3OAwVjO+/RUbh5QJ7ORntEn8euxaCHfMMFWGsbGTvDlY0qNkEMn9YAeqFr1s
+         MdMqZm79A1HHNLDu6tCoBfzs2ZU3ewVFAizPmwoQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Julia Lawall <Julia.Lawall@lip6.fr>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 224/320] powerpc/6xx: add missing of_node_put
-Date:   Mon, 24 Jan 2022 19:43:28 +0100
-Message-Id: <20220124184001.607075988@linuxfoundation.org>
+Subject: [PATCH 4.14 134/186] powerpc/cell: add missing of_node_put
+Date:   Mon, 24 Jan 2022 19:43:29 +0100
+Message-Id: <20220124183941.420864123@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,9 +51,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Julia Lawall <Julia.Lawall@lip6.fr>
 
-[ Upstream commit f6e82647ff71d427d4148964b71f239fba9d7937 ]
+[ Upstream commit a841fd009e51c8c0a8f07c942e9ab6bb48da8858 ]
 
-for_each_compatible_node performs an of_node_get on each iteration, so
+for_each_node_by_name performs an of_node_get on each iteration, so
 a break out of the loop requires an of_node_put.
 
 A simplified version of the semantic patch that fixes this problem is as
@@ -58,50 +61,43 @@ follows (http://coccinelle.lip6.fr):
 
 // <smpl>
 @@
-expression e;
+expression e,e1;
 local idexpression n;
 @@
 
-@@
-local idexpression n;
-expression e;
-@@
-
- for_each_compatible_node(n,...) {
-   ...
+ for_each_node_by_name(n, e1) {
+   ... when != of_node_put(n)
+       when != e = n
 (
-   of_node_put(n);
-|
-   e = n
+   return n;
 |
 +  of_node_put(n);
-?  break;
+?  return ...;
 )
    ...
  }
-... when != n
 // </smpl>
 
 Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/1448051604-25256-2-git-send-email-Julia.Lawall@lip6.fr
+Link: https://lore.kernel.org/r/1448051604-25256-7-git-send-email-Julia.Lawall@lip6.fr
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/platforms/embedded6xx/hlwd-pic.c | 1 +
+ arch/powerpc/platforms/cell/iommu.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/powerpc/platforms/embedded6xx/hlwd-pic.c b/arch/powerpc/platforms/embedded6xx/hlwd-pic.c
-index a1b7f79a8a152..de10c13de15c6 100644
---- a/arch/powerpc/platforms/embedded6xx/hlwd-pic.c
-+++ b/arch/powerpc/platforms/embedded6xx/hlwd-pic.c
-@@ -215,6 +215,7 @@ void hlwd_pic_probe(void)
- 			irq_set_chained_handler(cascade_virq,
- 						hlwd_pic_irq_cascade);
- 			hlwd_irq_host = host;
-+			of_node_put(np);
- 			break;
+diff --git a/arch/powerpc/platforms/cell/iommu.c b/arch/powerpc/platforms/cell/iommu.c
+index 4b91ad08eefd9..c4f352387aec3 100644
+--- a/arch/powerpc/platforms/cell/iommu.c
++++ b/arch/powerpc/platforms/cell/iommu.c
+@@ -1088,6 +1088,7 @@ static int __init cell_iommu_fixed_mapping_init(void)
+ 			if (hbase < dbase || (hend > (dbase + dsize))) {
+ 				pr_debug("iommu: hash window doesn't fit in"
+ 					 "real DMA window\n");
++				of_node_put(np);
+ 				return -1;
+ 			}
  		}
- 	}
 -- 
 2.34.1
 

@@ -2,42 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB93499808
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:34:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F3E499AE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:58:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237220AbiAXVTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:19:01 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44026 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392091AbiAXUu0 (ORCPT
+        id S1574103AbiAXVrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:47:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377757AbiAXVMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:50:26 -0500
+        Mon, 24 Jan 2022 16:12:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83E1C02B778;
+        Mon, 24 Jan 2022 12:09:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE86960B1A;
-        Mon, 24 Jan 2022 20:50:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0ABBC340E5;
-        Mon, 24 Jan 2022 20:50:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5DB19B8122A;
+        Mon, 24 Jan 2022 20:09:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84AEFC340E5;
+        Mon, 24 Jan 2022 20:09:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057425;
-        bh=q67Yuv2lFh5A7efPX2bOzffmmlUvGKImDLhXNGY13OQ=;
+        s=korg; t=1643054969;
+        bh=MHmC5G+aOd3jIodOwStGtnsuWl6x1s8Ye8y6waVER78=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x17V3IUP4VZYAcaTuXmsM+HMdPzUr9yXCZAPbfDR2wBnd7QZbIr/Hr8+g7LKaGRJ8
-         hNDANS41acXLU4U2Zx7QjuNosvDKE7p4ZhVBIuCDTXBA19+0WHRqGhzefheBbf4QWz
-         w/wdGaADpcxnC3759Bdh4gYi5whjO5UvYz4G79tM=
+        b=XCD6vIK2Eet5qPPwbEeM0MqCLkidvtXIoxgtQNpUPtP6DlBPXBzcvXlxbjv9g6qTV
+         WjU4Xn3U9q6VhoYy+rFeyWpy3Kr1NSRT3JmT1MBD7OfspeC/QTVEKW/82AqLhxlq7I
+         FfM9AjmnPPZjJbOiTwCwd5VQj7Mf4d5+kMzPPcwU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 808/846] netns: add schedule point in ops_exit_list()
-Date:   Mon, 24 Jan 2022 19:45:25 +0100
-Message-Id: <20220124184128.801450579@linuxfoundation.org>
+        stable@vger.kernel.org, Andrey Konovalov <andreyknvl@google.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.10 561/563] lib/test_meminit: destroy cache in kmem_cache_alloc_bulk() test
+Date:   Mon, 24 Jan 2022 19:45:26 +0100
+Message-Id: <20220124184043.856005308@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,47 +53,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Andrey Konovalov <andreyknvl@google.com>
 
-commit 2836615aa22de55b8fca5e32fe1b27a67cda625e upstream.
+commit e073e5ef90298d2d6e5e7f04b545a0815e92110c upstream.
 
-When under stress, cleanup_net() can have to dismantle
-netns in big numbers. ops_exit_list() currently calls
-many helpers [1] that have no schedule point, and we can
-end up with soft lockups, particularly on hosts
-with many cpus.
+Make do_kmem_cache_size_bulk() destroy the cache it creates.
 
-Even for moderate amount of netns processed by cleanup_net()
-this patch avoids latency spikes.
-
-[1] Some of these helpers like fib_sync_up() and fib_sync_down_dev()
-are very slow because net/ipv4/fib_semantics.c uses host-wide hash tables,
-and ifindex is used as the only input of two hash functions.
-    ifindexes tend to be the same for all netns (lo.ifindex==1 per instance)
-    This will be fixed in a separate patch.
-
-Fixes: 72ad937abd0a ("net: Add support for batching network namespace cleanups")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Eric W. Biederman <ebiederm@xmission.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Link: https://lkml.kernel.org/r/aced20a94bf04159a139f0846e41d38a1537debb.1640018297.git.andreyknvl@google.com
+Fixes: 03a9349ac0e0 ("lib/test_meminit: add a kmem_cache_alloc_bulk() test")
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Reviewed-by: Marco Elver <elver@google.com>
+Cc: Alexander Potapenko <glider@google.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>
+Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/net_namespace.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ lib/test_meminit.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/net/core/net_namespace.c
-+++ b/net/core/net_namespace.c
-@@ -164,8 +164,10 @@ static void ops_exit_list(const struct p
- {
- 	struct net *net;
- 	if (ops->exit) {
--		list_for_each_entry(net, net_exit_list, exit_list)
-+		list_for_each_entry(net, net_exit_list, exit_list) {
- 			ops->exit(net);
-+			cond_resched();
-+		}
+--- a/lib/test_meminit.c
++++ b/lib/test_meminit.c
+@@ -337,6 +337,7 @@ static int __init do_kmem_cache_size_bul
+ 		if (num)
+ 			kmem_cache_free_bulk(c, num, objects);
  	}
- 	if (ops->exit_batch)
- 		ops->exit_batch(net_exit_list);
++	kmem_cache_destroy(c);
+ 	*total_failures += fail;
+ 	return 1;
+ }
 
 

@@ -2,170 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 048574980D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F284980E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243104AbiAXNQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 08:16:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243076AbiAXNQP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 08:16:15 -0500
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6E6C06173B;
-        Mon, 24 Jan 2022 05:16:14 -0800 (PST)
-Received: by mail-ua1-x930.google.com with SMTP id n15so29343676uaq.5;
-        Mon, 24 Jan 2022 05:16:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uFYFObtMXp4GI0dEMvK7PEdd9wIdRLdqU+u9A0WaZIA=;
-        b=AQbRmLRorqGKzoH9vLmyLlfDixBs7gF2+oUApSmm1/GGJBzjvJIldKiApYcjNsUclQ
-         ajXVlxvH6aDmRTBEoqjgTIE/42gtY0ABpIeYTGDlZwn468ogNm71jP++qoH+gHhtIyQM
-         YZ08wNyNdcDrV3ELP/FJ/3GX5lTGN+/x4S8UyfHtjrEwt4g9NoSLSpy9GSmDuqdh6j7S
-         v5T3W9nb9tlXDeq95xSoejHmPy+2Y1YVNt6GFLyRBh5EsGt5lyR7aNBC6eZNbn+MK4G1
-         XQFwH2PGabpNqtTBNrO9aRYzWa7k2OdHNGP+2K5yjogT0i4hB0yQATS2hRcohP7QrDCg
-         MfgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uFYFObtMXp4GI0dEMvK7PEdd9wIdRLdqU+u9A0WaZIA=;
-        b=TrYYTcHcSNZJB+VTY3V+5CuvaEFp+CNmn6hrUCuN1/07ZcEAPMB2k8eIu8irRyesO+
-         XTOwKCK7pDH4IpRzn75PmNwbbYptNLHK29zgDfdMaD9NU9MZihnk5Ws4lJBuIMI18c0G
-         Xym4ccsfwxW3Hn0VyZ5p2sxY09peT93C2g4A+SXUR6TlknHUcge9G/zxQeERjbleCEZp
-         1Mc+yvSL6w6ftl9PDQ+9X14lUNOTj4Hn/apQjVKVtz7X/sdWlTCXqqLQAWhNNsssRFa4
-         bxMPPVUcZ87sIVneWQ21242oeGf4UW8rkmEAJEKVKb0nEk8Snl7FIT32YBfpCgRF2lS8
-         Jm/w==
-X-Gm-Message-State: AOAM533eip/S8ZK++cYv8H6M9Ml2Bv4xlT24wryLDw/XrqEfWu7M3dN7
-        2wweBXiZRV8ZXKycPefOmHQYGauXWhr6Z+ktwjmtk+huQXQ=
-X-Google-Smtp-Source: ABdhPJwZbWpaN+safEC1+Xt9t6p1mtVWx+ZXEjvmjqHuVecNAyRAteVrjGZcrtQ52ob56AX/j11Px/cD3Ikwit4TDR4=
-X-Received: by 2002:a05:6102:3913:: with SMTP id e19mr5463896vsu.14.1643030173736;
- Mon, 24 Jan 2022 05:16:13 -0800 (PST)
+        id S243051AbiAXNSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 08:18:07 -0500
+Received: from mail-bn8nam12on2052.outbound.protection.outlook.com ([40.107.237.52]:62304
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229729AbiAXNSG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 08:18:06 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Cke3RNWzWprJNQBJWo9BfY1LTnI3kFj8gl9+hFnywBfSv0Q+FNiBdsotooPljRxqylfoAxkvMj0KAUmI7p0itc3ua+/EVcfa2KLny5KgZY3AzngxrA7JbXUBQOOPFNk2GyZg4HGqt/L76vLWC5aPyqusKCcaMxfe76Aq/o2m8JvAb54Ykso3V4Pgcp9v7e/zleuxnvEzJhVFxiFBkVzMPd4W9GB+TkicsLrh0xpU0PI69/JO2OU/JuA8l9YyQOxHRO77dHmfgHXGb7qf9f9AN7M/P1pTj6UJPJjkV+KHxHwyQ0Ujbz9qbAhaQ+DM/7585yoc8ThKLFQXYKCrJagDQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jQ1ctbYWyR7COQ+Vd3WpqAIK34dkCpUvsvES6mASoQ0=;
+ b=Rue+17aPsVJjQWGn8dmH+dlg1DibxDom5utxqLkpx8j+RA9itRlrtNy3gcDB8nrIF/WHz69nqxyttOrBXOcbRtdrxJMGZ1JdDzzOjR5vcW00wiePgzSVD+0kKvSz81lcuEyUONzfNPsgWQH7xJm3IYPp/K4vs7LhBYi5EYxtYPfMYVMQtUfj5UYvfqfkDlfE6An9koaYBIZ6ZI/anGg86xcbT22E3gU5Yj8WadBTDcqbFUcSB4Q2IMYC7DsT8iLPKfY1D2qSTLlwuOH08/014J4DPF+Im5GKk2vop+v1tv0MPb9wbkdwoCsswpHVs+xUUkFgwkzYQjO6TX0i/wiing==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jQ1ctbYWyR7COQ+Vd3WpqAIK34dkCpUvsvES6mASoQ0=;
+ b=li0jf6UDTeMGeYkinLYa+T9nbpcc0MkkwSYw1ernUxD2Nn46W0bSsqFr3XcFif3XvLWOcG+kSHlp1/feIaPKPOAzwuBYOfxK3u1IbNQubHy4rgUd+aG2tHHr0n4NHPnl8OL87pvtOVCPaCIDfvzOXkiFo0yQ8+jmiqxnif43d0NRZ4V5F+5VOfUBz8tL9S4Z5LtOpu0KeFyV75frAGt8/zYGP8V3ougreVQGjkWbXgTVZPDjvS6dOYkQmJGeJhphXnfdbUSimUGkpqXzqM2WDEBG/qjtEjHLZ4O2fLzM7G9SMKpISoVgJ/WVqBZYM7tpF/4TZbFymj5ucVOa5CDWcw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by DM5PR1201MB0076.namprd12.prod.outlook.com (2603:10b6:4:55::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Mon, 24 Jan
+ 2022 13:18:04 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ad3f:373f:b7d3:19c2]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ad3f:373f:b7d3:19c2%7]) with mapi id 15.20.4909.017; Mon, 24 Jan 2022
+ 13:18:03 +0000
+Date:   Mon, 24 Jan 2022 09:18:02 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     zhi.wang.linux@gmail.com
+Cc:     'Christoph Hellwig' <hch@lst.de>,
+        "'Wang, Zhi A'" <zhi.a.wang@intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        'Jani Nikula' <jani.nikula@linux.intel.com>,
+        'Joonas Lahtinen' <joonas.lahtinen@linux.intel.com>,
+        "'Vivi, Rodrigo'" <rodrigo.vivi@intel.com>,
+        'Zhenyu Wang' <zhenyuw@linux.intel.com>,
+        "'Xu, Terrence'" <terrence.xu@intel.com>
+Subject: Re: [PATCH v4 1/2] i915/gvt: Introduce the mmio_info_table.c to
+ support VFIO new mdev API
+Message-ID: <20220124131802.GA966497@nvidia.com>
+References: <20211129123832.105196-1-zhi.a.wang@intel.com>
+ <20211130164622.GA15150@lst.de>
+ <e183b95f-89d1-3a2f-27e2-82aa2b10e8fc@intel.com>
+ <20220124094004.GA23537@lst.de>
+ <004201d8110a$db3ec9e0$91bc5da0$@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <004201d8110a$db3ec9e0$91bc5da0$@gmail.com>
+X-ClientProxiedBy: MN2PR12CA0016.namprd12.prod.outlook.com
+ (2603:10b6:208:a8::29) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-References: <164299573337.26253.7538614611220034049.stgit@noble.brown> <164299611278.26253.14950274629759580371.stgit@noble.brown>
-In-Reply-To: <164299611278.26253.14950274629759580371.stgit@noble.brown>
-From:   Mark Hemment <markhemm@googlemail.com>
-Date:   Mon, 24 Jan 2022 13:16:02 +0000
-Message-ID: <CANe_+UjJOZJwfFLMgenBttssB8G5ZW5fqw7Vi_tohF_HOW5wWg@mail.gmail.com>
-Subject: Re: [PATCH 09/23] MM: submit multipage reads for SWP_FS_OPS swap-space
-To:     NeilBrown <neilb@suse.de>
-Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        David Howells <dhowells@redhat.com>, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 47d99020-6f32-4a0c-92db-08d9df3bf3de
+X-MS-TrafficTypeDiagnostic: DM5PR1201MB0076:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR1201MB00767D30F1E62C5967BE2728C25E9@DM5PR1201MB0076.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1BWc/WfkJ/SMumCaAQwFEVk2Q7TvuHhh2XlykIlZsm86F0O7sh37nZa1E0AjS5MqmhTSVVZe/jh0yoT6UVshiTFkpMUP7Aa65KAoyQjH+fbGYPy7z9f6C1CqEek3C2ObPRLQz1aOI+sDxpzOacYyYNs1TWTRlrxRIASprAfsHjb7ZN7Yg7BUmjX7zM+7GvsQ5+VbfmFdnZM5dHVeRAa7RhQuCmDGZHc2dSufHMXbKkfaC+thU5ndIAzfEOv/0uZGCAXd4SVjEuK1GC/93fhLGYBNfO8NxMqdSPMavudE8wceE1IA9NLCLCQulBYmmuICWlMYRsSif96xhLNfCKTFoxjbnTGmOpK4jmQf8JbgbfpPok0sN1rUXV2M5kRwlPL5LR5C77sJOJhD+3SEDCabgW8Dv6N2Ecyg5V2oXNNKL3R0iyxI0ow2nCZ2vU07ppyO4/38ENMMstFScOwUJ0EueEmlerpD4xO39L3EISEect84CYnPgR/yMEcicmg2Z6Bd+9SsMQ/2urIngeHwhKGSctXpXB5e9IvvnvS0MPrJYowEuS/DOOOruUxjkkn5bhWOvCpSeIvbcqEmrVtBGrPKl2PhbsIgopgl1Pj+7z7Xx2oYizTwgCLLl64ipxoq7MhFbjMlGwKMbFwj0i/XsTYBPXVvqreSNyKrAsP1qFQCl3LbezsItGsToAgf5kymGX6W
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(36756003)(5660300002)(508600001)(86362001)(186003)(66946007)(6916009)(66476007)(66556008)(2906002)(33656002)(558084003)(1076003)(54906003)(6486002)(38100700002)(7416002)(316002)(8676002)(26005)(4326008)(8936002)(6506007)(6512007)(2616005)(27376004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?naJgoDZ5K0DuQxmrB44V50FH1O6UYqtHKwvGK6zOrVmPy5x1dbYVGZbTUktn?=
+ =?us-ascii?Q?V/c5zxEuxNvJNkJDfyOg8OTc3kCVZfdKE/jywBc/EVmAOWiwjbsZv18AgLvs?=
+ =?us-ascii?Q?zzELNgS6QMcYwMmdghBWDyFMG2ub/XfboIJZlOK0HZkEIp3+CxsC2EynUVO3?=
+ =?us-ascii?Q?PrfLLxfHGNKtCj8vr/349jfE+K7OP7SLwwAaUQX6hBo6EPmv+YjIrigwc419?=
+ =?us-ascii?Q?V/QcfWxYOm/UaTl6aaz25NT3+uR8kGqC7aHkzJKgTHHwAXPb3P2aEHsCxtq0?=
+ =?us-ascii?Q?R6FdK6+kkV1/9eNcZWjN7YixoK3rgri6y9/6QEEus9B3JAfvx1DWjVpTUbU8?=
+ =?us-ascii?Q?SMBdi+kXmxKmE+Lw4t3fv/wty/GmlUKN3rkKC5ww1Qy52v8IkFonGcOEogi6?=
+ =?us-ascii?Q?BYcTZS7But9Myi4fVgS1mQSgQqcL7nrd894qZGDAiO+owAiIwxGF+msiSviF?=
+ =?us-ascii?Q?oO3BcnHkZwyJ9B9NpNfrEjiyD7aIcxPuYdjOcZdQ6QsoCMpOsTEJATecdLDO?=
+ =?us-ascii?Q?cAFIwnsntNk93pVvIJcq1LavOWlQxZLfYkls/+uKieOX3QyxsP+4mqQ1BbfP?=
+ =?us-ascii?Q?4J0WodIoCit1bODSfGbBkTrfsz1MmeAn0sr8Mlb27l2sEjDMePd5BBmXwb/g?=
+ =?us-ascii?Q?1jj6hUjiP6SUmWLFo4nwhIrwL393x4pDoyX87lKR9JulwjBBgcYvcSgyTA0K?=
+ =?us-ascii?Q?POOFg3x0osKM0HLqvsQaaKCZbF44JfrU8jNWsTzTmGmpuL2Qj1UvMxlq2tx/?=
+ =?us-ascii?Q?Wr+x50xXGp5pPRFT2ZCkIRQOTqUWjHRS6uXEUC1UBtL0tlfKFqsdxUrF87Yu?=
+ =?us-ascii?Q?/WqUxStYViXfdR/9P03FJr+LGO58sdA8/2D8F5lYRlq3RArb/QgEkVH+SsDE?=
+ =?us-ascii?Q?1F+kjcCW1lGTx9V9r1f/BObsW1PbCMoeRC6Pnb91MyZrZC3uLnjnQzbwFsxr?=
+ =?us-ascii?Q?/ihOwJVzSK3xnEuFI8/oMLYujVy2sPiuFjtey42/eqBrovmnd+aG58VMFTxi?=
+ =?us-ascii?Q?BSZRZA3vdeJMfy2aHf7QgIYYCm1AscEM0c29oLEw062050gVk9ijKQagfCcP?=
+ =?us-ascii?Q?EXOIMtWfC+vaxCVFS9TEuuwT+Xp6M1neUFo1WKSMVgO5NZaE0DdWuSPSn4Qf?=
+ =?us-ascii?Q?92YbNi8APmllYLxoarwQCr5xCEFkYhKA/gCYagREqsj22iZXP5xxTPf5fn2t?=
+ =?us-ascii?Q?g6oK0SC+3jj+DyiP4IfHZo6/szUVgJqkx+Kn2JiLb7QevhmtBAQuw+0cp5pN?=
+ =?us-ascii?Q?fIv1mT2HVSVFF9EnVuJp/MfZUDVcxrkdyQNJZZwKA/I31uPZ9PGzYBo4wliA?=
+ =?us-ascii?Q?6DgCzcpRG+xFAki13NR+2lanZ0V7TtOraAKVdysh0145Bh3A2T0DIkYx/RJh?=
+ =?us-ascii?Q?Q+z5bzRzvh55TcTzPfHUNE2tnqm5Qc5fHj3c2bACsA73c1TLi7MSma4bPV5b?=
+ =?us-ascii?Q?o3RkVL3Wy1ma4HrWz1T1UJauLFIgl2Mp2DvBVzc0JErFMgpaOAG64VVRnCHI?=
+ =?us-ascii?Q?WpvNbt/vZUYDSUsWWgpMraSSBltwpO1bs98Kwh0SLwQqMCi0HTZNqvMB5TLO?=
+ =?us-ascii?Q?v+ztnzdrSssvVNmhLrM=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 47d99020-6f32-4a0c-92db-08d9df3bf3de
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2022 13:18:03.8868
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NaQW7fT3zbopg/B13Q5AEFy7QvGVTZQRKT6KTgpydHvgmqoJ9IvsRJXU9aC/SRrL
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB0076
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Jan 2022 at 03:52, NeilBrown <neilb@suse.de> wrote:
->
-> swap_readpage() is given one page at a time, but maybe called repeatedly
-> in succession.
-> For block-device swapspace, the blk_plug functionality allows the
-> multiple pages to be combined together at lower layers.
-> That cannot be used for SWP_FS_OPS as blk_plug may not exist - it is
-> only active when CONFIG_BLOCK=y.  Consequently all swap reads over NFS
-> are single page reads.
->
-> With this patch we pass in a pointer-to-pointer when swap_readpage can
-> store state between calls - much like the effect of blk_plug.  After
-> calling swap_readpage() some number of times, the state will be passed
-> to swap_read_unplug() which can submit the combined request.
->
-> Some caller currently call blk_finish_plug() *before* the final call to
-> swap_readpage(), so the last page cannot be included.  This patch moves
-> blk_finish_plug() to after the last call, and calls swap_read_unplug()
-> there too.
->
-> Signed-off-by: NeilBrown <neilb@suse.de>
-> ---
->  mm/madvise.c    |    8 +++-
->  mm/memory.c     |    2 +
->  mm/page_io.c    |  102 +++++++++++++++++++++++++++++++++++--------------------
->  mm/swap.h       |   16 +++++++--
->  mm/swap_state.c |   19 +++++++---
->  5 files changed, 98 insertions(+), 49 deletions(-)
->
-...
-> diff --git a/mm/page_io.c b/mm/page_io.c
-> index 6e32ca35d9b6..bcf655d650c8 100644
-> --- a/mm/page_io.c
-> +++ b/mm/page_io.c
-> @@ -390,46 +391,60 @@ int __swap_writepage(struct page *page, struct writeback_control *wbc,
->  static void sio_read_complete(struct kiocb *iocb, long ret)
->  {
->         struct swap_iocb *sio = container_of(iocb, struct swap_iocb, iocb);
-> -       struct page *page = sio->bvec.bv_page;
-> -
-> -       if (ret != 0 && ret != PAGE_SIZE) {
-> -               SetPageError(page);
-> -               ClearPageUptodate(page);
-> -               pr_alert_ratelimited("Read-error on swap-device\n");
-> -       } else {
-> -               SetPageUptodate(page);
-> -               count_vm_event(PSWPIN);
-> +       int p;
-> +
-> +       for (p = 0; p < sio->pages; p++) {
-> +               struct page *page = sio->bvec[p].bv_page;
-> +               if (ret != 0 && ret != PAGE_SIZE * sio->pages) {
-> +                       SetPageError(page);
-> +                       ClearPageUptodate(page);
-> +                       pr_alert_ratelimited("Read-error on swap-device\n");
-> +               } else {
-> +                       SetPageUptodate(page);
-> +                       count_vm_event(PSWPIN);
-> +               }
-> +               unlock_page(page);
->         }
-> -       unlock_page(page);
->         mempool_free(sio, sio_pool);
->  }
+On Mon, Jan 24, 2022 at 12:12:12PM +0200, zhi.wang.linux@gmail.com wrote:
+> Hi Christoph and Jason:
+> 
+> Have been talking with Raj. I am going to work on this series this week. 
 
-Trivial: on success, could be single call to count_vm_events(PSWPIN,
-sio->pages).
-Similar comment for PSWPOUT in sio_write_complete()
+Thanks!
 
->
-> -static int swap_readpage_fs(struct page *page)
-> +static void swap_readpage_fs(struct page *page,
-> +                            struct swap_iocb **plug)
->  {
->         struct swap_info_struct *sis = page_swap_info(page);
-> -       struct file *swap_file = sis->swap_file;
-> -       struct address_space *mapping = swap_file->f_mapping;
-> -       struct iov_iter from;
-> -       struct swap_iocb *sio;
-> +       struct swap_iocb *sio = NULL;
->         loff_t pos = page_file_offset(page);
-> -       int ret;
-> -
-> -       sio = mempool_alloc(sio_pool, GFP_KERNEL);
-> -       init_sync_kiocb(&sio->iocb, swap_file);
-> -       sio->iocb.ki_pos = pos;
-> -       sio->iocb.ki_complete = sio_read_complete;
-> -       sio->bvec.bv_page = page;
-> -       sio->bvec.bv_len = PAGE_SIZE;
-> -       sio->bvec.bv_offset = 0;
->
-> -       iov_iter_bvec(&from, READ, &sio->bvec, 1, PAGE_SIZE);
-> -       ret = mapping->a_ops->swap_rw(&sio->iocb, &from);
-> -       if (ret != -EIOCBQUEUED)
-> -               sio_read_complete(&sio->iocb, ret);
-> -       return ret;
-> +       if (*plug)
-> +               sio = *plug;
-
-'plug' can be NULL when called from do_swap_page();
-        if (plug && *plug)
-
-Cheers,
-Mark
+Jason

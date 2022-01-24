@@ -2,47 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60CC6498BCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6CE498D54
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:34:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346553AbiAXTQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:16:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346253AbiAXTFO (ORCPT
+        id S1352803AbiAXTbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:31:05 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47070 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346355AbiAXTW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:05:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D909CC0613EB;
-        Mon, 24 Jan 2022 11:00:33 -0800 (PST)
+        Mon, 24 Jan 2022 14:22:58 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A68860010;
-        Mon, 24 Jan 2022 19:00:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62B76C340E5;
-        Mon, 24 Jan 2022 19:00:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 160F2B8121B;
+        Mon, 24 Jan 2022 19:22:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CBA4C340E5;
+        Mon, 24 Jan 2022 19:22:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050832;
-        bh=xc4nnjOqKkJyiHkaXw1RU+ZlPk2fOnql3U4DXhHAocM=;
+        s=korg; t=1643052175;
+        bh=KMxJK1iIQOsIy0NuPpIiSoxPGHXz/J4x23TAqBxugmY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qlve4r/ChbOINb2tLB6APbcZrLeEjCJ4zQ+k4jKXUFPiP9Tm0pJeWV7kvBwlGp5Xn
-         u4tPjwmKco+/S6UjHfd8iene8HrXkSdy2xOCtD/hvVJqgFwFd1nNjrWx5hxDYDIAPB
-         2leCoi5xmmFY38hfWUUiy5PyGrCaJ4HE17PQUXm0=
+        b=u2qDPfA1umsqqPCqNi5+nJ6KvpMNECCRhev1vYRpSFhfPYMdxz/92PM4O5FK5Cxrz
+         JwlA4EtvfIPuKqzQgygKU/RQQFYalEkwLKIqzL84CdKbZ+2pOWv2ozeWhsMLBqniDo
+         rnr0BjlZrV5JuGm1sK50h0x2XbtpWFGIZ3E+q/Mo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Jan Stancek <jstancek@redhat.com>,
-        Borislav Petkov <bp@suse.de>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 4.9 127/157] drm/radeon: fix error handling in radeon_driver_open_kms
-Date:   Mon, 24 Jan 2022 19:43:37 +0100
-Message-Id: <20220124183936.808052553@linuxfoundation.org>
+        stable@vger.kernel.org, Julia Lawall <Julia.Lawall@lip6.fr>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 180/239] powerpc/cell: add missing of_node_put
+Date:   Mon, 24 Jan 2022 19:43:38 +0100
+Message-Id: <20220124183948.822127222@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,86 +46,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian König <christian.koenig@amd.com>
+From: Julia Lawall <Julia.Lawall@lip6.fr>
 
-commit 4722f463896cc0ef1a6f1c3cb2e171e949831249 upstream.
+[ Upstream commit a841fd009e51c8c0a8f07c942e9ab6bb48da8858 ]
 
-The return value was never initialized so the cleanup code executed when
-it isn't even necessary.
+for_each_node_by_name performs an of_node_get on each iteration, so
+a break out of the loop requires an of_node_put.
 
-Just add proper error handling.
+A simplified version of the semantic patch that fixes this problem is as
+follows (http://coccinelle.lip6.fr):
 
-Fixes: ab50cb9df889 ("drm/radeon/radeon_kms: Fix a NULL pointer dereference in radeon_driver_open_kms()")
-Signed-off-by: Christian König <christian.koenig@amd.com>
-Tested-by: Jan Stancek <jstancek@redhat.com>
-Tested-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+// <smpl>
+@@
+expression e,e1;
+local idexpression n;
+@@
+
+ for_each_node_by_name(n, e1) {
+   ... when != of_node_put(n)
+       when != e = n
+(
+   return n;
+|
++  of_node_put(n);
+?  return ...;
+)
+   ...
+ }
+// </smpl>
+
+Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/1448051604-25256-7-git-send-email-Julia.Lawall@lip6.fr
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/radeon/radeon_kms.c |   22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+ arch/powerpc/platforms/cell/iommu.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/gpu/drm/radeon/radeon_kms.c
-+++ b/drivers/gpu/drm/radeon/radeon_kms.c
-@@ -648,18 +648,18 @@ int radeon_driver_open_kms(struct drm_de
- 		fpriv = kzalloc(sizeof(*fpriv), GFP_KERNEL);
- 		if (unlikely(!fpriv)) {
- 			r = -ENOMEM;
--			goto out_suspend;
-+			goto err_suspend;
- 		}
- 
- 		if (rdev->accel_working) {
- 			vm = &fpriv->vm;
- 			r = radeon_vm_init(rdev, vm);
- 			if (r)
--				goto out_fpriv;
-+				goto err_fpriv;
- 
- 			r = radeon_bo_reserve(rdev->ring_tmp_bo.bo, false);
- 			if (r)
--				goto out_vm_fini;
-+				goto err_vm_fini;
- 
- 			/* map the ib pool buffer read only into
- 			 * virtual address space */
-@@ -667,7 +667,7 @@ int radeon_driver_open_kms(struct drm_de
- 							rdev->ring_tmp_bo.bo);
- 			if (!vm->ib_bo_va) {
- 				r = -ENOMEM;
--				goto out_vm_fini;
-+				goto err_vm_fini;
+diff --git a/arch/powerpc/platforms/cell/iommu.c b/arch/powerpc/platforms/cell/iommu.c
+index 12352a58072ab..d9c2c4cc60be1 100644
+--- a/arch/powerpc/platforms/cell/iommu.c
++++ b/arch/powerpc/platforms/cell/iommu.c
+@@ -1088,6 +1088,7 @@ static int __init cell_iommu_fixed_mapping_init(void)
+ 			if (hbase < dbase || (hend > (dbase + dsize))) {
+ 				pr_debug("iommu: hash window doesn't fit in"
+ 					 "real DMA window\n");
++				of_node_put(np);
+ 				return -1;
  			}
- 
- 			r = radeon_vm_bo_set_addr(rdev, vm->ib_bo_va,
-@@ -675,19 +675,21 @@ int radeon_driver_open_kms(struct drm_de
- 						  RADEON_VM_PAGE_READABLE |
- 						  RADEON_VM_PAGE_SNOOPED);
- 			if (r)
--				goto out_vm_fini;
-+				goto err_vm_fini;
  		}
- 		file_priv->driver_priv = fpriv;
- 	}
- 
--	if (!r)
--		goto out_suspend;
-+	pm_runtime_mark_last_busy(dev->dev);
-+	pm_runtime_put_autosuspend(dev->dev);
-+	return 0;
- 
--out_vm_fini:
-+err_vm_fini:
- 	radeon_vm_fini(rdev, vm);
--out_fpriv:
-+err_fpriv:
- 	kfree(fpriv);
--out_suspend:
-+
-+err_suspend:
- 	pm_runtime_mark_last_busy(dev->dev);
- 	pm_runtime_put_autosuspend(dev->dev);
- 	return r;
+-- 
+2.34.1
+
 
 

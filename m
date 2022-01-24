@@ -2,50 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4415249A636
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:19:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 369CD49A6AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:28:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3412520AbiAYAhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:37:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
+        id S3420049AbiAYCWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:22:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2366200AbiAXXwa (ORCPT
+        with ESMTP id S237867AbiAXTJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:52:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BEEC07A95F;
-        Mon, 24 Jan 2022 13:45:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91A53B81142;
-        Mon, 24 Jan 2022 21:45:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8569C340E4;
-        Mon, 24 Jan 2022 21:45:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060718;
-        bh=iDFeLzaEtK0aETLPn/3Aj15BXnZkxD+Yg9u0RfYTh2U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2lmojvs4cXXpwKXACm9iWn9IUQdDV993HmRk4T6YDX3XLvA3KNrvlFMQZfXSro7o2
-         iPB+PPx0KzJMYAEgyA4n30ZCPg2mqIzo+jguZkJebNbsmA04H7/EWWVhR+7thcgl/J
-         16dAPA+IR7ToK5IFEDoK0QfneMC2815p3hY0cQdI=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Paul Olaru <paul.olaru@oss.nxp.com>,
-        Bard Liao <bard.liao@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.16 1039/1039] ASoC: SOF: handle paused streams during system suspend
-Date:   Mon, 24 Jan 2022 19:47:08 +0100
-Message-Id: <20220124184200.208540069@linuxfoundation.org>
+        Mon, 24 Jan 2022 14:09:16 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A785C08C5DA
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:02:14 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id n12-20020a05600c3b8c00b0034eb13edb8eso267084wms.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:02:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3Qm9PL5QLT29CmW7VrLWEMoME0NYrJKZF2FZNBlbz70=;
+        b=eZzZHmtni0k6ax2xvSvztj/njqN+qKbXqwKyRPyDmAbo9OWX9hBbp3qHa6EnWPSuU0
+         N9pKHbsw+ejvyvGSK5rnOBnmn7VNtd49xJxDhHpwj7kU8mGGgRIgzsNfYXvNvc2wlWQ+
+         ziVz3YFsdoN+tDZBje2e63spZfJUIuI+4Rol0Lc+dElGGLJ20gMJoR4y8jix/yLNdh29
+         NxRcY8jOO9MQfGTZ4vTO2JKaWvjULsnetvuGUxltH+8Iro8mu7JHsecVjGXUjQhiGaFa
+         hKrkNGwzXHE7F4kE5j61Pdg9h3z3bg1npNWieFL0MZQdHV83kpUeX9rilTC9kGUFI8oZ
+         LCOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3Qm9PL5QLT29CmW7VrLWEMoME0NYrJKZF2FZNBlbz70=;
+        b=JThsxPnLfD7Km9n5q/qB6hM5pIkA4O9XzVJoErIrE0qyZlhNMSOdRzR8IXZIyOz+LI
+         MCedZHBXqC4oFmeq0UtgIvB72I5H1fnptnLsCrb82KSFW+bVO9s8Qnqbd3ZkHCUtWfka
+         csuu48oztQWc9v/Gj/pC28EysOG5qZb2volgF+BAD0YQXCruAfGkMJka83xuEmf1NcHB
+         NFdfCW5Bme2Hn0XmHGI4uMIytohemntwEf2flQykGuE9LGKx9eqhn7Xf+4wnGuV1QaRx
+         GrpY4CqOkS2Pd9pGEQUtuArhkEz+zgUWWMupDa68hCTrwtFgHRgYuu07XOPC8RPGByEY
+         74ag==
+X-Gm-Message-State: AOAM532dW5xt1t8fDH+xOtXxouG08PAccYNxWxSoDHa6XYxM8Hiur0Zw
+        AZuUUQD0RSwup4P8PeRo3SlE9JpOqJUBQw==
+X-Google-Smtp-Source: ABdhPJxjzgjcEj5hSuYDoscixFPVPxvNMY8PPTCh73mrsCDeP8PKU06OjiRumO24hqIXnGmP0X/Mww==
+X-Received: by 2002:a05:600c:5028:: with SMTP id n40mr2936954wmr.10.1643050932609;
+        Mon, 24 Jan 2022 11:02:12 -0800 (PST)
+Received: from localhost (cable-89-216-134-246.dynamic.sbb.rs. [89.216.134.246])
+        by smtp.gmail.com with ESMTPSA id w8sm15333381wrq.3.2022.01.24.11.02.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 11:02:12 -0800 (PST)
+From:   =?UTF-8?q?Aleksa=20Vu=C4=8Dkovi=C4=87?= <aleksav013@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Aleksa=20Vu=C4=8Dkovi=C4=87?= <aleksav013@gmail.com>
+Subject: [PATCH] drivers: dio: fixed coding style issues
+Date:   Mon, 24 Jan 2022 20:02:01 +0100
+Message-Id: <20220124190201.26741-1-aleksav013@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
-User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -53,156 +63,289 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Fixed multiple coding style issues:
+Converting spaces to tabs and moving braces.
 
-commit 96da174024b9c63bd5d3358668d0bc12677be877 upstream.
-
-During system suspend, paused streams do not get suspended.
-Therefore, we need to explicitly free these PCMs in the DSP
-and free the associated DAPM widgets so that they can be set
-up again during resume.
-
-Fixes: 5fcdbb2d45df ("ASoC: SOF: Add support for dynamic pipelines")
-Signed-off-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Reviewed-by: Paul Olaru <paul.olaru@oss.nxp.com>
-Reviewed-by: Bard Liao <bard.liao@intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Signed-off-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Link: https://lore.kernel.org/r/20211123171606.129350-3-kai.vehmanen@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Aleksa Vučković <aleksav013@gmail.com>
 ---
- sound/soc/sof/pcm.c       |    5 +--
- sound/soc/sof/sof-audio.c |   74 ++++++++++++++++++++++++++++++++++++++++++++--
- sound/soc/sof/sof-audio.h |    2 +
- 3 files changed, 76 insertions(+), 5 deletions(-)
+ drivers/dio/dio.c | 150 +++++++++++++++++++++++-----------------------
+ 1 file changed, 74 insertions(+), 76 deletions(-)
 
---- a/sound/soc/sof/pcm.c
-+++ b/sound/soc/sof/pcm.c
-@@ -100,9 +100,8 @@ void snd_sof_pcm_period_elapsed(struct s
- }
- EXPORT_SYMBOL(snd_sof_pcm_period_elapsed);
- 
--static int sof_pcm_dsp_pcm_free(struct snd_pcm_substream *substream,
--				struct snd_sof_dev *sdev,
--				struct snd_sof_pcm *spcm)
-+int sof_pcm_dsp_pcm_free(struct snd_pcm_substream *substream, struct snd_sof_dev *sdev,
-+			 struct snd_sof_pcm *spcm)
- {
- 	struct sof_ipc_stream stream;
- 	struct sof_ipc_reply reply;
---- a/sound/soc/sof/sof-audio.c
-+++ b/sound/soc/sof/sof-audio.c
-@@ -122,6 +122,14 @@ int sof_widget_free(struct snd_sof_dev *
- 	case snd_soc_dapm_buffer:
- 		ipc_free.hdr.cmd |= SOF_IPC_TPLG_BUFFER_FREE;
- 		break;
-+	case snd_soc_dapm_dai_in:
-+	case snd_soc_dapm_dai_out:
-+	{
-+		struct snd_sof_dai *dai = swidget->private;
-+
-+		dai->configured = false;
-+		fallthrough;
-+	}
- 	default:
- 		ipc_free.hdr.cmd |= SOF_IPC_TPLG_COMP_FREE;
- 		break;
-@@ -680,6 +688,55 @@ int sof_set_up_pipelines(struct snd_sof_
- }
- 
- /*
-+ * Free the PCM, its associated widgets and set the prepared flag to false for all PCMs that
-+ * did not get suspended(ex: paused streams) so the widgets can be set up again during resume.
-+ */
-+static int sof_tear_down_left_over_pipelines(struct snd_sof_dev *sdev)
-+{
-+	struct snd_sof_widget *swidget;
-+	struct snd_sof_pcm *spcm;
-+	int dir, ret;
-+
-+	/*
-+	 * free all PCMs and their associated DAPM widgets if their connected DAPM widget
-+	 * list is not NULL. This should only be true for paused streams at this point.
-+	 * This is equivalent to the handling of FE DAI suspend trigger for running streams.
-+	 */
-+	list_for_each_entry(spcm, &sdev->pcm_list, list)
-+		for_each_pcm_streams(dir) {
-+			struct snd_pcm_substream *substream = spcm->stream[dir].substream;
-+
-+			if (!substream || !substream->runtime)
-+				continue;
-+
-+			if (spcm->stream[dir].list) {
-+				ret = sof_pcm_dsp_pcm_free(substream, sdev, spcm);
-+				if (ret < 0)
-+					return ret;
-+
-+				ret = sof_widget_list_free(sdev, spcm, dir);
-+				if (ret < 0) {
-+					dev_err(sdev->dev, "failed to free widgets during suspend\n");
-+					return ret;
-+				}
-+			}
-+		}
-+
-+	/*
-+	 * free any left over DAI widgets. This is equivalent to the handling of suspend trigger
-+	 * for the BE DAI for running streams.
-+	 */
-+	list_for_each_entry(swidget, &sdev->widget_list, list)
-+		if (WIDGET_IS_DAI(swidget->id) && swidget->use_count == 1) {
-+			ret = sof_widget_free(sdev, swidget);
-+			if (ret < 0)
-+				return ret;
-+		}
-+
-+	return 0;
-+}
-+
-+/*
-  * For older firmware, this function doesn't free widgets for static pipelines during suspend.
-  * It only resets use_count for all widgets.
+diff --git a/drivers/dio/dio.c b/drivers/dio/dio.c
+index 4c06c93c93d3..28ae8596b0ea 100644
+--- a/drivers/dio/dio.c
++++ b/drivers/dio/dio.c
+@@ -2,27 +2,27 @@
+ /* Code to support devices on the DIO and DIO-II bus
+  * Copyright (C) 05/1998 Peter Maydell <pmaydell@chiark.greenend.org.uk>
+  * Copyright (C) 2004 Jochen Friedrich <jochen@scram.de>
+- * 
++ *
+  * This code has basically these routines at the moment:
+  * int dio_find(u_int deviceid)
+  *    Search the list of DIO devices and return the select code
+  *    of the next unconfigured device found that matches the given device ID.
+  *    Note that the deviceid parameter should be the encoded ID.
+- *    This means that framebuffers should pass it as 
++ *    This means that framebuffers should pass it as
+  *    DIO_ENCODE_ID(DIO_ID_FBUFFER,DIO_ID2_TOPCAT)
+  *    (or whatever); everybody else just uses DIO_ID_FOOBAR.
+  * unsigned long dio_scodetophysaddr(int scode)
+  *    Return the physical address corresponding to the given select code.
+  * int dio_scodetoipl(int scode)
+- *    Every DIO card has a fixed interrupt priority level. This function 
++ *    Every DIO card has a fixed interrupt priority level. This function
+  *    returns it, whatever it is.
+  * const char *dio_scodetoname(int scode)
+- *    Return a character string describing this board [might be "" if 
++ *    Return a character string describing this board [might be "" if
+  *    not CONFIG_DIO_CONSTANTS]
+  * void dio_config_board(int scode)     mark board as configured in the list
+  * void dio_unconfig_board(int scode)   mark board as no longer configured
+  *
+- * This file is based on the way the Amiga port handles Zorro II cards, 
++ * This file is based on the way the Amiga port handles Zorro II cards,
+  * although we aren't so complicated...
   */
-@@ -693,8 +750,8 @@ int sof_tear_down_pipelines(struct snd_s
- 	/*
- 	 * This function is called during suspend and for one-time topology verification during
- 	 * first boot. In both cases, there is no need to protect swidget->use_count and
--	 * sroute->setup because during suspend all streams are suspended and during topology
--	 * loading the sound card unavailable to open PCMs.
-+	 * sroute->setup because during suspend all running streams are suspended and during
-+	 * topology loading the sound card unavailable to open PCMs.
- 	 */
- 	list_for_each_entry(swidget, &sdev->widget_list, list) {
- 		if (swidget->dynamic_pipeline_widget)
-@@ -713,6 +770,19 @@ int sof_tear_down_pipelines(struct snd_s
- 			return ret;
- 	}
+ #include <linux/module.h>
+@@ -31,9 +31,9 @@
+ #include <linux/kernel.h>
+ #include <linux/init.h>
+ #include <linux/dio.h>
+-#include <linux/slab.h>                         /* kmalloc() */
++#include <linux/slab.h>			/* kmalloc() */
+ #include <linux/uaccess.h>
+-#include <asm/io.h>                             /* readb() */
++#include <linux/io.h>			/* readb() */
  
-+	/*
-+	 * Tear down all pipelines associated with PCMs that did not get suspended
-+	 * and unset the prepare flag so that they can be set up again during resume.
-+	 * Skip this step for older firmware.
-+	 */
-+	if (!verify && v->abi_version >= SOF_ABI_VER(3, 19, 0)) {
-+		ret = sof_tear_down_left_over_pipelines(sdev);
-+		if (ret < 0) {
-+			dev_err(sdev->dev, "failed to tear down paused pipelines\n");
-+			return ret;
-+		}
-+	}
+ struct dio_bus dio_bus = {
+ 	.resources = {
+@@ -52,38 +52,36 @@ struct dio_bus dio_bus = {
+ /* We associate each numeric ID with an appropriate descriptive string
+  * using a constant array of these structs.
+  * FIXME: we should be able to arrange to throw away most of the strings
+- * using the initdata stuff. Then we wouldn't need to worry about 
++ * using the initdata stuff. Then we wouldn't need to worry about
+  * carrying them around...
+- * I think we do this by copying them into newly kmalloc()ed memory and 
++ * I think we do this by copying them into newly kmalloc()ed memory and
+  * marking the names[] array as .initdata ?
+  */
+-struct dioname
+-{
+-        int id;
+-        const char *name;
++struct dioname {
++	int id;
++	const char *name;
+ };
+ 
+ /* useful macro */
+ #define DIONAME(x) { DIO_ID_##x, DIO_DESC_##x }
+-#define DIOFBNAME(x) { DIO_ENCODE_ID( DIO_ID_FBUFFER, DIO_ID2_##x), DIO_DESC2_##x }
+-
+-static struct dioname names[] = 
+-{
+-        DIONAME(DCA0), DIONAME(DCA0REM), DIONAME(DCA1), DIONAME(DCA1REM),
+-        DIONAME(DCM), DIONAME(DCMREM),
+-        DIONAME(LAN),
+-        DIONAME(FHPIB), DIONAME(NHPIB),
+-        DIONAME(SCSI0), DIONAME(SCSI1), DIONAME(SCSI2), DIONAME(SCSI3),
+-        DIONAME(FBUFFER),
+-        DIONAME(PARALLEL), DIONAME(VME), DIONAME(DCL), DIONAME(DCLREM),
+-        DIONAME(MISC0), DIONAME(MISC1), DIONAME(MISC2), DIONAME(MISC3),
+-        DIONAME(MISC4), DIONAME(MISC5), DIONAME(MISC6), DIONAME(MISC7),
+-        DIONAME(MISC8), DIONAME(MISC9), DIONAME(MISC10), DIONAME(MISC11), 
+-        DIONAME(MISC12), DIONAME(MISC13),
+-        DIOFBNAME(GATORBOX), DIOFBNAME(TOPCAT), DIOFBNAME(RENAISSANCE),
+-        DIOFBNAME(LRCATSEYE), DIOFBNAME(HRCCATSEYE), DIOFBNAME(HRMCATSEYE),
+-        DIOFBNAME(DAVINCI), DIOFBNAME(XXXCATSEYE), DIOFBNAME(HYPERION),
+-        DIOFBNAME(XGENESIS), DIOFBNAME(TIGER), DIOFBNAME(YGENESIS)   
++#define DIOFBNAME(x) { DIO_ENCODE_ID(DIO_ID_FBUFFER, DIO_ID2_##x), DIO_DESC2_##x }
 +
- 	list_for_each_entry(sroute, &sdev->route_list, list)
- 		sroute->setup = false;
++static struct dioname names[] = {
++	DIONAME(DCA0), DIONAME(DCA0REM), DIONAME(DCA1), DIONAME(DCA1REM),
++	DIONAME(DCM), DIONAME(DCMREM),
++	DIONAME(LAN),
++	DIONAME(FHPIB), DIONAME(NHPIB),
++	DIONAME(SCSI0), DIONAME(SCSI1), DIONAME(SCSI2), DIONAME(SCSI3),
++	DIONAME(FBUFFER),
++	DIONAME(PARALLEL), DIONAME(VME), DIONAME(DCL), DIONAME(DCLREM),
++	DIONAME(MISC0), DIONAME(MISC1), DIONAME(MISC2), DIONAME(MISC3),
++	DIONAME(MISC4), DIONAME(MISC5), DIONAME(MISC6), DIONAME(MISC7),
++	DIONAME(MISC8), DIONAME(MISC9), DIONAME(MISC10), DIONAME(MISC11),
++	DIONAME(MISC12), DIONAME(MISC13),
++	DIOFBNAME(GATORBOX), DIOFBNAME(TOPCAT), DIOFBNAME(RENAISSANCE),
++	DIOFBNAME(LRCATSEYE), DIOFBNAME(HRCCATSEYE), DIOFBNAME(HRMCATSEYE),
++	DIOFBNAME(DAVINCI), DIOFBNAME(XXXCATSEYE), DIOFBNAME(HYPERION),
++	DIOFBNAME(XGENESIS), DIOFBNAME(TIGER), DIOFBNAME(YGENESIS)
+ };
  
---- a/sound/soc/sof/sof-audio.h
-+++ b/sound/soc/sof/sof-audio.h
-@@ -267,4 +267,6 @@ int sof_widget_free(struct snd_sof_dev *
- /* PCM */
- int sof_widget_list_setup(struct snd_sof_dev *sdev, struct snd_sof_pcm *spcm, int dir);
- int sof_widget_list_free(struct snd_sof_dev *sdev, struct snd_sof_pcm *spcm, int dir);
-+int sof_pcm_dsp_pcm_free(struct snd_pcm_substream *substream, struct snd_sof_dev *sdev,
-+			 struct snd_sof_pcm *spcm);
- #endif
-
+ #undef DIONAME
+@@ -94,13 +92,14 @@ static const char unknowndioname[]
+ 
+ static const char *dio_getname(int id)
+ {
+-        /* return pointer to a constant string describing the board with given ID */
++	/* return pointer to a constant string describing the board with given ID */
+ 	unsigned int i;
++
+ 	for (i = 0; i < ARRAY_SIZE(names); i++)
+-                if (names[i].id == id) 
+-                        return names[i].name;
++		if (names[i].id == id)
++			return names[i].name;
+ 
+-        return unknowndioname;
++	return unknowndioname;
+ }
+ 
+ #else
+@@ -122,10 +121,10 @@ int __init dio_find(int deviceid)
+ 		void *va;
+ 		unsigned long pa;
+ 
+-                if (DIO_SCINHOLE(scode))
+-                        continue;
++		if (DIO_SCINHOLE(scode))
++			continue;
+ 
+-                pa = dio_scodetophysaddr(scode);
++		pa = dio_scodetophysaddr(scode);
+ 
+ 		if (!pa)
+ 			continue;
+@@ -139,15 +138,15 @@ int __init dio_find(int deviceid)
+ 				(unsigned char *)va + DIO_IDOFF, 1)) {
+ 			if (scode >= DIOII_SCBASE)
+ 				iounmap(va);
+-                        continue;             /* no board present at that select code */
++			continue;	     /* no board present at that select code */
+ 		}
+ 
+ 		prid = DIO_ID(va);
+ 
+-                if (DIO_NEEDSSECID(prid)) {
+-                        secid = DIO_SECID(va);
+-                        id = DIO_ENCODE_ID(prid, secid);
+-                } else
++		if (DIO_NEEDSSECID(prid)) {
++			secid = DIO_SECID(va);
++			id = DIO_ENCODE_ID(prid, secid);
++		} else
+ 			id = prid;
+ 
+ 		if (id == deviceid) {
+@@ -173,9 +172,9 @@ static int __init dio_init(void)
+ 	if (!MACH_IS_HP300)
+ 		return 0;
+ 
+-        printk(KERN_INFO "Scanning for DIO devices...\n");
++	printk(KERN_INFO "Scanning for DIO devices...\n");
+ 
+-	/* Initialize the DIO bus */ 
++	/* Initialize the DIO bus */
+ 	INIT_LIST_HEAD(&dio_bus.devices);
+ 	dev_set_name(&dio_bus.dev, "dio");
+ 	error = device_register(&dio_bus.dev);
+@@ -190,14 +189,13 @@ static int __init dio_init(void)
+ 		request_resource(&iomem_resource, &dio_bus.resources[i]);
+ 
+ 	/* Register all devices */
+-        for (scode = 0; scode < DIO_SCMAX; ++scode)
+-        {
+-                u_char prid, secid = 0;        /* primary, secondary ID bytes */
+-                u_char *va;
++	for (scode = 0; scode < DIO_SCMAX; ++scode) {
++		u_char prid, secid = 0;	/* primary, secondary ID bytes */
++		u_char *va;
+ 		unsigned long pa;
+-                
+-                if (DIO_SCINHOLE(scode))
+-                        continue;
++
++		if (DIO_SCINHOLE(scode))
++			continue;
+ 
+ 		pa = dio_scodetophysaddr(scode);
+ 
+@@ -213,10 +211,10 @@ static int __init dio_init(void)
+ 				(unsigned char *)va + DIO_IDOFF, 1)) {
+ 			if (scode >= DIOII_SCBASE)
+ 				iounmap(va);
+-                        continue;              /* no board present at that select code */
++			continue;	      /* no board present at that select code */
+ 		}
+ 
+-                /* Found a board, allocate it an entry in the list */
++		/* Found a board, allocate it an entry in the list */
+ 		dev = kzalloc(sizeof(struct dio_dev), GFP_KERNEL);
+ 		if (!dev)
+ 			return -ENOMEM;
+@@ -229,21 +227,21 @@ static int __init dio_init(void)
+ 		dev->resource.end = pa + DIO_SIZE(scode, va);
+ 		dev_set_name(&dev->dev, "%02x", scode);
+ 
+-                /* read the ID byte(s) and encode if necessary. */
++		/* read the ID byte(s) and encode if necessary. */
+ 		prid = DIO_ID(va);
+ 
+-                if (DIO_NEEDSSECID(prid)) {
+-                        secid = DIO_SECID(va);
+-                        dev->id = DIO_ENCODE_ID(prid, secid);
+-                } else
+-                        dev->id = prid;
++		if (DIO_NEEDSSECID(prid)) {
++			secid = DIO_SECID(va);
++			dev->id = DIO_ENCODE_ID(prid, secid);
++		} else
++			dev->id = prid;
+ 
+-                dev->ipl = DIO_IPL(va);
+-                strcpy(dev->name,dio_getname(dev->id));
+-                printk(KERN_INFO "select code %3d: ipl %d: ID %02X", dev->scode, dev->ipl, prid);
+-                if (DIO_NEEDSSECID(prid))
+-                        printk(":%02X", secid);
+-                printk(": %s\n", dev->name);
++		dev->ipl = DIO_IPL(va);
++		strcpy(dev->name, dio_getname(dev->id));
++		printk(KERN_INFO "select code %3d: ipl %d: ID %02X", dev->scode, dev->ipl, prid);
++		if (DIO_NEEDSSECID(prid))
++			printk(":%02X", secid);
++		printk(": %s\n", dev->name);
+ 
+ 		if (scode >= DIOII_SCBASE)
+ 			iounmap(va);
+@@ -256,7 +254,7 @@ static int __init dio_init(void)
+ 		error = dio_create_sysfs_dev_files(dev);
+ 		if (error)
+ 			dev_err(&dev->dev, "Error creating sysfs files\n");
+-        }
++	}
+ 	return 0;
+ }
+ 
+@@ -267,12 +265,12 @@ subsys_initcall(dio_init);
+  */
+ unsigned long dio_scodetophysaddr(int scode)
+ {
+-        if (scode >= DIOII_SCBASE) {
+-                return (DIOII_BASE + (scode - 132) * DIOII_DEVSIZE);
+-        } else if (scode > DIO_SCMAX || scode < 0)
+-                return 0;
+-        else if (DIO_SCINHOLE(scode))
+-                return 0;
+-
+-        return (DIO_BASE + scode * DIO_DEVSIZE);
++	if (scode >= DIOII_SCBASE)
++		return (DIOII_BASE + (scode - 132) * DIOII_DEVSIZE);
++	else if (scode > DIO_SCMAX || scode < 0)
++		return 0;
++	else if (DIO_SCINHOLE(scode))
++		return 0;
++
++	return (DIO_BASE + scode * DIO_DEVSIZE);
+ }
+-- 
+2.34.1
 

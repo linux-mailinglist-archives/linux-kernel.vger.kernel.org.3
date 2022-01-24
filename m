@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 515F4498ADF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:08:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAEF6498E3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:44:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343782AbiAXTHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:07:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345879AbiAXTBO (ORCPT
+        id S1355076AbiAXTj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:39:57 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:33022 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349435AbiAXTeK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:01:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53369C061A83;
-        Mon, 24 Jan 2022 10:58:27 -0800 (PST)
+        Mon, 24 Jan 2022 14:34:10 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1CD14B8121B;
-        Mon, 24 Jan 2022 18:58:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54BEAC340E5;
-        Mon, 24 Jan 2022 18:58:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B0D06141C;
+        Mon, 24 Jan 2022 19:34:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 878CBC340E8;
+        Mon, 24 Jan 2022 19:34:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050704;
-        bh=fkB1Uenr+wOd5Si9NwVeQ3Cj6i2+Q4Nx/VagxEJT/Tc=;
+        s=korg; t=1643052847;
+        bh=Mux5XJTW3pJiVPcl/iFS7hUyFsEJtVaPya5qb4ckeX0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KmRuewr7Xh+iiNhTMzLbA2CUGDG9jJkQz2VvIxZ6NfdVBac0dOuHZdCKRfPQP/Mok
-         cbE/v2Bsu9hVivdbFeb2qV90GUikfmH4kJdgy5z6JwosYjxqXJ41L0ML+ESlWRYoNH
-         5JKVTvSu3gx0MDjpwFrSXThVA1edSiHr5TyEJMc8=
+        b=O9ukjqbHFJI4u8EK1acklXuedqBmPLnXrLweHxEetECjZw82iZ4mMNVCasmYBYrr1
+         MBTvJLkCT8KO/moM68GiNrtPHZKITlHYxs45LsJfDexELOzbxZ5hzuHgnSjH3RoUX0
+         65gz8wDOWaHR28XHTHrRdZeQAxGGOU9IHucnPyIM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sebastian Gottschall <s.gottschall@dd-wrt.com>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        stable@vger.kernel.org, Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Richard Guy Briggs <rgb@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 087/157] ath10k: Fix tx hanging
+Subject: [PATCH 5.4 193/320] audit: ensure userspace is penalized the same as the kernel when under pressure
 Date:   Mon, 24 Jan 2022 19:42:57 +0100
-Message-Id: <20220124183935.544944696@linuxfoundation.org>
+Message-Id: <20220124184000.210055259@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,54 +47,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sebastian Gottschall <s.gottschall@dd-wrt.com>
+From: Paul Moore <paul@paul-moore.com>
 
-[ Upstream commit e8a91863eba3966a447d2daa1526082d52b5db2a ]
+[ Upstream commit 8f110f530635af44fff1f4ee100ecef0bac62510 ]
 
-While running stress tests in roaming scenarios (switching ap's every 5
-seconds, we discovered a issue which leads to tx hangings of exactly 5
-seconds while or after scanning for new accesspoints. We found out that
-this hanging is triggered by ath10k_mac_wait_tx_complete since the
-empty_tx_wq was not wake when the num_tx_pending counter reaches zero.
-To fix this, we simply move the wake_up call to htt_tx_dec_pending,
-since this call was missed on several locations within the ath10k code.
+Due to the audit control mutex necessary for serializing audit
+userspace messages we haven't been able to block/penalize userspace
+processes that attempt to send audit records while the system is
+under audit pressure.  The result is that privileged userspace
+applications have a priority boost with respect to audit as they are
+not bound by the same audit queue throttling as the other tasks on
+the system.
 
-Signed-off-by: Sebastian Gottschall <s.gottschall@dd-wrt.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20210505085806.11474-1-s.gottschall@dd-wrt.com
+This patch attempts to restore some balance to the system when under
+audit pressure by blocking these privileged userspace tasks after
+they have finished their audit processing, and dropped the audit
+control mutex, but before they return to userspace.
+
+Reported-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+Tested-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
+Signed-off-by: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath10k/htt_tx.c | 3 +++
- drivers/net/wireless/ath/ath10k/txrx.c   | 2 --
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ kernel/audit.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/ath/ath10k/htt_tx.c b/drivers/net/wireless/ath/ath10k/htt_tx.c
-index ae5b33fe5ba82..374ce35940d07 100644
---- a/drivers/net/wireless/ath/ath10k/htt_tx.c
-+++ b/drivers/net/wireless/ath/ath10k/htt_tx.c
-@@ -158,6 +158,9 @@ void ath10k_htt_tx_dec_pending(struct ath10k_htt *htt)
- 	htt->num_pending_tx--;
- 	if (htt->num_pending_tx == htt->max_num_pending_tx - 1)
- 		ath10k_mac_tx_unlock(htt->ar, ATH10K_TX_PAUSE_Q_FULL);
+diff --git a/kernel/audit.c b/kernel/audit.c
+index d67fce9e3f8b8..146edff0c73ec 100644
+--- a/kernel/audit.c
++++ b/kernel/audit.c
+@@ -1528,6 +1528,20 @@ static void audit_receive(struct sk_buff  *skb)
+ 		nlh = nlmsg_next(nlh, &len);
+ 	}
+ 	audit_ctl_unlock();
 +
-+	if (htt->num_pending_tx == 0)
-+		wake_up(&htt->empty_tx_wq);
++	/* can't block with the ctrl lock, so penalize the sender now */
++	if (audit_backlog_limit &&
++	    (skb_queue_len(&audit_queue) > audit_backlog_limit)) {
++		DECLARE_WAITQUEUE(wait, current);
++
++		/* wake kauditd to try and flush the queue */
++		wake_up_interruptible(&kauditd_wait);
++
++		add_wait_queue_exclusive(&audit_backlog_wait, &wait);
++		set_current_state(TASK_UNINTERRUPTIBLE);
++		schedule_timeout(audit_backlog_wait_time);
++		remove_wait_queue(&audit_backlog_wait, &wait);
++	}
  }
  
- int ath10k_htt_tx_inc_pending(struct ath10k_htt *htt)
-diff --git a/drivers/net/wireless/ath/ath10k/txrx.c b/drivers/net/wireless/ath/ath10k/txrx.c
-index beeb6be06939b..b6c050452b757 100644
---- a/drivers/net/wireless/ath/ath10k/txrx.c
-+++ b/drivers/net/wireless/ath/ath10k/txrx.c
-@@ -89,8 +89,6 @@ int ath10k_txrx_tx_unref(struct ath10k_htt *htt,
+ /* Run custom bind function on netlink socket group connect or bind requests. */
+@@ -1772,7 +1786,9 @@ struct audit_buffer *audit_log_start(struct audit_context *ctx, gfp_t gfp_mask,
+ 	 *    task_tgid_vnr() since auditd_pid is set in audit_receive_msg()
+ 	 *    using a PID anchored in the caller's namespace
+ 	 * 2. generator holding the audit_cmd_mutex - we don't want to block
+-	 *    while holding the mutex */
++	 *    while holding the mutex, although we do penalize the sender
++	 *    later in audit_receive() when it is safe to block
++	 */
+ 	if (!(auditd_test_task(current) || audit_ctl_owner_current())) {
+ 		long stime = audit_backlog_wait_time;
  
- 	ath10k_htt_tx_free_msdu_id(htt, tx_done->msdu_id);
- 	ath10k_htt_tx_dec_pending(htt);
--	if (htt->num_pending_tx == 0)
--		wake_up(&htt->empty_tx_wq);
- 	spin_unlock_bh(&htt->tx_lock);
- 
- 	dma_unmap_single(dev, skb_cb->paddr, msdu->len, DMA_TO_DEVICE);
 -- 
 2.34.1
 

@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DA649A620
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:18:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD8949A258
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 02:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3411555AbiAYAdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:33:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54740 "EHLO
+        id S2362131AbiAXXln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:41:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1455294AbiAXVfL (ORCPT
+        with ESMTP id S1841135AbiAXW5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:35:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C326BC075D3A;
-        Mon, 24 Jan 2022 12:21:56 -0800 (PST)
+        Mon, 24 Jan 2022 17:57:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899FAC034610;
+        Mon, 24 Jan 2022 13:12:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F9B361382;
-        Mon, 24 Jan 2022 20:21:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BB1FC340E5;
-        Mon, 24 Jan 2022 20:21:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45287B8123D;
+        Mon, 24 Jan 2022 21:12:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93AE7C340E5;
+        Mon, 24 Jan 2022 21:12:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055715;
-        bh=ZTyiFhQJN4fI0ohqFr2xGTdcTomL+FISSSU8k9rBfuk=;
+        s=korg; t=1643058742;
+        bh=ZiUO++6bgchHIbgpfnE+8NHiJEyM/iEETegiv0Pg5dQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lJloNfS4rl761O+hDBvql4J+EecySsbHYRxrHIz0SIa5lmWHUSP2pc8W8rSWApr7L
-         Y3QhiFAjjYJt2RkpFtX6E1zjDqzjZ6KhhbYG8UDq0sff8BJVC+ooOLHazvP8Zrb64k
-         5SF7EmCYYREXGtSad3x2pdyrEgEn3/4Mk026M4ps=
+        b=sTamqOwjrrZ3bLnheNVFcdpcCMysSASlZZaLOHc2WRB2pIn4oNFFJP0Y062bh5+iL
+         EXM1cIBtz2MRTqMHbqLGPV0KhVDJfeYD1r6MFigy3RyOFbYFVC0NgQbSGX5pjcMQI/
+         UcRZrp36yQsrD2Z+hn42WVgjfhucsxbkboOqQMKY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 242/846] perf/arm-cmn: Fix CPU hotplug unregistration
+        stable@vger.kernel.org,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0370/1039] net: dsa: fix incorrect function pointer check for MRP ring roles
 Date:   Mon, 24 Jan 2022 19:35:59 +0100
-Message-Id: <20220124184109.282417542@linuxfoundation.org>
+Message-Id: <20220124184137.738106366@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,48 +51,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robin Murphy <robin.murphy@arm.com>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-[ Upstream commit 56c7c6eaf3eb8ac1ec40d56096c0f2b27250da5f ]
+[ Upstream commit ff91e1b68490b97c18c649b769618815eb945f11 ]
 
-Attempting to migrate the PMU context after we've unregistered the PMU
-device, or especially if we never successfully registered it in the
-first place, is a woefully bad idea. It's also fundamentally pointless
-anyway. Make sure to unregister an instance from the hotplug handler
-*without* invoking the teardown callback.
+The cross-chip notifier boilerplate code meant to check the presence of
+ds->ops->port_mrp_add_ring_role before calling it, but checked
+ds->ops->port_mrp_add instead, before calling
+ds->ops->port_mrp_add_ring_role.
 
-Fixes: 0ba64770a2f2 ("perf: Add Arm CMN-600 PMU driver")
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-Link: https://lore.kernel.org/r/2c221d745544774e4b07583b65b5d4d94f7e0fe4.1638530442.git.robin.murphy@arm.com
-Signed-off-by: Will Deacon <will@kernel.org>
+Therefore, a driver which implements one operation but not the other
+would trigger a NULL pointer dereference.
+
+There isn't any such driver in DSA yet, so there is no reason to
+backport the change. Issue found through code inspection.
+
+Cc: Horatiu Vultur <horatiu.vultur@microchip.com>
+Fixes: c595c4330da0 ("net: dsa: add MRP support")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/perf/arm-cmn.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ net/dsa/switch.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
-index bc3cba5f8c5dc..400eb7f579dce 100644
---- a/drivers/perf/arm-cmn.c
-+++ b/drivers/perf/arm-cmn.c
-@@ -1561,7 +1561,8 @@ static int arm_cmn_probe(struct platform_device *pdev)
+diff --git a/net/dsa/switch.c b/net/dsa/switch.c
+index bb155a16d4540..80816f7e1f996 100644
+--- a/net/dsa/switch.c
++++ b/net/dsa/switch.c
+@@ -675,7 +675,7 @@ static int
+ dsa_switch_mrp_add_ring_role(struct dsa_switch *ds,
+ 			     struct dsa_notifier_mrp_ring_role_info *info)
+ {
+-	if (!ds->ops->port_mrp_add)
++	if (!ds->ops->port_mrp_add_ring_role)
+ 		return -EOPNOTSUPP;
  
- 	err = perf_pmu_register(&cmn->pmu, name, -1);
- 	if (err)
--		cpuhp_state_remove_instance(arm_cmn_hp_state, &cmn->cpuhp_node);
-+		cpuhp_state_remove_instance_nocalls(arm_cmn_hp_state, &cmn->cpuhp_node);
-+
- 	return err;
- }
+ 	if (ds->index == info->sw_index)
+@@ -689,7 +689,7 @@ static int
+ dsa_switch_mrp_del_ring_role(struct dsa_switch *ds,
+ 			     struct dsa_notifier_mrp_ring_role_info *info)
+ {
+-	if (!ds->ops->port_mrp_del)
++	if (!ds->ops->port_mrp_del_ring_role)
+ 		return -EOPNOTSUPP;
  
-@@ -1572,7 +1573,7 @@ static int arm_cmn_remove(struct platform_device *pdev)
- 	writel_relaxed(0, cmn->dtc[0].base + CMN_DT_DTC_CTL);
- 
- 	perf_pmu_unregister(&cmn->pmu);
--	cpuhp_state_remove_instance(arm_cmn_hp_state, &cmn->cpuhp_node);
-+	cpuhp_state_remove_instance_nocalls(arm_cmn_hp_state, &cmn->cpuhp_node);
- 	return 0;
- }
- 
+ 	if (ds->index == info->sw_index)
 -- 
 2.34.1
 

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D371749A502
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:11:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 483EE49A762
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:42:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2370534AbiAYAFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:05:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
+        id S3424004AbiAYCi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:38:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1846542AbiAXXQT (ORCPT
+        with ESMTP id S1385328AbiAXUcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:16:19 -0500
+        Mon, 24 Jan 2022 15:32:25 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97816C08B4F4;
-        Mon, 24 Jan 2022 11:43:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFB4C07A97D;
+        Mon, 24 Jan 2022 11:43:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 351A06153E;
-        Mon, 24 Jan 2022 19:43:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17F54C340E5;
-        Mon, 24 Jan 2022 19:43:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4310861553;
+        Mon, 24 Jan 2022 19:43:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21517C340E5;
+        Mon, 24 Jan 2022 19:43:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053421;
-        bh=PkwYfJNj13eKaScjRBJkbBJh0gjPuH/Z/VPnCw8A9+0=;
+        s=korg; t=1643053427;
+        bh=bk5v1u8Hg9MWexuPCgwEWZSSVhmQfiM7lztRzglm+zo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QGPeIYh1FI07cNbIQNE81Hbx2VCTbLRYCX6lBs8uW+aL09KHqKyxlG1y7u2qHOxI7
-         TuIuiDEuGUhiNhPSVWuXBqh9ZiHcJjT2rRW5Ef0akwsGugL4MMJYpVpGGBkJDpq/Vc
-         vEAFp6J25oAsALLbhx5iRLuX13AW3i9ylnV1mLn4=
+        b=nyPX1znAdYpyT2NccgFosXeAjQRt532Y/v3EtlzfBqYzHb6ZMjGFwweYSh3vIMvi0
+         g/Ru8+pSzM5uNs3bk+0E+q5BKim8gMtzKdfjmdWd2fi4GrSO0DAiKmjXCPcGNMdzlV
+         qrfqNx+R+h2IEm3+nHLZIHn3XDxzfU16+Yna5dBI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
+        stable@vger.kernel.org, Benjamin Li <benl@squareup.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
         Kalle Valo <kvalo@codeaurora.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 059/563] wcn36xx: Put DXE block into reset before freeing memory
-Date:   Mon, 24 Jan 2022 19:37:04 +0100
-Message-Id: <20220124184026.455111306@linuxfoundation.org>
+Subject: [PATCH 5.10 061/563] wcn36xx: fix RX BD rate mapping for 5GHz legacy rates
+Date:   Mon, 24 Jan 2022 19:37:06 +0100
+Message-Id: <20220124184026.529150093@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -50,47 +50,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+From: Benjamin Li <benl@squareup.com>
 
-[ Upstream commit ed04ea76e69e7194f7489cebe23a32a68f39218d ]
+[ Upstream commit cfdf6b19e750f7de8ae71a26932f63b52e3bf74c ]
 
-When deiniting the DXE hardware we should reset the block to ensure there
-is no spurious DMA write transaction from the downstream WCNSS to upstream
-MSM at a skbuff address we will have released.
+The linear mapping between the BD rate field and the driver's 5GHz
+legacy rates table (wcn_5ghz_rates) does not only apply for the latter
+four rates -- it applies to all eight rates.
 
-Fixes: 8e84c2582169 ("wcn36xx: mac80211 driver for Qualcomm WCN3660/WCN3680 hardware")
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Fixes: 6ea131acea98 ("wcn36xx: Fix warning due to bad rate_idx")
+Signed-off-by: Benjamin Li <benl@squareup.com>
+Tested-by: Loic Poulain <loic.poulain@linaro.org>
 Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
-Link: https://lore.kernel.org/r/20211105122152.1580542-4-bryan.odonoghue@linaro.org
+Link: https://lore.kernel.org/r/20211104010548.1107405-3-benl@squareup.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/wcn36xx/dxe.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/net/wireless/ath/wcn36xx/txrx.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/wcn36xx/dxe.c b/drivers/net/wireless/ath/wcn36xx/dxe.c
-index b117d8a0f446f..6c62ffc799a2b 100644
---- a/drivers/net/wireless/ath/wcn36xx/dxe.c
-+++ b/drivers/net/wireless/ath/wcn36xx/dxe.c
-@@ -997,6 +997,8 @@ out_err_txh_ch:
+diff --git a/drivers/net/wireless/ath/wcn36xx/txrx.c b/drivers/net/wireless/ath/wcn36xx/txrx.c
+index f76de106570d2..f33e7228a1010 100644
+--- a/drivers/net/wireless/ath/wcn36xx/txrx.c
++++ b/drivers/net/wireless/ath/wcn36xx/txrx.c
+@@ -237,7 +237,6 @@ int wcn36xx_rx_skb(struct wcn36xx *wcn, struct sk_buff *skb)
+ 	const struct wcn36xx_rate *rate;
+ 	struct ieee80211_hdr *hdr;
+ 	struct wcn36xx_rx_bd *bd;
+-	struct ieee80211_supported_band *sband;
+ 	u16 fc, sn;
  
- void wcn36xx_dxe_deinit(struct wcn36xx *wcn)
- {
-+	int reg_data = 0;
-+
- 	/* Disable channel interrupts */
- 	wcn36xx_dxe_disable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_RX_H);
- 	wcn36xx_dxe_disable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_RX_L);
-@@ -1012,6 +1014,10 @@ void wcn36xx_dxe_deinit(struct wcn36xx *wcn)
- 		wcn->tx_ack_skb = NULL;
- 	}
+ 	/*
+@@ -295,12 +294,11 @@ int wcn36xx_rx_skb(struct wcn36xx *wcn, struct sk_buff *skb)
+ 		status.enc_flags = rate->encoding_flags;
+ 		status.bw = rate->bw;
+ 		status.rate_idx = rate->mcs_or_legacy_index;
+-		sband = wcn->hw->wiphy->bands[status.band];
+ 		status.nss = 1;
  
-+	/* Put the DXE block into reset before freeing memory */
-+	reg_data = WCN36XX_DXE_REG_RESET;
-+	wcn36xx_dxe_write_register(wcn, WCN36XX_DXE_REG_CSR_RESET, reg_data);
-+
- 	wcn36xx_dxe_ch_free_skbs(wcn, &wcn->dxe_rx_l_ch);
- 	wcn36xx_dxe_ch_free_skbs(wcn, &wcn->dxe_rx_h_ch);
- 
+ 		if (status.band == NL80211_BAND_5GHZ &&
+ 		    status.encoding == RX_ENC_LEGACY &&
+-		    status.rate_idx >= sband->n_bitrates) {
++		    status.rate_idx >= 4) {
+ 			/* no dsss rates in 5Ghz rates table */
+ 			status.rate_idx -= 4;
+ 		}
 -- 
 2.34.1
 

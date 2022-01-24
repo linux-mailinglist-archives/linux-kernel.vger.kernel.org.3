@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27CB04997D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:33:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB93499808
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391233AbiAXVQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:16:43 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43910 "EHLO
+        id S237220AbiAXVTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:19:01 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44026 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392005AbiAXUuO (ORCPT
+        with ESMTP id S1392091AbiAXUu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:50:14 -0500
+        Mon, 24 Jan 2022 15:50:26 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6DBC60C41;
-        Mon, 24 Jan 2022 20:50:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AE71C340E5;
-        Mon, 24 Jan 2022 20:50:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE86960B1A;
+        Mon, 24 Jan 2022 20:50:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0ABBC340E5;
+        Mon, 24 Jan 2022 20:50:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057413;
-        bh=Gl0jy4PB5R5wa6o52whfL1Em2AKbbEFdXHfbPfhrtME=;
+        s=korg; t=1643057425;
+        bh=q67Yuv2lFh5A7efPX2bOzffmmlUvGKImDLhXNGY13OQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yN+G4nPELe+jkSEmjxDGwGscQ4xVy4eyEZD8AStvoOFCPjYPCOhEM2bS+UsMJUsrP
-         +ygghXa2BuN1LDzqul0emArPxtSl4tQoRg4VrVi+rfYkyRnjGPyJPJkm1+j9CRF7QG
-         WEv6SDryoog6usWxqZjRCF+SSl6FxVXuPOaKJ/bA=
+        b=x17V3IUP4VZYAcaTuXmsM+HMdPzUr9yXCZAPbfDR2wBnd7QZbIr/Hr8+g7LKaGRJ8
+         hNDANS41acXLU4U2Zx7QjuNosvDKE7p4ZhVBIuCDTXBA19+0WHRqGhzefheBbf4QWz
+         w/wdGaADpcxnC3759Bdh4gYi5whjO5UvYz4G79tM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Xuan Zhuo" <xuanzhuo@linux.alibaba.com>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Subject: [PATCH 5.15 805/846] virtio_ring: mark ring unused on error
-Date:   Mon, 24 Jan 2022 19:45:22 +0100
-Message-Id: <20220124184128.705167203@linuxfoundation.org>
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 808/846] netns: add schedule point in ops_exit_list()
+Date:   Mon, 24 Jan 2022 19:45:25 +0100
+Message-Id: <20220124184128.801450579@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -46,38 +46,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael S. Tsirkin <mst@redhat.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit 1861ba626ae9b98136f3e504208cdef6b29cd3ec upstream.
+commit 2836615aa22de55b8fca5e32fe1b27a67cda625e upstream.
 
-A recently added error path does not mark ring unused when exiting on
-OOM, which will lead to BUG on the next entry in debug builds.
+When under stress, cleanup_net() can have to dismantle
+netns in big numbers. ops_exit_list() currently calls
+many helpers [1] that have no schedule point, and we can
+end up with soft lockups, particularly on hosts
+with many cpus.
 
-TODO: refactor code so we have START_USE and END_USE in the same function.
+Even for moderate amount of netns processed by cleanup_net()
+this patch avoids latency spikes.
 
-Fixes: fc6d70f40b3d ("virtio_ring: check desc == NULL when using indirect with packed")
-Cc: "Xuan Zhuo" <xuanzhuo@linux.alibaba.com>
-Cc: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+[1] Some of these helpers like fib_sync_up() and fib_sync_down_dev()
+are very slow because net/ipv4/fib_semantics.c uses host-wide hash tables,
+and ifindex is used as the only input of two hash functions.
+    ifindexes tend to be the same for all netns (lo.ifindex==1 per instance)
+    This will be fixed in a separate patch.
+
+Fixes: 72ad937abd0a ("net: Add support for batching network namespace cleanups")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: Eric W. Biederman <ebiederm@xmission.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/virtio/virtio_ring.c |    4 +++-
+ net/core/net_namespace.c |    4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/virtio/virtio_ring.c
-+++ b/drivers/virtio/virtio_ring.c
-@@ -1197,8 +1197,10 @@ static inline int virtqueue_add_packed(s
- 	if (virtqueue_use_indirect(_vq, total_sg)) {
- 		err = virtqueue_add_indirect_packed(vq, sgs, total_sg, out_sgs,
- 						    in_sgs, data, gfp);
--		if (err != -ENOMEM)
-+		if (err != -ENOMEM) {
-+			END_USE(vq);
- 			return err;
+--- a/net/core/net_namespace.c
++++ b/net/core/net_namespace.c
+@@ -164,8 +164,10 @@ static void ops_exit_list(const struct p
+ {
+ 	struct net *net;
+ 	if (ops->exit) {
+-		list_for_each_entry(net, net_exit_list, exit_list)
++		list_for_each_entry(net, net_exit_list, exit_list) {
+ 			ops->exit(net);
++			cond_resched();
 +		}
- 
- 		/* fall back on direct */
  	}
+ 	if (ops->exit_batch)
+ 		ops->exit_batch(net_exit_list);
 
 

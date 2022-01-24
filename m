@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18873499B7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:03:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12FB8499576
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1575948AbiAXVwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:52:46 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43272 "EHLO
+        id S1441897AbiAXUwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:52:16 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53886 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1450490AbiAXVUk (ORCPT
+        with ESMTP id S1356917AbiAXU3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:20:40 -0500
+        Mon, 24 Jan 2022 15:29:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CDDD7614C7;
-        Mon, 24 Jan 2022 21:20:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1073C340E4;
-        Mon, 24 Jan 2022 21:20:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D50061382;
+        Mon, 24 Jan 2022 20:29:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51F65C340E5;
+        Mon, 24 Jan 2022 20:29:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059239;
-        bh=hjv/7tHzGjCV2RdHyu0RB7cGIUyd+Cr9zZGJnMbWeZc=;
+        s=korg; t=1643056152;
+        bh=rtpLZA/dEdKmmCJ55vX9tk3oGIr36nPawB5/HexGmQA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uDoR8zkKF18/Mg2Wpib9Y0Pmmvv8gbKoLdP2Lt4GYCaDtkcRYf3nXXSe5aNSCAvu3
-         htRO0RDmq0Sws483//VH5NBr4sS7/jOT78tGQN1IYxl5SVrXqj44XwpGU/UFvPRVuw
-         3WGXAcf9tn3z31c0chTzAnGyClMIEHI0jKglZM+s=
+        b=vl3+Qg2oN6cbMRxZ4L3+Hgxv9vr32h36J6L8N4j0SdjJzBvkc8NCpuuKX8gx+4SUG
+         7QsdGRr24YvcSIaM+aj4gsaJe6oQ3zycD60KhAOygHR8idM0Svj8hBorF8ZRL2xv+2
+         UgBJ+/pqQi9Z8vbn6OJBTThB1AY4z3zjlTos7j2U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0516/1039] mips: bcm63xx: add support for clk_set_parent()
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 388/846] ALSA: hda: Make proper use of timecounter
 Date:   Mon, 24 Jan 2022 19:38:25 +0100
-Message-Id: <20220124184142.636743478@linuxfoundation.org>
+Message-Id: <20220124184114.326151138@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,46 +46,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Thomas Gleixner <tglx@linutronix.de>
 
-[ Upstream commit 6f03055d508ff4feb8db02ba3df9303a1db8d381 ]
+[ Upstream commit 6dd21ad81bf96478db3403b1bbe251c0612d0431 ]
 
-The MIPS BMC63XX subarch does not provide/support clk_set_parent().
-This causes build errors in a few drivers, so add a simple implementation
-of that function so that callers of it will build without errors.
+HDA uses a timecounter to read a hardware clock running at 24 MHz. The
+conversion factor is set with a mult value of 125 and a shift value of 0,
+which is not converting the hardware clock to nanoseconds, it is converting
+to 1/3 nanoseconds because the conversion factor from 24Mhz to nanoseconds
+is 125/3. The usage sites divide the "nanoseconds" value returned by
+timecounter_read() by 3 to get a real nanoseconds value.
 
-Fixes these build errors:
+There is a lengthy comment in azx_timecounter_init() explaining this
+choice. That comment makes blatantly wrong assumptions about how
+timecounters work and what can overflow.
 
-ERROR: modpost: "clk_set_parent" [sound/soc/jz4740/snd-soc-jz4740-i2s.ko] undefined!
-ERROR: modpost: "clk_set_parent" [sound/soc/atmel/snd-soc-atmel-i2s.ko] undefined!
+The comment says:
 
-Fixes: e7300d04bd08 ("MIPS: BCM63xx: Add support for the Broadcom BCM63xx family of SOCs." )
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+     * Applying the 1/3 factor as part of the multiplication
+     * requires at least 20 bits for a decent precision, however
+     * overflows occur after about 4 hours or less, not a option.
+
+timecounters operate on time deltas between two readouts of a clock and use
+the mult/shift pair to calculate a precise nanoseconds value:
+
+    delta_nsec = (delta_clock * mult) >> shift;
+
+The fractional part is also taken into account and preserved to prevent
+accumulated rounding errors. For details see cyclecounter_cyc2ns().
+
+The mult/shift pair has to be chosen so that the multiplication of the
+maximum expected delta value does not result in a 64bit overflow. As the
+counter wraps around on 32bit, the maximum observable delta between two
+reads is (1 << 32) - 1 which is about 178.9 seconds.
+
+That in turn means the maximum multiplication factor which fits into an u32
+will not cause a 64bit overflow ever because it's guaranteed that:
+
+     ((1 << 32) - 1) ^ 2 < (1 << 64)
+
+The resulting correct multiplication factor is 2796202667 and the shift
+value is 26, i.e. 26 bit precision. The overflow of the multiplication
+would happen exactly at a clock readout delta of 6597069765 which is way
+after the wrap around of the hardware clock at around 274.8 seconds which
+is off from the claimed 4 hours by more than an order of magnitude.
+
+If the counter ever wraps around the last read value then the calculation
+is off by the number of wrap arounds times 178.9 seconds because the
+overflow cannot be observed.
+
+Use clocks_calc_mult_shift(), which calculates the most accurate mult/shift
+pair based on the given clock frequency, and remove the bogus comment along
+with the divisions at the readout sites.
+
+Fixes: 5d890f591d15 ("ALSA: hda: support for wallclock timestamps")
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Link: https://lore.kernel.org/r/871r35kwji.ffs@tglx
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/bcm63xx/clk.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ sound/hda/hdac_stream.c           | 14 ++++----------
+ sound/pci/hda/hda_controller.c    |  1 -
+ sound/soc/intel/skylake/skl-pcm.c |  1 -
+ 3 files changed, 4 insertions(+), 12 deletions(-)
 
-diff --git a/arch/mips/bcm63xx/clk.c b/arch/mips/bcm63xx/clk.c
-index 1c91064cb448b..6e6756e8fa0a9 100644
---- a/arch/mips/bcm63xx/clk.c
-+++ b/arch/mips/bcm63xx/clk.c
-@@ -387,6 +387,12 @@ struct clk *clk_get_parent(struct clk *clk)
- }
- EXPORT_SYMBOL(clk_get_parent);
+diff --git a/sound/hda/hdac_stream.c b/sound/hda/hdac_stream.c
+index 9867555883c34..aa7955fdf68a0 100644
+--- a/sound/hda/hdac_stream.c
++++ b/sound/hda/hdac_stream.c
+@@ -534,17 +534,11 @@ static void azx_timecounter_init(struct hdac_stream *azx_dev,
+ 	cc->mask = CLOCKSOURCE_MASK(32);
  
-+int clk_set_parent(struct clk *clk, struct clk *parent)
-+{
-+	return 0;
-+}
-+EXPORT_SYMBOL(clk_set_parent);
-+
- unsigned long clk_get_rate(struct clk *clk)
- {
- 	if (!clk)
+ 	/*
+-	 * Converting from 24 MHz to ns means applying a 125/3 factor.
+-	 * To avoid any saturation issues in intermediate operations,
+-	 * the 125 factor is applied first. The division is applied
+-	 * last after reading the timecounter value.
+-	 * Applying the 1/3 factor as part of the multiplication
+-	 * requires at least 20 bits for a decent precision, however
+-	 * overflows occur after about 4 hours or less, not a option.
++	 * Calculate the optimal mult/shift values. The counter wraps
++	 * around after ~178.9 seconds.
+ 	 */
+-
+-	cc->mult = 125; /* saturation after 195 years */
+-	cc->shift = 0;
++	clocks_calc_mult_shift(&cc->mult, &cc->shift, 24000000,
++			       NSEC_PER_SEC, 178);
+ 
+ 	nsec = 0; /* audio time is elapsed time since trigger */
+ 	timecounter_init(tc, cc, nsec);
+diff --git a/sound/pci/hda/hda_controller.c b/sound/pci/hda/hda_controller.c
+index 930ae4002a818..75dcb14ff20ad 100644
+--- a/sound/pci/hda/hda_controller.c
++++ b/sound/pci/hda/hda_controller.c
+@@ -504,7 +504,6 @@ static int azx_get_time_info(struct snd_pcm_substream *substream,
+ 		snd_pcm_gettime(substream->runtime, system_ts);
+ 
+ 		nsec = timecounter_read(&azx_dev->core.tc);
+-		nsec = div_u64(nsec, 3); /* can be optimized */
+ 		if (audio_tstamp_config->report_delay)
+ 			nsec = azx_adjust_codec_delay(substream, nsec);
+ 
+diff --git a/sound/soc/intel/skylake/skl-pcm.c b/sound/soc/intel/skylake/skl-pcm.c
+index 9ecaf6a1e8475..e4aa366d356eb 100644
+--- a/sound/soc/intel/skylake/skl-pcm.c
++++ b/sound/soc/intel/skylake/skl-pcm.c
+@@ -1251,7 +1251,6 @@ static int skl_platform_soc_get_time_info(
+ 		snd_pcm_gettime(substream->runtime, system_ts);
+ 
+ 		nsec = timecounter_read(&hstr->tc);
+-		nsec = div_u64(nsec, 3); /* can be optimized */
+ 		if (audio_tstamp_config->report_delay)
+ 			nsec = skl_adjust_codec_delay(substream, nsec);
+ 
 -- 
 2.34.1
 

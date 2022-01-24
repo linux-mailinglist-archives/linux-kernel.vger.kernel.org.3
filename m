@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26ADA499E2C
+	by mail.lfdr.de (Postfix) with ESMTP id 965F9499E2D
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:07:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587970AbiAXWaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:30:21 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50300 "EHLO
+        id S1587985AbiAXWaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:30:24 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50334 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1456325AbiAXVio (ORCPT
+        with ESMTP id S1444812AbiAXVio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 16:38:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF872B81233;
-        Mon, 24 Jan 2022 21:38:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19BB0C340E4;
-        Mon, 24 Jan 2022 21:38:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B699CB80FA1;
+        Mon, 24 Jan 2022 21:38:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDEC7C340E4;
+        Mon, 24 Jan 2022 21:38:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060315;
-        bh=4KnP9f2BG2N0gQWpClCCaBlbp1tyU3Pjw2Z1LPrgmQ8=;
+        s=korg; t=1643060318;
+        bh=8kdnPAkKMFZeojypize7PQeSHKNwYqoEZAm1hMECNzM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cenakRCK9CnTOdZM4c2d6HdhVsNEiRteH3JRptVZhoBSyjlcYg5qKT4ZItgxIWzEO
-         UbIHWjpr+Fm4/kYGYF39w89YLLunWLolbGoSGJ4DCmhGh0m/9bAsTIt5hQzlcyDjbH
-         qhdNW8plCebWFm30/Fa64BW7a2w7CyPsQFw00MTw=
+        b=EZYUgsy+OHq0wpf4Q0ieotqbTSPSSySH2DxwCj+NvZ897tbHtxuBfZsOTtgfWd3Zt
+         DGonPcs1NCvOxujY/hU4gnqKIfcVLi7s+8X0j/uGgjwrEakP8zlSpUpDndQuQD9gLb
+         JK+Fgc3e6w/xxDr6owlgs042571KXB7hnnDZ+pGE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joseph Bao <joseph.bao@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stuart Hayes <stuart.w.hayes@gmail.com>
-Subject: [PATCH 5.16 0874/1039] PCI: pciehp: Fix infinite loop in IRQ handler upon power fault
-Date:   Mon, 24 Jan 2022 19:44:23 +0100
-Message-Id: <20220124184154.674800632@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: [PATCH 5.16 0875/1039] PCI: pci-bridge-emul: Make expansion ROM Base Address register read-only
+Date:   Mon, 24 Jan 2022 19:44:24 +0100
+Message-Id: <20220124184154.707490250@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -47,76 +46,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Wunner <lukas@wunner.de>
+From: Pali Rohár <pali@kernel.org>
 
-commit 23584c1ed3e15a6f4bfab8dc5a88d94ab929ee12 upstream.
+commit 1c1a3b4d3e86b997a313ffb297c1129540882859 upstream.
 
-The Power Fault Detected bit in the Slot Status register differs from
-all other hotplug events in that it is sticky:  It can only be cleared
-after turning off slot power.  Per PCIe r5.0, sec. 6.7.1.8:
+If expansion ROM is unsupported (which is the case of pci-bridge-emul.c
+driver) then ROM Base Address register must be implemented as read-only
+register that return 0 when read, same as for unused Base Address
+registers.
 
-  If a power controller detects a main power fault on the hot-plug slot,
-  it must automatically set its internal main power fault latch [...].
-  The main power fault latch is cleared when software turns off power to
-  the hot-plug slot.
-
-The stickiness used to cause interrupt storms and infinite loops which
-were fixed in 2009 by commits 5651c48cfafe ("PCI pciehp: fix power fault
-interrupt storm problem") and 99f0169c17f3 ("PCI: pciehp: enable
-software notification on empty slots").
-
-Unfortunately in 2020 the infinite loop issue was inadvertently
-reintroduced by commit 8edf5332c393 ("PCI: pciehp: Fix MSI interrupt
-race"):  The hardirq handler pciehp_isr() clears the PFD bit until
-pciehp's power_fault_detected flag is set.  That happens in the IRQ
-thread pciehp_ist(), which never learns of the event because the hardirq
-handler is stuck in an infinite loop.  Fix by setting the
-power_fault_detected flag already in the hardirq handler.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=214989
-Link: https://lore.kernel.org/linux-pci/DM8PR11MB5702255A6A92F735D90A4446868B9@DM8PR11MB5702.namprd11.prod.outlook.com
-Fixes: 8edf5332c393 ("PCI: pciehp: Fix MSI interrupt race")
-Link: https://lore.kernel.org/r/66eaeef31d4997ceea357ad93259f290ededecfd.1637187226.git.lukas@wunner.de
-Reported-by: Joseph Bao <joseph.bao@intel.com>
-Tested-by: Joseph Bao <joseph.bao@intel.com>
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Cc: stable@vger.kernel.org # v4.19+
-Cc: Stuart Hayes <stuart.w.hayes@gmail.com>
+Link: https://lore.kernel.org/r/20211124155944.1290-2-pali@kernel.org
+Fixes: 23a5fba4d941 ("PCI: Introduce PCI bridge emulated config space common logic")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/hotplug/pciehp_hpc.c |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/pci/pci-bridge-emul.c |    7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
---- a/drivers/pci/hotplug/pciehp_hpc.c
-+++ b/drivers/pci/hotplug/pciehp_hpc.c
-@@ -642,6 +642,8 @@ read_status:
- 	 */
- 	if (ctrl->power_fault_detected)
- 		status &= ~PCI_EXP_SLTSTA_PFD;
-+	else if (status & PCI_EXP_SLTSTA_PFD)
-+		ctrl->power_fault_detected = true;
+--- a/drivers/pci/pci-bridge-emul.c
++++ b/drivers/pci/pci-bridge-emul.c
+@@ -139,8 +139,13 @@ struct pci_bridge_reg_behavior pci_regs_
+ 		.ro = GENMASK(7, 0),
+ 	},
  
- 	events |= status;
- 	if (!events) {
-@@ -651,7 +653,7 @@ read_status:
- 	}
++	/*
++	 * If expansion ROM is unsupported then ROM Base Address register must
++	 * be implemented as read-only register that return 0 when read, same
++	 * as for unused Base Address registers.
++	 */
+ 	[PCI_ROM_ADDRESS1 / 4] = {
+-		.rw = GENMASK(31, 11) | BIT(0),
++		.ro = ~0,
+ 	},
  
- 	if (status) {
--		pcie_capability_write_word(pdev, PCI_EXP_SLTSTA, events);
-+		pcie_capability_write_word(pdev, PCI_EXP_SLTSTA, status);
- 
- 		/*
- 		 * In MSI mode, all event bits must be zero before the port
-@@ -725,8 +727,7 @@ static irqreturn_t pciehp_ist(int irq, v
- 	}
- 
- 	/* Check Power Fault Detected */
--	if ((events & PCI_EXP_SLTSTA_PFD) && !ctrl->power_fault_detected) {
--		ctrl->power_fault_detected = 1;
-+	if (events & PCI_EXP_SLTSTA_PFD) {
- 		ctrl_err(ctrl, "Slot(%s): Power fault\n", slot_name(ctrl));
- 		pciehp_set_indicators(ctrl, PCI_EXP_SLTCTL_PWR_IND_OFF,
- 				      PCI_EXP_SLTCTL_ATTN_IND_ON);
+ 	/*
 
 

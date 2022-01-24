@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB0149A2A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7ED49A71A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2363066AbiAXXnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:43:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47702 "EHLO
+        id S3423315AbiAYCd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:33:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1843477AbiAXXED (ORCPT
+        with ESMTP id S1356859AbiAXU2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:04:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D168C06C5AF;
-        Mon, 24 Jan 2022 13:15:26 -0800 (PST)
+        Mon, 24 Jan 2022 15:28:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C506CC07A959;
+        Mon, 24 Jan 2022 11:42:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0738FB811FB;
-        Mon, 24 Jan 2022 21:15:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D194C340E5;
-        Mon, 24 Jan 2022 21:15:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6508661488;
+        Mon, 24 Jan 2022 19:42:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23C3FC340E5;
+        Mon, 24 Jan 2022 19:42:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058923;
-        bh=/EESlIcy4u19W/9Xq1u2Tkvy0QQYoel1/VtuLRwMchQ=;
+        s=korg; t=1643053325;
+        bh=237rbF9pS7DmapYAq12bvUaL8GTC3vSFTf2z40fMX3E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1FKCDMZe0MSK4bRfM3CWQMihOcsUwahnydDrxAPqyGmG+tEgVdcpafip4SNtTfprf
-         d5iFf0W5gahP1d9g2GNAHEz79befP4IbAmQb03LfVjIUhjwqWIjc74Xe3rUqhhzqTq
-         oLmULhXZ8FiQpF3TcUPKogI0jujgChpkhssxWDe8=
+        b=IB3dskKLnVy6YOh7m0W8tuvJYu84V7J2D8EWRwIsRrrjSJy3W3OOl0RoxGAfNogKm
+         i8Af/a11VSttHdQtilwl8cpq6uNx6JiPiVJaeVCKV3sx1NViUQ9U3T+nPo46M+YZRY
+         2QPvm6SooX+VUOQTWPRLBEFiWDjFGdTx3RT5CGWQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Huang Rui <ray.huang@amd.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0404/1039] x86, sched: Fix undefined reference to init_freq_invariance_cppc() build error
+        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH 5.10 028/563] media: stk1160: fix control-message timeouts
 Date:   Mon, 24 Jan 2022 19:36:33 +0100
-Message-Id: <20220124184138.888274826@linuxfoundation.org>
+Message-Id: <20220124184025.402106800@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,50 +49,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Huang Rui <ray.huang@amd.com>
+From: Johan Hovold <johan@kernel.org>
 
-[ Upstream commit 6c4ab1b86dac3954d15c00c1a6396d60a1023fab ]
+commit 6aa6e70cdb5b863a57bad61310bf89b6617a5d2d upstream.
 
-The init_freq_invariance_cppc function is implemented in smpboot and depends on
-CONFIG_SMP.
+USB control-message timeouts are specified in milliseconds and should
+specifically not vary with CONFIG_HZ.
 
-  MODPOST vmlinux.symvers
-  MODINFO modules.builtin.modinfo
-  GEN     modules.builtin
-  LD      .tmp_vmlinux.kallsyms1
-ld: drivers/acpi/cppc_acpi.o: in function `acpi_cppc_processor_probe':
-/home/ray/brahma3/linux/drivers/acpi/cppc_acpi.c:819: undefined reference to `init_freq_invariance_cppc'
-make: *** [Makefile:1161: vmlinux] Error 1
-
-See https://lore.kernel.org/lkml/484af487-7511-647e-5c5b-33d4429acdec@infradead.org/.
-
-Fixes: 41ea667227ba ("x86, sched: Calculate frequency invariance for AMD systems")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Huang Rui <ray.huang@amd.com>
-[ rjw: Subject edits ]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 9cb2173e6ea8 ("[media] media: Add stk1160 new driver (easycap replacement)")
+Cc: stable@vger.kernel.org      # 3.7
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/topology.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/usb/stk1160/stk1160-core.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
-index cc164777e6619..2f0b6be8eaabc 100644
---- a/arch/x86/include/asm/topology.h
-+++ b/arch/x86/include/asm/topology.h
-@@ -221,7 +221,7 @@ static inline void arch_set_max_freq_ratio(bool turbo_disabled)
- }
- #endif
+--- a/drivers/media/usb/stk1160/stk1160-core.c
++++ b/drivers/media/usb/stk1160/stk1160-core.c
+@@ -65,7 +65,7 @@ int stk1160_read_reg(struct stk1160 *dev
+ 		return -ENOMEM;
+ 	ret = usb_control_msg(dev->udev, pipe, 0x00,
+ 			USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+-			0x00, reg, buf, sizeof(u8), HZ);
++			0x00, reg, buf, sizeof(u8), 1000);
+ 	if (ret < 0) {
+ 		stk1160_err("read failed on reg 0x%x (%d)\n",
+ 			reg, ret);
+@@ -85,7 +85,7 @@ int stk1160_write_reg(struct stk1160 *de
  
--#ifdef CONFIG_ACPI_CPPC_LIB
-+#if defined(CONFIG_ACPI_CPPC_LIB) && defined(CONFIG_SMP)
- void init_freq_invariance_cppc(void);
- #define init_freq_invariance_cppc init_freq_invariance_cppc
- #endif
--- 
-2.34.1
-
+ 	ret =  usb_control_msg(dev->udev, pipe, 0x01,
+ 			USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+-			value, reg, NULL, 0, HZ);
++			value, reg, NULL, 0, 1000);
+ 	if (ret < 0) {
+ 		stk1160_err("write failed on reg 0x%x (%d)\n",
+ 			reg, ret);
 
 

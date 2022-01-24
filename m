@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7BE7498DC3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9977E4991E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353989AbiAXTfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:35:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351864AbiAXT25 (ORCPT
+        id S1380081AbiAXUPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:15:32 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:49206 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358825AbiAXTzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:28:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4DCC08E823;
-        Mon, 24 Jan 2022 11:13:07 -0800 (PST)
+        Mon, 24 Jan 2022 14:55:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE923612FC;
-        Mon, 24 Jan 2022 19:13:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C0C7C36AE9;
-        Mon, 24 Jan 2022 19:13:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D336D60B02;
+        Mon, 24 Jan 2022 19:55:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A90E7C340E5;
+        Mon, 24 Jan 2022 19:55:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051586;
-        bh=Q+MxbbWQVajUN34Ta0HIEmYAyo52hSUK/g2MXOMUHZo=;
+        s=korg; t=1643054152;
+        bh=eMrX1hV6akwkz8ht0zyrabETUFdYz2E50DjI7Kz+wBc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iXpH7K3X4uK64A1s3YkMSG0lMdXyJ0J7DUCS1z3rrZBOCCFzTPCZGj14f3SR41DTM
-         A1kdrP0l+cNNd0xz7N3VpjAqfMs9Amvbx6fKajWZbmTS6Z8p4LQqI6rCCk5p0ksLQA
-         oGrEGlHTwvdNSMCGiqFzN+asD1N+Qig5G0R905vo=
+        b=nu64cdg2uXBotrs4kWdg7m3NVj24/oNOK8M8LsQFS+Werl8YTztpFY3v0/W30xD9q
+         2n1BDmDFGuEEREnWsVSI68oILrSAiJ9uTZ+iJ0CXC/vjWvSGujeQ68XRTsqVwdaHkU
+         s34tRx2cs5oYKLLYE60Fdl4+5iKphsYLq/M+xJec=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Jiri Kosina <jkosina@suse.cz>
-Subject: [PATCH 4.19 022/239] HID: uhid: Fix worker destroying device without any protection
-Date:   Mon, 24 Jan 2022 19:41:00 +0100
-Message-Id: <20220124183943.826952634@linuxfoundation.org>
+        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 296/563] of: base: Fix phandle argument length mismatch error message
+Date:   Mon, 24 Jan 2022 19:41:01 +0100
+Message-Id: <20220124184034.674849285@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,101 +46,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+From: Baruch Siach <baruch@tkos.co.il>
 
-commit 4ea5763fb79ed89b3bdad455ebf3f33416a81624 upstream.
+[ Upstream commit 94a4950a4acff39b5847cc1fee4f65e160813493 ]
 
-uhid has to run hid_add_device() from workqueue context while allowing
-parallel use of the userspace API (which is protected with ->devlock).
-But hid_add_device() can fail. Currently, that is handled by immediately
-destroying the associated HID device, without using ->devlock - but if
-there are concurrent requests from userspace, that's wrong and leads to
-NULL dereferences and/or memory corruption (via use-after-free).
+The cell_count field of of_phandle_iterator is the number of cells we
+expect in the phandle arguments list when cells_name is missing. The
+error message should show the number of cells we actually see.
 
-Fix it by leaving the HID device as-is in the worker. We can clean it up
-later, either in the UHID_DESTROY command handler or in the ->release()
-handler.
-
-Cc: stable@vger.kernel.org
-Fixes: 67f8ecc550b5 ("HID: uhid: fix timeout when probe races with IO")
-Signed-off-by: Jann Horn <jannh@google.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: af3be70a3211 ("of: Improve of_phandle_iterator_next() error message")
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/96519ac55be90a63fa44afe01480c30d08535465.1640881913.git.baruch@tkos.co.il
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/uhid.c |   29 +++++++++++++++++++++++++----
- 1 file changed, 25 insertions(+), 4 deletions(-)
+ drivers/of/base.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/hid/uhid.c
-+++ b/drivers/hid/uhid.c
-@@ -31,11 +31,22 @@
- 
- struct uhid_device {
- 	struct mutex devlock;
-+
-+	/* This flag tracks whether the HID device is usable for commands from
-+	 * userspace. The flag is already set before hid_add_device(), which
-+	 * runs in workqueue context, to allow hid_add_device() to communicate
-+	 * with userspace.
-+	 * However, if hid_add_device() fails, the flag is cleared without
-+	 * holding devlock.
-+	 * We guarantee that if @running changes from true to false while you're
-+	 * holding @devlock, it's still fine to access @hid.
-+	 */
- 	bool running;
- 
- 	__u8 *rd_data;
- 	uint rd_size;
- 
-+	/* When this is NULL, userspace may use UHID_CREATE/UHID_CREATE2. */
- 	struct hid_device *hid;
- 	struct uhid_event input_buf;
- 
-@@ -66,9 +77,18 @@ static void uhid_device_add_worker(struc
- 	if (ret) {
- 		hid_err(uhid->hid, "Cannot register HID device: error %d\n", ret);
- 
--		hid_destroy_device(uhid->hid);
--		uhid->hid = NULL;
-+		/* We used to call hid_destroy_device() here, but that's really
-+		 * messy to get right because we have to coordinate with
-+		 * concurrent writes from userspace that might be in the middle
-+		 * of using uhid->hid.
-+		 * Just leave uhid->hid as-is for now, and clean it up when
-+		 * userspace tries to close or reinitialize the uhid instance.
-+		 *
-+		 * However, we do have to clear the ->running flag and do a
-+		 * wakeup to make sure userspace knows that the device is gone.
-+		 */
- 		uhid->running = false;
-+		wake_up_interruptible(&uhid->report_wait);
+diff --git a/drivers/of/base.c b/drivers/of/base.c
+index 161a23631472d..60cb9b44d4ecc 100644
+--- a/drivers/of/base.c
++++ b/drivers/of/base.c
+@@ -1328,9 +1328,9 @@ int of_phandle_iterator_next(struct of_phandle_iterator *it)
+ 		 * property data length
+ 		 */
+ 		if (it->cur + count > it->list_end) {
+-			pr_err("%pOF: %s = %d found %d\n",
++			pr_err("%pOF: %s = %d found %td\n",
+ 			       it->parent, it->cells_name,
+-			       count, it->cell_count);
++			       count, it->list_end - it->cur);
+ 			goto err;
+ 		}
  	}
- }
- 
-@@ -477,7 +497,7 @@ static int uhid_dev_create2(struct uhid_
- 	void *rd_data;
- 	int ret;
- 
--	if (uhid->running)
-+	if (uhid->hid)
- 		return -EALREADY;
- 
- 	rd_size = ev->u.create2.rd_size;
-@@ -559,7 +579,7 @@ static int uhid_dev_create(struct uhid_d
- 
- static int uhid_dev_destroy(struct uhid_device *uhid)
- {
--	if (!uhid->running)
-+	if (!uhid->hid)
- 		return -EINVAL;
- 
- 	uhid->running = false;
-@@ -568,6 +588,7 @@ static int uhid_dev_destroy(struct uhid_
- 	cancel_work_sync(&uhid->worker);
- 
- 	hid_destroy_device(uhid->hid);
-+	uhid->hid = NULL;
- 	kfree(uhid->rd_data);
- 
- 	return 0;
+-- 
+2.34.1
+
 
 

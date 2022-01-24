@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25FDB49A76F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:44:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D433349A2AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1312562AbiAYCn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:43:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40698 "EHLO
+        id S1386490AbiAXXqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:46:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387488AbiAXUgw (ORCPT
+        with ESMTP id S1845359AbiAXXMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:36:52 -0500
+        Mon, 24 Jan 2022 18:12:08 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A9AC061796;
-        Mon, 24 Jan 2022 11:49:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4C1C067A48;
+        Mon, 24 Jan 2022 13:19:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F6F4B811F9;
-        Mon, 24 Jan 2022 19:49:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 766B8C340E5;
-        Mon, 24 Jan 2022 19:49:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4DC01B8121C;
+        Mon, 24 Jan 2022 21:19:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D618C340E4;
+        Mon, 24 Jan 2022 21:19:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053781;
-        bh=ipc7IAl6/w4aJnjz2NcJSJkZF0EoOSK7yODQSB9i+8k=;
+        s=korg; t=1643059151;
+        bh=Bb08eC+W8XTdWgECuLhGZ+SpmqB3ZVW7ydcpMUaZC30=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WDs71H1Uvvk2ECfvxaTmYQ+xYe24cC6J7gpDmey41bITqFKwSDACfjyzTHdgPBVao
-         8hYJED8IdtU8PIcV1T6bppJt3rI/A4t+Ie4rZwXqBUK7Tnj7m4RXhOX+EGBy3rxXKk
-         C+87Os4UiTDmdCzF5tckbB9/gxNjwKFueSxNnDyI=
+        b=RSg8q3OUG6lVg8s7ELLLbCffpPlr4oPLEhd0kTMS+/pjmwZQvfvuzyilg04b/5gh5
+         3kY/8uHMIyku0PhF6GqqD+BVdpoCu9sUxcLI1g6nzWZPVS8ji0S1cvjfBnkd/L1TEi
+         4LiTjre4mRq0prYsZUOzV0jXGhUNqZggiQ7uNJGM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Schlabbach <robert_s@gmx.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 143/563] media: si2157: Fix "warm" tuner state detection
-Date:   Mon, 24 Jan 2022 19:38:28 +0100
-Message-Id: <20220124184029.349318252@linuxfoundation.org>
+Subject: [PATCH 5.16 0521/1039] cxl/core: Remove cxld_const_init in cxl_decoder_alloc()
+Date:   Mon, 24 Jan 2022 19:38:30 +0100
+Message-Id: <20220124184142.802001397@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,59 +49,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Schlabbach <robert_s@gmx.net>
+From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit a6441ea29cb2c9314654e093a1cd8020b9b851c8 ]
+[ Upstream commit be185c2988b48db65348d94168c793bdbc8d23c3 ]
 
-Commit e955f959ac52 ("media: si2157: Better check for running tuner in
-init") completely broke the "warm" tuner detection of the si2157 driver
-due to a simple endian error: The Si2157 CRYSTAL_TRIM property code is
-0x0402 and needs to be transmitted LSB first. However, it was inserted
-MSB first, causing the warm detection to always fail and spam the kernel
-log with tuner initialization messages each time the DVB frontend
-device was closed and reopened:
+Commit 48667f676189 ("cxl/core: Split decoder setup into alloc + add")
+aimed to fix a large stack frame warning but from v5 to v6, it
+introduced a new instance of the warning due to allocating
+cxld_const_init on the stack, which was done due to the use of const on
+the nr_target member of the cxl_decoder struct. With ARCH=arm
+allmodconfig minus CONFIG_KASAN:
 
-[  312.215682] si2157 16-0060: found a 'Silicon Labs Si2157-A30'
-[  312.264334] si2157 16-0060: firmware version: 3.0.5
-[  342.248593] si2157 16-0060: found a 'Silicon Labs Si2157-A30'
-[  342.295743] si2157 16-0060: firmware version: 3.0.5
-[  372.328574] si2157 16-0060: found a 'Silicon Labs Si2157-A30'
-[  372.385035] si2157 16-0060: firmware version: 3.0.5
+GCC 11.2.0:
 
-Also, the reinitializations were observed disturb _other_ tuners on
-multi-tuner cards such as the Hauppauge WinTV-QuadHD, leading to missed
-or errored packets when one of the other DVB frontend devices on that
-card was opened.
+drivers/cxl/core/bus.c: In function ‘cxl_decoder_alloc’:
+drivers/cxl/core/bus.c:523:1: error: the frame size of 1032 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+  523 | }
+      | ^
+cc1: all warnings being treated as errors
 
-Fix the order of the property code bytes to make the warm detection work
-again, also reducing the tuner initialization message in the kernel log
-to once per power-on, as well as fixing the interference with other
-tuners.
+Clang 12.0.1:
 
-Link: https://lore.kernel.org/linux-media/trinity-2a86eb9d-6264-4387-95e1-ba7b79a4050f-1638392923493@3c-app-gmx-bap03
+drivers/cxl/core/bus.c:486:21: error: stack frame size of 1056 bytes in function 'cxl_decoder_alloc' [-Werror,-Wframe-larger-than=]
+struct cxl_decoder *cxl_decoder_alloc(struct cxl_port *port, int nr_targets)
+                    ^
+1 error generated.
 
-Fixes: e955f959ac52 ("media: si2157: Better check for running tuner in init")
-Reported-by: Robert Schlabbach <robert_s@gmx.net>
-Signed-off-by: Robert Schlabbach <robert_s@gmx.net>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Revert that part of the change, which makes the stack frame of
+cxl_decoder_alloc() much more reasonable.
+
+Fixes: 48667f676189 ("cxl/core: Split decoder setup into alloc + add")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1539
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://lore.kernel.org/r/20211210213627.2477370-1-nathan@kernel.org
+Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/tuners/si2157.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/cxl/core/bus.c | 6 ++----
+ drivers/cxl/cxl.h      | 2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.c
-index fefb2625f6558..75ddf7ed1faff 100644
---- a/drivers/media/tuners/si2157.c
-+++ b/drivers/media/tuners/si2157.c
-@@ -90,7 +90,7 @@ static int si2157_init(struct dvb_frontend *fe)
- 	dev_dbg(&client->dev, "\n");
+diff --git a/drivers/cxl/core/bus.c b/drivers/cxl/core/bus.c
+index ebd061d039508..46ce58376580b 100644
+--- a/drivers/cxl/core/bus.c
++++ b/drivers/cxl/core/bus.c
+@@ -485,9 +485,7 @@ out_unlock:
  
- 	/* Try to get Xtal trim property, to verify tuner still running */
--	memcpy(cmd.args, "\x15\x00\x04\x02", 4);
-+	memcpy(cmd.args, "\x15\x00\x02\x04", 4);
- 	cmd.wlen = 4;
- 	cmd.rlen = 4;
- 	ret = si2157_cmd_execute(client, &cmd);
+ struct cxl_decoder *cxl_decoder_alloc(struct cxl_port *port, int nr_targets)
+ {
+-	struct cxl_decoder *cxld, cxld_const_init = {
+-		.nr_targets = nr_targets,
+-	};
++	struct cxl_decoder *cxld;
+ 	struct device *dev;
+ 	int rc = 0;
+ 
+@@ -497,13 +495,13 @@ struct cxl_decoder *cxl_decoder_alloc(struct cxl_port *port, int nr_targets)
+ 	cxld = kzalloc(struct_size(cxld, target, nr_targets), GFP_KERNEL);
+ 	if (!cxld)
+ 		return ERR_PTR(-ENOMEM);
+-	memcpy(cxld, &cxld_const_init, sizeof(cxld_const_init));
+ 
+ 	rc = ida_alloc(&port->decoder_ida, GFP_KERNEL);
+ 	if (rc < 0)
+ 		goto err;
+ 
+ 	cxld->id = rc;
++	cxld->nr_targets = nr_targets;
+ 	dev = &cxld->dev;
+ 	device_initialize(dev);
+ 	device_set_pm_not_required(dev);
+diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
+index 3af704e9b448e..7c2b51746e318 100644
+--- a/drivers/cxl/cxl.h
++++ b/drivers/cxl/cxl.h
+@@ -191,7 +191,7 @@ struct cxl_decoder {
+ 	int interleave_granularity;
+ 	enum cxl_decoder_type target_type;
+ 	unsigned long flags;
+-	const int nr_targets;
++	int nr_targets;
+ 	struct cxl_dport *target[];
+ };
+ 
 -- 
 2.34.1
 

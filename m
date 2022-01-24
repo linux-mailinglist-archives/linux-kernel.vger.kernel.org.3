@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B0E499BFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:06:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B904995FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573904AbiAXV6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:58:41 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39294 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358044AbiAXVQb (ORCPT
+        id S1352997AbiAXU6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:58:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385446AbiAXUdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:16:31 -0500
+        Mon, 24 Jan 2022 15:33:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593A9C07E296;
+        Mon, 24 Jan 2022 11:45:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2671F61484;
-        Mon, 24 Jan 2022 21:16:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32A19C340E4;
-        Mon, 24 Jan 2022 21:16:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15C62B81188;
+        Mon, 24 Jan 2022 19:45:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DE49C340E5;
+        Mon, 24 Jan 2022 19:45:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058988;
-        bh=0mn07Z63UB9WDnRDyK8KAWId9NRvMSa9a8fRkkhTd6s=;
+        s=korg; t=1643053518;
+        bh=7X518gYPa/yoX6heLriG4edfkEp/un6Wnm5Rw2reZr0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1WYYDxYIwiBdDKG44Ou6Nvzvyfc/WtxSYU0TSFcmgj8si2atExbXCzDyas8Z9Edko
-         Yiv6cWVRhBRpyhvVTqLA8/ex552bWcTgT2RKy6P/VyhyErwqgRlzxTzXz5Ev50lNoy
-         acwW6BC0LK94UTnmh4ZKyJXdL9jWinfpQSFge9uY=
+        b=pz/sUKi7kgIpgWuPsYXsV8nCcCcs6CeJNBrGJo3wWn0a0alescDULptnE05ABuYZd
+         aqfvaRl5XZ6tcxqC0cJGo3/c8v/xWzyj8XC+JcTJACPDV8IQBtHF5oaticY9uRONIE
+         F7Y47iZKWt5Q3AxYQUpWjunFb2XKupSpdgib9xQc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0467/1039] ALSA: usb-audio: Drop superfluous 0 in Presonus Studio 1810cs ID
+Subject: [PATCH 5.10 091/563] drm/vboxvideo: fix a NULL vs IS_ERR() check
 Date:   Mon, 24 Jan 2022 19:37:36 +0100
-Message-Id: <20220124184140.976598511@linuxfoundation.org>
+Message-Id: <20220124184027.538833367@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,62 +49,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 1e583aef12aa74afd37c1418255cc4b74e023236 ]
+[ Upstream commit cebbb5c46d0cb0615fd0c62dea9b44273d0a9780 ]
 
-The vendor ID of Presonus Studio 1810c had a superfluous '0' in its
-USB ID.  Drop it.
+The devm_gen_pool_create() function never returns NULL, it returns
+error pointers.
 
-Fixes: 8dc5efe3d17c ("ALSA: usb-audio: Add support for Presonus Studio 1810c")
-Link: https://lore.kernel.org/r/20211202083833.17784-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: 4cc9b565454b ("drm/vboxvideo: Use devm_gen_pool_create")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211118111233.GA1147@kili
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/usb/format.c       | 2 +-
- sound/usb/mixer_quirks.c | 2 +-
- sound/usb/quirks.c       | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/vboxvideo/vbox_main.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/sound/usb/format.c b/sound/usb/format.c
-index f5e676a51b30d..405dc0bf6678c 100644
---- a/sound/usb/format.c
-+++ b/sound/usb/format.c
-@@ -375,7 +375,7 @@ static int parse_uac2_sample_rate_range(struct snd_usb_audio *chip,
- 		for (rate = min; rate <= max; rate += res) {
+diff --git a/drivers/gpu/drm/vboxvideo/vbox_main.c b/drivers/gpu/drm/vboxvideo/vbox_main.c
+index d68d9bad76747..c5ea880d17b29 100644
+--- a/drivers/gpu/drm/vboxvideo/vbox_main.c
++++ b/drivers/gpu/drm/vboxvideo/vbox_main.c
+@@ -123,8 +123,8 @@ int vbox_hw_init(struct vbox_private *vbox)
+ 	/* Create guest-heap mem-pool use 2^4 = 16 byte chunks */
+ 	vbox->guest_pool = devm_gen_pool_create(vbox->ddev.dev, 4, -1,
+ 						"vboxvideo-accel");
+-	if (!vbox->guest_pool)
+-		return -ENOMEM;
++	if (IS_ERR(vbox->guest_pool))
++		return PTR_ERR(vbox->guest_pool);
  
- 			/* Filter out invalid rates on Presonus Studio 1810c */
--			if (chip->usb_id == USB_ID(0x0194f, 0x010c) &&
-+			if (chip->usb_id == USB_ID(0x194f, 0x010c) &&
- 			    !s1810c_valid_sample_rate(fp, rate))
- 				goto skip_rate;
- 
-diff --git a/sound/usb/mixer_quirks.c b/sound/usb/mixer_quirks.c
-index 823b6b8de942d..d48729e6a3b0a 100644
---- a/sound/usb/mixer_quirks.c
-+++ b/sound/usb/mixer_quirks.c
-@@ -3254,7 +3254,7 @@ int snd_usb_mixer_apply_create_quirk(struct usb_mixer_interface *mixer)
- 		err = snd_rme_controls_create(mixer);
- 		break;
- 
--	case USB_ID(0x0194f, 0x010c): /* Presonus Studio 1810c */
-+	case USB_ID(0x194f, 0x010c): /* Presonus Studio 1810c */
- 		err = snd_sc1810_init_mixer(mixer);
- 		break;
- 	case USB_ID(0x2a39, 0x3fb0): /* RME Babyface Pro FS */
-diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
-index 64e1c20311ed4..ab9f3da49941f 100644
---- a/sound/usb/quirks.c
-+++ b/sound/usb/quirks.c
-@@ -1290,7 +1290,7 @@ int snd_usb_apply_interface_quirk(struct snd_usb_audio *chip,
- 	if (chip->usb_id == USB_ID(0x0763, 0x2012))
- 		return fasttrackpro_skip_setting_quirk(chip, iface, altno);
- 	/* presonus studio 1810c: skip altsets incompatible with device_setup */
--	if (chip->usb_id == USB_ID(0x0194f, 0x010c))
-+	if (chip->usb_id == USB_ID(0x194f, 0x010c))
- 		return s1810c_skip_setting_quirk(chip, iface, altno);
- 
- 
+ 	ret = gen_pool_add_virt(vbox->guest_pool,
+ 				(unsigned long)vbox->guest_heap,
 -- 
 2.34.1
 

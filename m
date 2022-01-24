@@ -2,92 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A67FB498FF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2784990BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358950AbiAXT4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:56:04 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:58142 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348231AbiAXTol (ORCPT
+        id S1376431AbiAXUDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:03:52 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36996 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356415AbiAXTqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:44:41 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 5F1992113A;
-        Mon, 24 Jan 2022 19:44:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1643053479;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PALzt4viqppnbCTEd5JnoddSy6Y386bU+yI0jFXb2Xs=;
-        b=IcseyuDiG7EozSQCnSlNaIu0C8m1RyI7OuFmUHsOAWJWLqp41pauanI+rysneFWcm5CLBR
-        n7LPQF4ilqHydWcwaG6eVa1Qy64FHY/FhoTpzfBHzyn1QaqN5MDgMHpI4cGzjbyXkxCyDH
-        9MrEYU4J3b/joldDU/jitBydSALwLZo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1643053479;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PALzt4viqppnbCTEd5JnoddSy6Y386bU+yI0jFXb2Xs=;
-        b=fzuSFXyQjPmOXWqT/rGkeCcHwkWfuZUI8J6+pgGu3olwRTUa2sshOKH52RYgaMjfPNFRXV
-        3/b0X7L9No9PlVCA==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 51D7EA3B81;
-        Mon, 24 Jan 2022 19:44:39 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 54796DA7A3; Mon, 24 Jan 2022 20:43:59 +0100 (CET)
-Date:   Mon, 24 Jan 2022 20:43:59 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] btrfs: scrub: Remove redundant initialization of
- increment
-Message-ID: <20220124194359.GE14046@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, clm@fb.com,
-        josef@toxicpanda.com, dsterba@suse.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220121114224.92247-1-jiapeng.chong@linux.alibaba.com>
+        Mon, 24 Jan 2022 14:46:12 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1E598B8121C;
+        Mon, 24 Jan 2022 19:46:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCB7EC340E7;
+        Mon, 24 Jan 2022 19:46:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643053567;
+        bh=gJlHbxnMW0wTSxm4hKs/P78n5KAVQuBy0pzkZMpkAGQ=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=pBLf/juVpsFO6ypTkWqRMy7awwXjZ8Rw3n3NDnpqdQKeMJ2cgvfQLL0GpUqvtulR+
+         bmo/qL875hJXqkr81U3qQrQyZ5F5D8Jyzdc5HuVrYZyuTlaU1tRRH075D6tlF9Z7yu
+         vsY/HEQSCUklTYdk89aYoyEc7/7AcqfhvgEJk6fBGMHQMkIkc3yUqVOreEUWcwq0+j
+         QJjAbkykYxXP2DL9/i1fPlNuezzba0ip2ANz3M3yC8Bc/07GKj4wGg9z5l+Fo9JiLZ
+         6rAjcIZjA9t0P2KKfQ5Ni3rLGfv9fm3mDEPQGkLcOzqJR2FtIeiFs+i2iVeep0n3+7
+         WBkVgCU05PHgw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220121114224.92247-1-jiapeng.chong@linux.alibaba.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220124162442.29497-3-tdas@codeaurora.org>
+References: <20220124162442.29497-1-tdas@codeaurora.org> <20220124162442.29497-3-tdas@codeaurora.org>
+Subject: Re: [PATCH v3 2/2] clk: qcom: lpass: Add support for LPASS clock controller for SC7280
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh@kernel.org, robh+dt@kernel.org,
+        Taniya Das <tdas@codeaurora.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Taniya Das <tdas@codeaurora.org>
+Date:   Mon, 24 Jan 2022 11:46:05 -0800
+User-Agent: alot/0.10
+Message-Id: <20220124194607.BCB7EC340E7@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 07:42:24PM +0800, Jiapeng Chong wrote:
-> increment is being initialized to map->stripe_len but this is never
-> read as increment is overwritten later on. Remove the redundant
-> initialization.
+Quoting Taniya Das (2022-01-24 08:24:42)
+> diff --git a/drivers/clk/qcom/lpasscorecc-sc7280.c b/drivers/clk/qcom/lpa=
+sscorecc-sc7280.c
+> new file mode 100644
+> index 000000000000..3ac62ea5767e
+> --- /dev/null
+> +++ b/drivers/clk/qcom/lpasscorecc-sc7280.c
+> @@ -0,0 +1,430 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+> + */
+> +
+> +#include <linux/clk-provider.h>
+> +#include <linux/err.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/of.h>
 
-> 
-> Cleans up the following clang-analyzer warning:
-> 
-> fs/btrfs/scrub.c:3193:6: warning: Value stored to 'increment' during its
-> initialization is never read [clang-analyzer-deadcode.DeadStores].
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  fs/btrfs/scrub.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
-> index 2e9a322773f2..38f5666eff14 100644
-> --- a/fs/btrfs/scrub.c
-> +++ b/fs/btrfs/scrub.c
-> @@ -3209,7 +3209,6 @@ static noinline_for_stack int scrub_stripe(struct scrub_ctx *sctx,
->  	offset = 0;
->  	nstripes = div64_u64(dev_extent_len, map->stripe_len);
->  	mirror_num = 1;
-> -	increment = map->stripe_len;
+Is the of.h include used?
 
-I'd rather remove the initialization at the declarataion, the other
-values are initialized here so it's all in one place. As is's a minor
-change I'll do that at commit time, no need to resend. Thanks.
+> +#include <linux/pm_clock.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/regmap.h>
+> +
+> +#include <dt-bindings/clock/qcom,lpasscorecc-sc7280.h>
+> +
+> +#include "clk-alpha-pll.h"
+> +#include "clk-branch.h"
+> +#include "clk-rcg.h"
+> +#include "clk-regmap.h"
+> +#include "clk-regmap-divider.h"
+> +#include "common.h"
+> +#include "gdsc.h"
+> +
+[...]
+> +
+> +static struct regmap_config lpass_core_cc_sc7280_regmap_config =3D {
+> +       .reg_bits =3D 32,
+> +       .reg_stride =3D 4,
+> +       .val_bits =3D 32,
+> +       .fast_io =3D true,
+
+What's the max_register? Please set it so that debugfs works.

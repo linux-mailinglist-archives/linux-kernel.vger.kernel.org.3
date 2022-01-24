@@ -2,41 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1BC1499D0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2AD499751
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:27:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581684AbiAXWMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:12:10 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42586 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452970AbiAXV1b (ORCPT
+        id S1448433AbiAXVMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:12:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1390879AbiAXUqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:27:31 -0500
+        Mon, 24 Jan 2022 15:46:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5556EC06125B;
+        Mon, 24 Jan 2022 11:56:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9FCA2B81218;
-        Mon, 24 Jan 2022 21:27:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6292C340E4;
-        Mon, 24 Jan 2022 21:27:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E940E60916;
+        Mon, 24 Jan 2022 19:56:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE061C340E5;
+        Mon, 24 Jan 2022 19:56:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059648;
-        bh=t24xaTbX/YPgqubRwPSZulUBEsrmp1dBDxvvqQabvmg=;
+        s=korg; t=1643054198;
+        bh=Y3fmQ1Gr9y2ZSWkBNN6dTmaQIXWW9+9Nx7kmY3MGb2A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Tg4X64ZC96dazK6u20I8v7YGFaxr/eyAldXPyzavse1p7mth+gc9hK/behkJ9xZCd
-         fhTYm1mKFMqflsLDf+WcVpvrB2qPzAyVw6cw9JjQlanoKjV84Y3PefhTYApsTXL0wz
-         ZlJAcwQbRo8M3ersHzwhujodAI+KI255FpmRyxt4=
+        b=2PLUS4mTY9wS9UmG5xKr2AzTttAZ9JG+Pxi3BD8CpXtjFyNPafa7z7uKN7JW4Qxyf
+         dITGXM8uOA9bwuLdx48cr0HC2VwcMwYInkNR0//ZQ7EbfrEjE8ueqes2Emg6GVuiEj
+         5sNMdOumQQxKCrVPCUC5DXbPJ8Dl76XdaCoaSCg8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Luca Coelho <luciano.coelho@intel.com>,
+        stable@vger.kernel.org, Tycho Andersen <tycho@tycho.pizza>,
+        =?UTF-8?q?Linus=20L=C3=BCssing?= <linus.luessing@c0d3.blue>,
+        Sven Eckelmann <sven@narfation.org>,
+        Simon Wunderlich <sw@simonwunderlich.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0685/1039] iwlwifi: pcie: make sure prph_info is set when treating wakeup IRQ
-Date:   Mon, 24 Jan 2022 19:41:14 +0100
-Message-Id: <20220124184148.376711013@linuxfoundation.org>
+Subject: [PATCH 5.10 310/563] batman-adv: allow netlink usage in unprivileged containers
+Date:   Mon, 24 Jan 2022 19:41:15 +0100
+Message-Id: <20220124184035.154666306@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,43 +51,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luca Coelho <luciano.coelho@intel.com>
+From: Linus Lüssing <linus.luessing@c0d3.blue>
 
-[ Upstream commit 459fc0f2c6b0f6e280bfa0f230c100c9dfe3a199 ]
+[ Upstream commit 9057d6c23e7388ee9d037fccc9a7bc8557ce277b ]
 
-In some rare cases when the HW is in a bad state, we may get this
-interrupt when prph_info is not set yet.  Then we will try to
-dereference it to check the sleep_notif element, which will cause an
-oops.
+Currently, creating a batman-adv interface in an unprivileged LXD
+container and attaching secondary interfaces to it with "ip" or "batctl"
+works fine. However all batctl debug and configuration commands
+fail:
 
-Fix that by ignoring the interrupt if prph_info is not set yet.
+  root@container:~# batctl originators
+  Error received: Operation not permitted
+  root@container:~# batctl orig_interval
+  1000
+  root@container:~# batctl orig_interval 2000
+  root@container:~# batctl orig_interval
+  1000
 
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Link: https://lore.kernel.org/r/iwlwifi.20211219132536.0537aa562313.I183bb336345b9b3da196ba9e596a6f189fbcbd09@changeid
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+To fix this change the generic netlink permissions from GENL_ADMIN_PERM
+to GENL_UNS_ADMIN_PERM. This way a batman-adv interface is fully
+maintainable as root from within a user namespace, from an unprivileged
+container.
+
+All except one batman-adv netlink setting are per interface and do not
+leak information or change settings from the host system and are
+therefore save to retrieve or modify as root from within an unprivileged
+container.
+
+"batctl routing_algo" / BATADV_CMD_GET_ROUTING_ALGOS is the only
+exception: It provides the batman-adv kernel module wide default routing
+algorithm. However it is read-only from netlink and an unprivileged
+container is still not allowed to modify
+/sys/module/batman_adv/parameters/routing_algo. Instead it is advised to
+use the newly introduced "batctl if create routing_algo RA_NAME" /
+IFLA_BATADV_ALGO_NAME to set the routing algorithm on interface
+creation, which already works fine in an unprivileged container.
+
+Cc: Tycho Andersen <tycho@tycho.pizza>
+Signed-off-by: Linus Lüssing <linus.luessing@c0d3.blue>
+Signed-off-by: Sven Eckelmann <sven@narfation.org>
+Signed-off-by: Simon Wunderlich <sw@simonwunderlich.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/pcie/rx.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ net/batman-adv/netlink.c | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/pcie/rx.c b/drivers/net/wireless/intel/iwlwifi/pcie/rx.c
-index 14602d6d6699f..8247014278f30 100644
---- a/drivers/net/wireless/intel/iwlwifi/pcie/rx.c
-+++ b/drivers/net/wireless/intel/iwlwifi/pcie/rx.c
-@@ -2266,7 +2266,12 @@ irqreturn_t iwl_pcie_irq_msix_handler(int irq, void *dev_id)
- 		}
- 	}
- 
--	if (inta_hw & MSIX_HW_INT_CAUSES_REG_WAKEUP) {
-+	/*
-+	 * In some rare cases when the HW is in a bad state, we may
-+	 * get this interrupt too early, when prph_info is still NULL.
-+	 * So make sure that it's not NULL to prevent crashing.
-+	 */
-+	if (inta_hw & MSIX_HW_INT_CAUSES_REG_WAKEUP && trans_pcie->prph_info) {
- 		u32 sleep_notif =
- 			le32_to_cpu(trans_pcie->prph_info->sleep_notif);
- 		if (sleep_notif == IWL_D3_SLEEP_STATUS_SUSPEND ||
+diff --git a/net/batman-adv/netlink.c b/net/batman-adv/netlink.c
+index c7a55647b520e..121459704b069 100644
+--- a/net/batman-adv/netlink.c
++++ b/net/batman-adv/netlink.c
+@@ -1361,21 +1361,21 @@ static const struct genl_small_ops batadv_netlink_ops[] = {
+ 	{
+ 		.cmd = BATADV_CMD_TP_METER,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.doit = batadv_netlink_tp_meter_start,
+ 		.internal_flags = BATADV_FLAG_NEED_MESH,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_TP_METER_CANCEL,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.doit = batadv_netlink_tp_meter_cancel,
+ 		.internal_flags = BATADV_FLAG_NEED_MESH,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_ROUTING_ALGOS,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_algo_dump,
+ 	},
+ 	{
+@@ -1390,68 +1390,68 @@ static const struct genl_small_ops batadv_netlink_ops[] = {
+ 	{
+ 		.cmd = BATADV_CMD_GET_TRANSTABLE_LOCAL,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_tt_local_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_TRANSTABLE_GLOBAL,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_tt_global_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_ORIGINATORS,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_orig_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_NEIGHBORS,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_hardif_neigh_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_GATEWAYS,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_gw_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_BLA_CLAIM,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_bla_claim_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_BLA_BACKBONE,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_bla_backbone_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_DAT_CACHE,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_dat_cache_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_MCAST_FLAGS,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_mcast_flags_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_SET_MESH,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.doit = batadv_netlink_set_mesh,
+ 		.internal_flags = BATADV_FLAG_NEED_MESH,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_SET_HARDIF,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.doit = batadv_netlink_set_hardif,
+ 		.internal_flags = BATADV_FLAG_NEED_MESH |
+ 				  BATADV_FLAG_NEED_HARDIF,
+@@ -1467,7 +1467,7 @@ static const struct genl_small_ops batadv_netlink_ops[] = {
+ 	{
+ 		.cmd = BATADV_CMD_SET_VLAN,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.doit = batadv_netlink_set_vlan,
+ 		.internal_flags = BATADV_FLAG_NEED_MESH |
+ 				  BATADV_FLAG_NEED_VLAN,
 -- 
 2.34.1
 

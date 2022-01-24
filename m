@@ -2,112 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 816BF497B9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD33F497BA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:13:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233637AbiAXJNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 04:13:05 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:42444 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233534AbiAXJMp (ORCPT
+        id S229759AbiAXJNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 04:13:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56910 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229474AbiAXJNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 04:12:45 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id B94711F38F;
-        Mon, 24 Jan 2022 09:12:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1643015563; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 24 Jan 2022 04:13:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643015614;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=te56RQ99aqPTc41NPJHLgL/zz3BVpI2tpkzPhnGSaYY=;
-        b=FNyUO63n86aC6LffHgwaiXuA5ojWMjJ1XEaOzV/m7vIGXnEXt4sPIgJthaRWeMnKRgGOmz
-        78S1vbJAV/nyv1uemiOIrWR+C4RBsHUcZ8UCSwupwFBu94zUyfvhXgWnUFy+anPUx+qx87
-        iNKhd1p7VOsIR4WpGRMGDpIi6gyN1BY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1643015563;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=te56RQ99aqPTc41NPJHLgL/zz3BVpI2tpkzPhnGSaYY=;
-        b=qxPnKufainIaDn/nurTznWTh23bbgVSgRjZmoOYkNubkWcXresnuRNRVtF2QH7XLXm7Vy5
-        fKWmhfZIDmaAC7BA==
-Received: from quack3.suse.cz (unknown [10.163.43.118])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id AA18FA3B96;
-        Mon, 24 Jan 2022 09:12:43 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 695C1A05E7; Mon, 24 Jan 2022 10:12:43 +0100 (CET)
-Date:   Mon, 24 Jan 2022 10:12:43 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ritesh Harjani <riteshh@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Jan Kara <jack@suse.com>,
-        tytso@mit.edu
-Subject: Re: [PATCHv1 2/2] jbd2: Remove CONFIG_JBD2_DEBUG to update t_max_wait
-Message-ID: <20220124091243.cua4apgkd64fw6iv@quack3.lan>
-References: <cover.1642953021.git.riteshh@linux.ibm.com>
- <c1424ac2e6f6f5a21bcf2fb7679203df865c8a60.1642953021.git.riteshh@linux.ibm.com>
+        bh=q/cJ3iWSzk/L9pl1h0bSd2z9dkOZnVgBJiwkxutziMY=;
+        b=Cxb/oXBhlURefpfXJwh1xVY3J7t0QghjHgPGKqwtMbwSTqHDjMdqRDTgF3Xh0Dsr2kaDyw
+        aks8YMYlzq0ITUuSypsCb5lONBUKmWe/YJ5xPia+rdWqAr9605GgiI9DOZL+xkjvLjZ/JT
+        W3ubR3ZqKdD20P5RnsX+O1MeCYLOdC0=
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
+ [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-340-QzfWNIUWMb-nqbsFMj47nA-1; Mon, 24 Jan 2022 04:13:32 -0500
+X-MC-Unique: QzfWNIUWMb-nqbsFMj47nA-1
+Received: by mail-pf1-f200.google.com with SMTP id u80-20020a627953000000b004c82105f20dso2002666pfc.11
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 01:13:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=q/cJ3iWSzk/L9pl1h0bSd2z9dkOZnVgBJiwkxutziMY=;
+        b=wR0rEConOI+q81mtQm4lzCSfsgusvQfSNyIaj/KiJXAKn307EJdxYHxqnVVFtbnf/w
+         WgRY0U3L1PwbA8fQIQYokhHQ7SxaPIoY8HquReOgAoeW8zX0q5/thxNKVIPnOuRqEl4Z
+         IgNiG7JqgmKVpFnB7xzGUdW61eFaKVLfbQoYv5lpzPBmhGGDMhgSirDoQYVQv4ndhbdJ
+         GeOp4ZT2nsmtWMfOc05kPszlhvOAIwJm9jlyjHK4oOQgQNEp69d5jMBKiYhPiPegeFzu
+         o8DCwdYIhcFVpZLs3u/2cPMBem72eRR6YUf9hy4H8AktamdVCBtktebQWM5qPBoLrOGi
+         53zw==
+X-Gm-Message-State: AOAM532zO25Vv6Hq1k07lJ7v/wfVRm5/9HixINTJtoKTgRjrc6LAXt+1
+        ySgAx/kU324KLOli2C6jrqILAhV8Hvqj5APDZOVSFdHUXuWfRgIlQREPcy+FiToS0bhH+FxdoFM
+        OnjnnLgoeMO1hLnRY0DU7egrY
+X-Received: by 2002:a17:90b:2406:: with SMTP id nr6mr966725pjb.99.1643015611587;
+        Mon, 24 Jan 2022 01:13:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwWqTwByq4KaLiWEW35f6vhZ1leVAu4fEBkDJOyuZh7qPP+hPn4AmTAz6+a6+60W4DPgrTBcA==
+X-Received: by 2002:a17:90b:2406:: with SMTP id nr6mr966711pjb.99.1643015611367;
+        Mon, 24 Jan 2022 01:13:31 -0800 (PST)
+Received: from xz-m1.local ([94.177.118.73])
+        by smtp.gmail.com with ESMTPSA id s13sm4719075pfk.174.2022.01.24.01.13.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 01:13:30 -0800 (PST)
+Date:   Mon, 24 Jan 2022 17:13:23 +0800
+From:   Peter Xu <peterx@redhat.com>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        David Hildenbrand <david@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH RFC v2 1/2] mm: Don't skip swap entry even if zap_details
+ specified
+Message-ID: <Ye5ts7VtDnja2VUZ@xz-m1.local>
+References: <20211115134951.85286-1-peterx@redhat.com>
+ <20211115134951.85286-2-peterx@redhat.com>
+ <9937aaa-d9ab-2839-b0b7-691d85c9141@google.com>
+ <Yd7VEXI+/Lu8MVOo@xz-m1.local>
+ <Yd7W6ndSPkXQjurY@xz-m1.local>
+ <391aa58d-ce84-9d4-d68d-d98a9c533255@google.com>
+ <Yek6PaW8fAXY4Bft@xz-m1.local>
+ <YeokbrpCdAGAYHEl@xz-m1.local>
+ <YepAgBz4EUXc/jrM@xz-m1.local>
+ <56e33192-965d-691a-afc-f77f5856afd@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c1424ac2e6f6f5a21bcf2fb7679203df865c8a60.1642953021.git.riteshh@linux.ibm.com>
+In-Reply-To: <56e33192-965d-691a-afc-f77f5856afd@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 23-01-22 22:53:28, Ritesh Harjani wrote:
-> CONFIG_JBD2_DEBUG and jbd2_journal_enable_debug knobs were added in
-> update_t_max_wait(), since earlier it used to take a spinlock for updating
-> t_max_wait, which could cause a bottleneck while starting a txn
-> (start_this_handle()).
-> Since in previous patch, we have killed t_handle_lock completely, we
-> could get rid of this debug config and knob to let t_max_wait be updated
-> by default again.
+On Sun, Jan 23, 2022 at 10:51:57PM -0800, Hugh Dickins wrote:
+> I don't know of any problem that needs fixing with the zero page:
+> how do you suppose the zero page gets into a truncatable or hole-punchable
+> mapping?  We use it for read faults in anonymous mappings.  And I told the
+> story of how once-upon-a-time it could get inserted into any mapping by
+> reading from /dev/zero, but that odd case was dropped years ago.  And I
+> am open to (even encouraging) a change to make use of zero page for read
+> faults of holes in shmem: but that's potential future work, which would
+> require some changes elsewhere (though perhaps none here: the zero page
+> could never be used for the result of a COW).
 > 
-> Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
+> Please explain the zero page problem you hope to fix here.
 
-Sounds fine. Feel free to add:
+After I tried to learn the old/new worlds of zero page somehow I thought there
+can be zero pfns installed, but it seems not at all..
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+Please ignore above, sorry for the noise.
 
-								Honza
-
-> ---
->  fs/jbd2/transaction.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/fs/jbd2/transaction.c b/fs/jbd2/transaction.c
-> index 68dd7de49aff..77634e2e118e 100644
-> --- a/fs/jbd2/transaction.c
-> +++ b/fs/jbd2/transaction.c
-> @@ -141,20 +141,19 @@ static void jbd2_get_transaction(journal_t *journal,
->   * t_max_wait is carefully updated here with use of atomic compare exchange.
->   * Note that there could be multiplre threads trying to do this simultaneously
->   * hence using cmpxchg to avoid any use of locks in this case.
-> + * With this t_max_wait can be updated w/o enabling jbd2_journal_enable_debug.
->   */
->  static inline void update_t_max_wait(transaction_t *transaction,
->  				     unsigned long ts)
->  {
-> -#ifdef CONFIG_JBD2_DEBUG
->  	unsigned long oldts, newts;
-> -	if (jbd2_journal_enable_debug &&
-> -	    time_after(transaction->t_start, ts)) {
-> +
-> +	if (time_after(transaction->t_start, ts)) {
->  		newts = jbd2_time_diff(ts, transaction->t_start);
->  		oldts = READ_ONCE(transaction->t_max_wait);
->  		while (oldts < newts)
->  			oldts = cmpxchg(&transaction->t_max_wait, oldts, newts);
->  	}
-> -#endif
->  }
-> 
->  /*
-> --
-> 2.31.1
-> 
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Peter Xu
+

@@ -2,41 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E29498B01
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:09:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE4D49938C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:38:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344499AbiAXTJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:09:01 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57424 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344292AbiAXTBh (ORCPT
+        id S1385822AbiAXUej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:34:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355459AbiAXUNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:01:37 -0500
+        Mon, 24 Jan 2022 15:13:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D013AC0604D1;
+        Mon, 24 Jan 2022 11:37:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16B2AB8124C;
-        Mon, 24 Jan 2022 19:01:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B1DEC36AE3;
-        Mon, 24 Jan 2022 19:01:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E11F614FC;
+        Mon, 24 Jan 2022 19:37:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49DAFC340E5;
+        Mon, 24 Jan 2022 19:37:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050894;
-        bh=/WuAenPvtHoOYxe2cLjzMTFFnpRHp7Hh7oLwX6A9/98=;
+        s=korg; t=1643053021;
+        bh=QR8yZAhBM7iYkAK09ew+ffn9nmVg2lFDcim+AuhC6z0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VEAExKlJK+BY8HbC0FnodvMf8jWneI4MD0q3Lh71/s2VY7c3ghZLS8ys8OKgAHLXa
-         UNndaEtCOYLHyR8FG6M3MNf3YP4dh9+dVPtaBT6PO5f1meY0JHfrBXgg527N8uRDeM
-         YR3JkVMbIMr/dQcB8UlhNwHd1KWBfa6oOWCTkzrI=
+        b=uaMph8oNPNHKHUdVllV9XuoCJCC1k2saptmg2JZ5XO/DJVM7hR06mMKxM3mkRZLK+
+         kG6bK7MFXdQaktSytk6gIgTrJ4pOJLNKSWkZi9WfJCcujhUzu0Y4tKlH61TM/yCjA7
+         6DXfihI26P8vaMbszc8dUSkh/2Bk3JAvNbxXv3G0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.9 145/157] lib82596: Fix IRQ check in sni_82596_probe
+        stable@vger.kernel.org, Rafael Gago Castano <rgc@hms.se>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Su Bao Cheng <baocheng.su@siemens.com>,
+        Lukas Wunner <lukas@wunner.de>
+Subject: [PATCH 5.4 251/320] serial: Fix incorrect rs485 polarity on uart open
 Date:   Mon, 24 Jan 2022 19:43:55 +0100
-Message-Id: <20220124183937.364307472@linuxfoundation.org>
+Message-Id: <20220124184002.524758989@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,40 +50,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Lukas Wunner <lukas@wunner.de>
 
-commit 99218cbf81bf21355a3de61cd46a706d36e900e6 upstream.
+commit d3b3404df318504ec084213ab1065b73f49b0f1d upstream.
 
-platform_get_irq() returns negative error number instead 0 on failure.
-And the doc of platform_get_irq() provides a usage example:
+Commit a6845e1e1b78 ("serial: core: Consider rs485 settings to drive
+RTS") sought to deassert RTS when opening an rs485-enabled uart port.
+That way, the transceiver does not occupy the bus until it transmits
+data.
 
-    int irq = platform_get_irq(pdev, 0);
-    if (irq < 0)
-        return irq;
+Unfortunately, the commit mixed up the logic and *asserted* RTS instead
+of *deasserting* it:
 
-Fix the check of return value to catch errors correctly.
+The commit amended uart_port_dtr_rts(), which raises DTR and RTS when
+opening an rs232 port.  "Raising" actually means lowering the signal
+that's coming out of the uart, because an rs232 transceiver not only
+changes a signal's voltage level, it also *inverts* the signal.  See
+the simplified schematic in the MAX232 datasheet for an example:
+https://www.ti.com/lit/ds/symlink/max232.pdf
 
-Fixes: 115978859272 ("i825xx: Move the Intel 82586/82593/82596 based drivers")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+So, to raise RTS on an rs232 port, TIOCM_RTS is *set* in port->mctrl
+and that results in the signal being driven low.
+
+In contrast to rs232, the signal level for rs485 Transmit Enable is the
+identity, not the inversion:  If the transceiver expects a "high" RTS
+signal for Transmit Enable, the signal coming out of the uart must also
+be high, so TIOCM_RTS must be *cleared* in port->mctrl.
+
+The commit did the exact opposite, but it's easy to see why given the
+confusing semantics of rs232 and rs485.  Fix it.
+
+Fixes: a6845e1e1b78 ("serial: core: Consider rs485 settings to drive RTS")
+Cc: stable@vger.kernel.org # v4.14+
+Cc: Rafael Gago Castano <rgc@hms.se>
+Cc: Jan Kiszka <jan.kiszka@siemens.com>
+Cc: Su Bao Cheng <baocheng.su@siemens.com>
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Link: https://lore.kernel.org/r/9395767847833f2f3193c49cde38501eeb3b5669.1639821059.git.lukas@wunner.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/i825xx/sni_82596.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/tty/serial/serial_core.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/i825xx/sni_82596.c
-+++ b/drivers/net/ethernet/i825xx/sni_82596.c
-@@ -122,9 +122,10 @@ static int sni_82596_probe(struct platfo
- 	netdevice->dev_addr[5] = readb(eth_addr + 0x06);
- 	iounmap(eth_addr);
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -160,7 +160,7 @@ static void uart_port_dtr_rts(struct uar
+ 	int RTS_after_send = !!(uport->rs485.flags & SER_RS485_RTS_AFTER_SEND);
  
--	if (!netdevice->irq) {
-+	if (netdevice->irq < 0) {
- 		printk(KERN_ERR "%s: IRQ not found for i82596 at 0x%lx\n",
- 			__FILE__, netdevice->base_addr);
-+		retval = netdevice->irq;
- 		goto probe_failed;
+ 	if (raise) {
+-		if (rs485_on && !RTS_after_send) {
++		if (rs485_on && RTS_after_send) {
+ 			uart_set_mctrl(uport, TIOCM_DTR);
+ 			uart_clear_mctrl(uport, TIOCM_RTS);
+ 		} else {
+@@ -169,7 +169,7 @@ static void uart_port_dtr_rts(struct uar
+ 	} else {
+ 		unsigned int clear = TIOCM_DTR;
+ 
+-		clear |= (!rs485_on || !RTS_after_send) ? TIOCM_RTS : 0;
++		clear |= (!rs485_on || RTS_after_send) ? TIOCM_RTS : 0;
+ 		uart_clear_mctrl(uport, clear);
  	}
- 
+ }
 
 

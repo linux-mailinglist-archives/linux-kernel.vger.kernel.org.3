@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6DB749948E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:43:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3094498FD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:57:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358836AbiAXUnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:43:07 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:32782 "EHLO
+        id S1358663AbiAXTzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:55:37 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35808 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354711AbiAXUX7 (ORCPT
+        with ESMTP id S1344460AbiAXToA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:23:59 -0500
+        Mon, 24 Jan 2022 14:44:00 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B472BB8119E;
-        Mon, 24 Jan 2022 20:23:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7D1EC340E5;
-        Mon, 24 Jan 2022 20:23:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2084B80FA1;
+        Mon, 24 Jan 2022 19:43:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D43BC340E7;
+        Mon, 24 Jan 2022 19:43:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055835;
-        bh=/bLI7PY8b0pniFdtjS+4UE+h+UAG8zivzIo6Fo50J8c=;
+        s=korg; t=1643053433;
+        bh=yXIFEi0hrJpSznLM8N/k1ZoZ5zdtMovx27QVj/OKBf8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oPNc2suXpKqou3OkQr8A+65ICzhmAFtJ9azTJZfX1Z5X2dSuU9iDcgVXJyb7qCbp1
-         UyMCREGTc/iaNKI8IqpROs79B7x47Ou49de1LtWG5M+hwVcCUgHWT9r4lKjiffDNnX
-         wKJN7g4mgp4ViszQoc8gBc9wcn7fyyA8Lqv8417c=
+        b=X50Lv/Ti5Fgva732kJp81uPt2SK0gkHCbEyybT0bcL/Co92lfyv7quZI0yf0or1J1
+         h6RPbhl3bCan7ZrvaE8YHHs04o72Ts/drm8pbn1rB7DhhuqtEXo/8GCZRU78ZmH2+v
+         74Od2aPDewPn2lKoerO+r3Gti/sR7fj5nxq4+ytY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 281/846] lib/logic_iomem: Fix 32-bit build
-Date:   Mon, 24 Jan 2022 19:36:38 +0100
-Message-Id: <20220124184110.622146104@linuxfoundation.org>
+        stable@vger.kernel.org, Sam Bingner <sam@bingner.com>,
+        Yifeng Li <tomli@tomli.me>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
+Subject: [PATCH 5.10 036/563] PCI: Add function 1 DMA alias quirk for Marvell 88SE9125 SATA controller
+Date:   Mon, 24 Jan 2022 19:36:41 +0100
+Message-Id: <20220124184025.677502576@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,84 +47,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Yifeng Li <tomli@tomli.me>
 
-[ Upstream commit 4e84139e14af5ea60772cc4f33d7059aec76e0eb ]
+commit e445375882883f69018aa669b67cbb37ec873406 upstream.
 
-On a 32-bit build, the (unsigned long long) casts throw warnings
-(or errors) due to being to a different integer size. Cast to
-uintptr_t first (with the __force for sparse) and then further
-to get the consistent print on 32 and 64-bit.
+Like other SATA controller chips in the Marvell 88SE91xx series, the
+Marvell 88SE9125 has the same DMA requester ID hardware bug that prevents
+it from working under IOMMU.  Add it to the list of devices that need the
+quirk.
 
-Fixes: ca2e334232b6 ("lib: add iomem emulation (logic_iomem)")
-Reported-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Without this patch, device initialization fails with DMA errors:
+
+  ata8: softreset failed (1st FIS failed)
+  DMAR: DRHD: handling fault status reg 2
+  DMAR: [DMA Write NO_PASID] Request device [03:00.1] fault addr 0xfffc0000 [fault reason 0x02] Present bit in context entry is clear
+  DMAR: DRHD: handling fault status reg 2
+  DMAR: [DMA Read NO_PASID] Request device [03:00.1] fault addr 0xfffc0000 [fault reason 0x02] Present bit in context entry is clear
+
+After applying the patch, the controller can be successfully initialized:
+
+  ata8: SATA link up 1.5 Gbps (SStatus 113 SControl 330)
+  ata8.00: ATAPI: PIONEER BD-RW   BDR-207M, 1.21, max UDMA/100
+  ata8.00: configured for UDMA/100
+  scsi 7:0:0:0: CD-ROM            PIONEER  BD-RW   BDR-207M 1.21 PQ: 0 ANSI: 5
+
+Link: https://lore.kernel.org/r/YahpKVR+McJVDdkD@work
+Reported-by: Sam Bingner <sam@bingner.com>
+Tested-by: Sam Bingner <sam@bingner.com>
+Tested-by: Yifeng Li <tomli@tomli.me>
+Signed-off-by: Yifeng Li <tomli@tomli.me>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- lib/logic_iomem.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ drivers/pci/quirks.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/lib/logic_iomem.c b/lib/logic_iomem.c
-index 9bdfde0c0f86d..54fa601f3300b 100644
---- a/lib/logic_iomem.c
-+++ b/lib/logic_iomem.c
-@@ -79,7 +79,7 @@ static void __iomem *real_ioremap(phys_addr_t offset, size_t size)
- static void real_iounmap(void __iomem *addr)
- {
- 	WARN(1, "invalid iounmap for addr 0x%llx\n",
--	     (unsigned long long __force)addr);
-+	     (unsigned long long)(uintptr_t __force)addr);
- }
- #endif /* CONFIG_LOGIC_IOMEM_FALLBACK */
- 
-@@ -173,7 +173,7 @@ EXPORT_SYMBOL(iounmap);
- static u##sz real_raw_read ## op(const volatile void __iomem *addr)	\
- {									\
- 	WARN(1, "Invalid read" #op " at address %llx\n",		\
--	     (unsigned long long __force)addr);				\
-+	     (unsigned long long)(uintptr_t __force)addr);		\
- 	return (u ## sz)~0ULL;						\
- }									\
- 									\
-@@ -181,7 +181,8 @@ static void real_raw_write ## op(u ## sz val,				\
- 				 volatile void __iomem *addr)		\
- {									\
- 	WARN(1, "Invalid writeq" #op " of 0x%llx at address %llx\n",	\
--	     (unsigned long long)val, (unsigned long long __force)addr);\
-+	     (unsigned long long)val,					\
-+	     (unsigned long long)(uintptr_t __force)addr);\
- }									\
- 
- MAKE_FALLBACK(b, 8);
-@@ -194,14 +195,14 @@ MAKE_FALLBACK(q, 64);
- static void real_memset_io(volatile void __iomem *addr, int value, size_t size)
- {
- 	WARN(1, "Invalid memset_io at address 0x%llx\n",
--	     (unsigned long long __force)addr);
-+	     (unsigned long long)(uintptr_t __force)addr);
- }
- 
- static void real_memcpy_fromio(void *buffer, const volatile void __iomem *addr,
- 			       size_t size)
- {
- 	WARN(1, "Invalid memcpy_fromio at address 0x%llx\n",
--	     (unsigned long long __force)addr);
-+	     (unsigned long long)(uintptr_t __force)addr);
- 
- 	memset(buffer, 0xff, size);
- }
-@@ -210,7 +211,7 @@ static void real_memcpy_toio(volatile void __iomem *addr, const void *buffer,
- 			     size_t size)
- {
- 	WARN(1, "Invalid memcpy_toio at address 0x%llx\n",
--	     (unsigned long long __force)addr);
-+	     (unsigned long long)(uintptr_t __force)addr);
- }
- #endif /* CONFIG_LOGIC_IOMEM_FALLBACK */
- 
--- 
-2.34.1
-
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -4077,6 +4077,9 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_M
+ 			 quirk_dma_func1_alias);
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9123,
+ 			 quirk_dma_func1_alias);
++/* https://bugzilla.kernel.org/show_bug.cgi?id=42679#c136 */
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9125,
++			 quirk_dma_func1_alias);
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9128,
+ 			 quirk_dma_func1_alias);
+ /* https://bugzilla.kernel.org/show_bug.cgi?id=42679#c14 */
 
 

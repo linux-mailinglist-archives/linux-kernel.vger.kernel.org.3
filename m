@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4FB7498EAE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:48:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F2C4990D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355947AbiAXTo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:44:58 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58044 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354135AbiAXTgF (ORCPT
+        id S1377380AbiAXUFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:05:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356828AbiAXTr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:36:05 -0500
+        Mon, 24 Jan 2022 14:47:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11834C038AEB;
+        Mon, 24 Jan 2022 11:23:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE1D7B8122C;
-        Mon, 24 Jan 2022 19:36:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19EAEC340E5;
-        Mon, 24 Jan 2022 19:36:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BABFBB810BD;
+        Mon, 24 Jan 2022 19:23:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6331C340E5;
+        Mon, 24 Jan 2022 19:23:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052962;
-        bh=xX+HrHhYId0Tfufo3/43Ld1U2JB46Xat28lK7sWeS/0=;
+        s=korg; t=1643052194;
+        bh=5Ymn2AW/zGqbjw3qp2nR15M/bmz7QlMmrneVUroSo4g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YHFeCgFVzqRrNp0Z890erP8tkknqpzg5PLZ6aogOTdf/VgcxznKe+YHTl1mB5Ieu6
-         RyQSmeDK1M3s1EEzKDqzn5YR8r/HCy2alg/w3EJWNbW+bnBrByPLHvPlz91oTRa+OE
-         99PiluY44XVE+PvCZjf2Def+I9PlbNDZ+Ilf34+4=
+        b=vCWCgfat/DXx8mHeHIK5uMfDo57a1tGH2ypsclv3GOznEHRsFXV8safVxpJb30TVU
+         NGrBCrD/gleI45GwhSbjDUVBXfOdMQEbIsICjzno6ES7tSuEMwohT4S+XnL4ofs2tt
+         K8QvIvUYKBAgojFuYtBOxBhyf4oZJSRc3MWMX7uo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 230/320] powerpc/smp: Move setup_profiling_timer() under CONFIG_PROFILING
+Subject: [PATCH 4.19 176/239] serial: core: Keep mctrl register state and cached copy in sync
 Date:   Mon, 24 Jan 2022 19:43:34 +0100
-Message-Id: <20220124184001.805656409@linuxfoundation.org>
+Message-Id: <20220124183948.698401680@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,39 +48,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+From: Lukas Wunner <lukas@wunner.de>
 
-[ Upstream commit a4ac0d249a5db80e79d573db9e4ad29354b643a8 ]
+[ Upstream commit 93a770b7e16772530196674ffc79bb13fa927dc6 ]
 
-setup_profiling_timer() is only needed when CONFIG_PROFILING is enabled.
+struct uart_port contains a cached copy of the Modem Control signals.
+It is used to skip register writes in uart_update_mctrl() if the new
+signal state equals the old signal state.  It also avoids a register
+read to obtain the current state of output signals.
 
-Fixes the following W=1 warning when CONFIG_PROFILING=n:
-  linux/arch/powerpc/kernel/smp.c:1638:5: error: no previous prototype for ‘setup_profiling_timer’
+When a uart_port is registered, uart_configure_port() changes signal
+state but neglects to keep the cached copy in sync.  That may cause
+a subsequent register write to be incorrectly skipped.  Fix it before
+it trips somebody up.
 
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20211124093254.1054750-5-mpe@ellerman.id.au
+This behavior has been present ever since the serial core was introduced
+in 2002:
+https://git.kernel.org/history/history/c/33c0d1b0c3eb
+
+So far it was never an issue because the cached copy is initialized to 0
+by kzalloc() and when uart_configure_port() is executed, at most DTR has
+been set by uart_set_options() or sunsu_console_setup().  Therefore,
+a stable designation seems unnecessary.
+
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Link: https://lore.kernel.org/r/bceeaba030b028ed810272d55d5fc6f3656ddddb.1641129752.git.lukas@wunner.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kernel/smp.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/tty/serial/serial_core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
-index c06cac543f188..82dff003a7fd6 100644
---- a/arch/powerpc/kernel/smp.c
-+++ b/arch/powerpc/kernel/smp.c
-@@ -1296,10 +1296,12 @@ void start_secondary(void *unused)
- 	BUG();
- }
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 63aefe7e91be1..ab4d0f6058c04 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -2347,7 +2347,8 @@ uart_configure_port(struct uart_driver *drv, struct uart_state *state,
+ 		 * We probably don't need a spinlock around this, but
+ 		 */
+ 		spin_lock_irqsave(&port->lock, flags);
+-		port->ops->set_mctrl(port, port->mctrl & TIOCM_DTR);
++		port->mctrl &= TIOCM_DTR;
++		port->ops->set_mctrl(port, port->mctrl);
+ 		spin_unlock_irqrestore(&port->lock, flags);
  
-+#ifdef CONFIG_PROFILING
- int setup_profiling_timer(unsigned int multiplier)
- {
- 	return 0;
- }
-+#endif
- 
- #ifdef CONFIG_SCHED_SMT
- /* cpumask of CPUs with asymetric SMT dependancy */
+ 		/*
 -- 
 2.34.1
 

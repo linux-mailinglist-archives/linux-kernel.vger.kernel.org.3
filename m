@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34205499312
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0810D498C5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383954AbiAXU2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:28:03 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49082 "EHLO
+        id S1349344AbiAXTUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:20:37 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:38010 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377971AbiAXUGE (ORCPT
+        with ESMTP id S1345760AbiAXTMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:06:04 -0500
+        Mon, 24 Jan 2022 14:12:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B741EB81215;
-        Mon, 24 Jan 2022 20:06:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2F46C340E5;
-        Mon, 24 Jan 2022 20:06:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3AD62B8121B;
+        Mon, 24 Jan 2022 19:12:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52FADC340E7;
+        Mon, 24 Jan 2022 19:12:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054761;
-        bh=vwRGDU4N4TbEApmcUFKQ4hpx5acenT08Vv9AbCWceh8=;
+        s=korg; t=1643051530;
+        bh=zpx+7nESMQRkYZtXzoI6bEZjlXJJH0cIuPu5M2wgOws=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kl3Nre77F2SH0prH9ZGLj73Cdb9wF5KnVrCWuM8yBiQy6AtHyK98Q5xts/uGKCEHm
-         4jmwKGZ+yJticKJmQxEAtLwDH3IRnFaxL8fjxIQWXxbLsmUZ/gstpmNUVbAv4P9BRF
-         dknzDoEJFMP2OnrFpSqp/7F06Fpwcucho1zeJrYc=
+        b=00kg9WOJAOv+tZQddc/KhDmkDMDjdp5VXbwdI48iuqezOthDJfSYMmBTWrKkFUcJk
+         07dvDb/XSnuAV+rdikWZwu7TkAepjwxBRLNx1JK+LW2dLycuvU/nSBbjh/1jnaUnJw
+         p91Kxw0BZ3qTJJZ0eQfYeJvdwMznFK19fmAmnCZw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: [PATCH 5.10 493/563] Documentation: refer to config RANDOMIZE_BASE for kernel address-space randomization
-Date:   Mon, 24 Jan 2022 19:44:18 +0100
-Message-Id: <20220124184041.499757730@linuxfoundation.org>
+        stable@vger.kernel.org, Andy Spencer <aspencer@spacex.com>,
+        Jim Gruen <jgruen@spacex.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ben Hutchings <ben@decadent.org.uk>
+Subject: [PATCH 4.14 184/186] gianfar: simplify FCS handling and fix memory leak
+Date:   Mon, 24 Jan 2022 19:44:19 +0100
+Message-Id: <20220124183943.021876700@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,39 +47,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+From: Andy Spencer <aspencer@spacex.com>
 
-commit 82ca67321f55a8d1da6ac3ed611da3c32818bb37 upstream.
+commit d903ec77118c09f93a610b384d83a6df33a64fe6 upstream.
 
-The config RANDOMIZE_SLAB does not exist, the authors probably intended to
-refer to the config RANDOMIZE_BASE, which provides kernel address-space
-randomization. They probably just confused SLAB with BASE (these two
-four-letter words coincidentally share three common letters), as they also
-point out the config SLAB_FREELIST_RANDOM as further randomization within
-the same sentence.
+Previously, buffer descriptors containing only the frame check sequence
+(FCS) were skipped and not added to the skb. However, the page reference
+count was still incremented, leading to a memory leak.
 
-Fix the reference of the config for kernel address-space randomization to
-the config that provides that.
+Fixing this inside gfar_add_rx_frag() is difficult due to reserved
+memory handling and page reuse. Instead, move the FCS handling to
+gfar_process_frame() and trim off the FCS before passing the skb up the
+networking stack.
 
-Fixes: 6e88559470f5 ("Documentation: Add section about CPU vulnerabilities for Spectre")
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Link: https://lore.kernel.org/r/20211230171940.27558-1-lukas.bulwahn@gmail.com
-Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+Signed-off-by: Andy Spencer <aspencer@spacex.com>
+Signed-off-by: Jim Gruen <jgruen@spacex.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Cc: Ben Hutchings <ben@decadent.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/admin-guide/hw-vuln/spectre.rst |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/freescale/gianfar.c |   23 +++++++----------------
+ 1 file changed, 7 insertions(+), 16 deletions(-)
 
---- a/Documentation/admin-guide/hw-vuln/spectre.rst
-+++ b/Documentation/admin-guide/hw-vuln/spectre.rst
-@@ -468,7 +468,7 @@ Spectre variant 2
-    before invoking any firmware code to prevent Spectre variant 2 exploits
-    using the firmware.
+--- a/drivers/net/ethernet/freescale/gianfar.c
++++ b/drivers/net/ethernet/freescale/gianfar.c
+@@ -2936,29 +2936,17 @@ static bool gfar_add_rx_frag(struct gfar
+ {
+ 	int size = lstatus & BD_LENGTH_MASK;
+ 	struct page *page = rxb->page;
+-	bool last = !!(lstatus & BD_LFLAG(RXBD_LAST));
+-
+-	/* Remove the FCS from the packet length */
+-	if (last)
+-		size -= ETH_FCS_LEN;
  
--   Using kernel address space randomization (CONFIG_RANDOMIZE_SLAB=y
-+   Using kernel address space randomization (CONFIG_RANDOMIZE_BASE=y
-    and CONFIG_SLAB_FREELIST_RANDOM=y in the kernel configuration) makes
-    attacks on the kernel generally more difficult.
+ 	if (likely(first)) {
+ 		skb_put(skb, size);
+ 	} else {
+ 		/* the last fragments' length contains the full frame length */
+-		if (last)
++		if (lstatus & BD_LFLAG(RXBD_LAST))
+ 			size -= skb->len;
+ 
+-		/* Add the last fragment if it contains something other than
+-		 * the FCS, otherwise drop it and trim off any part of the FCS
+-		 * that was already received.
+-		 */
+-		if (size > 0)
+-			skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags, page,
+-					rxb->page_offset + RXBUF_ALIGNMENT,
+-					size, GFAR_RXB_TRUESIZE);
+-		else if (size < 0)
+-			pskb_trim(skb, skb->len + size);
++		skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags, page,
++				rxb->page_offset + RXBUF_ALIGNMENT,
++				size, GFAR_RXB_TRUESIZE);
+ 	}
+ 
+ 	/* try reuse page */
+@@ -3071,6 +3059,9 @@ static void gfar_process_frame(struct ne
+ 	if (priv->padding)
+ 		skb_pull(skb, priv->padding);
+ 
++	/* Trim off the FCS */
++	pskb_trim(skb, skb->len - ETH_FCS_LEN);
++
+ 	if (ndev->features & NETIF_F_RXCSUM)
+ 		gfar_rx_checksum(skb, fcb);
  
 
 

@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6234992D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C88F498B04
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381858AbiAXUYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:24:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377243AbiAXUFL (ORCPT
+        id S1344792AbiAXTJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:09:13 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59542 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345162AbiAXTCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:05:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692F6C06135F;
-        Mon, 24 Jan 2022 11:31:08 -0800 (PST)
+        Mon, 24 Jan 2022 14:02:49 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08EE660917;
-        Mon, 24 Jan 2022 19:31:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B63CAC340E5;
-        Mon, 24 Jan 2022 19:31:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DDCCEB8122F;
+        Mon, 24 Jan 2022 19:02:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E8B0C340E5;
+        Mon, 24 Jan 2022 19:02:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052667;
-        bh=ZziZE/q/QGnmo1EOHF/uyk7XIzDk+wvPA8vIawa5iH8=;
+        s=korg; t=1643050966;
+        bh=iQYLBwzLMi48bseQjprm7HaXg8owdAOoP16c2+NUHWs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yhSC8EDPeNaVbSrzCOAErNUIbDpIDkdKKvgefV9Npm3FaM6TtPY3StyCAFQxSmeGN
-         DJMBjhaqa0nmgZg/yfw0dfrTlh4CgolWc9vpPmvuUVnivCqcXwS+OkcThFhZAr/9hw
-         QwE6sjLaFv0G9Fg3y9qpRx71Mpz1871TcqhOR0D8=
+        b=DC115jhZyzdXOYOacuYls6ZnGf+gfSLh/IlDgECaVEnkrRvfiLebjuFtjyWYoXx8X
+         t90rvPYTyPC9jW9OklBtaEBGJMn2Yvez1cFeDRW+e6JTapGh/PLT039Sag6QNHzCi7
+         QtTwdv8rtfKbVfGzOcvkQk4bMv5YZ1ZHRpUJyw0U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 102/320] bpf: Fix SO_RCVBUF/SO_SNDBUF handling in _bpf_setsockopt().
-Date:   Mon, 24 Jan 2022 19:41:26 +0100
-Message-Id: <20220124183957.191563339@linuxfoundation.org>
+        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH 4.14 012/186] media: uvcvideo: fix division by zero at stream start
+Date:   Mon, 24 Jan 2022 19:41:27 +0100
+Message-Id: <20220124183937.507289946@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,46 +47,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+From: Johan Hovold <johan@kernel.org>
 
-[ Upstream commit 04c350b1ae6bdb12b84009a4d0bf5ab4e621c47b ]
+commit 8aa637bf6d70d2fb2ad4d708d8b9dd02b1c095df upstream.
 
-The commit 4057765f2dee ("sock: consistent handling of extreme
-SO_SNDBUF/SO_RCVBUF values") added a change to prevent underflow
-in setsockopt() around SO_SNDBUF/SO_RCVBUF.
+Add the missing bulk-endpoint max-packet sanity check to
+uvc_video_start_transfer() to avoid division by zero in
+uvc_alloc_urb_buffers() in case a malicious device has broken
+descriptors (or when doing descriptor fuzz testing).
 
-This patch adds the same change to _bpf_setsockopt().
+Note that USB core will reject URBs submitted for endpoints with zero
+wMaxPacketSize but that drivers doing packet-size calculations still
+need to handle this (cf. commit 2548288b4fb0 ("USB: Fix: Don't skip
+endpoint descriptors with maxpacket=0")).
 
-Fixes: 4057765f2dee ("sock: consistent handling of extreme SO_SNDBUF/SO_RCVBUF values")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20220104013153.97906-2-kuniyu@amazon.co.jp
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: c0efd232929c ("V4L/DVB (8145a): USB Video Class driver")
+Cc: stable@vger.kernel.org      # 2.6.26
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/filter.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/usb/uvc/uvc_video.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 5ebc973ed4c50..b90c0b5a10112 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4248,12 +4248,14 @@ BPF_CALL_5(bpf_setsockopt, struct bpf_sock_ops_kern *, bpf_sock,
- 		switch (optname) {
- 		case SO_RCVBUF:
- 			val = min_t(u32, val, sysctl_rmem_max);
-+			val = min_t(int, val, INT_MAX / 2);
- 			sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
- 			WRITE_ONCE(sk->sk_rcvbuf,
- 				   max_t(int, val * 2, SOCK_MIN_RCVBUF));
- 			break;
- 		case SO_SNDBUF:
- 			val = min_t(u32, val, sysctl_wmem_max);
-+			val = min_t(int, val, INT_MAX / 2);
- 			sk->sk_userlocks |= SOCK_SNDBUF_LOCK;
- 			WRITE_ONCE(sk->sk_sndbuf,
- 				   max_t(int, val * 2, SOCK_MIN_SNDBUF));
--- 
-2.34.1
-
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -1711,6 +1711,10 @@ static int uvc_init_video(struct uvc_str
+ 		if (ep == NULL)
+ 			return -EIO;
+ 
++		/* Reject broken descriptors. */
++		if (usb_endpoint_maxp(&ep->desc) == 0)
++			return -EIO;
++
+ 		ret = uvc_init_video_bulk(stream, ep, gfp_flags);
+ 	}
+ 
 
 

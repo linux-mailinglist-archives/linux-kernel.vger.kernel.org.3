@@ -2,134 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD54498681
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 403D549867E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240965AbiAXRWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:22:37 -0500
-Received: from mta-p7.oit.umn.edu ([134.84.196.207]:50060 "EHLO
-        mta-p7.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240257AbiAXRWg (ORCPT
+        id S244231AbiAXRWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:22:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34860 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238780AbiAXRWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:22:36 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p7.oit.umn.edu (Postfix) with ESMTP id 4JjGyM4z18z9vCBS
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 17:22:35 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p7.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p7.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id GsEAzjtjryDo for <linux-kernel@vger.kernel.org>;
-        Mon, 24 Jan 2022 11:22:35 -0600 (CST)
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p7.oit.umn.edu (Postfix) with ESMTPS id 4JjGyM2ybtz9vCBX
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:22:35 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p7.oit.umn.edu 4JjGyM2ybtz9vCBX
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p7.oit.umn.edu 4JjGyM2ybtz9vCBX
-Received: by mail-pf1-f199.google.com with SMTP id u80-20020a627953000000b004c82105f20dso2670272pfc.11
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:22:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vF2fJlNmkwltSc0OR3AIOEuqnVr6sggA/rInxG0v7nA=;
-        b=Yf8BnyP70J3zZ+qyndL20aJT2U8I9ToajN4PBdtxQasG/aAXHhRCIg0jRGBqS6fQY8
-         RtQMY8TaJ791JxjlCUR5zTpYwO0MWe55lkNuhSq0L0JEm9zLtA5GlI1Ia/ascECJtlpa
-         qojMzEpxA8KgJ19GjWWArLyNjVtsoBXaYsfT9fJw/Ukez7878s1JvJjGshReJ3df4S2/
-         PNAsPZAMyj4R5T5Va3FhueenTt7XAfdMwQjdznznQ5hKoOFk/gy3qiAbvTbKtKLB8X1Y
-         DLK73a5L+rj+jPDXgr8XQwqGRXbcAAfIpLHIJMEdl8Z7acX4QrVdPymIt5OeAWAYVFFE
-         YDsw==
+        Mon, 24 Jan 2022 12:22:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643044929;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=i1S3g+b7br3s08Re9KUAkuBGZDRyz6Chv3XkAdUIT9o=;
+        b=cAe6iL3mqtPOdlZTTPwrGmtcMC2BZ5pxojhU1GZ7zPctiaYKm8Ihc+DSgE6W4U7yS0PicV
+        nm0dsFBg3vPxdD8sDKco+JTMzU/NfZKEo264smrxiAyU7vNDfIY9podF3OzlniRIxcpcSj
+        gHg44KfcITEKql5eVvYjDcXTIexOC8A=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-619-ro2nz1JFPTGGxTVdGdA1zQ-1; Mon, 24 Jan 2022 12:22:07 -0500
+X-MC-Unique: ro2nz1JFPTGGxTVdGdA1zQ-1
+Received: by mail-qk1-f198.google.com with SMTP id y12-20020a05620a09cc00b0047d108ac60aso4776748qky.4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:22:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vF2fJlNmkwltSc0OR3AIOEuqnVr6sggA/rInxG0v7nA=;
-        b=AkLJI+7Isujua6GBMtFl6m/ZVlrR26huVFtZPOi4ig38nfL8oiHjboxhGOeoJNYWtI
-         vY6bBvPwCycLSGZNqG4G6MJ11I1gjDVU9Kdx+WeNyfsVvo6Dpyju+YSOIIv6HAv1ORgp
-         3y7/XHrV+wtrES5OEMqCVbQMst8yV+rY+AA0jUN5DXx3EB7jFXwurhtK5vZBJdaUZ9mT
-         QFFiDDHBxjK+jrMx9k4zZh42j0gPFnPk3h2gFmqOkvike+tjxrfS08nzobtZ9FQyoELd
-         r17fX7LdsodGmdtrCsJ+YRMjUgzjQWBUxMqRr1Pl3tnxyoKXYWD+VGqTSKusnmoXMtmS
-         ElWA==
-X-Gm-Message-State: AOAM532Z7RwBMcOSdo1koqxW6CKpQBAj8hW40+Rnqt8Qmi2wKpd0eqxl
-        WHF7Vd2OsYzPblBJ2SWPvJ/1COceWWDreHCvpDusTRRWP8FwQpDU9P2XHXqUAjeyzibizJETk51
-        JsFD28g/3XA5QXWdgkdkUQUiu+29T
-X-Received: by 2002:a17:90b:3e89:: with SMTP id rj9mr2835557pjb.91.1643044954585;
-        Mon, 24 Jan 2022 09:22:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwVYIlsxxKPhOwLx6Y538/G0Ur+T0jMdT68g/yxhxWRf5Og9AScrTI+fLaX8CMn7nQku5HzqA==
-X-Received: by 2002:a17:90b:3e89:: with SMTP id rj9mr2835546pjb.91.1643044954385;
-        Mon, 24 Jan 2022 09:22:34 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.4.61.248])
-        by smtp.gmail.com with ESMTPSA id me4sm20786965pjb.26.2022.01.24.09.22.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 09:22:34 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Nagalakshmi Nandigama <Nagalakshmi.Nandigama@lsi.com>,
-        James Bottomley <JBottomley@Parallels.com>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: mpt3sas: FIx a NULL pointer dereference bug in mpt3sas_transport_port_add()
-Date:   Tue, 25 Jan 2022 01:21:20 +0800
-Message-Id: <20220124172120.62828-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i1S3g+b7br3s08Re9KUAkuBGZDRyz6Chv3XkAdUIT9o=;
+        b=rtGfYn2vzRsSeppW5U24Izoy40jzHLnGw3bi2K1X+OHkkiMMcx+ICOBhebUurJcSYr
+         azK1sdp5VaIHp5jX8Q7wRRTGLs4XgZPLHkYfbj4Pad+fV5wzVdjUTGrdtCUpqi/Si0N9
+         +JVn69QeRF0j0EB/WwVSqDBSZfv/GbeQ+yQ5DxsoGLPWHN0umtfpyhcsPgV2DJgog+kw
+         ekocj1QfhO5phpw9wDo4aRrQKCG+HzRh1ExNzs6OAiX9VRbT6JsKSQaqlnbGmF2DBLCV
+         PRt+2Jo8GNyqrhslk8iuiDI2FQdPHd1cvCxk/rm+5nG6xV4vKk29tsak0av/gKGwdY7H
+         fHfw==
+X-Gm-Message-State: AOAM533Gyy1mAeTFd3oZcZZ0QOi3CvBIyKeVDFUtrd1mXEDd7lU7A915
+        ySnZYdZ0ad3FlN4CIoFYay2knHBChdaMEpc3V7GPX+UWRp9bJkqfC2S1Go3SCp4NUC3WaZ7EWhW
+        z1oYqyQ60U9ZMxLSNVrphnjN/h2FB09ZmJfmkb6GN
+X-Received: by 2002:a37:bd86:: with SMTP id n128mr11660107qkf.770.1643044927254;
+        Mon, 24 Jan 2022 09:22:07 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxUimEDbi3foNski3m2mUz0H6FU6LVnCqDgmmWfF0KbAU4PZJm+/5jDqGBmK60YY0A94WZuVtb8Flw59Rfx47E=
+X-Received: by 2002:a37:bd86:: with SMTP id n128mr11660087qkf.770.1643044927010;
+ Mon, 24 Jan 2022 09:22:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <202201221028.YKA8kSdm-lkp@intel.com> <CAK-6q+h_hb94J3DSXPk=E44kCxiwZ+BE3kMJe09iShRzMb=vzQ@mail.gmail.com>
+ <91901e7b-7d82-116c-aaf2-c74c6a6b999c@infradead.org> <CAK-6q+j2jc3pBmbvQ-DCmxveC-UMV75SFc2nC1zwXKe9wm4YPg@mail.gmail.com>
+ <20220124124530.GS1951@kadam>
+In-Reply-To: <20220124124530.GS1951@kadam>
+From:   Alexander Aring <aahringo@redhat.com>
+Date:   Mon, 24 Jan 2022 12:21:55 -0500
+Message-ID: <CAK-6q+iZfY=FyOxJfS7cY7MqScs+nU=U3B4NnLnvcLH3fofuAg@mail.gmail.com>
+Subject: Re: fs/dlm/midcomms.c:913:22: sparse: sparse: restricted __le32
+ degrades to integer
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, David Teigland <teigland@redhat.com>,
+        cluster-devel <cluster-devel@redhat.com>,
+        linux-sparse@vger.kernel.org, rcu@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In mpt3sas_transport_port_add(), sas_end_device_alloc() is assigned to rphy
-and there is a dereference of it. sas_end_device_alloc() could return NULL
-on failure of allocation, which could introduce a NULL pointer dereference
-bug.
+Hi,
 
-The same as sas_expander_alloc().
+On Mon, Jan 24, 2022 at 7:46 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> On Sun, Jan 23, 2022 at 01:41:52PM -0500, Alexander Aring wrote:
+> >
+> > I see also:
+> >
+> > fs/dlm/midcomms.c:213:1: sparse: sparse: symbol
+> > '__srcu_struct_nodes_srcu' was not declared. Should it be static?
+> >
+>
+> Why not just do this?  (Untested.  Maybe I don't understand?)
+>
+> diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
+> index cb1f4351e8ba..a164089abec4 100644
+> --- a/include/linux/srcutree.h
+> +++ b/include/linux/srcutree.h
+> @@ -121,7 +121,7 @@ struct srcu_struct {
+>  #ifdef MODULE
+>  # define __DEFINE_SRCU(name, is_static)                                        \
+>         is_static struct srcu_struct name;                              \
+> -       struct srcu_struct * const __srcu_struct_##name                 \
+> +       is_static struct srcu_struct * const __srcu_struct_##name       \
+>                 __section("___srcu_struct_ptrs") = &name
+>  #else
+>  # define __DEFINE_SRCU(name, is_static)                                        \
+>
 
-Fix this bug by adding a NULL check of rphy.
+I tried it and yes it will fix the issue and introduce another one
+about "is_static struct srcu_struct * const __srcu_struct_##name" is
+unused ("-Wunused-const-variable").
+I added a __maybe_unused after the introduced is_static and it seems
+to fix the introduced issue, now it compiles and sparse is happy. I am
+not sure if this is the right fix?
 
-This bug was found by a static analyzer.
-
-Builds with 'make allyesconfig' show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: f92363d12359 ("mpt3sas: add new driver supporting 12GB SAS")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
-The analysis employs differential checking to identify inconsistent 
-security operations (e.g., checks or kfrees) between two code paths 
-and confirms that the inconsistent operations are not recovered in the
-current function or the callers, so they constitute bugs. 
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
- drivers/scsi/mpt3sas/mpt3sas_transport.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_transport.c b/drivers/scsi/mpt3sas/mpt3sas_transport.c
-index 0681daee6c14..1caa929cf8bc 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_transport.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_transport.c
-@@ -823,6 +823,11 @@ mpt3sas_transport_port_add(struct MPT3SAS_ADAPTER *ioc, u16 handle,
- 			hba_port->sas_address =
- 			    mpt3sas_port->remote_identify.sas_address;
- 	}
-+	if (!rphy) {
-+		ioc_err(ioc, "failure at %s:%d/%s()!\n",
-+			__FILE__, __LINE__, __func__);
-+		goto out_fail;
-+	}
- 
- 	rphy->identify = mpt3sas_port->remote_identify;
- 
--- 
-2.25.1
+- Alex
 

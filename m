@@ -2,109 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B41FD4985C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:05:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D59D04985C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:05:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244225AbiAXRFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:05:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244156AbiAXRE6 (ORCPT
+        id S235398AbiAXRFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:05:30 -0500
+Received: from mta-p8.oit.umn.edu ([134.84.196.208]:33460 "EHLO
+        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244138AbiAXRFW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:04:58 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779B0C061744
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:04:57 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id v74so13311069pfc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:04:57 -0800 (PST)
+        Mon, 24 Jan 2022 12:05:22 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4JjGZT4vC3z9vjCJ
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 17:05:21 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p8.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id wwcWM2FjLjYF for <linux-kernel@vger.kernel.org>;
+        Mon, 24 Jan 2022 11:05:21 -0600 (CST)
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4JjGZT2m6bz9vjC7
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:05:21 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4JjGZT2m6bz9vjC7
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4JjGZT2m6bz9vjC7
+Received: by mail-pj1-f71.google.com with SMTP id q8-20020a17090a064800b001b4ee55e378so241744pje.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:05:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/sOriIScpqGqSMCpSL1XXoMzsikUflsoN818peCbauo=;
-        b=EelhhQ9FcRKTtaBSm9pIMg4gtPxg/0gsXW9D+HaCQelJT26SuHAZetCKYG5cT6FhYn
-         Bqrk78GOZxDpOSNWNMMvtCmkZ4o4Gs1Nb4DY060KbmRIHOyip0eDBZ5722zcoCuc2oiA
-         8pHFK9xlfK+DaU6zRvKMeFgA5FpraD96TUQu47uIs60xuE6sv7OXy/RV4jUH/xqL6qPO
-         2U272nDy8NejYpdCOhYzANkaoox0ubPU9gAFRp77VoEnwV4eJTWHN0dGZy89MAHfqtGJ
-         8enb9j/wnL/s6B51l6e0r7sL4OCV8n3thJho3i1k4A3R0SUg3Xe/28S3ZqKrIrvPvp6D
-         X+5Q==
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iqOvQckE4DPpe/gz80hlCWLF/acf9yFaFDsgsRhtXZY=;
+        b=czZ1znNCyFZoXGfMGTRQpY2QtLcSB0nqHP6Qv2BEwEtBbrFdR3EEjPAtvBBJ2rdKp1
+         HCWt/yP1Uz6TUK5+DCAUbmhjfwwbeygHk6e1pINjALHkZiuZ7X3fGXVzC4ja/Uffy3Pm
+         m3cGceoUfMcKY5gFjN5U3aHa31r5FJ53R4SduFG1taFo7vp7W57sSSyOhRD9HcDYl8P2
+         ZwMydl4q3y05ziPmP1wV9YGvHMUEqf1628SaqjuAKegh5garAkZUc09Rx9cpSH9F1jUy
+         kL7fgZO90+bdz4fB3nk2e0LepQwdWwOwh021tQT+3AZp5oVuMyKjQ+YYzz9guxDVk9eE
+         G+0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/sOriIScpqGqSMCpSL1XXoMzsikUflsoN818peCbauo=;
-        b=fRqqW+bJ+v+QigG5PJe8obPNYYxMl9meYMATSx/Y82snTynvhfw+M1sgA/iSwPeKmy
-         OTFUFsoqUkr93x0lBpKwTGgB2OLXYi5GSbWRHQkc/FJTYoHJKatb3PfMb4CJSK4pLhLO
-         GdPVxtbpaoAavDaQUYgPJjrnxUoMem4k/2VeHMBQJuXDHb1czTcj2CmWmt1IHWbL7+UH
-         avelTzUsfpVoDt9Xbtu6lnpIGUpY9vvX7/Ry9KSNgOK4w6dO8ToIf8jP00TPIkWTd7uV
-         sKDPURda3dEYcaf35V8cgt2TO2P1atthhvWTDe/UxpqPYdEYIpm0fdzo6F7yD0geRFQ5
-         fngg==
-X-Gm-Message-State: AOAM530O+wXWKTX85QQf+S+GR1438yu70AtZprOkg94Ge6UQT3itfYp9
-        91iwFuHHwfXWU/3mt++v099AWg==
-X-Google-Smtp-Source: ABdhPJzT0TczX4PYWrLVO38a96EyIar2HRyjGSuZpjo/m0cD2kMtPhw8hrOw/xoNFw2R+soXcTz7Jg==
-X-Received: by 2002:a63:45:: with SMTP id 66mr12481383pga.607.1643043896594;
-        Mon, 24 Jan 2022 09:04:56 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id z6sm12670970pgh.1.2022.01.24.09.04.55
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iqOvQckE4DPpe/gz80hlCWLF/acf9yFaFDsgsRhtXZY=;
+        b=1EqLNONOdEJIOKprxZrrN9qe+mwT7Ykfsd4+OVHneF9bCXOIHTfNsx369nvw5zZeFn
+         fEET37vT6o6MN1gbe0aHeUarq1UDnip+Q0JVdpUfCsC99hOql71CPSo4JxiNfItD6oyh
+         +1L8h8QBFszWoeD8rQASljIq9yEAm1J/lBke46T4GjnFpM3pjqvTVa7EER998pmZHxVS
+         jEC5FCyaXFXGShF4rNlmbY9xPASLSsQxWM9CbkW0EKaJloMax9rzbxvAVCMczknGQGUH
+         5D4ofbi6iuqPCO8XeQyU6aul0SfPDsPvD/KfbkssClZc1tv/GTCehueg6Ii/juf4O3tt
+         bh5Q==
+X-Gm-Message-State: AOAM533dVacFT3khi0u3F2WK7sIjQk+MjpGmApgjvENCvZ7o/B0hszHB
+        xQSN4HjTg2FO0qM6/mJSPgI3L+xBpA7OudIaQRpe7hge+5gYqKeEpCqdwNmks18V5nUpnfhOjhK
+        GNMO4rV0tl0CWZCPsbt1xyfO7UTzw
+X-Received: by 2002:a17:902:f243:b0:14b:1f32:e923 with SMTP id j3-20020a170902f24300b0014b1f32e923mr9628337plc.121.1643043920605;
+        Mon, 24 Jan 2022 09:05:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz6FN3UZbzNKOs+OIFcyGQ4fo0vfGGg3hCscMIg92FDOZqeD2qwe0OOD+rjCAyx1dQOnHgVQA==
+X-Received: by 2002:a17:902:f243:b0:14b:1f32:e923 with SMTP id j3-20020a170902f24300b0014b1f32e923mr9628306plc.121.1643043920288;
+        Mon, 24 Jan 2022 09:05:20 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.4.61.248])
+        by smtp.gmail.com with ESMTPSA id s2sm2882596pgq.38.2022.01.24.09.05.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 09:04:55 -0800 (PST)
-Date:   Mon, 24 Jan 2022 17:04:52 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Ayush Ranjan <ayushranjan@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ben Gardon <bgardon@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andrei Vagin <avagin@gmail.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Michael Davidson <md@google.com>
-Subject: Re: [PATCH] gvisor: add some missing definitions to vmx.h
-Message-ID: <Ye7cNMZku7jlRHa+@google.com>
-References: <20220123195337.509882-1-ayushranjan@google.com>
- <45a6395e-63f3-12b2-e6d1-52ccf00272e7@redhat.com>
+        Mon, 24 Jan 2022 09:05:20 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Michael Schimek <mschimek@gmx.at>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] media: bttv: Fix a NULL pointer dereference in setup_window_lock()
+Date:   Tue, 25 Jan 2022 01:05:13 +0800
+Message-Id: <20220124170515.58519-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <45a6395e-63f3-12b2-e6d1-52ccf00272e7@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022, Paolo Bonzini wrote:
-> On 1/23/22 20:53, Ayush Ranjan wrote:
-> > From: Michael Davidson <md@google.com>
-> > 
-> > gvisor needs definitions for some additional secondary exec controls.
-> > 
-> > Tested: builds
-> > Signed-off-by: Ayush Ranjan <ayushranjan@google.com>
-> > Signed-off-by: Michael Davidson <md@google.com>
-> 
-> Incorrect order of the Signed-off-by header (author goes first, submitter
-> goes last).
-> 
-> > ---
-> >   arch/x86/include/asm/vmx.h | 1 +
-> >   1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
-> > index c77ad687cdf7..df40dc568eb9 100644
-> > --- a/arch/x86/include/asm/vmx.h
-> > +++ b/arch/x86/include/asm/vmx.h
-> > @@ -67,6 +67,7 @@
-> >   #define SECONDARY_EXEC_ENCLS_EXITING		VMCS_CONTROL_BIT(ENCLS_EXITING)
-> >   #define SECONDARY_EXEC_RDSEED_EXITING		VMCS_CONTROL_BIT(RDSEED_EXITING)
-> >   #define SECONDARY_EXEC_ENABLE_PML               VMCS_CONTROL_BIT(PAGE_MOD_LOGGING)
-> > +#define SECONDARY_EXEC_EPT_VE			VMCS_CONTROL_BIT(EPT_VIOLATION_VE)
-> >   #define SECONDARY_EXEC_PT_CONCEAL_VMX		VMCS_CONTROL_BIT(PT_CONCEAL_VMX)
-> >   #define SECONDARY_EXEC_XSAVES			VMCS_CONTROL_BIT(XSAVES)
-> >   #define SECONDARY_EXEC_MODE_BASED_EPT_EXEC	VMCS_CONTROL_BIT(MODE_BASED_EPT_EXEC)
-> 
-> I'm not sure why gvisor would care about an internal Linux header. gvisor
-> should only use arch/x86/include/uapi headers.
+In setup_window_lock(), the return value of videobuf_sg_alloc() is
+assigned to variable new and there is a dereference of it after
+that. the return value of videobuf_sg_alloc() could be NULL on
+failure of allocation, which could lead to a NULL pointer dereference.
 
-It's Google-internal kernel crud, this patch should not be merged.  Though with a
-bit of patience, an equivalent patch will come with TDX support.  If we do merge
-something before TDX, I'd strongly prefer to take that "complete" version with a
-rewritten changelog.
+Fix this bug by adding a NULL check of new.
 
-[*] https://lore.kernel.org/all/e519d6ae1e75a4bea494bb3940e1272e935ead18.1625186503.git.isaku.yamahata@intel.com
+This bug was found by a static analyzer.
+
+Builds with 'make allyesconfig' show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Fixes: e5bd0260e7d3 ("V4L/DVB (5077): Bttv cropping support")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+The analysis employs differential checking to identify inconsistent 
+security operations (e.g., checks or kfrees) between two code paths 
+and confirms that the inconsistent operations are not recovered in the
+current function or the callers, so they constitute bugs. 
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+ drivers/media/pci/bt8xx/bttv-driver.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
+index 8cc9bec43688..6338f98d845d 100644
+--- a/drivers/media/pci/bt8xx/bttv-driver.c
++++ b/drivers/media/pci/bt8xx/bttv-driver.c
+@@ -2182,6 +2182,8 @@ static int setup_window_lock(struct bttv_fh *fh, struct bttv *btv,
+ 		struct bttv_buffer *new;
+ 
+ 		new = videobuf_sg_alloc(sizeof(*new));
++		if (!new)
++			return -ENOMEM;
+ 		new->crop = btv->crop[!!fh->do_crop].rect;
+ 		bttv_overlay_risc(btv, &fh->ov, fh->ovfmt, new);
+ 		retval = bttv_switch_overlay(btv,fh,new);
+-- 
+2.25.1
+

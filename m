@@ -2,120 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE264991BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:14:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D96A6498DCB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:37:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349894AbiAXUOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:14:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352791AbiAXTx1 (ORCPT
+        id S1354210AbiAXTgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:36:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:59679 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1352379AbiAXTaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:53:27 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC76C06118F;
-        Mon, 24 Jan 2022 11:26:59 -0800 (PST)
-Date:   Mon, 24 Jan 2022 19:26:55 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643052416;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 24 Jan 2022 14:30:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643052615;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Uc4CcyNeBy6pq/UPib+XtFLrqtsV8lin+EF3qDe9Xm4=;
-        b=L3+YLmiz1vcHCRmEVpY6owP6iftTzIaIeaGvoLb+BoXxODX1fKOyjebD8W4pTrCLmj6eQw
-        UrRz6FH8qnY8eOR/3vFXYdRSwlZiQ3IYPdLgnxCp9qk+02wbd9sGFsqLq3SxLaFHTlp3lA
-        rIGQ+GNNz4capz5SrJkROzbBh6u3aUoqy2MWgRkfLyj01IsA+48ZvFe+0rnw73w17MeJIl
-        0d2xks+Stngumz9J/zCFK2mBhtbl9CbLmjUwov4BX3kodKcV/JT79hmHg1nV/rgCQ60XWB
-        D3YUL7jOIfNfH/3dwlkwE73U0zGr4Hm+ZY3ixcPpXIoGKh9X9sbDdBMhwuIYxQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643052416;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Uc4CcyNeBy6pq/UPib+XtFLrqtsV8lin+EF3qDe9Xm4=;
-        b=6s27vJdI13QJ7ZdwPmM9YNHs4Jmn7lQhYcFtJ/+t6dQ5K95+iyBfyTj6zY2hFcz8OvODua
-        HFT8BQ/xWk9gc6Dw==
-From:   "tip-bot2 for Jan Beulich" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/paravirt] x86/paravirt: Use %rip-relative addressing in hook calls
-Cc:     Jan Beulich <jbeulich@suse.com>, Borislav Petkov <bp@suse.de>,
-        Juergen Gross <jgross@suse.com>, x86@kernel.org,
+        bh=RHI1zYWE7ZBUFpjcj0IWzH5yW083pieg5iHQ/MGsgn8=;
+        b=cFWe6UElcKji79MndCnQqz+TNt1gMCI1YsK1zlSEMSiOfnpSeD3kZduPSPXSR5FznJ/lD2
+        bFydRwnKzzoHYdq50USNAES8do27soMLVR4415sgCEeNJCIe0IezJstcgePcOTLzzsXM0H
+        yMLOtAhA/Uthy/AHvq62iJS/UedMBKc=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-520-OqjoEoCYMemTi4sjR2-gEw-1; Mon, 24 Jan 2022 14:30:14 -0500
+X-MC-Unique: OqjoEoCYMemTi4sjR2-gEw-1
+Received: by mail-qt1-f198.google.com with SMTP id e14-20020ac84b4e000000b002cfbbdf8206so2192009qts.10
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:30:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RHI1zYWE7ZBUFpjcj0IWzH5yW083pieg5iHQ/MGsgn8=;
+        b=cDKM/aekuKmY2O+7FALM0UTZYUCwF5j/2MHFKph5sTuC2KJa46JIbrcICFARqTmJ1V
+         XgezsfavCY8gStTKnhoSGn+G+Y+brYFvgjTqBovaSSOSEeowSuPa7zoh8nM8K4sqbvUU
+         eLJqNVfquyKe2U0H0E6y68uQQYsUTXlQkaEhl/ncOGeJV4z/JSPZhJxNxyGUDQYaLW07
+         N9znjG1F1r5X8q5e6xxxvQsQLlja9GMKVZGm/iamReIFoa/9E+NKC+BnBjnvwwdM8xzD
+         673Xy+H13f8a0UyAWy3PiQkeYeVjIgDRCK5Yr+GUM2LKE6H3Apf0FEz2TH0Y/KB+SJSf
+         mVzw==
+X-Gm-Message-State: AOAM532SWZRXLcXyjg0TJXHSzrxNJOe7KfP7tUNRevy5jVTXLML8O9L7
+        hWcdvCCewSDwEz6JxamhgctEM+xa1yBmFHrnP0VuBnaFt4qdd1C6WPYo/rkrLyGm7/CFrft6m6Y
+        0HG7Ph573eQZtGwFNlEeE4vOR
+X-Received: by 2002:a05:622a:1191:: with SMTP id m17mr14115094qtk.388.1643052613515;
+        Mon, 24 Jan 2022 11:30:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzaZ+1xfwk4bbykDfhG642lehNgBGSgQR7LEbKmwUEDOCDQEGekRURA6mmaTf0d996Z/X1AsQ==
+X-Received: by 2002:a05:622a:1191:: with SMTP id m17mr14115062qtk.388.1643052613247;
+        Mon, 24 Jan 2022 11:30:13 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::45])
+        by smtp.gmail.com with ESMTPSA id r7sm7590762qtw.25.2022.01.24.11.30.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 11:30:12 -0800 (PST)
+Date:   Mon, 24 Jan 2022 11:30:08 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, knsathya@kernel.org, pbonzini@redhat.com,
+        sdeep@vmware.com, seanjc@google.com, tony.luck@intel.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <b8192e8a-13ef-6ac6-6364-8ba58992cd1d@suse.com>
-References: <b8192e8a-13ef-6ac6-6364-8ba58992cd1d@suse.com>
+Subject: Re: [PATCHv2 08/29] x86/tdx: Handle in-kernel MMIO
+Message-ID: <20220124193008.gfaq5ppegx5nfomd@treble>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-9-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-Message-ID: <164305241532.16921.6031632679880039280.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220124150215.36893-9-kirill.shutemov@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/paravirt branch of tip:
+On Mon, Jan 24, 2022 at 06:01:54PM +0300, Kirill A. Shutemov wrote:
+> +static bool tdx_mmio(int size, bool write, unsigned long addr,
+> +		     unsigned long *val)
+> +{
+> +	struct tdx_hypercall_output out;
+> +	u64 err;
+> +
+> +	err = _tdx_hypercall(EXIT_REASON_EPT_VIOLATION, size, write,
+> +			     addr, *val, &out);
+> +	if (err)
+> +		return true;
+> +
+> +	*val = out.r11;
+> +	return false;
+> +}
+> +
+> +static bool tdx_mmio_read(int size, unsigned long addr, unsigned long *val)
+> +{
+> +	return tdx_mmio(size, false, addr, val);
+> +}
+> +
+> +static bool tdx_mmio_write(int size, unsigned long addr, unsigned long *val)
+> +{
+> +	return tdx_mmio(size, true, addr, val);
+> +}
+> +
+> +static int tdx_handle_mmio(struct pt_regs *regs, struct ve_info *ve)
+> +{
+> +	char buffer[MAX_INSN_SIZE];
+> +	unsigned long *reg, val = 0;
+> +	struct insn insn = {};
+> +	enum mmio_type mmio;
+> +	int size;
+> +	bool err;
+> +
+> +	if (copy_from_kernel_nofault(buffer, (void *)regs->ip, MAX_INSN_SIZE))
+> +		return -EFAULT;
+> +
+> +	if (insn_decode(&insn, buffer, MAX_INSN_SIZE, INSN_MODE_64))
+> +		return -EFAULT;
+> +
+> +	mmio = insn_decode_mmio(&insn, &size);
+> +	if (WARN_ON_ONCE(mmio == MMIO_DECODE_FAILED))
+> +		return -EFAULT;
+> +
+> +	if (mmio != MMIO_WRITE_IMM && mmio != MMIO_MOVS) {
+> +		reg = insn_get_modrm_reg_ptr(&insn, regs);
+> +		if (!reg)
+> +			return -EFAULT;
+> +	}
+> +
+> +	switch (mmio) {
+> +	case MMIO_WRITE:
+> +		memcpy(&val, reg, size);
+> +		err = tdx_mmio_write(size, ve->gpa, &val);
+> +		break;
 
-Commit-ID:     2e1f8e55f9e054b4a49ffc06c7e33b5d4725f05e
-Gitweb:        https://git.kernel.org/tip/2e1f8e55f9e054b4a49ffc06c7e33b5d4725f05e
-Author:        Jan Beulich <jbeulich@suse.com>
-AuthorDate:    Thu, 30 Sep 2021 14:40:38 +02:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Mon, 24 Jan 2022 20:21:19 +01:00
+The return code conventions are still all mismatched and confusing:
 
-x86/paravirt: Use %rip-relative addressing in hook calls
+- Most tdx_handle_*() handlers return bool (success == true)
 
-While using a plain (constant) address works, its use needlessly invokes
-a SIB addressing mode, making every call site one byte larger than
-necessary:
+- tdx_handle_mmio() returns int (success > 0)
 
-  ff 14 25 98 89 42 82    call   *0xffffffff82428998
+- tdx_mmio*() helpers return bool (success == false)
 
-Instead of using an "i" constraint with address-of operator and a 'c'
-operand modifier, simply use an ordinary "m" constraint, which the
-64-bit compiler will translate to %rip-relative addressing:
+I still don't see any benefit in arbitrarily mixing three different
+return conventions, none of which matches the typical kernel style for
+returning errors, unless the goal is to confuse the reader and invite
+bugs.
 
-  ff 15 62 fb d2 00       call   *0xd2fb62(%rip)	# ffffffff82428998 <pv_ops+0x18>
+There is precedent in traps.c for some handle_*() functions to return
+bool (success == true), so if the goal is to align with that
+semi-convention, that's ok.  But at the very least, please do it
+consistently:
 
-This way the compiler is also told the truth about operand usage - the
-memory location gets actually read, after all.
+  - change tdx_mmio*() to return true on success;
 
-32-bit code generation is unaffected by the change.
+  - change tdx_handle_mmio() to return bool, with 'len' passed as an
+    argument.
 
-  [ bp: Remove "we", add examples. ]
+Or, even better, just change them all to return 0 on success like 99+%
+of error-returning kernel functions.
 
-Signed-off-by: Jan Beulich <jbeulich@suse.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Juergen Gross <jgross@suse.com>
-Link: https://lore.kernel.org/r/b8192e8a-13ef-6ac6-6364-8ba58992cd1d@suse.com
----
- arch/x86/include/asm/paravirt_types.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+-- 
+Josh
 
-diff --git a/arch/x86/include/asm/paravirt_types.h b/arch/x86/include/asm/paravirt_types.h
-index a69012e..e159146 100644
---- a/arch/x86/include/asm/paravirt_types.h
-+++ b/arch/x86/include/asm/paravirt_types.h
-@@ -279,7 +279,7 @@ extern void (*paravirt_iret)(void);
- 
- #define paravirt_type(op)				\
- 	[paravirt_typenum] "i" (PARAVIRT_PATCH(op)),	\
--	[paravirt_opptr] "i" (&(pv_ops.op))
-+	[paravirt_opptr] "m" (pv_ops.op)
- #define paravirt_clobber(clobber)		\
- 	[paravirt_clobber] "i" (clobber)
- 
-@@ -316,7 +316,7 @@ int paravirt_disable_iospace(void);
-  */
- #define PARAVIRT_CALL					\
- 	ANNOTATE_RETPOLINE_SAFE				\
--	"call *%c[paravirt_opptr];"
-+	"call *%[paravirt_opptr];"
- 
- /*
-  * These macros are intended to wrap calls through one of the paravirt

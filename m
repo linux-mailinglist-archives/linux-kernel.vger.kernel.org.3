@@ -2,171 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 070CF49A85E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC5D49A7F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:05:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1318223AbiAYDE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 22:04:56 -0500
-Received: from msg-1.mailo.com ([213.182.54.11]:38848 "EHLO msg-1.mailo.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S3415610AbiAYBs7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 20:48:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
-        t=1643060024; bh=m7W6RdZpIgs59F0laXJf0Oc8HLBV9e38nx+omeEnpBg=;
-        h=X-EA-Auth:From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:
-         References:MIME-Version:Content-Transfer-Encoding;
-        b=OzAzqfJYpLMRYrXSCI8edvfcm7O0ilHpX70hiYQxP0mt0Gump9QTdJbovdjodQT6X
-         Dkx1fRmcaZwS/nbIP5N5qm3miXGAWDYdhAK3nUREmLzcRJO2y+Wi4itM1EFcyZGrrj
-         3PtjsiDzA0dIPlU5+mDic0RYakLo41oFpCobWbik=
-Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
-        via proxy.mailoo.org [213.182.55.207]
-        Mon, 24 Jan 2022 22:33:44 +0100 (CET)
-X-EA-Auth: EDqcBVgmuuR4MXWZLtn2hvWfmbbVYs19RD5uzKiPRG+2hbUcqx6KPCfOoHHAaYCNQ9ioZBlwWIZhC+Ikpahewb7f5X0B5JkOMi0X/DNwwbo=
-From:   Vincent Knecht <vincent.knecht@mailoo.org>
-To:     dmitry.torokhov@gmail.com, stephan@gerhold.net
-Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Vincent Knecht <vincent.knecht@mailoo.org>
-Subject: [PATCH v2 5/5] Input: msg2638 - Add support for msg2138 key events
-Date:   Mon, 24 Jan 2022 22:33:37 +0100
-Message-Id: <20220124213337.756051-1-vincent.knecht@mailoo.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124212611.752603-1-vincent.knecht@mailoo.org>
-References: <20220124212611.752603-1-vincent.knecht@mailoo.org>
+        id S1315476AbiAYCx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:53:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1387506AbiAYAE7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 19:04:59 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D223DC10FB1A
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 13:50:16 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id n8so12407223lfq.4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 13:50:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OGMPavFiygsyRUvP6iJHreifdhTfnFs8KzTgqM4LQXE=;
+        b=hHNFgGgpW1yZ1w3yidJ34MJlAwrfsR1lTv2j8pjJOimmG76AEX2nqrZgl12L1c2EjT
+         pUXl5fJZL52pNzq6q9l2kdXzPi1VwipLre4QSLIvXamsR28pncmewCxcyiyy/6snPrcw
+         MwZCDsjudVnfJyWF7UtVsZGai9O0RQi1zC7aH8CLCfHHcuJojcS/pXSWLJyDFybg6mV9
+         qW91v9PSr7mwaE8Y9WsVwjEp6SJz/l/3Zp+eKu5XGzD6r4RS1yZvmiHhoenEqJvfLJAR
+         BoWPA5dvK0QDl6tg0qrC/8YSBCha1070ecMkBJokjd1b1X7uetupIvFBhoPYhlw9JEjn
+         hbbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OGMPavFiygsyRUvP6iJHreifdhTfnFs8KzTgqM4LQXE=;
+        b=m9n6f+rA4vfAH1s3BWxrGwJZh+2vi0JaNVqUTPHHZSS4JM/f9+nVS8E+PrJJbGidPR
+         QWsfmxQ7m03m0XLjgBgejymJT4TRfGaEx3G7Xxb5Pjo8Y29OFuIQHjdNHSTRja/mvd25
+         Q29gBSsvCQlhTTDo42EvrgKQU+Zxt4C2WxnprGJ+hPSEr5oepIeaL28/iIqf28Lo0pOF
+         N0dvCFjitQjrXTGARpqwFiMEbosAhiW55OUMwJ0afxzVt0w3qVnuUGan0XfcPJAammQK
+         praIIenET/Si4PI9hsYGqyhjvf5NfjpcuCFD4PMdhaIyarFZsNiZBbbrFmI+bo2uP809
+         rvnQ==
+X-Gm-Message-State: AOAM532KHaHLDgznFfBcwH667DTKJFDlucR8EkR6vQiKFQEMtjG74xra
+        JcbzDyPctu9jb0N5JI4V00GxuI3/jRTSUc/fOL+jnQ==
+X-Google-Smtp-Source: ABdhPJzuUMYTwxoD6Be0fgMi8vjGomcIgc/33qufgHrwjBHGO7+ZPBh2d6fqFcJfjL6sG98DFQ8nsvt7hnR1jFZtn1E=
+X-Received: by 2002:a19:ad02:: with SMTP id t2mr14282474lfc.82.1643061014920;
+ Mon, 24 Jan 2022 13:50:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <202201200359.lTk9zHg4-lkp@intel.com> <39230575-13ea-7384-71bc-2aac1fa2edb8@intel.com>
+In-Reply-To: <39230575-13ea-7384-71bc-2aac1fa2edb8@intel.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 24 Jan 2022 13:50:02 -0800
+Message-ID: <CAKwvOd=NVZs7bfz-OTnhPmk4xZfmJq6zQzJaEtaX4AO0N7Pi9A@mail.gmail.com>
+Subject: Re: arch/arm/mach-ep93xx/clock.c:154:2: warning: Use of memory after
+ it is freed [clang-analyzer-unix.Malloc]
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        kernel test robot <yujie.liu@intel.com>,
+        Nathan Huckleberry <nhuck@google.com>,
+        Philip Li <philip.li@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some devices with msg2138 have back/menu/home keys.
-Add support for them.
+On Wed, Jan 19, 2022 at 5:46 PM kernel test robot <yujie.liu@intel.com> wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   1d1df41c5a33359a00e919d54eaebfb789711fdc
+> commit: 9645ccc7bd7a16cd73c3be9dee70cd702b03be37 ep93xx: clock: convert in-place to COMMON_CLK
+> date:   3 months ago
+> config: arm-randconfig-c002-20220118 (https://download.01.org/0day-ci/archive/20220120/202201200359.lTk9zHg4-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # install arm cross compiling tool for clang build
+>          # apt-get install binutils-arm-linux-gnueabi
+>          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9645ccc7bd7a16cd73c3be9dee70cd702b03be37
+>          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>          git fetch --no-tags linus master
+>          git checkout 9645ccc7bd7a16cd73c3be9dee70cd702b03be37
+>          # save the config file to linux build tree
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm clang-analyzer
 
-Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
----
-v2:
-- no change
----
- drivers/input/touchscreen/msg2638.c | 53 +++++++++++++++++++++++++----
- 1 file changed, 47 insertions(+), 6 deletions(-)
+Hey! This check finally caught something that looks legit! Cool to see
+0day bot running clang-analyzer, too!
+Nikita, can you PTAL?
 
-diff --git a/drivers/input/touchscreen/msg2638.c b/drivers/input/touchscreen/msg2638.c
-index 73e1b4d550fb..36069b30ab9b 100644
---- a/drivers/input/touchscreen/msg2638.c
-+++ b/drivers/input/touchscreen/msg2638.c
-@@ -29,6 +29,8 @@
- #define MSG2138_MAX_FINGERS		2
- #define MSG2638_MAX_FINGERS		5
- 
-+#define MAX_BUTTONS			4
-+
- #define CHIP_ON_DELAY_MS		15
- #define FIRMWARE_ON_DELAY_MS		50
- #define RESET_DELAY_MIN_US		10000
-@@ -72,6 +74,8 @@ struct msg2638_ts_data {
- 	struct regulator_bulk_data supplies[2];
- 	struct gpio_desc *reset_gpiod;
- 	int max_fingers;
-+	u32 keycodes[MAX_BUTTONS];
-+	int num_keycodes;
- };
- 
- static u8 msg2638_checksum(u8 *data, u32 length)
-@@ -85,6 +89,19 @@ static u8 msg2638_checksum(u8 *data, u32 length)
- 	return (u8)((-sum) & 0xFF);
- }
- 
-+static void msg2138_report_keys(struct msg2638_ts_data *msg2638, u8 keys)
-+{
-+	int i;
-+
-+	/* keys can be 0x00 or 0xff when all keys have been released */
-+	if (keys == 0xff)
-+		keys = 0;
-+
-+	for (i = 0; i < msg2638->num_keycodes; ++i)
-+		input_report_key(msg2638->input_dev, msg2638->keycodes[i],
-+				 !!(keys & BIT(i)));
-+}
-+
- static irqreturn_t msg2138_ts_irq_handler(int irq, void *msg2638_handler)
- {
- 	struct msg2638_ts_data *msg2638 = msg2638_handler;
-@@ -121,9 +138,12 @@ static irqreturn_t msg2138_ts_irq_handler(int irq, void *msg2638_handler)
- 	p0 = &touch_event.pkt[0];
- 	p1 = &touch_event.pkt[1];
- 
--	/* Ignore non-pressed finger data */
--	if (p0->xy_hi == 0xFF && p0->x_low == 0xFF && p0->y_low == 0xFF)
-+	/* Ignore non-pressed finger data, but check for key code */
-+	if (p0->xy_hi == 0xFF && p0->x_low == 0xFF && p0->y_low == 0xFF) {
-+		if (p1->xy_hi == 0xFF && p1->y_low == 0xFF)
-+			msg2138_report_keys(msg2638, p1->x_low);
- 		goto report;
-+	}
- 
- 	x = (((p0->xy_hi & 0xF0) << 4) | p0->x_low);
- 	y = (((p0->xy_hi & 0x0F) << 8) | p0->y_low);
-@@ -283,6 +303,7 @@ static int msg2638_init_input_dev(struct msg2638_ts_data *msg2638)
- 	struct device *dev = &msg2638->client->dev;
- 	struct input_dev *input_dev;
- 	int error;
-+	int i;
- 
- 	input_dev = devm_input_allocate_device(dev);
- 	if (!input_dev) {
-@@ -299,6 +320,14 @@ static int msg2638_init_input_dev(struct msg2638_ts_data *msg2638)
- 	input_dev->open = msg2638_input_open;
- 	input_dev->close = msg2638_input_close;
- 
-+	if (msg2638->num_keycodes) {
-+		input_dev->keycode = msg2638->keycodes;
-+		input_dev->keycodemax = msg2638->num_keycodes;
-+		input_dev->keycodesize = sizeof(msg2638->keycodes[0]);
-+		for (i = 0; i < msg2638->num_keycodes; i++)
-+			input_set_capability(input_dev, EV_KEY, msg2638->keycodes[i]);
-+	}
-+
- 	input_set_capability(input_dev, EV_ABS, ABS_MT_POSITION_X);
- 	input_set_capability(input_dev, EV_ABS, ABS_MT_POSITION_Y);
- 
-@@ -367,10 +396,16 @@ static int msg2638_ts_probe(struct i2c_client *client)
- 		return error;
- 	}
- 
--	error = msg2638_init_input_dev(msg2638);
--	if (error) {
--		dev_err(dev, "Failed to initialize input device: %d\n", error);
--		return error;
-+	msg2638->num_keycodes =
-+		of_property_read_variable_u32_array(dev->of_node, "linux,keycodes",
-+						    msg2638->keycodes, 0,
-+						    ARRAY_SIZE(msg2638->keycodes));
-+	if (msg2638->num_keycodes == -EINVAL) {
-+		msg2638->num_keycodes = 0;
-+	} else if (msg2638->num_keycodes < 0) {
-+		dev_err(dev, "Unable to parse linux,keycodes property: %d\n",
-+			msg2638->num_keycodes);
-+		return msg2638->num_keycodes;
- 	}
- 
- 	error = devm_request_threaded_irq(dev, client->irq,
-@@ -382,6 +417,12 @@ static int msg2638_ts_probe(struct i2c_client *client)
- 		return error;
- 	}
- 
-+	error = msg2638_init_input_dev(msg2638);
-+	if (error) {
-+		dev_err(dev, "Failed to initialize input device: %d\n", error);
-+		return error;
-+	}
-+
- 	return 0;
- }
- 
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+>
+> clang-analyzer warnings: (new ones prefixed by >>)
+>
+>  >> arch/arm/mach-ep93xx/clock.c:154:2: warning: Use of memory after it is freed [clang-analyzer-unix.Malloc]
+>             return &psc->hw;
+>             ^
+>     arch/arm/mach-ep93xx/clock.c:151:2: note: Taking true branch
+>             if (IS_ERR(clk))
+>             ^
+>     arch/arm/mach-ep93xx/clock.c:152:3: note: Memory is released
+>                     kfree(psc);
+>                     ^~~~~~~~~~
+>     arch/arm/mach-ep93xx/clock.c:154:2: note: Use of memory after it is freed
+>             return &psc->hw;
+>             ^      ~~~~~~~~
+>  >> arch/arm/mach-ep93xx/clock.c:484:2: warning: Value stored to 'hw' is never read [clang-analyzer-deadcode.DeadStores]
+>             hw = clk_hw_register_fixed_factor(NULL, "uart", "xtali", 0, 1, clk_uart_div);
+>             ^    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>  >> arch/arm/mach-ep93xx/clock.c:612:2: warning: Value stored to 'hw' is never read [clang-analyzer-deadcode.DeadStores]
+>             hw = clk_hw_register_fixed_factor(NULL, "usb_clk", "pll2", 0, 1, clk_usb_div);
+>             ^    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> vim +154 arch/arm/mach-ep93xx/clock.c
+>
+> ff05c0330b9880 Hartley Sweeten 2009-05-07  125
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  126  static struct clk_hw *ep93xx_clk_register_gate(const char *name,
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  127                                      const char *parent_name,
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  128                                      void __iomem *reg,
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  129                                      u8 bit_idx)
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  130  {
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  131          struct clk_init_data init;
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  132          struct clk_psc *psc;
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  133          struct clk *clk;
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  134
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  135          psc = kzalloc(sizeof(*psc), GFP_KERNEL);
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  136          if (!psc)
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  137                  return ERR_PTR(-ENOMEM);
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  138
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  139          init.name = name;
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  140          init.ops = &clk_ep93xx_gate_ops;
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  141          init.flags = CLK_SET_RATE_PARENT;
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  142          init.parent_names = (parent_name ? &parent_name : NULL);
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  143          init.num_parents = (parent_name ? 1 : 0);
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  144
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  145          psc->reg = reg;
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  146          psc->bit_idx = bit_idx;
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  147          psc->hw.init = &init;
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  148          psc->lock = &clk_lock;
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  149
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  150          clk = clk_register(NULL, &psc->hw);
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  151          if (IS_ERR(clk))
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  152                  kfree(psc);
+
+probably should `return ERR_CAST(clk);` ?
+
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18  153
+> 9645ccc7bd7a16 Nikita Shubin   2021-10-18 @154          return &psc->hw;
+> ff05c0330b9880 Hartley Sweeten 2009-05-07  155  }
+> ff05c0330b9880 Hartley Sweeten 2009-05-07  156
+>
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>
+
+
 -- 
-2.34.1
-
-
-
+Thanks,
+~Nick Desaulniers

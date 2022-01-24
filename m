@@ -2,42 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA71349A709
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9112C49A2C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3422701AbiAYCb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:31:56 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59038 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351922AbiAXUUl (ORCPT
+        id S2364283AbiAXXrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:47:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45282 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356414AbiAXWz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:20:41 -0500
+        Mon, 24 Jan 2022 17:55:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA90C0680BE;
+        Mon, 24 Jan 2022 13:10:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D14AEB80FA1;
-        Mon, 24 Jan 2022 20:20:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1235FC340E5;
-        Mon, 24 Jan 2022 20:20:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF5C661488;
+        Mon, 24 Jan 2022 21:10:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D75EC340E5;
+        Mon, 24 Jan 2022 21:10:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055638;
-        bh=ifGgMmen1cyaOXM+NRu5jbJ4DCqJtINvOqPJVVb1E1M=;
+        s=korg; t=1643058612;
+        bh=aoIkoXL+IbHeCwVZEZ3+5rPr3k+SkHRQnWmKrVQ5fs4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nMX7nlKQUP/Wsi57ASo313z/Zu7fqodH1eJKAiy8zKwDlGiivDYc7JLz8EOmZSqoc
-         bU9szMElzdndnzuf3l0t+U95R7JhrcgL7abTSf9H+QZx8C5s5Omyo9CGmxkY6Y9Nqz
-         UxGZ9E2lECVvMUm1PxrF9lPLjBqs8FjPEXXxPgms=
+        b=1Q17gA8P9cOLfaHljVn2F5zMmIW3kYpkBTshhSZ7gGx2Z4W3Xe6bjy7HIqCkeNU6o
+         fTb7LIE7M7IZ4y+9n0D3fLsQrGzZeWSR8kliulycQ5KfpIXQ+oImR/BM3ACFGZzqUL
+         /E0XBOZ4RUKP6AR0m4KmfpHG1eaP3xzhV7qYRklU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        stable@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 215/846] ath10k: Fix the MTU size on QCA9377 SDIO
-Date:   Mon, 24 Jan 2022 19:35:32 +0100
-Message-Id: <20220124184108.342853250@linuxfoundation.org>
+Subject: [PATCH 5.16 0346/1039] backlight: qcom-wled: Fix off-by-one maximum with default num_strings
+Date:   Mon, 24 Jan 2022 19:35:35 +0100
+Message-Id: <20220124184136.926874921@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,212 +53,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+From: Marijn Suijten <marijn.suijten@somainline.org>
 
-[ Upstream commit 09b8cd69edcf2be04a781e1781e98e52a775c9ad ]
+[ Upstream commit 5ada78b26f935f8751852dffa24f6b545b1d2517 ]
 
-On an imx6dl-pico-pi board with a QCA9377 SDIO chip, simply trying to
-connect via ssh to another machine causes:
+When not specifying num-strings in the DT the default is used, but +1 is
+added to it which turns WLED3 into 4 and WLED4/5 into 5 strings instead
+of 3 and 4 respectively, causing out-of-bounds reads and register
+read/writes.  This +1 exists for a deficiency in the DT parsing code,
+and is simply omitted entirely - solving this oob issue - by parsing the
+property separately much like qcom,enabled-strings.
 
-[   55.824159] ath10k_sdio mmc1:0001:1: failed to transmit packet, dropping: -12
-[   55.832169] ath10k_sdio mmc1:0001:1: failed to submit frame: -12
-[   55.838529] ath10k_sdio mmc1:0001:1: failed to push frame: -12
-[   55.905863] ath10k_sdio mmc1:0001:1: failed to transmit packet, dropping: -12
-[   55.913650] ath10k_sdio mmc1:0001:1: failed to submit frame: -12
-[   55.919887] ath10k_sdio mmc1:0001:1: failed to push frame: -12
+This also enables more stringent checks on the maximum value when
+qcom,enabled-strings is provided in the DT, by parsing num-strings after
+enabled-strings to allow it to check against (and in a subsequent patch
+override) the length of enabled-strings: it is invalid to set
+num-strings higher than that.
+The DT currently utilizes it to get around an incorrect fixed read of
+four elements from that array (has been addressed in a prior patch) by
+setting a lower num-strings where desired.
 
-, leading to an ssh connection failure.
-
-One user inspected the size of frames on Wireshark and reported
-the followig:
-
-"I was able to narrow the issue down to the mtu. If I set the mtu for
-the wlan0 device to 1486 instead of 1500, the issue does not happen.
-
-The size of frames that I see on Wireshark is exactly 1500 after
-setting it to 1486."
-
-Clearing the HI_ACS_FLAGS_ALT_DATA_CREDIT_SIZE avoids the problem and
-the ssh command works successfully after that.
-
-Introduce a 'credit_size_workaround' field to ath10k_hw_params for
-the QCA9377 SDIO, so that the HI_ACS_FLAGS_ALT_DATA_CREDIT_SIZE
-is not set in this case.
-
-Tested with QCA9377 SDIO with firmware WLAN.TF.1.1.1-00061-QCATFSWPZ-1.
-
-Fixes: 2f918ea98606 ("ath10k: enable alt data of TX path for sdio")
-Signed-off-by: Fabio Estevam <festevam@denx.de>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20211124131047.713756-1-festevam@denx.de
+Fixes: 93c64f1ea1e8 ("leds: add Qualcomm PM8941 WLED driver")
+Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+Reviewed-By: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Link: https://lore.kernel.org/r/20211115203459.1634079-5-marijn.suijten@somainline.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath10k/core.c | 19 ++++++++++++++++++-
- drivers/net/wireless/ath/ath10k/hw.h   |  3 +++
- 2 files changed, 21 insertions(+), 1 deletion(-)
+ drivers/video/backlight/qcom-wled.c | 48 ++++++++++-------------------
+ 1 file changed, 16 insertions(+), 32 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
-index 64c7145b51a2e..58e86e662ab83 100644
---- a/drivers/net/wireless/ath/ath10k/core.c
-+++ b/drivers/net/wireless/ath/ath10k/core.c
-@@ -89,6 +89,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.rri_on_ddr = false,
- 		.hw_filter_reset_required = true,
- 		.fw_diag_ce_download = false,
-+		.credit_size_workaround = false,
- 		.tx_stats_over_pktlog = true,
- 		.dynamic_sar_support = false,
- 	},
-@@ -124,6 +125,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.rri_on_ddr = false,
- 		.hw_filter_reset_required = true,
- 		.fw_diag_ce_download = false,
-+		.credit_size_workaround = false,
- 		.tx_stats_over_pktlog = true,
- 		.dynamic_sar_support = false,
- 	},
-@@ -160,6 +162,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.rri_on_ddr = false,
- 		.hw_filter_reset_required = true,
- 		.fw_diag_ce_download = false,
-+		.credit_size_workaround = false,
- 		.tx_stats_over_pktlog = false,
- 		.dynamic_sar_support = false,
- 	},
-@@ -190,6 +193,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.num_wds_entries = 0x20,
- 		.uart_pin_workaround = true,
- 		.tx_stats_over_pktlog = false,
-+		.credit_size_workaround = false,
- 		.bmi_large_size_download = true,
- 		.supports_peer_stats_info = true,
- 		.dynamic_sar_support = true,
-@@ -226,6 +230,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.rri_on_ddr = false,
- 		.hw_filter_reset_required = true,
- 		.fw_diag_ce_download = false,
-+		.credit_size_workaround = false,
- 		.tx_stats_over_pktlog = false,
- 		.dynamic_sar_support = false,
- 	},
-@@ -261,6 +266,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.rri_on_ddr = false,
- 		.hw_filter_reset_required = true,
- 		.fw_diag_ce_download = false,
-+		.credit_size_workaround = false,
- 		.tx_stats_over_pktlog = false,
- 		.dynamic_sar_support = false,
- 	},
-@@ -296,6 +302,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.rri_on_ddr = false,
- 		.hw_filter_reset_required = true,
- 		.fw_diag_ce_download = false,
-+		.credit_size_workaround = false,
- 		.tx_stats_over_pktlog = false,
- 		.dynamic_sar_support = false,
- 	},
-@@ -334,6 +341,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.rri_on_ddr = false,
- 		.hw_filter_reset_required = true,
- 		.fw_diag_ce_download = true,
-+		.credit_size_workaround = false,
- 		.tx_stats_over_pktlog = false,
- 		.supports_peer_stats_info = true,
- 		.dynamic_sar_support = true,
-@@ -376,6 +384,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.rri_on_ddr = false,
- 		.hw_filter_reset_required = true,
- 		.fw_diag_ce_download = false,
-+		.credit_size_workaround = false,
- 		.tx_stats_over_pktlog = false,
- 		.dynamic_sar_support = false,
- 	},
-@@ -424,6 +433,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.rri_on_ddr = false,
- 		.hw_filter_reset_required = true,
- 		.fw_diag_ce_download = false,
-+		.credit_size_workaround = false,
- 		.tx_stats_over_pktlog = false,
- 		.dynamic_sar_support = false,
- 	},
-@@ -469,6 +479,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.rri_on_ddr = false,
- 		.hw_filter_reset_required = true,
- 		.fw_diag_ce_download = false,
-+		.credit_size_workaround = false,
- 		.tx_stats_over_pktlog = false,
- 		.dynamic_sar_support = false,
- 	},
-@@ -504,6 +515,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.rri_on_ddr = false,
- 		.hw_filter_reset_required = true,
- 		.fw_diag_ce_download = false,
-+		.credit_size_workaround = false,
- 		.tx_stats_over_pktlog = false,
- 		.dynamic_sar_support = false,
- 	},
-@@ -541,6 +553,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.rri_on_ddr = false,
- 		.hw_filter_reset_required = true,
- 		.fw_diag_ce_download = true,
-+		.credit_size_workaround = false,
- 		.tx_stats_over_pktlog = false,
- 		.dynamic_sar_support = false,
- 	},
-@@ -570,6 +583,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.ast_skid_limit = 0x10,
- 		.num_wds_entries = 0x20,
- 		.uart_pin_workaround = true,
-+		.credit_size_workaround = true,
- 		.dynamic_sar_support = false,
- 	},
- 	{
-@@ -611,6 +625,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.rri_on_ddr = false,
- 		.hw_filter_reset_required = true,
- 		.fw_diag_ce_download = false,
-+		.credit_size_workaround = false,
- 		.tx_stats_over_pktlog = false,
- 		.dynamic_sar_support = false,
- 	},
-@@ -639,6 +654,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
- 		.rri_on_ddr = true,
- 		.hw_filter_reset_required = false,
- 		.fw_diag_ce_download = false,
-+		.credit_size_workaround = false,
- 		.tx_stats_over_pktlog = false,
- 		.dynamic_sar_support = true,
- 	},
-@@ -714,6 +730,7 @@ static void ath10k_send_suspend_complete(struct ath10k *ar)
+diff --git a/drivers/video/backlight/qcom-wled.c b/drivers/video/backlight/qcom-wled.c
+index d413b913fef32..dbcbeda655192 100644
+--- a/drivers/video/backlight/qcom-wled.c
++++ b/drivers/video/backlight/qcom-wled.c
+@@ -1256,21 +1256,6 @@ static const struct wled_var_cfg wled5_ovp_cfg = {
+ 	.size = 16,
+ };
  
- static int ath10k_init_sdio(struct ath10k *ar, enum ath10k_firmware_mode mode)
+-static u32 wled3_num_strings_values_fn(u32 idx)
+-{
+-	return idx + 1;
+-}
+-
+-static const struct wled_var_cfg wled3_num_strings_cfg = {
+-	.fn = wled3_num_strings_values_fn,
+-	.size = 3,
+-};
+-
+-static const struct wled_var_cfg wled4_num_strings_cfg = {
+-	.fn = wled3_num_strings_values_fn,
+-	.size = 4,
+-};
+-
+ static u32 wled3_switch_freq_values_fn(u32 idx)
  {
-+	bool mtu_workaround = ar->hw_params.credit_size_workaround;
- 	int ret;
- 	u32 param = 0;
+ 	return 19200 / (2 * (1 + idx));
+@@ -1344,11 +1329,6 @@ static int wled_configure(struct wled *wled)
+ 			.val_ptr = &cfg->switch_freq,
+ 			.cfg = &wled3_switch_freq_cfg,
+ 		},
+-		{
+-			.name = "qcom,num-strings",
+-			.val_ptr = &cfg->num_strings,
+-			.cfg = &wled3_num_strings_cfg,
+-		},
+ 	};
  
-@@ -731,7 +748,7 @@ static int ath10k_init_sdio(struct ath10k *ar, enum ath10k_firmware_mode mode)
+ 	const struct wled_u32_opts wled4_opts[] = {
+@@ -1372,11 +1352,6 @@ static int wled_configure(struct wled *wled)
+ 			.val_ptr = &cfg->switch_freq,
+ 			.cfg = &wled3_switch_freq_cfg,
+ 		},
+-		{
+-			.name = "qcom,num-strings",
+-			.val_ptr = &cfg->num_strings,
+-			.cfg = &wled4_num_strings_cfg,
+-		},
+ 	};
  
- 	param |= HI_ACS_FLAGS_SDIO_REDUCE_TX_COMPL_SET;
+ 	const struct wled_u32_opts wled5_opts[] = {
+@@ -1400,11 +1375,6 @@ static int wled_configure(struct wled *wled)
+ 			.val_ptr = &cfg->switch_freq,
+ 			.cfg = &wled3_switch_freq_cfg,
+ 		},
+-		{
+-			.name = "qcom,num-strings",
+-			.val_ptr = &cfg->num_strings,
+-			.cfg = &wled4_num_strings_cfg,
+-		},
+ 		{
+ 			.name = "qcom,modulator-sel",
+ 			.val_ptr = &cfg->mod_sel,
+@@ -1523,8 +1493,6 @@ static int wled_configure(struct wled *wled)
+ 			*bool_opts[i].val_ptr = true;
+ 	}
  
--	if (mode == ATH10K_FIRMWARE_MODE_NORMAL)
-+	if (mode == ATH10K_FIRMWARE_MODE_NORMAL && !mtu_workaround)
- 		param |= HI_ACS_FLAGS_ALT_DATA_CREDIT_SIZE;
- 	else
- 		param &= ~HI_ACS_FLAGS_ALT_DATA_CREDIT_SIZE;
-diff --git a/drivers/net/wireless/ath/ath10k/hw.h b/drivers/net/wireless/ath/ath10k/hw.h
-index 6b03c7787e36a..591ef7416b613 100644
---- a/drivers/net/wireless/ath/ath10k/hw.h
-+++ b/drivers/net/wireless/ath/ath10k/hw.h
-@@ -618,6 +618,9 @@ struct ath10k_hw_params {
- 	 */
- 	bool uart_pin_workaround;
+-	cfg->num_strings = cfg->num_strings + 1;
+-
+ 	string_len = of_property_count_elems_of_size(dev->of_node,
+ 						     "qcom,enabled-strings",
+ 						     sizeof(u32));
+@@ -1555,6 +1523,22 @@ static int wled_configure(struct wled *wled)
+ 		}
+ 	}
  
-+	/* Workaround for the credit size calculation */
-+	bool credit_size_workaround;
++	rc = of_property_read_u32(dev->of_node, "qcom,num-strings", &val);
++	if (!rc) {
++		if (val < 1 || val > wled->max_string_count) {
++			dev_err(dev, "qcom,num-strings must be between 1 and %d\n",
++				wled->max_string_count);
++			return -EINVAL;
++		}
 +
- 	/* tx stats support over pktlog */
- 	bool tx_stats_over_pktlog;
++		if (string_len > 0 && val > string_len) {
++			dev_err(dev, "qcom,num-strings exceeds qcom,enabled-strings\n");
++			return -EINVAL;
++		}
++
++		cfg->num_strings = val;
++	}
++
+ 	return 0;
+ }
  
 -- 
 2.34.1

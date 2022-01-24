@@ -2,199 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BDE74984F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:38:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0EB4984FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243538AbiAXQiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 11:38:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
+        id S243678AbiAXQjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 11:39:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236102AbiAXQiK (ORCPT
+        with ESMTP id S236102AbiAXQjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 11:38:10 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC4EC06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 08:38:10 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id h14so53043649ybe.12
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 08:38:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J8ycivHdU9v2HmuEv4lTg2qC6izyVod1QqFr0SelWOE=;
-        b=Ji+MSNF4pYwPoh7iPNo0AIs29aypuZNI03FIOxoIf4UlhRewBmOnp7m6hLTM2fEM+E
-         mkTUHB5wtnyvPphdtxKwnjLuTCPiOsrPulAwu4Au1almQbVWdocm98GhXO1+wbbU5m8x
-         9ny7w1HqLHLWNmkai3OZkesA5H2H+UqACv8C0wxHoKOL8snZTfd56Gvj2qasAyEUm5pa
-         /kNU6cAFW/BkyKA4hpgnyCWxLDwZdjIRIWawvLp0OFHzgwyHXvtBbQZ570v4BcThxJUr
-         +LooAypKttU4Ba8L6ceEjp6oC8P+N0Q+H3NwWo6fz3i2bi/xyuS+Wt4BOfieOZ35cAzb
-         h4Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J8ycivHdU9v2HmuEv4lTg2qC6izyVod1QqFr0SelWOE=;
-        b=4jZV8tyWvsYDhtjuyyA9YMISpx6iD/2+mBzaRbw2mxEa2rCsJaF05fi/E+1ZF0oEjC
-         ItrXf7jy/LZaP8aywH4YiY0D1QU3AGKEVfRSTb2MgBeUYwOePA+1nBQ6zKCbMGJLVMYJ
-         0VcIC+5YkA4N8OjiUCfyxry5A8tqFKscTqBNIsk42KcHb9MP4/iavIAF56bN6PMYSwuo
-         RGEPstsrEk1+yMkRugTvCDnQWyHgDSOoeKuvsKsz++5M8PCDTTe1wmDTIqGjZEfn4CYI
-         L4BKyz0GzHtawRa9zdVuqa0nv05KR6tHhy15zyKLg596q61nTn/AD75K2WVqTDOtgzda
-         vtwg==
-X-Gm-Message-State: AOAM530W+XMxIToGwtW5zvqASwaQDHBEJE2IlbHOg93LonptcEh7f/ag
-        5CPQudYu7esotjtOyONVwgcgfB9KbYei+EpP32tzozhdjAYzsw==
-X-Google-Smtp-Source: ABdhPJwdmbYvlu5sk5zS4/vbCTud0ofYtsymijqTtFDv8truJQRJYVBkxNIMGQbbB8TPYAabRLWn4T3853biseIK0RI=
-X-Received: by 2002:a25:d617:: with SMTP id n23mr25290949ybg.488.1643042288901;
- Mon, 24 Jan 2022 08:38:08 -0800 (PST)
+        Mon, 24 Jan 2022 11:39:18 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF2AC06173B;
+        Mon, 24 Jan 2022 08:39:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=9/+MlDi6lcUZjAUf3HbuHS32+cmOPkRXu63Gbss8eqg=; b=uVNfx9zQyzLorHQWoAKUtd2zIG
+        LqUlQojo8mjLziqYVwE90LDkxqiTc5GLZp8qNZ0AElYG0tys3KaURgLIte3Y8aHvBhY61+eRRxXdy
+        p4aKuRWNAiKNzrUjTPh0VQiK1FZmxfJDVBz2P6z7rsEHmTg2TWZlNv6yUXf3Y3t2ulqOi1BJEfqTa
+        Qtb/Y8uSYfl2ixeGy3tZBdB+5JkHhUpVZDLIIbnhEqd3sNDq+wFuJz8nI0o3Wn5nTJitmTSJbNqFP
+        cpMR/wE3pdwSIufHArmB+pSQYUzuA4lD0FG7+iQ8tTsrmemzmzFZQuCVKru0lpOTGq1sD9LHOn57Q
+        pg/Nfpjw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nC2N2-000vCa-VY; Mon, 24 Jan 2022 16:39:09 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A9580300222;
+        Mon, 24 Jan 2022 17:39:08 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8BDD52B54C621; Mon, 24 Jan 2022 17:39:08 +0100 (CET)
+Date:   Mon, 24 Jan 2022 17:39:08 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: Re: earlyprintk=xdbc seems broken
+Message-ID: <Ye7WLM+NyVQlEMXN@hirez.programming.kicks-ass.net>
+References: <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
+ <972a0e28-ad63-9766-88da-02743f80181b@intel.com>
+ <Yao35lElOkwtBYEb@kroah.com>
+ <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
+ <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
+ <YcGhIm7yqYPk4Nuu@hirez.programming.kicks-ass.net>
+ <YeE4rtq6t73OxOi+@hirez.programming.kicks-ass.net>
+ <cd534ff9-e500-c7ea-426a-347ac2b0830b@linux.intel.com>
+ <YeLxE3zQ7Vexk3gv@hirez.programming.kicks-ass.net>
+ <dfb311e3-1a83-31a2-3c82-fd982c0757f6@linux.intel.com>
 MIME-Version: 1.0
-References: <1642649516-15076-1-git-send-email-huangzhaoyang@gmail.com> <Ye7Lc1vIVwICZQet@cmpxchg.org>
-In-Reply-To: <Ye7Lc1vIVwICZQet@cmpxchg.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 24 Jan 2022 08:37:58 -0800
-Message-ID: <CAJuCfpFe-ZrYZ=o1YnxcjK3aQakxUaU6aKnOZRkKSSsJ=_pbxg@mail.gmail.com>
-Subject: Re: [Resend PATCH v3] psi: fix possible trigger missing in the window
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Huangzhaoyang <huangzhaoyang@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        Ingo Molnar <mingo@redhat.com>, linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dfb311e3-1a83-31a2-3c82-fd982c0757f6@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 7:53 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
->
-> On Thu, Jan 20, 2022 at 11:31:56AM +0800, Huangzhaoyang wrote:
-> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+On Mon, Jan 24, 2022 at 04:55:22PM +0200, Mathias Nyman wrote:
+>  
+> > [    0.000000] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 0
+> > [    4.984106] xhci_dbc:xdbc_start: waiting for connection timed out, DCPORTSC:0xa0
+> > [    9.946159] xhci_dbc:xdbc_start: waiting for connection timed out, DCPORTSC:0xa0
+> > [    9.946163] xhci_dbc:early_xdbc_setup_hardware: failed to setup the connection to host
 > >
-> > When a new threshold breaching stall happens after a psi event was
-> > generated and within the window duration, the new event is not
-> > generated because the events are rate-limited to one per window. If
-> > after that no new stall is recorded then the event will not be
-> > generated even after rate-limiting duration has passed. This is
-> > happening because with no new stall, window_update will not be called
-> > even though threshold was previously breached. To fix this, record
-> > threshold breaching occurrence and generate the event once window
-> > duration is passed.
-> >
-> > Suggested-by: Suren Baghdasaryan <surenb@google.com>
-> > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
->
-> Good catch. The change makes sense to me.
->
-> However, I had to re-read the discussion to understand *why*
-> triggering once per window can be a practical problem. Could you
-> please include the lkmd scenario you mentioned?
->
-> Suren, even though it's your suggested code, can you please also add
-> ack/review tags? Thanks!
+> > [   12.818364] xhci_hcd 0000:00:0d.0: xHCI Host Controller
+> > [   12.818373] xhci_hcd 0000:00:0d.0: new USB bus registered, assigned bus number 1
+> > [   12.820360] xhci_hcd 0000:00:0d.0: xHCI Host Controller
+> > [   12.820363] xhci_hcd 0000:00:0d.0: new USB bus registered, assigned bus number 2
+> > [   12.821036] xhci_hcd 0000:00:14.0: xHCI Host Controller
+> > [   12.821040] xhci_hcd 0000:00:14.0: new USB bus registered, assigned bus number 3
+> > [   12.823451] xhci_hcd 0000:00:14.0: xHCI Host Controller
+> > [   12.823453] xhci_hcd 0000:00:14.0: new USB bus registered, assigned bus number 4
+> > [   17.115089] usb usb4-port4: Cannot enable. Maybe the USB cable is bad?
+> > [   17.115163] usb usb4-port4: config error
+> 
+> Ok, I see it now.
+> Your setup has two xhci controllers, earlypringk=dbc enables dbc on the first xhci
+> it finds, which would be at 0000:00:0d.0.
+> Your cable is connected to the second xhci host at 0000:00:14.0
+> 
+> does using "earlyprintk=xdbc1" work?
 
-Will do as soon as the new version is posted and your comments are
-addressed. Thanks!
-
->
-> Some minor inline comments:
->
-> > diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
-> > index 0a23300..87b694a 100644
-> > --- a/include/linux/psi_types.h
-> > +++ b/include/linux/psi_types.h
-> > @@ -132,6 +132,8 @@ struct psi_trigger {
-> >
-> >       /* Refcounting to prevent premature destruction */
-> >       struct kref refcount;
-> > +
-> > +     bool threshold_breach;
->
-> Something like bool pending_event would be more descriptive, IMO.
->
-> Also please remember to add a short comment like we have for the other
-> struct members. For example:
->
->         /* Deferred event(s) from previous ratelimit window */
->
-> > @@ -524,24 +524,29 @@ static u64 update_triggers(struct psi_group *group, u64 now)
-> >        */
-> >       list_for_each_entry(t, &group->triggers, node) {
-> >               u64 growth;
-> > +             bool trigger_stalled =
-> > +                     group->polling_total[t->state] != total[t->state];
->
-> Triggers don't stall, they trigger on stalls. How about this:
->
->                 bool new_stall;
->                 u64 growth;
->
->                 new_stall = group->polling_total[t->state] != total[t->state];
->
-> (order local declarations by length, avoid line wraps where possible)
->
-> > -             /* Check for stall activity */
-> > -             if (group->polling_total[t->state] == total[t->state])
-> > -                     continue;
-> > -
-> > -             /*
-> > -              * Multiple triggers might be looking at the same state,
-> > -              * remember to update group->polling_total[] once we've
-> > -              * been through all of them. Also remember to extend the
-> > -              * polling time if we see new stall activity.
-> > -              */
-> > -             new_stall = true;
-> > -
-> > -             /* Calculate growth since last update */
-> > -             growth = window_update(&t->win, now, total[t->state]);
-> > -             if (growth < t->threshold)
-> > +             /* Check for stall activity or a previous threshold breach */
-> > +             if (!trigger_stalled && !t->threshold_breach)
-> >                       continue;
->
-> This could use a bit more explanation imo:
->
->                 /*
->                  * Check for new stall activity, as well as deferred
->                  * events that occurred in the last window after the
->                  * trigger had already fired (we want to ratelimit
->                  * events without dropping any).
->                  */
->                 if (!new_stall && !t->pending_event)
->                         continue;
->
-> > +             if (trigger_stalled) {
-> > +                     /*
-> > +                      * Multiple triggers might be looking at the same state,
-> > +                      * remember to update group->polling_total[] once we've
-> > +                      * been through all of them. Also remember to extend the
-> > +                      * polling time if we see new stall activity.
-> > +                      */
-> > +                     new_stall = true;
->
-> and then rename this flag `update_total'.
->
-> > +                     /* Calculate growth since last update */
-> > +                     growth = window_update(&t->win, now, total[t->state]);
-> > +                     if (growth < t->threshold)
-> > +                             continue;
-> > +
-> > +                     t->threshold_breach = true;
-> > +             }
-> >               /* Limit event signaling to once per window */
-> >               if (now < t->last_event_time + t->win.size)
-> >                       continue;
-> > @@ -550,6 +555,8 @@ static u64 update_triggers(struct psi_group *group, u64 now)
-> >               if (cmpxchg(&t->event, 0, 1) == 0)
-> >                       wake_up_interruptible(&t->event_wait);
-> >               t->last_event_time = now;
-> > +             /* Reset threshold breach flag once event got generated */
-> > +             t->threshold_breach = false;
-> >       }
-> >
-> >       if (new_stall)
-> > @@ -1152,6 +1159,7 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
-> >       t->last_event_time = 0;
-> >       init_waitqueue_head(&t->event_wait);
-> >       kref_init(&t->refcount);
-> > +     t->threshold_breach = false;
-> >
-> >       mutex_lock(&group->trigger_lock);
->
-> Thanks!
+Very quick testing says it don't work.. but I'll try again later, need
+to go cook dinner now.

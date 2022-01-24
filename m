@@ -2,39 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C93499C89
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:09:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AAC2499C8E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:09:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1579578AbiAXWGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:06:00 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40482 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1451787AbiAXVXg (ORCPT
+        id S1579603AbiAXWGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:06:03 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45388 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1451880AbiAXVXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:23:36 -0500
+        Mon, 24 Jan 2022 16:23:43 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B794B81257;
-        Mon, 24 Jan 2022 21:23:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D091C340E4;
-        Mon, 24 Jan 2022 21:23:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B99C60C44;
+        Mon, 24 Jan 2022 21:23:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E9B2C340E4;
+        Mon, 24 Jan 2022 21:23:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059413;
-        bh=gHZDIl4ijtbPfwSZrWODXsLXyJ1ff7iEnfrh/2hqDMw=;
+        s=korg; t=1643059423;
+        bh=+bH8S50HUOJv3r/LvFSv6imiapSYgEoH4Jcf7BfElYg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CytcIZohEIc9zusP+zOgHcNusp83F9cdpBTB4nKM01e9YbZTGpCh8JyF33/CTy6bi
-         Rt5fvd9xnIf+pGlnPG/Gs7tg3Ff8ZJicxTT2dt2Bq3Ns0z7BMXvsukEqreklnM+7IQ
-         jJjVWIqncDATcKujhPmgsD1WvSwwjG+WhdKlaF4c=
+        b=Zz71QydKz5+9oqVV3gNQrZ4Y3YEzcZsmU5Nj9h1VmB6Urbx8wcbuuxKv+cUsEvA6T
+         aVDaTnurEGZMf+JAaOkDDP+7D5H/Yrm3ONwPD7g/LmUTNnmEzQiQiy5AEXFIRBZOyn
+         H34SgBjDPMZMHIrvH0NWLL1g1lOoVg1F/dAuYL0s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Vlad Zahorodnii <vlad.zahorodnii@kde.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0607/1039] ACPI / x86: Allow specifying acpi_device_override_status() quirks by path
-Date:   Mon, 24 Jan 2022 19:39:56 +0100
-Message-Id: <20220124184145.735990249@linuxfoundation.org>
+Subject: [PATCH 5.16 0610/1039] drm/amd/display: Use oriented source size when checking cursor scaling
+Date:   Mon, 24 Jan 2022 19:39:59 +0100
+Message-Id: <20220124184145.846608151@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -46,106 +48,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Vlad Zahorodnii <vlad.zahorodnii@kde.org>
 
-[ Upstream commit ba46e42e925b5d09b4e441f8de3db119cc7df58f ]
+[ Upstream commit 69cb56290d9d10cdcc461aa2685e67e540507a96 ]
 
-Not all ACPI-devices have a HID + UID, allow specifying quirks for
-acpi_device_override_status() by path too.
+dm_check_crtc_cursor() doesn't take into account plane transforms when
+calculating plane scaling, this can result in false positives.
 
-Note this moves the path/HID+UID check to after the CPU + DMI checks
-since the path lookup is somewhat costly.
+For example, if there's an output with resolution 3840x2160 and the
+output is rotated 90 degrees, CRTC_W and CRTC_H will be 3840 and 2160,
+respectively, but SRC_W and SRC_H will be 2160 and 3840, respectively.
 
-This way this lookup is only done on devices where the other checks
-match.
+Since the cursor plane usually has a square buffer attached to it, the
+dm_check_crtc_cursor() will think that there's a scale factor mismatch
+even though there isn't really.
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+This fixes an issue where kwin fails to use hardware plane transforms.
+
+Changes since version 1:
+- s/orientated/oriented/g
+
+Reviewed-by: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+Signed-off-by: Vlad Zahorodnii <vlad.zahorodnii@kde.org>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/x86/utils.c | 42 ++++++++++++++++++++++++++++++----------
- 1 file changed, 32 insertions(+), 10 deletions(-)
+ .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 35 ++++++++++++++-----
+ 1 file changed, 27 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/acpi/x86/utils.c b/drivers/acpi/x86/utils.c
-index edb4f3fd93dc3..190bfc2ab3f26 100644
---- a/drivers/acpi/x86/utils.c
-+++ b/drivers/acpi/x86/utils.c
-@@ -38,22 +38,30 @@ struct override_status_id {
- 	struct x86_cpu_id cpu_ids[2];
- 	struct dmi_system_id dmi_ids[2]; /* Optional */
- 	const char *uid;
-+	const char *path;
- 	unsigned long long status;
- };
- 
--#define ENTRY(status, hid, uid, cpu_model, dmi...) {			\
-+#define ENTRY(status, hid, uid, path, cpu_model, dmi...) {		\
- 	{ { hid, }, {} },						\
- 	{ X86_MATCH_INTEL_FAM6_MODEL(cpu_model, NULL), {} },		\
- 	{ { .matches = dmi }, {} },					\
- 	uid,								\
-+	path,								\
- 	status,								\
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index e12f841d1d110..46d38d528468c 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -10662,6 +10662,24 @@ static int dm_update_plane_state(struct dc *dc,
+ 	return ret;
  }
  
- #define PRESENT_ENTRY_HID(hid, uid, cpu_model, dmi...) \
--	ENTRY(ACPI_STA_DEFAULT, hid, uid, cpu_model, dmi)
-+	ENTRY(ACPI_STA_DEFAULT, hid, uid, NULL, cpu_model, dmi)
- 
- #define NOT_PRESENT_ENTRY_HID(hid, uid, cpu_model, dmi...) \
--	ENTRY(0, hid, uid, cpu_model, dmi)
-+	ENTRY(0, hid, uid, NULL, cpu_model, dmi)
++static void dm_get_oriented_plane_size(struct drm_plane_state *plane_state,
++				       int *src_w, int *src_h)
++{
++	switch (plane_state->rotation & DRM_MODE_ROTATE_MASK) {
++	case DRM_MODE_ROTATE_90:
++	case DRM_MODE_ROTATE_270:
++		*src_w = plane_state->src_h >> 16;
++		*src_h = plane_state->src_w >> 16;
++		break;
++	case DRM_MODE_ROTATE_0:
++	case DRM_MODE_ROTATE_180:
++	default:
++		*src_w = plane_state->src_w >> 16;
++		*src_h = plane_state->src_h >> 16;
++		break;
++	}
++}
 +
-+#define PRESENT_ENTRY_PATH(path, cpu_model, dmi...) \
-+	ENTRY(ACPI_STA_DEFAULT, "", NULL, path, cpu_model, dmi)
-+
-+#define NOT_PRESENT_ENTRY_PATH(path, cpu_model, dmi...) \
-+	ENTRY(0, "", NULL, path, cpu_model, dmi)
+ static int dm_check_crtc_cursor(struct drm_atomic_state *state,
+ 				struct drm_crtc *crtc,
+ 				struct drm_crtc_state *new_crtc_state)
+@@ -10670,6 +10688,8 @@ static int dm_check_crtc_cursor(struct drm_atomic_state *state,
+ 	struct drm_plane_state *new_cursor_state, *new_underlying_state;
+ 	int i;
+ 	int cursor_scale_w, cursor_scale_h, underlying_scale_w, underlying_scale_h;
++	int cursor_src_w, cursor_src_h;
++	int underlying_src_w, underlying_src_h;
  
- static const struct override_status_id override_status_ids[] = {
- 	/*
-@@ -120,13 +128,6 @@ bool acpi_device_override_status(struct acpi_device *adev, unsigned long long *s
- 	unsigned int i;
+ 	/* On DCE and DCN there is no dedicated hardware cursor plane. We get a
+ 	 * cursor per pipe but it's going to inherit the scaling and
+@@ -10681,10 +10701,9 @@ static int dm_check_crtc_cursor(struct drm_atomic_state *state,
+ 		return 0;
+ 	}
  
- 	for (i = 0; i < ARRAY_SIZE(override_status_ids); i++) {
--		if (acpi_match_device_ids(adev, override_status_ids[i].hid))
--			continue;
--
--		if (!adev->pnp.unique_id ||
--		    strcmp(adev->pnp.unique_id, override_status_ids[i].uid))
--			continue;
--
- 		if (!x86_match_cpu(override_status_ids[i].cpu_ids))
+-	cursor_scale_w = new_cursor_state->crtc_w * 1000 /
+-			 (new_cursor_state->src_w >> 16);
+-	cursor_scale_h = new_cursor_state->crtc_h * 1000 /
+-			 (new_cursor_state->src_h >> 16);
++	dm_get_oriented_plane_size(new_cursor_state, &cursor_src_w, &cursor_src_h);
++	cursor_scale_w = new_cursor_state->crtc_w * 1000 / cursor_src_w;
++	cursor_scale_h = new_cursor_state->crtc_h * 1000 / cursor_src_h;
+ 
+ 	for_each_new_plane_in_state_reverse(state, underlying, new_underlying_state, i) {
+ 		/* Narrow down to non-cursor planes on the same CRTC as the cursor */
+@@ -10695,10 +10714,10 @@ static int dm_check_crtc_cursor(struct drm_atomic_state *state,
+ 		if (!new_underlying_state->fb)
  			continue;
  
-@@ -134,6 +135,27 @@ bool acpi_device_override_status(struct acpi_device *adev, unsigned long long *s
- 		    !dmi_check_system(override_status_ids[i].dmi_ids))
- 			continue;
+-		underlying_scale_w = new_underlying_state->crtc_w * 1000 /
+-				     (new_underlying_state->src_w >> 16);
+-		underlying_scale_h = new_underlying_state->crtc_h * 1000 /
+-				     (new_underlying_state->src_h >> 16);
++		dm_get_oriented_plane_size(new_underlying_state,
++					   &underlying_src_w, &underlying_src_h);
++		underlying_scale_w = new_underlying_state->crtc_w * 1000 / underlying_src_w;
++		underlying_scale_h = new_underlying_state->crtc_h * 1000 / underlying_src_h;
  
-+		if (override_status_ids[i].path) {
-+			struct acpi_buffer path = { ACPI_ALLOCATE_BUFFER, NULL };
-+			bool match;
-+
-+			if (acpi_get_name(adev->handle, ACPI_FULL_PATHNAME, &path))
-+				continue;
-+
-+			match = strcmp((char *)path.pointer, override_status_ids[i].path) == 0;
-+			kfree(path.pointer);
-+
-+			if (!match)
-+				continue;
-+		} else {
-+			if (acpi_match_device_ids(adev, override_status_ids[i].hid))
-+				continue;
-+
-+			if (!adev->pnp.unique_id ||
-+			    strcmp(adev->pnp.unique_id, override_status_ids[i].uid))
-+				continue;
-+		}
-+
- 		*status = override_status_ids[i].status;
- 		ret = true;
- 		break;
+ 		if (cursor_scale_w != underlying_scale_w ||
+ 		    cursor_scale_h != underlying_scale_h) {
 -- 
 2.34.1
 

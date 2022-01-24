@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2F64995DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A009049973A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:27:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443415AbiAXU4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:56:54 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38894 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385738AbiAXUeR (ORCPT
+        id S1447701AbiAXVLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:11:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358714AbiAXUm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:34:17 -0500
+        Mon, 24 Jan 2022 15:42:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77791C019B17;
+        Mon, 24 Jan 2022 11:53:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 337C8B8121A;
-        Mon, 24 Jan 2022 20:34:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E0CBC340E5;
-        Mon, 24 Jan 2022 20:34:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17C7A60B56;
+        Mon, 24 Jan 2022 19:53:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7E3AC340E5;
+        Mon, 24 Jan 2022 19:53:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056453;
-        bh=nWfx+5I8ePLDtAMpHsHpCuInFeM3n1fhygFY6A3KG1I=;
+        s=korg; t=1643053988;
+        bh=zfKn7wh8I2H8T5QJWZmD5y1h6MOrm2419lqsY1J2kOA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gkbvTp8PJEGzkv/ksLKXB7dzBEckWkPIoBnoe3hvz6i/oZowVQnKDS29QmpSKFMAm
-         OEMbeZodYkaikKg990SMLt+CDRKABPEBjIoYrMYBAoOiwHL01cETRJNJbzo1xWnocZ
-         kSb6sG2MP6v8TaExtdFFuQqEV+tyxACliFyM9pGU=
+        b=fJ8NX6+AagUndKNoXu5DdxdPD5H9JAacMiTlmeAXADt6sOZAafDjkfuA6gfFqo0U7
+         OZZITNLoSP97K5H3tDYUTuTYGQ3C7iWk6zIuYRpxtr15y3lNCe3JXoBO53GMhzhN4C
+         BawuE3xKt3WEeLgtJ06sYfoZFyzumdXnsqVoVlb0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 489/846] ethernet: renesas: Use div64_ul instead of do_div
+Subject: [PATCH 5.10 241/563] ALSA: hda: Add missing rwsem around snd_ctl_remove() calls
 Date:   Mon, 24 Jan 2022 19:40:06 +0100
-Message-Id: <20220124184117.878667952@linuxfoundation.org>
+Message-Id: <20220124184032.765181648@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,54 +48,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Li <yang.lee@linux.alibaba.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit d9f31aeaa1e5aefa68130878af3c3513d41c1e2d ]
+[ Upstream commit 80bd64af75b4bb11c0329bc66c35da2ddfb66d88 ]
 
-do_div() does a 64-by-32 division. Here the divisor is an
-unsigned long which on some platforms is 64 bit wide. So use
-div64_ul instead of do_div to avoid a possible truncation.
+snd_ctl_remove() has to be called with card->controls_rwsem held (when
+called after the card instantiation).  This patch add the missing
+rwsem calls around it.
 
-Eliminate the following coccicheck warning:
-./drivers/net/ethernet/renesas/ravb_main.c:2492:1-7: WARNING:
-do_div() does a 64-by-32 division, please consider using div64_ul
-instead.
-
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-Link: https://lore.kernel.org/r/1637228883-100100-1-git-send-email-yang.lee@linux.alibaba.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: d13bd412dce2 ("ALSA: hda - Manage kcontrol lists")
+Link: https://lore.kernel.org/r/20211116071314.15065-3-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/renesas/ravb_main.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ sound/pci/hda/hda_codec.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/ethernet/renesas/ravb_main.c b/drivers/net/ethernet/renesas/ravb_main.c
-index 0f85f2d97b18d..4e08b7219403c 100644
---- a/drivers/net/ethernet/renesas/ravb_main.c
-+++ b/drivers/net/ethernet/renesas/ravb_main.c
-@@ -30,8 +30,7 @@
- #include <linux/spinlock.h>
- #include <linux/sys_soc.h>
- #include <linux/reset.h>
--
--#include <asm/div64.h>
-+#include <linux/math64.h>
- 
- #include "ravb.h"
- 
-@@ -2061,8 +2060,7 @@ static int ravb_set_gti(struct net_device *ndev)
- 	if (!rate)
- 		return -EINVAL;
- 
--	inc = 1000000000ULL << 20;
--	do_div(inc, rate);
-+	inc = div64_ul(1000000000ULL << 20, rate);
- 
- 	if (inc < GTI_TIV_MIN || inc > GTI_TIV_MAX) {
- 		dev_err(dev, "gti.tiv increment 0x%llx is outside the range 0x%x - 0x%x\n",
+diff --git a/sound/pci/hda/hda_codec.c b/sound/pci/hda/hda_codec.c
+index 6dece719be669..39281106477eb 100644
+--- a/sound/pci/hda/hda_codec.c
++++ b/sound/pci/hda/hda_codec.c
+@@ -1727,8 +1727,11 @@ void snd_hda_ctls_clear(struct hda_codec *codec)
+ {
+ 	int i;
+ 	struct hda_nid_item *items = codec->mixers.list;
++
++	down_write(&codec->card->controls_rwsem);
+ 	for (i = 0; i < codec->mixers.used; i++)
+ 		snd_ctl_remove(codec->card, items[i].kctl);
++	up_write(&codec->card->controls_rwsem);
+ 	snd_array_free(&codec->mixers);
+ 	snd_array_free(&codec->nids);
+ }
 -- 
 2.34.1
 

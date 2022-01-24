@@ -2,46 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBE44993BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:39:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F12E1498D3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386660AbiAXUfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:35:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34288 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355136AbiAXUNU (ORCPT
+        id S1352116AbiAXT3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:29:41 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47230 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349128AbiAXTUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:13:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D84DC028BE4;
-        Mon, 24 Jan 2022 11:34:23 -0800 (PST)
+        Mon, 24 Jan 2022 14:20:17 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8796B810BD;
-        Mon, 24 Jan 2022 19:34:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3A8DC340E5;
-        Mon, 24 Jan 2022 19:34:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C5936131E;
+        Mon, 24 Jan 2022 19:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAA6EC340E5;
+        Mon, 24 Jan 2022 19:20:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052860;
-        bh=6dHo04fHFiPT6f+jP1NYlQtr50rOB45dS0uHn/hwoCE=;
+        s=korg; t=1643052016;
+        bh=IV9sGNAAhIv0lTHD76UObbI1oGTX0q68vnnkRH5LISs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W7YvEEaqT7ho/FzM0nBmzUAIYuwvUtnEyfL7F7XX2bXkwxhlyhWMCwdmH8iHEfNLs
-         fQiTRer3cCxTcPcia/tYFqWE4Furgts0eebbjY+AolxEIs+HlnOe8AksRvWhxz6ymP
-         zh3e0jmOFOdlz+9O6DqXNlCj3MfF0diYbwg/POko=
+        b=MlRi065GJUkhqaDp9aXO8Q1+v2tZMTZrH8nBivPvF0XGw1El23mtiNdsBDUNPnwkH
+         n4hxhfj2Eop7usjUJuF6S5iXrZVv9t2lzHmQb+20tImWUjq6hmZcLJaIE27XMtXTjX
+         dNQ3ntfHdJBy5fjZ5/f8vDk07p+EnHEKOZ0m272Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 196/320] cpufreq: Fix initialization of min and max frequency QoS requests
-Date:   Mon, 24 Jan 2022 19:43:00 +0100
-Message-Id: <20220124184000.304813534@linuxfoundation.org>
+Subject: [PATCH 4.19 143/239] x86/mce: Mark mce_end() noinstr
+Date:   Mon, 24 Jan 2022 19:43:01 +0100
+Message-Id: <20220124183947.646418035@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,52 +45,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Borislav Petkov <bp@suse.de>
 
-[ Upstream commit 521223d8b3ec078f670c7c35a1a04b1b2af07966 ]
+[ Upstream commit b4813539d37fa31fed62cdfab7bd2dd8929c5b2e ]
 
-The min and max frequency QoS requests in the cpufreq core are
-initialized to whatever the current min and max frequency values are
-at the init time, but if any of these values change later (for
-example, cpuinfo.max_freq is updated by the driver), these initial
-request values will be limiting the CPU frequency unnecessarily
-unless they are changed by user space via sysfs.
+It is called by the #MC handler which is noinstr.
 
-To address this, initialize min_freq_req and max_freq_req to
-FREQ_QOS_MIN_DEFAULT_VALUE and FREQ_QOS_MAX_DEFAULT_VALUE,
-respectively, so they don't really limit anything until user
-space updates them.
+Fixes
 
-Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Tested-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+  vmlinux.o: warning: objtool: do_machine_check()+0xbd6: call to memset() leaves .noinstr.text section
+
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20211208111343.8130-9-bp@alien8.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpufreq/cpufreq.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/kernel/cpu/mcheck/mce.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index cb7949a2ac0ca..af9f348048629 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1393,7 +1393,7 @@ static int cpufreq_online(unsigned int cpu)
+diff --git a/arch/x86/kernel/cpu/mcheck/mce.c b/arch/x86/kernel/cpu/mcheck/mce.c
+index 56c4456434a82..26adaad3f2587 100644
+--- a/arch/x86/kernel/cpu/mcheck/mce.c
++++ b/arch/x86/kernel/cpu/mcheck/mce.c
+@@ -1030,10 +1030,13 @@ static int mce_start(int *no_way_out)
+  * Synchronize between CPUs after main scanning loop.
+  * This invokes the bulk of the Monarch processing.
+  */
+-static int mce_end(int order)
++static noinstr int mce_end(int order)
+ {
+-	int ret = -1;
+ 	u64 timeout = (u64)mca_cfg.monarch_timeout * NSEC_PER_USEC;
++	int ret = -1;
++
++	/* Allow instrumentation around external facilities. */
++	instrumentation_begin();
  
- 		ret = freq_qos_add_request(&policy->constraints,
- 					   policy->min_freq_req, FREQ_QOS_MIN,
--					   policy->min);
-+					   FREQ_QOS_MIN_DEFAULT_VALUE);
- 		if (ret < 0) {
- 			/*
- 			 * So we don't call freq_qos_remove_request() for an
-@@ -1413,7 +1413,7 @@ static int cpufreq_online(unsigned int cpu)
+ 	if (!timeout)
+ 		goto reset;
+@@ -1077,7 +1080,8 @@ static int mce_end(int order)
+ 		/*
+ 		 * Don't reset anything. That's done by the Monarch.
+ 		 */
+-		return 0;
++		ret = 0;
++		goto out;
+ 	}
  
- 		ret = freq_qos_add_request(&policy->constraints,
- 					   policy->max_freq_req, FREQ_QOS_MAX,
--					   policy->max);
-+					   FREQ_QOS_MAX_DEFAULT_VALUE);
- 		if (ret < 0) {
- 			policy->max_freq_req = NULL;
- 			goto out_destroy_policy;
+ 	/*
+@@ -1092,6 +1096,10 @@ reset:
+ 	 * Let others run again.
+ 	 */
+ 	atomic_set(&mce_executing, 0);
++
++out:
++	instrumentation_end();
++
+ 	return ret;
+ }
+ 
 -- 
 2.34.1
 

@@ -2,114 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 663AD49878F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0875E4987AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235784AbiAXSCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:02:55 -0500
-Received: from foss.arm.com ([217.140.110.172]:42958 "EHLO foss.arm.com"
+        id S241754AbiAXSEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:04:15 -0500
+Received: from mga07.intel.com ([134.134.136.100]:37145 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235628AbiAXSCy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:02:54 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 231BAD6E;
-        Mon, 24 Jan 2022 10:02:54 -0800 (PST)
-Received: from [10.57.39.131] (unknown [10.57.39.131])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7EFFA3F766;
-        Mon, 24 Jan 2022 10:02:52 -0800 (PST)
-Subject: Re: [RFC V1 08/11] arm64/perf: Enable branch stack sampling
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <1642998653-21377-1-git-send-email-anshuman.khandual@arm.com>
- <1642998653-21377-9-git-send-email-anshuman.khandual@arm.com>
-From:   James Clark <james.clark@arm.com>
-Message-ID: <741d159d-fce4-377e-8817-f8a6462f3a71@arm.com>
-Date:   Mon, 24 Jan 2022 18:02:51 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S241599AbiAXSEF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 13:04:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643047445; x=1674583445;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OYmRkE6V3p9QrcyPrJBbLnZSuFH1gmWgXsZXCzijVQU=;
+  b=hxotyViaIw/IvKY05yP3zyWyauFGtKTWRMQrn0fxkOh8yck/iFs2Ov9c
+   ycbSITN5OPHcceSanmVtlHoXIbX3dtak7xBxHJkU+LeN9XVnZ1dlX51wz
+   WSERPpVKn10vFsknt8FrM+A7OH01GXZRJQk0RjkGgwoVAhJ8/QCca4Y6Q
+   m8cFQE2744VgeLepK0T0aGN10dYPad+LhEcR0TvoeyUSpNoDQlyFUJuRW
+   y/1rQiS60BVKXq1wOEgByzCo24NiF0rjiaFT+N2sBiu6tng34W7pOJXaq
+   2diB7k9nuQf3P71I1g3ElsoBhuBru/MvgNgamqD3U3WmpmiMg/pJOelZe
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="309429841"
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="309429841"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 10:04:05 -0800
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="494704523"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 10:04:03 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nC3g8-00Dz4t-FG;
+        Mon, 24 Jan 2022 20:02:56 +0200
+Date:   Mon, 24 Jan 2022 20:02:56 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wei Ming Chen <jj251510319013@gmail.com>,
+        Helge Deller <deller@gmx.de>
+Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        tzimmermann@suse.de, robh@kernel.org, maxime@cerno.tech
+Subject: Re: [PATCH] fbdev: Fix file path that does not exist
+Message-ID: <Ye7p0Ccmy+lHaRM1@smile.fi.intel.com>
+References: <20211208144631.3710-1-jj251510319013@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1642998653-21377-9-git-send-email-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208144631.3710-1-jj251510319013@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
++Cc: maintainer
 
+On Wed, Dec 08, 2021 at 10:46:31PM +0800, Wei Ming Chen wrote:
+> pvr2fb.c should be under drivers/video/fbdev/
+> instead of drivers/video/
 
-On 24/01/2022 04:30, Anshuman Khandual wrote:
-> Now that all the required pieces are already in place, just enable the perf
-> branch stack sampling support on arm64 platform, by removing the gate which
-> blocks it in armpmu_event_init().
-> 
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+LGTM,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
 > ---
->  drivers/perf/arm_pmu.c | 25 ++++++++++++++++++++++---
->  1 file changed, 22 insertions(+), 3 deletions(-)
+>  drivers/video/fbdev/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
-> index 0800c8858ed8..2117bf5d3232 100644
-> --- a/drivers/perf/arm_pmu.c
-> +++ b/drivers/perf/arm_pmu.c
-> @@ -537,9 +537,28 @@ static int armpmu_event_init(struct perf_event *event)
->  		!cpumask_test_cpu(event->cpu, &armpmu->supported_cpus))
->  		return -ENOENT;
+> diff --git a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
+> index 6ed5e608dd04..93b8d84c34cf 100644
+> --- a/drivers/video/fbdev/Kconfig
+> +++ b/drivers/video/fbdev/Kconfig
+> @@ -829,7 +829,7 @@ config FB_PVR2
+>  	  You can pass several parameters to the driver at boot time or at
+>  	  module load time.  The parameters look like "video=pvr2:XXX", where
+>  	  the meaning of XXX can be found at the end of the main source file
+> -	  (<file:drivers/video/pvr2fb.c>). Please see the file
+> +	  (<file:drivers/video/fbdev/pvr2fb.c>). Please see the file
+>  	  <file:Documentation/fb/pvr2fb.rst>.
 >  
-> -	/* does not support taken branch sampling */
-> -	if (has_branch_stack(event))
-> -		return -EOPNOTSUPP;
-> +	if (has_branch_stack(event)) {
-> +		/*
-> +		 * BRBE support is absent. Select CONFIG_ARM_BRBE_PMU
-> +		 * in the config, before branch stack sampling events
-> +		 * can be requested.
-> +		 */
-> +		if (!IS_ENABLED(CONFIG_ARM_BRBE_PMU)) {
-> +			pr_warn_once("BRBE is disabled, select CONFIG_ARM_BRBE_PMU\n");
-> +			return -EOPNOTSUPP;
-> +		}
-> +
-> +		/*
-> +		 * Branch stack sampling event can not be supported in
-> +		 * case either the required driver itself is absent or
-> +		 * BRBE buffer, is not supported. Besides checking for
-> +		 * the callback prevents a crash in case it's absent.
-> +		 */
-> +		if (!armpmu->brbe_supported || !armpmu->brbe_supported(event)) {
-> +			pr_warn_once("BRBE is not supported\n");
-> +			return -EOPNOTSUPP;
-
-brbe_supported() returns false for one permission case, rather than a "not supported" case
-so EOPNOTSUPP is the wrong thing to return here for this case otherwise it makes perf
-print confusing error messages. 
-
-The brbe_supported() function needs to be split into two, one that handles support and one
-that handles permissions and different errors need to be reported. Here is the permission
-bit from that function:
-
-  +	if (event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_KERNEL) {
-  +		if (!perfmon_capable()) {
-  +			pr_warn_once("does not have permission for kernel branch filter\n");
-  +			return false;
-  +		}
-  +	}
-
-> +		}
-> +	}
->  
->  	if (armpmu->map_event(event) == -ENOENT)
->  		return -ENOENT;
+>  config FB_OPENCORES
+> -- 
+> 2.25.1
 > 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

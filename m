@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B20A4999B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60718499891
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1455967AbiAXVg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:36:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
+        id S1346887AbiAXV0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:26:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391121AbiAXUq7 (ORCPT
+        with ESMTP id S1391136AbiAXUq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 15:46:59 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14248C0619C9;
-        Mon, 24 Jan 2022 11:57:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38380C0619CD;
+        Mon, 24 Jan 2022 11:57:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C792FB81269;
-        Mon, 24 Jan 2022 19:57:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0642AC340E5;
-        Mon, 24 Jan 2022 19:57:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01A2EB8128F;
+        Mon, 24 Jan 2022 19:57:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16DBBC33DA3;
+        Mon, 24 Jan 2022 19:57:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054237;
-        bh=TYR6G0G1NNZYgGiHfvo4P7O8iCjHHs0h9Uv+G6h0s/I=;
+        s=korg; t=1643054240;
+        bh=e/pMVKumLe2FHFOwgK2m3U8iURjNJRFnpl9Hmy2/nEQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LmTvLLaz3maq5qjfPEGmVQqBiAdsb1fO5rbjt5yUyeCnzXy1Ejrq7JFrgU+U5iTb1
-         YfqqUYoQMeIr4f6oeBt7rJaT+J4a9HHTdfKFzKeoYYxUX4O0Z10uxlhMtsKgE91h/8
-         tjVp9kOcYzpPF8FlVpR0JG1yEM42R1zWvQm97Qkc=
+        b=wY6sXAsiJCr/+Sa/3mEg7RN8fC08hrtMERN+z/2JIG8MTwzJ8+Y4QGlVax1zjwrt5
+         Xxv5CklEJIv70W68kWph5nL9APbxJs3ZpAbBnEvHGDYpNwPDrHFccj7YQaQiwwFHI/
+         q9vmf/fGzgqIni8HA5VNu80EcD+wu6ICotjrP8Gk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, Ammar Faizi <ammarfaizi2@gmail.com>,
+        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 290/563] mips: bcm63xx: add support for clk_set_parent()
-Date:   Mon, 24 Jan 2022 19:40:55 +0100
-Message-Id: <20220124184034.486618910@linuxfoundation.org>
+Subject: [PATCH 5.10 291/563] powerpc/xive: Add missing null check after calling kmalloc
+Date:   Mon, 24 Jan 2022 19:40:56 +0100
+Message-Id: <20220124184034.517499362@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -51,46 +50,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Ammar Faizi <ammarfaizi2@gmail.com>
 
-[ Upstream commit 6f03055d508ff4feb8db02ba3df9303a1db8d381 ]
+[ Upstream commit 18dbfcdedc802f9500b2c29794f22a31d27639c0 ]
 
-The MIPS BMC63XX subarch does not provide/support clk_set_parent().
-This causes build errors in a few drivers, so add a simple implementation
-of that function so that callers of it will build without errors.
+Commit 930914b7d528fc ("powerpc/xive: Add a debugfs file to dump
+internal XIVE state") forgot to add a null check.
 
-Fixes these build errors:
+Add it.
 
-ERROR: modpost: "clk_set_parent" [sound/soc/jz4740/snd-soc-jz4740-i2s.ko] undefined!
-ERROR: modpost: "clk_set_parent" [sound/soc/atmel/snd-soc-atmel-i2s.ko] undefined!
-
-Fixes: e7300d04bd08 ("MIPS: BCM63xx: Add support for the Broadcom BCM63xx family of SOCs." )
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Fixes: 930914b7d528fc6b0249bffc00564100bcf6ef75 ("powerpc/xive: Add a debugfs file to dump internal XIVE state")
+Signed-off-by: Ammar Faizi <ammarfaizi2@gmail.com>
+Reviewed-by: Cédric Le Goater <clg@kaod.org>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20211226135314.251221-1-ammar.faizi@intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/bcm63xx/clk.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/powerpc/sysdev/xive/spapr.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/mips/bcm63xx/clk.c b/arch/mips/bcm63xx/clk.c
-index aba6e2d6a736c..dcfa0ea912fe1 100644
---- a/arch/mips/bcm63xx/clk.c
-+++ b/arch/mips/bcm63xx/clk.c
-@@ -387,6 +387,12 @@ struct clk *clk_get_parent(struct clk *clk)
- }
- EXPORT_SYMBOL(clk_get_parent);
+diff --git a/arch/powerpc/sysdev/xive/spapr.c b/arch/powerpc/sysdev/xive/spapr.c
+index 1e3674d7ea7bc..b57eeaff7bb33 100644
+--- a/arch/powerpc/sysdev/xive/spapr.c
++++ b/arch/powerpc/sysdev/xive/spapr.c
+@@ -658,6 +658,9 @@ static int xive_spapr_debug_show(struct seq_file *m, void *private)
+ 	struct xive_irq_bitmap *xibm;
+ 	char *buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
  
-+int clk_set_parent(struct clk *clk, struct clk *parent)
-+{
-+	return 0;
-+}
-+EXPORT_SYMBOL(clk_set_parent);
++	if (!buf)
++		return -ENOMEM;
 +
- unsigned long clk_get_rate(struct clk *clk)
- {
- 	if (!clk)
+ 	list_for_each_entry(xibm, &xive_irq_bitmaps, list) {
+ 		memset(buf, 0, PAGE_SIZE);
+ 		bitmap_print_to_pagebuf(true, buf, xibm->bitmap, xibm->count);
 -- 
 2.34.1
 

@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C48499CEB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:15:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 330AB499646
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:17:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581721AbiAXWMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:12:13 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42946 "EHLO
+        id S1444825AbiAXVBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:01:37 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40570 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453085AbiAXV2C (ORCPT
+        with ESMTP id S1351907AbiAXUhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:28:02 -0500
+        Mon, 24 Jan 2022 15:37:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 982E7B80FA1;
-        Mon, 24 Jan 2022 21:27:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD1E2C340E4;
-        Mon, 24 Jan 2022 21:27:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3330BB81061;
+        Mon, 24 Jan 2022 20:37:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77A7AC340E5;
+        Mon, 24 Jan 2022 20:37:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059677;
-        bh=wvGjveaiDauudlfPDCVKE8+VhapA9ez4NKE2gofdcNI=;
+        s=korg; t=1643056669;
+        bh=9al30aZ+w+f56itTZnfhDZfSCut72/YNcJcpvw4L33c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TfPSqpYg8iWAVjFXTa0bqOJAuINbVEeUzOrzbTNZSTIHalaY/++bsgOw2DmPmt1lw
-         NmquuYng65gCqLhi3tAw3qUA0st/NM/oyPrz8go3dkWuvmPyAQxujG9s8gaTnAqxtJ
-         kqrPu0HXb29PIru7DH7zIEwTzhMDTHmHV24ZE43I=
+        b=q8KJmpyiWA6Zp1GiLOR1MDcvlrMi3ILb/u0No92GlemAKqhN8RJ7oZiTRz2/bzc+l
+         XWIp/8iNDQFJkt6vtsflmadm3BZJ9MSr++W5LZnKf2QQWvHhjplLE6+2uUkJwLC1wY
+         XVtqCoH8j+iEN7C+PpTO1W3hmbvyoAK1tE4UCt2Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ben Greear <greearb@candelatech.com>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        stable@vger.kernel.org, Thierry Reding <treding@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0689/1039] ath11k: Fix napi related hang
+Subject: [PATCH 5.15 561/846] arm64: tegra: Adjust length of CCPLEX cluster MMIO region
 Date:   Mon, 24 Jan 2022 19:41:18 +0100
-Message-Id: <20220124184148.509793510@linuxfoundation.org>
+Message-Id: <20220124184120.376492793@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,100 +45,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ben Greear <greearb@candelatech.com>
+From: Thierry Reding <treding@nvidia.com>
 
-[ Upstream commit d943fdad7589653065be0e20aadc6dff37725ed4 ]
+[ Upstream commit 2b14cbd643feea5fc17c6e8bead4e71088c69acd ]
 
-Similar to the same bug in ath10k, a napi disable w/out it being enabled
-will hang forever.  I believe I saw this while trying rmmod after driver
-had some failure on startup.  Fix it by keeping state on whether napi is
-enabled or not.
+The Tegra186 CCPLEX cluster register region is 4 MiB is length, not 4
+MiB - 1. This was likely presumed to be the "limit" rather than length.
+Fix it up.
 
-And, remove un-used napi pointer in ath11k driver base struct.
-
-Signed-off-by: Ben Greear <greearb@candelatech.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20200903195254.29379-1-greearb@candelatech.com
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath11k/ahb.c  |   12 +++++++++---
- drivers/net/wireless/ath/ath11k/core.h |    2 +-
- drivers/net/wireless/ath/ath11k/pci.c  |   12 +++++++++---
- 3 files changed, 19 insertions(+), 7 deletions(-)
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/wireless/ath/ath11k/ahb.c
-+++ b/drivers/net/wireless/ath/ath11k/ahb.c
-@@ -175,8 +175,11 @@ static void __ath11k_ahb_ext_irq_disable
+diff --git a/arch/arm64/boot/dts/nvidia/tegra186.dtsi b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
+index e94f8add1a400..062e87e893316 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra186.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
+@@ -1079,7 +1079,7 @@
  
- 		ath11k_ahb_ext_grp_disable(irq_grp);
+ 	ccplex@e000000 {
+ 		compatible = "nvidia,tegra186-ccplex-cluster";
+-		reg = <0x0 0x0e000000 0x0 0x3fffff>;
++		reg = <0x0 0x0e000000 0x0 0x400000>;
  
--		napi_synchronize(&irq_grp->napi);
--		napi_disable(&irq_grp->napi);
-+		if (irq_grp->napi_enabled) {
-+			napi_synchronize(&irq_grp->napi);
-+			napi_disable(&irq_grp->napi);
-+			irq_grp->napi_enabled = false;
-+		}
- 	}
- }
- 
-@@ -300,7 +303,10 @@ static void ath11k_ahb_ext_irq_enable(st
- 	for (i = 0; i < ATH11K_EXT_IRQ_GRP_NUM_MAX; i++) {
- 		struct ath11k_ext_irq_grp *irq_grp = &ab->ext_irq_grp[i];
- 
--		napi_enable(&irq_grp->napi);
-+		if (!irq_grp->napi_enabled) {
-+			napi_enable(&irq_grp->napi);
-+			irq_grp->napi_enabled = true;
-+		}
- 		ath11k_ahb_ext_grp_enable(irq_grp);
- 	}
- }
---- a/drivers/net/wireless/ath/ath11k/core.h
-+++ b/drivers/net/wireless/ath/ath11k/core.h
-@@ -141,6 +141,7 @@ struct ath11k_ext_irq_grp {
- 	u32 num_irq;
- 	u32 grp_id;
- 	u64 timestamp;
-+	bool napi_enabled;
- 	struct napi_struct napi;
- 	struct net_device napi_ndev;
- };
-@@ -718,7 +719,6 @@ struct ath11k_base {
- 	u32 wlan_init_status;
- 	int irq_num[ATH11K_IRQ_NUM_MAX];
- 	struct ath11k_ext_irq_grp ext_irq_grp[ATH11K_EXT_IRQ_GRP_NUM_MAX];
--	struct napi_struct *napi;
- 	struct ath11k_targ_cap target_caps;
- 	u32 ext_service_bitmap[WMI_SERVICE_EXT_BM_SIZE];
- 	bool pdevs_macaddr_valid;
---- a/drivers/net/wireless/ath/ath11k/pci.c
-+++ b/drivers/net/wireless/ath/ath11k/pci.c
-@@ -638,8 +638,11 @@ static void __ath11k_pci_ext_irq_disable
- 
- 		ath11k_pci_ext_grp_disable(irq_grp);
- 
--		napi_synchronize(&irq_grp->napi);
--		napi_disable(&irq_grp->napi);
-+		if (irq_grp->napi_enabled) {
-+			napi_synchronize(&irq_grp->napi);
-+			napi_disable(&irq_grp->napi);
-+			irq_grp->napi_enabled = false;
-+		}
- 	}
- }
- 
-@@ -658,7 +661,10 @@ static void ath11k_pci_ext_irq_enable(st
- 	for (i = 0; i < ATH11K_EXT_IRQ_GRP_NUM_MAX; i++) {
- 		struct ath11k_ext_irq_grp *irq_grp = &ab->ext_irq_grp[i];
- 
--		napi_enable(&irq_grp->napi);
-+		if (!irq_grp->napi_enabled) {
-+			napi_enable(&irq_grp->napi);
-+			irq_grp->napi_enabled = true;
-+		}
- 		ath11k_pci_ext_grp_enable(irq_grp);
- 	}
- }
+ 		nvidia,bpmp = <&bpmp>;
+ 	};
+-- 
+2.34.1
+
 
 

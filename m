@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90427498B18
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4EBF498D19
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345034AbiAXTL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:11:27 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60634 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344936AbiAXTEC (ORCPT
+        id S1348118AbiAXT1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:27:55 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:42900 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345004AbiAXTRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:04:02 -0500
+        Mon, 24 Jan 2022 14:17:53 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D563B60B86;
-        Mon, 24 Jan 2022 19:03:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7FE9C340E5;
-        Mon, 24 Jan 2022 19:03:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54614B81236;
+        Mon, 24 Jan 2022 19:17:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68744C340E5;
+        Mon, 24 Jan 2022 19:17:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051038;
-        bh=mhPuVfgRFd2RapL/z1cdkOW64XqvZopmkecBub3MIng=;
+        s=korg; t=1643051870;
+        bh=anLyqKY8xcsWg1zMq4nAdOxhcpkR8TKpIZYGmfktLU4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K0yIUOGkXw593BVt1k2ca/dZ9S64D5oYS+CFIivWENePLjasLeM1Ja/HiiRFliPYW
-         b1jSb2G6UpH473jBCJdK32EP5urGWQmUJGL1bPM/VFcBNPLyYi1l1Nf+MV4UBe/+ot
-         hsxHzos7FiNNjdBgCt3RTFt+SXX0H6q9f/HwiAW0=
+        b=zHUzKFuyYj7O1ztLjR97lT868Q6hocO/pXeMPdFbA1pq3neEzxn1xDIK/4BP62G0R
+         lCainNlY+5lz5D+ZiEOC0ii5KGtVOcO3/67dvPQXC33G0+FET7/5CLp60ftcFk6Gth
+         qqh7DvEmpUCeEsVY5nQxXEX571Ha4RGbMWtA9JhY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Wang Hai <wanghai38@huawei.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
+        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 033/186] Bluetooth: cmtp: fix possible panic when cmtp_init_sockets() fails
+Subject: [PATCH 4.19 070/239] media: saa7146: mxb: Fix a NULL pointer dereference in mxb_attach()
 Date:   Mon, 24 Jan 2022 19:41:48 +0100
-Message-Id: <20220124183938.190311012@linuxfoundation.org>
+Message-Id: <20220124183945.355676783@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,52 +47,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Hai <wanghai38@huawei.com>
+From: Zhou Qingyang <zhou1615@umn.edu>
 
-[ Upstream commit 2a7ca7459d905febf519163bd9e3eed894de6bb7 ]
+[ Upstream commit 0407c49ebe330333478440157c640fffd986f41b ]
 
-I got a kernel BUG report when doing fault injection test:
+In mxb_attach(dev, info), saa7146_vv_init() is called to allocate a
+new memory for dev->vv_data. saa7146_vv_release() will be called on
+failure of mxb_probe(dev). There is a dereference of dev->vv_data
+in saa7146_vv_release(), which could lead to a NULL pointer dereference
+on failure of saa7146_vv_init().
 
-------------[ cut here ]------------
-kernel BUG at lib/list_debug.c:45!
-...
-RIP: 0010:__list_del_entry_valid.cold+0x12/0x4d
-...
-Call Trace:
- proto_unregister+0x83/0x220
- cmtp_cleanup_sockets+0x37/0x40 [cmtp]
- cmtp_exit+0xe/0x1f [cmtp]
- do_syscall_64+0x35/0xb0
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+Fix this bug by adding a check of saa7146_vv_init().
 
-If cmtp_init_sockets() in cmtp_init() fails, cmtp_init() still returns
-success. This will cause a kernel bug when accessing uncreated ctmp
-related data when the module exits.
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wang Hai <wanghai38@huawei.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_VIDEO_MXB=m show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Fixes: 03b1930efd3c ("V4L/DVB: saa7146: fix regression of the av7110/budget-av driver")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/cmtp/core.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/media/pci/saa7146/mxb.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/net/bluetooth/cmtp/core.c b/net/bluetooth/cmtp/core.c
-index 9873684a9d8ff..4764ed73f33bf 100644
---- a/net/bluetooth/cmtp/core.c
-+++ b/net/bluetooth/cmtp/core.c
-@@ -499,9 +499,7 @@ static int __init cmtp_init(void)
+diff --git a/drivers/media/pci/saa7146/mxb.c b/drivers/media/pci/saa7146/mxb.c
+index 6e25654da2567..bfa7a7d15dbf6 100644
+--- a/drivers/media/pci/saa7146/mxb.c
++++ b/drivers/media/pci/saa7146/mxb.c
+@@ -695,10 +695,16 @@ static struct saa7146_ext_vv vv_data;
+ static int mxb_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data *info)
  {
- 	BT_INFO("CMTP (CAPI Emulation) ver %s", VERSION);
+ 	struct mxb *mxb;
++	int ret;
  
--	cmtp_init_sockets();
--
--	return 0;
-+	return cmtp_init_sockets();
- }
+ 	DEB_EE("dev:%p\n", dev);
  
- static void __exit cmtp_exit(void)
+-	saa7146_vv_init(dev, &vv_data);
++	ret = saa7146_vv_init(dev, &vv_data);
++	if (ret) {
++		ERR("Error in saa7146_vv_init()");
++		return ret;
++	}
++
+ 	if (mxb_probe(dev)) {
+ 		saa7146_vv_release(dev);
+ 		return -1;
 -- 
 2.34.1
 

@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A0949A6D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E882649A75F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3421550AbiAYC1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:27:09 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47772 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354921AbiAXTuz (ORCPT
+        id S3409562AbiAYCiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:38:05 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37312 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351174AbiAXUcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:50:55 -0500
+        Mon, 24 Jan 2022 15:32:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9768E60B02;
-        Mon, 24 Jan 2022 19:50:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7135AC340E5;
-        Mon, 24 Jan 2022 19:50:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 143E3B812A7;
+        Mon, 24 Jan 2022 20:32:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 483F9C340E5;
+        Mon, 24 Jan 2022 20:32:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053851;
-        bh=CMAFuYCxD3n3x60E7psobpsZULWljbebeyEgXDEvhw4=;
+        s=korg; t=1643056321;
+        bh=H3JgWIkK9aF+AOG0Q3SJH7ksdWnhv7n/DB0Ug8t9JDI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xH4ZPOT6sxDCNePWylVBn6CW1fl9If+JHWfJVPUEGVMkw4S5jYKz1CuqJcJt2ocoM
-         WvoAVo5IRL9X29t+QFrQV7riIobclnrQfEcBm+ha7RHxb2ZuBFel91U8bIktXCWML7
-         sZmupnV3AFtHRcZ2GcoMePFu+Ef+MunfXTXIgoQg=
+        b=0CcOV3uGvgvMaHWkcSEyPSnqsLgtV3Vf2R+9nJVcfiZKbf8pyP1DNlc/SmARbTlKR
+         MhgACVsQJ3gEYO1Cc05Vf80CzmvIu8RO1f0xWdgufVkdWDxGiXsPHobE9XOFJ9QoFS
+         5mwmbyeSNTiaXr3DBP+XGb8J3dzBJNo5pPC1THaU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 197/563] x86/boot/compressed: Move CLANG_FLAGS to beginning of KBUILD_CFLAGS
-Date:   Mon, 24 Jan 2022 19:39:22 +0100
-Message-Id: <20220124184031.248771405@linuxfoundation.org>
+        stable@vger.kernel.org, Taniya Das <tdas@codeaurora.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 446/846] clk: qcom: gcc-sc7280: Mark gcc_cfg_noc_lpass_clk always enabled
+Date:   Mon, 24 Jan 2022 19:39:23 +0100
+Message-Id: <20220124184116.371930653@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,67 +46,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Taniya Das <tdas@codeaurora.org>
 
-[ Upstream commit 5fe392ff9d1f7254a1fbb3f72d9893088e4d23eb ]
+[ Upstream commit 9c337073d9d81a145434b22f42dc3128ecd17730 ]
 
-When cross compiling i386_defconfig on an arm64 host with clang, there
-are a few instances of '-Waddress-of-packed-member' and
-'-Wgnu-variable-sized-type-not-at-end' in arch/x86/boot/compressed/,
-which should both be disabled with the cc-disable-warning calls in that
-directory's Makefile, which indicates that cc-disable-warning is failing
-at the point of testing these flags.
+The gcc cfg noc lpass clock is required to be always enabled for the
+LPASS core and audio drivers to be functional.
 
-The cc-disable-warning calls fail because at the point that the flags
-are tested, KBUILD_CFLAGS has '-march=i386' without $(CLANG_FLAGS),
-which has the '--target=' flag to tell clang what architecture it is
-targeting. Without the '--target=' flag, the host architecture (arm64)
-is used and i386 is not a valid value for '-march=' in that case. This
-error can be seen by adding some logging to try-run:
-
-  clang-14: error: the clang compiler does not support '-march=i386'
-
-Invoking the compiler has to succeed prior to calling cc-option or
-cc-disable-warning in order to accurately test whether or not the flag
-is supported; if it doesn't, the requested flag can never be added to
-the compiler flags. Move $(CLANG_FLAGS) to the beginning of KBUILD_FLAGS
-so that any new flags that might be added in the future can be
-accurately tested.
-
-Fixes: d5cbd80e302d ("x86/boot: Add $(CLANG_FLAGS) to compressed KBUILD_CFLAGS")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20211222163040.1961481-1-nathan@kernel.org
+Fixes: a3cc092196ef ("clk: qcom: Add Global Clock controller (GCC) driver for SC7280")
+Signed-off-by: Taniya Das <tdas@codeaurora.org>
+Link: https://lore.kernel.org/r/1640018638-19436-4-git-send-email-tdas@codeaurora.org
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/boot/compressed/Makefile | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/clk/qcom/gcc-sc7280.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 6004047d25fdd..bf91e0a36d77f 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -28,7 +28,11 @@ KCOV_INSTRUMENT		:= n
- targets := vmlinux vmlinux.bin vmlinux.bin.gz vmlinux.bin.bz2 vmlinux.bin.lzma \
- 	vmlinux.bin.xz vmlinux.bin.lzo vmlinux.bin.lz4 vmlinux.bin.zst
- 
--KBUILD_CFLAGS := -m$(BITS) -O2
-+# CLANG_FLAGS must come before any cc-disable-warning or cc-option calls in
-+# case of cross compiling, as it has the '--target=' flag, which is needed to
-+# avoid errors with '-march=i386', and future flags may depend on the target to
-+# be valid.
-+KBUILD_CFLAGS := -m$(BITS) -O2 $(CLANG_FLAGS)
- KBUILD_CFLAGS += -fno-strict-aliasing -fPIE
- KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
- cflags-$(CONFIG_X86_32) := -march=i386
-@@ -46,7 +50,6 @@ KBUILD_CFLAGS += -D__DISABLE_EXPORTS
- # Disable relocation relaxation in case the link is not PIE.
- KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
- KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
--KBUILD_CFLAGS += $(CLANG_FLAGS)
- 
- # sev-es.c indirectly inludes inat-table.h which is generated during
- # compilation and stored in $(objtree). Add the directory to the includes so
+diff --git a/drivers/clk/qcom/gcc-sc7280.c b/drivers/clk/qcom/gcc-sc7280.c
+index 6cefcdc869905..ce7c5ba2b9b7a 100644
+--- a/drivers/clk/qcom/gcc-sc7280.c
++++ b/drivers/clk/qcom/gcc-sc7280.c
+@@ -2998,7 +2998,7 @@ static struct clk_branch gcc_cfg_noc_lpass_clk = {
+ 		.enable_mask = BIT(0),
+ 		.hw.init = &(struct clk_init_data){
+ 			.name = "gcc_cfg_noc_lpass_clk",
+-			.ops = &clk_branch2_ops,
++			.ops = &clk_branch2_aon_ops,
+ 		},
+ 	},
+ };
 -- 
 2.34.1
 

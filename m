@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E03A49A0AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE466499E7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:09:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1846691AbiAXXQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:16:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1583235AbiAXWR1 (ORCPT
+        id S1835224AbiAXWfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:35:50 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47836 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1456141AbiAXVhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:17:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34BBC06138E;
-        Mon, 24 Jan 2022 12:48:13 -0800 (PST)
+        Mon, 24 Jan 2022 16:37:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B272DB81063;
-        Mon, 24 Jan 2022 20:48:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA344C340E5;
-        Mon, 24 Jan 2022 20:48:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F1F6B81057;
+        Mon, 24 Jan 2022 21:37:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D14AC340E4;
+        Mon, 24 Jan 2022 21:37:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057291;
-        bh=PJBaakTJqJ7uadR58mhjBkXOGvr1mslmS/bj9utbnjY=;
+        s=korg; t=1643060271;
+        bh=PBfU0sjDKHjPEXXIWzNxqIfWzz3fkDv5Yi5PMouzK2E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wvnd/UBaVYIVaeVW/saZtL0wHhQCZlQrfTUgB5dy1z7P7t19+83K14ibXq93m//Lj
-         eB6tAGiFDJLyECektxeXiXP+2tjkrGzP6cjWlmpI+SibtF/Da7h1Wowvifvv+uwhMd
-         IyZ4KHeJuIDNCJIiKu0WK6VuqFqswQlay6GeoQIY=
+        b=oIjF/J5mId3BnWPHmy6wSoJ8S7tr0LInJNen2iOvYe8bSEEGm8nVOXPMZiWort9wQ
+         HzxK+ekBFsAHxT7MBkN4v3Mcv6dQoHMWyJqiqKcF9Vipt/uz0dyoJ9UJJmafKf+Z1F
+         LeztVQFN+HNH5l8ZQ0eewuYa9XMb9BmsIPeRQa4g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+983941aa85af6ded1fd9@syzkaller.appspotmail.com,
-        Andrii Nakryiko <andrii@kernel.org>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: [PATCH 5.15 765/846] xdp: check prog type before updating BPF link
-Date:   Mon, 24 Jan 2022 19:44:42 +0100
-Message-Id: <20220124184127.349600297@linuxfoundation.org>
+        Jeroen van Wolffelaar <jeroen@wolffelaar.nl>,
+        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>,
+        Theodore Tso <tytso@mit.edu>, stable@kernel.org
+Subject: [PATCH 5.16 0894/1039] ext4: set csum seed in tmp inode while migrating to extents
+Date:   Mon, 24 Jan 2022 19:44:43 +0100
+Message-Id: <20220124184155.332890868@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,43 +47,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Toke Høiland-Jørgensen <toke@redhat.com>
+From: Luís Henriques <lhenriques@suse.de>
 
-commit 382778edc8262b7535f00523e9eb22edba1b9816 upstream.
+commit e81c9302a6c3c008f5c30beb73b38adb0170ff2d upstream.
 
-The bpf_xdp_link_update() function didn't check the program type before
-updating the program, which made it possible to install any program type as
-an XDP program, which is obviously not good. Syzbot managed to trigger this
-by swapping in an LWT program on the XDP hook which would crash in a helper
-call.
+When migrating to extents, the temporary inode will have it's own checksum
+seed.  This means that, when swapping the inodes data, the inode checksums
+will be incorrect.
 
-Fix this by adding a check and bailing out if the types don't match.
+This can be fixed by recalculating the extents checksums again.  Or simply
+by copying the seed into the temporary inode.
 
-Fixes: 026a4c28e1db ("bpf, xdp: Implement LINK_UPDATE for BPF XDP link")
-Reported-by: syzbot+983941aa85af6ded1fd9@syzkaller.appspotmail.com
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Link: https://lore.kernel.org/r/20220107221115.326171-1-toke@redhat.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=213357
+Reported-by: Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
+Signed-off-by: Luís Henriques <lhenriques@suse.de>
+Link: https://lore.kernel.org/r/20211214175058.19511-1-lhenriques@suse.de
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/dev.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ fs/ext4/migrate.c |   12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -9636,6 +9636,12 @@ static int bpf_xdp_link_update(struct bp
+--- a/fs/ext4/migrate.c
++++ b/fs/ext4/migrate.c
+@@ -459,6 +459,17 @@ int ext4_ext_migrate(struct inode *inode
+ 		ext4_journal_stop(handle);
  		goto out_unlock;
  	}
- 	old_prog = link->prog;
-+	if (old_prog->type != new_prog->type ||
-+	    old_prog->expected_attach_type != new_prog->expected_attach_type) {
-+		err = -EINVAL;
-+		goto out_unlock;
-+	}
-+
- 	if (old_prog == new_prog) {
- 		/* no-op, don't disturb drivers */
- 		bpf_prog_put(new_prog);
++	/*
++	 * Use the correct seed for checksum (i.e. the seed from 'inode').  This
++	 * is so that the metadata blocks will have the correct checksum after
++	 * the migration.
++	 *
++	 * Note however that, if a crash occurs during the migration process,
++	 * the recovery process is broken because the tmp_inode checksums will
++	 * be wrong and the orphans cleanup will fail.
++	 */
++	ei = EXT4_I(inode);
++	EXT4_I(tmp_inode)->i_csum_seed = ei->i_csum_seed;
+ 	i_size_write(tmp_inode, i_size_read(inode));
+ 	/*
+ 	 * Set the i_nlink to zero so it will be deleted later
+@@ -502,7 +513,6 @@ int ext4_ext_migrate(struct inode *inode
+ 		goto out_tmp_inode;
+ 	}
+ 
+-	ei = EXT4_I(inode);
+ 	i_data = ei->i_data;
+ 	memset(&lb, 0, sizeof(lb));
+ 
 
 

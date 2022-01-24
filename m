@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA0649A00C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA49499F9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1843091AbiAXXDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:03:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59510 "EHLO
+        id S1841845AbiAXXAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:00:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1576924AbiAXV5B (ORCPT
+        with ESMTP id S1576938AbiAXV5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:57:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B68C06178C;
-        Mon, 24 Jan 2022 12:38:18 -0800 (PST)
+        Mon, 24 Jan 2022 16:57:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90FAFC038ADF;
+        Mon, 24 Jan 2022 12:38:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA133B811F9;
-        Mon, 24 Jan 2022 20:38:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4742C340E5;
-        Mon, 24 Jan 2022 20:38:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EDA961540;
+        Mon, 24 Jan 2022 20:38:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5C85C340E7;
+        Mon, 24 Jan 2022 20:38:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056696;
-        bh=G+He0CBs0oY7cJsck3Uiaa6jdKC0I2296gCo9uHeeZU=;
+        s=korg; t=1643056699;
+        bh=0NPR2GEkXmlKshR2DCdw5F1yXLjr3XEZ5JAnE8LMcEk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UFgM/C1Bb1DHRJe1Xn525JyZos7luuY5faP8Vy83ASNwF49IEmEMCjJyydDA0T0tq
-         PiV8TGfCddre4vef+GQebmBp2XD3pnwDPvTyrvvxqwF0vlGMfsXU7PIISrkjRgupbr
-         ax5DH6qsxYCbW+/ySQI+pmK45ZJsZqjkVc2wprA0=
+        b=PBQoIgjdMN/u3oImnLMibSOZRbl3B7oXqGpCQgX5nNaqExcSVNUeH0YSChnMh5eQ/
+         KtjtzY28SNj7tZPW1CVs6sZKJqrFFCNOG5taAk0dAlRdyDckNwbzrvvA/l2SxAyGmO
+         UQymxBA/pzbxhC45Lk64/ibrSk8ceZExFd9oPNYI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
+        stable@vger.kernel.org,
+        syzbot <syzbot+4d2d56175b934b9a7bf9@syzkaller.appspotmail.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 569/846] mt76: mt7615: improve wmm index allocation
-Date:   Mon, 24 Jan 2022 19:41:26 +0100
-Message-Id: <20220124184120.671123228@linuxfoundation.org>
+Subject: [PATCH 5.15 570/846] ath9k_htc: fix NULL pointer dereference at ath9k_htc_rxep()
+Date:   Mon, 24 Jan 2022 19:41:27 +0100
+Message-Id: <20220124184120.702213299@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -48,43 +51,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Felix Fietkau <nbd@nbd.name>
+From: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
 
-[ Upstream commit 70fb028707c8871ef9e56b3ffa3d895e14956cc4 ]
+[ Upstream commit b0ec7e55fce65f125bd1d7f02e2dc4de62abee34 ]
 
-Typically all AP interfaces on a PHY will share the same WMM settings, while
-sta/mesh interfaces will usually inherit the settings from a remote device.
-In order minimize the likelihood of conflicting WMM settings, make all AP
-interfaces share one slot, and all non-AP interfaces another one.
+syzbot is reporting lockdep warning followed by kernel panic at
+ath9k_htc_rxep() [1], for ath9k_htc_rxep() depends on ath9k_rx_init()
+being already completed.
 
-This also fixes running multiple AP interfaces on MT7613, which only has 3
-WMM slots.
+Since ath9k_htc_rxep() is set by ath9k_htc_connect_svc(WMI_BEACON_SVC)
+ from ath9k_init_htc_services(), it is possible that ath9k_htc_rxep() is
+called via timer interrupt before ath9k_rx_init() from ath9k_init_device()
+is called.
 
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Since we can't call ath9k_init_device() before ath9k_init_htc_services(),
+let's hold ath9k_htc_rxep() no-op until ath9k_rx_init() completes.
+
+Link: https://syzkaller.appspot.com/bug?extid=4d2d56175b934b9a7bf9 [1]
+Reported-by: syzbot <syzbot+4d2d56175b934b9a7bf9@syzkaller.appspotmail.com>
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Tested-by: syzbot <syzbot+4d2d56175b934b9a7bf9@syzkaller.appspotmail.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/2b88f416-b2cb-7a18-d688-951e6dc3fe92@i-love.sakura.ne.jp
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7615/main.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/net/wireless/ath/ath9k/htc.h          | 1 +
+ drivers/net/wireless/ath/ath9k/htc_drv_txrx.c | 8 ++++++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/main.c b/drivers/net/wireless/mediatek/mt76/mt7615/main.c
-index 51260a669d166..fc266da54fe7b 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7615/main.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7615/main.c
-@@ -211,11 +211,9 @@ static int mt7615_add_interface(struct ieee80211_hw *hw,
- 	mvif->mt76.omac_idx = idx;
+diff --git a/drivers/net/wireless/ath/ath9k/htc.h b/drivers/net/wireless/ath/ath9k/htc.h
+index 0a1634238e673..4f71e962279af 100644
+--- a/drivers/net/wireless/ath/ath9k/htc.h
++++ b/drivers/net/wireless/ath/ath9k/htc.h
+@@ -281,6 +281,7 @@ struct ath9k_htc_rxbuf {
+ struct ath9k_htc_rx {
+ 	struct list_head rxbuf;
+ 	spinlock_t rxbuflock;
++	bool initialized;
+ };
  
- 	mvif->mt76.band_idx = ext_phy;
--	if (mt7615_ext_phy(dev))
--		mvif->mt76.wmm_idx = ext_phy * (MT7615_MAX_WMM_SETS / 2) +
--				mvif->mt76.idx % (MT7615_MAX_WMM_SETS / 2);
--	else
--		mvif->mt76.wmm_idx = mvif->mt76.idx % MT7615_MAX_WMM_SETS;
-+	mvif->mt76.wmm_idx = vif->type != NL80211_IFTYPE_AP;
-+	if (ext_phy)
-+		mvif->mt76.wmm_idx += 2;
+ #define ATH9K_HTC_TX_CLEANUP_INTERVAL 50 /* ms */
+diff --git a/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c b/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
+index 8e69e8989f6d3..e7a21eaf3a68d 100644
+--- a/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
++++ b/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
+@@ -1130,6 +1130,10 @@ void ath9k_htc_rxep(void *drv_priv, struct sk_buff *skb,
+ 	struct ath9k_htc_rxbuf *rxbuf = NULL, *tmp_buf = NULL;
+ 	unsigned long flags;
  
- 	dev->mt76.vif_mask |= BIT(mvif->mt76.idx);
- 	dev->omac_mask |= BIT_ULL(mvif->mt76.omac_idx);
++	/* Check if ath9k_rx_init() completed. */
++	if (!data_race(priv->rx.initialized))
++		goto err;
++
+ 	spin_lock_irqsave(&priv->rx.rxbuflock, flags);
+ 	list_for_each_entry(tmp_buf, &priv->rx.rxbuf, list) {
+ 		if (!tmp_buf->in_process) {
+@@ -1185,6 +1189,10 @@ int ath9k_rx_init(struct ath9k_htc_priv *priv)
+ 		list_add_tail(&rxbuf->list, &priv->rx.rxbuf);
+ 	}
+ 
++	/* Allow ath9k_htc_rxep() to operate. */
++	smp_wmb();
++	priv->rx.initialized = true;
++
+ 	return 0;
+ 
+ err:
 -- 
 2.34.1
 

@@ -2,160 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6855C499357
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:34:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D20814993B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:38:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384504AbiAXUdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:33:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34020 "EHLO
+        id S1386380AbiAXUf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:35:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346897AbiAXUMN (ORCPT
+        with ESMTP id S1353760AbiAXUNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:12:13 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31AF5C028C24
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:33:54 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id z25-20020a0568301db900b005946f536d85so23655074oti.9
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:33:54 -0800 (PST)
+        Mon, 24 Jan 2022 15:13:47 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB2BC0604D9
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:37:16 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id s9so27115347oib.11
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:37:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=v4SG+DqwLKzywP0j01kwA66yUj5lO6i+67mlhA4ZOG4=;
-        b=R3PLwXkZGrs9ceWT1j8dt5GiDq1FaY0RBbkRiyJ5xFRj8KlGtFPGfM5BNZYqW+ONq8
-         aFLQeCr3namNypqS03nc7dxIQhBmcXckv0nuEMmiDcz1gA5NSNsaiIdUN/qLotSFxGMn
-         kiH4+VNO9kusFxuqPy0o4vKumCh+SifaZiN9Y=
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6T+a8Bx06xvDutb5+VHfkoYO4ESKNGds/DLEsaoyVx8=;
+        b=FMSnFxr7XrvMSHM8YrAM6NA5d3ET8kIpzVnWIzWt1EKy7/wkEHXze29Yi49fGJq+Y5
+         GnxGPakbkFU5mIiNUV80zkvcs5Lq3FDyau5p4lc5ZHUMincF4tlOGxC64RcVK/YGhUhh
+         TA7kmVkXemc68K3B6H4WUIdjUnrcj0Z5AQRok=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=v4SG+DqwLKzywP0j01kwA66yUj5lO6i+67mlhA4ZOG4=;
-        b=I1vm4MPl9WYvcQYUNtwqAvbD4e//M0kszQty03K+iCaVGG1eSRu5iVfELzC0uC3ekX
-         OiXWs/D43wDngjt0hT8PGkxecTjn76/BDw3LlTaajqDEyR9kJRiwjC5uLOkvrCiuN6Iu
-         zcmIbzIJ6ksjhVU0+AqpLyYXeVN3l49Rp9c9NKuas4QctHel0M5pGG6BxMFyCqF795GJ
-         SVbQg0x6dykfQ+0goJbKBMTfiaTNtNmtF7vRIhm/eZEUAG1pOm3koEw8kxE5jJVTg+XU
-         FUv+bfV8egD0//roH4Npr35AwaJVO1sIJZZohU7XL0kxohm3t5AWGCoRq2HtDliLDlpq
-         7iqQ==
-X-Gm-Message-State: AOAM533pQzK7Y8NsFdgwG4mdg/H9ZJus6IWhBdqShJu10j9EpMLwXwfO
-        IC1K1QAobyUWTQIde7QWwFb/RNNnx7JVf7pXUxR+fQ==
-X-Google-Smtp-Source: ABdhPJxerNGg5PQ/cE7yz50qIfApJ1R8+nvofzeC6d9N1nf/CtJn5zcX/vn8QEy6PjgNpOeM0zb4zAeqFy0ndz+r+Dw=
-X-Received: by 2002:a9d:410d:: with SMTP id o13mr5394273ote.77.1643052833561;
- Mon, 24 Jan 2022 11:33:53 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 24 Jan 2022 11:33:53 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6T+a8Bx06xvDutb5+VHfkoYO4ESKNGds/DLEsaoyVx8=;
+        b=USjnHWCAHxFR2z+6VYgIrxV1MD84Ilax/Vh67XgRu67jAj6Xy0gF93VfHqSz3ofEjU
+         chbsVld2aR6OGnBK6h6ErRyDDn2l4SD0ZENuwq3FuWI/rGzERjTLpDKmB1VweQBAXb/V
+         2KBA8Bowd2Lga5NU7UbGbR2J0emjKZ/YyTn5hMx8IOq73X76OGHjnDBDpbKXd0SxvoN5
+         EWnSz34f+0+beOIqUw4pK1p0wBlGL9O0urFG5qY8+7Ub0JtC+WLPUDucSIuLialu2DQ/
+         4wGUgSx+vidKwAQkkDtOa/ygmY5wPNDIPETSP536joPowBlgUi9CUy40xDTWi20xO4/r
+         8YTQ==
+X-Gm-Message-State: AOAM532z/O1bQyQtPqKHuvKwI1A//B3IYKZfyxr6YaGS+6b0xTtLK99/
+        ufCpkHurba9PlMiXfR8ZhETZH0c7hHJbVoe5FgvMSQ==
+X-Google-Smtp-Source: ABdhPJx2AuJy+QcrAabTMb6vCZNPkX02N/uNR4+C15e6Iu9I+hPt4usCsK7v1wJ/eTUYdqctv9P8j2XhiTCfUUNkhbA=
+X-Received: by 2002:a05:6808:1188:: with SMTP id j8mr2716171oil.101.1643053036285;
+ Mon, 24 Jan 2022 11:37:16 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <efa57fd8-d2ac-4c02-04ac-c62315b3b28c@quicinc.com>
-References: <20220120204132.17875-1-quic_amelende@quicinc.com>
- <20220120204132.17875-2-quic_amelende@quicinc.com> <CAE-0n508nxF_c9pzsTaQfSi42ZGQXkqb3NyQebuMBec2DCV0KA@mail.gmail.com>
- <efa57fd8-d2ac-4c02-04ac-c62315b3b28c@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 24 Jan 2022 11:33:53 -0800
-Message-ID: <CAE-0n51GUGskL17MGhk-=-dbdPU_3ChE37Hbzq6VBZc2Ge0vkA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] input: misc: pm8941-pwrkey: add software key press
- debouncing support
-To:     Anjelique Melendez <quic_amelende@quicinc.com>,
-        dmitry.torokhov@gmail.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, collinsd@codeaurora.org,
-        bjorn.andersson@linaro.org, skakit@codeaurora.org
+References: <YeG8ydoJNWWkGrTb@ls3530> <c48ad8ae-aea5-43fa-882f-dccb90dde9a4@suse.de>
+ <87bl0amc6s.fsf@x1.stackframe.org> <20220118103323.4bae3a7d@eldfell>
+ <20220118095352.xsb6fqacw4p276c5@sirius.home.kraxel.org> <CAMuHMdWV+-+Jr7HggbfH_GEDcdep4pJLiMG+15jxBvQ91BCS0w@mail.gmail.com>
+ <CAKMK7uEOFg3z2btFERQ5XBQ7hqex6bXCb9X=SdwCjeLfX_SdFw@mail.gmail.com>
+ <CAMuHMdVjv1+UNeXkCBE+80tdtLuNg=5d6N12hNLgJdaS-jxERg@mail.gmail.com>
+ <CAKMK7uEwDdaR7kDVi9Oah0w8qFEoAywp_wj2eH7DtttVD2L00A@mail.gmail.com> <CAMuHMdUyHEExOCtH-hKh0HmZzadmfZaR=vAVYJkTvphfzs3Xiw@mail.gmail.com>
+In-Reply-To: <CAMuHMdUyHEExOCtH-hKh0HmZzadmfZaR=vAVYJkTvphfzs3Xiw@mail.gmail.com>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Mon, 24 Jan 2022 20:37:04 +0100
+Message-ID: <CAKMK7uGtjNgRo8t4ZY_ouve2GSbdkjBsw6Gso=riV2CbOJkpzA@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Gerd Hoffmann <kraxel@redhat.com>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Helge Deller <deller@gmx.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sven Schnelle <svens@stackframe.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Anjelique Melendez (2022-01-21 16:04:13)
+On Mon, Jan 24, 2022 at 7:51 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 >
+> Hi Daniel,
 >
-> On 1/20/2022 8:08 PM, Stephen Boyd wrote:
-> > Quoting Anjelique Melendez (2022-01-20 12:41:33)
-> >> @@ -200,15 +268,21 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
-> >>                         dev_err(&pdev->dev, "failed to locate regmap\n");
-> >>                         return -ENODEV;
-> >>                 }
-> >> +       }
-> >>
-> >> -               error = of_property_read_u32(parent->of_node,
-> >> -                                            "reg", &pwrkey->baseaddr);
-> >> -       } else {
-> >> -               error = of_property_read_u32(pdev->dev.of_node, "reg",
-> >> -                                            &pwrkey->baseaddr);
-> >> +       addr = of_get_address(regmap_node, 0, NULL, NULL);
-> >> +       if (!addr) {
-> >> +               dev_err(&pdev->dev, "reg property missing\n");
-> >> +               return -EINVAL;
-> >> +       }
-> >> +       pwrkey->baseaddr = be32_to_cpu(*addr);
-> > Can this hunk be split off? A new API is used and it doesn't look
-> > relevant to this patch.
+> On Thu, Jan 20, 2022 at 1:33 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+> > But reading code&docs is too hard I guess, safer to assume it's just
+> > broken and not supported.
 >
-> In PMK8350 and following chips the reg property will have the pon hlos address first,
-> followed by a second pon pbs address. This change is needed so that both the older chipsets
-> and the newer can be used regardless of how many reg addresses are being used.
+> I confirm there's lots of documentation (and even more code ;-),
+> which is always great!
+> But both are intimidating to me, and most of the documentation covers
+> features I'm not interested in, as they're only applicable to fancy
+> modern truecolor 3D-capable multi-buffer and multi-head hardware, while
+> what I am looking for is usually not documented.  E.g. I had a hard
+> time to discover how color look-up tables work (gamma_{store,size}!),
+> as this is not covered in https://docs.kernel.org/gpu/index.html,
+> and none of the tinydrm drivers support CLUT modes.
 
-Got it, but do we ned to change to of_get_address() in this patch? I was
-suggesting that the change to the new API be done first so that it's
-clearer what's going on with the change in address location.
+Hm yeah that part is a bit awkward since due to how Xorg works here
+the gamma table is abused to be the lookup table for C8. If we're
+adding piles of new Cx formats it might be worth it to structure this
+a bit better, e.g. (really just thinking on the spot here):
+- have a separate Cx lookup table blob in drm_plane_state (in theory
+you could have a different one on each plane and still have an overall
+gamma ramp on the crtc)
+- change the compat functions which map the legacy gamma ramp to
+redirect to the plane gamma ramp if the primary plane is set to Cx
+- bonus points for then correctly sizing the lookup table to match the
+number of bits in the Cx plane format
 
->
-> >
-> >> +
-> >> +       if (pwrkey->data->has_pon_pbs) {
-> >> +               /* PON_PBS base address is optional */
-> >> +               addr = of_get_address(regmap_node, 1, NULL, NULL);
-> >> +               if (addr)
-> >> +                       pwrkey->pon_pbs_baseaddr = be32_to_cpu(*addr);
-> >>         }
-> >> -       if (error)
-> >> -               return error;
-> >>
-> >>         pwrkey->irq = platform_get_irq(pdev, 0);
-> >>         if (pwrkey->irq < 0)
-> >> @@ -217,7 +291,14 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
-> >>         error = regmap_read(pwrkey->regmap, pwrkey->baseaddr + PON_REV2,
-> >>                             &pwrkey->revision);
-> >>         if (error) {
-> >> -               dev_err(&pdev->dev, "failed to set debounce: %d\n", error);
-> >> +               dev_err(&pdev->dev, "failed to read revision: %d\n", error);
-> > Nice error message fix!
+But unfiddling this confusion properly is going to be tricky. I think
+just continuing the tradition we have for C8 and reusing the crtc
+gamma ramp for that is probably fine for now.
 
-This can be split off to a different patch as well.
+And yes that's not documented, because when we fixed the docs for the
+entire degamm/CGM/gamma color correction pipeline Cx wasn't the top
+priority :-)
 
-> >
-> >> +               return error;
-> >> +       }
-> >> +
-> >> +       error = regmap_read(pwrkey->regmap, pwrkey->baseaddr + PON_SUBTYPE,
-> >> +                           &pwrkey->subtype);
-> >> +       if (error) {
-> >> +               dev_err(&pdev->dev, "failed to read subtype: %d\n", error);
-> >>                 return error;
-> >>         }
-> >>
-> >> @@ -255,6 +336,12 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
-> >>                 }
-> >>         }
-> >>
-> >> +       if (pwrkey->data->needs_sw_debounce) {
-> >> +               error = pm8941_pwrkey_sw_debounce_init(pwrkey);
-> >> +               if (error)
-> >> +                       return error;
-> >> +       }
-> >> +
-> >>         if (pwrkey->data->pull_up_bit) {
-> >>                 error = regmap_update_bits(pwrkey->regmap,
-> >>                                            pwrkey->baseaddr + PON_PULL_CTL,
-> >> @@ -316,6 +403,8 @@ static const struct pm8941_data pwrkey_data = {
-> >>         .phys = "pm8941_pwrkey/input0",
-> >>         .supports_ps_hold_poff_config = true,
-> >>         .supports_debounce_config = true,
-> >> +       .needs_sw_debounce = true,
-> > needs_sw_debounce is always true? Why is it even an option then?
->
-> As of right now the "needs_sw_debounce" property is being used for a sw work around for a hw
-> problem. We anticipate that chips in the future will fix this hw problem and we would then have
-> devices where needs_sw_debounce would be set to false.
-
-Hmm ok. Why can't future chips be supported in this series? What happens
-if nobody ever adds support for the new chips? We're left with this
-condition that looks like dead code.
+Cheers, Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

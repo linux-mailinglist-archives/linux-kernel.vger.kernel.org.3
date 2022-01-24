@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD141499D7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95FBB4995CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:13:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1585389AbiAXWX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:23:29 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47072 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359668AbiAXV06 (ORCPT
+        id S1443052AbiAXU4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:56:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38722 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385491AbiAXUd3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:26:58 -0500
+        Mon, 24 Jan 2022 15:33:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EF0C061366;
+        Mon, 24 Jan 2022 11:13:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EEC6361028;
-        Mon, 24 Jan 2022 21:26:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA61BC340E4;
-        Mon, 24 Jan 2022 21:26:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E5700B811F9;
+        Mon, 24 Jan 2022 19:13:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 088EDC340E5;
+        Mon, 24 Jan 2022 19:13:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059613;
-        bh=A1yCa7zVPJjMq59948eC6md/PSXKVMLzT/LBZ8zQ1oI=;
+        s=korg; t=1643051595;
+        bh=2Vc5uuT2sZZYyfYgafyeNPF3odAtR3w3IPP05lx1XxE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V0SBA2UqinZ2Ppcg7UnGwCQWKhXcsQbhKqXZJKNH0tySB8SJSroxI3ii8rmYmnC6v
-         ZffIWNYLIxfQJ9l4dv/cFBELkaw16xfDxR7eCYQLttRPCFtjwRaF/2OawqCvr4WC05
-         61BEfZVx0nwWuIsYkD9fmoDNyf3fI53xKjnMwSPM=
+        b=GZa4/994ccEa2soU0uAa7Ga+JachJxQlACjTn721WM3PrZkPId3+FnRpiWBYplR0Y
+         /j6XU44HBBvolVk1423uJ5XH+yythLQQDtPLo1y0jiZwB7tsClPbQp+1KU8c4qfczU
+         RqEIfEXW1jsW5z4JqTFv6NleQswx5NqCNA/F+/aQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Deren Wu <deren.wu@mediatek.com>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0674/1039] mt76: mt7921: fix network buffer leak by txs missing
+        stable@vger.kernel.org, Jason Gerecke <jason.gerecke@wacom.com>,
+        Ping Cheng <ping.cheng@wacom.com>,
+        Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH 4.19 025/239] HID: wacom: Avoid using stale array indicies to read contact count
 Date:   Mon, 24 Jan 2022 19:41:03 +0100
-Message-Id: <20220124184148.027996090@linuxfoundation.org>
+Message-Id: <20220124183943.920097912@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,118 +49,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Deren Wu <deren.wu@mediatek.com>
+From: Jason Gerecke <killertofu@gmail.com>
 
-[ Upstream commit e0bf699ad8e52330d848144a9624a067ad588bd6 ]
+commit 20f3cf5f860f9f267a6a6e5642d3d0525edb1814 upstream.
 
-TXS in mt7921 may be forwared to tx_done event. Should try to catch
-TXS information in tx_done event as well.
+If we ever see a touch report with contact count data we initialize
+several variables used to read the contact count in the pre-report
+phase. These variables are never reset if we process a report which
+doesn't contain a contact count, however. This can cause the pre-
+report function to trigger a read of arbitrary memory (e.g. NULL
+if we're lucky) and potentially crash the driver.
 
-Signed-off-by: Deren Wu <deren.wu@mediatek.com>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This commit restores resetting of the variables back to default
+"none" values that were used prior to the commit mentioned
+below.
+
+Link: https://github.com/linuxwacom/input-wacom/issues/276
+Fixes: 003f50ab673c (HID: wacom: Update last_slot_field during pre_report phase)
+CC: stable@vger.kernel.org
+Signed-off-by: Jason Gerecke <jason.gerecke@wacom.com>
+Reviewed-by: Ping Cheng <ping.cheng@wacom.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../net/wireless/mediatek/mt76/mt7921/mac.c   |  2 +-
- .../net/wireless/mediatek/mt76/mt7921/mcu.c   | 14 ++++++++++
- .../net/wireless/mediatek/mt76/mt7921/mcu.h   | 27 +++++++++++++++++++
- .../wireless/mediatek/mt76/mt7921/mt7921.h    |  1 +
- 4 files changed, 43 insertions(+), 1 deletion(-)
+ drivers/hid/wacom_wac.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/mac.c b/drivers/net/wireless/mediatek/mt76/mt7921/mac.c
-index 7228b34c66436..fc21a78b37c49 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/mac.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/mac.c
-@@ -1072,7 +1072,7 @@ out:
- 	return !!skb;
- }
+--- a/drivers/hid/wacom_wac.c
++++ b/drivers/hid/wacom_wac.c
+@@ -2610,6 +2610,10 @@ static void wacom_wac_finger_pre_report(
  
--static void mt7921_mac_add_txs(struct mt7921_dev *dev, void *data)
-+void mt7921_mac_add_txs(struct mt7921_dev *dev, void *data)
- {
- 	struct mt7921_sta *msta = NULL;
- 	struct mt76_wcid *wcid;
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7921/mcu.c
-index 1cc1c32ca258e..484a8c57b862e 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/mcu.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/mcu.c
-@@ -391,6 +391,17 @@ mt7921_mcu_low_power_event(struct mt7921_dev *dev, struct sk_buff *skb)
- 	trace_lp_event(dev, event->state);
- }
+ 	hid_data->confidence = true;
  
-+static void
-+mt7921_mcu_tx_done_event(struct mt7921_dev *dev, struct sk_buff *skb)
-+{
-+	struct mt7921_mcu_tx_done_event *event;
++	hid_data->cc_report = 0;
++	hid_data->cc_index = -1;
++	hid_data->cc_value_index = -1;
 +
-+	skb_pull(skb, sizeof(struct mt7921_mcu_rxd));
-+	event = (struct mt7921_mcu_tx_done_event *)skb->data;
-+
-+	mt7921_mac_add_txs(dev, event->txs);
-+}
-+
- static void
- mt7921_mcu_rx_unsolicited_event(struct mt7921_dev *dev, struct sk_buff *skb)
- {
-@@ -418,6 +429,9 @@ mt7921_mcu_rx_unsolicited_event(struct mt7921_dev *dev, struct sk_buff *skb)
- 	case MCU_EVENT_LP_INFO:
- 		mt7921_mcu_low_power_event(dev, skb);
- 		break;
-+	case MCU_EVENT_TX_DONE:
-+		mt7921_mcu_tx_done_event(dev, skb);
-+		break;
- 	default:
- 		break;
- 	}
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/mcu.h b/drivers/net/wireless/mediatek/mt76/mt7921/mcu.h
-index edc0c73f8c01c..68cb0ce013dbd 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/mcu.h
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/mcu.h
-@@ -91,6 +91,33 @@ enum {
- 	MCU_EVENT_COREDUMP = 0xf0,
- };
- 
-+struct mt7921_mcu_tx_done_event {
-+	u8 pid;
-+	u8 status;
-+	__le16 seq;
-+
-+	u8 wlan_idx;
-+	u8 tx_cnt;
-+	__le16 tx_rate;
-+
-+	u8 flag;
-+	u8 tid;
-+	u8 rsp_rate;
-+	u8 mcs;
-+
-+	u8 bw;
-+	u8 tx_pwr;
-+	u8 reason;
-+	u8 rsv0[1];
-+
-+	__le32 delay;
-+	__le32 timestamp;
-+	__le32 applied_flag;
-+	u8 txs[28];
-+
-+	u8 rsv1[32];
-+} __packed;
-+
- /* ext event table */
- enum {
- 	MCU_EXT_EVENT_RATE_REPORT = 0x87,
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/mt7921.h b/drivers/net/wireless/mediatek/mt76/mt7921/mt7921.h
-index d6b823713ba33..96647801850a5 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/mt7921.h
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/mt7921.h
-@@ -464,4 +464,5 @@ int mt7921s_tx_prepare_skb(struct mt76_dev *mdev, void *txwi_ptr,
- 			   struct mt76_tx_info *tx_info);
- void mt7921s_tx_complete_skb(struct mt76_dev *mdev, struct mt76_queue_entry *e);
- bool mt7921s_tx_status_data(struct mt76_dev *mdev, u8 *update);
-+void mt7921_mac_add_txs(struct mt7921_dev *dev, void *data);
- #endif
--- 
-2.34.1
-
+ 	for (i = 0; i < report->maxfield; i++) {
+ 		struct hid_field *field = report->field[i];
+ 		int j;
 
 

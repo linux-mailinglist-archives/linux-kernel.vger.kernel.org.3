@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D41F749933F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D381D4990CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354429AbiAXUcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:32:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
+        id S1377093AbiAXUEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:04:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355393AbiAXUNh (ORCPT
+        with ESMTP id S1356708AbiAXTrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:13:37 -0500
+        Mon, 24 Jan 2022 14:47:04 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A25C061354;
-        Mon, 24 Jan 2022 11:11:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E0BC038ADE;
+        Mon, 24 Jan 2022 11:22:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F45AB81236;
-        Mon, 24 Jan 2022 19:11:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A22BCC340E5;
-        Mon, 24 Jan 2022 19:11:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6EF6EB810BD;
+        Mon, 24 Jan 2022 19:22:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3A3EC340E5;
+        Mon, 24 Jan 2022 19:22:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051473;
-        bh=/wufMqX4nHb3ttYgY9ynSmxAtApyX6khtVhKyV0tUd8=;
+        s=korg; t=1643052166;
+        bh=HJF1USL0tK5yt1VH2wuXAGk9bp4CfHgV/w0pSwgs8ZM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f1CQ9nu6rs7etiNR6Ghordt3j+3hlWfPKBE0FYeWl5k5cLb/xamywP6csbF5iBGWz
-         sD9ZMCkn5atCnztQNu2RFeWtrswOYFEiUsLWu3xE2a2NMvR39a7oyKZZ9hzQNcUXiC
-         1FxbM/ICzy5R+5zK24O9s1JOVGtgAjCnu7WQG4QA=
+        b=Ro9gttmReiYHy/V5lWEX2sIWoooyoGRFLnBALRlp4V+yiY3UG1Xk5oYsK/UyDmCx7
+         rfVhQaNeuhZ41QVKXvCK3SKqG60VhsZeXyNRiTKkgZdA/3jplIiwdL0S2w3HRwvIr0
+         9y+LwqGg51B9pJUDS1hThmXOREC2HcPRr6CI7rcc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 4.14 172/186] dmaengine: at_xdmac: Dont start transactions at tx_submit level
+        stable@vger.kernel.org, Pascal Paillet <p.paillet@st.com>,
+        Mark Brown <broonie@kernel.org>, Andre Kalb <andre.kalb@sma.de>
+Subject: [PATCH 4.19 209/239] regulator: core: Let boot-on regulators be powered off
 Date:   Mon, 24 Jan 2022 19:44:07 +0100
-Message-Id: <20220124183942.646167534@linuxfoundation.org>
+Message-Id: <20220124183949.754390300@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,53 +48,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tudor Ambarus <tudor.ambarus@microchip.com>
+From: Pascal Paillet <p.paillet@st.com>
 
-commit bccfb96b59179d4f96cbbd1ddff8fac6d335eae4 upstream.
+commit 089b3f61ecfc43ca4ea26d595e1d31ead6de3f7b upstream.
 
-tx_submit is supposed to push the current transaction descriptor to a
-pending queue, waiting for issue_pending() to be called. issue_pending()
-must start the transfer, not tx_submit(), thus remove
-at_xdmac_start_xfer() from at_xdmac_tx_submit(). Clients of at_xdmac that
-assume that tx_submit() starts the transfer must be updated and call
-dma_async_issue_pending() if they miss to call it (one example is
-atmel_serial).
+Boot-on regulators are always kept on because their use_count value
+is now incremented at boot time and never cleaned.
 
-As the at_xdmac_start_xfer() is now called only from
-at_xdmac_advance_work() when !at_xdmac_chan_is_enabled(), the
-at_xdmac_chan_is_enabled() check is no longer needed in
-at_xdmac_start_xfer(), thus remove it.
+Only increment count value for alway-on regulators.
+regulator_late_cleanup() is now able to power off boot-on regulators
+when unused.
 
-Fixes: e1f7c9eee707 ("dmaengine: at_xdmac: creation of the atmel eXtended DMA Controller driver")
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Link: https://lore.kernel.org/r/20211215110115.191749-2-tudor.ambarus@microchip.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Fixes: 05f224ca6693 ("regulator: core: Clean enabling always-on regulators + their supplies")
+Signed-off-by: Pascal Paillet <p.paillet@st.com>
+Link: https://lore.kernel.org/r/20191113102737.27831-1-p.paillet@st.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Acked-by: Andre Kalb <andre.kalb@sma.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/at_xdmac.c |    6 ------
- 1 file changed, 6 deletions(-)
+ drivers/regulator/core.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/dma/at_xdmac.c
-+++ b/drivers/dma/at_xdmac.c
-@@ -344,9 +344,6 @@ static void at_xdmac_start_xfer(struct a
+--- a/drivers/regulator/core.c
++++ b/drivers/regulator/core.c
+@@ -1211,7 +1211,9 @@ static int set_machine_constraints(struc
+ 			rdev_err(rdev, "failed to enable\n");
+ 			return ret;
+ 		}
+-		rdev->use_count++;
++
++		if (rdev->constraints->always_on)
++			rdev->use_count++;
+ 	}
  
- 	dev_vdbg(chan2dev(&atchan->chan), "%s: desc 0x%p\n", __func__, first);
- 
--	if (at_xdmac_chan_is_enabled(atchan))
--		return;
--
- 	/* Set transfer as active to not try to start it again. */
- 	first->active_xfer = true;
- 
-@@ -430,9 +427,6 @@ static dma_cookie_t at_xdmac_tx_submit(s
- 	dev_vdbg(chan2dev(tx->chan), "%s: atchan 0x%p, add desc 0x%p to xfers_list\n",
- 		 __func__, atchan, desc);
- 	list_add_tail(&desc->xfer_node, &atchan->xfers_list);
--	if (list_is_singular(&atchan->xfers_list))
--		at_xdmac_start_xfer(atchan, desc);
--
- 	spin_unlock_irqrestore(&atchan->lock, irqflags);
- 	return cookie;
- }
+ 	print_constraints(rdev);
 
 

@@ -2,176 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA252498DD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DBE498DB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:37:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354514AbiAXTgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:36:41 -0500
-Received: from mga01.intel.com ([192.55.52.88]:26900 "EHLO mga01.intel.com"
+        id S1353703AbiAXTfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:35:16 -0500
+Received: from mga14.intel.com ([192.55.52.115]:3553 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353012AbiAXTbr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:31:47 -0500
+        id S1347994AbiAXT1a (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 14:27:30 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643052707; x=1674588707;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TG2q+/j5awwYR/POyqAYX1Q9rqeQKWr70oDpRqB7LlU=;
-  b=OpeDbzmomFhVe/xtmUHEXwiUECnmsupX24xydig8bqPJAE5iSyZgGV3H
-   HJ+0C+aNTyHd4KkdlBG29Sn/pJ4oSasnJXF5WxUysDFU2+iii87KTouIL
-   kn3/EAqHOXOkEUuH5quaTwI+Emhq7Du0i5Wb7tVv38iajEl72jtCc7KQ/
-   Us7CAamZ6YgUxIX+No0AScHuXwiQM2uJBAp8IpOQPqjQ8l2EbcYCAJ8AI
-   I66TYZFHxPLRVakCtpIeHpM7XObVYSoFjh8O2dntFAuZ+T05/rC9Ci+De
-   dtPLukTA5Xbt3srOjVQVswkIWZBge1LnyrY2lG0Jp6v9YwhVDAPGsUSY3
+  t=1643052449; x=1674588449;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=92G7QDVUIZopiXhcTFwl2+WPw+P0JDGWz1LsH6KJXFQ=;
+  b=U7xckXFisFQfm9DZAKaHs6FnUwx2ywnuPw9lO2dCQV/jtWsxIHUq1dX2
+   oN8q+AacrvWLP/E7NF2dOoSwJ9ixfz0I//EUPsvBU4rbVCnkwDrQk30nz
+   08hpT9RJGaEG+dpDwm2lwfz3bWthQGNnpJ/XhtaeaFA/2SI+qqp3Zanz8
+   +6iiYP2ptxfOQ4Ik2JtdaaGmsKFkA40NwD/E7VCpQPJY6u/m0YVASt8vj
+   LODnVt40WdyB7f7My/WXsc9CuQY/VkODyysgirplA93Gn0er+rFF6wjg7
+   bnN40GrnzPtD2n2EROOuew5X21zVIXIa2hBCKaHvhHJlSKbMWV5Gbygah
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="270567357"
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="246347515"
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="270567357"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 11:25:07 -0800
+   d="scan'208";a="246347515"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 11:25:05 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="768782484"
+   d="scan'208";a="695539896"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 24 Jan 2022 11:25:03 -0800
+  by orsmga005.jf.intel.com with ESMTP; 24 Jan 2022 11:25:03 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nC4xa-000IoP-Oz; Mon, 24 Jan 2022 19:25:02 +0000
-Date:   Tue, 25 Jan 2022 03:24:14 +0800
+        id 1nC4xa-000IoI-Lf; Mon, 24 Jan 2022 19:25:02 +0000
+Date:   Tue, 25 Jan 2022 03:24:25 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>
-Cc:     kbuild-all@lists.01.org, Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>
-Subject: Re: [PATCH v4 5/9] ARM: rethook: Add rethook arm implementation
-Message-ID: <202201250328.drn6ia3n-lkp@intel.com>
-References: <164304061932.1680787.11603911228891618150.stgit@devnote2>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1750/2384]
+ arch/mips/include/asm/mach-bcm63xx/bcm63xx_dev_enet.h:38:27: warning:
+ declaration of 'struct net_device' will not be visible outside of this
+ function
+Message-ID: <202201250317.7RaTIwIn-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <164304061932.1680787.11603911228891618150.stgit@devnote2>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masami,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on rostedt-trace/for-next]
-[also build test ERROR on arm64/for-next/core tip/x86/core linus/master v5.17-rc1 next-20220124]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Masami-Hiramatsu/fprobe-Introduce-fprobe-function-entry-exit-probe/20220125-001253
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
-config: arm-aspeed_g5_defconfig (https://download.01.org/0day-ci/archive/20220125/202201250328.drn6ia3n-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   4c707c1c0de83967079b4e385012fa5b00e2cd11
+commit: 665097d414cd5e34cf1c21585efc611205ab1efa [1750/2384] headers/deps: net: Optimize <linux/if_ether.h>
+config: mips-bcm63xx_defconfig (https://download.01.org/0day-ci/archive/20220125/202201250317.7RaTIwIn-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2e58a18910867ba6795066e044293e6daf89edf5)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/df6df88bb474db78d80fc5619d39b25ec15d5d16
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Masami-Hiramatsu/fprobe-Introduce-fprobe-function-entry-exit-probe/20220125-001253
-        git checkout df6df88bb474db78d80fc5619d39b25ec15d5d16
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=665097d414cd5e34cf1c21585efc611205ab1efa
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 665097d414cd5e34cf1c21585efc611205ab1efa
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/ kernel//
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   arch/arm/kernel/stacktrace.c: In function 'unwind_frame':
->> arch/arm/kernel/stacktrace.c:71:56: error: 'struct stackframe' has no member named 'tsk'
-      71 |                 frame->pc = rethook_find_ret_addr(frame->tsk, frame->fp,
-         |                                                        ^~
->> arch/arm/kernel/stacktrace.c:72:57: error: 'struct stackframe' has no member named 'kr_cur'
-      72 |                                                   &frame->kr_cur);
-         |                                                         ^~
+   In file included from arch/mips/bcm63xx/dev-enet.c:16:
+>> arch/mips/include/asm/mach-bcm63xx/bcm63xx_dev_enet.h:38:27: warning: declaration of 'struct net_device' will not be visible outside of this function [-Wvisibility]
+           int (*mii_config)(struct net_device *dev, int probe,
+                                    ^
+   1 warning generated.
 
 
-vim +71 arch/arm/kernel/stacktrace.c
+vim +38 arch/mips/include/asm/mach-bcm63xx/bcm63xx_dev_enet.h
 
-    12	
-    13	#if defined(CONFIG_FRAME_POINTER) && !defined(CONFIG_ARM_UNWIND)
-    14	/*
-    15	 * Unwind the current stack frame and store the new register values in the
-    16	 * structure passed as argument. Unwinding is equivalent to a function return,
-    17	 * hence the new PC value rather than LR should be used for backtrace.
-    18	 *
-    19	 * With framepointer enabled, a simple function prologue looks like this:
-    20	 *	mov	ip, sp
-    21	 *	stmdb	sp!, {fp, ip, lr, pc}
-    22	 *	sub	fp, ip, #4
-    23	 *
-    24	 * A simple function epilogue looks like this:
-    25	 *	ldm	sp, {fp, sp, pc}
-    26	 *
-    27	 * When compiled with clang, pc and sp are not pushed. A simple function
-    28	 * prologue looks like this when built with clang:
-    29	 *
-    30	 *	stmdb	{..., fp, lr}
-    31	 *	add	fp, sp, #x
-    32	 *	sub	sp, sp, #y
-    33	 *
-    34	 * A simple function epilogue looks like this when built with clang:
-    35	 *
-    36	 *	sub	sp, fp, #x
-    37	 *	ldm	{..., fp, pc}
-    38	 *
-    39	 *
-    40	 * Note that with framepointer enabled, even the leaf functions have the same
-    41	 * prologue and epilogue, therefore we can ignore the LR value in this case.
-    42	 */
-    43	int notrace unwind_frame(struct stackframe *frame)
-    44	{
-    45		unsigned long high, low;
-    46		unsigned long fp = frame->fp;
-    47	
-    48		/* only go to a higher address on the stack */
-    49		low = frame->sp;
-    50		high = ALIGN(low, THREAD_SIZE);
-    51	
-    52	#ifdef CONFIG_CC_IS_CLANG
-    53		/* check current frame pointer is within bounds */
-    54		if (fp < low + 4 || fp > high - 4)
-    55			return -EINVAL;
-    56	
-    57		frame->sp = frame->fp;
-    58		frame->fp = *(unsigned long *)(fp);
-    59		frame->pc = *(unsigned long *)(fp + 4);
-    60	#else
-    61		/* check current frame pointer is within bounds */
-    62		if (fp < low + 12 || fp > high - 4)
-    63			return -EINVAL;
-    64	
-    65		/* restore the registers from the stack frame */
-    66		frame->fp = *(unsigned long *)(fp - 12);
-    67		frame->sp = *(unsigned long *)(fp - 8);
-    68		frame->pc = *(unsigned long *)(fp - 4);
-    69	#endif
-    70		if (IS_ENABLED(CONFIG_RETHOOK) && is_rethook_trampoline(frame->pc))
-  > 71			frame->pc = rethook_find_ret_addr(frame->tsk, frame->fp,
-  > 72							  &frame->kr_cur);
-    73	#ifdef CONFIG_KRETPROBES
-    74		if (is_kretprobe_trampoline(frame->pc))
-    75			frame->pc = kretprobe_find_ret_addr(frame->tsk,
-    76						(void *)frame->fp, &frame->kr_cur);
-    77	#endif
-    78	
-    79		return 0;
-    80	}
-    81	#endif
-    82	
+3dc6475c0c9e55 Florian Fainelli 2013-06-12   9  
+e7300d04bd0809 Maxime Bizon     2009-08-18  10  /*
+e7300d04bd0809 Maxime Bizon     2009-08-18  11   * on board ethernet platform data
+e7300d04bd0809 Maxime Bizon     2009-08-18  12   */
+e7300d04bd0809 Maxime Bizon     2009-08-18  13  struct bcm63xx_enet_platform_data {
+e7300d04bd0809 Maxime Bizon     2009-08-18  14  	char mac_addr[ETH_ALEN];
+e7300d04bd0809 Maxime Bizon     2009-08-18  15  
+e7300d04bd0809 Maxime Bizon     2009-08-18  16  	int has_phy;
+e7300d04bd0809 Maxime Bizon     2009-08-18  17  
+e7300d04bd0809 Maxime Bizon     2009-08-18  18  	/* if has_phy, then set use_internal_phy */
+e7300d04bd0809 Maxime Bizon     2009-08-18  19  	int use_internal_phy;
+e7300d04bd0809 Maxime Bizon     2009-08-18  20  
+e7300d04bd0809 Maxime Bizon     2009-08-18  21  	/* or fill phy info to use an external one */
+e7300d04bd0809 Maxime Bizon     2009-08-18  22  	int phy_id;
+e7300d04bd0809 Maxime Bizon     2009-08-18  23  	int has_phy_interrupt;
+e7300d04bd0809 Maxime Bizon     2009-08-18  24  	int phy_interrupt;
+e7300d04bd0809 Maxime Bizon     2009-08-18  25  
+e904b94a06c77a Andrea Gelmini   2016-05-21  26  	/* if has_phy, use autonegotiated pause parameters or force
+e7300d04bd0809 Maxime Bizon     2009-08-18  27  	 * them */
+e7300d04bd0809 Maxime Bizon     2009-08-18  28  	int pause_auto;
+e7300d04bd0809 Maxime Bizon     2009-08-18  29  	int pause_rx;
+e7300d04bd0809 Maxime Bizon     2009-08-18  30  	int pause_tx;
+e7300d04bd0809 Maxime Bizon     2009-08-18  31  
+e7300d04bd0809 Maxime Bizon     2009-08-18  32  	/* if !has_phy, set desired forced speed/duplex */
+e7300d04bd0809 Maxime Bizon     2009-08-18  33  	int force_speed_100;
+e7300d04bd0809 Maxime Bizon     2009-08-18  34  	int force_duplex_full;
+e7300d04bd0809 Maxime Bizon     2009-08-18  35  
+e7300d04bd0809 Maxime Bizon     2009-08-18  36  	/* if !has_phy, set callback to perform mii device
+e7300d04bd0809 Maxime Bizon     2009-08-18  37  	 * init/remove */
+e7300d04bd0809 Maxime Bizon     2009-08-18 @38  	int (*mii_config)(struct net_device *dev, int probe,
+e7300d04bd0809 Maxime Bizon     2009-08-18  39  			  int (*mii_read)(struct net_device *dev,
+e7300d04bd0809 Maxime Bizon     2009-08-18  40  					  int phy_id, int reg),
+e7300d04bd0809 Maxime Bizon     2009-08-18  41  			  void (*mii_write)(struct net_device *dev,
+e7300d04bd0809 Maxime Bizon     2009-08-18  42  					    int phy_id, int reg, int val));
+3dc6475c0c9e55 Florian Fainelli 2013-06-12  43  
+3dc6475c0c9e55 Florian Fainelli 2013-06-12  44  	/* DMA channel enable mask */
+3dc6475c0c9e55 Florian Fainelli 2013-06-12  45  	u32 dma_chan_en_mask;
+3dc6475c0c9e55 Florian Fainelli 2013-06-12  46  
+3dc6475c0c9e55 Florian Fainelli 2013-06-12  47  	/* DMA channel interrupt mask */
+3dc6475c0c9e55 Florian Fainelli 2013-06-12  48  	u32 dma_chan_int_mask;
+3dc6475c0c9e55 Florian Fainelli 2013-06-12  49  
+3dc6475c0c9e55 Florian Fainelli 2013-06-12  50  	/* DMA engine has internal SRAM */
+3dc6475c0c9e55 Florian Fainelli 2013-06-12  51  	bool dma_has_sram;
+3dc6475c0c9e55 Florian Fainelli 2013-06-12  52  
+3dc6475c0c9e55 Florian Fainelli 2013-06-12  53  	/* DMA channel register width */
+3dc6475c0c9e55 Florian Fainelli 2013-06-12  54  	unsigned int dma_chan_width;
+3dc6475c0c9e55 Florian Fainelli 2013-06-12  55  
+3dc6475c0c9e55 Florian Fainelli 2013-06-12  56  	/* DMA descriptor shift */
+3dc6475c0c9e55 Florian Fainelli 2013-06-12  57  	unsigned int dma_desc_shift;
+1942e482258d8c Jonas Gorski     2017-12-17  58  
+1942e482258d8c Jonas Gorski     2017-12-17  59  	/* dma channel ids */
+1942e482258d8c Jonas Gorski     2017-12-17  60  	int rx_chan;
+1942e482258d8c Jonas Gorski     2017-12-17  61  	int tx_chan;
+e7300d04bd0809 Maxime Bizon     2009-08-18  62  };
+e7300d04bd0809 Maxime Bizon     2009-08-18  63  
+
+:::::: The code at line 38 was first introduced by commit
+:::::: e7300d04bd0809eb7ea10a2ed8c729459f816e36 MIPS: BCM63xx: Add support for the Broadcom BCM63xx family of SOCs.
+
+:::::: TO: Maxime Bizon <mbizon@freebox.fr>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

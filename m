@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7040498E71
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4EC3498D3D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349409AbiAXTle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:41:34 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33720 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353674AbiAXTfL (ORCPT
+        id S1352075AbiAXT3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:29:34 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43174 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349106AbiAXTUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:35:11 -0500
+        Mon, 24 Jan 2022 14:20:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EB2A61451;
-        Mon, 24 Jan 2022 19:35:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 134D0C340E5;
-        Mon, 24 Jan 2022 19:35:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 816F7B81233;
+        Mon, 24 Jan 2022 19:20:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF6F7C340E5;
+        Mon, 24 Jan 2022 19:20:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052910;
-        bh=ETlyL1vGfKy3FMGxoeXWr/m02+CklHI/tETSSripquc=;
+        s=korg; t=1643052013;
+        bh=FNVb3dcHIBLomxyIdcLDZf6bDvbLp1BTjjK8xjoWU5A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wje3IwTijTbw5kzip8f6qjRbimZvSAe/eBBCldSX45eIsXX4FPAVmh7ebyag0ZaOm
-         5gKEocJeF2RevB6/VBxuWIDrrn810rnF3DCam7VG/dhndhxsZ+ZaRSOY9WL0Ts+nhL
-         SbeJDyCgOzDIaXOvao0LwKJpudYvqSdcP7NpaOWU=
+        b=0A+q92prHDfR3XAGLy/4WSH7WfDVvdPQjqOe6TVMwRPRQJcl37twItikpUs1q/MyX
+         BvKQbC6VHBb8lnkZ9q91ygqIzlVCkrPfWhAzprsJ68eazyKE98JjJ/t3zaNK7OwEBy
+         oPSrBqtcKYmN80Vc4q4X6pIW81H4fCVfdJW8JUAo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Johannes Berg <johannes.berg@intel.com>,
+        stable@vger.kernel.org, Mark Langsdorf <mlangsdo@redhat.com>,
+        Bob Moore <robert.moore@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 214/320] mac80211: allow non-standard VHT MCS-10/11
+Subject: [PATCH 4.19 160/239] ACPICA: actypes.h: Expand the ACPI_ACCESS_ definitions
 Date:   Mon, 24 Jan 2022 19:43:18 +0100
-Message-Id: <20220124184000.920141368@linuxfoundation.org>
+Message-Id: <20220124183948.185753446@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,47 +47,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ping-Ke Shih <pkshih@realtek.com>
+From: Mark Langsdorf <mlangsdo@redhat.com>
 
-[ Upstream commit 04be6d337d37400ad5b3d5f27ca87645ee5a18a3 ]
+[ Upstream commit f81bdeaf816142e0729eea0cc84c395ec9673151 ]
 
-Some AP can possibly try non-standard VHT rate and mac80211 warns and drops
-packets, and leads low TCP throughput.
+ACPICA commit bc02c76d518135531483dfc276ed28b7ee632ce1
 
-    Rate marked as a VHT rate but data is invalid: MCS: 10, NSS: 2
-    WARNING: CPU: 1 PID: 7817 at net/mac80211/rx.c:4856 ieee80211_rx_list+0x223/0x2f0 [mac8021
+The current ACPI_ACCESS_*_WIDTH defines do not provide a way to
+test that size is small enough to not cause an overflow when
+applied to a 32-bit integer.
 
-Since commit c27aa56a72b8 ("cfg80211: add VHT rate entries for MCS-10 and MCS-11")
-has added, mac80211 adds this support as well.
+Rather than adding more magic numbers, add ACPI_ACCESS_*_SHIFT,
+ACPI_ACCESS_*_MAX, and ACPI_ACCESS_*_DEFAULT #defines and
+redefine ACPI_ACCESS_*_WIDTH in terms of the new #defines.
 
-After this patch, throughput is good and iw can get the bitrate:
-    rx bitrate:	975.1 MBit/s VHT-MCS 10 80MHz short GI VHT-NSS 2
-or
-    rx bitrate:	1083.3 MBit/s VHT-MCS 11 80MHz short GI VHT-NSS 2
+This was inititally reported on Linux where a size of 102 in
+ACPI_ACCESS_BIT_WIDTH caused an overflow error in the SPCR
+initialization code.
 
-Buglink: https://bugzilla.suse.com/show_bug.cgi?id=1192891
-Reported-by: Goldwyn Rodrigues <rgoldwyn@suse.com>
-Signed-off-by: Ping-Ke Shih <pkshih@realtek.com>
-Link: https://lore.kernel.org/r/20220103013623.17052-1-pkshih@realtek.com
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Link: https://github.com/acpica/acpica/commit/bc02c76d
+Signed-off-by: Mark Langsdorf <mlangsdo@redhat.com>
+Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mac80211/rx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/acpi/actypes.h | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/net/mac80211/rx.c b/net/mac80211/rx.c
-index 282bf336b15a4..464029892478f 100644
---- a/net/mac80211/rx.c
-+++ b/net/mac80211/rx.c
-@@ -4693,7 +4693,7 @@ void ieee80211_rx_napi(struct ieee80211_hw *hw, struct ieee80211_sta *pubsta,
- 				goto drop;
- 			break;
- 		case RX_ENC_VHT:
--			if (WARN_ONCE(status->rate_idx > 9 ||
-+			if (WARN_ONCE(status->rate_idx > 11 ||
- 				      !status->nss ||
- 				      status->nss > 8,
- 				      "Rate marked as a VHT rate but data is invalid: MCS: %d, NSS: %d\n",
+diff --git a/include/acpi/actypes.h b/include/acpi/actypes.h
+index 2939a6cd7fecb..9fc1dfc7f4c32 100644
+--- a/include/acpi/actypes.h
++++ b/include/acpi/actypes.h
+@@ -532,8 +532,14 @@ typedef u64 acpi_integer;
+  * Can be used with access_width of struct acpi_generic_address and access_size of
+  * struct acpi_resource_generic_register.
+  */
+-#define ACPI_ACCESS_BIT_WIDTH(size)     (1 << ((size) + 2))
+-#define ACPI_ACCESS_BYTE_WIDTH(size)    (1 << ((size) - 1))
++#define ACPI_ACCESS_BIT_SHIFT		2
++#define ACPI_ACCESS_BYTE_SHIFT		-1
++#define ACPI_ACCESS_BIT_MAX		(31 - ACPI_ACCESS_BIT_SHIFT)
++#define ACPI_ACCESS_BYTE_MAX		(31 - ACPI_ACCESS_BYTE_SHIFT)
++#define ACPI_ACCESS_BIT_DEFAULT		(8 - ACPI_ACCESS_BIT_SHIFT)
++#define ACPI_ACCESS_BYTE_DEFAULT	(8 - ACPI_ACCESS_BYTE_SHIFT)
++#define ACPI_ACCESS_BIT_WIDTH(size)	(1 << ((size) + ACPI_ACCESS_BIT_SHIFT))
++#define ACPI_ACCESS_BYTE_WIDTH(size)	(1 << ((size) + ACPI_ACCESS_BYTE_SHIFT))
+ 
+ /*******************************************************************************
+  *
 -- 
 2.34.1
 

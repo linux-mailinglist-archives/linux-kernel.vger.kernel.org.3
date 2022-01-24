@@ -2,155 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42AB14984A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 232B64984A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243694AbiAXQZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 11:25:00 -0500
-Received: from mga09.intel.com ([134.134.136.24]:33130 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241035AbiAXQY7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 11:24:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643041499; x=1674577499;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=r2LR73LQKloyaOT9ly1BGRSqZuXVJPR17XcCs+ZhQ00=;
-  b=ZMcbHpkLDsiLh4DD6wBhcI1QJ+aXwtV5/ROwsy0bZbzUcDsGziSZN7K7
-   CjXE4/0oLtMdJvRt1gldZp+pojAW98t3Vw6yGsbJOT88XnpB9yf7r7CH+
-   c86GYwisOqBK0rr32licuyWLADPlCXLKwR8WwO1HwnOSoyMktrVonjfYJ
-   Ox6Bui+UkE+daaTh9lBFjfXqB87UYuas/lUtMPab7zAw4/6SDINFM4Mt9
-   tSS6X8mbcCIf/2/P3SwqODnzBAZI8rKb20dcKm75IybqYhRDw/uXaXu+X
-   56FZ6PLn3RkDUgOjPdMFGqqv0PsWsLbdQwwNsqo2heAiOvR751cA5Mf6C
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="245865708"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="245865708"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 08:24:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="580440247"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Jan 2022 08:24:55 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nC29G-000IbA-Jx; Mon, 24 Jan 2022 16:24:54 +0000
-Date:   Tue, 25 Jan 2022 00:23:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Xin Yin <yinxin.x@bytedance.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Theodore Ts'o <tytso@mit.edu>,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>
-Subject: fs/ext4/fast_commit.c:1774:50: sparse: sparse: incorrect type in
- argument 2 (different base types)
-Message-ID: <202201250031.GhpANyOP-lkp@intel.com>
+        id S243678AbiAXQYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 11:24:39 -0500
+Received: from sonic311-24.consmr.mail.gq1.yahoo.com ([98.137.65.205]:39219
+        "EHLO sonic311-24.consmr.mail.gq1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243680AbiAXQYd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 11:24:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.ca; s=s2048; t=1643041471; bh=QnE0u9nJ2D7ncLMcRVk8Svkk+Us++NNlt7MPBoEY2JY=; h=Date:From:Subject:To:Cc:References:From:Subject:Reply-To; b=dWVxAdrb3kwPwxqbl3EVa7XjhCezzDFUXmhparSUbzbYlhK3citDcv60vdpQ+Lvf874SHbZdoELNFCeQfU0Oj6GCaR9wam8s+9qwUP11V1ZtBWZa4nYfE4yymZC83Ylgwy5XuAeiQnXAbPjaMJg2IQcR7+uuLdYiN+KfKeVwmeS9rCLZG0U/kSdOmZaelHOeKljXpzc1Pkzq6xbCB7J0aAEi7QzAROklSCX1bm8qMQBmWg7RcL/1vKHPeXER+jlRHthE4l1FPQytxFVgEtOLNKI4/58CKusnsANxP51BW4O5q0NAX3vFzB0HmhhKVRUAvpXuyJEbGOdOqf4OYJ0KIA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1643041471; bh=5JT3cpg4scwbroZ0zKqG6aNlvgJFcmMXpg0wI5cxBSK=; h=X-Sonic-MF:Date:From:Subject:To:From:Subject; b=bOVpjdG1ApvibXUimEnzWXxvUr7JGYjXikBUE8zT0FFTWPOCRwZZSVIvKOpY+ce+lohL2V6GXOGWj7OgzdOfYQ2o/tJeB8xannhGigRyYaHHf0qnZRIPun0bEdkOR7Ghr6TJy0b83HTr4NbgUb3w6Wl15mzoExa6amVHigkdZgrYJepGkFKIAPcmuJ6+KpoPbuR3M2+Fvxv9fvsUjOIbfziafh7ViJW8pz1WlISbFZX4VqBsG3gmQ/UjoQdllKQuN65uX/ttrlYNfziQyDuWL3ZMB9NZwQobl6Piph6fyznP2Jy3MosY7xoz286DSymW4dvamwIajkpP8tS4E5wv2A==
+X-YMail-OSG: YTjd_2gVM1myRYPiZT2qDD1uSZc.k0prT7Jon6fXpxif0fQOYn1CduI033TQe00
+ W7AfORaDPbQ4HZzsaeEQ_pwtmMDomAV.oXP.y5jxDm2mZJWqJt.SUl4JRZy5IdXNt3NsNhARPY1P
+ DfZ7nWRkAfLgE7hThv9h9lXWnDu03RCq0.Fg3vEwfqjDt69Uvo9TUZpFToj1GDmk8vYoUhOLucQl
+ KJEfsT9BOPBrp1kEuH8E.njFCdGV6pSnbCXF7T9ASeYGmaQvglxMUdwUAihV_LcN2Y4WT6zX8v8m
+ 7Y5OKcb8cC1DzAd_9e72pZ09LH6k8WJJsD05NVJbD5tRFup1ngs1qkfKfpfcw2uqvs5IhL0FW4Be
+ UdEEsTOrsiIY5gore7UZTKZTuNgmfFwdHIFCn2GdBU.2caHt8IaV1167AcnSjs6qZNZ2A.zip9Ap
+ DIkMbztu_eZdJiBIEqLeQS9CqWw69l8uNu6CPMnYi6QdBiH3ISw0qsDwSNgw90xOP9Ok.NFtV3Pu
+ 7.1Cz2ZfVJBlxpV7xxan8oa_4ckEJX0CC5YpKFJBdelytEywv8YnHd0QrBHFviCu00YE6pRNa3jg
+ qKlNNFQ.lBijtxKC6a8u2H4cEznp7hCot05_5gEI8NxM4JhaM5QFreulzuUMza787b1Pq2D9C3Iv
+ qa98a3Z2AMy0TfEW_qeUFsoOXEjuABwiuVklOAIj9qTB63IQ8smAutcxmh0dmhrOmwLhtNPpffgD
+ B2E0c8D3YQk2FXjktFhHiRYUw7cRsrajojCvPreEpxYsvNwC737zJAbS0iNg9kdAkNzoethhjKZW
+ TdWAYrodgcD7Re7LdnhBwWN1nxLCv82JfDHOKjTMdIRRwJDSMb16plrz1rJLl59GybXqxoi2PfuF
+ I3j66X7CtLxiXJnEEf2EGmmwO.21p7SAKvyBa7XqcQNsjMqCwQCmoD0obI8ozoQ3IiAoANlwevFa
+ s2fPxpb0mwiIXs0tmAyaNMGQ2RYAM6H3NYEd7p1gHVY7nbRQxsHPZLI5n4xXdg1yVrURPqRPEs2B
+ sGgffKSDJFF_JlVQ9keGD7h0QpZ7qpBv5JYw9JO01F07Ha1Gpjpzx4TrWPmLRpRAlZSYT.b07lFU
+ Qa7K25pg4yaujaPSHwgc7jOak48dWDo7BJeJ.YpDdXYpV1LEZfbvTBGJuY96_BD9d8FGeldbUuYn
+ 7.mx_1mjRf4QCRpi9097aXLp_WPinGhIL1aC3egGNQ3ZIMfMXdr.h6wHDpcOufhocY6WF_9CzUBG
+ 6vVwB_FIOhzNAAgjtcukvg0jaim0IOP9hhzyrj2PSkMig9pt37KAd5MFyux0rfpjXDLgBus3MmWD
+ gA.j56InhWdty1rhhrjxgE73iB2CjRzaFo_S3FgrkV36Aaw9FzrHHCuEXRcWZZYDlNKnJ8CkAkdB
+ rrfzCeXQwlDa5L4lsuMxCS40u3F0SAMwQwyDc0dcaWfK4ycaksBUiN2kd.GVvy9Rd9y0OzqovziZ
+ ucSbM0gWOKofBITrzjt.VHx5eT3SIk.nRYtt5DEkDApNwIrtK5JsYKlVxmxYaES3cK_KWowoZ.Ge
+ KcYNSg4DIugh9adc5qNYVk_nrcJrJXUsdOsF3wKpAMAeLUEUztZJ_lsOu7yrNw2KQwKIl9AgcI73
+ hzUvRFwHOdWfYo33Y.O7u5AsenugBP1AgWEAdZpHxuOMq.NIFx9QS.R_y0LQ6VfSu1tvv.sY_5lt
+ B.yBIn_QO7CrEAtSIokG0LL1YfEAoQYWsKHr.LmDmDVPNQ0LAh.PL_FVWT81PVjUq5e3mZKiqJqL
+ _H6jA5F_fVEtjyYRoUoT7GBydfXGfpY31wzg6Fl8VMwXjlGCCik5ogsZL0RFhOIps9zA4d9FxDN9
+ WFi6Rv0gDPe6PKLN6oY5EODkew6z07eksBUaagCyVftHrmlGce_9qaoo_IFn1IM4qm87nHgoZpI0
+ DW6DtsheX1JWW6Es19mX2mxMg.TWq5x2CR65.LXyicBuRPfpEJEhW6qCoxy7tP_ITYpUUk3hGu6b
+ uHPa3dKURnNc.vmXwPL6.uO5vxgGNDyzNG4I7D30tWuRXtwkds.6eP.sHFian817keuPFjLybkAF
+ EydEfo5vsUYE0KYEEdtDawY4E3Voaaap9k0VL1gf2MTxymM.yssNvUA_Th0FUqyDLRvf6gZA0V2l
+ gVWAc.VmNgTNFNFw_KmtW4xU40iGwHjX_wKXu_fbFVEILoNY5DteB9Tkkd3yhgwUvAicuvO05MPW
+ LLDsIASdmRzpbta556buBBVcf4cCiRmPU5xdLiQA9y7zYgR.4dA0vDq5gJzDTfyjXvUyoVEsPtM2
+ K6nS6fw--
+X-Sonic-MF: <alex_y_xu@yahoo.ca>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.gq1.yahoo.com with HTTP; Mon, 24 Jan 2022 16:24:31 +0000
+Received: by kubenode525.mail-prod1.omega.ne1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID f2f9fdeae1700c79dda6133d3f183e75;
+          Mon, 24 Jan 2022 16:24:27 +0000 (UTC)
+Date:   Mon, 24 Jan 2022 11:24:24 -0500
+From:   "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>
+Subject: "blk-mq: fix tag_get wait task can't be awakened" causes hangs
+To:     Laibin Qiu <qiulaibin@huawei.com>, axboe@kernel.dk,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-block@vger.kernel.org
+Cc:     john.garry@huawei.com, ming.lei@redhat.com,
+        martin.petersen@oracle.com, hare@suse.de,
+        akpm@linux-foundation.org, bvanassche@acm.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Message-Id: <1643040870.3bwvk3sis4.none@localhost>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+References: <1643040870.3bwvk3sis4.none.ref@localhost>
+X-Mailer: WebService/1.1.19615 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
-commit: 0b5b5a62b945a141e64011b2f90ee7e46f14be98 ext4: use ext4_ext_remove_space() for fast commit replay delete range
-date:   2 weeks ago
-config: csky-randconfig-s032-20220120 (https://download.01.org/0day-ci/archive/20220125/202201250031.GhpANyOP-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0b5b5a62b945a141e64011b2f90ee7e46f14be98
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 0b5b5a62b945a141e64011b2f90ee7e46f14be98
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=csky SHELL=/bin/bash
+Hi,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Recently on torvalds master, I/O on USB flash drives started hanging=20
+here:
 
+task:systemd-udevd   state:D stack:    0 pid:  374 ppid:   347 flags:0x0000=
+4000
+Call Trace:
+ <TASK>
+ ? __schedule+0x319/0x4a0
+ ? schedule+0x77/0xa0
+ ? io_schedule+0x43/0x60
+ ? blk_mq_get_tag+0x175/0x2b0
+ ? mempool_alloc+0x33/0x170
+ ? init_wait_entry+0x30/0x30
+ ? __blk_mq_alloc_requests+0x1b4/0x220
+ ? blk_mq_submit_bio+0x213/0x490
+ ? submit_bio_noacct+0x22c/0x270
+ ? xa_load+0x48/0x80
+ ? mpage_readahead+0x114/0x130
+ ? blkdev_fallocate+0x170/0x170
+ ? read_pages+0x48/0x1d0
+ ? page_cache_ra_unbounded+0xee/0x1f0
+ ? force_page_cache_ra+0x68/0xc0
+ ? filemap_read+0x18c/0x9a0
+ ? blkdev_read_iter+0x4e/0x120
+ ? vfs_read+0x265/0x2d0
+ ? ksys_read+0x50/0xa0
+ ? do_syscall_64+0x62/0x90
+ ? do_user_addr_fault+0x271/0x3c0
+ ? asm_exc_page_fault+0x8/0x30
+ ? exc_page_fault+0x58/0x80
+ ? entry_SYSCALL_64_after_hwframe+0x44/0xae
+ </TASK>
 
-sparse warnings: (new ones prefixed by >>)
->> fs/ext4/fast_commit.c:1774:50: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned int [usertype] start @@     got restricted __le32 [addressable] [usertype] fc_lblk @@
-   fs/ext4/fast_commit.c:1774:50: sparse:     expected unsigned int [usertype] start
-   fs/ext4/fast_commit.c:1774:50: sparse:     got restricted __le32 [addressable] [usertype] fc_lblk
->> fs/ext4/fast_commit.c:1775:39: sparse: sparse: restricted __le32 degrades to integer
-   fs/ext4/fast_commit.c:1775:56: sparse: sparse: restricted __le32 degrades to integer
+mount(8) hangs with a similar backtrace, making the device effectively=20
+unusable. It does not seem to affect NVMe or SATA attached drives. The=20
+affected drive does not support UAS. I don't currently have UAS drives=20
+to test with. The default I/O scheduler is set to noop.
 
-vim +1774 fs/ext4/fast_commit.c
+I found that reverting 180dccb0dba4 ("blk-mq: fix tag_get wait=20
+task can't be awakened") appears to resolve the issue.
 
-  1724	
-  1725	/* Replay DEL_RANGE tag */
-  1726	static int
-  1727	ext4_fc_replay_del_range(struct super_block *sb, struct ext4_fc_tl *tl,
-  1728				 u8 *val)
-  1729	{
-  1730		struct inode *inode;
-  1731		struct ext4_fc_del_range lrange;
-  1732		struct ext4_map_blocks map;
-  1733		ext4_lblk_t cur, remaining;
-  1734		int ret;
-  1735	
-  1736		memcpy(&lrange, val, sizeof(lrange));
-  1737		cur = le32_to_cpu(lrange.fc_lblk);
-  1738		remaining = le32_to_cpu(lrange.fc_len);
-  1739	
-  1740		trace_ext4_fc_replay(sb, EXT4_FC_TAG_DEL_RANGE,
-  1741			le32_to_cpu(lrange.fc_ino), cur, remaining);
-  1742	
-  1743		inode = ext4_iget(sb, le32_to_cpu(lrange.fc_ino), EXT4_IGET_NORMAL);
-  1744		if (IS_ERR(inode)) {
-  1745			jbd_debug(1, "Inode %d not found", le32_to_cpu(lrange.fc_ino));
-  1746			return 0;
-  1747		}
-  1748	
-  1749		ret = ext4_fc_record_modified_inode(sb, inode->i_ino);
-  1750	
-  1751		jbd_debug(1, "DEL_RANGE, inode %ld, lblk %d, len %d\n",
-  1752				inode->i_ino, le32_to_cpu(lrange.fc_lblk),
-  1753				le32_to_cpu(lrange.fc_len));
-  1754		while (remaining > 0) {
-  1755			map.m_lblk = cur;
-  1756			map.m_len = remaining;
-  1757	
-  1758			ret = ext4_map_blocks(NULL, inode, &map, 0);
-  1759			if (ret < 0) {
-  1760				iput(inode);
-  1761				return 0;
-  1762			}
-  1763			if (ret > 0) {
-  1764				remaining -= ret;
-  1765				cur += ret;
-  1766				ext4_mb_mark_bb(inode->i_sb, map.m_pblk, map.m_len, 0);
-  1767			} else {
-  1768				remaining -= map.m_len;
-  1769				cur += map.m_len;
-  1770			}
-  1771		}
-  1772	
-  1773		down_write(&EXT4_I(inode)->i_data_sem);
-> 1774		ret = ext4_ext_remove_space(inode, lrange.fc_lblk,
-> 1775					lrange.fc_lblk + lrange.fc_len - 1);
-  1776		up_write(&EXT4_I(inode)->i_data_sem);
-  1777		if (ret) {
-  1778			iput(inode);
-  1779			return 0;
-  1780		}
-  1781		ext4_ext_replay_shrink_inode(inode,
-  1782			i_size_read(inode) >> sb->s_blocksize_bits);
-  1783		ext4_mark_inode_dirty(NULL, inode);
-  1784		iput(inode);
-  1785	
-  1786		return 0;
-  1787	}
-  1788	
+Let me know what other information is needed.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Cheers,
+Alex.

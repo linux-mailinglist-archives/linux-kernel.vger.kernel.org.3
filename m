@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 677F3499ECC
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:10:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4724749A09C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1837809AbiAXWpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:45:24 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49640 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1456836AbiAXVkM (ORCPT
+        id S1384502AbiAXXOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:14:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37594 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1584553AbiAXWVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:40:12 -0500
+        Mon, 24 Jan 2022 17:21:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD04C0424D3;
+        Mon, 24 Jan 2022 12:50:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1EB0EB81057;
-        Mon, 24 Jan 2022 21:40:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5206C340E4;
-        Mon, 24 Jan 2022 21:40:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BFFC611CD;
+        Mon, 24 Jan 2022 20:50:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D30A3C340E5;
+        Mon, 24 Jan 2022 20:50:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060409;
-        bh=j7uZC0EMg6IOGQI/zK2ZT99oLEwNN8GGLHuqvCfKBrw=;
+        s=korg; t=1643057428;
+        bh=EmwCPnertVcmjrR8Moco0fRBdrq7Suz3ieik5+sjYIs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xuThfJM5hw7ZfMJ/sBO/R1zw+2wqYMTefaqDTwcVENDJRH0vqQl+XR3xMqp15z8Xl
-         uLcSuj0gWV+H4mN9XNBBLSdAIShLNQlhH7ZQzzebPMcTxgkES6KjgTSmHJzU5atEor
-         zStdVhu8xdMnRPRMJsMXLFwcszX4eXsbvrvG04XI=
+        b=dKr8Ow3AjbNcH6oVSH0+/PXcyuhKYSw2cP+ELL61f0d1BCQVZS4B/iUv//t66/w8D
+         yKGLaYoZMd1FidK6wn8CUy/9tm3eS6J0/vzMZfhfS26GGp1oN9UgAaqon6Nx9euOCv
+         8cfVjkjPdyohpjDJ7K1FISXir6VXK9oihF9HFVBE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Russell King <russell.king@oracle.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH 5.16 0937/1039] arm64/bpf: Remove 128MB limit for BPF JIT programs
+        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>
+Subject: [PATCH 5.15 809/846] iwlwifi: fix Bz NMI behaviour
 Date:   Mon, 24 Jan 2022 19:45:26 +0100
-Message-Id: <20220124184156.781671254@linuxfoundation.org>
+Message-Id: <20220124184128.831861285@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,115 +48,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Russell King <russell.king@oracle.com>
+From: Johannes Berg <johannes.berg@intel.com>
 
-commit b89ddf4cca43f1269093942cf5c4e457fd45c335 upstream.
+commit fdfde0cb79264f88992e72b5a056a3a3284fcaad upstream.
 
-Commit 91fc957c9b1d ("arm64/bpf: don't allocate BPF JIT programs in module
-memory") restricts BPF JIT program allocation to a 128MB region to ensure
-BPF programs are still in branching range of each other. However this
-restriction should not apply to the aarch64 JIT, since BPF_JMP | BPF_CALL
-are implemented as a 64-bit move into a register and then a BLR instruction -
-which has the effect of being able to call anything without proximity
-limitation.
+Contrary to what was stated before, the hardware hasn't changed
+the bits here yet. In any case, the new CSR is also directly
+(lower 16 bits) connected to UREG_DOORBELL_TO_ISR6, so if it
+still changes the changes would be there. Adjust the code and
+comments accordingly.
 
-The practical reason to relax this restriction on JIT memory is that 128MB of
-JIT memory can be quickly exhausted, especially where PAGE_SIZE is 64KB - one
-page is needed per program. In cases where seccomp filters are applied to
-multiple VMs on VM launch - such filters are classic BPF but converted to
-BPF - this can severely limit the number of VMs that can be launched. In a
-world where we support BPF JIT always on, turning off the JIT isn't always an
-option either.
-
-Fixes: 91fc957c9b1d ("arm64/bpf: don't allocate BPF JIT programs in module memory")
-Suggested-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Signed-off-by: Russell King <russell.king@oracle.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Tested-by: Alan Maguire <alan.maguire@oracle.com>
-Link: https://lore.kernel.org/bpf/1636131046-5982-2-git-send-email-alan.maguire@oracle.com
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Fixes: 6c0795f1a524 ("iwlwifi: implement Bz NMI behaviour")
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/iwlwifi.20211210090244.75b6207536e3.I7d170a48a9096e6b7269c3a9f447c326f929b171@changeid
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/include/asm/extable.h |    9 ---------
- arch/arm64/include/asm/memory.h  |    5 +----
- arch/arm64/kernel/traps.c        |    2 +-
- arch/arm64/mm/ptdump.c           |    2 --
- arch/arm64/net/bpf_jit_comp.c    |    7 ++-----
- 5 files changed, 4 insertions(+), 21 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/iwl-csr.h |    5 +++--
+ drivers/net/wireless/intel/iwlwifi/iwl-io.c  |    2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
---- a/arch/arm64/include/asm/extable.h
-+++ b/arch/arm64/include/asm/extable.h
-@@ -33,15 +33,6 @@ do {							\
- 	(b)->data = (tmp).data;				\
- } while (0)
+--- a/drivers/net/wireless/intel/iwlwifi/iwl-csr.h
++++ b/drivers/net/wireless/intel/iwlwifi/iwl-csr.h
+@@ -104,9 +104,10 @@
+ /* GIO Chicken Bits (PCI Express bus link power management) */
+ #define CSR_GIO_CHICKEN_BITS    (CSR_BASE+0x100)
  
--static inline bool in_bpf_jit(struct pt_regs *regs)
--{
--	if (!IS_ENABLED(CONFIG_BPF_JIT))
--		return false;
--
--	return regs->pc >= BPF_JIT_REGION_START &&
--	       regs->pc < BPF_JIT_REGION_END;
--}
--
- #ifdef CONFIG_BPF_JIT
- bool ex_handler_bpf(const struct exception_table_entry *ex,
- 		    struct pt_regs *regs);
---- a/arch/arm64/include/asm/memory.h
-+++ b/arch/arm64/include/asm/memory.h
-@@ -44,11 +44,8 @@
- #define _PAGE_OFFSET(va)	(-(UL(1) << (va)))
- #define PAGE_OFFSET		(_PAGE_OFFSET(VA_BITS))
- #define KIMAGE_VADDR		(MODULES_END)
--#define BPF_JIT_REGION_START	(_PAGE_END(VA_BITS_MIN))
--#define BPF_JIT_REGION_SIZE	(SZ_128M)
--#define BPF_JIT_REGION_END	(BPF_JIT_REGION_START + BPF_JIT_REGION_SIZE)
- #define MODULES_END		(MODULES_VADDR + MODULES_VSIZE)
--#define MODULES_VADDR		(BPF_JIT_REGION_END)
-+#define MODULES_VADDR		(_PAGE_END(VA_BITS_MIN))
- #define MODULES_VSIZE		(SZ_128M)
- #define VMEMMAP_START		(-(UL(1) << (VA_BITS - VMEMMAP_SHIFT)))
- #define VMEMMAP_END		(VMEMMAP_START + VMEMMAP_SIZE)
---- a/arch/arm64/kernel/traps.c
-+++ b/arch/arm64/kernel/traps.c
-@@ -994,7 +994,7 @@ static struct break_hook bug_break_hook
- static int reserved_fault_handler(struct pt_regs *regs, unsigned int esr)
- {
- 	pr_err("%s generated an invalid instruction at %pS!\n",
--		in_bpf_jit(regs) ? "BPF JIT" : "Kernel text patching",
-+		"Kernel text patching",
- 		(void *)instruction_pointer(regs));
+-/* Doorbell NMI (since Bz) */
++/* Doorbell - since Bz
++ * connected to UREG_DOORBELL_TO_ISR6 (lower 16 bits only)
++ */
+ #define CSR_DOORBELL_VECTOR	(CSR_BASE + 0x130)
+-#define CSR_DOORBELL_VECTOR_NMI	BIT(1)
  
- 	/* We cannot handle this */
---- a/arch/arm64/mm/ptdump.c
-+++ b/arch/arm64/mm/ptdump.c
-@@ -41,8 +41,6 @@ static struct addr_marker address_marker
- 	{ 0 /* KASAN_SHADOW_START */,	"Kasan shadow start" },
- 	{ KASAN_SHADOW_END,		"Kasan shadow end" },
- #endif
--	{ BPF_JIT_REGION_START,		"BPF start" },
--	{ BPF_JIT_REGION_END,		"BPF end" },
- 	{ MODULES_VADDR,		"Modules start" },
- 	{ MODULES_END,			"Modules end" },
- 	{ VMALLOC_START,		"vmalloc() area" },
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -1145,15 +1145,12 @@ out:
- 
- u64 bpf_jit_alloc_exec_limit(void)
- {
--	return BPF_JIT_REGION_SIZE;
-+	return VMALLOC_END - VMALLOC_START;
+ /* host chicken bits */
+ #define CSR_HOST_CHICKEN	(CSR_BASE + 0x204)
+--- a/drivers/net/wireless/intel/iwlwifi/iwl-io.c
++++ b/drivers/net/wireless/intel/iwlwifi/iwl-io.c
+@@ -218,7 +218,7 @@ void iwl_force_nmi(struct iwl_trans *tra
+ 				    UREG_DOORBELL_TO_ISR6_NMI_BIT);
+ 	else
+ 		iwl_write32(trans, CSR_DOORBELL_VECTOR,
+-			    CSR_DOORBELL_VECTOR_NMI);
++			    UREG_DOORBELL_TO_ISR6_NMI_BIT);
  }
+ IWL_EXPORT_SYMBOL(iwl_force_nmi);
  
- void *bpf_jit_alloc_exec(unsigned long size)
- {
--	return __vmalloc_node_range(size, PAGE_SIZE, BPF_JIT_REGION_START,
--				    BPF_JIT_REGION_END, GFP_KERNEL,
--				    PAGE_KERNEL, 0, NUMA_NO_NODE,
--				    __builtin_return_address(0));
-+	return vmalloc(size);
- }
- 
- void bpf_jit_free_exec(void *addr)
 
 

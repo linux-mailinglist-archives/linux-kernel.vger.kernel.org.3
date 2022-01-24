@@ -2,172 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C8F49A06D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42F8249A01E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1843978AbiAXXHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:07:15 -0500
-Received: from mga01.intel.com ([192.55.52.88]:43067 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1584285AbiAXWUh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:20:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643062836; x=1674598836;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KTx3QBS/bCeJLJyH0VTSsPA6HKtWhrWvddCv03rGT8E=;
-  b=Oo2+BdFCv2wbmzsE8EfQXdAbPE4ExNChj0VsiYrEZiOeVRG3XqOP54ni
-   zDHFJpchv4GZngv4VfUXbgiqwk9kaCU67/zhjYzrblnDjaOGKgDKRJCSq
-   HrS+FLWyz4GQiO/Tzik6n5kZNX3C96g9Fs8dufty2oVehIQRLVych9xyT
-   LK5hvP5GHn9dpvh+8OFBHUTIgnOq8AUrlNPhoXBjAfHGxatofDlQhSQFN
-   5vNzO9fZH+MfcM89D5veGB4XI/lyvxnTqMs55Vls/az9GojXqML9D9vUh
-   +cQfKtBtJ8clVWvKeJP6pJaITD/mQVapwbHFSSOVCHG0kE1rh/0p+j5X0
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="270600511"
-X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="270600511"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 14:08:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="520121337"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 24 Jan 2022 14:08:08 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id BE110178; Tue, 25 Jan 2022 00:08:21 +0200 (EET)
-Date:   Tue, 25 Jan 2022 01:08:21 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, knsathya@kernel.org, pbonzini@redhat.com,
-        sdeep@vmware.com, seanjc@google.com, tony.luck@intel.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 08/29] x86/tdx: Handle in-kernel MMIO
-Message-ID: <20220124220821.4bgf6i3qfhj6mrht@black.fi.intel.com>
-References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
- <20220124150215.36893-9-kirill.shutemov@linux.intel.com>
- <20220124193008.gfaq5ppegx5nfomd@treble>
+        id S1383541AbiAXXEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:04:21 -0500
+Received: from ip59.38.31.103.in-addr.arpa.unknwn.cloudhost.asia ([103.31.38.59]:48238
+        "EHLO gnuweeb.org" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1348958AbiAXWIe (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 17:08:34 -0500
+Received: from [10.5.5.3] (unknown [68.183.184.174])
+        by gnuweeb.org (Postfix) with ESMTPSA id 21C0DC316C;
+        Mon, 24 Jan 2022 22:08:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=gnuweeb.org;
+        s=default; t=1643062112;
+        bh=zxxunHJMdrtLLW9Gj1MtrXIOO8UGQKHrxWPSXsEVrXE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hz0g4K/xfkORh2e55UOv0F0+MwoNXnKbRWDbVEfYymEuHpJA0o+OVqZAOi+f9Obog
+         u9wAvZ4egvndPhyr9tAASg2ilf0rnRGIwzx+AsXBZ19lWce3VKMvgqeyADxd7dfWc3
+         C3mxO6xmZ++sTFqPlH5FM4zC9DlKgFuYXLr6b6K0dxCiZEmOsI7JL6EtvKgGhaAupP
+         PzzGHgzuZ48TcLP5j9mLPV5OGvFrqymJG+Rl8SP3jgUfmakXOiTqdNVkUxYdAEr3wy
+         t1u4T7rX13FrAr8ptO0vbLjcp/ClqTWfGvp+gYzRI0o+1ZJGHwKPI1dnL5RclkrbFv
+         JWZQC9GCqLZVQ==
+Message-ID: <3f08b8cf-a1dc-4d83-0de2-94203dff9a4c@gnuweeb.org>
+Date:   Tue, 25 Jan 2022 05:08:29 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124193008.gfaq5ppegx5nfomd@treble>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] rcu: Add per-CPU rcuc task info to RCU CPU stall
+ warnings
+Content-Language: en-US
+To:     paulmck@kernel.org
+Cc:     Zqiang <qiang1.zhang@intel.com>, linux-kernel@vger.kernel.org
+References: <20220124103637.4001386-1-qiang1.zhang@intel.com>
+ <e7d56d70-3750-b83a-8c1c-99878722c805@gnuweeb.org>
+ <20220124164251.GF4285@paulmck-ThinkPad-P17-Gen-1>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <20220124164251.GF4285@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 11:30:08AM -0800, Josh Poimboeuf wrote:
-> On Mon, Jan 24, 2022 at 06:01:54PM +0300, Kirill A. Shutemov wrote:
-> > +static bool tdx_mmio(int size, bool write, unsigned long addr,
-> > +		     unsigned long *val)
-> > +{
-> > +	struct tdx_hypercall_output out;
-> > +	u64 err;
-> > +
-> > +	err = _tdx_hypercall(EXIT_REASON_EPT_VIOLATION, size, write,
-> > +			     addr, *val, &out);
-> > +	if (err)
-> > +		return true;
-> > +
-> > +	*val = out.r11;
-> > +	return false;
-> > +}
-> > +
-> > +static bool tdx_mmio_read(int size, unsigned long addr, unsigned long *val)
-> > +{
-> > +	return tdx_mmio(size, false, addr, val);
-> > +}
-> > +
-> > +static bool tdx_mmio_write(int size, unsigned long addr, unsigned long *val)
-> > +{
-> > +	return tdx_mmio(size, true, addr, val);
-> > +}
-> > +
-> > +static int tdx_handle_mmio(struct pt_regs *regs, struct ve_info *ve)
-> > +{
-> > +	char buffer[MAX_INSN_SIZE];
-> > +	unsigned long *reg, val = 0;
-> > +	struct insn insn = {};
-> > +	enum mmio_type mmio;
-> > +	int size;
-> > +	bool err;
-> > +
-> > +	if (copy_from_kernel_nofault(buffer, (void *)regs->ip, MAX_INSN_SIZE))
-> > +		return -EFAULT;
-> > +
-> > +	if (insn_decode(&insn, buffer, MAX_INSN_SIZE, INSN_MODE_64))
-> > +		return -EFAULT;
-> > +
-> > +	mmio = insn_decode_mmio(&insn, &size);
-> > +	if (WARN_ON_ONCE(mmio == MMIO_DECODE_FAILED))
-> > +		return -EFAULT;
-> > +
-> > +	if (mmio != MMIO_WRITE_IMM && mmio != MMIO_MOVS) {
-> > +		reg = insn_get_modrm_reg_ptr(&insn, regs);
-> > +		if (!reg)
-> > +			return -EFAULT;
-> > +	}
-> > +
-> > +	switch (mmio) {
-> > +	case MMIO_WRITE:
-> > +		memcpy(&val, reg, size);
-> > +		err = tdx_mmio_write(size, ve->gpa, &val);
-> > +		break;
+On 1/24/22 11:42 PM, Paul E. McKenney wrote:
+> On Mon, Jan 24, 2022 at 05:38:21PM +0700, Ammar Faizi wrote:
+>> [snip...]
+>> FWIW, this one makes more sense:
+>> ```
+>> static void rcuc_kthread_dump(struct rcu_data *rdp)
+>> {
+>> 	 int cpu;
+>> 	 unsigned long j;
+>> 	 struct task_struct *rcuc;
+>>
+>> 	 if (!rcu_is_rcuc_kthread_starving(rdp, &j))
+>> 		 return;
+>>
+>> 	 rcuc = rdp->rcu_cpu_kthread_task;
+>> 	 if (!rcuc)
+>> 		 return;
+>>
+>> 	 pr_err("%s kthread starved for %ld jiffies, stack dump:\n", rcuc->comm, j);
 > 
-> The return code conventions are still all mismatched and confusing:
+> Thank you for looking this over and for the great feedback, Ammar!
 > 
-> - Most tdx_handle_*() handlers return bool (success == true)
+> I am also wondering why the above message should be printed when the
+> corresponding CPU is offline or idle.  Why not move the above pr_err()
+> line down to replace the pr_err() line below?
 > 
-> - tdx_handle_mmio() returns int (success > 0)
+> 							Thanx, Paul
 
-Right, all tdx_handle_* are consistent: success > 0.
+Hi Paul, Thank you for the review. Agree with that.
+Hopefully this one looks better (untested):
+```
+static void rcuc_kthread_dump(struct rcu_data *rdp)
+{
+	int cpu;
+	unsigned long j;
+	struct task_struct *rcuc;
 
-> - tdx_mmio*() helpers return bool (success == false)
+	rcuc = rdp->rcu_cpu_kthread_task;
+	if (!rcuc)
+		return;
 
-And what is wrong with that? Why do you mix functions that called in
-different contexts and expect them to have matching semantics?
+	cpu = task_cpu(rcuc);
+	if (cpu_is_offline(cpu) || idle_cpu(cpu))
+		return;
 
-> I still don't see any benefit in arbitrarily mixing three different
-> return conventions, none of which matches the typical kernel style for
-> returning errors, unless the goal is to confuse the reader and invite
-> bugs.
+	if (!rcu_is_rcuc_kthread_starving(rdp, &j))
+		return;
 
-Okay, we have an disagreement here.
+	pr_err("%s kthread starved for %ld jiffies\n", rcuc->comm, j);
+	sched_show_task(rcuc);
+	if (!trigger_single_cpu_backtrace(cpu))
+		dump_cpu_task(cpu);
+}
+```
 
-I picked a way to communicate function result as I see best fits the
-situation. It is a judgement call.
-
-I will adjust code if maintainers see it differently from me. But until
-then I don't see anything wrong here.
-
-> There is precedent in traps.c for some handle_*() functions to return
-> bool (success == true), so if the goal is to align with that
-> semi-convention, that's ok.  But at the very least, please do it
-> consistently:
-> 
->   - change tdx_mmio*() to return true on success;
-> 
->   - change tdx_handle_mmio() to return bool, with 'len' passed as an
->     argument.
-
-Hard no.
-
-Returning a value via passed argument is the last resort for cases when
-more than one value has to be returned. In this case the function is
-perfectly capable to communicate result via single return value.
-
-I don't see a reason to complicate the code to satisfy some "typical
-kernel style".
-
-> Or, even better, just change them all to return 0 on success like 99+%
-> of error-returning kernel functions.
-
-Citation needed. 99+% looks like an overstatement to me.
+Recall that dump_cpu_task looks like this:
+```
+void dump_cpu_task(int cpu)
+{
+	pr_info("Task dump for CPU %d:\n", cpu);
+	sched_show_task(cpu_curr(cpu));
+}
+```
+which already tells us it's a dump, so "stack dump" in the pr_err()
+can be omitted. Any comment, Zqiang?
 
 -- 
- Kirill A. Shutemov
+Ammar Faizi

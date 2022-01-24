@@ -2,134 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E994979E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:00:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA974979EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241964AbiAXIAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 03:00:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58874 "EHLO
+        id S241993AbiAXIDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 03:03:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235469AbiAXIAD (ORCPT
+        with ESMTP id S236096AbiAXIDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 03:00:03 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A845C06173B;
-        Mon, 24 Jan 2022 00:00:03 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id v74so11912088pfc.1;
-        Mon, 24 Jan 2022 00:00:03 -0800 (PST)
+        Mon, 24 Jan 2022 03:03:02 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF32C06173D;
+        Mon, 24 Jan 2022 00:03:02 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so16005152pjp.0;
+        Mon, 24 Jan 2022 00:03:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=lm/J+aImPr9M2aPp+wyjpyR9I7DDDAwWawLV3AwoeFM=;
-        b=ghIrSf7/neviOSBUCJt3fLK17TjgDjbmV6j02LQxKgRzlXkwFOlZnSSdqFwaZm6cHM
-         AsTOiIbpyTmxHwgxEfnTjboI5UYDc5HmDofGX/FERcKE37wh6A1hM8I3VGv8UkN6wukP
-         tMJzvibNaXvvr/Z1tjlwtAE+RX+pshwqzawnEawlGqHXkNWhe2PLjSqy6e8cxklHIlJR
-         bemKS6sc5v1vRVFQbJ1FaWih426mgnkbiqYG3Tbwhro2yhWSZBRkf+F9h526BHmFWa9K
-         GSK6OtMAtkIAh5FceRiI1MUdR9VV+GOahr+wrRI8eM5SXHPHF0NEk6a5hxIsApS2sWw+
-         pdTQ==
+        bh=heE4OVfXzjcbLsiS2jXpXXVHXoZTraF8TtJEtw/GvF8=;
+        b=h2e7cQ1kaG27HENpOzrw7hG3ADVmrfXIOH4qnrpAXnwohkTaTC7ImFxUNLKqf9ybfe
+         dvNYNCKiaWpMPIA6txMONOP4EN84EpiH3jl+yiilaetL1TeHsagy4b/1P49CSN2rPwrf
+         bYHISh1CcZTiiOJr/cqsq21ROKJ3qwi/6X3gAbq7+Lk+/XXMvHYxR24Q4RMgHIabxrU+
+         pLcVomuP+zYD4xqJgczTabCES7o8EO8OW55Kl0HTUXQN4HWW640MTZ7/6cR8Y/wYhLQ1
+         SPGkEo8Sy3TAAPTGa+SIuBOXQUK5oXO0UqAUnJrPjIurxhdbZb8eU42poAULJa/w4p/B
+         abZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=lm/J+aImPr9M2aPp+wyjpyR9I7DDDAwWawLV3AwoeFM=;
-        b=67VlFY3cTeHQa5w34m8I5NaaJxBhKdhrRvzxfhS4XbWrAGnC7fSuGF+K/BblcZu+N4
-         tabY9pEOA9xuQMpqJPIfQ3sBdeyHBR2MkV4SLjlX51Jpb6ROajRXHzmpjQ86stuc5CAy
-         118o9+g/Po+dp6X3LbZhsKI5czS6dJd4Ya6MmcE++uCUlNIYF/BUnd1wGeUep4maJJGF
-         SAMqnRz4yDE+R5jy9zsTwTOkkTodDgTpTbMrpU4QGhcPWleUwCpO9gBHFemCQhkT2y1D
-         wDnPHFYg4DpzEKIJK4OSk5iX6UHC9AjOVB4d8ZU5WHECGdATP42iq928eRXHm/xJURD/
-         y53w==
-X-Gm-Message-State: AOAM531uiSeiLrRp3T+pcxUNJzJlaE9sD7gtCNKvZGOzb4aFTUklSpOQ
-        pBmXSzp48gAYm4BNH6/VIaOGpP9E6b8=
-X-Google-Smtp-Source: ABdhPJx6vO8TtsrpfOV4aKeoJjXUbmSfGfFqG2MaKC65cP0qzjPWf3O1kbEraltyR3vLqJX9dLMzqQ==
-X-Received: by 2002:a63:5007:: with SMTP id e7mr10901585pgb.295.1643011202055;
-        Mon, 24 Jan 2022 00:00:02 -0800 (PST)
-Received: from localhost.localdomain ([43.132.141.9])
-        by smtp.gmail.com with ESMTPSA id a62sm14935460pfb.197.2022.01.23.23.59.59
+        bh=heE4OVfXzjcbLsiS2jXpXXVHXoZTraF8TtJEtw/GvF8=;
+        b=A+MgnsqXzeGLRbcrYUtMzRGq7BWUGKziNGh4pmiUQdSlNZ4PcFNS7Ma/lF0EKS0Zz8
+         Qh3MrWCgGN0Mfks3baaoyedNFnoj4/KG2y9cUcrOiTSDZwDgehmO/7Hw6SBCz3Wzyw/u
+         3hHo13+mHCk7+8P/EKKf0D3KVLmBrZDJZ/SiMFDhU1YtGhvhJYfGVGaKyu6kkBtvUeko
+         IOz9d0YnUJ7VGGokupD7Q2szu/pRelE5bAJ9BuqDs2162feopr8NrDJdpyxYdVnaocjW
+         f3+GNn62w8B+bXyMwDp830Ap47J8XCvWZbo9lEqI5mc9gerF3vzTGv/L7aXARG1EXgGO
+         6vOQ==
+X-Gm-Message-State: AOAM533kqz/yGNDJUq5bIjSwFWLZ6Y0OcOYe+SSeMTjXaztDI1jkSzZ/
+        5wX+XlKjm1TMVxTWkbUFXsQ=
+X-Google-Smtp-Source: ABdhPJyP4yUgARzH2bzIdYRPXgwUA8v2dwGwEaBHGP5B4NCN5jPL5SztRTPNZZ9JjbPqC0vTZ1SOYg==
+X-Received: by 2002:a17:90b:3503:: with SMTP id ls3mr755572pjb.127.1643011381508;
+        Mon, 24 Jan 2022 00:03:01 -0800 (PST)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id s1sm6505200pjn.42.2022.01.24.00.02.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 00:00:01 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     kuba@kernel.org
-Cc:     nhorman@tuxdriver.com, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dsahern@kernel.org,
-        rostedt@goodmis.org, Menglong Dong <imagedong@tencent.com>
-Subject: [PATCH net-next] net: drop_monitor: support drop reason
-Date:   Mon, 24 Jan 2022 15:59:55 +0800
-Message-Id: <20220124075955.1232426-1-imagedong@tencent.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 24 Jan 2022 00:03:01 -0800 (PST)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Tian Kevin <kevin.tian@intel.com>,
+        Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86/cpuid: Exclude unpermitted xfeatures sizes at KVM_GET_SUPPORTED_CPUID
+Date:   Mon, 24 Jan 2022 16:02:51 +0800
+Message-Id: <20220124080251.60558-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+From: Like Xu <likexu@tencent.com>
 
-In the commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()")
-drop reason is introduced to the tracepoint of kfree_skb. Therefore,
-drop_monitor is able to report the drop reason to users by netlink.
+With the help of xstate_get_guest_group_perm(), KVM can exclude unpermitted
+xfeatures in cpuid.0xd.0.eax, in which case the corresponding xfeatures
+sizes should also be matched to the permitted xfeatures.
 
-For now, the number of drop reason is passed to users ( seems it's
-a little troublesome to pass the drop reason as string ). Therefore,
-users can do some customized description of the reason.
+Fixing this inconsistency by introducing a local variable with the same
+name also helps to fix cpuid.0xd.1.ebx and later leaf-by-leaf queries.
 
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
+Fixes: 445ecdf79be0 ("kvm: x86: Exclude unpermitted xfeatures at KVM_GET_SUPPORTED_CPUID")
+Signed-off-by: Like Xu <likexu@tencent.com>
 ---
- include/uapi/linux/net_dropmon.h | 1 +
- net/core/drop_monitor.c          | 6 ++++++
- 2 files changed, 7 insertions(+)
+ arch/x86/kvm/cpuid.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/uapi/linux/net_dropmon.h b/include/uapi/linux/net_dropmon.h
-index 66048cc5d7b3..b2815166dbc2 100644
---- a/include/uapi/linux/net_dropmon.h
-+++ b/include/uapi/linux/net_dropmon.h
-@@ -93,6 +93,7 @@ enum net_dm_attr {
- 	NET_DM_ATTR_SW_DROPS,			/* flag */
- 	NET_DM_ATTR_HW_DROPS,			/* flag */
- 	NET_DM_ATTR_FLOW_ACTION_COOKIE,		/* binary */
-+	NET_DM_ATTR_REASON,			/* u32 */
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 3902c28fb6cb..3dcd58a138a9 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -887,12 +887,12 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+ 		}
+ 		break;
+ 	case 0xd: {
+-		u64 guest_perm = xstate_get_guest_group_perm();
++		u64 supported_xcr0 = supported_xcr0 & xstate_get_guest_group_perm();
  
- 	__NET_DM_ATTR_MAX,
- 	NET_DM_ATTR_MAX = __NET_DM_ATTR_MAX - 1
-diff --git a/net/core/drop_monitor.c b/net/core/drop_monitor.c
-index 7b288a121a41..4aed0e583770 100644
---- a/net/core/drop_monitor.c
-+++ b/net/core/drop_monitor.c
-@@ -126,6 +126,7 @@ struct net_dm_skb_cb {
- 		struct devlink_trap_metadata *hw_metadata;
- 		void *pc;
- 	};
-+	enum skb_drop_reason reason;
- };
+-		entry->eax &= supported_xcr0 & guest_perm;
++		entry->eax &= supported_xcr0;
+ 		entry->ebx = xstate_required_size(supported_xcr0, false);
+ 		entry->ecx = entry->ebx;
+-		entry->edx &= (supported_xcr0 & guest_perm) >> 32;
++		entry->edx &= supported_xcr0 >> 32;
+ 		if (!supported_xcr0)
+ 			break;
  
- #define NET_DM_SKB_CB(__skb) ((struct net_dm_skb_cb *)&((__skb)->cb[0]))
-@@ -508,6 +509,7 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
- 	if (!nskb)
- 		return;
- 
-+	NET_DM_SKB_CB(nskb)->reason = reason;
- 	NET_DM_SKB_CB(nskb)->pc = location;
- 	/* Override the timestamp because we care about the time when the
- 	 * packet was dropped.
-@@ -606,6 +608,7 @@ static int net_dm_packet_report_in_port_put(struct sk_buff *msg, int ifindex,
- static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
- 				     size_t payload_len)
- {
-+	enum skb_drop_reason reason = NET_DM_SKB_CB(skb)->reason;
- 	u64 pc = (u64)(uintptr_t) NET_DM_SKB_CB(skb)->pc;
- 	char buf[NET_DM_MAX_SYMBOL_LEN];
- 	struct nlattr *attr;
-@@ -623,6 +626,9 @@ static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
- 	if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, pc, NET_DM_ATTR_PAD))
- 		goto nla_put_failure;
- 
-+	if (nla_put_u32(msg, NET_DM_ATTR_REASON, reason))
-+		goto nla_put_failure;
-+
- 	snprintf(buf, sizeof(buf), "%pS", NET_DM_SKB_CB(skb)->pc);
- 	if (nla_put_string(msg, NET_DM_ATTR_SYMBOL, buf))
- 		goto nla_put_failure;
 -- 
-2.27.0
+2.33.1
 

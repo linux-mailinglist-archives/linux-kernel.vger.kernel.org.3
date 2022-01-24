@@ -2,42 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA174996AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:19:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B92C9499871
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358904AbiAXVFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:05:49 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39712 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358153AbiAXUn7 (ORCPT
+        id S1353036AbiAXVYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:24:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45184 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1443780AbiAXU7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:43:59 -0500
+        Mon, 24 Jan 2022 15:59:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD2EC04D60A;
+        Mon, 24 Jan 2022 12:01:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3698260B28;
-        Mon, 24 Jan 2022 20:43:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 196B9C340E5;
-        Mon, 24 Jan 2022 20:43:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AFC76091B;
+        Mon, 24 Jan 2022 20:01:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35739C340E5;
+        Mon, 24 Jan 2022 20:01:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057037;
-        bh=GzbYbsXc5BwyTSbLqMt453HSpU4UrE4xgXx+YQpBbjc=;
+        s=korg; t=1643054471;
+        bh=V5YukOHU6VCz6Xve1aib1W7dXXOp4w7id33j9rMc2uU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QpkrP0qb86i8DB42Wrb58N+OPup/mcWpJqnbDKzUR9S3Wst98a4KBdmhXrEPZnmPr
-         da+fgY+lkYsCcyLvyccpyHdyMgdLk7rWetoJqD8NREQ5o/RmaBUk5wC7DsMZWKsIoB
-         b07zlPthWKk3GZ3oQ9TbPxbyOs9qCYOYoDi7SDz4=
+        b=woYMOYztVlmC5KkENiSHZXSabFwIM0J/LfM0Fs6Sc9ivfQPtb8o883+DTDPmA3DOl
+         YqKQ1WcRrPuUd8snW+tqifPZPAhRWnHAMFriHjhs4Kt1fvpOr1UaJxu4wERytyXQWl
+         60lnnK1btyL7gXUcz6Y6wCaSGWR2QzQvsyph2kJA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+9ca499bb57a2b9e4c652@syzkaller.appspotmail.com,
-        Jan Kara <jack@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 649/846] udf: Fix error handling in udf_new_inode()
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 401/563] net: gemini: allow any RGMII interface mode
 Date:   Mon, 24 Jan 2022 19:42:46 +0100
-Message-Id: <20220124184123.406590822@linuxfoundation.org>
+Message-Id: <20220124184038.306708694@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,43 +52,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-[ Upstream commit f05f2429eec60851b98bdde213de31dab697c01b ]
+[ Upstream commit 4e4f325a0a55907b14f579e6b1a38c53755e3de2 ]
 
-When memory allocation of iinfo or block allocation fails, already
-allocated struct udf_inode_info gets freed with iput() and
-udf_evict_inode() may look at inode fields which are not properly
-initialized. Fix it by marking inode bad before dropping reference to it
-in udf_new_inode().
+The four RGMII interface modes take care of the required RGMII delay
+configuration at the PHY and should not be limited by the network MAC
+driver. Sadly, gemini was only permitting RGMII mode with no delays,
+which would require the required delay to be inserted via PCB tracking
+or by the MAC.
 
-Reported-by: syzbot+9ca499bb57a2b9e4c652@syzkaller.appspotmail.com
-Signed-off-by: Jan Kara <jack@suse.cz>
+However, there are designs that require the PHY to add the delay, which
+is impossible without Gemini permitting the other three PHY interface
+modes. Fix the driver to allow these.
+
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+Link: https://lore.kernel.org/r/E1n4mpT-002PLd-Ha@rmk-PC.armlinux.org.uk
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/udf/ialloc.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/cortina/gemini.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/fs/udf/ialloc.c b/fs/udf/ialloc.c
-index 2ecf0e87660e3..b5d611cee749c 100644
---- a/fs/udf/ialloc.c
-+++ b/fs/udf/ialloc.c
-@@ -77,6 +77,7 @@ struct inode *udf_new_inode(struct inode *dir, umode_t mode)
- 					GFP_KERNEL);
- 	}
- 	if (!iinfo->i_data) {
-+		make_bad_inode(inode);
- 		iput(inode);
- 		return ERR_PTR(-ENOMEM);
- 	}
-@@ -86,6 +87,7 @@ struct inode *udf_new_inode(struct inode *dir, umode_t mode)
- 			      dinfo->i_location.partitionReferenceNum,
- 			      start, &err);
- 	if (err) {
-+		make_bad_inode(inode);
- 		iput(inode);
- 		return ERR_PTR(err);
- 	}
+diff --git a/drivers/net/ethernet/cortina/gemini.c b/drivers/net/ethernet/cortina/gemini.c
+index 8df6f081f2447..d11fcfd927c0b 100644
+--- a/drivers/net/ethernet/cortina/gemini.c
++++ b/drivers/net/ethernet/cortina/gemini.c
+@@ -305,21 +305,21 @@ static void gmac_speed_set(struct net_device *netdev)
+ 	switch (phydev->speed) {
+ 	case 1000:
+ 		status.bits.speed = GMAC_SPEED_1000;
+-		if (phydev->interface == PHY_INTERFACE_MODE_RGMII)
++		if (phy_interface_mode_is_rgmii(phydev->interface))
+ 			status.bits.mii_rmii = GMAC_PHY_RGMII_1000;
+ 		netdev_dbg(netdev, "connect %s to RGMII @ 1Gbit\n",
+ 			   phydev_name(phydev));
+ 		break;
+ 	case 100:
+ 		status.bits.speed = GMAC_SPEED_100;
+-		if (phydev->interface == PHY_INTERFACE_MODE_RGMII)
++		if (phy_interface_mode_is_rgmii(phydev->interface))
+ 			status.bits.mii_rmii = GMAC_PHY_RGMII_100_10;
+ 		netdev_dbg(netdev, "connect %s to RGMII @ 100 Mbit\n",
+ 			   phydev_name(phydev));
+ 		break;
+ 	case 10:
+ 		status.bits.speed = GMAC_SPEED_10;
+-		if (phydev->interface == PHY_INTERFACE_MODE_RGMII)
++		if (phy_interface_mode_is_rgmii(phydev->interface))
+ 			status.bits.mii_rmii = GMAC_PHY_RGMII_100_10;
+ 		netdev_dbg(netdev, "connect %s to RGMII @ 10 Mbit\n",
+ 			   phydev_name(phydev));
+@@ -389,6 +389,9 @@ static int gmac_setup_phy(struct net_device *netdev)
+ 		status.bits.mii_rmii = GMAC_PHY_GMII;
+ 		break;
+ 	case PHY_INTERFACE_MODE_RGMII:
++	case PHY_INTERFACE_MODE_RGMII_ID:
++	case PHY_INTERFACE_MODE_RGMII_TXID:
++	case PHY_INTERFACE_MODE_RGMII_RXID:
+ 		netdev_dbg(netdev,
+ 			   "RGMII: set GMAC0 and GMAC1 to MII/RGMII mode\n");
+ 		status.bits.mii_rmii = GMAC_PHY_RGMII_100_10;
 -- 
 2.34.1
 

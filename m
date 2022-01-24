@@ -2,163 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DFF3497E14
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 12:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BCD497E1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 12:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237656AbiAXLd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 06:33:26 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:59560 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237628AbiAXLdY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 06:33:24 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id CDB411F38F;
-        Mon, 24 Jan 2022 11:33:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643024002; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QKBHCDMPU2sJF52iG3y1dGtFPo4VlBO67jsotRm8e/0=;
-        b=Ln5PL1tZA37VQlxptJx/GbMttynQPahbqiT+Z4Se+vFUkREn1RmVMN7pAHmXecliguG6BS
-        QPAnqSZNuBNURKDy1Ia3nNkQyiMdKuIfPvxkh7I7Jnt95yZIZXxJGlnkKMU5Po/YxYlAjv
-        r1fL+NAiMwvnnXIaK6x0BBxSDjhUzpQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643024002;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QKBHCDMPU2sJF52iG3y1dGtFPo4VlBO67jsotRm8e/0=;
-        b=flG+rXfAfOJfxShiDJEylKkcOkjPd+VMyJpOyRWbwWv2EBhYG1CYqy45bliOAex03Qt/I9
-        q5Cz7gqPDm8BtkCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7BE6213B5C;
-        Mon, 24 Jan 2022 11:33:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zD7CHIKO7mGjEQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 24 Jan 2022 11:33:22 +0000
-Message-ID: <d23800b4-503c-a6e2-2c51-2c07a736dffc@suse.de>
-Date:   Mon, 24 Jan 2022 12:33:21 +0100
+        id S237692AbiAXLiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 06:38:12 -0500
+Received: from mail-eopbgr60060.outbound.protection.outlook.com ([40.107.6.60]:32960
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S237677AbiAXLiJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 06:38:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OHa01YOsOQVSk0xhxou160z+axh/3uS3QDXSp3Dp+r4=;
+ b=3YhQ47L2UmEohY1gJHOK0gZbSnJ4h7wb19AufWxFDRtnpXNN1/56y1nCgkOcXXtJL1Iu4AS4efKLY/wjk1tOCzitqfC+MkFfwcbalc1At4qa1G4NULXhKUwHchfiZMuNPWAMHxBSzkGorhXomYBLGa/vdU5IME8+0aVo1LQv8zQ=
+Received: from DB6PR0601CA0003.eurprd06.prod.outlook.com (2603:10a6:4:7b::13)
+ by DB8PR08MB4059.eurprd08.prod.outlook.com (2603:10a6:10:a9::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.13; Mon, 24 Jan
+ 2022 11:37:57 +0000
+Received: from DB5EUR03FT013.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:4:7b:cafe::e1) by DB6PR0601CA0003.outlook.office365.com
+ (2603:10a6:4:7b::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8 via Frontend
+ Transport; Mon, 24 Jan 2022 11:37:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ DB5EUR03FT013.mail.protection.outlook.com (10.152.20.105) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4909.7 via Frontend Transport; Mon, 24 Jan 2022 11:37:57 +0000
+Received: ("Tessian outbound 2877e54fe176:v113"); Mon, 24 Jan 2022 11:37:57 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: 36332006b99362ae
+X-CR-MTA-TID: 64aa7808
+Received: from 5286fc686b33.1
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id B9E88F19-466B-4271-8928-4950B061A8D7.1;
+        Mon, 24 Jan 2022 11:37:48 +0000
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 5286fc686b33.1
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Mon, 24 Jan 2022 11:37:48 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DcGzwEjUZC9/GTmsbr8szlO2M27x8IATTbsN9GMZOmbGxpYueEPKXVI0HyWsm1f0b5CX80LjeImjAre9T70IWD9gXkX6NJmgEwwRm+YtA7HpogZM8SGebCZhLa858U7hmZcIo9PcMgb5EHUzpKfnlop5QqZUD6t2eeBITzbhznL5XbuEZeIGhvaqfEMSWvjLpdz6xI+6B/ozQ33yyJ9AzHe2iqiuaVT9fN6O6f1t3qLJANOj4m3juHaupmNg2vtwwBWn9BMnCGTCms9s5AWE5BF0yIoILQLCYbwZN+MXVlostPjw9k8J3dkE3u/DbfYA4JeXWRvINZoiZiALonp34g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OHa01YOsOQVSk0xhxou160z+axh/3uS3QDXSp3Dp+r4=;
+ b=GRsU/Yzs40ZGYGAbzfGfB7VmMM+BoLoS6Bl74qO8KWxy7deI1JvfpgAkF+U0o3fozGsBaXwFUaxEkWJ6yh/oCpGC7yaR2HvIz1Wj8v8TS/GpD0oRUiGOdtmGbjrdrVeXYNUOOhvQMlx1AnLTIVFAyRd0efTRcA9z/hPJTwihRQ+2IwgeQ3A6sLtsV3gz4W0VsmTRgoy31eyH22nwszmTIUEPiRn2rsUuqcqvoW8hT0ngETw4tc5lHp4hcv9kvc2t0lt6WMbz47mwGzlcHdiC+SSkJpLBTvo+nO94qrAk8JnTj0tFCFJglzn7ggr42McMjUdhGYtz5LosWfV1Ssu4LQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OHa01YOsOQVSk0xhxou160z+axh/3uS3QDXSp3Dp+r4=;
+ b=3YhQ47L2UmEohY1gJHOK0gZbSnJ4h7wb19AufWxFDRtnpXNN1/56y1nCgkOcXXtJL1Iu4AS4efKLY/wjk1tOCzitqfC+MkFfwcbalc1At4qa1G4NULXhKUwHchfiZMuNPWAMHxBSzkGorhXomYBLGa/vdU5IME8+0aVo1LQv8zQ=
+Received: from AM9PR08MB6020.eurprd08.prod.outlook.com (2603:10a6:20b:2d6::7)
+ by AM9PR08MB6899.eurprd08.prod.outlook.com (2603:10a6:20b:309::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8; Mon, 24 Jan
+ 2022 11:37:44 +0000
+Received: from AM9PR08MB6020.eurprd08.prod.outlook.com
+ ([fe80::b09d:a6f2:e90e:1b65]) by AM9PR08MB6020.eurprd08.prod.outlook.com
+ ([fe80::b09d:a6f2:e90e:1b65%5]) with mapi id 15.20.4909.017; Mon, 24 Jan 2022
+ 11:37:43 +0000
+From:   Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>
+To:     James Clark <James.Clark@arm.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "acme@kernel.org" <acme@kernel.org>,
+        Mark Rutland <Mark.Rutland@arm.com>,
+        "alexander.shishkin@linux.intel.com" 
+        <alexander.shishkin@linux.intel.com>,
+        "jolsa@redhat.com" <jolsa@redhat.com>,
+        "namhyung@kernel.org" <namhyung@kernel.org>
+CC:     "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "leo.yan@linaro.com" <leo.yan@linaro.com>,
+        Suzuki Poulose <Suzuki.Poulose@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 1/1] perf/core: Wake up parent event if inherited
+ event has no ring buffer
+Thread-Topic: [RFC PATCH 1/1] perf/core: Wake up parent event if inherited
+ event has no ring buffer
+Thread-Index: AQHX6pX8Zbn97L+JjEiCYRxnZUUCHqxyUnYb
+Date:   Mon, 24 Jan 2022 11:37:43 +0000
+Message-ID: <AM9PR08MB60200FA42FAB6DB843718F0A975E9@AM9PR08MB6020.eurprd08.prod.outlook.com>
+References: <20211206113840.130802-1-james.clark@arm.com>
+ <20211206113840.130802-2-james.clark@arm.com>
+In-Reply-To: <20211206113840.130802-2-james.clark@arm.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-GB
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+suggested_attachment_session_id: f2a74dfa-93fb-13d1-bdd2-7287bd28218d
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-MS-Office365-Filtering-Correlation-Id: 452c86b6-3c38-4121-3051-08d9df2df81b
+x-ms-traffictypediagnostic: AM9PR08MB6899:EE_|DB5EUR03FT013:EE_|DB8PR08MB4059:EE_
+X-Microsoft-Antispam-PRVS: <DB8PR08MB405968916F6A13ABA9DE134E975E9@DB8PR08MB4059.eurprd08.prod.outlook.com>
+x-checkrecipientrouted: true
+nodisclaimer: true
+x-ms-oob-tlc-oobclassifiers: OLM:5236;OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: fgDA/vTFNCSBJtL+9PCh11fIBQn1EutV2NZU50HV7eYPmqOALGoPx7x4owev7I6RRuHRStklcMZqXqAb/t/UCYuYg9niR2T5bY9d2lbT8DWpKPHcCHT7mCORuze4FrVC2rgpTm+/aWfdIUWH8lSKepjAu0PSHhht22z77JCPPr32qOOrhIlRQPxx5FeXHxytNYZo1aHUy4es7uCOCBQeLMpuA07oK6FeK0IGOkouaWydcPbF0uY2tulrqN6o9V+juQGbNXyIi1w0l26gZ0RXVSL1mWplWD+hVCwhcVQqTjNSLRpeXFqQuchGwGnsHvVuiJHihmOzZcQZToWb0dHaaILczq5MnYh/VbMfhjwEOYR8E+ePhUHs6gKO2JB9zpZ0K0gAjxJJo2hk/rFO/TVjE4ixICNmlTZzJJtO5jdfvFjlwkaLViVl4TGFHWkyXP+YykIPnIR/08uZCHnuBPvYXBOeVWDMQRxr7yFQQoe1BN0ho/LKg0bdoFx5cIdRO1s96KYCb+8Z+aPVx0V50GlE4NPdu3c1Ou2Nkf1DpNeF1pxJrBVWZLZVv7zGeHckLHUkqxK/OCDdkiah900l73vqJJjGAHoy9CXsR+WY4/HpXQ0QyzRLlz0wsRT/HLvh2h/WbSpK4bQqoH+z3VQFllvAvAw9P+z7vJy1dWt2JPCnr3zNEcXBIOK7KTGM5e/7f9514tICsI/f/o08oRh5sSfDRw==
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR08MB6020.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8936002)(71200400001)(86362001)(54906003)(38100700002)(52536014)(110136005)(55016003)(6506007)(508600001)(26005)(8676002)(2906002)(122000001)(7696005)(4326008)(5660300002)(91956017)(33656002)(76116006)(64756008)(9686003)(83380400001)(66446008)(38070700005)(186003)(66946007)(66476007)(66556008)(316002);DIR:OUT;SFP:1101;
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/2] Revert "fbcon: Disable accelerated scrolling"
-Content-Language: en-US
-To:     Helge Deller <deller@gmx.de>, Gerd Hoffmann <kraxel@redhat.com>
-Cc:     linux-fbdev@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sven Schnelle <svens@stackframe.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Claudio Suarez <cssk@net-c.es>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20220119110839.33187-1-deller@gmx.de>
- <20220119110839.33187-3-deller@gmx.de> <YelyGDNDTn1Aq/hm@phenom.ffwll.local>
- <6c000477-002b-d125-b945-2c4831bad8a5@gmx.de>
- <20220121072006.ylw2hdl7jbkbwnre@sirius.home.kraxel.org>
- <64fd46cb-9746-3fd0-ec92-c64dba76875a@gmx.de>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <64fd46cb-9746-3fd0-ec92-c64dba76875a@gmx.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------sd4BwwbAVtJnuPUN1A0pHCXE"
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR08MB6899
+Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB5EUR03FT013.eop-EUR03.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 1609842b-5fa9-459f-554f-08d9df2defcc
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fSoURxHarNAJepBgsqTrjkd0cj04UHAO8+nI0S9MGiWwxA1hws3VB6Oc/SYjbumw9su7RlxMIG1zH39ul0h01tTiFZVl/H+D3SeIH7QuoVvCiZ7rZLlqG9EA7D36JoUuxFFd2jhCxKy8j/9fFo33MhI1aKNq6xlPlYdhus61VOBlORQ9ubXApRnBQrvTXrQuXYRJRU7A7TtK7U5xi5SC2fsQIj5DMc77jhPJoKhoSQZ4SsEspaBKiAQKvzWqv9mSHvKvuum2PCzSZC3ecrTkvvxgAkUylieEUmI911X+dGlDWL4tpp56HR3ck5bwz/9iWTjYGj2LGr4lbdCDVyfc0XvCqIikNrkFr6JEoPV3Z9BAJs+jczsnxW4bH2QXr3+/xlCD5vyBx0LoNgYPmnaFe0xmdQMM9RHjTmh2DQIv+b+K6p0cwitbaU5KX7gYK3JoS7KUAhLZsS+NCADp/ZM9X/1gP7AA6/SpDvbw04JlySRJFJcGG+idYJ85YhtpKkVhlq47ltDRy5GDY196ABzS4j3FhYagV0odeB1Kx/0kOER95nWoAA/AF+y5QYafjR+6l99M23o1UxTqxQJ/5+KsWHS0RjNR4IA4l2vBHZUTI73dUM6nnfRUDUfA8zBWVq30lpvP3rgaS/oErwPOecX3zwqxY4FFejEUYw2CFG11MBITP6y7En9JnajBHsCw0f1eJyf+CJeQwH1egJmdonBs7ZU2egu6vCit9zLRVXnqB54A/r24BGu7gPmlfbBqD265tvKrWEoSiWjNbME1lUWEnQ==
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(4636009)(40470700004)(36840700001)(46966006)(33656002)(82310400004)(55016003)(86362001)(52536014)(54906003)(70586007)(81166007)(356005)(4326008)(110136005)(83380400001)(8676002)(5660300002)(26005)(508600001)(70206006)(36860700001)(7696005)(186003)(450100002)(40460700003)(9686003)(47076005)(8936002)(2906002)(316002)(6506007)(336012);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2022 11:37:57.8533
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 452c86b6-3c38-4121-3051-08d9df2df81b
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR03FT013.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR08MB4059
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------sd4BwwbAVtJnuPUN1A0pHCXE
-Content-Type: multipart/mixed; boundary="------------yogKbDJYwJBKFuJ7jue6tqub";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Helge Deller <deller@gmx.de>, Gerd Hoffmann <kraxel@redhat.com>
-Cc: linux-fbdev@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
- Sam Ravnborg <sam@ravnborg.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Sven Schnelle <svens@stackframe.org>,
- Javier Martinez Canillas <javierm@redhat.com>,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- Claudio Suarez <cssk@net-c.es>, Tomi Valkeinen <tomi.valkeinen@ti.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- Daniel Vetter <daniel.vetter@intel.com>,
- Linus Torvalds <torvalds@linux-foundation.org>
-Message-ID: <d23800b4-503c-a6e2-2c51-2c07a736dffc@suse.de>
-Subject: Re: [PATCH 2/2] Revert "fbcon: Disable accelerated scrolling"
-References: <20220119110839.33187-1-deller@gmx.de>
- <20220119110839.33187-3-deller@gmx.de> <YelyGDNDTn1Aq/hm@phenom.ffwll.local>
- <6c000477-002b-d125-b945-2c4831bad8a5@gmx.de>
- <20220121072006.ylw2hdl7jbkbwnre@sirius.home.kraxel.org>
- <64fd46cb-9746-3fd0-ec92-c64dba76875a@gmx.de>
-In-Reply-To: <64fd46cb-9746-3fd0-ec92-c64dba76875a@gmx.de>
+Hi everyone,
 
---------------yogKbDJYwJBKFuJ7jue6tqub
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+I've tried running a benchmark with and without this patch applied, with th=
+e following options:
+ perf record -e arm_spe_0/event_filter=3D0,jitter=3D0,ts_enable=3D1,pa_enab=
+le=3D0,min_latency=3D0/ ...
+repeating it 60 times with and without the patch.
 
-SGkNCg0KQW0gMjQuMDEuMjIgdW0gMTI6MTAgc2NocmllYiBIZWxnZSBEZWxsZXI6DQpbLi4u
-XQ0KPiANCj4gSGVyZSBpcyBteSBwcm9wb3NlZCB3YXkgZm9yd2FyZDoNCj4gYSkgSSB3aWxs
-IHJlc2VuZCB0aGUgcGF0Y2hlcyB3aGljaCByZXZlcnRzIHRoZSByZW1vdmUtZmJjb24taGFy
-ZHdhcmUtc2NvbGxpbmcgcGF0Y2hlcw0KPiAgICAgdG8gdGhlIG1haWxpbmcgbGlzdHMuIEkn
-bGwgYWRqdXN0IHRoZSBzdGFibGUgdGFncyBhbmQgdXBkYXRlIHRoZSBjb21taXQgbWVzc2Fn
-ZXMuDQo+IGIpIFRoZW4gYWZ0ZXIgc29tZSBkYXlzIEknbGwgaW5jbHVkZSBpdCBpbiB0aGUg
-ZmJkZXYgZm9yLW5leHQgZ2l0IGJyYW5jaC4gVGhhdCB3YXkgaXQncw0KPiAgICAgaW5jbHVk
-ZWQgaW4gdGhlIHZhcmlvdXMgYnVpbGQgJiB0ZXN0IGNoYWlucy4NCj4gYykgSWYgZXZlcnl0
-aGluZyBpcyB3b3JraW5nIHdlbGwsIEknbGwgcHVzaCB0aGF0IGNoYW5nZSBkdXJpbmcgdGhl
-IG5leHQgbWVyZ2Ugd2luZG93DQo+ICAgICBmb3Iga2VybmVsIDUuMTguIElmIHByb2JsZW1z
-IGFyaXNlIHdlIHdpbGwgbmVlZCB0byBkaXNjdXNzLg0KPiANCj4gV2hpbGUgdGhlIHBhdGNo
-ZXMgYXJlIGluIHRoZSBmYmRldiBnaXQgdHJlZSB3ZSBzaG91bGQgZGVjaWRlIGhvdyB0byBl
-eGNsdWRlIGNvZGUNCj4gd2hpY2ggaXMgbm90IG5lZWRlZCBmb3IgRFJNLg0KPiANCj4gV2hh
-dCBhYm91dCB0aGlzIHByb3Bvc2FsOg0KPiBhKSBhZGRpbmcgYSBLY29uZmlnIG9wdGlvbiBs
-aWtlOg0KPiAgICAgQ09ORklHX0ZCX0RSSVZFUlMgLSBlbmFibGUgaWYgeW91IG5lZWQgdGhl
-IGZiZGV2IGRyaXZlcnMuIEZvciBEUk0tb25seSB0aGlzIHNob3VsZCBiZSBkaXNhYmxlZC4N
-Cj4gYikgQWRkIHRvIGV2ZXJ5IG5hdGl2ZSBmYmRldiBkcml2ZXIgYSAiZGVwZW5kcyBvbiBG
-Ql9EUklWRVJTIiBpbiB0aGUgS2NvbmZpZyBmaWxlcy4NCj4gYykgVGhhdCB3YXkgd2UgY2Fu
-IHVzZSAiI2lmIGRlZmluZWQoQ09ORklHX0ZCX0RSSVZFUlMpLi4iIHRvIGV4Y2x1ZGUgY29k
-ZSBpbiBmYmNvbiB3aGljaA0KPiAgICAgaXNuJ3QgbmVlZGVkIGJ5IERSTS4NCj4gDQo+IFRo
-b3VnaHRzPw0KDQpJIGNhbid0IHNheSBJIGFwcHJvdmUga2VlcGluZyBmYmRldiBhbGl2ZSwg
-YnV0Li4uDQoNCldpdGggZmJkZXYgZW11bGF0aW9uLCBldmVyeSBEUk0gZHJpdmVyIGlzIGFu
-IGZiZGV2IGRyaXZlciB0b28uIFNvIA0KQ09ORklHX0ZCX0RSSVZFUiBpcyBzb21ld2hhdCBt
-aXNsZWFkaW5nLiBCZXR0ZXIgYWRkIGFuIG9wdGlvbiBsaWtlIA0KQ09ORklHX0ZCQ09OX0hX
-X1NDUk9MTElORyBhbmQgaGF2ZSBpdCBzZWxlY3RlZCBieSB0aGUgZmJkZXYgZHJpdmVycyB0
-aGF0IA0KYWJzb2x1dGVseSBuZWVkIEhXIGFjY2VsZXJhdGlvbi4gVGhhdCBvcHRpb24gd291
-bGQgdGhlbiBwcm90ZWN0IHRoZSByc3AgDQpjb2RlLg0KDQpCZXN0IHJlZ2FyZHMNClRob21h
-cw0KDQo+IA0KPiBIZWxnZQ0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBE
-cml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgN
-Ck1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwg
-QUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
+Without the patch, the output perf.data sizes were: 1.0G 1.0G 1.0G 1.0G 1.0=
+G 1.0G 1.0G 1.0G 47M 48M 48M 48M 48M 48M 48M 48M 48M 48M 49M 49M 49M 49M 49=
+M 49M 49M 49M 49M 49M 49M 49M 49M 49M 49M 49M 49M 60M 60M 60M 60M 61M 61M 6=
+1M 61M 61M 61M 61M 62M 62M 62M 62M 62M 62M 62M 62M 62M 63M 63M 63M 65M 990M=
+ i.e. 47MB to 1.0GB
 
---------------yogKbDJYwJBKFuJ7jue6tqub--
+With the patch, the output sizes were: 1.4G 1.4G 1.4G 1.5G 1.5G 1.5G 1.5G 1=
+.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1=
+.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1=
+.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1=
+.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G 1.5G i.e. 1.4GB to 1.5GB.
 
---------------sd4BwwbAVtJnuPUN1A0pHCXE
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmHujoEFAwAAAAAACgkQlh/E3EQov+Dx
-uBAAvLFcf747FdolJECw3QdAUXffyAmibH0iQVH1sBtC+lSiTsh3XzZ8jBpyB+iHaiGvRD1pGSGZ
-nemZn0ZVCocL/P5R3ZB46FzZRAJvwomu2VaHtBwcnyxkxRWMDJIrMrXSAnmQl3auVsxYABinOyHW
-XzXota9KKTSK2+1gRNnzR3VqCekB7r10Q1zhe4Mtqy7ZOtWWV2Baq8UTwj2R0OImu00WJg/iew9/
-GCe8f5fzs9RvPzjqp5k7oZCKBlUZBPU3hsC/k7wQ5WCF8My31SNSYWL4UBJ5Kqd0xGUzb2vGXn1t
-7FPXHKliIXAc8hOxFVdId8H5KhO3IZhh0FAKjuhi+n/KkCih2OuTS/JPJvA+ZlVeRHeWWBYTnP1f
-rwfozNwnGTru1kTYn7f+IvhwfP9g7q7AitFd5aaOLx9wNTwgM25JlyGGt+v4pAoDgzxxHHqGI98H
-BMxtFhAT8Sw/zNDsnBEEkQ2hs1GgxnmjHOay8mdrpI7Wd7EhG4dJJ+B7jqWIZheoa+ENjO99QnR8
-nhLQ/NY4IMtqMA5NQJLQBNfHaoCyD3d64ehIN88w5hi0j0sRFLdaPnFB5SJWaSviWOalRkayzF25
-67RGxexizLDIoFAbCNfrg4SBkaMLac7nH63unaC4nkyY9bEpg7rbr2KvzcCkDYUPC5PZ93DM8MnF
-wkE=
-=DlvH
------END PGP SIGNATURE-----
-
---------------sd4BwwbAVtJnuPUN1A0pHCXE--
+Tested-by: Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>
+IMPORTANT NOTICE: The contents of this email and any attachments are confid=
+ential and may also be privileged. If you are not the intended recipient, p=
+lease notify the sender immediately and do not disclose the contents to any=
+ other person, use it for any purpose, or store or copy the information in =
+any medium. Thank you.

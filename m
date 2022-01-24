@@ -2,115 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F8249A01E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68B0749A0DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:33:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383541AbiAXXEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:04:21 -0500
-Received: from ip59.38.31.103.in-addr.arpa.unknwn.cloudhost.asia ([103.31.38.59]:48238
-        "EHLO gnuweeb.org" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1348958AbiAXWIe (ORCPT
+        id S1848178AbiAXXVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:21:54 -0500
+Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:5910 "EHLO
+        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1586017AbiAXWZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:08:34 -0500
-Received: from [10.5.5.3] (unknown [68.183.184.174])
-        by gnuweeb.org (Postfix) with ESMTPSA id 21C0DC316C;
-        Mon, 24 Jan 2022 22:08:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=gnuweeb.org;
-        s=default; t=1643062112;
-        bh=zxxunHJMdrtLLW9Gj1MtrXIOO8UGQKHrxWPSXsEVrXE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hz0g4K/xfkORh2e55UOv0F0+MwoNXnKbRWDbVEfYymEuHpJA0o+OVqZAOi+f9Obog
-         u9wAvZ4egvndPhyr9tAASg2ilf0rnRGIwzx+AsXBZ19lWce3VKMvgqeyADxd7dfWc3
-         C3mxO6xmZ++sTFqPlH5FM4zC9DlKgFuYXLr6b6K0dxCiZEmOsI7JL6EtvKgGhaAupP
-         PzzGHgzuZ48TcLP5j9mLPV5OGvFrqymJG+Rl8SP3jgUfmakXOiTqdNVkUxYdAEr3wy
-         t1u4T7rX13FrAr8ptO0vbLjcp/ClqTWfGvp+gYzRI0o+1ZJGHwKPI1dnL5RclkrbFv
-         JWZQC9GCqLZVQ==
-Message-ID: <3f08b8cf-a1dc-4d83-0de2-94203dff9a4c@gnuweeb.org>
-Date:   Tue, 25 Jan 2022 05:08:29 +0700
+        Mon, 24 Jan 2022 17:25:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
+  s=amazon201209; t=1643063133; x=1674599133;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=AKt8vr05GreDSyVNxjtV2CHg4TV7DId+cTaYdsIngFM=;
+  b=lFA0ga3fIn0Whf3GjFFAKnlAtWUyCyNOlAUjpA2wXM9iJd5E3L1xEWT4
+   R8qYHiefa6bTm2snI/tYDFajLWwdB3hgYeW+JCQK375t2tasL5NSUEQlB
+   jbJZxGaWqw+kHHSeZPQ5PmAPMJMYsZs7WY5hZjSt3IMexLpuie7oQ6ZVf
+   M=;
+X-IronPort-AV: E=Sophos;i="5.88,313,1635206400"; 
+   d="scan'208";a="171891279"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-02ee77e7.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP; 24 Jan 2022 22:15:05 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2b-02ee77e7.us-west-2.amazon.com (Postfix) with ESMTPS id E080F41997;
+        Mon, 24 Jan 2022 22:15:03 +0000 (UTC)
+Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.28; Mon, 24 Jan 2022 22:15:01 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.162.8) by
+ EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.28; Mon, 24 Jan 2022 22:14:51 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+To:     <dave.hansen@intel.com>
+CC:     <benh@amazon.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
+        <kuni1840@gmail.com>, <kuniyu@amazon.co.jp>,
+        <linux-kernel@vger.kernel.org>, <mingo@redhat.com>,
+        <tglx@linutronix.de>, <x86@kernel.org>
+Subject: Re: [PATCH] x86/boot: Avoid redundant address overlap tests in memcpy().
+Date:   Tue, 25 Jan 2022 07:14:47 +0900
+Message-ID: <20220124221447.1030-1-kuniyu@amazon.co.jp>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <bd7c111c-8bd4-9c4d-4715-c0fb5fd034ee@intel.com>
+References: <bd7c111c-8bd4-9c4d-4715-c0fb5fd034ee@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] rcu: Add per-CPU rcuc task info to RCU CPU stall
- warnings
-Content-Language: en-US
-To:     paulmck@kernel.org
-Cc:     Zqiang <qiang1.zhang@intel.com>, linux-kernel@vger.kernel.org
-References: <20220124103637.4001386-1-qiang1.zhang@intel.com>
- <e7d56d70-3750-b83a-8c1c-99878722c805@gnuweeb.org>
- <20220124164251.GF4285@paulmck-ThinkPad-P17-Gen-1>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <20220124164251.GF4285@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.162.8]
+X-ClientProxiedBy: EX13D21UWB004.ant.amazon.com (10.43.161.221) To
+ EX13D04ANC001.ant.amazon.com (10.43.157.89)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/22 11:42 PM, Paul E. McKenney wrote:
-> On Mon, Jan 24, 2022 at 05:38:21PM +0700, Ammar Faizi wrote:
->> [snip...]
->> FWIW, this one makes more sense:
->> ```
->> static void rcuc_kthread_dump(struct rcu_data *rdp)
->> {
->> 	 int cpu;
->> 	 unsigned long j;
->> 	 struct task_struct *rcuc;
->>
->> 	 if (!rcu_is_rcuc_kthread_starving(rdp, &j))
->> 		 return;
->>
->> 	 rcuc = rdp->rcu_cpu_kthread_task;
->> 	 if (!rcuc)
->> 		 return;
->>
->> 	 pr_err("%s kthread starved for %ld jiffies, stack dump:\n", rcuc->comm, j);
+From:   Dave Hansen <dave.hansen@intel.com>
+Date:   Mon, 24 Jan 2022 09:38:40 -0800
+> On 1/22/22 17:58, Kuniyuki Iwashima wrote:
+> > -void *memmove(void *dest, const void *src, size_t n)
+> > +void *____memmove(void *dest, const void *src, size_t n)
+> >   {
+> >   	unsigned char *d = dest;
+> >   	const unsigned char *s = src;
+> >   
+> > -	if (d <= s || d - s >= n)
+> > -		return ____memcpy(dest, src, n);
+> > -
+> >   	while (n-- > 0)
+> >   		d[n] = s[n];
+> >   
+> >   	return dest;
+> >   }
 > 
-> Thank you for looking this over and for the great feedback, Ammar!
+> The ___ naming is pretty cruel.  Could we call it memmove_no_overlap() 
+> or memmove_unsafe()?  Surely we can put some *useful* bytes in the name 
+> rather than padding it out with _'s.  No need to perpetuate the 
+> ____memcpy() naming.
+
+Sure.  I will rename it to memmove_unsafe() because it supports another
+overlap case. (d > s)
+
+
 > 
-> I am also wondering why the above message should be printed when the
-> corresponding CPU is offline or idle.  Why not move the above pr_err()
-> line down to replace the pr_err() line below?
-> 
-> 							Thanx, Paul
+> Also, is this worth the churn?  It probably saves less than 10 
+> instructions, all of which are ridiculously cheap.  Is there a *reason* 
+> for this other than being a pure cleanup?
 
-Hi Paul, Thank you for the review. Agree with that.
-Hopefully this one looks better (untested):
-```
-static void rcuc_kthread_dump(struct rcu_data *rdp)
-{
-	int cpu;
-	unsigned long j;
-	struct task_struct *rcuc;
-
-	rcuc = rdp->rcu_cpu_kthread_task;
-	if (!rcuc)
-		return;
-
-	cpu = task_cpu(rcuc);
-	if (cpu_is_offline(cpu) || idle_cpu(cpu))
-		return;
-
-	if (!rcu_is_rcuc_kthread_starving(rdp, &j))
-		return;
-
-	pr_err("%s kthread starved for %ld jiffies\n", rcuc->comm, j);
-	sched_show_task(rcuc);
-	if (!trigger_single_cpu_backtrace(cpu))
-		dump_cpu_task(cpu);
-}
-```
-
-Recall that dump_cpu_task looks like this:
-```
-void dump_cpu_task(int cpu)
-{
-	pr_info("Task dump for CPU %d:\n", cpu);
-	sched_show_task(cpu_curr(cpu));
-}
-```
-which already tells us it's a dump, so "stack dump" in the pr_err()
-can be omitted. Any comment, Zqiang?
-
--- 
-Ammar Faizi
+This is just for cleanup.

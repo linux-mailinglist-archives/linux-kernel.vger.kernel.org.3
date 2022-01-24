@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6689F49A05C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:28:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC275499E8E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:09:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1843872AbiAXXGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:06:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1583740AbiAXWTa (ORCPT
+        id S1835571AbiAXWgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:36:54 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:55820 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377564AbiAXVhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:19:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95DD9C04A2F9;
-        Mon, 24 Jan 2022 12:49:39 -0800 (PST)
+        Mon, 24 Jan 2022 16:37:40 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 533E9B8122A;
-        Mon, 24 Jan 2022 20:49:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FF58C340E5;
-        Mon, 24 Jan 2022 20:49:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89AF261320;
+        Mon, 24 Jan 2022 21:37:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F8D0C340E4;
+        Mon, 24 Jan 2022 21:37:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057377;
-        bh=erMBbhktD/e8ZzmhSjqjLHdeMwvuoTg8BFvNKzz4T5E=;
+        s=korg; t=1643060259;
+        bh=UT/Dyl9nj/GkI8RbdJNJ6JJC4uuJhbXEjUEcFtXd0Bo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dWSvV1l8SxIMtm/hAdZd63CQPCY7TcQU4idySKkv7vKjSTzrXybusfsme7XYnO5WD
-         571oKWYDxS+XyMt1Fa0BxzA9c3pKMF+46/YCofF64x2yve5WNi7ddYRPGFU1YSHkOx
-         MDxP0uDazfcccerv/H25b6XySVFXDLf+473PUjXw=
+        b=ERebD0CSw+APQ9s/XpSjt6C35Wpb0fd42IGcq6a9V2aBWJ+Ft4oL5dtpNIdDhdfFT
+         IFejbMLFaSSwEf6gSvLHrCuSAiy1DU1G5j3Ha/0etyNCniJ9+RVYC6XzkIux63p8pM
+         Wrc5shrI8ilPYyf8Mmb/ZVn6GhvDFsB7BSQbZ89U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH 5.15 760/846] drm/vc4: Fix non-blocking commit getting stuck forever
-Date:   Mon, 24 Jan 2022 19:44:37 +0100
-Message-Id: <20220124184127.181674912@linuxfoundation.org>
+        stable@vger.kernel.org, Jan Kara <jack@suse.cz>, stable@kernel.org,
+        Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 5.16 0890/1039] ext4: make sure quota gets properly shutdown on error
+Date:   Mon, 24 Jan 2022 19:44:39 +0100
+Message-Id: <20220124184155.205187963@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,141 +45,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Jan Kara <jack@suse.cz>
 
-commit 0c250c150c74a90db298bf2a8bcd0a1dabed2e2f upstream.
+commit 15fc69bbbbbc8c72e5f6cc4e1be0f51283c5448e upstream.
 
-In some situation, we can end up being stuck on a non-blocking that went
-through properly.
+When we hit an error when enabling quotas and setting inode flags, we do
+not properly shutdown quota subsystem despite returning error from
+Q_QUOTAON quotactl. This can lead to some odd situations like kernel
+using quota file while it is still writeable for userspace. Make sure we
+properly cleanup the quota subsystem in case of error.
 
-The situation that seems to trigger it reliably is to first start a
-non-blocking commit, and then right after, and before we had any vblank
-interrupt), start a blocking commit.
-
-This will lead to the first commit workqueue to be scheduled, setup the
-display, while the second commit is waiting for the first one to be
-completed.
-
-The vblank interrupt will then be raised, vc4_crtc_handle_vblank() will
-run and will compare the active dlist in the HVS channel to the one
-associated with the crtc->state.
-
-However, at that point, the second commit is waiting using
-drm_atomic_helper_wait_for_dependencies that occurs after
-drm_atomic_helper_swap_state has been called, so crtc->state points to
-the second commit state. vc4_crtc_handle_vblank() will compare the two
-dlist addresses and since they don't match will ignore the interrupt.
-
-The vblank event will never be reported, and the first and second commit
-will wait for the first commit completion until they timeout.
-
-The underlying reason is that it was never safe to do so. Indeed,
-accessing the ->state pointer access synchronization is based on
-ownership guarantees that can only occur within the functions and hooks
-defined as part of the KMS framework, and obviously the irq handler
-isn't one of them. The rework to move to generic helpers only uncovered
-the underlying issue.
-
-However, since the code path between
-drm_atomic_helper_wait_for_dependencies() and
-drm_atomic_helper_wait_for_vblanks() is serialised and we can't get two
-commits in that path at the same time, we can work around this issue by
-setting a variable associated to struct drm_crtc to the dlist we expect,
-and then using it from the vc4_crtc_handle_vblank() function.
-
-Since that state is shared with the modesetting path, we also need to
-introduce a spinlock to protect the code shared between the interrupt
-handler and the modesetting path, protecting only our new variable for
-now.
-
-Link: https://lore.kernel.org/all/YWgteNaNeaS9uWDe@phenom.ffwll.local/
-Link: https://lore.kernel.org/r/20211025141113.702757-3-maxime@cerno.tech
-Fixes: 56d1fe0979dc ("drm/vc4: Make pageflip completion handling more robust.")
-Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Signed-off-by: Jan Kara <jack@suse.cz>
+Cc: stable@kernel.org
+Link: https://lore.kernel.org/r/20211007155336.12493-2-jack@suse.cz
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/vc4/vc4_crtc.c |    5 ++++-
- drivers/gpu/drm/vc4/vc4_drv.h  |   14 ++++++++++++++
- drivers/gpu/drm/vc4/vc4_hvs.c  |    7 +++++--
- 3 files changed, 23 insertions(+), 3 deletions(-)
+ fs/ext4/super.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
---- a/drivers/gpu/drm/vc4/vc4_crtc.c
-+++ b/drivers/gpu/drm/vc4/vc4_crtc.c
-@@ -713,8 +713,9 @@ static void vc4_crtc_handle_page_flip(st
- 	unsigned long flags;
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -6275,10 +6275,7 @@ static int ext4_quota_on(struct super_bl
  
- 	spin_lock_irqsave(&dev->event_lock, flags);
-+	spin_lock(&vc4_crtc->irq_lock);
- 	if (vc4_crtc->event &&
--	    (vc4_state->mm.start == HVS_READ(SCALER_DISPLACTX(chan)) ||
-+	    (vc4_crtc->current_dlist == HVS_READ(SCALER_DISPLACTX(chan)) ||
- 	     vc4_crtc->feeds_txp)) {
- 		drm_crtc_send_vblank_event(crtc, vc4_crtc->event);
- 		vc4_crtc->event = NULL;
-@@ -728,6 +729,7 @@ static void vc4_crtc_handle_page_flip(st
- 		 */
- 		vc4_hvs_unmask_underrun(dev, chan);
+ 	lockdep_set_quota_inode(path->dentry->d_inode, I_DATA_SEM_QUOTA);
+ 	err = dquot_quota_on(sb, type, format_id, path);
+-	if (err) {
+-		lockdep_set_quota_inode(path->dentry->d_inode,
+-					     I_DATA_SEM_NORMAL);
+-	} else {
++	if (!err) {
+ 		struct inode *inode = d_inode(path->dentry);
+ 		handle_t *handle;
+ 
+@@ -6298,7 +6295,12 @@ static int ext4_quota_on(struct super_bl
+ 		ext4_journal_stop(handle);
+ 	unlock_inode:
+ 		inode_unlock(inode);
++		if (err)
++			dquot_quota_off(sb, type);
  	}
-+	spin_unlock(&vc4_crtc->irq_lock);
- 	spin_unlock_irqrestore(&dev->event_lock, flags);
++	if (err)
++		lockdep_set_quota_inode(path->dentry->d_inode,
++					     I_DATA_SEM_NORMAL);
+ 	return err;
  }
  
-@@ -1127,6 +1129,7 @@ int vc4_crtc_init(struct drm_device *drm
- 		return PTR_ERR(primary_plane);
- 	}
- 
-+	spin_lock_init(&vc4_crtc->irq_lock);
- 	drm_crtc_init_with_planes(drm, crtc, primary_plane, NULL,
- 				  crtc_funcs, NULL);
- 	drm_crtc_helper_add(crtc, crtc_helper_funcs);
---- a/drivers/gpu/drm/vc4/vc4_drv.h
-+++ b/drivers/gpu/drm/vc4/vc4_drv.h
-@@ -500,6 +500,20 @@ struct vc4_crtc {
- 	 * @feeds_txp: True if the CRTC feeds our writeback controller.
- 	 */
- 	bool feeds_txp;
-+
-+	/**
-+	 * @irq_lock: Spinlock protecting the resources shared between
-+	 * the atomic code and our vblank handler.
-+	 */
-+	spinlock_t irq_lock;
-+
-+	/**
-+	 * @current_dlist: Start offset of the display list currently
-+	 * set in the HVS for that CRTC. Protected by @irq_lock, and
-+	 * copied in vc4_hvs_update_dlist() for the CRTC interrupt
-+	 * handler to have access to that value.
-+	 */
-+	unsigned int current_dlist;
- };
- 
- static inline struct vc4_crtc *
---- a/drivers/gpu/drm/vc4/vc4_hvs.c
-+++ b/drivers/gpu/drm/vc4/vc4_hvs.c
-@@ -365,10 +365,9 @@ static void vc4_hvs_update_dlist(struct
- 	struct vc4_dev *vc4 = to_vc4_dev(dev);
- 	struct vc4_crtc *vc4_crtc = to_vc4_crtc(crtc);
- 	struct vc4_crtc_state *vc4_state = to_vc4_crtc_state(crtc->state);
-+	unsigned long flags;
- 
- 	if (crtc->state->event) {
--		unsigned long flags;
--
- 		crtc->state->event->pipe = drm_crtc_index(crtc);
- 
- 		WARN_ON(drm_crtc_vblank_get(crtc) != 0);
-@@ -388,6 +387,10 @@ static void vc4_hvs_update_dlist(struct
- 		HVS_WRITE(SCALER_DISPLISTX(vc4_state->assigned_channel),
- 			  vc4_state->mm.start);
- 	}
-+
-+	spin_lock_irqsave(&vc4_crtc->irq_lock, flags);
-+	vc4_crtc->current_dlist = vc4_state->mm.start;
-+	spin_unlock_irqrestore(&vc4_crtc->irq_lock, flags);
- }
- 
- void vc4_hvs_atomic_enable(struct drm_crtc *crtc,
 
 

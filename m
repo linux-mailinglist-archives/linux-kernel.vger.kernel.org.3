@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72EF949963E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:17:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B164C499645
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444635AbiAXVBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:01:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
+        id S1444810AbiAXVBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:01:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387637AbiAXUhA (ORCPT
+        with ESMTP id S1387950AbiAXUhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:37:00 -0500
+        Mon, 24 Jan 2022 15:37:36 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74175C02B8D6;
-        Mon, 24 Jan 2022 11:50:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1E7C02B8E2;
+        Mon, 24 Jan 2022 11:51:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3C6D0B81142;
-        Mon, 24 Jan 2022 19:50:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 623D9C340E7;
-        Mon, 24 Jan 2022 19:50:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 68A81B8123A;
+        Mon, 24 Jan 2022 19:51:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8457CC340E8;
+        Mon, 24 Jan 2022 19:50:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053857;
-        bh=45UaNH9/HbIDxSHTUqBMSe0RI4AGTAFns1A7plVdQbQ=;
+        s=korg; t=1643053860;
+        bh=dew9iB/PSxpZFa7z+LvbEm0R1sFHfkirT3jY0G+NzIo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2kR5rSrXsU7acP5lNDg4l/UjH6mpfm4VgNCZoGW3J2/Y/w4rvmQD3XFtva4HFypJI
-         IOki6eSTNjgPbueuWP9wBjHq0ORPi07BDkqTHk9R3YqSl03+P4lqwsArvKT+hReyib
-         tOEvoSse2oR1Uy1fWBJ30s7Epi7XPZSgbmWCnJH0=
+        b=FXte4R0tvEQmbEtum+D04DmEqTRgQAsOIigDo96C+s4uy+jjrzdQrd6Lt6hCKYipi
+         n+vLRr4VnDnDLSfPyuQyfdV5hS1hTaeCw4V5HzkVq8AxBfvR+iF073q3Tgknsdgzaa
+         2mAxLl9VknkPnTdw4f/CWEKjDXdEgzsO5J2ZBBtY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhang Zixun <zhang133010@icloud.com>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 199/563] x86/mce/inject: Avoid out-of-bounds write when setting flags
-Date:   Mon, 24 Jan 2022 19:39:24 +0100
-Message-Id: <20220124184031.312888807@linuxfoundation.org>
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 200/563] ACPI: scan: Create platform device for BCM4752 and LNV4752 ACPI nodes
+Date:   Mon, 24 Jan 2022 19:39:25 +0100
+Message-Id: <20220124184031.344880300@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -48,53 +49,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Zixun <zhang133010@icloud.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit de768416b203ac84e02a757b782a32efb388476f ]
+[ Upstream commit f85196bdd5a50da74670250564740fc852b3c239 ]
 
-A contrived zero-length write, for example, by using write(2):
+BCM4752 and LNV4752 ACPI nodes describe a Broadcom 4752 GPS module
+attached to an UART of the system.
 
-  ...
-  ret = write(fd, str, 0);
-  ...
+The GPS modules talk a custom protocol which only works with a closed-
+source Android gpsd daemon which knows this protocol.
 
-to the "flags" file causes:
+The ACPI nodes also describe GPIOs to turn the GPS on/off these are
+handled by the net/rfkill/rfkill-gpio.c code. This handling predates the
+addition of enumeration of ACPI instantiated serdevs to the kernel and
+was broken by that addition, because the ACPI scan code now no longer
+instantiates platform_device-s for these nodes.
 
-  BUG: KASAN: stack-out-of-bounds in flags_write
-  Write of size 1 at addr ffff888019be7ddf by task writefile/3787
+Rename the i2c_multi_instantiate_ids HID list to ignore_serial_bus_ids
+and add the BCM4752 and LNV4752 HIDs, so that rfkill-gpio gets
+a platform_device to bind to again; and so that a tty cdev for gpsd
+gets created for these.
 
-  CPU: 4 PID: 3787 Comm: writefile Not tainted 5.16.0-rc7+ #12
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
-
-due to accessing buf one char before its start.
-
-Prevent such out-of-bounds access.
-
-  [ bp: Productize into a proper patch. Link below is the next best
-    thing because the original mail didn't get archived on lore. ]
-
-Fixes: 0451d14d0561 ("EDAC, mce_amd_inj: Modify flags attribute to use string arguments")
-Signed-off-by: Zhang Zixun <zhang133010@icloud.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/linux-edac/YcnePfF1OOqoQwrX@zn.tnic/
+Fixes: e361d1f85855 ("ACPI / scan: Fix enumeration for special UART devices")
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/cpu/mce/inject.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/scan.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-index 3a44346f22766..e7808309d4710 100644
---- a/arch/x86/kernel/cpu/mce/inject.c
-+++ b/arch/x86/kernel/cpu/mce/inject.c
-@@ -347,7 +347,7 @@ static ssize_t flags_write(struct file *filp, const char __user *ubuf,
- 	char buf[MAX_FLAG_OPT_SIZE], *__buf;
- 	int err;
+diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+index de0533bd4e086..67a5ee2fedfd3 100644
+--- a/drivers/acpi/scan.c
++++ b/drivers/acpi/scan.c
+@@ -1577,6 +1577,7 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
+ {
+ 	struct list_head resource_list;
+ 	bool is_serial_bus_slave = false;
++	static const struct acpi_device_id ignore_serial_bus_ids[] = {
+ 	/*
+ 	 * These devices have multiple I2cSerialBus resources and an i2c-client
+ 	 * must be instantiated for each, each with its own i2c_device_id.
+@@ -1585,11 +1586,18 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
+ 	 * drivers/platform/x86/i2c-multi-instantiate.c driver, which knows
+ 	 * which i2c_device_id to use for each resource.
+ 	 */
+-	static const struct acpi_device_id i2c_multi_instantiate_ids[] = {
+ 		{"BSG1160", },
+ 		{"BSG2150", },
+ 		{"INT33FE", },
+ 		{"INT3515", },
++	/*
++	 * HIDs of device with an UartSerialBusV2 resource for which userspace
++	 * expects a regular tty cdev to be created (instead of the in kernel
++	 * serdev) and which have a kernel driver which expects a platform_dev
++	 * such as the rfkill-gpio driver.
++	 */
++		{"BCM4752", },
++		{"LNV4752", },
+ 		{}
+ 	};
  
--	if (cnt > MAX_FLAG_OPT_SIZE)
-+	if (!cnt || cnt > MAX_FLAG_OPT_SIZE)
- 		return -EINVAL;
+@@ -1603,8 +1611,7 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
+ 	     fwnode_property_present(&device->fwnode, "baud")))
+ 		return true;
  
- 	if (copy_from_user(&buf, ubuf, cnt))
+-	/* Instantiate a pdev for the i2c-multi-instantiate drv to bind to */
+-	if (!acpi_match_device_ids(device, i2c_multi_instantiate_ids))
++	if (!acpi_match_device_ids(device, ignore_serial_bus_ids))
+ 		return false;
+ 
+ 	INIT_LIST_HEAD(&resource_list);
 -- 
 2.34.1
 

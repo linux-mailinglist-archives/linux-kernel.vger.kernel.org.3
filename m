@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3CC49A73E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F2149A394
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3423818AbiAYCgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:36:17 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36736 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385026AbiAXUbZ (ORCPT
+        id S2366583AbiAXXxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:53:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1846013AbiAXXOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:31:25 -0500
+        Mon, 24 Jan 2022 18:14:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A881C0610C8;
+        Mon, 24 Jan 2022 13:21:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53A44B8124F;
-        Mon, 24 Jan 2022 20:31:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D6A9C340E7;
-        Mon, 24 Jan 2022 20:31:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16DD9B81218;
+        Mon, 24 Jan 2022 21:21:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DF1CC340E4;
+        Mon, 24 Jan 2022 21:21:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056277;
-        bh=9OYIhp4tcNcPNdnDiXHPbH5wBCGJndxbPgN1unI9o3Y=;
+        s=korg; t=1643059268;
+        bh=k/Lz/Zo8RSedFrd/Cb57u0V3RMctMpavMVRb8b8/edc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QJ6r4500TUFeery9Tq0UIkLbuCZ5feWFHAepEMI8k5045lkNigc5QH1Yx3VmyxtoL
-         sjnP2EdxaVTenoY8ovOcRDNb+ymHScedvKFmDdN2MdzVlM6tY+CxUvDQ8AbTRjC2uF
-         bZNROn3XHOzyV3k88PRvX8rzayLnVdOojGpV4LAg=
+        b=jZ8pB21F/Uuw6HDKwNLWJGuQ8i6zYvDiNnJ/qKDojFx2PxSDZL9tIyffLo3ZgiEx6
+         wzTQWK7kDVWEBv6bgNeYpgBkd7sBUI7l7J6vaAH810AmAPYWB4a48wYhj4I4E6nLK0
+         +BXtxhkQRciO+IAipUT724W47VQ2DqaKe4JfWnVQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Xiang Chen <chenxiang66@hisilicon.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH 5.15 429/846] scsi: block: pm: Always set request queue runtime active in blk_post_runtime_resume()
-Date:   Mon, 24 Jan 2022 19:39:06 +0100
-Message-Id: <20220124184115.776860952@linuxfoundation.org>
+        stable@vger.kernel.org, Wan Jiabing <wanjiabing@vivo.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0560/1039] ARM: shmobile: rcar-gen2: Add missing of_node_put()
+Date:   Mon, 24 Jan 2022 19:39:09 +0100
+Message-Id: <20220124184144.137999152@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,118 +49,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alan Stern <stern@rowland.harvard.edu>
+From: Wan Jiabing <wanjiabing@vivo.com>
 
-[ Upstream commit 6e1fcab00a23f7fe9f4fe9704905a790efa1eeab ]
+[ Upstream commit 85744f2d938c5f3cfc44cb6533c157469634da93 ]
 
-John Garry reported a deadlock that occurs when trying to access a
-runtime-suspended SATA device.  For obscure reasons, the rescan procedure
-causes the link to be hard-reset, which disconnects the device.
+Fix following coccicheck warning:
+./arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c:156:1-33: Function
+for_each_matching_node_and_match should have of_node_put() before break
+and goto.
 
-The rescan tries to carry out a runtime resume when accessing the device.
-scsi_rescan_device() holds the SCSI device lock and won't release it until
-it can put commands onto the device's block queue.  This can't happen until
-the queue is successfully runtime-resumed or the device is unregistered.
-But the runtime resume fails because the device is disconnected, and
-__scsi_remove_device() can't do the unregistration because it can't get the
-device lock.
+Early exits from for_each_matching_node_and_match() should decrement the
+node reference counter.
 
-The best way to resolve this deadlock appears to be to allow the block
-queue to start running again even after an unsuccessful runtime resume.
-The idea is that the driver or the SCSI error handler will need to be able
-to use the queue to resolve the runtime resume failure.
-
-This patch removes the err argument to blk_post_runtime_resume() and makes
-the routine act as though the resume was successful always.  This fixes the
-deadlock.
-
-Link: https://lore.kernel.org/r/1639999298-244569-4-git-send-email-chenxiang66@hisilicon.com
-Fixes: e27829dc92e5 ("scsi: serialize ->rescan against ->remove")
-Reported-and-tested-by: John Garry <john.garry@huawei.com>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+Link: https://lore.kernel.org/r/20211018014503.7598-1-wanjiabing@vivo.com
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/blk-pm.c         | 22 +++++++---------------
- drivers/scsi/scsi_pm.c |  2 +-
- include/linux/blk-pm.h |  2 +-
- 3 files changed, 9 insertions(+), 17 deletions(-)
+ arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/block/blk-pm.c b/block/blk-pm.c
-index 17bd020268d42..2dad62cc15727 100644
---- a/block/blk-pm.c
-+++ b/block/blk-pm.c
-@@ -163,27 +163,19 @@ EXPORT_SYMBOL(blk_pre_runtime_resume);
- /**
-  * blk_post_runtime_resume - Post runtime resume processing
-  * @q: the queue of the device
-- * @err: return value of the device's runtime_resume function
-  *
-  * Description:
-- *    Update the queue's runtime status according to the return value of the
-- *    device's runtime_resume function. If the resume was successful, call
-- *    blk_set_runtime_active() to do the real work of restarting the queue.
-+ *    For historical reasons, this routine merely calls blk_set_runtime_active()
-+ *    to do the real work of restarting the queue.  It does this regardless of
-+ *    whether the device's runtime-resume succeeded; even if it failed the
-+ *    driver or error handler will need to communicate with the device.
-  *
-  *    This function should be called near the end of the device's
-  *    runtime_resume callback.
-  */
--void blk_post_runtime_resume(struct request_queue *q, int err)
-+void blk_post_runtime_resume(struct request_queue *q)
- {
--	if (!q->dev)
--		return;
--	if (!err) {
--		blk_set_runtime_active(q);
--	} else {
--		spin_lock_irq(&q->queue_lock);
--		q->rpm_status = RPM_SUSPENDED;
--		spin_unlock_irq(&q->queue_lock);
--	}
-+	blk_set_runtime_active(q);
- }
- EXPORT_SYMBOL(blk_post_runtime_resume);
+diff --git a/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c b/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c
+index ee949255ced3f..09ef73b99dd86 100644
+--- a/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c
++++ b/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c
+@@ -154,8 +154,10 @@ static int __init rcar_gen2_regulator_quirk(void)
+ 		return -ENODEV;
  
-@@ -201,7 +193,7 @@ EXPORT_SYMBOL(blk_post_runtime_resume);
-  * runtime PM status and re-enable peeking requests from the queue. It
-  * should be called before first request is added to the queue.
-  *
-- * This function is also called by blk_post_runtime_resume() for successful
-+ * This function is also called by blk_post_runtime_resume() for
-  * runtime resumes.  It does everything necessary to restart the queue.
-  */
- void blk_set_runtime_active(struct request_queue *q)
-diff --git a/drivers/scsi/scsi_pm.c b/drivers/scsi/scsi_pm.c
-index 3717eea37ecb3..e91a0a5bc7a3e 100644
---- a/drivers/scsi/scsi_pm.c
-+++ b/drivers/scsi/scsi_pm.c
-@@ -262,7 +262,7 @@ static int sdev_runtime_resume(struct device *dev)
- 	blk_pre_runtime_resume(sdev->request_queue);
- 	if (pm && pm->runtime_resume)
- 		err = pm->runtime_resume(dev);
--	blk_post_runtime_resume(sdev->request_queue, err);
-+	blk_post_runtime_resume(sdev->request_queue);
+ 	for_each_matching_node_and_match(np, rcar_gen2_quirk_match, &id) {
+-		if (!of_device_is_available(np))
++		if (!of_device_is_available(np)) {
++			of_node_put(np);
+ 			break;
++		}
  
- 	return err;
- }
-diff --git a/include/linux/blk-pm.h b/include/linux/blk-pm.h
-index b80c65aba2493..2580e05a8ab67 100644
---- a/include/linux/blk-pm.h
-+++ b/include/linux/blk-pm.h
-@@ -14,7 +14,7 @@ extern void blk_pm_runtime_init(struct request_queue *q, struct device *dev);
- extern int blk_pre_runtime_suspend(struct request_queue *q);
- extern void blk_post_runtime_suspend(struct request_queue *q, int err);
- extern void blk_pre_runtime_resume(struct request_queue *q);
--extern void blk_post_runtime_resume(struct request_queue *q, int err);
-+extern void blk_post_runtime_resume(struct request_queue *q);
- extern void blk_set_runtime_active(struct request_queue *q);
- #else
- static inline void blk_pm_runtime_init(struct request_queue *q,
+ 		ret = of_property_read_u32(np, "reg", &addr);
+ 		if (ret)	/* Skip invalid entry and continue */
+@@ -164,6 +166,7 @@ static int __init rcar_gen2_regulator_quirk(void)
+ 		quirk = kzalloc(sizeof(*quirk), GFP_KERNEL);
+ 		if (!quirk) {
+ 			ret = -ENOMEM;
++			of_node_put(np);
+ 			goto err_mem;
+ 		}
+ 
 -- 
 2.34.1
 

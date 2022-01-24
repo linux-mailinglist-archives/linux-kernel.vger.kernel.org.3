@@ -2,123 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FCE14985A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B844985A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244065AbiAXRCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:02:48 -0500
-Received: from mta-p7.oit.umn.edu ([134.84.196.207]:39818 "EHLO
-        mta-p7.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243911AbiAXRCq (ORCPT
+        id S244069AbiAXRDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:03:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243962AbiAXRDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:02:46 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p7.oit.umn.edu (Postfix) with ESMTP id 4JjGWT3ZYPz9vYdr
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 17:02:45 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p7.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p7.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Er-wlIDVSsuY for <linux-kernel@vger.kernel.org>;
-        Mon, 24 Jan 2022 11:02:45 -0600 (CST)
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p7.oit.umn.edu (Postfix) with ESMTPS id 4JjGWT1Wykz9vYdC
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:02:45 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p7.oit.umn.edu 4JjGWT1Wykz9vYdC
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p7.oit.umn.edu 4JjGWT1Wykz9vYdC
-Received: by mail-pj1-f70.google.com with SMTP id f1-20020a17090a8e8100b001b44bb75678so11085677pjo.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:02:45 -0800 (PST)
+        Mon, 24 Jan 2022 12:03:20 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72468C061744
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:03:20 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id j14so11209509lja.3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:03:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pNEeCGoKa1V6rmYqi+3L0jEf0NTPic6Q/DwIqKljNuU=;
-        b=oB+TQmFq3vUafAHIx75KxfATkLnzA+020njfiNxZ7n4IVOIyb8n0++/zm1oUOQsUX5
-         7Jbo9yoDrwfe4y+V1Qhmw6QSlZLJ6VQ4zXnMqYw2wRKx7Wx++ARQhcW2/d/hzR+hcGxU
-         cmtxskJiLEtUDFoRZS5PGx+yjgTn8bz9Y2tGPNnKB7RpDxcjshCxnCorZzjVfNZLSjvG
-         iSxUkHlgtvpcZOnLkOmE0TzZxNoL7hKnKSU7lXK5LIe5rQNOZWI+TFJcRXNg8vDePNUv
-         JqvxA7OQlKcmMWYepLjiLFq6VUxNGycAGKmf9p1j/EqZOxyOV+GW8NOxsmcQJtka6Snt
-         yjlw==
+        d=ventanamicro.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=w4LPuie2gZC/4gV/HI33snifTw+KkH8sPMZQ+z2ss9g=;
+        b=GMNghxZcUBO0n0fyg056ZLP7pohxEmoQNb+q9Gx3aJL7yN5OgP3L3sAXKKeG0FS2FZ
+         Z6pDM9krJxdYNIX5JVA7jIf5PVEaWB3PGmkC7PzXiUasK0mbo88jhYgwCX1k5jbVbMqb
+         sJ3IiMLRCt+4TpzmjqS9TqholOAk3g9plbBE2UYD+tiolZfJWQ8Tpv/UiU12e2qoNkKc
+         ODqMMR230gAhWRVkS6W1VlA7aC/0QEKLOCbIpRFoA5Y/sHPFuo5qFoGPwmFbwk3Sb3qz
+         8/5ZUZJrGisb4JDzOH3FxSWlIGyw2MCJJOMZVNMiLFQ1TAbmhgYe1jIk4F2YTgopqVaN
+         sjaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pNEeCGoKa1V6rmYqi+3L0jEf0NTPic6Q/DwIqKljNuU=;
-        b=Ni/5welEJZkglv3u1ZBwIRnlAcs2wUDAbz+bpQwvf8FTXHZG4kuj7dSa2jRRCn8dRH
-         Es/99qX+hGgRFG1nkzFg57dGoim96H12cQk9OdiKW4AfYa/s+ry80bN0KvSK1YqcHVnB
-         Ml68o5P9wGO5EmDKbvg+g0Fp0ODv5MYJeVwEIa1/xwUmj/A2dcZnCvl+CwBnrlactvfQ
-         nMLHERtlUix7hrfkY1LMFCjyk1/otsjD25tmnrgzjQoAJt7QEsFrJk1Zxyy9ghUS0rqt
-         B2Z5Xm//dz4FjoSS9lprdhkdbfq5ZVwwutMcxa3aWkIHaSFVkLQwOsBfTKYvkUZ47C2R
-         r9+w==
-X-Gm-Message-State: AOAM5338IyMbOuGAg5JesP+3+3Rvj23XUDz2vZhx/CwIbM0weizjFHDY
-        lEz0rmI/noREuJBITrG5Y4UP6bTEGm0Rl5smHk6+PlF6pnU3KyQSWssUPFlgYcROQkJiEb8RAe2
-        difa2vSQYp0N/oxtrhpxSjasmYl/G
-X-Received: by 2002:a17:902:cec8:b0:14b:47b3:c0a2 with SMTP id d8-20020a170902cec800b0014b47b3c0a2mr6663273plg.51.1643043764481;
-        Mon, 24 Jan 2022 09:02:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwut5m/BhVkcZcrvznz08wiT4QN4M/h6lmE32uu9pEMjPLtxdzu4Rdmt39nrJ/+uAbft69Pqw==
-X-Received: by 2002:a17:902:cec8:b0:14b:47b3:c0a2 with SMTP id d8-20020a170902cec800b0014b47b3c0a2mr6663249plg.51.1643043764246;
-        Mon, 24 Jan 2022 09:02:44 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.4.61.248])
-        by smtp.gmail.com with ESMTPSA id q17sm17263784pfu.158.2022.01.24.09.02.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 09:02:43 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Lv Zheng <lv.zheng@intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ACPI / tables: Fix a NULL pointer dereference in acpi_table_initrd_scan()
-Date:   Tue, 25 Jan 2022 01:02:37 +0800
-Message-Id: <20220124170237.57718-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w4LPuie2gZC/4gV/HI33snifTw+KkH8sPMZQ+z2ss9g=;
+        b=owr0KyFCmNeRLMwUCQgNYZhdUCCAV0uidY4i/HKD1WAkobynkCjEGLITiA/oTaFtrL
+         GLA1RVYB2rKU4Ea9r9jvpvbtTtQLucA3Rm11eiT9nsvEE0fqFheCqL4J89SVfWi/d7l6
+         wOP3WbehLEqNy6F7ITqDYjxo0II0eEQToQckn7qE+QhdefRl1qo62SGBc7bbvHNZAKMi
+         1oZCXfwg1Y88uDzSD9GZ7dxKgpcHlVGDmNHCWogmNPRORo9hSt1sAbskyhOYzh7h3jtT
+         qJSAZQLl+lIckdEbkjkCjVrf7XKy+W3+jgUySAb7Rx+ufzEooMALDLAzV8jn4OJ69JvW
+         NLWA==
+X-Gm-Message-State: AOAM5330nZRlzENekPRtyxMYM1m7eZZFfrj3CWrsRPrIkHOLoAaEPsSd
+        srr3o/D/dQ2/xaa06cOQ2pU0XXe67LW1Sms6xUNLXw==
+X-Google-Smtp-Source: ABdhPJwIH+cyPsq9bO3FdraGj6OvSy6jgmkNSoCj6ohDecG2rjLAnn9SJiY8LIXwnWs9epmvSWObibUgPiIYbVjqz4c=
+X-Received: by 2002:a2e:b8d3:: with SMTP id s19mr12244345ljp.401.1643043798747;
+ Mon, 24 Jan 2022 09:03:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211118192130.48b8f04c@xhacker> <20211118192651.605d0c80@xhacker>
+ <CAN37VV6vfee+T18UkbDLe1ts87+Zvg25oQR1+VJD3e6SJFPPiA@mail.gmail.com>
+ <YeqkIKUsdHH0ORxf@xhacker> <Ye0cCI8aAC8rL1IE@xhacker>
+In-Reply-To: <Ye0cCI8aAC8rL1IE@xhacker>
+From:   Mayuresh Chitale <mchitale@ventanamicro.com>
+Date:   Mon, 24 Jan 2022 22:32:43 +0530
+Message-ID: <CAN37VV4H=ts6GU1aV6M1mZk+SRb-3n3R_nz9Ao3_W1zcEKW4-A@mail.gmail.com>
+Subject: Re: [PATCH 11/12] riscv: extable: add a dedicated uaccess handler
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Tong Tiangen <tongtiangen@huawei.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In acpi_table_initrd_scan(), the return value of acpi_os_map_memory()
-is assigned to table and there is a dereference of it after that.
-acpi_os_map_memory() will return NULL on failure, which may lead to NULL
-pointer dereference.
+Hi Jisheng,
 
-Fix this bug by adding a NULL check of table.
+On Sun, Jan 23, 2022 at 2:50 PM Jisheng Zhang <jszhang@kernel.org> wrote:
+>
+> On Fri, Jan 21, 2022 at 08:16:51PM +0800, Jisheng Zhang wrote:
+> > On Thu, Jan 20, 2022 at 11:45:34PM +0530, Mayuresh Chitale wrote:
+> > > Hello Jisheng,
+> >
+> > Hi,
+> >
+> > >
+> > > Just wanted to inform you that this patch breaks the writev02 test
+> > > case in LTP and if it is reverted then the test passes. If we run the
+> > > test through strace then we see that the test hangs and following is
+> > > the last line printed by strace:
+> > >
+> > > "writev(3, [{iov_base=0x7fff848a6000, iov_len=8192}, {iov_base=NULL,
+> > > iov_len=0}]"
+> > >
+> >
+> > Thanks for the bug report. I will try to fix it.
+>
+> Hi Mayuresh,
+>
+> I just sent out a fix for this bug. Per my test, the issue is fixed.
+> Could you please try?
+>
+> Thanks
 
-This bug was found by a static analyzer.
+Your fix works as expected.
 
-Builds with 'make allyesconfig' show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: 5ae74f2cc2f1 ("ACPI / tables: Move table override mechanisms to tables.c")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
-The analysis employs differential checking to identify inconsistent 
-security operations (e.g., checks or kfrees) between two code paths 
-and confirms that the inconsistent operations are not recovered in the
-current function or the callers, so they constitute bugs. 
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
- drivers/acpi/tables.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/acpi/tables.c b/drivers/acpi/tables.c
-index 8b10c192ed32..356e08c4015b 100644
---- a/drivers/acpi/tables.c
-+++ b/drivers/acpi/tables.c
-@@ -755,6 +755,9 @@ static void __init acpi_table_initrd_scan(void)
- 	while (table_offset + ACPI_HEADER_SIZE <= all_tables_size) {
- 		table = acpi_os_map_memory(acpi_tables_addr + table_offset,
- 					   ACPI_HEADER_SIZE);
-+		if (!table)
-+			return;
-+
- 		if (table_offset + table->length > all_tables_size) {
- 			acpi_os_unmap_memory(table, ACPI_HEADER_SIZE);
- 			WARN_ON(1);
--- 
-2.25.1
-
+Thanks,
+Mayuresh.

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 629F2499DE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C09FF49A181
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1586617AbiAXW1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:27:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
+        id S2360619AbiAXXhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:37:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453945AbiAXVbS (ORCPT
+        with ESMTP id S1382512AbiAXW4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:31:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8ADC07594A;
-        Mon, 24 Jan 2022 12:20:38 -0800 (PST)
+        Mon, 24 Jan 2022 17:56:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65E7C055AA1;
+        Mon, 24 Jan 2022 13:10:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEEBAB8122C;
-        Mon, 24 Jan 2022 20:20:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3E9AC340E5;
-        Mon, 24 Jan 2022 20:20:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73AD76141C;
+        Mon, 24 Jan 2022 21:10:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F88FC340E5;
+        Mon, 24 Jan 2022 21:10:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055635;
-        bh=KUa3WcNIZgYdOfgeuGU3RnXVTi6qpCEYqF5dWKRmVxw=;
+        s=korg; t=1643058639;
+        bh=3brKqyaqybEcUH8yC/phuL2yfofUBG/ciXNRmRgItE8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IektO1ttiDbLTNXiLQFWMmsmhkFlPkb1KhrW4X8FbC0zgvUAPexayQ064ug7/XQcQ
-         BaRY+VFdgxvjJIoj2wpTZAAskfGybCbUYuqSGLsWIPon0444hw57wjel/cH7dvIMwr
-         jA6QC4on5Alst8+Pyl7Vzt39l6m/wxS+9UfxhGBM=
+        b=wCBbpwPRLDpBeKMxZ+FAAPXw5/nvqvoXOut4iPIs+9v2lfbs1NUdSthNAzm4R+efT
+         fdhAhXrF5jNH/nyYH434jIfSHs5I3uKZrJ1Tg5vzC1zAtk0N2QVps9vdWYAmFkq0N6
+         n/Mlq5Xwb8mm5+ffWUIm4Lad8+FWmth0MyNaTAvY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Li Hua <hucool.lihua@huawei.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 214/846] sched/rt: Try to restart rt period timer when rt runtime exceeded
-Date:   Mon, 24 Jan 2022 19:35:31 +0100
-Message-Id: <20220124184108.309081102@linuxfoundation.org>
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0354/1039] x86/boot/compressed: Move CLANG_FLAGS to beginning of KBUILD_CFLAGS
+Date:   Mon, 24 Jan 2022 19:35:43 +0100
+Message-Id: <20220124184137.179404474@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,97 +48,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Hua <hucool.lihua@huawei.com>
+From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit 9b58e976b3b391c0cf02e038d53dd0478ed3013c ]
+[ Upstream commit 5fe392ff9d1f7254a1fbb3f72d9893088e4d23eb ]
 
-When rt_runtime is modified from -1 to a valid control value, it may
-cause the task to be throttled all the time. Operations like the following
-will trigger the bug. E.g:
+When cross compiling i386_defconfig on an arm64 host with clang, there
+are a few instances of '-Waddress-of-packed-member' and
+'-Wgnu-variable-sized-type-not-at-end' in arch/x86/boot/compressed/,
+which should both be disabled with the cc-disable-warning calls in that
+directory's Makefile, which indicates that cc-disable-warning is failing
+at the point of testing these flags.
 
-  1. echo -1 > /proc/sys/kernel/sched_rt_runtime_us
-  2. Run a FIFO task named A that executes while(1)
-  3. echo 950000 > /proc/sys/kernel/sched_rt_runtime_us
+The cc-disable-warning calls fail because at the point that the flags
+are tested, KBUILD_CFLAGS has '-march=i386' without $(CLANG_FLAGS),
+which has the '--target=' flag to tell clang what architecture it is
+targeting. Without the '--target=' flag, the host architecture (arm64)
+is used and i386 is not a valid value for '-march=' in that case. This
+error can be seen by adding some logging to try-run:
 
-When rt_runtime is -1, The rt period timer will not be activated when task
-A enqueued. And then the task will be throttled after setting rt_runtime to
-950,000. The task will always be throttled because the rt period timer is
-not activated.
+  clang-14: error: the clang compiler does not support '-march=i386'
 
-Fixes: d0b27fa77854 ("sched: rt-group: synchonised bandwidth period")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Li Hua <hucool.lihua@huawei.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20211203033618.11895-1-hucool.lihua@huawei.com
+Invoking the compiler has to succeed prior to calling cc-option or
+cc-disable-warning in order to accurately test whether or not the flag
+is supported; if it doesn't, the requested flag can never be added to
+the compiler flags. Move $(CLANG_FLAGS) to the beginning of KBUILD_FLAGS
+so that any new flags that might be added in the future can be
+accurately tested.
+
+Fixes: d5cbd80e302d ("x86/boot: Add $(CLANG_FLAGS) to compressed KBUILD_CFLAGS")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20211222163040.1961481-1-nathan@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/sched/rt.c | 23 ++++++++++++++++++-----
- 1 file changed, 18 insertions(+), 5 deletions(-)
+ arch/x86/boot/compressed/Makefile | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index bfef3f39b5552..54f9bb3f15605 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -52,11 +52,8 @@ void init_rt_bandwidth(struct rt_bandwidth *rt_b, u64 period, u64 runtime)
- 	rt_b->rt_period_timer.function = sched_rt_period_timer;
- }
+diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+index 431bf7f846c3c..e118136460518 100644
+--- a/arch/x86/boot/compressed/Makefile
++++ b/arch/x86/boot/compressed/Makefile
+@@ -28,7 +28,11 @@ KCOV_INSTRUMENT		:= n
+ targets := vmlinux vmlinux.bin vmlinux.bin.gz vmlinux.bin.bz2 vmlinux.bin.lzma \
+ 	vmlinux.bin.xz vmlinux.bin.lzo vmlinux.bin.lz4 vmlinux.bin.zst
  
--static void start_rt_bandwidth(struct rt_bandwidth *rt_b)
-+static inline void do_start_rt_bandwidth(struct rt_bandwidth *rt_b)
- {
--	if (!rt_bandwidth_enabled() || rt_b->rt_runtime == RUNTIME_INF)
--		return;
--
- 	raw_spin_lock(&rt_b->rt_runtime_lock);
- 	if (!rt_b->rt_period_active) {
- 		rt_b->rt_period_active = 1;
-@@ -75,6 +72,14 @@ static void start_rt_bandwidth(struct rt_bandwidth *rt_b)
- 	raw_spin_unlock(&rt_b->rt_runtime_lock);
- }
+-KBUILD_CFLAGS := -m$(BITS) -O2
++# CLANG_FLAGS must come before any cc-disable-warning or cc-option calls in
++# case of cross compiling, as it has the '--target=' flag, which is needed to
++# avoid errors with '-march=i386', and future flags may depend on the target to
++# be valid.
++KBUILD_CFLAGS := -m$(BITS) -O2 $(CLANG_FLAGS)
+ KBUILD_CFLAGS += -fno-strict-aliasing -fPIE
+ KBUILD_CFLAGS += -Wundef
+ KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
+@@ -47,7 +51,6 @@ KBUILD_CFLAGS += -D__DISABLE_EXPORTS
+ # Disable relocation relaxation in case the link is not PIE.
+ KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
+ KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
+-KBUILD_CFLAGS += $(CLANG_FLAGS)
  
-+static void start_rt_bandwidth(struct rt_bandwidth *rt_b)
-+{
-+	if (!rt_bandwidth_enabled() || rt_b->rt_runtime == RUNTIME_INF)
-+		return;
-+
-+	do_start_rt_bandwidth(rt_b);
-+}
-+
- void init_rt_rq(struct rt_rq *rt_rq)
- {
- 	struct rt_prio_array *array;
-@@ -1029,13 +1034,17 @@ static void update_curr_rt(struct rq *rq)
- 
- 	for_each_sched_rt_entity(rt_se) {
- 		struct rt_rq *rt_rq = rt_rq_of_se(rt_se);
-+		int exceeded;
- 
- 		if (sched_rt_runtime(rt_rq) != RUNTIME_INF) {
- 			raw_spin_lock(&rt_rq->rt_runtime_lock);
- 			rt_rq->rt_time += delta_exec;
--			if (sched_rt_runtime_exceeded(rt_rq))
-+			exceeded = sched_rt_runtime_exceeded(rt_rq);
-+			if (exceeded)
- 				resched_curr(rq);
- 			raw_spin_unlock(&rt_rq->rt_runtime_lock);
-+			if (exceeded)
-+				do_start_rt_bandwidth(sched_rt_bandwidth(rt_rq));
- 		}
- 	}
- }
-@@ -2785,8 +2794,12 @@ static int sched_rt_global_validate(void)
- 
- static void sched_rt_do_global(void)
- {
-+	unsigned long flags;
-+
-+	raw_spin_lock_irqsave(&def_rt_bandwidth.rt_runtime_lock, flags);
- 	def_rt_bandwidth.rt_runtime = global_rt_runtime();
- 	def_rt_bandwidth.rt_period = ns_to_ktime(global_rt_period());
-+	raw_spin_unlock_irqrestore(&def_rt_bandwidth.rt_runtime_lock, flags);
- }
- 
- int sched_rt_handler(struct ctl_table *table, int write, void *buffer,
+ # sev.c indirectly inludes inat-table.h which is generated during
+ # compilation and stored in $(objtree). Add the directory to the includes so
 -- 
 2.34.1
 

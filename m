@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 611B649A3B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:03:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1489449A6CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2366790AbiAXXxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:53:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1846009AbiAXXOO (ORCPT
+        id S3421444AbiAYC05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:26:57 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39068 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357576AbiAXTuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:14:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01D2C061A81;
-        Mon, 24 Jan 2022 13:21:15 -0800 (PST)
+        Mon, 24 Jan 2022 14:50:19 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F50D614D8;
-        Mon, 24 Jan 2022 21:21:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C3DEC340E4;
-        Mon, 24 Jan 2022 21:21:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F18E6B8122F;
+        Mon, 24 Jan 2022 19:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FF2AC340E5;
+        Mon, 24 Jan 2022 19:50:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059274;
-        bh=eSOZJjsod7JXBVDUOGZX0mGYhD7AX7qWZXKijpCydxQ=;
+        s=korg; t=1643053816;
+        bh=nbudAHV5Id/HIQCDuN+n30CdC18eMXg3cLWyw/aOG2Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RZt0DybHI9wNw0w5QBs0otlhWNCBaEZbep/IgJJTho8FG1lEcd5Xg+MgBESoTYj97
-         i37flXF3EMVGfpOwWClRKswfkFrAhaSimGJE6Fd0kv2fypfeKBwmGWiap+UJcxrUB5
-         0Cs4XT+GrJy/X7A0pWsEKmp50QglI/PEI49fV3p0=
+        b=xcUiGlPwnnAtBIBkiyjcXbU5I68M7s4hID9899QKqvkdDkEMaMoyF4sKn7r7cwxyM
+         LpPEz41y3UgTylmgBbxDoJMUtQxKf91ya/5fbsVyZrZTocus/Hdvea/lvXHsZveYbw
+         JtOCXj98AXiVNKs5yq8vL5c6hPdW6vcKtBVV3YdE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tycho Andersen <tycho@tycho.pizza>,
-        =?UTF-8?q?Linus=20L=C3=BCssing?= <linus.luessing@c0d3.blue>,
-        Sven Eckelmann <sven@narfation.org>,
-        Simon Wunderlich <sw@simonwunderlich.de>,
+        stable@vger.kernel.org,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0562/1039] batman-adv: allow netlink usage in unprivileged containers
-Date:   Mon, 24 Jan 2022 19:39:11 +0100
-Message-Id: <20220124184144.210733982@linuxfoundation.org>
+Subject: [PATCH 5.10 187/563] Bluetooth: L2CAP: Fix using wrong mode
+Date:   Mon, 24 Jan 2022 19:39:12 +0100
+Message-Id: <20220124184030.887767032@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,169 +47,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Lüssing <linus.luessing@c0d3.blue>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-[ Upstream commit 9057d6c23e7388ee9d037fccc9a7bc8557ce277b ]
+[ Upstream commit 30d57722732d9736554f85f75f9d7ad5402d192e ]
 
-Currently, creating a batman-adv interface in an unprivileged LXD
-container and attaching secondary interfaces to it with "ip" or "batctl"
-works fine. However all batctl debug and configuration commands
-fail:
+If user has a set to use SOCK_STREAM the socket would default to
+L2CAP_MODE_ERTM which later needs to be adjusted if the destination
+address is LE which doesn't support such mode.
 
-  root@container:~# batctl originators
-  Error received: Operation not permitted
-  root@container:~# batctl orig_interval
-  1000
-  root@container:~# batctl orig_interval 2000
-  root@container:~# batctl orig_interval
-  1000
-
-To fix this change the generic netlink permissions from GENL_ADMIN_PERM
-to GENL_UNS_ADMIN_PERM. This way a batman-adv interface is fully
-maintainable as root from within a user namespace, from an unprivileged
-container.
-
-All except one batman-adv netlink setting are per interface and do not
-leak information or change settings from the host system and are
-therefore save to retrieve or modify as root from within an unprivileged
-container.
-
-"batctl routing_algo" / BATADV_CMD_GET_ROUTING_ALGOS is the only
-exception: It provides the batman-adv kernel module wide default routing
-algorithm. However it is read-only from netlink and an unprivileged
-container is still not allowed to modify
-/sys/module/batman_adv/parameters/routing_algo. Instead it is advised to
-use the newly introduced "batctl if create routing_algo RA_NAME" /
-IFLA_BATADV_ALGO_NAME to set the routing algorithm on interface
-creation, which already works fine in an unprivileged container.
-
-Cc: Tycho Andersen <tycho@tycho.pizza>
-Signed-off-by: Linus Lüssing <linus.luessing@c0d3.blue>
-Signed-off-by: Sven Eckelmann <sven@narfation.org>
-Signed-off-by: Simon Wunderlich <sw@simonwunderlich.de>
+Fixes: 15f02b9105625 ("Bluetooth: L2CAP: Add initial code for Enhanced Credit Based Mode")
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/batman-adv/netlink.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ net/bluetooth/l2cap_sock.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/net/batman-adv/netlink.c b/net/batman-adv/netlink.c
-index 29276284d281c..00875e1d8c44c 100644
---- a/net/batman-adv/netlink.c
-+++ b/net/batman-adv/netlink.c
-@@ -1368,21 +1368,21 @@ static const struct genl_small_ops batadv_netlink_ops[] = {
- 	{
- 		.cmd = BATADV_CMD_TP_METER,
- 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
--		.flags = GENL_ADMIN_PERM,
-+		.flags = GENL_UNS_ADMIN_PERM,
- 		.doit = batadv_netlink_tp_meter_start,
- 		.internal_flags = BATADV_FLAG_NEED_MESH,
- 	},
- 	{
- 		.cmd = BATADV_CMD_TP_METER_CANCEL,
- 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
--		.flags = GENL_ADMIN_PERM,
-+		.flags = GENL_UNS_ADMIN_PERM,
- 		.doit = batadv_netlink_tp_meter_cancel,
- 		.internal_flags = BATADV_FLAG_NEED_MESH,
- 	},
- 	{
- 		.cmd = BATADV_CMD_GET_ROUTING_ALGOS,
- 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
--		.flags = GENL_ADMIN_PERM,
-+		.flags = GENL_UNS_ADMIN_PERM,
- 		.dumpit = batadv_algo_dump,
- 	},
- 	{
-@@ -1397,68 +1397,68 @@ static const struct genl_small_ops batadv_netlink_ops[] = {
- 	{
- 		.cmd = BATADV_CMD_GET_TRANSTABLE_LOCAL,
- 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
--		.flags = GENL_ADMIN_PERM,
-+		.flags = GENL_UNS_ADMIN_PERM,
- 		.dumpit = batadv_tt_local_dump,
- 	},
- 	{
- 		.cmd = BATADV_CMD_GET_TRANSTABLE_GLOBAL,
- 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
--		.flags = GENL_ADMIN_PERM,
-+		.flags = GENL_UNS_ADMIN_PERM,
- 		.dumpit = batadv_tt_global_dump,
- 	},
- 	{
- 		.cmd = BATADV_CMD_GET_ORIGINATORS,
- 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
--		.flags = GENL_ADMIN_PERM,
-+		.flags = GENL_UNS_ADMIN_PERM,
- 		.dumpit = batadv_orig_dump,
- 	},
- 	{
- 		.cmd = BATADV_CMD_GET_NEIGHBORS,
- 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
--		.flags = GENL_ADMIN_PERM,
-+		.flags = GENL_UNS_ADMIN_PERM,
- 		.dumpit = batadv_hardif_neigh_dump,
- 	},
- 	{
- 		.cmd = BATADV_CMD_GET_GATEWAYS,
- 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
--		.flags = GENL_ADMIN_PERM,
-+		.flags = GENL_UNS_ADMIN_PERM,
- 		.dumpit = batadv_gw_dump,
- 	},
- 	{
- 		.cmd = BATADV_CMD_GET_BLA_CLAIM,
- 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
--		.flags = GENL_ADMIN_PERM,
-+		.flags = GENL_UNS_ADMIN_PERM,
- 		.dumpit = batadv_bla_claim_dump,
- 	},
- 	{
- 		.cmd = BATADV_CMD_GET_BLA_BACKBONE,
- 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
--		.flags = GENL_ADMIN_PERM,
-+		.flags = GENL_UNS_ADMIN_PERM,
- 		.dumpit = batadv_bla_backbone_dump,
- 	},
- 	{
- 		.cmd = BATADV_CMD_GET_DAT_CACHE,
- 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
--		.flags = GENL_ADMIN_PERM,
-+		.flags = GENL_UNS_ADMIN_PERM,
- 		.dumpit = batadv_dat_cache_dump,
- 	},
- 	{
- 		.cmd = BATADV_CMD_GET_MCAST_FLAGS,
- 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
--		.flags = GENL_ADMIN_PERM,
-+		.flags = GENL_UNS_ADMIN_PERM,
- 		.dumpit = batadv_mcast_flags_dump,
- 	},
- 	{
- 		.cmd = BATADV_CMD_SET_MESH,
- 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
--		.flags = GENL_ADMIN_PERM,
-+		.flags = GENL_UNS_ADMIN_PERM,
- 		.doit = batadv_netlink_set_mesh,
- 		.internal_flags = BATADV_FLAG_NEED_MESH,
- 	},
- 	{
- 		.cmd = BATADV_CMD_SET_HARDIF,
- 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
--		.flags = GENL_ADMIN_PERM,
-+		.flags = GENL_UNS_ADMIN_PERM,
- 		.doit = batadv_netlink_set_hardif,
- 		.internal_flags = BATADV_FLAG_NEED_MESH |
- 				  BATADV_FLAG_NEED_HARDIF,
-@@ -1474,7 +1474,7 @@ static const struct genl_small_ops batadv_netlink_ops[] = {
- 	{
- 		.cmd = BATADV_CMD_SET_VLAN,
- 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
--		.flags = GENL_ADMIN_PERM,
-+		.flags = GENL_UNS_ADMIN_PERM,
- 		.doit = batadv_netlink_set_vlan,
- 		.internal_flags = BATADV_FLAG_NEED_MESH |
- 				  BATADV_FLAG_NEED_VLAN,
+diff --git a/net/bluetooth/l2cap_sock.c b/net/bluetooth/l2cap_sock.c
+index 4574c5cb1b596..251017c69ab7f 100644
+--- a/net/bluetooth/l2cap_sock.c
++++ b/net/bluetooth/l2cap_sock.c
+@@ -161,7 +161,11 @@ static int l2cap_sock_bind(struct socket *sock, struct sockaddr *addr, int alen)
+ 		break;
+ 	}
+ 
+-	if (chan->psm && bdaddr_type_is_le(chan->src_type))
++	/* Use L2CAP_MODE_LE_FLOWCTL (CoC) in case of LE address and
++	 * L2CAP_MODE_EXT_FLOWCTL (ECRED) has not been set.
++	 */
++	if (chan->psm && bdaddr_type_is_le(chan->src_type) &&
++	    chan->mode != L2CAP_MODE_EXT_FLOWCTL)
+ 		chan->mode = L2CAP_MODE_LE_FLOWCTL;
+ 
+ 	chan->state = BT_BOUND;
+@@ -255,7 +259,11 @@ static int l2cap_sock_connect(struct socket *sock, struct sockaddr *addr,
+ 			return -EINVAL;
+ 	}
+ 
+-	if (chan->psm && bdaddr_type_is_le(chan->src_type) && !chan->mode)
++	/* Use L2CAP_MODE_LE_FLOWCTL (CoC) in case of LE address and
++	 * L2CAP_MODE_EXT_FLOWCTL (ECRED) has not been set.
++	 */
++	if (chan->psm && bdaddr_type_is_le(chan->src_type) &&
++	    chan->mode != L2CAP_MODE_EXT_FLOWCTL)
+ 		chan->mode = L2CAP_MODE_LE_FLOWCTL;
+ 
+ 	l2cap_sock_init_pid(sk);
 -- 
 2.34.1
 

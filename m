@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7983E4992FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E02C6499278
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:21:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383207AbiAXU04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:26:56 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:53818 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237207AbiAXT5Z (ORCPT
+        id S1356847AbiAXUVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354537AbiAXUDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:57:25 -0500
+        Mon, 24 Jan 2022 15:03:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB840C068099;
+        Mon, 24 Jan 2022 11:29:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96F0D6090B;
-        Mon, 24 Jan 2022 19:57:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 544F9C33DA0;
-        Mon, 24 Jan 2022 19:57:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 787A06121F;
+        Mon, 24 Jan 2022 19:29:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C1EFC340E5;
+        Mon, 24 Jan 2022 19:29:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054244;
-        bh=eBtV3ryZiXUZattGsksT7BmwOVTZlzKcXHsLCTSvJcc=;
+        s=korg; t=1643052548;
+        bh=j9v4ELVvP4tqIhgux2H8+EMhBOnwF6PBYkPSz86upds=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g6ooYM8B7/jCwc5C68VkebOO6p5py7J74ct8cqZhIwD7aOV0Fn2WPA3zTHpb5M5hf
-         rn6zqB3I53jnwDSP8NM3CaLtuVxCHIaTYlK8SoOKFuI5CGLPK6NzK7WooeW+cxlwOP
-         a+Fbpkqu4I37TuQ49Dh3pgbfXDnHJyagtdmNJuF8=
+        b=G0WaE1aTAcgMlTHqJv98wachaC5XXSfBUJpayNXB0bc0jcpDCL+q1uhbPesMALmua
+         WiOXgvM1bOkoBnzFgNIgtDyj+NfKL4KYLVIJ83ulK9vHQ4eLRSTYJQsmmIBAQLZ/1k
+         Loh/pxdXqBuEsaJILT0oIuAb5+JIguuv7mZRjY/E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ryuta NAKANISHI <nakanishi.ryuta@socionext.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 282/563] phy: uniphier-usb3ss: fix unintended writing zeros to PHY register
+        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 063/320] drm/amdgpu: Fix a NULL pointer dereference in amdgpu_connector_lcd_native_mode()
 Date:   Mon, 24 Jan 2022 19:40:47 +0100
-Message-Id: <20220124184034.194066983@linuxfoundation.org>
+Message-Id: <20220124183955.871825060@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,59 +49,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ryuta NAKANISHI <nakanishi.ryuta@socionext.com>
+From: Zhou Qingyang <zhou1615@umn.edu>
 
-[ Upstream commit 898c7a9ec81620125f2463714a0f4dea18ad6e54 ]
+[ Upstream commit b220110e4cd442156f36e1d9b4914bb9e87b0d00 ]
 
-Similar to commit 4a90bbb478db ("phy: uniphier-pcie: Fix updating phy
-parameters"), in function uniphier_u3ssphy_set_param(), unintentionally
-write zeros to other fields when writing PHY registers.
+In amdgpu_connector_lcd_native_mode(), the return value of
+drm_mode_duplicate() is assigned to mode, and there is a dereference
+of it in amdgpu_connector_lcd_native_mode(), which will lead to a NULL
+pointer dereference on failure of drm_mode_duplicate().
 
-Fixes: 5ab43d0f8697 ("phy: socionext: add USB3 PHY driver for UniPhier SoC")
-Signed-off-by: Ryuta NAKANISHI <nakanishi.ryuta@socionext.com>
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Link: https://lore.kernel.org/r/1640150369-4134-1-git-send-email-hayashi.kunihiko@socionext.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Fix this bug add a check of mode.
+
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_DRM_AMDGPU=m show no new warnings, and
+our static analyzer no longer warns about this code.
+
+Fixes: d38ceaf99ed0 ("drm/amdgpu: add core driver (v4)")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/socionext/phy-uniphier-usb3ss.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/phy/socionext/phy-uniphier-usb3ss.c b/drivers/phy/socionext/phy-uniphier-usb3ss.c
-index 6700645bcbe6b..3b5ffc16a6947 100644
---- a/drivers/phy/socionext/phy-uniphier-usb3ss.c
-+++ b/drivers/phy/socionext/phy-uniphier-usb3ss.c
-@@ -22,11 +22,13 @@
- #include <linux/reset.h>
- 
- #define SSPHY_TESTI		0x0
--#define SSPHY_TESTO		0x4
- #define TESTI_DAT_MASK		GENMASK(13, 6)
- #define TESTI_ADR_MASK		GENMASK(5, 1)
- #define TESTI_WR_EN		BIT(0)
- 
-+#define SSPHY_TESTO		0x4
-+#define TESTO_DAT_MASK		GENMASK(7, 0)
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
+index 0d39e386f6e9c..0e1cacf731698 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
+@@ -389,6 +389,9 @@ amdgpu_connector_lcd_native_mode(struct drm_encoder *encoder)
+ 	    native_mode->vdisplay != 0 &&
+ 	    native_mode->clock != 0) {
+ 		mode = drm_mode_duplicate(dev, native_mode);
++		if (!mode)
++			return NULL;
 +
- #define PHY_F(regno, msb, lsb) { (regno), (msb), (lsb) }
+ 		mode->type = DRM_MODE_TYPE_PREFERRED | DRM_MODE_TYPE_DRIVER;
+ 		drm_mode_set_name(mode);
  
- #define CDR_CPD_TRIM	PHY_F(7, 3, 0)	/* RxPLL charge pump current */
-@@ -84,12 +86,12 @@ static void uniphier_u3ssphy_set_param(struct uniphier_u3ssphy_priv *priv,
- 	val  = FIELD_PREP(TESTI_DAT_MASK, 1);
- 	val |= FIELD_PREP(TESTI_ADR_MASK, p->field.reg_no);
- 	uniphier_u3ssphy_testio_write(priv, val);
--	val = readl(priv->base + SSPHY_TESTO);
-+	val = readl(priv->base + SSPHY_TESTO) & TESTO_DAT_MASK;
- 
- 	/* update value */
--	val &= ~FIELD_PREP(TESTI_DAT_MASK, field_mask);
-+	val &= ~field_mask;
- 	data = field_mask & (p->value << p->field.lsb);
--	val  = FIELD_PREP(TESTI_DAT_MASK, data);
-+	val  = FIELD_PREP(TESTI_DAT_MASK, data | val);
- 	val |= FIELD_PREP(TESTI_ADR_MASK, p->field.reg_no);
- 	uniphier_u3ssphy_testio_write(priv, val);
- 	uniphier_u3ssphy_testio_write(priv, val | TESTI_WR_EN);
+@@ -403,6 +406,9 @@ amdgpu_connector_lcd_native_mode(struct drm_encoder *encoder)
+ 		 * simpler.
+ 		 */
+ 		mode = drm_cvt_mode(dev, native_mode->hdisplay, native_mode->vdisplay, 60, true, false, false);
++		if (!mode)
++			return NULL;
++
+ 		mode->type = DRM_MODE_TYPE_PREFERRED | DRM_MODE_TYPE_DRIVER;
+ 		DRM_DEBUG_KMS("Adding cvt approximation of native panel mode %s\n", mode->name);
+ 	}
 -- 
 2.34.1
 

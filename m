@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B96449A299
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:00:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66BBC49A74A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:38:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2365845AbiAXXvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:51:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
+        id S242417AbiAYCgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:36:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1843479AbiAXXED (ORCPT
+        with ESMTP id S1385152AbiAXUba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:04:03 -0500
+        Mon, 24 Jan 2022 15:31:30 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DCBC06C5AD;
-        Mon, 24 Jan 2022 13:15:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A34C061770;
+        Mon, 24 Jan 2022 11:43:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6E9EB80CCF;
-        Mon, 24 Jan 2022 21:15:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D68B3C340E5;
-        Mon, 24 Jan 2022 21:15:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B12D8B811FB;
+        Mon, 24 Jan 2022 19:43:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF20BC340E5;
+        Mon, 24 Jan 2022 19:43:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058914;
-        bh=MNP0naKwHatsb8nu+Qq1uQUPHt7r094wxZv8V9/AMEk=;
+        s=korg; t=1643053400;
+        bh=N7iqN2dtcEyo4qkf5F6uhGxw3W2pDTN7WGAfMlTzNYY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pJZT4ewC6z7k6qoebKNNg/IY5oLqs0HwoQHdg1BYTnu6WTxfWEaXLPQfduGXvaW+x
-         nXfScedFDfsDR5gkP4OwuCcBoaQJXavfYEHqy6mZVkRIAjlxQsi9hNWVHQoo1+3i/x
-         7WDjcu6bQUcxpCwaOgqr4ugzpj7msuork4k3XdwA=
+        b=YEb/uNPJdAMv0TcET6taoAGqFUwT7eddseuBadkveWtDCUg5XV6zvz/09XQeN8H86
+         AN5Xl3vuC/s6YirB7KRI1T604aZh2EumlpW2KIRN9n7fLHRCxmlVDp8EXo/H8iVV6G
+         qoakHZkT44kZE0n3J6dkuK2yS8iVTx5dhwsbiVlI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Blakey <paulb@nvidia.com>,
-        Oz Shlomo <ozsh@nvidia.com>, Eli Cohen <elic@nvidia.com>,
-        Roi Dayan <roid@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0411/1039] net/mlx5e: Fix matching on modified inner ip_ecn bits
+        stable@vger.kernel.org, Chris Wilson <chris@chris-wilson.co.uk>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>
+Subject: [PATCH 5.10 035/563] dma_fence_array: Fix PENDING_ERROR leak in dma_fence_array_signaled()
 Date:   Mon, 24 Jan 2022 19:36:40 +0100
-Message-Id: <20220124184139.126950750@linuxfoundation.org>
+Message-Id: <20220124184025.645252287@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,198 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Blakey <paulb@nvidia.com>
+From: Thomas Hellström <thomas.hellstrom@linux.intel.com>
 
-[ Upstream commit b6dfff21a170af5c695ebaa153b7f5e297ddca03 ]
+commit 95d35838880fb040ccb9fe4a48816bd0c8b62df5 upstream.
 
-Tunnel device follows RFC 6040, and during decapsulation inner
-ip_ecn might change depending on inner and outer ip_ecn as follows:
+If a dma_fence_array is reported signaled by a call to
+dma_fence_is_signaled(), it may leak the PENDING_ERROR status.
 
- +---------+----------------------------------------+
- |Arriving |         Arriving Outer Header          |
- |   Inner +---------+---------+---------+----------+
- |  Header | Not-ECT | ECT(0)  | ECT(1)  |   CE     |
- +---------+---------+---------+---------+----------+
- | Not-ECT | Not-ECT | Not-ECT | Not-ECT | <drop>   |
- |  ECT(0) |  ECT(0) | ECT(0)  | ECT(1)  |   CE*    |
- |  ECT(1) |  ECT(1) | ECT(1)  | ECT(1)* |   CE*    |
- |    CE   |   CE    |  CE     | CE      |   CE     |
- +---------+---------+---------+---------+----------+
+Fix this by clearing the PENDING_ERROR status if we return true in
+dma_fence_array_signaled().
 
-Cells marked above are changed from original inner packet ip_ecn value.
+v2:
+- Update Cc list, and add R-b.
 
-Tc then matches on the modified inner ip_ecn, but hw offload which
-matches the inner ip_ecn value before decap, will fail.
-
-Fix that by mapping all the cases of outer and inner ip_ecn matching,
-and only supporting cases where we know inner wouldn't be changed by
-decap, or in the outer ip_ecn=CE case, inner ip_ecn didn't matter.
-
-Fixes: bcef735c59f2 ("net/mlx5e: Offload TC matching on tos/ttl for ip tunnels")
-Signed-off-by: Paul Blakey <paulb@nvidia.com>
-Reviewed-by: Oz Shlomo <ozsh@nvidia.com>
-Reviewed-by: Eli Cohen <elic@nvidia.com>
-Reviewed-by: Roi Dayan <roid@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 1f70b8b812f3 ("dma-fence: Propagate errors to dma-fence-array container")
+Cc: Chris Wilson <chris@chris-wilson.co.uk>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Gustavo Padovan <gustavo@padovan.org>
+Cc: Christian König <christian.koenig@amd.com>
+Cc: "Christian König" <christian.koenig@amd.com>
+Cc: linux-media@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linaro-mm-sig@lists.linaro.org
+Cc: <stable@vger.kernel.org> # v5.4+
+Signed-off-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+Reviewed-by: Christian König <christian.koenig@amd.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211129152727.448908-1-thomas.hellstrom@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../net/ethernet/mellanox/mlx5/core/en_tc.c   | 120 +++++++++++++++++-
- 1 file changed, 116 insertions(+), 4 deletions(-)
+ drivers/dma-buf/dma-fence-array.c |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-index 5e454a14428f2..9b3adaccc9beb 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-@@ -1949,6 +1949,111 @@ u8 mlx5e_tc_get_ip_version(struct mlx5_flow_spec *spec, bool outer)
- 	return ip_version;
+--- a/drivers/dma-buf/dma-fence-array.c
++++ b/drivers/dma-buf/dma-fence-array.c
+@@ -104,7 +104,11 @@ static bool dma_fence_array_signaled(str
+ {
+ 	struct dma_fence_array *array = to_dma_fence_array(fence);
+ 
+-	return atomic_read(&array->num_pending) <= 0;
++	if (atomic_read(&array->num_pending) > 0)
++		return false;
++
++	dma_fence_array_clear_pending_error(array);
++	return true;
  }
  
-+/* Tunnel device follows RFC 6040, see include/net/inet_ecn.h.
-+ * And changes inner ip_ecn depending on inner and outer ip_ecn as follows:
-+ *      +---------+----------------------------------------+
-+ *      |Arriving |         Arriving Outer Header          |
-+ *      |   Inner +---------+---------+---------+----------+
-+ *      |  Header | Not-ECT | ECT(0)  | ECT(1)  |   CE     |
-+ *      +---------+---------+---------+---------+----------+
-+ *      | Not-ECT | Not-ECT | Not-ECT | Not-ECT | <drop>   |
-+ *      |  ECT(0) |  ECT(0) | ECT(0)  | ECT(1)  |   CE*    |
-+ *      |  ECT(1) |  ECT(1) | ECT(1)  | ECT(1)* |   CE*    |
-+ *      |    CE   |   CE    |  CE     | CE      |   CE     |
-+ *      +---------+---------+---------+---------+----------+
-+ *
-+ * Tc matches on inner after decapsulation on tunnel device, but hw offload matches
-+ * the inner ip_ecn value before hardware decap action.
-+ *
-+ * Cells marked are changed from original inner packet ip_ecn value during decap, and
-+ * so matching those values on inner ip_ecn before decap will fail.
-+ *
-+ * The following helper allows offload when inner ip_ecn won't be changed by outer ip_ecn,
-+ * except for the outer ip_ecn = CE, where in all cases inner ip_ecn will be changed to CE,
-+ * and such we can drop the inner ip_ecn=CE match.
-+ */
-+
-+static int mlx5e_tc_verify_tunnel_ecn(struct mlx5e_priv *priv,
-+				      struct flow_cls_offload *f,
-+				      bool *match_inner_ecn)
-+{
-+	u8 outer_ecn_mask = 0, outer_ecn_key = 0, inner_ecn_mask = 0, inner_ecn_key = 0;
-+	struct flow_rule *rule = flow_cls_offload_flow_rule(f);
-+	struct netlink_ext_ack *extack = f->common.extack;
-+	struct flow_match_ip match;
-+
-+	*match_inner_ecn = true;
-+
-+	if (flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_ENC_IP)) {
-+		flow_rule_match_enc_ip(rule, &match);
-+		outer_ecn_key = match.key->tos & INET_ECN_MASK;
-+		outer_ecn_mask = match.mask->tos & INET_ECN_MASK;
-+	}
-+
-+	if (flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_IP)) {
-+		flow_rule_match_ip(rule, &match);
-+		inner_ecn_key = match.key->tos & INET_ECN_MASK;
-+		inner_ecn_mask = match.mask->tos & INET_ECN_MASK;
-+	}
-+
-+	if (outer_ecn_mask != 0 && outer_ecn_mask != INET_ECN_MASK) {
-+		NL_SET_ERR_MSG_MOD(extack, "Partial match on enc_tos ecn bits isn't supported");
-+		netdev_warn(priv->netdev, "Partial match on enc_tos ecn bits isn't supported");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	if (!outer_ecn_mask) {
-+		if (!inner_ecn_mask)
-+			return 0;
-+
-+		NL_SET_ERR_MSG_MOD(extack,
-+				   "Matching on tos ecn bits without also matching enc_tos ecn bits isn't supported");
-+		netdev_warn(priv->netdev,
-+			    "Matching on tos ecn bits without also matching enc_tos ecn bits isn't supported");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	if (inner_ecn_mask && inner_ecn_mask != INET_ECN_MASK) {
-+		NL_SET_ERR_MSG_MOD(extack,
-+				   "Partial match on tos ecn bits with match on enc_tos ecn bits isn't supported");
-+		netdev_warn(priv->netdev,
-+			    "Partial match on tos ecn bits with match on enc_tos ecn bits isn't supported");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	if (!inner_ecn_mask)
-+		return 0;
-+
-+	/* Both inner and outer have full mask on ecn */
-+
-+	if (outer_ecn_key == INET_ECN_ECT_1) {
-+		/* inner ecn might change by DECAP action */
-+
-+		NL_SET_ERR_MSG_MOD(extack, "Match on enc_tos ecn = ECT(1) isn't supported");
-+		netdev_warn(priv->netdev, "Match on enc_tos ecn = ECT(1) isn't supported");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	if (outer_ecn_key != INET_ECN_CE)
-+		return 0;
-+
-+	if (inner_ecn_key != INET_ECN_CE) {
-+		/* Can't happen in software, as packet ecn will be changed to CE after decap */
-+		NL_SET_ERR_MSG_MOD(extack,
-+				   "Match on tos enc_tos ecn = CE while match on tos ecn != CE isn't supported");
-+		netdev_warn(priv->netdev,
-+			    "Match on tos enc_tos ecn = CE while match on tos ecn != CE isn't supported");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	/* outer ecn = CE, inner ecn = CE, as decap will change inner ecn to CE in anycase,
-+	 * drop match on inner ecn
-+	 */
-+	*match_inner_ecn = false;
-+
-+	return 0;
-+}
-+
- static int parse_tunnel_attr(struct mlx5e_priv *priv,
- 			     struct mlx5e_tc_flow *flow,
- 			     struct mlx5_flow_spec *spec,
-@@ -2144,6 +2249,7 @@ static int __parse_cls_flower(struct mlx5e_priv *priv,
- 	struct flow_rule *rule = flow_cls_offload_flow_rule(f);
- 	struct flow_dissector *dissector = rule->match.dissector;
- 	enum fs_flow_table_type fs_type;
-+	bool match_inner_ecn = true;
- 	u16 addr_type = 0;
- 	u8 ip_proto = 0;
- 	u8 *match_level;
-@@ -2197,6 +2303,10 @@ static int __parse_cls_flower(struct mlx5e_priv *priv,
- 			headers_c = get_match_inner_headers_criteria(spec);
- 			headers_v = get_match_inner_headers_value(spec);
- 		}
-+
-+		err = mlx5e_tc_verify_tunnel_ecn(priv, f, &match_inner_ecn);
-+		if (err)
-+			return err;
- 	}
- 
- 	err = mlx5e_flower_parse_meta(filter_dev, f);
-@@ -2420,10 +2530,12 @@ static int __parse_cls_flower(struct mlx5e_priv *priv,
- 		struct flow_match_ip match;
- 
- 		flow_rule_match_ip(rule, &match);
--		MLX5_SET(fte_match_set_lyr_2_4, headers_c, ip_ecn,
--			 match.mask->tos & 0x3);
--		MLX5_SET(fte_match_set_lyr_2_4, headers_v, ip_ecn,
--			 match.key->tos & 0x3);
-+		if (match_inner_ecn) {
-+			MLX5_SET(fte_match_set_lyr_2_4, headers_c, ip_ecn,
-+				 match.mask->tos & 0x3);
-+			MLX5_SET(fte_match_set_lyr_2_4, headers_v, ip_ecn,
-+				 match.key->tos & 0x3);
-+		}
- 
- 		MLX5_SET(fte_match_set_lyr_2_4, headers_c, ip_dscp,
- 			 match.mask->tos >> 2);
--- 
-2.34.1
-
+ static void dma_fence_array_release(struct dma_fence *fence)
 
 

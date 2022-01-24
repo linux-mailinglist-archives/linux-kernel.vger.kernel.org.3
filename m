@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C959499F2C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:18:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE0F499F39
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:18:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1840268AbiAXWxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:53:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58048 "EHLO
+        id S1840482AbiAXWxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:53:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1574350AbiAXVs7 (ORCPT
+        with ESMTP id S1574395AbiAXVtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:48:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F879C0811BF;
-        Mon, 24 Jan 2022 12:33:17 -0800 (PST)
+        Mon, 24 Jan 2022 16:49:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFDAC07A96C;
+        Mon, 24 Jan 2022 12:33:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1AA6614EC;
-        Mon, 24 Jan 2022 20:33:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1CB4C340E5;
-        Mon, 24 Jan 2022 20:33:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BAD5DB811FB;
+        Mon, 24 Jan 2022 20:33:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7C94C340E8;
+        Mon, 24 Jan 2022 20:33:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056396;
-        bh=gHfSCmYBYByuJZQy+bCo3KStS81UFeM1yUwFWwaOcNA=;
+        s=korg; t=1643056402;
+        bh=Qbnpal6S+UxOf65CG/ERZROcEXBzaAoH3S2RJUPcGq0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vI2KHRCS4B5iDl6vWsmCossVN9a/xg953okdT8f5N9qZ7jNtvwfegQW9t8ol+6mUB
-         mfC7wCT8kVuE9h4QBdBTyXcuJ+gUSP9FslVbdHWjWrbiog1DOmgC6cgWaepjbl6IhY
-         RHD5/KuDMCx/TjSC7jeezgUzuX+gR5IrU6Nl/Luo=
+        b=Ql2CLZHO/qjzYVwR19MjcBLwz3iYJLuUiO1wafA3Eydq22KenIvOv+3LmZEQhrNZy
+         06MBA53dEce5lSsNJjTcBsMo1fD4EvQnPldOR9RHzSkslmSwppiKfAsa8hrDdjz2Dj
+         cUl66gzUP8QugrufLT+efOWc72wAZ11CC09wrnN0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Trevor Wu <trevor.wu@mediatek.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 437/846] ASoC: mediatek: mt8195: correct pcmif BE dai control flow
-Date:   Mon, 24 Jan 2022 19:39:14 +0100
-Message-Id: <20220124184116.054750113@linuxfoundation.org>
+Subject: [PATCH 5.15 439/846] mips: lantiq: add support for clk_set_parent()
+Date:   Mon, 24 Jan 2022 19:39:16 +0100
+Message-Id: <20220124184116.118607029@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -49,164 +51,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trevor Wu <trevor.wu@mediatek.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 2355028c0c54c03afb66c589347f1dc9f6fe2e38 ]
+[ Upstream commit 76f66dfd60dc5d2f9dec22d99091fea1035c5d03 ]
 
-Originally, the conditions for preventing reentry are not correct.
-dai->component->active is not the state specifically for pcmif dai, so it
-is not a correct condition to indicate the status of pcmif dai.
-On the other hand, snd_soc_dai_stream_actvie() in prepare ops for both
-playback and capture possibly return true at the first entry when these
-two streams are opened at the same time.
+Provide a simple implementation of clk_set_parent() in the lantiq
+subarch so that callers of it will build without errors.
 
-In the patch, I refer to the implementation in mt8192-dai-pcm.c.
-Clock and enabling bit for PCMIF are managed by DAPM, and the condition
-for prepare ops is replaced by the status of dai widget.
+Fixes these build errors:
 
-Fixes: 1f95c019115c ("ASoC: mediatek: mt8195: support pcm in platform driver")
-Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
-Link: https://lore.kernel.org/r/20211230084731.31372-2-trevor.wu@mediatek.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+ERROR: modpost: "clk_set_parent" [sound/soc/jz4740/snd-soc-jz4740-i2s.ko] undefined!
+ERROR: modpost: "clk_set_parent" [sound/soc/atmel/snd-soc-atmel-i2s.ko] undefined!
+
+Fixes: 171bb2f19ed6 ("MIPS: Lantiq: Add initial support for Lantiq SoCs")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+--to=linux-mips@vger.kernel.org --cc="John Crispin <john@phrozen.org>" --cc="Jonathan Cameron <jic23@kernel.org>" --cc="Russell King <linux@armlinux.org.uk>" --cc="Andy Shevchenko <andy.shevchenko@gmail.com>" --cc=alsa-devel@alsa-project.org --to="Thomas Bogendoerfer <tsbogend@alpha.franken.de>"
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/mediatek/mt8195/mt8195-dai-pcm.c | 73 +++++++---------------
- sound/soc/mediatek/mt8195/mt8195-reg.h     |  1 +
- 2 files changed, 22 insertions(+), 52 deletions(-)
+ arch/mips/lantiq/clk.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/sound/soc/mediatek/mt8195/mt8195-dai-pcm.c b/sound/soc/mediatek/mt8195/mt8195-dai-pcm.c
-index 5d10d2c4c991c..151914c873acd 100644
---- a/sound/soc/mediatek/mt8195/mt8195-dai-pcm.c
-+++ b/sound/soc/mediatek/mt8195/mt8195-dai-pcm.c
-@@ -80,8 +80,15 @@ static const struct snd_soc_dapm_widget mtk_dai_pcm_widgets[] = {
- 			   mtk_dai_pcm_o001_mix,
- 			   ARRAY_SIZE(mtk_dai_pcm_o001_mix)),
+diff --git a/arch/mips/lantiq/clk.c b/arch/mips/lantiq/clk.c
+index 4916cccf378fd..7a623684d9b5e 100644
+--- a/arch/mips/lantiq/clk.c
++++ b/arch/mips/lantiq/clk.c
+@@ -164,6 +164,12 @@ struct clk *clk_get_parent(struct clk *clk)
+ }
+ EXPORT_SYMBOL(clk_get_parent);
  
-+	SND_SOC_DAPM_SUPPLY("PCM_EN", PCM_INTF_CON1,
-+			    PCM_INTF_CON1_PCM_EN_SHIFT, 0, NULL, 0),
++int clk_set_parent(struct clk *clk, struct clk *parent)
++{
++	return 0;
++}
++EXPORT_SYMBOL(clk_set_parent);
 +
- 	SND_SOC_DAPM_INPUT("PCM1_INPUT"),
- 	SND_SOC_DAPM_OUTPUT("PCM1_OUTPUT"),
-+
-+	SND_SOC_DAPM_CLOCK_SUPPLY("aud_asrc11"),
-+	SND_SOC_DAPM_CLOCK_SUPPLY("aud_asrc12"),
-+	SND_SOC_DAPM_CLOCK_SUPPLY("aud_pcmif"),
- };
- 
- static const struct snd_soc_dapm_route mtk_dai_pcm_routes[] = {
-@@ -97,22 +104,18 @@ static const struct snd_soc_dapm_route mtk_dai_pcm_routes[] = {
- 	{"PCM1 Playback", NULL, "O000"},
- 	{"PCM1 Playback", NULL, "O001"},
- 
-+	{"PCM1 Playback", NULL, "PCM_EN"},
-+	{"PCM1 Playback", NULL, "aud_asrc12"},
-+	{"PCM1 Playback", NULL, "aud_pcmif"},
-+
-+	{"PCM1 Capture", NULL, "PCM_EN"},
-+	{"PCM1 Capture", NULL, "aud_asrc11"},
-+	{"PCM1 Capture", NULL, "aud_pcmif"},
-+
- 	{"PCM1_OUTPUT", NULL, "PCM1 Playback"},
- 	{"PCM1 Capture", NULL, "PCM1_INPUT"},
- };
- 
--static void mtk_dai_pcm_enable(struct mtk_base_afe *afe)
--{
--	regmap_update_bits(afe->regmap, PCM_INTF_CON1,
--			   PCM_INTF_CON1_PCM_EN, PCM_INTF_CON1_PCM_EN);
--}
--
--static void mtk_dai_pcm_disable(struct mtk_base_afe *afe)
--{
--	regmap_update_bits(afe->regmap, PCM_INTF_CON1,
--			   PCM_INTF_CON1_PCM_EN, 0x0);
--}
--
- static int mtk_dai_pcm_configure(struct snd_pcm_substream *substream,
- 				 struct snd_soc_dai *dai)
+ static inline u32 get_counter_resolution(void)
  {
-@@ -207,54 +210,22 @@ static int mtk_dai_pcm_configure(struct snd_pcm_substream *substream,
- }
- 
- /* dai ops */
--static int mtk_dai_pcm_startup(struct snd_pcm_substream *substream,
--			       struct snd_soc_dai *dai)
--{
--	struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
--	struct mt8195_afe_private *afe_priv = afe->platform_priv;
--
--	if (dai->component->active)
--		return 0;
--
--	mt8195_afe_enable_clk(afe, afe_priv->clk[MT8195_CLK_AUD_ASRC11]);
--	mt8195_afe_enable_clk(afe, afe_priv->clk[MT8195_CLK_AUD_ASRC12]);
--	mt8195_afe_enable_clk(afe, afe_priv->clk[MT8195_CLK_AUD_PCMIF]);
--
--	return 0;
--}
--
--static void mtk_dai_pcm_shutdown(struct snd_pcm_substream *substream,
--				 struct snd_soc_dai *dai)
--{
--	struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
--	struct mt8195_afe_private *afe_priv = afe->platform_priv;
--
--	if (dai->component->active)
--		return;
--
--	mtk_dai_pcm_disable(afe);
--
--	mt8195_afe_disable_clk(afe, afe_priv->clk[MT8195_CLK_AUD_PCMIF]);
--	mt8195_afe_disable_clk(afe, afe_priv->clk[MT8195_CLK_AUD_ASRC12]);
--	mt8195_afe_disable_clk(afe, afe_priv->clk[MT8195_CLK_AUD_ASRC11]);
--}
--
- static int mtk_dai_pcm_prepare(struct snd_pcm_substream *substream,
- 			       struct snd_soc_dai *dai)
- {
--	struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
--	int ret = 0;
-+	int ret;
- 
--	if (snd_soc_dai_stream_active(dai, SNDRV_PCM_STREAM_PLAYBACK) &&
--	    snd_soc_dai_stream_active(dai, SNDRV_PCM_STREAM_CAPTURE))
-+	dev_dbg(dai->dev, "%s(), id %d, stream %d, widget active p %d, c %d\n",
-+		__func__, dai->id, substream->stream,
-+		dai->playback_widget->active, dai->capture_widget->active);
-+
-+	if (dai->playback_widget->active || dai->capture_widget->active)
- 		return 0;
- 
- 	ret = mtk_dai_pcm_configure(substream, dai);
- 	if (ret)
- 		return ret;
- 
--	mtk_dai_pcm_enable(afe);
--
- 	return 0;
- }
- 
-@@ -316,8 +287,6 @@ static int mtk_dai_pcm_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
- }
- 
- static const struct snd_soc_dai_ops mtk_dai_pcm_ops = {
--	.startup	= mtk_dai_pcm_startup,
--	.shutdown	= mtk_dai_pcm_shutdown,
- 	.prepare	= mtk_dai_pcm_prepare,
- 	.set_fmt	= mtk_dai_pcm_set_fmt,
- };
-diff --git a/sound/soc/mediatek/mt8195/mt8195-reg.h b/sound/soc/mediatek/mt8195/mt8195-reg.h
-index d06f9cf85a4ec..d3871353db415 100644
---- a/sound/soc/mediatek/mt8195/mt8195-reg.h
-+++ b/sound/soc/mediatek/mt8195/mt8195-reg.h
-@@ -2550,6 +2550,7 @@
- #define PCM_INTF_CON1_PCM_FMT(x)       (((x) & 0x3) << 1)
- #define PCM_INTF_CON1_PCM_FMT_MASK     (0x3 << 1)
- #define PCM_INTF_CON1_PCM_EN           BIT(0)
-+#define PCM_INTF_CON1_PCM_EN_SHIFT     0
- 
- /* PCM_INTF_CON2 */
- #define PCM_INTF_CON2_CLK_DOMAIN_SEL(x)   (((x) & 0x3) << 23)
+ 	u32 res;
 -- 
 2.34.1
 

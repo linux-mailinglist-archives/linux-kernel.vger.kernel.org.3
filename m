@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB617498BE5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15CEE498B13
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345627AbiAXTRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:17:24 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35190 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345422AbiAXTHH (ORCPT
+        id S1347147AbiAXTJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:09:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345276AbiAXTDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:07:07 -0500
+        Mon, 24 Jan 2022 14:03:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD58C0617B1;
+        Mon, 24 Jan 2022 10:58:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6126060B88;
-        Mon, 24 Jan 2022 19:07:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22A0CC340E5;
-        Mon, 24 Jan 2022 19:07:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A17406156C;
+        Mon, 24 Jan 2022 18:58:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82B77C340E5;
+        Mon, 24 Jan 2022 18:58:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051222;
-        bh=uDx30uAgUcsN7K0VNe2fp8EuYvLg5djITcl6kF56cWw=;
+        s=korg; t=1643050733;
+        bh=YH7HfRmQPrQX2wNff6Hbvunfjo8I8OoZpWqxbVVvQtc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ax5bbS3eXRvzFGgdq/1F4CXiCh6iy5Iyc81dDC9iGQ0pihFJtl71C/jYmMAi22b1P
-         3Xe3WX+45/Zi0QSCSIC+uB3zukO0lB0GceY/8Ba95al4WI2+ALkl/euEmciC5Qiluf
-         GcUJfksAAEHa63ovv+Kl2sY4f2boCVE4LXp92Vd0=
+        b=qUArMgqO2Y5CqKmBOz+yQLmpVjLewhIKX1gGitQbt1SaNjMM1CdRXCnbn/UUDfH8r
+         u18SBQwpUs1V+OZPECBGafpUhahqAkPXz8GBHhdslQtgRNqLpKbkIu/TszY/rRYKeO
+         2fJDFh5PyqbPgJy4HmNEh/gcuFnOTuR4YSDpqPx8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 093/186] ARM: imx: rename DEBUG_IMX21_IMX27_UART to DEBUG_IMX27_UART
+Subject: [PATCH 4.9 078/157] media: b2c2: Add missing check in flexcop_pci_isr:
 Date:   Mon, 24 Jan 2022 19:42:48 +0100
-Message-Id: <20220124183940.113116021@linuxfoundation.org>
+Message-Id: <20220124183935.259065698@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,119 +49,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit b0100bce4ff82ec1ccd3c1f3d339fd2df6a81784 ]
+[ Upstream commit b13203032e679674c7c518f52a7ec0801ca3a829 ]
 
-Since commit 4b563a066611 ("ARM: imx: Remove imx21 support"), the config
-DEBUG_IMX21_IMX27_UART is really only debug support for IMX27.
+A out-of-bounds bug can be triggered by an interrupt, the reason for
+this bug is the lack of checking of register values.
 
-So, rename this option to DEBUG_IMX27_UART and adjust dependencies in
-Kconfig and rename the definitions to IMX27 as further clean-up.
+In flexcop_pci_isr, the driver reads value from a register and uses it as
+a dma address. Finally, this address will be passed to the count parameter
+of find_next_packet. If this value is larger than the size of dma, the
+index of buffer will be out-of-bounds.
 
-This issue was discovered with ./scripts/checkkconfigsymbols.py, which
-reported that DEBUG_IMX21_IMX27_UART depends on the non-existing config
-SOC_IMX21.
+Fix this by adding a check after reading the value of the register.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+The following KASAN report reveals it:
+
+BUG: KASAN: slab-out-of-bounds in find_next_packet
+drivers/media/dvb-core/dvb_demux.c:528 [inline]
+BUG: KASAN: slab-out-of-bounds in _dvb_dmx_swfilter
+drivers/media/dvb-core/dvb_demux.c:572 [inline]
+BUG: KASAN: slab-out-of-bounds in dvb_dmx_swfilter+0x3fa/0x420
+drivers/media/dvb-core/dvb_demux.c:603
+Read of size 1 at addr ffff8880608c00a0 by task swapper/2/0
+
+CPU: 2 PID: 0 Comm: swapper/2 Not tainted 4.19.177-gdba4159c14ef #25
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xec/0x156 lib/dump_stack.c:118
+ print_address_description+0x78/0x290 mm/kasan/report.c:256
+ kasan_report_error mm/kasan/report.c:354 [inline]
+ kasan_report+0x25b/0x380 mm/kasan/report.c:412
+ __asan_report_load1_noabort+0x19/0x20 mm/kasan/report.c:430
+ find_next_packet drivers/media/dvb-core/dvb_demux.c:528 [inline]
+ _dvb_dmx_swfilter drivers/media/dvb-core/dvb_demux.c:572 [inline]
+ dvb_dmx_swfilter+0x3fa/0x420 drivers/media/dvb-core/dvb_demux.c:603
+ flexcop_pass_dmx_data+0x2e/0x40 drivers/media/common/b2c2/flexcop.c:167
+ flexcop_pci_isr+0x3d1/0x5d0 drivers/media/pci/b2c2/flexcop-pci.c:212
+ __handle_irq_event_percpu+0xfb/0x770 kernel/irq/handle.c:149
+ handle_irq_event_percpu+0x79/0x150 kernel/irq/handle.c:189
+ handle_irq_event+0xac/0x140 kernel/irq/handle.c:206
+ handle_fasteoi_irq+0x232/0x5c0 kernel/irq/chip.c:725
+ generic_handle_irq_desc include/linux/irqdesc.h:155 [inline]
+ handle_irq+0x230/0x3a0 arch/x86/kernel/irq_64.c:87
+ do_IRQ+0xa7/0x1e0 arch/x86/kernel/irq.c:247
+ common_interrupt+0xf/0xf arch/x86/entry/entry_64.S:670
+ </IRQ>
+RIP: 0010:native_safe_halt+0x28/0x30 arch/x86/include/asm/irqflags.h:61
+Code: 00 00 55 be 04 00 00 00 48 c7 c7 00 62 2f 8c 48 89 e5 e8 fb 31
+e8 f8 8b 05 75 4f 8e 03 85 c0 7e 07 0f 00 2d 8a 61 66 00 fb f4 <5d> c3
+90 90 90 90 90 90 0f 1f 44 00 00 55 48 89 e5 41 57 41 56 41
+RSP: 0018:ffff88806b71fcc8 EFLAGS: 00000246 ORIG_RAX: ffffffffffffffde
+RAX: 0000000000000000 RBX: ffffffff8bde44c8 RCX: ffffffff88a11285
+RDX: 0000000000000000 RSI: 0000000000000004 RDI: ffffffff8c2f6200
+RBP: ffff88806b71fcc8 R08: fffffbfff185ec40 R09: fffffbfff185ec40
+R10: 0000000000000001 R11: fffffbfff185ec40 R12: 0000000000000002
+R13: ffffffff8be9d6e0 R14: 0000000000000000 R15: 0000000000000000
+ arch_safe_halt arch/x86/include/asm/paravirt.h:94 [inline]
+ default_idle+0x6f/0x360 arch/x86/kernel/process.c:557
+ arch_cpu_idle+0xf/0x20 arch/x86/kernel/process.c:548
+ default_idle_call+0x3b/0x60 kernel/sched/idle.c:93
+ cpuidle_idle_call kernel/sched/idle.c:153 [inline]
+ do_idle+0x2ab/0x3c0 kernel/sched/idle.c:263
+ cpu_startup_entry+0xcb/0xe0 kernel/sched/idle.c:369
+ start_secondary+0x3b8/0x4e0 arch/x86/kernel/smpboot.c:271
+ secondary_startup_64+0xa4/0xb0 arch/x86/kernel/head_64.S:243
+
+Allocated by task 1:
+ save_stack+0x43/0xd0 mm/kasan/kasan.c:448
+ set_track mm/kasan/kasan.c:460 [inline]
+ kasan_kmalloc+0xad/0xe0 mm/kasan/kasan.c:553
+ kasan_slab_alloc+0x11/0x20 mm/kasan/kasan.c:490
+ slab_post_alloc_hook mm/slab.h:445 [inline]
+ slab_alloc_node mm/slub.c:2741 [inline]
+ slab_alloc mm/slub.c:2749 [inline]
+ kmem_cache_alloc+0xeb/0x280 mm/slub.c:2754
+ kmem_cache_zalloc include/linux/slab.h:699 [inline]
+ __kernfs_new_node+0xe2/0x6f0 fs/kernfs/dir.c:633
+ kernfs_new_node+0x9a/0x120 fs/kernfs/dir.c:693
+ __kernfs_create_file+0x5f/0x340 fs/kernfs/file.c:992
+ sysfs_add_file_mode_ns+0x22a/0x4e0 fs/sysfs/file.c:306
+ create_files fs/sysfs/group.c:63 [inline]
+ internal_create_group+0x34e/0xc30 fs/sysfs/group.c:147
+ sysfs_create_group fs/sysfs/group.c:173 [inline]
+ sysfs_create_groups+0x9c/0x140 fs/sysfs/group.c:200
+ driver_add_groups+0x3e/0x50 drivers/base/driver.c:129
+ bus_add_driver+0x3a5/0x790 drivers/base/bus.c:684
+ driver_register+0x1cd/0x410 drivers/base/driver.c:170
+ __pci_register_driver+0x197/0x200 drivers/pci/pci-driver.c:1411
+ cx88_audio_pci_driver_init+0x23/0x25 drivers/media/pci/cx88/cx88-alsa.c:
+ 1017
+ do_one_initcall+0xe0/0x610 init/main.c:884
+ do_initcall_level init/main.c:952 [inline]
+ do_initcalls init/main.c:960 [inline]
+ do_basic_setup init/main.c:978 [inline]
+ kernel_init_freeable+0x4d0/0x592 init/main.c:1145
+ kernel_init+0x18/0x190 init/main.c:1062
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:415
+
+Freed by task 0:
+(stack is not available)
+
+The buggy address belongs to the object at ffff8880608c0000
+ which belongs to the cache kernfs_node_cache of size 160
+The buggy address is located 0 bytes to the right of
+ 160-byte region [ffff8880608c0000, ffff8880608c00a0)
+The buggy address belongs to the page:
+page:ffffea0001823000 count:1 mapcount:0 mapping:ffff88806bed1e00
+index:0x0 compound_mapcount: 0
+flags: 0x100000000008100(slab|head)
+raw: 0100000000008100 dead000000000100 dead000000000200 ffff88806bed1e00
+raw: 0000000000000000 0000000000240024 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff8880608bff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff8880608c0000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff8880608c0080: 00 00 00 00 fc fc fc fc fc fc fc fc 00 00 00 00
+                               ^
+ ffff8880608c0100: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff8880608c0180: fc fc fc fc fc fc fc fc 00 00 00 00 00 00 00 00
+==================================================================
+
+Link: https://lore.kernel.org/linux-media/1620723603-30912-1-git-send-email-zheyuma97@gmail.com
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/Kconfig.debug            | 14 +++++++-------
- arch/arm/include/debug/imx-uart.h | 18 +++++++++---------
- 2 files changed, 16 insertions(+), 16 deletions(-)
+ drivers/media/pci/b2c2/flexcop-pci.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
-index d6cf18a0cb0a9..b70ed4c7691e5 100644
---- a/arch/arm/Kconfig.debug
-+++ b/arch/arm/Kconfig.debug
-@@ -363,12 +363,12 @@ choice
- 		  Say Y here if you want kernel low-level debugging support
- 		  on i.MX25.
+diff --git a/drivers/media/pci/b2c2/flexcop-pci.c b/drivers/media/pci/b2c2/flexcop-pci.c
+index 4cac1fc233f28..98e94cd8bfad7 100644
+--- a/drivers/media/pci/b2c2/flexcop-pci.c
++++ b/drivers/media/pci/b2c2/flexcop-pci.c
+@@ -184,6 +184,8 @@ static irqreturn_t flexcop_pci_isr(int irq, void *dev_id)
+ 		dma_addr_t cur_addr =
+ 			fc->read_ibi_reg(fc,dma1_008).dma_0x8.dma_cur_addr << 2;
+ 		u32 cur_pos = cur_addr - fc_pci->dma[0].dma_addr0;
++		if (cur_pos > fc_pci->dma[0].size * 2)
++			goto error;
  
--	config DEBUG_IMX21_IMX27_UART
--		bool "i.MX21 and i.MX27 Debug UART"
--		depends on SOC_IMX21 || SOC_IMX27
-+	config DEBUG_IMX27_UART
-+		bool "i.MX27 Debug UART"
-+		depends on SOC_IMX27
- 		help
- 		  Say Y here if you want kernel low-level debugging support
--		  on i.MX21 or i.MX27.
-+		  on i.MX27.
+ 		deb_irq("%u irq: %08x cur_addr: %llx: cur_pos: %08x, "
+ 			"last_cur_pos: %08x ",
+@@ -225,6 +227,7 @@ static irqreturn_t flexcop_pci_isr(int irq, void *dev_id)
+ 		ret = IRQ_NONE;
+ 	}
  
- 	config DEBUG_IMX28_UART
- 		bool "i.MX28 Debug UART"
-@@ -1398,7 +1398,7 @@ config DEBUG_IMX_UART_PORT
- 	int "i.MX Debug UART Port Selection"
- 	depends on DEBUG_IMX1_UART || \
- 		   DEBUG_IMX25_UART || \
--		   DEBUG_IMX21_IMX27_UART || \
-+		   DEBUG_IMX27_UART || \
- 		   DEBUG_IMX31_UART || \
- 		   DEBUG_IMX35_UART || \
- 		   DEBUG_IMX50_UART || \
-@@ -1451,12 +1451,12 @@ config DEBUG_LL_INCLUDE
- 	default "debug/icedcc.S" if DEBUG_ICEDCC
- 	default "debug/imx.S" if DEBUG_IMX1_UART || \
- 				 DEBUG_IMX25_UART || \
--				 DEBUG_IMX21_IMX27_UART || \
-+				 DEBUG_IMX27_UART || \
- 				 DEBUG_IMX31_UART || \
- 				 DEBUG_IMX35_UART || \
- 				 DEBUG_IMX50_UART || \
- 				 DEBUG_IMX51_UART || \
--				 DEBUG_IMX53_UART ||\
-+				 DEBUG_IMX53_UART || \
- 				 DEBUG_IMX6Q_UART || \
- 				 DEBUG_IMX6SL_UART || \
- 				 DEBUG_IMX6SX_UART || \
-diff --git a/arch/arm/include/debug/imx-uart.h b/arch/arm/include/debug/imx-uart.h
-index bce58e975ad1f..c750cc9876f6d 100644
---- a/arch/arm/include/debug/imx-uart.h
-+++ b/arch/arm/include/debug/imx-uart.h
-@@ -14,13 +14,6 @@
- #define IMX1_UART_BASE_ADDR(n)	IMX1_UART##n##_BASE_ADDR
- #define IMX1_UART_BASE(n)	IMX1_UART_BASE_ADDR(n)
- 
--#define IMX21_UART1_BASE_ADDR	0x1000a000
--#define IMX21_UART2_BASE_ADDR	0x1000b000
--#define IMX21_UART3_BASE_ADDR	0x1000c000
--#define IMX21_UART4_BASE_ADDR	0x1000d000
--#define IMX21_UART_BASE_ADDR(n)	IMX21_UART##n##_BASE_ADDR
--#define IMX21_UART_BASE(n)	IMX21_UART_BASE_ADDR(n)
--
- #define IMX25_UART1_BASE_ADDR	0x43f90000
- #define IMX25_UART2_BASE_ADDR	0x43f94000
- #define IMX25_UART3_BASE_ADDR	0x5000c000
-@@ -29,6 +22,13 @@
- #define IMX25_UART_BASE_ADDR(n)	IMX25_UART##n##_BASE_ADDR
- #define IMX25_UART_BASE(n)	IMX25_UART_BASE_ADDR(n)
- 
-+#define IMX27_UART1_BASE_ADDR	0x1000a000
-+#define IMX27_UART2_BASE_ADDR	0x1000b000
-+#define IMX27_UART3_BASE_ADDR	0x1000c000
-+#define IMX27_UART4_BASE_ADDR	0x1000d000
-+#define IMX27_UART_BASE_ADDR(n)	IMX27_UART##n##_BASE_ADDR
-+#define IMX27_UART_BASE(n)	IMX27_UART_BASE_ADDR(n)
-+
- #define IMX31_UART1_BASE_ADDR	0x43f90000
- #define IMX31_UART2_BASE_ADDR	0x43f94000
- #define IMX31_UART3_BASE_ADDR	0x5000c000
-@@ -115,10 +115,10 @@
- 
- #ifdef CONFIG_DEBUG_IMX1_UART
- #define UART_PADDR	IMX_DEBUG_UART_BASE(IMX1)
--#elif defined(CONFIG_DEBUG_IMX21_IMX27_UART)
--#define UART_PADDR	IMX_DEBUG_UART_BASE(IMX21)
- #elif defined(CONFIG_DEBUG_IMX25_UART)
- #define UART_PADDR	IMX_DEBUG_UART_BASE(IMX25)
-+#elif defined(CONFIG_DEBUG_IMX27_UART)
-+#define UART_PADDR	IMX_DEBUG_UART_BASE(IMX27)
- #elif defined(CONFIG_DEBUG_IMX31_UART)
- #define UART_PADDR	IMX_DEBUG_UART_BASE(IMX31)
- #elif defined(CONFIG_DEBUG_IMX35_UART)
++error:
+ 	spin_unlock_irqrestore(&fc_pci->irq_lock, flags);
+ 	return ret;
+ }
 -- 
 2.34.1
 

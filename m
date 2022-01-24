@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4F9499FBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:23:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06487499FB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:20:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1842109AbiAXXAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:00:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60966 "EHLO
+        id S1842039AbiAXXAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:00:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1577803AbiAXWBF (ORCPT
+        with ESMTP id S1577807AbiAXWBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 17:01:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57156C02B842;
-        Mon, 24 Jan 2022 12:40:31 -0800 (PST)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2750C02B843;
+        Mon, 24 Jan 2022 12:40:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6C88614EC;
-        Mon, 24 Jan 2022 20:40:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDBEDC340E5;
-        Mon, 24 Jan 2022 20:40:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7EC7FB81057;
+        Mon, 24 Jan 2022 20:40:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4CD3C340E5;
+        Mon, 24 Jan 2022 20:40:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056830;
-        bh=SwHp8z8g4fBVnumYsGHPVujRk5tCwr58kzWwwIKJFhQ=;
+        s=korg; t=1643056833;
+        bh=tzqPQmB0l/jBnxjNIcccagNcnuy3tZP8oVuJy5/u0uM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m/vPyDfLNXO9hrrmC0HLLlW6Ao5dWkmMBtUtVNIvKI7McVlYa5Wv19N1ZAdP5IcC2
-         df/4l8GzzHPuC0tPDWAHUhVvAUa/Kk0+5FZk1Etx7kWtFPD3STxYxVwYOrMjSqi5M5
-         ya84pWASwEZsZRS/5IRD5ACgnGBNwxDGFXC+Qsr4=
+        b=f8VSnLj9AKH8FEwgxolXBhKJmhuzxNUdeVDxfV8qzCBzeDI9PVdpIa8rgHyoExfaI
+         MsOLUdLiikSobhK5///xtxbfxqiBtdxDS5chiGJbYaumfwyGpLw2bDGd10tZJbkSb3
+         We1M1rRCIwZT8a9Ev5iL6evgSSiDKzL+/tPGbzgY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        linux-um@lists.infradead.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 582/846] um: registers: Rename function names to avoid conflicts and build problems
-Date:   Mon, 24 Jan 2022 19:41:39 +0100
-Message-Id: <20220124184121.128025849@linuxfoundation.org>
+        stable@vger.kernel.org, Ben Greear <greearb@candelatech.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 583/846] ath11k: Fix napi related hang
+Date:   Mon, 24 Jan 2022 19:41:40 +0100
+Message-Id: <20220124184121.158216137@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -51,103 +49,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Ben Greear <greearb@candelatech.com>
 
-[ Upstream commit 077b7320942b64b0da182aefd83c374462a65535 ]
+[ Upstream commit d943fdad7589653065be0e20aadc6dff37725ed4 ]
 
-The function names init_registers() and restore_registers() are used
-in several net/ethernet/ and gpu/drm/ drivers for other purposes (not
-calls to UML functions), so rename them.
+Similar to the same bug in ath10k, a napi disable w/out it being enabled
+will hang forever.  I believe I saw this while trying rmmod after driver
+had some failure on startup.  Fix it by keeping state on whether napi is
+enabled or not.
 
-This fixes multiple build errors.
+And, remove un-used napi pointer in ath11k driver base struct.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jeff Dike <jdike@addtoit.com>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Cc: linux-um@lists.infradead.org
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Signed-off-by: Ben Greear <greearb@candelatech.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20200903195254.29379-1-greearb@candelatech.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/um/include/shared/registers.h | 4 ++--
- arch/um/os-Linux/registers.c       | 4 ++--
- arch/um/os-Linux/start_up.c        | 2 +-
- arch/x86/um/syscalls_64.c          | 3 ++-
- 4 files changed, 7 insertions(+), 6 deletions(-)
+ drivers/net/wireless/ath/ath11k/ahb.c  |   12 +++++++++---
+ drivers/net/wireless/ath/ath11k/core.h |    2 +-
+ drivers/net/wireless/ath/ath11k/pci.c  |   12 +++++++++---
+ 3 files changed, 19 insertions(+), 7 deletions(-)
 
-diff --git a/arch/um/include/shared/registers.h b/arch/um/include/shared/registers.h
-index 0c50fa6e8a55b..fbb709a222839 100644
---- a/arch/um/include/shared/registers.h
-+++ b/arch/um/include/shared/registers.h
-@@ -16,8 +16,8 @@ extern int restore_fp_registers(int pid, unsigned long *fp_regs);
- extern int save_fpx_registers(int pid, unsigned long *fp_regs);
- extern int restore_fpx_registers(int pid, unsigned long *fp_regs);
- extern int save_registers(int pid, struct uml_pt_regs *regs);
--extern int restore_registers(int pid, struct uml_pt_regs *regs);
--extern int init_registers(int pid);
-+extern int restore_pid_registers(int pid, struct uml_pt_regs *regs);
-+extern int init_pid_registers(int pid);
- extern void get_safe_registers(unsigned long *regs, unsigned long *fp_regs);
- extern unsigned long get_thread_reg(int reg, jmp_buf *buf);
- extern int get_fp_registers(int pid, unsigned long *regs);
-diff --git a/arch/um/os-Linux/registers.c b/arch/um/os-Linux/registers.c
-index 2d9270508e156..b123955be7acc 100644
---- a/arch/um/os-Linux/registers.c
-+++ b/arch/um/os-Linux/registers.c
-@@ -21,7 +21,7 @@ int save_registers(int pid, struct uml_pt_regs *regs)
- 	return 0;
+--- a/drivers/net/wireless/ath/ath11k/ahb.c
++++ b/drivers/net/wireless/ath/ath11k/ahb.c
+@@ -175,8 +175,11 @@ static void __ath11k_ahb_ext_irq_disable
+ 
+ 		ath11k_ahb_ext_grp_disable(irq_grp);
+ 
+-		napi_synchronize(&irq_grp->napi);
+-		napi_disable(&irq_grp->napi);
++		if (irq_grp->napi_enabled) {
++			napi_synchronize(&irq_grp->napi);
++			napi_disable(&irq_grp->napi);
++			irq_grp->napi_enabled = false;
++		}
+ 	}
  }
  
--int restore_registers(int pid, struct uml_pt_regs *regs)
-+int restore_pid_registers(int pid, struct uml_pt_regs *regs)
- {
- 	int err;
+@@ -300,7 +303,10 @@ static void ath11k_ahb_ext_irq_enable(st
+ 	for (i = 0; i < ATH11K_EXT_IRQ_GRP_NUM_MAX; i++) {
+ 		struct ath11k_ext_irq_grp *irq_grp = &ab->ext_irq_grp[i];
  
-@@ -36,7 +36,7 @@ int restore_registers(int pid, struct uml_pt_regs *regs)
- static unsigned long exec_regs[MAX_REG_NR];
- static unsigned long exec_fp_regs[FP_SIZE];
- 
--int init_registers(int pid)
-+int init_pid_registers(int pid)
- {
- 	int err;
- 
-diff --git a/arch/um/os-Linux/start_up.c b/arch/um/os-Linux/start_up.c
-index 8a72c99994eb1..e3ee4db58b40d 100644
---- a/arch/um/os-Linux/start_up.c
-+++ b/arch/um/os-Linux/start_up.c
-@@ -368,7 +368,7 @@ void __init os_early_checks(void)
- 	check_tmpexec();
- 
- 	pid = start_ptraced_child();
--	if (init_registers(pid))
-+	if (init_pid_registers(pid))
- 		fatal("Failed to initialize default registers");
- 	stop_ptraced_child(pid, 1, 1);
+-		napi_enable(&irq_grp->napi);
++		if (!irq_grp->napi_enabled) {
++			napi_enable(&irq_grp->napi);
++			irq_grp->napi_enabled = true;
++		}
+ 		ath11k_ahb_ext_grp_enable(irq_grp);
+ 	}
  }
-diff --git a/arch/x86/um/syscalls_64.c b/arch/x86/um/syscalls_64.c
-index 58f51667e2e4b..8249685b40960 100644
---- a/arch/x86/um/syscalls_64.c
-+++ b/arch/x86/um/syscalls_64.c
-@@ -11,6 +11,7 @@
- #include <linux/uaccess.h>
- #include <asm/prctl.h> /* XXX This should get the constants from libc */
- #include <os.h>
-+#include <registers.h>
+--- a/drivers/net/wireless/ath/ath11k/core.h
++++ b/drivers/net/wireless/ath/ath11k/core.h
+@@ -137,6 +137,7 @@ struct ath11k_ext_irq_grp {
+ 	u32 num_irq;
+ 	u32 grp_id;
+ 	u64 timestamp;
++	bool napi_enabled;
+ 	struct napi_struct napi;
+ 	struct net_device napi_ndev;
+ };
+@@ -706,7 +707,6 @@ struct ath11k_base {
+ 	u32 wlan_init_status;
+ 	int irq_num[ATH11K_IRQ_NUM_MAX];
+ 	struct ath11k_ext_irq_grp ext_irq_grp[ATH11K_EXT_IRQ_GRP_NUM_MAX];
+-	struct napi_struct *napi;
+ 	struct ath11k_targ_cap target_caps;
+ 	u32 ext_service_bitmap[WMI_SERVICE_EXT_BM_SIZE];
+ 	bool pdevs_macaddr_valid;
+--- a/drivers/net/wireless/ath/ath11k/pci.c
++++ b/drivers/net/wireless/ath/ath11k/pci.c
+@@ -632,8 +632,11 @@ static void __ath11k_pci_ext_irq_disable
  
- long arch_prctl(struct task_struct *task, int option,
- 		unsigned long __user *arg2)
-@@ -35,7 +36,7 @@ long arch_prctl(struct task_struct *task, int option,
- 	switch (option) {
- 	case ARCH_SET_FS:
- 	case ARCH_SET_GS:
--		ret = restore_registers(pid, &current->thread.regs.regs);
-+		ret = restore_pid_registers(pid, &current->thread.regs.regs);
- 		if (ret)
- 			return ret;
- 		break;
--- 
-2.34.1
-
+ 		ath11k_pci_ext_grp_disable(irq_grp);
+ 
+-		napi_synchronize(&irq_grp->napi);
+-		napi_disable(&irq_grp->napi);
++		if (irq_grp->napi_enabled) {
++			napi_synchronize(&irq_grp->napi);
++			napi_disable(&irq_grp->napi);
++			irq_grp->napi_enabled = false;
++		}
+ 	}
+ }
+ 
+@@ -652,7 +655,10 @@ static void ath11k_pci_ext_irq_enable(st
+ 	for (i = 0; i < ATH11K_EXT_IRQ_GRP_NUM_MAX; i++) {
+ 		struct ath11k_ext_irq_grp *irq_grp = &ab->ext_irq_grp[i];
+ 
+-		napi_enable(&irq_grp->napi);
++		if (!irq_grp->napi_enabled) {
++			napi_enable(&irq_grp->napi);
++			irq_grp->napi_enabled = true;
++		}
+ 		ath11k_pci_ext_grp_enable(irq_grp);
+ 	}
+ }
 
 

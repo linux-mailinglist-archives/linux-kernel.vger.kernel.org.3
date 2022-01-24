@@ -2,184 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31DFB498B8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 756CC498D52
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347069AbiAXTOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:14:31 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:51092 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346409AbiAXTFb (ORCPT
+        id S1352772AbiAXTbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:31:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345150AbiAXTWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:05:31 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 6A6AE1F37D;
-        Mon, 24 Jan 2022 19:05:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643051130; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1zh59/pJI7EaZBSgzjE5vvArmlZWtdoTZrOJLYIPIsU=;
-        b=Pk3svNQ7HXYj9CSh1aWZrVtmLbzozIt3PXt69SBUuUEuve8xC4GnjYTak4jPAW8Zsat5Yj
-        0E6Ns6stnBIY34sHjQDvOUBdYOca9TBjWtDchyjdXr8elbNe3/t0c1gUTWgUt+NtORtMM/
-        9IC1AxyyQN7lbseU13WeHPYLQL9Q7PI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643051130;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1zh59/pJI7EaZBSgzjE5vvArmlZWtdoTZrOJLYIPIsU=;
-        b=reN9RPjKoyPeBOWqqtL+vOJ/OE3wnPZwH8OgDwl/OMWVp5Xbh7/KTcZpsCCdrpB2dueCBs
-        b3dBbhZKjR8KqcAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2810B13C97;
-        Mon, 24 Jan 2022 19:05:30 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id pMVNCHr47mEwDwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 24 Jan 2022 19:05:30 +0000
-Message-ID: <de46f070-3923-8bf3-c010-9ff4fcabcb23@suse.de>
-Date:   Mon, 24 Jan 2022 20:05:29 +0100
+        Mon, 24 Jan 2022 14:22:24 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D79C02B861
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:08:43 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id v74so13701174pfc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:08:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rVsQvo+ZjtK46Xp9A91RBZT4Worccr7KUw8/eqjUom4=;
+        b=oBwmdtH13x9b6kAQu+AfvDYJoAIzyE+GKZg3N4sPHI6da5W4ZAw0iucdO03Hsjwk6P
+         CxBAQ3AdTNCbqMwBxdqC2VysY9FZyaT/nmnwtCR1kaN7E/e+uRBV766ByYloQunh0WvK
+         kNP8Nb4DjJK1oMj+xMboRHrl/r4uYzKGxpFYlaI4AaPfXU00JRGG+WhsLeyq0fjWERzq
+         +xOrVG4tdVVa0Fv3m7HtNGGNlIEdZqSS8l/dxo9SW6E01VQA5b5rMLSz1Bek8egU8muk
+         MBNeMStA5TimanH4T9D+u0ruY5E4N8jzcQAqZxcFWA3M7ELce0p3WnkldfQG4796IoxW
+         phvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rVsQvo+ZjtK46Xp9A91RBZT4Worccr7KUw8/eqjUom4=;
+        b=1Fp9+/72hMuupp+Ece1Yw7Lb+Ik1jgRBVi2RS4TI4zLWJjwijyVB9XFKtvbcm8xPd3
+         va3xKOUvnp+FzsUNtQrsxmMMdZxsi+7W48mORZ4Y4f3Blu1dj0TQXzYEBGSvtiOESdyN
+         0MHFcBJAjJ2kMBM8ByyipBah6kqCp7q1gVKGcA4S/etlZZhhRzQgLExTfnwJvlxvu3iI
+         sv6JsrvTkoWbpVqAgyME8NZf7c8QdGoALjt7KQy6ZRQT8ae2QczXdupDMYLWUgnLVHI9
+         4WRm7I0nWq6dQ8246xHGmn4fS1LvVPFoyE93RlQKemjH/7QDos1UDlQh+kfgMrCMBwB7
+         XV6w==
+X-Gm-Message-State: AOAM532JCmULGt9M5OkkMNxQPjWxXDoLF9GJ5dy3ryMq9nABJsVkfb2F
+        aQDPkX5NHwy0rQnvunQVwnY0+Q==
+X-Google-Smtp-Source: ABdhPJxGnukKA6tJEogfNC/QfbWw1VjuOOgZ06J37PBc5sW91RZk/AE0UMR+mdF9nkRQtPlsnbtgzw==
+X-Received: by 2002:a63:ad42:: with SMTP id y2mr12736198pgo.386.1643051322966;
+        Mon, 24 Jan 2022 11:08:42 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id g21sm2080660pfc.11.2022.01.24.11.08.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 11:08:42 -0800 (PST)
+Date:   Mon, 24 Jan 2022 19:08:38 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Igor Mammedov <imammedo@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] KVM: x86: Use memcmp in kvm_cpuid_check_equal()
+Message-ID: <Ye75NpxFoOwCi23e@google.com>
+References: <20220124103606.2630588-1-vkuznets@redhat.com>
+ <20220124103606.2630588-3-vkuznets@redhat.com>
+ <95f63ed6-743b-3547-dda1-4fe83bc39070@redhat.com>
+ <87bl01i2zl.fsf@redhat.com>
+ <Ye7ZQJ6NYoZqK9yk@google.com>
+ <979883b4-8fcd-7488-0313-de6348863b21@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Helge Deller <deller@gmx.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Sven Schnelle <svens@stackframe.org>
-References: <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
- <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
- <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de>
- <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
- <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de>
- <CAKMK7uE7jnTtetB5ovGeyPxHq4ymhbWmQXWmSVw-V1vP3iNAKQ@mail.gmail.com>
- <b32ffceb-ea90-3d26-f20e-29ae21c68fcf@gmx.de>
- <20220118062947.6kfuam6ah63z5mmn@sirius.home.kraxel.org>
- <CAMuHMdWXWA2h7zrZa_nnqR_qNdsOdHJS=Vf1YExhvs08KukoNg@mail.gmail.com>
- <3f96f393-e59d-34ac-c98b-46180e2225cd@suse.de>
- <20220120125015.sx5n7ziq3765rwyo@sirius.home.kraxel.org>
- <CAKMK7uF-V20qWTxQLvTC6GjC8Sg+Pst+UJ3pWCLQ4Q7Khgy62g@mail.gmail.com>
- <CAMuHMdWS3rYUUB8HQcpjq0pY28cLiPMGrYEXeSPVtr-a_rrQvQ@mail.gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <CAMuHMdWS3rYUUB8HQcpjq0pY28cLiPMGrYEXeSPVtr-a_rrQvQ@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------OpjrWj9Nm7LGfAEzHGR8ZLZv"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <979883b4-8fcd-7488-0313-de6348863b21@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------OpjrWj9Nm7LGfAEzHGR8ZLZv
-Content-Type: multipart/mixed; boundary="------------JvGXEhTBESSSiUWwPPOuocIu";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Geert Uytterhoeven <geert@linux-m68k.org>, Daniel Vetter <daniel@ffwll.ch>
-Cc: Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
- Linus Torvalds <torvalds@linux-foundation.org>, Helge Deller
- <deller@gmx.de>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- DRI Development <dri-devel@lists.freedesktop.org>,
- Javier Martinez Canillas <javierm@redhat.com>,
- Gerd Hoffmann <kraxel@redhat.com>, Sven Schnelle <svens@stackframe.org>
-Message-ID: <de46f070-3923-8bf3-c010-9ff4fcabcb23@suse.de>
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-References: <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
- <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
- <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de>
- <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
- <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de>
- <CAKMK7uE7jnTtetB5ovGeyPxHq4ymhbWmQXWmSVw-V1vP3iNAKQ@mail.gmail.com>
- <b32ffceb-ea90-3d26-f20e-29ae21c68fcf@gmx.de>
- <20220118062947.6kfuam6ah63z5mmn@sirius.home.kraxel.org>
- <CAMuHMdWXWA2h7zrZa_nnqR_qNdsOdHJS=Vf1YExhvs08KukoNg@mail.gmail.com>
- <3f96f393-e59d-34ac-c98b-46180e2225cd@suse.de>
- <20220120125015.sx5n7ziq3765rwyo@sirius.home.kraxel.org>
- <CAKMK7uF-V20qWTxQLvTC6GjC8Sg+Pst+UJ3pWCLQ4Q7Khgy62g@mail.gmail.com>
- <CAMuHMdWS3rYUUB8HQcpjq0pY28cLiPMGrYEXeSPVtr-a_rrQvQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdWS3rYUUB8HQcpjq0pY28cLiPMGrYEXeSPVtr-a_rrQvQ@mail.gmail.com>
+On Mon, Jan 24, 2022, Paolo Bonzini wrote:
+> On 1/24/22 17:52, Sean Christopherson wrote:
+> > On Mon, Jan 24, 2022, Vitaly Kuznetsov wrote:
+> > > Paolo Bonzini <pbonzini@redhat.com> writes:
+> > > > > +	if (memcmp(e2, vcpu->arch.cpuid_entries, nent * sizeof(*e2)))
+> > > > > +		return -EINVAL;
+> > > > 
+> > > > Hmm, not sure about that due to the padding in struct kvm_cpuid_entry2.
+> > > >    It might break userspace that isn't too careful about zeroing it.
+> > 
+> > Given that we already are fully committed to potentially breaking userspace by
+> > disallowing KVM_SET_CPUID{2} after KVM_RUN, we might as well get greedy.
+> 
+> Hmm, I thought this series was because we were _not_ fully committed. :)
 
---------------JvGXEhTBESSSiUWwPPOuocIu
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-
-SGkNCg0KQW0gMjQuMDEuMjIgdW0gMTk6Mzggc2NocmllYiBHZWVydCBVeXR0ZXJob2V2ZW46
-DQo+IEhpIERhbmllbCwNCj4gDQo+IE9uIEZyaSwgSmFuIDIxLCAyMDIyIGF0IDk6NTUgQU0g
-RGFuaWVsIFZldHRlciA8ZGFuaWVsQGZmd2xsLmNoPiB3cm90ZToNCj4+IEp1c3QgdG8gY2xh
-cmlmeSwgc2luY2Ugd2UgaGFkIGxvdHMgb2Ygc21hbGxlciBhbmQgYmlnZ2VyDQo+PiBtaXN1
-bmRlcnN0YW5kaW5ncyBpbiB0aGUgdGhyZWFkIHRodXMgZmFyOiBEUk1fRk9STUFUX1JHQjMz
-MiBleGlzdHMsIHNvDQo+PiBkcm0gc3VwcG9ydCB0aGF0IGFscmVhZHkuIFRoZSBmYmRldiBl
-bXVsYXRpb24gZG9lc24ndCB5ZXQsIGJ1dCBhbGwNCj4+IHRoYXQncyBuZWVkZWQgZm9yIHRo
-YXQgaXMgZmlsbGluZyBvdXQgdGhlIGNvZGUgdG8gcmVtYXAgdGhlIGRybQ0KPj4gZGVzY3Jp
-cHRpb24gdG8gdGhlIGZiZGV2IGZvcm1hdCBkZXNjcmlwdGlvbiBmb3IgdGhpcyBjYXNlLiBQ
-bHVzDQo+PiB0ZXN0aW5nIGl0IGFsbCB3b3JrcyBvZmMgd2l0aCBmYmNvbiBhbmQgd2hhdGVs
-c2UuIE5vdGUgdGhhdCBSR0IzMzIgIGlzDQo+PiBhIGJpdCBtb3JlIHdvcmsgdGhhbiBlLmcu
-IEM0LCBzaW5jZSBhdG0gZmJkZXYgc3RpbGwgdXNlcyBvbmx5IGJwcCB0bw0KPj4gaWRlbnRp
-ZnkgZm9ybWF0cywgc28gd291bGQgbmVlZCB0byBiZSBzd2l0Y2ggb3ZlciB0byBkcm1fZm91
-cmNjIGZpcnN0DQo+PiBiZWZvcmUgYWRkaW5nIGFueXRoaW5nIHdoaWNoIGFsaWFzZXMgd2l0
-aCBzb21ldGhpbmcgZXhpc3RpbmcgKHdlIGhhdmUNCj4+IEM4IGFscmVhZHkgd2lyZWQgdXAp
-Lg0KPiANCj4gSSBkb3VidCB0aGF0IFJHQjMzMiB3b3VsZCBiZSBhIGJpdCBtb3JlIHdvcmsg
-dGhhbiBDNCwgYXMgUkdCMzMyIGlzIHN0aWxsDQo+IDggYnBwLCB3aGlsZSBDNCBpcyBsZXNz
-LiAgVG8gc3VwcG9ydCBDNCwgYWxsIERSTSBjb2RlIHRoYXQgY2Fubm90DQo+IGhhbmRsZSBm
-b3JtYXQtPmNwcFswXSA8IDEgb3IgZHJtX2Zvcm1hdF9pbmZvX2Jsb2NrX3dpZHRoKCkgPiAx
-IGhhcyB0byBiZQ0KPiBmaXhlZCBmaXJzdC4NCj4gDQo+IE9uIHRoZSBwbHVzIHNpZGUsIEkg
-ZmluYWxseSBnb3QgbXkgcHJvb2Ytb2YtY29uY2VwdCBBdGFyaSBEUk0gZHJpdmVyDQo+IHdv
-cmtpbmcgd2l0aCBmYmNvbiBvbiBBUkFueU0uICBNYXBwaW5nIC9kZXYvZmIwIGZyb20gdXNl
-cnNwYWNlIGRvZXNuJ3QNCj4gd29yayAoZmJ0ZXN0IFNFR1ZzIHdoaWxlIHJlYWRpbmcgZnJv
-bSB0aGUgbWFwcGVkIGZyYW1lIGJ1ZmZlcikuICBJIGRvbid0DQo+IGtub3cgeWV0IGlmIHRo
-aXMgaXMgYSBnZW5lcmFsIGlzc3VlIHdpdGhvdXQgZGVmZXJyZWQgSS9PIGluIHY1LjE3LXJj
-MSwNCj4gb3IgYSBidWcgaW4gdGhlIG02OGsgTU0gY29kZS4uLg0KPiANCj4gU28gZmFyIGl0
-IHN1cHBvcnRzIEM4IG9ubHksIGJ1dCBJIGhvcGUgdG8gdGFja2xlIEM0IGFuZCBtb25vY2hy
-b21lIHNvb24uDQo+IFdoZXRoZXIgdGhlIGVuZCByZXN1bHQgd2lsbCBiZSB1c2FibGUgb24g
-cmVhbCBoYXJkd2FyZSBpcyBzdGlsbCB0byBiZQ0KPiBzZWVuLCBidXQgYXQgbGVhc3QgSSBo
-b3BlIHRvIGdldCBzb21lIERSTSBjb2RlIHdyaXR0ZW4uLi4NCg0KVGhhdCBzb3VuZHMgcHJl
-dHR5IGNvb2wuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IEdye29ldGplLGVl
-dGluZ31zLA0KPiANCj4gICAgICAgICAgICAgICAgICAgICAgICAgIEdlZXJ0DQo+IA0KPiAt
-LQ0KPiBHZWVydCBVeXR0ZXJob2V2ZW4gLS0gVGhlcmUncyBsb3RzIG9mIExpbnV4IGJleW9u
-ZCBpYTMyIC0tIGdlZXJ0QGxpbnV4LW02OGsub3JnDQo+IA0KPiBJbiBwZXJzb25hbCBjb252
-ZXJzYXRpb25zIHdpdGggdGVjaG5pY2FsIHBlb3BsZSwgSSBjYWxsIG15c2VsZiBhIGhhY2tl
-ci4gQnV0DQo+IHdoZW4gSSdtIHRhbGtpbmcgdG8gam91cm5hbGlzdHMgSSBqdXN0IHNheSAi
-cHJvZ3JhbW1lciIgb3Igc29tZXRoaW5nIGxpa2UgdGhhdC4NCj4gICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgLS0gTGludXMgVG9ydmFsZHMNCg0KLS0gDQpUaG9tYXMgWmlt
-bWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1
-dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdl
-cm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJ
-dm8gVG90ZXYNCg==
-
---------------JvGXEhTBESSSiUWwPPOuocIu--
-
---------------OpjrWj9Nm7LGfAEzHGR8ZLZv
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmHu+HkFAwAAAAAACgkQlh/E3EQov+CX
-DA/+MW6H0j0pJpSJgfJuknECceCVp+GaPro9vc1NYQwzt8QwKf0VRBT4P3oMY2hIQXG5jepiinER
-0pBtY8CnGKllZXDLVioWa4HtHMQlNQuQq3H3OhQwgxhBAzAxo0du6rWLZVGa4pCsC6MBdkkMO+47
-G4h0yfAxCm7mPh6mqI4WE07+fJAZ71XOcgunh9+ZbTq/bnq2DIHayLf/rLcJhTxArCWD6EuX2D78
-5eV+E0nUfxQLdqoZB1SQsrAzPHKJwJRqBcfkOpwy0SRjKWwpnD9ZZjbOqo+U+Sqg7KicjlbLFeq2
-meNeKk+o1PaHn01EFYSHnwIPXzVoo1AUB8hoWNQ6KntzN91bzOlAo2RfNtvKxSfxDkQtZwTsPkcb
-Zm2qM9eKmUIqC7Cn1dg2RWzcjNezwYHQFQqXnOF/4Okb97o4iKZ8KKdMc0v79DIXZ15U7UMJHi/E
-OABmEJMwK2Tt8F8cckc5AH3eLrQBUBpI+nj2QYaf864dSIv4+msGmutLgcP7rYg+RDMsiD+P8ttP
-y3ntUESXd8y30LnX57sUaRjJMRQoRtPVGN7Er145AmZd/byftjvHLkI8z3ptXvWZJq8bscN7ZePI
-fRlQwqxKQ4m42uRBK7gT3L0KP3m0l1n0mVO5W1hfIZCCIH5RoJRw3dhhAy7X28+WMC1pg5SNXEgt
-u8o=
-=acXS
------END PGP SIGNATURE-----
-
---------------OpjrWj9Nm7LGfAEzHGR8ZLZv--
+We're fully committed in the sense that we know disallowing KVM_SET_CPUID2 after
+KVM_RUN broke at least one use case, and instead of reverting we are doubling down
+and adding more KVM code/complexity to grandfather in that one use case.  There's
+no guarantee that there aren't other use cases that will break, but haven't been
+reported simply because their users haven't yet moved to a 5.16 kernel.

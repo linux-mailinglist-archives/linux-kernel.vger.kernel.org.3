@@ -2,122 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E68C498686
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:23:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08EC3498692
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:24:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241269AbiAXRW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:22:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244445AbiAXRWy (ORCPT
+        id S244463AbiAXRYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:24:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:32845 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244468AbiAXRYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:22:54 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DA7C06173B;
-        Mon, 24 Jan 2022 09:22:54 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id v6so20379838iom.6;
-        Mon, 24 Jan 2022 09:22:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=E8MQ4czb3ly2s0ZsHOR2X1HdMa1yeCdwsrvL3BnehgA=;
-        b=Wg2tUc+O43y+Z/MoAaE+dIs/RaMYZg3sY5Qr5LVg3GlCgc4PYr2PKS5NFnGiQjW4/E
-         Xg/e0p94De6lky+3hq+TVAtuI2D+mKpdkNvAAECOKSakxmY9LtOjYTMczIv9I47a0LC1
-         HBjDdJc9vbqBUHUHY0DR75+K4I2j5K8eQpslOyIm1nTgTPcbtMj3NKddE4Wls/j+tgOA
-         O8fIaLFeiXmzv4zKTd3GC1nagNriRzRL+urBT1QGxlw1swAIdBycI78zgT9zB5N1TvLn
-         zmV0n3bSt1HC3AK81NOMCBIbYQ515Gh8IGvP1mqVXHCuT1K2x1pnh1a63Tub/P8o1R/I
-         87wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E8MQ4czb3ly2s0ZsHOR2X1HdMa1yeCdwsrvL3BnehgA=;
-        b=N9jSq/+ZLoFnKZQspHm7O6uVybtOu4DRTHiXeL35cK93/0RxCIsGqZczEqpcr1eP2F
-         dFWHDgJ4xpC+i0togHMp1ISR1404poS2COt9urjwlixNMZXTs5wDwRt+/qY8KadFf/xP
-         SNq2p6h9l6NWb09THfh6X7gzvxA6lycy8gklDj7CqmJ+uHf3KAs4zsaxi3RrVfCMV60p
-         ko88wDe6C8tTkDjQbqj5rmhhuH3SgwZygmWLaXmMLS/a1wcp8314d+8QaiPVzUOn73TV
-         4vI4VYxshxCCvBotxc4UbLlbR5oiwc9fde1kc33AADR1e+WaLReqwA896lsXd6fH9Zya
-         NLRg==
-X-Gm-Message-State: AOAM5304ehYKzqhFCymlChTVQ7SsQRFC8DkYI7O/cUraceUoriXpbRvM
-        5yZ96aRC+9gWVspzYT9CmcMGTww+i+AjYKyoinpXxSIbyKk=
-X-Google-Smtp-Source: ABdhPJyQnGtfIbojLhJ7nOqwsG6cQ6YUdbeVqP4NbJ9FV0B/g8EYeQIMJZJ+MT74ICkdxcLPsKBJ+5Yw/kAAzmlA9CA=
-X-Received: by 2002:a02:b382:: with SMTP id p2mr7731338jan.71.1643044973568;
- Mon, 24 Jan 2022 09:22:53 -0800 (PST)
+        Mon, 24 Jan 2022 12:24:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643045043;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TEjsu4aunQGUMYaLa6nuwmN8nXhBS2tjSAJpIcjrtF4=;
+        b=Y5BvFnaT7Zqx9lY/ILYgWJZEfn+vL7SN4T0UpLBt+vrnZzf2aq4sDP6xU7DlJVlQ9DEA1X
+        +2C5iRJ3MefRaTeFTEOsgmtpOI7vKqNSXjGZXap+PkHxsCAMFFUBuWFwLZ2J586uGXbsNw
+        wqDSZ0w9yfY/DQM4+tvD1UYUMNhX63M=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-32-kl7BYfteMv2xB_WYqoB8DQ-1; Mon, 24 Jan 2022 12:23:21 -0500
+X-MC-Unique: kl7BYfteMv2xB_WYqoB8DQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2098981C9A6;
+        Mon, 24 Jan 2022 17:23:18 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.5])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A41562D70;
+        Mon, 24 Jan 2022 17:23:01 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20220118131216.85338-1-jefflexu@linux.alibaba.com>
+References: <20220118131216.85338-1-jefflexu@linux.alibaba.com>
+To:     Jeffle Xu <jefflexu@linux.alibaba.com>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
+        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/20] fscache,erofs: fscache-based demand-read semantics
 MIME-Version: 1.0
-References: <20220120020148.1632253-1-pcc@google.com>
-In-Reply-To: <20220120020148.1632253-1-pcc@google.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Mon, 24 Jan 2022 18:22:42 +0100
-Message-ID: <CA+fCnZeC5K+YoFbMg30Gasyq6AXp5WFCxagrsftkT+mJPuBZkQ@mail.gmail.com>
-Subject: Re: [PATCH v3] mm: use compare-exchange operation to set KASAN page tag
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2351230.1643044980.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 24 Jan 2022 17:23:00 +0000
+Message-ID: <2351231.1643044980@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 3:02 AM Peter Collingbourne <pcc@google.com> wrote:
->
-> It has been reported that the tag setting operation on newly-allocated
-> pages can cause the page flags to be corrupted when performed
-> concurrently with other flag updates as a result of the use of
-> non-atomic operations. Fix the problem by using a compare-exchange
-> loop to update the tag.
->
-> Signed-off-by: Peter Collingbourne <pcc@google.com>
-> Link: https://linux-review.googlesource.com/id/I456b24a2b9067d93968d43b4bb3351c0cec63101
-> Fixes: 2813b9c02962 ("kasan, mm, arm64: tag non slab memory allocated via pagealloc")
-> Cc: stable@vger.kernel.org
-> ---
-> v3:
-> - use try_cmpxchg() as suggested by Peter Zijlstra on another
->   patch
->
-> v2:
-> - use READ_ONCE()
->
->  include/linux/mm.h | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
->
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index c768a7c81b0b..87473fe52c3f 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1531,11 +1531,18 @@ static inline u8 page_kasan_tag(const struct page *page)
->
->  static inline void page_kasan_tag_set(struct page *page, u8 tag)
->  {
-> -       if (kasan_enabled()) {
-> -               tag ^= 0xff;
-> -               page->flags &= ~(KASAN_TAG_MASK << KASAN_TAG_PGSHIFT);
-> -               page->flags |= (tag & KASAN_TAG_MASK) << KASAN_TAG_PGSHIFT;
-> -       }
-> +       unsigned long old_flags, flags;
-> +
-> +       if (!kasan_enabled())
-> +               return;
-> +
-> +       tag ^= 0xff;
-> +       old_flags = READ_ONCE(page->flags);
-> +       do {
-> +               flags = old_flags;
-> +               flags &= ~(KASAN_TAG_MASK << KASAN_TAG_PGSHIFT);
-> +               flags |= (tag & KASAN_TAG_MASK) << KASAN_TAG_PGSHIFT;
-> +       } while (unlikely(!try_cmpxchg(&page->flags, &old_flags, flags)));
->  }
->
->  static inline void page_kasan_tag_reset(struct page *page)
-> --
-> 2.34.1.703.g22d0c6ccf7-goog
->
+Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
 
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+> You could start a quick test by
+> https://github.com/lostjeffle/demand-read-cachefilesd
 
-FWIW, try_cmpxchg() doesn't seem to be doing annotated atomic accesses
-when accessing old_flags, so using READ_ONCE() in page_kasan_tag_set()
-seems pointless after all.
+Can you pull this up to v5.17-rc1 or my netfs-lib branch?
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log=
+/?h=3Dnetfs-lib
+
+I'll do my best to have a look at it tomorrow.
+
+Thanks,
+David
+

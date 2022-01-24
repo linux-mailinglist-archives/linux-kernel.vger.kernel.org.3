@@ -2,281 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA89549A24D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 02:59:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B33F249A279
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2365669AbiAXXv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:51:28 -0500
-Received: from mga01.intel.com ([192.55.52.88]:46410 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1458062AbiAXXEl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:04:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643065479; x=1674601479;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=neFeoG+ppIm0gLycEtF/biHhPFQNsJI6Zkd4uQWjuVM=;
-  b=V2IH0zAkxzlmCYSg37zEAz/pVHxtT9tR2f/XGkTEzHqABxRXZiLx1Cqx
-   PalJB9dpNoEKvfUemAKMR+T5cE7oe5FwBDWO6inYrkZPl7X7WAe7BiOKT
-   lzQNRsbPhHOMFh9BTCCkIS2qSxkEvBRrldVfIx7G7cUTeLb5Aj0DVV48U
-   1fwlXW4eTyqPky4i4e93ajHgGAYhA1+z1EuTZLnslUJ+YZ0xoOu8bDlf7
-   epkkigJvAkp5NIxK9/8qmQASQVw/pdyPzaIsxLC9oHTF+iKL4O1BNDVPW
-   Z8yboiTdL0MynIHuR+xn0/9a1Y/ii1FOE0dnoO4GNKfUcWCn7WQK4gCAh
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="270609769"
-X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="270609769"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 15:04:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="624257163"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 24 Jan 2022 15:04:32 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 9C491178; Tue, 25 Jan 2022 01:04:42 +0200 (EET)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     dave.hansen@intel.com
-Cc:     jpoimboe@redhat.com, aarcange@redhat.com, ak@linux.intel.com,
-        bp@alien8.de, dan.j.williams@intel.com, david@redhat.com,
+        id S2362558AbiAXXme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:42:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:59724 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1843602AbiAXXFF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 18:05:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643065505;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=C5KkQSdltS+b36FURaUjP42JJqZfoZP4iH99cfdSAq0=;
+        b=OqVxmRA8ebeDmciLYhGO9MDeIJjoNhxYi42Ywlh29+cFKUUSkChRV8HRbAVIjm4uYlY+hO
+        0NiU1ErwZSNT5icikeWIrmLFM5mbScsVAa0hmXu8KPx0sjLkyNm2zECbLmM3wgqf1DoGEj
+        Aem8PCYmQxJ0GBk8fLx6UndTQMZEH7g=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-50-p5P0bB2dNjOalbMCdfhH4w-1; Mon, 24 Jan 2022 18:05:04 -0500
+X-MC-Unique: p5P0bB2dNjOalbMCdfhH4w-1
+Received: by mail-oi1-f197.google.com with SMTP id w8-20020aca6208000000b002c7da950057so10016389oib.5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 15:05:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=C5KkQSdltS+b36FURaUjP42JJqZfoZP4iH99cfdSAq0=;
+        b=jEhpOmPTC2g2dZ7Gsm7i5FFyuWJeGzmiaGulcDaHfqvp07NZLAsOYI0OTkXx02PJ2h
+         JnxCouhFf5GnqqXkvULaQZT6WGC7w+xLC7chJpCUjBhGUxacKVeMVPQVTQROsE46SQOV
+         hWwrxMtDVizIXgRNAfFs7V8DOMOUqM0USwilGz8v3epl/LUFe1zoZPUpiKph7whtBuwy
+         SoazeaqE251s/nknRV1Ru6/MoX313is3aWpc396W0sVXpuaOrRPmFLUTB7+7i/LT6yH/
+         OwsaSOLfYFIpyk2LUhrwnq3WRXlJ7FRiAX7V2buY9aB1k2033gntqgT18Hy+Y4NnPXhR
+         jJ1g==
+X-Gm-Message-State: AOAM533GRv4AfJIzqe1gAwf7dcmiwNPJ0DmM8QvHrX5n6iDa7HCBosux
+        WgHDLtKi0SsqeGtOrqcESovjfmdxZvwFqmua+oREW/9BCJz2VKqaHuCrnHbBal7h1Fm6iCIf8sP
+        mmvl9EapXogVktd3p3U/X0NQJ
+X-Received: by 2002:a9d:6b84:: with SMTP id b4mr12911520otq.332.1643065502920;
+        Mon, 24 Jan 2022 15:05:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyoe8IVXWPjUFvwstPJ3Z0pnSu6YYkMxx7q6HeElC6QHFJC3V0xDo7mHvG8p7rZTtcIbUWInw==
+X-Received: by 2002:a9d:6b84:: with SMTP id b4mr12911495otq.332.1643065502632;
+        Mon, 24 Jan 2022 15:05:02 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::45])
+        by smtp.gmail.com with ESMTPSA id 124sm6093857oif.7.2022.01.24.15.05.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 15:05:02 -0800 (PST)
+Date:   Mon, 24 Jan 2022 15:04:58 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
         hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, kirill.shutemov@linux.intel.com,
-        knsathya@kernel.org, linux-kernel@vger.kernel.org, luto@kernel.org,
-        mingo@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
-        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
-Subject: [PATCHv2.1 08/29] x86/tdx: Handle in-kernel MMIO
-Date:   Tue, 25 Jan 2022 02:04:32 +0300
-Message-Id: <20220124230432.78003-1-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <12fb2758-8c06-8ab8-03d8-d77bd1edfce1@intel.com>
-References: <12fb2758-8c06-8ab8-03d8-d77bd1edfce1@intel.com>
+        joro@8bytes.org, knsathya@kernel.org, pbonzini@redhat.com,
+        sdeep@vmware.com, seanjc@google.com, tony.luck@intel.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 08/29] x86/tdx: Handle in-kernel MMIO
+Message-ID: <20220124230458.xm5dn6jdgti7qurq@treble>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-9-kirill.shutemov@linux.intel.com>
+ <20220124193008.gfaq5ppegx5nfomd@treble>
+ <20220124220821.4bgf6i3qfhj6mrht@black.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220124220821.4bgf6i3qfhj6mrht@black.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In non-TDX VMs, MMIO is implemented by providing the guest a mapping
-which will cause a VMEXIT on access and then the VMM emulating the
-instruction that caused the VMEXIT. That's not possible for TDX VM.
+On Tue, Jan 25, 2022 at 01:08:21AM +0300, Kirill A. Shutemov wrote:
+> > The return code conventions are still all mismatched and confusing:
+> > 
+> > - Most tdx_handle_*() handlers return bool (success == true)
+> > 
+> > - tdx_handle_mmio() returns int (success > 0)
+> 
+> Right, all tdx_handle_* are consistent: success > 0.
 
-To emulate an instruction an emulator needs two things:
+Non-zero success is not the same as above-zero success.  The behavior is
+not interchangeable.
 
-  - R/W access to the register file to read/modify instruction arguments
-    and see RIP of the faulted instruction.
+> > - tdx_mmio*() helpers return bool (success == false)
+> 
+> And what is wrong with that? Why do you mix functions that called in
+> different contexts and expect them to have matching semantics?
 
-  - Read access to memory where instruction is placed to see what to
-    emulate. In this case it is guest kernel text.
+Why would you expect the reader of the code to go investigate the weird
+return semantics of every called function?
 
-Both of them are not available to VMM in TDX environment:
+And "success == false" is just plain confusing, I haven't seen that one.
 
-  - Register file is never exposed to VMM. When a TD exits to the module,
-    it saves registers into the state-save area allocated for that TD.
-    The module then scrubs these registers before returning execution
-    control to the VMM, to help prevent leakage of TD state.
+> > I still don't see any benefit in arbitrarily mixing three different
+> > return conventions, none of which matches the typical kernel style for
+> > returning errors, unless the goal is to confuse the reader and invite
+> > bugs.
+> 
+> Okay, we have an disagreement here.
+> 
+> I picked a way to communicate function result as I see best fits the
+> situation. It is a judgement call.
+> 
+> I will adjust code if maintainers see it differently from me. But until
+> then I don't see anything wrong here.
+> 
+> > There is precedent in traps.c for some handle_*() functions to return
+> > bool (success == true), so if the goal is to align with that
+> > semi-convention, that's ok.  But at the very least, please do it
+> > consistently:
+> > 
+> >   - change tdx_mmio*() to return true on success;
+> > 
+> >   - change tdx_handle_mmio() to return bool, with 'len' passed as an
+> >     argument.
+> 
+> Hard no.
+> 
+> Returning a value via passed argument is the last resort for cases when
+> more than one value has to be returned. In this case the function is
+> perfectly capable to communicate result via single return value.
+> 
+> I don't see a reason to complicate the code to satisfy some "typical
+> kernel style".
 
-  - Memory is encrypted a TD-private key. The CPU disallows software
-    other than the TDX module and TDs from making memory accesses using
-    the private key.
+It's a convention for a reason.
 
-In TDX the MMIO regions are instead configured to trigger a #VE
-exception in the guest. The guest #VE handler then emulates the MMIO
-instruction inside the guest and converts it into a controlled hypercall
-to the host.
+> > Or, even better, just change them all to return 0 on success like 99+%
+> > of error-returning kernel functions.
+> 
+> Citation needed. 99+% looks like an overstatement to me.
 
-MMIO addresses can be used with any CPU instruction that accesses
-memory. This patch, however, covers only MMIO accesses done via io.h
-helpers, such as 'readl()' or 'writeq()'.
+From Documentation/process/coding-style.rst:
 
-readX()/writeX() helpers limit the range of instructions which can trigger
-MMIO. It makes MMIO instruction emulation feasible. Raw access to MMIO
-region allows compiler to generate whatever instruction it wants.
-Supporting all possible instructions is a task of a different scope
+16) Function return values and names
+------------------------------------
 
-MMIO access with anything other than helpers from io.h may result in
-MMIO_DECODE_FAILED and an oops.
+Functions can return values of many different kinds, and one of the
+most common is a value indicating whether the function succeeded or
+failed.  Such a value can be represented as an error-code integer
+(-Exxx = failure, 0 = success) or a ``succeeded`` boolean (0 = failure,
+non-zero = success).
 
-AMD SEV has the same limitations to MMIO handling.
+Mixing up these two sorts of representations is a fertile source of
+difficult-to-find bugs.  If the C language included a strong distinction
+between integers and booleans then the compiler would find these mistakes
+for us... but it doesn't.  To help prevent such bugs, always follow this
+convention::
 
-=== Potential alternative approaches ===
+	If the name of a function is an action or an imperative command,
+	the function should return an error-code integer.  If the name
+	is a predicate, the function should return a "succeeded" boolean.
 
-== Paravirtualizing all MMIO ==
+For example, ``add work`` is a command, and the add_work() function returns 0
+for success or -EBUSY for failure.  In the same way, ``PCI device present`` is
+a predicate, and the pci_dev_present() function returns 1 if it succeeds in
+finding a matching device or 0 if it doesn't.
 
-An alternative to letting MMIO induce a #VE exception is to avoid
-the #VE in the first place. Similar to the port I/O case, it is
-theoretically possible to paravirtualize MMIO accesses.
-
-Like the exception-based approach offered here, a fully paravirtualized
-approach would be limited to MMIO users that leverage common
-infrastructure like the io.h macros.
-
-However, any paravirtual approach would be patching approximately
-120k call sites. With a conservative overhead estimation of 5 bytes per
-call site (CALL instruction), it leads to bloating code by 600k.
-
-Many drivers will never be used in the TDX environment and the bloat
-cannot be justified.
-
-== Patching TDX drivers ==
-
-Rather than touching the entire kernel, it might also be possible to
-just go after drivers that use MMIO in TDX guests.  Right now, that's
-limited only to virtio and some x86-specific drivers.
-
-All virtio MMIO appears to be done through a single function, which
-makes virtio eminently easy to patch. This will be implemented in the
-future, removing the bulk of MMIO #VEs.
-
-Co-developed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
----
- arch/x86/kernel/tdx.c | 113 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 113 insertions(+)
-
-diff --git a/arch/x86/kernel/tdx.c b/arch/x86/kernel/tdx.c
-index f213c67b4ecc..c5367e331bf6 100644
---- a/arch/x86/kernel/tdx.c
-+++ b/arch/x86/kernel/tdx.c
-@@ -7,6 +7,8 @@
- #include <linux/cpufeature.h>
- #include <asm/tdx.h>
- #include <asm/vmx.h>
-+#include <asm/insn.h>
-+#include <asm/insn-eval.h>
- 
- /* TDX module Call Leaf IDs */
- #define TDX_GET_VEINFO			3
-@@ -149,6 +151,111 @@ static bool tdx_handle_cpuid(struct pt_regs *regs)
- 	return true;
- }
- 
-+static int tdx_mmio(int size, bool write, unsigned long addr,
-+		     unsigned long *val)
-+{
-+	struct tdx_hypercall_output out;
-+	u64 err;
-+
-+	err = _tdx_hypercall(EXIT_REASON_EPT_VIOLATION, size, write,
-+			     addr, *val, &out);
-+	if (err)
-+		return -EFAULT;
-+
-+	*val = out.r11;
-+	return 0;
-+}
-+
-+static int tdx_mmio_read(int size, unsigned long addr, unsigned long *val)
-+{
-+	return tdx_mmio(size, false, addr, val);
-+}
-+
-+static int tdx_mmio_write(int size, unsigned long addr, unsigned long *val)
-+{
-+	return tdx_mmio(size, true, addr, val);
-+}
-+
-+static int tdx_handle_mmio(struct pt_regs *regs, struct ve_info *ve)
-+{
-+	char buffer[MAX_INSN_SIZE];
-+	unsigned long *reg, val = 0;
-+	struct insn insn = {};
-+	enum mmio_type mmio;
-+	int size, err;
-+
-+	if (copy_from_kernel_nofault(buffer, (void *)regs->ip, MAX_INSN_SIZE))
-+		return -EFAULT;
-+
-+	if (insn_decode(&insn, buffer, MAX_INSN_SIZE, INSN_MODE_64))
-+		return -EFAULT;
-+
-+	mmio = insn_decode_mmio(&insn, &size);
-+	if (WARN_ON_ONCE(mmio == MMIO_DECODE_FAILED))
-+		return -EFAULT;
-+
-+	if (mmio != MMIO_WRITE_IMM && mmio != MMIO_MOVS) {
-+		reg = insn_get_modrm_reg_ptr(&insn, regs);
-+		if (!reg)
-+			return -EFAULT;
-+	}
-+
-+	switch (mmio) {
-+	case MMIO_WRITE:
-+		memcpy(&val, reg, size);
-+		err = tdx_mmio_write(size, ve->gpa, &val);
-+		break;
-+	case MMIO_WRITE_IMM:
-+		val = insn.immediate.value;
-+		err = tdx_mmio_write(size, ve->gpa, &val);
-+		break;
-+	case MMIO_READ:
-+		err = tdx_mmio_read(size, ve->gpa, &val);
-+		if (err)
-+			break;
-+		/* Zero-extend for 32-bit operation */
-+		if (size == 4)
-+			*reg = 0;
-+		memcpy(reg, &val, size);
-+		break;
-+	case MMIO_READ_ZERO_EXTEND:
-+		err = tdx_mmio_read(size, ve->gpa, &val);
-+		if (err)
-+			break;
-+
-+		/* Zero extend based on operand size */
-+		memset(reg, 0, insn.opnd_bytes);
-+		memcpy(reg, &val, size);
-+		break;
-+	case MMIO_READ_SIGN_EXTEND: {
-+		u8 sign_byte = 0, msb = 7;
-+
-+		err = tdx_mmio_read(size, ve->gpa, &val);
-+		if (err)
-+			break;
-+
-+		if (size > 1)
-+			msb = 15;
-+
-+		if (val & BIT(msb))
-+			sign_byte = -1;
-+
-+		/* Sign extend based on operand size */
-+		memset(reg, sign_byte, insn.opnd_bytes);
-+		memcpy(reg, &val, size);
-+		break;
-+	}
-+	case MMIO_MOVS:
-+	case MMIO_DECODE_FAILED:
-+		return -EFAULT;
-+	}
-+
-+	if (err)
-+		return err;
-+
-+	return insn.length;
-+}
-+
- bool tdx_get_ve_info(struct ve_info *ve)
- {
- 	struct tdx_module_output out;
-@@ -219,6 +326,12 @@ static bool tdx_virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
- 	case EXIT_REASON_CPUID:
- 		ret = tdx_handle_cpuid(regs);
- 		break;
-+	case EXIT_REASON_EPT_VIOLATION:
-+		ve->instr_len = tdx_handle_mmio(regs, ve);
-+		ret = ve->instr_len > 0;
-+		if (!ret)
-+			pr_warn_once("MMIO failed\n");
-+		break;
- 	default:
- 		pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
- 		break;
 -- 
-2.34.1
+Josh
 

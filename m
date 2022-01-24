@@ -2,58 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 412D84984A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:24:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5E34984B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:25:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243685AbiAXQY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 11:24:57 -0500
-Received: from foss.arm.com ([217.140.110.172]:39502 "EHLO foss.arm.com"
+        id S243723AbiAXQZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 11:25:31 -0500
+Received: from m43-7.mailgun.net ([69.72.43.7]:39145 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241035AbiAXQY4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 11:24:56 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C3C57D6E;
-        Mon, 24 Jan 2022 08:24:55 -0800 (PST)
-Received: from e126387.arm.com (unknown [10.57.5.45])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AFBFF3F793;
-        Mon, 24 Jan 2022 08:24:54 -0800 (PST)
-From:   carsten.haitzler@foss.arm.com
-To:     dri-devel@lists.freedesktop.org
-Cc:     liviu.dudau@arm.com, brian.starkey@arm.com, airlied@linux.ie,
-        daniel@ffwll.ch, steven.price@arm.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/arm: arm hdlcd select DRM_GEM_CMA_HELPER
-Date:   Mon, 24 Jan 2022 16:24:37 +0000
-Message-Id: <20220124162437.2470344-1-carsten.haitzler@foss.arm.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S241078AbiAXQZW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 11:25:22 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1643041522; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=eGubF93/8A2pSVEbBCCvbinoPb+5WYeOv0o+QrJ6Xaw=; b=gQ9169wlW0MzqDocuy9pGfUjulKmT4mPxYcoqu+kso+aT47h/MunhYOLHw9tZELqZhIe+0NN
+ DXJmUG/NjCJ4LdUzuWcsJ+KF1DuRDIbmVpk3Gdbbxt5aWqHiUEXLvhgoQZUoz4EosaArArJp
+ fB3lojkLR4yonwGauhJ0faHt63U=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 61eed2d7e0071250cfad0f12 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 24 Jan 2022 16:24:55
+ GMT
+Sender: tdas=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id B3799C43619; Mon, 24 Jan 2022 16:24:54 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from hu-tdas-hyd.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: tdas)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7617CC4338F;
+        Mon, 24 Jan 2022 16:24:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 7617CC4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Taniya Das <tdas@codeaurora.org>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        =?UTF-8?q?Michael=20Turquette=20=C2=A0?= <mturquette@baylibre.com>
+Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh@kernel.org, robh+dt@kernel.org,
+        Taniya Das <tdas@codeaurora.org>
+Subject: [PATCH v3 0/2] Add support for LPASS Core and Audio Clock for SC7280
+Date:   Mon, 24 Jan 2022 21:54:40 +0530
+Message-Id: <20220124162442.29497-1-tdas@codeaurora.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Carsten Haitzler <carsten.haitzler@arm.com>
+[v3]
+ * Fix 'pm_clk_suspend' expansion warning in lpass_audio_cc_sc7280_probe
+   and lpass_aon_cc_sc7280_probe.
+ * Update the vco table frequencies.
+ * Update 'regmap_config' name for all clock controllers.
+ * Fix the missing 'const' for clk_init_data.
+ * Update the binding for 'lpass_aon' CC.
 
-Without DRM_GEM_CMA_HELPER HDLCD won't build. This needs to be there too.
+[v2]
+ * Drop code for "Add support for clock voting from GDSC" from
+   drivers/clk/qcom/gdsc.c
+ * Add support for runtime PM get/put from clk_summary.
+ * Update commit message for PLL detect lock timeout increase.
+ * Fix documentation bindings errors reported by DT_CHECKER_FLAGS.
+ * Update the driver code to take care of the following
+    - KCONFIG to add "select QCOM_GDSC"
+    - Use of "const" for pll_vco and clk_init_data
+    - Use of index instead of fw_name.
+    - Fix extra space, remove 'lpass_create_pm_clks' and corresponding code.
+    - cleanup 'lpass_hm_core_probe' and 'lpass_hm_sc7280_match_table'.
 
-Fixes: 09717af7d13d ("drm: Remove CONFIG_DRM_KMS_CMA_HELPER option")
+[v1]
+This patchset supports the following.
+- Few PLLs might require to a higher time to detect lock, thus increase the
+  polling time.
+- GDSC which require clocks to be explicitly enabled before access.
+- LPASS core and audio clock driver support for SC7280.
 
-Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
----
- drivers/gpu/drm/arm/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/arm/Kconfig b/drivers/gpu/drm/arm/Kconfig
-index 58a242871b28..6e3f1d600541 100644
---- a/drivers/gpu/drm/arm/Kconfig
-+++ b/drivers/gpu/drm/arm/Kconfig
-@@ -6,6 +6,7 @@ config DRM_HDLCD
- 	depends on DRM && OF && (ARM || ARM64 || COMPILE_TEST)
- 	depends on COMMON_CLK
- 	select DRM_KMS_HELPER
-+	select DRM_GEM_CMA_HELPER
- 	help
- 	  Choose this option if you have an ARM High Definition Colour LCD
- 	  controller.
--- 
-2.30.1
+Taniya Das (2):
+  dt-bindings: clock: Add YAML schemas for LPASS clocks on SC7280
+  clk: qcom: lpass: Add support for LPASS clock controller for SC7280
+
+ .../clock/qcom,sc7280-lpasscorecc.yaml        | 172 ++++
+ drivers/clk/qcom/Kconfig                      |  10 +
+ drivers/clk/qcom/Makefile                     |   1 +
+ drivers/clk/qcom/lpassaudiocc-sc7280.c        | 837 ++++++++++++++++++
+ drivers/clk/qcom/lpasscorecc-sc7280.c         | 430 +++++++++
+ .../clock/qcom,lpassaudiocc-sc7280.h          |  43 +
+ .../clock/qcom,lpasscorecc-sc7280.h           |  26 +
+ 7 files changed, 1519 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscorecc.yaml
+ create mode 100644 drivers/clk/qcom/lpassaudiocc-sc7280.c
+ create mode 100644 drivers/clk/qcom/lpasscorecc-sc7280.c
+ create mode 100644 include/dt-bindings/clock/qcom,lpassaudiocc-sc7280.h
+ create mode 100644 include/dt-bindings/clock/qcom,lpasscorecc-sc7280.h
+
+--
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
+of the Code Aurora Forum, hosted by the  Linux Foundation.
 

@@ -2,147 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4A04982C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 15:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE394982C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 15:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238558AbiAXO60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 09:58:26 -0500
-Received: from foss.arm.com ([217.140.110.172]:36858 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231260AbiAXO6X (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 09:58:23 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CAFC86D;
-        Mon, 24 Jan 2022 06:58:21 -0800 (PST)
-Received: from [10.57.39.131] (unknown [10.57.39.131])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2DDD73F7D8;
-        Mon, 24 Jan 2022 06:58:20 -0800 (PST)
-Subject: Re: [RFC PATCH 1/1] perf/core: Wake up parent event if inherited
- event has no ring buffer
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org, linux-perf-users@vger.kernel.org,
-        leo.yan@linaro.com, Suzuki.Poulose@arm.com,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        linux-kernel@vger.kernel.org
-References: <20211206113840.130802-1-james.clark@arm.com>
- <20211206113840.130802-2-james.clark@arm.com>
- <Ye6SR0yxTrkNUQF6@hirez.programming.kicks-ass.net>
-From:   James Clark <james.clark@arm.com>
-Message-ID: <a4b64cff-f3f1-e6ad-38e9-b65a113ce561@arm.com>
-Date:   Mon, 24 Jan 2022 14:58:18 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S238795AbiAXO7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 09:59:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56707 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234477AbiAXO7A (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 09:59:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643036339;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+GyR2hA3d4f/6NdcbYJKilHqrKzexUXOMmjhu38LlLQ=;
+        b=iKKMw+SVGcAILO+TuCMU1VDc15z3R2QFRGRngyKPL1vLbvQn1VzXEIcuyRZ+Eh82EMT4hW
+        8CWkvm+L7QfAfNFPR3fJrBhDGNjSFJapZBe6A5ZJ8bL9yU7AOhWMfxY3EYJcjQA8wuTR5d
+        XPxEfV12NYJiE6ovYU43M1Auem641tg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-62-M3P3h5l0PqW5R3AjSzhSZQ-1; Mon, 24 Jan 2022 09:58:54 -0500
+X-MC-Unique: M3P3h5l0PqW5R3AjSzhSZQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1D12D1091DA2;
+        Mon, 24 Jan 2022 14:58:53 +0000 (UTC)
+Received: from [10.22.35.75] (unknown [10.22.35.75])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 836BA7A23A;
+        Mon, 24 Jan 2022 14:58:52 +0000 (UTC)
+Message-ID: <8e2fa0ee-12e7-b62a-27ef-aa251761d67e@redhat.com>
+Date:   Mon, 24 Jan 2022 09:58:52 -0500
 MIME-Version: 1.0
-In-Reply-To: <Ye6SR0yxTrkNUQF6@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] vfs: Pre-allocate superblock in sget_fc() if !test
 Content-Language: en-US
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220121185255.27601-1-longman@redhat.com>
+ <20220124113758.y34xceepk7oe26h7@wittgenstein>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220124113758.y34xceepk7oe26h7@wittgenstein>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 24/01/2022 11:49, Peter Zijlstra wrote:
-> On Mon, Dec 06, 2021 at 11:38:40AM +0000, James Clark wrote:
->> When using per-process mode and event inheritance is set to true, forked
->> processes will create a new perf events via inherit_event() ->
->> perf_event_alloc(). But these events will not have ring buffers assigned
->> to them. Any call to wakeup will be dropped if it's called on an event
->> with no ring buffer assigned because that's the object that holds the
->> wakeup list.
+On 1/24/22 06:37, Christian Brauner wrote:
+> On Fri, Jan 21, 2022 at 01:52:55PM -0500, Waiman Long wrote:
+>> When the test function is not defined in sget_fc(), we always need
+>> to allocate a new superblock. So there is no point in acquiring the
+>> sb_lock twice in this case. Optimize the !test case by pre-allocating
+>> the superblock first before acquring the lock.
 >>
->> If the child event is disabled due to a call to perf_aux_output_begin()
->> or perf_aux_output_end(), the wakeup is dropped leaving userspace
->> hanging forever on the poll.
->>
->> Normally the event is explicitly re-enabled by userspace after it wakes
->> up to read the aux data, but in this case it does not get woken up so
->> the event remains disabled.
->>
->> This can be reproduced when using Arm SPE and 'stress' which forks once
->> before running the workload. By looking at the list of aux buffers read,
->> it's apparent that they stop after the fork:
->>
->>   perf record -e arm_spe// -vvv -- stress -c 1
->>
->> With this patch applied they continue to be printed. This behaviour
->> doesn't happen when using systemwide or per-cpu mode.
->>
->> Reported-by: Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>
->> Signed-off-by: James Clark <james.clark@arm.com>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
 >> ---
-> 
-> Would this be the better patch?
+>>   fs/super.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/fs/super.c b/fs/super.c
+>> index a6405d44d4ca..c2bd5c34a826 100644
+>> --- a/fs/super.c
+>> +++ b/fs/super.c
+>> @@ -520,6 +520,8 @@ struct super_block *sget_fc(struct fs_context *fc,
+>>   	struct user_namespace *user_ns = fc->global ? &init_user_ns : fc->user_ns;
+>>   	int err;
+>>   
+>> +	if (!test)
+>> +		s = alloc_super(fc->fs_type, fc->sb_flags, user_ns);
+> Shouldn't we treat this allocation failure as "fatal" right away and not
+> bother taking locks, walking lists and so on? Seems strange to treat it
+> as fatal below but not here.
+I didn't add the null check because it was a rare case and the check is 
+done later on anyway. I do agree that it may look a bit odd. Perhaps I 
+should rearrange the code flow as suggested.
+>
+> (The code-flow in here has always been a bit challenging to follow imho.
+> So not super keen to see more special-cases in there. Curious: do you
+> see any noticeable performance impact from that lock being taken and
+> dropped for the !test case?)
 
-Yes I tested this and it also works. There is one other suspicious access
-of ->rb followed by if(rb) here in perf_poll(), but maybe it works out ok?
+I don't believe there is noticeable performance impact with the !test 
+case. The test case, however, can have some noticeable impact if the 
+superblock list is long. I am wondering if we just always preallocate 
+superblock with the risk that it may get unused and freed later on.
 
-	mutex_lock(&event->mmap_mutex);
-	rb = event->rb;
-	if (rb)
-		events = atomic_xchg(&rb->poll, 0);
+Cheers,
+Longman
 
-We also have a Perf self test that covers this failure for Arm SPE now, I'm not
-sure if I should post that separately or with your new version of this fix?
+>
 
-Thanks
-James
- 
-> 
-> 
-> ---
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 479c9e672ec4..b1c1928c0e7c 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -5985,6 +5985,8 @@ static void ring_buffer_attach(struct perf_event *event,
->  	struct perf_buffer *old_rb = NULL;
->  	unsigned long flags;
->  
-> +	WARN_ON_ONCE(event->parent);
-> +
->  	if (event->rb) {
->  		/*
->  		 * Should be impossible, we set this when removing
-> @@ -6042,6 +6044,9 @@ static void ring_buffer_wakeup(struct perf_event *event)
->  {
->  	struct perf_buffer *rb;
->  
-> +	if (event->parent)
-> +		event = event->parent;
-> +
->  	rcu_read_lock();
->  	rb = rcu_dereference(event->rb);
->  	if (rb) {
-> @@ -6055,6 +6060,9 @@ struct perf_buffer *ring_buffer_get(struct perf_event *event)
->  {
->  	struct perf_buffer *rb;
->  
-> +	if (event->parent)
-> +		event = event->parent;
-> +
->  	rcu_read_lock();
->  	rb = rcu_dereference(event->rb);
->  	if (rb) {
-> @@ -6763,7 +6771,7 @@ static unsigned long perf_prepare_sample_aux(struct perf_event *event,
->  	if (WARN_ON_ONCE(READ_ONCE(sampler->oncpu) != smp_processor_id()))
->  		goto out;
->  
-> -	rb = ring_buffer_get(sampler->parent ? sampler->parent : sampler);
-> +	rb = ring_buffer_get(sampler);
->  	if (!rb)
->  		goto out;
->  
-> @@ -6829,7 +6837,7 @@ static void perf_aux_sample_output(struct perf_event *event,
->  	if (WARN_ON_ONCE(!sampler || !data->aux_size))
->  		return;
->  
-> -	rb = ring_buffer_get(sampler->parent ? sampler->parent : sampler);
-> +	rb = ring_buffer_get(sampler);
->  	if (!rb)
->  		return;
->  
-> 

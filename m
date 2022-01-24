@@ -2,38 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3ACE499821
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:35:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A22C499825
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1450864AbiAXVVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:21:38 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46710 "EHLO
+        id S1450973AbiAXVVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:21:55 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:46816 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442133AbiAXUxW (ORCPT
+        with ESMTP id S1442151AbiAXUxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:53:22 -0500
+        Mon, 24 Jan 2022 15:53:31 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A956D611DA;
-        Mon, 24 Jan 2022 20:53:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EA6EC340E5;
-        Mon, 24 Jan 2022 20:53:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C3BB60C44;
+        Mon, 24 Jan 2022 20:53:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 558C5C340E7;
+        Mon, 24 Jan 2022 20:53:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057601;
-        bh=wKeoF4KVuNIMj/NAwyFfmj59Rac6LZagk23kK+eb/6g=;
+        s=korg; t=1643057608;
+        bh=aMCzFlePstTjSYJQ1nZqs+s14GvcDB63SuiLw1DajFU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eZKdZV1WlkNIvqX+5ZAs4luAcCAaLsjgWTdC1vDy48F7jnP/XyoiN/95nZ3sstP0a
-         nMi2XbDqjzPUv3s7BSApnlJjwvvZJYf4BPsDqRhtTTXmmdfte7y/CMezOvTCi0IMSz
-         Htby/RpYg3pAe7NmMELuDMCvotoeJcsneatoXbUk=
+        b=EfBWG2HCv0cgatgK0bgK+OCop9SWQXrdyqryrlASyUZJgY01IKeLGHDV5rUzHPfyS
+         8rVeUouRvc2xS68Ctbi6UF36KCT+XfIbmpLJqGWbDVi/ZSYcJOKfdiftHgHXlpKjc2
+         V+G+UJGYuoEb+Ztv71b48L3szABS78Xwsv/WBo1s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shyam Prasad N <sprasad@microsoft.com>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.16 0009/1039] cifs: free ntlmsspblob allocated in negotiate
-Date:   Mon, 24 Jan 2022 19:29:58 +0100
-Message-Id: <20220124184125.451931499@linuxfoundation.org>
+        stable@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 5.16 0013/1039] f2fs: avoid EINVAL by SBI_NEED_FSCK when pinning a file
+Date:   Mon, 24 Jan 2022 19:30:02 +0100
+Message-Id: <20220124184125.591885196@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -45,78 +44,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shyam Prasad N <sprasad@microsoft.com>
+From: Jaegeuk Kim <jaegeuk@kernel.org>
 
-commit e3548aaf41a200c2af359462be23bcdd76efd795 upstream.
+commit 19bdba5265624ba6b9d9dd936a0c6ccc167cfe80 upstream.
 
-One of my previous fixes:
-cifs: send workstation name during ntlmssp session setup
-...changed the prototype of build_ntlmssp_negotiate_blob
-from being allocated by the caller to being allocated within
-the function. The caller needs to free this object too.
-While SMB2 version of the caller did it, I forgot to free
-for the SMB1 version. Fixing that here.
+Android OTA failed due to SBI_NEED_FSCK flag when pinning the file. Let's avoid
+it since we can do in-place-updates.
 
-Fixes: 49bd49f983b5 ("cifs: send workstation name during ntlmssp session setup")
-Cc: stable@vger.kernel.org # 5.16
-Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/cifs/sess.c |   13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ fs/f2fs/data.c |    7 +++++--
+ fs/f2fs/file.c |   10 +++++-----
+ 2 files changed, 10 insertions(+), 7 deletions(-)
 
---- a/fs/cifs/sess.c
-+++ b/fs/cifs/sess.c
-@@ -1354,7 +1354,7 @@ sess_auth_rawntlmssp_negotiate(struct se
- 				     &blob_len, ses,
- 				     sess_data->nls_cp);
- 	if (rc)
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -2617,6 +2617,11 @@ bool f2fs_should_update_outplace(struct
+ {
+ 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+ 
++	/* The below cases were checked when setting it. */
++	if (f2fs_is_pinned_file(inode))
++		return false;
++	if (fio && is_sbi_flag_set(sbi, SBI_NEED_FSCK))
++		return true;
+ 	if (f2fs_lfs_mode(sbi))
+ 		return true;
+ 	if (S_ISDIR(inode->i_mode))
+@@ -2625,8 +2630,6 @@ bool f2fs_should_update_outplace(struct
+ 		return true;
+ 	if (f2fs_is_atomic_file(inode))
+ 		return true;
+-	if (is_sbi_flag_set(sbi, SBI_NEED_FSCK))
+-		return true;
+ 
+ 	/* swap file is migrating in aligned write mode */
+ 	if (is_inode_flag_set(inode, FI_ALIGNED_WRITE))
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -3143,17 +3143,17 @@ static int f2fs_ioc_set_pin_file(struct
+ 
+ 	inode_lock(inode);
+ 
+-	if (f2fs_should_update_outplace(inode, NULL)) {
+-		ret = -EINVAL;
 -		goto out;
-+		goto out_free_ntlmsspblob;
- 
- 	sess_data->iov[1].iov_len = blob_len;
- 	sess_data->iov[1].iov_base = ntlmsspblob;
-@@ -1362,7 +1362,7 @@ sess_auth_rawntlmssp_negotiate(struct se
- 
- 	rc = _sess_auth_rawntlmssp_assemble_req(sess_data);
- 	if (rc)
--		goto out;
-+		goto out_free_ntlmsspblob;
- 
- 	rc = sess_sendreceive(sess_data);
- 
-@@ -1376,14 +1376,14 @@ sess_auth_rawntlmssp_negotiate(struct se
- 		rc = 0;
- 
- 	if (rc)
--		goto out;
-+		goto out_free_ntlmsspblob;
- 
- 	cifs_dbg(FYI, "rawntlmssp session setup challenge phase\n");
- 
- 	if (smb_buf->WordCount != 4) {
- 		rc = -EIO;
- 		cifs_dbg(VFS, "bad word count %d\n", smb_buf->WordCount);
--		goto out;
-+		goto out_free_ntlmsspblob;
+-	}
+-
+ 	if (!pin) {
+ 		clear_inode_flag(inode, FI_PIN_FILE);
+ 		f2fs_i_gc_failures_write(inode, 0);
+ 		goto done;
  	}
  
- 	ses->Suid = smb_buf->Uid;   /* UID left in wire format (le) */
-@@ -1397,10 +1397,13 @@ sess_auth_rawntlmssp_negotiate(struct se
- 		cifs_dbg(VFS, "bad security blob length %d\n",
- 				blob_len);
- 		rc = -EINVAL;
--		goto out;
-+		goto out_free_ntlmsspblob;
- 	}
- 
- 	rc = decode_ntlmssp_challenge(bcc_ptr, blob_len, ses);
++	if (f2fs_should_update_outplace(inode, NULL)) {
++		ret = -EINVAL;
++		goto out;
++	}
 +
-+out_free_ntlmsspblob:
-+	kfree(ntlmsspblob);
- out:
- 	sess_free_buffer(sess_data);
- 
+ 	if (f2fs_pin_file_control(inode, false)) {
+ 		ret = -EAGAIN;
+ 		goto out;
 
 

@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F3F499CE7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D81ED499612
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581424AbiAXWLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:11:46 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40736 "EHLO
+        id S1442453AbiAXU67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:58:59 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39724 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452694AbiAXV0O (ORCPT
+        with ESMTP id S1386882AbiAXUgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:26:14 -0500
+        Mon, 24 Jan 2022 15:36:05 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B538CB8123D;
-        Mon, 24 Jan 2022 21:26:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D213CC340E4;
-        Mon, 24 Jan 2022 21:26:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A887B80FA1;
+        Mon, 24 Jan 2022 20:36:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9907C340E5;
+        Mon, 24 Jan 2022 20:36:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059572;
-        bh=s1+wA1K07F5Sne0E08ebjE9IXHWGC4ncgOKASX8xlfM=;
+        s=korg; t=1643056562;
+        bh=JjoTPxcrsm13yYDz2X0aCGOrakWj/cvM4DjQzFBa75A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KR9e1FktBstZNU5hntWtg5b3UdE9B8vQYoDWfhR0ScnNNOcxTJjUVnK2mPY6FAtlb
-         PVG4xVyMpKmK34IM/ZslucWs3SLfukAvzOnh3XsIcZ2VDNtOBWdcD9Lgv5O5Pm1Ryt
-         ljLj2/naK9/2VPmkurBElPB3XGyOO0j/9TDohLqQ=
+        b=ChPu5YnjUmHHvGPMNRSiQ1BRcx6DQFxbuh+gUSe1ExHOXjcq5LReOYoyWbQybeNDG
+         04zp9m103iRmR2iVLnom/JlwNTfB/gexscA8SXN4BPOx2VIAjdMiWd2y1ll54a9AXj
+         7ouzwuMSiqA7mZqVDSdTY9iGJLjmL4O+wshFY6UQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0653/1039] media: rockchip: rkisp1: use device name for debugfs subdir name
+Subject: [PATCH 5.15 525/846] media: saa7146: hexium_orion: Fix a NULL pointer dereference in hexium_attach()
 Date:   Mon, 24 Jan 2022 19:40:42 +0100
-Message-Id: <20220124184147.316019682@linuxfoundation.org>
+Message-Id: <20220124184119.119583436@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,42 +47,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikhail Rudenko <mike.rudenko@gmail.com>
+From: Zhou Qingyang <zhou1615@umn.edu>
 
-[ Upstream commit c2611e479f5d9b05108270e1ab423955486b4457 ]
+[ Upstream commit 348df8035301dd212e3cc2860efe4c86cb0d3303 ]
 
-While testing Rockchip RK3399 with both ISPs enabled, a dmesg error
-was observed:
-```
-[   15.559141] debugfs: Directory 'rkisp1' with parent '/' already present!
-```
+In hexium_attach(dev, info), saa7146_vv_init() is called to allocate
+a new memory for dev->vv_data. In hexium_detach(), saa7146_vv_release()
+will be called and there is a dereference of dev->vv_data in
+saa7146_vv_release(), which could lead to a NULL pointer dereference
+on failure of saa7146_vv_init() according to the following logic.
 
-Fix it by using the device name for the debugfs subdirectory name
-instead of the driver name, thus preventing name collision.
+Both hexium_attach() and hexium_detach() are callback functions of
+the variable 'extension', so there exists a possible call chain directly
+from hexium_attach() to hexium_detach():
 
-Link: https://lore.kernel.org/linux-media/20211010175457.438627-1-mike.rudenko@gmail.com
-Signed-off-by: Mikhail Rudenko <mike.rudenko@gmail.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+hexium_attach(dev, info) -- fail to alloc memory to dev->vv_data
+	|		    		in saa7146_vv_init().
+	|
+	|
+hexium_detach() -- a dereference of dev->vv_data in saa7146_vv_release()
+
+Fix this bug by adding a check of saa7146_vv_init().
+
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_VIDEO_HEXIUM_ORION=m show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/pci/saa7146/hexium_orion.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-index 50b166c49a03a..3f5cfa7eb9372 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-@@ -462,7 +462,7 @@ static void rkisp1_debug_init(struct rkisp1_device *rkisp1)
+diff --git a/drivers/media/pci/saa7146/hexium_orion.c b/drivers/media/pci/saa7146/hexium_orion.c
+index 39d14c179d229..2eb4bee16b71f 100644
+--- a/drivers/media/pci/saa7146/hexium_orion.c
++++ b/drivers/media/pci/saa7146/hexium_orion.c
+@@ -355,10 +355,16 @@ static struct saa7146_ext_vv vv_data;
+ static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data *info)
  {
- 	struct rkisp1_debug *debug = &rkisp1->debug;
+ 	struct hexium *hexium = (struct hexium *) dev->ext_priv;
++	int ret;
  
--	debug->debugfs_dir = debugfs_create_dir(RKISP1_DRIVER_NAME, NULL);
-+	debug->debugfs_dir = debugfs_create_dir(dev_name(rkisp1->dev), NULL);
- 	debugfs_create_ulong("data_loss", 0444, debug->debugfs_dir,
- 			     &debug->data_loss);
- 	debugfs_create_ulong("outform_size_err", 0444,  debug->debugfs_dir,
+ 	DEB_EE("\n");
+ 
+-	saa7146_vv_init(dev, &vv_data);
++	ret = saa7146_vv_init(dev, &vv_data);
++	if (ret) {
++		pr_err("Error in saa7146_vv_init()\n");
++		return ret;
++	}
++
+ 	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
+ 	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
+ 	vv_data.vid_ops.vidioc_s_input = vidioc_s_input;
 -- 
 2.34.1
 

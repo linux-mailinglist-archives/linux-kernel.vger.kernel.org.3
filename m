@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 289D649A765
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA3449A27C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:00:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354872AbiAYCmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:42:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
+        id S2362583AbiAXXmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:42:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356738AbiAXUce (ORCPT
+        with ESMTP id S1843730AbiAXXFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:32:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33F9C07E5FF;
-        Mon, 24 Jan 2022 11:44:06 -0800 (PST)
+        Mon, 24 Jan 2022 18:05:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E035CC02B77E;
+        Mon, 24 Jan 2022 13:16:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FCDD6131E;
-        Mon, 24 Jan 2022 19:44:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B22FC340E5;
-        Mon, 24 Jan 2022 19:44:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8836BB811A2;
+        Mon, 24 Jan 2022 21:16:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E02CBC340E4;
+        Mon, 24 Jan 2022 21:16:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053446;
-        bh=3FxDnd5tdF3uG58BoU/HCrS2q0GC+iXbM6f0zyUjWJM=;
+        s=korg; t=1643058994;
+        bh=n+2oQiECCDibeXeXVuzVRofAl5ID7Qq6aThu6u/Ccas=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z0OO7gRHPku2WuFIeJ6uI49TU335lnRs11KvnaTiSxE9yvcabTRm9TKeueXMwJMdv
-         IOCiPxna8Huis2su7vCgps4y//kD03tnNKkbHsjv7oVGj3jVRHx0qCsjpQ5unr+fGa
-         R5E6AFKxCfDBce/vzj2aTZaO22bM/uXfn6lo055Y=
+        b=hpw+kscnvqiOeTJkcSs9J7R+i1V9wUtYgJpfxldzVuzxDH3GCyCmQymvwSRvljLgZ
+         ciBM576y4y7wAEe1ITg9NIot4FLUKTXHbYM2sgNPKVIOB/NpTUgR6kM0YGKNbtKnya
+         cVXWgvYagraN4iYiR7B8+sm7A5wmbN/J0bBcz5U0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tsuchiya Yuto <kitakar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Taehee Yoo <ap420073@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 066/563] media: atomisp: fix punit_ddr_dvfs_enable() argument for mrfld_power up case
+Subject: [PATCH 5.16 0442/1039] amt: fix wrong return type of amt_send_membership_update()
 Date:   Mon, 24 Jan 2022 19:37:11 +0100
-Message-Id: <20220124184026.696478758@linuxfoundation.org>
+Message-Id: <20220124184140.152117560@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,86 +50,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tsuchiya Yuto <kitakar@gmail.com>
+From: Taehee Yoo <ap420073@gmail.com>
 
-[ Upstream commit 5bfbf65fcca7325e4d89d289b3c286e11220e386 ]
+[ Upstream commit dd3ca4c5184ea98e40acb8eb293d85b88ea04ee2 ]
 
-When comparing with intel-aero atomisp [1], it looks like
-punit_ddr_dvfs_enable() should take `false` as an argument on mrfld_power
-up case.
+amt_send_membership_update() would return -1 but it's return type is bool.
+So, it should be used TRUE instead of -1.
 
-Code from the intel-aero kernel [1]:
-
-        int atomisp_mrfld_power_down(struct atomisp_device *isp)
-        {
-        [...]
-		/*WA:Enable DVFS*/
-		if (IS_CHT)
-			punit_ddr_dvfs_enable(true);
-
-        int atomisp_mrfld_power_up(struct atomisp_device *isp)
-        {
-        [...]
-		/*WA for PUNIT, if DVFS enabled, ISP timeout observed*/
-		if (IS_CHT)
-			punit_ddr_dvfs_enable(false);
-
-This patch fixes the inverted argument as per the intel-aero code, as
-well as its comment. While here, fix space issues for comments in
-atomisp_mrfld_power().
-
-Note that it does not seem to be possible to unify the up/down cases for
-punit_ddr_dvfs_enable(), i.e., we can't do something like the following:
-
-        if (IS_CHT)
-		punit_ddr_dvfs_enable(!enable);
-
-because according to the intel-aero code [1], the DVFS is disabled
-before "writing 0x0 to ISPSSPM0 bit[1:0]" and the DVFS is enabled after
-"writing 0x3 to ISPSSPM0 bit[1:0]".
-
-[1] https://github.com/intel-aero/linux-kernel/blob/a1b673258feb915268377275130c5c5df0eafc82/drivers/media/pci/atomisp/atomisp_driver/atomisp_v4l2.c#L431-L514
-
-Fixes: 0f441fd70b1e ("media: atomisp: simplify the power down/up code")
-Signed-off-by: Tsuchiya Yuto <kitakar@gmail.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Fixes: cbc21dc1cfe9 ("amt: add data plane of amt interface")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Taehee Yoo <ap420073@gmail.com>
+Link: https://lore.kernel.org/r/20220109163702.6331-1-ap420073@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/atomisp_v4l2.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/net/amt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-index d35506f643609..687e94e8b6ce5 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-@@ -711,15 +711,15 @@ static int atomisp_mrfld_power(struct atomisp_device *isp, bool enable)
+diff --git a/drivers/net/amt.c b/drivers/net/amt.c
+index b732ee9a50ef9..d3a9dda6c7286 100644
+--- a/drivers/net/amt.c
++++ b/drivers/net/amt.c
+@@ -1106,7 +1106,7 @@ static bool amt_send_membership_query(struct amt_dev *amt,
+ 	rt = ip_route_output_key(amt->net, &fl4);
+ 	if (IS_ERR(rt)) {
+ 		netdev_dbg(amt->dev, "no route to %pI4\n", &tunnel->ip4);
+-		return -1;
++		return true;
+ 	}
  
- 	dev_dbg(isp->dev, "IUNIT power-%s.\n", enable ? "on" : "off");
- 
--	/*WA:Enable DVFS*/
-+	/* WA for P-Unit, if DVFS enabled, ISP timeout observed */
- 	if (IS_CHT && enable)
--		punit_ddr_dvfs_enable(true);
-+		punit_ddr_dvfs_enable(false);
- 
- 	/*
- 	 * FIXME:WA for ECS28A, with this sleep, CTS
- 	 * android.hardware.camera2.cts.CameraDeviceTest#testCameraDeviceAbort
- 	 * PASS, no impact on other platforms
--	*/
-+	 */
- 	if (IS_BYT && enable)
- 		msleep(10);
- 
-@@ -727,7 +727,7 @@ static int atomisp_mrfld_power(struct atomisp_device *isp, bool enable)
- 	iosf_mbi_modify(BT_MBI_UNIT_PMC, MBI_REG_READ, MRFLD_ISPSSPM0,
- 			val, MRFLD_ISPSSPM0_ISPSSC_MASK);
- 
--	/*WA:Enable DVFS*/
-+	/* WA:Enable DVFS */
- 	if (IS_CHT && !enable)
- 		punit_ddr_dvfs_enable(true);
- 
+ 	amtmq		= skb_push(skb, sizeof(*amtmq));
 -- 
 2.34.1
 

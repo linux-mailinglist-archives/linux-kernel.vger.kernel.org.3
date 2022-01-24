@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 324A64994D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FDBC4997B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390734AbiAXUqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:46:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356303AbiAXUXP (ORCPT
+        id S1449251AbiAXVPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:15:08 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41888 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1391418AbiAXUrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:23:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1C1C06124E;
-        Mon, 24 Jan 2022 11:10:42 -0800 (PST)
+        Mon, 24 Jan 2022 15:47:43 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22D3EB81233;
-        Mon, 24 Jan 2022 19:10:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BC8AC340E5;
-        Mon, 24 Jan 2022 19:10:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5136A60C13;
+        Mon, 24 Jan 2022 20:47:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EB93C340E5;
+        Mon, 24 Jan 2022 20:47:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051439;
-        bh=7MnhLEjkv5OmPQOjR5kPlUEAsHS1KKAq0CkG2/QiCQc=;
+        s=korg; t=1643057261;
+        bh=9mf3EP2FFGL21FYhRGtSiDPke0nxmISoiIGuIKuqdFc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XoIkdLYyPb+SxKCiITAghlWKNu0HVb/jQBmfH0vKOi3QiJVbT7h97qUOqWTVv4doh
-         ZRzl7WUQfGxdTUlZzIWVcRnd4JTajzoLdJBpvm69a2PhRbUi1KU81mrVYm1zd1rtc0
-         YvlkspSDvTSGYRwSMmjM+V+B8JgBlgazIF5J+BSI=
+        b=0Xw6HLPRNOBQNoFvXRMv9mfKa99ISim7xKw0b1cder/EQWBKl3PDFvLPrgfiALwa9
+         QrSklFyBdVQ3yHvK6Lyi7bJa6j9/GwE3YiSCv4KJNT/n+GC6Xa7GrL1CF5at0U3r9u
+         mt0i4AhROuF4O2Ewj4FMDj2fx1IA1Lv8ZMcK883s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chengguang Xu <cgxu519@mykernel.net>,
-        Zhu Yanjun <zyjzyj2000@gmail.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 4.14 162/186] RDMA/rxe: Fix a typo in opcode name
-Date:   Mon, 24 Jan 2022 19:43:57 +0100
-Message-Id: <20220124183942.308437768@linuxfoundation.org>
+        stable@vger.kernel.org, Xin Yin <yinxin.x@bytedance.com>,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        Theodore Tso <tytso@mit.edu>, stable@kernel.org
+Subject: [PATCH 5.15 721/846] ext4: fast commit may miss tracking unwritten range during ftruncate
+Date:   Mon, 24 Jan 2022 19:43:58 +0100
+Message-Id: <20220124184125.887304707@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,34 +46,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chengguang Xu <cgxu519@mykernel.net>
+From: Xin Yin <yinxin.x@bytedance.com>
 
-commit 8d1cfb884e881efd69a3be4ef10772c71cb22216 upstream.
+commit 9725958bb75cdfa10f2ec11526fdb23e7485e8e4 upstream.
 
-There is a redundant ']' in the name of opcode IB_OPCODE_RC_SEND_MIDDLE,
-so just fix it.
+If use FALLOC_FL_KEEP_SIZE to alloc unwritten range at bottom, the
+inode->i_size will not include the unwritten range. When call
+ftruncate with fast commit enabled, it will miss to track the
+unwritten range.
 
-Fixes: 8700e3e7c485 ("Soft RoCE driver")
-Link: https://lore.kernel.org/r/20211218112320.3558770-1-cgxu519@mykernel.net
-Signed-off-by: Chengguang Xu <cgxu519@mykernel.net>
-Acked-by: Zhu Yanjun <zyjzyj2000@gmail.com>
-Reviewed-by: Bob Pearson <rpearsonhpe@gmail.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Change to trace the full range during ftruncate.
+
+Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
+Reviewed-by: Harshad Shirwadkar <harshadshirwadkar@gmail.com>
+Link: https://lore.kernel.org/r/20211223032337.5198-3-yinxin.x@bytedance.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/sw/rxe/rxe_opcode.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/ext4/inode.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/drivers/infiniband/sw/rxe/rxe_opcode.c
-+++ b/drivers/infiniband/sw/rxe/rxe_opcode.c
-@@ -137,7 +137,7 @@ struct rxe_opcode_info rxe_opcode[RXE_NU
- 		}
- 	},
- 	[IB_OPCODE_RC_SEND_MIDDLE]		= {
--		.name	= "IB_OPCODE_RC_SEND_MIDDLE]",
-+		.name	= "IB_OPCODE_RC_SEND_MIDDLE",
- 		.mask	= RXE_PAYLOAD_MASK | RXE_REQ_MASK | RXE_SEND_MASK
- 				| RXE_MIDDLE_MASK,
- 		.length = RXE_BTH_BYTES,
+--- a/fs/ext4/inode.c
++++ b/fs/ext4/inode.c
+@@ -5414,8 +5414,7 @@ int ext4_setattr(struct user_namespace *
+ 				ext4_fc_track_range(handle, inode,
+ 					(attr->ia_size > 0 ? attr->ia_size - 1 : 0) >>
+ 					inode->i_sb->s_blocksize_bits,
+-					(oldsize > 0 ? oldsize - 1 : 0) >>
+-					inode->i_sb->s_blocksize_bits);
++					EXT_MAX_BLOCKS - 1);
+ 			else
+ 				ext4_fc_track_range(
+ 					handle, inode,
 
 

@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09682499BD1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02BA4499A2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1576673AbiAXVzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:55:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1450846AbiAXVVf (ORCPT
+        id S1457534AbiAXVls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:41:48 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56160 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1445725AbiAXVEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:21:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A9BC0604DF;
-        Mon, 24 Jan 2022 12:16:12 -0800 (PST)
+        Mon, 24 Jan 2022 16:04:50 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98BCBB8122F;
-        Mon, 24 Jan 2022 20:16:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3D5FC340E5;
-        Mon, 24 Jan 2022 20:16:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 31E29B810BD;
+        Mon, 24 Jan 2022 21:04:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30232C340E7;
+        Mon, 24 Jan 2022 21:04:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055371;
-        bh=fH45R+ON9VtofQLm2ZUtUvYmVRrVZ/+s/iF2FwrMnWw=;
+        s=korg; t=1643058287;
+        bh=9EwleqdRVZtL162VKfnttSjeH2nw2+PWu/If4AcMLWA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FKmwKeF3fk03AHMY0mVmCxCGwP43Yc9zzahP+9mXKgSLbYiJlgFjFXAm9sHh/hYtS
-         NDbADaGlfEk8XPF0RZvKwdaxpp0PpmHNtFEWhTCr17by+HEqkc/GtIx4t6DEnM6ncn
-         Vv9chZRyFJPNpeJ+dSTXUh7R9CBZ+ubUkhd2divA=
+        b=nRIMM2zMsCrf3cbM/7NcfKiSghJftRscHFUzejC0+UUwXYYQ+Nk4hTkLJhOudN0Y3
+         7vXCVLvHgqRFgio507LRx7Har4V40XCKkfPJhngN5oNOwNAArhj7nGd6+MCmSe4VhD
+         T4mr6+5fvF1F1wRPItPbIiXQ7assZE2uWGUvUVd4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tsuchiya Yuto <kitakar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 112/846] media: atomisp: fix inverted error check for ia_css_mipi_is_source_port_valid()
-Date:   Mon, 24 Jan 2022 19:33:49 +0100
-Message-Id: <20220124184104.837357983@linuxfoundation.org>
+Subject: [PATCH 5.16 0241/1039] samples/bpf: Clean up samples/bpf build failes
+Date:   Mon, 24 Jan 2022 19:33:50 +0100
+Message-Id: <20220124184133.423600481@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,76 +46,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tsuchiya Yuto <kitakar@gmail.com>
+From: Andrii Nakryiko <andrii@kernel.org>
 
-[ Upstream commit d21ce8c2f7bf6d737b60c09f86db141b9e8e47f0 ]
+[ Upstream commit 527024f7aeb683ce7ef49b07ef7ce9ecf015288d ]
 
-The function ia_css_mipi_is_source_port_valid() returns true if the port
-is valid. So, we can't use the existing err variable as is.
+Remove xdp_samples_user.o rule redefinition which generates Makefile
+warning and instead override TPROGS_CFLAGS. This seems to work fine when
+building inside selftests/bpf.
 
-To fix this issue while reusing that variable, invert the return value
-when assigning it to the variable.
+That was one big head-scratcher before I found that generic
+Makefile.target hid this surprising specialization for for xdp_samples_user.o.
 
-Fixes: 3c0538fbad9f ("media: atomisp: get rid of most checks for ISP2401 version")
-Signed-off-by: Tsuchiya Yuto <kitakar@gmail.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Main change is to use actual locally installed libbpf headers.
+
+Also drop printk macro re-definition (not even used!).
+
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/20211201232824.3166325-8-andrii@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../staging/media/atomisp/pci/sh_css_mipi.c   | 24 ++++++++++++-------
- 1 file changed, 15 insertions(+), 9 deletions(-)
+ samples/bpf/Makefile            | 13 ++++++++++++-
+ samples/bpf/Makefile.target     | 11 -----------
+ samples/bpf/lwt_len_hist_kern.c |  7 -------
+ 3 files changed, 12 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_mipi.c b/drivers/staging/media/atomisp/pci/sh_css_mipi.c
-index 65fc93c5d56bc..c1f2f6151c5f8 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_mipi.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_mipi.c
-@@ -423,10 +423,12 @@ allocate_mipi_frames(struct ia_css_pipe *pipe,
- 		return 0; /* AM TODO: Check  */
- 	}
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index a886dff1ba899..6ae62b1dc9388 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -328,7 +328,7 @@ $(BPF_SAMPLES_PATH)/*.c: verify_target_bpf $(LIBBPF)
+ $(src)/*.c: verify_target_bpf $(LIBBPF)
  
--	if (!IS_ISP2401)
-+	if (!IS_ISP2401) {
- 		port = (unsigned int)pipe->stream->config.source.port.port;
--	else
--		err = ia_css_mipi_is_source_port_valid(pipe, &port);
-+	} else {
-+		/* Returns true if port is valid. So, invert it */
-+		err = !ia_css_mipi_is_source_port_valid(pipe, &port);
-+	}
+ libbpf_hdrs: $(LIBBPF)
+-$(obj)/$(TRACE_HELPERS): | libbpf_hdrs
++$(obj)/$(TRACE_HELPERS) $(obj)/$(CGROUP_HELPERS) $(obj)/$(XDP_SAMPLE): | libbpf_hdrs
  
- 	assert(port < N_CSI_PORTS);
+ .PHONY: libbpf_hdrs
  
-@@ -553,10 +555,12 @@ free_mipi_frames(struct ia_css_pipe *pipe)
- 			return err;
- 		}
+@@ -343,6 +343,17 @@ $(obj)/hbm_out_kern.o: $(src)/hbm.h $(src)/hbm_kern.h
+ $(obj)/hbm.o: $(src)/hbm.h
+ $(obj)/hbm_edt_kern.o: $(src)/hbm.h $(src)/hbm_kern.h
  
--		if (!IS_ISP2401)
-+		if (!IS_ISP2401) {
- 			port = (unsigned int)pipe->stream->config.source.port.port;
--		else
--			err = ia_css_mipi_is_source_port_valid(pipe, &port);
-+		} else {
-+			/* Returns true if port is valid. So, invert it */
-+			err = !ia_css_mipi_is_source_port_valid(pipe, &port);
-+		}
++# Override includes for xdp_sample_user.o because $(srctree)/usr/include in
++# TPROGS_CFLAGS causes conflicts
++XDP_SAMPLE_CFLAGS += -Wall -O2 -lm \
++		     -I$(src)/../../tools/include \
++		     -I$(src)/../../tools/include/uapi \
++		     -I$(LIBBPF_INCLUDE) \
++		     -I$(src)/../../tools/testing/selftests/bpf
++
++$(obj)/$(XDP_SAMPLE): TPROGS_CFLAGS = $(XDP_SAMPLE_CFLAGS)
++$(obj)/$(XDP_SAMPLE): $(src)/xdp_sample_user.h $(src)/xdp_sample_shared.h
++
+ -include $(BPF_SAMPLES_PATH)/Makefile.target
  
- 		assert(port < N_CSI_PORTS);
+ VMLINUX_BTF_PATHS ?= $(abspath $(if $(O),$(O)/vmlinux))				\
+diff --git a/samples/bpf/Makefile.target b/samples/bpf/Makefile.target
+index 5a368affa0386..7621f55e2947d 100644
+--- a/samples/bpf/Makefile.target
++++ b/samples/bpf/Makefile.target
+@@ -73,14 +73,3 @@ quiet_cmd_tprog-cobjs	= CC  $@
+       cmd_tprog-cobjs	= $(CC) $(tprogc_flags) -c -o $@ $<
+ $(tprog-cobjs): $(obj)/%.o: $(src)/%.c FORCE
+ 	$(call if_changed_dep,tprog-cobjs)
+-
+-# Override includes for xdp_sample_user.o because $(srctree)/usr/include in
+-# TPROGS_CFLAGS causes conflicts
+-XDP_SAMPLE_CFLAGS += -Wall -O2 -lm \
+-		     -I./tools/include \
+-		     -I./tools/include/uapi \
+-		     -I./tools/lib \
+-		     -I./tools/testing/selftests/bpf
+-$(obj)/xdp_sample_user.o: $(src)/xdp_sample_user.c \
+-	$(src)/xdp_sample_user.h $(src)/xdp_sample_shared.h
+-	$(CC) $(XDP_SAMPLE_CFLAGS) -c -o $@ $<
+diff --git a/samples/bpf/lwt_len_hist_kern.c b/samples/bpf/lwt_len_hist_kern.c
+index 9ed63e10e1709..1fa14c54963a1 100644
+--- a/samples/bpf/lwt_len_hist_kern.c
++++ b/samples/bpf/lwt_len_hist_kern.c
+@@ -16,13 +16,6 @@
+ #include <uapi/linux/in.h>
+ #include <bpf/bpf_helpers.h>
  
-@@ -665,10 +669,12 @@ send_mipi_frames(struct ia_css_pipe *pipe)
- 		/* TODO: AM: maybe this should be returning an error. */
- 	}
- 
--	if (!IS_ISP2401)
-+	if (!IS_ISP2401) {
- 		port = (unsigned int)pipe->stream->config.source.port.port;
--	else
--		err = ia_css_mipi_is_source_port_valid(pipe, &port);
-+	} else {
-+		/* Returns true if port is valid. So, invert it */
-+		err = !ia_css_mipi_is_source_port_valid(pipe, &port);
-+	}
- 
- 	assert(port < N_CSI_PORTS);
- 
+-# define printk(fmt, ...)						\
+-		({							\
+-			char ____fmt[] = fmt;				\
+-			bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-				     ##__VA_ARGS__);			\
+-		})
+-
+ struct bpf_elf_map {
+ 	__u32 type;
+ 	__u32 size_key;
 -- 
 2.34.1
 

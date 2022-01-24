@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7094F49892D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 565C3498932
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245481AbiAXSxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:53:21 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50868 "EHLO
+        id S1344108AbiAXSxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:53:31 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50968 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343770AbiAXSvp (ORCPT
+        with ESMTP id S1343799AbiAXSvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:51:45 -0500
+        Mon, 24 Jan 2022 13:51:48 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 26D8A614B8;
-        Mon, 24 Jan 2022 18:51:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 059E8C340E5;
-        Mon, 24 Jan 2022 18:51:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67BB06151E;
+        Mon, 24 Jan 2022 18:51:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30400C340E7;
+        Mon, 24 Jan 2022 18:51:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050304;
-        bh=8lkdPXw64WnH0LbJLLWSNBVo1R68EaddM02RHx+wedE=;
+        s=korg; t=1643050307;
+        bh=mOgLhHho0OlNC/JpctgxY53RxDZv8N0vDhyZlun2JZY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vmmXMmEQzZYuN+GteBYUIto+NXFQ6ziRnonCeUGHaSYG4H/xaQo37sk+dZgbrurkM
-         fVi12ptyw2K1mAnwue1paRegFVbHGEULDvq68i5Q9Pjh4WwD+xVkiliWKiR3umHIzh
-         AIg84eDv/GjY9aV9dAccfIjikCJjDxw8xs0IAgh4=
+        b=Q3pjVM0PuJMHrJ/1dWupCuo7qSBMeXSfHwpC635DEL2tsucuw5/gOXVDwDpOrcsnE
+         gg7OidspADTt1wwEPMxv5rDsOfeYaC7XPF0IIBMXUV2A/nX3o/m8QKrv2WNNm93Ovl
+         +5mFobGjRfUbnRRV1IxLI6/XAsB2nH3GnPNc/e/w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lenny Szubowicz <lszubowi@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Bob Moore <robert.moore@intel.com>,
+        stable@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.4 075/114] ACPICA: Executer: Fix the REFCLASS_REFOF case in acpi_ex_opcode_1A_0T_1R()
-Date:   Mon, 24 Jan 2022 19:42:50 +0100
-Message-Id: <20220124183929.409926826@linuxfoundation.org>
+Subject: [PATCH 4.4 076/114] btrfs: remove BUG_ON() in find_parent_nodes()
+Date:   Mon, 24 Jan 2022 19:42:51 +0100
+Message-Id: <20220124183929.439324789@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183927.095545464@linuxfoundation.org>
 References: <20220124183927.095545464@linuxfoundation.org>
@@ -47,54 +46,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Josef Bacik <josef@toxicpanda.com>
 
-[ Upstream commit 24ea5f90ec9548044a6209685c5010edd66ffe8f ]
+[ Upstream commit fcba0120edf88328524a4878d1d6f4ad39f2ec81 ]
 
-ACPICA commit d984f12041392fa4156b52e2f7e5c5e7bc38ad9e
+We search for an extent entry with .offset = -1, which shouldn't be a
+thing, but corruption happens.  Add an ASSERT() for the developers,
+return -EUCLEAN for mortals.
 
-If Operand[0] is a reference of the ACPI_REFCLASS_REFOF class,
-acpi_ex_opcode_1A_0T_1R () calls acpi_ns_get_attached_object () to
-obtain return_desc which may require additional resolution with
-the help of acpi_ex_read_data_from_field (). If the latter fails,
-the reference counter of the original return_desc is decremented
-which is incorrect, because acpi_ns_get_attached_object () does not
-increment the reference counter of the object returned by it.
-
-This issue may lead to premature deletion of the attached object
-while it is still attached and a use-after-free and crash in the
-host OS.  For example, this may happen when on evaluation of ref_of()
-a local region field where there is no registered handler for the
-given Operation Region.
-
-Fix it by making acpi_ex_opcode_1A_0T_1R () return Status right away
-after a acpi_ex_read_data_from_field () failure.
-
-Link: https://github.com/acpica/acpica/commit/d984f120
-Link: https://github.com/acpica/acpica/pull/685
-Reported-by: Lenny Szubowicz <lszubowi@redhat.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Bob Moore <robert.moore@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/acpica/exoparg1.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/btrfs/backref.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/acpi/acpica/exoparg1.c b/drivers/acpi/acpica/exoparg1.c
-index 77930683ab7dd..c20b7dfec7b20 100644
---- a/drivers/acpi/acpica/exoparg1.c
-+++ b/drivers/acpi/acpica/exoparg1.c
-@@ -1016,7 +1016,8 @@ acpi_status acpi_ex_opcode_1A_0T_1R(struct acpi_walk_state *walk_state)
- 						    (walk_state, return_desc,
- 						     &temp_desc);
- 						if (ACPI_FAILURE(status)) {
--							goto cleanup;
-+							return_ACPI_STATUS
-+							    (status);
- 						}
+diff --git a/fs/btrfs/backref.c b/fs/btrfs/backref.c
+index 228bfa19b745d..c59a13a53b1cc 100644
+--- a/fs/btrfs/backref.c
++++ b/fs/btrfs/backref.c
+@@ -975,7 +975,12 @@ again:
+ 	ret = btrfs_search_slot(trans, fs_info->extent_root, &key, path, 0, 0);
+ 	if (ret < 0)
+ 		goto out;
+-	BUG_ON(ret == 0);
++	if (ret == 0) {
++		/* This shouldn't happen, indicates a bug or fs corruption. */
++		ASSERT(ret != 0);
++		ret = -EUCLEAN;
++		goto out;
++	}
  
- 						return_desc = temp_desc;
+ #ifdef CONFIG_BTRFS_FS_RUN_SANITY_TESTS
+ 	if (trans && likely(trans->type != __TRANS_DUMMY) &&
 -- 
 2.34.1
 

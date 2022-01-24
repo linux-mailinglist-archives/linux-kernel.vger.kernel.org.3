@@ -2,60 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5ED49782A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 05:28:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0AD449782C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 05:31:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241398AbiAXE2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 23:28:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiAXE2b (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 23:28:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A595C06173B;
-        Sun, 23 Jan 2022 20:28:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 571D4B80AC4;
-        Mon, 24 Jan 2022 04:28:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F0B6C340E1;
-        Mon, 24 Jan 2022 04:28:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642998509;
-        bh=a9zcV/HJCtoc58GdDIFo2VYi0DSNMeSdZlZvPfkbNuM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RVpfITq1YTv8ffdwu1bO6gh1NCM0NSipis+EfHeMLbTJ4TxGWV/4upSMbvsHqZNZR
-         PgZry3EBKl7la4pmnEyfAcLjy5NHNYgcqv8UbeAG12r9uvbKIuGStEiIs+vPdDfORD
-         eXhZNiJva60Z+nB+5RcortyU/szY4OVMowNXlc9uUwuqfNCNJzJmIoonsSwV2uwqjN
-         EYII9HYw3kUt54kdDUSldANQBoWdqJnUwJDl1esXcquk+vYahLqF+JscROkpPb8PcU
-         eW7B6+XlBHJGlZYsiyzstSThEs79VFliBQfou744CX6BICEyGHsIZ22tkQR19Hx/i5
-         r6LYg3xQ6PJrA==
-Date:   Mon, 24 Jan 2022 09:58:25 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] drivers: phy: qcom: ipq806x-usb: convert to BITFIELD
- macro
-Message-ID: <Ye4q6cKmFNPhkogD@matsya>
-References: <20220117002641.26773-1-ansuelsmth@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220117002641.26773-1-ansuelsmth@gmail.com>
+        id S241408AbiAXEba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 23:31:30 -0500
+Received: from foss.arm.com ([217.140.110.172]:47110 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241400AbiAXEb3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 23 Jan 2022 23:31:29 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5B720ED1;
+        Sun, 23 Jan 2022 20:31:28 -0800 (PST)
+Received: from p8cg001049571a15.arm.com (unknown [10.119.34.209])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 15E983F73B;
+        Sun, 23 Jan 2022 20:31:19 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: [RFC V1 00/11] arm64/perf: Enable branch stack sampling
+Date:   Mon, 24 Jan 2022 10:00:42 +0530
+Message-Id: <1642998653-21377-1-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17-01-22, 01:26, Ansuel Smith wrote:
-> Convert some define to BITFIELD macro to tidy things up.
+This series enables perf branch stack sampling support on arm64 platform
+via a new arch feature called Branch Record Buffer Extension (BRBE). All
+relevant register definitions could be accessed here.
 
-Applied both, thanks
+https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers
+
+The last two patches extend the perf ABI to accommodate additional branch
+information that can be captured in BRBE. This series applies on v5.17-rc1.
+
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-perf-users@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Anshuman Khandual (11):
+  perf: Consolidate branch sample filter helpers
+  arm64/perf: Add register definitions for BRBE
+  arm64/perf: Update struct arm_pmu for BRBE
+  arm64/perf: Update struct pmu_hw_events for BRBE
+  arm64/perf: Detect support for BRBE
+  arm64/perf: Drive BRBE from perf event states
+  arm64/perf: Add BRBE driver
+  arm64/perf: Enable branch stack sampling
+  perf: Add more generic branch types
+  perf: Expand perf_branch_entry.type
+  perf: Capture branch privilege information
+
+ arch/arm64/include/asm/sysreg.h          | 216 ++++++++++++
+ arch/arm64/kernel/perf_event.c           |  48 +++
+ arch/x86/events/intel/lbr.c              |   4 +-
+ drivers/perf/Kconfig                     |  11 +
+ drivers/perf/Makefile                    |   1 +
+ drivers/perf/arm_pmu.c                   |  65 +++-
+ drivers/perf/arm_pmu_brbe.c              | 432 +++++++++++++++++++++++
+ drivers/perf/arm_pmu_brbe.h              | 259 ++++++++++++++
+ drivers/perf/arm_pmu_platform.c          |  34 ++
+ include/linux/perf/arm_pmu.h             |  49 +++
+ include/linux/perf_event.h               |  24 ++
+ include/uapi/linux/perf_event.h          |  26 +-
+ kernel/events/core.c                     |   9 +-
+ tools/include/uapi/linux/perf_event.h    |  26 +-
+ tools/perf/Documentation/perf-record.txt |   1 +
+ tools/perf/util/branch.c                 |  13 +-
+ tools/perf/util/parse-branch-options.c   |   1 +
+ 17 files changed, 1202 insertions(+), 17 deletions(-)
+ create mode 100644 drivers/perf/arm_pmu_brbe.c
+ create mode 100644 drivers/perf/arm_pmu_brbe.h
 
 -- 
-~Vinod
+2.25.1
+

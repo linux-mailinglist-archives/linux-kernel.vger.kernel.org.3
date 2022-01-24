@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C17499204
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C32FE498C3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380808AbiAXUQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:16:57 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44852 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359325AbiAXT7d (ORCPT
+        id S1349817AbiAXTVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239892AbiAXTNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:59:33 -0500
+        Mon, 24 Jan 2022 14:13:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCE5C061749;
+        Mon, 24 Jan 2022 11:05:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1DF43B811F3;
-        Mon, 24 Jan 2022 19:59:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 361B3C340E5;
-        Mon, 24 Jan 2022 19:59:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F0DC60E8D;
+        Mon, 24 Jan 2022 19:05:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C0E8C340E5;
+        Mon, 24 Jan 2022 19:05:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054370;
-        bh=NtvLuRHT3V4sSBm45JA9E7W19eu6qsnP4a59oSTKsyc=;
+        s=korg; t=1643051116;
+        bh=WwExldU9G39L2ssPdcPuqzKK5FM6hA2PmC/gQghHkmE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2nVZ3rFv9GlmehdNBN6VwshJ2n3vTGexpEP3Fw3kXQlDwwGSVKN4b/EpUnQbC2rab
-         OqZ9Sgdxh7uoole3NY83/uob//xdrL2SAytSlrcRCpJs6ZT5VLgzIWrilTAGxDgYd4
-         lW6sS4KZjtP96JxEjdGEvHhsmW/ItOcjMGjW7wxw=
+        b=JIHHH5rDWiea/AorydXujGo/UeXikfW6eSUd+c16YOezyQZmCUvP7xEco5JbmhvJK
+         Yw4Dqxb8gk8IY2ey70m556wG0vNpNTB9aAAZCrOC5b3vsg5HcYO6LJsZ7WJ37CMvY8
+         16F3EJYtLiZEF3WxfqvfWeY2kQxuz41dwv8cf1og=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thierry Reding <treding@nvidia.com>,
+        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 368/563] arm64: tegra: Adjust length of CCPLEX cluster MMIO region
-Date:   Mon, 24 Jan 2022 19:42:13 +0100
-Message-Id: <20220124184037.149943023@linuxfoundation.org>
+Subject: [PATCH 4.14 059/186] pcmcia: rsrc_nonstatic: Fix a NULL pointer dereference in nonstatic_find_mem_region()
+Date:   Mon, 24 Jan 2022 19:42:14 +0100
+Message-Id: <20220124183939.025695500@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,33 +49,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+From: Zhou Qingyang <zhou1615@umn.edu>
 
-[ Upstream commit 2b14cbd643feea5fc17c6e8bead4e71088c69acd ]
+[ Upstream commit 977d2e7c63c3d04d07ba340b39987742e3241554 ]
 
-The Tegra186 CCPLEX cluster register region is 4 MiB is length, not 4
-MiB - 1. This was likely presumed to be the "limit" rather than length.
-Fix it up.
+In nonstatic_find_mem_region(), pcmcia_make_resource() is assigned to
+res and used in pci_bus_alloc_resource(). There a dereference of res
+in pci_bus_alloc_resource(), which could lead to a NULL pointer
+dereference on failure of pcmcia_make_resource().
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
+Fix this bug by adding a check of res.
+
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_PCCARD_NONSTATIC=y show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Fixes: 49b1153adfe1 ("pcmcia: move all pcmcia_resource_ops providers into one module")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/nvidia/tegra186.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pcmcia/rsrc_nonstatic.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra186.dtsi b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
-index 0c46ab7bbbf37..eec6418ecdb1a 100644
---- a/arch/arm64/boot/dts/nvidia/tegra186.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
-@@ -985,7 +985,7 @@
+diff --git a/drivers/pcmcia/rsrc_nonstatic.c b/drivers/pcmcia/rsrc_nonstatic.c
+index 4d244014f423f..2e96d9273b780 100644
+--- a/drivers/pcmcia/rsrc_nonstatic.c
++++ b/drivers/pcmcia/rsrc_nonstatic.c
+@@ -815,6 +815,9 @@ static struct resource *nonstatic_find_mem_region(u_long base, u_long num,
+ 	unsigned long min, max;
+ 	int ret, i, j;
  
- 	ccplex@e000000 {
- 		compatible = "nvidia,tegra186-ccplex-cluster";
--		reg = <0x0 0x0e000000 0x0 0x3fffff>;
-+		reg = <0x0 0x0e000000 0x0 0x400000>;
++	if (!res)
++		return NULL;
++
+ 	low = low || !(s->features & SS_CAP_PAGE_REGS);
  
- 		nvidia,bpmp = <&bpmp>;
- 	};
+ 	data.mask = align - 1;
 -- 
 2.34.1
 

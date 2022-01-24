@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 933854992F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C4B49933A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382884AbiAXU01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:26:27 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57572 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353838AbiAXUBJ (ORCPT
+        id S1384970AbiAXUbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:31:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379369AbiAXULV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:01:09 -0500
+        Mon, 24 Jan 2022 15:11:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA51C06F8E2;
+        Mon, 24 Jan 2022 11:33:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 34071611D6;
-        Mon, 24 Jan 2022 20:01:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF52FC36AE2;
-        Mon, 24 Jan 2022 20:01:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DCC161504;
+        Mon, 24 Jan 2022 19:33:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35EA3C340E5;
+        Mon, 24 Jan 2022 19:33:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054465;
-        bh=aBh7I4G6eOqb3JIhGIqsj/himHv49hrPqU4ibGY8N90=;
+        s=korg; t=1643052807;
+        bh=9aYQODP5szAojPD5WJTQP+8gls/HiWPful1vla/RVVY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wot25cpXPGKIIYyiBhtdeiRoXLOI0Ml/9xeVUCjXQK9NQXrJKVCD2hHuvnUb1Q/Ag
-         MD75QeHpv+ZwAH4IJqhpGJuWqiDfW13ZtPbz8sq5A5KLqKffAnsr+t+N47OQzh6ZdW
-         7zsLY2ntn6W+HIXCjmyk7R2XwMi4jIvU2ff2OdYk=
+        b=g5sMzs0k5IrgxWb2Iu8ZgxWcC68zEGo6FZrUQm9wBXJnk4Zz4qschzkWEvThmK//L
+         IVPCHZzIU+Xx6VwKFt3CY6mH76r6sd0DAWifmgLMqCfGh49fUdllGsTCI6DrQIkF59
+         VQ54o4A9mp7+B0o3ZL5ac/5bqBCwb4oUiqn9uAuw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Danielle Ratson <danieller@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Antoine Tenart <atenart@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 399/563] mlxsw: pci: Avoid flow control for EMAD packets
-Date:   Mon, 24 Jan 2022 19:42:44 +0100
-Message-Id: <20220124184038.227358463@linuxfoundation.org>
+Subject: [PATCH 5.4 181/320] net-sysfs: update the queue counts in the unregistration path
+Date:   Mon, 24 Jan 2022 19:42:45 +0100
+Message-Id: <20220124183959.824749734@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,93 +49,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Danielle Ratson <danieller@nvidia.com>
+From: Antoine Tenart <atenart@kernel.org>
 
-[ Upstream commit d43e4271747ace01a27a49a97a397cb4219f6487 ]
+[ Upstream commit d7dac083414eb5bb99a6d2ed53dc2c1b405224e5 ]
 
-Locally generated packets ingress the device through its CPU port. When
-the CPU port is congested and there are not enough credits in its
-headroom buffer, packets can be dropped.
+When updating Rx and Tx queue kobjects, the queue count should always be
+updated to match the queue kobjects count. This was not done in the net
+device unregistration path, fix it. Tracking all queue count updates
+will allow in a following up patch to detect illegal updates.
 
-While this might be acceptable for data packets that traverse the
-network, configuration packets exchanged between the host and the device
-(EMADs) should not be subjected to this flow control.
-
-The "sdq_lp" bit in the SDQ (Send Descriptor Queue) context allows the
-host to instruct the device to treat packets sent on this queue as
-"local processing" and always process them, regardless of the state of
-the CPU port's headroom.
-
-Add the definition of this bit and set it for the dedicated SDQ reserved
-for the transmission of EMAD packets. This makes the "local processing"
-bit in the WQE (Work Queue Element) redundant, so clear it.
-
-Signed-off-by: Danielle Ratson <danieller@nvidia.com>
-Signed-off-by: Ido Schimmel <idosch@nvidia.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Antoine Tenart <atenart@kernel.org>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlxsw/cmd.h | 12 ++++++++++++
- drivers/net/ethernet/mellanox/mlxsw/pci.c |  6 +++++-
- 2 files changed, 17 insertions(+), 1 deletion(-)
+ net/core/net-sysfs.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/ethernet/mellanox/mlxsw/cmd.h b/drivers/net/ethernet/mellanox/mlxsw/cmd.h
-index 5ffdfb532cb7f..91f68fb0b420a 100644
---- a/drivers/net/ethernet/mellanox/mlxsw/cmd.h
-+++ b/drivers/net/ethernet/mellanox/mlxsw/cmd.h
-@@ -905,6 +905,18 @@ static inline int mlxsw_cmd_sw2hw_rdq(struct mlxsw_core *mlxsw_core,
-  */
- MLXSW_ITEM32(cmd_mbox, sw2hw_dq, cq, 0x00, 24, 8);
+diff --git a/net/core/net-sysfs.c b/net/core/net-sysfs.c
+index 05b0c60bfba2b..bcad7028bbf45 100644
+--- a/net/core/net-sysfs.c
++++ b/net/core/net-sysfs.c
+@@ -1661,6 +1661,9 @@ static void remove_queue_kobjects(struct net_device *dev)
  
-+enum mlxsw_cmd_mbox_sw2hw_dq_sdq_lp {
-+	MLXSW_CMD_MBOX_SW2HW_DQ_SDQ_LP_WQE,
-+	MLXSW_CMD_MBOX_SW2HW_DQ_SDQ_LP_IGNORE_WQE,
-+};
+ 	net_rx_queue_update_kobjects(dev, real_rx, 0);
+ 	netdev_queue_update_kobjects(dev, real_tx, 0);
 +
-+/* cmd_mbox_sw2hw_dq_sdq_lp
-+ * SDQ local Processing
-+ * 0: local processing by wqe.lp
-+ * 1: local processing (ignoring wqe.lp)
-+ */
-+MLXSW_ITEM32(cmd_mbox, sw2hw_dq, sdq_lp, 0x00, 23, 1);
-+
- /* cmd_mbox_sw2hw_dq_sdq_tclass
-  * SDQ: CPU Egress TClass
-  * RDQ: Reserved
-diff --git a/drivers/net/ethernet/mellanox/mlxsw/pci.c b/drivers/net/ethernet/mellanox/mlxsw/pci.c
-index 72d5c77bcb949..dbb16ce25bdf3 100644
---- a/drivers/net/ethernet/mellanox/mlxsw/pci.c
-+++ b/drivers/net/ethernet/mellanox/mlxsw/pci.c
-@@ -285,6 +285,7 @@ static int mlxsw_pci_sdq_init(struct mlxsw_pci *mlxsw_pci, char *mbox,
- 			      struct mlxsw_pci_queue *q)
- {
- 	int tclass;
-+	int lp;
- 	int i;
- 	int err;
- 
-@@ -292,9 +293,12 @@ static int mlxsw_pci_sdq_init(struct mlxsw_pci *mlxsw_pci, char *mbox,
- 	q->consumer_counter = 0;
- 	tclass = q->num == MLXSW_PCI_SDQ_EMAD_INDEX ? MLXSW_PCI_SDQ_EMAD_TC :
- 						      MLXSW_PCI_SDQ_CTL_TC;
-+	lp = q->num == MLXSW_PCI_SDQ_EMAD_INDEX ? MLXSW_CMD_MBOX_SW2HW_DQ_SDQ_LP_IGNORE_WQE :
-+						  MLXSW_CMD_MBOX_SW2HW_DQ_SDQ_LP_WQE;
- 
- 	/* Set CQ of same number of this SDQ. */
- 	mlxsw_cmd_mbox_sw2hw_dq_cq_set(mbox, q->num);
-+	mlxsw_cmd_mbox_sw2hw_dq_sdq_lp_set(mbox, lp);
- 	mlxsw_cmd_mbox_sw2hw_dq_sdq_tclass_set(mbox, tclass);
- 	mlxsw_cmd_mbox_sw2hw_dq_log2_dq_sz_set(mbox, 3); /* 8 pages */
- 	for (i = 0; i < MLXSW_PCI_AQ_PAGES; i++) {
-@@ -1599,7 +1603,7 @@ static int mlxsw_pci_skb_transmit(void *bus_priv, struct sk_buff *skb,
- 
- 	wqe = elem_info->elem;
- 	mlxsw_pci_wqe_c_set(wqe, 1); /* always report completion */
--	mlxsw_pci_wqe_lp_set(wqe, !!tx_info->is_emad);
-+	mlxsw_pci_wqe_lp_set(wqe, 0);
- 	mlxsw_pci_wqe_type_set(wqe, MLXSW_PCI_WQE_TYPE_ETHERNET);
- 
- 	err = mlxsw_pci_wqe_frag_map(mlxsw_pci, wqe, 0, skb->data,
++	dev->real_num_rx_queues = 0;
++	dev->real_num_tx_queues = 0;
+ #ifdef CONFIG_SYSFS
+ 	kset_unregister(dev->queues_kset);
+ #endif
 -- 
 2.34.1
 

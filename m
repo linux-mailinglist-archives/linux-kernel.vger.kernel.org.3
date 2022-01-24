@@ -2,104 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A43498516
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBB549851B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:45:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243850AbiAXQok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 11:44:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241172AbiAXQoi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 11:44:38 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8BAC06173B;
-        Mon, 24 Jan 2022 08:44:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6k8LAK7tMRkW1TbeMgEK2fdsQgEWFo9/JaDK8LRdPXQ=; b=omnMlmPu3KuMaCmyP0Tf+sxWCy
-        /lM8WFMNuvRt+OYBaKD5+tKz3VeldzynZERSAAWs8v5ZrVcKxBaQUUkYrfRleX5LQIQBg7Eej1oop
-        9LVzblXb3ql3Ao1XMzw3R3iN/3vm65nv5bbuGkB3FfD0g/tAGkMStiJFCqdw2NpYEhnxRHfxHYwaQ
-        b5Oors1mFLqYW+Sw+0NvI5dbwrcDlX2omWcnJyhupZHqz9OUZuOcU20IuvUG9RmwPBdYV4ZcajUUU
-        0Q0NKpe6U/3gY8ZKNCmlLbFq2t5EVedaJZtukmmGhkzb/XPK05DYWeTDhhfl817LzOizwL4qoivyl
-        1gEAp6nQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nC2Ro-000vWm-FM; Mon, 24 Jan 2022 16:44:04 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AC13B300B80;
-        Mon, 24 Jan 2022 17:44:03 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 90D492B3A07CB; Mon, 24 Jan 2022 17:44:03 +0100 (CET)
-Date:   Mon, 24 Jan 2022 17:44:03 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     mingo@redhat.com, tglx@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-api@vger.kernel.org, x86@kernel.org, pjt@google.com,
-        posk@google.com, avagin@google.com, jannh@google.com,
-        tdelisle@uwaterloo.ca, mark.rutland@arm.com, posk@posk.io
-Subject: Re: [RFC][PATCH v2 5/5] sched: User Mode Concurency Groups
-Message-ID: <Ye7XU666240YyRBH@hirez.programming.kicks-ass.net>
-References: <20220120155517.066795336@infradead.org>
- <20220120160822.914418096@infradead.org>
- <20220121114758.GF20638@worktop.programming.kicks-ass.net>
- <20220121151845.GB22849@worktop.programming.kicks-ass.net>
- <Ye635PiRpv4rXVl0@hirez.programming.kicks-ass.net>
+        id S243879AbiAXQpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 11:45:03 -0500
+Received: from mga01.intel.com ([192.55.52.88]:11191 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243859AbiAXQo7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 11:44:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643042699; x=1674578699;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aM9YJcSBXC3yFsRIAO+XebEgJNs0dEaVhB0zbDtZ3xQ=;
+  b=UYPkqkG9u4/rqZiFgWvnZQm7XYcbIOvIXwX1kS6+dH9n6tZ0VDWf7AcB
+   EdWDBJvl3R8O4D4gYEuLYnfx1Xedvqbxh8MJmBRRiiv0BfP/uQxmlP/dC
+   +4Nqm/Bt/nq+8jCT6bPM6e5V44e3bXhmvGxGfa7a6oUQRgndo974lnW71
+   m6sFEit+JnjeY6Ok3jNlXon9gV7fFRoMOwWYWP+Fmf+r+S0xB1yO51PwC
+   LEOkTb383oEsGpEI8/uCYJp0KVWwbvhPIBpaO859fpNuW0CQVeOLbbwQ9
+   c1bXSUMX7+bZUCg/QHLoUhehnT+lKy9YR/97/Hpmetkz0mwfndxPE7ho+
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="270525828"
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="270525828"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 08:44:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="627562188"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 24 Jan 2022 08:44:56 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nC2Sd-000Icf-Q6; Mon, 24 Jan 2022 16:44:55 +0000
+Date:   Tue, 25 Jan 2022 00:44:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ronak Vijay Raheja <rraheja@codeaurora.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Eddie Hung <eddie.hung@mediatek.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.10
+ 2301/9999] drivers/usb/gadget/configfs.c:1620:2: error: implicit declaration
+ of function 'acc_disconnect'
+Message-ID: <202201250013.vOmQcvaI-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ye635PiRpv4rXVl0@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 03:29:56PM +0100, Peter Zijlstra wrote:
-> On Fri, Jan 21, 2022 at 04:18:46PM +0100, Peter Zijlstra wrote:
-> > Something like this, still yuck though. Also still need to write me a
-> > test for this.
-> > 
+Hi Ronak,
 
-> > --- a/kernel/sched/umcg.c
-> > +++ b/kernel/sched/umcg.c
-> > @@ -232,6 +232,8 @@ static int umcg_update_state(struct task
-> >  /* Called from syscall enter path and exceptions that can schedule */
-> >  void umcg_sys_enter(struct pt_regs *regs, long syscall)
-> >  {
-> > +	current->umcg_timeout = 0;
-> > +
-> >  	/* avoid recursion vs our own syscalls */
-> >  	if (syscall == __NR_umcg_wait ||
-> >  	    syscall == __NR_umcg_ctl)
-> > @@ -519,6 +521,7 @@ void umcg_notify_resume(struct pt_regs *
-> >  	struct umcg_task __user *self = tsk->umcg_task;
-> >  	bool worker = tsk->flags & PF_UMCG_WORKER;
-> >  	u32 state;
-> > +	int ret;
-> >  
-> >  	/* avoid recursion vs schedule() */
-> >  	if (worker)
-> > @@ -554,12 +557,17 @@ void umcg_notify_resume(struct pt_regs *
-> >  		umcg_unpin_pages();
-> >  	}
-> >  
-> > -	switch (umcg_wait(0)) {
-> > +	ret = umcg_wait(tsk->umcg_timeout);
-> 
-> Oh how I hate signals... this can get scribbled by a syscall/fault from
-> sigcontext :/
-> 
-> Maybe I can recover the timo argument from the original syscall
-> pt_regs.. let me try.
+FYI, the error/warning still remains.
 
-Urgh, recursive hell... If the signal does *anything* that tickles
-notify-resume it'll find RUNNABLE and go wait there --- ad infinitum.
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.10
+head:   eb69f26fe8e2177cfb7cbf859a23fc5ac59cacb7
+commit: 80fef39de7e9dbe706d0cbc820a09b5c05dc366f [2301/9999] ANDROID: usb: gadget: Resolve NULL pointer dereference in composite_disconnect
+config: arm64-randconfig-r021-20220120 (https://download.01.org/0day-ci/archive/20220125/202201250013.vOmQcvaI-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/80fef39de7e9dbe706d0cbc820a09b5c05dc366f
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.10
+        git checkout 80fef39de7e9dbe706d0cbc820a09b5c05dc366f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/usb/gadget/
 
-I need to go cook dinner, I'll prod more at this later
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/usb/gadget/configfs.c:1620:2: error: implicit declaration of function 'acc_disconnect' [-Werror,-Wimplicit-function-declaration]
+           acc_disconnect();
+           ^
+   1 error generated.
+
+
+vim +/acc_disconnect +1620 drivers/usb/gadget/configfs.c
+
+  1603	
+  1604	static void configfs_composite_disconnect(struct usb_gadget *gadget)
+  1605	{
+  1606		struct usb_composite_dev *cdev;
+  1607		struct gadget_info *gi;
+  1608		unsigned long flags;
+  1609	
+  1610		cdev = get_gadget_data(gadget);
+  1611		if (!cdev)
+  1612			return;
+  1613	
+  1614	#ifdef CONFIG_USB_CONFIGFS_F_ACC
+  1615		/*
+  1616		 * accessory HID support can be active while the
+  1617		 * accessory function is not actually enabled,
+  1618		 * so we need to inform it when we are disconnected.
+  1619		 */
+> 1620		acc_disconnect();
+  1621	#endif
+  1622		gi = container_of(cdev, struct gadget_info, cdev);
+  1623		spin_lock_irqsave(&gi->spinlock, flags);
+  1624		cdev = get_gadget_data(gadget);
+  1625		if (!cdev || gi->unbind) {
+  1626			spin_unlock_irqrestore(&gi->spinlock, flags);
+  1627			return;
+  1628		}
+  1629	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

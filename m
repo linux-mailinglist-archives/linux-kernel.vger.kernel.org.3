@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4EBF498D19
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:33:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A54F499308
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:33:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348118AbiAXT1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:27:55 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42900 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345004AbiAXTRx (ORCPT
+        id S1383722AbiAXU1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:27:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60544 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377239AbiAXUFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:17:53 -0500
+        Mon, 24 Jan 2022 15:05:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F865C061A11;
+        Mon, 24 Jan 2022 11:30:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 54614B81236;
-        Mon, 24 Jan 2022 19:17:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68744C340E5;
-        Mon, 24 Jan 2022 19:17:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD69AB8121A;
+        Mon, 24 Jan 2022 19:30:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CBCDC340E5;
+        Mon, 24 Jan 2022 19:30:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051870;
-        bh=anLyqKY8xcsWg1zMq4nAdOxhcpkR8TKpIZYGmfktLU4=;
+        s=korg; t=1643052637;
+        bh=bI71+dy3SjHsHKJSLG3Irk1aXpUx+GZcgDpdDh66Suk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zHUzKFuyYj7O1ztLjR97lT868Q6hocO/pXeMPdFbA1pq3neEzxn1xDIK/4BP62G0R
-         lCainNlY+5lz5D+ZiEOC0ii5KGtVOcO3/67dvPQXC33G0+FET7/5CLp60ftcFk6Gth
-         qqh7DvEmpUCeEsVY5nQxXEX571Ha4RGbMWtA9JhY=
+        b=QEJESrdDd5ZgIwu+XX32/dUPnTwYI76YaubPZqEZEeROW5gaQ89YsON9ImTjsYdjY
+         U0YW6pxQEOF+L0eBRDmctQoR2qx0lqhFtOcYEhQnXSPFQn82o1xGuAUeFXGtDzslbN
+         nNkg9TuftotPFdcoH3ApCXPDjgwHW17ooPRcQofQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 070/239] media: saa7146: mxb: Fix a NULL pointer dereference in mxb_attach()
+Subject: [PATCH 5.4 124/320] ALSA: PCM: Add missing rwsem around snd_ctl_remove() calls
 Date:   Mon, 24 Jan 2022 19:41:48 +0100
-Message-Id: <20220124183945.355676783@linuxfoundation.org>
+Message-Id: <20220124183957.897720160@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,62 +48,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 0407c49ebe330333478440157c640fffd986f41b ]
+[ Upstream commit 5471e9762e1af4b7df057a96bfd46cc250979b88 ]
 
-In mxb_attach(dev, info), saa7146_vv_init() is called to allocate a
-new memory for dev->vv_data. saa7146_vv_release() will be called on
-failure of mxb_probe(dev). There is a dereference of dev->vv_data
-in saa7146_vv_release(), which could lead to a NULL pointer dereference
-on failure of saa7146_vv_init().
+snd_ctl_remove() has to be called with card->controls_rwsem held (when
+called after the card instantiation).  This patch add the missing
+rwsem calls around it.
 
-Fix this bug by adding a check of saa7146_vv_init().
-
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_VIDEO_MXB=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: 03b1930efd3c ("V4L/DVB: saa7146: fix regression of the av7110/budget-av driver")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Fixes: a8ff48cb7083 ("ALSA: pcm: Free chmap at PCM free callback, too")
+Link: https://lore.kernel.org/r/20211116071314.15065-2-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/saa7146/mxb.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ sound/core/pcm.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/saa7146/mxb.c b/drivers/media/pci/saa7146/mxb.c
-index 6e25654da2567..bfa7a7d15dbf6 100644
---- a/drivers/media/pci/saa7146/mxb.c
-+++ b/drivers/media/pci/saa7146/mxb.c
-@@ -695,10 +695,16 @@ static struct saa7146_ext_vv vv_data;
- static int mxb_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data *info)
+diff --git a/sound/core/pcm.c b/sound/core/pcm.c
+index 9a72d641743d9..f8ce961c28d6e 100644
+--- a/sound/core/pcm.c
++++ b/sound/core/pcm.c
+@@ -810,7 +810,11 @@ EXPORT_SYMBOL(snd_pcm_new_internal);
+ static void free_chmap(struct snd_pcm_str *pstr)
  {
- 	struct mxb *mxb;
-+	int ret;
- 
- 	DEB_EE("dev:%p\n", dev);
- 
--	saa7146_vv_init(dev, &vv_data);
-+	ret = saa7146_vv_init(dev, &vv_data);
-+	if (ret) {
-+		ERR("Error in saa7146_vv_init()");
-+		return ret;
-+	}
+ 	if (pstr->chmap_kctl) {
+-		snd_ctl_remove(pstr->pcm->card, pstr->chmap_kctl);
++		struct snd_card *card = pstr->pcm->card;
 +
- 	if (mxb_probe(dev)) {
- 		saa7146_vv_release(dev);
- 		return -1;
++		down_write(&card->controls_rwsem);
++		snd_ctl_remove(card, pstr->chmap_kctl);
++		up_write(&card->controls_rwsem);
+ 		pstr->chmap_kctl = NULL;
+ 	}
+ }
 -- 
 2.34.1
 

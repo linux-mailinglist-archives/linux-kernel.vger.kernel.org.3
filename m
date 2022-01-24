@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9004F499EF2
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:11:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45DF349A0D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383745AbiAXWrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:47:23 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50594 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457082AbiAXVky (ORCPT
+        id S1847884AbiAXXVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:21:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37156 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1584613AbiAXWV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:40:54 -0500
+        Mon, 24 Jan 2022 17:21:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48364C0424E9;
+        Mon, 24 Jan 2022 12:52:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4723BB81142;
-        Mon, 24 Jan 2022 21:40:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C79AC340E4;
-        Mon, 24 Jan 2022 21:40:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9D4060C11;
+        Mon, 24 Jan 2022 20:52:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6450C340E5;
+        Mon, 24 Jan 2022 20:52:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060452;
-        bh=RCV48ZSlTzuCqmHvJn71DlSzI5sKqDQyg1UX/Fny5Jc=;
+        s=korg; t=1643057528;
+        bh=jVD31n0XfwWUjaU2jrHFkTVw1QFT1OP0Be3lL52UQb8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cJ9Dv7h7XZRNywSIHsHCGsuakQYS1PrxWt4Xi1qncrhJhKIWspWpFQzrRY2iCM0aN
-         WPIgt4WLvhpNfYZ2onJcdq7LgPUcrMK4f88t4mLJsrudlgQavBYkWIM5oQX2nmmTmY
-         qCGwJL/XHWN51mNKeDCR1KllTjLHbL6XLO6qP/SU=
+        b=ZLPlQndkHezvCwgKLSuspS8hQHfvoYiXYNiCoL/Jr32YOFaWrIaw+61NT8s66+OUI
+         clauQy61Yb9Boampqq6+Z8C/QQzJ4+9O2T8P2SWoj2hffkklxAMu0tSd8ZS50wfl72
+         JNuKnG3TXEQ+BHSaGznCHh+0RlC2fwDUGgavcDh0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zack Rusin <zackr@vmware.com>,
-        Martin Krastev <krastevm@vmware.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH 5.16 0953/1039] drm/vmwgfx: Remove unused compile options
+        stable@vger.kernel.org, Miroslav Lichvar <mlichvar@redhat.com>,
+        Yangbo Lu <yangbo.lu@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 825/846] net: fix sock_timestamping_bind_phc() to release device
 Date:   Mon, 24 Jan 2022 19:45:42 +0100
-Message-Id: <20220124184157.318282671@linuxfoundation.org>
+Message-Id: <20220124184129.359668763@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,98 +49,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zack Rusin <zackr@vmware.com>
+From: Miroslav Lichvar <mlichvar@redhat.com>
 
-commit 50ca8cc7c0fdd9ab16b8b66ffb301fface101fac upstream.
+commit 2a4d75bfe41232608f5596a6d1369f92ccb20817 upstream.
 
-Before the driver had screen targets support we had to disable explicit
-bringup of its infrastructure because it was breaking screen objects
-support.
-Since the implementation of screen targets landed there hasn't been a
-reason to explicitly disable it and the options were never used.
-Remove of all that unused code.
+Don't forget to release the device in sock_timestamping_bind_phc() after
+it was used to get the vclock indices.
 
-Signed-off-by: Zack Rusin <zackr@vmware.com>
-Fixes: d80efd5cb3de ("drm/vmwgfx: Initial DX support")
-Reviewed-by: Martin Krastev <krastevm@vmware.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211215184147.3688785-3-zack@kde.org
-(cherry picked from commit 11343099d5ae6c7411da1425b6b162c89fb5bf10)
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+Fixes: d463126e23f1 ("net: sock: extend SO_TIMESTAMPING for PHC binding")
+Signed-off-by: Miroslav Lichvar <mlichvar@redhat.com>
+Cc: Yangbo Lu <yangbo.lu@nxp.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/vmwgfx/vmwgfx_drv.h  |    3 ---
- drivers/gpu/drm/vmwgfx/vmwgfx_mob.c  |   12 +++---------
- drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c |    4 ++--
- 3 files changed, 5 insertions(+), 14 deletions(-)
+ net/core/sock.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/gpu/drm/vmwgfx/vmwgfx_drv.h
-+++ b/drivers/gpu/drm/vmwgfx/vmwgfx_drv.h
-@@ -59,11 +59,8 @@
- #define VMWGFX_DRIVER_MINOR 19
- #define VMWGFX_DRIVER_PATCHLEVEL 0
- #define VMWGFX_FIFO_STATIC_SIZE (1024*1024)
--#define VMWGFX_MAX_RELOCATIONS 2048
--#define VMWGFX_MAX_VALIDATIONS 2048
- #define VMWGFX_MAX_DISPLAYS 16
- #define VMWGFX_CMD_BOUNCE_INIT_SIZE 32768
--#define VMWGFX_ENABLE_SCREEN_TARGET_OTABLE 1
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -830,6 +830,8 @@ static int sock_timestamping_bind_phc(st
+ 	}
  
- #define VMWGFX_PCI_ID_SVGA2              0x0405
- #define VMWGFX_PCI_ID_SVGA3              0x0406
---- a/drivers/gpu/drm/vmwgfx/vmwgfx_mob.c
-+++ b/drivers/gpu/drm/vmwgfx/vmwgfx_mob.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0 OR MIT
- /**************************************************************************
-  *
-- * Copyright 2012-2015 VMware, Inc., Palo Alto, CA., USA
-+ * Copyright 2012-2021 VMware, Inc., Palo Alto, CA., USA
-  *
-  * Permission is hereby granted, free of charge, to any person obtaining a
-  * copy of this software and associated documentation files (the
-@@ -29,12 +29,6 @@
- 
- #include "vmwgfx_drv.h"
- 
--/*
-- * If we set up the screen target otable, screen objects stop working.
-- */
--
--#define VMW_OTABLE_SETUP_SUB ((VMWGFX_ENABLE_SCREEN_TARGET_OTABLE ? 0 : 1))
--
- #ifdef CONFIG_64BIT
- #define VMW_PPN_SIZE 8
- #define VMW_MOBFMT_PTDEPTH_0 SVGA3D_MOBFMT_PT64_0
-@@ -75,7 +69,7 @@ static const struct vmw_otable pre_dx_ta
- 	{VMWGFX_NUM_GB_CONTEXT * sizeof(SVGAOTableContextEntry), NULL, true},
- 	{VMWGFX_NUM_GB_SHADER * sizeof(SVGAOTableShaderEntry), NULL, true},
- 	{VMWGFX_NUM_GB_SCREEN_TARGET * sizeof(SVGAOTableScreenTargetEntry),
--	 NULL, VMWGFX_ENABLE_SCREEN_TARGET_OTABLE}
-+	 NULL, true}
- };
- 
- static const struct vmw_otable dx_tables[] = {
-@@ -84,7 +78,7 @@ static const struct vmw_otable dx_tables
- 	{VMWGFX_NUM_GB_CONTEXT * sizeof(SVGAOTableContextEntry), NULL, true},
- 	{VMWGFX_NUM_GB_SHADER * sizeof(SVGAOTableShaderEntry), NULL, true},
- 	{VMWGFX_NUM_GB_SCREEN_TARGET * sizeof(SVGAOTableScreenTargetEntry),
--	 NULL, VMWGFX_ENABLE_SCREEN_TARGET_OTABLE},
-+	 NULL, true},
- 	{VMWGFX_NUM_DXCONTEXT * sizeof(SVGAOTableDXContextEntry), NULL, true},
- };
- 
---- a/drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c
-+++ b/drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c
-@@ -1872,8 +1872,8 @@ int vmw_kms_stdu_init_display(struct vmw
- 	int i, ret;
- 
- 
--	/* Do nothing if Screen Target support is turned off */
--	if (!VMWGFX_ENABLE_SCREEN_TARGET_OTABLE || !dev_priv->has_mob)
-+	/* Do nothing if there's no support for MOBs */
-+	if (!dev_priv->has_mob)
- 		return -ENOSYS;
- 
- 	if (!(dev_priv->capabilities & SVGA_CAP_GBOBJECTS))
+ 	num = ethtool_get_phc_vclocks(dev, &vclock_index);
++	dev_put(dev);
++
+ 	for (i = 0; i < num; i++) {
+ 		if (*(vclock_index + i) == phc_index) {
+ 			match = true;
 
 

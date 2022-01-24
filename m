@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E535049A7EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:04:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FD549A940
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:20:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1315336AbiAYCxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:53:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47926 "EHLO
+        id S1322357AbiAYDVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 22:21:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446089AbiAXVGn (ORCPT
+        with ESMTP id S1319411AbiAYDIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:06:43 -0500
+        Mon, 24 Jan 2022 22:08:49 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2FEAC06136B;
-        Mon, 24 Jan 2022 12:07:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93500C0FE698;
+        Mon, 24 Jan 2022 13:44:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F842B810BD;
-        Mon, 24 Jan 2022 20:07:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E728C340E5;
-        Mon, 24 Jan 2022 20:07:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 596DFB811FB;
+        Mon, 24 Jan 2022 21:44:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 740D0C340E4;
+        Mon, 24 Jan 2022 21:44:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054840;
-        bh=QQYbblQ35leF5mIDeINDGQFfwan87gWS7LaQi2QXxZI=;
+        s=korg; t=1643060669;
+        bh=jHBt4D2LHkfF9t7FKzh7y8T3seROGWJIg2IRNcojcvs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xT0ymktvrfA6sG0TT+iKfB8fTas5BsE3O//P2oWzUAxsIw7JxYDdOjCqLJtqVCYbt
-         H/UxeblPCOwzfmO9UNNykZ7mvvQpPzFMQihhm7qmC5VxNAmPSxHkO5qMM9TZt/tWfj
-         Aiql5XJeIMAB4ZGnBnTT3lEVufgPnCUhCqfjABVw=
+        b=ucyyQiGOdoiSgLTnPHBAKn6Jgualeyrd7DjNcaryeIkLqdUgucHF0yt4DzG1DWly4
+         6INCzf4oLHUsnbxgTjP/2PjWGfXO9NCscTscSMeB07GMFEOtzrFSEzkH3XFfUtRMII
+         Gp+dZOXAjDQaNa3LMGf2pKy3wgnOqntR3FSsKNy4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        Andrew Lunn <andrew@lunn.ch>,
+        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Eric Dumazet <edumazet@google.com>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 520/563] net: axienet: increase reset timeout
-Date:   Mon, 24 Jan 2022 19:44:45 +0100
-Message-Id: <20220124184042.421883072@linuxfoundation.org>
+Subject: [PATCH 5.16 1025/1039] sch_api: Dont skip qdisc attach on ingress
+Date:   Mon, 24 Jan 2022 19:46:54 +0100
+Message-Id: <20220124184159.746106739@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,58 +49,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Maxim Mikityanskiy <maximmi@nvidia.com>
 
-commit 2e5644b1bab2ccea9cfc7a9520af95b94eb0dbf1 upstream.
+commit de2d807b294d3d2ce5e59043ae2634016765d076 upstream.
 
-The previous timeout of 1ms was too short to handle some cases where the
-core is reset just after the input clocks were started, which will
-be introduced in an upcoming patch. Increase the timeout to 50ms. Also
-simplify the reset timeout checking to use read_poll_timeout.
+The attach callback of struct Qdisc_ops is used by only a few qdiscs:
+mq, mqprio and htb. qdisc_graft() contains the following logic
+(pseudocode):
 
-Fixes: 8a3b7a252dca9 ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+    if (!qdisc->ops->attach) {
+        if (ingress)
+            do ingress stuff;
+        else
+            do egress stuff;
+    }
+    if (!ingress) {
+        ...
+        if (qdisc->ops->attach)
+            qdisc->ops->attach(qdisc);
+    } else {
+        ...
+    }
+
+As we see, the attach callback is not called if the qdisc is being
+attached to ingress (TC_H_INGRESS). That wasn't a problem for mq and
+mqprio, since they contain a check that they are attached to TC_H_ROOT,
+and they can't be attached to TC_H_INGRESS anyway.
+
+However, the commit cited below added the attach callback to htb. It is
+needed for the hardware offload, but in the non-offload mode it
+simulates the "do egress stuff" part of the pseudocode above. The
+problem is that when htb is attached to ingress, neither "do ingress
+stuff" nor attach() is called. It results in an inconsistency, and the
+following message is printed to dmesg:
+
+unregister_netdevice: waiting for lo to become free. Usage count = 2
+
+This commit addresses the issue by running "do ingress stuff" in the
+ingress flow even in the attach callback is present, which is fine,
+because attach isn't going to be called afterwards.
+
+The bug was found by syzbot and reported by Eric.
+
+Fixes: d03b195b5aa0 ("sch_htb: Hierarchical QoS hardware offload")
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Reported-by: Eric Dumazet <edumazet@google.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/xilinx/xilinx_axienet_main.c |   19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ net/sched/sch_api.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-@@ -496,7 +496,8 @@ static void axienet_setoptions(struct ne
+--- a/net/sched/sch_api.c
++++ b/net/sched/sch_api.c
+@@ -1062,7 +1062,7 @@ static int qdisc_graft(struct net_device
  
- static int __axienet_device_reset(struct axienet_local *lp)
- {
--	u32 timeout;
-+	u32 value;
-+	int ret;
+ 		qdisc_offload_graft_root(dev, new, old, extack);
  
- 	/* Reset Axi DMA. This would reset Axi Ethernet core as well. The reset
- 	 * process of Axi DMA takes a while to complete as all pending
-@@ -506,15 +507,13 @@ static int __axienet_device_reset(struct
- 	 * they both reset the entire DMA core, so only one needs to be used.
- 	 */
- 	axienet_dma_out32(lp, XAXIDMA_TX_CR_OFFSET, XAXIDMA_CR_RESET_MASK);
--	timeout = DELAY_OF_ONE_MILLISEC;
--	while (axienet_dma_in32(lp, XAXIDMA_TX_CR_OFFSET) &
--				XAXIDMA_CR_RESET_MASK) {
--		udelay(1);
--		if (--timeout == 0) {
--			netdev_err(lp->ndev, "%s: DMA reset timeout!\n",
--				   __func__);
--			return -ETIMEDOUT;
--		}
-+	ret = read_poll_timeout(axienet_dma_in32, value,
-+				!(value & XAXIDMA_CR_RESET_MASK),
-+				DELAY_OF_ONE_MILLISEC, 50000, false, lp,
-+				XAXIDMA_TX_CR_OFFSET);
-+	if (ret) {
-+		dev_err(lp->dev, "%s: DMA reset timeout!\n", __func__);
-+		return ret;
- 	}
+-		if (new && new->ops->attach)
++		if (new && new->ops->attach && !ingress)
+ 			goto skip;
  
- 	return 0;
+ 		for (i = 0; i < num_q; i++) {
 
 

@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8CF3498943
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7054989FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:01:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245647AbiAXSx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:53:58 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:51480 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343877AbiAXSwW (ORCPT
+        id S245436AbiAXS7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:59:33 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55094 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343556AbiAXS5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:52:22 -0500
+        Mon, 24 Jan 2022 13:57:01 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C7EA614E5;
-        Mon, 24 Jan 2022 18:52:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75F43C340E8;
-        Mon, 24 Jan 2022 18:52:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5ECABB810BD;
+        Mon, 24 Jan 2022 18:57:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89A7CC340E5;
+        Mon, 24 Jan 2022 18:56:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050341;
-        bh=doETBAvxueIqZl8ijjF86AueapnD81Xaah17I3OIXA4=;
+        s=korg; t=1643050619;
+        bh=y+we92SPknJm552z1ppO/DVAZMNczlZ+j1Y2CQ3lDoU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PJzuhCqlJEIVbzpIrunex7ubplCgoNg1+aaQMiZblHw/mMmGOfr+aUHHvPq5MdA+l
-         1g5zGfqtKnKbvZDgwMxO/ffndrSmzxDmDASQhTR7lMxfZRVizon/qSaKpRapXTGkud
-         w1reNiAuqdCG4IBHC2kRHuhcN2kHYhlpOyGUuTYw=
+        b=nimoex8BIwEfsQnunmPmLnzSOVi28qVo/5So+MpIlgQX2iPA71RlyA1ZccouNY+uy
+         lpZo7EWzL41wQEQz6sZLWlewpHEw3Y0OHt3QIf3tmsy+IVD+CtZA/X2vAQmVgiFV1h
+         miEIyechZ5zuVGBN6CTCrb4ylQ4MykHweoAqIpLE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, Kamal Heib <kamalheib1@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.4 054/114] mips: lantiq: add support for clk_set_parent()
-Date:   Mon, 24 Jan 2022 19:42:29 +0100
-Message-Id: <20220124183928.773171920@linuxfoundation.org>
+Subject: [PATCH 4.9 060/157] RDMA/hns: Validate the pkey index
+Date:   Mon, 24 Jan 2022 19:42:30 +0100
+Message-Id: <20220124183934.685563589@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183927.095545464@linuxfoundation.org>
-References: <20220124183927.095545464@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,46 +46,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Kamal Heib <kamalheib1@gmail.com>
 
-[ Upstream commit 76f66dfd60dc5d2f9dec22d99091fea1035c5d03 ]
+[ Upstream commit 2a67fcfa0db6b4075515bd23497750849b88850f ]
 
-Provide a simple implementation of clk_set_parent() in the lantiq
-subarch so that callers of it will build without errors.
+Before query pkey, make sure that the queried index is valid.
 
-Fixes these build errors:
-
-ERROR: modpost: "clk_set_parent" [sound/soc/jz4740/snd-soc-jz4740-i2s.ko] undefined!
-ERROR: modpost: "clk_set_parent" [sound/soc/atmel/snd-soc-atmel-i2s.ko] undefined!
-
-Fixes: 171bb2f19ed6 ("MIPS: Lantiq: Add initial support for Lantiq SoCs")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
---to=linux-mips@vger.kernel.org --cc="John Crispin <john@phrozen.org>" --cc="Jonathan Cameron <jic23@kernel.org>" --cc="Russell King <linux@armlinux.org.uk>" --cc="Andy Shevchenko <andy.shevchenko@gmail.com>" --cc=alsa-devel@alsa-project.org --to="Thomas Bogendoerfer <tsbogend@alpha.franken.de>"
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Fixes: 9a4435375cd1 ("IB/hns: Add driver files for hns RoCE driver")
+Link: https://lore.kernel.org/r/20211117145954.123893-1-kamalheib1@gmail.com
+Signed-off-by: Kamal Heib <kamalheib1@gmail.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/lantiq/clk.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/infiniband/hw/hns/hns_roce_main.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/mips/lantiq/clk.c b/arch/mips/lantiq/clk.c
-index a0706fd4ce0a0..80bdcb26ef8a3 100644
---- a/arch/mips/lantiq/clk.c
-+++ b/arch/mips/lantiq/clk.c
-@@ -165,6 +165,12 @@ struct clk *of_clk_get_from_provider(struct of_phandle_args *clkspec)
- 	return NULL;
- }
- 
-+int clk_set_parent(struct clk *clk, struct clk *parent)
-+{
-+	return 0;
-+}
-+EXPORT_SYMBOL(clk_set_parent);
-+
- static inline u32 get_counter_resolution(void)
+diff --git a/drivers/infiniband/hw/hns/hns_roce_main.c b/drivers/infiniband/hw/hns/hns_roce_main.c
+index 764e35a54457e..852aac146ac78 100644
+--- a/drivers/infiniband/hw/hns/hns_roce_main.c
++++ b/drivers/infiniband/hw/hns/hns_roce_main.c
+@@ -475,6 +475,9 @@ static int hns_roce_query_gid(struct ib_device *ib_dev, u8 port_num, int index,
+ static int hns_roce_query_pkey(struct ib_device *ib_dev, u8 port, u16 index,
+ 			       u16 *pkey)
  {
- 	u32 res;
++	if (index > 0)
++		return -EINVAL;
++
+ 	*pkey = PKEY_ID;
+ 
+ 	return 0;
 -- 
 2.34.1
 

@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 690994995C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:13:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D82CC499B5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442912AbiAXUzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:55:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385441AbiAXUdZ (ORCPT
+        id S1575220AbiAXVvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:51:09 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34670 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1449644AbiAXVP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:33:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14A9C07E290;
-        Mon, 24 Jan 2022 11:44:47 -0800 (PST)
+        Mon, 24 Jan 2022 16:15:56 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98983B811F9;
-        Mon, 24 Jan 2022 19:44:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AEBCC340E5;
-        Mon, 24 Jan 2022 19:44:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA315B811FB;
+        Mon, 24 Jan 2022 21:15:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13060C340E4;
+        Mon, 24 Jan 2022 21:15:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053485;
-        bh=V3QOwk8IW3ZkXrK9Ww4HIPJ27Oj/Lc/7eiEjo3TghfY=;
+        s=korg; t=1643058954;
+        bh=hoGmMt6X0klq0+u7iW/1fCYXghyAHMkMKI5zDTPe7y0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rtxeIdxAQEIM9Nv6xRJF8kgLefuT/gV5EGqFruzRrLY0ZC9IRkLpW7+Ux79Z8TrXT
-         e1Zn2Ps7+951XoiuHRBuoA4SpiikV8jHwShKmltNT3qV2F5Gz8g7Xwuk6rkpjI8oCF
-         RwoLh/zb871gRX+5xVwTeCxHQulbO4cde7Uq3uAg=
+        b=ZHGYf+q3xVRrUFTLNJYl1nBUTn9NL3kA+6SvWp7yGE91D8Tob8Og8SKcQbXGPEDWn
+         SUjULQgHlAowYsPOopJ4hLAosWnpB+FPDtlOlnvp2qzZdihwdCEl666Xwu/aCXXR9W
+         23ODV/hrD2jV4E5KGj8GHp13uf+iW9bXphkX/cls=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
+        stable@vger.kernel.org, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 081/563] arm64: dts: meson-gxbb-wetek: fix missing GPIO binding
+Subject: [PATCH 5.16 0457/1039] ASoC: uniphier: drop selecting non-existing SND_SOC_UNIPHIER_AIO_DMA
 Date:   Mon, 24 Jan 2022 19:37:26 +0100
-Message-Id: <20220124184027.185132482@linuxfoundation.org>
+Message-Id: <20220124184140.660840865@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,37 +46,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Hewitt <christianshewitt@gmail.com>
+From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-[ Upstream commit c019abb2feba3cbbd7cf7178f8e6499c4fa6fced ]
+[ Upstream commit 49f893253ab43566e34332a969324531fea463f6 ]
 
-The absence of this binding appears to be harmless in Linux but it breaks
-Ethernet support in mainline u-boot. So add the binding (which is present
-in all other u-boot supported GXBB device-trees).
+Commit f37fe2f9987b ("ASoC: uniphier: add support for UniPhier AIO common
+driver") adds configs SND_SOC_UNIPHIER_{LD11,PXS2}, which select the
+non-existing config SND_SOC_UNIPHIER_AIO_DMA.
 
-Fixes: fb72c03e0e32 ("ARM64: dts: meson-gxbb-wetek: add a wetek specific dtsi to cleanup hub and play2")
+Hence, ./scripts/checkkconfigsymbols.py warns:
 
-Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://lore.kernel.org/r/20211012052522.30873-3-christianshewitt@gmail.com
+  SND_SOC_UNIPHIER_AIO_DMA
+  Referencing files: sound/soc/uniphier/Kconfig
+
+Probably, there is actually no further config intended to be selected
+here. So, just drop selecting the non-existing config.
+
+Fixes: f37fe2f9987b ("ASoC: uniphier: add support for UniPhier AIO common driver")
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Link: https://lore.kernel.org/r/20211125095158.8394-2-lukas.bulwahn@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/amlogic/meson-gxbb-wetek.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+ sound/soc/uniphier/Kconfig | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-gxbb-wetek.dtsi b/arch/arm64/boot/dts/amlogic/meson-gxbb-wetek.dtsi
-index 8e2af986cebaf..a4d34398da358 100644
---- a/arch/arm64/boot/dts/amlogic/meson-gxbb-wetek.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-gxbb-wetek.dtsi
-@@ -6,6 +6,7 @@
-  */
- 
- #include "meson-gxbb.dtsi"
-+#include <dt-bindings/gpio/gpio.h>
- 
- / {
- 	aliases {
+diff --git a/sound/soc/uniphier/Kconfig b/sound/soc/uniphier/Kconfig
+index aa3592ee1358b..ddfa6424c656b 100644
+--- a/sound/soc/uniphier/Kconfig
++++ b/sound/soc/uniphier/Kconfig
+@@ -23,7 +23,6 @@ config SND_SOC_UNIPHIER_LD11
+ 	tristate "UniPhier LD11/LD20 Device Driver"
+ 	depends on SND_SOC_UNIPHIER
+ 	select SND_SOC_UNIPHIER_AIO
+-	select SND_SOC_UNIPHIER_AIO_DMA
+ 	help
+ 	  This adds ASoC driver for Socionext UniPhier LD11/LD20
+ 	  input and output that can be used with other codecs.
+@@ -34,7 +33,6 @@ config SND_SOC_UNIPHIER_PXS2
+ 	tristate "UniPhier PXs2 Device Driver"
+ 	depends on SND_SOC_UNIPHIER
+ 	select SND_SOC_UNIPHIER_AIO
+-	select SND_SOC_UNIPHIER_AIO_DMA
+ 	help
+ 	  This adds ASoC driver for Socionext UniPhier PXs2
+ 	  input and output that can be used with other codecs.
 -- 
 2.34.1
 

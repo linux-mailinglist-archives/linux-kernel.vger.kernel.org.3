@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 894B5498C00
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:18:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4E3498BE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:17:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347049AbiAXTSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:18:24 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36414 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346923AbiAXTJJ (ORCPT
+        id S238059AbiAXTRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:17:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38822 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346929AbiAXTJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:09:09 -0500
+        Mon, 24 Jan 2022 14:09:11 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA981B8121A;
-        Mon, 24 Jan 2022 19:09:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DF48C340E5;
-        Mon, 24 Jan 2022 19:09:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDF8660B88;
+        Mon, 24 Jan 2022 19:09:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAD15C340E5;
+        Mon, 24 Jan 2022 19:09:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051346;
-        bh=qNILM1RdhmA5Zm0cLlQ79sNMcY7CTw2k9YHU8nTci04=;
+        s=korg; t=1643051350;
+        bh=GLtLK6jPA6nPtqriz3ZVOeIfZ5OpRTdv6BTEh612+3M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CIfewN+Dia7lY9GxI92G/GpSkMn81A0T7Et5NLLOtZ4IX1rFUUU0bDsB//VpDZnfq
-         qcftELjV1qPwp1MOYrFiVbi5Jmnsl6oDHNs4lfAZT+X9e+1JQ9RuprhkSb6ISUO0ny
-         CHTlI04a6kIhaWL9k5hW17dIIzoF8lKCO+ZSF2fo=
+        b=yZ04MY26ji0jSK5PoHw031ku+B2azKKJnYEytXp0Kckza9Vx+7zSSNW7mOU3yZXfE
+         TfFzN16nWc9h/Rnoyx/DfmTZ0QyLP7vCWK1XqPczziklmxkLfEdWIASdNHH71ExGRK
+         2CfrjkiLUh+kRldc7a9IrZ2PmAAmtkWq4Lm204/Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Julia Lawall <Julia.Lawall@lip6.fr>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 132/186] powerpc/6xx: add missing of_node_put
-Date:   Mon, 24 Jan 2022 19:43:27 +0100
-Message-Id: <20220124183941.357910302@linuxfoundation.org>
+Subject: [PATCH 4.14 133/186] powerpc/powernv: add missing of_node_put
+Date:   Mon, 24 Jan 2022 19:43:28 +0100
+Message-Id: <20220124183941.389960692@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
 References: <20220124183937.101330125@linuxfoundation.org>
@@ -48,7 +48,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Julia Lawall <Julia.Lawall@lip6.fr>
 
-[ Upstream commit f6e82647ff71d427d4148964b71f239fba9d7937 ]
+[ Upstream commit 7d405a939ca960162eb30c1475759cb2fdf38f8c ]
 
 for_each_compatible_node performs an of_node_get on each iteration, so
 a break out of the loop requires an of_node_put.
@@ -57,11 +57,6 @@ A simplified version of the semantic patch that fixes this problem is as
 follows (http://coccinelle.lip6.fr):
 
 // <smpl>
-@@
-expression e;
-local idexpression n;
-@@
-
 @@
 local idexpression n;
 expression e;
@@ -84,24 +79,24 @@ expression e;
 
 Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/1448051604-25256-2-git-send-email-Julia.Lawall@lip6.fr
+Link: https://lore.kernel.org/r/1448051604-25256-4-git-send-email-Julia.Lawall@lip6.fr
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/platforms/embedded6xx/hlwd-pic.c | 1 +
+ arch/powerpc/platforms/powernv/opal-lpc.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/powerpc/platforms/embedded6xx/hlwd-pic.c b/arch/powerpc/platforms/embedded6xx/hlwd-pic.c
-index bf4a125faec66..db2ea6b6889de 100644
---- a/arch/powerpc/platforms/embedded6xx/hlwd-pic.c
-+++ b/arch/powerpc/platforms/embedded6xx/hlwd-pic.c
-@@ -220,6 +220,7 @@ void hlwd_pic_probe(void)
- 			irq_set_chained_handler(cascade_virq,
- 						hlwd_pic_irq_cascade);
- 			hlwd_irq_host = host;
-+			of_node_put(np);
- 			break;
- 		}
+diff --git a/arch/powerpc/platforms/powernv/opal-lpc.c b/arch/powerpc/platforms/powernv/opal-lpc.c
+index 6c7ad1d8b32ed..21f0edcfb84ad 100644
+--- a/arch/powerpc/platforms/powernv/opal-lpc.c
++++ b/arch/powerpc/platforms/powernv/opal-lpc.c
+@@ -400,6 +400,7 @@ void __init opal_lpc_init(void)
+ 		if (!of_get_property(np, "primary", NULL))
+ 			continue;
+ 		opal_lpc_chip_id = of_get_ibm_chip_id(np);
++		of_node_put(np);
+ 		break;
  	}
+ 	if (opal_lpc_chip_id < 0)
 -- 
 2.34.1
 

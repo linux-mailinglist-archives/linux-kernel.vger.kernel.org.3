@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7565649A5C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 390D549A6F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2374172AbiAYAQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:16:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
+        id S3422007AbiAYC3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:29:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382995AbiAXX2E (ORCPT
+        with ESMTP id S1357849AbiAXUJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:28:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D36C01D7F1;
-        Mon, 24 Jan 2022 13:31:19 -0800 (PST)
+        Mon, 24 Jan 2022 15:09:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E07DC02983A;
+        Mon, 24 Jan 2022 11:33:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93851614F3;
-        Mon, 24 Jan 2022 21:31:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 674CBC340E4;
-        Mon, 24 Jan 2022 21:31:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4551BB8121C;
+        Mon, 24 Jan 2022 19:33:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 689D5C340E5;
+        Mon, 24 Jan 2022 19:32:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059878;
-        bh=5ND4c0WFizvbyzJNtRy1VuRdoEZMvxVRqMNu9KAXCrQ=;
+        s=korg; t=1643052779;
+        bh=MGcczI86XdxpzZ8+PoJv+QLLEjPqQxli/cTut4UHhGo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M8mtHVw5RbMHWSSuq7TmsLnd2PYnOm2ENQAgX4/cWDYqLPRtBRAo6mjKgeeJ+oRZh
-         hA+X7lIx7sW5Ij+J4vBT8VOfwa6I866zGgw33W+OSlQZwhSL/25QL8f4nXuymSgHxX
-         +cOifRRn+lJLsyJczBvz1++qZ3okd/VxYNFOvr6E=
+        b=iy7vgXPYC95Rasyu3ywwZmVNLyoXqVnb5F4ExwHjoIeYskg7+72VKwFbjof8Cclnj
+         2FdOjnPzR7I9FvtFbolvXZhiytfYOmbz46+7s7ZXFAtIdIe5nLXElWkyrMAakt4HZF
+         VsfRtLyNFpKTNoQKTow+j/b8OzIkque9DkMI+FKw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        stable@vger.kernel.org, Avihai Horon <avihaih@nvidia.com>,
+        Mark Zhang <markzhang@nvidia.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0732/1039] x86/kbuild: Enable CONFIG_KALLSYMS_ALL=y in the defconfigs
-Date:   Mon, 24 Jan 2022 19:42:01 +0100
-Message-Id: <20220124184149.928393193@linuxfoundation.org>
+Subject: [PATCH 5.4 138/320] RDMA/core: Let ib_find_gid() continue search even after empty entry
+Date:   Mon, 24 Jan 2022 19:42:02 +0100
+Message-Id: <20220124183958.348215298@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,43 +51,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ingo Molnar <mingo@kernel.org>
+From: Avihai Horon <avihaih@nvidia.com>
 
-[ Upstream commit b6aa86cff44cf099299d3a5e66348cb709cd7964 ]
+[ Upstream commit 483d805191a23191f8294bbf9b4e94836f5d92e4 ]
 
-Most distro kernels have this option enabled, to improve debug output.
+Currently, ib_find_gid() will stop searching after encountering the first
+empty GID table entry. This behavior is wrong since neither IB nor RoCE
+spec enforce tightly packed GID tables.
 
-Lockdep also selects it.
+For example, when a valid GID entry exists at index N, and if a GID entry
+is empty at index N-1, ib_find_gid() will fail to find the valid entry.
 
-Enable this in the defconfig kernel as well, to make it more
-representative of what people are using on x86.
+Fix it by making ib_find_gid() continue searching even after encountering
+missing entries.
 
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/YdTn7gssoMVDMgMw@gmail.com
+Fixes: 5eb620c81ce3 ("IB/core: Add helpers for uncached GID and P_Key searches")
+Link: https://lore.kernel.org/r/e55d331b96cecfc2cf19803d16e7109ea966882d.1639055490.git.leonro@nvidia.com
+Signed-off-by: Avihai Horon <avihaih@nvidia.com>
+Reviewed-by: Mark Zhang <markzhang@nvidia.com>
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/configs/i386_defconfig   | 1 +
- arch/x86/configs/x86_64_defconfig | 1 +
- 2 files changed, 2 insertions(+)
+ drivers/infiniband/core/device.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/configs/i386_defconfig b/arch/x86/configs/i386_defconfig
-index e81885384f604..99398cbdae434 100644
---- a/arch/x86/configs/i386_defconfig
-+++ b/arch/x86/configs/i386_defconfig
-@@ -262,3 +262,4 @@ CONFIG_BLK_DEV_IO_TRACE=y
- CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
- CONFIG_EARLY_PRINTK_DBGP=y
- CONFIG_DEBUG_BOOT_PARAMS=y
-+CONFIG_KALLSYMS_ALL=y
-diff --git a/arch/x86/configs/x86_64_defconfig b/arch/x86/configs/x86_64_defconfig
-index e8a7a0af2bdaa..d7298b104a456 100644
---- a/arch/x86/configs/x86_64_defconfig
-+++ b/arch/x86/configs/x86_64_defconfig
-@@ -258,3 +258,4 @@ CONFIG_BLK_DEV_IO_TRACE=y
- CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
- CONFIG_EARLY_PRINTK_DBGP=y
- CONFIG_DEBUG_BOOT_PARAMS=y
-+CONFIG_KALLSYMS_ALL=y
+diff --git a/drivers/infiniband/core/device.c b/drivers/infiniband/core/device.c
+index 256d379bba676..de66d7da1bf6e 100644
+--- a/drivers/infiniband/core/device.c
++++ b/drivers/infiniband/core/device.c
+@@ -2438,7 +2438,8 @@ int ib_find_gid(struct ib_device *device, union ib_gid *gid,
+ 		     ++i) {
+ 			ret = rdma_query_gid(device, port, i, &tmp_gid);
+ 			if (ret)
+-				return ret;
++				continue;
++
+ 			if (!memcmp(&tmp_gid, gid, sizeof *gid)) {
+ 				*port_num = port;
+ 				if (index)
 -- 
 2.34.1
 

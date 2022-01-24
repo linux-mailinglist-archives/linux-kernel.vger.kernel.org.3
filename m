@@ -2,136 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 704E449A0F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:34:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C84B949A0FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:34:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1848306AbiAXXWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:22:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60993 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1454132AbiAXWX2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:23:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643063006;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=067mQ/rXiwBk6yJpI9gB9PMeq9lk0HWia8mGv4MMwCI=;
-        b=i+dJ9cepItwOGjKQrhGY/3NiPfEt/ZP3gwZCGAsqV7T5SSNI+A/h6GJg1Ul3xL3IcTuWPx
-        maWgm+8q0G7e7q7okqxa6u/LidAXexlomHC9FgvG8l/GlEemREm7L29d+r4k4uvfMT93Tn
-        Q+aesxsHuWBQYdwER3XYD2/VlgbIdUU=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-460-6tDms27aNdy1omFb1A0fRw-1; Mon, 24 Jan 2022 17:23:24 -0500
-X-MC-Unique: 6tDms27aNdy1omFb1A0fRw-1
-Received: by mail-ed1-f71.google.com with SMTP id i22-20020a0564020f1600b00407b56326a2so3747377eda.18
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:23:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=067mQ/rXiwBk6yJpI9gB9PMeq9lk0HWia8mGv4MMwCI=;
-        b=1hM8+f897pY8WjTW1QL/zdeyv0x+JQ80Kr7Pg2QGhqkmHWCJz/o3aYv5Vnu4uPN8BS
-         Fcq+KDTRCzbqfjVGdFmw6v40/JeDJo26khK8QTBdF2DgL8G1mYiAw4OsRjiBxO1kEBCb
-         t1calhfsW4msSu45Hp1QGu+qIIJvpphAsR6VFrXQyk5TYaxyflGLYfkCz5/+UDgICof+
-         qIkPKDGCpwzQyn91KIAaLukH9s/joOxsJuPeQYhUyiwQhRwkF+u6GdjI8LFC3Kpvil4c
-         5uYNCKCoEBTWAOGzCtisW2oOMkm5Bp6Fz2SWbvTHCuQmw+xby2bdvF1C7qfnHcgpk/C5
-         rhsg==
-X-Gm-Message-State: AOAM5312NrqEDGx2I54PAwgvkLLv0wVCJXibXHWbyz7r6O1uSX3ZyVXu
-        9UbrG+HjfqSn8+I44kRCICPQKCRmfVadtwVXIMp1m8VpHz5ne+z5b3SomQvBoDZz34Ns7YimM3S
-        ptj/1BGG5HFsHuWR8rQ7EHJCA
-X-Received: by 2002:a17:906:6a1a:: with SMTP id qw26mr5794945ejc.454.1643063003258;
-        Mon, 24 Jan 2022 14:23:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw/8716fksKjT7h1gtcfWcvIT83G/teXeHSfZuelcx9XPN1OZLtilO1FMN72ciP7y3cZa5/tA==
-X-Received: by 2002:a17:906:6a1a:: with SMTP id qw26mr5794923ejc.454.1643063002990;
-        Mon, 24 Jan 2022 14:23:22 -0800 (PST)
-Received: from krava ([83.240.63.12])
-        by smtp.gmail.com with ESMTPSA id l2sm7162047eds.28.2022.01.24.14.23.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 14:23:22 -0800 (PST)
-Date:   Mon, 24 Jan 2022 23:23:20 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [RFC PATCH v3 0/9] fprobe: Introduce fprobe function entry/exit
- probe
-Message-ID: <Ye8m2CpVI8VOiMTH@krava>
-References: <164260419349.657731.13913104835063027148.stgit@devnote2>
- <CAEf4Bzbbimea3ydwafXSHFiEffYx5zAcwGNKk8Zi6QZ==Vn0Ug@mail.gmail.com>
- <20220121135510.7cfa6540e31824aa39b1c1b8@kernel.org>
- <CAEf4Bza0eTft2kjcm9HhKpAm=AuXnGwZfZ+sYpVVBvj93PBreQ@mail.gmail.com>
- <Ye3ptcW0eAFRYm58@krava>
- <20220124092405.665e9e0fc3ce14b16a1a9fcf@kernel.org>
- <Ye6ZyeHQtPfUoSvX@krava>
- <CAEf4BzbrVBXDJA4qbCgudiiLGtHNyUQAOuE=AUwfxzMrF=Wr=w@mail.gmail.com>
+        id S1848654AbiAXXXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:23:00 -0500
+Received: from mga11.intel.com ([192.55.52.93]:52617 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1588580AbiAXWd3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 17:33:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643063603; x=1674599603;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tiOqC+YWUvtyr8cm/6FJsbU9NS5AZTGBWl4YTiFLuE8=;
+  b=IjQ2k88tNlDdmWojeK1CZmda64IUJG+ElgukhIUz3erdDN/xPQMqgHqH
+   7HpX2QlnrzStIBdqov3Ak+mLE3wPd75i0gqpTh7btL6k08aFRNW+3yMvT
+   VjtXDQ4UGSt0AXuAcrt98vuoldZNEGleWQa+2yRGn3wKBZOS9ZZ1s3MEi
+   3mCTxnP2BNivYdbzJnGxZ/DaoGVH6+kSp09lxjhyPWh+IFI4SoMbCzQeH
+   VnME7XmAPQV+YgpR2RVSIceqjWx2e+/Bu0N1+PbQl+ROMm5qnYqpaeq2k
+   P0LdXF5TbekcyUEtJuRiubpNLTGtIgz2wekhGEWntZUt7ujlL5kudsma6
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="243760667"
+X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
+   d="scan'208";a="243760667"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 14:24:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
+   d="scan'208";a="617403066"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 24 Jan 2022 14:24:10 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nC7kv-000IzK-Mt; Mon, 24 Jan 2022 22:24:09 +0000
+Date:   Tue, 25 Jan 2022 06:23:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: dtbs_check: arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:
+ i2s@3830000: 'assigned-clock-rates' does not match any of the regexes:
+ 'pinctrl-[0-9]+'
+Message-ID: <202201250436.5gEafGrM-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEf4BzbrVBXDJA4qbCgudiiLGtHNyUQAOuE=AUwfxzMrF=Wr=w@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 12:22:10PM -0800, Andrii Nakryiko wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
+commit: 58dfff3e984dfb96dae98008e6ea0ab92248d003 dt-bindings: Drop unnecessary pinctrl properties
+date:   4 days ago
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce: make ARCH=arm dtbs_check
 
-SNIP
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > > > > > > > (This testing patch is just for confirming the rethook is correctly
-> > > > > > > >  implemented.)
-> > > > > > > >
-> > > > > > > > BTW, on the x86, ftrace (with fentry) location address is same as
-> > > > > > > > symbol address. But on other archs, it will be different (e.g. arm64
-> > > > > > > > will need 2 instructions to save link-register and call ftrace, the
-> > > > > > > > 2nd instruction will be the ftrace location.)
-> > > > > > > > Does libbpf correctly handle it?
-> > > >
-> > > > hm, I'm probably missing something, but should this be handled by arm
-> > > > specific kernel code? user passes whatever is found in kallsyms, right?
-> > >
-> > > In x86, fentry nop is always placed at the first instruction of the function,
-> > > but the other arches couldn't do that if they use LR (link register) for
-> > > storing return address instead of stack. E.g. arm64 saves lr and call the
-> > > ftrace. Then ftrace location address of a function is not the symbol address.
-> > >
-> > > Anyway, I updated fprobe to handle those cases. I also found some issues
-> > > on rethook, so let me update the series again.
-> >
-> > great, I reworked the bpf fprobe link change and need to add the
-> > symbols attachment support, so you don't need to include it in
-> > new version.. I'll rebase it and send on top of your patchset
-> 
-> Using just addresses (IPs) for retsnoop and bpftrace is fine because
-> such generic tools are already parsing kallsyms and probably building
-> some lookup table. But in general, having IP-based attachment is a
-> regression from current perf_event_open-based kprobe, where user is
-> expected to pass symbolic function name. Using IPs has an advantage of
-> being unambiguous (e.g., when same static function name in kernel
-> belongs to multiple actual functions), so there is that. But I was
-> also wondering wouldn't kernel need to do symbol to IP resolution
-> anyways just to check that we are attaching to function entry?
 
-ftrace does its own check for address to attach, it keeps record
-for every attachable address.. so less work for us ;-)
+dtcheck warnings: (new ones prefixed by >>)
+   arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:0:0: /soc/pinctrl@13400000/wakeup-interrupt-controller: failed to match any schema with compatible: ['samsung,exynos4210-wakeup-eint']
+   arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:0:0: /soc/pinctrl@13410000: failed to match any schema with compatible: ['samsung,exynos5420-pinctrl']
+   arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:0:0: /soc/pinctrl@14000000: failed to match any schema with compatible: ['samsung,exynos5420-pinctrl']
+   arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:0:0: /soc/pinctrl@14010000: failed to match any schema with compatible: ['samsung,exynos5420-pinctrl']
+   arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:0:0: /soc/pinctrl@3860000: failed to match any schema with compatible: ['samsung,exynos5420-pinctrl']
+   arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:0:0: /soc/adma@3880000: failed to match any schema with compatible: ['arm,pl330', 'arm,primecell']
+   arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:0:0: /soc/pdma@121a0000: failed to match any schema with compatible: ['arm,pl330', 'arm,primecell']
+   arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:0:0: /soc/pdma@121b0000: failed to match any schema with compatible: ['arm,pl330', 'arm,primecell']
+   arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:0:0: /soc/mdma@10800000: failed to match any schema with compatible: ['arm,pl330', 'arm,primecell']
+   arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:0:0: /soc/mdma@11c10000: failed to match any schema with compatible: ['arm,pl330', 'arm,primecell']
+>> arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml: i2s@3830000: 'assigned-clock-rates' does not match any of the regexes: 'pinctrl-[0-9]+'
+   	From schema: Documentation/devicetree/bindings/sound/samsung-i2s.yaml
+   arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:0:0: /soc/spi@12d20000: failed to match any schema with compatible: ['samsung,exynos4210-spi']
+   arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:0:0: /soc/spi@12d30000: failed to match any schema with compatible: ['samsung,exynos4210-spi']
+   arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:0:0: /soc/spi@12d40000: failed to match any schema with compatible: ['samsung,exynos4210-spi']
+   arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:0:0: /soc/dp-video-phy: failed to match any schema with compatible: ['samsung,exynos5420-dp-video-phy']
+   arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:0:0: /soc/mipi-video-phy: failed to match any schema with compatible: ['samsung,s5pv210-mipi-video-phy']
+   arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:0:0: /soc/dsi@14500000: failed to match any schema with compatible: ['samsung,exynos5410-mipi-dsi']
+   arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:0:0: /soc/i2c@12e00000: failed to match any schema with compatible: ['samsung,exynos5250-hsi2c']
+   arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:0:0: /soc/i2c@12e10000: failed to match any schema with compatible: ['samsung,exynos5250-hsi2c']
+   arch/arm/boot/dts/exynos5422-odroidxu3.dt.yaml:0:0: /soc/i2c@12e20000: failed to match any schema with compatible: ['samsung,exynos5250-hsi2c']
+--
+   arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml:0:0: /soc/pinctrl@13400000/wakeup-interrupt-controller: failed to match any schema with compatible: ['samsung,exynos4210-wakeup-eint']
+   arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml:0:0: /soc/pinctrl@13410000: failed to match any schema with compatible: ['samsung,exynos5420-pinctrl']
+   arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml:0:0: /soc/pinctrl@14000000: failed to match any schema with compatible: ['samsung,exynos5420-pinctrl']
+   arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml:0:0: /soc/pinctrl@14010000: failed to match any schema with compatible: ['samsung,exynos5420-pinctrl']
+   arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml:0:0: /soc/pinctrl@3860000: failed to match any schema with compatible: ['samsung,exynos5420-pinctrl']
+   arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml:0:0: /soc/adma@3880000: failed to match any schema with compatible: ['arm,pl330', 'arm,primecell']
+   arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml:0:0: /soc/pdma@121a0000: failed to match any schema with compatible: ['arm,pl330', 'arm,primecell']
+   arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml:0:0: /soc/pdma@121b0000: failed to match any schema with compatible: ['arm,pl330', 'arm,primecell']
+   arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml:0:0: /soc/mdma@10800000: failed to match any schema with compatible: ['arm,pl330', 'arm,primecell']
+   arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml:0:0: /soc/mdma@11c10000: failed to match any schema with compatible: ['arm,pl330', 'arm,primecell']
+>> arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml: i2s@3830000: 'assigned-clock-rates' does not match any of the regexes: 'pinctrl-[0-9]+'
+   	From schema: Documentation/devicetree/bindings/sound/samsung-i2s.yaml
+   arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml:0:0: /soc/spi@12d20000: failed to match any schema with compatible: ['samsung,exynos4210-spi']
+   arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml:0:0: /soc/spi@12d30000: failed to match any schema with compatible: ['samsung,exynos4210-spi']
+   arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml:0:0: /soc/spi@12d40000: failed to match any schema with compatible: ['samsung,exynos4210-spi']
+   arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml:0:0: /soc/dp-video-phy: failed to match any schema with compatible: ['samsung,exynos5420-dp-video-phy']
+   arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml:0:0: /soc/mipi-video-phy: failed to match any schema with compatible: ['samsung,s5pv210-mipi-video-phy']
+   arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml:0:0: /soc/dsi@14500000: failed to match any schema with compatible: ['samsung,exynos5410-mipi-dsi']
+   arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml:0:0: /soc/i2c@12e00000: failed to match any schema with compatible: ['samsung,exynos5250-hsi2c']
+   arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml:0:0: /soc/i2c@12e10000: failed to match any schema with compatible: ['samsung,exynos5250-hsi2c']
+   arch/arm/boot/dts/exynos5422-odroidxu3-lite.dt.yaml:0:0: /soc/i2c@12e20000: failed to match any schema with compatible: ['samsung,exynos5250-hsi2c']
+--
+   arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml:0:0: /soc/pinctrl@13400000/wakeup-interrupt-controller: failed to match any schema with compatible: ['samsung,exynos4210-wakeup-eint']
+   arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml:0:0: /soc/pinctrl@13410000: failed to match any schema with compatible: ['samsung,exynos5420-pinctrl']
+   arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml:0:0: /soc/pinctrl@14000000: failed to match any schema with compatible: ['samsung,exynos5420-pinctrl']
+   arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml:0:0: /soc/pinctrl@14010000: failed to match any schema with compatible: ['samsung,exynos5420-pinctrl']
+   arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml:0:0: /soc/pinctrl@3860000: failed to match any schema with compatible: ['samsung,exynos5420-pinctrl']
+   arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml:0:0: /soc/adma@3880000: failed to match any schema with compatible: ['arm,pl330', 'arm,primecell']
+   arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml:0:0: /soc/pdma@121a0000: failed to match any schema with compatible: ['arm,pl330', 'arm,primecell']
+   arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml:0:0: /soc/pdma@121b0000: failed to match any schema with compatible: ['arm,pl330', 'arm,primecell']
+   arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml:0:0: /soc/mdma@10800000: failed to match any schema with compatible: ['arm,pl330', 'arm,primecell']
+   arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml:0:0: /soc/mdma@11c10000: failed to match any schema with compatible: ['arm,pl330', 'arm,primecell']
+>> arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml: i2s@3830000: 'assigned-clock-rates' does not match any of the regexes: 'pinctrl-[0-9]+'
+   	From schema: Documentation/devicetree/bindings/sound/samsung-i2s.yaml
+   arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml:0:0: /soc/spi@12d20000: failed to match any schema with compatible: ['samsung,exynos4210-spi']
+   arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml:0:0: /soc/spi@12d30000: failed to match any schema with compatible: ['samsung,exynos4210-spi']
+   arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml:0:0: /soc/spi@12d40000: failed to match any schema with compatible: ['samsung,exynos4210-spi']
+   arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml:0:0: /soc/dp-video-phy: failed to match any schema with compatible: ['samsung,exynos5420-dp-video-phy']
+   arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml:0:0: /soc/mipi-video-phy: failed to match any schema with compatible: ['samsung,s5pv210-mipi-video-phy']
+   arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml:0:0: /soc/dsi@14500000: failed to match any schema with compatible: ['samsung,exynos5410-mipi-dsi']
+   arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml:0:0: /soc/i2c@12e00000: failed to match any schema with compatible: ['samsung,exynos5250-hsi2c']
+   arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml:0:0: /soc/i2c@12e10000: failed to match any schema with compatible: ['samsung,exynos5250-hsi2c']
+   arch/arm/boot/dts/exynos5422-odroidxu4.dt.yaml:0:0: /soc/i2c@12e20000: failed to match any schema with compatible: ['samsung,exynos5250-hsi2c']
 
-> 
-> I'll wait for your patch set to see how did you go about it in a new revision.
-
-I agree we should have the support to use symbols as well, I'll add it
-
-jirka
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

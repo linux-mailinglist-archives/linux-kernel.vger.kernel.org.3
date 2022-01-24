@@ -2,48 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4174995DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B139E499575
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:12:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443384AbiAXU4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:56:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345513AbiAXUeT (ORCPT
+        id S1383789AbiAXUwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:52:13 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53644 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239764AbiAXU3C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:34:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5453C07E2B4;
-        Mon, 24 Jan 2022 11:47:42 -0800 (PST)
+        Mon, 24 Jan 2022 15:29:02 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9BDE7B811FB;
-        Mon, 24 Jan 2022 19:47:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1E04C340E5;
-        Mon, 24 Jan 2022 19:47:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DDA1B61506;
+        Mon, 24 Jan 2022 20:29:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B162EC340E5;
+        Mon, 24 Jan 2022 20:29:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053660;
-        bh=dKB+66OEFYLtY2vwiuFxKSq1TWOn9R5HhTm/Y3CAfr8=;
+        s=korg; t=1643056141;
+        bh=xPFcUW/VW0HIXO34nXQrqLM6dA/LfJbR16e5fxSkbvk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=izDFkG76I3zTbg+mc/rLPGSR2EwHESwlZttb0cL3tEHFX6cvCyzD1BKwpxg3c423I
-         NMoKrYq4flAoPspGu0JxGvkKYYMT5AWxZtAUhOW2mHXaGGpuVkayfAwK/ac5m1A/re
-         kMa5rKKi9521l+mzaosrjbyao0thAnMbe3Sk6VgE=
+        b=WyDQIokNd8821FlonSRRcRKWWpkG8/bQnRgM2BKglitM8oDagkFOl7t3Mm+wpQFFQ
+         53rJaWXItve5OUdxqEEXsu8CyN1yqtuWQfN/v1gw65zcBA/q3QNo2LqG8bDQyPVmo3
+         rpd5QnlQurrHWX+w/ebzhdeZ5XB/scMfiLdKYUqs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Vincent Donnefort <vincent.donnefort@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        stable@vger.kernel.org, Peiwei Hu <jlu.hpw@foxmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 135/563] sched/fair: Fix per-CPU kthread and wakee stacking for asym CPU capacity
-Date:   Mon, 24 Jan 2022 19:38:20 +0100
-Message-Id: <20220124184029.069413824@linuxfoundation.org>
+Subject: [PATCH 5.15 384/846] powerpc/prom_init: Fix improper check of prom_getprop()
+Date:   Mon, 24 Jan 2022 19:38:21 +0100
+Message-Id: <20220124184114.185577267@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,44 +46,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vincent Donnefort <vincent.donnefort@arm.com>
+From: Peiwei Hu <jlu.hpw@foxmail.com>
 
-[ Upstream commit 014ba44e8184e1acf93e0cbb7089ee847802f8f0 ]
+[ Upstream commit 869fb7e5aecbc163003f93f36dcc26d0554319f6 ]
 
-select_idle_sibling() has a special case for tasks woken up by a per-CPU
-kthread where the selected CPU is the previous one. For asymmetric CPU
-capacity systems, the assumption was that the wakee couldn't have a
-bigger utilization during task placement than it used to have during the
-last activation. That was not considering uclamp.min which can completely
-change between two task activations and as a consequence mandates the
-fitness criterion asym_fits_capacity(), even for the exit path described
-above.
+prom_getprop() can return PROM_ERROR. Binary operator can not identify
+it.
 
-Fixes: b4c9c9f15649 ("sched/fair: Prefer prev cpu in asymmetric wakeup path")
-Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Link: https://lkml.kernel.org/r/20211129173115.4006346-1-vincent.donnefort@arm.com
+Fixes: 94d2dde738a5 ("[POWERPC] Efika: prune fixups and make them more carefull")
+Signed-off-by: Peiwei Hu <jlu.hpw@foxmail.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/tencent_BA28CC6897B7C95A92EB8C580B5D18589105@qq.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/sched/fair.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/powerpc/kernel/prom_init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index a7589552be5fc..2a33cb5a10e59 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6286,7 +6286,8 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
- 	if (is_per_cpu_kthread(current) &&
- 	    in_task() &&
- 	    prev == smp_processor_id() &&
--	    this_rq()->nr_running <= 1) {
-+	    this_rq()->nr_running <= 1 &&
-+	    asym_fits_capacity(task_util, prev)) {
- 		return prev;
- 	}
+diff --git a/arch/powerpc/kernel/prom_init.c b/arch/powerpc/kernel/prom_init.c
+index 18b04b08b9833..f845065c860e3 100644
+--- a/arch/powerpc/kernel/prom_init.c
++++ b/arch/powerpc/kernel/prom_init.c
+@@ -2991,7 +2991,7 @@ static void __init fixup_device_tree_efika_add_phy(void)
  
+ 	/* Check if the phy-handle property exists - bail if it does */
+ 	rv = prom_getprop(node, "phy-handle", prop, sizeof(prop));
+-	if (!rv)
++	if (rv <= 0)
+ 		return;
+ 
+ 	/*
 -- 
 2.34.1
 

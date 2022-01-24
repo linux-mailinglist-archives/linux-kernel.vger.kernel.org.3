@@ -2,39 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8607499160
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:13:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFDA649916D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379165AbiAXUK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:10:28 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50246 "EHLO
+        id S1354767AbiAXUKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:10:41 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50274 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235569AbiAXTwv (ORCPT
+        with ESMTP id S1352389AbiAXTwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:52:51 -0500
+        Mon, 24 Jan 2022 14:52:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1580860989;
-        Mon, 24 Jan 2022 19:52:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDAB1C340E8;
-        Mon, 24 Jan 2022 19:52:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E600D60916;
+        Mon, 24 Jan 2022 19:52:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D049AC340E5;
+        Mon, 24 Jan 2022 19:52:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053969;
-        bh=HkJde7G0N3DRpmHjssvvdYfr06UK7b1u/hUJBLTfLf4=;
+        s=korg; t=1643053972;
+        bh=Otfz0U8maTLEn+Irs0y44lE82ilMaXIVy8OqHKRQp7I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fWjdYUDEYkQS17SfaxzHQxD0xOFt9HQJXJ6Ng5oiOi3YfHrufv9d0+2CzQI61NyCH
-         C+LIlUpWArhp3jej1Zuvz/+HyCr7A/8z+P5zlW7TJLC3dt1sXq2m1K9xlYRQBxv8qh
-         uMrCwR6zgEY/bK5JZB6zDavMWAql/B2etcECtDWE=
+        b=MjFgCH6xCGUNGpd3TD/LFWfAIvJ+bwd44q3FSHsEdUl5ox264i91o1lI2kTzAfIDv
+         FYFzxOlF0ki7GmpAb6WkIvR5l51QkgUqSMXAzrDcQo8vFelGObUHePvatNaRrItcTq
+         4mM67mUhQOHi8JsExcFtZGTvG0eUn7ZAm1CZXSu0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 236/563] iwlwifi: mvm: Use div_s64 instead of do_div in iwl_mvm_ftm_rtt_smoothing()
-Date:   Mon, 24 Jan 2022 19:40:01 +0100
-Message-Id: <20220124184032.606666415@linuxfoundation.org>
+        Sasha Levin <sashal@kernel.org>,
+        syzbot+003c0a286b9af5412510@syzkaller.appspotmail.com
+Subject: [PATCH 5.10 237/563] net: mcs7830: handle usb read errors properly
+Date:   Mon, 24 Jan 2022 19:40:02 +0100
+Message-Id: <20220124184032.642319486@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -46,50 +48,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-[ Upstream commit 4ccdcc8ffd955490feec05380223db6a48961eb5 ]
+[ Upstream commit d668769eb9c52b150753f1653f7f5a0aeb8239d2 ]
 
-When building ARCH=arm allmodconfig:
+Syzbot reported uninit value in mcs7830_bind(). The problem was in
+missing validation check for bytes read via usbnet_read_cmd().
 
-drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c: In function ‘iwl_mvm_ftm_rtt_smoothing’:
-./include/asm-generic/div64.h:222:35: error: comparison of distinct pointer types lacks a cast [-Werror]
-  222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
-      |                                   ^~
-drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c:1070:9: note: in expansion of macro ‘do_div’
- 1070 |         do_div(rtt_avg, 100);
-      |         ^~~~~~
+usbnet_read_cmd() internally calls usb_control_msg(), that returns
+number of bytes read. Code should validate that requested number of bytes
+was actually read.
 
-do_div() has to be used with an unsigned 64-bit integer dividend but
-rtt_avg is a signed 64-bit integer.
+So, this patch adds missing size validation check inside
+mcs7830_get_reg() to prevent uninit value bugs
 
-div_s64() expects a signed 64-bit integer dividend and signed 32-bit
-divisor, which fits this scenario, so use that function here to fix the
-warning.
-
-Fixes: 8b0f92549f2c ("iwlwifi: mvm: fix 32-bit build in FTM")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Link: https://lore.kernel.org/r/20211227191757.2354329-1-nathan@kernel.org
+Reported-and-tested-by: syzbot+003c0a286b9af5412510@syzkaller.appspotmail.com
+Fixes: 2a36d7083438 ("USB: driver for mcs7830 (aka DeLOCK) USB ethernet adapter")
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/r/20220106225716.7425-1-paskripkin@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/net/usb/mcs7830.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c b/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c
-index fe3d52620a897..b1335fe3b01a2 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c
-@@ -967,8 +967,7 @@ static void iwl_mvm_ftm_rtt_smoothing(struct iwl_mvm *mvm,
- 	overshoot = IWL_MVM_FTM_INITIATOR_SMOOTH_OVERSHOOT;
- 	alpha = IWL_MVM_FTM_INITIATOR_SMOOTH_ALPHA;
+diff --git a/drivers/net/usb/mcs7830.c b/drivers/net/usb/mcs7830.c
+index 09bfa6a4dfbc1..7e40e2e2f3723 100644
+--- a/drivers/net/usb/mcs7830.c
++++ b/drivers/net/usb/mcs7830.c
+@@ -108,8 +108,16 @@ static const char driver_name[] = "MOSCHIP usb-ethernet driver";
  
--	rtt_avg = alpha * rtt + (100 - alpha) * resp->rtt_avg;
--	do_div(rtt_avg, 100);
-+	rtt_avg = div_s64(alpha * rtt + (100 - alpha) * resp->rtt_avg, 100);
+ static int mcs7830_get_reg(struct usbnet *dev, u16 index, u16 size, void *data)
+ {
+-	return usbnet_read_cmd(dev, MCS7830_RD_BREQ, MCS7830_RD_BMREQ,
+-				0x0000, index, data, size);
++	int ret;
++
++	ret = usbnet_read_cmd(dev, MCS7830_RD_BREQ, MCS7830_RD_BMREQ,
++			      0x0000, index, data, size);
++	if (ret < 0)
++		return ret;
++	else if (ret < size)
++		return -ENODATA;
++
++	return ret;
+ }
  
- 	IWL_DEBUG_INFO(mvm,
- 		       "%pM: prev rtt_avg=%lld, new rtt_avg=%lld, rtt=%lld\n",
+ static int mcs7830_set_reg(struct usbnet *dev, u16 index, u16 size, const void *data)
 -- 
 2.34.1
 

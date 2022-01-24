@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD354990DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17C914990F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:08:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377530AbiAXUFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:05:36 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44854 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356961AbiAXTrp (ORCPT
+        id S1353376AbiAXUH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:07:57 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:38688 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356754AbiAXTt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:47:45 -0500
+        Mon, 24 Jan 2022 14:49:26 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2F916131E;
-        Mon, 24 Jan 2022 19:47:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D28F9C340E5;
-        Mon, 24 Jan 2022 19:47:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8267DB8121A;
+        Mon, 24 Jan 2022 19:49:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B83FC340E5;
+        Mon, 24 Jan 2022 19:49:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053663;
-        bh=CK6VH06TPdfkCC62W0JQK2cm9ehLj5Fn/1ycjcQy56A=;
+        s=korg; t=1643053763;
+        bh=awbqRVaIUfFP7Xv7D24AO89VIJbRkobad3YVxWh0VP8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KYT7yEsaYx1I/rEOAu6v3yqkqdooAt9xf3LR2cKnbH2M5DkXjITWEXijryNpuWZnI
-         XJCZgBPG5kFVThPz/ksZcrW/4OBHA4zPsjWQrjt7GsJooZbDHKaIDeUoSGku/zvW67
-         0nrLhtvuiUZWVDT/d98y0Vkh/iDZ8/2EEI5WyoXE=
+        b=HO7PeqamNdX1ocAGL7wOB66aa9B8a6LaEWihrdvhNkjCrAbS9Ak/F22G/lyabDCNW
+         McRzimx6rZYgM3Pj/OXp5qnbCO+FKkEM3qB4rWaN525BjuTGGo99tG00ut/HFwAqMD
+         G63cb9YP/YKjx0v4kQcvpF5gKusAkELBNe+4F1bI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 136/563] bpf: Adjust BTF log size limit.
-Date:   Mon, 24 Jan 2022 19:38:21 +0100
-Message-Id: <20220124184029.099971589@linuxfoundation.org>
+Subject: [PATCH 5.10 142/563] media: saa7146: mxb: Fix a NULL pointer dereference in mxb_attach()
+Date:   Mon, 24 Jan 2022 19:38:27 +0100
+Message-Id: <20220124184029.315256898@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -46,35 +47,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexei Starovoitov <ast@kernel.org>
+From: Zhou Qingyang <zhou1615@umn.edu>
 
-[ Upstream commit c5a2d43e998a821701029f23e25b62f9188e93ff ]
+[ Upstream commit 0407c49ebe330333478440157c640fffd986f41b ]
 
-Make BTF log size limit to be the same as the verifier log size limit.
-Otherwise tools that progressively increase log size and use the same log
-for BTF loading and program loading will be hitting hard to debug EINVAL.
+In mxb_attach(dev, info), saa7146_vv_init() is called to allocate a
+new memory for dev->vv_data. saa7146_vv_release() will be called on
+failure of mxb_probe(dev). There is a dereference of dev->vv_data
+in saa7146_vv_release(), which could lead to a NULL pointer dereference
+on failure of saa7146_vv_init().
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20211201181040.23337-7-alexei.starovoitov@gmail.com
+Fix this bug by adding a check of saa7146_vv_init().
+
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_VIDEO_MXB=m show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Fixes: 03b1930efd3c ("V4L/DVB: saa7146: fix regression of the av7110/budget-av driver")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/btf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/pci/saa7146/mxb.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index aaf2fbaa0cc76..72534a6f4b96e 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -4135,7 +4135,7 @@ static struct btf *btf_parse(void __user *btf_data, u32 btf_data_size,
- 		log->len_total = log_size;
+diff --git a/drivers/media/pci/saa7146/mxb.c b/drivers/media/pci/saa7146/mxb.c
+index 73fc901ecf3db..bf0b9b0914cd5 100644
+--- a/drivers/media/pci/saa7146/mxb.c
++++ b/drivers/media/pci/saa7146/mxb.c
+@@ -683,10 +683,16 @@ static struct saa7146_ext_vv vv_data;
+ static int mxb_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data *info)
+ {
+ 	struct mxb *mxb;
++	int ret;
  
- 		/* log attributes have to be sane */
--		if (log->len_total < 128 || log->len_total > UINT_MAX >> 8 ||
-+		if (log->len_total < 128 || log->len_total > UINT_MAX >> 2 ||
- 		    !log->level || !log->ubuf) {
- 			err = -EINVAL;
- 			goto errout;
+ 	DEB_EE("dev:%p\n", dev);
+ 
+-	saa7146_vv_init(dev, &vv_data);
++	ret = saa7146_vv_init(dev, &vv_data);
++	if (ret) {
++		ERR("Error in saa7146_vv_init()");
++		return ret;
++	}
++
+ 	if (mxb_probe(dev)) {
+ 		saa7146_vv_release(dev);
+ 		return -1;
 -- 
 2.34.1
 

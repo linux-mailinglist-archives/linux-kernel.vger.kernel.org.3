@@ -2,38 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC41499730
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:26:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA6D49976C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:28:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447369AbiAXVKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:10:34 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46934 "EHLO
+        id S1447609AbiAXVLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:11:04 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47042 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390829AbiAXUq1 (ORCPT
+        with ESMTP id S1390922AbiAXUqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:46:27 -0500
+        Mon, 24 Jan 2022 15:46:39 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D2B5B81257;
-        Mon, 24 Jan 2022 20:46:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82E15C36AE3;
-        Mon, 24 Jan 2022 20:46:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A722B8121C;
+        Mon, 24 Jan 2022 20:46:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 818CEC340E5;
+        Mon, 24 Jan 2022 20:46:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057185;
-        bh=Optsw7fZH7IyeMM7yyHVhmBMnQlfEE3Lft2i5Il4zVY=;
+        s=korg; t=1643057195;
+        bh=4LlpM95g7CNgEA0hqrQZzMpteGnWJ4lfkbLqK14oIGw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XVQKRVJ/aWBGV1/SBXphIUhuv/55vVb72r/4E/GQGV/ujOPs5x4Y+DuqYMmRwRtso
-         YmMLAteqrgz1axRUbiWzB0O1AQkmNy8utLGHU5nKxE/uY7IChyHZvMyhONKdi4FhGy
-         7CqN4eXtw5SPxYZkh6/LPaI3DLfO8/BaZnAuFne4=
+        b=jBNSDaIFS3ZDeM5I7/pAVBBjtfU5powu4pwmVs900AGWmyioO+rkob53F99mmxWt/
+         g+dKH3vapBVztYOxF7ndAeEeXJfHZVw2ZKLspdMMLWqhwOVqWJqMwr3W9yvQU5x/5S
+         KVhpIKGH2xNKN2BjqXlWgGjfCcs5KN57PIn5BRpQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baruch Siach <baruch@tkos.co.il>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH 5.15 730/846] of: base: Improve argument length mismatch error
-Date:   Mon, 24 Jan 2022 19:44:07 +0100
-Message-Id: <20220124184126.181693077@linuxfoundation.org>
+        stable@vger.kernel.org, Suresh Udipi <sudipi@jp.adit-jv.com>,
+        Michael Rodin <mrodin@de.adit-jv.com>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH 5.15 733/846] media: rcar-csi2: Optimize the selection PHTW register
+Date:   Mon, 24 Jan 2022 19:44:10 +0100
+Message-Id: <20220124184126.285314729@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -45,55 +49,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baruch Siach <baruch@tkos.co.il>
+From: Suresh Udipi <sudipi@jp.adit-jv.com>
 
-commit 5d05b811b5acb92fc581a7b328b36646c86f5ab9 upstream.
+commit 549cc89cd09a85aaa16dc07ef3db811d5cf9bcb1 upstream.
 
-The cells_name field of of_phandle_iterator might be NULL. Use the
-phandle name instead. With this change instead of:
+PHTW register is selected based on default bit rate from Table[1].
+for the bit rates less than or equal to 250. Currently first
+value of default bit rate which is greater than or equal to
+the caculated mbps is selected. This selection can be further
+improved by selecting the default bit rate which is nearest to
+the calculated value.
 
-  OF: /soc/pinctrl@1000000: (null) = 3 found 2
+[1] specs r19uh0105ej0200-r-car-3rd-generation.pdf [Table 25.12]
 
-We get:
-
-  OF: /soc/pinctrl@1000000: phandle pinctrl@1000000 needs 3, found 2
-
-Which is a more helpful messages making DT debugging easier.
-
-In this particular example the phandle name looks like duplicate of the
-same node name. But note that the first node is the parent node
-(it->parent), while the second is the phandle target (it->node). They
-happen to be the same in the case that triggered this improvement. See
-commit 72cb4c48a46a ("arm64: dts: qcom: ipq6018: Fix gpio-ranges
-property").
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/f6a68e0088a552ea9dfd4d8e3b5b586d92594738.1640881913.git.baruch@tkos.co.il
+Fixes: 769afd212b16 ("media: rcar-csi2: add Renesas R-Car MIPI CSI-2 receiver driver")
+Signed-off-by: Suresh Udipi <sudipi@jp.adit-jv.com>
+Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/of/base.c |   11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/media/platform/rcar-vin/rcar-csi2.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
---- a/drivers/of/base.c
-+++ b/drivers/of/base.c
-@@ -1327,9 +1327,14 @@ int of_phandle_iterator_next(struct of_p
- 		 * property data length
- 		 */
- 		if (it->cur + count > it->list_end) {
--			pr_err("%pOF: %s = %d found %td\n",
--			       it->parent, it->cells_name,
--			       count, it->list_end - it->cur);
-+			if (it->cells_name)
-+				pr_err("%pOF: %s = %d found %td\n",
-+					it->parent, it->cells_name,
-+					count, it->list_end - it->cur);
-+			else
-+				pr_err("%pOF: phandle %s needs %d, found %td\n",
-+					it->parent, of_node_full_name(it->node),
-+					count, it->list_end - it->cur);
- 			goto err;
- 		}
- 	}
+--- a/drivers/media/platform/rcar-vin/rcar-csi2.c
++++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
+@@ -989,10 +989,17 @@ static int rcsi2_phtw_write_mbps(struct
+ 				 const struct rcsi2_mbps_reg *values, u16 code)
+ {
+ 	const struct rcsi2_mbps_reg *value;
++	const struct rcsi2_mbps_reg *prev_value = NULL;
+ 
+-	for (value = values; value->mbps; value++)
++	for (value = values; value->mbps; value++) {
+ 		if (value->mbps >= mbps)
+ 			break;
++		prev_value = value;
++	}
++
++	if (prev_value &&
++	    ((mbps - prev_value->mbps) <= (value->mbps - mbps)))
++		value = prev_value;
+ 
+ 	if (!value->mbps) {
+ 		dev_err(priv->dev, "Unsupported PHY speed (%u Mbps)", mbps);
 
 

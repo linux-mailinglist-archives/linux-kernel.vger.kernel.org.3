@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D791949928C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB76498CA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:23:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381656AbiAXUVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:21:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60646 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376679AbiAXUDd (ORCPT
+        id S239545AbiAXTXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:23:47 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40176 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348046AbiAXTOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:03:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055D2C08E6DC;
-        Mon, 24 Jan 2022 11:29:44 -0800 (PST)
+        Mon, 24 Jan 2022 14:14:47 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B7B28B81238;
-        Mon, 24 Jan 2022 19:29:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4820C340E5;
-        Mon, 24 Jan 2022 19:29:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F20B0B8121C;
+        Mon, 24 Jan 2022 19:14:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24347C340E5;
+        Mon, 24 Jan 2022 19:14:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052581;
-        bh=J8duQaotuAl4FUUuOIClzvWBYiFdiRFM92W/pHtQcoo=;
+        s=korg; t=1643051683;
+        bh=D54MdEBmCYEy6ur7bgYgsa7SkjdZdJ+WIe8dfhTumU0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SJmM+oGcqZ0BG+Ym7hvZlF3eRAAxm9HG+6F+1DxrFKAFbLab2lljYwjPoWhzc6PPv
-         pRExZGqps2tmTp3tzPNZ15RUAluIzj5v8PvqEA15qZwldYbCU5DzHu6PtZwmvUFP9I
-         gQVUznnK8H6FsxYsebs5yAhAWd5zp/iErJnG5iAQ=
+        b=PDStTNV6mZVICQuZHYjGQOs67wGh+3UPgdYaIsry/4tyXlwQufllXMzzCuqAiKL40
+         MP1EydNPSaaSxXbzzzp0lAvx7rGlvXJQjpFVV2bOOb4lYL6OX5FoKj2OZTwi0K1MhB
+         P+h+smN7obJUsBGvYawowjUzJFJoOwAISCG9qLXk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Marcel Holtmann <marcel@holtmann.org>,
+        stable@vger.kernel.org, Sumit Garg <sumit.garg@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 107/320] Bluetooth: hci_bcm: Check for error irq
-Date:   Mon, 24 Jan 2022 19:41:31 +0100
-Message-Id: <20220124183957.360997824@linuxfoundation.org>
+Subject: [PATCH 4.19 054/239] tee: fix put order in teedev_close_context()
+Date:   Mon, 24 Jan 2022 19:41:32 +0100
+Message-Id: <20220124183944.853795376@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,44 +46,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Jens Wiklander <jens.wiklander@linaro.org>
 
-[ Upstream commit b38cd3b42fba66cc538edb9cf77e07881f43f8e2 ]
+[ Upstream commit f18397ab3ae23e8e43bba9986e66af6d4497f2ad ]
 
-For the possible failure of the platform_get_irq(), the returned irq
-could be error number and will finally cause the failure of the
-request_irq().
-Consider that platform_get_irq() can now in certain cases return
--EPROBE_DEFER, and the consequences of letting request_irq() effectively
-convert that into -EINVAL, even at probe time rather than later on.
-So it might be better to check just now.
+Prior to this patch was teedev_close_context() calling tee_device_put()
+before teedev_ctx_put() leading to teedev_ctx_release() accessing
+ctx->teedev just after the reference counter was decreased on the
+teedev. Fix this by calling teedev_ctx_put() before tee_device_put().
 
-Fixes: 0395ffc1ee05 ("Bluetooth: hci_bcm: Add PM for BCM devices")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Fixes: 217e0250cccb ("tee: use reference counting for tee_context")
+Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bluetooth/hci_bcm.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/tee/tee_core.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/bluetooth/hci_bcm.c b/drivers/bluetooth/hci_bcm.c
-index 94ed734c1d7eb..c6bb380806f9b 100644
---- a/drivers/bluetooth/hci_bcm.c
-+++ b/drivers/bluetooth/hci_bcm.c
-@@ -1127,7 +1127,12 @@ static int bcm_probe(struct platform_device *pdev)
- 		return -ENOMEM;
+diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c
+index dd46b758852aa..d42fc2ae8592e 100644
+--- a/drivers/tee/tee_core.c
++++ b/drivers/tee/tee_core.c
+@@ -96,8 +96,10 @@ void teedev_ctx_put(struct tee_context *ctx)
  
- 	dev->dev = &pdev->dev;
--	dev->irq = platform_get_irq(pdev, 0);
+ static void teedev_close_context(struct tee_context *ctx)
+ {
+-	tee_device_put(ctx->teedev);
++	struct tee_device *teedev = ctx->teedev;
 +
-+	ret = platform_get_irq(pdev, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	dev->irq = ret;
+ 	teedev_ctx_put(ctx);
++	tee_device_put(teedev);
+ }
  
- 	if (has_acpi_companion(&pdev->dev)) {
- 		ret = bcm_acpi_probe(dev);
+ static int tee_release(struct inode *inode, struct file *filp)
 -- 
 2.34.1
 

@@ -2,94 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0D449883C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4C8498841
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:24:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245201AbiAXSXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:23:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36832 "EHLO
+        id S245221AbiAXSYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:24:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241809AbiAXSX3 (ORCPT
+        with ESMTP id S245211AbiAXSYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:23:29 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C9EC06173B;
-        Mon, 24 Jan 2022 10:23:29 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id m6so54039925ybc.9;
-        Mon, 24 Jan 2022 10:23:29 -0800 (PST)
+        Mon, 24 Jan 2022 13:24:35 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E93AC06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:24:35 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id j16so5946905plx.4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:24:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9tZG6vWxuDQCoLS5EQblxGJTd+bt3ysX5fuLcy2Y6SM=;
-        b=QSphLw8QGXwRadu8SEtVzrz+uAPxzgUXxBCTYvd8u+EzKvCZYAMBZbvQ0GzUT9lkYb
-         0TFOXxY45WV0PSZ3ddQrjy3SQUZPtqa7YHPvmJPNMydM6+eoBo5UbK6ID0lAxUXi4Yh6
-         cDwBWqa26f1/ChJ5kBk1ndFaK8Ev13pXKn1EwTz+x03VEnqw4GLyjew/7KqFj6mIXLfZ
-         NGFBY2KQodm75wHc9O8diYkzmXH7Do2XpcpuaIeHir/nIE1PdxyZHTbCtnoH2k9mJDZ3
-         EvbnqZajKgkg8BShwDfIVg2MLmiSTM2Rdoa4IpRk+xk2SGoT/Y+5JrWnhq7lX2NjL3Dk
-         xdtA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uhZIz3/JykOBz9VP0YFQFFJB6JHp3P7kosVSER8JbCs=;
+        b=alUnBjwA9GnJNcB1VQbp/WSOeoyPUm7ct70T0RMkE/CVfVe0iGp5KNjxhHwR40ceTB
+         6amxmfkC0OCiiUzzNflT0LH8nbTiIXGFiCnRTzrzB1Zm94fqLJkT7M5ODG5wwtdaegO4
+         q9dcoLaWBG29OEiHULjhmJXDUEbMQUlUoOw/4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9tZG6vWxuDQCoLS5EQblxGJTd+bt3ysX5fuLcy2Y6SM=;
-        b=e+TMnMSUPe61uPJIfuE1DM4zwkKxWXskJc6cTTIfFgrnnPkOrJDo8lMvbg4rhJqA9X
-         9tceQ3LwFTHWCaByGYLc1zCrGsFODYzILQggTTsilXi4jMsnUa1kcOEhSxru/kYxfyP5
-         R9pQVb4xhUCTn+MX2sApR2zQp6olat3kT1uaLIzF27vUneC/urrUnEMFTucKO8IrYrFH
-         6XjvyqAEXy2NwOf8RMcPkvmg+c7B/O/5wqQPRBMg5iEpkXWcBstgNwtcFhKWyxOL0xC6
-         Y1Fmwj8SUa/ujCDG+C8aTilvIherHWmeG5Wcr8S4WeIYG18XDGqqQdwbohDYbecPeimf
-         6iuQ==
-X-Gm-Message-State: AOAM533YmhywzoTR+xm0eb/HyvfHjsGPTaBu0SM8VZSq3D4RRh2jv1X+
-        Bu4IygxGPDIFqXzglJVaxR5I1nijDFCASMA1fGiJ+UFM7wQ=
-X-Google-Smtp-Source: ABdhPJzklKeY0cEKgb7H/Bf3xipTsWELKbetuLEAQtTx3cw76yIbNXFjOpOEq9A85WGOlo0z4286U2sC9tfe/L373hM=
-X-Received: by 2002:a25:42d7:: with SMTP id p206mr24456154yba.182.1643048608104;
- Mon, 24 Jan 2022 10:23:28 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uhZIz3/JykOBz9VP0YFQFFJB6JHp3P7kosVSER8JbCs=;
+        b=nzIJmhHc7wMmnqWoOvXJcMVrG8QO6KtBY6OTGS1snoIbSPdml2SDBumCTBl+nP9+Ex
+         To6/lxA1JE2f0Ts/65rcyZBFKhULBYA7qk5Im5pEHtYWtCs+jr4T+kB/KTapG8yDQYrO
+         /iXj1sLeH1wYKsrMdIhXDJPBdmqHIKvX+9UZasevxnk8Ss+h4dna/kU7hW1b8xrVLrZm
+         zCbl2B0+9ai1QmXIzzVZmt+7aGB0rI62F2A2vWnBfk4jAHVTbtNDESU7ph04KnyDitpE
+         hWFR70+A/1HlW5XPQm5xjjk9pDBkYvxtcuS/o8p+V4kB9Y/nlA9bVJZZWGSiJzoa9XWe
+         p0Jw==
+X-Gm-Message-State: AOAM530/mzqts+YDAy2WiKdv6GL8hJX07lRo0vGUeadEqENxhabee+Tm
+        MOC4lw5CcBu6rEQkMKZYwgvYvg==
+X-Google-Smtp-Source: ABdhPJx/8XSSCE4pNF/rMKWRrUHHg7PdBjMRFPZ0Ya0DtIbcSeRdq+8k4YOK6JIR4In6vxCm3Y1BZw==
+X-Received: by 2002:a17:902:bc88:b0:149:2032:6bcf with SMTP id bb8-20020a170902bc8800b0014920326bcfmr15462814plb.44.1643048675213;
+        Mon, 24 Jan 2022 10:24:35 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id e1sm12311920pgu.17.2022.01.24.10.24.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 10:24:34 -0800 (PST)
+Date:   Mon, 24 Jan 2022 10:24:34 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Marco Elver <elver@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-hardening@vger.kernel.org, Nico Pache <npache@redhat.com>
+Subject: Re: [PATCH] kasan: test: fix compatibility with FORTIFY_SOURCE
+Message-ID: <202201241024.DA581869@keescook>
+References: <20220124160744.1244685-1-elver@google.com>
 MIME-Version: 1.0
-References: <20220124003342.1457437-1-ztong0001@gmail.com> <20220124104012.nblfd6b5on4kojgi@wittgenstein>
-In-Reply-To: <20220124104012.nblfd6b5on4kojgi@wittgenstein>
-From:   Tong Zhang <ztong0001@gmail.com>
-Date:   Mon, 24 Jan 2022 10:23:17 -0800
-Message-ID: <CAA5qM4A_pArXkyLvcXbJwp0xFSnDZJ+Md82ME1AOrt+5v-zaDg@mail.gmail.com>
-Subject: Re: [PATCH v1] binfmt_misc: fix crash when load/unload module
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220124160744.1244685-1-elver@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 2:40 AM Christian Brauner <brauner@kernel.org> wrote:
-> The fix itself is obviously needed.
->
-> However, afaict the previous patch introduced another bug and this patch
-> right here doesn't fix it either.
->
-> Namely, if you set CONFIG_SYSCTL=n and CONFIG_BINFMT_MISC={y,m}, then
-> register_sysctl_mount_point() will return NULL causing modprobe
-> binfmt_misc to fail. However, before 3ba442d5331f ("fs: move binfmt_misc
-> sysctl to its own file") loading binfmt_misc would've succeeded even if
-> fs/binfmt_misc wasn't created in kernel/sysctl.c. Afaict, that goes for
-> both CONFIG_SYSCTL={y,n} since even in the CONFIG_SYSCTL=y case the
-> kernel would've moved on if creating the sysctl header would've failed.
-> And that makes sense since binfmt_misc is mountable wherever, not just
-> at fs/binfmt_misc.
->
-> All that indicates that the correct fix here would be to simply:
->
-> binfmt_misc_header = register_sysctl_mount_point("fs/binfmt_misc");
->
-> without checking for an error. That should fully restore the old
-> behavior.
->
+On Mon, Jan 24, 2022 at 05:07:44PM +0100, Marco Elver wrote:
+> With CONFIG_FORTIFY_SOURCE enabled, string functions will also perform
+> dynamic checks using __builtin_object_size(ptr), which when failed will
+> panic the kernel.
+> 
+> Because the KASAN test deliberately performs out-of-bounds operations,
+> the kernel panics with FORITY_SOURCE, for example:
+> 
+>  | kernel BUG at lib/string_helpers.c:910!
+>  | invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
+>  | CPU: 1 PID: 137 Comm: kunit_try_catch Tainted: G    B             5.16.0-rc3+ #3
+>  | Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+>  | RIP: 0010:fortify_panic+0x19/0x1b
+>  | ...
+>  | Call Trace:
+>  |  <TASK>
+>  |  kmalloc_oob_in_memset.cold+0x16/0x16
+>  |  ...
+> 
+> Fix it by also hiding `ptr` from the optimizer, which will ensure that
+> __builtin_object_size() does not return a valid size, preventing
+> fortified string functions from panicking.
+> 
+> Reported-by: Nico Pache <npache@redhat.com>
+> Signed-off-by: Marco Elver <elver@google.com>
 
-Thanks! That makes sense.
-I modified the patch according to your comment, added another fix for
-the return type issue and sent a v2.
-Thanks again.
-- Tong
+Yup, more good fixes. Thanks!
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-- 
+Kees Cook

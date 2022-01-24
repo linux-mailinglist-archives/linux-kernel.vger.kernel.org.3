@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E3AD499093
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A92498DED
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:38:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376361AbiAXUBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:01:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352416AbiAXThV (ORCPT
+        id S1348620AbiAXThl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:37:41 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59702 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345179AbiAXTcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:37:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAA5C034012;
-        Mon, 24 Jan 2022 11:17:25 -0800 (PST)
+        Mon, 24 Jan 2022 14:32:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BEE160909;
-        Mon, 24 Jan 2022 19:17:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B11C340E5;
-        Mon, 24 Jan 2022 19:17:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34B69614A8;
+        Mon, 24 Jan 2022 19:32:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AC78C340E7;
+        Mon, 24 Jan 2022 19:32:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051845;
-        bh=hoGmMt6X0klq0+u7iW/1fCYXghyAHMkMKI5zDTPe7y0=;
+        s=korg; t=1643052738;
+        bh=k/Lz/Zo8RSedFrd/Cb57u0V3RMctMpavMVRb8b8/edc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AEU2wC2z9vKDnMngquQdHrei289fV7pZjb7am5zcmYlG3Hd03M9klKGrhup5urzxq
-         UORk8tMEx1YNxFjUtl50EWFQ7JI8gU9xgNaw2mzOKfzTJCcudXx4hTrhzUZk+Jfbwk
-         xwnpantNstUOqhsN+3nbl518qt1QEMquSlhU7Exo=
+        b=o+vFfqqBTfdJYK6XzOvdlqAYQFiNPXJx9Un/9tEIbhSbqOlDJOCFlUKGR/rsczmpP
+         eU3xqZ9ugLwIMDI4JmRNom5kU0lvxtDnFd3HbkmXDSA24ghS0AaiKfZimr7FNMW3nU
+         rZii2Ejine6TlSGPT8P8OiLEUlrnplIKqGdhc4o4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Wan Jiabing <wanjiabing@vivo.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 104/239] ASoC: uniphier: drop selecting non-existing SND_SOC_UNIPHIER_AIO_DMA
+Subject: [PATCH 5.4 158/320] ARM: shmobile: rcar-gen2: Add missing of_node_put()
 Date:   Mon, 24 Jan 2022 19:42:22 +0100
-Message-Id: <20220124183946.409590500@linuxfoundation.org>
+Message-Id: <20220124183959.009971247@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,51 +46,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+From: Wan Jiabing <wanjiabing@vivo.com>
 
-[ Upstream commit 49f893253ab43566e34332a969324531fea463f6 ]
+[ Upstream commit 85744f2d938c5f3cfc44cb6533c157469634da93 ]
 
-Commit f37fe2f9987b ("ASoC: uniphier: add support for UniPhier AIO common
-driver") adds configs SND_SOC_UNIPHIER_{LD11,PXS2}, which select the
-non-existing config SND_SOC_UNIPHIER_AIO_DMA.
+Fix following coccicheck warning:
+./arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c:156:1-33: Function
+for_each_matching_node_and_match should have of_node_put() before break
+and goto.
 
-Hence, ./scripts/checkkconfigsymbols.py warns:
+Early exits from for_each_matching_node_and_match() should decrement the
+node reference counter.
 
-  SND_SOC_UNIPHIER_AIO_DMA
-  Referencing files: sound/soc/uniphier/Kconfig
-
-Probably, there is actually no further config intended to be selected
-here. So, just drop selecting the non-existing config.
-
-Fixes: f37fe2f9987b ("ASoC: uniphier: add support for UniPhier AIO common driver")
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Link: https://lore.kernel.org/r/20211125095158.8394-2-lukas.bulwahn@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+Link: https://lore.kernel.org/r/20211018014503.7598-1-wanjiabing@vivo.com
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/uniphier/Kconfig | 2 --
- 1 file changed, 2 deletions(-)
+ arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/uniphier/Kconfig b/sound/soc/uniphier/Kconfig
-index aa3592ee1358b..ddfa6424c656b 100644
---- a/sound/soc/uniphier/Kconfig
-+++ b/sound/soc/uniphier/Kconfig
-@@ -23,7 +23,6 @@ config SND_SOC_UNIPHIER_LD11
- 	tristate "UniPhier LD11/LD20 Device Driver"
- 	depends on SND_SOC_UNIPHIER
- 	select SND_SOC_UNIPHIER_AIO
--	select SND_SOC_UNIPHIER_AIO_DMA
- 	help
- 	  This adds ASoC driver for Socionext UniPhier LD11/LD20
- 	  input and output that can be used with other codecs.
-@@ -34,7 +33,6 @@ config SND_SOC_UNIPHIER_PXS2
- 	tristate "UniPhier PXs2 Device Driver"
- 	depends on SND_SOC_UNIPHIER
- 	select SND_SOC_UNIPHIER_AIO
--	select SND_SOC_UNIPHIER_AIO_DMA
- 	help
- 	  This adds ASoC driver for Socionext UniPhier PXs2
- 	  input and output that can be used with other codecs.
+diff --git a/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c b/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c
+index ee949255ced3f..09ef73b99dd86 100644
+--- a/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c
++++ b/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c
+@@ -154,8 +154,10 @@ static int __init rcar_gen2_regulator_quirk(void)
+ 		return -ENODEV;
+ 
+ 	for_each_matching_node_and_match(np, rcar_gen2_quirk_match, &id) {
+-		if (!of_device_is_available(np))
++		if (!of_device_is_available(np)) {
++			of_node_put(np);
+ 			break;
++		}
+ 
+ 		ret = of_property_read_u32(np, "reg", &addr);
+ 		if (ret)	/* Skip invalid entry and continue */
+@@ -164,6 +166,7 @@ static int __init rcar_gen2_regulator_quirk(void)
+ 		quirk = kzalloc(sizeof(*quirk), GFP_KERNEL);
+ 		if (!quirk) {
+ 			ret = -ENOMEM;
++			of_node_put(np);
+ 			goto err_mem;
+ 		}
+ 
 -- 
 2.34.1
 

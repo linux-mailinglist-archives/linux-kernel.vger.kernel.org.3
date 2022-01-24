@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 106DA498C06
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E13498E66
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347254AbiAXTSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:18:44 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36688 "EHLO
+        id S1353196AbiAXTlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:41:01 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57382 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347111AbiAXTJn (ORCPT
+        with ESMTP id S1353574AbiAXTfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:09:43 -0500
+        Mon, 24 Jan 2022 14:35:00 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BF65B8121B;
-        Mon, 24 Jan 2022 19:09:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DE0BC340E5;
-        Mon, 24 Jan 2022 19:09:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8AF4BB81232;
+        Mon, 24 Jan 2022 19:34:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99D6EC340E5;
+        Mon, 24 Jan 2022 19:34:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051380;
-        bh=///eduZoePXlekkzVUpHa5zCsgdmQWKsry4wD4F/bcQ=;
+        s=korg; t=1643052898;
+        bh=YRtFLS33UvhcMXoutG1kpLoHx0Za8NOY2p3DeITTCGo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sT01S87wPquJEfr8vsvQ2vqgtBZfqClL17/tM4S4ASZQ8RRpJOS/6gZLgs7w9JY4r
-         kRSJV4qI2lxgDmtbgA6D8RDR3sRgxZI6Bdhom01Avf8N2JoI5v21rdMp43NtbPZCyS
-         UU2PNTJ2VOQWdC1ADfAWzCEnBRTzrJC+sKBm11Gw=
+        b=UjRiddPw47MPHe99nV1Cz5xKTI7XU2FEAWBVHbQMo/1kwbtl1hV8YKAZ/RpNKel7q
+         Vv/BpWpz9mOQ5IaZGYKrDO0B4aewG8qf950SZ86KfBkxal745DnUd/y+sOqYSEoLcq
+         gRGfuqnrHvxwQg4tBOZCqcYlfi+eGxMKc0bug1MQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 110/186] mmc: core: Fixup storing of OCR for MMC_QUIRK_NONSTD_SDIO
-Date:   Mon, 24 Jan 2022 19:43:05 +0100
-Message-Id: <20220124183940.648466485@linuxfoundation.org>
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-um@lists.infradead.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 202/320] um: registers: Rename function names to avoid conflicts and build problems
+Date:   Mon, 24 Jan 2022 19:43:06 +0100
+Message-Id: <20220124184000.509506732@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,55 +48,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ulf Hansson <ulf.hansson@linaro.org>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 8c3e5b74b9e2146f564905e50ca716591c76d4f1 ]
+[ Upstream commit 077b7320942b64b0da182aefd83c374462a65535 ]
 
-The mmc core takes a specific path to support initializing of a
-non-standard SDIO card. This is triggered by looking for the card-quirk,
-MMC_QUIRK_NONSTD_SDIO.
+The function names init_registers() and restore_registers() are used
+in several net/ethernet/ and gpu/drm/ drivers for other purposes (not
+calls to UML functions), so rename them.
 
-In mmc_sdio_init_card() this gets rather messy, as it causes the code to
-bail out earlier, compared to the usual path. This leads to that the OCR
-doesn't get saved properly in card->ocr. Fortunately, only omap_hsmmc has
-been using the MMC_QUIRK_NONSTD_SDIO and is dealing with the issue, by
-assigning a hardcoded value (0x80) to card->ocr from an ->init_card() ops.
+This fixes multiple build errors.
 
-To make the behaviour consistent, let's instead rely on the core to save
-the OCR in card->ocr during initialization.
-
-Reported-by: H. Nikolaus Schaller <hns@goldelico.com>
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-Link: https://lore.kernel.org/r/e7936cff7fc24d187ef2680d3b4edb0ade58f293.1636564631.git.hns@goldelico.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Jeff Dike <jdike@addtoit.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc: linux-um@lists.infradead.org
+Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/core/sdio.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/um/include/shared/registers.h | 4 ++--
+ arch/um/os-Linux/registers.c       | 4 ++--
+ arch/um/os-Linux/start_up.c        | 2 +-
+ arch/x86/um/syscalls_64.c          | 3 ++-
+ 4 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/mmc/core/sdio.c b/drivers/mmc/core/sdio.c
-index 7568cea559220..bf0a0ef60d6b4 100644
---- a/drivers/mmc/core/sdio.c
-+++ b/drivers/mmc/core/sdio.c
-@@ -631,6 +631,8 @@ try_again:
- 	if (host->ops->init_card)
- 		host->ops->init_card(host, card);
+diff --git a/arch/um/include/shared/registers.h b/arch/um/include/shared/registers.h
+index 0c50fa6e8a55b..fbb709a222839 100644
+--- a/arch/um/include/shared/registers.h
++++ b/arch/um/include/shared/registers.h
+@@ -16,8 +16,8 @@ extern int restore_fp_registers(int pid, unsigned long *fp_regs);
+ extern int save_fpx_registers(int pid, unsigned long *fp_regs);
+ extern int restore_fpx_registers(int pid, unsigned long *fp_regs);
+ extern int save_registers(int pid, struct uml_pt_regs *regs);
+-extern int restore_registers(int pid, struct uml_pt_regs *regs);
+-extern int init_registers(int pid);
++extern int restore_pid_registers(int pid, struct uml_pt_regs *regs);
++extern int init_pid_registers(int pid);
+ extern void get_safe_registers(unsigned long *regs, unsigned long *fp_regs);
+ extern unsigned long get_thread_reg(int reg, jmp_buf *buf);
+ extern int get_fp_registers(int pid, unsigned long *regs);
+diff --git a/arch/um/os-Linux/registers.c b/arch/um/os-Linux/registers.c
+index 2d9270508e156..b123955be7acc 100644
+--- a/arch/um/os-Linux/registers.c
++++ b/arch/um/os-Linux/registers.c
+@@ -21,7 +21,7 @@ int save_registers(int pid, struct uml_pt_regs *regs)
+ 	return 0;
+ }
  
-+	card->ocr = ocr_card;
-+
- 	/*
- 	 * If the host and card support UHS-I mode request the card
- 	 * to switch to 1.8V signaling level.  No 1.8v signalling if
-@@ -737,7 +739,7 @@ try_again:
+-int restore_registers(int pid, struct uml_pt_regs *regs)
++int restore_pid_registers(int pid, struct uml_pt_regs *regs)
+ {
+ 	int err;
  
- 		card = oldcard;
- 	}
--	card->ocr = ocr_card;
-+
- 	mmc_fixup_device(card, sdio_fixup_methods);
+@@ -36,7 +36,7 @@ int restore_registers(int pid, struct uml_pt_regs *regs)
+ static unsigned long exec_regs[MAX_REG_NR];
+ static unsigned long exec_fp_regs[FP_SIZE];
  
- 	if (card->type == MMC_TYPE_SD_COMBO) {
+-int init_registers(int pid)
++int init_pid_registers(int pid)
+ {
+ 	int err;
+ 
+diff --git a/arch/um/os-Linux/start_up.c b/arch/um/os-Linux/start_up.c
+index f79dc338279e6..b28373a2b8d2d 100644
+--- a/arch/um/os-Linux/start_up.c
++++ b/arch/um/os-Linux/start_up.c
+@@ -336,7 +336,7 @@ void __init os_early_checks(void)
+ 	check_tmpexec();
+ 
+ 	pid = start_ptraced_child();
+-	if (init_registers(pid))
++	if (init_pid_registers(pid))
+ 		fatal("Failed to initialize default registers");
+ 	stop_ptraced_child(pid, 1, 1);
+ }
+diff --git a/arch/x86/um/syscalls_64.c b/arch/x86/um/syscalls_64.c
+index 58f51667e2e4b..8249685b40960 100644
+--- a/arch/x86/um/syscalls_64.c
++++ b/arch/x86/um/syscalls_64.c
+@@ -11,6 +11,7 @@
+ #include <linux/uaccess.h>
+ #include <asm/prctl.h> /* XXX This should get the constants from libc */
+ #include <os.h>
++#include <registers.h>
+ 
+ long arch_prctl(struct task_struct *task, int option,
+ 		unsigned long __user *arg2)
+@@ -35,7 +36,7 @@ long arch_prctl(struct task_struct *task, int option,
+ 	switch (option) {
+ 	case ARCH_SET_FS:
+ 	case ARCH_SET_GS:
+-		ret = restore_registers(pid, &current->thread.regs.regs);
++		ret = restore_pid_registers(pid, &current->thread.regs.regs);
+ 		if (ret)
+ 			return ret;
+ 		break;
 -- 
 2.34.1
 

@@ -2,38 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8DCA499EE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:11:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB1F499ED5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838521AbiAXWqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:46:44 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58842 "EHLO
+        id S1838120AbiAXWpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:45:54 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58872 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457024AbiAXVko (ORCPT
+        with ESMTP id S1457043AbiAXVkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:40:44 -0500
+        Mon, 24 Jan 2022 16:40:47 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D03061519;
-        Mon, 24 Jan 2022 21:40:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72DA2C340E4;
-        Mon, 24 Jan 2022 21:40:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE6836150C;
+        Mon, 24 Jan 2022 21:40:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8340EC340E5;
+        Mon, 24 Jan 2022 21:40:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060443;
-        bh=m4BNfYQYC4dEYNrO6HUF/i8ht6RJdxFTmGaSFBrmAO0=;
+        s=korg; t=1643060446;
+        bh=waB+9LUVqnckRupSe5o4AhePh0a/nlEjGKrVjtO3D4Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gd8LoQLJVHvw6TgNDOjI/is9zJypsvjTi0Wg4/1Q2IJDQxIjb/NIhX7f25F68RtEY
-         IpbX5hknXv90D9GOphjTqf2bSUxITuL/ttapBSEn9aOYJIu06khgSmOIx5M2my+I/+
-         PwmT54Ljp2a8KmPLCnqqCMY5nxzRQxMs9dk8ivvg=
+        b=sr4q5+2MEXM8YEePp/OcKga3dmCWG0JSBPVtHZoDznXVfq+nRYz8yH/Gfo5xqUjID
+         TEeqE3CdoODsUK8bcOqKsq6WxzfBoA49wdR6iJN2LPUB5s4JtNWfXEWkOKofz0oscU
+         e/AgqlJZYnfVOcOAeFIxW3lpVBKZFs05MXC8jKMQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Anup Patel <anup@brainfault.org>,
+        stable@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH 5.16 0950/1039] RISC-V: defconfigs: Set CONFIG_FB=y, for FB console
-Date:   Mon, 24 Jan 2022 19:45:39 +0100
-Message-Id: <20220124184157.220884764@linuxfoundation.org>
+Subject: [PATCH 5.16 0951/1039] riscv: dts: microchip: mpfs: Drop empty chosen node
+Date:   Mon, 24 Jan 2022 19:45:40 +0100
+Message-Id: <20220124184157.255161107@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -45,43 +47,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Palmer Dabbelt <palmer@rivosinc.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
 
-commit 3d12b634fe8206ea974c6061a3f3eea529ffbc48 upstream.
+commit 53ef07326ad0d6ae7fefded22bc53b427d542761 upstream.
 
-We have CONFIG_FRAMEBUFFER_CONSOLE=y in the defconfigs, but that depends
-on CONFIG_FB so it's not actually getting set.  I'm assuming most users
-on real systems want a framebuffer console, so this enables CONFIG_FB to
-allow that to take effect.
+It does not make sense to have an (empty) chosen node in an SoC-specific
+.dtsi, as chosen is meant for system-specific configuration.
+It is already provided in microchip-mpfs-icicle-kit.dts anyway.
 
-Fixes: 33c57c0d3c67 ("RISC-V: Add a basic defconfig")
-Reviewed-by: Anup Patel <anup@brainfault.org>
+Fixes: 0fa6107eca4186ad ("RISC-V: Initial DTS for Microchip ICICLE board")
+Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Tested-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/configs/defconfig      |    1 +
- arch/riscv/configs/rv32_defconfig |    1 +
- 2 files changed, 2 insertions(+)
+ arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi |    3 ---
+ 1 file changed, 3 deletions(-)
 
---- a/arch/riscv/configs/defconfig
-+++ b/arch/riscv/configs/defconfig
-@@ -78,6 +78,7 @@ CONFIG_DRM=m
- CONFIG_DRM_RADEON=m
- CONFIG_DRM_NOUVEAU=m
- CONFIG_DRM_VIRTIO_GPU=m
-+CONFIG_FB=y
- CONFIG_FRAMEBUFFER_CONSOLE=y
- CONFIG_USB=y
- CONFIG_USB_XHCI_HCD=y
---- a/arch/riscv/configs/rv32_defconfig
-+++ b/arch/riscv/configs/rv32_defconfig
-@@ -73,6 +73,7 @@ CONFIG_POWER_RESET=y
- CONFIG_DRM=y
- CONFIG_DRM_RADEON=y
- CONFIG_DRM_VIRTIO_GPU=y
-+CONFIG_FB=y
- CONFIG_FRAMEBUFFER_CONSOLE=y
- CONFIG_USB=y
- CONFIG_USB_XHCI_HCD=y
+--- a/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
++++ b/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
+@@ -9,9 +9,6 @@
+ 	model = "Microchip PolarFire SoC";
+ 	compatible = "microchip,mpfs";
+ 
+-	chosen {
+-	};
+-
+ 	cpus {
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
 
 

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06CD149A57A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:12:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9930749A6BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2373259AbiAYAN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:13:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53970 "EHLO
+        id S3420844AbiAYCZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:25:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1850673AbiAXXah (ORCPT
+        with ESMTP id S1349715AbiAXTVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:30:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E614DC0AD19B;
-        Mon, 24 Jan 2022 13:34:49 -0800 (PST)
+        Mon, 24 Jan 2022 14:21:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E61C02B84B;
+        Mon, 24 Jan 2022 11:08:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83E2A61469;
-        Mon, 24 Jan 2022 21:34:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AB6CC340E4;
-        Mon, 24 Jan 2022 21:34:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 986C8B811FC;
+        Mon, 24 Jan 2022 19:08:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA69C340E5;
+        Mon, 24 Jan 2022 19:08:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060089;
-        bh=uj/vlz7sng3h83daQU+iLntr8Q7hgEd1Y+KuiH5SAXw=;
+        s=korg; t=1643051292;
+        bh=2POWAd983rmLTzegXs88h1p/oWSCn2Gje3KOmqdlqlE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sSO5DLbhWU0WlkjZZ/gCr3p7x0vGAhhkmALi7SvqmX8pZQe4V6hRGNWrlAw8cwHJA
-         9txlk5zjcPWbS/facDOx9gh3m0kCot7Hzo8R9uPGPsBC/TOzEnjMgyTHdq8kHlo41+
-         xO5RXrVgzj40DylfF7xnL4O7mZgzkGCpA07rWUxo=
+        b=xMG03cZs47XCZaMFJDY8houhjDofBUFnDNK681ri76SVneC2WO4OrmDWbieDZvhvo
+         ajtRY3uTmxlp6iWwja1z23K1a4KseojRZ8jNVYPj67sVwXHEubdzbFSGbckN1EQb8I
+         fBQtu33DcT99zhBxRu/VdfnfjTYm0Sf/htZKlYvs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0802/1039] PCI: mvebu: Fix configuring secondary bus of PCIe Root Port via emulated bridge
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-um@lists.infradead.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 116/186] um: registers: Rename function names to avoid conflicts and build problems
 Date:   Mon, 24 Jan 2022 19:43:11 +0100
-Message-Id: <20220124184152.266944706@linuxfoundation.org>
+Message-Id: <20220124183940.841533562@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,172 +51,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 91a8d79fc797d3486ae978beebdfc55261c7d65b ]
+[ Upstream commit 077b7320942b64b0da182aefd83c374462a65535 ]
 
-It looks like that mvebu PCIe controller has for each PCIe link fully
-independent PCIe host bridge and so every PCIe Root Port is isolated not
-only on its own bus but also isolated from each others. But in past device
-tree structure was defined to put all PCIe Root Ports (as PCI Bridge
-devices) into one root bus 0 and this bus is emulated by pci-mvebu.c
-driver.
+The function names init_registers() and restore_registers() are used
+in several net/ethernet/ and gpu/drm/ drivers for other purposes (not
+calls to UML functions), so rename them.
 
-Probably reason for this decision was incorrect understanding of PCIe
-topology of these Armada SoCs and also reason of misunderstanding how is
-PCIe controller generating Type 0 and Type 1 config requests (it is fully
-different compared to other drivers). Probably incorrect setup leaded to
-very surprised things like having PCIe Root Port (PCI Bridge device, with
-even incorrect Device Class set to Memory Controller) and the PCIe device
-behind the Root Port on the same PCI bus, which obviously was needed to
-somehow hack (as these two devices cannot be in reality on the same bus).
+This fixes multiple build errors.
 
-Properly set mvebu local bus number and mvebu local device number based on
-PCI Bridge secondary bus number configuration. Also correctly report
-configured secondary bus number in config space. And explain in driver
-comment why this setup is correct.
-
-Link: https://lore.kernel.org/r/20211125124605.25915-12-pali@kernel.org
-Fixes: 1f08673eef12 ("PCI: mvebu: Convert to PCI emulated bridge config space")
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Jeff Dike <jdike@addtoit.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc: linux-um@lists.infradead.org
+Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pci-mvebu.c | 99 +++++++++++++++++++++++++++++-
- 1 file changed, 97 insertions(+), 2 deletions(-)
+ arch/um/include/shared/registers.h | 4 ++--
+ arch/um/os-Linux/registers.c       | 4 ++--
+ arch/um/os-Linux/start_up.c        | 2 +-
+ arch/x86/um/syscalls_64.c          | 3 ++-
+ 4 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-index 326527f2d6f41..abed58db56877 100644
---- a/drivers/pci/controller/pci-mvebu.c
-+++ b/drivers/pci/controller/pci-mvebu.c
-@@ -125,6 +125,11 @@ static bool mvebu_pcie_link_up(struct mvebu_pcie_port *port)
- 	return !(mvebu_readl(port, PCIE_STAT_OFF) & PCIE_STAT_LINK_DOWN);
+diff --git a/arch/um/include/shared/registers.h b/arch/um/include/shared/registers.h
+index a74449b5b0e31..12ad7c435e97f 100644
+--- a/arch/um/include/shared/registers.h
++++ b/arch/um/include/shared/registers.h
+@@ -16,8 +16,8 @@ extern int restore_fp_registers(int pid, unsigned long *fp_regs);
+ extern int save_fpx_registers(int pid, unsigned long *fp_regs);
+ extern int restore_fpx_registers(int pid, unsigned long *fp_regs);
+ extern int save_registers(int pid, struct uml_pt_regs *regs);
+-extern int restore_registers(int pid, struct uml_pt_regs *regs);
+-extern int init_registers(int pid);
++extern int restore_pid_registers(int pid, struct uml_pt_regs *regs);
++extern int init_pid_registers(int pid);
+ extern void get_safe_registers(unsigned long *regs, unsigned long *fp_regs);
+ extern unsigned long get_thread_reg(int reg, jmp_buf *buf);
+ extern int get_fp_registers(int pid, unsigned long *regs);
+diff --git a/arch/um/os-Linux/registers.c b/arch/um/os-Linux/registers.c
+index 2ff8d4fe83c4f..34a5963bd7efd 100644
+--- a/arch/um/os-Linux/registers.c
++++ b/arch/um/os-Linux/registers.c
+@@ -21,7 +21,7 @@ int save_registers(int pid, struct uml_pt_regs *regs)
+ 	return 0;
  }
  
-+static u8 mvebu_pcie_get_local_bus_nr(struct mvebu_pcie_port *port)
-+{
-+	return (mvebu_readl(port, PCIE_STAT_OFF) & PCIE_STAT_BUS) >> 8;
-+}
-+
- static void mvebu_pcie_set_local_bus_nr(struct mvebu_pcie_port *port, int nr)
+-int restore_registers(int pid, struct uml_pt_regs *regs)
++int restore_pid_registers(int pid, struct uml_pt_regs *regs)
  {
- 	u32 stat;
-@@ -437,6 +442,20 @@ mvebu_pci_bridge_emul_base_conf_read(struct pci_bridge_emul *bridge,
- 		*value = mvebu_readl(port, PCIE_CMD_OFF);
+ 	int err;
+ 
+@@ -36,7 +36,7 @@ int restore_registers(int pid, struct uml_pt_regs *regs)
+ static unsigned long exec_regs[MAX_REG_NR];
+ static unsigned long exec_fp_regs[FP_SIZE];
+ 
+-int init_registers(int pid)
++int init_pid_registers(int pid)
+ {
+ 	int err;
+ 
+diff --git a/arch/um/os-Linux/start_up.c b/arch/um/os-Linux/start_up.c
+index 82bf5f8442ba4..2c75f2d638681 100644
+--- a/arch/um/os-Linux/start_up.c
++++ b/arch/um/os-Linux/start_up.c
+@@ -336,7 +336,7 @@ void __init os_early_checks(void)
+ 	check_tmpexec();
+ 
+ 	pid = start_ptraced_child();
+-	if (init_registers(pid))
++	if (init_pid_registers(pid))
+ 		fatal("Failed to initialize default registers");
+ 	stop_ptraced_child(pid, 1, 1);
+ }
+diff --git a/arch/x86/um/syscalls_64.c b/arch/x86/um/syscalls_64.c
+index 58f51667e2e4b..8249685b40960 100644
+--- a/arch/x86/um/syscalls_64.c
++++ b/arch/x86/um/syscalls_64.c
+@@ -11,6 +11,7 @@
+ #include <linux/uaccess.h>
+ #include <asm/prctl.h> /* XXX This should get the constants from libc */
+ #include <os.h>
++#include <registers.h>
+ 
+ long arch_prctl(struct task_struct *task, int option,
+ 		unsigned long __user *arg2)
+@@ -35,7 +36,7 @@ long arch_prctl(struct task_struct *task, int option,
+ 	switch (option) {
+ 	case ARCH_SET_FS:
+ 	case ARCH_SET_GS:
+-		ret = restore_registers(pid, &current->thread.regs.regs);
++		ret = restore_pid_registers(pid, &current->thread.regs.regs);
+ 		if (ret)
+ 			return ret;
  		break;
- 
-+	case PCI_PRIMARY_BUS: {
-+		/*
-+		 * From the whole 32bit register we support reading from HW only
-+		 * secondary bus number which is mvebu local bus number.
-+		 * Other bits are retrieved only from emulated config buffer.
-+		 */
-+		__le32 *cfgspace = (__le32 *)&bridge->conf;
-+		u32 val = le32_to_cpu(cfgspace[PCI_PRIMARY_BUS / 4]);
-+		val &= ~0xff00;
-+		val |= mvebu_pcie_get_local_bus_nr(port) << 8;
-+		*value = val;
-+		break;
-+	}
-+
- 	default:
- 		return PCI_BRIDGE_EMUL_NOT_HANDLED;
- 	}
-@@ -520,7 +539,8 @@ mvebu_pci_bridge_emul_base_conf_write(struct pci_bridge_emul *bridge,
- 		break;
- 
- 	case PCI_PRIMARY_BUS:
--		mvebu_pcie_set_local_bus_nr(port, conf->secondary_bus);
-+		if (mask & 0xff00)
-+			mvebu_pcie_set_local_bus_nr(port, conf->secondary_bus);
- 		break;
- 
- 	default:
-@@ -1127,8 +1147,83 @@ static int mvebu_pcie_probe(struct platform_device *pdev)
- 			continue;
- 		}
- 
-+		/*
-+		 * PCIe topology exported by mvebu hw is quite complicated. In
-+		 * reality has something like N fully independent host bridges
-+		 * where each host bridge has one PCIe Root Port (which acts as
-+		 * PCI Bridge device). Each host bridge has its own independent
-+		 * internal registers, independent access to PCI config space,
-+		 * independent interrupt lines, independent window and memory
-+		 * access configuration. But additionally there is some kind of
-+		 * peer-to-peer support between PCIe devices behind different
-+		 * host bridges limited just to forwarding of memory and I/O
-+		 * transactions (forwarding of error messages and config cycles
-+		 * is not supported). So we could say there are N independent
-+		 * PCIe Root Complexes.
-+		 *
-+		 * For this kind of setup DT should have been structured into
-+		 * N independent PCIe controllers / host bridges. But instead
-+		 * structure in past was defined to put PCIe Root Ports of all
-+		 * host bridges into one bus zero, like in classic multi-port
-+		 * Root Complex setup with just one host bridge.
-+		 *
-+		 * This means that pci-mvebu.c driver provides "virtual" bus 0
-+		 * on which registers all PCIe Root Ports (PCI Bridge devices)
-+		 * specified in DT by their BDF addresses and virtually routes
-+		 * PCI config access of each PCI bridge device to specific PCIe
-+		 * host bridge.
-+		 *
-+		 * Normally PCI Bridge should choose between Type 0 and Type 1
-+		 * config requests based on primary and secondary bus numbers
-+		 * configured on the bridge itself. But because mvebu PCI Bridge
-+		 * does not have registers for primary and secondary bus numbers
-+		 * in its config space, it determinates type of config requests
-+		 * via its own custom way.
-+		 *
-+		 * There are two options how mvebu determinate type of config
-+		 * request.
-+		 *
-+		 * 1. If Secondary Bus Number Enable bit is not set or is not
-+		 * available (applies for pre-XP PCIe controllers) then Type 0
-+		 * is used if target bus number equals Local Bus Number (bits
-+		 * [15:8] in register 0x1a04) and target device number differs
-+		 * from Local Device Number (bits [20:16] in register 0x1a04).
-+		 * Type 1 is used if target bus number differs from Local Bus
-+		 * Number. And when target bus number equals Local Bus Number
-+		 * and target device equals Local Device Number then request is
-+		 * routed to Local PCI Bridge (PCIe Root Port).
-+		 *
-+		 * 2. If Secondary Bus Number Enable bit is set (bit 7 in
-+		 * register 0x1a2c) then mvebu hw determinate type of config
-+		 * request like compliant PCI Bridge based on primary bus number
-+		 * which is configured via Local Bus Number (bits [15:8] in
-+		 * register 0x1a04) and secondary bus number which is configured
-+		 * via Secondary Bus Number (bits [7:0] in register 0x1a2c).
-+		 * Local PCI Bridge (PCIe Root Port) is available on primary bus
-+		 * as device with Local Device Number (bits [20:16] in register
-+		 * 0x1a04).
-+		 *
-+		 * Secondary Bus Number Enable bit is disabled by default and
-+		 * option 2. is not available on pre-XP PCIe controllers. Hence
-+		 * this driver always use option 1.
-+		 *
-+		 * Basically it means that primary and secondary buses shares
-+		 * one virtual number configured via Local Bus Number bits and
-+		 * Local Device Number bits determinates if accessing primary
-+		 * or secondary bus. Set Local Device Number to 1 and redirect
-+		 * all writes of PCI Bridge Secondary Bus Number register to
-+		 * Local Bus Number (bits [15:8] in register 0x1a04).
-+		 *
-+		 * So when accessing devices on buses behind secondary bus
-+		 * number it would work correctly. And also when accessing
-+		 * device 0 at secondary bus number via config space would be
-+		 * correctly routed to secondary bus. Due to issues described
-+		 * in mvebu_pcie_setup_hw(), PCI Bridges at primary bus (zero)
-+		 * are not accessed directly via PCI config space but rarher
-+		 * indirectly via kernel emulated PCI bridge driver.
-+		 */
- 		mvebu_pcie_setup_hw(port);
--		mvebu_pcie_set_local_dev_nr(port, 1);
-+		mvebu_pcie_set_local_dev_nr(port, 0);
- 	}
- 
- 	pcie->nports = i;
 -- 
 2.34.1
 

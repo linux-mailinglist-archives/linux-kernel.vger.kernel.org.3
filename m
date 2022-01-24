@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 759BB4994C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:06:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D6C499ACA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:57:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389851AbiAXUo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:44:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382294AbiAXUZZ (ORCPT
+        id S1448337AbiAXVqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:46:35 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35602 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1448372AbiAXVMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:25:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833ACC07E30E;
-        Mon, 24 Jan 2022 11:41:17 -0800 (PST)
+        Mon, 24 Jan 2022 16:12:32 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4B5EFB8121A;
-        Mon, 24 Jan 2022 19:41:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 711EDC340E5;
-        Mon, 24 Jan 2022 19:41:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F56C6131F;
+        Mon, 24 Jan 2022 21:12:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30496C340E5;
+        Mon, 24 Jan 2022 21:12:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053275;
-        bh=+UqKwQ35sgQOM9w62WCDHOz/u6Y8TNzdLyjcPKVz5Ac=;
+        s=korg; t=1643058750;
+        bh=IjNxPGEtSYkVvnCwbHUvJvg0zijHBM+PZ9Fgl4BzepI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ei+an6+S5xCdwhGVinUoVmViDVUflm7KmNrjJQq4n7vlqxHCiQip9Tfm5Ot/1xCtP
-         9M3UOa85URiEWFQy36iwX4N4EWuOPZoXku2JEh8awUylRjgV0faCEmhX3hrcXl+3vB
-         gazGFAuhrX9I3atpWh8Q5eu3bh67ZUVglMVv3Tv8=
+        b=fDgPvDMxi5maui4pDfdzJp3zWSTYQRPMXKfTIhEhp89li4R6Sf3T0whgFEGwV2iEk
+         X6IQ/0Ng50oCOvCkyaJNBFFvXly0Rh40Hwwg9Lu9koYigRbehOHvK0tHHLMcS4mWVz
+         q997VIK41FdjCIPpdfLUR72zQcRLeXMnMZgjcovc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 5.10 013/563] mtd: rawnand: davinci: Rewrite function description
-Date:   Mon, 24 Jan 2022 19:36:18 +0100
-Message-Id: <20220124184024.874787464@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0390/1039] usb: dwc2: do not gate off the hardware if it does not support clock gating
+Date:   Mon, 24 Jan 2022 19:36:19 +0100
+Message-Id: <20220124184138.426988331@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,47 +47,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Cercueil <paul@crapouillou.net>
+From: Dinh Nguyen <dinguyen@kernel.org>
 
-commit 0697f8441faad552fbeb02d74454b5e7bcc956a2 upstream.
+[ Upstream commit 34146c68083f1aef6709196b3dc888c1ceffd357 ]
 
-The original comment that describes the function
-nand_davinci_read_page_hwecc_oob_first() is very obscure and it is hard
-to understand what it is for.
+We should not be clearing the HCD_FLAG_HW_ACCESSIBLE bit if the hardware
+does not support clock gating.
 
-Cc: <stable@vger.kernel.org> # v5.2
-Fixes: a0ac778eb82c ("mtd: rawnand: ingenic: Add support for the JZ4740")
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20211016132228.40254-3-paul@crapouillou.net
+Fixes: 50fb0c128b6e ("usb: dwc2: Add clock gating entering flow by system suspend")
+Acked-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+Link: https://lore.kernel.org/r/20220104135922.734776-1-dinguyen@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/nand/raw/davinci_nand.c |   10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/usb/dwc2/hcd.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/drivers/mtd/nand/raw/davinci_nand.c
-+++ b/drivers/mtd/nand/raw/davinci_nand.c
-@@ -372,17 +372,15 @@ correct:
- }
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index 13c779a28e94f..f63a27d11fac8 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -4399,11 +4399,12 @@ static int _dwc2_hcd_suspend(struct usb_hcd *hcd)
+ 		 * If not hibernation nor partial power down are supported,
+ 		 * clock gating is used to save power.
+ 		 */
+-		if (!hsotg->params.no_clock_gating)
++		if (!hsotg->params.no_clock_gating) {
+ 			dwc2_host_enter_clock_gating(hsotg);
  
- /**
-- * nand_read_page_hwecc_oob_first - hw ecc, read oob first
-+ * nand_davinci_read_page_hwecc_oob_first - Hardware ECC page read with ECC
-+ *                                          data read from OOB area
-  * @chip: nand chip info structure
-  * @buf: buffer to store read data
-  * @oob_required: caller requires OOB data read to chip->oob_poi
-  * @page: page number to read
-  *
-- * Hardware ECC for large page chips, require OOB to be read first. For this
-- * ECC mode, the write_page method is re-used from ECC_HW. These methods
-- * read/write ECC from the OOB area, unlike the ECC_HW_SYNDROME support with
-- * multiple ECC steps, follows the "infix ECC" scheme and reads/writes ECC from
-- * the data area, by overwriting the NAND manufacturer bad block markings.
-+ * Hardware ECC for large page chips, which requires the ECC data to be
-+ * extracted from the OOB before the actual data is read.
-  */
- static int nand_davinci_read_page_hwecc_oob_first(struct nand_chip *chip,
- 						  uint8_t *buf,
+-		/* After entering suspend, hardware is not accessible */
+-		clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
++			/* After entering suspend, hardware is not accessible */
++			clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
++		}
+ 		break;
+ 	default:
+ 		goto skip_power_saving;
+-- 
+2.34.1
+
 
 

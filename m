@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D2F7499D1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1DA249973C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:27:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1582313AbiAXWPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:15:05 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42470 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452896AbiAXV1X (ORCPT
+        id S1447784AbiAXVL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:11:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41696 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1390230AbiAXUpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:27:23 -0500
+        Mon, 24 Jan 2022 15:45:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7C9C061396;
+        Mon, 24 Jan 2022 11:55:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F21D2B812A7;
-        Mon, 24 Jan 2022 21:27:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25F9AC340E4;
-        Mon, 24 Jan 2022 21:27:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B030360B02;
+        Mon, 24 Jan 2022 19:55:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 802DDC340E5;
+        Mon, 24 Jan 2022 19:55:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059636;
-        bh=VugHGI8+6S85HjqW94JyGeLrIidA8ZW1E+7xFGmNbvY=;
+        s=korg; t=1643054137;
+        bh=4F+FoEJCjA5dc535C82+wg9z4q7LEbCQMztv5Eb7YX0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HwknhRKko4gRgnqWGES8sS/o3XUOfF0FeWg/QLttp1YG+Dnl3kOUJyB0xmjkP5hnj
-         EMAAvrceKAeQ62XG4sh3aJjhPAtKvaKkp0y/6zQ2fynfsl4fNTj5bF+ZR4MrxUx3yd
-         V/shXpUso9Ocw/1MzOTd9iOZ3ksblXJnUQTMyf3o=
+        b=iiYS0Py4XIQ08NX6b06t6PjXLOta0vw5ZKxO3vMlJVxpLul4RW080D9WyHhGztAkJ
+         thAeRo3TxksxPMWMaD6jYLgAeDfYCGshn6EAySpQixgLh/5jVE6RrgADugovL4oDn+
+         5fGmrFycEHbF4R6YccfMJbo32FCZ/l7wEndM6N3w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0655/1039] mmc: tmio: reinit card irqs in reset routine
-Date:   Mon, 24 Jan 2022 19:40:44 +0100
-Message-Id: <20220124184147.379482173@linuxfoundation.org>
+Subject: [PATCH 5.10 283/563] ASoC: mediatek: Check for error clk pointer
+Date:   Mon, 24 Jan 2022 19:40:48 +0100
+Message-Id: <20220124184034.226566770@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,65 +49,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Biju Das <biju.das.jz@bp.renesas.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit e315b1f3a170f368da5618f8a598e68880302ed1 ]
+[ Upstream commit 9de2b9286a6dd16966959b3cb34fc2ddfd39213e ]
 
-Refactor the code so that card detect irqs are always reenabled after a
-reset. This avoids doing it manually all over the code or forgetting to
-do this in the future.
+Yes, you are right and now the return code depending on the
+init_clks().
 
-Reported-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-[wsa: added a comment when 'native_hotplug' has to be set]
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Link: https://lore.kernel.org/r/20211103122646.64422-1-wsa+renesas@sang-engineering.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Fixes: 6078c651947a ("soc: mediatek: Refine scpsys to support multiple platform")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Link: https://lore.kernel.org/r/20211222015157.1025853-1-jiasheng@iscas.ac.cn
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/host/tmio_mmc_core.c | 15 +++------------
- 1 file changed, 3 insertions(+), 12 deletions(-)
+ drivers/soc/mediatek/mtk-scpsys.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/mmc/host/tmio_mmc_core.c b/drivers/mmc/host/tmio_mmc_core.c
-index e2affa52ef469..a5850d83908be 100644
---- a/drivers/mmc/host/tmio_mmc_core.c
-+++ b/drivers/mmc/host/tmio_mmc_core.c
-@@ -960,14 +960,8 @@ static void tmio_mmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
- 	case MMC_POWER_OFF:
- 		tmio_mmc_power_off(host);
- 		/* For R-Car Gen2+, we need to reset SDHI specific SCC */
--		if (host->pdata->flags & TMIO_MMC_MIN_RCAR2) {
--			host->reset(host);
--
--			if (host->native_hotplug)
--				tmio_mmc_enable_mmc_irqs(host,
--						TMIO_STAT_CARD_REMOVE |
--						TMIO_STAT_CARD_INSERT);
--		}
-+		if (host->pdata->flags & TMIO_MMC_MIN_RCAR2)
-+			tmio_mmc_reset(host);
+diff --git a/drivers/soc/mediatek/mtk-scpsys.c b/drivers/soc/mediatek/mtk-scpsys.c
+index ca75b14931ec9..670cc82d17dc2 100644
+--- a/drivers/soc/mediatek/mtk-scpsys.c
++++ b/drivers/soc/mediatek/mtk-scpsys.c
+@@ -411,12 +411,17 @@ out:
+ 	return ret;
+ }
  
- 		host->set_clock(host, 0);
- 		break;
-@@ -1175,6 +1169,7 @@ int tmio_mmc_host_probe(struct tmio_mmc_host *_host)
- 	if (mmc_can_gpio_cd(mmc))
- 		_host->ops.get_cd = mmc_gpio_get_cd;
+-static void init_clks(struct platform_device *pdev, struct clk **clk)
++static int init_clks(struct platform_device *pdev, struct clk **clk)
+ {
+ 	int i;
  
-+	/* must be set before tmio_mmc_reset() */
- 	_host->native_hotplug = !(mmc_can_gpio_cd(mmc) ||
- 				  mmc->caps & MMC_CAP_NEEDS_POLL ||
- 				  !mmc_card_is_removable(mmc));
-@@ -1295,10 +1290,6 @@ int tmio_mmc_host_runtime_resume(struct device *dev)
- 	if (host->clk_cache)
- 		host->set_clock(host, host->clk_cache);
+-	for (i = CLK_NONE + 1; i < CLK_MAX; i++)
++	for (i = CLK_NONE + 1; i < CLK_MAX; i++) {
+ 		clk[i] = devm_clk_get(&pdev->dev, clk_names[i]);
++		if (IS_ERR(clk[i]))
++			return PTR_ERR(clk[i]);
++	}
++
++	return 0;
+ }
  
--	if (host->native_hotplug)
--		tmio_mmc_enable_mmc_irqs(host,
--				TMIO_STAT_CARD_REMOVE | TMIO_STAT_CARD_INSERT);
--
- 	tmio_mmc_enable_dma(host, true);
+ static struct scp *init_scp(struct platform_device *pdev,
+@@ -426,7 +431,7 @@ static struct scp *init_scp(struct platform_device *pdev,
+ {
+ 	struct genpd_onecell_data *pd_data;
+ 	struct resource *res;
+-	int i, j;
++	int i, j, ret;
+ 	struct scp *scp;
+ 	struct clk *clk[CLK_MAX];
  
- 	return 0;
+@@ -481,7 +486,9 @@ static struct scp *init_scp(struct platform_device *pdev,
+ 
+ 	pd_data->num_domains = num;
+ 
+-	init_clks(pdev, clk);
++	ret = init_clks(pdev, clk);
++	if (ret)
++		return ERR_PTR(ret);
+ 
+ 	for (i = 0; i < num; i++) {
+ 		struct scp_domain *scpd = &scp->domains[i];
 -- 
 2.34.1
 

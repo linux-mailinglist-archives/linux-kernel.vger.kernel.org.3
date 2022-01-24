@@ -2,138 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B9FE498588
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:58:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8807498587
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:58:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244029AbiAXQ6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 11:58:04 -0500
-Received: from mta-p6.oit.umn.edu ([134.84.196.206]:40556 "EHLO
-        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243685AbiAXQ6B (ORCPT
+        id S244022AbiAXQ6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 11:58:02 -0500
+Received: from so254-9.mailgun.net ([198.61.254.9]:17795 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243796AbiAXQ6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 11:58:01 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 4JjGQ11wNqz9vvsq
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:58:01 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p6.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id WQFxJMtFL_ov for <linux-kernel@vger.kernel.org>;
-        Mon, 24 Jan 2022 10:58:01 -0600 (CST)
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1643043479; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=BmbwObkwttro0SkpL4p0P2XaUDTExkEYfbCchug/+GI=; b=vZFNpNT6t++UjJxzzIePhWchIejBneLoz90n1QPY/EWYS8mDZdoAP2e84prgmuMHPe4uOYN4
+ Jk4a4tQ6BUIFsKV+9dPDMQlm7awNLgcyqHRyJL5/AzE3CwyaIpEB/Q4Zf3yEsz9HZGbCM6SD
+ aUzK0Ny7PUKK99DlnFEdSpGMW6E=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 61eeda94020b4d26a6184209 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 24 Jan 2022 16:57:56
+ GMT
+Sender: tdas=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id E4E3DC4360D; Mon, 24 Jan 2022 16:57:55 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from hu-tdas-hyd.qualcomm.com (unknown [202.46.22.19])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id 4JjGPk10nvz9vKfQ
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:57:46 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p6.oit.umn.edu 4JjGPk10nvz9vKfQ
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p6.oit.umn.edu 4JjGPk10nvz9vKfQ
-Received: by mail-pl1-f197.google.com with SMTP id b15-20020a1709027e0f00b0014a922bc3a9so3640118plm.13
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 08:57:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PMFfnAra5OAPA2izCo6QzwQ1sU01OGFtg5xgGw3BVmI=;
-        b=S5ZZStViBVCiSgrJgAPXiRKX3V4djwyrlnB6OeTG4NG6+lxAOXy+29Wuihu+/e9t5U
-         sH5hNg7qOIvGf3Q1MMfagwm7osjrG9TKG8hddH3EbNMYSRBbaewNw9B5vpX1UZnmzFME
-         BsU07O7fqLmJgYObCqfe/WIyIEux3XoN91Rn3QuGbaXd0oS/+bDEYKEFTMg1JEkvBF1d
-         /ky91uNUGtQcUsznxztF+HkLCjOzeBBo+ChsTcLqdE9A5ViJkSchONnPUCrOn8XjYR8r
-         c3/aMOq1VHBdqJV22eq7L5gC2vdW5HXd9kMNLdKTXDW0fdJEcHqeobKu+nukzGp8ojhj
-         YvHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PMFfnAra5OAPA2izCo6QzwQ1sU01OGFtg5xgGw3BVmI=;
-        b=HNNXnyXhWJUXdL9npJy8cuUktSDgZdorHNou7UwOSQ7ru7E6rx43MQ+0lo8A47NGfg
-         NH4EHMqeT23DhAphGEDPZU79Odz+4qmMhfyL9MZTrse1cSoMsfqxyZgViZzitaqT/BdQ
-         9A+v43foqAxSmRQ5jUTSymC3buAQQWc+CFAaqjWp013+r0D1ZH5AmUDAWU4TUCyuSFmR
-         r/1tm5semo4wuFz1kD/FP3AkJgVQzrNhMI4SF8jbCbSa+t2Z1F8asP5QdakrB6CLusu1
-         D1EFyrfbM9FHX6JPtRvI+zEkXQ2mSng8QJn3hVAeuK5Q7P7WP+yDEkW2apzvX0KLtrWX
-         SCKA==
-X-Gm-Message-State: AOAM531mJIyAyLhspjlzXsj6K/ug76qp6yQJnsq3ohcGz2wj/79rnCTT
-        TeS8IKVA7xUrqfjdWn1bdErbejKDeJiz15uSzLmomGikV7Qh3Tqoflyida7ETyapZ0L4WjdV0VI
-        p35i4uawb+SrumGwTfHkK5otL5soP
-X-Received: by 2002:a65:610b:: with SMTP id z11mr12719331pgu.205.1643043465359;
-        Mon, 24 Jan 2022 08:57:45 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxQnFXtF5Ph8R6eAihtOj2AR0vQXbTXIbQRkEBMw+neKa1NwTrsboSIeKwGF8tXd48OBGjhBA==
-X-Received: by 2002:a65:610b:: with SMTP id z11mr12719303pgu.205.1643043465076;
-        Mon, 24 Jan 2022 08:57:45 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.4.61.248])
-        by smtp.gmail.com with ESMTPSA id a15sm17826365pfv.212.2022.01.24.08.57.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 08:57:44 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Jude Shih <shenshih@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Nikola Cornij <nikola.cornij@amd.com>,
-        Wayne Lin <Wayne.Lin@amd.com>, Roman Li <Roman.Li@amd.com>,
-        Tony Cheng <Tony.Cheng@amd.com>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/amd/display: Fix a NULL pointer dereference in amdgpu_dm_connector_add_common_modes()
-Date:   Tue, 25 Jan 2022 00:57:29 +0800
-Message-Id: <20220124165732.56587-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        (Authenticated sender: tdas)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 57B9DC4338F;
+        Mon, 24 Jan 2022 16:57:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 57B9DC4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Taniya Das <tdas@codeaurora.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Taniya Das <tdas@codeaurora.org>
+Subject: [PATCH v1] arm64: dts: qcom: sc7280: Add lpasscore & lpassaudio clock controllers
+Date:   Mon, 24 Jan 2022 22:27:45 +0530
+Message-Id: <20220124165745.16277-1-tdas@codeaurora.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In amdgpu_dm_connector_add_common_modes(), amdgpu_dm_create_common_mode()
-is assigned to mode and is passed to drm_mode_probed_add() directly after
-that. drm_mode_probed_add() passes &mode->head to list_add_tail(), and
-there is a dereference of it in list_add_tail() without recoveries, which
-could lead to NULL pointer dereference on failure of
-amdgpu_dm_create_common_mode().
+Add the low pass audio clock controller device nodes.
 
-Fix this by adding a NULL check of mode.
-
-This bug was found by a static analyzer.
-
-Builds with 'make allyesconfig' show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: e7b07ceef2a6 ("drm/amd/display: Merge amdgpu_dm_types and amdgpu_dm")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Signed-off-by: Taniya Das <tdas@codeaurora.org>
 ---
-The analysis employs differential checking to identify inconsistent 
-security operations (e.g., checks or kfrees) between two code paths 
-and confirms that the inconsistent operations are not recovered in the
-current function or the callers, so they constitute bugs. 
+Dependent onLPASS clock controller change: https://lkml.org/lkml/2022/1/24/772
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
+ arch/arm64/boot/dts/qcom/sc7280.dtsi | 43 ++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 3 +++
- 1 file changed, 3 insertions(+)
+diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+index 937c2e0e93eb..0aa834ce6b61 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+@@ -8,6 +8,8 @@
+ #include <dt-bindings/clock/qcom,dispcc-sc7280.h>
+ #include <dt-bindings/clock/qcom,gcc-sc7280.h>
+ #include <dt-bindings/clock/qcom,gpucc-sc7280.h>
++#include <dt-bindings/clock/qcom,lpassaudiocc-sc7280.h>
++#include <dt-bindings/clock/qcom,lpasscorecc-sc7280.h>
+ #include <dt-bindings/clock/qcom,rpmh.h>
+ #include <dt-bindings/clock/qcom,videocc-sc7280.h>
+ #include <dt-bindings/interconnect/qcom,sc7280.h>
+@@ -1744,6 +1746,47 @@
+ 			#clock-cells = <1>;
+ 		};
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index 7f9773f8dab6..9ad94186b146 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -8143,6 +8143,9 @@ static void amdgpu_dm_connector_add_common_modes(struct drm_encoder *encoder,
- 		mode = amdgpu_dm_create_common_mode(encoder,
- 				common_modes[i].name, common_modes[i].w,
- 				common_modes[i].h);
-+		if (!mode)
-+			continue;
++		lpass_audiocc: clock-controller@3300000 {
++			compatible = "qcom,sc7280-lpassaudiocc";
++			reg = <0  0x03300000 0 0x30000>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>,
++			       <&lpass_aon LPASS_AON_CC_MAIN_RCG_CLK_SRC>;
++			clock-names = "bi_tcxo", "lpass_aon_cc_main_rcg_clk_src";
++			power-domains = <&lpass_aon LPASS_AON_CC_LPASS_AUDIO_HM_GDSC>;
++			#clock-cells = <1>;
++			#power-domain-cells = <1>;
++		};
 +
- 		drm_mode_probed_add(connector, mode);
- 		amdgpu_dm_connector->num_modes++;
- 	}
--- 
-2.25.1
++		lpass_aon: clock-controller@3380000 {
++			compatible = "qcom,sc7280-lpassaoncc";
++			reg = <0  0x03380000 0 0x30000>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>,
++			       <&rpmhcc RPMH_CXO_CLK_A>,
++			       <&lpasscc LPASS_CORE_CC_CORE_CLK>;
++			clock-names = "bi_tcxo", "bi_tcxo_ao", "iface";
++			#clock-cells = <1>;
++			#power-domain-cells = <1>;
++		};
++
++		lpasscore: clock-controller@3900000 {
++			compatible = "qcom,sc7280-lpasscorecc";
++			reg = <0  0x03900000 0 0x50000>;
++			clocks =  <&rpmhcc RPMH_CXO_CLK>;
++			clock-names = "bi_tcxo";
++			power-domains = <&lpass_hm LPASS_CORE_CC_LPASS_CORE_HM_GDSC>;
++			#clock-cells = <1>;
++			#power-domain-cells = <1>;
++		};
++
++		lpass_hm: clock-controller@3c00000 {
++			compatible = "qcom,sc7280-lpasshm";
++			reg = <0 0x3c00000 0 0x28>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>;
++			clock-names = "bi_tcxo";
++			#clock-cells = <1>;
++			#power-domain-cells = <1>;
++		};
++
+ 		lpass_ag_noc: interconnect@3c40000 {
+ 			reg = <0 0x03c40000 0 0xf080>;
+ 			compatible = "qcom,sc7280-lpass-ag-noc";
+--
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
+of the Code Aurora Forum, hosted by the  Linux Foundation.
 

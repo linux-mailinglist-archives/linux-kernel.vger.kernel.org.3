@@ -2,170 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFB9C497EB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:12:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 625FF497F11
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:16:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238278AbiAXMMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 07:12:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233792AbiAXMM2 (ORCPT
+        id S242713AbiAXMPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 07:15:45 -0500
+Received: from mta-p8.oit.umn.edu ([134.84.196.208]:39592 "EHLO
+        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239342AbiAXMOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:12:28 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A289C06173D
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 04:12:28 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id s13so20808581ejy.3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 04:12:28 -0800 (PST)
+        Mon, 24 Jan 2022 07:14:17 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4Jj86b4RXcz9vC8s
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:14:15 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p8.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id omnldx4fKL66 for <linux-kernel@vger.kernel.org>;
+        Mon, 24 Jan 2022 06:14:15 -0600 (CST)
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4Jj86b2HTFz9vC8v
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 06:14:15 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4Jj86b2HTFz9vC8v
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4Jj86b2HTFz9vC8v
+Received: by mail-pg1-f199.google.com with SMTP id c19-20020a637253000000b0035e0ba5a1bfso2760025pgn.13
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 04:14:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=EF33JaMG+hm3D3rC4FKnXqraG6SkDY8uCv7rbWwdgXo=;
-        b=h9kOSUGdVE4gKL9s/LJMs1IPT3IbpeWYBrpfv+AuECTvZC/d9Mgmj+8/qzAF3eXbfK
-         m2PtizTIvCHLxd6Gr7Fy05dMKmmlLLy4fEUmMzmo48gVyiHxEhPLV4MLyO9oPA3wQplh
-         Vu1eRpEh9FNcwp+b/0xm/G3Q5QeqPlP25zblpv7pn1fhf7z/jOebqtlWaC7aW9HA3fhF
-         VjHo7lvhY7/oUqkPSCrDzarLxSsOAQnP9tESF52Jr02HUzNrium0qVdHZa1C0dYGAGE8
-         mDJhzJkStQMJW3cmp/Q9xzv797988P0T7BpUMuqWmKMM8P4QGKIRCVs93TY4AR01o66n
-         x2fw==
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=bcoDGYv5WbGoY7EVxjd/aG/krLpaD/QwL/X8pTR3VUk=;
+        b=I9K1ey0NhGpNev5axEpQwfCr7zcPte2LN+htxeiycK6t56WT4om0xTQeVf5ij4PBd8
+         mcTOSD2Mkui15OuZYRuN2iDXVWOJ/2bsWFyJQs3u96aGJpBQqUIx9AXy67FKGAF9g9c8
+         tN6fzvCZuHeInuZKtq6p0rki6LhTW3I2o/prlUQQIlouqS4WRfBUhAC1MauNatB1WyhX
+         6eMHmcyiJqjHGZLa7+Rx0u+wUUQLjlZCx3gkxxMY7w29+LS+UfFwxdtOLMJ+3CfM42Ez
+         K2AdD3u/IjP9llrpNtJalHxwk0TL4DN0f5MmwdHJf0SwUDlxneyUPsoOF60EGQSoBpHq
+         ig4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=EF33JaMG+hm3D3rC4FKnXqraG6SkDY8uCv7rbWwdgXo=;
-        b=t+Zy6IDGt/3Mp08T1VvTcSljMn3jZLkjh5flyQr3hXf6aFawUGWSNRy+o1hFqp1lhE
-         Kbn5oIBkGiJFzDZXCeqG9T8QvI0Q/NGPWT0oDPye4QnnRbFHVQMZYb61pZCd9jMkZ8ZW
-         /+ZsBN7SlynIsFGKhyTcfQbpMBaEgire8r7zbm+pJmigCQTyUbQEUkVrs9gGJ74HXvEf
-         YdozkMwPaXYqp2czFshn3Qufk6IAGp0gLiKLVpJuP2UeXX41VzbkmphrZ9wnjfVl+cSz
-         RBu4bnv/wgzqpu8MNcivSmye/F4JPGQcDdmAUCfUXczFZqqk2L5uZpI12vda57gVJlk+
-         x1vw==
-X-Gm-Message-State: AOAM530In8MUkLfoOZzCU05iJ4LOBLG4cQUjeKavXwcsP+jQSUSMJiLB
-        o/jgbANtrQHybsUoOPXjbYIdfg==
-X-Google-Smtp-Source: ABdhPJyQSddN36xdAtpIRActuatI3ilXCh3FopeB7M5+U2SlQv66S7Fj/8y3ScreZHIH5mQGHDw6Ng==
-X-Received: by 2002:a17:906:c099:: with SMTP id f25mr12755359ejz.458.1643026346842;
-        Mon, 24 Jan 2022 04:12:26 -0800 (PST)
-Received: from ?IPV6:2a02:768:2307:40d6::f9e? ([2a02:768:2307:40d6::f9e])
-        by smtp.gmail.com with ESMTPSA id gu2sm4768438ejb.221.2022.01.24.04.12.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jan 2022 04:12:26 -0800 (PST)
-Message-ID: <9e98c6c9-36a8-046a-b195-78942fdcafff@monstr.eu>
-Date:   Mon, 24 Jan 2022 13:12:25 +0100
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=bcoDGYv5WbGoY7EVxjd/aG/krLpaD/QwL/X8pTR3VUk=;
+        b=uIbK6/j3YCXLDk+z/McbRcS7gHOLYgTPD17zMgxUrWf3t1rD08BMQnlBsfCLH/3F4p
+         1imvAvdaiDqROdnNQkFFe4SEkKJ7tcqN1iwa9eqIJNIYWeRzV39n9SE2sKk6ITatqcQx
+         4AGXuypEurClTNQWchgKZx4PZY9HHugsK6lmz7s/gkgyXXD9Y3Dz1yNiuqzfi+f0cK8B
+         HuBwsvcxwaa5XObaYij1tzLeFnzYKLsPT53QFxMVmJThrUZ7MQcEsPs636xvouHTcRIn
+         elBZCFaUOvS4X9GK0rM7he96T0P2DfHWgSbrmmbTDvNWjVAUbXHV/NRmvpv/XfxO7OlA
+         dWhg==
+X-Gm-Message-State: AOAM531jNa133k7L3BiaURhiQubIkdwhrsjyxxCm+uo+5xBroZSqBnbB
+        gpYeF8VcE1xNB4lCLBmFOpWMlk10odfMMgGIi6goB3jrQbq05Ebj3F5Z3RUfAcb59NULPysGgyv
+        IFQrWSLZ5hOkAQFXFQyHhebXSNfFM
+X-Received: by 2002:a05:6a00:cc5:b0:4c3:832a:1180 with SMTP id b5-20020a056a000cc500b004c3832a1180mr14103252pfv.10.1643026454442;
+        Mon, 24 Jan 2022 04:14:14 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzkPpY5o+pwP/MpYJFNoBFr9G8QoFt755MIYhSaRAtEQ74j4Dp4tq5YxTU7Ff5MZDdXIDiHSg==
+X-Received: by 2002:a05:6a00:cc5:b0:4c3:832a:1180 with SMTP id b5-20020a056a000cc500b004c3832a1180mr14103233pfv.10.1643026454188;
+        Mon, 24 Jan 2022 04:14:14 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.4.61.248])
+        by smtp.gmail.com with ESMTPSA id b21sm11546359pgi.51.2022.01.24.04.14.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 04:14:13 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>,
+        Nadezda Lutovinova <lutovinova@ispras.ru>,
+        Yu Xu <yuxu@marvell.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: gadget: mv_u3d: Fix a NULL pointer dereference in mv_u3d_req_to_trb()
+Date:   Mon, 24 Jan 2022 20:12:33 +0800
+Message-Id: <20220124121236.19761-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <Yan3RHLH7UUjwSvE@hovoldconsulting.com>
+References: <Yan3RHLH7UUjwSvE@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1] microblaze/PCI: Remove pci_phys_mem_access_prot() dead
- code
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20220121205150.1151607-1-helgaas@kernel.org>
-From:   Michal Simek <monstr@monstr.eu>
-In-Reply-To: <20220121205150.1151607-1-helgaas@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In mv_u3d_req_to_trb(), mv_u3d_build_trb_one() is assigned to trb and
+there is a dereference of it in mv_u3d_req_to_trb(), which could lead
+to a NULL pointer dereference on failure of mv_u3d_build_trb_one().
 
+Fix this bug by adding a check of trb.
 
-On 1/21/22 21:51, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> pci_phys_mem_access_prot() is defined but never used.  Remove it.
-> 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> ---
->   arch/microblaze/include/asm/pci.h |  4 ---
->   arch/microblaze/pci/pci-common.c  | 49 -------------------------------
->   2 files changed, 53 deletions(-)
-> 
-> diff --git a/arch/microblaze/include/asm/pci.h b/arch/microblaze/include/asm/pci.h
-> index 7c4dc5d85f53..d90528064604 100644
-> --- a/arch/microblaze/include/asm/pci.h
-> +++ b/arch/microblaze/include/asm/pci.h
-> @@ -61,10 +61,6 @@ extern int pci_mmap_legacy_page_range(struct pci_bus *bus,
->   extern void pcibios_resource_survey(void);
->   
->   struct file;
-> -extern pgprot_t	pci_phys_mem_access_prot(struct file *file,
-> -					 unsigned long pfn,
-> -					 unsigned long size,
-> -					 pgprot_t prot);
->   
->   /* This part of code was originally in xilinx-pci.h */
->   #ifdef CONFIG_PCI_XILINX
-> diff --git a/arch/microblaze/pci/pci-common.c b/arch/microblaze/pci/pci-common.c
-> index 622a4867f9e9..33bab7eec731 100644
-> --- a/arch/microblaze/pci/pci-common.c
-> +++ b/arch/microblaze/pci/pci-common.c
-> @@ -165,55 +165,6 @@ int pci_iobar_pfn(struct pci_dev *pdev, int bar, struct vm_area_struct *vma)
->   	return 0;
->   }
->   
-> -/*
-> - * This one is used by /dev/mem and fbdev who have no clue about the
-> - * PCI device, it tries to find the PCI device first and calls the
-> - * above routine
-> - */
-> -pgprot_t pci_phys_mem_access_prot(struct file *file,
-> -				  unsigned long pfn,
-> -				  unsigned long size,
-> -				  pgprot_t prot)
-> -{
-> -	struct pci_dev *pdev = NULL;
-> -	struct resource *found = NULL;
-> -	resource_size_t offset = ((resource_size_t)pfn) << PAGE_SHIFT;
-> -	int i;
-> -
-> -	if (page_is_ram(pfn))
-> -		return prot;
-> -
-> -	prot = pgprot_noncached(prot);
-> -	for_each_pci_dev(pdev) {
-> -		for (i = 0; i <= PCI_ROM_RESOURCE; i++) {
-> -			struct resource *rp = &pdev->resource[i];
-> -			int flags = rp->flags;
-> -
-> -			/* Active and same type? */
-> -			if ((flags & IORESOURCE_MEM) == 0)
-> -				continue;
-> -			/* In the range of this resource? */
-> -			if (offset < (rp->start & PAGE_MASK) ||
-> -			    offset > rp->end)
-> -				continue;
-> -			found = rp;
-> -			break;
-> -		}
-> -		if (found)
-> -			break;
-> -	}
-> -	if (found) {
-> -		if (found->flags & IORESOURCE_PREFETCH)
-> -			prot = pgprot_noncached_wc(prot);
-> -		pci_dev_put(pdev);
-> -	}
-> -
-> -	pr_debug("PCI: Non-PCI map for %llx, prot: %lx\n",
-> -		 (unsigned long long)offset, pgprot_val(prot));
-> -
-> -	return prot;
-> -}
-> -
->   /* This provides legacy IO read access on a bus */
->   int pci_legacy_read(struct pci_bus *bus, loff_t port, u32 *val, size_t size)
->   {
+This bug was found by a static analyzer.
 
-Applied.
-M
+Builds with CONFIG_USB_MV_U3D=m show no new warnings,
+and our static analyzer no longer warns about this code.
 
+Fixes: 3d4eb9dfa3e8 ("usb: gadget: mv: Add USB 3.0 device driver for Marvell PXA2128 chip.")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+The analysis employs differential checking to identify inconsistent
+security operations (e.g., checks or kfrees) between two code paths 
+and confirms that the inconsistent operations are not recovered in 
+the current function or the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Changes in v2:
+  -  Remove unnecessary error message
+
+ drivers/usb/gadget/udc/mv_u3d_core.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/usb/gadget/udc/mv_u3d_core.c b/drivers/usb/gadget/udc/mv_u3d_core.c
+index a1057ddfbda3..4573233f2835 100644
+--- a/drivers/usb/gadget/udc/mv_u3d_core.c
++++ b/drivers/usb/gadget/udc/mv_u3d_core.c
+@@ -417,6 +417,9 @@ static int mv_u3d_req_to_trb(struct mv_u3d_req *req)
+ 	 */
+ 	if (length <= (unsigned)MV_U3D_EP_MAX_LENGTH_TRANSFER) {
+ 		trb = mv_u3d_build_trb_one(req, &count, &dma);
++		if (!trb)
++			return -ENOMEM;
++
+ 		list_add_tail(&trb->trb_list, &req->trb_list);
+ 		req->trb_head = trb;
+ 		req->trb_count = 1;
 -- 
-Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
-w: www.monstr.eu p: +42-0-721842854
-Maintainer of Linux kernel - Xilinx Microblaze
-Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
-U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
-
+2.25.1
 

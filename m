@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F916498BF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:18:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA7F498A89
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346295AbiAXTRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:17:43 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34358 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345654AbiAXTGY (ORCPT
+        id S1345911AbiAXTEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:04:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345351AbiAXTAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:06:24 -0500
+        Mon, 24 Jan 2022 14:00:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1D4C06179A;
+        Mon, 24 Jan 2022 10:57:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E94EAB81239;
-        Mon, 24 Jan 2022 19:06:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AC80C340E5;
-        Mon, 24 Jan 2022 19:06:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 294CE6153A;
+        Mon, 24 Jan 2022 18:57:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCF7DC340E5;
+        Mon, 24 Jan 2022 18:57:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051178;
-        bh=RtIo5JOYlq8YpCO9arDpjnQVZP64mqVCmyYXczOJcOs=;
+        s=korg; t=1643050641;
+        bh=w46WblcSNnkv/REghqn6QUVMuYOSbyXJbKRtxqJJU4E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=laAhjQCyDu7VdK3of0ECehIzhzjoN2P9sXRZaZBS8PTowl7q4NKKBSVdxNWWyF0mf
-         cWH6H9YbVJTxMoCwgA+q95H1SVlO6tKkKVwZPmDpePcgWSEvvYGriZtrZzwLHWjPYT
-         4IFvrQgGw+7UUGJ/KjSKk0SkQI3wQDWwGt/LHY6c=
+        b=xHkQZD1KhE3lYh+d2w/ePp3bMpAmer4UU8vyjm3VlY1tGbX1ioSGm6+NnCVpSquMp
+         Ic5nxskLJ8hHCFYyJsvvONhuw/kQ4fktxmziXuZP9iAL9p8/jnlo2whkJN7vR0mMBq
+         yCUD4MRsURCHLCdq+alqtAXqOGbbBnYHXzCkp8X4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 080/186] iommu/iova: Fix race between FQ timeout and teardown
-Date:   Mon, 24 Jan 2022 19:42:35 +0100
-Message-Id: <20220124183939.695751989@linuxfoundation.org>
+        stable@vger.kernel.org, Avihai Horon <avihaih@nvidia.com>,
+        Mark Zhang <markzhang@nvidia.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 066/157] RDMA/core: Let ib_find_gid() continue search even after empty entry
+Date:   Mon, 24 Jan 2022 19:42:36 +0100
+Message-Id: <20220124183934.877562935@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,51 +51,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+From: Avihai Horon <avihaih@nvidia.com>
 
-[ Upstream commit d7061627d701c90e1cac1e1e60c45292f64f3470 ]
+[ Upstream commit 483d805191a23191f8294bbf9b4e94836f5d92e4 ]
 
-It turns out to be possible for hotplugging out a device to reach the
-stage of tearing down the device's group and default domain before the
-domain's flush queue has drained naturally. At this point, it is then
-possible for the timeout to expire just before the del_timer() call
-in free_iova_flush_queue(), such that we then proceed to free the FQ
-resources while fq_flush_timeout() is still accessing them on another
-CPU. Crashes due to this have been observed in the wild while removing
-NVMe devices.
+Currently, ib_find_gid() will stop searching after encountering the first
+empty GID table entry. This behavior is wrong since neither IB nor RoCE
+spec enforce tightly packed GID tables.
 
-Close the race window by using del_timer_sync() to safely wait for any
-active timeout handler to finish before we start to free things. We
-already avoid any locking in free_iova_flush_queue() since the FQ is
-supposed to be inactive anyway, so the potential deadlock scenario does
-not apply.
+For example, when a valid GID entry exists at index N, and if a GID entry
+is empty at index N-1, ib_find_gid() will fail to find the valid entry.
 
-Fixes: 9a005a800ae8 ("iommu/iova: Add flush timer")
-Reviewed-by: John Garry <john.garry@huawei.com>
-Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-[ rm: rewrite commit message ]
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-Link: https://lore.kernel.org/r/0a365e5b07f14b7344677ad6a9a734966a8422ce.1639753638.git.robin.murphy@arm.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Fix it by making ib_find_gid() continue searching even after encountering
+missing entries.
+
+Fixes: 5eb620c81ce3 ("IB/core: Add helpers for uncached GID and P_Key searches")
+Link: https://lore.kernel.org/r/e55d331b96cecfc2cf19803d16e7109ea966882d.1639055490.git.leonro@nvidia.com
+Signed-off-by: Avihai Horon <avihaih@nvidia.com>
+Reviewed-by: Mark Zhang <markzhang@nvidia.com>
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/iova.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/infiniband/core/device.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-index 2c97d2552c5bd..ebee9e191b3ee 100644
---- a/drivers/iommu/iova.c
-+++ b/drivers/iommu/iova.c
-@@ -68,8 +68,7 @@ static void free_iova_flush_queue(struct iova_domain *iovad)
- 	if (!has_iova_flush_queue(iovad))
- 		return;
- 
--	if (timer_pending(&iovad->fq_timer))
--		del_timer(&iovad->fq_timer);
-+	del_timer_sync(&iovad->fq_timer);
- 
- 	fq_destroy_all_entries(iovad);
- 
+diff --git a/drivers/infiniband/core/device.c b/drivers/infiniband/core/device.c
+index 4b947d5cafe28..c5c175b72f21e 100644
+--- a/drivers/infiniband/core/device.c
++++ b/drivers/infiniband/core/device.c
+@@ -870,7 +870,8 @@ int ib_find_gid(struct ib_device *device, union ib_gid *gid,
+ 		for (i = 0; i < device->port_immutable[port].gid_tbl_len; ++i) {
+ 			ret = ib_query_gid(device, port, i, &tmp_gid, NULL);
+ 			if (ret)
+-				return ret;
++				continue;
++
+ 			if (!memcmp(&tmp_gid, gid, sizeof *gid)) {
+ 				*port_num = port;
+ 				if (index)
 -- 
 2.34.1
 

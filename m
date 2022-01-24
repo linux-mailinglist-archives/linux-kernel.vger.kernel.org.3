@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D84F499E7C
+	by mail.lfdr.de (Postfix) with ESMTP id 89DD9499E7D
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1835039AbiAXWf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:35:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55820 "EHLO
+        id S1835066AbiAXWfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:35:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1456654AbiAXVjo (ORCPT
+        with ESMTP id S1456692AbiAXVjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:39:44 -0500
+        Mon, 24 Jan 2022 16:39:48 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B27DC0419C4;
-        Mon, 24 Jan 2022 12:26:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9FFC0419C5;
+        Mon, 24 Jan 2022 12:26:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01D42B811F9;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0346FB81239;
+        Mon, 24 Jan 2022 20:26:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2741EC340E5;
         Mon, 24 Jan 2022 20:26:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 003D2C340E5;
-        Mon, 24 Jan 2022 20:26:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055969;
-        bh=VGIkT8JLELxZFrOomgUDtxo9zPRY+QxiAo2uv+JBIW8=;
+        s=korg; t=1643055972;
+        bh=3brKqyaqybEcUH8yC/phuL2yfofUBG/ciXNRmRgItE8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nffYg3gI5D9OTfbkOQpR+veEEyeIvzVRy3i//W0X9L9s598J3SAxEvUqEuvmuPOzj
-         sr/viwpFz1eO/+z3W799nNSJ1xwUpsF8w7NLLXh6qd43C4l2xDXPpzlQpsESJNAYiJ
-         zSCsS58gEN0EAQyVZ0XZGENM7krtExeOfyAiQlW4=
+        b=ESkCCaPjw9o86K/q9MIBQC18cLVkIj3m66xqkxmmeRvjUGfPzqDOn/fm8RAGznOoY
+         E0psAbJccuBI2DhbNbZl+4THTu/b48sVi77xEMxth7Qe8bc+4rC3Z0rxIEOt4XLxlH
+         eVL6Z5Cm3wOyI5EvPcNHWuDvvgNE3jSH90dKRzWM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Panicker Harish <quic_pharish@quicinc.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 293/846] Bluetooth: hci_qca: Stop IBS timer during BT OFF
-Date:   Mon, 24 Jan 2022 19:36:50 +0100
-Message-Id: <20220124184111.033095201@linuxfoundation.org>
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 294/846] x86/boot/compressed: Move CLANG_FLAGS to beginning of KBUILD_CFLAGS
+Date:   Mon, 24 Jan 2022 19:36:51 +0100
+Message-Id: <20220124184111.061573794@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -49,36 +48,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Panicker Harish <quic_pharish@quicinc.com>
+From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit df1e5c51492fd93ffc293acdcc6f00698d19fedc ]
+[ Upstream commit 5fe392ff9d1f7254a1fbb3f72d9893088e4d23eb ]
 
-The IBS timers are not stopped properly once BT OFF is triggered.
-we could see IBS commands being sent along with version command,
-so stopped IBS timers while Bluetooth is off.
+When cross compiling i386_defconfig on an arm64 host with clang, there
+are a few instances of '-Waddress-of-packed-member' and
+'-Wgnu-variable-sized-type-not-at-end' in arch/x86/boot/compressed/,
+which should both be disabled with the cc-disable-warning calls in that
+directory's Makefile, which indicates that cc-disable-warning is failing
+at the point of testing these flags.
 
-Fixes: 3e4be65eb82c ("Bluetooth: hci_qca: Add poweroff support during hci down for wcn3990")
-Signed-off-by: Panicker Harish <quic_pharish@quicinc.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+The cc-disable-warning calls fail because at the point that the flags
+are tested, KBUILD_CFLAGS has '-march=i386' without $(CLANG_FLAGS),
+which has the '--target=' flag to tell clang what architecture it is
+targeting. Without the '--target=' flag, the host architecture (arm64)
+is used and i386 is not a valid value for '-march=' in that case. This
+error can be seen by adding some logging to try-run:
+
+  clang-14: error: the clang compiler does not support '-march=i386'
+
+Invoking the compiler has to succeed prior to calling cc-option or
+cc-disable-warning in order to accurately test whether or not the flag
+is supported; if it doesn't, the requested flag can never be added to
+the compiler flags. Move $(CLANG_FLAGS) to the beginning of KBUILD_FLAGS
+so that any new flags that might be added in the future can be
+accurately tested.
+
+Fixes: d5cbd80e302d ("x86/boot: Add $(CLANG_FLAGS) to compressed KBUILD_CFLAGS")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20211222163040.1961481-1-nathan@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bluetooth/hci_qca.c | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/x86/boot/compressed/Makefile | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index 53deea2eb7b4d..3c26fc8463923 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -1927,6 +1927,9 @@ static int qca_power_off(struct hci_dev *hdev)
- 	hu->hdev->hw_error = NULL;
- 	hu->hdev->cmd_timeout = NULL;
+diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+index 431bf7f846c3c..e118136460518 100644
+--- a/arch/x86/boot/compressed/Makefile
++++ b/arch/x86/boot/compressed/Makefile
+@@ -28,7 +28,11 @@ KCOV_INSTRUMENT		:= n
+ targets := vmlinux vmlinux.bin vmlinux.bin.gz vmlinux.bin.bz2 vmlinux.bin.lzma \
+ 	vmlinux.bin.xz vmlinux.bin.lzo vmlinux.bin.lz4 vmlinux.bin.zst
  
-+	del_timer_sync(&qca->wake_retrans_timer);
-+	del_timer_sync(&qca->tx_idle_timer);
-+
- 	/* Stop sending shutdown command if soc crashes. */
- 	if (soc_type != QCA_ROME
- 		&& qca->memdump_state == QCA_MEMDUMP_IDLE) {
+-KBUILD_CFLAGS := -m$(BITS) -O2
++# CLANG_FLAGS must come before any cc-disable-warning or cc-option calls in
++# case of cross compiling, as it has the '--target=' flag, which is needed to
++# avoid errors with '-march=i386', and future flags may depend on the target to
++# be valid.
++KBUILD_CFLAGS := -m$(BITS) -O2 $(CLANG_FLAGS)
+ KBUILD_CFLAGS += -fno-strict-aliasing -fPIE
+ KBUILD_CFLAGS += -Wundef
+ KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
+@@ -47,7 +51,6 @@ KBUILD_CFLAGS += -D__DISABLE_EXPORTS
+ # Disable relocation relaxation in case the link is not PIE.
+ KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
+ KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
+-KBUILD_CFLAGS += $(CLANG_FLAGS)
+ 
+ # sev.c indirectly inludes inat-table.h which is generated during
+ # compilation and stored in $(objtree). Add the directory to the includes so
 -- 
 2.34.1
 

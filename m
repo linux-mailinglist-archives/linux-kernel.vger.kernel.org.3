@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BEA64992AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:23:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A05498A70
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:03:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355025AbiAXUXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:23:06 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48096 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376814AbiAXUEG (ORCPT
+        id S1344812AbiAXTDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:03:41 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56362 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344839AbiAXS7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:04:06 -0500
+        Mon, 24 Jan 2022 13:59:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 454BDB81229;
-        Mon, 24 Jan 2022 20:04:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75399C340E5;
-        Mon, 24 Jan 2022 20:04:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 357ED608D4;
+        Mon, 24 Jan 2022 18:59:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1149C340E7;
+        Mon, 24 Jan 2022 18:59:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054641;
-        bh=/+mI8nrRREij5JDaj6gEO/h76K+KA7kZdaVgSdBD+Fk=;
+        s=korg; t=1643050759;
+        bh=JcvhSTU1IQqq+oYId9prgK7Cki2I3kfKY0v6RsGm2zU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RvOtHKfvir77WWjSlgwYJBiZmQkCdbrYjk0LzaU0r5zlUiiRKo58CqMRowR+vvjfL
-         jNve9bWYcY0d80I1o43obPRie5xof185qZSBaZi2qwQVu5zGaPeucJfXJqLp/fw+Xy
-         NPp4ilY2aNUEvyeHYdZRMWn0AHuwohK4ePQQKe9M=
+        b=ZZRCyZTDZyPus2+l4q0LdJRch7rrwToPzmfdrchKkx/NsSdfTlSMdLQF/BawoYX8a
+         78FylcI1c47+0HY0hSsCRTaC3ztSh4zN+vYf/UKxh6hRkGW3ZNVBI1n63z6ONdxhCN
+         NoIbIxqzJVm8rMtd9dTd/t3lX7NhyLH4ECZvBlPw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 428/563] selftests/powerpc/spectre_v2: Return skip code when miss_percent is high
+Subject: [PATCH 4.9 103/157] serial: core: Keep mctrl register state and cached copy in sync
 Date:   Mon, 24 Jan 2022 19:43:13 +0100
-Message-Id: <20220124184039.253521440@linuxfoundation.org>
+Message-Id: <20220124183936.032114999@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,40 +45,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+From: Lukas Wunner <lukas@wunner.de>
 
-[ Upstream commit 3c42e9542050d49610077e083c7c3f5fd5e26820 ]
+[ Upstream commit 93a770b7e16772530196674ffc79bb13fa927dc6 ]
 
-A mis-match between reported and actual mitigation is not restricted to the
-Vulnerable case. The guest might also report the mitigation as "Software
-count cache flush" and the host will still mitigate with branch cache
-disabled.
+struct uart_port contains a cached copy of the Modem Control signals.
+It is used to skip register writes in uart_update_mctrl() if the new
+signal state equals the old signal state.  It also avoids a register
+read to obtain the current state of output signals.
 
-So, instead of skipping depending on the detected mitigation, simply skip
-whenever the detected miss_percent is the expected one for a fully
-mitigated system, that is, above 95%.
+When a uart_port is registered, uart_configure_port() changes signal
+state but neglects to keep the cached copy in sync.  That may cause
+a subsequent register write to be incorrectly skipped.  Fix it before
+it trips somebody up.
 
-Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20211207130557.40566-1-cascardo@canonical.com
+This behavior has been present ever since the serial core was introduced
+in 2002:
+https://git.kernel.org/history/history/c/33c0d1b0c3eb
+
+So far it was never an issue because the cached copy is initialized to 0
+by kzalloc() and when uart_configure_port() is executed, at most DTR has
+been set by uart_set_options() or sunsu_console_setup().  Therefore,
+a stable designation seems unnecessary.
+
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Link: https://lore.kernel.org/r/bceeaba030b028ed810272d55d5fc6f3656ddddb.1641129752.git.lukas@wunner.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/powerpc/security/spectre_v2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/serial_core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/powerpc/security/spectre_v2.c b/tools/testing/selftests/powerpc/security/spectre_v2.c
-index adc2b7294e5fd..83647b8277e7d 100644
---- a/tools/testing/selftests/powerpc/security/spectre_v2.c
-+++ b/tools/testing/selftests/powerpc/security/spectre_v2.c
-@@ -193,7 +193,7 @@ int spectre_v2_test(void)
- 			 * We are not vulnerable and reporting otherwise, so
- 			 * missing such a mismatch is safe.
- 			 */
--			if (state == VULNERABLE)
-+			if (miss_percent > 95)
- 				return 4;
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index e97961dc3622d..ec458add38833 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -2349,7 +2349,8 @@ uart_configure_port(struct uart_driver *drv, struct uart_state *state,
+ 		 * We probably don't need a spinlock around this, but
+ 		 */
+ 		spin_lock_irqsave(&port->lock, flags);
+-		port->ops->set_mctrl(port, port->mctrl & TIOCM_DTR);
++		port->mctrl &= TIOCM_DTR;
++		port->ops->set_mctrl(port, port->mctrl);
+ 		spin_unlock_irqrestore(&port->lock, flags);
  
- 			return 1;
+ 		/*
 -- 
 2.34.1
 

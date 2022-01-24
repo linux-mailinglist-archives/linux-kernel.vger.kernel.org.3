@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E51EA4992D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BA5498C99
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382145AbiAXUZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:25:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
+        id S1348183AbiAXTXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:23:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377246AbiAXUFL (ORCPT
+        with ESMTP id S1344583AbiAXTNI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:05:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA4BC08E81D;
-        Mon, 24 Jan 2022 11:30:58 -0800 (PST)
+        Mon, 24 Jan 2022 14:13:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA16C0604E7;
+        Mon, 24 Jan 2022 11:04:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8F63B810BD;
-        Mon, 24 Jan 2022 19:30:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2398C340E5;
-        Mon, 24 Jan 2022 19:30:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E66360010;
+        Mon, 24 Jan 2022 19:04:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F36FC340E5;
+        Mon, 24 Jan 2022 19:04:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052655;
-        bh=5zh1rubP8abvPORWa1hoNnaR/LUIf5kg/5MAFni13VQ=;
+        s=korg; t=1643051056;
+        bh=3njCL0iPs9o1Ejs+3EW/XKFhmRx+GaQarQ66q9kIcNw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s5zg3uTBrXJ7MEAvB8caQ1TKK2ZeqKpfz3CY7ZfwmZmGFBlPLr+kPJSntLlkT3v2q
-         aY0OC2zIi+xOKcK8YwOaVNpFbx/EAKC+qjwIin4IFWKKWRoSLedLzT8qpTA8yQqMvj
-         vhz6IZBJM9ju2qaIHg4d/rH7DollekxnQ/dp942g=
+        b=H3BX7Z+lLshRyu0XAwvJvtpSFFsbHPGasPpuEmTWTcpWBMhrP/zRraHdJROxzrg1Y
+         9sjci4NrNdAB4gCjzHxeQgYgEce1f0bem4+qFei7O4054NXtab2eBkyqgeyIOJ7P/b
+         jKdKuV5Xr0ebyIdZi3NOJobt8BQO1Qv/TrPKgioo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 098/320] ACPI: scan: Create platform device for BCM4752 and LNV4752 ACPI nodes
-Date:   Mon, 24 Jan 2022 19:41:22 +0100
-Message-Id: <20220124183957.057409767@linuxfoundation.org>
+        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 4.14 008/186] random: fix data race on crng init time
+Date:   Mon, 24 Jan 2022 19:41:23 +0100
+Message-Id: <20220124183937.381172045@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,79 +49,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Eric Biggers <ebiggers@google.com>
 
-[ Upstream commit f85196bdd5a50da74670250564740fc852b3c239 ]
+commit 009ba8568be497c640cab7571f7bfd18345d7b24 upstream.
 
-BCM4752 and LNV4752 ACPI nodes describe a Broadcom 4752 GPS module
-attached to an UART of the system.
+_extract_crng() does plain loads of crng->init_time and
+crng_global_init_time, which causes undefined behavior if
+crng_reseed() and RNDRESEEDCRNG modify these corrently.
 
-The GPS modules talk a custom protocol which only works with a closed-
-source Android gpsd daemon which knows this protocol.
+Use READ_ONCE() and WRITE_ONCE() to make the behavior defined.
 
-The ACPI nodes also describe GPIOs to turn the GPS on/off these are
-handled by the net/rfkill/rfkill-gpio.c code. This handling predates the
-addition of enumeration of ACPI instantiated serdevs to the kernel and
-was broken by that addition, because the ACPI scan code now no longer
-instantiates platform_device-s for these nodes.
+Don't fix the race on crng->init_time by protecting it with crng->lock,
+since it's not a problem for duplicate reseedings to occur.  I.e., the
+lockless access with READ_ONCE() is fine.
 
-Rename the i2c_multi_instantiate_ids HID list to ignore_serial_bus_ids
-and add the BCM4752 and LNV4752 HIDs, so that rfkill-gpio gets
-a platform_device to bind to again; and so that a tty cdev for gpsd
-gets created for these.
-
-Fixes: e361d1f85855 ("ACPI / scan: Fix enumeration for special UART devices")
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: d848e5f8e1eb ("random: add new ioctl RNDRESEEDCRNG")
+Fixes: e192be9d9a30 ("random: replace non-blocking pool with a Chacha20-based CRNG")
+Cc: stable@vger.kernel.org
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/acpi/scan.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ drivers/char/random.c |   17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-index 95d119ff76b65..5d4be80ee6cb4 100644
---- a/drivers/acpi/scan.c
-+++ b/drivers/acpi/scan.c
-@@ -1577,6 +1577,7 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -951,7 +951,7 @@ static void crng_reseed(struct crng_stat
+ 		crng->state[i+4] ^= buf.key[i] ^ rv;
+ 	}
+ 	memzero_explicit(&buf, sizeof(buf));
+-	crng->init_time = jiffies;
++	WRITE_ONCE(crng->init_time, jiffies);
+ 	spin_unlock_irqrestore(&crng->lock, flags);
+ 	if (crng == &primary_crng && crng_init < 2) {
+ 		invalidate_batched_entropy();
+@@ -978,12 +978,15 @@ static void crng_reseed(struct crng_stat
+ static void _extract_crng(struct crng_state *crng,
+ 			  __u8 out[CHACHA20_BLOCK_SIZE])
  {
- 	struct list_head resource_list;
- 	bool is_serial_bus_slave = false;
-+	static const struct acpi_device_id ignore_serial_bus_ids[] = {
- 	/*
- 	 * These devices have multiple I2cSerialBus resources and an i2c-client
- 	 * must be instantiated for each, each with its own i2c_device_id.
-@@ -1585,11 +1586,18 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
- 	 * drivers/platform/x86/i2c-multi-instantiate.c driver, which knows
- 	 * which i2c_device_id to use for each resource.
- 	 */
--	static const struct acpi_device_id i2c_multi_instantiate_ids[] = {
- 		{"BSG1160", },
- 		{"BSG2150", },
- 		{"INT33FE", },
- 		{"INT3515", },
-+	/*
-+	 * HIDs of device with an UartSerialBusV2 resource for which userspace
-+	 * expects a regular tty cdev to be created (instead of the in kernel
-+	 * serdev) and which have a kernel driver which expects a platform_dev
-+	 * such as the rfkill-gpio driver.
-+	 */
-+		{"BCM4752", },
-+		{"LNV4752", },
- 		{}
- 	};
+-	unsigned long v, flags;
++	unsigned long v, flags, init_time;
  
-@@ -1603,8 +1611,7 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
- 	     fwnode_property_present(&device->fwnode, "baud")))
- 		return true;
- 
--	/* Instantiate a pdev for the i2c-multi-instantiate drv to bind to */
--	if (!acpi_match_device_ids(device, i2c_multi_instantiate_ids))
-+	if (!acpi_match_device_ids(device, ignore_serial_bus_ids))
- 		return false;
- 
- 	INIT_LIST_HEAD(&resource_list);
--- 
-2.34.1
-
+-	if (crng_ready() &&
+-	    (time_after(crng_global_init_time, crng->init_time) ||
+-	     time_after(jiffies, crng->init_time + CRNG_RESEED_INTERVAL)))
+-		crng_reseed(crng, crng == &primary_crng ? &input_pool : NULL);
++	if (crng_ready()) {
++		init_time = READ_ONCE(crng->init_time);
++		if (time_after(READ_ONCE(crng_global_init_time), init_time) ||
++		    time_after(jiffies, init_time + CRNG_RESEED_INTERVAL))
++			crng_reseed(crng, crng == &primary_crng ?
++				    &input_pool : NULL);
++	}
+ 	spin_lock_irqsave(&crng->lock, flags);
+ 	if (arch_get_random_long(&v))
+ 		crng->state[14] ^= v;
+@@ -1987,7 +1990,7 @@ static long random_ioctl(struct file *f,
+ 		if (crng_init < 2)
+ 			return -ENODATA;
+ 		crng_reseed(&primary_crng, &input_pool);
+-		crng_global_init_time = jiffies - 1;
++		WRITE_ONCE(crng_global_init_time, jiffies - 1);
+ 		return 0;
+ 	default:
+ 		return -EINVAL;
 
 

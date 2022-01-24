@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D4C499CD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 654CD499632
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1580823AbiAXWKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:10:48 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41262 "EHLO
+        id S1444273AbiAXVAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:00:34 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39462 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452372AbiAXVZU (ORCPT
+        with ESMTP id S1386309AbiAXUfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:25:20 -0500
+        Mon, 24 Jan 2022 15:35:24 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1AD90B8123A;
-        Mon, 24 Jan 2022 21:25:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4470AC340E4;
-        Mon, 24 Jan 2022 21:25:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E0A5B811F9;
+        Mon, 24 Jan 2022 20:35:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87756C340E5;
+        Mon, 24 Jan 2022 20:35:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059515;
-        bh=IuUQk7EuyxnlKJabLJmOzkPUFtwzZ9odlbaCsWfgiVE=;
+        s=korg; t=1643056522;
+        bh=PJa9pJriew9OaMlnsA9qTXusUtpxB4DAsf4xRVD7nJw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tAdfmr43wc/r5SPylpvW8pYhciVMejra9Od7IA0tDZ+jUuHUTQa2dAkxl+6klo/DC
-         1b+wci6C6GNV3RJ42ZpKNpsTAgIs3GILC9zwPf4vZ93WhNRU4fkc4VgpQwAd1FVfL3
-         CVcDWKfM22y7BMqTytJTeGNXfN+A1o6MSXkmNrm4=
+        b=12EJ+tR/iM1zwgjcdIJwkzxe2kTuOkWe3bxIzlbWqmyWm5fFTpV+6s2MriLJrJ2h9
+         k32xv8wl8hB4wEVnfoCE7DOngDEYoQXOaJoMuV2pqL+5F7mLW+TQnghvRcanEu6GXF
+         X4SYsSfpVJ/KD1C01bW+li71C7Js+6nmrjQLjO1w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0641/1039] x86/mce: Prevent severity computation from being instrumented
+Subject: [PATCH 5.15 513/846] ACPI / x86: Drop PWM2 device on Lenovo Yoga Book from always present table
 Date:   Mon, 24 Jan 2022 19:40:30 +0100
-Message-Id: <20220124184146.898030990@linuxfoundation.org>
+Message-Id: <20220124184118.707485797@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,101 +46,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 0a5b288e85bbef5227bb6397e31fcf1d7ba9142a ]
+[ Upstream commit d431dfb764b145369be820fcdfd50f2159b9bbc2 ]
 
-Mark all the MCE severity computation logic noinstr and allow
-instrumentation when it "calls out".
+It turns out that there is a WMI object which controls the PWM2 device
+used for the keyboard backlight and that WMI object also provides some
+other useful functionality.
 
-Fixes
+The upcoming lenovo-yogabook-wmi driver will offer both backlight
+control and the other functionality, so there no longer is a need
+to have the lpss-pwm driver binding to PWM2 for backlight control;
+and this is now actually undesirable because this will cause both
+the WMI code and the lpss-pwm driver to poke at the same PWM
+controller.
 
-  vmlinux.o: warning: objtool: do_machine_check()+0xc5d: call to mce_severity() leaves .noinstr.text section
+Drop the always-present quirk for the PWM2 ACPI-device, so that the
+ lpss-pwm controller will no longer bind to it.
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20211208111343.8130-7-bp@alien8.de
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/cpu/mce/severity.c | 30 +++++++++++++++++++++---------
- 1 file changed, 21 insertions(+), 9 deletions(-)
+ drivers/acpi/x86/utils.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
-index bb019a594a2c9..171a1495111b1 100644
---- a/arch/x86/kernel/cpu/mce/severity.c
-+++ b/arch/x86/kernel/cpu/mce/severity.c
-@@ -263,24 +263,36 @@ static bool is_copy_from_user(struct pt_regs *regs)
-  * distinguish an exception taken in user from from one
-  * taken in the kernel.
-  */
--static int error_context(struct mce *m, struct pt_regs *regs)
-+static noinstr int error_context(struct mce *m, struct pt_regs *regs)
- {
-+	int fixup_type;
-+	bool copy_user;
-+
- 	if ((m->cs & 3) == 3)
- 		return IN_USER;
-+
- 	if (!mc_recoverable(m->mcgstatus))
- 		return IN_KERNEL;
+diff --git a/drivers/acpi/x86/utils.c b/drivers/acpi/x86/utils.c
+index f22f23933063b..3bcac98f6eca6 100644
+--- a/drivers/acpi/x86/utils.c
++++ b/drivers/acpi/x86/utils.c
+@@ -54,10 +54,6 @@ static const struct always_present_id always_present_ids[] = {
+ 	ENTRY("80860F09", "1", X86_MATCH(ATOM_SILVERMONT), {}),
+ 	ENTRY("80862288", "1", X86_MATCH(ATOM_AIRMONT), {}),
  
--	switch (ex_get_fixup_type(m->ip)) {
-+	/* Allow instrumentation around external facilities usage. */
-+	instrumentation_begin();
-+	fixup_type = ex_get_fixup_type(m->ip);
-+	copy_user  = is_copy_from_user(regs);
-+	instrumentation_end();
-+
-+	switch (fixup_type) {
- 	case EX_TYPE_UACCESS:
- 	case EX_TYPE_COPY:
--		if (!regs || !is_copy_from_user(regs))
-+		if (!regs || !copy_user)
- 			return IN_KERNEL;
- 		m->kflags |= MCE_IN_KERNEL_COPYIN;
- 		fallthrough;
-+
- 	case EX_TYPE_FAULT_MCE_SAFE:
- 	case EX_TYPE_DEFAULT_MCE_SAFE:
- 		m->kflags |= MCE_IN_KERNEL_RECOV;
- 		return IN_KERNEL_RECOV;
-+
- 	default:
- 		return IN_KERNEL;
- 	}
-@@ -317,8 +329,8 @@ static int mce_severity_amd_smca(struct mce *m, enum context err_ctx)
-  * See AMD Error Scope Hierarchy table in a newer BKDG. For example
-  * 49125_15h_Models_30h-3Fh_BKDG.pdf, section "RAS Features"
-  */
--static int mce_severity_amd(struct mce *m, struct pt_regs *regs, int tolerant,
--			    char **msg, bool is_excp)
-+static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, int tolerant,
-+				    char **msg, bool is_excp)
- {
- 	enum context ctx = error_context(m, regs);
- 
-@@ -370,8 +382,8 @@ static int mce_severity_amd(struct mce *m, struct pt_regs *regs, int tolerant,
- 	return MCE_KEEP_SEVERITY;
- }
- 
--static int mce_severity_intel(struct mce *m, struct pt_regs *regs,
--			      int tolerant, char **msg, bool is_excp)
-+static noinstr int mce_severity_intel(struct mce *m, struct pt_regs *regs,
-+				      int tolerant, char **msg, bool is_excp)
- {
- 	enum exception excp = (is_excp ? EXCP_CONTEXT : NO_EXCP);
- 	enum context ctx = error_context(m, regs);
-@@ -407,8 +419,8 @@ static int mce_severity_intel(struct mce *m, struct pt_regs *regs,
- 	}
- }
- 
--int mce_severity(struct mce *m, struct pt_regs *regs, int tolerant, char **msg,
--		 bool is_excp)
-+int noinstr mce_severity(struct mce *m, struct pt_regs *regs, int tolerant, char **msg,
-+			 bool is_excp)
- {
- 	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
- 	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
+-	/* Lenovo Yoga Book uses PWM2 for keyboard backlight control */
+-	ENTRY("80862289", "2", X86_MATCH(ATOM_AIRMONT), {
+-			DMI_MATCH(DMI_PRODUCT_NAME, "Lenovo YB1-X9"),
+-		}),
+ 	/*
+ 	 * The INT0002 device is necessary to clear wakeup interrupt sources
+ 	 * on Cherry Trail devices, without it we get nobody cared IRQ msgs.
 -- 
 2.34.1
 

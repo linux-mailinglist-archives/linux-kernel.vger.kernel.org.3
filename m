@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 412F449988D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:38:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6060D499CF0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1452746AbiAXV02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:26:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358721AbiAXUtA (ORCPT
+        id S1581874AbiAXWMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:12:33 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:49188 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351709AbiAXV2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:49:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413C0C04189D;
-        Mon, 24 Jan 2022 11:57:48 -0800 (PST)
+        Mon, 24 Jan 2022 16:28:40 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F015BB8123A;
-        Mon, 24 Jan 2022 19:57:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1080FC340E5;
-        Mon, 24 Jan 2022 19:57:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AC116151E;
+        Mon, 24 Jan 2022 21:28:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E418DC33E64;
+        Mon, 24 Jan 2022 21:28:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054265;
-        bh=pDLLvoeU36LjGUQLKpr+514zihBBhyi8aheoZQjcDAU=;
+        s=korg; t=1643059719;
+        bh=eZwEiXJyPGEonfCjOOp7aKHAaSn0sBKdsFPzaIWm9G4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H1+ab6hdO/5118LX4aroI/nou7K4IN32g0R57X+jhMUAH8XfC1A2dTbqckKsAl2IK
-         9rAzNov7cjMYO3+VR98aBwvxySIAvkAbRuYa6O7tSVg04JcnkDfeNiIVl6yOlXNFom
-         4cshDQSjmgAW7xOVwvY2qGSsEgYpJml/d54V0p0Y=
+        b=hFinnNtjW1COtpuV08egxGh/CBiVPMcnYEt4DFSrqV9VXYgNG0GbmSQo0iw8XnHR5
+         brB3waaFaZD99eByS6s9IZ7MHKVyVDI7MCTBeNxVd1ioJNWlBw0Lk/YK9g9B82vGO6
+         Owvfw2t8hnEeNWi2ggE5uSGCXbKIPkKCxAiPUYMM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 333/563] ACPI / x86: Drop PWM2 device on Lenovo Yoga Book from always present table
-Date:   Mon, 24 Jan 2022 19:41:38 +0100
-Message-Id: <20220124184035.942065856@linuxfoundation.org>
+Subject: [PATCH 5.16 0710/1039] btrfs: remove BUG_ON(!eie) in find_parent_nodes
+Date:   Mon, 24 Jan 2022 19:41:39 +0100
+Message-Id: <20220124184149.204909875@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,46 +46,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Josef Bacik <josef@toxicpanda.com>
 
-[ Upstream commit d431dfb764b145369be820fcdfd50f2159b9bbc2 ]
+[ Upstream commit 9f05c09d6baef789726346397438cca4ec43c3ee ]
 
-It turns out that there is a WMI object which controls the PWM2 device
-used for the keyboard backlight and that WMI object also provides some
-other useful functionality.
+If we're looking for leafs that point to a data extent we want to record
+the extent items that point at our bytenr.  At this point we have the
+reference and we know for a fact that this leaf should have a reference
+to our bytenr.  However if there's some sort of corruption we may not
+find any references to our leaf, and thus could end up with eie == NULL.
+Replace this BUG_ON() with an ASSERT() and then return -EUCLEAN for the
+mortals.
 
-The upcoming lenovo-yogabook-wmi driver will offer both backlight
-control and the other functionality, so there no longer is a need
-to have the lpss-pwm driver binding to PWM2 for backlight control;
-and this is now actually undesirable because this will cause both
-the WMI code and the lpss-pwm driver to poke at the same PWM
-controller.
-
-Drop the always-present quirk for the PWM2 ACPI-device, so that the
- lpss-pwm controller will no longer bind to it.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/x86/utils.c | 4 ----
- 1 file changed, 4 deletions(-)
+ fs/btrfs/backref.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/acpi/x86/utils.c b/drivers/acpi/x86/utils.c
-index bdc1ba00aee9f..baaa44edc9441 100644
---- a/drivers/acpi/x86/utils.c
-+++ b/drivers/acpi/x86/utils.c
-@@ -54,10 +54,6 @@ static const struct always_present_id always_present_ids[] = {
- 	ENTRY("80860F09", "1", X86_MATCH(ATOM_SILVERMONT), {}),
- 	ENTRY("80862288", "1", X86_MATCH(ATOM_AIRMONT), {}),
- 
--	/* Lenovo Yoga Book uses PWM2 for keyboard backlight control */
--	ENTRY("80862289", "2", X86_MATCH(ATOM_AIRMONT), {
--			DMI_MATCH(DMI_PRODUCT_NAME, "Lenovo YB1-X9"),
--		}),
- 	/*
- 	 * The INT0002 device is necessary to clear wakeup interrupt sources
- 	 * on Cherry Trail devices, without it we get nobody cared IRQ msgs.
+diff --git a/fs/btrfs/backref.c b/fs/btrfs/backref.c
+index 6b4b0f105a572..8b090c40daf77 100644
+--- a/fs/btrfs/backref.c
++++ b/fs/btrfs/backref.c
+@@ -1365,10 +1365,18 @@ again:
+ 				goto out;
+ 			if (!ret && extent_item_pos) {
+ 				/*
+-				 * we've recorded that parent, so we must extend
+-				 * its inode list here
++				 * We've recorded that parent, so we must extend
++				 * its inode list here.
++				 *
++				 * However if there was corruption we may not
++				 * have found an eie, return an error in this
++				 * case.
+ 				 */
+-				BUG_ON(!eie);
++				ASSERT(eie);
++				if (!eie) {
++					ret = -EUCLEAN;
++					goto out;
++				}
+ 				while (eie->next)
+ 					eie = eie->next;
+ 				eie->next = ref->inode_list;
 -- 
 2.34.1
 

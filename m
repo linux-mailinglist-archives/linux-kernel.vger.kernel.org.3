@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE65498AD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:07:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA27498F82
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:54:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346678AbiAXTHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:07:13 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:59474 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345779AbiAXTBF (ORCPT
+        id S1348234AbiAXTw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:52:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55008 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234964AbiAXTmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:01:05 -0500
+        Mon, 24 Jan 2022 14:42:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93EF4C0401F9;
+        Mon, 24 Jan 2022 11:21:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D860860915;
-        Mon, 24 Jan 2022 19:01:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C96AC340E5;
-        Mon, 24 Jan 2022 19:01:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 504B9B8122C;
+        Mon, 24 Jan 2022 19:21:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EC7DC340E5;
+        Mon, 24 Jan 2022 19:21:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050864;
-        bh=Up43H3zYk3ZP2Hqn8ayRSbG3xGzWcLCx7omRLNqeFEY=;
+        s=korg; t=1643052098;
+        bh=9uuTNGN4fd8TIPEbjUjg8u469Jw6qL+92O7t1DCz5R4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v+glVPtiQ5nnr9QJKEPQckXmKaUF+tofXihrQ7HkpGmnt+6FKrGLIF72nxcnmWK98
-         hEo/T7zkYmsLDJoDE/vFzl+LUioWTo8GNMPBDK1r6LhxmIuBk56P0AKhBb/Nwx6zGe
-         kmvV7+YnWL34ikaqXH8d1q0tsjvLWZsubswDJItc=
+        b=joy4VfxCgwXNO5CKZ3PEVyOgDrHjzP0SWn1jc79vdMbZou66o8UbZeG6LrWJtBREz
+         vv+bTAT1GVLWJZo2zr11ssBFNE7ogCKCp8n8ZLQqTucS1ZAbp+4yoZ5bCUUJYcqk2V
+         pE3bcNUfWqougSF7MxdxypuZzbUyXrmCCA7wUljA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.9 136/157] netns: add schedule point in ops_exit_list()
-Date:   Mon, 24 Jan 2022 19:43:46 +0100
-Message-Id: <20220124183937.090378830@linuxfoundation.org>
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Ye Guojin <ye.guojin@zte.com.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 189/239] MIPS: OCTEON: add put_device() after of_find_device_by_node()
+Date:   Mon, 24 Jan 2022 19:43:47 +0100
+Message-Id: <20220124183949.123070769@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,47 +50,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Ye Guojin <ye.guojin@zte.com.cn>
 
-commit 2836615aa22de55b8fca5e32fe1b27a67cda625e upstream.
+[ Upstream commit 858779df1c0787d3fec827fb705708df9ebdb15b ]
 
-When under stress, cleanup_net() can have to dismantle
-netns in big numbers. ops_exit_list() currently calls
-many helpers [1] that have no schedule point, and we can
-end up with soft lockups, particularly on hosts
-with many cpus.
+This was found by coccicheck:
+./arch/mips/cavium-octeon/octeon-platform.c, 332, 1-7, ERROR missing
+put_device; call of_find_device_by_node on line 324, but without a
+corresponding object release within this function.
+./arch/mips/cavium-octeon/octeon-platform.c, 395, 1-7, ERROR missing
+put_device; call of_find_device_by_node on line 387, but without a
+corresponding object release within this function.
+./arch/mips/cavium-octeon/octeon-usb.c, 512, 3-9, ERROR missing
+put_device; call of_find_device_by_node on line 515, but without a
+corresponding object release within this function.
+./arch/mips/cavium-octeon/octeon-usb.c, 543, 1-7, ERROR missing
+put_device; call of_find_device_by_node on line 515, but without a
+corresponding object release within this function.
 
-Even for moderate amount of netns processed by cleanup_net()
-this patch avoids latency spikes.
-
-[1] Some of these helpers like fib_sync_up() and fib_sync_down_dev()
-are very slow because net/ipv4/fib_semantics.c uses host-wide hash tables,
-and ifindex is used as the only input of two hash functions.
-    ifindexes tend to be the same for all netns (lo.ifindex==1 per instance)
-    This will be fixed in a separate patch.
-
-Fixes: 72ad937abd0a ("net: Add support for batching network namespace cleanups")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Eric W. Biederman <ebiederm@xmission.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Ye Guojin <ye.guojin@zte.com.cn>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/net_namespace.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/mips/cavium-octeon/octeon-platform.c | 2 ++
+ arch/mips/cavium-octeon/octeon-usb.c      | 1 +
+ 2 files changed, 3 insertions(+)
 
---- a/net/core/net_namespace.c
-+++ b/net/core/net_namespace.c
-@@ -132,8 +132,10 @@ static void ops_exit_list(const struct p
- {
- 	struct net *net;
- 	if (ops->exit) {
--		list_for_each_entry(net, net_exit_list, exit_list)
-+		list_for_each_entry(net, net_exit_list, exit_list) {
- 			ops->exit(net);
-+			cond_resched();
-+		}
- 	}
- 	if (ops->exit_batch)
- 		ops->exit_batch(net_exit_list);
+diff --git a/arch/mips/cavium-octeon/octeon-platform.c b/arch/mips/cavium-octeon/octeon-platform.c
+index 5ba181e87d2c1..4d83f5bc7211c 100644
+--- a/arch/mips/cavium-octeon/octeon-platform.c
++++ b/arch/mips/cavium-octeon/octeon-platform.c
+@@ -328,6 +328,7 @@ static int __init octeon_ehci_device_init(void)
+ 
+ 	pd->dev.platform_data = &octeon_ehci_pdata;
+ 	octeon_ehci_hw_start(&pd->dev);
++	put_device(&pd->dev);
+ 
+ 	return ret;
+ }
+@@ -391,6 +392,7 @@ static int __init octeon_ohci_device_init(void)
+ 
+ 	pd->dev.platform_data = &octeon_ohci_pdata;
+ 	octeon_ohci_hw_start(&pd->dev);
++	put_device(&pd->dev);
+ 
+ 	return ret;
+ }
+diff --git a/arch/mips/cavium-octeon/octeon-usb.c b/arch/mips/cavium-octeon/octeon-usb.c
+index 75189ff2f3c78..3465452e28195 100644
+--- a/arch/mips/cavium-octeon/octeon-usb.c
++++ b/arch/mips/cavium-octeon/octeon-usb.c
+@@ -543,6 +543,7 @@ static int __init dwc3_octeon_device_init(void)
+ 			devm_iounmap(&pdev->dev, base);
+ 			devm_release_mem_region(&pdev->dev, res->start,
+ 						resource_size(res));
++			put_device(&pdev->dev);
+ 		}
+ 	} while (node != NULL);
+ 
+-- 
+2.34.1
+
 
 

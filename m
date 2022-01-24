@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B037A49A303
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:01:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C047A49A374
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2367555AbiAXXzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:55:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
+        id S2366346AbiAXXwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:52:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1846539AbiAXXQT (ORCPT
+        with ESMTP id S1845840AbiAXXNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:16:19 -0500
+        Mon, 24 Jan 2022 18:13:42 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAA2C09425A;
-        Mon, 24 Jan 2022 11:48:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E6CC067A67;
+        Mon, 24 Jan 2022 13:19:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 86A4F61523;
-        Mon, 24 Jan 2022 19:48:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C56EC340E5;
-        Mon, 24 Jan 2022 19:48:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF9B4614BC;
+        Mon, 24 Jan 2022 21:19:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC714C340E4;
+        Mon, 24 Jan 2022 21:19:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053708;
-        bh=Y/PntOGbeKcLkcguD4MJEGdYfgJmLyuZlGDpwaQ0Bg0=;
+        s=korg; t=1643059175;
+        bh=uDbfPJ73HUWqhPHuTRXhY7UbI0yEEfy4ihntlu9sniM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WSWoQNzauf1IPAHuR7RiWReDobLQ/HuT+ZXPaFUp2EVIABorKWJqSkja3IIEwAquS
-         +jyNLl66GY8WCkLzTmCla1WZSMzznHzNYYgzFADVUnqp4r97oay4PK6LdLNJ1Qsxj1
-         GVFuhi3+gdVoy5xtRH8vqZ8LYJT0e2hdZRp+MhIQ=
+        b=Ne6N91lVdJ+FKqVi76IqA/+o+2xZ4VABOU5IcDx9e6kkL+vruqxziXi3giVXZmmuK
+         TPyl6yBXtzFDOwKoBT/F7LHxhr5waw1EBb6e/DMMoCW84hwSIvUni3pLXnTxPnQZm8
+         YEP7MFwNAaMRP4vkaczSsnfb30cxprNVtO9Am7eY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        stable@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 152/563] selftests: harness: avoid false negatives if test has no ASSERTs
-Date:   Mon, 24 Jan 2022 19:38:37 +0100
-Message-Id: <20220124184029.661119362@linuxfoundation.org>
+Subject: [PATCH 5.16 0529/1039] clk: bm1880: remove kfrees on static allocations
+Date:   Mon, 24 Jan 2022 19:38:38 +0100
+Message-Id: <20220124184143.068195143@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,38 +49,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Conor Dooley <conor.dooley@microchip.com>
 
-[ Upstream commit 3abedf4646fdc0036fcb8ebbc3b600667167fafe ]
+[ Upstream commit c861c1be3897845313a0df47804b1db37c7052e1 ]
 
-Test can fail either immediately when ASSERT() failed or at the
-end if one or more EXPECT() was not met. The exact return code
-is decided based on the number of successful ASSERT()s.
+bm1880_clk_unregister_pll & bm1880_clk_unregister_div both try to
+free statically allocated variables, so remove those kfrees.
 
-If test has no ASSERT()s, however, the return code will be 0,
-as if the test did not fail. Start counting ASSERT()s from 1.
+For example, if we take L703 kfree(div_hw):
+- div_hw is a bm1880_div_hw_clock pointer
+- in bm1880_clk_register_plls this is pointed to an element of arg1:
+  struct bm1880_div_hw_clock *clks
+- in the probe, where bm1880_clk_register_plls is called arg1 is
+  bm1880_div_clks, defined on L371:
+  static struct bm1880_div_hw_clock bm1880_div_clks[]
 
-Fixes: 369130b63178 ("selftests: Enhance kselftest_harness.h to print which assert failed")
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Fixes: 1ab4601da55b ("clk: Add common clock driver for BM1880 SoC")
+Link: https://lore.kernel.org/r/20211223154244.1024062-1-conor.dooley@microchip.com
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/kselftest_harness.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/clk-bm1880.c | 20 ++------------------
+ 1 file changed, 2 insertions(+), 18 deletions(-)
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index edce85420d193..5ecb9718e1616 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -965,7 +965,7 @@ void __run_test(struct __fixture_metadata *f,
- 	t->passed = 1;
- 	t->skip = 0;
- 	t->trigger = 0;
--	t->step = 0;
-+	t->step = 1;
- 	t->no_print = 0;
- 	memset(t->results->reason, 0, sizeof(t->results->reason));
+diff --git a/drivers/clk/clk-bm1880.c b/drivers/clk/clk-bm1880.c
+index e6d6599d310a1..fad78a22218e8 100644
+--- a/drivers/clk/clk-bm1880.c
++++ b/drivers/clk/clk-bm1880.c
+@@ -522,14 +522,6 @@ static struct clk_hw *bm1880_clk_register_pll(struct bm1880_pll_hw_clock *pll_cl
+ 	return hw;
+ }
  
+-static void bm1880_clk_unregister_pll(struct clk_hw *hw)
+-{
+-	struct bm1880_pll_hw_clock *pll_hw = to_bm1880_pll_clk(hw);
+-
+-	clk_hw_unregister(hw);
+-	kfree(pll_hw);
+-}
+-
+ static int bm1880_clk_register_plls(struct bm1880_pll_hw_clock *clks,
+ 				    int num_clks,
+ 				    struct bm1880_clock_data *data)
+@@ -555,7 +547,7 @@ static int bm1880_clk_register_plls(struct bm1880_pll_hw_clock *clks,
+ 
+ err_clk:
+ 	while (i--)
+-		bm1880_clk_unregister_pll(data->hw_data.hws[clks[i].pll.id]);
++		clk_hw_unregister(data->hw_data.hws[clks[i].pll.id]);
+ 
+ 	return PTR_ERR(hw);
+ }
+@@ -695,14 +687,6 @@ static struct clk_hw *bm1880_clk_register_div(struct bm1880_div_hw_clock *div_cl
+ 	return hw;
+ }
+ 
+-static void bm1880_clk_unregister_div(struct clk_hw *hw)
+-{
+-	struct bm1880_div_hw_clock *div_hw = to_bm1880_div_clk(hw);
+-
+-	clk_hw_unregister(hw);
+-	kfree(div_hw);
+-}
+-
+ static int bm1880_clk_register_divs(struct bm1880_div_hw_clock *clks,
+ 				    int num_clks,
+ 				    struct bm1880_clock_data *data)
+@@ -729,7 +713,7 @@ static int bm1880_clk_register_divs(struct bm1880_div_hw_clock *clks,
+ 
+ err_clk:
+ 	while (i--)
+-		bm1880_clk_unregister_div(data->hw_data.hws[clks[i].div.id]);
++		clk_hw_unregister(data->hw_data.hws[clks[i].div.id]);
+ 
+ 	return PTR_ERR(hw);
+ }
 -- 
 2.34.1
 

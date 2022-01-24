@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFBCD498C32
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0CED498A5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349224AbiAXTU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:20:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
+        id S1344520AbiAXTCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344755AbiAXTLx (ORCPT
+        with ESMTP id S1344428AbiAXS6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:11:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50624C061A7D;
-        Mon, 24 Jan 2022 11:03:34 -0800 (PST)
+        Mon, 24 Jan 2022 13:58:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11E2C061340;
+        Mon, 24 Jan 2022 10:56:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1E8A609EE;
-        Mon, 24 Jan 2022 19:03:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE00CC340E8;
-        Mon, 24 Jan 2022 19:03:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8CD35B81235;
+        Mon, 24 Jan 2022 18:56:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A75F5C340E5;
+        Mon, 24 Jan 2022 18:56:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051013;
-        bh=2oP2LDwVaJ0zFvAODpVplv81tT3l5LF8ATWXhfox+4U=;
+        s=korg; t=1643050568;
+        bh=qJGO70c2a2ulGpa0+3IZx4+4uG78TZ2lXQht9kVfXc8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q/7TaQ3CPZ4GAsbmTyMAPY3VMkQA9mkNDbLZxJIVazjg/xI5Urne87NZIIxji+YNC
-         DfuzR5fCha1imNG2HJo3XEittcBMg7xLigEeVfdVjwro5Ma8bdUuna8EPm9B9F/9bV
-         St9I9xmybnUf1/3Bbp8rslbyN0bLcZg5+2dJXdpE=
+        b=FNxuwaGZwxI80bsVBV3WUgS82GeD6igNUo69pb20wAb2zgZw1dEOWN9bdS9qJ45FV
+         S2EMF9Ab5xKJt5DKPN9bP30bHbDpoQ5iOANqaVFObdU//6bM0pfCzbrZcpUCQiPhwU
+         kqKZxxd9V3sBA5UvmrhH0CYciHaJf129+PD5P1H0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Kuron <michael.kuron@gmail.com>,
+        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 4.14 026/186] media: dib0700: fix undefined behavior in tuner shutdown
+Subject: [PATCH 4.9 011/157] media: uvcvideo: fix division by zero at stream start
 Date:   Mon, 24 Jan 2022 19:41:41 +0100
-Message-Id: <20220124183937.962117631@linuxfoundation.org>
+Message-Id: <20220124183933.144507896@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,51 +50,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Kuron <michael.kuron@gmail.com>
+From: Johan Hovold <johan@kernel.org>
 
-commit f7b77ebe6d2f49c7747b2d619586d1aa33f9ea91 upstream.
+commit 8aa637bf6d70d2fb2ad4d708d8b9dd02b1c095df upstream.
 
-This fixes a problem where closing the tuner would leave it in a state
-where it would not tune to any channel when reopened. This problem was
-discovered as part of https://github.com/hselasky/webcamd/issues/16.
+Add the missing bulk-endpoint max-packet sanity check to
+uvc_video_start_transfer() to avoid division by zero in
+uvc_alloc_urb_buffers() in case a malicious device has broken
+descriptors (or when doing descriptor fuzz testing).
 
-Since adap->id is 0 or 1, this bit-shift overflows, which is undefined
-behavior. The driver still worked in practice as the overflow would in
-most environments result in 0, which rendered the line a no-op. When
-running the driver as part of webcamd however, the overflow could lead
-to 0xff due to optimizations by the compiler, which would, in the end,
-improperly shut down the tuner.
+Note that USB core will reject URBs submitted for endpoints with zero
+wMaxPacketSize but that drivers doing packet-size calculations still
+need to handle this (cf. commit 2548288b4fb0 ("USB: Fix: Don't skip
+endpoint descriptors with maxpacket=0")).
 
-The bug is a regression introduced in the commit referenced below. The
-present patch causes identical behavior to before that commit for
-adap->id equal to 0 or 1. The driver does not contain support for
-dib0700 devices with more adapters, assuming such even exist.
-
-Tests have been performed with the Xbox One Digital TV Tuner on amd64.
-Not all dib0700 devices are expected to be affected by the regression;
-this code path is only taken by those with incorrect endpoint numbers.
-
-Link: https://lore.kernel.org/linux-media/1d2fc36d94ced6f67c7cc21dcc469d5e5bdd8201.1632689033.git.mchehab+huawei@kernel.org
-
-Cc: stable@vger.kernel.org
-Fixes: 7757ddda6f4f ("[media] DiB0700: add function to change I2C-speed")
-Signed-off-by: Michael Kuron <michael.kuron@gmail.com>
+Fixes: c0efd232929c ("V4L/DVB (8145a): USB Video Class driver")
+Cc: stable@vger.kernel.org      # 2.6.26
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/usb/dvb-usb/dib0700_core.c |    2 --
- 1 file changed, 2 deletions(-)
+ drivers/media/usb/uvc/uvc_video.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/media/usb/dvb-usb/dib0700_core.c
-+++ b/drivers/media/usb/dvb-usb/dib0700_core.c
-@@ -619,8 +619,6 @@ int dib0700_streaming_ctrl(struct dvb_us
- 		deb_info("the endpoint number (%i) is not correct, use the adapter id instead", adap->fe_adap[0].stream.props.endpoint);
- 		if (onoff)
- 			st->channel_state |=	1 << (adap->id);
--		else
--			st->channel_state |=	1 << ~(adap->id);
- 	} else {
- 		if (onoff)
- 			st->channel_state |=	1 << (adap->fe_adap[0].stream.props.endpoint-2);
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -1716,6 +1716,10 @@ static int uvc_init_video(struct uvc_str
+ 		if (ep == NULL)
+ 			return -EIO;
+ 
++		/* Reject broken descriptors. */
++		if (usb_endpoint_maxp(&ep->desc) == 0)
++			return -EIO;
++
+ 		ret = uvc_init_video_bulk(stream, ep, gfp_flags);
+ 	}
+ 
 
 

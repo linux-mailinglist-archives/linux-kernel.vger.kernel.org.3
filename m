@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C254992E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E3D498B10
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:11:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382499AbiAXUZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:25:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60652 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352283AbiAXUDd (ORCPT
+        id S1347064AbiAXTJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:09:39 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59858 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345272AbiAXTDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:03:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B66C02B87E;
-        Mon, 24 Jan 2022 11:29:50 -0800 (PST)
+        Mon, 24 Jan 2022 14:03:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52DC16148B;
-        Mon, 24 Jan 2022 19:29:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A3DEC340E5;
-        Mon, 24 Jan 2022 19:29:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 92D53B81233;
+        Mon, 24 Jan 2022 19:03:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEAEAC340E5;
+        Mon, 24 Jan 2022 19:03:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052589;
-        bh=Qyt+cjc79L+3v4LC0sQJwm5VCbZP3ks6OIZ5fJEIcQM=;
+        s=korg; t=1643050988;
+        bh=a2U4mYk9aMz3PSdQy/lNT9uOKbGAZ7fAC/WJXnxesEA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qm9sQoGNAA+qyElgYPwKy8qjLWpbOvdCtssHS7sIticpifSfhMzmwRQy/+bNi5q9m
-         Trrsz1jkpTm/atdi2QP2GRFIdsZkdAry+S1gwWUZLPGY3j//xmdstVolP0SGcXChUo
-         2LVFKwVT3brQrwNhRKA5fkyKtYWoMKAuLQeSzQ+E=
+        b=iIpX4c7PXr06FDxbRjaedxIqGShYKdwcwZ6gj1ljejJy81prHpPpsMEnJ+IOyP9Up
+         f4PorUEjV6FJl8kbvh44TxC4s91UF5EqfoL/b4zfPsntsr4IvC8dL4cykNmjvkEplL
+         zOgcxs8/Cy0Hv/97ZnshaRBAS2/1gIofdC3mJiwQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 110/320] HID: hid-uclogic-params: Invalid parameter check in uclogic_params_huion_init
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        syzbot+7f23bcddf626e0593a39@syzkaller.appspotmail.com
+Subject: [PATCH 4.14 019/186] nfc: llcp: fix NULL error pointer dereference on sendmsg() after failed bind()
 Date:   Mon, 24 Jan 2022 19:41:34 +0100
-Message-Id: <20220124183957.463099825@linuxfoundation.org>
+Message-Id: <20220124183937.738493420@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,55 +47,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: José Expósito <jose.exposito89@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-[ Upstream commit ff6b548afe4d9d1ff3a0f6ef79e8cbca25d8f905 ]
+commit dded08927ca3c31a5c37f8e7f95fe98770475dd4 upstream.
 
-The function performs a check on its input parameters, however, the
-hdev parameter is used before the check.
+Syzbot detected a NULL pointer dereference of nfc_llcp_sock->dev pointer
+(which is a 'struct nfc_dev *') with calls to llcp_sock_sendmsg() after
+a failed llcp_sock_bind(). The message being sent is a SOCK_DGRAM.
 
-Initialize the stack variables after checking the input parameters to
-avoid a possible NULL pointer dereference.
+KASAN report:
 
-Fixes: 9614219e9310e ("HID: uclogic: Extract tablet parameter discovery into a module")
-Addresses-Coverity-ID: 1443804 ("Null pointer dereference")
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+  BUG: KASAN: null-ptr-deref in nfc_alloc_send_skb+0x2d/0xc0
+  Read of size 4 at addr 00000000000005c8 by task llcp_sock_nfc_a/899
+
+  CPU: 5 PID: 899 Comm: llcp_sock_nfc_a Not tainted 5.16.0-rc6-next-20211224-00001-gc6437fbf18b0 #125
+  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+  Call Trace:
+   <TASK>
+   dump_stack_lvl+0x45/0x59
+   ? nfc_alloc_send_skb+0x2d/0xc0
+   __kasan_report.cold+0x117/0x11c
+   ? mark_lock+0x480/0x4f0
+   ? nfc_alloc_send_skb+0x2d/0xc0
+   kasan_report+0x38/0x50
+   nfc_alloc_send_skb+0x2d/0xc0
+   nfc_llcp_send_ui_frame+0x18c/0x2a0
+   ? nfc_llcp_send_i_frame+0x230/0x230
+   ? __local_bh_enable_ip+0x86/0xe0
+   ? llcp_sock_connect+0x470/0x470
+   ? llcp_sock_connect+0x470/0x470
+   sock_sendmsg+0x8e/0xa0
+   ____sys_sendmsg+0x253/0x3f0
+   ...
+
+The issue was visible only with multiple simultaneous calls to bind() and
+sendmsg(), which resulted in most of the bind() calls to fail.  The
+bind() was failing on checking if there is available WKS/SDP/SAP
+(respective bit in 'struct nfc_llcp_local' fields).  When there was no
+available WKS/SDP/SAP, the bind returned error but the sendmsg() to such
+socket was able to trigger mentioned NULL pointer dereference of
+nfc_llcp_sock->dev.
+
+The code looks simply racy and currently it protects several paths
+against race with checks for (!nfc_llcp_sock->local) which is NULL-ified
+in error paths of bind().  The llcp_sock_sendmsg() did not have such
+check but called function nfc_llcp_send_ui_frame() had, although not
+protected with lock_sock().
+
+Therefore the race could look like (same socket is used all the time):
+  CPU0                                     CPU1
+  ====                                     ====
+  llcp_sock_bind()
+  - lock_sock()
+    - success
+  - release_sock()
+  - return 0
+                                           llcp_sock_sendmsg()
+                                           - lock_sock()
+                                           - release_sock()
+  llcp_sock_bind(), same socket
+  - lock_sock()
+    - error
+                                           - nfc_llcp_send_ui_frame()
+                                             - if (!llcp_sock->local)
+    - llcp_sock->local = NULL
+    - nfc_put_device(dev)
+                                             - dereference llcp_sock->dev
+  - release_sock()
+  - return -ERRNO
+
+The nfc_llcp_send_ui_frame() checked llcp_sock->local outside of the
+lock, which is racy and ineffective check.  Instead, its caller
+llcp_sock_sendmsg(), should perform the check inside lock_sock().
+
+Reported-and-tested-by: syzbot+7f23bcddf626e0593a39@syzkaller.appspotmail.com
+Fixes: b874dec21d1c ("NFC: Implement LLCP connection less Tx path")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hid-uclogic-params.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ net/nfc/llcp_sock.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
-index 1f3ea6c93ef44..0fdac91c5f510 100644
---- a/drivers/hid/hid-uclogic-params.c
-+++ b/drivers/hid/hid-uclogic-params.c
-@@ -707,9 +707,9 @@ static int uclogic_params_huion_init(struct uclogic_params *params,
- 				     struct hid_device *hdev)
- {
- 	int rc;
--	struct usb_device *udev = hid_to_usb_dev(hdev);
--	struct usb_interface *iface = to_usb_interface(hdev->dev.parent);
--	__u8 bInterfaceNumber = iface->cur_altsetting->desc.bInterfaceNumber;
-+	struct usb_device *udev;
-+	struct usb_interface *iface;
-+	__u8 bInterfaceNumber;
- 	bool found;
- 	/* The resulting parameters (noop) */
- 	struct uclogic_params p = {0, };
-@@ -723,6 +723,10 @@ static int uclogic_params_huion_init(struct uclogic_params *params,
- 		goto cleanup;
- 	}
+--- a/net/nfc/llcp_sock.c
++++ b/net/nfc/llcp_sock.c
+@@ -797,6 +797,11 @@ static int llcp_sock_sendmsg(struct sock
  
-+	udev = hid_to_usb_dev(hdev);
-+	iface = to_usb_interface(hdev->dev.parent);
-+	bInterfaceNumber = iface->cur_altsetting->desc.bInterfaceNumber;
+ 	lock_sock(sk);
+ 
++	if (!llcp_sock->local) {
++		release_sock(sk);
++		return -ENODEV;
++	}
 +
- 	/* If it's not a pen interface */
- 	if (bInterfaceNumber != 0) {
- 		/* TODO: Consider marking the interface invalid */
--- 
-2.34.1
-
+ 	if (sk->sk_type == SOCK_DGRAM) {
+ 		DECLARE_SOCKADDR(struct sockaddr_nfc_llcp *, addr,
+ 				 msg->msg_name);
 
 

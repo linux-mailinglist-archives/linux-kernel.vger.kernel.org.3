@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7547C49A083
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:29:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0DD149A11F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:35:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1837511AbiAXXI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:08:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35702 "EHLO
+        id S1850198AbiAXX1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:27:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353083AbiAXWRZ (ORCPT
+        with ESMTP id S1588101AbiAXWbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:17:25 -0500
+        Mon, 24 Jan 2022 17:31:25 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C369FC04A2E5;
-        Mon, 24 Jan 2022 12:46:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E45AC06175F;
+        Mon, 24 Jan 2022 11:35:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D09A60C23;
-        Mon, 24 Jan 2022 20:46:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AC3CC340E5;
-        Mon, 24 Jan 2022 20:45:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2ECA614FC;
+        Mon, 24 Jan 2022 19:35:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF8CFC340E5;
+        Mon, 24 Jan 2022 19:35:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057160;
-        bh=rKEnzmRNzR7KabDzJxbjdFEi1uqoOkavf2ooI37fkbw=;
+        s=korg; t=1643052938;
+        bh=x0fzf8FlFRZXZhlR8ylc17SgQ+HQ3whKwwhRnI/v+fE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HLTRdVitrdhPHDNpssge7d3PjoMzj0j0fzVkT2AyCyfeX7byFM9jqKOkiG5mrKW6U
-         LAI4zlIekJomz0b/leW7lYWp2goLJcMPl0WRQe0Zt+KnchtxY7IJcfn3E2i8tZfalh
-         LYyOBORi3+/EATxqQYEum2v6NvKaaJkzoxI3DcBw=
+        b=dm6wvxQS65FURRn4o9oPxuHFVGXVUVcMYCAnukXESXs6iTgQRf9f7fYwK+iZ59vFc
+         6Iqmc0BHLDAH8O9+ZMv8iD3KsE38zvhqAPdXyQQx12aZLsdED5ljNUHUz328AT+bcj
+         N4M5FhXKpLHZFGkxYt3oV4jU26CqSY945Hy6EUAs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vlastimil Babka <vbabka@suse.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Subject: [PATCH 5.15 688/846] s390/mm: fix 2KB pgtable release race
-Date:   Mon, 24 Jan 2022 19:43:25 +0100
-Message-Id: <20220124184124.788606967@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 222/320] random: do not throw away excess input to crng_fast_load
+Date:   Mon, 24 Jan 2022 19:43:26 +0100
+Message-Id: <20220124184001.207698415@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,110 +50,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Gordeev <agordeev@linux.ibm.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit c2c224932fd0ee6854d6ebfc8d059c2bcad86606 upstream.
+[ Upstream commit 73c7733f122e8d0107f88655a12011f68f69e74b ]
 
-There is a race on concurrent 2KB-pgtables release paths when
-both upper and lower halves of the containing parent page are
-freed, one via page_table_free_rcu() + __tlb_remove_table(),
-and the other via page_table_free(). The race might lead to a
-corruption as result of remove of list item in page_table_free()
-concurrently with __free_page() in __tlb_remove_table().
+When crng_fast_load() is called by add_hwgenerator_randomness(), we
+currently will advance to crng_init==1 once we've acquired 64 bytes, and
+then throw away the rest of the buffer. Usually, that is not a problem:
+When add_hwgenerator_randomness() gets called via EFI or DT during
+setup_arch(), there won't be any IRQ randomness. Therefore, the 64 bytes
+passed by EFI exactly matches what is needed to advance to crng_init==1.
+Usually, DT seems to pass 64 bytes as well -- with one notable exception
+being kexec, which hands over 128 bytes of entropy to the kexec'd kernel.
+In that case, we'll advance to crng_init==1 once 64 of those bytes are
+consumed by crng_fast_load(), but won't continue onward feeding in bytes
+to progress to crng_init==2. This commit fixes the issue by feeding
+any leftover bytes into the next phase in add_hwgenerator_randomness().
 
-Let's assume first the lower and next the upper 2KB-pgtables are
-freed from a page. Since both halves of the page are allocated
-the tracking byte (bits 24-31 of the page _refcount) has value
-of 0x03 initially:
-
-CPU0				CPU1
-----				----
-
-page_table_free_rcu() // lower half
-{
-	// _refcount[31..24] == 0x03
-	...
-	atomic_xor_bits(&page->_refcount,
-			0x11U << (0 + 24));
-	// _refcount[31..24] <= 0x12
-	...
-	table = table | (1U << 0);
-	tlb_remove_table(tlb, table);
-}
-...
-__tlb_remove_table()
-{
-	// _refcount[31..24] == 0x12
-	mask = _table & 3;
-	// mask <= 0x01
-	...
-
-				page_table_free() // upper half
-				{
-					// _refcount[31..24] == 0x12
-					...
-					atomic_xor_bits(
-						&page->_refcount,
-						1U << (1 + 24));
-					// _refcount[31..24] <= 0x10
-					// mask <= 0x10
-					...
-	atomic_xor_bits(&page->_refcount,
-			mask << (4 + 24));
-	// _refcount[31..24] <= 0x00
-	// mask <= 0x00
-	...
-	if (mask != 0) // == false
-		break;
-	fallthrough;
-	...
-					if (mask & 3) // == false
-						...
-					else
-	__free_page(page);			list_del(&page->lru);
-	^^^^^^^^^^^^^^^^^^	RACE!		^^^^^^^^^^^^^^^^^^^^^
-}					...
-				}
-
-The problem is page_table_free() releases the page as result of
-lower nibble unset and __tlb_remove_table() observing zero too
-early. With this update page_table_free() will use the similar
-logic as page_table_free_rcu() + __tlb_remove_table(), and mark
-the fragment as pending for removal in the upper nibble until
-after the list_del().
-
-In other words, the parent page is considered as unreferenced and
-safe to release only when the lower nibble is cleared already and
-unsetting a bit in upper nibble results in that nibble turned zero.
-
-Cc: stable@vger.kernel.org
-Suggested-by: Vlastimil Babka <vbabka@suse.com>
-Reviewed-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[linux@dominikbrodowski.net: rewrite commit message]
+Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/s390/mm/pgalloc.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/char/random.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
---- a/arch/s390/mm/pgalloc.c
-+++ b/arch/s390/mm/pgalloc.c
-@@ -244,13 +244,15 @@ void page_table_free(struct mm_struct *m
- 		/* Free 2K page table fragment of a 4K page */
- 		bit = ((unsigned long) table & ~PAGE_MASK)/(PTRS_PER_PTE*sizeof(pte_t));
- 		spin_lock_bh(&mm->context.lock);
--		mask = atomic_xor_bits(&page->_refcount, 1U << (bit + 24));
-+		mask = atomic_xor_bits(&page->_refcount, 0x11U << (bit + 24));
- 		mask >>= 24;
- 		if (mask & 3)
- 			list_add(&page->lru, &mm->context.pgtable_list);
- 		else
- 			list_del(&page->lru);
- 		spin_unlock_bh(&mm->context.lock);
-+		mask = atomic_xor_bits(&page->_refcount, 0x10U << (bit + 24));
-+		mask >>= 24;
- 		if (mask != 0)
- 			return;
- 	} else {
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 60b39af1279a4..19bfbaf135989 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -975,12 +975,14 @@ static struct crng_state *select_crng(void)
+ 
+ /*
+  * crng_fast_load() can be called by code in the interrupt service
+- * path.  So we can't afford to dilly-dally.
++ * path.  So we can't afford to dilly-dally. Returns the number of
++ * bytes processed from cp.
+  */
+-static int crng_fast_load(const char *cp, size_t len)
++static size_t crng_fast_load(const char *cp, size_t len)
+ {
+ 	unsigned long flags;
+ 	char *p;
++	size_t ret = 0;
+ 
+ 	if (!spin_trylock_irqsave(&primary_crng.lock, flags))
+ 		return 0;
+@@ -991,7 +993,7 @@ static int crng_fast_load(const char *cp, size_t len)
+ 	p = (unsigned char *) &primary_crng.state[4];
+ 	while (len > 0 && crng_init_cnt < CRNG_INIT_CNT_THRESH) {
+ 		p[crng_init_cnt % CHACHA_KEY_SIZE] ^= *cp;
+-		cp++; crng_init_cnt++; len--;
++		cp++; crng_init_cnt++; len--; ret++;
+ 	}
+ 	spin_unlock_irqrestore(&primary_crng.lock, flags);
+ 	if (crng_init_cnt >= CRNG_INIT_CNT_THRESH) {
+@@ -1000,7 +1002,7 @@ static int crng_fast_load(const char *cp, size_t len)
+ 		wake_up_interruptible(&crng_init_wait);
+ 		pr_notice("random: fast init done\n");
+ 	}
+-	return 1;
++	return ret;
+ }
+ 
+ /*
+@@ -1353,7 +1355,7 @@ void add_interrupt_randomness(int irq, int irq_flags)
+ 	if (unlikely(crng_init == 0)) {
+ 		if ((fast_pool->count >= 64) &&
+ 		    crng_fast_load((char *) fast_pool->pool,
+-				   sizeof(fast_pool->pool))) {
++				   sizeof(fast_pool->pool)) > 0) {
+ 			fast_pool->count = 0;
+ 			fast_pool->last = now;
+ 		}
+@@ -2501,8 +2503,11 @@ void add_hwgenerator_randomness(const char *buffer, size_t count,
+ 	struct entropy_store *poolp = &input_pool;
+ 
+ 	if (unlikely(crng_init == 0)) {
+-		crng_fast_load(buffer, count);
+-		return;
++		size_t ret = crng_fast_load(buffer, count);
++		count -= ret;
++		buffer += ret;
++		if (!count || crng_init == 0)
++			return;
+ 	}
+ 
+ 	/* Suspend writing if we're above the trickle threshold.
+-- 
+2.34.1
+
 
 

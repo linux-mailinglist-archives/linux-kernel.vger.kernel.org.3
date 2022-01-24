@@ -2,111 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7FA7498553
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44045498580
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:56:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243803AbiAXQzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 11:55:22 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:56250
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243450AbiAXQzT (ORCPT
+        id S244020AbiAXQ4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 11:56:18 -0500
+Received: from mta-p7.oit.umn.edu ([134.84.196.207]:33184 "EHLO
+        mta-p7.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244003AbiAXQ4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 11:55:19 -0500
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 24 Jan 2022 11:56:15 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p7.oit.umn.edu (Postfix) with ESMTP id 4JjGMy2Rchz9vBrr
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:56:14 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p7.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p7.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Hz0S1HyEeG2p for <linux-kernel@vger.kernel.org>;
+        Mon, 24 Jan 2022 10:56:14 -0600 (CST)
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 741CE3F1B7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:55:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643043318;
-        bh=9EEQLll5JWPzYvRo5e7XU5syPg3MM9rervJCQ5j61PE=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=Zp914u3J397Qo0bMnjW6Vb28iFCOkvPinzNOAVPhvEVjfPQKvp6I/mDx0k+T4BjCn
-         BMcBkc4l8IXio05eqnqQzZMwEiI1BzPSZJf5IrWDGqLACmhdGlMV8d9EU+v36dGiQe
-         a8WhxBTiQ0MxkQwAY9Yvmq8Izf/bccI9Z63FqVL8Mq0BngOc6OTry8i744HZ1mWnUj
-         5FaHnHfx5Lt2omYuWwPUuJWeU++PdmtEWFMHjk3thK7rlsZx/UcPXWGw/iUJvAY/KZ
-         vGC7i7j/38cTNtVZ1TgX1uvKlC63SiQgc0+vlP9gATZ/ttdGpkihdoIfl5ZjXneMpV
-         tMXhs29HykTrw==
-Received: by mail-ej1-f72.google.com with SMTP id rl11-20020a170907216b00b006b73a611c1aso1638739ejb.22
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 08:55:18 -0800 (PST)
+        by mta-p7.oit.umn.edu (Postfix) with ESMTPS id 4JjGMx6fWXz9vBsL
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:56:13 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p7.oit.umn.edu 4JjGMx6fWXz9vBsL
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p7.oit.umn.edu 4JjGMx6fWXz9vBsL
+Received: by mail-pg1-f199.google.com with SMTP id o20-20020a656a54000000b003441a994d60so10215048pgu.6
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 08:56:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5wazUphf657A8u85KxBx+8Rcz0Mc5JkcT16GzU8geFE=;
+        b=mKuu8jAjF++IFpgduLN3RDEVefDAWyK1s4jcIwDrrK+XkSR3CLGnu6uzdybyWM/2C3
+         n2Ka7vv2Kc4aFO7usHMBcS56BrfBYO+rChtPEsb85JbE7kFzCg+eZ97ccdjpG0AagJyl
+         w2TOL8I+lRDJMovzuIUaKOjSCqvivDF5Sl34KOohYqPrdk97JIn8HtrZTRGtkoOgZQyS
+         +BqNOR6gUwPP/qBFir0JaDtzbRBzxLMlEb+DKuppNoNmhV2dytprGUjKYlVanlscF3fL
+         YnvpC74TvXg92Phex9UTG1VG/of07Q6Hc45DYRbggbr9jqtka4Z8CFLXtPXtW+vSjf7a
+         gCWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9EEQLll5JWPzYvRo5e7XU5syPg3MM9rervJCQ5j61PE=;
-        b=EwkB6Oqe16Na/VAeTSJVbgX4xSSGuC7WybUyyaSpIPdEVfoYn/fUBxhEtKVUWsmL5t
-         EqQj4LSKBzsYuJ+u/myUxSr3XZaDblmeEoxQa0ncF2T/EjvlNWawlLNakVOh4l/vK7F1
-         NunlvCN1Pn11HJdeR4+8xMdXmPjtvVKlRcOQ4Dd5893j4/A85WXuk+MXGyMuWjWKgQEJ
-         grPns8WmOJLDY744A3B+qwXd+qok7+w95N0D4RlDTlGCoEJicqO6iQXDDACWhM2/Ds22
-         anWGoVHlG7g2RoitjjNGRjuLbQOUx9ziG2JsKsJHJ3dcN37i2Kei1O63CN6WiPJCz2yv
-         CkuQ==
-X-Gm-Message-State: AOAM532UT/7FZt5WsPKzFs4BvAv86L9b9knV+cQZHggpoWDY1jGt3mPZ
-        MhTLBs8IQZXxDvAI8Qg6lNmQ1nM3dmAR3Dfkcfb8U2z8lY+yxwICP4sCshBl+9dveNlZ+6Qt5hw
-        IfvSQ6Xa8MGCGxCmHfneaqY/EZ07pG0NW3WlTdZ3QIuZNH/ACX3DCveXEqg==
-X-Received: by 2002:a50:9549:: with SMTP id v9mr16834031eda.335.1643043318208;
-        Mon, 24 Jan 2022 08:55:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyCcCQ2xn7I2rwOCmf8P8fmxvKeYvey/cJWwAqZ0tDzbf4isWUQwXV1mSERsEcSSLZDF6CZzpYhZ/4G59YeUgI=
-X-Received: by 2002:a50:9549:: with SMTP id v9mr16834016eda.335.1643043317988;
- Mon, 24 Jan 2022 08:55:17 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5wazUphf657A8u85KxBx+8Rcz0Mc5JkcT16GzU8geFE=;
+        b=Pe0Xnn5fBAO6F+ZKHjUScKtoDyUC1PeSLtOEADUPtWw2Uv88dPo1e6CANCmAg/p3cT
+         YgM6trywGJH5gSlTKpSStXZftd3/tP9UpJ907cV0IJ9Az5xz9ijPG+4ZKSkkImBFx9la
+         E5sgmAlbg3DvbTkJrICn2h4ONPYWhD9yb4XpPvrxvIHex525UCO7Ua+5nQTT4wz8R2YU
+         MAwrgCaAu29BpGsNXTcx2RZ/5e0YGpjnEYs4+86RYNM96HVE57Zq7J6IdiX8YK+7sf2x
+         KQp0yVWvobottNYelgFqfNzCNp5JV9O5GWglKMkuxiEvDzO2dG/B6OxZ19Z3Y5jEc25G
+         zt1w==
+X-Gm-Message-State: AOAM530VFbCoi7pv8rcZ2ogDnkJPo+O3PE8bUwqWhX3DlE4wB88k86Ab
+        FwW4bEuKLUoAXvzPaBeWhNFjNdHyL6Y6+ZvcH87254rp0vakLdKR2Rft8AKU1h0eQ7kDVVSrc+w
+        f+y2K/PC4osJjZg1O5WKsQeJ12oEa
+X-Received: by 2002:a17:903:110d:b0:149:a833:af21 with SMTP id n13-20020a170903110d00b00149a833af21mr15513349plh.14.1643043373165;
+        Mon, 24 Jan 2022 08:56:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwLuSK48OaRsgH3XF8ivq/y0OenHyrkB1/k/dcMZr1ADIQwnE4TW2Bda19qwmzB3Xd0i6sFJQ==
+X-Received: by 2002:a17:903:110d:b0:149:a833:af21 with SMTP id n13-20020a170903110d00b00149a833af21mr15513334plh.14.1643043372944;
+        Mon, 24 Jan 2022 08:56:12 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.4.61.248])
+        by smtp.gmail.com with ESMTPSA id p18sm18349600pfh.98.2022.01.24.08.56.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 08:56:12 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mario Kleiner <mario.kleiner.de@gmail.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amd/display/dc/calcs/dce_calcs: Fix a memleak in calculate_bandwidth()
+Date:   Tue, 25 Jan 2022 00:55:51 +0800
+Message-Id: <20220124165552.56106-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220119015038.2433585-1-robh@kernel.org>
-In-Reply-To: <20220119015038.2433585-1-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Date:   Mon, 24 Jan 2022 17:55:06 +0100
-Message-ID: <CA+Eumj4HjM8SPoOUo7_eLBOHFYXTPPPgmx_YDYdEXDyaT67Rrg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Improve phandle-array schemas
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Jan 2022 at 02:50, Rob Herring <robh@kernel.org> wrote:
->
-> The 'phandle-array' type is a bit ambiguous. It can be either just an
-> array of phandles or an array of phandles plus args. Many schemas for
-> phandle-array properties aren't clear in the schema which case applies
-> though the description usually describes it.
->
+In calculate_bandwidth(), the tag free_sclk and free_yclk are reversed,
+which could lead to a memory leak of yclk.
 
-Hi Rob,
+Fix this bug by changing the location of free_sclk and free_yclk.
 
-I have few questions below.
+This bug was found by a static analyzer.
 
-(...)
+Builds with 'make allyesconfig' show no new warnings,
+and our static analyzer no longer warns about this code.
 
-> diff --git a/Documentation/devicetree/bindings/sound/samsung,midas-audio.yaml b/Documentation/devicetree/bindings/sound/samsung,midas-audio.yaml
-> index 095775c598fa..3a4df2ce1728 100644
-> --- a/Documentation/devicetree/bindings/sound/samsung,midas-audio.yaml
-> +++ b/Documentation/devicetree/bindings/sound/samsung,midas-audio.yaml
-> @@ -21,8 +21,7 @@ properties:
->      type: object
->      properties:
->        sound-dai:
-> -        $ref: /schemas/types.yaml#/definitions/phandle-array
-> -        maxItems: 1
-> +        $ref: /schemas/types.yaml#/definitions/phandle
->          description: phandle to the I2S controller
->      required:
->        - sound-dai
+Fixes: 2be8989d0fc2 ("drm/amd/display/dc/calcs/dce_calcs: Move some large variables from the stack to the heap")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+The analysis employs differential checking to identify inconsistent 
+security operations (e.g., checks or kfrees) between two code paths 
+and confirms that the inconsistent operations are not recovered in the
+current function or the callers, so they constitute bugs. 
 
-This passes the example only because the example was simplified to
-hide dtschema errors.
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
 
-The cpu dai node is like:
-cpu {
-    sound-dai = <&i2s0 0>;
-};
+ drivers/gpu/drm/amd/display/dc/calcs/dce_calcs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-and this fails with errors missing phandle tag in 0.
+diff --git a/drivers/gpu/drm/amd/display/dc/calcs/dce_calcs.c b/drivers/gpu/drm/amd/display/dc/calcs/dce_calcs.c
+index ff5bb152ef49..e6ef36de0825 100644
+--- a/drivers/gpu/drm/amd/display/dc/calcs/dce_calcs.c
++++ b/drivers/gpu/drm/amd/display/dc/calcs/dce_calcs.c
+@@ -2033,10 +2033,10 @@ static void calculate_bandwidth(
+ 	kfree(surface_type);
+ free_tiling_mode:
+ 	kfree(tiling_mode);
+-free_yclk:
+-	kfree(yclk);
+ free_sclk:
+ 	kfree(sclk);
++free_yclk:
++	kfree(yclk);
+ }
+ 
+ /*******************************************************************************
+-- 
+2.25.1
 
-I am converting rest of Samsung audio bindings to dtschema and have
-trouble expressing this. How schema should express such cpu node?
-
-Best regards,
-Krzysztof

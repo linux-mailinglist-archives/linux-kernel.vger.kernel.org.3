@@ -2,82 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09670498714
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:38:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BBA498719
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:39:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244725AbiAXRip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:38:45 -0500
-Received: from mga02.intel.com ([134.134.136.20]:37041 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235570AbiAXRio (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:38:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643045924; x=1674581924;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=vPNTBoYL3mQlTowJCIE+opIrXBijwuuIm5WDA377RCk=;
-  b=R4zib/AlAhy4TyBArxkCdrSh/eUrWFAhZg9H9D4DtsqXfj2WQjEW1BFw
-   b8mOiwvmpaGgYG23OSmVFxxBAC0moecJ9myns3vNUX/dNjz7LujbXKXVV
-   aXNo3VS33PrqWRy2uEutH94gTILgLCboUEVkqSPHx8WKHkjstemDQd38Q
-   7O9Cu3ssf/P2/X5uGtmRbJDsFeOs+VoeI8TGRQqtlPYxQ013NRslLTQCs
-   IJvhNAF0r5ez0Pu5O84cUtpAgN5N9wWEw8k/Kv3V1H5R9wAGe45NOU4hR
-   ha0/e5AZt5PV6QuhZImZ2CeuPPAwnvBDxuP7uUZ0WNjYaODdNQpxbYlTF
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="233465149"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="233465149"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 09:38:44 -0800
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="580464712"
-Received: from jncomo-mobl.amr.corp.intel.com (HELO [10.251.27.220]) ([10.251.27.220])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 09:38:43 -0800
-Message-ID: <bd7c111c-8bd4-9c4d-4715-c0fb5fd034ee@intel.com>
-Date:   Mon, 24 Jan 2022 09:38:40 -0800
+        id S244730AbiAXRjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:39:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54376 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241622AbiAXRjf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 12:39:35 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058CBC06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:39:35 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id v186so53771564ybg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:39:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=41aTXdV4RG6O01NXUYoariT3ZoaysCZ/qlDc5spT4HA=;
+        b=KtMyrRvJWIl6g8aDJ61tlp8htAjY4Z83rHHQ37w5E4AYOV95sTCTO3FBn7EBhflmbJ
+         CxWCXrBckFGPQfca5aep0e7UzLEXMD3ETaTClllL8KjOFuwaNx0fD7wHsaadw+5J3wC3
+         r1TXzS45h+raBDvMZKiw8DbRJ90dXATrxp3b+SqgcWH2NvW4lSxRXeIxf7yslsW4VR5q
+         e7qz73Et4MV6Buk+jQNlwpzFBpHTHcDl97z4Am5fDJQgk+plZfap5ZpWKxp8wvp/qPcg
+         X2vn5qfhrAnouI9M3KkyH7Y5xdIXJ0gDHZGSMQUHCbTtD1tzFJL8zb8fiVAul/A2HoFV
+         7+7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=41aTXdV4RG6O01NXUYoariT3ZoaysCZ/qlDc5spT4HA=;
+        b=CLrI6d2Ok2/OuPLihQoADMjdLt+FZ4Aenn9rJPI4vvOkEXF6+Ckj1minvyAFDef7Ee
+         NPEPhqz+5FRdUQPEqNRSwP90pUmb4AEw7MZHxhecCzRF21lKTm4OKocA14xSHlnkdgFQ
+         +QKkHEg35mjPEgWrNEzn2u6RqpK7Hoh5Bb5I3M6rp7Ihf7bTUmLQGDbU99K53NuukO5G
+         diW3FLgzHJxqf9B5tz/w2u+qJXlhlVF41VUB+kOptqpg4E+/YvkMc/f7pBKA/Z8IpqQs
+         mdDQplAqDLtgRcrkMtOARHwWggEUDqhLajGTMhuP5j/19+pMkUB9vbaDIZ8izmVl5wWS
+         UalA==
+X-Gm-Message-State: AOAM531GMKhf03Il/FIOUltdSGupZyGuIyN6v6eJasOaUVX+GCxtjD+S
+        0f57buQBUHeUH5uyYFjF1B9ymKfecKZf7cc0WQcaDtJ6MbyxNg==
+X-Google-Smtp-Source: ABdhPJzijEBEsszZji35c2/oqwgGLWjHqxbyQXeb+yO/np9p1/WZOLk+N2o1x5C4wXMRIs7+CkyMUPv+rSy5Z5jM20o=
+X-Received: by 2002:a25:b683:: with SMTP id s3mr24190315ybj.293.1643045973784;
+ Mon, 24 Jan 2022 09:39:33 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Benjamin Herrenschmidt <benh@amazon.com>,
-        Kuniyuki Iwashima <kuni1840@gmail.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220123015807.45005-1-kuniyu@amazon.co.jp>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH] x86/boot: Avoid redundant address overlap tests in
- memcpy().
-In-Reply-To: <20220123015807.45005-1-kuniyu@amazon.co.jp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220122000301.1872828-1-jeffreyji@google.com>
+ <20220121194057.17079951@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+ <CAMzD94QW5uK2wAZfYWu5J=2HqCcLrT=y7u6+0PgJvHBb0YTz_Q@mail.gmail.com> <20220124092924.0eb17027@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <20220124092924.0eb17027@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 24 Jan 2022 09:39:22 -0800
+Message-ID: <CANn89iKGOw3LZ_2agxewuNLMLRX7TSnGYnf0T6NwC+1s4OB2bg@mail.gmail.com>
+Subject: Re: [PATCH net-next] net-core: add InMacErrors counter
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Brian Vazquez <brianvv@google.com>,
+        Jeffrey Ji <jeffreyjilinux@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, jeffreyji <jeffreyji@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/22/22 17:58, Kuniyuki Iwashima wrote:
-> -void *memmove(void *dest, const void *src, size_t n)
-> +void *____memmove(void *dest, const void *src, size_t n)
->   {
->   	unsigned char *d = dest;
->   	const unsigned char *s = src;
->   
-> -	if (d <= s || d - s >= n)
-> -		return ____memcpy(dest, src, n);
-> -
->   	while (n-- > 0)
->   		d[n] = s[n];
->   
->   	return dest;
->   }
+On Mon, Jan 24, 2022 at 9:29 AM Jakub Kicinski <kuba@kernel.org> wrote:
 
-The ___ naming is pretty cruel.  Could we call it memmove_no_overlap() 
-or memmove_unsafe()?  Surely we can put some *useful* bytes in the name 
-rather than padding it out with _'s.  No need to perpetuate the 
-____memcpy() naming.
+> That much it's understood, but it's a trade off. This drop point
+> existed for 20 years, why do we need to consume extra memory now?
 
-Also, is this worth the churn?  It probably saves less than 10 
-instructions, all of which are ridiculously cheap.  Is there a *reason* 
-for this other than being a pure cleanup?
+Being able to tell after the facts, that such a drop reason had
+occured can help investigations.
+
+nstat -a | grep InMac
+
+Jeffrey, what about _also_ adding the kfree_skb_reason(), since this
+seems to also help ?

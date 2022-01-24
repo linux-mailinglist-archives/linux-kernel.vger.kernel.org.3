@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8352149A09A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 654F8499E73
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:09:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384469AbiAXXOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:14:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1584585AbiAXWV3 (ORCPT
+        id S1588860AbiAXWeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:34:16 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51144 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1456516AbiAXVj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:21:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E9AC0424DE;
-        Mon, 24 Jan 2022 12:51:20 -0800 (PST)
+        Mon, 24 Jan 2022 16:39:26 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1986260C3E;
-        Mon, 24 Jan 2022 20:51:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F265AC340E5;
-        Mon, 24 Jan 2022 20:51:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA597B8121C;
+        Mon, 24 Jan 2022 21:39:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22A8BC340E4;
+        Mon, 24 Jan 2022 21:39:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057479;
-        bh=uKmrqgjSA/5eJeqZdMw9hagnqck9mskx6h1Fw7fRqhA=;
+        s=korg; t=1643060363;
+        bh=x7S04SykEtkNO6jyz+/ia/IfgXn8OU6ejHj5ebXM5TE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cmm8p/94TW3mErVMalZBzvfpki0B0tN8nAgnOkw7i5RVjnhdFKe65qWG5QNqhI9u5
-         R3cDinLk/wfzkRPlXP9NdRYVUpq/4ji6tthKKpG473QpUpvFcKOa7RTisUiE1vOGGn
-         KXu9p5bx0GorJt5SZtDnUwWVOFKSKKqyesYR7Haw=
+        b=fQLJ1GsVFYJCvPI7lxgqGbnHA6/NQTnycWzOSkw6+J1/QBT5jLh2gpDindsoUINZH
+         2g1KikLyWJ4vf0YGDRsD7YHF7cP1SPnMYGn11iKmsgkfmHl5VfmhyP1yHPSM+VCyC4
+         KU49ZW9IBeZ08zobOMXOwLND2RmE7XbaF5h7wdi4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 793/846] net: axienet: reset core on initialization prior to MDIO access
-Date:   Mon, 24 Jan 2022 19:45:10 +0100
-Message-Id: <20220124184128.306481427@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.16 0923/1039] dmaengine: uniphier-xdmac: Fix type of address variables
+Date:   Mon, 24 Jan 2022 19:45:12 +0100
+Message-Id: <20220124184156.323754976@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,40 +46,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 
-commit 04cc2da39698efd7eb2e30c112538922d26f848e upstream.
+commit 105a8c525675bb7d4d64871f9b2edf39460de881 upstream.
 
-In some cases where the Xilinx Ethernet core was used in 1000Base-X or
-SGMII modes, which use the internal PCS/PMA PHY, and the MGT
-transceiver clock source for the PCS was not running at the time the
-FPGA logic was loaded, the core would come up in a state where the
-PCS could not be found on the MDIO bus. To fix this, the Ethernet core
-(including the PCS) should be reset after enabling the clocks, prior to
-attempting to access the PCS using of_mdio_find_device.
+The variables src_addr and dst_addr handle DMA addresses, so these should
+be declared as dma_addr_t.
 
-Fixes: 1a02556086fc (net: axienet: Properly handle PCS/PMA PHY for 1000BaseX mode)
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 667b9251440b ("dmaengine: uniphier-xdmac: Add UniPhier external DMA controller driver")
+Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Link: https://lore.kernel.org/r/1639456963-10232-1-git-send-email-hayashi.kunihiko@socionext.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/xilinx/xilinx_axienet_main.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/dma/uniphier-xdmac.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-@@ -2091,6 +2091,11 @@ static int axienet_probe(struct platform
- 	lp->coalesce_count_rx = XAXIDMA_DFT_RX_THRESHOLD;
- 	lp->coalesce_count_tx = XAXIDMA_DFT_TX_THRESHOLD;
+--- a/drivers/dma/uniphier-xdmac.c
++++ b/drivers/dma/uniphier-xdmac.c
+@@ -131,8 +131,9 @@ uniphier_xdmac_next_desc(struct uniphier
+ static void uniphier_xdmac_chan_start(struct uniphier_xdmac_chan *xc,
+ 				      struct uniphier_xdmac_desc *xd)
+ {
+-	u32 src_mode, src_addr, src_width;
+-	u32 dst_mode, dst_addr, dst_width;
++	u32 src_mode, src_width;
++	u32 dst_mode, dst_width;
++	dma_addr_t src_addr, dst_addr;
+ 	u32 val, its, tnum;
+ 	enum dma_slave_buswidth buswidth;
  
-+	/* Reset core now that clocks are enabled, prior to accessing MDIO */
-+	ret = __axienet_device_reset(lp);
-+	if (ret)
-+		goto cleanup_clk;
-+
- 	lp->phy_node = of_parse_phandle(pdev->dev.of_node, "phy-handle", 0);
- 	if (lp->phy_node) {
- 		ret = axienet_mdio_setup(lp);
 
 

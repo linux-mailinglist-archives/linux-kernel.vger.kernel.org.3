@@ -2,68 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FBB8497C00
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:32:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E31497C09
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233809AbiAXJcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 04:32:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiAXJcW (ORCPT
+        id S234440AbiAXJeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 04:34:14 -0500
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:50240 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234307AbiAXJeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 04:32:22 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F555C06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 01:32:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=apuUXH+60n6hljRak/UVGWlJLkn1KcaMbpnLlafoj9s=; b=hVSTPrEcrShyI50dK3OBPQnhac
-        maUZoKQh8S9+L4HSCfX2bpnHFRylBiAFnpnySwK8VANInwz9+Q3PQczTrtReo2Z71IhkalEjU9IrX
-        zp1orRmwMunA4S4gWCFQy//JLgYjB6uZgjzVtCH2nptqNpe2886yBsOy4RWYBPvcmxqM1/R+gakd3
-        CfRiiJDFzOnXcLZn4FAILBTaqCOcC0/GZUvlwNJRwVmulvcGydFJWZDE90TGJEdgn6HbZB8wIVBk0
-        KVLzMKAeJE9URH+f89yX5NaN7ayeFp1EowP4ZeaXe80w9FRuO83rSHt1owTqL7Kz0QWEZSsJD7HP4
-        7zCyL4MQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nBvht-002nqj-Nq; Mon, 24 Jan 2022 09:32:13 +0000
-Date:   Mon, 24 Jan 2022 01:32:13 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/7] iommu: Use right way to retrieve iommu_ops
-Message-ID: <Ye5yHejpaAnJQYeR@infradead.org>
-References: <20220124071103.2097118-1-baolu.lu@linux.intel.com>
- <20220124071103.2097118-7-baolu.lu@linux.intel.com>
+        Mon, 24 Jan 2022 04:34:06 -0500
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 20O9QVf4054145;
+        Mon, 24 Jan 2022 17:26:31 +0800 (GMT-8)
+        (envelope-from jammy_huang@aspeedtech.com)
+Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 24 Jan
+ 2022 17:33:47 +0800
+From:   Jammy Huang <jammy_huang@aspeedtech.com>
+To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
+        <andrew@aj.id.au>, <linux-media@vger.kernel.org>,
+        <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/4] Correct timing report
+Date:   Mon, 24 Jan 2022 17:33:41 +0800
+Message-ID: <20220124093345.3935-1-jammy_huang@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124071103.2097118-7-baolu.lu@linux.intel.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.115]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 20O9QVf4054145
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 03:11:01PM +0800, Lu Baolu wrote:
-> The common iommu_ops is hooked to both device and domain. When a helper
-> has both device and domain pointer, the way to get the iommu_ops looks
-> messy in iommu core. This sorts out the way to get iommu_ops. The device
-> related helpers go through device pointer, while the domain related ones
-> go through domain pointer.
+This series will correct the value of timing detected.
 
-Ugg. This really sounds like we should have a different structures for
-each set of ops?
+Changes in v3:
+ - Add API, aspeed_video_get_timings(), for the calculation of timings
+ - Use active rather than 'total/2' as critera for sync polarity workaround
+Changes in v2:
+ - code refined to improve readability
+
+Jammy Huang (4):
+  media: aspeed: Correct value for h-total-pixels
+  media: aspeed: Use FIELD_GET to improve readability
+  media: aspeed: Correct values for detected timing
+  media: aspeed: Fix timing polarity incorrect
+
+ drivers/media/platform/aspeed-video.c | 139 ++++++++++++++++++++------
+ 1 file changed, 111 insertions(+), 28 deletions(-)
+
+-- 
+2.25.1
+

@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8519D499ABE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E6A499AC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:57:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378651AbiAXVqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:46:08 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33918 "EHLO
+        id S1359842AbiAXVqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:46:20 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33960 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448261AbiAXVMT (ORCPT
+        with ESMTP id S1448321AbiAXVM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:12:19 -0500
+        Mon, 24 Jan 2022 16:12:27 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48423B811FB;
-        Mon, 24 Jan 2022 21:12:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 756C7C340E5;
-        Mon, 24 Jan 2022 21:12:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1A2CAB8123D;
+        Mon, 24 Jan 2022 21:12:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68BEBC340E5;
+        Mon, 24 Jan 2022 21:12:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058736;
-        bh=hMS3Pfo/RADStheTOI07FspzNnegx1/g9BH7Y01uFTg=;
+        s=korg; t=1643058744;
+        bh=cZlP7inydCpcNyjSPOxf7NCHLOzHE2ldB8dKrIBV8pU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O/I9KwmMFVAtRNHA1mRkqoQO4cmWUJeR2Z69580OJh7UeGYhb3xoJ7WBy7Y9xXJ+8
-         ZDyaVCOREXW29/znMbStX0b34yMZY1ArTrHxzTDp9aK5lYyQaxt4ENJuwrEN1pkbOO
-         SJL16WeMfCX23a8PDBkDlRMOLzjX6pvMT/VldSKI=
+        b=BsJe1Io6TcIskWxCC+vmN/DsR5+3H+q/EBAeI37DQMpmh4mbcNm3lNo2gb2XqBRsc
+         0DX0Sli9O1mnkh3PekaSub3thsJHU8A14XfZ7WEpIgAXUBEfwCj9wDQuSMkDseCfyO
+         Iyzouan8N3yUTRrP4pSuG1krBMZJmviWfIi3jTBg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Marcel Holtmann <marcel@holtmann.org>,
+        stable@vger.kernel.org, Karsten Graul <kgraul@linux.ibm.com>,
+        Wen Gu <guwen@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0386/1039] Bluetooth: hci_bcm: Check for error irq
-Date:   Mon, 24 Jan 2022 19:36:15 +0100
-Message-Id: <20220124184138.292152168@linuxfoundation.org>
+Subject: [PATCH 5.16 0388/1039] net/smc: Reset conn->lgr when link group registration fails
+Date:   Mon, 24 Jan 2022 19:36:17 +0100
+Message-Id: <20220124184138.361043091@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -46,44 +47,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Wen Gu <guwen@linux.alibaba.com>
 
-[ Upstream commit b38cd3b42fba66cc538edb9cf77e07881f43f8e2 ]
+[ Upstream commit 36595d8ad46d9e4c41cc7c48c4405b7c3322deac ]
 
-For the possible failure of the platform_get_irq(), the returned irq
-could be error number and will finally cause the failure of the
-request_irq().
-Consider that platform_get_irq() can now in certain cases return
--EPROBE_DEFER, and the consequences of letting request_irq() effectively
-convert that into -EINVAL, even at probe time rather than later on.
-So it might be better to check just now.
+SMC connections might fail to be registered in a link group due to
+unable to find a usable link during its creation. As a result,
+smc_conn_create() will return a failure and most resources related
+to the connection won't be applied or initialized, such as
+conn->abort_work or conn->lnk.
 
-Fixes: 0395ffc1ee05 ("Bluetooth: hci_bcm: Add PM for BCM devices")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+If smc_conn_free() is invoked later, it will try to access the
+uninitialized resources related to the connection, thus causing
+a warning or crash.
+
+This patch tries to fix this by resetting conn->lgr to NULL if an
+abnormal exit occurs in smc_lgr_register_conn(), thus avoiding the
+access to uninitialized resources in smc_conn_free().
+
+Meanwhile, the new created link group should be terminated if smc
+connections can't be registered in it. So smc_lgr_cleanup_early() is
+modified to take care of link group only and invoked to terminate
+unusable link group by smc_conn_create(). The call to smc_conn_free()
+is moved out from smc_lgr_cleanup_early() to smc_conn_abort().
+
+Fixes: 56bc3b2094b4 ("net/smc: assign link to a new connection")
+Suggested-by: Karsten Graul <kgraul@linux.ibm.com>
+Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
+Acked-by: Karsten Graul <kgraul@linux.ibm.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bluetooth/hci_bcm.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ net/smc/af_smc.c   |  8 +++++---
+ net/smc/smc_core.c | 12 +++++++-----
+ net/smc/smc_core.h |  2 +-
+ 3 files changed, 13 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/bluetooth/hci_bcm.c b/drivers/bluetooth/hci_bcm.c
-index ef54afa293574..7abf99f0ee399 100644
---- a/drivers/bluetooth/hci_bcm.c
-+++ b/drivers/bluetooth/hci_bcm.c
-@@ -1188,7 +1188,12 @@ static int bcm_probe(struct platform_device *pdev)
- 		return -ENOMEM;
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index 1c9289f56dc47..211cd91b6c408 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -632,10 +632,12 @@ static int smc_connect_decline_fallback(struct smc_sock *smc, int reason_code,
  
- 	dev->dev = &pdev->dev;
--	dev->irq = platform_get_irq(pdev, 0);
+ static void smc_conn_abort(struct smc_sock *smc, int local_first)
+ {
++	struct smc_connection *conn = &smc->conn;
++	struct smc_link_group *lgr = conn->lgr;
 +
-+	ret = platform_get_irq(pdev, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	dev->irq = ret;
++	smc_conn_free(conn);
+ 	if (local_first)
+-		smc_lgr_cleanup_early(&smc->conn);
+-	else
+-		smc_conn_free(&smc->conn);
++		smc_lgr_cleanup_early(lgr);
+ }
  
- 	/* Initialize routing field to an unused value */
- 	dev->pcm_int_params[0] = 0xff;
+ /* check if there is a rdma device available for this connection. */
+diff --git a/net/smc/smc_core.c b/net/smc/smc_core.c
+index a6849362f4ddd..c9a8092c4ac96 100644
+--- a/net/smc/smc_core.c
++++ b/net/smc/smc_core.c
+@@ -171,8 +171,10 @@ static int smc_lgr_register_conn(struct smc_connection *conn, bool first)
+ 
+ 	if (!conn->lgr->is_smcd) {
+ 		rc = smcr_lgr_conn_assign_link(conn, first);
+-		if (rc)
++		if (rc) {
++			conn->lgr = NULL;
+ 			return rc;
++		}
+ 	}
+ 	/* find a new alert_token_local value not yet used by some connection
+ 	 * in this link group
+@@ -622,15 +624,13 @@ int smcd_nl_get_lgr(struct sk_buff *skb, struct netlink_callback *cb)
+ 	return skb->len;
+ }
+ 
+-void smc_lgr_cleanup_early(struct smc_connection *conn)
++void smc_lgr_cleanup_early(struct smc_link_group *lgr)
+ {
+-	struct smc_link_group *lgr = conn->lgr;
+ 	spinlock_t *lgr_lock;
+ 
+ 	if (!lgr)
+ 		return;
+ 
+-	smc_conn_free(conn);
+ 	smc_lgr_list_head(lgr, &lgr_lock);
+ 	spin_lock_bh(lgr_lock);
+ 	/* do not use this link group for new connections */
+@@ -1832,8 +1832,10 @@ create:
+ 		write_lock_bh(&lgr->conns_lock);
+ 		rc = smc_lgr_register_conn(conn, true);
+ 		write_unlock_bh(&lgr->conns_lock);
+-		if (rc)
++		if (rc) {
++			smc_lgr_cleanup_early(lgr);
+ 			goto out;
++		}
+ 	}
+ 	conn->local_tx_ctrl.common.type = SMC_CDC_MSG_TYPE;
+ 	conn->local_tx_ctrl.len = SMC_WR_TX_SIZE;
+diff --git a/net/smc/smc_core.h b/net/smc/smc_core.h
+index d63b08274197e..73d0c35d3eb77 100644
+--- a/net/smc/smc_core.h
++++ b/net/smc/smc_core.h
+@@ -468,7 +468,7 @@ static inline void smc_set_pci_values(struct pci_dev *pci_dev,
+ struct smc_sock;
+ struct smc_clc_msg_accept_confirm;
+ 
+-void smc_lgr_cleanup_early(struct smc_connection *conn);
++void smc_lgr_cleanup_early(struct smc_link_group *lgr);
+ void smc_lgr_terminate_sched(struct smc_link_group *lgr);
+ void smcr_port_add(struct smc_ib_device *smcibdev, u8 ibport);
+ void smcr_port_err(struct smc_ib_device *smcibdev, u8 ibport);
 -- 
 2.34.1
 

@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF98849A70E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6306F49A2F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:01:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3422843AbiAYCcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:32:15 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59406 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356881AbiAXUVT (ORCPT
+        id S2366034AbiAXXwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:52:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45342 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354678AbiAXW4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:21:19 -0500
+        Mon, 24 Jan 2022 17:56:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE0FC055AAB;
+        Mon, 24 Jan 2022 13:11:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B892B8119E;
-        Mon, 24 Jan 2022 20:21:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50745C340E7;
-        Mon, 24 Jan 2022 20:21:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7346F6141C;
+        Mon, 24 Jan 2022 21:11:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5024DC340E5;
+        Mon, 24 Jan 2022 21:11:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055676;
-        bh=qNBywZO7Q40NSzdO4zwsqXT66WdGUyNv/559Vflwzns=;
+        s=korg; t=1643058673;
+        bh=MR0DDHmEUnRhfhkZtXdtcXdk3sQQ2ZdHmzsTEcDQPNw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wMPO5aJM8mh02WfGsrVrnI5wFiHEIAj6ho2HuRxeOOfEf4ihCyZc17Ds4BjuLQeVg
-         LJ58JP5QUeXXN93YJ3P3VBfY94C+mDfVtCp1Rve0LWpnDYaIyP25zbuMJ+Nw0BKXGm
-         Xb6Bsd8Rkq5GCiQ+XrtNS25N3c4JFmxFkppwYfCM=
+        b=gjXCB/wkjjsm/soO9GkVM5v4pys5Ie/C50DMxeyUihlJ5WgFbQg5bRbh6Ck+aO1++
+         P8yFGFpN8YY688vH8YpzbSt1KDE4xkRaSgBFwAxtgwFcxsUUTTfknDlTgxZcS8netI
+         OzabdorQcoyoL21PlXK326g3hRuTiYN2xKHRzAoY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 230/846] selftests: harness: avoid false negatives if test has no ASSERTs
-Date:   Mon, 24 Jan 2022 19:35:47 +0100
-Message-Id: <20220124184108.860093984@linuxfoundation.org>
+Subject: [PATCH 5.16 0364/1039] ACPI: scan: Create platform device for BCM4752 and LNV4752 ACPI nodes
+Date:   Mon, 24 Jan 2022 19:35:53 +0100
+Message-Id: <20220124184137.521769259@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,38 +49,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 3abedf4646fdc0036fcb8ebbc3b600667167fafe ]
+[ Upstream commit f85196bdd5a50da74670250564740fc852b3c239 ]
 
-Test can fail either immediately when ASSERT() failed or at the
-end if one or more EXPECT() was not met. The exact return code
-is decided based on the number of successful ASSERT()s.
+BCM4752 and LNV4752 ACPI nodes describe a Broadcom 4752 GPS module
+attached to an UART of the system.
 
-If test has no ASSERT()s, however, the return code will be 0,
-as if the test did not fail. Start counting ASSERT()s from 1.
+The GPS modules talk a custom protocol which only works with a closed-
+source Android gpsd daemon which knows this protocol.
 
-Fixes: 369130b63178 ("selftests: Enhance kselftest_harness.h to print which assert failed")
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+The ACPI nodes also describe GPIOs to turn the GPS on/off these are
+handled by the net/rfkill/rfkill-gpio.c code. This handling predates the
+addition of enumeration of ACPI instantiated serdevs to the kernel and
+was broken by that addition, because the ACPI scan code now no longer
+instantiates platform_device-s for these nodes.
+
+Rename the i2c_multi_instantiate_ids HID list to ignore_serial_bus_ids
+and add the BCM4752 and LNV4752 HIDs, so that rfkill-gpio gets
+a platform_device to bind to again; and so that a tty cdev for gpsd
+gets created for these.
+
+Fixes: e361d1f85855 ("ACPI / scan: Fix enumeration for special UART devices")
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/kselftest_harness.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/scan.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index ae0f0f33b2a6e..79a182cfa43ad 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -969,7 +969,7 @@ void __run_test(struct __fixture_metadata *f,
- 	t->passed = 1;
- 	t->skip = 0;
- 	t->trigger = 0;
--	t->step = 0;
-+	t->step = 1;
- 	t->no_print = 0;
- 	memset(t->results->reason, 0, sizeof(t->results->reason));
+diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+index 2c80765670bc7..25d9f04f19959 100644
+--- a/drivers/acpi/scan.c
++++ b/drivers/acpi/scan.c
+@@ -1695,6 +1695,7 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
+ {
+ 	struct list_head resource_list;
+ 	bool is_serial_bus_slave = false;
++	static const struct acpi_device_id ignore_serial_bus_ids[] = {
+ 	/*
+ 	 * These devices have multiple I2cSerialBus resources and an i2c-client
+ 	 * must be instantiated for each, each with its own i2c_device_id.
+@@ -1703,11 +1704,18 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
+ 	 * drivers/platform/x86/i2c-multi-instantiate.c driver, which knows
+ 	 * which i2c_device_id to use for each resource.
+ 	 */
+-	static const struct acpi_device_id i2c_multi_instantiate_ids[] = {
+ 		{"BSG1160", },
+ 		{"BSG2150", },
+ 		{"INT33FE", },
+ 		{"INT3515", },
++	/*
++	 * HIDs of device with an UartSerialBusV2 resource for which userspace
++	 * expects a regular tty cdev to be created (instead of the in kernel
++	 * serdev) and which have a kernel driver which expects a platform_dev
++	 * such as the rfkill-gpio driver.
++	 */
++		{"BCM4752", },
++		{"LNV4752", },
+ 		{}
+ 	};
  
+@@ -1721,8 +1729,7 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
+ 	     fwnode_property_present(&device->fwnode, "baud")))
+ 		return true;
+ 
+-	/* Instantiate a pdev for the i2c-multi-instantiate drv to bind to */
+-	if (!acpi_match_device_ids(device, i2c_multi_instantiate_ids))
++	if (!acpi_match_device_ids(device, ignore_serial_bus_ids))
+ 		return false;
+ 
+ 	INIT_LIST_HEAD(&resource_list);
 -- 
 2.34.1
 

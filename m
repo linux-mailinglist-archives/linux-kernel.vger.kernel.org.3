@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6BE8498D5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:34:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81131498AFF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352974AbiAXTbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:31:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348058AbiAXTXZ (ORCPT
+        id S1345243AbiAXTIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:08:54 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59288 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345003AbiAXTCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:23:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658B1C06125A;
-        Mon, 24 Jan 2022 11:11:03 -0800 (PST)
+        Mon, 24 Jan 2022 14:02:31 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 23B61B81235;
-        Mon, 24 Jan 2022 19:11:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37EAFC340E7;
-        Mon, 24 Jan 2022 19:10:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2A3A1B8122C;
+        Mon, 24 Jan 2022 19:02:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36388C340E7;
+        Mon, 24 Jan 2022 19:02:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051460;
-        bh=WIhonFUuLPDgILEzIj8zMYalQ6tBoRgyQ7YNS/mS6RA=;
+        s=korg; t=1643050948;
+        bh=QaK4PqTesDZysa0f8zUBvmQkPai+vOO0lmowdkVMUL0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jyLgYGm2WIV9aQhbilpkoWfgwj4jPkNQ5i/9MRNYJL99448ajVWso02HEV7ODO9Yh
-         gpsCKYeIDeyDAdjqzvfrQxbaBdUh/r6lFM+LPE2wdg+b9nxs+h5wiWAZJymVBjMEIx
-         K8Pa8FxBCpIGwkbV4Wim9rn5q7VVexH3IQy8V2go=
+        b=o2Eb4J0eLdwaZfd2Ns5P2lNx43B5GVA9lI7+2eUYpl6e4ceeM3kcG8tPsEAHQRYhJ
+         hOHUwAvOZRELv3FaNi3Jso6S1NWQVlu9GVnY0OXZEm0bCuOsaE3yFFC+tgJFotAM0T
+         gpy8UCjn4UnI6ANhW66vxygr5EVkStSfMT2yVFUc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.14 169/186] net: axienet: fix number of TX ring slots for available check
-Date:   Mon, 24 Jan 2022 19:44:04 +0100
-Message-Id: <20220124183942.553407222@linuxfoundation.org>
+        David Stevens <stevensd@google.com>, 3pvd@google.com,
+        Jann Horn <jannh@google.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>,
+        Ben Hutchings <ben@decadent.org.uk>
+Subject: [PATCH 4.9 155/157] KVM: do not assume PTE is writable after follow_pfn
+Date:   Mon, 24 Jan 2022 19:44:05 +0100
+Message-Id: <20220124183937.673291168@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,41 +48,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Paolo Bonzini <pbonzini@redhat.com>
 
-commit aba57a823d2985a2cc8c74a2535f3a88e68d9424 upstream.
+commit bd2fae8da794b55bf2ac02632da3a151b10e664c upstream.
 
-The check for the number of available TX ring slots was off by 1 since a
-slot is required for the skb header as well as each fragment. This could
-result in overwriting a TX ring slot that was still in use.
+In order to convert an HVA to a PFN, KVM usually tries to use
+the get_user_pages family of functinso.  This however is not
+possible for VM_IO vmas; in that case, KVM instead uses follow_pfn.
 
-Fixes: 8a3b7a252dca9 ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+In doing this however KVM loses the information on whether the
+PFN is writable.  That is usually not a problem because the main
+use of VM_IO vmas with KVM is for BARs in PCI device assignment,
+however it is a bug.  To fix it, use follow_pte and check pte_write
+while under the protection of the PTE lock.  The information can
+be used to fail hva_to_pfn_remapped or passed back to the
+caller via *writable.
+
+Usage of follow_pfn was introduced in commit add6a0cd1c5b ("KVM: MMU: try to fix
+up page faults before giving up", 2016-07-05); however, even older version
+have the same issue, all the way back to commit 2e2e3738af33 ("KVM:
+Handle vma regions with no backing page", 2008-07-20), as they also did
+not check whether the PFN was writable.
+
+Fixes: 2e2e3738af33 ("KVM: Handle vma regions with no backing page")
+Reported-by: David Stevens <stevensd@google.com>
+Cc: 3pvd@google.com
+Cc: Jann Horn <jannh@google.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: stable@vger.kernel.org
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+[OP: backport to 4.19, adjust follow_pte() -> follow_pte_pmd()]
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[bwh: Backport to 4.9: follow_pte_pmd() does not take start or end
+ parameters]
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/xilinx/xilinx_axienet_main.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ virt/kvm/kvm_main.c |   15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
---- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-@@ -682,7 +682,7 @@ axienet_start_xmit(struct sk_buff *skb,
- 	num_frag = skb_shinfo(skb)->nr_frags;
- 	cur_p = &lp->tx_bd_v[lp->tx_bd_tail];
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -1519,9 +1519,11 @@ static int hva_to_pfn_remapped(struct vm
+ 			       kvm_pfn_t *p_pfn)
+ {
+ 	unsigned long pfn;
++	pte_t *ptep;
++	spinlock_t *ptl;
+ 	int r;
  
--	if (axienet_check_tx_bd_space(lp, num_frag)) {
-+	if (axienet_check_tx_bd_space(lp, num_frag + 1)) {
- 		if (netif_queue_stopped(ndev))
- 			return NETDEV_TX_BUSY;
+-	r = follow_pfn(vma, addr, &pfn);
++	r = follow_pte_pmd(vma->vm_mm, addr, &ptep, NULL, &ptl);
+ 	if (r) {
+ 		/*
+ 		 * get_user_pages fails for VM_IO and VM_PFNMAP vmas and does
+@@ -1536,14 +1538,19 @@ static int hva_to_pfn_remapped(struct vm
+ 		if (r)
+ 			return r;
  
-@@ -692,7 +692,7 @@ axienet_start_xmit(struct sk_buff *skb,
- 		smp_mb();
+-		r = follow_pfn(vma, addr, &pfn);
++		r = follow_pte_pmd(vma->vm_mm, addr, &ptep, NULL, &ptl);
+ 		if (r)
+ 			return r;
++	}
  
- 		/* Space might have just been freed - check again */
--		if (axienet_check_tx_bd_space(lp, num_frag))
-+		if (axienet_check_tx_bd_space(lp, num_frag + 1))
- 			return NETDEV_TX_BUSY;
++	if (write_fault && !pte_write(*ptep)) {
++		pfn = KVM_PFN_ERR_RO_FAULT;
++		goto out;
+ 	}
  
- 		netif_wake_queue(ndev);
+ 	if (writable)
+-		*writable = true;
++		*writable = pte_write(*ptep);
++	pfn = pte_pfn(*ptep);
+ 
+ 	/*
+ 	 * Get a reference here because callers of *hva_to_pfn* and
+@@ -1558,6 +1565,8 @@ static int hva_to_pfn_remapped(struct vm
+ 	 */ 
+ 	kvm_get_pfn(pfn);
+ 
++out:
++	pte_unmap_unlock(ptep, ptl);
+ 	*p_pfn = pfn;
+ 	return 0;
+ }
 
 

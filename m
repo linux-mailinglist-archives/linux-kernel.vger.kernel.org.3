@@ -2,43 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E258499B71
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4174995DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:14:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1575644AbiAXVwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:52:10 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38074 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447080AbiAXVTI (ORCPT
+        id S1443384AbiAXU4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:56:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39394 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345513AbiAXUeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:19:08 -0500
+        Mon, 24 Jan 2022 15:34:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5453C07E2B4;
+        Mon, 24 Jan 2022 11:47:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E062B811FB;
-        Mon, 24 Jan 2022 21:19:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41B23C340E4;
-        Mon, 24 Jan 2022 21:19:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9BDE7B811FB;
+        Mon, 24 Jan 2022 19:47:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1E04C340E5;
+        Mon, 24 Jan 2022 19:47:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059144;
-        bh=IRR7woKXRTUuwAj7dh3xDIZETJ6KdYf3GLSVPriOUYc=;
+        s=korg; t=1643053660;
+        bh=dKB+66OEFYLtY2vwiuFxKSq1TWOn9R5HhTm/Y3CAfr8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kKdqxAVCqAYqMe/47QtWUfd54Dl6R1kqSRmDp1LXZyl7MHSBsIjouXj89ZDiZbJgG
-         jL3Fe5ebgIUS+DbM2/ZyPGYHDt8azBPnhvdXj7LKi/slNIKyCG715BmUrdlE5t9GL1
-         ZvA2cgKlhVVNKOWumSaoCrgECpycASXKffYc7CwY=
+        b=izDFkG76I3zTbg+mc/rLPGSR2EwHESwlZttb0cL3tEHFX6cvCyzD1BKwpxg3c423I
+         NMoKrYq4flAoPspGu0JxGvkKYYMT5AWxZtAUhOW2mHXaGGpuVkayfAwK/ac5m1A/re
+         kMa5rKKi9521l+mzaosrjbyao0thAnMbe3Sk6VgE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0511/1039] ASoC: samsung: idma: Check of ioremap return value
+Subject: [PATCH 5.10 135/563] sched/fair: Fix per-CPU kthread and wakee stacking for asym CPU capacity
 Date:   Mon, 24 Jan 2022 19:38:20 +0100
-Message-Id: <20220124184142.463537167@linuxfoundation.org>
+Message-Id: <20220124184029.069413824@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,38 +52,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Vincent Donnefort <vincent.donnefort@arm.com>
 
-[ Upstream commit 3ecb46755eb85456b459a1a9f952c52986bce8ec ]
+[ Upstream commit 014ba44e8184e1acf93e0cbb7089ee847802f8f0 ]
 
-Because of the potential failure of the ioremap(), the buf->area could
-be NULL.
-Therefore, we need to check it and return -ENOMEM in order to transfer
-the error.
+select_idle_sibling() has a special case for tasks woken up by a per-CPU
+kthread where the selected CPU is the previous one. For asymmetric CPU
+capacity systems, the assumption was that the wakee couldn't have a
+bigger utilization during task placement than it used to have during the
+last activation. That was not considering uclamp.min which can completely
+change between two task activations and as a consequence mandates the
+fitness criterion asym_fits_capacity(), even for the exit path described
+above.
 
-Fixes: f09aecd50f39 ("ASoC: SAMSUNG: Add I2S0 internal dma driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Link: https://lore.kernel.org/r/20211228034026.1659385-1-jiasheng@iscas.ac.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: b4c9c9f15649 ("sched/fair: Prefer prev cpu in asymmetric wakeup path")
+Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Link: https://lkml.kernel.org/r/20211129173115.4006346-1-vincent.donnefort@arm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/samsung/idma.c | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/sched/fair.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/samsung/idma.c b/sound/soc/samsung/idma.c
-index 66bcc2f97544b..c3f1b054e2389 100644
---- a/sound/soc/samsung/idma.c
-+++ b/sound/soc/samsung/idma.c
-@@ -360,6 +360,8 @@ static int preallocate_idma_buffer(struct snd_pcm *pcm, int stream)
- 	buf->addr = idma.lp_tx_addr;
- 	buf->bytes = idma_hardware.buffer_bytes_max;
- 	buf->area = (unsigned char * __force)ioremap(buf->addr, buf->bytes);
-+	if (!buf->area)
-+		return -ENOMEM;
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index a7589552be5fc..2a33cb5a10e59 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -6286,7 +6286,8 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+ 	if (is_per_cpu_kthread(current) &&
+ 	    in_task() &&
+ 	    prev == smp_processor_id() &&
+-	    this_rq()->nr_running <= 1) {
++	    this_rq()->nr_running <= 1 &&
++	    asym_fits_capacity(task_util, prev)) {
+ 		return prev;
+ 	}
  
- 	return 0;
- }
 -- 
 2.34.1
 

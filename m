@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9183949A128
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B31E8499DE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:04:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1849838AbiAXX0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:26:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
+        id S1586582AbiAXW05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:26:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1835912AbiAXWhq (ORCPT
+        with ESMTP id S1390829AbiAXVM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:37:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F9BC054863;
-        Mon, 24 Jan 2022 12:59:28 -0800 (PST)
+        Mon, 24 Jan 2022 16:12:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA0BC06E000;
+        Mon, 24 Jan 2022 12:10:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 529D5B811A9;
-        Mon, 24 Jan 2022 20:59:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B35C340E5;
-        Mon, 24 Jan 2022 20:59:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69219611CD;
+        Mon, 24 Jan 2022 20:10:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A4FFC340E7;
+        Mon, 24 Jan 2022 20:10:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057966;
-        bh=KhFuWy6pIgFqeK/ZBpQXBDs+iXmN2Kr+UX1z8tFIAGE=;
+        s=korg; t=1643055015;
+        bh=fdw1b/O5jRA9uMPseswenIy2CXbtFeNmPjVBedmsMlQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qNVkHIOgSvNqL/49xO2xzzVtxJnXYo/XDwmz03w6+Yh/WomJUaGC+k7l5qynnk4+f
-         yfYuIFYhnzL5A5IXQpV5zTOaK9++8uNjOJCv9sCJHtmeZtM0+jbkYi1FTI28KHFrw2
-         eY3ug/l+KjrttxB++Q5sYojpRmPEyjhsyPX8syzI=
+        b=td2SgnJ0OWxhx+8fUUPIAPGyb5LD4SNc7IKWJdA1sL4PWqrYo+yjVY3Si+edSz/Sf
+         2SAFl7DqKF1SP484HOjBxAN7P/KrOAdgqHRotzEWeZrc8pkwbAUBhobPa09/U5oUjT
+         eZ8EC+9VM51IIwg6kFOaHEJYPgh7147y0XgS+JI4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0138/1039] memory: renesas-rpc-if: Return error in case devm_ioremap_resource() fails
-Date:   Mon, 24 Jan 2022 19:32:07 +0100
-Message-Id: <20220124184129.813519102@linuxfoundation.org>
+        Stefan Riedmueller <s.riedmueller@phytec.de>,
+        Han Xu <han.xu@nxp.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH 5.15 014/846] mtd: rawnand: gpmi: Remove explicit default gpmi clock setting for i.MX6
+Date:   Mon, 24 Jan 2022 19:32:11 +0100
+Message-Id: <20220124184101.407137179@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,40 +50,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Stefan Riedmueller <s.riedmueller@phytec.de>
 
-[ Upstream commit 818fdfa89baac77a8df5a2c30f4fb798cc937aa0 ]
+commit aa1baa0e6c1aa4872e481dce4fc7fd6f3dd8496b upstream.
 
-Make sure we return error in case devm_ioremap_resource() fails for dirmap
-resource.
+There is no need to explicitly set the default gpmi clock rate during
+boot for the i.MX 6 since this is done during nand_detect anyway.
 
-Fixes: ca7d8b980b67 ("memory: add Renesas RPC-IF driver")
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/20211025205631.21151-6-prabhakar.mahadev-lad.rj@bp.renesas.com
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
+Cc: stable@vger.kernel.org
+Acked-by: Han Xu <han.xu@nxp.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20211102202022.15551-1-ceggers@arri.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/memory/renesas-rpc-if.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c |    9 ---------
+ 1 file changed, 9 deletions(-)
 
-diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
-index 7435baad00075..ff8bcbccac637 100644
---- a/drivers/memory/renesas-rpc-if.c
-+++ b/drivers/memory/renesas-rpc-if.c
-@@ -243,7 +243,7 @@ int rpcif_sw_init(struct rpcif *rpc, struct device *dev)
- 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dirmap");
- 	rpc->dirmap = devm_ioremap_resource(&pdev->dev, res);
- 	if (IS_ERR(rpc->dirmap))
--		rpc->dirmap = NULL;
-+		return PTR_ERR(rpc->dirmap);
- 	rpc->size = resource_size(res);
+--- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
++++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+@@ -1054,15 +1054,6 @@ static int gpmi_get_clks(struct gpmi_nan
+ 		r->clock[i] = clk;
+ 	}
  
- 	rpc->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
--- 
-2.34.1
-
+-	if (GPMI_IS_MX6(this))
+-		/*
+-		 * Set the default value for the gpmi clock.
+-		 *
+-		 * If you want to use the ONFI nand which is in the
+-		 * Synchronous Mode, you should change the clock as you need.
+-		 */
+-		clk_set_rate(r->clock[0], 22000000);
+-
+ 	return 0;
+ 
+ err_clock:
 
 

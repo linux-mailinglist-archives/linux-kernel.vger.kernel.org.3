@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F914999BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C38E84999DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:47:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1455999AbiAXVhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:37:04 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55586 "EHLO
+        id S1456238AbiAXViQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:38:16 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55618 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444767AbiAXVBc (ORCPT
+        with ESMTP id S1444771AbiAXVBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:01:32 -0500
+        Mon, 24 Jan 2022 16:01:33 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 827B5B81063;
-        Mon, 24 Jan 2022 21:01:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B814BC340E5;
-        Mon, 24 Jan 2022 21:01:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7E5E0B81233;
+        Mon, 24 Jan 2022 21:01:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97445C340E5;
+        Mon, 24 Jan 2022 21:01:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058088;
-        bh=BEB192YSk8J7M70ks8jXvP3kVrZQ28TXQvGWZkv04+k=;
+        s=korg; t=1643058091;
+        bh=zikkDb5E0yQAxePuAHSQ7wRITvp+edAuiWAtjoerU2k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N2UdX3pGZSDM/lDL/AJDOgi1Ko7jvZdnfy0IieA8s0QBTx5LfdM0H6sC6oJB1pY3U
-         iohkoNVI7LSYUya29hJohZ0AM1WczxJKjOTXKej+bhcJokK3RwL2S6DVDmSG1MQodX
-         TguAgOAnUBqiisd6eTmfq4QG/5X3cpb0FKSM3Du4=
+        b=bWQsTROrasDxrLGfPk9xoNlRQ90hB+y/HNy7BP4OaqOaqsAstxZE01coqxdkIYxc8
+         xyVMca/qaEXQcWVriIRV3yks+QQAud6TZTLIDf96viyR8jSsUap31myl9006SKQDk6
+         hSeyQ4akFOFllVn+oBq0CxdWaQC2/h12IE75cuHw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Richard Genoud <richard.genoud@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0177/1039] tty: serial: atmel: Check return code of dmaengine_submit()
-Date:   Mon, 24 Jan 2022 19:32:46 +0100
-Message-Id: <20220124184131.217361811@linuxfoundation.org>
+Subject: [PATCH 5.16 0178/1039] tty: serial: atmel: Call dma_async_issue_pending()
+Date:   Mon, 24 Jan 2022 19:32:47 +0100
+Message-Id: <20220124184131.256776519@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -49,55 +48,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Tudor Ambarus <tudor.ambarus@microchip.com>
 
-[ Upstream commit 1e67bd2b8cb90b66e89562598e9c2046246832d3 ]
+[ Upstream commit 4f4b9b5895614eb2e2b5f4cab7858f44bd113e1b ]
 
-The tx_submit() method of struct dma_async_tx_descriptor is entitled
-to do sanity checks and return errors if encountered. It's not the
-case for the DMA controller drivers that this client is using
-(at_h/xdmac), because they currently don't do sanity checks and always
-return a positive cookie at tx_submit() method. In case the controller
-drivers will implement sanity checks and return errors, print a message
-so that the client will be informed that something went wrong at
-tx_submit() level.
+The driver wrongly assummed that tx_submit() will start the transfer,
+which is not the case, now that the at_xdmac driver is fixed. tx_submit
+is supposed to push the current transaction descriptor to a pending queue,
+waiting for issue_pending to be called. issue_pending must start the
+transfer, not tx_submit.
 
+Fixes: 34df42f59a60 ("serial: at91: add rx dma support")
 Fixes: 08f738be88bb ("serial: at91: add tx dma support")
 Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Acked-by: Richard Genoud <richard.genoud@gmail.com>
-Link: https://lore.kernel.org/r/20211125090028.786832-3-tudor.ambarus@microchip.com
+Link: https://lore.kernel.org/r/20211125090028.786832-4-tudor.ambarus@microchip.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/atmel_serial.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/tty/serial/atmel_serial.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-index 2c99a47a25357..376f7a9c2868a 100644
+index 376f7a9c2868a..269b4500e9e78 100644
 --- a/drivers/tty/serial/atmel_serial.c
 +++ b/drivers/tty/serial/atmel_serial.c
-@@ -1004,6 +1004,11 @@ static void atmel_tx_dma(struct uart_port *port)
- 		desc->callback = atmel_complete_tx_dma;
- 		desc->callback_param = atmel_port;
- 		atmel_port->cookie_tx = dmaengine_submit(desc);
-+		if (dma_submit_error(atmel_port->cookie_tx)) {
-+			dev_err(port->dev, "dma_submit_error %d\n",
-+				atmel_port->cookie_tx);
-+			return;
-+		}
+@@ -1009,6 +1009,8 @@ static void atmel_tx_dma(struct uart_port *port)
+ 				atmel_port->cookie_tx);
+ 			return;
+ 		}
++
++		dma_async_issue_pending(chan);
  	}
  
  	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
-@@ -1258,6 +1263,11 @@ static int atmel_prepare_rx_dma(struct uart_port *port)
- 	desc->callback_param = port;
- 	atmel_port->desc_rx = desc;
- 	atmel_port->cookie_rx = dmaengine_submit(desc);
-+	if (dma_submit_error(atmel_port->cookie_rx)) {
-+		dev_err(port->dev, "dma_submit_error %d\n",
-+			atmel_port->cookie_rx);
-+		goto chan_err;
-+	}
+@@ -1269,6 +1271,8 @@ static int atmel_prepare_rx_dma(struct uart_port *port)
+ 		goto chan_err;
+ 	}
  
++	dma_async_issue_pending(atmel_port->chan_rx);
++
  	return 0;
  
+ chan_err:
 -- 
 2.34.1
 

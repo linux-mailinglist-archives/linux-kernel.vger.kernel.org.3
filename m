@@ -2,87 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6890D4977AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 04:27:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8EE54977B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 04:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241045AbiAXD1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 22:27:54 -0500
-Received: from mswedge1.sunplus.com ([60.248.182.113]:60700 "EHLO
-        mg.sunplus.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S241038AbiAXD1x (ORCPT
+        id S241057AbiAXDae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 22:30:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56108 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241038AbiAXDad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 22:27:53 -0500
-X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
-        ,3)
-Received: from 172.17.9.112
-        by mg01.sunplus.com with MailGates ESMTP Server V5.0(11311:0:AUTH_RELAY)
-        (envelope-from <lh.Kuo@sunplus.com>); Mon, 24 Jan 2022 11:27:51 +0800 (CST)
-Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
- sphcmbx02.sunplus.com.tw (172.17.9.112) with Microsoft SMTP Server (TLS) id
- 15.0.1497.26; Mon, 24 Jan 2022 11:27:45 +0800
-Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
- sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
- 15.00.1497.026; Mon, 24 Jan 2022 11:27:45 +0800
-From:   =?utf-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Li-hao Kuo <lhjeff911@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Subject: RE: [PATCH v6 1/2] spi: Add spi driver for Sunplus SP7021
-Thread-Topic: [PATCH v6 1/2] spi: Add spi driver for Sunplus SP7021
-Thread-Index: AQHYDEdoNQA4Z8mYU0mSuzI8gOIgg6xqY3GAgAE/t3D//4TFAIABjwHAgAAISoCABMfgEA==
-Date:   Mon, 24 Jan 2022 03:27:45 +0000
-Message-ID: <638055e6c4dd4f66bab98c12bd5bd74a@sphcmbx02.sunplus.com.tw>
-References: <cover.1642494310.git.lhjeff911@gmail.com>
- <37998e515d561e762ee30d0ac4fca25a948e0c5c.1642494310.git.lhjeff911@gmail.com>
- <CAHp75VdKc3UDzaqM2G5J5+G90U6Spqyhz_vuOYKhqJ4V-uf=wg@mail.gmail.com>
- <a354d7c1dce4463ea57706dd5443fe7a@sphcmbx02.sunplus.com.tw>
- <CAHp75VcCpye1u3+PK=C3CT8fMHPSOsXTL5AhbLVy0YyGWfyfkQ@mail.gmail.com>
- <ee5838c307f84bb99ace070292167a26@sphcmbx02.sunplus.com.tw>
- <CAHp75VcmFPCC0kDxOma6gunwFRf-eXEr6+ZxQs1dt5GH2quT4Q@mail.gmail.com>
-In-Reply-To: <CAHp75VcmFPCC0kDxOma6gunwFRf-eXEr6+ZxQs1dt5GH2quT4Q@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [172.25.108.51]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Sun, 23 Jan 2022 22:30:33 -0500
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F025C06173B;
+        Sun, 23 Jan 2022 19:30:32 -0800 (PST)
+Received: by mail-pj1-x1043.google.com with SMTP id d5so12651565pjk.5;
+        Sun, 23 Jan 2022 19:30:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RX6Av1jIiyqXvZYjcpZEeGLsyORkpiw+PH/GcVKGsHk=;
+        b=TVighjXmld8xjrLsacTJCmUi8xhvnHU+SU2zVkR93VRMOoaA5A+oScrkxaodwFq50j
+         78/84wVestiPhMtV2WWr3chJ1UgTcgLk21X1vCXpcT9tjr6Isqd3Aq88uLTDu4l6QeTO
+         p2FqyiqbFX6Vqh88Hxkswi+eXed7BvZ5NmtHAMAXow3ydduW6bWMnZBn6EExFHWi9tpK
+         CQpBl3KoSRE93i6HsJw1reE+KifNt06FM+UG0NVK6AXRBikPLAJt6SQSMExulX9fcCVv
+         cHvmrh8L3NxdjvkxG7HfsSoA81UzF1MR9ckRBb27O8nll8mJvC2UkOUIDXYYA+mNcIQe
+         16EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RX6Av1jIiyqXvZYjcpZEeGLsyORkpiw+PH/GcVKGsHk=;
+        b=MUzGXrhvvj6i1YKDjDZYkqWeB5hKrqGfyEBN2QpZiaWWbu7Q3oNLzUmGMKGQkhUkAM
+         /Ho18jAuwfkW74TOjYzFnOM9fZdu71sMzR4+VCv2oZJWYXI9bc56/qIP41m/FqqJ+6VV
+         Xa19xsIMSs5GY9j97XzrhVyeKENxjU0qHHNEJOqc0ew+xu6BWNDlYqSimQ5YY5CWSGqs
+         fmegjVUC964dljPxPv0k87gHmJIHInnYAKhY38hcESqzkQGQvqv6zD3CaMb6C+dfpmmw
+         fOhyFsFmSsyvw7RnT0MtS6D0wxDZvUA2Ng4OzejpaV7W4FTQsEcw+9C34qmVcXrCEnU/
+         wpWQ==
+X-Gm-Message-State: AOAM533pkZiBnIUkSoMKNweN9aB6ferfAllNMv+Eql8BjvnYPWHyQrGB
+        tXfPz8rRmeIZBKS+DQFNXIc=
+X-Google-Smtp-Source: ABdhPJxrBHaemBkBFmBL3KV9+t104TL5EBzibAlxur7Q5S263lmO2RJah0zWLOE2BsDv4OW4o3DJSQ==
+X-Received: by 2002:a17:90b:3a85:: with SMTP id om5mr56077pjb.150.1642995032168;
+        Sun, 23 Jan 2022 19:30:32 -0800 (PST)
+Received: from slim.das-security.cn ([103.84.139.53])
+        by smtp.gmail.com with ESMTPSA id g5sm11178639pjj.36.2022.01.23.19.30.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Jan 2022 19:30:31 -0800 (PST)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     jpr@f6fbb.org, davem@davemloft.net, kuba@kernel.org,
+        wang6495@umn.edu
+Cc:     linux-hams@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH] yam: fix a memory leak in yam_siocdevprivate()
+Date:   Mon, 24 Jan 2022 11:29:54 +0800
+Message-Id: <20220124032954.18283-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiA+ID4gPiA+ID4gKyAgICAgICBpZiAoeGZlci0+dHhfYnVmKQ0KPiA+ID4gPiA+ID4gKyAgICAg
-ICAgICAgICAgIGRtYV91bm1hcF9zaW5nbGUoZGV2LCB4ZmVyLT50eF9kbWEsIHhmZXItPmxlbiwg
-RE1BX1RPX0RFVklDRSk7DQo+ID4gPiA+ID4gPiArICAgICAgIGlmICh4ZmVyLT5yeF9idWYpDQo+
-ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgZG1hX3VubWFwX3NpbmdsZShkZXYsIHhmZXItPnJ4
-X2RtYSwgeGZlci0+bGVuLA0KPiA+ID4gPiA+ID4gKyBETUFfRlJPTV9ERVZJQ0UpOw0KPiA+ID4g
-PiA+DQo+ID4gPiA+ID4gV2h5IGNhbid0IHlvdSB1c2UgU1BJIGNvcmUgRE1BIG1hcHBpbmcgY29k
-ZT8NCj4gPiA+ID4NCj4gPiA+ID4gSSBkaWRuJ3QgZmluZCB0aGUgU1BJIGNvcmUgRE1BIG1hcHBp
-bmcgY29kZSBmb3Igc2luZ2xlIG1hcGluZy4NCj4gPiA+ID4gVGhlIG1ldGhvZCBjdXJyZW50bHkg
-dXNlZCBpcyB0aGUgZ2VuZXJhbCBETUEgc2luZ2xlLW1hcCBjb2RlIHVzYWdlIG1ldGhvZC4NCj4g
-PiA+DQo+ID4gPiBXaHkgZG8geW91IG5lZWQgc2luZ2xlIHBhZ2UgbWFwcGluZz8NCj4gPiA+IFdo
-YXQncyB3cm9uZyB3aXRoIFNHIG1hcHBpbmcgdGhhdCBTUEkgY29yZSBwcm92aWRlcz8NCj4gPg0K
-PiA+IFNQNzAyMSBTUEkgc2xhdmUgZG1hIG9ubHkgc3VwcG9ydHMgc2luZ2xlIGRtYSBpbiBvbmUg
-dHJpZ2dlci4NCj4gPiBJdCBpcyBub3Qgc3VpdGFibGUgZm9yIHVzaW5nIFNHIG1hcHBpbmcuDQo+
-ID4gSWYgdGhlIGxlbmd0aCBvZiB0aGUgdHJhbnNmZXIgaXMgbGFyZ2VyIHRoYW4gdGhlIGxlbmd0
-aCBvZiB0aGUNCj4gPiBTRy1tYXBwaW5nLCBTbGF2ZS1tb2RlIHdpbGwgZ2V0IGVycm9yIGluIHRo
-ZSB0cmFuc2Zlci4NCj4gDQo+IFNhbWUgc3RvcnkgZm9yIFNQSSBEZXNpZ25XYXJlIG9uIEludGVs
-IE1lZGZpZWxkLCB3aGVyZSBubyBTRyB0cmFuc2ZlcnMgYXJlIHN1cHBvcnRlZCBieSBoYXJkd2Fy
-ZS4NCj4gTmV2ZXJ0aGVsZXNzLCB0aGUgRE1BIGRyaXZlciB0YWtlcyBjYXJlIG9mIHRoaXMgYW5k
-IG9uIGVhY2ggaW50ZXJydXB0IHJlY2hhcmdlcyBhIGNoYW5uZWwgdG8gY29udGludWUuDQo+IFdo
-eSBjYW4ndCB0aGUgc2FtZSBiZSBpbXBsZW1lbnRlZCBoZXJlPw0KPiANCj4gDQpJIHRoaW5rIGl0
-IHNob3VsZCB3b3JrIGluIG1hc3Rlci4gc3BpIG1hc3RlciBtdXN0IGFjdGl2ZWx5IHNlbmQgY2xr
-IGFuZCBkYXRlIHRvIHNsYXZlIGRldmljZS4NCkFuZCB5ZXMsIGluIHRoZSAibWFzdGVyIiBtb2Rl
-IGl0IGNhbiBoYW5kbGUgU0ctRE1BIG9uIGVhY2ggaW50ZXJydXB0Lg0KQnV0IGlmIHdvcmtpbmcg
-aW4gInNsYXZlIiBtb2RlLCB0aGUgbWFzdGVyIHdpbGwgbm90IGtub3cgdGhlIHN0YXRlIG9mIHRo
-ZSBzbGF2ZS4gU2xhdmVzIHdvcmsgb24gaW50ZXJydXB0IGFuZCByZWNoYXJnZSBjaGFubmVscy4N
-CldoZW4gbWFzdGVyIHNlbmQgY2xrIGFuZCBkYXRlIGluIHRoZSBzYW1lIHRpbWUuIEl0IG1heSBs
-b3NlIGRhdGEgYW5kIGVycm9ycyBvY2N1cg0KDQoNCg==
+ym needs to be free when ym->cmd != SIOCYAMSMCS.
+
+Fixes: 0781168e23a2 ("yam: fix a missing-check bug")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+---
+ drivers/net/hamradio/yam.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/net/hamradio/yam.c b/drivers/net/hamradio/yam.c
+index 6376b8485976..980f2be32f05 100644
+--- a/drivers/net/hamradio/yam.c
++++ b/drivers/net/hamradio/yam.c
+@@ -950,9 +950,7 @@ static int yam_siocdevprivate(struct net_device *dev, struct ifreq *ifr, void __
+ 		ym = memdup_user(data, sizeof(struct yamdrv_ioctl_mcs));
+ 		if (IS_ERR(ym))
+ 			return PTR_ERR(ym);
+-		if (ym->cmd != SIOCYAMSMCS)
+-			return -EINVAL;
+-		if (ym->bitrate > YAM_MAXBITRATE) {
++		if (ym->cmd != SIOCYAMSMCS || ym->bitrate > YAM_MAXBITRATE) {
+ 			kfree(ym);
+ 			return -EINVAL;
+ 		}
+-- 
+2.25.1
+

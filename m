@@ -2,41 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 556F2499A3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:54:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA89499D7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1457953AbiAXVmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:42:35 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59838 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377366AbiAXVIR (ORCPT
+        id S1381377AbiAXWXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:23:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52826 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1444177AbiAXV1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:08:17 -0500
+        Mon, 24 Jan 2022 16:27:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25713C073214;
+        Mon, 24 Jan 2022 12:18:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A76B3B812A5;
-        Mon, 24 Jan 2022 21:08:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC848C340E7;
-        Mon, 24 Jan 2022 21:08:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BF4F9B8121C;
+        Mon, 24 Jan 2022 20:18:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFEE8C340E8;
+        Mon, 24 Jan 2022 20:18:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058488;
-        bh=jwjFmACAnwdgTPgiXQNtUaCkXKpEKBIBAWq4GBFnCFA=;
+        s=korg; t=1643055502;
+        bh=muVOtGtyr0Hg8KOiY7lMxc783mCGaGKnx1t//W1goEk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Uafc5laLJhTuj55KZLRMaeo5bC4pnPCJiMCI6CqWbTo87mCSOUwnEkREhMED+FEmX
-         +ip5pAE0id8gUNqaXIGfROJwmbuXoQUdjY3eQInGiiUixnyKr0jumCt4FloIhtsLtq
-         HmZyjHicLK7oZOaLMKIYBw9FKcMiPJnkKXyiTOKY=
+        b=MMgTjbDD3FA6u0pxxk0galDRdp2DWSib+vuNozcjTojjiXfvmgLCaw6ya9Kxy1qBJ
+         ADxKPtfNk63kDtvlVcKiaPihgll0jwLWzQgYi0VxGz6edO7vDSALQyMk8eCQOmeMUT
+         laEj6HqoQ/+Y0mxO9DD1N/ZDqbqOxCk6VEdKvaJk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thierry Reding <treding@nvidia.com>,
+        stable@vger.kernel.org, Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0298/1039] drm/tegra: gr2d: Explicitly control module reset
-Date:   Mon, 24 Jan 2022 19:34:47 +0100
-Message-Id: <20220124184135.315889632@linuxfoundation.org>
+Subject: [PATCH 5.15 172/846] net: stmmac: Add platform level debug register dump feature
+Date:   Mon, 24 Jan 2022 19:34:49 +0100
+Message-Id: <20220124184106.909212033@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,111 +50,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+From: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 
-[ Upstream commit 271fca025a6d43f1c18a48543c5aaf31a31e4694 ]
+[ Upstream commit 4047b9db1aa7512a10ba3560a3f63821c8c40235 ]
 
-As of commit 4782c0a5dd88 ("clk: tegra: Don't deassert reset on enabling
-clocks"), module resets are no longer automatically deasserted when the
-module clock is enabled. To make sure that the gr2d module continues to
-work, we need to explicitly control the module reset.
+dwmac-qcom-ethqos currently exposes a mechanism to dump rgmii registers
+after the 'stmmac_dvr_probe()' returns. However with commit
+5ec55823438e ("net: stmmac: add clocks management for gmac driver"),
+we now let 'pm_runtime_put()' disable the clocks before returning from
+'stmmac_dvr_probe()'.
 
-Fixes: 4782c0a5dd88 ("clk: tegra: Don't deassert reset on enabling clocks")
-Signed-off-by: Thierry Reding <treding@nvidia.com>
+This causes a crash when 'rgmii_dump()' register dumps are enabled,
+as the clocks are already off.
+
+Since other dwmac drivers (possible future users as well) might
+require a similar register dump feature, introduce a platform level
+callback to allow the same.
+
+This fixes the crash noticed while enabling rgmii_dump() dumps in
+dwmac-qcom-ethqos driver as well. It also allows future changes
+to keep a invoking the register dump callback from the correct
+place inside 'stmmac_dvr_probe()'.
+
+Fixes: 5ec55823438e ("net: stmmac: add clocks management for gmac driver")
+Cc: Joakim Zhang <qiangqing.zhang@nxp.com>
+Cc: David S. Miller <davem@davemloft.net>
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/tegra/gr2d.c | 33 +++++++++++++++++++++++++++++++--
- 1 file changed, 31 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c | 7 ++++---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c       | 3 +++
+ include/linux/stmmac.h                                  | 1 +
+ 3 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/tegra/gr2d.c b/drivers/gpu/drm/tegra/gr2d.c
-index de288cba39055..ba3722f1b8651 100644
---- a/drivers/gpu/drm/tegra/gr2d.c
-+++ b/drivers/gpu/drm/tegra/gr2d.c
-@@ -4,9 +4,11 @@
-  */
- 
- #include <linux/clk.h>
-+#include <linux/delay.h>
- #include <linux/iommu.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
-+#include <linux/reset.h>
- 
- #include "drm.h"
- #include "gem.h"
-@@ -19,6 +21,7 @@ struct gr2d_soc {
- struct gr2d {
- 	struct tegra_drm_client client;
- 	struct host1x_channel *channel;
-+	struct reset_control *rst;
- 	struct clk *clk;
- 
- 	const struct gr2d_soc *soc;
-@@ -208,6 +211,12 @@ static int gr2d_probe(struct platform_device *pdev)
- 	if (!syncpts)
- 		return -ENOMEM;
- 
-+	gr2d->rst = devm_reset_control_get(dev, NULL);
-+	if (IS_ERR(gr2d->rst)) {
-+		dev_err(dev, "cannot get reset\n");
-+		return PTR_ERR(gr2d->rst);
-+	}
-+
- 	gr2d->clk = devm_clk_get(dev, NULL);
- 	if (IS_ERR(gr2d->clk)) {
- 		dev_err(dev, "cannot get clock\n");
-@@ -220,6 +229,14 @@ static int gr2d_probe(struct platform_device *pdev)
- 		return err;
- 	}
- 
-+	usleep_range(2000, 4000);
-+
-+	err = reset_control_deassert(gr2d->rst);
-+	if (err < 0) {
-+		dev_err(dev, "failed to deassert reset: %d\n", err);
-+		goto disable_clk;
-+	}
-+
- 	INIT_LIST_HEAD(&gr2d->client.base.list);
- 	gr2d->client.base.ops = &gr2d_client_ops;
- 	gr2d->client.base.dev = dev;
-@@ -234,8 +251,7 @@ static int gr2d_probe(struct platform_device *pdev)
- 	err = host1x_client_register(&gr2d->client.base);
- 	if (err < 0) {
- 		dev_err(dev, "failed to register host1x client: %d\n", err);
--		clk_disable_unprepare(gr2d->clk);
--		return err;
-+		goto assert_rst;
- 	}
- 
- 	/* initialize address register map */
-@@ -245,6 +261,13 @@ static int gr2d_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, gr2d);
- 
- 	return 0;
-+
-+assert_rst:
-+	(void)reset_control_assert(gr2d->rst);
-+disable_clk:
-+	clk_disable_unprepare(gr2d->clk);
-+
-+	return err;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+index 5c74b6279d690..6b1d9e8879f46 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+@@ -113,8 +113,10 @@ static void rgmii_updatel(struct qcom_ethqos *ethqos,
+ 	rgmii_writel(ethqos, temp, offset);
  }
  
- static int gr2d_remove(struct platform_device *pdev)
-@@ -259,6 +282,12 @@ static int gr2d_remove(struct platform_device *pdev)
- 		return err;
- 	}
- 
-+	err = reset_control_assert(gr2d->rst);
-+	if (err < 0)
-+		dev_err(&pdev->dev, "failed to assert reset: %d\n", err);
+-static void rgmii_dump(struct qcom_ethqos *ethqos)
++static void rgmii_dump(void *priv)
+ {
++	struct qcom_ethqos *ethqos = priv;
 +
-+	usleep_range(2000, 4000);
-+
- 	clk_disable_unprepare(gr2d->clk);
+ 	dev_dbg(&ethqos->pdev->dev, "Rgmii register dump\n");
+ 	dev_dbg(&ethqos->pdev->dev, "RGMII_IO_MACRO_CONFIG: %x\n",
+ 		rgmii_readl(ethqos, RGMII_IO_MACRO_CONFIG));
+@@ -499,6 +501,7 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
  
- 	return 0;
+ 	plat_dat->bsp_priv = ethqos;
+ 	plat_dat->fix_mac_speed = ethqos_fix_mac_speed;
++	plat_dat->dump_debug_regs = rgmii_dump;
+ 	plat_dat->has_gmac4 = 1;
+ 	plat_dat->pmt = 1;
+ 	plat_dat->tso_en = of_property_read_bool(np, "snps,tso");
+@@ -507,8 +510,6 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err_clk;
+ 
+-	rgmii_dump(ethqos);
+-
+ 	return ret;
+ 
+ err_clk:
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 3422f0746d825..06e5431cf51df 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -7077,6 +7077,9 @@ int stmmac_dvr_probe(struct device *device,
+ 	stmmac_init_fs(ndev);
+ #endif
+ 
++	if (priv->plat->dump_debug_regs)
++		priv->plat->dump_debug_regs(priv->plat->bsp_priv);
++
+ 	/* Let pm_runtime_put() disable the clocks.
+ 	 * If CONFIG_PM is not enabled, the clocks will stay powered.
+ 	 */
+diff --git a/include/linux/stmmac.h b/include/linux/stmmac.h
+index a6f03b36fc4f7..1450397fc0bcd 100644
+--- a/include/linux/stmmac.h
++++ b/include/linux/stmmac.h
+@@ -233,6 +233,7 @@ struct plat_stmmacenet_data {
+ 	int (*clks_config)(void *priv, bool enabled);
+ 	int (*crosststamp)(ktime_t *device, struct system_counterval_t *system,
+ 			   void *ctx);
++	void (*dump_debug_regs)(void *priv);
+ 	void *bsp_priv;
+ 	struct clk *stmmac_clk;
+ 	struct clk *pclk;
 -- 
 2.34.1
 

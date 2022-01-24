@@ -2,99 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA6B14987B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:04:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 663AD49878F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:02:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244998AbiAXSEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:04:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60126 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244881AbiAXSEJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:04:09 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A08C06173D
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:04:08 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1643047446;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Kp+2Q3QLxWnCUmTGCUqJeVTafIKYNKQMJyZMylxx2h8=;
-        b=OU7GvARnGOLtlQZDocwMze8JHtUIBg/v2thX0JTm7vOM50wiRONN3Lgecvw2z4F8OiCNaR
-        rUEllo3gu9hLdt5H/vImDY88hg2AbwP6AoZIFzEtEIF7ya1g8dLfgCuYWd1I5lq2mdvu6U
-        PUVTSS2nmCMZUKA7Sa5fYJdTKYtZMCM=
-From:   andrey.konovalov@linux.dev
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        id S235784AbiAXSCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:02:55 -0500
+Received: from foss.arm.com ([217.140.110.172]:42958 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235628AbiAXSCy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 13:02:54 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 231BAD6E;
+        Mon, 24 Jan 2022 10:02:54 -0800 (PST)
+Received: from [10.57.39.131] (unknown [10.57.39.131])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7EFFA3F766;
+        Mon, 24 Jan 2022 10:02:52 -0800 (PST)
+Subject: Re: [RFC V1 08/11] arm64/perf: Enable branch stack sampling
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH v6 16/39] kasan: define KASAN_VMALLOC_INVALID for SW_TAGS
-Date:   Mon, 24 Jan 2022 19:02:24 +0100
-Message-Id: <1daaaafeb148a7ae8285265edc97d7ca07b6a07d.1643047180.git.andreyknvl@google.com>
-In-Reply-To: <cover.1643047180.git.andreyknvl@google.com>
-References: <cover.1643047180.git.andreyknvl@google.com>
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+References: <1642998653-21377-1-git-send-email-anshuman.khandual@arm.com>
+ <1642998653-21377-9-git-send-email-anshuman.khandual@arm.com>
+From:   James Clark <james.clark@arm.com>
+Message-ID: <741d159d-fce4-377e-8817-f8a6462f3a71@arm.com>
+Date:   Mon, 24 Jan 2022 18:02:51 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+In-Reply-To: <1642998653-21377-9-git-send-email-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@google.com>
 
-In preparation for adding vmalloc support to SW_TAGS KASAN,
-provide a KASAN_VMALLOC_INVALID definition for it.
 
-HW_TAGS KASAN won't be using this value, as it falls back onto
-page_alloc for poisoning freed vmalloc() memory.
+On 24/01/2022 04:30, Anshuman Khandual wrote:
+> Now that all the required pieces are already in place, just enable the perf
+> branch stack sampling support on arm64 platform, by removing the gate which
+> blocks it in armpmu_event_init().
+> 
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  drivers/perf/arm_pmu.c | 25 ++++++++++++++++++++++---
+>  1 file changed, 22 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
+> index 0800c8858ed8..2117bf5d3232 100644
+> --- a/drivers/perf/arm_pmu.c
+> +++ b/drivers/perf/arm_pmu.c
+> @@ -537,9 +537,28 @@ static int armpmu_event_init(struct perf_event *event)
+>  		!cpumask_test_cpu(event->cpu, &armpmu->supported_cpus))
+>  		return -ENOENT;
+>  
+> -	/* does not support taken branch sampling */
+> -	if (has_branch_stack(event))
+> -		return -EOPNOTSUPP;
+> +	if (has_branch_stack(event)) {
+> +		/*
+> +		 * BRBE support is absent. Select CONFIG_ARM_BRBE_PMU
+> +		 * in the config, before branch stack sampling events
+> +		 * can be requested.
+> +		 */
+> +		if (!IS_ENABLED(CONFIG_ARM_BRBE_PMU)) {
+> +			pr_warn_once("BRBE is disabled, select CONFIG_ARM_BRBE_PMU\n");
+> +			return -EOPNOTSUPP;
+> +		}
+> +
+> +		/*
+> +		 * Branch stack sampling event can not be supported in
+> +		 * case either the required driver itself is absent or
+> +		 * BRBE buffer, is not supported. Besides checking for
+> +		 * the callback prevents a crash in case it's absent.
+> +		 */
+> +		if (!armpmu->brbe_supported || !armpmu->brbe_supported(event)) {
+> +			pr_warn_once("BRBE is not supported\n");
+> +			return -EOPNOTSUPP;
 
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
----
- mm/kasan/kasan.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+brbe_supported() returns false for one permission case, rather than a "not supported" case
+so EOPNOTSUPP is the wrong thing to return here for this case otherwise it makes perf
+print confusing error messages. 
 
-diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-index 952cd6f9ca46..020f3e57a03f 100644
---- a/mm/kasan/kasan.h
-+++ b/mm/kasan/kasan.h
-@@ -71,18 +71,19 @@ static inline bool kasan_sync_fault_possible(void)
- #define KASAN_PAGE_REDZONE      0xFE  /* redzone for kmalloc_large allocations */
- #define KASAN_KMALLOC_REDZONE   0xFC  /* redzone inside slub object */
- #define KASAN_KMALLOC_FREE      0xFB  /* object was freed (kmem_cache_free/kfree) */
-+#define KASAN_VMALLOC_INVALID   0xF8  /* unallocated space in vmapped page */
- #else
- #define KASAN_FREE_PAGE         KASAN_TAG_INVALID
- #define KASAN_PAGE_REDZONE      KASAN_TAG_INVALID
- #define KASAN_KMALLOC_REDZONE   KASAN_TAG_INVALID
- #define KASAN_KMALLOC_FREE      KASAN_TAG_INVALID
-+#define KASAN_VMALLOC_INVALID   KASAN_TAG_INVALID /* only for SW_TAGS */
- #endif
- 
- #ifdef CONFIG_KASAN_GENERIC
- 
- #define KASAN_KMALLOC_FREETRACK 0xFA  /* object was freed and has free track set */
- #define KASAN_GLOBAL_REDZONE    0xF9  /* redzone for global variable */
--#define KASAN_VMALLOC_INVALID   0xF8  /* unallocated space in vmapped page */
- 
- /*
-  * Stack redzone shadow values
--- 
-2.25.1
+The brbe_supported() function needs to be split into two, one that handles support and one
+that handles permissions and different errors need to be reported. Here is the permission
+bit from that function:
 
+  +	if (event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_KERNEL) {
+  +		if (!perfmon_capable()) {
+  +			pr_warn_once("does not have permission for kernel branch filter\n");
+  +			return false;
+  +		}
+  +	}
+
+> +		}
+> +	}
+>  
+>  	if (armpmu->map_event(event) == -ENOENT)
+>  		return -ENOENT;
+> 

@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59398498DDA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBBDE498FE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346842AbiAXThN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:37:13 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55356 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347717AbiAXTcL (ORCPT
+        id S1359156AbiAXT43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:56:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349667AbiAXThT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:32:11 -0500
+        Mon, 24 Jan 2022 14:37:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB4EC03400B;
+        Mon, 24 Jan 2022 11:17:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 31972B8122C;
-        Mon, 24 Jan 2022 19:32:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 578C8C340E5;
-        Mon, 24 Jan 2022 19:32:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C9C0AB8121A;
+        Mon, 24 Jan 2022 19:17:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D898C340E5;
+        Mon, 24 Jan 2022 19:17:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052728;
-        bh=0Qm+dWNT8phmQ4tU5kIS5Fv5RyW+rZO78HIgmJ65jAo=;
+        s=korg; t=1643051838;
+        bh=Qv3iaepdUWUPB8G3RKHiXJh6nOrf8T5JCWPTQVoXFDA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YWMVb79GFm4XZ+8BeXOZEaf+Thcyo4n3U1GUR3Key/R5+qhSlw+xTAPRrhDQeXCSp
-         Ahd0H38mcdCrfD6emf8RMrwzQTogvefL7/y/3qHRrQRZaWuNzlmO40EeiuxruS4sVV
-         gPHHLlCZp8T4Bngbe9X+b+XYeWDjaNBHV13JH5Hk=
+        b=gsb1bnPW53q9csd4VzVtWuff//depYjG/LkiqmV7AtMFAm56cZ5yj9zLr7ZlZVwAW
+         +I0e3t/8G4peXWl9XPKVpyAmrN7dQQAWJ6D9JBKivbPBTNRN8JtJivhOhC56ocQzpo
+         BsUT6lRurOVONtwU+VwdOAUmvinkD/di2eB73A+s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vasily Khoruzhick <anarsoul@gmail.com>,
-        Roman Stratiienko <r.stratiienko@gmail.com>,
-        Qiang Yu <yuq825@gmail.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 155/320] drm/lima: fix warning when CONFIG_DEBUG_SG=y & CONFIG_DMA_API_DEBUG=y
-Date:   Mon, 24 Jan 2022 19:42:19 +0100
-Message-Id: <20220124183958.901709370@linuxfoundation.org>
+        stable@vger.kernel.org, Kamal Heib <kamalheib1@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 102/239] RDMA/hns: Validate the pkey index
+Date:   Mon, 24 Jan 2022 19:42:20 +0100
+Message-Id: <20220124183946.346995735@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,37 +49,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qiang Yu <yuq825@gmail.com>
+From: Kamal Heib <kamalheib1@gmail.com>
 
-[ Upstream commit 89636a06fa2ee7826a19c39c19a9bc99ab9340a9 ]
+[ Upstream commit 2a67fcfa0db6b4075515bd23497750849b88850f ]
 
-Otherwise get following warning:
+Before query pkey, make sure that the queried index is valid.
 
-DMA-API: lima 1c40000.gpu: mapping sg segment longer than device claims to support [len=4149248] [max=65536]
-
-See: https://gitlab.freedesktop.org/mesa/mesa/-/issues/5496
-
-Reviewed-by: Vasily Khoruzhick <anarsoul@gmail.com>
-Reported-by: Roman Stratiienko <r.stratiienko@gmail.com>
-Signed-off-by: Qiang Yu <yuq825@gmail.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211031041604.187216-1-yuq825@gmail.com
+Fixes: 9a4435375cd1 ("IB/hns: Add driver files for hns RoCE driver")
+Link: https://lore.kernel.org/r/20211117145954.123893-1-kamalheib1@gmail.com
+Signed-off-by: Kamal Heib <kamalheib1@gmail.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/lima/lima_device.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/infiniband/hw/hns/hns_roce_main.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/gpu/drm/lima/lima_device.c b/drivers/gpu/drm/lima/lima_device.c
-index d86b8d81a483a..155971c57b2d5 100644
---- a/drivers/gpu/drm/lima/lima_device.c
-+++ b/drivers/gpu/drm/lima/lima_device.c
-@@ -293,6 +293,7 @@ int lima_device_init(struct lima_device *ldev)
- 	struct resource *res;
+diff --git a/drivers/infiniband/hw/hns/hns_roce_main.c b/drivers/infiniband/hw/hns/hns_roce_main.c
+index c5cae9a38c044..5e60a2596d2bf 100644
+--- a/drivers/infiniband/hw/hns/hns_roce_main.c
++++ b/drivers/infiniband/hw/hns/hns_roce_main.c
+@@ -295,6 +295,9 @@ static enum rdma_link_layer hns_roce_get_link_layer(struct ib_device *device,
+ static int hns_roce_query_pkey(struct ib_device *ib_dev, u8 port, u16 index,
+ 			       u16 *pkey)
+ {
++	if (index > 0)
++		return -EINVAL;
++
+ 	*pkey = PKEY_ID;
  
- 	dma_set_coherent_mask(ldev->dev, DMA_BIT_MASK(32));
-+	dma_set_max_seg_size(ldev->dev, UINT_MAX);
- 
- 	err = lima_clk_init(ldev);
- 	if (err)
+ 	return 0;
 -- 
 2.34.1
 

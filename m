@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A783A498C2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECB3498DD2
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:37:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349042AbiAXTUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:20:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347805AbiAXTLL (ORCPT
+        id S1354354AbiAXTgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:36:33 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54102 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352812AbiAXTbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:11:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00591C08E87C;
-        Mon, 24 Jan 2022 11:02:42 -0800 (PST)
+        Mon, 24 Jan 2022 14:31:06 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2C67B8119D;
-        Mon, 24 Jan 2022 19:02:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7B06C340E5;
-        Mon, 24 Jan 2022 19:02:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE9E6B8121B;
+        Mon, 24 Jan 2022 19:31:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD8CEC340E5;
+        Mon, 24 Jan 2022 19:31:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050960;
-        bh=IR6MvDjAe+wJMl1IxlgonkXpDFZ0GOTFD4VnS/SjRDc=;
+        s=korg; t=1643052664;
+        bh=ojLv2A8YiZqQBiDKnhqmW0NP9PBK7G+zSluVkxtI0IA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w1FwtiwjS6nHEo75YV6M/ro716I+KWV0Ul2Led8Xky3eLRyO/srG9lYaB9wp9/IcZ
-         N1SlyGMn8H2knOJteTbh7AhkZKkncrtSMM/C1TTp/V/SBrYfQGUpxkPSgAaT3A2Fh0
-         WZZKihJQJigMGPtpshKu9ylZJk/NDfkGmiPWdJwI=
+        b=Lfyu98jfTxtiuJfCC18FGhkwArO/yLNz7l1027LZgoFume2GuYJSRiDsuR61dUT7z
+         gl14gsUjCXLZuII55rR/+lVe3wn4wm+zRTJkLQ6L3zZtYcBm9yxLHB9CkPY7cadiiA
+         qixTcQ4lZt6AwaboNPTnndYLIBc1Q/lXITS51uVo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        =?UTF-8?q?D=C3=A1vid=20Bolvansk=C3=BD?= <david.bolvansky@gmail.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>
-Subject: [PATCH 4.14 010/186] drm/i915: Avoid bitwise vs logical OR warning in snb_wm_latency_quirk()
+        stable@vger.kernel.org, Xin Xiong <xiongx18@fudan.edu.cn>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Xin Tan <tanxin.ctf@gmail.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 101/320] netfilter: ipt_CLUSTERIP: fix refcount leak in clusterip_tg_check()
 Date:   Mon, 24 Jan 2022 19:41:25 +0100
-Message-Id: <20220124183937.447155070@linuxfoundation.org>
+Message-Id: <20220124183957.161789148@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,52 +48,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Xin Xiong <xiongx18@fudan.edu.cn>
 
-commit 2e70570656adfe1c5d9a29940faa348d5f132199 upstream.
+[ Upstream commit d94a69cb2cfa77294921aae9afcfb866e723a2da ]
 
-A new warning in clang points out a place in this file where a bitwise
-OR is being used with boolean types:
+The issue takes place in one error path of clusterip_tg_check(). When
+memcmp() returns nonzero, the function simply returns the error code,
+forgetting to decrease the reference count of a clusterip_config
+object, which is bumped earlier by clusterip_config_find_get(). This
+may incur reference count leak.
 
-drivers/gpu/drm/i915/intel_pm.c:3066:12: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
-        changed = ilk_increase_wm_latency(dev_priv, dev_priv->wm.pri_latency, 12) |
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Fix this issue by decrementing the refcount of the object in specific
+error path.
 
-This construct is intentional, as it allows every one of the calls to
-ilk_increase_wm_latency() to occur (instead of short circuiting with
-logical OR) while still caring about the result of each call.
-
-To make this clearer to the compiler, use the '|=' operator to assign
-the result of each ilk_increase_wm_latency() call to changed, which
-keeps the meaning of the code the same but makes it obvious that every
-one of these calls is expected to happen.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1473
-Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Suggested-by: Dávid Bolvanský <david.bolvansky@gmail.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211014211916.3550122-1-nathan@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 06aa151ad1fc74 ("netfilter: ipt_CLUSTERIP: check MAC address when duplicate config is set")
+Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
+Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/i915/intel_pm.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ net/ipv4/netfilter/ipt_CLUSTERIP.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/i915/intel_pm.c
-+++ b/drivers/gpu/drm/i915/intel_pm.c
-@@ -2985,9 +2985,9 @@ static void snb_wm_latency_quirk(struct
- 	 * The BIOS provided WM memory latency values are often
- 	 * inadequate for high resolution displays. Adjust them.
- 	 */
--	changed = ilk_increase_wm_latency(dev_priv, dev_priv->wm.pri_latency, 12) |
--		ilk_increase_wm_latency(dev_priv, dev_priv->wm.spr_latency, 12) |
--		ilk_increase_wm_latency(dev_priv, dev_priv->wm.cur_latency, 12);
-+	changed = ilk_increase_wm_latency(dev_priv, dev_priv->wm.pri_latency, 12);
-+	changed |= ilk_increase_wm_latency(dev_priv, dev_priv->wm.spr_latency, 12);
-+	changed |= ilk_increase_wm_latency(dev_priv, dev_priv->wm.cur_latency, 12);
+diff --git a/net/ipv4/netfilter/ipt_CLUSTERIP.c b/net/ipv4/netfilter/ipt_CLUSTERIP.c
+index 6bdb1ab8af617..63ebb87d85331 100644
+--- a/net/ipv4/netfilter/ipt_CLUSTERIP.c
++++ b/net/ipv4/netfilter/ipt_CLUSTERIP.c
+@@ -505,8 +505,11 @@ static int clusterip_tg_check(const struct xt_tgchk_param *par)
+ 			if (IS_ERR(config))
+ 				return PTR_ERR(config);
+ 		}
+-	} else if (memcmp(&config->clustermac, &cipinfo->clustermac, ETH_ALEN))
++	} else if (memcmp(&config->clustermac, &cipinfo->clustermac, ETH_ALEN)) {
++		clusterip_config_entry_put(config);
++		clusterip_config_put(config);
+ 		return -EINVAL;
++	}
  
- 	if (!changed)
- 		return;
+ 	ret = nf_ct_netns_get(par->net, par->family);
+ 	if (ret < 0) {
+-- 
+2.34.1
+
 
 

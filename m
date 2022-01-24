@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8E6499F1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:15:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7336E499EF4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1839998AbiAXWwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:52:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56578 "EHLO
+        id S1838700AbiAXWry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:47:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1458145AbiAXVmr (ORCPT
+        with ESMTP id S1458144AbiAXVmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 16:42:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458E7C07A954;
-        Mon, 24 Jan 2022 12:30:50 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8B8C07A955;
+        Mon, 24 Jan 2022 12:31:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01A85B8122A;
-        Mon, 24 Jan 2022 20:30:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 399A8C340E5;
-        Mon, 24 Jan 2022 20:30:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29FB661383;
+        Mon, 24 Jan 2022 20:31:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0839AC340E7;
+        Mon, 24 Jan 2022 20:30:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056247;
-        bh=lk34w8WMdUL6l4PL5XdnwhuS4losa8tnQTL3Rj/ZblM=;
+        s=korg; t=1643056259;
+        bh=e9ukgO2HtZrPpeNCuBBCRIWPjwNXuYeZrknKf0Rh6RA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rfx2Wup2blfcMAFl5LZcVIRSCNWBB/yVGcpZiob3MdpLsFeqjnXs76MDhmXuVrrCg
-         LQJMqZL8CCtO8YQdpHKmPAuYfXMtgyephYfawLXlkfLQtN33F2RKYeRUGBGCK68ZDB
-         zwH1Z2rftyeZrCeOYhRwivruYWeakT8IYKLDvrcM=
+        b=FgRrmsTKzTTTv/EGe2/6mLZcTDNyzgT2ZkUe4NjXOrhz68EM2VKuJ2JR42Mrod+KR
+         IjJJbCrVTEgw0RFCoJhjmB4aFEGucRNLDWdwZZYaxEHszfWLleRXbwg9HAIvwNLXqj
+         hZfOj8Unhwkj4ZPUDAe3oP5m99tPICIj2FK4Izu8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 420/846] iommu/amd: X2apic mode: re-enable after resume
-Date:   Mon, 24 Jan 2022 19:38:57 +0100
-Message-Id: <20220124184115.468706093@linuxfoundation.org>
+        stable@vger.kernel.org, Kevin Tian <kevin.tian@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 424/846] ASoC: Intel: catpt: Test dmaengine_submit() result before moving on
+Date:   Mon, 24 Jan 2022 19:39:01 +0100
+Message-Id: <20220124184115.607866287@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -48,45 +51,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Levitsky <mlevitsk@redhat.com>
+From: Cezary Rojewski <cezary.rojewski@intel.com>
 
-[ Upstream commit 01b297a48a26bcb96769505ac948db4603b72bd1 ]
+[ Upstream commit 2a9a72e290d4a4741e673f86b9fba9bfb319786d ]
 
-Otherwise it is guaranteed to not work after the resume...
+After calling dmaengine_submit(), the submitted transfer descriptor
+belongs to the DMA engine. Pointer to that descriptor may no longer be
+valid after the call and should be tested before awaiting transfer
+completion.
 
-Fixes: 66929812955bb ("iommu/amd: Add support for X2APIC IOMMU interrupts")
-
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-Link: https://lore.kernel.org/r/20211123161038.48009-3-mlevitsk@redhat.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Reported-by: Kevin Tian <kevin.tian@intel.com>
+Suggested-by: Dave Jiang <dave.jiang@intel.com>
+Fixes: 4fac9b31d0b9 ("ASoC: Intel: Add catpt base members")
+Signed-off-by: Cezary Rojewski <cezary.rojewski@intel.com>
+Link: https://lore.kernel.org/r/20211216115743.2130622-2-cezary.rojewski@intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/amd/init.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ sound/soc/intel/catpt/dsp.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
-index 9b12a2f7548ac..c1d4e66d2747b 100644
---- a/drivers/iommu/amd/init.c
-+++ b/drivers/iommu/amd/init.c
-@@ -2169,7 +2169,6 @@ static int iommu_setup_intcapxt(struct amd_iommu *iommu)
- 		return ret;
- 	}
+diff --git a/sound/soc/intel/catpt/dsp.c b/sound/soc/intel/catpt/dsp.c
+index 9c5fd18f2600f..346bec0003066 100644
+--- a/sound/soc/intel/catpt/dsp.c
++++ b/sound/soc/intel/catpt/dsp.c
+@@ -65,6 +65,7 @@ static int catpt_dma_memcpy(struct catpt_dev *cdev, struct dma_chan *chan,
+ {
+ 	struct dma_async_tx_descriptor *desc;
+ 	enum dma_status status;
++	int ret;
  
--	iommu_feature_enable(iommu, CONTROL_INTCAPXT_EN);
- 	return 0;
+ 	desc = dmaengine_prep_dma_memcpy(chan, dst_addr, src_addr, size,
+ 					 DMA_CTRL_ACK);
+@@ -77,13 +78,22 @@ static int catpt_dma_memcpy(struct catpt_dev *cdev, struct dma_chan *chan,
+ 	catpt_updatel_shim(cdev, HMDC,
+ 			   CATPT_HMDC_HDDA(CATPT_DMA_DEVID, chan->chan_id),
+ 			   CATPT_HMDC_HDDA(CATPT_DMA_DEVID, chan->chan_id));
+-	dmaengine_submit(desc);
++
++	ret = dma_submit_error(dmaengine_submit(desc));
++	if (ret) {
++		dev_err(cdev->dev, "submit tx failed: %d\n", ret);
++		goto clear_hdda;
++	}
++
+ 	status = dma_wait_for_async_tx(desc);
++	ret = (status == DMA_COMPLETE) ? 0 : -EPROTO;
++
++clear_hdda:
+ 	/* regardless of status, disable access to HOST memory in demand mode */
+ 	catpt_updatel_shim(cdev, HMDC,
+ 			   CATPT_HMDC_HDDA(CATPT_DMA_DEVID, chan->chan_id), 0);
+ 
+-	return (status == DMA_COMPLETE) ? 0 : -EPROTO;
++	return ret;
  }
  
-@@ -2192,6 +2191,10 @@ static int iommu_init_irq(struct amd_iommu *iommu)
- 
- 	iommu->int_enabled = true;
- enable_faults:
-+
-+	if (amd_iommu_xt_mode == IRQ_REMAP_X2APIC_MODE)
-+		iommu_feature_enable(iommu, CONTROL_INTCAPXT_EN);
-+
- 	iommu_feature_enable(iommu, CONTROL_EVT_INT_EN);
- 
- 	if (iommu->ppr_log != NULL)
+ int catpt_dma_memcpy_todsp(struct catpt_dev *cdev, struct dma_chan *chan,
 -- 
 2.34.1
 

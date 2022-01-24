@@ -2,160 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 592324980DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:16:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 048574980D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:16:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243108AbiAXNQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 08:16:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47970 "EHLO
+        id S243104AbiAXNQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 08:16:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243051AbiAXNQW (ORCPT
+        with ESMTP id S243076AbiAXNQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 08:16:22 -0500
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4AEC06173B;
-        Mon, 24 Jan 2022 05:16:21 -0800 (PST)
-Received: by mail-pj1-x1042.google.com with SMTP id nn16-20020a17090b38d000b001b56b2bce31so5921760pjb.3;
-        Mon, 24 Jan 2022 05:16:21 -0800 (PST)
+        Mon, 24 Jan 2022 08:16:15 -0500
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6E6C06173B;
+        Mon, 24 Jan 2022 05:16:14 -0800 (PST)
+Received: by mail-ua1-x930.google.com with SMTP id n15so29343676uaq.5;
+        Mon, 24 Jan 2022 05:16:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ppg6e0FUc7/+T7KoOP2mY3oDf3knGfZ3sgY11AP0m8c=;
-        b=N5OpEeEZ2HG1lv9lhr/M0WNCOXjyW8crtPrGnqtEsi58aHeDVaonh/NC4L+/NAr7jA
-         1Au/zsIikA/hhJtAOy/Si8ivuFNx1hnQKBRgA2qw0GqeQY2IKv3k52SkBbLBaAKDznR9
-         jrEOQKcvWyqCAP7BoXZ2bih7m40BjApEvhdrNyV4yiBb++3LyIbtBXM4vXFHpn3nQilf
-         YF4/RSVA+GM3cDZ7i/WEFCWJEiEw2me/ekjvL3M4jRmrlQ4/mcLp649Mjz+cGpMZQyLb
-         yzeCQVHYhdT/wPs0FwtuZww57l9VZfgooDbnpp59W5lzDMtNjxNpmIEyF/GT3pCNk/X+
-         jLoA==
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uFYFObtMXp4GI0dEMvK7PEdd9wIdRLdqU+u9A0WaZIA=;
+        b=AQbRmLRorqGKzoH9vLmyLlfDixBs7gF2+oUApSmm1/GGJBzjvJIldKiApYcjNsUclQ
+         ajXVlxvH6aDmRTBEoqjgTIE/42gtY0ABpIeYTGDlZwn468ogNm71jP++qoH+gHhtIyQM
+         YZ08wNyNdcDrV3ELP/FJ/3GX5lTGN+/x4S8UyfHtjrEwt4g9NoSLSpy9GSmDuqdh6j7S
+         v5T3W9nb9tlXDeq95xSoejHmPy+2Y1YVNt6GFLyRBh5EsGt5lyR7aNBC6eZNbn+MK4G1
+         XQFwH2PGabpNqtTBNrO9aRYzWa7k2OdHNGP+2K5yjogT0i4hB0yQATS2hRcohP7QrDCg
+         MfgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ppg6e0FUc7/+T7KoOP2mY3oDf3knGfZ3sgY11AP0m8c=;
-        b=QqsVU4C75YS+WaVCAnSJVq2TodjjoNMl1PpfJqmpUJIlgpMQ07yVTDTG19IPRvRSQl
-         8sWP7mR+Fr41fWjwC82u0kWU9sm1gFCGzgXvQaypTT48j39tg8Idy5vTlC0zjih1BA3X
-         KYWY9eI3qelOIkXiMLkUmm/P85q5IU7WzgtXqYD267rEASnCEOay0Z0TT0Yi2+V8N/8I
-         8Jgim2VZjeiHcaR/bfyvMrR4oCttFizds+k1Vgns2Al3qRUbGTD8N988BxtxCMIBKCpO
-         nS5CwPnfQ1xHYqD1rJ12D1FJKEPbTo+7w+NXnyu+KWoHn0kh59FmNWnn7N4rYPteGhNk
-         J8ew==
-X-Gm-Message-State: AOAM532GuMfNFN1+2hzm2+Ch4M985avV+KJJg0/Spn1+Ba5RYMTgKGR/
-        k60NXsW4m/C/cV6X8KGzkig=
-X-Google-Smtp-Source: ABdhPJxQNeH7Fa20w+9Hv2sUuwO57UWFPyWYTuKKQZ9D1pnJMIjizaXst04CmDMwtEPTRWhI7VmoYA==
-X-Received: by 2002:a17:903:32c1:b0:14b:3c0c:9118 with SMTP id i1-20020a17090332c100b0014b3c0c9118mr7867771plr.58.1643030181201;
-        Mon, 24 Jan 2022 05:16:21 -0800 (PST)
-Received: from localhost.localdomain ([43.132.141.9])
-        by smtp.gmail.com with ESMTPSA id j11sm16508806pfu.55.2022.01.24.05.16.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 05:16:20 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     kuba@kernel.org
-Cc:     rostedt@goodmis.org, mingo@redhat.com, davem@davemloft.net,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, pablo@netfilter.org,
-        kadlec@netfilter.org, fw@strlen.de, imagedong@tencent.com,
-        edumazet@google.com, alobakin@pm.me, paulb@nvidia.com,
-        pabeni@redhat.com, talalahmad@google.com, haokexin@gmail.com,
-        keescook@chromium.org, memxor@gmail.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        cong.wang@bytedance.com
-Subject: [PATCH net-next 6/6] net: udp: use kfree_skb_reason() in __udp_queue_rcv_skb()
-Date:   Mon, 24 Jan 2022 21:15:38 +0800
-Message-Id: <20220124131538.1453657-7-imagedong@tencent.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220124131538.1453657-1-imagedong@tencent.com>
-References: <20220124131538.1453657-1-imagedong@tencent.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uFYFObtMXp4GI0dEMvK7PEdd9wIdRLdqU+u9A0WaZIA=;
+        b=TrYYTcHcSNZJB+VTY3V+5CuvaEFp+CNmn6hrUCuN1/07ZcEAPMB2k8eIu8irRyesO+
+         XTOwKCK7pDH4IpRzn75PmNwbbYptNLHK29zgDfdMaD9NU9MZihnk5Ws4lJBuIMI18c0G
+         Xym4ccsfwxW3Hn0VyZ5p2sxY09peT93C2g4A+SXUR6TlknHUcge9G/zxQeERjbleCEZp
+         1Mc+yvSL6w6ftl9PDQ+9X14lUNOTj4Hn/apQjVKVtz7X/sdWlTCXqqLQAWhNNsssRFa4
+         bxMPPVUcZ87sIVneWQ21242oeGf4UW8rkmEAJEKVKb0nEk8Snl7FIT32YBfpCgRF2lS8
+         Jm/w==
+X-Gm-Message-State: AOAM533eip/S8ZK++cYv8H6M9Ml2Bv4xlT24wryLDw/XrqEfWu7M3dN7
+        2wweBXiZRV8ZXKycPefOmHQYGauXWhr6Z+ktwjmtk+huQXQ=
+X-Google-Smtp-Source: ABdhPJwZbWpaN+safEC1+Xt9t6p1mtVWx+ZXEjvmjqHuVecNAyRAteVrjGZcrtQ52ob56AX/j11Px/cD3Ikwit4TDR4=
+X-Received: by 2002:a05:6102:3913:: with SMTP id e19mr5463896vsu.14.1643030173736;
+ Mon, 24 Jan 2022 05:16:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <164299573337.26253.7538614611220034049.stgit@noble.brown> <164299611278.26253.14950274629759580371.stgit@noble.brown>
+In-Reply-To: <164299611278.26253.14950274629759580371.stgit@noble.brown>
+From:   Mark Hemment <markhemm@googlemail.com>
+Date:   Mon, 24 Jan 2022 13:16:02 +0000
+Message-ID: <CANe_+UjJOZJwfFLMgenBttssB8G5ZW5fqw7Vi_tohF_HOW5wWg@mail.gmail.com>
+Subject: Re: [PATCH 09/23] MM: submit multipage reads for SWP_FS_OPS swap-space
+To:     NeilBrown <neilb@suse.de>
+Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        David Howells <dhowells@redhat.com>, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+On Mon, 24 Jan 2022 at 03:52, NeilBrown <neilb@suse.de> wrote:
+>
+> swap_readpage() is given one page at a time, but maybe called repeatedly
+> in succession.
+> For block-device swapspace, the blk_plug functionality allows the
+> multiple pages to be combined together at lower layers.
+> That cannot be used for SWP_FS_OPS as blk_plug may not exist - it is
+> only active when CONFIG_BLOCK=y.  Consequently all swap reads over NFS
+> are single page reads.
+>
+> With this patch we pass in a pointer-to-pointer when swap_readpage can
+> store state between calls - much like the effect of blk_plug.  After
+> calling swap_readpage() some number of times, the state will be passed
+> to swap_read_unplug() which can submit the combined request.
+>
+> Some caller currently call blk_finish_plug() *before* the final call to
+> swap_readpage(), so the last page cannot be included.  This patch moves
+> blk_finish_plug() to after the last call, and calls swap_read_unplug()
+> there too.
+>
+> Signed-off-by: NeilBrown <neilb@suse.de>
+> ---
+>  mm/madvise.c    |    8 +++-
+>  mm/memory.c     |    2 +
+>  mm/page_io.c    |  102 +++++++++++++++++++++++++++++++++++--------------------
+>  mm/swap.h       |   16 +++++++--
+>  mm/swap_state.c |   19 +++++++---
+>  5 files changed, 98 insertions(+), 49 deletions(-)
+>
+...
+> diff --git a/mm/page_io.c b/mm/page_io.c
+> index 6e32ca35d9b6..bcf655d650c8 100644
+> --- a/mm/page_io.c
+> +++ b/mm/page_io.c
+> @@ -390,46 +391,60 @@ int __swap_writepage(struct page *page, struct writeback_control *wbc,
+>  static void sio_read_complete(struct kiocb *iocb, long ret)
+>  {
+>         struct swap_iocb *sio = container_of(iocb, struct swap_iocb, iocb);
+> -       struct page *page = sio->bvec.bv_page;
+> -
+> -       if (ret != 0 && ret != PAGE_SIZE) {
+> -               SetPageError(page);
+> -               ClearPageUptodate(page);
+> -               pr_alert_ratelimited("Read-error on swap-device\n");
+> -       } else {
+> -               SetPageUptodate(page);
+> -               count_vm_event(PSWPIN);
+> +       int p;
+> +
+> +       for (p = 0; p < sio->pages; p++) {
+> +               struct page *page = sio->bvec[p].bv_page;
+> +               if (ret != 0 && ret != PAGE_SIZE * sio->pages) {
+> +                       SetPageError(page);
+> +                       ClearPageUptodate(page);
+> +                       pr_alert_ratelimited("Read-error on swap-device\n");
+> +               } else {
+> +                       SetPageUptodate(page);
+> +                       count_vm_event(PSWPIN);
+> +               }
+> +               unlock_page(page);
+>         }
+> -       unlock_page(page);
+>         mempool_free(sio, sio_pool);
+>  }
 
-Replace kfree_skb() with kfree_skb_reason() in __udp_queue_rcv_skb().
-Following new drop reasons are introduced:
+Trivial: on success, could be single call to count_vm_events(PSWPIN,
+sio->pages).
+Similar comment for PSWPOUT in sio_write_complete()
 
-SKB_DROP_REASON_SOCKET_RCVBUFF
-SKB_DROP_REASON_PROTO_MEM
+>
+> -static int swap_readpage_fs(struct page *page)
+> +static void swap_readpage_fs(struct page *page,
+> +                            struct swap_iocb **plug)
+>  {
+>         struct swap_info_struct *sis = page_swap_info(page);
+> -       struct file *swap_file = sis->swap_file;
+> -       struct address_space *mapping = swap_file->f_mapping;
+> -       struct iov_iter from;
+> -       struct swap_iocb *sio;
+> +       struct swap_iocb *sio = NULL;
+>         loff_t pos = page_file_offset(page);
+> -       int ret;
+> -
+> -       sio = mempool_alloc(sio_pool, GFP_KERNEL);
+> -       init_sync_kiocb(&sio->iocb, swap_file);
+> -       sio->iocb.ki_pos = pos;
+> -       sio->iocb.ki_complete = sio_read_complete;
+> -       sio->bvec.bv_page = page;
+> -       sio->bvec.bv_len = PAGE_SIZE;
+> -       sio->bvec.bv_offset = 0;
+>
+> -       iov_iter_bvec(&from, READ, &sio->bvec, 1, PAGE_SIZE);
+> -       ret = mapping->a_ops->swap_rw(&sio->iocb, &from);
+> -       if (ret != -EIOCBQUEUED)
+> -               sio_read_complete(&sio->iocb, ret);
+> -       return ret;
+> +       if (*plug)
+> +               sio = *plug;
 
-For example, following log will be printed by ftrace when udp socket
-receive buff overflow:
+'plug' can be NULL when called from do_swap_page();
+        if (plug && *plug)
 
-> 3345.537796: kfree_skb: skbaddr=00000000f013dfb6 protocol=2048 location=00000000c74d2ddd reason: SOCKET_RCVBUFF
-> 3345.638805: kfree_skb: skbaddr=00000000cbc73bc7 protocol=2048 location=00000000c74d2ddd reason: SOCKET_RCVBUFF
-> 3345.739975: kfree_skb: skbaddr=00000000717f24bb protocol=2048 location=00000000c74d2ddd reason: SOCKET_RCVBUFF
-> 3345.841172: kfree_skb: skbaddr=00000000c62d20e9 protocol=2048 location=00000000c74d2ddd reason: SOCKET_RCVBUFF
-> 3345.941353: kfree_skb: skbaddr=000000007eea9d4d protocol=2048 location=00000000c74d2ddd reason: SOCKET_RCVBUFF
-> 3346.042610: kfree_skb: skbaddr=00000000c62d20e9 protocol=2048 location=00000000c74d2ddd reason: SOCKET_RCVBUFF
-> 3346.142723: kfree_skb: skbaddr=00000000717f24bb protocol=2048 location=00000000c74d2ddd reason: SOCKET_RCVBUFF
-> 3346.242785: kfree_skb: skbaddr=00000000cbc73bc7 protocol=2048 location=00000000c74d2ddd reason: SOCKET_RCVBUFF
-
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
- include/linux/skbuff.h     |  5 +++++
- include/trace/events/skb.h |  2 ++
- net/ipv4/udp.c             | 10 +++++++---
- 3 files changed, 14 insertions(+), 3 deletions(-)
-
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index dd64a4f2ff1d..723fc1cbbe3c 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -331,6 +331,11 @@ enum skb_drop_reason {
- 	SKB_DROP_REASON_XFRM_POLICY,
- 	SKB_DROP_REASON_IP_NOPROTO,
- 	SKB_DROP_REASON_UDP_FILTER,
-+	SKB_DROP_REASON_SOCKET_RCVBUFF,	/* socket receive buff is full */
-+	SKB_DROP_REASON_PROTO_MEM,	/* proto memory limition, such as
-+					 * udp packet drop out of
-+					 * udp_memory_allocated.
-+					 */
- 	SKB_DROP_REASON_MAX,
- };
- 
-diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
-index 6db61ce4d6f5..0496bbb0fe08 100644
---- a/include/trace/events/skb.h
-+++ b/include/trace/events/skb.h
-@@ -28,6 +28,8 @@
- 	EM(SKB_DROP_REASON_XFRM_POLICY, XFRM_POLICY)		\
- 	EM(SKB_DROP_REASON_IP_NOPROTO, IP_NOPROTO)		\
- 	EM(SKB_DROP_REASON_UDP_FILTER, UDP_FILTER)		\
-+	EM(SKB_DROP_REASON_SOCKET_RCVBUFF, SOCKET_RCVBUFF)	\
-+	EM(SKB_DROP_REASON_PROTO_MEM, PROTO_MEM)		\
- 	EMe(SKB_DROP_REASON_MAX, MAX)
- 
- #undef EM
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index 57681e98e6bf..ca9ed24704ec 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -2093,16 +2093,20 @@ static int __udp_queue_rcv_skb(struct sock *sk, struct sk_buff *skb)
- 	rc = __udp_enqueue_schedule_skb(sk, skb);
- 	if (rc < 0) {
- 		int is_udplite = IS_UDPLITE(sk);
-+		int drop_reason;
- 
- 		/* Note that an ENOMEM error is charged twice */
--		if (rc == -ENOMEM)
-+		if (rc == -ENOMEM) {
- 			UDP_INC_STATS(sock_net(sk), UDP_MIB_RCVBUFERRORS,
- 					is_udplite);
--		else
-+			drop_reason = SKB_DROP_REASON_SOCKET_RCVBUFF;
-+		} else {
- 			UDP_INC_STATS(sock_net(sk), UDP_MIB_MEMERRORS,
- 				      is_udplite);
-+			drop_reason = SKB_DROP_REASON_PROTO_MEM;
-+		}
- 		UDP_INC_STATS(sock_net(sk), UDP_MIB_INERRORS, is_udplite);
--		kfree_skb(skb);
-+		kfree_skb_reason(skb, drop_reason);
- 		trace_udp_fail_queue_rcv_skb(rc, sk);
- 		return -1;
- 	}
--- 
-2.34.1
-
+Cheers,
+Mark

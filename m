@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3A64990F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5CEA4990F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378601AbiAXUHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:07:45 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44358 "EHLO
+        id S1354520AbiAXUIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:08:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:46772 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356153AbiAXTtP (ORCPT
+        with ESMTP id S1357225AbiAXTtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:49:15 -0500
+        Mon, 24 Jan 2022 14:49:39 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCD4F6090C;
-        Mon, 24 Jan 2022 19:49:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9148C340E5;
-        Mon, 24 Jan 2022 19:49:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F2886091C;
+        Mon, 24 Jan 2022 19:49:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 867CAC340E5;
+        Mon, 24 Jan 2022 19:49:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053754;
-        bh=G0jmp0hanQ0WSDwgNBwHNuNpg0lD0ReR5+DUtfY/cWs=;
+        s=korg; t=1643053778;
+        bh=WzNw0oSd1gKe/M9faZwGg+IalzTanMcEGX+KVptdEPQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WbNkXD+mXG2OSKtCp55mmIrckr4CKiXbtiCG7v1A71hQZqCuO+Z2dMv3MPsXWAYO/
-         Mu3+ic/8gu3BB1PrLeq44ayp/ilLOggSiPnaygcp5GcxYvutzNixID2VcMjpkMzCB+
-         H2JxaqqljTNKU2oSnbUa1uoAMbaHj1NgZocupK6Q=
+        b=TcSepyyzt82KiaaIWdXx3BxTx7HKMqHV8mVziOHgPRBtmEpr1DvuR4sT69iadsslI
+         1s9voMzxfkEltQbjNjaqb2Ky1itTzxSthjpmE1ziAlnSK9rtExS9mRD7tWW5REiDb4
+         cxjwGPUKo3q1K+9DcFo/kyIFgjEVUcOKEQq1flvg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        stable@vger.kernel.org, Antony Antony <antony.antony@secunet.com>,
+        Eyal Birger <eyal.birger@gmail.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 166/563] ath11k: Fix a NULL pointer dereference in ath11k_mac_op_hw_scan()
-Date:   Mon, 24 Jan 2022 19:38:51 +0100
-Message-Id: <20220124184030.146413635@linuxfoundation.org>
+Subject: [PATCH 5.10 173/563] xfrm: interface with if_id 0 should return error
+Date:   Mon, 24 Jan 2022 19:38:58 +0100
+Message-Id: <20220124184030.397155595@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -46,57 +47,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Antony Antony <antony.antony@secunet.com>
 
-[ Upstream commit eccd25136386a04ebf46a64f3a34e8e0fab6d9e1 ]
+[ Upstream commit 8dce43919566f06e865f7e8949f5c10d8c2493f5 ]
 
-In ath11k_mac_op_hw_scan(), the return value of kzalloc() is directly
-used in memcpy(), which may lead to a NULL pointer dereference on
-failure of kzalloc().
+xfrm interface if_id = 0 would cause xfrm policy lookup errors since
+Commit 9f8550e4bd9d.
 
-Fix this bug by adding a check of arg.extraie.ptr.
+Now explicitly fail to create an xfrm interface when if_id = 0
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+With this commit:
+ ip link add ipsec0  type xfrm dev lo  if_id 0
+ Error: if_id must be non zero.
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
+v1->v2 change:
+ - add Fixes: tag
 
-Builds with CONFIG_ATH11K=m show no new warnings, and our static
-analyzer no longer warns about this code.
-
-Fixes: d5c65159f289 ("ath11k: driver for Qualcomm IEEE 802.11ax devices")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20211202155348.71315-1-zhou1615@umn.edu
+Fixes: 9f8550e4bd9d ("xfrm: fix disable_xfrm sysctl when used on xfrm interfaces")
+Signed-off-by: Antony Antony <antony.antony@secunet.com>
+Reviewed-by: Eyal Birger <eyal.birger@gmail.com>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath11k/mac.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ net/xfrm/xfrm_interface.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
-index 835ce805b63ec..18e841e1a016d 100644
---- a/drivers/net/wireless/ath/ath11k/mac.c
-+++ b/drivers/net/wireless/ath/ath11k/mac.c
-@@ -2320,9 +2320,12 @@ static int ath11k_mac_op_hw_scan(struct ieee80211_hw *hw,
- 	arg.scan_id = ATH11K_SCAN_ID;
+diff --git a/net/xfrm/xfrm_interface.c b/net/xfrm/xfrm_interface.c
+index e9ce23343f5ca..e1fae61a5bb90 100644
+--- a/net/xfrm/xfrm_interface.c
++++ b/net/xfrm/xfrm_interface.c
+@@ -643,11 +643,16 @@ static int xfrmi_newlink(struct net *src_net, struct net_device *dev,
+ 			struct netlink_ext_ack *extack)
+ {
+ 	struct net *net = dev_net(dev);
+-	struct xfrm_if_parms p;
++	struct xfrm_if_parms p = {};
+ 	struct xfrm_if *xi;
+ 	int err;
  
- 	if (req->ie_len) {
-+		arg.extraie.ptr = kmemdup(req->ie, req->ie_len, GFP_KERNEL);
-+		if (!arg.extraie.ptr) {
-+			ret = -ENOMEM;
-+			goto exit;
-+		}
- 		arg.extraie.len = req->ie_len;
--		arg.extraie.ptr = kzalloc(req->ie_len, GFP_KERNEL);
--		memcpy(arg.extraie.ptr, req->ie, req->ie_len);
- 	}
+ 	xfrmi_netlink_parms(data, &p);
++	if (!p.if_id) {
++		NL_SET_ERR_MSG(extack, "if_id must be non zero");
++		return -EINVAL;
++	}
++
+ 	xi = xfrmi_locate(net, &p);
+ 	if (xi)
+ 		return -EEXIST;
+@@ -672,7 +677,12 @@ static int xfrmi_changelink(struct net_device *dev, struct nlattr *tb[],
+ {
+ 	struct xfrm_if *xi = netdev_priv(dev);
+ 	struct net *net = xi->net;
+-	struct xfrm_if_parms p;
++	struct xfrm_if_parms p = {};
++
++	if (!p.if_id) {
++		NL_SET_ERR_MSG(extack, "if_id must be non zero");
++		return -EINVAL;
++	}
  
- 	if (req->n_ssids) {
+ 	xfrmi_netlink_parms(data, &p);
+ 	xi = xfrmi_locate(net, &p);
 -- 
 2.34.1
 

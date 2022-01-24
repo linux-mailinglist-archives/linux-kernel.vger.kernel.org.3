@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5CB498CE2
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A85498A92
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351179AbiAXT0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:26:07 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43854 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344211AbiAXTSb (ORCPT
+        id S1346305AbiAXTFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:05:20 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53666 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343848AbiAXS5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:18:31 -0500
+        Mon, 24 Jan 2022 13:57:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 86D8260BB9;
-        Mon, 24 Jan 2022 19:18:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FE49C340E5;
-        Mon, 24 Jan 2022 19:18:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 382A2B81243;
+        Mon, 24 Jan 2022 18:57:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D0B8C340EC;
+        Mon, 24 Jan 2022 18:57:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051910;
-        bh=4I2F3w+qvMx8ERrKqBcHEf041oDFYR5vHFs3Gc44x9s=;
+        s=korg; t=1643050669;
+        bh=tvYs1VSePffa4h5x8YjWrQTm+RhMLjGYNBC6EzBNKdU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OVr8cpuxMwaxKNjzIGsSf4vpWrxNXd6ijY42tptn7dLOJZ2xMY8WdnqM6lemygcdV
-         yrcd6TYJsU7MGc3F8yPAUavbCRnjHYqNh0ftogy4U29Fbg60ZAXkkMHwtE3/O+/JBZ
-         crJh9s8n3oTLDVQ5xiwa0zvR8tT53sIsF0cSje4Q=
+        b=Jaa5jmhznhj5/G8HnXTwnxiQelejV1z3GQSMwUiloxIwjEFFpKXui35xVCFuyxRlN
+         9+fgF8WVVd7w7wg7GqZzadaQY7SzQYpPP/Y6BrN7vv+HzCkl3YT6A7SPF/KccJ0P20
+         DbqXEqkWVoV8edGoL84qzdm1o5n7m1bvYNCOd4cg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, Alexander Aring <aahringo@redhat.com>,
+        David Teigland <teigland@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 126/239] media: b2c2: Add missing check in flexcop_pci_isr:
+Subject: [PATCH 4.9 074/157] fs: dlm: filter user dlm messages for kernel locks
 Date:   Mon, 24 Jan 2022 19:42:44 +0100
-Message-Id: <20220124183947.118696172@linuxfoundation.org>
+Message-Id: <20220124183935.136173920@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,161 +46,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Alexander Aring <aahringo@redhat.com>
 
-[ Upstream commit b13203032e679674c7c518f52a7ec0801ca3a829 ]
+[ Upstream commit 6c2e3bf68f3e5e5a647aa52be246d5f552d7496d ]
 
-A out-of-bounds bug can be triggered by an interrupt, the reason for
-this bug is the lack of checking of register values.
+This patch fixes the following crash by receiving a invalid message:
 
-In flexcop_pci_isr, the driver reads value from a register and uses it as
-a dma address. Finally, this address will be passed to the count parameter
-of find_next_packet. If this value is larger than the size of dma, the
-index of buffer will be out-of-bounds.
+[  160.672220] ==================================================================
+[  160.676206] BUG: KASAN: user-memory-access in dlm_user_add_ast+0xc3/0x370
+[  160.679659] Read of size 8 at addr 00000000deadbeef by task kworker/u32:13/319
+[  160.681447]
+[  160.681824] CPU: 10 PID: 319 Comm: kworker/u32:13 Not tainted 5.14.0-rc2+ #399
+[  160.683472] Hardware name: Red Hat KVM/RHEL-AV, BIOS 1.14.0-1.module+el8.6.0+12648+6ede71a5 04/01/2014
+[  160.685574] Workqueue: dlm_recv process_recv_sockets
+[  160.686721] Call Trace:
+[  160.687310]  dump_stack_lvl+0x56/0x6f
+[  160.688169]  ? dlm_user_add_ast+0xc3/0x370
+[  160.689116]  kasan_report.cold.14+0x116/0x11b
+[  160.690138]  ? dlm_user_add_ast+0xc3/0x370
+[  160.690832]  dlm_user_add_ast+0xc3/0x370
+[  160.691502]  _receive_unlock_reply+0x103/0x170
+[  160.692241]  _receive_message+0x11df/0x1ec0
+[  160.692926]  ? rcu_read_lock_sched_held+0xa1/0xd0
+[  160.693700]  ? rcu_read_lock_bh_held+0xb0/0xb0
+[  160.694427]  ? lock_acquire+0x175/0x400
+[  160.695058]  ? do_purge.isra.51+0x200/0x200
+[  160.695744]  ? lock_acquired+0x360/0x5d0
+[  160.696400]  ? lock_contended+0x6a0/0x6a0
+[  160.697055]  ? lock_release+0x21d/0x5e0
+[  160.697686]  ? lock_is_held_type+0xe0/0x110
+[  160.698352]  ? lock_is_held_type+0xe0/0x110
+[  160.699026]  ? ___might_sleep+0x1cc/0x1e0
+[  160.699698]  ? dlm_wait_requestqueue+0x94/0x140
+[  160.700451]  ? dlm_process_requestqueue+0x240/0x240
+[  160.701249]  ? down_write_killable+0x2b0/0x2b0
+[  160.701988]  ? do_raw_spin_unlock+0xa2/0x130
+[  160.702690]  dlm_receive_buffer+0x1a5/0x210
+[  160.703385]  dlm_process_incoming_buffer+0x726/0x9f0
+[  160.704210]  receive_from_sock+0x1c0/0x3b0
+[  160.704886]  ? dlm_tcp_shutdown+0x30/0x30
+[  160.705561]  ? lock_acquire+0x175/0x400
+[  160.706197]  ? rcu_read_lock_sched_held+0xa1/0xd0
+[  160.706941]  ? rcu_read_lock_bh_held+0xb0/0xb0
+[  160.707681]  process_recv_sockets+0x32/0x40
+[  160.708366]  process_one_work+0x55e/0xad0
+[  160.709045]  ? pwq_dec_nr_in_flight+0x110/0x110
+[  160.709820]  worker_thread+0x65/0x5e0
+[  160.710423]  ? process_one_work+0xad0/0xad0
+[  160.711087]  kthread+0x1ed/0x220
+[  160.711628]  ? set_kthread_struct+0x80/0x80
+[  160.712314]  ret_from_fork+0x22/0x30
 
-Fix this by adding a check after reading the value of the register.
+The issue is that we received a DLM message for a user lock but the
+destination lock is a kernel lock. Note that the address which is trying
+to derefence is 00000000deadbeef, which is in a kernel lock
+lkb->lkb_astparam, this field should never be derefenced by the DLM
+kernel stack. In case of a user lock lkb->lkb_astparam is lkb->lkb_ua
+(memory is shared by a union field). The struct lkb_ua will be handled
+by the DLM kernel stack but on a kernel lock it will contain invalid
+data and ends in most likely crashing the kernel.
 
-The following KASAN report reveals it:
+It can be reproduced with two cluster nodes.
 
-BUG: KASAN: slab-out-of-bounds in find_next_packet
-drivers/media/dvb-core/dvb_demux.c:528 [inline]
-BUG: KASAN: slab-out-of-bounds in _dvb_dmx_swfilter
-drivers/media/dvb-core/dvb_demux.c:572 [inline]
-BUG: KASAN: slab-out-of-bounds in dvb_dmx_swfilter+0x3fa/0x420
-drivers/media/dvb-core/dvb_demux.c:603
-Read of size 1 at addr ffff8880608c00a0 by task swapper/2/0
+node 2:
+dlm_tool join test
+echo "862 fooobaar 1 2 1" > /sys/kernel/debug/dlm/test_locks
+echo "862 3 1" > /sys/kernel/debug/dlm/test_waiters
 
-CPU: 2 PID: 0 Comm: swapper/2 Not tainted 4.19.177-gdba4159c14ef #25
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xec/0x156 lib/dump_stack.c:118
- print_address_description+0x78/0x290 mm/kasan/report.c:256
- kasan_report_error mm/kasan/report.c:354 [inline]
- kasan_report+0x25b/0x380 mm/kasan/report.c:412
- __asan_report_load1_noabort+0x19/0x20 mm/kasan/report.c:430
- find_next_packet drivers/media/dvb-core/dvb_demux.c:528 [inline]
- _dvb_dmx_swfilter drivers/media/dvb-core/dvb_demux.c:572 [inline]
- dvb_dmx_swfilter+0x3fa/0x420 drivers/media/dvb-core/dvb_demux.c:603
- flexcop_pass_dmx_data+0x2e/0x40 drivers/media/common/b2c2/flexcop.c:167
- flexcop_pci_isr+0x3d1/0x5d0 drivers/media/pci/b2c2/flexcop-pci.c:212
- __handle_irq_event_percpu+0xfb/0x770 kernel/irq/handle.c:149
- handle_irq_event_percpu+0x79/0x150 kernel/irq/handle.c:189
- handle_irq_event+0xac/0x140 kernel/irq/handle.c:206
- handle_fasteoi_irq+0x232/0x5c0 kernel/irq/chip.c:725
- generic_handle_irq_desc include/linux/irqdesc.h:155 [inline]
- handle_irq+0x230/0x3a0 arch/x86/kernel/irq_64.c:87
- do_IRQ+0xa7/0x1e0 arch/x86/kernel/irq.c:247
- common_interrupt+0xf/0xf arch/x86/entry/entry_64.S:670
- </IRQ>
-RIP: 0010:native_safe_halt+0x28/0x30 arch/x86/include/asm/irqflags.h:61
-Code: 00 00 55 be 04 00 00 00 48 c7 c7 00 62 2f 8c 48 89 e5 e8 fb 31
-e8 f8 8b 05 75 4f 8e 03 85 c0 7e 07 0f 00 2d 8a 61 66 00 fb f4 <5d> c3
-90 90 90 90 90 90 0f 1f 44 00 00 55 48 89 e5 41 57 41 56 41
-RSP: 0018:ffff88806b71fcc8 EFLAGS: 00000246 ORIG_RAX: ffffffffffffffde
-RAX: 0000000000000000 RBX: ffffffff8bde44c8 RCX: ffffffff88a11285
-RDX: 0000000000000000 RSI: 0000000000000004 RDI: ffffffff8c2f6200
-RBP: ffff88806b71fcc8 R08: fffffbfff185ec40 R09: fffffbfff185ec40
-R10: 0000000000000001 R11: fffffbfff185ec40 R12: 0000000000000002
-R13: ffffffff8be9d6e0 R14: 0000000000000000 R15: 0000000000000000
- arch_safe_halt arch/x86/include/asm/paravirt.h:94 [inline]
- default_idle+0x6f/0x360 arch/x86/kernel/process.c:557
- arch_cpu_idle+0xf/0x20 arch/x86/kernel/process.c:548
- default_idle_call+0x3b/0x60 kernel/sched/idle.c:93
- cpuidle_idle_call kernel/sched/idle.c:153 [inline]
- do_idle+0x2ab/0x3c0 kernel/sched/idle.c:263
- cpu_startup_entry+0xcb/0xe0 kernel/sched/idle.c:369
- start_secondary+0x3b8/0x4e0 arch/x86/kernel/smpboot.c:271
- secondary_startup_64+0xa4/0xb0 arch/x86/kernel/head_64.S:243
+node 1:
+dlm_tool join test
 
-Allocated by task 1:
- save_stack+0x43/0xd0 mm/kasan/kasan.c:448
- set_track mm/kasan/kasan.c:460 [inline]
- kasan_kmalloc+0xad/0xe0 mm/kasan/kasan.c:553
- kasan_slab_alloc+0x11/0x20 mm/kasan/kasan.c:490
- slab_post_alloc_hook mm/slab.h:445 [inline]
- slab_alloc_node mm/slub.c:2741 [inline]
- slab_alloc mm/slub.c:2749 [inline]
- kmem_cache_alloc+0xeb/0x280 mm/slub.c:2754
- kmem_cache_zalloc include/linux/slab.h:699 [inline]
- __kernfs_new_node+0xe2/0x6f0 fs/kernfs/dir.c:633
- kernfs_new_node+0x9a/0x120 fs/kernfs/dir.c:693
- __kernfs_create_file+0x5f/0x340 fs/kernfs/file.c:992
- sysfs_add_file_mode_ns+0x22a/0x4e0 fs/sysfs/file.c:306
- create_files fs/sysfs/group.c:63 [inline]
- internal_create_group+0x34e/0xc30 fs/sysfs/group.c:147
- sysfs_create_group fs/sysfs/group.c:173 [inline]
- sysfs_create_groups+0x9c/0x140 fs/sysfs/group.c:200
- driver_add_groups+0x3e/0x50 drivers/base/driver.c:129
- bus_add_driver+0x3a5/0x790 drivers/base/bus.c:684
- driver_register+0x1cd/0x410 drivers/base/driver.c:170
- __pci_register_driver+0x197/0x200 drivers/pci/pci-driver.c:1411
- cx88_audio_pci_driver_init+0x23/0x25 drivers/media/pci/cx88/cx88-alsa.c:
- 1017
- do_one_initcall+0xe0/0x610 init/main.c:884
- do_initcall_level init/main.c:952 [inline]
- do_initcalls init/main.c:960 [inline]
- do_basic_setup init/main.c:978 [inline]
- kernel_init_freeable+0x4d0/0x592 init/main.c:1145
- kernel_init+0x18/0x190 init/main.c:1062
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:415
+python:
+foo = DLM(h_cmd=3, o_nextcmd=1, h_nodeid=1, h_lockspace=0x77222027, \
+          m_type=7, m_flags=0x1, m_remid=0x862, m_result=0xFFFEFFFE)
+newFile = open("/sys/kernel/debug/dlm/comms/2/rawmsg", "wb")
+newFile.write(bytes(foo))
 
-Freed by task 0:
-(stack is not available)
-
-The buggy address belongs to the object at ffff8880608c0000
- which belongs to the cache kernfs_node_cache of size 160
-The buggy address is located 0 bytes to the right of
- 160-byte region [ffff8880608c0000, ffff8880608c00a0)
-The buggy address belongs to the page:
-page:ffffea0001823000 count:1 mapcount:0 mapping:ffff88806bed1e00
-index:0x0 compound_mapcount: 0
-flags: 0x100000000008100(slab|head)
-raw: 0100000000008100 dead000000000100 dead000000000200 ffff88806bed1e00
-raw: 0000000000000000 0000000000240024 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff8880608bff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff8880608c0000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff8880608c0080: 00 00 00 00 fc fc fc fc fc fc fc fc 00 00 00 00
-                               ^
- ffff8880608c0100: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff8880608c0180: fc fc fc fc fc fc fc fc 00 00 00 00 00 00 00 00
-==================================================================
-
-Link: https://lore.kernel.org/linux-media/1620723603-30912-1-git-send-email-zheyuma97@gmail.com
-Reported-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Alexander Aring <aahringo@redhat.com>
+Signed-off-by: David Teigland <teigland@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/b2c2/flexcop-pci.c | 3 +++
- 1 file changed, 3 insertions(+)
+ fs/dlm/lock.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/media/pci/b2c2/flexcop-pci.c b/drivers/media/pci/b2c2/flexcop-pci.c
-index cc6527e355373..b7d8e34ffd5da 100644
---- a/drivers/media/pci/b2c2/flexcop-pci.c
-+++ b/drivers/media/pci/b2c2/flexcop-pci.c
-@@ -184,6 +184,8 @@ static irqreturn_t flexcop_pci_isr(int irq, void *dev_id)
- 		dma_addr_t cur_addr =
- 			fc->read_ibi_reg(fc,dma1_008).dma_0x8.dma_cur_addr << 2;
- 		u32 cur_pos = cur_addr - fc_pci->dma[0].dma_addr0;
-+		if (cur_pos > fc_pci->dma[0].size * 2)
-+			goto error;
+diff --git a/fs/dlm/lock.c b/fs/dlm/lock.c
+index 3a7f401e943c1..ffab7dc881574 100644
+--- a/fs/dlm/lock.c
++++ b/fs/dlm/lock.c
+@@ -3975,6 +3975,14 @@ static int validate_message(struct dlm_lkb *lkb, struct dlm_message *ms)
+ 	int from = ms->m_header.h_nodeid;
+ 	int error = 0;
  
- 		deb_irq("%u irq: %08x cur_addr: %llx: cur_pos: %08x, last_cur_pos: %08x ",
- 				jiffies_to_usecs(jiffies - fc_pci->last_irq),
-@@ -224,6 +226,7 @@ static irqreturn_t flexcop_pci_isr(int irq, void *dev_id)
- 		ret = IRQ_NONE;
++	/* currently mixing of user/kernel locks are not supported */
++	if (ms->m_flags & DLM_IFL_USER && ~lkb->lkb_flags & DLM_IFL_USER) {
++		log_error(lkb->lkb_resource->res_ls,
++			  "got user dlm message for a kernel lock");
++		error = -EINVAL;
++		goto out;
++	}
++
+ 	switch (ms->m_type) {
+ 	case DLM_MSG_CONVERT:
+ 	case DLM_MSG_UNLOCK:
+@@ -4003,6 +4011,7 @@ static int validate_message(struct dlm_lkb *lkb, struct dlm_message *ms)
+ 		error = -EINVAL;
  	}
  
-+error:
- 	spin_unlock_irqrestore(&fc_pci->irq_lock, flags);
- 	return ret;
- }
++out:
+ 	if (error)
+ 		log_error(lkb->lkb_resource->res_ls,
+ 			  "ignore invalid message %d from %d %x %x %x %d",
 -- 
 2.34.1
 

@@ -2,60 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7546F49A72A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC7E49A6CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3423031AbiAYCct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:32:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355504AbiAXUWc (ORCPT
+        id S3421421AbiAYC0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:26:52 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:58342 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357333AbiAXTtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:22:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B4DC0417D0;
-        Mon, 24 Jan 2022 11:40:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C95EB81239;
-        Mon, 24 Jan 2022 19:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44297C340E5;
-        Mon, 24 Jan 2022 19:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643053216;
-        bh=5d1KiOyv52f+/wbMD2uRsiNtmxj6WuPrFFJ1Ny+tHaI=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=tv1dOZ6nWTTYKVQE3WBOun88z3a7NKEHWdsILR7FQSWt/fS9wEKsPaZDmi/9/dp3E
-         emcPhSKCjrZ3WoAYJ+Kgu5Zw7/Rh0P0HzmDta0HNlJDbGxTQ4ZoGc3Ne+yJSxXrh4K
-         wNVWWnTCnYhoLqAP9Afw3lB3wduPyr5R64qurcdMgUMeHQzUeBTYoFNNrbZembJFFC
-         wtsD++vu/0rX/RDvkTJi8T+PC3p0KB9otRV+WG+y4xgoQqRc+HkTv2qp4eSQcykmhb
-         MdWJgMPtcyfNoIOpKiBBTVWD7qUkAa7kZHlqjrLD/bG+MF715pu+kTnTVV9nl/kB1W
-         SVoX62lyjRf4Q==
-Content-Type: text/plain; charset="utf-8"
+        Mon, 24 Jan 2022 14:49:52 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 5FBE42113A;
+        Mon, 24 Jan 2022 19:49:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1643053790;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lSB/HKbk/o697vERtOHKC1oUxFtTGY1mq5Ymy+OsCfE=;
+        b=sgK3GhGtwEfItF5vh2VmPhgD5Rf6JoYXxVsyPpGa4H5jbV3KcRkfF6+m441azdLepOhK9H
+        WWuld4kkv5AZ0A0Mu00FrhN3sysxmihLFRW8mzZ5yxht0d/LDr/QOphQhOHV6Xw9wEWlRN
+        CO0CWWluK3q09C17/l4nGp+09CPS0rk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1643053790;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lSB/HKbk/o697vERtOHKC1oUxFtTGY1mq5Ymy+OsCfE=;
+        b=AczkhFgdVZQppvz1h4XFkKufdIxGYT/bVxpC3BgLrXUwiOKCsKE9YjBYtHCniBCq5RxkU/
+        XnEGb2Jq6i5IuUAA==
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 45D07A3B83;
+        Mon, 24 Jan 2022 19:49:50 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 5D6ECDA7A3; Mon, 24 Jan 2022 20:49:10 +0100 (CET)
+Date:   Mon, 24 Jan 2022 20:49:10 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     trix@redhat.com
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        nathan@kernel.org, ndesaulniers@google.com, anand.jain@oracle.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] btrfs: initialize variable cancel
+Message-ID: <20220124194910.GF14046@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, trix@redhat.com, clm@fb.com,
+        josef@toxicpanda.com, dsterba@suse.com, nathan@kernel.org,
+        ndesaulniers@google.com, anand.jain@oracle.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <20220121134522.832207-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220124174805.31021-1-tdas@codeaurora.org>
-References: <20220124174805.31021-1-tdas@codeaurora.org>
-Subject: Re: [PATCH v1] clk qcom: clk-alpha-pll: Update to use determine rate ops for PLL
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Taniya Das <tdas@codeaurora.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <tdas@codeaurora.org>
-Date:   Mon, 24 Jan 2022 11:40:14 -0800
-User-Agent: alot/0.10
-Message-Id: <20220124194016.44297C340E5@smtp.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220121134522.832207-1-trix@redhat.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Taniya Das (2022-01-24 09:48:05)
-> On 32 bit devices, where the PLL requires to support the frequency
-> beyond the range of the `long int` the round rate ops cannot support.
-> Thus update the clk_ops to use determine rate instead.
->=20
-> While at it also fix the code in RCG.
+On Fri, Jan 21, 2022 at 05:45:22AM -0800, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> Clang static analysis reports this problem
+> ioctl.c:3333:8: warning: 3rd function call argument is an
+>   uninitialized value
+>     ret = exclop_start_or_cancel_reloc(fs_info,
+> 
+> cancel is only set in one branch of an if-check and is
+> always used.  So initialize to false.
+> 
+> Fixes: 1a15eb724aae ("btrfs: use btrfs_get_dev_args_from_path in dev removal ioctls")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Please split this into two patches, and tag with Fixes
+Added to misc-next, with the updted subject line, thanks.

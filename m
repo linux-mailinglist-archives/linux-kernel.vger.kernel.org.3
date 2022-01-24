@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A38649922F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBACC498CD0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:32:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350912AbiAXUR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:17:57 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45986 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353190AbiAXUBC (ORCPT
+        id S1350686AbiAXTZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:25:10 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45302 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344024AbiAXTQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:01:02 -0500
+        Mon, 24 Jan 2022 14:16:10 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A33E8B8122A;
-        Mon, 24 Jan 2022 20:01:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9175C340E5;
-        Mon, 24 Jan 2022 20:00:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6271060918;
+        Mon, 24 Jan 2022 19:16:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F701C340E5;
+        Mon, 24 Jan 2022 19:16:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054459;
-        bh=NsNmxlzJcp4bHdt1JVI79chzoIVKauwC5RQte6uzHu4=;
+        s=korg; t=1643051769;
+        bh=R/8W69jPQrWexMmMn+5pYEBZEBte7tNLSs8/YEVRk5Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IIwQOCuU8/Q7IifiwSRKkHxsWJyta6kyLJkZBrcR2s0YqWDpdMrlQhH41ViEp8ZX0
-         EtjlVSqwW5ponDUp9IBK5wZBl8yH3Mhs6NF2lpygDuJiN1aQlP2JJDIiP1KjwKE0s9
-         NAd1kRwvqW9DnSVyRkNdRv1mYruiLGDayAIr1jKQ=
+        b=qLjh70yvt5bJ/HuqpF8Gwy6+TuHHTQ9m3W4VweGsdbrD/KyM66Ike/FECks2jnaJY
+         LwbklB5ShgR2i63GWARqWeyU53am6AWhbvtycJXzUJ+0HQl4rDjqGKtxWiGdbQs+SD
+         TLjBF1ySLf8MZTe7ezH7Rz2L5aOWtFNwvbOF1fc0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 354/563] selftests/ftrace: make kprobe profile testcase description unique
-Date:   Mon, 24 Jan 2022 19:41:59 +0100
-Message-Id: <20220124184036.659126137@linuxfoundation.org>
+Subject: [PATCH 4.19 082/239] ARM: dts: armada-38x: Add generic compatible to UART nodes
+Date:   Mon, 24 Jan 2022 19:42:00 +0100
+Message-Id: <20220124183945.730959014@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,39 +48,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heiko Carstens <hca@linux.ibm.com>
+From: Marek Behún <kabel@kernel.org>
 
-[ Upstream commit e5992f373c6eed6d09e5858e9623df1259b3ce30 ]
+[ Upstream commit 62480772263ab6b52e758f2346c70a526abd1d28 ]
 
-Commit 32f6e5da83c7 ("selftests/ftrace: Add kprobe profile testcase")
-added a new kprobes testcase, but has a description which does not
-describe what the test case is doing and is duplicating the description
-of another test case.
+Add generic compatible string "ns16550a" to serial port nodes of Armada
+38x.
 
-Therefore change the test case description, so it is unique and then
-allows easily to tell which test case actually passed or failed.
+This makes it possible to use earlycon.
 
-Reported-by: Alexander Egorenkov <egorenar@linux.ibm.com>
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Fixes: 0d3d96ab0059 ("ARM: mvebu: add Device Tree description of the Armada 380/385 SoCs")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/ftrace/test.d/kprobe/profile.tc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/armada-38x.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/profile.tc b/tools/testing/selftests/ftrace/test.d/kprobe/profile.tc
-index 98166fa3eb91c..34fb89b0c61fa 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/profile.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/profile.tc
-@@ -1,6 +1,6 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
--# description: Kprobe dynamic event - adding and removing
-+# description: Kprobe profile
- # requires: kprobe_events
+diff --git a/arch/arm/boot/dts/armada-38x.dtsi b/arch/arm/boot/dts/armada-38x.dtsi
+index 929459c427605..6f32f12332824 100644
+--- a/arch/arm/boot/dts/armada-38x.dtsi
++++ b/arch/arm/boot/dts/armada-38x.dtsi
+@@ -163,7 +163,7 @@
+ 			};
  
- ! grep -q 'myevent' kprobe_profile
+ 			uart0: serial@12000 {
+-				compatible = "marvell,armada-38x-uart";
++				compatible = "marvell,armada-38x-uart", "ns16550a";
+ 				reg = <0x12000 0x100>;
+ 				reg-shift = <2>;
+ 				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
+@@ -173,7 +173,7 @@
+ 			};
+ 
+ 			uart1: serial@12100 {
+-				compatible = "marvell,armada-38x-uart";
++				compatible = "marvell,armada-38x-uart", "ns16550a";
+ 				reg = <0x12100 0x100>;
+ 				reg-shift = <2>;
+ 				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
 -- 
 2.34.1
 

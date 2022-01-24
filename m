@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CC7498B71
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E11F8498E25
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345837AbiAXTNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:13:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346206AbiAXTFN (ORCPT
+        id S1354874AbiAXTjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:39:33 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:32808 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350901AbiAXTdx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:05:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53251C06176D;
-        Mon, 24 Jan 2022 11:00:00 -0800 (PST)
+        Mon, 24 Jan 2022 14:33:53 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1BAB2B8119D;
-        Mon, 24 Jan 2022 18:59:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C9E8C340E5;
-        Mon, 24 Jan 2022 18:59:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5183F61488;
+        Mon, 24 Jan 2022 19:33:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25EB0C340E5;
+        Mon, 24 Jan 2022 19:33:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050797;
-        bh=ytqGsn8MmYRAVpbzLdd12cjfjLBCERwhbxRlqhLvZ30=;
+        s=korg; t=1643052832;
+        bh=tZM5TML74UbfSY7dpcQg47KWZMIdishfAIuWtvqaerk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XX3C2T7XakFqsaq1EPmfggB3fyQtqbJUCGOMfzccuIDnU3f6S2FjixYLj2O1vhYlE
-         6/ZeFuAyLGuLrUpvSH9N/q+9J0eiskDGKZQvb0gdONs6KNIcJb95v2ZMpEMH0H5dkM
-         J0gcln9gk9qEI9lihg6TG5DVnFliujEc7cDCU8E4=
+        b=XyS/jJCEXFQxvrCr/DY6Ulf9zZ+7hlFhckzP+6ORs7HzQJtOMleBApEENWrcbBDUp
+         qCmA4W5QXFTXxJRc2QWuEGZdMTJAep/vto6FVFhlHmlAIw1p0uK+v4mIu3EdxuPKjw
+         GWTmPQNIWfXhkEnheBuLI0cm2jgzzyvKgShtiQMI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brendan Dolan-Gavitt <brendandg@nyu.edu>,
-        Zekun Shen <bruceshenzk@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 082/157] mwifiex: Fix skb_over_panic in mwifiex_usb_recv()
+Subject: [PATCH 5.4 188/320] bpf: Do not WARN in bpf_warn_invalid_xdp_action()
 Date:   Mon, 24 Jan 2022 19:42:52 +0100
-Message-Id: <20220124183935.385431507@linuxfoundation.org>
+Message-Id: <20220124184000.041545255@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,66 +47,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zekun Shen <bruceshenzk@gmail.com>
+From: Paolo Abeni <pabeni@redhat.com>
 
-[ Upstream commit 04d80663f67ccef893061b49ec8a42ff7045ae84 ]
+[ Upstream commit 2cbad989033bff0256675c38f96f5faab852af4b ]
 
-Currently, with an unknown recv_type, mwifiex_usb_recv
-just return -1 without restoring the skb. Next time
-mwifiex_usb_rx_complete is invoked with the same skb,
-calling skb_put causes skb_over_panic.
+The WARN_ONCE() in bpf_warn_invalid_xdp_action() can be triggered by
+any bugged program, and even attaching a correct program to a NIC
+not supporting the given action.
 
-The bug is triggerable with a compromised/malfunctioning
-usb device. After applying the patch, skb_over_panic
-no longer shows up with the same input.
+The resulting splat, beyond polluting the logs, fouls automated tools:
+e.g. a syzkaller reproducers using an XDP program returning an
+unsupported action will never pass validation.
 
-Attached is the panic report from fuzzing.
-skbuff: skb_over_panic: text:000000003bf1b5fa
- len:2048 put:4 head:00000000dd6a115b data:000000000a9445d8
- tail:0x844 end:0x840 dev:<NULL>
-kernel BUG at net/core/skbuff.c:109!
-invalid opcode: 0000 [#1] SMP KASAN NOPTI
-CPU: 0 PID: 198 Comm: in:imklog Not tainted 5.6.0 #60
-RIP: 0010:skb_panic+0x15f/0x161
-Call Trace:
- <IRQ>
- ? mwifiex_usb_rx_complete+0x26b/0xfcd [mwifiex_usb]
- skb_put.cold+0x24/0x24
- mwifiex_usb_rx_complete+0x26b/0xfcd [mwifiex_usb]
- __usb_hcd_giveback_urb+0x1e4/0x380
- usb_giveback_urb_bh+0x241/0x4f0
- ? __hrtimer_run_queues+0x316/0x740
- ? __usb_hcd_giveback_urb+0x380/0x380
- tasklet_action_common.isra.0+0x135/0x330
- __do_softirq+0x18c/0x634
- irq_exit+0x114/0x140
- smp_apic_timer_interrupt+0xde/0x380
- apic_timer_interrupt+0xf/0x20
- </IRQ>
+Replace the WARN_ONCE with a less intrusive pr_warn_once().
 
-Reported-by: Brendan Dolan-Gavitt <brendandg@nyu.edu>
-Signed-off-by: Zekun Shen <bruceshenzk@gmail.com>
-Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
-Link: https://lore.kernel.org/r/YX4CqjfRcTa6bVL+@Zekuns-MBP-16.fios-router.home
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Link: https://lore.kernel.org/bpf/016ceec56e4817ebb2a9e35ce794d5c917df572c.1638189075.git.pabeni@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/marvell/mwifiex/usb.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/core/filter.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/wireless/marvell/mwifiex/usb.c b/drivers/net/wireless/marvell/mwifiex/usb.c
-index 2c4225e57c396..3a26add665ca0 100644
---- a/drivers/net/wireless/marvell/mwifiex/usb.c
-+++ b/drivers/net/wireless/marvell/mwifiex/usb.c
-@@ -132,7 +132,8 @@ static int mwifiex_usb_recv(struct mwifiex_adapter *adapter,
- 		default:
- 			mwifiex_dbg(adapter, ERROR,
- 				    "unknown recv_type %#x\n", recv_type);
--			return -1;
-+			ret = -1;
-+			goto exit_restore_skb;
- 		}
- 		break;
- 	case MWIFIEX_USB_EP_DATA:
+diff --git a/net/core/filter.c b/net/core/filter.c
+index b90c0b5a10112..92ce4d46f02e4 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -6912,9 +6912,9 @@ void bpf_warn_invalid_xdp_action(u32 act)
+ {
+ 	const u32 act_max = XDP_REDIRECT;
+ 
+-	WARN_ONCE(1, "%s XDP return value %u, expect packet loss!\n",
+-		  act > act_max ? "Illegal" : "Driver unsupported",
+-		  act);
++	pr_warn_once("%s XDP return value %u, expect packet loss!\n",
++		     act > act_max ? "Illegal" : "Driver unsupported",
++		     act);
+ }
+ EXPORT_SYMBOL_GPL(bpf_warn_invalid_xdp_action);
+ 
 -- 
 2.34.1
 

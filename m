@@ -2,136 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7FE4982B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 15:51:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B07D4982B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 15:52:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234498AbiAXOvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 09:51:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52140 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229710AbiAXOvg (ORCPT
+        id S238258AbiAXOwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 09:52:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231545AbiAXOwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 09:51:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643035895;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=+1jqT3LbjlOuLyo0cMqyWpnoJ+Se41HIEzTNCOpBhUk=;
-        b=Mo+q0pb+8ML8ITCBov4jM3yNGyvb1xyaDOq4FDFk3eAUVhVJLTaYcIXv6C80TSM5QrKAEu
-        YNlLJ1JSgd6AUm/p1lnrgKZ659EbIGjuH29CdXiBiIxj4eEGhqqczSkFogOHJlYabl373e
-        P1Pg8VRfvU/46pVkUOQ13LEcpoM9iHE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-554-_-98kE0PMzurRtwPWJghzg-1; Mon, 24 Jan 2022 09:51:31 -0500
-X-MC-Unique: _-98kE0PMzurRtwPWJghzg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B9723101F7A3;
-        Mon, 24 Jan 2022 14:51:30 +0000 (UTC)
-Received: from jmeneghi.bos.com (unknown [10.22.34.217])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 948CF84A0E;
-        Mon, 24 Jan 2022 14:51:21 +0000 (UTC)
-From:   John Meneghini <jmeneghi@redhat.com>
-To:     skashyap@marvell.com
-Cc:     njavali@marvell.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        GR-QLogic-Storage-Upstream@marvell.com, mlombard@redhat.com,
-        guazhang@redhat.com
-Subject: [PATCH] scsi: bnx2fc: make bnx2fc_recv_frame mp safe
-Date:   Mon, 24 Jan 2022 09:51:10 -0500
-Message-Id: <20220124145110.442335-1-jmeneghi@redhat.com>
+        Mon, 24 Jan 2022 09:52:31 -0500
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDD3C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 06:52:31 -0800 (PST)
+Received: by mail-yb1-xb41.google.com with SMTP id c6so52095549ybk.3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 06:52:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Fh6o/GOsgmj5XjpJdBv76VSM5VP8+e8FRYFpUzMgxVM=;
+        b=YeTkuZARWVTV2gd1KzRZGkvmt7O4k7lo0nx6OKwMi/Z1FxrCV8wJ6J1beALf3GxM3e
+         KPmwuveElkjfQtPsYo4mfC4fu0si/igA88p8kulb7PzOAeTkXCQN0h1ChbUr+R620QxD
+         8CzQO1XVCC8scN09Lg8BvJJebgvEVz+L2o955ygoS7CDeazsMjkNopHJpDI5vzeBeVBm
+         V/NjVE9ImpvX2BMMz57dD4q1wpRl51zyjcdpR/fdDXR9uoWoiFRo4LRhFMsfauJNGLl+
+         U8B+eUIbFaJwxKYYr//66MCTFFmw++RBVWYMYcG3fU+iDYj+1KgxVhExa7YUSMnPtG8d
+         5dkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=Fh6o/GOsgmj5XjpJdBv76VSM5VP8+e8FRYFpUzMgxVM=;
+        b=wNzFl/83WRA/aZE5AWZH6nNV1l4kzMmtFFCv/jqRm8RBiqKIzFiE0JOelu/6ey/LJT
+         RDbSjdC04rKcnG1Jgtnm+63duRnRz4ge+M+01Labss84Rk37kegBVZ6nS/3ReR8YIkmr
+         YJPnYIvzwxDIIVCKm7fRvHCsGtfB5OAVrouBel7W2J1LXXq8Sl0fFUh3CPDc0ye2hbt1
+         CcyWp+4rkNhJ6rNTstKzlV6PM7QFgAWLtlrY8Ndhuw1vSpYtkUpQSVamsJlYSWuG5Bjx
+         +A5LDOv9YO+usb2VIakFIx2b0ILGO4JiSgs50J4WMHL8ZnPmSn6+1DRGlExtJGlTYY8o
+         lWOA==
+X-Gm-Message-State: AOAM530zxqH4JRNtd13bAX2JosQsInX6oPoACKI6D6noh6Fq0aDNAkAh
+        ZZ/MiumgWcEbndKjr4VuZJ6UA1PKsQoMPLMmE1U=
+X-Google-Smtp-Source: ABdhPJya9nZZH89XmDtjv5/ARL/dT1AzAbErhAVzYHjml2F4CgQdixATw4nn+QyCGOsvuDhX+sLpXvgHzjrjlUwX+rY=
+X-Received: by 2002:a25:bacf:: with SMTP id a15mr23382332ybk.462.1643035950864;
+ Mon, 24 Jan 2022 06:52:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Received: by 2002:a0d:e611:0:0:0:0:0 with HTTP; Mon, 24 Jan 2022 06:52:30
+ -0800 (PST)
+Reply-To: kodjikokou09@gmail.com
+From:   kodji kokou <barristermu0@gmail.com>
+Date:   Mon, 24 Jan 2022 14:52:30 +0000
+Message-ID: <CAL8vDK8Hf+F0Meyoo9ABY7HOUu0y-F3C8fNY=4smynS1VA9P7A@mail.gmail.com>
+Subject: Re
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-    Running tests with a debug kernel shows that bnx2fc_recv_frame is
-    modifying the per_cpu lport stats counters in a non-mpsafe way.
-    Just boot a debug kernel and run the bnx2fc driver with the hardware
-    enabled.
+The World Health Organization in collaboration with it=E2=80=99s Parent
+Organization United Nations Economic and Social Council has mandated
+this office to diligently disburse the covid19 Palliative/benefit
+mapped out to assist (you), persons affected by the economic meltdown
+the virus has caused.
 
-    [ 1391.699147] BUG: using smp_processor_id() in preemptible [00000000] code: bnx2fc_
-    [ 1391.699160] caller is bnx2fc_recv_frame+0xbf9/0x1760 [bnx2fc]
-    [ 1391.699174] CPU: 2 PID: 4355 Comm: bnx2fc_l2_threa Kdump: loaded Tainted: G    B
-    [ 1391.699180] Hardware name: HP ProLiant DL120 G7, BIOS J01 07/01/2013
-    [ 1391.699183] Call Trace:
-    [ 1391.699188]  dump_stack_lvl+0x57/0x7d
-    [ 1391.699198]  check_preemption_disabled+0xc8/0xd0
-    [ 1391.699205]  bnx2fc_recv_frame+0xbf9/0x1760 [bnx2fc]
-    [ 1391.699215]  ? do_raw_spin_trylock+0xb5/0x180
-    [ 1391.699221]  ? bnx2fc_npiv_create_vports.isra.0+0x4e0/0x4e0 [bnx2fc]
-    [ 1391.699229]  ? bnx2fc_l2_rcv_thread+0xb7/0x3a0 [bnx2fc]
-    [ 1391.699240]  bnx2fc_l2_rcv_thread+0x1af/0x3a0 [bnx2fc]
-    [ 1391.699250]  ? bnx2fc_ulp_init+0xc0/0xc0 [bnx2fc]
-    [ 1391.699258]  kthread+0x364/0x420
-    [ 1391.699263]  ? _raw_spin_unlock_irq+0x24/0x50
-    [ 1391.699268]  ? set_kthread_struct+0x100/0x100
-    [ 1391.699273]  ret_from_fork+0x22/0x30
+Your Covid19 benefit of ($550,000.00) Five hundred and fifty thousand
+United States dollars is ready for disbursement, payment method is via
+Union Togolaise Bank(UTB) ATM Debit Card=E2=80=9D which will be sent to you=
+ by
+Fast Link Logistics Courier company. You can only withdraw a maximum
+of $5000 daily till the full funds are totally withdrawn. contact us
+on this emails (kodjikokou09@gmail.com)
 
-    To fix the problem: restore the old get_cpu/put_cpu code with some
-    modifications to reduce the size of the critical section.
 
-Fixes: d576a5e80cd0 ("bnx2fc: Improve stats update mechanism")
-Tested-by: Guangwu Zhang <guazhang@redhat.com>
-Signed-off-by: John Meneghini <jmeneghi@redhat.com>
----
- drivers/scsi/bnx2fc/bnx2fc_fcoe.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-index 71fa62bd3083..e41a94dc2d1f 100644
---- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-+++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-@@ -508,7 +508,8 @@ static int bnx2fc_l2_rcv_thread(void *arg)
- 
- static void bnx2fc_recv_frame(struct sk_buff *skb)
- {
--	u32 fr_len;
-+	u64 crc_err;
-+	u32 fr_len, fr_crc;
- 	struct fc_lport *lport;
- 	struct fcoe_rcv_info *fr;
- 	struct fc_stats *stats;
-@@ -542,6 +543,11 @@ static void bnx2fc_recv_frame(struct sk_buff *skb)
- 	skb_pull(skb, sizeof(struct fcoe_hdr));
- 	fr_len = skb->len - sizeof(struct fcoe_crc_eof);
- 
-+	stats = per_cpu_ptr(lport->stats, get_cpu());
-+	stats->RxFrames++;
-+	stats->RxWords += fr_len / FCOE_WORD_TO_BYTE;
-+	put_cpu();
-+
- 	fp = (struct fc_frame *)skb;
- 	fc_frame_init(fp);
- 	fr_dev(fp) = lport;
-@@ -624,16 +630,15 @@ static void bnx2fc_recv_frame(struct sk_buff *skb)
- 		return;
- 	}
- 
--	stats = per_cpu_ptr(lport->stats, smp_processor_id());
--	stats->RxFrames++;
--	stats->RxWords += fr_len / FCOE_WORD_TO_BYTE;
-+	fr_crc = le32_to_cpu(fr_crc(fp));
- 
--	if (le32_to_cpu(fr_crc(fp)) !=
--			~crc32(~0, skb->data, fr_len)) {
--		if (stats->InvalidCRCCount < 5)
-+	if (unlikely(fr_crc != ~crc32(~0, skb->data, fr_len))) {
-+		stats = per_cpu_ptr(lport->stats, get_cpu());
-+		crc_err = (stats->InvalidCRCCount++);
-+		put_cpu();
-+		if (crc_err < 5)
- 			printk(KERN_WARNING PFX "dropping frame with "
- 			       "CRC error\n");
--		stats->InvalidCRCCount++;
- 		kfree_skb(skb);
- 		return;
- 	}
--- 
-2.27.0
-
+Warm Regards,
+kodji kokou
+Union Togolaise Bank

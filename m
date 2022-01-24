@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 616BE49A0D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A2C499DEE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:06:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1847956AbiAXXVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37102 "EHLO
+        id S1586750AbiAXW1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:27:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1584545AbiAXWVY (ORCPT
+        with ESMTP id S1447759AbiAXVLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:21:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA0DC0424CF;
-        Mon, 24 Jan 2022 12:50:08 -0800 (PST)
+        Mon, 24 Jan 2022 16:11:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72AF4C09D339;
+        Mon, 24 Jan 2022 12:09:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 732EAB80FA1;
-        Mon, 24 Jan 2022 20:50:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB3E7C340E5;
-        Mon, 24 Jan 2022 20:50:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12DEE611CD;
+        Mon, 24 Jan 2022 20:09:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D896EC340E5;
+        Mon, 24 Jan 2022 20:09:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057407;
-        bh=t36Qf7OqaHp5mhLh63Ejubt/7CRwFd48SoJJMeaqkEw=;
+        s=korg; t=1643054950;
+        bh=Q+kbtrSzN3sW0F+y05oRP18A4WGq9IVLlwKWgshlVIM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mxryHwxWoHZChzr6ovZ6iOQvaJnOe52Rq8DCM78TKHv7RIBx9SfCPfhebZfNHMpSY
-         KCYxmjHQdoAL+ghyS24hzK6waKWCyOQq0K1RmapDN50WV+wj7dZDBR/11lvXj69wbi
-         XQ6O6rzK7NQL4NWIKpzttbeIT5YVPtP34aBT4Fs8=
+        b=FsXvZ3alGTP+0jMPAlurJmPPGzBvb660x9X3LYpi5LN7QmqK6MRL1Gmqho78tcQtT
+         XRqnmHWGxP4AcFg0EQUIlqbWp9czMQH9NqOHaE7JQLYMwZWGWJVC3EtmUkqw2uOZwX
+         XEo33MN6M+bIli19mnLLBA1WNe7XXH7DsjHOVYlA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Laurence de Bruxelles <lfdebrux@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 5.15 803/846] rtc: pxa: fix null pointer dereference
-Date:   Mon, 24 Jan 2022 19:45:20 +0100
-Message-Id: <20220124184128.642134089@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Alexander Stein <alexander.stein@mailbox.org>,
+        Rob Herring <robh@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH 5.10 556/563] dt-bindings: display: meson-vpu: Add missing amlogic,canvas property
+Date:   Mon, 24 Jan 2022 19:45:21 +0100
+Message-Id: <20220124184043.665712880@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,51 +51,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Laurence de Bruxelles <lfdebrux@gmail.com>
+From: Alexander Stein <alexander.stein@mailbox.org>
 
-commit 34127b3632b21e5c391756e724b1198eb9917981 upstream.
+commit 640f35b871d29cd685ce0ea0762636381beeb98a upstream.
 
-With the latest stable kernel versions the rtc on the PXA based
-Zaurus does not work, when booting I see the following kernel messages:
+This property was already mentioned in the old textual bindings
+amlogic,meson-vpu.txt, but got dropped during conversion.
+Adding it back similar to amlogic,gx-vdec.yaml.
 
-pxa-rtc pxa-rtc: failed to find rtc clock source
-pxa-rtc pxa-rtc: Unable to init SA1100 RTC sub-device
-pxa-rtc: probe of pxa-rtc failed with error -2
-hctosys: unable to open rtc device (rtc0)
-
-I think this is because commit f2997775b111 ("rtc: sa1100: fix possible
-race condition") moved the allocation of the rtc_device struct out of
-sa1100_rtc_init and into sa1100_rtc_probe. This means that pxa_rtc_probe
-also needs to do allocation for the rtc_device struct, otherwise
-sa1100_rtc_init will try to dereference a null pointer. This patch adds
-that allocation by copying how sa1100_rtc_probe in
-drivers/rtc/rtc-sa1100.c does it; after the IRQs are set up a managed
-rtc_device is allocated.
-
-I've tested this patch with `qemu-system-arm -machine akita` and with a
-real Zaurus SL-C1000 applied to 4.19, 5.4, and 5.10.
-
-Signed-off-by: Laurence de Bruxelles <lfdebrux@gmail.com>
-Fixes: f2997775b111 ("rtc: sa1100: fix possible race condition")
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/20220101154149.12026-1-lfdebrux@gmail.com
+Fixes: 6b9ebf1e0e67 ("dt-bindings: display: amlogic, meson-vpu: convert to yaml")
+Signed-off-by: Alexander Stein <alexander.stein@mailbox.org>
+Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211219094155.177206-1-alexander.stein@mailbox.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/rtc/rtc-pxa.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ Documentation/devicetree/bindings/display/amlogic,meson-vpu.yaml |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/drivers/rtc/rtc-pxa.c
-+++ b/drivers/rtc/rtc-pxa.c
-@@ -330,6 +330,10 @@ static int __init pxa_rtc_probe(struct p
- 	if (sa1100_rtc->irq_alarm < 0)
- 		return -ENXIO;
+--- a/Documentation/devicetree/bindings/display/amlogic,meson-vpu.yaml
++++ b/Documentation/devicetree/bindings/display/amlogic,meson-vpu.yaml
+@@ -78,6 +78,10 @@ properties:
+   interrupts:
+     maxItems: 1
  
-+	sa1100_rtc->rtc = devm_rtc_allocate_device(&pdev->dev);
-+	if (IS_ERR(sa1100_rtc->rtc))
-+		return PTR_ERR(sa1100_rtc->rtc);
++  amlogic,canvas:
++    description: should point to a canvas provider node
++    $ref: /schemas/types.yaml#/definitions/phandle
 +
- 	pxa_rtc->base = devm_ioremap(dev, pxa_rtc->ress->start,
- 				resource_size(pxa_rtc->ress));
- 	if (!pxa_rtc->base) {
+   power-domains:
+     maxItems: 1
+     description: phandle to the associated power domain
+@@ -106,6 +110,7 @@ required:
+   - port@1
+   - "#address-cells"
+   - "#size-cells"
++  - amlogic,canvas
+ 
+ additionalProperties: false
+ 
+@@ -118,6 +123,7 @@ examples:
+         interrupts = <3>;
+         #address-cells = <1>;
+         #size-cells = <0>;
++        amlogic,canvas = <&canvas>;
+ 
+         /* CVBS VDAC output port */
+         port@0 {
 
 

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27144498AF7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:08:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8CC14993B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:38:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344325AbiAXTIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:08:30 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59026 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236937AbiAXTCJ (ORCPT
+        id S1386303AbiAXUfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:35:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344625AbiAXUNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:02:09 -0500
+        Mon, 24 Jan 2022 15:13:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA60DC0604D6;
+        Mon, 24 Jan 2022 11:37:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0912B81215;
-        Mon, 24 Jan 2022 19:02:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0089BC340E5;
-        Mon, 24 Jan 2022 19:02:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41C7A61515;
+        Mon, 24 Jan 2022 19:37:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27847C340E5;
+        Mon, 24 Jan 2022 19:37:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050923;
-        bh=peYOOlMTmm+OyUGHt8OuEe9VzQ3EpRYmy3uRyqu9rOU=;
+        s=korg; t=1643053030;
+        bh=5vWYp7qQngVJfxFk9KUiSt3vvkHtUkiSXrq/kc/duEM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DWpuKXSfr/zvOv7+w+e6zyTRDQPMEVsfzK+RfHLOHiiTHnVxwZlkhd4FjTldcGO5C
-         6qxpYXJ+sjJSmln4IP6SSTvDYRTuXRRrPgDZ/QakDvBYxGyR2rjcyrRCk+HGpc6iwe
-         UkvF6duSfqcrPoVtkj8wrnEsMBW1N/cCwsL9Zb90=
+        b=clEYfLh8Wbn18xnBz484lDJNaAadC1LG2fsUvQKFTKUGQi/Y3qT6HQP0TQPT3qoPg
+         PsaTBeAdKcqkQWyTqjutf2kUliGltWL/MMjfUY6k09d5TxCG8ZApg9OVC83Qhgcy5x
+         a8e/ILj3xQvgv1LMOIwwfqmrxou5QspLtRU8c9UY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Ben Hutchings <ben@decadent.org.uk>
-Subject: [PATCH 4.9 148/157] drm/ttm/nouveau: dont call tt destroy callback on alloc failure.
+        stable@vger.kernel.org, Ilan Peer <ilan.peer@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>
+Subject: [PATCH 5.4 254/320] iwlwifi: mvm: Increase the scan timeout guard to 30 seconds
 Date:   Mon, 24 Jan 2022 19:43:58 +0100
-Message-Id: <20220124183937.461801402@linuxfoundation.org>
+Message-Id: <20220124184002.631982996@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,68 +48,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Airlie <airlied@redhat.com>
+From: Ilan Peer <ilan.peer@intel.com>
 
-commit 5de5b6ecf97a021f29403aa272cb4e03318ef586 upstream.
+commit ced50f1133af12f7521bb777fcf4046ca908fb77 upstream.
 
-This is confusing, and from my reading of all the drivers only
-nouveau got this right.
+With the introduction of 6GHz channels the scan guard timeout should
+be adjusted to account for the following extreme case:
 
-Just make the API act under driver control of it's own allocation
-failing, and don't call destroy, if the page table fails to
-create there is nothing to cleanup here.
+- All 6GHz channels are scanned passively: 58 channels.
+- The scan is fragmented with the following parameters: 3 fragments,
+  95 TUs suspend time, 44 TUs maximal out of channel time.
 
-(I'm willing to believe I've missed something here, so please
-review deeply).
+The above would result with scan time of more than 24 seconds. Thus,
+set the timeout to 30 seconds.
 
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Dave Airlie <airlied@redhat.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20200728041736.20689-1-airlied@gmail.com
-[bwh: Backported to 4.14:
- - Drop change in ttm_sg_tt_init()
- - Adjust context]
-Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+Cc: stable@vger.kernel.org
+Signed-off-by: Ilan Peer <ilan.peer@intel.com>
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/iwlwifi.20211210090244.3c851b93aef5.I346fa2e1d79220a6770496e773c6f87a2ad9e6c4@changeid
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/nouveau/nouveau_sgdma.c |    9 +++------
- drivers/gpu/drm/ttm/ttm_tt.c            |    2 --
- 2 files changed, 3 insertions(+), 8 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/mvm/scan.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/nouveau/nouveau_sgdma.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_sgdma.c
-@@ -105,12 +105,9 @@ nouveau_sgdma_create_ttm(struct ttm_bo_d
- 	else
- 		nvbe->ttm.ttm.func = &nv50_sgdma_backend;
- 
--	if (ttm_dma_tt_init(&nvbe->ttm, bdev, size, page_flags, dummy_read_page))
--		/*
--		 * A failing ttm_dma_tt_init() will call ttm_tt_destroy()
--		 * and thus our nouveau_sgdma_destroy() hook, so we don't need
--		 * to free nvbe here.
--		 */
-+	if (ttm_dma_tt_init(&nvbe->ttm, bdev, size, page_flags, dummy_read_page)) {
-+		kfree(nvbe);
- 		return NULL;
-+	}
- 	return &nvbe->ttm.ttm;
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
+@@ -1700,7 +1700,7 @@ static int iwl_mvm_check_running_scans(s
+ 	return -EIO;
  }
---- a/drivers/gpu/drm/ttm/ttm_tt.c
-+++ b/drivers/gpu/drm/ttm/ttm_tt.c
-@@ -195,7 +195,6 @@ int ttm_tt_init(struct ttm_tt *ttm, stru
  
- 	ttm_tt_alloc_page_directory(ttm);
- 	if (!ttm->pages) {
--		ttm_tt_destroy(ttm);
- 		pr_err("Failed allocating page table\n");
- 		return -ENOMEM;
- 	}
-@@ -228,7 +227,6 @@ int ttm_dma_tt_init(struct ttm_dma_tt *t
- 	INIT_LIST_HEAD(&ttm_dma->pages_list);
- 	ttm_dma_tt_alloc_page_directory(ttm_dma);
- 	if (!ttm->pages) {
--		ttm_tt_destroy(ttm);
- 		pr_err("Failed allocating page table\n");
- 		return -ENOMEM;
- 	}
+-#define SCAN_TIMEOUT 20000
++#define SCAN_TIMEOUT 30000
+ 
+ void iwl_mvm_scan_timeout_wk(struct work_struct *work)
+ {
 
 

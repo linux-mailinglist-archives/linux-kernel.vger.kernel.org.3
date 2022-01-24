@@ -2,95 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E49649885E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:31:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3A3498867
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:33:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245255AbiAXSbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:31:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
+        id S244529AbiAXSdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:33:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235727AbiAXSbr (ORCPT
+        with ESMTP id S235727AbiAXSdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:31:47 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E97C06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:31:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8ZxSf7vRGmtmjPRVRuc/UAtt0g7lispoIvSffcp1Qyk=; b=g6yrZ37hc7PRrLe90OF1G9oYOT
-        5dOCrI/gA/wzT/K15vRfpSwCqD1iRC10W4iuptigIekHQWhPfOktVNreow1Dq20yJEmQkIWgC6JhV
-        YhpVPX1SU1+k8QPzh05WdnlpyD6H0/n9EjArlOvcwTnPUVL9hVBPivaiIgJnZlBj9n6JE1B+basIC
-        tSyVzTf2zn6XwgIHtI5u8NB7CRqKR3FX7dBseDx74wr/qmQWxJYNea5eF0q00IDnk/sOwQGc1GvZ7
-        lyy+CKiMGen5ZSGss9V/Bk8jWm55T5xXDO4TjUEnQ8/m3awaoICONB9FTpOUMI5oNpgqB1zd9YSNn
-        ukSyu7hg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nC47v-001452-K9; Mon, 24 Jan 2022 18:31:39 +0000
-Date:   Mon, 24 Jan 2022 18:31:39 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: make 'highmem' symbol ro_after_init
-Message-ID: <Ye7wiwq/KFS3/bqL@casper.infradead.org>
-References: <20220124170555.1054480-1-ardb@kernel.org>
+        Mon, 24 Jan 2022 13:33:09 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE579C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:33:09 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id i14so14656926ila.11
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:33:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x+ahb+ncTkNINLBQrDuikTk5BgmagpsijNgGC5Fq2MY=;
+        b=pGkU+DYDv5talYflVfdNWi7FnnPfjgLyEauehNx0zBQQPb55D+r53HFtXXn4Vqzfwk
+         bRn7ROziPHYUCR98gVW/qKjDl+Pq2MgHjHuUpTMkioxQfZIH4WxxuzlTmWN7NsZtCYho
+         0ye+Mfou814+5HwLORyd+S2+4patNR6nACmrMnjnCWuvY8oxPvE3b/os8MGXqvqSZuUO
+         7CaSqNwCWsMaI2C9Yy0yJ5T1rsh5AxEi2Ra8FyFMXGr9ztqOKDAnpLnjmcBgK3iuQX+y
+         w/XjZ67gSb/dWsRaxJt3vF78b/pPpyZMIeKscYLoIz1a85wP/yLdVDWubuX20tqBubrS
+         uhWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x+ahb+ncTkNINLBQrDuikTk5BgmagpsijNgGC5Fq2MY=;
+        b=kulNlugcmUm/ILalUKlF0mlYYwgSYx6Dv/l6n2YFN07tiCdIcbQxc9mLuRRkV7DGQE
+         bil27YQNqMhdd+IX0Z8UqnxRE+3son98sTOCGK43/TRO2iih7Xr3rlTaO97ItUdY0CF/
+         RvcVF0s6o8piSdrs8l0ENPbZlNP6fQZNqirM7Kp5PoOmluBzUAU5HRTdmFgyStZ9yYvO
+         12WImnnZ5oqEDa0zsSSlIgG6ayAp3LQKNLrFkC95TqXEPm/uXuylvDcPSv9EpWG/FjAg
+         PbdX6t/loBu8G8qHSCod4ZiTB1EyVDbCegYCNamwFyulj1rsr8YjnjcBscp4f1/2Eo7o
+         m2bA==
+X-Gm-Message-State: AOAM533rxNtMS/4ugqmM+S55sQ6PI3SWYntcq2N6QjZjDQdzc/DcXvr0
+        4Y1rdJUNOiWadzfw4LNbU68mNFsvUcjiizC1Z5Q=
+X-Google-Smtp-Source: ABdhPJze2sDkxQzD9hQA68DGJMg8/lxH8/CW/ZjU8yd6vTdPIakmMsD0/msvexpDol+iVGPwDQRx5BZOI0zWWV1F2+U=
+X-Received: by 2002:a92:d2c3:: with SMTP id w3mr1032639ilg.28.1643049189234;
+ Mon, 24 Jan 2022 10:33:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124170555.1054480-1-ardb@kernel.org>
+References: <cover.1643047180.git.andreyknvl@google.com> <CANpmjNO2Lwq5+zy3pGj=cetMdB7qLmP0WWjbSCYucPVjEt4kWw@mail.gmail.com>
+In-Reply-To: <CANpmjNO2Lwq5+zy3pGj=cetMdB7qLmP0WWjbSCYucPVjEt4kWw@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Mon, 24 Jan 2022 19:32:58 +0100
+Message-ID: <CA+fCnZdxFnxXJyv6rqRgZynK5NC-PS1jSpAdwqVgymr2AL+63Q@mail.gmail.com>
+Subject: Re: [PATCH v6 00/39] kasan, vmalloc, arm64: add vmalloc tagging
+ support for SW/HW_TAGS
+To:     Marco Elver <elver@google.com>
+Cc:     andrey.konovalov@linux.dev,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 06:05:55PM +0100, Ard Biesheuvel wrote:
-> The 'highmem' variable is only set at boot, so we can make it
-> ro_after_init and prevent it from being corrupted inadvertently, or from
-> ending up in a contended cacheline.
+On Mon, Jan 24, 2022 at 7:09 PM Marco Elver <elver@google.com> wrote:
+>
+> On Mon, 24 Jan 2022 at 19:02, <andrey.konovalov@linux.dev> wrote:
+> >
+> > From: Andrey Konovalov <andreyknvl@google.com>
+> >
+> > Hi,
+> >
+> > This patchset adds vmalloc tagging support for SW_TAGS and HW_TAGS
+> > KASAN modes.
+> [...]
+> >
+> > Acked-by: Marco Elver <elver@google.com>
+>
+> FYI, my Ack may get lost here - on rebase you could apply it to all
+> patches to carry it forward. As-is, Andrew would still have to apply
+> it manually.
 
-I'm not against this patch, but it'd be nice to go further and remove
-it entirely for !CONFIG_HIGHMEM builds?  Adding something like
+Sounds good, will do if there is a v7.
 
-static inline bool is_high_pfn(unsigned long pfn)
-{
-#ifdef CONFIG_HIGHMEM
-	return pfn <= max_low_pfn;
-#else
-	return false;
-#endif
-}
+> An Ack to the cover letter saves replying to each patch and thus
+> generating less emails, which I think is preferred.
+>
+> My Ack is still valid, given v6 is mainly a rebase and I don't see any
+> major changes.
 
-static inline bool is_high_phys(phys_addr_t pa)
-{
-	return is_high_pfn(pa / PAGE_SIZE);
-}
-
-static inline bool is_high_addr(void *addr)
-{
-	return is_high_phys(virt_to_phys(addr));
-}
-
-should be all the primitives you need, from a quick grep.
-
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  mm/memory.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index c125c4969913..50e82cb94ccc 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -106,7 +106,7 @@ EXPORT_SYMBOL(mem_map);
->   * highstart_pfn must be the same; there must be no gap between ZONE_NORMAL
->   * and ZONE_HIGHMEM.
->   */
-> -void *high_memory;
-> +void *high_memory __ro_after_init;
->  EXPORT_SYMBOL(high_memory);
->  
->  /*
-> -- 
-> 2.30.2
-> 
-> 
+Thanks, Marco!

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E3C49796B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 08:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 311F1497972
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 08:28:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241853AbiAXH2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 02:28:30 -0500
-Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:41200
+        id S241878AbiAXH2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 02:28:46 -0500
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:41218
         "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241842AbiAXH2Z (ORCPT
+        by vger.kernel.org with ESMTP id S241813AbiAXH2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 02:28:25 -0500
+        Mon, 24 Jan 2022 02:28:40 -0500
 Received: from HP-EliteBook-840-G7.. (36-229-235-192.dynamic-ip.hinet.net [36.229.235.192])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 7A27B3F165;
-        Mon, 24 Jan 2022 07:28:21 +0000 (UTC)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 0FC403F165;
+        Mon, 24 Jan 2022 07:28:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643009304;
-        bh=dj16gFP5CrsdfGvdwZ7qFQSRJlPlMNcu4pgF0B1jdwU=;
+        s=20210705; t=1643009319;
+        bh=/P4GM/HjZ9otcaPnYgwHZvVXprLdcfNklxr7iOYHDzQ=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=FFHyCs9r9oCp5/xPILV8zOMHxXLhkDt35DUtlG2Jm9TcGYIDlIfL3CcuC2trpZ1E6
-         BsHufcXP8WgfifSX3W/rrHmf/KHHPFrVzIOVLGCkzRQl5hoCQygPcsX36i+zy0sIkX
-         meRpEjMl8oO8kEOen9VYcH7plUP/22miuDov8RA0Roy4QBuaP/PKA8Bd2lvzvAgciO
-         KqbZezdyzpKOEL0wcZxmq8HV1zOt9/qYW0IpKdEUIYGWGpS3rFftaDYGSFnzsY7g1B
-         7aCJHXg+//jtu05tN7npF/CHURyEbvx70eNDfGyqSdhZCxU450ZbhgQuJQSK1begnJ
-         ZGWlaAvsnY//w==
+        b=kc7ZB4pwkGIwfAO2p0ruXNoqesrQPsnHj5x52Qh+hMjefN5ABwUVieTpprjuo2+l2
+         FSbwK7qXmtembBdCn6iL5RGuEL+ZCv/YTw4Ztdg1PE+nfDcz+m45RvCaRWo7et+Ty1
+         rqMzkeQDlaHJIFBhuI7qxriaZhmLAYiBq1jRdI7Y9Wb1EZ+bsigdX/TUwrFkNDMae7
+         M+no7P+8Q1sEuXddyqw7vo2sDE1D1RgBJlk+v0cjAu0VMiAMGsNUuhxAcIY4ybrMJD
+         GS2W8snJnhbKf7Bs8RAV0is2eFIV8+lcWN460s7hJvZLNDqr+Eo72XOejb/nftn9tP
+         FoPzol/OTOOWw==
 From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
 To:     arnd@arndb.de, gregkh@linuxfoundation.org, ulf.hansson@linaro.org
 Cc:     linux-pm@vger.kernel.org,
         Kai-Heng Feng <kai.heng.feng@canonical.com>,
         Ricky WU <ricky_wu@realtek.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Yang Li <yang.lee@linux.alibaba.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 3/4] misc: rtsx: Cleanup power management ops
-Date:   Mon, 24 Jan 2022 15:28:02 +0800
-Message-Id: <20220124072804.1811690-3-kai.heng.feng@canonical.com>
+Subject: [PATCH v5 4/4] misc: rtsx: Quiesce rts5249 on system suspend
+Date:   Mon, 24 Jan 2022 15:28:03 +0800
+Message-Id: <20220124072804.1811690-4-kai.heng.feng@canonical.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220124072804.1811690-1-kai.heng.feng@canonical.com>
 References: <20220121014039.1693208-1-kai.heng.feng@canonical.com>
@@ -50,122 +50,254 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- Use cancel_delayed_work_sync to ensure there's no race with
-  carddet_work.
+Set more registers in force_power_down callback to avoid S3 wakeup from
+hotplugging cards.
 
-- Remove device_wakeup_disable to save some CPU cycles. If the device
-  really has ACPI _DSW then the wakeup should be disabled in probe
-  routine.
+This is originally written by Ricky WU.
 
-- Remove fetch_vendor_settings from runtime resume routine, since they
-  are already saved in "struct rtsx_pcr".
-
-- Move variable assignments to the top of the functions.
-
+Link: https://lore.kernel.org/lkml/c4525b4738f94483b9b8f8571fc80646@realtek.com/
 Cc: Ricky WU <ricky_wu@realtek.com>
 Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 ---
 v5:
- - No change.
-
 v4:
- - Move variable assignments to the top of the functions.
-
 v3:
 v2:
  - No change.
 
- drivers/misc/cardreader/rtsx_pcr.c | 34 ++++++++----------------------
- 1 file changed, 9 insertions(+), 25 deletions(-)
+ drivers/misc/cardreader/rtl8411.c  |  2 +-
+ drivers/misc/cardreader/rts5209.c  |  2 +-
+ drivers/misc/cardreader/rts5228.c  |  2 +-
+ drivers/misc/cardreader/rts5229.c  |  2 +-
+ drivers/misc/cardreader/rts5249.c  | 31 ++++++++++++++++++++++++++++--
+ drivers/misc/cardreader/rts5261.c  |  2 +-
+ drivers/misc/cardreader/rtsx_pcr.c | 14 +++++++-------
+ drivers/misc/cardreader/rtsx_pcr.h |  1 +
+ include/linux/rtsx_pci.h           |  2 +-
+ 9 files changed, 43 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/misc/cardreader/rtsx_pcr.c b/drivers/misc/cardreader/rtsx_pcr.c
-index f919290f01192..ec395a33faf8b 100644
---- a/drivers/misc/cardreader/rtsx_pcr.c
-+++ b/drivers/misc/cardreader/rtsx_pcr.c
-@@ -1660,22 +1660,17 @@ static void rtsx_pci_remove(struct pci_dev *pcidev)
- static int __maybe_unused rtsx_pci_suspend(struct device *dev_d)
+diff --git a/drivers/misc/cardreader/rtl8411.c b/drivers/misc/cardreader/rtl8411.c
+index 4c5621b17a6fb..06457e875a90c 100644
+--- a/drivers/misc/cardreader/rtl8411.c
++++ b/drivers/misc/cardreader/rtl8411.c
+@@ -76,7 +76,7 @@ static void rtl8411b_fetch_vendor_settings(struct rtsx_pcr *pcr)
+ 		map_sd_drive(rtl8411b_reg_to_sd30_drive_sel_3v3(reg));
+ }
+ 
+-static void rtl8411_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
++static void rtl8411_force_power_down(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
  {
- 	struct pci_dev *pcidev = to_pci_dev(dev_d);
--	struct pcr_handle *handle;
--	struct rtsx_pcr *pcr;
-+	struct pcr_handle *handle = pci_get_drvdata(pcidev);
-+	struct rtsx_pcr *pcr = handle->pcr;
+ 	rtsx_pci_write_register(pcr, FPDCTL, 0x07, 0x07);
+ }
+diff --git a/drivers/misc/cardreader/rts5209.c b/drivers/misc/cardreader/rts5209.c
+index 29f5414072bf1..52b0a476ba51f 100644
+--- a/drivers/misc/cardreader/rts5209.c
++++ b/drivers/misc/cardreader/rts5209.c
+@@ -47,7 +47,7 @@ static void rts5209_fetch_vendor_settings(struct rtsx_pcr *pcr)
+ 	}
+ }
  
- 	dev_dbg(&(pcidev->dev), "--> %s\n", __func__);
+-static void rts5209_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
++static void rts5209_force_power_down(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
+ {
+ 	rtsx_pci_write_register(pcr, FPDCTL, 0x07, 0x07);
+ }
+diff --git a/drivers/misc/cardreader/rts5228.c b/drivers/misc/cardreader/rts5228.c
+index ffc128278613b..ffe3afbf8bfed 100644
+--- a/drivers/misc/cardreader/rts5228.c
++++ b/drivers/misc/cardreader/rts5228.c
+@@ -91,7 +91,7 @@ static int rts5228_optimize_phy(struct rtsx_pcr *pcr)
+ 	return rtsx_pci_write_phy_register(pcr, 0x07, 0x8F40);
+ }
  
--	handle = pci_get_drvdata(pcidev);
--	pcr = handle->pcr;
--
--	cancel_delayed_work(&pcr->carddet_work);
-+	cancel_delayed_work_sync(&pcr->carddet_work);
+-static void rts5228_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
++static void rts5228_force_power_down(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
+ {
+ 	/* Set relink_time to 0 */
+ 	rtsx_pci_write_register(pcr, AUTOLOAD_CFG_BASE + 1, MASK_8_BIT_DEF, 0);
+diff --git a/drivers/misc/cardreader/rts5229.c b/drivers/misc/cardreader/rts5229.c
+index c748eaf1ec1f9..b0edd8006d52f 100644
+--- a/drivers/misc/cardreader/rts5229.c
++++ b/drivers/misc/cardreader/rts5229.c
+@@ -44,7 +44,7 @@ static void rts5229_fetch_vendor_settings(struct rtsx_pcr *pcr)
+ 		map_sd_drive(rtsx_reg_to_sd30_drive_sel_3v3(reg));
+ }
  
- 	mutex_lock(&pcr->pcr_mutex);
+-static void rts5229_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
++static void rts5229_force_power_down(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
+ {
+ 	rtsx_pci_write_register(pcr, FPDCTL, 0x03, 0x03);
+ }
+diff --git a/drivers/misc/cardreader/rts5249.c b/drivers/misc/cardreader/rts5249.c
+index 53f3a1f45c4a7..91d240dd68faa 100644
+--- a/drivers/misc/cardreader/rts5249.c
++++ b/drivers/misc/cardreader/rts5249.c
+@@ -74,7 +74,8 @@ static void rtsx_base_fetch_vendor_settings(struct rtsx_pcr *pcr)
+ 	pci_read_config_dword(pdev, PCR_SETTING_REG2, &reg);
+ 	pcr_dbg(pcr, "Cfg 0x%x: 0x%x\n", PCR_SETTING_REG2, reg);
  
- 	rtsx_pci_power_off(pcr, HOST_ENTER_S3);
+-	pcr->rtd3_en = rtsx_reg_to_rtd3_uhsii(reg);
++	if (CHK_PCI_PID(pcr, PID_524A) || CHK_PCI_PID(pcr, PID_525A))
++		pcr->rtd3_en = rtsx_reg_to_rtd3_uhsii(reg);
  
--	device_wakeup_disable(dev_d);
--
- 	mutex_unlock(&pcr->pcr_mutex);
+ 	if (rtsx_check_mmc_support(reg))
+ 		pcr->extra_caps |= EXTRA_CAPS_NO_MMC;
+@@ -143,6 +144,27 @@ static int rts5249_init_from_hw(struct rtsx_pcr *pcr)
  	return 0;
  }
-@@ -1683,15 +1678,12 @@ static int __maybe_unused rtsx_pci_suspend(struct device *dev_d)
- static int __maybe_unused rtsx_pci_resume(struct device *dev_d)
+ 
++static void rts52xa_force_power_down(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
++{
++	/* Set relink_time to 0 */
++	rtsx_pci_write_register(pcr, AUTOLOAD_CFG_BASE + 1, MASK_8_BIT_DEF, 0);
++	rtsx_pci_write_register(pcr, AUTOLOAD_CFG_BASE + 2, MASK_8_BIT_DEF, 0);
++	rtsx_pci_write_register(pcr, AUTOLOAD_CFG_BASE + 3,
++				RELINK_TIME_MASK, 0);
++
++	rtsx_pci_write_register(pcr, RTS524A_PM_CTRL3,
++			D3_DELINK_MODE_EN, D3_DELINK_MODE_EN);
++
++	if (!runtime) {
++		rtsx_pci_write_register(pcr, RTS524A_AUTOLOAD_CFG1,
++				CD_RESUME_EN_MASK, 0);
++		rtsx_pci_write_register(pcr, RTS524A_PM_CTRL3, 0x01, 0x00);
++		rtsx_pci_write_register(pcr, RTS524A_PME_FORCE_CTL, 0x30, 0x20);
++	}
++
++	rtsx_pci_write_register(pcr, FPDCTL, ALL_POWER_DOWN, ALL_POWER_DOWN);
++}
++
+ static void rts52xa_save_content_from_efuse(struct rtsx_pcr *pcr)
  {
- 	struct pci_dev *pcidev = to_pci_dev(dev_d);
--	struct pcr_handle *handle;
--	struct rtsx_pcr *pcr;
-+	struct pcr_handle *handle = pci_get_drvdata(pcidev);
-+	struct rtsx_pcr *pcr = handle->pcr;
- 	int ret = 0;
+ 	u8 cnt, sv;
+@@ -281,8 +303,11 @@ static int rts5249_extra_init_hw(struct rtsx_pcr *pcr)
  
- 	dev_dbg(&(pcidev->dev), "--> %s\n", __func__);
+ 	rtsx_pci_send_cmd(pcr, CMD_TIMEOUT_DEF);
  
--	handle = pci_get_drvdata(pcidev);
--	pcr = handle->pcr;
--
+-	if (CHK_PCI_PID(pcr, PID_524A) || CHK_PCI_PID(pcr, PID_525A))
++	if (CHK_PCI_PID(pcr, PID_524A) || CHK_PCI_PID(pcr, PID_525A)) {
+ 		rtsx_pci_write_register(pcr, REG_VREF, PWD_SUSPND_EN, PWD_SUSPND_EN);
++		rtsx_pci_write_register(pcr, RTS524A_AUTOLOAD_CFG1,
++			CD_RESUME_EN_MASK, CD_RESUME_EN_MASK);
++	}
+ 
+ 	if (pcr->rtd3_en) {
+ 		if (CHK_PCI_PID(pcr, PID_524A) || CHK_PCI_PID(pcr, PID_525A)) {
+@@ -724,6 +749,7 @@ static const struct pcr_ops rts524a_pcr_ops = {
+ 	.card_power_on = rtsx_base_card_power_on,
+ 	.card_power_off = rtsx_base_card_power_off,
+ 	.switch_output_voltage = rtsx_base_switch_output_voltage,
++	.force_power_down = rts52xa_force_power_down,
+ 	.set_l1off_cfg_sub_d0 = rts5250_set_l1off_cfg_sub_d0,
+ };
+ 
+@@ -841,6 +867,7 @@ static const struct pcr_ops rts525a_pcr_ops = {
+ 	.card_power_on = rts525a_card_power_on,
+ 	.card_power_off = rtsx_base_card_power_off,
+ 	.switch_output_voltage = rts525a_switch_output_voltage,
++	.force_power_down = rts52xa_force_power_down,
+ 	.set_l1off_cfg_sub_d0 = rts5250_set_l1off_cfg_sub_d0,
+ };
+ 
+diff --git a/drivers/misc/cardreader/rts5261.c b/drivers/misc/cardreader/rts5261.c
+index 1fd4e0e507302..64333347c14a4 100644
+--- a/drivers/misc/cardreader/rts5261.c
++++ b/drivers/misc/cardreader/rts5261.c
+@@ -91,7 +91,7 @@ static void rtsx5261_fetch_vendor_settings(struct rtsx_pcr *pcr)
+ 	pcr->sd30_drive_sel_3v3 = rts5261_reg_to_sd30_drive_sel_3v3(reg);
+ }
+ 
+-static void rts5261_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
++static void rts5261_force_power_down(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
+ {
+ 	/* Set relink_time to 0 */
+ 	rtsx_pci_write_register(pcr, AUTOLOAD_CFG_BASE + 1, MASK_8_BIT_DEF, 0);
+diff --git a/drivers/misc/cardreader/rtsx_pcr.c b/drivers/misc/cardreader/rtsx_pcr.c
+index ec395a33faf8b..7262ef0f1913f 100644
+--- a/drivers/misc/cardreader/rtsx_pcr.c
++++ b/drivers/misc/cardreader/rtsx_pcr.c
+@@ -1086,7 +1086,7 @@ static void rtsx_pm_power_saving(struct rtsx_pcr *pcr)
+ 	rtsx_comm_pm_power_saving(pcr);
+ }
+ 
+-static void rtsx_base_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
++static void rtsx_base_force_power_down(struct rtsx_pcr *pcr)
+ {
+ 	/* Set relink_time to 0 */
+ 	rtsx_pci_write_register(pcr, AUTOLOAD_CFG_BASE + 1, MASK_8_BIT_DEF, 0);
+@@ -1100,7 +1100,7 @@ static void rtsx_base_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
+ 	rtsx_pci_write_register(pcr, FPDCTL, ALL_POWER_DOWN, ALL_POWER_DOWN);
+ }
+ 
+-static void __maybe_unused rtsx_pci_power_off(struct rtsx_pcr *pcr, u8 pm_state)
++static void __maybe_unused rtsx_pci_power_off(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
+ {
+ 	if (pcr->ops->turn_off_led)
+ 		pcr->ops->turn_off_led(pcr);
+@@ -1112,9 +1112,9 @@ static void __maybe_unused rtsx_pci_power_off(struct rtsx_pcr *pcr, u8 pm_state)
+ 	rtsx_pci_write_register(pcr, HOST_SLEEP_STATE, 0x03, pm_state);
+ 
+ 	if (pcr->ops->force_power_down)
+-		pcr->ops->force_power_down(pcr, pm_state);
++		pcr->ops->force_power_down(pcr, pm_state, runtime);
+ 	else
+-		rtsx_base_force_power_down(pcr, pm_state);
++		rtsx_base_force_power_down(pcr);
+ }
+ 
+ void rtsx_pci_enable_ocp(struct rtsx_pcr *pcr)
+@@ -1669,7 +1669,7 @@ static int __maybe_unused rtsx_pci_suspend(struct device *dev_d)
+ 
  	mutex_lock(&pcr->pcr_mutex);
  
- 	ret = rtsx_pci_write_register(pcr, HOST_SLEEP_STATE, 0x03, 0x00);
-@@ -1711,13 +1703,11 @@ static int __maybe_unused rtsx_pci_resume(struct device *dev_d)
+-	rtsx_pci_power_off(pcr, HOST_ENTER_S3);
++	rtsx_pci_power_off(pcr, HOST_ENTER_S3, false);
  
- static void rtsx_pci_shutdown(struct pci_dev *pcidev)
- {
--	struct pcr_handle *handle;
--	struct rtsx_pcr *pcr;
-+	struct pcr_handle *handle = pci_get_drvdata(pcidev);
-+	struct rtsx_pcr *pcr = handle->pcr;
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 	return 0;
+@@ -1708,7 +1708,7 @@ static void rtsx_pci_shutdown(struct pci_dev *pcidev)
  
  	dev_dbg(&(pcidev->dev), "--> %s\n", __func__);
  
--	handle = pci_get_drvdata(pcidev);
--	pcr = handle->pcr;
- 	rtsx_pci_power_off(pcr, HOST_ENTER_S1);
+-	rtsx_pci_power_off(pcr, HOST_ENTER_S1);
++	rtsx_pci_power_off(pcr, HOST_ENTER_S1, false);
  
  	pci_disable_device(pcidev);
-@@ -1756,11 +1746,8 @@ static int rtsx_pci_runtime_idle(struct device *device)
- static int rtsx_pci_runtime_suspend(struct device *device)
- {
- 	struct pci_dev *pcidev = to_pci_dev(device);
--	struct pcr_handle *handle;
--	struct rtsx_pcr *pcr;
--
--	handle = pci_get_drvdata(pcidev);
--	pcr = handle->pcr;
-+	struct pcr_handle *handle = pci_get_drvdata(pcidev);
-+	struct rtsx_pcr *pcr = handle->pcr;
+ 	free_irq(pcr->irq, (void *)pcr);
+@@ -1754,7 +1754,7 @@ static int rtsx_pci_runtime_suspend(struct device *device)
+ 	cancel_delayed_work_sync(&pcr->carddet_work);
  
- 	dev_dbg(device, "--> %s\n", __func__);
+ 	mutex_lock(&pcr->pcr_mutex);
+-	rtsx_pci_power_off(pcr, HOST_ENTER_S3);
++	rtsx_pci_power_off(pcr, HOST_ENTER_S3, true);
  
-@@ -1786,9 +1773,6 @@ static int rtsx_pci_runtime_resume(struct device *device)
+ 	mutex_unlock(&pcr->pcr_mutex);
  
- 	rtsx_pci_write_register(pcr, HOST_SLEEP_STATE, 0x03, 0x00);
+diff --git a/drivers/misc/cardreader/rtsx_pcr.h b/drivers/misc/cardreader/rtsx_pcr.h
+index daf057c4eea62..aa0ebd6672277 100644
+--- a/drivers/misc/cardreader/rtsx_pcr.h
++++ b/drivers/misc/cardreader/rtsx_pcr.h
+@@ -25,6 +25,7 @@
+ #define REG_EFUSE_POWEROFF		0x00
+ #define RTS5250_CLK_CFG3		0xFF79
+ #define RTS525A_CFG_MEM_PD		0xF0
++#define RTS524A_AUTOLOAD_CFG1		0xFF7C
+ #define RTS524A_PM_CTRL3		0xFF7E
+ #define RTS525A_BIOS_CFG		0xFF2D
+ #define RTS525A_LOAD_BIOS_FLAG	0x01
+diff --git a/include/linux/rtsx_pci.h b/include/linux/rtsx_pci.h
+index 89b7d34e25b63..3d780b44e678a 100644
+--- a/include/linux/rtsx_pci.h
++++ b/include/linux/rtsx_pci.h
+@@ -1095,7 +1095,7 @@ struct pcr_ops {
+ 	unsigned int	(*cd_deglitch)(struct rtsx_pcr *pcr);
+ 	int		(*conv_clk_and_div_n)(int clk, int dir);
+ 	void		(*fetch_vendor_settings)(struct rtsx_pcr *pcr);
+-	void		(*force_power_down)(struct rtsx_pcr *pcr, u8 pm_state);
++	void		(*force_power_down)(struct rtsx_pcr *pcr, u8 pm_state, bool runtime);
+ 	void		(*stop_cmd)(struct rtsx_pcr *pcr);
  
--	if (pcr->ops->fetch_vendor_settings)
--		pcr->ops->fetch_vendor_settings(pcr);
--
- 	rtsx_pci_init_hw(pcr);
- 
- 	if (pcr->slots[RTSX_SD_CARD].p_dev != NULL) {
+ 	void (*set_aspm)(struct rtsx_pcr *pcr, bool enable);
 -- 
 2.33.1
 

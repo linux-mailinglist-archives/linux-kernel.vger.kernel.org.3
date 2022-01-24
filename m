@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9D1499382
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9968B498C21
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347904AbiAXUeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:34:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355442AbiAXUNl (ORCPT
+        id S1348690AbiAXTTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:19:31 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37040 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347480AbiAXTKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:13:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2CFC0604D2;
-        Mon, 24 Jan 2022 11:37:07 -0800 (PST)
+        Mon, 24 Jan 2022 14:10:36 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 082B8B81232;
-        Mon, 24 Jan 2022 19:37:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27356C340E7;
-        Mon, 24 Jan 2022 19:37:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3CBA1B8121C;
+        Mon, 24 Jan 2022 19:10:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67D68C340E5;
+        Mon, 24 Jan 2022 19:10:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053024;
-        bh=QaemAATjchbPUysn33dPWc1b6QtCHkameZcT4eNz62Q=;
+        s=korg; t=1643051434;
+        bh=bhP8cYmcF+oa1LaEN1EYwyqQkc2Wenjwi4rB4DKehC8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DtfC5d4oiNhvzdA6GQO0nFF4q4E0wN7UiqjUi5NAUDJIoz+X/Vn1NwSnm328W0uAT
-         g1IDZTjSvSlCOyqU+7Jvv+v8oLwQ3onmQsBubu0Ysew44REjG7909KoWCsIkTQVNSd
-         yh//fymMrqwHwdd9vWZN2oH/9Hd+6s36rxuKFGc8=
+        b=UvANOJRingdiHjjywDkjJtUivzT/gB0Qt9dVHz2qWgvnwwBYn0HM/B0wdYj/y2Rn7
+         ThNxCvNCFLQ44Tgnj1472pnL0Zroblvc/RPVGZbyQnNACjOCvVIC2DHTrIq7S77MLN
+         NojF7TvJJvMi11KacYf0RXMoqw6rxgcc0BDfLYp8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrey Ryabinin <arbn@yandex-team.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        Tejun Heo <tj@kernel.org>
-Subject: [PATCH 5.4 252/320] cputime, cpuacct: Include guest time in user time in cpuacct.stat
+        stable@vger.kernel.org, Yixing Liu <liuyixing1@huawei.com>,
+        Wenpeng Liang <liangwenpeng@huawei.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 4.14 161/186] RDMA/hns: Modify the mapping attribute of doorbell to device
 Date:   Mon, 24 Jan 2022 19:43:56 +0100
-Message-Id: <20220124184002.557104227@linuxfoundation.org>
+Message-Id: <20220124183942.275906961@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,44 +46,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Ryabinin <arbn@yandex-team.com>
+From: Yixing Liu <liuyixing1@huawei.com>
 
-commit 9731698ecb9c851f353ce2496292ff9fcea39dff upstream.
+commit 39d5534b1302189c809e90641ffae8cbdc42a8fc upstream.
 
-cpuacct.stat in no-root cgroups shows user time without guest time
-included int it. This doesn't match with user time shown in root
-cpuacct.stat and /proc/<pid>/stat. This also affects cgroup2's cpu.stat
-in the same way.
+It is more general for ARM device drivers to use the device attribute to
+map PCI BAR spaces.
 
-Make account_guest_time() to add user time to cgroup's cpustat to
-fix this.
-
-Fixes: ef12fefabf94 ("cpuacct: add per-cgroup utime/stime statistics")
-Signed-off-by: Andrey Ryabinin <arbn@yandex-team.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Daniel Jordan <daniel.m.jordan@oracle.com>
-Acked-by: Tejun Heo <tj@kernel.org>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20211115164607.23784-1-arbn@yandex-team.com
+Fixes: 9a4435375cd1 ("IB/hns: Add driver files for hns RoCE driver")
+Link: https://lore.kernel.org/r/20211206133652.27476-1-liangwenpeng@huawei.com
+Signed-off-by: Yixing Liu <liuyixing1@huawei.com>
+Signed-off-by: Wenpeng Liang <liangwenpeng@huawei.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/sched/cputime.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/infiniband/hw/hns/hns_roce_main.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/kernel/sched/cputime.c
-+++ b/kernel/sched/cputime.c
-@@ -147,10 +147,10 @@ void account_guest_time(struct task_stru
+--- a/drivers/infiniband/hw/hns/hns_roce_main.c
++++ b/drivers/infiniband/hw/hns/hns_roce_main.c
+@@ -377,7 +377,7 @@ static int hns_roce_mmap(struct ib_ucont
+ 		return -EINVAL;
  
- 	/* Add guest time to cpustat. */
- 	if (task_nice(p) > 0) {
--		cpustat[CPUTIME_NICE] += cputime;
-+		task_group_account_field(p, CPUTIME_NICE, cputime);
- 		cpustat[CPUTIME_GUEST_NICE] += cputime;
- 	} else {
--		cpustat[CPUTIME_USER] += cputime;
-+		task_group_account_field(p, CPUTIME_USER, cputime);
- 		cpustat[CPUTIME_GUEST] += cputime;
- 	}
- }
+ 	if (vma->vm_pgoff == 0) {
+-		vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
++		vma->vm_page_prot = pgprot_device(vma->vm_page_prot);
+ 		if (io_remap_pfn_range(vma, vma->vm_start,
+ 				       to_hr_ucontext(context)->uar.pfn,
+ 				       PAGE_SIZE, vma->vm_page_prot))
 
 

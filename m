@@ -2,46 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3FB499893
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CA20499584
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:13:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449802AbiAXV1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:27:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40274 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387515AbiAXUgy (ORCPT
+        id S1442060AbiAXUwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:52:41 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35962 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1384555AbiAXUaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:36:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E636C038AF4;
-        Mon, 24 Jan 2022 11:49:59 -0800 (PST)
+        Mon, 24 Jan 2022 15:30:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFAE960B03;
-        Mon, 24 Jan 2022 19:49:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F85EC340E5;
-        Mon, 24 Jan 2022 19:49:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45351B8121A;
+        Mon, 24 Jan 2022 20:30:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74BBBC340E5;
+        Mon, 24 Jan 2022 20:29:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053798;
-        bh=YDjUoVyK2QZHgahWsrbWXcshySCqkSFQvmka6DxA3K4=;
+        s=korg; t=1643056200;
+        bh=0KD1eiKFQZ+15lvlwGjcpA2CZ9608oocxiXbhgHw+rM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vhCEmZrulHGMkwqp6JqpLEiIbt69llL16z3++VfXtC8iZ2QCQ4VgQOIv4ahvolkZl
-         NhQVoZjfyDyDH20tkM7agiAxREBIaUNLAdLc1FhahufIUST2avfOYVUpY2h+9H/+aq
-         MAB4FGznnzD2DajFTv6cCVQnfg1bB085rWGIs6WQ=
+        b=gLC5f3Koh5ayJC2USpP6jgtjipH/3smluYrcUSBZX8++BXnmjvZiEUoKWNI0J5d8F
+         k7+g78oCxunBXwIXXjaApyf1D2DTjltW31NRsR4lazEjMBBPdcZICsClhS0IiSmQm0
+         9nn2yvJob1rCQxbJMrVAA9/Fc9vYykNSq+hyEqFs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
-        TOTE Robot <oslab@tsinghua.edu.cn>,
-        Brian Norris <briannorris@chromium.org>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 148/563] mwifiex: Fix possible ABBA deadlock
-Date:   Mon, 24 Jan 2022 19:38:33 +0100
-Message-Id: <20220124184029.520070168@linuxfoundation.org>
+        stable@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 397/846] char/mwave: Adjust io port register size
+Date:   Mon, 24 Jan 2022 19:38:34 +0100
+Message-Id: <20220124184114.649441386@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,80 +45,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Norris <briannorris@chromium.org>
+From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit 1b8bb8919ef81bfc8873d223b9361f1685f2106d ]
+[ Upstream commit f5912cc19acd7c24b2dbf65a6340bf194244f085 ]
 
-Quoting Jia-Ju Bai <baijiaju1990@gmail.com>:
+Using MKWORD() on a byte-sized variable results in OOB read. Expand the
+size of the reserved area so both MKWORD and MKBYTE continue to work
+without overflow. Silences this warning on a -Warray-bounds build:
 
-  mwifiex_dequeue_tx_packet()
-     spin_lock_bh(&priv->wmm.ra_list_spinlock); --> Line 1432 (Lock A)
-     mwifiex_send_addba()
-       spin_lock_bh(&priv->sta_list_spinlock); --> Line 608 (Lock B)
+drivers/char/mwave/3780i.h:346:22: error: array subscript 'short unsigned int[0]' is partly outside array bounds of 'DSP_ISA_SLAVE_CONTROL[1]' [-Werror=array-bounds]
+  346 | #define MKWORD(var) (*((unsigned short *)(&var)))
+      |                     ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/char/mwave/3780i.h:356:40: note: in definition of macro 'OutWordDsp'
+  356 | #define OutWordDsp(index,value)   outw(value,usDspBaseIO+index)
+      |                                        ^~~~~
+drivers/char/mwave/3780i.c:373:41: note: in expansion of macro 'MKWORD'
+  373 |         OutWordDsp(DSP_IsaSlaveControl, MKWORD(rSlaveControl));
+      |                                         ^~~~~~
+drivers/char/mwave/3780i.c:358:31: note: while referencing 'rSlaveControl'
+  358 |         DSP_ISA_SLAVE_CONTROL rSlaveControl;
+      |                               ^~~~~~~~~~~~~
 
-  mwifiex_process_sta_tx_pause()
-     spin_lock_bh(&priv->sta_list_spinlock); --> Line 398 (Lock B)
-     mwifiex_update_ralist_tx_pause()
-       spin_lock_bh(&priv->wmm.ra_list_spinlock); --> Line 941 (Lock A)
-
-Similar report for mwifiex_process_uap_tx_pause().
-
-While the locking expectations in this driver are a bit unclear, the
-Fixed commit only intended to protect the sta_ptr, so we can drop the
-lock as soon as we're done with it.
-
-IIUC, this deadlock cannot actually happen, because command event
-processing (which calls mwifiex_process_sta_tx_pause()) is
-sequentialized with TX packet processing (e.g.,
-mwifiex_dequeue_tx_packet()) via the main loop (mwifiex_main_process()).
-But it's good not to leave this potential issue lurking.
-
-Fixes: f0f7c2275fb9 ("mwifiex: minor cleanups w/ sta_list_spinlock in cfg80211.c")
-Cc: Douglas Anderson <dianders@chromium.org>
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Link: https://lore.kernel.org/linux-wireless/0e495b14-efbb-e0da-37bd-af6bd677ee2c@gmail.com/
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/YaV0pllJ5p/EuUat@google.com
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20211203084206.3104326-1-keescook@chromium.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/marvell/mwifiex/sta_event.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/char/mwave/3780i.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/marvell/mwifiex/sta_event.c b/drivers/net/wireless/marvell/mwifiex/sta_event.c
-index bc79ca4cb803c..753458628f86a 100644
---- a/drivers/net/wireless/marvell/mwifiex/sta_event.c
-+++ b/drivers/net/wireless/marvell/mwifiex/sta_event.c
-@@ -364,10 +364,12 @@ static void mwifiex_process_uap_tx_pause(struct mwifiex_private *priv,
- 		sta_ptr = mwifiex_get_sta_entry(priv, tp->peermac);
- 		if (sta_ptr && sta_ptr->tx_pause != tp->tx_pause) {
- 			sta_ptr->tx_pause = tp->tx_pause;
-+			spin_unlock_bh(&priv->sta_list_spinlock);
- 			mwifiex_update_ralist_tx_pause(priv, tp->peermac,
- 						       tp->tx_pause);
-+		} else {
-+			spin_unlock_bh(&priv->sta_list_spinlock);
- 		}
--		spin_unlock_bh(&priv->sta_list_spinlock);
- 	}
- }
+diff --git a/drivers/char/mwave/3780i.h b/drivers/char/mwave/3780i.h
+index 9ccb6b270b071..95164246afd1a 100644
+--- a/drivers/char/mwave/3780i.h
++++ b/drivers/char/mwave/3780i.h
+@@ -68,7 +68,7 @@ typedef struct {
+ 	unsigned char ClockControl:1;	/* RW: Clock control: 0=normal, 1=stop 3780i clocks */
+ 	unsigned char SoftReset:1;	/* RW: Soft reset 0=normal, 1=soft reset active */
+ 	unsigned char ConfigMode:1;	/* RW: Configuration mode, 0=normal, 1=config mode */
+-	unsigned char Reserved:5;	/* 0: Reserved */
++	unsigned short Reserved:13;	/* 0: Reserved */
+ } DSP_ISA_SLAVE_CONTROL;
  
-@@ -399,11 +401,13 @@ static void mwifiex_process_sta_tx_pause(struct mwifiex_private *priv,
- 			sta_ptr = mwifiex_get_sta_entry(priv, tp->peermac);
- 			if (sta_ptr && sta_ptr->tx_pause != tp->tx_pause) {
- 				sta_ptr->tx_pause = tp->tx_pause;
-+				spin_unlock_bh(&priv->sta_list_spinlock);
- 				mwifiex_update_ralist_tx_pause(priv,
- 							       tp->peermac,
- 							       tp->tx_pause);
-+			} else {
-+				spin_unlock_bh(&priv->sta_list_spinlock);
- 			}
--			spin_unlock_bh(&priv->sta_list_spinlock);
- 		}
- 	}
- }
+ 
 -- 
 2.34.1
 

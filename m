@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5368A4991C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:18:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F3E4991D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345491AbiAXUO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:14:27 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49486 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351643AbiAXTyC (ORCPT
+        id S1355741AbiAXUOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:14:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351783AbiAXTwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:54:02 -0500
+        Mon, 24 Jan 2022 14:52:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164BEC061395;
+        Mon, 24 Jan 2022 11:26:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B31960C2A;
-        Mon, 24 Jan 2022 19:54:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CD0DC340E5;
-        Mon, 24 Jan 2022 19:54:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA6ED6148C;
+        Mon, 24 Jan 2022 19:26:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77DCEC340E5;
+        Mon, 24 Jan 2022 19:26:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054040;
-        bh=IGbzNY6f3suY9s0u1XuNuzP2O/Pk4yXeeJ9hmyQGuew=;
+        s=korg; t=1643052383;
+        bh=XLSLNSZKrLzuOonGSWPffYXKyT9mQ/W4Hk3kFvBGZ7k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vosSdu+ZxcDgBTvl+VDmu2OtgOZzzeXpARqks3g3uIR9z1xyKwqboQr5PFBVsETbi
-         C+S2lI1ywzTNI9vUW6hUCmO/ItbE/D1aunJQKum3EgoRaLozdRgf4yCTSblS/XW0Dt
-         huQFQf2yB7yRLYVHQzBbcX+lYOQPBj1/BDfKyzww=
+        b=W2VLwLU9uUR4fVbgRClcD8tSODYdIaNLk34lv3IrCd5iiMBM9hscCSxn/VJffAOmP
+         Uurs0c99VcKCCAP/9DFxjmYoW/l6BECHGzXAFtSTbr9BJl2Gzm9TjoUOVu2ujbiaqf
+         IfTupIxC2yRSmjRV69JZ9H8Cx35HnG1tD15EuvbE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Todd Kjos <tkjos@google.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 260/563] binder: fix handling of error during copy
+        stable@vger.kernel.org,
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 041/320] wcn36xx: Release DMA channel descriptor allocations
 Date:   Mon, 24 Jan 2022 19:40:25 +0100
-Message-Id: <20220124184033.421679754@linuxfoundation.org>
+Message-Id: <20220124183955.151421264@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,44 +50,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Todd Kjos <tkjos@google.com>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-[ Upstream commit fe6b1869243f23a485a106c214bcfdc7aa0ed593 ]
+[ Upstream commit 3652096e5263ad67604b0323f71d133485f410e5 ]
 
-If a memory copy function fails to copy the whole buffer,
-a positive integar with the remaining bytes is returned.
-In binder_translate_fd_array() this can result in an fd being
-skipped due to the failed copy, but the loop continues
-processing fds since the early return condition expects a
-negative integer on error.
+When unloading the driver we are not releasing the DMA descriptors which we
+previously allocated.
 
-Fix by returning "ret > 0 ? -EINVAL : ret" to handle this case.
-
-Fixes: bb4a2e48d510 ("binder: return errors from buffer copy functions")
-Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
-Signed-off-by: Todd Kjos <tkjos@google.com>
-Link: https://lore.kernel.org/r/20211130185152.437403-2-tkjos@google.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 8e84c2582169 ("wcn36xx: mac80211 driver for Qualcomm WCN3660/WCN3680 hardware")
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+Link: https://lore.kernel.org/r/20211105122152.1580542-3-bryan.odonoghue@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/android/binder.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/wireless/ath/wcn36xx/dxe.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-index 80e2bbb36422e..366b124057081 100644
---- a/drivers/android/binder.c
-+++ b/drivers/android/binder.c
-@@ -2657,8 +2657,8 @@ static int binder_translate_fd_array(struct binder_fd_array_object *fda,
- 		if (!ret)
- 			ret = binder_translate_fd(fd, offset, t, thread,
- 						  in_reply_to);
--		if (ret < 0)
--			return ret;
-+		if (ret)
-+			return ret > 0 ? -EINVAL : ret;
- 	}
- 	return 0;
+diff --git a/drivers/net/wireless/ath/wcn36xx/dxe.c b/drivers/net/wireless/ath/wcn36xx/dxe.c
+index 4da25e84793b7..c400261352bc8 100644
+--- a/drivers/net/wireless/ath/wcn36xx/dxe.c
++++ b/drivers/net/wireless/ath/wcn36xx/dxe.c
+@@ -952,4 +952,9 @@ void wcn36xx_dxe_deinit(struct wcn36xx *wcn)
+ 
+ 	wcn36xx_dxe_ch_free_skbs(wcn, &wcn->dxe_rx_l_ch);
+ 	wcn36xx_dxe_ch_free_skbs(wcn, &wcn->dxe_rx_h_ch);
++
++	wcn36xx_dxe_deinit_descs(wcn->dev, &wcn->dxe_tx_l_ch);
++	wcn36xx_dxe_deinit_descs(wcn->dev, &wcn->dxe_tx_h_ch);
++	wcn36xx_dxe_deinit_descs(wcn->dev, &wcn->dxe_rx_l_ch);
++	wcn36xx_dxe_deinit_descs(wcn->dev, &wcn->dxe_rx_h_ch);
  }
 -- 
 2.34.1

@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9599D498EAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E2B498D58
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355903AbiAXTov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:44:51 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33890 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353906AbiAXTfd (ORCPT
+        id S1352918AbiAXTbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:31:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350037AbiAXTXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:35:33 -0500
+        Mon, 24 Jan 2022 14:23:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A162C061345;
+        Mon, 24 Jan 2022 11:09:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED8C3614B8;
-        Mon, 24 Jan 2022 19:35:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC55DC340E5;
-        Mon, 24 Jan 2022 19:35:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CAD7460B86;
+        Mon, 24 Jan 2022 19:09:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76A0CC340E5;
+        Mon, 24 Jan 2022 19:09:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052932;
-        bh=9RyE6ZLi77tUv4uCLRdOWWqq4WpjHFSm/tVZXOPXU14=;
+        s=korg; t=1643051390;
+        bh=TJQQhk+LtbsaVOiLRJNVbeEVkSaz5diuewmKJ4vB+uI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gfoWxPA4qGCPDv3SG5RlfrDbEbKT76GEyTOtRS8D0YjDjTB1dYOp8mDLnpvF4PoVc
-         yoDqmvQRAWTxbwEDwBIs6MCvb//IdkIj2QhLcbxECRcWBri+ZVD7YbzVCfODMEgpE9
-         jqsxwOy69Aq0KqW4uHtNYIGuy8NaqApLxLiomer8=
+        b=FCCbwUqVS3GPRf2UIpOiaxQOap7nwyO3SMJPyLev/8IZmajh0GXsJ+EPxudVmR2+H
+         QI9UOhgAf4M3jQUJEgIND0p67rXSgmVwn8dWUnlRQK3q9k/hR8JYSLOBODsrtWJFpJ
+         uaFuffLqhjSBqppLWD6SVMqPtIP4evi6mron5EXw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Kyeong Yoo <kyeong.yoo@alliedtelesis.co.nz>,
-        Richard Weinberger <richard@nod.at>,
+        stable@vger.kernel.org, Zekun Shen <bruceshenzk@gmail.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 203/320] jffs2: GC deadlock reading a page that is used in jffs2_write_begin()
-Date:   Mon, 24 Jan 2022 19:43:07 +0100
-Message-Id: <20220124184000.541931930@linuxfoundation.org>
+Subject: [PATCH 4.14 113/186] ath9k: Fix out-of-bound memcpy in ath9k_hif_usb_rx_stream
+Date:   Mon, 24 Jan 2022 19:43:08 +0100
+Message-Id: <20220124183940.748943459@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,131 +49,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kyeong Yoo <kyeong.yoo@alliedtelesis.co.nz>
+From: Zekun Shen <bruceshenzk@gmail.com>
 
-[ Upstream commit aa39cc675799bc92da153af9a13d6f969c348e82 ]
+[ Upstream commit 6ce708f54cc8d73beca213cec66ede5ce100a781 ]
 
-GC task can deadlock in read_cache_page() because it may attempt
-to release a page that is actually allocated by another task in
-jffs2_write_begin().
-The reason is that in jffs2_write_begin() there is a small window
-a cache page is allocated for use but not set Uptodate yet.
+Large pkt_len can lead to out-out-bound memcpy. Current
+ath9k_hif_usb_rx_stream allows combining the content of two urb
+inputs to one pkt. The first input can indicate the size of the
+pkt. Any remaining size is saved in hif_dev->rx_remain_len.
+While processing the next input, memcpy is used with rx_remain_len.
 
-This ends up with a deadlock between two tasks:
-1) A task (e.g. file copy)
-   - jffs2_write_begin() locks a cache page
-   - jffs2_write_end() tries to lock "alloc_sem" from
-	 jffs2_reserve_space() <-- STUCK
-2) GC task (jffs2_gcd_mtd3)
-   - jffs2_garbage_collect_pass() locks "alloc_sem"
-   - try to lock the same cache page in read_cache_page() <-- STUCK
+4-byte pkt_len can go up to 0xffff, while a single input is 0x4000
+maximum in size (MAX_RX_BUF_SIZE). Thus, the patch adds a check for
+pkt_len which must not exceed 2 * MAX_RX_BUG_SIZE.
 
-So to avoid this deadlock, hold "alloc_sem" in jffs2_write_begin()
-while reading data in a cache page.
+BUG: KASAN: slab-out-of-bounds in ath9k_hif_usb_rx_cb+0x490/0xed7 [ath9k_htc]
+Read of size 46393 at addr ffff888018798000 by task kworker/0:1/23
 
-Signed-off-by: Kyeong Yoo <kyeong.yoo@alliedtelesis.co.nz>
-Signed-off-by: Richard Weinberger <richard@nod.at>
+CPU: 0 PID: 23 Comm: kworker/0:1 Not tainted 5.6.0 #63
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS rel-1.10.2-0-g5f4c7b1-prebuilt.qemu-project.org 04/01/2014
+Workqueue: events request_firmware_work_func
+Call Trace:
+ <IRQ>
+ dump_stack+0x76/0xa0
+ print_address_description.constprop.0+0x16/0x200
+ ? ath9k_hif_usb_rx_cb+0x490/0xed7 [ath9k_htc]
+ ? ath9k_hif_usb_rx_cb+0x490/0xed7 [ath9k_htc]
+ __kasan_report.cold+0x37/0x7c
+ ? ath9k_hif_usb_rx_cb+0x490/0xed7 [ath9k_htc]
+ kasan_report+0xe/0x20
+ check_memory_region+0x15a/0x1d0
+ memcpy+0x20/0x50
+ ath9k_hif_usb_rx_cb+0x490/0xed7 [ath9k_htc]
+ ? hif_usb_mgmt_cb+0x2d9/0x2d9 [ath9k_htc]
+ ? _raw_spin_lock_irqsave+0x7b/0xd0
+ ? _raw_spin_trylock_bh+0x120/0x120
+ ? __usb_unanchor_urb+0x12f/0x210
+ __usb_hcd_giveback_urb+0x1e4/0x380
+ usb_giveback_urb_bh+0x241/0x4f0
+ ? __hrtimer_run_queues+0x316/0x740
+ ? __usb_hcd_giveback_urb+0x380/0x380
+ tasklet_action_common.isra.0+0x135/0x330
+ __do_softirq+0x18c/0x634
+ irq_exit+0x114/0x140
+ smp_apic_timer_interrupt+0xde/0x380
+ apic_timer_interrupt+0xf/0x20
+
+I found the bug using a custome USBFuzz port. It's a research work
+to fuzz USB stack/drivers. I modified it to fuzz ath9k driver only,
+providing hand-crafted usb descriptors to QEMU.
+
+After fixing the value of pkt_tag to ATH_USB_RX_STREAM_MODE_TAG in QEMU
+emulation, I found the KASAN report. The bug is triggerable whenever
+pkt_len is above two MAX_RX_BUG_SIZE. I used the same input that crashes
+to test the driver works when applying the patch.
+
+Signed-off-by: Zekun Shen <bruceshenzk@gmail.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/YXsidrRuK6zBJicZ@10-18-43-117.dynapool.wireless.nyu.edu
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/jffs2/file.c | 40 +++++++++++++++++++++++++---------------
- 1 file changed, 25 insertions(+), 15 deletions(-)
+ drivers/net/wireless/ath/ath9k/hif_usb.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/fs/jffs2/file.c b/fs/jffs2/file.c
-index f8fb89b10227c..34880a4c21732 100644
---- a/fs/jffs2/file.c
-+++ b/fs/jffs2/file.c
-@@ -135,20 +135,15 @@ static int jffs2_write_begin(struct file *filp, struct address_space *mapping,
- 	struct page *pg;
- 	struct inode *inode = mapping->host;
- 	struct jffs2_inode_info *f = JFFS2_INODE_INFO(inode);
-+	struct jffs2_sb_info *c = JFFS2_SB_INFO(inode->i_sb);
- 	pgoff_t index = pos >> PAGE_SHIFT;
- 	uint32_t pageofs = index << PAGE_SHIFT;
- 	int ret = 0;
- 
--	pg = grab_cache_page_write_begin(mapping, index, flags);
--	if (!pg)
--		return -ENOMEM;
--	*pagep = pg;
--
- 	jffs2_dbg(1, "%s()\n", __func__);
- 
- 	if (pageofs > inode->i_size) {
- 		/* Make new hole frag from old EOF to new page */
--		struct jffs2_sb_info *c = JFFS2_SB_INFO(inode->i_sb);
- 		struct jffs2_raw_inode ri;
- 		struct jffs2_full_dnode *fn;
- 		uint32_t alloc_len;
-@@ -159,7 +154,7 @@ static int jffs2_write_begin(struct file *filp, struct address_space *mapping,
- 		ret = jffs2_reserve_space(c, sizeof(ri), &alloc_len,
- 					  ALLOC_NORMAL, JFFS2_SUMMARY_INODE_SIZE);
- 		if (ret)
--			goto out_page;
-+			goto out_err;
- 
- 		mutex_lock(&f->sem);
- 		memset(&ri, 0, sizeof(ri));
-@@ -189,7 +184,7 @@ static int jffs2_write_begin(struct file *filp, struct address_space *mapping,
- 			ret = PTR_ERR(fn);
- 			jffs2_complete_reservation(c);
- 			mutex_unlock(&f->sem);
--			goto out_page;
-+			goto out_err;
+diff --git a/drivers/net/wireless/ath/ath9k/hif_usb.c b/drivers/net/wireless/ath/ath9k/hif_usb.c
+index ce3a785212740..8125f17526519 100644
+--- a/drivers/net/wireless/ath/ath9k/hif_usb.c
++++ b/drivers/net/wireless/ath/ath9k/hif_usb.c
+@@ -588,6 +588,13 @@ static void ath9k_hif_usb_rx_stream(struct hif_device_usb *hif_dev,
+ 			return;
  		}
- 		ret = jffs2_add_full_dnode_to_inode(c, f, fn);
- 		if (f->metadata) {
-@@ -204,13 +199,26 @@ static int jffs2_write_begin(struct file *filp, struct address_space *mapping,
- 			jffs2_free_full_dnode(fn);
- 			jffs2_complete_reservation(c);
- 			mutex_unlock(&f->sem);
--			goto out_page;
-+			goto out_err;
- 		}
- 		jffs2_complete_reservation(c);
- 		inode->i_size = pageofs;
- 		mutex_unlock(&f->sem);
- 	}
  
-+	/*
-+	 * While getting a page and reading data in, lock c->alloc_sem until
-+	 * the page is Uptodate. Otherwise GC task may attempt to read the same
-+	 * page in read_cache_page(), which causes a deadlock.
-+	 */
-+	mutex_lock(&c->alloc_sem);
-+	pg = grab_cache_page_write_begin(mapping, index, flags);
-+	if (!pg) {
-+		ret = -ENOMEM;
-+		goto release_sem;
-+	}
-+	*pagep = pg;
-+
- 	/*
- 	 * Read in the page if it wasn't already present. Cannot optimize away
- 	 * the whole page write case until jffs2_write_end can handle the
-@@ -220,15 +228,17 @@ static int jffs2_write_begin(struct file *filp, struct address_space *mapping,
- 		mutex_lock(&f->sem);
- 		ret = jffs2_do_readpage_nolock(inode, pg);
- 		mutex_unlock(&f->sem);
--		if (ret)
--			goto out_page;
-+		if (ret) {
-+			unlock_page(pg);
-+			put_page(pg);
-+			goto release_sem;
++		if (pkt_len > 2 * MAX_RX_BUF_SIZE) {
++			dev_err(&hif_dev->udev->dev,
++				"ath9k_htc: invalid pkt_len (%x)\n", pkt_len);
++			RX_STAT_INC(skb_dropped);
++			return;
 +		}
- 	}
- 	jffs2_dbg(1, "end write_begin(). pg->flags %lx\n", pg->flags);
--	return ret;
- 
--out_page:
--	unlock_page(pg);
--	put_page(pg);
-+release_sem:
-+	mutex_unlock(&c->alloc_sem);
-+out_err:
- 	return ret;
- }
- 
++
+ 		pad_len = 4 - (pkt_len & 0x3);
+ 		if (pad_len == 4)
+ 			pad_len = 0;
 -- 
 2.34.1
 

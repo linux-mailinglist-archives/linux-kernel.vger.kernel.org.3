@@ -2,160 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A94D349A7FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:05:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5BA49A7FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:06:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1315743AbiAYCyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:54:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
+        id S1315783AbiAYCyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:54:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3407930AbiAYAVN (ORCPT
+        with ESMTP id S3408501AbiAYAWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 19:21:13 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F14C036BC9
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:05:19 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id 128so17400755pfe.12
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:05:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=t2/pVCkMGUvGOAzHtcsjzXK8+5zE14NO4NddvkDqj9w=;
-        b=zgQsj3L6OSg50dgEyhI8VbLJQG2U1v8YozGt0iCNFUM1VD44MdEEHw1TSHFiiFusYm
-         KDxrEiMMuxae+sOtjt1EAf0QRiHYPBqrWfrqeoKDDcS9C6HEE8Yc+eiMecOXPMVj7yBn
-         vR6x7/Nxu9rUwbIaPs6BeMj7O0HmKhccqmGffa7QrvZQpq6IeST+8ublmUmvRAE0oJYn
-         AdMckgD861YXcZiqZQjGz7k0XtXBU9eYrbKNJx0axcLK9lsZTYS39AsDHHQjpRxksUAV
-         NzMsZ/b68MBEQWFupMhFjbLnuTikjDakneYKyipvasoYBv/IYV2UBa0nLqwjNKUeungZ
-         2D2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=t2/pVCkMGUvGOAzHtcsjzXK8+5zE14NO4NddvkDqj9w=;
-        b=jHpqOVxh4bax0Fs1BuATblyVK8EK4MP1o/zz8cZ2JPwzIWICaN6yWM7LyKD++ZgyAY
-         DweXyzEmNGlTAydm1+favtmZXb5peYnyHuGoOolk5zWjnkThOHK+cpB1qEaS0xylqVGG
-         ofV7a31Vpa7nY/K53LbrdUVA6huZwv+TbrbQTSKZYg8E1Afxu0OCHJLzArktSzuQBsDw
-         sXJQiPj8kkPGYHlr1A674WqipBY19GTI/gBLQMzsc8d/OzODbuCFzd3eBgYYnH3g11lq
-         xgzAmM+CJCrmcKCtGnIzCqG683yoeu1KX0kIZlzVBeKaxEV+wuAuE+U7i44v7aS1GUYf
-         DAHg==
-X-Gm-Message-State: AOAM5318tkAAN5tPQ0rTY0qvYw0/fxziD5XlyDTdcCua+SHFXzaNO6GX
-        UEE5LsNQzXQjomYqMdrULQJEgQ==
-X-Google-Smtp-Source: ABdhPJxjC87yai3OmklySQg2guTsUaM+Gp8LsOyFaNfbg6oSqG4pZdEJrXLL3UYim1KqqbXZDdEcOw==
-X-Received: by 2002:a05:6a00:114f:b0:4c5:72f6:d0b5 with SMTP id b15-20020a056a00114f00b004c572f6d0b5mr15521818pfm.61.1643061918766;
-        Mon, 24 Jan 2022 14:05:18 -0800 (PST)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id g12sm16231227pfm.119.2022.01.24.14.05.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 14:05:18 -0800 (PST)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Rong Chen <rong.chen@amlogic.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        1131046452@qq.com, linux-mmc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     45581586@qq.com, Rong Chen <rong.chen@amlogic.com>
-Subject: Re: [PATCH] mmc: meson: Fix usage of meson_mmc_post_req()
-In-Reply-To: <20220106105453.3875119-1-rong.chen@amlogic.com>
-References: <20220106105453.3875119-1-rong.chen@amlogic.com>
-Date:   Mon, 24 Jan 2022 14:05:17 -0800
-Message-ID: <7htudsx00y.fsf@baylibre.com>
+        Mon, 24 Jan 2022 19:22:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352DBC036BE4;
+        Mon, 24 Jan 2022 14:06:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2767615CF;
+        Mon, 24 Jan 2022 22:06:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ACCBC340F8;
+        Mon, 24 Jan 2022 22:06:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643061989;
+        bh=s0Q2iLX9dyK6zBfXvE6AmOg6Y4MPmiUDjoi2MZ8nbRI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=BB8Mpx1LnwvDuTkbA0cXddeZ/rQmtoz8pUu0UU6grzafB6tLVMViJeDK0RQZji0pa
+         ALjXmDrGSFz3XxbxVxzAwQI37Jrd1WyjAs4m0uinFAz/wQMNAGxQ+XlElHAM7N9Z2O
+         CNuHrOf/n3Osqripl7Pwbn+uu34DRbgdl8p2qx+km9d9A51sLduueP3C2eCmviHrQM
+         kWhX/ZhSpD9LMiR/NvcdNf5eocL/fFS9RK/MFN7rIxhtS4ddTPaXsHQfQq7uGT86Nf
+         TVaZfoKOH0mQklFjLmq4GHpu0BEGXBmTNPAQqUG/7IbD9zXl2timujV65yhcCpbQFr
+         HTcL+lDGlz7Yg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id DDF295C0FCD; Mon, 24 Jan 2022 14:06:28 -0800 (PST)
+Date:   Mon, 24 Jan 2022 14:06:28 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alexander Aring <aahringo@redhat.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, David Teigland <teigland@redhat.com>,
+        cluster-devel <cluster-devel@redhat.com>,
+        linux-sparse@vger.kernel.org, rcu@vger.kernel.org
+Subject: Re: fs/dlm/midcomms.c:913:22: sparse: sparse: restricted __le32
+ degrades to integer
+Message-ID: <20220124220628.GL4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <202201221028.YKA8kSdm-lkp@intel.com>
+ <CAK-6q+h_hb94J3DSXPk=E44kCxiwZ+BE3kMJe09iShRzMb=vzQ@mail.gmail.com>
+ <91901e7b-7d82-116c-aaf2-c74c6a6b999c@infradead.org>
+ <CAK-6q+j2jc3pBmbvQ-DCmxveC-UMV75SFc2nC1zwXKe9wm4YPg@mail.gmail.com>
+ <20220124124530.GS1951@kadam>
+ <CAK-6q+iZfY=FyOxJfS7cY7MqScs+nU=U3B4NnLnvcLH3fofuAg@mail.gmail.com>
+ <CAK-6q+ga2zT2h4oY0=aCXFeU=oaFHbSXGzuVRptB8Hg-YKR7Gw@mail.gmail.com>
+ <CAK-6q+jfA2k1TFrLqK4YN2vshgLidD=6r_CCV6df_VRFMFO7ag@mail.gmail.com>
+ <20220124201417.GI4285@paulmck-ThinkPad-P17-Gen-1>
+ <CAK-6q+gGx68Wx8mBJAdo0ygpBWPoHW+L+HD11U6UQSOjSXVP3w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK-6q+gGx68Wx8mBJAdo0ygpBWPoHW+L+HD11U6UQSOjSXVP3w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Rong,
+On Mon, Jan 24, 2022 at 04:36:55PM -0500, Alexander Aring wrote:
+> Hi,
+> 
+> On Mon, Jan 24, 2022 at 3:23 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Mon, Jan 24, 2022 at 12:41:04PM -0500, Alexander Aring wrote:
+> > > Hi,
+> > >
+> > > On Mon, Jan 24, 2022 at 12:36 PM Alexander Aring <aahringo@redhat.com> wrote:
+> > > >
+> > > > Hi,
+> > > >
+> > > > On Mon, Jan 24, 2022 at 12:21 PM Alexander Aring <aahringo@redhat.com> wrote:
+> > > > >
+> > > > > Hi,
+> > > > >
+> > > > > On Mon, Jan 24, 2022 at 7:46 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+> > > > > >
+> > > > > > On Sun, Jan 23, 2022 at 01:41:52PM -0500, Alexander Aring wrote:
+> > > > > > >
+> > > > > > > I see also:
+> > > > > > >
+> > > > > > > fs/dlm/midcomms.c:213:1: sparse: sparse: symbol
+> > > > > > > '__srcu_struct_nodes_srcu' was not declared. Should it be static?
+> > > > > > >
+> > > > > >
+> > > > > > Why not just do this?  (Untested.  Maybe I don't understand?)
+> > > > > >
+> > > > > > diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
+> > > > > > index cb1f4351e8ba..a164089abec4 100644
+> > > > > > --- a/include/linux/srcutree.h
+> > > > > > +++ b/include/linux/srcutree.h
+> > > > > > @@ -121,7 +121,7 @@ struct srcu_struct {
+> > > > > >  #ifdef MODULE
+> > > > > >  # define __DEFINE_SRCU(name, is_static)                                        \
+> > > > > >         is_static struct srcu_struct name;                              \
+> > > > > > -       struct srcu_struct * const __srcu_struct_##name                 \
+> > > > > > +       is_static struct srcu_struct * const __srcu_struct_##name       \
+> > > > > >                 __section("___srcu_struct_ptrs") = &name
+> > > > > >  #else
+> > > > > >  # define __DEFINE_SRCU(name, is_static)                                        \
+> > > > > >
+> > > > >
+> > > > > I tried it and yes it will fix the issue and introduce another one
+> > > > > about "is_static struct srcu_struct * const __srcu_struct_##name" is
+> > > > > unused ("-Wunused-const-variable").
+> > > > > I added a __maybe_unused after the introduced is_static and it seems
+> > > > > to fix the introduced issue, now it compiles and sparse is happy. I am
+> > > > > not sure if this is the right fix?
+> > > >
+> > > > it is obviously unused, but it has something to do with
+> > > > "__section("___srcu_struct_ptrs")" and during module loading it, I
+> > > > suppose, srcu tries to access it to find whatever needs to be
+> > > > registered?
+> > >
+> > > Sorry, but if this is true then it can't be declared as static... and
+> > > we are at the beginning again.
+> >
+> > Welcome to my world!!!  ;-)
+> >
+> > More seriously, thank you for chasing this down.  But would it work to
+> > add a declaration just before?
+> >
+> 
+> only if I add an "extern" in front of the declaration before, so it looks like:
+> 
+> extern struct srcu_struct * const __srcu_struct_##name;
+> 
+> (compile and sparse tested only)
 
-First, thank you finding the issue and for submitting a fix!
+If that works for everyone, it seems worth persuing.
 
-Rong Chen <rong.chen@amlogic.com> writes:
+One way to test this is as follows:
 
-> To ensure the DMA moves data correctly from memory to
-> peripherals, DMA unmapping when the MMC request done
-> with calls meson_mmc_post_req().
->
-> Signed-off-by: Rong Chen <rong.chen@amlogic.com>
+1.	Build a kernel with CONFIG_RCU_TORTURE_TEST=m.  Boot this and
+	type "modprobe rcutorture torture_type=srcu".
 
-The patch looks correct, but I think I think the changelog could be
-improved.  If I understand the code correctly, I think what you're doing
-is:
+	If you want to stop the torture test, type "rmmod rcutorture".
 
-"""
-Currently meson_mmc_post_req() is called in meson_mmc_request() right
-after _start_cmd().  This could lead to DMA unmapping before the request
-is actually finished.
+	This will test DEFINE_SRCU() for the module case.
 
-To fix, ton't call meson_mmc_post_req() until _request_done().
-"""
+2.	At the top-level directory of your Linux-kernel source tree,
+	type "tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 3 --configs 'SRCU-N' --trust-make"
 
-Kevin
+	This will test DEFINE_SRCU() for the non-module case.
 
-> ---
->  drivers/mmc/host/meson-gx-mmc.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/mmc/host/meson-gx-mmc.c b/drivers/mmc/host/meson-gx-mmc.c
-> index 8f36536cb1b6..6a9554ae4b1c 100644
-> --- a/drivers/mmc/host/meson-gx-mmc.c
-> +++ b/drivers/mmc/host/meson-gx-mmc.c
-> @@ -173,6 +173,7 @@ struct meson_host {
->  	int irq;
->  
->  	bool vqmmc_enabled;
-> +	bool needs_pre_post_req;
->  };
->  
->  #define CMD_CFG_LENGTH_MASK GENMASK(8, 0)
-> @@ -663,6 +664,8 @@ static void meson_mmc_request_done(struct mmc_host *mmc,
->  	struct meson_host *host = mmc_priv(mmc);
->  
->  	host->cmd = NULL;
-> +	if (host->needs_pre_post_req)
-> +		meson_mmc_post_req(mmc, mrq, 0);
->  	mmc_request_done(host->mmc, mrq);
->  }
->  
-> @@ -880,7 +883,7 @@ static int meson_mmc_validate_dram_access(struct mmc_host *mmc, struct mmc_data
->  static void meson_mmc_request(struct mmc_host *mmc, struct mmc_request *mrq)
->  {
->  	struct meson_host *host = mmc_priv(mmc);
-> -	bool needs_pre_post_req = mrq->data &&
-> +	host->needs_pre_post_req = mrq->data &&
->  			!(mrq->data->host_cookie & SD_EMMC_PRE_REQ_DONE);
->  
->  	/*
-> @@ -896,22 +899,19 @@ static void meson_mmc_request(struct mmc_host *mmc, struct mmc_request *mrq)
->  		}
->  	}
->  
-> -	if (needs_pre_post_req) {
-> +	if (host->needs_pre_post_req) {
->  		meson_mmc_get_transfer_mode(mmc, mrq);
->  		if (!meson_mmc_desc_chain_mode(mrq->data))
-> -			needs_pre_post_req = false;
-> +			host->needs_pre_post_req = false;
->  	}
->  
-> -	if (needs_pre_post_req)
-> +	if (host->needs_pre_post_req)
->  		meson_mmc_pre_req(mmc, mrq);
->  
->  	/* Stop execution */
->  	writel(0, host->regs + SD_EMMC_START);
->  
->  	meson_mmc_start_cmd(mmc, mrq->sbc ?: mrq->cmd);
-> -
-> -	if (needs_pre_post_req)
-> -		meson_mmc_post_req(mmc, mrq, 0);
->  }
->  
->  static void meson_mmc_read_resp(struct mmc_host *mmc, struct mmc_command *cmd)
->
-> base-commit: 356f3f2c5756bbb67a515760966a40fc7043cdda
-> -- 
-> 2.25.1
+If those both work, and if there are no other objections or complications,
+please do send a patch.
+
+							Thanx, Paul

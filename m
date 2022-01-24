@@ -2,92 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB1549877D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:01:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5716E498793
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244835AbiAXSBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:01:03 -0500
-Received: from mga04.intel.com ([192.55.52.120]:41944 "EHLO mga04.intel.com"
+        id S241516AbiAXSC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:02:57 -0500
+Received: from out0.migadu.com ([94.23.1.103]:17184 "EHLO out0.migadu.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244841AbiAXSAd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:00:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643047232; x=1674583232;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=GQ5E0i+zBiGPpozPgnHLAnkyvtSeafp3A0mHCHJieDY=;
-  b=aQlCK2Kk4zwsmu+vElfLBMXsITM8rTkMejV/LhKEM+PsPJ24mgX9U7Qo
-   YNXkpC33aY763VFEUrMM4V2ucUVFqygvEMMjgnBNePvKnzbIjr6Db8F8Y
-   mbcrB1iiRX8yEn0bp/xwnuTjFzv0raumScWJA/j4qF/9ozBzaujYAc1vl
-   hupqwk0sYHJhQrEjiwm3f0HR1Jylxp69RJaMTqdxwxVAIu6qJ5D5gAre0
-   WoJDUGhYwDTGmv4Q+6vvtRfrSiKztY4GHk3BEbs8FBCsG5ZYf4Mm5pgB5
-   W3sP6y23eCSK8Qp9wGN6Xj4Cs9HMDUlxbckbA+NeZJWcMhkQvEaSw6x1v
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="244942117"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="244942117"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 10:00:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="766479413"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Jan 2022 10:00:29 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 8101BA51; Mon, 24 Jan 2022 20:00:42 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-Subject: [PATCH v2 5/5] thunderbolt: Drop duplicate NULL checks around nvmem_unregister()
-Date:   Mon, 24 Jan 2022 20:00:40 +0200
-Message-Id: <20220124180040.50660-5-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124180040.50660-1-andriy.shevchenko@linux.intel.com>
-References: <20220124180040.50660-1-andriy.shevchenko@linux.intel.com>
+        id S229862AbiAXSCy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 13:02:54 -0500
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1643047373;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=GbVJ1msdnw8aUuqkUgFBeXnijUIniHfkygukcEQkJ5A=;
+        b=xVwDGQ88+eLG0dJC2sqyTTB3x6BHKIG4XXFhNhtB7EEg/5RimKrYNnii60LZpBbZSYIde3
+        gElPzQA0IO/p6+S9RfUEW9B5ZNuFWhm8Qha7qmNRSl+HkJV7kaBAedho7Hrz8F+LcRmkYu
+        SMCzmKK1sDDh0J6WtAJEAC1WaO6y2qU=
+From:   andrey.konovalov@linux.dev
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: [PATCH v6 00/39] kasan, vmalloc, arm64: add vmalloc tagging support for SW/HW_TAGS
+Date:   Mon, 24 Jan 2022 19:02:08 +0100
+Message-Id: <cover.1643047180.git.andreyknvl@google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since nvmem_unregister() checks for NULL, no need to repeat in
-the caller. Drop duplicate NULL checks.
+From: Andrey Konovalov <andreyknvl@google.com>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
-v2: added tag (Mika)
- drivers/thunderbolt/nvm.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Hi,
 
-diff --git a/drivers/thunderbolt/nvm.c b/drivers/thunderbolt/nvm.c
-index 3a5336913cca..b3f310389378 100644
---- a/drivers/thunderbolt/nvm.c
-+++ b/drivers/thunderbolt/nvm.c
-@@ -154,10 +154,8 @@ int tb_nvm_add_non_active(struct tb_nvm *nvm, size_t size,
- void tb_nvm_free(struct tb_nvm *nvm)
- {
- 	if (nvm) {
--		if (nvm->non_active)
--			nvmem_unregister(nvm->non_active);
--		if (nvm->active)
--			nvmem_unregister(nvm->active);
-+		nvmem_unregister(nvm->non_active);
-+		nvmem_unregister(nvm->active);
- 		vfree(nvm->buf);
- 		ida_simple_remove(&nvm_ida, nvm->id);
- 	}
+This patchset adds vmalloc tagging support for SW_TAGS and HW_TAGS
+KASAN modes.
+
+The tree with patches is available here:
+
+https://github.com/xairy/linux/tree/up-kasan-vmalloc-tags-v6
+
+About half of patches are cleanups I went for along the way. None of
+them seem to be important enough to go through stable, so I decided
+not to split them out into separate patches/series.
+
+The patchset is partially based on an early version of the HW_TAGS
+patchset by Vincenzo that had vmalloc support. Thus, I added a
+Co-developed-by tag into a few patches.
+
+SW_TAGS vmalloc tagging support is straightforward. It reuses all of
+the generic KASAN machinery, but uses shadow memory to store tags
+instead of magic values. Naturally, vmalloc tagging requires adding
+a few kasan_reset_tag() annotations to the vmalloc code.
+
+HW_TAGS vmalloc tagging support stands out. HW_TAGS KASAN is based on
+Arm MTE, which can only assigns tags to physical memory. As a result,
+HW_TAGS KASAN only tags vmalloc() allocations, which are backed by
+page_alloc memory. It ignores vmap() and others.
+
+Thanks!
+
+Changes in v5->v6:
+- Rebased onto mainline/5.17-rc1.
+- Drop unnecessary explicit checks for software KASAN modes from
+  should_skip_init().
+
+Changes in v4->v5:
+- Rebase onto fresh mm.
+- Mention optimization intention in the comment for __GFP_ZEROTAGS.
+- Replace "kasan: simplify kasan_init_hw_tags" with "kasan: clean up
+  feature flags for HW_TAGS mode".
+- Use true as kasan_flag_vmalloc static key default.
+- Cosmetic changes to __def_gfpflag_names_kasan and __GFP_BITS_SHIFT.
+
+Changes in v3->v4:
+- Rebase onto fresh mm.
+- Rename KASAN_VMALLOC_NOEXEC to KASAN_VMALLOC_PROT_NORMAL.
+- Compare prot with PAGE_KERNEL instead of using pgprot_nx() to
+  indentify normal non-executable mappings.
+- Rename arch_vmalloc_pgprot_modify() to arch_vmap_pgprot_tagged().
+- Move checks from arch_vmap_pgprot_tagged() to __vmalloc_node_range()
+  as the same condition is used for other things in subsequent patches.
+- Use proper kasan_hw_tags_enabled() checks instead of
+  IS_ENABLED(CONFIG_KASAN_HW_TAGS).
+- Set __GFP_SKIP_KASAN_UNPOISON and __GFP_SKIP_ZERO flags instead of
+  resetting.
+- Only define KASAN GFP flags when when HW_TAGS KASAN is enabled.
+- Move setting KASAN GFP flags to __vmalloc_node_range() and do it
+  only for normal non-executable mapping when HW_TAGS KASAN is enabled.
+- Add new GFP flags to include/trace/events/mmflags.h.
+- Don't forget to save tagged addr to vm_struct->addr for VM_ALLOC
+  so that find_vm_area(addr)->addr == addr for vmalloc().
+- Reset pointer tag in change_memory_common().
+- Add test checks for set_memory_*() on vmalloc() allocations.
+- Minor patch descriptions and comments fixes.
+
+Changes in v2->v3:
+- Rebase onto mm.
+- New patch: "kasan, arm64: reset pointer tags of vmapped stacks".
+- New patch: "kasan, vmalloc: don't tag executable vmalloc allocations".
+- New patch: "kasan, arm64: don't tag executable vmalloc allocations".
+- Allowing enabling KASAN_VMALLOC with SW/HW_TAGS is moved to
+  "kasan: allow enabling KASAN_VMALLOC and SW/HW_TAGS", as this can only
+  be done once executable allocations are no longer tagged.
+- Minor fixes, see patches for lists of changes.
+
+Changes in v1->v2:
+- Move memory init for vmalloc() into vmalloc code for HW_TAGS KASAN.
+- Minor fixes and code reshuffling, see patches for lists of changes.
+
+Acked-by: Marco Elver <elver@google.com>
+
+Andrey Konovalov (39):
+  kasan, page_alloc: deduplicate should_skip_kasan_poison
+  kasan, page_alloc: move tag_clear_highpage out of
+    kernel_init_free_pages
+  kasan, page_alloc: merge kasan_free_pages into free_pages_prepare
+  kasan, page_alloc: simplify kasan_poison_pages call site
+  kasan, page_alloc: init memory of skipped pages on free
+  kasan: drop skip_kasan_poison variable in free_pages_prepare
+  mm: clarify __GFP_ZEROTAGS comment
+  kasan: only apply __GFP_ZEROTAGS when memory is zeroed
+  kasan, page_alloc: refactor init checks in post_alloc_hook
+  kasan, page_alloc: merge kasan_alloc_pages into post_alloc_hook
+  kasan, page_alloc: combine tag_clear_highpage calls in post_alloc_hook
+  kasan, page_alloc: move SetPageSkipKASanPoison in post_alloc_hook
+  kasan, page_alloc: move kernel_init_free_pages in post_alloc_hook
+  kasan, page_alloc: rework kasan_unpoison_pages call site
+  kasan: clean up metadata byte definitions
+  kasan: define KASAN_VMALLOC_INVALID for SW_TAGS
+  kasan, x86, arm64, s390: rename functions for modules shadow
+  kasan, vmalloc: drop outdated VM_KASAN comment
+  kasan: reorder vmalloc hooks
+  kasan: add wrappers for vmalloc hooks
+  kasan, vmalloc: reset tags in vmalloc functions
+  kasan, fork: reset pointer tags of vmapped stacks
+  kasan, arm64: reset pointer tags of vmapped stacks
+  kasan, vmalloc: add vmalloc tagging for SW_TAGS
+  kasan, vmalloc, arm64: mark vmalloc mappings as pgprot_tagged
+  kasan, vmalloc: unpoison VM_ALLOC pages after mapping
+  kasan, mm: only define ___GFP_SKIP_KASAN_POISON with HW_TAGS
+  kasan, page_alloc: allow skipping unpoisoning for HW_TAGS
+  kasan, page_alloc: allow skipping memory init for HW_TAGS
+  kasan, vmalloc: add vmalloc tagging for HW_TAGS
+  kasan, vmalloc: only tag normal vmalloc allocations
+  kasan, arm64: don't tag executable vmalloc allocations
+  kasan: mark kasan_arg_stacktrace as __initdata
+  kasan: clean up feature flags for HW_TAGS mode
+  kasan: add kasan.vmalloc command line flag
+  kasan: allow enabling KASAN_VMALLOC and SW/HW_TAGS
+  arm64: select KASAN_VMALLOC for SW/HW_TAGS modes
+  kasan: documentation updates
+  kasan: improve vmalloc tests
+
+ Documentation/dev-tools/kasan.rst   |  17 ++-
+ arch/arm64/Kconfig                  |   2 +-
+ arch/arm64/include/asm/vmalloc.h    |   6 +
+ arch/arm64/include/asm/vmap_stack.h |   5 +-
+ arch/arm64/kernel/module.c          |   5 +-
+ arch/arm64/mm/pageattr.c            |   2 +-
+ arch/arm64/net/bpf_jit_comp.c       |   3 +-
+ arch/s390/kernel/module.c           |   2 +-
+ arch/x86/kernel/module.c            |   2 +-
+ include/linux/gfp.h                 |  35 +++--
+ include/linux/kasan.h               |  97 +++++++++-----
+ include/linux/vmalloc.h             |  18 +--
+ include/trace/events/mmflags.h      |  14 +-
+ kernel/fork.c                       |   1 +
+ kernel/scs.c                        |   4 +-
+ lib/Kconfig.kasan                   |  20 +--
+ lib/test_kasan.c                    | 189 ++++++++++++++++++++++++++-
+ mm/kasan/common.c                   |   4 +-
+ mm/kasan/hw_tags.c                  | 193 ++++++++++++++++++++++------
+ mm/kasan/kasan.h                    |  18 ++-
+ mm/kasan/shadow.c                   |  63 +++++----
+ mm/page_alloc.c                     | 152 +++++++++++++++-------
+ mm/vmalloc.c                        |  99 +++++++++++---
+ 23 files changed, 731 insertions(+), 220 deletions(-)
+
 -- 
-2.34.1
+2.25.1
 

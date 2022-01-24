@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C9DE49A276
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8281649A511
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:11:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2362518AbiAXXma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:42:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46746 "EHLO
+        id S2370579AbiAYAFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:05:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1843521AbiAXXEF (ORCPT
+        with ESMTP id S1846538AbiAXXQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:04:05 -0500
+        Mon, 24 Jan 2022 18:16:19 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35811C06E003;
-        Mon, 24 Jan 2022 13:16:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98003C07E292;
+        Mon, 24 Jan 2022 11:45:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CABFA61496;
-        Mon, 24 Jan 2022 21:16:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A42BFC340E4;
-        Mon, 24 Jan 2022 21:16:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36E6A61482;
+        Mon, 24 Jan 2022 19:45:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05D33C340E5;
+        Mon, 24 Jan 2022 19:44:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058970;
-        bh=s9tsxmFlqICboirL075gBp3+3Ny1m13WJnEkExbZ/tc=;
+        s=korg; t=1643053500;
+        bh=KNMqk2/v7Cqb3mKBohF9ykocCHVkYYWvinM/tQw+06A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OsygMvCFr6Nq+9QhyFNmpH8xxml2RcEDgbX6RkYcIlsYzvRR7XAoY4egeb7lRGVJD
-         wGxjoJPHl8v/Rwb/nJDv9e3zl1UaffQWt2UMeVj5KY83zuhCd5tv7DSMCZpgghuCzp
-         nKKZMMvFtYwZcClnkuoZDoj7SjtTMULhKApRPNQg=
+        b=OcUtSl0sfffGp8Nnu7XhPh5z4QFcEHs5GTRNdSiD1jl62diX86UjWRdxuYVbiVeFo
+         Mjr8CY8sGx1hXfQNDFljYF3KbVLufCtzMIQVYuMNi4FjkRIrbyNLf44bViTQcIxm5M
+         F/mU1v/pWbkLO/Q77kcFl+CwzxaZiF16+p+QrZqY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0461/1039] dt-bindings: thermal: Fix definition of cooling-maps contribution property
-Date:   Mon, 24 Jan 2022 19:37:30 +0100
-Message-Id: <20220124184140.783230585@linuxfoundation.org>
+        stable@vger.kernel.org, Sven Eckelmann <sven@narfation.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 086/563] ath11k: Fix ETSI regd with weather radar overlap
+Date:   Mon, 24 Jan 2022 19:37:31 +0100
+Message-Id: <20220124184027.375883183@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,61 +49,238 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+From: Sven Eckelmann <sven@narfation.org>
 
-[ Upstream commit 49bcb1506f2e095262c01bda7fd1c0db524c91e2 ]
+[ Upstream commit 086c921a354089f209318501038d43c98d3f409f ]
 
-When converting the thermal-zones bindings to yaml the definition of the
-contribution property changed. The intention is the same, an integer
-value expressing a ratio of a sum on how much cooling is provided by the
-device to the zone. But after the conversion the integer value is
-limited to the range 0 to 100 and expressed as a percentage.
+Some ETSI countries have a small overlap in the wireless-regdb with an ETSI
+channel (5590-5650). A good example is Australia:
 
-This is problematic for two reasons.
+  country AU: DFS-ETSI
+  	(2400 - 2483.5 @ 40), (36)
+  	(5150 - 5250 @ 80), (23), NO-OUTDOOR, AUTO-BW
+  	(5250 - 5350 @ 80), (20), NO-OUTDOOR, AUTO-BW, DFS
+  	(5470 - 5600 @ 80), (27), DFS
+  	(5650 - 5730 @ 80), (27), DFS
+  	(5730 - 5850 @ 80), (36)
+  	(57000 - 66000 @ 2160), (43), NO-OUTDOOR
 
-- This do not match how the binding is used. Out of the 18 files that
-  make use of the property only two (ste-dbx5x0.dtsi and
-  ste-hrefv60plus.dtsi) sets it at a value that satisfy the binding,
-  100. The remaining 16 files set the value higher and fail to validate.
+If the firmware (or the BDF) is shipped with these rules then there is only
+a 10 MHz overlap with the weather radar:
 
-- Expressing the value as a percentage instead of a ratio of the sum is
-  confusing as there is nothing to enforce the sum in the zone is not
-  greater then 100.
+* below: 5470 - 5590
+* weather radar: 5590 - 5600
+* above: (none for the rule "5470 - 5600 @ 80")
 
-This patch restore the pre yaml conversion description and removes the
-value limitation allowing the usage of the bindings to validate.
+There are several wrong assumption in the ath11k code:
 
-Fixes: 1202a442a31fd2e5 ("dt-bindings: thermal: Add yaml bindings for thermal zones")
-Reported-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Link: https://lore.kernel.org/r/20211109103045.1403686-1-niklas.soderlund+renesas@ragnatech.se
-Signed-off-by: Rob Herring <robh@kernel.org>
+* there is always a valid range below the weather radar
+  (actually: there could be no range below the weather radar range OR range
+   could be smaller than 20 MHz)
+* intersected range in the weather radar range is valid
+  (actually: the range could be smaller than 20 MHz)
+* range above weather radar is either empty or valid
+  (actually: the range could be smaller than 20 MHz)
+
+These wrong assumption will lead in this example to a rule
+
+  (5590 - 5600 @ 20), (N/A, 27), (600000 ms), DFS, AUTO-BW
+
+which is invalid according to is_valid_reg_rule() because the freq_diff is
+only 10 MHz but the max_bandwidth is set to 20 MHz. Which results in a
+rejection like:
+
+  WARNING: at backports-20210222_001-4.4.60-b157d2276/net/wireless/reg.c:3984
+  [...]
+  Call trace:
+  [<ffffffbffc3d2e50>] reg_get_max_bandwidth+0x300/0x3a8 [cfg80211]
+  [<ffffffbffc3d3d0c>] regulatory_set_wiphy_regd_sync+0x3c/0x98 [cfg80211]
+  [<ffffffbffc651598>] ath11k_regd_update+0x1a8/0x210 [ath11k]
+  [<ffffffbffc652108>] ath11k_regd_update_work+0x18/0x20 [ath11k]
+  [<ffffffc0000a93e0>] process_one_work+0x1f8/0x340
+  [<ffffffc0000a9784>] worker_thread+0x25c/0x448
+  [<ffffffc0000aedc8>] kthread+0xd0/0xd8
+  [<ffffffc000085550>] ret_from_fork+0x10/0x40
+  ath11k c000000.wifi: failed to perform regd update : -22
+  Invalid regulatory domain detected
+
+To avoid this, the algorithm has to be changed slightly. Instead of
+splitting a rule which overlaps with the weather radar range into 3 pieces
+and accepting the first two parts blindly, it must actually be checked for
+each piece whether it is a valid range. And only if it is valid, add it to
+the output array.
+
+When these checks are in place, the processed rules for AU would end up as
+
+  country AU: DFS-ETSI
+          (2400 - 2483 @ 40), (N/A, 36), (N/A)
+          (5150 - 5250 @ 80), (6, 23), (N/A), NO-OUTDOOR, AUTO-BW
+          (5250 - 5350 @ 80), (6, 20), (0 ms), NO-OUTDOOR, DFS, AUTO-BW
+          (5470 - 5590 @ 80), (6, 27), (0 ms), DFS, AUTO-BW
+          (5650 - 5730 @ 80), (6, 27), (0 ms), DFS, AUTO-BW
+          (5730 - 5850 @ 80), (6, 36), (N/A), AUTO-BW
+
+and will be accepted by the wireless regulatory code.
+
+Fixes: d5c65159f289 ("ath11k: driver for Qualcomm IEEE 802.11ax devices")
+Signed-off-by: Sven Eckelmann <sven@narfation.org>
+Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+Link: https://lore.kernel.org/r/20211112153116.1214421-1-sven@narfation.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../devicetree/bindings/thermal/thermal-zones.yaml       | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/net/wireless/ath/ath11k/reg.c | 103 ++++++++++++++------------
+ 1 file changed, 56 insertions(+), 47 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-index a07de5ed0ca6a..2d34f3ccb2572 100644
---- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-+++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-@@ -199,12 +199,11 @@ patternProperties:
+diff --git a/drivers/net/wireless/ath/ath11k/reg.c b/drivers/net/wireless/ath/ath11k/reg.c
+index b8f9f34408879..e34311516b958 100644
+--- a/drivers/net/wireless/ath/ath11k/reg.c
++++ b/drivers/net/wireless/ath/ath11k/reg.c
+@@ -456,6 +456,9 @@ ath11k_reg_adjust_bw(u16 start_freq, u16 end_freq, u16 max_bw)
+ {
+ 	u16 bw;
  
-               contribution:
-                 $ref: /schemas/types.yaml#/definitions/uint32
--                minimum: 0
--                maximum: 100
-                 description:
--                  The percentage contribution of the cooling devices at the
--                  specific trip temperature referenced in this map
--                  to this thermal zone
-+                  The cooling contribution to the thermal zone of the referred
-+                  cooling device at the referred trip point. The contribution is
-+                  a ratio of the sum of all cooling contributions within a
-+                  thermal zone.
++	if (end_freq <= start_freq)
++		return 0;
++
+ 	bw = end_freq - start_freq;
+ 	bw = min_t(u16, bw, max_bw);
  
-             required:
-               - trip
+@@ -463,8 +466,10 @@ ath11k_reg_adjust_bw(u16 start_freq, u16 end_freq, u16 max_bw)
+ 		bw = 80;
+ 	else if (bw >= 40 && bw < 80)
+ 		bw = 40;
+-	else if (bw < 40)
++	else if (bw >= 20 && bw < 40)
+ 		bw = 20;
++	else
++		bw = 0;
+ 
+ 	return bw;
+ }
+@@ -488,73 +493,77 @@ ath11k_reg_update_weather_radar_band(struct ath11k_base *ab,
+ 				     struct cur_reg_rule *reg_rule,
+ 				     u8 *rule_idx, u32 flags, u16 max_bw)
+ {
++	u32 start_freq;
+ 	u32 end_freq;
+ 	u16 bw;
+ 	u8 i;
+ 
+ 	i = *rule_idx;
+ 
++	/* there might be situations when even the input rule must be dropped */
++	i--;
++
++	/* frequencies below weather radar */
+ 	bw = ath11k_reg_adjust_bw(reg_rule->start_freq,
+ 				  ETSI_WEATHER_RADAR_BAND_LOW, max_bw);
++	if (bw > 0) {
++		i++;
+ 
+-	ath11k_reg_update_rule(regd->reg_rules + i, reg_rule->start_freq,
+-			       ETSI_WEATHER_RADAR_BAND_LOW, bw,
+-			       reg_rule->ant_gain, reg_rule->reg_power,
+-			       flags);
++		ath11k_reg_update_rule(regd->reg_rules + i,
++				       reg_rule->start_freq,
++				       ETSI_WEATHER_RADAR_BAND_LOW, bw,
++				       reg_rule->ant_gain, reg_rule->reg_power,
++				       flags);
+ 
+-	ath11k_dbg(ab, ATH11K_DBG_REG,
+-		   "\t%d. (%d - %d @ %d) (%d, %d) (%d ms) (FLAGS %d)\n",
+-		   i + 1, reg_rule->start_freq, ETSI_WEATHER_RADAR_BAND_LOW,
+-		   bw, reg_rule->ant_gain, reg_rule->reg_power,
+-		   regd->reg_rules[i].dfs_cac_ms,
+-		   flags);
+-
+-	if (reg_rule->end_freq > ETSI_WEATHER_RADAR_BAND_HIGH)
+-		end_freq = ETSI_WEATHER_RADAR_BAND_HIGH;
+-	else
+-		end_freq = reg_rule->end_freq;
++		ath11k_dbg(ab, ATH11K_DBG_REG,
++			   "\t%d. (%d - %d @ %d) (%d, %d) (%d ms) (FLAGS %d)\n",
++			   i + 1, reg_rule->start_freq,
++			   ETSI_WEATHER_RADAR_BAND_LOW, bw, reg_rule->ant_gain,
++			   reg_rule->reg_power, regd->reg_rules[i].dfs_cac_ms,
++			   flags);
++	}
+ 
+-	bw = ath11k_reg_adjust_bw(ETSI_WEATHER_RADAR_BAND_LOW, end_freq,
+-				  max_bw);
++	/* weather radar frequencies */
++	start_freq = max_t(u32, reg_rule->start_freq,
++			   ETSI_WEATHER_RADAR_BAND_LOW);
++	end_freq = min_t(u32, reg_rule->end_freq, ETSI_WEATHER_RADAR_BAND_HIGH);
+ 
+-	i++;
++	bw = ath11k_reg_adjust_bw(start_freq, end_freq, max_bw);
++	if (bw > 0) {
++		i++;
+ 
+-	ath11k_reg_update_rule(regd->reg_rules + i,
+-			       ETSI_WEATHER_RADAR_BAND_LOW, end_freq, bw,
+-			       reg_rule->ant_gain, reg_rule->reg_power,
+-			       flags);
++		ath11k_reg_update_rule(regd->reg_rules + i, start_freq,
++				       end_freq, bw, reg_rule->ant_gain,
++				       reg_rule->reg_power, flags);
+ 
+-	regd->reg_rules[i].dfs_cac_ms = ETSI_WEATHER_RADAR_BAND_CAC_TIMEOUT;
++		regd->reg_rules[i].dfs_cac_ms = ETSI_WEATHER_RADAR_BAND_CAC_TIMEOUT;
+ 
+-	ath11k_dbg(ab, ATH11K_DBG_REG,
+-		   "\t%d. (%d - %d @ %d) (%d, %d) (%d ms) (FLAGS %d)\n",
+-		   i + 1, ETSI_WEATHER_RADAR_BAND_LOW, end_freq,
+-		   bw, reg_rule->ant_gain, reg_rule->reg_power,
+-		   regd->reg_rules[i].dfs_cac_ms,
+-		   flags);
+-
+-	if (end_freq == reg_rule->end_freq) {
+-		regd->n_reg_rules--;
+-		*rule_idx = i;
+-		return;
++		ath11k_dbg(ab, ATH11K_DBG_REG,
++			   "\t%d. (%d - %d @ %d) (%d, %d) (%d ms) (FLAGS %d)\n",
++			   i + 1, start_freq, end_freq, bw,
++			   reg_rule->ant_gain, reg_rule->reg_power,
++			   regd->reg_rules[i].dfs_cac_ms, flags);
+ 	}
+ 
++	/* frequencies above weather radar */
+ 	bw = ath11k_reg_adjust_bw(ETSI_WEATHER_RADAR_BAND_HIGH,
+ 				  reg_rule->end_freq, max_bw);
++	if (bw > 0) {
++		i++;
+ 
+-	i++;
+-
+-	ath11k_reg_update_rule(regd->reg_rules + i, ETSI_WEATHER_RADAR_BAND_HIGH,
+-			       reg_rule->end_freq, bw,
+-			       reg_rule->ant_gain, reg_rule->reg_power,
+-			       flags);
++		ath11k_reg_update_rule(regd->reg_rules + i,
++				       ETSI_WEATHER_RADAR_BAND_HIGH,
++				       reg_rule->end_freq, bw,
++				       reg_rule->ant_gain, reg_rule->reg_power,
++				       flags);
+ 
+-	ath11k_dbg(ab, ATH11K_DBG_REG,
+-		   "\t%d. (%d - %d @ %d) (%d, %d) (%d ms) (FLAGS %d)\n",
+-		   i + 1, ETSI_WEATHER_RADAR_BAND_HIGH, reg_rule->end_freq,
+-		   bw, reg_rule->ant_gain, reg_rule->reg_power,
+-		   regd->reg_rules[i].dfs_cac_ms,
+-		   flags);
++		ath11k_dbg(ab, ATH11K_DBG_REG,
++			   "\t%d. (%d - %d @ %d) (%d, %d) (%d ms) (FLAGS %d)\n",
++			   i + 1, ETSI_WEATHER_RADAR_BAND_HIGH,
++			   reg_rule->end_freq, bw, reg_rule->ant_gain,
++			   reg_rule->reg_power, regd->reg_rules[i].dfs_cac_ms,
++			   flags);
++	}
+ 
+ 	*rule_idx = i;
+ }
 -- 
 2.34.1
 

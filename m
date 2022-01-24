@@ -2,217 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A78498675
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F4349866C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:20:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244427AbiAXRVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49598 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244450AbiAXRUj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:20:39 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B31C061744
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:20:39 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id 187so15760094pga.10
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:20:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uvbVlssiuOL2o7l4VGo9wAQ7yG1g9QxFoYPbSYFtdqo=;
-        b=b8kkFS5/WqRt/uGkxgdO4EPtPACa7K4UyA5rdihYBP0zQfEvfu9Hc7L6wke4IFyhtQ
-         9F3JxaZcx3rKTh3OX8pgIvYfgQCZqMuNZnRymYeySn88lJEFnMJ1FFqAGqDns740oe0g
-         y5gJShOglcZEdDYr2VYR12OQOXlCAACHa0JQ0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uvbVlssiuOL2o7l4VGo9wAQ7yG1g9QxFoYPbSYFtdqo=;
-        b=VUg6YlSmwt1sSjYg+zs8ARI3VEC3A2T0shBU2DS8A1q8EEiX3hNBseGbwNOgEpscnP
-         t9ni4oLsJm12jwZGCiLNGDwK5y95tot/s2Mgm+URijJ2QhmiEykR688m5KnRnuKCcDbH
-         eukLhQIa4jTcSYRgtzXho0g7d3yXf/qoxLjW8Mx+wA47y9CHbvenueTYEau7/UsT+vQm
-         MSisAV5Ww+S06ysFRAYklaYsdBzmQc+M/NofiBoFSWIhB9AY/gwjr1pmQjvYmbJhB+98
-         +UWTuZEScJ7lji4oy0+SPKO4gJkJdFWDHxPYBFp200PcKTyIwuVU0ja3LXUGuGcZeBg+
-         jPcw==
-X-Gm-Message-State: AOAM5313YQ3PMsY9Ya5AO4ZWcBUbkgZSohYbgME6F7pRuY6CE16QW5Re
-        5MGT16IkgXm1IG5XZCDrnQ+YuA==
-X-Google-Smtp-Source: ABdhPJwOxnazNMZcXd19bSVJ9MoN8ZvyCdEePmDJfQKMV6Sw4mYioXg78RY4Q74VmtnF7JqMgDdW1Q==
-X-Received: by 2002:a63:204a:: with SMTP id r10mr12454750pgm.502.1643044838506;
-        Mon, 24 Jan 2022 09:20:38 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l26sm12555173pgm.73.2022.01.24.09.20.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 09:20:38 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Saeed Mahameed <saeedm@nvidia.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH v2 RESEND] net/mlx5e: Avoid field-overflowing memcpy()
-Date:   Mon, 24 Jan 2022 09:20:28 -0800
-Message-Id: <20220124172028.2410761-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        id S244406AbiAXRUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:20:33 -0500
+Received: from mga04.intel.com ([192.55.52.120]:37867 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244359AbiAXRU2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 12:20:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643044828; x=1674580828;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=RVVPkYMMp87PkJON1Ymf9k5n3tLKBCKMpBFOUFvL4KE=;
+  b=CNqgUIJpNinmvHkbc5uF6q7BsgPtimJh1pL/FLaTbDLMhJJ46WTtN18F
+   ZESEIJcBE8FlFb8cJ/4/y5qKgKR1mFM7K2f4mwROKvn6+ePSv+gA5dOY2
+   S0+Jj9GmZJWcK/0bu5Fa658oKPEWdHjzL51v9imoPx8vv/Sm9z05nU//x
+   JIlA0MQGtoIoqK0pIZOxwtVGV59IrGaYcwPPzEDKddgAsk26Z9KEFF5vf
+   bpAn7BWUaKA5fHDbj3A/zSnt3mSNSyT1hExwyPnvrscKFM1cYZD/pDvW7
+   AUPZBgE48I3UkWxWID2Rl2t1XHbJVN+SSgARJMVREa6VAswKWC478aYD+
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="244933222"
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="244933222"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 09:20:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="627578404"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 24 Jan 2022 09:20:22 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id A244AB7; Mon, 24 Jan 2022 19:20:35 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Rosin <peda@axentia.se>
+Subject: [PATCH v3 2/6] iio: adc: rn5t618: Re-use generic struct u16_fract
+Date:   Mon, 24 Jan 2022 19:20:28 +0200
+Message-Id: <20220124172032.87893-2-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220124172032.87893-1-andriy.shevchenko@linux.intel.com>
+References: <20220124172032.87893-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6160; h=from:subject; bh=VQqeo576slnncrVuQigWvgwHbkmaogPwolkC5v46MpQ=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh7t/bEEizP4HPXunI0lIL+G351adCgzYP8rg/gvyC Pv5SX/WJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYe7f2wAKCRCJcvTf3G3AJm6VD/ 9jlPxoUFcLSoP71xgroQBRupcIYrG31w6xXFGdiZs8oSKGJPTYGWEbRd+EcSiDEc0WILjMWRh5qlq3 xCKyFF0jgopugVAQ5bOoCAAuYlm+OxpDaV9qq3aU7ITc7dbSwgB36A/qFxX8fVBv9RisFb0iJPwZp6 5u/67EShGoip2rkulhk4qSkLBaqGB6x/lK4Jego5xxn3iMBBkNK2H3sAD+uTDqpDde44GHbvRK5O/w hG+d4vQSXKy9IotXNQTD0cak7N0d/KXigldG6jUkLX7PX1I95EQHO80E4YzUzE5PizdAPK0FoghAAq ThRukak3eD7WZwU+Ls8P+fL/3EDVFFb6z0mr9ZLs7lcAMbsy17qxZJgQw+p8X+/RMZwM9SZoE2IdHd AR1WKqub7atfYkCGBMCvRBjqaVtBPkU3v6ID9nnN+U67xPc8vedjC6qeHJ3A6aWMxV5qd9+0cWejQE 4iAqY3HzPuwttaOoYs1PUBReTmMmk8QfHBPNMGFurW8HBEfIhgg7j4cAo0mDFuNIYuCCf5Dqo9zFF6 5Z6gsWMiM+yN8zjJUDV/zYHO4grzBp/BUM1Wli/iGpuKUWg9DBmUbdd+en8GTGeghoCHAIk6D1aemY UjQkOLAF0Kyi3rp7rjcTWXjtBLEiPlGZCGnCGloSwEG0DUWTfSh34Ny1lSLQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for FORTIFY_SOURCE performing compile-time and run-time
-field bounds checking for memcpy(), memmove(), and memset(), avoid
-intentionally writing across neighboring fields.
+Instead of custom data type re-use generic struct u16_fract.
+No changes intended.
 
-Use flexible arrays instead of zero-element arrays (which look like they
-are always overflowing) and split the cross-field memcpy() into two halves
-that can be appropriately bounds-checked by the compiler.
-
-We were doing:
-
-	#define ETH_HLEN  14
-	#define VLAN_HLEN  4
-	...
-	#define MLX5E_XDP_MIN_INLINE (ETH_HLEN + VLAN_HLEN)
-	...
-        struct mlx5e_tx_wqe      *wqe  = mlx5_wq_cyc_get_wqe(wq, pi);
-	...
-        struct mlx5_wqe_eth_seg  *eseg = &wqe->eth;
-        struct mlx5_wqe_data_seg *dseg = wqe->data;
-	...
-	memcpy(eseg->inline_hdr.start, xdptxd->data, MLX5E_XDP_MIN_INLINE);
-
-target is wqe->eth.inline_hdr.start (which the compiler sees as being
-2 bytes in size), but copying 18, intending to write across start
-(really vlan_tci, 2 bytes). The remaining 16 bytes get written into
-wqe->data[0], covering byte_count (4 bytes), lkey (4 bytes), and addr
-(8 bytes).
-
-struct mlx5e_tx_wqe {
-        struct mlx5_wqe_ctrl_seg   ctrl;                 /*     0    16 */
-        struct mlx5_wqe_eth_seg    eth;                  /*    16    16 */
-        struct mlx5_wqe_data_seg   data[];               /*    32     0 */
-
-        /* size: 32, cachelines: 1, members: 3 */
-        /* last cacheline: 32 bytes */
-};
-
-struct mlx5_wqe_eth_seg {
-        u8                         swp_outer_l4_offset;  /*     0     1 */
-        u8                         swp_outer_l3_offset;  /*     1     1 */
-        u8                         swp_inner_l4_offset;  /*     2     1 */
-        u8                         swp_inner_l3_offset;  /*     3     1 */
-        u8                         cs_flags;             /*     4     1 */
-        u8                         swp_flags;            /*     5     1 */
-        __be16                     mss;                  /*     6     2 */
-        __be32                     flow_table_metadata;  /*     8     4 */
-        union {
-                struct {
-                        __be16     sz;                   /*    12     2 */
-                        u8         start[2];             /*    14     2 */
-                } inline_hdr;                            /*    12     4 */
-                struct {
-                        __be16     type;                 /*    12     2 */
-                        __be16     vlan_tci;             /*    14     2 */
-                } insert;                                /*    12     4 */
-                __be32             trailer;              /*    12     4 */
-        };                                               /*    12     4 */
-
-        /* size: 16, cachelines: 1, members: 9 */
-        /* last cacheline: 16 bytes */
-};
-
-struct mlx5_wqe_data_seg {
-        __be32                     byte_count;           /*     0     4 */
-        __be32                     lkey;                 /*     4     4 */
-        __be64                     addr;                 /*     8     8 */
-
-        /* size: 16, cachelines: 1, members: 3 */
-        /* last cacheline: 16 bytes */
-};
-
-So, split the memcpy() so the compiler can reason about the buffer
-sizes.
-
-"pahole" shows no size nor member offset changes to struct mlx5e_tx_wqe
-nor struct mlx5e_umr_wqe. "objdump -d" shows no meaningful object
-code changes (i.e. only source line number induced differences and
-optimizations).
-
-Cc: Saeed Mahameed <saeedm@nvidia.com>
-Cc: Leon Romanovsky <leon@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: netdev@vger.kernel.org
-Cc: linux-rdma@vger.kernel.org
-Cc: bpf@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
-Since this results in no binary differences, I will carry this in my tree
-unless someone else wants to pick it up. It's one of the last remaining
-clean-ups needed for the next step in memcpy() hardening.
----
- drivers/net/ethernet/mellanox/mlx5/core/en.h     | 6 +++---
- drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c | 4 +++-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+v3: no changes
+ drivers/iio/adc/rn5t618-adc.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-index 812e6810cb3b..c14e06ca64d8 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-@@ -224,7 +224,7 @@ static inline int mlx5e_get_max_num_channels(struct mlx5_core_dev *mdev)
- struct mlx5e_tx_wqe {
- 	struct mlx5_wqe_ctrl_seg ctrl;
- 	struct mlx5_wqe_eth_seg  eth;
--	struct mlx5_wqe_data_seg data[0];
-+	struct mlx5_wqe_data_seg data[];
+diff --git a/drivers/iio/adc/rn5t618-adc.c b/drivers/iio/adc/rn5t618-adc.c
+index 7d891b4ea461..6bf32907f01d 100644
+--- a/drivers/iio/adc/rn5t618-adc.c
++++ b/drivers/iio/adc/rn5t618-adc.c
+@@ -42,11 +42,6 @@ struct rn5t618_adc_data {
+ 	int irq;
  };
  
- struct mlx5e_rx_wqe_ll {
-@@ -241,8 +241,8 @@ struct mlx5e_umr_wqe {
- 	struct mlx5_wqe_umr_ctrl_seg   uctrl;
- 	struct mlx5_mkey_seg           mkc;
- 	union {
--		struct mlx5_mtt inline_mtts[0];
--		struct mlx5_klm inline_klms[0];
-+		DECLARE_FLEX_ARRAY(struct mlx5_mtt, inline_mtts);
-+		DECLARE_FLEX_ARRAY(struct mlx5_klm, inline_klms);
- 	};
+-struct rn5t618_channel_ratios {
+-	u16 numerator;
+-	u16 denominator;
+-};
+-
+ enum rn5t618_channels {
+ 	LIMMON = 0,
+ 	VBAT,
+@@ -58,7 +53,7 @@ enum rn5t618_channels {
+ 	AIN0
  };
  
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-index 338d65e2c9ce..56e10c84a706 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-@@ -341,8 +341,10 @@ mlx5e_xmit_xdp_frame(struct mlx5e_xdpsq *sq, struct mlx5e_xmit_data *xdptxd,
- 
- 	/* copy the inline part if required */
- 	if (sq->min_inline_mode != MLX5_INLINE_MODE_NONE) {
--		memcpy(eseg->inline_hdr.start, xdptxd->data, MLX5E_XDP_MIN_INLINE);
-+		memcpy(eseg->inline_hdr.start, xdptxd->data, sizeof(eseg->inline_hdr.start));
- 		eseg->inline_hdr.sz = cpu_to_be16(MLX5E_XDP_MIN_INLINE);
-+		memcpy(dseg, xdptxd->data + sizeof(eseg->inline_hdr.start),
-+		       MLX5E_XDP_MIN_INLINE - sizeof(eseg->inline_hdr.start));
- 		dma_len  -= MLX5E_XDP_MIN_INLINE;
- 		dma_addr += MLX5E_XDP_MIN_INLINE;
- 		dseg++;
+-static const struct rn5t618_channel_ratios rn5t618_ratios[8] = {
++static const struct u16_fract rn5t618_ratios[8] = {
+ 	[LIMMON] = {50, 32}, /* measured across 20mOhm, amplified by 32 */
+ 	[VBAT] = {2, 1},
+ 	[VADP] = {3, 1},
 -- 
-2.30.2
+2.34.1
 

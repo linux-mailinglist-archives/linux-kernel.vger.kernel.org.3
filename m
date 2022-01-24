@@ -2,47 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A21498C5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71FED499212
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:19:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349777AbiAXTVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347546AbiAXTNQ (ORCPT
+        id S1380922AbiAXURT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:17:19 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:42774 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344007AbiAXUAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:13:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFBF0C08EAD7;
-        Mon, 24 Jan 2022 11:04:39 -0800 (PST)
+        Mon, 24 Jan 2022 15:00:24 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EBD0AB8122C;
-        Mon, 24 Jan 2022 19:04:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10C43C340E5;
-        Mon, 24 Jan 2022 19:04:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33BBDB81218;
+        Mon, 24 Jan 2022 20:00:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56124C340E5;
+        Mon, 24 Jan 2022 20:00:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051075;
-        bh=0HIcbNe44vpoX7J0z4B6yzMybdVKFNuIc5+ehR4MREA=;
+        s=korg; t=1643054421;
+        bh=ehT1W02LPHHbQC4CpSx98mgh4CIOnT+AKMKHij0IAzI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dqe0YPy2/nNvs/0MSNjx/pstIJMp3UtuJM7xeCHBFmksPhavbDIpddy7qkd4YnvBp
-         lnTPk9C/73HKAVHJCewEl6z+skuz6Y344rFCFjHYNagsRB4RC1l5v6JNMVg/PkF8Uv
-         lYugf+yg7B0vsY8ihCaT0qgwbZExs0bFtcQ4p27Q=
+        b=CldPozz/hgOS6PkcXNiifqofcJPm2nXcSNZadRaMqTLhswYJE3HR7GzjwiA6E8mCt
+         tA0BdMUR2QYy2HaTDntfQU7iQB0vNz4SxQqEzRy8QNFx0vjlSUgrWSNXpobI6fX9CP
+         UkL7zomYVGgGRU5zOdOqPe9x/rUyGF5BvWvLT30Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Zhou Qingyang <zhou1615@umn.edu>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 047/186] drm/radeon/radeon_kms: Fix a NULL pointer dereference in radeon_driver_open_kms()
+Subject: [PATCH 5.10 357/563] x86/mce: Mark mce_panic() noinstr
 Date:   Mon, 24 Jan 2022 19:42:02 +0100
-Message-Id: <20220124183938.643797389@linuxfoundation.org>
+Message-Id: <20220124184036.765131336@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,116 +45,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Borislav Petkov <bp@suse.de>
 
-[ Upstream commit ab50cb9df8896b39aae65c537a30de2c79c19735 ]
+[ Upstream commit 3c7ce80a818fa7950be123cac80cd078e5ac1013 ]
 
-In radeon_driver_open_kms(), radeon_vm_bo_add() is assigned to
-vm->ib_bo_va and passes and used in radeon_vm_bo_set_addr(). In
-radeon_vm_bo_set_addr(), there is a dereference of vm->ib_bo_va,
-which could lead to a NULL pointer dereference on failure of
-radeon_vm_bo_add().
+And allow instrumentation inside it because it does calls to other
+facilities which will not be tagged noinstr.
 
-Fix this bug by adding a check of vm->ib_bo_va.
+Fixes
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+  vmlinux.o: warning: objtool: do_machine_check()+0xc73: call to mce_panic() leaves .noinstr.text section
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_DRM_RADEON=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: cc9e67e3d700 ("drm/radeon: fix VM IB handling")
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20211208111343.8130-8-bp@alien8.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/radeon/radeon_kms.c | 36 ++++++++++++++++-------------
- 1 file changed, 20 insertions(+), 16 deletions(-)
+ arch/x86/kernel/cpu/mce/core.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/radeon/radeon_kms.c b/drivers/gpu/drm/radeon/radeon_kms.c
-index 4973bd241aec3..fb292b9f3d402 100644
---- a/drivers/gpu/drm/radeon/radeon_kms.c
-+++ b/drivers/gpu/drm/radeon/radeon_kms.c
-@@ -655,6 +655,8 @@ void radeon_driver_lastclose_kms(struct drm_device *dev)
- int radeon_driver_open_kms(struct drm_device *dev, struct drm_file *file_priv)
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 34fffffaf8730..64d8a96a2bf1e 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -295,11 +295,17 @@ static void wait_for_panic(void)
+ 	panic("Panicing machine check CPU died");
+ }
+ 
+-static void mce_panic(const char *msg, struct mce *final, char *exp)
++static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
  {
- 	struct radeon_device *rdev = dev->dev_private;
-+	struct radeon_fpriv *fpriv;
-+	struct radeon_vm *vm;
- 	int r;
- 
- 	file_priv->driver_priv = NULL;
-@@ -667,8 +669,6 @@ int radeon_driver_open_kms(struct drm_device *dev, struct drm_file *file_priv)
- 
- 	/* new gpu have virtual address space support */
- 	if (rdev->family >= CHIP_CAYMAN) {
--		struct radeon_fpriv *fpriv;
--		struct radeon_vm *vm;
- 
- 		fpriv = kzalloc(sizeof(*fpriv), GFP_KERNEL);
- 		if (unlikely(!fpriv)) {
-@@ -679,35 +679,39 @@ int radeon_driver_open_kms(struct drm_device *dev, struct drm_file *file_priv)
- 		if (rdev->accel_working) {
- 			vm = &fpriv->vm;
- 			r = radeon_vm_init(rdev, vm);
--			if (r) {
--				kfree(fpriv);
--				goto out_suspend;
--			}
-+			if (r)
-+				goto out_fpriv;
- 
- 			r = radeon_bo_reserve(rdev->ring_tmp_bo.bo, false);
--			if (r) {
--				radeon_vm_fini(rdev, vm);
--				kfree(fpriv);
--				goto out_suspend;
--			}
-+			if (r)
-+				goto out_vm_fini;
- 
- 			/* map the ib pool buffer read only into
- 			 * virtual address space */
- 			vm->ib_bo_va = radeon_vm_bo_add(rdev, vm,
- 							rdev->ring_tmp_bo.bo);
-+			if (!vm->ib_bo_va) {
-+				r = -ENOMEM;
-+				goto out_vm_fini;
-+			}
+-	int apei_err = 0;
+ 	struct llist_node *pending;
+ 	struct mce_evt_llist *l;
++	int apei_err = 0;
 +
- 			r = radeon_vm_bo_set_addr(rdev, vm->ib_bo_va,
- 						  RADEON_VA_IB_OFFSET,
- 						  RADEON_VM_PAGE_READABLE |
- 						  RADEON_VM_PAGE_SNOOPED);
--			if (r) {
--				radeon_vm_fini(rdev, vm);
--				kfree(fpriv);
--				goto out_suspend;
--			}
-+			if (r)
-+				goto out_vm_fini;
- 		}
- 		file_priv->driver_priv = fpriv;
++	/*
++	 * Allow instrumentation around external facilities usage. Not that it
++	 * matters a whole lot since the machine is going to panic anyway.
++	 */
++	instrumentation_begin();
+ 
+ 	if (!fake_panic) {
+ 		/*
+@@ -314,7 +320,7 @@ static void mce_panic(const char *msg, struct mce *final, char *exp)
+ 	} else {
+ 		/* Don't log too much for fake panic */
+ 		if (atomic_inc_return(&mce_fake_panicked) > 1)
+-			return;
++			goto out;
  	}
- 
-+	if (!r)
-+		goto out_suspend;
+ 	pending = mce_gen_pool_prepare_records();
+ 	/* First print corrected ones that are still unlogged */
+@@ -352,6 +358,9 @@ static void mce_panic(const char *msg, struct mce *final, char *exp)
+ 		panic(msg);
+ 	} else
+ 		pr_emerg(HW_ERR "Fake kernel panic: %s\n", msg);
 +
-+out_vm_fini:
-+	radeon_vm_fini(rdev, vm);
-+out_fpriv:
-+	kfree(fpriv);
- out_suspend:
- 	pm_runtime_mark_last_busy(dev->dev);
- 	pm_runtime_put_autosuspend(dev->dev);
++out:
++	instrumentation_end();
+ }
+ 
+ /* Support code for software error injection */
 -- 
 2.34.1
 

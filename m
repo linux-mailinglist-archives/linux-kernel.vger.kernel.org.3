@@ -2,190 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F8AA497CB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 11:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36BD1497CAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 11:04:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237038AbiAXKEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 05:04:53 -0500
-Received: from foss.arm.com ([217.140.110.172]:56080 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236988AbiAXKEU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 05:04:20 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 92CA56D;
-        Mon, 24 Jan 2022 02:04:19 -0800 (PST)
-Received: from e120937-lin.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 085F53F73B;
-        Mon, 24 Jan 2022 02:04:16 -0800 (PST)
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
-        souvik.chakravarty@arm.com, peter.hilber@opensynergy.com,
-        igor.skalkin@opensynergy.com, cristian.marussi@arm.com,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-Subject: [PATCH 6/6] [RFC] clk: scmi: Support atomic clock enable/disable API
-Date:   Mon, 24 Jan 2022 10:03:41 +0000
-Message-Id: <20220124100341.41191-7-cristian.marussi@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220124100341.41191-1-cristian.marussi@arm.com>
-References: <20220124100341.41191-1-cristian.marussi@arm.com>
+        id S237006AbiAXKER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 05:04:17 -0500
+Received: from ip59.38.31.103.in-addr.arpa.unknwn.cloudhost.asia ([103.31.38.59]:48152
+        "EHLO gnuweeb.org" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S236914AbiAXKEH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 05:04:07 -0500
+Received: from [192.168.88.87] (unknown [36.81.38.25])
+        by gnuweeb.org (Postfix) with ESMTPSA id 7E855C3022;
+        Mon, 24 Jan 2022 10:04:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=gnuweeb.org;
+        s=default; t=1643018644;
+        bh=rLCietX+8asL0GcSnssoo9Wq4OVIrWT57SoaybWDYhA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=D8I8lBKcdphw4TT1nh6JGbDlzMDvNd7w+LbTh9C2P3I+s7FQa6DwgTorSMSACxQfX
+         HtBWz83MD68F/lEG+LQx+E8ebS1d6nc6Z+9BQqA2ZV6jOGI8YIOy3E4o/dnBwd/VcQ
+         eTGqfesNIVysSV4tM4oLMjhDs7dUtcaPWbq8xKTi1CcOER3+43ZyCvSi1/VFW1JCTq
+         5mq3ZIbUzB9cK5NBMqixW5Si9Flkcj0hr/D9RVqZU8E0FfnzWKBuBr0SFZpooMAMv6
+         9ZbJVCGnfqB9jD1auR+fYCF+PZt4NVE1DuC8rU8V5k1u/G/UXDCH6A82PEJ9Kxa1b3
+         BGgEoDYKJQdUQ==
+Message-ID: <ec15ce1f-4766-6ccc-97d2-980c8ea183a7@gnuweeb.org>
+Date:   Mon, 24 Jan 2022 17:03:58 +0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v2] rcu: Add per-CPU rcuc task info to RCU CPU stall
+ warnings
+Content-Language: en-US
+To:     Zqiang <qiang1.zhang@intel.com>, paulmck@kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220124103637.4001386-1-qiang1.zhang@intel.com>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <20220124103637.4001386-1-qiang1.zhang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support also atomic enable/disable clk_ops beside the bare non-atomic one
-(prepare/unprepare) when the underlying SCMI transport is configured to
-support atomic transactions for synchronous commands.
+Hi Zqiang,
 
-Compare the SCMI system-wide configured atomic threshold latency time and
-the per-clock advertised enable latency (if any) to choose whether to
-provide sleeping prepare/unprepare vs atomic enable/disable.
+On Sat, 22 Jan 2022 02:30:00 +0800, Zqiang <qiang1.zhang@intel.com> wrote:
+```
+ > +static void rcuc_kthread_dump(struct rcu_data *rdp)
+ > +{
+ > +        int cpu;
+ > +        unsigned long j;
+ > +        struct task_struct *rcuc = rdp->rcu_cpu_kthread_task;
+ > +
+ > +        if (rcu_is_rcuc_kthread_starving(rdp, &j)) {
+ > +                cpu = rcuc ? task_cpu(rcuc) : -1;
+ > +
+ > +                if (rcuc) {
+ > +                        pr_err("%s kthread starved for %ld jiffies, stack dump:\n",
+ > + rcuc->comm, j);
+ > +                        sched_show_task(rcuc);
+ > +                        if (cpu >= 0) {
+ > +                                if (cpu_online(cpu) && !idle_cpu(cpu)) {
+ > +                                        pr_err("Dump current CPU stack:\n");
+ > +                                        if (!trigger_single_cpu_backtrace(cpu))
+ > + dump_cpu_task(cpu);
+ > +                                }
+ > +                        }
+ > +                }
+ > +        }
+ > +}
+```
 
-Cc: Michael Turquette <mturquette@baylibre.com>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
----
-Tagged as RFC since dependent on a previous RFC patch
----
- drivers/clk/clk-scmi.c | 71 +++++++++++++++++++++++++++++++++++-------
- 1 file changed, 60 insertions(+), 11 deletions(-)
+1) We can reduce the nested if with an early return
+    after checking `rcu_is_rcuc_kthread_starving()`.
 
-diff --git a/drivers/clk/clk-scmi.c b/drivers/clk/clk-scmi.c
-index 1e357d364ca2..2c7a830ce308 100644
---- a/drivers/clk/clk-scmi.c
-+++ b/drivers/clk/clk-scmi.c
-@@ -2,7 +2,7 @@
- /*
-  * System Control and Power Interface (SCMI) Protocol based clock driver
-  *
-- * Copyright (C) 2018-2021 ARM Ltd.
-+ * Copyright (C) 2018-2022 ARM Ltd.
-  */
- 
- #include <linux/clk-provider.h>
-@@ -88,21 +88,51 @@ static void scmi_clk_disable(struct clk_hw *hw)
- 	scmi_proto_clk_ops->disable(clk->ph, clk->id);
- }
- 
-+static int scmi_clk_atomic_enable(struct clk_hw *hw)
-+{
-+	struct scmi_clk *clk = to_scmi_clk(hw);
-+
-+	return scmi_proto_clk_ops->enable_atomic(clk->ph, clk->id);
-+}
-+
-+static void scmi_clk_atomic_disable(struct clk_hw *hw)
-+{
-+	struct scmi_clk *clk = to_scmi_clk(hw);
-+
-+	scmi_proto_clk_ops->disable_atomic(clk->ph, clk->id);
-+}
-+
-+/*
-+ * We can provide enable/disable atomic callbacks only if the underlying SCMI
-+ * transport for an SCMI instance is configured to handle SCMI commands in an
-+ * atomic manner.
-+ *
-+ * When no SCMI atomic transport support is available we instead provide only
-+ * the prepare/unprepare API, as allowed by the clock framework when atomic
-+ * calls are not available.
-+ *
-+ * Two distinct sets of clk_ops are provided since we could have multiple SCMI
-+ * instances with different underlying transport quality, so they cannot be
-+ * shared.
-+ */
- static const struct clk_ops scmi_clk_ops = {
- 	.recalc_rate = scmi_clk_recalc_rate,
- 	.round_rate = scmi_clk_round_rate,
- 	.set_rate = scmi_clk_set_rate,
--	/*
--	 * We can't provide enable/disable callback as we can't perform the same
--	 * in atomic context. Since the clock framework provides standard API
--	 * clk_prepare_enable that helps cases using clk_enable in non-atomic
--	 * context, it should be fine providing prepare/unprepare.
--	 */
- 	.prepare = scmi_clk_enable,
- 	.unprepare = scmi_clk_disable,
- };
- 
--static int scmi_clk_ops_init(struct device *dev, struct scmi_clk *sclk)
-+static const struct clk_ops scmi_atomic_clk_ops = {
-+	.recalc_rate = scmi_clk_recalc_rate,
-+	.round_rate = scmi_clk_round_rate,
-+	.set_rate = scmi_clk_set_rate,
-+	.enable = scmi_clk_atomic_enable,
-+	.disable = scmi_clk_atomic_disable,
-+};
-+
-+static int scmi_clk_ops_init(struct device *dev, struct scmi_clk *sclk,
-+			     const struct clk_ops *scmi_ops)
- {
- 	int ret;
- 	unsigned long min_rate, max_rate;
-@@ -110,7 +140,7 @@ static int scmi_clk_ops_init(struct device *dev, struct scmi_clk *sclk)
- 	struct clk_init_data init = {
- 		.flags = CLK_GET_RATE_NOCACHE,
- 		.num_parents = 0,
--		.ops = &scmi_clk_ops,
-+		.ops = scmi_ops,
- 		.name = sclk->info->name,
- 	};
- 
-@@ -139,6 +169,8 @@ static int scmi_clk_ops_init(struct device *dev, struct scmi_clk *sclk)
- static int scmi_clocks_probe(struct scmi_device *sdev)
- {
- 	int idx, count, err;
-+	unsigned int atomic_threshold;
-+	bool is_atomic;
- 	struct clk_hw **hws;
- 	struct clk_hw_onecell_data *clk_data;
- 	struct device *dev = &sdev->dev;
-@@ -168,8 +200,11 @@ static int scmi_clocks_probe(struct scmi_device *sdev)
- 	clk_data->num = count;
- 	hws = clk_data->hws;
- 
-+	is_atomic = handle->is_transport_atomic(handle, &atomic_threshold);
-+
- 	for (idx = 0; idx < count; idx++) {
- 		struct scmi_clk *sclk;
-+		const struct clk_ops *scmi_ops;
- 
- 		sclk = devm_kzalloc(dev, sizeof(*sclk), GFP_KERNEL);
- 		if (!sclk)
-@@ -184,13 +219,27 @@ static int scmi_clocks_probe(struct scmi_device *sdev)
- 		sclk->id = idx;
- 		sclk->ph = ph;
- 
--		err = scmi_clk_ops_init(dev, sclk);
-+		/*
-+		 * Note that when transport is atomic but SCMI protocol did not
-+		 * specify (or support) an enable_latency associated with a
-+		 * clock, we default to use atomic operations mode.
-+		 */
-+		if (is_atomic &&
-+		    sclk->info->enable_latency <= atomic_threshold)
-+			scmi_ops = &scmi_atomic_clk_ops;
-+		else
-+			scmi_ops = &scmi_clk_ops;
-+
-+		err = scmi_clk_ops_init(dev, sclk, scmi_ops);
- 		if (err) {
- 			dev_err(dev, "failed to register clock %d\n", idx);
- 			devm_kfree(dev, sclk);
- 			hws[idx] = NULL;
- 		} else {
--			dev_dbg(dev, "Registered clock:%s\n", sclk->info->name);
-+			dev_dbg(dev, "Registered clock:%s%s\n",
-+				sclk->info->name,
-+				scmi_ops == &scmi_atomic_clk_ops ?
-+				" (atomic ops)" : "");
- 			hws[idx] = &sclk->hw;
- 		}
- 	}
+2) This ternary operator doesn't make sense:
+
+   `cpu = rcuc ? task_cpu(rcuc) : -1;`
+
+If `rcuc` is NULL, then the "if (rcuc)" block will never
+be executed, and `cpu` variable won't be used, why should
+we perform a conditional with ternary to assign -1 here?
+
+3) We can use an early return as well for the `if (rcuc)` to
+    avoid more nested if.
+
+
+FWIW, this one makes more sense:
+```
+static void rcuc_kthread_dump(struct rcu_data *rdp)
+{
+     int cpu;
+     unsigned long j;
+     struct task_struct *rcuc;
+
+     if (!rcu_is_rcuc_kthread_starving(rdp, &j))
+         return;
+
+     rcuc = rdp->rcu_cpu_kthread_task;
+     if (!rcuc)
+         return;
+
+     pr_err("%s kthread starved for %ld jiffies, stack dump:\n", rcuc->comm, j);
+     sched_show_task(rcuc);
+     cpu = task_cpu(rcuc);
+     if (cpu_online(cpu) && !idle_cpu(cpu)) {
+         pr_err("Dump current CPU stack:\n");
+         if (!trigger_single_cpu_backtrace(cpu))
+             dump_cpu_task(cpu);
+     }
+}
+```
+
+Thank you!
+
 -- 
-2.17.1
+Ammar Faizi
 

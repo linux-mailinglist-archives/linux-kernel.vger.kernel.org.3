@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D565499F41
+	by mail.lfdr.de (Postfix) with ESMTP id 675D7499F42
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1840574AbiAXWyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:54:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
+        id S1840639AbiAXWyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:54:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1576146AbiAXVxF (ORCPT
+        with ESMTP id S1576167AbiAXVxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:53:05 -0500
+        Mon, 24 Jan 2022 16:53:06 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCF2C0C0904;
-        Mon, 24 Jan 2022 12:34:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F340EC07A97E;
+        Mon, 24 Jan 2022 12:34:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 79B7561546;
-        Mon, 24 Jan 2022 20:34:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55528C340E7;
-        Mon, 24 Jan 2022 20:34:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 943C4614EC;
+        Mon, 24 Jan 2022 20:34:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70C1BC340E5;
+        Mon, 24 Jan 2022 20:34:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056470;
-        bh=V7/JdFZkaZtZGU6MdNaGyFFwHH6I5LEbMplix7arxqc=;
+        s=korg; t=1643056474;
+        bh=f8+DzzjtvvnxDthTcjNQ/23aDxrL03Fv6o1cZ2WdV3Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LX1QMzw6BYdG6lzua5ZGYJEHM4GFEMM8MM5XqvIMI8drk+HCy3ORDpa8Ao6gpNk1O
-         UXvkCAqifqWNaEwhczt9pN9cMiBGhkfpwoeATJzW34JldjKeHhljVeju48SQxWpSp+
-         ypaMK2mHD7aY/SReFRjUV/Okii+GeZ1L2zWDUsss=
+        b=PrTp55f5cY/eYO/S5kTlZv3WBLz3Zg0NrD16iy5vNCg3bGpcMG1+gTcBRxtzP4DKE
+         coty7of/lslEuOEtRsLrDqBFeXRtAKUhSpvMmSn2driQWRyxrkfWCA8aZ90IGGSJDE
+         N8llQVH+nZhPoENhlYErVW4+0mXs2+QxDbCaTCk4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Harry Wentland <harry.wentland@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org, Jan Kiszka <jan.kiszka@siemens.com>,
+        Suman Anna <s-anna@ti.com>, Nishanth Menon <nm@ti.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 495/846] drm/amdgpu/display: set vblank_disable_immediate for DC
-Date:   Mon, 24 Jan 2022 19:40:12 +0100
-Message-Id: <20220124184118.084070642@linuxfoundation.org>
+Subject: [PATCH 5.15 496/846] soc: ti: pruss: fix referenced node in error message
+Date:   Mon, 24 Jan 2022 19:40:13 +0100
+Message-Id: <20220124184118.115451640@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -49,48 +49,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Deucher <alexander.deucher@amd.com>
+From: Jan Kiszka <jan.kiszka@siemens.com>
 
-[ Upstream commit 92020e81ddbeac351ea4a19bcf01743f32b9c800 ]
+[ Upstream commit 8aa35e0bb5eaa42bac415ad0847985daa7b4890c ]
 
-Disable vblanks immediately to save power.  I think this was
-missed when we merged DC support.
+So far, "(null)" is reported for the node that is missing clocks.
 
-Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1781
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+Acked-by: Suman Anna <s-anna@ti.com>
+Signed-off-by: Nishanth Menon <nm@ti.com>
+Link: https://lore.kernel.org/r/d6e24953-ea89-fd1c-6e16-7a0142118054@siemens.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_irq.c           | 1 -
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 3 +++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ drivers/soc/ti/pruss.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_irq.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_irq.c
-index cc2e0c9cfe0a1..4f3c62adccbde 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_irq.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_irq.c
-@@ -333,7 +333,6 @@ int amdgpu_irq_init(struct amdgpu_device *adev)
- 	if (!amdgpu_device_has_dc_support(adev)) {
- 		if (!adev->enable_virtual_display)
- 			/* Disable vblank IRQs aggressively for power-saving */
--			/* XXX: can this be enabled for DC? */
- 			adev_to_drm(adev)->vblank_disable_immediate = true;
+diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+index 49da387d77494..b36779309e49b 100644
+--- a/drivers/soc/ti/pruss.c
++++ b/drivers/soc/ti/pruss.c
+@@ -129,7 +129,7 @@ static int pruss_clk_init(struct pruss *pruss, struct device_node *cfg_node)
  
- 		r = drm_vblank_init(adev_to_drm(adev), adev->mode_info.num_crtc);
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index 2fbaf6f869bfb..16556ae892d4a 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -1279,6 +1279,9 @@ static int amdgpu_dm_init(struct amdgpu_device *adev)
- 	adev_to_drm(adev)->mode_config.cursor_width = adev->dm.dc->caps.max_cursor_size;
- 	adev_to_drm(adev)->mode_config.cursor_height = adev->dm.dc->caps.max_cursor_size;
+ 	clks_np = of_get_child_by_name(cfg_node, "clocks");
+ 	if (!clks_np) {
+-		dev_err(dev, "%pOF is missing its 'clocks' node\n", clks_np);
++		dev_err(dev, "%pOF is missing its 'clocks' node\n", cfg_node);
+ 		return -ENODEV;
+ 	}
  
-+	/* Disable vblank IRQs aggressively for power-saving */
-+	adev_to_drm(adev)->vblank_disable_immediate = true;
-+
- 	if (drm_vblank_init(adev_to_drm(adev), adev->dm.display_indexes_num)) {
- 		DRM_ERROR(
- 		"amdgpu: failed to initialize sw for display support.\n");
 -- 
 2.34.1
 

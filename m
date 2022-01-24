@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0810D498C5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5FC4498F09
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349344AbiAXTUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:20:37 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38010 "EHLO
+        id S1357429AbiAXTt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:49:58 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58796 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345760AbiAXTMM (ORCPT
+        with ESMTP id S1354940AbiAXTjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:12:12 -0500
+        Mon, 24 Jan 2022 14:39:43 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3AD62B8121B;
-        Mon, 24 Jan 2022 19:12:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52FADC340E7;
-        Mon, 24 Jan 2022 19:12:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C0B2CB80FA1;
+        Mon, 24 Jan 2022 19:39:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02BA8C340E5;
+        Mon, 24 Jan 2022 19:39:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051530;
-        bh=zpx+7nESMQRkYZtXzoI6bEZjlXJJH0cIuPu5M2wgOws=;
+        s=korg; t=1643053180;
+        bh=Kg6lB8gyFX7ICKo3+KWCWKtc2SOVkFcVpBWAYHfLIk4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=00kg9WOJAOv+tZQddc/KhDmkDMDjdp5VXbwdI48iuqezOthDJfSYMmBTWrKkFUcJk
-         07dvDb/XSnuAV+rdikWZwu7TkAepjwxBRLNx1JK+LW2dLycuvU/nSBbjh/1jnaUnJw
-         p91Kxw0BZ3qTJJZ0eQfYeJvdwMznFK19fmAmnCZw=
+        b=iXkqVAton2oKAhP/YUDzDfvYS1KneJDZ0k5KJb75XoDFxwHzoiM+zWKZFbq+LXVUf
+         BlZyN3uEMiz6t3U+qU4wifaf90MT9rc9T6TWuL9cxImKhy0BeN9sCjvBQ/RNHrVJur
+         fznXzYrAihCIgxtk6BoDRKu9De0ynz4ej3LCnxmw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andy Spencer <aspencer@spacex.com>,
-        Jim Gruen <jgruen@spacex.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Julius Werner <jwerner@chromium.org>,
         Ben Hutchings <ben@decadent.org.uk>
-Subject: [PATCH 4.14 184/186] gianfar: simplify FCS handling and fix memory leak
+Subject: [PATCH 5.4 275/320] firmware: Update Kconfig help text for Google firmware
 Date:   Mon, 24 Jan 2022 19:44:19 +0100
-Message-Id: <20220124183943.021876700@linuxfoundation.org>
+Message-Id: <20220124184003.327989918@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,73 +45,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Spencer <aspencer@spacex.com>
+From: Ben Hutchings <ben@decadent.org.uk>
 
-commit d903ec77118c09f93a610b384d83a6df33a64fe6 upstream.
+commit d185a3466f0cd5af8f1c5c782c53bc0e6f2e7136 upstream.
 
-Previously, buffer descriptors containing only the frame check sequence
-(FCS) were skipped and not added to the skb. However, the page reference
-count was still incremented, leading to a memory leak.
+The help text for GOOGLE_FIRMWARE states that it should only be
+enabled when building a kernel for Google's own servers.  However,
+many of the drivers dependent on it are also useful on Chromebooks or
+on any platform using coreboot.
 
-Fixing this inside gfar_add_rx_frag() is difficult due to reserved
-memory handling and page reuse. Instead, move the FCS handling to
-gfar_process_frame() and trim off the FCS before passing the skb up the
-networking stack.
+Update the help text to reflect this double duty.
 
-Signed-off-by: Andy Spencer <aspencer@spacex.com>
-Signed-off-by: Jim Gruen <jgruen@spacex.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Cc: Ben Hutchings <ben@decadent.org.uk>
+Fixes: d384d6f43d1e ("firmware: google memconsole: Add coreboot support")
+Reviewed-by: Julius Werner <jwerner@chromium.org>
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+Link: https://lore.kernel.org/r/20180618225540.GD14131@decadent.org.uk
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/freescale/gianfar.c |   23 +++++++----------------
- 1 file changed, 7 insertions(+), 16 deletions(-)
+ drivers/firmware/google/Kconfig |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/net/ethernet/freescale/gianfar.c
-+++ b/drivers/net/ethernet/freescale/gianfar.c
-@@ -2936,29 +2936,17 @@ static bool gfar_add_rx_frag(struct gfar
- {
- 	int size = lstatus & BD_LENGTH_MASK;
- 	struct page *page = rxb->page;
--	bool last = !!(lstatus & BD_LFLAG(RXBD_LAST));
--
--	/* Remove the FCS from the packet length */
--	if (last)
--		size -= ETH_FCS_LEN;
+--- a/drivers/firmware/google/Kconfig
++++ b/drivers/firmware/google/Kconfig
+@@ -3,9 +3,9 @@ menuconfig GOOGLE_FIRMWARE
+ 	bool "Google Firmware Drivers"
+ 	default n
+ 	help
+-	  These firmware drivers are used by Google's servers.  They are
+-	  only useful if you are working directly on one of their
+-	  proprietary servers.  If in doubt, say "N".
++	  These firmware drivers are used by Google servers,
++	  Chromebooks and other devices using coreboot firmware.
++	  If in doubt, say "N".
  
- 	if (likely(first)) {
- 		skb_put(skb, size);
- 	} else {
- 		/* the last fragments' length contains the full frame length */
--		if (last)
-+		if (lstatus & BD_LFLAG(RXBD_LAST))
- 			size -= skb->len;
- 
--		/* Add the last fragment if it contains something other than
--		 * the FCS, otherwise drop it and trim off any part of the FCS
--		 * that was already received.
--		 */
--		if (size > 0)
--			skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags, page,
--					rxb->page_offset + RXBUF_ALIGNMENT,
--					size, GFAR_RXB_TRUESIZE);
--		else if (size < 0)
--			pskb_trim(skb, skb->len + size);
-+		skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags, page,
-+				rxb->page_offset + RXBUF_ALIGNMENT,
-+				size, GFAR_RXB_TRUESIZE);
- 	}
- 
- 	/* try reuse page */
-@@ -3071,6 +3059,9 @@ static void gfar_process_frame(struct ne
- 	if (priv->padding)
- 		skb_pull(skb, priv->padding);
- 
-+	/* Trim off the FCS */
-+	pskb_trim(skb, skb->len - ETH_FCS_LEN);
-+
- 	if (ndev->features & NETIF_F_RXCSUM)
- 		gfar_rx_checksum(skb, fcb);
+ if GOOGLE_FIRMWARE
  
 
 

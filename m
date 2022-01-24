@@ -2,126 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58EA0498509
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:41:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 042B949850C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:42:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243803AbiAXQlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 11:41:44 -0500
-Received: from mta-p8.oit.umn.edu ([134.84.196.208]:52498 "EHLO
-        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241174AbiAXQlm (ORCPT
+        id S243828AbiAXQmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 11:42:54 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46940 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243685AbiAXQmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 11:41:42 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4JjG393q2Rz9vKMM
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:41:41 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p8.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id LyBRGfAocl05 for <linux-kernel@vger.kernel.org>;
-        Mon, 24 Jan 2022 10:41:41 -0600 (CST)
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Mon, 24 Jan 2022 11:42:53 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4JjG391gYlz9vKMN
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:41:41 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4JjG391gYlz9vKMN
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4JjG391gYlz9vKMN
-Received: by mail-pl1-f197.google.com with SMTP id p17-20020a170903249100b0014af06caa65so3598938plw.6
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 08:41:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZjxyaAEg9dgyhIAkpzzAptxU/LU+QVbkLgcz/aYUJL0=;
-        b=VirmN0SOTo8kwAsb6NJ8f0My6angxwwfXPytMw1MiWvZSTJvH+k60e1XJyHLwmUJ8I
-         gb0dYxOJhTRm6FHSjRNj1F6BYyfFQ8+rziWRzJ00cmkMG234HWQcyUGZn5QJtTbt/0x5
-         WbHHVlcfwvqCi20uI+e6uqC7Qe1Eo2tLyk+amiDmu4D5peJpc9psf3Irx6gq3vG41A0C
-         FIAlbksV75hxBifi+VXqDsxG/vbBE68AVFX6uEYDWAe+mYQwZ8A+Pc4O0JHjfAlsM/mJ
-         4xTil0FcCZpFLqjqcbEgxhd0Ryw/MGyG3tq1qmv37KkJPwdGE8iTmytU4kXKL8ky7oxJ
-         COMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZjxyaAEg9dgyhIAkpzzAptxU/LU+QVbkLgcz/aYUJL0=;
-        b=y3LlT+90Csz3CPhwC4SoMSVtaz/6jUaWccUIU/yUbrEHNmlZfDnxmRBma7t8JXlKkW
-         a3ABoaypQcTBtH9t16Tp2QpcJY5GkDnYZlpJtV5LlFnDHSUPjA9p/0g5uZ/LS2ZYnSsv
-         Cayv2S2FnfX93/KmlkYX1AR1K78dNM9u/lMNN/CTh2KHT/DPGt4L6MzH1vOT/7n9Zl6/
-         yHZ6Fdrt7ygYVAQnbknXqesVGitCpc6XJIpOH6YGejII0y1yj2HC61ZgHqflZIO7cavt
-         xlAUO9+c5ZGZ2C7G/q069uvdnbllYQwKz/RJSq5yEBALIbW3cem6ElCh5sbL0n3fFvH0
-         7SFQ==
-X-Gm-Message-State: AOAM530ahC/yqpW1Notoh8COs9GuBcGHRTdfftFdx/j7AnZhDfc6s8Dx
-        40LaRhw+BbqfYPXa8Mat7Fpf0/+PIWgeexMVtsbtIeT1vWMFDPEOoZCgrvIYbfGMeS+/hwquEkC
-        +SbTa61vO26QAV/fXYU9CD4+cNTt2
-X-Received: by 2002:a17:90a:3f09:: with SMTP id l9mr2728753pjc.38.1643042500403;
-        Mon, 24 Jan 2022 08:41:40 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyOpsozHODGgFyK9SCHH//gLgeWWuohBy6yEBU2ijxYIw5SjGOPgAKzc1o1kBe/gI7Gr6S2GA==
-X-Received: by 2002:a17:90a:3f09:: with SMTP id l9mr2728731pjc.38.1643042500108;
-        Mon, 24 Jan 2022 08:41:40 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.4.61.248])
-        by smtp.gmail.com with ESMTPSA id my11sm11680862pjb.35.2022.01.24.08.41.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 08:41:39 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Lv Zheng <lv.zheng@intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ACPI: OSL: Fix a NULL pointer dereference in extlog_init().
-Date:   Tue, 25 Jan 2022 00:41:34 +0800
-Message-Id: <20220124164134.52046-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2B2EB810FD
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:42:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FA64C340EE;
+        Mon, 24 Jan 2022 16:42:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643042571;
+        bh=SqErisRUlGDkdeqDrji8hZuLh+ZPAh1XtvZmsBKGgnI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=SnRbCnqDSRoMaz5rHCrNC3g9sjlvYcZye/foIYb+917Y9TkUyssdjSrHR+0JEeD1+
+         sGXU1UqcSjFu0Ug1my+h8afOiHD+6K+7Y0A+3j99NrKzfUprtOJDfEV66nfcvlu/4i
+         4o1JRMdRwSM1Tx+tyomD73aYPMGMkh1MypTWCKDse6ymQJDcbzkTQPL15kZ5QL65BJ
+         g3v7brTijPWj7bKxQy/cRjDBumDEbm8HPvWq+kI0MfEuWJDbhYYaD8VH7NSkhCzle7
+         nxK4YfasnedaCN3P14pt3+yswA/zl5mIpm4DK58pQ5DhDIhPS6CoMyWhFepyYOHXBb
+         OVP7EWgPlswSw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 4B7895C1286; Mon, 24 Jan 2022 08:42:51 -0800 (PST)
+Date:   Mon, 24 Jan 2022 08:42:51 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Zqiang <qiang1.zhang@intel.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] rcu: Add per-CPU rcuc task info to RCU CPU stall
+ warnings
+Message-ID: <20220124164251.GF4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220124103637.4001386-1-qiang1.zhang@intel.com>
+ <e7d56d70-3750-b83a-8c1c-99878722c805@gnuweeb.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e7d56d70-3750-b83a-8c1c-99878722c805@gnuweeb.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In extlog_init(), acpi_os_map_iomem() is assigned to extlog_l1_hdr and
-there is a dereference of it through l1_head. on the failure of
-acpi_os_map_iomem(), the return value of it could be NULL, which may
-introduce a NULL pointer dereference.
+On Mon, Jan 24, 2022 at 05:38:21PM +0700, Ammar Faizi wrote:
+> 
+> [ I resend and fix my reply, my previous reply seems to have an
+>   issue with the "Date" ]
+> 
+> Hi Zqiang,
+> 
+> On Mon, 24 Jan 2022 18:36:37 +0800, Zqiang <qiang1.zhang@intel.com> wrote:> +static void rcuc_kthread_dump(struct rcu_data *rdp)
+> > +{
+> > +	int cpu;
+> > +	unsigned long j;
+> > +	struct task_struct *rcuc = rdp->rcu_cpu_kthread_task;
+> > +
+> > +	if (rcu_is_rcuc_kthread_starving(rdp, &j)) {
+> > +		cpu = rcuc ? task_cpu(rcuc) : -1;
+> > +
+> > +		if (rcuc) {
+> > +			pr_err("%s kthread starved for %ld jiffies, stack dump:\n",
+> > +									rcuc->comm, j);
+> > +			sched_show_task(rcuc);
+> > +			if (cpu >= 0) {
+> > +				if (cpu_online(cpu) && !idle_cpu(cpu)) {
+> > +					pr_err("Dump current CPU stack:\n");
+> > +					if (!trigger_single_cpu_backtrace(cpu))
+> > +						dump_cpu_task(cpu);
+> > +				}
+> > +			}
+> > +		}
+> > +	}
+> > +}
+> 
+> 1) We can reduce the nested if with an early return after
+>    checking `rcu_is_rcuc_kthread_starving()`.
+> 
+> 2) This ternary operator doesn't make sense:
+> 
+>    `cpu = rcuc ? task_cpu(rcuc) : -1;`
+> 
+>    If `rcuc` is NULL, then the "if (rcuc)" block will never
+>    be executed, and `cpu` variable won't be used, why should
+>    we perform a conditional with ternary to assign -1 here?
+> 
+> 3) We can use an early return as well for the `if (rcuc)` to
+>    avoid more nested if.
+> 
+> FWIW, this one makes more sense:
+> ```
+> static void rcuc_kthread_dump(struct rcu_data *rdp)
+> {
+> 	 int cpu;
+> 	 unsigned long j;
+> 	 struct task_struct *rcuc;
+> 
+> 	 if (!rcu_is_rcuc_kthread_starving(rdp, &j))
+> 		 return;
+> 
+> 	 rcuc = rdp->rcu_cpu_kthread_task;
+> 	 if (!rcuc)
+> 		 return;
+> 
+> 	 pr_err("%s kthread starved for %ld jiffies, stack dump:\n", rcuc->comm, j);
 
-Fix this bug by adding a NULL check of extlog_l1_hdr.
+Thank you for looking this over and for the great feedback, Ammar!
 
-This bug was found by a static analyzer.
+I am also wondering why the above message should be printed when the
+corresponding CPU is offline or idle.  Why not move the above pr_err()
+line down to replace the pr_err() line below?
 
-Builds with 'make allyesconfig' show no new warnings,
-and our static analyzer no longer warns about this code.
+							Thanx, Paul
 
-Fixes: a238317ce818 ("ACPI: Clean up acpi_os_map/unmap_memory() to eliminate __iomem.")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
-The analysis employs differential checking to identify inconsistent 
-security operations (e.g., checks or kfrees) between two code paths 
-and confirms that the inconsistent operations are not recovered in the
-current function or the callers, so they constitute bugs. 
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
- drivers/acpi/acpi_extlog.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/acpi/acpi_extlog.c b/drivers/acpi/acpi_extlog.c
-index 72f1fb77abcd..2187ac23d3d4 100644
---- a/drivers/acpi/acpi_extlog.c
-+++ b/drivers/acpi/acpi_extlog.c
-@@ -239,6 +239,12 @@ static int __init extlog_init(void)
- 	}
- 
- 	extlog_l1_hdr = acpi_os_map_iomem(l1_dirbase, l1_hdr_size);
-+	if (!extlog_l1_hdr) {
-+		rc = -ENOMEM;
-+		release_mem_region(l1_dirbase, l1_hdr_size);
-+		goto err;
-+	}
-+
- 	l1_head = (struct extlog_l1_head *)extlog_l1_hdr;
- 	l1_size = l1_head->total_len;
- 	l1_percpu_entry = l1_head->entries;
--- 
-2.25.1
-
+> 	 sched_show_task(rcuc);
+> 	 cpu = task_cpu(rcuc);
+> 	 if (cpu_online(cpu) && !idle_cpu(cpu)) {
+> 		 pr_err("Dump current CPU stack:\n");
+> 		 if (!trigger_single_cpu_backtrace(cpu))
+> 			 dump_cpu_task(cpu);
+> 	 }
+> }
+> ```
+> 
+> Thank you!
+> 
+> -- 
+> Ammar Faizi

@@ -2,48 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F1FE4990D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:07:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C11498EBB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:48:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377270AbiAXUFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:05:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356831AbiAXTr0 (ORCPT
+        id S1356994AbiAXTsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:48:11 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59098 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345772AbiAXTiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:47:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318A3C038AEC;
-        Mon, 24 Jan 2022 11:23:19 -0800 (PST)
+        Mon, 24 Jan 2022 14:38:02 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CCA15B8123F;
-        Mon, 24 Jan 2022 19:23:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1643C340E5;
-        Mon, 24 Jan 2022 19:23:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD7FEB81215;
+        Mon, 24 Jan 2022 19:38:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F416CC340E5;
+        Mon, 24 Jan 2022 19:37:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052197;
-        bh=+5B2a8108S7AUZGD06016KZBTI+r/kEmX5RhV/EvtKU=;
+        s=korg; t=1643053079;
+        bh=xn5CIkjOdhzi0YaD3ET90nmLIPGwL+NI53JbBeeAdXo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ihVZ/g2cXH+wcz1KNpmiL1gXE5TeK5iw0ulnZvCa6/TbIzBZBeie0FKzEHKojhKmv
-         UjKG4tqyLp5M7U4C/XwwUVaCJK8hocU97RiAcTNoRtHDPedUeKvyX4FEpgw1Wje45Z
-         M7Dust+j66aGsQTpgzb+jljEF2Up6aMIqMMwvi0U=
+        b=TSSSPDOL8FymrBxVmc4QmIShf6VPzBMqI1zSMRBh7+9mT3E88SiLHwcygqKK/14zO
+         NLV3p54TF/8WT6Nzf5QiyWmRuLORZ5ISUjlKIicq7uUKq4M0Qu0GOyrwXIyjLhU0+c
+         05cxxAES99iy8wNsgdMIIBe6A1tyXlrXB8L3Jsp4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Suresh Udipi <sudipi@jp.adit-jv.com>,
-        Michael Rodin <mrodin@de.adit-jv.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 4.19 213/239] media: rcar-csi2: Optimize the selection PHTW register
-Date:   Mon, 24 Jan 2022 19:44:11 +0100
-Message-Id: <20220124183949.887495650@linuxfoundation.org>
+        stable@vger.kernel.org, Jan Kara <jack@suse.cz>, stable@kernel.org,
+        Theodore Tso <tytso@mit.edu>,
+        syzbot+3b6f9218b1301ddda3e2@syzkaller.appspotmail.com
+Subject: [PATCH 5.4 268/320] ext4: make sure to reset inode lockdep class when quota enabling fails
+Date:   Mon, 24 Jan 2022 19:44:12 +0100
+Message-Id: <20220124184003.098755253@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,50 +46,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Suresh Udipi <sudipi@jp.adit-jv.com>
+From: Jan Kara <jack@suse.cz>
 
-commit 549cc89cd09a85aaa16dc07ef3db811d5cf9bcb1 upstream.
+commit 4013d47a5307fdb5c13370b5392498b00fedd274 upstream.
 
-PHTW register is selected based on default bit rate from Table[1].
-for the bit rates less than or equal to 250. Currently first
-value of default bit rate which is greater than or equal to
-the caculated mbps is selected. This selection can be further
-improved by selecting the default bit rate which is nearest to
-the calculated value.
+When we succeed in enabling some quota type but fail to enable another
+one with quota feature, we correctly disable all enabled quota types.
+However we forget to reset i_data_sem lockdep class. When the inode gets
+freed and reused, it will inherit this lockdep class (i_data_sem is
+initialized only when a slab is created) and thus eventually lockdep
+barfs about possible deadlocks.
 
-[1] specs r19uh0105ej0200-r-car-3rd-generation.pdf [Table 25.12]
-
-Fixes: 769afd212b16 ("media: rcar-csi2: add Renesas R-Car MIPI CSI-2 receiver driver")
-Signed-off-by: Suresh Udipi <sudipi@jp.adit-jv.com>
-Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Reported-and-tested-by: syzbot+3b6f9218b1301ddda3e2@syzkaller.appspotmail.com
+Signed-off-by: Jan Kara <jack@suse.cz>
+Cc: stable@kernel.org
+Link: https://lore.kernel.org/r/20211007155336.12493-3-jack@suse.cz
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/platform/rcar-vin/rcar-csi2.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ fs/ext4/super.c |   13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
---- a/drivers/media/platform/rcar-vin/rcar-csi2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
-@@ -843,10 +843,17 @@ static int rcsi2_phtw_write_mbps(struct
- 				 const struct rcsi2_mbps_reg *values, u16 code)
- {
- 	const struct rcsi2_mbps_reg *value;
-+	const struct rcsi2_mbps_reg *prev_value = NULL;
- 
--	for (value = values; value->mbps; value++)
-+	for (value = values; value->mbps; value++) {
- 		if (value->mbps >= mbps)
- 			break;
-+		prev_value = value;
-+	}
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -5998,8 +5998,19 @@ static int ext4_enable_quotas(struct sup
+ 					"Failed to enable quota tracking "
+ 					"(type=%d, err=%d). Please run "
+ 					"e2fsck to fix.", type, err);
+-				for (type--; type >= 0; type--)
++				for (type--; type >= 0; type--) {
++					struct inode *inode;
 +
-+	if (prev_value &&
-+	    ((mbps - prev_value->mbps) <= (value->mbps - mbps)))
-+		value = prev_value;
++					inode = sb_dqopt(sb)->files[type];
++					if (inode)
++						inode = igrab(inode);
+ 					dquot_quota_off(sb, type);
++					if (inode) {
++						lockdep_set_quota_inode(inode,
++							I_DATA_SEM_NORMAL);
++						iput(inode);
++					}
++				}
  
- 	if (!value->mbps) {
- 		dev_err(priv->dev, "Unsupported PHY speed (%u Mbps)", mbps);
+ 				return err;
+ 			}
 
 

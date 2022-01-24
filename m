@@ -2,100 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4C8498841
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:24:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C97A498846
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245221AbiAXSYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:24:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37084 "EHLO
+        id S245238AbiAXSZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:25:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245211AbiAXSYf (ORCPT
+        with ESMTP id S245233AbiAXSZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:24:35 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E93AC06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:24:35 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id j16so5946905plx.4
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:24:35 -0800 (PST)
+        Mon, 24 Jan 2022 13:25:19 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857EAC061744
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:25:19 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id h2so21292962qkp.10
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:25:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uhZIz3/JykOBz9VP0YFQFFJB6JHp3P7kosVSER8JbCs=;
-        b=alUnBjwA9GnJNcB1VQbp/WSOeoyPUm7ct70T0RMkE/CVfVe0iGp5KNjxhHwR40ceTB
-         6amxmfkC0OCiiUzzNflT0LH8nbTiIXGFiCnRTzrzB1Zm94fqLJkT7M5ODG5wwtdaegO4
-         q9dcoLaWBG29OEiHULjhmJXDUEbMQUlUoOw/4=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K6etE/ly2g0VeXSdeIkDpJwMBD9Oa8SeCLG1zWSfgrU=;
+        b=Pcs1V+CdhZCKff3WNADfaPdxie2c9AoWyjHN3xGrBOrslo+5Ry9Su4Wg81Yg58YjO+
+         e5PtYQEs05Ne337BKKtfad0inw/4ziYXpp3kIwYQVfkfLnKx3wJNjIuaMh/X2QszO+Zl
+         9kyxYlWKd3aiMhUU7Ow7VTonasdUwHVTJPUcv/aYE1uyGc9M2WJtUVTM5Y2vLsYjTIeJ
+         z0087J0F1jlYYFkzLgeejHJCAqKyDFadvc5knPzsPD7nHcSIQl27ffC4veEliT7/PpD5
+         JjP/3wJ0hs7WCnfe1pNTb+rX5iQcEstoRA3wi8llqhD4Sp0J/82l7yfrEcGUOn3IaMTv
+         ozQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uhZIz3/JykOBz9VP0YFQFFJB6JHp3P7kosVSER8JbCs=;
-        b=nzIJmhHc7wMmnqWoOvXJcMVrG8QO6KtBY6OTGS1snoIbSPdml2SDBumCTBl+nP9+Ex
-         To6/lxA1JE2f0Ts/65rcyZBFKhULBYA7qk5Im5pEHtYWtCs+jr4T+kB/KTapG8yDQYrO
-         /iXj1sLeH1wYKsrMdIhXDJPBdmqHIKvX+9UZasevxnk8Ss+h4dna/kU7hW1b8xrVLrZm
-         zCbl2B0+9ai1QmXIzzVZmt+7aGB0rI62F2A2vWnBfk4jAHVTbtNDESU7ph04KnyDitpE
-         hWFR70+A/1HlW5XPQm5xjjk9pDBkYvxtcuS/o8p+V4kB9Y/nlA9bVJZZWGSiJzoa9XWe
-         p0Jw==
-X-Gm-Message-State: AOAM530/mzqts+YDAy2WiKdv6GL8hJX07lRo0vGUeadEqENxhabee+Tm
-        MOC4lw5CcBu6rEQkMKZYwgvYvg==
-X-Google-Smtp-Source: ABdhPJx/8XSSCE4pNF/rMKWRrUHHg7PdBjMRFPZ0Ya0DtIbcSeRdq+8k4YOK6JIR4In6vxCm3Y1BZw==
-X-Received: by 2002:a17:902:bc88:b0:149:2032:6bcf with SMTP id bb8-20020a170902bc8800b0014920326bcfmr15462814plb.44.1643048675213;
-        Mon, 24 Jan 2022 10:24:35 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id e1sm12311920pgu.17.2022.01.24.10.24.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 10:24:34 -0800 (PST)
-Date:   Mon, 24 Jan 2022 10:24:34 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-hardening@vger.kernel.org, Nico Pache <npache@redhat.com>
-Subject: Re: [PATCH] kasan: test: fix compatibility with FORTIFY_SOURCE
-Message-ID: <202201241024.DA581869@keescook>
-References: <20220124160744.1244685-1-elver@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K6etE/ly2g0VeXSdeIkDpJwMBD9Oa8SeCLG1zWSfgrU=;
+        b=q9+CUQRchxRE1Zwa5lMklgQ96tIinUt/wRYk0d4opm/BxARL5aR1SFLbLNNhzlOCmh
+         hoZqUkKkpQKh4NAoDuMy+mZ49zEgG4nLigDaUS4Jgg/VBuaxbHaalJgtpNQ9zCRYWqP/
+         7JGxUafAFmy5DuXhclv1Roxo07K+XkTUb3HEPEZ9LDuXYdtbH2M2TX1/AEPNdNXW67qH
+         lQQ0g7dgpLoK73h93nlOkG5AdfNh/5c5m48gMwTtnl4lyLzGkr2jamLJgfsIU/lHCopS
+         H3OwUDFvvom/R6mI2ABK9OIRkYFvYoNTdoqddIMNPDmQfv+uFo7zWKmYxBTOtL8rUA/p
+         dfxw==
+X-Gm-Message-State: AOAM530+hv0TvilkcjM/PRK00LKImHwAvAx7uciYci/ZrKDNXUqVqg0X
+        ynzV8V8i33sO7yV/vqRnCq3stbtuNxce0AT4x0PuvQ==
+X-Google-Smtp-Source: ABdhPJwVmpBJh+L3pkv2NUpvbujhb1GpxAtUDey9JzaQf/umiNBIUxrPnv3lzPWtoX0EddYiSt5MEAJmYzwoi9JSu7w=
+X-Received: by 2002:a05:620a:4689:: with SMTP id bq9mr12401158qkb.496.1643048718462;
+ Mon, 24 Jan 2022 10:25:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124160744.1244685-1-elver@google.com>
+References: <Yboc/G18R1Vi1eQV@google.com> <b2af633d-aaae-d0c5-72f9-0688b76b4505@gmail.com>
+ <Ybom69OyOjsR7kmZ@google.com> <634c2c87-84c9-0254-3f12-7d993037495c@gmail.com>
+ <Yboy2WwaREgo95dy@google.com> <e729a63a-cded-da9c-3860-a90013b87e2d@gmail.com>
+ <CAKH8qBv+GsPz3JTTmLZ+Q2iMSC3PS+bE1xOLbxZyjfno7hqpSA@mail.gmail.com>
+ <92f69969-42dc-204a-4138-16fdaaebb78d@gmail.com> <CAKH8qBuZxBen871AWDK1eDcxJenK7UkSQCZQsHCPhk6nk9e=Ng@mail.gmail.com>
+ <7ca623df-73ed-9191-bec7-a4728f2f95e6@gmail.com> <20211216181449.p2izqxgzmfpknbsw@kafai-mbp.dhcp.thefacebook.com>
+ <CAKH8qBuAZoVQddMUkyhur=WyQO5b=z9eom1RAwgwraXg2WTj5w@mail.gmail.com> <9b8632f9-6d7a-738f-78dc-0287d441d1cc@gmail.com>
+In-Reply-To: <9b8632f9-6d7a-738f-78dc-0287d441d1cc@gmail.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Mon, 24 Jan 2022 10:25:07 -0800
+Message-ID: <CAKH8qBvX8_vy0aYhiO-do0rh3y3CzgDGfHqt1bB6uRcr_DxncQ@mail.gmail.com>
+Subject: Re: [PATCH v3] cgroup/bpf: fast path skb BPF filtering
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     Martin KaFai Lau <kafai@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 05:07:44PM +0100, Marco Elver wrote:
-> With CONFIG_FORTIFY_SOURCE enabled, string functions will also perform
-> dynamic checks using __builtin_object_size(ptr), which when failed will
-> panic the kernel.
-> 
-> Because the KASAN test deliberately performs out-of-bounds operations,
-> the kernel panics with FORITY_SOURCE, for example:
-> 
->  | kernel BUG at lib/string_helpers.c:910!
->  | invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
->  | CPU: 1 PID: 137 Comm: kunit_try_catch Tainted: G    B             5.16.0-rc3+ #3
->  | Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
->  | RIP: 0010:fortify_panic+0x19/0x1b
->  | ...
->  | Call Trace:
->  |  <TASK>
->  |  kmalloc_oob_in_memset.cold+0x16/0x16
->  |  ...
-> 
-> Fix it by also hiding `ptr` from the optimizer, which will ensure that
-> __builtin_object_size() does not return a valid size, preventing
-> fortified string functions from panicking.
-> 
-> Reported-by: Nico Pache <npache@redhat.com>
-> Signed-off-by: Marco Elver <elver@google.com>
+On Mon, Jan 24, 2022 at 7:49 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>
+> On 12/16/21 18:24, Stanislav Fomichev wrote:
+> > On Thu, Dec 16, 2021 at 10:14 AM Martin KaFai Lau <kafai@fb.com> wrote:
+> >> On Thu, Dec 16, 2021 at 01:21:26PM +0000, Pavel Begunkov wrote:
+> >>> On 12/15/21 22:07, Stanislav Fomichev wrote:
+> >>>>> I'm skeptical I'll be able to measure inlining one function,
+> >>>>> variability between boots/runs is usually greater and would hide it.
+> >>>>
+> >>>> Right, that's why I suggested to mirror what we do in set/getsockopt
+> >>>> instead of the new extra CGROUP_BPF_TYPE_ENABLED. But I'll leave it up
+> >>>> to you, Martin and the rest.
+> >> I also suggested to try to stay with one way for fullsock context in v2
+> >> but it is for code readability reason.
+> >>
+> >> How about calling CGROUP_BPF_TYPE_ENABLED() just next to cgroup_bpf_enabled()
+> >> in BPF_CGROUP_RUN_PROG_*SOCKOPT_*() instead ?
+> >
+> > SG!
+> >
+> >> It is because both cgroup_bpf_enabled() and CGROUP_BPF_TYPE_ENABLED()
+> >> want to check if there is bpf to run before proceeding everything else
+> >> and then I don't need to jump to the non-inline function itself to see
+> >> if there is other prog array empty check.
+> >>
+> >> Stan, do you have concern on an extra inlined sock_cgroup_ptr()
+> >> when there is bpf prog to run for set/getsockopt()?  I think
+> >> it should be mostly noise from looking at
+> >> __cgroup_bpf_run_filter_*sockopt()?
+> >
+> > Yeah, my concern is also mostly about readability/consistency. Either
+> > __cgroup_bpf_prog_array_is_empty everywhere or this new
+> > CGROUP_BPF_TYPE_ENABLED everywhere. I'm slightly leaning towards
+> > __cgroup_bpf_prog_array_is_empty because I don't believe direct
+> > function calls add any visible overhead and macros are ugly :-) But
+> > either way is fine as long as it looks consistent.
+>
+> Martin, Stanislav, do you think it's good to go? Any other concerns?
+> It feels it might end with bikeshedding and would be great to finally
+> get it done, especially since I find the issue to be pretty simple.
 
-Yup, more good fixes. Thanks!
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
--- 
-Kees Cook
+I'll leave it up to the bpf maintainers/reviewers. Personally, I'd
+still prefer a respin with a consistent
+__cgroup_bpf_prog_array_is_empty or CGROUP_BPF_TYPE_ENABLED everywhere
+(shouldn't be a lot of effort?)

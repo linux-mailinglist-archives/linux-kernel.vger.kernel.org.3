@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DD9499E7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB28499E82
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:09:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1835066AbiAXWfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:35:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
+        id S1835291AbiAXWgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:36:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1456692AbiAXVjs (ORCPT
+        with ESMTP id S1456712AbiAXVjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:39:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9FFC0419C5;
-        Mon, 24 Jan 2022 12:26:15 -0800 (PST)
+        Mon, 24 Jan 2022 16:39:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9232C0419C6;
+        Mon, 24 Jan 2022 12:26:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0346FB81239;
-        Mon, 24 Jan 2022 20:26:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2741EC340E5;
-        Mon, 24 Jan 2022 20:26:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46A1C614ED;
+        Mon, 24 Jan 2022 20:26:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13EC7C340E5;
+        Mon, 24 Jan 2022 20:26:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055972;
-        bh=3brKqyaqybEcUH8yC/phuL2yfofUBG/ciXNRmRgItE8=;
+        s=korg; t=1643055978;
+        bh=3Fu7+CpOM2je09bja5KFR0o3WRmslcWj3YAGQSVyIFU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ESkCCaPjw9o86K/q9MIBQC18cLVkIj3m66xqkxmmeRvjUGfPzqDOn/fm8RAGznOoY
-         E0psAbJccuBI2DhbNbZl+4THTu/b48sVi77xEMxth7Qe8bc+4rC3Z0rxIEOt4XLxlH
-         eVL6Z5Cm3wOyI5EvPcNHWuDvvgNE3jSH90dKRzWM=
+        b=tznkrP8hLY2zu285JEZ6pvY3wqpbzPPRa2PEc4yWqRD5epXivgSjeuNmuzqagtcgg
+         jUcaQj1b/yZgIsg86zfeZJFnPguSen000hrH2ZUtfabGvS07wWrc7nDg/ze/5lMfCe
+         JejNfUcdXSg5/huP+VNhkMBVmu21pMA3OWLTI2IE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 294/846] x86/boot/compressed: Move CLANG_FLAGS to beginning of KBUILD_CFLAGS
-Date:   Mon, 24 Jan 2022 19:36:51 +0100
-Message-Id: <20220124184111.061573794@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 296/846] regulator: qcom-labibb: OCP interrupts are not a failure while disabled
+Date:   Mon, 24 Jan 2022 19:36:53 +0100
+Message-Id: <20220124184111.128184376@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -48,67 +52,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Marijn Suijten <marijn.suijten@somainline.org>
 
-[ Upstream commit 5fe392ff9d1f7254a1fbb3f72d9893088e4d23eb ]
+[ Upstream commit d27bb69dc83f00f86a830298c967052cded6e784 ]
 
-When cross compiling i386_defconfig on an arm64 host with clang, there
-are a few instances of '-Waddress-of-packed-member' and
-'-Wgnu-variable-sized-type-not-at-end' in arch/x86/boot/compressed/,
-which should both be disabled with the cc-disable-warning calls in that
-directory's Makefile, which indicates that cc-disable-warning is failing
-at the point of testing these flags.
+Receiving the Over-Current Protection interrupt while the regulator is
+disabled does not count as unhandled/failure (IRQ_NONE, or 0 as it were)
+but a "fake event", usually due to inrush as the is regulator about to
+be enabled.
 
-The cc-disable-warning calls fail because at the point that the flags
-are tested, KBUILD_CFLAGS has '-march=i386' without $(CLANG_FLAGS),
-which has the '--target=' flag to tell clang what architecture it is
-targeting. Without the '--target=' flag, the host architecture (arm64)
-is used and i386 is not a valid value for '-march=' in that case. This
-error can be seen by adding some logging to try-run:
-
-  clang-14: error: the clang compiler does not support '-march=i386'
-
-Invoking the compiler has to succeed prior to calling cc-option or
-cc-disable-warning in order to accurately test whether or not the flag
-is supported; if it doesn't, the requested flag can never be added to
-the compiler flags. Move $(CLANG_FLAGS) to the beginning of KBUILD_FLAGS
-so that any new flags that might be added in the future can be
-accurately tested.
-
-Fixes: d5cbd80e302d ("x86/boot: Add $(CLANG_FLAGS) to compressed KBUILD_CFLAGS")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20211222163040.1961481-1-nathan@kernel.org
+Fixes: 390af53e0411 ("regulator: qcom-labibb: Implement short-circuit and over-current IRQs")
+Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+Link: https://lore.kernel.org/r/20211224113450.107958-1-marijn.suijten@somainline.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/boot/compressed/Makefile | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/regulator/qcom-labibb-regulator.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 431bf7f846c3c..e118136460518 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -28,7 +28,11 @@ KCOV_INSTRUMENT		:= n
- targets := vmlinux vmlinux.bin vmlinux.bin.gz vmlinux.bin.bz2 vmlinux.bin.lzma \
- 	vmlinux.bin.xz vmlinux.bin.lzo vmlinux.bin.lz4 vmlinux.bin.zst
+diff --git a/drivers/regulator/qcom-labibb-regulator.c b/drivers/regulator/qcom-labibb-regulator.c
+index b3da0dc58782f..639b71eb41ffe 100644
+--- a/drivers/regulator/qcom-labibb-regulator.c
++++ b/drivers/regulator/qcom-labibb-regulator.c
+@@ -260,7 +260,7 @@ static irqreturn_t qcom_labibb_ocp_isr(int irq, void *chip)
  
--KBUILD_CFLAGS := -m$(BITS) -O2
-+# CLANG_FLAGS must come before any cc-disable-warning or cc-option calls in
-+# case of cross compiling, as it has the '--target=' flag, which is needed to
-+# avoid errors with '-march=i386', and future flags may depend on the target to
-+# be valid.
-+KBUILD_CFLAGS := -m$(BITS) -O2 $(CLANG_FLAGS)
- KBUILD_CFLAGS += -fno-strict-aliasing -fPIE
- KBUILD_CFLAGS += -Wundef
- KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
-@@ -47,7 +51,6 @@ KBUILD_CFLAGS += -D__DISABLE_EXPORTS
- # Disable relocation relaxation in case the link is not PIE.
- KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
- KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
--KBUILD_CFLAGS += $(CLANG_FLAGS)
+ 	/* If the regulator is not enabled, this is a fake event */
+ 	if (!ops->is_enabled(vreg->rdev))
+-		return 0;
++		return IRQ_HANDLED;
  
- # sev.c indirectly inludes inat-table.h which is generated during
- # compilation and stored in $(objtree). Add the directory to the includes so
+ 	/* If we tried to recover for too many times it's not getting better */
+ 	if (vreg->ocp_irq_count > LABIBB_MAX_OCP_COUNT)
 -- 
 2.34.1
 

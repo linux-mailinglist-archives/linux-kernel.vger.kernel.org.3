@@ -2,26 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 482BC4987DA
+	by mail.lfdr.de (Postfix) with ESMTP id C00D84987DB
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245097AbiAXSHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:07:54 -0500
-Received: from out0.migadu.com ([94.23.1.103]:19487 "EHLO out0.migadu.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244951AbiAXSHa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:07:30 -0500
+        id S244961AbiAXSH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:07:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244955AbiAXSHb (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 13:07:31 -0500
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A014C061748
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:07:30 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1643047648;
+        t=1643047649;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=woHyASpRd1dsSk1k8aXjCDxvW5sGTzgveGosFVStA8I=;
-        b=LdSOcXw1hp5Fj7UST7UQpXoVIdytjtEsxQSoeOFLx8SjFkRo2FOAZykSmAnBB63s0l5Uuz
-        1OEAtZIT9WPUQT12nwV/ZCGMIa8rdy84Hyp25CnCuDUwNE9eExF9qqoRVg9/9wCcD9EGLD
-        nElJQwpewG4SGKHZMb9sCnd+9GEwY14=
+        bh=ypDUrRwpvHxVi9/0pzLPCyjGz64l2U6vLcrEu5OiSo8=;
+        b=h5KNT+HE1tKNl8ee9QGd2J7zWqwuSghQOwH0ssGabPUeG/2X6n0oVJ+eGPg0ZJJjeEX/Ja
+        qkxlKfLQ+WQdvG4iYDLBizd0WFXWkjtg+5zwMDHoCl1l2+84TzWpdZeElA/8OFOjnTKSe0
+        Pl06koOQs2H3JvLAj2nhgTZi1e3hAow=
 From:   andrey.konovalov@linux.dev
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
@@ -39,9 +43,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH v6 33/39] kasan: mark kasan_arg_stacktrace as __initdata
-Date:   Mon, 24 Jan 2022 19:05:07 +0100
-Message-Id: <7fa090865614f8e0c6c1265508efb1d429afaa50.1643047180.git.andreyknvl@google.com>
+Subject: [PATCH v6 34/39] kasan: clean up feature flags for HW_TAGS mode
+Date:   Mon, 24 Jan 2022 19:05:08 +0100
+Message-Id: <76ebb340265be57a218564a497e1f52ff36a3879.1643047180.git.andreyknvl@google.com>
 In-Reply-To: <cover.1643047180.git.andreyknvl@google.com>
 References: <cover.1643047180.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -54,49 +58,133 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-As kasan_arg_stacktrace is only used in __init functions, mark it as
-__initdata instead of __ro_after_init to allow it be freed after boot.
+- Untie kasan_init_hw_tags() code from the default values of
+  kasan_arg_mode and kasan_arg_stacktrace.
 
-The other enums for KASAN args are used in kasan_init_hw_tags_cpu(),
-which is not marked as __init as a CPU can be hot-plugged after boot.
-Clarify this in a comment.
+- Move static_branch_enable(&kasan_flag_enabled) to the end of
+  kasan_init_hw_tags_cpu().
+
+- Remove excessive comments in kasan_arg_mode switch.
+
+- Add new comments.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-Suggested-by: Marco Elver <elver@google.com>
 
 ---
 
-Changes v1->v2:
+Changes v4->v5:
 - Add this patch.
 ---
- mm/kasan/hw_tags.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ mm/kasan/hw_tags.c | 38 +++++++++++++++++++++-----------------
+ mm/kasan/kasan.h   |  2 +-
+ 2 files changed, 22 insertions(+), 18 deletions(-)
 
 diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
-index 2e9378a4f07f..6509809dd5d8 100644
+index 6509809dd5d8..6a3146d1ccc5 100644
 --- a/mm/kasan/hw_tags.c
 +++ b/mm/kasan/hw_tags.c
-@@ -40,7 +40,7 @@ enum kasan_arg_stacktrace {
- 
- static enum kasan_arg kasan_arg __ro_after_init;
+@@ -42,16 +42,22 @@ static enum kasan_arg kasan_arg __ro_after_init;
  static enum kasan_arg_mode kasan_arg_mode __ro_after_init;
--static enum kasan_arg_stacktrace kasan_arg_stacktrace __ro_after_init;
-+static enum kasan_arg_stacktrace kasan_arg_stacktrace __initdata;
+ static enum kasan_arg_stacktrace kasan_arg_stacktrace __initdata;
  
- /* Whether KASAN is enabled at all. */
- DEFINE_STATIC_KEY_FALSE(kasan_flag_enabled);
-@@ -116,7 +116,10 @@ static inline const char *kasan_mode_info(void)
- 		return "sync";
- }
- 
--/* kasan_init_hw_tags_cpu() is called for each CPU. */
+-/* Whether KASAN is enabled at all. */
 +/*
-+ * kasan_init_hw_tags_cpu() is called for each CPU.
-+ * Not marked as __init as a CPU can be hot-plugged after boot.
++ * Whether KASAN is enabled at all.
++ * The value remains false until KASAN is initialized by kasan_init_hw_tags().
 + */
- void kasan_init_hw_tags_cpu(void)
- {
- 	/*
+ DEFINE_STATIC_KEY_FALSE(kasan_flag_enabled);
+ EXPORT_SYMBOL(kasan_flag_enabled);
+ 
+-/* Whether the selected mode is synchronous/asynchronous/asymmetric.*/
++/*
++ * Whether the selected mode is synchronous, asynchronous, or asymmetric.
++ * Defaults to KASAN_MODE_SYNC.
++ */
+ enum kasan_mode kasan_mode __ro_after_init;
+ EXPORT_SYMBOL_GPL(kasan_mode);
+ 
+ /* Whether to collect alloc/free stack traces. */
+-DEFINE_STATIC_KEY_FALSE(kasan_flag_stacktrace);
++DEFINE_STATIC_KEY_TRUE(kasan_flag_stacktrace);
+ 
+ /* kasan=off/on */
+ static int __init early_kasan_flag(char *arg)
+@@ -127,7 +133,11 @@ void kasan_init_hw_tags_cpu(void)
+ 	 * as this function is only called for MTE-capable hardware.
+ 	 */
+ 
+-	/* If KASAN is disabled via command line, don't initialize it. */
++	/*
++	 * If KASAN is disabled via command line, don't initialize it.
++	 * When this function is called, kasan_flag_enabled is not yet
++	 * set by kasan_init_hw_tags(). Thus, check kasan_arg instead.
++	 */
+ 	if (kasan_arg == KASAN_ARG_OFF)
+ 		return;
+ 
+@@ -154,42 +164,36 @@ void __init kasan_init_hw_tags(void)
+ 	if (kasan_arg == KASAN_ARG_OFF)
+ 		return;
+ 
+-	/* Enable KASAN. */
+-	static_branch_enable(&kasan_flag_enabled);
+-
+ 	switch (kasan_arg_mode) {
+ 	case KASAN_ARG_MODE_DEFAULT:
+-		/*
+-		 * Default to sync mode.
+-		 */
+-		fallthrough;
++		/* Default is specified by kasan_mode definition. */
++		break;
+ 	case KASAN_ARG_MODE_SYNC:
+-		/* Sync mode enabled. */
+ 		kasan_mode = KASAN_MODE_SYNC;
+ 		break;
+ 	case KASAN_ARG_MODE_ASYNC:
+-		/* Async mode enabled. */
+ 		kasan_mode = KASAN_MODE_ASYNC;
+ 		break;
+ 	case KASAN_ARG_MODE_ASYMM:
+-		/* Asymm mode enabled. */
+ 		kasan_mode = KASAN_MODE_ASYMM;
+ 		break;
+ 	}
+ 
+ 	switch (kasan_arg_stacktrace) {
+ 	case KASAN_ARG_STACKTRACE_DEFAULT:
+-		/* Default to enabling stack trace collection. */
+-		static_branch_enable(&kasan_flag_stacktrace);
++		/* Default is specified by kasan_flag_stacktrace definition. */
+ 		break;
+ 	case KASAN_ARG_STACKTRACE_OFF:
+-		/* Do nothing, kasan_flag_stacktrace keeps its default value. */
++		static_branch_disable(&kasan_flag_stacktrace);
+ 		break;
+ 	case KASAN_ARG_STACKTRACE_ON:
+ 		static_branch_enable(&kasan_flag_stacktrace);
+ 		break;
+ 	}
+ 
++	/* KASAN is now initialized, enable it. */
++	static_branch_enable(&kasan_flag_enabled);
++
+ 	pr_info("KernelAddressSanitizer initialized (hw-tags, mode=%s, stacktrace=%s)\n",
+ 		kasan_mode_info(),
+ 		kasan_stack_collection_enabled() ? "on" : "off");
+diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+index 020f3e57a03f..efda13a9ce6a 100644
+--- a/mm/kasan/kasan.h
++++ b/mm/kasan/kasan.h
+@@ -12,7 +12,7 @@
+ #include <linux/static_key.h>
+ #include "../slab.h"
+ 
+-DECLARE_STATIC_KEY_FALSE(kasan_flag_stacktrace);
++DECLARE_STATIC_KEY_TRUE(kasan_flag_stacktrace);
+ 
+ enum kasan_mode {
+ 	KASAN_MODE_SYNC,
 -- 
 2.25.1
 

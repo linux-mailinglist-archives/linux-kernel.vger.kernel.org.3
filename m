@@ -2,40 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7574996C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B2549973F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:27:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446108AbiAXVGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:06:43 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40144 "EHLO
+        id S1447902AbiAXVLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:11:39 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:40190 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351903AbiAXUoe (ORCPT
+        with ESMTP id S1389949AbiAXUpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:44:34 -0500
+        Mon, 24 Jan 2022 15:45:03 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CE0D60B0B;
-        Mon, 24 Jan 2022 20:44:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E3E7C340E5;
-        Mon, 24 Jan 2022 20:44:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3136860B11;
+        Mon, 24 Jan 2022 20:44:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0669DC340E5;
+        Mon, 24 Jan 2022 20:44:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057072;
-        bh=xI5hEJ3lhDIHA1QI9owRidjMV8Rm3Aur9/+X8usPUKA=;
+        s=korg; t=1643057078;
+        bh=YljHBSu8U7fYgPuBxiqBxuJLS3a+IyXUlt9fCs6zb+E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fBI9oJzXdsIXDh561HNCaOpqcQ+uhLx++H4fuSwtnDdX8cXr0OR2/E7S+KMMaucAC
-         NLl4DuesPRYkxbNwUUp8h8nGOtDfw93C0rE0DTAMPwbPV5DuBZmfVXn1IdB4dLhuTj
-         +IHAtqkjAEnuRru4cNHi0RnN6uA1EoOx8FJZXya4=
+        b=UT4dvYCS03Guinbh0NFD/ZCrG5c007EplAMXJpbIQx+x9m2VOezPhKdHSkrqL8vSu
+         vV3ptC0TP9l6J7GeL32jDQ53GFQuJ7M4rnymHPNHDLVR4A8S042N26EvqFxamhh/Mt
+         cJW4HCfWoFiEzlCeZBEtpZKbbzuXID4/u7SmdyNA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Nathan E. Egge" <unlord@xiph.org>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>
-Subject: [PATCH 5.15 693/846] drm/nouveau/kms/nv04: use vzalloc for nv04_display
-Date:   Mon, 24 Jan 2022 19:43:30 +0100
-Message-Id: <20220124184124.950008539@linuxfoundation.org>
+        stable@vger.kernel.org, John David Anglin <dave.anglin@bell.net>,
+        Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.15 695/846] parisc: Fix lpa and lpa_user defines
+Date:   Mon, 24 Jan 2022 19:43:32 +0100
+Message-Id: <20220124184125.027440777@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -47,45 +45,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilia Mirkin <imirkin@alum.mit.edu>
+From: John David Anglin <dave.anglin@bell.net>
 
-commit bd6e07e72f37f34535bec7eebc807e5fcfe37b43 upstream.
+commit db19c6f1a2a353cc8dec35b4789733a3cf6e2838 upstream.
 
-The struct is giant, and triggers an order-7 allocation (512K). There is
-no reason for this to be kmalloc-type memory, so switch to vmalloc. This
-should help loading nouveau on low-memory and/or long-running systems.
+While working on the rewrite to the light-weight syscall and futex code, I
+experimented with using a hash index based on the user physical address of
+atomic variable. This exposed two problems with the lpa and lpa_user defines.
 
-Reported-by: Nathan E. Egge <unlord@xiph.org>
-Signed-off-by: Ilia Mirkin <imirkin@alum.mit.edu>
-Cc: stable@vger.kernel.org
-Signed-off-by: Ben Skeggs <bskeggs@redhat.com>
-Reviewed-by: Karol Herbst <kherbst@redhat.com>
-Signed-off-by: Karol Herbst <kherbst@redhat.com>
-Link: https://gitlab.freedesktop.org/drm/nouveau/-/merge_requests/10
+Because of the copy instruction, the pa argument needs to be an early clobber
+argument. This prevents gcc from allocating the va and pa arguments to the same
+register.
+
+Secondly, the lpa instruction can cause a page fault so we need to catch
+exceptions.
+
+Signed-off-by: John David Anglin <dave.anglin@bell.net>
+Fixes: 116d753308cf ("parisc: Use lpa instruction to load physical addresses in driver code")
+Signed-off-by: Helge Deller <deller@gmx.de>
+Cc: stable@vger.kernel.org # v5.2+
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/nouveau/dispnv04/disp.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/parisc/include/asm/special_insns.h |   44 +++++++++++++++++---------------
+ 1 file changed, 24 insertions(+), 20 deletions(-)
 
---- a/drivers/gpu/drm/nouveau/dispnv04/disp.c
-+++ b/drivers/gpu/drm/nouveau/dispnv04/disp.c
-@@ -205,7 +205,7 @@ nv04_display_destroy(struct drm_device *
- 	nvif_notify_dtor(&disp->flip);
+--- a/arch/parisc/include/asm/special_insns.h
++++ b/arch/parisc/include/asm/special_insns.h
+@@ -2,28 +2,32 @@
+ #ifndef __PARISC_SPECIAL_INSNS_H
+ #define __PARISC_SPECIAL_INSNS_H
  
- 	nouveau_display(dev)->priv = NULL;
--	kfree(disp);
-+	vfree(disp);
+-#define lpa(va)	({			\
+-	unsigned long pa;		\
+-	__asm__ __volatile__(		\
+-		"copy %%r0,%0\n\t"	\
+-		"lpa %%r0(%1),%0"	\
+-		: "=r" (pa)		\
+-		: "r" (va)		\
+-		: "memory"		\
+-	);				\
+-	pa;				\
++#define lpa(va)	({					\
++	unsigned long pa;				\
++	__asm__ __volatile__(				\
++		"copy %%r0,%0\n"			\
++		"8:\tlpa %%r0(%1),%0\n"			\
++		"9:\n"					\
++		ASM_EXCEPTIONTABLE_ENTRY(8b, 9b)	\
++		: "=&r" (pa)				\
++		: "r" (va)				\
++		: "memory"				\
++	);						\
++	pa;						\
+ })
  
- 	nvif_object_unmap(&drm->client.device.object);
- }
-@@ -223,7 +223,7 @@ nv04_display_create(struct drm_device *d
- 	struct nv04_display *disp;
- 	int i, ret;
+-#define lpa_user(va)	({		\
+-	unsigned long pa;		\
+-	__asm__ __volatile__(		\
+-		"copy %%r0,%0\n\t"	\
+-		"lpa %%r0(%%sr3,%1),%0"	\
+-		: "=r" (pa)		\
+-		: "r" (va)		\
+-		: "memory"		\
+-	);				\
+-	pa;				\
++#define lpa_user(va)	({				\
++	unsigned long pa;				\
++	__asm__ __volatile__(				\
++		"copy %%r0,%0\n"			\
++		"8:\tlpa %%r0(%%sr3,%1),%0\n"		\
++		"9:\n"					\
++		ASM_EXCEPTIONTABLE_ENTRY(8b, 9b)	\
++		: "=&r" (pa)				\
++		: "r" (va)				\
++		: "memory"				\
++	);						\
++	pa;						\
+ })
  
--	disp = kzalloc(sizeof(*disp), GFP_KERNEL);
-+	disp = vzalloc(sizeof(*disp));
- 	if (!disp)
- 		return -ENOMEM;
- 
+ #define mfctl(reg)	({		\
 
 

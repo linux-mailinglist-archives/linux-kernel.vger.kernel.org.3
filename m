@@ -2,99 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B1A499F4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:18:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF8349A00B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1588589AbiAXW40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:56:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58588 "EHLO
+        id S1843075AbiAXXDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:03:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457425AbiAXVzF (ORCPT
+        with ESMTP id S1576941AbiAXV5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:55:05 -0500
+        Mon, 24 Jan 2022 16:57:02 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEBBC07E297;
-        Mon, 24 Jan 2022 12:36:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677E7C038AE1;
+        Mon, 24 Jan 2022 12:38:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78A2A614FF;
-        Mon, 24 Jan 2022 20:36:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15638C340E7;
-        Mon, 24 Jan 2022 20:36:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48FAA61540;
+        Mon, 24 Jan 2022 20:38:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7052C340EC;
+        Mon, 24 Jan 2022 20:38:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643056569;
-        bh=N6HkrGlOPhp/lfQrBU6OuWeAmsz4cFxje4P56uyHS08=;
+        s=k20201202; t=1643056700;
+        bh=l7cvZgIsIwqv4LAC60bKrfGQYbIF6mK9Jif6GEmnsdk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tMvS0u9vqPHiJmamtWo2hxIfeAM+s7Ecv0ZmZJ0nQZ3D9W1YwYkePQzqZdW43jJC/
-         pfn1HewwRr0fGJ+xwd5Szt17yDi6vy2vdgPuuIuDHKlaCZuIULmPqLbZn9cVnX2nzn
-         AtH4RV7t+kJEaz7frVA2Aebsq/f/78dU+4jAly/NqVY6WvAUtuMyruYuYh2yF/EwF4
-         nhXr1MwoYKa6iexDzDGY+fGXeEWHH1cVD03wqebpbpxEwrgzZAcxu4mUZBDTrdMb4K
-         albBIx6R0f/tPjsk7yittG9m7wqN75cGDYd3L2DxSO/JotyKF7DmJsKKXj/81iMtvq
-         fD0RpJx+KWiuQ==
-Date:   Mon, 24 Jan 2022 14:42:53 -0600
+        b=W1X8vk3LKgVfUy7Kw+UryhTphoi9IbtbvcpEFh+TsjwcQM5gsT/1cRF6QT1mvpDi5
+         +UFp9wwyd5No619fazpvWgRoNWwhxIhNU7kjoCdbhN9Iewa7vGOPmIQp/DdNYJMejk
+         /ofSQmlsnouHl/1ce6SimQ/07ngoCIriRroMgsvN9I245Gl9l9gpqfDpgr3SAVivw0
+         RWi9j96uvlmEpZr9KwqA76aJLLfhBOT9VqDMuFZP8++jeEEvurhEzku1pCXtNKx03S
+         UEFYN5lHXLCg/yQmemvyJnwTVbnAvWcp5+V6w2uVbBLH0ETDrdSBYOX3QwYwkWd8cE
+         uleuvYJi+lodQ==
+Date:   Mon, 24 Jan 2022 14:45:04 -0600
 From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Johan Hovold <johan@kernel.org>,
-        Alex Elder <elder@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] staging: greybus: i2c: Use struct_size() helper in
- gb_i2c_operation_create()
-Message-ID: <20220124204253.GA11735@embeddedor>
-References: <20220121222250.GA73021@embeddedor>
- <202201241213.82E7D9F598@keescook>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, Michal Marek <michal.lkml@markovi.net>,
+        carnil@debian.org, Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH] Revert "Makefile: Do not quote value for
+ CONFIG_CC_IMPLICIT_FALLTHROUGH"
+Message-ID: <20220124204504.GB11735@embeddedor>
+References: <20220120053100.408816-1-masahiroy@kernel.org>
+ <CAKwvOd=52G2J2nXRbefjJ57B_ySZaZ6SD8UwwHziZMPoR6ABHQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202201241213.82E7D9F598@keescook>
+In-Reply-To: <CAKwvOd=52G2J2nXRbefjJ57B_ySZaZ6SD8UwwHziZMPoR6ABHQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 12:19:03PM -0800, Kees Cook wrote:
-> On Fri, Jan 21, 2022 at 04:22:50PM -0600, Gustavo A. R. Silva wrote:
-> > Make use of the struct_size() helper instead of an open-coded version,
-> > in order to avoid any potential type mistakes or integer overflows that,
-> > in the worst scenario, could lead to heap overflows.
-> > 
-> > Also, address the following sparse warnings:
-> > drivers/staging/greybus/i2c.c:111:24: warning: using sizeof on a flexible structure
-> > 
-> > Link: https://github.com/KSPP/linux/issues/174
-> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> > ---
-> >  drivers/staging/greybus/i2c.c | 4 +---
-> >  1 file changed, 1 insertion(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/staging/greybus/i2c.c b/drivers/staging/greybus/i2c.c
-> > index de2f6516da09..9dfc6791c20e 100644
-> > --- a/drivers/staging/greybus/i2c.c
-> > +++ b/drivers/staging/greybus/i2c.c
-> > @@ -108,9 +108,7 @@ gb_i2c_operation_create(struct gb_connection *connection,
-> >  		else
-> >  			data_out_size += (u32)msg->len;
-> >  
-> > -	request_size = sizeof(*request);
-> > -	request_size += msg_count * sizeof(*op);
-> > -	request_size += data_out_size;
-> > +	request_size = struct_size(request, ops, msg_count) + data_out_size;
+On Mon, Jan 24, 2022 at 11:55:43AM -0800, Nick Desaulniers wrote:
+> + Salvatore, Kees, Gustavo, Nathan
 > 
-> This could still overflow if struct_size() returns SIZE_MAX. Perhaps:
-
-uggh... I got too excited with all the new cases reported. 
+> On Wed, Jan 19, 2022 at 9:31 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > This reverts commit cd8c917a56f20f48748dd43d9ae3caff51d5b987.
+> >
+> > Commit 129ab0d2d9f3 ("kbuild: do not quote string values in
+> > include/config/auto.conf") provided the final solution.
+> >
+> > Now reverting the temporary workaround.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > 
-> 	if (check_add_overflow(struct_size(request, ops, msg_count),
-> 			       data_out_size, &request_size))
-> 		request_size = SIZE_MAX;
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Yep; I'll respin and include this change, thanks!
-> 
-> I should brush off the saturating arithmetic helpers series:
-> https://lore.kernel.org/all/20210920180853.1825195-1-keescook@chromium.org/
+Great!
 
-Yeah; those helpers are very much needed in many places we need to audit...
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
+Thanks
 --
 Gustavo
+
+> 
+> > ---
+> >
+> >  Makefile | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/Makefile b/Makefile
+> > index 3f07f0f04475..c94559a97dca 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -778,7 +778,7 @@ stackp-flags-$(CONFIG_STACKPROTECTOR_STRONG)      := -fstack-protector-strong
+> >  KBUILD_CFLAGS += $(stackp-flags-y)
+> >
+> >  KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
+> > -KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH:"%"=%)
+> > +KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+> >
+> >  ifdef CONFIG_CC_IS_CLANG
+> >  KBUILD_CPPFLAGS += -Qunused-arguments
+> > --
+> > 2.32.0
+> >
+> 
+> 
+> -- 
+> Thanks,
+> ~Nick Desaulniers

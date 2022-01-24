@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4A949A180
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C27499E08
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:06:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2360569AbiAXXhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:37:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
+        id S1587341AbiAXW2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:28:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382645AbiAXW4E (ORCPT
+        with ESMTP id S1454648AbiAXVdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:56:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21B3C055AA4;
-        Mon, 24 Jan 2022 13:10:55 -0800 (PST)
+        Mon, 24 Jan 2022 16:33:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A855C075971;
+        Mon, 24 Jan 2022 12:21:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35C5F6141C;
-        Mon, 24 Jan 2022 21:10:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 140B8C340E5;
-        Mon, 24 Jan 2022 21:10:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37246B81253;
+        Mon, 24 Jan 2022 20:21:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53A12C340E5;
+        Mon, 24 Jan 2022 20:21:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058654;
-        bh=LMcJzmhZ16w/aeOwg1sAK9yzJhMtOiwmj70gGTRHMjY=;
+        s=korg; t=1643055683;
+        bh=1Xu0fY9+VgGKTdVcFCdBa37F4Om7SvBXrvrP+wodbko=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XB44q84o9gU3n3jXu1cyh7205M5nbcsfMxhVkilSFqp1sRjK33oUCwAxuHsmHwYbG
-         /g4A7Zew7PyJTT8awptb2wLEf6Oz9deCQ32/uwaVy2+9A3yF5ynd+TE6PHNo+l+Zon
-         7q2+F8t5tuX5AECsFXrFTjd7S5ePxKrdhq+PerwY=
+        b=D6A6IMiENEjyxqDeztiogxhFEVBZ2rp7HzIkkG1khmo8fC2CsCiwGKD0QZQzzaSct
+         RHcSfLJj1YbUtnhGIYkcYWGE8jJPGkI2Wx6Ad6N/W0agvdPHNrLw/VnOp7gqJibDsP
+         UDvdFjh7Ko6p9dEDXANEUP/df0Q00FJjSx15ZE8I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhang Zixun <zhang133010@icloud.com>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0359/1039] x86/mce/inject: Avoid out-of-bounds write when setting flags
-Date:   Mon, 24 Jan 2022 19:35:48 +0100
-Message-Id: <20220124184137.348537290@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 232/846] crypto: stm32/cryp - fix xts and race condition in crypto_engine requests
+Date:   Mon, 24 Jan 2022 19:35:49 +0100
+Message-Id: <20220124184108.938782772@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,53 +50,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Zixun <zhang133010@icloud.com>
+From: Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>
 
-[ Upstream commit de768416b203ac84e02a757b782a32efb388476f ]
+[ Upstream commit d703c7a994ee34b7fa89baf21631fca0aa9f17fc ]
 
-A contrived zero-length write, for example, by using write(2):
+Don't erase key:
+If key is erased before the crypto_finalize_.*_request() call, some
+pending process will run with a key={ 0 }.
+Moreover if the key is reset at end of request, it breaks xts chaining
+mode, as for last xts block (in case input len is not a multiple of
+block) a new AES request is started without calling again set_key().
 
-  ...
-  ret = write(fd, str, 0);
-  ...
+Fixes: 9e054ec21ef8 ("crypto: stm32 - Support for STM32 CRYP crypto module")
 
-to the "flags" file causes:
-
-  BUG: KASAN: stack-out-of-bounds in flags_write
-  Write of size 1 at addr ffff888019be7ddf by task writefile/3787
-
-  CPU: 4 PID: 3787 Comm: writefile Not tainted 5.16.0-rc7+ #12
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
-
-due to accessing buf one char before its start.
-
-Prevent such out-of-bounds access.
-
-  [ bp: Productize into a proper patch. Link below is the next best
-    thing because the original mail didn't get archived on lore. ]
-
-Fixes: 0451d14d0561 ("EDAC, mce_amd_inj: Modify flags attribute to use string arguments")
-Signed-off-by: Zhang Zixun <zhang133010@icloud.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/linux-edac/YcnePfF1OOqoQwrX@zn.tnic/
+Signed-off-by: Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/cpu/mce/inject.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/crypto/stm32/stm32-cryp.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-index 0bfc14041bbb4..b63b548497c14 100644
---- a/arch/x86/kernel/cpu/mce/inject.c
-+++ b/arch/x86/kernel/cpu/mce/inject.c
-@@ -350,7 +350,7 @@ static ssize_t flags_write(struct file *filp, const char __user *ubuf,
- 	char buf[MAX_FLAG_OPT_SIZE], *__buf;
- 	int err;
+diff --git a/drivers/crypto/stm32/stm32-cryp.c b/drivers/crypto/stm32/stm32-cryp.c
+index d13b262b36252..e2bcc4f98b0ae 100644
+--- a/drivers/crypto/stm32/stm32-cryp.c
++++ b/drivers/crypto/stm32/stm32-cryp.c
+@@ -674,8 +674,6 @@ static void stm32_cryp_finish_req(struct stm32_cryp *cryp, int err)
+ 	else
+ 		crypto_finalize_skcipher_request(cryp->engine, cryp->req,
+ 						   err);
+-
+-	memset(cryp->ctx->key, 0, cryp->ctx->keylen);
+ }
  
--	if (cnt > MAX_FLAG_OPT_SIZE)
-+	if (!cnt || cnt > MAX_FLAG_OPT_SIZE)
- 		return -EINVAL;
- 
- 	if (copy_from_user(&buf, ubuf, cnt))
+ static int stm32_cryp_cpu_start(struct stm32_cryp *cryp)
 -- 
 2.34.1
 

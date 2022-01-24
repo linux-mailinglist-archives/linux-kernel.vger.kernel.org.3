@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0797A499E8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F5F49A0A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1835550AbiAXWgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:36:49 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58600 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1456858AbiAXVkR (ORCPT
+        id S1846572AbiAXXQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:16:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1583311AbiAXWRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:40:17 -0500
+        Mon, 24 Jan 2022 17:17:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C08C0613BA;
+        Mon, 24 Jan 2022 12:48:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96E346151D;
-        Mon, 24 Jan 2022 21:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DD59C340E4;
-        Mon, 24 Jan 2022 21:40:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0841B8122A;
+        Mon, 24 Jan 2022 20:48:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7091C340E5;
+        Mon, 24 Jan 2022 20:48:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060416;
-        bh=bp019RBoTTCh7yRBmXJPnGFc3pky8+XP4OrNPBx1/AM=;
+        s=korg; t=1643057337;
+        bh=K9f0ucON4kLdNdqnPBrGZBG4X1mCAoiYAWsZ0Ti78yY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oIOWU7J/EPdgH3JIiAAO0hDK8h0C06VTAVvQnXw7Y5mu7g/EBBCMl+OJEIR4/w6wJ
-         /qnkrkBjLiw6B8DI8916L+hYleQnMr+kto03++fSilQ5Q4ua4BR9Kn/w9f3EWyWVzV
-         BEXEg9N8ImAapw4PS6xptQ7OiIXmtMbH1IYAIC04=
+        b=fGzmYoZiKxI6U724LEWCs0EjFhH7WUaCFOngI4Kqu6tf1sKqcn/d0sAKPdbR0Mbph
+         /cajU1GjSexmxFfHF8mwEEH0+C+RUxZpeKfp5VKVzuPHqmClWKN5eUGfHQXAnkZl9R
+         aUDD1nT/SI2w5rARIp286fS7qUpCBRBGpGvLVurI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Suresh Udipi <sudipi@jp.adit-jv.com>,
-        Michael Rodin <mrodin@de.adit-jv.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 5.16 0907/1039] media: rcar-csi2: Optimize the selection PHTW register
+        stable@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 5.15 779/846] f2fs: fix to avoid panic in is_alive() if metadata is inconsistent
 Date:   Mon, 24 Jan 2022 19:44:56 +0100
-Message-Id: <20220124184155.785926208@linuxfoundation.org>
+Message-Id: <20220124184127.823779589@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,50 +48,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Suresh Udipi <sudipi@jp.adit-jv.com>
+From: Chao Yu <chao@kernel.org>
 
-commit 549cc89cd09a85aaa16dc07ef3db811d5cf9bcb1 upstream.
+commit f6db43076d190d9bf75559dec28e18b9d12e4ce5 upstream.
 
-PHTW register is selected based on default bit rate from Table[1].
-for the bit rates less than or equal to 250. Currently first
-value of default bit rate which is greater than or equal to
-the caculated mbps is selected. This selection can be further
-improved by selecting the default bit rate which is nearest to
-the calculated value.
+As report by Wenqing Liu in bugzilla:
 
-[1] specs r19uh0105ej0200-r-car-3rd-generation.pdf [Table 25.12]
+https://bugzilla.kernel.org/show_bug.cgi?id=215231
 
-Fixes: 769afd212b16 ("media: rcar-csi2: add Renesas R-Car MIPI CSI-2 receiver driver")
-Signed-off-by: Suresh Udipi <sudipi@jp.adit-jv.com>
-Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+If we enable CONFIG_F2FS_CHECK_FS config, and with fuzzed image attached
+in above link, we will encounter panic when executing below script:
+
+1. mkdir mnt
+2. mount -t f2fs tmp1.img mnt
+3. touch tmp
+
+F2FS-fs (loop11): mismatched blkaddr 5765 (source_blkaddr 1) in seg 3
+kernel BUG at fs/f2fs/gc.c:1042!
+ do_garbage_collect+0x90f/0xa80 [f2fs]
+ f2fs_gc+0x294/0x12a0 [f2fs]
+ f2fs_balance_fs+0x2c5/0x7d0 [f2fs]
+ f2fs_create+0x239/0xd90 [f2fs]
+ lookup_open+0x45e/0xa90
+ open_last_lookups+0x203/0x670
+ path_openat+0xae/0x490
+ do_filp_open+0xbc/0x160
+ do_sys_openat2+0x2f1/0x500
+ do_sys_open+0x5e/0xa0
+ __x64_sys_openat+0x28/0x40
+
+Previously, f2fs tries to catch data inconcistency exception in between
+SSA and SIT table during GC, however once the exception is caught, it will
+call f2fs_bug_on to hang kernel, it's not needed, instead, let's set
+SBI_NEED_FSCK flag and skip migrating current block.
+
+Fixes: bbf9f7d90f21 ("f2fs: Fix indefinite loop in f2fs_gc()")
+Signed-off-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/platform/rcar-vin/rcar-csi2.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ fs/f2fs/gc.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/media/platform/rcar-vin/rcar-csi2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
-@@ -1104,10 +1104,17 @@ static int rcsi2_phtw_write_mbps(struct
- 				 const struct rcsi2_mbps_reg *values, u16 code)
- {
- 	const struct rcsi2_mbps_reg *value;
-+	const struct rcsi2_mbps_reg *prev_value = NULL;
- 
--	for (value = values; value->mbps; value++)
-+	for (value = values; value->mbps; value++) {
- 		if (value->mbps >= mbps)
- 			break;
-+		prev_value = value;
-+	}
-+
-+	if (prev_value &&
-+	    ((mbps - prev_value->mbps) <= (value->mbps - mbps)))
-+		value = prev_value;
- 
- 	if (!value->mbps) {
- 		dev_err(priv->dev, "Unsupported PHY speed (%u Mbps)", mbps);
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1039,7 +1039,7 @@ static bool is_alive(struct f2fs_sb_info
+ 			if (!test_and_set_bit(segno, SIT_I(sbi)->invalid_segmap)) {
+ 				f2fs_err(sbi, "mismatched blkaddr %u (source_blkaddr %u) in seg %u",
+ 					 blkaddr, source_blkaddr, segno);
+-				f2fs_bug_on(sbi, 1);
++				set_sbi_flag(sbi, SBI_NEED_FSCK);
+ 			}
+ 		}
+ #endif
 
 

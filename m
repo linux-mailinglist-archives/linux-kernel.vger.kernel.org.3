@@ -2,107 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBDB7499746
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A9A499779
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:28:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448131AbiAXVMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:12:03 -0500
-Received: from smtp09.smtpout.orange.fr ([80.12.242.131]:57501 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390405AbiAXUpT (ORCPT
+        id S1448401AbiAXVMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:12:35 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:6353 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1390807AbiAXUqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:45:19 -0500
-Received: from [192.168.1.18] ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id C6DBnl19kAWDQC6DBnQiEv; Mon, 24 Jan 2022 21:45:16 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Mon, 24 Jan 2022 21:45:16 +0100
-X-ME-IP: 90.126.236.122
-Message-ID: <6a1b84da-d55e-e058-13a8-9920b05ff20d@wanadoo.fr>
-Date:   Mon, 24 Jan 2022 21:45:12 +0100
+        Mon, 24 Jan 2022 15:46:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643057186; x=1674593186;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=GRbUMXJdZdTwUnYKR/ryNDqpfjnJkqgWc+WnYEkkLro=;
+  b=evgr4pyi8HwMiTnEnnSnaaPsR3vRS9aHceyf1hh7GnzAgViff9/4j1Pg
+   thxPw7XuPrwTKBPDgYVHxJ1Vlk0Qcz6pRnOC8K2rDi93rwYDyvuGwxsp8
+   K2qZNLZwXJqSMWUsFRFz8bzHNHh9SW4ZtwkiC3fr5BtmlPCV5uk7IWHk8
+   I=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 24 Jan 2022 12:46:23 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 12:46:22 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 24 Jan 2022 12:46:20 -0800
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 24 Jan 2022 12:46:20 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
+        <quic_khsieh@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/msm/dp: always add fail-safe mode into connector mode list
+Date:   Mon, 24 Jan 2022 12:46:10 -0800
+Message-ID: <1643057170-10413-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] lib/string_helpers: Use the given gfp flag when
- allocating memory
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Andy Shevchenko <andy@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@suse.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-References: <1ec96b6e4f2e35599931d7516c6938c4a8845bf0.1642337606.git.christophe.jaillet@wanadoo.fr>
- <Ye63DkOZkBd2j+8+@smile.fi.intel.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <Ye63DkOZkBd2j+8+@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 24/01/2022 à 15:26, Andy Shevchenko a écrit :
-> On Sun, Jan 16, 2022 at 01:53:37PM +0100, Christophe JAILLET wrote:
->> kstrdup_quotable_cmdline() and kstrdup_quotable_file() are given a gfp flag
->> that is passed and used for memory allocation in kstrdup_quotable() just a
->> few lines below.
->>
->> It looks reasonable to use this gfp value for the buffer allocated and
->> freed in these functions as well.
-> 
-> Acked-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+Some of DP link compliant test expects to return fail-safe mode
+if prefer detailed timing mode can not be supported by mainlink's
+lane and rate after link training. Therefore add fail-safe mode
+into connector mode list as backup mode. This patch fixes test
+case 4.2.2.1.
 
-Hi,
-just in case, another patch has been proposed in the thread related to 
-the v1 of this patch.
-See [1].
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+---
+ drivers/gpu/drm/msm/dp/dp_panel.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-I let you see which approach is the more relevant.
-
-CJ
-
-[1]: https://lore.kernel.org/linux-kernel/YeU8PhtvvXIWtTk%2F@dhcp22.suse.cz/
-
-> 
->> Fixes: 0ee931c4e31a ("mm: treewide: remove GFP_TEMPORARY allocation flag")
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> ---
->> According to what I've found in 5.16, all callers use GFP_KERNEL, so this
->> patch should be a no-op.
->> But who knows how it will be used in the future. Better safe than sorry.
->>
->> v2: Add the change for kstrdup_quotable_file()
->> ---
->>   lib/string_helpers.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/lib/string_helpers.c b/lib/string_helpers.c
->> index 90f9f1b7afec..4433e486b725 100644
->> --- a/lib/string_helpers.c
->> +++ b/lib/string_helpers.c
->> @@ -624,7 +624,7 @@ char *kstrdup_quotable_cmdline(struct task_struct *task, gfp_t gfp)
->>   	char *buffer, *quoted;
->>   	int i, res;
->>   
->> -	buffer = kmalloc(PAGE_SIZE, GFP_KERNEL);
->> +	buffer = kmalloc(PAGE_SIZE, gfp);
->>   	if (!buffer)
->>   		return NULL;
->>   
->> @@ -660,7 +660,7 @@ char *kstrdup_quotable_file(struct file *file, gfp_t gfp)
->>   		return kstrdup("<unknown>", gfp);
->>   
->>   	/* We add 11 spaces for ' (deleted)' to be appended */
->> -	temp = kmalloc(PATH_MAX + 11, GFP_KERNEL);
->> +	temp = kmalloc(PATH_MAX + 11, gfp);
->>   	if (!temp)
->>   		return kstrdup("<no_memory>", gfp);
->>   
->> -- 
->> 2.32.0
->>
-> 
+diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c b/drivers/gpu/drm/msm/dp/dp_panel.c
+index 3b02922..7743b45 100644
+--- a/drivers/gpu/drm/msm/dp/dp_panel.c
++++ b/drivers/gpu/drm/msm/dp/dp_panel.c
+@@ -221,6 +221,11 @@ int dp_panel_read_sink_caps(struct dp_panel *dp_panel,
+ 		if (drm_add_modes_noedid(connector, 640, 480))
+ 			drm_set_preferred_mode(connector, 640, 480);
+ 		mutex_unlock(&connector->dev->mode_config.mutex);
++	} else {
++		/* always add fail-safe mode as backup mode */
++		mutex_lock(&connector->dev->mode_config.mutex);
++		drm_add_modes_noedid(connector, 640, 480);
++		mutex_unlock(&connector->dev->mode_config.mutex);
+ 	}
+ 
+ 	if (panel->aux_cfg_update_done) {
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 

@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 330AB499646
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 530A0499796
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:28:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444825AbiAXVBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:01:37 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40570 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351907AbiAXUhw (ORCPT
+        id S1448788AbiAXVNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:13:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42800 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1391105AbiAXUq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:37:52 -0500
+        Mon, 24 Jan 2022 15:46:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E72EC0619C2;
+        Mon, 24 Jan 2022 11:56:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3330BB81061;
-        Mon, 24 Jan 2022 20:37:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77A7AC340E5;
-        Mon, 24 Jan 2022 20:37:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3AB33B8122F;
+        Mon, 24 Jan 2022 19:56:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92510C340E5;
+        Mon, 24 Jan 2022 19:56:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056669;
-        bh=9al30aZ+w+f56itTZnfhDZfSCut72/YNcJcpvw4L33c=;
+        s=korg; t=1643054210;
+        bh=WwyqKVvqSWpzPHuY0DjZnnFLbWkXOccjBFegE6a5n8o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q8KJmpyiWA6Zp1GiLOR1MDcvlrMi3ILb/u0No92GlemAKqhN8RJ7oZiTRz2/bzc+l
-         XWIp/8iNDQFJkt6vtsflmadm3BZJ9MSr++W5LZnKf2QQWvHhjplLE6+2uUkJwLC1wY
-         XVtqCoH8j+iEN7C+PpTO1W3hmbvyoAK1tE4UCt2Y=
+        b=SxWaDOXibv/qmdAVtyEesNJeWeMRve9vQnfLf+F3cxcSwNvOKXLCnLoG+TJL6E+Up
+         1SUGSDwWQF+2GKCF//MgeqNRtoQgfCuigzR8uoPje/Nds6C90Rw3rt/9TVhBLhyT6y
+         7D2cqq4jW2vgCMcrZF1iR/QZYzenn4QPoYLxzFzM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thierry Reding <treding@nvidia.com>,
+        stable@vger.kernel.org, John Keeping <john@metanate.com>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 561/846] arm64: tegra: Adjust length of CCPLEX cluster MMIO region
+Subject: [PATCH 5.10 313/563] usb: gadget: f_fs: Use stream_open() for endpoint files
 Date:   Mon, 24 Jan 2022 19:41:18 +0100
-Message-Id: <20220124184120.376492793@linuxfoundation.org>
+Message-Id: <20220124184035.255603480@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,33 +49,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+From: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
 
-[ Upstream commit 2b14cbd643feea5fc17c6e8bead4e71088c69acd ]
+[ Upstream commit c76ef96fc00eb398c8fc836b0eb2f82bcc619dc7 ]
 
-The Tegra186 CCPLEX cluster register region is 4 MiB is length, not 4
-MiB - 1. This was likely presumed to be the "limit" rather than length.
-Fix it up.
+Function fs endpoint file operations are synchronized via an interruptible
+mutex wait. However we see threads that do ep file operations concurrently
+are getting blocked for the mutex lock in __fdget_pos(). This is an
+uninterruptible wait and we see hung task warnings and kernel panic
+if hung_task_panic systcl is enabled if host does not send/receive
+the data for long time.
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
+The reason for threads getting blocked in __fdget_pos() is due to
+the file position protection introduced by the commit 9c225f2655e3
+("vfs: atomic f_pos accesses as per POSIX"). Since function fs
+endpoint files does not have the notion of the file position, switch
+to the stream mode. This will bypass the file position mutex and
+threads will be blocked in interruptible state for the function fs
+mutex.
+
+It should not affects user space as we are only changing the task state
+changes the task state from UNINTERRUPTIBLE to INTERRUPTIBLE while waiting
+for the USB transfers to be finished. However there is a slight change to
+the O_NONBLOCK behavior. Earlier threads that are using O_NONBLOCK are also
+getting blocked inside fdget_pos(). Now they reach to function fs and error
+code is returned. The non blocking behavior is actually honoured now.
+
+Reviewed-by: John Keeping <john@metanate.com>
+Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Link: https://lore.kernel.org/r/1636712682-1226-1-git-send-email-quic_pkondeti@quicinc.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/nvidia/tegra186.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/gadget/function/f_fs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra186.dtsi b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
-index e94f8add1a400..062e87e893316 100644
---- a/arch/arm64/boot/dts/nvidia/tegra186.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
-@@ -1079,7 +1079,7 @@
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index cbb7947f366f9..d8652321e15e9 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -614,7 +614,7 @@ static int ffs_ep0_open(struct inode *inode, struct file *file)
+ 	file->private_data = ffs;
+ 	ffs_data_opened(ffs);
  
- 	ccplex@e000000 {
- 		compatible = "nvidia,tegra186-ccplex-cluster";
--		reg = <0x0 0x0e000000 0x0 0x3fffff>;
-+		reg = <0x0 0x0e000000 0x0 0x400000>;
+-	return 0;
++	return stream_open(inode, file);
+ }
  
- 		nvidia,bpmp = <&bpmp>;
- 	};
+ static int ffs_ep0_release(struct inode *inode, struct file *file)
+@@ -1152,7 +1152,7 @@ ffs_epfile_open(struct inode *inode, struct file *file)
+ 	file->private_data = epfile;
+ 	ffs_data_opened(epfile->ffs);
+ 
+-	return 0;
++	return stream_open(inode, file);
+ }
+ 
+ static int ffs_aio_cancel(struct kiocb *kiocb)
 -- 
 2.34.1
 

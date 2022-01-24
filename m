@@ -2,41 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 627764997CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:33:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27CB04997D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:33:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352669AbiAXVQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:16:23 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43884 "EHLO
+        id S1391233AbiAXVQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:16:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43910 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391988AbiAXUuL (ORCPT
+        with ESMTP id S1392005AbiAXUuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:50:11 -0500
+        Mon, 24 Jan 2022 15:50:14 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB05860C2A;
-        Mon, 24 Jan 2022 20:50:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAB58C340E5;
-        Mon, 24 Jan 2022 20:50:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6DBC60C41;
+        Mon, 24 Jan 2022 20:50:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AE71C340E5;
+        Mon, 24 Jan 2022 20:50:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057410;
-        bh=rTzjsPOM+kVOAAhf7w4z3TQ9XVsck917kVkeBLIXDsM=;
+        s=korg; t=1643057413;
+        bh=Gl0jy4PB5R5wa6o52whfL1Em2AKbbEFdXHfbPfhrtME=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hRof/DEkF/7ryjJKdcOfyk8T6sz09DFgp5FAiAwJI44xEoIQF3bChx5itjwTrA+kb
-         SMFd1cp05+Cz0gA2HbJVdq+SMfo9Bv3yYrmhDnv/kWnk3dmBDUIeCkg1UgJ5fznG19
-         AxwSlsmli4HbEODkUMzJhQrqBmE40qLJO25b/PQ4=
+        b=yN+G4nPELe+jkSEmjxDGwGscQ4xVy4eyEZD8AStvoOFCPjYPCOhEM2bS+UsMJUsrP
+         +ygghXa2BuN1LDzqul0emArPxtSl4tQoRg4VrVi+rfYkyRnjGPyJPJkm1+j9CRF7QG
+         WEv6SDryoog6usWxqZjRCF+SSl6FxVXuPOaKJ/bA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eli Cohen <elic@nvidia.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Parav Pandit <parav@nvidia.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>
-Subject: [PATCH 5.15 804/846] vdpa/mlx5: Fix wrong configuration of virtio_version_1_0
-Date:   Mon, 24 Jan 2022 19:45:21 +0100
-Message-Id: <20220124184128.673051881@linuxfoundation.org>
+        stable@vger.kernel.org, "Xuan Zhuo" <xuanzhuo@linux.alibaba.com>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Subject: [PATCH 5.15 805/846] virtio_ring: mark ring unused on error
+Date:   Mon, 24 Jan 2022 19:45:22 +0100
+Message-Id: <20220124184128.705167203@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -48,35 +46,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eli Cohen <elic@nvidia.com>
+From: Michael S. Tsirkin <mst@redhat.com>
 
-commit 97143b70aa847f2b0a1f959dde126b76ff7b5376 upstream.
+commit 1861ba626ae9b98136f3e504208cdef6b29cd3ec upstream.
 
-Remove overriding of virtio_version_1_0 which forced the virtqueue
-object to version 1.
+A recently added error path does not mark ring unused when exiting on
+OOM, which will lead to BUG on the next entry in debug builds.
 
-Fixes: 1a86b377aa21 ("vdpa/mlx5: Add VDPA driver for supported mlx5 devices")
-Signed-off-by: Eli Cohen <elic@nvidia.com>
-Link: https://lore.kernel.org/r/20211230142024.142979-1-elic@nvidia.com
+TODO: refactor code so we have START_USE and END_USE in the same function.
+
+Fixes: fc6d70f40b3d ("virtio_ring: check desc == NULL when using indirect with packed")
+Cc: "Xuan Zhuo" <xuanzhuo@linux.alibaba.com>
+Cc: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-Reviewed-by: Parav Pandit <parav@nvidia.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
-Reviewed-by: Si-Wei Liu <si-wei.liu@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/vdpa/mlx5/net/mlx5_vnet.c |    2 --
- 1 file changed, 2 deletions(-)
+ drivers/virtio/virtio_ring.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-+++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-@@ -873,8 +873,6 @@ static int create_virtqueue(struct mlx5_
- 	MLX5_SET(virtio_q, vq_ctx, umem_3_id, mvq->umem3.id);
- 	MLX5_SET(virtio_q, vq_ctx, umem_3_size, mvq->umem3.size);
- 	MLX5_SET(virtio_q, vq_ctx, pd, ndev->mvdev.res.pdn);
--	if (MLX5_CAP_DEV_VDPA_EMULATION(ndev->mvdev.mdev, eth_frame_offload_type))
--		MLX5_SET(virtio_q, vq_ctx, virtio_version_1_0, 1);
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -1197,8 +1197,10 @@ static inline int virtqueue_add_packed(s
+ 	if (virtqueue_use_indirect(_vq, total_sg)) {
+ 		err = virtqueue_add_indirect_packed(vq, sgs, total_sg, out_sgs,
+ 						    in_sgs, data, gfp);
+-		if (err != -ENOMEM)
++		if (err != -ENOMEM) {
++			END_USE(vq);
+ 			return err;
++		}
  
- 	err = mlx5_cmd_exec(ndev->mvdev.mdev, in, inlen, out, sizeof(out));
- 	if (err)
+ 		/* fall back on direct */
+ 	}
 
 

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CFB049A473
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:09:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5B849A559
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:11:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2374734AbiAYASK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:18:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53774 "EHLO
+        id S2373008AbiAYAMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:12:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1851039AbiAXXbp (ORCPT
+        with ESMTP id S1849657AbiAXX0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:31:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DADC07595E;
-        Mon, 24 Jan 2022 13:35:11 -0800 (PST)
+        Mon, 24 Jan 2022 18:26:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED03C061245;
+        Mon, 24 Jan 2022 11:10:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BFD10B80CCF;
-        Mon, 24 Jan 2022 21:35:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFCEEC340E4;
-        Mon, 24 Jan 2022 21:35:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFD6860918;
+        Mon, 24 Jan 2022 19:10:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7139C340E5;
+        Mon, 24 Jan 2022 19:10:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060109;
-        bh=9YkuKF8cpwuIWjIHtOGRypGioyQeoLf8mYpkm6MpMf8=;
+        s=korg; t=1643051424;
+        bh=OcShTilfpp1LyDQG1WS6FNKo03gOhrTiA8dOuv6tF4c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o16+2XEVQQ6+NYFbZbNWWzUNP05iATsvkeYuPUr8RQEW6CjHJm8BKZkfvnXs661of
-         HVbV72gCo9m0L0cPB2OcdNjEcBmFOYb9TMt+CEMCQsDbWa4DghIavDgxEUnN9TTIbF
-         ifkHWYcZGkhyGTfhZ/U334k1v6j43TVoOW0jVGUk=
+        b=r7VfP5AjzymIIrNNbav2JCGpIt6C9HyAaCGAblOmRRbZLRQ09JPOipR1cNbVBei79
+         9cwb1KGZUYHgKxjVlnp17Y/zV+3lNTd6rDXnYnXXsltiOwHyUQ6zo7lGE1ugupJ8K2
+         YvMBbDU8oimuMFIrbbRi2mfZ6sTwiSMJY5BVNrXg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.16 0843/1039] spi: uniphier: Fix a bug that doesnt point to private data correctly
-Date:   Mon, 24 Jan 2022 19:43:52 +0100
-Message-Id: <20220124184153.627105558@linuxfoundation.org>
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Jan Stancek <jstancek@redhat.com>,
+        Borislav Petkov <bp@suse.de>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 4.14 158/186] drm/radeon: fix error handling in radeon_driver_open_kms
+Date:   Mon, 24 Jan 2022 19:43:53 +0100
+Message-Id: <20220124183942.180878929@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,46 +51,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+From: Christian König <christian.koenig@amd.com>
 
-commit 80bb73a9fbcde4ecc55e12f10c73fabbe68a24d1 upstream.
+commit 4722f463896cc0ef1a6f1c3cb2e171e949831249 upstream.
 
-In uniphier_spi_remove(), there is a wrong code to get private data from
-the platform device, so the driver can't be removed properly.
+The return value was never initialized so the cleanup code executed when
+it isn't even necessary.
 
-The driver should get spi_master from the platform device and retrieve
-the private data from it.
+Just add proper error handling.
 
-Cc: <stable@vger.kernel.org>
-Fixes: 5ba155a4d4cc ("spi: add SPI controller driver for UniPhier SoC")
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Link: https://lore.kernel.org/r/1640148492-32178-1-git-send-email-hayashi.kunihiko@socionext.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: ab50cb9df889 ("drm/radeon/radeon_kms: Fix a NULL pointer dereference in radeon_driver_open_kms()")
+Signed-off-by: Christian König <christian.koenig@amd.com>
+Tested-by: Jan Stancek <jstancek@redhat.com>
+Tested-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/spi/spi-uniphier.c |   11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/radeon/radeon_kms.c |   22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
---- a/drivers/spi/spi-uniphier.c
-+++ b/drivers/spi/spi-uniphier.c
-@@ -767,12 +767,13 @@ out_master_put:
+--- a/drivers/gpu/drm/radeon/radeon_kms.c
++++ b/drivers/gpu/drm/radeon/radeon_kms.c
+@@ -673,18 +673,18 @@ int radeon_driver_open_kms(struct drm_de
+ 		fpriv = kzalloc(sizeof(*fpriv), GFP_KERNEL);
+ 		if (unlikely(!fpriv)) {
+ 			r = -ENOMEM;
+-			goto out_suspend;
++			goto err_suspend;
+ 		}
  
- static int uniphier_spi_remove(struct platform_device *pdev)
- {
--	struct uniphier_spi_priv *priv = platform_get_drvdata(pdev);
-+	struct spi_master *master = platform_get_drvdata(pdev);
-+	struct uniphier_spi_priv *priv = spi_master_get_devdata(master);
+ 		if (rdev->accel_working) {
+ 			vm = &fpriv->vm;
+ 			r = radeon_vm_init(rdev, vm);
+ 			if (r)
+-				goto out_fpriv;
++				goto err_fpriv;
  
--	if (priv->master->dma_tx)
--		dma_release_channel(priv->master->dma_tx);
--	if (priv->master->dma_rx)
--		dma_release_channel(priv->master->dma_rx);
-+	if (master->dma_tx)
-+		dma_release_channel(master->dma_tx);
-+	if (master->dma_rx)
-+		dma_release_channel(master->dma_rx);
+ 			r = radeon_bo_reserve(rdev->ring_tmp_bo.bo, false);
+ 			if (r)
+-				goto out_vm_fini;
++				goto err_vm_fini;
  
- 	clk_disable_unprepare(priv->clk);
+ 			/* map the ib pool buffer read only into
+ 			 * virtual address space */
+@@ -692,7 +692,7 @@ int radeon_driver_open_kms(struct drm_de
+ 							rdev->ring_tmp_bo.bo);
+ 			if (!vm->ib_bo_va) {
+ 				r = -ENOMEM;
+-				goto out_vm_fini;
++				goto err_vm_fini;
+ 			}
  
+ 			r = radeon_vm_bo_set_addr(rdev, vm->ib_bo_va,
+@@ -700,19 +700,21 @@ int radeon_driver_open_kms(struct drm_de
+ 						  RADEON_VM_PAGE_READABLE |
+ 						  RADEON_VM_PAGE_SNOOPED);
+ 			if (r)
+-				goto out_vm_fini;
++				goto err_vm_fini;
+ 		}
+ 		file_priv->driver_priv = fpriv;
+ 	}
+ 
+-	if (!r)
+-		goto out_suspend;
++	pm_runtime_mark_last_busy(dev->dev);
++	pm_runtime_put_autosuspend(dev->dev);
++	return 0;
+ 
+-out_vm_fini:
++err_vm_fini:
+ 	radeon_vm_fini(rdev, vm);
+-out_fpriv:
++err_fpriv:
+ 	kfree(fpriv);
+-out_suspend:
++
++err_suspend:
+ 	pm_runtime_mark_last_busy(dev->dev);
+ 	pm_runtime_put_autosuspend(dev->dev);
+ 	return r;
 
 

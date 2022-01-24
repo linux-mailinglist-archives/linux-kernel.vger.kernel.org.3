@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F154991DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:18:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6510498DD0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379871AbiAXUPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:15:13 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42064 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358435AbiAXTzM (ORCPT
+        id S1354318AbiAXTg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:36:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52784 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352698AbiAXTa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:55:12 -0500
+        Mon, 24 Jan 2022 14:30:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20EE6C028C15;
+        Mon, 24 Jan 2022 11:14:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1DE37B81247;
-        Mon, 24 Jan 2022 19:55:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CAEDC340E5;
-        Mon, 24 Jan 2022 19:55:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B2CB36124E;
+        Mon, 24 Jan 2022 19:13:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E809C340E5;
+        Mon, 24 Jan 2022 19:13:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054108;
-        bh=hAIdkZCY+ok1pRLnYWR59O3Yuc/U9rnIQHy6AiirbO0=;
+        s=korg; t=1643051639;
+        bh=6tmTeqTNP3KBX1hcRrZiqO7BaY+kpbpNKJCvnuGuh6c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WgeS+0lOjHJ7ZDCfavc7duewwlnkbT2xUyWwKJDvZPEatUayu4UezJm+hivaHHjo5
-         Tz+r6FZ72EwgDxoDVUHOhukNMK6lx+/XfK5iczRVXpf13mX1jw0O2xaxn5s8kDjhPU
-         1m4fJCtDRuc5zWaBjQOpl2i/9TOv7hoVR2hPWHZ4=
+        b=GrNhsCSFPrj8msPQ3tFhOQs89F3Es9XQu4kPkU9Dz+SnyZpLOxvDynXDOQ4Adq3ng
+         klH0QriPDdY9Qz8vKbbgYCCURKN3a3QB8bI3a3sm5EPq62zbcCAHVXS22PfuUc3DwP
+         GrIRB+q52kyfS2wktdJUq71RCUIgwZ5AeqCQLzww=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 280/563] iommu/iova: Fix race between FQ timeout and teardown
+        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 4.19 007/239] can: gs_usb: fix use of uninitialized variable, detach device on reception of invalid USB data
 Date:   Mon, 24 Jan 2022 19:40:45 +0100
-Message-Id: <20220124184034.126466350@linuxfoundation.org>
+Message-Id: <20220124183943.347749020@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,53 +47,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-[ Upstream commit d7061627d701c90e1cac1e1e60c45292f64f3470 ]
+commit 4a8737ff068724f509d583fef404d349adba80d6 upstream.
 
-It turns out to be possible for hotplugging out a device to reach the
-stage of tearing down the device's group and default domain before the
-domain's flush queue has drained naturally. At this point, it is then
-possible for the timeout to expire just before the del_timer() call
-in free_iova_flush_queue(), such that we then proceed to free the FQ
-resources while fq_flush_timeout() is still accessing them on another
-CPU. Crashes due to this have been observed in the wild while removing
-NVMe devices.
+The received data contains the channel the received data is associated
+with. If the channel number is bigger than the actual number of
+channels assume broken or malicious USB device and shut it down.
 
-Close the race window by using del_timer_sync() to safely wait for any
-active timeout handler to finish before we start to free things. We
-already avoid any locking in free_iova_flush_queue() since the FQ is
-supposed to be inactive anyway, so the potential deadlock scenario does
-not apply.
+This fixes the error found by clang:
 
-Fixes: 9a005a800ae8 ("iommu/iova: Add flush timer")
-Reviewed-by: John Garry <john.garry@huawei.com>
-Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-[ rm: rewrite commit message ]
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-Link: https://lore.kernel.org/r/0a365e5b07f14b7344677ad6a9a734966a8422ce.1639753638.git.robin.murphy@arm.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+| drivers/net/can/usb/gs_usb.c:386:6: error: variable 'dev' is used
+|                                     uninitialized whenever 'if' condition is true
+|         if (hf->channel >= GS_MAX_INTF)
+|             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+| drivers/net/can/usb/gs_usb.c:474:10: note: uninitialized use occurs here
+|                           hf, dev->gs_hf_size, gs_usb_receive_bulk_callback,
+|                               ^~~
+
+Link: https://lore.kernel.org/all/20211210091158.408326-1-mkl@pengutronix.de
+Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
+Cc: stable@vger.kernel.org
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iommu/iova.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/net/can/usb/gs_usb.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-index 30d969a4c5fde..1164d1a42cbc5 100644
---- a/drivers/iommu/iova.c
-+++ b/drivers/iommu/iova.c
-@@ -64,8 +64,7 @@ static void free_iova_flush_queue(struct iova_domain *iovad)
- 	if (!has_iova_flush_queue(iovad))
- 		return;
+--- a/drivers/net/can/usb/gs_usb.c
++++ b/drivers/net/can/usb/gs_usb.c
+@@ -328,7 +328,7 @@ static void gs_usb_receive_bulk_callback
  
--	if (timer_pending(&iovad->fq_timer))
--		del_timer(&iovad->fq_timer);
-+	del_timer_sync(&iovad->fq_timer);
+ 	/* device reports out of range channel id */
+ 	if (hf->channel >= GS_MAX_INTF)
+-		goto resubmit_urb;
++		goto device_detach;
  
- 	fq_destroy_all_entries(iovad);
+ 	dev = usbcan->canch[hf->channel];
  
--- 
-2.34.1
-
+@@ -413,6 +413,7 @@ static void gs_usb_receive_bulk_callback
+ 
+ 	/* USB failure take down all interfaces */
+ 	if (rc == -ENODEV) {
++ device_detach:
+ 		for (rc = 0; rc < GS_MAX_INTF; rc++) {
+ 			if (usbcan->canch[rc])
+ 				netif_device_detach(usbcan->canch[rc]->netdev);
 
 

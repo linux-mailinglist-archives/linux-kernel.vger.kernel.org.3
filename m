@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC21749A5C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4500249A6B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3410581AbiAYA3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:29:34 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47772 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1455590AbiAXVfm (ORCPT
+        id S3420549AbiAYCYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:24:46 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:40126 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347621AbiAXTKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:35:42 -0500
+        Mon, 24 Jan 2022 14:10:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0F85FB81057;
-        Mon, 24 Jan 2022 21:35:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28AA6C340E4;
-        Mon, 24 Jan 2022 21:35:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A5FD60918;
+        Mon, 24 Jan 2022 19:10:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C045C340E5;
+        Mon, 24 Jan 2022 19:10:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060139;
-        bh=28iv+IlR6fG6foqJ96vlzt15jft0kK5kKyy556Qfa+s=;
+        s=korg; t=1643051451;
+        bh=sGOvretFgauqF2/LGbvj1iZr7JxVo+3umuYUrti16Ho=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z6CmdiCUHFs85Zu9DIQ6UumaurjpZL4aSIYS3dZNusQhE+6Yiwp66S0XmrMNby3b6
-         pnF4EwBC8TjsbMI/Ne47mZUDRqne0Llsq2SXpj0dcwHMcBrnZfrgdld4Tag6dkGFxe
-         KeeCQb1uYE10zR2Rl02dsFZrji5YE/seYYxPOh0Y=
+        b=TYqTILZ42sV7UVoXUiEbiM/hb10pYKDSFc99PSvnFCtOfqqtE+/7VLoTVZh2rQ5Sx
+         4/tx89p4eO3+6UaiHX91wLYPtnEmNen9+HjOsTkfsAXCgQgGrhXBGOHgChzQqgj2l3
+         PUrTs5ZWoRZ54tKaea1UilxMhWNjsYo7+wCxV6YU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH 5.16 0852/1039] tracing/osnoise: Properly unhook events if start_per_cpu_kthreads() fails
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Helge Deller <deller@gmx.de>
+Subject: [PATCH 4.14 166/186] parisc: pdc_stable: Fix memory leak in pdcs_register_pathentries
 Date:   Mon, 24 Jan 2022 19:44:01 +0100
-Message-Id: <20220124184153.916097176@linuxfoundation.org>
+Message-Id: <20220124183942.454961631@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,79 +45,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 0878355b51f5f26632e652c848a8e174bb02d22d upstream.
+commit d24846a4246b6e61ecbd036880a4adf61681d241 upstream.
 
-If start_per_cpu_kthreads() called from osnoise_workload_start() returns
-error, event hooks are left in broken state: unhook_irq_events() called
-but unhook_thread_events() and unhook_softirq_events() not called, and
-trace_osnoise_callback_enabled flag not cleared.
+kobject_init_and_add() takes reference even when it fails.
+According to the doc of kobject_init_and_add()：
 
-On the next tracer enable, hooks get not installed due to
-trace_osnoise_callback_enabled flag.
+   If this function returns an error, kobject_put() must be called to
+   properly clean up the memory associated with the object.
 
-And on the further tracer disable an attempt to remove non-installed
-hooks happened, hitting a WARN_ON_ONCE() in tracepoint_remove_func().
+Fix memory leak by calling kobject_put().
 
-Fix the error path by adding the missing part of cleanup.
-While at this, introduce osnoise_unhook_events() to avoid code
-duplication between this error path and normal tracer disable.
-
-Link: https://lkml.kernel.org/r/20220109153459.3701773-1-nikita.yushchenko@virtuozzo.com
-
-Cc: stable@vger.kernel.org
-Fixes: bce29ac9ce0b ("trace: Add osnoise tracer")
-Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-Signed-off-by: Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>
-Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+Fixes: 73f368cf679b ("Kobject: change drivers/parisc/pdc_stable.c to use kobject_init_and_add")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/trace/trace_osnoise.c |   20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ drivers/parisc/pdc_stable.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/kernel/trace/trace_osnoise.c
-+++ b/kernel/trace/trace_osnoise.c
-@@ -2123,6 +2123,13 @@ out_unhook_irq:
- 	return -EINVAL;
- }
+--- a/drivers/parisc/pdc_stable.c
++++ b/drivers/parisc/pdc_stable.c
+@@ -992,8 +992,10 @@ pdcs_register_pathentries(void)
+ 		entry->kobj.kset = paths_kset;
+ 		err = kobject_init_and_add(&entry->kobj, &ktype_pdcspath, NULL,
+ 					   "%s", entry->name);
+-		if (err)
++		if (err) {
++			kobject_put(&entry->kobj);
+ 			return err;
++		}
  
-+static void osnoise_unhook_events(void)
-+{
-+	unhook_thread_events();
-+	unhook_softirq_events();
-+	unhook_irq_events();
-+}
-+
- /*
-  * osnoise_workload_start - start the workload and hook to events
-  */
-@@ -2155,7 +2162,14 @@ static int osnoise_workload_start(void)
- 
- 	retval = start_per_cpu_kthreads();
- 	if (retval) {
--		unhook_irq_events();
-+		trace_osnoise_callback_enabled = false;
-+		/*
-+		 * Make sure that ftrace_nmi_enter/exit() see
-+		 * trace_osnoise_callback_enabled as false before continuing.
-+		 */
-+		barrier();
-+
-+		osnoise_unhook_events();
- 		return retval;
- 	}
- 
-@@ -2186,9 +2200,7 @@ static void osnoise_workload_stop(void)
- 
- 	stop_per_cpu_kthreads();
- 
--	unhook_irq_events();
--	unhook_softirq_events();
--	unhook_thread_events();
-+	osnoise_unhook_events();
- }
- 
- static void osnoise_tracer_start(struct trace_array *tr)
+ 		/* kobject is now registered */
+ 		write_lock(&entry->rw_lock);
 
 

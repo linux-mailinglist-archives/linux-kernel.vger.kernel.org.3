@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 936EC499CDF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C32004994CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:06:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581207AbiAXWLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:11:24 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33918 "EHLO
+        id S1390426AbiAXUpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:45:21 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34092 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359768AbiAXVOW (ORCPT
+        with ESMTP id S1382881AbiAXU01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:14:22 -0500
+        Mon, 24 Jan 2022 15:26:27 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0F321B81243;
-        Mon, 24 Jan 2022 21:14:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23C2EC340E5;
-        Mon, 24 Jan 2022 21:14:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00EE3B811F9;
+        Mon, 24 Jan 2022 20:26:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 024E6C340E5;
+        Mon, 24 Jan 2022 20:26:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058859;
-        bh=tLYKVPrk6SwB3glulpE2TPmStGQfWvn/PQr44b2j16Y=;
+        s=korg; t=1643055984;
+        bh=LMcJzmhZ16w/aeOwg1sAK9yzJhMtOiwmj70gGTRHMjY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XgYw4whTmsFkoXqPi68o5le/aGQDK8lgnUovxt8I0eFjad64kU411GHnRDMJAeIcs
-         USMoNVVHIFGVyvgPZiLtlj05pUVgbBSV6/nv9ILYgiPbYKO0vyHJucX0qGvEGDadjm
-         B6uxRc0iVH6x/2Pt9HLunhsCTRsdTqKGi/sxzWAk=
+        b=ax+N1rIisuBJX/bTxDgK8YaAdRxW5CofIIMuKkPqe61MTaY2BIc1nevqiHmySwRuX
+         tP7p59U12Cl7kC88uj1GQlvAiGphObVguPsRZS6mHEkfKKbd6/5SDTPIBHmzpjOX4T
+         6uizZM0l79cdcaLkLRxVAErZrrBWTgEnHtxk2iII=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0425/1039] ax25: uninitialized variable in ax25_setsockopt()
-Date:   Mon, 24 Jan 2022 19:36:54 +0100
-Message-Id: <20220124184139.589701660@linuxfoundation.org>
+        stable@vger.kernel.org, Zhang Zixun <zhang133010@icloud.com>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 298/846] x86/mce/inject: Avoid out-of-bounds write when setting flags
+Date:   Mon, 24 Jan 2022 19:36:55 +0100
+Message-Id: <20220124184111.190228138@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,73 +45,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Zhang Zixun <zhang133010@icloud.com>
 
-[ Upstream commit 9371937092d5fd502032c1bb4475b36b39b1f1b3 ]
+[ Upstream commit de768416b203ac84e02a757b782a32efb388476f ]
 
-The "opt" variable is unsigned long but we only copy 4 bytes from
-the user so the lower 4 bytes are uninitialized.
+A contrived zero-length write, for example, by using write(2):
 
-I have changed the integer overflow checks from ULONG to UINT as well.
-This is a slight API change but I don't expect it to break anything.
+  ...
+  ret = write(fd, str, 0);
+  ...
 
-Fixes: a7b75c5a8c41 ("net: pass a sockptr_t into ->setsockopt")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+to the "flags" file causes:
+
+  BUG: KASAN: stack-out-of-bounds in flags_write
+  Write of size 1 at addr ffff888019be7ddf by task writefile/3787
+
+  CPU: 4 PID: 3787 Comm: writefile Not tainted 5.16.0-rc7+ #12
+  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+
+due to accessing buf one char before its start.
+
+Prevent such out-of-bounds access.
+
+  [ bp: Productize into a proper patch. Link below is the next best
+    thing because the original mail didn't get archived on lore. ]
+
+Fixes: 0451d14d0561 ("EDAC, mce_amd_inj: Modify flags attribute to use string arguments")
+Signed-off-by: Zhang Zixun <zhang133010@icloud.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/linux-edac/YcnePfF1OOqoQwrX@zn.tnic/
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ax25/af_ax25.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ arch/x86/kernel/cpu/mce/inject.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
-index cfca99e295b80..02f43f3e2c564 100644
---- a/net/ax25/af_ax25.c
-+++ b/net/ax25/af_ax25.c
-@@ -536,7 +536,7 @@ static int ax25_setsockopt(struct socket *sock, int level, int optname,
- 	ax25_cb *ax25;
- 	struct net_device *dev;
- 	char devname[IFNAMSIZ];
--	unsigned long opt;
-+	unsigned int opt;
- 	int res = 0;
+diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
+index 0bfc14041bbb4..b63b548497c14 100644
+--- a/arch/x86/kernel/cpu/mce/inject.c
++++ b/arch/x86/kernel/cpu/mce/inject.c
+@@ -350,7 +350,7 @@ static ssize_t flags_write(struct file *filp, const char __user *ubuf,
+ 	char buf[MAX_FLAG_OPT_SIZE], *__buf;
+ 	int err;
  
- 	if (level != SOL_AX25)
-@@ -568,7 +568,7 @@ static int ax25_setsockopt(struct socket *sock, int level, int optname,
- 		break;
+-	if (cnt > MAX_FLAG_OPT_SIZE)
++	if (!cnt || cnt > MAX_FLAG_OPT_SIZE)
+ 		return -EINVAL;
  
- 	case AX25_T1:
--		if (opt < 1 || opt > ULONG_MAX / HZ) {
-+		if (opt < 1 || opt > UINT_MAX / HZ) {
- 			res = -EINVAL;
- 			break;
- 		}
-@@ -577,7 +577,7 @@ static int ax25_setsockopt(struct socket *sock, int level, int optname,
- 		break;
- 
- 	case AX25_T2:
--		if (opt < 1 || opt > ULONG_MAX / HZ) {
-+		if (opt < 1 || opt > UINT_MAX / HZ) {
- 			res = -EINVAL;
- 			break;
- 		}
-@@ -593,7 +593,7 @@ static int ax25_setsockopt(struct socket *sock, int level, int optname,
- 		break;
- 
- 	case AX25_T3:
--		if (opt < 1 || opt > ULONG_MAX / HZ) {
-+		if (opt < 1 || opt > UINT_MAX / HZ) {
- 			res = -EINVAL;
- 			break;
- 		}
-@@ -601,7 +601,7 @@ static int ax25_setsockopt(struct socket *sock, int level, int optname,
- 		break;
- 
- 	case AX25_IDLE:
--		if (opt > ULONG_MAX / (60 * HZ)) {
-+		if (opt > UINT_MAX / (60 * HZ)) {
- 			res = -EINVAL;
- 			break;
- 		}
+ 	if (copy_from_user(&buf, ubuf, cnt))
 -- 
 2.34.1
 

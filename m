@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4034999EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:47:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4E7499847
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:35:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377531AbiAXVis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:38:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46670 "EHLO
+        id S1451962AbiAXVXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:23:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444650AbiAXVBO (ORCPT
+        with ESMTP id S1443277AbiAXU4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:01:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C82C04C071;
-        Mon, 24 Jan 2022 12:02:41 -0800 (PST)
+        Mon, 24 Jan 2022 15:56:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C877C110F30;
+        Mon, 24 Jan 2022 11:18:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3CD0CB811F3;
-        Mon, 24 Jan 2022 20:02:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A9E7C340E5;
-        Mon, 24 Jan 2022 20:02:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09FDF60BB9;
+        Mon, 24 Jan 2022 19:18:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE8CDC340E5;
+        Mon, 24 Jan 2022 19:18:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054559;
-        bh=Tfk/9Tnd2NIGXZpaVjiZo4dOXCNs2OsaCggUq26g89U=;
+        s=korg; t=1643051898;
+        bh=42cKnB73ycwsYbytnMtn+m7ZqxOi3VaJu09BCcgAuRU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=izp5MRdaFp5aBDAgIDmyJxZY7FTsPE0hLs8HhKqKELxEoxW3hCEbgBn/1+gr8racN
-         ntm3yoOO2FosRY1qApA3l6lPw4aTzhhS7V6zy7oCMPobzJtjnMbpaZh98LTcBD/1PW
-         gQur7lff231X9eX2KZgPm4E6nHl1mnfaF/D94euY=
+        b=hNQZ5L8Cvab0bSwn2+4DzrZsgx/mzTkQghIvGsrGHSQ8Vgq1OUkGNe+Ht3ty6VVZ5
+         pxU8AjPennwDieHls7XwYGyWCEfLx+4a1PfU0FpPzX5PzNab2W9fQx44lJlZratNCZ
+         37KDbnX0bdJKsmMauFLWmTIBesDM/5Tcst0sls00=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Bizon <mbizon@freebox.fr>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Diego Viola <diego.viola@gmail.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 395/563] net: mdio: Demote probed message to debug print
-Date:   Mon, 24 Jan 2022 19:42:40 +0100
-Message-Id: <20220124184038.091730452@linuxfoundation.org>
+Subject: [PATCH 4.19 123/239] drm/nouveau/pmu/gm200-: avoid touching PMU outside of DEVINIT/PREOS/ACR
+Date:   Mon, 24 Jan 2022 19:42:41 +0100
+Message-Id: <20220124183947.011511046@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,38 +50,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+From: Ben Skeggs <bskeggs@redhat.com>
 
-[ Upstream commit 7590fc6f80ac2cbf23e6b42b668bbeded070850b ]
+[ Upstream commit 1d2271d2fb85e54bfc9630a6c30ac0feb9ffb983 ]
 
-On systems with large numbers of MDIO bus/muxes the message indicating
-that a given MDIO bus has been successfully probed is repeated for as
-many buses we have, which can eat up substantial boot time for no
-reason, demote to a debug print.
+There have been reports of the WFI timing out on some boards, and a
+patch was proposed to just remove it.  This stuff is rather fragile,
+and I believe the WFI might be needed with our FW prior to GM200.
 
-Reported-by: Maxime Bizon <mbizon@freebox.fr>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20220103194024.2620-1-f.fainelli@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+However, we probably should not be touching PMU during init on GPUs
+where we depend on NVIDIA FW, outside of limited circumstances, so
+this should be a somewhat safer change that achieves the desired
+result.
+
+Reported-by: Diego Viola <diego.viola@gmail.com>
+Signed-off-by: Ben Skeggs <bskeggs@redhat.com>
+Reviewed-by: Karol Herbst <kherbst@redhat.com>
+Signed-off-by: Karol Herbst <kherbst@redhat.com>
+Link: https://gitlab.freedesktop.org/drm/nouveau/-/merge_requests/10
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/mdio_bus.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../gpu/drm/nouveau/nvkm/subdev/pmu/base.c    | 37 +++++++++++--------
+ 1 file changed, 21 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
-index 2645ca35103c9..c416ab1d2b008 100644
---- a/drivers/net/phy/mdio_bus.c
-+++ b/drivers/net/phy/mdio_bus.c
-@@ -588,7 +588,7 @@ int __mdiobus_register(struct mii_bus *bus, struct module *owner)
- 	mdiobus_setup_mdiodev_from_board_info(bus, mdiobus_create_device);
- 
- 	bus->state = MDIOBUS_REGISTERED;
--	pr_info("%s: probed\n", bus->name);
-+	dev_dbg(&bus->dev, "probed\n");
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
+index ce70a193caa7f..8cf3d1b4662de 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
+@@ -70,20 +70,13 @@ nvkm_pmu_fini(struct nvkm_subdev *subdev, bool suspend)
  	return 0;
+ }
  
- error:
+-static int
++static void
+ nvkm_pmu_reset(struct nvkm_pmu *pmu)
+ {
+ 	struct nvkm_device *device = pmu->subdev.device;
+ 
+ 	if (!pmu->func->enabled(pmu))
+-		return 0;
+-
+-	/* Inhibit interrupts, and wait for idle. */
+-	nvkm_wr32(device, 0x10a014, 0x0000ffff);
+-	nvkm_msec(device, 2000,
+-		if (!nvkm_rd32(device, 0x10a04c))
+-			break;
+-	);
++		return;
+ 
+ 	/* Reset. */
+ 	if (pmu->func->reset)
+@@ -94,25 +87,37 @@ nvkm_pmu_reset(struct nvkm_pmu *pmu)
+ 		if (!(nvkm_rd32(device, 0x10a10c) & 0x00000006))
+ 			break;
+ 	);
+-
+-	return 0;
+ }
+ 
+ static int
+ nvkm_pmu_preinit(struct nvkm_subdev *subdev)
+ {
+ 	struct nvkm_pmu *pmu = nvkm_pmu(subdev);
+-	return nvkm_pmu_reset(pmu);
++	nvkm_pmu_reset(pmu);
++	return 0;
+ }
+ 
+ static int
+ nvkm_pmu_init(struct nvkm_subdev *subdev)
+ {
+ 	struct nvkm_pmu *pmu = nvkm_pmu(subdev);
+-	int ret = nvkm_pmu_reset(pmu);
+-	if (ret == 0 && pmu->func->init)
+-		ret = pmu->func->init(pmu);
+-	return ret;
++	struct nvkm_device *device = pmu->subdev.device;
++
++	if (!pmu->func->init)
++		return 0;
++
++	if (pmu->func->enabled(pmu)) {
++		/* Inhibit interrupts, and wait for idle. */
++		nvkm_wr32(device, 0x10a014, 0x0000ffff);
++		nvkm_msec(device, 2000,
++			if (!nvkm_rd32(device, 0x10a04c))
++				break;
++		);
++
++		nvkm_pmu_reset(pmu);
++	}
++
++	return pmu->func->init(pmu);
+ }
+ 
+ static int
 -- 
 2.34.1
 

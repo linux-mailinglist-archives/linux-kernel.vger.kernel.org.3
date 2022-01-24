@@ -2,120 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 116BD4981AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 15:04:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3234981B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 15:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238360AbiAXOEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 09:04:21 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:48014 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbiAXOET (ORCPT
+        id S238437AbiAXOFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 09:05:33 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59536 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238356AbiAXOFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 09:04:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643033059; x=1674569059;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hK6Gk5mnXF4IHRICMmepTdEfNCx/EzeL17Dix2QUIaU=;
-  b=OGSCboF8Fn9X54gI+CpLoN7tH+gJi/KtdhubT5uyh6/cQiIOGW0KfZBl
-   Wtlr8LM/DabWj2unrWbYcf1OBR/D8YO8GPHVR14ZDHZCkFGe/pTFJdp5k
-   m5dJzICVsQma+KvLsYIsJX6W/pG4fx8k5sckRk7Dqqoc9A0hOJxhrRvSN
-   w=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 24 Jan 2022 06:04:19 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 06:04:19 -0800
-Received: from [10.216.45.46] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 24 Jan
- 2022 06:04:15 -0800
-Message-ID: <49c9611e-f8cd-3a18-19b3-123da5d8d8eb@quicinc.com>
-Date:   Mon, 24 Jan 2022 19:34:09 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] remoteproc: Use unbounded/high priority workqueue for
- recovery work
-Content-Language: en-US
-To:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>
-References: <1642620644-19297-1-git-send-email-quic_mojha@quicinc.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <1642620644-19297-1-git-send-email-quic_mojha@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.47.97.222)
+        Mon, 24 Jan 2022 09:05:32 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0966EB8100B;
+        Mon, 24 Jan 2022 14:05:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B71D6C340E4;
+        Mon, 24 Jan 2022 14:05:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643033129;
+        bh=6P+R8VnmDB3dT+j9DILXJFZf9Tn9cSGCM1mGeXRYho0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rTrzNvFbH/iT6SDidIbXnsToidddYd4KHCbVBrwMlAnjf24kRGxRXpCl+Gas/roia
+         woa1jMAwLu86tbWOUdbhGrJgx6sMbjSK2Iz4BpXJZCcU6o/nUyyuHJNSpfDaC6+Rnq
+         x43oripcFvVK3/GVVRoW+r5QGMnzQ5YcJiJPpcCNGGTh27a4jkDMQZvoSMx2gIJ4eA
+         cDSYFD3oMLnib/FbJoEGchdi5bALNSDBDdZQHSBjblihpJrftOhCRZ0CFStsj0F4Ns
+         AZNFQZtkM6f8t4ppYYA/8Mr1jPBVbxXxSjZeRe8f6819Wh/FLg5w3S5z1uYZYgK78u
+         2IG4fUCJ6LO6w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nBzyJ-002OpM-OT; Mon, 24 Jan 2022 14:05:27 +0000
+Date:   Mon, 24 Jan 2022 14:05:27 +0000
+Message-ID: <877dap8c0o.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [RFC V1 02/11] arm64/perf: Add register definitions for BRBE
+In-Reply-To: <1642998653-21377-3-git-send-email-anshuman.khandual@arm.com>
+References: <1642998653-21377-1-git-send-email-anshuman.khandual@arm.com>
+        <1642998653-21377-3-git-send-email-anshuman.khandual@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: anshuman.khandual@arm.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com, peterz@infradead.org, mingo@redhat.com, acme@kernel.org, linux-perf-users@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+linux-arm-msm
+On Mon, 24 Jan 2022 04:30:44 +0000,
+Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+> 
+> This adds BRBE related register definitions and various other related field
+> macros there in. These will be used subsequently in a BRBE driver which is
+> being added later on.
+> 
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  arch/arm64/include/asm/sysreg.h | 216 ++++++++++++++++++++++++++++++++
+>  1 file changed, 216 insertions(+)
+> 
+> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+> index 898bee0004ae..d8fd7e806a47 100644
+> --- a/arch/arm64/include/asm/sysreg.h
+> +++ b/arch/arm64/include/asm/sysreg.h
+> @@ -141,6 +141,218 @@
+>  #define SYS_DBGDTRTX_EL0		sys_reg(2, 3, 0, 5, 0)
+>  #define SYS_DBGVCR32_EL2		sys_reg(2, 4, 0, 7, 0)
+>  
+> +/*
+> + * BRBINF<N>_EL1 Encoding: [2, 1, 8, CRm, op2]
+> + *
+> + * derived as <CRm> = c{N<3:0>} <op2> = (N<4>x4 + 0)
+> + */
+> +#define SYS_BRBINF0_EL1			sys_reg(2, 1, 8, 0, 0)
+> +#define SYS_BRBINF1_EL1			sys_reg(2, 1, 8, 1, 0)
+> +#define SYS_BRBINF2_EL1			sys_reg(2, 1, 8, 2, 0)
+> +#define SYS_BRBINF3_EL1			sys_reg(2, 1, 8, 3, 0)
+> +#define SYS_BRBINF4_EL1			sys_reg(2, 1, 8, 4, 0)
+> +#define SYS_BRBINF5_EL1			sys_reg(2, 1, 8, 5, 0)
+> +#define SYS_BRBINF6_EL1			sys_reg(2, 1, 8, 6, 0)
+> +#define SYS_BRBINF7_EL1			sys_reg(2, 1, 8, 7, 0)
+> +#define SYS_BRBINF8_EL1			sys_reg(2, 1, 8, 8, 0)
+> +#define SYS_BRBINF9_EL1			sys_reg(2, 1, 8, 9, 0)
+
+[snip]
+
+Since the architecture gives you the formula to build these, why do
+you enumerate each and every register encoding? I'd rather see
+something like:
+
+#define __SYS_BRBINFO(n) sys_reg(2, 1, 8, ((n) & 0xf), (((n) & 0x10)) >> 2)
+#define SYS_BRBINF0_EL1	__SYS_BRBINFO(0)
+[...]
+
+and something similar for all the new registers that come in packs of
+32... We already have similar things for AMU, PMU, GIC and co.
 
 Thanks,
--Mukesh
 
-On 1/20/2022 1:00 AM, Mukesh Ojha wrote:
-> There could be a scenario where there is too much load(n number
-> of tasks which is affined) on a core on which rproc recovery
-> is queued. Due to which, it takes number of seconds to complete
-> the recovery.
->
-> If we make this queue unbounded and move it to high priority worker
-> pool then this work can be attempted to finished in less time.
->
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> ---
->   drivers/remoteproc/remoteproc_core.c | 14 ++++++++++++--
->   1 file changed, 12 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> index 69f51ac..efb6316 100644
-> --- a/drivers/remoteproc/remoteproc_core.c
-> +++ b/drivers/remoteproc/remoteproc_core.c
-> @@ -59,6 +59,7 @@ static int rproc_release_carveout(struct rproc *rproc,
->   
->   /* Unique indices for remoteproc devices */
->   static DEFINE_IDA(rproc_dev_index);
-> +static struct workqueue_struct *rproc_recovery_wq;
->   
->   static const char * const rproc_crash_names[] = {
->   	[RPROC_MMUFAULT]	= "mmufault",
-> @@ -2752,8 +2753,10 @@ void rproc_report_crash(struct rproc *rproc, enum rproc_crash_type type)
->   	dev_err(&rproc->dev, "crash detected in %s: type %s\n",
->   		rproc->name, rproc_crash_to_string(type));
->   
-> -	/* Have a worker handle the error; ensure system is not suspended */
-> -	queue_work(system_freezable_wq, &rproc->crash_handler);
-> +	if (rproc_recovery_wq)
-> +		queue_work(rproc_recovery_wq, &rproc->crash_handler);
-> +	else
-> +		queue_work(system_freezable_wq, &rproc->crash_handler);
->   }
->   EXPORT_SYMBOL(rproc_report_crash);
->   
-> @@ -2802,6 +2805,11 @@ static void __exit rproc_exit_panic(void)
->   
->   static int __init remoteproc_init(void)
->   {
-> +	rproc_recovery_wq = alloc_workqueue("rproc_recovery_wq", WQ_UNBOUND |
-> +				WQ_HIGHPRI | WQ_FREEZABLE, 0);
-> +	if (!rproc_recovery_wq)
-> +		pr_err("remoteproc: creation of rproc_recovery_wq failed\n");
-> +
->   	rproc_init_sysfs();
->   	rproc_init_debugfs();
->   	rproc_init_cdev();
-> @@ -2818,6 +2826,8 @@ static void __exit remoteproc_exit(void)
->   	rproc_exit_panic();
->   	rproc_exit_debugfs();
->   	rproc_exit_sysfs();
-> +	if (rproc_recovery_wq)
-> +		destroy_workqueue(rproc_recovery_wq);
->   }
->   module_exit(remoteproc_exit);
->   
+	M.
+
+
+-- 
+Without deviation from the norm, progress is not possible.

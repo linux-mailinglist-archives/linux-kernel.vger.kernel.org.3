@@ -2,113 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14578497A61
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 453AF497A69
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:34:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242155AbiAXIbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 03:31:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231483AbiAXIbO (ORCPT
+        id S242177AbiAXIeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 03:34:07 -0500
+Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:58706 "EHLO
+        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242127AbiAXIeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 03:31:14 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7C3C06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 00:31:14 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nBukh-00077b-Eo; Mon, 24 Jan 2022 09:31:03 +0100
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nBukg-0005yn-2z; Mon, 24 Jan 2022 09:31:02 +0100
-Date:   Mon, 24 Jan 2022 09:31:02 +0100
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-rockchip@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Johan Jonker <jbx6244@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] arm64: dts: rockchip: Add Bananapi R2 Pro
-Message-ID: <20220124083102.GW23490@pengutronix.de>
-References: <20220123135116.136846-1-linux@fw-web.de>
- <20220123135116.136846-3-linux@fw-web.de>
+        Mon, 24 Jan 2022 03:34:06 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V2gQ.wI_1643013242;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V2gQ.wI_1643013242)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 24 Jan 2022 16:34:04 +0800
+Date:   Mon, 24 Jan 2022 16:34:02 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-erofs@lists.ozlabs.org, Christoph Hellwig <hch@lst.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] erofs: fix fsdax partition offset handling
+Message-ID: <Ye5kehup+iQ3g+q/@B-P7TQMD6M-0146.local>
+References: <20220113051845.244461-1-hsiangkao@linux.alibaba.com>
+ <d424369b-c559-bf63-bbb3-71886f1799c9@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220123135116.136846-3-linux@fw-web.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 09:22:14 up 44 days, 17:07, 74 users,  load average: 0.10, 0.26,
- 0.32
-User-Agent: Mutt/1.10.1 (2018-07-13)
-From:   Sascha Hauer <sha@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+In-Reply-To: <d424369b-c559-bf63-bbb3-71886f1799c9@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 23, 2022 at 02:51:16PM +0100, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
+On Mon, Jan 24, 2022 at 03:11:35PM +0800, Chao Yu wrote:
+> On 2022/1/13 13:18, Gao Xiang wrote:
+> > After seeking time on testing today upstream fsdax, I found it
+> > actually doesn't work well as below:
+> > 
+> > [  186.492983] ------------[ cut here ]------------
+> > [  186.493629] WARNING: CPU: 1 PID: 205 at fs/iomap/iter.c:33 iomap_iter+0x2f6/0x310
+> > 
+> > The problem is that m_dax_part_off should be applied to physical
+> > addresses and very sorry about that I didn't catch this eariler.
+> > 
+> > Anyway, let's fix it up now. Also, I need to find a way to set up
+> > a standalone testcase to look after this later.
+> > 
+> > Fixes: de2051147771 ("fsdax: shift partition offset handling into the file systems")
+> > Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 > 
-> This patch adds Devicetree for Bananapi R2 Pro based on RK3568.
-> Add uart/sd/emmc/i2c/rk809/tsadc nodes for basic function.
-> Gmac0 is directly connected to wan-port so usable without additional
-> driver.
-> On gmac1 there is a switch (rtl8367rb) connected which have not yet a
-> driver in mainline.
+> Reviewed-by: Chao Yu <chao@kernel.org>
+
+Thanks for the review! I will send this together with other misc
+fixes this or next week..
+
+Thanks,
+Gao Xiang
+
 > 
-> Patch also prepares nodes for GPIO header.
-> 
-> Co-developed-by: Peter Geis <pgwipeout@gmail.com>
-> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
-> +&gmac0 {
-> +	assigned-clocks = <&cru SCLK_GMAC0_RX_TX>, <&cru SCLK_GMAC0>;
-> +	assigned-clock-parents = <&cru SCLK_GMAC0_RGMII_SPEED>, <&cru CLK_MAC0_2TOP>;
-> +	clock_in_out = "input";
-> +	phy-handle = <&rgmii_phy0>;
-> +	phy-mode = "rgmii";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&gmac0_miim
-> +		     &gmac0_tx_bus2
-> +		     &gmac0_rx_bus2
-> +		     &gmac0_rgmii_clk
-> +		     &gmac0_rgmii_bus>;
-> +
-> +	snps,reset-gpio = <&gpio3 RK_PB7 GPIO_ACTIVE_LOW>;
-> +	snps,reset-active-low;
-> +	/* Reset time is 20ms, 100ms for rtl8211f */
-
-Is this really a rtl8211f? I don't know and it could indeed be a
-rtl8211f, I'm just asking because the comment is copy pasted from
-the Quartz64 board.
-
-> +	snps,reset-delays-us = <0 20000 100000>;
-> +
-> +&mdio0 {
-> +	rgmii_phy0: ethernet-phy@0 {
-> +		compatible = "ethernet-phy-ieee802.3-c22";
-> +		reg = <0x0>;
-> +	};
-
-0 is the broadcast address. I'm not sure if it's a good idea to use it.
-There should be another address the phy listens on.
-
-Sascha
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> Thanks,

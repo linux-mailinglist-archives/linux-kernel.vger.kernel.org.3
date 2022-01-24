@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E193498BBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:17:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C94A3498A7E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347925AbiAXTOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:14:36 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33080 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345476AbiAXTFn (ORCPT
+        id S1345584AbiAXTER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:04:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44554 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345215AbiAXS74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:05:43 -0500
+        Mon, 24 Jan 2022 13:59:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9892EC0619C9;
+        Mon, 24 Jan 2022 10:56:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E99D9B81233;
-        Mon, 24 Jan 2022 19:05:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB57C340E5;
-        Mon, 24 Jan 2022 19:05:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6097EB81235;
+        Mon, 24 Jan 2022 18:56:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77125C340E5;
+        Mon, 24 Jan 2022 18:56:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051140;
-        bh=roOoVmBLp8DGLovcxZsX04NbD9zAfwHu/iuBHS6vXH0=;
+        s=korg; t=1643050593;
+        bh=3hDW7gIhEOondEF4Jh+0/sHITCd+cZaNzno8dlPJPuE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j7+DG/koz55KLbgpyCSMFST+aOD8CLQZ0AnGuem/w6lzTC47jfGtyjXh9NTdH4Yu7
-         wbcl63emITSHp/EZh9KuSBY7h9Vwk9XnY/CXm7qeOWDskD15WQYaRlOqIVINwcGcsf
-         nHFHPVMOO1LAJXfhuY5CHxFbuPw2eiQfqXo88zPk=
+        b=a4EoOBrvqpSR4wmb492altdE034+NALGsrJOwGz6dtDhog0lFOtal7baH9ZDG3l5D
+         kdtZ+7E0qrNuBiO+H0JJ9ivlGE9pGdb0vBkcn/k0SFmXbaYTGbVN5GHiGI9REiwrSL
+         gmZZ9GvX4Hfo317adxJPfsDXbJP3IsbxpbkXuR+w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@ZenIV.linux.org.uk>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        stable@vger.kernel.org,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 066/186] pcmcia: fix setting of kthread task states
-Date:   Mon, 24 Jan 2022 19:42:21 +0100
-Message-Id: <20220124183939.242365371@linuxfoundation.org>
+Subject: [PATCH 4.9 052/157] can: softing: softing_startstop(): fix set but not used variable warning
+Date:   Mon, 24 Jan 2022 19:42:22 +0100
+Message-Id: <20220124183934.438803830@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,53 +50,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dominik Brodowski <linux@dominikbrodowski.net>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-[ Upstream commit fbb3485f1f931102d8ba606f1c28123f5b48afa3 ]
+[ Upstream commit 370d988cc529598ebaec6487d4f84c2115dc696b ]
 
-We need to set TASK_INTERRUPTIBLE before calling kthread_should_stop().
-Otherwise, kthread_stop() might see that the pccardd thread is still
-in TASK_RUNNING state and fail to wake it up.
+In the function softing_startstop() the variable error_reporting is
+assigned but not used. The code that uses this variable is commented
+out. Its stated that the functionality is not finally verified.
 
-Additionally, we only need to set the state back to TASK_RUNNING if
-kthread_should_stop() breaks the loop.
+To fix the warning:
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reported-by: Al Viro <viro@ZenIV.linux.org.uk>
-Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Fixes: d3046ba809ce ("pcmcia: fix a boot time warning in pcmcia cs code")
-Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
+| drivers/net/can/softing/softing_fw.c:424:9: error: variable 'error_reporting' set but not used [-Werror,-Wunused-but-set-variable]
+
+remove the comment, activate the code, but add a "0 &&" to the if
+expression and rely on the optimizer rather than the preprocessor to
+remove the code.
+
+Link: https://lore.kernel.org/all/20220109103126.1872833-1-mkl@pengutronix.de
+Fixes: 03fd3cf5a179 ("can: add driver for Softing card")
+Cc: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pcmcia/cs.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/net/can/softing/softing_fw.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/pcmcia/cs.c b/drivers/pcmcia/cs.c
-index 8c8caec3a72cc..182e5ef4ab83d 100644
---- a/drivers/pcmcia/cs.c
-+++ b/drivers/pcmcia/cs.c
-@@ -669,18 +669,16 @@ static int pccardd(void *__skt)
- 		if (events || sysfs_events)
- 			continue;
- 
-+		set_current_state(TASK_INTERRUPTIBLE);
- 		if (kthread_should_stop())
- 			break;
- 
--		set_current_state(TASK_INTERRUPTIBLE);
--
- 		schedule();
- 
--		/* make sure we are running */
--		__set_current_state(TASK_RUNNING);
--
- 		try_to_freeze();
+diff --git a/drivers/net/can/softing/softing_fw.c b/drivers/net/can/softing/softing_fw.c
+index 52fe50725d749..a74c779feb90e 100644
+--- a/drivers/net/can/softing/softing_fw.c
++++ b/drivers/net/can/softing/softing_fw.c
+@@ -576,18 +576,19 @@ int softing_startstop(struct net_device *dev, int up)
+ 		if (ret < 0)
+ 			goto failed;
  	}
-+	/* make sure we are running before we exit */
-+	__set_current_state(TASK_RUNNING);
- 
- 	/* shut down socket, if a device is still present */
- 	if (skt->state & SOCKET_PRESENT) {
+-	/* enable_error_frame */
+-	/*
++
++	/* enable_error_frame
++	 *
+ 	 * Error reporting is switched off at the moment since
+ 	 * the receiving of them is not yet 100% verified
+ 	 * This should be enabled sooner or later
+-	 *
+-	if (error_reporting) {
++	 */
++	if (0 && error_reporting) {
+ 		ret = softing_fct_cmd(card, 51, "enable_error_frame");
+ 		if (ret < 0)
+ 			goto failed;
+ 	}
+-	*/
++
+ 	/* initialize interface */
+ 	iowrite16(1, &card->dpram[DPRAM_FCT_PARAM + 2]);
+ 	iowrite16(1, &card->dpram[DPRAM_FCT_PARAM + 4]);
 -- 
 2.34.1
 

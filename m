@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BDA7498B5D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 545AB498E5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:44:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245414AbiAXTM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:12:58 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:60716 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345923AbiAXTEs (ORCPT
+        id S1348415AbiAXTkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:40:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353545AbiAXTe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:04:48 -0500
+        Mon, 24 Jan 2022 14:34:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED56C0219BF;
+        Mon, 24 Jan 2022 11:16:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66598B8121C;
-        Mon, 24 Jan 2022 19:04:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FB06C340E5;
-        Mon, 24 Jan 2022 19:04:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E62661320;
+        Mon, 24 Jan 2022 19:16:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB7A5C340E7;
+        Mon, 24 Jan 2022 19:16:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051085;
-        bh=aV3zafJQPEzD6m4LFBk4Gt1VO07mpJBE5/dHt1hesZY=;
+        s=korg; t=1643051785;
+        bh=q5W9hIOQRdyJnbVfoV96IYZAH+fk/4zycAksEdJnDqY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gafh2o6tbFEQc+u0vdORX755OSrDrrcBYPekSJnmEXCHOscwsdINLLxe24JefxQvA
-         lsDD4MSMn59aPxNoXbq8Xu7VvRPPwfBM3mZ7Z3ZdJP/099u6j8sYUquO5Pr1kvCTJ3
-         NXTn3wQBFMHC82oybi/BoTXAee5rMvBrf2tT6G6k=
+        b=tR4ELxWNivesxZkTHO80gxp9hF8HrtnhArNvK1C/L29WcQjMtJ7cTtMUUsixYw6VY
+         x1lJ9Qd2t2GMYNTzvwFqchWFjHmOiuZdXu+VPS/45nC4h7yHTSQG/9E95q8PrdqunV
+         uWSQLFH2j4nqh3OLRqAfaJYx9qZjPBS+30v5hBZs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, Xin Xiong <xiongx18@fudan.edu.cn>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Xin Tan <tanxin.ctf@gmail.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 050/186] media: dib8000: Fix a memleak in dib8000_init()
+Subject: [PATCH 4.19 087/239] netfilter: ipt_CLUSTERIP: fix refcount leak in clusterip_tg_check()
 Date:   Mon, 24 Jan 2022 19:42:05 +0100
-Message-Id: <20220124183938.738872060@linuxfoundation.org>
+Message-Id: <20220124183945.883816661@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,53 +51,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Xin Xiong <xiongx18@fudan.edu.cn>
 
-[ Upstream commit 8dbdcc7269a83305ee9d677b75064d3530a48ee2 ]
+[ Upstream commit d94a69cb2cfa77294921aae9afcfb866e723a2da ]
 
-In dib8000_init(), the variable fe is not freed or passed out on the
-failure of dib8000_identify(&state->i2c), which could lead to a memleak.
+The issue takes place in one error path of clusterip_tg_check(). When
+memcmp() returns nonzero, the function simply returns the error code,
+forgetting to decrease the reference count of a clusterip_config
+object, which is bumped earlier by clusterip_config_find_get(). This
+may incur reference count leak.
 
-Fix this bug by adding a kfree of fe in the error path.
+Fix this issue by decrementing the refcount of the object in specific
+error path.
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_DVB_DIB8000=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: 77e2c0f5d471 ("V4L/DVB (12900): DiB8000: added support for DiBcom ISDB-T/ISDB-Tsb demodulator DiB8000")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Fixes: 06aa151ad1fc74 ("netfilter: ipt_CLUSTERIP: check MAC address when duplicate config is set")
+Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
+Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-frontends/dib8000.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ net/ipv4/netfilter/ipt_CLUSTERIP.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/dvb-frontends/dib8000.c b/drivers/media/dvb-frontends/dib8000.c
-index 59ab01dc62b19..c429392ebbe63 100644
---- a/drivers/media/dvb-frontends/dib8000.c
-+++ b/drivers/media/dvb-frontends/dib8000.c
-@@ -4476,8 +4476,10 @@ static struct dvb_frontend *dib8000_init(struct i2c_adapter *i2c_adap, u8 i2c_ad
- 
- 	state->timf_default = cfg->pll->timf;
- 
--	if (dib8000_identify(&state->i2c) == 0)
-+	if (dib8000_identify(&state->i2c) == 0) {
-+		kfree(fe);
- 		goto error;
+diff --git a/net/ipv4/netfilter/ipt_CLUSTERIP.c b/net/ipv4/netfilter/ipt_CLUSTERIP.c
+index 2fa1963259880..954c96f4ddd0f 100644
+--- a/net/ipv4/netfilter/ipt_CLUSTERIP.c
++++ b/net/ipv4/netfilter/ipt_CLUSTERIP.c
+@@ -509,8 +509,11 @@ static int clusterip_tg_check(const struct xt_tgchk_param *par)
+ 			if (IS_ERR(config))
+ 				return PTR_ERR(config);
+ 		}
+-	} else if (memcmp(&config->clustermac, &cipinfo->clustermac, ETH_ALEN))
++	} else if (memcmp(&config->clustermac, &cipinfo->clustermac, ETH_ALEN)) {
++		clusterip_config_entry_put(config);
++		clusterip_config_put(config);
+ 		return -EINVAL;
 +	}
  
- 	dibx000_init_i2c_master(&state->i2c_master, DIB8000, state->i2c.adap, state->i2c.addr);
- 
+ 	ret = nf_ct_netns_get(par->net, par->family);
+ 	if (ret < 0) {
 -- 
 2.34.1
 

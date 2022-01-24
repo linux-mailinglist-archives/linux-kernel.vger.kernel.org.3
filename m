@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB943499776
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:28:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D1444996FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448162AbiAXVMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:12:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41472 "EHLO
+        id S1376663AbiAXVIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:08:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389564AbiAXUmS (ORCPT
+        with ESMTP id S1389571AbiAXUmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:42:18 -0500
+        Mon, 24 Jan 2022 15:42:21 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF66AC049646;
-        Mon, 24 Jan 2022 11:52:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C36C04964D;
+        Mon, 24 Jan 2022 11:52:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8839EB81142;
-        Mon, 24 Jan 2022 19:52:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9937BC340E7;
-        Mon, 24 Jan 2022 19:52:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC360B81188;
+        Mon, 24 Jan 2022 19:52:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7FAEC340E5;
+        Mon, 24 Jan 2022 19:52:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053945;
-        bh=bRrlijC1F6GBDT2Rk+XS0Jz07Rmt6OW88U30+cWYSz4=;
+        s=korg; t=1643053951;
+        bh=VCiTbnnjte9C+5Tux5ffEglBv+5ZTbI2UNk5iaPeTpU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CNI6UYPQVKErXjOgJeMVanzoqel651bkT/6IxabeZKOhCCVzZyGrVlQNZXiPsszh2
-         PfZAoVH1FYQF+84+dJCU2iPr+pRBcbiDFReiSsdwoa5BUnJe4CvD1hzZdqCYkc+bRp
-         tpLrbqRyLsQl0Wa+jFXTdw8JOtdwHf4gjo0pmF2A=
+        b=apVw3TQE9jZwQ7UBFZKrq2B5ZJuxVXW0esTvPrRiGaddwZAUSEqJEyvre16nrDcCT
+         zEeuqkMR4w4ENYDXHWgnOsdpiCrx1wt0KRXyY+2rilhl/xf9Gpa57icyYJD5SLEufa
+         xTroy20jSLvh7IyeXIlPAa0VMgqjolDdsHUQf51w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Fabio Estevam <festevam@denx.de>,
+        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 229/563] regmap: Call regmap_debugfs_exit() prior to _init()
-Date:   Mon, 24 Jan 2022 19:39:54 +0100
-Message-Id: <20220124184032.369790263@linuxfoundation.org>
+Subject: [PATCH 5.10 230/563] can: mcp251xfd: add missing newline to printed strings
+Date:   Mon, 24 Jan 2022 19:39:55 +0100
+Message-Id: <20220124184032.404070396@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -49,59 +48,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-[ Upstream commit 530792efa6cb86f5612ff093333fec735793b582 ]
+[ Upstream commit 3bd9d8ce6f8c5c43ee2f1106021db0f98882cc75 ]
 
-Since commit cffa4b2122f5 ("regmap: debugfs: Fix a memory leak when
-calling regmap_attach_dev"), the following debugfs error is seen
-on i.MX boards:
+This patch adds the missing newline to printed strings.
 
-debugfs: Directory 'dummy-iomuxc-gpr@20e0000' with parent 'regmap' already present!
-
-In the attempt to fix the memory leak, the above commit added a NULL check
-for map->debugfs_name. For the first debufs entry, map->debugfs_name is NULL
-and then the new name is allocated via kasprintf().
-
-For the second debugfs entry, map->debugfs_name() is no longer NULL, so
-it will keep using the old entry name and the duplicate name error is seen.
-
-Quoting Mark Brown:
-
-"That means that if the device gets freed we'll end up with the old debugfs
-file hanging around pointing at nothing.
-...
-To be more explicit this means we need a call to regmap_debugfs_exit()
-which will clean up all the existing debugfs stuff before we loose
-references to it."
-
-Call regmap_debugfs_exit() prior to regmap_debugfs_init() to fix
-the problem.
-
-Tested on i.MX6Q and i.MX6SX boards.
-
-Fixes: cffa4b2122f5 ("regmap: debugfs: Fix a memory leak when calling regmap_attach_dev")
-Suggested-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Fabio Estevam <festevam@denx.de>
-Link: https://lore.kernel.org/r/20220107163307.335404-1-festevam@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 55e5b97f003e ("can: mcp25xxfd: add driver for Microchip MCP25xxFD SPI CAN")
+Link: https://lore.kernel.org/all/20220105154300.1258636-4-mkl@pengutronix.de
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/base/regmap/regmap.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
-index 456a1787e18d0..55a30afc14a00 100644
---- a/drivers/base/regmap/regmap.c
-+++ b/drivers/base/regmap/regmap.c
-@@ -620,6 +620,7 @@ int regmap_attach_dev(struct device *dev, struct regmap *map,
- 	if (ret)
- 		return ret;
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index 4e13f6dfb91a2..e0b322ab03628 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -2497,7 +2497,7 @@ static int mcp251xfd_register_chip_detect(struct mcp251xfd_priv *priv)
+ 	if (!mcp251xfd_is_251X(priv) &&
+ 	    priv->devtype_data.model != devtype_data->model) {
+ 		netdev_info(ndev,
+-			    "Detected %s, but firmware specifies a %s. Fixing up.",
++			    "Detected %s, but firmware specifies a %s. Fixing up.\n",
+ 			    __mcp251xfd_get_model_str(devtype_data->model),
+ 			    mcp251xfd_get_model_str(priv));
+ 	}
+@@ -2534,7 +2534,7 @@ static int mcp251xfd_register_check_rx_int(struct mcp251xfd_priv *priv)
+ 		return 0;
  
-+	regmap_debugfs_exit(map);
- 	regmap_debugfs_init(map);
+ 	netdev_info(priv->ndev,
+-		    "RX_INT active after softreset, disabling RX_INT support.");
++		    "RX_INT active after softreset, disabling RX_INT support.\n");
+ 	devm_gpiod_put(&priv->spi->dev, priv->rx_int);
+ 	priv->rx_int = NULL;
  
- 	/* Add a devres resource for dev_get_regmap() */
 -- 
 2.34.1
 

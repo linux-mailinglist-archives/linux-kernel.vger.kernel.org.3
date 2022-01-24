@@ -2,111 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EC69498634
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA8849863C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:16:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241460AbiAXRPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:15:35 -0500
-Received: from m43-7.mailgun.net ([69.72.43.7]:38867 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244403AbiAXRPd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:15:33 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1643044533; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=piowxZvxdRmjQpd/2H1/kJab1tq+eQt2F5u4/0VD8C0=; b=HmnuTIHjVehS+l+Zp/7SpxMP1tH/x9jki6Kx5Ies+8jJrmGuN+t/5uhyF7aGvC2bx3eOq4JG
- oU4Mws5QKJp53Kdq0J2Mne0XMlNccx6xJfDc/1oIEqgQxqjG5ZjGOXSuMKw+FPahrXk79JrE
- Uv2I3jCgl3CUUjuhM7DTn3Pt3fE=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 61eede7362864ab1016bbae1 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 24 Jan 2022 17:14:27
- GMT
-Sender: tdas=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 99D98C4360D; Mon, 24 Jan 2022 17:14:26 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from hu-tdas-hyd.qualcomm.com (unknown [202.46.22.19])
+        id S244233AbiAXRQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:16:36 -0500
+Received: from mta-p6.oit.umn.edu ([134.84.196.206]:38836 "EHLO
+        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244671AbiAXRPL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 12:15:11 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 4JjGnq0MjRz9w6RF
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 17:15:11 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p6.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id p-akFQfq6MvS for <linux-kernel@vger.kernel.org>;
+        Mon, 24 Jan 2022 11:15:10 -0600 (CST)
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: tdas)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3ACDDC4360D;
-        Mon, 24 Jan 2022 17:14:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 3ACDDC4360D
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-From:   Taniya Das <tdas@codeaurora.org>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?q?Michael=20Turquette=20=C2=A0?= <mturquette@baylibre.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Taniya Das <tdas@codeaurora.org>
-Subject: [PATCH v1] clk: qcom: clk-rcg2: Update logic to calculate D value for RCG
-Date:   Mon, 24 Jan 2022 22:44:15 +0530
-Message-Id: <20220124171415.12293-1-tdas@codeaurora.org>
-X-Mailer: git-send-email 2.17.1
+        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id 4JjGnp5PrHz9w6RS
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:15:10 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p6.oit.umn.edu 4JjGnp5PrHz9w6RS
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p6.oit.umn.edu 4JjGnp5PrHz9w6RS
+Received: by mail-pl1-f198.google.com with SMTP id z11-20020a1709027e8b00b0014a642aacc6so3675902pla.10
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:15:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=390Z369C1NgAVDfHVFd06GPqJvUJJ6Covz6dC4YZpPs=;
+        b=bImcnXy8fZy7F4dnGzUsw02MV9/8DVIGzU96NqOUAJi+y0l/xzshbFH+OUYSHiuoWM
+         b9TwMoxjDBZjPQkqJ8p0HknNru4OYBFFbF7CmZ4ZRKIzBkSlX40S1pG7eEMu2lcBJF01
+         b+/yhpSulOi4tu6iTtBtXdWdnHCpCWziYn876IfwP2dGmmKLI2ANAdUeVC7SIQRk4zO9
+         9MZ5jaWkVw/OuhErY6Pve9OTyAufrUuaOC/89woviuBHLIkM6P4BLOaxrIvY+3rWWS1B
+         GPdm5BRDlQnlelJ6RAIEDHiP+bweofWbwrFc0cFBAspGEf8dE0nfzw6kdKCpYRlF44AA
+         I4MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=390Z369C1NgAVDfHVFd06GPqJvUJJ6Covz6dC4YZpPs=;
+        b=qvSwmG5QJZcqTyK8Sk8pAPHyjiisFk78dEKX5upvbR5n1YhdM1gwn4X2l94tRPWjH/
+         dg3Ewtr/t3HgZuMkl1zgeB64NDixb4EfR+oixy9sRMcGhSjpQilAVY+Rdi6dJPyp/X3E
+         8AMzY6bCoCQaud+nSBUph+1BU3VFjN5KXPF2EtmQV2GloCYwlAsmbJ8QBZIlkgq3Ljxm
+         mOCUVWuuUm02n8ZK9UK38Dpki2JDmfzjCHOtJe/aG6uvd4rK1xt0WDnfrwXZ4q66i34h
+         CZkmLDNKmI4190XEhwKaBRTbXducAghyN1Y2V1ACOuhZDcMTm25LRPj50VL7Msfo2rxI
+         QZ8Q==
+X-Gm-Message-State: AOAM5327xruzrFpYGats87Iwi8GPVa6DFAkiZGEitSaps2DyD4axJ+y2
+        LeLg1PR2zBlMQhryWGsArUBS4S/4eUogwi8no5YWOUDzZjlY4LzTJucHWBvQUUN2VSkpN8zPhsp
+        nTtDMSRndy58ny331CaIADUCnakVl
+X-Received: by 2002:a62:e210:0:b0:4c9:1cff:15cc with SMTP id a16-20020a62e210000000b004c91cff15ccmr2439276pfi.55.1643044509979;
+        Mon, 24 Jan 2022 09:15:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx84cDfl3K1Yzlm2R96/QreAAV4PPWN7pVVziLRsV/a1l3TVNWg71tyUX9SHuxKcq+2egH2Mw==
+X-Received: by 2002:a62:e210:0:b0:4c9:1cff:15cc with SMTP id a16-20020a62e210000000b004c91cff15ccmr2439258pfi.55.1643044509740;
+        Mon, 24 Jan 2022 09:15:09 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.4.61.248])
+        by smtp.gmail.com with ESMTPSA id 197sm462785pfz.152.2022.01.24.09.15.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 09:15:09 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: mtk-vcodec: media: mtk-vcodec: Fix a NULL pointer dereference in mtk_vcodec_fw_vpu_init()
+Date:   Tue, 25 Jan 2022 01:15:03 +0800
+Message-Id: <20220124171503.61098-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current implementation does not check for D value is within
-the accepted range for a given M & N value. Update the logic to
-calculate the final D value based on the range. While at it, add
-support for 2/3 divider in frac_table_pixel.
+In mtk_vcodec_fw_vpu_init(), devm_kzalloc() is assigned to fw and there is
+a dereference of it right after that, which could lead to NULL pointer
+dereference on failure of devm_kzalloc().
 
-Signed-off-by: Taniya Das <tdas@codeaurora.org>
+Fix this bug by adding a NULL check of fw.
+
+This bug was found by a static analyzer.
+
+Builds with 'make allyesconfig' show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Fixes: 46233e91fa24 ("media: mtk-vcodec: move firmware implementations into their own files")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
 ---
- drivers/clk/qcom/clk-rcg2.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+The analysis employs differential checking to identify inconsistent 
+security operations (e.g., checks or kfrees) between two code paths 
+and confirms that the inconsistent operations are not recovered in the
+current function or the callers, so they constitute bugs. 
 
-diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
-index e1b1b426fae4..036c8071c07a 100644
---- a/drivers/clk/qcom/clk-rcg2.c
-+++ b/drivers/clk/qcom/clk-rcg2.c
-@@ -264,7 +264,7 @@ static int clk_rcg2_determine_floor_rate(struct clk_hw *hw,
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
 
- static int __clk_rcg2_configure(struct clk_rcg2 *rcg, const struct freq_tbl *f)
- {
--	u32 cfg, mask;
-+	u32 cfg, mask, d_val, not2d_val;
- 	struct clk_hw *hw = &rcg->clkr.hw;
- 	int ret, index = qcom_find_src_index(hw, rcg->parent_map, f->src);
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-@@ -283,8 +283,18 @@ static int __clk_rcg2_configure(struct clk_rcg2 *rcg, const struct freq_tbl *f)
- 		if (ret)
- 			return ret;
-
-+		/* Calculate 2d value */
-+		d_val = f->n;
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
+index cd27f637dbe7..33ae88a9f9da 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
+@@ -102,6 +102,9 @@ struct mtk_vcodec_fw *mtk_vcodec_fw_vpu_init(struct mtk_vcodec_dev *dev,
+ 	vpu_wdt_reg_handler(fw_pdev, mtk_vcodec_vpu_reset_handler, dev, rst_id);
+ 
+ 	fw = devm_kzalloc(&dev->plat_dev->dev, sizeof(*fw), GFP_KERNEL);
++	if (!fw)
++		return ERR_PTR(-ENOMEM);
 +
-+		if (d_val > ((f->n - f->m) * 2))
-+			d_val = (f->n - f->m) * 2;
-+		else if (d_val < f->m)
-+			d_val = f->m;
-+
-+		not2d_val = ~d_val & mask;
-+
- 		ret = regmap_update_bits(rcg->clkr.regmap,
--				RCG_D_OFFSET(rcg), mask, ~f->n);
-+				RCG_D_OFFSET(rcg), mask, not2d_val);
- 		if (ret)
- 			return ret;
- 	}
-@@ -720,6 +730,7 @@ static const struct frac_entry frac_table_pixel[] = {
- 	{ 2, 9 },
- 	{ 4, 9 },
- 	{ 1, 1 },
-+	{ 2, 3 },
- 	{ }
- };
-
---
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
-of the Code Aurora Forum, hosted by the  Linux Foundation.
+ 	fw->type = VPU;
+ 	fw->ops = &mtk_vcodec_vpu_msg;
+ 	fw->pdev = fw_pdev;
+-- 
+2.25.1
 

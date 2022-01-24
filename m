@@ -2,237 +2,354 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF3A497EB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3DFB497EFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238394AbiAXMNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 07:13:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40212 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233792AbiAXMNA (ORCPT
+        id S242670AbiAXMO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 07:14:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239179AbiAXMNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:13:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643026379;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jgo/S7sjlaPhT9Y19EsdD9p5FFY6hIgWybsEw2AdVf4=;
-        b=P3wQ5sM2qoKT/xc6P4kD6e4EKzdpbID7qLh6/M/Kity4ypPqgOxi9M9FHeqsBXzhfZMFYe
-        nM+OoPyZdwSZh8QxSgB2emMA5/aHNyNXBn482MMZIESDUrlHxzljbhQcywhvnHYCm+QSKX
-        /0z2oIYNlBELpMZKf2VNonDwJYQoCP4=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-44-_oBQ9XlTOnGQGi9V2A8Kxw-1; Mon, 24 Jan 2022 07:12:58 -0500
-X-MC-Unique: _oBQ9XlTOnGQGi9V2A8Kxw-1
-Received: by mail-ej1-f69.google.com with SMTP id rl11-20020a170907216b00b006b73a611c1aso1300297ejb.22
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 04:12:58 -0800 (PST)
+        Mon, 24 Jan 2022 07:13:53 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822C8C06173B;
+        Mon, 24 Jan 2022 04:13:36 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id p12so56230841edq.9;
+        Mon, 24 Jan 2022 04:13:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kgwpa/nfD6Ba4i91nDFUIWWvs0ArnF+hSW7LgNcf6rE=;
+        b=g8eOZt/yXkPSSVZsS2dcITsg6fYbYuis6CyPatnKCrBWgppXNOsNe2s7oKTZ8ydIQk
+         h544LP/z4awYUUF8rWeQ0pNLwDNjqIEyXjm2bf3QpBxxNddTpqk5D79NCaY0E2ALqQl5
+         xftqFXI4Ob/Jm/7toTeBZMjjQ3O58qUSt0Emiclwcba7TDnvTo1vNSDZ20lTJtf5X2Km
+         5ohDel38JjNL6jFbSzBSRwSPSp7G7BXvcBaSwbzY/GYOHyVzNRxdOqm0LLgAf4PuUmqu
+         pXwQvp3vCOhxPqQo+UMpTyvyFdjjVd1N287F19Bty239ptr8q4qawVEa9rKXL7fkjIEa
+         Ajjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Jgo/S7sjlaPhT9Y19EsdD9p5FFY6hIgWybsEw2AdVf4=;
-        b=s7b20BoKdoI6fqIUaD38o1oYUHok+WQRGwC7YRJDWh9BeRsm4JkJi1ahoRS5SpMqdm
-         GcGlyPX5+Wkggw/6lBTPEvZ90dXochZFcMZBdZs1JPSl/XFnB7cUs4p5X2pBz+OPbwks
-         80NL7rgP2uOFYqZkIvB1ip1icBu8ECaA/D3ooKNHeo93p6AWLIm/Wd/EGO1yEyz8u8En
-         WdM7WGqBW4mkNLgh+1Z8tdAsgDsbQTDzO0W14+2SuysAkooBqmMdRlQB94FLh4rLBCX8
-         6IqLxqGTZd/jMAOPUFnwLwf/Wg7ItYZJr+s7rdG91iyvBv1KVo12I4YnJq+yADhcvipE
-         TJ1A==
-X-Gm-Message-State: AOAM532B3rOddr0Z63DDxMSl1A7m5+LXKyG8HgSp7WhJKgpcinzQ8J2Z
-        rxbsAs1k7xNFo5+cnUm7utCpyTKhBW0iwe4TcYMEkVEQfWi/eTb3WBVAUfv8AdgVz6ye+KFuxg3
-        yrGynD6sMX2Q24fJ7Ej8gaSZ6
-X-Received: by 2002:a50:f60a:: with SMTP id c10mr15677284edn.244.1643026376217;
-        Mon, 24 Jan 2022 04:12:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzeAP+ilNlgL4BcKuLW9AzZIZHsF6UJc18boCsxUW/7gD4RQkhhDnrivWREc2YP+evP+Hm8iw==
-X-Received: by 2002:a50:f60a:: with SMTP id c10mr15677203edn.244.1643026374972;
-        Mon, 24 Jan 2022 04:12:54 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id bl12sm4786871ejb.75.2022.01.24.04.12.54
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kgwpa/nfD6Ba4i91nDFUIWWvs0ArnF+hSW7LgNcf6rE=;
+        b=6NAVPI5F3/6Q1WVIO5ZM4Ry++qfWf1Z/tb2WBo5OWB9xKFq58HcND6hQ8B0I/Vbf8a
+         LSylVAkYwyendsPKyCPFk2VRMr0ATqn+mEaxuMZ8rsLIvjLM8jv8xWyzbhaSiNdu8c2a
+         4rgnr+hsIvDb5KE2itwDdAuptbOiYYLJ/GXxHFs+wtMa4WdMf4sj+36v7nn6pNKW7QSi
+         B2yTJEK8pNV/Vz0HyBZdZPYjfWE/Mb56L++d6rJKEiw91zPlyJ4tvINYZiD6UPZPyGvI
+         IYZYCLfdNbp+3Z6nQ7bnPiQwJ3u2+8TOoXyhNPX7HTq0DUjZLjjgwIWvDTcbS+8dGTtm
+         3ULg==
+X-Gm-Message-State: AOAM531oIBKRTvK9vztQVgmUGO5N6dafCMvdIt13M0NZa92fx8yjomol
+        Lq4emDpNTzhugfgwET+ODJ8=
+X-Google-Smtp-Source: ABdhPJwOcTDY2FAgRFkSXe7fQGCPq2S4k26eOKhwbyI5YImvYENnfXxJJMJtyeXTgnSr0GuSc1veyQ==
+X-Received: by 2002:a05:6402:5246:: with SMTP id t6mr8070016edd.35.1643026415069;
+        Mon, 24 Jan 2022 04:13:35 -0800 (PST)
+Received: from ponky.lan ([2a04:241e:502:a09c:a21f:7a9f:9158:4a40])
+        by smtp.gmail.com with ESMTPSA id b16sm4847517eja.211.2022.01.24.04.13.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 04:12:54 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id B0E2F18044B; Mon, 24 Jan 2022 13:12:53 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Colin Foster <colin.foster@in-advantage.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        Mon, 24 Jan 2022 04:13:34 -0800 (PST)
+From:   Leonard Crestez <cdleonard@gmail.com>
+To:     David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Philip Paeps <philip@trouble.is>,
+        Dmitry Safonov <0x7f454c46@gmail.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>
-Subject: Re: [net RFC v1 1/1] page_pool: fix NULL dereference crash
-In-Reply-To: <CAADnVQ+UqKMfn+ZxgOkBcXidBWUGJDugU7gCEV+rGS6wscZjJw@mail.gmail.com>
-References: <20220122005644.802352-1-colin.foster@in-advantage.com>
- <20220122005644.802352-2-colin.foster@in-advantage.com>
- <CAADnVQK8xrQ92+=wm8AoDkC93SEKz3G=CoOnkPgvs=spJk5UZA@mail.gmail.com>
- <20220122022047.GA803138@euler>
- <CAADnVQ+UqKMfn+ZxgOkBcXidBWUGJDugU7gCEV+rGS6wscZjJw@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Mon, 24 Jan 2022 13:12:53 +0100
-Message-ID: <87mtjl5o3e.fsf@toke.dk>
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yuchung Cheng <ycheng@google.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Christoph Paasch <cpaasch@apple.com>,
+        Ivan Delalande <colona@arista.com>,
+        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 08/20] tcp: authopt: Implement Sequence Number Extension
+Date:   Mon, 24 Jan 2022 14:12:54 +0200
+Message-Id: <4e554642d04304ef61797f5ddc7dc22a2a081eee.1643026076.git.cdleonard@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1643026076.git.cdleonard@gmail.com>
+References: <cover.1643026076.git.cdleonard@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+Add a compute_sne function which finds the value of SNE for a certain
+SEQ given an already known "recent" SNE/SEQ. This is implemented using
+the standard tcp before/after macro and will work for SEQ values that
+are without 2^31 of the SEQ for which we know the SNE.
 
-> On Fri, Jan 21, 2022 at 6:20 PM Colin Foster
-> <colin.foster@in-advantage.com> wrote:
->>
->> On Fri, Jan 21, 2022 at 05:13:28PM -0800, Alexei Starovoitov wrote:
->> > On Fri, Jan 21, 2022 at 4:57 PM Colin Foster
->> > <colin.foster@in-advantage.com> wrote:
->> > >
->> > > Check for the existence of page pool params before dereferencing. This can
->> > > cause crashes in certain conditions.
->> >
->> > In what conditions?
->> > Out of tree driver?
->>
->> Hi Alexei,
->>
->> Thanks for the quick response.
->>
->> I'm actively working on a DSA driver that is currently out-of-tree, but
->> trying to get it into mainline. But I'm not convinced that's the
->> problem...
->>
->> I'm using a beagelebone black with the cpsw_new driver. There are two
->> tweaks to that driver: the default vlan port is 10 and 11 so there's no
->> conflict between cpsw_new and DSA, and the ndev->max_mtu / rx_packet_max
->> have been increased to 1600 to allow for DSA frames larger than the
->> standard MTU of 1500.
->>
->> My focus is on the DSA driver, but the crash happens as soon as I run
->> "ip link set eth0 up" which is invoking the cpsw_new driver. Therefore I
->> suspect that the issue is not directly related to the DSA section
->> (ocelot / felix, much of which uses code that is mainline)
->>
->> As I suggested, I haven't dug into what is going on around the
->> page_pool yet. If there is something that is pre-loading memory at 1500
->> byte intervals and I broke that, that's entirely on me.
->>
->> [ removes 1600 byte MTU patch and pool patch ]
->>
->> I can confirm it still crashes when I don't modify the MTU in the
->> cpsw_new driver... so that doesn't seem to be it. That crash log is
->> below.
->>
->>
->> # ip link set eth0 up
->> [   18.074704] cpsw-switch 4a100000.switch: starting ndev. mode: dual_mac
->> [   18.174286] SMSC LAN8710/LAN8720 4a101000.mdio:00: attached PHY driver (mii_bus:phy_addr=4a101000.mdio:00, irq=POLL)
->> [   18.185458] 8<--- cut here ---
->> [   18.188554] Unable to handle kernel paging request at virtual address c3104440
->> [   18.195819] [c3104440] *pgd=8300041e(bad)
->> [   18.199885] Internal error: Oops: 8000000d [#1] SMP ARM
->> [   18.205148] Modules linked in:
->> [   18.208233] CPU: 0 PID: 168 Comm: ip Not tainted 5.16.0-05302-g8bd405e6e8a0-dirty #265
->> [   18.216201] Hardware name: Generic AM33XX (Flattened Device Tree)
->> [   18.222328] PC is at 0xc3104440
->> [   18.225500] LR is at __page_pool_alloc_pages_slow+0xbc/0x2e0
->> [   18.231222] pc : [<c3104440>]    lr : [<c0ee06c8>]    psr: a00b0013
->> [   18.237523] sp : c3104440  ip : 00000020  fp : c219e580
->> [   18.242778] r10: c1a04d54  r9 : 00000000  r8 : 00000000
->> [   18.248032] r7 : c36b9000  r6 : 00000000  r5 : c36b9084  r4 : 00000000
->> [   18.254595] r3 : c07a399c  r2 : 00000000  r1 : c325784c  r0 : dfa48bc0
->> [   18.261162] Flags: NzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
->> [   18.268343] Control: 10c5387d  Table: 836f0019  DAC: 00000051
->> [   18.274119] Register r0 information: non-slab/vmalloc memory
->> [   18.279825] Register r1 information: non-slab/vmalloc memory
->> [   18.285523] Register r2 information: NULL pointer
->> [   18.290260] Register r3 information: non-slab/vmalloc memory
->> [   18.295957] Register r4 information: NULL pointer
->> [   18.300693] Register r5 information: slab kmalloc-1k start c36b9000 pointer offset 132 size 1024
->> [   18.309569] Register r6 information: NULL pointer
->> [   18.314306] Register r7 information: slab kmalloc-1k start c36b9000 pointer offset 0 size 1024
->> [   18.322999] Register r8 information: NULL pointer
->> [   18.327736] Register r9 information: NULL pointer
->> [   18.332473] Register r10 information: non-slab/vmalloc memory
->> [   18.338257] Register r11 information: slab kmalloc-4k start c219e000 pointer offset 1408 size 4096
->> [   18.347301] Register r12 information: non-paged memory
->> [   18.352475] Process ip (pid: 168, stack limit = 0x7eb0d4ab)
->> [   18.358089] Stack: (0xc3104440 to 0xc3258000)
->> (too big a stack to show)
->>
->>
->> I can confirm that it crashes on net-next/master as well:
->> commit fe8152b38d3a, using the same DTB that defines the cpsw_new port
->> as the DSA master. Relevant DTS snippet from my in-development driver:
->>
->> +&spi0 {
->> +       #address-cells = <1>;
->> +       #size-cells = <0>;
->> +       status = "okay";
->> +
->> +       ocelot-chip@0 {
->> +               compatible = "mscc,vsc7512_mfd_spi";
->> +               spi-max-frequency = <2500000>;
->> +               reg = <0>;
->> +
->> +               ethernet-switch@0 {
->> +                       compatible = "mscc,vsc7512-ext-switch";
->> +                       ports {
->> +                               #address-cells = <1>;
->> +                               #size-cells = <0>;
->> +
->> +                               port@0 {
->> +                                       reg = <0>;
->> +                                       label = "cpu";
->> +                                       status = "okay";
->> +                                       ethernet = <&mac_sw>;
->> +                                       phy-handle = <&sw_phy0>;
->> +                                       phy-mode = "internal";
->> +                               };
->>
->>
->> I was hoping for an "oh, if a switch is set up in DSA the page_pool gets
->> set up this way" type scenario. I fully understand that might not be the
->> case, and the issue could be in something I'm doing incorrectly - it
->> certainly wouldn't be the first time.
->>
->> If this patch doesn't make sense I can look deeper. As mentioned, I'm
->> working to get this accepted upstream, so I'll have to figure it out one
->> way or another.
->
-> With !pool tweak the patch makes sense.
->
-> Toke, wdyt?
+For updating we advance the value for rcv_sne at the same time as
+rcv_nxt and for snd_sne at the same time as snd_nxt. We could track
+other values (for example snd_una) but this is good enough and works
+very easily for timewait socket.
 
-I don't really see how page_pool_set_pp_info() can be called with a NULL
-'pool' pointer. There are only two callers:
-__page_pool_alloc_page_order() and __page_pool_alloc_pages_slow(). And
-both functions deref the pool pointer right before calling
-page_pool_set_pp_info(), so I don't really see how this patch would
-actually be a proper fix?
+This implementation is different from RFC suggestions and doesn't
+require additional flags. It does pass tests from this draft:
+    https://datatracker.ietf.org/doc/draft-touch-sne/
 
-Looking a bit closer, actually the fault seems like it lies with the
-driver; Colin, could you please check if the patch below fixes your
-issue?
+Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
+---
+ include/net/tcp_authopt.h | 34 ++++++++++++++
+ net/ipv4/tcp_authopt.c    | 98 ++++++++++++++++++++++++++++++++++++++-
+ net/ipv4/tcp_input.c      |  1 +
+ net/ipv4/tcp_output.c     |  1 +
+ 4 files changed, 132 insertions(+), 2 deletions(-)
 
-I'll go check all the other drivers as well and send a fix for all that
-are affected...
-
--Toke
-
-
-diff --git a/drivers/net/ethernet/ti/cpsw_priv.c b/drivers/net/ethernet/ti/cpsw_priv.c
-index 3537502e5e8b..648c78ecf2a5 100644
---- a/drivers/net/ethernet/ti/cpsw_priv.c
-+++ b/drivers/net/ethernet/ti/cpsw_priv.c
-@@ -1146,7 +1146,7 @@ int cpsw_fill_rx_channels(struct cpsw_priv *priv)
- static struct page_pool *cpsw_create_page_pool(struct cpsw_common *cpsw,
-                                               int size)
- {
--       struct page_pool_params pp_params;
-+       struct page_pool_params pp_params = {};
-        struct page_pool *pool;
+diff --git a/include/net/tcp_authopt.h b/include/net/tcp_authopt.h
+index 4c9ec1f39932..6e9b5ca22f62 100644
+--- a/include/net/tcp_authopt.h
++++ b/include/net/tcp_authopt.h
+@@ -66,10 +66,14 @@ struct tcp_authopt_info {
+ 	u32 flags;
+ 	/** @src_isn: Local Initial Sequence Number */
+ 	u32 src_isn;
+ 	/** @dst_isn: Remote Initial Sequence Number */
+ 	u32 dst_isn;
++	/** @rcv_sne: Recv-side Sequence Number Extension tracking tcp_sock.rcv_nxt */
++	u32 rcv_sne;
++	/** @snd_sne: Send-side Sequence Number Extension tracking tcp_sock.snd_nxt */
++	u32 snd_sne;
+ };
  
-        pp_params.order = 0;
+ /* TCP authopt as found in header */
+ struct tcphdr_authopt {
+ 	u8 num;
+@@ -185,10 +189,34 @@ static inline int tcp_authopt_inbound_check_req(struct request_sock *req, struct
+ 		if (info)
+ 			return __tcp_authopt_inbound_check((struct sock *)req, skb, info, opt);
+ 	}
+ 	return 0;
+ }
++void __tcp_authopt_update_rcv_sne(struct tcp_sock *tp, struct tcp_authopt_info *info, u32 seq);
++static inline void tcp_authopt_update_rcv_sne(struct tcp_sock *tp, u32 seq)
++{
++	struct tcp_authopt_info *info;
++
++	if (tcp_authopt_needed) {
++		info = rcu_dereference_protected(tp->authopt_info,
++						 lockdep_sock_is_held((struct sock *)tp));
++		if (info)
++			__tcp_authopt_update_rcv_sne(tp, info, seq);
++	}
++}
++void __tcp_authopt_update_snd_sne(struct tcp_sock *tp, struct tcp_authopt_info *info, u32 seq);
++static inline void tcp_authopt_update_snd_sne(struct tcp_sock *tp, u32 seq)
++{
++	struct tcp_authopt_info *info;
++
++	if (tcp_authopt_needed) {
++		info = rcu_dereference_protected(tp->authopt_info,
++						 lockdep_sock_is_held((struct sock *)tp));
++		if (info)
++			__tcp_authopt_update_snd_sne(tp, info, seq);
++	}
++}
+ #else
+ static inline int tcp_set_authopt(struct sock *sk, sockptr_t optval, unsigned int optlen)
+ {
+ 	return -ENOPROTOOPT;
+ }
+@@ -235,8 +263,14 @@ static inline int tcp_authopt_inbound_check(struct sock *sk, struct sk_buff *skb
+ static inline int tcp_authopt_inbound_check_req(struct request_sock *sk, struct sk_buff *skb,
+ 						const u8 *opt)
+ {
+ 	return 0;
+ }
++static inline void tcp_authopt_update_rcv_sne(struct tcp_sock *tp, u32 seq)
++{
++}
++static inline void tcp_authopt_update_snd_sne(struct tcp_sock *tp, u32 seq)
++{
++}
+ #endif
+ 
+ #endif /* _LINUX_TCP_AUTHOPT_H */
+diff --git a/net/ipv4/tcp_authopt.c b/net/ipv4/tcp_authopt.c
+index 939dfb4a6f12..5e240b4ada60 100644
+--- a/net/ipv4/tcp_authopt.c
++++ b/net/ipv4/tcp_authopt.c
+@@ -649,10 +649,97 @@ static int tcp_authopt_get_isn(struct sock *sk,
+ 		*disn = htonl(info->dst_isn);
+ 	}
+ 	return 0;
+ }
+ 
++/* compute_sne - Calculate Sequence Number Extension
++ *
++ * Give old upper/lower 32bit values and a new lower 32bit value determine the
++ * new value of the upper 32 bit. The new sequence number can be 2^31 before or
++ * after prev_seq but TCP window scaling should limit this further.
++ *
++ * For correct accounting the stored SNE value should be only updated together
++ * with the SEQ.
++ */
++static u32 compute_sne(u32 sne, u32 prev_seq, u32 seq)
++{
++	if (before(seq, prev_seq)) {
++		if (seq > prev_seq)
++			--sne;
++	} else {
++		if (seq < prev_seq)
++			++sne;
++	}
++
++	return sne;
++}
++
++/* Update rcv_sne, must be called immediately before rcv_nxt update */
++void __tcp_authopt_update_rcv_sne(struct tcp_sock *tp,
++				  struct tcp_authopt_info *info, u32 seq)
++{
++	info->rcv_sne = compute_sne(info->rcv_sne, tp->rcv_nxt, seq);
++}
++
++/* Update snd_sne, must be called immediately before snd_nxt update */
++void __tcp_authopt_update_snd_sne(struct tcp_sock *tp,
++				  struct tcp_authopt_info *info, u32 seq)
++{
++	info->snd_sne = compute_sne(info->snd_sne, tp->snd_nxt, seq);
++}
++
++/* Compute SNE for a specific packet (by seq). */
++static int compute_packet_sne(struct sock *sk, struct tcp_authopt_info *info,
++			      u32 seq, bool input, __be32 *sne)
++{
++	u32 rcv_nxt, snd_nxt;
++
++	// For TCP_NEW_SYN_RECV we have no tcp_authopt_info but tcp_request_sock holds ISN.
++	if (sk->sk_state == TCP_NEW_SYN_RECV) {
++		struct tcp_request_sock *rsk = tcp_rsk((struct request_sock *)sk);
++
++		if (input)
++			*sne = htonl(compute_sne(0, rsk->rcv_isn, seq));
++		else
++			*sne = htonl(compute_sne(0, rsk->snt_isn, seq));
++		return 0;
++	}
++
++	/* TCP_LISTEN only receives SYN */
++	if (sk->sk_state == TCP_LISTEN && input)
++		return 0;
++
++	/* TCP_SYN_SENT only sends SYN and receives SYN/ACK
++	 * For the input case rcv_nxt is initialized after the packet is
++	 * validated so tcp_sk(sk)->rcv_nxt is not initialized.
++	 */
++	if (sk->sk_state == TCP_SYN_SENT)
++		return 0;
++
++	if (sk->sk_state == TCP_TIME_WAIT) {
++		rcv_nxt = tcp_twsk(sk)->tw_rcv_nxt;
++		snd_nxt = tcp_twsk(sk)->tw_snd_nxt;
++	} else {
++		if (WARN_ONCE(!sk_fullsock(sk),
++			      "unexpected minisock sk=%p state=%d", sk,
++			      sk->sk_state))
++			return -EINVAL;
++		rcv_nxt = tcp_sk(sk)->rcv_nxt;
++		snd_nxt = tcp_sk(sk)->snd_nxt;
++	}
++
++	if (WARN_ONCE(!info, "unexpected missing info for sk=%p sk_state=%d", sk, sk->sk_state))
++		return -EINVAL;
++
++	if (input)
++		*sne = htonl(compute_sne(info->rcv_sne, rcv_nxt, seq));
++	else
++		*sne = htonl(compute_sne(info->snd_sne, snd_nxt, seq));
++
++	return 0;
++}
++
+ /* Feed one buffer into ahash
+  * The buffer is assumed to be DMA-able
+  */
+ static int crypto_ahash_buf(struct ahash_request *req, u8 *buf, uint len)
+ {
+@@ -684,10 +771,13 @@ int __tcp_authopt_openreq(struct sock *newsk, const struct sock *oldsk, struct r
+ 	if (!new_info)
+ 		return -ENOMEM;
+ 
+ 	new_info->src_isn = tcp_rsk(req)->snt_isn;
+ 	new_info->dst_isn = tcp_rsk(req)->rcv_isn;
++	/* Caller is tcp_create_openreq_child and already initializes snd_nxt/rcv_nxt */
++	new_info->snd_sne = compute_sne(0, new_info->src_isn, tcp_sk(newsk)->snd_nxt);
++	new_info->rcv_sne = compute_sne(0, new_info->dst_isn, tcp_sk(newsk)->rcv_nxt);
+ 	sk_gso_disable(newsk);
+ 	rcu_assign_pointer(tcp_sk(newsk)->authopt_info, new_info);
+ 
+ 	return 0;
+ }
+@@ -695,10 +785,12 @@ int __tcp_authopt_openreq(struct sock *newsk, const struct sock *oldsk, struct r
+ void __tcp_authopt_finish_connect(struct sock *sk, struct sk_buff *skb,
+ 				  struct tcp_authopt_info *info)
+ {
+ 	info->src_isn = ntohl(tcp_hdr(skb)->ack_seq) - 1;
+ 	info->dst_isn = ntohl(tcp_hdr(skb)->seq);
++	info->snd_sne = compute_sne(0, info->src_isn, tcp_sk(sk)->snd_nxt);
++	info->rcv_sne = compute_sne(0, info->dst_isn, tcp_sk(sk)->rcv_nxt);
+ }
+ 
+ /* feed traffic key into ahash */
+ static int tcp_authopt_ahash_traffic_key(struct tcp_authopt_alg_pool *pool,
+ 					 struct sock *sk,
+@@ -952,14 +1044,16 @@ static int tcp_authopt_hash_packet(struct tcp_authopt_alg_pool *pool,
+ 				   bool ipv6,
+ 				   bool include_options,
+ 				   u8 *macbuf)
+ {
+ 	struct tcphdr *th = tcp_hdr(skb);
++	__be32 sne = 0;
+ 	int err;
+ 
+-	/* NOTE: SNE unimplemented */
+-	__be32 sne = 0;
++	err = compute_packet_sne(sk, info, ntohl(th->seq), input, &sne);
++	if (err)
++		return err;
+ 
+ 	err = crypto_ahash_init(pool->req);
+ 	if (err)
+ 		return err;
+ 
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 5bdb8c31b943..91f1b04c1933 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -3517,10 +3517,11 @@ static void tcp_snd_una_update(struct tcp_sock *tp, u32 ack)
+ static void tcp_rcv_nxt_update(struct tcp_sock *tp, u32 seq)
+ {
+ 	u32 delta = seq - tp->rcv_nxt;
+ 
+ 	sock_owned_by_me((struct sock *)tp);
++	tcp_authopt_update_rcv_sne(tp, seq);
+ 	tp->bytes_received += delta;
+ 	WRITE_ONCE(tp->rcv_nxt, seq);
+ }
+ 
+ /* Update our send window.
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index b959e8b949b6..6a6024a0b9e9 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -67,10 +67,11 @@ static void tcp_event_new_data_sent(struct sock *sk, struct sk_buff *skb)
+ {
+ 	struct inet_connection_sock *icsk = inet_csk(sk);
+ 	struct tcp_sock *tp = tcp_sk(sk);
+ 	unsigned int prior_packets = tp->packets_out;
+ 
++	tcp_authopt_update_snd_sne(tp, TCP_SKB_CB(skb)->end_seq);
+ 	WRITE_ONCE(tp->snd_nxt, TCP_SKB_CB(skb)->end_seq);
+ 
+ 	__skb_unlink(skb, &sk->sk_write_queue);
+ 	tcp_rbtree_insert(&sk->tcp_rtx_queue, skb);
+ 
+-- 
+2.25.1
 

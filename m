@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC7949A4A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5749F49A6EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2375353AbiAYATy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:19:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2359669AbiAXXej (ORCPT
+        id S1378541AbiAYC2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:28:13 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50364 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354217AbiAXUIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:34:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8626CC0AD1BF;
-        Mon, 24 Jan 2022 13:36:56 -0800 (PST)
+        Mon, 24 Jan 2022 15:08:00 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43490B811A9;
-        Mon, 24 Jan 2022 21:36:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DABDC340E4;
-        Mon, 24 Jan 2022 21:36:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2E47B811F9;
+        Mon, 24 Jan 2022 20:07:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9471C340E5;
+        Mon, 24 Jan 2022 20:07:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060214;
-        bh=O/8B47WCHt/7NggE2om+s/HBijeVuMCAcR01gd/vuYs=;
+        s=korg; t=1643054877;
+        bh=j8QhFAcoP5YnbewakrrigomulAjYONylTaD5Y1/NRwM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zz1GW8nhs4ldg0CWX2QQGh7II+fj27PWeAmeFZ0CUDjfIY8gev/pc9qSSeYL5tCnp
-         G/lof+yK+kk49xf2s+JMSrMxjuN8ImdMwQfdThKgHbJylrViHQm4R46noGIzazffGG
-         Ryo0hFhhbR12K1cm+RCSQ3maqoPTSltvaUf8dWZw=
+        b=WQCo2Gbyu8LFHzJekqXo92mNjvb61C1Qidw7wCqsb5MyE9ZzYQhD+KjfNIDLBHfEu
+         DFG/JWRqusWn9S6pY5fm28ALw+st2GzMRzeKuXpX/EGXsHtVgKBVxDao6GPgvqBp8x
+         8WtsGzBJkz8lsetxvxvgiaYqJ2WV/W9kJDnWQBsA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: [PATCH 5.16 0876/1039] PCI: pci-bridge-emul: Properly mark reserved PCIe bits in PCI config space
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.10 500/563] dmaengine: stm32-mdma: fix STM32_MDMA_CTBR_TSEL_MASK
 Date:   Mon, 24 Jan 2022 19:44:25 +0100
-Message-Id: <20220124184154.743263590@linuxfoundation.org>
+Message-Id: <20220124184041.745777054@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,53 +46,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
 
-commit 7b067ac63a5730d2fae18399fed7e45f23d36912 upstream.
+commit e7f110889a87307fb0fed408a5dee1707796ca04 upstream.
 
-Some bits in PCI config space are reserved when device is PCIe. Properly
-define behavior of PCI registers for PCIe emulated bridge and ensure that
-it would not be possible change these reserved bits.
+This patch fixes STM32_MDMA_CTBR_TSEL_MASK, which is [5:0], not [7:0].
 
-Link: https://lore.kernel.org/r/20211124155944.1290-3-pali@kernel.org
-Fixes: 23a5fba4d941 ("PCI: Introduce PCI bridge emulated config space common logic")
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc: stable@vger.kernel.org
+Fixes: a4ffb13c8946 ("dmaengine: Add STM32 MDMA driver")
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Link: https://lore.kernel.org/r/20211220165827.1238097-1-amelie.delaunay@foss.st.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/pci-bridge-emul.c |   21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ drivers/dma/stm32-mdma.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/pci/pci-bridge-emul.c
-+++ b/drivers/pci/pci-bridge-emul.c
-@@ -295,6 +295,27 @@ int pci_bridge_emul_init(struct pci_brid
- 			kfree(bridge->pci_regs_behavior);
- 			return -ENOMEM;
- 		}
-+		/* These bits are applicable only for PCI and reserved on PCIe */
-+		bridge->pci_regs_behavior[PCI_CACHE_LINE_SIZE / 4].ro &=
-+			~GENMASK(15, 8);
-+		bridge->pci_regs_behavior[PCI_COMMAND / 4].ro &=
-+			~((PCI_COMMAND_SPECIAL | PCI_COMMAND_INVALIDATE |
-+			   PCI_COMMAND_VGA_PALETTE | PCI_COMMAND_WAIT |
-+			   PCI_COMMAND_FAST_BACK) |
-+			  (PCI_STATUS_66MHZ | PCI_STATUS_FAST_BACK |
-+			   PCI_STATUS_DEVSEL_MASK) << 16);
-+		bridge->pci_regs_behavior[PCI_PRIMARY_BUS / 4].ro &=
-+			~GENMASK(31, 24);
-+		bridge->pci_regs_behavior[PCI_IO_BASE / 4].ro &=
-+			~((PCI_STATUS_66MHZ | PCI_STATUS_FAST_BACK |
-+			   PCI_STATUS_DEVSEL_MASK) << 16);
-+		bridge->pci_regs_behavior[PCI_INTERRUPT_LINE / 4].rw &=
-+			~((PCI_BRIDGE_CTL_MASTER_ABORT |
-+			   BIT(8) | BIT(9) | BIT(11)) << 16);
-+		bridge->pci_regs_behavior[PCI_INTERRUPT_LINE / 4].ro &=
-+			~((PCI_BRIDGE_CTL_FAST_BACK) << 16);
-+		bridge->pci_regs_behavior[PCI_INTERRUPT_LINE / 4].w1c &=
-+			~(BIT(10) << 16);
- 	}
+--- a/drivers/dma/stm32-mdma.c
++++ b/drivers/dma/stm32-mdma.c
+@@ -184,7 +184,7 @@
+ #define STM32_MDMA_CTBR(x)		(0x68 + 0x40 * (x))
+ #define STM32_MDMA_CTBR_DBUS		BIT(17)
+ #define STM32_MDMA_CTBR_SBUS		BIT(16)
+-#define STM32_MDMA_CTBR_TSEL_MASK	GENMASK(7, 0)
++#define STM32_MDMA_CTBR_TSEL_MASK	GENMASK(5, 0)
+ #define STM32_MDMA_CTBR_TSEL(n)		STM32_MDMA_SET(n, \
+ 						      STM32_MDMA_CTBR_TSEL_MASK)
  
- 	if (flags & PCI_BRIDGE_EMUL_NO_PREFETCHABLE_BAR) {
 
 

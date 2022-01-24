@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8CA649A6B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A614549A5CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:13:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3420681AbiAYCZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:25:06 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49106 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349496AbiAXTUx (ORCPT
+        id S3410639AbiAYA3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:29:40 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45920 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1454930AbiAXVeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:20:53 -0500
+        Mon, 24 Jan 2022 16:34:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6804660909;
-        Mon, 24 Jan 2022 19:20:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50C1AC340E5;
-        Mon, 24 Jan 2022 19:20:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC226B81257;
+        Mon, 24 Jan 2022 21:34:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02FBDC340E4;
+        Mon, 24 Jan 2022 21:34:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052051;
-        bh=diNtmretYvBMH6ruzlzMmmbrIGYcwFDWMdE2r2P1wKI=;
+        s=korg; t=1643060044;
+        bh=PuPDInC1r/GLcY+Vi+sQObVdNBoB1cbEQ8SKVAlGUU0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1HI3Iz7ElAW9yyU5C0nhQx0ykGNcWBeOolQtkRqFdJZW3W5HDDWfaZ64O0ohYqjBw
-         YTNyGTtf5+g9lQLUG9zkJqjmJZUidkEEyOGc2XDGa6w8IZisUrH9dTHce4aX3dt2rg
-         k69pymccGfzld1XFBshBv/OoiZctQsAiOLM+6yuE=
+        b=V2UAReNXan+TmlkIrx4VZj6ZYo1NdeshC46cTh6x5ry9jtGg2X5XaRxHcTag4njXk
+         Z6FbmBmsNK/bZbClHDmajnH4F3WZrJQ27h2zLp3WLKEx1xi5afJ3BXd++RQ9akBgKg
+         Yms/TgNhwfs9dQl4DXdgLsDdoLOScyx3zo7LFJf4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joe Thornber <ejt@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 171/239] dm space map common: add bounds check to sm_ll_lookup_bitmap()
+        stable@vger.kernel.org, Wesley Sheng <wesley.sheng@microchip.com>,
+        Kelvin Cao <kelvin.cao@microchip.com>,
+        Jon Mason <jdmason@kudzu.us>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0820/1039] ntb_hw_switchtec: Fix bug with more than 32 partitions
 Date:   Mon, 24 Jan 2022 19:43:29 +0100
-Message-Id: <20220124183948.538720161@linuxfoundation.org>
+Message-Id: <20220124184152.866189101@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,35 +46,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joe Thornber <ejt@redhat.com>
+From: Wesley Sheng <wesley.sheng@microchip.com>
 
-[ Upstream commit cba23ac158db7f3cd48a923d6861bee2eb7a2978 ]
+[ Upstream commit 7ff351c86b6b258f387502ab2c9b9d04f82c1c3d ]
 
-Corrupted metadata could warrant returning error from sm_ll_lookup_bitmap().
+Switchtec could support as mush as 48 partitions, but ffs & fls are
+for 32 bit argument, in case of partition index larger than 31, the
+current code could not parse the peer partition index correctly.
+Change to the 64 bit version __ffs64 & fls64 accordingly to fix this
+bug.
 
-Signed-off-by: Joe Thornber <ejt@redhat.com>
-Signed-off-by: Mike Snitzer <snitzer@redhat.com>
+Fixes: 3df54c870f52 ("ntb_hw_switchtec: Allow using Switchtec NTB in multi-partition setups")
+Signed-off-by: Wesley Sheng <wesley.sheng@microchip.com>
+Signed-off-by: Kelvin Cao <kelvin.cao@microchip.com>
+Signed-off-by: Jon Mason <jdmason@kudzu.us>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/persistent-data/dm-space-map-common.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/ntb/hw/mscc/ntb_hw_switchtec.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/md/persistent-data/dm-space-map-common.c b/drivers/md/persistent-data/dm-space-map-common.c
-index a284762e548e1..5115a27196038 100644
---- a/drivers/md/persistent-data/dm-space-map-common.c
-+++ b/drivers/md/persistent-data/dm-space-map-common.c
-@@ -279,6 +279,11 @@ int sm_ll_lookup_bitmap(struct ll_disk *ll, dm_block_t b, uint32_t *result)
- 	struct disk_index_entry ie_disk;
- 	struct dm_block *blk;
+diff --git a/drivers/ntb/hw/mscc/ntb_hw_switchtec.c b/drivers/ntb/hw/mscc/ntb_hw_switchtec.c
+index 6603c77c0a848..ec9cb6c81edae 100644
+--- a/drivers/ntb/hw/mscc/ntb_hw_switchtec.c
++++ b/drivers/ntb/hw/mscc/ntb_hw_switchtec.c
+@@ -840,7 +840,6 @@ static int switchtec_ntb_init_sndev(struct switchtec_ntb *sndev)
+ 	u64 tpart_vec;
+ 	int self;
+ 	u64 part_map;
+-	int bit;
  
-+	if (b >= ll->nr_blocks) {
-+		DMERR_LIMIT("metadata block out of bounds");
-+		return -EINVAL;
-+	}
-+
- 	b = do_div(index, ll->entries_per_block);
- 	r = ll->load_ie(ll, index, &ie_disk);
- 	if (r < 0)
+ 	sndev->ntb.pdev = sndev->stdev->pdev;
+ 	sndev->ntb.topo = NTB_TOPO_SWITCH;
+@@ -861,29 +860,28 @@ static int switchtec_ntb_init_sndev(struct switchtec_ntb *sndev)
+ 	part_map = ioread64(&sndev->mmio_ntb->ep_map);
+ 	part_map &= ~(1 << sndev->self_partition);
+ 
+-	if (!ffs(tpart_vec)) {
++	if (!tpart_vec) {
+ 		if (sndev->stdev->partition_count != 2) {
+ 			dev_err(&sndev->stdev->dev,
+ 				"ntb target partition not defined\n");
+ 			return -ENODEV;
+ 		}
+ 
+-		bit = ffs(part_map);
+-		if (!bit) {
++		if (!part_map) {
+ 			dev_err(&sndev->stdev->dev,
+ 				"peer partition is not NT partition\n");
+ 			return -ENODEV;
+ 		}
+ 
+-		sndev->peer_partition = bit - 1;
++		sndev->peer_partition = __ffs64(part_map);
+ 	} else {
+-		if (ffs(tpart_vec) != fls(tpart_vec)) {
++		if (__ffs64(tpart_vec) != (fls64(tpart_vec) - 1)) {
+ 			dev_err(&sndev->stdev->dev,
+ 				"ntb driver only supports 1 pair of 1-1 ntb mapping\n");
+ 			return -ENODEV;
+ 		}
+ 
+-		sndev->peer_partition = ffs(tpart_vec) - 1;
++		sndev->peer_partition = __ffs64(tpart_vec);
+ 		if (!(part_map & (1ULL << sndev->peer_partition))) {
+ 			dev_err(&sndev->stdev->dev,
+ 				"ntb target partition is not NT partition\n");
 -- 
 2.34.1
 

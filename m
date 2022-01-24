@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A254987B9
+	by mail.lfdr.de (Postfix) with ESMTP id A06474987BA
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244949AbiAXSFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:05:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
+        id S244997AbiAXSFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:05:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241629AbiAXSFS (ORCPT
+        with ESMTP id S241746AbiAXSFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:05:18 -0500
+        Mon, 24 Jan 2022 13:05:19 -0500
 Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A919C06173D
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:05:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F1BC06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:05:19 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
         t=1643047517;
@@ -22,10 +22,10 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9A/aiRr/eeAtuJgRH9CgKix3liywKVtjCGXmP7PCGKU=;
-        b=tbxWzIiyor4endaQATbidklnt+syNwmi7hm5yMdHV/C61qeV/L0qewDmLZBPYSQ+zsDRZ/
-        7OnBdrdpNZVCh+9SEtM3qEhN1Vp/J+5bVgsZSIIYFcybmneoDbonBvyjLV9oysEtgmEHvS
-        VRFLR80lfIXwhpaou6epRhjOvXLjwMo=
+        bh=Lnm9A41ImFCEtqp3Gi0grxBV1YcMXYG5Az9GP4mftA4=;
+        b=W6Ni6gXqY31b9gLa5gF8vgygaDhQsnhJU5AWnwGIb5wzCOSAql2ONNmlTMH5oBStaC9LeW
+        VIdJ21zfnfyIJTu26c+IjPJ0PW6NVeYs1vh+IRBr0+cXz6h4VulAfPfPlz7FfkraCOGcbb
+        tHw744jS+00ZXq44vAw0vcFkklAUgww=
 From:   andrey.konovalov@linux.dev
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
@@ -43,9 +43,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH v6 18/39] kasan, vmalloc: drop outdated VM_KASAN comment
-Date:   Mon, 24 Jan 2022 19:04:52 +0100
-Message-Id: <780395afea83a147b3b5acc36cf2e38f7f8479f9.1643047180.git.andreyknvl@google.com>
+Subject: [PATCH v6 19/39] kasan: reorder vmalloc hooks
+Date:   Mon, 24 Jan 2022 19:04:53 +0100
+Message-Id: <aeef49eb249c206c4c9acce2437728068da74c28.1643047180.git.andreyknvl@google.com>
 In-Reply-To: <cover.1643047180.git.andreyknvl@google.com>
 References: <cover.1643047180.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -58,40 +58,128 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-The comment about VM_KASAN in include/linux/vmalloc.c is outdated.
-VM_KASAN is currently only used to mark vm_areas allocated for
-kernel modules when CONFIG_KASAN_VMALLOC is disabled.
+Group functions that [de]populate shadow memory for vmalloc.
+Group functions that [un]poison memory for vmalloc.
 
-Drop the comment.
+This patch does no functional changes but prepares KASAN code for
+adding vmalloc support to HW_TAGS KASAN.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 Reviewed-by: Alexander Potapenko <glider@google.com>
 ---
- include/linux/vmalloc.h | 11 -----------
- 1 file changed, 11 deletions(-)
+ include/linux/kasan.h | 20 +++++++++-----------
+ mm/kasan/shadow.c     | 43 ++++++++++++++++++++++---------------------
+ 2 files changed, 31 insertions(+), 32 deletions(-)
 
-diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-index 880227b9f044..87f8cfec50a0 100644
---- a/include/linux/vmalloc.h
-+++ b/include/linux/vmalloc.h
-@@ -35,17 +35,6 @@ struct notifier_block;		/* in notifier.h */
- #define VM_DEFER_KMEMLEAK	0
- #endif
+diff --git a/include/linux/kasan.h b/include/linux/kasan.h
+index 55f1d4edf6b5..46a63374c86f 100644
+--- a/include/linux/kasan.h
++++ b/include/linux/kasan.h
+@@ -418,34 +418,32 @@ static inline void kasan_init_hw_tags(void) { }
+ 
+ #ifdef CONFIG_KASAN_VMALLOC
+ 
++void kasan_populate_early_vm_area_shadow(void *start, unsigned long size);
+ int kasan_populate_vmalloc(unsigned long addr, unsigned long size);
+-void kasan_poison_vmalloc(const void *start, unsigned long size);
+-void kasan_unpoison_vmalloc(const void *start, unsigned long size);
+ void kasan_release_vmalloc(unsigned long start, unsigned long end,
+ 			   unsigned long free_region_start,
+ 			   unsigned long free_region_end);
+ 
+-void kasan_populate_early_vm_area_shadow(void *start, unsigned long size);
++void kasan_unpoison_vmalloc(const void *start, unsigned long size);
++void kasan_poison_vmalloc(const void *start, unsigned long size);
+ 
+ #else /* CONFIG_KASAN_VMALLOC */
+ 
++static inline void kasan_populate_early_vm_area_shadow(void *start,
++						       unsigned long size) { }
+ static inline int kasan_populate_vmalloc(unsigned long start,
+ 					unsigned long size)
+ {
+ 	return 0;
+ }
+-
+-static inline void kasan_poison_vmalloc(const void *start, unsigned long size)
+-{ }
+-static inline void kasan_unpoison_vmalloc(const void *start, unsigned long size)
+-{ }
+ static inline void kasan_release_vmalloc(unsigned long start,
+ 					 unsigned long end,
+ 					 unsigned long free_region_start,
+-					 unsigned long free_region_end) {}
++					 unsigned long free_region_end) { }
+ 
+-static inline void kasan_populate_early_vm_area_shadow(void *start,
+-						       unsigned long size)
++static inline void kasan_unpoison_vmalloc(const void *start, unsigned long size)
++{ }
++static inline void kasan_poison_vmalloc(const void *start, unsigned long size)
+ { }
+ 
+ #endif /* CONFIG_KASAN_VMALLOC */
+diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
+index e5c4393eb861..bf7ab62fbfb9 100644
+--- a/mm/kasan/shadow.c
++++ b/mm/kasan/shadow.c
+@@ -345,27 +345,6 @@ int kasan_populate_vmalloc(unsigned long addr, unsigned long size)
+ 	return 0;
+ }
  
 -/*
-- * VM_KASAN is used slightly differently depending on CONFIG_KASAN_VMALLOC.
-- *
-- * If IS_ENABLED(CONFIG_KASAN_VMALLOC), VM_KASAN is set on a vm_struct after
-- * shadow memory has been mapped. It's used to handle allocation errors so that
-- * we don't try to poison shadow on free if it was never allocated.
-- *
-- * Otherwise, VM_KASAN is set for kasan_module_alloc() allocations and used to
-- * determine which allocations need the module shadow freed.
+- * Poison the shadow for a vmalloc region. Called as part of the
+- * freeing process at the time the region is freed.
 - */
+-void kasan_poison_vmalloc(const void *start, unsigned long size)
+-{
+-	if (!is_vmalloc_or_module_addr(start))
+-		return;
 -
- /* bits [20..32] reserved for arch specific ioremap internals */
+-	size = round_up(size, KASAN_GRANULE_SIZE);
+-	kasan_poison(start, size, KASAN_VMALLOC_INVALID, false);
+-}
+-
+-void kasan_unpoison_vmalloc(const void *start, unsigned long size)
+-{
+-	if (!is_vmalloc_or_module_addr(start))
+-		return;
+-
+-	kasan_unpoison(start, size, false);
+-}
+-
+ static int kasan_depopulate_vmalloc_pte(pte_t *ptep, unsigned long addr,
+ 					void *unused)
+ {
+@@ -496,6 +475,28 @@ void kasan_release_vmalloc(unsigned long start, unsigned long end,
+ 	}
+ }
  
- /*
++
++void kasan_unpoison_vmalloc(const void *start, unsigned long size)
++{
++	if (!is_vmalloc_or_module_addr(start))
++		return;
++
++	kasan_unpoison(start, size, false);
++}
++
++/*
++ * Poison the shadow for a vmalloc region. Called as part of the
++ * freeing process at the time the region is freed.
++ */
++void kasan_poison_vmalloc(const void *start, unsigned long size)
++{
++	if (!is_vmalloc_or_module_addr(start))
++		return;
++
++	size = round_up(size, KASAN_GRANULE_SIZE);
++	kasan_poison(start, size, KASAN_VMALLOC_INVALID, false);
++}
++
+ #else /* CONFIG_KASAN_VMALLOC */
+ 
+ int kasan_alloc_module_shadow(void *addr, size_t size, gfp_t gfp_mask)
 -- 
 2.25.1
 

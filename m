@@ -2,50 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2B0499647
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5978449979C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:29:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444853AbiAXVBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:01:40 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33224 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353760AbiAXUhy (ORCPT
+        id S1346811AbiAXVOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:14:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43272 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1391108AbiAXUq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:37:54 -0500
+        Mon, 24 Jan 2022 15:46:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65F5C0619C4;
+        Mon, 24 Jan 2022 11:56:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7457E61545;
-        Mon, 24 Jan 2022 20:37:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB18C340E7;
-        Mon, 24 Jan 2022 20:37:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79EB6B8122F;
+        Mon, 24 Jan 2022 19:56:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97A02C340E8;
+        Mon, 24 Jan 2022 19:56:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056672;
-        bh=IWsJn1qUltswEzZQyGwVZ4QpIXfIN5nldvNPVenoV+E=;
+        s=korg; t=1643054216;
+        bh=mTzcCRXvRXdFMvGvyeb2rwfSPt4Nj5V1BB1LEiRqQ70=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OxX6YFowwv+cooyWsmh8KgcW8tPXgfJJySHwzqOAGFfWvs1VW4G4WAyc2YyjDGOlC
-         SKbOFaSbMVSgQKOtkGLOET2ugHnnZVBQw1LSvh4vusfqaH5h69fK8Ao1e7PluorQHC
-         ydxpef3Tg7663uUINfYTTMz2dccDKiYhRsfbcwKM=
+        b=kTsLq0lynSOZmLmPL7f+UhvsxIPLNjJmwIKZbTiSJGNdzYADphLDg1MA8K1xrhjPO
+         BM4slc3gZbs78hhjz7wH6V7D4wJ/ORpdVE0hUM2YtVeYJ4HDjK7bOrWXFx79MvUSDP
+         6A1AdLHB9k3/M5ipUjdaO6JNqvX1waE+FpLmXZs0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peter Gonda <pgonda@google.com>,
-        Marc Orr <marcorr@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        John Allen <john.allen@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-crypto@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 562/846] crypto: ccp - Move SEV_INIT retry for corrupted data
-Date:   Mon, 24 Jan 2022 19:41:19 +0100
-Message-Id: <20220124184120.416260637@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 315/563] HID: apple: Do not reset quirks when the Fn key is not found
+Date:   Mon, 24 Jan 2022 19:41:20 +0100
+Message-Id: <20220124184035.322383770@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,93 +49,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Gonda <pgonda@google.com>
+From: José Expósito <jose.exposito89@gmail.com>
 
-[ Upstream commit e423b9d75e779d921e6adf5ac3d0b59400d6ba7e ]
+[ Upstream commit a5fe7864d8ada170f19cc47d176bf8260ffb4263 ]
 
-Move the data corrupted retry of SEV_INIT into the
-__sev_platform_init_locked() function. This is for upcoming INIT_EX
-support as well as helping direct callers of
-__sev_platform_init_locked() which currently do not support the
-retry.
+When a keyboard without a function key is detected, instead of removing
+all quirks, remove only the APPLE_HAS_FN quirk.
 
-Signed-off-by: Peter Gonda <pgonda@google.com>
-Reviewed-by: Marc Orr <marcorr@google.com>
-Acked-by: David Rientjes <rientjes@google.com>
-Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
-Acked-by: Brijesh Singh <brijesh.singh@amd.com>
-Cc: Tom Lendacky <thomas.lendacky@amd.com>
-Cc: Brijesh Singh <brijesh.singh@amd.com>
-Cc: Marc Orr <marcorr@google.com>
-Cc: Joerg Roedel <jroedel@suse.de>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: David Rientjes <rientjes@google.com>
-Cc: John Allen <john.allen@amd.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: linux-crypto@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/ccp/sev-dev.c | 30 ++++++++++++++++--------------
- 1 file changed, 16 insertions(+), 14 deletions(-)
+ drivers/hid/hid-apple.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-index 2ecb0e1f65d8d..e2806ca3300a8 100644
---- a/drivers/crypto/ccp/sev-dev.c
-+++ b/drivers/crypto/ccp/sev-dev.c
-@@ -241,7 +241,7 @@ static int __sev_platform_init_locked(int *error)
- 	struct psp_device *psp = psp_master;
- 	struct sev_data_init data;
- 	struct sev_device *sev;
--	int rc = 0;
-+	int psp_ret, rc = 0;
+diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
+index 5c1d33cda863b..e5d2e7e9541b8 100644
+--- a/drivers/hid/hid-apple.c
++++ b/drivers/hid/hid-apple.c
+@@ -415,7 +415,7 @@ static int apple_input_configured(struct hid_device *hdev,
  
- 	if (!psp || !psp->sev_data)
- 		return -ENODEV;
-@@ -266,7 +266,21 @@ static int __sev_platform_init_locked(int *error)
- 		data.tmr_len = SEV_ES_TMR_SIZE;
+ 	if ((asc->quirks & APPLE_HAS_FN) && !asc->fn_found) {
+ 		hid_info(hdev, "Fn key not found (Apple Wireless Keyboard clone?), disabling Fn key handling\n");
+-		asc->quirks = 0;
++		asc->quirks &= ~APPLE_HAS_FN;
  	}
  
--	rc = __sev_do_cmd_locked(SEV_CMD_INIT, &data, error);
-+	rc = __sev_do_cmd_locked(SEV_CMD_INIT, &data, &psp_ret);
-+	if (rc && psp_ret == SEV_RET_SECURE_DATA_INVALID) {
-+		/*
-+		 * Initialization command returned an integrity check failure
-+		 * status code, meaning that firmware load and validation of SEV
-+		 * related persistent data has failed. Retrying the
-+		 * initialization function should succeed by replacing the state
-+		 * with a reset state.
-+		 */
-+		dev_dbg(sev->dev, "SEV: retrying INIT command");
-+		rc = __sev_do_cmd_locked(SEV_CMD_INIT, &data, &psp_ret);
-+	}
-+	if (error)
-+		*error = psp_ret;
-+
- 	if (rc)
- 		return rc;
- 
-@@ -1091,18 +1105,6 @@ void sev_pci_init(void)
- 
- 	/* Initialize the platform */
- 	rc = sev_platform_init(&error);
--	if (rc && (error == SEV_RET_SECURE_DATA_INVALID)) {
--		/*
--		 * INIT command returned an integrity check failure
--		 * status code, meaning that firmware load and
--		 * validation of SEV related persistent data has
--		 * failed and persistent state has been erased.
--		 * Retrying INIT command here should succeed.
--		 */
--		dev_dbg(sev->dev, "SEV: retrying INIT command");
--		rc = sev_platform_init(&error);
--	}
--
- 	if (rc) {
- 		dev_err(sev->dev, "SEV: failed to INIT error %#x\n", error);
- 		return;
+ 	return 0;
 -- 
 2.34.1
 

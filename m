@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FCE4990D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:08:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA0A4990E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:08:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377469AbiAXUFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:05:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56432 "EHLO
+        id S1377598AbiAXUFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:05:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349990AbiAXTry (ORCPT
+        with ESMTP id S1356980AbiAXTsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:47:54 -0500
+        Mon, 24 Jan 2022 14:48:11 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B350C038AF4;
-        Mon, 24 Jan 2022 11:23:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C89DC038AF8;
+        Mon, 24 Jan 2022 11:23:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BEF1961496;
-        Mon, 24 Jan 2022 19:23:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D23C36AE2;
-        Mon, 24 Jan 2022 19:23:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CED7C60010;
+        Mon, 24 Jan 2022 19:23:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90EEBC340E5;
+        Mon, 24 Jan 2022 19:23:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052207;
-        bh=WIhonFUuLPDgILEzIj8zMYalQ6tBoRgyQ7YNS/mS6RA=;
+        s=korg; t=1643052210;
+        bh=U+eiWYMugops2qGWPhAC285h643ykhpyv+8sf2oFFCs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SE8YkIDaapaFZ9eUce/9+9jnmS0VU3QKn01siD7rAMVySd5tnI0Us0LCVX2WmBGkO
-         Un2z+2AHk8fB54rAsAp8MZsu7249JJOhKAupvSLbrdInb2Sk/uUVXwNkjHOltZwIC2
-         658d8DArUz10ruBOO1uVSPT8cWmQntxR19Uy5aqY=
+        b=YAcxZtSUFk9inF8FuHJIBtR6WFPnH21lD3Hg7vKA/cezgzLhlLiBP9meLiWOA7X+Q
+         u2bZWIahfxhkg0K56luMNuMjed7LaaCwKC+XXREdXPK5IK+AUXk9lYntcyfVffZdsY
+         j5rNM94QstcReRWLyuqeeSjqNmmUFDfXzjdhg06I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.19 224/239] net: axienet: fix number of TX ring slots for available check
-Date:   Mon, 24 Jan 2022 19:44:22 +0100
-Message-Id: <20220124183950.232834013@linuxfoundation.org>
+        stable@vger.kernel.org, Laurence de Bruxelles <lfdebrux@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH 4.19 225/239] rtc: pxa: fix null pointer dereference
+Date:   Mon, 24 Jan 2022 19:44:23 +0100
+Message-Id: <20220124183950.263085309@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
 References: <20220124183943.102762895@linuxfoundation.org>
@@ -48,41 +48,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Laurence de Bruxelles <lfdebrux@gmail.com>
 
-commit aba57a823d2985a2cc8c74a2535f3a88e68d9424 upstream.
+commit 34127b3632b21e5c391756e724b1198eb9917981 upstream.
 
-The check for the number of available TX ring slots was off by 1 since a
-slot is required for the skb header as well as each fragment. This could
-result in overwriting a TX ring slot that was still in use.
+With the latest stable kernel versions the rtc on the PXA based
+Zaurus does not work, when booting I see the following kernel messages:
 
-Fixes: 8a3b7a252dca9 ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+pxa-rtc pxa-rtc: failed to find rtc clock source
+pxa-rtc pxa-rtc: Unable to init SA1100 RTC sub-device
+pxa-rtc: probe of pxa-rtc failed with error -2
+hctosys: unable to open rtc device (rtc0)
+
+I think this is because commit f2997775b111 ("rtc: sa1100: fix possible
+race condition") moved the allocation of the rtc_device struct out of
+sa1100_rtc_init and into sa1100_rtc_probe. This means that pxa_rtc_probe
+also needs to do allocation for the rtc_device struct, otherwise
+sa1100_rtc_init will try to dereference a null pointer. This patch adds
+that allocation by copying how sa1100_rtc_probe in
+drivers/rtc/rtc-sa1100.c does it; after the IRQs are set up a managed
+rtc_device is allocated.
+
+I've tested this patch with `qemu-system-arm -machine akita` and with a
+real Zaurus SL-C1000 applied to 4.19, 5.4, and 5.10.
+
+Signed-off-by: Laurence de Bruxelles <lfdebrux@gmail.com>
+Fixes: f2997775b111 ("rtc: sa1100: fix possible race condition")
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Link: https://lore.kernel.org/r/20220101154149.12026-1-lfdebrux@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/xilinx/xilinx_axienet_main.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/rtc/rtc-pxa.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-@@ -682,7 +682,7 @@ axienet_start_xmit(struct sk_buff *skb,
- 	num_frag = skb_shinfo(skb)->nr_frags;
- 	cur_p = &lp->tx_bd_v[lp->tx_bd_tail];
+--- a/drivers/rtc/rtc-pxa.c
++++ b/drivers/rtc/rtc-pxa.c
+@@ -349,6 +349,10 @@ static int __init pxa_rtc_probe(struct p
+ 		return -ENXIO;
+ 	}
  
--	if (axienet_check_tx_bd_space(lp, num_frag)) {
-+	if (axienet_check_tx_bd_space(lp, num_frag + 1)) {
- 		if (netif_queue_stopped(ndev))
- 			return NETDEV_TX_BUSY;
- 
-@@ -692,7 +692,7 @@ axienet_start_xmit(struct sk_buff *skb,
- 		smp_mb();
- 
- 		/* Space might have just been freed - check again */
--		if (axienet_check_tx_bd_space(lp, num_frag))
-+		if (axienet_check_tx_bd_space(lp, num_frag + 1))
- 			return NETDEV_TX_BUSY;
- 
- 		netif_wake_queue(ndev);
++	sa1100_rtc->rtc = devm_rtc_allocate_device(&pdev->dev);
++	if (IS_ERR(sa1100_rtc->rtc))
++		return PTR_ERR(sa1100_rtc->rtc);
++
+ 	pxa_rtc->base = devm_ioremap(dev, pxa_rtc->ress->start,
+ 				resource_size(pxa_rtc->ress));
+ 	if (!pxa_rtc->base) {
 
 

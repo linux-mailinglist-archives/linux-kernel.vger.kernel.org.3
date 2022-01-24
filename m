@@ -2,200 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 424164987F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:11:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BB84987F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:11:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245070AbiAXSLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:11:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
+        id S245112AbiAXSLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:11:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241620AbiAXSLB (ORCPT
+        with ESMTP id S241620AbiAXSLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:11:01 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E45C06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:11:01 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id bx18so26766078oib.7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:11:01 -0800 (PST)
+        Mon, 24 Jan 2022 13:11:03 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601A2C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:11:03 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id w190so10563782pfw.7
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:11:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bLjR18B4+O+BIq4G++lcJm85fWQaGrH2dHhZhdZDiNg=;
-        b=4Pwvu6wbVKNMT1IIQfGgwf/cWB5DOhgoxtmYK9b6CJBDR/cUI8aLbOZCfdjQK3m8Oy
-         fYczIA0hgH9T+qPlgcE6d5o896j4zVri+HqCwa1ld7/XoTdCR1F2qd4oNDAFDyCAyjfc
-         1e91X48DOh4n4D+LcPA17yp8DIYCconJ51xP7BnflNfJ/vSnPtRWU0GSjkiDJU0kV4Kc
-         XLMa7fgbCO8Vyns+V1qjIAnOKSZGIDxf96+kQ+kHGz3tIBpgAFuflEDcENF7GRTgSxR5
-         WzSvGjETaJE1YsmuJ2b0vU2pJw1+fsx0n5zBJrd+KI4zrRBgmZDKsqTWwd0R8IyjQGp3
-         oGdw==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=hplmvL7wDWDjn1QFlc9u8Rz2NqKzd7tI4pOgh4hC0uk=;
+        b=fJF6YWxS67b+WXJ/kZRALafhcc4hw67zf1+uP4o1aZQEKj+2cKcMa6Ka9f/8zrMVxS
+         cqOnxJWlX7WzCZgMu/KyRCJ6ZVTUVUG1uFil+iuinSEImbQqTgnUK1f4MVvWX2WLE3Rb
+         nZ3T5hx0L2rtQwgJOXn/nrNTnmRH7oIMhC9kltY6MuWzhNBkCCjJtdzfRKK+feGgZqk9
+         un7V0NSk+TjRoF5orh4rlBUZMWeYflBdfi+PmGm15ieTqlRjAapF9/3eatTCSvNwypC/
+         HlpAKm01mYc9kNVp8gakNZ1DjE1++PM6qzRarq4VXa9/0+qGYwg3aoX9W6CQvuIcSFQh
+         ohxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bLjR18B4+O+BIq4G++lcJm85fWQaGrH2dHhZhdZDiNg=;
-        b=aLhPEV94DyuYv/8tawUNC/TAbfoLqdcrFag3XsBRNL9tu2CF3vd1arN1J8/frrpK7e
-         9dZKe+w25p+WnWPSkXQDs0lY1EV7/YMTkp2sZw5/d/gGynBhwqy0Pw/ams24DcYrkf56
-         /At/adHK0Cv/7mOS8eVAm99/aRInookCSN5n8Csklh6J6+4pLeueAJhGDT4AElaUKxiw
-         zJ6VPmu1JOYjBdWIekBtnDBUs/5qvSw8XdfBj/j3BHQpYkUiQVfUvnO7aG4IrCsepuVw
-         51N2+10KkEUI1ei/bVDy0zXeE/CL8gUdJonEnO41l/8hWHGHqR2/muo2JwlGWF/pXclY
-         NeOQ==
-X-Gm-Message-State: AOAM532QkOpfqjXdp0vgK8RsqtVgXLdiY2dKNhTbjzAqStrHj821bdBs
-        glZ6SZncMkDYaslYL6EebHmSMQ==
-X-Google-Smtp-Source: ABdhPJxJ2boFuR0dh+CNPK3ZdaELWLmFBxuDXsa8zlM+dj8aIG0igVhT92WI5bJwXPs1aRkb87N7PQ==
-X-Received: by 2002:a05:6808:1644:: with SMTP id az4mr2599697oib.18.1643047860800;
-        Mon, 24 Jan 2022 10:11:00 -0800 (PST)
-Received: from eze-laptop ([190.194.87.200])
-        by smtp.gmail.com with ESMTPSA id b7sm4602674ooq.30.2022.01.24.10.10.56
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=hplmvL7wDWDjn1QFlc9u8Rz2NqKzd7tI4pOgh4hC0uk=;
+        b=p93ebDIg+3X+bYCW3tYqm5Wa1qSc3722jZ7olvHg6klK1pyoy9X3owVdpBtPqW359n
+         J+6CPObTF930HUACiqZY/FLEo8q1/vOEMMaFD8RRKE+2y4aEzB2Ai/L8xLY5OA/6CUGB
+         MLGl86+AenOnET0dDm4K45qS/rUoKGzXDbOYBh0mrJHNGGrma1rh76abFUlFVz+ZQfky
+         3+ZJN4vzsi88qgyEet72M5fD3us8KxiSxXPEij+4XPllxPBIlYverG8by6ZnL68h+AcY
+         uIjwdSVIEx04faA7IialJRWLfFJPs2vBwJPMAPLu6+ejxV+CVt8V5jZ+ORgqROZlx4Ip
+         Dx2Q==
+X-Gm-Message-State: AOAM5313oxc60TSWmo5w0wFdWS8rAXwsewOIWFJvXUqtPMchfnoszcaz
+        dxROCiLG2LnHGL8V3rQoo4qmfQ==
+X-Google-Smtp-Source: ABdhPJzA+Y6+DamPb2TvXy85bCHzGMXiad6+zP/iBggpho3e8gjenXre/Iao0V1J9Sm3JKEKSjW36w==
+X-Received: by 2002:a63:33cd:: with SMTP id z196mr12457613pgz.78.1643047862575;
+        Mon, 24 Jan 2022 10:11:02 -0800 (PST)
+Received: from [2620:15c:29:204:1f99:bd65:fcbb:146c] ([2620:15c:29:204:1f99:bd65:fcbb:146c])
+        by smtp.gmail.com with ESMTPSA id t17sm17288302pfg.207.2022.01.24.10.11.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 10:10:59 -0800 (PST)
-Date:   Mon, 24 Jan 2022 15:10:53 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        shawnguo@kernel.org, aford@beaconembedded.com,
-        Rob Herring <robh@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH V3 04/10] dt-bindings: media: nxp, imx8mq-vpu: Split G1
- and G2 nodes
-Message-ID: <Ye7rrQHtu1rnbdHm@eze-laptop>
-References: <20220124023125.414794-1-aford173@gmail.com>
- <20220124023125.414794-5-aford173@gmail.com>
+        Mon, 24 Jan 2022 10:11:01 -0800 (PST)
+Date:   Mon, 24 Jan 2022 10:11:00 -0800 (PST)
+From:   David Rientjes <rientjes@google.com>
+To:     Muchun Song <songmuchun@bytedance.com>
+cc:     akpm@linux-foundation.org, zi.yan@cs.rutgers.edu,
+        kirill.shutemov@linux.intel.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com
+Subject: Re: [PATCH v2 2/2] mm: fix missing cache flush for all tail pages
+ of THP
+In-Reply-To: <20220124051752.83281-2-songmuchun@bytedance.com>
+Message-ID: <4d5044e7-cac9-b6e6-1467-59ea6010b0f5@google.com>
+References: <20220124051752.83281-1-songmuchun@bytedance.com> <20220124051752.83281-2-songmuchun@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124023125.414794-5-aford173@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 23, 2022 at 08:31:18PM -0600, Adam Ford wrote:
-> The G1 and G2 are independent and separate decoder blocks
-> that are enabled by the vpu-blk-ctrl power-domain controller,
-> which now has a proper driver.
-> 
-> Because these blocks only share the power-domain, and can be
-> independently fused out, update the bindings to support separate
-> nodes for the G1 and G2 decoders with vpu-blk-ctrl power-domain
-> support.
-> 
-> The new DT + old kernel isn't a supported configuration.
-> 
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+On Mon, 24 Jan 2022, Muchun Song wrote:
+
+> The D-cache maintenance inside move_to_new_page() only consider one page,
+> there is still D-cache maintenance issue for tail pages of THP. Fix this
+> by not using flush_dcache_folio() since it is not backportable.
 > 
 
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+The mention of being backportable suggests that we should backport this, 
+likely to 4.14+.  So should it be marked as stable?
 
-Thanks,
-Ezequiel
+That aside, should there be a follow-up patch that converts to using 
+flush_dcache_folio()?
 
-> diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> index 762be3f96ce9..9c28d562112b 100644
-> --- a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> +++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> @@ -15,33 +15,20 @@ description:
+> Fixes: 616b8371539a ("mm: thp: enable thp migration in generic path")
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> ---
+> Changes in v2:
+>  - Using a for loop instead of the folio variant for backportable.
+> 
+>  mm/migrate.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index c9296d63878d..c418e8d92b9c 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -933,9 +933,12 @@ static int move_to_new_page(struct page *newpage, struct page *page,
+>  		if (!PageMappingFlags(page))
+>  			page->mapping = NULL;
 >  
->  properties:
->    compatible:
-> -    const: nxp,imx8mq-vpu
-> +    oneOf:
-> +      - const: nxp,imx8mq-vpu
-> +        deprecated: true
-> +      - const: nxp,imx8mq-vpu-g1
-> +      - const: nxp,imx8mq-vpu-g2
+> -		if (likely(!is_zone_device_page(newpage)))
+> -			flush_dcache_page(newpage);
+> +		if (likely(!is_zone_device_page(newpage))) {
+> +			int i, nr = compound_nr(newpage);
 >  
->    reg:
-> -    maxItems: 3
-> -
-> -  reg-names:
-> -    items:
-> -      - const: g1
-> -      - const: g2
-> -      - const: ctrl
-> +    maxItems: 1
->  
->    interrupts:
-> -    maxItems: 2
-> -
-> -  interrupt-names:
-> -    items:
-> -      - const: g1
-> -      - const: g2
-> +    maxItems: 1
->  
->    clocks:
-> -    maxItems: 3
-> -
-> -  clock-names:
-> -    items:
-> -      - const: g1
-> -      - const: g2
-> -      - const: bus
-> +    maxItems: 1
->  
->    power-domains:
->      maxItems: 1
-> @@ -49,31 +36,33 @@ properties:
->  required:
->    - compatible
->    - reg
-> -  - reg-names
->    - interrupts
-> -  - interrupt-names
->    - clocks
-> -  - clock-names
->  
->  additionalProperties: false
->  
->  examples:
->    - |
->          #include <dt-bindings/clock/imx8mq-clock.h>
-> +        #include <dt-bindings/power/imx8mq-power.h>
-> +        #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +        vpu_g1: video-codec@38300000 {
-> +                compatible = "nxp,imx8mq-vpu-g1";
-> +                reg = <0x38300000 0x10000>;
-> +                interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
-> +                clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>;
-> +                power-domains = <&vpu_blk_ctrl IMX8MQ_VPUBLK_PD_G1>;
-> +        };
-> +  - |
-> +        #include <dt-bindings/clock/imx8mq-clock.h>
-> +        #include <dt-bindings/power/imx8mq-power.h>
->          #include <dt-bindings/interrupt-controller/arm-gic.h>
->  
-> -        vpu: video-codec@38300000 {
-> -                compatible = "nxp,imx8mq-vpu";
-> -                reg = <0x38300000 0x10000>,
-> -                      <0x38310000 0x10000>,
-> -                      <0x38320000 0x10000>;
-> -                reg-names = "g1", "g2", "ctrl";
-> -                interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-> -                             <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-> -                interrupt-names = "g1", "g2";
-> -                clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
-> -                         <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
-> -                         <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
-> -                clock-names = "g1", "g2", "bus";
-> -                power-domains = <&pgc_vpu>;
-> +        vpu_g2: video-codec@38300000 {
-> +                compatible = "nxp,imx8mq-vpu-g2";
-> +                reg = <0x38310000 0x10000>;
-> +                interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-> +                clocks = <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
-> +                power-domains = <&vpu_blk_ctrl IMX8MQ_VPUBLK_PD_G2>;
->          };
+> +			for (i = 0; i < nr; i++)
+> +				flush_dcache_page(newpage + i);
+> +		}
+>  	}
+>  out:
+>  	return rc;
 > -- 
-> 2.32.0
+> 2.11.0
+> 
+> 
 > 

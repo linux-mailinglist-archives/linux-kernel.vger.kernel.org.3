@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1706049A3C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:03:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F04249A761
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2366897AbiAXXxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:53:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1846007AbiAXXOO (ORCPT
+        id S3423978AbiAYCi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:38:26 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53096 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353862AbiAXUcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:14:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7752CC061A80;
-        Mon, 24 Jan 2022 13:21:14 -0800 (PST)
+        Mon, 24 Jan 2022 15:32:18 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E0A1B8123A;
-        Mon, 24 Jan 2022 21:21:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D85AC340E4;
-        Mon, 24 Jan 2022 21:21:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 548E561506;
+        Mon, 24 Jan 2022 20:32:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 211CFC340E5;
+        Mon, 24 Jan 2022 20:32:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059272;
-        bh=bep6sJR3PXgQxcO9jA0MP5nJ6KAIdBpiWgtPVOcKKEU=;
+        s=korg; t=1643056336;
+        bh=zW8E6nDHYA+IOGgYE859eoZ7bTAfChWLdJJ/+NaK2gA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a3FvMFbfw7dj8EVAXAZdxTxeWKLxGSIJtXlQjtr0KyDug1cTCTLkWffKKQwv9mB6U
-         15RHwf4WVgFksZ5RKkXCwjYrdEBluS96K8hPltXYHvDyUOZte+Ms3jJylw567MofC8
-         OtDOPql2NDchDRjXJ53C1x8BwRP189uYzt9vVuZs=
+        b=qkgsN6ttcn7PxqqOuMtrcLj+MgKP6rrSLj7ncTGWwOmM9ZJbDZLTEnqQtfoVse0Pj
+         /Wt8LFiXGOEGSF2SXVCYrkiYmcEL6TLDJy5hQ3WdPzZsqiZwwHQB8xAykTgnORy6Gu
+         kS4opsbw4EtgfmmZdvIQCBclJesidHSrJdX6e8Dg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wen Gong <wgong@codeaurora.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
+        stable@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0561/1039] ath11k: enable IEEE80211_VHT_EXT_NSS_BW_CAPABLE if NSS ratio enabled
+Subject: [PATCH 5.15 433/846] powerpc/64s: Use EMIT_WARN_ENTRY for SRR debug warnings
 Date:   Mon, 24 Jan 2022 19:39:10 +0100
-Message-Id: <20220124184144.170113354@linuxfoundation.org>
+Message-Id: <20220124184115.930393410@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,52 +45,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wen Gong <wgong@codeaurora.org>
+From: Michael Ellerman <mpe@ellerman.id.au>
 
-[ Upstream commit 78406044bdd0cc8987bc082b76867c63ab1c6af8 ]
+[ Upstream commit fd1eaaaaa6864b5fb8f99880fcefb49760b8fe4e ]
 
-When NSS ratio enabled reported by firmware, SUPPORTS_VHT_EXT_NSS_BW
-is set in ath11k, meanwhile IEEE80211_VHT_EXT_NSS_BW_CAPABLE also
-need to be set, otherwise it is invalid because spec in IEEE Std
-802.11™‐2020 as below.
+When CONFIG_PPC_RFI_SRR_DEBUG=y we check the SRR values before returning
+from interrupts. This is done in asm using EMIT_BUG_ENTRY, and passing
+BUGFLAG_WARNING.
 
-Table 9-273-Supported VHT-MCS and NSS Set subfields, it has subfield
-VHT Extended NSS BW Capable, its definition is:
-Indicates whether the STA is capable of interpreting the Extended NSS
-BW Support subfield of the VHT Capabilities Information field.
+However that fails to create an exception table entry for the warning,
+and so do_program_check() fails the exception table search and proceeds
+to call _exception(), resulting in an oops like:
 
-dmesg have a message without this patch:
+  Oops: Exception in kernel mode, sig: 5 [#1]
+  LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2048 NUMA pSeries
+  Modules linked in:
+  CPU: 2 PID: 1204 Comm: sigreturn_unali Tainted: P                  5.16.0-rc2-00194-g91ca3d4f77c5 #12
+  NIP:  c00000000000c5b0 LR: 0000000000000000 CTR: 0000000000000000
+  ...
+  NIP [c00000000000c5b0] system_call_common+0x150/0x268
+  LR [0000000000000000] 0x0
+  Call Trace:
+  [c00000000db73e10] [c00000000000c558] system_call_common+0xf8/0x268 (unreliable)
+  ...
+  Instruction dump:
+  7cc803a6 888d0931 2c240000 4082001c 38800000 988d0931 e8810170 e8a10178
+  7c9a03a6 7cbb03a6 7d7a02a6 e9810170 <7f0b6088> 7d7b02a6 e9810178 7f0b6088
 
-ieee80211 phy0: copying sband (band 1) due to VHT EXT NSS BW flag
+We should instead use EMIT_WARN_ENTRY, which creates an exception table
+entry for the warning, allowing the warning to be correctly recognised,
+and the code to resume after printing the warning.
 
-It means mac80211 will set IEEE80211_VHT_EXT_NSS_BW_CAPABLE if ath11k not
-set it in ieee80211_register_hw(). So it is better to set it in ath11k.
+Note however that because this warning is buried deep in the interrupt
+return path, we are not able to recover from it (due to MSR_RI being
+clear), so we still end up in die() with an unrecoverable exception.
 
-Tested-on: WCN6855 hw2.0 PCI WLAN.HSP.1.1-01720.1-QCAHSPSWPL_V1_V2_SILICONZ_LITE-1
-
-Signed-off-by: Wen Gong <wgong@codeaurora.org>
-Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
-Link: https://lore.kernel.org/r/20211013073704.15888-1-wgong@codeaurora.org
+Fixes: 59dc5bfca0cb ("powerpc/64s: avoid reloading (H)SRR registers if they are still valid")
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20211221135101.2085547-2-mpe@ellerman.id.au
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath11k/mac.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/powerpc/kernel/interrupt_64.S | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
-index 5d49a7ea51fae..cb41c3e5708cb 100644
---- a/drivers/net/wireless/ath/ath11k/mac.c
-+++ b/drivers/net/wireless/ath/ath11k/mac.c
-@@ -4566,6 +4566,10 @@ ath11k_create_vht_cap(struct ath11k *ar, u32 rate_cap_tx_chainmask,
- 	vht_cap.vht_supported = 1;
- 	vht_cap.cap = ar->pdev->cap.vht_cap;
- 
-+	if (ar->pdev->cap.nss_ratio_enabled)
-+		vht_cap.vht_mcs.tx_highest |=
-+			cpu_to_le16(IEEE80211_VHT_EXT_NSS_BW_CAPABLE);
-+
- 	ath11k_set_vht_txbf_cap(ar, &vht_cap.cap);
- 
- 	rxmcs_map = 0;
+diff --git a/arch/powerpc/kernel/interrupt_64.S b/arch/powerpc/kernel/interrupt_64.S
+index 894588b2381e5..4b1ff94e67eb4 100644
+--- a/arch/powerpc/kernel/interrupt_64.S
++++ b/arch/powerpc/kernel/interrupt_64.S
+@@ -32,21 +32,21 @@ COMPAT_SYS_CALL_TABLE:
+ 	ld	r12,_NIP(r1)
+ 	clrrdi  r12,r12,2
+ 100:	tdne	r11,r12
+-	EMIT_BUG_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
++	EMIT_WARN_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
+ 	mfspr	r11,SPRN_SRR1
+ 	ld	r12,_MSR(r1)
+ 100:	tdne	r11,r12
+-	EMIT_BUG_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
++	EMIT_WARN_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
+ 	.else
+ 	mfspr	r11,SPRN_HSRR0
+ 	ld	r12,_NIP(r1)
+ 	clrrdi  r12,r12,2
+ 100:	tdne	r11,r12
+-	EMIT_BUG_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
++	EMIT_WARN_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
+ 	mfspr	r11,SPRN_HSRR1
+ 	ld	r12,_MSR(r1)
+ 100:	tdne	r11,r12
+-	EMIT_BUG_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
++	EMIT_WARN_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
+ 	.endif
+ #endif
+ .endm
 -- 
 2.34.1
 

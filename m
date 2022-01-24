@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99476498B95
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 138F2498CDE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:32:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348265AbiAXTPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:15:08 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:32836 "EHLO
+        id S1351089AbiAXTZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:25:55 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47142 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345813AbiAXTGZ (ORCPT
+        with ESMTP id S229976AbiAXTSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:06:25 -0500
+        Mon, 24 Jan 2022 14:18:09 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6141E603DE;
-        Mon, 24 Jan 2022 19:06:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25BAAC340E5;
-        Mon, 24 Jan 2022 19:06:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 432C560909;
+        Mon, 24 Jan 2022 19:18:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1590C340E5;
+        Mon, 24 Jan 2022 19:18:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051184;
-        bh=2C18HuDLscgc4+tKatxU9QstG6/auVKahETKdInN1gE=;
+        s=korg; t=1643051888;
+        bh=ri41GA+rvvOGALv/2S5SeTe6pJ0+n/UxBzOZzgqgoRs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iqhaJDh1lxqDHj3g3dngicRQ2tjXlGkIsyZpRGZPZWgBIRKxrFbdTmcwPnYEboUdl
-         YYSrn9eAdqVB7h5fScfsQzLVqvNI3N0a0gs5ZgfdDIfj/BcMnl7fgLKaWxY59SsMRt
-         Ct8zxF8c56ROrpSm9BKUKH88pZkWEYJSBk2Kjin0=
+        b=XcmKYK8lWclGql16JYpctV2oRA20sRFqieLhlR0pPDi8xHX2FPLZ2cz81NIFVzmCW
+         QSjJrxYKj72E7z+1qtlnNKc6wjkVUYxg1vc4FzDMk84skstxKAWy0KMpcp5mXU7KOI
+         yDyaA7YyjYJx2H4EpWY22bBHgm0Tj1G6iziCC9A0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
+        stable@vger.kernel.org, Wei Yongjun <weiyongjun1@huawei.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 082/186] misc: lattice-ecp3-config: Fix task hung when firmware load failed
-Date:   Mon, 24 Jan 2022 19:42:37 +0100
-Message-Id: <20220124183939.758150635@linuxfoundation.org>
+Subject: [PATCH 4.19 120/239] Bluetooth: Fix debugfs entry leak in hci_register_dev()
+Date:   Mon, 24 Jan 2022 19:42:38 +0100
+Message-Id: <20220124183946.921198853@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,91 +48,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Wei Yongjun <weiyongjun1@huawei.com>
 
-[ Upstream commit fcee5ce50bdb21116711e38635e3865594af907e ]
+[ Upstream commit 5a4bb6a8e981d3d0d492aa38412ee80b21033177 ]
 
-When firmware load failed, kernel report task hung as follows:
+Fault injection test report debugfs entry leak as follows:
 
-INFO: task xrun:5191 blocked for more than 147 seconds.
-      Tainted: G        W         5.16.0-rc5-next-20211220+ #11
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:xrun            state:D stack:    0 pid: 5191 ppid:   270 flags:0x00000004
-Call Trace:
- __schedule+0xc12/0x4b50 kernel/sched/core.c:4986
- schedule+0xd7/0x260 kernel/sched/core.c:6369 (discriminator 1)
- schedule_timeout+0x7aa/0xa80 kernel/time/timer.c:1857
- wait_for_completion+0x181/0x290 kernel/sched/completion.c:85
- lattice_ecp3_remove+0x32/0x40 drivers/misc/lattice-ecp3-config.c:221
- spi_remove+0x72/0xb0 drivers/spi/spi.c:409
+debugfs: Directory 'hci0' with parent 'bluetooth' already present!
 
-lattice_ecp3_remove() wait for signals from firmware loading, but when
-load failed, firmware_load() does not send this signal. This cause
-device remove hung. Fix it by sending signal even if load failed.
+When register_pm_notifier() failed in hci_register_dev(), the debugfs
+create by debugfs_create_dir() do not removed in the error handing path.
 
-Fixes: 781551df57c7 ("misc: Add Lattice ECP3 FPGA configuration via SPI")
-Reported-by: Hulk Robot <hulkci@huawei.com>
+Add the remove debugfs code to fix it.
+
 Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
-Link: https://lore.kernel.org/r/20211228125522.3122284-1-weiyongjun1@huawei.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/lattice-ecp3-config.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ net/bluetooth/hci_core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/misc/lattice-ecp3-config.c b/drivers/misc/lattice-ecp3-config.c
-index 626fdcaf25101..645d26536114f 100644
---- a/drivers/misc/lattice-ecp3-config.c
-+++ b/drivers/misc/lattice-ecp3-config.c
-@@ -81,12 +81,12 @@ static void firmware_load(const struct firmware *fw, void *context)
+diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+index 26acacb2fa95f..a5755e0645439 100644
+--- a/net/bluetooth/hci_core.c
++++ b/net/bluetooth/hci_core.c
+@@ -3263,6 +3263,7 @@ int hci_register_dev(struct hci_dev *hdev)
+ 	return id;
  
- 	if (fw == NULL) {
- 		dev_err(&spi->dev, "Cannot load firmware, aborting\n");
--		return;
-+		goto out;
- 	}
- 
- 	if (fw->size == 0) {
- 		dev_err(&spi->dev, "Error: Firmware size is 0!\n");
--		return;
-+		goto out;
- 	}
- 
- 	/* Fill dummy data (24 stuffing bits for commands) */
-@@ -108,7 +108,7 @@ static void firmware_load(const struct firmware *fw, void *context)
- 		dev_err(&spi->dev,
- 			"Error: No supported FPGA detected (JEDEC_ID=%08x)!\n",
- 			jedec_id);
--		return;
-+		goto out;
- 	}
- 
- 	dev_info(&spi->dev, "FPGA %s detected\n", ecp3_dev[i].name);
-@@ -121,7 +121,7 @@ static void firmware_load(const struct firmware *fw, void *context)
- 	buffer = kzalloc(fw->size + 8, GFP_KERNEL);
- 	if (!buffer) {
- 		dev_err(&spi->dev, "Error: Can't allocate memory!\n");
--		return;
-+		goto out;
- 	}
- 
- 	/*
-@@ -160,7 +160,7 @@ static void firmware_load(const struct firmware *fw, void *context)
- 			"Error: Timeout waiting for FPGA to clear (status=%08x)!\n",
- 			status);
- 		kfree(buffer);
--		return;
-+		goto out;
- 	}
- 
- 	dev_info(&spi->dev, "Configuring the FPGA...\n");
-@@ -186,7 +186,7 @@ static void firmware_load(const struct firmware *fw, void *context)
- 	release_firmware(fw);
- 
- 	kfree(buffer);
--
-+out:
- 	complete(&data->fw_loaded);
- }
- 
+ err_wqueue:
++	debugfs_remove_recursive(hdev->debugfs);
+ 	destroy_workqueue(hdev->workqueue);
+ 	destroy_workqueue(hdev->req_workqueue);
+ err:
 -- 
 2.34.1
 

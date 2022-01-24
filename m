@@ -2,41 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A0C499BA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1E34995F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:14:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1575350AbiAXVva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:51:30 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39510 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389657AbiAXVQp (ORCPT
+        id S1359639AbiAXU5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:57:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39176 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385460AbiAXUdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:16:45 -0500
+        Mon, 24 Jan 2022 15:33:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0709C07E298;
+        Mon, 24 Jan 2022 11:45:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4CBC612E9;
-        Mon, 24 Jan 2022 21:16:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0E13C340E4;
-        Mon, 24 Jan 2022 21:16:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63F9CB8121C;
+        Mon, 24 Jan 2022 19:45:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B47BC340E5;
+        Mon, 24 Jan 2022 19:45:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059000;
-        bh=0KD1eiKFQZ+15lvlwGjcpA2CZ9608oocxiXbhgHw+rM=;
+        s=korg; t=1643053528;
+        bh=pE1XdxEVbHz1gSf4Rh3y/sVw7bmiKe/EQ7YVF+zJq5U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G0GTUC07Rmybk5wv02//X2Inmzn27CN5fQvh6j5UiGhXzhJj5BWn78gqXmOq3nUyU
-         sONXiDH//x35cG+CigXPfbY5gtvvp+NxcrlHvq4R6V1MCKCr9bNfMQ1W64Kyc44xBR
-         akJYWKbN9Zn2BDd7RhlVEIoOeRysLMywqYjrvBeI=
+        b=FKkgEJFzRGEL57v35D7eUeYWLHv/a1VTyX8kXeAix1+XuntmjBi8wVIK93vUJi/7s
+         ghlGMWZxbkHq8QOER5NpQnSi4Yaqkjz4fEQ4gHxVmjx2GvWfQ/Plhn4+SkvU8qHFQw
+         AvXsUQ2n5qIKpqkYZ2Y4Y5hJKVCXYZgLLuKQ2w98=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        stable@vger.kernel.org, Chengfeng Ye <cyeaa@connect.ust.hk>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0470/1039] char/mwave: Adjust io port register size
+Subject: [PATCH 5.10 094/563] crypto: qce - fix uaf on qce_ahash_register_one
 Date:   Mon, 24 Jan 2022 19:37:39 +0100
-Message-Id: <20220124184141.076124919@linuxfoundation.org>
+Message-Id: <20220124184027.640121536@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,48 +50,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Chengfeng Ye <cyeaa@connect.ust.hk>
 
-[ Upstream commit f5912cc19acd7c24b2dbf65a6340bf194244f085 ]
+[ Upstream commit b4cb4d31631912842eb7dce02b4350cbb7562d5e ]
 
-Using MKWORD() on a byte-sized variable results in OOB read. Expand the
-size of the reserved area so both MKWORD and MKBYTE continue to work
-without overflow. Silences this warning on a -Warray-bounds build:
+Pointer base points to sub field of tmpl, it
+is dereferenced after tmpl is freed. Fix
+this by accessing base before free tmpl.
 
-drivers/char/mwave/3780i.h:346:22: error: array subscript 'short unsigned int[0]' is partly outside array bounds of 'DSP_ISA_SLAVE_CONTROL[1]' [-Werror=array-bounds]
-  346 | #define MKWORD(var) (*((unsigned short *)(&var)))
-      |                     ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/char/mwave/3780i.h:356:40: note: in definition of macro 'OutWordDsp'
-  356 | #define OutWordDsp(index,value)   outw(value,usDspBaseIO+index)
-      |                                        ^~~~~
-drivers/char/mwave/3780i.c:373:41: note: in expansion of macro 'MKWORD'
-  373 |         OutWordDsp(DSP_IsaSlaveControl, MKWORD(rSlaveControl));
-      |                                         ^~~~~~
-drivers/char/mwave/3780i.c:358:31: note: while referencing 'rSlaveControl'
-  358 |         DSP_ISA_SLAVE_CONTROL rSlaveControl;
-      |                               ^~~~~~~~~~~~~
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20211203084206.3104326-1-keescook@chromium.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: ec8f5d8f ("crypto: qce - Qualcomm crypto engine driver")
+Signed-off-by: Chengfeng Ye <cyeaa@connect.ust.hk>
+Acked-by: Thara Gopinath <thara.gopinath@linaro.org>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/mwave/3780i.h | 2 +-
+ drivers/crypto/qce/sha.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/char/mwave/3780i.h b/drivers/char/mwave/3780i.h
-index 9ccb6b270b071..95164246afd1a 100644
---- a/drivers/char/mwave/3780i.h
-+++ b/drivers/char/mwave/3780i.h
-@@ -68,7 +68,7 @@ typedef struct {
- 	unsigned char ClockControl:1;	/* RW: Clock control: 0=normal, 1=stop 3780i clocks */
- 	unsigned char SoftReset:1;	/* RW: Soft reset 0=normal, 1=soft reset active */
- 	unsigned char ConfigMode:1;	/* RW: Configuration mode, 0=normal, 1=config mode */
--	unsigned char Reserved:5;	/* 0: Reserved */
-+	unsigned short Reserved:13;	/* 0: Reserved */
- } DSP_ISA_SLAVE_CONTROL;
+diff --git a/drivers/crypto/qce/sha.c b/drivers/crypto/qce/sha.c
+index 87be96a0b0bba..8b4e79d882af4 100644
+--- a/drivers/crypto/qce/sha.c
++++ b/drivers/crypto/qce/sha.c
+@@ -533,8 +533,8 @@ static int qce_ahash_register_one(const struct qce_ahash_def *def,
  
+ 	ret = crypto_register_ahash(alg);
+ 	if (ret) {
+-		kfree(tmpl);
+ 		dev_err(qce->dev, "%s registration failed\n", base->cra_name);
++		kfree(tmpl);
+ 		return ret;
+ 	}
  
 -- 
 2.34.1

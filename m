@@ -2,148 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 047B0497CA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 11:03:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6536C497CA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 11:03:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236949AbiAXKDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 05:03:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235062AbiAXKDb (ORCPT
+        id S235046AbiAXKD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 05:03:29 -0500
+Received: from outbound-smtp60.blacknight.com ([46.22.136.244]:52991 "EHLO
+        outbound-smtp60.blacknight.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230339AbiAXKD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 05:03:31 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B236C06173B;
-        Mon, 24 Jan 2022 02:03:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=H6LcKSehcG3T/G89t5l/X+r5xRWoUbyAIud7gmEk2Ns=; b=AI1SH0yWSYHRGtVDmwlkZmfGts
-        HB+d4rBh7HItjzsOBEar6kBuVbDGa3spuoIvOz/we8xbedmKSrqC6eF+3peimc27upL4/kFX+6fJJ
-        NCv+1F15l7r0fJPA/j9jd0fZymXwgC3KCYKBXd+HFxf2WriPXODLbwsA6v3d82q4Xx7FU8RBMoKuD
-        EfsXNGyCTyx/O/uLjbr3ZF6PLl/5faGeeiPtU8n3Wz7EN8eboCmUTXGYcKQPUyuE2yRIcWEz4zKHR
-        8zsMk1tiO2+hP/IOPUQbQ2IppkXJUo+qwEsUB21dE8y4cAcsGgNUajoJnPrQXZrI9q9J97RZnizpr
-        WxaifpMQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nBwBn-000RjR-KF; Mon, 24 Jan 2022 10:03:08 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AC413986245; Mon, 24 Jan 2022 11:03:06 +0100 (CET)
-Date:   Mon, 24 Jan 2022 11:03:06 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     mingo@redhat.com, tglx@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
-        pjt@google.com, posk@google.com, avagin@google.com,
-        jannh@google.com, tdelisle@uwaterloo.ca, posk@posk.io
-Subject: Re: [RFC][PATCH v2 5/5] sched: User Mode Concurency Groups
-Message-ID: <20220124100306.GO20638@worktop.programming.kicks-ass.net>
-References: <20220120155517.066795336@infradead.org>
- <20220120160822.914418096@infradead.org>
- <Yerl+ZrZ2qflIMyg@FVFF77S0Q05N>
+        Mon, 24 Jan 2022 05:03:26 -0500
+Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
+        by outbound-smtp60.blacknight.com (Postfix) with ESMTPS id 6CA22FA928
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:03:23 +0000 (GMT)
+Received: (qmail 28722 invoked from network); 24 Jan 2022 10:03:23 -0000
+Received: from unknown (HELO stampy.112glenside.lan) (mgorman@techsingularity.net@[84.203.17.223])
+  by 81.17.254.9 with ESMTPA; 24 Jan 2022 10:03:23 -0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Mike Galbraith <efault@gmx.de>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: [PATCH 1/1] sched/fair: Increase wakeup_gran if current task has not executed the minimum granularity
+Date:   Mon, 24 Jan 2022 10:03:12 +0000
+Message-Id: <20220124100312.32573-1-mgorman@techsingularity.net>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yerl+ZrZ2qflIMyg@FVFF77S0Q05N>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 04:57:29PM +0000, Mark Rutland wrote:
+Commit 8a99b6833c88 ("sched: Move SCHED_DEBUG sysctl to debugfs") moved
+the kernel.sched_wakeup_granularity_ns sysctl under debugfs.  One of the
+reasons why this sysctl may be used may be for "optimising for throughput",
+particularly when overloaded. The tool TuneD sometimes alters this for two
+profiles e.g. "mssql" and "throughput-performance".  Since tuned 2.16.0,
+it also pokes into debugfs without any clear reason why. This patch
+aims to reduce the motivation to tweak sysctl_sched_wakeup_granularity
+by increasing sched_wakeup_granularity if the running task runtime has
+not exceeded sysctl_sched_min_granularity.
 
-> > @@ -221,8 +227,11 @@ static inline void local_irq_disable_exi
-> >   */
-> >  static inline void irqentry_irq_enable(struct pt_regs *regs)
-> >  {
-> > -	if (!regs_irqs_disabled(regs))
-> > +	if (!regs_irqs_disabled(regs)) {
-> >  		local_irq_enable();
-> > +		if (user_mode(regs) && (current->flags & PF_UMCG_WORKER))
-> > +			umcg_sys_enter(regs, -1);
-> > +	}
-> >  }
-> 
-> Perhaps it would make sense to have separate umcg_sys_enter(regs) and
-> umcg_sys_enter_syscall(regs, syscallno)? Even if the former is just a wrapper,
-> to make the entry/exit bits clearly correspond for all the !syscall cases?
+During task migration or wakeup, a decision is made on whether
+to preempt the current task or not. To limit over-scheduling,
+sysctl_sched_wakeup_granularity delays the preemption to allow at least 1ms
+of runtime before preempting. However, when a domain is heavily overloaded
+(e.g. hackbench), the degree of over-scheduling is still severe. This is
+problematic as time is wasted rescheduling tasks that could instead be
+used by userspace tasks.
 
-Can do I suppose.
+However, care must be taken. Even if a system is overloaded, there may
+be high priority threads that must still be able to run. Mike Galbraith
+explained the constraints as follows;
 
-> Also, is the syscall case meant to nest within this, or syscall entry paths not
-> supposed to call irqentry_irq_enable() ?
+        CFS came about because the O1 scheduler was unfair to the
+        point it had starvation problems. People pretty much across the
+        board agreed that a fair scheduler was a much way better way
+        to go, and CFS was born.  It didn't originally have the sleep
+        credit business, but had to grow it to become _short term_ fair.
+        Ingo cut the sleep credit in half because of overscheduling, and
+        that has worked out pretty well all told.. but now you're pushing
+        it more in the unfair direction, all the way to extremely unfair
+        for anything and everything very light.
 
-No nesting, syscall_ vs irqentry_. And you can't have a syscall and an
-exception both be from user at the same time :-)
+        Fairness isn't the holy grail mind you, and at some point, giving
+        up on short term fairness certainly isn't crazy, as proven by your
+        hackbench numbers and other numbers we've seen over the years,
+        but taking bites out of the 'CF' in the CFS that was born to be a
+        corner-case killer is.. worrisome.  The other shoe will drop.. it
+        always does :)
 
-> >  /**
-> > @@ -232,8 +241,11 @@ static inline void irqentry_irq_enable(s
-> >   */
-> >  static inline void irqentry_irq_disable(struct pt_regs *regs)
-> >  {
-> > -	if (!regs_irqs_disabled(regs))
-> > +	if (!regs_irqs_disabled(regs)) {
-> > +		if (user_mode(regs) && (current->flags & PF_UMCG_WORKER))
-> > +			umcg_sys_exit(regs);
-> >  		local_irq_disable();
-> > +	}
-> >  }
-> 
-> Do the umcg_sys_{enter,exit}() calls need to happen with IRQs unmasked?
+This patch increases the wakeup granularity if the current task has not
+reached its minimum preemption granularity. The current task may still
+be preempted but the difference in runtime must be higher.
 
-Yes; both can end up blocking.
+hackbench-process-pipes
+                          5.17.0-rc0             5.17.0-rc0
+                             vanilla sched-scalewakegran-v5
+Amean     1        0.3360 (   0.00%)      0.3247 (   3.37%)
+Amean     4        0.8490 (   0.00%)      0.8170 (   3.77%)
+Amean     7        1.0653 (   0.00%)      1.0337 (   2.97%)
+Amean     12       1.7473 (   0.00%)      1.5793 *   9.61%*
+Amean     21       3.0810 (   0.00%)      2.6507 *  13.97%*
+Amean     30       4.4270 (   0.00%)      3.7067 *  16.27%*
+Amean     48       7.4763 (   0.00%)      5.8417 *  21.86%*
+Amean     79      12.6160 (   0.00%)      8.9873 *  28.76%*
+Amean     110     17.8917 (   0.00%)     12.5193 *  30.03%*
+Amean     141     20.9503 (   0.00%)     17.1913 *  17.94%*
+Amean     172     24.0280 (   0.00%)     20.2977 *  15.52%*
+Amean     203     27.2777 (   0.00%)     24.8710 *   8.82%*
+Amean     234     32.1567 (   0.00%)     29.2507 (   9.04%)
+Amean     265     35.2520 (   0.00%)     30.2247 *  14.26%*
+Amean     296     37.7867 (   0.00%)     33.8587 *  10.40%*
 
-> * If not (and this nests): for arm64 these can live in our
->   enter_from_user_mode() and exit_to_user_mode() helpers.
-> 
-> * If so (or this doesn't nest): for arm64 we'd need to rework our
->   local_daif_{inherit,restore,mask}() calls to handle this, though I've been
->   meaning to do that anyway to handle pseudo-NMI better.
-> 
-> Either way, it looks like we'd need helpers along the lines of:
-> 
-> | static __always_inline void umcg_enter_from_user(struct pt_regs *regs)
-> | {
-> | 	if (current->flags & PF_UMCG_WORKER)
-> | 		umcg_sys_enter(regs, -1);
-> | }
-> | 
-> | static __always_inline void umcg_exit_to_user(struct pt_regs *regs)
-> | {
-> | 	if (current->flags & PF_UMCG_WORKER)
-> | 		umcg_sys_exit(regs);
-> | }
+                  5.17.0-rc0  5.17.0-rc0
+                     vanilla sched-scalewakegran-v5
+Duration User       16189.01    15301.35
+Duration System     37651.60    30529.21
+Duration Elapsed      706.79      605.33
 
-Would something like:
+Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+---
+ kernel/sched/fair.c     | 17 +++++++++++++++--
+ kernel/sched/features.h |  2 ++
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
-#ifndef arch_irqentry_irq_enter
-static __always_inline bool arch_irqentry_irq_enter(struct pt_regs *regs)
-{
-	if (!regs_irqs_disabled(regs)) {
-		local_irq_enable();
-		return true;
-	}
-	return false;
-}
-#endif
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 095b0aa378df..b976b094d8c7 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -6965,10 +6965,23 @@ balance_fair(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
+ }
+ #endif /* CONFIG_SMP */
+ 
+-static unsigned long wakeup_gran(struct sched_entity *se)
++static unsigned long
++wakeup_gran(struct sched_entity *curr, struct sched_entity *se)
+ {
+ 	unsigned long gran = sysctl_sched_wakeup_granularity;
+ 
++	if (sched_feat(SCALE_WAKEUP_GRAN)) {
++		unsigned long delta_exec;
++
++		/*
++		 * Increase the wakeup granularity if curr's runtime
++		 * is less than the minimum preemption granularity.
++		 */
++		delta_exec = curr->sum_exec_runtime - curr->prev_sum_exec_runtime;
++		if (delta_exec < sysctl_sched_min_granularity)
++			gran += sysctl_sched_min_granularity;
++	}
++
+ 	/*
+ 	 * Since its curr running now, convert the gran from real-time
+ 	 * to virtual-time in his units.
+@@ -7007,7 +7020,7 @@ wakeup_preempt_entity(struct sched_entity *curr, struct sched_entity *se)
+ 	if (vdiff <= 0)
+ 		return -1;
+ 
+-	gran = wakeup_gran(se);
++	gran = wakeup_gran(curr, se);
+ 	if (vdiff > gran)
+ 		return 1;
+ 
+diff --git a/kernel/sched/features.h b/kernel/sched/features.h
+index 1cf435bbcd9c..7b70a409cfa5 100644
+--- a/kernel/sched/features.h
++++ b/kernel/sched/features.h
+@@ -100,3 +100,5 @@ SCHED_FEAT(LATENCY_WARN, false)
+ 
+ SCHED_FEAT(ALT_PERIOD, true)
+ SCHED_FEAT(BASE_SLICE, true)
++
++SCHED_FEAT(SCALE_WAKEUP_GRAN, true)
+-- 
+2.31.1
 
-static __always_inline void irqentry_irq_enter(struct pt_regs *regs)
-{
-	if (arch_irqentry_irq_inherit(regs)) {
-		if (user_mode(regs) && (current->flags & PF_UMCG_WORKER))
-			umcg_sys_enter(regs, -1);
-	}
-}
-
-Work? Then arm64 can do:
-
-static __always_inline bool arch_irqentry_irq_enter(struct pt_regs *regs)
-{
-	local_daif_inherit();
-	return interrupts_enabled(regs);
-}
-
-or somesuch...

@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6692849A756
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:42:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A42EB49A75D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242559AbiAYChY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:37:24 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34664 "EHLO
+        id S3408302AbiAYCho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:37:44 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37166 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385267AbiAXUb5 (ORCPT
+        with ESMTP id S1385295AbiAXUb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:31:57 -0500
+        Mon, 24 Jan 2022 15:31:59 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06AABB8123D;
-        Mon, 24 Jan 2022 20:31:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2558FC340E5;
-        Mon, 24 Jan 2022 20:31:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1CAD7B81239;
+        Mon, 24 Jan 2022 20:31:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CC70C340E5;
+        Mon, 24 Jan 2022 20:31:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056312;
-        bh=wxcf2td4nock/WupOP7KOGXdCb7aoLTxQcRZqO5Uhzg=;
+        s=korg; t=1643056315;
+        bh=HXJV0jhVF0YnUWsRplcUKIX+Ihje/JCzSZtYZ+p4VdI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=moM19WuAU3dIJcASYrz+Hb6m+zpibfp2HJp/Jso0I5266/eeIg7SuoUaOdH9XhQ8H
-         UHjNdjEsZxEqDtSHHdt9sLbPW0JogdFVWehBo1U9vjqL0JHFT8qtz+X+wZ890WapPD
-         38CIhMV8BYSKSJTu2N7DjGY8Zd1D/a0OiaFP5xM4=
+        b=2DzxBhkNCuovzyLMFhQsCURNVb3t6UTFRfnjbKNfieCiZm5YC5vJq+4t3o/jarPfZ
+         5FdA/wG0dU3Pi6ECTrJsNzkhRzYBaw+vwOZh2iefDNNqtexPwuswWKH8khRJA80MR+
+         8KIJ/UvWA7W9b1kmC14GR3lREl5xc1cWcAPtTU7c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, "Christian A. Ehrhardt" <lk@c--e.de>,
         Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 443/846] ALSA: hda/cs8409: Increase delay during jack detection
-Date:   Mon, 24 Jan 2022 19:39:20 +0100
-Message-Id: <20220124184116.263137916@linuxfoundation.org>
+Subject: [PATCH 5.15 444/846] ALSA: hda/cs8409: Fix Jack detection after resume
+Date:   Mon, 24 Jan 2022 19:39:21 +0100
+Message-Id: <20220124184116.302124918@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -47,38 +47,87 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Christian A. Ehrhardt <lk@c--e.de>
 
-[ Upstream commit 8cd07657177006b67cc1610e4466cc75ad781c05 ]
+[ Upstream commit 57f234248ff925d88caedf4019ec84e6ecb83909 ]
 
-Commit c8b4f0865e82 reduced delays related to cs42l42 jack
-detection. However, the change was too aggressive. As a result
-internal speakers on DELL Inspirion 3501 are not detected.
+The suspend code unconditionally sets ->hp_jack_in and ->mic_jack_in
+to zero but without reporting this status change to the HDA core.
+To compensate for this, always assume a status change on the
+first unsol event after boot or resume.
 
-Increase the delay in cs42l42_run_jack_detect() a bit.
-
-Fixes: c8b4f0865e82 ("ALSA: hda/cs8409: Remove unnecessary delays")
+Fixes: 424e531b47f8 ("ALSA: hda/cs8409: Ensure Type Detection is only run on startup when necessary")
 Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
-Link: https://lore.kernel.org/r/20211231131221.itwotyfk5qomn7n6@cae.in-ulm.de
+Link: https://lore.kernel.org/r/20211231134432.atwmuzeceqiklcoa@cae.in-ulm.de
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_cs8409.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sound/pci/hda/patch_cs8409-tables.c | 3 +++
+ sound/pci/hda/patch_cs8409.c        | 5 ++++-
+ sound/pci/hda/patch_cs8409.h        | 1 +
+ 3 files changed, 8 insertions(+), 1 deletion(-)
 
+diff --git a/sound/pci/hda/patch_cs8409-tables.c b/sound/pci/hda/patch_cs8409-tables.c
+index 0fb0a428428b4..df0b4522babf7 100644
+--- a/sound/pci/hda/patch_cs8409-tables.c
++++ b/sound/pci/hda/patch_cs8409-tables.c
+@@ -252,6 +252,7 @@ struct sub_codec cs8409_cs42l42_codec = {
+ 	.init_seq_num = ARRAY_SIZE(cs42l42_init_reg_seq),
+ 	.hp_jack_in = 0,
+ 	.mic_jack_in = 0,
++	.force_status_change = 1,
+ 	.paged = 1,
+ 	.suspended = 1,
+ 	.no_type_dect = 0,
+@@ -443,6 +444,7 @@ struct sub_codec dolphin_cs42l42_0 = {
+ 	.init_seq_num = ARRAY_SIZE(dolphin_c0_init_reg_seq),
+ 	.hp_jack_in = 0,
+ 	.mic_jack_in = 0,
++	.force_status_change = 1,
+ 	.paged = 1,
+ 	.suspended = 1,
+ 	.no_type_dect = 0,
+@@ -456,6 +458,7 @@ struct sub_codec dolphin_cs42l42_1 = {
+ 	.init_seq_num = ARRAY_SIZE(dolphin_c1_init_reg_seq),
+ 	.hp_jack_in = 0,
+ 	.mic_jack_in = 0,
++	.force_status_change = 1,
+ 	.paged = 1,
+ 	.suspended = 1,
+ 	.no_type_dect = 1,
 diff --git a/sound/pci/hda/patch_cs8409.c b/sound/pci/hda/patch_cs8409.c
-index 039b9f2f8e947..bf5d7f0c6ba55 100644
+index bf5d7f0c6ba55..aff2b5abb81ea 100644
 --- a/sound/pci/hda/patch_cs8409.c
 +++ b/sound/pci/hda/patch_cs8409.c
-@@ -628,8 +628,8 @@ static void cs42l42_run_jack_detect(struct sub_codec *cs42l42)
- 	cs8409_i2c_write(cs42l42, 0x1b74, 0x07);
- 	cs8409_i2c_write(cs42l42, 0x131b, 0xFD);
- 	cs8409_i2c_write(cs42l42, 0x1120, 0x80);
--	/* Wait ~100us*/
--	usleep_range(100, 200);
-+	/* Wait ~20ms*/
-+	usleep_range(20000, 25000);
- 	cs8409_i2c_write(cs42l42, 0x111f, 0x77);
- 	cs8409_i2c_write(cs42l42, 0x1120, 0xc0);
- }
+@@ -636,7 +636,9 @@ static void cs42l42_run_jack_detect(struct sub_codec *cs42l42)
+ 
+ static int cs42l42_handle_tip_sense(struct sub_codec *cs42l42, unsigned int reg_ts_status)
+ {
+-	int status_changed = 0;
++	int status_changed = cs42l42->force_status_change;
++
++	cs42l42->force_status_change = 0;
+ 
+ 	/* TIP_SENSE INSERT/REMOVE */
+ 	switch (reg_ts_status) {
+@@ -791,6 +793,7 @@ static void cs42l42_suspend(struct sub_codec *cs42l42)
+ 	cs42l42->last_page = 0;
+ 	cs42l42->hp_jack_in = 0;
+ 	cs42l42->mic_jack_in = 0;
++	cs42l42->force_status_change = 1;
+ 
+ 	/* Put CS42L42 into Reset */
+ 	gpio_data = snd_hda_codec_read(codec, CS8409_PIN_AFG, 0, AC_VERB_GET_GPIO_DATA, 0);
+diff --git a/sound/pci/hda/patch_cs8409.h b/sound/pci/hda/patch_cs8409.h
+index ade2b838590cf..d0b725c7285b6 100644
+--- a/sound/pci/hda/patch_cs8409.h
++++ b/sound/pci/hda/patch_cs8409.h
+@@ -305,6 +305,7 @@ struct sub_codec {
+ 
+ 	unsigned int hp_jack_in:1;
+ 	unsigned int mic_jack_in:1;
++	unsigned int force_status_change:1;
+ 	unsigned int suspended:1;
+ 	unsigned int paged:1;
+ 	unsigned int last_page;
 -- 
 2.34.1
 

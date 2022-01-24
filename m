@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7AD9498EBA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:48:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A82498D67
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356967AbiAXTsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:48:02 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35464 "EHLO
+        id S1347505AbiAXTcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:32:02 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:52656 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346088AbiAXTiD (ORCPT
+        with ESMTP id S1345874AbiAXTYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:38:03 -0500
+        Mon, 24 Jan 2022 14:24:21 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A9CB6135E;
-        Mon, 24 Jan 2022 19:38:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEC48C340E5;
-        Mon, 24 Jan 2022 19:38:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97B7F61447;
+        Mon, 24 Jan 2022 19:24:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58207C340E5;
+        Mon, 24 Jan 2022 19:24:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053082;
-        bh=WrPbiVsHL3R4O3QuRUsnYj8sP4lCgmZ79KNdHnoSs5w=;
+        s=korg; t=1643052260;
+        bh=hHYPuzQMlbi5BWrijAFproJ8AIh6hz9KF3iVdpWexwk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QROLokJm7FXJWaYjjnKEWjcZlhUKIzPLVO8RzrL4881U3pJYiMp9UXRYeS8clYhit
-         pMrdLeG0qQ3gds+hS+UZAumUch/jcNv5hH4Ayo97rIDWqS+kBKgHQ2AoJ2i5Gj7Dwl
-         ctO9ILS95+gSC4EfFxAU5A5giZJW/EHr1gC/PsEQ=
+        b=jfTKlzHoNe7TQ130Uz55/1uhmoaqc1+qecy2drWgt0ypQnnEuWG7sNPzpWD7366eW
+         kiKPTO8XXs412t53ubLcGkefeonZgLUZu59OCaaEHGCBwNabDRp0RLXjgeMo8zW7KU
+         IxHq3xjh1338Ou/R+i5/lMDhryOOqoDuDAEx28f4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan Kara <jack@suse.cz>, stable@kernel.org,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.4 269/320] ext4: make sure quota gets properly shutdown on error
+        stable@vger.kernel.org, Yixing Liu <liuyixing1@huawei.com>,
+        Wenpeng Liang <liangwenpeng@huawei.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 4.19 215/239] RDMA/hns: Modify the mapping attribute of doorbell to device
 Date:   Mon, 24 Jan 2022 19:44:13 +0100
-Message-Id: <20220124184003.131541828@linuxfoundation.org>
+Message-Id: <20220124183949.946783914@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,51 +46,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Yixing Liu <liuyixing1@huawei.com>
 
-commit 15fc69bbbbbc8c72e5f6cc4e1be0f51283c5448e upstream.
+commit 39d5534b1302189c809e90641ffae8cbdc42a8fc upstream.
 
-When we hit an error when enabling quotas and setting inode flags, we do
-not properly shutdown quota subsystem despite returning error from
-Q_QUOTAON quotactl. This can lead to some odd situations like kernel
-using quota file while it is still writeable for userspace. Make sure we
-properly cleanup the quota subsystem in case of error.
+It is more general for ARM device drivers to use the device attribute to
+map PCI BAR spaces.
 
-Signed-off-by: Jan Kara <jack@suse.cz>
-Cc: stable@kernel.org
-Link: https://lore.kernel.org/r/20211007155336.12493-2-jack@suse.cz
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Fixes: 9a4435375cd1 ("IB/hns: Add driver files for hns RoCE driver")
+Link: https://lore.kernel.org/r/20211206133652.27476-1-liangwenpeng@huawei.com
+Signed-off-by: Yixing Liu <liuyixing1@huawei.com>
+Signed-off-by: Wenpeng Liang <liangwenpeng@huawei.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/super.c |   10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/infiniband/hw/hns/hns_roce_main.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -5912,10 +5912,7 @@ static int ext4_quota_on(struct super_bl
+--- a/drivers/infiniband/hw/hns/hns_roce_main.c
++++ b/drivers/infiniband/hw/hns/hns_roce_main.c
+@@ -432,7 +432,7 @@ static int hns_roce_mmap(struct ib_ucont
+ 		return -EINVAL;
  
- 	lockdep_set_quota_inode(path->dentry->d_inode, I_DATA_SEM_QUOTA);
- 	err = dquot_quota_on(sb, type, format_id, path);
--	if (err) {
--		lockdep_set_quota_inode(path->dentry->d_inode,
--					     I_DATA_SEM_NORMAL);
--	} else {
-+	if (!err) {
- 		struct inode *inode = d_inode(path->dentry);
- 		handle_t *handle;
- 
-@@ -5935,7 +5932,12 @@ static int ext4_quota_on(struct super_bl
- 		ext4_journal_stop(handle);
- 	unlock_inode:
- 		inode_unlock(inode);
-+		if (err)
-+			dquot_quota_off(sb, type);
- 	}
-+	if (err)
-+		lockdep_set_quota_inode(path->dentry->d_inode,
-+					     I_DATA_SEM_NORMAL);
- 	return err;
- }
- 
+ 	if (vma->vm_pgoff == 0) {
+-		vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
++		vma->vm_page_prot = pgprot_device(vma->vm_page_prot);
+ 		if (io_remap_pfn_range(vma, vma->vm_start,
+ 				       to_hr_ucontext(context)->uar.pfn,
+ 				       PAGE_SIZE, vma->vm_page_prot))
 
 

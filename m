@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE40498D57
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DCB6499369
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352874AbiAXTbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:31:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
+        id S1385613AbiAXUdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347975AbiAXTXG (ORCPT
+        with ESMTP id S1349334AbiAXUNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:23:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1537AC06139D;
-        Mon, 24 Jan 2022 11:09:25 -0800 (PST)
+        Mon, 24 Jan 2022 15:13:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5B0C061765;
+        Mon, 24 Jan 2022 11:35:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF761B81215;
-        Mon, 24 Jan 2022 19:09:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05DA9C340E8;
-        Mon, 24 Jan 2022 19:09:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BFB7614FC;
+        Mon, 24 Jan 2022 19:35:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3356C340E5;
+        Mon, 24 Jan 2022 19:35:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051362;
-        bh=1G5W5+597GyiCixdJ+b9k+vwhTT84W5MJH0OG6McupM=;
+        s=korg; t=1643052956;
+        bh=fqghv2tM9KQdZtwnpamw7ZoE6favq2oByT6WYmfaJKk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UhUw6khLgtAUnrAm02VeDDKN499aPnswovvUkcfDUOKdmriDyIDGHjSsIOMHRI0he
-         6TSYmRMWrzy6C5BrZchOyecN9u1Y8WqjmTPOlGoynhcBtMWHsvZu3Imm1fwrm0sggL
-         yPtSXxBomR4UKanAaZR0jyQ5UEFUOsu3ypokWS5Q=
+        b=u4r6HlSDzXweTuTb2eNTILEfjgfGJ8oyVtGra3tkhSXsGLC8LjgIRcOMz6h2ZleiW
+         LRGQY4JHBlJEnuhjMzAz840sYAtzOqt72h0laZf1eeYzrl9g5eFIHXIygXFG9uUIr2
+         GlIUVcGNlxLSBurDZNUUh+lFvkpwpEMs14/2AYX8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Laurent Dufour <ldufour@linux.ibm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 136/186] powerpc/watchdog: Fix missed watchdog reset due to memory ordering race
-Date:   Mon, 24 Jan 2022 19:43:31 +0100
-Message-Id: <20220124183941.483292568@linuxfoundation.org>
+Subject: [PATCH 5.4 228/320] powerpc/watchdog: Fix missed watchdog reset due to memory ordering race
+Date:   Mon, 24 Jan 2022 19:43:32 +0100
+Message-Id: <20220124184001.741509727@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -79,10 +79,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 40 insertions(+), 1 deletion(-)
 
 diff --git a/arch/powerpc/kernel/watchdog.c b/arch/powerpc/kernel/watchdog.c
-index ce848ff84eddf..1617767ebc9ae 100644
+index af3c15a1d41eb..75b2a6c4db5a5 100644
 --- a/arch/powerpc/kernel/watchdog.c
 +++ b/arch/powerpc/kernel/watchdog.c
-@@ -106,6 +106,10 @@ static void set_cpumask_stuck(const struct cpumask *cpumask, u64 tb)
+@@ -132,6 +132,10 @@ static void set_cpumask_stuck(const struct cpumask *cpumask, u64 tb)
  {
  	cpumask_or(&wd_smp_cpus_stuck, &wd_smp_cpus_stuck, cpumask);
  	cpumask_andnot(&wd_smp_cpus_pending, &wd_smp_cpus_pending, cpumask);
@@ -93,8 +93,8 @@ index ce848ff84eddf..1617767ebc9ae 100644
  	if (cpumask_empty(&wd_smp_cpus_pending)) {
  		wd_smp_last_reset_tb = tb;
  		cpumask_andnot(&wd_smp_cpus_pending,
-@@ -177,13 +181,44 @@ static void wd_smp_clear_cpu_pending(int cpu, u64 tb)
- 			wd_smp_lock(&flags);
+@@ -217,13 +221,44 @@ static void wd_smp_clear_cpu_pending(int cpu, u64 tb)
+ 
  			cpumask_clear_cpu(cpu, &wd_smp_cpus_stuck);
  			wd_smp_unlock(&flags);
 +		} else {
@@ -138,16 +138,16 @@ index ce848ff84eddf..1617767ebc9ae 100644
  		wd_smp_lock(&flags);
  		if (cpumask_empty(&wd_smp_cpus_pending)) {
  			wd_smp_last_reset_tb = tb;
-@@ -276,8 +311,12 @@ void arch_touch_nmi_watchdog(void)
+@@ -314,8 +349,12 @@ void arch_touch_nmi_watchdog(void)
  {
  	unsigned long ticks = tb_ticks_per_usec * wd_timer_period_ms * 1000;
  	int cpu = smp_processor_id();
 -	u64 tb = get_tb();
 +	u64 tb;
-+
+ 
 +	if (!cpumask_test_cpu(cpu, &watchdog_cpumask))
 +		return;
- 
++
 +	tb = get_tb();
  	if (tb - per_cpu(wd_timer_tb, cpu) >= ticks) {
  		per_cpu(wd_timer_tb, cpu) = tb;

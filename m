@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB20499D12
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70CA2499862
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1582109AbiAXWNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:13:54 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45328 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453726AbiAXVar (ORCPT
+        id S1451357AbiAXVWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:22:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1442662AbiAXUzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:30:47 -0500
+        Mon, 24 Jan 2022 15:55:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74C2C047CE4;
+        Mon, 24 Jan 2022 11:59:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 111F0B8121C;
-        Mon, 24 Jan 2022 21:30:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32098C340E5;
-        Mon, 24 Jan 2022 21:30:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A00AFB81229;
+        Mon, 24 Jan 2022 19:59:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03E47C340E5;
+        Mon, 24 Jan 2022 19:59:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059842;
-        bh=4RrGe9wr71LWzqgF6XSoStKYKDl1f6S25cA8dDWoh9o=;
+        s=korg; t=1643054397;
+        bh=/dLmxP0k5YulXdYMfs2D5bBa+Ba737FmT5TgawM3dGg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jRPM2FuHY04uZC7yGPukn7yAC5fiDjhNda7nD9KfDfDI2J7zB2J0vn1izh6OaI0ty
-         wwKdhPG8uND/Yx+Rwvk6AgGdm/zxWkbxBEThQZ6Cib53iCRbSO4AtDXr5BiAlz1izb
-         26zGy3ln77P0/AT6ROxULvbt0n2eoCtAiOYTkuew=
+        b=vF/8skGovRwakkmlzaILgojRMk0CDlGbKb5tPabqJGZBQLWLOq/ygtNnPswinsoU6
+         pBWx7vVbxUv0QL8TlE9UpJKdnUEZk4ddgF4aaobWQ2n0O0wpjZ8F9H6YAI/shTLp7S
+         46qQaQrRIxxr2pkFaabCUll93EfVKg3eWkeDDyOc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
-        Georgi Djakov <djakov@kernel.org>,
+        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0752/1039] interconnect: qcom: rpm: Prevent integer overflow in rate
+Subject: [PATCH 5.10 376/563] iwlwifi: remove module loading failure message
 Date:   Mon, 24 Jan 2022 19:42:21 +0100
-Message-Id: <20220124184150.612174636@linuxfoundation.org>
+Message-Id: <20220124184037.433003114@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,40 +49,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephan Gerhold <stephan@gerhold.net>
+From: Johannes Berg <johannes.berg@intel.com>
 
-[ Upstream commit a7d9436a6c85fcb8843c910fd323dcd7f839bf63 ]
+[ Upstream commit 6518f83ffa51131daaf439b66094f684da3fb0ae ]
 
-Using icc-rpm on ARM32 currently results in clk_set_rate() errors during
-boot, e.g. "bus clk_set_rate error: -22". This is very similar to commit
-7381e27b1e56 ("interconnect: qcom: msm8974: Prevent integer overflow in rate")
-where the u64 is converted to a signed long during clock rate rounding,
-resulting in an overflow on 32-bit platforms.
+When CONFIG_DEBUG_TEST_DRIVER_REMOVE is set, iwlwifi crashes
+when the opmode module cannot be loaded, due to completing
+the completion before using drv->dev, which can then already
+be freed.
 
-Let's fix it similarly by making sure that the rate does not exceed
-LONG_MAX. Such high clock rates will surely result in the maximum
-frequency of the bus anyway.
+Fix this by removing the (fairly useless) message. Moving the
+completion later causes a deadlock instead, so that's not an
+option.
 
-Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-Link: https://lore.kernel.org/r/20211206114542.45325-1-stephan@gerhold.net
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/20211210091245.289008-2-luca@coelho.fi
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/interconnect/qcom/icc-rpm.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/wireless/intel/iwlwifi/iwl-drv.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index ef7999a08c8bf..8114295a83129 100644
---- a/drivers/interconnect/qcom/icc-rpm.c
-+++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -239,6 +239,7 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- 	rate = max(sum_bw, max_peak_bw);
+diff --git a/drivers/net/wireless/intel/iwlwifi/iwl-drv.c b/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
+index 4bdfd6afa7324..30c6d7b18599a 100644
+--- a/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
++++ b/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
+@@ -1629,15 +1629,8 @@ static void iwl_req_fw_callback(const struct firmware *ucode_raw, void *context)
+ 	 * else from proceeding if the module fails to load
+ 	 * or hangs loading.
+ 	 */
+-	if (load_module) {
++	if (load_module)
+ 		request_module("%s", op->name);
+-#ifdef CONFIG_IWLWIFI_OPMODE_MODULAR
+-		if (err)
+-			IWL_ERR(drv,
+-				"failed to load module %s (error %d), is dynamic loading enabled?\n",
+-				op->name, err);
+-#endif
+-	}
+ 	failure = false;
+ 	goto free;
  
- 	do_div(rate, qn->buswidth);
-+	rate = min_t(u64, rate, LONG_MAX);
- 
- 	if (qn->rate == rate)
- 		return 0;
 -- 
 2.34.1
 

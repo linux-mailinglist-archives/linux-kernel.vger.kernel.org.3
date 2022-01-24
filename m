@@ -2,41 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2236F498EAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9C2498B94
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351252AbiAXTop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:44:45 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33860 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353863AbiAXTfa (ORCPT
+        id S1348222AbiAXTPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:15:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237315AbiAXTGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:35:30 -0500
+        Mon, 24 Jan 2022 14:06:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC49AC061794;
+        Mon, 24 Jan 2022 11:01:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F08896121F;
-        Mon, 24 Jan 2022 19:35:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B86DBC340E5;
-        Mon, 24 Jan 2022 19:35:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CB9560BB7;
+        Mon, 24 Jan 2022 19:01:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75DBAC340E5;
+        Mon, 24 Jan 2022 19:01:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052929;
-        bh=ybTUdVpSs4tP9fA30UA8SByCPb6Bm5xSjfuBftAAKl0=;
+        s=korg; t=1643050882;
+        bh=Qf6XnIzeElSZlaTPE0+w9iFReX52uTDmquC2axMPOMY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IoGVSyYM6Nq0EDzcXOpJtNUDY1URjnw91tt4xxjAyFXxUNsZF+SZBDHyUYMe4SjT3
-         cd5ISitkjRuNGszUgktNJMzZdkp5UOqzCWWLmLJaE01Q45KgrFqj8FkGW9ftIFKA7R
-         OHqdzQ941dDr+oVWECfDitngTtjlDpBjnNw+nwnA=
+        b=uherd27hb+yB2e/005qIB2XgwTj+NH5xUNY69YCzq6s7oefdU2Qvf51m5YITh0qx5
+         jS2AE0ftcnvU/TbO0o0zxS/h9VQKqNr0ZRJBy0FZ84eZyY7X8lIBjnKYb0ydhiJR7W
+         0Riwxe/gjnXOdUOiJRysB1aBb/p6qtaGMpPIm8QY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Russell King <rmk+kernel@armlinux.org.uk>,
-        Lukas Wunner <lukas@wunner.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 220/320] serial: pl010: Drop CR register reset on set_termios
-Date:   Mon, 24 Jan 2022 19:43:24 +0100
-Message-Id: <20220124184001.139499978@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 115/157] MIPS: Octeon: Fix build errors using clang
+Date:   Mon, 24 Jan 2022 19:43:25 +0100
+Message-Id: <20220124183936.423191959@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,56 +52,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Wunner <lukas@wunner.de>
+From: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 
-[ Upstream commit 08a0c6dff91c965e39905cf200d22db989203ccb ]
+[ Upstream commit 95339b70677dc6f9a2d669c4716058e71b8dc1c7 ]
 
-pl010_set_termios() briefly resets the CR register to zero.
+A large number of the following errors is reported when compiling
+with clang:
 
-Where does this register write come from?
+  cvmx-bootinfo.h:326:3: error: adding 'int' to a string does not append to the string [-Werror,-Wstring-plus-int]
+                  ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_NULL)
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  cvmx-bootinfo.h:321:20: note: expanded from macro 'ENUM_BRD_TYPE_CASE'
+          case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+                         ~~~^~~~
+  cvmx-bootinfo.h:326:3: note: use array indexing to silence this warning
+  cvmx-bootinfo.h:321:20: note: expanded from macro 'ENUM_BRD_TYPE_CASE'
+          case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+                          ^
 
-The PL010 driver's IRQ handler ambauart_int() originally modified the CR
-register without holding the port spinlock.  ambauart_set_termios() also
-modified that register.  To prevent concurrent read-modify-writes by the
-IRQ handler and to prevent transmission while changing baudrate,
-ambauart_set_termios() had to disable interrupts.  That is achieved by
-writing zero to the CR register.
+Follow the prompts to use the address operator '&' to fix this error.
 
-However in 2004 the PL010 driver was amended to acquire the port
-spinlock in the IRQ handler, obviating the need to disable interrupts in
-->set_termios():
-https://git.kernel.org/history/history/c/157c0342e591
-
-That rendered the CR register write obsolete.  Drop it.
-
-Cc: Russell King <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Link: https://lore.kernel.org/r/fcaff16e5b1abb4cc3da5a2879ac13f278b99ed0.1641128728.git.lukas@wunner.de
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/amba-pl010.c | 3 ---
- 1 file changed, 3 deletions(-)
+ arch/mips/include/asm/octeon/cvmx-bootinfo.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/amba-pl010.c b/drivers/tty/serial/amba-pl010.c
-index 2c37d11726aba..13f882e5e7b76 100644
---- a/drivers/tty/serial/amba-pl010.c
-+++ b/drivers/tty/serial/amba-pl010.c
-@@ -452,14 +452,11 @@ pl010_set_termios(struct uart_port *port, struct ktermios *termios,
- 	if ((termios->c_cflag & CREAD) == 0)
- 		uap->port.ignore_status_mask |= UART_DUMMY_RSR_RX;
+diff --git a/arch/mips/include/asm/octeon/cvmx-bootinfo.h b/arch/mips/include/asm/octeon/cvmx-bootinfo.h
+index 62787765575ef..ce6e5fddce0bf 100644
+--- a/arch/mips/include/asm/octeon/cvmx-bootinfo.h
++++ b/arch/mips/include/asm/octeon/cvmx-bootinfo.h
+@@ -315,7 +315,7 @@ enum cvmx_chip_types_enum {
  
--	/* first, disable everything */
- 	old_cr = readb(uap->port.membase + UART010_CR) & ~UART010_CR_MSIE;
+ /* Functions to return string based on type */
+ #define ENUM_BRD_TYPE_CASE(x) \
+-	case x: return(#x + 16);	/* Skip CVMX_BOARD_TYPE_ */
++	case x: return (&#x[16]);	/* Skip CVMX_BOARD_TYPE_ */
+ static inline const char *cvmx_board_type_to_string(enum
+ 						    cvmx_board_types_enum type)
+ {
+@@ -404,7 +404,7 @@ static inline const char *cvmx_board_type_to_string(enum
+ }
  
- 	if (UART_ENABLE_MS(port, termios->c_cflag))
- 		old_cr |= UART010_CR_MSIE;
- 
--	writel(0, uap->port.membase + UART010_CR);
--
- 	/* Set baud rate */
- 	quot -= 1;
- 	writel((quot & 0xf00) >> 8, uap->port.membase + UART010_LCRM);
+ #define ENUM_CHIP_TYPE_CASE(x) \
+-	case x: return(#x + 15);	/* Skip CVMX_CHIP_TYPE */
++	case x: return (&#x[15]);	/* Skip CVMX_CHIP_TYPE */
+ static inline const char *cvmx_chip_type_to_string(enum
+ 						   cvmx_chip_types_enum type)
+ {
 -- 
 2.34.1
 

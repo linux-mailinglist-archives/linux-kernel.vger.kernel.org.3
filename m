@@ -2,101 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE92A497E3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 12:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95C0A497E44
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 12:50:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237911AbiAXLtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 06:49:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237737AbiAXLto (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 06:49:44 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4CCC06173B;
-        Mon, 24 Jan 2022 03:49:43 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 777391F435C0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643024982;
-        bh=FSC7K3juKE1eNNYIPrdbq7OnFxlkDzU7nCffIASlRCY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=CKJ8A1n3NySKOB/dkSSLGnk+EZTf6gzzmu3PRyPsb8skJ7ZaZCUyNI3rXDejvTBC/
-         Kdk5BjFgN0tV5ckYE1J9k8tybsX6uh2SG89yZYKCjK+dTrt9zZEbWHnOJD8MogqWJM
-         4aBlQWaWQKIO85Pe+eENUzkiTzvtP5RtHhMNUY1HRUjyG4ZPiP8L+42K7YZT2nPJ5P
-         h+qLSoLa/SMjabbDANxg8FsXbZ75XCqPBpaanhbY7kOhbTW7Zjcref85vdcXBVB8K1
-         pALpT+IXth7FC4Z1ZJvNcfcnajuuq0YbgT2uqRIpwM/VbBmSnMGjLdnROppk7ZEOMk
-         IoNEssr8ByMiw==
-Subject: Re: [PATCH v21 7/8] arm64: dts: mt8192: add svs device information
-To:     Roger Lu <roger.lu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Guenter Roeck <linux@roeck-us.net>
-References: <20220107095200.4389-1-roger.lu@mediatek.com>
- <20220107095200.4389-8-roger.lu@mediatek.com>
- <010f9b6a-d6bf-b27a-cb2d-c5fd181c3ac7@collabora.com>
- <3d3518ff5c332129af5d10766477b9776bbbf55e.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <ffafbbf6-3049-ec14-da24-18b6f1b4d147@collabora.com>
-Date:   Mon, 24 Jan 2022 12:49:39 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S237937AbiAXLuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 06:50:09 -0500
+Received: from mout.gmx.net ([212.227.17.22]:40095 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237927AbiAXLuH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 06:50:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643024983;
+        bh=yNy7EZg3mbp0lvINimyGvIkMJmw3Um6hIqmwnMmXJTk=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=QHm2H2YsZcUks7oOV0TMT2ZiHWwjOhEF0Cx2YXeJXzb6rjrPVhn6AifVGEwZmAyGY
+         m6OMPiD8s78NnV8yHIrOO+2FQR2dTNt2yThoHEmzQDEW+qneAttwpgkcuT1SGyVRWj
+         qCtxPYoO6xyCXNgdyu4oyFQ06pD1kSr3BjUGwAzQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [80.245.79.70] ([80.245.79.70]) by web-mail.gmx.net
+ (3c-app-gmx-bs10.server.lan [172.19.170.61]) (via HTTP); Mon, 24 Jan 2022
+ 12:49:43 +0100
 MIME-Version: 1.0
-In-Reply-To: <3d3518ff5c332129af5d10766477b9776bbbf55e.camel@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Message-ID: <trinity-263c703e-80d0-4663-9a42-21b9b7cb57e5-1643024983188@3c-app-gmx-bs10>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Sascha Hauer <sha@pengutronix.de>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-rockchip@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Johan Jonker <jbx6244@gmail.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Aw: Re: Re: [PATCH v2 2/2] arm64: dts: rockchip: Add Bananapi R2
+ Pro
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 24 Jan 2022 12:49:43 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20220124110331.GZ23490@pengutronix.de>
+References: <20220123135116.136846-1-linux@fw-web.de>
+ <20220123135116.136846-3-linux@fw-web.de>
+ <20220124083102.GW23490@pengutronix.de>
+ <trinity-2e9cf5db-4c9b-4ad7-b684-74541e639edf-1643014505272@3c-app-gmx-bs10>
+ <20220124110331.GZ23490@pengutronix.de>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:bZK1BGXbDbNyasi2iQqJob1z02lSju4CxKtjw7F5Pqt/vKLSqdxkWfw8Wlb8qbvqP+iCr
+ U0CDRI3/s5wZS44yl7TWrzWA3MTf6aIgYmaMW00qXDCiXMKDvh7zuwPKxgmMEUi9z3raLRrNR+I9
+ UjOwtGNFu+X0/GnMi6HowGf/0Qgj2lwbgXlblMPoEjKmoPa3DiMvxf3l9k/VcgWM9Fx1ncaghdOp
+ O7R853vPEwzF1Fmn8Zfmc8OG/L6bkGK6pWkdD9bPci+/a0fPRWtAJgVt34sjiSdZKcjsfbhpFovY
+ nQ=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:kzCDCNdY4G0=:oyarcQiy9PUsJKUUVdcr3N
+ i9VkGktYX1cF/ZRqOfx3MQKwkFg3TfiUGld43GnNR2l3V83F3SC2nR+QoVfHZr/uPqV+94MMD
+ 1rZKfAZMCmqLzvM5uMbf+XN69DDN0uGzLlyORKZJFTmLuy3O1VTr9FvwyLqsYXl6BmhVGUrsQ
+ ZlqlTXoZLSjF1gU218I4QkzZt9ooq4fgXge1rDnzj+ZgXjT4BJgnYTvKIuMmrq4UUzvI9DHi7
+ woBEmFTOmfDBnjfsOV2W6iiyQ5QIyFSKIKoDq4KU8nrRf9T6CUxijpWmklPPEmCdwFoIBlw4f
+ H1VCg7BEsHSCVhAx7MLErX1+IEMsk4vH+E754/PFF5dyF463lzJFT7hw1CwYhyPJHPLbhZnIM
+ BirTdJUoNwKfFEyeIMUyQ2eTKmySoD7oVge1RBOlD+KOv1AGHmwzqT24OzHAu6BjCgJm9+ReR
+ EzwJkq8MSVu39/CQ4LmTTd4a2Uf/VqGUoZB8r8kg8ZGUgVpjmBPMnz9G7QUS1bTuVVI6uegk3
+ T8gEJVy9ZLD1gfjagwuJcmYZqO/IP/vt7K/CFntUDYdNiwrYmYNF1IlADlTg3MPS7hIbkKiHT
+ XKxDOQzeG1M6Zm4y7HngmIxkevHi/v04uAY8fduOFzw/gXJv2vOH6xpbkgxdU/bVLrNgnvFFr
+ 6B/cL2t0BQ3hCrp2MXysIU0pPhDJ3tmD6R8eYmS2f5XqA+ZPD/4F87/hwf/duKgbhN3k8O/q7
+ lLhhzx1OGy2YtYwEs7UJ/paMgrmCyUtDUWruRBp3xS57QX/5g8kxdYPy4qlEXlrXhlk/li76H
+ 1IJJmLz
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 24/01/22 11:48, Roger Lu ha scritto:
-> Hi AngeloGioacchino,
-> 
-> On Fri, 2022-01-07 at 15:33 +0100, AngeloGioacchino Del Regno wrote:
->> Il 07/01/22 10:51, Roger Lu ha scritto:
->>> Add compitable/reg/irq/clock/efuse/reset setting in svs node.
->>
->> Typo: compitable => compatible
->> .. also, you're not only adding the svs node, but also efuse: please add that
->> information in the commit description.
->>
->>>
->>> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
->>
->> This patch seems to not apply on top of the current linux-next, can you please
->> rebase it? That would resolve issues with this series and would be picked
->> sooner.
->>
->> Apart from that...
-> 
-> Sorry to make you confuse. After having discussion internally, we'll submit
-> another complete mt8192.dtsi patch including this svs node. Therefore, I'll drop
-> this path from svs patchset in order not to make the reviewer confuse. Thanks
-> for the comments a lot.
-> 
+> Gesendet: Montag, 24. Januar 2022 um 12:03 Uhr
+> Von: "Sascha Hauer" <sha@pengutronix.de>
 
-Yes that decision looks good to me, as this allows different maintainers
-to apply patches on a per-subsystem basis.
-Thanks!
+> On Mon, Jan 24, 2022 at 09:55:05AM +0100, Frank Wunderlich wrote:
 
-Regards,
-Angelo
+> > took this from the 3568-EVB (like the most parts, as the board is
+> > mostly the same), and in linux it's the same and working. The switch
+> > have also phy-id 0 on mdio bus #1, are you sure this is invalid?
+
+just to clarify: in linux dts only the basics were taken from evb and chan=
+ged if
+needed (like iodomain, regulators).
+mixed this with the barebox submsission where i mainly used the evb dts.
+
+should i add a note in head that some parts are taken from EVB and vendors=
+ dts?
+As this is my first new DTS, i want to be sure the legal notice is correct=
+.
+
+> It's not invalid, it's just the broadcast address to which other phys
+> might answer as well. Anyway, as long as there's only a single phy on
+> the bus it's probably okay.
+
+ok, on mdio0 there is the rtl8211 phy and on mdio1 there is the rtl8367rb =
+switch,
+so only 1 device per bus. I was not aware that 0 is broadcast.
+
+regards Frank

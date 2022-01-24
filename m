@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 947C4497E93
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 143BD497E9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:10:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238346AbiAXMKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 07:10:32 -0500
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:42947 "EHLO
+        id S238243AbiAXMKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 07:10:38 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:37711 "EHLO
         new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238323AbiAXMKS (ORCPT
+        by vger.kernel.org with ESMTP id S238388AbiAXMK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:10:18 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 1381C580355;
-        Mon, 24 Jan 2022 07:10:18 -0500 (EST)
+        Mon, 24 Jan 2022 07:10:26 -0500
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 5965B58035C;
+        Mon, 24 Jan 2022 07:10:24 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 24 Jan 2022 07:10:18 -0500
+  by compute1.internal (MEProxy); Mon, 24 Jan 2022 07:10:24 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=cc:cc:content-transfer-encoding:content-type:date:date:from
-        :from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to; s=fm3; bh=yDDZWE4He/pimUZxCO0Sh7kk8bh3iF
-        5Bhx4IEsrP9p4=; b=fwxpbuyxqtScSM0n3F92+6NeWxGDQr6YYMqtldw5D3Pl0w
-        89qffJRwxvyMzBg5ke6MK2hVAJyyyHr5DQUUx/IStis4XFk0gkikurX8OrV+KFWc
-        r5o5MhfdXpHhteXf/bMyUv0WNGroUvmWsDBg8qv3VKHYl3OS8dHHLh4lj0a+88HO
-        yvaca0Kz+bUpH+jg+beKOqefBph5neGOV/KltgW9EWZXBUmt1TocsGD7yKI2cJWq
-        EUcpTLi5YRz7DqXr2cnIfXDJKARbXhyU1VK+f7BIDOHJBFEgd2GQP5+oO1Ovubar
-        RGdwGG0wRX0zOphBC71wlFqPJ6F6KBcW5A45BB/g==
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; bh=dIamJe71dG+Zox
+        +zSJ91KvmhrQ+mqndeaCChM+4h6+0=; b=WDYQKVYH+ZiKUwKq8iAnWtalF2X8JA
+        1oHvo9ex0o/zEHl710TxdhfaPhj9zpQTNFDf6rnCSOxejGqKJs8yIt5mVwnSMiEX
+        FgqG8k8/UjJIhXc5JwmV57gYBASt18F0FAMh8rPO0/AxM2rl6nwa0/uZVGV3a0sO
+        9m6ax5igUoGBuBmK8sCGVCERiB5W03BT7dycn8dHdsBQELaYbsoDhVEHTTpvCQix
+        X/6ZeWCQxYvszf6WfZ0N39SIZ6ZAz1GDsjlPGD4Uy9QUWVF3qTeYUqQItRm5zQSU
+        rA/EcKDsAea3eTuSRHz/mWkelID9ycSgXke5Cq8tH4M9yR1DThpHm4Ow==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=yDDZWE
-        4He/pimUZxCO0Sh7kk8bh3iF5Bhx4IEsrP9p4=; b=kjxqvDeGS98uzkQCCZmu+w
-        c5TqmMYwe+zhOzzq8xu0nmTLtWGkOZmhGa/jXdZNwZAxVKsNlctq8plk53yyc+PL
-        ANwMxsTGFU90E2ay0N1kc8aCuZ/6ONtI0DNDuhWrtAatFWVwwz2gp+5snRvOKxaB
-        BNBofqBbFUos089YpZYfN7cu1+oWwlUScCyCOHY/Ar3QECXYNhPIii3P4Y28KlY0
-        g3QPkJzJ6vJBRSJPONIpJ5HpQff7ySUT35MyClg1o9JhovOj+4dR2PBUmqGEvNTJ
-        iHXPBHKGxZXVIXHksJwyjvOZ8B+Kc9V0fQjkELCryMV2PDdhbFzPFH83Zo0561bg
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=dIamJe
+        71dG+Zox+zSJ91KvmhrQ+mqndeaCChM+4h6+0=; b=iCDmk0rcRelouNrStnu2YI
+        U54JakfTuK/+vTEUVtRYWyO9c9PDNDW6k4mvr0RhzTgboFlKTmODFcVQxpiCjH2E
+        fqAMPm0k2fDCoM7OCQZhCZRdinYqldw195wck8tew4Z4zWQiAnqKTDh7Wx7BJqO6
+        zwR3zI5eQr1LnNvwcWhT/m0kp76dyCRLATvgQbnOS0PnNBGS3/OlUbOX7fwCYK3+
+        ri8uga8asxncW/B8uWvWFOAG1dOn1BrnI47PYoKBhlSjWev3Va2ytwrW7sga9l6V
+        pIOO4+/V9IHD7BunTz9ytdJRo7oCx5sK7htF9KrqIr4HWbQFnI6e7DpBZAaBEqVg
         ==
-X-ME-Sender: <xms:KZfuYTktgWwmvWVS94IjUqVu0EVkhIROgzFcASUjADkunOrLjnwfYA>
-    <xme:KZfuYW2TI6jUvYrIDj9a4BK6acgwpUHVUVFgBZ9szuCMAsqhHEZ-mzLzLjmTQsoV0
-    rOLK1_Vp9s1vp2lW7I>
-X-ME-Received: <xmr:KZfuYZoLdvNi-PPRbv-V-4rYYqL-0jisX-SQZDoTH2q7BNMda-F_wMKsmU_dCOKAc1PujXPVosSKTTYNg7G2uj3OG4NvsG6mG530KOJr5XfC>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvdeigdefjecutefuodetggdotefrodftvf
+X-ME-Sender: <xms:MJfuYYWKz8C8-vXPGubV7BsdcB84Z5p6z9QY2UJRp--KgRgV4MY00A>
+    <xme:MJfuYcmUY9_yE_HIc-Vt_UO5duKD5IutbowfVcW1t5M7KFc8yhkXGRsYzlnKDln3t
+    k0Gy3dYrCSwLv525To>
+X-ME-Received: <xmr:MJfuYcZHvwO05qOcnfvy4RqDtcGP5ZMnzrZYzklVVh-SEk_69AGLatgFMXPipcdbFu7-zCh2TNMj2XTeXgM6NHimpVjtBNVQJQ5w01jkkvFe>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvdeigdefkecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffotggggfesthhqredtre
-    dtjeenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgrihhr
-    segrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeehteefgfejueejtd
-    egvdfggefhiefgheffvdffudevveetjeduhfdukeduteevjeenucevlhhushhtvghrufhi
-    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlihhsth
-    grihhrvdefrdhmvg
-X-ME-Proxy: <xmx:KZfuYbm4ijr_kGUpK3hJo7S7eACDvVOYpnO9RIk4VX-tjvMJiHWBzw>
-    <xmx:KZfuYR2h1oPS1S3IQwoEfUcl6DJwE1odkMxhI1419aGLIFtIjnv-7A>
-    <xmx:KZfuYatDxSRrkE2MmZA-o4gMHB0ylT8LEIsnkEx8Q7Z5PgOV2gvw4A>
-    <xmx:KpfuYSHrj8adsEToquzJvAdzuYD1geMjg3C3aCa6Xq-aRmgTlAwNYA>
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomheptehlihhsthgr
+    ihhrucfhrhgrnhgtihhsuceorghlihhsthgrihhrsegrlhhishhtrghirhdvfedrmhgvqe
+    enucggtffrrghtthgvrhhnpefftdfhgfeggfelgfekjefhkeeigfelleefhfethfehfeet
+    leeggeeggfefffdvtdenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgr
+    ihhrsegrlhhishhtrghirhdvfedrmhgv
+X-ME-Proxy: <xmx:MJfuYXXfWJZZTWQZd7453F2cuKznxCI_Em7G6JaUOASusC4l39QJgw>
+    <xmx:MJfuYSkHuo4ACseccLQzRtzScdlNa-YVq8Uk9BVObFiE_IX7jIBNzQ>
+    <xmx:MJfuYcd-VpDOS6J0RDqYVvFAblNlp8I4NFC9KIJmwH64x-Bjs6h9KQ>
+    <xmx:MJfuYRqazzV9THiGh7omcke-tRaplNs8umZdG9tZCs2T2GcvlDKaRQ>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 24 Jan 2022 07:10:12 -0500 (EST)
+ 24 Jan 2022 07:10:18 -0500 (EST)
 From:   Alistair Francis <alistair@alistair23.me>
 To:     broonie@kernel.org, robh+dt@kernel.org, kernel@pengutronix.de,
         lgirdwood@gmail.com, lee.jones@linaro.org
@@ -65,71 +66,119 @@ Cc:     linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
         alistair23@gmail.com, amitk@kernel.org,
         linux-arm-kernel@lists.infradead.org, andreas@kemnade.info,
         s.hauer@pengutronix.de, linux-kernel@vger.kernel.org,
-        shawnguo@kernel.org, Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v18 0/8] Add support for the silergy,sy7636a
-Date:   Mon, 24 Jan 2022 22:10:01 +1000
-Message-Id: <20220124121009.108649-1-alistair@alistair23.me>
+        shawnguo@kernel.org, Alistair Francis <alistair@alistair23.me>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v18 1/8] dt-bindings: mfd: Initial commit of silergy,sy7636a.yaml
+Date:   Mon, 24 Jan 2022 22:10:02 +1000
+Message-Id: <20220124121009.108649-2-alistair@alistair23.me>
 X-Mailer: git-send-email 2.31.1
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20220124121009.108649-1-alistair@alistair23.me>
+References: <20220124121009.108649-1-alistair@alistair23.me>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v18:=0D
- - Rebase=0D
-v17:=0D
- - Rebase and fix build issues=0D
-v16:=0D
- - Improve vdd regulator comments=0D
-v15:=0D
- - Address comments on the patches=0D
-v14:=0D
- - Merge the thermal driver and hwmon=0D
-v13:=0D
- - Address comments on thermal driver=0D
- - Rebase on master (without other patches)=0D
-v12:=0D
- - Rebase=0D
-v11:=0D
- - Address comments on hwmon=0D
- - Improve "mfd: simple-mfd-i2c: Add a Kconfig name" commit message=0D
-v10:=0D
- - Use dev_get_regmap() instead of dev_get_drvdata()=0D
-v9:=0D
- - Convert to use the simple-mfd-i2c instead=0D
-=0D
-Alistair Francis (8):=0D
-  dt-bindings: mfd: Initial commit of silergy,sy7636a.yaml=0D
-  mfd: simple-mfd-i2c: Add a Kconfig name=0D
-  mfd: simple-mfd-i2c: Enable support for the silergy,sy7636a=0D
-  regulator: sy7636a: Remove requirement on sy7636a mfd=0D
-  hwmon: sy7636a: Add temperature driver for sy7636a=0D
-  ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a=0D
-  ARM: dts: imx7d-remarkable2: Enable silergy,sy7636a=0D
-  ARM: dts: imx7d-remarkable2: Enable lcdif=0D
-=0D
- .../bindings/mfd/silergy,sy7636a.yaml         |  82 +++++++++++=0D
- Documentation/hwmon/index.rst                 |   1 +=0D
- Documentation/hwmon/sy7636a-hwmon.rst         |  26 ++++=0D
- arch/arm/boot/dts/imx7d-remarkable2.dts       | 136 ++++++++++++++++++=0D
- arch/arm/configs/imx_v6_v7_defconfig          |   3 +=0D
- drivers/hwmon/Kconfig                         |   9 ++=0D
- drivers/hwmon/Makefile                        |   1 +=0D
- drivers/hwmon/sy7636a-hwmon.c                 | 106 ++++++++++++++=0D
- drivers/mfd/Kconfig                           |   2 +-=0D
- drivers/mfd/simple-mfd-i2c.c                  |  11 ++=0D
- drivers/regulator/Kconfig                     |   1 -=0D
- drivers/regulator/sy7636a-regulator.c         |   7 +-=0D
- include/linux/mfd/sy7636a.h                   |  34 +++++=0D
- 13 files changed, 415 insertions(+), 4 deletions(-)=0D
- create mode 100644 Documentation/devicetree/bindings/mfd/silergy,sy7636a.y=
-aml=0D
- create mode 100644 Documentation/hwmon/sy7636a-hwmon.rst=0D
- create mode 100644 drivers/hwmon/sy7636a-hwmon.c=0D
- create mode 100644 include/linux/mfd/sy7636a.h=0D
-=0D
--- =0D
-2.31.1=0D
-=0D
+Initial support for the Silergy SY7636A Power Management chip
+and regulator.
+
+Signed-off-by: Alistair Francis <alistair@alistair23.me>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+---
+ .../bindings/mfd/silergy,sy7636a.yaml         | 82 +++++++++++++++++++
+ 1 file changed, 82 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+
+diff --git a/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml b/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+new file mode 100644
+index 000000000000..6de74c701635
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+@@ -0,0 +1,82 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mfd/silergy,sy7636a.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: silergy sy7636a PMIC
++
++maintainers:
++  - Alistair Francis <alistair@alistair23.me>
++
++properties:
++  compatible:
++    const: silergy,sy7636a
++
++  reg:
++    description:
++      I2C device address.
++    maxItems: 1
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++  '#thermal-sensor-cells':
++    const: 0
++
++  epd-pwr-good-gpios:
++    description:
++      Specifying the power good GPIOs.
++    maxItems: 1
++
++  regulators:
++    type: object
++
++    properties:
++      compatible:
++        const: silergy,sy7636a-regulator
++
++      vcom:
++        type: object
++        $ref: /schemas/regulator/regulator.yaml#
++        description:
++          The regulator for the compenstation voltage. Enabling/disabling this
++          enables/disables the entire device.
++        properties:
++          regulator-name:
++            const: vcom
++
++    additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - '#thermal-sensor-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      pmic@62 {
++        compatible = "silergy,sy7636a";
++        reg = <0x62>;
++        pinctrl-names = "default";
++        pinctrl-0 = <&pinctrl_epdpmic>;
++        #thermal-sensor-cells = <0>;
++
++        regulators {
++          reg_epdpmic: vcom {
++            regulator-name = "vcom";
++            regulator-boot-on;
++          };
++        };
++      };
++    };
++...
+-- 
+2.31.1
+

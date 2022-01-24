@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDFB149A6C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB6349A715
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:36:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3421064AbiAYC0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:26:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
+        id S3423087AbiAYCcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:32:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244557AbiAXTsh (ORCPT
+        with ESMTP id S1356111AbiAXUWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:48:37 -0500
+        Mon, 24 Jan 2022 15:22:32 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DD3C02B8D6;
-        Mon, 24 Jan 2022 11:23:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918AAC0417D1;
+        Mon, 24 Jan 2022 11:40:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C60EFB810BD;
-        Mon, 24 Jan 2022 19:23:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D666EC340E5;
-        Mon, 24 Jan 2022 19:23:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39B88B81239;
+        Mon, 24 Jan 2022 19:40:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66C9FC340E7;
+        Mon, 24 Jan 2022 19:40:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052213;
-        bh=Cxrhw0mczMyhZ1QX+B6rSfeV8iyoAeiPu4kVy1aqEBY=;
+        s=korg; t=1643053218;
+        bh=Nfhpuzi4irbRQN3E3HkAZc4HSOT9aiM10z8KebCFNVM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j9NYMuchI3L3FabQl2ozMpKyWh+hWM47Ze3vf2wXBvy+FoJYilbReAXwcAF+vU8A9
-         WlkPAYUZnyUFMxXHjwn9YJtZyojMirPL6NKPGSVBfG5muOZgXrvDy0qh7phTfH1VLt
-         yS0vaVChfKh2QZPh5lvzkFxDXKTXZThEmpL4RT3o=
+        b=i4k9PuQsRNigywDeO/YurS5pO1DBwUkuyuye5MIq3J6Fwduy28IGnv9rzjTDPEdcu
+         naJ2naVo4RmqsDbuCdfxvnWf5E3grSBUUNX2Mym1zSLO8A0ApDc9+nlPJjEhkeOqVU
+         dwFAe3S0jSJLGdB61f3w5YlDz5UhUOXi+qh6Rtsg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.19 226/239] netns: add schedule point in ops_exit_list()
-Date:   Mon, 24 Jan 2022 19:44:24 +0100
-Message-Id: <20220124183950.294608115@linuxfoundation.org>
+        stable@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.4 281/320] scsi: core: Show SCMD_LAST in text form
+Date:   Mon, 24 Jan 2022 19:44:25 +0100
+Message-Id: <20220124184003.536800740@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,47 +48,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Bart Van Assche <bvanassche@acm.org>
 
-commit 2836615aa22de55b8fca5e32fe1b27a67cda625e upstream.
+commit 3369046e54ca8f82e0cb17740643da2d80d3cfa8 upstream.
 
-When under stress, cleanup_net() can have to dismantle
-netns in big numbers. ops_exit_list() currently calls
-many helpers [1] that have no schedule point, and we can
-end up with soft lockups, particularly on hosts
-with many cpus.
+The SCSI debugfs code supports showing information about pending commands,
+including translating SCSI command flags from numeric into text format.
+Also convert the SCMD_LAST flag from numeric into text form.
 
-Even for moderate amount of netns processed by cleanup_net()
-this patch avoids latency spikes.
-
-[1] Some of these helpers like fib_sync_up() and fib_sync_down_dev()
-are very slow because net/ipv4/fib_semantics.c uses host-wide hash tables,
-and ifindex is used as the only input of two hash functions.
-    ifindexes tend to be the same for all netns (lo.ifindex==1 per instance)
-    This will be fixed in a separate patch.
-
-Fixes: 72ad937abd0a ("net: Add support for batching network namespace cleanups")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Eric W. Biederman <ebiederm@xmission.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Link: https://lore.kernel.org/r/20211129194609.3466071-4-bvanassche@acm.org
+Fixes: 8930a6c20791 ("scsi: core: add support for request batching")
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/net_namespace.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/scsi/scsi_debugfs.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/net/core/net_namespace.c
-+++ b/net/core/net_namespace.c
-@@ -149,8 +149,10 @@ static void ops_exit_list(const struct p
- {
- 	struct net *net;
- 	if (ops->exit) {
--		list_for_each_entry(net, net_exit_list, exit_list)
-+		list_for_each_entry(net, net_exit_list, exit_list) {
- 			ops->exit(net);
-+			cond_resched();
-+		}
- 	}
- 	if (ops->exit_batch)
- 		ops->exit_batch(net_exit_list);
+--- a/drivers/scsi/scsi_debugfs.c
++++ b/drivers/scsi/scsi_debugfs.c
+@@ -10,6 +10,7 @@ static const char *const scsi_cmd_flags[
+ 	SCSI_CMD_FLAG_NAME(TAGGED),
+ 	SCSI_CMD_FLAG_NAME(UNCHECKED_ISA_DMA),
+ 	SCSI_CMD_FLAG_NAME(INITIALIZED),
++	SCSI_CMD_FLAG_NAME(LAST),
+ };
+ #undef SCSI_CMD_FLAG_NAME
+ 
 
 

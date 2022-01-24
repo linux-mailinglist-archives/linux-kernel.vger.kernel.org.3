@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D9D499DE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA2849A126
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1586547AbiAXW0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:26:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
+        id S1849706AbiAXX0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:26:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390883AbiAXVM6 (ORCPT
+        with ESMTP id S1835944AbiAXWht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:12:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82405C06E004;
-        Mon, 24 Jan 2022 12:10:39 -0800 (PST)
+        Mon, 24 Jan 2022 17:37:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A03C0E9BB6;
+        Mon, 24 Jan 2022 13:00:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A42DB8122F;
-        Mon, 24 Jan 2022 20:10:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 881F1C340E5;
-        Mon, 24 Jan 2022 20:10:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7209360B03;
+        Mon, 24 Jan 2022 21:00:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52773C340E7;
+        Mon, 24 Jan 2022 21:00:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055037;
-        bh=zp/NYWIKoE3tOdV+Shax2CsA4xFUZ7F/J0Kgo/s5+RE=;
+        s=korg; t=1643058008;
+        bh=ZJHWMUCWg6+N2cEePcY7AEKzfwzAQ9WRJqqZIo2gEFk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F0erfDtt3tjN+W4kzCI/2dHR15AJ75KPbRku4deLeKaK+JhrWnF4OMdL2x1s2o0uv
-         5i5cVyTIkC/bFLBLY6rQAQDVEkk1JHKqKBsmT5lTN/hMhDCLqaxSIKBE5H96hFf07o
-         D77baBY6ZsU7eW68JPJUhMBg57FkZHsSlVY7Ywiw=
+        b=NJjIRKV1uz5AoJ2tLkOM91W9VAyNtNLQhghQ7C+04UeiL3vD1038Fm3td41VcVLvB
+         GxmY3ji/I2aE5WzBQcYrlT4eRE1kiIU2hQjnrAhcwZMyI6/Ii2gTcDxyR4ynOd3PvV
+         y7OVkqGTsA65SAm5og6G0jW9l0N0uQfMhzHFRZc8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Conor Dooley <Conor.Dooley@microchip.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH 5.15 021/846] riscv: Get rid of MAXPHYSMEM configs
-Date:   Mon, 24 Jan 2022 19:32:18 +0100
-Message-Id: <20220124184101.647245147@linuxfoundation.org>
+        stable@vger.kernel.org, Jeremy Kerr <jk@codeconstruct.com.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0150/1039] mctp/test: Update refcount checking in route fragment tests
+Date:   Mon, 24 Jan 2022 19:32:19 +0100
+Message-Id: <20220124184130.204931581@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,104 +49,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+From: Jeremy Kerr <jk@codeconstruct.com.au>
 
-commit db1503d355a79d1d4255a9996f20e72848b74a56 upstream.
+[ Upstream commit f6ef47e5bdc6f652176e433b02317fc83049f8d7 ]
 
-CONFIG_MAXPHYSMEM_* are actually never used, even the nommu defconfigs
-selecting the MAXPHYSMEM_2GB had no effects on PAGE_OFFSET since it was
-preempted by !MMU case right before.
+In 99ce45d5e, we moved a route refcount decrement from
+mctp_do_fragment_route into the caller. This invalidates the assumption
+that the route test makes about refcount behaviour, so the route tests
+fail.
 
-In addition, the move of the kernel mapping at the end of the address
-space broke the use of MAXPHYSMEM_2G with MMU since it defines PAGE_OFFSET
-at the same address as the kernel mapping.
+This change fixes the test case to suit the new refcount behaviour.
 
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Fixes: 2bfc6cd81bd1 ("riscv: Move kernel mapping outside of linear mapping")
-Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Tested-by: Conor Dooley <Conor.Dooley@microchip.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 99ce45d5e7db ("mctp: Implement extended addressing")
+Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/riscv/Kconfig                             |   23 ++---------------------
- arch/riscv/configs/nommu_k210_defconfig        |    2 --
- arch/riscv/configs/nommu_k210_sdcard_defconfig |    2 --
- arch/riscv/configs/nommu_virt_defconfig        |    1 -
- 4 files changed, 2 insertions(+), 26 deletions(-)
+ net/mctp/test/route-test.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -158,10 +158,9 @@ config PA_BITS
+diff --git a/net/mctp/test/route-test.c b/net/mctp/test/route-test.c
+index 36fac3daf86a4..86ad15abf8978 100644
+--- a/net/mctp/test/route-test.c
++++ b/net/mctp/test/route-test.c
+@@ -150,11 +150,6 @@ static void mctp_test_fragment(struct kunit *test)
+ 	rt = mctp_test_create_route(&init_net, NULL, 10, mtu);
+ 	KUNIT_ASSERT_TRUE(test, rt);
  
- config PAGE_OFFSET
- 	hex
--	default 0xC0000000 if 32BIT && MAXPHYSMEM_1GB
-+	default 0xC0000000 if 32BIT
- 	default 0x80000000 if 64BIT && !MMU
--	default 0xffffffff80000000 if 64BIT && MAXPHYSMEM_2GB
--	default 0xffffffe000000000 if 64BIT && MAXPHYSMEM_128GB
-+	default 0xffffffe000000000 if 64BIT
+-	/* The refcount would usually be incremented as part of a route lookup,
+-	 * but we're setting the route directly here.
+-	 */
+-	refcount_inc(&rt->rt.refs);
+-
+ 	rc = mctp_do_fragment_route(&rt->rt, skb, mtu, MCTP_TAG_OWNER);
+ 	KUNIT_EXPECT_FALSE(test, rc);
  
- config KASAN_SHADOW_OFFSET
- 	hex
-@@ -270,24 +269,6 @@ config MODULE_SECTIONS
- 	bool
- 	select HAVE_MOD_ARCH_SPECIFIC
- 
--choice
--	prompt "Maximum Physical Memory"
--	default MAXPHYSMEM_1GB if 32BIT
--	default MAXPHYSMEM_2GB if 64BIT && CMODEL_MEDLOW
--	default MAXPHYSMEM_128GB if 64BIT && CMODEL_MEDANY
--
--	config MAXPHYSMEM_1GB
--		depends on 32BIT
--		bool "1GiB"
--	config MAXPHYSMEM_2GB
--		depends on 64BIT && CMODEL_MEDLOW
--		bool "2GiB"
--	config MAXPHYSMEM_128GB
--		depends on 64BIT && CMODEL_MEDANY
--		bool "128GiB"
--endchoice
--
--
- config SMP
- 	bool "Symmetric Multi-Processing"
- 	help
---- a/arch/riscv/configs/nommu_k210_defconfig
-+++ b/arch/riscv/configs/nommu_k210_defconfig
-@@ -29,8 +29,6 @@ CONFIG_EMBEDDED=y
- CONFIG_SLOB=y
- # CONFIG_MMU is not set
- CONFIG_SOC_CANAAN=y
--CONFIG_SOC_CANAAN_K210_DTB_SOURCE="k210_generic"
--CONFIG_MAXPHYSMEM_2GB=y
- CONFIG_SMP=y
- CONFIG_NR_CPUS=2
- CONFIG_CMDLINE="earlycon console=ttySIF0"
---- a/arch/riscv/configs/nommu_k210_sdcard_defconfig
-+++ b/arch/riscv/configs/nommu_k210_sdcard_defconfig
-@@ -21,8 +21,6 @@ CONFIG_EMBEDDED=y
- CONFIG_SLOB=y
- # CONFIG_MMU is not set
- CONFIG_SOC_CANAAN=y
--CONFIG_SOC_CANAAN_K210_DTB_SOURCE="k210_generic"
--CONFIG_MAXPHYSMEM_2GB=y
- CONFIG_SMP=y
- CONFIG_NR_CPUS=2
- CONFIG_CMDLINE="earlycon console=ttySIF0 rootdelay=2 root=/dev/mmcblk0p1 ro"
---- a/arch/riscv/configs/nommu_virt_defconfig
-+++ b/arch/riscv/configs/nommu_virt_defconfig
-@@ -27,7 +27,6 @@ CONFIG_SLOB=y
- # CONFIG_SLAB_MERGE_DEFAULT is not set
- # CONFIG_MMU is not set
- CONFIG_SOC_VIRT=y
--CONFIG_MAXPHYSMEM_2GB=y
- CONFIG_SMP=y
- CONFIG_CMDLINE="root=/dev/vda rw earlycon=uart8250,mmio,0x10000000,115200n8 console=ttyS0"
- CONFIG_CMDLINE_FORCE=y
+-- 
+2.34.1
+
 
 

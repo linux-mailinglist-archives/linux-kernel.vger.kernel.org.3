@@ -2,126 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E274984FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:40:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B514984FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:40:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243772AbiAXQkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 11:40:15 -0500
-Received: from mga03.intel.com ([134.134.136.65]:13016 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236102AbiAXQkO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 11:40:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643042414; x=1674578414;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=MrgQitvtOWVHTnHUojQtooTuvQQ5xWumXXPm8dAS4EE=;
-  b=U1PlyMPtvSocnwvufDqVPYmKjSPaSkEycWhNT55j73zul6pqY9xhHq/O
-   tpbrjwQspJ3Nv31iV7+/eNcZ6Yan9AQZbwwbRHp8GqC7oBoTpx+vxjh4i
-   21INqSi7U2gbs2AB3zbumYj9JippzwT6WpYyWRUWzpvhJlO+sICtcvJPm
-   7Udzz0YuQ9n0YXtLAG8P3PSpoRNr93lGEi4pXyoU8GyB1DAOD/HZI3+0B
-   tNQbbWql6rcdBC7jKtuvlcFli61Ho5/fi3b0zz1Bl8p0jQYS3pz90WQho
-   rrzyT19r8tIUjwD4r4goBU+XLAno/mLcaSijzkvD904uUcdtGgYvvkx7Q
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="246033249"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="246033249"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 08:40:13 -0800
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="534306104"
-Received: from zengguan-mobl.ccr.corp.intel.com (HELO [10.254.213.37]) ([10.254.213.37])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 08:40:09 -0800
-Message-ID: <2207797e-6441-8abc-9ffc-d231fa4ca3fc@intel.com>
-Date:   Tue, 25 Jan 2022 00:40:01 +0800
+        id S243790AbiAXQkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 11:40:23 -0500
+Received: from mta-p6.oit.umn.edu ([134.84.196.206]:55678 "EHLO
+        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243785AbiAXQkW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 11:40:22 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 4JjG1d4vhCz9xhTg
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:40:21 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p6.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id yoAwxsAGPphS for <linux-kernel@vger.kernel.org>;
+        Mon, 24 Jan 2022 10:40:21 -0600 (CST)
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id 4JjG1d2vCLz9xhTk
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:40:21 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p6.oit.umn.edu 4JjG1d2vCLz9xhTk
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p6.oit.umn.edu 4JjG1d2vCLz9xhTk
+Received: by mail-pj1-f69.google.com with SMTP id q1-20020a17090a064100b001b4d85cbaf7so14028207pje.9
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 08:40:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cxLL3kilti4ewVR3w7E45Znhv6mVTGnaO20o6vv+LVM=;
+        b=JpaXbkVPCCzYwDK587ZtC73AffzMALrsKE+nNt2D0mgffg8Gs2TwFtlI7d00fAe2TL
+         6MHNAA6ISqfAxx/VhnWjRSueDDXe5Gbh0N7mbYX6mqKu88a4cxeOjlP4tgXucRKW0uFY
+         3hF5zPCbgkNMGFj6RUEHp8zFFkOWKXFLma2CFIuwLfpM32YmO2K5oZapIAkzA3dkjaBK
+         tNQj7q/UoNKZcXKl/Jf0qCYnUuwnjkWkJ8AlGYl6iN5+hj53K0dh8LdU7rpw4+sLl1X0
+         a3yKSjCSpKM+u7mPfQkurNP/Sdh7aIcMMptvxGPzzxvwrEFqr7NW72lczyMlPWTOdM7h
+         guCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cxLL3kilti4ewVR3w7E45Znhv6mVTGnaO20o6vv+LVM=;
+        b=M0Gvp+6nWqaQNEZuQQWovIM/Ytzdj6U0OKlj6Nt0n3f380G2U4BgqvuyxUyve/lyz/
+         HXzsO1NZkdobFQqINPuMJJ8bKJXeA0++PKXrtOJRLXHk5TKfTujj53wL5oAF88GyLYLO
+         EXKAFwiIY8uogieepe7JBUuEqBdvuwoFgTJPs86UPZityPSROAzalC5eJ2OTtgawzHrl
+         YGpLVhs0YMYyqO6Lb/MjmUNx2S94oaMSnNcpN4ZtBhyt6EsY/JacUZ6LYu8J+ctoFZNX
+         yKGLKLcGf7Jm7V93pRvItZTjlPoD/6QjY0ubKz/bLwCnCqWNDrIy2D5DuS7wgt2gD3r+
+         1ADw==
+X-Gm-Message-State: AOAM530uVkk6b9Ir6PUEJ3DNZWyBIEYnzkYPvOUS1xaalQHHZg6v/SBo
+        kqxhjacNWvyANwREvFXlPeKuyGtLJA0oD7gE0Dt+mkngW7l3x25ZhvrPZPgTPVHJWeWEvPdMjkY
+        GXctNarNblG3VfFpKdjKMD2nG2SbA
+X-Received: by 2002:a17:90b:33cb:: with SMTP id lk11mr641662pjb.163.1643042420643;
+        Mon, 24 Jan 2022 08:40:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyKOpecXgH6OOu7Zh1Mdt8qsroSNZreBYhHQlXtTouXfATIb4NWFFgnxqg5cED3i6NAq7waBw==
+X-Received: by 2002:a17:90b:33cb:: with SMTP id lk11mr641645pjb.163.1643042420395;
+        Mon, 24 Jan 2022 08:40:20 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.4.61.248])
+        by smtp.gmail.com with ESMTPSA id bf23sm13770284pjb.52.2022.01.24.08.40.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 08:40:20 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Robert Moore <robert.moore@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Len Brown <lenb@kernel.org>, Lv Zheng <lv.zheng@intel.com>,
+        linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ACPICA: Linuxize: Fix a NULL pointer dereference in acpi_db_convert_to_package()
+Date:   Tue, 25 Jan 2022 00:40:14 +0800
+Message-Id: <20220124164014.51658-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH v5 8/8] KVM: VMX: Resize PID-ponter table on demand for
- IPI virtualization
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>,
-        "Gao, Chao" <chao.gao@intel.com>
-References: <20211231142849.611-1-guang.zeng@intel.com>
- <20211231142849.611-9-guang.zeng@intel.com> <YeCjHbdAikyIFQc9@google.com>
- <43200b86-aa40-f7a3-d571-dc5fc3ebd421@intel.com>
- <YeGiVCn0wNH9eqxX@google.com>
- <67262b95-d577-0620-79bf-20fc37906869@intel.com>
- <Yeb1vkEclYzD27R/@google.com>
- <aba84be5-562a-369e-913d-1b834c141cc6@intel.com>
- <Yei0d0KVnNphPrP3@google.com>
-From:   Zeng Guang <guang.zeng@intel.com>
-In-Reply-To: <Yei0d0KVnNphPrP3@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/20/2022 9:01 AM, Sean Christopherson wrote:
-> On Wed, Jan 19, 2022, Zeng Guang wrote:
->> It's self-adaptive , standalone function module in kvm, no any extra
->> limitation introduced
-> I disagree.  Its failure mode on OOM is to degrade guest performance, _that_ is
-> a limitation.  OOM is absolutely something that should be immediately communicated
-> to userspace in a way that userspace can take action.
-If memory allocation fails, PID-pointer table stop updating and keep using
-the old one.  All IPIs from other vcpus will go through APIC-Write VM-exits
-and won't get performance improvement from IPI virtualization to this new
-created vcpu. Right, it's a limitation though it doesn't impact the 
-effectiveness
-of IPI virtualization among existing vcpus.
->> and scalable even future extension on KVM_MAX_VCPU_IDS or new apic id
->> implementation released.
->>
->> How do you think ? :)
-> Heh, I think I've made it quite clear that I think it's unnecesary complexity in
-> KVM.  It's not a hill I'll die on, e.g. if Paolo and others feel it's the right
-> approach then so be it, but I really, really dislike the idea of dynamically
-> changing the table, KVM has a long and sordid history of botching those types
-> of flows/features.
+In acpi_db_convert_to_package(), the variable elements is assigned by
+ACPI_ALLOCATE_ZEROED() and passes its address to 
+acpi_db_convert_to_object(). In that function we may have a dereference
+of elements without checks. ACPI_ALLOCATE_ZEROED() would return NULL on
+failure, which may lead to NULL pointer dereference.
 
-To follow your proposal, we think about the feasible implementation as 
-follows:
-1. Define new parameter apic_id_limit in struct kvm_arch and initialized
-as KVM_MAX_VCPU_IDS by default.
+Fix this bug by adding a NULL check of elements.
 
-2. New vm ioclt KVM_SET_APICID_LIMIT to allow user space set the possible
-max apic id required in the vm session before vcpu creation. Currently
-QEMU calculates the limit to CPU APIC ID up to max cpus assigned for
-hotpluggable cpu. It simply uses package/die/core/smt model to get bit
-width of id field on each level (not totally comply with CPUID 1f/0b) and
-make apic id for specific vcpu index. We can notify kvm this apic id limit
-to ensure memory enough for PID-table.
+This bug was found by a static analyzer.
 
-3. Need check whether id is less than min(apic_id_limit, KVM_MAX_VCPU_IDS)
-in vcpu creation. Otherwise return error.
+Builds with 'make allyesconfig' show no new warnings,
+and our static analyzer no longer warns about this code.
 
-4. Allocate memory covering vcpus with the id up to apic_id_limit for PID
-table during the first vcpu creation. Proper lock still needed to 
-protect PID
-table setup from race condition. If OOM happens, current vcpu creation
-fails either and return error back to user space.
+Fixes: 995751025572 ("ACPICA: Linuxize: Export debugger files to Linux")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+The analysis employs differential checking to identify inconsistent 
+security operations (e.g., checks or kfrees) between two code paths 
+and confirms that the inconsistent operations are not recovered in the
+current function or the callers, so they constitute bugs. 
 
-Plz let us know whether we can go for this solution further. Thanks.
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+ drivers/acpi/acpica/dbconvert.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/acpi/acpica/dbconvert.c b/drivers/acpi/acpica/dbconvert.c
+index 2b84ac093698..8dbab6932049 100644
+--- a/drivers/acpi/acpica/dbconvert.c
++++ b/drivers/acpi/acpica/dbconvert.c
+@@ -174,6 +174,8 @@ acpi_status acpi_db_convert_to_package(char *string, union acpi_object *object)
+ 	elements =
+ 	    ACPI_ALLOCATE_ZEROED(DB_DEFAULT_PKG_ELEMENTS *
+ 				 sizeof(union acpi_object));
++	if (!elements)
++		return (AE_NO_MEMORY);
+ 
+ 	this = string;
+ 	for (i = 0; i < (DB_DEFAULT_PKG_ELEMENTS - 1); i++) {
+-- 
+2.25.1
 

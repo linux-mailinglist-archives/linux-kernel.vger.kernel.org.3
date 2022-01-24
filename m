@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F91499C30
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB89E4995A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:13:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578213AbiAXWCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:02:04 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43168 "EHLO
+        id S1442194AbiAXUxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:53:44 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54866 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1450423AbiAXVU2 (ORCPT
+        with ESMTP id S1384832AbiAXUai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:20:28 -0500
+        Mon, 24 Jan 2022 15:30:38 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20F0B61305;
-        Mon, 24 Jan 2022 21:20:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F02F2C340E4;
-        Mon, 24 Jan 2022 21:20:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EF73614E2;
+        Mon, 24 Jan 2022 20:30:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7502BC340E5;
+        Mon, 24 Jan 2022 20:30:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059227;
-        bh=hMvz0BBLDKfp6xLtKBumqNeTre1P81r1tH1l9Baj+sI=;
+        s=korg; t=1643056236;
+        bh=mZ3TmLwV+XX3SCnqWrn6HwwnB01kskCiDLYtCvbS3mU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=behnfwQp/OCYQ/rOScrWLRjs/nBOqHk2iG57W/kzKmgH3U8ihi6WLAjS/JBhtD4cj
-         yD9l/3NqzW6yv44RlDxF8aoH8UjhpeC/cnWtzJj+im7juK8nATZ1TMA/BdOId7D13s
-         mAh45GNYPuacpe9ogBV0vHeZ3nHumMC+T+BTgzv4=
+        b=s9YtnGrElkQ8nw/Hd0OrHxsMIDzGrBf/ZAZbqryCBJaqOD/mW6HFkqx8yj2s9AEGg
+         najxm0Xx0Yv+Gy31PJpT+P8SW74VSYqvtssYAgUsMXCdDktX3BRmaTFV5K++M4nomO
+         XcnvNX+voqlAUyihNolsaEn+GOphGgImgk84/Kd4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        stable@vger.kernel.org, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0544/1039] drm/sched: Avoid lockdep spalt on killing a processes
+Subject: [PATCH 5.15 416/846] mips: add SYS_HAS_CPU_MIPS64_R5 config for MIPS Release 5 support
 Date:   Mon, 24 Jan 2022 19:38:53 +0100
-Message-Id: <20220124184143.561981088@linuxfoundation.org>
+Message-Id: <20220124184115.331045317@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,122 +46,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-[ Upstream commit 542cff7893a37445f98ece26aeb3c9c1055e9ea4 ]
+[ Upstream commit fd4eb90b164442cb1e9909f7845e12a0835ac699 ]
 
-Probelm:
-Singlaning one sched fence from within another's sched
-fence singal callback generates lockdep splat because
-the both have same lockdep class of their fence->lock
+Commit ab7c01fdc3cf ("mips: Add MIPS Release 5 support") adds the two
+configs CPU_MIPS32_R5 and CPU_MIPS64_R5, which depend on the corresponding
+SYS_HAS_CPU_MIPS32_R5 and SYS_HAS_CPU_MIPS64_R5, respectively.
 
-Fix:
-Fix bellow stack by rescheduling to irq work of
-signaling and killing of jobs that left when entity is killed.
+The config SYS_HAS_CPU_MIPS32_R5 was already introduced with commit
+c5b367835cfc ("MIPS: Add support for XPA."); the config
+SYS_HAS_CPU_MIPS64_R5, however, was never introduced.
 
-[11176.741181]  dump_stack+0x10/0x12
-[11176.741186] __lock_acquire.cold+0x208/0x2df
-[11176.741197]  lock_acquire+0xc6/0x2d0
-[11176.741204]  ? dma_fence_signal+0x28/0x80
-[11176.741212] _raw_spin_lock_irqsave+0x4d/0x70
-[11176.741219]  ? dma_fence_signal+0x28/0x80
-[11176.741225]  dma_fence_signal+0x28/0x80
-[11176.741230] drm_sched_fence_finished+0x12/0x20 [gpu_sched]
-[11176.741240] drm_sched_entity_kill_jobs_cb+0x1c/0x50 [gpu_sched]
-[11176.741248] dma_fence_signal_timestamp_locked+0xac/0x1a0
-[11176.741254]  dma_fence_signal+0x3b/0x80
-[11176.741260] drm_sched_fence_finished+0x12/0x20 [gpu_sched]
-[11176.741268] drm_sched_job_done.isra.0+0x7f/0x1a0 [gpu_sched]
-[11176.741277] drm_sched_job_done_cb+0x12/0x20 [gpu_sched]
-[11176.741284] dma_fence_signal_timestamp_locked+0xac/0x1a0
-[11176.741290]  dma_fence_signal+0x3b/0x80
-[11176.741296] amdgpu_fence_process+0xd1/0x140 [amdgpu]
-[11176.741504] sdma_v4_0_process_trap_irq+0x8c/0xb0 [amdgpu]
-[11176.741731]  amdgpu_irq_dispatch+0xce/0x250 [amdgpu]
-[11176.741954]  amdgpu_ih_process+0x81/0x100 [amdgpu]
-[11176.742174]  amdgpu_irq_handler+0x26/0xa0 [amdgpu]
-[11176.742393] __handle_irq_event_percpu+0x4f/0x2c0
-[11176.742402] handle_irq_event_percpu+0x33/0x80
-[11176.742408]  handle_irq_event+0x39/0x60
-[11176.742414]  handle_edge_irq+0x93/0x1d0
-[11176.742419]  __common_interrupt+0x50/0xe0
-[11176.742426]  common_interrupt+0x80/0x90
+Hence, ./scripts/checkkconfigsymbols.py warns:
 
-Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-Suggested-by: Daniel Vetter  <daniel.vetter@ffwll.ch>
-Suggested-by: Christian König <christian.koenig@amd.com>
-Tested-by: Christian König <christian.koenig@amd.com>
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Link: https://www.spinics.net/lists/dri-devel/msg321250.html
+  SYS_HAS_CPU_MIPS64_R5
+  Referencing files: arch/mips/Kconfig, arch/mips/include/asm/cpu-type.h
+
+Add the definition for config SYS_HAS_CPU_MIPS64_R5 under the assumption
+that SYS_HAS_CPU_MIPS64_R5 follows the same pattern as the existing
+SYS_HAS_CPU_MIPS32_R5 and SYS_HAS_CPU_MIPS64_R6.
+
+Fixes: ab7c01fdc3cf ("mips: Add MIPS Release 5 support")
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/scheduler/sched_entity.c | 15 ++++++++++++---
- include/drm/gpu_scheduler.h              | 12 +++++++++++-
- 2 files changed, 23 insertions(+), 4 deletions(-)
+ arch/mips/Kconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/gpu/drm/scheduler/sched_entity.c b/drivers/gpu/drm/scheduler/sched_entity.c
-index 27e1573af96e2..191c56064f196 100644
---- a/drivers/gpu/drm/scheduler/sched_entity.c
-+++ b/drivers/gpu/drm/scheduler/sched_entity.c
-@@ -190,6 +190,16 @@ long drm_sched_entity_flush(struct drm_sched_entity *entity, long timeout)
- }
- EXPORT_SYMBOL(drm_sched_entity_flush);
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 23654ccdbfb12..0200ebb7a0144 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -1993,6 +1993,10 @@ config SYS_HAS_CPU_MIPS64_R1
+ config SYS_HAS_CPU_MIPS64_R2
+ 	bool
  
-+static void drm_sched_entity_kill_jobs_irq_work(struct irq_work *wrk)
-+{
-+	struct drm_sched_job *job = container_of(wrk, typeof(*job), work);
++config SYS_HAS_CPU_MIPS64_R5
++	bool
++	select ARCH_HAS_SYNC_DMA_FOR_CPU if DMA_NONCOHERENT
 +
-+	drm_sched_fence_finished(job->s_fence);
-+	WARN_ON(job->s_fence->parent);
-+	job->sched->ops->free_job(job);
-+}
-+
-+
- /* Signal the scheduler finished fence when the entity in question is killed. */
- static void drm_sched_entity_kill_jobs_cb(struct dma_fence *f,
- 					  struct dma_fence_cb *cb)
-@@ -197,9 +207,8 @@ static void drm_sched_entity_kill_jobs_cb(struct dma_fence *f,
- 	struct drm_sched_job *job = container_of(cb, struct drm_sched_job,
- 						 finish_cb);
- 
--	drm_sched_fence_finished(job->s_fence);
--	WARN_ON(job->s_fence->parent);
--	job->sched->ops->free_job(job);
-+	init_irq_work(&job->work, drm_sched_entity_kill_jobs_irq_work);
-+	irq_work_queue(&job->work);
- }
- 
- static struct dma_fence *
-diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
-index f011e4c407f2e..bbc22fad8d802 100644
---- a/include/drm/gpu_scheduler.h
-+++ b/include/drm/gpu_scheduler.h
-@@ -28,6 +28,7 @@
- #include <linux/dma-fence.h>
- #include <linux/completion.h>
- #include <linux/xarray.h>
-+#include <linux/irq_work.h>
- 
- #define MAX_WAIT_SCHED_ENTITY_Q_EMPTY msecs_to_jiffies(1000)
- 
-@@ -286,7 +287,16 @@ struct drm_sched_job {
- 	struct list_head		list;
- 	struct drm_gpu_scheduler	*sched;
- 	struct drm_sched_fence		*s_fence;
--	struct dma_fence_cb		finish_cb;
-+
-+	/*
-+	 * work is used only after finish_cb has been used and will not be
-+	 * accessed anymore.
-+	 */
-+	union {
-+		struct dma_fence_cb		finish_cb;
-+		struct irq_work 		work;
-+	};
-+
- 	uint64_t			id;
- 	atomic_t			karma;
- 	enum drm_sched_priority		s_priority;
+ config SYS_HAS_CPU_MIPS64_R6
+ 	bool
+ 	select ARCH_HAS_SYNC_DMA_FOR_CPU if DMA_NONCOHERENT
 -- 
 2.34.1
 

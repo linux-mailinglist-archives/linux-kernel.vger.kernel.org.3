@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EAC1498C38
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 065104991F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:19:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349503AbiAXTUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:20:54 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38408 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346427AbiAXTMr (ORCPT
+        id S1380511AbiAXUQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:16:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352696AbiAXT5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:12:47 -0500
+        Mon, 24 Jan 2022 14:57:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E420C047CE0;
+        Mon, 24 Jan 2022 11:27:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1969B8121A;
-        Mon, 24 Jan 2022 19:12:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8396C340E8;
-        Mon, 24 Jan 2022 19:12:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA432B811F9;
+        Mon, 24 Jan 2022 19:27:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA315C340E7;
+        Mon, 24 Jan 2022 19:27:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051561;
-        bh=sqIKcZ/QTMPYz57hTGY6s+dI4WplPMK/ztbGXgAGfns=;
+        s=korg; t=1643052469;
+        bh=TVOUWNBzfDhAxoXUMjAv2R95FzmE2kWLWGzml5e+0xM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z6qH0vGxqa3dBGn7gv31Dut6jc6Iffa5pYS0VbPkT6MCNy258B8iidVTG5OC+iz1h
-         /sS579gO1gs571EqUvQ89qTdyHJH8U2vUVa93CpTSMRJ03c1su6iS47IFg80n9YQGQ
-         Z/oYCrCEQaYd+1YgUGGR5PcXpRGOkU2jmlaHLKjQ=
+        b=Yim4rdW855uNiP8MExWtHJoNutDxW8Wd8R+24/U2jroz4wfFRDIsrO46wzsD62QeZ
+         g8sRJpdJQtia5tn651TZ2dj80+3G3NK1bOvcd+oxBJ2Y4Ba0GUnG4h3FoQ1hrj11Dd
+         0N0qJ5k1I8iX1qdDVvIb1SKWppdDDgE23aX6dPOU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-Subject: [PATCH 4.19 015/239] KVM: s390: Clarify SIGP orders versus STOP/RESTART
-Date:   Mon, 24 Jan 2022 19:40:53 +0100
-Message-Id: <20220124183943.599752654@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 070/320] staging: rtl8192e: rtllib_module: fix error handle case in alloc_rtllib()
+Date:   Mon, 24 Jan 2022 19:40:54 +0100
+Message-Id: <20220124183956.108196673@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,121 +50,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Farman <farman@linux.ibm.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-commit 812de04661c4daa7ac385c0dfd62594540538034 upstream.
+[ Upstream commit e730cd57ac2dfe94bca0f14a3be8e1b21de41a9c ]
 
-With KVM_CAP_S390_USER_SIGP, there are only five Signal Processor
-orders (CONDITIONAL EMERGENCY SIGNAL, EMERGENCY SIGNAL, EXTERNAL CALL,
-SENSE, and SENSE RUNNING STATUS) which are intended for frequent use
-and thus are processed in-kernel. The remainder are sent to userspace
-with the KVM_CAP_S390_USER_SIGP capability. Of those, three orders
-(RESTART, STOP, and STOP AND STORE STATUS) have the potential to
-inject work back into the kernel, and thus are asynchronous.
+Some variables are leaked in the error handling in alloc_rtllib(), free
+the variables in the error path.
 
-Let's look for those pending IRQs when processing one of the in-kernel
-SIGP orders, and return BUSY (CC2) if one is in process. This is in
-agreement with the Principles of Operation, which states that only one
-order can be "active" on a CPU at a time.
-
-Cc: stable@vger.kernel.org
-Suggested-by: David Hildenbrand <david@redhat.com>
-Signed-off-by: Eric Farman <farman@linux.ibm.com>
-Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
-Acked-by: David Hildenbrand <david@redhat.com>
-Link: https://lore.kernel.org/r/20211213210550.856213-2-farman@linux.ibm.com
-[borntraeger@linux.ibm.com: add stable tag]
-Signed-off-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+Fixes: 94a799425eee ("From: wlanfae <wlanfae@realtek.com>")
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Link: https://lore.kernel.org/r/20211202030704.2425621-3-yangyingliang@huawei.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/s390/kvm/interrupt.c |    7 +++++++
- arch/s390/kvm/kvm-s390.c  |    9 +++++++--
- arch/s390/kvm/kvm-s390.h  |    1 +
- arch/s390/kvm/sigp.c      |   28 ++++++++++++++++++++++++++++
- 4 files changed, 43 insertions(+), 2 deletions(-)
+ drivers/staging/rtl8192e/rtllib_module.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
---- a/arch/s390/kvm/interrupt.c
-+++ b/arch/s390/kvm/interrupt.c
-@@ -1900,6 +1900,13 @@ int kvm_s390_is_stop_irq_pending(struct
- 	return test_bit(IRQ_PEND_SIGP_STOP, &li->pending_irqs);
+diff --git a/drivers/staging/rtl8192e/rtllib_module.c b/drivers/staging/rtl8192e/rtllib_module.c
+index 64d9feee1f392..f00ac94b2639b 100644
+--- a/drivers/staging/rtl8192e/rtllib_module.c
++++ b/drivers/staging/rtl8192e/rtllib_module.c
+@@ -88,7 +88,7 @@ struct net_device *alloc_rtllib(int sizeof_priv)
+ 	err = rtllib_networks_allocate(ieee);
+ 	if (err) {
+ 		pr_err("Unable to allocate beacon storage: %d\n", err);
+-		goto failed;
++		goto free_netdev;
+ 	}
+ 	rtllib_networks_initialize(ieee);
+ 
+@@ -121,11 +121,13 @@ struct net_device *alloc_rtllib(int sizeof_priv)
+ 	ieee->hwsec_active = 0;
+ 
+ 	memset(ieee->swcamtable, 0, sizeof(struct sw_cam_table) * 32);
+-	rtllib_softmac_init(ieee);
++	err = rtllib_softmac_init(ieee);
++	if (err)
++		goto free_crypt_info;
+ 
+ 	ieee->pHTInfo = kzalloc(sizeof(struct rt_hi_throughput), GFP_KERNEL);
+ 	if (!ieee->pHTInfo)
+-		return NULL;
++		goto free_softmac;
+ 
+ 	HTUpdateDefaultSetting(ieee);
+ 	HTInitializeHTInfo(ieee);
+@@ -141,8 +143,14 @@ struct net_device *alloc_rtllib(int sizeof_priv)
+ 
+ 	return dev;
+ 
+- failed:
++free_softmac:
++	rtllib_softmac_free(ieee);
++free_crypt_info:
++	lib80211_crypt_info_free(&ieee->crypt_info);
++	rtllib_networks_free(ieee);
++free_netdev:
+ 	free_netdev(dev);
++
+ 	return NULL;
  }
- 
-+int kvm_s390_is_restart_irq_pending(struct kvm_vcpu *vcpu)
-+{
-+	struct kvm_s390_local_interrupt *li = &vcpu->arch.local_int;
-+
-+	return test_bit(IRQ_PEND_RESTART, &li->pending_irqs);
-+}
-+
- void kvm_s390_clear_stop_irq(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_s390_local_interrupt *li = &vcpu->arch.local_int;
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -3844,10 +3844,15 @@ void kvm_s390_vcpu_stop(struct kvm_vcpu
- 	spin_lock(&vcpu->kvm->arch.start_stop_lock);
- 	online_vcpus = atomic_read(&vcpu->kvm->online_vcpus);
- 
--	/* SIGP STOP and SIGP STOP AND STORE STATUS has been fully processed */
-+	/*
-+	 * Set the VCPU to STOPPED and THEN clear the interrupt flag,
-+	 * now that the SIGP STOP and SIGP STOP AND STORE STATUS orders
-+	 * have been fully processed. This will ensure that the VCPU
-+	 * is kept BUSY if another VCPU is inquiring with SIGP SENSE.
-+	 */
-+	kvm_s390_set_cpuflags(vcpu, CPUSTAT_STOPPED);
- 	kvm_s390_clear_stop_irq(vcpu);
- 
--	kvm_s390_set_cpuflags(vcpu, CPUSTAT_STOPPED);
- 	__disable_ibs_on_vcpu(vcpu);
- 
- 	for (i = 0; i < online_vcpus; i++) {
---- a/arch/s390/kvm/kvm-s390.h
-+++ b/arch/s390/kvm/kvm-s390.h
-@@ -372,6 +372,7 @@ void kvm_s390_destroy_adapters(struct kv
- int kvm_s390_ext_call_pending(struct kvm_vcpu *vcpu);
- extern struct kvm_device_ops kvm_flic_ops;
- int kvm_s390_is_stop_irq_pending(struct kvm_vcpu *vcpu);
-+int kvm_s390_is_restart_irq_pending(struct kvm_vcpu *vcpu);
- void kvm_s390_clear_stop_irq(struct kvm_vcpu *vcpu);
- int kvm_s390_set_irq_state(struct kvm_vcpu *vcpu,
- 			   void __user *buf, int len);
---- a/arch/s390/kvm/sigp.c
-+++ b/arch/s390/kvm/sigp.c
-@@ -288,6 +288,34 @@ static int handle_sigp_dst(struct kvm_vc
- 	if (!dst_vcpu)
- 		return SIGP_CC_NOT_OPERATIONAL;
- 
-+	/*
-+	 * SIGP RESTART, SIGP STOP, and SIGP STOP AND STORE STATUS orders
-+	 * are processed asynchronously. Until the affected VCPU finishes
-+	 * its work and calls back into KVM to clear the (RESTART or STOP)
-+	 * interrupt, we need to return any new non-reset orders "busy".
-+	 *
-+	 * This is important because a single VCPU could issue:
-+	 *  1) SIGP STOP $DESTINATION
-+	 *  2) SIGP SENSE $DESTINATION
-+	 *
-+	 * If the SIGP SENSE would not be rejected as "busy", it could
-+	 * return an incorrect answer as to whether the VCPU is STOPPED
-+	 * or OPERATING.
-+	 */
-+	if (order_code != SIGP_INITIAL_CPU_RESET &&
-+	    order_code != SIGP_CPU_RESET) {
-+		/*
-+		 * Lockless check. Both SIGP STOP and SIGP (RE)START
-+		 * properly synchronize everything while processing
-+		 * their orders, while the guest cannot observe a
-+		 * difference when issuing other orders from two
-+		 * different VCPUs.
-+		 */
-+		if (kvm_s390_is_stop_irq_pending(dst_vcpu) ||
-+		    kvm_s390_is_restart_irq_pending(dst_vcpu))
-+			return SIGP_CC_BUSY;
-+	}
-+
- 	switch (order_code) {
- 	case SIGP_SENSE:
- 		vcpu->stat.instruction_sigp_sense++;
+ EXPORT_SYMBOL(alloc_rtllib);
+-- 
+2.34.1
+
 
 

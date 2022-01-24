@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 895E2499DE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 629F2499DE7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:05:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1586634AbiAXW1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:27:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
+        id S1586617AbiAXW1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:27:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453942AbiAXVbS (ORCPT
+        with ESMTP id S1453945AbiAXVbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 16:31:18 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323A6C06137C;
-        Mon, 24 Jan 2022 12:20:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8ADC07594A;
+        Mon, 24 Jan 2022 12:20:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CCEB1B8122C;
-        Mon, 24 Jan 2022 20:20:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07532C340E5;
-        Mon, 24 Jan 2022 20:20:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CEEBAB8122C;
+        Mon, 24 Jan 2022 20:20:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3E9AC340E5;
+        Mon, 24 Jan 2022 20:20:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055629;
-        bh=ipc7IAl6/w4aJnjz2NcJSJkZF0EoOSK7yODQSB9i+8k=;
+        s=korg; t=1643055635;
+        bh=KUa3WcNIZgYdOfgeuGU3RnXVTi6qpCEYqF5dWKRmVxw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2Tr50/Dqu5BjSAWRAAgoL6tqzdqpfyhVmCBnGdsVeU2kXB/EQdhtByUS9zxE7z7eT
-         zKQNacYFksCNaB4xmXWqmOzz5n17GT2vI+MI6hvpaDzxkBGo9tHMzPVVYs7QKj5GzD
-         sB62CxUOzh1jiUDFzsNRIh5y/t90RflJuIeJEdrw=
+        b=IektO1ttiDbLTNXiLQFWMmsmhkFlPkb1KhrW4X8FbC0zgvUAPexayQ064ug7/XQcQ
+         BaRY+VFdgxvjJIoj2wpTZAAskfGybCbUYuqSGLsWIPon0444hw57wjel/cH7dvIMwr
+         jA6QC4on5Alst8+Pyl7Vzt39l6m/wxS+9UfxhGBM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Schlabbach <robert_s@gmx.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Li Hua <hucool.lihua@huawei.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 212/846] media: si2157: Fix "warm" tuner state detection
-Date:   Mon, 24 Jan 2022 19:35:29 +0100
-Message-Id: <20220124184108.241067963@linuxfoundation.org>
+Subject: [PATCH 5.15 214/846] sched/rt: Try to restart rt period timer when rt runtime exceeded
+Date:   Mon, 24 Jan 2022 19:35:31 +0100
+Message-Id: <20220124184108.309081102@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -49,59 +50,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Schlabbach <robert_s@gmx.net>
+From: Li Hua <hucool.lihua@huawei.com>
 
-[ Upstream commit a6441ea29cb2c9314654e093a1cd8020b9b851c8 ]
+[ Upstream commit 9b58e976b3b391c0cf02e038d53dd0478ed3013c ]
 
-Commit e955f959ac52 ("media: si2157: Better check for running tuner in
-init") completely broke the "warm" tuner detection of the si2157 driver
-due to a simple endian error: The Si2157 CRYSTAL_TRIM property code is
-0x0402 and needs to be transmitted LSB first. However, it was inserted
-MSB first, causing the warm detection to always fail and spam the kernel
-log with tuner initialization messages each time the DVB frontend
-device was closed and reopened:
+When rt_runtime is modified from -1 to a valid control value, it may
+cause the task to be throttled all the time. Operations like the following
+will trigger the bug. E.g:
 
-[  312.215682] si2157 16-0060: found a 'Silicon Labs Si2157-A30'
-[  312.264334] si2157 16-0060: firmware version: 3.0.5
-[  342.248593] si2157 16-0060: found a 'Silicon Labs Si2157-A30'
-[  342.295743] si2157 16-0060: firmware version: 3.0.5
-[  372.328574] si2157 16-0060: found a 'Silicon Labs Si2157-A30'
-[  372.385035] si2157 16-0060: firmware version: 3.0.5
+  1. echo -1 > /proc/sys/kernel/sched_rt_runtime_us
+  2. Run a FIFO task named A that executes while(1)
+  3. echo 950000 > /proc/sys/kernel/sched_rt_runtime_us
 
-Also, the reinitializations were observed disturb _other_ tuners on
-multi-tuner cards such as the Hauppauge WinTV-QuadHD, leading to missed
-or errored packets when one of the other DVB frontend devices on that
-card was opened.
+When rt_runtime is -1, The rt period timer will not be activated when task
+A enqueued. And then the task will be throttled after setting rt_runtime to
+950,000. The task will always be throttled because the rt period timer is
+not activated.
 
-Fix the order of the property code bytes to make the warm detection work
-again, also reducing the tuner initialization message in the kernel log
-to once per power-on, as well as fixing the interference with other
-tuners.
-
-Link: https://lore.kernel.org/linux-media/trinity-2a86eb9d-6264-4387-95e1-ba7b79a4050f-1638392923493@3c-app-gmx-bap03
-
-Fixes: e955f959ac52 ("media: si2157: Better check for running tuner in init")
-Reported-by: Robert Schlabbach <robert_s@gmx.net>
-Signed-off-by: Robert Schlabbach <robert_s@gmx.net>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Fixes: d0b27fa77854 ("sched: rt-group: synchonised bandwidth period")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Li Hua <hucool.lihua@huawei.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20211203033618.11895-1-hucool.lihua@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/tuners/si2157.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/sched/rt.c | 23 ++++++++++++++++++-----
+ 1 file changed, 18 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.c
-index fefb2625f6558..75ddf7ed1faff 100644
---- a/drivers/media/tuners/si2157.c
-+++ b/drivers/media/tuners/si2157.c
-@@ -90,7 +90,7 @@ static int si2157_init(struct dvb_frontend *fe)
- 	dev_dbg(&client->dev, "\n");
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index bfef3f39b5552..54f9bb3f15605 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -52,11 +52,8 @@ void init_rt_bandwidth(struct rt_bandwidth *rt_b, u64 period, u64 runtime)
+ 	rt_b->rt_period_timer.function = sched_rt_period_timer;
+ }
  
- 	/* Try to get Xtal trim property, to verify tuner still running */
--	memcpy(cmd.args, "\x15\x00\x04\x02", 4);
-+	memcpy(cmd.args, "\x15\x00\x02\x04", 4);
- 	cmd.wlen = 4;
- 	cmd.rlen = 4;
- 	ret = si2157_cmd_execute(client, &cmd);
+-static void start_rt_bandwidth(struct rt_bandwidth *rt_b)
++static inline void do_start_rt_bandwidth(struct rt_bandwidth *rt_b)
+ {
+-	if (!rt_bandwidth_enabled() || rt_b->rt_runtime == RUNTIME_INF)
+-		return;
+-
+ 	raw_spin_lock(&rt_b->rt_runtime_lock);
+ 	if (!rt_b->rt_period_active) {
+ 		rt_b->rt_period_active = 1;
+@@ -75,6 +72,14 @@ static void start_rt_bandwidth(struct rt_bandwidth *rt_b)
+ 	raw_spin_unlock(&rt_b->rt_runtime_lock);
+ }
+ 
++static void start_rt_bandwidth(struct rt_bandwidth *rt_b)
++{
++	if (!rt_bandwidth_enabled() || rt_b->rt_runtime == RUNTIME_INF)
++		return;
++
++	do_start_rt_bandwidth(rt_b);
++}
++
+ void init_rt_rq(struct rt_rq *rt_rq)
+ {
+ 	struct rt_prio_array *array;
+@@ -1029,13 +1034,17 @@ static void update_curr_rt(struct rq *rq)
+ 
+ 	for_each_sched_rt_entity(rt_se) {
+ 		struct rt_rq *rt_rq = rt_rq_of_se(rt_se);
++		int exceeded;
+ 
+ 		if (sched_rt_runtime(rt_rq) != RUNTIME_INF) {
+ 			raw_spin_lock(&rt_rq->rt_runtime_lock);
+ 			rt_rq->rt_time += delta_exec;
+-			if (sched_rt_runtime_exceeded(rt_rq))
++			exceeded = sched_rt_runtime_exceeded(rt_rq);
++			if (exceeded)
+ 				resched_curr(rq);
+ 			raw_spin_unlock(&rt_rq->rt_runtime_lock);
++			if (exceeded)
++				do_start_rt_bandwidth(sched_rt_bandwidth(rt_rq));
+ 		}
+ 	}
+ }
+@@ -2785,8 +2794,12 @@ static int sched_rt_global_validate(void)
+ 
+ static void sched_rt_do_global(void)
+ {
++	unsigned long flags;
++
++	raw_spin_lock_irqsave(&def_rt_bandwidth.rt_runtime_lock, flags);
+ 	def_rt_bandwidth.rt_runtime = global_rt_runtime();
+ 	def_rt_bandwidth.rt_period = ns_to_ktime(global_rt_period());
++	raw_spin_unlock_irqrestore(&def_rt_bandwidth.rt_runtime_lock, flags);
+ }
+ 
+ int sched_rt_handler(struct ctl_table *table, int write, void *buffer,
 -- 
 2.34.1
 

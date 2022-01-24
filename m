@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA3449A27C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:00:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E2149A241
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 02:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2362583AbiAXXmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:42:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47108 "EHLO
+        id S2365638AbiAXXvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:51:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1843730AbiAXXFi (ORCPT
+        with ESMTP id S1383930AbiAXXGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:05:38 -0500
+        Mon, 24 Jan 2022 18:06:07 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E035CC02B77E;
-        Mon, 24 Jan 2022 13:16:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0BDC061A7F;
+        Mon, 24 Jan 2022 13:17:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8836BB811A2;
-        Mon, 24 Jan 2022 21:16:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E02CBC340E4;
-        Mon, 24 Jan 2022 21:16:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39E61B81233;
+        Mon, 24 Jan 2022 21:16:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C29CC36AEB;
+        Mon, 24 Jan 2022 21:16:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058994;
-        bh=n+2oQiECCDibeXeXVuzVRofAl5ID7Qq6aThu6u/Ccas=;
+        s=korg; t=1643059018;
+        bh=fLy9g1Dn9MLU9x6rBqmMs6F2pQoFUyKdCOxJNNtpLe0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hpw+kscnvqiOeTJkcSs9J7R+i1V9wUtYgJpfxldzVuzxDH3GCyCmQymvwSRvljLgZ
-         ciBM576y4y7wAEe1ITg9NIot4FLUKTXHbYM2sgNPKVIOB/NpTUgR6kM0YGKNbtKnya
-         cVXWgvYagraN4iYiR7B8+sm7A5wmbN/J0bBcz5U0=
+        b=064UNFFXX07h4wih0LBtYG0dkbBkG56HW8i8jgCQVkXExmrhpFzpMKP90zyRf3Nis
+         k6UvIcFW4NNn65nk8jfNdb5ftXddsWah52b49iD8SaOF+i/xMdsyfFyc9hWFY/DU68
+         /DGAYXvUo3qMH2qGB9ZNS7FOY7kaZreDh+efmZN0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Taehee Yoo <ap420073@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0442/1039] amt: fix wrong return type of amt_send_membership_update()
-Date:   Mon, 24 Jan 2022 19:37:11 +0100
-Message-Id: <20220124184140.152117560@linuxfoundation.org>
+Subject: [PATCH 5.16 0445/1039] ALSA: jack: Add missing rwsem around snd_ctl_remove() calls
+Date:   Mon, 24 Jan 2022 19:37:14 +0100
+Message-Id: <20220124184140.255356036@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -50,36 +48,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Taehee Yoo <ap420073@gmail.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit dd3ca4c5184ea98e40acb8eb293d85b88ea04ee2 ]
+[ Upstream commit 06764dc931848c3a9bc01a63bbf76a605408bb54 ]
 
-amt_send_membership_update() would return -1 but it's return type is bool.
-So, it should be used TRUE instead of -1.
+snd_ctl_remove() has to be called with card->controls_rwsem held (when
+called after the card instantiation).  This patch add the missing
+rwsem calls around it.
 
-Fixes: cbc21dc1cfe9 ("amt: add data plane of amt interface")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Taehee Yoo <ap420073@gmail.com>
-Link: https://lore.kernel.org/r/20220109163702.6331-1-ap420073@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 9058cbe1eed2 ("ALSA: jack: implement kctl creating for jack devices")
+Link: https://lore.kernel.org/r/20211116071314.15065-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/amt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/core/jack.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/amt.c b/drivers/net/amt.c
-index b732ee9a50ef9..d3a9dda6c7286 100644
---- a/drivers/net/amt.c
-+++ b/drivers/net/amt.c
-@@ -1106,7 +1106,7 @@ static bool amt_send_membership_query(struct amt_dev *amt,
- 	rt = ip_route_output_key(amt->net, &fl4);
- 	if (IS_ERR(rt)) {
- 		netdev_dbg(amt->dev, "no route to %pI4\n", &tunnel->ip4);
--		return -1;
-+		return true;
- 	}
+diff --git a/sound/core/jack.c b/sound/core/jack.c
+index 537df1e98f8ac..d1e3055f2b6a5 100644
+--- a/sound/core/jack.c
++++ b/sound/core/jack.c
+@@ -62,10 +62,13 @@ static int snd_jack_dev_free(struct snd_device *device)
+ 	struct snd_card *card = device->card;
+ 	struct snd_jack_kctl *jack_kctl, *tmp_jack_kctl;
  
- 	amtmq		= skb_push(skb, sizeof(*amtmq));
++	down_write(&card->controls_rwsem);
+ 	list_for_each_entry_safe(jack_kctl, tmp_jack_kctl, &jack->kctl_list, list) {
+ 		list_del_init(&jack_kctl->list);
+ 		snd_ctl_remove(card, jack_kctl->kctl);
+ 	}
++	up_write(&card->controls_rwsem);
++
+ 	if (jack->private_free)
+ 		jack->private_free(jack);
+ 
 -- 
 2.34.1
 

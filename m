@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F04954977DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 04:52:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8420C4977EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 04:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241197AbiAXDwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 22:52:40 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:46964 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241192AbiAXDwj (ORCPT
+        id S241261AbiAXDyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 22:54:47 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:57042 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241288AbiAXDyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 22:52:39 -0500
+        Sun, 23 Jan 2022 22:54:43 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0CEDE1F3B1;
-        Mon, 24 Jan 2022 03:52:38 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BEDB221995;
+        Mon, 24 Jan 2022 03:54:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1642996358; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1642996481; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ilA7OZh9lH4lfKt0EXiI3v3DOr+k3/ZmJc6w2w8IIto=;
-        b=TUDcaGrH3IQ4jbI1LjGtfJCbku6HgfJ1SA/e6tbwpuxhP2zeP7roeBtqcf29FStJv3t1kA
-        JOxNBGux+SkxQBPCG4okM7MhzqvdeTyyO4puxMZp2QQgWOQETuLMe+PB8FmMINrXEIGO5T
-        vod7VaeEvCsdi4n6uSwxs8g5GqZUM74=
+        bh=azmox78FA+UkT5DRfdfUnBYA52daA5AqYmjfYZjaXVU=;
+        b=SvjCElxiZL71HUL1QKmR8N6TjTOkCtoj0nlAhVdRzI8aHkVdWC1FxUJsrJDadWz/jXad/E
+        k0TSIoScbEGeNJNO4y9QqPG5lg887GwF5rgipEqDxURbMGWBMEpy56u9NvpCY+OTs3DyP8
+        Qcc3iIJ9CAKqgXXgydcQOIRxjh0Dnko=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1642996358;
+        s=susede2_ed25519; t=1642996481;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ilA7OZh9lH4lfKt0EXiI3v3DOr+k3/ZmJc6w2w8IIto=;
-        b=nhz08CByEzBnGB2LFv8iQj+QHte3XP0ue/V1xUBzjFDMFI8LovcXTXc5TKw/QFIcbkrbAf
-        mEcxnij1qU2BYLAQ==
+        bh=azmox78FA+UkT5DRfdfUnBYA52daA5AqYmjfYZjaXVU=;
+        b=2mur45c8AUVh1bD4Pih8u6DoyIKnnBRd535iZfKCCJaJTEhHv7J+v+vLrzpd//e+KDB5LX
+        XZYsI4dHQYt8/yAQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B5DED13305;
-        Mon, 24 Jan 2022 03:52:34 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B204013305;
+        Mon, 24 Jan 2022 03:54:38 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id UruJHIIi7mFkRQAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 24 Jan 2022 03:52:34 +0000
-Subject: [PATCH 10/23] MM: submit multipage write for SWP_FS_OPS swap-space
+        id RDAXG/4i7mERRgAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 24 Jan 2022 03:54:38 +0000
+Subject: [PATCH 19/23] NFS: discard NFS_RPC_SWAPFLAGS and RPC_TASK_ROOTCREDS
 From:   NeilBrown <neilb@suse.de>
 To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
         Anna Schumaker <anna.schumaker@netapp.com>,
@@ -58,7 +58,7 @@ To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
 Cc:     linux-nfs@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Date:   Mon, 24 Jan 2022 14:48:32 +1100
-Message-ID: <164299611279.26253.12350012848236496937.stgit@noble.brown>
+Message-ID: <164299611284.26253.4993812368278110635.stgit@noble.brown>
 In-Reply-To: <164299573337.26253.7538614611220034049.stgit@noble.brown>
 References: <164299573337.26253.7538614611220034049.stgit@noble.brown>
 User-Agent: StGit/0.23
@@ -69,240 +69,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-swap_writepage() is given one page at a time, but may be called repeatedly
-in succession.
-For block-device swapspace, the blk_plug functionality allows the
-multiple pages to be combined together at lower layers.
-That cannot be used for SWP_FS_OPS as blk_plug may not exist - it is
-only active when CONFIG_BLOCK=y.  Consequently all swap reads over NFS
-are single page reads.
+NFS_RPC_SWAPFLAGS is only used for READ requests.
+It sets RPC_TASK_SWAPPER which gives some memory-allocation priority to
+requests.  This is not needed for swap READ - though it is for writes
+where it is set via a different mechanism.
 
-With this patch we pass a pointer-to-pointer via the wbc.
-swap_writepage can store state between calls - much like the pointer
-passed explicitly to swap_readpage.  After calling swap_writepage() some
-number of times, the state will be passed to swap_write_unplug() which
-can submit the combined request.
+RPC_TASK_ROOTCREDS causes the 'machine' credential to be used.
+This is not needed as the root credential is saved when the swap file is
+opened, and this is used for all IO.
+
+So NFS_RPC_SWAPFLAGS isn't needed, and as it is the only user of
+RPC_TASK_ROOTCREDS, that isn't needed either.
+
+Remove both.
 
 Signed-off-by: NeilBrown <neilb@suse.de>
 ---
- include/linux/writeback.h |    7 +++
- mm/page_io.c              |  103 +++++++++++++++++++++++++++++----------------
- mm/swap.h                 |    1 
- mm/vmscan.c               |    9 +++-
- 4 files changed, 82 insertions(+), 38 deletions(-)
+ fs/nfs/read.c                 |    4 ----
+ include/linux/nfs_fs.h        |    5 -----
+ include/linux/sunrpc/sched.h  |    1 -
+ include/trace/events/sunrpc.h |    1 -
+ net/sunrpc/auth.c             |    2 +-
+ 5 files changed, 1 insertion(+), 12 deletions(-)
 
-diff --git a/include/linux/writeback.h b/include/linux/writeback.h
-index fec248ab1fec..6dcaa0639c0d 100644
---- a/include/linux/writeback.h
-+++ b/include/linux/writeback.h
-@@ -80,6 +80,13 @@ struct writeback_control {
- 
- 	unsigned punt_to_cgroup:1;	/* cgrp punting, see __REQ_CGROUP_PUNT */
- 
-+	/* To enable batching of swap writes to non-block-device backends,
-+	 * "plug" can be set point to a 'struct swap_iocb *'.  When all swap
-+	 * writes have been submitted, if with swap_iocb is not NULL,
-+	 * swap_write_unplug() should be called.
-+	 */
-+	struct swap_iocb **plug;
-+
- #ifdef CONFIG_CGROUP_WRITEBACK
- 	struct bdi_writeback *wb;	/* wb this writeback is issued under */
- 	struct inode *inode;		/* inode being written out */
-diff --git a/mm/page_io.c b/mm/page_io.c
-index bcf655d650c8..b61c2cafc4f9 100644
---- a/mm/page_io.c
-+++ b/mm/page_io.c
-@@ -307,56 +307,74 @@ int sio_pool_init(void)
- static void sio_write_complete(struct kiocb *iocb, long ret)
+diff --git a/fs/nfs/read.c b/fs/nfs/read.c
+index eb00229c1a50..cd797ce3a67c 100644
+--- a/fs/nfs/read.c
++++ b/fs/nfs/read.c
+@@ -194,10 +194,6 @@ static void nfs_initiate_read(struct nfs_pgio_header *hdr,
+ 			      const struct nfs_rpc_ops *rpc_ops,
+ 			      struct rpc_task_setup *task_setup_data, int how)
  {
- 	struct swap_iocb *sio = container_of(iocb, struct swap_iocb, iocb);
--	struct page *page = sio->bvec[0].bv_page;
-+	int p;
- 
--	if (ret != 0 && ret != PAGE_SIZE) {
--		/*
--		 * In the case of swap-over-nfs, this can be a
--		 * temporary failure if the system has limited
--		 * memory for allocating transmit buffers.
--		 * Mark the page dirty and avoid
--		 * folio_rotate_reclaimable but rate-limit the
--		 * messages but do not flag PageError like
--		 * the normal direct-to-bio case as it could
--		 * be temporary.
--		 */
--		set_page_dirty(page);
--		ClearPageReclaim(page);
--		pr_err_ratelimited("Write error %ld on dio swapfile (%llu)\n",
--				   ret, page_file_offset(page));
--	} else
--		count_vm_event(PSWPOUT);
--	end_page_writeback(page);
-+	for (p = 0; p < sio->pages; p++) {
-+		struct page *page = sio->bvec[p].bv_page;
-+
-+		if (ret != 0 && ret != PAGE_SIZE * sio->pages) {
-+			/*
-+			 * In the case of swap-over-nfs, this can be a
-+			 * temporary failure if the system has limited
-+			 * memory for allocating transmit buffers.
-+			 * Mark the page dirty and avoid
-+			 * folio_rotate_reclaimable but rate-limit the
-+			 * messages but do not flag PageError like
-+			 * the normal direct-to-bio case as it could
-+			 * be temporary.
-+			 */
-+			set_page_dirty(page);
-+			ClearPageReclaim(page);
-+			pr_err_ratelimited("Write error %ld on dio swapfile (%llu)\n",
-+					   ret, page_file_offset(page));
-+		} else
-+			count_vm_event(PSWPOUT);
-+		end_page_writeback(page);
-+	}
- 	mempool_free(sio, sio_pool);
+-	struct inode *inode = hdr->inode;
+-	int swap_flags = IS_SWAPFILE(inode) ? NFS_RPC_SWAPFLAGS : 0;
+-
+-	task_setup_data->flags |= swap_flags;
+ 	rpc_ops->read_setup(hdr, msg);
+ 	trace_nfs_initiate_read(hdr);
  }
- 
- static int swap_writepage_fs(struct page *page, struct writeback_control *wbc)
- {
--	struct swap_iocb *sio;
-+	struct swap_iocb *sio = NULL;
- 	struct swap_info_struct *sis = page_swap_info(page);
- 	struct file *swap_file = sis->swap_file;
--	struct address_space *mapping = swap_file->f_mapping;
--	struct iov_iter from;
--	int ret;
-+	loff_t pos = page_file_offset(page);
- 
- 	set_page_writeback(page);
- 	unlock_page(page);
--	sio = mempool_alloc(sio_pool, GFP_NOIO);
--	init_sync_kiocb(&sio->iocb, swap_file);
--	sio->iocb.ki_complete = sio_write_complete;
--	sio->iocb.ki_pos = page_file_offset(page);
--	sio->bvec[0].bv_page = page;
--	sio->bvec[0].bv_len = PAGE_SIZE;
--	sio->bvec[0].bv_offset = 0;
--	iov_iter_bvec(&from, WRITE, &sio->bvec[0], 1, PAGE_SIZE);
--	ret = mapping->a_ops->swap_rw(&sio->iocb, &from);
--	if (ret != -EIOCBQUEUED)
--		sio_write_complete(&sio->iocb, ret);
--	return ret;
-+	if (wbc->plug)
-+		sio = *wbc->plug;
-+	if (sio) {
-+		if (sio->iocb.ki_filp != swap_file ||
-+		    sio->iocb.ki_pos + sio->pages * PAGE_SIZE != pos) {
-+			swap_write_unplug(sio);
-+			sio = NULL;
-+		}
-+	}
-+	if (!sio) {
-+		sio = mempool_alloc(sio_pool, GFP_NOIO);
-+		init_sync_kiocb(&sio->iocb, swap_file);
-+		sio->iocb.ki_complete = sio_write_complete;
-+		sio->iocb.ki_pos = pos;
-+		sio->pages = 0;
-+	}
-+	sio->bvec[sio->pages].bv_page = page;
-+	sio->bvec[sio->pages].bv_len = PAGE_SIZE;
-+	sio->bvec[sio->pages].bv_offset = 0;
-+	sio->pages += 1;
-+	if (sio->pages == ARRAY_SIZE(sio->bvec) || !wbc->plug) {
-+		swap_write_unplug(sio);
-+		sio = NULL;
-+	}
-+	if (wbc->plug)
-+		*wbc->plug = sio;
-+
-+	return 0;
- }
- 
- int __swap_writepage(struct page *page, struct writeback_control *wbc,
--		bio_end_io_t end_write_func)
-+		     bio_end_io_t end_write_func)
- {
- 	struct bio *bio;
- 	int ret;
-@@ -388,6 +406,19 @@ int __swap_writepage(struct page *page, struct writeback_control *wbc,
- 	return 0;
- }
- 
-+void swap_write_unplug(struct swap_iocb *sio)
-+{
-+	struct iov_iter from;
-+	struct address_space *mapping = sio->iocb.ki_filp->f_mapping;
-+	int ret;
-+
-+	iov_iter_bvec(&from, WRITE, sio->bvec, sio->pages,
-+		      PAGE_SIZE * sio->pages);
-+	ret = mapping->a_ops->swap_rw(&sio->iocb, &from);
-+	if (ret != -EIOCBQUEUED)
-+		sio_write_complete(&sio->iocb, ret);
-+}
-+
- static void sio_read_complete(struct kiocb *iocb, long ret)
- {
- 	struct swap_iocb *sio = container_of(iocb, struct swap_iocb, iocb);
-diff --git a/mm/swap.h b/mm/swap.h
-index 0c79b2478f3f..0194ac153d40 100644
---- a/mm/swap.h
-+++ b/mm/swap.h
-@@ -13,6 +13,7 @@ static inline void swap_read_unplug(struct swap_iocb *plug)
- 	if (unlikely(plug))
- 		__swap_read_unplug(plug);
- }
-+void swap_write_unplug(struct swap_iocb *sio);
- int swap_writepage(struct page *page, struct writeback_control *wbc);
- void end_swap_bio_write(struct bio *bio);
- int __swap_writepage(struct page *page, struct writeback_control *wbc,
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index ad5026d06aa8..f75c71490921 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -1164,7 +1164,8 @@ typedef enum {
-  * pageout is called by shrink_page_list() for each dirty page.
-  * Calls ->writepage().
+diff --git a/include/linux/nfs_fs.h b/include/linux/nfs_fs.h
+index aba38dc4fd29..9e87752bdd00 100644
+--- a/include/linux/nfs_fs.h
++++ b/include/linux/nfs_fs.h
+@@ -45,11 +45,6 @@
   */
--static pageout_t pageout(struct page *page, struct address_space *mapping)
-+static pageout_t pageout(struct page *page, struct address_space *mapping,
-+			 struct swap_iocb **plug)
- {
- 	/*
- 	 * If the page is dirty, only perform writeback if that write
-@@ -1211,6 +1212,7 @@ static pageout_t pageout(struct page *page, struct address_space *mapping)
- 			.range_start = 0,
- 			.range_end = LLONG_MAX,
- 			.for_reclaim = 1,
-+			.plug = plug,
- 		};
+ #define NFS_MAX_TRANSPORTS 16
  
- 		SetPageReclaim(page);
-@@ -1537,6 +1539,7 @@ static unsigned int shrink_page_list(struct list_head *page_list,
- 	unsigned int nr_reclaimed = 0;
- 	unsigned int pgactivate = 0;
- 	bool do_demote_pass;
-+	struct swap_iocb *plug = NULL;
- 
- 	memset(stat, 0, sizeof(*stat));
- 	cond_resched();
-@@ -1817,7 +1820,7 @@ static unsigned int shrink_page_list(struct list_head *page_list,
- 			 * starts and then write it out here.
- 			 */
- 			try_to_unmap_flush_dirty();
--			switch (pageout(page, mapping)) {
-+			switch (pageout(page, mapping, &plug)) {
- 			case PAGE_KEEP:
- 				goto keep_locked;
- 			case PAGE_ACTIVATE:
-@@ -1971,6 +1974,8 @@ static unsigned int shrink_page_list(struct list_head *page_list,
- 	list_splice(&ret_pages, page_list);
- 	count_vm_events(PGACTIVATE, pgactivate);
- 
-+	if (plug)
-+		swap_write_unplug(plug);
- 	return nr_reclaimed;
- }
- 
+-/*
+- * These are the default flags for swap requests
+- */
+-#define NFS_RPC_SWAPFLAGS		(RPC_TASK_SWAPPER|RPC_TASK_ROOTCREDS)
+-
+ /*
+  * Size of the NFS directory verifier
+  */
+diff --git a/include/linux/sunrpc/sched.h b/include/linux/sunrpc/sched.h
+index db964bb63912..56710f8056d3 100644
+--- a/include/linux/sunrpc/sched.h
++++ b/include/linux/sunrpc/sched.h
+@@ -124,7 +124,6 @@ struct rpc_task_setup {
+ #define RPC_TASK_MOVEABLE	0x0004		/* nfs4.1+ rpc tasks */
+ #define RPC_TASK_NULLCREDS	0x0010		/* Use AUTH_NULL credential */
+ #define RPC_CALL_MAJORSEEN	0x0020		/* major timeout seen */
+-#define RPC_TASK_ROOTCREDS	0x0040		/* force root creds */
+ #define RPC_TASK_DYNAMIC	0x0080		/* task was kmalloc'ed */
+ #define	RPC_TASK_NO_ROUND_ROBIN	0x0100		/* send requests on "main" xprt */
+ #define RPC_TASK_SOFT		0x0200		/* Use soft timeouts */
+diff --git a/include/trace/events/sunrpc.h b/include/trace/events/sunrpc.h
+index 1e566ac4b812..ef9e9351cb2f 100644
+--- a/include/trace/events/sunrpc.h
++++ b/include/trace/events/sunrpc.h
+@@ -311,7 +311,6 @@ TRACE_EVENT(rpc_request,
+ 		{ RPC_TASK_MOVEABLE, "MOVEABLE" },			\
+ 		{ RPC_TASK_NULLCREDS, "NULLCREDS" },			\
+ 		{ RPC_CALL_MAJORSEEN, "MAJORSEEN" },			\
+-		{ RPC_TASK_ROOTCREDS, "ROOTCREDS" },			\
+ 		{ RPC_TASK_DYNAMIC, "DYNAMIC" },			\
+ 		{ RPC_TASK_NO_ROUND_ROBIN, "NO_ROUND_ROBIN" },		\
+ 		{ RPC_TASK_SOFT, "SOFT" },				\
+diff --git a/net/sunrpc/auth.c b/net/sunrpc/auth.c
+index 6bfa19f9fa6a..682fcd24bf43 100644
+--- a/net/sunrpc/auth.c
++++ b/net/sunrpc/auth.c
+@@ -670,7 +670,7 @@ rpcauth_bindcred(struct rpc_task *task, const struct cred *cred, int flags)
+ 	/* If machine cred couldn't be bound, try a root cred */
+ 	if (new)
+ 		;
+-	else if (cred == &machine_cred || (flags & RPC_TASK_ROOTCREDS))
++	else if (cred == &machine_cred)
+ 		new = rpcauth_bind_root_cred(task, lookupflags);
+ 	else if (flags & RPC_TASK_NULLCREDS)
+ 		new = authnull_ops.lookup_cred(NULL, NULL, 0);
 
 

@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D932499A65
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED25499D5C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352950AbiAXVns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:43:48 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33854 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447083AbiAXVKA (ORCPT
+        id S1583419AbiAXWRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:17:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1453953AbiAXVbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:10:00 -0500
+        Mon, 24 Jan 2022 16:31:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DB6C075949;
+        Mon, 24 Jan 2022 12:20:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FB4461451;
-        Mon, 24 Jan 2022 21:10:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50C8CC340E5;
-        Mon, 24 Jan 2022 21:09:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5E73B8122F;
+        Mon, 24 Jan 2022 20:20:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC417C340E5;
+        Mon, 24 Jan 2022 20:20:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058599;
-        bh=xLe6OIxRf5HXXv5JzxhjAzembg+iCLkQRK2lINkvGpA=;
+        s=korg; t=1643055632;
+        bh=sgSscAIfs33is+A3+mF+JxJk+KOnqSxfxISmLEcfSqk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tdhOq8FhvLNKosgAgbk+IqRGc7ely3TkTwxfQ7sR6nfce2f6frId8naGvXnp0xYFe
-         +oaVsfaXLEsHAnUVrC7+cMH+VwXZIQQLwUYjtVnU7/PRn4VDKBIfm5U/IbKWPl5h5P
-         jKYiw1/AYUk95744hGzPX8N/XDGy0EazkZJBsz+0=
+        b=ugJ7U/QeMWZxAur4U1Us4pkLcMl6lvEA0/IwwvypBJbtaBYfxNntto97LA4RRtgrD
+         phlV9c5Spi3Ox6h6Tsm8W0XYzprR+rmoYNoXa5Qyt21uZdqxgydsDntBfrSYwZt6ng
+         CfqSEuBOGo1UUoHlqjT3omjYuw7ixgNMhrkPZYNQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot <syzbot+28a66a9fbc621c939000@syzkaller.appspotmail.com>,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        stable@vger.kernel.org, Lv Yunlong <lyl2019@mail.ustc.edu.cn>,
+        Luca Coelho <luciano.coelho@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0334/1039] block: fix error unwinding in device_add_disk
-Date:   Mon, 24 Jan 2022 19:35:23 +0100
-Message-Id: <20220124184136.533605897@linuxfoundation.org>
+Subject: [PATCH 5.15 213/846] wireless: iwlwifi: Fix a double free in iwl_txq_dyn_alloc_dma
+Date:   Mon, 24 Jan 2022 19:35:30 +0100
+Message-Id: <20220124184108.272161843@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,65 +49,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
 
-[ Upstream commit 99d8690aae4b2f0d1d90075de355ac087f820a66 ]
+[ Upstream commit f973795a8d19cbf3d03807704eb7c6ff65788d5a ]
 
-One device_add is called disk->ev will be freed by disk_release, so we
-should free it twice.  Fix this by allocating disk->ev after device_add
-so that the extra local unwinding can be removed entirely.
+In iwl_txq_dyn_alloc_dma, txq->tfds is freed at first time by:
+iwl_txq_alloc()->goto err_free_tfds->dma_free_coherent(). But
+it forgot to set txq->tfds to NULL.
 
-Based on an earlier patch from Tetsuo Handa.
+Then the txq->tfds is freed again in iwl_txq_dyn_alloc_dma by:
+goto error->iwl_txq_gen2_free_memory()->dma_free_coherent().
 
-Reported-by: syzbot <syzbot+28a66a9fbc621c939000@syzkaller.appspotmail.com>
-Tested-by: syzbot <syzbot+28a66a9fbc621c939000@syzkaller.appspotmail.com>
-Fixes: 83cbce9574462c6b ("block: add error handling for device_add_disk / add_disk")
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20211221161851.788424-1-hch@lst.de
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+My patch sets txq->tfds to NULL after the first free to avoid the
+double free.
+
+Fixes: 0cd1ad2d7fd41 ("iwlwifi: move all bus-independent TX functions to common code")
+Signed-off-by: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+Link: https://lore.kernel.org/r/20210403054755.4781-1-lyl2019@mail.ustc.edu.cn
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/genhd.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/queue/tx.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/block/genhd.c b/block/genhd.c
-index 30362aeacac4b..596e43764846b 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -437,10 +437,6 @@ int __must_check device_add_disk(struct device *parent, struct gendisk *disk,
- 		disk->flags |= GENHD_FL_EXT_DEVT;
- 	}
- 
--	ret = disk_alloc_events(disk);
--	if (ret)
--		goto out_free_ext_minor;
--
- 	/* delay uevents, until we scanned partition table */
- 	dev_set_uevent_suppress(ddev, 1);
- 
-@@ -451,7 +447,12 @@ int __must_check device_add_disk(struct device *parent, struct gendisk *disk,
- 		ddev->devt = MKDEV(disk->major, disk->first_minor);
- 	ret = device_add(ddev);
- 	if (ret)
--		goto out_disk_release_events;
-+		goto out_free_ext_minor;
-+
-+	ret = disk_alloc_events(disk);
-+	if (ret)
-+		goto out_device_del;
-+
- 	if (!sysfs_deprecated) {
- 		ret = sysfs_create_link(block_depr, &ddev->kobj,
- 					kobject_name(&ddev->kobj));
-@@ -539,8 +540,6 @@ out_del_block_link:
- 		sysfs_remove_link(block_depr, dev_name(ddev));
- out_device_del:
- 	device_del(ddev);
--out_disk_release_events:
--	disk_release_events(disk);
- out_free_ext_minor:
- 	if (disk->major == BLOCK_EXT_MAJOR)
- 		blk_free_ext_minor(disk->first_minor);
+diff --git a/drivers/net/wireless/intel/iwlwifi/queue/tx.c b/drivers/net/wireless/intel/iwlwifi/queue/tx.c
+index 451b060693501..0f3526b0c5b00 100644
+--- a/drivers/net/wireless/intel/iwlwifi/queue/tx.c
++++ b/drivers/net/wireless/intel/iwlwifi/queue/tx.c
+@@ -1072,6 +1072,7 @@ int iwl_txq_alloc(struct iwl_trans *trans, struct iwl_txq *txq, int slots_num,
+ 	return 0;
+ err_free_tfds:
+ 	dma_free_coherent(trans->dev, tfd_sz, txq->tfds, txq->dma_addr);
++	txq->tfds = NULL;
+ error:
+ 	if (txq->entries && cmd_queue)
+ 		for (i = 0; i < slots_num; i++)
 -- 
 2.34.1
 

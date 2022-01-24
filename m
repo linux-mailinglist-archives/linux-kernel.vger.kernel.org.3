@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FBD449801A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD32A49801D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242787AbiAXM6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 07:58:32 -0500
-Received: from foss.arm.com ([217.140.110.172]:32892 "EHLO foss.arm.com"
+        id S242843AbiAXM6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 07:58:37 -0500
+Received: from foss.arm.com ([217.140.110.172]:32914 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242741AbiAXM53 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:57:29 -0500
+        id S242751AbiAXM5e (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 07:57:34 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 59744ED1;
-        Mon, 24 Jan 2022 04:57:29 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5D9DA101E;
+        Mon, 24 Jan 2022 04:57:34 -0800 (PST)
 Received: from p8cg001049571a15.arm.com (unknown [10.163.43.190])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id BB07D3F774;
-        Mon, 24 Jan 2022 04:57:25 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 287253F774;
+        Mon, 24 Jan 2022 04:57:29 -0800 (PST)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-mm@kvack.org
 Cc:     linux-kernel@vger.kernel.org, hch@infradead.org,
         akpm@linux-foundation.org,
         Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [RFC V1 05/31] arm64/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Date:   Mon, 24 Jan 2022 18:26:42 +0530
-Message-Id: <1643029028-12710-6-git-send-email-anshuman.khandual@arm.com>
+        "David S. Miller" <davem@davemloft.net>,
+        Khalid Aziz <khalid.aziz@oracle.com>,
+        sparclinux@vger.kernel.org
+Subject: [RFC V1 06/31] sparc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Date:   Mon, 24 Jan 2022 18:26:43 +0530
+Message-Id: <1643029028-12710-7-git-send-email-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
 References: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
@@ -37,124 +37,124 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 This defines and exports a platform specific custom vm_get_page_prot() via
 subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
-macros can be dropped which are no longer needed. This also localizes both
-arch_filter_pgprot and arch_vm_get_page_prot() helpers, unsubscribing from
-ARCH_HAS_FILTER_PGPROT as well.
+macros can be dropped which are no longer needed.
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Khalid Aziz <khalid.aziz@oracle.com>
+Cc: sparclinux@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- arch/arm64/Kconfig                    |  2 +-
- arch/arm64/include/asm/mman.h         |  3 +-
- arch/arm64/include/asm/pgtable-prot.h | 18 ----------
- arch/arm64/include/asm/pgtable.h      |  2 +-
- arch/arm64/mm/mmap.c                  | 50 +++++++++++++++++++++++++++
- 5 files changed, 53 insertions(+), 22 deletions(-)
+ arch/sparc/Kconfig                  |  2 +
+ arch/sparc/include/asm/mman.h       |  1 -
+ arch/sparc/include/asm/pgtable_32.h | 19 --------
+ arch/sparc/include/asm/pgtable_64.h | 19 --------
+ arch/sparc/mm/init_32.c             | 41 +++++++++++++++++
+ arch/sparc/mm/init_64.c             | 71 +++++++++++++++++++++--------
+ 6 files changed, 95 insertions(+), 58 deletions(-)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index cad609528e58..fce2d0fc4ecc 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -23,7 +23,6 @@ config ARM64
- 	select ARCH_HAS_DMA_PREP_COHERENT
- 	select ARCH_HAS_ACPI_TABLE_UPGRADE if ACPI
- 	select ARCH_HAS_FAST_MULTIPLIER
--	select ARCH_HAS_FILTER_PGPROT
- 	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_HAS_GIGANTIC_PAGE
-@@ -44,6 +43,7 @@ config ARM64
- 	select ARCH_HAS_SYSCALL_WRAPPER
- 	select ARCH_HAS_TEARDOWN_DMA_OPS if IOMMU_SUPPORT
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
+index 1cab1b284f1a..ff29156f2380 100644
+--- a/arch/sparc/Kconfig
++++ b/arch/sparc/Kconfig
+@@ -59,6 +59,7 @@ config SPARC32
+ 	select HAVE_UID16
+ 	select OLD_SIGACTION
+ 	select ZONE_DMA
 +	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAS_ZONE_DMA_SET if EXPERT
- 	select ARCH_HAVE_ELF_PROT
+ 
+ config SPARC64
+ 	def_bool 64BIT
+@@ -84,6 +85,7 @@ config SPARC64
+ 	select PERF_USE_VMALLOC
  	select ARCH_HAVE_NMI_SAFE_CMPXCHG
-diff --git a/arch/arm64/include/asm/mman.h b/arch/arm64/include/asm/mman.h
-index e3e28f7daf62..85f41f72a8b3 100644
---- a/arch/arm64/include/asm/mman.h
-+++ b/arch/arm64/include/asm/mman.h
-@@ -35,7 +35,7 @@ static inline unsigned long arch_calc_vm_flag_bits(unsigned long flags)
+ 	select HAVE_C_RECORDMCOUNT
++	select ARCH_HAS_VM_GET_PAGE_PROT
+ 	select HAVE_ARCH_AUDITSYSCALL
+ 	select ARCH_SUPPORTS_ATOMIC_RMW
+ 	select ARCH_SUPPORTS_DEBUG_PAGEALLOC
+diff --git a/arch/sparc/include/asm/mman.h b/arch/sparc/include/asm/mman.h
+index 274217e7ed70..874d21483202 100644
+--- a/arch/sparc/include/asm/mman.h
++++ b/arch/sparc/include/asm/mman.h
+@@ -46,7 +46,6 @@ static inline unsigned long sparc_calc_vm_prot_bits(unsigned long prot)
+ 	}
  }
- #define arch_calc_vm_flag_bits(flags) arch_calc_vm_flag_bits(flags)
  
--static inline pgprot_t arch_vm_get_page_prot(unsigned long vm_flags)
-+static inline pgprot_t arm64_arch_vm_get_page_prot(unsigned long vm_flags)
+-#define arch_vm_get_page_prot(vm_flags) sparc_vm_get_page_prot(vm_flags)
+ static inline pgprot_t sparc_vm_get_page_prot(unsigned long vm_flags)
  {
- 	pteval_t prot = 0;
+ 	return (vm_flags & VM_SPARC_ADI) ? __pgprot(_PAGE_MCD_4V) : __pgprot(0);
+diff --git a/arch/sparc/include/asm/pgtable_32.h b/arch/sparc/include/asm/pgtable_32.h
+index ffccfe3b22ed..060a435f96d6 100644
+--- a/arch/sparc/include/asm/pgtable_32.h
++++ b/arch/sparc/include/asm/pgtable_32.h
+@@ -64,25 +64,6 @@ void paging_init(void);
  
-@@ -57,7 +57,6 @@ static inline pgprot_t arch_vm_get_page_prot(unsigned long vm_flags)
+ extern unsigned long ptr_in_current_pgd;
  
- 	return __pgprot(prot);
- }
--#define arch_vm_get_page_prot(vm_flags) arch_vm_get_page_prot(vm_flags)
- 
- static inline bool arch_validate_prot(unsigned long prot,
- 	unsigned long addr __always_unused)
-diff --git a/arch/arm64/include/asm/pgtable-prot.h b/arch/arm64/include/asm/pgtable-prot.h
-index 7032f04c8ac6..d8ee0aa7886d 100644
---- a/arch/arm64/include/asm/pgtable-prot.h
-+++ b/arch/arm64/include/asm/pgtable-prot.h
-@@ -88,24 +88,6 @@ extern bool arm64_use_ng_mappings;
- #define PAGE_READONLY_EXEC	__pgprot(_PAGE_DEFAULT | PTE_USER | PTE_RDONLY | PTE_NG | PTE_PXN)
- #define PAGE_EXECONLY		__pgprot(_PAGE_DEFAULT | PTE_RDONLY | PTE_NG | PTE_PXN)
- 
+-/*         xwr */
 -#define __P000  PAGE_NONE
 -#define __P001  PAGE_READONLY
--#define __P010  PAGE_READONLY
--#define __P011  PAGE_READONLY
--#define __P100  PAGE_EXECONLY
--#define __P101  PAGE_READONLY_EXEC
--#define __P110  PAGE_READONLY_EXEC
--#define __P111  PAGE_READONLY_EXEC
+-#define __P010  PAGE_COPY
+-#define __P011  PAGE_COPY
+-#define __P100  PAGE_READONLY
+-#define __P101  PAGE_READONLY
+-#define __P110  PAGE_COPY
+-#define __P111  PAGE_COPY
 -
--#define __S000  PAGE_NONE
--#define __S001  PAGE_READONLY
--#define __S010  PAGE_SHARED
--#define __S011  PAGE_SHARED
--#define __S100  PAGE_EXECONLY
--#define __S101  PAGE_READONLY_EXEC
--#define __S110  PAGE_SHARED_EXEC
--#define __S111  PAGE_SHARED_EXEC
+-#define __S000	PAGE_NONE
+-#define __S001	PAGE_READONLY
+-#define __S010	PAGE_SHARED
+-#define __S011	PAGE_SHARED
+-#define __S100	PAGE_READONLY
+-#define __S101	PAGE_READONLY
+-#define __S110	PAGE_SHARED
+-#define __S111	PAGE_SHARED
 -
- #endif /* __ASSEMBLY__ */
+ /* First physical page can be anywhere, the following is needed so that
+  * va-->pa and vice versa conversions work properly without performance
+  * hit for all __pa()/__va() operations.
+diff --git a/arch/sparc/include/asm/pgtable_64.h b/arch/sparc/include/asm/pgtable_64.h
+index 4679e45c8348..a779418ceba9 100644
+--- a/arch/sparc/include/asm/pgtable_64.h
++++ b/arch/sparc/include/asm/pgtable_64.h
+@@ -187,25 +187,6 @@ bool kern_addr_valid(unsigned long addr);
+ #define _PAGE_SZHUGE_4U	_PAGE_SZ4MB_4U
+ #define _PAGE_SZHUGE_4V	_PAGE_SZ4MB_4V
  
- #endif /* __ASM_PGTABLE_PROT_H */
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index c4ba047a82d2..5a73501a45ed 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -1017,7 +1017,7 @@ static inline bool arch_wants_old_prefaulted_pte(void)
+-/* These are actually filled in at boot time by sun4{u,v}_pgprot_init() */
+-#define __P000	__pgprot(0)
+-#define __P001	__pgprot(0)
+-#define __P010	__pgprot(0)
+-#define __P011	__pgprot(0)
+-#define __P100	__pgprot(0)
+-#define __P101	__pgprot(0)
+-#define __P110	__pgprot(0)
+-#define __P111	__pgprot(0)
+-
+-#define __S000	__pgprot(0)
+-#define __S001	__pgprot(0)
+-#define __S010	__pgprot(0)
+-#define __S011	__pgprot(0)
+-#define __S100	__pgprot(0)
+-#define __S101	__pgprot(0)
+-#define __S110	__pgprot(0)
+-#define __S111	__pgprot(0)
+-
+ #ifndef __ASSEMBLY__
+ 
+ pte_t mk_pte_io(unsigned long, pgprot_t, int, unsigned long);
+diff --git a/arch/sparc/mm/init_32.c b/arch/sparc/mm/init_32.c
+index 1e9f577f084d..efb3d6e6d7f6 100644
+--- a/arch/sparc/mm/init_32.c
++++ b/arch/sparc/mm/init_32.c
+@@ -302,3 +302,44 @@ void sparc_flush_page_to_ram(struct page *page)
+ 		__flush_page_to_ram(vaddr);
  }
- #define arch_wants_old_prefaulted_pte	arch_wants_old_prefaulted_pte
- 
--static inline pgprot_t arch_filter_pgprot(pgprot_t prot)
-+static inline pgprot_t arm64_arch_filter_pgprot(pgprot_t prot)
- {
- 	if (cpus_have_const_cap(ARM64_HAS_EPAN))
- 		return prot;
-diff --git a/arch/arm64/mm/mmap.c b/arch/arm64/mm/mmap.c
-index a38f54cd638c..ad605eb86d23 100644
---- a/arch/arm64/mm/mmap.c
-+++ b/arch/arm64/mm/mmap.c
-@@ -10,6 +10,7 @@
- #include <linux/types.h>
- 
- #include <asm/page.h>
-+#include <asm/mman.h>
- 
- /*
-  * You really shouldn't be using read() or write() on /dev/mem.  This might go
-@@ -38,3 +39,52 @@ int valid_mmap_phys_addr_range(unsigned long pfn, size_t size)
- {
- 	return !(((pfn << PAGE_SHIFT) + size) & ~PHYS_MASK);
- }
+ EXPORT_SYMBOL(sparc_flush_page_to_ram);
 +
-+static inline pgprot_t __vm_get_page_prot(unsigned long vm_flags)
++pgprot_t vm_get_page_prot(unsigned long vm_flags)
 +{
 +	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
 +	case VM_NONE:
@@ -162,17 +162,17 @@ index a38f54cd638c..ad605eb86d23 100644
 +	case VM_READ:
 +		return PAGE_READONLY;
 +	case VM_WRITE:
-+		return PAGE_READONLY;
++		return PAGE_COPY;
 +	case VM_READ | VM_WRITE:
-+		return PAGE_READONLY;
++		return PAGE_COPY;
 +	case VM_EXEC:
-+		return PAGE_EXECONLY;
++		return PAGE_READONLY;
 +	case VM_EXEC | VM_READ:
-+		return PAGE_READONLY_EXEC;
++		return PAGE_READONLY;
 +	case VM_EXEC | VM_WRITE:
-+		return PAGE_READONLY_EXEC;
++		return PAGE_COPY;
 +	case VM_EXEC | VM_READ | VM_WRITE:
-+		return PAGE_READONLY_EXEC;
++		return PAGE_COPY;
 +	case VM_SHARED:
 +		return PAGE_NONE;
 +	case VM_SHARED | VM_READ:
@@ -182,13 +182,103 @@ index a38f54cd638c..ad605eb86d23 100644
 +	case VM_SHARED | VM_READ | VM_WRITE:
 +		return PAGE_SHARED;
 +	case VM_SHARED | VM_EXEC:
-+		return PAGE_EXECONLY;
++		return PAGE_READONLY;
 +	case VM_SHARED | VM_EXEC | VM_READ:
-+		return PAGE_READONLY_EXEC;
++		return PAGE_READONLY;
 +	case VM_SHARED | VM_EXEC | VM_WRITE:
-+		return PAGE_SHARED_EXEC;
++		return PAGE_SHARED;
 +	case VM_SHARED | VM_EXEC | VM_READ | VM_WRITE:
-+		return PAGE_SHARED_EXEC;
++		return PAGE_SHARED;
++	default:
++		BUILD_BUG();
++	}
++}
++EXPORT_SYMBOL(vm_get_page_prot);
+diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
+index 1b23639e2fcd..46b5366f7f69 100644
+--- a/arch/sparc/mm/init_64.c
++++ b/arch/sparc/mm/init_64.c
+@@ -50,6 +50,7 @@
+ #include <asm/cpudata.h>
+ #include <asm/setup.h>
+ #include <asm/irq.h>
++#include <asm/mman.h>
+ 
+ #include "init_64.h"
+ 
+@@ -2641,29 +2642,13 @@ static void prot_init_common(unsigned long page_none,
+ {
+ 	PAGE_COPY = __pgprot(page_copy);
+ 	PAGE_SHARED = __pgprot(page_shared);
+-
+-	protection_map[0x0] = __pgprot(page_none);
+-	protection_map[0x1] = __pgprot(page_readonly & ~page_exec_bit);
+-	protection_map[0x2] = __pgprot(page_copy & ~page_exec_bit);
+-	protection_map[0x3] = __pgprot(page_copy & ~page_exec_bit);
+-	protection_map[0x4] = __pgprot(page_readonly);
+-	protection_map[0x5] = __pgprot(page_readonly);
+-	protection_map[0x6] = __pgprot(page_copy);
+-	protection_map[0x7] = __pgprot(page_copy);
+-	protection_map[0x8] = __pgprot(page_none);
+-	protection_map[0x9] = __pgprot(page_readonly & ~page_exec_bit);
+-	protection_map[0xa] = __pgprot(page_shared & ~page_exec_bit);
+-	protection_map[0xb] = __pgprot(page_shared & ~page_exec_bit);
+-	protection_map[0xc] = __pgprot(page_readonly);
+-	protection_map[0xd] = __pgprot(page_readonly);
+-	protection_map[0xe] = __pgprot(page_shared);
+-	protection_map[0xf] = __pgprot(page_shared);
+ }
+ 
++static unsigned long page_none, page_shared, page_copy, page_readonly;
++static unsigned long page_exec_bit;
++
+ static void __init sun4u_pgprot_init(void)
+ {
+-	unsigned long page_none, page_shared, page_copy, page_readonly;
+-	unsigned long page_exec_bit;
+ 	int i;
+ 
+ 	PAGE_KERNEL = __pgprot (_PAGE_PRESENT_4U | _PAGE_VALID |
+@@ -3183,3 +3168,51 @@ void copy_highpage(struct page *to, struct page *from)
+ 	}
+ }
+ EXPORT_SYMBOL(copy_highpage);
++
++static inline pgprot_t __vm_get_page_prot(unsigned long vm_flags)
++{
++	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
++	case VM_NONE:
++		return __pgprot(page_none);
++	case VM_READ:
++		return __pgprot(page_readonly & ~page_exec_bit);
++	case VM_WRITE:
++		return __pgprot(page_copy & ~page_exec_bit);
++	case VM_READ | VM_WRITE:
++		return __pgprot(page_copy & ~page_exec_bit);
++	case VM_EXEC:
++		return __pgprot(page_readonly);
++	case VM_EXEC | VM_READ:
++		return __pgprot(page_readonly);
++	case VM_EXEC | VM_WRITE:
++		return __pgprot(page_copy);
++	case VM_EXEC | VM_READ | VM_WRITE:
++		return __pgprot(page_copy);
++	case VM_SHARED:
++		return __pgprot(page_none);
++	case VM_SHARED | VM_READ:
++		return __pgprot(page_readonly & ~page_exec_bit);
++	case VM_SHARED | VM_WRITE:
++		return __pgprot(page_shared & ~page_exec_bit);
++	case VM_SHARED | VM_READ | VM_WRITE:
++		return __pgprot(page_shared & ~page_exec_bit);
++	case VM_SHARED | VM_EXEC:
++		return __pgprot(page_readonly);
++	case VM_SHARED | VM_EXEC | VM_READ:
++		return __pgprot(page_readonly);
++	case VM_SHARED | VM_EXEC | VM_WRITE:
++		return __pgprot(page_shared);
++	case VM_SHARED | VM_EXEC | VM_READ | VM_WRITE:
++		return __pgprot(page_shared);
 +	default:
 +		BUILD_BUG();
 +	}
@@ -196,10 +286,9 @@ index a38f54cd638c..ad605eb86d23 100644
 +
 +pgprot_t vm_get_page_prot(unsigned long vm_flags)
 +{
-+	pgprot_t ret = __pgprot(pgprot_val(__vm_get_page_prot(vm_flags)) |
-+			pgprot_val(arm64_arch_vm_get_page_prot(vm_flags)));
++	return __pgprot(pgprot_val(__vm_get_page_prot(vm_flags)) |
++	       pgprot_val(sparc_vm_get_page_prot(vm_flags)));
 +
-+	return arm64_arch_filter_pgprot(ret);
 +}
 +EXPORT_SYMBOL(vm_get_page_prot);
 -- 

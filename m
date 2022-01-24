@@ -2,120 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33093497D31
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 11:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 238F1497D35
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 11:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237156AbiAXKaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 05:30:13 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:60116 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237146AbiAXKaM (ORCPT
+        id S237165AbiAXKcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 05:32:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237146AbiAXKcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 05:30:12 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 65E3E2197D;
-        Mon, 24 Jan 2022 10:30:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1643020211; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hUS7IPB39sYAuBcxNuJ+tx/xCk5Lnvrdaahae+B90KE=;
-        b=WgojSsf0PtqCZK8UxbwfTaD9xL3fmJfrz7PGpUKcV8b+Q2xYPC/+3WR+WGo5bQX0FUI3Rk
-        HXF5+ZQKW2GLwnVk4M05WxOAdymhw8h63nJ7l7LJyZEi9R1RlJJv1k+jVX+FRfu3Ewfygh
-        PSAt4VlRsKKMsP9udbtYnx9EP42/o+4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1643020211;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hUS7IPB39sYAuBcxNuJ+tx/xCk5Lnvrdaahae+B90KE=;
-        b=f52QtYuDzFI6iyOY8FWMS09mFbbX/11pE0GhLERIcvNyIAdSGWr0xf0V1eG1kmKo1DJcxB
-        8Bbal1MSFg8sVYCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2EF7713B1C;
-        Mon, 24 Jan 2022 10:30:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 2KHVCrN/7mHVawAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 24 Jan 2022 10:30:11 +0000
-Message-ID: <93c48e68-2266-72ee-0763-65805b94c968@suse.cz>
-Date:   Mon, 24 Jan 2022 11:30:10 +0100
+        Mon, 24 Jan 2022 05:32:15 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD03C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 02:32:14 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id nn16-20020a17090b38d000b001b56b2bce31so5461980pjb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 02:32:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=elaMpABJ6ePTMvkZA2OfFeFiKBytOl2OykV9muWIvyY=;
+        b=ggiLoLIe7AXZB+CBtdxcInt4cNSVMj8JD+iWER2gyyzqJtBN8xPr1NfzT+YVfqIqGE
+         dRmbI60nBXEgCZN4qbBcV56qXgFxeaJ6B2lsyzfdkfc0+RMuHj40CnOwgfLRJPBEtS4V
+         9fPHrcYmkIMf2jfw/899ELc+w3ZYnTju1TRi5QEN3ZrlVV/AI6eaM5x5N0QRejnR5ZVb
+         PVK8EEFRbj0E5Ak7cu+9/TWEa6FVX9jwrRczTP9Ogvm7mNW4rM4umGCmn4cyonuRkON9
+         fhDWow7qODcjS5xbG6DrAZ/LmnoidggV0XJ0y3Ll49Uyrx4GfMKS6C1cqzUgW/9K64Fv
+         dZaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=elaMpABJ6ePTMvkZA2OfFeFiKBytOl2OykV9muWIvyY=;
+        b=WRNwhxB6yFHVwRUyp87PLMt/kvn6sAdZy6pNZOQ9GYcDlryyI6ZmihVAOCdGxEjsBr
+         5ALlfCwFFJ+oUgC4xFQwt4cQAn7K7EG2QY0DDC1WMVcgQzd8BcdL0fSBziu4dLEg2Ndk
+         EpOpNZkIwqVq91c1nV74YbW+34hh5bi8wx3UG+GTyTN41YvdpFAgjKP9dhsfu7Zpy9Da
+         77iOh0xoSZFFd1BM7ChZ0HrwMsvIZDT1vgfsyoR+pkZjwaQYP5/J8QeIVqj3yJcgVIkR
+         MYXwRoOp3JeeJnhMr53NkhgaaF9BIKFMplWlquQbGFGZAFZSy8wIaFqdS0Q7kFW4lo1g
+         YVvw==
+X-Gm-Message-State: AOAM5330fO49/SA2ewvjP1IQLMZaPmwgWzzyhdtcn37KIN3MtxaVXX8E
+        0OXxzhdJaGH/W/dRMrH1c18=
+X-Google-Smtp-Source: ABdhPJx5IgvvoZoeazTNkiXVcubVTzVXKeEl9L+hHlo7KS2u1Si+fQ+TCaLymYL97cTAJZoI6XO13g==
+X-Received: by 2002:a17:902:d503:b0:14b:10e2:f387 with SMTP id b3-20020a170902d50300b0014b10e2f387mr13896394plg.9.1643020334523;
+        Mon, 24 Jan 2022 02:32:14 -0800 (PST)
+Received: from archlinux.localdomain ([140.121.198.213])
+        by smtp.gmail.com with ESMTPSA id x7sm11749704pgr.87.2022.01.24.02.32.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 02:32:14 -0800 (PST)
+From:   Huichun Feng <foxhoundsk.tw@gmail.com>
+To:     henrybear327@gmail.com
+Cc:     bristot@redhat.com, bsegall@google.com, christian@brauner.io,
+        dietmar.eggemann@arm.com, juri.lelli@redhat.com,
+        linux-kernel@vger.kernel.org, mgorman@suse.de, mingo@redhat.com,
+        peterz@infradead.org, rostedt@goodmis.org,
+        vincent.guittot@linaro.org
+Subject: Re: [PATCH v2] sched: Simplify __sched_init runtime checks
+Date:   Mon, 24 Jan 2022 18:33:02 +0800
+Message-Id: <20220124103302.3124748-1-foxhoundsk.tw@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220124085332.41552-1-henrybear327@gmail.com>
+References: <20220124085332.41552-1-henrybear327@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] mm: remove offset check on page->compound_head and
- folio->lru
-Content-Language: en-US
-To:     Wei Yang <richard.weiyang@gmail.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        peterz@infradead.org, will@kernel.org, linyunsheng@huawei.com,
-        aarcange@redhat.com, feng.tang@intel.com, ebiederm@xmission.com,
-        linux-kernel@vger.kernel.org
-References: <20220106235254.19190-1-richard.weiyang@gmail.com>
- <Yde6hZ41agqa2zs3@casper.infradead.org>
- <20220107134059.flxr2hcd6ilb6vt7@master>
- <Ydi6iMbSZ/FewYPT@casper.infradead.org>
- <20220107160825.13c71fdd871d7d5611d116b9@linux-foundation.org>
- <YdjfsbAR0UlwyC6b@casper.infradead.org>
- <20220108081340.3oi2z2rm3cbqozzt@master>
- <20220123013852.mm7eyn3z26v3hkc2@master>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220123013852.mm7eyn3z26v3hkc2@master>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/23/22 02:38, Wei Yang wrote:
-> On Sat, Jan 08, 2022 at 08:13:40AM +0000, Wei Yang wrote:
->>On Sat, Jan 08, 2022 at 12:49:53AM +0000, Matthew Wilcox wrote:
->>>On Fri, Jan 07, 2022 at 04:08:25PM -0800, Andrew Morton wrote:
->>>> On Fri, 7 Jan 2022 22:11:20 +0000 Matthew Wilcox <willy@infradead.org> wrote:
->>>> 
->>>> > > Hi, Matthew
->>>> > > 
->>>> > > Would you mind sharing some insight on this check?
->>>> > 
->>>> > It's right there in the comments.
->>>> 
->>>> Well I can't figure out which comment you're referring to?
->>>
->>>         * WARNING: bit 0 of the first word is used for PageTail(). That
->>>         * means the other users of this union MUST NOT use the bit to
->>>         * avoid collision and false-positive PageTail().
->>>
->>
->>I know this requirement on bit 0 of first word. But I don't see the connection
->>between this and the check of page->compound_head and folio->lru.
->>
->>This is more like a internal requirement on struct page. There are 8 struct in
->>this five words union. And this requirement apply to bit 0 of first word of
->>all those five struct.
->>
->>To me, if folio has the same layout of page, folio meets this requirement. I
->>still not catch the point why we need this check here.
->>
-> 
-> Hi, Matthew
-> 
-> Are you back from vocation? If you could give more insight on this check, I
-> would be appreciated.
+Improve runtime checks in __sched_init(void) by replacing if conditional
+checks with preprocessor directives.
 
-I can offer my insight (which might be of course wrong). Ideally one day
-page.lru will be gone and only folio will be used for LRU pages. Then there
-won't be a  FOLIO_MATCH(lru, lru); and FOLIO_MATCH(compound_head, lru);
-won't appear to be redundant anymore. lru is list_head so two pointers and
-thus valid pointers are aligned in such a way they can't accidentaly set the
-bit 0.
+Signed-off-by: Chun-Hung Tseng <henrybear327@gmail.com>
+Signed-off-by: Huichun Feng <foxhoundsk.tw@gmail.com>
+---
+ kernel/sched/core.c | 29 +++++++++++++++--------------
+ 1 file changed, 15 insertions(+), 14 deletions(-)
 
-
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 848eaa0efe0e..1b27ca7f485a 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -9308,28 +9308,29 @@ void __init sched_init(void)
+ #ifdef CONFIG_RT_GROUP_SCHED
+ 	ptr += 2 * nr_cpu_ids * sizeof(void **);
+ #endif
+-	if (ptr) {
+-		ptr = (unsigned long)kzalloc(ptr, GFP_NOWAIT);
++
++#if defined(CONFIG_FAIR_GROUP_SCHED) || defined(CONFIG_RT_GROUP_SCHED)
++	ptr = (unsigned long)kzalloc(ptr, GFP_NOWAIT);
+ 
+ #ifdef CONFIG_FAIR_GROUP_SCHED
+-		root_task_group.se = (struct sched_entity **)ptr;
+-		ptr += nr_cpu_ids * sizeof(void **);
++	root_task_group.se = (struct sched_entity **)ptr;
++	ptr += nr_cpu_ids * sizeof(void **);
+ 
+-		root_task_group.cfs_rq = (struct cfs_rq **)ptr;
+-		ptr += nr_cpu_ids * sizeof(void **);
++	root_task_group.cfs_rq = (struct cfs_rq **)ptr;
++	ptr += nr_cpu_ids * sizeof(void **);
+ 
+-		root_task_group.shares = ROOT_TASK_GROUP_LOAD;
+-		init_cfs_bandwidth(&root_task_group.cfs_bandwidth);
++	root_task_group.shares = ROOT_TASK_GROUP_LOAD;
++	init_cfs_bandwidth(&root_task_group.cfs_bandwidth);
+ #endif /* CONFIG_FAIR_GROUP_SCHED */
+ #ifdef CONFIG_RT_GROUP_SCHED
+-		root_task_group.rt_se = (struct sched_rt_entity **)ptr;
+-		ptr += nr_cpu_ids * sizeof(void **);
+-
+-		root_task_group.rt_rq = (struct rt_rq **)ptr;
+-		ptr += nr_cpu_ids * sizeof(void **);
++	root_task_group.rt_se = (struct sched_rt_entity **)ptr;
++	ptr += nr_cpu_ids * sizeof(void **);
+ 
++	root_task_group.rt_rq = (struct rt_rq **)ptr;
++	ptr += nr_cpu_ids * sizeof(void **);
+ #endif /* CONFIG_RT_GROUP_SCHED */
+-	}
++#endif /* CONFIG_FAIR_GROUP_SCHED || CONFIG_RT_GROUP_SCHED */
++
+ #ifdef CONFIG_CPUMASK_OFFSTACK
+ 	for_each_possible_cpu(i) {
+ 		per_cpu(load_balance_mask, i) = (cpumask_var_t)kzalloc_node(
+-- 
+2.34.1

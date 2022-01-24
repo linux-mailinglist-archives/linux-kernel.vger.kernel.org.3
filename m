@@ -2,71 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A280A498712
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:38:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09670498714
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244718AbiAXRi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:38:27 -0500
-Received: from mout.kundenserver.de ([212.227.17.24]:33033 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241578AbiAXRi0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:38:26 -0500
-Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MI4gb-1n6G8t1YJT-00F9bj; Mon, 24 Jan 2022 18:38:24 +0100
-Received: by mail-wr1-f50.google.com with SMTP id s18so15008492wrv.7;
-        Mon, 24 Jan 2022 09:38:24 -0800 (PST)
-X-Gm-Message-State: AOAM532wZ/7hDIwWVwGqKyTMpN/7w/SxsY5tVPI64gOAxf9MNq7pya2C
-        kq2rztD30Mt58FtjPiiZAl3EMC2rz0rqlNTm6Sc=
-X-Google-Smtp-Source: ABdhPJyXZF2Mj32FjIcX5YcSsfFjBiMAv8HzCU2khH2F5s44N81S3irwIWHPo6ztRa/zA18kUOwyvr7pqZEPgvvDxxk=
-X-Received: by 2002:adf:fd05:: with SMTP id e5mr15019518wrr.192.1643045904049;
- Mon, 24 Jan 2022 09:38:24 -0800 (PST)
+        id S244725AbiAXRip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:38:45 -0500
+Received: from mga02.intel.com ([134.134.136.20]:37041 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235570AbiAXRio (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 12:38:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643045924; x=1674581924;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=vPNTBoYL3mQlTowJCIE+opIrXBijwuuIm5WDA377RCk=;
+  b=R4zib/AlAhy4TyBArxkCdrSh/eUrWFAhZg9H9D4DtsqXfj2WQjEW1BFw
+   b8mOiwvmpaGgYG23OSmVFxxBAC0moecJ9myns3vNUX/dNjz7LujbXKXVV
+   aXNo3VS33PrqWRy2uEutH94gTILgLCboUEVkqSPHx8WKHkjstemDQd38Q
+   7O9Cu3ssf/P2/X5uGtmRbJDsFeOs+VoeI8TGRQqtlPYxQ013NRslLTQCs
+   IJvhNAF0r5ez0Pu5O84cUtpAgN5N9wWEw8k/Kv3V1H5R9wAGe45NOU4hR
+   ha0/e5AZt5PV6QuhZImZ2CeuPPAwnvBDxuP7uUZ0WNjYaODdNQpxbYlTF
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="233465149"
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="233465149"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 09:38:44 -0800
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="580464712"
+Received: from jncomo-mobl.amr.corp.intel.com (HELO [10.251.27.220]) ([10.251.27.220])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 09:38:43 -0800
+Message-ID: <bd7c111c-8bd4-9c4d-4715-c0fb5fd034ee@intel.com>
+Date:   Mon, 24 Jan 2022 09:38:40 -0800
 MIME-Version: 1.0
-References: <20220124160107.1683901-1-kbusch@kernel.org> <20220124160107.1683901-6-kbusch@kernel.org>
-In-Reply-To: <20220124160107.1683901-6-kbusch@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 24 Jan 2022 18:38:07 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0i87SHhAvG2GuruGgnTzqAuHaEQ0iq9udaMwX56aaw+Q@mail.gmail.com>
-Message-ID: <CAK8P3a0i87SHhAvG2GuruGgnTzqAuHaEQ0iq9udaMwX56aaw+Q@mail.gmail.com>
-Subject: Re: [RFC 5/7] asm-generic: introduce be48 unaligned accessors
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     linux-nvme@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Coly Li <colyli@suse.de>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:I8h1ypcpQkRVWYDmhHD/7ZNBaRfwZbx4+VRS54tR3JyXNphMEfB
- z54KvBcDDtEa/MBE7dN53mI5dqkOoFGWp8lMih5OXZw5ukhwwAtDsoP+pUVO6CJJR91Adfd
- AoIKE/3yKOX87arMjSdbWDaB7IRqVKP3EIwThbxqSiWGa5BJ7MYyIE/Q8n85ZzHuOryD2UO
- jU9pRnU0chK/aawyX36Zg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yYbU92YJgN0=:zF7fXxd/lCqCcUbPx/Uwbz
- J9nARFuQXexhVj1/CFuxAHbI7oxDLqJS8MbsQ+LLqcMpwlLS3qR7ZLT2SaBtWPYqz6EaC6wLN
- QDE6VN4ZzgU+4xktwPmLgFJaDlz16xMWUa6aZ2qgb+vvq4iPd1OnKqOh4CvXYQ6Y8d5p+Ex+5
- W2nIf31TfHS7nGw5lkM/SOPIQK0OBQadNwIq+legAJy6B+BMF85J8LMiVr+14jLHgfxzEndYb
- Qo8bRhwquW18Nqrb4sA4tHAdepSs8pxhXkS0dGDVeoje6foumgG9l5U4442cCfDlkFdMrzRqI
- AlaWmpGuxueyFjkV7pmNnqzcMhsv0YfJizf8OIX7fVUSjYWpvFwUGWcWUaRezG8zFpDutcEsR
- Zrg1IFKGpAr33QNgxKggTpyOaytjm2oL+3U82uEq5HwJ2xlf+H1JYR01uvdVdIhEgnwQpuCxy
- rORfoynedSd5Aca0CBxmDal33N1bs9HLPLifZoTyqL1BwAAHekZKu0jhHBRILgkwQh5FX5dIJ
- w6GF1TLsGdlB2uXcrgWVPtsRWX+ScrqpqQF+MTtktqvdogq42Xvxq0BvNIiRMRQes08Y3MWyM
- HDHa5oU6tHkqcZk6JsaXmfhJtb4cDYst8FHkKVhmJ+fpFzjnPrwmlr9tqlmXp9NyKM4miUPHU
- s5Y8VYf870Kp7bMB+EdOXqQvMvdF0GU1gmQe9nUxwnWA+lKqDH2VlrtPzutP7g+faeVY=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Benjamin Herrenschmidt <benh@amazon.com>,
+        Kuniyuki Iwashima <kuni1840@gmail.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220123015807.45005-1-kuniyu@amazon.co.jp>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH] x86/boot: Avoid redundant address overlap tests in
+ memcpy().
+In-Reply-To: <20220123015807.45005-1-kuniyu@amazon.co.jp>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 5:01 PM Keith Busch <kbusch@kernel.org> wrote:
->
-> The NVMe protocol extended data integrity fields with unaligned 48-bit
-> reference tags. Provide some helper accessors in preparation for these.
->
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Keith Busch <kbusch@kernel.org>
+On 1/22/22 17:58, Kuniyuki Iwashima wrote:
+> -void *memmove(void *dest, const void *src, size_t n)
+> +void *____memmove(void *dest, const void *src, size_t n)
+>   {
+>   	unsigned char *d = dest;
+>   	const unsigned char *s = src;
+>   
+> -	if (d <= s || d - s >= n)
+> -		return ____memcpy(dest, src, n);
+> -
+>   	while (n-- > 0)
+>   		d[n] = s[n];
+>   
+>   	return dest;
+>   }
 
-For asm-generic:
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+The ___ naming is pretty cruel.  Could we call it memmove_no_overlap() 
+or memmove_unsafe()?  Surely we can put some *useful* bytes in the name 
+rather than padding it out with _'s.  No need to perpetuate the 
+____memcpy() naming.
 
-I assume you are keeping this together with the rest of the series.
+Also, is this worth the churn?  It probably saves less than 10 
+instructions, all of which are ridiculously cheap.  Is there a *reason* 
+for this other than being a pure cleanup?

@@ -2,90 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8EE54977B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 04:30:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DED84977B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 04:45:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241057AbiAXDae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 22:30:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56108 "EHLO
+        id S241070AbiAXDpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 22:45:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241038AbiAXDad (ORCPT
+        with ESMTP id S241061AbiAXDpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 22:30:33 -0500
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F025C06173B;
-        Sun, 23 Jan 2022 19:30:32 -0800 (PST)
-Received: by mail-pj1-x1043.google.com with SMTP id d5so12651565pjk.5;
-        Sun, 23 Jan 2022 19:30:32 -0800 (PST)
+        Sun, 23 Jan 2022 22:45:01 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C4DC06173B
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 19:45:01 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id d1so14250735plh.10
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 19:45:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RX6Av1jIiyqXvZYjcpZEeGLsyORkpiw+PH/GcVKGsHk=;
-        b=TVighjXmld8xjrLsacTJCmUi8xhvnHU+SU2zVkR93VRMOoaA5A+oScrkxaodwFq50j
-         78/84wVestiPhMtV2WWr3chJ1UgTcgLk21X1vCXpcT9tjr6Isqd3Aq88uLTDu4l6QeTO
-         p2FqyiqbFX6Vqh88Hxkswi+eXed7BvZ5NmtHAMAXow3ydduW6bWMnZBn6EExFHWi9tpK
-         CQpBl3KoSRE93i6HsJw1reE+KifNt06FM+UG0NVK6AXRBikPLAJt6SQSMExulX9fcCVv
-         cHvmrh8L3NxdjvkxG7HfsSoA81UzF1MR9ckRBb27O8nll8mJvC2UkOUIDXYYA+mNcIQe
-         16EA==
+        h=from:to:cc:subject:date:message-id;
+        bh=dvwTLzMIYV8rIX2vp2D7TYVhSv3EaE9p1XD2xRzEULA=;
+        b=lT+R58S0wjQMnjEW48O9E8XXmIHQ9F+yHZgkJw35WHAmFdvtMn1szbHULjQnpjT68M
+         PfVNQFxaFgZ49gnUxNg6EOn1J8QbkEUkvlJaoxRVj85FCEp6ZOa096U3b3Mb95KhUjoI
+         ctpzXfRlPmOw7K6EPOwDeg+vUCfguqJRQny6tbXO4RIsLWjBJEaEU6I8U0rV/ir2I7/z
+         AmXmkaMqDTbXx7rFL/4hiCuWgAf8atkyGTW9Qz42LXE4zDcH4PeMxZaKuJAtHJxJ2Rhz
+         lsRehL2kra9WQ9rsMO5KscghXTUxD2XGQ8aDEJ0nG3GHgvbrjA0AWL176lFhRCaEa/Rs
+         X/gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RX6Av1jIiyqXvZYjcpZEeGLsyORkpiw+PH/GcVKGsHk=;
-        b=MUzGXrhvvj6i1YKDjDZYkqWeB5hKrqGfyEBN2QpZiaWWbu7Q3oNLzUmGMKGQkhUkAM
-         /Ho18jAuwfkW74TOjYzFnOM9fZdu71sMzR4+VCv2oZJWYXI9bc56/qIP41m/FqqJ+6VV
-         Xa19xsIMSs5GY9j97XzrhVyeKENxjU0qHHNEJOqc0ew+xu6BWNDlYqSimQ5YY5CWSGqs
-         fmegjVUC964dljPxPv0k87gHmJIHInnYAKhY38hcESqzkQGQvqv6zD3CaMb6C+dfpmmw
-         fOhyFsFmSsyvw7RnT0MtS6D0wxDZvUA2Ng4OzejpaV7W4FTQsEcw+9C34qmVcXrCEnU/
-         wpWQ==
-X-Gm-Message-State: AOAM533pkZiBnIUkSoMKNweN9aB6ferfAllNMv+Eql8BjvnYPWHyQrGB
-        tXfPz8rRmeIZBKS+DQFNXIc=
-X-Google-Smtp-Source: ABdhPJxrBHaemBkBFmBL3KV9+t104TL5EBzibAlxur7Q5S263lmO2RJah0zWLOE2BsDv4OW4o3DJSQ==
-X-Received: by 2002:a17:90b:3a85:: with SMTP id om5mr56077pjb.150.1642995032168;
-        Sun, 23 Jan 2022 19:30:32 -0800 (PST)
-Received: from slim.das-security.cn ([103.84.139.53])
-        by smtp.gmail.com with ESMTPSA id g5sm11178639pjj.36.2022.01.23.19.30.29
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=dvwTLzMIYV8rIX2vp2D7TYVhSv3EaE9p1XD2xRzEULA=;
+        b=cwPeJkZf7R2Ys8UrKO2Dr4gGfrhhe2hJhgwxrAqXR4u23KcEHCAlOidf3mT68zcDdB
+         j4V2DkTFUQAselyNcwrwltQwpr8x7/j2E2GgnXpqow7/J/TenxjalQp/mB4IaMKHjrX/
+         svdTzwXnC39VS2pS/XJzKyBU34je05n3+X1PfbfjyXlmcq4TgkeUjnZteGUyfc81hMBS
+         bRWFeD//1ueo+eLJW7Rv3eBkCJTCrT1QJyaXesPeMuwP+pFDF9LxOJ0kAW/D+BTRbdfK
+         Oy7JwsDmgFciBvpVLNc4zuix0+wYryuqX0zqLoPegb95Ec+HSHheLRJgIGAYeIJZtMSG
+         DLew==
+X-Gm-Message-State: AOAM531vTScKhwSpDWIjxhRigM01ye/c8CDd3lBplZRKrUBbQ/V0GFwp
+        JMEC3Bxub8K8Heomoi8N8gPa8nGKiQFyMQ==
+X-Google-Smtp-Source: ABdhPJz+zSvrtPXD+6KPv7j0xG9F61AIZUg9TVfs/O8kB4VB/6qzzaVsXis1oJRYSOxqSJ+B7lnlnw==
+X-Received: by 2002:a17:902:8f91:b0:149:87ff:ac85 with SMTP id z17-20020a1709028f9100b0014987ffac85mr13052389plo.162.1642995901227;
+        Sun, 23 Jan 2022 19:45:01 -0800 (PST)
+Received: from localhost.localdomain ([27.7.142.194])
+        by smtp.gmail.com with ESMTPSA id p38sm9853390pgb.36.2022.01.23.19.44.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 19:30:31 -0800 (PST)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     jpr@f6fbb.org, davem@davemloft.net, kuba@kernel.org,
-        wang6495@umn.edu
-Cc:     linux-hams@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH] yam: fix a memory leak in yam_siocdevprivate()
-Date:   Mon, 24 Jan 2022 11:29:54 +0800
-Message-Id: <20220124032954.18283-1-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Sun, 23 Jan 2022 19:45:00 -0800 (PST)
+From:   Jagath Jog J <jagathjog1996@gmail.com>
+To:     gregkh@linuxfoundation.org, hdegoede@redhat.com,
+        Larry.Finger@lwfinger.net
+Cc:     fabioaiuto83@gmail.com, dan.carpenter@oracle.com,
+        marcocesati@gmail.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, jagathjog1996@gmail.com
+Subject: [Patch  0/3] Staging: rtl8723bs: Fix codestyle errors and warnings
+Date:   Mon, 24 Jan 2022 09:14:53 +0530
+Message-Id: <20220124034456.8665-1-jagathjog1996@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ym needs to be free when ym->cmd != SIOCYAMSMCS.
+This series fix the following errors/warnings:
 
-Fixes: 0781168e23a2 ("yam: fix a missing-check bug")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
----
- drivers/net/hamradio/yam.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+-Placing { braces at the end of same line of if condition
+-Removed extra spaces in declaration
+-Placing necessary blank line after declaration
 
-diff --git a/drivers/net/hamradio/yam.c b/drivers/net/hamradio/yam.c
-index 6376b8485976..980f2be32f05 100644
---- a/drivers/net/hamradio/yam.c
-+++ b/drivers/net/hamradio/yam.c
-@@ -950,9 +950,7 @@ static int yam_siocdevprivate(struct net_device *dev, struct ifreq *ifr, void __
- 		ym = memdup_user(data, sizeof(struct yamdrv_ioctl_mcs));
- 		if (IS_ERR(ym))
- 			return PTR_ERR(ym);
--		if (ym->cmd != SIOCYAMSMCS)
--			return -EINVAL;
--		if (ym->bitrate > YAM_MAXBITRATE) {
-+		if (ym->cmd != SIOCYAMSMCS || ym->bitrate > YAM_MAXBITRATE) {
- 			kfree(ym);
- 			return -EINVAL;
- 		}
+Jagath Jog J (3):
+  Staging: rtl8723bs: Placing opening { braces in previous line
+  Staging: rtl8723bs: Removed extra spaces between datatype and variable
+  Staging: rtl8723bs: Inserting blank line after declaration
+
+ drivers/staging/rtl8723bs/core/rtw_cmd.c      | 54 +++++-----
+ drivers/staging/rtl8723bs/hal/hal_intf.c      |  5 +
+ .../staging/rtl8723bs/os_dep/ioctl_cfg80211.c | 98 ++++++-------------
+ 3 files changed, 63 insertions(+), 94 deletions(-)
+
 -- 
-2.25.1
+2.17.1
 

@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B83B7498AB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:07:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 541EB499066
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:04:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346334AbiAXTFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:05:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44632 "EHLO
+        id S1359717AbiAXUAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:00:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345343AbiAXTAI (ORCPT
+        with ESMTP id S1348804AbiAXTkz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:00:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F51DC061793;
-        Mon, 24 Jan 2022 10:57:12 -0800 (PST)
+        Mon, 24 Jan 2022 14:40:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F65C0613E6;
+        Mon, 24 Jan 2022 11:19:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FAF76154A;
-        Mon, 24 Jan 2022 18:57:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7E2FC340E5;
-        Mon, 24 Jan 2022 18:57:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4B39B81249;
+        Mon, 24 Jan 2022 19:19:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07B2FC340E7;
+        Mon, 24 Jan 2022 19:19:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050631;
-        bh=0KD1eiKFQZ+15lvlwGjcpA2CZ9608oocxiXbhgHw+rM=;
+        s=korg; t=1643051976;
+        bh=QMWYLrt8iQbcEWQT/CMGJk+AiXwb31DZVl21V+GXoQs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aHyujCZAr2Z2Fm9pqKveNg4112DjtAV/WiSCnEl78T1iWeKOUu4akxiCwKqxJeLkV
-         B2XOR+/5sRJ2tN03MHnw50uhi/HUDazg0MERtQ9CRl+dLoPMYnCTZiMajgisFVzCHj
-         6srHYjqe1Cx4hkrDxfwbdAZuZQ+KaDkm4eZpx+qE=
+        b=J39H91+yz2I/u6FG6PevGIiCQToQ/jszeZI3NnbPUnBPbMarO7e4Qe/N4QIx3h05n
+         PLgyKc3QTlh/ogSa2iZ/EzjtHqK83XQsQdzzBKdWMGr9MukrjQREnGccKmMvTrkV13
+         WPweaFB1RuxTvVl0AvB+Pb1ncZ5XnNkgBwE6L4G4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 063/157] char/mwave: Adjust io port register size
+Subject: [PATCH 4.19 115/239] ASoC: samsung: idma: Check of ioremap return value
 Date:   Mon, 24 Jan 2022 19:42:33 +0100
-Message-Id: <20220124183934.788737719@linuxfoundation.org>
+Message-Id: <20220124183946.761209146@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,49 +50,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit f5912cc19acd7c24b2dbf65a6340bf194244f085 ]
+[ Upstream commit 3ecb46755eb85456b459a1a9f952c52986bce8ec ]
 
-Using MKWORD() on a byte-sized variable results in OOB read. Expand the
-size of the reserved area so both MKWORD and MKBYTE continue to work
-without overflow. Silences this warning on a -Warray-bounds build:
+Because of the potential failure of the ioremap(), the buf->area could
+be NULL.
+Therefore, we need to check it and return -ENOMEM in order to transfer
+the error.
 
-drivers/char/mwave/3780i.h:346:22: error: array subscript 'short unsigned int[0]' is partly outside array bounds of 'DSP_ISA_SLAVE_CONTROL[1]' [-Werror=array-bounds]
-  346 | #define MKWORD(var) (*((unsigned short *)(&var)))
-      |                     ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/char/mwave/3780i.h:356:40: note: in definition of macro 'OutWordDsp'
-  356 | #define OutWordDsp(index,value)   outw(value,usDspBaseIO+index)
-      |                                        ^~~~~
-drivers/char/mwave/3780i.c:373:41: note: in expansion of macro 'MKWORD'
-  373 |         OutWordDsp(DSP_IsaSlaveControl, MKWORD(rSlaveControl));
-      |                                         ^~~~~~
-drivers/char/mwave/3780i.c:358:31: note: while referencing 'rSlaveControl'
-  358 |         DSP_ISA_SLAVE_CONTROL rSlaveControl;
-      |                               ^~~~~~~~~~~~~
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20211203084206.3104326-1-keescook@chromium.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: f09aecd50f39 ("ASoC: SAMSUNG: Add I2S0 internal dma driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Link: https://lore.kernel.org/r/20211228034026.1659385-1-jiasheng@iscas.ac.cn
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/mwave/3780i.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/samsung/idma.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/char/mwave/3780i.h b/drivers/char/mwave/3780i.h
-index 9ccb6b270b071..95164246afd1a 100644
---- a/drivers/char/mwave/3780i.h
-+++ b/drivers/char/mwave/3780i.h
-@@ -68,7 +68,7 @@ typedef struct {
- 	unsigned char ClockControl:1;	/* RW: Clock control: 0=normal, 1=stop 3780i clocks */
- 	unsigned char SoftReset:1;	/* RW: Soft reset 0=normal, 1=soft reset active */
- 	unsigned char ConfigMode:1;	/* RW: Configuration mode, 0=normal, 1=config mode */
--	unsigned char Reserved:5;	/* 0: Reserved */
-+	unsigned short Reserved:13;	/* 0: Reserved */
- } DSP_ISA_SLAVE_CONTROL;
+diff --git a/sound/soc/samsung/idma.c b/sound/soc/samsung/idma.c
+index b1f09b942410d..e397f5e10e33e 100644
+--- a/sound/soc/samsung/idma.c
++++ b/sound/soc/samsung/idma.c
+@@ -369,6 +369,8 @@ static int preallocate_idma_buffer(struct snd_pcm *pcm, int stream)
+ 	buf->addr = idma.lp_tx_addr;
+ 	buf->bytes = idma_hardware.buffer_bytes_max;
+ 	buf->area = (unsigned char * __force)ioremap(buf->addr, buf->bytes);
++	if (!buf->area)
++		return -ENOMEM;
  
- 
+ 	return 0;
+ }
 -- 
 2.34.1
 

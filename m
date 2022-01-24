@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF31499770
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A5149960C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447862AbiAXVLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:11:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390172AbiAXUpD (ORCPT
+        id S1443721AbiAXU6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:58:45 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60394 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1386662AbiAXUfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:45:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159FEC0617BD;
-        Mon, 24 Jan 2022 11:54:42 -0800 (PST)
+        Mon, 24 Jan 2022 15:35:48 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AAC876090A;
-        Mon, 24 Jan 2022 19:54:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F42BC340E5;
-        Mon, 24 Jan 2022 19:54:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFF946152F;
+        Mon, 24 Jan 2022 20:35:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5E38C340E5;
+        Mon, 24 Jan 2022 20:35:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054081;
-        bh=Kdgl4eAeB8QZQJOvxda19BG6ULeDMmWdoInfnJAQYOg=;
+        s=korg; t=1643056547;
+        bh=WW9YieQwk2clGKAZBRP8Uji/4Smq/3oUwh7LfdiSjSI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T5DSkxv14Dv/vA6fKbRnHS8g8fsNiYVQL05IAbrSSa+vdSK6wm/Jtr/2J07FO2zjo
-         N2kJtpbtIBTKrB2AzKfwMz9Mss23SRXt6i7FmJG7haWma/lhRprF+4Xj6rYKQmQasr
-         +Klvnf+fHpUZYbFraVqvlsCpSAE0ZSTGvf7VX+NU=
+        b=cSb9x6NH71UZ+sN5DXlCqYzy6Lwzri63V0oU65gZSeMIY4fFX7fbw3rqLwU4GKxBB
+         QRBLYaf6u6jPugu8FMpM69MYmo36hsc2aH308G5ohBT8PgIQKasz+5hD0CSAw+86pP
+         h16/mV4LW6SHnCYK8QIVXHPYtNts8aI303AYG0yY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Frank Rowand <frank.rowand@sony.com>,
-        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 272/563] of: unittest: 64 bit dma address test requires arch support
-Date:   Mon, 24 Jan 2022 19:40:37 +0100
-Message-Id: <20220124184033.844760247@linuxfoundation.org>
+        stable@vger.kernel.org, Joerg Roedel <jroedel@suse.de>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 521/846] x86/mm: Flush global TLB when switching to trampoline page-table
+Date:   Mon, 24 Jan 2022 19:40:38 +0100
+Message-Id: <20220124184118.991685745@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,38 +45,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Rowand <frank.rowand@sony.com>
+From: Joerg Roedel <jroedel@suse.de>
 
-[ Upstream commit 9fd4cf5d3571b27d746b8ead494a3f051485b679 ]
+[ Upstream commit 71d5049b053876afbde6c3273250b76935494ab2 ]
 
-If an architecture does not support 64 bit dma addresses then testing
-for an expected dma address >= 0x100000000 will fail.
+Move the switching code into a function so that it can be re-used and
+add a global TLB flush. This makes sure that usage of memory which is
+not mapped in the trampoline page-table is reliably caught.
 
-Fixes: e0d072782c73 ("dma-mapping: introduce DMA range map, supplanting dma_pfn_offset")
-Signed-off-by: Frank Rowand <frank.rowand@sony.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20211212221852.233295-1-frowand.list@gmail.com
+Also move the clearing of CR4.PCIDE before the CR3 switch because the
+cr4_clear_bits() function will access data not mapped into the
+trampoline page-table.
+
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20211202153226.22946-4-joro@8bytes.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/of/unittest.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/realmode.h |  1 +
+ arch/x86/kernel/reboot.c        | 12 ++----------
+ arch/x86/realmode/init.c        | 26 ++++++++++++++++++++++++++
+ 3 files changed, 29 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
-index a5c4c77b6f3e2..5407bbdb64395 100644
---- a/drivers/of/unittest.c
-+++ b/drivers/of/unittest.c
-@@ -941,8 +941,9 @@ static void __init of_unittest_parse_dma_ranges(void)
- {
- 	of_unittest_dma_ranges_one("/testcase-data/address-tests/device@70000000",
- 		0x0, 0x20000000);
--	of_unittest_dma_ranges_one("/testcase-data/address-tests/bus@80000000/device@1000",
--		0x100000000, 0x20000000);
-+	if (IS_ENABLED(CONFIG_ARCH_DMA_ADDR_T_64BIT))
-+		of_unittest_dma_ranges_one("/testcase-data/address-tests/bus@80000000/device@1000",
-+			0x100000000, 0x20000000);
- 	of_unittest_dma_ranges_one("/testcase-data/address-tests/pci@90000000",
- 		0x80000000, 0x20000000);
+diff --git a/arch/x86/include/asm/realmode.h b/arch/x86/include/asm/realmode.h
+index 5db5d083c8732..331474b150f16 100644
+--- a/arch/x86/include/asm/realmode.h
++++ b/arch/x86/include/asm/realmode.h
+@@ -89,6 +89,7 @@ static inline void set_real_mode_mem(phys_addr_t mem)
  }
+ 
+ void reserve_real_mode(void);
++void load_trampoline_pgtable(void);
+ 
+ #endif /* __ASSEMBLY__ */
+ 
+diff --git a/arch/x86/kernel/reboot.c b/arch/x86/kernel/reboot.c
+index 0a40df66a40de..fa700b46588e0 100644
+--- a/arch/x86/kernel/reboot.c
++++ b/arch/x86/kernel/reboot.c
+@@ -113,17 +113,9 @@ void __noreturn machine_real_restart(unsigned int type)
+ 	spin_unlock(&rtc_lock);
+ 
+ 	/*
+-	 * Switch back to the initial page table.
++	 * Switch to the trampoline page table.
+ 	 */
+-#ifdef CONFIG_X86_32
+-	load_cr3(initial_page_table);
+-#else
+-	write_cr3(real_mode_header->trampoline_pgd);
+-
+-	/* Exiting long mode will fail if CR4.PCIDE is set. */
+-	if (boot_cpu_has(X86_FEATURE_PCID))
+-		cr4_clear_bits(X86_CR4_PCIDE);
+-#endif
++	load_trampoline_pgtable();
+ 
+ 	/* Jump to the identity-mapped low memory code */
+ #ifdef CONFIG_X86_32
+diff --git a/arch/x86/realmode/init.c b/arch/x86/realmode/init.c
+index d3eee1ebcf1d5..1d20ed4b28729 100644
+--- a/arch/x86/realmode/init.c
++++ b/arch/x86/realmode/init.c
+@@ -17,6 +17,32 @@ u32 *trampoline_cr4_features;
+ /* Hold the pgd entry used on booting additional CPUs */
+ pgd_t trampoline_pgd_entry;
+ 
++void load_trampoline_pgtable(void)
++{
++#ifdef CONFIG_X86_32
++	load_cr3(initial_page_table);
++#else
++	/*
++	 * This function is called before exiting to real-mode and that will
++	 * fail with CR4.PCIDE still set.
++	 */
++	if (boot_cpu_has(X86_FEATURE_PCID))
++		cr4_clear_bits(X86_CR4_PCIDE);
++
++	write_cr3(real_mode_header->trampoline_pgd);
++#endif
++
++	/*
++	 * The CR3 write above will not flush global TLB entries.
++	 * Stale, global entries from previous page tables may still be
++	 * present.  Flush those stale entries.
++	 *
++	 * This ensures that memory accessed while running with
++	 * trampoline_pgd is *actually* mapped into trampoline_pgd.
++	 */
++	__flush_tlb_all();
++}
++
+ void __init reserve_real_mode(void)
+ {
+ 	phys_addr_t mem;
 -- 
 2.34.1
 

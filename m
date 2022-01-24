@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0BA349A416
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD45649A54F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2369297AbiAYAB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:01:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
+        id S3409390AbiAYAZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:25:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1847011AbiAXXSP (ORCPT
+        with ESMTP id S1448972AbiAXVyz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:18:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4283C0604F0;
-        Mon, 24 Jan 2022 13:26:05 -0800 (PST)
+        Mon, 24 Jan 2022 16:54:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1E5C08B4FA;
+        Mon, 24 Jan 2022 12:34:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AC391B811A2;
-        Mon, 24 Jan 2022 21:26:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D54A1C340E4;
-        Mon, 24 Jan 2022 21:26:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B6FC61530;
+        Mon, 24 Jan 2022 20:34:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84502C340E5;
+        Mon, 24 Jan 2022 20:34:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059563;
-        bh=c7/XBWzsaYmWU+H2uCUZADGkTpa6wfvO5HYwbEXPfCU=;
+        s=korg; t=1643056483;
+        bh=UH/NsbM9mt79CzA1kPcHg2YVaT+xnxkxbBGOOFUagss=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jbt3sKYYnGeIjkDukbneQlskK/8kdKI9OHGHLBjE2u/XyH4sFMeljUZfQRd6EFUmn
-         hFgCnwo0eBF9IfJIxX+5RkaALLiC3qpMZAmKDIV7cRv8gN/kjZAW0krBz87+0nmXyo
-         O618R4OZVyFUlk2Z7WuAjDVqJDV0pSuMyOnsisSA=
+        b=NdbV5FwiRMwrHGZVZnr8blp31FVaBSjL+brfKJtoT34mv3jiUGg6+TuW8Zh5XSWyu
+         t4ikbYzBDfIT7YAnCcK6Z++CoyARdp4Goq1whCRTXW7SyZYepVGYY/8/v0dAuTR5Xh
+         DAcv2cd9jSEbRNGCRNPw8ONi2iTuJP2RJBlthGf8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shaul Triebitz <shaul.triebitz@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
+        stable@vger.kernel.org, Aric Cyr <Aric.Cyr@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Martin Leung <Martin.Leung@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0625/1039] iwlwifi: mvm: avoid clearing a just saved session protection id
-Date:   Mon, 24 Jan 2022 19:40:14 +0100
-Message-Id: <20220124184146.348656466@linuxfoundation.org>
+Subject: [PATCH 5.15 498/846] drm/amd/display: add else to avoid double destroy clk_mgr
+Date:   Mon, 24 Jan 2022 19:40:15 +0100
+Message-Id: <20220124184118.201266166@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,57 +52,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shaul Triebitz <shaul.triebitz@intel.com>
+From: Martin Leung <Martin.Leung@amd.com>
 
-[ Upstream commit 8e967c137df3b236d2075f9538cb888129425d1a ]
+[ Upstream commit 11dff0e871037a6ad978e52f826a2eb7f5fb274a ]
 
-When scheduling a session protection the id is saved but
-then it may be cleared when calling iwl_mvm_te_clear_data
-(if a previous session protection is currently active).
-Fix it by saving the id after calling iwl_mvm_te_clear_data.
+[Why & How]
+when changing some code we accidentally
+changed else if-> if. reverting that.
 
-Signed-off-by: Shaul Triebitz <shaul.triebitz@intel.com>
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Link: https://lore.kernel.org/r/iwlwifi.20211204130722.b0743a588d14.I098fef6677d0dab3ef1b6183ed206a10bab01eb2@changeid
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Reviewed-by: Aric Cyr <Aric.Cyr@amd.com>
+Acked-by: Qingqing Zhuo <qingqing.zhuo@amd.com>
+Signed-off-by: Martin Leung <Martin.Leung@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/mvm/time-event.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/amd/display/dc/clk_mgr/clk_mgr.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/time-event.c b/drivers/net/wireless/intel/iwlwifi/mvm/time-event.c
-index f93f15357a3f8..b8c645b9880fc 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/time-event.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/time-event.c
-@@ -1167,15 +1167,10 @@ void iwl_mvm_schedule_session_protection(struct iwl_mvm *mvm,
- 			cpu_to_le32(FW_CMD_ID_AND_COLOR(mvmvif->id,
- 							mvmvif->color)),
- 		.action = cpu_to_le32(FW_CTXT_ACTION_ADD),
-+		.conf_id = cpu_to_le32(SESSION_PROTECT_CONF_ASSOC),
- 		.duration_tu = cpu_to_le32(MSEC_TO_TU(duration)),
- 	};
- 
--	/* The time_event_data.id field is reused to save session
--	 * protection's configuration.
--	 */
--	mvmvif->time_event_data.id = SESSION_PROTECT_CONF_ASSOC;
--	cmd.conf_id = cpu_to_le32(mvmvif->time_event_data.id);
--
- 	lockdep_assert_held(&mvm->mutex);
- 
- 	spin_lock_bh(&mvm->time_event_lock);
-@@ -1189,6 +1184,11 @@ void iwl_mvm_schedule_session_protection(struct iwl_mvm *mvm,
- 	}
- 
- 	iwl_mvm_te_clear_data(mvm, te_data);
-+	/*
-+	 * The time_event_data.id field is reused to save session
-+	 * protection's configuration.
-+	 */
-+	te_data->id = le32_to_cpu(cmd.conf_id);
- 	te_data->duration = le32_to_cpu(cmd.duration_tu);
- 	te_data->vif = vif;
- 	spin_unlock_bh(&mvm->time_event_lock);
+diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/clk_mgr.c
+index bb31541f80723..6420527fe476c 100644
+--- a/drivers/gpu/drm/amd/display/dc/clk_mgr/clk_mgr.c
++++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/clk_mgr.c
+@@ -306,8 +306,7 @@ void dc_destroy_clk_mgr(struct clk_mgr *clk_mgr_base)
+ 	case FAMILY_NV:
+ 		if (ASICREV_IS_SIENNA_CICHLID_P(clk_mgr_base->ctx->asic_id.hw_internal_rev)) {
+ 			dcn3_clk_mgr_destroy(clk_mgr);
+-		}
+-		if (ASICREV_IS_DIMGREY_CAVEFISH_P(clk_mgr_base->ctx->asic_id.hw_internal_rev)) {
++		} else if (ASICREV_IS_DIMGREY_CAVEFISH_P(clk_mgr_base->ctx->asic_id.hw_internal_rev)) {
+ 			dcn3_clk_mgr_destroy(clk_mgr);
+ 		}
+ 		if (ASICREV_IS_BEIGE_GOBY_P(clk_mgr_base->ctx->asic_id.hw_internal_rev)) {
 -- 
 2.34.1
 

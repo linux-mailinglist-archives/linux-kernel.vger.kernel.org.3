@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA706498A06
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:01:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51DF7498897
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:48:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345120AbiAXS7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:59:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344483AbiAXS4z (ORCPT
+        id S245297AbiAXSs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:48:29 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47378 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245261AbiAXSs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:56:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E13C0612B0;
-        Mon, 24 Jan 2022 10:54:37 -0800 (PST)
+        Mon, 24 Jan 2022 13:48:27 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BFDBB810BD;
-        Mon, 24 Jan 2022 18:54:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51E5CC340E5;
-        Mon, 24 Jan 2022 18:54:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50590614CF;
+        Mon, 24 Jan 2022 18:48:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13C07C340E5;
+        Mon, 24 Jan 2022 18:48:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050475;
-        bh=bfcNSSSFgCqI3GxKVbE6LXuPeSyfon74j0nK3vab2lY=;
+        s=korg; t=1643050106;
+        bh=nMY3jNJlD6R1fXSSHrV1arx8jCTkhdTfQMrJ4L7TSn8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NSaQcZPxe2InvKodciSfmD/LECf8NWmeWmK03ZVCBp4DkPYsxk2GFAsqkjaLWeV+A
-         vw0eL+wB4u7kZYbw1uAP56cLoQXomVHY8MFnydgi4zqBQ0hAL0CIRNMyMfj/r4Gs8T
-         kHjmfcItt3uDN30nbDxGDNfLGK/rHUkPT1rQPzWY=
+        b=J4di5Kff7FxG3x/j90L8bFKSceSZER39GPFEmm4tmDL6ZVF8CBlj5KVRGb6qhlKgN
+         sAx/mA3lJkDYoZXyKF24XYZ9g1O9X5KvGkSfhsGEpE/j0kllWgENc71gAl/lfM973g
+         Xsye0Zi4GuOS4o3aiSAwiSU2ExeV5bOiipm/TjXA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 007/157] random: fix data race on crng_node_pool
-Date:   Mon, 24 Jan 2022 19:41:37 +0100
-Message-Id: <20220124183933.019583375@linuxfoundation.org>
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com
+Subject: [PATCH 4.4 003/114] USB: Fix "slab-out-of-bounds Write" bug in usb_hcd_poll_rh_status
+Date:   Mon, 24 Jan 2022 19:41:38 +0100
+Message-Id: <20220124183927.207781595@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183927.095545464@linuxfoundation.org>
+References: <20220124183927.095545464@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,106 +45,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+From: Alan Stern <stern@rowland.harvard.edu>
 
-commit 5d73d1e320c3fd94ea15ba5f79301da9a8bcc7de upstream.
+commit 1d7d4c07932e04355d6e6528d44a2f2c9e354346 upstream.
 
-extract_crng() and crng_backtrack_protect() load crng_node_pool with a
-plain load, which causes undefined behavior if do_numa_crng_init()
-modifies it concurrently.
+When the USB core code for getting root-hub status reports was
+originally written, it was assumed that the hub driver would be its
+only caller.  But this isn't true now; user programs can use usbfs to
+communicate with root hubs and get status reports.  When they do this,
+they may use a transfer_buffer that is smaller than the data returned
+by the HCD, which will lead to a buffer overflow error when
+usb_hcd_poll_rh_status() tries to store the status data.  This was
+discovered by syzbot:
 
-Fix this by using READ_ONCE().  Note: as per the previous discussion
-https://lore.kernel.org/lkml/20211219025139.31085-1-ebiggers@kernel.org/T/#u,
-READ_ONCE() is believed to be sufficient here, and it was requested that
-it be used here instead of smp_load_acquire().
+BUG: KASAN: slab-out-of-bounds in memcpy include/linux/fortify-string.h:225 [inline]
+BUG: KASAN: slab-out-of-bounds in usb_hcd_poll_rh_status+0x5f4/0x780 drivers/usb/core/hcd.c:776
+Write of size 2 at addr ffff88801da403c0 by task syz-executor133/4062
 
-Also change do_numa_crng_init() to set crng_node_pool using
-cmpxchg_release() instead of mb() + cmpxchg(), as the former is
-sufficient here but is more lightweight.
+This patch fixes the bug by reducing the amount of status data if it
+won't fit in the transfer_buffer.  If some data gets discarded then
+the URB's completion status is set to -EOVERFLOW rather than 0, to let
+the user know what happened.
 
-Fixes: 1e7f583af67b ("random: make /dev/urandom scalable for silly userspace programs")
-Cc: stable@vger.kernel.org
-Signed-off-by: Eric Biggers <ebiggers@google.com>
-Acked-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Reported-and-tested-by: syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/Yc+3UIQJ2STbxNua@rowland.harvard.edu
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   42 ++++++++++++++++++++++--------------------
- 1 file changed, 22 insertions(+), 20 deletions(-)
+ drivers/usb/core/hcd.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -845,8 +845,8 @@ static void do_numa_crng_init(struct wor
- 		crng_initialize(crng);
- 		pool[i] = crng;
- 	}
--	mb();
--	if (cmpxchg(&crng_node_pool, NULL, pool)) {
-+	/* pairs with READ_ONCE() in select_crng() */
-+	if (cmpxchg_release(&crng_node_pool, NULL, pool) != NULL) {
- 		for_each_node(i)
- 			kfree(pool[i]);
- 		kfree(pool);
-@@ -859,8 +859,26 @@ static void numa_crng_init(void)
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -731,6 +731,7 @@ void usb_hcd_poll_rh_status(struct usb_h
  {
- 	schedule_work(&numa_crng_init_work);
- }
-+
-+static struct crng_state *select_crng(void)
-+{
-+	struct crng_state **pool;
-+	int nid = numa_node_id();
-+
-+	/* pairs with cmpxchg_release() in do_numa_crng_init() */
-+	pool = READ_ONCE(crng_node_pool);
-+	if (pool && pool[nid])
-+		return pool[nid];
-+
-+	return &primary_crng;
-+}
- #else
- static void numa_crng_init(void) {}
-+
-+static struct crng_state *select_crng(void)
-+{
-+	return &primary_crng;
-+}
- #endif
+ 	struct urb	*urb;
+ 	int		length;
++	int		status;
+ 	unsigned long	flags;
+ 	char		buffer[6];	/* Any root hubs with > 31 ports? */
  
- static void crng_reseed(struct crng_state *crng, struct entropy_store *r)
-@@ -945,15 +963,7 @@ static void _extract_crng(struct crng_st
+@@ -748,11 +749,17 @@ void usb_hcd_poll_rh_status(struct usb_h
+ 		if (urb) {
+ 			clear_bit(HCD_FLAG_POLL_PENDING, &hcd->flags);
+ 			hcd->status_urb = NULL;
++			if (urb->transfer_buffer_length >= length) {
++				status = 0;
++			} else {
++				status = -EOVERFLOW;
++				length = urb->transfer_buffer_length;
++			}
+ 			urb->actual_length = length;
+ 			memcpy(urb->transfer_buffer, buffer, length);
  
- static void extract_crng(__u8 out[CHACHA20_BLOCK_SIZE])
- {
--	struct crng_state *crng = NULL;
--
--#ifdef CONFIG_NUMA
--	if (crng_node_pool)
--		crng = crng_node_pool[numa_node_id()];
--	if (crng == NULL)
--#endif
--		crng = &primary_crng;
--	_extract_crng(crng, out);
-+	_extract_crng(select_crng(), out);
- }
- 
- /*
-@@ -982,15 +992,7 @@ static void _crng_backtrack_protect(stru
- 
- static void crng_backtrack_protect(__u8 tmp[CHACHA20_BLOCK_SIZE], int used)
- {
--	struct crng_state *crng = NULL;
--
--#ifdef CONFIG_NUMA
--	if (crng_node_pool)
--		crng = crng_node_pool[numa_node_id()];
--	if (crng == NULL)
--#endif
--		crng = &primary_crng;
--	_crng_backtrack_protect(crng, tmp, used);
-+	_crng_backtrack_protect(select_crng(), tmp, used);
- }
- 
- static ssize_t extract_crng_user(void __user *buf, size_t nbytes)
+ 			usb_hcd_unlink_urb_from_ep(hcd, urb);
+-			usb_hcd_giveback_urb(hcd, urb, 0);
++			usb_hcd_giveback_urb(hcd, urb, status);
+ 		} else {
+ 			length = 0;
+ 			set_bit(HCD_FLAG_POLL_PENDING, &hcd->flags);
 
 

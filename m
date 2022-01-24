@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0D1499D6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:59:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5054997C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:29:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1584018AbiAXWTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:19:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48056 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447467AbiAXVKy (ORCPT
+        id S1346770AbiAXVQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:16:06 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43674 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1391902AbiAXUt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:10:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F61C09D306;
-        Mon, 24 Jan 2022 12:08:51 -0800 (PST)
+        Mon, 24 Jan 2022 15:49:59 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 681F1B81215;
-        Mon, 24 Jan 2022 20:08:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93393C340E5;
-        Mon, 24 Jan 2022 20:08:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B5BC160B11;
+        Mon, 24 Jan 2022 20:49:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EC08C340E5;
+        Mon, 24 Jan 2022 20:49:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054929;
-        bh=Or7GSkXzoVtS/Y66OyTISEOtYo4mULGloYLLh4FWCl8=;
+        s=korg; t=1643057398;
+        bh=u/UP1OsSzDo7P7Ajc+9f8LDlJZ84k4hEdHMP1AEqTSg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sGeR3Ytfz+DXWF+cJgNZSLxAudWBL6nTH5kp3yro5EwCS/eWbefeMP84Fb3/E1ObJ
-         ADe3UW+v2W7slA1uvP7/IUSM2ViS5cdft8gfxaQJ31Unjx8f4DiDu+xgtmGWFUYXNx
-         q29S21r3YAw+ld1GyrHPdx32IE/6r6YJk7nVLEd8=
+        b=0GxuEEF9f55vWWvMtMQuLG44hec6zwsKYYStcU+qtL3dzdFGQ7Tdj+M8ILyLu4CIt
+         c1TH3Zuj2d8OUzod/bUuo8sErVHyG9nSmrYs0Wj0mCuvJtOQN9A/N4f1iwU/cM5EYS
+         8quYFKckKnb8cRpfXjzKARgSV5Wzsmoj58Zym5VQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kevin Bracey <kevin@bracey.fi>,
-        Eric Dumazet <edumazet@google.com>,
-        Jiri Pirko <jiri@resnulli.us>, Vimalkumar <j.vimal@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 550/563] net_sched: restore "mpu xxx" handling
-Date:   Mon, 24 Jan 2022 19:45:15 +0100
-Message-Id: <20220124184043.458620209@linuxfoundation.org>
+        stable@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
+        kernel test robot <lkp@intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH 5.15 800/846] bitops: protect find_first_{,zero}_bit properly
+Date:   Mon, 24 Jan 2022 19:45:17 +0100
+Message-Id: <20220124184128.539745866@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,99 +46,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kevin Bracey <kevin@bracey.fi>
+From: Yury Norov <yury.norov@gmail.com>
 
-commit fb80445c438c78b40b547d12b8d56596ce4ccfeb upstream.
+commit b7ec62d7ee0f0b8af6ba190501dff7f9ee6545ca upstream.
 
-commit 56b765b79e9a ("htb: improved accuracy at high rates") broke
-"overhead X", "linklayer atm" and "mpu X" attributes.
+find_first_bit() and find_first_zero_bit() are not protected with
+ifdefs as other functions in find.h. It causes build errors on some
+platforms if CONFIG_GENERIC_FIND_FIRST_BIT is enabled.
 
-"overhead X" and "linklayer atm" have already been fixed. This restores
-the "mpu X" handling, as might be used by DOCSIS or Ethernet shaping:
-
-    tc class add ... htb rate X overhead 4 mpu 64
-
-The code being fixed is used by htb, tbf and act_police. Cake has its
-own mpu handling. qdisc_calculate_pkt_len still uses the size table
-containing values adjusted for mpu by user space.
-
-iproute2 tc has always passed mpu into the kernel via a tc_ratespec
-structure, but the kernel never directly acted on it, merely stored it
-so that it could be read back by `tc class show`.
-
-Rather, tc would generate length-to-time tables that included the mpu
-(and linklayer) in their construction, and the kernel used those tables.
-
-Since v3.7, the tables were no longer used. Along with "mpu", this also
-broke "overhead" and "linklayer" which were fixed in 01cb71d2d47b
-("net_sched: restore "overhead xxx" handling", v3.10) and 8a8e3d84b171
-("net_sched: restore "linklayer atm" handling", v3.11).
-
-"overhead" was fixed by simply restoring use of tc_ratespec::overhead -
-this had originally been used by the kernel but was initially omitted
-from the new non-table-based calculations.
-
-"linklayer" had been handled in the table like "mpu", but the mode was
-not originally passed in tc_ratespec. The new implementation was made to
-handle it by getting new versions of tc to pass the mode in an extended
-tc_ratespec, and for older versions of tc the table contents were analysed
-at load time to deduce linklayer.
-
-As "mpu" has always been given to the kernel in tc_ratespec,
-accompanying the mpu-based table, we can restore system functionality
-with no userspace change by making the kernel act on the tc_ratespec
-value.
-
-Fixes: 56b765b79e9a ("htb: improved accuracy at high rates")
-Signed-off-by: Kevin Bracey <kevin@bracey.fi>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jiri Pirko <jiri@resnulli.us>
-Cc: Vimalkumar <j.vimal@gmail.com>
-Link: https://lore.kernel.org/r/20220112170210.1014351-1-kevin@bracey.fi
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+Fixes: 2cc7b6a44ac2 ("lib: add fast path for find_first_*_bit() and find_last_bit()")
+Reported-by: kernel test robot <lkp@intel.com>
+Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/sch_generic.h |    5 +++++
- net/sched/sch_generic.c   |    1 +
- 2 files changed, 6 insertions(+)
+ include/asm-generic/bitops/find.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/include/net/sch_generic.h
-+++ b/include/net/sch_generic.h
-@@ -1261,6 +1261,7 @@ struct psched_ratecfg {
- 	u64	rate_bytes_ps; /* bytes per second */
- 	u32	mult;
- 	u16	overhead;
-+	u16	mpu;
- 	u8	linklayer;
- 	u8	shift;
- };
-@@ -1270,6 +1271,9 @@ static inline u64 psched_l2t_ns(const st
- {
- 	len += r->overhead;
+diff --git a/include/asm-generic/bitops/find.h b/include/asm-generic/bitops/find.h
+index 0d132ee2a291..835f959a25f2 100644
+--- a/include/asm-generic/bitops/find.h
++++ b/include/asm-generic/bitops/find.h
+@@ -97,6 +97,7 @@ unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
  
-+	if (len < r->mpu)
-+		len = r->mpu;
-+
- 	if (unlikely(r->linklayer == TC_LINKLAYER_ATM))
- 		return ((u64)(DIV_ROUND_UP(len,48)*53) * r->mult) >> r->shift;
+ #ifdef CONFIG_GENERIC_FIND_FIRST_BIT
  
-@@ -1292,6 +1296,7 @@ static inline void psched_ratecfg_getrat
- 	res->rate = min_t(u64, r->rate_bytes_ps, ~0U);
++#ifndef find_first_bit
+ /**
+  * find_first_bit - find the first set bit in a memory region
+  * @addr: The address to start the search at
+@@ -116,7 +117,9 @@ unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
  
- 	res->overhead = r->overhead;
-+	res->mpu = r->mpu;
- 	res->linklayer = (r->linklayer & TC_LINKLAYER_MASK);
+ 	return _find_first_bit(addr, size);
  }
++#endif
  
---- a/net/sched/sch_generic.c
-+++ b/net/sched/sch_generic.c
-@@ -1386,6 +1386,7 @@ void psched_ratecfg_precompute(struct ps
- {
- 	memset(r, 0, sizeof(*r));
- 	r->overhead = conf->overhead;
-+	r->mpu = conf->mpu;
- 	r->rate_bytes_ps = max_t(u64, conf->rate, rate64);
- 	r->linklayer = (conf->linklayer & TC_LINKLAYER_MASK);
- 	r->mult = 1;
++#ifndef find_first_zero_bit
+ /**
+  * find_first_zero_bit - find the first cleared bit in a memory region
+  * @addr: The address to start the search at
+@@ -136,6 +139,8 @@ unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
+ 
+ 	return _find_first_zero_bit(addr, size);
+ }
++#endif
++
+ #else /* CONFIG_GENERIC_FIND_FIRST_BIT */
+ 
+ #ifndef find_first_bit
+-- 
+2.34.1
+
 
 

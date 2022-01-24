@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F0549985C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:36:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D464849980C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1450324AbiAXVUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:20:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44252 "EHLO
+        id S1376439AbiAXVTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:19:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392365AbiAXUvE (ORCPT
+        with ESMTP id S1392375AbiAXUvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:51:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AFBC054325;
-        Mon, 24 Jan 2022 11:58:24 -0800 (PST)
+        Mon, 24 Jan 2022 15:51:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0E7C05432D;
+        Mon, 24 Jan 2022 11:58:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 577B5B8119D;
-        Mon, 24 Jan 2022 19:58:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AD0BC340E5;
-        Mon, 24 Jan 2022 19:58:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E218861028;
+        Mon, 24 Jan 2022 19:58:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B55FFC340E5;
+        Mon, 24 Jan 2022 19:58:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054302;
-        bh=JjoTPxcrsm13yYDz2X0aCGOrakWj/cvM4DjQzFBa75A=;
+        s=korg; t=1643054308;
+        bh=ogkFxolfQWRQxJZn/Tdu72Ih6tdiWRo2xRIJQtxu78g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uEvl33PG4PPhjxI0aEAMSxO9ikEBrIAAZuf3SNDRDbIh9df/u5cbxO3NYbiN24y6s
-         zjic6cIYomUy+OTLpXJPA4R/5jk4YUEHeSyGGJIpqt2UkMF/y9iWss0cqEPDLuQ1rE
-         bUyCoKwojDCLiifVYZ+Zm6rotJzy7fPsJAWEWceQ=
+        b=abD5uZA+mkgD4DhYARoDRt+1Zad14ECoS1kZWmrSl3yMShD3xU3sBpAaWRTA669J3
+         Vi2WljSFa7w1j7Iz2f3vSliPsjGy6jGfBRjE6jqQ7/nk38xVO2U8AWAuD+zej6eFA8
+         ZF1bCkdXfWxehqOCNLanKVxQDDEcvSpClz11tpr0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 344/563] media: saa7146: hexium_orion: Fix a NULL pointer dereference in hexium_attach()
-Date:   Mon, 24 Jan 2022 19:41:49 +0100
-Message-Id: <20220124184036.320287570@linuxfoundation.org>
+Subject: [PATCH 5.10 346/563] thunderbolt: Runtime PM activate both ends of the device link
+Date:   Mon, 24 Jan 2022 19:41:51 +0100
+Message-Id: <20220124184036.381000032@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -50,71 +50,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-[ Upstream commit 348df8035301dd212e3cc2860efe4c86cb0d3303 ]
+[ Upstream commit f3380cac0c0b3a6f49ab161e2a057c363962f48d ]
 
-In hexium_attach(dev, info), saa7146_vv_init() is called to allocate
-a new memory for dev->vv_data. In hexium_detach(), saa7146_vv_release()
-will be called and there is a dereference of dev->vv_data in
-saa7146_vv_release(), which could lead to a NULL pointer dereference
-on failure of saa7146_vv_init() according to the following logic.
+If protocol tunnels are already up when the driver is loaded, for
+instance if the boot firmware implements connection manager of its own,
+runtime PM reference count of the consumer devices behind the tunnel
+might have been increased already before the device link is created but
+the supplier device runtime PM reference count is not. This leads to a
+situation where the supplier (the Thunderbolt driver) can runtime
+suspend even if it should not because the corresponding protocol tunnel
+needs to be up causing the devices to be removed from the corresponding
+native bus.
 
-Both hexium_attach() and hexium_detach() are callback functions of
-the variable 'extension', so there exists a possible call chain directly
-from hexium_attach() to hexium_detach():
+Prevent this from happening by making both sides of the link runtime PM
+active briefly. The pm_runtime_put() for the consumer (PCIe
+root/downstream port, xHCI) then allows it to runtime suspend again but
+keeps the supplier runtime resumed the whole time it is runtime active.
 
-hexium_attach(dev, info) -- fail to alloc memory to dev->vv_data
-	|		    		in saa7146_vv_init().
-	|
-	|
-hexium_detach() -- a dereference of dev->vv_data in saa7146_vv_release()
-
-Fix this bug by adding a check of saa7146_vv_init().
-
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_VIDEO_HEXIUM_ORION=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/saa7146/hexium_orion.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/thunderbolt/acpi.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/drivers/media/pci/saa7146/hexium_orion.c b/drivers/media/pci/saa7146/hexium_orion.c
-index 39d14c179d229..2eb4bee16b71f 100644
---- a/drivers/media/pci/saa7146/hexium_orion.c
-+++ b/drivers/media/pci/saa7146/hexium_orion.c
-@@ -355,10 +355,16 @@ static struct saa7146_ext_vv vv_data;
- static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data *info)
- {
- 	struct hexium *hexium = (struct hexium *) dev->ext_priv;
-+	int ret;
+diff --git a/drivers/thunderbolt/acpi.c b/drivers/thunderbolt/acpi.c
+index b5442f979b4d0..6355fdf7d71a3 100644
+--- a/drivers/thunderbolt/acpi.c
++++ b/drivers/thunderbolt/acpi.c
+@@ -7,6 +7,7 @@
+  */
  
- 	DEB_EE("\n");
+ #include <linux/acpi.h>
++#include <linux/pm_runtime.h>
  
--	saa7146_vv_init(dev, &vv_data);
-+	ret = saa7146_vv_init(dev, &vv_data);
-+	if (ret) {
-+		pr_err("Error in saa7146_vv_init()\n");
-+		return ret;
-+	}
+ #include "tb.h"
+ 
+@@ -74,8 +75,18 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
+ 		 pci_pcie_type(pdev) == PCI_EXP_TYPE_DOWNSTREAM))) {
+ 		const struct device_link *link;
+ 
++		/*
++		 * Make them both active first to make sure the NHI does
++		 * not runtime suspend before the consumer. The
++		 * pm_runtime_put() below then allows the consumer to
++		 * runtime suspend again (which then allows NHI runtime
++		 * suspend too now that the device link is established).
++		 */
++		pm_runtime_get_sync(&pdev->dev);
 +
- 	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
- 	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
- 	vv_data.vid_ops.vidioc_s_input = vidioc_s_input;
+ 		link = device_link_add(&pdev->dev, &nhi->pdev->dev,
+ 				       DL_FLAG_AUTOREMOVE_SUPPLIER |
++				       DL_FLAG_RPM_ACTIVE |
+ 				       DL_FLAG_PM_RUNTIME);
+ 		if (link) {
+ 			dev_dbg(&nhi->pdev->dev, "created link from %s\n",
+@@ -84,6 +95,8 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
+ 			dev_warn(&nhi->pdev->dev, "device link creation from %s failed\n",
+ 				 dev_name(&pdev->dev));
+ 		}
++
++		pm_runtime_put(&pdev->dev);
+ 	}
+ 
+ out_put:
 -- 
 2.34.1
 

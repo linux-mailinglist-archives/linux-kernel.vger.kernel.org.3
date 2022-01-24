@@ -2,100 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5B34986FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B342498707
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244675AbiAXRfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:35:04 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4481 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244699AbiAXRfD (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:35:03 -0500
-Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JjH7r0Mdjz6FGjl;
-        Tue, 25 Jan 2022 01:30:48 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 24 Jan 2022 18:35:01 +0100
-Received: from localhost (10.47.74.148) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Mon, 24 Jan
- 2022 17:35:00 +0000
-Date:   Mon, 24 Jan 2022 17:34:57 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Jeff LaBundy <jeff@labundy.com>
-CC:     <lee.jones@linaro.org>, <jic23@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH 2/2] iio: temperature: iqs620at-temp: Add support for V3
- silicon
-Message-ID: <20220124173457.00006728@Huawei.com>
-In-Reply-To: <20220123190106.80591-3-jeff@labundy.com>
-References: <20220123190106.80591-1-jeff@labundy.com>
-        <20220123190106.80591-3-jeff@labundy.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        id S244714AbiAXRhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:37:05 -0500
+Received: from mga04.intel.com ([192.55.52.120]:39507 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244706AbiAXRhC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 12:37:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643045822; x=1674581822;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=FUZC/e5xkZGN112lLRWuyS219UiLmaVqnCFLWTG+TYk=;
+  b=ZpKhtT2BS1GKl/bG+HYZIzDBFCS6B0JESRkcbABNc7fEP/EVKDcR1WKT
+   sr0Sl1EsxfmBe7DsVqcQXPz+Jo8AE/KMNB1lC2bJM4Z1Zm2BWmug409K4
+   y4KFQwLbyqQm9dmHvd6HS3Ya9nYRgtXSxXKrph/iCgi7OCBhTbfz82mj/
+   YeNH4StPne/l/0BdQa5AT/vA4henhvkcWHeJq9ZaFKBXBHcufUfRKhAab
+   GFPwdr+XP3JVxlqzqAd+SFSDcA5T+UjjrpRpT5XU6c/yBv4ZwsEmTgDtT
+   i1VBmDXysXsqe19hVWYljy8pyHWsxeM3LPhlL3txmoLU0LURpLGAsgTNG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="244936597"
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="244936597"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 09:37:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="673697723"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga001.fm.intel.com with ESMTP; 24 Jan 2022 09:36:59 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 20OHawV0011179;
+        Mon, 24 Jan 2022 17:36:58 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     intel-wired-lan@lists.osuosl.org
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Martyna Szapar-Mudlaw <martyna.szapar-mudlaw@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: ice: Add support for inner etype in switchdev
+Date:   Mon, 24 Jan 2022 18:35:19 +0100
+Message-Id: <20220124173519.739323-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220124173116.739083-6-alexandr.lobakin@intel.com>
+References: <20220124173116.739083-1-alexandr.lobakin@intel.com> <20220124173116.739083-6-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.74.148]
-X-ClientProxiedBy: lhreml739-chm.china.huawei.com (10.201.108.189) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 23 Jan 2022 13:01:06 -0600
-Jeff LaBundy <jeff@labundy.com> wrote:
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
+Date: Mon, 24 Jan 2022 18:31:16 +0100
 
-> The vendor introduced an updated revision of IQS620A(T) silicon
-> which is backwards-compatible with previous revisions, the only
-> exception being the offset used to derive temperature.
+> From: Martyna Szapar-Mudlaw <martyna.szapar-mudlaw@intel.com>
 > 
-> Enable this new revision by returning the appropriate offset as
-> a function of the hardware number provided by the parent MFD.
+> Enable support for adding TC rules that filter on the inner
+> EtherType field of tunneled packet headers.
 > 
-> Signed-off-by: Jeff LaBundy <jeff@labundy.com>
-Trivial comment inline but I'm fine with this either way.
-Assuming it will go through mfd.
+> Signed-off-by: Martyna Szapar-Mudlaw <martyna.szapar-mudlaw@intel.com>
+> Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+That one was included by mistake, sorry :c
 
 > ---
->  drivers/iio/temperature/iqs620at-temp.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  drivers/net/ethernet/intel/ice/ice_protocol_type.h |   2 +
+>  drivers/net/ethernet/intel/ice/ice_switch.c        | 272 ++++++++++++++++++++-
+>  drivers/net/ethernet/intel/ice/ice_tc_lib.c        |  15 +-
+>  3 files changed, 277 insertions(+), 12 deletions(-)
 > 
-> diff --git a/drivers/iio/temperature/iqs620at-temp.c b/drivers/iio/temperature/iqs620at-temp.c
-> index fe126e1fb783..e2f878d57af7 100644
-> --- a/drivers/iio/temperature/iqs620at-temp.c
-> +++ b/drivers/iio/temperature/iqs620at-temp.c
-> @@ -17,6 +17,7 @@
->  
->  #define IQS620_TEMP_SCALE			1000
->  #define IQS620_TEMP_OFFSET			(-100)
-> +#define IQS620_TEMP_OFFSET_V3			(-40)
->  
->  static int iqs620_temp_read_raw(struct iio_dev *indio_dev,
->  				struct iio_chan_spec const *chan,
-> @@ -41,7 +42,8 @@ static int iqs620_temp_read_raw(struct iio_dev *indio_dev,
->  		return IIO_VAL_INT;
->  
->  	case IIO_CHAN_INFO_OFFSET:
-> -		*val = IQS620_TEMP_OFFSET;
-> +		*val = iqs62x->hw_num < IQS620_HW_NUM_V3 ? IQS620_TEMP_OFFSET
-> +							 : IQS620_TEMP_OFFSET_V3;
 
-Line is a bit long, so maybe it would be better to just use an if / else
+--- 8< ---
 
-		if (iqs6x->hw_num < IQS620_HW_NUM_V3)
-			*val = IQS620_TEMP_OFFSET;
-		else
-			*val = IQS620_TEMP_OFFSET_V3;
+> -- 
+> cgit 1.2.3-1.el7
 
-
->  		return IIO_VAL_INT;
->  
->  	default:
-
+Thanks,
+Al

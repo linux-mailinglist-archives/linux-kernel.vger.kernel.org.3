@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC4BD4988D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:51:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4809E4988D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:51:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343585AbiAXSvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:51:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245391AbiAXSt5 (ORCPT
+        id S1343619AbiAXSvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:51:09 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:48650 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245404AbiAXSuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:49:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0015BC06176E;
-        Mon, 24 Jan 2022 10:49:56 -0800 (PST)
+        Mon, 24 Jan 2022 13:50:00 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 946F3614E8;
-        Mon, 24 Jan 2022 18:49:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7455DC340E5;
-        Mon, 24 Jan 2022 18:49:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A55CC614FE;
+        Mon, 24 Jan 2022 18:49:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D8FC340E8;
+        Mon, 24 Jan 2022 18:49:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050196;
-        bh=tnFxo+X8MhMhJfzopAdktpTd6isKsEkPQG4eerdzgBg=;
+        s=korg; t=1643050199;
+        bh=xyb7el4B8LdNx+P5MYu2OzNDCK3CD8EPUq/+flDETEc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GCRhfs1xSmzSFyX9AaCXh5hNaX+LDyG1xFA0oFB+ZnpOwVemYz07io4c49iQXwZd7
-         lrWGOh0OjrYRgndCVrxA1qJHapACoo3ZRzfWT/gLJnPuWixO2NzIwD+zeArI8CWbUH
-         Bv3CjOWm8C9De4meJ/jPwnJ6Uxss8eDHUX2/DMsA=
+        b=BYV4ZJVKvVtH5vzFOoAIyhgbDvjkOVbqvGuGKGHPb+dx9tUHtPryP698peloDSE9s
+         3rVd6NsAbzZlcDS9mixCzoMhILBvun/KBMDOR6RYgGyTfFFozeW76EfwWan52k8fJ1
+         sK5e+Cs0No535aQ2ysaUtase24w9u9xuEoSFf9ns=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@ZenIV.linux.org.uk>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.4 040/114] pcmcia: fix setting of kthread task states
-Date:   Mon, 24 Jan 2022 19:42:15 +0100
-Message-Id: <20220124183928.348724102@linuxfoundation.org>
+        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        syzbot+003c0a286b9af5412510@syzkaller.appspotmail.com
+Subject: [PATCH 4.4 041/114] net: mcs7830: handle usb read errors properly
+Date:   Mon, 24 Jan 2022 19:42:16 +0100
+Message-Id: <20220124183928.377684769@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183927.095545464@linuxfoundation.org>
 References: <20220124183927.095545464@linuxfoundation.org>
@@ -50,53 +48,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dominik Brodowski <linux@dominikbrodowski.net>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-[ Upstream commit fbb3485f1f931102d8ba606f1c28123f5b48afa3 ]
+[ Upstream commit d668769eb9c52b150753f1653f7f5a0aeb8239d2 ]
 
-We need to set TASK_INTERRUPTIBLE before calling kthread_should_stop().
-Otherwise, kthread_stop() might see that the pccardd thread is still
-in TASK_RUNNING state and fail to wake it up.
+Syzbot reported uninit value in mcs7830_bind(). The problem was in
+missing validation check for bytes read via usbnet_read_cmd().
 
-Additionally, we only need to set the state back to TASK_RUNNING if
-kthread_should_stop() breaks the loop.
+usbnet_read_cmd() internally calls usb_control_msg(), that returns
+number of bytes read. Code should validate that requested number of bytes
+was actually read.
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reported-by: Al Viro <viro@ZenIV.linux.org.uk>
-Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Fixes: d3046ba809ce ("pcmcia: fix a boot time warning in pcmcia cs code")
-Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
+So, this patch adds missing size validation check inside
+mcs7830_get_reg() to prevent uninit value bugs
+
+Reported-and-tested-by: syzbot+003c0a286b9af5412510@syzkaller.appspotmail.com
+Fixes: 2a36d7083438 ("USB: driver for mcs7830 (aka DeLOCK) USB ethernet adapter")
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/r/20220106225716.7425-1-paskripkin@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pcmcia/cs.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/net/usb/mcs7830.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pcmcia/cs.c b/drivers/pcmcia/cs.c
-index c3b615c94b4bf..a92cbc952b70b 100644
---- a/drivers/pcmcia/cs.c
-+++ b/drivers/pcmcia/cs.c
-@@ -665,18 +665,16 @@ static int pccardd(void *__skt)
- 		if (events || sysfs_events)
- 			continue;
+diff --git a/drivers/net/usb/mcs7830.c b/drivers/net/usb/mcs7830.c
+index 4f345bd4e6e29..95151b46f2001 100644
+--- a/drivers/net/usb/mcs7830.c
++++ b/drivers/net/usb/mcs7830.c
+@@ -121,8 +121,16 @@ static const char driver_name[] = "MOSCHIP usb-ethernet driver";
  
-+		set_current_state(TASK_INTERRUPTIBLE);
- 		if (kthread_should_stop())
- 			break;
+ static int mcs7830_get_reg(struct usbnet *dev, u16 index, u16 size, void *data)
+ {
+-	return usbnet_read_cmd(dev, MCS7830_RD_BREQ, MCS7830_RD_BMREQ,
+-				0x0000, index, data, size);
++	int ret;
++
++	ret = usbnet_read_cmd(dev, MCS7830_RD_BREQ, MCS7830_RD_BMREQ,
++			      0x0000, index, data, size);
++	if (ret < 0)
++		return ret;
++	else if (ret < size)
++		return -ENODATA;
++
++	return ret;
+ }
  
--		set_current_state(TASK_INTERRUPTIBLE);
--
- 		schedule();
- 
--		/* make sure we are running */
--		__set_current_state(TASK_RUNNING);
--
- 		try_to_freeze();
- 	}
-+	/* make sure we are running before we exit */
-+	__set_current_state(TASK_RUNNING);
- 
- 	/* shut down socket, if a device is still present */
- 	if (skt->state & SOCKET_PRESENT) {
+ static int mcs7830_set_reg(struct usbnet *dev, u16 index, u16 size, const void *data)
 -- 
 2.34.1
 

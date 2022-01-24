@@ -2,217 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6B2497CD8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 11:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E85497CE1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 11:22:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237017AbiAXKQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 05:16:34 -0500
-Received: from mga06.intel.com ([134.134.136.31]:3143 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233901AbiAXKQb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 05:16:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643019391; x=1674555391;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=po26d10aSoKULRraWPNmwC8WF79NRr0LxADcpCOT0H4=;
-  b=VzYqMwlLuGqoH5tWYZh8UqSqaDWLqmlPpRYD0y2kAfmxT1nwCIzncC9N
-   m/B7cnksczvoBE07kdfMTP72ZvAG/+hIx/etkbFX/NExif50F2GdLGwP9
-   QjlKeK/PWIQM9M73uZtC05puEZwm5Cn0kBZFPDPPOt1AoInvBQ/Q9nvjH
-   N5Yek4ocCifKoCPLcHdDU9uWGhFyLa7pfJGmMpuGjRY1spPbfhknc6q77
-   fu3Ib1s159dfaDVT6/jhLMsC95gaCgX5W6w/nJgn4BEHW5TqtMVUJUSWo
-   D16b1p/ei8wvO9PPxzyFSPRtJldDzMc7g8NX20Tem0Eh6w2Y/27dTVjn4
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="306729513"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="306729513"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 02:16:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="534168341"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 24 Jan 2022 02:16:30 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nBwOj-000IBa-JV; Mon, 24 Jan 2022 10:16:29 +0000
-Date:   Mon, 24 Jan 2022 18:16:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- 1f52b0aba6fd37653416375cb8a1ca673acf8d5f
-Message-ID: <61ee7c75.cFzSdiqKKS5uoHyB%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S237023AbiAXKWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 05:22:54 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:33646 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232375AbiAXKWx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 05:22:53 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CF436CE106E;
+        Mon, 24 Jan 2022 10:22:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BB2EC340E1;
+        Mon, 24 Jan 2022 10:22:48 +0000 (UTC)
+Message-ID: <2ddda01a-3f1f-eff6-6ce1-a5b9354f2993@xs4all.nl>
+Date:   Mon, 24 Jan 2022 11:22:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 4/4] media: aspeed: Fix timing polarity incorrect
+Content-Language: en-US
+To:     Jammy Huang <jammy_huang@aspeedtech.com>, eajames@linux.ibm.com,
+        mchehab@kernel.org, joel@jms.id.au, andrew@aj.id.au,
+        linux-media@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20211222082139.26933-1-jammy_huang@aspeedtech.com>
+ <20211222082139.26933-5-jammy_huang@aspeedtech.com>
+ <418fc1b2-ddbe-24e3-82cc-aa8ce74f4507@xs4all.nl>
+ <b8707885-c10c-ca19-3f2c-f19f567e1f92@aspeedtech.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <b8707885-c10c-ca19-3f2c-f19f567e1f92@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: 1f52b0aba6fd37653416375cb8a1ca673acf8d5f  x86/MCE/AMD: Allow thresholding interface updates after init
+On 24/01/2022 03:29, Jammy Huang wrote:
+> 
+> On 2022/1/21 下午 03:30, Hans Verkuil wrote:
+>> On 12/22/21 09:21, Jammy Huang wrote:
+>>> This is a workaround for sync polarity unstable.
+>>> Sync value get by VR09C counts from sync's rising edge, which means
+>>> sync's polarity is negative if sync value is bigger than total/2.
+>> Do you have an example of such a format, or is this mostly theoretical?
+>>
+>> Either provide the example or make a note that it is theoretical.
+> 
+> OK, I will update an example in next patch. Let me explain first.
+> 
+> This is a must-be result. Please refer to the graph below as I sent in 3/4 of this
+> series. For negative sync, sync width equals to back porch + data enable + front porch.
+> Thus, sync would be bigger than 90% of total in most cases.
 
-elapsed time: 729m
+Right, I suspected that might be the case.
 
-configs tested: 141
-configs skipped: 75
+I think it would be better to combine patches 3 and 4 into a single
+patch, since they are closely related and it is actually easier to
+understand if it's just a single patch.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Regards,
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20220124
-powerpc              randconfig-c003-20220124
-arc                 nsimosci_hs_smp_defconfig
-arm                       imx_v6_v7_defconfig
-xtensa                       common_defconfig
-m68k                          multi_defconfig
-i386                                defconfig
-sh                          landisk_defconfig
-sh                          r7780mp_defconfig
-parisc                              defconfig
-powerpc                       eiger_defconfig
-sh                           se7751_defconfig
-sh                         microdev_defconfig
-powerpc                     stx_gp3_defconfig
-arm                         cm_x300_defconfig
-powerpc                     tqm8548_defconfig
-powerpc                 mpc837x_mds_defconfig
-sh                          rsk7269_defconfig
-arm                         vf610m4_defconfig
-sh                            shmin_defconfig
-parisc                           alldefconfig
-powerpc                 mpc85xx_cds_defconfig
-sparc                       sparc32_defconfig
-s390                          debug_defconfig
-nios2                            alldefconfig
-nds32                            alldefconfig
-powerpc                     taishan_defconfig
-xtensa                  audio_kc705_defconfig
-powerpc                      ppc40x_defconfig
-sh                           se7619_defconfig
-i386                             alldefconfig
-arc                        vdk_hs38_defconfig
-sh                           se7780_defconfig
-sh                         ap325rxa_defconfig
-arc                         haps_hs_defconfig
-powerpc                     mpc83xx_defconfig
-h8300                            alldefconfig
-powerpc                     tqm8541_defconfig
-sh                          sdk7780_defconfig
-mips                            gpr_defconfig
-microblaze                      mmu_defconfig
-mips                         cobalt_defconfig
-arm                  randconfig-c002-20220123
-arm                  randconfig-c002-20220124
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a002-20220124
-x86_64               randconfig-a003-20220124
-x86_64               randconfig-a001-20220124
-x86_64               randconfig-a004-20220124
-x86_64               randconfig-a005-20220124
-x86_64               randconfig-a006-20220124
-i386                 randconfig-a002-20220124
-i386                 randconfig-a005-20220124
-i386                 randconfig-a003-20220124
-i386                 randconfig-a004-20220124
-i386                 randconfig-a001-20220124
-i386                 randconfig-a006-20220124
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+	Hans
 
-clang tested configs:
-arm                  randconfig-c002-20220123
-arm                  randconfig-c002-20220124
-riscv                randconfig-c006-20220124
-riscv                randconfig-c006-20220123
-i386                 randconfig-c001-20220124
-powerpc              randconfig-c003-20220123
-powerpc              randconfig-c003-20220124
-mips                 randconfig-c004-20220123
-mips                 randconfig-c004-20220124
-x86_64               randconfig-c007-20220124
-x86_64                        randconfig-c007
-i386                          randconfig-c001
-powerpc                       ebony_defconfig
-mips                       rbtx49xx_defconfig
-arm                        spear3xx_defconfig
-powerpc                 mpc832x_rdb_defconfig
-arm                   milbeaut_m10v_defconfig
-powerpc                     mpc512x_defconfig
-mips                           ip22_defconfig
-mips                   sb1250_swarm_defconfig
-riscv                          rv32_defconfig
-x86_64               randconfig-a011-20220124
-x86_64               randconfig-a013-20220124
-x86_64               randconfig-a014-20220124
-x86_64               randconfig-a012-20220124
-x86_64               randconfig-a015-20220124
-x86_64               randconfig-a016-20220124
-i386                 randconfig-a011-20220124
-i386                 randconfig-a016-20220124
-i386                 randconfig-a013-20220124
-i386                 randconfig-a014-20220124
-i386                 randconfig-a015-20220124
-i386                 randconfig-a012-20220124
-riscv                randconfig-r042-20220124
-hexagon              randconfig-r045-20220124
-hexagon              randconfig-r041-20220124
-hexagon              randconfig-r045-20220123
-hexagon              randconfig-r041-20220123
+> 
+>                   +-------------------+
+>                   |    v i d e o      |
+>       +--+  +-----+                   +-----+  +---+
+>          |  |                               |  |
+>          +--+                               +--+
+>        vsync+-------------------------------+
+>    frame_top+-----+
+> frame_bottom+-------------------------+
+> 
+> 
+> Following registers are what I got for 1920x1200@60.
+> 
+> 1e700090: 07ee206f 04c9001a c4d3efff 04cc001f
+> 
+> 1e7000a0: 0000081f 00000000 00000000 00000000
+> 
+> vertical total = 0x4D3 (VR098[27:16]) = 1235
+> vertical sync = 0x4CC (VR09C[27:16]) = 1228
+> 
+>>
+>> Regards,
+>>
+>>     Hans
+>>
+>>> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+>>> ---
+>>>   v2:
+>>>    - Use 'total/2' rather than 'total<<1'
+>>>    - Update comment
+>>> ---
+>>>   drivers/media/platform/aspeed-video.c | 20 ++++++++++++++++++++
+>>>   1 file changed, 20 insertions(+)
+>>>
+>>> diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+>>> index 7c50567f5ab0..c3e3343d91e1 100644
+>>> --- a/drivers/media/platform/aspeed-video.c
+>>> +++ b/drivers/media/platform/aspeed-video.c
+>>> @@ -989,6 +989,16 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+>>>             video->frame_bottom = FIELD_GET(VE_SRC_TB_EDGE_DET_BOT, src_tb_edge);
+>>>           video->frame_top = FIELD_GET(VE_SRC_TB_EDGE_DET_TOP, src_tb_edge);
+>>> +
+>>> +        /*
+>>> +         * This is a workaround for polarity detection when the sync
+>>> +         * value is larger than half.
+>>> +         */
+>>> +        if (vsync > (vtotal / 2))
+>>> +            det->polarities &= ~V4L2_DV_VSYNC_POS_POL;
+>>> +        else
+>>> +            det->polarities |= V4L2_DV_VSYNC_POS_POL;
+>>> +
+>>>           if (det->polarities & V4L2_DV_VSYNC_POS_POL) {
+>>>               det->vbackporch = video->frame_top - vsync;
+>>>               det->vfrontporch = vtotal - video->frame_bottom;
+>>> @@ -1003,6 +1013,16 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+>>>             video->frame_right = FIELD_GET(VE_SRC_LR_EDGE_DET_RT, src_lr_edge);
+>>>           video->frame_left = FIELD_GET(VE_SRC_LR_EDGE_DET_LEFT, src_lr_edge);
+>>> +
+>>> +        /*
+>>> +         * This is a workaround for polarity detection when the sync
+>>> +         * value is larger than half.
+>>> +         */
+>>> +        if (hsync > (htotal / 2))
+>>> +            det->polarities &= ~V4L2_DV_HSYNC_POS_POL;
+>>> +        else
+>>> +            det->polarities |= V4L2_DV_HSYNC_POS_POL;
+>>> +
+>>>           if (det->polarities & V4L2_DV_HSYNC_POS_POL) {
+>>>               det->hbackporch = video->frame_left - hsync;
+>>>               det->hfrontporch = htotal - video->frame_right;
+> 
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

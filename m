@@ -2,106 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5BE497A10
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26ABF497A15
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242086AbiAXIQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 03:16:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51240 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242062AbiAXIQP (ORCPT
+        id S242100AbiAXIQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 03:16:48 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37036 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242110AbiAXIQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 03:16:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643012174;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZTLl4YJkeUuVgMvKnlcneMHmBiRgYGMhn5C09P+gXVg=;
-        b=hPAoJF8no+GXgt5ZhElOugHzSMVV1gguIDimWXXMpiv7KljTBQaDBuxy9zGQCxcs9gW1EJ
-        a0ChZ8/swvxd1+JsVxCJhTUQUB8kTajXRHTSDfX0L7LcMv1giNTTW8hX8CP1wJrIa1jKmK
-        w3zlWFpZJB3ygeHwRZJ+Xya3AFzIjXI=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-438-OcSjX6zjN5uWViM5VwZeEw-1; Mon, 24 Jan 2022 03:16:11 -0500
-X-MC-Unique: OcSjX6zjN5uWViM5VwZeEw-1
-Received: by mail-ej1-f70.google.com with SMTP id p16-20020a170906785000b006b5d9c3d47fso1755931ejm.21
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 00:16:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZTLl4YJkeUuVgMvKnlcneMHmBiRgYGMhn5C09P+gXVg=;
-        b=S/NhWfCkwnlkfR8XF+11DruHIDa6S3JoeEnbDLC0rtAj3beqMWVraQWSTtZ7BIo7ua
-         pe5yoNZzsFkWhwJW+mGs3UYnJRr/k7anAjz0zUwJ4OaOv4HIstqeO+zP3TWJkfk7Lir5
-         DiA7GKDIojRwILXBbpFAq5HxUL06N3nzAD5SdBpmdBdBxt/PqaNJTGqQ/dhrz9Ax7Mcu
-         znpEanMKaF0aWXvQWikevn1CUDGf0y5tDHxzChbNh7dX0G9F0pcbOs8BdztrMuUyynCK
-         LRns9D/XooXQ1PAOD5OsKTne6e0Gh5kIcgkEeGPykpkdMkPdkRyXLYlgevys8UpppEVA
-         QU5w==
-X-Gm-Message-State: AOAM532pAv54Pe0XSdDu3EZggr3epwpP/VoWSg7wbcNAkEMt4jGtjroO
-        CO3eHiWFI/aq1cWxkT7VKpMP9H2BMwsTjET2kDV4XmCtRb9Dxc563HPSiZNTVN1I0KcSOA/kBHD
-        WrCgw7Yzd4GLAypRzSFFzI4+w
-X-Received: by 2002:a17:906:9742:: with SMTP id o2mr11722207ejy.530.1643012170408;
-        Mon, 24 Jan 2022 00:16:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzOr3jOY+RTOMB2JqY3ZgFgnki6NWYqRSaiNL7SDrsnmX5TQlHJzM/4eGuy6YOS1RraAewSXw==
-X-Received: by 2002:a17:906:9742:: with SMTP id o2mr11722192ejy.530.1643012170213;
-        Mon, 24 Jan 2022 00:16:10 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id r23sm948111eju.134.2022.01.24.00.16.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jan 2022 00:16:09 -0800 (PST)
-Message-ID: <7792513f-4f5a-d2b8-f142-ac14d97cda8f@redhat.com>
-Date:   Mon, 24 Jan 2022 09:16:08 +0100
+        Mon, 24 Jan 2022 03:16:45 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3858B80ECB;
+        Mon, 24 Jan 2022 08:16:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D33CEC340E1;
+        Mon, 24 Jan 2022 08:16:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643012202;
+        bh=1p4Ei0VQKjl/EI+UbOBbtqk35AVMqncFK1+SkqXuzTA=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=kEkJ8VYOppns4alKgHnJ3E9TEXtOhYfO7Fne4WuQX1e5Ife3PEZVNbE9PjCk52WpX
+         WxK90Y6QSSz65mdN6/JcFvg6hztXVPnoeyuqXLJu12TPq0G7Eha/c1tCqgU4XF0ae8
+         n/+qIWbMP1KHbNwrzkV/DxHteLKP0km6HP08UcVlcVZLQskw8MCHVFjwkRIyQwGZR+
+         E0+NUwTM5mdtrcdaf/TOMqtbB+/JtVJpluN4lhJpYhVTE9zxA9s+tYWN7Ls+IS3pYB
+         cBfov42qaIFPtQwkUbUh7vvvHbUkKf7TheTFuHGk7O2z8OaTZf2x55NWgz1UZlZpte
+         xw4rPYYqvxnow==
+Date:   Mon, 24 Jan 2022 09:16:38 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+cc:     Nehal Shah <nehal-bakulchandra.shah@amd.com>,
+        Basavaraj Natikar <basavaraj.natikar@amd.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH] HID: amd_sfh: Remove useless DMA-32 fallback
+ configuration
+In-Reply-To: <a1ce59490a9a32f638a41fb80ff4b4598c33acec.1642260273.git.christophe.jaillet@wanadoo.fr>
+Message-ID: <nycvar.YFH.7.76.2201240916280.28059@cbobk.fhfr.pm>
+References: <a1ce59490a9a32f638a41fb80ff4b4598c33acec.1642260273.git.christophe.jaillet@wanadoo.fr>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [Patch 0/3] Staging: rtl8723bs: Fix codestyle errors and warnings
-Content-Language: en-US
-To:     Jagath Jog J <jagathjog1996@gmail.com>, gregkh@linuxfoundation.org,
-        Larry.Finger@lwfinger.net
-Cc:     fabioaiuto83@gmail.com, dan.carpenter@oracle.com,
-        marcocesati@gmail.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20220124034456.8665-1-jagathjog1996@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220124034456.8665-1-jagathjog1996@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, 15 Jan 2022, Christophe JAILLET wrote:
 
-On 1/24/22 04:44, Jagath Jog J wrote:
-> This series fix the following errors/warnings:
+> As stated in [1], dma_set_mask() with a 64-bit mask never fails if
+> dev->dma_mask is non-NULL.
+> So, if it fails, the 32 bits case will also fail for the same reason.
 > 
-> -Placing { braces at the end of same line of if condition
-> -Removed extra spaces in declaration
-> -Placing necessary blank line after declaration
-
-Thanks, series looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-for the series.
-
-Regards,
-
-Hans
-
+> Simplify code and remove some dead code accordingly.
 > 
-> Jagath Jog J (3):
->   Staging: rtl8723bs: Placing opening { braces in previous line
->   Staging: rtl8723bs: Removed extra spaces between datatype and variable
->   Staging: rtl8723bs: Inserting blank line after declaration
+> [1]: https://lore.kernel.org/linux-kernel/YL3vSPK5DXTNvgdx@infradead.org/#t
 > 
->  drivers/staging/rtl8723bs/core/rtw_cmd.c      | 54 +++++-----
->  drivers/staging/rtl8723bs/hal/hal_intf.c      |  5 +
->  .../staging/rtl8723bs/os_dep/ioctl_cfg80211.c | 98 ++++++-------------
->  3 files changed, 63 insertions(+), 94 deletions(-)
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>  drivers/hid/amd-sfh-hid/amd_sfh_pcie.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
 > 
+> diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
+> index 2503be0253d3..673536d1d9ba 100644
+> --- a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
+> +++ b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
+> @@ -248,11 +248,8 @@ static int amd_mp2_pci_probe(struct pci_dev *pdev, const struct pci_device_id *i
+>  	pci_set_master(pdev);
+>  	rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+>  	if (rc) {
+> -		rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+> -		if (rc) {
+> -			dev_err(&pdev->dev, "failed to set DMA mask\n");
+> -			return rc;
+> -		}
+> +		dev_err(&pdev->dev, "failed to set DMA mask\n");
+> +		return rc;
+>  	}
+
+Applied, thank you.
+
+-- 
+Jiri Kosina
+SUSE Labs
 

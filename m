@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 321CE49A552
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F120E49A769
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:44:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2372974AbiAYAMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:12:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1849686AbiAXX02 (ORCPT
+        id S3410429AbiAYCnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:43:00 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37874 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1382785AbiAXUck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:26:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4698C02B850;
-        Mon, 24 Jan 2022 11:51:20 -0800 (PST)
+        Mon, 24 Jan 2022 15:32:40 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62736B811F3;
-        Mon, 24 Jan 2022 19:51:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9190AC340E5;
-        Mon, 24 Jan 2022 19:51:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8B3EB811F9;
+        Mon, 24 Jan 2022 20:32:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED9A6C340E7;
+        Mon, 24 Jan 2022 20:32:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053878;
-        bh=uZdjnvYVh5IOLTVLrRpVEx2N2444vhjRxBkWWJxrb8g=;
+        s=korg; t=1643056357;
+        bh=qVTsRmkfHHvtcYhP+AfBxHTCm0Hpp40vXIcFjCKm+lI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eWx+7w4j4QHNnqUL5scAumNWSVkPtVVTWnm4NchvK5pZxgSNKi40Paf8tDcMKRxou
-         2vE72MatsHAp17zyBQnDHpqfoAiUtyr/j4v0auqU065FTiHCAKMQxpEhLp6xNDz9Us
-         Whk3/OMhw1LY4jvzzEoojpF2R5UzPs6I2msEnXVE=
+        b=ACdPH7SVTfYQySczm/6iwHLto0QBOmhwgY9zPGLPpiCmMynO1HnzOATB3brgA+oDU
+         x+OPh+JPWC2XnVvvDB6Xu+CXl5TXjkHGPSm8hlX2IAnG3eBCMtABodSDvMzJ7tNA5j
+         +5ArpqqC05FUsi00ax0F3dne4KqByhooTvRxQOyw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 205/563] bpf: Dont promote bogus looking registers after null check.
-Date:   Mon, 24 Jan 2022 19:39:30 +0100
-Message-Id: <20220124184031.520807730@linuxfoundation.org>
+        stable@vger.kernel.org, Merlijn Wajer <merlijn@wizzup.org>,
+        "Sicelo A. Mhlongo" <absicsz@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 457/846] ARM: dts: omap3-n900: Fix lp5523 for multi color
+Date:   Mon, 24 Jan 2022 19:39:34 +0100
+Message-Id: <20220124184116.738683164@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,51 +46,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Borkmann <daniel@iogearbox.net>
+From: Sicelo A. Mhlongo <absicsz@gmail.com>
 
-[ Upstream commit e60b0d12a95dcf16a63225cead4541567f5cb517 ]
+[ Upstream commit e9af026a3b24f59d7af4609f73e0ef60a4d6d516 ]
 
-If we ever get to a point again where we convert a bogus looking <ptr>_or_null
-typed register containing a non-zero fixed or variable offset, then lets not
-reset these bounds to zero since they are not and also don't promote the register
-to a <ptr> type, but instead leave it as <ptr>_or_null. Converting to a unknown
-register could be an avenue as well, but then if we run into this case it would
-allow to leak a kernel pointer this way.
+Since the LED multicolor framework support was added in commit
+92a81562e695 ("leds: lp55xx: Add multicolor framework support to lp55xx")
+LEDs on this platform stopped working.
 
-Fixes: f1174f77b50c ("bpf/verifier: rework value tracking")
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Fixes: 92a81562e695 ("leds: lp55xx: Add multicolor framework support to lp55xx")
+Fixes: ac219bf3c9bd ("leds: lp55xx: Convert to use GPIO descriptors")
+Signed-off-by: Merlijn Wajer <merlijn@wizzup.org>
+Signed-off-by: Sicelo A. Mhlongo <absicsz@gmail.com>
+Signed-off-by: Pavel Machek <pavel@ucw.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/verifier.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ arch/arm/boot/dts/omap3-n900.dts | 50 +++++++++++++++++++++++++-------
+ 1 file changed, 40 insertions(+), 10 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c623c3e549210..015bf2ba4a0b6 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -7725,15 +7725,15 @@ static void mark_ptr_or_null_reg(struct bpf_func_state *state,
- {
- 	if (reg_type_may_be_null(reg->type) && reg->id == id &&
- 	    !WARN_ON_ONCE(!reg->id)) {
--		/* Old offset (both fixed and variable parts) should
--		 * have been known-zero, because we don't allow pointer
--		 * arithmetic on pointers that might be NULL.
--		 */
- 		if (WARN_ON_ONCE(reg->smin_value || reg->smax_value ||
- 				 !tnum_equals_const(reg->var_off, 0) ||
- 				 reg->off)) {
--			__mark_reg_known_zero(reg);
--			reg->off = 0;
-+			/* Old offset (both fixed and variable parts) should
-+			 * have been known-zero, because we don't allow pointer
-+			 * arithmetic on pointers that might be NULL. If we
-+			 * see this happening, don't convert the register.
-+			 */
-+			return;
- 		}
- 		if (is_null) {
- 			reg->type = SCALAR_VALUE;
+diff --git a/arch/arm/boot/dts/omap3-n900.dts b/arch/arm/boot/dts/omap3-n900.dts
+index 32335d4ce478b..d40c3d2c4914e 100644
+--- a/arch/arm/boot/dts/omap3-n900.dts
++++ b/arch/arm/boot/dts/omap3-n900.dts
+@@ -8,6 +8,7 @@
+ 
+ #include "omap34xx.dtsi"
+ #include <dt-bindings/input/input.h>
++#include <dt-bindings/leds/common.h>
+ 
+ /*
+  * Default secure signed bootloader (Nokia X-Loader) does not enable L3 firewall
+@@ -630,63 +631,92 @@
+ 	};
+ 
+ 	lp5523: lp5523@32 {
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 		compatible = "national,lp5523";
+ 		reg = <0x32>;
+ 		clock-mode = /bits/ 8 <0>; /* LP55XX_CLOCK_AUTO */
+-		enable-gpio = <&gpio2 9 GPIO_ACTIVE_HIGH>; /* 41 */
++		enable-gpios = <&gpio2 9 GPIO_ACTIVE_HIGH>; /* 41 */
+ 
+-		chan0 {
++		led@0 {
++			reg = <0>;
+ 			chan-name = "lp5523:kb1";
+ 			led-cur = /bits/ 8 <50>;
+ 			max-cur = /bits/ 8 <100>;
++			color = <LED_COLOR_ID_WHITE>;
++			function = LED_FUNCTION_KBD_BACKLIGHT;
+ 		};
+ 
+-		chan1 {
++		led@1 {
++			reg = <1>;
+ 			chan-name = "lp5523:kb2";
+ 			led-cur = /bits/ 8 <50>;
+ 			max-cur = /bits/ 8 <100>;
++			color = <LED_COLOR_ID_WHITE>;
++			function = LED_FUNCTION_KBD_BACKLIGHT;
+ 		};
+ 
+-		chan2 {
++		led@2 {
++			reg = <2>;
+ 			chan-name = "lp5523:kb3";
+ 			led-cur = /bits/ 8 <50>;
+ 			max-cur = /bits/ 8 <100>;
++			color = <LED_COLOR_ID_WHITE>;
++			function = LED_FUNCTION_KBD_BACKLIGHT;
+ 		};
+ 
+-		chan3 {
++		led@3 {
++			reg = <3>;
+ 			chan-name = "lp5523:kb4";
+ 			led-cur = /bits/ 8 <50>;
+ 			max-cur = /bits/ 8 <100>;
++			color = <LED_COLOR_ID_WHITE>;
++			function = LED_FUNCTION_KBD_BACKLIGHT;
+ 		};
+ 
+-		chan4 {
++		led@4 {
++			reg = <4>;
+ 			chan-name = "lp5523:b";
+ 			led-cur = /bits/ 8 <50>;
+ 			max-cur = /bits/ 8 <100>;
++			color = <LED_COLOR_ID_BLUE>;
++			function = LED_FUNCTION_STATUS;
+ 		};
+ 
+-		chan5 {
++		led@5 {
++			reg = <5>;
+ 			chan-name = "lp5523:g";
+ 			led-cur = /bits/ 8 <50>;
+ 			max-cur = /bits/ 8 <100>;
++			color = <LED_COLOR_ID_GREEN>;
++			function = LED_FUNCTION_STATUS;
+ 		};
+ 
+-		chan6 {
++		led@6 {
++			reg = <6>;
+ 			chan-name = "lp5523:r";
+ 			led-cur = /bits/ 8 <50>;
+ 			max-cur = /bits/ 8 <100>;
++			color = <LED_COLOR_ID_RED>;
++			function = LED_FUNCTION_STATUS;
+ 		};
+ 
+-		chan7 {
++		led@7 {
++			reg = <7>;
+ 			chan-name = "lp5523:kb5";
+ 			led-cur = /bits/ 8 <50>;
+ 			max-cur = /bits/ 8 <100>;
++			color = <LED_COLOR_ID_WHITE>;
++			function = LED_FUNCTION_KBD_BACKLIGHT;
+ 		};
+ 
+-		chan8 {
++		led@8 {
++			reg = <8>;
+ 			chan-name = "lp5523:kb6";
+ 			led-cur = /bits/ 8 <50>;
+ 			max-cur = /bits/ 8 <100>;
++			color = <LED_COLOR_ID_WHITE>;
++			function = LED_FUNCTION_KBD_BACKLIGHT;
+ 		};
+ 	};
+ 
 -- 
 2.34.1
 

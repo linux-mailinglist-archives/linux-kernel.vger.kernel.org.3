@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB05499C23
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E3A4995E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1577581AbiAXWAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:00:34 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40176 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1451404AbiAXVWy (ORCPT
+        id S1443507AbiAXU5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:57:08 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60122 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1386157AbiAXUfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:22:54 -0500
+        Mon, 24 Jan 2022 15:35:14 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F873B8123D;
-        Mon, 24 Jan 2022 21:22:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6193BC340E4;
-        Mon, 24 Jan 2022 21:22:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0421614EC;
+        Mon, 24 Jan 2022 20:35:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD7A0C340E5;
+        Mon, 24 Jan 2022 20:35:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059370;
-        bh=hEOXtMUwE/45Nh6ai1hbQxYP2KFHIOMKiavrEhac3jM=;
+        s=korg; t=1643056513;
+        bh=2tE7hxKGMOMC5KAqc0el4iqpnPASZIZxwjjzSAZrSyQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f+QWbv9LSAA4Rqj/ZfSXb1kmYiGni+elscsL1Huc/gCXj9cxTSVklkF2cHI4BnsLH
-         noryMqsxuTGjm2UjBirZJkhXc1YRoJzgKqSLwl2NSP2m7iWBr0cQSMiDP4FXVBQ7Qy
-         EygRvyCU5klhfb6QlHej41mUm0LplN7BgrcbPa8U=
+        b=Qpcn1vb+lppcwXAYOytUGjM5XuAkX14mbqsDVWrykDVY513ZQBw5LlezNiyj+sUex
+         TxH+ZnFIqm4+xjIgolOeYEizI7ka4hltYwwFVub6DiywF8Co3D0//Fjc12cssM+J9P
+         jHR0Nv2UiC77dHXQpD7ta4rKlI9ufilxfLlAEFH8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chengfeng Ye <cyeaa@connect.ust.hk>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        stable@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Hengqi Chen <hengqi.chen@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0594/1039] HSI: core: Fix return freed object in hsi_new_client
-Date:   Mon, 24 Jan 2022 19:39:43 +0100
-Message-Id: <20220124184145.299780465@linuxfoundation.org>
+Subject: [PATCH 5.15 467/846] selftests/bpf: Destroy XDP link correctly
+Date:   Mon, 24 Jan 2022 19:39:44 +0100
+Message-Id: <20220124184117.088239073@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,33 +47,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chengfeng Ye <cyeaa@connect.ust.hk>
+From: Andrii Nakryiko <andrii@kernel.org>
 
-[ Upstream commit a1ee1c08fcd5af03187dcd41dcab12fd5b379555 ]
+[ Upstream commit f91231eeeed752119f49eb6620cae44ec745a007 ]
 
-cl is freed on error of calling device_register, but this
-object is return later, which will cause uaf issue. Fix it
-by return NULL on error.
+bpf_link__detach() was confused with bpf_link__destroy() and leaves
+leaked FD in the process. Fix the problem.
 
-Signed-off-by: Chengfeng Ye <cyeaa@connect.ust.hk>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Reviewed-by: Hengqi Chen <hengqi.chen@gmail.com>
+Link: https://lore.kernel.org/bpf/20211107165521.9240-9-andrii@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hsi/hsi_core.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hsi/hsi_core.c b/drivers/hsi/hsi_core.c
-index ec90713564e32..884066109699c 100644
---- a/drivers/hsi/hsi_core.c
-+++ b/drivers/hsi/hsi_core.c
-@@ -102,6 +102,7 @@ struct hsi_client *hsi_new_client(struct hsi_port *port,
- 	if (device_register(&cl->device) < 0) {
- 		pr_err("hsi: failed to register client: %s\n", info->name);
- 		put_device(&cl->device);
-+		goto err;
- 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c b/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
+index 59adb4715394f..3c85247f96f95 100644
+--- a/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
++++ b/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
+@@ -204,8 +204,8 @@ static int pass_ack(struct migrate_reuseport_test_case *test_case)
+ {
+ 	int err;
  
- 	return cl;
+-	err = bpf_link__detach(test_case->link);
+-	if (!ASSERT_OK(err, "bpf_link__detach"))
++	err = bpf_link__destroy(test_case->link);
++	if (!ASSERT_OK(err, "bpf_link__destroy"))
+ 		return -1;
+ 
+ 	test_case->link = NULL;
 -- 
 2.34.1
 

@@ -2,125 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F40499F16
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:15:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E2849A031
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1839913AbiAXWwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:52:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
+        id S1842486AbiAXXB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:01:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1572945AbiAXVmw (ORCPT
+        with ESMTP id S1457394AbiAXVzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:42:52 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DB7C0419EC
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:31:45 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id x7so52373676lfu.8
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:31:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+d4eE8vTSmnTfcsF06A9ijaErxq3MGUA0JFQlf6Ufdo=;
-        b=iGTTMnQUe6uCwdHf5Y3Mp1+38vh4KuCC/+c8hZNfhXimk0D0Ayh2BU70jO35jFEpcK
-         cOCeEvEQ/Iraq9AGogYQpDBg9mbz93t+A86PMxJjW/CWDucXsgesD2+Tv37M9X6yB42r
-         oPQ/Wbltm6WTxGzZ4T8pnqtIReASplBaKYxk/kaH4hF4UeEYZN0/G79oE7sRD7//rrfd
-         ixrXNgbKQmnOKvkmf+amiE4RxQeQY1LgUmnSGznOHsOKgzquLg03V1MyNBpe0Z1F4JSV
-         m1ayHjlKDHflrMB6jVZ4FApQ7CpB0So9LjO8/+TwRhvQMe0SPR61YdGgKWXFBpXOWlrD
-         hkJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+d4eE8vTSmnTfcsF06A9ijaErxq3MGUA0JFQlf6Ufdo=;
-        b=g8FfolFxTY2CBjecFIyIaCVT65X73JnJj2N2ZXXfqiB+Q1rC0hx+PqbDa4NtvNpTA6
-         2Hb87aAFC2y2XLsmf1QhNxRVrMJuaHgJGRwZTa/iPxMyH5DS+CA/r188ixcH4YcZ7TAk
-         GiR7SAvWaHKHrX1OSCD4UEBnxEt1BzgvP/pE5+SVaJBwETPwJ5s6CmXPFStphVXKQKDK
-         dwD/Sbt7RSL8iv7I0/LSekG56h7yieGOtscZ1OVGRnXg1NdVQCvtCceszuHfX0Bi90wf
-         ZZOpVFbOha/UgMEng4Ubq7AP2mzatN0GgyVrjZHBY/503D8AZbrxoBYzv9Fk07LWawK7
-         KLuw==
-X-Gm-Message-State: AOAM531giIXlS+6VybW+W8T3lO9PmcGkZnoykqhdVX8ZI8rUeb57AEuD
-        Wfwe913mS+MmrukXQ8vuxkjudjMGVE/xSTFZYdKvxw==
-X-Google-Smtp-Source: ABdhPJwKfa6Ns5aNibD/NX7BlH7zp+cXMKbhPhjC0LcBq64TG0tqzj8/gnpWVJ+3dgyOXXYYuTSKDsNwY9wFloSu3bk=
-X-Received: by 2002:a05:6512:308d:: with SMTP id z13mr13958467lfd.523.1643056303222;
- Mon, 24 Jan 2022 12:31:43 -0800 (PST)
+        Mon, 24 Jan 2022 16:55:04 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E34C07E296
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:36:03 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643056560;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZkeR8sx1uJfYl5V+1hDn7Z+OR1HYkHbw79HjnsAp4QY=;
+        b=nkPJpLA2yOi+yzdNLC/2FWxejeY1zVZkgybDhWNcCuaClcSm2bzt7VcV1MQvPYNqFSo4+Q
+        WHwstVrTl643QT6MMv2QwtlaHQ2QmQUyVTOX0A5i+DLaM0QGE/hv87T5+M9VjRhmijVtvs
+        mud10TcJ3WSiYPn0nSuSprneTlnF/PRe/QB6adeMkUmsWnmel/Ig8eO53OIIH8ZrRvc8W7
+        5l1g8VRInKtciwBJEh0eV8qVpDD4jfWXXCHTsS6Jt3B0iPNU2lurEpfjlNCv30gyTiIDlR
+        vBV8TAKvfJcZ6G99jgEuC0BxiV0Da5jFhMfB7VozCkSDOqizG5z5xp5/oVk3Jg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643056560;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZkeR8sx1uJfYl5V+1hDn7Z+OR1HYkHbw79HjnsAp4QY=;
+        b=h4ZLp5bKuVRuCYbVfeAOg6IS9CjOLBsFAmTC0ad9+KDBLUtxmYqHYPptNWjZhlF6uk2VLc
+        bdMceZqau2ihH1BQ==
+To:     Fenghua Yu <fenghua.yu@intel.com>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>
+Cc:     iommu@lists.linux-foundation.org, x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>
+Subject: Re: [PATCH v2 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+In-Reply-To: <87ee4w6g1n.ffs@tglx>
+References: <20211217220136.2762116-1-fenghua.yu@intel.com>
+ <20211217220136.2762116-6-fenghua.yu@intel.com> <87ee4w6g1n.ffs@tglx>
+Date:   Mon, 24 Jan 2022 21:36:00 +0100
+Message-ID: <87bl006fdb.ffs@tglx>
 MIME-Version: 1.0
-References: <20220120214001.1879469-1-nathan@kernel.org>
-In-Reply-To: <20220120214001.1879469-1-nathan@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 24 Jan 2022 12:31:31 -0800
-Message-ID: <CAKwvOd=4QBW5uFLM7zbHfG+5499tT_zqBTaZQgzqegmuq_5+MQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] MIPS: Loongson64: Clean up use of cc-ifversion
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 1:40 PM Nathan Chancellor <nathan@kernel.org> wrote:
+On Mon, Jan 24 2022 at 21:21, Thomas Gleixner wrote:
 >
-> This Makefile checks that GCC is 4.9 or newer, which is redundant after
-> commit 76ae847497bc ("Documentation: raise minimum supported version of
-> GCC to 5.1"), so cc-option can be removed.
+> Hrm. This is odd.
 >
-> Clang does not support -march=loongson3a so it needs to continue to use
-> -march=mips64r2, along with binutils less than 2.25, so check that both
-> GCC and binutils 2.25 or newer are being used before using
-> -march=loongson3a. These flags do not need to be checked with cc-option
-> anymore because all GCC versions support -march=loongson3a and
-> -march=mips64r2 and all clang versions support -march=mips64r2.
+>> +/* Associate a PASID with an mm_struct: */
+>> +static inline void mm_pasid_get(struct mm_struct *mm, u32 pasid)
+>> +{
+>> +	mm->pasid = pasid;
+>> +}
 >
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> This does not get anything. It sets the allocated PASID in the mm. The
+> refcount on the PASID was already taken by the allocation. So this
+> should be mm_pasid_set() or mm_pasid_install(), right?
 
-Thanks for the patch. I wonder why `_MIPS_ISA` only seems to be set at
-all for `-march=loongson3a` AFAICT, though that question is orthogonal
-to this patch. Perhaps the Loongson or MIPS maintainers know more?
-Otherwise seems like most uses of _MIPS_ISA can either be deleted or
-simplified now.
+And as a result of all this ioasid_get() is now left without users...
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-> ---
->  arch/mips/loongson64/Platform | 13 +++----------
->  1 file changed, 3 insertions(+), 10 deletions(-)
->
-> diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Platform
-> index 3e660d6d3c2b..981d3abc150e 100644
-> --- a/arch/mips/loongson64/Platform
-> +++ b/arch/mips/loongson64/Platform
-> @@ -12,17 +12,10 @@ cflags-$(CONFIG_CPU_LOONGSON64)     += -Wa,--trap
->  # by GAS.  The cc-option can't probe for this behaviour so -march=loongson3a
->  # can't easily be used safely within the kbuild framework.
->  #
-> -ifeq ($(call cc-ifversion, -ge, 0409, y), y)
-> -  ifeq ($(call ld-ifversion, -ge, 22500, y), y)
-> -    cflags-$(CONFIG_CPU_LOONGSON64)  += \
-> -      $(call cc-option,-march=loongson3a -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
-> -  else
-> -    cflags-$(CONFIG_CPU_LOONGSON64)  += \
-> -      $(call cc-option,-march=mips64r2,-mips64r2 -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
-> -  endif
-> +ifeq ($(CONFIG_CC_IS_GCC)$(call ld-ifversion, -ge, 22500, y), yy)
-> +  cflags-$(CONFIG_CPU_LOONGSON64) += -march=loongson3a -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64
->  else
-> -    cflags-$(CONFIG_CPU_LOONGSON64)  += \
-> -      $(call cc-option,-march=mips64r2,-mips64r2 -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
-> +  cflags-$(CONFIG_CPU_LOONGSON64) += -march=mips64r2
->  endif
->
->  # Some -march= flags enable MMI instructions, and GCC complains about that
->
-> base-commit: 2c271fe77d52a0555161926c232cd5bc07178b39
-> --
-> 2.34.1
->
-
-
--- 
 Thanks,
-~Nick Desaulniers
+
+        tglx

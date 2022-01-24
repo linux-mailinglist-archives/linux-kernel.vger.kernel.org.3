@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B38D499014
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:02:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CCE7499273
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359258AbiAXT6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:58:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
+        id S1381455AbiAXUU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:20:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351391AbiAXT06 (ORCPT
+        with ESMTP id S1354592AbiAXUDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:26:58 -0500
+        Mon, 24 Jan 2022 15:03:10 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B7CC02B74F;
-        Mon, 24 Jan 2022 11:12:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21817C0680A1;
+        Mon, 24 Jan 2022 11:29:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 927F460909;
-        Mon, 24 Jan 2022 19:12:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 610A7C340E8;
-        Mon, 24 Jan 2022 19:12:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B475E6121F;
+        Mon, 24 Jan 2022 19:29:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FC1AC340E5;
+        Mon, 24 Jan 2022 19:29:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051549;
-        bh=T+56S/9BkRyTdv/V9EVsXJQEBPQFzty4gfufVZgmqdk=;
+        s=korg; t=1643052555;
+        bh=Io6GojHjOIH5iEGY0sX45+CZjrtUYNzXyKuwv4OimYI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zVAZXlngkqXiLysRAzNg+ap67H+Na0vn6sPKEquyRIJEKbOqEwhfVB9NRxqX80ue7
-         2jXfl9Qn9f3SxRAb4XKku49Om2L8JlnbgnyySxVOW0Bq+V2227q6KDmi0fECndoGN9
-         A3DBORZsur5t4Qjj9Hp34vSvlJftIu73hgJMVifk=
+        b=zGOH3KS/iO5ybjej1z6bKqm0+LEBRkqAYZhOeKVkuZmtyJrsPi9WcJfw6hJkWsyop
+         O7o285oy82OzB92UrSq4FgY2JfgQpG9Ni2P6D6W/ncPOa+ODC7isVuRWTbZceHYzkQ
+         Lx9nrDL2jA9WaM5uUK3+47X+5t6tOT6C98bQ+eyU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 4.19 011/239] staging: wlan-ng: Avoid bitwise vs logical OR warning in hfa384x_usb_throttlefn()
+        stable@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+        Nishanth Menon <nm@ti.com>, Pratyush Yadav <p.yadav@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 065/320] arm64: dts: ti: k3-j721e: Fix the L2 cache sets
 Date:   Mon, 24 Jan 2022 19:40:49 +0100
-Message-Id: <20220124183943.475656085@linuxfoundation.org>
+Message-Id: <20220124183955.936018891@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,68 +50,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Nishanth Menon <nm@ti.com>
 
-commit 502408a61f4b7eb4713f44bd77f4a48e6cb1b59a upstream.
+[ Upstream commit e9ba3a5bc6fdc2c796c69fdaf5ed6c9957cf9f9d ]
 
-A new warning in clang points out a place in this file where a bitwise
-OR is being used with boolean expressions:
+A72's L2 cache[1] on J721e[2] is 1MB. A72's L2 is fixed line length of
+64 bytes and 16-way set-associative cache structure.
 
-In file included from drivers/staging/wlan-ng/prism2usb.c:2:
-drivers/staging/wlan-ng/hfa384x_usb.c:3787:7: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
-            ((test_and_clear_bit(THROTTLE_RX, &hw->usb_flags) &&
-            ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/staging/wlan-ng/hfa384x_usb.c:3787:7: note: cast one or both operands to int to silence this warning
-1 warning generated.
+1MB of L2 / 64 (line length) = 16384 ways
+16384 ways / 16 = 1024 sets
 
-The comment explains that short circuiting here is undesirable, as the
-calls to test_and_{clear,set}_bit() need to happen for both sides of the
-expression.
+Fix the l2 cache-sets.
 
-Clang's suggestion would work to silence the warning but the readability
-of the expression would suffer even more. To clean up the warning and
-make the block more readable, use a variable for each side of the
-bitwise expression.
+[1] https://developer.arm.com/documentation/100095/0003/Level-2-Memory-System/About-the-L2-memory-system
+[2] http://www.ti.com/lit/pdf/spruil1
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1478
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Link: https://lore.kernel.org/r/20211014215703.3705371-1-nathan@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 2d87061e70de ("arm64: dts: ti: Add Support for J721E SoC")
+Reported-by: Peng Fan <peng.fan@nxp.com>
+Signed-off-by: Nishanth Menon <nm@ti.com>
+Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
+Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+Link: https://lore.kernel.org/r/20211113043639.4413-1-nm@ti.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/wlan-ng/hfa384x_usb.c |   22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ arch/arm64/boot/dts/ti/k3-j721e.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/staging/wlan-ng/hfa384x_usb.c
-+++ b/drivers/staging/wlan-ng/hfa384x_usb.c
-@@ -3903,18 +3903,18 @@ static void hfa384x_usb_throttlefn(struc
+diff --git a/arch/arm64/boot/dts/ti/k3-j721e.dtsi b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+index f4d8f3b37d5bb..5a6e74636d6fc 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721e.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+@@ -84,7 +84,7 @@
+ 		cache-level = <2>;
+ 		cache-size = <0x100000>;
+ 		cache-line-size = <64>;
+-		cache-sets = <2048>;
++		cache-sets = <1024>;
+ 		next-level-cache = <&msmc_l3>;
+ 	};
  
- 	spin_lock_irqsave(&hw->ctlxq.lock, flags);
- 
--	/*
--	 * We need to check BOTH the RX and the TX throttle controls,
--	 * so we use the bitwise OR instead of the logical OR.
--	 */
- 	pr_debug("flags=0x%lx\n", hw->usb_flags);
--	if (!hw->wlandev->hwremoved &&
--	    ((test_and_clear_bit(THROTTLE_RX, &hw->usb_flags) &&
--	      !test_and_set_bit(WORK_RX_RESUME, &hw->usb_flags)) |
--	     (test_and_clear_bit(THROTTLE_TX, &hw->usb_flags) &&
--	      !test_and_set_bit(WORK_TX_RESUME, &hw->usb_flags))
--	    )) {
--		schedule_work(&hw->usb_work);
-+	if (!hw->wlandev->hwremoved) {
-+		bool rx_throttle = test_and_clear_bit(THROTTLE_RX, &hw->usb_flags) &&
-+				   !test_and_set_bit(WORK_RX_RESUME, &hw->usb_flags);
-+		bool tx_throttle = test_and_clear_bit(THROTTLE_TX, &hw->usb_flags) &&
-+				   !test_and_set_bit(WORK_TX_RESUME, &hw->usb_flags);
-+		/*
-+		 * We need to check BOTH the RX and the TX throttle controls,
-+		 * so we use the bitwise OR instead of the logical OR.
-+		 */
-+		if (rx_throttle | tx_throttle)
-+			schedule_work(&hw->usb_work);
- 	}
- 
- 	spin_unlock_irqrestore(&hw->ctlxq.lock, flags);
+-- 
+2.34.1
+
 
 

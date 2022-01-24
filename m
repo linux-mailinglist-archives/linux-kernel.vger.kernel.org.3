@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E9649896C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D54498998
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242616AbiAXSz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:55:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42914 "EHLO
+        id S1343739AbiAXS5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:57:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344191AbiAXSxz (ORCPT
+        with ESMTP id S1344263AbiAXSyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:53:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2406EC06176A;
-        Mon, 24 Jan 2022 10:53:08 -0800 (PST)
+        Mon, 24 Jan 2022 13:54:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC11C0613E9;
+        Mon, 24 Jan 2022 10:53:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC3D4B8121F;
-        Mon, 24 Jan 2022 18:53:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC749C340E8;
-        Mon, 24 Jan 2022 18:53:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A04C614E3;
+        Mon, 24 Jan 2022 18:53:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3D30C340E5;
+        Mon, 24 Jan 2022 18:53:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050386;
-        bh=FIqYHvH6IqcIa7qor3u4vpchq2nShExahI2dprWf424=;
+        s=korg; t=1643050389;
+        bh=sGOvretFgauqF2/LGbvj1iZr7JxVo+3umuYUrti16Ho=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eKrsa0gEhQEMYAuxOPM2+zhjDzPRpCoszb6SBUORiwAvEaawA+6UvQSVRAp1nfqGi
-         pcYAghX617Ng3b5poJGpdbZtomydyrRVGSJxTolgxO3enm89ZWAuP7aePI99hxXzBN
-         5DhlrHPoE5ebCTGi09J5a5dycZhzFmU/urlAXDE0=
+        b=dOEMyXdMc+GAwbXcsr7qK+YVSIRsvynzpBmj/4Qq50u08KpAYmNXD79FIiVRGZAW7
+         56NHAyXF2ps5H6wYRVaB7UJs2u/I0wQW8Rm19J+/W7/vJFV24demf0IiYvwJ8w7kWm
+         o6e4HykwupjITpgzla2MroBLwisd5B1UBgh+2YQc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tobias Waldekranz <tobias@waldekranz.com>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.4 102/114] net/fsl: xgmac_mdio: Fix incorrect iounmap when removing module
-Date:   Mon, 24 Jan 2022 19:43:17 +0100
-Message-Id: <20220124183930.260689505@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Helge Deller <deller@gmx.de>
+Subject: [PATCH 4.4 103/114] parisc: pdc_stable: Fix memory leak in pdcs_register_pathentries
+Date:   Mon, 24 Jan 2022 19:43:18 +0100
+Message-Id: <20220124183930.290507116@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183927.095545464@linuxfoundation.org>
 References: <20220124183927.095545464@linuxfoundation.org>
@@ -48,36 +48,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tobias Waldekranz <tobias@waldekranz.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 3f7c239c7844d2044ed399399d97a5f1c6008e1b upstream.
+commit d24846a4246b6e61ecbd036880a4adf61681d241 upstream.
 
-As reported by sparse: In the remove path, the driver would attempt to
-unmap its own priv pointer - instead of the io memory that it mapped
-in probe.
+kobject_init_and_add() takes reference even when it fails.
+According to the doc of kobject_init_and_add()：
 
-Fixes: 9f35a7342cff ("net/fsl: introduce Freescale 10G MDIO driver")
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+   If this function returns an error, kobject_put() must be called to
+   properly clean up the memory associated with the object.
+
+Fix memory leak by calling kobject_put().
+
+Fixes: 73f368cf679b ("Kobject: change drivers/parisc/pdc_stable.c to use kobject_init_and_add")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/freescale/xgmac_mdio.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/parisc/pdc_stable.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/freescale/xgmac_mdio.c
-+++ b/drivers/net/ethernet/freescale/xgmac_mdio.c
-@@ -304,9 +304,10 @@ err_ioremap:
- static int xgmac_mdio_remove(struct platform_device *pdev)
- {
- 	struct mii_bus *bus = platform_get_drvdata(pdev);
-+	struct mdio_fsl_priv *priv = bus->priv;
+--- a/drivers/parisc/pdc_stable.c
++++ b/drivers/parisc/pdc_stable.c
+@@ -992,8 +992,10 @@ pdcs_register_pathentries(void)
+ 		entry->kobj.kset = paths_kset;
+ 		err = kobject_init_and_add(&entry->kobj, &ktype_pdcspath, NULL,
+ 					   "%s", entry->name);
+-		if (err)
++		if (err) {
++			kobject_put(&entry->kobj);
+ 			return err;
++		}
  
- 	mdiobus_unregister(bus);
--	iounmap(bus->priv);
-+	iounmap(priv->mdio_base);
- 	mdiobus_free(bus);
- 
- 	return 0;
+ 		/* kobject is now registered */
+ 		write_lock(&entry->rw_lock);
 
 

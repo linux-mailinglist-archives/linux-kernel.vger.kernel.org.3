@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 744DE49A2D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:01:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0595D49A726
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386616AbiAXXri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:47:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45344 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1589221AbiAXWyE (ORCPT
+        id S3422600AbiAYCbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:31:41 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57132 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1381224AbiAXUTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:54:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3E3C061A78;
-        Mon, 24 Jan 2022 13:09:26 -0800 (PST)
+        Mon, 24 Jan 2022 15:19:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A6836146B;
-        Mon, 24 Jan 2022 21:09:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B14FC340E5;
-        Mon, 24 Jan 2022 21:09:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA09FB8122A;
+        Mon, 24 Jan 2022 20:19:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0DBDC340E5;
+        Mon, 24 Jan 2022 20:19:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058565;
-        bh=SFpaN1Q+FQLxVudgmI3DnJry1PBPmM+zzf/zOsrDouM=;
+        s=korg; t=1643055592;
+        bh=Ipaf2xrialY117D8ei2KWYiw/gJ+vYaZHb44lVq9cJ0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DCyT/Xrgo32ARRs662fIHjjYPnTqMBsJto9NOsC8BGn9aIKRuvx/uiCkx3CkQqG+N
-         i+sweG40o/bz+jgXBW2KT4b4j/QhIEO24GfmlzfE3hPVnlgQfEc2wPAHyvzQ2BD6ci
-         S9a7RnyHa3f1EhIuU6bJ8hddEBoxxbhh50g7xB9I=
+        b=Rwc6pk7A2mMTeJLgr54Ca4tQhRrs4PRsDjNDMa2EjnCPEN92NjiN3SB+TNa1MIfWV
+         zV34FHaIY3qEwRYjM959NTzT+Mt2SJWZVWwldapMtGfxG4Gww2viT5y8zzNiA16I7K
+         Qf6OH00NAxpLhsRYvQeE+vsH8HAUA+ENJOETQ3kQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Errera <nathan.errera@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
+        stable@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0329/1039] iwlwifi: mvm: test roc running status bits before removing the sta
+Subject: [PATCH 5.15 201/846] bpf: Adjust BTF log size limit.
 Date:   Mon, 24 Jan 2022 19:35:18 +0100
-Message-Id: <20220124184136.366304226@linuxfoundation.org>
+Message-Id: <20220124184107.868752221@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,65 +46,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Errera <nathan.errera@intel.com>
+From: Alexei Starovoitov <ast@kernel.org>
 
-[ Upstream commit 998e1aba6e5eb35370eaf30ccc1823426ec11f90 ]
+[ Upstream commit c5a2d43e998a821701029f23e25b62f9188e93ff ]
 
-In some cases the sta is being removed twice since we do not test the
-roc aux running before removing it. Start looking at the bit before
-removing the sta.
+Make BTF log size limit to be the same as the verifier log size limit.
+Otherwise tools that progressively increase log size and use the same log
+for BTF loading and program loading will be hitting hard to debug EINVAL.
 
-Signed-off-by: Nathan Errera <nathan.errera@intel.com>
-Fixes: 2c2c3647cde4 ("iwlwifi: mvm: support ADD_STA_CMD_API_S ver 12")
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Link: https://lore.kernel.org/r/iwlwifi.20211219121514.d5376ac6bcb0.Ic5f8470ea60c072bde9d1503e5f528b65e301e20@changeid
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20211201181040.23337-7-alexei.starovoitov@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/wireless/intel/iwlwifi/mvm/time-event.c   | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ kernel/bpf/btf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/time-event.c b/drivers/net/wireless/intel/iwlwifi/mvm/time-event.c
-index e91f8e889df70..f93f15357a3f8 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/time-event.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/time-event.c
-@@ -49,14 +49,13 @@ void iwl_mvm_roc_done_wk(struct work_struct *wk)
- 	struct iwl_mvm *mvm = container_of(wk, struct iwl_mvm, roc_done_wk);
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index dfe61df4f974d..79c0bcdcab842 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -4332,7 +4332,7 @@ static struct btf *btf_parse(bpfptr_t btf_data, u32 btf_data_size,
+ 		log->len_total = log_size;
  
- 	/*
--	 * Clear the ROC_RUNNING /ROC_AUX_RUNNING status bit.
-+	 * Clear the ROC_RUNNING status bit.
- 	 * This will cause the TX path to drop offchannel transmissions.
- 	 * That would also be done by mac80211, but it is racy, in particular
- 	 * in the case that the time event actually completed in the firmware
- 	 * (which is handled in iwl_mvm_te_handle_notif).
- 	 */
- 	clear_bit(IWL_MVM_STATUS_ROC_RUNNING, &mvm->status);
--	clear_bit(IWL_MVM_STATUS_ROC_AUX_RUNNING, &mvm->status);
- 
- 	synchronize_net();
- 
-@@ -82,9 +81,19 @@ void iwl_mvm_roc_done_wk(struct work_struct *wk)
- 			mvmvif = iwl_mvm_vif_from_mac80211(mvm->p2p_device_vif);
- 			iwl_mvm_flush_sta(mvm, &mvmvif->bcast_sta, true);
- 		}
--	} else {
-+	}
-+
-+	/*
-+	 * Clear the ROC_AUX_RUNNING status bit.
-+	 * This will cause the TX path to drop offchannel transmissions.
-+	 * That would also be done by mac80211, but it is racy, in particular
-+	 * in the case that the time event actually completed in the firmware
-+	 * (which is handled in iwl_mvm_te_handle_notif).
-+	 */
-+	if (test_and_clear_bit(IWL_MVM_STATUS_ROC_AUX_RUNNING, &mvm->status)) {
- 		/* do the same in case of hot spot 2.0 */
- 		iwl_mvm_flush_sta(mvm, &mvm->aux_sta, true);
-+
- 		/* In newer version of this command an aux station is added only
- 		 * in cases of dedicated tx queue and need to be removed in end
- 		 * of use */
+ 		/* log attributes have to be sane */
+-		if (log->len_total < 128 || log->len_total > UINT_MAX >> 8 ||
++		if (log->len_total < 128 || log->len_total > UINT_MAX >> 2 ||
+ 		    !log->level || !log->ubuf) {
+ 			err = -EINVAL;
+ 			goto errout;
 -- 
 2.34.1
 

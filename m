@@ -2,160 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E658B49859E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FCE14985A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:02:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244049AbiAXRBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:01:15 -0500
-Received: from mailout1.samsung.com ([203.254.224.24]:43865 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243970AbiAXRBN (ORCPT
+        id S244065AbiAXRCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:02:48 -0500
+Received: from mta-p7.oit.umn.edu ([134.84.196.207]:39818 "EHLO
+        mta-p7.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243911AbiAXRCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:01:13 -0500
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220124170110epoutp013ec38e27b0807269d9b434890609c31f~NQ4NFrQWJ1311613116epoutp013
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 17:01:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220124170110epoutp013ec38e27b0807269d9b434890609c31f~NQ4NFrQWJ1311613116epoutp013
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1643043670;
-        bh=83VTFefNOOVIvD1TeUCpJROFSX+M5uWagKuPIDdCXIY=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=QATqPK6lRANb3ZjC9t2p+W2KwZDZSwX2i2mM/CgRQBmVeJ6l4nFvCHd53HEOvsvyL
-         h4fX86YhyopBg9rf4fJbyS2g452UGYD3ObrsZyz0r4UoICM3lR872rOLptoJ6jMQ8T
-         P9jXBfFb6pjPcGe58w+clAAWOLObRBd43vAzHSYI=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220124170108epcas5p4d637040355668959fb1daa10aaae4a17~NQ4L-Ptsb2304923049epcas5p44;
-        Mon, 24 Jan 2022 17:01:08 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.177]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4JjGTR1zMPz4x9Pv; Mon, 24 Jan
-        2022 17:00:59 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2B.38.46822.9E9DEE16; Tue, 25 Jan 2022 01:55:05 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220124170058epcas5p4cba1540f63abdf832a74f690ad76f28a~NQ4CXbHSs2304923049epcas5p4v;
-        Mon, 24 Jan 2022 17:00:58 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220124170058epsmtrp1df9335a206cbfd912786e0ae95434d0e~NQ4CWinAW2043120431epsmtrp18;
-        Mon, 24 Jan 2022 17:00:58 +0000 (GMT)
-X-AuditID: b6c32a4a-de5ff7000000b6e6-aa-61eed9e97d13
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EE.00.08738.A4BDEE16; Tue, 25 Jan 2022 02:00:58 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220124170056epsmtip250cb478e3013d73c6c775011103dcdbf~NQ4APwByP1523815238epsmtip2X;
-        Mon, 24 Jan 2022 17:00:56 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Andi Shyti'" <andi@etezian.org>
-Cc:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linus.walleij@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@canonical.com>,
-        <linux-samsung-soc@vger.kernel.org>, <pankaj.dubey@samsung.com>,
-        <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        "'Aswani Reddy'" <aswani.reddy@samsung.com>, <linux-fsd@tesla.com>
-In-Reply-To: <YevfmeGwmwLml+6b@jack.zhora.eu>
-Subject: RE: [PATCH v2 3/3] arm64: dts: fsd: Add SPI device nodes
-Date:   Mon, 24 Jan 2022 22:30:54 +0530
-Message-ID: <048801d81143$f5585ec0$e0091c40$@samsung.com>
+        Mon, 24 Jan 2022 12:02:46 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p7.oit.umn.edu (Postfix) with ESMTP id 4JjGWT3ZYPz9vYdr
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 17:02:45 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p7.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p7.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Er-wlIDVSsuY for <linux-kernel@vger.kernel.org>;
+        Mon, 24 Jan 2022 11:02:45 -0600 (CST)
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p7.oit.umn.edu (Postfix) with ESMTPS id 4JjGWT1Wykz9vYdC
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:02:45 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p7.oit.umn.edu 4JjGWT1Wykz9vYdC
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p7.oit.umn.edu 4JjGWT1Wykz9vYdC
+Received: by mail-pj1-f70.google.com with SMTP id f1-20020a17090a8e8100b001b44bb75678so11085677pjo.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:02:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pNEeCGoKa1V6rmYqi+3L0jEf0NTPic6Q/DwIqKljNuU=;
+        b=oB+TQmFq3vUafAHIx75KxfATkLnzA+020njfiNxZ7n4IVOIyb8n0++/zm1oUOQsUX5
+         7Jbo9yoDrwfe4y+V1Qhmw6QSlZLJ6VQ4zXnMqYw2wRKx7Wx++ARQhcW2/d/hzR+hcGxU
+         cmtxskJiLEtUDFoRZS5PGx+yjgTn8bz9Y2tGPNnKB7RpDxcjshCxnCorZzjVfNZLSjvG
+         iSxUkHlgtvpcZOnLkOmE0TzZxNoL7hKnKSU7lXK5LIe5rQNOZWI+TFJcRXNg8vDePNUv
+         JqvxA7OQlKcmMWYepLjiLFq6VUxNGycAGKmf9p1j/EqZOxyOV+GW8NOxsmcQJtka6Snt
+         yjlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pNEeCGoKa1V6rmYqi+3L0jEf0NTPic6Q/DwIqKljNuU=;
+        b=Ni/5welEJZkglv3u1ZBwIRnlAcs2wUDAbz+bpQwvf8FTXHZG4kuj7dSa2jRRCn8dRH
+         Es/99qX+hGgRFG1nkzFg57dGoim96H12cQk9OdiKW4AfYa/s+ry80bN0KvSK1YqcHVnB
+         Ml68o5P9wGO5EmDKbvg+g0Fp0ODv5MYJeVwEIa1/xwUmj/A2dcZnCvl+CwBnrlactvfQ
+         nMLHERtlUix7hrfkY1LMFCjyk1/otsjD25tmnrgzjQoAJt7QEsFrJk1Zxyy9ghUS0rqt
+         B2Z5Xm//dz4FjoSS9lprdhkdbfq5ZVwwutMcxa3aWkIHaSFVkLQwOsBfTKYvkUZ47C2R
+         r9+w==
+X-Gm-Message-State: AOAM5338IyMbOuGAg5JesP+3+3Rvj23XUDz2vZhx/CwIbM0weizjFHDY
+        lEz0rmI/noREuJBITrG5Y4UP6bTEGm0Rl5smHk6+PlF6pnU3KyQSWssUPFlgYcROQkJiEb8RAe2
+        difa2vSQYp0N/oxtrhpxSjasmYl/G
+X-Received: by 2002:a17:902:cec8:b0:14b:47b3:c0a2 with SMTP id d8-20020a170902cec800b0014b47b3c0a2mr6663273plg.51.1643043764481;
+        Mon, 24 Jan 2022 09:02:44 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwut5m/BhVkcZcrvznz08wiT4QN4M/h6lmE32uu9pEMjPLtxdzu4Rdmt39nrJ/+uAbft69Pqw==
+X-Received: by 2002:a17:902:cec8:b0:14b:47b3:c0a2 with SMTP id d8-20020a170902cec800b0014b47b3c0a2mr6663249plg.51.1643043764246;
+        Mon, 24 Jan 2022 09:02:44 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.4.61.248])
+        by smtp.gmail.com with ESMTPSA id q17sm17263784pfu.158.2022.01.24.09.02.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 09:02:43 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Lv Zheng <lv.zheng@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ACPI / tables: Fix a NULL pointer dereference in acpi_table_initrd_scan()
+Date:   Tue, 25 Jan 2022 01:02:37 +0800
+Message-Id: <20220124170237.57718-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQIlRa7NAXyP9WKiX5aeFVThmKbe4gH4FQMDAd/j86ICC5i7Zquo37lA
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCJsWRmVeSWpSXmKPExsWy7bCmlu7Lm+8SDa7fl7JY/OM5k8WhzVvZ
-        LaY+fMJmMf/IOVaLjW9/MFlM+bOcyWLT42usFg9fhVtc3jWHzWLG+X1MFo0fb7JbLNr6hd2i
-        de8Rdgdej1kNvWwe15d8YvbYtKqTzePOtT1sHpuX1Hv0bVnF6PGvaS67x+dNcgEcUdk2GamJ
-        KalFCql5yfkpmXnptkrewfHO8aZmBoa6hpYW5koKeYm5qbZKLj4Bum6ZOUAXKymUJeaUAoUC
-        EouLlfTtbIryS0tSFTLyi0tslVILUnIKTAr0ihNzi0vz0vXyUkusDA0MjEyBChOyMx7/X8BW
-        8IGn4sexV0wNjC3cXYycHBICJhJfLyxi7mLk4hAS2M0osffPPHYI5xOjxM2ti6Eynxkl/n9c
-        wgjTsnDtFzaIxC5GiWtrnzFBOC8ZJV7OWc8KUsUmoCuxY3EbG4gtIqAqsfTxTLAOZoFGZomW
-        3lvMIAlOoKKDqxYwgdjCAo4Sa9YuY+li5OBgAWpYecIDJMwrYCkx7dxrZghbUOLkzCcsIDaz
-        gLzE9rdzmCEuUpD4+XQZK8QuN4nDx26xQtSIS7w8egTsHwmBGxwSm+aAvMAB5LhIbN9QBNEr
-        LPHq+BZ2CFtK4mV/GztESbZEzy5jiHCNxNJ5x1ggbHuJA1fmgF3JLKApsX6XPsQmPone30+Y
-        IDp5JTrahCCqVSWa312F6pSWmNjdzQphe0j8ujKJeQKj4iwkf81C8tcsJPfPQli2gJFlFaNk
-        akFxbnpqsWmBUV5qOTy6k/NzNzGCk7OW1w7Ghw8+6B1iZOJgPMQowcGsJMJblfIuUYg3JbGy
-        KrUoP76oNCe1+BCjKTCsJzJLiSbnA/NDXkm8oYmlgYmZmZmJpbGZoZI47+n0DYlCAumJJanZ
-        qakFqUUwfUwcnFINTD6TlaufevXuUjlUJBCYOfPLpcXyPfZ3mFq5lj6dyu+6QWxu+jItgY3a
-        ev8rmm5xRj+fInmFdfHOCdZLrohO9eorrZumveB081+B8M3/jGR+/10hwXGmZZVfe49l/NEz
-        MXxa3dE5c4+IqB3PmaV5P65h0p/Wl6LPT81sjYu6s+JW94+FNYaHqwScQmesyJ3Y8ClOrjjK
-        eP+Wnb6Fy5c+vGwkuunkfB696oKiwLijSgdunk7gcc+Yfvz3zy2VrnOULwuXhHwNntF1ZOvp
-        c44Pmo49d+jeXO9RzK9xr6r0yq3EZwe3ObE1cJ8/9+XEfJvZjlxu+XzvdK2XaFvG1x/3ZAy7
-        USR/isVwa+5lCe9ly5RYijMSDbWYi4oTASToz6RXBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLIsWRmVeSWpSXmKPExsWy7bCSvK7X7XeJBhcWy1ss/vGcyeLQ5q3s
-        FlMfPmGzmH/kHKvFxrc/mCym/FnOZLHp8TVWi4evwi0u75rDZjHj/D4mi8aPN9ktFm39wm7R
-        uvcIuwOvx6yGXjaP60s+MXtsWtXJ5nHn2h42j81L6j36tqxi9PjXNJfd4/MmuQCOKC6blNSc
-        zLLUIn27BK6Mx/8XsBV84Kn4cewVUwNjC3cXIyeHhICJxMK1X9i6GLk4hAR2MEocazvOCpGQ
-        lri+cQI7hC0ssfLfc3aIoueMEjOO3GcGSbAJ6ErsWNzGBmKLCKhKLH08E2wSs0Avs8SENztY
-        IToeMEp0/pgBNooTqOPgqgVMILawgKPEmrXLWLoYOThYgLpXnvAACfMKWEpMO/eaGcIWlDg5
-        8wlYCbOAnkTbRkaQMLOAvMT2t3OYIY5TkPj5dBkrxA1uEoeP3WKFqBGXeHn0CPsERuFZSCbN
-        Qpg0C8mkWUg6FjCyrGKUTC0ozk3PLTYsMMpLLdcrTswtLs1L10vOz93ECI5RLa0djHtWfdA7
-        xMjEwXiIUYKDWUmEtyrlXaIQb0piZVVqUX58UWlOavEhRmkOFiVx3gtdJ+OFBNITS1KzU1ML
-        UotgskwcnFINTNNVMiKXFLSKRFixTVw0911wrqXl1OLTDHtjPF/FVWyoElf2ubo9+RbbK+6s
-        hAMvpt7g2+Psmf3wtm5dw8NneicCjG/MeFTAFjvPc95UD1epMP4H+lMZvLq6E7cFBTZ9C1L1
-        +6n6b+NyyxXes/53a2qqv50Y+D79dcTf1N+VN0zLrcX3qvCdEGBnO7RY4udcXknRYxKRjxji
-        Hv8x9GjktLhSfMbsfKLv129/sqqWiByYOU/21TqOf9dEyo24OC3nFE9K1n3JXLNl9z8t/XKP
-        5l/ajSUxZXsCjr26HmStX3f31krFQ9rHtFmyX7UE9+5zZFt2ZEL+pV8u6z+aR8wNvZC1T0wp
-        3nN9Ro+FB2+3EktxRqKhFnNRcSIAqAil20ADAAA=
-X-CMS-MailID: 20220124170058epcas5p4cba1540f63abdf832a74f690ad76f28a
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220120193622epcas5p3a65c8424c6a01aed9a87f5ac2a89eb06
-References: <20220120192438.25555-1-alim.akhtar@samsung.com>
-        <CGME20220120193622epcas5p3a65c8424c6a01aed9a87f5ac2a89eb06@epcas5p3.samsung.com>
-        <20220120192438.25555-4-alim.akhtar@samsung.com>
-        <YevfmeGwmwLml+6b@jack.zhora.eu>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Andi for review
+In acpi_table_initrd_scan(), the return value of acpi_os_map_memory()
+is assigned to table and there is a dereference of it after that.
+acpi_os_map_memory() will return NULL on failure, which may lead to NULL
+pointer dereference.
 
->-----Original Message-----
->From: Andi Shyti [mailto:andi@etezian.org]
->Sent: Saturday, January 22, 2022 4:13 PM
->To: Alim Akhtar <alim.akhtar@samsung.com>
->Cc: linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
->devicetree@vger.kernel.org; linus.walleij@linaro.org; robh+dt@kernel.org;
->krzysztof.kozlowski@canonical.com; linux-samsung-soc@vger.kernel.org;
->pankaj.dubey@samsung.com; broonie@kernel.org; andi@etezian.org; linux-
->spi@vger.kernel.org; Aswani Reddy <aswani.reddy@samsung.com>; linux-
->fsd@tesla.com
->Subject: Re: [PATCH v2 3/3] arm64: dts: fsd: Add SPI device nodes
->
->Hi Alim and Aswani,
->
->On Fri, Jan 21, 2022 at 12:54:38AM +0530, Alim Akhtar wrote:
->> From: Aswani Reddy <aswani.reddy@samsung.com>
->>
->> Adds device tree node for SPI IPs
->>
->> Cc: linux-fsd@tesla.com
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->> Signed-off-by: Aswani Reddy <aswani.reddy@samsung.com>
->> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
->
->Reviewed-by: Andi Shyti <andi@etezian.org>
->
->Please, also allow me another nit-commnent for the next patches:
->the tag section is in chronological order. I suppose that first Aswani
-wrote the
->patch, then you sent it to the mailing list and at the end Krzysztof has
->reviewed it, this means that the right order is:
->
->  Signed-off-by: Aswani Reddy <aswani.reddy@samsung.com>
->  Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
->  Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->
-Sure, will update it in the next version of the patch set.
+Fix this bug by adding a NULL check of table.
 
->Thank you,
->Andi
+This bug was found by a static analyzer.
+
+Builds with 'make allyesconfig' show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Fixes: 5ae74f2cc2f1 ("ACPI / tables: Move table override mechanisms to tables.c")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+The analysis employs differential checking to identify inconsistent 
+security operations (e.g., checks or kfrees) between two code paths 
+and confirms that the inconsistent operations are not recovered in the
+current function or the callers, so they constitute bugs. 
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+ drivers/acpi/tables.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/acpi/tables.c b/drivers/acpi/tables.c
+index 8b10c192ed32..356e08c4015b 100644
+--- a/drivers/acpi/tables.c
++++ b/drivers/acpi/tables.c
+@@ -755,6 +755,9 @@ static void __init acpi_table_initrd_scan(void)
+ 	while (table_offset + ACPI_HEADER_SIZE <= all_tables_size) {
+ 		table = acpi_os_map_memory(acpi_tables_addr + table_offset,
+ 					   ACPI_HEADER_SIZE);
++		if (!table)
++			return;
++
+ 		if (table_offset + table->length > all_tables_size) {
+ 			acpi_os_unmap_memory(table, ACPI_HEADER_SIZE);
+ 			WARN_ON(1);
+-- 
+2.25.1
 

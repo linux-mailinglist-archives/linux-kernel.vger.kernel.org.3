@@ -2,114 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE3049815E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE74498165
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234202AbiAXNtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 08:49:55 -0500
-Received: from mga05.intel.com ([192.55.52.43]:11290 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232688AbiAXNtr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 08:49:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643032187; x=1674568187;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SZOZaltlzRkEFvk7iyPFTYTArEs+caDEG/8y0bOW5QQ=;
-  b=jBaYD5WBGXQqsavxFF8qSKv9xVcYAGK7XRJ08NG6B2ncbqAZP5P4pR5K
-   Bsx1IQVOsS9RTldhjnaIenkiXGYlwFZNLJaPazSUrrIZPlTG4//DjePzu
-   ugiBNYXDBrthX0zfwZ3yqXwAduHJkmyqwSrPEUhXWgN5l8qhub9UbWxKs
-   Sb7Q3XGOkYIQg784DcZztWZKO19oxTxFmK5jfWxA7GzlHz+OyT6jJc4RS
-   C2F8CevCfc5S16B15Ro6DofXJr5H4AjJ6HaPxL+6uyDTW9KdIb+zgvp1m
-   lPM/4Dj0YWUFclkDzqWnID42Lw788V+nIC69gKnKLEqWSufQVwkMguVfT
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="332400062"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="332400062"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 05:49:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="673628194"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Jan 2022 05:49:42 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nBzj4-000IPB-6r; Mon, 24 Jan 2022 13:49:42 +0000
-Date:   Mon, 24 Jan 2022 21:49:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>, jic23@kernel.org,
-        lars@metafoo.de, robh+dt@kernel.org, tomas.melin@vaisala.com,
-        andy.shevchenko@gmail.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-Subject: Re: [PATCH V1 2/6] iio: accel: sca3300: Add interface for operation
- modes.
-Message-ID: <202201242108.VNQCotc3-lkp@intel.com>
-References: <20220124093912.2429190-3-Qing-wu.Li@leica-geosystems.com.cn>
+        id S234419AbiAXNuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 08:50:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229846AbiAXNuy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 08:50:54 -0500
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36A3C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 05:50:53 -0800 (PST)
+Received: by mail-ua1-x92f.google.com with SMTP id p7so23855563uao.6
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 05:50:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=elnpBLQARnRLZNvPKlv8JLeoq3JtZl1fu0Kwxhb6W4Q=;
+        b=pOSKjTusGjLhqw45TfjvAeEDkHrppVglkaZ3biN4z+B1+eDjER6arxBNrUVxd9mTfB
+         UiKon0CaJtb/ljtfx0tbtXe0iCGZyasNfl+l+vP2P+Ug5yMmEpmwF19mvStimWu9gVnS
+         yvi50a5OOvl+pw6PX1wqAhCYu//gzXaz7WB3aOJW12F4aed4ECP1bZPZp5VkU3jJnXsC
+         WtjmgJmLBACrR/Yt3FwA15sBFuxnGhT4/6ceDUBAPfcIaUdTVVYyx+m1bv4eQoJxgjKa
+         aQQr5sBuQQkPnQqqnKkXWxWxj1H9VXJMNOuM7uHdW6AMeW/LyGGy8E82jDLKWqZtm5JI
+         QkxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=elnpBLQARnRLZNvPKlv8JLeoq3JtZl1fu0Kwxhb6W4Q=;
+        b=IMJXYx7Db4cTNBekxKZR7ocGFzgxrPd+7iad06zLNmmZAUKUOSOVCfJIVbrVGSbmq+
+         Waqx00SMug5CfjE0m/G0xS8O15UrCs8SLczU4AVY5MmC36SQsFc/AE0uAHdBNRW0O7Eq
+         nUozzgQwdQIZQq92ESINe7ZzypOoHmn+LA0S0cuG8OXj8lPJRYzp6W1LQVExvQEA3chy
+         Bw1ZrBRIt2mU+Iy5OT1uER8y2Hwxdl/CbqVn+Rogu8mj5hPqnrIJ+CvWYjhC99WW/na5
+         EkcCWX6RZpN1+NdMEWNvHeJ6GR4kaqeGcqzK+ZPHTyyXaitThBAniK88HXDcAIP0PLz/
+         kQNA==
+X-Gm-Message-State: AOAM5321/aovKtqkq8e0HjqTcvCHU2Ulkx/FNE+p23Vc8xlnGu/96/KN
+        nmsKhyc7+8M4t+zq0Cg3RphJb7frHMlbD7Zvf0WoPw==
+X-Google-Smtp-Source: ABdhPJxvi5cZdB24aTyLiac3wH/da4Ee9sNkiG0jVsHFaPMStmGQ3+FEHBnkb+seTBGiIWnc3xn/pq1JWy1QVANrkXY=
+X-Received: by 2002:a67:c591:: with SMTP id h17mr4539820vsk.86.1643032252928;
+ Mon, 24 Jan 2022 05:50:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124093912.2429190-3-Qing-wu.Li@leica-geosystems.com.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211227112959.7325-1-krzysztof.kozlowski@canonical.com>
+ <CAPLW+4n-1H5Yu3wQaus-UJ_VW_TjHrNUHaPCGCMURXg8EqxjyA@mail.gmail.com>
+ <CAK8P3a1ou-ZdrXN0MHQoJ+gGbvhXT-e2qt96_f9M8VwrdX0pAg@mail.gmail.com>
+ <CAOesGMgF3S5_XsWjEqq=-zfYXwOWFpFNA6afL81wceRUA_0FeQ@mail.gmail.com>
+ <CAPLW+4k8=ymx56R7bKOt8kMVG_uUgrTsCkVd5wiY_rkYq8dYbQ@mail.gmail.com> <72a50afd-df9f-ceb3-898e-070d70dc0221@canonical.com>
+In-Reply-To: <72a50afd-df9f-ceb3-898e-070d70dc0221@canonical.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Mon, 24 Jan 2022 15:50:41 +0200
+Message-ID: <CAPLW+4=xaHA2a=-F4ikuUPDpoO8Waj7qrrfpgkift1aMi_hU+g@mail.gmail.com>
+Subject: Re: [GIT PULL] arm64: dts: samsung: Second pull for v5.17
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi LI,
+On Sun, 23 Jan 2022 at 21:27, Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> On 22/01/2022 13:38, Sam Protsenko wrote:
+> > On Wed, 19 Jan 2022 at 18:53, Olof Johansson <olof@lixom.net> wrote:
+> >>
+> >> On Wed, Jan 19, 2022 at 8:07 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> >>>
+> >>> On Wed, Jan 19, 2022 at 4:11 PM Sam Protsenko
+> >>> <semen.protsenko@linaro.org> wrote:
+> >>>> On Mon, 27 Dec 2021 at 13:30, Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
+> >>>>
+> >>>> Hi Olof, Arnd,
+> >>>>
+> >>>> Just want to check if it's possible for those patches to be applied in
+> >>>> v5.17? Sorry for the noise, but that's important to me.
+> >>>
+> >>> I can see that Olof merged merged this into the "arm/late" branch in
+> >>> the soc tree,
+> >>> so I assume he still plans to send it in the next few days.
+> >>
+> >> Yep, will be sent up today most likely.
+> >>
+> >
+> > Thanks for detailed answer! Glad to hear it's still a possibility.
+> > Please let me know if you need any actions on my side (like rebasing,
+> > etc).
+> >
+> >>> With the timing over Christmas, I sent out the large bulk of the
+> >>> contents (anything
+> >>> I merged before Dec 23) last year, and Linus already merged it, the rest ended
+> >>> up in the "late" branch.
+> >>>
+> >>> As usual, there is no guarantee that late changes make it in, but I have seen
+> >>> no indication of any problems so far.
+> >>
+> >> Correct. Been sitting on it for a while in case there were fixes
+> >> coming in for the first pieces that got merged, but in traditional
+> >> fashion I'm guessing those will start to show up a few days after the
+> >> late branch gets merged. :)
+>
+> Olof,
+> v5.17-rc1 came earlier, so I see this part did not make into it. Is
+> there a chance for a past-rc1 pull to Linus with it?
+>
+> Sam,
+> Anyway the patches wont' get lost (you mentioned such worry in previous
+> email to me). They might just need to wait. Unfortunately if patch,
+> especially with new feature, is coming in the end of cycle, there is a
+> risk it won't make it. The patches have to wait a few days in my trees
+> before I send them to Arnd/Olof, so if the patch is coming after rc6, I
+> can push it to Arnd/Olof around rc7, you see there is very little time.
+>
 
-Thank you for the patch! Yet something to improve:
+Should I send the patch fixing hard-coded clock numbers though? I
+remember you said I should send it once -rc1 is out. But now that dts
+patches are not merged in mainline, I'm not sure it can still be
+applied?
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on v5.17-rc1 next-20220124]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/LI-Qingwu/i-iio-accel-sca3300-add-compitible-for-scl3300/20220124-174021
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: hexagon-randconfig-r033-20220124 (https://download.01.org/0day-ci/archive/20220124/202201242108.VNQCotc3-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2e58a18910867ba6795066e044293e6daf89edf5)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/1521580933c9c08143fc14b23a363eb7961d4520
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review LI-Qingwu/i-iio-accel-sca3300-add-compitible-for-scl3300/20220124-174021
-        git checkout 1521580933c9c08143fc14b23a363eb7961d4520
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/iio/accel/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/iio/accel/sca3300.c:74:53: error: too few arguments provided to function-like macro invocation
-           IIO_ENUM_AVAILABLE("op_mode", &sca3300_op_mode_enum),
-                                                              ^
-   include/linux/iio/iio.h:112:9: note: macro 'IIO_ENUM_AVAILABLE' defined here
-   #define IIO_ENUM_AVAILABLE(_name, _shared, _e) \
-           ^
->> drivers/iio/accel/sca3300.c:74:2: error: use of undeclared identifier 'IIO_ENUM_AVAILABLE'
-           IIO_ENUM_AVAILABLE("op_mode", &sca3300_op_mode_enum),
-           ^
-   2 errors generated.
-
-
-vim +74 drivers/iio/accel/sca3300.c
-
-    71	
-    72	static const struct iio_chan_spec_ext_info sca3300_ext_info[] = {
-    73		IIO_ENUM("op_mode", IIO_SHARED_BY_DIR, &sca3300_op_mode_enum),
-  > 74		IIO_ENUM_AVAILABLE("op_mode", &sca3300_op_mode_enum),
-    75		{ }
-    76	};
-    77	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> Best regards,
+> Krzysztof

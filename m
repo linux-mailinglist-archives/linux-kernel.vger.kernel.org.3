@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A902498ABC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:07:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 246A0498D28
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:33:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345814AbiAXTG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:06:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57424 "EHLO
+        id S1348243AbiAXT2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:28:14 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43482 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345389AbiAXTAN (ORCPT
+        with ESMTP id S1347169AbiAXTSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:00:13 -0500
+        Mon, 24 Jan 2022 14:18:42 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2149B81236;
-        Mon, 24 Jan 2022 19:00:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1A98C340E5;
-        Mon, 24 Jan 2022 19:00:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8366FB811F9;
+        Mon, 24 Jan 2022 19:18:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABCE6C340E5;
+        Mon, 24 Jan 2022 19:18:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050810;
-        bh=46ZQ2Ukvtqdel2YKeI9Beyu+coFEEPVZxoQUk1YKJUY=;
+        s=korg; t=1643051917;
+        bh=teqJf60VfZfCyKR10hz8RbabCK/klAXvLnO3Vng0KDM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lEDO1P8+vcdWgtmZiCU/NEiRmyQeTHlH0/JWJIlshPpaPnAy9ngSa7UQxbQPLZ/tN
-         kOXpsYn4Gs3iNfC1oF+cTo4QELWxZuBz51dR2dNjt0H4HdE7cF+BdBKyJ4PjEiQnDW
-         c4dnwuM0gT3IMqgM/f2tfNyWYNTxnX4h8JWBKbr4=
+        b=d8s/QQ9gpValdTBTlqYLQrdjYJdc/QtBplUDCzx+2ma0+P0HXDxbhEmvo7uvIvc1P
+         hhWtvTCTLPQwXYGwLtMEMacZCjypecJ5wA73yqdGbi9Gif48CQpgtJvNooQQCZVPRk
+         igzzB5/JuAh9tvM95MLt2Jx0E+fGqgq7Ag/rjBZM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Keeping <john@metanate.com>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        stable@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>,
+        Danielle Ratson <danieller@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 076/157] usb: gadget: f_fs: Use stream_open() for endpoint files
+Subject: [PATCH 4.19 128/239] mlxsw: pci: Add shutdown method in PCI driver
 Date:   Mon, 24 Jan 2022 19:42:46 +0100
-Message-Id: <20220124183935.198233579@linuxfoundation.org>
+Message-Id: <20220124183947.181183438@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,63 +48,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+From: Danielle Ratson <danieller@nvidia.com>
 
-[ Upstream commit c76ef96fc00eb398c8fc836b0eb2f82bcc619dc7 ]
+[ Upstream commit c1020d3cf4752f61a6a413f632ea2ce2370e150d ]
 
-Function fs endpoint file operations are synchronized via an interruptible
-mutex wait. However we see threads that do ep file operations concurrently
-are getting blocked for the mutex lock in __fdget_pos(). This is an
-uninterruptible wait and we see hung task warnings and kernel panic
-if hung_task_panic systcl is enabled if host does not send/receive
-the data for long time.
+On an arm64 platform with the Spectrum ASIC, after loading and executing
+a new kernel via kexec, the following trace [1] is observed. This seems
+to be caused by the fact that the device is not properly shutdown before
+executing the new kernel.
 
-The reason for threads getting blocked in __fdget_pos() is due to
-the file position protection introduced by the commit 9c225f2655e3
-("vfs: atomic f_pos accesses as per POSIX"). Since function fs
-endpoint files does not have the notion of the file position, switch
-to the stream mode. This will bypass the file position mutex and
-threads will be blocked in interruptible state for the function fs
-mutex.
+Fix this by implementing a shutdown method which mirrors the remove
+method, as recommended by the kexec maintainer [2][3].
 
-It should not affects user space as we are only changing the task state
-changes the task state from UNINTERRUPTIBLE to INTERRUPTIBLE while waiting
-for the USB transfers to be finished. However there is a slight change to
-the O_NONBLOCK behavior. Earlier threads that are using O_NONBLOCK are also
-getting blocked inside fdget_pos(). Now they reach to function fs and error
-code is returned. The non blocking behavior is actually honoured now.
+[1]
+BUG: Bad page state in process devlink pfn:22f73d
+page:fffffe00089dcf40 refcount:-1 mapcount:0 mapping:0000000000000000 index:0x0
+flags: 0x2ffff00000000000()
+raw: 2ffff00000000000 0000000000000000 ffffffff089d0201 0000000000000000
+raw: 0000000000000000 0000000000000000 ffffffffffffffff 0000000000000000
+page dumped because: nonzero _refcount
+Modules linked in:
+CPU: 1 PID: 16346 Comm: devlink Tainted: G B 5.8.0-rc6-custom-273020-gac6b365b1bf5 #44
+Hardware name: Marvell Armada 7040 TX4810M (DT)
+Call trace:
+ dump_backtrace+0x0/0x1d0
+ show_stack+0x1c/0x28
+ dump_stack+0xbc/0x118
+ bad_page+0xcc/0xf8
+ check_free_page_bad+0x80/0x88
+ __free_pages_ok+0x3f8/0x418
+ __free_pages+0x38/0x60
+ kmem_freepages+0x200/0x2a8
+ slab_destroy+0x28/0x68
+ slabs_destroy+0x60/0x90
+ ___cache_free+0x1b4/0x358
+ kfree+0xc0/0x1d0
+ skb_free_head+0x2c/0x38
+ skb_release_data+0x110/0x1a0
+ skb_release_all+0x2c/0x38
+ consume_skb+0x38/0x130
+ __dev_kfree_skb_any+0x44/0x50
+ mlxsw_pci_rdq_fini+0x8c/0xb0
+ mlxsw_pci_queue_fini.isra.0+0x28/0x58
+ mlxsw_pci_queue_group_fini+0x58/0x88
+ mlxsw_pci_aqs_fini+0x2c/0x60
+ mlxsw_pci_fini+0x34/0x50
+ mlxsw_core_bus_device_unregister+0x104/0x1d0
+ mlxsw_devlink_core_bus_device_reload_down+0x2c/0x48
+ devlink_reload+0x44/0x158
+ devlink_nl_cmd_reload+0x270/0x290
+ genl_rcv_msg+0x188/0x2f0
+ netlink_rcv_skb+0x5c/0x118
+ genl_rcv+0x3c/0x50
+ netlink_unicast+0x1bc/0x278
+ netlink_sendmsg+0x194/0x390
+ __sys_sendto+0xe0/0x158
+ __arm64_sys_sendto+0x2c/0x38
+ el0_svc_common.constprop.0+0x70/0x168
+ do_el0_svc+0x28/0x88
+ el0_sync_handler+0x88/0x190
+ el0_sync+0x140/0x180
 
-Reviewed-by: John Keeping <john@metanate.com>
-Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-Link: https://lore.kernel.org/r/1636712682-1226-1-git-send-email-quic_pkondeti@quicinc.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[2]
+https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1195432.html
+
+[3]
+https://patchwork.kernel.org/project/linux-scsi/patch/20170212214920.28866-1-anton@ozlabs.org/#20116693
+
+Cc: Eric Biederman <ebiederm@xmission.com>
+Signed-off-by: Danielle Ratson <danieller@nvidia.com>
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/f_fs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/mellanox/mlxsw/pci.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 0336392686935..e4826454de1a7 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -608,7 +608,7 @@ static int ffs_ep0_open(struct inode *inode, struct file *file)
- 	file->private_data = ffs;
- 	ffs_data_opened(ffs);
- 
--	return 0;
-+	return stream_open(inode, file);
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/pci.c b/drivers/net/ethernet/mellanox/mlxsw/pci.c
+index a903e97793f9a..addd5765576d9 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/pci.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/pci.c
+@@ -1825,6 +1825,7 @@ int mlxsw_pci_driver_register(struct pci_driver *pci_driver)
+ {
+ 	pci_driver->probe = mlxsw_pci_probe;
+ 	pci_driver->remove = mlxsw_pci_remove;
++	pci_driver->shutdown = mlxsw_pci_remove;
+ 	return pci_register_driver(pci_driver);
  }
- 
- static int ffs_ep0_release(struct inode *inode, struct file *file)
-@@ -1071,7 +1071,7 @@ ffs_epfile_open(struct inode *inode, struct file *file)
- 	file->private_data = epfile;
- 	ffs_data_opened(epfile->ffs);
- 
--	return 0;
-+	return stream_open(inode, file);
- }
- 
- static int ffs_aio_cancel(struct kiocb *kiocb)
+ EXPORT_SYMBOL(mlxsw_pci_driver_register);
 -- 
 2.34.1
 

@@ -2,38 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A336498985
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:56:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E775D49896F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:56:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344022AbiAXS4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:56:46 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51876 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343997AbiAXSxC (ORCPT
+        id S236352AbiAXS4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:56:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344187AbiAXSxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:53:02 -0500
+        Mon, 24 Jan 2022 13:53:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB052C06175B;
+        Mon, 24 Jan 2022 10:53:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 387FAB8121C;
-        Mon, 24 Jan 2022 18:53:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43B8EC36AE9;
-        Mon, 24 Jan 2022 18:52:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78049B810BD;
+        Mon, 24 Jan 2022 18:53:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83272C340E5;
+        Mon, 24 Jan 2022 18:53:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050380;
-        bh=sTTgpgmbUcfDJ3e7vQshhsXsvJ02IkzeYILauBlTR2k=;
+        s=korg; t=1643050383;
+        bh=SqqKlmrkJD2ajJiHT7F53gMvsqqsiJfdubXqh3QjyAo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PTZmIJ5Bm0gP/comaZwtf0CJ/rjU5liQSdl8lSJAEcI0usiv4IdGMQAxfDFLwK4DL
-         MZy2y5Qn2WIWSI4URkSK3b0VTFgSpB/z8Px2BRRD5wNjDgeaS2Vf96HstL/Cb2ZKTZ
-         80K3I9b6s2mfFvD/1oETTe9TPrEnO+OVeYfdD8+Y=
+        b=LXHOT118XShLCB1XxGaKuI1ApFICs4MQBvuoFKVgUkti8rDp3d3q8u1miwMElwnrF
+         dMLsss3xAYnlfGMlVUvB5zNEUrsoUs57sHXo7X0rmeEzJlTknoB7gVmU0GFJNJ2EM4
+         0uTYihnLgT7TigeDT3MWEYFR2U0NGPnVRHTZn1oM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        Lukas Czerner <lczerner@redhat.com>, stable@kernel.org
-Subject: [PATCH 4.4 100/114] ext4: dont use the orphan list when migrating an inode
-Date:   Mon, 24 Jan 2022 19:43:15 +0100
-Message-Id: <20220124183930.198387689@linuxfoundation.org>
+        stable@vger.kernel.org, Tobias Waldekranz <tobias@waldekranz.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.4 101/114] powerpc/fsl/dts: Enable WA for erratum A-009885 on fman3l MDIO buses
+Date:   Mon, 24 Jan 2022 19:43:16 +0100
+Message-Id: <20220124183930.228586236@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183927.095545464@linuxfoundation.org>
 References: <20220124183927.095545464@linuxfoundation.org>
@@ -45,83 +48,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Theodore Ts'o <tytso@mit.edu>
+From: Tobias Waldekranz <tobias@waldekranz.com>
 
-commit 6eeaf88fd586f05aaf1d48cb3a139d2a5c6eb055 upstream.
+commit 0d375d610fa96524e2ee2b46830a46a7bfa92a9f upstream.
 
-We probably want to remove the indirect block to extents migration
-feature after a deprecation window, but until then, let's fix a
-potential data loss problem caused by the fact that we put the
-tmp_inode on the orphan list.  In the unlikely case where we crash and
-do a journal recovery, the data blocks belonging to the inode being
-migrated are also represented in the tmp_inode on the orphan list ---
-and so its data blocks will get marked unallocated, and available for
-reuse.
+This block is used in (at least) T1024 and T1040, including their
+variants like T1023 etc.
 
-Instead, stop putting the tmp_inode on the oprhan list.  So in the
-case where we crash while migrating the inode, we'll leak an inode,
-which is not a disaster.  It will be easily fixed the next time we run
-fsck, and it's better than potentially having blocks getting claimed
-by two different files, and losing data as a result.
-
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Reviewed-by: Lukas Czerner <lczerner@redhat.com>
-Cc: stable@kernel.org
+Fixes: d55ad2967d89 ("powerpc/mpc85xx: Create dts components for the FSL QorIQ DPAA FMan")
+Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/migrate.c |   19 ++++---------------
- 1 file changed, 4 insertions(+), 15 deletions(-)
+ arch/powerpc/boot/dts/fsl/qoriq-fman3l-0.dtsi |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/fs/ext4/migrate.c
-+++ b/fs/ext4/migrate.c
-@@ -459,12 +459,12 @@ int ext4_ext_migrate(struct inode *inode
- 		return retval;
+--- a/arch/powerpc/boot/dts/fsl/qoriq-fman3l-0.dtsi
++++ b/arch/powerpc/boot/dts/fsl/qoriq-fman3l-0.dtsi
+@@ -78,6 +78,7 @@ fman0: fman@400000 {
+ 		#size-cells = <0>;
+ 		compatible = "fsl,fman-memac-mdio", "fsl,fman-xmdio";
+ 		reg = <0xfc000 0x1000>;
++		fsl,erratum-a009885;
+ 	};
  
- 	/*
--	 * Worst case we can touch the allocation bitmaps, a bgd
--	 * block, and a block to link in the orphan list.  We do need
--	 * need to worry about credits for modifying the quota inode.
-+	 * Worst case we can touch the allocation bitmaps and a block
-+	 * group descriptor block.  We do need need to worry about
-+	 * credits for modifying the quota inode.
- 	 */
- 	handle = ext4_journal_start(inode, EXT4_HT_MIGRATE,
--		4 + EXT4_MAXQUOTAS_TRANS_BLOCKS(inode->i_sb));
-+		3 + EXT4_MAXQUOTAS_TRANS_BLOCKS(inode->i_sb));
+ 	xmdio0: mdio@fd000 {
+@@ -85,6 +86,7 @@ fman0: fman@400000 {
+ 		#size-cells = <0>;
+ 		compatible = "fsl,fman-memac-mdio", "fsl,fman-xmdio";
+ 		reg = <0xfd000 0x1000>;
++		fsl,erratum-a009885;
+ 	};
  
- 	if (IS_ERR(handle)) {
- 		retval = PTR_ERR(handle);
-@@ -485,10 +485,6 @@ int ext4_ext_migrate(struct inode *inode
- 	 * Use the correct seed for checksum (i.e. the seed from 'inode').  This
- 	 * is so that the metadata blocks will have the correct checksum after
- 	 * the migration.
--	 *
--	 * Note however that, if a crash occurs during the migration process,
--	 * the recovery process is broken because the tmp_inode checksums will
--	 * be wrong and the orphans cleanup will fail.
- 	 */
- 	ei = EXT4_I(inode);
- 	EXT4_I(tmp_inode)->i_csum_seed = ei->i_csum_seed;
-@@ -500,7 +496,6 @@ int ext4_ext_migrate(struct inode *inode
- 	clear_nlink(tmp_inode);
- 
- 	ext4_ext_tree_init(handle, tmp_inode);
--	ext4_orphan_add(handle, tmp_inode);
- 	ext4_journal_stop(handle);
- 
- 	/*
-@@ -525,12 +520,6 @@ int ext4_ext_migrate(struct inode *inode
- 
- 	handle = ext4_journal_start(inode, EXT4_HT_MIGRATE, 1);
- 	if (IS_ERR(handle)) {
--		/*
--		 * It is impossible to update on-disk structures without
--		 * a handle, so just rollback in-core changes and live other
--		 * work to orphan_list_cleanup()
--		 */
--		ext4_orphan_del(NULL, tmp_inode);
- 		retval = PTR_ERR(handle);
- 		goto out;
- 	}
+ 	ptp_timer0: ptp-timer@fe000 {
 
 

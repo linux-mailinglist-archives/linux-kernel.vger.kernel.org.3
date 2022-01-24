@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8EB549A350
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB46649A6C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387527AbiAXX5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:57:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358273AbiAXXRp (ORCPT
+        id S3421009AbiAYCZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:25:57 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45332 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357011AbiAXTsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:17:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD69C07E2BF;
-        Mon, 24 Jan 2022 11:48:07 -0800 (PST)
+        Mon, 24 Jan 2022 14:48:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D184061574;
-        Mon, 24 Jan 2022 19:48:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91D1BC340E5;
-        Mon, 24 Jan 2022 19:48:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D915D61298;
+        Mon, 24 Jan 2022 19:48:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4364C340E7;
+        Mon, 24 Jan 2022 19:48:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053686;
-        bh=hSPmmAxsvGfVUsGYIQ1clq+bMrnZsXvoyVNZsG9SmHI=;
+        s=korg; t=1643053689;
+        bh=0QUssqJNsNALCtFHI2M4tOyb+toYMUWbwPGQqJ03+fw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LsfqYTc7YhErehljNMq/OBO2dEMjFmVBDZS2HYKOaQ9kDsNQyoNGPzu7zNOkpKjb0
-         NTlkDzDxuke2JSIUyCeOAQX93vHVpeHmtjIQ+FtrL1KSPhM1g5q3EM2e152cKps0o1
-         1ho2+Xu5GaaaXV7NfsKNlGTxYPHabqq4wci+uVds=
+        b=BH4nad/5ePNung0vySifG8mbrPJ3e06Vt2mkJjA4FvavH3LL3r8rR1W7aKTo4IlPd
+         pS7GpSa1jqPDefFNuaxFJPGoyjzh4JIDe9yMMC5EODqM4fhM0JWzhFgGUCvSmbnas/
+         jS+tzk5jFlAL6dRLclxYuHqXReTn91Pha6UCVdPI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Martin Weber <martin.weber@br-automation.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 111/563] media: mtk-vcodec: call v4l2_m2m_ctx_release first when file is released
-Date:   Mon, 24 Jan 2022 19:37:56 +0100
-Message-Id: <20220124184028.260388985@linuxfoundation.org>
+Subject: [PATCH 5.10 112/563] media: coda: fix CODA960 JPEG encoder buffer overflow
+Date:   Mon, 24 Jan 2022 19:37:57 +0100
+Message-Id: <20220124184028.293601037@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -51,83 +49,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+From: Philipp Zabel <p.zabel@pengutronix.de>
 
-[ Upstream commit 9f89c881bffbdffe4060ffaef3489a2830a6dd9c ]
+[ Upstream commit 1a59cd88f55068710f6549bee548846661673780 ]
 
-The func v4l2_m2m_ctx_release waits for currently running jobs
-to finish and then stop streaming both queues and frees the buffers.
-All this should be done before the call to mtk_vcodec_enc_release
-which frees the encoder handler. This fixes null-pointer dereference bug:
+Stop the CODA960 JPEG encoder from overflowing capture buffers.
+The bitstream buffer overflow interrupt doesn't seem to be connected,
+so this has to be handled via timeout instead.
 
-[  638.028076] Mem abort info:
-[  638.030932]   ESR = 0x96000004
-[  638.033978]   EC = 0x25: DABT (current EL), IL = 32 bits
-[  638.039293]   SET = 0, FnV = 0
-[  638.042338]   EA = 0, S1PTW = 0
-[  638.045474]   FSC = 0x04: level 0 translation fault
-[  638.050349] Data abort info:
-[  638.053224]   ISV = 0, ISS = 0x00000004
-[  638.057055]   CM = 0, WnR = 0
-[  638.060018] user pgtable: 4k pages, 48-bit VAs, pgdp=000000012b6db000
-[  638.066485] [00000000000001a0] pgd=0000000000000000, p4d=0000000000000000
-[  638.073277] Internal error: Oops: 96000004 [#1] SMP
-[  638.078145] Modules linked in: rfkill mtk_vcodec_dec mtk_vcodec_enc uvcvideo mtk_mdp mtk_vcodec_common videobuf2_dma_contig v4l2_h264 cdc_ether v4l2_mem2mem videobuf2_vmalloc usbnet videobuf2_memops videobuf2_v4l2 r8152 videobuf2_common videodev cros_ec_sensors cros_ec_sensors_core industrialio_triggered_buffer kfifo_buf elan_i2c elants_i2c sbs_battery mc cros_usbpd_charger cros_ec_chardev cros_usbpd_logger crct10dif_ce mtk_vpu fuse ip_tables x_tables ipv6
-[  638.118583] CPU: 0 PID: 212 Comm: kworker/u8:5 Not tainted 5.15.0-06427-g58a1d4dcfc74-dirty #109
-[  638.127357] Hardware name: Google Elm (DT)
-[  638.131444] Workqueue: mtk-vcodec-enc mtk_venc_worker [mtk_vcodec_enc]
-[  638.137974] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[  638.144925] pc : vp8_enc_encode+0x34/0x2b0 [mtk_vcodec_enc]
-[  638.150493] lr : venc_if_encode+0xac/0x1b0 [mtk_vcodec_enc]
-[  638.156060] sp : ffff8000124d3c40
-[  638.159364] x29: ffff8000124d3c40 x28: 0000000000000000 x27: 0000000000000000
-[  638.166493] x26: 0000000000000000 x25: ffff0000e7f252d0 x24: ffff8000124d3d58
-[  638.173621] x23: ffff8000124d3d58 x22: ffff8000124d3d60 x21: 0000000000000001
-[  638.180750] x20: ffff80001137e000 x19: 0000000000000000 x18: 0000000000000001
-[  638.187878] x17: 000000040044ffff x16: 00400032b5503510 x15: 0000000000000000
-[  638.195006] x14: ffff8000118536c0 x13: ffff8000ee1da000 x12: 0000000030d4d91d
-[  638.202134] x11: 0000000000000000 x10: 0000000000000980 x9 : ffff8000124d3b20
-[  638.209262] x8 : ffff0000c18d4ea0 x7 : ffff0000c18d44c0 x6 : ffff0000c18d44c0
-[  638.216391] x5 : ffff80000904a3b0 x4 : ffff8000124d3d58 x3 : ffff8000124d3d60
-[  638.223519] x2 : ffff8000124d3d78 x1 : 0000000000000001 x0 : ffff80001137efb8
-[  638.230648] Call trace:
-[  638.233084]  vp8_enc_encode+0x34/0x2b0 [mtk_vcodec_enc]
-[  638.238304]  venc_if_encode+0xac/0x1b0 [mtk_vcodec_enc]
-[  638.243525]  mtk_venc_worker+0x110/0x250 [mtk_vcodec_enc]
-[  638.248918]  process_one_work+0x1f8/0x498
-[  638.252923]  worker_thread+0x140/0x538
-[  638.256664]  kthread+0x148/0x158
-[  638.259884]  ret_from_fork+0x10/0x20
-[  638.263455] Code: f90023f9 2a0103f5 aa0303f6 aa0403f8 (f940d277)
-[  638.269538] ---[ end trace e374fc10f8e181f5 ]---
-
-[gst-master] root@debian:~/gst-build# [  638.019193] Unable to handle kernel NULL pointer dereference at virtual address 00000000000001a0
-Fixes: 4e855a6efa547 ("[media] vcodec: mediatek: Add Mediatek V4L2 Video Encoder Driver")
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Reported-by: Martin Weber <martin.weber@br-automation.com>
+Fixes: 96f6f62c4656 ("media: coda: jpeg: add CODA960 JPEG encoder support")
+Tested-by: Martin Weber <martin.weber@br-automation.com>
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/coda/coda-common.c |  8 +++++---
+ drivers/media/platform/coda/coda-jpeg.c   | 21 ++++++++++++++++++++-
+ 2 files changed, 25 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-index 219c2c5b78efc..5f93bc670edb2 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-@@ -237,11 +237,11 @@ static int fops_vcodec_release(struct file *file)
- 	mtk_v4l2_debug(1, "[%d] encoder", ctx->id);
- 	mutex_lock(&dev->dev_mutex);
+diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
+index 87a2c706f7477..1eed69d29149f 100644
+--- a/drivers/media/platform/coda/coda-common.c
++++ b/drivers/media/platform/coda/coda-common.c
+@@ -1537,11 +1537,13 @@ static void coda_pic_run_work(struct work_struct *work)
  
-+	v4l2_m2m_ctx_release(ctx->m2m_ctx);
- 	mtk_vcodec_enc_release(ctx);
- 	v4l2_fh_del(&ctx->fh);
- 	v4l2_fh_exit(&ctx->fh);
- 	v4l2_ctrl_handler_free(&ctx->ctrl_hdl);
--	v4l2_m2m_ctx_release(ctx->m2m_ctx);
+ 	if (!wait_for_completion_timeout(&ctx->completion,
+ 					 msecs_to_jiffies(1000))) {
+-		dev_err(dev->dev, "CODA PIC_RUN timeout\n");
++		if (ctx->use_bit) {
++			dev_err(dev->dev, "CODA PIC_RUN timeout\n");
  
- 	list_del_init(&ctx->list);
- 	kfree(ctx);
+-		ctx->hold = true;
++			ctx->hold = true;
+ 
+-		coda_hw_reset(ctx);
++			coda_hw_reset(ctx);
++		}
+ 
+ 		if (ctx->ops->run_timeout)
+ 			ctx->ops->run_timeout(ctx);
+diff --git a/drivers/media/platform/coda/coda-jpeg.c b/drivers/media/platform/coda/coda-jpeg.c
+index b11cfbe166dd3..a72f4655e5ad5 100644
+--- a/drivers/media/platform/coda/coda-jpeg.c
++++ b/drivers/media/platform/coda/coda-jpeg.c
+@@ -1127,7 +1127,8 @@ static int coda9_jpeg_prepare_encode(struct coda_ctx *ctx)
+ 	coda_write(dev, 0, CODA9_REG_JPEG_GBU_BT_PTR);
+ 	coda_write(dev, 0, CODA9_REG_JPEG_GBU_WD_PTR);
+ 	coda_write(dev, 0, CODA9_REG_JPEG_GBU_BBSR);
+-	coda_write(dev, 0, CODA9_REG_JPEG_BBC_STRM_CTRL);
++	coda_write(dev, BIT(31) | ((end_addr - start_addr - header_len) / 256),
++		   CODA9_REG_JPEG_BBC_STRM_CTRL);
+ 	coda_write(dev, 0, CODA9_REG_JPEG_GBU_CTRL);
+ 	coda_write(dev, 0, CODA9_REG_JPEG_GBU_FF_RPTR);
+ 	coda_write(dev, 127, CODA9_REG_JPEG_GBU_BBER);
+@@ -1257,6 +1258,23 @@ static void coda9_jpeg_finish_encode(struct coda_ctx *ctx)
+ 	coda_hw_reset(ctx);
+ }
+ 
++static void coda9_jpeg_encode_timeout(struct coda_ctx *ctx)
++{
++	struct coda_dev *dev = ctx->dev;
++	u32 end_addr, wr_ptr;
++
++	/* Handle missing BBC overflow interrupt via timeout */
++	end_addr = coda_read(dev, CODA9_REG_JPEG_BBC_END_ADDR);
++	wr_ptr = coda_read(dev, CODA9_REG_JPEG_BBC_WR_PTR);
++	if (wr_ptr >= end_addr - 256) {
++		v4l2_err(&dev->v4l2_dev, "JPEG too large for capture buffer\n");
++		coda9_jpeg_finish_encode(ctx);
++		return;
++	}
++
++	coda_hw_reset(ctx);
++}
++
+ static void coda9_jpeg_release(struct coda_ctx *ctx)
+ {
+ 	int i;
+@@ -1276,6 +1294,7 @@ const struct coda_context_ops coda9_jpeg_encode_ops = {
+ 	.start_streaming = coda9_jpeg_start_encoding,
+ 	.prepare_run = coda9_jpeg_prepare_encode,
+ 	.finish_run = coda9_jpeg_finish_encode,
++	.run_timeout = coda9_jpeg_encode_timeout,
+ 	.release = coda9_jpeg_release,
+ };
+ 
 -- 
 2.34.1
 

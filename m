@@ -2,30 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E1B4987C8
+	by mail.lfdr.de (Postfix) with ESMTP id 772734987C9
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:06:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245064AbiAXSG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:06:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245006AbiAXSGY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S245079AbiAXSGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:06:31 -0500
+Received: from out0.migadu.com ([94.23.1.103]:18946 "EHLO out0.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245002AbiAXSGY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 13:06:24 -0500
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0A8C06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:06:24 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1643047582;
+        t=1643047583;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EP4tI+Rouw15xYzxaTB6yeKX8++pBPS4+JzWpz9l86E=;
-        b=urMo9kR2/OaUAzrXCyCRxF1GiQSN2C8+PM+wk13aeeDAIN+SjiV+pGVOej2R7oSbLpzLpE
-        +LNS0YyMcwSPDvzfR28Hnd9TluQ4o6ClvB8+IUBZ/jCaKjZOiIf0HuBK/sHJTsvcjd+xFl
-        7fzeyqRxoOABNT0oVg7o3MtdOdE+CVQ=
+        bh=4/y0HjGmlj8gRZl7sKKC15OiIQ+URUy4QXcXfGAQLsE=;
+        b=cEt2JHsQwrkLVfMoZK13nWffMlEiwZaIGbGyF4gC8cAeDpRvqj1bkguYhGcbPfveiE3JA2
+        +1sTkZavlWgOjB5XJNxkdXXXbmh7xEABFORykbamGRFegBc2vbxDSqj+Mw7AZ4f8QGXi31
+        /c/hBakatNfmGBIuDYr5ea0bqnV1CIo=
 From:   andrey.konovalov@linux.dev
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
@@ -43,9 +39,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH v6 25/39] kasan, vmalloc, arm64: mark vmalloc mappings as pgprot_tagged
-Date:   Mon, 24 Jan 2022 19:04:59 +0100
-Message-Id: <983fc33542db2f6b1e77b34ca23448d4640bbb9e.1643047180.git.andreyknvl@google.com>
+Subject: [PATCH v6 26/39] kasan, vmalloc: unpoison VM_ALLOC pages after mapping
+Date:   Mon, 24 Jan 2022 19:05:00 +0100
+Message-Id: <fcb98980e6fcd3c4be6acdcb5d6110898ef28548.1643047180.git.andreyknvl@google.com>
 In-Reply-To: <cover.1643047180.git.andreyknvl@google.com>
 References: <cover.1643047180.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -58,87 +54,122 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-HW_TAGS KASAN relies on ARM Memory Tagging Extension (MTE). With MTE,
-a memory region must be mapped as MT_NORMAL_TAGGED to allow setting
-memory tags via MTE-specific instructions.
+Make KASAN unpoison vmalloc mappings after they have been mapped in
+when it's possible: for vmalloc() (indentified via VM_ALLOC) and
+vm_map_ram().
 
-Add proper protection bits to vmalloc() allocations. These allocations
-are always backed by page_alloc pages, so the tags will actually be
-getting set on the corresponding physical memory.
+The reasons for this are:
+
+- For vmalloc() and vm_map_ram(): pages don't get unpoisoned in case
+  mapping them fails.
+- For vmalloc(): HW_TAGS KASAN needs pages to be mapped to set tags via
+  kasan_unpoison_vmalloc().
+
+As a part of these changes, the return value of __vmalloc_node_range()
+is changed to area->addr. This is a non-functional change, as
+__vmalloc_area_node() returns area->addr anyway.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-Co-developed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>
 
 ---
 
 Changes v3->v4:
-- Rename arch_vmalloc_pgprot_modify() to arch_vmap_pgprot_tagged()
-  to be consistent with other arch vmalloc hooks.
-- Move checks from arch_vmap_pgprot_tagged() to __vmalloc_node_range()
-  as the same condition is used for other things in subsequent patches.
+- Don't forget to save tagged addr to vm_struct->addr for VM_ALLOC
+  so that find_vm_area(addr)->addr == addr for vmalloc().
+- Reword comments.
+- Update patch description.
 
 Changes v2->v3:
 - Update patch description.
 ---
- arch/arm64/include/asm/vmalloc.h | 6 ++++++
- include/linux/vmalloc.h          | 7 +++++++
- mm/vmalloc.c                     | 9 +++++++++
- 3 files changed, 22 insertions(+)
+ mm/vmalloc.c | 30 ++++++++++++++++++++++--------
+ 1 file changed, 22 insertions(+), 8 deletions(-)
 
-diff --git a/arch/arm64/include/asm/vmalloc.h b/arch/arm64/include/asm/vmalloc.h
-index b9185503feae..38fafffe699f 100644
---- a/arch/arm64/include/asm/vmalloc.h
-+++ b/arch/arm64/include/asm/vmalloc.h
-@@ -25,4 +25,10 @@ static inline bool arch_vmap_pmd_supported(pgprot_t prot)
- 
- #endif
- 
-+#define arch_vmap_pgprot_tagged arch_vmap_pgprot_tagged
-+static inline pgprot_t arch_vmap_pgprot_tagged(pgprot_t prot)
-+{
-+	return pgprot_tagged(prot);
-+}
-+
- #endif /* _ASM_ARM64_VMALLOC_H */
-diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-index 87f8cfec50a0..7b879c77bec5 100644
---- a/include/linux/vmalloc.h
-+++ b/include/linux/vmalloc.h
-@@ -115,6 +115,13 @@ static inline int arch_vmap_pte_supported_shift(unsigned long size)
- }
- #endif
- 
-+#ifndef arch_vmap_pgprot_tagged
-+static inline pgprot_t arch_vmap_pgprot_tagged(pgprot_t prot)
-+{
-+	return prot;
-+}
-+#endif
-+
- /*
-  *	Highlevel APIs for driver use
-  */
 diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 15e1a4fdfe0b..92e635b7490c 100644
+index 92e635b7490c..b65adac1cd80 100644
 --- a/mm/vmalloc.c
 +++ b/mm/vmalloc.c
-@@ -3108,6 +3108,15 @@ void *__vmalloc_node_range(unsigned long size, unsigned long align,
- 		goto fail;
+@@ -2210,14 +2210,15 @@ void *vm_map_ram(struct page **pages, unsigned int count, int node)
+ 		mem = (void *)addr;
  	}
  
-+	/*
-+	 * Modify protection bits to allow tagging.
-+	 * This must be done before mapping by __vmalloc_area_node().
-+	 */
-+	if (kasan_hw_tags_enabled() &&
-+	    pgprot_val(prot) == pgprot_val(PAGE_KERNEL))
-+		prot = arch_vmap_pgprot_tagged(prot);
+-	mem = kasan_unpoison_vmalloc(mem, size);
+-
+ 	if (vmap_pages_range(addr, addr + size, PAGE_KERNEL,
+ 				pages, PAGE_SHIFT) < 0) {
+ 		vm_unmap_ram(mem, count);
+ 		return NULL;
+ 	}
+ 
++	/* Mark the pages as accessible, now that they are mapped. */
++	mem = kasan_unpoison_vmalloc(mem, size);
 +
-+	/* Allocate physical pages and map them into vmalloc space. */
- 	addr = __vmalloc_area_node(area, gfp_mask, prot, shift, node);
- 	if (!addr)
+ 	return mem;
+ }
+ EXPORT_SYMBOL(vm_map_ram);
+@@ -2445,7 +2446,14 @@ static struct vm_struct *__get_vm_area_node(unsigned long size,
+ 
+ 	setup_vmalloc_vm(area, va, flags, caller);
+ 
+-	area->addr = kasan_unpoison_vmalloc(area->addr, requested_size);
++	/*
++	 * Mark pages for non-VM_ALLOC mappings as accessible. Do it now as a
++	 * best-effort approach, as they can be mapped outside of vmalloc code.
++	 * For VM_ALLOC mappings, the pages are marked as accessible after
++	 * getting mapped in __vmalloc_node_range().
++	 */
++	if (!(flags & VM_ALLOC))
++		area->addr = kasan_unpoison_vmalloc(area->addr, requested_size);
+ 
+ 	return area;
+ }
+@@ -3055,7 +3063,7 @@ void *__vmalloc_node_range(unsigned long size, unsigned long align,
+ 			const void *caller)
+ {
+ 	struct vm_struct *area;
+-	void *addr;
++	void *ret;
+ 	unsigned long real_size = size;
+ 	unsigned long real_align = align;
+ 	unsigned int shift = PAGE_SHIFT;
+@@ -3117,10 +3125,13 @@ void *__vmalloc_node_range(unsigned long size, unsigned long align,
+ 		prot = arch_vmap_pgprot_tagged(prot);
+ 
+ 	/* Allocate physical pages and map them into vmalloc space. */
+-	addr = __vmalloc_area_node(area, gfp_mask, prot, shift, node);
+-	if (!addr)
++	ret = __vmalloc_area_node(area, gfp_mask, prot, shift, node);
++	if (!ret)
  		goto fail;
+ 
++	/* Mark the pages as accessible, now that they are mapped. */
++	area->addr = kasan_unpoison_vmalloc(area->addr, real_size);
++
+ 	/*
+ 	 * In this function, newly allocated vm_struct has VM_UNINITIALIZED
+ 	 * flag. It means that vm_struct is not fully initialized.
+@@ -3132,7 +3143,7 @@ void *__vmalloc_node_range(unsigned long size, unsigned long align,
+ 	if (!(vm_flags & VM_DEFER_KMEMLEAK))
+ 		kmemleak_vmalloc(area, size, gfp_mask);
+ 
+-	return addr;
++	return area->addr;
+ 
+ fail:
+ 	if (shift > PAGE_SHIFT) {
+@@ -3816,7 +3827,10 @@ struct vm_struct **pcpu_get_vm_areas(const unsigned long *offsets,
+ 	}
+ 	spin_unlock(&vmap_area_lock);
+ 
+-	/* mark allocated areas as accessible */
++	/*
++	 * Mark allocated areas as accessible. Do it now as a best-effort
++	 * approach, as they can be mapped outside of vmalloc code.
++	 */
+ 	for (area = 0; area < nr_vms; area++)
+ 		vms[area]->addr = kasan_unpoison_vmalloc(vms[area]->addr,
+ 							 vms[area]->size);
 -- 
 2.25.1
 

@@ -2,33 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE4D49938C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED6E498D50
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385822AbiAXUej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:34:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355459AbiAXUNl (ORCPT
+        id S1352716AbiAXTa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:30:58 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45960 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345181AbiAXTWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:13:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D013AC0604D1;
-        Mon, 24 Jan 2022 11:37:02 -0800 (PST)
+        Mon, 24 Jan 2022 14:22:09 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E11F614FC;
-        Mon, 24 Jan 2022 19:37:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49DAFC340E5;
-        Mon, 24 Jan 2022 19:37:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C486B811F9;
+        Mon, 24 Jan 2022 19:22:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6C59C340E5;
+        Mon, 24 Jan 2022 19:22:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053021;
-        bh=QR8yZAhBM7iYkAK09ew+ffn9nmVg2lFDcim+AuhC6z0=;
+        s=korg; t=1643052126;
+        bh=/5/CJb6Fyon2cuhp/4IYOBwBZ4GC+0GuDTvi8QtMyYo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uaMph8oNPNHKHUdVllV9XuoCJCC1k2saptmg2JZ5XO/DJVM7hR06mMKxM3mkRZLK+
-         kG6bK7MFXdQaktSytk6gIgTrJ4pOJLNKSWkZi9WfJCcujhUzu0Y4tKlH61TM/yCjA7
-         6DXfihI26P8vaMbszc8dUSkh/2Bk3JAvNbxXv3G0=
+        b=D2auywxv+Qm67H1AneJy101i1yEn3n8VCM+vrVPDQ4NOZohzseqrzWjTwnaOSviFB
+         B/qRpHATfF3DBY7wtARlaP9zPEAMrT3+DSWatOQmo53FPZD6+EFZtdrBEKki9aMdH8
+         7Dp0pMuQMi6Y15DAwvpAiVNetTzu7PudCYlbbtqg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +33,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jan Kiszka <jan.kiszka@siemens.com>,
         Su Bao Cheng <baocheng.su@siemens.com>,
         Lukas Wunner <lukas@wunner.de>
-Subject: [PATCH 5.4 251/320] serial: Fix incorrect rs485 polarity on uart open
+Subject: [PATCH 4.19 197/239] serial: Fix incorrect rs485 polarity on uart open
 Date:   Mon, 24 Jan 2022 19:43:55 +0100
-Message-Id: <20220124184002.524758989@linuxfoundation.org>
+Message-Id: <20220124183949.373291831@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -94,7 +91,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/tty/serial/serial_core.c
 +++ b/drivers/tty/serial/serial_core.c
-@@ -160,7 +160,7 @@ static void uart_port_dtr_rts(struct uar
+@@ -159,7 +159,7 @@ static void uart_port_dtr_rts(struct uar
  	int RTS_after_send = !!(uport->rs485.flags & SER_RS485_RTS_AFTER_SEND);
  
  	if (raise) {
@@ -103,7 +100,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  			uart_set_mctrl(uport, TIOCM_DTR);
  			uart_clear_mctrl(uport, TIOCM_RTS);
  		} else {
-@@ -169,7 +169,7 @@ static void uart_port_dtr_rts(struct uar
+@@ -168,7 +168,7 @@ static void uart_port_dtr_rts(struct uar
  	} else {
  		unsigned int clear = TIOCM_DTR;
  

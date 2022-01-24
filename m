@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E046499EE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE11A49A0CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838541AbiAXWqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:46:47 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58950 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457107AbiAXVk4 (ORCPT
+        id S1847574AbiAXXUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:20:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37160 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1584631AbiAXWVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:40:56 -0500
+        Mon, 24 Jan 2022 17:21:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3DBC0424F4;
+        Mon, 24 Jan 2022 12:52:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EAFE61520;
-        Mon, 24 Jan 2022 21:40:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F33DC340E4;
-        Mon, 24 Jan 2022 21:40:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AB7160B21;
+        Mon, 24 Jan 2022 20:52:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA219C340E5;
+        Mon, 24 Jan 2022 20:52:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060454;
-        bh=bA2NVkNRdfsC9+kYNk0cI6zBu7bM2DrL1aL/zdydw6E=;
+        s=korg; t=1643057547;
+        bh=157YON3ewFpZewgxjqxaCDDdcCeplABo9eTS1EJvvBU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2mDkXYxnyETnsdBw8AXCEXW5ryjJ2yJwRgeDaHYyT2Vnro/9XtmKcatE4cTOVw4ur
-         claEytLSE5YhOcIom6EFQqztk1wvpmHmg6nXqLIFZBkgD+E2WTl8s5DvOKtcfgVqKd
-         yda34lqzuAyknNIWti4OgqNuSQtGT3AgCiKF2x1k=
+        b=XvFxXD9JdrQP9uWWyvfouhRX8KQoFIySvq/MpMMxvKOqYptCdtzqKwThWX1K60vTa
+         Ynsw89uI/ecCz9cuam3Ls69Arviet31Xi+58qV9wf7sPwFzTJknhTOW8rzRFeif0oK
+         ykj58tszmPkb2saeoOqiLDqHxS8n3tGP5bemI3XY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fengnan Chang <changfengnan@vivo.com>,
-        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH 5.16 0954/1039] f2fs: fix remove page failed in invalidate compress pages
-Date:   Mon, 24 Jan 2022 19:45:43 +0100
-Message-Id: <20220124184157.355359360@linuxfoundation.org>
+        stable@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
+        Alex Elder <elder@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 827/846] net: ipa: fix atomic update in ipa_endpoint_replenish()
+Date:   Mon, 24 Jan 2022 19:45:44 +0100
+Message-Id: <20220124184129.435103470@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,36 +49,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fengnan Chang <changfengnan@vivo.com>
+From: Alex Elder <elder@linaro.org>
 
-commit d1917865a7906baf6b687e15e8e6195a295a3992 upstream.
+commit 6c0e3b5ce94947b311348c367db9e11dcb2ccc93 upstream.
 
-Since compress inode not a regular file, generic_error_remove_page in
-f2fs_invalidate_compress_pages will always be failed, set compress
-inode as a regular file to fix it.
+In ipa_endpoint_replenish(), if an error occurs when attempting to
+replenish a receive buffer, we just quit and try again later.  In
+that case we increment the backlog count to reflect that the attempt
+was unsuccessful.  Then, if the add_one flag was true we increment
+the backlog again.
 
-Fixes: 6ce19aff0b8c ("f2fs: compress: add compress_inode to cache compressed blocks")
-Signed-off-by: Fengnan Chang <changfengnan@vivo.com>
-Reviewed-by: Chao Yu <chao@kernel.org>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+This second increment is not included in the backlog local variable
+though, and its value determines whether delayed work should be
+scheduled.  This is a bug.
+
+Fix this by determining whether 1 or 2 should be added to the
+backlog before adding it in a atomic_add_return() call.
+
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Fixes: 84f9bd12d46db ("soc: qcom: ipa: IPA endpoints")
+Signed-off-by: Alex Elder <elder@linaro.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/f2fs/inode.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/ipa/ipa_endpoint.c |    7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
---- a/fs/f2fs/inode.c
-+++ b/fs/f2fs/inode.c
-@@ -516,6 +516,11 @@ make_now:
- 	} else if (ino == F2FS_COMPRESS_INO(sbi)) {
- #ifdef CONFIG_F2FS_FS_COMPRESSION
- 		inode->i_mapping->a_ops = &f2fs_compress_aops;
-+		/*
-+		 * generic_error_remove_page only truncates pages of regular
-+		 * inode
-+		 */
-+		inode->i_mode |= S_IFREG;
- #endif
- 		mapping_set_gfp_mask(inode->i_mapping,
- 			GFP_NOFS | __GFP_HIGHMEM | __GFP_MOVABLE);
+--- a/drivers/net/ipa/ipa_endpoint.c
++++ b/drivers/net/ipa/ipa_endpoint.c
+@@ -1067,6 +1067,7 @@ static void ipa_endpoint_replenish(struc
+ {
+ 	struct gsi *gsi;
+ 	u32 backlog;
++	int delta;
+ 
+ 	if (!endpoint->replenish_enabled) {
+ 		if (add_one)
+@@ -1084,10 +1085,8 @@ static void ipa_endpoint_replenish(struc
+ 
+ try_again_later:
+ 	/* The last one didn't succeed, so fix the backlog */
+-	backlog = atomic_inc_return(&endpoint->replenish_backlog);
+-
+-	if (add_one)
+-		atomic_inc(&endpoint->replenish_backlog);
++	delta = add_one ? 2 : 1;
++	backlog = atomic_add_return(delta, &endpoint->replenish_backlog);
+ 
+ 	/* Whenever a receive buffer transaction completes we'll try to
+ 	 * replenish again.  It's unlikely, but if we fail to supply even
 
 

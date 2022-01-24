@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6413F498FE9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FDF8498B9F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:15:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358548AbiAXTzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:55:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
+        id S1344584AbiAXTPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:15:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353222AbiAXTlB (ORCPT
+        with ESMTP id S1346735AbiAXTHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:41:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AB5C07A973;
-        Mon, 24 Jan 2022 11:20:43 -0800 (PST)
+        Mon, 24 Jan 2022 14:07:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBAAC061244;
+        Mon, 24 Jan 2022 11:01:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DDA84B8122C;
-        Mon, 24 Jan 2022 19:20:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A343C340E8;
-        Mon, 24 Jan 2022 19:20:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E1D16090C;
+        Mon, 24 Jan 2022 19:01:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43CC1C340E5;
+        Mon, 24 Jan 2022 19:01:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052040;
-        bh=G/c4LNnucpXtwkCHxSEbJWbQlWj6wH/TH00PIgn6fJM=;
+        s=korg; t=1643050903;
+        bh=/hdemuENqnf/jOGaiRcSiGH0J0G5zPzuLXuG/sxnf9g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0J4rnQfOCoWUkJhyzQ0OQk46aRoahwgF5ISsxJAaxMI8/apkpMm6fd4+m/osZvY7k
-         nUaNO5brkqhR2b0irVVNPJnnFopi3RVfEa2XmF0yDT641ESWXTq7/7qlKoUu16A9fI
-         JwbFP6f9vM3EcAz6hxKs3aCyEJ1H+T4+uMeD5agU=
+        b=shArt8N7ASkwTUDC98shOBvd45PoSQeTumiVNM5DROLe7XkCT57UWeSG82VxnvUoj
+         q5TH6MoVDltljyVSyjqfGo3z0pOLHyxZnametZ82+MaH+cc3HU+sBbudl+8NBaU5UM
+         mvuoB3Dz3I6DsuS5g3Nrwj3rH/m5g8PHjdmNjUd0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Bizon <mbizon@freebox.fr>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Tzung-Bi Shih <tzungbi@google.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 168/239] net: mdio: Demote probed message to debug print
-Date:   Mon, 24 Jan 2022 19:43:26 +0100
-Message-Id: <20220124183948.439360846@linuxfoundation.org>
+Subject: [PATCH 4.9 117/157] ASoC: mediatek: mt8173: fix device_node leak
+Date:   Mon, 24 Jan 2022 19:43:27 +0100
+Message-Id: <20220124183936.493606975@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,38 +49,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+From: Tzung-Bi Shih <tzungbi@google.com>
 
-[ Upstream commit 7590fc6f80ac2cbf23e6b42b668bbeded070850b ]
+[ Upstream commit 493433785df0075afc0c106ab65f10a605d0b35d ]
 
-On systems with large numbers of MDIO bus/muxes the message indicating
-that a given MDIO bus has been successfully probed is repeated for as
-many buses we have, which can eat up substantial boot time for no
-reason, demote to a debug print.
+Fixes the device_node leak.
 
-Reported-by: Maxime Bizon <mbizon@freebox.fr>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20220103194024.2620-1-f.fainelli@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
+Link: https://lore.kernel.org/r/20211224064719.2031210-2-tzungbi@google.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/mdio_bus.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/mediatek/mt8173/mt8173-max98090.c      | 3 +++
+ sound/soc/mediatek/mt8173/mt8173-rt5650-rt5514.c | 2 ++
+ sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c | 2 ++
+ sound/soc/mediatek/mt8173/mt8173-rt5650.c        | 2 ++
+ 4 files changed, 9 insertions(+)
 
-diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
-index 3207da2224f67..eaa890a6a5d21 100644
---- a/drivers/net/phy/mdio_bus.c
-+++ b/drivers/net/phy/mdio_bus.c
-@@ -426,7 +426,7 @@ int __mdiobus_register(struct mii_bus *bus, struct module *owner)
- 	mdiobus_setup_mdiodev_from_board_info(bus, mdiobus_create_device);
+diff --git a/sound/soc/mediatek/mt8173/mt8173-max98090.c b/sound/soc/mediatek/mt8173/mt8173-max98090.c
+index 5524a2c727ec7..cab30cb48366d 100644
+--- a/sound/soc/mediatek/mt8173/mt8173-max98090.c
++++ b/sound/soc/mediatek/mt8173/mt8173-max98090.c
+@@ -183,6 +183,9 @@ static int mt8173_max98090_dev_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
+ 			__func__, ret);
++
++	of_node_put(codec_node);
++	of_node_put(platform_node);
+ 	return ret;
+ }
  
- 	bus->state = MDIOBUS_REGISTERED;
--	pr_info("%s: probed\n", bus->name);
-+	dev_dbg(&bus->dev, "probed\n");
- 	return 0;
+diff --git a/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5514.c b/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5514.c
+index 467f7049a2886..52fdd766ee82c 100644
+--- a/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5514.c
++++ b/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5514.c
+@@ -228,6 +228,8 @@ static int mt8173_rt5650_rt5514_dev_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
+ 			__func__, ret);
++
++	of_node_put(platform_node);
+ 	return ret;
+ }
  
- error:
+diff --git a/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c b/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c
+index 1b8b2a7788450..5d75b04f074fe 100644
+--- a/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c
++++ b/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c
+@@ -285,6 +285,8 @@ static int mt8173_rt5650_rt5676_dev_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
+ 			__func__, ret);
++
++	of_node_put(platform_node);
+ 	return ret;
+ }
+ 
+diff --git a/sound/soc/mediatek/mt8173/mt8173-rt5650.c b/sound/soc/mediatek/mt8173/mt8173-rt5650.c
+index ba65f4157a7e0..d02a90201b13b 100644
+--- a/sound/soc/mediatek/mt8173/mt8173-rt5650.c
++++ b/sound/soc/mediatek/mt8173/mt8173-rt5650.c
+@@ -317,6 +317,8 @@ static int mt8173_rt5650_dev_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
+ 			__func__, ret);
++
++	of_node_put(platform_node);
+ 	return ret;
+ }
+ 
 -- 
 2.34.1
 

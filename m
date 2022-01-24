@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E797497A89
+	by mail.lfdr.de (Postfix) with ESMTP id F0E8A497A8A
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242329AbiAXInx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 03:43:53 -0500
-Received: from mga09.intel.com ([134.134.136.24]:62624 "EHLO mga09.intel.com"
+        id S236294AbiAXInz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 03:43:55 -0500
+Received: from mga09.intel.com ([134.134.136.24]:62668 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242393AbiAXInr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S242424AbiAXInr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 03:43:47 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1643013827; x=1674549827;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=8q/Wt44pMdRN3PKEEkQ91EMdy7sMo2325SWA5ltc8EE=;
-  b=kLuU5r9K6eiATsCE386SpsTgRiuQzHYj2EyF1+y953CsmMW88Ltu8Zof
-   P6cSd6XLhuKiZN+o/WvmyB6EKwRKZ+5neDA7GLThld1ny5Ti0V28RApRp
-   jt+IMF1A8YeZPuE+Dwt5t0fF8j58f5McDUjO39H2JXT3I6i5JYD6TgzsV
-   ff8YLUg4iw1vIvXcq/6IG94aVAIcI8TmK3HHAqQ7EFVI0S98GvhMZ3Z6T
-   0b0OiDL/IreL7aQ17ug2nHEw//mPMtY19S4Zln0gsyG08XJMHt/0GTslM
-   ODyftx6G2/b2yPCPXUYyOaIxtjXuO9mvSdJibyQXjHIB8DCGz5VjQGKIN
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="245778508"
+  bh=wuSr8gsqw7dsz4rThO8aX99+YLV64Z6bw2AGjlT33GM=;
+  b=PYunpwSrMsQGBiK/pgeVV9W6NWZ4lj3hAYiWV9EZxK7w9AC828mCGxKZ
+   4PCgNhnQH4uWV2igCZfhpAW7su8NZCZ04pywsC4sZ9OniqOruiLP8sgGA
+   3qaGKBvP5eihrfxZxVyi/+vvRe1Srjp3o58nPXx9ukkv2GSYiztzwaHEZ
+   WMNzm0gVfxM4+e6TwAvEvMm9EHL2utifRE8R6qBGfbwUcJ5TYPsio/zXl
+   4qbSXARaaWrDcGL+sJGqyIDisuCaMBh0A603VpVH5M9GqK3m1RM8CXQC1
+   oTpCqCujfVHoNXKMuJVyqf73D+Yr4t+NTgE5oOOsiBjMkLhnK08/k0dKV
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="245778512"
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="245778508"
+   d="scan'208";a="245778512"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 00:42:54 -0800
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 00:42:56 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="627417280"
+   d="scan'208";a="627417293"
 Received: from ahunter-desktop.fi.intel.com ([10.237.72.92])
-  by orsmga004.jf.intel.com with ESMTP; 24 Jan 2022 00:42:52 -0800
+  by orsmga004.jf.intel.com with ESMTP; 24 Jan 2022 00:42:54 -0800
 From:   Adrian Hunter <adrian.hunter@intel.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc:     Jiri Olsa <jolsa@redhat.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH 22/25] perf scripting python: Add all sample flags to DB export
-Date:   Mon, 24 Jan 2022 10:41:58 +0200
-Message-Id: <20220124084201.2699795-23-adrian.hunter@intel.com>
+Subject: [PATCH 23/25] perf scripts python: export-to-sqlite.py: Export all sample flags
+Date:   Mon, 24 Jan 2022 10:41:59 +0200
+Message-Id: <20220124084201.2699795-24-adrian.hunter@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220124084201.2699795-1-adrian.hunter@intel.com>
 References: <20220124084201.2699795-1-adrian.hunter@intel.com>
@@ -52,37 +52,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the transaction flag (x) is kept separate from branch flags.
-Instead of doing the same for the interrupt disabled flags (D and t), add
-all flags so that new flags will not need to be handled separately in the
-future.
+Add sample flags to the SQLite database definition and export.
 
 Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 ---
- tools/perf/util/scripting-engines/trace-event-python.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/perf/scripts/python/export-to-sqlite.py | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-diff --git a/tools/perf/util/scripting-engines/trace-event-python.c b/tools/perf/util/scripting-engines/trace-event-python.c
-index e752e1f4a5f0..413f2d19c13f 100644
---- a/tools/perf/util/scripting-engines/trace-event-python.c
-+++ b/tools/perf/util/scripting-engines/trace-event-python.c
-@@ -1216,7 +1216,7 @@ static void python_export_sample_table(struct db_export *dbe,
- 	struct tables *tables = container_of(dbe, struct tables, dbe);
- 	PyObject *t;
+diff --git a/tools/perf/scripts/python/export-to-sqlite.py b/tools/perf/scripts/python/export-to-sqlite.py
+index 8043a7272a56..73c992feb1b9 100644
+--- a/tools/perf/scripts/python/export-to-sqlite.py
++++ b/tools/perf/scripts/python/export-to-sqlite.py
+@@ -223,7 +223,8 @@ if branches:
+ 		'in_tx		boolean,'
+ 		'call_path_id	bigint,'
+ 		'insn_count	bigint,'
+-		'cyc_count	bigint)')
++		'cyc_count	bigint,'
++		'flags		integer)')
+ else:
+ 	do_query(query, 'CREATE TABLE samples ('
+ 		'id		integer		NOT NULL	PRIMARY KEY,'
+@@ -249,7 +250,8 @@ else:
+ 		'in_tx		boolean,'
+ 		'call_path_id	bigint,'
+ 		'insn_count	bigint,'
+-		'cyc_count	bigint)')
++		'cyc_count	bigint,'
++		'flags		integer)')
  
--	t = tuple_new(24);
-+	t = tuple_new(25);
+ if perf_db_export_calls or perf_db_export_callchains:
+ 	do_query(query, 'CREATE TABLE call_paths ('
+@@ -442,7 +444,8 @@ do_query(query, 'CREATE VIEW samples_view AS '
+ 		'in_tx,'
+ 		'insn_count,'
+ 		'cyc_count,'
+-		'CASE WHEN cyc_count=0 THEN CAST(0 AS FLOAT) ELSE ROUND(CAST(insn_count AS FLOAT) / cyc_count, 2) END AS IPC'
++		'CASE WHEN cyc_count=0 THEN CAST(0 AS FLOAT) ELSE ROUND(CAST(insn_count AS FLOAT) / cyc_count, 2) END AS IPC,'
++		'flags'
+ 	' FROM samples')
  
- 	tuple_set_d64(t, 0, es->db_id);
- 	tuple_set_d64(t, 1, es->evsel->db_id);
-@@ -1242,6 +1242,7 @@ static void python_export_sample_table(struct db_export *dbe,
- 	tuple_set_d64(t, 21, es->call_path_id);
- 	tuple_set_d64(t, 22, es->sample->insn_cnt);
- 	tuple_set_d64(t, 23, es->sample->cyc_cnt);
-+	tuple_set_s32(t, 24, es->sample->flags);
+ do_query(query, 'CREATE VIEW ptwrite_view AS '
+@@ -584,9 +587,9 @@ branch_type_query = QSqlQuery(db)
+ branch_type_query.prepare("INSERT INTO branch_types VALUES (?, ?)")
+ sample_query = QSqlQuery(db)
+ if branches:
+-	sample_query.prepare("INSERT INTO samples VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
++	sample_query.prepare("INSERT INTO samples VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+ else:
+-	sample_query.prepare("INSERT INTO samples VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
++	sample_query.prepare("INSERT INTO samples VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+ if perf_db_export_calls or perf_db_export_callchains:
+ 	call_path_query = QSqlQuery(db)
+ 	call_path_query.prepare("INSERT INTO call_paths VALUES (?, ?, ?, ?)")
+@@ -618,7 +621,7 @@ def trace_begin():
+ 	comm_table(0, "unknown", 0, 0, 0)
+ 	dso_table(0, 0, "unknown", "unknown", "")
+ 	symbol_table(0, 0, 0, 0, 0, "unknown")
+-	sample_table(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
++	sample_table(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+ 	if perf_db_export_calls or perf_db_export_callchains:
+ 		call_path_table(0, 0, 0, 0)
+ 		call_return_table(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+@@ -703,11 +706,11 @@ def sample_table(*x):
+ 	if branches:
+ 		for xx in x[0:15]:
+ 			sample_query.addBindValue(str(xx))
+-		for xx in x[19:24]:
++		for xx in x[19:25]:
+ 			sample_query.addBindValue(str(xx))
+ 		do_query_(sample_query)
+ 	else:
+-		bind_exec(sample_query, 24, x)
++		bind_exec(sample_query, 25, x)
  
- 	call_object(tables->sample_handler, t, "sample_table");
- 
+ def call_path_table(*x):
+ 	bind_exec(call_path_query, 4, x)
 -- 
 2.25.1
 

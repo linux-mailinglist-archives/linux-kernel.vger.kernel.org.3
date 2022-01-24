@@ -2,41 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F04249A761
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 611B649A3B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3423978AbiAYCi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:38:26 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:53096 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353862AbiAXUcS (ORCPT
+        id S2366790AbiAXXxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:53:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1846009AbiAXXOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:32:18 -0500
+        Mon, 24 Jan 2022 18:14:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01D2C061A81;
+        Mon, 24 Jan 2022 13:21:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 548E561506;
-        Mon, 24 Jan 2022 20:32:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 211CFC340E5;
-        Mon, 24 Jan 2022 20:32:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F50D614D8;
+        Mon, 24 Jan 2022 21:21:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C3DEC340E4;
+        Mon, 24 Jan 2022 21:21:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056336;
-        bh=zW8E6nDHYA+IOGgYE859eoZ7bTAfChWLdJJ/+NaK2gA=;
+        s=korg; t=1643059274;
+        bh=eSOZJjsod7JXBVDUOGZX0mGYhD7AX7qWZXKijpCydxQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qkgsN6ttcn7PxqqOuMtrcLj+MgKP6rrSLj7ncTGWwOmM9ZJbDZLTEnqQtfoVse0Pj
-         /Wt8LFiXGOEGSF2SXVCYrkiYmcEL6TLDJy5hQ3WdPzZsqiZwwHQB8xAykTgnORy6Gu
-         kS4opsbw4EtgfmmZdvIQCBclJesidHSrJdX6e8Dg=
+        b=RZt0DybHI9wNw0w5QBs0otlhWNCBaEZbep/IgJJTho8FG1lEcd5Xg+MgBESoTYj97
+         i37flXF3EMVGfpOwWClRKswfkFrAhaSimGJE6Fd0kv2fypfeKBwmGWiap+UJcxrUB5
+         0Cs4XT+GrJy/X7A0pWsEKmp50QglI/PEI49fV3p0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Tycho Andersen <tycho@tycho.pizza>,
+        =?UTF-8?q?Linus=20L=C3=BCssing?= <linus.luessing@c0d3.blue>,
+        Sven Eckelmann <sven@narfation.org>,
+        Simon Wunderlich <sw@simonwunderlich.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 433/846] powerpc/64s: Use EMIT_WARN_ENTRY for SRR debug warnings
-Date:   Mon, 24 Jan 2022 19:39:10 +0100
-Message-Id: <20220124184115.930393410@linuxfoundation.org>
+Subject: [PATCH 5.16 0562/1039] batman-adv: allow netlink usage in unprivileged containers
+Date:   Mon, 24 Jan 2022 19:39:11 +0100
+Message-Id: <20220124184144.210733982@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,79 +51,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+From: Linus Lüssing <linus.luessing@c0d3.blue>
 
-[ Upstream commit fd1eaaaaa6864b5fb8f99880fcefb49760b8fe4e ]
+[ Upstream commit 9057d6c23e7388ee9d037fccc9a7bc8557ce277b ]
 
-When CONFIG_PPC_RFI_SRR_DEBUG=y we check the SRR values before returning
-from interrupts. This is done in asm using EMIT_BUG_ENTRY, and passing
-BUGFLAG_WARNING.
+Currently, creating a batman-adv interface in an unprivileged LXD
+container and attaching secondary interfaces to it with "ip" or "batctl"
+works fine. However all batctl debug and configuration commands
+fail:
 
-However that fails to create an exception table entry for the warning,
-and so do_program_check() fails the exception table search and proceeds
-to call _exception(), resulting in an oops like:
+  root@container:~# batctl originators
+  Error received: Operation not permitted
+  root@container:~# batctl orig_interval
+  1000
+  root@container:~# batctl orig_interval 2000
+  root@container:~# batctl orig_interval
+  1000
 
-  Oops: Exception in kernel mode, sig: 5 [#1]
-  LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2048 NUMA pSeries
-  Modules linked in:
-  CPU: 2 PID: 1204 Comm: sigreturn_unali Tainted: P                  5.16.0-rc2-00194-g91ca3d4f77c5 #12
-  NIP:  c00000000000c5b0 LR: 0000000000000000 CTR: 0000000000000000
-  ...
-  NIP [c00000000000c5b0] system_call_common+0x150/0x268
-  LR [0000000000000000] 0x0
-  Call Trace:
-  [c00000000db73e10] [c00000000000c558] system_call_common+0xf8/0x268 (unreliable)
-  ...
-  Instruction dump:
-  7cc803a6 888d0931 2c240000 4082001c 38800000 988d0931 e8810170 e8a10178
-  7c9a03a6 7cbb03a6 7d7a02a6 e9810170 <7f0b6088> 7d7b02a6 e9810178 7f0b6088
+To fix this change the generic netlink permissions from GENL_ADMIN_PERM
+to GENL_UNS_ADMIN_PERM. This way a batman-adv interface is fully
+maintainable as root from within a user namespace, from an unprivileged
+container.
 
-We should instead use EMIT_WARN_ENTRY, which creates an exception table
-entry for the warning, allowing the warning to be correctly recognised,
-and the code to resume after printing the warning.
+All except one batman-adv netlink setting are per interface and do not
+leak information or change settings from the host system and are
+therefore save to retrieve or modify as root from within an unprivileged
+container.
 
-Note however that because this warning is buried deep in the interrupt
-return path, we are not able to recover from it (due to MSR_RI being
-clear), so we still end up in die() with an unrecoverable exception.
+"batctl routing_algo" / BATADV_CMD_GET_ROUTING_ALGOS is the only
+exception: It provides the batman-adv kernel module wide default routing
+algorithm. However it is read-only from netlink and an unprivileged
+container is still not allowed to modify
+/sys/module/batman_adv/parameters/routing_algo. Instead it is advised to
+use the newly introduced "batctl if create routing_algo RA_NAME" /
+IFLA_BATADV_ALGO_NAME to set the routing algorithm on interface
+creation, which already works fine in an unprivileged container.
 
-Fixes: 59dc5bfca0cb ("powerpc/64s: avoid reloading (H)SRR registers if they are still valid")
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20211221135101.2085547-2-mpe@ellerman.id.au
+Cc: Tycho Andersen <tycho@tycho.pizza>
+Signed-off-by: Linus Lüssing <linus.luessing@c0d3.blue>
+Signed-off-by: Sven Eckelmann <sven@narfation.org>
+Signed-off-by: Simon Wunderlich <sw@simonwunderlich.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kernel/interrupt_64.S | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ net/batman-adv/netlink.c | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/arch/powerpc/kernel/interrupt_64.S b/arch/powerpc/kernel/interrupt_64.S
-index 894588b2381e5..4b1ff94e67eb4 100644
---- a/arch/powerpc/kernel/interrupt_64.S
-+++ b/arch/powerpc/kernel/interrupt_64.S
-@@ -32,21 +32,21 @@ COMPAT_SYS_CALL_TABLE:
- 	ld	r12,_NIP(r1)
- 	clrrdi  r12,r12,2
- 100:	tdne	r11,r12
--	EMIT_BUG_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
-+	EMIT_WARN_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
- 	mfspr	r11,SPRN_SRR1
- 	ld	r12,_MSR(r1)
- 100:	tdne	r11,r12
--	EMIT_BUG_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
-+	EMIT_WARN_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
- 	.else
- 	mfspr	r11,SPRN_HSRR0
- 	ld	r12,_NIP(r1)
- 	clrrdi  r12,r12,2
- 100:	tdne	r11,r12
--	EMIT_BUG_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
-+	EMIT_WARN_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
- 	mfspr	r11,SPRN_HSRR1
- 	ld	r12,_MSR(r1)
- 100:	tdne	r11,r12
--	EMIT_BUG_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
-+	EMIT_WARN_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
- 	.endif
- #endif
- .endm
+diff --git a/net/batman-adv/netlink.c b/net/batman-adv/netlink.c
+index 29276284d281c..00875e1d8c44c 100644
+--- a/net/batman-adv/netlink.c
++++ b/net/batman-adv/netlink.c
+@@ -1368,21 +1368,21 @@ static const struct genl_small_ops batadv_netlink_ops[] = {
+ 	{
+ 		.cmd = BATADV_CMD_TP_METER,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.doit = batadv_netlink_tp_meter_start,
+ 		.internal_flags = BATADV_FLAG_NEED_MESH,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_TP_METER_CANCEL,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.doit = batadv_netlink_tp_meter_cancel,
+ 		.internal_flags = BATADV_FLAG_NEED_MESH,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_ROUTING_ALGOS,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_algo_dump,
+ 	},
+ 	{
+@@ -1397,68 +1397,68 @@ static const struct genl_small_ops batadv_netlink_ops[] = {
+ 	{
+ 		.cmd = BATADV_CMD_GET_TRANSTABLE_LOCAL,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_tt_local_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_TRANSTABLE_GLOBAL,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_tt_global_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_ORIGINATORS,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_orig_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_NEIGHBORS,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_hardif_neigh_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_GATEWAYS,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_gw_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_BLA_CLAIM,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_bla_claim_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_BLA_BACKBONE,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_bla_backbone_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_DAT_CACHE,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_dat_cache_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_GET_MCAST_FLAGS,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.dumpit = batadv_mcast_flags_dump,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_SET_MESH,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.doit = batadv_netlink_set_mesh,
+ 		.internal_flags = BATADV_FLAG_NEED_MESH,
+ 	},
+ 	{
+ 		.cmd = BATADV_CMD_SET_HARDIF,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.doit = batadv_netlink_set_hardif,
+ 		.internal_flags = BATADV_FLAG_NEED_MESH |
+ 				  BATADV_FLAG_NEED_HARDIF,
+@@ -1474,7 +1474,7 @@ static const struct genl_small_ops batadv_netlink_ops[] = {
+ 	{
+ 		.cmd = BATADV_CMD_SET_VLAN,
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+-		.flags = GENL_ADMIN_PERM,
++		.flags = GENL_UNS_ADMIN_PERM,
+ 		.doit = batadv_netlink_set_vlan,
+ 		.internal_flags = BATADV_FLAG_NEED_MESH |
+ 				  BATADV_FLAG_NEED_VLAN,
 -- 
 2.34.1
 

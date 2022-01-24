@@ -2,77 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0988E49849C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C288A498498
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:23:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243674AbiAXQXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 11:23:38 -0500
-Received: from mga12.intel.com ([192.55.52.136]:14634 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243618AbiAXQXh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 11:23:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643041417; x=1674577417;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zkVnxmZoUn2PXNTt6Cj60EJHO4p9UXlPBZUS9Jg10dI=;
-  b=I/7WiJCWS15OfMwS/K9XQtepGgrH3VrwfgvNz8lNek8LjnI5cQTgLiBX
-   g7dUxBB/zRs1ULXCY81aqRQKDs7r1LsOofAvqtOfQa6ws3zMLcfwvMyqG
-   qYVaD+gEXQcLkHZqwqd8hN/owQcz/oUQYA35xj+IWNs5aECwB/HD2/iz7
-   fjXvJVReWGRSujBqZWNbOKOthTMrbcV+Iz5URz7uxZsGGH5VhI873rcDO
-   ejg3BypMpuFsaf2o/2DQUsrYWEeS9bK3pQm1NdEnzZIUKQKntS6Muy4Gt
-   674Sb2blDkt3x94IUvDQld1+ifhUTg9RyeSyudvAXY5ZmSYTqE2t7Yhdy
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="226064467"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="226064467"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 08:23:36 -0800
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="479135670"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 08:23:34 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nC26t-00Dwzw-NZ;
-        Mon, 24 Jan 2022 18:22:27 +0200
-Date:   Mon, 24 Jan 2022 18:22:27 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: Re: [PATCH v1 1/1] ASoC: madera: Replace kernel.h with the necessary
- inclusions
-Message-ID: <Ye7SQ7Na4Q5KyvOk@smile.fi.intel.com>
-References: <20211222164534.67636-1-andriy.shevchenko@linux.intel.com>
- <20211229095345.GX18506@ediswmail.ad.cirrus.com>
+        id S243668AbiAXQXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 11:23:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240842AbiAXQXO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 11:23:14 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3C7C06173D
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 08:23:14 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id 187so15610686pga.10
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 08:23:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=l7aZJnt8QJHGg+NhfzeZeueXVQnuGTn1GJNwLw97API=;
+        b=aMgOFBudEvo/1+mRGOn+iLXumNUshu9rs2Jl4IUpDDpx4RwzMzW4x8HTOy1fGwmdiM
+         55Dw8smutxb6UOvriTHkEd5g7L3tWNtxbP0d5S0ywsFR0Gk4yY/ON+XcwJNLBtO7pQR9
+         +QXL+eYiYtZ2IDlrIl9YlJCWJ5xEOQUbk9vKcW9POGqHRvmC1FIOaNps3gZnPnetlIDu
+         +ghHC6fCb6nqd5h6RINSXYVRfDYALCAN8wJn/+NyBpuz0yg4TC3NVOrl3VKUj2TlUE85
+         oBHKi3R6q4kWUNYx2XRJPFgN9rBd+PSgQRKr6TgNOc2LcdcZ1IFIaN0wwmjom0fA3sB3
+         Fu+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=l7aZJnt8QJHGg+NhfzeZeueXVQnuGTn1GJNwLw97API=;
+        b=C+yu1g7UUCQaFhem17y2pjFuoTZdluN+6Jx4vKvZPUipkYebr0pdatzWm+5ZpYDfwW
+         5OowLpHQ++mk6egXGQJkilraSqpiyUzdNJBbOCUechohbyDTfsE9OIKBWr1pflifDniU
+         hy1cLvJxQrPUfXVV7Osx4T+hIxCQ4GXySx6fkmAJhFw3I+Ph7KIOMnjV6OjQVW/edpnZ
+         00YOYoH/NWJio51JSUrqF/UOJ4i+pR6aiDtzITTeatYBgf0MYCrvBhU07iw342oqSYSn
+         Wc75sLC6rhGtjt2HkPJLkyRLASCiO7V0En0/6dkPO2O6Yh4v0WZTv9c+wqUqbDQtleHn
+         FHNg==
+X-Gm-Message-State: AOAM532onHzPF0H9y3HV6/dMjpxVvClOj5+2dO6m7dREirSAUSCI1DaS
+        iN/AethauzQ6fnfbAhwoz/5JIg==
+X-Google-Smtp-Source: ABdhPJxVMo1edQcNkn0O784je5xXtByJ/sPu5BxFgdgA331J9x1X3lWhbYdWQ6XphC5dfFHpuu3EhA==
+X-Received: by 2002:a63:81c6:: with SMTP id t189mr12364478pgd.417.1643041393455;
+        Mon, 24 Jan 2022 08:23:13 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id nu15sm5412136pjb.5.2022.01.24.08.23.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 08:23:12 -0800 (PST)
+Date:   Mon, 24 Jan 2022 16:23:09 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Liu, Jing2" <jing2.liu@intel.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] KVM: x86/cpuid: Exclude unpermitted xfeatures for
+ vcpu->arch.guest_supported_xcr0
+Message-ID: <Ye7SbfPL/QAjOI6s@google.com>
+References: <20220123055025.81342-1-likexu@tencent.com>
+ <BN9PR11MB52762E2DEF810DF9AFAE1DDC8C5E9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <38c1fbc3-d770-48f3-5432-8fa1fde033f5@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211229095345.GX18506@ediswmail.ad.cirrus.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <38c1fbc3-d770-48f3-5432-8fa1fde033f5@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 09:53:45AM +0000, Charles Keepax wrote:
-> On Wed, Dec 22, 2021 at 06:45:34PM +0200, Andy Shevchenko wrote:
-> > When kernel.h is used in the headers it adds a lot into dependency hell,
-> > especially when there are circular dependencies are involved.
+On Mon, Jan 24, 2022, Like Xu wrote:
+> On 24/1/2022 3:06 pm, Tian, Kevin wrote:
+> > > From: Like Xu <like.xu.linux@gmail.com>
+> > > Sent: Sunday, January 23, 2022 1:50 PM
+> > > 
+> > > From: Like Xu <likexu@tencent.com>
+> > > 
+> > > A malicious user space can bypass xstate_get_guest_group_perm() in the
+> > > KVM_GET_SUPPORTED_CPUID mechanism and obtain unpermitted xfeatures,
+> > > since the validity check of xcr0 depends only on guest_supported_xcr0.
 > > 
-> > Replace kernel.h inclusion with the list of what is really being used.
+> > Unpermitted xfeatures cannot pass kvm_check_cpuid()...
+> 
+> Indeed, 5ab2f45bba4894a0db4af8567da3efd6228dd010.
+> 
+> This part of logic is pretty fragile and fragmented due to semantic
+> inconsistencies between supported_xcr0 and guest_supported_xcr0
+> in other three places:
 
-> Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+There are no inconsistencies, at least not in the examples below, as the examples
+are intended to work in host context.  guest_supported_xcr0 is about what the guest
+is/isn't allowed to access, it has no bearing on what host userspace can/can't do.
+Or are you talking about a different type of inconsistency?
 
-Thanks!
+> - __do_cpuid_func
 
-Takashi, should I resend this?
+Reporting what KVM supports to host userspace.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> - kvm_mpx_supported
 
+This is a check on host support.
 
+> - kvm_vcpu_ioctl_x86_set_xsave
+
+"write" from host userspace.
+
+> Have you identified all their areas of use ?

@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07760499809
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:34:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0385749997F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:45:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377685AbiAXVTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:19:17 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42638 "EHLO
+        id S1455526AbiAXVfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:35:34 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44392 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392244AbiAXUu4 (ORCPT
+        with ESMTP id S1392277AbiAXUvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:50:56 -0500
+        Mon, 24 Jan 2022 15:51:01 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1972660B0B;
-        Mon, 24 Jan 2022 20:50:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D22F0C340E5;
-        Mon, 24 Jan 2022 20:50:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C4DC60C60;
+        Mon, 24 Jan 2022 20:50:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C27C340E5;
+        Mon, 24 Jan 2022 20:50:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057455;
-        bh=qUzPwoD8luyL20rDQ9zTz7gFj1WnVztB4linAqs+gbM=;
+        s=korg; t=1643057458;
+        bh=p0y5hJByeFplk5ECbWCT3NibhmV/f6yWSLLTnzSRmkU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=spNLVKN8+7pkV/fBGCpjOO2GH/thD5O5MBfbhO1MtlG2s2jrjvDZt+AZwYDRxXTfl
-         PNSQTrHc5GbpeJF9vuUfraUcIIMcZME21zO0aUynude+l56OfAxhDQWvQN2IpD8DCw
-         Hys2U8lI+y8mb2xYO9pQmAHNF4L/f6kelOSrE2xA=
+        b=lu03jff0stm+RoIN1RUrVVMv2o4R+gOoSPSQTQz/dxQmOTYvyT2cGVIcJ9MEikP2A
+         3DxvH2RH5s7ramByfXwP+8Q5EZGpmznzHikvF9dEPRa+ZCPMliUqXGTL+v+ApBrJGe
+         TQKSQJfVepY2zK2D7DyYaRDa/vrBCBHq7ElCDh0c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Tudor Ambarus <tudor.ambarus@microchip.com>,
         Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.15 817/846] dmaengine: at_xdmac: Print debug message after realeasing the lock
-Date:   Mon, 24 Jan 2022 19:45:34 +0100
-Message-Id: <20220124184129.089588433@linuxfoundation.org>
+Subject: [PATCH 5.15 818/846] dmaengine: at_xdmac: Fix concurrency over xfers_list
+Date:   Mon, 24 Jan 2022 19:45:35 +0100
+Message-Id: <20220124184129.118939908@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -48,36 +48,48 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Tudor Ambarus <tudor.ambarus@microchip.com>
 
-commit 5edc24ac876a928f36f407a0fcdb33b94a3a210f upstream.
+commit 18deddea9184b62941395889ff7659529c877326 upstream.
 
-It is desirable to do the prints without the lock held if possible, so
-move the print after the lock is released.
+Since tx_submit can be called from a hard IRQ, xfers_list must be
+protected with a lock to avoid concurency on the list's elements.
+Since at_xdmac_handle_cyclic() is called from a tasklet, spin_lock_irq
+is enough to protect from a hard IRQ.
 
 Fixes: e1f7c9eee707 ("dmaengine: at_xdmac: creation of the atmel eXtended DMA Controller driver")
 Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Link: https://lore.kernel.org/r/20211215110115.191749-4-tudor.ambarus@microchip.com
+Link: https://lore.kernel.org/r/20211215110115.191749-8-tudor.ambarus@microchip.com
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/at_xdmac.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/dma/at_xdmac.c |   17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
 --- a/drivers/dma/at_xdmac.c
 +++ b/drivers/dma/at_xdmac.c
-@@ -473,10 +473,12 @@ static dma_cookie_t at_xdmac_tx_submit(s
- 	spin_lock_irqsave(&atchan->lock, irqflags);
- 	cookie = dma_cookie_assign(tx);
+@@ -1619,14 +1619,17 @@ static void at_xdmac_handle_cyclic(struc
+ 	struct at_xdmac_desc		*desc;
+ 	struct dma_async_tx_descriptor	*txd;
  
--	dev_vdbg(chan2dev(tx->chan), "%s: atchan 0x%p, add desc 0x%p to xfers_list\n",
--		 __func__, atchan, desc);
- 	list_add_tail(&desc->xfer_node, &atchan->xfers_list);
- 	spin_unlock_irqrestore(&atchan->lock, irqflags);
-+
-+	dev_vdbg(chan2dev(tx->chan), "%s: atchan 0x%p, add desc 0x%p to xfers_list\n",
-+		 __func__, atchan, desc);
-+
- 	return cookie;
+-	if (!list_empty(&atchan->xfers_list)) {
+-		desc = list_first_entry(&atchan->xfers_list,
+-					struct at_xdmac_desc, xfer_node);
+-		txd = &desc->tx_dma_desc;
+-
+-		if (txd->flags & DMA_PREP_INTERRUPT)
+-			dmaengine_desc_get_callback_invoke(txd, NULL);
++	spin_lock_irq(&atchan->lock);
++	if (list_empty(&atchan->xfers_list)) {
++		spin_unlock_irq(&atchan->lock);
++		return;
+ 	}
++	desc = list_first_entry(&atchan->xfers_list, struct at_xdmac_desc,
++				xfer_node);
++	spin_unlock_irq(&atchan->lock);
++	txd = &desc->tx_dma_desc;
++	if (txd->flags & DMA_PREP_INTERRUPT)
++		dmaengine_desc_get_callback_invoke(txd, NULL);
  }
  
+ static void at_xdmac_handle_error(struct at_xdmac_chan *atchan)
 
 

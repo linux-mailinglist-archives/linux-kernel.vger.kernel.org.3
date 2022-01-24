@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A742B499F05
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BDBE499F03
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:15:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1839411AbiAXWul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:50:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
+        id S1839345AbiAXWu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:50:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1572919AbiAXVmv (ORCPT
+        with ESMTP id S1572925AbiAXVmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 16:42:51 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BAAC0419E4;
-        Mon, 24 Jan 2022 12:31:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEC1C07A960;
+        Mon, 24 Jan 2022 12:31:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0C4F1B8122A;
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8D58B81229;
+        Mon, 24 Jan 2022 20:31:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24A9DC340E7;
         Mon, 24 Jan 2022 20:31:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A9AAC340E5;
-        Mon, 24 Jan 2022 20:31:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056291;
-        bh=eXld64SAj0/uBme7zFW+YGIPcTAU5bs5ccJa8NjUrcA=;
+        s=korg; t=1643056294;
+        bh=VJaVJEP2pnmf2hrnN+bNMJSsTptTmnZEfFyAfQj2aoA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PFa/bKqaiiTCuV1Nm4uJBgsMe5xpOLNQs90GzjX8Jy8GsA0h25LCb8g5zzKHDHr/U
-         QXMdLYBcqVJ+zrM4do8j9IW6nCWl7XTle47NLCqHnrcpfLCfOJXgv5JeEtNioAhDeL
-         bntFawLvzwG5XOLC1xlFflBmKb/QpX1gvWl3SMCY=
+        b=nfoAfanaQhu2XdVx2mXwzdcdZa/whSLkkt23ce/Vlmi5zlcuAuFJaSofgiDDybhEo
+         WbPuiIdK15aKr4BR4DbIYjyZ98xYXmPRICZpsjezyu89pozuPXRFio2GKzDBGPW0Q4
+         XT/3pXqKVqRJI88w5jKAExIptPY4me5i8C42wx2I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        Hector Martin <marcan@marcan.st>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 403/846] iommu/io-pgtable-arm: Fix table descriptor paddr formatting
-Date:   Mon, 24 Jan 2022 19:38:40 +0100
-Message-Id: <20220124184114.869565607@linuxfoundation.org>
+        stable@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
+        Sumanesh Samanta <sumanesh.samanta@broadcom.com>,
+        Bean Huo <beanhuo@micron.com>, Ming Lei <ming.lei@redhat.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 404/846] scsi: core: Fix scsi_device_max_queue_depth()
+Date:   Mon, 24 Jan 2022 19:38:41 +0100
+Message-Id: <20220124184114.906915693@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -49,67 +52,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hector Martin <marcan@marcan.st>
+From: Bart Van Assche <bvanassche@acm.org>
 
-[ Upstream commit 9abe2ac834851a7d0b0756e295cf7a292c45ca53 ]
+[ Upstream commit 4bc3bffc1a885eb5cb259e4a25146a4c7b1034e3 ]
 
-Table descriptors were being installed without properly formatting the
-address using paddr_to_iopte, which does not match up with the
-iopte_deref in __arm_lpae_map. This is incorrect for the LPAE pte
-format, as it does not handle the high bits properly.
+The comment above scsi_device_max_queue_depth() and also the description of
+commit ca4453213951 ("scsi: core: Make sure sdev->queue_depth is <=
+max(shost->can_queue, 1024)") contradict the implementation of the function
+scsi_device_max_queue_depth(). Additionally, the maximum queue depth of a
+SCSI LUN never exceeds host->can_queue. Fix scsi_device_max_queue_depth()
+by changing max_t() into min_t().
 
-This was found on Apple T6000 DARTs, which require a new pte format
-(different shift); adding support for that to
-paddr_to_iopte/iopte_to_paddr caused it to break badly, as even <48-bit
-addresses would end up incorrect in that case.
-
-Fixes: 6c89928ff7a0 ("iommu/io-pgtable-arm: Support 52-bit physical address")
-Acked-by: Robin Murphy <robin.murphy@arm.com>
-Signed-off-by: Hector Martin <marcan@marcan.st>
-Link: https://lore.kernel.org/r/20211120031343.88034-1-marcan@marcan.st
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Link: https://lore.kernel.org/r/20211203231950.193369-2-bvanassche@acm.org
+Fixes: ca4453213951 ("scsi: core: Make sure sdev->queue_depth is <= max(shost->can_queue, 1024)")
+Cc: Hannes Reinecke <hare@suse.de>
+Cc: Sumanesh Samanta <sumanesh.samanta@broadcom.com>
+Tested-by: Bean Huo <beanhuo@micron.com>
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
+Reviewed-by: Bean Huo <beanhuo@micron.com>
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/io-pgtable-arm.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/scsi/scsi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/iommu/io-pgtable-arm.c b/drivers/iommu/io-pgtable-arm.c
-index dd9e47189d0d9..94ff319ae8acc 100644
---- a/drivers/iommu/io-pgtable-arm.c
-+++ b/drivers/iommu/io-pgtable-arm.c
-@@ -315,11 +315,12 @@ static int arm_lpae_init_pte(struct arm_lpae_io_pgtable *data,
- static arm_lpae_iopte arm_lpae_install_table(arm_lpae_iopte *table,
- 					     arm_lpae_iopte *ptep,
- 					     arm_lpae_iopte curr,
--					     struct io_pgtable_cfg *cfg)
-+					     struct arm_lpae_io_pgtable *data)
+diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
+index 291ecc33b1fe6..4fc9466d820a7 100644
+--- a/drivers/scsi/scsi.c
++++ b/drivers/scsi/scsi.c
+@@ -209,11 +209,11 @@ void scsi_finish_command(struct scsi_cmnd *cmd)
+ 
+ 
+ /*
+- * 1024 is big enough for saturating the fast scsi LUN now
++ * 1024 is big enough for saturating fast SCSI LUNs.
+  */
+ int scsi_device_max_queue_depth(struct scsi_device *sdev)
  {
- 	arm_lpae_iopte old, new;
-+	struct io_pgtable_cfg *cfg = &data->iop.cfg;
+-	return max_t(int, sdev->host->can_queue, 1024);
++	return min_t(int, sdev->host->can_queue, 1024);
+ }
  
--	new = __pa(table) | ARM_LPAE_PTE_TYPE_TABLE;
-+	new = paddr_to_iopte(__pa(table), data) | ARM_LPAE_PTE_TYPE_TABLE;
- 	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_NS)
- 		new |= ARM_LPAE_PTE_NSTABLE;
- 
-@@ -380,7 +381,7 @@ static int __arm_lpae_map(struct arm_lpae_io_pgtable *data, unsigned long iova,
- 		if (!cptep)
- 			return -ENOMEM;
- 
--		pte = arm_lpae_install_table(cptep, ptep, 0, cfg);
-+		pte = arm_lpae_install_table(cptep, ptep, 0, data);
- 		if (pte)
- 			__arm_lpae_free_pages(cptep, tblsz, cfg);
- 	} else if (!cfg->coherent_walk && !(pte & ARM_LPAE_PTE_SW_SYNC)) {
-@@ -592,7 +593,7 @@ static size_t arm_lpae_split_blk_unmap(struct arm_lpae_io_pgtable *data,
- 		__arm_lpae_init_pte(data, blk_paddr, pte, lvl, 1, &tablep[i]);
- 	}
- 
--	pte = arm_lpae_install_table(tablep, ptep, blk_pte, cfg);
-+	pte = arm_lpae_install_table(tablep, ptep, blk_pte, data);
- 	if (pte != blk_pte) {
- 		__arm_lpae_free_pages(tablep, tablesz, cfg);
- 		/*
+ /**
 -- 
 2.34.1
 

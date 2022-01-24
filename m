@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48795499B63
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19D624995C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:13:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1575279AbiAXVvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:51:18 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35842 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449591AbiAXVPv (ORCPT
+        id S1442939AbiAXUzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:55:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38696 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385438AbiAXUdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:15:51 -0500
+        Mon, 24 Jan 2022 15:33:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F15C061778;
+        Mon, 24 Jan 2022 11:44:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0BC14B811F3;
-        Mon, 24 Jan 2022 21:15:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A0F8C340E4;
-        Mon, 24 Jan 2022 21:15:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41BF6B811F9;
+        Mon, 24 Jan 2022 19:44:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 728DEC340E5;
+        Mon, 24 Jan 2022 19:44:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058948;
-        bh=LSL6cfHhkID5SJXenbev0csahBF86XUuUbQBpDHN27Q=;
+        s=korg; t=1643053479;
+        bh=pvYtC9heZmM5zQOv9q7on2eqOlXb2uSoAf+0nnGKKhY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PQYCGszN5kZYqPj4TmjfZ+H78w4CmTY2q6GkzPayELFI/g+IPyJmINcBZDZvVt5e/
-         mO1YFr5uHQOWBo+TTizW7Zc5KFIBUVfHkZdBU9n8Ha90KdR5ssvvBASYn6AOhBmfBH
-         Xlh59cwAiBMdGxfcjAaPRUZ44zrKgDTgcKHTlfnM=
+        b=LdHQX2LUybndc6dnFgiE+7H2H7Ciq7BC2CXBtdgpjmrbXOM+HnomuCJTXmcKMfLRL
+         3sQsQfWv+UbLjQmcc+k8WVTPtoLhiJZpq7gYBSbhbk/h7Q1nyuxal50P5WEkXlaXxf
+         bbMIgGkscT+5tYIifwzt3KKIv4uJsSDXLC4zOJx4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Neil Armstrong <narmstrong@baylibre.com>,
+        Alexander Stein <alexander.stein@mailbox.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0455/1039] ASoC: cs42l42: Report initial jack state
+Subject: [PATCH 5.10 079/563] arm64: dts: amlogic: Fix SPI NOR flash node name for ODROID N2/N2+
 Date:   Mon, 24 Jan 2022 19:37:24 +0100
-Message-Id: <20220124184140.591589225@linuxfoundation.org>
+Message-Id: <20220124184027.122575755@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,107 +49,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Fitzgerald <rf@opensource.cirrus.com>
+From: Alexander Stein <alexander.stein@mailbox.org>
 
-[ Upstream commit fdd535283779ec9f9c35fda352585c629121214f ]
+[ Upstream commit 95d35256b564aca33fb661eac77dc94bfcffc8df ]
 
-When a jack handler is registered in cs42l42_set_jack() the
-initial state should be reported if an attached headphone/headset
-has already been detected.
+Fix the schema warning: "spi-flash@0: $nodename:0: 'spi-flash@0' does
+ not match '^flash(@.*)?$'" from jedec,spi-nor.yaml
 
-The jack detect sequence takes around 1 second: typically long
-enough for the machine driver to probe and register the jack handler
-in time to receive the first report from the interrupt handler. So
-it is possible on some systems that the correct initial state was seen
-simply because of lucky timing. Modular builds were more likely to
-miss the reporting of the initial state.
-
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-Fixes: 4ca239f33737 ("ASoC: cs42l42: Always enable TS_PLUG and TS_UNPLUG interrupts")
-Link: https://lore.kernel.org/r/20211119124854.58939-1-rf@opensource.cirrus.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: a084eaf3096c ("arm64: dts: meson-g12b-odroid-n2: add SPIFC controller node")
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Alexander Stein <alexander.stein@mailbox.org>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/20211026182813.900775-3-alexander.stein@mailbox.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/cs42l42.c | 22 ++++++++++++++++++++++
- sound/soc/codecs/cs42l42.h |  2 ++
- 2 files changed, 24 insertions(+)
+ arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/cs42l42.c b/sound/soc/codecs/cs42l42.c
-index 27a1c4c73074f..a63fba4e6c9c2 100644
---- a/sound/soc/codecs/cs42l42.c
-+++ b/sound/soc/codecs/cs42l42.c
-@@ -521,8 +521,25 @@ static int cs42l42_set_jack(struct snd_soc_component *component, struct snd_soc_
- {
- 	struct cs42l42_private *cs42l42 = snd_soc_component_get_drvdata(component);
+diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
+index 59b5f39088757..b9b8cd4b5ba9d 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
+@@ -543,7 +543,7 @@
+ 	pinctrl-0 = <&nor_pins>;
+ 	pinctrl-names = "default";
  
-+	/* Prevent race with interrupt handler */
-+	mutex_lock(&cs42l42->jack_detect_mutex);
- 	cs42l42->jack = jk;
- 
-+	if (jk) {
-+		switch (cs42l42->hs_type) {
-+		case CS42L42_PLUG_CTIA:
-+		case CS42L42_PLUG_OMTP:
-+			snd_soc_jack_report(jk, SND_JACK_HEADSET, SND_JACK_HEADSET);
-+			break;
-+		case CS42L42_PLUG_HEADPHONE:
-+			snd_soc_jack_report(jk, SND_JACK_HEADPHONE, SND_JACK_HEADPHONE);
-+			break;
-+		default:
-+			break;
-+		}
-+	}
-+	mutex_unlock(&cs42l42->jack_detect_mutex);
-+
- 	return 0;
- }
- 
-@@ -1611,6 +1628,8 @@ static irqreturn_t cs42l42_irq_thread(int irq, void *data)
- 		CS42L42_M_DETECT_FT_MASK |
- 		CS42L42_M_HSBIAS_HIZ_MASK);
- 
-+	mutex_lock(&cs42l42->jack_detect_mutex);
-+
- 	/* Check auto-detect status */
- 	if ((~masks[5]) & irq_params_table[5].mask) {
- 		if (stickies[5] & CS42L42_HSDET_AUTO_DONE_MASK) {
-@@ -1689,6 +1708,8 @@ static irqreturn_t cs42l42_irq_thread(int irq, void *data)
- 		}
- 	}
- 
-+	mutex_unlock(&cs42l42->jack_detect_mutex);
-+
- 	return IRQ_HANDLED;
- }
- 
-@@ -2033,6 +2054,7 @@ static int cs42l42_i2c_probe(struct i2c_client *i2c_client,
- 
- 	cs42l42->dev = &i2c_client->dev;
- 	i2c_set_clientdata(i2c_client, cs42l42);
-+	mutex_init(&cs42l42->jack_detect_mutex);
- 
- 	cs42l42->regmap = devm_regmap_init_i2c(i2c_client, &cs42l42_regmap);
- 	if (IS_ERR(cs42l42->regmap)) {
-diff --git a/sound/soc/codecs/cs42l42.h b/sound/soc/codecs/cs42l42.h
-index f45bcc9a3a62f..02128ebf8989a 100644
---- a/sound/soc/codecs/cs42l42.h
-+++ b/sound/soc/codecs/cs42l42.h
-@@ -12,6 +12,7 @@
- #ifndef __CS42L42_H__
- #define __CS42L42_H__
- 
-+#include <linux/mutex.h>
- #include <sound/jack.h>
- 
- #define CS42L42_PAGE_REGISTER	0x00	/* Page Select Register */
-@@ -838,6 +839,7 @@ struct  cs42l42_private {
- 	struct gpio_desc *reset_gpio;
- 	struct completion pdn_done;
- 	struct snd_soc_jack *jack;
-+	struct mutex jack_detect_mutex;
- 	int pll_config;
- 	int bclk;
- 	u32 sclk;
+-	mx25u64: spi-flash@0 {
++	mx25u64: flash@0 {
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 		compatible = "mxicy,mx25u6435f", "jedec,spi-nor";
 -- 
 2.34.1
 

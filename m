@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B9A498AFB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:09:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 434E0498FDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343748AbiAXTIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:08:43 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:32836 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237110AbiAXTCX (ORCPT
+        id S1359048AbiAXT4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:56:14 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58796 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347814AbiAXThj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:02:23 -0500
+        Mon, 24 Jan 2022 14:37:39 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 353D260BFB;
-        Mon, 24 Jan 2022 19:02:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C3D5C340E5;
-        Mon, 24 Jan 2022 19:02:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E84F3B80FA1;
+        Mon, 24 Jan 2022 19:37:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 259BCC340E5;
+        Mon, 24 Jan 2022 19:37:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050942;
-        bh=TpG7FVjmqICJYubPQPE/JrnyvkEd1i2n0LOWSOYT5vM=;
+        s=korg; t=1643053052;
+        bh=rkWayZZC0RqM6hI7nNtYbd4ASzlnGge0fvI4FQpwk0c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0g3rHd0qiKXPaWCF3wZwW5HuS2+oZz/P+aqB6VjFO/1Br6hm1A/BhrCYg6bhgZKlh
-         jRV7ywqDGtYygjAAum8eYBI9ZJ1TescR6d4f/9hb3f2SbSJq7x+Xw394aEqYL0HDHT
-         rd+11hZ0DaeqbQK+zvuh7uYDeOA48bzH3KSquxTM=
+        b=NYoheFsO34MuS7+mv9OZFCG+sXXUmpSlrtIMW0yFyu68J9XNQHIegFvXmjhGnE817
+         vNwiO9taRJkwkdSBau8mJi8gFfc8/luvOSe/BOmMpWA4SoZa5Qso+XrO+ZnyukwyVd
+         0g35wseyLl4B/NNQJkT+1SKfnWwb37LOAWTydHVY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Davidlohr Bueso <dbueso@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ben Hutchings <ben@decadent.org.uk>
-Subject: [PATCH 4.9 153/157] lib/timerqueue: Rely on rbtree semantics for next timer
-Date:   Mon, 24 Jan 2022 19:44:03 +0100
-Message-Id: <20220124183937.610181088@linuxfoundation.org>
+        stable@vger.kernel.org, Joseph Bao <joseph.bao@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stuart Hayes <stuart.w.hayes@gmail.com>
+Subject: [PATCH 5.4 260/320] PCI: pciehp: Fix infinite loop in IRQ handler upon power fault
+Date:   Mon, 24 Jan 2022 19:44:04 +0100
+Message-Id: <20220124184002.827563143@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,137 +47,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Davidlohr Bueso <dave@stgolabs.net>
+From: Lukas Wunner <lukas@wunner.de>
 
-commit 511885d7061eda3eb1faf3f57dcc936ff75863f1 upstream.
+commit 23584c1ed3e15a6f4bfab8dc5a88d94ab929ee12 upstream.
 
-Simplify the timerqueue code by using cached rbtrees and rely on the tree
-leftmost node semantics to get the timer with earliest expiration time.
-This is a drop in conversion, and therefore semantics remain untouched.
+The Power Fault Detected bit in the Slot Status register differs from
+all other hotplug events in that it is sticky:  It can only be cleared
+after turning off slot power.  Per PCIe r5.0, sec. 6.7.1.8:
 
-The runtime overhead of cached rbtrees is be pretty much the same as the
-current head->next method, noting that when removing the leftmost node,
-a common operation for the timerqueue, the rb_next(leftmost) is O(1) as
-well, so the next timer will either be the right node or its parent.
-Therefore no extra pointer chasing. Finally, the size of the struct
-timerqueue_head remains the same.
+  If a power controller detects a main power fault on the hot-plug slot,
+  it must automatically set its internal main power fault latch [...].
+  The main power fault latch is cleared when software turns off power to
+  the hot-plug slot.
 
-Passes several hours of rcutorture.
+The stickiness used to cause interrupt storms and infinite loops which
+were fixed in 2009 by commits 5651c48cfafe ("PCI pciehp: fix power fault
+interrupt storm problem") and 99f0169c17f3 ("PCI: pciehp: enable
+software notification on empty slots").
 
-Signed-off-by: Davidlohr Bueso <dbueso@suse.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lkml.kernel.org/r/20190724152323.bojciei3muvfxalm@linux-r8p5
-[bwh: While this was supposed to be just refactoring, it also fixed a
- security flaw (CVE-2021-20317).  Backported to 4.9:
- - Deleted code in timerqueue_del() is different before commit d852d39432f5
-   "timerqueue: Use rb_entry_safe() instead of open-coding it"
- - Adjust context]
-Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+Unfortunately in 2020 the infinite loop issue was inadvertently
+reintroduced by commit 8edf5332c393 ("PCI: pciehp: Fix MSI interrupt
+race"):  The hardirq handler pciehp_isr() clears the PFD bit until
+pciehp's power_fault_detected flag is set.  That happens in the IRQ
+thread pciehp_ist(), which never learns of the event because the hardirq
+handler is stuck in an infinite loop.  Fix by setting the
+power_fault_detected flag already in the hardirq handler.
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=214989
+Link: https://lore.kernel.org/linux-pci/DM8PR11MB5702255A6A92F735D90A4446868B9@DM8PR11MB5702.namprd11.prod.outlook.com
+Fixes: 8edf5332c393 ("PCI: pciehp: Fix MSI interrupt race")
+Link: https://lore.kernel.org/r/66eaeef31d4997ceea357ad93259f290ededecfd.1637187226.git.lukas@wunner.de
+Reported-by: Joseph Bao <joseph.bao@intel.com>
+Tested-by: Joseph Bao <joseph.bao@intel.com>
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Cc: stable@vger.kernel.org # v4.19+
+Cc: Stuart Hayes <stuart.w.hayes@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/timerqueue.h |   13 ++++++-------
- lib/timerqueue.c           |   31 ++++++++++++-------------------
- 2 files changed, 18 insertions(+), 26 deletions(-)
+ drivers/pci/hotplug/pciehp_hpc.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/include/linux/timerqueue.h
-+++ b/include/linux/timerqueue.h
-@@ -11,8 +11,7 @@ struct timerqueue_node {
- };
+--- a/drivers/pci/hotplug/pciehp_hpc.c
++++ b/drivers/pci/hotplug/pciehp_hpc.c
+@@ -577,6 +577,8 @@ read_status:
+ 	 */
+ 	if (ctrl->power_fault_detected)
+ 		status &= ~PCI_EXP_SLTSTA_PFD;
++	else if (status & PCI_EXP_SLTSTA_PFD)
++		ctrl->power_fault_detected = true;
  
- struct timerqueue_head {
--	struct rb_root head;
--	struct timerqueue_node *next;
-+	struct rb_root_cached rb_root;
- };
- 
- 
-@@ -28,13 +27,14 @@ extern struct timerqueue_node *timerqueu
-  *
-  * @head: head of timerqueue
-  *
-- * Returns a pointer to the timer node that has the
-- * earliest expiration time.
-+ * Returns a pointer to the timer node that has the earliest expiration time.
-  */
- static inline
- struct timerqueue_node *timerqueue_getnext(struct timerqueue_head *head)
- {
--	return head->next;
-+	struct rb_node *leftmost = rb_first_cached(&head->rb_root);
-+
-+	return rb_entry(leftmost, struct timerqueue_node, node);
- }
- 
- static inline void timerqueue_init(struct timerqueue_node *node)
-@@ -44,7 +44,6 @@ static inline void timerqueue_init(struc
- 
- static inline void timerqueue_init_head(struct timerqueue_head *head)
- {
--	head->head = RB_ROOT;
--	head->next = NULL;
-+	head->rb_root = RB_ROOT_CACHED;
- }
- #endif /* _LINUX_TIMERQUEUE_H */
---- a/lib/timerqueue.c
-+++ b/lib/timerqueue.c
-@@ -38,9 +38,10 @@
-  */
- bool timerqueue_add(struct timerqueue_head *head, struct timerqueue_node *node)
- {
--	struct rb_node **p = &head->head.rb_node;
-+	struct rb_node **p = &head->rb_root.rb_root.rb_node;
- 	struct rb_node *parent = NULL;
--	struct timerqueue_node  *ptr;
-+	struct timerqueue_node *ptr;
-+	bool leftmost = true;
- 
- 	/* Make sure we don't add nodes that are already added */
- 	WARN_ON_ONCE(!RB_EMPTY_NODE(&node->node));
-@@ -48,19 +49,17 @@ bool timerqueue_add(struct timerqueue_he
- 	while (*p) {
- 		parent = *p;
- 		ptr = rb_entry(parent, struct timerqueue_node, node);
--		if (node->expires.tv64 < ptr->expires.tv64)
-+		if (node->expires.tv64 < ptr->expires.tv64) {
- 			p = &(*p)->rb_left;
--		else
-+		} else {
- 			p = &(*p)->rb_right;
-+			leftmost = false;
-+		}
+ 	events |= status;
+ 	if (!events) {
+@@ -586,7 +588,7 @@ read_status:
  	}
- 	rb_link_node(&node->node, parent, p);
--	rb_insert_color(&node->node, &head->head);
-+	rb_insert_color_cached(&node->node, &head->rb_root, leftmost);
  
--	if (!head->next || node->expires.tv64 < head->next->expires.tv64) {
--		head->next = node;
--		return true;
--	}
--	return false;
-+	return leftmost;
- }
- EXPORT_SYMBOL_GPL(timerqueue_add);
+ 	if (status) {
+-		pcie_capability_write_word(pdev, PCI_EXP_SLTSTA, events);
++		pcie_capability_write_word(pdev, PCI_EXP_SLTSTA, status);
  
-@@ -76,16 +75,10 @@ bool timerqueue_del(struct timerqueue_he
- {
- 	WARN_ON_ONCE(RB_EMPTY_NODE(&node->node));
+ 		/*
+ 		 * In MSI mode, all event bits must be zero before the port
+@@ -660,8 +662,7 @@ static irqreturn_t pciehp_ist(int irq, v
+ 	}
  
--	/* update next pointer */
--	if (head->next == node) {
--		struct rb_node *rbn = rb_next(&node->node);
--
--		head->next = rbn ?
--			rb_entry(rbn, struct timerqueue_node, node) : NULL;
--	}
--	rb_erase(&node->node, &head->head);
-+	rb_erase_cached(&node->node, &head->rb_root);
- 	RB_CLEAR_NODE(&node->node);
--	return head->next != NULL;
-+
-+	return !RB_EMPTY_ROOT(&head->rb_root.rb_root);
- }
- EXPORT_SYMBOL_GPL(timerqueue_del);
- 
+ 	/* Check Power Fault Detected */
+-	if ((events & PCI_EXP_SLTSTA_PFD) && !ctrl->power_fault_detected) {
+-		ctrl->power_fault_detected = 1;
++	if (events & PCI_EXP_SLTSTA_PFD) {
+ 		ctrl_err(ctrl, "Slot(%s): Power fault\n", slot_name(ctrl));
+ 		pciehp_set_indicators(ctrl, PCI_EXP_SLTCTL_PWR_IND_OFF,
+ 				      PCI_EXP_SLTCTL_ATTN_IND_ON);
 
 

@@ -2,344 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89FC5498079
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:08:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB331498085
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:10:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242928AbiAXNI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 08:08:57 -0500
-Received: from mga14.intel.com ([192.55.52.115]:33646 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242781AbiAXNI4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 08:08:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643029736; x=1674565736;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1UE4yJTBuYWXm8YEr2krV6YOz7xSpcnUVRYLwdU34IM=;
-  b=YX0cRNXY7IN64/BCAm4drgR/ZTolXIkURfbtDtVhJhVgIUwEk1hYKqL0
-   /6jYnieA1xiEi+JKq4DrkUDkSpkmblP4uzQaAcopbe8549GJ+gm0wmc6n
-   vo/x0bkn5udmeZkjUF4vJBhSrsjpzb5w+LKD7bE0IwfdbRrg82B0WVjR1
-   RuYUnAtyzx76bo01PJc7MY0iREW4v/59KzqtVVXJ8fiyXVyeZf/M55Tep
-   iRH9BUDPnRuIQXtdLYY0MEGkbV1zS4EzAeP/BrjCyrmk7CFKzFInfXR4T
-   LEpCrcicf3YL9DKNLGKBSpJ/O5CxDRfc6KHhq1bxRdu8MGabNhFsr+nrI
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="246256460"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="246256460"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 05:08:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="695414953"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 24 Jan 2022 05:08:41 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nBz5M-000ILh-HC; Mon, 24 Jan 2022 13:08:40 +0000
-Date:   Mon, 24 Jan 2022 21:08:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2376/2384]
- arch/arm64/include/asm/preempt.h:13:47: error: invalid type argument of '->'
- (have 'int')
-Message-ID: <202201242026.CrtQ9uF8-lkp@intel.com>
+        id S242833AbiAXNKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 08:10:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242754AbiAXNKj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 08:10:39 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A00C06173B;
+        Mon, 24 Jan 2022 05:10:39 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id n10so40877673edv.2;
+        Mon, 24 Jan 2022 05:10:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ii7ywF9YTsgxUZ8BJSe/h1Y/FMQ0hLAIMS3wBsXZ6bo=;
+        b=R5E5QxUdxVK/9Ca7x/MyQKlnBzZR2twm8WE1Hwg3LmAsOJajNi2N2qz9uNhn2PJcHS
+         lTchITPR7duzj6dUDvDVOMeEcxNM7y1e5EaCWWwA91nfqWnDRZLZwYUPOfoIJ1Wd++ex
+         cjyL6Mnp4H3ncuHCh9Sy2C3ptIrgKZRgeH9nwX7AAiBMja6c6T2sYuR6nHJg2pXlrj9L
+         aWWNIXFtbR+ymuyIBfwl3qmFCT0JInIizWJWyqk8HVnH++9jWCXX+8mCBJGFyB6Dq0Lv
+         Cl7lp/FLzio/bXGyp5UwJ2GW00mZ+LeM5TQymlWlxZecWBozLDGXOK95E0pLM9gFAxPg
+         StEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ii7ywF9YTsgxUZ8BJSe/h1Y/FMQ0hLAIMS3wBsXZ6bo=;
+        b=I2wsCVDP/lX4m7TIaZ5rYzY2CQtQTXxKZR3zFY5FyI++GaeulcFRPZLPjZZ2B1iQnH
+         IU7sfTzRZoEjpLgH3q0XVADW4L7BYSJA4NsGCR3RaxuWlwkgmHdyi4X4Y0QtLtDHdM3s
+         bU/bbIxFmLe+qXmUiBmHZnvSIbdmfdWWwPekLIt3nO3AZ5Dz5rCTdtDTh9q+vKnaccrq
+         AzsolWHtp8IJ4UQxkK1o7C/qyTcxq5/4gW0Dqe+rn+6elOqa6ucNOam8TqewRrivsV5F
+         PuH0HzaOgPSlaDUY3uofKOk4E+2ECRhCspFDYRATgkfxZQgUZIvG7T7T09Cb7d/u13DV
+         G02Q==
+X-Gm-Message-State: AOAM531bwub5Pwx2mkieCbA5m+27wK8dB4m0fVX4+TW5CqJd0T2/ixxV
+        V8DBqE8PO3kLRQN1lE9SAH1V/PpjGySqHb5SgrBM+zJDiTHr2u2r
+X-Google-Smtp-Source: ABdhPJxe9gG7GmwLNzIqUqnXptTYfVi++yYk4b57rKeuLa9kbpKKL1Tf4IIP/DKbUVTsBkAnMFS9uv8bHhvRrk63vI8=
+X-Received: by 2002:aa7:c0c9:: with SMTP id j9mr15579423edp.270.1643029837684;
+ Mon, 24 Jan 2022 05:10:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220124093912.2429190-1-Qing-wu.Li@leica-geosystems.com.cn> <20220124093912.2429190-4-Qing-wu.Li@leica-geosystems.com.cn>
+In-Reply-To: <20220124093912.2429190-4-Qing-wu.Li@leica-geosystems.com.cn>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 24 Jan 2022 15:08:57 +0200
+Message-ID: <CAHp75VdgcB-U3+H0=R3s7xRP6nQKu+iGKaa2pV4QsGjrrfVpgg@mail.gmail.com>
+Subject: Re: [PATCH V1 3/6] iio: accel: sca3300: modified to support multi chips
+To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tomas Melin <tomas.melin@vaisala.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   4c707c1c0de83967079b4e385012fa5b00e2cd11
-commit: 882f8a5202090503bd884d578674fd1da9a404ff [2376/2384] headers/deps: Introduce the CONFIG_FAST_HEADERS=y config option
-config: arm64-buildonly-randconfig-r005-20220124 (https://download.01.org/0day-ci/archive/20220124/202201242026.CrtQ9uF8-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=882f8a5202090503bd884d578674fd1da9a404ff
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 882f8a5202090503bd884d578674fd1da9a404ff
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 prepare
+On Mon, Jan 24, 2022 at 11:39 AM LI Qingwu
+<Qing-wu.Li@leica-geosystems.com.cn> wrote:
+>
+> The drive support sca3300 only,there are some other similar chips,
+> for instance, SCL3300.
+> modified the driver to read the device id,
+> add the tables for the corresponding id to support multiple chips.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+...
 
-All errors (new ones prefixed by >>):
+>  /* Device return status and mask */
+>  #define SCA3300_VALUE_RS_ERROR 0x3
+>  #define SCA3300_MASK_RS_STATUS GENMASK(1, 0)
+> +
+>  enum sca3300_op_mode_indexes {
+>         OP_MOD_1 = 0,
+>         OP_MOD_2,
 
-   In file included from <command-line>:
-   arch/arm64/include/asm/preempt.h: In function 'preempt_count':
-   include/linux/thread_info.h:28:32: error: implicit declaration of function 'task_thread_info'; did you mean 'task_thread'? [-Werror=implicit-function-declaration]
-      28 | # define current_thread_info() task_thread_info(current)
-         |                                ^~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:315:23: note: in definition of macro '__compiletime_assert'
-     315 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:335:9: note: in expansion of macro '_compiletime_assert'
-     335 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:9: note: in expansion of macro 'compiletime_assert'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:28: note: in expansion of macro '__native_word'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                            ^~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:49:9: note: in expansion of macro 'compiletime_assert_rwonce_type'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/include/asm/preempt.h:13:16: note: in expansion of macro 'READ_ONCE'
-      13 |         return READ_ONCE(current_thread_info()->preempt.count);
-         |                ^~~~~~~~~
-   arch/arm64/include/asm/preempt.h:13:26: note: in expansion of macro 'current_thread_info'
-      13 |         return READ_ONCE(current_thread_info()->preempt.count);
-         |                          ^~~~~~~~~~~~~~~~~~~
->> arch/arm64/include/asm/preempt.h:13:47: error: invalid type argument of '->' (have 'int')
-      13 |         return READ_ONCE(current_thread_info()->preempt.count);
-         |                                               ^~
-   include/linux/compiler_types.h:315:23: note: in definition of macro '__compiletime_assert'
-     315 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:335:9: note: in expansion of macro '_compiletime_assert'
-     335 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:9: note: in expansion of macro 'compiletime_assert'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:28: note: in expansion of macro '__native_word'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                            ^~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:49:9: note: in expansion of macro 'compiletime_assert_rwonce_type'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/include/asm/preempt.h:13:16: note: in expansion of macro 'READ_ONCE'
-      13 |         return READ_ONCE(current_thread_info()->preempt.count);
-         |                ^~~~~~~~~
->> arch/arm64/include/asm/preempt.h:13:47: error: invalid type argument of '->' (have 'int')
-      13 |         return READ_ONCE(current_thread_info()->preempt.count);
-         |                                               ^~
-   include/linux/compiler_types.h:315:23: note: in definition of macro '__compiletime_assert'
-     315 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:335:9: note: in expansion of macro '_compiletime_assert'
-     335 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:9: note: in expansion of macro 'compiletime_assert'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:28: note: in expansion of macro '__native_word'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                            ^~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:49:9: note: in expansion of macro 'compiletime_assert_rwonce_type'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/include/asm/preempt.h:13:16: note: in expansion of macro 'READ_ONCE'
-      13 |         return READ_ONCE(current_thread_info()->preempt.count);
-         |                ^~~~~~~~~
->> arch/arm64/include/asm/preempt.h:13:47: error: invalid type argument of '->' (have 'int')
-      13 |         return READ_ONCE(current_thread_info()->preempt.count);
-         |                                               ^~
-   include/linux/compiler_types.h:315:23: note: in definition of macro '__compiletime_assert'
-     315 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:335:9: note: in expansion of macro '_compiletime_assert'
-     335 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:9: note: in expansion of macro 'compiletime_assert'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:28: note: in expansion of macro '__native_word'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                            ^~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:49:9: note: in expansion of macro 'compiletime_assert_rwonce_type'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/include/asm/preempt.h:13:16: note: in expansion of macro 'READ_ONCE'
-      13 |         return READ_ONCE(current_thread_info()->preempt.count);
-         |                ^~~~~~~~~
->> arch/arm64/include/asm/preempt.h:13:47: error: invalid type argument of '->' (have 'int')
-      13 |         return READ_ONCE(current_thread_info()->preempt.count);
-         |                                               ^~
-   include/linux/compiler_types.h:315:23: note: in definition of macro '__compiletime_assert'
-     315 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:335:9: note: in expansion of macro '_compiletime_assert'
-     335 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:9: note: in expansion of macro 'compiletime_assert'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:28: note: in expansion of macro '__native_word'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                            ^~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:49:9: note: in expansion of macro 'compiletime_assert_rwonce_type'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/include/asm/preempt.h:13:16: note: in expansion of macro 'READ_ONCE'
-      13 |         return READ_ONCE(current_thread_info()->preempt.count);
-         |                ^~~~~~~~~
->> arch/arm64/include/asm/preempt.h:13:47: error: invalid type argument of '->' (have 'int')
-      13 |         return READ_ONCE(current_thread_info()->preempt.count);
-         |                                               ^~
-   include/linux/compiler_types.h:315:23: note: in definition of macro '__compiletime_assert'
-     315 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:335:9: note: in expansion of macro '_compiletime_assert'
-     335 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:9: note: in expansion of macro 'compiletime_assert'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:49:9: note: in expansion of macro 'compiletime_assert_rwonce_type'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/include/asm/preempt.h:13:16: note: in expansion of macro 'READ_ONCE'
-      13 |         return READ_ONCE(current_thread_info()->preempt.count);
-         |                ^~~~~~~~~
->> arch/arm64/include/asm/preempt.h:13:47: error: invalid type argument of '->' (have 'int')
-      13 |         return READ_ONCE(current_thread_info()->preempt.count);
-         |                                               ^~
-   include/linux/compiler_types.h:291:27: note: in definition of macro '__unqual_scalar_typeof'
-     291 |                 _Generic((x),                                           \
-         |                           ^
-   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
-      50 |         __READ_ONCE(x);                                                 \
-         |         ^~~~~~~~~~~
-   arch/arm64/include/asm/preempt.h:13:16: note: in expansion of macro 'READ_ONCE'
-      13 |         return READ_ONCE(current_thread_info()->preempt.count);
-         |                ^~~~~~~~~
-   In file included from arch/arm64/include/asm/rwonce.h:71,
-                    from include/linux/compiler.h:263,
-                    from include/asm-generic/bug.h:5,
-                    from arch/arm64/include/asm/bug.h:26,
-                    from include/linux/bug.h:5,
-                    from include/linux/thread_info.h:15,
-                    from include/linux/sched.h:2,
-                    from arch/arm64/kernel/../../../kernel/sched/per_task_area_struct.h:7,
-                    from arch/arm64/kernel/asm-offsets.c:9:
->> arch/arm64/include/asm/preempt.h:13:47: error: invalid type argument of '->' (have 'int')
-      13 |         return READ_ONCE(current_thread_info()->preempt.count);
-         |                                               ^~
-   include/asm-generic/rwonce.h:44:73: note: in definition of macro '__READ_ONCE'
-      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
-         |                                                                         ^
-   arch/arm64/include/asm/preempt.h:13:16: note: in expansion of macro 'READ_ONCE'
-      13 |         return READ_ONCE(current_thread_info()->preempt.count);
-         |                ^~~~~~~~~
-   In file included from <command-line>:
-   arch/arm64/include/asm/preempt.h: In function 'preempt_count_set':
-   arch/arm64/include/asm/preempt.h:19:41: error: invalid type argument of '->' (have 'int')
-      19 |         WRITE_ONCE(current_thread_info()->preempt.count, pc);
-         |                                         ^~
-   include/linux/compiler_types.h:315:23: note: in definition of macro '__compiletime_assert'
-     315 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:335:9: note: in expansion of macro '_compiletime_assert'
-     335 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:9: note: in expansion of macro 'compiletime_assert'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:28: note: in expansion of macro '__native_word'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                            ^~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:60:9: note: in expansion of macro 'compiletime_assert_rwonce_type'
-      60 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/include/asm/preempt.h:19:9: note: in expansion of macro 'WRITE_ONCE'
-      19 |         WRITE_ONCE(current_thread_info()->preempt.count, pc);
-         |         ^~~~~~~~~~
-   arch/arm64/include/asm/preempt.h:19:41: error: invalid type argument of '->' (have 'int')
-      19 |         WRITE_ONCE(current_thread_info()->preempt.count, pc);
-         |                                         ^~
-   include/linux/compiler_types.h:315:23: note: in definition of macro '__compiletime_assert'
-     315 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:335:9: note: in expansion of macro '_compiletime_assert'
-     335 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:9: note: in expansion of macro 'compiletime_assert'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:28: note: in expansion of macro '__native_word'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                            ^~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:60:9: note: in expansion of macro 'compiletime_assert_rwonce_type'
-      60 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/include/asm/preempt.h:19:9: note: in expansion of macro 'WRITE_ONCE'
-      19 |         WRITE_ONCE(current_thread_info()->preempt.count, pc);
-         |         ^~~~~~~~~~
-   arch/arm64/include/asm/preempt.h:19:41: error: invalid type argument of '->' (have 'int')
-      19 |         WRITE_ONCE(current_thread_info()->preempt.count, pc);
-         |                                         ^~
-   include/linux/compiler_types.h:315:23: note: in definition of macro '__compiletime_assert'
-     315 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:335:9: note: in expansion of macro '_compiletime_assert'
-     335 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:9: note: in expansion of macro 'compiletime_assert'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:28: note: in expansion of macro '__native_word'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                            ^~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:60:9: note: in expansion of macro 'compiletime_assert_rwonce_type'
-      60 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/include/asm/preempt.h:19:9: note: in expansion of macro 'WRITE_ONCE'
-      19 |         WRITE_ONCE(current_thread_info()->preempt.count, pc);
-         |         ^~~~~~~~~~
-   arch/arm64/include/asm/preempt.h:19:41: error: invalid type argument of '->' (have 'int')
-      19 |         WRITE_ONCE(current_thread_info()->preempt.count, pc);
-         |                                         ^~
-   include/linux/compiler_types.h:315:23: note: in definition of macro '__compiletime_assert'
-     315 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:335:9: note: in expansion of macro '_compiletime_assert'
-     335 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:9: note: in expansion of macro 'compiletime_assert'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:36:28: note: in expansion of macro '__native_word'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                            ^~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:60:9: note: in expansion of macro 'compiletime_assert_rwonce_type'
-      60 |         compiletime_assert_rwonce_type(x);                              \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/include/asm/preempt.h:19:9: note: in expansion of macro 'WRITE_ONCE'
-      19 |         WRITE_ONCE(current_thread_info()->preempt.count, pc);
-         |         ^~~~~~~~~~
-   arch/arm64/include/asm/preempt.h:19:41: error: invalid type argument of '->' (have 'int')
-      19 |         WRITE_ONCE(current_thread_info()->preempt.count, pc);
-         |                                         ^~
-   include/linux/compiler_types.h:315:23: note: in definition of macro '__compiletime_assert'
-     315 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
+Stray change ?
 
+...
 
-vim +13 arch/arm64/include/asm/preempt.h
+> +struct sca3300_chip_info {
+> +       enum sca3300_chip_type chip_type;
+> +       const char *name;
 
-396244692232fc Will Deacon 2018-09-20  10  
-396244692232fc Will Deacon 2018-09-20  11  static inline int preempt_count(void)
-396244692232fc Will Deacon 2018-09-20  12  {
-396244692232fc Will Deacon 2018-09-20 @13  	return READ_ONCE(current_thread_info()->preempt.count);
-396244692232fc Will Deacon 2018-09-20  14  }
-396244692232fc Will Deacon 2018-09-20  15  
+> +       u8 chip_id;
+> +       const struct iio_chan_spec *channels;
+> +       int num_channels;
 
-:::::: The code at line 13 was first introduced by commit
-:::::: 396244692232fcf0881cb6ba2404be2906f47681 arm64: preempt: Provide our own implementation of asm/preempt.h
+Ordering these as
 
-:::::: TO: Will Deacon <will.deacon@arm.com>
-:::::: CC: Will Deacon <will.deacon@arm.com>
+       const struct iio_chan_spec *channels;
+       int num_channels;
+       u8 chip_id;
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+will save 4 bytes in some cases.
+
+> +       unsigned long scan_masks;
+> +};
+
+...
+
+>                 }
+>                 return -EINVAL;
+> -
+>         case IIO_CHAN_INFO_LOW_PASS_FILTER_3DB_FREQUENCY:
+>                 ret = sca3300_read_reg(data, SCA3300_REG_MODE, &reg_val);
+
+Another stray change?
+
+...
+
+>         int value = 0;
+>         int ret;
+> +       int i = 0;
+
+Reversed xmas tree order?
+
+...
+
+>          * Wait 15ms for settling of signal paths.
+>          */
+>         usleep_range(16e3, 50e3);
+> -
+
+Leave this blank line, so you will have a better reading of the code
+and comment.
+
+> +       for (i = 0; i < ARRAY_SIZE(sca3300_chip_info_tbl); i++) {
+> +               ret = sca3300_read_reg(sca_data, SCA3300_REG_WHOAMI, &value);
+> +               if (ret)
+> +                       return ret;
+
+> +               if (sca3300_chip_info_tbl[i].chip_id == value) {
+
+> +                       sca_data->chip_info = &sca3300_chip_info_tbl[i];
+> +                       indio_dev->name = sca3300_chip_info_tbl[i].name;
+> +                       indio_dev->channels = sca3300_chip_info_tbl[i].channels;
+> +                       indio_dev->num_channels = sca3300_chip_info_tbl[i].num_channels;
+> +                       indio_dev->modes = INDIO_DIRECT_MODE;
+> +                       indio_dev->available_scan_masks = sca3300_chip_info_tbl[i].scan_masks;
+
+You may do it after the below check. Thus here
+
+               if (sca3300_chip_info_tbl[i].chip_id == value)
+                       break;
+
+> +                       break;
+> +               }
+> +       }
+> +       if (i == ARRAY_SIZE(sca3300_chip_info_tbl)) {
+> +               dev_err(&sca_data->spi->dev, "Invalid chip %x\n", value);
+>                 return -ENODEV;
+>         }
+>         return 0;
+
+...
+
+>         indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*sca_data));
+>         if (!indio_dev)
+>                 return -ENOMEM;
+> -
+>         sca_data = iio_priv(indio_dev);
+>         mutex_init(&sca_data->lock);
+
+Stray change for sure.
+
+...
+
+>         indio_dev->info = &sca3300_info;
+> -       indio_dev->name = SCA3300_ALIAS;
+> -       indio_dev->modes = INDIO_DIRECT_MODE;
+> -       indio_dev->channels = sca3300_channels;
+> -       indio_dev->num_channels = ARRAY_SIZE(sca3300_channels);
+> -       indio_dev->available_scan_masks = sca3300_scan_masks;
+
+> +
+
+Ditto.
+
+>
+>         ret = sca3300_init(sca_data, indio_dev);
+
+-- 
+With Best Regards,
+Andy Shevchenko

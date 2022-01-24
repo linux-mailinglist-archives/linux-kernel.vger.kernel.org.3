@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D88D4992E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2C6498DEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:38:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382626AbiAXU0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:26:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60224 "EHLO
+        id S1354777AbiAXTh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:37:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352002AbiAXUDp (ORCPT
+        with ESMTP id S1347734AbiAXTc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:03:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6307C02B742;
-        Mon, 24 Jan 2022 11:30:17 -0800 (PST)
+        Mon, 24 Jan 2022 14:32:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083D2C061749;
+        Mon, 24 Jan 2022 11:15:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 651A260917;
-        Mon, 24 Jan 2022 19:30:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A002C340E5;
-        Mon, 24 Jan 2022 19:30:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1520B81223;
+        Mon, 24 Jan 2022 19:15:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6426C340E5;
+        Mon, 24 Jan 2022 19:15:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052616;
-        bh=/lpNPmWX5dfLrKHdBpEYNnkutGKFPRmgQYn9v2IX4JM=;
+        s=korg; t=1643051717;
+        bh=A2NvKwd73D8pQ6vaWh6pCK/nGc+b3GhvLNFIRFxwTA0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VWzI3hiIshJ9UmK0pIE8QXoMttJDuNtPd6oJlef0mOHKNb1K5kqBb+CkGIje8iH0q
-         e5/ODueCEwdjn4qqszBLK9kQF7IcUmN3AwSZLrftlhNUmM9F36vp72s9f478J1/8Vm
-         KbMD4LgvBSKZKUK8u3jKQriDTriN2L5Os5BfnPVo=
+        b=baQgDcUWgb4my/afV8ynTlk1AWFntrjWTFC2iTsCezzB7XS1dKjNQb37omgdhXzHj
+         rxwmplQn4MvrIRwCD8aKGW29ECiYXX6qeFDRSLISnFefWJvb9QMKTFvt8yRUM0gdaz
+         6uMxgn+iSfE+SSzev7kakLKknRka3vYIQ6B7fE+s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 118/320] can: softing: softing_startstop(): fix set but not used variable warning
+Subject: [PATCH 4.19 064/239] drm/amdgpu: Fix a NULL pointer dereference in amdgpu_connector_lcd_native_mode()
 Date:   Mon, 24 Jan 2022 19:41:42 +0100
-Message-Id: <20220124183957.707029762@linuxfoundation.org>
+Message-Id: <20220124183945.169579704@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,60 +49,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+From: Zhou Qingyang <zhou1615@umn.edu>
 
-[ Upstream commit 370d988cc529598ebaec6487d4f84c2115dc696b ]
+[ Upstream commit b220110e4cd442156f36e1d9b4914bb9e87b0d00 ]
 
-In the function softing_startstop() the variable error_reporting is
-assigned but not used. The code that uses this variable is commented
-out. Its stated that the functionality is not finally verified.
+In amdgpu_connector_lcd_native_mode(), the return value of
+drm_mode_duplicate() is assigned to mode, and there is a dereference
+of it in amdgpu_connector_lcd_native_mode(), which will lead to a NULL
+pointer dereference on failure of drm_mode_duplicate().
 
-To fix the warning:
+Fix this bug add a check of mode.
 
-| drivers/net/can/softing/softing_fw.c:424:9: error: variable 'error_reporting' set but not used [-Werror,-Wunused-but-set-variable]
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
 
-remove the comment, activate the code, but add a "0 &&" to the if
-expression and rely on the optimizer rather than the preprocessor to
-remove the code.
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
 
-Link: https://lore.kernel.org/all/20220109103126.1872833-1-mkl@pengutronix.de
-Fixes: 03fd3cf5a179 ("can: add driver for Softing card")
-Cc: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Builds with CONFIG_DRM_AMDGPU=m show no new warnings, and
+our static analyzer no longer warns about this code.
+
+Fixes: d38ceaf99ed0 ("drm/amdgpu: add core driver (v4)")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/softing/softing_fw.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/net/can/softing/softing_fw.c b/drivers/net/can/softing/softing_fw.c
-index 8f44fdd8804bf..1c2afa17c26d1 100644
---- a/drivers/net/can/softing/softing_fw.c
-+++ b/drivers/net/can/softing/softing_fw.c
-@@ -565,18 +565,19 @@ int softing_startstop(struct net_device *dev, int up)
- 		if (ret < 0)
- 			goto failed;
- 	}
--	/* enable_error_frame */
--	/*
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
+index e1be3fd4d7a45..3e4305c3c9831 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
+@@ -388,6 +388,9 @@ amdgpu_connector_lcd_native_mode(struct drm_encoder *encoder)
+ 	    native_mode->vdisplay != 0 &&
+ 	    native_mode->clock != 0) {
+ 		mode = drm_mode_duplicate(dev, native_mode);
++		if (!mode)
++			return NULL;
 +
-+	/* enable_error_frame
-+	 *
- 	 * Error reporting is switched off at the moment since
- 	 * the receiving of them is not yet 100% verified
- 	 * This should be enabled sooner or later
--	 *
--	if (error_reporting) {
-+	 */
-+	if (0 && error_reporting) {
- 		ret = softing_fct_cmd(card, 51, "enable_error_frame");
- 		if (ret < 0)
- 			goto failed;
- 	}
--	*/
+ 		mode->type = DRM_MODE_TYPE_PREFERRED | DRM_MODE_TYPE_DRIVER;
+ 		drm_mode_set_name(mode);
+ 
+@@ -402,6 +405,9 @@ amdgpu_connector_lcd_native_mode(struct drm_encoder *encoder)
+ 		 * simpler.
+ 		 */
+ 		mode = drm_cvt_mode(dev, native_mode->hdisplay, native_mode->vdisplay, 60, true, false, false);
++		if (!mode)
++			return NULL;
 +
- 	/* initialize interface */
- 	iowrite16(1, &card->dpram[DPRAM_FCT_PARAM + 2]);
- 	iowrite16(1, &card->dpram[DPRAM_FCT_PARAM + 4]);
+ 		mode->type = DRM_MODE_TYPE_PREFERRED | DRM_MODE_TYPE_DRIVER;
+ 		DRM_DEBUG_KMS("Adding cvt approximation of native panel mode %s\n", mode->name);
+ 	}
 -- 
 2.34.1
 

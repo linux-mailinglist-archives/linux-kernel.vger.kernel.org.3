@@ -2,121 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4453497A41
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E722497A4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:26:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236216AbiAXIYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 03:24:06 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:58640
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242158AbiAXIYA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 03:24:00 -0500
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 9910940051
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 08:23:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643012638;
-        bh=bto/xpfUsOVGNmCnHot8/BAzxWmx4lezX3yYM6aPOPk=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=JSWnxyc6Ynxb4pzX0DEiloksdMGeHVH6a9RN36NM0CxF6rmsONQ+hL2l9dBHMFvjB
-         z6JSuTDgV5/BKMd1xaTWFZK1rPg2NhY4OhzxdCqTYvI3Og0fVfnzpwcon8qI397GjX
-         iK9t4+pMFlgIwuYpspxZ7nUKciXf11UZYK67XL5sEZLgiPP02j+BBixUbYnjA8aJUs
-         z0j7L8lKXGFADXh6fAMbEZDzJWe6YxFdP+I5LFJKRCK7BywQfIGhKAXdicexuhs7tA
-         sNekQUWlnhnJeA24NqgDOwaXGtYXHEGwasAA8yeT93d5s87JDZRCGt4QZfMWAE6uyy
-         aVoeygH+Oaumg==
-Received: by mail-wm1-f70.google.com with SMTP id m127-20020a1ca385000000b0034e992a94a8so1708211wme.5
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 00:23:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bto/xpfUsOVGNmCnHot8/BAzxWmx4lezX3yYM6aPOPk=;
-        b=j2RpaJx7qwo7wL8VjVDirBqVCwbo+XeP86GcJUkfpBVFbdCNX7iuuCNvg+WQ1tjKL7
-         Xl/3MYQWj12UYIUAe0He+juX2hTJgtnVOA9guXMORXj1rFTUeEWpeo9DOvc8KHLPNY+L
-         Bh5SYaYkvm+vLdS0iwmzNk4NKM0Nzz/fkuJDy36KETmg6Ij7inpPt1OHYNSiLGE2SlxZ
-         l5eQ5Q2NfzAik/x7Sl1NF2ghpE7Vg/ccYJT+Y7XQ8H6duZcKvfiTGtaGqxvTlSIWcDEU
-         tliAhPm3pJj6lTV99jLBFK4xW2g/Zxdmup+NyvuzYNzOaU7iAUFCetHw//gc58C5LIt4
-         PeLg==
-X-Gm-Message-State: AOAM533cdZZ1wy3wOoX+R5FZh6NfXdf1oB5N0f53wSH10wqUD2KPNuZJ
-        VNJcLduZa0Yw7abT9fnuIWRpGcKcp5nlizTmEn6HE/IdmEUxp4W8c7LSFQWnI/bhCWr/k/RRLvS
-        n/HMOrQuwZ6eBG4U/dBsXLE2rSxoFAN4NFSgWtt4UFw==
-X-Received: by 2002:a5d:64c1:: with SMTP id f1mr13620184wri.214.1643012637896;
-        Mon, 24 Jan 2022 00:23:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwbDEtlR+A8QosvqD2D6NDMpI/LZF+F4pIQPaln/inShBkt2VmjdWxKP27qiPZUiadTkD+7Dw==
-X-Received: by 2002:a5d:64c1:: with SMTP id f1mr13620166wri.214.1643012637710;
-        Mon, 24 Jan 2022 00:23:57 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id m64sm7148550wmm.31.2022.01.24.00.23.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 00:23:57 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Pratyush Yadav <p.yadav@ti.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-spi@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 4/4] spi: s3c64xx: allow controller-data to be optional
-Date:   Mon, 24 Jan 2022 09:23:47 +0100
-Message-Id: <20220124082347.32747-5-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220124082347.32747-1-krzysztof.kozlowski@canonical.com>
-References: <20220124082347.32747-1-krzysztof.kozlowski@canonical.com>
+        id S231483AbiAXI0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 03:26:31 -0500
+Received: from mga03.intel.com ([134.134.136.65]:16043 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229800AbiAXI00 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 03:26:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643012786; x=1674548786;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Rux9J+VSLdbgWUxsBOOX1krXPu5RScfzXKkMHtGrIAA=;
+  b=jpDLzkj8skj+gKVyVCN7U1hrF+56398B9fX5G10KlwDgpAqvBHTO/j0M
+   abJPDe8LZGPhEgMdJgYv/s0MIUmKVUyceW2Z7vXUDj4D6Z60B4/MesQkM
+   A4TVO9YdbrYiwD0+ilHkY1FZ11xfOyHfsGZpXB5L+bDHroJ49foxaXL76
+   kt+WvEUisxH/Z6XKya5Xc+OEoGeTehNA8ZBhTxnlcTxs2FmO3O3cifRdV
+   2XeMNH5K4PdreMpONeEuWDuY70IiKf/MvRwol7fMH7vVOI7njkjXhf72S
+   ecZAcKPdutYK454pRlkGMW+goFcWgUyjkvfcK7i66LMHI/QPHA8C7PHaF
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="245940051"
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="245940051"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 00:26:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="695340539"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 24 Jan 2022 00:26:23 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nBugA-000Hzt-GI; Mon, 24 Jan 2022 08:26:22 +0000
+Date:   Mon, 24 Jan 2022 16:25:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     NeilBrown <neilb@suse.de>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 09/23] MM: submit multipage reads for SWP_FS_OPS
+ swap-space
+Message-ID: <202201241613.8J5z5arQ-lkp@intel.com>
+References: <164299611278.26253.14950274629759580371.stgit@noble.brown>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <164299611278.26253.14950274629759580371.stgit@noble.brown>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Samsung SoC SPI driver requires to provide controller-data node
-for each of SPI peripheral device nodes.  Make this controller-data node
-optional, so DTS could be simpler.
+Hi NeilBrown,
 
-Suggested-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-Reviewed-by: Andi Shyti <andi@etezian.org>
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.17-rc1 next-20220124]
+[cannot apply to trondmy-nfs/linux-next cifs/for-next hnaz-mm/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/NeilBrown/Repair-SWAP-over_NFS/20220124-115716
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
+config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20220124/202201241613.8J5z5arQ-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/63bff668aa0537d7ccef9ed428809fc16c1a6b6c
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review NeilBrown/Repair-SWAP-over_NFS/20220124-115716
+        git checkout 63bff668aa0537d7ccef9ed428809fc16c1a6b6c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from mm/vmscan.c:61:
+   mm/swap.h:66:40: warning: 'struct swap_iocb' declared inside parameter list will not be visible outside of this definition or declaration
+      66 |                                 struct swap_iocb **plug);
+         |                                        ^~~~~~~~~
+>> mm/swap.h:67:1: error: expected identifier or '(' before '{' token
+      67 | {
+         | ^
+   mm/swap.h:65:19: warning: 'swap_readpage' declared 'static' but never defined [-Wunused-function]
+      65 | static inline int swap_readpage(struct page *page, bool do_poll,
+         |                   ^~~~~~~~~~~~~
+--
+   In file included from mm/memory.c:89:
+   mm/swap.h:66:40: warning: 'struct swap_iocb' declared inside parameter list will not be visible outside of this definition or declaration
+      66 |                                 struct swap_iocb **plug);
+         |                                        ^~~~~~~~~
+>> mm/swap.h:67:1: error: expected identifier or '(' before '{' token
+      67 | {
+         | ^
+>> mm/swap.h:65:19: warning: 'swap_readpage' used but never defined
+      65 | static inline int swap_readpage(struct page *page, bool do_poll,
+         |                   ^~~~~~~~~~~~~
+--
+   In file included from mm/page_alloc.c:84:
+   mm/swap.h:66:40: warning: 'struct swap_iocb' declared inside parameter list will not be visible outside of this definition or declaration
+      66 |                                 struct swap_iocb **plug);
+         |                                        ^~~~~~~~~
+>> mm/swap.h:67:1: error: expected identifier or '(' before '{' token
+      67 | {
+         | ^
+   mm/page_alloc.c:3821:15: warning: no previous prototype for 'should_fail_alloc_page' [-Wmissing-prototypes]
+    3821 | noinline bool should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
+         |               ^~~~~~~~~~~~~~~~~~~~~~
+   In file included from mm/page_alloc.c:84:
+   mm/swap.h:65:19: warning: 'swap_readpage' declared 'static' but never defined [-Wunused-function]
+      65 | static inline int swap_readpage(struct page *page, bool do_poll,
+         |                   ^~~~~~~~~~~~~
+
+
+vim +67 mm/swap.h
+
+50dceef273a619 NeilBrown 2022-01-24  45  
+50dceef273a619 NeilBrown 2022-01-24  46  struct page *read_swap_cache_async(swp_entry_t, gfp_t,
+50dceef273a619 NeilBrown 2022-01-24  47  				   struct vm_area_struct *vma,
+50dceef273a619 NeilBrown 2022-01-24  48  				   unsigned long addr,
+63bff668aa0537 NeilBrown 2022-01-24  49  				   bool do_poll,
+63bff668aa0537 NeilBrown 2022-01-24  50  				   struct swap_iocb **plug);
+50dceef273a619 NeilBrown 2022-01-24  51  struct page *__read_swap_cache_async(swp_entry_t, gfp_t,
+50dceef273a619 NeilBrown 2022-01-24  52  				     struct vm_area_struct *vma,
+50dceef273a619 NeilBrown 2022-01-24  53  				     unsigned long addr,
+50dceef273a619 NeilBrown 2022-01-24  54  				     bool *new_page_allocated);
+50dceef273a619 NeilBrown 2022-01-24  55  struct page *swap_cluster_readahead(swp_entry_t entry, gfp_t flag,
+50dceef273a619 NeilBrown 2022-01-24  56  				    struct vm_fault *vmf);
+50dceef273a619 NeilBrown 2022-01-24  57  struct page *swapin_readahead(swp_entry_t entry, gfp_t flag,
+50dceef273a619 NeilBrown 2022-01-24  58  			      struct vm_fault *vmf);
+50dceef273a619 NeilBrown 2022-01-24  59  
+12cf545fe71035 NeilBrown 2022-01-24  60  static inline unsigned int page_swap_flags(struct page *page)
+12cf545fe71035 NeilBrown 2022-01-24  61  {
+12cf545fe71035 NeilBrown 2022-01-24  62  	return page_swap_info(page)->flags;
+12cf545fe71035 NeilBrown 2022-01-24  63  }
+50dceef273a619 NeilBrown 2022-01-24  64  #else /* CONFIG_SWAP */
+63bff668aa0537 NeilBrown 2022-01-24 @65  static inline int swap_readpage(struct page *page, bool do_poll,
+63bff668aa0537 NeilBrown 2022-01-24 @66  				struct swap_iocb **plug);
+50dceef273a619 NeilBrown 2022-01-24 @67  {
+50dceef273a619 NeilBrown 2022-01-24  68  	return 0;
+50dceef273a619 NeilBrown 2022-01-24  69  }
+50dceef273a619 NeilBrown 2022-01-24  70  
+
 ---
- drivers/spi/spi-s3c64xx.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 8755cd85e83c..386550fca81c 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -796,16 +796,14 @@ static struct s3c64xx_spi_csinfo *s3c64xx_get_slave_ctrldata(
- 		return ERR_PTR(-EINVAL);
- 	}
- 
--	data_np = of_get_child_by_name(slave_np, "controller-data");
--	if (!data_np) {
--		dev_err(&spi->dev, "child node 'controller-data' not found\n");
--		return ERR_PTR(-EINVAL);
--	}
--
- 	cs = kzalloc(sizeof(*cs), GFP_KERNEL);
--	if (!cs) {
--		of_node_put(data_np);
-+	if (!cs)
- 		return ERR_PTR(-ENOMEM);
-+
-+	data_np = of_get_child_by_name(slave_np, "controller-data");
-+	if (!data_np) {
-+		dev_info(&spi->dev, "feedback delay set to default (0)\n");
-+		return cs;
- 	}
- 
- 	of_property_read_u32(data_np, "samsung,spi-feedback-delay", &fb_delay);
--- 
-2.32.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

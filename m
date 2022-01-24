@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8D24990B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:07:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FCE4990D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352498AbiAXUDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:03:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51652 "EHLO
+        id S1377469AbiAXUFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:05:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238002AbiAXT01 (ORCPT
+        with ESMTP id S1349990AbiAXTry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:26:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D845CC02B879;
-        Mon, 24 Jan 2022 11:12:17 -0800 (PST)
+        Mon, 24 Jan 2022 14:47:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B350C038AF4;
+        Mon, 24 Jan 2022 11:23:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F81DB8121A;
-        Mon, 24 Jan 2022 19:12:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A88A7C340EA;
-        Mon, 24 Jan 2022 19:12:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEF1961496;
+        Mon, 24 Jan 2022 19:23:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D23C36AE2;
+        Mon, 24 Jan 2022 19:23:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051536;
-        bh=1IvSxe8xKZxSOH1osGJiqjMhR5Nf6Fmyo66KyHc0iLw=;
+        s=korg; t=1643052207;
+        bh=WIhonFUuLPDgILEzIj8zMYalQ6tBoRgyQ7YNS/mS6RA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=syak8bdGY/9AFvq+ux/NiTyWrTjfrrMXzEN8qowHGjojSHZLN6ETSDD9+8Lh1f0Mw
-         ZDwHDo9yWOdeiqLYvaOZixGQu7aPcKT4W/q68nbcVlgPL6MsYdWLFaplKkb3uxEYoj
-         xyzRMwfu6KAUTVyaYoQY3+JM5Yucpe0+hTxIAbF4=
+        b=SE8YkIDaapaFZ9eUce/9+9jnmS0VU3QKn01siD7rAMVySd5tnI0Us0LCVX2WmBGkO
+         Un2z+2AHk8fB54rAsAp8MZsu7249JJOhKAupvSLbrdInb2Sk/uUVXwNkjHOltZwIC2
+         658d8DArUz10ruBOO1uVSPT8cWmQntxR19Uy5aqY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Michael Wakabayashi <mwakabayashi@vmware.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: [PATCH 4.14 186/186] NFSv4: Initialise connection to the server in nfs4_alloc_client()
-Date:   Mon, 24 Jan 2022 19:44:21 +0100
-Message-Id: <20220124183943.090675630@linuxfoundation.org>
+        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.19 224/239] net: axienet: fix number of TX ring slots for available check
+Date:   Mon, 24 Jan 2022 19:44:22 +0100
+Message-Id: <20220124183950.232834013@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,135 +48,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Robert Hancock <robert.hancock@calian.com>
 
-commit dd99e9f98fbf423ff6d365b37a98e8879170f17c upstream.
+commit aba57a823d2985a2cc8c74a2535f3a88e68d9424 upstream.
 
-Set up the connection to the NFSv4 server in nfs4_alloc_client(), before
-we've added the struct nfs_client to the net-namespace's nfs_client_list
-so that a downed server won't cause other mounts to hang in the trunking
-detection code.
+The check for the number of available TX ring slots was off by 1 since a
+slot is required for the skb header as well as each fragment. This could
+result in overwriting a TX ring slot that was still in use.
 
-Reported-by: Michael Wakabayashi <mwakabayashi@vmware.com>
-Fixes: 5c6e5b60aae4 ("NFS: Fix an Oops in the pNFS files and flexfiles connection setup to the DS")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Fixes: 8a3b7a252dca9 ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/nfs4client.c |   82 ++++++++++++++++++++++++++--------------------------
- 1 file changed, 42 insertions(+), 40 deletions(-)
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/fs/nfs/nfs4client.c
-+++ b/fs/nfs/nfs4client.c
-@@ -177,8 +177,11 @@ void nfs40_shutdown_client(struct nfs_cl
+--- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
++++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+@@ -682,7 +682,7 @@ axienet_start_xmit(struct sk_buff *skb,
+ 	num_frag = skb_shinfo(skb)->nr_frags;
+ 	cur_p = &lp->tx_bd_v[lp->tx_bd_tail];
  
- struct nfs_client *nfs4_alloc_client(const struct nfs_client_initdata *cl_init)
- {
--	int err;
-+	char buf[INET6_ADDRSTRLEN + 1];
-+	const char *ip_addr = cl_init->ip_addr;
- 	struct nfs_client *clp = nfs_alloc_client(cl_init);
-+	int err;
-+
- 	if (IS_ERR(clp))
- 		return clp;
+-	if (axienet_check_tx_bd_space(lp, num_frag)) {
++	if (axienet_check_tx_bd_space(lp, num_frag + 1)) {
+ 		if (netif_queue_stopped(ndev))
+ 			return NETDEV_TX_BUSY;
  
-@@ -202,6 +205,44 @@ struct nfs_client *nfs4_alloc_client(con
- #if IS_ENABLED(CONFIG_NFS_V4_1)
- 	init_waitqueue_head(&clp->cl_lock_waitq);
- #endif
-+
-+	if (cl_init->minorversion != 0)
-+		__set_bit(NFS_CS_INFINITE_SLOTS, &clp->cl_flags);
-+	__set_bit(NFS_CS_DISCRTRY, &clp->cl_flags);
-+	__set_bit(NFS_CS_NO_RETRANS_TIMEOUT, &clp->cl_flags);
-+
-+	/*
-+	 * Set up the connection to the server before we add add to the
-+	 * global list.
-+	 */
-+	err = nfs_create_rpc_client(clp, cl_init, RPC_AUTH_GSS_KRB5I);
-+	if (err == -EINVAL)
-+		err = nfs_create_rpc_client(clp, cl_init, RPC_AUTH_UNIX);
-+	if (err < 0)
-+		goto error;
-+
-+	/* If no clientaddr= option was specified, find a usable cb address */
-+	if (ip_addr == NULL) {
-+		struct sockaddr_storage cb_addr;
-+		struct sockaddr *sap = (struct sockaddr *)&cb_addr;
-+
-+		err = rpc_localaddr(clp->cl_rpcclient, sap, sizeof(cb_addr));
-+		if (err < 0)
-+			goto error;
-+		err = rpc_ntop(sap, buf, sizeof(buf));
-+		if (err < 0)
-+			goto error;
-+		ip_addr = (const char *)buf;
-+	}
-+	strlcpy(clp->cl_ipaddr, ip_addr, sizeof(clp->cl_ipaddr));
-+
-+	err = nfs_idmap_new(clp);
-+	if (err < 0) {
-+		dprintk("%s: failed to create idmapper. Error = %d\n",
-+			__func__, err);
-+		goto error;
-+	}
-+	__set_bit(NFS_CS_IDMAP, &clp->cl_res_state);
- 	return clp;
+@@ -692,7 +692,7 @@ axienet_start_xmit(struct sk_buff *skb,
+ 		smp_mb();
  
- error:
-@@ -354,8 +395,6 @@ static int nfs4_init_client_minor_versio
- struct nfs_client *nfs4_init_client(struct nfs_client *clp,
- 				    const struct nfs_client_initdata *cl_init)
- {
--	char buf[INET6_ADDRSTRLEN + 1];
--	const char *ip_addr = cl_init->ip_addr;
- 	struct nfs_client *old;
- 	int error;
+ 		/* Space might have just been freed - check again */
+-		if (axienet_check_tx_bd_space(lp, num_frag))
++		if (axienet_check_tx_bd_space(lp, num_frag + 1))
+ 			return NETDEV_TX_BUSY;
  
-@@ -363,43 +402,6 @@ struct nfs_client *nfs4_init_client(stru
- 		/* the client is initialised already */
- 		return clp;
- 
--	/* Check NFS protocol revision and initialize RPC op vector */
--	clp->rpc_ops = &nfs_v4_clientops;
--
--	if (clp->cl_minorversion != 0)
--		__set_bit(NFS_CS_INFINITE_SLOTS, &clp->cl_flags);
--	__set_bit(NFS_CS_DISCRTRY, &clp->cl_flags);
--	__set_bit(NFS_CS_NO_RETRANS_TIMEOUT, &clp->cl_flags);
--
--	error = nfs_create_rpc_client(clp, cl_init, RPC_AUTH_GSS_KRB5I);
--	if (error == -EINVAL)
--		error = nfs_create_rpc_client(clp, cl_init, RPC_AUTH_UNIX);
--	if (error < 0)
--		goto error;
--
--	/* If no clientaddr= option was specified, find a usable cb address */
--	if (ip_addr == NULL) {
--		struct sockaddr_storage cb_addr;
--		struct sockaddr *sap = (struct sockaddr *)&cb_addr;
--
--		error = rpc_localaddr(clp->cl_rpcclient, sap, sizeof(cb_addr));
--		if (error < 0)
--			goto error;
--		error = rpc_ntop(sap, buf, sizeof(buf));
--		if (error < 0)
--			goto error;
--		ip_addr = (const char *)buf;
--	}
--	strlcpy(clp->cl_ipaddr, ip_addr, sizeof(clp->cl_ipaddr));
--
--	error = nfs_idmap_new(clp);
--	if (error < 0) {
--		dprintk("%s: failed to create idmapper. Error = %d\n",
--			__func__, error);
--		goto error;
--	}
--	__set_bit(NFS_CS_IDMAP, &clp->cl_res_state);
--
- 	error = nfs4_init_client_minor_version(clp);
- 	if (error < 0)
- 		goto error;
+ 		netif_wake_queue(ndev);
 
 

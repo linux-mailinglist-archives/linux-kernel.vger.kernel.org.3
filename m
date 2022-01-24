@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2663549A58E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:12:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8220F49A713
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:36:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3410124AbiAYA2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:28:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54932 "EHLO
+        id S3422968AbiAYCck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:32:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2360928AbiAXXin (ORCPT
+        with ESMTP id S1355550AbiAXUWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:38:43 -0500
+        Mon, 24 Jan 2022 15:22:30 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D0CC0BD108;
-        Mon, 24 Jan 2022 13:38:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A44C0417CC;
+        Mon, 24 Jan 2022 11:39:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D825B81243;
-        Mon, 24 Jan 2022 21:38:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 570BBC340E5;
-        Mon, 24 Jan 2022 21:38:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E020B8121C;
+        Mon, 24 Jan 2022 19:39:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78B57C340E5;
+        Mon, 24 Jan 2022 19:39:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060291;
-        bh=gQFqGG9/fSj/hQQshBDiTsv+zM3FhzzYSeDeoKFtb3U=;
+        s=korg; t=1643053196;
+        bh=XvKunCyUTqhoDJttVMh5EWZ4rnj0JNBQ0NSEL9yv4Ak=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mu2eanA+qdyNZbso2V/188c5zwXiudQrQao3H+FYuMc2OsNwkm3S5FwV4FlM1bvJd
-         EssmELlECClO25TH4OeH7693hNnqj0J+UNj9NwxhxSjQSxWMepyKJoYJv3HbYaLRvr
-         71ZoAZ5twPVGY4/WWP8Mp1SPIaWPOPXy8LB9Iur4=
+        b=kmsvG1WC1BAU75kosbi2IHI7+5/MX7h9cL0ntOru5anoZAIyUbZNk6NQVefkKJ19g
+         dyui+MiXQato9cCJeYUDPC8xJSZfxr1rfRG9wvPTXwUuc5BlZl++O+Br7kkeEPrkgV
+         ydt9Dihna92mDsaOJ5ngDIp3rLTzZePZ02o6bey8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhang Yi <yi.zhang@huawei.com>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.16 0900/1039] ext4: fix an use-after-free issue about data=journal writeback mode
-Date:   Mon, 24 Jan 2022 19:44:49 +0100
-Message-Id: <20220124184155.545115512@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.4 306/320] dmaengine: at_xdmac: Print debug message after realeasing the lock
+Date:   Mon, 24 Jan 2022 19:44:50 +0100
+Message-Id: <20220124184004.356910982@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,129 +49,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Yi <yi.zhang@huawei.com>
+From: Tudor Ambarus <tudor.ambarus@microchip.com>
 
-commit 5c48a7df91499e371ef725895b2e2d21a126e227 upstream.
+commit 5edc24ac876a928f36f407a0fcdb33b94a3a210f upstream.
 
-Our syzkaller report an use-after-free issue that accessing the freed
-buffer_head on the writeback page in __ext4_journalled_writepage(). The
-problem is that if there was a truncate racing with the data=journalled
-writeback procedure, the writeback length could become zero and
-bget_one() refuse to get buffer_head's refcount, then the truncate
-procedure release buffer once we drop page lock, finally, the last
-ext4_walk_page_buffers() trigger the use-after-free problem.
+It is desirable to do the prints without the lock held if possible, so
+move the print after the lock is released.
 
-sync                               truncate
-ext4_sync_file()
- file_write_and_wait_range()
-                                   ext4_setattr(0)
-                                    inode->i_size = 0
-  ext4_writepage()
-   len = 0
-   __ext4_journalled_writepage()
-    page_bufs = page_buffers(page)
-    ext4_walk_page_buffers(bget_one) <- does not get refcount
-                                    do_invalidatepage()
-                                      free_buffer_head()
-    ext4_walk_page_buffers(page_bufs) <- trigger use-after-free
-
-After commit bdf96838aea6 ("ext4: fix race between truncate and
-__ext4_journalled_writepage()"), we have already handled the racing
-case, so the bget_one() and bput_one() are not needed. So this patch
-simply remove these hunk, and recheck the i_size to make it safe.
-
-Fixes: bdf96838aea6 ("ext4: fix race between truncate and __ext4_journalled_writepage()")
-Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20211225090937.712867-1-yi.zhang@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Fixes: e1f7c9eee707 ("dmaengine: at_xdmac: creation of the atmel eXtended DMA Controller driver")
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+Link: https://lore.kernel.org/r/20211215110115.191749-4-tudor.ambarus@microchip.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/inode.c |   37 ++++++++++---------------------------
- 1 file changed, 10 insertions(+), 27 deletions(-)
+ drivers/dma/at_xdmac.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -1845,30 +1845,16 @@ int ext4_da_get_block_prep(struct inode
- 	return 0;
+--- a/drivers/dma/at_xdmac.c
++++ b/drivers/dma/at_xdmac.c
+@@ -424,10 +424,12 @@ static dma_cookie_t at_xdmac_tx_submit(s
+ 	spin_lock_irqsave(&atchan->lock, irqflags);
+ 	cookie = dma_cookie_assign(tx);
+ 
+-	dev_vdbg(chan2dev(tx->chan), "%s: atchan 0x%p, add desc 0x%p to xfers_list\n",
+-		 __func__, atchan, desc);
+ 	list_add_tail(&desc->xfer_node, &atchan->xfers_list);
+ 	spin_unlock_irqrestore(&atchan->lock, irqflags);
++
++	dev_vdbg(chan2dev(tx->chan), "%s: atchan 0x%p, add desc 0x%p to xfers_list\n",
++		 __func__, atchan, desc);
++
+ 	return cookie;
  }
  
--static int bget_one(handle_t *handle, struct inode *inode,
--		    struct buffer_head *bh)
--{
--	get_bh(bh);
--	return 0;
--}
--
--static int bput_one(handle_t *handle, struct inode *inode,
--		    struct buffer_head *bh)
--{
--	put_bh(bh);
--	return 0;
--}
--
- static int __ext4_journalled_writepage(struct page *page,
- 				       unsigned int len)
- {
- 	struct address_space *mapping = page->mapping;
- 	struct inode *inode = mapping->host;
--	struct buffer_head *page_bufs = NULL;
- 	handle_t *handle = NULL;
- 	int ret = 0, err = 0;
- 	int inline_data = ext4_has_inline_data(inode);
- 	struct buffer_head *inode_bh = NULL;
-+	loff_t size;
- 
- 	ClearPageChecked(page);
- 
-@@ -1878,14 +1864,6 @@ static int __ext4_journalled_writepage(s
- 		inode_bh = ext4_journalled_write_inline_data(inode, len, page);
- 		if (inode_bh == NULL)
- 			goto out;
--	} else {
--		page_bufs = page_buffers(page);
--		if (!page_bufs) {
--			BUG();
--			goto out;
--		}
--		ext4_walk_page_buffers(handle, inode, page_bufs, 0, len,
--				       NULL, bget_one);
- 	}
- 	/*
- 	 * We need to release the page lock before we start the
-@@ -1906,7 +1884,8 @@ static int __ext4_journalled_writepage(s
- 
- 	lock_page(page);
- 	put_page(page);
--	if (page->mapping != mapping) {
-+	size = i_size_read(inode);
-+	if (page->mapping != mapping || page_offset(page) > size) {
- 		/* The page got truncated from under us */
- 		ext4_journal_stop(handle);
- 		ret = 0;
-@@ -1916,6 +1895,13 @@ static int __ext4_journalled_writepage(s
- 	if (inline_data) {
- 		ret = ext4_mark_inode_dirty(handle, inode);
- 	} else {
-+		struct buffer_head *page_bufs = page_buffers(page);
-+
-+		if (page->index == size >> PAGE_SHIFT)
-+			len = size & ~PAGE_MASK;
-+		else
-+			len = PAGE_SIZE;
-+
- 		ret = ext4_walk_page_buffers(handle, inode, page_bufs, 0, len,
- 					     NULL, do_journal_get_write_access);
- 
-@@ -1936,9 +1922,6 @@ static int __ext4_journalled_writepage(s
- out:
- 	unlock_page(page);
- out_no_pagelock:
--	if (!inline_data && page_bufs)
--		ext4_walk_page_buffers(NULL, inode, page_bufs, 0, len,
--				       NULL, bput_one);
- 	brelse(inode_bh);
- 	return ret;
- }
 
 

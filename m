@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9968B498C21
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BBC1498FBB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348690AbiAXTTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:19:31 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37040 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347480AbiAXTKg (ORCPT
+        id S1350760AbiAXTyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:54:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348066AbiAXTnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:10:36 -0500
+        Mon, 24 Jan 2022 14:43:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A845C094275;
+        Mon, 24 Jan 2022 11:22:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3CBA1B8121C;
-        Mon, 24 Jan 2022 19:10:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67D68C340E5;
-        Mon, 24 Jan 2022 19:10:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3932360010;
+        Mon, 24 Jan 2022 19:22:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10751C340E5;
+        Mon, 24 Jan 2022 19:22:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051434;
-        bh=bhP8cYmcF+oa1LaEN1EYwyqQkc2Wenjwi4rB4DKehC8=;
+        s=korg; t=1643052132;
+        bh=32f1GQzhq8P7rtzI6K3kbis7qu0LI7dysxm9i2zoPKc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UvANOJRingdiHjjywDkjJtUivzT/gB0Qt9dVHz2qWgvnwwBYn0HM/B0wdYj/y2Rn7
-         ThNxCvNCFLQ44Tgnj1472pnL0Zroblvc/RPVGZbyQnNACjOCvVIC2DHTrIq7S77MLN
-         NojF7TvJJvMi11KacYf0RXMoqw6rxgcc0BDfLYp8=
+        b=PVbwqyaFY/1xleS8oZA+j2NPUDWO1mi4trrGWMSADy8e/wfj5xE86cB/pJS8DhghL
+         +lQ5Oh3aYpyWn6FhR+zBOYBL5UwKMZSmih41VDdA3J7DQrGELYqUjk6RNw1EpsCbTy
+         H60xCHosd904Uk10z4TCUeLDp9kusj8D76Cgx+Mw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yixing Liu <liuyixing1@huawei.com>,
-        Wenpeng Liang <liangwenpeng@huawei.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 4.14 161/186] RDMA/hns: Modify the mapping attribute of doorbell to device
-Date:   Mon, 24 Jan 2022 19:43:56 +0100
-Message-Id: <20220124183942.275906961@linuxfoundation.org>
+        stable@vger.kernel.org, Ilan Peer <ilan.peer@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>
+Subject: [PATCH 4.19 199/239] iwlwifi: mvm: Increase the scan timeout guard to 30 seconds
+Date:   Mon, 24 Jan 2022 19:43:57 +0100
+Message-Id: <20220124183949.441382787@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,33 +48,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yixing Liu <liuyixing1@huawei.com>
+From: Ilan Peer <ilan.peer@intel.com>
 
-commit 39d5534b1302189c809e90641ffae8cbdc42a8fc upstream.
+commit ced50f1133af12f7521bb777fcf4046ca908fb77 upstream.
 
-It is more general for ARM device drivers to use the device attribute to
-map PCI BAR spaces.
+With the introduction of 6GHz channels the scan guard timeout should
+be adjusted to account for the following extreme case:
 
-Fixes: 9a4435375cd1 ("IB/hns: Add driver files for hns RoCE driver")
-Link: https://lore.kernel.org/r/20211206133652.27476-1-liangwenpeng@huawei.com
-Signed-off-by: Yixing Liu <liuyixing1@huawei.com>
-Signed-off-by: Wenpeng Liang <liangwenpeng@huawei.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+- All 6GHz channels are scanned passively: 58 channels.
+- The scan is fragmented with the following parameters: 3 fragments,
+  95 TUs suspend time, 44 TUs maximal out of channel time.
+
+The above would result with scan time of more than 24 seconds. Thus,
+set the timeout to 30 seconds.
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Ilan Peer <ilan.peer@intel.com>
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/iwlwifi.20211210090244.3c851b93aef5.I346fa2e1d79220a6770496e773c6f87a2ad9e6c4@changeid
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/hw/hns/hns_roce_main.c |    2 +-
+ drivers/net/wireless/intel/iwlwifi/mvm/scan.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/infiniband/hw/hns/hns_roce_main.c
-+++ b/drivers/infiniband/hw/hns/hns_roce_main.c
-@@ -377,7 +377,7 @@ static int hns_roce_mmap(struct ib_ucont
- 		return -EINVAL;
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
+@@ -1555,7 +1555,7 @@ static int iwl_mvm_check_running_scans(s
+ 	return -EIO;
+ }
  
- 	if (vma->vm_pgoff == 0) {
--		vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
-+		vma->vm_page_prot = pgprot_device(vma->vm_page_prot);
- 		if (io_remap_pfn_range(vma, vma->vm_start,
- 				       to_hr_ucontext(context)->uar.pfn,
- 				       PAGE_SIZE, vma->vm_page_prot))
+-#define SCAN_TIMEOUT 20000
++#define SCAN_TIMEOUT 30000
+ 
+ void iwl_mvm_scan_timeout_wk(struct work_struct *work)
+ {
 
 

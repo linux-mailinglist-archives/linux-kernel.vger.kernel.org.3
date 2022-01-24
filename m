@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6306F49A2F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:01:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DCA849A266
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 02:59:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2366034AbiAXXwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:52:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45342 "EHLO
+        id S2362296AbiAXXmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:42:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354678AbiAXW4K (ORCPT
+        with ESMTP id S1841093AbiAXW5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:56:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE0FC055AAB;
-        Mon, 24 Jan 2022 13:11:14 -0800 (PST)
+        Mon, 24 Jan 2022 17:57:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FE9C055ABD;
+        Mon, 24 Jan 2022 13:11:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7346F6141C;
-        Mon, 24 Jan 2022 21:11:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5024DC340E5;
-        Mon, 24 Jan 2022 21:11:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D55EAB8121C;
+        Mon, 24 Jan 2022 21:11:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4F6FC340E8;
+        Mon, 24 Jan 2022 21:11:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058673;
-        bh=MR0DDHmEUnRhfhkZtXdtcXdk3sQQ2ZdHmzsTEcDQPNw=;
+        s=korg; t=1643058708;
+        bh=50E6Rx/1hjD8ce3GLxo312lfRaJ+k/VnmDjEgimOyp8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gjXCB/wkjjsm/soO9GkVM5v4pys5Ie/C50DMxeyUihlJ5WgFbQg5bRbh6Ck+aO1++
-         P8yFGFpN8YY688vH8YpzbSt1KDE4xkRaSgBFwAxtgwFcxsUUTTfknDlTgxZcS8netI
-         OzabdorQcoyoL21PlXK326g3hRuTiYN2xKHRzAoY=
+        b=YzRyBZR/aZlM+3FYFPcDckYcClD3Vz4I2PNT4Yph8Z7SpFhvXwCR1pU1pXTzq8rsV
+         TO43SSbwfX3+nfbB6GYSP7XEzfJhrppAdHaH4bdhr32PHQvhL+shOvYKohKOBD6YHt
+         GIPFXiwVlX2HJo2eH8vo1u2BCy0lUrM22Sf9JafY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, Daniel Golle <daniel@makrotopia.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0364/1039] ACPI: scan: Create platform device for BCM4752 and LNV4752 ACPI nodes
-Date:   Mon, 24 Jan 2022 19:35:53 +0100
-Message-Id: <20220124184137.521769259@linuxfoundation.org>
+Subject: [PATCH 5.16 0369/1039] net: ethernet: mtk_eth_soc: fix return values and refactor MDIO ops
+Date:   Mon, 24 Jan 2022 19:35:58 +0100
+Message-Id: <20220124184137.699085044@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -49,77 +49,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Daniel Golle <daniel@makrotopia.org>
 
-[ Upstream commit f85196bdd5a50da74670250564740fc852b3c239 ]
+[ Upstream commit eda80b249df7bbc7b3dd13907343a3e59bfc57fd ]
 
-BCM4752 and LNV4752 ACPI nodes describe a Broadcom 4752 GPS module
-attached to an UART of the system.
+Instead of returning -1 (-EPERM) when MDIO bus is stuck busy
+while writing or 0xffff if it happens while reading, return the
+appropriate -ETIMEDOUT. Also fix return type to int instead of u32.
+Refactor functions to use bitfield helpers instead of having various
+masking and shifting constants in the code, which also results in the
+register definitions in the header file being more obviously related
+to what is stated in the MediaTek's Reference Manual.
 
-The GPS modules talk a custom protocol which only works with a closed-
-source Android gpsd daemon which knows this protocol.
-
-The ACPI nodes also describe GPIOs to turn the GPS on/off these are
-handled by the net/rfkill/rfkill-gpio.c code. This handling predates the
-addition of enumeration of ACPI instantiated serdevs to the kernel and
-was broken by that addition, because the ACPI scan code now no longer
-instantiates platform_device-s for these nodes.
-
-Rename the i2c_multi_instantiate_ids HID list to ignore_serial_bus_ids
-and add the BCM4752 and LNV4752 HIDs, so that rfkill-gpio gets
-a platform_device to bind to again; and so that a tty cdev for gpsd
-gets created for these.
-
-Fixes: e361d1f85855 ("ACPI / scan: Fix enumeration for special UART devices")
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: 656e705243fd0 ("net-next: mediatek: add support for MT7623 ethernet")
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/scan.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c | 53 ++++++++++++---------
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h | 16 +++++--
+ 2 files changed, 41 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-index 2c80765670bc7..25d9f04f19959 100644
---- a/drivers/acpi/scan.c
-+++ b/drivers/acpi/scan.c
-@@ -1695,6 +1695,7 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+index 75d67d1b5f6b2..ab023d3ca81f9 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -91,46 +91,53 @@ static int mtk_mdio_busy_wait(struct mtk_eth *eth)
+ 	}
+ 
+ 	dev_err(eth->dev, "mdio: MDIO timeout\n");
+-	return -1;
++	return -ETIMEDOUT;
+ }
+ 
+-static u32 _mtk_mdio_write(struct mtk_eth *eth, u32 phy_addr,
+-			   u32 phy_register, u32 write_data)
++static int _mtk_mdio_write(struct mtk_eth *eth, u32 phy_addr, u32 phy_reg,
++			   u32 write_data)
  {
- 	struct list_head resource_list;
- 	bool is_serial_bus_slave = false;
-+	static const struct acpi_device_id ignore_serial_bus_ids[] = {
- 	/*
- 	 * These devices have multiple I2cSerialBus resources and an i2c-client
- 	 * must be instantiated for each, each with its own i2c_device_id.
-@@ -1703,11 +1704,18 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
- 	 * drivers/platform/x86/i2c-multi-instantiate.c driver, which knows
- 	 * which i2c_device_id to use for each resource.
- 	 */
--	static const struct acpi_device_id i2c_multi_instantiate_ids[] = {
- 		{"BSG1160", },
- 		{"BSG2150", },
- 		{"INT33FE", },
- 		{"INT3515", },
-+	/*
-+	 * HIDs of device with an UartSerialBusV2 resource for which userspace
-+	 * expects a regular tty cdev to be created (instead of the in kernel
-+	 * serdev) and which have a kernel driver which expects a platform_dev
-+	 * such as the rfkill-gpio driver.
-+	 */
-+		{"BCM4752", },
-+		{"LNV4752", },
- 		{}
- 	};
+-	if (mtk_mdio_busy_wait(eth))
+-		return -1;
++	int ret;
  
-@@ -1721,8 +1729,7 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
- 	     fwnode_property_present(&device->fwnode, "baud")))
- 		return true;
+-	write_data &= 0xffff;
++	ret = mtk_mdio_busy_wait(eth);
++	if (ret < 0)
++		return ret;
  
--	/* Instantiate a pdev for the i2c-multi-instantiate drv to bind to */
--	if (!acpi_match_device_ids(device, i2c_multi_instantiate_ids))
-+	if (!acpi_match_device_ids(device, ignore_serial_bus_ids))
- 		return false;
+-	mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START | PHY_IAC_WRITE |
+-		(phy_register << PHY_IAC_REG_SHIFT) |
+-		(phy_addr << PHY_IAC_ADDR_SHIFT) | write_data,
++	mtk_w32(eth, PHY_IAC_ACCESS |
++		     PHY_IAC_START_C22 |
++		     PHY_IAC_CMD_WRITE |
++		     PHY_IAC_REG(phy_reg) |
++		     PHY_IAC_ADDR(phy_addr) |
++		     PHY_IAC_DATA(write_data),
+ 		MTK_PHY_IAC);
  
- 	INIT_LIST_HEAD(&resource_list);
+-	if (mtk_mdio_busy_wait(eth))
+-		return -1;
++	ret = mtk_mdio_busy_wait(eth);
++	if (ret < 0)
++		return ret;
+ 
+ 	return 0;
+ }
+ 
+-static u32 _mtk_mdio_read(struct mtk_eth *eth, int phy_addr, int phy_reg)
++static int _mtk_mdio_read(struct mtk_eth *eth, u32 phy_addr, u32 phy_reg)
+ {
+-	u32 d;
++	int ret;
+ 
+-	if (mtk_mdio_busy_wait(eth))
+-		return 0xffff;
++	ret = mtk_mdio_busy_wait(eth);
++	if (ret < 0)
++		return ret;
+ 
+-	mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START | PHY_IAC_READ |
+-		(phy_reg << PHY_IAC_REG_SHIFT) |
+-		(phy_addr << PHY_IAC_ADDR_SHIFT),
++	mtk_w32(eth, PHY_IAC_ACCESS |
++		     PHY_IAC_START_C22 |
++		     PHY_IAC_CMD_C22_READ |
++		     PHY_IAC_REG(phy_reg) |
++		     PHY_IAC_ADDR(phy_addr),
+ 		MTK_PHY_IAC);
+ 
+-	if (mtk_mdio_busy_wait(eth))
+-		return 0xffff;
+-
+-	d = mtk_r32(eth, MTK_PHY_IAC) & 0xffff;
++	ret = mtk_mdio_busy_wait(eth);
++	if (ret < 0)
++		return ret;
+ 
+-	return d;
++	return mtk_r32(eth, MTK_PHY_IAC) & PHY_IAC_DATA_MASK;
+ }
+ 
+ static int mtk_mdio_write(struct mii_bus *bus, int phy_addr,
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+index 5ef70dd8b49c6..f2d90639d7ed1 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+@@ -341,11 +341,17 @@
+ /* PHY Indirect Access Control registers */
+ #define MTK_PHY_IAC		0x10004
+ #define PHY_IAC_ACCESS		BIT(31)
+-#define PHY_IAC_READ		BIT(19)
+-#define PHY_IAC_WRITE		BIT(18)
+-#define PHY_IAC_START		BIT(16)
+-#define PHY_IAC_ADDR_SHIFT	20
+-#define PHY_IAC_REG_SHIFT	25
++#define PHY_IAC_REG_MASK	GENMASK(29, 25)
++#define PHY_IAC_REG(x)		FIELD_PREP(PHY_IAC_REG_MASK, (x))
++#define PHY_IAC_ADDR_MASK	GENMASK(24, 20)
++#define PHY_IAC_ADDR(x)		FIELD_PREP(PHY_IAC_ADDR_MASK, (x))
++#define PHY_IAC_CMD_MASK	GENMASK(19, 18)
++#define PHY_IAC_CMD_WRITE	FIELD_PREP(PHY_IAC_CMD_MASK, 1)
++#define PHY_IAC_CMD_C22_READ	FIELD_PREP(PHY_IAC_CMD_MASK, 2)
++#define PHY_IAC_START_MASK	GENMASK(17, 16)
++#define PHY_IAC_START_C22	FIELD_PREP(PHY_IAC_START_MASK, 1)
++#define PHY_IAC_DATA_MASK	GENMASK(15, 0)
++#define PHY_IAC_DATA(x)		FIELD_PREP(PHY_IAC_DATA_MASK, (x))
+ #define PHY_IAC_TIMEOUT		HZ
+ 
+ #define MTK_MAC_MISC		0x1000c
 -- 
 2.34.1
 

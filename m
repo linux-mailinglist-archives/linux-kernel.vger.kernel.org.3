@@ -2,201 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C275149893D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:54:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C14149894C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242325AbiAXSxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:53:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343614AbiAXSwI (ORCPT
+        id S1344294AbiAXSyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:54:13 -0500
+Received: from mail-qk1-f174.google.com ([209.85.222.174]:43606 "EHLO
+        mail-qk1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245656AbiAXSw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:52:08 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6FCC061770;
-        Mon, 24 Jan 2022 10:52:00 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id m8-20020a9d4c88000000b00592bae7944bso23549757otf.1;
-        Mon, 24 Jan 2022 10:52:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=r9ORcgxwPP4ycG1Uxe8mTwFvOudbcps3q5Aj2rRnpck=;
-        b=e0jdHKVOQgUpteOMfqGIsKj6bppWqqtxb5ZahWfm3lk77uMULiAbyRMiAKafk9wKhT
-         obaUU1owPGL5j6q0WlyHQe9AZXD63iBfKn5yQBktSaUkSZYotefpB1vQhY2MmOd20UBa
-         fdBk/sNOEbcRNXpK/Co7No3CejVyF+9fEZtBPov/vxP85W1L74LxnkeMRUb11+lGqngi
-         KbyoW40hJ9R+ETAV8kSKkfrsiXWCw57UPUGDO88HRIlqTpbTn5NCBbuFoyhnfHe2+k+i
-         GhAQO4/ddpnm1G0bgPsxgqM79TPbDXHjC18GDBxasAnV+4V0d2cXD4/AM/CNIFipJ34V
-         Fudw==
+        Mon, 24 Jan 2022 13:52:27 -0500
+Received: by mail-qk1-f174.google.com with SMTP id h2so21394780qkp.10;
+        Mon, 24 Jan 2022 10:52:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=r9ORcgxwPP4ycG1Uxe8mTwFvOudbcps3q5Aj2rRnpck=;
-        b=rJWUKkupxwaVuEF05cdSSNiaTo+Sigj9wkGFdORJKgSTxudK7LHOJzGWru4x4OId2G
-         muaDe6u++v7t5xiKz5B2LWM4EcbwW8IO0k3MZTiBpZ4GEEV0P8acIOAwPR4b01aVBPp8
-         RUuuuQFtSMJG0+A53tKS7cwuFuJ99YkRDnnTWydPXKFoR7XGQreYSKXXQvbsMRzYBwO0
-         +9LUmHWKdYrw9c3fsrSm4eN4GlKFER9QumOPM18e+ASAQAjzDJ86IecbVSTej2a+FgCD
-         RiFi2aze+K2GdTSU4pGCOW+gdxvva3w/J7eidUlEhqRnmECEyUYos5eCbAlAs9D1KG1z
-         3F9w==
-X-Gm-Message-State: AOAM532vDpxoK0S+bNEagJp1c0cHVzL9tcc9Hh0K9slbPDoAzLdRHl2+
-        tYfKt2UNxhoQvFz2MEvgf//Sp9989W6TqPnvo5Y=
-X-Google-Smtp-Source: ABdhPJz1Khf3SO0+bH9fYxpAMD7XCc9wWdnY55JgNJ7kmV9RJ/cvxr18HoDYHDiBJbnuymI0c1uy0F3r7GxxZrlfypU=
-X-Received: by 2002:a9d:601a:: with SMTP id h26mr3092033otj.357.1643050319496;
- Mon, 24 Jan 2022 10:51:59 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=JVltL7XfUr78OBdyLqEqOu/YRzCA0cEoywdSG9wAfwo=;
+        b=QJ58ryjU0BQnhokNxWiSvx9LVJwvpRNeTjeCa7g5uqbTy6E9pv4SzezeQnGTPQcvYm
+         QQgaIWSpdt/RWwmso62q/DYncSFGhGGOJDQcPLiwqvy/X8ucaeyM8sAguAMXYjX5WH8V
+         +FP/z9eeimYBcPQUsRAJxiWRYGOOts4wBFoKeuHADnfTwnGpAgY5QdrgKI2zhaLcEkgJ
+         fNOm17Fze2vFZPl7Gx+vU6mWOzbhmA0MYXWYNjJXD2Fy0MwytP904gXmZ+GVLAsjn34x
+         zYEQVjdBrIVpxAHKO1IXyFtQO9j+3uNqTqwgX2O9CqTiNfygiLvxE5OjvUuga8IXiWz+
+         MdFA==
+X-Gm-Message-State: AOAM5328EF22RW5au7gQUBSdOKnMVMs4/R7IOtYCmclHB/6PYcievHFn
+        h0eIp75pgzzLfbS8pASIQ5NN0Q9JL3KtqqxW23w=
+X-Google-Smtp-Source: ABdhPJx7TK2MvPwVSaAnSh01KupVk1iv0Pp7EXSDqNuAkHni9KT1XFQY2XONmQZbwXzKfAEkNwUa4j5bzUrEm8hJr20=
+X-Received: by 2002:a05:620a:1a97:: with SMTP id bl23mr12176564qkb.621.1643050346792;
+ Mon, 24 Jan 2022 10:52:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20220123125737.2658758-1-geert@linux-m68k.org> <alpine.DEB.2.22.394.2201240851560.2674757@ramsan.of.borg>
-In-Reply-To: <alpine.DEB.2.22.394.2201240851560.2674757@ramsan.of.borg>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 24 Jan 2022 13:51:48 -0500
-Message-ID: <CADnq5_MUq0fX7wMLJyUUxxa+2xoRinonL-TzD8tUhXALRfY8-A@mail.gmail.com>
-Subject: Re: Build regressions/improvements in v5.17-rc1
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, alsa-devel@alsa-project.org,
-        kvm@vger.kernel.org, Network Development <netdev@vger.kernel.org>,
-        linux-um@lists.infradead.org, linux-mips@vger.kernel.org,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
-        sparclinux@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "Tobin C. Harding" <me@tobin.cc>
+References: <20220111103346.2660639-1-abailon@baylibre.com> <7hilu9xe7n.fsf@baylibre.com>
+In-Reply-To: <7hilu9xe7n.fsf@baylibre.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 24 Jan 2022 19:52:11 +0100
+Message-ID: <CAJZ5v0gZFBEKDt6S0H91F5xCjC3qtT6B+cTnv6u1nijMHkc8jA@mail.gmail.com>
+Subject: Re: [PATCH v4 RESEND 0/2] Add a generic virtual thermal sensor
+To:     Kevin Hilman <khilman@baylibre.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ben.tseng@mediatek.com, Matthias Kaehlcke <mka@chromium.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 5:25 AM Geert Uytterhoeven <geert@linux-m68k.org> w=
-rote:
+On Mon, Jan 24, 2022 at 5:58 PM Kevin Hilman <khilman@baylibre.com> wrote:
 >
-> On Sun, 23 Jan 2022, Geert Uytterhoeven wrote:
-> > Below is the list of build error/warning regressions/improvements in
-> > v5.17-rc1[1] compared to v5.16[2].
-> >
-> > Summarized:
-> >  - build errors: +17/-2
-> >  - build warnings: +23/-25
-> >
-> > Note that there may be false regressions, as some logs are incomplete.
-> > Still, they're build errors/warnings.
-> >
-> > Happy fixing! ;-)
-> >
-> > Thanks to the linux-next team for providing the build service.
-> >
-> > [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/e783362eb54cd=
-99b2cac8b3a9aeac942e6f6ac07/ (all 99 configs)
-> > [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/df0cc57e057f1=
-8e44dac8e6c18aba47ab53202f9/ (98 out of 99 configs)
-> >
-> >
-> > *** ERRORS ***
-> >
-> > 17 error regressions:
-> >  + /kisskb/src/arch/powerpc/kernel/stacktrace.c: error: implicit declar=
-ation of function 'nmi_cpu_backtrace' [-Werror=3Dimplicit-function-declarat=
-ion]:  =3D> 171:2
-> >  + /kisskb/src/arch/powerpc/kernel/stacktrace.c: error: implicit declar=
-ation of function 'nmi_trigger_cpumask_backtrace' [-Werror=3Dimplicit-funct=
-ion-declaration]:  =3D> 226:2
+> Daniel, Amit,
 >
-> powerpc-gcc5/skiroot_defconfig
+> Alexandre Bailon <abailon@baylibre.com> writes:
 >
-> >  + /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible =
-function types from 'void (*)(long unsigned int)' to 'void (*)(long unsigne=
-d int,  long unsigned int,  long unsigned int,  long unsigned int,  long un=
-signed int)' [-Werror=3Dcast-function-type]:  =3D> 1756:13, 1639:13
-> >  + /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible =
-function types from 'void (*)(struct mm_struct *)' to 'void (*)(long unsign=
-ed int,  long unsigned int,  long unsigned int,  long unsigned int,  long u=
-nsigned int)' [-Werror=3Dcast-function-type]:  =3D> 1674:29, 1662:29
-> >  + /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible =
-function types from 'void (*)(struct mm_struct *, long unsigned int)' to 'v=
-oid (*)(long unsigned int,  long unsigned int,  long unsigned int,  long un=
-signed int,  long unsigned int)' [-Werror=3Dcast-function-type]:  =3D> 1767=
-:21
-> >  + /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible =
-function types from 'void (*)(struct vm_area_struct *, long unsigned int)' =
-to 'void (*)(long unsigned int,  long unsigned int,  long unsigned int,  lo=
-ng unsigned int,  long unsigned int)' [-Werror=3Dcast-function-type]:  =3D>=
- 1741:29, 1726:29
-> >  + /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible =
-function types from 'void (*)(struct vm_area_struct *, long unsigned int,  =
-long unsigned int)' to 'void (*)(long unsigned int,  long unsigned int,  lo=
-ng unsigned int,  long unsigned int,  long unsigned int)' [-Werror=3Dcast-f=
-unction-type]:  =3D> 1694:29, 1711:29
+> > This series add a virtual thermal sensor.
+> > It could be used to get a temperature using some thermal sensors.
+> > Currently, the supported operations are max, min and avg.
+> > The virtual sensor could be easily extended to support others operations.
+> >
+> > Changes in v2:
+> > - Fix some warnings / errors reported by kernel test robot
+> > - rename some struct and functions with a more accurate name
+> > - update the dt bindings: rename type attribute to aggregation-function
+> > - factorize a little bit the aggregation functions
+> > Changes in v3:
+> > - Aggregate thermal zone instead of thermal sensors
+> > - Use try_get_module / put_module to prevent thermal providers to be removed
+> > - Update the bindings, to be more accurate
+> > Changes in v4:
+> > - Fix two warnings reported by kernel test robot
 >
-> sparc64-gcc11/sparc-allmodconfig
->
-> >  + /kisskb/src/arch/um/include/asm/processor-generic.h: error: called o=
-bject is not a function or function pointer:  =3D> 103:18
-> >  + /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: assignment make=
-s pointer from integer without a cast [-Werror=3Dint-conversion]:  =3D> 324=
-:9, 317:9
-> >  + /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: implicit declar=
-ation of function 'ioport_map' [-Werror=3Dimplicit-function-declaration]:  =
-=3D> 317:11
-> >  + /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: implicit declar=
-ation of function 'ioport_unmap' [-Werror=3Dimplicit-function-declaration]:=
-  =3D> 338:15
->
-> um-x86_64/um-allyesconfig
->
-> >  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: err=
-or: control reaches end of non-void function [-Werror=3Dreturn-type]:  =3D>=
- 1560:1
+> Any more feedback on this series?
 
-I don't really see what's going on here:
-
-#ifdef CONFIG_X86_64
-return cpu_data(first_cpu_of_numa_node).apicid;
-#else
-return first_cpu_of_numa_node;
-#endif
-
-Alex
-
->
-> um-x86_64/um-all{mod,yes}config
->
-> >  + /kisskb/src/drivers/net/ethernet/freescale/fec_mpc52xx.c: error: pas=
-sing argument 2 of 'mpc52xx_fec_set_paddr' discards 'const' qualifier from =
-pointer target type [-Werror=3Ddiscarded-qualifiers]:  =3D> 659:29
->
-> powerpc-gcc5/ppc32_allmodconfig
->
-> >  + /kisskb/src/drivers/pinctrl/pinctrl-thunderbay.c: error: assignment =
-discards 'const' qualifier from pointer target type [-Werror=3Ddiscarded-qu=
-alifiers]:  =3D> 815:8, 815:29
->
-> arm64-gcc5.4/arm64-allmodconfig
-> arm64-gcc8/arm64-allmodconfig
->
-> >  + /kisskb/src/lib/test_printf.c: error: "PTR" redefined [-Werror]:  =
-=3D> 247:0, 247
-> >  + /kisskb/src/sound/pci/ca0106/ca0106.h: error: "PTR" redefined [-Werr=
-or]:  =3D> 62, 62:0
->
-> mips-gcc8/mips-allmodconfig
-> mipsel/mips-allmodconfig
->
-> >  + error: arch/powerpc/kvm/book3s_64_entry.o: relocation truncated to f=
-it: R_PPC64_REL14 (stub) against symbol `machine_check_common' defined in .=
-text section in arch/powerpc/kernel/head_64.o:  =3D> (.text+0x3e4)
->
-> powerpc-gcc5/powerpc-allyesconfig
->
-> Gr{oetje,eeting}s,
->
->                                                 Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
-8k.org
->
-> In personal conversations with technical people, I call myself a hacker. =
-But
-> when I'm talking to journalists I just say "programmer" or something like=
- that.
->                                                             -- Linus Torv=
-alds
+Hopefully, I'll get to it this week and I'll let you know.

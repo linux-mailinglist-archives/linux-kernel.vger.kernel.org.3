@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB88497EB0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9171497EB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:11:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238956AbiAXMLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 07:11:14 -0500
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:48091 "EHLO
+        id S238381AbiAXMLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 07:11:16 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:53695 "EHLO
         new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238507AbiAXMLD (ORCPT
+        by vger.kernel.org with ESMTP id S237863AbiAXMLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:11:03 -0500
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 1AF045800C6;
-        Mon, 24 Jan 2022 07:11:03 -0500 (EST)
+        Mon, 24 Jan 2022 07:11:10 -0500
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 8198C58018C;
+        Mon, 24 Jan 2022 07:11:09 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 24 Jan 2022 07:11:03 -0500
+  by compute1.internal (MEProxy); Mon, 24 Jan 2022 07:11:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
          h=cc:cc:content-transfer-encoding:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; bh=cz/W+o1QaYv6KI
-        uV4GCrT7jbxJ0xS3lwdZjaIKs47tY=; b=zkKju1Exn64yUuWCtIhztzVSDwhS23
-        Q6eBc7UO3MhoRDh4c+jxoCNJRn+qJzBEZ5f/7auA2uDjcJG4uK+I2KCuEvrriaLJ
-        6aN/clPy41yd42vTXH1HUBIotWkfNm6GSP5ORAr3/0ddjDIVA+AxYbRV81QcVdDN
-        eDqlDRXEbvEsimJqQ67bBPml50iCX+3PZUYSQ0lXZWDzuaB0WZuH7e8JbwyA5aNc
-        aUSFiPO4QM9ALp7ONFWDqFAL93dSQdgRrDEZKlDfLNgKMCAiYNyr+NB5X/F1B912
-        OeUt31qo0Cvjrc8FuwH50O5Io/wfSW6outHV76Srobe1XG/Hdmz8sM2A==
+        :reply-to:sender:subject:subject:to:to; s=fm3; bh=iFE30ZBYJvCyNk
+        M0bB9sCSLWOJ+dFFVmxcQv5U8f2Ek=; b=sFaJZbgtUeLAWxocb1HvewYSWmgi1J
+        Re1ZdEuZzL/938sA+qmN8/V9uqSF0L0vNex+CnpmYcNX7FQv5Ab+4EsQWhgwYyS2
+        BxBRjkarT13aS94OAP7CA5+ZtFovRlo781V9mXCY0+2naEz2uqm+thCrqRRTjP3C
+        +8i8adF5ILCqVpjdpmFXgJbcxkt92Hao8M++0wm+u3kSM3nNe7kFR3T5pAqhSVPI
+        NHrGxktbZFDL9myBRd1SKz9DtxHXVr6I9e+GSntdBdwhR6d92bXLqO7AqkBe1XC1
+        vQn27LWHTajONUzwk7ri/UDXb2+eoaaiapnBgFuf9r5OKtkIAAfJPC6A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=cz/W+o
-        1QaYv6KIuV4GCrT7jbxJ0xS3lwdZjaIKs47tY=; b=F+eMxLXY17mxzbLPbfbNT2
-        q8DzLgrNG6/CG/HpNbrdxNdzuf5KrDxYbojqyfogGf0aMFvrKmgxJi/erLaCdjOT
-        d2Y+i+pXrH0ddb2qG5RbQYsw+e+QK6BXcss/sx6bY8WH1Dw/pZoMxkgb3Nn8RMAz
-        j9zirzcft7L9bp9Ly+fX0uzNVXzYw2Rye6WwGznD8+qUssjy1GwTHLYTMGIRx52n
-        TgOlAWgPJPUWX28/9R2V58iB0Lwrvkm26A+lwjA3xN7FBnnY6s8Ze58OwGMw7F+a
-        mm60YR/A/BZA5iGK1YKkmMTKDa8cr2J5Z2MsIyVHgmk3EgsLAbP2kkchw0q7vV+Q
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=iFE30Z
+        BYJvCyNkM0bB9sCSLWOJ+dFFVmxcQv5U8f2Ek=; b=SxrHIhM9QqCGIGebAZRtTh
+        YexoR8oVDJ5lzGLRIsbH0rfne1ycAoMdqmKWdIiKzg2sA+KPuIZPzIgprJlWMzp3
+        BkGCC5TZ6heQU7KhS5Mdu1nzti/9e4oeCVvl1lD+vN4q5jPJmJ132dLU2Ind1aVT
+        3l1PnYZ2oJYPOKC8HG/N9WdJcA2pxZ0GfoaWpAwUUXDkqFDdAxYRWFw80esffR7u
+        qX8Z00KRPR8nOoWgvEIPbnjW2IPIchNYxZvpRk9+jJCoPphrDkb+ZNit7qenWDLS
+        6+L/tk4zNltJR5PTU419W3ecZgTL4Ahcmlwm6rhHe6lrqyWJiLJxLr/mli+pWRMQ
         ==
-X-ME-Sender: <xms:VpfuYZ2lCMOo5QPgi88_fOQjsEWng0IbKcxSsTkjwJT1Oyg-D3RKEw>
-    <xme:VpfuYQGuK-qCCDhDkJF3dNjba2--8WQnyEdBlAr_SoAcDNCm4QeIuZ2apu3xEQ-3R
-    7N8NBiwvzuymo1mGJ4>
-X-ME-Received: <xmr:VpfuYZ5UOjHKwtsrlv9jwZKNkLy_7GPT3sUowqNwArx9jrbIyuQ5fa3vo5idcEbKOKfEwiYlU4f3oGU9D8Umt2QCRGuJxAf174jMHMYM-mqc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvdeigdefjecutefuodetggdotefrodftvf
+X-ME-Sender: <xms:XZfuYTGqGKqgzT4iF0o1VUBZ4VDY2TXBdSC6ceGKDioz7591nWp9Nw>
+    <xme:XZfuYQWZikCehBHIKL2WcSVzj7uO0yzV9Bana6O9g1ZVBJFl3eH9r2KamBbVTx7hF
+    BzrKFbzfjLsYMur7lQ>
+X-ME-Received: <xmr:XZfuYVL9eV6hR4iAO9MckKw5oXCizGOnU80_7HfLjz08dG19yG9diSW9Y-sMgahdr_qpRYnHtCK2IWiR_8LebgKqaSrIRfD5n2yyCrAshDjj>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvdeigdefkecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffojghfggfgsedtkeertd
     ertddtnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishhtrghi
     rhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepgeegtdetjeekge
     eguefgheeuvedugedvteejveeiudegvddtkeffkeehtdetudfhnecuvehluhhsthgvrhfu
-    ihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlhhish
+    ihiivgepudenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlhhish
     htrghirhdvfedrmhgv
-X-ME-Proxy: <xmx:VpfuYW1nZ6gQpTC5sPWmfSwFaj9RXmrXO6pkprChTeCvI0Ohzy-vYQ>
-    <xmx:VpfuYcG7srVKEpW3oPLSLFSW3J3EStHZHtAS88b8KEz50F2jMmIQ_Q>
-    <xmx:VpfuYX_zm-ZbyUY9hjwiJT-oB9tjbdX4k70MLyfxl0SeLTZ9hEBIzw>
-    <xmx:V5fuYaU5H_Smuq8QSBcTQ4Y0VKa7XzZlCA1Ebms2oIbrFwjyIT-vxQ>
+X-ME-Proxy: <xmx:XZfuYRH0A7zj_roVyA5Rpvn806K1fiOzZBoS8VXz9zzwMcCoEhh81w>
+    <xmx:XZfuYZX15ZRVwpqEJG5Fh_tDwkCTBUf8AE3nDMzvw4LQCxnIudAXCA>
+    <xmx:XZfuYcMK0By7wOuhnGcuTTGHIgUNi1vV7WVyQrukOH0Ka0tBJ4hAhQ>
+    <xmx:XZfuYdn56FVv7fMDhdTQZ8XAwiMg3C_QoLid89kUn_WAQRghgzqdxQ>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 24 Jan 2022 07:10:57 -0500 (EST)
+ 24 Jan 2022 07:11:03 -0500 (EST)
 From:   Alistair Francis <alistair@alistair23.me>
 To:     broonie@kernel.org, robh+dt@kernel.org, kernel@pengutronix.de,
         lgirdwood@gmail.com, lee.jones@linaro.org
@@ -66,9 +66,9 @@ Cc:     linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, andreas@kemnade.info,
         s.hauer@pengutronix.de, linux-kernel@vger.kernel.org,
         shawnguo@kernel.org, Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v18 7/8] ARM: dts: imx7d-remarkable2: Enable silergy,sy7636a
-Date:   Mon, 24 Jan 2022 22:10:08 +1000
-Message-Id: <20220124121009.108649-8-alistair@alistair23.me>
+Subject: [PATCH v18 8/8] ARM: dts: imx7d-remarkable2: Enable lcdif
+Date:   Mon, 24 Jan 2022 22:10:09 +1000
+Message-Id: <20220124121009.108649-9-alistair@alistair23.me>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220124121009.108649-1-alistair@alistair23.me>
 References: <20220124121009.108649-1-alistair@alistair23.me>
@@ -78,73 +78,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the silergy,sy7636a and silergy,sy7636a-regulator on the
-reMarkable2.
+Connect the dispaly on the reMarkable2.
 
 Signed-off-by: Alistair Francis <alistair@alistair23.me>
 ---
- arch/arm/boot/dts/imx7d-remarkable2.dts | 62 +++++++++++++++++++++++++
- 1 file changed, 62 insertions(+)
+ arch/arm/boot/dts/imx7d-remarkable2.dts | 74 +++++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
 
 diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-index a2a91bfdd98e..99ac0d242936 100644
+index 99ac0d242936..03a4029e1e57 100644
 --- a/arch/arm/boot/dts/imx7d-remarkable2.dts
 +++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-@@ -22,6 +22,27 @@ memory@80000000 {
- 		reg = <0x80000000 0x40000000>;
+@@ -68,6 +68,16 @@ reg_digitizer: regulator-digitizer {
+ 		startup-delay-us = <100000>; /* 100 ms */
  	};
  
-+	thermal-zones {
-+		epd-thermal {
-+			thermal-sensors = <&epd_pmic>;
-+			polling-delay-passive = <30000>;
-+			polling-delay = <30000>;
-+			trips {
-+				trip0 {
-+					temperature = <49000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
++	reg_sdoe: regulator-sdoe {
++		compatible = "regulator-fixed";
++		regulator-name = "SDOE";
++		pinctrl-names = "default", "sleep";
++		pinctrl-0 = <&pinctrl_sdoe_reg>;
++		pinctrl-1 = <&pinctrl_sdoe_reg>;
++		gpio = <&gpio3 27 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++	};
 +
-+				trip1 {
-+					temperature = <50000>;
-+					hysteresis = <2000>;
-+					type = "critical";
-+				};
+ 	wifi_pwrseq: wifi_pwrseq {
+ 		compatible = "mmc-pwrseq-simple";
+ 		pinctrl-names = "default";
+@@ -76,6 +86,16 @@ wifi_pwrseq: wifi_pwrseq {
+ 		clocks = <&clks IMX7D_CLKO2_ROOT_DIV>;
+ 		clock-names = "ext_clock";
+ 	};
++
++	panel {
++		compatible = "eink,vb3300-kca";
++
++		port {
++			panel_in: endpoint {
++				remote-endpoint = <&display_out>;
 +			};
 +		};
 +	};
-+
- 	reg_brcm: regulator-brcm {
- 		compatible = "regulator-fixed";
- 		regulator-name = "brcm_reg";
-@@ -84,6 +105,33 @@ wacom_digitizer: digitizer@9 {
+ };
+ 
+ &clks {
+@@ -132,6 +152,20 @@ reg_epdpmic: vcom {
  	};
  };
  
-+&i2c4 {
-+	clock-frequency = <100000>;
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&pinctrl_i2c4>;
-+	pinctrl-1 = <&pinctrl_i2c4>;
++&lcdif {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_lcdif>;
++	lcd-supply = <&reg_epdpmic>;
++	lcd2-supply = <&reg_sdoe>;
 +	status = "okay";
 +
-+	epd_pmic: sy7636a@62 {
-+		compatible = "silergy,sy7636a";
-+		reg = <0x62>;
-+		status = "okay";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_epdpmic>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		#thermal-sensor-cells = <0>;
-+
-+		epd-pwr-good-gpios = <&gpio6 21 GPIO_ACTIVE_HIGH>;
-+		regulators {
-+			reg_epdpmic: vcom {
-+				regulator-name = "vcom";
-+				regulator-boot-on;
-+			};
++	port {
++		display_out: endpoint {
++			remote-endpoint = <&panel_in>;
 +		};
 +	};
 +};
@@ -152,28 +144,47 @@ index a2a91bfdd98e..99ac0d242936 100644
  &snvs_pwrkey {
  	status = "okay";
  };
-@@ -177,6 +225,13 @@ MX7D_PAD_SAI1_TX_BCLK__GPIO6_IO13	0x14
+@@ -246,6 +280,46 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
  		>;
  	};
  
-+	pinctrl_epdpmic: epdpmicgrp {
++	pinctrl_lcdif: lcdifgrp {
 +		fsl,pins = <
-+			MX7D_PAD_SAI2_RX_DATA__GPIO6_IO21 0x00000074
-+			MX7D_PAD_ENET1_RGMII_TXC__GPIO7_IO11 0x00000014
++			MX7D_PAD_LCD_DATA00__LCD_DATA0		0x79
++			MX7D_PAD_LCD_DATA01__LCD_DATA1		0x79
++			MX7D_PAD_LCD_DATA02__LCD_DATA2		0x79
++			MX7D_PAD_LCD_DATA03__LCD_DATA3		0x79
++			MX7D_PAD_LCD_DATA04__LCD_DATA4		0x79
++			MX7D_PAD_LCD_DATA05__LCD_DATA5		0x79
++			MX7D_PAD_LCD_DATA06__LCD_DATA6		0x79
++			MX7D_PAD_LCD_DATA07__LCD_DATA7		0x79
++			MX7D_PAD_LCD_DATA08__LCD_DATA8		0x79
++			MX7D_PAD_LCD_DATA09__LCD_DATA9		0x79
++			MX7D_PAD_LCD_DATA10__LCD_DATA10		0x79
++			MX7D_PAD_LCD_DATA11__LCD_DATA11		0x79
++			MX7D_PAD_LCD_DATA12__LCD_DATA12		0x79
++			MX7D_PAD_LCD_DATA13__LCD_DATA13		0x79
++			MX7D_PAD_LCD_DATA14__LCD_DATA14		0x79
++			MX7D_PAD_LCD_DATA15__LCD_DATA15		0x79
++
++			MX7D_PAD_LCD_DATA17__LCD_DATA17		0x79
++			MX7D_PAD_LCD_DATA18__LCD_DATA18		0x79
++			MX7D_PAD_LCD_DATA19__LCD_DATA19		0x79
++			MX7D_PAD_LCD_DATA20__LCD_DATA20		0x79
++			MX7D_PAD_LCD_DATA21__LCD_DATA21		0x79
++
++			MX7D_PAD_LCD_DATA23__LCD_DATA23		0x79
++			MX7D_PAD_LCD_CLK__LCD_CLK		0x79
++			MX7D_PAD_LCD_ENABLE__LCD_ENABLE		0x79
++			MX7D_PAD_LCD_VSYNC__LCD_VSYNC		0x79
++			MX7D_PAD_LCD_HSYNC__LCD_HSYNC		0x79
++			MX7D_PAD_LCD_RESET__LCD_RESET		0x79
 +		>;
 +	};
 +
- 	pinctrl_i2c1: i2c1grp {
- 		fsl,pins = <
- 			MX7D_PAD_I2C1_SDA__I2C1_SDA		0x4000007f
-@@ -184,6 +239,13 @@ MX7D_PAD_I2C1_SCL__I2C1_SCL		0x4000007f
- 		>;
- 	};
- 
-+	pinctrl_i2c4: i2c4grp {
++	pinctrl_sdoe_reg: sdoereggrp {
 +		fsl,pins = <
-+			MX7D_PAD_I2C4_SDA__I2C4_SDA		0x4000007f
-+			MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
++			MX7D_PAD_LCD_DATA22__GPIO3_IO27		0x74
 +		>;
 +	};
 +

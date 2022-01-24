@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C1249A096
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 677F3499ECC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1845372AbiAXXML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:12:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37104 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1584552AbiAXWVY (ORCPT
+        id S1837809AbiAXWpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:45:24 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49640 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1456836AbiAXVkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:21:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5318EC0424D2;
-        Mon, 24 Jan 2022 12:50:23 -0800 (PST)
+        Mon, 24 Jan 2022 16:40:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E511860B1A;
-        Mon, 24 Jan 2022 20:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0FBFC340E5;
-        Mon, 24 Jan 2022 20:50:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1EB0EB81057;
+        Mon, 24 Jan 2022 21:40:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5206C340E4;
+        Mon, 24 Jan 2022 21:40:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057422;
-        bh=8gIy0nFAgB03VCQxnZfvFcSa3D+U6k63cyxwaTXRIKc=;
+        s=korg; t=1643060409;
+        bh=j7uZC0EMg6IOGQI/zK2ZT99oLEwNN8GGLHuqvCfKBrw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jXE9EuxRBn/hLT6RI7DSSQdwS6R1EwvDqlCsL5CIBsI12DbAOK//LsQbpH5Pm90Xc
-         KKVpv+ddgIh73JJWPVL2/wcjs7r17gwcW7fhh8u+RgxJRLOCJDBkd2bmN6okAAkYGV
-         SLw1kBx+2tFhTgZLV2DEGzYbV6f0qORFFiJnd5HA=
+        b=xuThfJM5hw7ZfMJ/sBO/R1zw+2wqYMTefaqDTwcVENDJRH0vqQl+XR3xMqp15z8Xl
+         uLcSuj0gWV+H4mN9XNBBLSdAIShLNQlhH7ZQzzebPMcTxgkES6KjgTSmHJzU5atEor
+         zStdVhu8xdMnRPRMJsMXLFwcszX4eXsbvrvG04XI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 807/846] inet: frags: annotate races around fqdir->dead and fqdir->high_thresh
-Date:   Mon, 24 Jan 2022 19:45:24 +0100
-Message-Id: <20220124184128.771260860@linuxfoundation.org>
+        stable@vger.kernel.org, Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Russell King <russell.king@oracle.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH 5.16 0937/1039] arm64/bpf: Remove 128MB limit for BPF JIT programs
+Date:   Mon, 24 Jan 2022 19:45:26 +0100
+Message-Id: <20220124184156.781671254@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,94 +47,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Russell King <russell.king@oracle.com>
 
-commit 91341fa0003befd097e190ec2a4bf63ad957c49a upstream.
+commit b89ddf4cca43f1269093942cf5c4e457fd45c335 upstream.
 
-Both fields can be read/written without synchronization,
-add proper accessors and documentation.
+Commit 91fc957c9b1d ("arm64/bpf: don't allocate BPF JIT programs in module
+memory") restricts BPF JIT program allocation to a 128MB region to ensure
+BPF programs are still in branching range of each other. However this
+restriction should not apply to the aarch64 JIT, since BPF_JMP | BPF_CALL
+are implemented as a 64-bit move into a register and then a BLR instruction -
+which has the effect of being able to call anything without proximity
+limitation.
 
-Fixes: d5dd88794a13 ("inet: fix various use-after-free in defrags units")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+The practical reason to relax this restriction on JIT memory is that 128MB of
+JIT memory can be quickly exhausted, especially where PAGE_SIZE is 64KB - one
+page is needed per program. In cases where seccomp filters are applied to
+multiple VMs on VM launch - such filters are classic BPF but converted to
+BPF - this can severely limit the number of VMs that can be launched. In a
+world where we support BPF JIT always on, turning off the JIT isn't always an
+option either.
+
+Fixes: 91fc957c9b1d ("arm64/bpf: don't allocate BPF JIT programs in module memory")
+Suggested-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Signed-off-by: Russell King <russell.king@oracle.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Tested-by: Alan Maguire <alan.maguire@oracle.com>
+Link: https://lore.kernel.org/bpf/1636131046-5982-2-git-send-email-alan.maguire@oracle.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/inet_frag.h  |   11 +++++++++--
- include/net/ipv6_frag.h  |    3 ++-
- net/ipv4/inet_fragment.c |    8 +++++---
- net/ipv4/ip_fragment.c   |    3 ++-
- 4 files changed, 18 insertions(+), 7 deletions(-)
+ arch/arm64/include/asm/extable.h |    9 ---------
+ arch/arm64/include/asm/memory.h  |    5 +----
+ arch/arm64/kernel/traps.c        |    2 +-
+ arch/arm64/mm/ptdump.c           |    2 --
+ arch/arm64/net/bpf_jit_comp.c    |    7 ++-----
+ 5 files changed, 4 insertions(+), 21 deletions(-)
 
---- a/include/net/inet_frag.h
-+++ b/include/net/inet_frag.h
-@@ -117,8 +117,15 @@ int fqdir_init(struct fqdir **fqdirp, st
+--- a/arch/arm64/include/asm/extable.h
++++ b/arch/arm64/include/asm/extable.h
+@@ -33,15 +33,6 @@ do {							\
+ 	(b)->data = (tmp).data;				\
+ } while (0)
  
- static inline void fqdir_pre_exit(struct fqdir *fqdir)
+-static inline bool in_bpf_jit(struct pt_regs *regs)
+-{
+-	if (!IS_ENABLED(CONFIG_BPF_JIT))
+-		return false;
+-
+-	return regs->pc >= BPF_JIT_REGION_START &&
+-	       regs->pc < BPF_JIT_REGION_END;
+-}
+-
+ #ifdef CONFIG_BPF_JIT
+ bool ex_handler_bpf(const struct exception_table_entry *ex,
+ 		    struct pt_regs *regs);
+--- a/arch/arm64/include/asm/memory.h
++++ b/arch/arm64/include/asm/memory.h
+@@ -44,11 +44,8 @@
+ #define _PAGE_OFFSET(va)	(-(UL(1) << (va)))
+ #define PAGE_OFFSET		(_PAGE_OFFSET(VA_BITS))
+ #define KIMAGE_VADDR		(MODULES_END)
+-#define BPF_JIT_REGION_START	(_PAGE_END(VA_BITS_MIN))
+-#define BPF_JIT_REGION_SIZE	(SZ_128M)
+-#define BPF_JIT_REGION_END	(BPF_JIT_REGION_START + BPF_JIT_REGION_SIZE)
+ #define MODULES_END		(MODULES_VADDR + MODULES_VSIZE)
+-#define MODULES_VADDR		(BPF_JIT_REGION_END)
++#define MODULES_VADDR		(_PAGE_END(VA_BITS_MIN))
+ #define MODULES_VSIZE		(SZ_128M)
+ #define VMEMMAP_START		(-(UL(1) << (VA_BITS - VMEMMAP_SHIFT)))
+ #define VMEMMAP_END		(VMEMMAP_START + VMEMMAP_SIZE)
+--- a/arch/arm64/kernel/traps.c
++++ b/arch/arm64/kernel/traps.c
+@@ -994,7 +994,7 @@ static struct break_hook bug_break_hook
+ static int reserved_fault_handler(struct pt_regs *regs, unsigned int esr)
  {
--	fqdir->high_thresh = 0; /* prevent creation of new frags */
--	fqdir->dead = true;
-+	/* Prevent creation of new frags.
-+	 * Pairs with READ_ONCE() in inet_frag_find().
-+	 */
-+	WRITE_ONCE(fqdir->high_thresh, 0);
-+
-+	/* Pairs with READ_ONCE() in inet_frag_kill(), ip_expire()
-+	 * and ip6frag_expire_frag_queue().
-+	 */
-+	WRITE_ONCE(fqdir->dead, true);
+ 	pr_err("%s generated an invalid instruction at %pS!\n",
+-		in_bpf_jit(regs) ? "BPF JIT" : "Kernel text patching",
++		"Kernel text patching",
+ 		(void *)instruction_pointer(regs));
+ 
+ 	/* We cannot handle this */
+--- a/arch/arm64/mm/ptdump.c
++++ b/arch/arm64/mm/ptdump.c
+@@ -41,8 +41,6 @@ static struct addr_marker address_marker
+ 	{ 0 /* KASAN_SHADOW_START */,	"Kasan shadow start" },
+ 	{ KASAN_SHADOW_END,		"Kasan shadow end" },
+ #endif
+-	{ BPF_JIT_REGION_START,		"BPF start" },
+-	{ BPF_JIT_REGION_END,		"BPF end" },
+ 	{ MODULES_VADDR,		"Modules start" },
+ 	{ MODULES_END,			"Modules end" },
+ 	{ VMALLOC_START,		"vmalloc() area" },
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -1145,15 +1145,12 @@ out:
+ 
+ u64 bpf_jit_alloc_exec_limit(void)
+ {
+-	return BPF_JIT_REGION_SIZE;
++	return VMALLOC_END - VMALLOC_START;
  }
- void fqdir_exit(struct fqdir *fqdir);
  
---- a/include/net/ipv6_frag.h
-+++ b/include/net/ipv6_frag.h
-@@ -67,7 +67,8 @@ ip6frag_expire_frag_queue(struct net *ne
- 	struct sk_buff *head;
- 
- 	rcu_read_lock();
--	if (fq->q.fqdir->dead)
-+	/* Paired with the WRITE_ONCE() in fqdir_pre_exit(). */
-+	if (READ_ONCE(fq->q.fqdir->dead))
- 		goto out_rcu_unlock;
- 	spin_lock(&fq->q.lock);
- 
---- a/net/ipv4/inet_fragment.c
-+++ b/net/ipv4/inet_fragment.c
-@@ -235,9 +235,9 @@ void inet_frag_kill(struct inet_frag_que
- 		/* The RCU read lock provides a memory barrier
- 		 * guaranteeing that if fqdir->dead is false then
- 		 * the hash table destruction will not start until
--		 * after we unlock.  Paired with inet_frags_exit_net().
-+		 * after we unlock.  Paired with fqdir_pre_exit().
- 		 */
--		if (!fqdir->dead) {
-+		if (!READ_ONCE(fqdir->dead)) {
- 			rhashtable_remove_fast(&fqdir->rhashtable, &fq->node,
- 					       fqdir->f->rhash_params);
- 			refcount_dec(&fq->refcnt);
-@@ -352,9 +352,11 @@ static struct inet_frag_queue *inet_frag
- /* TODO : call from rcu_read_lock() and no longer use refcount_inc_not_zero() */
- struct inet_frag_queue *inet_frag_find(struct fqdir *fqdir, void *key)
+ void *bpf_jit_alloc_exec(unsigned long size)
  {
-+	/* This pairs with WRITE_ONCE() in fqdir_pre_exit(). */
-+	long high_thresh = READ_ONCE(fqdir->high_thresh);
- 	struct inet_frag_queue *fq = NULL, *prev;
+-	return __vmalloc_node_range(size, PAGE_SIZE, BPF_JIT_REGION_START,
+-				    BPF_JIT_REGION_END, GFP_KERNEL,
+-				    PAGE_KERNEL, 0, NUMA_NO_NODE,
+-				    __builtin_return_address(0));
++	return vmalloc(size);
+ }
  
--	if (!fqdir->high_thresh || frag_mem_limit(fqdir) > fqdir->high_thresh)
-+	if (!high_thresh || frag_mem_limit(fqdir) > high_thresh)
- 		return NULL;
- 
- 	rcu_read_lock();
---- a/net/ipv4/ip_fragment.c
-+++ b/net/ipv4/ip_fragment.c
-@@ -144,7 +144,8 @@ static void ip_expire(struct timer_list
- 
- 	rcu_read_lock();
- 
--	if (qp->q.fqdir->dead)
-+	/* Paired with WRITE_ONCE() in fqdir_pre_exit(). */
-+	if (READ_ONCE(qp->q.fqdir->dead))
- 		goto out_rcu_unlock;
- 
- 	spin_lock(&qp->q.lock);
+ void bpf_jit_free_exec(void *addr)
 
 

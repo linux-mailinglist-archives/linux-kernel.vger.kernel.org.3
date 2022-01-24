@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B224991AB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CA04991D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:18:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348335AbiAXUNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:13:18 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:51530 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358135AbiAXTyc (ORCPT
+        id S1378081AbiAXUOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:14:54 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:41764 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358158AbiAXTyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:54:32 -0500
+        Mon, 24 Jan 2022 14:54:36 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 31AD060B88;
-        Mon, 24 Jan 2022 19:54:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F783C340E5;
-        Mon, 24 Jan 2022 19:54:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA682B81229;
+        Mon, 24 Jan 2022 19:54:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18552C340E7;
+        Mon, 24 Jan 2022 19:54:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054068;
-        bh=trFRVxPpwQP5j5PpHCK0jByQ6eNg8p9rOMd216bDq5o=;
+        s=korg; t=1643054071;
+        bh=Zf2oU5zgQQMODYzgwGbMC19Oupb+AxdNmqbbKp+TCUw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DpKVVVd7h48U6EEB02P20CG4+cFiLyz4IomYwKjGffx0UI8Zbz1JAIlgQIpVMFcAE
-         Tkxbs3CKYMRoWNL76O9sCkgwrgxceYzg7feUebOOSG8H2+2kFOIhfp5HZAxEDA15t3
-         4VyfAmpMlN55OeugKEyyYA5oNgd06bebwsCGQskY=
+        b=WD8Ki+t3wazPKsayV5p0ZbllDHSPGPEPJCe1biuDfRyfGCD9yLzWb/QwH1XogWoVR
+         C1l6C6lDcWBZfkaaB3RO6Xzs6NI7NCt9lO/64gRAzMRiA82qlDPxsX2QxHz1xxajG2
+         jKZc5GVDyWPOTggvy2PxrnqPXYrc90gvqwHIjPxc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -34,9 +34,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Leon Romanovsky <leonro@nvidia.com>,
         Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 268/563] RDMA/core: Let ib_find_gid() continue search even after empty entry
-Date:   Mon, 24 Jan 2022 19:40:33 +0100
-Message-Id: <20220124184033.719964552@linuxfoundation.org>
+Subject: [PATCH 5.10 269/563] RDMA/cma: Let cma_resolve_ib_dev() continue search even after empty entry
+Date:   Mon, 24 Jan 2022 19:40:34 +0100
+Message-Id: <20220124184033.749989711@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -50,43 +50,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Avihai Horon <avihaih@nvidia.com>
 
-[ Upstream commit 483d805191a23191f8294bbf9b4e94836f5d92e4 ]
+[ Upstream commit 20679094a0161c94faf77e373fa3f7428a8e14bd ]
 
-Currently, ib_find_gid() will stop searching after encountering the first
-empty GID table entry. This behavior is wrong since neither IB nor RoCE
-spec enforce tightly packed GID tables.
+Currently, when cma_resolve_ib_dev() searches for a matching GID it will
+stop searching after encountering the first empty GID table entry. This
+behavior is wrong since neither IB nor RoCE spec enforce tightly packed
+GID tables.
 
-For example, when a valid GID entry exists at index N, and if a GID entry
-is empty at index N-1, ib_find_gid() will fail to find the valid entry.
+For example, when the matching valid GID entry exists at index N, and if a
+GID entry is empty at index N-1, cma_resolve_ib_dev() will fail to find
+the matching valid entry.
 
-Fix it by making ib_find_gid() continue searching even after encountering
-missing entries.
+Fix it by making cma_resolve_ib_dev() continue searching even after
+encountering missing entries.
 
-Fixes: 5eb620c81ce3 ("IB/core: Add helpers for uncached GID and P_Key searches")
-Link: https://lore.kernel.org/r/e55d331b96cecfc2cf19803d16e7109ea966882d.1639055490.git.leonro@nvidia.com
+Fixes: f17df3b0dede ("RDMA/cma: Add support for AF_IB to rdma_resolve_addr()")
+Link: https://lore.kernel.org/r/b7346307e3bb396c43d67d924348c6c496493991.1639055490.git.leonro@nvidia.com
 Signed-off-by: Avihai Horon <avihaih@nvidia.com>
 Reviewed-by: Mark Zhang <markzhang@nvidia.com>
 Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/core/device.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/infiniband/core/cma.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/infiniband/core/device.c b/drivers/infiniband/core/device.c
-index 76b9c436edcd2..aa526c5ca0cf3 100644
---- a/drivers/infiniband/core/device.c
-+++ b/drivers/infiniband/core/device.c
-@@ -2411,7 +2411,8 @@ int ib_find_gid(struct ib_device *device, union ib_gid *gid,
- 		     ++i) {
- 			ret = rdma_query_gid(device, port, i, &tmp_gid);
- 			if (ret)
--				return ret;
-+				continue;
+diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
+index 8e54184566f7f..4d4ba09f6cf93 100644
+--- a/drivers/infiniband/core/cma.c
++++ b/drivers/infiniband/core/cma.c
+@@ -775,6 +775,7 @@ static int cma_resolve_ib_dev(struct rdma_id_private *id_priv)
+ 	unsigned int p;
+ 	u16 pkey, index;
+ 	enum ib_port_state port_state;
++	int ret;
+ 	int i;
+ 
+ 	cma_dev = NULL;
+@@ -793,9 +794,14 @@ static int cma_resolve_ib_dev(struct rdma_id_private *id_priv)
+ 
+ 			if (ib_get_cached_port_state(cur_dev->device, p, &port_state))
+ 				continue;
+-			for (i = 0; !rdma_query_gid(cur_dev->device,
+-						    p, i, &gid);
+-			     i++) {
 +
- 			if (!memcmp(&tmp_gid, gid, sizeof *gid)) {
- 				*port_num = port;
- 				if (index)
++			for (i = 0; i < cur_dev->device->port_data[p].immutable.gid_tbl_len;
++			     ++i) {
++				ret = rdma_query_gid(cur_dev->device, p, i,
++						     &gid);
++				if (ret)
++					continue;
++
+ 				if (!memcmp(&gid, dgid, sizeof(gid))) {
+ 					cma_dev = cur_dev;
+ 					sgid = gid;
 -- 
 2.34.1
 

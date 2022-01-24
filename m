@@ -2,44 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F2B498C36
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E62434991A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:14:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349399AbiAXTUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:20:41 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42048 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346038AbiAXTMX (ORCPT
+        id S1354856AbiAXUMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:12:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355648AbiAXTyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:12:23 -0500
+        Mon, 24 Jan 2022 14:54:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B7FC041899;
+        Mon, 24 Jan 2022 11:27:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 123996130B;
-        Mon, 24 Jan 2022 19:12:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE045C340E5;
-        Mon, 24 Jan 2022 19:12:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 345E7B81238;
+        Mon, 24 Jan 2022 19:27:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 637A8C340E5;
+        Mon, 24 Jan 2022 19:27:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051542;
-        bh=CBPENbkco7iWTiGBptNuAshMijpXyfLZVEct9/ZpMIs=;
+        s=korg; t=1643052431;
+        bh=7qJYOBbowqh8wUi59F2Jgk5pd7lhjQA/WH7nAkqaXQ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xOm6hkhL7r2ErUvPJgpL0u+pIfF6fz2tIR97BhyHR4j6J96RWU8+ntkyPKSkMl/WP
-         pwJb275lbTOs4MSBrpTw4XlhScx76dO0661tPL/4DWIQg8DVBUWvNT5D0pH5x8Mw3F
-         t7PMLU2uY0/YNqUC2rEZoVCHIOo/l8+ok0LkhaXE=
+        b=IpuslQ5CnI+5T1RPM+OQEe8F134VabPRoiWHlKR7585AtNqaQ5myA4Z+nVkqFEuxf
+         nmK0XmvFmSxbMwG2+2CRM0tcgL+9vAZuTz5vmGSSM9qQ7kPpjRPesjnAfIT5K0jgDV
+         THNUTIxbyBB6C+GzNjSIcPrPHgtrumN0YXzGIHeI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>
-Subject: [PATCH 4.19 001/239] Bluetooth: bfusb: fix division by zero in send path
+        stable@vger.kernel.org, Suresh Udipi <sudipi@jp.adit-jv.com>,
+        Kazuyoshi Akiyama <akiyama@nds-osk.co.jp>,
+        Michael Rodin <mrodin@de.adit-jv.com>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 055/320] media: rcar-csi2: Correct the selection of hsfreqrange
 Date:   Mon, 24 Jan 2022 19:40:39 +0100
-Message-Id: <20220124183943.163048809@linuxfoundation.org>
+Message-Id: <20220124183955.608113027@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -47,38 +54,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Suresh Udipi <sudipi@jp.adit-jv.com>
 
-commit b5e6fa7a12572c82f1e7f2f51fbb02a322291291 upstream.
+[ Upstream commit cee44d4fbacbbdfe62697ec94e76c6e4f726c5df ]
 
-Add the missing bulk-out endpoint sanity check to probe() to avoid
-division by zero in bfusb_send_frame() in case a malicious device has
-broken descriptors (or when doing descriptor fuzz testing).
+hsfreqrange should be chosen based on the calculated mbps which
+is closer to the default bit rate  and within the range as per
+table[1]. But current calculation always selects first value which
+is greater than or equal to the calculated mbps which may lead
+to chosing a wrong range in some cases.
 
-Note that USB core will reject URBs submitted for endpoints with zero
-wMaxPacketSize but that drivers doing packet-size calculations still
-need to handle this (cf. commit 2548288b4fb0 ("USB: Fix: Don't skip
-endpoint descriptors with maxpacket=0")).
+For example for 360 mbps for H3/M3N
+Existing logic selects
+Calculated value 360Mbps : Default 400Mbps Range [368.125 -433.125 mbps]
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This hsfreqrange is out of range.
+
+The logic is changed to get the default value which is closest to the
+calculated value [1]
+
+Calculated value 360Mbps : Default 350Mbps  Range [320.625 -380.625 mpbs]
+
+[1] specs r19uh0105ej0200-r-car-3rd-generation.pdf [Table 25.9]
+
+Please note that According to Renesas in Table 25.9 the range for
+220 default value is corrected as below
+
+ |Range (Mbps)     |  Default  Bit rate (Mbps) |
+ -----------------------------------------------
+ | 197.125-244.125 |     220                   |
+ -----------------------------------------------
+
+Fixes: 769afd212b16 ("media: rcar-csi2: add Renesas R-Car MIPI CSI-2 receiver driver")
+Signed-off-by: Suresh Udipi <sudipi@jp.adit-jv.com>
+Signed-off-by: Kazuyoshi Akiyama <akiyama@nds-osk.co.jp>
+Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bluetooth/bfusb.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/media/platform/rcar-vin/rcar-csi2.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
---- a/drivers/bluetooth/bfusb.c
-+++ b/drivers/bluetooth/bfusb.c
-@@ -644,6 +644,9 @@ static int bfusb_probe(struct usb_interf
- 	data->bulk_out_ep   = bulk_out_ep->desc.bEndpointAddress;
- 	data->bulk_pkt_size = le16_to_cpu(bulk_out_ep->desc.wMaxPacketSize);
+diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
+index e01f22bf826d4..99b28611eb12c 100644
+--- a/drivers/media/platform/rcar-vin/rcar-csi2.c
++++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
+@@ -430,16 +430,23 @@ static int rcsi2_wait_phy_start(struct rcar_csi2 *priv)
+ static int rcsi2_set_phypll(struct rcar_csi2 *priv, unsigned int mbps)
+ {
+ 	const struct rcsi2_mbps_reg *hsfreq;
++	const struct rcsi2_mbps_reg *hsfreq_prev = NULL;
  
-+	if (!data->bulk_pkt_size)
-+		goto done;
+-	for (hsfreq = priv->info->hsfreqrange; hsfreq->mbps != 0; hsfreq++)
++	for (hsfreq = priv->info->hsfreqrange; hsfreq->mbps != 0; hsfreq++) {
+ 		if (hsfreq->mbps >= mbps)
+ 			break;
++		hsfreq_prev = hsfreq;
++	}
+ 
+ 	if (!hsfreq->mbps) {
+ 		dev_err(priv->dev, "Unsupported PHY speed (%u Mbps)", mbps);
+ 		return -ERANGE;
+ 	}
+ 
++	if (hsfreq_prev &&
++	    ((mbps - hsfreq_prev->mbps) <= (hsfreq->mbps - mbps)))
++		hsfreq = hsfreq_prev;
 +
- 	rwlock_init(&data->lock);
+ 	rcsi2_write(priv, PHYPLL_REG, PHYPLL_HSFREQRANGE(hsfreq->reg));
  
- 	data->reassembly = NULL;
+ 	return 0;
+-- 
+2.34.1
+
 
 

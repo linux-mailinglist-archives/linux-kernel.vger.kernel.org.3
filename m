@@ -2,108 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1F8249A802
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:06:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 709F749A803
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1315855AbiAYCyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:54:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
+        id S1315874AbiAYCyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:54:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3409268AbiAYAZU (ORCPT
+        with ESMTP id S3409660AbiAYA1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 19:25:20 -0500
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7757C04590A
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:07:24 -0800 (PST)
-Received: by mail-oo1-xc33.google.com with SMTP id t75-20020a4a3e4e000000b002e9c0821d78so869143oot.4
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:07:24 -0800 (PST)
+        Mon, 24 Jan 2022 19:27:09 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F41C0C6864
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:08:40 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id m8-20020a9d4c88000000b00592bae7944bso24246165otf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:08:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=/aLnHFuStZ5orf+mOt/+JIQklpQVMq3vUHjZ6F6RUME=;
-        b=oVOpoQrs7lAhfFdYwpI0Rbzn4piuzf9e5etUCLba1zcBTLVJXNv0oO+H7iWuBfLpPF
-         ASNNSRyIUHiyAlE1wrc8sjhJTg7yluaGRdSE38M+06TBKdyjDXmPU4bzAnn+0kwjb55o
-         Xh651eHtRdmJG65PfUKKbclnQeEXW8CKWcSjs=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5AU7UHXWGTgXus+jcgLu4tYknaJHqkDWYn1T5acuUH8=;
+        b=NMM7a/yjJoWOPQjiTo+SdO9A7Y7k+6dqKIG3Kq3o8dz5RSoZ1W2vD77yq2K3z1Nxt4
+         2Qn4P18bkaT2nk5dsqlPUyMhY/TB3Qoo6FJRy1W+8sr33cSUmBdktRvJMckxtUpC7ev5
+         NS4RFF6uAiFsuqMj/uJEnwtonchUz8WDNLz/9Wj0/0qE5/gDqlonX/RwX/0T7sfOjJsJ
+         mIRTYh6QH+zNutWNdWHCUp+LbnJaxAVIF41PJPKVg7CoHdgjKGgvoNgaGqzpbgr4/4Ox
+         X1OrHW75bzMi9cF1nNAmFxIVFjO2qiS8K+uCqfqG980sJeDjyS8uL0x5tfK1XA0vq274
+         2OwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=/aLnHFuStZ5orf+mOt/+JIQklpQVMq3vUHjZ6F6RUME=;
-        b=G9VXoVcTQWcZK3TL61knhK19pn2Tnf34+GL8ZtClBYsWGLc8jqQLHJRPt/+Kn4O0Jp
-         ZZhxrEPDpAOnHkYxAXn/HIBVGgIaujzuztVrIiM3fugOyIoYXuWH6ABWQ9ZuxqRPol8G
-         3sCVCRplonPyvsXAoE3hJzkxiA1JdaYK0gPQC6Nfw/QzVizHUscHVb6E5TlV4zd2TZiT
-         WFhmSo9sUfts2V1+hovFDjgCYjrf6+mnR39UitjN5t4mnGgvr2ZLatJXHFz/EzY01Czq
-         4ZsGqgE+guEEx0q8V6itMjgMhsgtrJ8HNbLeUVV7N25yU49OiG1LGwD+AQuTKCjL5P4i
-         Hzpw==
-X-Gm-Message-State: AOAM530YTbXQVvpKiToJgYHeeb/ZIlK415SffmF0CgQAUa2oLrMIehAq
-        c8hTEf4LFNtPLJdzmijNjW8Mgm0kvvUTiU+oOezwLg==
-X-Google-Smtp-Source: ABdhPJyc/dz2yM6w+iD9kilsMJPwY0RIbV00zr4BPr32NKAK/72Bw+/QQmFbTMkH7urzwVaB7eMehwTkn+zmuRw96G8=
-X-Received: by 2002:a4a:d51a:: with SMTP id m26mr4897764oos.1.1643062044068;
- Mon, 24 Jan 2022 14:07:24 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 24 Jan 2022 14:07:23 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5AU7UHXWGTgXus+jcgLu4tYknaJHqkDWYn1T5acuUH8=;
+        b=KbJDaLLvVU+WglUBj+dYRQPoJ1iDOkrsiLSohR60XG5u7xi/m47RKdbOpA7gBFSCCz
+         G0Xc/z/978zOoecCDi5zxr/y4cNY7vJ+vo2YC6IHSQNWNxW6y05KCwri4Y6nShRKVnvJ
+         mZlZe8Pf5pNY0/KIhWXwmrNWajlh6I/+SiAqR0qjvYxrYNTOA3hOSBncx9m3+6QdW6NG
+         S55pZUgipkztcoqf4TFOzZSqCtv15USun5Ud0BE1JlwO1Nfp/gGdWpGNcaMB4qRtxNX5
+         12XZm+BWZWCu1tE9VqZ4ZY53K1VfLPjX9oGmHp/R6QC5AJvzECYNt9i30WuhE69H2x/D
+         8sOw==
+X-Gm-Message-State: AOAM533RruNJBG9Pc//jqQBvfYfgP8Vk8UpLgWbpO0x+R8bkN8+mKzc8
+        j2rbyhQkVq1td+zKOV8QvDjV+Fj5DWobpXypKJk=
+X-Google-Smtp-Source: ABdhPJyRp7jJ3E/mwEtBlF6sV7zRxPUTudHrillxpCsaSQDiBOb6hmpGdoVdYTdWWuI6WFz59OvDXIFEApG8s+eBGw0=
+X-Received: by 2002:a9d:601a:: with SMTP id h26mr3605702otj.357.1643062119806;
+ Mon, 24 Jan 2022 14:08:39 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <28734c1c-a30c-d47f-3fc1-95035adcd33d@quicinc.com>
-References: <1643057170-10413-1-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n53nFcMzuKfqVRac6PRTkoPrftXL+uVK56ZQsHVWHmivkQ@mail.gmail.com> <28734c1c-a30c-d47f-3fc1-95035adcd33d@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 24 Jan 2022 14:07:23 -0800
-Message-ID: <CAE-0n51wjxd+6azct0ENNBZuE7oVSH6tXfSfEUhT4LRX6kesdw@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/dp: always add fail-safe mode into connector mode list
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        dmitry.baryshkov@linaro.org, robdclark@gmail.com, sean@poorly.run,
-        vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220124201812.1078824-1-trix@redhat.com>
+In-Reply-To: <20220124201812.1078824-1-trix@redhat.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 24 Jan 2022 17:08:28 -0500
+Message-ID: <CADnq5_M+xmJkiMkug=5bix8ypxHzr0embK7GN4GRY57BK1y4FA@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/amd/pm: return -ENOTSUPP if there is no
+ get_dpm_ultimate_freq function
+To:     Tom Rix <trix@redhat.com>
+Cc:     "Quan, Evan" <evan.quan@amd.com>,
+        "Deucher, Alexander" <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        xinhui pan <Xinhui.Pan@amd.com>,
+        Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Lazar, Lijo" <lijo.lazar@amd.com>,
+        "Powell, Darren" <darren.powell@amd.com>,
+        "Chen, Guchun" <guchun.chen@amd.com>,
+        Arunpravin <Arunpravin.PaneerSelvam@amd.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        llvm@lists.linux.dev,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Kuogee Hsieh (2022-01-24 13:24:25)
->
-> On 1/24/2022 1:04 PM, Stephen Boyd wrote:
-> > Quoting Kuogee Hsieh (2022-01-24 12:46:10)
-> >> Some of DP link compliant test expects to return fail-safe mode
-> >> if prefer detailed timing mode can not be supported by mainlink's
-> >> lane and rate after link training. Therefore add fail-safe mode
-> >> into connector mode list as backup mode. This patch fixes test
-> >> case 4.2.2.1.
-> >>
-> >> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> > Any Fixes tag? I also wonder why this isn't pushed into the DP core code
-> > somehow. Wouldn't every device need to add a 640x480 mode by default?
->
-> Original test case 4.2.2.1 always passed until we did firmware upgrade
-> of our compliance test tester (Unigraph) recently.
+Applied.  Thanks!
 
-Ok. So the Fixes tag should be the introduction of the driver or at
-least whenever compliance testing support was added.
+Alex
 
+On Mon, Jan 24, 2022 at 3:18 PM <trix@redhat.com> wrote:
 >
-> The new firmware of tester use newer edid contains 1080p with 145.7 mhz
-> which can not be supported by 2 lanes with 1.6G rate. Hence we failed
-> this test case.
-
-Interesting. So the test case wouldn't fail unless the number of lanes
-were limited by the hardware? Seems that the test isn't thorough.
-
+> From: Tom Rix <trix@redhat.com>
 >
-> After discuss with Vendor, they claims we have to return fail-safe mode
-> if prefer detailed timing mode can not be supported.
+> clang static analysis reports this represenative problem
+> amdgpu_smu.c:144:18: warning: The left operand of '*' is a garbage value
+>         return clk_freq * 100;
+>                ~~~~~~~~ ^
 >
-> I think would be good to add fail-safe mode into connector mode list.
+> If there is no get_dpm_ultimate_freq function,
+> smu_get_dpm_freq_range returns success without setting the
+> output min,max parameters.  So return an -ENOTSUPP error.
 >
+> Fixes: e5ef784b1e17 ("drm/amd/powerplay: revise calling chain on retrieving frequency range")
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+> v2: return error instead of initializing min/max
 >
+> drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
+> diff --git a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
+> index 5ace30434e603..264eb09ccfd51 100644
+> --- a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
+> +++ b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
+> @@ -116,7 +116,7 @@ int smu_get_dpm_freq_range(struct smu_context *smu,
+>                            uint32_t *min,
+>                            uint32_t *max)
+>  {
+> -       int ret = 0;
+> +       int ret = -ENOTSUPP;
 >
-> > we just run into this problem recently.
-
-
-Sure I'm not saying it's incorrect, just wondering why a connector
-that's DP wouldn't have the 640x480 resolution by default somewhere in
-the drm core.
+>         if (!min && !max)
+>                 return -EINVAL;
+> --
+> 2.26.3
+>

@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7814F49A437
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D5849A4FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2374275AbiAYAQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:16:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S1389960AbiAYAYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:24:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383050AbiAXX2E (ORCPT
+        with ESMTP id S1578529AbiAXWDE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:28:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B0DC01D7EC;
-        Mon, 24 Jan 2022 13:31:01 -0800 (PST)
+        Mon, 24 Jan 2022 17:03:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D44C036BC7;
+        Mon, 24 Jan 2022 12:41:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4AD71B8122A;
-        Mon, 24 Jan 2022 21:31:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77A88C340E4;
-        Mon, 24 Jan 2022 21:30:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 853EE6153D;
+        Mon, 24 Jan 2022 20:41:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FA09C340E5;
+        Mon, 24 Jan 2022 20:41:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059860;
-        bh=9aUcXT3IAkm0wq9zoAJHhvROrGWTCBthzqq60iNgH8g=;
+        s=korg; t=1643056881;
+        bh=ZKIO0EI8etdhFdJgw05cNmBcT16ZGNTA2eUjGktLPHw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CeQyGaISh2khsOeIiZXuAz4/KnypXx++/PLwgmGMlommWrLPTIx4Lcv4vMCD/7vnJ
-         urLBio6qi9tajkZ9g5IHsUCYJtbNbTOG4y8MNNcFsdUvFq/NfZIQGAdg3hnG+EtlLF
-         N6AKNazmOKq83djYHnmsAqAKOHuAqdso0aahNdw4=
+        b=YWhNTvrNxpA40XdlnOBHDywNQ9gP02dOXgGMeSmwfU4W8L5Y3kNzX4ADz52/gryBd
+         +yjGtzYrjXl4N0mgZ3KuT7FEeyM/tdmoQL5gMGYtYxswVndFIP05DMGc7HApBljrnz
+         VgBEpqsczJyIYpDe/hI0w7m0Jk1W5KGGFn29dSdE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0757/1039] MIPS: Loongson64: Use three arguments for slti
-Date:   Mon, 24 Jan 2022 19:42:26 +0100
-Message-Id: <20220124184150.779947895@linuxfoundation.org>
+Subject: [PATCH 5.15 630/846] powerpc/smp: Move setup_profiling_timer() under CONFIG_PROFILING
+Date:   Mon, 24 Jan 2022 19:42:27 +0100
+Message-Id: <20220124184122.766073833@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,60 +48,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Michael Ellerman <mpe@ellerman.id.au>
 
-[ Upstream commit f2c6c22fa83ab2577619009057b3ebcb5305bb03 ]
+[ Upstream commit a4ac0d249a5db80e79d573db9e4ad29354b643a8 ]
 
-LLVM's integrated assembler does not support 'slti <reg>, <imm>':
+setup_profiling_timer() is only needed when CONFIG_PROFILING is enabled.
 
-<instantiation>:16:12: error: invalid operand for instruction
- slti $12, (0x6300 | 0x0008)
-           ^
-arch/mips/kernel/head.S:86:2: note: while in macro instantiation
- kernel_entry_setup # cpu specific setup
- ^
-<instantiation>:16:12: error: invalid operand for instruction
- slti $12, (0x6300 | 0x0008)
-           ^
-arch/mips/kernel/head.S:150:2: note: while in macro instantiation
- smp_slave_setup
- ^
+Fixes the following W=1 warning when CONFIG_PROFILING=n:
+  linux/arch/powerpc/kernel/smp.c:1638:5: error: no previous prototype for ‘setup_profiling_timer’
 
-To increase compatibility with LLVM's integrated assembler, use the full
-form of 'slti <reg>, <reg>, <imm>', which matches the rest of
-arch/mips/. This does not result in any change for GNU as.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1526
-Reported-by: Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20211124093254.1054750-5-mpe@ellerman.id.au
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/include/asm/mach-loongson64/kernel-entry-init.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/powerpc/kernel/smp.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h b/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
-index 13373c5144f89..efb41b3519747 100644
---- a/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
-+++ b/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
-@@ -32,7 +32,7 @@
- 	nop
- 	/* Loongson-3A R2/R3 */
- 	andi	t0, (PRID_IMP_MASK | PRID_REV_MASK)
--	slti	t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
-+	slti	t0, t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
- 	bnez	t0, 2f
- 	nop
- 1:
-@@ -63,7 +63,7 @@
- 	nop
- 	/* Loongson-3A R2/R3 */
- 	andi	t0, (PRID_IMP_MASK | PRID_REV_MASK)
--	slti	t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
-+	slti	t0, t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
- 	bnez	t0, 2f
- 	nop
- 1:
+diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
+index 605bab448f847..c7ef0739c8640 100644
+--- a/arch/powerpc/kernel/smp.c
++++ b/arch/powerpc/kernel/smp.c
+@@ -1640,10 +1640,12 @@ void start_secondary(void *unused)
+ 	BUG();
+ }
+ 
++#ifdef CONFIG_PROFILING
+ int setup_profiling_timer(unsigned int multiplier)
+ {
+ 	return 0;
+ }
++#endif
+ 
+ static void fixup_topology(void)
+ {
 -- 
 2.34.1
 

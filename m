@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8214996A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:19:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72578499694
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:19:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbiAXVFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:05:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
+        id S1445823AbiAXVFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:05:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389732AbiAXUm6 (ORCPT
+        with ESMTP id S1358023AbiAXUnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:42:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70BC5C04967A;
-        Mon, 24 Jan 2022 11:53:02 -0800 (PST)
+        Mon, 24 Jan 2022 15:43:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1172EC019B2B;
+        Mon, 24 Jan 2022 11:53:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F99460B02;
-        Mon, 24 Jan 2022 19:53:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE3F6C36AE9;
-        Mon, 24 Jan 2022 19:53:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFDCAB8122F;
+        Mon, 24 Jan 2022 19:53:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 097C8C340E5;
+        Mon, 24 Jan 2022 19:53:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053981;
-        bh=EdRBPmg9UuzN3RscHx/sISlmgsII/q5Oql95LbXNop0=;
+        s=korg; t=1643054003;
+        bh=81xl3sgM260UXnSFz+zCoNVTk3dN1gWBm6MwUjmOT7A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JglY1Pcb11z48W8Ayv51vQTBUR/iXXTqciITs6xLa/Zo4IbugFZW++tVK14HT6rRf
-         ilWy8svjnw6oiBfuoiHPWCyH1FELTwroq6KAgZYRf57q2NKVnjHWbKBmcOLVh2mp54
-         jhwk6aq8/qSGibf/wwJkB5CGPpm/Y3hWRm0Sioi0=
+        b=jjLuGwQTbfL7qXzMfJMQ4qc1jz+WRbPAGZ8xBpXf/XLYkTlhvBPwxGa+0TfF7k6Bn
+         +gTBNztk3Tpf/Y+vZQ1MHMCRQyEFSTi8LVReBd+sxZt+R89rtzbHzKPkprpS2rMnuz
+         671wwAPEXuwqjZiJ5G2acF4Vid0ilrkE0/Ghr1iY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 213/563] Bluetooth: hci_qca: Fix NULL vs IS_ERR_OR_NULL check in qca_serdev_probe
-Date:   Mon, 24 Jan 2022 19:39:38 +0100
-Message-Id: <20220124184031.819170738@linuxfoundation.org>
+Subject: [PATCH 5.10 214/563] usb: dwc3: qcom: Fix NULL vs IS_ERR checking in dwc3_qcom_probe
+Date:   Mon, 24 Jan 2022 19:39:39 +0100
+Message-Id: <20220124184031.855228474@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -51,34 +50,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 6845667146a28c09b5dfc401c1ad112374087944 ]
+[ Upstream commit b52fe2dbb3e655eb1483000adfab68a219549e13 ]
 
-The function devm_gpiod_get_index() return error pointers on error.
-Thus devm_gpiod_get_index_optional() could return NULL and error pointers.
-The same as devm_gpiod_get_optional() function. Using IS_ERR_OR_NULL()
-check to catch error pointers.
+Since the acpi_create_platform_device() function may return error
+pointers, dwc3_qcom_create_urs_usb_platdev() function may return error
+pointers too. Using IS_ERR_OR_NULL() to check the return value to fix this.
 
-Fixes: 77131dfe ("Bluetooth: hci_qca: Replace devm_gpiod_get() with devm_gpiod_get_optional()")
+Fixes: c25c210f590e ("usb: dwc3: qcom: add URS Host support for sdm845 ACPI boot")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Link: https://lore.kernel.org/r/20211222111823.22887-1-linmq006@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bluetooth/hci_qca.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/dwc3/dwc3-qcom.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index 4f8a32601c1b6..dc7ee5dd2eeca 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -1990,7 +1990,7 @@ static int qca_serdev_probe(struct serdev_device *serdev)
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index 2a29e2f681fe6..504f8af4d0f80 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -764,9 +764,12 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
  
- 		qcadev->bt_en = devm_gpiod_get_optional(&serdev->dev, "enable",
- 					       GPIOD_OUT_LOW);
--		if (!qcadev->bt_en) {
-+		if (IS_ERR_OR_NULL(qcadev->bt_en)) {
- 			dev_warn(&serdev->dev, "failed to acquire enable gpio\n");
- 			power_ctrl_enabled = false;
+ 		if (qcom->acpi_pdata->is_urs) {
+ 			qcom->urs_usb = dwc3_qcom_create_urs_usb_platdev(dev);
+-			if (!qcom->urs_usb) {
++			if (IS_ERR_OR_NULL(qcom->urs_usb)) {
+ 				dev_err(dev, "failed to create URS USB platdev\n");
+-				return -ENODEV;
++				if (!qcom->urs_usb)
++					return -ENODEV;
++				else
++					return PTR_ERR(qcom->urs_usb);
+ 			}
  		}
+ 	}
 -- 
 2.34.1
 

@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D6C499ACA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:57:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F044994FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448337AbiAXVqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:46:35 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35602 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448372AbiAXVMc (ORCPT
+        id S1392003AbiAXUuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:50:13 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60504 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354319AbiAXUXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:12:32 -0500
+        Mon, 24 Jan 2022 15:23:03 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F56C6131F;
-        Mon, 24 Jan 2022 21:12:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30496C340E5;
-        Mon, 24 Jan 2022 21:12:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E652DB8121C;
+        Mon, 24 Jan 2022 20:22:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2063DC340E5;
+        Mon, 24 Jan 2022 20:22:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058750;
-        bh=IjNxPGEtSYkVvnCwbHUvJvg0zijHBM+PZ9Fgl4BzepI=;
+        s=korg; t=1643055777;
+        bh=Jqatb1L8yQjhbQy9UNMVpIvmVrX+KciqGzLn7FtNWoA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fDgPvDMxi5maui4pDfdzJp3zWSTYQRPMXKfTIhEhp89li4R6Sf3T0whgFEGwV2iEk
-         X6IQ/0Ng50oCOvCkyaJNBFFvXly0Rh40Hwwg9Lu9koYigRbehOHvK0tHHLMcS4mWVz
-         q997VIK41FdjCIPpdfLUR72zQcRLeXMnMZgjcovc=
+        b=v8w/y9kA95AimS7b/yX67vOWdUDjOd6JIyCjft56dHu876xZw+rpgroS15b3H0bxJ
+         AEK5EYYosMWolyhj5teyWM7WtQKAcsMa0nFECI4VRh6UawK/4buiaqijomyZ9Or92r
+         NiSWGXU4fnLe8xM4pG5ZsDdlLKGoThKvFWh09VhI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
+        stable@vger.kernel.org, Robert Marko <robert.marko@sartura.hr>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0390/1039] usb: dwc2: do not gate off the hardware if it does not support clock gating
-Date:   Mon, 24 Jan 2022 19:36:19 +0100
-Message-Id: <20220124184138.426988331@linuxfoundation.org>
+Subject: [PATCH 5.15 263/846] arm64: dts: marvell: cn9130: add GPIO and SPI aliases
+Date:   Mon, 24 Jan 2022 19:36:20 +0100
+Message-Id: <20220124184110.001780743@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,43 +46,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dinh Nguyen <dinguyen@kernel.org>
+From: Robert Marko <robert.marko@sartura.hr>
 
-[ Upstream commit 34146c68083f1aef6709196b3dc888c1ceffd357 ]
+[ Upstream commit effd42600b987c1e95f946b14fefc1c7639e7439 ]
 
-We should not be clearing the HCD_FLAG_HW_ACCESSIBLE bit if the hardware
-does not support clock gating.
+CN9130 has one CP115 built in, which like the CP110 has 2 GPIO and 2 SPI
+controllers built-in.
 
-Fixes: 50fb0c128b6e ("usb: dwc2: Add clock gating entering flow by system suspend")
-Acked-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-Link: https://lore.kernel.org/r/20220104135922.734776-1-dinguyen@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+However, unlike the Armada 7k and 8k the SoC DTSI doesn't add the required
+aliases as both the Orion SPI driver and MVEBU GPIO drivers require the
+aliases to be present.
+
+So add the required aliases for GPIO and SPI controllers.
+
+Fixes: 6b8970bd8d7a ("arm64: dts: marvell: Add support for Marvell CN9130 SoC support")
+
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc2/hcd.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/marvell/cn9130.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index 13c779a28e94f..f63a27d11fac8 100644
---- a/drivers/usb/dwc2/hcd.c
-+++ b/drivers/usb/dwc2/hcd.c
-@@ -4399,11 +4399,12 @@ static int _dwc2_hcd_suspend(struct usb_hcd *hcd)
- 		 * If not hibernation nor partial power down are supported,
- 		 * clock gating is used to save power.
- 		 */
--		if (!hsotg->params.no_clock_gating)
-+		if (!hsotg->params.no_clock_gating) {
- 			dwc2_host_enter_clock_gating(hsotg);
+diff --git a/arch/arm64/boot/dts/marvell/cn9130.dtsi b/arch/arm64/boot/dts/marvell/cn9130.dtsi
+index a2b7e5ec979d3..71769ac7f0585 100644
+--- a/arch/arm64/boot/dts/marvell/cn9130.dtsi
++++ b/arch/arm64/boot/dts/marvell/cn9130.dtsi
+@@ -11,6 +11,13 @@
+ 	model = "Marvell Armada CN9130 SoC";
+ 	compatible = "marvell,cn9130", "marvell,armada-ap807-quad",
+ 		     "marvell,armada-ap807";
++
++	aliases {
++		gpio1 = &cp0_gpio1;
++		gpio2 = &cp0_gpio2;
++		spi1 = &cp0_spi0;
++		spi2 = &cp0_spi1;
++	};
+ };
  
--		/* After entering suspend, hardware is not accessible */
--		clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
-+			/* After entering suspend, hardware is not accessible */
-+			clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
-+		}
- 		break;
- 	default:
- 		goto skip_power_saving;
+ /*
 -- 
 2.34.1
 

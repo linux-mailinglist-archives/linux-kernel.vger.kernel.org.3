@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C87049A053
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D503499E90
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:09:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1583332AbiAXXGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:06:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36192 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381204AbiAXWTa (ORCPT
+        id S1835609AbiAXWhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:37:02 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49116 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1456018AbiAXVhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:19:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904A2C0619CF;
-        Mon, 24 Jan 2022 12:49:33 -0800 (PST)
+        Mon, 24 Jan 2022 16:37:34 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E9D4B811A9;
-        Mon, 24 Jan 2022 20:49:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71CD2C340E5;
-        Mon, 24 Jan 2022 20:49:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26CC5B811A2;
+        Mon, 24 Jan 2022 21:37:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B66BC340E4;
+        Mon, 24 Jan 2022 21:37:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057371;
-        bh=nCkMqPq7aczurCyrAgJsTR6iIJRd5PJT1ENTZ16rmAY=;
+        s=korg; t=1643060249;
+        bh=H9Cd36ES4vBtIfhbCdjJQJgnY58I/rp/a5KBhpw7fX4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SlUjwNoPgIH9GPDVpehCO/exdg90dAOOPhgy8fKGkVnczu4jNobVS834odNkRtmBs
-         iLa8b4df0WxuDLNCTt0ZM/hP9cOurXxWYsdvxNz4kn7zc5mZI64bCyg+KKX+KxcPFi
-         iREqIkIvg1drD83qs2QsSD5gdRFKbdwvXf1LJUok=
+        b=T8FznQkJ2iND11cPa+TxKhVA4iIJydGXqLOIY64NAgOXh5hm5fCLE4Y/V2dmOPyAJ
+         RIrzIQSyuKmuSnq6O80n+WnXwEWsKtEMvh8sL+o93iY/1QjUi2P+7+HuDptovWp8P2
+         XyhARHiDOyHbU5iQZ6opBAPtLgIiXMZv+TbGUGL8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
-        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.15 758/846] block: Fix fsync always failed if once failed
-Date:   Mon, 24 Jan 2022 19:44:35 +0100
-Message-Id: <20220124184127.118647249@linuxfoundation.org>
+        stable@vger.kernel.org, Naohiro Aota <naohiro.aota@wdc.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.16 0887/1039] btrfs: zoned: fix chunk allocation condition for zoned allocator
+Date:   Mon, 24 Jan 2022 19:44:36 +0100
+Message-Id: <20220124184155.103243395@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,62 +45,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+From: Naohiro Aota <naohiro.aota@wdc.com>
 
-commit 8a7518931baa8ea023700987f3db31cb0a80610b upstream.
+commit 82187d2ecdfb22ab7ee05f388402a39236d31428 upstream.
 
-We do test with inject error fault base on v4.19, after test some time we found
-sync /dev/sda always failed.
-[root@localhost] sync /dev/sda
-sync: error syncing '/dev/sda': Input/output error
+The ZNS specification defines a limit on the number of "active"
+zones. That limit impose us to limit the number of block groups which
+can be used for an allocation at the same time. Not to exceed the
+limit, we reuse the existing active block groups as much as possible
+when we can't activate any other zones without sacrificing an already
+activated block group in commit a85f05e59bc1 ("btrfs: zoned: avoid
+chunk allocation if active block group has enough space").
 
-scsi log as follows:
-[19069.812296] sd 0:0:0:0: [sda] tag#64 Send: scmd 0x00000000d03a0b6b
-[19069.812302] sd 0:0:0:0: [sda] tag#64 CDB: Synchronize Cache(10) 35 00 00 00 00 00 00 00 00 00
-[19069.812533] sd 0:0:0:0: [sda] tag#64 Done: SUCCESS Result: hostbyte=DID_OK driverbyte=DRIVER_OK
-[19069.812536] sd 0:0:0:0: [sda] tag#64 CDB: Synchronize Cache(10) 35 00 00 00 00 00 00 00 00 00
-[19069.812539] sd 0:0:0:0: [sda] tag#64 scsi host busy 1 failed 0
-[19069.812542] sd 0:0:0:0: Notifying upper driver of completion (result 0)
-[19069.812546] sd 0:0:0:0: [sda] tag#64 sd_done: completed 0 of 0 bytes
-[19069.812549] sd 0:0:0:0: [sda] tag#64 0 sectors total, 0 bytes done.
-[19069.812564] print_req_error: I/O error, dev sda, sector 0
+However, the check is wrong in two ways. First, it checks the
+condition for every raid index (ffe_ctl->index). Even if it reaches
+the condition and "ffe_ctl->max_extent_size >=
+ffe_ctl->min_alloc_size" is met, there can be other block groups
+having enough space to hold ffe_ctl->num_bytes. (Actually, this won't
+happen in the current zoned code as it only supports SINGLE
+profile. But, it can happen once it enables other RAID types.)
 
-ftrace log as follows:
- rep-306069 [007] .... 19654.923315: block_bio_queue: 8,0 FWS 0 + 0 [rep]
- rep-306069 [007] .... 19654.923333: block_getrq: 8,0 FWS 0 + 0 [rep]
- kworker/7:1H-250   [007] .... 19654.923352: block_rq_issue: 8,0 FF 0 () 0 + 0 [kworker/7:1H]
- <idle>-0     [007] ..s. 19654.923562: block_rq_complete: 8,0 FF () 18446744073709551615 + 0 [0]
- <idle>-0     [007] d.s. 19654.923576: block_rq_complete: 8,0 WS () 0 + 0 [-5]
+Second, it checks the active zone availability depending on the
+raid index. The raid index is just an index for
+space_info->block_groups, so it has nothing to do with chunk allocation.
 
-As 8d6996630c03 introduce 'fq->rq_status', this data only update when 'flush_rq'
-reference count isn't zero. If flush request once failed and record error code
-in 'fq->rq_status'. If there is no chance to update 'fq->rq_status',then do fsync
-will always failed.
-To address this issue reset 'fq->rq_status' after return error code to upper layer.
+These mistakes are causing a faulty allocation in a certain
+situation. Consider we are running zoned btrfs on a device whose
+max_active_zone == 0 (no limit). And, suppose no block group have a
+room to fit ffe_ctl->num_bytes but some room to meet
+ffe_ctl->min_alloc_size (i.e. max_extent_size > num_bytes >=
+min_alloc_size).
 
-Fixes: 8d6996630c03("block: fix null pointer dereference in blk_mq_rq_timed_out()")
-Signed-off-by: Ye Bin <yebin10@huawei.com>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
-Link: https://lore.kernel.org/r/20211129012659.1553733-1-yebin10@huawei.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+In this situation, the following occur:
+
+- With SINGLE raid_index, it reaches the chunk allocation checking
+  code
+- The check returns true because we can activate a new zone (no limit)
+- But, before allocating the chunk, it iterates to the next raid index
+  (RAID5)
+- Since there are no RAID5 block groups on zoned mode, it again
+  reaches the check code
+- The check returns false because of btrfs_can_activate_zone()'s "if
+  (raid_index != BTRFS_RAID_SINGLE)" part
+- That results in returning -ENOSPC without allocating a new chunk
+
+As a result, we end up hitting -ENOSPC too early.
+
+Move the check to the right place in the can_allocate_chunk() hook,
+and do the active zone check depending on the allocation flag, not on
+the raid index.
+
+CC: stable@vger.kernel.org # 5.16
+Signed-off-by: Naohiro Aota <naohiro.aota@wdc.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/blk-flush.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ fs/btrfs/extent-tree.c |   21 +++++++++------------
+ fs/btrfs/zoned.c       |    5 ++---
+ fs/btrfs/zoned.h       |    5 ++---
+ 3 files changed, 13 insertions(+), 18 deletions(-)
 
---- a/block/blk-flush.c
-+++ b/block/blk-flush.c
-@@ -235,8 +235,10 @@ static void flush_end_io(struct request
- 	 * avoiding use-after-free.
- 	 */
- 	WRITE_ONCE(flush_rq->state, MQ_RQ_IDLE);
--	if (fq->rq_status != BLK_STS_OK)
-+	if (fq->rq_status != BLK_STS_OK) {
- 		error = fq->rq_status;
-+		fq->rq_status = BLK_STS_OK;
-+	}
+--- a/fs/btrfs/extent-tree.c
++++ b/fs/btrfs/extent-tree.c
+@@ -3966,6 +3966,15 @@ static bool can_allocate_chunk(struct bt
+ 	case BTRFS_EXTENT_ALLOC_CLUSTERED:
+ 		return true;
+ 	case BTRFS_EXTENT_ALLOC_ZONED:
++		/*
++		 * If we have enough free space left in an already
++		 * active block group and we can't activate any other
++		 * zone now, do not allow allocating a new chunk and
++		 * let find_free_extent() retry with a smaller size.
++		 */
++		if (ffe_ctl->max_extent_size >= ffe_ctl->min_alloc_size &&
++		    !btrfs_can_activate_zone(fs_info->fs_devices, ffe_ctl->flags))
++			return false;
+ 		return true;
+ 	default:
+ 		BUG();
+@@ -4012,18 +4021,6 @@ static int find_free_extent_update_loop(
+ 		return 0;
+ 	}
  
- 	if (!q->elevator) {
- 		flush_rq->tag = BLK_MQ_NO_TAG;
+-	if (ffe_ctl->max_extent_size >= ffe_ctl->min_alloc_size &&
+-	    !btrfs_can_activate_zone(fs_info->fs_devices, ffe_ctl->index)) {
+-		/*
+-		 * If we have enough free space left in an already active block
+-		 * group and we can't activate any other zone now, retry the
+-		 * active ones with a smaller allocation size.  Returning early
+-		 * from here will tell btrfs_reserve_extent() to haven the
+-		 * size.
+-		 */
+-		return -ENOSPC;
+-	}
+-
+ 	if (ffe_ctl->loop >= LOOP_CACHING_WAIT && ffe_ctl->have_caching_bg)
+ 		return 1;
+ 
+--- a/fs/btrfs/zoned.c
++++ b/fs/btrfs/zoned.c
+@@ -1934,7 +1934,7 @@ int btrfs_zone_finish(struct btrfs_block
+ 	return ret;
+ }
+ 
+-bool btrfs_can_activate_zone(struct btrfs_fs_devices *fs_devices, int raid_index)
++bool btrfs_can_activate_zone(struct btrfs_fs_devices *fs_devices, u64 flags)
+ {
+ 	struct btrfs_device *device;
+ 	bool ret = false;
+@@ -1943,8 +1943,7 @@ bool btrfs_can_activate_zone(struct btrf
+ 		return true;
+ 
+ 	/* Non-single profiles are not supported yet */
+-	if (raid_index != BTRFS_RAID_SINGLE)
+-		return false;
++	ASSERT((flags & BTRFS_BLOCK_GROUP_PROFILE_MASK) == 0);
+ 
+ 	/* Check if there is a device with active zones left */
+ 	mutex_lock(&fs_devices->device_list_mutex);
+--- a/fs/btrfs/zoned.h
++++ b/fs/btrfs/zoned.h
+@@ -72,8 +72,7 @@ struct btrfs_device *btrfs_zoned_get_dev
+ 					    u64 logical, u64 length);
+ bool btrfs_zone_activate(struct btrfs_block_group *block_group);
+ int btrfs_zone_finish(struct btrfs_block_group *block_group);
+-bool btrfs_can_activate_zone(struct btrfs_fs_devices *fs_devices,
+-			     int raid_index);
++bool btrfs_can_activate_zone(struct btrfs_fs_devices *fs_devices, u64 flags);
+ void btrfs_zone_finish_endio(struct btrfs_fs_info *fs_info, u64 logical,
+ 			     u64 length);
+ void btrfs_clear_data_reloc_bg(struct btrfs_block_group *bg);
+@@ -225,7 +224,7 @@ static inline int btrfs_zone_finish(stru
+ }
+ 
+ static inline bool btrfs_can_activate_zone(struct btrfs_fs_devices *fs_devices,
+-					   int raid_index)
++					   u64 flags)
+ {
+ 	return true;
+ }
 
 

@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A2B49A4DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:10:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B774C49A6C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3408219AbiAYAWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:22:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385259AbiAXXeJ (ORCPT
+        id S3420989AbiAYCZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:25:55 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48310 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350254AbiAXTYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:34:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112DDC07597B;
-        Mon, 24 Jan 2022 13:36:05 -0800 (PST)
+        Mon, 24 Jan 2022 14:24:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A51B061028;
-        Mon, 24 Jan 2022 21:36:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AB43C340E4;
-        Mon, 24 Jan 2022 21:36:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B69EB8122C;
+        Mon, 24 Jan 2022 19:24:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AE68C340E5;
+        Mon, 24 Jan 2022 19:24:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060164;
-        bh=A2EUI144kMYsLayEJBAsTA84cPoFnieVulthcDcdZcE=;
+        s=korg; t=1643052282;
+        bh=64djAcdFOZX9lox2mWpaTdgR3LKocNI2zq5giDpMUEs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CMNyH+U1Y1Iii6a0Cf4eJxXfhlY7TEJTLQjZVoVibRxmSF91hjny+zLCll5Lyz//b
-         biwAeXW79WDqE6daTtJcRK9zm/iQqIdNLWR5ib6dgdR+MI/A0Gs34NFPj8hrhlAnYc
-         jTYYZNfcgeobyVPdkSQrLdldHyU2vM+uY8VloFoA=
+        b=UO5PPYXD240o8DvYSFmBoqyqQu5ooV1RJcbUqlIdwEP18RueMhAIUUvIua5NGINfR
+         stUvh8EG9RYTY8EV2H4gaq9CSoWoNYzRCLqd1Y1qPuLzlenPsLqnh7MqszRm6+rRjV
+         ja9U4k+aTMqCS/WvbAUs7JpF9UwgvNWpy7/ldfHw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>
-Subject: [PATCH 5.16 0860/1039] drm/etnaviv: limit submit sizes
-Date:   Mon, 24 Jan 2022 19:44:09 +0100
-Message-Id: <20220124184154.205642921@linuxfoundation.org>
+        stable@vger.kernel.org, Julius Werner <jwerner@chromium.org>,
+        Ben Hutchings <ben@decadent.org.uk>
+Subject: [PATCH 4.19 212/239] firmware: Update Kconfig help text for Google firmware
+Date:   Mon, 24 Jan 2022 19:44:10 +0100
+Message-Id: <20220124183949.855915546@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,48 +45,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas Stach <l.stach@pengutronix.de>
+From: Ben Hutchings <ben@decadent.org.uk>
 
-commit 6dfa2fab8ddd46faa771a102672176bee7a065de upstream.
+commit d185a3466f0cd5af8f1c5c782c53bc0e6f2e7136 upstream.
 
-Currently we allow rediculous amounts of kernel memory being allocated
-via the etnaviv GEM_SUBMIT ioctl, which is a pretty easy DoS vector. Put
-some reasonable limits in to fix this.
+The help text for GOOGLE_FIRMWARE states that it should only be
+enabled when building a kernel for Google's own servers.  However,
+many of the drivers dependent on it are also useful on Chromebooks or
+on any platform using coreboot.
 
-The commandstream size is limited to 64KB, which was already a soft limit
-on older kernels after which the kernel only took submits on a best effort
-base, so there is no userspace that tries to submit commandstreams larger
-than this. Even if the whole commandstream is a single incrementing address
-load, the size limit also limits the number of potential relocs and
-referenced buffers to slightly under 64K, so use the same limit for those
-arguments. The performance monitoring infrastructure currently supports
-less than 50 performance counter signals, so limiting them to 128 on a
-single submit seems like a reasonably future-proof number for now. This
-number can be bumped if needed without breaking the interface.
+Update the help text to reflect this double duty.
 
-Cc: stable@vger.kernel.org
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-Reviewed-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+Fixes: d384d6f43d1e ("firmware: google memconsole: Add coreboot support")
+Reviewed-by: Julius Werner <jwerner@chromium.org>
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+Link: https://lore.kernel.org/r/20180618225540.GD14131@decadent.org.uk
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/firmware/google/Kconfig |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c
-@@ -469,6 +469,12 @@ int etnaviv_ioctl_gem_submit(struct drm_
- 		return -EINVAL;
- 	}
+--- a/drivers/firmware/google/Kconfig
++++ b/drivers/firmware/google/Kconfig
+@@ -2,9 +2,9 @@ menuconfig GOOGLE_FIRMWARE
+ 	bool "Google Firmware Drivers"
+ 	default n
+ 	help
+-	  These firmware drivers are used by Google's servers.  They are
+-	  only useful if you are working directly on one of their
+-	  proprietary servers.  If in doubt, say "N".
++	  These firmware drivers are used by Google servers,
++	  Chromebooks and other devices using coreboot firmware.
++	  If in doubt, say "N".
  
-+	if (args->stream_size > SZ_64K || args->nr_relocs > SZ_64K ||
-+	    args->nr_bos > SZ_64K || args->nr_pmrs > 128) {
-+		DRM_ERROR("submit arguments out of size limits\n");
-+		return -EINVAL;
-+	}
-+
- 	/*
- 	 * Copy the command submission and bo array to kernel space in
- 	 * one go, and do this outside of any locks.
+ if GOOGLE_FIRMWARE
+ 
 
 

@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EACDF498C24
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEEDD498B83
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348776AbiAXTTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:19:41 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36618 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345803AbiAXTLi (ORCPT
+        id S1346575AbiAXTOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:14:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346258AbiAXTFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:11:38 -0500
+        Mon, 24 Jan 2022 14:05:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A3AC0613EE;
+        Mon, 24 Jan 2022 11:00:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F8B9B81223;
-        Mon, 24 Jan 2022 19:11:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4118C340E5;
-        Mon, 24 Jan 2022 19:11:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2F02B81215;
+        Mon, 24 Jan 2022 19:00:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D190C340E5;
+        Mon, 24 Jan 2022 19:00:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051495;
-        bh=F4nmS/uUMjatDum9Kt6VZLEzJ7zD8NK6+V1mBofGU74=;
+        s=korg; t=1643050854;
+        bh=63F1nd3KDMNKL6yqbHKJOnOSr+qJ79dax9b58eVEicc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=03SXH7z4AZNwQJQWNH8Aht8n6GLKi+1LF4uFUWThkDBtJB4nAdiuVZDKlhBODUBrS
-         wMYBsUrem/0VcR0nxeBLoGOFGRbyVhicpf7MAe+UzIOrjPtT2cwYdVJjZWZrT4LndL
-         ZZQo8YIKujTErj7egpCqzolQ/fHZ1qTMESKw1aAQ=
+        b=ZHMtXeVsCfl75dzTfcZQZrmMf/E2OWQAOkk4kF5hyCjrt5j5eXglmVMlPwkeixusE
+         yItzN+va/m4zeUTZC9G5Cgu949oVWycR1HbcVoiGcdw8FdT3U1RxQkGF/sMiewjLAs
+         wucx52TYvyZenh4swkPjra11CbyYhIuVjQAy3dqU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Petr Cvachoucek <cvachoucek@gmail.com>,
-        Richard Weinberger <richard@nod.at>
-Subject: [PATCH 4.14 148/186] ubifs: Error path in ubifs_remount_rw() seems to wrongly free write buffers
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.9 133/157] af_unix: annote lockless accesses to unix_tot_inflight & gc_in_progress
 Date:   Mon, 24 Jan 2022 19:43:43 +0100
-Message-Id: <20220124183941.863688304@linuxfoundation.org>
+Message-Id: <20220124183936.998303024@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,105 +49,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Petr Cvachoucek <cvachoucek@gmail.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit 3fea4d9d160186617ff40490ae01f4f4f36b28ff upstream.
+commit 9d6d7f1cb67cdee15f1a0e85aacfb924e0e02435 upstream.
 
-it seems freeing the write buffers in the error path of the
-ubifs_remount_rw() is wrong. It leads later to a kernel oops like this:
+wait_for_unix_gc() reads unix_tot_inflight & gc_in_progress
+without synchronization.
 
-[10016.431274] UBIFS (ubi0:0): start fixing up free space
-[10090.810042] UBIFS (ubi0:0): free space fixup complete
-[10090.814623] UBIFS error (ubi0:0 pid 512): ubifs_remount_fs: cannot
-spawn "ubifs_bgt0_0", error -4
-[10101.915108] UBIFS (ubi0:0): background thread "ubifs_bgt0_0" started,
-PID 517
-[10105.275498] Unable to handle kernel NULL pointer dereference at
-virtual address 0000000000000030
-[10105.284352] Mem abort info:
-[10105.287160]   ESR = 0x96000006
-[10105.290252]   EC = 0x25: DABT (current EL), IL = 32 bits
-[10105.295592]   SET = 0, FnV = 0
-[10105.298652]   EA = 0, S1PTW = 0
-[10105.301848] Data abort info:
-[10105.304723]   ISV = 0, ISS = 0x00000006
-[10105.308573]   CM = 0, WnR = 0
-[10105.311564] user pgtable: 4k pages, 48-bit VAs, pgdp=00000000f03d1000
-[10105.318034] [0000000000000030] pgd=00000000f6cee003,
-pud=00000000f4884003, pmd=0000000000000000
-[10105.326783] Internal error: Oops: 96000006 [#1] PREEMPT SMP
-[10105.332355] Modules linked in: ath10k_pci ath10k_core ath mac80211
-libarc4 cfg80211 nvme nvme_core cryptodev(O)
-[10105.342468] CPU: 3 PID: 518 Comm: touch Tainted: G           O
-5.4.3 #1
-[10105.349517] Hardware name: HYPEX CPU (DT)
-[10105.353525] pstate: 40000005 (nZcv daif -PAN -UAO)
-[10105.358324] pc : atomic64_try_cmpxchg_acquire.constprop.22+0x8/0x34
-[10105.364596] lr : mutex_lock+0x1c/0x34
-[10105.368253] sp : ffff000075633aa0
-[10105.371563] x29: ffff000075633aa0 x28: 0000000000000001
-[10105.376874] x27: ffff000076fa80c8 x26: 0000000000000004
-[10105.382185] x25: 0000000000000030 x24: 0000000000000000
-[10105.387495] x23: 0000000000000000 x22: 0000000000000038
-[10105.392807] x21: 000000000000000c x20: ffff000076fa80c8
-[10105.398119] x19: ffff000076fa8000 x18: 0000000000000000
-[10105.403429] x17: 0000000000000000 x16: 0000000000000000
-[10105.408741] x15: 0000000000000000 x14: fefefefefefefeff
-[10105.414052] x13: 0000000000000000 x12: 0000000000000fe0
-[10105.419364] x11: 0000000000000fe0 x10: ffff000076709020
-[10105.424675] x9 : 0000000000000000 x8 : 00000000000000a0
-[10105.429986] x7 : ffff000076fa80f4 x6 : 0000000000000030
-[10105.435297] x5 : 0000000000000000 x4 : 0000000000000000
-[10105.440609] x3 : 0000000000000000 x2 : ffff00006f276040
-[10105.445920] x1 : ffff000075633ab8 x0 : 0000000000000030
-[10105.451232] Call trace:
-[10105.453676]  atomic64_try_cmpxchg_acquire.constprop.22+0x8/0x34
-[10105.459600]  ubifs_garbage_collect+0xb4/0x334
-[10105.463956]  ubifs_budget_space+0x398/0x458
-[10105.468139]  ubifs_create+0x50/0x180
-[10105.471712]  path_openat+0x6a0/0x9b0
-[10105.475284]  do_filp_open+0x34/0x7c
-[10105.478771]  do_sys_open+0x78/0xe4
-[10105.482170]  __arm64_sys_openat+0x1c/0x24
-[10105.486180]  el0_svc_handler+0x84/0xc8
-[10105.489928]  el0_svc+0x8/0xc
-[10105.492808] Code: 52800013 17fffffb d2800003 f9800011 (c85ffc05)
-[10105.498903] ---[ end trace 46b721d93267a586 ]---
+Adds READ_ONCE()/WRITE_ONCE() and their associated comments
+to better document the intent.
 
-To reproduce the problem:
+BUG: KCSAN: data-race in unix_inflight / wait_for_unix_gc
 
-1. Filesystem initially mounted read-only, free space fixup flag set.
+write to 0xffffffff86e2b7c0 of 4 bytes by task 9380 on cpu 0:
+ unix_inflight+0x1e8/0x260 net/unix/scm.c:63
+ unix_attach_fds+0x10c/0x1e0 net/unix/scm.c:121
+ unix_scm_to_skb net/unix/af_unix.c:1674 [inline]
+ unix_dgram_sendmsg+0x679/0x16b0 net/unix/af_unix.c:1817
+ unix_seqpacket_sendmsg+0xcc/0x110 net/unix/af_unix.c:2258
+ sock_sendmsg_nosec net/socket.c:704 [inline]
+ sock_sendmsg net/socket.c:724 [inline]
+ ____sys_sendmsg+0x39a/0x510 net/socket.c:2409
+ ___sys_sendmsg net/socket.c:2463 [inline]
+ __sys_sendmmsg+0x267/0x4c0 net/socket.c:2549
+ __do_sys_sendmmsg net/socket.c:2578 [inline]
+ __se_sys_sendmmsg net/socket.c:2575 [inline]
+ __x64_sys_sendmmsg+0x53/0x60 net/socket.c:2575
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-2. mount -o remount,rw <mountpoint>
+read to 0xffffffff86e2b7c0 of 4 bytes by task 9375 on cpu 1:
+ wait_for_unix_gc+0x24/0x160 net/unix/garbage.c:196
+ unix_dgram_sendmsg+0x8e/0x16b0 net/unix/af_unix.c:1772
+ unix_seqpacket_sendmsg+0xcc/0x110 net/unix/af_unix.c:2258
+ sock_sendmsg_nosec net/socket.c:704 [inline]
+ sock_sendmsg net/socket.c:724 [inline]
+ ____sys_sendmsg+0x39a/0x510 net/socket.c:2409
+ ___sys_sendmsg net/socket.c:2463 [inline]
+ __sys_sendmmsg+0x267/0x4c0 net/socket.c:2549
+ __do_sys_sendmmsg net/socket.c:2578 [inline]
+ __se_sys_sendmmsg net/socket.c:2575 [inline]
+ __x64_sys_sendmmsg+0x53/0x60 net/socket.c:2575
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-3. it takes some time (free space fixup running)
-    ... try to terminate running mount by CTRL-C
-    ... does not respond, only after free space fixup is complete
-    ... then "ubifs_remount_fs: cannot spawn "ubifs_bgt0_0", error -4"
+value changed: 0x00000002 -> 0x00000004
 
-4. mount -o remount,rw <mountpoint>
-    ... now finished instantly (fixup already done).
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 1 PID: 9375 Comm: syz-executor.1 Not tainted 5.16.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
 
-5. Create file or just unmount the filesystem and we get the oops.
-
-Cc: <stable@vger.kernel.org>
-Fixes: b50b9f408502 ("UBIFS: do not free write-buffers when in R/O mode")
-Signed-off-by: Petr Cvachoucek <cvachoucek@gmail.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Fixes: 9915672d4127 ("af_unix: limit unix_tot_inflight")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Link: https://lore.kernel.org/r/20220114164328.2038499-1-eric.dumazet@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ubifs/super.c |    1 -
- 1 file changed, 1 deletion(-)
+ net/unix/garbage.c |   14 +++++++++++---
+ net/unix/scm.c     |    6 ++++--
+ 2 files changed, 15 insertions(+), 5 deletions(-)
 
---- a/fs/ubifs/super.c
-+++ b/fs/ubifs/super.c
-@@ -1706,7 +1706,6 @@ out:
- 		kthread_stop(c->bgt);
- 		c->bgt = NULL;
+--- a/net/unix/garbage.c
++++ b/net/unix/garbage.c
+@@ -197,8 +197,11 @@ void wait_for_unix_gc(void)
+ {
+ 	/* If number of inflight sockets is insane,
+ 	 * force a garbage collect right now.
++	 * Paired with the WRITE_ONCE() in unix_inflight(),
++	 * unix_notinflight() and gc_in_progress().
+ 	 */
+-	if (unix_tot_inflight > UNIX_INFLIGHT_TRIGGER_GC && !gc_in_progress)
++	if (READ_ONCE(unix_tot_inflight) > UNIX_INFLIGHT_TRIGGER_GC &&
++	    !READ_ONCE(gc_in_progress))
+ 		unix_gc();
+ 	wait_event(unix_gc_wait, gc_in_progress == false);
+ }
+@@ -218,7 +221,9 @@ void unix_gc(void)
+ 	if (gc_in_progress)
+ 		goto out;
+ 
+-	gc_in_progress = true;
++	/* Paired with READ_ONCE() in wait_for_unix_gc(). */
++	WRITE_ONCE(gc_in_progress, true);
++
+ 	/* First, select candidates for garbage collection.  Only
+ 	 * in-flight sockets are considered, and from those only ones
+ 	 * which don't have any external reference.
+@@ -304,7 +309,10 @@ void unix_gc(void)
+ 
+ 	/* All candidates should have been detached by now. */
+ 	BUG_ON(!list_empty(&gc_candidates));
+-	gc_in_progress = false;
++
++	/* Paired with READ_ONCE() in wait_for_unix_gc(). */
++	WRITE_ONCE(gc_in_progress, false);
++
+ 	wake_up(&unix_gc_wait);
+ 
+  out:
+--- a/net/unix/scm.c
++++ b/net/unix/scm.c
+@@ -56,7 +56,8 @@ void unix_inflight(struct user_struct *u
+ 		} else {
+ 			BUG_ON(list_empty(&u->link));
+ 		}
+-		unix_tot_inflight++;
++		/* Paired with READ_ONCE() in wait_for_unix_gc() */
++		WRITE_ONCE(unix_tot_inflight, unix_tot_inflight + 1);
  	}
--	free_wbufs(c);
- 	kfree(c->write_reserve_buf);
- 	c->write_reserve_buf = NULL;
- 	vfree(c->ileb_buf);
+ 	user->unix_inflight++;
+ 	spin_unlock(&unix_gc_lock);
+@@ -76,7 +77,8 @@ void unix_notinflight(struct user_struct
+ 
+ 		if (atomic_long_dec_and_test(&u->inflight))
+ 			list_del_init(&u->link);
+-		unix_tot_inflight--;
++		/* Paired with READ_ONCE() in wait_for_unix_gc() */
++		WRITE_ONCE(unix_tot_inflight, unix_tot_inflight - 1);
+ 	}
+ 	user->unix_inflight--;
+ 	spin_unlock(&unix_gc_lock);
 
 

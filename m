@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB1E498B9A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C46A4993D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348472AbiAXTP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:15:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35184 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344418AbiAXTHP (ORCPT
+        id S1387764AbiAXUhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:37:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379647AbiAXUME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:07:15 -0500
+        Mon, 24 Jan 2022 15:12:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9651BC028C1F;
+        Mon, 24 Jan 2022 11:33:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 659ADB81215;
-        Mon, 24 Jan 2022 19:07:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70CD9C340E5;
-        Mon, 24 Jan 2022 19:07:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3823861488;
+        Mon, 24 Jan 2022 19:33:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F419CC340E5;
+        Mon, 24 Jan 2022 19:33:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051232;
-        bh=yraV5qbWzPsH0cRFfYvfm/iPTOmgkyD17b1bI7AU2sA=;
+        s=korg; t=1643052829;
+        bh=qGh2KMC0KjqVZsHyFocmreJrZNAvnD7Xei2FC+o7QDQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0m48NBH3QWa9NlpM7tspa7+YibwiYC2TyYnjCnlLa1T4Rhf1e241xp6BtLlTuOXCt
-         cIQsGOaTm08rANVO4MLszlWRQy/KtdehYw109VB8bSZ0lo0iZeSDTi6M3NPbQ2qwOT
-         9hKur6TgHlRt24zP403adaDcSzkMVfZbvgcMzhHQ=
+        b=G5/5TNIr+5uLd/tpBbBmTiPx9WxVfrpgSEDXCB6A4FpCzF5D1B4nTbUqT3qVLN8xx
+         kqPx/kpW/55VA9nZDEU/bromFlscHu11MW0Adae6qdW3UEmlelUv4aNkl+gKD+wyi3
+         CaR1MmTqQsl4LFvzOfLAMJMrL6s9LicMl0NWZLi0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        stable@vger.kernel.org, Suresh Kumar <suresh2514@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 096/186] gpiolib: acpi: Do not set the IRQ type if the IRQ is already in use
+Subject: [PATCH 5.4 187/320] net: bonding: debug: avoid printing debug logs when bond is not notifying peers
 Date:   Mon, 24 Jan 2022 19:42:51 +0100
-Message-Id: <20220124183940.207954644@linuxfoundation.org>
+Message-Id: <20220124184000.012353590@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,59 +49,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Suresh Kumar <surkumar@redhat.com>
 
-[ Upstream commit bdfd6ab8fdccd8b138837efff66f4a1911496378 ]
+[ Upstream commit fee32de284ac277ba434a2d59f8ce46528ff3946 ]
 
-If the IRQ is already in use, then acpi_dev_gpio_irq_get_by() really
-should not change the type underneath the current owner.
+Currently "bond_should_notify_peers: slave ..." messages are printed whenever
+"bond_should_notify_peers" function is called.
 
-I specifically hit an issue with this an a Chuwi Hi8 Super (CWI509) Bay
-Trail tablet, when the Boot OS selection in the BIOS is set to Android.
-In this case _STA for a MAX17047 ACPI I2C device wrongly returns 0xf and
-the _CRS resources for this device include a GpioInt pointing to a GPIO
-already in use by an _AEI handler, with a different type then specified
-in the _CRS for the MAX17047 device. Leading to the acpi_dev_gpio_irq_get()
-call done by the i2c-core-acpi.c code changing the type breaking the
-_AEI handler.
++++
+Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+Dec 12 12:33:26 node1 kernel: bond0: (slave enp0s25): Received LACPDU on port 1
+Dec 12 12:33:26 node1 kernel: bond0: (slave enp0s25): Rx Machine: Port=1, Last State=6, Curr State=6
+Dec 12 12:33:26 node1 kernel: bond0: (slave enp0s25): partner sync=1
+Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+...
+Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+Dec 12 12:33:30 node1 kernel: bond0: (slave enp4s3): Received LACPDU on port 2
+Dec 12 12:33:30 node1 kernel: bond0: (slave enp4s3): Rx Machine: Port=2, Last State=6, Curr State=6
+Dec 12 12:33:30 node1 kernel: bond0: (slave enp4s3): partner sync=1
+Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
++++
 
-Now this clearly is a bug in the DSDT of this tablet (in Android mode),
-but in general calling irq_set_irq_type() on an IRQ which already is
-in use seems like a bad idea.
+This is confusing and can also clutter up debug logs.
+Print logs only when the peer notification happens.
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Suresh Kumar <suresh2514@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpio/gpiolib-acpi.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ drivers/net/bonding/bond_main.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
-index c380ce957d8da..60e394da97098 100644
---- a/drivers/gpio/gpiolib-acpi.c
-+++ b/drivers/gpio/gpiolib-acpi.c
-@@ -943,10 +943,17 @@ int acpi_dev_gpio_irq_get(struct acpi_device *adev, int index)
- 			irq_flags = acpi_dev_get_irq_type(info.triggering,
- 							  info.polarity);
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index a7eaf80f500c0..ff50ccc7dceb1 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -792,9 +792,6 @@ static bool bond_should_notify_peers(struct bonding *bond)
+ 	slave = rcu_dereference(bond->curr_active_slave);
+ 	rcu_read_unlock();
  
--			/* Set type if specified and different than the current one */
--			if (irq_flags != IRQ_TYPE_NONE &&
--			    irq_flags != irq_get_trigger_type(irq))
--				irq_set_irq_type(irq, irq_flags);
-+			/*
-+			 * If the IRQ is not already in use then set type
-+			 * if specified and different than the current one.
-+			 */
-+			if (can_request_irq(irq, irq_flags)) {
-+				if (irq_flags != IRQ_TYPE_NONE &&
-+				    irq_flags != irq_get_trigger_type(irq))
-+					irq_set_irq_type(irq, irq_flags);
-+			} else {
-+				dev_dbg(&adev->dev, "IRQ %d already in use\n", irq);
-+			}
+-	netdev_dbg(bond->dev, "bond_should_notify_peers: slave %s\n",
+-		   slave ? slave->dev->name : "NULL");
+-
+ 	if (!slave || !bond->send_peer_notif ||
+ 	    bond->send_peer_notif %
+ 	    max(1, bond->params.peer_notif_delay) != 0 ||
+@@ -802,6 +799,9 @@ static bool bond_should_notify_peers(struct bonding *bond)
+ 	    test_bit(__LINK_STATE_LINKWATCH_PENDING, &slave->dev->state))
+ 		return false;
  
- 			return irq;
- 		}
++	netdev_dbg(bond->dev, "bond_should_notify_peers: slave %s\n",
++		   slave ? slave->dev->name : "NULL");
++
+ 	return true;
+ }
+ 
 -- 
 2.34.1
 

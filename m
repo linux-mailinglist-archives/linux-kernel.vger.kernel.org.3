@@ -2,169 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF04497BF7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A846C497BF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:28:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233752AbiAXJ3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 04:29:04 -0500
-Received: from mga01.intel.com ([192.55.52.88]:33652 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233202AbiAXJ3C (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 04:29:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643016542; x=1674552542;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qiYa68DZset/+GHU23v7gsmy5RVOLlEdSLnfR9RS/NA=;
-  b=A7BCxH+tfAQN3t9uIKjNUJu64qt97wZ11c8GholSXLT5pUP0w1RepbxX
-   2cUcuPNPGtAJCYgU+D9Wn+3Dyh+4fpQ8fdmdl9MYqlG6Xy/5JqcSY+eHL
-   c1jpb2K6bT+LMAgenqyufSHToBLyjEz0EVEo/DU1xxcXkh0Yh21t7tDOr
-   rUxuKNJzRYijHIFkPF1xCI5xR5H05fARp+VnqykUvVUWYV1CQRPFFKIYl
-   RlBxDiLtYsCJyISkLQ0pc3kjUGtgwmULteava/8h+v/2bevLePED9ZVso
-   mA8MIoVgn3YvZ3CqsZup8jVH1gGK5fCbuZnuwazmpn9yJrEOgm0gkKCpO
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="270439681"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="270439681"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 01:28:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="476657671"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 24 Jan 2022 01:28:26 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nBveE-000I6R-5k; Mon, 24 Jan 2022 09:28:26 +0000
-Date:   Mon, 24 Jan 2022 17:27:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     NeilBrown <neilb@suse.de>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/23] MM: submit multipage reads for SWP_FS_OPS
- swap-space
-Message-ID: <202201241747.X9gXaaeP-lkp@intel.com>
-References: <164299611278.26253.14950274629759580371.stgit@noble.brown>
+        id S233738AbiAXJ2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 04:28:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:36982 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233202AbiAXJ2e (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 04:28:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643016513;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PU7JbFuDwdFKk/VjKzygUczh9Zjw5LHX5d/gO46ICZ4=;
+        b=IUEkFkL/yErZDKKqXP/gtz/Ayn6Y58BH0XSEsnqY7NPbZmxNZTWU7hjVNC46IWogPGS8RF
+        0jjBjcQp5LerJCGMSnNJdq52Znmo9jxxfpsdglPzaTJbkWbD+WrMRZ9Gtticj3OnwTrW2V
+        tzhbv0OWYhuDFCCIts6Ozn7wGnC4EM4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-664-h86HWp00MZiTOBQxiU5KBw-1; Mon, 24 Jan 2022 04:28:29 -0500
+X-MC-Unique: h86HWp00MZiTOBQxiU5KBw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6CE8B5108D;
+        Mon, 24 Jan 2022 09:28:27 +0000 (UTC)
+Received: from localhost (unknown [10.43.135.229])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C25C770D52;
+        Mon, 24 Jan 2022 09:28:24 +0000 (UTC)
+Date:   Mon, 24 Jan 2022 10:28:23 +0100
+From:   Miroslav Lichvar <mlichvar@redhat.com>
+To:     Richard Cochran <richardcochran@gmail.com>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Russell King <linux@arm.linux.org.uk>
+Subject: Re: [PATCH RFC V1 net-next 3/4] net: Let the active time stamping
+ layer be selectable.
+Message-ID: <Ye5xN6sQvsfX1lmn@localhost>
+References: <20220103232555.19791-4-richardcochran@gmail.com>
+ <20220120164832.xdebp5vykib6h6dp@skbuf>
+ <Yeoqof1onvrcWGNp@lunn.ch>
+ <20220121040508.GA7588@hoboy.vegasvil.org>
+ <20220121145035.z4yv2qsub5mr7ljs@skbuf>
+ <20220121152820.GA15600@hoboy.vegasvil.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <164299611278.26253.14950274629759580371.stgit@noble.brown>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220121152820.GA15600@hoboy.vegasvil.org>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi NeilBrown,
+On Fri, Jan 21, 2022 at 07:28:20AM -0800, Richard Cochran wrote:
+> On Fri, Jan 21, 2022 at 02:50:36PM +0000, Vladimir Oltean wrote:
+> > So as I mentioned earlier, the use case would be hardware performance
+> > testing and diagnosing. You may consider that as not that important, but
+> > this is basically what I had to do for several months, and even wrote
+> > a program for that, that collects packet timestamps at all possible points.
+> 
+> This is not possible without making a brand new CMSG to accommodate
+> time stamps from all the various layers.
 
-Thank you for the patch! Yet something to improve:
+FWIW, scm_timestamping has three fields and the middle one no longer
+seems to be used. If a new socket/timestamping option enabled all
+three (SW, MAC, PHY) timestamps in the cmsg, I think that would be a
+nice feature.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.17-rc1 next-20220124]
-[cannot apply to trondmy-nfs/linux-next cifs/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+There are applications that receive both SW and HW timestamps in order
+to fall back to SW when a HW timestamp glitched or is missing. This
+could be extended to three levels with MAC and PHY timestamps.
 
-url:    https://github.com/0day-ci/linux/commits/NeilBrown/Repair-SWAP-over_NFS/20220124-115716
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
-config: i386-randconfig-a011-20220124 (https://download.01.org/0day-ci/archive/20220124/202201241747.X9gXaaeP-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 9006bf424847bf91f0a624ffc27ad165c7b804c4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/63bff668aa0537d7ccef9ed428809fc16c1a6b6c
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review NeilBrown/Repair-SWAP-over_NFS/20220124-115716
-        git checkout 63bff668aa0537d7ccef9ed428809fc16c1a6b6c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+> That is completely out of scope for this series.
+> 
+> The only practical use case of this series is to switch from PHY back to MAC.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+From an admin point of view, it makes sense to me to have an option to
+disable PHY timestamps for the whole device if there are issues with
+it. For debugging and applications, it would be nice to have an option
+to get all of them at the same time.
 
-All errors (new ones prefixed by >>):
+-- 
+Miroslav Lichvar
 
-   In file included from mm/vmscan.c:61:
-   mm/swap.h:66:12: warning: declaration of 'struct swap_iocb' will not be visible outside of this function [-Wvisibility]
-                                   struct swap_iocb **plug);
-                                          ^
->> mm/swap.h:67:1: error: expected identifier or '('
-   {
-   ^
-   1 warning and 1 error generated.
---
-   In file included from mm/shmem.c:41:
-   mm/swap.h:66:12: warning: declaration of 'struct swap_iocb' will not be visible outside of this function [-Wvisibility]
-                                   struct swap_iocb **plug);
-                                          ^
->> mm/swap.h:67:1: error: expected identifier or '('
-   {
-   ^
-   In file included from mm/shmem.c:56:
-   include/linux/mman.h:158:9: warning: division by zero is undefined [-Wdivision-by-zero]
-                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
-      : ((x) & (bit1)) / ((bit1) / (bit2))))
-                       ^ ~~~~~~~~~~~~~~~~~
-   2 warnings and 1 error generated.
---
-   In file included from mm/page_alloc.c:84:
-   mm/swap.h:66:12: warning: declaration of 'struct swap_iocb' will not be visible outside of this function [-Wvisibility]
-                                   struct swap_iocb **plug);
-                                          ^
->> mm/swap.h:67:1: error: expected identifier or '('
-   {
-   ^
-   mm/page_alloc.c:3821:15: warning: no previous prototype for function 'should_fail_alloc_page' [-Wmissing-prototypes]
-   noinline bool should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
-                 ^
-   mm/page_alloc.c:3821:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   noinline bool should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
-            ^
-            static 
-   2 warnings and 1 error generated.
-
-
-vim +67 mm/swap.h
-
-50dceef273a619 NeilBrown 2022-01-24  45  
-50dceef273a619 NeilBrown 2022-01-24  46  struct page *read_swap_cache_async(swp_entry_t, gfp_t,
-50dceef273a619 NeilBrown 2022-01-24  47  				   struct vm_area_struct *vma,
-50dceef273a619 NeilBrown 2022-01-24  48  				   unsigned long addr,
-63bff668aa0537 NeilBrown 2022-01-24  49  				   bool do_poll,
-63bff668aa0537 NeilBrown 2022-01-24  50  				   struct swap_iocb **plug);
-50dceef273a619 NeilBrown 2022-01-24  51  struct page *__read_swap_cache_async(swp_entry_t, gfp_t,
-50dceef273a619 NeilBrown 2022-01-24  52  				     struct vm_area_struct *vma,
-50dceef273a619 NeilBrown 2022-01-24  53  				     unsigned long addr,
-50dceef273a619 NeilBrown 2022-01-24  54  				     bool *new_page_allocated);
-50dceef273a619 NeilBrown 2022-01-24  55  struct page *swap_cluster_readahead(swp_entry_t entry, gfp_t flag,
-50dceef273a619 NeilBrown 2022-01-24  56  				    struct vm_fault *vmf);
-50dceef273a619 NeilBrown 2022-01-24  57  struct page *swapin_readahead(swp_entry_t entry, gfp_t flag,
-50dceef273a619 NeilBrown 2022-01-24  58  			      struct vm_fault *vmf);
-50dceef273a619 NeilBrown 2022-01-24  59  
-12cf545fe71035 NeilBrown 2022-01-24  60  static inline unsigned int page_swap_flags(struct page *page)
-12cf545fe71035 NeilBrown 2022-01-24  61  {
-12cf545fe71035 NeilBrown 2022-01-24  62  	return page_swap_info(page)->flags;
-12cf545fe71035 NeilBrown 2022-01-24  63  }
-50dceef273a619 NeilBrown 2022-01-24  64  #else /* CONFIG_SWAP */
-63bff668aa0537 NeilBrown 2022-01-24  65  static inline int swap_readpage(struct page *page, bool do_poll,
-63bff668aa0537 NeilBrown 2022-01-24 @66  				struct swap_iocb **plug);
-50dceef273a619 NeilBrown 2022-01-24 @67  {
-50dceef273a619 NeilBrown 2022-01-24  68  	return 0;
-50dceef273a619 NeilBrown 2022-01-24  69  }
-50dceef273a619 NeilBrown 2022-01-24  70  
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

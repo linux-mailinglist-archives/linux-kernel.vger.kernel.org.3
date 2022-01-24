@@ -2,46 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7074949A0E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2B9499E02
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1848599AbiAXXWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:22:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1587835AbiAXW3r (ORCPT
+        id S1587236AbiAXW17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:27:59 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53228 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1454827AbiAXVdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:29:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4057FC06175C;
-        Mon, 24 Jan 2022 11:35:27 -0800 (PST)
+        Mon, 24 Jan 2022 16:33:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6439614FC;
-        Mon, 24 Jan 2022 19:35:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 860EBC340E5;
-        Mon, 24 Jan 2022 19:35:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4277B614D9;
+        Mon, 24 Jan 2022 21:33:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 169A9C340E4;
+        Mon, 24 Jan 2022 21:33:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052926;
-        bh=TXPLGBjX08lx8iCQganWvEMrURi0yL0ybuyo+NimSgg=;
+        s=korg; t=1643060029;
+        bh=V51i5NSzuvI4kZFN8M+AscwhplgJFBRBDz7wg7aMuqc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0MLekpsrmir8t2NNXkyDO9ewW+WhcqZt1IW6opIsuSf6WPWh6DNsXpHAkHd+rClKi
-         2KMxBAgDEN2AlW1w5BTHWpunCuMyeg8EeAPuNHMnFRlZg2Ts+gzJrSMssooIYj1/HA
-         axr8uxClK6TZ+2ELj4eD6Dn3+a3aWYGGaAA099d4=
+        b=sR09uEvQimogDHClWp0xGuX5xV4nh+J9S4T8mAsPbXp/Xflbr5dvxOqNJtJ2G4qm1
+         7tXmfCEZdKWnM35OfiRI73TnAdJvcfJrnaVRtYDqlmCaQTQl8tGeM6qjW8B8qWDLSB
+         XbMTUGZ3xpQuaDjVRFc2R1LPxmapmtfAD7s51h/8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 219/320] regulator: qcom_smd: Align probe function with rpmh-regulator
-Date:   Mon, 24 Jan 2022 19:43:23 +0100
-Message-Id: <20220124184001.100691766@linuxfoundation.org>
+Subject: [PATCH 5.16 0815/1039] SUNRPC: Fix sockaddr handling in the svc_xprt_create_error trace point
+Date:   Mon, 24 Jan 2022 19:43:24 +0100
+Message-Id: <20220124184152.700408346@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,168 +45,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Konrad Dybcio <konrad.dybcio@somainline.org>
+From: Chuck Lever <chuck.lever@oracle.com>
 
-[ Upstream commit 14e2976fbabdacb01335d7f91eeebbc89c67ddb1 ]
+[ Upstream commit dc6c6fb3d639756a532bcc47d4a9bf9f3965881b ]
 
-The RPMh regulator driver is much newer and gets more attention, which in
-consequence makes it do a few things better. Update qcom_smd-regulator's
-probe function to mimic what rpmh-regulator does to address a couple of
-issues:
+While testing, I got an unexpected KASAN splat:
 
-- Probe defer now works correctly, before it used to, well,
-  kinda just die.. This fixes reliable probing on (at least) PM8994,
-  because Linux apparently cannot deal with supply map dependencies yet..
+Jan 08 13:50:27 oracle-102.nfsv4.dev kernel: BUG: KASAN: stack-out-of-bounds in trace_event_raw_event_svc_xprt_create_err+0x190/0x210 [sunrpc]
+Jan 08 13:50:27 oracle-102.nfsv4.dev kernel: Read of size 28 at addr ffffc9000008f728 by task mount.nfs/4628
 
-- Regulator data is now matched more sanely: regulator data is matched
-  against each individual regulator node name and throwing an -EINVAL if
-  data is missing, instead of just assuming everything is fine and
-  iterating over all subsequent array members.
+The memcpy() in the TP_fast_assign section of this trace point
+copies the size of the destination buffer in order that the buffer
+won't be overrun.
 
-- status = "disabled" will now work for disabling individual regulators in
-  DT. Previously it didn't seem to do much if anything at all.
+In other similar trace points, the source buffer for this memcpy is
+a "struct sockaddr_storage" so the actual length of the source
+buffer is always long enough to prevent the memcpy from reading
+uninitialized or unallocated memory.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Link: https://lore.kernel.org/r/20211230023442.1123424-1-konrad.dybcio@somainline.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+However, for this trace point, the source buffer can be as small as
+a "struct sockaddr_in". For AF_INET sockaddrs, the memcpy() reads
+memory that follows the source buffer, which is not always valid
+memory.
+
+To avoid copying past the end of the passed-in sockaddr, make the
+source address's length available to the memcpy(). It would be a
+little nicer if the tracing infrastructure was more friendly about
+storing socket addresses that are not AF_INET, but I could not find
+a way to make printk("%pIS") work with a dynamic array.
+
+Reported-by: KASAN
+Fixes: 4b8f380e46e4 ("SUNRPC: Tracepoint to record errors in svc_xpo_create()")
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/regulator/qcom_smd-regulator.c | 100 +++++++++++++++++--------
- 1 file changed, 70 insertions(+), 30 deletions(-)
+ include/trace/events/sunrpc.h | 5 +++--
+ net/sunrpc/svc_xprt.c         | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/regulator/qcom_smd-regulator.c b/drivers/regulator/qcom_smd-regulator.c
-index 3b0828c79e2b5..e6601c28ab431 100644
---- a/drivers/regulator/qcom_smd-regulator.c
-+++ b/drivers/regulator/qcom_smd-regulator.c
-@@ -9,6 +9,7 @@
- #include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/regulator/driver.h>
-+#include <linux/regulator/of_regulator.h>
- #include <linux/soc/qcom/smd-rpm.h>
+diff --git a/include/trace/events/sunrpc.h b/include/trace/events/sunrpc.h
+index 3a99358c262b4..52288f1c1b52d 100644
+--- a/include/trace/events/sunrpc.h
++++ b/include/trace/events/sunrpc.h
+@@ -1744,10 +1744,11 @@ TRACE_EVENT(svc_xprt_create_err,
+ 		const char *program,
+ 		const char *protocol,
+ 		struct sockaddr *sap,
++		size_t salen,
+ 		const struct svc_xprt *xprt
+ 	),
  
- struct qcom_rpm_reg {
-@@ -776,52 +777,91 @@ static const struct of_device_id rpm_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, rpm_of_match);
+-	TP_ARGS(program, protocol, sap, xprt),
++	TP_ARGS(program, protocol, sap, salen, xprt),
  
--static int rpm_reg_probe(struct platform_device *pdev)
-+/**
-+ * rpm_regulator_init_vreg() - initialize all attributes of a qcom_smd-regulator
-+ * @vreg:		Pointer to the individual qcom_smd-regulator resource
-+ * @dev:		Pointer to the top level qcom_smd-regulator PMIC device
-+ * @node:		Pointer to the individual qcom_smd-regulator resource
-+ *			device node
-+ * @rpm:		Pointer to the rpm bus node
-+ * @pmic_rpm_data:	Pointer to a null-terminated array of qcom_smd-regulator
-+ *			resources defined for the top level PMIC device
-+ *
-+ * Return: 0 on success, errno on failure
-+ */
-+static int rpm_regulator_init_vreg(struct qcom_rpm_reg *vreg, struct device *dev,
-+				   struct device_node *node, struct qcom_smd_rpm *rpm,
-+				   const struct rpm_regulator_data *pmic_rpm_data)
- {
--	const struct rpm_regulator_data *reg;
--	const struct of_device_id *match;
--	struct regulator_config config = { };
-+	struct regulator_config config = {};
-+	const struct rpm_regulator_data *rpm_data;
- 	struct regulator_dev *rdev;
-+	int ret;
-+
-+	for (rpm_data = pmic_rpm_data; rpm_data->name; rpm_data++)
-+		if (of_node_name_eq(node, rpm_data->name))
-+			break;
-+
-+	if (!rpm_data->name) {
-+		dev_err(dev, "Unknown regulator %pOFn\n", node);
-+		return -EINVAL;
-+	}
-+
-+	vreg->dev	= dev;
-+	vreg->rpm	= rpm;
-+	vreg->type	= rpm_data->type;
-+	vreg->id	= rpm_data->id;
-+
-+	memcpy(&vreg->desc, rpm_data->desc, sizeof(vreg->desc));
-+	vreg->desc.name = rpm_data->name;
-+	vreg->desc.supply_name = rpm_data->supply;
-+	vreg->desc.owner = THIS_MODULE;
-+	vreg->desc.type = REGULATOR_VOLTAGE;
-+	vreg->desc.of_match = rpm_data->name;
-+
-+	config.dev		= dev;
-+	config.of_node		= node;
-+	config.driver_data	= vreg;
-+
-+	rdev = devm_regulator_register(dev, &vreg->desc, &config);
-+	if (IS_ERR(rdev)) {
-+		ret = PTR_ERR(rdev);
-+		dev_err(dev, "%pOFn: devm_regulator_register() failed, ret=%d\n", node, ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int rpm_reg_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	const struct rpm_regulator_data *vreg_data;
-+	struct device_node *node;
- 	struct qcom_rpm_reg *vreg;
- 	struct qcom_smd_rpm *rpm;
-+	int ret;
+ 	TP_STRUCT__entry(
+ 		__field(long, error)
+@@ -1760,7 +1761,7 @@ TRACE_EVENT(svc_xprt_create_err,
+ 		__entry->error = PTR_ERR(xprt);
+ 		__assign_str(program, program);
+ 		__assign_str(protocol, protocol);
+-		memcpy(__entry->addr, sap, sizeof(__entry->addr));
++		memcpy(__entry->addr, sap, min(salen, sizeof(__entry->addr)));
+ 	),
  
- 	rpm = dev_get_drvdata(pdev->dev.parent);
- 	if (!rpm) {
--		dev_err(&pdev->dev, "unable to retrieve handle to rpm\n");
-+		dev_err(&pdev->dev, "Unable to retrieve handle to rpm\n");
- 		return -ENODEV;
- 	}
- 
--	match = of_match_device(rpm_of_match, &pdev->dev);
--	if (!match) {
--		dev_err(&pdev->dev, "failed to match device\n");
-+	vreg_data = of_device_get_match_data(dev);
-+	if (!vreg_data)
- 		return -ENODEV;
--	}
- 
--	for (reg = match->data; reg->name; reg++) {
-+	for_each_available_child_of_node(dev->of_node, node) {
- 		vreg = devm_kzalloc(&pdev->dev, sizeof(*vreg), GFP_KERNEL);
- 		if (!vreg)
- 			return -ENOMEM;
- 
--		vreg->dev = &pdev->dev;
--		vreg->type = reg->type;
--		vreg->id = reg->id;
--		vreg->rpm = rpm;
--
--		memcpy(&vreg->desc, reg->desc, sizeof(vreg->desc));
--
--		vreg->desc.id = -1;
--		vreg->desc.owner = THIS_MODULE;
--		vreg->desc.type = REGULATOR_VOLTAGE;
--		vreg->desc.name = reg->name;
--		vreg->desc.supply_name = reg->supply;
--		vreg->desc.of_match = reg->name;
--
--		config.dev = &pdev->dev;
--		config.driver_data = vreg;
--		rdev = devm_regulator_register(&pdev->dev, &vreg->desc, &config);
--		if (IS_ERR(rdev)) {
--			dev_err(&pdev->dev, "failed to register %s\n", reg->name);
--			return PTR_ERR(rdev);
-+		ret = rpm_regulator_init_vreg(vreg, dev, node, rpm, vreg_data);
-+
-+		if (ret < 0) {
-+			of_node_put(node);
-+			return ret;
- 		}
- 	}
+ 	TP_printk("addr=%pISpc program=%s protocol=%s error=%ld",
+diff --git a/net/sunrpc/svc_xprt.c b/net/sunrpc/svc_xprt.c
+index 1e99ba1b9d723..008f1b05a7a9f 100644
+--- a/net/sunrpc/svc_xprt.c
++++ b/net/sunrpc/svc_xprt.c
+@@ -243,7 +243,7 @@ static struct svc_xprt *__svc_xpo_create(struct svc_xprt_class *xcl,
+ 	xprt = xcl->xcl_ops->xpo_create(serv, net, sap, len, flags);
+ 	if (IS_ERR(xprt))
+ 		trace_svc_xprt_create_err(serv->sv_program->pg_name,
+-					  xcl->xcl_name, sap, xprt);
++					  xcl->xcl_name, sap, len, xprt);
+ 	return xprt;
+ }
  
 -- 
 2.34.1

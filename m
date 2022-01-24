@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E2749A6B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC21749A5C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3420152AbiAYCXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:23:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46604 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345731AbiAXTJS (ORCPT
+        id S3410581AbiAYA3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:29:34 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47772 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1455590AbiAXVfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:09:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D430C061359;
-        Mon, 24 Jan 2022 11:02:17 -0800 (PST)
+        Mon, 24 Jan 2022 16:35:42 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FA9460E8D;
-        Mon, 24 Jan 2022 19:02:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D289C340E5;
-        Mon, 24 Jan 2022 19:02:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0F85FB81057;
+        Mon, 24 Jan 2022 21:35:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28AA6C340E4;
+        Mon, 24 Jan 2022 21:35:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050936;
-        bh=/21cnJbkG4LiQeLMdTF15F+v5kVgRMWcxYcW/eO6v+4=;
+        s=korg; t=1643060139;
+        bh=28iv+IlR6fG6foqJ96vlzt15jft0kK5kKyy556Qfa+s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oQuYxTqezyjmotmt6jGWhRbtTdZBbyWREdV5ZMMcOO61LeIwCRWWOsy1FgpO8cwCW
-         FnkDg6xnw0/r8Enr5U469CWDvr+RAvqjCQ5DhcrzfLQacJcEa9ts4b/rS1ZkdfPZ93
-         7PzVo9EzwNZXNtmhtlGVKvqBiJKQng4bkgQ6u2Tg=
+        b=z6CmdiCUHFs85Zu9DIQ6UumaurjpZL4aSIYS3dZNusQhE+6Yiwp66S0XmrMNby3b6
+         pnF4EwBC8TjsbMI/Ne47mZUDRqne0Llsq2SXpj0dcwHMcBrnZfrgdld4Tag6dkGFxe
+         KeeCQb1uYE10zR2Rl02dsFZrji5YE/seYYxPOh0Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        syzbot+9ec037722d2603a9f52e@syzkaller.appspotmail.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Ben Hutchings <ben@decadent.org.uk>
-Subject: [PATCH 4.9 151/157] cipso,calipso: resolve a number of problems with the DOI refcounts
+        stable@vger.kernel.org,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [PATCH 5.16 0852/1039] tracing/osnoise: Properly unhook events if start_per_cpu_kthreads() fails
 Date:   Mon, 24 Jan 2022 19:44:01 +0100
-Message-Id: <20220124183937.549864875@linuxfoundation.org>
+Message-Id: <20220124184153.916097176@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,136 +47,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Moore <paul@paul-moore.com>
+From: Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>
 
-commit ad5d07f4a9cd671233ae20983848874731102c08 upstream.
+commit 0878355b51f5f26632e652c848a8e174bb02d22d upstream.
 
-The current CIPSO and CALIPSO refcounting scheme for the DOI
-definitions is a bit flawed in that we:
+If start_per_cpu_kthreads() called from osnoise_workload_start() returns
+error, event hooks are left in broken state: unhook_irq_events() called
+but unhook_thread_events() and unhook_softirq_events() not called, and
+trace_osnoise_callback_enabled flag not cleared.
 
-1. Don't correctly match gets/puts in netlbl_cipsov4_list().
-2. Decrement the refcount on each attempt to remove the DOI from the
-   DOI list, only removing it from the list once the refcount drops
-   to zero.
+On the next tracer enable, hooks get not installed due to
+trace_osnoise_callback_enabled flag.
 
-This patch fixes these problems by adding the missing "puts" to
-netlbl_cipsov4_list() and introduces a more conventional, i.e.
-not-buggy, refcounting mechanism to the DOI definitions.  Upon the
-addition of a DOI to the DOI list, it is initialized with a refcount
-of one, removing a DOI from the list removes it from the list and
-drops the refcount by one; "gets" and "puts" behave as expected with
-respect to refcounts, increasing and decreasing the DOI's refcount by
-one.
+And on the further tracer disable an attempt to remove non-installed
+hooks happened, hitting a WARN_ON_ONCE() in tracepoint_remove_func().
 
-Fixes: b1edeb102397 ("netlabel: Replace protocol/NetLabel linking with refrerence counts")
-Fixes: d7cce01504a0 ("netlabel: Add support for removing a CALIPSO DOI.")
-Reported-by: syzbot+9ec037722d2603a9f52e@syzkaller.appspotmail.com
-Signed-off-by: Paul Moore <paul@paul-moore.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-[bwh: Backported to 4.9: adjust context]
-Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+Fix the error path by adding the missing part of cleanup.
+While at this, introduce osnoise_unhook_events() to avoid code
+duplication between this error path and normal tracer disable.
+
+Link: https://lkml.kernel.org/r/20220109153459.3701773-1-nikita.yushchenko@virtuozzo.com
+
+Cc: stable@vger.kernel.org
+Fixes: bce29ac9ce0b ("trace: Add osnoise tracer")
+Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Signed-off-by: Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>
+Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/cipso_ipv4.c            |   11 +----------
- net/ipv6/calipso.c               |   14 +++++---------
- net/netlabel/netlabel_cipso_v4.c |    3 +++
- 3 files changed, 9 insertions(+), 19 deletions(-)
+ kernel/trace/trace_osnoise.c |   20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
---- a/net/ipv4/cipso_ipv4.c
-+++ b/net/ipv4/cipso_ipv4.c
-@@ -534,16 +534,10 @@ int cipso_v4_doi_remove(u32 doi, struct
- 		ret_val = -ENOENT;
- 		goto doi_remove_return;
- 	}
--	if (!atomic_dec_and_test(&doi_def->refcount)) {
--		spin_unlock(&cipso_v4_doi_list_lock);
--		ret_val = -EBUSY;
--		goto doi_remove_return;
--	}
- 	list_del_rcu(&doi_def->list);
- 	spin_unlock(&cipso_v4_doi_list_lock);
- 
--	cipso_v4_cache_invalidate();
--	call_rcu(&doi_def->rcu, cipso_v4_doi_free_rcu);
-+	cipso_v4_doi_putdef(doi_def);
- 	ret_val = 0;
- 
- doi_remove_return:
-@@ -600,9 +594,6 @@ void cipso_v4_doi_putdef(struct cipso_v4
- 
- 	if (!atomic_dec_and_test(&doi_def->refcount))
- 		return;
--	spin_lock(&cipso_v4_doi_list_lock);
--	list_del_rcu(&doi_def->list);
--	spin_unlock(&cipso_v4_doi_list_lock);
- 
- 	cipso_v4_cache_invalidate();
- 	call_rcu(&doi_def->rcu, cipso_v4_doi_free_rcu);
---- a/net/ipv6/calipso.c
-+++ b/net/ipv6/calipso.c
-@@ -97,6 +97,9 @@ struct calipso_map_cache_entry {
- 
- static struct calipso_map_cache_bkt *calipso_cache;
- 
-+static void calipso_cache_invalidate(void);
-+static void calipso_doi_putdef(struct calipso_doi *doi_def);
-+
- /* Label Mapping Cache Functions
-  */
- 
-@@ -458,15 +461,10 @@ static int calipso_doi_remove(u32 doi, s
- 		ret_val = -ENOENT;
- 		goto doi_remove_return;
- 	}
--	if (!atomic_dec_and_test(&doi_def->refcount)) {
--		spin_unlock(&calipso_doi_list_lock);
--		ret_val = -EBUSY;
--		goto doi_remove_return;
--	}
- 	list_del_rcu(&doi_def->list);
- 	spin_unlock(&calipso_doi_list_lock);
- 
--	call_rcu(&doi_def->rcu, calipso_doi_free_rcu);
-+	calipso_doi_putdef(doi_def);
- 	ret_val = 0;
- 
- doi_remove_return:
-@@ -522,10 +520,8 @@ static void calipso_doi_putdef(struct ca
- 
- 	if (!atomic_dec_and_test(&doi_def->refcount))
- 		return;
--	spin_lock(&calipso_doi_list_lock);
--	list_del_rcu(&doi_def->list);
--	spin_unlock(&calipso_doi_list_lock);
- 
-+	calipso_cache_invalidate();
- 	call_rcu(&doi_def->rcu, calipso_doi_free_rcu);
+--- a/kernel/trace/trace_osnoise.c
++++ b/kernel/trace/trace_osnoise.c
+@@ -2123,6 +2123,13 @@ out_unhook_irq:
+ 	return -EINVAL;
  }
  
---- a/net/netlabel/netlabel_cipso_v4.c
-+++ b/net/netlabel/netlabel_cipso_v4.c
-@@ -587,6 +587,7 @@ list_start:
++static void osnoise_unhook_events(void)
++{
++	unhook_thread_events();
++	unhook_softirq_events();
++	unhook_irq_events();
++}
++
+ /*
+  * osnoise_workload_start - start the workload and hook to events
+  */
+@@ -2155,7 +2162,14 @@ static int osnoise_workload_start(void)
  
- 		break;
+ 	retval = start_per_cpu_kthreads();
+ 	if (retval) {
+-		unhook_irq_events();
++		trace_osnoise_callback_enabled = false;
++		/*
++		 * Make sure that ftrace_nmi_enter/exit() see
++		 * trace_osnoise_callback_enabled as false before continuing.
++		 */
++		barrier();
++
++		osnoise_unhook_events();
+ 		return retval;
  	}
-+	cipso_v4_doi_putdef(doi_def);
- 	rcu_read_unlock();
  
- 	genlmsg_end(ans_skb, data);
-@@ -595,12 +596,14 @@ list_start:
- list_retry:
- 	/* XXX - this limit is a guesstimate */
- 	if (nlsze_mult < 4) {
-+		cipso_v4_doi_putdef(doi_def);
- 		rcu_read_unlock();
- 		kfree_skb(ans_skb);
- 		nlsze_mult *= 2;
- 		goto list_start;
- 	}
- list_failure_lock:
-+	cipso_v4_doi_putdef(doi_def);
- 	rcu_read_unlock();
- list_failure:
- 	kfree_skb(ans_skb);
+@@ -2186,9 +2200,7 @@ static void osnoise_workload_stop(void)
+ 
+ 	stop_per_cpu_kthreads();
+ 
+-	unhook_irq_events();
+-	unhook_softirq_events();
+-	unhook_thread_events();
++	osnoise_unhook_events();
+ }
+ 
+ static void osnoise_tracer_start(struct trace_array *tr)
 
 

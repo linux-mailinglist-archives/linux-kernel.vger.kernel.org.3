@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C53499651
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:18:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD6F24997C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:29:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445019AbiAXVBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:01:54 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34234 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388459AbiAXUjC (ORCPT
+        id S1449598AbiAXVPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:15:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43794 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1391837AbiAXUtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:39:02 -0500
+        Mon, 24 Jan 2022 15:49:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EF2C08C5C9;
+        Mon, 24 Jan 2022 11:58:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20FD36153D;
-        Mon, 24 Jan 2022 20:39:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8B8AC340E5;
-        Mon, 24 Jan 2022 20:38:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 202F4B81218;
+        Mon, 24 Jan 2022 19:58:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A29BC340E5;
+        Mon, 24 Jan 2022 19:58:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056739;
-        bh=gDmFszm+/TUhgaalM12dREB18MEqRLtv9uD+Yy9sdoY=;
+        s=korg; t=1643054283;
+        bh=Wz1PAbR8+iIe/jPfTcBbjPHkLNB0RxFEi0fK8+Aossk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y+Jf8QZmgElbhl4+yb6XhhRA3Zk2yOIUc1RLgffuEqyB0FSH+jaoj6V75BCwWewig
-         /lj8DbhD3B9050J49bADXkUgbMGAxTZc6uTCzyslzwKP+G6K9xHJl8Y4Q2uivuGtvd
-         9LyW41kwpCoFoVI844yZApfHXQTQi/HmmRVExFa4=
+        b=AeFBFi4pl93iNzNYFP9Np0pfo2Fwettz/xDrEDgY75zGuqqLODYQnKpp/jj/nDjVl
+         yh7YM+rejpxojnsNfmHGRkiDU+7oVQ204txoP0CPHTlBQ9Hp8WXcwt4tb8XmRP6Zfl
+         JsxDQRqYJ3UErsFIDOV2O3smFx9d0Mf5Br6KNsuk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
+        stable@vger.kernel.org, Neal Liu <neal_liu@aspeedtech.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 585/846] Bluetooth: vhci: Set HCI_QUIRK_VALID_LE_STATES
-Date:   Mon, 24 Jan 2022 19:41:42 +0100
-Message-Id: <20220124184121.226915672@linuxfoundation.org>
+Subject: [PATCH 5.10 338/563] usb: uhci: add aspeed ast2600 uhci support
+Date:   Mon, 24 Jan 2022 19:41:43 +0100
+Message-Id: <20220124184036.118403513@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,33 +48,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Neal Liu <neal_liu@aspeedtech.com>
 
-[ Upstream commit cfb4c313be670fd4bd09650216620fa4514cdb93 ]
+[ Upstream commit 554abfe2eadec97d12c71d4a69da1518478f69eb ]
 
-This set HCI_QUIRK_VALID_LE_STATES quirk which is required for the likes
-of experimental LE simultaneous roles.
+Enable ast2600 uhci quirks.
 
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+Link: https://lore.kernel.org/r/20211126100021.2331024-1-neal_liu@aspeedtech.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bluetooth/hci_vhci.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/host/uhci-platform.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/bluetooth/hci_vhci.c b/drivers/bluetooth/hci_vhci.c
-index 8ab26dec5f6e8..8469f9876dd26 100644
---- a/drivers/bluetooth/hci_vhci.c
-+++ b/drivers/bluetooth/hci_vhci.c
-@@ -121,6 +121,8 @@ static int __vhci_create_device(struct vhci_data *data, __u8 opcode)
- 	if (opcode & 0x80)
- 		set_bit(HCI_QUIRK_RAW_DEVICE, &hdev->quirks);
- 
-+	set_bit(HCI_QUIRK_VALID_LE_STATES, &hdev->quirks);
-+
- 	if (hci_register_dev(hdev) < 0) {
- 		BT_ERR("Can't register HCI device");
- 		hci_free_dev(hdev);
+diff --git a/drivers/usb/host/uhci-platform.c b/drivers/usb/host/uhci-platform.c
+index 70dbd95c3f063..be9e9db7cad10 100644
+--- a/drivers/usb/host/uhci-platform.c
++++ b/drivers/usb/host/uhci-platform.c
+@@ -113,7 +113,8 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
+ 				num_ports);
+ 		}
+ 		if (of_device_is_compatible(np, "aspeed,ast2400-uhci") ||
+-		    of_device_is_compatible(np, "aspeed,ast2500-uhci")) {
++		    of_device_is_compatible(np, "aspeed,ast2500-uhci") ||
++		    of_device_is_compatible(np, "aspeed,ast2600-uhci")) {
+ 			uhci->is_aspeed = 1;
+ 			dev_info(&pdev->dev,
+ 				 "Enabled Aspeed implementation workarounds\n");
 -- 
 2.34.1
 

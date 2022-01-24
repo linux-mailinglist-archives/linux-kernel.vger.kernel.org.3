@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB46649A6C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:33:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5391A49A38C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:03:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3421009AbiAYCZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:25:57 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45332 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357011AbiAXTsM (ORCPT
+        id S2365519AbiAXXvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:51:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47702 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1844210AbiAXXII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:48:12 -0500
+        Mon, 24 Jan 2022 18:08:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB473C09F49F;
+        Mon, 24 Jan 2022 13:17:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D915D61298;
-        Mon, 24 Jan 2022 19:48:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4364C340E7;
-        Mon, 24 Jan 2022 19:48:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A079B81243;
+        Mon, 24 Jan 2022 21:17:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96C26C340E5;
+        Mon, 24 Jan 2022 21:17:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053689;
-        bh=0QUssqJNsNALCtFHI2M4tOyb+toYMUWbwPGQqJ03+fw=;
+        s=korg; t=1643059054;
+        bh=TeYp5QSifAzy2E8GygoVq7w2IL6PghiUOAK0zkgnnm4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BH4nad/5ePNung0vySifG8mbrPJ3e06Vt2mkJjA4FvavH3LL3r8rR1W7aKTo4IlPd
-         pS7GpSa1jqPDefFNuaxFJPGoyjzh4JIDe9yMMC5EODqM4fhM0JWzhFgGUCvSmbnas/
-         jS+tzk5jFlAL6dRLclxYuHqXReTn91Pha6UCVdPI=
+        b=RAgi0R2nI4efGaC99IXeg+Mw8j0t7qPkEwPeRI/YLf2Kz3a+sDsoeakCV/8TSh/bo
+         XpC8AP5Z85M7YNKqkEPsk3l1l4lcqfpqXLnnfJcASCN5uflEwJokVumlN3pKlhMEz3
+         XLI9W5whvSBT9GQ5DG6fExu/cLpqMBC5mhlXPNy8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Martin Weber <martin.weber@br-automation.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 112/563] media: coda: fix CODA960 JPEG encoder buffer overflow
-Date:   Mon, 24 Jan 2022 19:37:57 +0100
-Message-Id: <20220124184028.293601037@linuxfoundation.org>
+Subject: [PATCH 5.16 0490/1039] mips: add SYS_HAS_CPU_MIPS64_R5 config for MIPS Release 5 support
+Date:   Mon, 24 Jan 2022 19:37:59 +0100
+Message-Id: <20220124184141.736245824@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,93 +49,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philipp Zabel <p.zabel@pengutronix.de>
+From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-[ Upstream commit 1a59cd88f55068710f6549bee548846661673780 ]
+[ Upstream commit fd4eb90b164442cb1e9909f7845e12a0835ac699 ]
 
-Stop the CODA960 JPEG encoder from overflowing capture buffers.
-The bitstream buffer overflow interrupt doesn't seem to be connected,
-so this has to be handled via timeout instead.
+Commit ab7c01fdc3cf ("mips: Add MIPS Release 5 support") adds the two
+configs CPU_MIPS32_R5 and CPU_MIPS64_R5, which depend on the corresponding
+SYS_HAS_CPU_MIPS32_R5 and SYS_HAS_CPU_MIPS64_R5, respectively.
 
-Reported-by: Martin Weber <martin.weber@br-automation.com>
-Fixes: 96f6f62c4656 ("media: coda: jpeg: add CODA960 JPEG encoder support")
-Tested-by: Martin Weber <martin.weber@br-automation.com>
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+The config SYS_HAS_CPU_MIPS32_R5 was already introduced with commit
+c5b367835cfc ("MIPS: Add support for XPA."); the config
+SYS_HAS_CPU_MIPS64_R5, however, was never introduced.
+
+Hence, ./scripts/checkkconfigsymbols.py warns:
+
+  SYS_HAS_CPU_MIPS64_R5
+  Referencing files: arch/mips/Kconfig, arch/mips/include/asm/cpu-type.h
+
+Add the definition for config SYS_HAS_CPU_MIPS64_R5 under the assumption
+that SYS_HAS_CPU_MIPS64_R5 follows the same pattern as the existing
+SYS_HAS_CPU_MIPS32_R5 and SYS_HAS_CPU_MIPS64_R6.
+
+Fixes: ab7c01fdc3cf ("mips: Add MIPS Release 5 support")
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/coda/coda-common.c |  8 +++++---
- drivers/media/platform/coda/coda-jpeg.c   | 21 ++++++++++++++++++++-
- 2 files changed, 25 insertions(+), 4 deletions(-)
+ arch/mips/Kconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
-index 87a2c706f7477..1eed69d29149f 100644
---- a/drivers/media/platform/coda/coda-common.c
-+++ b/drivers/media/platform/coda/coda-common.c
-@@ -1537,11 +1537,13 @@ static void coda_pic_run_work(struct work_struct *work)
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 0215dc1529e9a..91ce1c57af005 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -1907,6 +1907,10 @@ config SYS_HAS_CPU_MIPS64_R1
+ config SYS_HAS_CPU_MIPS64_R2
+ 	bool
  
- 	if (!wait_for_completion_timeout(&ctx->completion,
- 					 msecs_to_jiffies(1000))) {
--		dev_err(dev->dev, "CODA PIC_RUN timeout\n");
-+		if (ctx->use_bit) {
-+			dev_err(dev->dev, "CODA PIC_RUN timeout\n");
- 
--		ctx->hold = true;
-+			ctx->hold = true;
- 
--		coda_hw_reset(ctx);
-+			coda_hw_reset(ctx);
-+		}
- 
- 		if (ctx->ops->run_timeout)
- 			ctx->ops->run_timeout(ctx);
-diff --git a/drivers/media/platform/coda/coda-jpeg.c b/drivers/media/platform/coda/coda-jpeg.c
-index b11cfbe166dd3..a72f4655e5ad5 100644
---- a/drivers/media/platform/coda/coda-jpeg.c
-+++ b/drivers/media/platform/coda/coda-jpeg.c
-@@ -1127,7 +1127,8 @@ static int coda9_jpeg_prepare_encode(struct coda_ctx *ctx)
- 	coda_write(dev, 0, CODA9_REG_JPEG_GBU_BT_PTR);
- 	coda_write(dev, 0, CODA9_REG_JPEG_GBU_WD_PTR);
- 	coda_write(dev, 0, CODA9_REG_JPEG_GBU_BBSR);
--	coda_write(dev, 0, CODA9_REG_JPEG_BBC_STRM_CTRL);
-+	coda_write(dev, BIT(31) | ((end_addr - start_addr - header_len) / 256),
-+		   CODA9_REG_JPEG_BBC_STRM_CTRL);
- 	coda_write(dev, 0, CODA9_REG_JPEG_GBU_CTRL);
- 	coda_write(dev, 0, CODA9_REG_JPEG_GBU_FF_RPTR);
- 	coda_write(dev, 127, CODA9_REG_JPEG_GBU_BBER);
-@@ -1257,6 +1258,23 @@ static void coda9_jpeg_finish_encode(struct coda_ctx *ctx)
- 	coda_hw_reset(ctx);
- }
- 
-+static void coda9_jpeg_encode_timeout(struct coda_ctx *ctx)
-+{
-+	struct coda_dev *dev = ctx->dev;
-+	u32 end_addr, wr_ptr;
++config SYS_HAS_CPU_MIPS64_R5
++	bool
++	select ARCH_HAS_SYNC_DMA_FOR_CPU if DMA_NONCOHERENT
 +
-+	/* Handle missing BBC overflow interrupt via timeout */
-+	end_addr = coda_read(dev, CODA9_REG_JPEG_BBC_END_ADDR);
-+	wr_ptr = coda_read(dev, CODA9_REG_JPEG_BBC_WR_PTR);
-+	if (wr_ptr >= end_addr - 256) {
-+		v4l2_err(&dev->v4l2_dev, "JPEG too large for capture buffer\n");
-+		coda9_jpeg_finish_encode(ctx);
-+		return;
-+	}
-+
-+	coda_hw_reset(ctx);
-+}
-+
- static void coda9_jpeg_release(struct coda_ctx *ctx)
- {
- 	int i;
-@@ -1276,6 +1294,7 @@ const struct coda_context_ops coda9_jpeg_encode_ops = {
- 	.start_streaming = coda9_jpeg_start_encoding,
- 	.prepare_run = coda9_jpeg_prepare_encode,
- 	.finish_run = coda9_jpeg_finish_encode,
-+	.run_timeout = coda9_jpeg_encode_timeout,
- 	.release = coda9_jpeg_release,
- };
- 
+ config SYS_HAS_CPU_MIPS64_R6
+ 	bool
+ 	select ARCH_HAS_SYNC_DMA_FOR_CPU if DMA_NONCOHERENT
 -- 
 2.34.1
 

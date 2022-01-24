@@ -2,38 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 004DC499802
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0471A4997B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:29:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354469AbiAXVSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:18:15 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43398 "EHLO
+        id S1449455AbiAXVPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:15:35 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42206 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388088AbiAXUto (ORCPT
+        with ESMTP id S1391637AbiAXUsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:49:44 -0500
+        Mon, 24 Jan 2022 15:48:16 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FF9D6091C;
-        Mon, 24 Jan 2022 20:49:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CCF9C340E5;
-        Mon, 24 Jan 2022 20:49:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7824D60C39;
+        Mon, 24 Jan 2022 20:48:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D846FC340E5;
+        Mon, 24 Jan 2022 20:48:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057379;
-        bh=NYew2eLHnOVBJzWS0JUQya8E9KMDLrukBSAFBS4kna0=;
+        s=korg; t=1643057294;
+        bh=alN1nGi9d01VTi67hSzdh6Vdn9Sl4cPFqezMOL+KxcI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n/ArlKRuyT8hYu+gWEQ22JGbtLvVbas1+AlPOZ6JGNDQqgJloR6QFMH5UD4RGlI7Q
-         /7pwzqUuwNVyvqclA7u0ROJwwkkmx+Rs8PXjO532Lr3XAHY/R5cpe1PaZuG2/wLaQS
-         NlwT9qbXC/4h+0s1MvYVMTFzxtrotGMp1hxq6rcA=
+        b=NCd0Y4mOqUU5kYq9kf6aDvlrqp9c3KBtLXrrzQASSXguZtOeYu/QnnyxY614SVAoP
+         UO9E/pyyuPoTut4HRTLzavBJvVRJwtP8TE5NLp7R5oxi4olun11przFxzMWdr4dRwQ
+         od/W1CNBZQwf1bFoA8Le7DG3JpJ/3UC3F+YXgd4w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH 5.15 761/846] drm/vc4: crtc: Copy assigned channel to the CRTC
-Date:   Mon, 24 Jan 2022 19:44:38 +0100
-Message-Id: <20220124184127.212911521@linuxfoundation.org>
+        stable@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
+        Yafang Shao <laoar.shao@gmail.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: [PATCH 5.15 766/846] bpf: Fix mount source show for bpffs
+Date:   Mon, 24 Jan 2022 19:44:43 +0100
+Message-Id: <20220124184127.381781059@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -45,110 +48,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Yafang Shao <laoar.shao@gmail.com>
 
-commit eeb6ab4639590130d25670204ab7b6011333d685 upstream.
+commit 1e9d74660d4df625b0889e77018f9e94727ceacd upstream.
 
-Accessing the crtc->state pointer from outside the modesetting context
-is not allowed. We thus need to copy whatever we need from the KMS state
-to our structure in order to access it.
+We noticed our tc ebpf tools can't start after we upgrade our in-house kernel
+version from 4.19 to 5.10. That is because of the behaviour change in bpffs
+caused by commit d2935de7e4fd ("vfs: Convert bpf to use the new mount API").
 
-In VC4, a number of users of that pointers have crept in over the years,
-and the previous commits removed them all but the HVS channel a CRTC has
-been assigned.
+In our tc ebpf tools, we do strict environment check. If the environment is
+not matched, we won't allow to start the ebpf progs. One of the check is whether
+bpffs is properly mounted. The mount information of bpffs in kernel-4.19 and
+kernel-5.10 are as follows:
 
-Let's move this channel in struct vc4_crtc at atomic_begin() time, drop
-it from our private state structure, and remove our use of crtc->state
-from our vblank handler entirely.
+- kernel 4.19
+$ mount -t bpf bpffs /sys/fs/bpf
+$ mount -t bpf
+bpffs on /sys/fs/bpf type bpf (rw,relatime)
 
-Link: https://lore.kernel.org/all/YWgteNaNeaS9uWDe@phenom.ffwll.local/
-Link: https://lore.kernel.org/r/20211025141113.702757-4-maxime@cerno.tech
-Fixes: 87ebcd42fb7b ("drm/vc4: crtc: Assign output to channel automatically")
-Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+- kernel 5.10
+$ mount -t bpf bpffs /sys/fs/bpf
+$ mount -t bpf
+none on /sys/fs/bpf type bpf (rw,relatime)
+
+The device name in kernel-5.10 is displayed as none instead of bpffs, then our
+environment check fails. Currently we modify the tools to adopt to the kernel
+behaviour change, but I think we'd better change the kernel code to keep the
+behavior consistent.
+
+After this change, the mount information will be displayed the same with the
+behavior in kernel-4.19, for example:
+
+$ mount -t bpf bpffs /sys/fs/bpf
+$ mount -t bpf
+bpffs on /sys/fs/bpf type bpf (rw,relatime)
+
+Fixes: d2935de7e4fd ("vfs: Convert bpf to use the new mount API")
+Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Link: https://lore.kernel.org/bpf/20220108134623.32467-1-laoar.shao@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/vc4/vc4_crtc.c |    4 ++--
- drivers/gpu/drm/vc4/vc4_drv.h  |    9 +++++++++
- drivers/gpu/drm/vc4/vc4_hvs.c  |   12 ++++++++++++
- drivers/gpu/drm/vc4/vc4_txp.c  |    1 +
- 4 files changed, 24 insertions(+), 2 deletions(-)
+ kernel/bpf/inode.c |   14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
---- a/drivers/gpu/drm/vc4/vc4_crtc.c
-+++ b/drivers/gpu/drm/vc4/vc4_crtc.c
-@@ -708,8 +708,7 @@ static void vc4_crtc_handle_page_flip(st
- 	struct drm_crtc *crtc = &vc4_crtc->base;
- 	struct drm_device *dev = crtc->dev;
- 	struct vc4_dev *vc4 = to_vc4_dev(dev);
--	struct vc4_crtc_state *vc4_state = to_vc4_crtc_state(crtc->state);
--	u32 chan = vc4_state->assigned_channel;
-+	u32 chan = vc4_crtc->current_hvs_channel;
- 	unsigned long flags;
+--- a/kernel/bpf/inode.c
++++ b/kernel/bpf/inode.c
+@@ -648,12 +648,22 @@ static int bpf_parse_param(struct fs_con
+ 	int opt;
  
- 	spin_lock_irqsave(&dev->event_lock, flags);
-@@ -955,6 +954,7 @@ static const struct drm_crtc_funcs vc4_c
- static const struct drm_crtc_helper_funcs vc4_crtc_helper_funcs = {
- 	.mode_valid = vc4_crtc_mode_valid,
- 	.atomic_check = vc4_crtc_atomic_check,
-+	.atomic_begin = vc4_hvs_atomic_begin,
- 	.atomic_flush = vc4_hvs_atomic_flush,
- 	.atomic_enable = vc4_crtc_atomic_enable,
- 	.atomic_disable = vc4_crtc_atomic_disable,
---- a/drivers/gpu/drm/vc4/vc4_drv.h
-+++ b/drivers/gpu/drm/vc4/vc4_drv.h
-@@ -514,6 +514,14 @@ struct vc4_crtc {
- 	 * handler to have access to that value.
- 	 */
- 	unsigned int current_dlist;
+ 	opt = fs_parse(fc, bpf_fs_parameters, param, &result);
+-	if (opt < 0)
++	if (opt < 0) {
+ 		/* We might like to report bad mount options here, but
+ 		 * traditionally we've ignored all mount options, so we'd
+ 		 * better continue to ignore non-existing options for bpf.
+ 		 */
+-		return opt == -ENOPARAM ? 0 : opt;
++		if (opt == -ENOPARAM) {
++			opt = vfs_parse_fs_param_source(fc, param);
++			if (opt != -ENOPARAM)
++				return opt;
 +
-+	/**
-+	 * @current_hvs_channel: HVS channel currently assigned to the
-+	 * CRTC. Protected by @irq_lock, and copied in
-+	 * vc4_hvs_atomic_begin() for the CRTC interrupt handler to have
-+	 * access to that value.
-+	 */
-+	unsigned int current_hvs_channel;
- };
- 
- static inline struct vc4_crtc *
-@@ -926,6 +934,7 @@ extern struct platform_driver vc4_hvs_dr
- void vc4_hvs_stop_channel(struct drm_device *dev, unsigned int output);
- int vc4_hvs_get_fifo_from_output(struct drm_device *dev, unsigned int output);
- int vc4_hvs_atomic_check(struct drm_crtc *crtc, struct drm_atomic_state *state);
-+void vc4_hvs_atomic_begin(struct drm_crtc *crtc, struct drm_atomic_state *state);
- void vc4_hvs_atomic_enable(struct drm_crtc *crtc, struct drm_atomic_state *state);
- void vc4_hvs_atomic_disable(struct drm_crtc *crtc, struct drm_atomic_state *state);
- void vc4_hvs_atomic_flush(struct drm_crtc *crtc, struct drm_atomic_state *state);
---- a/drivers/gpu/drm/vc4/vc4_hvs.c
-+++ b/drivers/gpu/drm/vc4/vc4_hvs.c
-@@ -393,6 +393,18 @@ static void vc4_hvs_update_dlist(struct
- 	spin_unlock_irqrestore(&vc4_crtc->irq_lock, flags);
- }
- 
-+void vc4_hvs_atomic_begin(struct drm_crtc *crtc,
-+			  struct drm_atomic_state *state)
-+{
-+	struct vc4_crtc *vc4_crtc = to_vc4_crtc(crtc);
-+	struct vc4_crtc_state *vc4_state = to_vc4_crtc_state(crtc->state);
-+	unsigned long flags;
++			return 0;
++		}
 +
-+	spin_lock_irqsave(&vc4_crtc->irq_lock, flags);
-+	vc4_crtc->current_hvs_channel = vc4_state->assigned_channel;
-+	spin_unlock_irqrestore(&vc4_crtc->irq_lock, flags);
-+}
-+
- void vc4_hvs_atomic_enable(struct drm_crtc *crtc,
- 			   struct drm_atomic_state *state)
- {
---- a/drivers/gpu/drm/vc4/vc4_txp.c
-+++ b/drivers/gpu/drm/vc4/vc4_txp.c
-@@ -435,6 +435,7 @@ static void vc4_txp_atomic_disable(struc
++		if (opt < 0)
++			return opt;
++	}
  
- static const struct drm_crtc_helper_funcs vc4_txp_crtc_helper_funcs = {
- 	.atomic_check	= vc4_txp_atomic_check,
-+	.atomic_begin	= vc4_hvs_atomic_begin,
- 	.atomic_flush	= vc4_hvs_atomic_flush,
- 	.atomic_enable	= vc4_txp_atomic_enable,
- 	.atomic_disable	= vc4_txp_atomic_disable,
+ 	switch (opt) {
+ 	case OPT_MODE:
 
 

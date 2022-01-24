@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD6A499CF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:15:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F0549985C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581949AbiAXWMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:12:43 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46086 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377233AbiAXV3J (ORCPT
+        id S1450324AbiAXVUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:20:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44252 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1392365AbiAXUvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:29:09 -0500
+        Mon, 24 Jan 2022 15:51:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AFBC054325;
+        Mon, 24 Jan 2022 11:58:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB37D614D9;
-        Mon, 24 Jan 2022 21:29:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C41EFC340F8;
-        Mon, 24 Jan 2022 21:29:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 577B5B8119D;
+        Mon, 24 Jan 2022 19:58:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AD0BC340E5;
+        Mon, 24 Jan 2022 19:58:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059748;
-        bh=CZwN9XuDQUkbNMVEEIxVWPpXVAE2UgZwHjhnWnLbtBI=;
+        s=korg; t=1643054302;
+        bh=JjoTPxcrsm13yYDz2X0aCGOrakWj/cvM4DjQzFBa75A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bEkeCw1KDaLX3y0l/Mx19GMH+hOge4tM6E6UKj7SeD5Qt58TsQ++f9GiFaRkYhEUk
-         UQfTqC8UX+MrR68+wRZNFwlfrTtMBJwwv5UiCZapSaHm59vxrBUjpfdAHD0Pc7wVTI
-         U2P557Q5gqhhzXq12mtNa3XivpNGZxoylpDZPwiw=
+        b=uEvl33PG4PPhjxI0aEAMSxO9ikEBrIAAZuf3SNDRDbIh9df/u5cbxO3NYbiN24y6s
+         zjic6cIYomUy+OTLpXJPA4R/5jk4YUEHeSyGGJIpqt2UkMF/y9iWss0cqEPDLuQ1rE
+         bUyCoKwojDCLiifVYZ+Zm6rotJzy7fPsJAWEWceQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0719/1039] net: gemini: allow any RGMII interface mode
-Date:   Mon, 24 Jan 2022 19:41:48 +0100
-Message-Id: <20220124184149.498059748@linuxfoundation.org>
+Subject: [PATCH 5.10 344/563] media: saa7146: hexium_orion: Fix a NULL pointer dereference in hexium_attach()
+Date:   Mon, 24 Jan 2022 19:41:49 +0100
+Message-Id: <20220124184036.320287570@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,69 +50,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+From: Zhou Qingyang <zhou1615@umn.edu>
 
-[ Upstream commit 4e4f325a0a55907b14f579e6b1a38c53755e3de2 ]
+[ Upstream commit 348df8035301dd212e3cc2860efe4c86cb0d3303 ]
 
-The four RGMII interface modes take care of the required RGMII delay
-configuration at the PHY and should not be limited by the network MAC
-driver. Sadly, gemini was only permitting RGMII mode with no delays,
-which would require the required delay to be inserted via PCB tracking
-or by the MAC.
+In hexium_attach(dev, info), saa7146_vv_init() is called to allocate
+a new memory for dev->vv_data. In hexium_detach(), saa7146_vv_release()
+will be called and there is a dereference of dev->vv_data in
+saa7146_vv_release(), which could lead to a NULL pointer dereference
+on failure of saa7146_vv_init() according to the following logic.
 
-However, there are designs that require the PHY to add the delay, which
-is impossible without Gemini permitting the other three PHY interface
-modes. Fix the driver to allow these.
+Both hexium_attach() and hexium_detach() are callback functions of
+the variable 'extension', so there exists a possible call chain directly
+from hexium_attach() to hexium_detach():
 
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
-Link: https://lore.kernel.org/r/E1n4mpT-002PLd-Ha@rmk-PC.armlinux.org.uk
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+hexium_attach(dev, info) -- fail to alloc memory to dev->vv_data
+	|		    		in saa7146_vv_init().
+	|
+	|
+hexium_detach() -- a dereference of dev->vv_data in saa7146_vv_release()
+
+Fix this bug by adding a check of saa7146_vv_init().
+
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_VIDEO_HEXIUM_ORION=m show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/cortina/gemini.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/media/pci/saa7146/hexium_orion.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/cortina/gemini.c b/drivers/net/ethernet/cortina/gemini.c
-index 941f175fb911e..0ff40a9b06cec 100644
---- a/drivers/net/ethernet/cortina/gemini.c
-+++ b/drivers/net/ethernet/cortina/gemini.c
-@@ -305,21 +305,21 @@ static void gmac_speed_set(struct net_device *netdev)
- 	switch (phydev->speed) {
- 	case 1000:
- 		status.bits.speed = GMAC_SPEED_1000;
--		if (phydev->interface == PHY_INTERFACE_MODE_RGMII)
-+		if (phy_interface_mode_is_rgmii(phydev->interface))
- 			status.bits.mii_rmii = GMAC_PHY_RGMII_1000;
- 		netdev_dbg(netdev, "connect %s to RGMII @ 1Gbit\n",
- 			   phydev_name(phydev));
- 		break;
- 	case 100:
- 		status.bits.speed = GMAC_SPEED_100;
--		if (phydev->interface == PHY_INTERFACE_MODE_RGMII)
-+		if (phy_interface_mode_is_rgmii(phydev->interface))
- 			status.bits.mii_rmii = GMAC_PHY_RGMII_100_10;
- 		netdev_dbg(netdev, "connect %s to RGMII @ 100 Mbit\n",
- 			   phydev_name(phydev));
- 		break;
- 	case 10:
- 		status.bits.speed = GMAC_SPEED_10;
--		if (phydev->interface == PHY_INTERFACE_MODE_RGMII)
-+		if (phy_interface_mode_is_rgmii(phydev->interface))
- 			status.bits.mii_rmii = GMAC_PHY_RGMII_100_10;
- 		netdev_dbg(netdev, "connect %s to RGMII @ 10 Mbit\n",
- 			   phydev_name(phydev));
-@@ -389,6 +389,9 @@ static int gmac_setup_phy(struct net_device *netdev)
- 		status.bits.mii_rmii = GMAC_PHY_GMII;
- 		break;
- 	case PHY_INTERFACE_MODE_RGMII:
-+	case PHY_INTERFACE_MODE_RGMII_ID:
-+	case PHY_INTERFACE_MODE_RGMII_TXID:
-+	case PHY_INTERFACE_MODE_RGMII_RXID:
- 		netdev_dbg(netdev,
- 			   "RGMII: set GMAC0 and GMAC1 to MII/RGMII mode\n");
- 		status.bits.mii_rmii = GMAC_PHY_RGMII_100_10;
+diff --git a/drivers/media/pci/saa7146/hexium_orion.c b/drivers/media/pci/saa7146/hexium_orion.c
+index 39d14c179d229..2eb4bee16b71f 100644
+--- a/drivers/media/pci/saa7146/hexium_orion.c
++++ b/drivers/media/pci/saa7146/hexium_orion.c
+@@ -355,10 +355,16 @@ static struct saa7146_ext_vv vv_data;
+ static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data *info)
+ {
+ 	struct hexium *hexium = (struct hexium *) dev->ext_priv;
++	int ret;
+ 
+ 	DEB_EE("\n");
+ 
+-	saa7146_vv_init(dev, &vv_data);
++	ret = saa7146_vv_init(dev, &vv_data);
++	if (ret) {
++		pr_err("Error in saa7146_vv_init()\n");
++		return ret;
++	}
++
+ 	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
+ 	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
+ 	vv_data.vid_ops.vidioc_s_input = vidioc_s_input;
 -- 
 2.34.1
 

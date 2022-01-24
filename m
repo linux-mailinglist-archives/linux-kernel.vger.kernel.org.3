@@ -2,115 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7471499A2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BE1499AC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:57:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1457444AbiAXVlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:41:40 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57150 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353803AbiAXVEY (ORCPT
+        id S1378697AbiAXVqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:46:15 -0500
+Received: from smtp-fw-6002.amazon.com ([52.95.49.90]:55055 "EHLO
+        smtp-fw-6002.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1448337AbiAXVM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:04:24 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EC79AB812A7;
-        Mon, 24 Jan 2022 21:04:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E437C340E7;
-        Mon, 24 Jan 2022 21:04:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643058259;
-        bh=xrI2Yd8Z85VtM/EHXSuSj1x1uMSh4WRSVCjNSh83i40=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rt8P/37acGeRdawKBy6Kot2gVMpJ+i0SnNoPhIwd4LveC2Y1I5GK7pJURL+ksEa9a
-         1OtFYXPb+2oX2ZGxcObiOhFerPRCUaPd24D77pBN/xCm1StLFBKRKScWtv/T1Rcf27
-         acbyaIRW1hdWYlgbQfyeygahiL1S1F+ZnBBDUdYsTnfmvdPUeLKaAG+WbSchocKDg3
-         1zVtG6McE9y19BFccX/KcgMyeb0ex+0SRWPJnywmmHQCOZ2XLVSws8LEN1KNu7gcOJ
-         Yw41rGlg7gehEssffEoCyHNfum2IyBaGvur2eHV9hTCnYgTXJPJi8Z+Kdu+06zxh4u
-         NjStG0Lr9WgNg==
-Date:   Mon, 24 Jan 2022 22:04:13 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Akhil R <akhilrajeev@nvidia.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-Subject: Re: [PATCH v4 0/3] Enable named interrupt smbus-alert for ACPI
-Message-ID: <Ye8UTQlHphVtAYUW@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Akhil R <akhilrajeev@nvidia.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-References: <1642851166-27096-1-git-send-email-akhilrajeev@nvidia.com>
- <CAHp75Ve-zYz27baJ9SV3wcyKS5iMnxFO61gGE2LXQPU_hTt+qw@mail.gmail.com>
- <CAJZ5v0guL4nk21gvvs2K9Ak6sjhDSzMvDQZJvmnq6Frsj3+7yA@mail.gmail.com>
+        Mon, 24 Jan 2022 16:12:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1643058748; x=1674594748;
+  h=date:from:to:cc:message-id:references:mime-version:
+   in-reply-to:subject;
+  bh=s08kGL1P6vWKXvsndk5HwY8vMXv8Hz2WGGuKsGt7M+M=;
+  b=Lt24+Kwh4B2vxFMObDYugoNvzC+0bVYqPVLp4pet6BWgIT7rqAUzfT0e
+   ZZgVZhu0LqdjiHOV0RwGKa5xn6p6D6SDHea6XhMdMz6Bkkplo/KuTD8Yc
+   DRiP8b+zP0CvKjJmo0dG8EzEygfor9G9x/oBVJMOBl2s5YYvjpiuX+n8C
+   E=;
+X-IronPort-AV: E=Sophos;i="5.88,313,1635206400"; 
+   d="scan'208";a="171375781"
+Subject: Re: [PATCH 1/3] memblock: define functions to set the usable memory range
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1a-b27d4a00.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP; 24 Jan 2022 21:05:45 +0000
+Received: from EX13MTAUEB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1a-b27d4a00.us-east-1.amazon.com (Postfix) with ESMTPS id 3023081139;
+        Mon, 24 Jan 2022 21:05:39 +0000 (UTC)
+Received: from EX13D19UEB001.ant.amazon.com (10.43.60.16) by
+ EX13MTAUEB001.ant.amazon.com (10.43.60.129) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.28; Mon, 24 Jan 2022 21:05:39 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX13D19UEB001.ant.amazon.com (10.43.60.16) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.28; Mon, 24 Jan 2022 21:05:39 +0000
+Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
+ (172.19.206.175) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
+ Server id 15.0.1497.28 via Frontend Transport; Mon, 24 Jan 2022 21:05:38
+ +0000
+Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
+        id 1DC072A; Mon, 24 Jan 2022 21:05:38 +0000 (UTC)
+Date:   Mon, 24 Jan 2022 21:05:38 +0000
+From:   Frank van der Linden <fllinden@amazon.com>
+To:     Mike Rapoport <rppt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>, <robh+dt@kernel.org>,
+        <frowand.list@gmail.com>, <ardb@kernel.org>, <linux-mm@kvack.org>,
+        <devicetree@vger.kernel.org>, <linux-efi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kexec@lists.infradead.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <geert+renesas@glider.be>
+Message-ID: <20220124210538.GA15943@dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com>
+References: <20220110210809.3528-1-fllinden@amazon.com>
+ <20220110210809.3528-2-fllinden@amazon.com> <Yd1cnquQFZoNE7FP@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="PQ+Di6JU9ZkrkCPn"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0guL4nk21gvvs2K9Ak6sjhDSzMvDQZJvmnq6Frsj3+7yA@mail.gmail.com>
+In-Reply-To: <Yd1cnquQFZoNE7FP@kernel.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Meanwhile, it seems that this issue was already addressed in:
 
---PQ+Di6JU9ZkrkCPn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+https://lore.kernel.org/all/20211215021348.8766-1-kernelfans@gmail.com/
 
+..which has now been pulled in, and sent to stable@ for 5.15. I
+somehow missed that message, and sent my change in a few weeks
+later.
 
-> It looks good to me.
->=20
-> If no one else has concerns regarding it, I'll queue it up for 5.18.
+The fix to just reserve the ranges does seem a bit cleaner overall,
+but this will do fine.
 
-I'd prefer this to go via I2C because it touches the I2C core. And SMBus
-alert is I2C material anyway :)
+Thanks!
 
-
---PQ+Di6JU9ZkrkCPn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHvFEkACgkQFA3kzBSg
-KbYS+A/8ChbXO2Eu9RSZj1oeAp2Y5/csPWUB7EIozmvoC8o3JmK5mQPk/nu+QpPo
-txvkFIK6NJM41Fhxp+yqq1cxLotOWSoA2rdHYv08mfj5uL0lxfYa6Zn6v+DJ0A6l
-RRpSjbHq9pT/I4JLqJP+EqVq2FvJ0owmaOi28gBDiqdH/fqg5oa5cxoA9vD9Z9oK
-r3RHDPOgM+aFxY4qRYEFtEi3T4NkK9yet+zpp5G9DtPz0qhxtVi8H7boOdGtPUyB
-3gjp3KgR3sA2IQaFYbbCstYUXDsgu6/heina/rqv48M7TCC0M4lBMAzQemDSMs4t
-ZveLjhwYNXbBwWVRMfuENLWFUJvYeXEFyD5A+RYMRDrQZo9ObGXRpk6YCfYNZ6UV
-h90V+U0C67snDIcoQ31lbLyXZeAStvcIcEWPnk2RJ5dFvyDAkfz734HVD7xT2e6P
-+0M4+/M9JDXEMAzV8DNi6YSc3IHhf88MmczYNS5APIWKhXzxQ6p1jGp94xIRXIK0
-0fw18VxniVD27aWnxb4EmxwCf73NbzrwzbYY6whKQgXIgMHjlOqw/XRVbV3WyNKh
-c3py3f6aad/mipXjUdKYpDDK+V275qa9n1w2OSks+XirXnJqedYRumiUncD4af+q
-MrKRbl09XzdEkjRg6bCwQkZI9EW/bwLPskxdvHo1vC5/cWaMvkE=
-=VNXV
------END PGP SIGNATURE-----
-
---PQ+Di6JU9ZkrkCPn--
+- Frank

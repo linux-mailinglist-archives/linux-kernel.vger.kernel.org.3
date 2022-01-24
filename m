@@ -2,112 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE72497E56
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 12:55:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB66497E59
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 12:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238015AbiAXLzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 06:55:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56644 "EHLO
+        id S238035AbiAXLzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 06:55:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiAXLzI (ORCPT
+        with ESMTP id S237873AbiAXLzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 06:55:08 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7E3C06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 03:55:08 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id f17so13089373wrx.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 03:55:08 -0800 (PST)
+        Mon, 24 Jan 2022 06:55:40 -0500
+Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EE6C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 03:55:40 -0800 (PST)
+Received: by mail-oo1-xc29.google.com with SMTP id w15-20020a4a9d0f000000b002c5cfa80e84so5722462ooj.5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 03:55:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=IPFbfrHJ6YrXapqN6K+le3Ltd/e6LaT+IHt+F0E8NmE=;
-        b=qJ+dcUMbd6zqqDcRVuIf2EzIHMBdWtsgv0Yso0AiNQkIbV5IUPQOAV9dJY19FXq0cG
-         FOUk24NOyTdb5c7Of+bfsr+LAQ9ZFZo7xULqrKSryYBobwOw+Gp25HwmLeHFy6r6vZ2n
-         h0Xr6OgIMob8SVm9IHIjUg+dFqtEjSL0ctSzRi7JPOaa/8d+kZxCBm24xwoAtnEl73+K
-         QMIp17ggV/oTnByqlJdZxNoMR4302aWnDnrE55o5omgGwUgSIbO9v5MAOWIQtDXx553q
-         lGr4NIHI2lyIEZuHB9IPghxeOUZhi8uFtD/y/Ey3yrDg08R4cgy8GPdaM+3zK9Unjezy
-         +tZQ==
+        bh=McNieCwRwqdn4mXgmAvirHEqDHVQd8Qo6rMG0vyrR7Q=;
+        b=HNu+maSSw2VuoPG4z2uqifqYkaqVw+S4RwRek4pz9ohP+yYYdhPtsnebMxEUL9dCg0
+         mz4snKlOEPKfVdw9XFwzbzUnLeeKb7uoLF0m6AVVled4cErVwiFux0F7AqnZypSPj/w9
+         7CUAthYAwmJwcA2SLFnbKmI25IZY9D33wVk2wLeEcSa9iibyrFhSEhyuNBa7vJHGqoq+
+         Mf6xSUvsTspf6F1BnsKbYk4KwExvvwuBI0DekRdYZF96MwMDX5PLcKcdIcKiv8laApGC
+         1OWhuDW9YRtxwBY2fDwBjyzTaVPfHvNFHy2m9pft0LKZrUVxDvZCglgu7+N9C6PFAHDu
+         39hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=IPFbfrHJ6YrXapqN6K+le3Ltd/e6LaT+IHt+F0E8NmE=;
-        b=otZg+C84ZyGAL5canrheDFL2U0fXwLpGy+0b8b4KEddXR0Sa3r4mrZP2E0tJSu7c3X
-         /ukqrhsQICu3XZpTq9f3Con+RcFKIYdXurT3v4qXHYxGmGZMskUIHBGpQhq884Z2a7dQ
-         Zys2qqnXdvjUZRjDMlD6zkkwdpX+b2NamzSS7gM6FN1Xel1RvjDMpTHRJvARuggvWt43
-         Qgd7rOh2qu1dVGhmlMQMJwRtYkJ12zD1TwSLnhMNXWD1+MlptXes9gMie/QDUeSbQdoc
-         X+X0BvpyOgzLqa0+SKsSOXnM8dUuna6lzQju52KVrLleV8UshDM38pobk0WxmdjHqhYq
-         HOKg==
-X-Gm-Message-State: AOAM532ZtPod9s+UkI18dB/pf4wgZgjj+Ajz+ULi8tI5Gn1F/yrglm2N
-        sFuD7D41DT5rNsfAtmnUpUgE0cvTJAFJkJi8i5c9gAC4zGc=
-X-Google-Smtp-Source: ABdhPJygh4ndxuIUIDoHBPdynyoouvtJaW1vhxFPfdQK9E08zK4F3+ACis9LGr+K5s5V09OwuUMZXHpCZ4eNNpBcisc=
-X-Received: by 2002:adf:c843:: with SMTP id e3mr14327737wrh.38.1643025306645;
- Mon, 24 Jan 2022 03:55:06 -0800 (PST)
+        bh=McNieCwRwqdn4mXgmAvirHEqDHVQd8Qo6rMG0vyrR7Q=;
+        b=d+I9AtpG4hHFVHeUoEgrs+Wj+0BuwdbE7nwfALhgWemKNenPr4rIpbOe8U1ZzgSf1y
+         AFFfiF9Y9L67TnPjlp2DW0ZRmRnOJ6dp5qNF0lr+XPzn2AEyLVWCxF/9X4XDMnKdWGlw
+         SkzZY6d36PB6VOfVSrcUDNdOhEMT9x0BjoAP8afO5XXb7xz+v1VnnzLIHglEjL3GcKHP
+         g1x63OxmEndlbPeF9bK/14gHeE+RP4m3s6hfoKm7ggDBorOrlqbU+KOW47l8hf8awXSN
+         FebynaLCnTCxsZEZv8Y6DNLGnwcrojTRU6pEjDyx3IMMF7qMcr0HYmMfD2yr03NWWMqV
+         L1yQ==
+X-Gm-Message-State: AOAM531iaCYKMHz1ktktZt9Jf1to3LZdy7RaK9FA7bsGpUzgF4VXiOE8
+        08Qi5hNVWvBWFcC7+8q105QCj6VfrsjE+TMxx0wFKtf+rdw7Kg==
+X-Google-Smtp-Source: ABdhPJw7mc2w5pNFCFGNTs8AQieDdtqWE4vCOvZNY/RlwQ+oYpw5SAwk5nCWs+H6posIOLwEsPgAVLlXQxs+y7bzmRY=
+X-Received: by 2002:a4a:bd84:: with SMTP id k4mr2249718oop.45.1643025339517;
+ Mon, 24 Jan 2022 03:55:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20220120074232.1084967-1-jens.wiklander@linaro.org> <CAFA6WYO=9Rw7R+QEgunjtdM=63L1AzYxx26452=+uj7SuPiE7Q@mail.gmail.com>
-In-Reply-To: <CAFA6WYO=9Rw7R+QEgunjtdM=63L1AzYxx26452=+uj7SuPiE7Q@mail.gmail.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Mon, 24 Jan 2022 12:54:56 +0100
-Message-ID: <CAHUa44Gtwwx4+8QS9UiVGp+2FnZuPjFnZaZ+_Tt8VJnq308gQA@mail.gmail.com>
-Subject: Re: [PATCH v2] optee: add error checks in optee_ffa_do_call_with_arg()
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        David Laight <david.laight@aculab.com>
+References: <20220124025205.329752-1-liupeng256@huawei.com>
+ <20220124025205.329752-2-liupeng256@huawei.com> <Ye5hKItk3j7arjaI@elver.google.com>
+ <6eb16a68-9a56-7aea-3dd6-bd719a9ce700@huawei.com> <CANpmjNM_bp03RvWYr+PaOxx0DS3LryChweG90QXci3iBgzW4wQ@mail.gmail.com>
+In-Reply-To: <CANpmjNM_bp03RvWYr+PaOxx0DS3LryChweG90QXci3iBgzW4wQ@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 24 Jan 2022 12:55:28 +0100
+Message-ID: <CANpmjNO8g_MB-5T9YxLKHOe=Mo8AWTmSFGh5jmr479s=j-v0Pg@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/3] kfence: Add a module parameter to adjust kfence objects
+To:     "liupeng (DM)" <liupeng256@huawei.com>
+Cc:     glider@google.com, dvyukov@google.com, corbet@lwn.net,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        akpm@linux-foundation.org, kasan-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 12:18 PM Sumit Garg <sumit.garg@linaro.org> wrote:
+On Mon, 24 Jan 2022 at 12:45, Marco Elver <elver@google.com> wrote:
 >
-> On Thu, 20 Jan 2022 at 13:12, Jens Wiklander <jens.wiklander@linaro.org> wrote:
-> >
-> > Adds error checking in optee_ffa_do_call_with_arg() for correctness.
-> >
-> > Fixes: 4615e5a34b95 ("optee: add FF-A support")
-> > Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
-> > ---
-> >  drivers/tee/optee/ffa_abi.c | 15 ++++++++++++---
-> >  1 file changed, 12 insertions(+), 3 deletions(-)
-> >
+> [ FYI, your reply was not plain text, so LKML may have rejected it. I
+> advise that you switch your email client for LKML emails to plain
+> text. ]
 >
-> Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+> On Mon, 24 Jan 2022 at 12:24, liupeng (DM) <liupeng256@huawei.com> wrote:
+> [...]
+> > > I think the only reasonable way forward is if you add immediate patching
+> > > support to the kernel as the "Note" suggests.
+> >
+> > May you give us more details about "immediate patching"?
+> [...]
+> > Thank you for your patient suggestions, it's actually helpful and inspired.
+> > We have integrated your latest work "skipping already covered allocations",
+> > and will do more experiments about KFENCE. Finally, we really hope you can
+> > give us more introductions about "immediate patching".
+>
+> "Immediate patching" would, similar to "static branches" or
+> "alternatives" be based on code hot patching.
+>
+> https://www.kernel.org/doc/html/latest/staging/static-keys.html
+>
+> "Patching immediates" would essentially patch the immediate operands
+> of certain (limited) instructions. I think designing this properly to
+> work across various architectures (like static_keys/jump_label) is
+> very complex. So it may not be a viable near-term option.
+>
+> What Dmitry suggests using a constant virtual address carveout is more
+> realistic. But this means having to discuss with arch maintainers
+> which virtual address ranges can be reserved. The nice thing about
+> just relying on memblock and nothing else is that it is very portable
+> and simple. You can have a look at how KASAN deals with organizing its
+> shadow memory if you are interested.
 
-I'm picking up this.
+Hmm, there may be more issues lurking here:
+
+https://lore.kernel.org/all/20200929140226.GB53442@C02TD0UTHF1T.local/
+https://lore.kernel.org/all/20200929142411.GC53442@C02TD0UTHF1T.local/
+
+... and I'm guessing if we assign a fixed virtual address range it'll
+live outside the linear mapping, which is likely to break certain
+requirements of kmalloc()'d allocations in certain situations (a
+problem we had with v1 of KFENCE on arm64).
+
+So I don't even know if that's feasible. :-/
 
 Thanks,
-Jens
-
->
-> -Sumit
->
-> > diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
-> > index 20a1b1a3d965..0775759a29c0 100644
-> > --- a/drivers/tee/optee/ffa_abi.c
-> > +++ b/drivers/tee/optee/ffa_abi.c
-> > @@ -619,9 +619,18 @@ static int optee_ffa_do_call_with_arg(struct tee_context *ctx,
-> >                 .data2 = (u32)(shm->sec_world_id >> 32),
-> >                 .data3 = shm->offset,
-> >         };
-> > -       struct optee_msg_arg *arg = tee_shm_get_va(shm, 0);
-> > -       unsigned int rpc_arg_offs = OPTEE_MSG_GET_ARG_SIZE(arg->num_params);
-> > -       struct optee_msg_arg *rpc_arg = tee_shm_get_va(shm, rpc_arg_offs);
-> > +       struct optee_msg_arg *arg;
-> > +       unsigned int rpc_arg_offs;
-> > +       struct optee_msg_arg *rpc_arg;
-> > +
-> > +       arg = tee_shm_get_va(shm, 0);
-> > +       if (IS_ERR(arg))
-> > +               return PTR_ERR(arg);
-> > +
-> > +       rpc_arg_offs = OPTEE_MSG_GET_ARG_SIZE(arg->num_params);
-> > +       rpc_arg = tee_shm_get_va(shm, rpc_arg_offs);
-> > +       if (IS_ERR(rpc_arg))
-> > +               return PTR_ERR(rpc_arg);
-> >
-> >         return optee_ffa_yielding_call(ctx, &data, rpc_arg);
-> >  }
-> > --
-> > 2.31.1
-> >
+-- Marco

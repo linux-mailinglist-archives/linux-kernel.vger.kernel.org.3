@@ -2,41 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55775498C5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BAD5498C37
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349423AbiAXTUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:20:44 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39938 "EHLO
+        id S1349454AbiAXTUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:20:45 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42248 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346286AbiAXTMd (ORCPT
+        with ESMTP id S1346348AbiAXTMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:12:33 -0500
+        Mon, 24 Jan 2022 14:12:37 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7C3F612DE;
-        Mon, 24 Jan 2022 19:12:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87D79C340E5;
-        Mon, 24 Jan 2022 19:12:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C1221611A9;
+        Mon, 24 Jan 2022 19:12:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97FE2C340E5;
+        Mon, 24 Jan 2022 19:12:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051552;
-        bh=2pDpaWx5MhnyIcZv45hliHuSeHM25XYVHYfE71ZrZbA=;
+        s=korg; t=1643051555;
+        bh=7MC46cqVCemBIVTmpcjdimelq3KvYsWQumf2TrlMETo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y/KWYyGrACCQQZ8Q8INgQyOle8pjMkHEBRnRMXGZRI+d8I/zCptItjqLbbrPRW6bO
-         lpQIpvJc19sQj0IbHFZ112tDKwxocro9WMrkoCjnAXGPICjzQsgV6ufxgAQJznEjUU
-         8mcPDGPvhFmKyrVh3O0RSop8XBGHEi3UVxYBjaS4=
+        b=QIv0oRvv+6nOyegDsecpJeOfQnpFJlxjDmgR86qGzivKyiUeKNHSxmdqd84kU8DbT
+         gg4mQ7SzJUII0LvjdKDXJmosU/zXAZaZ2yx3m5+bsztFIWmGg/th8DL4rgbQi4g0+Z
+         I+qcrWUdtgO2MwXlBOn1qgOLWkW4AV6uuphR+S1M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        =?UTF-8?q?D=C3=A1vid=20Bolvansk=C3=BD?= <david.bolvansky@gmail.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>
-Subject: [PATCH 4.19 012/239] drm/i915: Avoid bitwise vs logical OR warning in snb_wm_latency_quirk()
-Date:   Mon, 24 Jan 2022 19:40:50 +0100
-Message-Id: <20220124183943.505209038@linuxfoundation.org>
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Paul Barker <paul.barker@sancloud.com>
+Subject: [PATCH 4.19 013/239] kbuild: Add $(KBUILD_HOSTLDFLAGS) to has_libelf test
+Date:   Mon, 24 Jan 2022 19:40:51 +0100
+Message-Id: <20220124183943.538536958@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
 References: <20220124183943.102762895@linuxfoundation.org>
@@ -50,50 +48,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Nathan Chancellor <nathan@kernel.org>
 
-commit 2e70570656adfe1c5d9a29940faa348d5f132199 upstream.
+commit f634ca650f724347892068489c7920631a3aac6a upstream.
 
-A new warning in clang points out a place in this file where a bitwise
-OR is being used with boolean types:
+Normally, invocations of $(HOSTCC) include $(KBUILD_HOSTLDFLAGS), which
+in turn includes $(HOSTLDFLAGS), which allows users to pass in their own
+flags when linking. However, the 'has_libelf' test does not, meaning
+that if a user requests a specific linker via HOSTLDFLAGS=-fuse-ld=...,
+it is not respected and the build might error.
 
-drivers/gpu/drm/i915/intel_pm.c:3066:12: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
-        changed = ilk_increase_wm_latency(dev_priv, dev_priv->wm.pri_latency, 12) |
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+For example, if a user building with clang wants to use all of the LLVM
+tools without any GNU tools, they might remove all of the GNU tools from
+their system or PATH then build with
 
-This construct is intentional, as it allows every one of the calls to
-ilk_increase_wm_latency() to occur (instead of short circuiting with
-logical OR) while still caring about the result of each call.
+$ make HOSTLDFLAGS=-fuse-ld=lld LLVM=1 LLVM_IAS=1
 
-To make this clearer to the compiler, use the '|=' operator to assign
-the result of each ilk_increase_wm_latency() call to changed, which
-keeps the meaning of the code the same but makes it obvious that every
-one of these calls is expected to happen.
+which says use all of the LLVM tools, the integrated assembler, and
+ld.lld for linking host executables. Without this change, the build will
+error because $(HOSTCC) uses its default linker, rather than the one
+requested via -fuse-ld=..., which is GNU ld in clang's case in a default
+configuration.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1473
-Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+error: Cannot generate ORC metadata for CONFIG_UNWINDER_ORC=y, please
+install libelf-dev, libelf-devel or elfutils-libelf-devel
+make[1]: *** [Makefile:1260: prepare-objtool] Error 1
+
+Add $(KBUILD_HOSTLDFLAGS) to the 'has_libelf' test so that the linker
+choice is respected.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/479
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Suggested-by: Dávid Bolvanský <david.bolvansky@gmail.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211014211916.3550122-1-nathan@kernel.org
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Paul Barker <paul.barker@sancloud.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/intel_pm.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ Makefile |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/i915/intel_pm.c
-+++ b/drivers/gpu/drm/i915/intel_pm.c
-@@ -3002,9 +3002,9 @@ static void snb_wm_latency_quirk(struct
- 	 * The BIOS provided WM memory latency values are often
- 	 * inadequate for high resolution displays. Adjust them.
- 	 */
--	changed = ilk_increase_wm_latency(dev_priv, dev_priv->wm.pri_latency, 12) |
--		ilk_increase_wm_latency(dev_priv, dev_priv->wm.spr_latency, 12) |
--		ilk_increase_wm_latency(dev_priv, dev_priv->wm.cur_latency, 12);
-+	changed = ilk_increase_wm_latency(dev_priv, dev_priv->wm.pri_latency, 12);
-+	changed |= ilk_increase_wm_latency(dev_priv, dev_priv->wm.spr_latency, 12);
-+	changed |= ilk_increase_wm_latency(dev_priv, dev_priv->wm.cur_latency, 12);
+--- a/Makefile
++++ b/Makefile
+@@ -972,7 +972,7 @@ HOST_LIBELF_LIBS = $(shell pkg-config li
  
- 	if (!changed)
- 		return;
+ ifdef CONFIG_STACK_VALIDATION
+   has_libelf := $(call try-run,\
+-		echo "int main() {}" | $(HOSTCC) -xc -o /dev/null $(HOST_LIBELF_LIBS) -,1,0)
++		echo "int main() {}" | $(HOSTCC) $(KBUILD_HOSTLDFLAGS) -xc -o /dev/null $(HOST_LIBELF_LIBS) -,1,0)
+   ifeq ($(has_libelf),1)
+     objtool_target := tools/objtool FORCE
+   else
 
 

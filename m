@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58FFF499E25
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4628049A18F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:38:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587816AbiAXW3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:29:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
+        id S1851280AbiAXXhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:37:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378448AbiAXVha (ORCPT
+        with ESMTP id S1841261AbiAXW6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:37:30 -0500
+        Mon, 24 Jan 2022 17:58:09 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27075C05A1A6;
-        Mon, 24 Jan 2022 12:23:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF50C02B74C;
+        Mon, 24 Jan 2022 13:13:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8BD6614FE;
-        Mon, 24 Jan 2022 20:23:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95EE8C340E7;
-        Mon, 24 Jan 2022 20:23:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDC9261471;
+        Mon, 24 Jan 2022 21:13:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF661C340E5;
+        Mon, 24 Jan 2022 21:13:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055817;
-        bh=LkP5wPAOSpGkOD6OaRU0ev13KEb6uw1g3WHDaHfng7s=;
+        s=korg; t=1643058794;
+        bh=/o+LUW1Cr2cpX0MN9+mBS9URWFlB9//SCkxN0ezCjhk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IA9amDC4aRGmmBjLWhkAPURLcxhRFi33zx4HiDNok29c3m8KnucCE2/0Mn4yc7yWD
-         Qq3XeDCo1Rki6kIYfKOve6+VGQP7a4OqrvCCpjSqfIOAnz5oHlg3eCiAbx5oEH5xd7
-         I4UaYpNc3SfTVp2jTZ2H6cqDHOy84Pdmuyjy1WEs=
+        b=zVzhVm/n7u+jMNVM6y6Nx1iPwjsY6NQztRX0+4FFuqY1Joua31EHIXbsrgz7UNmmS
+         YdGNqgmCF8BbdhsIOaSKP+gLZvZ5sdkEnEQieUEu3ku1z0nh9lsAVVjyj8x5mdDB4Y
+         H3oB6givGPC21THMjsSsfqKlVTh1PiRIwldiXLbc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
+        Vinod Koul <vkoul@kernel.org>, Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 275/846] mmc: meson-mx-sdio: add IRQ check
+Subject: [PATCH 5.16 0403/1039] spi: qcom: geni: handle timeout for gpi mode
 Date:   Mon, 24 Jan 2022 19:36:32 +0100
-Message-Id: <20220124184110.427030706@linuxfoundation.org>
+Message-Id: <20220124184138.856581651@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,42 +49,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
+From: Vinod Koul <vkoul@kernel.org>
 
-[ Upstream commit 8fc9a77bc64e1f23d07953439817d8402ac9706f ]
+[ Upstream commit f8039ea55d4ccac2238a247a574f0acb3bc1dc4b ]
 
-The driver neglects to check the result of platform_get_irq()'s call and
-blithely passes the negative error codes to devm_request_threaded_irq()
-(which takes *unsigned* IRQ #), causing it to fail with -EINVAL, overriding
-an original error code. Stop calling devm_request_threaded_irq() with the
-invalid IRQ #s.
+We missed adding handle_err for gpi mode, so add a new function
+spi_geni_handle_err() which would call handle_fifo_timeout() or newly
+added handle_gpi_timeout() based on mode
 
-Fixes: ed80a13bb4c4 ("mmc: meson-mx-sdio: Add a driver for the Amlogic Meson8 and Meson8b SoC")
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Link: https://lore.kernel.org/r/20211217202717.10041-3-s.shtylyov@omp.ru
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Fixes: b59c122484ec ("spi: spi-geni-qcom: Add support for GPI dma")
+Reported-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Link: https://lore.kernel.org/r/20220103071118.27220-2-vkoul@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/host/meson-mx-sdio.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/spi/spi-geni-qcom.c | 26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mmc/host/meson-mx-sdio.c b/drivers/mmc/host/meson-mx-sdio.c
-index d4a48916bfb67..3a19a05ef55a7 100644
---- a/drivers/mmc/host/meson-mx-sdio.c
-+++ b/drivers/mmc/host/meson-mx-sdio.c
-@@ -662,6 +662,11 @@ static int meson_mx_mmc_probe(struct platform_device *pdev)
+diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+index 69e71aac85129..079d0cb783ee3 100644
+--- a/drivers/spi/spi-geni-qcom.c
++++ b/drivers/spi/spi-geni-qcom.c
+@@ -168,6 +168,30 @@ static void handle_fifo_timeout(struct spi_master *spi,
  	}
+ }
  
- 	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0) {
-+		ret = irq;
-+		goto error_free_mmc;
-+	}
++static void handle_gpi_timeout(struct spi_master *spi, struct spi_message *msg)
++{
++	struct spi_geni_master *mas = spi_master_get_devdata(spi);
 +
- 	ret = devm_request_threaded_irq(host->controller_dev, irq,
- 					meson_mx_mmc_irq,
- 					meson_mx_mmc_irq_thread, IRQF_ONESHOT,
++	dmaengine_terminate_sync(mas->tx);
++	dmaengine_terminate_sync(mas->rx);
++}
++
++static void spi_geni_handle_err(struct spi_master *spi, struct spi_message *msg)
++{
++	struct spi_geni_master *mas = spi_master_get_devdata(spi);
++
++	switch (mas->cur_xfer_mode) {
++	case GENI_SE_FIFO:
++		handle_fifo_timeout(spi, msg);
++		break;
++	case GENI_GPI_DMA:
++		handle_gpi_timeout(spi, msg);
++		break;
++	default:
++		dev_err(mas->dev, "Abort on Mode:%d not supported", mas->cur_xfer_mode);
++	}
++}
++
+ static bool spi_geni_is_abort_still_pending(struct spi_geni_master *mas)
+ {
+ 	struct geni_se *se = &mas->se;
+@@ -926,7 +950,7 @@ static int spi_geni_probe(struct platform_device *pdev)
+ 	spi->can_dma = geni_can_dma;
+ 	spi->dma_map_dev = dev->parent;
+ 	spi->auto_runtime_pm = true;
+-	spi->handle_err = handle_fifo_timeout;
++	spi->handle_err = spi_geni_handle_err;
+ 	spi->use_gpio_descriptors = true;
+ 
+ 	init_completion(&mas->cs_done);
 -- 
 2.34.1
 

@@ -2,39 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F0D4999D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:47:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D80174999FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377491AbiAXVh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:37:57 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:54438 "EHLO
+        id S1456397AbiAXVjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:39:01 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54604 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444979AbiAXVBu (ORCPT
+        with ESMTP id S1445066AbiAXVCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:01:50 -0500
+        Mon, 24 Jan 2022 16:02:01 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5122D60C17;
-        Mon, 24 Jan 2022 21:01:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 314AFC340E5;
-        Mon, 24 Jan 2022 21:01:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 627F260B28;
+        Mon, 24 Jan 2022 21:02:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F33EC340E5;
+        Mon, 24 Jan 2022 21:02:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058109;
-        bh=RCFUEYNF8zNosS4379XW1Pwb4Rx5S5veAVuWvZxUI2s=;
+        s=korg; t=1643058120;
+        bh=ckyorOORVsIp70Q+mkMHGOBzftHyZMq+cQA994k0QLc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D9Y1WObEbu60uL+ms9Q57TeIsgGg/5orLASjVI8T0vsj+Utq58Z6cU1ViqemjWf3c
-         QDXL51TY+xbGlAH9o56lF+GKMwruOw69hg3Q2JCZrY95/MsEqdY0W/dUD8+QUSalBY
-         f80ceAgvkVpHEjmbcjwYarQ80r/PM9MPpURaNK6c=
+        b=lac4Ah3dcUrCKPITN0Y1m4kSKRP8CKU2mdp1a8dMHzJnNpoAAO8sWotMSM4POrmed
+         R6USd2eStCsE5eBgAt//QhwPqdPE71xrKE5uzk/XzkV3QjpCsUr+DxvMq63VlI47mg
+         JaSF5HXviFM7YcmSGYg9mjSaymZLR3CIUgy5i1uc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        stable@vger.kernel.org,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0184/1039] libbpf: Silence uninitialized warning/error in btf_dump_dump_type_data
-Date:   Mon, 24 Jan 2022 19:32:53 +0100
-Message-Id: <20220124184131.467285436@linuxfoundation.org>
+Subject: [PATCH 5.16 0185/1039] media: i2c: imx274: fix s_frame_interval runtime resume not requested
+Date:   Mon, 24 Jan 2022 19:32:54 +0100
+Message-Id: <20220124184131.508745317@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -46,48 +48,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alan Maguire <alan.maguire@oracle.com>
+From: Eugen Hristev <eugen.hristev@microchip.com>
 
-[ Upstream commit 43174f0d4597325cb91f1f1f55263eb6e6101036 ]
+[ Upstream commit da653498c20ba5b185214d8ae43b4e8e9594f520 ]
 
-When compiling libbpf with gcc 4.8.5, we see:
+pm_runtime_resume_and_get should be called when the s_frame_interval
+is called.
 
-  CC       staticobjs/btf_dump.o
-btf_dump.c: In function ‘btf_dump_dump_type_data.isra.24’:
-btf_dump.c:2296:5: error: ‘err’ may be used uninitialized in this function [-Werror=maybe-uninitialized]
-  if (err < 0)
-     ^
-cc1: all warnings being treated as errors
-make: *** [staticobjs/btf_dump.o] Error 1
+The driver will try to access device registers to configure VMAX, coarse
+time and exposure.
 
-While gcc 4.8.5 is too old to build the upstream kernel, it's possible it
-could be used to build standalone libbpf which suffers from the same problem.
-Silence the error by initializing 'err' to 0.  The warning/error seems to be
-a false positive since err is set early in the function.  Regardless we
-shouldn't prevent libbpf from building for this.
+Currently if the runtime is not resumed, this fails:
+ # media-ctl -d /dev/media0 --set-v4l2 '"IMX274 1-001a":0[fmt:SRGGB10_1X10/3840x2
+160@1/10]'
 
-Fixes: 920d16af9b42 ("libbpf: BTF dumper support for typed data")
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/1638180040-8037-1-git-send-email-alan.maguire@oracle.com
+IMX274 1-001a: imx274_binning_goodness: ask 3840x2160, size 3840x2160, goodness 0
+IMX274 1-001a: imx274_binning_goodness: ask 3840x2160, size 1920x1080, goodness -3000
+IMX274 1-001a: imx274_binning_goodness: ask 3840x2160, size 1280x720, goodness -4000
+IMX274 1-001a: imx274_binning_goodness: ask 3840x2160, size 1280x540, goodness -4180
+IMX274 1-001a: __imx274_change_compose: selected 1x1 binning
+IMX274 1-001a: imx274_set_frame_interval: input frame interval = 1 / 10
+IMX274 1-001a: imx274_read_mbreg : addr 0x300e, val=0x1 (2 bytes)
+IMX274 1-001a: imx274_set_frame_interval : register SVR = 1
+IMX274 1-001a: imx274_read_mbreg : addr 0x30f6, val=0x6a8 (2 bytes)
+IMX274 1-001a: imx274_set_frame_interval : register HMAX = 1704
+IMX274 1-001a: imx274_set_frame_length : input length = 2112
+IMX274 1-001a: imx274_write_mbreg : i2c bulk write failed, 30f8 = 884 (3 bytes)
+IMX274 1-001a: imx274_set_frame_length error = -121
+IMX274 1-001a: imx274_set_frame_interval error = -121
+Unable to setup formats: Remote I/O error (121)
+
+The device is not resumed thus the remote I/O error.
+
+Setting the frame interval works at streaming time, because
+pm_runtime_resume_and_get is called at s_stream time before sensor setup.
+The failure happens when only the s_frame_interval is called separately
+independently on streaming time.
+
+Fixes: ad97bc37426c ("media: i2c: imx274: Add IMX274 power on and off sequence")
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/btf_dump.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/imx274.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index 17db62b5002e8..5cae71600631b 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -2194,7 +2194,7 @@ static int btf_dump_dump_type_data(struct btf_dump *d,
- 				   __u8 bits_offset,
- 				   __u8 bit_sz)
- {
--	int size, err;
-+	int size, err = 0;
+diff --git a/drivers/media/i2c/imx274.c b/drivers/media/i2c/imx274.c
+index 0dce92872176d..4d9b64c61f603 100644
+--- a/drivers/media/i2c/imx274.c
++++ b/drivers/media/i2c/imx274.c
+@@ -1367,6 +1367,10 @@ static int imx274_s_frame_interval(struct v4l2_subdev *sd,
+ 	int min, max, def;
+ 	int ret;
  
- 	size = btf_dump_type_data_check_overflow(d, t, id, data, bits_offset);
- 	if (size < 0)
++	ret = pm_runtime_resume_and_get(&imx274->client->dev);
++	if (ret < 0)
++		return ret;
++
+ 	mutex_lock(&imx274->lock);
+ 	ret = imx274_set_frame_interval(imx274, fi->interval);
+ 
+@@ -1398,6 +1402,7 @@ static int imx274_s_frame_interval(struct v4l2_subdev *sd,
+ 
+ unlock:
+ 	mutex_unlock(&imx274->lock);
++	pm_runtime_put(&imx274->client->dev);
+ 
+ 	return ret;
+ }
 -- 
 2.34.1
 

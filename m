@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C483499DE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA2349A141
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:35:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1586599AbiAXW1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:27:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
+        id S1850850AbiAXXbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:31:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390792AbiAXVM6 (ORCPT
+        with ESMTP id S1835751AbiAXWhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:12:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD58FC02980C;
-        Mon, 24 Jan 2022 12:10:01 -0800 (PST)
+        Mon, 24 Jan 2022 17:37:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85D7C0E9BA9;
+        Mon, 24 Jan 2022 12:59:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84A03B81218;
-        Mon, 24 Jan 2022 20:10:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A742EC340E7;
-        Mon, 24 Jan 2022 20:09:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47CAA61342;
+        Mon, 24 Jan 2022 20:59:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28421C340E5;
+        Mon, 24 Jan 2022 20:59:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055000;
-        bh=fdEnQR3ESgo3jqbn1qe9UEwBUMsHG31tWLdWi7m5dR8=;
+        s=korg; t=1643057941;
+        bh=AwFJn6/pMMxcV4YXEZ5zf98OztZsn5CIgYkwv9snTGE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ucgCgEE+JWo22aQAIGa6Jg1JZEFycUGVZq/2shhpyjFxHQSufX9tICoPMpcV22pOP
-         5hhR3iVpednjHABZ8qvcg5t6QZMXuKF2Rx9//z+BOPotVsoC0nMh/ZwpCzfo8sTbxp
-         o9cmdpYf5Ur8BJvSCv44gnrIjIPVnaBVu0DdVTD8=
+        b=EuSZKPIKHC5pEHdOEMxZhpeKSKzu7q82fEh9QlJo6XI9tWosZiIucrIhwCCTUMg+/
+         O+Sw3iix5zJELd2lmILtSdGQc/wc8OfnuvKQjrktDophKEbNF+BCmT7HyljHAUJvul
+         bBUkmUJruCffxPzTW9RFoITg20PSvfFBoiYgTaFE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 001/846] KVM: x86/mmu: Fix write-protection of PTs mapped by the TDP MMU
-Date:   Mon, 24 Jan 2022 19:31:58 +0100
-Message-Id: <20220124184100.925469129@linuxfoundation.org>
+        stable@vger.kernel.org, Jammy Huang <jammy_huang@aspeedtech.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Joel Stanley <joel@jms.id.au>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0130/1039] media: aspeed: fix mode-detect always time out at 2nd run
+Date:   Mon, 24 Jan 2022 19:31:59 +0100
+Message-Id: <20220124184129.533329949@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -51,56 +52,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Matlack <dmatlack@google.com>
+From: Jammy Huang <jammy_huang@aspeedtech.com>
 
-commit 7c8a4742c4abe205ec9daf416c9d42fd6b406e8e upstream.
+[ Upstream commit 62cea52ad4bead0ae4be2cfe1142eb0aae0e9fbd ]
 
-When the TDP MMU is write-protection GFNs for page table protection (as
-opposed to for dirty logging, or due to the HVA not being writable), it
-checks if the SPTE is already write-protected and if so skips modifying
-the SPTE and the TLB flush.
+aspeed_video_get_resolution() will try to do res-detect again if the
+timing got in last try is invalid. But it will always time out because
+VE_SEQ_CTRL_TRIG_MODE_DET is only cleared after 1st mode-detect.
 
-This behavior is incorrect because it fails to check if the SPTE
-is write-protected for page table protection, i.e. fails to check
-that MMU-writable is '0'.  If the SPTE was write-protected for dirty
-logging but not page table protection, the SPTE could locklessly be made
-writable, and vCPUs could still be running with writable mappings cached
-in their TLB.
+To fix the problem, just clear VE_SEQ_CTRL_TRIG_MODE_DET before setting
+it in aspeed_video_enable_mode_detect().
 
-Fix this by only skipping setting the SPTE if the SPTE is already
-write-protected *and* MMU-writable is already clear.  Technically,
-checking only MMU-writable would suffice; a SPTE cannot be writable
-without MMU-writable being set.  But check both to be paranoid and
-because it arguably yields more readable code.
-
-Fixes: 46044f72c382 ("kvm: x86/mmu: Support write protection for nesting in tdp MMU")
-Cc: stable@vger.kernel.org
-Signed-off-by: David Matlack <dmatlack@google.com>
-Message-Id: <20220113233020.3986005-2-dmatlack@google.com>
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d2b4387f3bdf ("media: platform: Add Aspeed Video Engine driver")
+Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+Acked-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Reviewed-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/mmu/tdp_mmu.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/platform/aspeed-video.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -1493,12 +1493,12 @@ static bool write_protect_gfn(struct kvm
- 		    !is_last_spte(iter.old_spte, iter.level))
- 			continue;
+diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+index cad3f97515aef..136383ad0e97c 100644
+--- a/drivers/media/platform/aspeed-video.c
++++ b/drivers/media/platform/aspeed-video.c
+@@ -539,6 +539,10 @@ static void aspeed_video_enable_mode_detect(struct aspeed_video *video)
+ 	aspeed_video_update(video, VE_INTERRUPT_CTRL, 0,
+ 			    VE_INTERRUPT_MODE_DETECT);
  
--		if (!is_writable_pte(iter.old_spte))
--			break;
--
- 		new_spte = iter.old_spte &
- 			~(PT_WRITABLE_MASK | shadow_mmu_writable_mask);
- 
-+		if (new_spte == iter.old_spte)
-+			break;
++	/* Disable mode detect in order to re-trigger */
++	aspeed_video_update(video, VE_SEQ_CTRL,
++			    VE_SEQ_CTRL_TRIG_MODE_DET, 0);
 +
- 		tdp_mmu_set_spte(kvm, &iter, new_spte);
- 		spte_set = true;
- 	}
+ 	/* Trigger mode detect */
+ 	aspeed_video_update(video, VE_SEQ_CTRL, 0, VE_SEQ_CTRL_TRIG_MODE_DET);
+ }
+@@ -824,10 +828,6 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+ 			return;
+ 		}
+ 
+-		/* Disable mode detect in order to re-trigger */
+-		aspeed_video_update(video, VE_SEQ_CTRL,
+-				    VE_SEQ_CTRL_TRIG_MODE_DET, 0);
+-
+ 		aspeed_video_check_and_set_polarity(video);
+ 
+ 		aspeed_video_enable_mode_detect(video);
+-- 
+2.34.1
+
 
 

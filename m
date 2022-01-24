@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4E2498FF4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BEA64992AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351707AbiAXT4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:56:47 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33376 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354433AbiAXTgg (ORCPT
+        id S1355025AbiAXUXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:23:06 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48096 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376814AbiAXUEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:36:36 -0500
+        Mon, 24 Jan 2022 15:04:06 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 86D6361488;
-        Mon, 24 Jan 2022 19:36:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64D6AC340E5;
-        Mon, 24 Jan 2022 19:36:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 454BDB81229;
+        Mon, 24 Jan 2022 20:04:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75399C340E5;
+        Mon, 24 Jan 2022 20:04:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052996;
-        bh=Rg17Dj64ENb9qLkvReuWQv612SCW6VQtuChYHLBUX6g=;
+        s=korg; t=1643054641;
+        bh=/+mI8nrRREij5JDaj6gEO/h76K+KA7kZdaVgSdBD+Fk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UuSPG/zoP6sPaHDZYt90bUzPR5tBKo/SIplXW3pQh9ifLKdoDzKD8a4jl8MjH3xKA
-         Za1sKrDZ1eUeQ/ystSnNyCCtdW5g1TSo57X2ggsFNgo1oNXLfuHpEIg2qAaw0YztMm
-         Mbp3Jj1B2QVJuY1un1QAM0MRttkk7PFuiSAf4pyI=
+        b=RvOtHKfvir77WWjSlgwYJBiZmQkCdbrYjk0LzaU0r5zlUiiRKo58CqMRowR+vvjfL
+         jNve9bWYcY0d80I1o43obPRie5xof185qZSBaZi2qwQVu5zGaPeucJfXJqLp/fw+Xy
+         NPp4ilY2aNUEvyeHYdZRMWn0AHuwohK4ePQQKe9M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Bob Moore <robert.moore@intel.com>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 208/320] ACPICA: Hardware: Do not flush CPU cache when entering S4 and S5
-Date:   Mon, 24 Jan 2022 19:43:12 +0100
-Message-Id: <20220124184000.704367846@linuxfoundation.org>
+Subject: [PATCH 5.10 428/563] selftests/powerpc/spectre_v2: Return skip code when miss_percent is high
+Date:   Mon, 24 Jan 2022 19:43:13 +0100
+Message-Id: <20220124184039.253521440@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,80 +47,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
-[ Upstream commit 1d4e0b3abb168b2ee1eca99c527cffa1b80b6161 ]
+[ Upstream commit 3c42e9542050d49610077e083c7c3f5fd5e26820 ]
 
-ACPICA commit 3dd7e1f3996456ef81bfe14cba29860e8d42949e
+A mis-match between reported and actual mitigation is not restricted to the
+Vulnerable case. The guest might also report the mitigation as "Software
+count cache flush" and the host will still mitigate with branch cache
+disabled.
 
-According to ACPI 6.4, Section 16.2, the CPU cache flushing is
-required on entering to S1, S2, and S3, but the ACPICA code
-flushes the CPU cache regardless of the sleep state.
+So, instead of skipping depending on the detected mitigation, simply skip
+whenever the detected miss_percent is the expected one for a fully
+mitigated system, that is, above 95%.
 
-Blind cache flush on entering S5 causes problems for TDX.
-
-Flushing happens with WBINVD that is not supported in the TDX
-environment.
-
-TDX only supports S5 and adjusting ACPICA code to conform to the
-spec more strictly fixes the issue.
-
-Link: https://github.com/acpica/acpica/commit/3dd7e1f3
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-[ rjw: Subject and changelog edits ]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Bob Moore <robert.moore@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20211207130557.40566-1-cascardo@canonical.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/acpica/hwesleep.c  | 4 +++-
- drivers/acpi/acpica/hwsleep.c   | 4 +++-
- drivers/acpi/acpica/hwxfsleep.c | 2 --
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ tools/testing/selftests/powerpc/security/spectre_v2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/acpi/acpica/hwesleep.c b/drivers/acpi/acpica/hwesleep.c
-index aa502ae3b6b31..de0a59878e52d 100644
---- a/drivers/acpi/acpica/hwesleep.c
-+++ b/drivers/acpi/acpica/hwesleep.c
-@@ -104,7 +104,9 @@ acpi_status acpi_hw_extended_sleep(u8 sleep_state)
+diff --git a/tools/testing/selftests/powerpc/security/spectre_v2.c b/tools/testing/selftests/powerpc/security/spectre_v2.c
+index adc2b7294e5fd..83647b8277e7d 100644
+--- a/tools/testing/selftests/powerpc/security/spectre_v2.c
++++ b/tools/testing/selftests/powerpc/security/spectre_v2.c
+@@ -193,7 +193,7 @@ int spectre_v2_test(void)
+ 			 * We are not vulnerable and reporting otherwise, so
+ 			 * missing such a mismatch is safe.
+ 			 */
+-			if (state == VULNERABLE)
++			if (miss_percent > 95)
+ 				return 4;
  
- 	/* Flush caches, as per ACPI specification */
- 
--	ACPI_FLUSH_CPU_CACHE();
-+	if (sleep_state < ACPI_STATE_S4) {
-+		ACPI_FLUSH_CPU_CACHE();
-+	}
- 
- 	status = acpi_os_enter_sleep(sleep_state, sleep_control, 0);
- 	if (status == AE_CTRL_TERMINATE) {
-diff --git a/drivers/acpi/acpica/hwsleep.c b/drivers/acpi/acpica/hwsleep.c
-index 5f7d63badbe9d..321aaad97e2f7 100644
---- a/drivers/acpi/acpica/hwsleep.c
-+++ b/drivers/acpi/acpica/hwsleep.c
-@@ -110,7 +110,9 @@ acpi_status acpi_hw_legacy_sleep(u8 sleep_state)
- 
- 	/* Flush caches, as per ACPI specification */
- 
--	ACPI_FLUSH_CPU_CACHE();
-+	if (sleep_state < ACPI_STATE_S4) {
-+		ACPI_FLUSH_CPU_CACHE();
-+	}
- 
- 	status = acpi_os_enter_sleep(sleep_state, pm1a_control, pm1b_control);
- 	if (status == AE_CTRL_TERMINATE) {
-diff --git a/drivers/acpi/acpica/hwxfsleep.c b/drivers/acpi/acpica/hwxfsleep.c
-index 79731efbe8fe2..4e3398819718d 100644
---- a/drivers/acpi/acpica/hwxfsleep.c
-+++ b/drivers/acpi/acpica/hwxfsleep.c
-@@ -162,8 +162,6 @@ acpi_status acpi_enter_sleep_state_s4bios(void)
- 		return_ACPI_STATUS(status);
- 	}
- 
--	ACPI_FLUSH_CPU_CACHE();
--
- 	status = acpi_hw_write_port(acpi_gbl_FADT.smi_command,
- 				    (u32)acpi_gbl_FADT.s4_bios_request, 8);
- 
+ 			return 1;
 -- 
 2.34.1
 

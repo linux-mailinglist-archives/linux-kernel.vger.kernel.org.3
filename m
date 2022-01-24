@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A0649962B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:17:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C457499B7D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444024AbiAXU7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:59:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385569AbiAXUdg (ORCPT
+        id S1575970AbiAXVws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:52:48 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37966 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377498AbiAXVTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:33:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2F9C07E2AC;
-        Mon, 24 Jan 2022 11:46:58 -0800 (PST)
+        Mon, 24 Jan 2022 16:19:00 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 685C86131E;
-        Mon, 24 Jan 2022 19:46:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49974C340E5;
-        Mon, 24 Jan 2022 19:46:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1E06B8123A;
+        Mon, 24 Jan 2022 21:18:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26D51C340E4;
+        Mon, 24 Jan 2022 21:18:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053617;
-        bh=H1hFsvuFf55B6JVRQj672EgOQJOv6pp5Kk5rrycgc9s=;
+        s=korg; t=1643059135;
+        bh=FaB0y9HIYPaqAi9q7owR1nZqkiO+ArzL+57wSpMcVoE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gZ2if9Uhajqg6wITfg7Nj0uDMIXSIDsxMdAB9Zsbtn9iStWpgXM07/WAOpIYPCNM/
-         +m/hFHEJSoMizZLXFYp8CEMXDlLnt88Yy/1bR0+65twGC2lsY1vmCPLVSBy83UQ6ap
-         OjR5jxCKYBK5TwyK7hRsXbLx3HaIK7b1w23febtA=
+        b=fyNIE7iBTyVbZr2OOVH2YW4MLr2aJumoGAqSgLGYSPQwpi9YvdFAkOqku86d8+lgR
+         /AM/o7Y3pH+Sa+bxqmD60gUTopFx0Mm/pirui2/63WBo4PfjeB7FAsQ1p+v/IRbmDt
+         a84F6WfU+c1GCJs0sStRsEu14obCqUkr7r0A8Pl8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        stable@vger.kernel.org, Erhard Furtner <erhard_f@mailbox.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 105/563] tty: serial: atmel: Call dma_async_issue_pending()
-Date:   Mon, 24 Jan 2022 19:37:50 +0100
-Message-Id: <20220124184028.030130227@linuxfoundation.org>
+Subject: [PATCH 5.16 0482/1039] powerpc/powermac: Add additional missing lockdep_register_key()
+Date:   Mon, 24 Jan 2022 19:37:51 +0100
+Message-Id: <20220124184141.475710269@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,48 +47,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tudor Ambarus <tudor.ambarus@microchip.com>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-[ Upstream commit 4f4b9b5895614eb2e2b5f4cab7858f44bd113e1b ]
+[ Upstream commit b149d5d45ac9171ed699a256f026c8ebef901112 ]
 
-The driver wrongly assummed that tx_submit() will start the transfer,
-which is not the case, now that the at_xdmac driver is fixed. tx_submit
-is supposed to push the current transaction descriptor to a pending queue,
-waiting for issue_pending to be called. issue_pending must start the
-transfer, not tx_submit.
+Commit df1f679d19ed ("powerpc/powermac: Add missing
+lockdep_register_key()") fixed a problem that was causing a WARNING.
 
-Fixes: 34df42f59a60 ("serial: at91: add rx dma support")
-Fixes: 08f738be88bb ("serial: at91: add tx dma support")
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Link: https://lore.kernel.org/r/20211125090028.786832-4-tudor.ambarus@microchip.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+There are two other places in the same file with the same problem
+originating from commit 9e607f72748d ("i2c_powermac: shut up lockdep
+warning").
+
+Add missing lockdep_register_key()
+
+Fixes: 9e607f72748d ("i2c_powermac: shut up lockdep warning")
+Reported-by: Erhard Furtner <erhard_f@mailbox.org>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Depends-on: df1f679d19ed ("powerpc/powermac: Add missing lockdep_register_key()")
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=200055
+Link: https://lore.kernel.org/r/2c7e421874e21b2fb87813d768cf662f630c2ad4.1638984999.git.christophe.leroy@csgroup.eu
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/atmel_serial.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/powerpc/platforms/powermac/low_i2c.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-index 396fe8c51f93b..602065bfc9bb8 100644
---- a/drivers/tty/serial/atmel_serial.c
-+++ b/drivers/tty/serial/atmel_serial.c
-@@ -1009,6 +1009,8 @@ static void atmel_tx_dma(struct uart_port *port)
- 				atmel_port->cookie_tx);
- 			return;
- 		}
-+
-+		dma_async_issue_pending(chan);
- 	}
- 
- 	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
-@@ -1275,6 +1277,8 @@ static int atmel_prepare_rx_dma(struct uart_port *port)
- 		goto chan_err;
- 	}
- 
-+	dma_async_issue_pending(atmel_port->chan_rx);
-+
- 	return 0;
- 
- chan_err:
+diff --git a/arch/powerpc/platforms/powermac/low_i2c.c b/arch/powerpc/platforms/powermac/low_i2c.c
+index f77a59b5c2e1a..09bfe4b8f25aa 100644
+--- a/arch/powerpc/platforms/powermac/low_i2c.c
++++ b/arch/powerpc/platforms/powermac/low_i2c.c
+@@ -810,6 +810,7 @@ static void __init pmu_i2c_probe(void)
+ 		bus->hostdata = bus + 1;
+ 		bus->xfer = pmu_i2c_xfer;
+ 		mutex_init(&bus->mutex);
++		lockdep_register_key(&bus->lock_key);
+ 		lockdep_set_class(&bus->mutex, &bus->lock_key);
+ 		bus->flags = pmac_i2c_multibus;
+ 		list_add(&bus->link, &pmac_i2c_busses);
+@@ -933,6 +934,7 @@ static void __init smu_i2c_probe(void)
+ 		bus->hostdata = bus + 1;
+ 		bus->xfer = smu_i2c_xfer;
+ 		mutex_init(&bus->mutex);
++		lockdep_register_key(&bus->lock_key);
+ 		lockdep_set_class(&bus->mutex, &bus->lock_key);
+ 		bus->flags = 0;
+ 		list_add(&bus->link, &pmac_i2c_busses);
 -- 
 2.34.1
 

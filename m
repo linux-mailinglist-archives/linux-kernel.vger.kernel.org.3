@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F3F4977E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 04:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 741FB4977F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 04:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241213AbiAXDxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 22:53:12 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:56866 "EHLO
+        id S241302AbiAXDzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 22:55:38 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:57064 "EHLO
         smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241200AbiAXDxK (ORCPT
+        with ESMTP id S235321AbiAXDzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 22:53:10 -0500
+        Sun, 23 Jan 2022 22:55:36 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E11EA21997;
-        Mon, 24 Jan 2022 03:53:08 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 378CC21997;
+        Mon, 24 Jan 2022 03:55:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1642996388; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1642996535; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=w8lR7J8JNn9z3HgJi0/q20xbPjyDJKVj8xh3UiEzhOQ=;
-        b=BIFtq0WxNoK33RbSSnkbhn7EkwZIJe9uuHRxyCZ03NZ7aYWSjcVp24hiAUh1n0iZ2FW66L
-        KiFctLtDEFU4K29rI7mnmXznzvDMex258aT9xsPPVtAk0JwooEtTFgRa2cnmEDBVQaOpA0
-        MSFdLM9c+p5eGfwo5yPWmePVfpPljq0=
+        bh=WFyjPabVahDB+vrXElKQ+UDq/fcSAdM6+RjOQdJJ+zQ=;
+        b=VgQrwpIxLgoCjPnFeLQ6BZXyoET8QaMuJj5dg3XrTQjG/Dyt8rnQo5H2GJQtXWKNEPjzw0
+        3LVlkZnGEErfLJ5EZGcO/nb+tBz6PyIHowNAMuCegClQg5ZrMhmmIZTDjms6NXFeLDRqPQ
+        zG8uip/oHc07Wt3VH1lEmYNs8wJB0uM=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1642996388;
+        s=susede2_ed25519; t=1642996535;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=w8lR7J8JNn9z3HgJi0/q20xbPjyDJKVj8xh3UiEzhOQ=;
-        b=T7wT1d1qNNR2PFPLlpZBeDaBKmfxRWNTJgT+STJswMATGxn3qssrMiMMOHHdaw5UYROrSd
-        59Joc+ibKdu2eGBw==
+        bh=WFyjPabVahDB+vrXElKQ+UDq/fcSAdM6+RjOQdJJ+zQ=;
+        b=JvFFvxy7hIQZ1+xEKNkM/EQRldT0iSe3V12OSgUpU+cHWb6H8JoYwh8OdaLk3As3Rgau0m
+        WMhtltZp6u4HM8Ag==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D33C113305;
-        Mon, 24 Jan 2022 03:53:05 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EEB8813305;
+        Mon, 24 Jan 2022 03:55:31 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id XkU8I6Ei7mGURQAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 24 Jan 2022 03:53:05 +0000
-Subject: [PATCH 12/23] NFS: remove IS_SWAPFILE hack
+        id eiDtKjMj7mFfRgAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 24 Jan 2022 03:55:31 +0000
+Subject: [PATCH 23/23] SUNRPC: lock against ->sock changing during sysfs read
 From:   NeilBrown <neilb@suse.de>
 To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
         Anna Schumaker <anna.schumaker@netapp.com>,
@@ -58,7 +58,7 @@ To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
 Cc:     linux-nfs@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Date:   Mon, 24 Jan 2022 14:48:32 +1100
-Message-ID: <164299611280.26253.6924680050876339981.stgit@noble.brown>
+Message-ID: <164299611287.26253.6282866540933339893.stgit@noble.brown>
 In-Reply-To: <164299573337.26253.7538614611220034049.stgit@noble.brown>
 References: <164299573337.26253.7538614611220034049.stgit@noble.brown>
 User-Agent: StGit/0.23
@@ -69,30 +69,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This code is pointless as IS_SWAPFILE is always defined.
-So remove it.
+->sock can be set to NULL asynchronously unless ->recv_mutex is held.
+So it is important to hold that mutex.  Otherwise a sysfs read can
+trigger an oops.
+Commit 17f09d3f619a ("SUNRPC: Check if the xprt is connected before
+handling sysfs reads") appears to attempt to fix this problem, but it
+only narrows the race window.
 
-Suggested-by: Mark Hemment <markhemm@googlemail.com>
+Fixes: 17f09d3f619a ("SUNRPC: Check if the xprt is connected before handling sysfs reads")
+Fixes: a8482488a7d6 ("SUNRPC query transport's source port")
 Signed-off-by: NeilBrown <neilb@suse.de>
 ---
- fs/nfs/file.c |    5 -----
- 1 file changed, 5 deletions(-)
+ net/sunrpc/sysfs.c    |    5 ++++-
+ net/sunrpc/xprtsock.c |    7 ++++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/fs/nfs/file.c b/fs/nfs/file.c
-index 9e2def045111..4d4750738aeb 100644
---- a/fs/nfs/file.c
-+++ b/fs/nfs/file.c
-@@ -44,11 +44,6 @@
+diff --git a/net/sunrpc/sysfs.c b/net/sunrpc/sysfs.c
+index 2766dd21935b..baaf65ea9e38 100644
+--- a/net/sunrpc/sysfs.c
++++ b/net/sunrpc/sysfs.c
+@@ -115,11 +115,14 @@ static ssize_t rpc_sysfs_xprt_srcaddr_show(struct kobject *kobj,
+ 	}
  
- static const struct vm_operations_struct nfs_file_vm_ops;
+ 	sock = container_of(xprt, struct sock_xprt, xprt);
+-	if (kernel_getsockname(sock->sock, (struct sockaddr *)&saddr) < 0)
++	mutex_lock(&sock->recv_mutex);
++	if (sock->sock == NULL ||
++	    kernel_getsockname(sock->sock, (struct sockaddr *)&saddr) < 0)
+ 		goto out;
  
--/* Hack for future NFS swap support */
--#ifndef IS_SWAPFILE
--# define IS_SWAPFILE(inode)	(0)
--#endif
--
- int nfs_check_flags(int flags)
+ 	ret = sprintf(buf, "%pISc\n", &saddr);
+ out:
++	mutex_unlock(&sock->recv_mutex);
+ 	xprt_put(xprt);
+ 	return ret + 1;
+ }
+diff --git a/net/sunrpc/xprtsock.c b/net/sunrpc/xprtsock.c
+index 9d34c71004fa..3f2b766e9f82 100644
+--- a/net/sunrpc/xprtsock.c
++++ b/net/sunrpc/xprtsock.c
+@@ -1641,7 +1641,12 @@ static int xs_get_srcport(struct sock_xprt *transport)
+ unsigned short get_srcport(struct rpc_xprt *xprt)
  {
- 	if ((flags & (O_APPEND | O_DIRECT)) == (O_APPEND | O_DIRECT))
+ 	struct sock_xprt *sock = container_of(xprt, struct sock_xprt, xprt);
+-	return xs_sock_getport(sock->sock);
++	unsigned short ret = 0;
++	mutex_lock(&sock->recv_mutex);
++	if (sock->sock)
++		ret = xs_sock_getport(sock->sock);
++	mutex_unlock(&sock->recv_mutex);
++	return ret;
+ }
+ EXPORT_SYMBOL(get_srcport);
+ 
 
 

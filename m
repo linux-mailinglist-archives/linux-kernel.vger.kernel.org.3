@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E14D0499523
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:09:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD6F9499AFB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:58:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392265AbiAXUu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:50:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37802 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383657AbiAXU1e (ORCPT
+        id S1379251AbiAXVsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:48:31 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36068 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1448564AbiAXVNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:27:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F799C08254D;
-        Mon, 24 Jan 2022 11:41:47 -0800 (PST)
+        Mon, 24 Jan 2022 16:13:02 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FAF261551;
-        Mon, 24 Jan 2022 19:41:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06C37C340E5;
-        Mon, 24 Jan 2022 19:41:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C4776146B;
+        Mon, 24 Jan 2022 21:13:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8AA0C340E5;
+        Mon, 24 Jan 2022 21:13:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053306;
-        bh=lDnMZdm1qIoBNi8zGpb9L19ogrWHp8r6Rf4WFn0gvus=;
+        s=korg; t=1643058781;
+        bh=KRYqqgWjbG1axnu97YGHjeYl7Ss7mR3mkioLhNf+bLM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kb4XDSzvDrg9iabil5PzGCxkFqC7UxkzNGEKZ3HqgV2AqNdqhuhUotTKhLKr3WUVK
-         sQoh6e6PDfn3IMVKxJ21W0PNANn2h97V+OkiZiK1eg5qRCjXKUFMxyqMzeOc1IyY3G
-         OOi9U2OWEztgYbItzuMmBJbnScZD4nCie1hcEjWQ=
+        b=W2Ij4DJw8dExZEtBewcuDbXVPFPKvQN5zsnvr1ydjMfH+dc2HGO9fQZ89AdBWH7jX
+         Eo5aNREwJY0UK2vjGevUhu8nkMJldzspcHiJnLdO6zfa2PzdkKiT5qLgxFNy1EaDQs
+         fMWgh2BkWIq+6Jxcc1COq8opBqlPaalGHhe0l1jw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 5.10 022/563] media: em28xx: fix control-message timeouts
-Date:   Mon, 24 Jan 2022 19:36:27 +0100
-Message-Id: <20220124184025.187005090@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0399/1039] drivers/firmware: Add missing platform_device_put() in sysfb_create_simplefb
+Date:   Mon, 24 Jan 2022 19:36:28 +0100
+Message-Id: <20220124184138.729231144@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,42 +45,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit d9b7e8df3aa9b8c10708aab60e72e79ac08237e4 upstream.
+[ Upstream commit 0589e8889dce8e0f0ea5bbf757f38865e2a469c1 ]
 
-USB control-message timeouts are specified in milliseconds and should
-specifically not vary with CONFIG_HZ.
+Add the missing platform_device_put() before return from
+sysfb_create_simplefb() in the error handling case.
 
-Fixes: a6c2ba283565 ("[PATCH] v4l: 716: support for em28xx board family")
-Cc: stable@vger.kernel.org      # 2.6.16
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Fixes: 8633ef82f101 ("drivers/firmware: consolidate EFI framebuffer setup for all arches")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20211231080431.15385-1-linmq006@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/em28xx/em28xx-core.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/firmware/sysfb_simplefb.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
---- a/drivers/media/usb/em28xx/em28xx-core.c
-+++ b/drivers/media/usb/em28xx/em28xx-core.c
-@@ -89,7 +89,7 @@ int em28xx_read_reg_req_len(struct em28x
- 	mutex_lock(&dev->ctrl_urb_lock);
- 	ret = usb_control_msg(udev, pipe, req,
- 			      USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
--			      0x0000, reg, dev->urb_buf, len, HZ);
-+			      0x0000, reg, dev->urb_buf, len, 1000);
- 	if (ret < 0) {
- 		em28xx_regdbg("(pipe 0x%08x): IN:  %02x %02x %02x %02x %02x %02x %02x %02x  failed with error %i\n",
- 			      pipe,
-@@ -158,7 +158,7 @@ int em28xx_write_regs_req(struct em28xx
- 	memcpy(dev->urb_buf, buf, len);
- 	ret = usb_control_msg(udev, pipe, req,
- 			      USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
--			      0x0000, reg, dev->urb_buf, len, HZ);
-+			      0x0000, reg, dev->urb_buf, len, 1000);
- 	mutex_unlock(&dev->ctrl_urb_lock);
+diff --git a/drivers/firmware/sysfb_simplefb.c b/drivers/firmware/sysfb_simplefb.c
+index b86761904949c..303a491e520d1 100644
+--- a/drivers/firmware/sysfb_simplefb.c
++++ b/drivers/firmware/sysfb_simplefb.c
+@@ -113,12 +113,16 @@ __init int sysfb_create_simplefb(const struct screen_info *si,
+ 	sysfb_apply_efi_quirks(pd);
  
- 	if (ret < 0) {
+ 	ret = platform_device_add_resources(pd, &res, 1);
+-	if (ret)
++	if (ret) {
++		platform_device_put(pd);
+ 		return ret;
++	}
+ 
+ 	ret = platform_device_add_data(pd, mode, sizeof(*mode));
+-	if (ret)
++	if (ret) {
++		platform_device_put(pd);
+ 		return ret;
++	}
+ 
+ 	return platform_device_add(pd);
+ }
+-- 
+2.34.1
+
 
 

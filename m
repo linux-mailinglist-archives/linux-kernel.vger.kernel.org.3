@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5EE5498DC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB85498D36
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354113AbiAXTgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:36:01 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57036 "EHLO
+        id S1344510AbiAXT3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:29:01 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43896 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352064AbiAXT3d (ORCPT
+        with ESMTP id S1347071AbiAXTOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:29:33 -0500
+        Mon, 24 Jan 2022 14:14:32 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FF356135E;
-        Mon, 24 Jan 2022 19:29:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A3EDC340E5;
-        Mon, 24 Jan 2022 19:29:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 762CF6090A;
+        Mon, 24 Jan 2022 19:14:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D7BBC340E5;
+        Mon, 24 Jan 2022 19:14:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052572;
-        bh=ETqpcHCICc1tUB+WtR27CydYwT/UiM3pGK7XK2NBSNk=;
+        s=korg; t=1643051670;
+        bh=d4twU/xt8Evsjk78l3La49ircXkQ1OuoTKgMSn0/0D8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aFvpbW7wDgl/qFmbFcFK83tze/6thQYC5IyZ3jUj19NO7TcbpnxVXBx0dev5HjZ1P
-         5FhDzMbXJ6qcX87J4RoKH7c6nvGOHoPJmgubpeNLYnzaXQKZV9JMnYHkfOcKy2qeNq
-         DEa79Gyy9z/w+UW4dsDcFbGeaZaRm+RbTFziEWYw=
+        b=TPrR0ymUlNpdCeeCTRMIkuxzExjbLgoJhXsAImRBii6tr1GrnwhhhOmccNXjh+FrZ
+         Rk45hLiaOTJAprlOR2PjeMgVrX7ZWzPFvdRyifSHRl/ScuArQyVKqSVS28vQtJCMm5
+         8zXPhOMx5iPLt5Y3u8JQbsb5fA/pOpUmCAYkG4rk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Dillon Min <dillon.minfei@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 104/320] rocker: fix a sleeping in atomic bug
+Subject: [PATCH 4.19 050/239] media: videobuf2: Fix the size printk format
 Date:   Mon, 24 Jan 2022 19:41:28 +0100
-Message-Id: <20220124183957.261941057@linuxfoundation.org>
+Message-Id: <20220124183944.727868893@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,36 +47,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Dillon Min <dillon.minfei@gmail.com>
 
-[ Upstream commit 43d012123122cc69feacab55b71369f386c19566 ]
+[ Upstream commit c9ee220d76775e42f35d634479c978d9350077d3 ]
 
-This code is holding the &ofdpa->flow_tbl_lock spinlock so it is not
-allowed to sleep.  That means we have to pass the OFDPA_OP_FLAG_NOWAIT
-flag to ofdpa_flow_tbl_del().
+Since the type of parameter size is unsigned long,
+it should printk by %lu, instead of %ld, fix it.
 
-Fixes: 936bd486564a ("rocker: use FIB notifications instead of switchdev calls")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 7952be9b6ece ("media: drivers/media/common/videobuf2: rename from videobuf")
+Signed-off-by: Dillon Min <dillon.minfei@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/rocker/rocker_ofdpa.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/media/common/videobuf2/videobuf2-dma-contig.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/rocker/rocker_ofdpa.c b/drivers/net/ethernet/rocker/rocker_ofdpa.c
-index 7072b249c8bd6..8157666209798 100644
---- a/drivers/net/ethernet/rocker/rocker_ofdpa.c
-+++ b/drivers/net/ethernet/rocker/rocker_ofdpa.c
-@@ -2795,7 +2795,8 @@ static void ofdpa_fib4_abort(struct rocker *rocker)
- 		if (!ofdpa_port)
- 			continue;
- 		nh->fib_nh_flags &= ~RTNH_F_OFFLOAD;
--		ofdpa_flow_tbl_del(ofdpa_port, OFDPA_OP_FLAG_REMOVE,
-+		ofdpa_flow_tbl_del(ofdpa_port,
-+				   OFDPA_OP_FLAG_REMOVE | OFDPA_OP_FLAG_NOWAIT,
- 				   flow_entry);
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+index aff0ab7bf83d5..bbd5716d4c9cb 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+@@ -154,7 +154,7 @@ static void *vb2_dc_alloc(struct device *dev, unsigned long attrs,
+ 	buf->cookie = dma_alloc_attrs(dev, size, &buf->dma_addr,
+ 					GFP_KERNEL | gfp_flags, buf->attrs);
+ 	if (!buf->cookie) {
+-		dev_err(dev, "dma_alloc_coherent of size %ld failed\n", size);
++		dev_err(dev, "dma_alloc_coherent of size %lu failed\n", size);
+ 		kfree(buf);
+ 		return ERR_PTR(-ENOMEM);
  	}
- 	spin_unlock_irqrestore(&ofdpa->flow_tbl_lock, flags);
+@@ -206,9 +206,9 @@ static int vb2_dc_mmap(void *buf_priv, struct vm_area_struct *vma)
+ 
+ 	vma->vm_ops->open(vma);
+ 
+-	pr_debug("%s: mapped dma addr 0x%08lx at 0x%08lx, size %ld\n",
+-		__func__, (unsigned long)buf->dma_addr, vma->vm_start,
+-		buf->size);
++	pr_debug("%s: mapped dma addr 0x%08lx at 0x%08lx, size %lu\n",
++		 __func__, (unsigned long)buf->dma_addr, vma->vm_start,
++		 buf->size);
+ 
+ 	return 0;
+ }
 -- 
 2.34.1
 

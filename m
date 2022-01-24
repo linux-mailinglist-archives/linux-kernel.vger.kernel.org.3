@@ -2,42 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4F3498D5E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E344A498C02
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:18:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346847AbiAXTbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:31:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349925AbiAXTWz (ORCPT
+        id S1347446AbiAXTSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:18:31 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38996 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343934AbiAXTJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:22:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DF8C02B865;
-        Mon, 24 Jan 2022 11:08:45 -0800 (PST)
+        Mon, 24 Jan 2022 14:09:21 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53B3060B7B;
-        Mon, 24 Jan 2022 19:08:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31DDCC340E8;
-        Mon, 24 Jan 2022 19:08:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 166F7611A9;
+        Mon, 24 Jan 2022 19:09:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C702EC340E5;
+        Mon, 24 Jan 2022 19:09:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051324;
-        bh=R7V9/x7dkmKmUlvwmV4BF5Mr5APc4p8ioiYZydxfyRE=;
+        s=korg; t=1643051359;
+        bh=iMVmUcIEnhx1/dyD/Ep+9ykJlQn0RTzeVgSkysfS/jI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LhSvSf52qRW9iCzeWQB8DVBm7krQ6IxgIQ/uc0KRCqLxjgaVvZWI7v3UQFm2zDkuD
-         XwrQDEcUo3IBxD7bq7ZdEq8F99voWimXZ246ihKOSlU4Vl9qZpRUQmo+v4wsE1fUzT
-         c+tobpHa+0tbC/BM4AYMX58UMIwoHaQ8VgXpaWNo=
+        b=Z2fUqZAu7celpbh6xhK5eBSCRDT4Do1AB+tr2ihVskjymq8MR+zS67dP92MvRV6Mk
+         vkVsyO9kgxasQutxodnooJDezIy7QaHrtw5yJqYlTWSzYuPi6MePpYrHr30rbdGOUr
+         ytghmwiwtmlo18m0TgsQgwJ6bMIjkfLZmUv3fA4s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Young <sean@mess.org>,
+        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 108/186] media: igorplugusb: receiver overflow should be reported
-Date:   Mon, 24 Jan 2022 19:43:03 +0100
-Message-Id: <20220124183940.588661906@linuxfoundation.org>
+Subject: [PATCH 4.14 109/186] media: saa7146: hexium_gemini: Fix a NULL pointer dereference in hexium_attach()
+Date:   Mon, 24 Jan 2022 19:43:04 +0100
+Message-Id: <20220124183940.618283778@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
 References: <20220124183937.101330125@linuxfoundation.org>
@@ -49,37 +46,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Young <sean@mess.org>
+From: Zhou Qingyang <zhou1615@umn.edu>
 
-[ Upstream commit 8fede658e7ddb605bbd68ed38067ddb0af033db4 ]
+[ Upstream commit 3af86b046933ba513d08399dba0d4d8b50d607d0 ]
 
-Without this, some IR will be missing mid-stream and we might decode
-something which never really occurred.
+In hexium_attach(dev, info), saa7146_vv_init() is called to allocate
+a new memory for dev->vv_data. saa7146_vv_release() will be called on
+failure of saa7146_register_device(). There is a dereference of
+dev->vv_data in saa7146_vv_release(), which could lead to a NULL
+pointer dereference on failure of saa7146_vv_init().
 
-Signed-off-by: Sean Young <sean@mess.org>
+Fix this bug by adding a check of saa7146_vv_init().
+
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_VIDEO_HEXIUM_GEMINI=m show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Link: https://lore.kernel.org/linux-media/20211203154030.111210-1-zhou1615@umn.edu
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/rc/igorplugusb.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/media/common/saa7146/saa7146_fops.c | 2 +-
+ drivers/media/pci/saa7146/hexium_gemini.c   | 7 ++++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/rc/igorplugusb.c b/drivers/media/rc/igorplugusb.c
-index a5ea86be8f449..2a0325d1f9def 100644
---- a/drivers/media/rc/igorplugusb.c
-+++ b/drivers/media/rc/igorplugusb.c
-@@ -73,9 +73,11 @@ static void igorplugusb_irdata(struct igorplugusb *ir, unsigned len)
- 	if (start >= len) {
- 		dev_err(ir->dev, "receive overflow invalid: %u", overflow);
- 	} else {
--		if (overflow > 0)
-+		if (overflow > 0) {
- 			dev_warn(ir->dev, "receive overflow, at least %u lost",
- 								overflow);
-+			ir_raw_event_reset(ir->rc);
-+		}
+diff --git a/drivers/media/common/saa7146/saa7146_fops.c b/drivers/media/common/saa7146/saa7146_fops.c
+index 930d2c94d5d30..2c9365a39270a 100644
+--- a/drivers/media/common/saa7146/saa7146_fops.c
++++ b/drivers/media/common/saa7146/saa7146_fops.c
+@@ -524,7 +524,7 @@ int saa7146_vv_init(struct saa7146_dev* dev, struct saa7146_ext_vv *ext_vv)
+ 		ERR("out of memory. aborting.\n");
+ 		kfree(vv);
+ 		v4l2_ctrl_handler_free(hdl);
+-		return -1;
++		return -ENOMEM;
+ 	}
  
- 		do {
- 			rawir.duration = ir->buf_in[i] * 85333;
+ 	saa7146_video_uops.init(dev,vv);
+diff --git a/drivers/media/pci/saa7146/hexium_gemini.c b/drivers/media/pci/saa7146/hexium_gemini.c
+index a527d86b93a77..7f498aebb4112 100644
+--- a/drivers/media/pci/saa7146/hexium_gemini.c
++++ b/drivers/media/pci/saa7146/hexium_gemini.c
+@@ -296,7 +296,12 @@ static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_d
+ 	hexium_set_input(hexium, 0);
+ 	hexium->cur_input = 0;
+ 
+-	saa7146_vv_init(dev, &vv_data);
++	ret = saa7146_vv_init(dev, &vv_data);
++	if (ret) {
++		i2c_del_adapter(&hexium->i2c_adapter);
++		kfree(hexium);
++		return ret;
++	}
+ 
+ 	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
+ 	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
 -- 
 2.34.1
 

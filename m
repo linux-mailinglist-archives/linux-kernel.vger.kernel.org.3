@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F3E4991D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FFD84991CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:18:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355741AbiAXUOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:14:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351783AbiAXTwn (ORCPT
+        id S1349660AbiAXUOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:14:30 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:51212 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241746AbiAXTyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:52:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164BEC061395;
-        Mon, 24 Jan 2022 11:26:24 -0800 (PST)
+        Mon, 24 Jan 2022 14:54:05 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA6ED6148C;
-        Mon, 24 Jan 2022 19:26:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77DCEC340E5;
-        Mon, 24 Jan 2022 19:26:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B467E60FD7;
+        Mon, 24 Jan 2022 19:54:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61E58C340ED;
+        Mon, 24 Jan 2022 19:54:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052383;
-        bh=XLSLNSZKrLzuOonGSWPffYXKyT9mQ/W4Hk3kFvBGZ7k=;
+        s=korg; t=1643054044;
+        bh=gW6W/LYDczWG1fyNSWXD+duzWRVrqeY6Pi0AavfNS5A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W2VLwLU9uUR4fVbgRClcD8tSODYdIaNLk34lv3IrCd5iiMBM9hscCSxn/VJffAOmP
-         Uurs0c99VcKCCAP/9DFxjmYoW/l6BECHGzXAFtSTbr9BJl2Gzm9TjoUOVu2ujbiaqf
-         IfTupIxC2yRSmjRV69JZ9H8Cx35HnG1tD15EuvbE=
+        b=bqLVHO1+U7ib/VREBGdguc3QkV2VSdwxc1ibIy6T+SWcGPC8vFfnoxfVrjM8VGZMe
+         u/AILtFh4mbKTD/pRVVL5fG2p71GZJx1Z0T1maKSkK2ByhZMMCrD5k6303H7h6JmkI
+         mw5//2OYMCXRy5t2ZWh0CDaQ87+owW9xW2NWBrqQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
+        stable@vger.kernel.org, Rob Landley <rob@landley.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Stafford Horne <shorne@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 041/320] wcn36xx: Release DMA channel descriptor allocations
-Date:   Mon, 24 Jan 2022 19:40:25 +0100
-Message-Id: <20220124183955.151421264@linuxfoundation.org>
+Subject: [PATCH 5.10 261/563] openrisc: Add clone3 ABI wrapper
+Date:   Mon, 24 Jan 2022 19:40:26 +0100
+Message-Id: <20220124184033.453050081@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,36 +47,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+From: Stafford Horne <shorne@gmail.com>
 
-[ Upstream commit 3652096e5263ad67604b0323f71d133485f410e5 ]
+[ Upstream commit 433fe39f674d58bc7a3e8254a5d2ffc290b7e04e ]
 
-When unloading the driver we are not releasing the DMA descriptors which we
-previously allocated.
+Like fork and clone the clone3 syscall needs a wrapper to save callee
+saved registers, which is required by the OpenRISC ABI.  This came up
+after auditing code following a discussion with Rob Landley and Arnd
+Bergmann [0].
 
-Fixes: 8e84c2582169 ("wcn36xx: mac80211 driver for Qualcomm WCN3660/WCN3680 hardware")
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
-Link: https://lore.kernel.org/r/20211105122152.1580542-3-bryan.odonoghue@linaro.org
+Tested with the clone3 kselftests and there were no issues.
+
+[0] https://lore.kernel.org/all/41206fc7-f8ce-98aa-3718-ba3e1431e320@landley.net/T/#m9c0cdb2703813b9df4da04cf6b30de1f1aa89944
+
+Fixes: 07e83dfbe16c ("openrisc: Enable the clone3 syscall")
+Cc: Rob Landley <rob@landley.net>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Stafford Horne <shorne@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/wcn36xx/dxe.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/openrisc/include/asm/syscalls.h | 2 ++
+ arch/openrisc/kernel/entry.S         | 5 +++++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/drivers/net/wireless/ath/wcn36xx/dxe.c b/drivers/net/wireless/ath/wcn36xx/dxe.c
-index 4da25e84793b7..c400261352bc8 100644
---- a/drivers/net/wireless/ath/wcn36xx/dxe.c
-+++ b/drivers/net/wireless/ath/wcn36xx/dxe.c
-@@ -952,4 +952,9 @@ void wcn36xx_dxe_deinit(struct wcn36xx *wcn)
+diff --git a/arch/openrisc/include/asm/syscalls.h b/arch/openrisc/include/asm/syscalls.h
+index 3a7eeae6f56a8..aa1c7e98722e3 100644
+--- a/arch/openrisc/include/asm/syscalls.h
++++ b/arch/openrisc/include/asm/syscalls.h
+@@ -22,9 +22,11 @@ asmlinkage long sys_or1k_atomic(unsigned long type, unsigned long *v1,
  
- 	wcn36xx_dxe_ch_free_skbs(wcn, &wcn->dxe_rx_l_ch);
- 	wcn36xx_dxe_ch_free_skbs(wcn, &wcn->dxe_rx_h_ch);
+ asmlinkage long __sys_clone(unsigned long clone_flags, unsigned long newsp,
+ 			void __user *parent_tid, void __user *child_tid, int tls);
++asmlinkage long __sys_clone3(struct clone_args __user *uargs, size_t size);
+ asmlinkage long __sys_fork(void);
+ 
+ #define sys_clone __sys_clone
++#define sys_clone3 __sys_clone3
+ #define sys_fork __sys_fork
+ 
+ #endif /* __ASM_OPENRISC_SYSCALLS_H */
+diff --git a/arch/openrisc/kernel/entry.S b/arch/openrisc/kernel/entry.S
+index 98e4f97db5159..b42d32d79b2e6 100644
+--- a/arch/openrisc/kernel/entry.S
++++ b/arch/openrisc/kernel/entry.S
+@@ -1170,6 +1170,11 @@ ENTRY(__sys_clone)
+ 	l.j	_fork_save_extra_regs_and_call
+ 	 l.nop
+ 
++ENTRY(__sys_clone3)
++	l.movhi	r29,hi(sys_clone3)
++	l.j	_fork_save_extra_regs_and_call
++	 l.ori	r29,r29,lo(sys_clone3)
 +
-+	wcn36xx_dxe_deinit_descs(wcn->dev, &wcn->dxe_tx_l_ch);
-+	wcn36xx_dxe_deinit_descs(wcn->dev, &wcn->dxe_tx_h_ch);
-+	wcn36xx_dxe_deinit_descs(wcn->dev, &wcn->dxe_rx_l_ch);
-+	wcn36xx_dxe_deinit_descs(wcn->dev, &wcn->dxe_rx_h_ch);
- }
+ ENTRY(__sys_fork)
+ 	l.movhi	r29,hi(sys_fork)
+ 	l.ori	r29,r29,lo(sys_fork)
 -- 
 2.34.1
 

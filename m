@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1472499D68
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:59:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 627764997CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1583689AbiAXWTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:19:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48974 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447555AbiAXVK6 (ORCPT
+        id S1352669AbiAXVQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:16:23 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43884 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1391988AbiAXUuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:10:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE8FC09D335;
-        Mon, 24 Jan 2022 12:09:10 -0800 (PST)
+        Mon, 24 Jan 2022 15:50:11 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D95A4B8122C;
-        Mon, 24 Jan 2022 20:09:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B730C340E5;
-        Mon, 24 Jan 2022 20:09:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB05860C2A;
+        Mon, 24 Jan 2022 20:50:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAB58C340E5;
+        Mon, 24 Jan 2022 20:50:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054947;
-        bh=A61Mjq671YKWOXyCgRwXP22r5uuFJFRpViFWZVpV9aU=;
+        s=korg; t=1643057410;
+        bh=rTzjsPOM+kVOAAhf7w4z3TQ9XVsck917kVkeBLIXDsM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x4c4X+hwcDKJKpFB4RJtkTEIGBFS4CQLN5plJyRa6J6Nfp5KAya3lKUzhcgQPaKRd
-         CdLEdIm/Lhh9LtnTibJKC+vfiWmO+FmAK8/JOQXpmdHjRgEUF2EkCO0bK6GB7aezt5
-         m2If3MseQqWhpGhJrpaPx737SeA2RPuTmvtrqiPk=
+        b=hRof/DEkF/7ryjJKdcOfyk8T6sz09DFgp5FAiAwJI44xEoIQF3bChx5itjwTrA+kb
+         SMFd1cp05+Cz0gA2HbJVdq+SMfo9Bv3yYrmhDnv/kWnk3dmBDUIeCkg1UgJ5fznG19
+         AxwSlsmli4HbEODkUMzJhQrqBmE40qLJO25b/PQ4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexander Stein <alexander.stein@mailbox.org>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: [PATCH 5.10 555/563] dt-bindings: display: meson-dw-hdmi: add missing sound-name-prefix property
-Date:   Mon, 24 Jan 2022 19:45:20 +0100
-Message-Id: <20220124184043.630517916@linuxfoundation.org>
+        stable@vger.kernel.org, Eli Cohen <elic@nvidia.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Parav Pandit <parav@nvidia.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>
+Subject: [PATCH 5.15 804/846] vdpa/mlx5: Fix wrong configuration of virtio_version_1_0
+Date:   Mon, 24 Jan 2022 19:45:21 +0100
+Message-Id: <20220124184128.673051881@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,45 +48,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Stein <alexander.stein@mailbox.org>
+From: Eli Cohen <elic@nvidia.com>
 
-commit 22bf4047d26980807611b7e2030803db375afd87 upstream.
+commit 97143b70aa847f2b0a1f959dde126b76ff7b5376 upstream.
 
-This is used in meson-gx and meson-g12. Add the property to the binding.
-This fixes the dtschema warning:
-hdmi-tx@c883a000: 'sound-name-prefix' does not match any of the
-regexes: 'pinctrl-[0-9]+'
+Remove overriding of virtio_version_1_0 which forced the virtqueue
+object to version 1.
 
-Signed-off-by: Alexander Stein <alexander.stein@mailbox.org>
-Fixes: 376bf52deef5 ("dt-bindings: display: amlogic, meson-dw-hdmi: convert to yaml")
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211223122434.39378-2-alexander.stein@mailbox.org
+Fixes: 1a86b377aa21 ("vdpa/mlx5: Add VDPA driver for supported mlx5 devices")
+Signed-off-by: Eli Cohen <elic@nvidia.com>
+Link: https://lore.kernel.org/r/20211230142024.142979-1-elic@nvidia.com
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Reviewed-by: Parav Pandit <parav@nvidia.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+Reviewed-by: Si-Wei Liu <si-wei.liu@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/devicetree/bindings/display/amlogic,meson-dw-hdmi.yaml |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/vdpa/mlx5/net/mlx5_vnet.c |    2 --
+ 1 file changed, 2 deletions(-)
 
---- a/Documentation/devicetree/bindings/display/amlogic,meson-dw-hdmi.yaml
-+++ b/Documentation/devicetree/bindings/display/amlogic,meson-dw-hdmi.yaml
-@@ -10,6 +10,9 @@ title: Amlogic specific extensions to th
- maintainers:
-   - Neil Armstrong <narmstrong@baylibre.com>
+--- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
++++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+@@ -873,8 +873,6 @@ static int create_virtqueue(struct mlx5_
+ 	MLX5_SET(virtio_q, vq_ctx, umem_3_id, mvq->umem3.id);
+ 	MLX5_SET(virtio_q, vq_ctx, umem_3_size, mvq->umem3.size);
+ 	MLX5_SET(virtio_q, vq_ctx, pd, ndev->mvdev.res.pdn);
+-	if (MLX5_CAP_DEV_VDPA_EMULATION(ndev->mvdev.mdev, eth_frame_offload_type))
+-		MLX5_SET(virtio_q, vq_ctx, virtio_version_1_0, 1);
  
-+allOf:
-+  - $ref: /schemas/sound/name-prefix.yaml#
-+
- description: |
-   The Amlogic Meson Synopsys Designware Integration is composed of
-   - A Synopsys DesignWare HDMI Controller IP
-@@ -99,6 +102,8 @@ properties:
-   "#sound-dai-cells":
-     const: 0
- 
-+  sound-name-prefix: true
-+
- required:
-   - compatible
-   - reg
+ 	err = mlx5_cmd_exec(ndev->mvdev.mdev, in, inlen, out, sizeof(out));
+ 	if (err)
 
 

@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C97A549A2CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:01:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 471E749A705
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:36:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2364359AbiAXXr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:47:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1840878AbiAXWzj (ORCPT
+        id S3422626AbiAYCbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:31:43 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58646 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1381297AbiAXUUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:55:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD8CC0680A6;
-        Mon, 24 Jan 2022 13:09:32 -0800 (PST)
+        Mon, 24 Jan 2022 15:20:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D6B161451;
-        Mon, 24 Jan 2022 21:09:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AD62C340E5;
-        Mon, 24 Jan 2022 21:09:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE45CB81229;
+        Mon, 24 Jan 2022 20:20:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11758C340E5;
+        Mon, 24 Jan 2022 20:20:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058572;
-        bh=/CjwGGaAUdmDEBm/a/YjAd8KE0FRV4xADIfrAnFqqX8=;
+        s=korg; t=1643055601;
+        bh=16LNaUCzIzb/T+JoyZ/ziwN0gPqMj0yFnQdm07T7pxI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zF0v6gTZSEUTpfCTtpF3so4tOZMrDhuNyje+5hE4c4D0vgQUvPAylWRZ6aUeAccM2
-         MkKuWZHNC+MavCXmWOKt87zuGM7uPam7mx5SJFHmVthh/mDbXMrXzCUUSbH0qalGVx
-         HdTISxWGS0OAkIjL+n+V2Q2kaRG6QLEPPNSgXtJQ=
+        b=odIllL/oIMYA1Wwy7XpPMuuTD2i+OoGpRsmUYks9YswxsW3mJ34q0EtglKPQ2txf8
+         d5jrquT0BVPzlaRW/clfxuUUNXEXPu0xxUNr9CVSmORvh+uTDG4XIXPRtg0SgCIU5d
+         AmV0BusbLt5vzKwasyqp7sgUbshEYm+l0o6YQz4Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Avraham Stern <avraham.stern@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
+        stable@vger.kernel.org, Reiji Watanabe <reijiw@google.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0331/1039] iwlwifi: mvm: set protected flag only for NDP ranging
-Date:   Mon, 24 Jan 2022 19:35:20 +0100
-Message-Id: <20220124184136.439036135@linuxfoundation.org>
+Subject: [PATCH 5.15 204/846] arm64: clear_page() shouldnt use DC ZVA when DCZID_EL0.DZP == 1
+Date:   Mon, 24 Jan 2022 19:35:21 +0100
+Message-Id: <20220124184107.969459458@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,37 +47,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Avraham Stern <avraham.stern@intel.com>
+From: Reiji Watanabe <reijiw@google.com>
 
-[ Upstream commit 6bb2ea37c02db98cb677f978cfcb833ca608c5eb ]
+[ Upstream commit f0616abd4e67143b45b04b565839148458857347 ]
 
-Don't use protected ranging negotiation for FTM ranging as responders
-that support only FTM ranging don't expect the FTM request to be
-protected.
+Currently, clear_page() uses DC ZVA instruction unconditionally.  But it
+should make sure that DCZID_EL0.DZP, which indicates whether or not use
+of DC ZVA instruction is prohibited, is zero when using the instruction.
+Use STNP instead when DCZID_EL0.DZP == 1.
 
-Signed-off-by: Avraham Stern <avraham.stern@intel.com>
-Fixes: 517a5eb9fab2 ("iwlwifi: mvm: when associated with PMF, use protected NDP ranging negotiation")
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Link: https://lore.kernel.org/r/iwlwifi.20211219132536.f50ed0e3c6b3.Ibff247ee9d4e6e0a1a2d08a3c8a4bbb37e6829dd@changeid
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Fixes: f27bb139c387 ("arm64: Miscellaneous library functions")
+Signed-off-by: Reiji Watanabe <reijiw@google.com>
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+Link: https://lore.kernel.org/r/20211206004736.1520989-2-reijiw@google.com
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/lib/clear_page.S | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c b/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c
-index 3e6c13fc74eb0..9449d1af3c11a 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c
-@@ -511,7 +511,7 @@ iwl_mvm_ftm_put_target(struct iwl_mvm *mvm, struct ieee80211_vif *vif,
- 		rcu_read_lock();
- 
- 		sta = rcu_dereference(mvm->fw_id_to_mac_id[mvmvif->ap_sta_id]);
--		if (sta->mfp)
-+		if (sta->mfp && (peer->ftm.trigger_based || peer->ftm.non_trigger_based))
- 			FTM_PUT_FLAG(PMF);
- 
- 		rcu_read_unlock();
+diff --git a/arch/arm64/lib/clear_page.S b/arch/arm64/lib/clear_page.S
+index b84b179edba3a..1fd5d790ab800 100644
+--- a/arch/arm64/lib/clear_page.S
++++ b/arch/arm64/lib/clear_page.S
+@@ -16,6 +16,7 @@
+  */
+ SYM_FUNC_START_PI(clear_page)
+ 	mrs	x1, dczid_el0
++	tbnz	x1, #4, 2f	/* Branch if DC ZVA is prohibited */
+ 	and	w1, w1, #0xf
+ 	mov	x2, #4
+ 	lsl	x1, x2, x1
+@@ -25,5 +26,14 @@ SYM_FUNC_START_PI(clear_page)
+ 	tst	x0, #(PAGE_SIZE - 1)
+ 	b.ne	1b
+ 	ret
++
++2:	stnp	xzr, xzr, [x0]
++	stnp	xzr, xzr, [x0, #16]
++	stnp	xzr, xzr, [x0, #32]
++	stnp	xzr, xzr, [x0, #48]
++	add	x0, x0, #64
++	tst	x0, #(PAGE_SIZE - 1)
++	b.ne	2b
++	ret
+ SYM_FUNC_END_PI(clear_page)
+ EXPORT_SYMBOL(clear_page)
 -- 
 2.34.1
 

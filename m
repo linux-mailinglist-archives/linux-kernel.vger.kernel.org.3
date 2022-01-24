@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D00ED499604
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04EE2499B74
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234462AbiAXU6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:58:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39792 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386521AbiAXUfg (ORCPT
+        id S1575779AbiAXVwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:52:30 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37676 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1450398AbiAXVU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:35:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B12C038ADF;
-        Mon, 24 Jan 2022 11:49:13 -0800 (PST)
+        Mon, 24 Jan 2022 16:20:27 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53B49B81229;
-        Mon, 24 Jan 2022 19:49:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EDF8C340E5;
-        Mon, 24 Jan 2022 19:49:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9D2C9B81057;
+        Mon, 24 Jan 2022 21:20:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFC27C340E4;
+        Mon, 24 Jan 2022 21:20:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053751;
-        bh=9o48Je1F87lDwxkuT1N6YQqhnrPGRVS42N5wlSw4AZM=;
+        s=korg; t=1643059224;
+        bh=dlPDKHqCSXfPjaKZ96hJwLoit81JvMZoIoPBWl/uRsA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yu+7Zk1yW7AYhzm206V2SkQCd1xXtEDdP0Bu9wVAQtMw0EKG69QOamY3b5O/1UVaC
-         NLNbyma2o3RQIoAHg1y9fgWVChCcYQLTOI5bOFDLiRhd+4PiMmpa2LnFG0bBrnmBA/
-         XYJ2rnq2k08VB+OcaS219aO+9N9Wu8ebsH1WnTqs=
+        b=m9A+tYIRIcKLlYBxb3oYISv8eRyqaDPH8/Yfp1bn/3hmYhU4DvSsrlOVZwc3qR82U
+         ByuA5FM8xlaetEGIU7Erbr/BTqJMbjkYs3r/zr1Ei3sn5to3dza3Yg2ZCcMw95BTAN
+         ilfK1iHaaXNnVxxbCVbuJefU9qdeyu7D5xmA3PvA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, Archie Pusaka <apusaka@chromium.org>,
+        Sonny Sasaka <sonnysasaka@chromium.org>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 165/563] media: coda/imx-vdoa: Handle dma_set_coherent_mask error codes
-Date:   Mon, 24 Jan 2022 19:38:50 +0100
-Message-Id: <20220124184030.107024827@linuxfoundation.org>
+Subject: [PATCH 5.16 0543/1039] Bluetooth: Fix removing adv when processing cmd complete
+Date:   Mon, 24 Jan 2022 19:38:52 +0100
+Message-Id: <20220124184143.528865585@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,39 +47,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Archie Pusaka <apusaka@chromium.org>
 
-[ Upstream commit 43f0633f89947df57fe0b5025bdd741768007708 ]
+[ Upstream commit 2128939fe2e771645dd88e1938c27fdf96bd1cd0 ]
 
-The return value of dma_set_coherent_mask() is not always 0.
-To catch the exception in case that dma is not support the mask.
+If we remove one instance of adv using Set Extended Adv Enable, there
+is a possibility of issue occurs when processing the Command Complete
+event. Especially, the adv_info might not be found since we already
+remove it in hci_req_clear_adv_instance() -> hci_remove_adv_instance().
+If that's the case, we will mistakenly proceed to remove all adv
+instances instead of just one single instance.
 
-Link: https://lore.kernel.org/linux-media/20211206022201.1639460-1-jiasheng@iscas.ac.cn
-Fixes: b0444f18e0b1 ("[media] coda: add i.MX6 VDOA driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+This patch fixes the issue by checking the content of the HCI command
+instead of checking whether the adv_info is found.
+
+Signed-off-by: Archie Pusaka <apusaka@chromium.org>
+Reviewed-by: Sonny Sasaka <sonnysasaka@chromium.org>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/coda/imx-vdoa.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ net/bluetooth/hci_event.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/coda/imx-vdoa.c b/drivers/media/platform/coda/imx-vdoa.c
-index 8bc0d83718193..dd6e2e320264e 100644
---- a/drivers/media/platform/coda/imx-vdoa.c
-+++ b/drivers/media/platform/coda/imx-vdoa.c
-@@ -287,7 +287,11 @@ static int vdoa_probe(struct platform_device *pdev)
- 	struct resource *res;
- 	int ret;
- 
--	dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
-+	ret = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
-+	if (ret) {
-+		dev_err(&pdev->dev, "DMA enable failed\n");
-+		return ret;
-+	}
- 
- 	vdoa = devm_kzalloc(&pdev->dev, sizeof(*vdoa), GFP_KERNEL);
- 	if (!vdoa)
+diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+index 6eba439487749..8882c6dfb48f4 100644
+--- a/net/bluetooth/hci_event.c
++++ b/net/bluetooth/hci_event.c
+@@ -1326,8 +1326,10 @@ static void hci_cc_le_set_ext_adv_enable(struct hci_dev *hdev,
+ 					   &conn->le_conn_timeout,
+ 					   conn->conn_timeout);
+ 	} else {
+-		if (adv) {
+-			adv->enabled = false;
++		if (cp->num_of_sets) {
++			if (adv)
++				adv->enabled = false;
++
+ 			/* If just one instance was disabled check if there are
+ 			 * any other instance enabled before clearing HCI_LE_ADV
+ 			 */
 -- 
 2.34.1
 

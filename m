@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 446014990E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3A64990F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353044AbiAXUHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:07:15 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38296 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346805AbiAXTsm (ORCPT
+        id S1378601AbiAXUHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:07:45 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44358 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356153AbiAXTtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:48:42 -0500
+        Mon, 24 Jan 2022 14:49:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E4AAB81142;
-        Mon, 24 Jan 2022 19:48:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8241EC340E5;
-        Mon, 24 Jan 2022 19:48:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCD4F6090C;
+        Mon, 24 Jan 2022 19:49:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9148C340E5;
+        Mon, 24 Jan 2022 19:49:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053720;
-        bh=po8e2/5PZlaR1L4ebFA+7hbiUKq4RTDZucpG7BuzS80=;
+        s=korg; t=1643053754;
+        bh=G0jmp0hanQ0WSDwgNBwHNuNpg0lD0ReR5+DUtfY/cWs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=URNNM7f5X/6z6x6I6CT/BbKGNrOvF0crskxICMnPS2zepDgEoVMtSYfNYJQlPy3Mv
-         orIjllDKPhSvWAjdaPVzWv0rI32e151C4pi3gqLj9Hnqh6fyv/dwnlmcjkYDrL4enW
-         XqAl3gyQV8rSncM3bSlY+8fRkhUj08Bu/M+ta9jE=
+        b=WbNkXD+mXG2OSKtCp55mmIrckr4CKiXbtiCG7v1A71hQZqCuO+Z2dMv3MPsXWAYO/
+         Mu3+ic/8gu3BB1PrLeq44ayp/ilLOggSiPnaygcp5GcxYvutzNixID2VcMjpkMzCB+
+         H2JxaqqljTNKU2oSnbUa1uoAMbaHj1NgZocupK6Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 156/563] crypto: stm32/cryp - check early input data
-Date:   Mon, 24 Jan 2022 19:38:41 +0100
-Message-Id: <20220124184029.782338718@linuxfoundation.org>
+Subject: [PATCH 5.10 166/563] ath11k: Fix a NULL pointer dereference in ath11k_mac_op_hw_scan()
+Date:   Mon, 24 Jan 2022 19:38:51 +0100
+Message-Id: <20220124184030.146413635@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -47,239 +46,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>
+From: Zhou Qingyang <zhou1615@umn.edu>
 
-[ Upstream commit 39e6e699c7fb92bdb2617b596ca4a4ea35c5d2a7 ]
+[ Upstream commit eccd25136386a04ebf46a64f3a34e8e0fab6d9e1 ]
 
-Some auto tests failed because driver wasn't returning the expected
-error with some input size/iv value/tag size.
-Now:
- Return 0 early for empty buffer. (We don't need to start the engine for
- an empty input buffer).
- Accept any valid authsize for gcm(aes).
- Return -EINVAL if iv for ccm(aes) is invalid.
- Return -EINVAL if buffer size is a not a multiple of algorithm block size.
+In ath11k_mac_op_hw_scan(), the return value of kzalloc() is directly
+used in memcpy(), which may lead to a NULL pointer dereference on
+failure of kzalloc().
 
-Fixes: 9e054ec21ef8 ("crypto: stm32 - Support for STM32 CRYP crypto module")
+Fix this bug by adding a check of arg.extraie.ptr.
 
-Signed-off-by: Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_ATH11K=m show no new warnings, and our static
+analyzer no longer warns about this code.
+
+Fixes: d5c65159f289 ("ath11k: driver for Qualcomm IEEE 802.11ax devices")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20211202155348.71315-1-zhou1615@umn.edu
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/stm32/stm32-cryp.c | 114 +++++++++++++++++++++++++++++-
- 1 file changed, 113 insertions(+), 1 deletion(-)
+ drivers/net/wireless/ath/ath11k/mac.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/crypto/stm32/stm32-cryp.c b/drivers/crypto/stm32/stm32-cryp.c
-index e2bcc4f98b0ae..fd7fb73a4d450 100644
---- a/drivers/crypto/stm32/stm32-cryp.c
-+++ b/drivers/crypto/stm32/stm32-cryp.c
-@@ -799,7 +799,20 @@ static int stm32_cryp_aes_aead_setkey(struct crypto_aead *tfm, const u8 *key,
- static int stm32_cryp_aes_gcm_setauthsize(struct crypto_aead *tfm,
- 					  unsigned int authsize)
- {
--	return authsize == AES_BLOCK_SIZE ? 0 : -EINVAL;
-+	switch (authsize) {
-+	case 4:
-+	case 8:
-+	case 12:
-+	case 13:
-+	case 14:
-+	case 15:
-+	case 16:
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
- }
+diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
+index 835ce805b63ec..18e841e1a016d 100644
+--- a/drivers/net/wireless/ath/ath11k/mac.c
++++ b/drivers/net/wireless/ath/ath11k/mac.c
+@@ -2320,9 +2320,12 @@ static int ath11k_mac_op_hw_scan(struct ieee80211_hw *hw,
+ 	arg.scan_id = ATH11K_SCAN_ID;
  
- static int stm32_cryp_aes_ccm_setauthsize(struct crypto_aead *tfm,
-@@ -823,31 +836,61 @@ static int stm32_cryp_aes_ccm_setauthsize(struct crypto_aead *tfm,
+ 	if (req->ie_len) {
++		arg.extraie.ptr = kmemdup(req->ie, req->ie_len, GFP_KERNEL);
++		if (!arg.extraie.ptr) {
++			ret = -ENOMEM;
++			goto exit;
++		}
+ 		arg.extraie.len = req->ie_len;
+-		arg.extraie.ptr = kzalloc(req->ie_len, GFP_KERNEL);
+-		memcpy(arg.extraie.ptr, req->ie, req->ie_len);
+ 	}
  
- static int stm32_cryp_aes_ecb_encrypt(struct skcipher_request *req)
- {
-+	if (req->cryptlen % AES_BLOCK_SIZE)
-+		return -EINVAL;
-+
-+	if (req->cryptlen == 0)
-+		return 0;
-+
- 	return stm32_cryp_crypt(req, FLG_AES | FLG_ECB | FLG_ENCRYPT);
- }
- 
- static int stm32_cryp_aes_ecb_decrypt(struct skcipher_request *req)
- {
-+	if (req->cryptlen % AES_BLOCK_SIZE)
-+		return -EINVAL;
-+
-+	if (req->cryptlen == 0)
-+		return 0;
-+
- 	return stm32_cryp_crypt(req, FLG_AES | FLG_ECB);
- }
- 
- static int stm32_cryp_aes_cbc_encrypt(struct skcipher_request *req)
- {
-+	if (req->cryptlen % AES_BLOCK_SIZE)
-+		return -EINVAL;
-+
-+	if (req->cryptlen == 0)
-+		return 0;
-+
- 	return stm32_cryp_crypt(req, FLG_AES | FLG_CBC | FLG_ENCRYPT);
- }
- 
- static int stm32_cryp_aes_cbc_decrypt(struct skcipher_request *req)
- {
-+	if (req->cryptlen % AES_BLOCK_SIZE)
-+		return -EINVAL;
-+
-+	if (req->cryptlen == 0)
-+		return 0;
-+
- 	return stm32_cryp_crypt(req, FLG_AES | FLG_CBC);
- }
- 
- static int stm32_cryp_aes_ctr_encrypt(struct skcipher_request *req)
- {
-+	if (req->cryptlen == 0)
-+		return 0;
-+
- 	return stm32_cryp_crypt(req, FLG_AES | FLG_CTR | FLG_ENCRYPT);
- }
- 
- static int stm32_cryp_aes_ctr_decrypt(struct skcipher_request *req)
- {
-+	if (req->cryptlen == 0)
-+		return 0;
-+
- 	return stm32_cryp_crypt(req, FLG_AES | FLG_CTR);
- }
- 
-@@ -861,53 +904,122 @@ static int stm32_cryp_aes_gcm_decrypt(struct aead_request *req)
- 	return stm32_cryp_aead_crypt(req, FLG_AES | FLG_GCM);
- }
- 
-+static inline int crypto_ccm_check_iv(const u8 *iv)
-+{
-+	/* 2 <= L <= 8, so 1 <= L' <= 7. */
-+	if (iv[0] < 1 || iv[0] > 7)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
- static int stm32_cryp_aes_ccm_encrypt(struct aead_request *req)
- {
-+	int err;
-+
-+	err = crypto_ccm_check_iv(req->iv);
-+	if (err)
-+		return err;
-+
- 	return stm32_cryp_aead_crypt(req, FLG_AES | FLG_CCM | FLG_ENCRYPT);
- }
- 
- static int stm32_cryp_aes_ccm_decrypt(struct aead_request *req)
- {
-+	int err;
-+
-+	err = crypto_ccm_check_iv(req->iv);
-+	if (err)
-+		return err;
-+
- 	return stm32_cryp_aead_crypt(req, FLG_AES | FLG_CCM);
- }
- 
- static int stm32_cryp_des_ecb_encrypt(struct skcipher_request *req)
- {
-+	if (req->cryptlen % DES_BLOCK_SIZE)
-+		return -EINVAL;
-+
-+	if (req->cryptlen == 0)
-+		return 0;
-+
- 	return stm32_cryp_crypt(req, FLG_DES | FLG_ECB | FLG_ENCRYPT);
- }
- 
- static int stm32_cryp_des_ecb_decrypt(struct skcipher_request *req)
- {
-+	if (req->cryptlen % DES_BLOCK_SIZE)
-+		return -EINVAL;
-+
-+	if (req->cryptlen == 0)
-+		return 0;
-+
- 	return stm32_cryp_crypt(req, FLG_DES | FLG_ECB);
- }
- 
- static int stm32_cryp_des_cbc_encrypt(struct skcipher_request *req)
- {
-+	if (req->cryptlen % DES_BLOCK_SIZE)
-+		return -EINVAL;
-+
-+	if (req->cryptlen == 0)
-+		return 0;
-+
- 	return stm32_cryp_crypt(req, FLG_DES | FLG_CBC | FLG_ENCRYPT);
- }
- 
- static int stm32_cryp_des_cbc_decrypt(struct skcipher_request *req)
- {
-+	if (req->cryptlen % DES_BLOCK_SIZE)
-+		return -EINVAL;
-+
-+	if (req->cryptlen == 0)
-+		return 0;
-+
- 	return stm32_cryp_crypt(req, FLG_DES | FLG_CBC);
- }
- 
- static int stm32_cryp_tdes_ecb_encrypt(struct skcipher_request *req)
- {
-+	if (req->cryptlen % DES_BLOCK_SIZE)
-+		return -EINVAL;
-+
-+	if (req->cryptlen == 0)
-+		return 0;
-+
- 	return stm32_cryp_crypt(req, FLG_TDES | FLG_ECB | FLG_ENCRYPT);
- }
- 
- static int stm32_cryp_tdes_ecb_decrypt(struct skcipher_request *req)
- {
-+	if (req->cryptlen % DES_BLOCK_SIZE)
-+		return -EINVAL;
-+
-+	if (req->cryptlen == 0)
-+		return 0;
-+
- 	return stm32_cryp_crypt(req, FLG_TDES | FLG_ECB);
- }
- 
- static int stm32_cryp_tdes_cbc_encrypt(struct skcipher_request *req)
- {
-+	if (req->cryptlen % DES_BLOCK_SIZE)
-+		return -EINVAL;
-+
-+	if (req->cryptlen == 0)
-+		return 0;
-+
- 	return stm32_cryp_crypt(req, FLG_TDES | FLG_CBC | FLG_ENCRYPT);
- }
- 
- static int stm32_cryp_tdes_cbc_decrypt(struct skcipher_request *req)
- {
-+	if (req->cryptlen % DES_BLOCK_SIZE)
-+		return -EINVAL;
-+
-+	if (req->cryptlen == 0)
-+		return 0;
-+
- 	return stm32_cryp_crypt(req, FLG_TDES | FLG_CBC);
- }
- 
+ 	if (req->n_ssids) {
 -- 
 2.34.1
 

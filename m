@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA7D498CCA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:32:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1D7E498EA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:48:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350384AbiAXTYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:24:54 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41504 "EHLO
+        id S1351009AbiAXTnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:43:53 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58052 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345749AbiAXTPj (ORCPT
+        with ESMTP id S1352897AbiAXTbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:15:39 -0500
+        Mon, 24 Jan 2022 14:31:14 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 598C9612FC;
-        Mon, 24 Jan 2022 19:15:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C495C340E5;
-        Mon, 24 Jan 2022 19:15:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09DC561482;
+        Mon, 24 Jan 2022 19:31:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E29BEC340E5;
+        Mon, 24 Jan 2022 19:31:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051738;
-        bh=APWsZhwa5pVHhTAULT9fAjfDNrVdk3v3541Ngoypbog=;
+        s=korg; t=1643052673;
+        bh=Yfx4afU5U/SUeFI8vDC9AXyMNEsK7W7v+iXmHZLdwWE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BWJlBjnP0nEHh2xgmzA+Yy9SPKBGYn+dE3szEc2zl+RQgQfPuRQ5uage/z9wt4c+L
-         jVE7rFCB6nZ+xxujvAv15VZELMAYjaEHYhbXWxJpXScKnqvw8Ki+n7sKdJn9gfYUSG
-         HYW9ek7bH2f7lv4+cchsfMxZ6SfEG8qWrrlOVKcE=
+        b=RtaD40NqMM8WNjQRWTmcJwab5y3NB7/EFJP9vj4GWdxt8RbKKZKUU6fjHzl7K9/Mv
+         z7DvYPZLL86ipa6ju552f0YJfePmGzTtJrbMRpcu7dfORgkAqVA5WnpycXoFel8zIt
+         JU4hx8tHNNJ987E6NR4npcFelJ50B3UDg0Etj2k0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 4.19 039/239] media: stk1160: fix control-message timeouts
-Date:   Mon, 24 Jan 2022 19:41:17 +0100
-Message-Id: <20220124183944.384759003@linuxfoundation.org>
+        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 094/320] mmc: meson-mx-sdio: add IRQ check
+Date:   Mon, 24 Jan 2022 19:41:18 +0100
+Message-Id: <20220124183956.933670845@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,42 +47,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-commit 6aa6e70cdb5b863a57bad61310bf89b6617a5d2d upstream.
+[ Upstream commit 8fc9a77bc64e1f23d07953439817d8402ac9706f ]
 
-USB control-message timeouts are specified in milliseconds and should
-specifically not vary with CONFIG_HZ.
+The driver neglects to check the result of platform_get_irq()'s call and
+blithely passes the negative error codes to devm_request_threaded_irq()
+(which takes *unsigned* IRQ #), causing it to fail with -EINVAL, overriding
+an original error code. Stop calling devm_request_threaded_irq() with the
+invalid IRQ #s.
 
-Fixes: 9cb2173e6ea8 ("[media] media: Add stk1160 new driver (easycap replacement)")
-Cc: stable@vger.kernel.org      # 3.7
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: ed80a13bb4c4 ("mmc: meson-mx-sdio: Add a driver for the Amlogic Meson8 and Meson8b SoC")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Link: https://lore.kernel.org/r/20211217202717.10041-3-s.shtylyov@omp.ru
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/stk1160/stk1160-core.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/mmc/host/meson-mx-sdio.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/drivers/media/usb/stk1160/stk1160-core.c
-+++ b/drivers/media/usb/stk1160/stk1160-core.c
-@@ -75,7 +75,7 @@ int stk1160_read_reg(struct stk1160 *dev
- 		return -ENOMEM;
- 	ret = usb_control_msg(dev->udev, pipe, 0x00,
- 			USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
--			0x00, reg, buf, sizeof(u8), HZ);
-+			0x00, reg, buf, sizeof(u8), 1000);
- 	if (ret < 0) {
- 		stk1160_err("read failed on reg 0x%x (%d)\n",
- 			reg, ret);
-@@ -95,7 +95,7 @@ int stk1160_write_reg(struct stk1160 *de
+diff --git a/drivers/mmc/host/meson-mx-sdio.c b/drivers/mmc/host/meson-mx-sdio.c
+index 360d523132bd5..780552a86ec08 100644
+--- a/drivers/mmc/host/meson-mx-sdio.c
++++ b/drivers/mmc/host/meson-mx-sdio.c
+@@ -665,6 +665,11 @@ static int meson_mx_mmc_probe(struct platform_device *pdev)
+ 	}
  
- 	ret =  usb_control_msg(dev->udev, pipe, 0x01,
- 			USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
--			value, reg, NULL, 0, HZ);
-+			value, reg, NULL, 0, 1000);
- 	if (ret < 0) {
- 		stk1160_err("write failed on reg 0x%x (%d)\n",
- 			reg, ret);
+ 	irq = platform_get_irq(pdev, 0);
++	if (irq < 0) {
++		ret = irq;
++		goto error_free_mmc;
++	}
++
+ 	ret = devm_request_threaded_irq(host->controller_dev, irq,
+ 					meson_mx_mmc_irq,
+ 					meson_mx_mmc_irq_thread, IRQF_ONESHOT,
+-- 
+2.34.1
+
 
 

@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B599497A5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:28:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7BC1497A58
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242181AbiAXI2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 03:28:25 -0500
+        id S242127AbiAXI2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 03:28:21 -0500
 Received: from mail-gv0che01on2128.outbound.protection.outlook.com ([40.107.23.128]:41184
         "EHLO CHE01-GV0-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229800AbiAXI2V (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 03:28:21 -0500
+        id S236330AbiAXI2T (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 03:28:19 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G8pyt7FdFPbib5r5cgrcaZqznj9VvN8SpTcUTWjYT1Rray1jvTWB82WLs1vFG8hRQj9BbANsTq4mX63qkYpxaFv5LOewDQU7Dxf3Z1u1tPwymio4+U6xT6LrI2YCYDi0PQMpyh+ZTT28dgQxbFpScK7twSU9B4ICx0UzH/+v1Ovrd+vDxEosAQkwQPuen0miNfsc3L/kQNqepc1yTBAqqHtltezItlagGIuW/GMAe1bwesmsEgSwtw29hAm/qvMKU0Ab9JIEhmCUYTfIfsjIMe/i5jpo2b9NkzQC13DPBdyuBOpXb+TL8OWunxJltO3Jo3xdp+nQsJ6Z6kwR6ftxtw==
+ b=ZeK4UMSR+FbEHA1FioB7TpDP3a/XxgVjD+RayqJm0DZ91pNXH7Gg3I0fKIZkcKevKIKsTAX2NWzm36399vE90NjWqxZTNEbzDPowjdXAupmUCvbYVO0wHdmiuvVSuZtV/LPw9CDukNc3LINr5Tuavi3XWL0cJDpN5IBZl4+HnpJkAucae2zYspIPm+Pn6lxJ+Cl0kbgk+QLmsk3SSkAcADNMCvjr4RAHyczKb+Gm9Tjg9MqPLYmHl3TJbCPyuR3KPW3PJPTI2iwZAGA6giwwTM95pIB1io55niJjyWiM8yhsQjwv9jn+xe+Jaw1bpGsfp/FA2IIQQEwbDbYDrC/dGg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oWmaWbMbNAfXdTupUt6m92kFhXSXdjA3e27dLOocQpM=;
- b=DYEart3L9hx4IWpBqF08beusno9sdGymgSAxRjwHMMybTV2NVOqbFkCHnoWOmp2yRRbibrwfAiCAMat542e+8HCPHKwR5svo9LIt5J2adBVo1OLb5IMTfA1S8WX4tty0iNAHe4CradsTNIP92v860s60YkHixxa79fCHkzj1gK3RzlATOsDblxikln8tJUDsxMJHBvdzmhhnrcaujs7pblTUS7NaIBaPCfaXWH+JJRzg5KdNX1xyh5k3XbFyYpg58wAORW/OHXj9o+cHJ6lCJVYWZ6MKXwr1YcqEuA7EFs+yh5S6zDrBbtIri+zIdHjrNaQLvCE1FP3bLmJ//HReEA==
+ bh=i8nimqkeTMpgA2YPpvATxQrTcVrQQDl5iLgecwDMWs0=;
+ b=nFCvETpUp2nq19ynEM2x4rFqxPo9chNXhWsv8SqXszfvYQ6ZzOdwe10apv2RoJNDcuW5bE/jEYUBzZgtmE8BRaYrZcRcjuk3MSmefYTBF07QXDQ58yueK5u8+UXBWjvVaHjyXWsjoxeesY0ARavWdCDslDRIltFM6Jo0B+NFBerlBH8mMZjFEwUyPtWJ1YtwKE4fWIkqOg3ejbWSk46qtDreAoSZDsdME+V09eVZa8xWMDUcGAABsVkWFODB4bswqcJGmNk9jY7sG4CJ0nZq8ZotB9kxmzOCnm4IibUYyk2T/l4GccdQ+Mu2GoODowTl51MUprZY3cuRHZvzGGH+yg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=toradex.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oWmaWbMbNAfXdTupUt6m92kFhXSXdjA3e27dLOocQpM=;
- b=Jq2pSzuCvGAowhmUwNm5EM/dNDQ4d6tArsC4RGsCrD+2xrwKmZmu3WWgnlVuioPBTfDO+mBfEIKSdhmM49W2pb0OnydfvS/Nw7OvS/u/R8qk+DEcRjwOWvSiD2BkJxXsBFSq04GE8+CoTrdRL36Pnm1Y40Q8/4cCNYL0R6lhJrs=
+ bh=i8nimqkeTMpgA2YPpvATxQrTcVrQQDl5iLgecwDMWs0=;
+ b=S0rfFneSVayNjIEVW/O3ZojJd6xTNymdAzxH5XW8PUqkpV/zL8gKDtCLouGDnlkQRsOEz+2zQe8jp532hQ1fcfLT4VW5IdSHG6nh7JcRBe+lUMtXAkI53KE0C1N4XldCGOE6GNWkkD9LKudHYRw/qqUNmYDWTJ4L9lKyAcut8vY=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=toradex.com;
 Received: from ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3d::11)
@@ -46,121 +46,108 @@ To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Denys Drozdov <denys.drozdov@toradex.com>,
+Cc:     Stefan Agner <stefan.agner@toradex.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Denys Drozdov <denys.drozdov@toradex.com>,
+        Stefan Agner <stefan@agner.ch>,
         Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: [PATCH v2 1/2] ARM: dts: imx7s: Define operating points table for cpufreq
-Date:   Mon, 24 Jan 2022 09:28:02 +0100
-Message-Id: <20220124082803.94286-2-francesco.dolcini@toradex.com>
+Subject: [PATCH v2 2/2] cpufreq: Add i.MX7S to cpufreq-dt-platdev blocklist
+Date:   Mon, 24 Jan 2022 09:28:03 +0100
+Message-Id: <20220124082803.94286-3-francesco.dolcini@toradex.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220124082803.94286-1-francesco.dolcini@toradex.com>
 References: <20220124082803.94286-1-francesco.dolcini@toradex.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: GV0P278CA0052.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:710:29::21) To ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM
+X-ClientProxiedBy: GV0P278CA0010.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:710:26::20) To ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM
  (2603:10a6:910:3d::11)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 985b5869-faa1-412a-f6e5-08d9df1377f8
+X-MS-Office365-Filtering-Correlation-Id: bc5470b4-0464-4e28-f6e5-08d9df1377f8
 X-MS-TrafficTypeDiagnostic: GV0P278MB0227:EE_
-X-Microsoft-Antispam-PRVS: <GV0P278MB02270D0C8F6C7DD2564D5825E25E9@GV0P278MB0227.CHEP278.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3631;
+X-Microsoft-Antispam-PRVS: <GV0P278MB0227111CD3D6E6EA7868D2F7E25E9@GV0P278MB0227.CHEP278.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6HfirZSyT0lSY20COGAmWXmCjEXIrwl+Yc5Mb+gUehBItrKD9k/Kh6XmcpIU6Zwx422jgSYc2TupwsVX4U556leYIT9u2Ssn1KWmqAqrzQigfZOLvUvSCyrCpKun68ID3SZrAwRsy4IbDV1mpB6xpFXeNX+LIUoSfK4xLBdaB1DPdrtLEA6PpSvp6QgK/KIDmfZUdj4RhxcrQ1YRcbZB4faS1uSMEYYER4tBL9tntZlVZf8SrAhSJ1PsuSlzXb3S6ECWdjbEYtk0CQ6RGN1HLsElPMloOwC/97xnPSQddwf3Hw3SyCJE6S//xUi5kELXkKkUyGmbuPuHMiz769ezSDvQZZU1Wec/e1Zco7CSWNIaP8ybXvHenj8J8dj17mZ3mtmBDEIvGFHUorgVwl7vMdMmx8gwl3vwRBfUXcu6d0a7yXGYOcbzTKK8HneMgRdco+XXxVxt06avRRaY8V9BMLA47I2CRSiqwvzuPuoATxIpy3k2QukKRMKiF91y4zCw/SpcRZHdRNI80EbBvfeRS1/AG+A2dRxs4bFne+w9KkOqiI98+VCK0f5YQ8dSjnOZjIeeygWtRrgWnTrlMKWRwr6XDV3Ssjg62DQmNmKfgP7etSyJrsxo3sPHMzxKgTMd/cOfVBVZswZQn5CnjCkw300uCo/VJpTh0bgu/oCTWT9K8C0PCFyAEJY5pow6SfhjxCfRp7GwMtwTnu5Jq0srgQ==
+X-Microsoft-Antispam-Message-Info: xsZSd7M5p7EGVvTV7CNwZlldP6zNHKO+5c6wUXtqqWlSIuZTARDh9zPh9+y1I47K31/GRc2k+FnJKCItxYhpsyT/kvQ8VZsA40Mo7uRhpjwvOFiUqqpCbsTgH+oKqlCpjP1IAFhijLlP9Ijdz8jq1EJ1Mp8AEsEo942wS5IvFA/2GLanlxmISYqVEuMx+ZoE0Yx3NbBbTLzgMWIUPpuIxuatkHh97I4gFlZ8TdiXi2BfBQblLAZXEI1lEjNp4PS9kDK5xgsEFTLrvJi6uch9udLHXwnMnGgsSx72agzJBMBJQSqNq+z1YhE0xD0iLgjpVpNfMQyX58JLtGh1bwYdeAbtDfBEWj9pjkuI5VxqCdF5Qii2Ghw10LnCZYHTtHeUog7qNXp+R4NjH04vuAIMnpiJNG9w6AApU1nTtIHWFmYf15IBqK7O95vbM2bORW7VVYRgygaISfbvAES7Fmv9Azms2CDZpbd4Xzf1UiWYz4tdJTg4LH7GdLayTAwkD1GqiZPezaKhgsAD4av6eaAUuSGRtbDHPFy67bgdn7nwJLhSfJS2nFAf9XOHB/miKuWO4z5u/f+uBVUTuXJeZDpnRa169iKUG6B/+rllEuhJjVCXfdzMSGvu1XwxrN5yFTx5gfIRWZLDS0glGKjQheyD6j//mfJfjlaEfhnJ8oNkYS6iBJwQ3Rp8o6d0w+GQec5yO37hmqiE176tY6ek7joEew==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(136003)(346002)(39840400004)(366004)(396003)(376002)(54906003)(52116002)(26005)(1076003)(44832011)(110136005)(83380400001)(5660300002)(38100700002)(186003)(38350700002)(4326008)(8936002)(8676002)(66476007)(2906002)(66556008)(6666004)(316002)(86362001)(7416002)(36756003)(2616005)(6506007)(508600001)(6486002)(66946007)(6512007)(107886003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lGg6Xr1jvGCY1e7hwCC57gQPz6qyLgx11HDp0dOgeXG7+m2PJDmwi3xXsTw3?=
- =?us-ascii?Q?CqYQ3hzjCI9Om6yXKiPoIYOK90SFMt8EOBSUabRCbkAq4tMF1bEzOkUpkzq9?=
- =?us-ascii?Q?TT7hHFS0Dh+eSPz4QQXr8Y/soTol/XbiKGPOUd3XixxXXyqbDAmzxfYhUU/f?=
- =?us-ascii?Q?pBjut9YTtiU1AX4fkFFnTLiESCwl/9tzcAmB4LxJeXd6WtITxRNIRp7JCvip?=
- =?us-ascii?Q?3GT3urGSBJo2J3uYseNfD2y8nwRw9gQrCyKLK83xgpFKHfcy3g2Tvx75hZ9t?=
- =?us-ascii?Q?f7VsQcVHQPFpeQ3C8Ts5FWBgV9oZLG6uudb2oeE02TaukN7Q2wH3ZO37H781?=
- =?us-ascii?Q?gu9Vmj8f16YjXV9bCf5mzSgAlBRzQZu67F3T6nIQm9sngVPk+VTrTC84PEv0?=
- =?us-ascii?Q?2uOsxP8i82gaUnZ5DOBjw1gZyIuMFC+Mta0WQAJP/izL3u5DxMLbiDyogDID?=
- =?us-ascii?Q?DIivyVBAsdEwteKrD6+de0102s8fYpmAILnSxsaSstkkEYZSyU8M60a5oTFS?=
- =?us-ascii?Q?syZ4aRV6Zw1eSO53hv1nbT8WploivDopUu1dV3SKJiClOsZXZDzJKe02is34?=
- =?us-ascii?Q?KJADqejURCP/gZVFRrArvQvGiVmBGK4oWzF9av9SPeT0+32rPmu0Es8LMG89?=
- =?us-ascii?Q?w9hDn8JBsQkw/jvNZV7yPyWApNUVxylLpSaMpsPJbeQ5eUjTqbCbVMey5G85?=
- =?us-ascii?Q?2P3jX3X7dt5Tdoh2Xko/IxEmsOxiTz9wUH/XFAljzFA98Ryt5zG4CJYqvUxg?=
- =?us-ascii?Q?bXduJEUscmuKZ1ug82gzaJybfbl6CmShwR5ZTrOPDlkSXM50Iybu14hL/iP4?=
- =?us-ascii?Q?ELquSnGo8fcDfqAgGEGAeEXfgLj7Y7jyMjldmUBUnVPfmh36tGP+RoHNqc6j?=
- =?us-ascii?Q?P6xrYr9RaWRJEX/CG8x+jKNxl8onGXMxaKx/1Shyee2D8PVm8YgxpwY0Ga1N?=
- =?us-ascii?Q?0hvTyAJa2F8snuGDQ0wwUN0P2XCZyAapTHMN7L12JFwvFoBRrt1cfeldz+jW?=
- =?us-ascii?Q?ryQdRMFBqqU4PSm5uzHx3yg/yajEF5m1UrBzifRTwrz7O9jMogpTZpbPAgb9?=
- =?us-ascii?Q?3LtQ7+Uq46KjlCYY2mGk5sH+dq77wyOmfs7UmsE9w7zbGtdnq9fA0jtU9GV9?=
- =?us-ascii?Q?h71uMBFzUpcvNH2gfrO7wWolvK/ixOhSDlcPMCH5nyqXmsuePxEyNf38B0vN?=
- =?us-ascii?Q?+zd1UlxSD4seGOwa8z5oUfgUUz++XVnQKhXPpVQHoWppQE03XSxixPMGXk/1?=
- =?us-ascii?Q?MOL/tMvHLmzhFGZTnMsk4nOB3v6rJtC5ad0VHSPAIwqcMfVDzark2emVTit0?=
- =?us-ascii?Q?m1djlN6WfqQ1KHFVRgeqztA14MPGbTJIfcF63f29dU7qTghMiR3utdbv8bq7?=
- =?us-ascii?Q?/t0X7Szkqc6R0+1wqRS3TQ2u+A3LJtLLgN7WlgN5eFgxySaZ0FzHXQhTVwDI?=
- =?us-ascii?Q?NFxCrtQ9OdHR0m2yRaVhuyWP/hoOrB/3Dgh9j9NW5OjUrcjgz48CnEKsLgRq?=
- =?us-ascii?Q?xf40O1mmr3rv1/eTll086G8p+i7C7N7XV3jP7tmf45MilHA4BeEgzHPfFjIe?=
- =?us-ascii?Q?fvK8EIrBxUS03D5vc2bgcqeQOIyswowC64Dp5c0wn/9IWDZvMEkYcLiIjFua?=
- =?us-ascii?Q?GztyW9l+dkAWmR6J8H/gara3qeR1oAjEsVc6Tdghi1l28+UaLlXh/KkD8iyO?=
- =?us-ascii?Q?yw2V+w=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SPGKqyvPuSxoAcsa8sRzr0gZ7PMwj7BWzVdHYRMqf+LDul+Tv10tfxgdHJaY?=
+ =?us-ascii?Q?sM63lsouFqwwJNauXzj6ciEOFRmhG+1GNolRJAS/r2L246uMLmR7dBlsCKBh?=
+ =?us-ascii?Q?A9N3hUFM7+vAPU+JtEFA4jO3MMbcTnfr8sjWr/wDTr+UvtUHZeZzhmeXZFMv?=
+ =?us-ascii?Q?k93+O+i0OMxCc42lTnLJpcIjb5TY+yxs4M5kU7KCm5T3ejT58exeZkR3S8he?=
+ =?us-ascii?Q?2mOI0d/g2razACga45RIqtZbz/C2qHx4BlyvmSJKCwqza+yRYlgpdhdDSwyy?=
+ =?us-ascii?Q?zgDpNlGao+XVFa/aPgp7o9PR2O8668k7D7Gj1plDbesinWOfszF2gE/x9ort?=
+ =?us-ascii?Q?5R2cl7ybe0PN9S7nYhRkNFX7NxLE81up6A3Wh9nEc6fegM3hZS1xdAdzTraE?=
+ =?us-ascii?Q?4cQRZDGVDs0fgb+6x5Jb/UMRTu70P16tCZQ9KZhNdL7aafaUMBnOi7bEwoqP?=
+ =?us-ascii?Q?sOABG3sThH1ZpQ8Q8Mq58GBcT/g0d8MrMNLE3lssmYSkASVhZDI4DDLTYnm3?=
+ =?us-ascii?Q?U5QjzGA2bZS6WEeobKfs3je6QOGdC+UOjlcMGCtESnwICcwaaHpDY+SU2As8?=
+ =?us-ascii?Q?xCdrfItp4eAvxktA8Ro4AKYB8anrxWreyO7iD8cSsN6ASBN8VsXL7YNgM7hI?=
+ =?us-ascii?Q?VaLbhPIQhYY2uK1W7o2kemOediV+frVMJVda3eoZ2UdMKHgKOo0KtX5np8xj?=
+ =?us-ascii?Q?FtVkDnhzsxks+jI/Ag3z0MVUD8jseAFUXQsM0QQo2W8sxlnTmjOEfCTilsNC?=
+ =?us-ascii?Q?jnC4lYZZfLRZAp2OEZ2WkThzLwBDyif60KazOiW1TBsxwN9E2BCsuRIN3zxw?=
+ =?us-ascii?Q?pMn1LWhjhavOM61ZvWrakYrxZGxbtM9rlC1Crng9cbshsZXyQwTVddLsuLyt?=
+ =?us-ascii?Q?Y+TPa8cv4PMNOK15ob/pmvyyWhLdujUMBfiZzsE7wcu0OnqWgKdMLw6WO+qX?=
+ =?us-ascii?Q?zAYrXwwO7gF1uej0GJNmi7ApX004xt4pYTrVSHSN9KU5f8Eb/s/DPxrA2GOo?=
+ =?us-ascii?Q?AT7sEWiOxR2o5bDHcx2tqfCTYz5FuYge+AurESeucRNSAXgGT+YqxxlBFFiZ?=
+ =?us-ascii?Q?HqiCxFTODQGXJsXk94txq2KsasVpe2UCRp9wkn5ZUCs6B8P+LI8VcAMEFfcO?=
+ =?us-ascii?Q?lsjzUbGtiFgK7THrapfVwt0+vVUqP0PbA+imVCxAEAupZtorV8F2NDmEhNSx?=
+ =?us-ascii?Q?+mff6JrE5lFffzrh5Vj4HHlMctikdjlPmjtGgXGJsu3wB5KzvXDKbgAfbkiz?=
+ =?us-ascii?Q?6wX9liWENFBzT7T4TOTXDKp5A6IuBptaDkKMSjQSBPEf1+aQcqVtuuAYsj/r?=
+ =?us-ascii?Q?poVh2jbhWPjK09NDDyb4a81pIR6yZnA/2kQw4pRMACfFK9Ny0cgWJQij6fFd?=
+ =?us-ascii?Q?mZFM/Ec4IyVI8i91OJL+GX1NNteyaJQJ6AaLaqACLPAc7yTYceOTyAAU2+5+?=
+ =?us-ascii?Q?lxb5Z4iM8VjmyOHI8PaWOE7dnUwhZZeQ6k8F1CUW7TLE9XJhQDwv9dCMfGhz?=
+ =?us-ascii?Q?Iqw63pLWjhHyu8lOi8txWAZxkEby1Egmk8Bo25vQFpC5yCUmGT4svfH049Jt?=
+ =?us-ascii?Q?RwZB0uHxoz/bPJXfp/NcPTN0K4WR+Y2Yt+IN/3i/l5aw0z9Cu84qkf8UM7oh?=
+ =?us-ascii?Q?BnlSJx0dZ+XYrZx3EKqze5WANpXgSMlOdpfOn9u5coUtWq7FZOiKBUB1ey10?=
+ =?us-ascii?Q?+ZpaMQ=3D=3D?=
 X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 985b5869-faa1-412a-f6e5-08d9df1377f8
+X-MS-Exchange-CrossTenant-Network-Message-Id: bc5470b4-0464-4e28-f6e5-08d9df1377f8
 X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2022 08:28:16.1047
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2022 08:28:16.0878
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PaYwZjiZ1I5yM2H9KaD9jQHjM2JXQYWq2yaSZe/6lSmXkIUM8wX3N73iCWB4hLMbTLML28M6zXaHVzLjpMLqfbFroDKXlQdcQqQ6wEl+CQg=
+X-MS-Exchange-CrossTenant-UserPrincipalName: MrlL7szsoIpMlANosw9TiJJNipujOYukmDHCHOvhmoQ6py3OuRT1E3xptFvMwKowHusY0bcdi6azMaSL6qE8iH36b6R9NkCbdsGqBIyiEog=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV0P278MB0227
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Denys Drozdov <denys.drozdov@toradex.com>
+From: Stefan Agner <stefan.agner@toradex.com>
 
-Processor operating points for imx7s.dtsi should be properly defined to
-perform correct imx-cpufreq-dt probe and registration and provide an
-access to the temperature sensors using the i.MX thermal driver.
+The i.MX 7Solo currently does not have multiple operating points,
+however, in order for the i.MX Thermal driver to successfully probe
+a cpufreq device is required. Add it to the cpufreq-dt-platdev
+driver's blocklist to allow using imx-cpufreq-dt.
 
-Signed-off-by: Denys Drozdov <denys.drozdov@toradex.com>
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+Cc: Stefan Agner <stefan@agner.ch>
 Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 ---
-
-v2: no changes
-
+v2: removed empty line
 ---
- arch/arm/boot/dts/imx7s.dtsi | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/imx7s.dtsi b/arch/arm/boot/dts/imx7s.dtsi
-index 52a9aeecdbb2..5af6d58666f4 100644
---- a/arch/arm/boot/dts/imx7s.dtsi
-+++ b/arch/arm/boot/dts/imx7s.dtsi
-@@ -76,6 +76,22 @@ cpu0: cpu@0 {
- 			clock-latency = <61036>; /* two CLK32 periods */
- 			clocks = <&clks IMX7D_CLK_ARM>;
- 			cpu-idle-states = <&cpu_sleep_wait>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			#cooling-cells = <2>;
-+			nvmem-cells = <&fuse_grade>;
-+			nvmem-cell-names = "speed_grade";
-+		};
-+	};
-+
-+	cpu0_opp_table: opp-table {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		opp-792000000 {
-+			opp-hz = /bits/ 64 <792000000>;
-+			opp-microvolt = <1000000>;
-+			clock-latency-ns = <150000>;
-+			opp-supported-hw = <0xf>, <0xf>;
- 		};
- 	};
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index ca1d103ec449..6b808f805eab 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -110,6 +110,7 @@ static const struct of_device_id blocklist[] __initconst = {
  
+ 	{ .compatible = "fsl,imx7ulp", },
+ 	{ .compatible = "fsl,imx7d", },
++	{ .compatible = "fsl,imx7s", },
+ 	{ .compatible = "fsl,imx8mq", },
+ 	{ .compatible = "fsl,imx8mm", },
+ 	{ .compatible = "fsl,imx8mn", },
 -- 
 2.25.1
 

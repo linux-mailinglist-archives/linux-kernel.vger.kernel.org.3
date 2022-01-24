@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD502499578
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6CF499BAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:04:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1441939AbiAXUwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:52:25 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:51138 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384314AbiAXU33 (ORCPT
+        id S1575851AbiAXVwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:52:37 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:38090 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1448683AbiAXVTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:29:29 -0500
+        Mon, 24 Jan 2022 16:19:14 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32CEF61502;
-        Mon, 24 Jan 2022 20:29:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A89CC340E5;
-        Mon, 24 Jan 2022 20:29:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48920B81061;
+        Mon, 24 Jan 2022 21:19:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CF92C340E4;
+        Mon, 24 Jan 2022 21:19:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056167;
-        bh=th4VKO5Ug+nK9IqtFEODJ6OwStYjXRjMQK8H8lx4WDQ=;
+        s=korg; t=1643059148;
+        bh=HXJV0jhVF0YnUWsRplcUKIX+Ihje/JCzSZtYZ+p4VdI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H/uYKVDakIY6izgRp23TaOjmuR7h4nwOSvpOc89iLfAN2heZladNdckLFvbCngVp+
-         SBiH1lsoNBCfhz7sP0mZvclxGJSwpoYufebGEu0drNe3JNSNWMdjQO6PUVAg6uweF5
-         7xZ9IkJvEicPuHp0p83cjnbqn2ItuS/JfDypTyw4=
+        b=tCgvKrLWMc9Wl9xqbOPjcAi9TMATx7qj0HA6RlBSgaOAJfcAgU00Jx4MrIzeMC9+o
+         PFWaesm/UpFhyahH1Oho+kZcJmVjic7CplqK/jj3rA6IFModh+yjctOSb7St+PpQZf
+         LEq3hfk2j+n12NhyfDiRJCUREI0Jh9tLEeY6J9tE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Erhard Furtner <erhard_f@mailbox.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 392/846] powerpc/32s: Fix shift-out-of-bounds in KASAN init
+        stable@vger.kernel.org, "Christian A. Ehrhardt" <lk@c--e.de>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0520/1039] ALSA: hda/cs8409: Fix Jack detection after resume
 Date:   Mon, 24 Jan 2022 19:38:29 +0100
-Message-Id: <20220124184114.464732347@linuxfoundation.org>
+Message-Id: <20220124184142.769715347@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,54 +45,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+From: Christian A. Ehrhardt <lk@c--e.de>
 
-[ Upstream commit af11dee4361b3519981fa04d014873f9d9edd6ac ]
+[ Upstream commit 57f234248ff925d88caedf4019ec84e6ecb83909 ]
 
-================================================================================
-UBSAN: shift-out-of-bounds in arch/powerpc/mm/kasan/book3s_32.c:22:23
-shift exponent -1 is negative
-CPU: 0 PID: 0 Comm: swapper Not tainted 5.15.5-gentoo-PowerMacG4 #9
-Call Trace:
-[c214be60] [c0ba0048] dump_stack_lvl+0x80/0xb0 (unreliable)
-[c214be80] [c0b99288] ubsan_epilogue+0x10/0x5c
-[c214be90] [c0b98fe0] __ubsan_handle_shift_out_of_bounds+0x94/0x138
-[c214bf00] [c1c0f010] kasan_init_region+0xd8/0x26c
-[c214bf30] [c1c0ed84] kasan_init+0xc0/0x198
-[c214bf70] [c1c08024] setup_arch+0x18/0x54c
-[c214bfc0] [c1c037f0] start_kernel+0x90/0x33c
-[c214bff0] [00003610] 0x3610
-================================================================================
+The suspend code unconditionally sets ->hp_jack_in and ->mic_jack_in
+to zero but without reporting this status change to the HDA core.
+To compensate for this, always assume a status change on the
+first unsol event after boot or resume.
 
-This happens when the directly mapped memory is a power of 2.
-
-Fix it by checking the shift and set the result to 0 when shift is -1
-
-Fixes: 7974c4732642 ("powerpc/32s: Implement dedicated kasan_init_region()")
-Reported-by: Erhard Furtner <erhard_f@mailbox.org>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215169
-Link: https://lore.kernel.org/r/15cbc3439d4ad988b225e2119ec99502a5cc6ad3.1638261744.git.christophe.leroy@csgroup.eu
+Fixes: 424e531b47f8 ("ALSA: hda/cs8409: Ensure Type Detection is only run on startup when necessary")
+Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
+Link: https://lore.kernel.org/r/20211231134432.atwmuzeceqiklcoa@cae.in-ulm.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/mm/kasan/book3s_32.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ sound/pci/hda/patch_cs8409-tables.c | 3 +++
+ sound/pci/hda/patch_cs8409.c        | 5 ++++-
+ sound/pci/hda/patch_cs8409.h        | 1 +
+ 3 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/mm/kasan/book3s_32.c b/arch/powerpc/mm/kasan/book3s_32.c
-index 202bd260a0095..35b287b0a8da4 100644
---- a/arch/powerpc/mm/kasan/book3s_32.c
-+++ b/arch/powerpc/mm/kasan/book3s_32.c
-@@ -19,7 +19,8 @@ int __init kasan_init_region(void *start, size_t size)
- 	block = memblock_alloc(k_size, k_size_base);
+diff --git a/sound/pci/hda/patch_cs8409-tables.c b/sound/pci/hda/patch_cs8409-tables.c
+index 0fb0a428428b4..df0b4522babf7 100644
+--- a/sound/pci/hda/patch_cs8409-tables.c
++++ b/sound/pci/hda/patch_cs8409-tables.c
+@@ -252,6 +252,7 @@ struct sub_codec cs8409_cs42l42_codec = {
+ 	.init_seq_num = ARRAY_SIZE(cs42l42_init_reg_seq),
+ 	.hp_jack_in = 0,
+ 	.mic_jack_in = 0,
++	.force_status_change = 1,
+ 	.paged = 1,
+ 	.suspended = 1,
+ 	.no_type_dect = 0,
+@@ -443,6 +444,7 @@ struct sub_codec dolphin_cs42l42_0 = {
+ 	.init_seq_num = ARRAY_SIZE(dolphin_c0_init_reg_seq),
+ 	.hp_jack_in = 0,
+ 	.mic_jack_in = 0,
++	.force_status_change = 1,
+ 	.paged = 1,
+ 	.suspended = 1,
+ 	.no_type_dect = 0,
+@@ -456,6 +458,7 @@ struct sub_codec dolphin_cs42l42_1 = {
+ 	.init_seq_num = ARRAY_SIZE(dolphin_c1_init_reg_seq),
+ 	.hp_jack_in = 0,
+ 	.mic_jack_in = 0,
++	.force_status_change = 1,
+ 	.paged = 1,
+ 	.suspended = 1,
+ 	.no_type_dect = 1,
+diff --git a/sound/pci/hda/patch_cs8409.c b/sound/pci/hda/patch_cs8409.c
+index bf5d7f0c6ba55..aff2b5abb81ea 100644
+--- a/sound/pci/hda/patch_cs8409.c
++++ b/sound/pci/hda/patch_cs8409.c
+@@ -636,7 +636,9 @@ static void cs42l42_run_jack_detect(struct sub_codec *cs42l42)
  
- 	if (block && k_size_base >= SZ_128K && k_start == ALIGN(k_start, k_size_base)) {
--		int k_size_more = 1 << (ffs(k_size - k_size_base) - 1);
-+		int shift = ffs(k_size - k_size_base);
-+		int k_size_more = shift ? 1 << (shift - 1) : 0;
+ static int cs42l42_handle_tip_sense(struct sub_codec *cs42l42, unsigned int reg_ts_status)
+ {
+-	int status_changed = 0;
++	int status_changed = cs42l42->force_status_change;
++
++	cs42l42->force_status_change = 0;
  
- 		setbat(-1, k_start, __pa(block), k_size_base, PAGE_KERNEL);
- 		if (k_size_more >= SZ_128K)
+ 	/* TIP_SENSE INSERT/REMOVE */
+ 	switch (reg_ts_status) {
+@@ -791,6 +793,7 @@ static void cs42l42_suspend(struct sub_codec *cs42l42)
+ 	cs42l42->last_page = 0;
+ 	cs42l42->hp_jack_in = 0;
+ 	cs42l42->mic_jack_in = 0;
++	cs42l42->force_status_change = 1;
+ 
+ 	/* Put CS42L42 into Reset */
+ 	gpio_data = snd_hda_codec_read(codec, CS8409_PIN_AFG, 0, AC_VERB_GET_GPIO_DATA, 0);
+diff --git a/sound/pci/hda/patch_cs8409.h b/sound/pci/hda/patch_cs8409.h
+index ade2b838590cf..d0b725c7285b6 100644
+--- a/sound/pci/hda/patch_cs8409.h
++++ b/sound/pci/hda/patch_cs8409.h
+@@ -305,6 +305,7 @@ struct sub_codec {
+ 
+ 	unsigned int hp_jack_in:1;
+ 	unsigned int mic_jack_in:1;
++	unsigned int force_status_change:1;
+ 	unsigned int suspended:1;
+ 	unsigned int paged:1;
+ 	unsigned int last_page;
 -- 
 2.34.1
 

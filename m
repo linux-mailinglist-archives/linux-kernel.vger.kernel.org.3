@@ -2,39 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7901F49972E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F556499733
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447301AbiAXVKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:10:25 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39928 "EHLO
+        id S1447454AbiAXVKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:10:47 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41198 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390780AbiAXUqS (ORCPT
+        with ESMTP id S1390804AbiAXUqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:46:18 -0500
+        Mon, 24 Jan 2022 15:46:25 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B610960B28;
-        Mon, 24 Jan 2022 20:46:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96CECC340E5;
-        Mon, 24 Jan 2022 20:46:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4D7D60C23;
+        Mon, 24 Jan 2022 20:46:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 870E7C340E5;
+        Mon, 24 Jan 2022 20:46:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057176;
-        bh=q18wRBnCv2k58Fxjm5AjDgHriZlgmiylV6kF/Ik9r9A=;
+        s=korg; t=1643057182;
+        bh=ongecXjzHtP37xKEtMPAuQCBn6ybQCZN/W1veZ+7+ls=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RdILDd0l38CpkMuPzRuNG5oOiq0xMQjq79t4e9Od/knxCma98pJzF9XrziM/gBSZR
-         JksDR0XYo0G317WpMq0H4elj3SinG6fWY78v1ZrJCuDpZg8oGMkyuyFd5SHsM+zqG0
-         PEwspGjszNCGbTH3Z8dCZqMlDwtVfze0Vw4fIuYM=
+        b=DKN99LQ7CZPxolIquyBtICLEbHAGKD1jTSYRGy/Qdv1mvOWIDeokYqHyx2MnxLtOb
+         VSETuY/ef+uuHM/EbjHFUdeZubVptuO1ezBjVAuNROhS+xAGFKBQLqgM6cC0gCF1gh
+         7x8VyXkXj33J65jMU4cMnhxpjPzB/ZbzFIZvsaQk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aaron Ma <aaron.ma@canonical.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>
-Subject: [PATCH 5.15 727/846] ath11k: qmi: avoid error messages when dma allocation fails
-Date:   Mon, 24 Jan 2022 19:44:04 +0100
-Message-Id: <20220124184126.083992973@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Jan Stancek <jstancek@redhat.com>,
+        Borislav Petkov <bp@suse.de>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.15 729/846] drm/radeon: fix error handling in radeon_driver_open_kms
+Date:   Mon, 24 Jan 2022 19:44:06 +0100
+Message-Id: <20220124184126.152368740@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -46,33 +48,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aaron Ma <aaron.ma@canonical.com>
+From: Christian König <christian.koenig@amd.com>
 
-commit b9b5948cdd7bc8d9fa31c78cbbb04382c815587f upstream.
+commit 4722f463896cc0ef1a6f1c3cb2e171e949831249 upstream.
 
-qmi tries to allocate a large contiguous dma memory at first,
-on the AMD Ryzen platform it fails, then retries with small slices.
-So set flag GFP_NOWARN to avoid flooding dmesg.
+The return value was never initialized so the cleanup code executed when
+it isn't even necessary.
 
-Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
-Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
-Link: https://lore.kernel.org/r/20210823063258.37747-1-aaron.ma@canonical.com
-Cc: "Limonciello, Mario" <mario.limonciello@amd.com>
+Just add proper error handling.
+
+Fixes: ab50cb9df889 ("drm/radeon/radeon_kms: Fix a NULL pointer dereference in radeon_driver_open_kms()")
+Signed-off-by: Christian König <christian.koenig@amd.com>
+Tested-by: Jan Stancek <jstancek@redhat.com>
+Tested-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/ath/ath11k/qmi.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/radeon/radeon_kms.c |   22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
---- a/drivers/net/wireless/ath/ath11k/qmi.c
-+++ b/drivers/net/wireless/ath/ath11k/qmi.c
-@@ -1770,7 +1770,7 @@ static int ath11k_qmi_alloc_target_mem_c
- 		chunk->vaddr = dma_alloc_coherent(ab->dev,
- 						  chunk->size,
- 						  &chunk->paddr,
--						  GFP_KERNEL);
-+						  GFP_KERNEL | __GFP_NOWARN);
- 		if (!chunk->vaddr) {
- 			if (ab->qmi.mem_seg_count <= ATH11K_QMI_FW_MEM_REQ_SEGMENT_CNT) {
- 				ath11k_dbg(ab, ATH11K_DBG_QMI,
+--- a/drivers/gpu/drm/radeon/radeon_kms.c
++++ b/drivers/gpu/drm/radeon/radeon_kms.c
+@@ -666,18 +666,18 @@ int radeon_driver_open_kms(struct drm_de
+ 		fpriv = kzalloc(sizeof(*fpriv), GFP_KERNEL);
+ 		if (unlikely(!fpriv)) {
+ 			r = -ENOMEM;
+-			goto out_suspend;
++			goto err_suspend;
+ 		}
+ 
+ 		if (rdev->accel_working) {
+ 			vm = &fpriv->vm;
+ 			r = radeon_vm_init(rdev, vm);
+ 			if (r)
+-				goto out_fpriv;
++				goto err_fpriv;
+ 
+ 			r = radeon_bo_reserve(rdev->ring_tmp_bo.bo, false);
+ 			if (r)
+-				goto out_vm_fini;
++				goto err_vm_fini;
+ 
+ 			/* map the ib pool buffer read only into
+ 			 * virtual address space */
+@@ -685,7 +685,7 @@ int radeon_driver_open_kms(struct drm_de
+ 							rdev->ring_tmp_bo.bo);
+ 			if (!vm->ib_bo_va) {
+ 				r = -ENOMEM;
+-				goto out_vm_fini;
++				goto err_vm_fini;
+ 			}
+ 
+ 			r = radeon_vm_bo_set_addr(rdev, vm->ib_bo_va,
+@@ -693,19 +693,21 @@ int radeon_driver_open_kms(struct drm_de
+ 						  RADEON_VM_PAGE_READABLE |
+ 						  RADEON_VM_PAGE_SNOOPED);
+ 			if (r)
+-				goto out_vm_fini;
++				goto err_vm_fini;
+ 		}
+ 		file_priv->driver_priv = fpriv;
+ 	}
+ 
+-	if (!r)
+-		goto out_suspend;
++	pm_runtime_mark_last_busy(dev->dev);
++	pm_runtime_put_autosuspend(dev->dev);
++	return 0;
+ 
+-out_vm_fini:
++err_vm_fini:
+ 	radeon_vm_fini(rdev, vm);
+-out_fpriv:
++err_fpriv:
+ 	kfree(fpriv);
+-out_suspend:
++
++err_suspend:
+ 	pm_runtime_mark_last_busy(dev->dev);
+ 	pm_runtime_put_autosuspend(dev->dev);
+ 	return r;
 
 

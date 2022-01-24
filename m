@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ABFE499D6F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA174996AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1584304AbiAXWUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:20:39 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52186 "EHLO
+        id S1358904AbiAXVFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:05:49 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:39712 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1454132AbiAXVbu (ORCPT
+        with ESMTP id S1358153AbiAXUn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:31:50 -0500
+        Mon, 24 Jan 2022 15:43:59 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1933D61320;
-        Mon, 24 Jan 2022 21:31:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A4FDC340E7;
-        Mon, 24 Jan 2022 21:31:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3698260B28;
+        Mon, 24 Jan 2022 20:43:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 196B9C340E5;
+        Mon, 24 Jan 2022 20:43:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059909;
-        bh=grTelnkSX6Y12cAJ2c2Z7iI+CF/lO3oFNnwSui4aYhQ=;
+        s=korg; t=1643057037;
+        bh=GzbYbsXc5BwyTSbLqMt453HSpU4UrE4xgXx+YQpBbjc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K10IUhma7e0Dilj+4D0vmFGEn/PJMFuESy31obxEicyklYfm5E4mvtKNpiYpnc4L8
-         fiSHu24nNLADyxodk4WhTPLFc5+FagtXmbY1gkV+ZsOJzsAV12XMyu9BQjjS2V8eUt
-         xyy+r9c39Cp3rUWNFDVW2NV2Fd6+pZMNO0aN/iOA=
+        b=QpkrP0qb86i8DB42Wrb58N+OPup/mcWpJqnbDKzUR9S3Wst98a4KBdmhXrEPZnmPr
+         da+fgY+lkYsCcyLvyccpyHdyMgdLk7rWetoJqD8NREQ5o/RmaBUk5wC7DsMZWKsIoB
+         b07zlPthWKk3GZ3oQ9TbPxbyOs9qCYOYoDi7SDz4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tzung-Bi Shih <tzungbi@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0776/1039] ASoC: mediatek: mt8183: fix device_node leak
-Date:   Mon, 24 Jan 2022 19:42:45 +0100
-Message-Id: <20220124184151.377915660@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+9ca499bb57a2b9e4c652@syzkaller.appspotmail.com,
+        Jan Kara <jack@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 649/846] udf: Fix error handling in udf_new_inode()
+Date:   Mon, 24 Jan 2022 19:42:46 +0100
+Message-Id: <20220124184123.406590822@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,56 +46,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tzung-Bi Shih <tzungbi@google.com>
+From: Jan Kara <jack@suse.cz>
 
-[ Upstream commit cb006006fe6221f092fadaffd3f219288304c9ad ]
+[ Upstream commit f05f2429eec60851b98bdde213de31dab697c01b ]
 
-Fixes the device_node leak.
+When memory allocation of iinfo or block allocation fails, already
+allocated struct udf_inode_info gets freed with iput() and
+udf_evict_inode() may look at inode fields which are not properly
+initialized. Fix it by marking inode bad before dropping reference to it
+in udf_new_inode().
 
-Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
-Link: https://lore.kernel.org/r/20211224064719.2031210-3-tzungbi@google.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Reported-by: syzbot+9ca499bb57a2b9e4c652@syzkaller.appspotmail.com
+Signed-off-by: Jan Kara <jack@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c         | 6 +++++-
- sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c | 7 ++++++-
- 2 files changed, 11 insertions(+), 2 deletions(-)
+ fs/udf/ialloc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c b/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
-index a4d26a6fc8492..bda103211e0bd 100644
---- a/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
-+++ b/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
-@@ -781,7 +781,11 @@ static int mt8183_da7219_max98357_dev_probe(struct platform_device *pdev)
- 		return ret;
+diff --git a/fs/udf/ialloc.c b/fs/udf/ialloc.c
+index 2ecf0e87660e3..b5d611cee749c 100644
+--- a/fs/udf/ialloc.c
++++ b/fs/udf/ialloc.c
+@@ -77,6 +77,7 @@ struct inode *udf_new_inode(struct inode *dir, umode_t mode)
+ 					GFP_KERNEL);
  	}
- 
--	return devm_snd_soc_register_card(&pdev->dev, card);
-+	ret = devm_snd_soc_register_card(&pdev->dev, card);
-+
-+	of_node_put(platform_node);
-+	of_node_put(hdmi_codec);
-+	return ret;
- }
- 
- #ifdef CONFIG_OF
-diff --git a/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c b/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c
-index aeb1af86047ef..9f0bf15fe465e 100644
---- a/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c
-+++ b/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c
-@@ -780,7 +780,12 @@ mt8183_mt6358_ts3a227_max98357_dev_probe(struct platform_device *pdev)
- 				 __func__, ret);
+ 	if (!iinfo->i_data) {
++		make_bad_inode(inode);
+ 		iput(inode);
+ 		return ERR_PTR(-ENOMEM);
  	}
- 
--	return devm_snd_soc_register_card(&pdev->dev, card);
-+	ret = devm_snd_soc_register_card(&pdev->dev, card);
-+
-+	of_node_put(platform_node);
-+	of_node_put(ec_codec);
-+	of_node_put(hdmi_codec);
-+	return ret;
- }
- 
- #ifdef CONFIG_OF
+@@ -86,6 +87,7 @@ struct inode *udf_new_inode(struct inode *dir, umode_t mode)
+ 			      dinfo->i_location.partitionReferenceNum,
+ 			      start, &err);
+ 	if (err) {
++		make_bad_inode(inode);
+ 		iput(inode);
+ 		return ERR_PTR(err);
+ 	}
 -- 
 2.34.1
 

@@ -2,128 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 661C949A805
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C9849A804
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1315933AbiAYCyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:54:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
+        id S1315894AbiAYCyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:54:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3409738AbiAYA1T (ORCPT
+        with ESMTP id S3409749AbiAYA1S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 19:27:19 -0500
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21F3C046E03;
-        Mon, 24 Jan 2022 14:09:25 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id y17so3641053ilm.1;
-        Mon, 24 Jan 2022 14:09:25 -0800 (PST)
+        Mon, 24 Jan 2022 19:27:18 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D0FC046E0D;
+        Mon, 24 Jan 2022 14:10:07 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id n6-20020a9d6f06000000b005a0750019a7so2596237otq.5;
+        Mon, 24 Jan 2022 14:10:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=d6HjppEWR1T8ZOcwdp+EOP/ztmmko1v8gQaGfPlFykA=;
-        b=hGDljOFLASbsoMo+rcy/eXZrA59L6Zh/LlOQEBmL6YzOvLS2AjNgBfEei25hhxaxSL
-         W3aSXsKTwJrIhbL4e4IWQeWpBFOO7JLb+bt/Jrpal9j/v5CfX2tR4iXme1k6g7HRAfKp
-         8NbVw4XVbcceiUm8OkImUmbHVhdRh8oW5rlhzn5TgRs4v6hzH9nviJAFQ3VxMEy6C9ML
-         JH5Ra4099xJ7v/JF/EC57bBk3zh0iEff8JTkQv63GL7ojY2VZpJuXSnaWyC4dSvhGv4k
-         aOiUM5l33Met6VKn8K6CjMV2nFzcM3n0Ny45RCZXc3IeOSH2AiSzLDJK0uMDG7GWi/h6
-         Pxmw==
+         :cc;
+        bh=dfQ1Cr8MOGNWzImPgM3FPvJ3DRDIShXaWCzTw2fuiGo=;
+        b=Z+F0etylmIPRLfXkQxHrbCduqN93SYw7wl/ke/YpNeM4rPaukRCnKxTe71ymWVnYxP
+         7Vp4nnlA+M4Rm1eAhkuZw7yqe9BkTYhucCx+9Fsb6LaMeeQg6V2LonO6YxMnEKLTLNWf
+         ThtFvcc/fRFn4UZPlVRhL+vS5U3wQmnxEtFLUPWE3obBRz8H/TwYkyRptXqFHff3vgKB
+         jcy7q9coHrKyr3wha1pNcOuLmgUKjtbpCVRunpmpzDKtiFy4PTDQ6ZyeH6WC1swXj9wH
+         1gUQHxkh7d72RWBkcPCYm2r14IlbhITnuWDjv0rAlIdb7LUIu60GlZpkmIhgWB5EqtZk
+         o1eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=d6HjppEWR1T8ZOcwdp+EOP/ztmmko1v8gQaGfPlFykA=;
-        b=TNT+kznhYwjlSu2e8Nemp+qhzvEuN8Q7LhAUsJOS1rmcWnaN6FRz9OABqyZhdXyePm
-         4TyOb3A9BTJfLr6HhGrWF9aHUa1OBR6vGWCDNJ7WhUM3GMd1vS/7ZU0syFIEfke5BIop
-         EEbf/PRgFs+/MCzfeQrMB2mSprNRtwY6HlEU24f8ZLCtB4JI7cI+VRw8WTZRz6JYkVgX
-         GQiy2p5oNtcrcA064ei0V0qrtXXwY+b6B5iLBzeLabs8l3gEHN/yKqRsDWQmg2+of6NN
-         wCaYZbARFxaUbH32k02CKLBzdPHZhW2mL59ghRAch9rmljMitrWB4lOycURKa4gWQVS2
-         p4XA==
-X-Gm-Message-State: AOAM532thjKf2AFm/vtQXkHauycY6k2i/OoAryaqURaXInJt4D+eofEs
-        f4EG6DRRBneOlAC4h+EE8bF3lZ/LNreRF7B8cbw=
-X-Google-Smtp-Source: ABdhPJwdeoHnJR9W8Q6Dtox2JxDYbtjJrpqft3BvbegaPWgsRQNkibILgfHG2HkruRoKnslClqAvxANGNw0Kvdf3pVI=
-X-Received: by 2002:a05:6e02:1749:: with SMTP id y9mr9274241ill.252.1643062164966;
- Mon, 24 Jan 2022 14:09:24 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=dfQ1Cr8MOGNWzImPgM3FPvJ3DRDIShXaWCzTw2fuiGo=;
+        b=jIjGTjM2GDixBCvyqqZwMd4H8icOPehTYjUxp/co5i3uthLq3AYzK0AdICpvl6M7ij
+         0Mnm/flsHy7Dm88UbWW8A0XjrIKZ+lwSj4oouDGzTV0GecSYpfkDhHELYoi2FD5ObpEr
+         6yfsKzxoJ7drfxQw7FO6keR3x6i2SGFw6q+p3wXxte9XdUR0qxI/b3xWJlJ7M1IAYRCk
+         2XR66nVm8eb0vd6BzrnM6nHqlUX7hdwtz01dky/3MxroK9caHnMdXZTHm5P8UK0Iy8X2
+         3u73KKOdUegjLQnxdc7F6v7XtafHC/P07SyV3EIbRHi+G2aitSKJLPDYlSbEC/wfTMqv
+         W4fw==
+X-Gm-Message-State: AOAM530RfR2LQrZbhbBi/6Oryk/dMwA241tUfYKs2y2/Kw/Of2WHvf43
+        Ii/2bknvfs/Ned2YJJx0EYKsfm9GiT5P21RtgB4=
+X-Google-Smtp-Source: ABdhPJwvLyrL8/z3f3oeYcfh5RaeZB2rvDsalLA+HVQ+FDuwfMu1r9GNC9grwWebJSLxVHBZqstuKTAHNHQYm1JYjGE=
+X-Received: by 2002:a05:6830:1d90:: with SMTP id y16mr13147279oti.200.1643062206810;
+ Mon, 24 Jan 2022 14:10:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20220124184100.867127425@linuxfoundation.org> <29a0f562-af46-f4d0-182c-09c8d99e0a93@applied-asynchrony.com>
-In-Reply-To: <29a0f562-af46-f4d0-182c-09c8d99e0a93@applied-asynchrony.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 24 Jan 2022 14:09:13 -0800
-Message-ID: <CAEf4BzaOHPD72jTsdJjUa6md2AyRp2LnArNKyrKCva6pWCdzaA@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/846] 5.15.17-rc1 review
-To:     =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux@roeck-us.net,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        linux- stable <stable@vger.kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>
+References: <20220119224628.123084-1-colin.i.king@gmail.com> <CAKwvOdnMibw77AvvWw7seB2PPamS_OLMUarSjdsa4w4OP1isKg@mail.gmail.com>
+In-Reply-To: <CAKwvOdnMibw77AvvWw7seB2PPamS_OLMUarSjdsa4w4OP1isKg@mail.gmail.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 24 Jan 2022 17:09:55 -0500
+Message-ID: <CADnq5_P4F9MqfP2BHSzj7rgXBDxRPtiphh5sqF0+dW7NSTLFVA@mail.gmail.com>
+Subject: Re: [PATCH] drm/radeon: remove redundant assignment to reg
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Colin Ian King <colin.i.king@gmail.com>, llvm@lists.linux.dev,
+        David Airlie <airlied@linux.ie>,
+        xinhui pan <Xinhui.Pan@amd.com>,
+        kernel-janitors@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 12:36 PM Holger Hoffst=C3=A4tte
-<holger@applied-asynchrony.com> wrote:
->
-> On 2022-01-24 19:31, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.15.17 release.
->
-> Oh noes :(
->
->    DESCEND bpf/resolve_btfids
->    MKDIR     /tmp/linux-5.15.17/tools/bpf/resolve_btfids//libbpf
->    GEN     /tmp/linux-5.15.17/tools/bpf/resolve_btfids/libbpf/bpf_helper_=
-defs.h
->    MKDIR   /tmp/linux-5.15.17/tools/bpf/resolve_btfids/libbpf/staticobjs/
->    CC      /tmp/linux-5.15.17/tools/bpf/resolve_btfids/libbpf/staticobjs/=
-libbpf.o
-> libbpf.c: In function 'bpf_object__elf_collect':
-> libbpf.c:3038:31: error: invalid type argument of '->' (have 'GElf_Shdr' =
-{aka 'Elf64_Shdr'})
->   3038 |                         if (sh->sh_type !=3D SHT_PROGBITS)
->        |                               ^~
-> libbpf.c:3042:31: error: invalid type argument of '->' (have 'GElf_Shdr' =
-{aka 'Elf64_Shdr'})
->   3042 |                         if (sh->sh_type !=3D SHT_PROGBITS)
->        |                               ^~
-> make[4]: *** [/tmp/linux-5.15.17/tools/build/Makefile.build:97: /tmp/linu=
-x-5.15.17/tools/bpf/resolve_btfids/libbpf/staticobjs/libbpf.o] Error 1
-> make[3]: *** [Makefile:158: /tmp/linux-5.15.17/tools/bpf/resolve_btfids/l=
-ibbpf/staticobjs/libbpf-in.o] Error 2
-> make[2]: *** [Makefile:44: /tmp/linux-5.15.17/tools/bpf/resolve_btfids//l=
-ibbpf/libbpf.a] Error 2
-> make[1]: *** [Makefile:72: bpf/resolve_btfids] Error 2
-> make: *** [Makefile:1371: tools/bpf/resolve_btfids] Error 2
->
-> Reverting "libbpf-validate-that-.btf-and-.btf.ext-sections-cont.patcht" a=
-ka
-> this one:
->
-> > Andrii Nakryiko <andrii@kernel.org>
-> >      libbpf: Validate that .BTF and .BTF.ext sections contain data
->
-> makes it build & run fine. I looked for followups but couldn't find anyth=
-ing that
-> stood out, maybe the BPF folks (cc'ed) know what's missing/wrong.
->
+Applied.  Thanks!
 
-That small fix depends on much bigger refactoring in ad23b7238474
-("libbpf: Use Elf64-specific types explicitly for dealing with ELF").
-I think this small fix can be dropped.
+Alex
 
-That's sort of a general rule with libbpf-related fixes, they are
-usually not that critical to backport to stable, because most users
-use/build libbpf from its Github mirror, which is always taken from
-latest bpf-next. Libbpf is also not supposed to be used with untrusted
-inputs (i.e., BPF object files) as BPF programs are loaded into the
-kernel under root.
-
-
-> cheers
-> Holger
+On Mon, Jan 24, 2022 at 3:21 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Wed, Jan 19, 2022 at 2:46 PM Colin Ian King <colin.i.king@gmail.com> wrote:
+> >
+> > The pointer reg is being assigned a value that is not read, the
+> > exit path via label 'out' never accesses it. The assignment is
+> > redundant and can be removed.
+> >
+> > Cleans up clang scan build warning:
+> > drivers/gpu/drm/radeon/radeon_object.c:570:3: warning: Value
+> > stored to 'reg' is never read [deadcode.DeadStores]
+> >
+> > Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+>
+> Thanks for the patch!
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> > ---
+> >  drivers/gpu/drm/radeon/radeon_object.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/radeon/radeon_object.c b/drivers/gpu/drm/radeon/radeon_object.c
+> > index 56ede9d63b12..87536d205593 100644
+> > --- a/drivers/gpu/drm/radeon/radeon_object.c
+> > +++ b/drivers/gpu/drm/radeon/radeon_object.c
+> > @@ -567,7 +567,6 @@ int radeon_bo_get_surface_reg(struct radeon_bo *bo)
+> >                 return 0;
+> >
+> >         if (bo->surface_reg >= 0) {
+> > -               reg = &rdev->surface_regs[bo->surface_reg];
+> >                 i = bo->surface_reg;
+> >                 goto out;
+> >         }
+> > --
+> > 2.33.1
+> >
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD1B499ED3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1C9499E93
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:09:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838055AbiAXWpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:45:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55246 "EHLO
+        id S1835659AbiAXWhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:37:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377401AbiAXVh2 (ORCPT
+        with ESMTP id S1377443AbiAXVh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 16:37:28 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BD6C05A19B;
-        Mon, 24 Jan 2022 12:23:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC7EC05A1A4;
+        Mon, 24 Jan 2022 12:23:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E50D161491;
-        Mon, 24 Jan 2022 20:23:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA5B8C340E5;
-        Mon, 24 Jan 2022 20:23:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F463614E2;
+        Mon, 24 Jan 2022 20:23:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB5A4C340E5;
+        Mon, 24 Jan 2022 20:23:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055805;
-        bh=3POvJJyTnUSsgYbLhRzcncXzFxDB1opYPXtwcY0P3l8=;
+        s=korg; t=1643055811;
+        bh=Ze5VekDJFQ9F4Lq5FKHeY0TK6oTja4UldYieM8HT1Es=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f+OcBSmXqdeCHCBvL1hgTYSFvJuxVYyr7lX+9BphnXaX94b5yLXX8Rgd1izDv8/sJ
-         ptmiYkuS1WrHfBNnaCvJdi6F9cDjxX4lWYGLrz+lRZQk3MHJw6dLCXTkFLIfwUkZVm
-         b2KnXdtW1NoAykqGjLtaQRDDRwZXp6uG8uEfpvV8=
+        b=WUK6yVMyIiTzvRLFDHgLopblvAh47WcHGBnHUZsflF6t1KpcRLLAQHifZlKAT9Blf
+         /loQXAZlZvDOk60F7UsCx7nCr3PjmaMCk5Ey2Wi0kVBkBbwvMk7c7AS9Fxf+TmmqnV
+         PMnsP7cw7JRl1us95nMhi9+rXgy7w9c/9Pk/7KSo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Avraham Stern <avraham.stern@intel.com>,
         Luca Coelho <luciano.coelho@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 272/846] iwlwifi: mvm: perform 6GHz passive scan after suspend
-Date:   Mon, 24 Jan 2022 19:36:29 +0100
-Message-Id: <20220124184110.314861809@linuxfoundation.org>
+Subject: [PATCH 5.15 273/846] iwlwifi: mvm: set protected flag only for NDP ranging
+Date:   Mon, 24 Jan 2022 19:36:30 +0100
+Message-Id: <20220124184110.349637437@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -51,60 +51,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Avraham Stern <avraham.stern@intel.com>
 
-[ Upstream commit f4745cbb17572209a7fa27a6796ed70e7ada860b ]
+[ Upstream commit 6bb2ea37c02db98cb677f978cfcb833ca608c5eb ]
 
-The 6GHz passive scan is performed only once every 50 minutes.
-However, in case of suspend/resume, the regulatory information
-is reset, so 6GHz channels may become disabled.
-Fix it by performing a 6GHz passive scan within 60 seconds after
-suspend/resume even if the 50 minutes timeout did not expire yet.
+Don't use protected ranging negotiation for FTM ranging as responders
+that support only FTM ranging don't expect the FTM request to be
+protected.
 
 Signed-off-by: Avraham Stern <avraham.stern@intel.com>
-Fixes: e8fe3b41c3a3 ("iwlwifi: mvm: Add support for 6GHz passive scan")
+Fixes: 517a5eb9fab2 ("iwlwifi: mvm: when associated with PMF, use protected NDP ranging negotiation")
 Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Link: https://lore.kernel.org/r/iwlwifi.20211219121514.6d5c043372cf.I251dd5618a3f0b8febbcca788eb861f1cd6039bc@changeid
+Link: https://lore.kernel.org/r/iwlwifi.20211219132536.f50ed0e3c6b3.Ibff247ee9d4e6e0a1a2d08a3c8a4bbb37e6829dd@changeid
 Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/mvm/scan.c | 21 ++++++++-----------
- 1 file changed, 9 insertions(+), 12 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
-index d78e436fa8b53..d4d562779d0a2 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/scan.c
-@@ -1924,22 +1924,19 @@ static void iwl_mvm_scan_6ghz_passive_scan(struct iwl_mvm *mvm,
- 	}
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c b/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c
+index c7fee6a2f7fd4..6e1d37f258035 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c
+@@ -499,7 +499,7 @@ iwl_mvm_ftm_put_target(struct iwl_mvm *mvm, struct ieee80211_vif *vif,
+ 		rcu_read_lock();
  
- 	/*
--	 * 6GHz passive scan is allowed while associated in a defined time
--	 * interval following HW reset or resume flow
-+	 * 6GHz passive scan is allowed in a defined time interval following HW
-+	 * reset or resume flow, or while not associated and a large interval
-+	 * has passed since the last 6GHz passive scan.
- 	 */
--	if (vif->bss_conf.assoc &&
-+	if ((vif->bss_conf.assoc ||
-+	     time_after(mvm->last_6ghz_passive_scan_jiffies +
-+			(IWL_MVM_6GHZ_PASSIVE_SCAN_TIMEOUT * HZ), jiffies)) &&
- 	    (time_before(mvm->last_reset_or_resume_time_jiffies +
- 			 (IWL_MVM_6GHZ_PASSIVE_SCAN_ASSOC_TIMEOUT * HZ),
- 			 jiffies))) {
--		IWL_DEBUG_SCAN(mvm, "6GHz passive scan: associated\n");
--		return;
--	}
--
--	/* No need for 6GHz passive scan if not enough time elapsed */
--	if (time_after(mvm->last_6ghz_passive_scan_jiffies +
--		       (IWL_MVM_6GHZ_PASSIVE_SCAN_TIMEOUT * HZ), jiffies)) {
--		IWL_DEBUG_SCAN(mvm,
--			       "6GHz passive scan: timeout did not expire\n");
-+		IWL_DEBUG_SCAN(mvm, "6GHz passive scan: %s\n",
-+			       vif->bss_conf.assoc ? "associated" :
-+			       "timeout did not expire");
- 		return;
- 	}
+ 		sta = rcu_dereference(mvm->fw_id_to_mac_id[mvmvif->ap_sta_id]);
+-		if (sta->mfp)
++		if (sta->mfp && (peer->ftm.trigger_based || peer->ftm.non_trigger_based))
+ 			FTM_PUT_FLAG(PMF);
  
+ 		rcu_read_unlock();
 -- 
 2.34.1
 

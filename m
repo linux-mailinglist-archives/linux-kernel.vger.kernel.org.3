@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D05349A5F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:17:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2400949A6F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3410868AbiAYAbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:31:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2362423AbiAXXmY (ORCPT
+        id S3422040AbiAYCaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:30:01 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36582 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378794AbiAXUJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:42:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4521FC0BD4B3;
-        Mon, 24 Jan 2022 13:38:53 -0800 (PST)
+        Mon, 24 Jan 2022 15:09:51 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F38E5B8123D;
-        Mon, 24 Jan 2022 21:38:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 291A8C340E4;
-        Mon, 24 Jan 2022 21:38:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5621F6136F;
+        Mon, 24 Jan 2022 20:09:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F58DC340E5;
+        Mon, 24 Jan 2022 20:09:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060330;
-        bh=9VXSeQPj3bW/cw0fQE/GFo4vmyWAHlsa/ig/RPb23gY=;
+        s=korg; t=1643054990;
+        bh=ZJUZG0M+EAzk8WRfF9nqPauGl/R5HVk9Iof7QH3bIac=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eTFFtENCnCDNwGtd9jjBHtdH2bjx9T/AYsQ6b8H54AAT3sr6fRVx6wseGFVwXvMqw
-         eA58z3hJGXVOF+99kHHA2jjfdoxddVqCxXsAE5TBdyO/Wuc610LHyka7A0oZ0IW0Go
-         HXYKarmwlSEw8jgxdNCnnJ4c7XAAtVsVnBqXT/sk=
+        b=PojPSSQsFl4wv6+XNElg9rV2IwILkaFEXSl6JSlCNdImVuofUutU4pr0w8YFL74mh
+         mpU3ej8ZXfixaMbbwqo3IW+oSlttm8nw1DgrhkcgGdHO2Znq5FPTbq+YECduohEp5u
+         vRgEErbtbmI5N+u1V33Jf/1U1mw8fAyINh6qq9HU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 5.16 0913/1039] Documentation, arch: Remove leftovers from raw device
-Date:   Mon, 24 Jan 2022 19:45:02 +0100
-Message-Id: <20220124184155.990498529@linuxfoundation.org>
+        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 5.10 539/563] perf script: Fix hex dump character output
+Date:   Mon, 24 Jan 2022 19:45:04 +0100
+Message-Id: <20220124184043.078437690@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,82 +46,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
 
-commit 473dcf0ffc31ce1135cd10578e7e06698cf51f4a upstream.
+commit 62942e9fda9fd1def10ffcbd5e1c025b3c9eec17 upstream.
 
-Raw device interface was removed so remove all references to configs
-related to it.
+Using grep -C with perf script -D can give erroneous results as grep loses
+lines due to non-printable characters, for example, below the 0020, 0060
+and 0070 lines are missing:
 
-Fixes: 603e4922f1c8 ("remove the raw driver")
-Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Acked-by: Arnd Bergmann <arnd@arndb.de> [arch/arm/configs]
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+ $ perf script -D | grep -C10 AUX | head
+ .  0010:  08 00 00 00 00 00 00 00 1f 00 00 00 00 00 00 00  ................
+ .  0030:  01 00 00 00 00 00 00 00 00 04 00 00 00 00 00 00  ................
+ .  0040:  00 08 00 00 00 00 00 00 02 00 00 00 00 00 00 00  ................
+ .  0050:  00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00  ................
+ .  0080:  02 00 00 00 00 00 00 00 1b 00 00 00 00 00 00 00  ................
+ .  0090:  00 00 00 00 00 00 00 00                          ........
+
+ 0 0 0x450 [0x98]: PERF_RECORD_AUXTRACE_INFO type: 1
+   PMU Type            8
+   Time Shift          31
+
+perf's isprint() is a custom implementation from the kernel, but the
+kernel's _ctype appears to include characters from Latin-1 Supplement which
+is not compatible with, for example, UTF-8. Fix by checking also isascii().
+
+After:
+
+ $ tools/perf/perf script -D | grep -C10 AUX | head
+ .  0010:  08 00 00 00 00 00 00 00 1f 00 00 00 00 00 00 00  ................
+ .  0020:  03 84 32 2f 00 00 00 00 63 7c 4f d2 fa ff ff ff  ..2/....c|O.....
+ .  0030:  01 00 00 00 00 00 00 00 00 04 00 00 00 00 00 00  ................
+ .  0040:  00 08 00 00 00 00 00 00 02 00 00 00 00 00 00 00  ................
+ .  0050:  00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00  ................
+ .  0060:  00 02 00 00 00 00 00 00 00 c0 03 00 00 00 00 00  ................
+ .  0070:  e2 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00  ................
+ .  0080:  02 00 00 00 00 00 00 00 1b 00 00 00 00 00 00 00  ................
+ .  0090:  00 00 00 00 00 00 00 00                          ........
+
+Fixes: 3052ba56bcb58904 ("tools perf: Move from sane_ctype.h obtained from git to the Linux's original")
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Link: http://lore.kernel.org/lkml/20220112085057.277205-1-adrian.hunter@intel.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/admin-guide/devices.txt  |    8 +-------
- arch/arm/configs/spear13xx_defconfig   |    1 -
- arch/arm/configs/spear3xx_defconfig    |    1 -
- arch/arm/configs/spear6xx_defconfig    |    1 -
- arch/powerpc/configs/pseries_defconfig |    1 -
- 5 files changed, 1 insertion(+), 11 deletions(-)
+ tools/perf/util/debug.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/Documentation/admin-guide/devices.txt
-+++ b/Documentation/admin-guide/devices.txt
-@@ -2339,13 +2339,7 @@
- 		disks (see major number 3) except that the limit on
- 		partitions is 31.
- 
-- 162 char	Raw block device interface
--		  0 = /dev/rawctl	Raw I/O control device
--		  1 = /dev/raw/raw1	First raw I/O device
--		  2 = /dev/raw/raw2	Second raw I/O device
--		    ...
--		 max minor number of raw device is set by kernel config
--		 MAX_RAW_DEVS or raw module parameter 'max_raw_devs'
-+ 162 char	Used for (now removed) raw block device interface
- 
-  163 char
- 
---- a/arch/arm/configs/spear13xx_defconfig
-+++ b/arch/arm/configs/spear13xx_defconfig
-@@ -61,7 +61,6 @@ CONFIG_SERIAL_AMBA_PL011=y
- CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
- # CONFIG_HW_RANDOM is not set
- CONFIG_RAW_DRIVER=y
--CONFIG_MAX_RAW_DEVS=8192
- CONFIG_I2C=y
- CONFIG_I2C_DESIGNWARE_PLATFORM=y
- CONFIG_SPI=y
---- a/arch/arm/configs/spear3xx_defconfig
-+++ b/arch/arm/configs/spear3xx_defconfig
-@@ -41,7 +41,6 @@ CONFIG_SERIAL_AMBA_PL011=y
- CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
- # CONFIG_HW_RANDOM is not set
- CONFIG_RAW_DRIVER=y
--CONFIG_MAX_RAW_DEVS=8192
- CONFIG_I2C=y
- CONFIG_I2C_DESIGNWARE_PLATFORM=y
- CONFIG_SPI=y
---- a/arch/arm/configs/spear6xx_defconfig
-+++ b/arch/arm/configs/spear6xx_defconfig
-@@ -36,7 +36,6 @@ CONFIG_INPUT_FF_MEMLESS=y
- CONFIG_SERIAL_AMBA_PL011=y
- CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
- CONFIG_RAW_DRIVER=y
--CONFIG_MAX_RAW_DEVS=8192
- CONFIG_I2C=y
- CONFIG_I2C_DESIGNWARE_PLATFORM=y
- CONFIG_SPI=y
---- a/arch/powerpc/configs/pseries_defconfig
-+++ b/arch/powerpc/configs/pseries_defconfig
-@@ -189,7 +189,6 @@ CONFIG_HVCS=m
- CONFIG_VIRTIO_CONSOLE=m
- CONFIG_IBM_BSR=m
- CONFIG_RAW_DRIVER=y
--CONFIG_MAX_RAW_DEVS=1024
- CONFIG_I2C_CHARDEV=y
- CONFIG_FB=y
- CONFIG_FIRMWARE_EDID=y
+--- a/tools/perf/util/debug.c
++++ b/tools/perf/util/debug.c
+@@ -145,7 +145,7 @@ static int trace_event_printer(enum bina
+ 		break;
+ 	case BINARY_PRINT_CHAR_DATA:
+ 		printed += color_fprintf(fp, color, "%c",
+-			      isprint(ch) ? ch : '.');
++			      isprint(ch) && isascii(ch) ? ch : '.');
+ 		break;
+ 	case BINARY_PRINT_CHAR_PAD:
+ 		printed += color_fprintf(fp, color, " ");
 
 

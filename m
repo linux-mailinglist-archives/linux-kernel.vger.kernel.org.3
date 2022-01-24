@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 474D1498B17
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A734992AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344197AbiAXTLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:11:21 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34170 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343993AbiAXTD6 (ORCPT
+        id S1356347AbiAXUXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:23:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376820AbiAXUEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:03:58 -0500
+        Mon, 24 Jan 2022 15:04:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2323BC061A10;
+        Mon, 24 Jan 2022 11:30:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C15C7611A9;
-        Mon, 24 Jan 2022 19:03:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F3DC340E5;
-        Mon, 24 Jan 2022 19:03:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1B24B81235;
+        Mon, 24 Jan 2022 19:30:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24DEFC340E7;
+        Mon, 24 Jan 2022 19:30:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051035;
-        bh=cO11i6sL99XTWmL63fsA0et6hoGNDFcOuN707ypFsbg=;
+        s=korg; t=1643052631;
+        bh=cWI8ojefn/SNJygUfmetwTuVORwXnr4IbGXVnLFJoK4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0c/nZkPeeWrXi72ol4YHhZl7yzhHIjc6yMhgRrDt4dpU5SNlL8HcUWqgrPYMpyNkO
-         6DavlDOLPYZkFm7LQzt9V70VrVZ0PU/y14x+Vcv8D+ozzK9d/0P9gK4eZFr4zDrrt8
-         npTuZnqspS95Jp/HPD4orqZQeeE+kfulzwRUeEis=
+        b=WIkeqvbf316IwFXG60kYA6rFetUoXqWRBXBX6Wv97nNKqoC9jYcdqN80AF+KZ3qjr
+         I/VILEyRKaZO0u2EI00EMrk+7vuxx7pNvmn/aCHhmhzEbfwN9O9NDTJlH7CvVvNJ72
+         935BvgBOZC1V2+ImuL0Db69W5bOGPFh02yCeeG98=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sam Bingner <sam@bingner.com>,
-        Yifeng Li <tomli@tomli.me>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
-Subject: [PATCH 4.14 032/186] PCI: Add function 1 DMA alias quirk for Marvell 88SE9125 SATA controller
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 123/320] ALSA: jack: Add missing rwsem around snd_ctl_remove() calls
 Date:   Mon, 24 Jan 2022 19:41:47 +0100
-Message-Id: <20220124183938.156607286@linuxfoundation.org>
+Message-Id: <20220124183957.867945420@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,54 +48,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yifeng Li <tomli@tomli.me>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit e445375882883f69018aa669b67cbb37ec873406 upstream.
+[ Upstream commit 06764dc931848c3a9bc01a63bbf76a605408bb54 ]
 
-Like other SATA controller chips in the Marvell 88SE91xx series, the
-Marvell 88SE9125 has the same DMA requester ID hardware bug that prevents
-it from working under IOMMU.  Add it to the list of devices that need the
-quirk.
+snd_ctl_remove() has to be called with card->controls_rwsem held (when
+called after the card instantiation).  This patch add the missing
+rwsem calls around it.
 
-Without this patch, device initialization fails with DMA errors:
-
-  ata8: softreset failed (1st FIS failed)
-  DMAR: DRHD: handling fault status reg 2
-  DMAR: [DMA Write NO_PASID] Request device [03:00.1] fault addr 0xfffc0000 [fault reason 0x02] Present bit in context entry is clear
-  DMAR: DRHD: handling fault status reg 2
-  DMAR: [DMA Read NO_PASID] Request device [03:00.1] fault addr 0xfffc0000 [fault reason 0x02] Present bit in context entry is clear
-
-After applying the patch, the controller can be successfully initialized:
-
-  ata8: SATA link up 1.5 Gbps (SStatus 113 SControl 330)
-  ata8.00: ATAPI: PIONEER BD-RW   BDR-207M, 1.21, max UDMA/100
-  ata8.00: configured for UDMA/100
-  scsi 7:0:0:0: CD-ROM            PIONEER  BD-RW   BDR-207M 1.21 PQ: 0 ANSI: 5
-
-Link: https://lore.kernel.org/r/YahpKVR+McJVDdkD@work
-Reported-by: Sam Bingner <sam@bingner.com>
-Tested-by: Sam Bingner <sam@bingner.com>
-Tested-by: Yifeng Li <tomli@tomli.me>
-Signed-off-by: Yifeng Li <tomli@tomli.me>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 9058cbe1eed2 ("ALSA: jack: implement kctl creating for jack devices")
+Link: https://lore.kernel.org/r/20211116071314.15065-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/quirks.c |    3 +++
+ sound/core/jack.c | 3 +++
  1 file changed, 3 insertions(+)
 
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -4004,6 +4004,9 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_M
- 			 quirk_dma_func1_alias);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9123,
- 			 quirk_dma_func1_alias);
-+/* https://bugzilla.kernel.org/show_bug.cgi?id=42679#c136 */
-+DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9125,
-+			 quirk_dma_func1_alias);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9128,
- 			 quirk_dma_func1_alias);
- /* https://bugzilla.kernel.org/show_bug.cgi?id=42679#c14 */
+diff --git a/sound/core/jack.c b/sound/core/jack.c
+index 8b209750c7a9c..b00ae6f39f054 100644
+--- a/sound/core/jack.c
++++ b/sound/core/jack.c
+@@ -54,10 +54,13 @@ static int snd_jack_dev_free(struct snd_device *device)
+ 	struct snd_card *card = device->card;
+ 	struct snd_jack_kctl *jack_kctl, *tmp_jack_kctl;
+ 
++	down_write(&card->controls_rwsem);
+ 	list_for_each_entry_safe(jack_kctl, tmp_jack_kctl, &jack->kctl_list, list) {
+ 		list_del_init(&jack_kctl->list);
+ 		snd_ctl_remove(card, jack_kctl->kctl);
+ 	}
++	up_write(&card->controls_rwsem);
++
+ 	if (jack->private_free)
+ 		jack->private_free(jack);
+ 
+-- 
+2.34.1
+
 
 

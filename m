@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB8A4988EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:51:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC48F498A01
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:01:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245526AbiAXSve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:51:34 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49164 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245683AbiAXSuY (ORCPT
+        id S1344960AbiAXS7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:59:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343815AbiAXS46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:50:24 -0500
+        Mon, 24 Jan 2022 13:56:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE71C061753;
+        Mon, 24 Jan 2022 10:55:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D926614D4;
-        Mon, 24 Jan 2022 18:50:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6417BC340E5;
-        Mon, 24 Jan 2022 18:50:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C0A63B8121A;
+        Mon, 24 Jan 2022 18:54:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2F0CC340EA;
+        Mon, 24 Jan 2022 18:54:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050224;
-        bh=ZCLq4ueO8BEDL+z2nWwbk/NGy+MQ8q+TZbhlMK+G2fY=;
+        s=korg; t=1643050498;
+        bh=qJAm7nxkvWLXikpp65EDpvm73EhmGBm8p+/E1dgdSS0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iy+++X7Z8lbw9IaJNUxtZDCR6PLOf65x/9Zo4norIPChsV9KZyTD33R5R9Qv86/Ez
-         sw8j8fLw/uDH4ejAKylJtWVXdZofG5CQwmof8yBfEfHhQ6u/b1ABHMuK7Fdzu1DZnK
-         juncWqPL2lEXM6xGBTJzFAP5jSnRE/hRqkUzkpRU=
+        b=A8tuTd34f10vxkcqfyyi2ZAAE120up6vp5uHkxRKar3KI/636c/AZqU5U6lN2JvvM
+         ViCytgWTSXu+1VMORszkKJmm/S2mFQqboJGR3b0VJ11SzxGa6ziEGUbGHMtREhmBMm
+         9iIdyYUczqV9ve9IHocxYp3NKXKnF8+QgS89eaDc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        stable@vger.kernel.org, Michael Kuron <michael.kuron@gmail.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 4.4 016/114] media: pvrusb2: fix control-message timeouts
-Date:   Mon, 24 Jan 2022 19:41:51 +0100
-Message-Id: <20220124183927.614206819@linuxfoundation.org>
+Subject: [PATCH 4.9 022/157] media: dib0700: fix undefined behavior in tuner shutdown
+Date:   Mon, 24 Jan 2022 19:41:52 +0100
+Message-Id: <20220124183933.500112255@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183927.095545464@linuxfoundation.org>
-References: <20220124183927.095545464@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,60 +48,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Michael Kuron <michael.kuron@gmail.com>
 
-commit b82bf9b9dc305d7d3d93eab106d70dbf2171b43e upstream.
+commit f7b77ebe6d2f49c7747b2d619586d1aa33f9ea91 upstream.
 
-USB control-message timeouts are specified in milliseconds and should
-specifically not vary with CONFIG_HZ.
+This fixes a problem where closing the tuner would leave it in a state
+where it would not tune to any channel when reopened. This problem was
+discovered as part of https://github.com/hselasky/webcamd/issues/16.
 
-Fixes: d855497edbfb ("V4L/DVB (4228a): pvrusb2 to kernel 2.6.18")
-Cc: stable@vger.kernel.org      # 2.6.18
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Since adap->id is 0 or 1, this bit-shift overflows, which is undefined
+behavior. The driver still worked in practice as the overflow would in
+most environments result in 0, which rendered the line a no-op. When
+running the driver as part of webcamd however, the overflow could lead
+to 0xff due to optimizations by the compiler, which would, in the end,
+improperly shut down the tuner.
+
+The bug is a regression introduced in the commit referenced below. The
+present patch causes identical behavior to before that commit for
+adap->id equal to 0 or 1. The driver does not contain support for
+dib0700 devices with more adapters, assuming such even exist.
+
+Tests have been performed with the Xbox One Digital TV Tuner on amd64.
+Not all dib0700 devices are expected to be affected by the regression;
+this code path is only taken by those with incorrect endpoint numbers.
+
+Link: https://lore.kernel.org/linux-media/1d2fc36d94ced6f67c7cc21dcc469d5e5bdd8201.1632689033.git.mchehab+huawei@kernel.org
+
+Cc: stable@vger.kernel.org
+Fixes: 7757ddda6f4f ("[media] DiB0700: add function to change I2C-speed")
+Signed-off-by: Michael Kuron <michael.kuron@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/usb/pvrusb2/pvrusb2-hdw.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/media/usb/dvb-usb/dib0700_core.c |    2 --
+ 1 file changed, 2 deletions(-)
 
---- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-@@ -1488,7 +1488,7 @@ static int pvr2_upload_firmware1(struct
- 	for (address = 0; address < fwsize; address += 0x800) {
- 		memcpy(fw_ptr, fw_entry->data + address, 0x800);
- 		ret += usb_control_msg(hdw->usb_dev, pipe, 0xa0, 0x40, address,
--				       0, fw_ptr, 0x800, HZ);
-+				       0, fw_ptr, 0x800, 1000);
- 	}
- 
- 	trace_firmware("Upload done, releasing device's CPU");
-@@ -1627,7 +1627,7 @@ int pvr2_upload_firmware2(struct pvr2_hd
- 			((u32 *)fw_ptr)[icnt] = swab32(((u32 *)fw_ptr)[icnt]);
- 
- 		ret |= usb_bulk_msg(hdw->usb_dev, pipe, fw_ptr,bcnt,
--				    &actual_length, HZ);
-+				    &actual_length, 1000);
- 		ret |= (actual_length != bcnt);
- 		if (ret) break;
- 		fw_done += bcnt;
-@@ -3491,7 +3491,7 @@ void pvr2_hdw_cpufw_set_enabled(struct p
- 						      0xa0,0xc0,
- 						      address,0,
- 						      hdw->fw_buffer+address,
--						      0x800,HZ);
-+						      0x800,1000);
- 				if (ret < 0) break;
- 			}
- 
-@@ -4017,7 +4017,7 @@ void pvr2_hdw_cpureset_assert(struct pvr
- 	/* Write the CPUCS register on the 8051.  The lsb of the register
- 	   is the reset bit; a 1 asserts reset while a 0 clears it. */
- 	pipe = usb_sndctrlpipe(hdw->usb_dev, 0);
--	ret = usb_control_msg(hdw->usb_dev,pipe,0xa0,0x40,0xe600,0,da,1,HZ);
-+	ret = usb_control_msg(hdw->usb_dev,pipe,0xa0,0x40,0xe600,0,da,1,1000);
- 	if (ret < 0) {
- 		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
- 			   "cpureset_assert(%d) error=%d",val,ret);
+--- a/drivers/media/usb/dvb-usb/dib0700_core.c
++++ b/drivers/media/usb/dvb-usb/dib0700_core.c
+@@ -610,8 +610,6 @@ int dib0700_streaming_ctrl(struct dvb_us
+ 		deb_info("the endpoint number (%i) is not correct, use the adapter id instead", adap->fe_adap[0].stream.props.endpoint);
+ 		if (onoff)
+ 			st->channel_state |=	1 << (adap->id);
+-		else
+-			st->channel_state |=	1 << ~(adap->id);
+ 	} else {
+ 		if (onoff)
+ 			st->channel_state |=	1 << (adap->fe_adap[0].stream.props.endpoint-2);
 
 

@@ -2,47 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7BD49A0CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E4D499EA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:10:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1847815AbiAXXUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:20:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36608 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1584592AbiAXWV3 (ORCPT
+        id S1836759AbiAXWkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:40:45 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59772 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1457483AbiAXVln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:21:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD58C0424E5;
-        Mon, 24 Jan 2022 12:51:57 -0800 (PST)
+        Mon, 24 Jan 2022 16:41:43 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3B0E60B21;
-        Mon, 24 Jan 2022 20:51:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFE9AC340E5;
-        Mon, 24 Jan 2022 20:51:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11C7C61526;
+        Mon, 24 Jan 2022 21:41:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED0F0C340E4;
+        Mon, 24 Jan 2022 21:41:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057516;
-        bh=Q+kbtrSzN3sW0F+y05oRP18A4WGq9IVLlwKWgshlVIM=;
+        s=korg; t=1643060502;
+        bh=hgTMhcKXn0qipvk81yvlR5VaiWMS55P9EIckJyt9sxo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OC5Ph9KqbvZXiXJNLoEYuP2OVy20E9wYr1qyWP6YNAVBb4KHb5QGqVriWNiIK0KUc
-         wIYFNhnVrLzktdm2PgMLijp7CJXfFsphI0gpj3FFaaR7DLu/90L0PAeoU3qTiCc4fq
-         tiQBB12GqWw9SejtIhQqin28R57q7wkA3nbS+mCI=
+        b=GdO2GWewTxxGm2rMqqELfQ++O/fS7YKP2+9gy+z4GMFfM1bC1ndCrbJFalFlXQxaf
+         mgDl8rA+MRwmY7mQNv8PiQo3ZnqdBlLuIh/HohkOHZfp1GDZ9TmREilxVJVizORs4B
+         dFdZQC4wB0mLeNIkgaGtAorpp+TATUbhs9Ih8If4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexander Stein <alexander.stein@mailbox.org>,
-        Rob Herring <robh@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH 5.15 839/846] dt-bindings: display: meson-vpu: Add missing amlogic,canvas property
-Date:   Mon, 24 Jan 2022 19:45:56 +0100
-Message-Id: <20220124184129.847445968@linuxfoundation.org>
+        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.16 0968/1039] net: axienet: Wait for PhyRstCmplt after core reset
+Date:   Mon, 24 Jan 2022 19:45:57 +0100
+Message-Id: <20220124184157.828788785@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,54 +46,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Stein <alexander.stein@mailbox.org>
+From: Robert Hancock <robert.hancock@calian.com>
 
-commit 640f35b871d29cd685ce0ea0762636381beeb98a upstream.
+commit b400c2f4f4c53c86594dd57098970d97d488bfde upstream.
 
-This property was already mentioned in the old textual bindings
-amlogic,meson-vpu.txt, but got dropped during conversion.
-Adding it back similar to amlogic,gx-vdec.yaml.
+When resetting the device, wait for the PhyRstCmplt bit to be set
+in the interrupt status register before continuing initialization, to
+ensure that the core is actually ready. When using an external PHY, this
+also ensures we do not start trying to access the PHY while it is still
+in reset. The PHY reset is initiated by the core reset which is
+triggered just above, but remains asserted for 5ms after the core is
+reset according to the documentation.
 
-Fixes: 6b9ebf1e0e67 ("dt-bindings: display: amlogic, meson-vpu: convert to yaml")
-Signed-off-by: Alexander Stein <alexander.stein@mailbox.org>
-Acked-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211219094155.177206-1-alexander.stein@mailbox.org
+The MgtRdy bit could also be waited for, but unfortunately when using
+7-series devices, the bit does not appear to work as documented (it
+seems to behave as some sort of link state indication and not just an
+indication the transceiver is ready) so it can't really be relied on for
+this purpose.
+
+Fixes: 8a3b7a252dca9 ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/devicetree/bindings/display/amlogic,meson-vpu.yaml |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
---- a/Documentation/devicetree/bindings/display/amlogic,meson-vpu.yaml
-+++ b/Documentation/devicetree/bindings/display/amlogic,meson-vpu.yaml
-@@ -78,6 +78,10 @@ properties:
-   interrupts:
-     maxItems: 1
+--- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
++++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+@@ -516,6 +516,16 @@ static int __axienet_device_reset(struct
+ 		return ret;
+ 	}
  
-+  amlogic,canvas:
-+    description: should point to a canvas provider node
-+    $ref: /schemas/types.yaml#/definitions/phandle
++	/* Wait for PhyRstCmplt bit to be set, indicating the PHY reset has finished */
++	ret = read_poll_timeout(axienet_ior, value,
++				value & XAE_INT_PHYRSTCMPLT_MASK,
++				DELAY_OF_ONE_MILLISEC, 50000, false, lp,
++				XAE_IS_OFFSET);
++	if (ret) {
++		dev_err(lp->dev, "%s: timeout waiting for PhyRstCmplt\n", __func__);
++		return ret;
++	}
 +
-   power-domains:
-     maxItems: 1
-     description: phandle to the associated power domain
-@@ -106,6 +110,7 @@ required:
-   - port@1
-   - "#address-cells"
-   - "#size-cells"
-+  - amlogic,canvas
+ 	return 0;
+ }
  
- additionalProperties: false
- 
-@@ -118,6 +123,7 @@ examples:
-         interrupts = <3>;
-         #address-cells = <1>;
-         #size-cells = <0>;
-+        amlogic,canvas = <&canvas>;
- 
-         /* CVBS VDAC output port */
-         port@0 {
 
 

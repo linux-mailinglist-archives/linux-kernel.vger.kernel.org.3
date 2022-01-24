@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC61F49A17D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B385499DDC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:04:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2360506AbiAXXgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:36:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44290 "EHLO
+        id S1586414AbiAXW0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:26:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382775AbiAXWxo (ORCPT
+        with ESMTP id S1453859AbiAXVbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:53:44 -0500
+        Mon, 24 Jan 2022 16:31:05 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7843C061A10;
-        Mon, 24 Jan 2022 13:08:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D81EC0AD1A2;
+        Mon, 24 Jan 2022 12:19:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 831A0B80FA3;
-        Mon, 24 Jan 2022 21:08:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB209C340E5;
-        Mon, 24 Jan 2022 21:08:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB231B81229;
+        Mon, 24 Jan 2022 20:19:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C797C340E5;
+        Mon, 24 Jan 2022 20:19:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058519;
-        bh=XVfbMr+0bam4xryzd7On8rKa6GlVOXgJT+vvJ89vSBA=;
+        s=korg; t=1643055579;
+        bh=AtSJyWWQBR0qTc4KjdnINqtOHj8XVN61e4NKDvYhRxE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v5TDG/ZebXH84R+DJhR9it98WcAEmXCcn2wNwx3tQpKQZRmIjEdwna8pC0nvIfGu1
-         Q29ER5MxBQahmLlEblDWJNx1K5pWtQZ9zl5bM13gvXO/mNoysxTrpS2q9JqwwcN8cT
-         dMejYdw0mbuY9jhmoTmKf5lCMCuhCxlxipqql8Bo=
+        b=gY8CsRtTLG6PbffeC/BTK9mihgRbOdGFGYgvkGa+2ZxcPwK8iZk2MUxe71XB8cmb6
+         g/BTD9xm/LZ6DR/Sd3pxJV8Zvzy+S09Sb7q128PtnJsrWQLQ5WkM/r0yKDx8+uqbHF
+         4UbVs/Yf6by+IyoeyIE5Gv56FlR3W9SsDU96Mn3U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Wang <sean.wang@mediatek.com>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0316/1039] mt76: mt7921s: fix possible kernel crash due to invalid Rx count
-Date:   Mon, 24 Jan 2022 19:35:05 +0100
-Message-Id: <20220124184135.922658007@linuxfoundation.org>
+        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 198/846] bpf: Fix the test_task_vma selftest to support output shorter than 1 kB
+Date:   Mon, 24 Jan 2022 19:35:15 +0100
+Message-Id: <20220124184107.775121833@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,55 +49,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Wang <sean.wang@mediatek.com>
+From: Maxim Mikityanskiy <maximmi@nvidia.com>
 
-[ Upstream commit 2b7f3574ca9a7ff4a6b4ec1ae4dfdfde481ac80b ]
+[ Upstream commit da54ab14953c38d98cb3e34c564c06c3739394b2 ]
 
-Return the proper error code when out-of-range the Rx aggregation count
-are reported from the hardware that would create the unreasonable extreme
-large Rx buffer.
+The test for bpf_iter_task_vma assumes that the output will be longer
+than 1 kB, as the comment above the loop says. Due to this assumption,
+the loop becomes infinite if the output turns to be shorter than 1 kB.
+The return value of read_fd_into_buffer is 0 when the end of file was
+reached, and len isn't being increased any more.
 
-[  100.873810]  show_stack+0x20/0x2c
-[  100.873823]  dump_stack+0xc4/0x140
-[  100.873839]  bad_page+0x110/0x114
-[  100.873854]  check_new_pages+0xf8/0xfc
-[  100.873869]  rmqueue+0x5a0/0x640
-[  100.873884]  get_page_from_freelist+0x124/0x20c
-[  100.873898]  __alloc_pages_nodemask+0x114/0x2a4
-[  100.873918]  mt76s_rx_run_queue+0xd4/0x2e4 [mt76_sdio 8280a88a0c8c9cf203f16e194f99ac293bdbb2f5]
-[  100.873938]  mt76s_rx_handler+0xd4/0x2a0 [mt76_sdio 8280a88a0c8c9cf203f16e194f99ac293bdbb2f5]
-[  100.873957]  mt76s_txrx_worker+0xac/0x17c [mt76_sdio 8280a88a0c8c9cf203f16e194f99ac293bdbb2f5]
-[  100.873977]  mt7921s_txrx_worker+0x5c/0xd8 [mt7921s d0bdbc018082dbc8dc1407614be3c2e7bd64423b]
-[  100.874003]  __mt76_worker_fn+0xe8/0x170 [mt76 b80af3483a8f9d48e916c12d8dbfaa0d3cd15337]
-[  100.874018]  kthread+0x148/0x3ac
-[  100.874032]  ret_from_fork+0x10/0x30
-[  100.874067] Kernel Offset: 0x1fe2000000 from 0xffffffc010000000
-[  100.874079] PHYS_OFFSET: 0xffffffe800000000
-[  100.874090] CPU features: 0x0240002,2188200c
+This commit adds a break on EOF to handle short output correctly. For
+the reference, this is the contents that I get when running test_progs
+under vmtest.sh, and it's shorter than 1 kB:
 
-Fixes: 48fab5bbef40 ("mt76: mt7921: introduce mt7921s support")
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+00400000-00401000 r--p 00000000 fe:00 25867     /root/bpf/test_progs
+00401000-00674000 r-xp 00001000 fe:00 25867     /root/bpf/test_progs
+00674000-0095f000 r--p 00274000 fe:00 25867     /root/bpf/test_progs
+0095f000-00983000 r--p 0055e000 fe:00 25867     /root/bpf/test_progs
+00983000-00a8a000 rw-p 00582000 fe:00 25867     /root/bpf/test_progs
+00a8a000-0484e000 rw-p 00000000 00:00 0
+7f6c64000000-7f6c64021000 rw-p 00000000 00:00 0
+7f6c64021000-7f6c68000000 ---p 00000000 00:00 0
+7f6c6ac8f000-7f6c6ac90000 r--s 00000000 00:0d 8032
+anon_inode:bpf-map
+7f6c6ac90000-7f6c6ac91000 ---p 00000000 00:00 0
+7f6c6ac91000-7f6c6b491000 rw-p 00000000 00:00 0
+7f6c6b491000-7f6c6b492000 r--s 00000000 00:0d 8032
+anon_inode:bpf-map
+7f6c6b492000-7f6c6b493000 rw-s 00000000 00:0d 8032
+anon_inode:bpf-map
+7ffc1e23d000-7ffc1e25e000 rw-p 00000000 00:00 0
+7ffc1e3b8000-7ffc1e3bc000 r--p 00000000 00:00 0
+7ffc1e3bc000-7ffc1e3bd000 r-xp 00000000 00:00 0
+7fffffffe000-7ffffffff000 --xp 00000000 00:00 0
+
+Fixes: e8168840e16c ("selftests/bpf: Add test for bpf_iter_task_vma")
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20211130181811.594220-1-maximmi@nvidia.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7921/sdio.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/bpf_iter.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/sdio.c b/drivers/net/wireless/mediatek/mt76/mt7921/sdio.c
-index 5c88b6b8d0979..84be229a899da 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/sdio.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/sdio.c
-@@ -62,6 +62,10 @@ static int mt7921s_parse_intr(struct mt76_dev *dev, struct mt76s_intr *intr)
- 	if (err < 0)
- 		return err;
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+index 77ac24b191d4c..dc18e5ae0febc 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+@@ -1208,13 +1208,14 @@ static void test_task_vma(void)
+ 		goto out;
  
-+	if (irq_data->rx.num[0] > 16 ||
-+	    irq_data->rx.num[1] > 128)
-+		return -EINVAL;
-+
- 	intr->isr = irq_data->isr;
- 	intr->rec_mb = irq_data->rec_mb;
- 	intr->tx.wtqcr = irq_data->tx.wtqcr;
+ 	/* Read CMP_BUFFER_SIZE (1kB) from bpf_iter. Read in small chunks
+-	 * to trigger seq_file corner cases. The expected output is much
+-	 * longer than 1kB, so the while loop will terminate.
++	 * to trigger seq_file corner cases.
+ 	 */
+ 	len = 0;
+ 	while (len < CMP_BUFFER_SIZE) {
+ 		err = read_fd_into_buffer(iter_fd, task_vma_output + len,
+ 					  min(read_size, CMP_BUFFER_SIZE - len));
++		if (!err)
++			break;
+ 		if (CHECK(err < 0, "read_iter_fd", "read_iter_fd failed\n"))
+ 			goto out;
+ 		len += err;
 -- 
 2.34.1
 

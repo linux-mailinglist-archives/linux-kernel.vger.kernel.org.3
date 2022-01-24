@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3E4499DF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2784549A140
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587043AbiAXW1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:27:39 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:51444 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1454311AbiAXVcN (ORCPT
+        id S1850826AbiAXXa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:30:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380561AbiAXWHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:32:13 -0500
+        Mon, 24 Jan 2022 17:07:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A1CC046E06;
+        Mon, 24 Jan 2022 12:42:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C70B614F3;
-        Mon, 24 Jan 2022 21:32:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4479C340E4;
-        Mon, 24 Jan 2022 21:32:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 03077B815A6;
+        Mon, 24 Jan 2022 20:42:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 945DBC340E5;
+        Mon, 24 Jan 2022 20:42:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059932;
-        bh=2hF7BRGsfHYFsaSCRg8aq1TO5nuw7n7HAXgR4OfbIJo=;
+        s=korg; t=1643056954;
+        bh=VffSaQeFa9LtkWe5JdScSFvdlZGz2Hde+F96tYEm9vU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2Jq46nqN8oFpfSpVXfRX+s7uUVyEd9MnQ5aq7rsyezgei3CeP19hQ7vQSg5k6qblc
-         +R9miQW+4yLNyOmMIdOYzUp6uLuzoyvmB2S1+4OkJXU3uIfwLguk61KB85fsHUbVN+
-         RaX+85UgSTdICtPQkhVCPiij3Da2/AS7CXtA00y4=
+        b=O0y9Ybpjvr3Q/8yrsmwJq0hfY/p+zab6cATaBytSX8burLudjEtTJGzykmIJwn6Wj
+         mhreiL8d5VcwcPQcA1hxtEGqY5HYj/skAAISfRmqDfTv35e7rQZnpQlr1JXL2qMKwg
+         M3c+dcr/FuVhVq8mVZD3BYafmM2YLgi0eZIrlHTY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Stephen Boyd <swboyd@chromium.org>,
+        stable@vger.kernel.org, Baoquan He <bhe@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0783/1039] PCI: qcom: Fix an error handling path in qcom_pcie_probe()
+Subject: [PATCH 5.15 655/846] scsi: sr: Dont use GFP_DMA
 Date:   Mon, 24 Jan 2022 19:42:52 +0100
-Message-Id: <20220124184151.607878649@linuxfoundation.org>
+Message-Id: <20220124184123.635149982@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,55 +50,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Christoph Hellwig <hch@lst.de>
 
-[ Upstream commit 4e0e90539bb0e6c0ca3768c642df9eed2118a8bb ]
+[ Upstream commit d94d94969a4ba07a43d62429c60372320519c391 ]
 
-If 'of_device_get_match_data()' fails, previous 'pm_runtime_get_sync()/
-pm_runtime_enable()' should be undone.
+The allocated buffers are used as a command payload, for which the block
+layer and/or DMA API do the proper bounce buffering if needed.
 
-To fix it, the easiest is to move this block of code before the memory
-allocations and the pm_runtime_xxx calls.
-
-Link: https://lore.kernel.org/r/4d03c636193f64907c8dacb17fa71ed05fd5f60c.1636220582.git.christophe.jaillet@wanadoo.fr
-Fixes: b89ff410253d ("PCI: qcom: Replace ops with struct pcie_cfg in pcie match data")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Link: https://lore.kernel.org/r/20211222090842.920724-1-hch@lst.de
+Reported-by: Baoquan He <bhe@redhat.com>
+Reviewed-by: Baoquan He <bhe@redhat.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/dwc/pcie-qcom.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/scsi/sr.c        | 2 +-
+ drivers/scsi/sr_vendor.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 1c3d1116bb60c..baae67f71ba82 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -1534,6 +1534,12 @@ static int qcom_pcie_probe(struct platform_device *pdev)
- 	const struct qcom_pcie_cfg *pcie_cfg;
- 	int ret;
+diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
+index 8b17b35283aa5..1203374828b97 100644
+--- a/drivers/scsi/sr.c
++++ b/drivers/scsi/sr.c
+@@ -851,7 +851,7 @@ static void get_capabilities(struct scsi_cd *cd)
  
-+	pcie_cfg = of_device_get_match_data(dev);
-+	if (!pcie_cfg || !pcie_cfg->ops) {
-+		dev_err(dev, "Invalid platform data\n");
-+		return -EINVAL;
-+	}
-+
- 	pcie = devm_kzalloc(dev, sizeof(*pcie), GFP_KERNEL);
- 	if (!pcie)
+ 
+ 	/* allocate transfer buffer */
+-	buffer = kmalloc(512, GFP_KERNEL | GFP_DMA);
++	buffer = kmalloc(512, GFP_KERNEL);
+ 	if (!buffer) {
+ 		sr_printk(KERN_ERR, cd, "out of memory.\n");
+ 		return;
+diff --git a/drivers/scsi/sr_vendor.c b/drivers/scsi/sr_vendor.c
+index 1f988a1b9166f..a61635326ae0a 100644
+--- a/drivers/scsi/sr_vendor.c
++++ b/drivers/scsi/sr_vendor.c
+@@ -131,7 +131,7 @@ int sr_set_blocklength(Scsi_CD *cd, int blocklength)
+ 	if (cd->vendor == VENDOR_TOSHIBA)
+ 		density = (blocklength > 2048) ? 0x81 : 0x83;
+ 
+-	buffer = kmalloc(512, GFP_KERNEL | GFP_DMA);
++	buffer = kmalloc(512, GFP_KERNEL);
+ 	if (!buffer)
  		return -ENOMEM;
-@@ -1553,12 +1559,6 @@ static int qcom_pcie_probe(struct platform_device *pdev)
  
- 	pcie->pci = pci;
+@@ -179,7 +179,7 @@ int sr_cd_check(struct cdrom_device_info *cdi)
+ 	if (cd->cdi.mask & CDC_MULTI_SESSION)
+ 		return 0;
  
--	pcie_cfg = of_device_get_match_data(dev);
--	if (!pcie_cfg || !pcie_cfg->ops) {
--		dev_err(dev, "Invalid platform data\n");
--		return -EINVAL;
--	}
--
- 	pcie->ops = pcie_cfg->ops;
- 	pcie->pipe_clk_need_muxing = pcie_cfg->pipe_clk_need_muxing;
+-	buffer = kmalloc(512, GFP_KERNEL | GFP_DMA);
++	buffer = kmalloc(512, GFP_KERNEL);
+ 	if (!buffer)
+ 		return -ENOMEM;
  
 -- 
 2.34.1

@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C192498A66
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:03:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C038A498CC6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344547AbiAXTDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:03:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344710AbiAXS65 (ORCPT
+        id S1350238AbiAXTYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:24:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44530 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230384AbiAXTP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:58:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A61C06124C;
-        Mon, 24 Jan 2022 10:56:17 -0800 (PST)
+        Mon, 24 Jan 2022 14:15:28 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C22D1B8122F;
-        Mon, 24 Jan 2022 18:56:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5C6DC340E7;
-        Mon, 24 Jan 2022 18:56:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32D35612A5;
+        Mon, 24 Jan 2022 19:15:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E3D7C340E5;
+        Mon, 24 Jan 2022 19:15:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050574;
-        bh=XjFCQMtChNzQu+/wivrPl0tpf7DCbKXansZw5loAbeM=;
+        s=korg; t=1643051726;
+        bh=+Y5rCE8pky0SVMuid6BEie+bScD2LnKU6fGjCqvgFGU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hMmzBOZ9Z2UfJk79nwr4opRE8jqstYwFAzPrYgmxOyQ6sV5w2YD1WB3HYQh/020sP
-         WV7J/UH6rDa3xXAu11Hf7TJjd09UBLkM1n0Je3wlGqrzq6dQcoUZgvg8DXD4mNy4mP
-         yLSw/tpFz9POxGq6n2QfVfFG7+bq0esGpl6Am8hM=
+        b=J9bEX6f8K1muS17Lh6z/B9GkMLC0GwEeN8xwbUOC9otbOcjqC/jawW3WIXIuSpB4d
+         /+oNkykwMMf2hvjLAZoHm8EZM40ZOGyc3AZBQ9fl2s5CDlJ2er3X//Xj0Dnj2KPQFC
+         l545ivIrRMdQeyF8+qjwhr03CmAImpU2dsann6MQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Jiri Kosina <jkosina@suse.cz>
-Subject: [PATCH 4.9 013/157] HID: uhid: Fix worker destroying device without any protection
-Date:   Mon, 24 Jan 2022 19:41:43 +0100
-Message-Id: <20220124183933.213789762@linuxfoundation.org>
+        stable@vger.kernel.org, Lizhi Hou <lizhi.hou@xilinx.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 066/239] tty: serial: uartlite: allow 64 bit address
+Date:   Mon, 24 Jan 2022 19:41:44 +0100
+Message-Id: <20220124183945.237568972@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,101 +45,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+From: Lizhi Hou <lizhi.hou@xilinx.com>
 
-commit 4ea5763fb79ed89b3bdad455ebf3f33416a81624 upstream.
+[ Upstream commit 3672fb65155530b5eea6225685c75329b6debec3 ]
 
-uhid has to run hid_add_device() from workqueue context while allowing
-parallel use of the userspace API (which is protected with ->devlock).
-But hid_add_device() can fail. Currently, that is handled by immediately
-destroying the associated HID device, without using ->devlock - but if
-there are concurrent requests from userspace, that's wrong and leads to
-NULL dereferences and/or memory corruption (via use-after-free).
+The base address of uartlite registers could be 64 bit address which is from
+device resource. When ulite_probe() calls ulite_assign(), this 64 bit
+address is casted to 32-bit. The fix is to replace "u32" type with
+"phys_addr_t" type for the base address in ulite_assign() argument list.
 
-Fix it by leaving the HID device as-is in the worker. We can clean it up
-later, either in the UHID_DESTROY command handler or in the ->release()
-handler.
-
-Cc: stable@vger.kernel.org
-Fixes: 67f8ecc550b5 ("HID: uhid: fix timeout when probe races with IO")
-Signed-off-by: Jann Horn <jannh@google.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Fixes: 8fa7b6100693 ("[POWERPC] Uartlite: Separate the bus binding from the driver proper")
+Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
+Link: https://lore.kernel.org/r/20211129202302.1319033-1-lizhi.hou@xilinx.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/uhid.c |   29 +++++++++++++++++++++++++----
- 1 file changed, 25 insertions(+), 4 deletions(-)
+ drivers/tty/serial/uartlite.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/hid/uhid.c
-+++ b/drivers/hid/uhid.c
-@@ -33,11 +33,22 @@
- 
- struct uhid_device {
- 	struct mutex devlock;
-+
-+	/* This flag tracks whether the HID device is usable for commands from
-+	 * userspace. The flag is already set before hid_add_device(), which
-+	 * runs in workqueue context, to allow hid_add_device() to communicate
-+	 * with userspace.
-+	 * However, if hid_add_device() fails, the flag is cleared without
-+	 * holding devlock.
-+	 * We guarantee that if @running changes from true to false while you're
-+	 * holding @devlock, it's still fine to access @hid.
-+	 */
- 	bool running;
- 
- 	__u8 *rd_data;
- 	uint rd_size;
- 
-+	/* When this is NULL, userspace may use UHID_CREATE/UHID_CREATE2. */
- 	struct hid_device *hid;
- 	struct uhid_event input_buf;
- 
-@@ -68,9 +79,18 @@ static void uhid_device_add_worker(struc
- 	if (ret) {
- 		hid_err(uhid->hid, "Cannot register HID device: error %d\n", ret);
- 
--		hid_destroy_device(uhid->hid);
--		uhid->hid = NULL;
-+		/* We used to call hid_destroy_device() here, but that's really
-+		 * messy to get right because we have to coordinate with
-+		 * concurrent writes from userspace that might be in the middle
-+		 * of using uhid->hid.
-+		 * Just leave uhid->hid as-is for now, and clean it up when
-+		 * userspace tries to close or reinitialize the uhid instance.
-+		 *
-+		 * However, we do have to clear the ->running flag and do a
-+		 * wakeup to make sure userspace knows that the device is gone.
-+		 */
- 		uhid->running = false;
-+		wake_up_interruptible(&uhid->report_wait);
- 	}
- }
- 
-@@ -479,7 +499,7 @@ static int uhid_dev_create2(struct uhid_
- 	void *rd_data;
- 	int ret;
- 
--	if (uhid->running)
-+	if (uhid->hid)
- 		return -EALREADY;
- 
- 	rd_size = ev->u.create2.rd_size;
-@@ -560,7 +580,7 @@ static int uhid_dev_create(struct uhid_d
- 
- static int uhid_dev_destroy(struct uhid_device *uhid)
+diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
+index 8df3058226687..5d1b7455e627d 100644
+--- a/drivers/tty/serial/uartlite.c
++++ b/drivers/tty/serial/uartlite.c
+@@ -618,7 +618,7 @@ static struct uart_driver ulite_uart_driver = {
+  *
+  * Returns: 0 on success, <0 otherwise
+  */
+-static int ulite_assign(struct device *dev, int id, u32 base, int irq,
++static int ulite_assign(struct device *dev, int id, phys_addr_t base, int irq,
+ 			struct uartlite_data *pdata)
  {
--	if (!uhid->running)
-+	if (!uhid->hid)
- 		return -EINVAL;
- 
- 	uhid->running = false;
-@@ -569,6 +589,7 @@ static int uhid_dev_destroy(struct uhid_
- 	cancel_work_sync(&uhid->worker);
- 
- 	hid_destroy_device(uhid->hid);
-+	uhid->hid = NULL;
- 	kfree(uhid->rd_data);
- 
- 	return 0;
+ 	struct uart_port *port;
+-- 
+2.34.1
+
 
 

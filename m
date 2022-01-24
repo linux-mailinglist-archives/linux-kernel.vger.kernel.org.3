@@ -2,92 +2,354 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8533497F8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C883F497F88
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:28:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241203AbiAXM3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 07:29:14 -0500
-Received: from mga07.intel.com ([134.134.136.100]:6547 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239650AbiAXM3N (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:29:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643027353; x=1674563353;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=o7r0U7Ku8gJK9VEbYjNho62PNu3+pf6Q/1IyLG6vJkk=;
-  b=kFhlw11iXnsD/zys52QjWkBc42TYF5UVZ/jFZSjGvVz48GItMBKX7otW
-   PLcPatXa6l1PTFGoNsNlaZW4YewKXwc47p9t1f6OkIe1yALmou075W8za
-   +lJKRAKCQSNwtVb5UaaMcketwTYpZP7xtJU6eB++uDeC/r5idDVyX0SbI
-   4C+PMtje1VSoOv9DMH8swYNU3U5WMP/Z1V0tqfYjkAa6bIrkXqUAxhTkh
-   MEZrmE071E7YsXLklF3f5zkNDA0F3vIAriWz437Y9g5V8SaiokxfgJsi9
-   XOQhVk1AljwJRQwExNxPGIZ8KGn6ZhIio2KyeLVKoya3tUAzIwxULhsjj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="309353499"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="309353499"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 04:29:12 -0800
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="580353480"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 04:29:08 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nByS0-00DszF-DE;
-        Mon, 24 Jan 2022 14:28:00 +0200
-Date:   Mon, 24 Jan 2022 14:28:00 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
-Subject: Re: [PATCH 10/54] net: ethernet: replace bitmap_weight with
- bitmap_empty for qlogic
-Message-ID: <Ye6bUC1GyLLUV37p@smile.fi.intel.com>
-References: <20220123183925.1052919-1-yury.norov@gmail.com>
- <20220123183925.1052919-11-yury.norov@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220123183925.1052919-11-yury.norov@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S239639AbiAXM2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 07:28:47 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43802 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239405AbiAXM2q (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 07:28:46 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A292B80F02
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:28:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15911C340E7;
+        Mon, 24 Jan 2022 12:28:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643027324;
+        bh=Fj/YWRYa0LmQnC4cEuDz9WfgVcW5+eatBzV+vva55ho=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=p6rBUI/ilprXb0f+mhQtMDjwUiEGd4DBDoNRzVPpsKI1hccltNLIlD1oHT6Gp1ygD
+         MAt2TpR8LJOSzRO63f4aOVnJqgixYXItvEKDidyGViD5isWGYI2kJeQUXkg2VbnrKh
+         39Qay9hKYQWg2dGuxEDHzMHW4Jv1AFo9+8S0A3TbmRv7ns7jwcnHaY99ZeXY7E5sdl
+         E7kpPI8hvnoELB5zSMih6TECgPMT2uMf/v8Xbm9eBM4mL36SwzPYn3uw7xK2WRc+gG
+         5aHuaBpbCF9z4mdq70lmf//rtGHYvM9yloL90YVRH7u79Xn/IyR9jPzK+2xyvpAkxz
+         /tHMqmIcE5UoQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nBySg-002Ndm-3m; Mon, 24 Jan 2022 12:28:42 +0000
+Date:   Mon, 24 Jan 2022 12:28:41 +0000
+Message-ID: <878rv58ghy.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] drivers: irqchip: add irq-type-changer
+In-Reply-To: <20220124095652.522099-1-nikita.yoush@cogentembedded.com>
+References: <20220124095652.522099-1-nikita.yoush@cogentembedded.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: nikita.yoush@cogentembedded.com, tglx@linutronix.de, geert@linux-m68k.org, erosca@de.adit-jv.com, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 23, 2022 at 10:38:41AM -0800, Yury Norov wrote:
-> qlogic/qed code calls bitmap_weight() to check if any bit of a given
-> bitmap is set. It's better to use bitmap_empty() in that case because
-> bitmap_empty() stops traversing the bitmap as soon as it finds first
-> set bit, while bitmap_weight() counts all bits unconditionally.
+Nikita,
 
-> -		if (bitmap_weight((unsigned long *)&pmap[item], 64 * 8))
-> +		if (!bitmap_empty((unsigned long *)&pmap[item], 64 * 8))
+This patch is obviously part of a series, and yet you post them as
+unrelated patches. Please don't do that. Keep the patches together and
+treat them as a proper series.
 
-> -	    (bitmap_weight((unsigned long *)&pmap[item],
-> +	    (!bitmap_empty((unsigned long *)&pmap[item],
+On Mon, 24 Jan 2022 09:56:52 +0000,
+Nikita Yushchenko <nikita.yoush@cogentembedded.com> wrote:
+> 
+> Irq type changer is a virtual irqchip useful to support boards that
+> change (e.g. invert) interrupt signal between producer and consumer.
+> 
+> Usage example, for Kingfisher extension board for Renesas Gen-3 Soc,
+> that has WiFi interrupt delivered over inverting level-shifter:
+> 
+> / {
+> 	gpio1_25_inverted: inverter {
+> 		compatible = "linux,irq-type-changer";
+> 		interrupt-controller;
+> 		#interrupt-cells = <2>;
+> 		interrupt-parent = <&gpio1>;
+> 		interrupts = <25 IRQ_TYPE_EDGE_FALLING>;
+> 	};
+> };
 
-Side note, these castings reminds me previous discussion and I'm wondering
-if you have this kind of potentially problematic places in your TODO as
-subject to fix.
+You need a proper DT binding.
 
+I also don't see why you model this as the actual device that triggers
+the interrupt. This goes against the way we have modelled similar
+devices in the tree. I'm also pretty sure that with the current code,
+you end-up with *two* interrupts (one for the inverter and one for the
+end-point). More on that later.
+
+> 
+> &wlcore {
+>         interrupt-parent = <&gpio1_25_inverted>;
+> 	interrupts = <0 IRQ_TYPE_EDGE_RISING>;
+> };
+> 
+> Then, wlcore driver observes IRQ_TYPE_EDGE_RISING trigger type and
+> configures interrupt output as such. At the same time, gpio-rcar driver
+> gets interrupt configured for IRQ_TYPE_EDGE_FALLING.
+> 
+> This version uses hierarchical irq_domain API, and works only with
+> parent interrupt domains compatible with that API.
+> 
+> Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+> ---
+> v1: https://lore.kernel.org/lkml/20220119201741.717770-1-nikita.yoush@cogentembedded.com/
+> Changes from v1:
+> - fixed order of kzalloc() args, caught by kbuild robot
+> 
+>  drivers/irqchip/Kconfig            |  18 ++++
+>  drivers/irqchip/Makefile           |   1 +
+>  drivers/irqchip/irq-type-changer.c | 162 +++++++++++++++++++++++++++++
+>  3 files changed, 181 insertions(+)
+>  create mode 100644 drivers/irqchip/irq-type-changer.c
+> 
+> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> index 7038957f4a77..7f348016e82c 100644
+> --- a/drivers/irqchip/Kconfig
+> +++ b/drivers/irqchip/Kconfig
+> @@ -617,4 +617,22 @@ config MCHP_EIC
+>  	help
+>  	  Support for Microchip External Interrupt Controller.
+>  
+> +config IRQ_TYPE_CHANGER
+> +	bool "Interrupt trigger type changer"
+> +	select IRQ_DOMAIN
+> +	select IRQ_DOMAIN_HIERARCHY
+> +	help
+> +	  Interrupt trigger type changer is designed to support boards that
+> +	  modify (e.g. invert) signal between interrupt source and interrupt
+> +	  controller input. So trigger type configured by a driver for some
+> +	  interrupt output pin does not match trigger type that shall be used
+> +	  to configure interrupt controller's input where that pin is connected.
+> +
+> +	  In this case, board device tree shall add an interrupt trigger
+> +	  type changer node and use it as the interrupt parent for the node
+> +	  representing interrupt source. Then, interrupt trigger type defined
+> +	  in the interrupt source node will be visible for the interrupt source
+> +	  driver, and (different) trigger type defined inside the changer node
+> +	  will be used to configure the interrupt controller.
+> +
+>  endmenu
+> diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
+> index c1f611cbfbf8..57a664837857 100644
+> --- a/drivers/irqchip/Makefile
+> +++ b/drivers/irqchip/Makefile
+> @@ -117,3 +117,4 @@ obj-$(CONFIG_WPCM450_AIC)		+= irq-wpcm450-aic.o
+>  obj-$(CONFIG_IRQ_IDT3243X)		+= irq-idt3243x.o
+>  obj-$(CONFIG_APPLE_AIC)			+= irq-apple-aic.o
+>  obj-$(CONFIG_MCHP_EIC)			+= irq-mchp-eic.o
+> +obj-$(CONFIG_IRQ_TYPE_CHANGER)		+= irq-type-changer.o
+> diff --git a/drivers/irqchip/irq-type-changer.c b/drivers/irqchip/irq-type-changer.c
+> new file mode 100644
+> index 000000000000..0f461fda6610
+> --- /dev/null
+> +++ b/drivers/irqchip/irq-type-changer.c
+> @@ -0,0 +1,162 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <linux/irqchip.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/of_irq.h>
+> +
+> +struct changer {
+
+Changer doesn't quite describe it. This is an inverter, please name it
+as such.
+
+> +	unsigned long count;
+> +	struct {
+> +		struct irq_fwspec fwspec;
+> +		unsigned int type;
+> +	} out[0];
+
+Geert commented on why this is wrong.
+
+> +};
+> +
+> +static int changer_set_type(struct irq_data *data, unsigned int type)
+> +{
+> +	struct changer *ch = data->domain->host_data;
+> +	struct irq_data *parent_data = data->parent_data;
+> +
+> +	return parent_data->chip->irq_set_type(parent_data,
+> +					       ch->out[data->hwirq].type);
+
+Can you actually take this at face-value? Some transformations don't
+make any sense (you can't turn an edge into a level, for example).
+Which is also why calling this a 'type changer' is wrong.
+
+> +}
+> +
+> +static struct irq_chip changer_chip = {
+> +	.name			= "type-changer",
+> +	.irq_mask		= irq_chip_mask_parent,
+> +	.irq_unmask		= irq_chip_unmask_parent,
+> +	.irq_eoi		= irq_chip_eoi_parent,
+> +	.irq_set_type		= changer_set_type,
+> +	.irq_retrigger		= irq_chip_retrigger_hierarchy,
+> +	.irq_set_affinity	= irq_chip_set_affinity_parent,
+> +	.irq_set_wake		= irq_chip_set_wake_parent,
+> +};
+> +
+> +static int changer_domain_translate(struct irq_domain *domain,
+> +				    struct irq_fwspec *fwspec,
+> +				    unsigned long *hwirq,
+> +				    unsigned int *type)
+> +{
+> +	struct changer *ch = domain->host_data;
+> +
+> +	if (fwspec->param_count != 2)
+> +		return -EINVAL;
+> +	if (fwspec->param[0] >= ch->count)
+> +		return -ENXIO;
+> +
+> +	*hwirq = fwspec->param[0];
+> +	*type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
+> +	return 0;
+> +}
+> +
+> +static int changer_domain_alloc(struct irq_domain *domain, unsigned int virq,
+> +				unsigned int nr_irqs, void *arg)
+> +{
+> +	struct changer *ch = domain->host_data;
+> +	struct irq_fwspec *fwspec = arg;
+> +	irq_hw_number_t hwirq;
+> +	unsigned int type;
+> +	int ret;
+> +
+> +	if (WARN_ON(nr_irqs != 1))
+> +		return -EINVAL;
+> +
+> +	ret = changer_domain_translate(domain, fwspec, &hwirq, &type);
+> +	if (ret)
+> +		return ret;
+> +
+> +	irq_domain_set_hwirq_and_chip(domain, virq, hwirq, &changer_chip, ch);
+> +
+> +	return irq_domain_alloc_irqs_parent(domain, virq, 1,
+> +					    &ch->out[hwirq].fwspec);
+
+So here, you are forcing the reallocation of an interrupt that was
+already created, and overriding the existing mapping. That's not
+right.
+
+> +}
+> +
+> +static const struct irq_domain_ops changer_domain_ops = {
+> +	.translate	= changer_domain_translate,
+> +	.alloc		= changer_domain_alloc,
+> +	.free		= irq_domain_free_irqs_common,
+> +};
+> +
+> +static int __init changer_of_init(struct device_node *node,
+> +				  struct device_node *parent)
+> +{
+> +	struct irq_domain *domain, *parent_domain;
+> +	int count, i, ret;
+> +	struct changer *ch;
+> +	struct of_phandle_args pargs;
+> +	irq_hw_number_t unused;
+> +
+> +	if (!parent) {
+> +		pr_err("%pOF: no parent node\n", node);
+> +		return -EINVAL;
+> +	}
+> +
+> +	parent_domain = irq_find_host(parent);
+> +	if (!parent_domain) {
+> +		pr_err("%pOF: no parent domain\n", node);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (WARN_ON(!parent_domain->ops->translate))
+> +		return -EINVAL;
+> +
+> +	count = of_irq_count(node);
+> +	if (count < 1) {
+> +		pr_err("%pOF: no interrupts defined\n", node);
+> +		return -EINVAL;
+> +	}
+> +
+> +	ch = kzalloc(sizeof(*ch) + count * sizeof(ch->out[0]), GFP_KERNEL);
+
+Use struct_size().
+
+> +	if (!ch)
+> +		return -ENOMEM;
+> +	ch->count = count;
+> +
+> +	for (i = 0; i < count; i++) {
+> +		ret = of_irq_parse_one(node, i, &pargs);
+> +		if (ret) {
+> +			pr_err("%pOF: interrupt %d: error %d parsing\n",
+> +			       node, i, ret);
+> +			goto out_free;
+> +		}
+> +		of_phandle_args_to_fwspec(pargs.np, pargs.args,
+> +					  pargs.args_count,
+> +					  &ch->out[i].fwspec);
+> +		ret = parent_domain->ops->translate(parent_domain,
+> +						    &ch->out[i].fwspec,
+> +						    &unused,
+> +						    &ch->out[i].type);
+> +		if (ret) {
+> +			pr_err("%pOF: interrupt %d: error %d extracting type\n",
+> +			       node, i, ret);
+> +			goto out_free;
+> +		}
+> +		if (ch->out[i].type == IRQ_TYPE_NONE) {
+> +			pr_err("%pOF: interrupt %d: no type\n", node, i);
+> +			ret = -ENXIO;
+> +			goto out_free;
+> +		}
+> +	}
+
+This would be all pretty unnecessary if you adopted the scheme I gave
+you last time [1]. The interrupt duality definitely is a no-go.
+
+> +
+> +	domain = irq_domain_create_hierarchy(parent_domain, 0, count,
+> +					     of_node_to_fwnode(node),
+> +					     &changer_domain_ops, ch);
+> +	if (!domain) {
+> +		ret = -ENOMEM;
+> +		goto out_free;
+> +	}
+> +
+> +	return 0;
+> +
+> +out_free:
+> +	kfree(ch);
+> +	return ret;
+> +}
+> +
+> +IRQCHIP_PLATFORM_DRIVER_BEGIN(changer)
+> +IRQCHIP_MATCH("linux,irq-type-changer", changer_of_init)
+> +IRQCHIP_PLATFORM_DRIVER_END(changer)
+> +MODULE_AUTHOR("Nikita Yushchenko <nikita.yoush.cogentembedded.com>");
+> +MODULE_DESCRIPTION("Virtual irqchip to support trigger type change in route");
+> +MODULE_LICENSE("GPL v2");
+
+Thanks,
+
+	M.
+
+[1] https://lore.kernel.org/lkml/87fsqbznc2.wl-maz@kernel.org
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Without deviation from the norm, progress is not possible.

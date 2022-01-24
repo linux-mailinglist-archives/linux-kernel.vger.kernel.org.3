@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 666D8499BD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:05:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62305499AAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:56:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1576772AbiAXV4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:56:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1450886AbiAXVVm (ORCPT
+        id S1573734AbiAXVpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:45:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60402 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1446389AbiAXVIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:21:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F5CC0604E0;
-        Mon, 24 Jan 2022 12:16:18 -0800 (PST)
+        Mon, 24 Jan 2022 16:08:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1339E61480;
-        Mon, 24 Jan 2022 20:16:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9D49C340E5;
-        Mon, 24 Jan 2022 20:16:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 043B56141C;
+        Mon, 24 Jan 2022 21:08:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8425C340E5;
+        Mon, 24 Jan 2022 21:08:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055377;
-        bh=BQUSTbqeX9gvk8ph/o/unFOemqAWTvtHM8tjaNdqpjo=;
+        s=korg; t=1643058485;
+        bh=R3GdNXfUaGyr8KHuooO/tDQGndAoZTEvXAMGEPVcDFc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C3kZ6mauZybdPXThivX4nNWU0eo4vnkbPYNqa+lMKaAkeV8rtwqoRQMibvl73pfOE
-         Lo6E0zjMW/O8WttoV9McItlZPh7+jqF5wNP6lFB4O4Oa6JOBCxhRxFC6ch/kHw8I0/
-         IfYmNsR4DjXIw6KxUm3jqmsQVaaKUQDkujoscKU4=
+        b=mAC6FApmBj0yN6IWlbrksk8QfTsYuO9eKY7p1O56GhxT7snuUQfpkSQv696EqE3E7
+         ojivBOJjAPmqOYW+U3pAWA69zU/MMfP8PGtu3FQWLXKVIArsX7ZF0STrku7EUZIBPa
+         PMzVwxfPTSU3vWRme0qc15sJ2/yvXmlS9wcv1hAY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sumit Garg <sumit.garg@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
+        stable@vger.kernel.org, kernelbot <kernel-bot@kylinos.cn>,
+        Jackie Liu <liuyun01@kylinos.cn>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 131/846] tee: fix put order in teedev_close_context()
-Date:   Mon, 24 Jan 2022 19:34:08 +0100
-Message-Id: <20220124184105.509283115@linuxfoundation.org>
+Subject: [PATCH 5.16 0261/1039] drm/msm/dp: displayPort driver need algorithm rational
+Date:   Mon, 24 Jan 2022 19:34:10 +0100
+Message-Id: <20220124184134.081001067@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,39 +48,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Wiklander <jens.wiklander@linaro.org>
+From: Jackie Liu <liuyun01@kylinos.cn>
 
-[ Upstream commit f18397ab3ae23e8e43bba9986e66af6d4497f2ad ]
+[ Upstream commit 53d22794711ad630f40d59dd726bd260d77d585f ]
 
-Prior to this patch was teedev_close_context() calling tee_device_put()
-before teedev_ctx_put() leading to teedev_ctx_release() accessing
-ctx->teedev just after the reference counter was decreased on the
-teedev. Fix this by calling teedev_ctx_put() before tee_device_put().
+Let's select RATIONAL with dp driver. avoid like:
 
-Fixes: 217e0250cccb ("tee: use reference counting for tee_context")
-Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
-Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+[...]
+x86_64-linux-gnu-ld: drivers/gpu/drm/msm/dp/dp_catalog.o: in function `dp_catalog_ctrl_config_msa':
+dp_catalog.c:(.text+0x57e): undefined reference to `rational_best_approximation'
+
+Fixes: c943b4948b58 ("drm/msm/dp: add displayPort driver support")
+Reported-by: kernelbot <kernel-bot@kylinos.cn>
+Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
+Link: https://lore.kernel.org/r/20211110070950.3355597-2-liu.yun@linux.dev
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tee/tee_core.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/msm/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c
-index 2b37bc408fc3d..85102d12d7169 100644
---- a/drivers/tee/tee_core.c
-+++ b/drivers/tee/tee_core.c
-@@ -98,8 +98,10 @@ void teedev_ctx_put(struct tee_context *ctx)
- 
- static void teedev_close_context(struct tee_context *ctx)
- {
--	tee_device_put(ctx->teedev);
-+	struct tee_device *teedev = ctx->teedev;
-+
- 	teedev_ctx_put(ctx);
-+	tee_device_put(teedev);
- }
- 
- static int tee_open(struct inode *inode, struct file *filp)
+diff --git a/drivers/gpu/drm/msm/Kconfig b/drivers/gpu/drm/msm/Kconfig
+index 39197b4beea78..1eae5a9645f41 100644
+--- a/drivers/gpu/drm/msm/Kconfig
++++ b/drivers/gpu/drm/msm/Kconfig
+@@ -65,6 +65,7 @@ config DRM_MSM_HDMI_HDCP
+ config DRM_MSM_DP
+ 	bool "Enable DisplayPort support in MSM DRM driver"
+ 	depends on DRM_MSM
++	select RATIONAL
+ 	default y
+ 	help
+ 	  Compile in support for DP driver in MSM DRM driver. DP external
 -- 
 2.34.1
 

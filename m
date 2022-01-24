@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5B9499814
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:34:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E1C499818
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1450427AbiAXVU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:20:29 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43504 "EHLO
+        id S1450586AbiAXVVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:21:00 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45560 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1441878AbiAXUvs (ORCPT
+        with ESMTP id S1358666AbiAXUwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:51:48 -0500
+        Mon, 24 Jan 2022 15:52:03 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DCC436091C;
-        Mon, 24 Jan 2022 20:51:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A2AAC340E5;
-        Mon, 24 Jan 2022 20:51:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7B3360B03;
+        Mon, 24 Jan 2022 20:52:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2D62C340E7;
+        Mon, 24 Jan 2022 20:52:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057507;
-        bh=E8N01BRn+ZSoMWY1IVzzlzEZ8SnabB6tW00fO7KDffU=;
+        s=korg; t=1643057522;
+        bh=jHBt4D2LHkfF9t7FKzh7y8T3seROGWJIg2IRNcojcvs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tgbLG2AWXDil7q8OwwCldyyBm7K/8WNf3PwLDBEypoMrVWUTmNpYSlWmsJZ2FhnRb
-         ixvaFuco4menxURH8VDPTL90k1vm14EfH6N0UBKEuueNICWZTkoqhgBWHqZSbcc5hX
-         ztOpF17x5BheAACcDCTBdmfk4ZIKLsQMvzLa+QPc=
+        b=cEZ7efX8PMRmPvtNn3ofDNd+DSqsWKVTIEtlaKuIgi9cbsJATx+jdpl5fO4Xb2gEb
+         hAyYtzY+TWMMbMxwv2BgIe3oBaf8PiHoDgVQjxb1pXRQA3SgMG0un3a+4OMAc5jZAW
+         CX20lDCEDNVPUX/SWsxtW8lXEj6+BK01Ui30hFsE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
+        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Eric Dumazet <edumazet@google.com>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 836/846] net: phy: micrel: use kszphy_suspend()/kszphy_resume for irq aware devices
-Date:   Mon, 24 Jan 2022 19:45:53 +0100
-Message-Id: <20220124184129.751977334@linuxfoundation.org>
+Subject: [PATCH 5.15 841/846] sch_api: Dont skip qdisc attach on ingress
+Date:   Mon, 24 Jan 2022 19:45:58 +0100
+Message-Id: <20220124184129.919921520@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -47,140 +46,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+From: Maxim Mikityanskiy <maximmi@nvidia.com>
 
-commit f1131b9c23fb4a3540a774828ff49f421619f902 upstream.
+commit de2d807b294d3d2ce5e59043ae2634016765d076 upstream.
 
-On a setup with KSZ9131 and MACB drivers it happens on suspend path, from
-time to time, that the PHY interrupt arrives after PHY and MACB were
-suspended (PHY via genphy_suspend(), MACB via macb_suspend()). In this
-case the phy_read() at the beginning of kszphy_handle_interrupt() will
-fail (as MACB driver is suspended at this time) leading to phy_error()
-being called and a stack trace being displayed on console. To solve this
-.suspend/.resume functions for all KSZ devices implementing
-.handle_interrupt were replaced with kszphy_suspend()/kszphy_resume()
-which disable/enable interrupt before/after calling
-genphy_suspend()/genphy_resume().
+The attach callback of struct Qdisc_ops is used by only a few qdiscs:
+mq, mqprio and htb. qdisc_graft() contains the following logic
+(pseudocode):
 
-The fix has been adapted for all KSZ devices which implements
-.handle_interrupt but it has been tested only on KSZ9131.
+    if (!qdisc->ops->attach) {
+        if (ingress)
+            do ingress stuff;
+        else
+            do egress stuff;
+    }
+    if (!ingress) {
+        ...
+        if (qdisc->ops->attach)
+            qdisc->ops->attach(qdisc);
+    } else {
+        ...
+    }
 
-Fixes: 59ca4e58b917 ("net: phy: micrel: implement generic .handle_interrupt() callback")
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+As we see, the attach callback is not called if the qdisc is being
+attached to ingress (TC_H_INGRESS). That wasn't a problem for mq and
+mqprio, since they contain a check that they are attached to TC_H_ROOT,
+and they can't be attached to TC_H_INGRESS anyway.
+
+However, the commit cited below added the attach callback to htb. It is
+needed for the hardware offload, but in the non-offload mode it
+simulates the "do egress stuff" part of the pseudocode above. The
+problem is that when htb is attached to ingress, neither "do ingress
+stuff" nor attach() is called. It results in an inconsistency, and the
+following message is printed to dmesg:
+
+unregister_netdevice: waiting for lo to become free. Usage count = 2
+
+This commit addresses the issue by running "do ingress stuff" in the
+ingress flow even in the attach callback is present, which is fine,
+because attach isn't going to be called afterwards.
+
+The bug was found by syzbot and reported by Eric.
+
+Fixes: d03b195b5aa0 ("sch_htb: Hierarchical QoS hardware offload")
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Reported-by: Eric Dumazet <edumazet@google.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/phy/micrel.c |   36 ++++++++++++++++++------------------
- 1 file changed, 18 insertions(+), 18 deletions(-)
+ net/sched/sch_api.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/phy/micrel.c
-+++ b/drivers/net/phy/micrel.c
-@@ -1547,8 +1547,8 @@ static struct phy_driver ksphy_driver[]
- 	.config_init	= kszphy_config_init,
- 	.config_intr	= kszphy_config_intr,
- 	.handle_interrupt = kszphy_handle_interrupt,
--	.suspend	= genphy_suspend,
--	.resume		= genphy_resume,
-+	.suspend	= kszphy_suspend,
-+	.resume		= kszphy_resume,
- }, {
- 	.phy_id		= PHY_ID_KSZ8021,
- 	.phy_id_mask	= 0x00ffffff,
-@@ -1562,8 +1562,8 @@ static struct phy_driver ksphy_driver[]
- 	.get_sset_count = kszphy_get_sset_count,
- 	.get_strings	= kszphy_get_strings,
- 	.get_stats	= kszphy_get_stats,
--	.suspend	= genphy_suspend,
--	.resume		= genphy_resume,
-+	.suspend	= kszphy_suspend,
-+	.resume		= kszphy_resume,
- }, {
- 	.phy_id		= PHY_ID_KSZ8031,
- 	.phy_id_mask	= 0x00ffffff,
-@@ -1577,8 +1577,8 @@ static struct phy_driver ksphy_driver[]
- 	.get_sset_count = kszphy_get_sset_count,
- 	.get_strings	= kszphy_get_strings,
- 	.get_stats	= kszphy_get_stats,
--	.suspend	= genphy_suspend,
--	.resume		= genphy_resume,
-+	.suspend	= kszphy_suspend,
-+	.resume		= kszphy_resume,
- }, {
- 	.phy_id		= PHY_ID_KSZ8041,
- 	.phy_id_mask	= MICREL_PHY_ID_MASK,
-@@ -1609,8 +1609,8 @@ static struct phy_driver ksphy_driver[]
- 	.get_sset_count = kszphy_get_sset_count,
- 	.get_strings	= kszphy_get_strings,
- 	.get_stats	= kszphy_get_stats,
--	.suspend	= genphy_suspend,
--	.resume		= genphy_resume,
-+	.suspend	= kszphy_suspend,
-+	.resume		= kszphy_resume,
- }, {
- 	.name		= "Micrel KSZ8051",
- 	/* PHY_BASIC_FEATURES */
-@@ -1623,8 +1623,8 @@ static struct phy_driver ksphy_driver[]
- 	.get_strings	= kszphy_get_strings,
- 	.get_stats	= kszphy_get_stats,
- 	.match_phy_device = ksz8051_match_phy_device,
--	.suspend	= genphy_suspend,
--	.resume		= genphy_resume,
-+	.suspend	= kszphy_suspend,
-+	.resume		= kszphy_resume,
- }, {
- 	.phy_id		= PHY_ID_KSZ8001,
- 	.name		= "Micrel KSZ8001 or KS8721",
-@@ -1638,8 +1638,8 @@ static struct phy_driver ksphy_driver[]
- 	.get_sset_count = kszphy_get_sset_count,
- 	.get_strings	= kszphy_get_strings,
- 	.get_stats	= kszphy_get_stats,
--	.suspend	= genphy_suspend,
--	.resume		= genphy_resume,
-+	.suspend	= kszphy_suspend,
-+	.resume		= kszphy_resume,
- }, {
- 	.phy_id		= PHY_ID_KSZ8081,
- 	.name		= "Micrel KSZ8081 or KSZ8091",
-@@ -1669,8 +1669,8 @@ static struct phy_driver ksphy_driver[]
- 	.config_init	= ksz8061_config_init,
- 	.config_intr	= kszphy_config_intr,
- 	.handle_interrupt = kszphy_handle_interrupt,
--	.suspend	= genphy_suspend,
--	.resume		= genphy_resume,
-+	.suspend	= kszphy_suspend,
-+	.resume		= kszphy_resume,
- }, {
- 	.phy_id		= PHY_ID_KSZ9021,
- 	.phy_id_mask	= 0x000ffffe,
-@@ -1685,8 +1685,8 @@ static struct phy_driver ksphy_driver[]
- 	.get_sset_count = kszphy_get_sset_count,
- 	.get_strings	= kszphy_get_strings,
- 	.get_stats	= kszphy_get_stats,
--	.suspend	= genphy_suspend,
--	.resume		= genphy_resume,
-+	.suspend	= kszphy_suspend,
-+	.resume		= kszphy_resume,
- 	.read_mmd	= genphy_read_mmd_unsupported,
- 	.write_mmd	= genphy_write_mmd_unsupported,
- }, {
-@@ -1704,7 +1704,7 @@ static struct phy_driver ksphy_driver[]
- 	.get_sset_count = kszphy_get_sset_count,
- 	.get_strings	= kszphy_get_strings,
- 	.get_stats	= kszphy_get_stats,
--	.suspend	= genphy_suspend,
-+	.suspend	= kszphy_suspend,
- 	.resume		= kszphy_resume,
- }, {
- 	.phy_id		= PHY_ID_LAN8814,
-@@ -1732,7 +1732,7 @@ static struct phy_driver ksphy_driver[]
- 	.get_sset_count = kszphy_get_sset_count,
- 	.get_strings	= kszphy_get_strings,
- 	.get_stats	= kszphy_get_stats,
--	.suspend	= genphy_suspend,
-+	.suspend	= kszphy_suspend,
- 	.resume		= kszphy_resume,
- }, {
- 	.phy_id		= PHY_ID_KSZ8873MLL,
+--- a/net/sched/sch_api.c
++++ b/net/sched/sch_api.c
+@@ -1062,7 +1062,7 @@ static int qdisc_graft(struct net_device
+ 
+ 		qdisc_offload_graft_root(dev, new, old, extack);
+ 
+-		if (new && new->ops->attach)
++		if (new && new->ops->attach && !ingress)
+ 			goto skip;
+ 
+ 		for (i = 0; i < num_q; i++) {
 
 

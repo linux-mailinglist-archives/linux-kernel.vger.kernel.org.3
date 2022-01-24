@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C2F49A13F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:35:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F702499DF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:06:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1850801AbiAXXau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:30:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1579875AbiAXWHP (ORCPT
+        id S1586992AbiAXW1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:27:35 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:51250 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1454382AbiAXVc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:07:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77242C046E21;
-        Mon, 24 Jan 2022 12:42:48 -0800 (PST)
+        Mon, 24 Jan 2022 16:32:28 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0CE52B81057;
-        Mon, 24 Jan 2022 20:42:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B4C9C340E5;
-        Mon, 24 Jan 2022 20:42:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E11BA6131F;
+        Mon, 24 Jan 2022 21:32:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD5CBC340E4;
+        Mon, 24 Jan 2022 21:32:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056966;
-        bh=dPNDS9c1FKRDuq5vFo9z89Gbkjn2n1/fPgl2lhDlYk4=;
+        s=korg; t=1643059947;
+        bh=+IC5SxFlPCTwimrhYxrbf0C6EBpcKCzs3MZ8Q9Z5Lf0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FIm2pfyxojTnUHNmwxzFxcRtQIZ3cyfAkMVkgeudUcKTLO4uD4P5Qf6/dmoDPsWf9
-         q19XhYbhHV4vOqP+upJfoD+Nqfos3ye3LfhjnBIhJJFLBKw/TwbBTEmp6tuXf7aWm8
-         TH4yGSU/5WLFlcu8w/jdT4WiUY39tLbuemGxy304=
+        b=RrXxvxxMikzF1qW3RXVQ15uB1IAMV+NxeXxnAnNUy1HjKqhIIpZ7hCaTu2O6UG6Ou
+         p0ePgVNW59F3mApqOTOqHMBv25fFkx6tcUAXe/KAnnhHimteVjSZdmspBA0SV5jXUr
+         Mf5graGyfCmYJjNSrGfwJMp8jURmj7uQcXbGufvU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tzung-Bi Shih <tzungbi@google.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 659/846] ASoC: mediatek: mt8173: fix device_node leak
-Date:   Mon, 24 Jan 2022 19:42:56 +0100
-Message-Id: <20220124184123.792529888@linuxfoundation.org>
+Subject: [PATCH 5.16 0788/1039] KVM: VMX: Dont unblock vCPU w/ Posted IRQ if IRQs are disabled in guest
+Date:   Mon, 24 Jan 2022 19:42:57 +0100
+Message-Id: <20220124184151.781814654@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,76 +46,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tzung-Bi Shih <tzungbi@google.com>
+From: Paolo Bonzini <pbonzini@redhat.com>
 
-[ Upstream commit 493433785df0075afc0c106ab65f10a605d0b35d ]
+[ Upstream commit 1831fa44df743a7cdffdf1c12c799bf6f3c12b8c ]
 
-Fixes the device_node leak.
+Don't configure the wakeup handler when a vCPU is blocking with IRQs
+disabled, in which case any IRQ, posted or otherwise, should not be
+recognized and thus should not wake the vCPU.
 
-Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
-Link: https://lore.kernel.org/r/20211224064719.2031210-2-tzungbi@google.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: bf9f6ac8d749 ("KVM: Update Posted-Interrupts Descriptor when vCPU is blocked")
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20211009021236.4122790-2-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/mediatek/mt8173/mt8173-max98090.c      | 3 +++
- sound/soc/mediatek/mt8173/mt8173-rt5650-rt5514.c | 2 ++
- sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c | 2 ++
- sound/soc/mediatek/mt8173/mt8173-rt5650.c        | 2 ++
- 4 files changed, 9 insertions(+)
+ arch/x86/kvm/vmx/posted_intr.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/mediatek/mt8173/mt8173-max98090.c b/sound/soc/mediatek/mt8173/mt8173-max98090.c
-index fc94314bfc02f..3bdd4931316cd 100644
---- a/sound/soc/mediatek/mt8173/mt8173-max98090.c
-+++ b/sound/soc/mediatek/mt8173/mt8173-max98090.c
-@@ -180,6 +180,9 @@ static int mt8173_max98090_dev_probe(struct platform_device *pdev)
- 	if (ret)
- 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
- 			__func__, ret);
-+
-+	of_node_put(codec_node);
-+	of_node_put(platform_node);
- 	return ret;
- }
+diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
+index 21ea58d25771f..696ad48ab5daa 100644
+--- a/arch/x86/kvm/vmx/posted_intr.c
++++ b/arch/x86/kvm/vmx/posted_intr.c
+@@ -147,7 +147,8 @@ int pi_pre_block(struct kvm_vcpu *vcpu)
+ 	struct pi_desc old, new;
+ 	struct pi_desc *pi_desc = vcpu_to_pi_desc(vcpu);
  
-diff --git a/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5514.c b/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5514.c
-index 0f28dc2217c09..390da5bf727eb 100644
---- a/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5514.c
-+++ b/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5514.c
-@@ -218,6 +218,8 @@ static int mt8173_rt5650_rt5514_dev_probe(struct platform_device *pdev)
- 	if (ret)
- 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
- 			__func__, ret);
-+
-+	of_node_put(platform_node);
- 	return ret;
- }
+-	if (!vmx_can_use_vtd_pi(vcpu->kvm))
++	if (!vmx_can_use_vtd_pi(vcpu->kvm) ||
++	    vmx_interrupt_blocked(vcpu))
+ 		return 0;
  
-diff --git a/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c b/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c
-index 077c6ee067806..c8e4e85e10575 100644
---- a/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c
-+++ b/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c
-@@ -285,6 +285,8 @@ static int mt8173_rt5650_rt5676_dev_probe(struct platform_device *pdev)
- 	if (ret)
- 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
- 			__func__, ret);
-+
-+	of_node_put(platform_node);
- 	return ret;
- }
- 
-diff --git a/sound/soc/mediatek/mt8173/mt8173-rt5650.c b/sound/soc/mediatek/mt8173/mt8173-rt5650.c
-index c28ebf891cb05..e168d31f44459 100644
---- a/sound/soc/mediatek/mt8173/mt8173-rt5650.c
-+++ b/sound/soc/mediatek/mt8173/mt8173-rt5650.c
-@@ -323,6 +323,8 @@ static int mt8173_rt5650_dev_probe(struct platform_device *pdev)
- 	if (ret)
- 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
- 			__func__, ret);
-+
-+	of_node_put(platform_node);
- 	return ret;
- }
- 
+ 	WARN_ON(irqs_disabled());
 -- 
 2.34.1
 

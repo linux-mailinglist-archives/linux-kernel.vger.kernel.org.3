@@ -2,42 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC868499701
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:21:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC7F49983D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446520AbiAXVIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:08:39 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40348 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389520AbiAXUlf (ORCPT
+        id S1451636AbiAXVXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:23:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1442868AbiAXUzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:41:35 -0500
+        Mon, 24 Jan 2022 15:55:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D432C09543D;
+        Mon, 24 Jan 2022 12:00:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0643B810BD;
-        Mon, 24 Jan 2022 20:41:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AEC6C340E5;
-        Mon, 24 Jan 2022 20:41:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CF9F611C8;
+        Mon, 24 Jan 2022 20:00:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB9DBC36AF6;
+        Mon, 24 Jan 2022 20:00:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056892;
-        bh=lllL1+YSQOwmnLAGhKuxtgJRcS5EeLGylTj5nvLlLTA=;
+        s=korg; t=1643054431;
+        bh=DwA8F4zgidWixlK9aMmqBvtZBvHnXYpCKUEafJu47RM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RyUC8CDcyCO7Q20D/Gkon9hOKwlvIFRhLuqxMsOQv9PNLBS5iPARoo33QUDqjxGsK
-         E+UVfG1XLKgRAWvvikLQEzCNa1UrRgXWA7lK/Qwpdiu8N4JLJdapzLkeKlAfT7w/GZ
-         vLuGDfvxJnQqi4hKoGrk/OuV3j01Un1n01YcxK3c=
+        b=i8pB0MosULBx/4t8yhyWQF49YArfYo2mCqKJOs6KMNbrPyyzeXW++YK7I8+lLRbJq
+         i67SjjALmO+l8j7Lx1GRDg6tolGMXU7YG9cmQXECJB7H76MT98I6miN9g1CdVVJMoi
+         LCUk0RuaYqA8LIg3padR4xZje0SjDXBcOSH5g4Xo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org,
+        Mark Asselstine <mark.asselstine@windriver.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Bob Moore <robert.moore@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 634/846] KVM: PPC: Book3S: Suppress warnings when allocating too big memory slots
+Subject: [PATCH 5.10 386/563] ACPICA: Utilities: Avoid deleting the same object twice in a row
 Date:   Mon, 24 Jan 2022 19:42:31 +0100
-Message-Id: <20220124184122.899954773@linuxfoundation.org>
+Message-Id: <20220124184037.781017181@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,50 +51,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexey Kardashevskiy <aik@ozlabs.ru>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-[ Upstream commit 511d25d6b789fffcb20a3eb71899cf974a31bd9d ]
+[ Upstream commit 1cdfe9e346b4c5509ffe19ccde880fd259d9f7a3 ]
 
-The userspace can trigger "vmalloc size %lu allocation failure: exceeds
-total pages" via the KVM_SET_USER_MEMORY_REGION ioctl.
+ACPICA commit c11af67d8f7e3d381068ce7771322f2b5324d687
 
-This silences the warning by checking the limit before calling vzalloc()
-and returns ENOMEM if failed.
+If original_count is 0 in acpi_ut_update_ref_count (),
+acpi_ut_delete_internal_obj () is invoked for the target object, which is
+incorrect, because that object has been deleted once already and the
+memory allocated to store it may have been reclaimed and allocated
+for a different purpose by the host OS.  Moreover, a confusing debug
+message following the "Reference Count is already zero, cannot
+decrement" warning is printed in that case.
 
-This does not call underlying valloc helpers as __vmalloc_node() is only
-exported when CONFIG_TEST_VMALLOC_MODULE and __vmalloc_node_range() is
-not exported at all.
+To fix this issue, make acpi_ut_update_ref_count () return after finding
+that original_count is 0 and printing the above warning.
 
-Spotted by syzkaller.
-
-Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
-[mpe: Use 'size' for the variable rather than 'cb']
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20210901084512.1658628-1-aik@ozlabs.ru
+Link: https://github.com/acpica/acpica/commit/c11af67d
+Link: https://github.com/acpica/acpica/pull/652
+Reported-by: Mark Asselstine <mark.asselstine@windriver.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kvm/book3s_hv.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/acpi/acpica/utdelete.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
-index 7b74fc0a986b8..94da0d25eb125 100644
---- a/arch/powerpc/kvm/book3s_hv.c
-+++ b/arch/powerpc/kvm/book3s_hv.c
-@@ -4861,8 +4861,12 @@ static int kvmppc_core_prepare_memory_region_hv(struct kvm *kvm,
- 	unsigned long npages = mem->memory_size >> PAGE_SHIFT;
+diff --git a/drivers/acpi/acpica/utdelete.c b/drivers/acpi/acpica/utdelete.c
+index 72d2c0b656339..cb1750e7a6281 100644
+--- a/drivers/acpi/acpica/utdelete.c
++++ b/drivers/acpi/acpica/utdelete.c
+@@ -422,6 +422,7 @@ acpi_ut_update_ref_count(union acpi_operand_object *object, u32 action)
+ 			ACPI_WARNING((AE_INFO,
+ 				      "Obj %p, Reference Count is already zero, cannot decrement\n",
+ 				      object));
++			return;
+ 		}
  
- 	if (change == KVM_MR_CREATE) {
--		slot->arch.rmap = vzalloc(array_size(npages,
--					  sizeof(*slot->arch.rmap)));
-+		unsigned long size = array_size(npages, sizeof(*slot->arch.rmap));
-+
-+		if ((size >> PAGE_SHIFT) > totalram_pages())
-+			return -ENOMEM;
-+
-+		slot->arch.rmap = vzalloc(size);
- 		if (!slot->arch.rmap)
- 			return -ENOMEM;
- 	}
+ 		ACPI_DEBUG_PRINT_RAW((ACPI_DB_ALLOCATIONS,
 -- 
 2.34.1
 

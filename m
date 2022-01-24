@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF72498BC1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:17:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4DE49920D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:19:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344907AbiAXTP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:15:58 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:38016 "EHLO
+        id S1358383AbiAXURL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:17:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56384 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238262AbiAXTIH (ORCPT
+        with ESMTP id S1359759AbiAXUAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:08:07 -0500
+        Mon, 24 Jan 2022 15:00:11 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B24C460010;
-        Mon, 24 Jan 2022 19:08:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 969E8C340EC;
-        Mon, 24 Jan 2022 19:08:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31E10601B6;
+        Mon, 24 Jan 2022 20:00:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26BDEC340E5;
+        Mon, 24 Jan 2022 20:00:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051286;
-        bh=y/E3jVcAUJEZwgN0fw5HqTsokMmFSM7zAbtJdqNaMkg=;
+        s=korg; t=1643054409;
+        bh=Ewoqf+lA3UVgXVPosWCGDLUE0k5LkPsd+VjXLW6OORU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IGuL1nmzunafnCjH10YlgtVtQmUc2oRlm/x35A6kBffOvjWidUlvpztSmYduo6RzM
-         aVJgg2wEAJqSHnJobcid4AT3g5DTqTsZbpRNfFLzEkQiAUi9V9vjE275Btv/dcPMUN
-         4rqV8HQZcK/aMdNb2NdjdqQ1r6fZpRxWcbTodE9s=
+        b=OrG1e2ZbEUS1oZeYt1VnZ0q7phPA6Tk5JC3lCS2xHZ/h5gkPQQdGMWH51Sao1Hphm
+         yWWFle7NMkWN0xoUi13hkYgjq+fp134jKyjRXCQKJFZHfnc3X6kuAtja8PHJa8wVAb
+         evXDR7PMRYsJA6LbQNgLTTZQr/8QR72KAinyfjgM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        stable@vger.kernel.org, Ben Greear <greearb@candelatech.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 070/186] ALSA: PCM: Add missing rwsem around snd_ctl_remove() calls
+Subject: [PATCH 5.10 380/563] ath11k: Fix napi related hang
 Date:   Mon, 24 Jan 2022 19:42:25 +0100
-Message-Id: <20220124183939.379094689@linuxfoundation.org>
+Message-Id: <20220124184037.567917942@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,37 +46,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Ben Greear <greearb@candelatech.com>
 
-[ Upstream commit 5471e9762e1af4b7df057a96bfd46cc250979b88 ]
+[ Upstream commit d943fdad7589653065be0e20aadc6dff37725ed4 ]
 
-snd_ctl_remove() has to be called with card->controls_rwsem held (when
-called after the card instantiation).  This patch add the missing
-rwsem calls around it.
+Similar to the same bug in ath10k, a napi disable w/out it being enabled
+will hang forever.  I believe I saw this while trying rmmod after driver
+had some failure on startup.  Fix it by keeping state on whether napi is
+enabled or not.
 
-Fixes: a8ff48cb7083 ("ALSA: pcm: Free chmap at PCM free callback, too")
-Link: https://lore.kernel.org/r/20211116071314.15065-2-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+And, remove un-used napi pointer in ath11k driver base struct.
+
+Signed-off-by: Ben Greear <greearb@candelatech.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20200903195254.29379-1-greearb@candelatech.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/core/pcm.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/net/wireless/ath/ath11k/ahb.c  | 12 +++++++++---
+ drivers/net/wireless/ath/ath11k/core.h |  2 +-
+ drivers/net/wireless/ath/ath11k/pci.c  | 12 +++++++++---
+ 3 files changed, 19 insertions(+), 7 deletions(-)
 
-diff --git a/sound/core/pcm.c b/sound/core/pcm.c
-index 2b5caa8dea2e2..a228bf9331102 100644
---- a/sound/core/pcm.c
-+++ b/sound/core/pcm.c
-@@ -875,7 +875,11 @@ EXPORT_SYMBOL(snd_pcm_new_internal);
- static void free_chmap(struct snd_pcm_str *pstr)
- {
- 	if (pstr->chmap_kctl) {
--		snd_ctl_remove(pstr->pcm->card, pstr->chmap_kctl);
-+		struct snd_card *card = pstr->pcm->card;
-+
-+		down_write(&card->controls_rwsem);
-+		snd_ctl_remove(card, pstr->chmap_kctl);
-+		up_write(&card->controls_rwsem);
- 		pstr->chmap_kctl = NULL;
+diff --git a/drivers/net/wireless/ath/ath11k/ahb.c b/drivers/net/wireless/ath/ath11k/ahb.c
+index e8cca58e18ffc..9ff6e68533142 100644
+--- a/drivers/net/wireless/ath/ath11k/ahb.c
++++ b/drivers/net/wireless/ath/ath11k/ahb.c
+@@ -175,8 +175,11 @@ static void __ath11k_ahb_ext_irq_disable(struct ath11k_base *ab)
+ 
+ 		ath11k_ahb_ext_grp_disable(irq_grp);
+ 
+-		napi_synchronize(&irq_grp->napi);
+-		napi_disable(&irq_grp->napi);
++		if (irq_grp->napi_enabled) {
++			napi_synchronize(&irq_grp->napi);
++			napi_disable(&irq_grp->napi);
++			irq_grp->napi_enabled = false;
++		}
+ 	}
+ }
+ 
+@@ -300,7 +303,10 @@ static void ath11k_ahb_ext_irq_enable(struct ath11k_base *ab)
+ 	for (i = 0; i < ATH11K_EXT_IRQ_GRP_NUM_MAX; i++) {
+ 		struct ath11k_ext_irq_grp *irq_grp = &ab->ext_irq_grp[i];
+ 
+-		napi_enable(&irq_grp->napi);
++		if (!irq_grp->napi_enabled) {
++			napi_enable(&irq_grp->napi);
++			irq_grp->napi_enabled = true;
++		}
+ 		ath11k_ahb_ext_grp_enable(irq_grp);
+ 	}
+ }
+diff --git a/drivers/net/wireless/ath/ath11k/core.h b/drivers/net/wireless/ath/ath11k/core.h
+index c8e36251068c9..d2f2898d17b49 100644
+--- a/drivers/net/wireless/ath/ath11k/core.h
++++ b/drivers/net/wireless/ath/ath11k/core.h
+@@ -124,6 +124,7 @@ struct ath11k_ext_irq_grp {
+ 	u32 num_irq;
+ 	u32 grp_id;
+ 	u64 timestamp;
++	bool napi_enabled;
+ 	struct napi_struct napi;
+ 	struct net_device napi_ndev;
+ };
+@@ -687,7 +688,6 @@ struct ath11k_base {
+ 	u32 wlan_init_status;
+ 	int irq_num[ATH11K_IRQ_NUM_MAX];
+ 	struct ath11k_ext_irq_grp ext_irq_grp[ATH11K_EXT_IRQ_GRP_NUM_MAX];
+-	struct napi_struct *napi;
+ 	struct ath11k_targ_cap target_caps;
+ 	u32 ext_service_bitmap[WMI_SERVICE_EXT_BM_SIZE];
+ 	bool pdevs_macaddr_valid;
+diff --git a/drivers/net/wireless/ath/ath11k/pci.c b/drivers/net/wireless/ath/ath11k/pci.c
+index d7eb6b7160bb4..105e344240c10 100644
+--- a/drivers/net/wireless/ath/ath11k/pci.c
++++ b/drivers/net/wireless/ath/ath11k/pci.c
+@@ -416,8 +416,11 @@ static void __ath11k_pci_ext_irq_disable(struct ath11k_base *sc)
+ 
+ 		ath11k_pci_ext_grp_disable(irq_grp);
+ 
+-		napi_synchronize(&irq_grp->napi);
+-		napi_disable(&irq_grp->napi);
++		if (irq_grp->napi_enabled) {
++			napi_synchronize(&irq_grp->napi);
++			napi_disable(&irq_grp->napi);
++			irq_grp->napi_enabled = false;
++		}
+ 	}
+ }
+ 
+@@ -436,7 +439,10 @@ static void ath11k_pci_ext_irq_enable(struct ath11k_base *ab)
+ 	for (i = 0; i < ATH11K_EXT_IRQ_GRP_NUM_MAX; i++) {
+ 		struct ath11k_ext_irq_grp *irq_grp = &ab->ext_irq_grp[i];
+ 
+-		napi_enable(&irq_grp->napi);
++		if (!irq_grp->napi_enabled) {
++			napi_enable(&irq_grp->napi);
++			irq_grp->napi_enabled = true;
++		}
+ 		ath11k_pci_ext_grp_enable(irq_grp);
  	}
  }
 -- 

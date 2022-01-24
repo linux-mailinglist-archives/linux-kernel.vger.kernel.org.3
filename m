@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B7C7498D44
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 628EF498AB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352377AbiAXTaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:30:15 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41852 "EHLO
+        id S1346407AbiAXTFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:05:30 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57490 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349641AbiAXTVF (ORCPT
+        with ESMTP id S1345493AbiAXTAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:21:05 -0500
+        Mon, 24 Jan 2022 14:00:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6092FB8121F;
-        Mon, 24 Jan 2022 19:21:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 901EFC340E5;
-        Mon, 24 Jan 2022 19:21:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32722B8121F;
+        Mon, 24 Jan 2022 19:00:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D2D5C340EA;
+        Mon, 24 Jan 2022 19:00:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052063;
-        bh=ybTUdVpSs4tP9fA30UA8SByCPb6Bm5xSjfuBftAAKl0=;
+        s=korg; t=1643050820;
+        bh=Z845udqUw2rjUiaPdUgkj+7y6/B6zzKwPohCDuK4TyE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hSEVsva8gp9WT/49Idq8clXMkx+YJO+Pvmo2X7uD+P+yskS9dSPOwVn4ncGqBO97H
-         aJVhXPgbk/nlRfKY4zz88oOf4q2+rqT2Pz+5IKzlcpCGrUfPptW9mnj+06o8/je5oa
-         c/x+2r2ixaYFNHK7Xthjb1D0wYjLrvKUqVlS62Dk=
+        b=iGsG7OmRp3gvFtjJpUUOOQqyALY0JbkJWcFrPvQTwT2myob/RIOnqtZ5suV30y0IX
+         BuX/gaxcnASuDnDFKex4x4pQ1la6/HcyTb9DNkdrKWjthJwUEKZ3OofvXeegLUhm+v
+         gugSkbxrX7Emxsks9G7df5aoZG1wb57O7yRrQ4fY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Russell King <rmk+kernel@armlinux.org.uk>,
-        Lukas Wunner <lukas@wunner.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 175/239] serial: pl010: Drop CR register reset on set_termios
+        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
+        stable@kernel.org
+Subject: [PATCH 4.9 123/157] ext4: Fix BUG_ON in ext4_bread when write quota data
 Date:   Mon, 24 Jan 2022 19:43:33 +0100
-Message-Id: <20220124183948.668143983@linuxfoundation.org>
+Message-Id: <20220124183936.676801278@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,58 +46,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Wunner <lukas@wunner.de>
+From: Ye Bin <yebin10@huawei.com>
 
-[ Upstream commit 08a0c6dff91c965e39905cf200d22db989203ccb ]
+commit 380a0091cab482489e9b19e07f2a166ad2b76d5c upstream.
 
-pl010_set_termios() briefly resets the CR register to zero.
+We got issue as follows when run syzkaller:
+[  167.936972] EXT4-fs error (device loop0): __ext4_remount:6314: comm rep: Abort forced by user
+[  167.938306] EXT4-fs (loop0): Remounting filesystem read-only
+[  167.981637] Assertion failure in ext4_getblk() at fs/ext4/inode.c:847: '(EXT4_SB(inode->i_sb)->s_mount_state & EXT4_FC_REPLAY) || handle != NULL || create == 0'
+[  167.983601] ------------[ cut here ]------------
+[  167.984245] kernel BUG at fs/ext4/inode.c:847!
+[  167.984882] invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
+[  167.985624] CPU: 7 PID: 2290 Comm: rep Tainted: G    B             5.16.0-rc5-next-20211217+ #123
+[  167.986823] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ?-20190727_073836-buildvm-ppc64le-16.ppc.fedoraproject.org-3.fc31 04/01/2014
+[  167.988590] RIP: 0010:ext4_getblk+0x17e/0x504
+[  167.989189] Code: c6 01 74 28 49 c7 c0 a0 a3 5c 9b b9 4f 03 00 00 48 c7 c2 80 9c 5c 9b 48 c7 c6 40 b6 5c 9b 48 c7 c7 20 a4 5c 9b e8 77 e3 fd ff <0f> 0b 8b 04 244
+[  167.991679] RSP: 0018:ffff8881736f7398 EFLAGS: 00010282
+[  167.992385] RAX: 0000000000000094 RBX: 1ffff1102e6dee75 RCX: 0000000000000000
+[  167.993337] RDX: 0000000000000001 RSI: ffffffff9b6e29e0 RDI: ffffed102e6dee66
+[  167.994292] RBP: ffff88816a076210 R08: 0000000000000094 R09: ffffed107363fa09
+[  167.995252] R10: ffff88839b1fd047 R11: ffffed107363fa08 R12: ffff88816a0761e8
+[  167.996205] R13: 0000000000000000 R14: 0000000000000021 R15: 0000000000000001
+[  167.997158] FS:  00007f6a1428c740(0000) GS:ffff88839b000000(0000) knlGS:0000000000000000
+[  167.998238] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  167.999025] CR2: 00007f6a140716c8 CR3: 0000000133216000 CR4: 00000000000006e0
+[  167.999987] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[  168.000944] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[  168.001899] Call Trace:
+[  168.002235]  <TASK>
+[  168.007167]  ext4_bread+0xd/0x53
+[  168.007612]  ext4_quota_write+0x20c/0x5c0
+[  168.010457]  write_blk+0x100/0x220
+[  168.010944]  remove_free_dqentry+0x1c6/0x440
+[  168.011525]  free_dqentry.isra.0+0x565/0x830
+[  168.012133]  remove_tree+0x318/0x6d0
+[  168.014744]  remove_tree+0x1eb/0x6d0
+[  168.017346]  remove_tree+0x1eb/0x6d0
+[  168.019969]  remove_tree+0x1eb/0x6d0
+[  168.022128]  qtree_release_dquot+0x291/0x340
+[  168.023297]  v2_release_dquot+0xce/0x120
+[  168.023847]  dquot_release+0x197/0x3e0
+[  168.024358]  ext4_release_dquot+0x22a/0x2d0
+[  168.024932]  dqput.part.0+0x1c9/0x900
+[  168.025430]  __dquot_drop+0x120/0x190
+[  168.025942]  ext4_clear_inode+0x86/0x220
+[  168.026472]  ext4_evict_inode+0x9e8/0xa22
+[  168.028200]  evict+0x29e/0x4f0
+[  168.028625]  dispose_list+0x102/0x1f0
+[  168.029148]  evict_inodes+0x2c1/0x3e0
+[  168.030188]  generic_shutdown_super+0xa4/0x3b0
+[  168.030817]  kill_block_super+0x95/0xd0
+[  168.031360]  deactivate_locked_super+0x85/0xd0
+[  168.031977]  cleanup_mnt+0x2bc/0x480
+[  168.033062]  task_work_run+0xd1/0x170
+[  168.033565]  do_exit+0xa4f/0x2b50
+[  168.037155]  do_group_exit+0xef/0x2d0
+[  168.037666]  __x64_sys_exit_group+0x3a/0x50
+[  168.038237]  do_syscall_64+0x3b/0x90
+[  168.038751]  entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Where does this register write come from?
+In order to reproduce this problem, the following conditions need to be met:
+1. Ext4 filesystem with no journal;
+2. Filesystem image with incorrect quota data;
+3. Abort filesystem forced by user;
+4. umount filesystem;
 
-The PL010 driver's IRQ handler ambauart_int() originally modified the CR
-register without holding the port spinlock.  ambauart_set_termios() also
-modified that register.  To prevent concurrent read-modify-writes by the
-IRQ handler and to prevent transmission while changing baudrate,
-ambauart_set_termios() had to disable interrupts.  That is achieved by
-writing zero to the CR register.
+As in ext4_quota_write:
+...
+         if (EXT4_SB(sb)->s_journal && !handle) {
+                 ext4_msg(sb, KERN_WARNING, "Quota write (off=%llu, len=%llu)"
+                         " cancelled because transaction is not started",
+                         (unsigned long long)off, (unsigned long long)len);
+                 return -EIO;
+         }
+...
+We only check handle if NULL when filesystem has journal. There is need
+check handle if NULL even when filesystem has no journal.
 
-However in 2004 the PL010 driver was amended to acquire the port
-spinlock in the IRQ handler, obviating the need to disable interrupts in
-->set_termios():
-https://git.kernel.org/history/history/c/157c0342e591
-
-That rendered the CR register write obsolete.  Drop it.
-
-Cc: Russell King <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Link: https://lore.kernel.org/r/fcaff16e5b1abb4cc3da5a2879ac13f278b99ed0.1641128728.git.lukas@wunner.de
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20211223015506.297766-1-yebin10@huawei.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/amba-pl010.c | 3 ---
- 1 file changed, 3 deletions(-)
+ fs/ext4/super.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/amba-pl010.c b/drivers/tty/serial/amba-pl010.c
-index 2c37d11726aba..13f882e5e7b76 100644
---- a/drivers/tty/serial/amba-pl010.c
-+++ b/drivers/tty/serial/amba-pl010.c
-@@ -452,14 +452,11 @@ pl010_set_termios(struct uart_port *port, struct ktermios *termios,
- 	if ((termios->c_cflag & CREAD) == 0)
- 		uap->port.ignore_status_mask |= UART_DUMMY_RSR_RX;
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -5602,7 +5602,7 @@ static ssize_t ext4_quota_write(struct s
+ 	struct buffer_head *bh;
+ 	handle_t *handle = journal_current_handle();
  
--	/* first, disable everything */
- 	old_cr = readb(uap->port.membase + UART010_CR) & ~UART010_CR_MSIE;
- 
- 	if (UART_ENABLE_MS(port, termios->c_cflag))
- 		old_cr |= UART010_CR_MSIE;
- 
--	writel(0, uap->port.membase + UART010_CR);
--
- 	/* Set baud rate */
- 	quot -= 1;
- 	writel((quot & 0xf00) >> 8, uap->port.membase + UART010_LCRM);
--- 
-2.34.1
-
+-	if (EXT4_SB(sb)->s_journal && !handle) {
++	if (!handle) {
+ 		ext4_msg(sb, KERN_WARNING, "Quota write (off=%llu, len=%llu)"
+ 			" cancelled because transaction is not started",
+ 			(unsigned long long)off, (unsigned long long)len);
 
 

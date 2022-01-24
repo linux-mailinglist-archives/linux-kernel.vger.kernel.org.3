@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E89499C2F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA3D499A25
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:49:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578189AbiAXWB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:01:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1450068AbiAXVTl (ORCPT
+        id S1457146AbiAXVlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:41:02 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55262 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347028AbiAXVDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:19:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAFE7C0604C2;
-        Mon, 24 Jan 2022 12:13:51 -0800 (PST)
+        Mon, 24 Jan 2022 16:03:02 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61985B812A8;
-        Mon, 24 Jan 2022 20:13:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A9ECC340E8;
-        Mon, 24 Jan 2022 20:13:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67612B811FB;
+        Mon, 24 Jan 2022 21:03:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F133C340E5;
+        Mon, 24 Jan 2022 21:02:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055230;
-        bh=U3wisKp1DQL3P73XQGZFVVCkj4o+R4Zq2mDuqeIwGBc=;
+        s=korg; t=1643058180;
+        bh=r6PJTVbTgA7n2wSq8entt3xiWEWDnWuHPyVrqFfvuUQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NeHmu63eXqfLZ4wUuP0FcpUauvRpH8cLeGooHwsj8kh7RnOcvDAZbBtyAD5XdRiAy
-         F1OJlWUfPg3oa3br5PLPIny6m44RlPc3KVvfcIy2KgmUafpHtcwViOvPLe4fGpMrO9
-         pGrvi1T3rYeWSdXDTi04j6fVaronpdIlli7qZ4uc=
+        b=gjr/q4eJRij9zblNdQ/jOqW60PpN6pwa4UjJzwO5gI5aGGMgFS9D08MdmPJVF4F6J
+         uiNt77AefEr1LWDvB80ZtmXxadFsko9Vjlxj44KfUFQovmWSvhdshvuz35eutVtC2J
+         oT4LE7j3DdnfaHlLRFTa38EvBvQJDT/JYuONYnBw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
+        stable@vger.kernel.org, Zack Rusin <zackr@vmware.com>,
+        Martin Krastev <krastevm@vmware.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 076/846] Bluetooth: L2CAP: Fix not initializing sk_peer_pid
-Date:   Mon, 24 Jan 2022 19:33:13 +0100
-Message-Id: <20220124184103.608470804@linuxfoundation.org>
+Subject: [PATCH 5.16 0206/1039] drm/vmwgfx: Remove the deprecated lower mem limit
+Date:   Mon, 24 Jan 2022 19:33:15 +0100
+Message-Id: <20220124184132.246155959@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,66 +46,186 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Zack Rusin <zackr@vmware.com>
 
-[ Upstream commit f5ff291098f70a70b344df1e388596755c3c8315 ]
+[ Upstream commit 826c387d015247df396a91eadbaca94f0394853c ]
 
-In order to group sockets being connected using L2CAP_MODE_EXT_FLOWCTL
-the pid is used but sk_peer_pid was not being initialized as it is
-currently only done for af_unix.
+TTM during the transition to the new page allocator lost the ability
+to constrain the allocations via the lower_mem_limit. The code has
+been unused since the change:
+256dd44bd897 ("drm/ttm: nuke old page allocator")
+and there's no reason to keep it.
 
-Fixes: b48596d1dc25 ("Bluetooth: L2CAP: Add get_peer_pid callback")
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Fixes: 256dd44bd897 ("drm/ttm: nuke old page allocator")
+Signed-off-by: Zack Rusin <zackr@vmware.com>
+Reviewed-by: Martin Krastev <krastevm@vmware.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211105193845.258816-2-zackr@vmware.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/l2cap_sock.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/gpu/drm/vmwgfx/ttm_memory.c | 99 +----------------------------
+ drivers/gpu/drm/vmwgfx/ttm_memory.h |  6 +-
+ 2 files changed, 2 insertions(+), 103 deletions(-)
 
-diff --git a/net/bluetooth/l2cap_sock.c b/net/bluetooth/l2cap_sock.c
-index 160c016a5dfb9..4574c5cb1b596 100644
---- a/net/bluetooth/l2cap_sock.c
-+++ b/net/bluetooth/l2cap_sock.c
-@@ -172,6 +172,21 @@ done:
- 	return err;
+diff --git a/drivers/gpu/drm/vmwgfx/ttm_memory.c b/drivers/gpu/drm/vmwgfx/ttm_memory.c
+index 7f7fe35fc21df..326d2d177c8bb 100644
+--- a/drivers/gpu/drm/vmwgfx/ttm_memory.c
++++ b/drivers/gpu/drm/vmwgfx/ttm_memory.c
+@@ -34,7 +34,6 @@
+ #include <linux/mm.h>
+ #include <linux/module.h>
+ #include <linux/slab.h>
+-#include <linux/swap.h>
+ 
+ #include <drm/drm_device.h>
+ #include <drm/drm_file.h>
+@@ -173,69 +172,7 @@ static struct kobj_type ttm_mem_zone_kobj_type = {
+ 	.sysfs_ops = &ttm_mem_zone_ops,
+ 	.default_attrs = ttm_mem_zone_attrs,
+ };
+-
+-static struct attribute ttm_mem_global_lower_mem_limit = {
+-	.name = "lower_mem_limit",
+-	.mode = S_IRUGO | S_IWUSR
+-};
+-
+-static ssize_t ttm_mem_global_show(struct kobject *kobj,
+-				 struct attribute *attr,
+-				 char *buffer)
+-{
+-	struct ttm_mem_global *glob =
+-		container_of(kobj, struct ttm_mem_global, kobj);
+-	uint64_t val = 0;
+-
+-	spin_lock(&glob->lock);
+-	val = glob->lower_mem_limit;
+-	spin_unlock(&glob->lock);
+-	/* convert from number of pages to KB */
+-	val <<= (PAGE_SHIFT - 10);
+-	return snprintf(buffer, PAGE_SIZE, "%llu\n",
+-			(unsigned long long) val);
+-}
+-
+-static ssize_t ttm_mem_global_store(struct kobject *kobj,
+-				  struct attribute *attr,
+-				  const char *buffer,
+-				  size_t size)
+-{
+-	int chars;
+-	uint64_t val64;
+-	unsigned long val;
+-	struct ttm_mem_global *glob =
+-		container_of(kobj, struct ttm_mem_global, kobj);
+-
+-	chars = sscanf(buffer, "%lu", &val);
+-	if (chars == 0)
+-		return size;
+-
+-	val64 = val;
+-	/* convert from KB to number of pages */
+-	val64 >>= (PAGE_SHIFT - 10);
+-
+-	spin_lock(&glob->lock);
+-	glob->lower_mem_limit = val64;
+-	spin_unlock(&glob->lock);
+-
+-	return size;
+-}
+-
+-static struct attribute *ttm_mem_global_attrs[] = {
+-	&ttm_mem_global_lower_mem_limit,
+-	NULL
+-};
+-
+-static const struct sysfs_ops ttm_mem_global_ops = {
+-	.show = &ttm_mem_global_show,
+-	.store = &ttm_mem_global_store,
+-};
+-
+-static struct kobj_type ttm_mem_glob_kobj_type = {
+-	.sysfs_ops = &ttm_mem_global_ops,
+-	.default_attrs = ttm_mem_global_attrs,
+-};
++static struct kobj_type ttm_mem_glob_kobj_type = {0};
+ 
+ static bool ttm_zones_above_swap_target(struct ttm_mem_global *glob,
+ 					bool from_wq, uint64_t extra)
+@@ -435,11 +372,6 @@ int ttm_mem_global_init(struct ttm_mem_global *glob, struct device *dev)
+ 
+ 	si_meminfo(&si);
+ 
+-	spin_lock(&glob->lock);
+-	/* set it as 0 by default to keep original behavior of OOM */
+-	glob->lower_mem_limit = 0;
+-	spin_unlock(&glob->lock);
+-
+ 	ret = ttm_mem_init_kernel_zone(glob, &si);
+ 	if (unlikely(ret != 0))
+ 		goto out_no_zone;
+@@ -526,35 +458,6 @@ void ttm_mem_global_free(struct ttm_mem_global *glob,
  }
+ EXPORT_SYMBOL(ttm_mem_global_free);
  
-+static void l2cap_sock_init_pid(struct sock *sk)
-+{
-+	struct l2cap_chan *chan = l2cap_pi(sk)->chan;
+-/*
+- * check if the available mem is under lower memory limit
+- *
+- * a. if no swap disk at all or free swap space is under swap_mem_limit
+- * but available system mem is bigger than sys_mem_limit, allow TTM
+- * allocation;
+- *
+- * b. if the available system mem is less than sys_mem_limit but free
+- * swap disk is bigger than swap_mem_limit, allow TTM allocation.
+- */
+-bool
+-ttm_check_under_lowerlimit(struct ttm_mem_global *glob,
+-			uint64_t num_pages,
+-			struct ttm_operation_ctx *ctx)
+-{
+-	int64_t available;
+-
+-	/* We allow over commit during suspend */
+-	if (ctx->force_alloc)
+-		return false;
+-
+-	available = get_nr_swap_pages() + si_mem_available();
+-	available -= num_pages;
+-	if (available < glob->lower_mem_limit)
+-		return true;
+-
+-	return false;
+-}
+-
+ static int ttm_mem_global_reserve(struct ttm_mem_global *glob,
+ 				  struct ttm_mem_zone *single_zone,
+ 				  uint64_t amount, bool reserve)
+diff --git a/drivers/gpu/drm/vmwgfx/ttm_memory.h b/drivers/gpu/drm/vmwgfx/ttm_memory.h
+index c50dba7744854..7b0d617ebcb1e 100644
+--- a/drivers/gpu/drm/vmwgfx/ttm_memory.h
++++ b/drivers/gpu/drm/vmwgfx/ttm_memory.h
+@@ -50,8 +50,6 @@
+  * @work: The workqueue callback for the shrink queue.
+  * @lock: Lock to protect the @shrink - and the memory accounting members,
+  * that is, essentially the whole structure with some exceptions.
+- * @lower_mem_limit: include lower limit of swap space and lower limit of
+- * system memory.
+  * @zones: Array of pointers to accounting zones.
+  * @num_zones: Number of populated entries in the @zones array.
+  * @zone_kernel: Pointer to the kernel zone.
+@@ -69,7 +67,6 @@ extern struct ttm_mem_global {
+ 	struct workqueue_struct *swap_queue;
+ 	struct work_struct work;
+ 	spinlock_t lock;
+-	uint64_t lower_mem_limit;
+ 	struct ttm_mem_zone *zones[TTM_MEM_MAX_ZONES];
+ 	unsigned int num_zones;
+ 	struct ttm_mem_zone *zone_kernel;
+@@ -91,6 +88,5 @@ int ttm_mem_global_alloc_page(struct ttm_mem_global *glob,
+ void ttm_mem_global_free_page(struct ttm_mem_global *glob,
+ 			      struct page *page, uint64_t size);
+ size_t ttm_round_pot(size_t size);
+-bool ttm_check_under_lowerlimit(struct ttm_mem_global *glob, uint64_t num_pages,
+-				struct ttm_operation_ctx *ctx);
 +
-+	/* Only L2CAP_MODE_EXT_FLOWCTL ever need to access the PID in order to
-+	 * group the channels being requested.
-+	 */
-+	if (chan->mode != L2CAP_MODE_EXT_FLOWCTL)
-+		return;
-+
-+	spin_lock(&sk->sk_peer_lock);
-+	sk->sk_peer_pid = get_pid(task_tgid(current));
-+	spin_unlock(&sk->sk_peer_lock);
-+}
-+
- static int l2cap_sock_connect(struct socket *sock, struct sockaddr *addr,
- 			      int alen, int flags)
- {
-@@ -243,6 +258,8 @@ static int l2cap_sock_connect(struct socket *sock, struct sockaddr *addr,
- 	if (chan->psm && bdaddr_type_is_le(chan->src_type) && !chan->mode)
- 		chan->mode = L2CAP_MODE_LE_FLOWCTL;
- 
-+	l2cap_sock_init_pid(sk);
-+
- 	err = l2cap_chan_connect(chan, la.l2_psm, __le16_to_cpu(la.l2_cid),
- 				 &la.l2_bdaddr, la.l2_bdaddr_type);
- 	if (err)
-@@ -298,6 +315,8 @@ static int l2cap_sock_listen(struct socket *sock, int backlog)
- 		goto done;
- 	}
- 
-+	l2cap_sock_init_pid(sk);
-+
- 	sk->sk_max_ack_backlog = backlog;
- 	sk->sk_ack_backlog = 0;
- 
+ #endif
 -- 
 2.34.1
 

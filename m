@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF5C499C22
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5AC499599
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:13:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1577542AbiAXWA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:00:27 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:38218 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449256AbiAXVPJ (ORCPT
+        id S1442114AbiAXUxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:53:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38516 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1384757AbiAXUad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:15:09 -0500
+        Mon, 24 Jan 2022 15:30:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92E1C08B4D5;
+        Mon, 24 Jan 2022 11:42:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0ADD561451;
-        Mon, 24 Jan 2022 21:15:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8F3EC340E5;
-        Mon, 24 Jan 2022 21:15:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 865F2B80FA1;
+        Mon, 24 Jan 2022 19:42:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9A43C340E5;
+        Mon, 24 Jan 2022 19:42:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058908;
-        bh=d6R36MrvRchoiac2EDIDDPVYsSqO0GHpTgvcUZB/b70=;
+        s=korg; t=1643053367;
+        bh=FeZZ+ingMMeS9llhA0tL7fmg4FwHfTx7PJX3YvByI6A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WCELllb+ympGW39y/wUa1ruvBXBLG9A8/3AfyPhHRBJ3J8DHGdreCtUYfIM3UmZOD
-         1zC1LZ0iPzxe5rUXjCe6vLjiQCVHnTVv5EwE10gsNKKHKdWXUTnvgRd5b4CuLUeNyW
-         VSpkoeUGpY0TQUq8BNwA4DSwM2Kzd2ruBkkxyAPg=
+        b=h7JAahBvBFk8l/NZOpIEsvDjsdWUUXaLyEEKLapyXt0YF1RyjQ8uG0lbjH9lKx7Jo
+         UArvXGoyOmc1vDvwKArdzvGMDiyMasroJnGiBOmGW4DzOYcZt+feF+fafgRUUuHrtm
+         ng+hLd8qAs+tXDRP3wcBttFO1EQW2+5Xs8Hfa8mQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aya Levin <ayal@nvidia.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0409/1039] Revert "net/mlx5e: Block offload of outer header csum for UDP tunnels"
-Date:   Mon, 24 Jan 2022 19:36:38 +0100
-Message-Id: <20220124184139.064960266@linuxfoundation.org>
+        stable@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <treding@nvidia.com>
+Subject: [PATCH 5.10 034/563] gpu: host1x: Add back arm_iommu_detach_device()
+Date:   Mon, 24 Jan 2022 19:36:39 +0100
+Message-Id: <20220124184025.606765771@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,50 +48,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aya Levin <ayal@nvidia.com>
+From: Dmitry Osipenko <digetx@gmail.com>
 
-[ Upstream commit 64050cdad0983ad8060e33c3f4b5aee2366bcebd ]
+commit d5185965c3b59073c4520bad7dd2adf725b9abba upstream.
 
-This reverts commit 6d6727dddc7f93fcc155cb8d0c49c29ae0e71122.
+Host1x DMA buffer isn't mapped properly when CONFIG_ARM_DMA_USE_IOMMU=y.
+The memory management code of Host1x driver has a longstanding overhaul
+overdue and it's not obvious where the problem is in this case. Hence
+let's add back the old workaround which we already had sometime before.
+It explicitly detaches Host1x device from the offending implicit IOMMU
+domain. This fixes a completely broken Host1x DMA in case of ARM32
+multiplatform kernel config.
 
-Although the NIC doesn't support offload of outer header CSUM, using
-gso_partial_features allows offloading the tunnel's segmentation. The
-driver relies on the stack CSUM calculation of the outer header. For
-this, NETIF_F_GSO_UDP_TUNNEL_CSUM must be a member of the device's
-features.
-
-Fixes: 6d6727dddc7f ("net/mlx5e: Block offload of outer header csum for UDP tunnels")
-Signed-off-by: Aya Levin <ayal@nvidia.com>
-Reviewed-by: Gal Pressman <gal@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: af1cbfb9bf0f ("gpu: host1x: Support DMA mapping of buffers")
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en_main.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/gpu/host1x/dev.c |   15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-index 41379844eee1f..de8acd3217c18 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -4789,9 +4789,13 @@ static void mlx5e_build_nic_netdev(struct net_device *netdev)
- 	}
+--- a/drivers/gpu/host1x/dev.c
++++ b/drivers/gpu/host1x/dev.c
+@@ -18,6 +18,10 @@
+ #include <trace/events/host1x.h>
+ #undef CREATE_TRACE_POINTS
  
- 	if (mlx5_vxlan_allowed(mdev->vxlan) || mlx5_geneve_tx_allowed(mdev)) {
--		netdev->hw_features     |= NETIF_F_GSO_UDP_TUNNEL;
--		netdev->hw_enc_features |= NETIF_F_GSO_UDP_TUNNEL;
--		netdev->vlan_features |= NETIF_F_GSO_UDP_TUNNEL;
-+		netdev->hw_features     |= NETIF_F_GSO_UDP_TUNNEL |
-+					   NETIF_F_GSO_UDP_TUNNEL_CSUM;
-+		netdev->hw_enc_features |= NETIF_F_GSO_UDP_TUNNEL |
-+					   NETIF_F_GSO_UDP_TUNNEL_CSUM;
-+		netdev->gso_partial_features = NETIF_F_GSO_UDP_TUNNEL_CSUM;
-+		netdev->vlan_features |= NETIF_F_GSO_UDP_TUNNEL |
-+					 NETIF_F_GSO_UDP_TUNNEL_CSUM;
- 	}
++#if IS_ENABLED(CONFIG_ARM_DMA_USE_IOMMU)
++#include <asm/dma-iommu.h>
++#endif
++
+ #include "bus.h"
+ #include "channel.h"
+ #include "debug.h"
+@@ -232,6 +236,17 @@ static struct iommu_domain *host1x_iommu
+ 	struct iommu_domain *domain = iommu_get_domain_for_dev(host->dev);
+ 	int err;
  
- 	if (mlx5e_tunnel_proto_supported_tx(mdev, IPPROTO_GRE)) {
--- 
-2.34.1
-
++#if IS_ENABLED(CONFIG_ARM_DMA_USE_IOMMU)
++	if (host->dev->archdata.mapping) {
++		struct dma_iommu_mapping *mapping =
++				to_dma_iommu_mapping(host->dev);
++		arm_iommu_detach_device(host->dev);
++		arm_iommu_release_mapping(mapping);
++
++		domain = iommu_get_domain_for_dev(host->dev);
++	}
++#endif
++
+ 	/*
+ 	 * We may not always want to enable IOMMU support (for example if the
+ 	 * host1x firewall is already enabled and we don't support addressing
 
 

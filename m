@@ -2,73 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B79BB499D09
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA61549A0E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581600AbiAXWME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:12:04 -0500
-Received: from ip-15.mailobj.net ([213.182.54.15]:38058 "EHLO msg-4.mailo.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1452807AbiAXV0n (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:26:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
-        t=1643059591; bh=z2N8AFm6BKjIW6yLTb4o2Nvq1Bhr1Z1MkQ0IL+yIuDw=;
-        h=X-EA-Auth:From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:
-         References:MIME-Version:Content-Transfer-Encoding;
-        b=A58/lCoBYsCKzvo2qIUZFX5RSk8D6qhkHqqzPjBdVRTvZBeFIUpO0XMCwr8KTriCg
-         zxJtdR1GK/+sh1rYi8FVr55BQ2fflKTJKesK3/g0DvdaNq4+OAkL2nfkUKPTtMKm70
-         vtsmcQ6zj6Yj/PqYBklLY2alKbYClXa05XRfsuQk=
-Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
-        via proxy.mailoo.org [213.182.55.207]
-        Mon, 24 Jan 2022 22:26:31 +0100 (CET)
-X-EA-Auth: xN/soZ7g5/FwWb7FyMsA8grkgZp7zMu0jHmpPenAVYqC9/vvQcjEQNdQbQUVICgJMytb0GNfJ5JW0blANF72ExR5NwoqP3SlWQSmW7LtIvA=
-From:   Vincent Knecht <vincent.knecht@mailoo.org>
-To:     dmitry.torokhov@gmail.com, stephan@gerhold.net
-Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Vincent Knecht <vincent.knecht@mailoo.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v2 4/5] dt-bindings: input: touchscreen: msg2638: Document keys support
-Date:   Mon, 24 Jan 2022 22:26:10 +0100
-Message-Id: <20220124212611.752603-5-vincent.knecht@mailoo.org>
+        id S1848329AbiAXXWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:22:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37658 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1584676AbiAXWVc (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 17:21:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D89C041881;
+        Mon, 24 Jan 2022 12:52:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 564CB611C2;
+        Mon, 24 Jan 2022 20:52:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CECAC340E5;
+        Mon, 24 Jan 2022 20:52:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643057568;
+        bh=PV3zTcZoEZBIfBNhE05GCrsJQVwhbmMUXbm4kUtn8zI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=oG/h7ez1OU3vlzJLnvHfQH70PrRtUmnD0jHOiULPorwOcKbVXdfkssgvAdLj4GW1Y
+         DQyZ19Ka8etfAj9Wo+mhLlmMZ4c+ebzZDgj/VPR3Me5iR96zfTiW4ZgrNJE4MNbAip
+         p31Whvr18iKC7cMVw3gFAB0l915hbRVf1P38e2UI=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.16 0001/1039] KVM: x86/mmu: Fix write-protection of PTs mapped by the TDP MMU
+Date:   Mon, 24 Jan 2022 19:29:50 +0100
+Message-Id: <20220124184125.179384891@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124212611.752603-1-vincent.knecht@mailoo.org>
-References: <20220124212611.752603-1-vincent.knecht@mailoo.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document optional linux,keycodes support.
+From: David Matlack <dmatlack@google.com>
 
-Acked-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
----
-v2:
-- picked up Rob's Ack
----
- .../devicetree/bindings/input/touchscreen/mstar,msg2638.yaml  | 4 ++++
- 1 file changed, 4 insertions(+)
+commit 7c8a4742c4abe205ec9daf416c9d42fd6b406e8e upstream.
 
-diff --git a/Documentation/devicetree/bindings/input/touchscreen/mstar,msg2638.yaml b/Documentation/devicetree/bindings/input/touchscreen/mstar,msg2638.yaml
-index 2fb7e01bb65a..af4f954de958 100644
---- a/Documentation/devicetree/bindings/input/touchscreen/mstar,msg2638.yaml
-+++ b/Documentation/devicetree/bindings/input/touchscreen/mstar,msg2638.yaml
-@@ -36,6 +36,10 @@ properties:
-   touchscreen-size-x: true
-   touchscreen-size-y: true
+When the TDP MMU is write-protection GFNs for page table protection (as
+opposed to for dirty logging, or due to the HVA not being writable), it
+checks if the SPTE is already write-protected and if so skips modifying
+the SPTE and the TLB flush.
+
+This behavior is incorrect because it fails to check if the SPTE
+is write-protected for page table protection, i.e. fails to check
+that MMU-writable is '0'.  If the SPTE was write-protected for dirty
+logging but not page table protection, the SPTE could locklessly be made
+writable, and vCPUs could still be running with writable mappings cached
+in their TLB.
+
+Fix this by only skipping setting the SPTE if the SPTE is already
+write-protected *and* MMU-writable is already clear.  Technically,
+checking only MMU-writable would suffice; a SPTE cannot be writable
+without MMU-writable being set.  But check both to be paranoid and
+because it arguably yields more readable code.
+
+Fixes: 46044f72c382 ("kvm: x86/mmu: Support write protection for nesting in tdp MMU")
+Cc: stable@vger.kernel.org
+Signed-off-by: David Matlack <dmatlack@google.com>
+Message-Id: <20220113233020.3986005-2-dmatlack@google.com>
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/x86/kvm/mmu/tdp_mmu.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -1442,12 +1442,12 @@ static bool write_protect_gfn(struct kvm
+ 		    !is_last_spte(iter.old_spte, iter.level))
+ 			continue;
  
-+  linux,keycodes:
-+    minItems: 1
-+    maxItems: 4
+-		if (!is_writable_pte(iter.old_spte))
+-			break;
+-
+ 		new_spte = iter.old_spte &
+ 			~(PT_WRITABLE_MASK | shadow_mmu_writable_mask);
+ 
++		if (new_spte == iter.old_spte)
++			break;
 +
- additionalProperties: false
- 
- required:
--- 
-2.34.1
-
+ 		tdp_mmu_set_spte(kvm, &iter, new_spte);
+ 		spte_set = true;
+ 	}
 
 

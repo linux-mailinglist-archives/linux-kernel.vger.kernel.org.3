@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2140749A0E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:33:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F630499E60
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1848442AbiAXXWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:22:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1584586AbiAXWV3 (ORCPT
+        id S1450543AbiAXWc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:32:59 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58036 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1444637AbiAXVjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:21:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C055C0424E1;
-        Mon, 24 Jan 2022 12:51:31 -0800 (PST)
+        Mon, 24 Jan 2022 16:39:31 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EEE46B810A8;
-        Mon, 24 Jan 2022 20:51:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3229BC340E5;
-        Mon, 24 Jan 2022 20:51:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64EAD612E5;
+        Mon, 24 Jan 2022 21:39:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D26AC340E4;
+        Mon, 24 Jan 2022 21:39:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057488;
-        bh=z/kUukaJylcFxGt8AABs3R9KeYEcCOvB/8aKXDK3HDc=;
+        s=korg; t=1643060366;
+        bh=MwVDU5KHXsZMAwuTBPhjmF0Tyu+ExRo7B82mYWrX2lQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g5cTEvsFfq8wOcSAg6np3DTq/DnPrp4rx437sJo8FGYiQo46leUO3hPZdKgKn8m0J
-         e0O8TB/OHTeEyK1S2DEQFi+jmqcJ3ufaDPtgklGoBgQB4fz9JVipxspbEHD/L+uxFZ
-         sdR7EP6EwZkUGEE/sKKDtanYlx1i579mFQDsIrcs=
+        b=icgJoUL/oGhuK3ZuQgraHVw/m+NO10p/fitA4OFn5NH3J/9IKJT5t4AtBTSRscZDb
+         sZj62ylWqGyl8DiP2ssluTBrM534u8s18p1L+1IMA1lyPpdNAXCVVXUnbBsZqwzbpm
+         nmpinDyeKaDd/iZdCQyEsnfy/+ORNYAY0yOLyXYs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 796/846] net: axienet: Fix TX ring slot available check
+        stable@vger.kernel.org, Lucas Van <lucas.van@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.16 0924/1039] dmaengine: idxd: fix wq settings post wq disable
 Date:   Mon, 24 Jan 2022 19:45:13 +0100
-Message-Id: <20220124184128.409686443@linuxfoundation.org>
+Message-Id: <20220124184156.355071904@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,51 +46,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Dave Jiang <dave.jiang@intel.com>
 
-commit 996defd7f8b5dafc1d480b7585c7c62437f80c3c upstream.
+commit 0f225705cf6536826318180831e18a74595efc8d upstream.
 
-The check for whether a TX ring slot was available was incorrect,
-since a slot which had been loaded with transmit data but the device had
-not started transmitting would be treated as available, potentially
-causing non-transmitted slots to be overwritten. The control field in
-the descriptor should be checked, rather than the status field (which may
-only be updated when the device completes the entry).
+By the spec, wq size and group association is not changeable unless device
+is disabled. Exclude clearing the shadow copy on wq disable/reset. This
+allows wq type to be changed after disable to be re-enabled.
 
-Fixes: 8a3b7a252dca9 ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Move the size and group association to its own cleanup and only call it
+during device disable.
+
+Fixes: 0dcfe41e9a4c ("dmanegine: idxd: cleanup all device related bits after disabling device")
+Reported-by: Lucas Van <lucas.van@intel.com>
+Tested-by: Lucas Van <lucas.van@intel.com>
+Signed-off-by: Dave Jiang <dave.jiang@intel.com>
+Link: https://lore.kernel.org/r/163951291732.2987775.13576571320501115257.stgit@djiang5-desk3.ch.intel.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/xilinx/xilinx_axienet_main.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/dma/idxd/device.c |   12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-@@ -643,7 +643,6 @@ static int axienet_free_tx_chain(struct
- 		if (cur_p->skb && (status & XAXIDMA_BD_STS_COMPLETE_MASK))
- 			dev_consume_skb_irq(cur_p->skb);
- 
--		cur_p->cntrl = 0;
- 		cur_p->app0 = 0;
- 		cur_p->app1 = 0;
- 		cur_p->app2 = 0;
-@@ -651,6 +650,7 @@ static int axienet_free_tx_chain(struct
- 		cur_p->skb = NULL;
- 		/* ensure our transmit path and device don't prematurely see status cleared */
- 		wmb();
-+		cur_p->cntrl = 0;
- 		cur_p->status = 0;
- 
- 		if (sizep)
-@@ -713,7 +713,7 @@ static inline int axienet_check_tx_bd_sp
- 	/* Ensure we see all descriptor updates from device or TX IRQ path */
- 	rmb();
- 	cur_p = &lp->tx_bd_v[(lp->tx_bd_tail + num_frag) % lp->tx_bd_num];
--	if (cur_p->status & XAXIDMA_BD_STS_ALL_MASK)
-+	if (cur_p->cntrl)
- 		return NETDEV_TX_BUSY;
- 	return 0;
+--- a/drivers/dma/idxd/device.c
++++ b/drivers/dma/idxd/device.c
+@@ -382,8 +382,6 @@ static void idxd_wq_disable_cleanup(stru
+ 	lockdep_assert_held(&wq->wq_lock);
+ 	memset(wq->wqcfg, 0, idxd->wqcfg_size);
+ 	wq->type = IDXD_WQT_NONE;
+-	wq->size = 0;
+-	wq->group = NULL;
+ 	wq->threshold = 0;
+ 	wq->priority = 0;
+ 	wq->ats_dis = 0;
+@@ -392,6 +390,15 @@ static void idxd_wq_disable_cleanup(stru
+ 	memset(wq->name, 0, WQ_NAME_SIZE);
  }
+ 
++static void idxd_wq_device_reset_cleanup(struct idxd_wq *wq)
++{
++	lockdep_assert_held(&wq->wq_lock);
++
++	idxd_wq_disable_cleanup(wq);
++	wq->size = 0;
++	wq->group = NULL;
++}
++
+ static void idxd_wq_ref_release(struct percpu_ref *ref)
+ {
+ 	struct idxd_wq *wq = container_of(ref, struct idxd_wq, wq_active);
+@@ -699,6 +706,7 @@ static void idxd_device_wqs_clear_state(
+ 
+ 		if (wq->state == IDXD_WQ_ENABLED) {
+ 			idxd_wq_disable_cleanup(wq);
++			idxd_wq_device_reset_cleanup(wq);
+ 			wq->state = IDXD_WQ_DISABLED;
+ 		}
+ 	}
 
 

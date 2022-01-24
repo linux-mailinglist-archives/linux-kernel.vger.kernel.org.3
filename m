@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB56E498C23
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A38499096
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348755AbiAXTTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:19:39 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37594 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345148AbiAXTLf (ORCPT
+        id S1353273AbiAXUBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:01:45 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34880 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352064AbiAXThW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:11:35 -0500
+        Mon, 24 Jan 2022 14:37:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DB21B81233;
-        Mon, 24 Jan 2022 19:11:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A115C340E5;
-        Mon, 24 Jan 2022 19:11:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DB9D6153C;
+        Mon, 24 Jan 2022 19:37:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C913C34106;
+        Mon, 24 Jan 2022 19:37:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051492;
-        bh=AXv0bhwDFHYDlHSaMxBSRFCsCriGi5RSJxtkFLs0kwU=;
+        s=korg; t=1643053039;
+        bh=DgL0M9pJ+5hLvwUAh76NXDtoQtsqUyxfMwlZsYc7D1A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QyLTs/s1knjfeW2UOCGNfMvjuyVN8WtOfjStxTBrM+6cj+uLnkmwxbiWA8kEYY4UF
-         FB0xV99oLmDjtVJJas0YHOzZGb6t+SA76RCcR4RlkQfBAdSoJb0hVm9DJHddKabjIi
-         SoEwq1Xy7wqP8aL993AnDLbuNmqhVzFRui54Yeog=
+        b=p92n6uhRTGDEcdnRZ8ekt0nGqU3vh7Rj8VqKRxTtrpuoX/ycpjifppOUGS3vQxOim
+         Y6rmS444GAZPFFMNYZoTbHtBsj8TuqyjjiNeXwbCmIvfUdqxymAGKc1VI8tL9klv9P
+         FVf59je3EEjbgxLL8wCJ3QGn1X9cHrNn/IjiMgsw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Ye Guojin <ye.guojin@zte.com.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 147/186] power: bq25890: Enable continuous conversion for ADC at charging
-Date:   Mon, 24 Jan 2022 19:43:42 +0100
-Message-Id: <20220124183941.832765733@linuxfoundation.org>
+Subject: [PATCH 5.4 239/320] MIPS: OCTEON: add put_device() after of_find_device_by_node()
+Date:   Mon, 24 Jan 2022 19:43:43 +0100
+Message-Id: <20220124184002.119676205@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,41 +47,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yauhen Kharuzhy <jekhor@gmail.com>
+From: Ye Guojin <ye.guojin@zte.com.cn>
 
-[ Upstream commit 80211be1b9dec04cc2805d3d81e2091ecac289a1 ]
+[ Upstream commit 858779df1c0787d3fec827fb705708df9ebdb15b ]
 
-Instead of one shot run of ADC at beginning of charging, run continuous
-conversion to ensure that all charging-related values are monitored
-properly (input voltage, input current, themperature etc.).
+This was found by coccicheck:
+./arch/mips/cavium-octeon/octeon-platform.c, 332, 1-7, ERROR missing
+put_device; call of_find_device_by_node on line 324, but without a
+corresponding object release within this function.
+./arch/mips/cavium-octeon/octeon-platform.c, 395, 1-7, ERROR missing
+put_device; call of_find_device_by_node on line 387, but without a
+corresponding object release within this function.
+./arch/mips/cavium-octeon/octeon-usb.c, 512, 3-9, ERROR missing
+put_device; call of_find_device_by_node on line 515, but without a
+corresponding object release within this function.
+./arch/mips/cavium-octeon/octeon-usb.c, 543, 1-7, ERROR missing
+put_device; call of_find_device_by_node on line 515, but without a
+corresponding object release within this function.
 
-Signed-off-by: Yauhen Kharuzhy <jekhor@gmail.com>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Ye Guojin <ye.guojin@zte.com.cn>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/bq25890_charger.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/mips/cavium-octeon/octeon-platform.c | 2 ++
+ arch/mips/cavium-octeon/octeon-usb.c      | 1 +
+ 2 files changed, 3 insertions(+)
 
-diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-index 8e2c41ded171c..e90253b3f6561 100644
---- a/drivers/power/supply/bq25890_charger.c
-+++ b/drivers/power/supply/bq25890_charger.c
-@@ -521,12 +521,12 @@ static void bq25890_handle_state_change(struct bq25890_device *bq,
+diff --git a/arch/mips/cavium-octeon/octeon-platform.c b/arch/mips/cavium-octeon/octeon-platform.c
+index 51685f893eab0..c214fe4e678bb 100644
+--- a/arch/mips/cavium-octeon/octeon-platform.c
++++ b/arch/mips/cavium-octeon/octeon-platform.c
+@@ -328,6 +328,7 @@ static int __init octeon_ehci_device_init(void)
  
- 	if (!new_state->online) {			     /* power removed */
- 		/* disable ADC */
--		ret = bq25890_field_write(bq, F_CONV_START, 0);
-+		ret = bq25890_field_write(bq, F_CONV_RATE, 0);
- 		if (ret < 0)
- 			goto error;
- 	} else if (!old_state.online) {			    /* power inserted */
- 		/* enable ADC, to have control of charge current/voltage */
--		ret = bq25890_field_write(bq, F_CONV_START, 1);
-+		ret = bq25890_field_write(bq, F_CONV_RATE, 1);
- 		if (ret < 0)
- 			goto error;
- 	}
+ 	pd->dev.platform_data = &octeon_ehci_pdata;
+ 	octeon_ehci_hw_start(&pd->dev);
++	put_device(&pd->dev);
+ 
+ 	return ret;
+ }
+@@ -391,6 +392,7 @@ static int __init octeon_ohci_device_init(void)
+ 
+ 	pd->dev.platform_data = &octeon_ohci_pdata;
+ 	octeon_ohci_hw_start(&pd->dev);
++	put_device(&pd->dev);
+ 
+ 	return ret;
+ }
+diff --git a/arch/mips/cavium-octeon/octeon-usb.c b/arch/mips/cavium-octeon/octeon-usb.c
+index 4017398519cf9..e092d86e63581 100644
+--- a/arch/mips/cavium-octeon/octeon-usb.c
++++ b/arch/mips/cavium-octeon/octeon-usb.c
+@@ -544,6 +544,7 @@ static int __init dwc3_octeon_device_init(void)
+ 			devm_iounmap(&pdev->dev, base);
+ 			devm_release_mem_region(&pdev->dev, res->start,
+ 						resource_size(res));
++			put_device(&pdev->dev);
+ 		}
+ 	} while (node != NULL);
+ 
 -- 
 2.34.1
 

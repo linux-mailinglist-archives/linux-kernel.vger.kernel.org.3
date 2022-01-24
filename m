@@ -2,79 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B07D4982B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 15:52:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 180D14982BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 15:53:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238258AbiAXOwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 09:52:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
+        id S238413AbiAXOxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 09:53:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbiAXOwb (ORCPT
+        with ESMTP id S231403AbiAXOxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 09:52:31 -0500
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDD3C06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 06:52:31 -0800 (PST)
-Received: by mail-yb1-xb41.google.com with SMTP id c6so52095549ybk.3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 06:52:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Fh6o/GOsgmj5XjpJdBv76VSM5VP8+e8FRYFpUzMgxVM=;
-        b=YeTkuZARWVTV2gd1KzRZGkvmt7O4k7lo0nx6OKwMi/Z1FxrCV8wJ6J1beALf3GxM3e
-         KPmwuveElkjfQtPsYo4mfC4fu0si/igA88p8kulb7PzOAeTkXCQN0h1ChbUr+R620QxD
-         8CzQO1XVCC8scN09Lg8BvJJebgvEVz+L2o955ygoS7CDeazsMjkNopHJpDI5vzeBeVBm
-         V/NjVE9ImpvX2BMMz57dD4q1wpRl51zyjcdpR/fdDXR9uoWoiFRo4LRhFMsfauJNGLl+
-         U8B+eUIbFaJwxKYYr//66MCTFFmw++RBVWYMYcG3fU+iDYj+1KgxVhExa7YUSMnPtG8d
-         5dkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=Fh6o/GOsgmj5XjpJdBv76VSM5VP8+e8FRYFpUzMgxVM=;
-        b=wNzFl/83WRA/aZE5AWZH6nNV1l4kzMmtFFCv/jqRm8RBiqKIzFiE0JOelu/6ey/LJT
-         RDbSjdC04rKcnG1Jgtnm+63duRnRz4ge+M+01Labss84Rk37kegBVZ6nS/3ReR8YIkmr
-         YJPnYIvzwxDIIVCKm7fRvHCsGtfB5OAVrouBel7W2J1LXXq8Sl0fFUh3CPDc0ye2hbt1
-         CcyWp+4rkNhJ6rNTstKzlV6PM7QFgAWLtlrY8Ndhuw1vSpYtkUpQSVamsJlYSWuG5Bjx
-         +A5LDOv9YO+usb2VIakFIx2b0ILGO4JiSgs50J4WMHL8ZnPmSn6+1DRGlExtJGlTYY8o
-         lWOA==
-X-Gm-Message-State: AOAM530zxqH4JRNtd13bAX2JosQsInX6oPoACKI6D6noh6Fq0aDNAkAh
-        ZZ/MiumgWcEbndKjr4VuZJ6UA1PKsQoMPLMmE1U=
-X-Google-Smtp-Source: ABdhPJya9nZZH89XmDtjv5/ARL/dT1AzAbErhAVzYHjml2F4CgQdixATw4nn+QyCGOsvuDhX+sLpXvgHzjrjlUwX+rY=
-X-Received: by 2002:a25:bacf:: with SMTP id a15mr23382332ybk.462.1643035950864;
- Mon, 24 Jan 2022 06:52:30 -0800 (PST)
+        Mon, 24 Jan 2022 09:53:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4E6C06173B;
+        Mon, 24 Jan 2022 06:53:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2E7061388;
+        Mon, 24 Jan 2022 14:53:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66412C340E1;
+        Mon, 24 Jan 2022 14:53:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643035995;
+        bh=/UFZn2Ad3U5S5ZRsk1t55iYX+8gryJpTv4IG7nItYc4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Xe+iouwjWuuESsP10Y68t7k6Yk0aQoWI+HuNVas6ORg9ZrjsawOjAsOPr/UcJYHHP
+         8KaUShnoMa0TT84HpB0JojyeNbuzb3ASxINV9dHu0vCdSKtf0SHhXmLt/tRXALHGeH
+         kNHxM7wd3+mbK30y1aBXQgdcmwXIqlio39fvyBR7abnwt97CRijO52Dd0bPeuxxgzH
+         uzzwre5HvfOcH/Ammtj6B2l9pmj5l3rejzDyEGknm8J12LyVWYhlCH3X1SdutbN3Ol
+         uDOSgl/B6z0v6UHWegE87uCwSvf7pP376SuVTpFoSC2sJcEANI29Y7HdW2aW1NKUJK
+         IflS6HHNbnu0Q==
+Received: by mail-ej1-f49.google.com with SMTP id j2so21915432ejk.6;
+        Mon, 24 Jan 2022 06:53:15 -0800 (PST)
+X-Gm-Message-State: AOAM531vj7JY07noyNXohI8iVE7FMQLwBMeGaxQMJXh1DrIRxHcjQfyW
+        e1OG5oL4Hwu8QwxY56C4vCzpi3Pgh6k5w+dUBA==
+X-Google-Smtp-Source: ABdhPJzKZ0BrDSVscI7GTZTJD8z7zgb4zEFRYYwlxVZkor3vQWVirMqnVnt0UADo/U7N+2UHyxeeQ0FkuTip5UYte6I=
+X-Received: by 2002:a17:906:9503:: with SMTP id u3mr12559207ejx.423.1643035993766;
+ Mon, 24 Jan 2022 06:53:13 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a0d:e611:0:0:0:0:0 with HTTP; Mon, 24 Jan 2022 06:52:30
- -0800 (PST)
-Reply-To: kodjikokou09@gmail.com
-From:   kodji kokou <barristermu0@gmail.com>
-Date:   Mon, 24 Jan 2022 14:52:30 +0000
-Message-ID: <CAL8vDK8Hf+F0Meyoo9ABY7HOUu0y-F3C8fNY=4smynS1VA9P7A@mail.gmail.com>
-Subject: Re
-To:     undisclosed-recipients:;
+References: <20211217173908.3201517-1-robh@kernel.org>
+In-Reply-To: <20211217173908.3201517-1-robh@kernel.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 24 Jan 2022 08:53:02 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLYXYNHRKM9hAhxZjheJZUxiXN3zCwsmwo1kxVvhKn9VA@mail.gmail.com>
+Message-ID: <CAL_JsqLYXYNHRKM9hAhxZjheJZUxiXN3zCwsmwo1kxVvhKn9VA@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: imx8qm: Drop CPU 'arm,armv8' compatible
+To:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The World Health Organization in collaboration with it=E2=80=99s Parent
-Organization United Nations Economic and Social Council has mandated
-this office to diligently disburse the covid19 Palliative/benefit
-mapped out to assist (you), persons affected by the economic meltdown
-the virus has caused.
+On Fri, Dec 17, 2021 at 11:39 AM Rob Herring <robh@kernel.org> wrote:
+>
+> The CPU 'arm,armv8' compatible is only for s/w models, so remove it from
+> i.MX8QM CPU nodes.
+>
+> Cc: Shawn Guo <shawnguo@kernel.org>
+> Cc: Sascha Hauer <s.hauer@pengutronix.de>
+> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+> Cc: Fabio Estevam <festevam@gmail.com>
+> Cc: NXP Linux Team <linux-imx@nxp.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> Note that the PMU node is also wrong as it should have separate A72 and
+> A53 nodes to get uarch specific events, but that needs some GIC changes.
+> ---
+>  arch/arm64/boot/dts/freescale/imx8qm.dtsi | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
 
-Your Covid19 benefit of ($550,000.00) Five hundred and fifty thousand
-United States dollars is ready for disbursement, payment method is via
-Union Togolaise Bank(UTB) ATM Debit Card=E2=80=9D which will be sent to you=
- by
-Fast Link Logistics Courier company. You can only withdraw a maximum
-of $5000 daily till the full funds are totally withdrawn. contact us
-on this emails (kodjikokou09@gmail.com)
+Ping
 
-
-
-Warm Regards,
-kodji kokou
-Union Togolaise Bank
+>
+> diff --git a/arch/arm64/boot/dts/freescale/imx8qm.dtsi b/arch/arm64/boot/dts/freescale/imx8qm.dtsi
+> index aebbe2b84aa1..b13f09ca0404 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8qm.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8qm.dtsi
+> @@ -54,7 +54,7 @@ core1 {
+>
+>                 A53_0: cpu@0 {
+>                         device_type = "cpu";
+> -                       compatible = "arm,cortex-a53", "arm,armv8";
+> +                       compatible = "arm,cortex-a53";
+>                         reg = <0x0 0x0>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&A53_L2>;
+> @@ -62,7 +62,7 @@ A53_0: cpu@0 {
+>
+>                 A53_1: cpu@1 {
+>                         device_type = "cpu";
+> -                       compatible = "arm,cortex-a53", "arm,armv8";
+> +                       compatible = "arm,cortex-a53";
+>                         reg = <0x0 0x1>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&A53_L2>;
+> @@ -70,7 +70,7 @@ A53_1: cpu@1 {
+>
+>                 A53_2: cpu@2 {
+>                         device_type = "cpu";
+> -                       compatible = "arm,cortex-a53", "arm,armv8";
+> +                       compatible = "arm,cortex-a53";
+>                         reg = <0x0 0x2>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&A53_L2>;
+> @@ -78,7 +78,7 @@ A53_2: cpu@2 {
+>
+>                 A53_3: cpu@3 {
+>                         device_type = "cpu";
+> -                       compatible = "arm,cortex-a53", "arm,armv8";
+> +                       compatible = "arm,cortex-a53";
+>                         reg = <0x0 0x3>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&A53_L2>;
+> @@ -86,7 +86,7 @@ A53_3: cpu@3 {
+>
+>                 A72_0: cpu@100 {
+>                         device_type = "cpu";
+> -                       compatible = "arm,cortex-a72", "arm,armv8";
+> +                       compatible = "arm,cortex-a72";
+>                         reg = <0x0 0x100>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&A72_L2>;
+> @@ -94,7 +94,7 @@ A72_0: cpu@100 {
+>
+>                 A72_1: cpu@101 {
+>                         device_type = "cpu";
+> -                       compatible = "arm,cortex-a72", "arm,armv8";
+> +                       compatible = "arm,cortex-a72";
+>                         reg = <0x0 0x101>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&A72_L2>;
+> --
+> 2.32.0
+>

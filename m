@@ -2,26 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8382E4987AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:04:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F184987AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:04:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244981AbiAXSEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:04:21 -0500
-Received: from out2.migadu.com ([188.165.223.204]:13119 "EHLO out2.migadu.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241814AbiAXSEG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:04:06 -0500
+        id S244990AbiAXSEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:04:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244910AbiAXSEI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 13:04:08 -0500
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC7FC06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:04:07 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1643047445;
+        t=1643047446;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=oezMiLyxVhF2aG84EFC26Sv8fZTyXG8nFAITNGxgkbE=;
-        b=hKYMToa+bujkmr7wgOye4l3cPA+GjY3bUtFPRBN2WYE9s8EdKZPcq64IcXtxwDWrW0lemI
-        qe0IUyEgHs651mz0vqmC86zcANUjhBwzJcW2aKxQwjw9Az9wQG/nAQ8lLB7Vn2ym1AeIAt
-        /DsOGDhODF3vwda1QrHbTAL1lJfuSuw=
+        bh=28nrHGgMyGK55v/Rjfsypuf+W8Mz9cvlkAPr7bWxb48=;
+        b=fFDtB2KDwFbcEENCkw/8vc4GY+6LJfkdVAPQUtLwY81rGhcfffeiO8X1oggyWxFg/7KuhZ
+        8GM8tTPROF3c30ccsKKSW7CrIL69KUwrv36N6NfYYU0hjZzO1/Eg/MMrzqsd5kwB97XpiF
+        gO400E0HvSdPO/Wu/9oY3GEZ0mg8r3c=
 From:   andrey.konovalov@linux.dev
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
@@ -39,9 +43,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH v6 14/39] kasan, page_alloc: rework kasan_unpoison_pages call site
-Date:   Mon, 24 Jan 2022 19:02:22 +0100
-Message-Id: <0ecebd0d7ccd79150e3620ea4185a32d3dfe912f.1643047180.git.andreyknvl@google.com>
+Subject: [PATCH v6 15/39] kasan: clean up metadata byte definitions
+Date:   Mon, 24 Jan 2022 19:02:23 +0100
+Message-Id: <ac11d6e9e007c95e472e8fdd22efb6074ef3c6d8.1643047180.git.andreyknvl@google.com>
 In-Reply-To: <cover.1643047180.git.andreyknvl@google.com>
 References: <cover.1643047180.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -54,61 +58,50 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Rework the checks around kasan_unpoison_pages() call in
-post_alloc_hook().
+Most of the metadata byte values are only used for Generic KASAN.
 
-The logical condition for calling this function is:
-
-- If a software KASAN mode is enabled, we need to mark shadow memory.
-- Otherwise, HW_TAGS KASAN is enabled, and it only makes sense to
-  set tags if they haven't already been cleared by tag_clear_highpage(),
-  which is indicated by init_tags.
-
-This patch concludes the changes for post_alloc_hook().
+Remove KASAN_KMALLOC_FREETRACK definition for !CONFIG_KASAN_GENERIC
+case, and put it along with other metadata values for the Generic
+mode under a corresponding ifdef.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-
+Reviewed-by: Alexander Potapenko <glider@google.com>
 ---
+ mm/kasan/kasan.h | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Changes v3->v4:
-- Make the confition checks more explicit.
-- Update patch description.
----
- mm/page_alloc.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 2784bd478942..3af38e323391 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -2434,15 +2434,20 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
- 		/* Note that memory is already initialized by the loop above. */
- 		init = false;
- 	}
--	if (kasan_has_integrated_init()) {
--		if (!init_tags) {
--			kasan_unpoison_pages(page, order, init);
-+	/*
-+	 * If either a software KASAN mode is enabled, or,
-+	 * in the case of hardware tag-based KASAN,
-+	 * if memory tags have not been cleared via tag_clear_highpage().
-+	 */
-+	if (IS_ENABLED(CONFIG_KASAN_GENERIC) ||
-+	    IS_ENABLED(CONFIG_KASAN_SW_TAGS) ||
-+	    kasan_hw_tags_enabled() && !init_tags) {
-+		/* Mark shadow memory or set memory tags. */
-+		kasan_unpoison_pages(page, order, init);
+diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+index c17fa8d26ffe..952cd6f9ca46 100644
+--- a/mm/kasan/kasan.h
++++ b/mm/kasan/kasan.h
+@@ -71,15 +71,16 @@ static inline bool kasan_sync_fault_possible(void)
+ #define KASAN_PAGE_REDZONE      0xFE  /* redzone for kmalloc_large allocations */
+ #define KASAN_KMALLOC_REDZONE   0xFC  /* redzone inside slub object */
+ #define KASAN_KMALLOC_FREE      0xFB  /* object was freed (kmem_cache_free/kfree) */
+-#define KASAN_KMALLOC_FREETRACK 0xFA  /* object was freed and has free track set */
+ #else
+ #define KASAN_FREE_PAGE         KASAN_TAG_INVALID
+ #define KASAN_PAGE_REDZONE      KASAN_TAG_INVALID
+ #define KASAN_KMALLOC_REDZONE   KASAN_TAG_INVALID
+ #define KASAN_KMALLOC_FREE      KASAN_TAG_INVALID
+-#define KASAN_KMALLOC_FREETRACK KASAN_TAG_INVALID
+ #endif
  
--			/* Note that memory is already initialized by KASAN. */
-+		/* Note that memory is already initialized by KASAN. */
-+		if (kasan_has_integrated_init())
- 			init = false;
--		}
--	} else {
--		kasan_unpoison_pages(page, order, init);
- 	}
- 	/* If memory is still not initialized, do it now. */
- 	if (init)
++#ifdef CONFIG_KASAN_GENERIC
++
++#define KASAN_KMALLOC_FREETRACK 0xFA  /* object was freed and has free track set */
+ #define KASAN_GLOBAL_REDZONE    0xF9  /* redzone for global variable */
+ #define KASAN_VMALLOC_INVALID   0xF8  /* unallocated space in vmapped page */
+ 
+@@ -110,6 +111,8 @@ static inline bool kasan_sync_fault_possible(void)
+ #define KASAN_ABI_VERSION 1
+ #endif
+ 
++#endif /* CONFIG_KASAN_GENERIC */
++
+ /* Metadata layout customization. */
+ #define META_BYTES_PER_BLOCK 1
+ #define META_BLOCKS_PER_ROW 16
 -- 
 2.25.1
 

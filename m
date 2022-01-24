@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B734D499F28
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED38F499F29
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1840196AbiAXWww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:52:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57030 "EHLO
+        id S1840212AbiAXWwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:52:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452445AbiAXVsu (ORCPT
+        with ESMTP id S1379357AbiAXVsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 16:48:50 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183F4C081197;
-        Mon, 24 Jan 2022 12:32:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F608C0811A1;
+        Mon, 24 Jan 2022 12:33:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE1B26153A;
-        Mon, 24 Jan 2022 20:32:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D43F5C340E5;
-        Mon, 24 Jan 2022 20:32:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A527E6153D;
+        Mon, 24 Jan 2022 20:33:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87855C340E5;
+        Mon, 24 Jan 2022 20:33:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056375;
-        bh=bvRgmzztybuxgeiocEHbhGy+hF9oTXJZSdyxIsdtvhY=;
+        s=korg; t=1643056381;
+        bh=Jmr/r+DKlgP8D2OIcz4/zMDpgMnOFOLO1c0h1VM4wBk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qG3OFeHORoese6DMlw7khWFIT4h5SxVWwhwoSiUtwWJqmK+8eNS5/2aiV9YPXjMzc
-         ABNtl4bocVxZS3tWnNtB9JsZUjokS9LJ+BYNakhomNtxLKh8RJ+afWACepNf6SitrA
-         yK9Jc6SDYQIKrZRe3eFm7IFXbUOHpnzq0limcy1c=
+        b=gBjurC1l9wvsRKLWTp0wiBJEtc1fEkCOmeMd4Wdqkla4H66oaadosCZygavlmE0oC
+         45O/YKXY0TOUOhZ9y30tQwYlu2+5IJhtXMBaPeN1xVr6mkFl4REWsz14zueXdoG/Nl
+         p0dDh+Rz5wenVASG3E6JZvUpFFN9Tglx16uJeHPU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Archie Pusaka <apusaka@chromium.org>,
-        Sonny Sasaka <sonnysasaka@chromium.org>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 462/846] Bluetooth: Fix removing adv when processing cmd complete
-Date:   Mon, 24 Jan 2022 19:39:39 +0100
-Message-Id: <20220124184116.918866562@linuxfoundation.org>
+        stable@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 464/846] libbpf: Validate that .BTF and .BTF.ext sections contain data
+Date:   Mon, 24 Jan 2022 19:39:41 +0100
+Message-Id: <20220124184116.991402743@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -50,45 +49,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Archie Pusaka <apusaka@chromium.org>
+From: Andrii Nakryiko <andrii@kernel.org>
 
-[ Upstream commit 2128939fe2e771645dd88e1938c27fdf96bd1cd0 ]
+[ Upstream commit 62554d52e71797eefa3fc15b54008038837bb2d4 ]
 
-If we remove one instance of adv using Set Extended Adv Enable, there
-is a possibility of issue occurs when processing the Command Complete
-event. Especially, the adv_info might not be found since we already
-remove it in hci_req_clear_adv_instance() -> hci_remove_adv_instance().
-If that's the case, we will mistakenly proceed to remove all adv
-instances instead of just one single instance.
+.BTF and .BTF.ext ELF sections should have SHT_PROGBITS type and contain
+data. If they are not, ELF is invalid or corrupted, so bail out.
+Otherwise this can lead to data->d_buf being NULL and SIGSEGV later on.
+Reported by oss-fuzz project.
 
-This patch fixes the issue by checking the content of the HCI command
-instead of checking whether the adv_info is found.
-
-Signed-off-by: Archie Pusaka <apusaka@chromium.org>
-Reviewed-by: Sonny Sasaka <sonnysasaka@chromium.org>
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/bpf/20211103173213.1376990-4-andrii@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/hci_event.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ tools/lib/bpf/libbpf.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-index 50d1d62c15ec8..20e36126bbdae 100644
---- a/net/bluetooth/hci_event.c
-+++ b/net/bluetooth/hci_event.c
-@@ -1325,8 +1325,10 @@ static void hci_cc_le_set_ext_adv_enable(struct hci_dev *hdev,
- 					   &conn->le_conn_timeout,
- 					   conn->conn_timeout);
- 	} else {
--		if (adv) {
--			adv->enabled = false;
-+		if (cp->num_of_sets) {
-+			if (adv)
-+				adv->enabled = false;
-+
- 			/* If just one instance was disabled check if there are
- 			 * any other instance enabled before clearing HCI_LE_ADV
- 			 */
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 0ad29203cbfbf..b7d278b8f4527 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -3035,8 +3035,12 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
+ 		} else if (strcmp(name, MAPS_ELF_SEC) == 0) {
+ 			obj->efile.btf_maps_shndx = idx;
+ 		} else if (strcmp(name, BTF_ELF_SEC) == 0) {
++			if (sh->sh_type != SHT_PROGBITS)
++				return -LIBBPF_ERRNO__FORMAT;
+ 			btf_data = data;
+ 		} else if (strcmp(name, BTF_EXT_ELF_SEC) == 0) {
++			if (sh->sh_type != SHT_PROGBITS)
++				return -LIBBPF_ERRNO__FORMAT;
+ 			btf_ext_data = data;
+ 		} else if (sh.sh_type == SHT_SYMTAB) {
+ 			/* already processed during the first pass above */
 -- 
 2.34.1
 

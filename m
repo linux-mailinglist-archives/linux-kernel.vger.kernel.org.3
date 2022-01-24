@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E565049A04B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E10499E28
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1843646AbiAXXFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:05:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36674 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1583217AbiAXWR1 (ORCPT
+        id S1587903AbiAXWaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:30:04 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47772 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1456084AbiAXVhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:17:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F114DC0617BF;
-        Mon, 24 Jan 2022 12:48:04 -0800 (PST)
+        Mon, 24 Jan 2022 16:37:48 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9B2DB81057;
-        Mon, 24 Jan 2022 20:48:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB1F4C340E5;
-        Mon, 24 Jan 2022 20:48:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4957CB812A7;
+        Mon, 24 Jan 2022 21:37:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 617EAC340E4;
+        Mon, 24 Jan 2022 21:37:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057282;
-        bh=DipoW+9j9osrZ+kfOvN/q/9oNghSGZj1flwFPyKMQQU=;
+        s=korg; t=1643060262;
+        bh=TrEyxXScUQN2ndIprFfTUzN2MsbyjUrfc//izk3BMCk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZnvxrbDGmxJhowmb2nC92JlQocGFYtoa4PNDN7JE1Z5LDzF9rqlX1CN/+Bc+lc3Hd
-         fs1cGlIiBwNV0b9Dj8wa1MmYMauoA25HfiD11fo1xTH7d2CtZQ9ihvccWFtPSSJHH4
-         FLJDs7m8AZiCFJppqU0u2rd4TQK7hz3gdxNUow4o=
+        b=DeJU6osTOOhIoC29NF3vjDJ+1aRVrQI/+NQV4Ch9H8YyHm4BN0hH4XRF8dGo8EOYI
+         xWll1l4ba5KQWc89WyLa4qqqP6mA/E59T0daOW+FwkO8wbKOgkjjEjx+VCuY3vT1OE
+         pBAt8+b5EqXrTtrHOPEhgSBW4nqJZhtytMUtvcDg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Russell King <russell.king@oracle.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH 5.15 762/846] arm64/bpf: Remove 128MB limit for BPF JIT programs
-Date:   Mon, 24 Jan 2022 19:44:39 +0100
-Message-Id: <20220124184127.244740766@linuxfoundation.org>
+        stable@vger.kernel.org, Chunguang Xu <brookxu@tencent.com>,
+        kernel test robot <lkp@intel.com>, Jan Kara <jack@suse.cz>,
+        Theodore Tso <tytso@mit.edu>, stable@kernel.org
+Subject: [PATCH 5.16 0891/1039] ext4: fix a possible ABBA deadlock due to busy PA
+Date:   Mon, 24 Jan 2022 19:44:40 +0100
+Message-Id: <20220124184155.237744472@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,115 +46,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Russell King <russell.king@oracle.com>
+From: Chunguang Xu <brookxu@tencent.com>
 
-commit b89ddf4cca43f1269093942cf5c4e457fd45c335 upstream.
+commit 8c80fb312d7abf8bcd66cca1d843a80318a2c522 upstream.
 
-Commit 91fc957c9b1d ("arm64/bpf: don't allocate BPF JIT programs in module
-memory") restricts BPF JIT program allocation to a 128MB region to ensure
-BPF programs are still in branching range of each other. However this
-restriction should not apply to the aarch64 JIT, since BPF_JMP | BPF_CALL
-are implemented as a 64-bit move into a register and then a BLR instruction -
-which has the effect of being able to call anything without proximity
-limitation.
+We found on older kernel (3.10) that in the scenario of insufficient
+disk space, system may trigger an ABBA deadlock problem, it seems that
+this problem still exists in latest kernel, try to fix it here. The
+main process triggered by this problem is that task A occupies the PA
+and waits for the jbd2 transaction finish, the jbd2 transaction waits
+for the completion of task B's IO (plug_list), but task B waits for
+the release of PA by task A to finish discard, which indirectly forms
+an ABBA deadlock. The related calltrace is as follows:
 
-The practical reason to relax this restriction on JIT memory is that 128MB of
-JIT memory can be quickly exhausted, especially where PAGE_SIZE is 64KB - one
-page is needed per program. In cases where seccomp filters are applied to
-multiple VMs on VM launch - such filters are classic BPF but converted to
-BPF - this can severely limit the number of VMs that can be launched. In a
-world where we support BPF JIT always on, turning off the JIT isn't always an
-option either.
+    Task A
+    vfs_write
+    ext4_mb_new_blocks()
+    ext4_mb_mark_diskspace_used()       JBD2
+    jbd2_journal_get_write_access()  -> jbd2_journal_commit_transaction()
+  ->schedule()                          filemap_fdatawait()
+ |                                              |
+ | Task B                                       |
+ | do_unlinkat()                                |
+ | ext4_evict_inode()                           |
+ | jbd2_journal_begin_ordered_truncate()        |
+ | filemap_fdatawrite_range()                   |
+ | ext4_mb_new_blocks()                         |
+  -ext4_mb_discard_group_preallocations() <-----
 
-Fixes: 91fc957c9b1d ("arm64/bpf: don't allocate BPF JIT programs in module memory")
-Suggested-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Signed-off-by: Russell King <russell.king@oracle.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Tested-by: Alan Maguire <alan.maguire@oracle.com>
-Link: https://lore.kernel.org/bpf/1636131046-5982-2-git-send-email-alan.maguire@oracle.com
+Here, try to cancel ext4_mb_discard_group_preallocations() internal
+retry due to PA busy, and do a limited number of retries inside
+ext4_mb_discard_preallocations(), which can circumvent the above
+problems, but also has some advantages:
+
+1. Since the PA is in a busy state, if other groups have free PAs,
+   keeping the current PA may help to reduce fragmentation.
+2. Continue to traverse forward instead of waiting for the current
+   group PA to be released. In most scenarios, the PA discard time
+   can be reduced.
+
+However, in the case of smaller free space, if only a few groups have
+space, then due to multiple traversals of the group, it may increase
+CPU overhead. But in contrast, I feel that the overall benefit is
+better than the cost.
+
+Signed-off-by: Chunguang Xu <brookxu@tencent.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/1637630277-23496-1-git-send-email-brookxu.cn@gmail.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/include/asm/extable.h |    9 ---------
- arch/arm64/include/asm/memory.h  |    5 +----
- arch/arm64/kernel/traps.c        |    2 +-
- arch/arm64/mm/ptdump.c           |    2 --
- arch/arm64/net/bpf_jit_comp.c    |    7 ++-----
- 5 files changed, 4 insertions(+), 21 deletions(-)
+ fs/ext4/mballoc.c |   40 ++++++++++++++++++----------------------
+ 1 file changed, 18 insertions(+), 22 deletions(-)
 
---- a/arch/arm64/include/asm/extable.h
-+++ b/arch/arm64/include/asm/extable.h
-@@ -22,15 +22,6 @@ struct exception_table_entry
- 
- #define ARCH_HAS_RELATIVE_EXTABLE
- 
--static inline bool in_bpf_jit(struct pt_regs *regs)
--{
--	if (!IS_ENABLED(CONFIG_BPF_JIT))
--		return false;
--
--	return regs->pc >= BPF_JIT_REGION_START &&
--	       regs->pc < BPF_JIT_REGION_END;
--}
--
- #ifdef CONFIG_BPF_JIT
- int arm64_bpf_fixup_exception(const struct exception_table_entry *ex,
- 			      struct pt_regs *regs);
---- a/arch/arm64/include/asm/memory.h
-+++ b/arch/arm64/include/asm/memory.h
-@@ -44,11 +44,8 @@
- #define _PAGE_OFFSET(va)	(-(UL(1) << (va)))
- #define PAGE_OFFSET		(_PAGE_OFFSET(VA_BITS))
- #define KIMAGE_VADDR		(MODULES_END)
--#define BPF_JIT_REGION_START	(_PAGE_END(VA_BITS_MIN))
--#define BPF_JIT_REGION_SIZE	(SZ_128M)
--#define BPF_JIT_REGION_END	(BPF_JIT_REGION_START + BPF_JIT_REGION_SIZE)
- #define MODULES_END		(MODULES_VADDR + MODULES_VSIZE)
--#define MODULES_VADDR		(BPF_JIT_REGION_END)
-+#define MODULES_VADDR		(_PAGE_END(VA_BITS_MIN))
- #define MODULES_VSIZE		(SZ_128M)
- #define VMEMMAP_START		(-(UL(1) << (VA_BITS - VMEMMAP_SHIFT)))
- #define VMEMMAP_END		(VMEMMAP_START + VMEMMAP_SIZE)
---- a/arch/arm64/kernel/traps.c
-+++ b/arch/arm64/kernel/traps.c
-@@ -988,7 +988,7 @@ static struct break_hook bug_break_hook
- static int reserved_fault_handler(struct pt_regs *regs, unsigned int esr)
+--- a/fs/ext4/mballoc.c
++++ b/fs/ext4/mballoc.c
+@@ -4814,7 +4814,7 @@ ext4_mb_release_group_pa(struct ext4_bud
+  */
+ static noinline_for_stack int
+ ext4_mb_discard_group_preallocations(struct super_block *sb,
+-					ext4_group_t group, int needed)
++				     ext4_group_t group, int *busy)
  {
- 	pr_err("%s generated an invalid instruction at %pS!\n",
--		in_bpf_jit(regs) ? "BPF JIT" : "Kernel text patching",
-+		"Kernel text patching",
- 		(void *)instruction_pointer(regs));
+ 	struct ext4_group_info *grp = ext4_get_group_info(sb, group);
+ 	struct buffer_head *bitmap_bh = NULL;
+@@ -4822,8 +4822,7 @@ ext4_mb_discard_group_preallocations(str
+ 	struct list_head list;
+ 	struct ext4_buddy e4b;
+ 	int err;
+-	int busy = 0;
+-	int free, free_total = 0;
++	int free = 0;
  
- 	/* We cannot handle this */
---- a/arch/arm64/mm/ptdump.c
-+++ b/arch/arm64/mm/ptdump.c
-@@ -41,8 +41,6 @@ static struct addr_marker address_marker
- 	{ 0 /* KASAN_SHADOW_START */,	"Kasan shadow start" },
- 	{ KASAN_SHADOW_END,		"Kasan shadow end" },
- #endif
--	{ BPF_JIT_REGION_START,		"BPF start" },
--	{ BPF_JIT_REGION_END,		"BPF end" },
- 	{ MODULES_VADDR,		"Modules start" },
- 	{ MODULES_END,			"Modules end" },
- 	{ VMALLOC_START,		"vmalloc() area" },
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -1138,15 +1138,12 @@ out:
+ 	mb_debug(sb, "discard preallocation for group %u\n", group);
+ 	if (list_empty(&grp->bb_prealloc_list))
+@@ -4846,19 +4845,14 @@ ext4_mb_discard_group_preallocations(str
+ 		goto out_dbg;
+ 	}
  
- u64 bpf_jit_alloc_exec_limit(void)
- {
--	return BPF_JIT_REGION_SIZE;
-+	return VMALLOC_END - VMALLOC_START;
+-	if (needed == 0)
+-		needed = EXT4_CLUSTERS_PER_GROUP(sb) + 1;
+-
+ 	INIT_LIST_HEAD(&list);
+-repeat:
+-	free = 0;
+ 	ext4_lock_group(sb, group);
+ 	list_for_each_entry_safe(pa, tmp,
+ 				&grp->bb_prealloc_list, pa_group_list) {
+ 		spin_lock(&pa->pa_lock);
+ 		if (atomic_read(&pa->pa_count)) {
+ 			spin_unlock(&pa->pa_lock);
+-			busy = 1;
++			*busy = 1;
+ 			continue;
+ 		}
+ 		if (pa->pa_deleted) {
+@@ -4898,22 +4892,13 @@ repeat:
+ 		call_rcu(&(pa)->u.pa_rcu, ext4_mb_pa_callback);
+ 	}
+ 
+-	free_total += free;
+-
+-	/* if we still need more blocks and some PAs were used, try again */
+-	if (free_total < needed && busy) {
+-		ext4_unlock_group(sb, group);
+-		cond_resched();
+-		busy = 0;
+-		goto repeat;
+-	}
+ 	ext4_unlock_group(sb, group);
+ 	ext4_mb_unload_buddy(&e4b);
+ 	put_bh(bitmap_bh);
+ out_dbg:
+ 	mb_debug(sb, "discarded (%d) blocks preallocated for group %u bb_free (%d)\n",
+-		 free_total, group, grp->bb_free);
+-	return free_total;
++		 free, group, grp->bb_free);
++	return free;
  }
  
- void *bpf_jit_alloc_exec(unsigned long size)
+ /*
+@@ -5455,13 +5440,24 @@ static int ext4_mb_discard_preallocation
  {
--	return __vmalloc_node_range(size, PAGE_SIZE, BPF_JIT_REGION_START,
--				    BPF_JIT_REGION_END, GFP_KERNEL,
--				    PAGE_KERNEL, 0, NUMA_NO_NODE,
--				    __builtin_return_address(0));
-+	return vmalloc(size);
- }
+ 	ext4_group_t i, ngroups = ext4_get_groups_count(sb);
+ 	int ret;
+-	int freed = 0;
++	int freed = 0, busy = 0;
++	int retry = 0;
  
- void bpf_jit_free_exec(void *addr)
+ 	trace_ext4_mb_discard_preallocations(sb, needed);
++
++	if (needed == 0)
++		needed = EXT4_CLUSTERS_PER_GROUP(sb) + 1;
++ repeat:
+ 	for (i = 0; i < ngroups && needed > 0; i++) {
+-		ret = ext4_mb_discard_group_preallocations(sb, i, needed);
++		ret = ext4_mb_discard_group_preallocations(sb, i, &busy);
+ 		freed += ret;
+ 		needed -= ret;
++		cond_resched();
++	}
++
++	if (needed > 0 && busy && ++retry < 3) {
++		busy = 0;
++		goto repeat;
+ 	}
+ 
+ 	return freed;
 
 

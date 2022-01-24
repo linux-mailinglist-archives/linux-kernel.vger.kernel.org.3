@@ -2,125 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A7A49871F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:41:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12356498721
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244739AbiAXRlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:41:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33135 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244683AbiAXRlR (ORCPT
+        id S244748AbiAXRlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:41:23 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:57120 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244736AbiAXRlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:41:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643046076;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KLmnh7F+9qnrIKW2UFS2DJy4bOHo/tjVCSEI8rXwkN0=;
-        b=KUj3Ye52w/EyCg8CoDKt5xipQYmwbSPg8uTzWgk4r+ssEJQWKd3fMo/QxziVRoy6dQ7BOI
-        96ImPMkErurODfyIGT5K2R662csC+VrYVTjBhq+qOEGG0TJC3FMEohUvcAXymJMQLrNCQ1
-        jo9WycFYVLt5JG71ruvJkt3l8tIgySc=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-212-cQUZn3SHPMW2XMG_NYV9Ew-1; Mon, 24 Jan 2022 12:41:15 -0500
-X-MC-Unique: cQUZn3SHPMW2XMG_NYV9Ew-1
-Received: by mail-qk1-f199.google.com with SMTP id b13-20020a05620a270d00b0047ba5ddde8dso12875617qkp.2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:41:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KLmnh7F+9qnrIKW2UFS2DJy4bOHo/tjVCSEI8rXwkN0=;
-        b=ysZrrRAZ5XzQqVLHfo3DSdqq30gcoWo/3JNxNry/lyBEDmGT4Brruy9s9x54Kw4XJS
-         Q60Ay1HTy3tBWowAYk1rEDe8tFt0KxFEMzYGkuiW/jSKv+AhOK2Ef0+oETm4GPErIyFT
-         K04z1CJ3LcwYfgDMhZVLAlfGHCNg041YvdKi7SWxoPF29/OlRrxkOwq7c1z/17iaL2S2
-         /rzouZ0KdjvLRZPAGQmwGKDeNpTms62YquwuAhVZ6VkUAl9Cr7JR7FWL89B/AE7Ka5cj
-         PXbH2VAy20CAl8nfseraEcOIcTRnHsPvoWFbrJCLhqmjv6Vjkr7zA66r/icmCZ/4B8SP
-         XDtw==
-X-Gm-Message-State: AOAM533eVPYpc+n+sHWlgLmBmlIGbosQQWpzieAOceKc4VH3oPXOJa7J
-        m6g8LoZAxlPZ2DTWz0MjzRIswFAR602dDB8HmcXCwHROTOZQHPD1qfSLRF+q5SUATKsdbJAC+VE
-        8dP7wGwdFWA+ok6GXny0cFcmiYdVDzjH39A2LvyIy
-X-Received: by 2002:a05:6214:21ae:: with SMTP id t14mr5880994qvc.59.1643046075041;
-        Mon, 24 Jan 2022 09:41:15 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzmZ0zoLxqMaj4sgRawFKfYQmeh7BxLZQUfotyGdGqOmghwyprTfohZ9jYN68ECfTUFCiv5VLMuukYTQwYO+9A=
-X-Received: by 2002:a05:6214:21ae:: with SMTP id t14mr5880983qvc.59.1643046074838;
- Mon, 24 Jan 2022 09:41:14 -0800 (PST)
+        Mon, 24 Jan 2022 12:41:21 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20OGkZJH011608;
+        Mon, 24 Jan 2022 17:41:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=KBtcrcZN2Dj1v8WNpi2XQD0gccBGNu2VLbHvNql5mQQ=;
+ b=kWq6BwqQPrt9psLLDQhNXPT/oJp8kerdsRRIvrOqU/rnVAaAEGAUGEHvfFeSxt5w0g8d
+ fSDdWLfw5ljLhcEmUfzwgM+o8leZTNktc5SRea0fHjieEfnXx78JNI0f/NF+Q+Ti4aYP
+ qsDOdBqFzKHmv/lJK8ZRDg2RdkmKJxQAf4Embrv2Kyjjqf2dIx7xI78HHmrmN4tI4wlz
+ nbCGCufm50/2Q0eVBWmRE4wUoKXplcD7O2jxyhtJrTxmiGbqwmobpnEt9lC+s6c3vasz
+ HU5RgutDx0RjFxsHpnBDxpXAWz6VCAmMJfvuSDv7+ycASs93lMZywadZWo2vG1e+bgqf qg== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dsyx9sgct-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Jan 2022 17:41:19 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20OHcGG3010220;
+        Mon, 24 Jan 2022 17:41:17 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 3dr96j71t5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Jan 2022 17:41:17 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20OHVhDt43712958
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Jan 2022 17:31:43 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 21477A4054;
+        Mon, 24 Jan 2022 17:41:14 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BE476A405C;
+        Mon, 24 Jan 2022 17:41:13 +0000 (GMT)
+Received: from osiris (unknown [9.145.65.174])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon, 24 Jan 2022 17:41:13 +0000 (GMT)
+Date:   Mon, 24 Jan 2022 18:41:12 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nico Boehr <nrb@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] uaccess: Add mechanism for key checked access to
+ user memory
+Message-ID: <Ye7kuJ51QWFBGoJ4@osiris>
+References: <YerCfDceDszqbdHU@osiris>
+ <20220124103812.2340666-1-scgl@linux.ibm.com>
 MIME-Version: 1.0
-References: <202201221028.YKA8kSdm-lkp@intel.com> <CAK-6q+h_hb94J3DSXPk=E44kCxiwZ+BE3kMJe09iShRzMb=vzQ@mail.gmail.com>
- <91901e7b-7d82-116c-aaf2-c74c6a6b999c@infradead.org> <CAK-6q+j2jc3pBmbvQ-DCmxveC-UMV75SFc2nC1zwXKe9wm4YPg@mail.gmail.com>
- <20220124124530.GS1951@kadam> <CAK-6q+iZfY=FyOxJfS7cY7MqScs+nU=U3B4NnLnvcLH3fofuAg@mail.gmail.com>
- <CAK-6q+ga2zT2h4oY0=aCXFeU=oaFHbSXGzuVRptB8Hg-YKR7Gw@mail.gmail.com>
-In-Reply-To: <CAK-6q+ga2zT2h4oY0=aCXFeU=oaFHbSXGzuVRptB8Hg-YKR7Gw@mail.gmail.com>
-From:   Alexander Aring <aahringo@redhat.com>
-Date:   Mon, 24 Jan 2022 12:41:04 -0500
-Message-ID: <CAK-6q+jfA2k1TFrLqK4YN2vshgLidD=6r_CCV6df_VRFMFO7ag@mail.gmail.com>
-Subject: Re: fs/dlm/midcomms.c:913:22: sparse: sparse: restricted __le32
- degrades to integer
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, David Teigland <teigland@redhat.com>,
-        cluster-devel <cluster-devel@redhat.com>,
-        linux-sparse@vger.kernel.org, rcu@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220124103812.2340666-1-scgl@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: rj8QOKdQUuEwR0-vuUm2njUYNKDE0nSx
+X-Proofpoint-ORIG-GUID: rj8QOKdQUuEwR0-vuUm2njUYNKDE0nSx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-24_09,2022-01-24_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
+ suspectscore=0 impostorscore=0 malwarescore=0 spamscore=0 mlxlogscore=999
+ phishscore=0 lowpriorityscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2201240116
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Jan 24, 2022 at 11:38:12AM +0100, Janis Schoetterl-Glausch wrote:
+> KVM on s390 needs a mechanism to do accesses to guest memory
+> that honors storage key protection.
+> __copy_from/to_user_with_key is implemented by introducing
+> raw_copy_from/to_user_with_key.
+> Since the existing uaccess implementation on s390 makes use of move
+> instructions that support having an additional access key supplied,
+> we can implement raw_copy_from/to_user_with_key by enhancing the
+> existing implementation.
+> 
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> ---
+> 
+> This works for us and compiles on other architectures (tested x86).
+> The patch only implements __copy_from/to_user_with_key, since those
+> are the ones we actually need. On other architectures those functions
+> don't exists, but they aren't used either, so it's not a problem.
 
-On Mon, Jan 24, 2022 at 12:36 PM Alexander Aring <aahringo@redhat.com> wrote:
->
-> Hi,
->
-> On Mon, Jan 24, 2022 at 12:21 PM Alexander Aring <aahringo@redhat.com> wrote:
-> >
-> > Hi,
-> >
-> > On Mon, Jan 24, 2022 at 7:46 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
-> > >
-> > > On Sun, Jan 23, 2022 at 01:41:52PM -0500, Alexander Aring wrote:
-> > > >
-> > > > I see also:
-> > > >
-> > > > fs/dlm/midcomms.c:213:1: sparse: sparse: symbol
-> > > > '__srcu_struct_nodes_srcu' was not declared. Should it be static?
-> > > >
-> > >
-> > > Why not just do this?  (Untested.  Maybe I don't understand?)
-> > >
-> > > diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
-> > > index cb1f4351e8ba..a164089abec4 100644
-> > > --- a/include/linux/srcutree.h
-> > > +++ b/include/linux/srcutree.h
-> > > @@ -121,7 +121,7 @@ struct srcu_struct {
-> > >  #ifdef MODULE
-> > >  # define __DEFINE_SRCU(name, is_static)                                        \
-> > >         is_static struct srcu_struct name;                              \
-> > > -       struct srcu_struct * const __srcu_struct_##name                 \
-> > > +       is_static struct srcu_struct * const __srcu_struct_##name       \
-> > >                 __section("___srcu_struct_ptrs") = &name
-> > >  #else
-> > >  # define __DEFINE_SRCU(name, is_static)                                        \
-> > >
-> >
-> > I tried it and yes it will fix the issue and introduce another one
-> > about "is_static struct srcu_struct * const __srcu_struct_##name" is
-> > unused ("-Wunused-const-variable").
-> > I added a __maybe_unused after the introduced is_static and it seems
-> > to fix the introduced issue, now it compiles and sparse is happy. I am
-> > not sure if this is the right fix?
->
-> it is obviously unused, but it has something to do with
-> "__section("___srcu_struct_ptrs")" and during module loading it, I
-> suppose, srcu tries to access it to find whatever needs to be
-> registered?
+Adding an API where only underscored function names are to be used can be
+considered suboptimal.
 
-Sorry, but if this is true then it can't be declared as static... and
-we are at the beginning again.
+> Should we also implement single and no underscore variants? Why?
+> Completeness?
 
-- Alex
+Please make this _fully_ symmetrical to the existing copy_to/from_user()
+implementations, like I tried to say several times. Maybe I wasn't clear
+enough about this. Also the default implementation - that is if an
+architecture makes use of copy_to_user_key() without providing a
+raw_copy_from_user_key() implementation - should fallback to regular
+copy_to_user() semantics, like I tried to outline with the ifndef example
+of raw_copy_from_user_key() previously.
 
+Furthermore this should be splitted into two patches: one which adds the
+common code infrastructure, like described above; and a second patch which
+adds the actual s390 architecture backend/override.
+
+The patches should contain a _detailed_ description why the first patch,
+aka API, should probably be in common code (staying in sync with code
+instrumentation, etc.); and of course it should contain enough information
+for people not familiar with s390's storage keys so they can figure out
+what this is about.
+
+Hopefully we get some feedback and either this is acceptable for common
+code one way or the other, or we have to maintain this on our own, and get
+the additional maintenance cost for free.
+
+Please make sure to add Al Viro, Kees Cook, Arnd Bergmann, and Andrew
+Morton to cc on your next version, so we hopefully come to a conclusion and
+can move on.

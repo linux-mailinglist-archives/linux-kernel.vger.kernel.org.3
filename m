@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE0E498A63
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:03:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59398498DDA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344335AbiAXTDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:03:08 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56022 "EHLO
+        id S1346842AbiAXThN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:37:13 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55356 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245690AbiAXS6L (ORCPT
+        with ESMTP id S1347717AbiAXTcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:58:11 -0500
+        Mon, 24 Jan 2022 14:32:11 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 603B9B8123F;
-        Mon, 24 Jan 2022 18:58:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82A27C340E8;
-        Mon, 24 Jan 2022 18:58:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 31972B8122C;
+        Mon, 24 Jan 2022 19:32:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 578C8C340E5;
+        Mon, 24 Jan 2022 19:32:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050689;
-        bh=agoNMi90ZhC246six2voGL/6IHiCf2B0eTOKT3NbzG8=;
+        s=korg; t=1643052728;
+        bh=0Qm+dWNT8phmQ4tU5kIS5Fv5RyW+rZO78HIgmJ65jAo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SqKRrne+5bqTus4Kir9dfosYya4d0CUQdQKxW144aOjcijm1ufg8odO7XNLvarew3
-         +a8q6Xuv/f+Jx5OM/XDkIMpF8916kpmaodFGaQlxL8bWTrvwcxIFyTSLTE/5hnaGkb
-         B+7k3d89SIqeP7+vKhKjUl57MdHeiKofjhi2qvvA=
+        b=YWMVb79GFm4XZ+8BeXOZEaf+Thcyo4n3U1GUR3Key/R5+qhSlw+xTAPRrhDQeXCSp
+         Ahd0H38mcdCrfD6emf8RMrwzQTogvefL7/y/3qHRrQRZaWuNzlmO40EeiuxruS4sVV
+         gPHHLlCZp8T4Bngbe9X+b+XYeWDjaNBHV13JH5Hk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Paul Mackerras <paulus@samba.org>, linux-ppp@vger.kernel.org,
-        syzbot <syzkaller@googlegroups.com>,
-        Guillaume Nault <gnault@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 049/157] ppp: ensure minimum packet size in ppp_write()
+        stable@vger.kernel.org, Vasily Khoruzhick <anarsoul@gmail.com>,
+        Roman Stratiienko <r.stratiienko@gmail.com>,
+        Qiang Yu <yuq825@gmail.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 155/320] drm/lima: fix warning when CONFIG_DEBUG_SG=y & CONFIG_DMA_API_DEBUG=y
 Date:   Mon, 24 Jan 2022 19:42:19 +0100
-Message-Id: <20220124183934.347808204@linuxfoundation.org>
+Message-Id: <20220124183958.901709370@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,102 +46,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Qiang Yu <yuq825@gmail.com>
 
-[ Upstream commit 44073187990d5629804ce0627525f6ea5cfef171 ]
+[ Upstream commit 89636a06fa2ee7826a19c39c19a9bc99ab9340a9 ]
 
-It seems pretty clear ppp layer assumed user space
-would always be kind to provide enough data
-in their write() to a ppp device.
+Otherwise get following warning:
 
-This patch makes sure user provides at least
-2 bytes.
+DMA-API: lima 1c40000.gpu: mapping sg segment longer than device claims to support [len=4149248] [max=65536]
 
-It adds PPP_PROTO_LEN macro that could replace
-in net-next many occurrences of hard-coded 2 value.
+See: https://gitlab.freedesktop.org/mesa/mesa/-/issues/5496
 
-I replaced only one occurrence to ease backports
-to stable kernels.
-
-The bug manifests in the following report:
-
-BUG: KMSAN: uninit-value in ppp_send_frame+0x28d/0x27c0 drivers/net/ppp/ppp_generic.c:1740
- ppp_send_frame+0x28d/0x27c0 drivers/net/ppp/ppp_generic.c:1740
- __ppp_xmit_process+0x23e/0x4b0 drivers/net/ppp/ppp_generic.c:1640
- ppp_xmit_process+0x1fe/0x480 drivers/net/ppp/ppp_generic.c:1661
- ppp_write+0x5cb/0x5e0 drivers/net/ppp/ppp_generic.c:513
- do_iter_write+0xb0c/0x1500 fs/read_write.c:853
- vfs_writev fs/read_write.c:924 [inline]
- do_writev+0x645/0xe00 fs/read_write.c:967
- __do_sys_writev fs/read_write.c:1040 [inline]
- __se_sys_writev fs/read_write.c:1037 [inline]
- __x64_sys_writev+0xe5/0x120 fs/read_write.c:1037
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Uninit was created at:
- slab_post_alloc_hook mm/slab.h:524 [inline]
- slab_alloc_node mm/slub.c:3251 [inline]
- __kmalloc_node_track_caller+0xe0c/0x1510 mm/slub.c:4974
- kmalloc_reserve net/core/skbuff.c:354 [inline]
- __alloc_skb+0x545/0xf90 net/core/skbuff.c:426
- alloc_skb include/linux/skbuff.h:1126 [inline]
- ppp_write+0x11d/0x5e0 drivers/net/ppp/ppp_generic.c:501
- do_iter_write+0xb0c/0x1500 fs/read_write.c:853
- vfs_writev fs/read_write.c:924 [inline]
- do_writev+0x645/0xe00 fs/read_write.c:967
- __do_sys_writev fs/read_write.c:1040 [inline]
- __se_sys_writev fs/read_write.c:1037 [inline]
- __x64_sys_writev+0xe5/0x120 fs/read_write.c:1037
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: linux-ppp@vger.kernel.org
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Acked-by: Guillaume Nault <gnault@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Reviewed-by: Vasily Khoruzhick <anarsoul@gmail.com>
+Reported-by: Roman Stratiienko <r.stratiienko@gmail.com>
+Signed-off-by: Qiang Yu <yuq825@gmail.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211031041604.187216-1-yuq825@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ppp/ppp_generic.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/lima/lima_device.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ppp/ppp_generic.c b/drivers/net/ppp/ppp_generic.c
-index 0a29844676f92..6287d2ad77c6d 100644
---- a/drivers/net/ppp/ppp_generic.c
-+++ b/drivers/net/ppp/ppp_generic.c
-@@ -71,6 +71,8 @@
- #define MPHDRLEN	6	/* multilink protocol header length */
- #define MPHDRLEN_SSN	4	/* ditto with short sequence numbers */
+diff --git a/drivers/gpu/drm/lima/lima_device.c b/drivers/gpu/drm/lima/lima_device.c
+index d86b8d81a483a..155971c57b2d5 100644
+--- a/drivers/gpu/drm/lima/lima_device.c
++++ b/drivers/gpu/drm/lima/lima_device.c
+@@ -293,6 +293,7 @@ int lima_device_init(struct lima_device *ldev)
+ 	struct resource *res;
  
-+#define PPP_PROTO_LEN	2
-+
- /*
-  * An instance of /dev/ppp can be associated with either a ppp
-  * interface unit or a ppp channel.  In both cases, file->private_data
-@@ -500,6 +502,9 @@ static ssize_t ppp_write(struct file *file, const char __user *buf,
+ 	dma_set_coherent_mask(ldev->dev, DMA_BIT_MASK(32));
++	dma_set_max_seg_size(ldev->dev, UINT_MAX);
  
- 	if (!pf)
- 		return -ENXIO;
-+	/* All PPP packets should start with the 2-byte protocol */
-+	if (count < PPP_PROTO_LEN)
-+		return -EINVAL;
- 	ret = -ENOMEM;
- 	skb = alloc_skb(count + pf->hdrlen, GFP_KERNEL);
- 	if (!skb)
-@@ -1563,7 +1568,7 @@ ppp_send_frame(struct ppp *ppp, struct sk_buff *skb)
- 	}
- 
- 	++ppp->stats64.tx_packets;
--	ppp->stats64.tx_bytes += skb->len - 2;
-+	ppp->stats64.tx_bytes += skb->len - PPP_PROTO_LEN;
- 
- 	switch (proto) {
- 	case PPP_IP:
+ 	err = lima_clk_init(ldev);
+ 	if (err)
 -- 
 2.34.1
 

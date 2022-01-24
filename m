@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC66498A91
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:06:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6FCD498E6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346278AbiAXTFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:05:15 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58564 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344910AbiAXS7g (ORCPT
+        id S1355457AbiAXTlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:41:23 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57448 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353662AbiAXTfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:59:36 -0500
+        Mon, 24 Jan 2022 14:35:10 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE2AE60909;
-        Mon, 24 Jan 2022 18:59:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EDD5C340E5;
-        Mon, 24 Jan 2022 18:59:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D8B81B811FC;
+        Mon, 24 Jan 2022 19:35:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E698CC340E5;
+        Mon, 24 Jan 2022 19:35:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050775;
-        bh=ehxo8YQgznHOl0EbViewbaIP5NiLJZCNpNXsawUryR8=;
+        s=korg; t=1643052907;
+        bh=kd999wTU3fAGULJUDrGvKzHoIuOBNt+L72OBcGIqlCE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d0Hj4omVSC/gbT5VkWrXoDeAft0RgdnaWh75xGAFmBhj5eFI1UlCQyuftjjqChv7l
-         fq8mBZ+gMse6fVab1ubiJb6fPydtfEADykPUvpbr2RslMAtRhIoSijlElNrO2oSD2/
-         FX1Zx7te5hAdfi3ZsbxJ/tOdRgJPNfJKESbtm73Q=
+        b=IOC9Kxhlo0nc8qtXGuGVx3nPfqpsJgYwXINNi1Feghn0kb+dB5xSiVhV42mO7dicX
+         BI5AnwOlVUFfZ8G0lHf85UswEgllMEQkM/0dQYlSSDiG0m9EzhRQPPTX/6Uni7AIzB
+         /74z6NAwqWO+4Vi0jzc6SdKpsCXcYwCo2rpPSmGE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Julia Lawall <Julia.Lawall@lip6.fr>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Maxime Bizon <mbizon@freebox.fr>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 107/157] powerpc/cell: add missing of_node_put
+Subject: [PATCH 5.4 213/320] net: mdio: Demote probed message to debug print
 Date:   Mon, 24 Jan 2022 19:43:17 +0100
-Message-Id: <20220124183936.163649241@linuxfoundation.org>
+Message-Id: <20220124184000.880534322@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,55 +47,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Julia Lawall <Julia.Lawall@lip6.fr>
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-[ Upstream commit a841fd009e51c8c0a8f07c942e9ab6bb48da8858 ]
+[ Upstream commit 7590fc6f80ac2cbf23e6b42b668bbeded070850b ]
 
-for_each_node_by_name performs an of_node_get on each iteration, so
-a break out of the loop requires an of_node_put.
+On systems with large numbers of MDIO bus/muxes the message indicating
+that a given MDIO bus has been successfully probed is repeated for as
+many buses we have, which can eat up substantial boot time for no
+reason, demote to a debug print.
 
-A simplified version of the semantic patch that fixes this problem is as
-follows (http://coccinelle.lip6.fr):
-
-// <smpl>
-@@
-expression e,e1;
-local idexpression n;
-@@
-
- for_each_node_by_name(n, e1) {
-   ... when != of_node_put(n)
-       when != e = n
-(
-   return n;
-|
-+  of_node_put(n);
-?  return ...;
-)
-   ...
- }
-// </smpl>
-
-Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/1448051604-25256-7-git-send-email-Julia.Lawall@lip6.fr
+Reported-by: Maxime Bizon <mbizon@freebox.fr>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220103194024.2620-1-f.fainelli@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/platforms/cell/iommu.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/phy/mdio_bus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/platforms/cell/iommu.c b/arch/powerpc/platforms/cell/iommu.c
-index 7ff51f96a00e8..8df43781f5db9 100644
---- a/arch/powerpc/platforms/cell/iommu.c
-+++ b/arch/powerpc/platforms/cell/iommu.c
-@@ -1107,6 +1107,7 @@ static int __init cell_iommu_fixed_mapping_init(void)
- 			if (hbase < dbase || (hend > (dbase + dsize))) {
- 				pr_debug("iommu: hash window doesn't fit in"
- 					 "real DMA window\n");
-+				of_node_put(np);
- 				return -1;
- 			}
- 		}
+diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
+index bec73f0640d03..b0a439248ff69 100644
+--- a/drivers/net/phy/mdio_bus.c
++++ b/drivers/net/phy/mdio_bus.c
+@@ -433,7 +433,7 @@ int __mdiobus_register(struct mii_bus *bus, struct module *owner)
+ 	mdiobus_setup_mdiodev_from_board_info(bus, mdiobus_create_device);
+ 
+ 	bus->state = MDIOBUS_REGISTERED;
+-	pr_info("%s: probed\n", bus->name);
++	dev_dbg(&bus->dev, "probed\n");
+ 	return 0;
+ 
+ error:
 -- 
 2.34.1
 

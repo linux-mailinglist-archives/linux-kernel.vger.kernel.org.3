@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C95498C54
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B106498D56
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348870AbiAXTTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:19:50 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36414 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347827AbiAXTLM (ORCPT
+        id S1352837AbiAXTbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:31:10 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:49180 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346367AbiAXTXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:11:12 -0500
+        Mon, 24 Jan 2022 14:23:06 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77718B811FC;
-        Mon, 24 Jan 2022 19:11:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E68EC340E5;
-        Mon, 24 Jan 2022 19:11:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEC9C61490;
+        Mon, 24 Jan 2022 19:23:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BECAC36AE3;
+        Mon, 24 Jan 2022 19:23:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051470;
-        bh=4k2z4KLtYvdYk31HaIx1OrD6ZDakKeeWxnh9mTjMlRk=;
+        s=korg; t=1643052182;
+        bh=fqghv2tM9KQdZtwnpamw7ZoE6favq2oByT6WYmfaJKk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ykzvh0uKlgAaTqHvq9SGTrYi/Z+bxy5JjckihQphPF5pzkTsOaHOyypGbXpi6ylMo
-         Y4pRCSSOausjuyrMlCYDihD9321aPK8MNC577nNOX8UaiLWKOZFmebwIgW9d9kzBCM
-         goQU9PZ7v7c8+uVUyoT7GmZ4DaJtOm95fNSxVHWc=
+        b=VOaSXvOxxv9voBj/zuy+k6rmOPU+tc98sbAO+R8u5Y6osuPSnQLYLRxFi0Wlz/85Y
+         RSHuP4sfm3wvWbzTMV0JYM91G7gtSPV5aK3W6csp7BNqfnmDnPyr378wrGiXp91RBj
+         rlXlDXH4GllLagTIVum6HJAl6tKj0xa0rkc+nnWk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baoquan He <bhe@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 145/186] scsi: sr: Dont use GFP_DMA
+Subject: [PATCH 4.19 182/239] powerpc/watchdog: Fix missed watchdog reset due to memory ordering race
 Date:   Mon, 24 Jan 2022 19:43:40 +0100
-Message-Id: <20220124183941.770293747@linuxfoundation.org>
+Message-Id: <20220124183948.881059269@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,59 +47,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Nicholas Piggin <npiggin@gmail.com>
 
-[ Upstream commit d94d94969a4ba07a43d62429c60372320519c391 ]
+[ Upstream commit 5dad4ba68a2483fc80d70b9dc90bbe16e1f27263 ]
 
-The allocated buffers are used as a command payload, for which the block
-layer and/or DMA API do the proper bounce buffering if needed.
+It is possible for all CPUs to miss the pending cpumask becoming clear,
+and then nobody resetting it, which will cause the lockup detector to
+stop working. It will eventually expire, but watchdog_smp_panic will
+avoid doing anything if the pending mask is clear and it will never be
+reset.
 
-Link: https://lore.kernel.org/r/20211222090842.920724-1-hch@lst.de
-Reported-by: Baoquan He <bhe@redhat.com>
-Reviewed-by: Baoquan He <bhe@redhat.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Order the cpumask clear vs the subsequent test to close this race.
+
+Add an extra check for an empty pending mask when the watchdog fires and
+finds its bit still clear, to try to catch any other possible races or
+bugs here and keep the watchdog working. The extra test in
+arch_touch_nmi_watchdog is required to prevent the new warning from
+firing off.
+
+Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+Reviewed-by: Laurent Dufour <ldufour@linux.ibm.com>
+Debugged-by: Laurent Dufour <ldufour@linux.ibm.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20211110025056.2084347-2-npiggin@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/sr.c        | 2 +-
- drivers/scsi/sr_vendor.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ arch/powerpc/kernel/watchdog.c | 41 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 40 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
-index be2daf5536ff7..180087d1c6cdb 100644
---- a/drivers/scsi/sr.c
-+++ b/drivers/scsi/sr.c
-@@ -885,7 +885,7 @@ static void get_capabilities(struct scsi_cd *cd)
+diff --git a/arch/powerpc/kernel/watchdog.c b/arch/powerpc/kernel/watchdog.c
+index af3c15a1d41eb..75b2a6c4db5a5 100644
+--- a/arch/powerpc/kernel/watchdog.c
++++ b/arch/powerpc/kernel/watchdog.c
+@@ -132,6 +132,10 @@ static void set_cpumask_stuck(const struct cpumask *cpumask, u64 tb)
+ {
+ 	cpumask_or(&wd_smp_cpus_stuck, &wd_smp_cpus_stuck, cpumask);
+ 	cpumask_andnot(&wd_smp_cpus_pending, &wd_smp_cpus_pending, cpumask);
++	/*
++	 * See wd_smp_clear_cpu_pending()
++	 */
++	smp_mb();
+ 	if (cpumask_empty(&wd_smp_cpus_pending)) {
+ 		wd_smp_last_reset_tb = tb;
+ 		cpumask_andnot(&wd_smp_cpus_pending,
+@@ -217,13 +221,44 @@ static void wd_smp_clear_cpu_pending(int cpu, u64 tb)
  
- 
- 	/* allocate transfer buffer */
--	buffer = kmalloc(512, GFP_KERNEL | GFP_DMA);
-+	buffer = kmalloc(512, GFP_KERNEL);
- 	if (!buffer) {
- 		sr_printk(KERN_ERR, cd, "out of memory.\n");
+ 			cpumask_clear_cpu(cpu, &wd_smp_cpus_stuck);
+ 			wd_smp_unlock(&flags);
++		} else {
++			/*
++			 * The last CPU to clear pending should have reset the
++			 * watchdog so we generally should not find it empty
++			 * here if our CPU was clear. However it could happen
++			 * due to a rare race with another CPU taking the
++			 * last CPU out of the mask concurrently.
++			 *
++			 * We can't add a warning for it. But just in case
++			 * there is a problem with the watchdog that is causing
++			 * the mask to not be reset, try to kick it along here.
++			 */
++			if (unlikely(cpumask_empty(&wd_smp_cpus_pending)))
++				goto none_pending;
+ 		}
  		return;
-diff --git a/drivers/scsi/sr_vendor.c b/drivers/scsi/sr_vendor.c
-index e3b0ce25162ba..2887be4316be9 100644
---- a/drivers/scsi/sr_vendor.c
-+++ b/drivers/scsi/sr_vendor.c
-@@ -119,7 +119,7 @@ int sr_set_blocklength(Scsi_CD *cd, int blocklength)
- 		density = (blocklength > 2048) ? 0x81 : 0x83;
- #endif
+ 	}
++
+ 	cpumask_clear_cpu(cpu, &wd_smp_cpus_pending);
++
++	/*
++	 * Order the store to clear pending with the load(s) to check all
++	 * words in the pending mask to check they are all empty. This orders
++	 * with the same barrier on another CPU. This prevents two CPUs
++	 * clearing the last 2 pending bits, but neither seeing the other's
++	 * store when checking if the mask is empty, and missing an empty
++	 * mask, which ends with a false positive.
++	 */
++	smp_mb();
+ 	if (cpumask_empty(&wd_smp_cpus_pending)) {
+ 		unsigned long flags;
  
--	buffer = kmalloc(512, GFP_KERNEL | GFP_DMA);
-+	buffer = kmalloc(512, GFP_KERNEL);
- 	if (!buffer)
- 		return -ENOMEM;
++none_pending:
++		/*
++		 * Double check under lock because more than one CPU could see
++		 * a clear mask with the lockless check after clearing their
++		 * pending bits.
++		 */
+ 		wd_smp_lock(&flags);
+ 		if (cpumask_empty(&wd_smp_cpus_pending)) {
+ 			wd_smp_last_reset_tb = tb;
+@@ -314,8 +349,12 @@ void arch_touch_nmi_watchdog(void)
+ {
+ 	unsigned long ticks = tb_ticks_per_usec * wd_timer_period_ms * 1000;
+ 	int cpu = smp_processor_id();
+-	u64 tb = get_tb();
++	u64 tb;
  
-@@ -167,7 +167,7 @@ int sr_cd_check(struct cdrom_device_info *cdi)
- 	if (cd->cdi.mask & CDC_MULTI_SESSION)
- 		return 0;
- 
--	buffer = kmalloc(512, GFP_KERNEL | GFP_DMA);
-+	buffer = kmalloc(512, GFP_KERNEL);
- 	if (!buffer)
- 		return -ENOMEM;
- 
++	if (!cpumask_test_cpu(cpu, &watchdog_cpumask))
++		return;
++
++	tb = get_tb();
+ 	if (tb - per_cpu(wd_timer_tb, cpu) >= ticks) {
+ 		per_cpu(wd_timer_tb, cpu) = tb;
+ 		wd_smp_clear_cpu_pending(cpu, tb);
 -- 
 2.34.1
 

@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E99BA499A2E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09682499BD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:05:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1457519AbiAXVlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:41:45 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57456 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445711AbiAXVEs (ORCPT
+        id S1576673AbiAXVzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:55:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1450846AbiAXVVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:04:48 -0500
+        Mon, 24 Jan 2022 16:21:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A9BC0604DF;
+        Mon, 24 Jan 2022 12:16:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 21F5AB8123D;
-        Mon, 24 Jan 2022 21:04:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20E8DC340EA;
-        Mon, 24 Jan 2022 21:04:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98BCBB8122F;
+        Mon, 24 Jan 2022 20:16:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3D5FC340E5;
+        Mon, 24 Jan 2022 20:16:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058284;
-        bh=B2XzkCbD1hJiPE4C447BD00cSG+WKckSPUTUv11flOc=;
+        s=korg; t=1643055371;
+        bh=fH45R+ON9VtofQLm2ZUtUvYmVRrVZ/+s/iF2FwrMnWw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TlV+OK3AQtKuEjxHrjSkMzA/cvGhFvpVh626t0eOIK7rAikFAQueTt5m//8b11MQ4
-         hyRaZ5c2cpZSc7cBrgSaLubsVAYIIA9bDEi4TLzmvKGoRQfGE+J4MmDEKd34CNVeSX
-         YY50MTIfpOUfrsOaublkzQaUy98wAlFyY4eRMGTA=
+        b=FKmwKeF3fk03AHMY0mVmCxCGwP43Yc9zzahP+9mXKgSLbYiJlgFjFXAm9sHh/hYtS
+         NDbADaGlfEk8XPF0RZvKwdaxpp0PpmHNtFEWhTCr17by+HEqkc/GtIx4t6DEnM6ncn
+         Vv9chZRyFJPNpeJ+dSTXUh7R9CBZ+ubUkhd2divA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
+        stable@vger.kernel.org, Tsuchiya Yuto <kitakar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0240/1039] platform/x86: wmi: Fix driver->notify() vs ->probe() race
+Subject: [PATCH 5.15 112/846] media: atomisp: fix inverted error check for ia_css_mipi_is_source_port_valid()
 Date:   Mon, 24 Jan 2022 19:33:49 +0100
-Message-Id: <20220124184133.392081454@linuxfoundation.org>
+Message-Id: <20220124184104.837357983@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,67 +49,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Tsuchiya Yuto <kitakar@gmail.com>
 
-[ Upstream commit 9918878676a5f9e99b98679f04b9e6c0f5426b0a ]
+[ Upstream commit d21ce8c2f7bf6d737b60c09f86db141b9e8e47f0 ]
 
-The driver core sets struct device->driver before calling out
-to the bus' probe() method, this leaves a window where an ACPI
-notify may happen on the WMI object before the driver's
-probe() method has completed running, causing e.g. the
-driver's notify() callback to get called with drvdata
-not yet being set leading to a NULL pointer deref.
+The function ia_css_mipi_is_source_port_valid() returns true if the port
+is valid. So, we can't use the existing err variable as is.
 
-At a check for this to the WMI core, ensuring that the notify()
-callback is not called before the driver is ready.
+To fix this issue while reusing that variable, invert the return value
+when assigning it to the variable.
 
-Fixes: 1686f5444546 ("platform/x86: wmi: Incorporate acpi_install_notify_handler")
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20211128190031.405620-2-hdegoede@redhat.com
+Fixes: 3c0538fbad9f ("media: atomisp: get rid of most checks for ISP2401 version")
+Signed-off-by: Tsuchiya Yuto <kitakar@gmail.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/x86/wmi.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ .../staging/media/atomisp/pci/sh_css_mipi.c   | 24 ++++++++++++-------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/platform/x86/wmi.c b/drivers/platform/x86/wmi.c
-index 46178e03aecad..02aba274c4bc2 100644
---- a/drivers/platform/x86/wmi.c
-+++ b/drivers/platform/x86/wmi.c
-@@ -59,6 +59,7 @@ static_assert(__alignof__(struct guid_block) == 1);
- 
- enum {	/* wmi_block flags */
- 	WMI_READ_TAKES_NO_ARGS,
-+	WMI_PROBED,
- };
- 
- struct wmi_block {
-@@ -1008,6 +1009,7 @@ static int wmi_dev_probe(struct device *dev)
- 		}
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_mipi.c b/drivers/staging/media/atomisp/pci/sh_css_mipi.c
+index 65fc93c5d56bc..c1f2f6151c5f8 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css_mipi.c
++++ b/drivers/staging/media/atomisp/pci/sh_css_mipi.c
+@@ -423,10 +423,12 @@ allocate_mipi_frames(struct ia_css_pipe *pipe,
+ 		return 0; /* AM TODO: Check  */
  	}
  
-+	set_bit(WMI_PROBED, &wblock->flags);
- 	return 0;
+-	if (!IS_ISP2401)
++	if (!IS_ISP2401) {
+ 		port = (unsigned int)pipe->stream->config.source.port.port;
+-	else
+-		err = ia_css_mipi_is_source_port_valid(pipe, &port);
++	} else {
++		/* Returns true if port is valid. So, invert it */
++		err = !ia_css_mipi_is_source_port_valid(pipe, &port);
++	}
  
- probe_misc_failure:
-@@ -1025,6 +1027,8 @@ static void wmi_dev_remove(struct device *dev)
- 	struct wmi_block *wblock = dev_to_wblock(dev);
- 	struct wmi_driver *wdriver = drv_to_wdrv(dev->driver);
+ 	assert(port < N_CSI_PORTS);
  
-+	clear_bit(WMI_PROBED, &wblock->flags);
-+
- 	if (wdriver->filter_callback) {
- 		misc_deregister(&wblock->char_dev);
- 		kfree(wblock->char_dev.name);
-@@ -1322,7 +1326,7 @@ static void acpi_wmi_notify_handler(acpi_handle handle, u32 event,
- 		return;
+@@ -553,10 +555,12 @@ free_mipi_frames(struct ia_css_pipe *pipe)
+ 			return err;
+ 		}
  
- 	/* If a driver is bound, then notify the driver. */
--	if (wblock->dev.dev.driver) {
-+	if (test_bit(WMI_PROBED, &wblock->flags) && wblock->dev.dev.driver) {
- 		struct wmi_driver *driver = drv_to_wdrv(wblock->dev.dev.driver);
- 		struct acpi_buffer evdata = { ACPI_ALLOCATE_BUFFER, NULL };
- 		acpi_status status;
+-		if (!IS_ISP2401)
++		if (!IS_ISP2401) {
+ 			port = (unsigned int)pipe->stream->config.source.port.port;
+-		else
+-			err = ia_css_mipi_is_source_port_valid(pipe, &port);
++		} else {
++			/* Returns true if port is valid. So, invert it */
++			err = !ia_css_mipi_is_source_port_valid(pipe, &port);
++		}
+ 
+ 		assert(port < N_CSI_PORTS);
+ 
+@@ -665,10 +669,12 @@ send_mipi_frames(struct ia_css_pipe *pipe)
+ 		/* TODO: AM: maybe this should be returning an error. */
+ 	}
+ 
+-	if (!IS_ISP2401)
++	if (!IS_ISP2401) {
+ 		port = (unsigned int)pipe->stream->config.source.port.port;
+-	else
+-		err = ia_css_mipi_is_source_port_valid(pipe, &port);
++	} else {
++		/* Returns true if port is valid. So, invert it */
++		err = !ia_css_mipi_is_source_port_valid(pipe, &port);
++	}
+ 
+ 	assert(port < N_CSI_PORTS);
+ 
 -- 
 2.34.1
 

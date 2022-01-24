@@ -2,100 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B4C4985EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:09:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825AA4985EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244076AbiAXRJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:09:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244230AbiAXRJo (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:09:44 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB27FC06173B;
-        Mon, 24 Jan 2022 09:09:44 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id d15-20020a17090a110f00b001b4e7d27474so439954pja.2;
-        Mon, 24 Jan 2022 09:09:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QE8pJtTMoYdDHJAtBqji1V9DieZJck0kxv9CAHW5UMY=;
-        b=crjmhB1Z+RS1q8ktQBw3YUhkzD7s7woazxvUAgl3Rrg1e0fOzcxmWRil91UdTZB7cs
-         O5I7mhZVpzQAd6ZWPStIQVNkNP7AkoIJvyM+SWRtU2LdAWVI5FNctkqLgYMTz+QOrnXV
-         1fH9p1vB7wXtDXz3vz4jRogELrTguBqjnG6ObubR+1/DJ+3S4Ejm8tlXcUvYuGAZT5Qg
-         WQIdmnNsRzc2rdhl1T+kF+Jw0zb5sUrr1YUEtSAMU9LtxZ34eJ/s2Rt7pmp3fR5PqZzy
-         oOuagTQP4oYb1rIEo6bIP8pYFs54esR4/FfC0a0bePIFrTx2RWCxtbSU+7idhPcXDop6
-         35iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QE8pJtTMoYdDHJAtBqji1V9DieZJck0kxv9CAHW5UMY=;
-        b=VS4/rbUDyly4WJOFzRLq+6g3e//NknsKzQBNbAAeJQl0jng19tZatlhKtbxeoF2CVU
-         lEG03stEYc+Abgl20xmxHPnvwnxj/6380hSMrdjfGgQTotdxJxeNLo2SdLsRLxBq2Qbt
-         0W6x3K+OCM0PUstBRWzHwz5nihcTrm67OjmfuypHH7BKpcLm6FN9OJvhwAkq7I8jOS53
-         ghRxLRD7zIEwjpZeNbKp1PN090kRScZE9yEB00mYYPFpHZl5cIcrRiIEMSpVfgjO8XLN
-         9Qiu5W4TaI5up+25hxTEGta4UFIjVqnwiVPcmTzhzlAr9RMPJDksbT9sJ3vBnADg2eet
-         XJhg==
-X-Gm-Message-State: AOAM533LfXF4KtmHw2aREqkZcROjZH7UXYG5Gy6p8OHlXoZH0gLY78sI
-        nUP0uSm4EYZXLVuogl0hYYI=
-X-Google-Smtp-Source: ABdhPJyCHG1ScNMOYjKnM4xN/inKbAncgw3P2Yy6QvhmPW7XJcuRbtEhsblpix6z34++DrJTm6TFAg==
-X-Received: by 2002:a17:90b:4f49:: with SMTP id pj9mr2837537pjb.211.1643044183996;
-        Mon, 24 Jan 2022 09:09:43 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id g5sm13502751pjj.36.2022.01.24.09.09.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jan 2022 09:09:43 -0800 (PST)
-Message-ID: <562d9627-fe34-fbef-e908-d06a1cdd7cb4@gmail.com>
-Date:   Mon, 24 Jan 2022 09:09:41 -0800
+        id S244159AbiAXRKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:10:00 -0500
+Received: from foss.arm.com ([217.140.110.172]:41092 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244090AbiAXRJ6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 12:09:58 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 76333D6E;
+        Mon, 24 Jan 2022 09:09:58 -0800 (PST)
+Received: from [192.168.99.12] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DB3C03F73B;
+        Mon, 24 Jan 2022 09:09:57 -0800 (PST)
+Message-ID: <c7736841-4f60-061e-3a84-d4178be7a292@foss.arm.com>
+Date:   Mon, 24 Jan 2022 17:09:48 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] net: dsa|ethernet: use bool values to pass bool param of
- phy_init_eee
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 03/60] drm/malidp: Add support for the nomodeset kernel
+ parameter
 Content-Language: en-US
-To:     Jisheng Zhang <jszhang@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Bryan Whitehead <bryan.whitehead@microchip.com>,
-        UNGLinuxDriver@microchip.com, Byungho An <bh74.an@samsung.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com
-References: <20220123152241.1480-1-jszhang@kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220123152241.1480-1-jszhang@kernel.org>
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     Liviu Dudau <liviu.dudau@arm.com>
+References: <20211215010008.2545520-1-javierm@redhat.com>
+ <20211215010008.2545520-4-javierm@redhat.com>
+From:   Carsten Haitzler <carsten.haitzler@foss.arm.com>
+Organization: Arm Ltd.
+In-Reply-To: <20211215010008.2545520-4-javierm@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Seems fine to me.
 
+Reviewed-by: Carsten Haitzler <carsten.haitzler@arm.com>
 
-On 1/23/2022 7:22 AM, Jisheng Zhang wrote:
-> The 2nd param of phy_init_eee(): clk_stop_enable is a bool param, use
-> true or false instead of 1/0.
+On 12/15/21 00:59, Javier Martinez Canillas wrote:
+> According to disable Documentation/admin-guide/kernel-parameters.txt, this
+> parameter can be used to disable kernel modesetting.
 > 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-
-Nit: for future changes, if your patch spans multiple 
-subsystems/directories, just go with the top-most subject prefix, for 
-instance here "net: " would have been sufficient. Thanks!
--- 
-Florian
+> DRM drivers will not perform display-mode changes or accelerated rendering
+> and only the systewm system framebuffer will be available if it was set-up.
+> 
+> But only a few DRM drivers currently check for nomodeset, make this driver
+> to also support the command line parameter.
+> 
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> ---
+> 
+>   drivers/gpu/drm/arm/malidp_drv.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/arm/malidp_drv.c b/drivers/gpu/drm/arm/malidp_drv.c
+> index 78d15b04b105..5da4168eb76d 100644
+> --- a/drivers/gpu/drm/arm/malidp_drv.c
+> +++ b/drivers/gpu/drm/arm/malidp_drv.c
+> @@ -938,6 +938,9 @@ static int malidp_platform_probe(struct platform_device *pdev)
+>   	struct device_node *port;
+>   	struct component_match *match = NULL;
+>   
+> +	if (drm_firmware_drivers_only())
+> +		return -ENODEV;
+> +
+>   	if (!pdev->dev.of_node)
+>   		return -ENODEV;
+>   

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2182499FF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE48499F0A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:15:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1842408AbiAXXBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:01:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59100 "EHLO
+        id S1839576AbiAXWvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:51:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573166AbiAXVzI (ORCPT
+        with ESMTP id S1458135AbiAXVmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:55:08 -0500
+        Mon, 24 Jan 2022 16:42:47 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DE3C061781;
-        Mon, 24 Jan 2022 12:37:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8C2C04D602;
+        Mon, 24 Jan 2022 11:28:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79D66B81061;
-        Mon, 24 Jan 2022 20:37:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2C78C340E5;
-        Mon, 24 Jan 2022 20:37:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 73A3CB8121B;
+        Mon, 24 Jan 2022 19:28:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0E30C340E5;
+        Mon, 24 Jan 2022 19:28:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056658;
-        bh=HRXudv1LX55jdNmLURQuWoLwq0VgBqKlNiBl0L6rbbs=;
+        s=korg; t=1643052482;
+        bh=4FbeBf20xb7bbU524D4+GOwUrzmhwbI/YceguH5f59g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AhjmeEqnSqByBG12A5+XLZoecEf7TTghnmOuNVJUeNWfU4KOBVd+/H8BYG0rC/oxd
-         7Jy/6zqvLIMp97IRaf7On48FEVdINbjv1C9nAHPp6qgeu8aDqXpSAnGkg0sRYmNmni
-         t7bBY7elEO82TFzRFuyY1CklPoRx64NBS1Jweli4=
+        b=1+ooUKFPn9fKJdPCzNIAH+5YdmnwoS6Yg2pKEOjJkSoEyOzgNt/4dVpSaY4d9m76Q
+         VXl0XbfyKQtAe00kxo+d16Fa8J5IhQLoJho5rlAoQHLRW4iwAPsHizpxm3r0CbNXtu
+         Dt+zhavZmX+xRPYbU9QhLB6af2XwvsNs5koRi0OI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baochen Qiang <quic_bqiang@quicinc.com>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        stable@vger.kernel.org, Robert Schlabbach <robert_s@gmx.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 540/846] ath11k: Avoid false DEADLOCK warning reported by lockdep
-Date:   Mon, 24 Jan 2022 19:40:57 +0100
-Message-Id: <20220124184119.641288275@linuxfoundation.org>
+Subject: [PATCH 5.4 074/320] media: si2157: Fix "warm" tuner state detection
+Date:   Mon, 24 Jan 2022 19:40:58 +0100
+Message-Id: <20220124183956.248493211@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,179 +49,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baochen Qiang <quic_bqiang@quicinc.com>
+From: Robert Schlabbach <robert_s@gmx.net>
 
-[ Upstream commit 767c94caf0efad136157110787fe221b74cb5c8a ]
+[ Upstream commit a6441ea29cb2c9314654e093a1cd8020b9b851c8 ]
 
-With CONFIG_LOCKDEP=y and CONFIG_DEBUG_SPINLOCK=y, lockdep reports
-below warning:
+Commit e955f959ac52 ("media: si2157: Better check for running tuner in
+init") completely broke the "warm" tuner detection of the si2157 driver
+due to a simple endian error: The Si2157 CRYSTAL_TRIM property code is
+0x0402 and needs to be transmitted LSB first. However, it was inserted
+MSB first, causing the warm detection to always fail and spam the kernel
+log with tuner initialization messages each time the DVB frontend
+device was closed and reopened:
 
-[  166.059415] ============================================
-[  166.059416] WARNING: possible recursive locking detected
-[  166.059418] 5.15.0-wt-ath+ #10 Tainted: G        W  O
-[  166.059420] --------------------------------------------
-[  166.059421] kworker/0:2/116 is trying to acquire lock:
-[  166.059423] ffff9905f2083160 (&srng->lock){+.-.}-{2:2}, at: ath11k_hal_reo_cmd_send+0x20/0x490 [ath11k]
-[  166.059440]
-               but task is already holding lock:
-[  166.059442] ffff9905f2083230 (&srng->lock){+.-.}-{2:2}, at: ath11k_dp_process_reo_status+0x95/0x2d0 [ath11k]
-[  166.059491]
-               other info that might help us debug this:
-[  166.059492]  Possible unsafe locking scenario:
+[  312.215682] si2157 16-0060: found a 'Silicon Labs Si2157-A30'
+[  312.264334] si2157 16-0060: firmware version: 3.0.5
+[  342.248593] si2157 16-0060: found a 'Silicon Labs Si2157-A30'
+[  342.295743] si2157 16-0060: firmware version: 3.0.5
+[  372.328574] si2157 16-0060: found a 'Silicon Labs Si2157-A30'
+[  372.385035] si2157 16-0060: firmware version: 3.0.5
 
-[  166.059493]        CPU0
-[  166.059494]        ----
-[  166.059495]   lock(&srng->lock);
-[  166.059498]   lock(&srng->lock);
-[  166.059500]
-                *** DEADLOCK ***
+Also, the reinitializations were observed disturb _other_ tuners on
+multi-tuner cards such as the Hauppauge WinTV-QuadHD, leading to missed
+or errored packets when one of the other DVB frontend devices on that
+card was opened.
 
-[  166.059501]  May be due to missing lock nesting notation
+Fix the order of the property code bytes to make the warm detection work
+again, also reducing the tuner initialization message in the kernel log
+to once per power-on, as well as fixing the interference with other
+tuners.
 
-[  166.059502] 3 locks held by kworker/0:2/116:
-[  166.059504]  #0: ffff9905c0081548 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x1f6/0x660
-[  166.059511]  #1: ffff9d2400a5fe68 ((debug_obj_work).work){+.+.}-{0:0}, at: process_one_work+0x1f6/0x660
-[  166.059517]  #2: ffff9905f2083230 (&srng->lock){+.-.}-{2:2}, at: ath11k_dp_process_reo_status+0x95/0x2d0 [ath11k]
-[  166.059532]
-               stack backtrace:
-[  166.059534] CPU: 0 PID: 116 Comm: kworker/0:2 Kdump: loaded Tainted: G        W  O      5.15.0-wt-ath+ #10
-[  166.059537] Hardware name: Intel(R) Client Systems NUC8i7HVK/NUC8i7HVB, BIOS HNKBLi70.86A.0059.2019.1112.1124 11/12/2019
-[  166.059539] Workqueue: events free_obj_work
-[  166.059543] Call Trace:
-[  166.059545]  <IRQ>
-[  166.059547]  dump_stack_lvl+0x56/0x7b
-[  166.059552]  __lock_acquire+0xb9a/0x1a50
-[  166.059556]  lock_acquire+0x1e2/0x330
-[  166.059560]  ? ath11k_hal_reo_cmd_send+0x20/0x490 [ath11k]
-[  166.059571]  _raw_spin_lock_bh+0x33/0x70
-[  166.059574]  ? ath11k_hal_reo_cmd_send+0x20/0x490 [ath11k]
-[  166.059584]  ath11k_hal_reo_cmd_send+0x20/0x490 [ath11k]
-[  166.059594]  ath11k_dp_tx_send_reo_cmd+0x3f/0x130 [ath11k]
-[  166.059605]  ath11k_dp_rx_tid_del_func+0x221/0x370 [ath11k]
-[  166.059618]  ath11k_dp_process_reo_status+0x22f/0x2d0 [ath11k]
-[  166.059632]  ? ath11k_dp_service_srng+0x2ea/0x2f0 [ath11k]
-[  166.059643]  ath11k_dp_service_srng+0x2ea/0x2f0 [ath11k]
-[  166.059655]  ath11k_pci_ext_grp_napi_poll+0x1c/0x70 [ath11k_pci]
-[  166.059659]  __napi_poll+0x28/0x230
-[  166.059664]  net_rx_action+0x285/0x310
-[  166.059668]  __do_softirq+0xe6/0x4d2
-[  166.059672]  irq_exit_rcu+0xd2/0xf0
-[  166.059675]  common_interrupt+0xa5/0xc0
-[  166.059678]  </IRQ>
-[  166.059679]  <TASK>
-[  166.059680]  asm_common_interrupt+0x1e/0x40
-[  166.059683] RIP: 0010:_raw_spin_unlock_irqrestore+0x38/0x70
-[  166.059686] Code: 83 c7 18 e8 2a 95 43 ff 48 89 ef e8 22 d2 43 ff 81 e3 00 02 00 00 75 25 9c 58 f6 c4 02 75 2d 48 85 db 74 01 fb bf 01 00 00 00 <e8> 63 2e 40 ff 65 8b 05 8c 59 97 5c 85 c0 74 0a 5b 5d c3 e8 00 6a
-[  166.059689] RSP: 0018:ffff9d2400a5fca0 EFLAGS: 00000206
-[  166.059692] RAX: 0000000000000002 RBX: 0000000000000200 RCX: 0000000000000006
-[  166.059694] RDX: 0000000000000000 RSI: ffffffffa404879b RDI: 0000000000000001
-[  166.059696] RBP: ffff9905c0053000 R08: 0000000000000001 R09: 0000000000000001
-[  166.059698] R10: ffff9d2400a5fc50 R11: 0000000000000001 R12: ffffe186c41e2840
-[  166.059700] R13: 0000000000000001 R14: ffff9905c78a1c68 R15: 0000000000000001
-[  166.059704]  free_debug_processing+0x257/0x3d0
-[  166.059708]  ? free_obj_work+0x1f5/0x250
-[  166.059712]  __slab_free+0x374/0x5a0
-[  166.059718]  ? kmem_cache_free+0x2e1/0x370
-[  166.059721]  ? free_obj_work+0x1f5/0x250
-[  166.059724]  kmem_cache_free+0x2e1/0x370
-[  166.059727]  free_obj_work+0x1f5/0x250
-[  166.059731]  process_one_work+0x28b/0x660
-[  166.059735]  ? process_one_work+0x660/0x660
-[  166.059738]  worker_thread+0x37/0x390
-[  166.059741]  ? process_one_work+0x660/0x660
-[  166.059743]  kthread+0x176/0x1a0
-[  166.059746]  ? set_kthread_struct+0x40/0x40
-[  166.059749]  ret_from_fork+0x22/0x30
-[  166.059754]  </TASK>
+Link: https://lore.kernel.org/linux-media/trinity-2a86eb9d-6264-4387-95e1-ba7b79a4050f-1638392923493@3c-app-gmx-bap03
 
-Since these two lockes are both initialized in ath11k_hal_srng_setup,
-they are assigned with the same key. As a result lockdep suspects that
-the task is trying to acquire the same lock (due to same key) while
-already holding it, and thus reports the DEADLOCK warning. However as
-they are different spinlock instances, the warning is false positive.
-
-On the other hand, even no dead lock indeed, this is a major issue for
-upstream regression testing as it disables lockdep functionality.
-
-Fix it by assigning separate lock class key for each srng->lock.
-
-Tested-on: WCN6855 hw2.0 PCI WLAN.HSP.1.1-01720.1-QCAHSPSWPL_V1_V2_SILICONZ_LITE-1
-Signed-off-by: Baochen Qiang <quic_bqiang@quicinc.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20211209011949.151472-1-quic_bqiang@quicinc.com
+Fixes: e955f959ac52 ("media: si2157: Better check for running tuner in init")
+Reported-by: Robert Schlabbach <robert_s@gmx.net>
+Signed-off-by: Robert Schlabbach <robert_s@gmx.net>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath11k/hal.c | 22 ++++++++++++++++++++++
- drivers/net/wireless/ath/ath11k/hal.h |  2 ++
- 2 files changed, 24 insertions(+)
+ drivers/media/tuners/si2157.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/hal.c b/drivers/net/wireless/ath/ath11k/hal.c
-index eaa0edca55761..5dbf5596c9e8e 100644
---- a/drivers/net/wireless/ath/ath11k/hal.c
-+++ b/drivers/net/wireless/ath/ath11k/hal.c
-@@ -947,6 +947,7 @@ int ath11k_hal_srng_setup(struct ath11k_base *ab, enum hal_ring_type type,
- 	srng->msi_data = params->msi_data;
- 	srng->initialized = 1;
- 	spin_lock_init(&srng->lock);
-+	lockdep_set_class(&srng->lock, hal->srng_key + ring_id);
+diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.c
+index a39e1966816bf..8db9f0eb98b52 100644
+--- a/drivers/media/tuners/si2157.c
++++ b/drivers/media/tuners/si2157.c
+@@ -80,7 +80,7 @@ static int si2157_init(struct dvb_frontend *fe)
+ 	dev_dbg(&client->dev, "\n");
  
- 	for (i = 0; i < HAL_SRNG_NUM_REG_GRP; i++) {
- 		srng->hwreg_base[i] = srng_config->reg_start[i] +
-@@ -1233,6 +1234,24 @@ static int ath11k_hal_srng_create_config(struct ath11k_base *ab)
- 	return 0;
- }
- 
-+static void ath11k_hal_register_srng_key(struct ath11k_base *ab)
-+{
-+	struct ath11k_hal *hal = &ab->hal;
-+	u32 ring_id;
-+
-+	for (ring_id = 0; ring_id < HAL_SRNG_RING_ID_MAX; ring_id++)
-+		lockdep_register_key(hal->srng_key + ring_id);
-+}
-+
-+static void ath11k_hal_unregister_srng_key(struct ath11k_base *ab)
-+{
-+	struct ath11k_hal *hal = &ab->hal;
-+	u32 ring_id;
-+
-+	for (ring_id = 0; ring_id < HAL_SRNG_RING_ID_MAX; ring_id++)
-+		lockdep_unregister_key(hal->srng_key + ring_id);
-+}
-+
- int ath11k_hal_srng_init(struct ath11k_base *ab)
- {
- 	struct ath11k_hal *hal = &ab->hal;
-@@ -1252,6 +1271,8 @@ int ath11k_hal_srng_init(struct ath11k_base *ab)
- 	if (ret)
- 		goto err_free_cont_rdp;
- 
-+	ath11k_hal_register_srng_key(ab);
-+
- 	return 0;
- 
- err_free_cont_rdp:
-@@ -1266,6 +1287,7 @@ void ath11k_hal_srng_deinit(struct ath11k_base *ab)
- {
- 	struct ath11k_hal *hal = &ab->hal;
- 
-+	ath11k_hal_unregister_srng_key(ab);
- 	ath11k_hal_free_cont_rdp(ab);
- 	ath11k_hal_free_cont_wrp(ab);
- 	kfree(hal->srng_config);
-diff --git a/drivers/net/wireless/ath/ath11k/hal.h b/drivers/net/wireless/ath/ath11k/hal.h
-index 35ed3a14e200a..7fdcd8bbf7e98 100644
---- a/drivers/net/wireless/ath/ath11k/hal.h
-+++ b/drivers/net/wireless/ath/ath11k/hal.h
-@@ -901,6 +901,8 @@ struct ath11k_hal {
- 	/* shadow register configuration */
- 	u32 shadow_reg_addr[HAL_SHADOW_NUM_REGS];
- 	int num_shadow_reg_configured;
-+
-+	struct lock_class_key srng_key[HAL_SRNG_RING_ID_MAX];
- };
- 
- u32 ath11k_hal_reo_qdesc_size(u32 ba_window_size, u8 tid);
+ 	/* Try to get Xtal trim property, to verify tuner still running */
+-	memcpy(cmd.args, "\x15\x00\x04\x02", 4);
++	memcpy(cmd.args, "\x15\x00\x02\x04", 4);
+ 	cmd.wlen = 4;
+ 	cmd.rlen = 4;
+ 	ret = si2157_cmd_execute(client, &cmd);
 -- 
 2.34.1
 

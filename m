@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00EED4988EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:51:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3814989F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343764AbiAXSvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:51:44 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49300 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245741AbiAXSue (ORCPT
+        id S1344828AbiAXS7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:59:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44170 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343595AbiAXS5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:50:34 -0500
+        Mon, 24 Jan 2022 13:57:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A337BC061756;
+        Mon, 24 Jan 2022 10:55:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B00BA614B8;
-        Mon, 24 Jan 2022 18:50:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 964E3C340E7;
-        Mon, 24 Jan 2022 18:50:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61852B8121A;
+        Mon, 24 Jan 2022 18:55:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77EE0C340E5;
+        Mon, 24 Jan 2022 18:55:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050233;
-        bh=vY09gumFJYAuICoH+Y13Ik7CFxOnZVlQler2X++ILY4=;
+        s=korg; t=1643050508;
+        bh=+JGX5V6bckuGbkPso6Uwk7DIgB1lnA95aSlFuON2aDk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WlzGpqCMAWHRDcc+me/bY1QWCHDagjCnKdurLVjwhTH9fbL5t5YowdFG9LGa97aNg
-         Zw92ixAeuOC3YXlPHQG+GN3jvX1wnx1RUPAt3vkv48vpH3c5bJLpdn6zWGCI+nAKi9
-         qoZvxX1YleZ9La3Iyw7S6ODkUhXtkwPJ4YHCqYMM=
+        b=L+nqPbPXrgq1c6zWPND5LjU1TxEQo10clOBqFzQqZKU+UAOonlefyEjsnDf6K6KyH
+         ujhiYKUhAQAaTpYySodjeztWyUJLS2sjRhiRhwVGv+GB5JkDTnErQi5b5dIjDNbiyy
+         L6wo+uoNhG3cZKgJfQC8ek/kph3v9XV6OQ8BHLtU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sam Bingner <sam@bingner.com>,
-        Yifeng Li <tomli@tomli.me>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
-Subject: [PATCH 4.4 019/114] PCI: Add function 1 DMA alias quirk for Marvell 88SE9125 SATA controller
-Date:   Mon, 24 Jan 2022 19:41:54 +0100
-Message-Id: <20220124183927.712313393@linuxfoundation.org>
+        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH 4.9 025/157] media: stk1160: fix control-message timeouts
+Date:   Mon, 24 Jan 2022 19:41:55 +0100
+Message-Id: <20220124183933.591621918@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183927.095545464@linuxfoundation.org>
-References: <20220124183927.095545464@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,54 +49,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yifeng Li <tomli@tomli.me>
+From: Johan Hovold <johan@kernel.org>
 
-commit e445375882883f69018aa669b67cbb37ec873406 upstream.
+commit 6aa6e70cdb5b863a57bad61310bf89b6617a5d2d upstream.
 
-Like other SATA controller chips in the Marvell 88SE91xx series, the
-Marvell 88SE9125 has the same DMA requester ID hardware bug that prevents
-it from working under IOMMU.  Add it to the list of devices that need the
-quirk.
+USB control-message timeouts are specified in milliseconds and should
+specifically not vary with CONFIG_HZ.
 
-Without this patch, device initialization fails with DMA errors:
-
-  ata8: softreset failed (1st FIS failed)
-  DMAR: DRHD: handling fault status reg 2
-  DMAR: [DMA Write NO_PASID] Request device [03:00.1] fault addr 0xfffc0000 [fault reason 0x02] Present bit in context entry is clear
-  DMAR: DRHD: handling fault status reg 2
-  DMAR: [DMA Read NO_PASID] Request device [03:00.1] fault addr 0xfffc0000 [fault reason 0x02] Present bit in context entry is clear
-
-After applying the patch, the controller can be successfully initialized:
-
-  ata8: SATA link up 1.5 Gbps (SStatus 113 SControl 330)
-  ata8.00: ATAPI: PIONEER BD-RW   BDR-207M, 1.21, max UDMA/100
-  ata8.00: configured for UDMA/100
-  scsi 7:0:0:0: CD-ROM            PIONEER  BD-RW   BDR-207M 1.21 PQ: 0 ANSI: 5
-
-Link: https://lore.kernel.org/r/YahpKVR+McJVDdkD@work
-Reported-by: Sam Bingner <sam@bingner.com>
-Tested-by: Sam Bingner <sam@bingner.com>
-Tested-by: Yifeng Li <tomli@tomli.me>
-Signed-off-by: Yifeng Li <tomli@tomli.me>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
-Cc: stable@vger.kernel.org
+Fixes: 9cb2173e6ea8 ("[media] media: Add stk1160 new driver (easycap replacement)")
+Cc: stable@vger.kernel.org      # 3.7
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/quirks.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/media/usb/stk1160/stk1160-core.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -3657,6 +3657,9 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_M
- 			 quirk_dma_func1_alias);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9123,
- 			 quirk_dma_func1_alias);
-+/* https://bugzilla.kernel.org/show_bug.cgi?id=42679#c136 */
-+DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9125,
-+			 quirk_dma_func1_alias);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9128,
- 			 quirk_dma_func1_alias);
- /* https://bugzilla.kernel.org/show_bug.cgi?id=42679#c14 */
+--- a/drivers/media/usb/stk1160/stk1160-core.c
++++ b/drivers/media/usb/stk1160/stk1160-core.c
+@@ -76,7 +76,7 @@ int stk1160_read_reg(struct stk1160 *dev
+ 		return -ENOMEM;
+ 	ret = usb_control_msg(dev->udev, pipe, 0x00,
+ 			USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+-			0x00, reg, buf, sizeof(u8), HZ);
++			0x00, reg, buf, sizeof(u8), 1000);
+ 	if (ret < 0) {
+ 		stk1160_err("read failed on reg 0x%x (%d)\n",
+ 			reg, ret);
+@@ -96,7 +96,7 @@ int stk1160_write_reg(struct stk1160 *de
+ 
+ 	ret =  usb_control_msg(dev->udev, pipe, 0x01,
+ 			USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+-			value, reg, NULL, 0, HZ);
++			value, reg, NULL, 0, 1000);
+ 	if (ret < 0) {
+ 		stk1160_err("write failed on reg 0x%x (%d)\n",
+ 			reg, ret);
 
 

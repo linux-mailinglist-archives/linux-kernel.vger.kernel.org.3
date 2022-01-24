@@ -2,129 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12D1849842B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:03:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5520C498432
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:04:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243430AbiAXQD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 11:03:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59046 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240993AbiAXQDV (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 11:03:21 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A55C06173B;
-        Mon, 24 Jan 2022 08:03:21 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id x11so50884812lfa.2;
-        Mon, 24 Jan 2022 08:03:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vfS/F/Wf9bu+NmDqBxpkt9bmTl6S69QHI1qpficbqZk=;
-        b=BPJQ7SJ1V0lmwC4C01DIbifBg7ehy+WB5aIuFTp6EjdCDMMOsA6mfQfRV+4UTcrNdP
-         Tdhc3iHt54ivoyVnXU1mWG1lf0abJKqqCwnPElabBBzQHWByy7GqLaXpvkooORBA0tJt
-         xYnkY6QuTkwqjY1Bq0J75UrtLrn4urM2LojwoL00czhU7e+nAvLQmzUmfyTajF7xW+Jo
-         LHFCXOsg5Ey6JaFG3qSVGmym+Uw2qL3l2Zfy+x7yQN3k4k6G0RocYgNZpUiGv71dfVh5
-         E4ok0tjNlDPOlkhARkh29k7oFo+teAVcWsyeFpgRqTItoVxCUcVbdab0wfAsWctUpEts
-         LXEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vfS/F/Wf9bu+NmDqBxpkt9bmTl6S69QHI1qpficbqZk=;
-        b=f8gYXlwAuzLYA8wMmhHan2LIT1f2q9ziy2DUCvWfQdOMmnZ8NsFr0rxW6HQcXjD9PC
-         y9tIMP67i1btKsXwFSTedGF6fbGm+Bn5PSKTlwlfxMlyxmKTTnH/MuyNCkGkX5z3salK
-         gfQTh/T4AU2eh2rJ2omafZtY5jaApvKePRhT+wKQibKTwI39zueA2LDRZkGEo5Gl5KV8
-         ptcRj6I5FnAbrb5vds9whxbXuHjMt7i5KoNeOC9a1x/ewhl36MdJ07BH/locVBHo1cyJ
-         JSl1hWIXPgmbcIecu8YnTqTmvtyDT2E4uHrkBDUUfxnfuYa/+maO647pNtPL8zvjzQ09
-         xsCQ==
-X-Gm-Message-State: AOAM532M24WxxUoTqpu8DNIQ7zxUT3pRC8G8fvK6vUVndRcrISmGxXfJ
-        uIq/1T/39pif7ExKk4K9Aks=
-X-Google-Smtp-Source: ABdhPJxAfwvpekuz53Sh6fCrPpxNEfqZtyyPgqs42/pS7SEszF6KXyJ0UzyTB8S3DJyXgws5ehsBog==
-X-Received: by 2002:a05:6512:b84:: with SMTP id b4mr4711978lfv.652.1643040199237;
-        Mon, 24 Jan 2022 08:03:19 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id n21sm674187lji.18.2022.01.24.08.03.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 08:03:18 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH 3/3] nvmem: core: add cell name based matching of DT cell nodes
-Date:   Mon, 24 Jan 2022 17:03:00 +0100
-Message-Id: <20220124160300.25131-4-zajec5@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220124160300.25131-1-zajec5@gmail.com>
-References: <20220124160300.25131-1-zajec5@gmail.com>
+        id S243363AbiAXQEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 11:04:01 -0500
+Received: from mga03.intel.com ([134.134.136.65]:8835 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243307AbiAXQD7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 11:03:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643040238; x=1674576238;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=17zqfEkQdJLAK/211DWVQkarvodRYPP8SbHf4uGm+qY=;
+  b=kPv2wRzvYxOaYbScKwJrRDGcKhpIAR66GvKdm4j0OPLmH/iVpSNFwVXI
+   EvfV9lo1PZkHnYXW4h/dFrXVkGHcfxk1ON2j/ql38IY6K5ZyL3Apdj08R
+   TPfCMtajienn7NeNcfoxUeZ+AltsE4GXR71r4PCnlakPZU9LI0xB8Eq7G
+   u7ABGbwmw7W0fRyycCpgEXp0lv7JmLMmHL0coD+C27eWoDgsbd5Pzv/ix
+   DtUoxeTrv0sWXmg06Xuw1qUNpfSL7Th1lYUzKFiCMrb3+jcy518HeCWCw
+   tt5RK+P+KfsH6ncDbPz4SSgmlZqCfHm8ZPmoQnN7e/CXbrTRGHQ8MbENa
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="246021445"
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="246021445"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 08:03:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="627541906"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 24 Jan 2022 08:03:54 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nC1ov-000IZv-PA; Mon, 24 Jan 2022 16:03:53 +0000
+Date:   Tue, 25 Jan 2022 00:03:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [bvanassche:scsi-move-scsi-pointer 24/45]
+ drivers/scsi/mac53c94.h:219:22: warning: no previous prototype for
+ 'mac53c94_scsi_pointer'
+Message-ID: <202201242330.fIUDhR7w-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+tree:   https://github.com/bvanassche/linux scsi-move-scsi-pointer
+head:   83b0eca2b3e354c26f2dbfcc765d97c35de34a57
+commit: 7d78660acf74697fe6470e6f95fbeacca3113524 [24/45] mac53c94: Move the SCSI pointer to private command data
+config: powerpc-ppc6xx_defconfig (https://download.01.org/0day-ci/archive/20220124/202201242330.fIUDhR7w-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/bvanassche/linux/commit/7d78660acf74697fe6470e6f95fbeacca3113524
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche scsi-move-scsi-pointer
+        git checkout 7d78660acf74697fe6470e6f95fbeacca3113524
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/
 
-When adding NVMEM cells defined by driver it's important to match them
-with DT nodes that specify matching names. That way other bindings &
-drivers can reference such "dynamic" NVMEM cells.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/scsi/mac53c94.c:34:
+>> drivers/scsi/mac53c94.h:219:22: warning: no previous prototype for 'mac53c94_scsi_pointer' [-Wmissing-prototypes]
+     219 | struct scsi_pointer *mac53c94_scsi_pointer(struct scsi_cmnd *cmd)
+         |                      ^~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/mac53c94.c: In function 'mac53c94_init':
+   drivers/scsi/mac53c94.c:128:13: warning: variable 'x' set but not used [-Wunused-but-set-variable]
+     128 |         int x;
+         |             ^
+
+
+vim +/mac53c94_scsi_pointer +219 drivers/scsi/mac53c94.h
+
+   218	
+ > 219	struct scsi_pointer *mac53c94_scsi_pointer(struct scsi_cmnd *cmd)
+   220	{
+   221		struct mac53c94_cmd_priv *mcmd = scsi_cmd_priv(cmd);
+   222	
+   223		return &mcmd->scsi_pointer;
+   224	}
+   225	
+
 ---
- drivers/nvmem/core.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
-
-diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-index 23a38dcf0fc4..9a1299a7f46a 100644
---- a/drivers/nvmem/core.c
-+++ b/drivers/nvmem/core.c
-@@ -499,6 +499,31 @@ static int nvmem_cell_info_to_nvmem_cell_entry(struct nvmem_device *nvmem,
- 	return 0;
- }
- 
-+/**
-+ * nvmem_find_cell_of_node() - Find DT node matching nvmem cell
-+ *
-+ * @nvmem: nvmem provider
-+ * @name: nvmem cell name
-+ *
-+ * Runtime created nvmem cells (those not coming from DT) may still need to be
-+ * referenced in DT. This function allows finding DT node referencing nvmem cell
-+ * by its name. Such a DT node can be then used by nvmem consumers.
-+ *
-+ * Return: NULL or pointer to DT node
-+ */
-+static struct device_node *nvmem_find_cell_of_node(struct nvmem_device *nvmem,
-+						   const char *name)
-+{
-+	struct device_node *child;
-+
-+	for_each_child_of_node(nvmem->dev.of_node, child) {
-+		if (!strcmp(child->name, name))
-+			return child;
-+	}
-+
-+	return NULL;
-+}
-+
- /**
-  * nvmem_add_cells() - Add cell information to an nvmem device
-  *
-@@ -532,6 +557,8 @@ static int nvmem_add_cells(struct nvmem_device *nvmem,
- 			goto err;
- 		}
- 
-+		cells[i]->np = nvmem_find_cell_of_node(nvmem, cells[i]->name);
-+
- 		nvmem_cell_entry_add(cells[i]);
- 	}
- 
--- 
-2.31.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

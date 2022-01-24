@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1895498B8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B03D3498EB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:48:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347678AbiAXTOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:14:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46206 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343848AbiAXTFg (ORCPT
+        id S242121AbiAXTry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:47:54 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34544 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354633AbiAXTgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:05:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25EDC061774;
-        Mon, 24 Jan 2022 11:01:20 -0800 (PST)
+        Mon, 24 Jan 2022 14:36:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5142160C17;
-        Mon, 24 Jan 2022 19:01:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29D4AC340E5;
-        Mon, 24 Jan 2022 19:01:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D236E6141C;
+        Mon, 24 Jan 2022 19:36:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABC58C340E5;
+        Mon, 24 Jan 2022 19:36:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050879;
-        bh=/5CAYepTBiNKnuaUxeDRApQltX0ss9gMvwPaaxbIzC0=;
+        s=korg; t=1643053013;
+        bh=N9z9CA+DDyeJ2G05kqCDHc2y8kstWZPWxKWqeGhvqvs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GLrPH7goNAJmkIZEIYtk1TWf2nhmJ0HTtLndcpD2ix5p/PMLOWFcONtoi/ifVHhKw
-         UkVJEgbAq6rtInksyQOUdFRJMbtyq1LVIA0PYtQmlQvdFKMspTV1Z7Fudn7Lg4TMtq
-         qE6BVtLy86wfoeBGFoghq/8C3XDAq8wfr9LUGnVA=
+        b=C/4mcIM8BDORH1AMLuJUQcUCnZgzBmXUp9o28BnK96r5Mz0vv5zYtI/PAzUcXF3y6
+         Dkebau1MxwmCTxu9FCNl0AZbkXUQod1dXm6eIup8fz6QAoWdRiuKXfIOiQ4k4EDDE/
+         7lrOPL9lYOMVZZZClDoAEZuAvrd1IsrlMnuSQDLU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 4.9 141/157] dmaengine: at_xdmac: Fix at_xdmac_lld struct definition
-Date:   Mon, 24 Jan 2022 19:43:51 +0100
-Message-Id: <20220124183937.241489893@linuxfoundation.org>
+        stable@vger.kernel.org, Meng Li <Meng.Li@windriver.com>,
+        =?UTF-8?q?Horia=20Geant=C4=83?= <horia.geanta@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Subject: [PATCH 5.4 248/320] crypto: caam - replace this_cpu_ptr with raw_cpu_ptr
+Date:   Mon, 24 Jan 2022 19:43:52 +0100
+Message-Id: <20220124184002.429181031@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,50 +46,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tudor Ambarus <tudor.ambarus@microchip.com>
+From: Meng Li <Meng.Li@windriver.com>
 
-commit 912f7c6f7fac273f40e621447cf17d14b50d6e5b upstream.
+commit efd21e10fc3bf4c6da122470a5ae89ec4ed8d180 upstream.
 
-The hardware channel next descriptor view structure contains just
-fields of 32 bits, while dma_addr_t can be of type u64 or u32
-depending on CONFIG_ARCH_DMA_ADDR_T_64BIT. Force u32 to comply with
-what the hardware expects.
+When enable the kernel debug config, there is below calltrace detected:
+BUG: using smp_processor_id() in preemptible [00000000] code: cryptomgr_test/339
+caller is debug_smp_processor_id+0x20/0x30
+CPU: 9 PID: 339 Comm: cryptomgr_test Not tainted 5.10.63-yocto-standard #1
+Hardware name: NXP Layerscape LX2160ARDB (DT)
+Call trace:
+ dump_backtrace+0x0/0x1a0
+ show_stack+0x24/0x30
+ dump_stack+0xf0/0x13c
+ check_preemption_disabled+0x100/0x110
+ debug_smp_processor_id+0x20/0x30
+ dpaa2_caam_enqueue+0x10c/0x25c
+ ......
+ cryptomgr_test+0x38/0x60
+ kthread+0x158/0x164
+ ret_from_fork+0x10/0x38
+According to the comment in commit ac5d15b4519f("crypto: caam/qi2
+ - use affine DPIOs "), because preemption is no longer disabled
+while trying to enqueue an FQID, it might be possible to run the
+enqueue on a different CPU(due to migration, when in process context),
+however this wouldn't be a functionality issue. But there will be
+above calltrace when enable kernel debug config. So, replace this_cpu_ptr
+with raw_cpu_ptr to avoid above call trace.
 
-Fixes: e1f7c9eee707 ("dmaengine: at_xdmac: creation of the atmel eXtended DMA Controller driver")
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Link: https://lore.kernel.org/r/20211215110115.191749-11-tudor.ambarus@microchip.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Fixes: ac5d15b4519f ("crypto: caam/qi2 - use affine DPIOs")
+Cc: stable@vger.kernel.org
+Signed-off-by: Meng Li <Meng.Li@windriver.com>
+Reviewed-by: Horia Geantă <horia.geanta@nxp.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/at_xdmac.c |   18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ drivers/crypto/caam/caamalg_qi2.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/dma/at_xdmac.c
-+++ b/drivers/dma/at_xdmac.c
-@@ -233,15 +233,15 @@ struct at_xdmac {
+--- a/drivers/crypto/caam/caamalg_qi2.c
++++ b/drivers/crypto/caam/caamalg_qi2.c
+@@ -5421,7 +5421,7 @@ int dpaa2_caam_enqueue(struct device *de
+ 	dpaa2_fd_set_len(&fd, dpaa2_fl_get_len(&req->fd_flt[1]));
+ 	dpaa2_fd_set_flc(&fd, req->flc_dma);
  
- /* Linked List Descriptor */
- struct at_xdmac_lld {
--	dma_addr_t	mbr_nda;	/* Next Descriptor Member */
--	u32		mbr_ubc;	/* Microblock Control Member */
--	dma_addr_t	mbr_sa;		/* Source Address Member */
--	dma_addr_t	mbr_da;		/* Destination Address Member */
--	u32		mbr_cfg;	/* Configuration Register */
--	u32		mbr_bc;		/* Block Control Register */
--	u32		mbr_ds;		/* Data Stride Register */
--	u32		mbr_sus;	/* Source Microblock Stride Register */
--	u32		mbr_dus;	/* Destination Microblock Stride Register */
-+	u32 mbr_nda;	/* Next Descriptor Member */
-+	u32 mbr_ubc;	/* Microblock Control Member */
-+	u32 mbr_sa;	/* Source Address Member */
-+	u32 mbr_da;	/* Destination Address Member */
-+	u32 mbr_cfg;	/* Configuration Register */
-+	u32 mbr_bc;	/* Block Control Register */
-+	u32 mbr_ds;	/* Data Stride Register */
-+	u32 mbr_sus;	/* Source Microblock Stride Register */
-+	u32 mbr_dus;	/* Destination Microblock Stride Register */
- };
- 
- /* 64-bit alignment needed to update CNDA and CUBC registers in an atomic way. */
+-	ppriv = this_cpu_ptr(priv->ppriv);
++	ppriv = raw_cpu_ptr(priv->ppriv);
+ 	for (i = 0; i < (priv->dpseci_attr.num_tx_queues << 1); i++) {
+ 		err = dpaa2_io_service_enqueue_fq(ppriv->dpio, ppriv->req_fqid,
+ 						  &fd);
 
 

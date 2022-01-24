@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED74C499DF2
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3653449A04D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:28:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1586834AbiAXW1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:27:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47096 "EHLO
+        id S1843718AbiAXXFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:05:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445275AbiAXVHP (ORCPT
+        with ESMTP id S1583332AbiAXWRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:07:15 -0500
+        Mon, 24 Jan 2022 17:17:38 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8B6C0680A2;
-        Mon, 24 Jan 2022 12:07:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492AEC0613A0;
+        Mon, 24 Jan 2022 12:48:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E0E96090A;
-        Mon, 24 Jan 2022 20:07:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C048C340E5;
-        Mon, 24 Jan 2022 20:07:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D93A060F54;
+        Mon, 24 Jan 2022 20:48:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE361C340E7;
+        Mon, 24 Jan 2022 20:48:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054861;
-        bh=EjBx6VLc9soLrs83ucHSAMI+i/H49AZLt1t7DcmUv5c=;
+        s=korg; t=1643057322;
+        bh=x1ittnNsJWwt1zDpNreQd8A+qpmVXaypmHKKZugegkE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PgZVgII2gyzAB5LA6IDlCYoJ6FvN79V54S3xe2IgGsttIZEpPw4Yemi120X4ZN3P8
-         knR+XsZvqwNiTlF15wB8V8TZ8YoR+wApNkJZzm78hADoTY/UiPFuPcebdVYpVpU8Tr
-         +xq2DTNOwZRPfZ5eBvp6RKcWv/d+yXRxxdQKFsTM=
+        b=BZ4ArYuB9T4b0bx0JEfxDhTLguJTgNSOANWXI4oz4DKuP4fGetEuMuw9WCUqV/VTm
+         CSZjp/CrPH61alOdz6Y6siZzsrH7EUU1plOIuELPBlDFXcR55AfpjxB8kN8+x3y1nR
+         8F37/gOe8yLS2LECx/kSb3Ri6t3ekSpWOUB6FIzY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 526/563] net: axienet: fix number of TX ring slots for available check
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.15 774/846] parisc: pdc_stable: Fix memory leak in pdcs_register_pathentries
 Date:   Mon, 24 Jan 2022 19:44:51 +0100
-Message-Id: <20220124184042.624814989@linuxfoundation.org>
+Message-Id: <20220124184127.661919511@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,41 +48,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit aba57a823d2985a2cc8c74a2535f3a88e68d9424 upstream.
+commit d24846a4246b6e61ecbd036880a4adf61681d241 upstream.
 
-The check for the number of available TX ring slots was off by 1 since a
-slot is required for the skb header as well as each fragment. This could
-result in overwriting a TX ring slot that was still in use.
+kobject_init_and_add() takes reference even when it fails.
+According to the doc of kobject_init_and_add()：
 
-Fixes: 8a3b7a252dca9 ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+   If this function returns an error, kobject_put() must be called to
+   properly clean up the memory associated with the object.
+
+Fix memory leak by calling kobject_put().
+
+Fixes: 73f368cf679b ("Kobject: change drivers/parisc/pdc_stable.c to use kobject_init_and_add")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/xilinx/xilinx_axienet_main.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/parisc/pdc_stable.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-@@ -747,7 +747,7 @@ axienet_start_xmit(struct sk_buff *skb,
- 	num_frag = skb_shinfo(skb)->nr_frags;
- 	cur_p = &lp->tx_bd_v[lp->tx_bd_tail];
+--- a/drivers/parisc/pdc_stable.c
++++ b/drivers/parisc/pdc_stable.c
+@@ -979,8 +979,10 @@ pdcs_register_pathentries(void)
+ 		entry->kobj.kset = paths_kset;
+ 		err = kobject_init_and_add(&entry->kobj, &ktype_pdcspath, NULL,
+ 					   "%s", entry->name);
+-		if (err)
++		if (err) {
++			kobject_put(&entry->kobj);
+ 			return err;
++		}
  
--	if (axienet_check_tx_bd_space(lp, num_frag)) {
-+	if (axienet_check_tx_bd_space(lp, num_frag + 1)) {
- 		if (netif_queue_stopped(ndev))
- 			return NETDEV_TX_BUSY;
- 
-@@ -757,7 +757,7 @@ axienet_start_xmit(struct sk_buff *skb,
- 		smp_mb();
- 
- 		/* Space might have just been freed - check again */
--		if (axienet_check_tx_bd_space(lp, num_frag))
-+		if (axienet_check_tx_bd_space(lp, num_frag + 1))
- 			return NETDEV_TX_BUSY;
- 
- 		netif_wake_queue(ndev);
+ 		/* kobject is now registered */
+ 		write_lock(&entry->rw_lock);
 
 

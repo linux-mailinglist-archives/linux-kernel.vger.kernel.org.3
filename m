@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC1849A6B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D56949A465
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3420370AbiAYCYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:24:10 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:38446 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347526AbiAXTKn (ORCPT
+        id S2374712AbiAYARn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:17:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1851187AbiAXXcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:10:43 -0500
+        Mon, 24 Jan 2022 18:32:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FA5C075966;
+        Mon, 24 Jan 2022 13:35:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50D66603DE;
-        Mon, 24 Jan 2022 19:10:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B2D2C340E5;
-        Mon, 24 Jan 2022 19:10:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65E8E612D6;
+        Mon, 24 Jan 2022 21:35:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CA12C340E4;
+        Mon, 24 Jan 2022 21:35:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051442;
-        bh=gk9HNkOw8giGGMPD+7p+DjpVIM6kP8mjUyFj3QJZWyw=;
+        s=korg; t=1643060130;
+        bh=LvKt4kNdalNrtHc1yjv9UoZIUONIbwelUZZZPp/IQas=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QrhU4twLkqiILEAvrVM1EYWORaJArw7eihFUHfGVHeM77RpD1/1CxL189+PMP36Xt
-         dyqJC0NuIIm94niBwruduvdwP1Uh4sxj/W0bJ+zDE9aqglyS+K3/rlK3cgia6hNuof
-         Z3tiK/rreBc2SU7UtDnpeH8yzH+W4nxxjz1w5fjA=
+        b=HDtjA3mIWLLOrBLrbuwxi0Mis/DNj+l3IbJ9Vl8+rkT5kPZ7pbPqhmndbtkuIQ+lN
+         GORxUFTvYsb7Pw6L2eMaGCALzF6GtBqAdI0Sjai05Jm1Cm4xkdv6gRvsChkmxm/GMJ
+         pbz+Q0QFgzSvsyZA83pRTfdpJcy9IudRj0T4Argg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 4.14 163/186] powerpc/cell: Fix clang -Wimplicit-fallthrough warning
-Date:   Mon, 24 Jan 2022 19:43:58 +0100
-Message-Id: <20220124183942.352926189@linuxfoundation.org>
+        stable@vger.kernel.org, Andrey Ryabinin <arbn@yandex-team.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Tejun Heo <tj@kernel.org>
+Subject: [PATCH 5.16 0850/1039] cputime, cpuacct: Include guest time in user time in cpuacct.stat
+Date:   Mon, 24 Jan 2022 19:43:59 +0100
+Message-Id: <20220124184153.855085884@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,47 +50,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anders Roxell <anders.roxell@linaro.org>
+From: Andrey Ryabinin <arbn@yandex-team.com>
 
-commit e89257e28e844f5d1d39081bb901d9f1183a7705 upstream.
+commit 9731698ecb9c851f353ce2496292ff9fcea39dff upstream.
 
-Clang warns:
+cpuacct.stat in no-root cgroups shows user time without guest time
+included int it. This doesn't match with user time shown in root
+cpuacct.stat and /proc/<pid>/stat. This also affects cgroup2's cpu.stat
+in the same way.
 
-arch/powerpc/platforms/cell/pervasive.c:81:2: error: unannotated fall-through between switch labels
-        case SRR1_WAKEEE:
-        ^
-arch/powerpc/platforms/cell/pervasive.c:81:2: note: insert 'break;' to avoid fall-through
-        case SRR1_WAKEEE:
-        ^
-        break;
-1 error generated.
+Make account_guest_time() to add user time to cgroup's cpustat to
+fix this.
 
-Clang is more pedantic than GCC, which does not warn when failing
-through to a case that is just break or return. Clang's version is more
-in line with the kernel's own stance in deprecated.rst. Add athe missing
-break to silence the warning.
-
-Fixes: 6e83985b0f6e ("powerpc/cbe: Do not process external or decremeter interrupts from sreset")
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20211207110228.698956-1-anders.roxell@linaro.org
+Fixes: ef12fefabf94 ("cpuacct: add per-cgroup utime/stime statistics")
+Signed-off-by: Andrey Ryabinin <arbn@yandex-team.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Daniel Jordan <daniel.m.jordan@oracle.com>
+Acked-by: Tejun Heo <tj@kernel.org>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20211115164607.23784-1-arbn@yandex-team.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/platforms/cell/pervasive.c |    1 +
- 1 file changed, 1 insertion(+)
+ kernel/sched/cputime.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/powerpc/platforms/cell/pervasive.c
-+++ b/arch/powerpc/platforms/cell/pervasive.c
-@@ -90,6 +90,7 @@ static int cbe_system_reset_exception(st
- 	switch (regs->msr & SRR1_WAKEMASK) {
- 	case SRR1_WAKEDEC:
- 		set_dec(1);
-+		break;
- 	case SRR1_WAKEEE:
- 		/*
- 		 * Handle these when interrupts get re-enabled and we take
+--- a/kernel/sched/cputime.c
++++ b/kernel/sched/cputime.c
+@@ -148,10 +148,10 @@ void account_guest_time(struct task_stru
+ 
+ 	/* Add guest time to cpustat. */
+ 	if (task_nice(p) > 0) {
+-		cpustat[CPUTIME_NICE] += cputime;
++		task_group_account_field(p, CPUTIME_NICE, cputime);
+ 		cpustat[CPUTIME_GUEST_NICE] += cputime;
+ 	} else {
+-		cpustat[CPUTIME_USER] += cputime;
++		task_group_account_field(p, CPUTIME_USER, cputime);
+ 		cpustat[CPUTIME_GUEST] += cputime;
+ 	}
+ }
 
 

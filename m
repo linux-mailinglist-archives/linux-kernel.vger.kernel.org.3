@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B51654997AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:29:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA604499A3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449009AbiAXVOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:14:34 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40554 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391264AbiAXUrM (ORCPT
+        id S1457764AbiAXVmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:42:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47256 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354150AbiAXVFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:47:12 -0500
+        Mon, 24 Jan 2022 16:05:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24C4C0613E8;
+        Mon, 24 Jan 2022 12:06:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52FF160918;
-        Mon, 24 Jan 2022 20:47:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22E2FC340E5;
-        Mon, 24 Jan 2022 20:47:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8995BB81239;
+        Mon, 24 Jan 2022 20:06:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8359C340E5;
+        Mon, 24 Jan 2022 20:06:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057231;
-        bh=0L0DDiEfxGJyaxQOimR7aMe0htOuKRpRbrOBhnHMJQE=;
+        s=korg; t=1643054792;
+        bh=x7S04SykEtkNO6jyz+/ia/IfgXn8OU6ejHj5ebXM5TE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lIm2smwI83+kCrbs6gtP1CSERxISnBXev6wzPMaGGpkUsRtefrCKbd0YWQXg8tuqj
-         x2WmWbBM0/AeVEIIqQrnhWlDu/E7665gBAOv9iD/6SRSyXTHV1IK3pwY9COknlnWVp
-         NTg60XqXua5MkaK1gLWdCnHjOPzA0UXzOgusIftM=
+        b=iZ8TaNah0+GuvgPL1GlUqk5C9gX7fgzpE6xpIA72LTdw++QXCuhh4U4OHKuBEOpGk
+         iWqTPmThS44eRAIzZ2/AOt+WIMT95DThubrZaqCh0mM4aaGUUlIWYMDE2BQgL8fe9b
+         ZRhLo4HcCP/ESDY/+1QVoHNH79vS8UfrzCiu/ktQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gabriel Hojda <ghojda@yo2urs.ro>,
-        Markus Reichl <m.reichl@fivetechno.de>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 744/846] net: usb: Correct reset handling of smsc95xx
-Date:   Mon, 24 Jan 2022 19:44:21 +0100
-Message-Id: <20220124184126.654026824@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.10 497/563] dmaengine: uniphier-xdmac: Fix type of address variables
+Date:   Mon, 24 Jan 2022 19:44:22 +0100
+Message-Id: <20220124184041.634891897@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,40 +49,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Markus Reichl <m.reichl@fivetechno.de>
+From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 
-commit 0bf3885324a8599e3af4c7379b8d4f621c9bbffa upstream.
+commit 105a8c525675bb7d4d64871f9b2edf39460de881 upstream.
 
-On boards with LAN9514 and no preconfigured MAC address we don't get an
-ip address from DHCP after commit a049a30fc27c ("net: usb: Correct PHY handling
-of smsc95xx") anymore. Adding an explicit reset before starting the phy
-fixes the issue.
+The variables src_addr and dst_addr handle DMA addresses, so these should
+be declared as dma_addr_t.
 
-[1]
-https://lore.kernel.org/netdev/199eebbd6b97f52b9119c9fa4fd8504f8a34de18.camel@collabora.com/
-
-From: Gabriel Hojda <ghojda@yo2urs.ro>
-Fixes: a049a30fc27c ("net: usb: Correct PHY handling of smsc95xx")
-Signed-off-by: Gabriel Hojda <ghojda@yo2urs.ro>
-Signed-off-by: Markus Reichl <m.reichl@fivetechno.de>
-Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 667b9251440b ("dmaengine: uniphier-xdmac: Add UniPhier external DMA controller driver")
+Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Link: https://lore.kernel.org/r/1639456963-10232-1-git-send-email-hayashi.kunihiko@socionext.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/smsc95xx.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/dma/uniphier-xdmac.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/net/usb/smsc95xx.c
-+++ b/drivers/net/usb/smsc95xx.c
-@@ -1961,7 +1961,8 @@ static const struct driver_info smsc95xx
- 	.bind		= smsc95xx_bind,
- 	.unbind		= smsc95xx_unbind,
- 	.link_reset	= smsc95xx_link_reset,
--	.reset		= smsc95xx_start_phy,
-+	.reset		= smsc95xx_reset,
-+	.check_connect	= smsc95xx_start_phy,
- 	.stop		= smsc95xx_stop,
- 	.rx_fixup	= smsc95xx_rx_fixup,
- 	.tx_fixup	= smsc95xx_tx_fixup,
+--- a/drivers/dma/uniphier-xdmac.c
++++ b/drivers/dma/uniphier-xdmac.c
+@@ -131,8 +131,9 @@ uniphier_xdmac_next_desc(struct uniphier
+ static void uniphier_xdmac_chan_start(struct uniphier_xdmac_chan *xc,
+ 				      struct uniphier_xdmac_desc *xd)
+ {
+-	u32 src_mode, src_addr, src_width;
+-	u32 dst_mode, dst_addr, dst_width;
++	u32 src_mode, src_width;
++	u32 dst_mode, dst_width;
++	dma_addr_t src_addr, dst_addr;
+ 	u32 val, its, tnum;
+ 	enum dma_slave_buswidth buswidth;
+ 
 
 

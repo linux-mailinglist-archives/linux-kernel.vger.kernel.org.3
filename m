@@ -2,93 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 876E4498590
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48ECB498593
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:59:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244042AbiAXQ6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 11:58:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241308AbiAXQ6y (ORCPT
+        id S244047AbiAXQ7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 11:59:09 -0500
+Received: from mta-p7.oit.umn.edu ([134.84.196.207]:49314 "EHLO
+        mta-p7.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244049AbiAXQ7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 11:58:54 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34366C06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 08:58:54 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id t32so15892492pgm.7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 08:58:54 -0800 (PST)
+        Mon, 24 Jan 2022 11:59:05 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p7.oit.umn.edu (Postfix) with ESMTP id 4JjGRD3bKQz9vKSm
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:59:04 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p7.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p7.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id j_qZSIQ02XDh for <linux-kernel@vger.kernel.org>;
+        Mon, 24 Jan 2022 10:59:04 -0600 (CST)
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p7.oit.umn.edu (Postfix) with ESMTPS id 4JjGRD1VGsz9vKTC
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:59:04 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p7.oit.umn.edu 4JjGRD1VGsz9vKTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p7.oit.umn.edu 4JjGRD1VGsz9vKTC
+Received: by mail-pg1-f197.google.com with SMTP id o20-20020a656a54000000b003441a994d60so10219397pgu.6
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 08:59:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=QpweiVyIfmb5hj1sObeMoupM7nExebWp4y/78WjEl2o=;
-        b=KDOcJo5VhtwHDYkRvxFLe2+8bdiG3/Uk+A59ZObbMymNhlfS5n75/xTEDHaC4pb2RW
-         oJRWHcQb3z+pmIvLIXCmTMK1ddA7KKZGOJ8L/2qRnorzLU4l0QG0uJPDaFE1vB/Aj8N3
-         Fo/+tT4g2b/ftcx6RppZOyB5biFw+pEfpxA6eg5rV1xrKK4APlmhwmrTlto+roVogi6h
-         L+URhA9G81VATPDvfsLgNgLgKe93cjhhr9j7IOi3qzVgTgCkh26o1+z0ZVAyJwtbUuQL
-         PPHgqFOgqaH3Pk+wjxq8ZQLekAjvcQEpzD61nodAygpv5M5Y0Tqemg7HWzKABeJliIvz
-         lhOw==
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JBdR4mgm88fr12HVo/ewep9TPqR0vTSvkIZJUoqDnV8=;
+        b=i9gwll8Lj0xIystAPGKZPE6qavOR9ipRhN3UOjJAZBL0zM3KdFOuYScCsxjIL5KW72
+         mnmvOoi35XlwgkX90lC/GVK8Y5bsuSZXi65LxGsHvNcgieXe0Cnn0I9HugOK75K/Ap40
+         +I3jYOQxsiMstiLOooqtHxjBlOXnOw9fzWuqctJCRUEyjHwCC6/nM2vn6wjoN1FuIqQO
+         pFXTUxn6gXYd7rcEdP+irCKVGkHe78RM23O4Z9t6421BLl7GpcjJ9aofu/nNpRn5qdYF
+         nQSbPgd/GcRvK/eWVUGTpW4vXI7zPkbqp3+BWwcEA2aGlBlOoKL4tX9E6RsEGIpdozLO
+         jFBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=QpweiVyIfmb5hj1sObeMoupM7nExebWp4y/78WjEl2o=;
-        b=ucmXIEDx0eXFfFIYmTPMEzz5ZNDxmmgDxZ6PBYgKLu1dwGvC1IfNLWRAP0RtpQLFlW
-         ylFxbSpb/7iLM/VzcZoUbzZZ+dcJJJnGfCgjLv0Eltds1AWxgKcRxBizHIhblnjvtLf9
-         /a3X6bfsnM7HIHjl49GlLfEus1aAH8U3eHieSg6zfVlbJJ4CxV2S22oXrvLtJw5dE/KL
-         C8xcHlzTEO6EISR5Wo8f6MLPwDZDnergTeVHQENeetD6jp9eYr7DmXcmAvKsDTALSnXv
-         U4ws+M2QTYRV/KuVe+z+ApswvKsNogbeQ8nn81htVyMr/2068LmVmO7IxO0tm8ui5L9z
-         9o+A==
-X-Gm-Message-State: AOAM533zK8VeLc7VrFVEhrgElFfS5h6jdT0Sm12V+iTNl2Ytp3ekPrB4
-        uiYb9qXo3h0LbGVmqs57EbWE/w==
-X-Google-Smtp-Source: ABdhPJzFFs4pNrvCJjliYLl0Xd2gUQ4IZdd9l1RcnT7MfpuqAkrcqgx4Kuk2LSLF5GEFQtg9h6gySw==
-X-Received: by 2002:a63:3182:: with SMTP id x124mr12248537pgx.586.1643043533673;
-        Mon, 24 Jan 2022 08:58:53 -0800 (PST)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id v4sm16849486pfu.202.2022.01.24.08.58.53
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JBdR4mgm88fr12HVo/ewep9TPqR0vTSvkIZJUoqDnV8=;
+        b=Fmcr2Hlb3sL8CKgXmjjm0Uy0sh5VHYjC3orbsFayW5OGeVJ9COEoZ3ovfVA9usk5kQ
+         uaADeuDKxCtKgjR4aXJ+PEjNcpXGc3hQNGcPHl3/2XVYu8fIiIEn1o764OiOOtyHcLVH
+         QWkE5bsPmpxvPU6hIUDA0POpxcQgaiAbCGaC4Di5ZREUqdXNw1KH1HCwpW+ig2l5v3iV
+         pXs87OwjgEA01sk+3xNoIWFRj6pNCuQDLcv5vWtCLM+92tbbaGzdV+WVFccYtetX6vKj
+         446i+rZH1/+WpBdGwkfkkqR6CSOecJ0awNiIC9BNN8YNR23/ki+xego8F/h+B56zDxeQ
+         1B3Q==
+X-Gm-Message-State: AOAM533YSOt7wJfvOXEAelwD+1C5eDkLO1U0xaPsr17bxE0XET7wHP0u
+        P0+i5YRMbeipaDa/1nZSETcfzGebGDa+3IR2ofI8QAFhI8L0aFxVjHqI7G60VskV13SlQJJdqk4
+        ZqKB591keNW676hKaxgcufyYRMaUF
+X-Received: by 2002:a17:902:a502:b0:149:c5a5:5329 with SMTP id s2-20020a170902a50200b00149c5a55329mr15059193plq.164.1643043543455;
+        Mon, 24 Jan 2022 08:59:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx153Lwqmcm3ClgP1FVJyLtTuU1uOlM4S9H5l1vuihVakSp4Vk8HYPmRXyyQQ13l5bkmxsCkA==
+X-Received: by 2002:a17:902:a502:b0:149:c5a5:5329 with SMTP id s2-20020a170902a50200b00149c5a55329mr15059179plq.164.1643043543198;
+        Mon, 24 Jan 2022 08:59:03 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.4.61.248])
+        by smtp.gmail.com with ESMTPSA id c17sm17289913pfc.171.2022.01.24.08.59.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 08:58:53 -0800 (PST)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     daniel.lezcano@linaro.org, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ben.tseng@mediatek.com, mka@chromium.org,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Alexandre Bailon <abailon@baylibre.com>, rafael@kernel.org,
-        rui.zhang@intel.com
-Subject: Re: [PATCH v4 RESEND 0/2] Add a generic virtual thermal sensor
-In-Reply-To: <20220111103346.2660639-1-abailon@baylibre.com>
-References: <20220111103346.2660639-1-abailon@baylibre.com>
-Date:   Mon, 24 Jan 2022 08:58:52 -0800
-Message-ID: <7hilu9xe7n.fsf@baylibre.com>
+        Mon, 24 Jan 2022 08:59:02 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/nouveau/acr: Fix undefined behavior in nvkm_acr_hsfw_load_bl()
+Date:   Tue, 25 Jan 2022 00:58:55 +0800
+Message-Id: <20220124165856.57022-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Daniel, Amit,
+In nvkm_acr_hsfw_load_bl(), the return value of kmalloc() is directly
+passed to memcpy(), which could lead to undefined behavior on failure
+of kmalloc().
 
-Alexandre Bailon <abailon@baylibre.com> writes:
+Fix this bug by using kmemdup() instead of kmalloc()+memcpy().
 
-> This series add a virtual thermal sensor.
-> It could be used to get a temperature using some thermal sensors.
-> Currently, the supported operations are max, min and avg.
-> The virtual sensor could be easily extended to support others operations.
->
-> Changes in v2:
-> - Fix some warnings / errors reported by kernel test robot
-> - rename some struct and functions with a more accurate name
-> - update the dt bindings: rename type attribute to aggregation-function
-> - factorize a little bit the aggregation functions
-> Changes in v3:
-> - Aggregate thermal zone instead of thermal sensors
-> - Use try_get_module / put_module to prevent thermal providers to be removed
-> - Update the bindings, to be more accurate
-> Changes in v4:
-> - Fix two warnings reported by kernel test robot
+This bug was found by a static analyzer.
 
-Any more feedback on this series?
+Builds with 'make allyesconfig' show no new warnings,
+and our static analyzer no longer warns about this code.
 
-Thanks,
+Fixes: 22dcda45a3d1 ("drm/nouveau/acr: implement new subdev to replace "secure boot"")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+The analysis employs differential checking to identify inconsistent 
+security operations (e.g., checks or kfrees) between two code paths 
+and confirms that the inconsistent operations are not recovered in the
+current function or the callers, so they constitute bugs. 
 
-Kevin
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+ drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
+index 667fa016496e..a6ea89a5d51a 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
+@@ -142,11 +142,12 @@ nvkm_acr_hsfw_load_bl(struct nvkm_acr *acr, const char *name, int ver,
+ 
+ 	hsfw->imem_size = desc->code_size;
+ 	hsfw->imem_tag = desc->start_tag;
+-	hsfw->imem = kmalloc(desc->code_size, GFP_KERNEL);
+-	memcpy(hsfw->imem, data + desc->code_off, desc->code_size);
+-
++	hsfw->imem = kmemdup(data + desc->code_off, desc->code_size, GFP_KERNEL);
+ 	nvkm_firmware_put(fw);
+-	return 0;
++	if (!hsfw->imem)
++		return -ENOMEM;
++	else
++		return 0;
+ }
+ 
+ int
+-- 
+2.25.1
+

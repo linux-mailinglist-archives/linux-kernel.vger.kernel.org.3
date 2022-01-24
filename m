@@ -2,122 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C8D497BFE
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7B0497BFF
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233785AbiAXJaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 04:30:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51572 "EHLO
+        id S233953AbiAXJaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 04:30:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233779AbiAXJ35 (ORCPT
+        with ESMTP id S233809AbiAXJaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 04:29:57 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D56C061744;
-        Mon, 24 Jan 2022 01:29:56 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id q22so2963199ljh.7;
-        Mon, 24 Jan 2022 01:29:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=BylAZRLZiOyBqUYQ0byZHJ8IV+2vCMweAI+8MNCkOSw=;
-        b=evmatsRBhp0/WOQ6RRsVjbljlAIKAaQd4tBlKQcs7K8Kxke9edWg/RHg5ok34FlOco
-         rEwrqfvBKTIHQV/D2zKHNrBy0wLop6PlPos3DQxzpXzx6wt151QCpfusd71QDtCYNJ/V
-         y0Ur9Yv9FImNk1dfkSsX0q/4ciNt6UDF/7QNzJQRGojSwrYZMcCgPCLG8LQ4r7HwU+U3
-         C5OhqCavFsBgSBebt/ehSxlIVon8diqlRI4LnOouqKPJHrzAIOO1930dG8D/qmSZo/w2
-         CttQ9KVuKr4+dssJ9Dcf1AtD1V1ja0CFuYQN0FPpKfoCjUihkczOumNbA9o6+TYH2LIm
-         6kmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=BylAZRLZiOyBqUYQ0byZHJ8IV+2vCMweAI+8MNCkOSw=;
-        b=XhYb5meEM7Ra4CpJN8r7M9K9D3mfM2xahmLZzu07h0ciuUwVSKMEnTd1P6Ae8dI19O
-         SU1iO6nSHPM5BF0CaC8vH8WqUkLETt44ZgGVBtZk1p5YYW272BsLz3y9H8KbX2OdVgUk
-         6KiZJjFu/pK342h4xkwBBYq5B978k6RNVgSFR4OF3eRYoeVqbiHABFM6FjG0IQ+mlVWW
-         1VHf3IefDygQqme3a24GaUVYqmfKxFyntadgmBzlh7NAbXSRMOgaqJkdl7JNOUdmyCQV
-         hMvRoscf3MGkROIaM8zIScTn9trkr/TUurC3QufR9ZSUMt0yCb+fkofayC90nmcFo/F5
-         hpRQ==
-X-Gm-Message-State: AOAM531ufAtx8ia5B5vg8YZHTIUoS4q/i5Em/MQdivKLOMPJq7SADZTS
-        o1cBOs5f7matOMJY++kYZck=
-X-Google-Smtp-Source: ABdhPJwDY/NKkYVl6jo01kZCQotV/0114XSeqjYmBym30jgQMmam5q2orQz4vuL7PMczXyDSQgP4dQ==
-X-Received: by 2002:a05:651c:1198:: with SMTP id w24mr5392186ljo.42.1643016595297;
-        Mon, 24 Jan 2022 01:29:55 -0800 (PST)
-Received: from [192.168.8.103] (m91-129-103-86.cust.tele2.ee. [91.129.103.86])
-        by smtp.gmail.com with ESMTPSA id n15sm454493lfi.101.2022.01.24.01.29.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jan 2022 01:29:54 -0800 (PST)
-Message-ID: <5cca8bdd-bed0-f26a-6c96-d18947d3a50b@gmail.com>
-Date:   Mon, 24 Jan 2022 11:29:52 +0200
+        Mon, 24 Jan 2022 04:30:05 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91728C06173D
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 01:30:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+Cbhoao8YGSMbLhLMvHmRWGSewCaoxDNcEjjCdUssKY=; b=G6sqF+8Q7cLOd4wGmirGsKPswL
+        BKg/uDXdGa8RZ7jTwvJQGtb8iZbh2HLDi1ClyvRjkik/iLL3N6JAgQjzmEaO+Yh/N4sfcg1BjnDW+
+        RARriawQ3akmmVWqwsSY/3T2waQE8FudFuiGrHIW29RUVY66Y+oWfDx9Yl5Mawrn/FuI8yj+/PpIu
+        dEz1meLry+wtMTDeLqG+lW5wIWkD8WHEbOU9y1vYHfyFMQmTwuepUmQseiMWXnJwcyBHvvBIjtM+A
+        3SrECgTgN19wA0OlVKDbz4RmoZ7PjLEBBTHLZHZDLhEXZ8i08ZdJvedeS4fQG5qbQ6eCM6G0r9vGH
+        Tvscrkpw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nBvfh-002nXX-9U; Mon, 24 Jan 2022 09:29:57 +0000
+Date:   Mon, 24 Jan 2022 01:29:57 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/7] drm/nouveau/device: Get right pgsize_bitmap of
+ iommu_domain
+Message-ID: <Ye5xlSbwAw5JJ8k2@infradead.org>
+References: <20220124071103.2097118-1-baolu.lu@linux.intel.com>
+ <20220124071103.2097118-6-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] net: ena: Do not waste napi skb cache
-Content-Language: en-US
-From:   Julian Wiedmann <jwiedmann.dev@gmail.com>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, netdev@vger.kernel.org
-Cc:     Shay Agroskin <shayagr@amazon.com>,
-        Arthur Kiyanovski <akiyano@amazon.com>,
-        David Arinzon <darinzon@amazon.com>,
-        Noam Dagan <ndagan@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Sameeh Jubran <sameehj@amazon.com>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        linux-kernel@vger.kernel.org
-References: <20220123115623.94843-1-42.hyeyoo@gmail.com>
- <f835cbb3-a028-1daf-c038-516dd47ce47c@gmail.com>
-In-Reply-To: <f835cbb3-a028-1daf-c038-516dd47ce47c@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220124071103.2097118-6-baolu.lu@linux.intel.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.01.22 10:57, Julian Wiedmann wrote:
-> On 23.01.22 13:56, Hyeonggon Yoo wrote:
->> By profiling, discovered that ena device driver allocates skb by
->> build_skb() and frees by napi_skb_cache_put(). Because the driver
->> does not use napi skb cache in allocation path, napi skb cache is
->> periodically filled and flushed. This is waste of napi skb cache.
->>
->> As ena_alloc_skb() is called only in napi, Use napi_build_skb()
->> instead of build_skb() to when allocating skb.
->>
->> This patch was tested on aws a1.metal instance.
->>
->> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
->> ---
->>  drivers/net/ethernet/amazon/ena/ena_netdev.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c b/drivers/net/ethernet/amazon/ena/ena_netdev.c
->> index c72f0c7ff4aa..2c67fb1703c5 100644
->> --- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
->> +++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
->> @@ -1407,7 +1407,7 @@ static struct sk_buff *ena_alloc_skb(struct ena_ring *rx_ring, void *first_frag)
->>  		skb = netdev_alloc_skb_ip_align(rx_ring->netdev,
->>  						rx_ring->rx_copybreak);
+On Mon, Jan 24, 2022 at 03:11:00PM +0800, Lu Baolu wrote:
+> The supported page sizes of an iommu_domain are saved in the pgsize_bitmap
+> field. Retrieve the value from the right place.
 > 
-> To keep things consistent, this should then also be napi_alloc_skb().
-> 
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+> Link: https://lore.kernel.org/r/20211218074546.1772553-1-baolu.lu@linux.intel.com
 
-And on closer look, this copybreak path also looks buggy. If rx_copybreak
-gets reduced _while_ receiving a frame, the allocated skb can end up too
-small to take all the data.
+Looks good:
 
-@ ena maintainers: can you please fix this?
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 
->>  	else
->> -		skb = build_skb(first_frag, ENA_PAGE_SIZE);
->> +		skb = napi_build_skb(first_frag, ENA_PAGE_SIZE);
->>  
->>  	if (unlikely(!skb)) {
->>  		ena_increase_stat(&rx_ring->rx_stats.skb_alloc_fail, 1,
-> 
-
+Wouldn't it mke sense to remove the pgsize_bitmap in struct iommu_ops
+and initialize the domain field in the domain_alloc methods?  Or am I
+missing something?

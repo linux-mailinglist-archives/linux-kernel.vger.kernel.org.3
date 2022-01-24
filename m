@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED25499D5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F4E2499D62
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:59:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1583419AbiAXWRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453953AbiAXVbS (ORCPT
+        id S1583495AbiAXWSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:18:25 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33686 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1447918AbiAXVLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:31:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DB6C075949;
-        Mon, 24 Jan 2022 12:20:35 -0800 (PST)
+        Mon, 24 Jan 2022 16:11:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B5E73B8122F;
-        Mon, 24 Jan 2022 20:20:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC417C340E5;
-        Mon, 24 Jan 2022 20:20:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B936B81233;
+        Mon, 24 Jan 2022 21:11:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C161BC340E5;
+        Mon, 24 Jan 2022 21:11:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055632;
-        bh=sgSscAIfs33is+A3+mF+JxJk+KOnqSxfxISmLEcfSqk=;
+        s=korg; t=1643058702;
+        bh=nbudAHV5Id/HIQCDuN+n30CdC18eMXg3cLWyw/aOG2Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ugJ7U/QeMWZxAur4U1Us4pkLcMl6lvEA0/IwwvypBJbtaBYfxNntto97LA4RRtgrD
-         phlV9c5Spi3Ox6h6Tsm8W0XYzprR+rmoYNoXa5Qyt21uZdqxgydsDntBfrSYwZt6ng
-         CfqSEuBOGo1UUoHlqjT3omjYuw7ixgNMhrkPZYNQ=
+        b=2D2AFof3BofQ3g9/IWo4SVqQ8pKfVXZC0HRt+DwaQVXI8Q+4mSlheueNfi/ITubsJ
+         jKh0e7Q0HFs+omrvWGOJXtADkvnGhd9MB6AeehUxoNEzxyoGgmOImitcuCBM6NoOta
+         lv29Q1tA3f4+Cz6VKlOwjxxj61aDRkKc0CbMTLQY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lv Yunlong <lyl2019@mail.ustc.edu.cn>,
-        Luca Coelho <luciano.coelho@intel.com>,
+        stable@vger.kernel.org,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 213/846] wireless: iwlwifi: Fix a double free in iwl_txq_dyn_alloc_dma
-Date:   Mon, 24 Jan 2022 19:35:30 +0100
-Message-Id: <20220124184108.272161843@linuxfoundation.org>
+Subject: [PATCH 5.16 0342/1039] Bluetooth: L2CAP: Fix using wrong mode
+Date:   Mon, 24 Jan 2022 19:35:31 +0100
+Message-Id: <20220124184136.798730800@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,41 +47,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-[ Upstream commit f973795a8d19cbf3d03807704eb7c6ff65788d5a ]
+[ Upstream commit 30d57722732d9736554f85f75f9d7ad5402d192e ]
 
-In iwl_txq_dyn_alloc_dma, txq->tfds is freed at first time by:
-iwl_txq_alloc()->goto err_free_tfds->dma_free_coherent(). But
-it forgot to set txq->tfds to NULL.
+If user has a set to use SOCK_STREAM the socket would default to
+L2CAP_MODE_ERTM which later needs to be adjusted if the destination
+address is LE which doesn't support such mode.
 
-Then the txq->tfds is freed again in iwl_txq_dyn_alloc_dma by:
-goto error->iwl_txq_gen2_free_memory()->dma_free_coherent().
-
-My patch sets txq->tfds to NULL after the first free to avoid the
-double free.
-
-Fixes: 0cd1ad2d7fd41 ("iwlwifi: move all bus-independent TX functions to common code")
-Signed-off-by: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
-Link: https://lore.kernel.org/r/20210403054755.4781-1-lyl2019@mail.ustc.edu.cn
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Fixes: 15f02b9105625 ("Bluetooth: L2CAP: Add initial code for Enhanced Credit Based Mode")
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/queue/tx.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/bluetooth/l2cap_sock.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/queue/tx.c b/drivers/net/wireless/intel/iwlwifi/queue/tx.c
-index 451b060693501..0f3526b0c5b00 100644
---- a/drivers/net/wireless/intel/iwlwifi/queue/tx.c
-+++ b/drivers/net/wireless/intel/iwlwifi/queue/tx.c
-@@ -1072,6 +1072,7 @@ int iwl_txq_alloc(struct iwl_trans *trans, struct iwl_txq *txq, int slots_num,
- 	return 0;
- err_free_tfds:
- 	dma_free_coherent(trans->dev, tfd_sz, txq->tfds, txq->dma_addr);
-+	txq->tfds = NULL;
- error:
- 	if (txq->entries && cmd_queue)
- 		for (i = 0; i < slots_num; i++)
+diff --git a/net/bluetooth/l2cap_sock.c b/net/bluetooth/l2cap_sock.c
+index 4574c5cb1b596..251017c69ab7f 100644
+--- a/net/bluetooth/l2cap_sock.c
++++ b/net/bluetooth/l2cap_sock.c
+@@ -161,7 +161,11 @@ static int l2cap_sock_bind(struct socket *sock, struct sockaddr *addr, int alen)
+ 		break;
+ 	}
+ 
+-	if (chan->psm && bdaddr_type_is_le(chan->src_type))
++	/* Use L2CAP_MODE_LE_FLOWCTL (CoC) in case of LE address and
++	 * L2CAP_MODE_EXT_FLOWCTL (ECRED) has not been set.
++	 */
++	if (chan->psm && bdaddr_type_is_le(chan->src_type) &&
++	    chan->mode != L2CAP_MODE_EXT_FLOWCTL)
+ 		chan->mode = L2CAP_MODE_LE_FLOWCTL;
+ 
+ 	chan->state = BT_BOUND;
+@@ -255,7 +259,11 @@ static int l2cap_sock_connect(struct socket *sock, struct sockaddr *addr,
+ 			return -EINVAL;
+ 	}
+ 
+-	if (chan->psm && bdaddr_type_is_le(chan->src_type) && !chan->mode)
++	/* Use L2CAP_MODE_LE_FLOWCTL (CoC) in case of LE address and
++	 * L2CAP_MODE_EXT_FLOWCTL (ECRED) has not been set.
++	 */
++	if (chan->psm && bdaddr_type_is_le(chan->src_type) &&
++	    chan->mode != L2CAP_MODE_EXT_FLOWCTL)
+ 		chan->mode = L2CAP_MODE_LE_FLOWCTL;
+ 
+ 	l2cap_sock_init_pid(sk);
 -- 
 2.34.1
 

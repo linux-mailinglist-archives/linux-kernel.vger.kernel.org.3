@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C695A498D11
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:33:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E77A498C90
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:23:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351567AbiAXT1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:27:32 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44614 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345934AbiAXTRi (ORCPT
+        id S1345432AbiAXTXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:23:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346472AbiAXTNY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:17:38 -0500
+        Mon, 24 Jan 2022 14:13:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C338C061763;
+        Mon, 24 Jan 2022 11:05:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED9946133D;
-        Mon, 24 Jan 2022 19:17:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0F6FC340E7;
-        Mon, 24 Jan 2022 19:17:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B02F7603DE;
+        Mon, 24 Jan 2022 19:05:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E359C340E5;
+        Mon, 24 Jan 2022 19:05:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051857;
-        bh=2tlDt6Cs63ivblVqNROf09tHbLBAy/Z87u2ytLnMtfQ=;
+        s=korg; t=1643051156;
+        bh=2oJQ6ThJe2gdSrrrORMLu8Meow0HMdp7Eylv6Q47zng=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PLqsANrBh7VYOfKK+WRqn46qVeBQVTUSTFCpvOmLy7MwiQGONovCxMbpSQbJnGWoH
-         G8wNys9l2lpeBCqeBu5MrY+hXHI8JA2cVNZX943eKCn+TA/Vn3KUb8l6A9O/MTCkxC
-         YWCtWpwKx3KWMUvFHBuJxRAsZ3YosphQF1uLhCdM=
+        b=SOmjTNJ1cDKyeNDilmDqnqy9zXJmSOudddDbFlINnjSAciBE5tWzUtc04UJnnPkVJ
+         0C4su13uolZcwy1wsKoo9jGJzjYWF7B/RAQrM8rZmaXXg0QfSKqFjKgUTq4VoDiMCV
+         lnuh/J2i1tVd1N4LKVlu26Re3gvmyDvfFv8PdhLY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Wang Hai <wanghai38@huawei.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, Chengfeng Ye <cyeaa@connect.ust.hk>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 076/239] media: msi001: fix possible null-ptr-deref in msi001_probe()
-Date:   Mon, 24 Jan 2022 19:41:54 +0100
-Message-Id: <20220124183945.536846034@linuxfoundation.org>
+Subject: [PATCH 4.14 040/186] crypto: qce - fix uaf on qce_ahash_register_one
+Date:   Mon, 24 Jan 2022 19:41:55 +0100
+Message-Id: <20220124183938.413364817@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,56 +50,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Hai <wanghai38@huawei.com>
+From: Chengfeng Ye <cyeaa@connect.ust.hk>
 
-[ Upstream commit 3d5831a40d3464eea158180eb12cbd81c5edfb6a ]
+[ Upstream commit b4cb4d31631912842eb7dce02b4350cbb7562d5e ]
 
-I got a null-ptr-deref report:
+Pointer base points to sub field of tmpl, it
+is dereferenced after tmpl is freed. Fix
+this by accessing base before free tmpl.
 
-BUG: kernel NULL pointer dereference, address: 0000000000000060
-...
-RIP: 0010:v4l2_ctrl_auto_cluster+0x57/0x270
-...
-Call Trace:
- msi001_probe+0x13b/0x24b [msi001]
- spi_probe+0xeb/0x130
-...
- do_syscall_64+0x35/0xb0
-
-In msi001_probe(), if the creation of control for bandwidth_auto
-fails, there will be a null-ptr-deref issue when it is used in
-v4l2_ctrl_auto_cluster().
-
-Check dev->hdl.error before v4l2_ctrl_auto_cluster() to fix this bug.
-
-Link: https://lore.kernel.org/linux-media/20211026112348.2878040-1-wanghai38@huawei.com
-Fixes: 93203dd6c7c4 ("[media] msi001: Mirics MSi001 silicon tuner driver")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wang Hai <wanghai38@huawei.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Fixes: ec8f5d8f ("crypto: qce - Qualcomm crypto engine driver")
+Signed-off-by: Chengfeng Ye <cyeaa@connect.ust.hk>
+Acked-by: Thara Gopinath <thara.gopinath@linaro.org>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/tuners/msi001.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/crypto/qce/sha.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/tuners/msi001.c b/drivers/media/tuners/msi001.c
-index 5de6ed7287085..13ffe196b7a42 100644
---- a/drivers/media/tuners/msi001.c
-+++ b/drivers/media/tuners/msi001.c
-@@ -451,6 +451,13 @@ static int msi001_probe(struct spi_device *spi)
- 			V4L2_CID_RF_TUNER_BANDWIDTH_AUTO, 0, 1, 1, 1);
- 	dev->bandwidth = v4l2_ctrl_new_std(&dev->hdl, &msi001_ctrl_ops,
- 			V4L2_CID_RF_TUNER_BANDWIDTH, 200000, 8000000, 1, 200000);
-+	if (dev->hdl.error) {
-+		ret = dev->hdl.error;
-+		dev_err(&spi->dev, "Could not initialize controls\n");
-+		/* control init failed, free handler */
-+		goto err_ctrl_handler_free;
-+	}
-+
- 	v4l2_ctrl_auto_cluster(2, &dev->bandwidth_auto, 0, false);
- 	dev->lna_gain = v4l2_ctrl_new_std(&dev->hdl, &msi001_ctrl_ops,
- 			V4L2_CID_RF_TUNER_LNA_GAIN, 0, 1, 1, 1);
+diff --git a/drivers/crypto/qce/sha.c b/drivers/crypto/qce/sha.c
+index 47e114ac09d01..ff1e788f92767 100644
+--- a/drivers/crypto/qce/sha.c
++++ b/drivers/crypto/qce/sha.c
+@@ -544,8 +544,8 @@ static int qce_ahash_register_one(const struct qce_ahash_def *def,
+ 
+ 	ret = crypto_register_ahash(alg);
+ 	if (ret) {
+-		kfree(tmpl);
+ 		dev_err(qce->dev, "%s registration failed\n", base->cra_name);
++		kfree(tmpl);
+ 		return ret;
+ 	}
+ 
 -- 
 2.34.1
 

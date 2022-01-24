@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F41D49A2AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:00:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F0649A71E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:36:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2365903AbiAXXv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:51:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
+        id S242086AbiAYCds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:33:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1843471AbiAXXED (ORCPT
+        with ESMTP id S1384162AbiAXU3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:04:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0658DC06C5AB;
-        Mon, 24 Jan 2022 13:14:48 -0800 (PST)
+        Mon, 24 Jan 2022 15:29:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D52C082571;
+        Mon, 24 Jan 2022 11:42:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 981AB6147D;
-        Mon, 24 Jan 2022 21:14:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 812FCC340E5;
-        Mon, 24 Jan 2022 21:14:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CD32B80FA1;
+        Mon, 24 Jan 2022 19:42:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B23CC340E5;
+        Mon, 24 Jan 2022 19:42:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058887;
-        bh=ZCpHyFJAoXnEja1vJbnmNPOXxj+CVxDmB0m9DLqkUr4=;
+        s=korg; t=1643053339;
+        bh=uwBEOBweT8nlFVJJg0CeubIROq7ixtblezKhAsWjI78=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CnuSWAk2T+/zVGkKcEaKvHGUvV3mRHe2TtGXBdfNTMdkZAJ3cWZjeDw89aWDmruVf
-         oQi4puFUtIzdA6mb2ji2TLK45dljQn2wSA8rCJ3peeyg6YHLMB70tiW/GnbsXE5enu
-         8mripOUEXFxKaacZj3ZrQ19sNHJnnVSMsmTO8hXM=
+        b=ouLjJSPP9nvx2WNcfXshbJPIHnc3Z13uxOexjRFiC99z7S7wu/d3UdgBYI3GdBhkp
+         j87PmjwbNQT2v9INa9txKy4VmXqPkBms9g+j1xUD99ZCH+cX2NUqf5zDNReZnqR+2r
+         uvUm0QY1/0/8Kq0tpsgTulPy9xWBQ2QGSVtTcUXw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maor Dickman <maord@nvidia.com>,
-        Vlad Buslov <vladbu@nvidia.com>, Roi Dayan <roid@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0407/1039] net/mlx5e: Fix wrong usage of fib_info_nh when routes with nexthop objects are used
+        stable@vger.kernel.org, Kunyang Fan <Kunyang_Fan@aaeon.com.tw>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Stable@vger.kernel.org
+Subject: [PATCH 5.10 031/563] iio: adc: ti-adc081c: Partial revert of removal of ACPI IDs
 Date:   Mon, 24 Jan 2022 19:36:36 +0100
-Message-Id: <20220124184138.990561002@linuxfoundation.org>
+Message-Id: <20220124184025.503755457@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,83 +50,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maor Dickman <maord@nvidia.com>
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-[ Upstream commit 885751eb1b01d276e38f57d78c583e4ce006c5ed ]
+commit c9791a94384af07592d29504004d2255dbaf8663 upstream.
 
-Creating routes with nexthop objects while in switchdev mode leads to access to
-un-allocated memory and trigger bellow call trace due to hitting WARN_ON.
-This is caused due to illegal usage of fib_info_nh in TC tunnel FIB event handling to
-resolve the FIB device while fib_info built in with nexthop.
+Unfortuanately a non standards compliant ACPI ID is known to be
+in the wild on some AAEON boards.
 
-Fixed by ignoring attempts to use nexthop objects with routes until support can be
-properly added.
+Partly revert the removal of these IDs so that ADC081C will again
+work + add a comment to that affect for future reference.
 
-WARNING: CPU: 1 PID: 1724 at include/net/nexthop.h:468 mlx5e_tc_tun_fib_event+0x448/0x570 [mlx5_core]
-CPU: 1 PID: 1724 Comm: ip Not tainted 5.15.0_for_upstream_min_debug_2021_11_09_02_04 #1
-RIP: 0010:mlx5e_tc_tun_fib_event+0x448/0x570 [mlx5_core]
-RSP: 0018:ffff8881349f7910 EFLAGS: 00010202
-RAX: ffff8881492f1980 RBX: ffff8881349f79e8 RCX: 0000000000000000
-RDX: ffff8881349f79e8 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffff8881349f7950 R08: 00000000000000fe R09: 0000000000000001
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff88811e9d0000
-R13: ffff88810eb62000 R14: ffff888106710268 R15: 0000000000000018
-FS:  00007f1d5ca6e800(0000) GS:ffff88852c880000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffedba44ff8 CR3: 0000000129808004 CR4: 0000000000370ea0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- atomic_notifier_call_chain+0x42/0x60
- call_fib_notifiers+0x21/0x40
- fib_table_insert+0x479/0x6d0
- ? try_charge_memcg+0x480/0x6d0
- inet_rtm_newroute+0x65/0xb0
- rtnetlink_rcv_msg+0x2af/0x360
- ? page_add_file_rmap+0x13/0x130
- ? do_set_pte+0xcd/0x120
- ? rtnl_calcit.isra.0+0x120/0x120
- netlink_rcv_skb+0x4e/0xf0
- netlink_unicast+0x1ee/0x2b0
- netlink_sendmsg+0x22e/0x460
- sock_sendmsg+0x33/0x40
- ____sys_sendmsg+0x1d1/0x1f0
- ___sys_sendmsg+0xab/0xf0
- ? __mod_memcg_lruvec_state+0x40/0x60
- ? __mod_lruvec_page_state+0x95/0xd0
- ? page_add_new_anon_rmap+0x4e/0xf0
- ? __handle_mm_fault+0xec6/0x1470
- __sys_sendmsg+0x51/0x90
- ? internal_get_user_pages_fast+0x480/0xa10
- do_syscall_64+0x3d/0x90
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+Whilst here use generic firmware properties rather than the ACPI
+specific handling previously found in this driver.
 
-Fixes: 8914add2c9e5 ("net/mlx5e: Handle FIB events to update tunnel endpoint device")
-Signed-off-by: Maor Dickman <maord@nvidia.com>
-Reviewed-by: Vlad Buslov <vladbu@nvidia.com>
-Reviewed-by: Roi Dayan <roid@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Kunyang Fan <Kunyang_Fan@aaeon.com.tw>
+Fixes: c458b7ca3fd0 ("iio:adc:ti-adc081c: Drop ACPI ids that seem very unlikely to be official.")
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+Tested-by: Kunyang Fan <Kunyang_Fan@aaeon.com.tw> #UP-extremei11
+Link: https://lore.kernel.org/r/20211205172728.2826512-1-jic23@kernel.org
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/iio/adc/ti-adc081c.c |   22 +++++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c
-index 042b1abe1437f..62cbd15ffc341 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_encap.c
-@@ -1579,6 +1579,8 @@ mlx5e_init_fib_work_ipv4(struct mlx5e_priv *priv,
- 	struct net_device *fib_dev;
+--- a/drivers/iio/adc/ti-adc081c.c
++++ b/drivers/iio/adc/ti-adc081c.c
+@@ -19,6 +19,7 @@
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+ #include <linux/mod_devicetable.h>
++#include <linux/property.h>
  
- 	fen_info = container_of(info, struct fib_entry_notifier_info, info);
-+	if (fen_info->fi->nh)
-+		return NULL;
- 	fib_dev = fib_info_nh(fen_info->fi, 0)->fib_nh_dev;
- 	if (!fib_dev || fib_dev->netdev_ops != &mlx5e_netdev_ops ||
- 	    fen_info->dst_len != 32)
--- 
-2.34.1
-
+ #include <linux/iio/iio.h>
+ #include <linux/iio/buffer.h>
+@@ -151,13 +152,16 @@ static int adc081c_probe(struct i2c_clie
+ {
+ 	struct iio_dev *iio;
+ 	struct adc081c *adc;
+-	struct adcxx1c_model *model;
++	const struct adcxx1c_model *model;
+ 	int err;
+ 
+ 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_WORD_DATA))
+ 		return -EOPNOTSUPP;
+ 
+-	model = &adcxx1c_models[id->driver_data];
++	if (dev_fwnode(&client->dev))
++		model = device_get_match_data(&client->dev);
++	else
++		model = &adcxx1c_models[id->driver_data];
+ 
+ 	iio = devm_iio_device_alloc(&client->dev, sizeof(*adc));
+ 	if (!iio)
+@@ -224,10 +228,17 @@ static const struct i2c_device_id adc081
+ };
+ MODULE_DEVICE_TABLE(i2c, adc081c_id);
+ 
++static const struct acpi_device_id adc081c_acpi_match[] = {
++	/* Used on some AAEON boards */
++	{ "ADC081C", (kernel_ulong_t)&adcxx1c_models[ADC081C] },
++	{ }
++};
++MODULE_DEVICE_TABLE(acpi, adc081c_acpi_match);
++
+ static const struct of_device_id adc081c_of_match[] = {
+-	{ .compatible = "ti,adc081c" },
+-	{ .compatible = "ti,adc101c" },
+-	{ .compatible = "ti,adc121c" },
++	{ .compatible = "ti,adc081c", .data = &adcxx1c_models[ADC081C] },
++	{ .compatible = "ti,adc101c", .data = &adcxx1c_models[ADC101C] },
++	{ .compatible = "ti,adc121c", .data = &adcxx1c_models[ADC121C] },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, adc081c_of_match);
+@@ -236,6 +247,7 @@ static struct i2c_driver adc081c_driver
+ 	.driver = {
+ 		.name = "adc081c",
+ 		.of_match_table = adc081c_of_match,
++		.acpi_match_table = adc081c_acpi_match,
+ 	},
+ 	.probe = adc081c_probe,
+ 	.remove = adc081c_remove,
 
 

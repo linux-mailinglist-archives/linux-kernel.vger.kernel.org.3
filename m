@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E7749A24E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 02:59:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C05CB49A2BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:01:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2361865AbiAXXlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:41:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46112 "EHLO
+        id S2364208AbiAXXrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1841065AbiAXW5a (ORCPT
+        with ESMTP id S1356424AbiAXWz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:57:30 -0500
+        Mon, 24 Jan 2022 17:55:59 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC77C055ABC;
-        Mon, 24 Jan 2022 13:11:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78006C0680BD;
+        Mon, 24 Jan 2022 13:10:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4E80B80FA1;
-        Mon, 24 Jan 2022 21:11:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBF70C340E5;
-        Mon, 24 Jan 2022 21:11:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 401AAB810BD;
+        Mon, 24 Jan 2022 21:10:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58E52C340E5;
+        Mon, 24 Jan 2022 21:10:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058699;
-        bh=Sg3S3kOi4mnZWSbiDwAh4Yx1tel3YqVXV3twfkoYhCA=;
+        s=korg; t=1643058603;
+        bh=GenLxtxLRHNWfA86dEZ+thJRET1S9HTGCB7UNjRlrEI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=weFOZsnREhwfgzXBXPrv7aMj61kRjFHkEPLKH2h6jXl0G5vjkoJS7mW1X8b9RMsY7
-         BPR/y37a8nuTU8G2Cmaj7m/rv/IcMEMibaiGb+GpErIqtUQ7dkwgX0QSgDmjgdmY94
-         y9hNaP7ecURwW8qleK7z5GVfe2+/W/ZeJqFlHmrs=
+        b=i52JiI3TTBbe8kszDIbz5mnNnirjtwDoK5q661/dXpzXlGrqlckxUU639KUh3BgHd
+         /DOSeg+cMPK2iDsPHCRzpUzytbi0mM/eeopgOTx9hSGEzm80Y0roFa3AzD3oNbjexP
+         Mk46JPpXSMczI85bUMwU/fRoh6O2/MXwc6gfpdlg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0341/1039] um: virtio_uml: Fix time-travel external time propagation
-Date:   Mon, 24 Jan 2022 19:35:30 +0100
-Message-Id: <20220124184136.768068556@linuxfoundation.org>
+        stable@vger.kernel.org, Quentin Monnet <quentin@isovalent.com>,
+        Paul Chaignon <paul@isovalent.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0343/1039] bpftool: Enable line buffering for stdout
+Date:   Mon, 24 Jan 2022 19:35:32 +0100
+Message-Id: <20220124184136.830520895@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -49,57 +50,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Paul Chaignon <paul@isovalent.com>
 
-[ Upstream commit 85e73968a040c642fd38f6cba5b73b61f5d0f052 ]
+[ Upstream commit 1a1a0b0364ad291bd8e509da104ac8b5b1afec5d ]
 
-When creating an external event, the current time needs to
-be propagated to other participants of a simulation. This
-is done in the places here where we kick a virtq etc.
+The output of bpftool prog tracelog is currently buffered, which is
+inconvenient when piping the output into other commands. A simple
+tracelog | grep will typically not display anything. This patch fixes it
+by enabling line buffering on stdout for the whole bpftool binary.
 
-However, it must be done for _all_ external events, and
-that includes making the initial socket connection and
-later closing it. Call time_travel_propagate_time() to do
-this before making or closing the socket connection.
-
-Apparently, at least for the initial connection creation,
-due to the remote side in my use cases using microseconds
-(rather than nanoseconds), this wasn't a problem yet; only
-started failing between 5.14-rc1 and 5.15-rc1 (didn't test
-others much), or possibly depending on the configuration,
-where more delays happen before the virtio devices are
-initialized.
-
-Fixes: 88ce64249233 ("um: Implement time-travel=ext")
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Fixes: 30da46b5dc3a ("tools: bpftool: add a command to dump the trace pipe")
+Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+Signed-off-by: Paul Chaignon <paul@isovalent.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/bpf/20211220214528.GA11706@Mem
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/um/drivers/virtio_uml.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/bpf/bpftool/main.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/um/drivers/virtio_uml.c b/arch/um/drivers/virtio_uml.c
-index d51e445df7976..7755cb4ff9fc6 100644
---- a/arch/um/drivers/virtio_uml.c
-+++ b/arch/um/drivers/virtio_uml.c
-@@ -1090,6 +1090,8 @@ static void virtio_uml_release_dev(struct device *d)
- 			container_of(d, struct virtio_device, dev);
- 	struct virtio_uml_device *vu_dev = to_virtio_uml_device(vdev);
+diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+index 28237d7cef67f..8fbcff9d557d9 100644
+--- a/tools/bpf/bpftool/main.c
++++ b/tools/bpf/bpftool/main.c
+@@ -400,6 +400,8 @@ int main(int argc, char **argv)
+ 	};
+ 	int opt, ret;
  
-+	time_travel_propagate_time();
++	setlinebuf(stdout);
 +
- 	/* might not have been opened due to not negotiating the feature */
- 	if (vu_dev->req_fd >= 0) {
- 		um_free_irq(vu_dev->irq, vu_dev);
-@@ -1136,6 +1138,8 @@ static int virtio_uml_probe(struct platform_device *pdev)
- 	vu_dev->pdev = pdev;
- 	vu_dev->req_fd = -1;
- 
-+	time_travel_propagate_time();
-+
- 	do {
- 		rc = os_connect_socket(pdata->socket_path);
- 	} while (rc == -EINTR);
+ 	last_do_help = do_help;
+ 	pretty_output = false;
+ 	json_output = false;
 -- 
 2.34.1
 

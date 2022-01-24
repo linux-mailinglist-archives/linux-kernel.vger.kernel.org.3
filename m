@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 374F4499CCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C97774995B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:13:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1580532AbiAXWJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:09:58 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37066 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448902AbiAXVOM (ORCPT
+        id S1347217AbiAXUyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:54:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1384815AbiAXUaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:14:12 -0500
+        Mon, 24 Jan 2022 15:30:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F33C07A968;
+        Mon, 24 Jan 2022 11:43:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 563066148B;
-        Mon, 24 Jan 2022 21:14:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CC6FC340E5;
-        Mon, 24 Jan 2022 21:14:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6F79B8122F;
+        Mon, 24 Jan 2022 19:43:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7D91C340EA;
+        Mon, 24 Jan 2022 19:43:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058850;
-        bh=br5AcrBFtY1joqdyAs9YGFFLMk3rYlCqyHCcz2VHz0k=;
+        s=korg; t=1643053385;
+        bh=PqqgOMdQYsjVK+c5rEKxPaFKwUlR+y4hoxNyhmOITC8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZtJcfE6dLT5uXD0cobMhB6toFjtos9FGy5QwwlDcqwCBmRkAIdS3GvGSfQG82KjXG
-         02yjf6iGlrcvHI5jOQPy1mccy6pwkBV5zv3Js41zv9LpOv6T0GupNfzIk2PkVlwRCN
-         Ss5uUzvfcu3K1txT4YTsFIR4Tm9sIDdKsJfGxU30=
+        b=g9KUG/hdbiBkuL/OMM0UyxuSG5B6dZNNeEIaiMRdI1Rgh07MWzXJMUForknH2E7a9
+         ZO3GBGkrKyqu+iQtE5dq/WYgEfQyJQ/CDuU+mNg1rnuWvXw4E9z8rs1Rdrhr8llOd0
+         DB7QowVmhDgVYalPQhAIGC4dzELH8dI1SSE8xM2A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Subbaraya Sundeep <sbhatta@marvell.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0423/1039] octeontx2-af: Increment ptp refcount before use
-Date:   Mon, 24 Jan 2022 19:36:52 +0100
-Message-Id: <20220124184139.523946948@linuxfoundation.org>
+        stable@vger.kernel.org, aleksandr.o.makarov@gmail.com,
+        Brian Norris <briannorris@chromium.org>,
+        "=?UTF-8?q?N=C3=ADcolas=20F . =20R . =20A . =20Prado?=" 
+        <nfraprado@collabora.com>, Chen-Yu Tsai <wenst@chromium.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Subject: [PATCH 5.10 048/563] drm/rockchip: dsi: Hold pm-runtime across bind/unbind
+Date:   Mon, 24 Jan 2022 19:36:53 +0100
+Message-Id: <20220124184026.078735949@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,37 +51,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Subbaraya Sundeep <sbhatta@marvell.com>
+From: Brian Norris <briannorris@chromium.org>
 
-[ Upstream commit 93440f4888cf049dbd22b41aaf94d2e2153b3eb8 ]
+commit 514db871922f103886ad4d221cf406b4fcc5e74a upstream.
 
-Before using the ptp pci device by AF driver increment
-the reference count of it.
+In commit 43c2de1002d2 ("drm/rockchip: dsi: move all lane config except
+LCDC mux to bind()"), we moved most HW configuration to bind(), but we
+didn't move the runtime PM management. Therefore, depending on initial
+boot state, runtime-PM workqueue delays, and other timing factors, we
+may disable our power domain in between the hardware configuration
+(bind()) and when we enable the display. This can cause us to lose
+hardware state and fail to configure our display. For example:
 
-Fixes: a8b90c9d26d6 ("octeontx2-af: Add PTP device id for CN10K and 95O silcons")
-Signed-off-by: Subbaraya Sundeep <sbhatta@marvell.com>
-Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+  dw-mipi-dsi-rockchip ff968000.mipi: failed to write command FIFO
+  panel-innolux-p079zca ff960000.mipi.0: failed to write command 0
+
+or:
+
+  dw-mipi-dsi-rockchip ff968000.mipi: failed to write command FIFO
+  panel-kingdisplay-kd097d04 ff960000.mipi.0: failed write init cmds: -110
+
+We should match the runtime PM to the lifetime of the bind()/unbind()
+cycle.
+
+Tested on Acer Chrometab 10 (RK3399 Gru-Scarlet), with panel drivers
+built either as modules or built-in.
+
+Side notes: it seems one is more likely to see this problem when the
+panel driver is built into the kernel. I've also seen this problem
+bisect down to commits that simply changed Kconfig dependencies, because
+it changed the order in which driver init functions were compiled into
+the kernel, and therefore the ordering and timing of built-in device
+probe.
+
+Fixes: 43c2de1002d2 ("drm/rockchip: dsi: move all lane config except LCDC mux to bind()")
+Link: https://lore.kernel.org/linux-rockchip/9aedfb528600ecf871885f7293ca4207c84d16c1.camel@gmail.com/
+Reported-by: <aleksandr.o.makarov@gmail.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20210928143413.v3.1.Ic2904d37f30013a7f3d8476203ad3733c186827e@changeid
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/marvell/octeontx2/af/ptp.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c |   37 ++++++++++++------------
+ 1 file changed, 19 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/ptp.c b/drivers/net/ethernet/marvell/octeontx2/af/ptp.c
-index d6321de3cc171..e682b7bfde640 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/ptp.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/ptp.c
-@@ -60,6 +60,8 @@ struct ptp *ptp_get(void)
- 	/* Check driver is bound to PTP block */
- 	if (!ptp)
- 		ptp = ERR_PTR(-EPROBE_DEFER);
-+	else
-+		pci_dev_get(ptp->pdev);
+--- a/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c
++++ b/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c
+@@ -753,10 +753,6 @@ static void dw_mipi_dsi_encoder_enable(s
+ 	if (mux < 0)
+ 		return;
  
- 	return ptp;
+-	pm_runtime_get_sync(dsi->dev);
+-	if (dsi->slave)
+-		pm_runtime_get_sync(dsi->slave->dev);
+-
+ 	/*
+ 	 * For the RK3399, the clk of grf must be enabled before writing grf
+ 	 * register. And for RK3288 or other soc, this grf_clk must be NULL,
+@@ -775,20 +771,10 @@ static void dw_mipi_dsi_encoder_enable(s
+ 	clk_disable_unprepare(dsi->grf_clk);
  }
--- 
-2.34.1
-
+ 
+-static void dw_mipi_dsi_encoder_disable(struct drm_encoder *encoder)
+-{
+-	struct dw_mipi_dsi_rockchip *dsi = to_dsi(encoder);
+-
+-	if (dsi->slave)
+-		pm_runtime_put(dsi->slave->dev);
+-	pm_runtime_put(dsi->dev);
+-}
+-
+ static const struct drm_encoder_helper_funcs
+ dw_mipi_dsi_encoder_helper_funcs = {
+ 	.atomic_check = dw_mipi_dsi_encoder_atomic_check,
+ 	.enable = dw_mipi_dsi_encoder_enable,
+-	.disable = dw_mipi_dsi_encoder_disable,
+ };
+ 
+ static int rockchip_dsi_drm_create_encoder(struct dw_mipi_dsi_rockchip *dsi,
+@@ -918,10 +904,14 @@ static int dw_mipi_dsi_rockchip_bind(str
+ 		put_device(second);
+ 	}
+ 
++	pm_runtime_get_sync(dsi->dev);
++	if (dsi->slave)
++		pm_runtime_get_sync(dsi->slave->dev);
++
+ 	ret = clk_prepare_enable(dsi->pllref_clk);
+ 	if (ret) {
+ 		DRM_DEV_ERROR(dev, "Failed to enable pllref_clk: %d\n", ret);
+-		return ret;
++		goto out_pm_runtime;
+ 	}
+ 
+ 	/*
+@@ -933,7 +923,7 @@ static int dw_mipi_dsi_rockchip_bind(str
+ 	ret = clk_prepare_enable(dsi->grf_clk);
+ 	if (ret) {
+ 		DRM_DEV_ERROR(dsi->dev, "Failed to enable grf_clk: %d\n", ret);
+-		return ret;
++		goto out_pm_runtime;
+ 	}
+ 
+ 	dw_mipi_dsi_rockchip_config(dsi);
+@@ -945,16 +935,23 @@ static int dw_mipi_dsi_rockchip_bind(str
+ 	ret = rockchip_dsi_drm_create_encoder(dsi, drm_dev);
+ 	if (ret) {
+ 		DRM_DEV_ERROR(dev, "Failed to create drm encoder\n");
+-		return ret;
++		goto out_pm_runtime;
+ 	}
+ 
+ 	ret = dw_mipi_dsi_bind(dsi->dmd, &dsi->encoder);
+ 	if (ret) {
+ 		DRM_DEV_ERROR(dev, "Failed to bind: %d\n", ret);
+-		return ret;
++		goto out_pm_runtime;
+ 	}
+ 
+ 	return 0;
++
++out_pm_runtime:
++	pm_runtime_put(dsi->dev);
++	if (dsi->slave)
++		pm_runtime_put(dsi->slave->dev);
++
++	return ret;
+ }
+ 
+ static void dw_mipi_dsi_rockchip_unbind(struct device *dev,
+@@ -969,6 +966,10 @@ static void dw_mipi_dsi_rockchip_unbind(
+ 	dw_mipi_dsi_unbind(dsi->dmd);
+ 
+ 	clk_disable_unprepare(dsi->pllref_clk);
++
++	pm_runtime_put(dsi->dev);
++	if (dsi->slave)
++		pm_runtime_put(dsi->slave->dev);
+ }
+ 
+ static const struct component_ops dw_mipi_dsi_rockchip_ops = {
 
 

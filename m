@@ -2,42 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 381B549A64F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED9F49A70A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:36:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3413114AbiAYAi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:38:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53000 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1454114AbiAXVbt (ORCPT
+        id S3422723AbiAYCcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:32:00 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:46800 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356723AbiAXUUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:31:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F452C07595A;
-        Mon, 24 Jan 2022 12:21:04 -0800 (PST)
+        Mon, 24 Jan 2022 15:20:46 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3857EB8119E;
-        Mon, 24 Jan 2022 20:21:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B99FC340E5;
-        Mon, 24 Jan 2022 20:21:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF0CF61496;
+        Mon, 24 Jan 2022 20:20:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEF72C340E5;
+        Mon, 24 Jan 2022 20:20:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055662;
-        bh=U94C906NVzu+fIoK8RoHp3J6s382LtXBfWhOw9c3lbA=;
+        s=korg; t=1643055644;
+        bh=b7tX3ZlHFJtdTxVMz/rlSEv/QGf1NcHRNgd6ZSQZdFU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nLLvYsFUg2F/dC0YDOqSfHf5I3UZz09pc3HqqiBV+dL7XusvvpT+Tsgb8AjDzFCLc
-         gXLQeeWJ+LKoPQYcG/iKyOWulO6ei2c3hVhq+DybnV+7LXuQtJVc5IkEoscJlJlH0O
-         GefzEOU+X0aoeP1AzpmuAYzB9m6a7K/FPeD+BkFo=
+        b=2o4DZ2A+OjpQ/GQJp3oOCLTyaATTc/mtZgHuXMO1A/jblHz/AnHmBcAuzrU20n7Wd
+         APeI2KROYkD9Z0mXm9ggGpLJYPQmx3wheQh84l7764X6iL7zGjMRwjfqg3QUropOcM
+         kIZwtv+vRo/vKR9uj/uirrw3R9ri5jPb9nHG0TW4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 181/846] ACPI: EC: Rework flushing of EC work while suspended to idle
-Date:   Mon, 24 Jan 2022 19:34:58 +0100
-Message-Id: <20220124184107.226676200@linuxfoundation.org>
+Subject: [PATCH 5.15 185/846] libbpf: Clean gen_loaders attach kind.
+Date:   Mon, 24 Jan 2022 19:35:02 +0100
+Message-Id: <20220124184107.359387999@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -49,216 +46,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Alexei Starovoitov <ast@kernel.org>
 
-[ Upstream commit 4a9af6cac050dce2e895ec3205c4615383ad9112 ]
+[ Upstream commit 19250f5fc0c283892a61f3abf9d65e6325f63897 ]
 
-The flushing of pending work in the EC driver uses drain_workqueue()
-to flush the event handling work that can requeue itself via
-advance_transaction(), but this is problematic, because that
-work may also be requeued from the query workqueue.
+The gen_loader has to clear attach_kind otherwise the programs
+without attach_btf_id will fail load if they follow programs
+with attach_btf_id.
 
-Namely, if an EC transaction is carried out during the execution of
-a query handler, it involves calling advance_transaction() which
-may queue up the event handling work again.  This causes the kernel
-to complain about attempts to add a work item to the EC event
-workqueue while it is being drained and worst-case it may cause a
-valid event to be skipped.
-
-To avoid this problem, introduce two new counters, events_in_progress
-and queries_in_progress, incremented when a work item is queued on
-the event workqueue or the query workqueue, respectively, and
-decremented at the end of the corresponding work function, and make
-acpi_ec_dispatch_gpe() the workqueues in a loop until the both of
-these counters are zero (or system wakeup is pending) instead of
-calling acpi_ec_flush_work().
-
-At the same time, change __acpi_ec_flush_work() to call
-flush_workqueue() instead of drain_workqueue() to flush the event
-workqueue.
-
-While at it, use the observation that the work item queued in
-acpi_ec_query() cannot be pending at that time, because it is used
-only once, to simplify the code in there.
-
-Additionally, clean up a comment in acpi_ec_query() and adjust white
-space in acpi_ec_event_processor().
-
-Fixes: f0ac20c3f613 ("ACPI: EC: Fix flushing of pending work")
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: 67234743736a ("libbpf: Generate loader program out of BPF ELF file.")
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20211201181040.23337-12-alexei.starovoitov@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/ec.c       | 57 +++++++++++++++++++++++++++++++----------
- drivers/acpi/internal.h |  2 ++
- 2 files changed, 45 insertions(+), 14 deletions(-)
+ tools/lib/bpf/gen_loader.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/acpi/ec.c b/drivers/acpi/ec.c
-index e629e891d1bb3..9b859ff976e89 100644
---- a/drivers/acpi/ec.c
-+++ b/drivers/acpi/ec.c
-@@ -166,6 +166,7 @@ struct acpi_ec_query {
- 	struct transaction transaction;
- 	struct work_struct work;
- 	struct acpi_ec_query_handler *handler;
-+	struct acpi_ec *ec;
- };
- 
- static int acpi_ec_query(struct acpi_ec *ec, u8 *data);
-@@ -452,6 +453,7 @@ static void acpi_ec_submit_query(struct acpi_ec *ec)
- 		ec_dbg_evt("Command(%s) submitted/blocked",
- 			   acpi_ec_cmd_string(ACPI_EC_COMMAND_QUERY));
- 		ec->nr_pending_queries++;
-+		ec->events_in_progress++;
- 		queue_work(ec_wq, &ec->work);
- 	}
- }
-@@ -518,7 +520,7 @@ static void acpi_ec_enable_event(struct acpi_ec *ec)
- #ifdef CONFIG_PM_SLEEP
- static void __acpi_ec_flush_work(void)
- {
--	drain_workqueue(ec_wq); /* flush ec->work */
-+	flush_workqueue(ec_wq); /* flush ec->work */
- 	flush_workqueue(ec_query_wq); /* flush queries */
- }
- 
-@@ -1103,7 +1105,7 @@ void acpi_ec_remove_query_handler(struct acpi_ec *ec, u8 query_bit)
- }
- EXPORT_SYMBOL_GPL(acpi_ec_remove_query_handler);
- 
--static struct acpi_ec_query *acpi_ec_create_query(u8 *pval)
-+static struct acpi_ec_query *acpi_ec_create_query(struct acpi_ec *ec, u8 *pval)
- {
- 	struct acpi_ec_query *q;
- 	struct transaction *t;
-@@ -1111,11 +1113,13 @@ static struct acpi_ec_query *acpi_ec_create_query(u8 *pval)
- 	q = kzalloc(sizeof (struct acpi_ec_query), GFP_KERNEL);
- 	if (!q)
- 		return NULL;
-+
- 	INIT_WORK(&q->work, acpi_ec_event_processor);
- 	t = &q->transaction;
- 	t->command = ACPI_EC_COMMAND_QUERY;
- 	t->rdata = pval;
- 	t->rlen = 1;
-+	q->ec = ec;
- 	return q;
- }
- 
-@@ -1132,13 +1136,21 @@ static void acpi_ec_event_processor(struct work_struct *work)
- {
- 	struct acpi_ec_query *q = container_of(work, struct acpi_ec_query, work);
- 	struct acpi_ec_query_handler *handler = q->handler;
-+	struct acpi_ec *ec = q->ec;
- 
- 	ec_dbg_evt("Query(0x%02x) started", handler->query_bit);
-+
- 	if (handler->func)
- 		handler->func(handler->data);
- 	else if (handler->handle)
- 		acpi_evaluate_object(handler->handle, NULL, NULL, NULL);
-+
- 	ec_dbg_evt("Query(0x%02x) stopped", handler->query_bit);
-+
-+	spin_lock_irq(&ec->lock);
-+	ec->queries_in_progress--;
-+	spin_unlock_irq(&ec->lock);
-+
- 	acpi_ec_delete_query(q);
- }
- 
-@@ -1148,7 +1160,7 @@ static int acpi_ec_query(struct acpi_ec *ec, u8 *data)
- 	int result;
- 	struct acpi_ec_query *q;
- 
--	q = acpi_ec_create_query(&value);
-+	q = acpi_ec_create_query(ec, &value);
- 	if (!q)
- 		return -ENOMEM;
- 
-@@ -1170,19 +1182,20 @@ static int acpi_ec_query(struct acpi_ec *ec, u8 *data)
- 	}
- 
- 	/*
--	 * It is reported that _Qxx are evaluated in a parallel way on
--	 * Windows:
-+	 * It is reported that _Qxx are evaluated in a parallel way on Windows:
- 	 * https://bugzilla.kernel.org/show_bug.cgi?id=94411
- 	 *
--	 * Put this log entry before schedule_work() in order to make
--	 * it appearing before any other log entries occurred during the
--	 * work queue execution.
-+	 * Put this log entry before queue_work() to make it appear in the log
-+	 * before any other messages emitted during workqueue handling.
- 	 */
- 	ec_dbg_evt("Query(0x%02x) scheduled", value);
--	if (!queue_work(ec_query_wq, &q->work)) {
--		ec_dbg_evt("Query(0x%02x) overlapped", value);
--		result = -EBUSY;
--	}
-+
-+	spin_lock_irq(&ec->lock);
-+
-+	ec->queries_in_progress++;
-+	queue_work(ec_query_wq, &q->work);
-+
-+	spin_unlock_irq(&ec->lock);
- 
- err_exit:
- 	if (result)
-@@ -1240,6 +1253,10 @@ static void acpi_ec_event_handler(struct work_struct *work)
- 	ec_dbg_evt("Event stopped");
- 
- 	acpi_ec_check_event(ec);
-+
-+	spin_lock_irqsave(&ec->lock, flags);
-+	ec->events_in_progress--;
-+	spin_unlock_irqrestore(&ec->lock, flags);
- }
- 
- static void acpi_ec_handle_interrupt(struct acpi_ec *ec)
-@@ -2021,6 +2038,7 @@ void acpi_ec_set_gpe_wake_mask(u8 action)
- 
- bool acpi_ec_dispatch_gpe(void)
- {
-+	bool work_in_progress;
- 	u32 ret;
- 
- 	if (!first_ec)
-@@ -2041,8 +2059,19 @@ bool acpi_ec_dispatch_gpe(void)
- 	if (ret == ACPI_INTERRUPT_HANDLED)
- 		pm_pr_dbg("ACPI EC GPE dispatched\n");
- 
--	/* Flush the event and query workqueues. */
--	acpi_ec_flush_work();
-+	/* Drain EC work. */
-+	do {
-+		acpi_ec_flush_work();
-+
-+		pm_pr_dbg("ACPI EC work flushed\n");
-+
-+		spin_lock_irq(&first_ec->lock);
-+
-+		work_in_progress = first_ec->events_in_progress +
-+			first_ec->queries_in_progress > 0;
-+
-+		spin_unlock_irq(&first_ec->lock);
-+	} while (work_in_progress && !pm_wakeup_pending());
- 
- 	return false;
- }
-diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
-index d91b560e88674..54b2be94d23dc 100644
---- a/drivers/acpi/internal.h
-+++ b/drivers/acpi/internal.h
-@@ -183,6 +183,8 @@ struct acpi_ec {
- 	struct work_struct work;
- 	unsigned long timestamp;
- 	unsigned long nr_pending_queries;
-+	unsigned int events_in_progress;
-+	unsigned int queries_in_progress;
- 	bool busy_polling;
- 	unsigned int polling_guard;
- };
+diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+index 8df718a6b142d..33c19590ee434 100644
+--- a/tools/lib/bpf/gen_loader.c
++++ b/tools/lib/bpf/gen_loader.c
+@@ -663,9 +663,11 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
+ 	debug_ret(gen, "prog_load %s insn_cnt %d", attr.prog_name, attr.insn_cnt);
+ 	/* successful or not, close btf module FDs used in extern ksyms and attach_btf_obj_fd */
+ 	cleanup_relos(gen, insns);
+-	if (gen->attach_kind)
++	if (gen->attach_kind) {
+ 		emit_sys_close_blob(gen,
+ 				    attr_field(prog_load_attr, attach_btf_obj_fd));
++		gen->attach_kind = 0;
++	}
+ 	emit_check_err(gen);
+ 	/* remember prog_fd in the stack, if successful */
+ 	emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_7,
 -- 
 2.34.1
 

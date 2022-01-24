@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4113F498E53
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:44:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8314499201
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:19:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241249AbiAXTkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:40:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352901AbiAXTbO (ORCPT
+        id S1380743AbiAXUQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:16:51 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43330 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353083AbiAXT7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:31:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F311C028C31;
-        Mon, 24 Jan 2022 11:14:16 -0800 (PST)
+        Mon, 24 Jan 2022 14:59:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1AD260917;
-        Mon, 24 Jan 2022 19:14:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FD49C340E5;
-        Mon, 24 Jan 2022 19:14:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1272BB8119D;
+        Mon, 24 Jan 2022 19:59:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 461DDC340E5;
+        Mon, 24 Jan 2022 19:59:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051655;
-        bh=mhPuVfgRFd2RapL/z1cdkOW64XqvZopmkecBub3MIng=;
+        s=korg; t=1643054352;
+        bh=FMHYx2XBoKvpWK72As1cxGEVQ+XWXjh/vSjCyMexVUE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HjsqYz1FdDjhsLklY47MDvWJ/wX0YosZxgchYxqnJmL0Cy2lKU/5IdbZG87zsHm1h
-         PRaDyxdE6nj81JZwR02rQs/ji+3gZSsE5A30tW3QkZb/9375XnFFNYNEt1Lu79xT5K
-         FqlkuLOIvg7/5UAg31aNpGJEUZiSdHOnxmCwAkts=
+        b=yGZG13DO1WXUDoUeJm5mhhPGFCdiw29CwAFpIYb2HOQNKdUVr8kHIhQcUe7Jd781d
+         xCYa0VIY2c4s2TqLMtz1hXXBU9KNqD70fAFAmLc1wRvllAtuqCaZGo3AFGywQlRwo6
+         zPm9f7ece5uQf3f+iKNtCEl9GnFfEYyBinJN/IYo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Wang Hai <wanghai38@huawei.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
+        stable@vger.kernel.org, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Shawn Guo <shawnguo@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 045/239] Bluetooth: cmtp: fix possible panic when cmtp_init_sockets() fails
+Subject: [PATCH 5.10 318/563] ARM: imx: rename DEBUG_IMX21_IMX27_UART to DEBUG_IMX27_UART
 Date:   Mon, 24 Jan 2022 19:41:23 +0100
-Message-Id: <20220124183944.571590635@linuxfoundation.org>
+Message-Id: <20220124184035.430426801@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,52 +46,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Hai <wanghai38@huawei.com>
+From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-[ Upstream commit 2a7ca7459d905febf519163bd9e3eed894de6bb7 ]
+[ Upstream commit b0100bce4ff82ec1ccd3c1f3d339fd2df6a81784 ]
 
-I got a kernel BUG report when doing fault injection test:
+Since commit 4b563a066611 ("ARM: imx: Remove imx21 support"), the config
+DEBUG_IMX21_IMX27_UART is really only debug support for IMX27.
 
-------------[ cut here ]------------
-kernel BUG at lib/list_debug.c:45!
-...
-RIP: 0010:__list_del_entry_valid.cold+0x12/0x4d
-...
-Call Trace:
- proto_unregister+0x83/0x220
- cmtp_cleanup_sockets+0x37/0x40 [cmtp]
- cmtp_exit+0xe/0x1f [cmtp]
- do_syscall_64+0x35/0xb0
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+So, rename this option to DEBUG_IMX27_UART and adjust dependencies in
+Kconfig and rename the definitions to IMX27 as further clean-up.
 
-If cmtp_init_sockets() in cmtp_init() fails, cmtp_init() still returns
-success. This will cause a kernel bug when accessing uncreated ctmp
-related data when the module exits.
+This issue was discovered with ./scripts/checkkconfigsymbols.py, which
+reported that DEBUG_IMX21_IMX27_UART depends on the non-existing config
+SOC_IMX21.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wang Hai <wanghai38@huawei.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/cmtp/core.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ arch/arm/Kconfig.debug            | 14 +++++++-------
+ arch/arm/include/debug/imx-uart.h | 18 +++++++++---------
+ 2 files changed, 16 insertions(+), 16 deletions(-)
 
-diff --git a/net/bluetooth/cmtp/core.c b/net/bluetooth/cmtp/core.c
-index 9873684a9d8ff..4764ed73f33bf 100644
---- a/net/bluetooth/cmtp/core.c
-+++ b/net/bluetooth/cmtp/core.c
-@@ -499,9 +499,7 @@ static int __init cmtp_init(void)
- {
- 	BT_INFO("CMTP (CAPI Emulation) ver %s", VERSION);
+diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
+index 8986a91a6f31b..dd1cf70353986 100644
+--- a/arch/arm/Kconfig.debug
++++ b/arch/arm/Kconfig.debug
+@@ -400,12 +400,12 @@ choice
+ 		  Say Y here if you want kernel low-level debugging support
+ 		  on i.MX25.
  
--	cmtp_init_sockets();
+-	config DEBUG_IMX21_IMX27_UART
+-		bool "i.MX21 and i.MX27 Debug UART"
+-		depends on SOC_IMX21 || SOC_IMX27
++	config DEBUG_IMX27_UART
++		bool "i.MX27 Debug UART"
++		depends on SOC_IMX27
+ 		help
+ 		  Say Y here if you want kernel low-level debugging support
+-		  on i.MX21 or i.MX27.
++		  on i.MX27.
+ 
+ 	config DEBUG_IMX28_UART
+ 		bool "i.MX28 Debug UART"
+@@ -1523,7 +1523,7 @@ config DEBUG_IMX_UART_PORT
+ 	int "i.MX Debug UART Port Selection"
+ 	depends on DEBUG_IMX1_UART || \
+ 		   DEBUG_IMX25_UART || \
+-		   DEBUG_IMX21_IMX27_UART || \
++		   DEBUG_IMX27_UART || \
+ 		   DEBUG_IMX31_UART || \
+ 		   DEBUG_IMX35_UART || \
+ 		   DEBUG_IMX50_UART || \
+@@ -1591,12 +1591,12 @@ config DEBUG_LL_INCLUDE
+ 	default "debug/icedcc.S" if DEBUG_ICEDCC
+ 	default "debug/imx.S" if DEBUG_IMX1_UART || \
+ 				 DEBUG_IMX25_UART || \
+-				 DEBUG_IMX21_IMX27_UART || \
++				 DEBUG_IMX27_UART || \
+ 				 DEBUG_IMX31_UART || \
+ 				 DEBUG_IMX35_UART || \
+ 				 DEBUG_IMX50_UART || \
+ 				 DEBUG_IMX51_UART || \
+-				 DEBUG_IMX53_UART ||\
++				 DEBUG_IMX53_UART || \
+ 				 DEBUG_IMX6Q_UART || \
+ 				 DEBUG_IMX6SL_UART || \
+ 				 DEBUG_IMX6SX_UART || \
+diff --git a/arch/arm/include/debug/imx-uart.h b/arch/arm/include/debug/imx-uart.h
+index c8eb83d4b8964..3edbb3c5b42bf 100644
+--- a/arch/arm/include/debug/imx-uart.h
++++ b/arch/arm/include/debug/imx-uart.h
+@@ -11,13 +11,6 @@
+ #define IMX1_UART_BASE_ADDR(n)	IMX1_UART##n##_BASE_ADDR
+ #define IMX1_UART_BASE(n)	IMX1_UART_BASE_ADDR(n)
+ 
+-#define IMX21_UART1_BASE_ADDR	0x1000a000
+-#define IMX21_UART2_BASE_ADDR	0x1000b000
+-#define IMX21_UART3_BASE_ADDR	0x1000c000
+-#define IMX21_UART4_BASE_ADDR	0x1000d000
+-#define IMX21_UART_BASE_ADDR(n)	IMX21_UART##n##_BASE_ADDR
+-#define IMX21_UART_BASE(n)	IMX21_UART_BASE_ADDR(n)
 -
--	return 0;
-+	return cmtp_init_sockets();
- }
+ #define IMX25_UART1_BASE_ADDR	0x43f90000
+ #define IMX25_UART2_BASE_ADDR	0x43f94000
+ #define IMX25_UART3_BASE_ADDR	0x5000c000
+@@ -26,6 +19,13 @@
+ #define IMX25_UART_BASE_ADDR(n)	IMX25_UART##n##_BASE_ADDR
+ #define IMX25_UART_BASE(n)	IMX25_UART_BASE_ADDR(n)
  
- static void __exit cmtp_exit(void)
++#define IMX27_UART1_BASE_ADDR	0x1000a000
++#define IMX27_UART2_BASE_ADDR	0x1000b000
++#define IMX27_UART3_BASE_ADDR	0x1000c000
++#define IMX27_UART4_BASE_ADDR	0x1000d000
++#define IMX27_UART_BASE_ADDR(n)	IMX27_UART##n##_BASE_ADDR
++#define IMX27_UART_BASE(n)	IMX27_UART_BASE_ADDR(n)
++
+ #define IMX31_UART1_BASE_ADDR	0x43f90000
+ #define IMX31_UART2_BASE_ADDR	0x43f94000
+ #define IMX31_UART3_BASE_ADDR	0x5000c000
+@@ -112,10 +112,10 @@
+ 
+ #ifdef CONFIG_DEBUG_IMX1_UART
+ #define UART_PADDR	IMX_DEBUG_UART_BASE(IMX1)
+-#elif defined(CONFIG_DEBUG_IMX21_IMX27_UART)
+-#define UART_PADDR	IMX_DEBUG_UART_BASE(IMX21)
+ #elif defined(CONFIG_DEBUG_IMX25_UART)
+ #define UART_PADDR	IMX_DEBUG_UART_BASE(IMX25)
++#elif defined(CONFIG_DEBUG_IMX27_UART)
++#define UART_PADDR	IMX_DEBUG_UART_BASE(IMX27)
+ #elif defined(CONFIG_DEBUG_IMX31_UART)
+ #define UART_PADDR	IMX_DEBUG_UART_BASE(IMX31)
+ #elif defined(CONFIG_DEBUG_IMX35_UART)
 -- 
 2.34.1
 

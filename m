@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E011649A28D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C869149A30B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2365816AbiAXXvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:51:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46716 "EHLO
+        id S2367600AbiAXX4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:56:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1843489AbiAXXED (ORCPT
+        with ESMTP id S1846559AbiAXXQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:04:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAB4C06C5B7;
-        Mon, 24 Jan 2022 13:15:52 -0800 (PST)
+        Mon, 24 Jan 2022 18:16:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CCBC07E291;
+        Mon, 24 Jan 2022 11:44:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BF5461484;
-        Mon, 24 Jan 2022 21:15:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 003CBC340E4;
-        Mon, 24 Jan 2022 21:15:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 854D7B81188;
+        Mon, 24 Jan 2022 19:44:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B728C340E5;
+        Mon, 24 Jan 2022 19:44:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058951;
-        bh=xPFcUW/VW0HIXO34nXQrqLM6dA/LfJbR16e5fxSkbvk=;
+        s=korg; t=1643053494;
+        bh=XkwDeNlHci496NYmFmsJJ6uvx9eXXONCTwinhOIY5r4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e0HQ4zjHi2F3fDyLRc+C7ZGubUuWbWWrKvegXywrRXVivrCsrHaFw1m6n1qfPXv0I
-         034WTj3EoL/WJ1LnWSW4gaIc4AAdcpxhgsKg0FOSQjbC0kC/jGxJ+MiwlUPdRxj9kr
-         8elVp+3P8TupgIrynA0VJNDXg2Anf0PEmtGjM6p0=
+        b=SFAuqllBdpTTuMW232PXkvT+5rgm49lZi5wMGf11jpdQOPSNMGHSpHYVOSk8JoTBL
+         lMVr3exZE5IPc5tsCyRUiAY+kMvEJvmrJqBY6OqrrqvNctyJRQAXT8m3xsoQ2nuYOP
+         3DZwEpUNSoe1IFqMTxl8WdJRuSxRQFctR7p2Exnk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peiwei Hu <jlu.hpw@foxmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0456/1039] powerpc/prom_init: Fix improper check of prom_getprop()
-Date:   Mon, 24 Jan 2022 19:37:25 +0100
-Message-Id: <20220124184140.623807965@linuxfoundation.org>
+Subject: [PATCH 5.10 084/563] memory: renesas-rpc-if: Return error in case devm_ioremap_resource() fails
+Date:   Mon, 24 Jan 2022 19:37:29 +0100
+Message-Id: <20220124184027.303523032@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,35 +53,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peiwei Hu <jlu.hpw@foxmail.com>
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-[ Upstream commit 869fb7e5aecbc163003f93f36dcc26d0554319f6 ]
+[ Upstream commit 818fdfa89baac77a8df5a2c30f4fb798cc937aa0 ]
 
-prom_getprop() can return PROM_ERROR. Binary operator can not identify
-it.
+Make sure we return error in case devm_ioremap_resource() fails for dirmap
+resource.
 
-Fixes: 94d2dde738a5 ("[POWERPC] Efika: prune fixups and make them more carefull")
-Signed-off-by: Peiwei Hu <jlu.hpw@foxmail.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/tencent_BA28CC6897B7C95A92EB8C580B5D18589105@qq.com
+Fixes: ca7d8b980b67 ("memory: add Renesas RPC-IF driver")
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Link: https://lore.kernel.org/r/20211025205631.21151-6-prabhakar.mahadev-lad.rj@bp.renesas.com
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kernel/prom_init.c | 2 +-
+ drivers/memory/renesas-rpc-if.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/kernel/prom_init.c b/arch/powerpc/kernel/prom_init.c
-index 18b04b08b9833..f845065c860e3 100644
---- a/arch/powerpc/kernel/prom_init.c
-+++ b/arch/powerpc/kernel/prom_init.c
-@@ -2991,7 +2991,7 @@ static void __init fixup_device_tree_efika_add_phy(void)
+diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
+index a760ab08256ff..9019121a80f53 100644
+--- a/drivers/memory/renesas-rpc-if.c
++++ b/drivers/memory/renesas-rpc-if.c
+@@ -245,7 +245,7 @@ int rpcif_sw_init(struct rpcif *rpc, struct device *dev)
+ 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dirmap");
+ 	rpc->dirmap = devm_ioremap_resource(&pdev->dev, res);
+ 	if (IS_ERR(rpc->dirmap))
+-		rpc->dirmap = NULL;
++		return PTR_ERR(rpc->dirmap);
+ 	rpc->size = resource_size(res);
  
- 	/* Check if the phy-handle property exists - bail if it does */
- 	rv = prom_getprop(node, "phy-handle", prop, sizeof(prop));
--	if (!rv)
-+	if (rv <= 0)
- 		return;
- 
- 	/*
+ 	rpc->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
 -- 
 2.34.1
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DE6498FD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9684992D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358998AbiAXT4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:56:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
+        id S1382056AbiAXUZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:25:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354759AbiAXThv (ORCPT
+        with ESMTP id S1377244AbiAXUFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:37:51 -0500
+        Mon, 24 Jan 2022 15:05:11 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F1CC0085BD;
-        Mon, 24 Jan 2022 11:17:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B849C08E814;
+        Mon, 24 Jan 2022 11:30:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B13E56131D;
-        Mon, 24 Jan 2022 19:17:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84D45C340E5;
-        Mon, 24 Jan 2022 19:17:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B0CA60917;
+        Mon, 24 Jan 2022 19:30:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C7EDC340E5;
+        Mon, 24 Jan 2022 19:30:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051851;
-        bh=MVcReX3W2UATrsEc/FCbBHApTKVMcOq6AMGjgtU5CP0=;
+        s=korg; t=1643052649;
+        bh=VNXFk8BJ3Gnx1wh3auxgPrTluzAXvo1QXEFYQZslIsM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fJocDCPBDEdIOz8mb18qcqcXQoWCfRbwohMsxnW1k7S1bzTiKMo+P0tMdSpiQ/LA/
-         NexNgklJVF/Uzwvcyfm5Mt2dU6Z0k177UJPrKqyehVSAp+6L8BrCvS5wL7ApFVmLWh
-         hkzokrZ9qgoF4t1m4h2v/iBhTBGpC2jm057/uiVc=
+        b=s+izFP24edvCMHawF7ws5/XV9XdtEVcBEbvmb2TONiM0HiT8zdN2Hjok+OuVEmoO8
+         mpYDFEKLcjPTyqcAZ6Gndoea49P3whrJpi6FQ1iQqje+iFyhYaVwgVmrgmEzN8xSNM
+         hiAd/UG+qBgj1nu6fwQT0bKhytrUbnf3O0u7Gvso=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Peiwei Hu <jlu.hpw@foxmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 074/239] crypto: stm32/cryp - fix double pm exit
+Subject: [PATCH 5.4 128/320] powerpc/prom_init: Fix improper check of prom_getprop()
 Date:   Mon, 24 Jan 2022 19:41:52 +0100
-Message-Id: <20220124183945.477087875@linuxfoundation.org>
+Message-Id: <20220124183958.031926322@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,36 +49,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>
+From: Peiwei Hu <jlu.hpw@foxmail.com>
 
-[ Upstream commit 6c12e742785bf9333faf60bfb96575bdd763448e ]
+[ Upstream commit 869fb7e5aecbc163003f93f36dcc26d0554319f6 ]
 
-Delete extraneous lines in probe error handling code: pm was
-disabled twice.
+prom_getprop() can return PROM_ERROR. Binary operator can not identify
+it.
 
-Fixes: 65f9aa36ee47 ("crypto: stm32/cryp - Add power management support")
-
-Reported-by: Marek Vasut <marex@denx.de>
-Signed-off-by: Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Fixes: 94d2dde738a5 ("[POWERPC] Efika: prune fixups and make them more carefull")
+Signed-off-by: Peiwei Hu <jlu.hpw@foxmail.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/tencent_BA28CC6897B7C95A92EB8C580B5D18589105@qq.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/stm32/stm32-cryp.c | 2 --
- 1 file changed, 2 deletions(-)
+ arch/powerpc/kernel/prom_init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/crypto/stm32/stm32-cryp.c b/drivers/crypto/stm32/stm32-cryp.c
-index 23b0b7bd64c7f..b3b49dce11369 100644
---- a/drivers/crypto/stm32/stm32-cryp.c
-+++ b/drivers/crypto/stm32/stm32-cryp.c
-@@ -2036,8 +2036,6 @@ err_engine1:
- 	list_del(&cryp->list);
- 	spin_unlock(&cryp_list.lock);
+diff --git a/arch/powerpc/kernel/prom_init.c b/arch/powerpc/kernel/prom_init.c
+index 1b65fb7c0bdaa..7f4e2c031a9ab 100644
+--- a/arch/powerpc/kernel/prom_init.c
++++ b/arch/powerpc/kernel/prom_init.c
+@@ -2919,7 +2919,7 @@ static void __init fixup_device_tree_efika_add_phy(void)
  
--	pm_runtime_disable(dev);
--	pm_runtime_put_noidle(dev);
- 	pm_runtime_disable(dev);
- 	pm_runtime_put_noidle(dev);
+ 	/* Check if the phy-handle property exists - bail if it does */
+ 	rv = prom_getprop(node, "phy-handle", prop, sizeof(prop));
+-	if (!rv)
++	if (rv <= 0)
+ 		return;
  
+ 	/*
 -- 
 2.34.1
 

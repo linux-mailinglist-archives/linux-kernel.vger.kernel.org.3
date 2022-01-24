@@ -2,46 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5636A498A8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:06:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2A1498D35
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346085AbiAXTFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:05:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343948AbiAXS6m (ORCPT
+        id S1351364AbiAXT25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:28:57 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:41144 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345800AbiAXTQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:58:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC20C0617BD;
-        Mon, 24 Jan 2022 10:55:36 -0800 (PST)
+        Mon, 24 Jan 2022 14:16:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7805B8121F;
-        Mon, 24 Jan 2022 18:55:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0AAFC340E5;
-        Mon, 24 Jan 2022 18:55:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 706E7B81235;
+        Mon, 24 Jan 2022 19:16:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E22BC340E5;
+        Mon, 24 Jan 2022 19:16:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050533;
-        bh=Z4nxAGJ3zNBXE1ZFPZ/Q4sjK2iny9EAwaDNANlUTFik=;
+        s=korg; t=1643051776;
+        bh=X5jJ6NhYJuoshh5xIzUWV+HwgGDkQAbbJZYP703Wfao=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EM6a3ANhzO9vWEnLRTaqyiMYqiHBNHlbLhCZycGIfWtLqC9Yeisd0wDBHO3HsPep4
-         dBCi8MnI7bgbfjJvFXWoS13NZrNLApgAGNpbLzsmt5cwhm4icTIcegulssPQJlGFm0
-         MBeoCjL9FAzNOdDDBd+VCcQL/wgv4FjAlPMlBRqU=
+        b=gFdi7DUcc1fui/3wIE2VZmnnxKUc9REZ5RqbmQI7RS5HzH3IGP+B+l7fLQxSnRczM
+         waxklV8n96AN2vEmnF0LCyiB7lBg+Da7MsVrc6bPm7AQYwZ27qmSsT9MVYR8lrwz37
+         yAeP8k5noVgzXangw8BYMAmffzL9TxIud6B9YBGY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Wang Hai <wanghai38@huawei.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 032/157] media: dmxdev: fix UAF when dvb_register_device() fails
+        stable@vger.kernel.org, Zhang Zixun <zhang133010@icloud.com>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 084/239] x86/mce/inject: Avoid out-of-bounds write when setting flags
 Date:   Mon, 24 Jan 2022 19:42:02 +0100
-Message-Id: <20220124183933.821294735@linuxfoundation.org>
+Message-Id: <20220124183945.791813622@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,102 +45,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Hai <wanghai38@huawei.com>
+From: Zhang Zixun <zhang133010@icloud.com>
 
-[ Upstream commit ab599eb11882f834951c436cc080c3455ba32b9b ]
+[ Upstream commit de768416b203ac84e02a757b782a32efb388476f ]
 
-I got a use-after-free report:
+A contrived zero-length write, for example, by using write(2):
 
-dvbdev: dvb_register_device: failed to create device dvb1.dvr0 (-12)
-...
-==================================================================
-BUG: KASAN: use-after-free in dvb_dmxdev_release+0xce/0x2f0
-...
-Call Trace:
- dump_stack_lvl+0x6c/0x8b
- print_address_description.constprop.0+0x48/0x70
- kasan_report.cold+0x82/0xdb
- __asan_load4+0x6b/0x90
- dvb_dmxdev_release+0xce/0x2f0
-...
-Allocated by task 7666:
- kasan_save_stack+0x23/0x50
- __kasan_kmalloc+0x83/0xa0
- kmem_cache_alloc_trace+0x22e/0x470
- dvb_register_device+0x12f/0x980
- dvb_dmxdev_init+0x1f3/0x230
-...
-Freed by task 7666:
- kasan_save_stack+0x23/0x50
- kasan_set_track+0x20/0x30
- kasan_set_free_info+0x24/0x40
- __kasan_slab_free+0xf2/0x130
- kfree+0xd1/0x5c0
- dvb_register_device.cold+0x1ac/0x1fa
- dvb_dmxdev_init+0x1f3/0x230
-...
+  ...
+  ret = write(fd, str, 0);
+  ...
 
-When dvb_register_device() in dvb_dmxdev_init() fails, dvb_dmxdev_init()
-does not return a failure, and the memory pointed to by dvbdev or
-dvr_dvbdev is invalid at this point. If they are used subsequently, it
-will result in UFA or null-ptr-deref.
+to the "flags" file causes:
 
-If dvb_register_device() in dvb_dmxdev_init() fails, fix the bug by making
-dvb_dmxdev_init() return an error as well.
+  BUG: KASAN: stack-out-of-bounds in flags_write
+  Write of size 1 at addr ffff888019be7ddf by task writefile/3787
 
-Link: https://lore.kernel.org/linux-media/20211015085741.1203283-1-wanghai38@huawei.com
+  CPU: 4 PID: 3787 Comm: writefile Not tainted 5.16.0-rc7+ #12
+  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wang Hai <wanghai38@huawei.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+due to accessing buf one char before its start.
+
+Prevent such out-of-bounds access.
+
+  [ bp: Productize into a proper patch. Link below is the next best
+    thing because the original mail didn't get archived on lore. ]
+
+Fixes: 0451d14d0561 ("EDAC, mce_amd_inj: Modify flags attribute to use string arguments")
+Signed-off-by: Zhang Zixun <zhang133010@icloud.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/linux-edac/YcnePfF1OOqoQwrX@zn.tnic/
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-core/dmxdev.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+ arch/x86/kernel/cpu/mcheck/mce-inject.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/dvb-core/dmxdev.c b/drivers/media/dvb-core/dmxdev.c
-index 0418b5a0fb645..32a2e6ffdb097 100644
---- a/drivers/media/dvb-core/dmxdev.c
-+++ b/drivers/media/dvb-core/dmxdev.c
-@@ -1225,7 +1225,7 @@ static const struct dvb_device dvbdev_dvr = {
- };
- int dvb_dmxdev_init(struct dmxdev *dmxdev, struct dvb_adapter *dvb_adapter)
- {
--	int i;
-+	int i, ret;
+diff --git a/arch/x86/kernel/cpu/mcheck/mce-inject.c b/arch/x86/kernel/cpu/mcheck/mce-inject.c
+index 9cc524be3c949..14dc3c1f7fb43 100644
+--- a/arch/x86/kernel/cpu/mcheck/mce-inject.c
++++ b/arch/x86/kernel/cpu/mcheck/mce-inject.c
+@@ -354,7 +354,7 @@ static ssize_t flags_write(struct file *filp, const char __user *ubuf,
+ 	char buf[MAX_FLAG_OPT_SIZE], *__buf;
+ 	int err;
  
- 	if (dmxdev->demux->open(dmxdev->demux) < 0)
- 		return -EUSERS;
-@@ -1243,14 +1243,26 @@ int dvb_dmxdev_init(struct dmxdev *dmxdev, struct dvb_adapter *dvb_adapter)
- 					    DMXDEV_STATE_FREE);
- 	}
+-	if (cnt > MAX_FLAG_OPT_SIZE)
++	if (!cnt || cnt > MAX_FLAG_OPT_SIZE)
+ 		return -EINVAL;
  
--	dvb_register_device(dvb_adapter, &dmxdev->dvbdev, &dvbdev_demux, dmxdev,
-+	ret = dvb_register_device(dvb_adapter, &dmxdev->dvbdev, &dvbdev_demux, dmxdev,
- 			    DVB_DEVICE_DEMUX, dmxdev->filternum);
--	dvb_register_device(dvb_adapter, &dmxdev->dvr_dvbdev, &dvbdev_dvr,
-+	if (ret < 0)
-+		goto err_register_dvbdev;
-+
-+	ret = dvb_register_device(dvb_adapter, &dmxdev->dvr_dvbdev, &dvbdev_dvr,
- 			    dmxdev, DVB_DEVICE_DVR, dmxdev->filternum);
-+	if (ret < 0)
-+		goto err_register_dvr_dvbdev;
- 
- 	dvb_ringbuffer_init(&dmxdev->dvr_buffer, NULL, 8192);
- 
- 	return 0;
-+
-+err_register_dvr_dvbdev:
-+	dvb_unregister_device(dmxdev->dvbdev);
-+err_register_dvbdev:
-+	vfree(dmxdev->filter);
-+	dmxdev->filter = NULL;
-+	return ret;
- }
- 
- EXPORT_SYMBOL(dvb_dmxdev_init);
+ 	if (copy_from_user(&buf, ubuf, cnt))
 -- 
 2.34.1
 

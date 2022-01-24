@@ -2,466 +2,414 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ADD649835B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:15:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7BA49835F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:15:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240718AbiAXPO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 10:14:59 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:55004 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240588AbiAXPO6 (ORCPT
+        id S240746AbiAXPPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 10:15:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240713AbiAXPPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 10:14:58 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6756B1529;
-        Mon, 24 Jan 2022 16:14:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643037296;
-        bh=QzguhOsWKcDPKL1U0eTNS+68gbDPzvjUYAkS0EkT4B0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IpxLcYbITqD4M12snwkGuj4bQ/1T7shRCNqweDuuL3YG9uj5aCR0cprBzEtmFeZzp
-         LkrOvCcbH9Q9XENCws0aAQI5hOdfBvHmdyrTkVh56K9NLExWC+k6lnkEuf+rHG65+X
-         8sW/l1Id6lOGyRpaLVirK8uMKVzRtZCxFmDxotn0=
-Date:   Mon, 24 Jan 2022 17:14:38 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: uvcvideo: Do power management granularly
-Message-ID: <Ye7CXovFQMm9q4F6@pendragon.ideasonboard.com>
-References: <20220124144539.180822-1-ribalda@chromium.org>
+        Mon, 24 Jan 2022 10:15:49 -0500
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE2CC061401
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 07:15:48 -0800 (PST)
+Received: by mail-ua1-x930.google.com with SMTP id r15so31594839uao.3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 07:15:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RRUzzoLYxlrhGNgxBbOH7Wf9YtHCiK8fKYwn8zs5y4E=;
+        b=kRd7RLQ6DZaZsDSwZG6IrW8fBKZzw8WKkUR/Htawx7nfgY16HcFFDyYhl0If1a+qr2
+         a/Ica6wIYcD5UHh8CgJiSaTfASAxF8SADpAMFqoux/LhFVf0cl+VUjxFyGHbJl1Z0jum
+         1d4+A3sW2YDpdPZ4S7e//DXoJ1c+124b9/7RJsbVW9RRLgn1dcIe+SEL4BJqUAkckqjo
+         1DmU3HCqfqeWUv5WLgYjpNgfIObiaai0jqP0OAL+eqOtkKK1xhInyIHXNC/JOpuxFIx8
+         WUwkJFfDVLQDvZdnJo6c/X39ns67C/DAlbSKWFVn6AAHSiwvFWyv16VRj2LfmDSLzo2M
+         wQPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RRUzzoLYxlrhGNgxBbOH7Wf9YtHCiK8fKYwn8zs5y4E=;
+        b=3CEu78qb7qCUaUFKXIpMgZoujl3IdNoNoOLCLC3QcoewpzBTtTmIq1Wf58+BPA55QS
+         4DuCqaaxadpBz7kvSLQokgA/wjO2kPjtGq1C05UOXjzbjmlgDOUwMNdzuwGi0K10mOwp
+         XIos8jPlp6h7GD/6lR8eSJQCbFZIZplCiG4M8pl1PgMgOiTqNkiPl4eCY/6ZKrwm+lTa
+         D9V++kcRNIVwZA7cDeu67hcaepfvhS8cdoCXzjAd8FYI/4GFX3dWaCiTIlLpYM4RDfJq
+         f1Yn65BsJ6FrLHe7Tftd7y9tVEUOJnbWP3FXS6Y+QBe8ag1XCo+jNkTPghN+BhbP9LKh
+         U83w==
+X-Gm-Message-State: AOAM533j++rRy7xQN7zmTcmaicFvKE4BhE2TgSTUmlk9BmoVWkd3a+/Q
+        8otwoscGE2TXN6j3r1wuNnSGTzgd3ur0pTiGnxE=
+X-Google-Smtp-Source: ABdhPJysRryK28CWGBwFmEnDVftwXkJv9OITYLzCkMDfLG4UIDevFjkLtOWjAsn27sxOHMi5eingh4MsAvEv0fIiHfI=
+X-Received: by 2002:a9f:234a:: with SMTP id 68mr5685579uae.49.1643037347911;
+ Mon, 24 Jan 2022 07:15:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220124144539.180822-1-ribalda@chromium.org>
+References: <cover.1642526745.git.khalid.aziz@oracle.com> <CANe_+UhrcQO0mwB2KJtm69+MDVJuD-r5Cbyqt8AkWdtfY55CCQ@mail.gmail.com>
+ <ef356f12-5eef-a92e-a816-ab853f2d369a@oracle.com> <CANe_+Ui4x7xz_QtG1iXr6J3dbKyja3-T=2tTTg+yqsacrTUYNw@mail.gmail.com>
+ <f0939948-51c4-eacb-0b20-dd31e0a8b92c@oracle.com>
+In-Reply-To: <f0939948-51c4-eacb-0b20-dd31e0a8b92c@oracle.com>
+From:   Mark Hemment <markhemm@googlemail.com>
+Date:   Mon, 24 Jan 2022 15:15:36 +0000
+Message-ID: <CANe_+Uiw1mSnFFBW3n5qBJ+V9EDaqY1PAEXFTXF9mkwM73x0-Q@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/6] Add support for shared PTEs across processes
+To:     Khalid Aziz <khalid.aziz@oracle.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        longpeng2@huawei.com, arnd@arndb.de, dave.hansen@linux.intel.com,
+        david@redhat.com, rppt@kernel.org,
+        Suren Baghdasaryan <surenb@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
+On Thu, 20 Jan 2022 at 19:15, Khalid Aziz <khalid.aziz@oracle.com> wrote:
+>
+> On 1/20/22 05:49, Mark Hemment wrote:
+> > On Wed, 19 Jan 2022 at 17:02, Khalid Aziz <khalid.aziz@oracle.com> wrote:
+> >>
+> >> On 1/19/22 04:38, Mark Hemment wrote:
+> >>> On Tue, 18 Jan 2022 at 21:20, Khalid Aziz <khalid.aziz@oracle.com> wrote:
+> >>>>
+> >>>> Page tables in kernel consume some of the memory and as long as
+> >>>> number of mappings being maintained is small enough, this space
+> >>>> consumed by page tables is not objectionable. When very few memory
+> >>>> pages are shared between processes, the number of page table entries
+> >>>> (PTEs) to maintain is mostly constrained by the number of pages of
+> >>>> memory on the system. As the number of shared pages and the number
+> >>>> of times pages are shared goes up, amount of memory consumed by page
+> >>>> tables starts to become significant.
+> >>>>
+> >>>> Some of the field deployments commonly see memory pages shared
+> >>>> across 1000s of processes. On x86_64, each page requires a PTE that
+> >>>> is only 8 bytes long which is very small compared to the 4K page
+> >>>> size. When 2000 processes map the same page in their address space,
+> >>>> each one of them requires 8 bytes for its PTE and together that adds
+> >>>> up to 8K of memory just to hold the PTEs for one 4K page. On a
+> >>>> database server with 300GB SGA, a system carsh was seen with
+> >>>> out-of-memory condition when 1500+ clients tried to share this SGA
+> >>>> even though the system had 512GB of memory. On this server, in the
+> >>>> worst case scenario of all 1500 processes mapping every page from
+> >>>> SGA would have required 878GB+ for just the PTEs. If these PTEs
+> >>>> could be shared, amount of memory saved is very significant.
+> >>>>
+> >>>> This is a proposal to implement a mechanism in kernel to allow
+> >>>> userspace processes to opt into sharing PTEs. The proposal is to add
+> >>>> a new system call - mshare(), which can be used by a process to
+> >>>> create a region (we will call it mshare'd region) which can be used
+> >>>> by other processes to map same pages using shared PTEs. Other
+> >>>> process(es), assuming they have the right permissions, can then make
+> >>>> the mashare() system call to map the shared pages into their address
+> >>>> space using the shared PTEs.  When a process is done using this
+> >>>> mshare'd region, it makes a mshare_unlink() system call to end its
+> >>>> access. When the last process accessing mshare'd region calls
+> >>>> mshare_unlink(), the mshare'd region is torn down and memory used by
+> >>>> it is freed.
+> >>>>
+> >>>>
+> >>>> API Proposal
+> >>>> ============
+> >>>>
+> >>>> The mshare API consists of two system calls - mshare() and mshare_unlink()
+> >>>>
+> >>>> --
+> >>>> int mshare(char *name, void *addr, size_t length, int oflags, mode_t mode)
+> >>>>
+> >>>> mshare() creates and opens a new, or opens an existing mshare'd
+> >>>> region that will be shared at PTE level. "name" refers to shared object
+> >>>> name that exists under /sys/fs/mshare. "addr" is the starting address
+> >>>> of this shared memory area and length is the size of this area.
+> >>>> oflags can be one of:
+> >>>>
+> >>>> - O_RDONLY opens shared memory area for read only access by everyone
+> >>>> - O_RDWR opens shared memory area for read and write access
+> >>>> - O_CREAT creates the named shared memory area if it does not exist
+> >>>> - O_EXCL If O_CREAT was also specified, and a shared memory area
+> >>>>     exists with that name, return an error.
+> >>>>
+> >>>> mode represents the creation mode for the shared object under
+> >>>> /sys/fs/mshare.
+> >>>>
+> >>>> mshare() returns an error code if it fails, otherwise it returns 0.
+> >>>>
+> >>>> PTEs are shared at pgdir level and hence it imposes following
+> >>>> requirements on the address and size given to the mshare():
+> >>>>
+> >>>> - Starting address must be aligned to pgdir size (512GB on x86_64)
+> >>>> - Size must be a multiple of pgdir size
+> >>>> - Any mappings created in this address range at any time become
+> >>>>     shared automatically
+> >>>> - Shared address range can have unmapped addresses in it. Any access
+> >>>>     to unmapped address will result in SIGBUS
+> >>>>
+> >>>> Mappings within this address range behave as if they were shared
+> >>>> between threads, so a write to a MAP_PRIVATE mapping will create a
+> >>>> page which is shared between all the sharers. The first process that
+> >>>> declares an address range mshare'd can continue to map objects in
+> >>>> the shared area. All other processes that want mshare'd access to
+> >>>> this memory area can do so by calling mshare(). After this call, the
+> >>>> address range given by mshare becomes a shared range in its address
+> >>>> space. Anonymous mappings will be shared and not COWed.
+> >>>>
+> >>>> A file under /sys/fs/mshare can be opened and read from. A read from
+> >>>> this file returns two long values - (1) starting address, and (2)
+> >>>> size of the mshare'd region.
+> >>>>
+> >>>> --
+> >>>> int mshare_unlink(char *name)
+> >>>>
+> >>>> A shared address range created by mshare() can be destroyed using
+> >>>> mshare_unlink() which removes the  shared named object. Once all
+> >>>> processes have unmapped the shared object, the shared address range
+> >>>> references are de-allocated and destroyed.
+> >>>>
+> >>>> mshare_unlink() returns 0 on success or -1 on error.
+> >>>>
+> >>>>
+> >>>> Example Code
+> >>>> ============
+> >>>>
+> >>>> Snippet of the code that a donor process would run looks like below:
+> >>>>
+> >>>> -----------------
+> >>>>           addr = mmap((void *)TB(2), GB(512), PROT_READ | PROT_WRITE,
+> >>>>                           MAP_SHARED | MAP_ANONYMOUS, 0, 0);
+> >>>>           if (addr == MAP_FAILED)
+> >>>>                   perror("ERROR: mmap failed");
+> >>>>
+> >>>>           err = syscall(MSHARE_SYSCALL, "testregion", (void *)TB(2),
+> >>>>                           GB(512), O_CREAT|O_RDWR|O_EXCL, 600);
+> >>>>           if (err < 0) {
+> >>>>                   perror("mshare() syscall failed");
+> >>>>                   exit(1);
+> >>>>           }
+> >>>>
+> >>>>           strncpy(addr, "Some random shared text",
+> >>>>                           sizeof("Some random shared text"));
+> >>>> -----------------
+> >>>>
+> >>>> Snippet of code that a consumer process would execute looks like:
+> >>>>
+> >>>> -----------------
+> >>>>           fd = open("testregion", O_RDONLY);
+> >>>>           if (fd < 0) {
+> >>>>                   perror("open failed");
+> >>>>                   exit(1);
+> >>>>           }
+> >>>>
+> >>>>           if ((count = read(fd, &mshare_info, sizeof(mshare_info)) > 0))
+> >>>>                   printf("INFO: %ld bytes shared at addr %lx \n",
+> >>>>                                   mshare_info[1], mshare_info[0]);
+> >>>>           else
+> >>>>                   perror("read failed");
+> >>>>
+> >>>>           close(fd);
+> >>>>
+> >>>>           addr = (char *)mshare_info[0];
+> >>>>           err = syscall(MSHARE_SYSCALL, "testregion", (void *)mshare_info[0],
+> >>>>                           mshare_info[1], O_RDWR, 600);
+> >>>>           if (err < 0) {
+> >>>>                   perror("mshare() syscall failed");
+> >>>>                   exit(1);
+> >>>>           }
+> >>>>
+> >>>>           printf("Guest mmap at %px:\n", addr);
+> >>>>           printf("%s\n", addr);
+> >>>>           printf("\nDone\n");
+> >>>>
+> >>>>           err = syscall(MSHARE_UNLINK_SYSCALL, "testregion");
+> >>>>           if (err < 0) {
+> >>>>                   perror("mshare_unlink() failed");
+> >>>>                   exit(1);
+> >>>>           }
+> >>>> -----------------
+> >>> ...
+> >>> Hi Khalid,
+> >>>
+> >>> The proposed mshare() appears to be similar to POSIX shared memory,
+> >>> but with two extra (related) attributes;
+> >>> a) Internally, uses shared page tables.
+> >>> b) Shared memory is mapped at same address for all users.
+> >>
+> >> Hi Mark,
+> >>
+> >> You are right there are a few similarities with POSIX shm but there is one key difference - unlike shm, shared region
+> >> access does not go through a filesystem. msharefs exists to query mshare'd regions and enforce access restrictions.
+> >> mshare is meant to allow sharing any existing regions that might map a file, may be anonymous or map any other object.
+> >> Any consumer process can use the same PTEs to access whatever might be mapped in that region which is quite different
+> >> from what shm does. Because of the similarities between the two, I had started a prototype using POSIX shm API to
+> >> leverage that code but I found myself special casing mshare often enough in shm code that it made sense to go with a
+> >> separate implementation.
+> >
+> > Ah, I jumped in assuming this was only for anon memory.
+> >
+> >> I considered an API very much like POSIX shm but a simple mshare() syscall at any time to share
+> >> a range of addresses that may be fully or partially mapped in is a simpler and more versatile API.
+> >
+> > So possible you have already considered the below...which does make
+> > the API a little more POSIX shm like.
+> >
+> > The mshare() syscall does two operations;
+> > 1) create/open mshare object
+> > 2) export/import the given memory region
+> >
+> > Would it be better if these were seperate operations?  That is,
+> > mshare_open() (say) creates/opens the object returning a file
+> > descriptor.  The fd used as the identifier for the export/import after
+> > mmap(2); eg.
+> > addr = mshare_op(EXPORT, fd, addr, size);
+> > addr = mshare_op(IMPORT, fd, NULL, 0);
+> > (Not sure about export/import terms..)
+> >
+> > The benefit of the the separate ops is the file descriptor.  This
+> > could be used for fstat(2) (and fchown(2)?), although not sure how
+> > much value this would add.
+>
+> Hi Mark,
+>
+> That is the question here - what would be the value of fd to mshare_op? The file in msharefs can be opened like a
+> regular file and supports fstat, fchown etc which can be used to query/set permissions for the mshare'd region.
 
-Thank you for the patch.
+Hi Khalid,
 
-On Mon, Jan 24, 2022 at 03:45:39PM +0100, Ricardo Ribalda wrote:
-> Instead of suspending/resume the USB device at open()/close(), do it
-> when the device is actually used.
-> 
-> This way we can reduce the power consumption when a service is holding
-> the video device and leaving it in an idle state.
+In your proposed API, the 'importer' of the mshared region does not
+open the mshared backing object (when a file being mapped) instead it
+does an open on the msharefs file.
+From the code sample in your initial email (simplified), where a
+process attaches to the mshared region;
+    fd = open("testregion", O_RDONLY);
+    read(fd, &mshare_info, sizeof (mshare_info));
+    mshare("testregion", addr, len, RDWR, 0600);
 
-Won't this prevent receiving button events ?
+Open permission checks are done by the mshare() system call against
+the msharefs file ("testregion").
 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
->  drivers/media/usb/uvc/uvc_v4l2.c | 191 +++++++++++++++++++++++++------
->  drivers/media/usb/uvc/uvcvideo.h |   1 +
->  2 files changed, 156 insertions(+), 36 deletions(-)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-> index 711556d13d03..4fcfc9a24e7f 100644
-> --- a/drivers/media/usb/uvc/uvc_v4l2.c
-> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
-> @@ -25,6 +25,55 @@
->  
->  #include "uvcvideo.h"
->  
-> +/* ------------------------------------------------------------------------
-> + * UVC power management
-> + */
-> +
-> +static int uvc_pm_get(struct uvc_streaming *stream)
-> +{
-> +	int ret = 0;
-> +
-> +	if (!video_is_registered(&stream->vdev))
-> +		return -ENODEV;
-> +
-> +	/*
-> +	 * We cannot hold dev->lock when calling autopm_get_interface.
-> +	 */
-> +	ret = usb_autopm_get_interface(stream->dev->intf);
-> +	if (ret)
-> +		return ret;
-> +
-> +	mutex_lock(&stream->dev->lock);
-> +	if (!stream->dev->users)
-> +		ret = uvc_status_start(stream->dev, GFP_KERNEL);
-> +	if (!ret)
-> +		stream->dev->users++;
-> +	mutex_unlock(&stream->dev->lock);
-> +
-> +	if (ret)
-> +		usb_autopm_put_interface(stream->dev->intf);
-> +
-> +	return ret;
-> +}
-> +
-> +static void uvc_pm_put(struct uvc_streaming *stream)
-> +{
-> +	if (!video_is_registered(&stream->vdev))
-> +		return;
-> +
-> +	mutex_lock(&stream->dev->lock);
-> +	if (WARN_ON(!stream->dev->users)) {
-> +		mutex_unlock(&stream->dev->lock);
-> +		return;
-> +	}
-> +	stream->dev->users--;
-> +	if (!stream->dev->users)
-> +		uvc_status_stop(stream->dev);
-> +	mutex_unlock(&stream->dev->lock);
-> +
-> +	usb_autopm_put_interface(stream->dev->intf);
-> +}
-> +
->  /* ------------------------------------------------------------------------
->   * UVC ioctls
->   */
-> @@ -251,8 +300,14 @@ static int uvc_v4l2_try_format(struct uvc_streaming *stream,
->  			stream->ctrl.dwMaxVideoFrameSize;
->  
->  	/* Probe the device. */
-> +	ret = uvc_pm_get(stream);
-> +	if (ret) {
-> +		mutex_unlock(&stream->mutex);
-> +		goto done;
-> +	}
->  	ret = uvc_probe_video(stream, probe);
->  	mutex_unlock(&stream->mutex);
-> +	uvc_pm_put(stream);
->  	if (ret < 0)
->  		goto done;
->  
-> @@ -464,7 +519,13 @@ static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
->  	}
->  
->  	/* Probe the device with the new settings. */
-> +	ret = uvc_pm_get(stream);
-> +	if (ret) {
-> +		mutex_unlock(&stream->mutex);
-> +		return ret;
-> +	}
->  	ret = uvc_probe_video(stream, &probe);
-> +	uvc_pm_put(stream);
->  	if (ret < 0) {
->  		mutex_unlock(&stream->mutex);
->  		return ret;
-> @@ -555,35 +616,14 @@ static int uvc_v4l2_open(struct file *file)
->  {
->  	struct uvc_streaming *stream;
->  	struct uvc_fh *handle;
-> -	int ret = 0;
->  
->  	stream = video_drvdata(file);
->  	uvc_dbg(stream->dev, CALLS, "%s\n", __func__);
->  
-> -	ret = usb_autopm_get_interface(stream->dev->intf);
-> -	if (ret < 0)
-> -		return ret;
-> -
->  	/* Create the device handle. */
->  	handle = kzalloc(sizeof(*handle), GFP_KERNEL);
-> -	if (handle == NULL) {
-> -		usb_autopm_put_interface(stream->dev->intf);
-> +	if (!handle)
->  		return -ENOMEM;
-> -	}
-> -
-> -	mutex_lock(&stream->dev->lock);
-> -	if (stream->dev->users == 0) {
-> -		ret = uvc_status_start(stream->dev, GFP_KERNEL);
-> -		if (ret < 0) {
-> -			mutex_unlock(&stream->dev->lock);
-> -			usb_autopm_put_interface(stream->dev->intf);
-> -			kfree(handle);
-> -			return ret;
-> -		}
-> -	}
-> -
-> -	stream->dev->users++;
-> -	mutex_unlock(&stream->dev->lock);
->  
->  	v4l2_fh_init(&handle->vfh, &stream->vdev);
->  	v4l2_fh_add(&handle->vfh);
-> @@ -606,6 +646,9 @@ static int uvc_v4l2_release(struct file *file)
->  	if (uvc_has_privileges(handle))
->  		uvc_queue_release(&stream->queue);
->  
-> +	if (handle->is_streaming)
-> +		uvc_pm_put(stream);
-> +
->  	/* Release the file handle. */
->  	uvc_dismiss_privileges(handle);
->  	v4l2_fh_del(&handle->vfh);
-> @@ -613,12 +656,6 @@ static int uvc_v4l2_release(struct file *file)
->  	kfree(handle);
->  	file->private_data = NULL;
->  
-> -	mutex_lock(&stream->dev->lock);
-> -	if (--stream->dev->users == 0)
-> -		uvc_status_stop(stream->dev);
-> -	mutex_unlock(&stream->dev->lock);
-> -
-> -	usb_autopm_put_interface(stream->dev->intf);
->  	return 0;
->  }
->  
-> @@ -842,7 +879,21 @@ static int uvc_ioctl_streamon(struct file *file, void *fh,
->  		return -EBUSY;
->  
->  	mutex_lock(&stream->mutex);
-> +	if (!handle->is_streaming) {
-> +		ret = uvc_pm_get(stream);
-> +		if (ret)
-> +			goto unlock;
-> +	}
-> +
->  	ret = uvc_queue_streamon(&stream->queue, type);
-> +
-> +	if (ret && !handle->is_streaming)
-> +		uvc_pm_put(stream);
-> +
-> +	if (!ret)
-> +		handle->is_streaming = true;
-> +
-> +unlock:
->  	mutex_unlock(&stream->mutex);
->  
->  	return ret;
-> @@ -859,6 +910,10 @@ static int uvc_ioctl_streamoff(struct file *file, void *fh,
->  
->  	mutex_lock(&stream->mutex);
->  	uvc_queue_streamoff(&stream->queue, type);
-> +	if (handle->is_streaming) {
-> +		handle->is_streaming = false;
-> +		uvc_pm_put(stream);
-> +	}
->  	mutex_unlock(&stream->mutex);
->  
->  	return 0;
-> @@ -909,6 +964,7 @@ static int uvc_ioctl_g_input(struct file *file, void *fh, unsigned int *input)
->  {
->  	struct uvc_fh *handle = fh;
->  	struct uvc_video_chain *chain = handle->chain;
-> +	struct uvc_streaming *stream = handle->stream;
->  	u8 *buf;
->  	int ret;
->  
-> @@ -922,9 +978,16 @@ static int uvc_ioctl_g_input(struct file *file, void *fh, unsigned int *input)
->  	if (!buf)
->  		return -ENOMEM;
->  
-> +	ret = uvc_pm_get(stream);
-> +	if (ret) {
-> +		kfree(buf);
-> +		return ret;
-> +	}
-> +
->  	ret = uvc_query_ctrl(chain->dev, UVC_GET_CUR, chain->selector->id,
->  			     chain->dev->intfnum,  UVC_SU_INPUT_SELECT_CONTROL,
->  			     buf, 1);
-> +	uvc_pm_put(stream);
->  	if (!ret)
->  		*input = *buf - 1;
->  
-> @@ -937,6 +1000,7 @@ static int uvc_ioctl_s_input(struct file *file, void *fh, unsigned int input)
->  {
->  	struct uvc_fh *handle = fh;
->  	struct uvc_video_chain *chain = handle->chain;
-> +	struct uvc_streaming *stream = handle->stream;
->  	u8 *buf;
->  	int ret;
->  
-> @@ -958,10 +1022,17 @@ static int uvc_ioctl_s_input(struct file *file, void *fh, unsigned int input)
->  	if (!buf)
->  		return -ENOMEM;
->  
-> +	ret = uvc_pm_get(stream);
-> +	if (ret) {
-> +		kfree(buf);
-> +		return ret;
-> +	}
-> +
->  	*buf = input + 1;
->  	ret = uvc_query_ctrl(chain->dev, UVC_SET_CUR, chain->selector->id,
->  			     chain->dev->intfnum, UVC_SU_INPUT_SELECT_CONTROL,
->  			     buf, 1);
-> +	uvc_pm_put(stream);
->  	kfree(buf);
->  
->  	return ret;
-> @@ -972,8 +1043,15 @@ static int uvc_ioctl_queryctrl(struct file *file, void *fh,
->  {
->  	struct uvc_fh *handle = fh;
->  	struct uvc_video_chain *chain = handle->chain;
-> +	struct uvc_streaming *stream = handle->stream;
-> +	int ret;
->  
-> -	return uvc_query_v4l2_ctrl(chain, qc);
-> +	ret = uvc_pm_get(stream);
-> +	if (ret)
-> +		return ret;
-> +	ret = uvc_query_v4l2_ctrl(chain, qc);
-> +	uvc_pm_put(stream);
-> +	return ret;
->  }
->  
->  static int uvc_ioctl_query_ext_ctrl(struct file *file, void *fh,
-> @@ -981,10 +1059,15 @@ static int uvc_ioctl_query_ext_ctrl(struct file *file, void *fh,
->  {
->  	struct uvc_fh *handle = fh;
->  	struct uvc_video_chain *chain = handle->chain;
-> +	struct uvc_streaming *stream = handle->stream;
->  	struct v4l2_queryctrl qc = { qec->id };
->  	int ret;
->  
-> +	ret = uvc_pm_get(stream);
-> +	if (ret)
-> +		return ret;
->  	ret = uvc_query_v4l2_ctrl(chain, &qc);
-> +	uvc_pm_put(stream);
->  	if (ret)
->  		return ret;
->  
-> @@ -1030,6 +1113,7 @@ static int uvc_ioctl_g_ext_ctrls(struct file *file, void *fh,
->  {
->  	struct uvc_fh *handle = fh;
->  	struct uvc_video_chain *chain = handle->chain;
-> +	struct uvc_streaming *stream = handle->stream;
->  	struct v4l2_ext_control *ctrl = ctrls->controls;
->  	unsigned int i;
->  	int ret;
-> @@ -1054,22 +1138,30 @@ static int uvc_ioctl_g_ext_ctrls(struct file *file, void *fh,
->  		return 0;
->  	}
->  
-> +	ret = uvc_pm_get(stream);
-> +	if (ret)
-> +		return ret;
->  	ret = uvc_ctrl_begin(chain);
-> -	if (ret < 0)
-> +	if (ret < 0) {
-> +		uvc_pm_put(stream);
->  		return ret;
-> +	}
->  
->  	for (i = 0; i < ctrls->count; ++ctrl, ++i) {
->  		ret = uvc_ctrl_get(chain, ctrl);
->  		if (ret < 0) {
->  			uvc_ctrl_rollback(handle);
->  			ctrls->error_idx = i;
-> +			uvc_pm_put(stream);
->  			return ret;
->  		}
->  	}
->  
->  	ctrls->error_idx = 0;
->  
-> -	return uvc_ctrl_rollback(handle);
-> +	ret = uvc_ctrl_rollback(handle);
-> +	uvc_pm_put(stream);
-> +	return ret;
->  }
->  
->  static int uvc_ioctl_s_try_ext_ctrls(struct uvc_fh *handle,
-> @@ -1078,6 +1170,7 @@ static int uvc_ioctl_s_try_ext_ctrls(struct uvc_fh *handle,
->  {
->  	struct v4l2_ext_control *ctrl = ctrls->controls;
->  	struct uvc_video_chain *chain = handle->chain;
-> +	struct uvc_streaming *stream = handle->stream;
->  	unsigned int i;
->  	int ret;
->  
-> @@ -1085,9 +1178,15 @@ static int uvc_ioctl_s_try_ext_ctrls(struct uvc_fh *handle,
->  	if (ret < 0)
->  		return ret;
->  
-> +	ret = uvc_pm_get(stream);
-> +	if (ret)
-> +		return ret;
-> +
->  	ret = uvc_ctrl_begin(chain);
-> -	if (ret < 0)
-> +	if (ret < 0) {
-> +		uvc_pm_put(stream);
->  		return ret;
-> +	}
->  
->  	for (i = 0; i < ctrls->count; ++ctrl, ++i) {
->  		ret = uvc_ctrl_set(handle, ctrl);
-> @@ -1095,6 +1194,7 @@ static int uvc_ioctl_s_try_ext_ctrls(struct uvc_fh *handle,
->  			uvc_ctrl_rollback(handle);
->  			ctrls->error_idx = ioctl == VIDIOC_S_EXT_CTRLS ?
->  						    ctrls->count : i;
-> +			uvc_pm_put(stream);
->  			return ret;
->  		}
->  	}
-> @@ -1102,9 +1202,12 @@ static int uvc_ioctl_s_try_ext_ctrls(struct uvc_fh *handle,
->  	ctrls->error_idx = 0;
->  
->  	if (ioctl == VIDIOC_S_EXT_CTRLS)
-> -		return uvc_ctrl_commit(handle, ctrls);
-> +		ret = uvc_ctrl_commit(handle, ctrls);
->  	else
-> -		return uvc_ctrl_rollback(handle);
-> +		ret = uvc_ctrl_rollback(handle);
-> +
-> +	uvc_pm_put(stream);
-> +	return ret;
->  }
->  
->  static int uvc_ioctl_s_ext_ctrls(struct file *file, void *fh,
-> @@ -1119,8 +1222,16 @@ static int uvc_ioctl_try_ext_ctrls(struct file *file, void *fh,
->  				   struct v4l2_ext_controls *ctrls)
->  {
->  	struct uvc_fh *handle = fh;
-> +	struct uvc_streaming *stream = handle->stream;
-> +	int ret;
-> +
-> +	ret = uvc_pm_get(stream);
-> +	if (ret)
-> +		return ret;
-> +	ret = uvc_ioctl_s_try_ext_ctrls(handle, ctrls, VIDIOC_TRY_EXT_CTRLS);
-> +	uvc_pm_put(stream);
->  
-> -	return uvc_ioctl_s_try_ext_ctrls(handle, ctrls, VIDIOC_TRY_EXT_CTRLS);
-> +	return ret;
->  }
->  
->  static int uvc_ioctl_querymenu(struct file *file, void *fh,
-> @@ -1128,8 +1239,16 @@ static int uvc_ioctl_querymenu(struct file *file, void *fh,
->  {
->  	struct uvc_fh *handle = fh;
->  	struct uvc_video_chain *chain = handle->chain;
-> +	struct uvc_streaming *stream = handle->stream;
-> +	int ret;
->  
-> -	return uvc_query_v4l2_menu(chain, qm);
-> +	ret = uvc_pm_get(stream);
-> +	if (ret)
-> +		return ret;
-> +	ret = uvc_query_v4l2_menu(chain, qm);
-> +	uvc_pm_put(stream);
-> +
-> +	return ret;
->  }
->  
->  static int uvc_ioctl_g_selection(struct file *file, void *fh,
-> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> index 143230b3275b..5958b2a54dab 100644
-> --- a/drivers/media/usb/uvc/uvcvideo.h
-> +++ b/drivers/media/usb/uvc/uvcvideo.h
-> @@ -720,6 +720,7 @@ enum uvc_handle_state {
->  
->  struct uvc_fh {
->  	struct v4l2_fh vfh;
-> +	bool is_streaming;
->  	struct uvc_video_chain *chain;
->  	struct uvc_streaming *stream;
->  	enum uvc_handle_state state;
+From the code sample in your initial email (simplified), where a
+process creates a msharefs file with the anonymous mmap()ed region to
+be shared;
+    addr = mmap(RDWR, ANON);
+    mshare("testregion", addr, len, CREAT|RDWR|EXCL, 0600);
 
--- 
-Regards,
+Now, consider the case where the mmap() is named (that is, against a
+file).  I believe this is the usecase for Oracle's SGA.
+My (simplified) code for msharing a named file ("SGA") using your
+proposed API (does not matter if the mapping is PRIVATE or SHARED);
+    fd = open("SGA", RDWR);
+    addr = mmap(RDWR, ..., fd);
+    mshare("SGA-region", addr, len, CREAT|RDWR|EXCL, 0600);
 
-Laurent Pinchart
+If the permissions (usr/grp+perms+ACL) between the "SGA" file and the
+"SGA-region" msharefs are different, then it is very likely a serious
+security issue.
+That is, a user who could not open(2) the "SGA" file might be able to
+open the "SGA-region" msharefs file, and so gain at least read
+permission on the file.
+
+This is why I was proposing a file descriptor, so the msharefs file
+could be set to have the same permissions as the backing file it is
+exporting (but I got this wrong).
+This would still leave a window between the msharefs file being
+creating and the permissions being set, where a rogue process could
+attach to a region when they should not have the permission (this
+could be closed by failing a non-creating mshare() if the region is of
+zero len - nothing yet shared - until permission are set and the
+region shared).
+But relying on userspace to always set the correct permissions on the
+msharefs file is dangerous - likely to get it wrong on occasion - and
+isn't sufficient.  The msharefs API needs to be bullet proof.
+
+Looking at the patches, I cannot see where extra validation is being
+done for a named mapping to ensure any 'importer' has the necessary
+permission against the backing file.
+The 'struct file' (->vm_file, and associated inode) in the VMA is
+sufficient to perform required access checks against the file's perms
+- the posted patches do not check this (but they are for an RFC, so
+don't expect all cases to be handled).  But what about a full path
+permission check?  That is, the 'importer' has necessary permissions
+on the backing file, but would not be able to find this file due to
+directory permissions?  msharefs would bypass the directory checks.
+
+
+> >
+> > The 'importer' would use the address/size of the memory region as
+> > exported (and stored in msharefs), so no need for /sys file (except
+> > for human readable info).
+>
+> I think we still need /sys/fs/msharefs files, right? Since you said msharefs stores information about address and size,
+> I assume you are not proposing eliminating msharefs.
+
+The 'exporter' of the mshared region specifies the address and length,
+and is therefore is known by the mshare code.
+An 'import' needs to only pass NULL/0 for addr/len and is told by
+mshare where the region has been attached in its address-space.  With
+this, the /sys file is no longer part of the API.
+
+
+> >
+> > If the set-up operations are split in two, then would it make sense to
+> > also split the teardown as well?  Say, mshare_op(DROP, fd) and
+> > mshare_unlink(fd)?
+>
+> A single op is simpler. Every process can call mshare_unlink() and if last reference is dropped, kernel should take care
+> of cleaning up mshare'd region by itself. One of my goals is for mshare to continue to work even if the process that
+> created the mshare region dies. In a database context, such mshare'd regions can live for very long time. As a result I
+> would rather not make any process be responsible for cleaning up the mshare'd region. It should be as simple as the
+> mshare'd region disappearing on its own when all references to it are dropped.
+>
+> Thanks,
+> Khalid
+
+Cheers,
+Mark
+
+>
+> >
+> >>
+> >> Does that rationale sound reasonable?
+> >
+> > It doesn't sound unreasonable.  As msharefs is providing a namespace
+> > and perms, it doesn't need much flexibility.  Being able to modifying
+> > the perms post namespace creation (fchown(2)), before exporting the
+> > memory region, might be useful in some cases - but as I don't have any
+> > usecases I'm not claiming it is essential.
+> >
+> >>
+> >> Thanks,
+> >> Khalid
+> >
+> > Cheers,
+> > Mark
+> >>
+> >>>
+> >>> Rather than introduce two new system calls, along with /sys/ file to
+> >>> communicate global addresses, could mshare() be built on top of shmem
+> >>> API?  Thinking of something like the below;
+> >>> 1) For shm_open(3), add a new oflag to indicate the properties needed
+> >>> for mshare() (say, O_SHARED_PTE - better name?)
+> >>> 2) For ftruncate(2), objects created with O_SHARED_PTE are constrained
+> >>> in the sizes which can be set.
+> >>> 3) For mmap(2), NULL is always passed as the address for O_SHARED_PTE
+> >>> objects.  On first mmap()ing an appropiate address is assigned,
+> >>> otherwise the current 'global' address is used.
+> >>> 4) shm_unlink(3) destroys the object when last reference is dropped.
+> >>>
+> >>> For 3), might be able to weaken the NULL requirement and validate a
+> >>> given address on first mapping to ensure it is correctly aligned.
+> >>> shm_open(3) sets FD_CLOEXEC on the file descriptor, which might not be
+> >>> the default behaviour you require.
+> >>>
+> >>> Internally, the handling of mshare()/O_SHARED_PTE memory might be
+> >>> sufficiently different to shmem that there is not much code sharing
+> >>> between the two (I haven't thought this through, but the object
+> >>> naming/refcounting should be similiar), but using shmem would be a
+> >>> familiar API.
+> >>>
+> >>> Any thoughts?
+> >>>
+> >>> Cheers,
+> >>> Mark
+> >>>
+> >>
+>

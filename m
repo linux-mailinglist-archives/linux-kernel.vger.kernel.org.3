@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D0A499769
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:28:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD49499C15
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:06:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447137AbiAXVKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:10:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388845AbiAXUkM (ORCPT
+        id S1577228AbiAXV7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:59:38 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40022 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1451296AbiAXVWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:40:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34D5C04590F;
-        Mon, 24 Jan 2022 11:51:34 -0800 (PST)
+        Mon, 24 Jan 2022 16:22:38 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 589FBB81215;
-        Mon, 24 Jan 2022 19:51:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86A5CC340E5;
-        Mon, 24 Jan 2022 19:51:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 549F8B81057;
+        Mon, 24 Jan 2022 21:22:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EC2DC340E4;
+        Mon, 24 Jan 2022 21:22:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053893;
-        bh=2/G4H/z6ZjT0mBnaR+ViTzd1dhM7FMwdV/1uFN7ooNs=;
+        s=korg; t=1643059356;
+        bh=0tDVZXKr9K09AvgqRFA/1j1lSWqb13QUoRj3scev9K0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hz7SdrvlMbEm4IgGUN12tpx00NlcVkIc7wr0Uivf8akj0B0TKcmT9GRzspu+S1PVh
-         +kR1OoIQxDeGnJOVs9qgWVWasCZASq5Am8o8Pg2dFgNk2qirGjZIjSeoJa0iLmYzRl
-         s44r0PWXkOJ3nI32yRhG8A0bsAdOXhvIL7A0w5Tw=
+        b=fQes7rLVPvskQzRFnLtBj6EddaUpBzBfm/CxRRUzro4/nD41MiZy49xxHITSNlidY
+         yt5vh/stooPVZYj6DC4tN1H9EeoiBsW815IorIuEQL8KYZpZ+8DE/gliG743bXqz9d
+         n3LaAuQu09BsC1fxlXHRbuHNkEyR+nFpvJ2qUKlo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Marko <robert.marko@sartura.hr>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        stable@vger.kernel.org, Diego Viola <diego.viola@gmail.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 178/563] arm64: dts: marvell: cn9130: enable CP0 GPIO controllers
-Date:   Mon, 24 Jan 2022 19:39:03 +0100
-Message-Id: <20220124184030.572918348@linuxfoundation.org>
+Subject: [PATCH 5.16 0555/1039] drm/nouveau/pmu/gm200-: avoid touching PMU outside of DEVINIT/PREOS/ACR
+Date:   Mon, 24 Jan 2022 19:39:04 +0100
+Message-Id: <20220124184143.960634757@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,44 +47,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Marko <robert.marko@sartura.hr>
+From: Ben Skeggs <bskeggs@redhat.com>
 
-[ Upstream commit 0734f8311ce72c9041e5142769eff2083889c172 ]
+[ Upstream commit 1d2271d2fb85e54bfc9630a6c30ac0feb9ffb983 ]
 
-CN9130 has a built-in CP115 which has 2 GPIO controllers, but unlike in
-Armada 7k and 8k both are left disabled by the SoC DTSI.
+There have been reports of the WFI timing out on some boards, and a
+patch was proposed to just remove it.  This stuff is rather fragile,
+and I believe the WFI might be needed with our FW prior to GM200.
 
-This first of all makes no sense as they are always present due to being
-SoC built-in and its an issue as boards like CN9130-CRB use the CPO GPIO2
-pins for regulators and SD card support without enabling them first.
+However, we probably should not be touching PMU during init on GPUs
+where we depend on NVIDIA FW, outside of limited circumstances, so
+this should be a somewhat safer change that achieves the desired
+result.
 
-So, enable both of them like Armada 7k and 8k do.
-
-Fixes: 6b8970bd8d7a ("arm64: dts: marvell: Add support for Marvell CN9130 SoC support")
-
-Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+Reported-by: Diego Viola <diego.viola@gmail.com>
+Signed-off-by: Ben Skeggs <bskeggs@redhat.com>
+Reviewed-by: Karol Herbst <kherbst@redhat.com>
+Signed-off-by: Karol Herbst <kherbst@redhat.com>
+Link: https://gitlab.freedesktop.org/drm/nouveau/-/merge_requests/10
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/marvell/cn9130.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ .../gpu/drm/nouveau/nvkm/subdev/pmu/base.c    | 37 +++++++++++--------
+ 1 file changed, 21 insertions(+), 16 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/marvell/cn9130.dtsi b/arch/arm64/boot/dts/marvell/cn9130.dtsi
-index 71769ac7f0585..327b04134134f 100644
---- a/arch/arm64/boot/dts/marvell/cn9130.dtsi
-+++ b/arch/arm64/boot/dts/marvell/cn9130.dtsi
-@@ -42,3 +42,11 @@
- #undef CP11X_PCIE0_BASE
- #undef CP11X_PCIE1_BASE
- #undef CP11X_PCIE2_BASE
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
+index 24382875fb4f3..455e95a89259f 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
+@@ -94,20 +94,13 @@ nvkm_pmu_fini(struct nvkm_subdev *subdev, bool suspend)
+ 	return 0;
+ }
+ 
+-static int
++static void
+ nvkm_pmu_reset(struct nvkm_pmu *pmu)
+ {
+ 	struct nvkm_device *device = pmu->subdev.device;
+ 
+ 	if (!pmu->func->enabled(pmu))
+-		return 0;
+-
+-	/* Inhibit interrupts, and wait for idle. */
+-	nvkm_wr32(device, 0x10a014, 0x0000ffff);
+-	nvkm_msec(device, 2000,
+-		if (!nvkm_rd32(device, 0x10a04c))
+-			break;
+-	);
++		return;
+ 
+ 	/* Reset. */
+ 	if (pmu->func->reset)
+@@ -118,25 +111,37 @@ nvkm_pmu_reset(struct nvkm_pmu *pmu)
+ 		if (!(nvkm_rd32(device, 0x10a10c) & 0x00000006))
+ 			break;
+ 	);
+-
+-	return 0;
+ }
+ 
+ static int
+ nvkm_pmu_preinit(struct nvkm_subdev *subdev)
+ {
+ 	struct nvkm_pmu *pmu = nvkm_pmu(subdev);
+-	return nvkm_pmu_reset(pmu);
++	nvkm_pmu_reset(pmu);
++	return 0;
+ }
+ 
+ static int
+ nvkm_pmu_init(struct nvkm_subdev *subdev)
+ {
+ 	struct nvkm_pmu *pmu = nvkm_pmu(subdev);
+-	int ret = nvkm_pmu_reset(pmu);
+-	if (ret == 0 && pmu->func->init)
+-		ret = pmu->func->init(pmu);
+-	return ret;
++	struct nvkm_device *device = pmu->subdev.device;
 +
-+&cp0_gpio1 {
-+	status = "okay";
-+};
++	if (!pmu->func->init)
++		return 0;
 +
-+&cp0_gpio2 {
-+	status = "okay";
-+};
++	if (pmu->func->enabled(pmu)) {
++		/* Inhibit interrupts, and wait for idle. */
++		nvkm_wr32(device, 0x10a014, 0x0000ffff);
++		nvkm_msec(device, 2000,
++			if (!nvkm_rd32(device, 0x10a04c))
++				break;
++		);
++
++		nvkm_pmu_reset(pmu);
++	}
++
++	return pmu->func->init(pmu);
+ }
+ 
+ static void *
 -- 
 2.34.1
 

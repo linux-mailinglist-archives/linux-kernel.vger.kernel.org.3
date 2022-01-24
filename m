@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BAB6499BE9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:05:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B37499CCB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:13:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574369AbiAXV5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:57:38 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44732 "EHLO
+        id S1580231AbiAXWJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:09:05 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45782 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1451155AbiAXVWS (ORCPT
+        with ESMTP id S1452251AbiAXVY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:22:18 -0500
+        Mon, 24 Jan 2022 16:24:26 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B68861469;
-        Mon, 24 Jan 2022 21:22:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70DE1C340E4;
-        Mon, 24 Jan 2022 21:22:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99970614D8;
+        Mon, 24 Jan 2022 21:24:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E80DC340E4;
+        Mon, 24 Jan 2022 21:24:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059337;
-        bh=HFolmNo+c+aMlXO4NpVNNdLLeHerT2CSqgdw0YSR8sc=;
+        s=korg; t=1643059465;
+        bh=3v1HE+aP+jyFLtVWiJY2W1IvFFukw8FwMDbrTfFOkGc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PS1WVTHwgWsa3AXLC/FIFz+X8dECP8jyRRpaTelFkbfI6mijmzmqZS/bp36XV7ABA
-         yLS+Y3f7Rf78AW0uGrhtgjWjnDvtt9oawO3/x/PcjkvMfnlqOFe+Uf2hTjcwb1aYxx
-         Yy06IiGLnHuNZ4HejDAZ3XAQAsPFWyYbIXLqpkpo=
+        b=hHo8PGzq+IU4hyJFlLgS3jDOMSBuqIS8t0bnA8frwVI/UlRdrDHMuPdchflbcCCRy
+         iMn+/KWwe8V27kHkQHLS/xcPGcIBC+omKgk3S4qDvZXDgp/ih/YyJLPdBc+SSoFN9s
+         GyNaaOlTxbOr/0ZOgu8NWyy/k6sfnxicr9GQaoSg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Anilkumar Kolli <akolli@codeaurora.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
+        stable@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0581/1039] ath11k: Fix mon status ring rx tlv processing
-Date:   Mon, 24 Jan 2022 19:39:30 +0100
-Message-Id: <20220124184144.872005397@linuxfoundation.org>
+Subject: [PATCH 5.16 0582/1039] drm/amd/display: check top_pipe_to_program pointer
+Date:   Mon, 24 Jan 2022 19:39:31 +0100
+Message-Id: <20220124184144.909444563@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -46,73 +47,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anilkumar Kolli <akolli@codeaurora.org>
+From: Yang Li <yang.lee@linux.alibaba.com>
 
-[ Upstream commit 09f16f7390f302937409738d6cb6ce99b265f455 ]
+[ Upstream commit a689e8d1f80012f90384ebac9dcfac4201f9f77e ]
 
-In HE monitor capture, HAL_TLV_STATUS_PPDU_DONE is received
-on processing multiple skb. Do not clear the ppdu_info
-till the HAL_TLV_STATUS_PPDU_DONE is received.
+Clang static analysis reports this error
 
-This fixes below warning and packet drops in monitor mode.
- "Rate marked as an HE rate but data is invalid: MCS: 6, NSS: 0"
- WARNING: at
- PC is at ieee80211_rx_napi+0x624/0x840 [mac80211]
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:2870:7: warning:
+Dereference of null pointer [clang-analyzer-core.NullDereference]
+                if
+(top_pipe_to_program->stream_res.tg->funcs->lock_doublebuffer_enable) {
+                    ^
 
-Tested-on: IPQ8074 hw2.0 AHB WLAN.HK.2.4.0.1-01693-QCAHKSWPL_SILICONZ-1
+top_pipe_to_program being NULL is caught as an error
+But then it is used to report the error.
 
-Signed-off-by: Anilkumar Kolli <akolli@codeaurora.org>
-Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
-Link: https://lore.kernel.org/r/1637249433-10316-1-git-send-email-akolli@codeaurora.org
+So add a check before using it.
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath11k/dp_rx.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/gpu/drm/amd/display/dc/core/dc.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/dp_rx.c b/drivers/net/wireless/ath/ath11k/dp_rx.c
-index 22b6b6a470d4c..621372c568d2c 100644
---- a/drivers/net/wireless/ath/ath11k/dp_rx.c
-+++ b/drivers/net/wireless/ath/ath11k/dp_rx.c
-@@ -3064,10 +3064,10 @@ int ath11k_dp_rx_process_mon_status(struct ath11k_base *ab, int mac_id,
- 	if (!num_buffs_reaped)
- 		goto exit;
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
+index 0ded4decee05f..f0fbd8ad56229 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
+@@ -2870,7 +2870,8 @@ static void commit_planes_for_stream(struct dc *dc,
+ #endif
  
--	while ((skb = __skb_dequeue(&skb_list))) {
--		memset(&ppdu_info, 0, sizeof(ppdu_info));
--		ppdu_info.peer_id = HAL_INVALID_PEERID;
-+	memset(&ppdu_info, 0, sizeof(ppdu_info));
-+	ppdu_info.peer_id = HAL_INVALID_PEERID;
- 
-+	while ((skb = __skb_dequeue(&skb_list))) {
- 		if (ath11k_debugfs_is_pktlog_lite_mode_enabled(ar)) {
- 			log_type = ATH11K_PKTLOG_TYPE_LITE_RX;
- 			rx_buf_sz = DP_RX_BUFFER_SIZE_LITE;
-@@ -3095,10 +3095,7 @@ int ath11k_dp_rx_process_mon_status(struct ath11k_base *ab, int mac_id,
- 			ath11k_dbg(ab, ATH11K_DBG_DATA,
- 				   "failed to find the peer with peer_id %d\n",
- 				   ppdu_info.peer_id);
--			spin_unlock_bh(&ab->base_lock);
--			rcu_read_unlock();
--			dev_kfree_skb_any(skb);
--			continue;
-+			goto next_skb;
- 		}
- 
- 		arsta = (struct ath11k_sta *)peer->sta->drv_priv;
-@@ -3107,10 +3104,13 @@ int ath11k_dp_rx_process_mon_status(struct ath11k_base *ab, int mac_id,
- 		if (ath11k_debugfs_is_pktlog_peer_valid(ar, peer->addr))
- 			trace_ath11k_htt_rxdesc(ar, skb->data, log_type, rx_buf_sz);
- 
-+next_skb:
- 		spin_unlock_bh(&ab->base_lock);
- 		rcu_read_unlock();
- 
- 		dev_kfree_skb_any(skb);
-+		memset(&ppdu_info, 0, sizeof(ppdu_info));
-+		ppdu_info.peer_id = HAL_INVALID_PEERID;
- 	}
- exit:
- 	return num_buffs_reaped;
+ 	if ((update_type != UPDATE_TYPE_FAST) && stream->update_flags.bits.dsc_changed)
+-		if (top_pipe_to_program->stream_res.tg->funcs->lock_doublebuffer_enable) {
++		if (top_pipe_to_program &&
++			top_pipe_to_program->stream_res.tg->funcs->lock_doublebuffer_enable) {
+ 			if (should_use_dmub_lock(stream->link)) {
+ 				union dmub_hw_lock_flags hw_locks = { 0 };
+ 				struct dmub_hw_lock_inst_flags inst_flags = { 0 };
 -- 
 2.34.1
 

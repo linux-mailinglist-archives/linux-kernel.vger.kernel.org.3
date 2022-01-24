@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7948749A345
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:02:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4A249A2F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:01:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2365105AbiAXXuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:50:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48686 "EHLO
+        id S2367457AbiAXXzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:55:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1844747AbiAXXKN (ORCPT
+        with ESMTP id S1846531AbiAXXQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:10:13 -0500
+        Mon, 24 Jan 2022 18:16:15 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B7EC0A0295;
-        Mon, 24 Jan 2022 13:18:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FA1C07E2B3;
+        Mon, 24 Jan 2022 11:47:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6120861496;
-        Mon, 24 Jan 2022 21:18:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AABCC340E4;
-        Mon, 24 Jan 2022 21:18:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9F2D60909;
+        Mon, 24 Jan 2022 19:47:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A645C340E5;
+        Mon, 24 Jan 2022 19:47:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059112;
-        bh=crMXqvSs9XeCYRWN5QFY6tsNKDUACgMNtu1LADo50Es=;
+        s=korg; t=1643053657;
+        bh=mmvAoJjg43JXHo+H49l9ox+6UY5dyipU5KxhAj68wNo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qOVHfJO7ZoxKEmK83q/802lOpo6CchlCPZYByMkno9r4MYqc+5k/6VAHhSmcKW4zt
-         fNNcu0gvof7n6L3JMbbJg5I3AbudCFM/A36frTqe7eCid06yT5wpbRAK2UuoQwuREg
-         rXrXvhibwwAZZMylraiQpjevkMrUHZkHpYZ/Uch8=
+        b=uERMQBz8ZculV3aWLnga7v0AiuZQLXmzuWs1SlULGNvrjakjH3CTCHIaulu+sDK/i
+         ZY3Qa5VgDl/33ja+KiBGvILh/mkggkKJQC9DGThBx3E46Gf8CFu6Q6ZfPavGWdLLYK
+         nS/Jkl/ChyVZcxrLyrtmnhG94z+QeJdjWeUASwbY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sachin Sant <sachinp@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0507/1039] powerpc/64s: Mask NIP before checking against SRR0
-Date:   Mon, 24 Jan 2022 19:38:16 +0100
-Message-Id: <20220124184142.325472093@linuxfoundation.org>
+Subject: [PATCH 5.10 134/563] sched/fair: Fix detection of per-CPU kthreads waking a task
+Date:   Mon, 24 Jan 2022 19:38:19 +0100
+Message-Id: <20220124184029.032288957@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,47 +52,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+From: Vincent Donnefort <vincent.donnefort@arm.com>
 
-[ Upstream commit 314f6c23dd8d417281eb9e8a516dd98036f2e7b3 ]
+[ Upstream commit 8b4e74ccb582797f6f0b0a50372ebd9fd2372a27 ]
 
-When CONFIG_PPC_RFI_SRR_DEBUG=y we check that NIP and SRR0 match when
-returning from interrupts. This can trigger falsely if NIP has either of
-its two low bits set via sigreturn or ptrace, while SRR0 has its low two
-bits masked in hardware.
+select_idle_sibling() has a special case for tasks woken up by a per-CPU
+kthread, where the selected CPU is the previous one. However, the current
+condition for this exit path is incomplete. A task can wake up from an
+interrupt context (e.g. hrtimer), while a per-CPU kthread is running. A
+such scenario would spuriously trigger the special case described above.
+Also, a recent change made the idle task like a regular per-CPU kthread,
+hence making that situation more likely to happen
+(is_per_cpu_kthread(swapper) being true now).
 
-As a quick fix make sure to mask the low bits before doing the check.
+Checking for task context makes sure select_idle_sibling() will not
+interpret a wake up from any other context as a wake up by a per-CPU
+kthread.
 
-Fixes: 59dc5bfca0cb ("powerpc/64s: avoid reloading (H)SRR registers if they are still valid")
-Reported-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Tested-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
-Link: https://lore.kernel.org/r/20211221135101.2085547-1-mpe@ellerman.id.au
+Fixes: 52262ee567ad ("sched/fair: Allow a per-CPU kthread waking a task to stack on the same CPU, to fix XFS performance regression")
+Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
+Link: https://lore.kernel.org/r/20211201143450.479472-1-vincent.donnefort@arm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kernel/interrupt_64.S | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/sched/fair.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/powerpc/kernel/interrupt_64.S b/arch/powerpc/kernel/interrupt_64.S
-index ec950b08a8dcc..894588b2381e5 100644
---- a/arch/powerpc/kernel/interrupt_64.S
-+++ b/arch/powerpc/kernel/interrupt_64.S
-@@ -30,6 +30,7 @@ COMPAT_SYS_CALL_TABLE:
- 	.ifc \srr,srr
- 	mfspr	r11,SPRN_SRR0
- 	ld	r12,_NIP(r1)
-+	clrrdi  r12,r12,2
- 100:	tdne	r11,r12
- 	EMIT_BUG_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
- 	mfspr	r11,SPRN_SRR1
-@@ -39,6 +40,7 @@ COMPAT_SYS_CALL_TABLE:
- 	.else
- 	mfspr	r11,SPRN_HSRR0
- 	ld	r12,_NIP(r1)
-+	clrrdi  r12,r12,2
- 100:	tdne	r11,r12
- 	EMIT_BUG_ENTRY 100b,__FILE__,__LINE__,(BUGFLAG_WARNING | BUGFLAG_ONCE)
- 	mfspr	r11,SPRN_HSRR1
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index c004e3b89c324..a7589552be5fc 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -6284,6 +6284,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+ 	 * pattern is IO completions.
+ 	 */
+ 	if (is_per_cpu_kthread(current) &&
++	    in_task() &&
+ 	    prev == smp_processor_id() &&
+ 	    this_rq()->nr_running <= 1) {
+ 		return prev;
 -- 
 2.34.1
 

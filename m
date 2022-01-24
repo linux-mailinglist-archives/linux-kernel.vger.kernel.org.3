@@ -2,134 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C67B9497D73
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 11:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C44497D75
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 11:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237055AbiAXKxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 05:53:19 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34414 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237038AbiAXKxO (ORCPT
+        id S237132AbiAXKxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 05:53:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237123AbiAXKxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 05:53:14 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EAE7612F2;
-        Mon, 24 Jan 2022 10:53:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D8F0C340E4;
-        Mon, 24 Jan 2022 10:53:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643021593;
-        bh=ZMfQWUpk0eDWkXdZTigFyfC36ehh99jynZEFFZLSbok=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rMkT1h22frBQn/cTz/3is31icPq12OL/glW8xho0ut6HBfsVoHBMko82K9bGo0+tx
-         tlcfD/x+m4USH16VRHx5S69dRXF/ei/i1WVuyH/FXulF1IblTar3w0LW98KcJr2ceg
-         u3kT++IizLHxgYS/Y5aY6e04RZyk/mxL/8SPzgQXSth5dvf8PN0AkSi2e8o049RC5j
-         i/Uhz6iH6mZVZ7tCVi1Y1TeSOuhVkhg4shN+avG+sWPtSJ4uKyDIo75HaSZ+Po7hgE
-         FSpy69yHtrJ9AcLKsWBuFPsHefIiKTOLMjCdauaIoKqCydijPSIwqXH+8d/5y+JZBG
-         7Pf1QIYrwHkmg==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>,
-        Chris Hyser <chris.hyser@oracle.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Peter Collingbourne <pcc@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Balbir Singh <sblbir@amazon.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: [resend RFC 3/3] tests: add new PR_SCHED_CORE_SHARE test
-Date:   Mon, 24 Jan 2022 11:52:47 +0100
-Message-Id: <20220124105247.2118990-4-brauner@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220124105247.2118990-1-brauner@kernel.org>
-References: <20220124105247.2118990-1-brauner@kernel.org>
+        Mon, 24 Jan 2022 05:53:18 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF931C06173D
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 02:53:17 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id r22so5118932wra.8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 02:53:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=AWyFv6pGSlo5DklimzoRbZU1SIfMIBepmw9wE4YDVeo=;
+        b=koQzdbfOEuh0RiAzV1r6d12nfvmRNGlCkk3husGtJd9DwCn4I26dh5I719KqzIQEru
+         VxBafBluv7aRzZd/LjJ6MtQoyDQ550qXtjZYWLlYWBEf2x6RRDjrT54V29gpuFeXuYpn
+         WXUleMGWssXxtZVRvIZxXDG2Rk8tC3J2LNIJQ80PqsVJFi2XYpb6yvFxbZsDoOrxWCGt
+         Z8NG91onuecWNEUOmaqdAC0ZlFREXBPQHTGCyp6/UxmH7b427nGiXEmjKyJoAaXdGt71
+         B0pFrHwJIs5/Kv4aVyyJ37n63ha+Yv5nTcEEF8aDWPLiRle6n4+KOwKj1rJ2+Us74VXu
+         vaLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=AWyFv6pGSlo5DklimzoRbZU1SIfMIBepmw9wE4YDVeo=;
+        b=oyPMjVDObchXDJOaQYhsTeBod9TloFCZ/ySO2cebwKhazo8QZk5Ddgrs1+xjyVVFHq
+         3Mu4GHBJi10AXrb5E0qLiIs71/RDxDG7waVxuCH8nq5lPvrs6NoS3OgnYXgv91delWM9
+         dk07++TPpxSEcS1SI71/fP3ySXWj2THZFTRTwEFLRfpXBGnFeeDpjTDsWw6mKPpBXO41
+         7W8OKnJ7uC/kWXjIA+aK7627ioC8AZOpMMCAUU7E/ktzneFovfQ4kxYy+Wy3JY6Vg4Wc
+         revvgLaaglFeNap3kfmQg1prFs9yfcyMhEBU+dFmzrlIDD1hA7Sm9sGYTykACKVXZrh7
+         vTwg==
+X-Gm-Message-State: AOAM5333lgrUAKeCD9KwOEj5phr6Yei0WjUJbHf3nuz/U1f7o+IvHCOw
+        mL5iwiTNbhbvX5fh1TTlysK+Vw==
+X-Google-Smtp-Source: ABdhPJzJ0fM/5P4fiblE5AHsartrM9QQbDW+P9/ZhxZAzoai2fjsYFQvSzMoj4/VZN+WbA3fpvbaFg==
+X-Received: by 2002:adf:f80a:: with SMTP id s10mr13307344wrp.416.1643021596270;
+        Mon, 24 Jan 2022 02:53:16 -0800 (PST)
+Received: from google.com (cpc106310-bagu17-2-0-cust853.1-3.cable.virginm.net. [86.15.223.86])
+        by smtp.gmail.com with ESMTPSA id a1sm14343535wrf.42.2022.01.24.02.53.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 02:53:15 -0800 (PST)
+Date:   Mon, 24 Jan 2022 10:53:13 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Luiz Sampaio <sampaio.ime@gmail.com>
+Cc:     daniel.thompson@linaro.org, michael.hennerich@analog.com,
+        jingoohan1@gmail.com, deller@gmx.de, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH 24/31] video: backlight: changing LED_* from enum
+ led_brightness to actual value
+Message-ID: <Ye6FGUPJ7KH5gYdf@google.com>
+References: <20220121170540.w6c4wqwrqzpde2lm@maple.lan>
+ <20220121180948.2501-1-sampaio.ime@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3036; h=from:subject; bh=ZMfQWUpk0eDWkXdZTigFyfC36ehh99jynZEFFZLSbok=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMSS+a/nrsHpjTQmnzVYRq6/3Eg/6iSclPb25elvHJpOypz8m LJ4Y2VHKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAjCRE+0M/+N11D70tG7ccyFuwg5W3T fvIj5PW/L9YlHNxZ/vHospeeUz/I+T/bDRPidh4TT3txMrMmvab/unreA+5m1tLpP9viVRlxUA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220121180948.2501-1-sampaio.ime@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tests for the new PR_SCHED_CORE_SHARE command.
+On Fri, 21 Jan 2022, Luiz Sampaio wrote:
 
-Cc: Peter Collingbourne <pcc@google.com>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Joel Fernandes <joel@joelfernandes.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Chris Hyser <chris.hyser@oracle.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ben Segall <bsegall@google.com>
-Cc: Balbir Singh <sblbir@amazon.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Christian Brauner <brauner@kernel.org>
----
- tools/testing/selftests/sched/cs_prctl_test.c | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
+> Hello, Daniel
+> 
+> Thanks for your reply. This is one of my first patches, so I am still
+> learning. This series of patches affects others subsystems too (hid,
+> leds, sound etc). Should I create series for each subsystem
+> separately, instead of creating one series for everyone?
+> What do you mean by "this patch might wants to land in one tree"?
 
-diff --git a/tools/testing/selftests/sched/cs_prctl_test.c b/tools/testing/selftests/sched/cs_prctl_test.c
-index 8109b17dc764..985b83fe7221 100644
---- a/tools/testing/selftests/sched/cs_prctl_test.c
-+++ b/tools/testing/selftests/sched/cs_prctl_test.c
-@@ -229,6 +229,7 @@ int main(int argc, char *argv[])
- 	int pidx;
- 	int pid;
- 	int opt;
-+	int i;
- 
- 	while ((opt = getopt(argc, argv, ":hkT:P:d:")) != -1) {
- 		switch (opt) {
-@@ -325,6 +326,28 @@ int main(int argc, char *argv[])
- 	validate(get_cs_cookie(pid) != 0);
- 	validate(get_cs_cookie(pid) == get_cs_cookie(procs[pidx].thr_tids[0]));
- 
-+	printf("\n## Set a new cookie on a single thread/PR_SCHED_CORE_SCOPE_THREAD [%d]\n", pid);
-+	if (_prctl(PR_SCHED_CORE, PR_SCHED_CORE_CREATE, pid, PR_SCHED_CORE_SCOPE_THREAD, 0) < 0)
-+		handle_error("core_sched create failed -- PR_SCHED_CORE_SCOPE_THREAD");
-+	disp_processes(num_processes, procs);
-+
-+	validate(get_cs_cookie(pid) != get_cs_cookie(procs[pidx].thr_tids[0]));
-+
-+	printf("\n## Copy cookie from a thread [%d] to [%d] as PR_SCHED_CORE_SCOPE_THREAD\n", pid, procs[pidx].thr_tids[0]);
-+	if (_prctl(PR_SCHED_CORE, PR_SCHED_CORE_SHARE, procs[pidx].thr_tids[0], PR_SCHED_CORE_SCOPE_THREAD, pid) < 0)
-+		handle_error("core_sched share cookie from and to thread failed -- PR_SCHED_CORE_SCOPE_THREAD");
-+	disp_processes(num_processes, procs);
-+
-+	validate(get_cs_cookie(pid) == get_cs_cookie(procs[pidx].thr_tids[0]));
-+
-+	printf("\n## Copy cookie from a thread [%d] to [%d] as PR_SCHED_CORE_SCOPE_THREAD_GROUP\n", pid, pid);
-+	if (_prctl(PR_SCHED_CORE, PR_SCHED_CORE_SHARE, pid, PR_SCHED_CORE_SCOPE_THREAD_GROUP, pid) < 0)
-+		handle_error("core_sched share cookie from and to thread-group failed -- PR_SCHED_CORE_SCOPE_THREAD_GROUP");
-+	disp_processes(num_processes, procs);
-+
-+	for (i = 0; i < procs[pidx].num_threads; ++i)
-+		validate(get_cs_cookie(pid) == get_cs_cookie(procs[pidx].thr_tids[i]));
-+
- 	if (errors) {
- 		printf("TESTS FAILED. errors: %d\n", errors);
- 		res = 10;
+Can the individual patches be applied on their own without causing
+issues (warnings/errors) with the build?  If so, they can be applied
+separately via their associated subsystem trees.  If not, someone will
+have to collect them all and take them via a single tree with Acks
+from the other subsystem maintainers.
+
+It's difficult to make that decision for ourselves since you didn't
+share all of the patches with all of the maintainers.
+
 -- 
-2.32.0
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

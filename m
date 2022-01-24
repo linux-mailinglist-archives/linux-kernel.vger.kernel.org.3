@@ -2,162 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAEDD49A826
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3E249AB3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:48:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1316631AbiAYC6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:58:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45438 "EHLO
+        id S254711AbiAYEq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 23:46:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3415024AbiAYAzT (ORCPT
+        with ESMTP id S1325891AbiAYDjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 19:55:19 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E52C05485A
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:41:26 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id p15so25563321ejc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:41:26 -0800 (PST)
+        Mon, 24 Jan 2022 22:39:07 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761C8C06B59C
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:44:21 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id k18so16354657wrg.11
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:44:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uXDJy29KRa4aADLFl/N15nh7M0VaTORTTf56QaN1/D8=;
-        b=efqbMukuNMqUuks37174gIM5nhm8Gen4FtY57CdK2tEi3BfMZzBFRqgmzNeBtajT3i
-         UZq7JOvZGrjgXK8khxabKMnqG4WwKYAL5FfmYg5D5IlXAexyxMaYdHuaAYUREX+N3TCU
-         Opdh+/jMhD1bB9/57dSGaCBHcnH2ZUCSK+LbU=
+        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aZhdR7WzThndblzZsr8d03scH0vKnQACS9be2wdEni8=;
+        b=r+JoXgviNYzPT9NLyF1ZN0EZpKKzUsI32D2OUkXsOXnGv/8yfSE8cHQ0ivUW/PVLqr
+         rq255ukBTU4Z8NnNoucRXFPDtyjPXsYKcjOmGdmIhki0d738Y+A9H0kcW0KHPmLuQkCG
+         H4513rfEGAc94GP2oaPUx7g1OHrbWNclgWU4jQVFe7kpJA3Nz/jps+AFh40Fe6vsRvq4
+         k1OFO3+19YSJP2GWDPN+oCtiI4MCstHNsKPdPvgIZgudWvCKJIaNyM9Tl8VD3Xg/OPDA
+         G1aBA3MPtgt6W86hwAZAiU/0ToC2ub8pATcVCdhj8EMCltPSUd+u8jiVpCzIcKMBKbva
+         U1/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=uXDJy29KRa4aADLFl/N15nh7M0VaTORTTf56QaN1/D8=;
-        b=q59UW4/sX6mDStVzZiSONQQJiA2rq10E6esW0uVsC6SqM2UTesR+7+fyB1SANIbSki
-         6xeU6wGcaqvDIq4S13tfFeLHhwPM4i0AQ09k41l3F4jqVKRRAoYNR2zJznWJkfMASh26
-         L8BLpxhLfpLKZKmymixCoMZtt0Ti0STheWvVH/7PJkvTTfb6umMQzRwii0LlPsyYzhrJ
-         iOa2UeT82PNoZVQ+aBUJoAbunEnXOTHPJ8rv7EmjULUIRjHd7UMxOLCVvFFEV/9yNgse
-         zJxUZRJTuRgvUziXKmX4FfSInDJyMfEkA4abKDFfYha1+2OHPMGgDDhtvgv1zal0J7Fw
-         NrIA==
-X-Gm-Message-State: AOAM531t901KZq6pMR9qojK8pdSfZ3kWAxGOo16ffA50kKYa4NscNMmf
-        RE35KC0mjmToprG3mS5UMMfUUw==
-X-Google-Smtp-Source: ABdhPJwEBu82CanT1FE6tnzaZiKu217V/6ZzbRSjWilrwERD5ltPGeNXbEtdzOWx5lKLMTP+U507fQ==
-X-Received: by 2002:a17:907:e8d:: with SMTP id ho13mr3105265ejc.169.1643064084993;
-        Mon, 24 Jan 2022 14:41:24 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id z4sm5364919ejd.39.2022.01.24.14.41.24
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aZhdR7WzThndblzZsr8d03scH0vKnQACS9be2wdEni8=;
+        b=7sSVk3oMNiu4/118gnm2KcnhNZWrtFNOleGCH4p9w7luvPoBF7dcIedIZNnVB2In6p
+         YMjeWnkyoqWbME4Mx/4RZFzpblJ9VQ6uzN64kBjJIPRmTCDIpyRG6f4MDHEPXXOODavY
+         fpeDz6Kv64HGLj5Zn1YMnf6W3jYH3FO5remNVwx9ZM4Ap/ogYnS92+pXFVtyE/L8i9CR
+         DaTSZbKb5GGpTy/gllI+yRgbeYE+CcWNGNNOW5zrOdX0SSb+nbh0MV2KId6kvAaCiWga
+         4RFNY1L+SFcPXtrLhH/U3FzNO/2kGoS76wVgZwvpFn6pk/uM8PerwYOsnV13gMhQlqPg
+         ihmA==
+X-Gm-Message-State: AOAM531sMhCU3U00MOCwFhZU2itNKr1Sa9lAioPUqRl/1I3xgA6FEU7w
+        vBnplT4EfOmgPnQij0rknqFQqA==
+X-Google-Smtp-Source: ABdhPJxcKyahmF6MlNwDoAkTtr7eAnTxLu5plcMBwLNt4+53GfA0dcQcZWzbUVK+cVwSV+DSx6JFwQ==
+X-Received: by 2002:adf:eb88:: with SMTP id t8mr15408011wrn.291.1643064260084;
+        Mon, 24 Jan 2022 14:44:20 -0800 (PST)
+Received: from localhost.localdomain (d.f.5.e.6.6.b.1.e.6.2.7.e.5.c.8.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0:8c5e:726e:1b66:e5fd])
+        by smtp.gmail.com with ESMTPSA id i3sm15010613wru.33.2022.01.24.14.44.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 14:41:24 -0800 (PST)
-Date:   Mon, 24 Jan 2022 23:41:22 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Helge Deller <deller@gmx.de>
-Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        Pavel Machek <pavel@ucw.cz>, Sam Ravnborg <sam@ravnborg.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sven Schnelle <svens@stackframe.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Claudio Suarez <cssk@net-c.es>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v2 0/2] Fix regression introduced by disabling
- accelerated scrolling in fbcon
-Message-ID: <Ye8rElg/lANVos2Q@phenom.ffwll.local>
-Mail-Followup-To: Helge Deller <deller@gmx.de>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        Pavel Machek <pavel@ucw.cz>, Sam Ravnborg <sam@ravnborg.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sven Schnelle <svens@stackframe.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Claudio Suarez <cssk@net-c.es>, Gerd Hoffmann <kraxel@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20220124210319.325512-1-deller@gmx.de>
- <Ye8mDFcWSiXoRJbD@phenom.ffwll.local>
- <16884bfd-36ca-dd2e-43e4-4977861f8fa1@gmx.de>
+        Mon, 24 Jan 2022 14:44:19 -0800 (PST)
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     gregkh@linuxfoundation.org
+Cc:     dan.carpenter@oracle.com, Larry.Finger@lwfinger.net,
+        straube.linux@gmail.com, martin@kaiser.cx,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        paskripkin@gmail.com
+Subject: [PATCH 00/10] Cleanup and removal of DBG_88E macro
+Date:   Mon, 24 Jan 2022 22:44:05 +0000
+Message-Id: <20220124224415.831-1-phil@philpotter.co.uk>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <16884bfd-36ca-dd2e-43e4-4977861f8fa1@gmx.de>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 11:37:03PM +0100, Helge Deller wrote:
-> On 1/24/22 23:19, Daniel Vetter wrote:
-> > On Mon, Jan 24, 2022 at 10:03:17PM +0100, Helge Deller wrote:
-> >> This series reverts two patches which disabled scrolling acceleration in
-> >> fbcon/fbdev. Those patches introduced a regression for fbdev-supported graphic
-> >> cards because of the performance penalty by doing screen scrolling by software
-> >> instead of using existing 2D hardware acceleration.
-> >>
-> >> This series has been discussed on linux-fbdev, dri-devel and linux-kernel
-> >> mailing lists. The consensus is that they will be reverted, but in addition
-> >> it's being worked on to find a solution which allows to disable parts of the
-> >> classic fbdev hardware acceleration code which isn't needed in DRM-only
-> >> configurations.
-> >
-> > That's not my take at least.
-> 
-> Which is?
-> Didn't we discussed about introducing something like
-> CONFIG_FBCON_LEGACY_ACCELERATION ?
+This series does a few things in order to effect the removal of the
+DBG_88E macro:
 
-Yeah, as part of the reverts. Or at least that's what I meant to say.
--Daniel
-> 
-> >> The patchset is planned to be kept in fbdev's for-next git branch and later
-> >> pushed into kernel v5.18 if no issues are found until then.
-> >
-> > Neither this. I don't think we've resovled maintainership of fbdev core
-> > code and fbcon yet. That is the part that drm folks very much still
-> > maintained, as a quick git shortlog will show.
-> >
-> > Maintaining these parts outside of drm trees just doesn't make sense,
-> > since none of the other graphics relevant development happens outside of
-> 
-> I have no objections if you are willing to take those two patches through
-> the drm tree.
-> 
-> Helge
-> 
-> >> ---
-> >> Changes in v2 compared to v1:
-> >> - adjusted the stable tags (one v5.10+, the other v5.16+)
-> >> - moved the analysis and reasoning why those should be reverted into
-> >>   the commit message. That simplifies to analyze later why they were
-> >>   reverted.
-> >> - resorted the To an Cc mail recipient lists
-> >>
-> >> Helge Deller (2):
-> >>   Revert "fbdev: Garbage collect fbdev scrolling acceleration, part 1
-> >>     (from TODO list)"
-> >>   Revert "fbcon: Disable accelerated scrolling"
-> >>
-> >>  Documentation/gpu/todo.rst              |  24 --
-> >>  drivers/video/fbdev/core/bitblit.c      |  16 +
-> >>  drivers/video/fbdev/core/fbcon.c        | 540 +++++++++++++++++++++++-
-> >>  drivers/video/fbdev/core/fbcon.h        |  59 +++
-> >>  drivers/video/fbdev/core/fbcon_ccw.c    |  28 +-
-> >>  drivers/video/fbdev/core/fbcon_cw.c     |  28 +-
-> >>  drivers/video/fbdev/core/fbcon_rotate.h |   9 +
-> >>  drivers/video/fbdev/core/fbcon_ud.c     |  37 +-
-> >>  drivers/video/fbdev/core/tileblit.c     |  16 +
-> >>  drivers/video/fbdev/skeletonfb.c        |  12 +-
-> >>  include/linux/fb.h                      |   2 +-
-> >>  11 files changed, 703 insertions(+), 68 deletions(-)
-> >>
-> >> --
-> >> 2.31.1
+(1) It removes previously converted calls for consistency.
+(2) It removes all current DBG_88E calls.
+(3) It removes all aliased DBG_88E calls.
+(4) It removes the GlobalDebugLevel flag and the file that defines it.
+
+By its very nature, it is a large patchset, so I've tried to group as
+appropriate. I went by file as I did the work, which led to over 40
+patches originally, so I've listed the largest C files as their own
+patches and then grouped everything else by subdir which gives closer
+sizes for the other patches.
+
+Phillip Potter (10):
+  staging: r8188eu: remove previously added dev_dbg and netdev_dbg calls
+  staging: r8188eu: remove smaller sets of DBG_88E calls from core dir
+  staging: r8188eu: remove DBG_88E calls from core/rtw_mlme_ext.c
+  staging: r8188eu: remove all DBG_88E calls from hal dir
+  staging: r8188eu: remove smaller sets of DBG_88E calls from os_dep dir
+  staging: r8188eu: remove DBG_88E calls from os_dep/ioctl_linux.c
+  staging: r8188eu: remove DBG_88E call from include/usb_ops.h
+  staging: r8188eu: remove all remaining aliased DBG_88E calls
+  staging: r8188eu: remove DBG_88E macro definition
+  staging: r8188eu: remove GlobalDebugLevel flag
+
+ drivers/staging/r8188eu/Makefile              |   1 -
+ drivers/staging/r8188eu/core/rtw_ap.c         | 108 +----
+ drivers/staging/r8188eu/core/rtw_br_ext.c     |  59 +--
+ drivers/staging/r8188eu/core/rtw_cmd.c        |  12 +-
+ drivers/staging/r8188eu/core/rtw_ieee80211.c  |  37 +-
+ drivers/staging/r8188eu/core/rtw_ioctl_set.c  |  15 +-
+ drivers/staging/r8188eu/core/rtw_iol.c        |  10 +-
+ drivers/staging/r8188eu/core/rtw_mlme.c       |  54 +--
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c   | 343 +--------------
+ drivers/staging/r8188eu/core/rtw_p2p.c        |  61 +--
+ drivers/staging/r8188eu/core/rtw_pwrctrl.c    |  49 +--
+ drivers/staging/r8188eu/core/rtw_recv.c       |  73 +--
+ drivers/staging/r8188eu/core/rtw_security.c   |  19 +-
+ drivers/staging/r8188eu/core/rtw_sta_mgt.c    |   6 -
+ drivers/staging/r8188eu/core/rtw_wlan_util.c  | 102 +----
+ drivers/staging/r8188eu/core/rtw_xmit.c       |  62 +--
+ drivers/staging/r8188eu/hal/HalPwrSeqCmd.c    |   4 +-
+ drivers/staging/r8188eu/hal/hal_intf.c        |   3 -
+ drivers/staging/r8188eu/hal/odm_debug.c       |   6 -
+ drivers/staging/r8188eu/hal/rtl8188e_cmd.c    |  43 +-
+ .../staging/r8188eu/hal/rtl8188e_hal_init.c   |  95 +---
+ drivers/staging/r8188eu/hal/rtl8188e_phycfg.c |   3 -
+ drivers/staging/r8188eu/hal/rtl8188eu_recv.c  |   5 -
+ drivers/staging/r8188eu/hal/rtl8188eu_xmit.c  |   8 +-
+ drivers/staging/r8188eu/hal/usb_halinit.c     |  62 +--
+ drivers/staging/r8188eu/hal/usb_ops_linux.c   |  31 +-
+ drivers/staging/r8188eu/include/rtw_br_ext.h  |   5 -
+ drivers/staging/r8188eu/include/rtw_debug.h   |   8 -
+ drivers/staging/r8188eu/include/usb_ops.h     |   5 +-
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c  | 416 +-----------------
+ drivers/staging/r8188eu/os_dep/mlme_linux.c   |   4 -
+ drivers/staging/r8188eu/os_dep/os_intfs.c     |  34 +-
+ .../staging/r8188eu/os_dep/osdep_service.c    |   2 -
+ drivers/staging/r8188eu/os_dep/usb_intf.c     |  84 +---
+ .../staging/r8188eu/os_dep/usb_ops_linux.c    |  18 +-
+ drivers/staging/r8188eu/os_dep/xmit_linux.c   |   6 +-
+ 36 files changed, 166 insertions(+), 1687 deletions(-)
+ delete mode 100644 drivers/staging/r8188eu/hal/odm_debug.c
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.34.1
+

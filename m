@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 124B449A032
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16AB549A007
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1842861AbiAXXCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:02:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
+        id S1842962AbiAXXDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:03:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1574737AbiAXV7D (ORCPT
+        with ESMTP id S1574933AbiAXV7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:59:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E9CC038AFD;
-        Mon, 24 Jan 2022 12:39:12 -0800 (PST)
+        Mon, 24 Jan 2022 16:59:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DEFC02B8C4;
+        Mon, 24 Jan 2022 12:39:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EDDA61382;
-        Mon, 24 Jan 2022 20:39:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06A51C340E5;
-        Mon, 24 Jan 2022 20:39:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CAA7EB811FB;
+        Mon, 24 Jan 2022 20:39:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01E93C340E5;
+        Mon, 24 Jan 2022 20:39:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056751;
-        bh=GyS828HD/W5brWBjztyF7pzethTmRJ7htmn28hD2mHA=;
+        s=korg; t=1643056757;
+        bh=RrkQfr1N8/D9I56nK7YQ11YiOSyDN+pImc2mLPrVi0M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h/FKX0xpUsRcrObP67twklf5z/cvz3Ne+HV50LrwTYZkDWaLu98zTZKxkQSKne39c
-         u6CPoo5mdp8ytkaRcciGWhGsZbrRkgH2SiwMUT6o0FaIT7Sx7Q62pXzcY/hQZvBX/V
-         LppjD0ikb8OpABnSSnRN32NIwaQRUQyUCUEh6dDk=
+        b=Nt6oV2pOroFqKlgSmfNrX5gI+VLaoGd2p40qcLR0SalB0bi2/6HS4EbTbDdHH6yYe
+         WfKoSLewVg0jiPGOKzrvJikjo6z4G8DjH63ICwI7aWqdFlsoCYgMzvkxDmLzkc0RXu
+         PjKPXdgU4ofuumxBwc5YXXOJJ53y/dzDEOXuLhEE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Langsdorf <mlangsdo@redhat.com>,
-        Bob Moore <robert.moore@intel.com>,
+        stable@vger.kernel.org, Lenny Szubowicz <lszubowi@redhat.com>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Bob Moore <robert.moore@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 589/846] ACPICA: actypes.h: Expand the ACPI_ACCESS_ definitions
-Date:   Mon, 24 Jan 2022 19:41:46 +0100
-Message-Id: <20220124184121.358560131@linuxfoundation.org>
+Subject: [PATCH 5.15 591/846] ACPICA: Executer: Fix the REFCLASS_REFOF case in acpi_ex_opcode_1A_0T_1R()
+Date:   Mon, 24 Jan 2022 19:41:48 +0100
+Message-Id: <20220124184121.419404333@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -50,54 +50,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Langsdorf <mlangsdo@redhat.com>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-[ Upstream commit f81bdeaf816142e0729eea0cc84c395ec9673151 ]
+[ Upstream commit 24ea5f90ec9548044a6209685c5010edd66ffe8f ]
 
-ACPICA commit bc02c76d518135531483dfc276ed28b7ee632ce1
+ACPICA commit d984f12041392fa4156b52e2f7e5c5e7bc38ad9e
 
-The current ACPI_ACCESS_*_WIDTH defines do not provide a way to
-test that size is small enough to not cause an overflow when
-applied to a 32-bit integer.
+If Operand[0] is a reference of the ACPI_REFCLASS_REFOF class,
+acpi_ex_opcode_1A_0T_1R () calls acpi_ns_get_attached_object () to
+obtain return_desc which may require additional resolution with
+the help of acpi_ex_read_data_from_field (). If the latter fails,
+the reference counter of the original return_desc is decremented
+which is incorrect, because acpi_ns_get_attached_object () does not
+increment the reference counter of the object returned by it.
 
-Rather than adding more magic numbers, add ACPI_ACCESS_*_SHIFT,
-ACPI_ACCESS_*_MAX, and ACPI_ACCESS_*_DEFAULT #defines and
-redefine ACPI_ACCESS_*_WIDTH in terms of the new #defines.
+This issue may lead to premature deletion of the attached object
+while it is still attached and a use-after-free and crash in the
+host OS.  For example, this may happen when on evaluation of ref_of()
+a local region field where there is no registered handler for the
+given Operation Region.
 
-This was inititally reported on Linux where a size of 102 in
-ACPI_ACCESS_BIT_WIDTH caused an overflow error in the SPCR
-initialization code.
+Fix it by making acpi_ex_opcode_1A_0T_1R () return Status right away
+after a acpi_ex_read_data_from_field () failure.
 
-Link: https://github.com/acpica/acpica/commit/bc02c76d
-Signed-off-by: Mark Langsdorf <mlangsdo@redhat.com>
+Link: https://github.com/acpica/acpica/commit/d984f120
+Link: https://github.com/acpica/acpica/pull/685
+Reported-by: Lenny Szubowicz <lszubowi@redhat.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Bob Moore <robert.moore@intel.com>
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/acpi/actypes.h | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/acpi/acpica/exoparg1.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/acpi/actypes.h b/include/acpi/actypes.h
-index 92c71dfce0d5d..cefbb7ad253e0 100644
---- a/include/acpi/actypes.h
-+++ b/include/acpi/actypes.h
-@@ -536,8 +536,14 @@ typedef u64 acpi_integer;
-  * Can be used with access_width of struct acpi_generic_address and access_size of
-  * struct acpi_resource_generic_register.
-  */
--#define ACPI_ACCESS_BIT_WIDTH(size)     (1 << ((size) + 2))
--#define ACPI_ACCESS_BYTE_WIDTH(size)    (1 << ((size) - 1))
-+#define ACPI_ACCESS_BIT_SHIFT		2
-+#define ACPI_ACCESS_BYTE_SHIFT		-1
-+#define ACPI_ACCESS_BIT_MAX		(31 - ACPI_ACCESS_BIT_SHIFT)
-+#define ACPI_ACCESS_BYTE_MAX		(31 - ACPI_ACCESS_BYTE_SHIFT)
-+#define ACPI_ACCESS_BIT_DEFAULT		(8 - ACPI_ACCESS_BIT_SHIFT)
-+#define ACPI_ACCESS_BYTE_DEFAULT	(8 - ACPI_ACCESS_BYTE_SHIFT)
-+#define ACPI_ACCESS_BIT_WIDTH(size)	(1 << ((size) + ACPI_ACCESS_BIT_SHIFT))
-+#define ACPI_ACCESS_BYTE_WIDTH(size)	(1 << ((size) + ACPI_ACCESS_BYTE_SHIFT))
+diff --git a/drivers/acpi/acpica/exoparg1.c b/drivers/acpi/acpica/exoparg1.c
+index b639e930d6429..44b7c350ed5ca 100644
+--- a/drivers/acpi/acpica/exoparg1.c
++++ b/drivers/acpi/acpica/exoparg1.c
+@@ -1007,7 +1007,8 @@ acpi_status acpi_ex_opcode_1A_0T_1R(struct acpi_walk_state *walk_state)
+ 						    (walk_state, return_desc,
+ 						     &temp_desc);
+ 						if (ACPI_FAILURE(status)) {
+-							goto cleanup;
++							return_ACPI_STATUS
++							    (status);
+ 						}
  
- /*******************************************************************************
-  *
+ 						return_desc = temp_desc;
 -- 
 2.34.1
 

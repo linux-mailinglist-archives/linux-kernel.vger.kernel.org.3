@@ -2,160 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8348E49A589
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:12:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 863D949A4C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:10:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2370961AbiAYAGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:06:43 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:65534 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1847822AbiAXXUn (ORCPT
+        id S3407996AbiAYAVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:21:19 -0500
+Received: from prt-mail.chinatelecom.cn ([42.123.76.227]:35948 "EHLO
+        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1386334AbiAXXhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:20:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643066443; x=1674602443;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=lHW3hLnV/NwAlPaJvWLZeYHn/Z13jsz9Dd88QrFizYA=;
-  b=m++m4t7oTvxKU3eDqNBL/kDP212fa18klJqMbqXSBtv7nLcZYjHJO3Kl
-   t26byNRVb3if/tSC3Pyj9zZE7iY/99hJVVGMDDJoiHb5JhCyNftE91C3+
-   6974KnoGekKF0PJUxxLkggbzMwzYBegroCdVENYQW3rUaEdMi0bU/Qurm
-   E=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 24 Jan 2022 15:20:42 -0800
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 15:20:42 -0800
-Received: from collinsd-linux.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 24 Jan 2022 15:20:41 -0800
-From:   David Collins <quic_collinsd@quicinc.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-CC:     David Collins <quic_collinsd@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
-Subject: [RESEND PATCH 2/2] regulator: scmi: add support for registering SCMI regulators by name
-Date:   Mon, 24 Jan 2022 15:20:02 -0800
-Message-ID: <916966958cc63e9509f94fb263ad8d3c3ec768da.1639099631.git.quic_collinsd@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1639099631.git.quic_collinsd@quicinc.com>
-References: <cover.1639099631.git.quic_collinsd@quicinc.com>
+        Mon, 24 Jan 2022 18:37:23 -0500
+HMM_SOURCE_IP: 172.18.0.188:35794.1040684494
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-202.80.192.39 (unknown [172.18.0.188])
+        by chinatelecom.cn (HERMES) with SMTP id 6074C280091;
+        Tue, 25 Jan 2022 07:37:10 +0800 (CST)
+X-189-SAVE-TO-SEND: sunshouxin@chinatelecom.cn
+Received: from  ([172.18.0.188])
+        by app0023 with ESMTP id b0f4a0a9dd364382b2f72083794d0d69 for j.vosburgh@gmail.com;
+        Tue, 25 Jan 2022 07:37:18 CST
+X-Transaction-ID: b0f4a0a9dd364382b2f72083794d0d69
+X-Real-From: sunshouxin@chinatelecom.cn
+X-Receive-IP: 172.18.0.188
+X-MEDUSA-Status: 0
+Sender: sunshouxin@chinatelecom.cn
+From:   Sun Shouxin <sunshouxin@chinatelecom.cn>
+To:     j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
+        davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jay.vosburgh@canonical.com, nikolay@nvidia.com,
+        huyd12@chinatelecom.cn
+Subject: [PATCH v8] net: bonding: Add support for IPV6 ns/na to balance-alb/balance-tlb mode
+Date:   Mon, 24 Jan 2022 18:36:27 -0500
+Message-Id: <20220124233627.94310-1-sunshouxin@chinatelecom.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to register SCMI regulator subnodes based on an SCMI
-Voltage Domain name specified via the 'regulator-name' device tree
-property.  In doing so, make the 'reg' property optional with the
-constraint that at least one of 'reg' or 'regulator-name' must be
-specified.  If both are specified, then both must match the
-Voltage Domain data exposed by the SCMI platform.
+Since ipv6 neighbor solicitation and advertisement messages
+isn't handled gracefully in bond6 driver, we can see packet
+drop due to inconsistency between mac address in the option
+message and source MAC .
 
-Name based SCMI regulator registration helps ensure that an SCMI
-agent doesn't need to be aware of the numbering scheme used for
-Voltage Domains by the SCMI platform.  It also ensures that the
-correct Voltage Domain is selected for a given physical regulator.
-This cannot be guaranteed with numeric Voltage Domain IDs alone.
+Another examples is ipv6 neighbor solicitation and advertisement
+messages from VM via tap attached to host bridge, the src mac
+might be changed through balance-alb mode, but it is not synced
+with Link-layer address in the option message.
 
-Signed-off-by: David Collins <quic_collinsd@quicinc.com>
+The patch implements bond6's tx handle for ipv6 neighbor
+solicitation and advertisement messages.
+
+Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
 ---
- drivers/regulator/scmi-regulator.c | 57 ++++++++++++++++++++++++++++--
- 1 file changed, 54 insertions(+), 3 deletions(-)
+ drivers/net/bonding/bond_alb.c | 37 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 36 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/regulator/scmi-regulator.c b/drivers/regulator/scmi-regulator.c
-index 1f02f60ad136..c3287901975e 100644
---- a/drivers/regulator/scmi-regulator.c
-+++ b/drivers/regulator/scmi-regulator.c
-@@ -31,6 +31,7 @@
- #include <linux/regulator/of_regulator.h>
- #include <linux/scmi_protocol.h>
- #include <linux/slab.h>
-+#include <linux/string.h>
- #include <linux/types.h>
- 
- static const struct scmi_voltage_proto_ops *voltage_ops;
-@@ -252,16 +253,66 @@ static int scmi_regulator_common_init(struct scmi_regulator *sreg)
- 	return 0;
+diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
+index 533e476988f2..d4d8670643e9 100644
+--- a/drivers/net/bonding/bond_alb.c
++++ b/drivers/net/bonding/bond_alb.c
+@@ -1269,6 +1269,34 @@ static int alb_set_mac_address(struct bonding *bond, void *addr)
+ 	return res;
  }
  
-+static int scmi_regulator_map_name(struct scmi_protocol_handle *ph,
-+				   struct scmi_regulator_info *rinfo,
-+				   const char *name)
++/* determine if the packet is NA or NS */
++static bool __alb_determine_nd(struct icmp6hdr *hdr)
 +{
-+	const struct scmi_voltage_info *vinfo;
-+	int i;
-+
-+	for (i = 0; i < rinfo->num_doms; i++) {
-+		vinfo = voltage_ops->info_get(ph, i);
-+		if (!vinfo)
-+			continue;
-+		if (!strncmp(vinfo->name, name, sizeof(vinfo->name)))
-+			return i;
++	if (hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
++	    hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
++		return true;
 +	}
 +
-+	return -ENODEV;
++	return false;
 +}
 +
- static int process_scmi_regulator_of_node(struct scmi_device *sdev,
- 					  struct scmi_protocol_handle *ph,
- 					  struct device_node *np,
- 					  struct scmi_regulator_info *rinfo)
- {
- 	u32 dom, ret;
-+	int name_dom;
-+	const char *name;
- 
--	ret = of_property_read_u32(np, "reg", &dom);
--	if (ret)
--		return ret;
-+	dom = rinfo->num_doms;
-+	if (of_find_property(np, "reg", NULL)) {
-+		ret = of_property_read_u32(np, "reg", &dom);
-+		if (ret)
-+			return ret;
++static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
++{
++	struct ipv6hdr *ip6hdr;
++	struct icmp6hdr *hdr;
 +
-+		if (dom >= rinfo->num_doms)
-+			return -ENODEV;
++	ip6hdr = ipv6_hdr(skb);
++	if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
++		if (!pskb_may_pull(skb, sizeof(struct ipv6hdr) + sizeof(struct icmp6hdr)))
++			return true;
++
++		hdr = icmp6_hdr(skb);
++		return __alb_determine_nd(hdr);
 +	}
 +
-+	if (of_find_property(np, "regulator-name", NULL)) {
-+		ret = of_property_read_string(np, "regulator-name", &name);
-+		if (ret)
-+			return ret;
++	return false;
++}
 +
-+		name_dom = scmi_regulator_map_name(ph, rinfo, name);
-+		if (name_dom < 0) {
-+			dev_err(&sdev->dev,
-+				"No SCMI Voltage Domain found named %s. Skipping: %s\n",
-+				name, np->full_name);
-+			return name_dom;
-+		}
-+
-+		if (dom >= rinfo->num_doms)
-+			dom = name_dom;
-+
-+		if (name_dom != dom) {
-+			dev_err(&sdev->dev,
-+				"SCMI Voltage Domain %s ID mismatch, %u (DT) != %d (firmware). Skipping: %s\n",
-+				name, dom, name_dom, np->full_name);
-+			return -EINVAL;
-+		}
-+	}
+ /************************ exported alb functions ************************/
  
- 	if (dom >= rinfo->num_doms)
- 		return -ENODEV;
+ int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
+@@ -1348,8 +1376,10 @@ struct slave *bond_xmit_tlb_slave_get(struct bonding *bond,
+ 	/* Do not TX balance any multicast or broadcast */
+ 	if (!is_multicast_ether_addr(eth_data->h_dest)) {
+ 		switch (skb->protocol) {
+-		case htons(ETH_P_IP):
+ 		case htons(ETH_P_IPV6):
++			if (alb_determine_nd(skb, bond))
++				break;
++		case htons(ETH_P_IP):
+ 			hash_index = bond_xmit_hash(bond, skb);
+ 			if (bond->params.tlb_dynamic_lb) {
+ 				tx_slave = tlb_choose_channel(bond,
+@@ -1446,6 +1476,11 @@ struct slave *bond_xmit_alb_slave_get(struct bonding *bond,
+ 			break;
+ 		}
+ 
++		if (alb_determine_nd(skb, bond)) {
++			do_tx_balance = false;
++			break;
++		}
++
+ 		hash_start = (char *)&ip6hdr->daddr;
+ 		hash_size = sizeof(ip6hdr->daddr);
+ 		break;
+
+base-commit: dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
 -- 
-2.17.1
+2.27.0
 

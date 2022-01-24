@@ -2,159 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3763B49858C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:58:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 876E4498590
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:58:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243849AbiAXQ6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 11:58:38 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:10619 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241308AbiAXQ6e (ORCPT
+        id S244042AbiAXQ6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 11:58:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241308AbiAXQ6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 11:58:34 -0500
+        Mon, 24 Jan 2022 11:58:54 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34366C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 08:58:54 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id t32so15892492pgm.7
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 08:58:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643043514; x=1674579514;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PB2abBFo+LtFf89gOGyi1S52is2pdXAToSOC4wA22ac=;
-  b=Ri2xU7NcMCkUPhM3XwPHlBFIKxoCt62lrFO+q4btT4rzWD2b4QhUqKES
-   sTrn/MjMMcpCsvJ58CK6NM0fPlw7Cnr1fg0sHK1l4TohapmW+JTacajOM
-   +8AjFVjcozSUGJI4GnBZ+gMlebnemH1Zr5hNMlUK92JXrD89sAGNCwXj/
-   s=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 24 Jan 2022 08:58:34 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 08:58:34 -0800
-Received: from [10.216.45.46] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 24 Jan
- 2022 08:58:32 -0800
-Message-ID: <05cdeb95-1e16-c1c1-30df-135a4d4ebfcc@quicinc.com>
-Date:   Mon, 24 Jan 2022 22:28:28 +0530
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=QpweiVyIfmb5hj1sObeMoupM7nExebWp4y/78WjEl2o=;
+        b=KDOcJo5VhtwHDYkRvxFLe2+8bdiG3/Uk+A59ZObbMymNhlfS5n75/xTEDHaC4pb2RW
+         oJRWHcQb3z+pmIvLIXCmTMK1ddA7KKZGOJ8L/2qRnorzLU4l0QG0uJPDaFE1vB/Aj8N3
+         Fo/+tT4g2b/ftcx6RppZOyB5biFw+pEfpxA6eg5rV1xrKK4APlmhwmrTlto+roVogi6h
+         L+URhA9G81VATPDvfsLgNgLgKe93cjhhr9j7IOi3qzVgTgCkh26o1+z0ZVAyJwtbUuQL
+         PPHgqFOgqaH3Pk+wjxq8ZQLekAjvcQEpzD61nodAygpv5M5Y0Tqemg7HWzKABeJliIvz
+         lhOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=QpweiVyIfmb5hj1sObeMoupM7nExebWp4y/78WjEl2o=;
+        b=ucmXIEDx0eXFfFIYmTPMEzz5ZNDxmmgDxZ6PBYgKLu1dwGvC1IfNLWRAP0RtpQLFlW
+         ylFxbSpb/7iLM/VzcZoUbzZZ+dcJJJnGfCgjLv0Eltds1AWxgKcRxBizHIhblnjvtLf9
+         /a3X6bfsnM7HIHjl49GlLfEus1aAH8U3eHieSg6zfVlbJJ4CxV2S22oXrvLtJw5dE/KL
+         C8xcHlzTEO6EISR5Wo8f6MLPwDZDnergTeVHQENeetD6jp9eYr7DmXcmAvKsDTALSnXv
+         U4ws+M2QTYRV/KuVe+z+ApswvKsNogbeQ8nn81htVyMr/2068LmVmO7IxO0tm8ui5L9z
+         9o+A==
+X-Gm-Message-State: AOAM533zK8VeLc7VrFVEhrgElFfS5h6jdT0Sm12V+iTNl2Ytp3ekPrB4
+        uiYb9qXo3h0LbGVmqs57EbWE/w==
+X-Google-Smtp-Source: ABdhPJzFFs4pNrvCJjliYLl0Xd2gUQ4IZdd9l1RcnT7MfpuqAkrcqgx4Kuk2LSLF5GEFQtg9h6gySw==
+X-Received: by 2002:a63:3182:: with SMTP id x124mr12248537pgx.586.1643043533673;
+        Mon, 24 Jan 2022 08:58:53 -0800 (PST)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id v4sm16849486pfu.202.2022.01.24.08.58.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 08:58:53 -0800 (PST)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     daniel.lezcano@linaro.org, amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ben.tseng@mediatek.com, mka@chromium.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Alexandre Bailon <abailon@baylibre.com>, rafael@kernel.org,
+        rui.zhang@intel.com
+Subject: Re: [PATCH v4 RESEND 0/2] Add a generic virtual thermal sensor
+In-Reply-To: <20220111103346.2660639-1-abailon@baylibre.com>
+References: <20220111103346.2660639-1-abailon@baylibre.com>
+Date:   Mon, 24 Jan 2022 08:58:52 -0800
+Message-ID: <7hilu9xe7n.fsf@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: synchronize_rcu_expedited gets stuck in hotplug path
-Content-Language: en-US
-To:     <paulmck@kernel.org>
-CC:     Tejun Heo <tj@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, <jiangshanlai@gmail.com>
-References: <7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com>
- <20220118200646.GJ947480@paulmck-ThinkPad-P17-Gen-1>
- <Yece9mH3nzwGxar6@slm.duckdns.org>
- <20220118214155.GK947480@paulmck-ThinkPad-P17-Gen-1>
- <4f2ada96-234f-31d8-664a-c84f5b461385@quicinc.com>
- <20220124164452.GG4285@paulmck-ThinkPad-P17-Gen-1>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20220124164452.GG4285@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.47.97.222)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Daniel, Amit,
 
-On 1/24/2022 10:14 PM, Paul E. McKenney wrote:
-> On Mon, Jan 24, 2022 at 07:32:01PM +0530, Mukesh Ojha wrote:
->> On 1/19/2022 3:11 AM, Paul E. McKenney wrote:
->>> On Tue, Jan 18, 2022 at 10:11:34AM -1000, Tejun Heo wrote:
->>>> Hello,
->>>>
->>>> On Tue, Jan 18, 2022 at 12:06:46PM -0800, Paul E. McKenney wrote:
->>>>> Interesting.  Adding Tejun and Lai on CC for their perspective.
->>>>>
->>>>> As you say, the incoming CPU invoked synchronize_rcu_expedited() which
->>>>> in turn invoked queue_work().  By default, workqueues will of course
->>>>> queue that work on the current CPU.  But in this case, the CPU's bit
->>>>> is not yet set in the cpu_active_mask.  Thus, a workqueue scheduled on
->>>>> the incoming CPU won't be invoked until CPUHP_AP_ACTIVE, which won't
->>>>> be reached until after the grace period ends, which cannot happen until
->>>>> the workqueue handler is invoked.
->>>>>
->>>>> I could imagine doing something as shown in the (untested) patch below,
->>>>> but first does this help?
->>>>>
->>>>> If it does help, would this sort of check be appropriate here or
->>>>> should it instead go into workqueues?
->>>> Maybe it can be solved by rearranging the hotplug sequence but it's fragile
->>>> to schedule per-cpu work items from hotplug paths. Maybe the whole issue can
->>>> be side-stepped by making synchronize_rcu_expedited() use unbound workqueue
->>>> instead? Does it require to be per-cpu?
->>> Good point!
->>>
->>> And now that you mention it, RCU expedited grace periods already avoid
->>> using workqueues during early boot.  The (again untested) patch below
->>> extends that approach to incoming CPUs.
->>>
->>> Thoughts?
->> Hi Paul,
->>
->> We are not seeing the issue after this patch.
->> Can we merge this patch ?
-> It is currently in -rcu and should also be in -next shortly.  Left to
-> myself, and assuming further testing and reviews all go well, I would
-> submit it during the upcoming v5.18 merge window.
+Alexandre Bailon <abailon@baylibre.com> writes:
+
+> This series add a virtual thermal sensor.
+> It could be used to get a temperature using some thermal sensors.
+> Currently, the supported operations are max, min and avg.
+> The virtual sensor could be easily extended to support others operations.
 >
-> Does that work for you?  Or do you need it in mainline sooner?
+> Changes in v2:
+> - Fix some warnings / errors reported by kernel test robot
+> - rename some struct and functions with a more accurate name
+> - update the dt bindings: rename type attribute to aggregation-function
+> - factorize a little bit the aggregation functions
+> Changes in v3:
+> - Aggregate thermal zone instead of thermal sensors
+> - Use try_get_module / put_module to prevent thermal providers to be removed
+> - Update the bindings, to be more accurate
+> Changes in v4:
+> - Fix two warnings reported by kernel test robot
 
-Before reporting this issue, we saw only one instance of it.
-Also got this fix tested with same set of test cases, did not observe 
-any issue as of yet.
+Any more feedback on this series?
 
-I would be happy to get a mail once it clear all the testing and get merges
-to -next. I would cherry-pick it in android branch-5.10.
+Thanks,
 
--Mukesh
-
->
-> 							Thanx, Paul
->
->> -Mukesh
->>
->>> 							Thanx, Paul
->>>
->>> ------------------------------------------------------------------------
->>>
->>> diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
->>> index 60197ea24ceb9..1a45667402260 100644
->>> --- a/kernel/rcu/tree_exp.h
->>> +++ b/kernel/rcu/tree_exp.h
->>> @@ -816,7 +816,7 @@ static int rcu_print_task_exp_stall(struct rcu_node *rnp)
->>>     */
->>>    void synchronize_rcu_expedited(void)
->>>    {
->>> -	bool boottime = (rcu_scheduler_active == RCU_SCHEDULER_INIT);
->>> +	bool no_wq;
->>>    	struct rcu_exp_work rew;
->>>    	struct rcu_node *rnp;
->>>    	unsigned long s;
->>> @@ -841,9 +841,15 @@ void synchronize_rcu_expedited(void)
->>>    	if (exp_funnel_lock(s))
->>>    		return;  /* Someone else did our work for us. */
->>> +	/* Don't use workqueue during boot or from an incoming CPU. */
->>> +	preempt_disable();
->>> +	no_wq = rcu_scheduler_active == RCU_SCHEDULER_INIT ||
->>> +		!cpumask_test_cpu(smp_processor_id(), cpu_active_mask);
->>> +	preempt_enable();
->>> +
->>>    	/* Ensure that load happens before action based on it. */
->>> -	if (unlikely(boottime)) {
->>> -		/* Direct call during scheduler init and early_initcalls(). */
->>> +	if (unlikely(no_wq)) {
->>> +		/* Direct call for scheduler init, early_initcall()s, and incoming CPUs. */
->>>    		rcu_exp_sel_wait_wake(s);
->>>    	} else {
->>>    		/* Marshall arguments & schedule the expedited grace period. */
->>> @@ -861,7 +867,7 @@ void synchronize_rcu_expedited(void)
->>>    	/* Let the next expedited grace period start. */
->>>    	mutex_unlock(&rcu_state.exp_mutex);
->>> -	if (likely(!boottime))
->>> +	if (likely(!no_wq))
->>>    		destroy_work_on_stack(&rew.rew_work);
->>>    }
->>>    EXPORT_SYMBOL_GPL(synchronize_rcu_expedited);
+Kevin

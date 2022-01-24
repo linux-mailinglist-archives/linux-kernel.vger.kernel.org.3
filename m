@@ -2,95 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CB349A112
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:34:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AAAF49A155
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:35:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1849750AbiAXX0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:26:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
+        id S2359443AbiAXXch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:32:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1835942AbiAXWhu (ORCPT
+        with ESMTP id S1456647AbiAXWjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:37:50 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027F8C0D9433
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:59:58 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id o30-20020a05600c511e00b0034f4c3186f4so203691wms.3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:59:57 -0800 (PST)
+        Mon, 24 Jan 2022 17:39:52 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA02C04D61D
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 13:04:20 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id s6-20020a0568301e0600b0059ea5472c98so8270024otr.11
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 13:04:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=LelPLFVyiMTpw5yA1vIPFMWw4VOWdiJSPS8F5u+bLEc=;
-        b=qRZb3pM+5b2VNWc/AzABp2OqhydpmI2RSTdUgZsB+pKt3vGNMqDrBgXP/MKGbxYyHg
-         wWnY5BfxqqcbIUq6wPMF9Wrl3cFRKva373rvxCvgG/CE3dvo9GQkBwHGCDK8CsN8vWpD
-         7ThNJfRa6Vr+Tbjs2BXWAheDIeoqp5RiCRk8u1cD2qULgAiilowza9Apg/0qECxnejBa
-         Fad6dKu/8fVBAYJjbuNnYB1rOP9vDJdi1naj3nqGx/sHOem74ASUXGbfnLBjY2QkTYNc
-         WTA2kK8IEaUhDo+ifHdp9FaYSgg8bYW1d5pV0BY6wa5HAyUByZbm4iPldXhv8wz416yY
-         ASyg==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=JYiLYol9mvWoC/k9SlBNW3f4S6peoi+xmexnQLDaAHc=;
+        b=HsuuTxhscaoAqtQaDrdwBqOr+pYZMN4w2SA8Q7gzbGeDVQlpfcRDDYbqoI1eGaw4HH
+         tqzC8Rw8Wq9AFXlLETHFjUOJ/Kd57+8avtXJcdQl+Zk2xnWWSjvNGfjrKmB1mjc9h3G/
+         J51AFEegRcmcOXWbI+rmYoSKJy7YCRzp/zMxE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=LelPLFVyiMTpw5yA1vIPFMWw4VOWdiJSPS8F5u+bLEc=;
-        b=s8pnbCkmJTmIDl10x6S11XwTzn07EJDDch4+1tYbmJR0CEmd5qImFB+4r+j4A1Hfny
-         xZvRrm+Fc+ADC4jsYzi63M+bZ68hspWIHcc8JAz1KGz1uagXRNmrBXcRd/Y6Ke0GRGsE
-         f2nYi1mVDS/FHxnvhRsw47dXHE/waFGn6My+keDBcoJ+ZlLn4+lSpmXekipOHiN8qyuo
-         HhEyh2nz4HBBMkLlz7vNkl0XdE3mUR59fLtBnX0ZjUfmbm4vJpv8x8yqAtL3cDK4gTo7
-         yxorD5NbA//x39L/EI/oU3x6atRrffXVSSRvM1Ii/vnhxaXc58t7vBeZsFsm/iqAHBXk
-         h1jg==
-X-Gm-Message-State: AOAM532ODqQmmkSHMNg9/CQbGSimrQ/iYJClIFF/zP3WarywNUNp0pCU
-        AZ63nbwXh0VWUhQbDxd0CuuBj0krwnRw9BzPftQ0lA==
-X-Google-Smtp-Source: ABdhPJzQ2EdezBI/cadxJvyRuRdpwrqFMtyGwYYsP71DbnBy25EekbaOkxmdTf3MKawF+mMAoyzlm2azpJ+IBoCSdG0=
-X-Received: by 2002:a05:600c:3503:: with SMTP id h3mr110888wmq.164.1643057996298;
- Mon, 24 Jan 2022 12:59:56 -0800 (PST)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=JYiLYol9mvWoC/k9SlBNW3f4S6peoi+xmexnQLDaAHc=;
+        b=V5JuFevwKvfVhdY0gN82jg4/VfrRxiGjzO8mW9Eoz9h7/g4Il3EXFC9ESIWSA/X++L
+         8d9rBCDOO/oF0pPDhlmAsEmWsohSWw9tUoANh6U3f209NYSUu1DkvFBje5q4Q6yzsV1d
+         XHDowfBhtrEl2V040tn5CNJblXczGJCRAXnNtAv8EDoGssnRsZK0FVtV4qElbnnnG1+K
+         cTh3qE1QQk6jBS8GmdQz8gnP5/Qf5Gw0rFqZAznjB2qdGlVMicwgDYNP4papy/ZPBFJt
+         nvwzYbQ2CEUiLuP94JIpK6Ocda8eabyDZ+OS7+zcI34YAc3InAC4xj8BdApwXUTsOelH
+         RJfQ==
+X-Gm-Message-State: AOAM532tokHHmFaROLCnAXDPQ98+8VqfeZCZcBfc42iBRU/IxuyRuqB1
+        zVmJ2TlsqXb5GiLQVPYPOHeIPoZunAMF5DMS514NPA==
+X-Google-Smtp-Source: ABdhPJzWss7XOnvh73u3Bx1WcknT+UoYuzDwWnibDZtvmdSPqZExl7hcfY2zpEl1b5NjqqKETJt01WEhiJ/eialMpxs=
+X-Received: by 2002:a05:6830:30ba:: with SMTP id g26mr6213128ots.159.1643058259360;
+ Mon, 24 Jan 2022 13:04:19 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 24 Jan 2022 13:04:18 -0800
 MIME-Version: 1.0
-From:   Hao Luo <haoluo@google.com>
-Date:   Mon, 24 Jan 2022 12:59:44 -0800
-Message-ID: <CA+khW7gh=vO8m-_SVnwWwj7kv+EDeUPcuWFqebf2Zmi9T_oEAQ@mail.gmail.com>
-Subject: [Question] How to reliably get BuildIDs from bpf prog
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Blake Jones <blakejones@google.com>,
-        Alexey Alexandrov <aalexand@google.com>,
-        Namhyung Kim <namhyung@google.com>,
-        Ian Rogers <irogers@google.com>,
-        "pasha.tatashin@soleen.com" <pasha.tatashin@soleen.com>
+In-Reply-To: <1643057170-10413-1-git-send-email-quic_khsieh@quicinc.com>
+References: <1643057170-10413-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 24 Jan 2022 13:04:18 -0800
+Message-ID: <CAE-0n53nFcMzuKfqVRac6PRTkoPrftXL+uVK56ZQsHVWHmivkQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/dp: always add fail-safe mode into connector mode list
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dmitry.baryshkov@linaro.org, robdclark@gmail.com, sean@poorly.run,
+        vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
+        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear BPF experts,
+Quoting Kuogee Hsieh (2022-01-24 12:46:10)
+> Some of DP link compliant test expects to return fail-safe mode
+> if prefer detailed timing mode can not be supported by mainlink's
+> lane and rate after link training. Therefore add fail-safe mode
+> into connector mode list as backup mode. This patch fixes test
+> case 4.2.2.1.
+>
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
 
-I'm working on collecting some kernel performance data using BPF
-tracing prog. Our performance profiling team wants to associate the
-data with user stack information. One of the requirements is to
-reliably get BuildIDs from bpf_get_stackid() and other similar helpers
-[1].
+Any Fixes tag? I also wonder why this isn't pushed into the DP core code
+somehow. Wouldn't every device need to add a 640x480 mode by default?
 
-As part of an early investigation, we found that there are a couple
-issues that make bpf_get_stackid() much less reliable than we'd like
-for our use:
-
-1. The first page of many binaries (which contains the ELF headers and
-thus the BuildID that we need) is often not in memory. The failure of
-find_get_page() (called from build_id_parse()) is higher than we would
-want.
-
-2. When anonymous huge pages are used to hold some regions of process
-text, build_id_parse() also fails to get a BuildID because
-vma->vm_file is NULL.
-
-These two issues are critical blockers for us to use BPF in
-production. Can we do better? What do other users do to reliably get
-build ids?
-
-Thanks very much,
-Hao
-
-[1] https://man7.org/linux/man-pages/man7/bpf-helpers.7.html
+> ---
+>  drivers/gpu/drm/msm/dp/dp_panel.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c b/drivers/gpu/drm/msm/dp/dp_panel.c
+> index 3b02922..7743b45 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_panel.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_panel.c
+> @@ -221,6 +221,11 @@ int dp_panel_read_sink_caps(struct dp_panel *dp_panel,
+>                 if (drm_add_modes_noedid(connector, 640, 480))
+>                         drm_set_preferred_mode(connector, 640, 480);
+>                 mutex_unlock(&connector->dev->mode_config.mutex);
+> +       } else {
+> +               /* always add fail-safe mode as backup mode */
+> +               mutex_lock(&connector->dev->mode_config.mutex);
+> +               drm_add_modes_noedid(connector, 640, 480);
+> +               mutex_unlock(&connector->dev->mode_config.mutex);
+>         }
+>
+>         if (panel->aux_cfg_update_done) {
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+>

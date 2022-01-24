@@ -2,41 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0253E4990C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:07:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD10D498FD8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376797AbiAXUEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:04:04 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43560 "EHLO
+        id S1358982AbiAXT4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:56:07 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42216 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356432AbiAXTqP (ORCPT
+        with ESMTP id S1351146AbiAXToo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:46:15 -0500
+        Mon, 24 Jan 2022 14:44:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 56D88614BB;
-        Mon, 24 Jan 2022 19:46:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 658C6C340E5;
-        Mon, 24 Jan 2022 19:46:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1CA06153F;
+        Mon, 24 Jan 2022 19:44:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E5AFC340E5;
+        Mon, 24 Jan 2022 19:44:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053572;
-        bh=k3U219NtxpqvwwJsFdcR9puEAbmjM0wOQedBtfEhGzM=;
+        s=korg; t=1643053482;
+        bh=m1F5fWtgDM8E6XKmaqCuV0mNrGXhTgIpzHKN+ItcTok=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zfouQ9pJwVnbpRd8KTwVPyxtqMyQeMdK98wHZ2xskwb2m1L3m6S17Mi4XGO748JnR
-         R3qr7glQZPFNXjk7xArWVmhAcEtMsKVP24gxUBmk9FhX6RqBtiDKK36WrwsgRPOF1h
-         tQfW6M98ClyLMqXpnLxkkY37zyn99GLGTZ0+/yoo=
+        b=BuhWMXcfaCx2Do6tF3X+S/6OHP76J9g7cKEAv+8cm5engwBoMPFxeJ7wZAtpCZUg7
+         WCQtaOwOGaRRiIYNusOSr7fjHu3gn/lgaJWJmylE/NISTYN/ZA1jyau/j75xBs9bJQ
+         0HAPUnSZp296lS4drlywgLmmkPi06mH3rIU1Uxoc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jammy Huang <jammy_huang@aspeedtech.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 077/563] media: aspeed: Update signal status immediately to ensure sane hw state
-Date:   Mon, 24 Jan 2022 19:37:22 +0100
-Message-Id: <20220124184027.052803371@linuxfoundation.org>
+Subject: [PATCH 5.10 080/563] arm64: dts: meson-gxbb-wetek: fix HDMI in early boot
+Date:   Mon, 24 Jan 2022 19:37:25 +0100
+Message-Id: <20220124184027.154017982@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -48,63 +47,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jammy Huang <jammy_huang@aspeedtech.com>
+From: Christian Hewitt <christianshewitt@gmail.com>
 
-[ Upstream commit af6d1bde395cac174ee71adcd3fa43f6435c7206 ]
+[ Upstream commit 8182a35868db5f053111d5d9d4da8fcb3f99259d ]
 
-If res-chg, VE_INTERRUPT_MODE_DETECT_WD irq will be raised. But
-v4l2_input_status won't be updated to no-signal immediately until
-aspeed_video_get_resolution() in aspeed_video_resolution_work().
+Mark the VDDIO_AO18 regulator always-on and set hdmi-supply for the hdmi_tx
+node to ensure HDMI is powered in the early stages of boot.
 
-During the period of time, aspeed_video_start_frame() could be called
-because it doesn't know signal becomes unstable now. If it goes with
-aspeed_video_init_regs() of aspeed_video_irq_res_change()
-simultaneously, it will mess up hw state.
+Fixes: fb72c03e0e32 ("ARM64: dts: meson-gxbb-wetek: add a wetek specific dtsi to cleanup hub and play2")
 
-To fix this problem, v4l2_input_status is updated to no-signal
-immediately for VE_INTERRUPT_MODE_DETECT_WD irq.
-
-Fixes: d2b4387f3bdf ("media: platform: Add Aspeed Video Engine driver")
-Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
-Acked-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/20211012052522.30873-2-christianshewitt@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/aspeed-video.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/amlogic/meson-gxbb-wetek.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index 23c41c545c536..debc7509c173c 100644
---- a/drivers/media/platform/aspeed-video.c
-+++ b/drivers/media/platform/aspeed-video.c
-@@ -556,6 +556,8 @@ static void aspeed_video_irq_res_change(struct aspeed_video *video, ulong delay)
- 	set_bit(VIDEO_RES_CHANGE, &video->flags);
- 	clear_bit(VIDEO_FRAME_INPRG, &video->flags);
+diff --git a/arch/arm64/boot/dts/amlogic/meson-gxbb-wetek.dtsi b/arch/arm64/boot/dts/amlogic/meson-gxbb-wetek.dtsi
+index a350fee1264d7..8e2af986cebaf 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-gxbb-wetek.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-gxbb-wetek.dtsi
+@@ -64,6 +64,7 @@
+ 		regulator-name = "VDDIO_AO18";
+ 		regulator-min-microvolt = <1800000>;
+ 		regulator-max-microvolt = <1800000>;
++		regulator-always-on;
+ 	};
  
-+	video->v4l2_input_status = V4L2_IN_ST_NO_SIGNAL;
-+
- 	aspeed_video_off(video);
- 	aspeed_video_bufs_done(video, VB2_BUF_STATE_ERROR);
+ 	vcc_3v3: regulator-vcc_3v3 {
+@@ -161,6 +162,7 @@
+ 	status = "okay";
+ 	pinctrl-0 = <&hdmi_hpd_pins>, <&hdmi_i2c_pins>;
+ 	pinctrl-names = "default";
++	hdmi-supply = <&vddio_ao18>;
+ };
  
-@@ -1337,7 +1339,6 @@ static void aspeed_video_resolution_work(struct work_struct *work)
- 	struct delayed_work *dwork = to_delayed_work(work);
- 	struct aspeed_video *video = container_of(dwork, struct aspeed_video,
- 						  res_work);
--	u32 input_status = video->v4l2_input_status;
- 
- 	aspeed_video_on(video);
- 
-@@ -1350,8 +1351,7 @@ static void aspeed_video_resolution_work(struct work_struct *work)
- 	aspeed_video_get_resolution(video);
- 
- 	if (video->detected_timings.width != video->active_timings.width ||
--	    video->detected_timings.height != video->active_timings.height ||
--	    input_status != video->v4l2_input_status) {
-+	    video->detected_timings.height != video->active_timings.height) {
- 		static const struct v4l2_event ev = {
- 			.type = V4L2_EVENT_SOURCE_CHANGE,
- 			.u.src_change.changes = V4L2_EVENT_SRC_CH_RESOLUTION,
+ &hdmi_tx_tmds_port {
 -- 
 2.34.1
 

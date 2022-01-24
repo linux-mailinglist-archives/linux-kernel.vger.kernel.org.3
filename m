@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF22A4995B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30802499C0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:06:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442327AbiAXUyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:54:17 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55290 "EHLO
+        id S1357335AbiAXV7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:59:09 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43196 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379434AbiAXUbE (ORCPT
+        with ESMTP id S1451259AbiAXVWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:31:04 -0500
+        Mon, 24 Jan 2022 16:22:34 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 404C361531;
-        Mon, 24 Jan 2022 20:31:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1881AC340E5;
-        Mon, 24 Jan 2022 20:31:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F90960C60;
+        Mon, 24 Jan 2022 21:22:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6468DC340E5;
+        Mon, 24 Jan 2022 21:22:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056262;
-        bh=NArxHwZeGD7GaMmhx/LlhECXgL7KMKQlYAHAYYPDj34=;
+        s=korg; t=1643059353;
+        bh=9ThM2tKjcmelkSf3NnzxN7fdj2TU5ZXZctFcGUmZTsY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1oHilC+k+FDN9vqtX2PFQNYE2h52GDNDIfZok3r8L9OAi3wsY8zO80p9huOQ/RD3T
-         CAGpX7NXH6BwClE4hrTMPzk4417c2XRK+W7+kv7ifV/tasXu0TrIRgVX138qnZ3BMc
-         PVlcPxCeABCTnI0rSkHwUGQtQWOWZnE7hsIi6Fxo=
+        b=Y34YWv5b6lr0uXJg2rEFEMbLSLpweN7haOcEqIxCTRh5Y+vM1Xxdb3uS3TwF+I/Q/
+         n5H0CtpLhO1YsGVv0ePQa+WaZnEmdTnfqEGLFgzxkQpH8DE8/dTF2Psyi6I+ocWo4O
+         twdRvZUGC4ffyHLrz9k83eT/VnXSi/e/TyMrZWYM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 425/846] iommu/iova: Fix race between FQ timeout and teardown
-Date:   Mon, 24 Jan 2022 19:39:02 +0100
-Message-Id: <20220124184115.637840607@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0554/1039] drm/bridge: dw-hdmi: handle ELD when DRM_BRIDGE_ATTACH_NO_CONNECTOR
+Date:   Mon, 24 Jan 2022 19:39:03 +0100
+Message-Id: <20220124184143.919776531@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,51 +48,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+From: Neil Armstrong <narmstrong@baylibre.com>
 
-[ Upstream commit d7061627d701c90e1cac1e1e60c45292f64f3470 ]
+[ Upstream commit 3f2532d65a571ca02258b547b5b68ab2e9406fdb ]
 
-It turns out to be possible for hotplugging out a device to reach the
-stage of tearing down the device's group and default domain before the
-domain's flush queue has drained naturally. At this point, it is then
-possible for the timeout to expire just before the del_timer() call
-in free_iova_flush_queue(), such that we then proceed to free the FQ
-resources while fq_flush_timeout() is still accessing them on another
-CPU. Crashes due to this have been observed in the wild while removing
-NVMe devices.
+The current ELD handling takes the internal connector ELD buffer and
+shares it to the I2S and AHB sub-driver.
 
-Close the race window by using del_timer_sync() to safely wait for any
-active timeout handler to finish before we start to free things. We
-already avoid any locking in free_iova_flush_queue() since the FQ is
-supposed to be inactive anyway, so the potential deadlock scenario does
-not apply.
+But with DRM_BRIDGE_ATTACH_NO_CONNECTOR, the connector is created
+elsewhere (or not), and an eventual connector is known only
+if the bridge chain up to a connector is enabled.
 
-Fixes: 9a005a800ae8 ("iommu/iova: Add flush timer")
-Reviewed-by: John Garry <john.garry@huawei.com>
-Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-[ rm: rewrite commit message ]
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-Link: https://lore.kernel.org/r/0a365e5b07f14b7344677ad6a9a734966a8422ce.1639753638.git.robin.murphy@arm.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+The current dw-hdmi code gets the current connector from
+atomic_enable() so use the already stored connector pointer and
+replace the buffer pointer with a callback returning the current
+connector ELD buffer.
+
+Since a connector is not always available, either pass an empty
+ELD to the alsa HDMI driver or don't call snd_pcm_hw_constraint_eld()
+in AHB driver.
+
+Reported-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+[narmstrong: fixed typo in commit log]
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211029135947.3022875-1-narmstrong@baylibre.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/iova.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c | 10 +++++++---
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi-audio.h     |  4 ++--
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi-i2s-audio.c |  9 ++++++++-
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi.c           | 12 ++++++++++--
+ 4 files changed, 27 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-index 9e8bc802ac053..920fcc27c9a1e 100644
---- a/drivers/iommu/iova.c
-+++ b/drivers/iommu/iova.c
-@@ -83,8 +83,7 @@ static void free_iova_flush_queue(struct iova_domain *iovad)
- 	if (!has_iova_flush_queue(iovad))
- 		return;
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c
+index d0db1acf11d73..7d2ed0ed2fe26 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c
+@@ -320,13 +320,17 @@ static int dw_hdmi_open(struct snd_pcm_substream *substream)
+ 	struct snd_pcm_runtime *runtime = substream->runtime;
+ 	struct snd_dw_hdmi *dw = substream->private_data;
+ 	void __iomem *base = dw->data.base;
++	u8 *eld;
+ 	int ret;
  
--	if (timer_pending(&iovad->fq_timer))
--		del_timer(&iovad->fq_timer);
-+	del_timer_sync(&iovad->fq_timer);
+ 	runtime->hw = dw_hdmi_hw;
  
- 	fq_destroy_all_entries(iovad);
+-	ret = snd_pcm_hw_constraint_eld(runtime, dw->data.eld);
+-	if (ret < 0)
+-		return ret;
++	eld = dw->data.get_eld(dw->data.hdmi);
++	if (eld) {
++		ret = snd_pcm_hw_constraint_eld(runtime, eld);
++		if (ret < 0)
++			return ret;
++	}
  
+ 	ret = snd_pcm_limit_hw_rates(runtime);
+ 	if (ret < 0)
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-audio.h b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-audio.h
+index cb07dc0da5a70..f72d27208ebef 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-audio.h
++++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-audio.h
+@@ -9,15 +9,15 @@ struct dw_hdmi_audio_data {
+ 	void __iomem *base;
+ 	int irq;
+ 	struct dw_hdmi *hdmi;
+-	u8 *eld;
++	u8 *(*get_eld)(struct dw_hdmi *hdmi);
+ };
+ 
+ struct dw_hdmi_i2s_audio_data {
+ 	struct dw_hdmi *hdmi;
+-	u8 *eld;
+ 
+ 	void (*write)(struct dw_hdmi *hdmi, u8 val, int offset);
+ 	u8 (*read)(struct dw_hdmi *hdmi, int offset);
++	u8 *(*get_eld)(struct dw_hdmi *hdmi);
+ };
+ 
+ #endif
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-i2s-audio.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-i2s-audio.c
+index feb04f127b550..f50b47ac11a82 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-i2s-audio.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-i2s-audio.c
+@@ -135,8 +135,15 @@ static int dw_hdmi_i2s_get_eld(struct device *dev, void *data, uint8_t *buf,
+ 			       size_t len)
+ {
+ 	struct dw_hdmi_i2s_audio_data *audio = data;
++	u8 *eld;
++
++	eld = audio->get_eld(audio->hdmi);
++	if (eld)
++		memcpy(buf, eld, min_t(size_t, MAX_ELD_BYTES, len));
++	else
++		/* Pass en empty ELD if connector not available */
++		memset(buf, 0, len);
+ 
+-	memcpy(buf, audio->eld, min_t(size_t, MAX_ELD_BYTES, len));
+ 	return 0;
+ }
+ 
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+index f08d0fded61f7..e1211a5b334ba 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+@@ -757,6 +757,14 @@ static void hdmi_enable_audio_clk(struct dw_hdmi *hdmi, bool enable)
+ 	hdmi_writeb(hdmi, hdmi->mc_clkdis, HDMI_MC_CLKDIS);
+ }
+ 
++static u8 *hdmi_audio_get_eld(struct dw_hdmi *hdmi)
++{
++	if (!hdmi->curr_conn)
++		return NULL;
++
++	return hdmi->curr_conn->eld;
++}
++
+ static void dw_hdmi_ahb_audio_enable(struct dw_hdmi *hdmi)
+ {
+ 	hdmi_set_cts_n(hdmi, hdmi->audio_cts, hdmi->audio_n);
+@@ -3431,7 +3439,7 @@ struct dw_hdmi *dw_hdmi_probe(struct platform_device *pdev,
+ 		audio.base = hdmi->regs;
+ 		audio.irq = irq;
+ 		audio.hdmi = hdmi;
+-		audio.eld = hdmi->connector.eld;
++		audio.get_eld = hdmi_audio_get_eld;
+ 		hdmi->enable_audio = dw_hdmi_ahb_audio_enable;
+ 		hdmi->disable_audio = dw_hdmi_ahb_audio_disable;
+ 
+@@ -3444,7 +3452,7 @@ struct dw_hdmi *dw_hdmi_probe(struct platform_device *pdev,
+ 		struct dw_hdmi_i2s_audio_data audio;
+ 
+ 		audio.hdmi	= hdmi;
+-		audio.eld	= hdmi->connector.eld;
++		audio.get_eld	= hdmi_audio_get_eld;
+ 		audio.write	= hdmi_writeb;
+ 		audio.read	= hdmi_readb;
+ 		hdmi->enable_audio = dw_hdmi_i2s_audio_enable;
 -- 
 2.34.1
 

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E6A499AC5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:57:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 759BB4994C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:06:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359842AbiAXVqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:46:20 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33960 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448321AbiAXVM1 (ORCPT
+        id S1389851AbiAXUo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:44:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1382294AbiAXUZZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:12:27 -0500
+        Mon, 24 Jan 2022 15:25:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833ACC07E30E;
+        Mon, 24 Jan 2022 11:41:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1A2CAB8123D;
-        Mon, 24 Jan 2022 21:12:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68BEBC340E5;
-        Mon, 24 Jan 2022 21:12:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B5EFB8121A;
+        Mon, 24 Jan 2022 19:41:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 711EDC340E5;
+        Mon, 24 Jan 2022 19:41:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058744;
-        bh=cZlP7inydCpcNyjSPOxf7NCHLOzHE2ldB8dKrIBV8pU=;
+        s=korg; t=1643053275;
+        bh=+UqKwQ35sgQOM9w62WCDHOz/u6Y8TNzdLyjcPKVz5Ac=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BsJe1Io6TcIskWxCC+vmN/DsR5+3H+q/EBAeI37DQMpmh4mbcNm3lNo2gb2XqBRsc
-         0DX0Sli9O1mnkh3PekaSub3thsJHU8A14XfZ7WEpIgAXUBEfwCj9wDQuSMkDseCfyO
-         Iyzouan8N3yUTRrP4pSuG1krBMZJmviWfIi3jTBg=
+        b=Ei+an6+S5xCdwhGVinUoVmViDVUflm7KmNrjJQq4n7vlqxHCiQip9Tfm5Ot/1xCtP
+         9M3UOa85URiEWFQy36iwX4N4EWuOPZoXku2JEh8awUylRjgV0faCEmhX3hrcXl+3vB
+         gazGFAuhrX9I3atpWh8Q5eu3bh67ZUVglMVv3Tv8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Karsten Graul <kgraul@linux.ibm.com>,
-        Wen Gu <guwen@linux.alibaba.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0388/1039] net/smc: Reset conn->lgr when link group registration fails
-Date:   Mon, 24 Jan 2022 19:36:17 +0100
-Message-Id: <20220124184138.361043091@linuxfoundation.org>
+        stable@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH 5.10 013/563] mtd: rawnand: davinci: Rewrite function description
+Date:   Mon, 24 Jan 2022 19:36:18 +0100
+Message-Id: <20220124184024.874787464@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,122 +48,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wen Gu <guwen@linux.alibaba.com>
+From: Paul Cercueil <paul@crapouillou.net>
 
-[ Upstream commit 36595d8ad46d9e4c41cc7c48c4405b7c3322deac ]
+commit 0697f8441faad552fbeb02d74454b5e7bcc956a2 upstream.
 
-SMC connections might fail to be registered in a link group due to
-unable to find a usable link during its creation. As a result,
-smc_conn_create() will return a failure and most resources related
-to the connection won't be applied or initialized, such as
-conn->abort_work or conn->lnk.
+The original comment that describes the function
+nand_davinci_read_page_hwecc_oob_first() is very obscure and it is hard
+to understand what it is for.
 
-If smc_conn_free() is invoked later, it will try to access the
-uninitialized resources related to the connection, thus causing
-a warning or crash.
-
-This patch tries to fix this by resetting conn->lgr to NULL if an
-abnormal exit occurs in smc_lgr_register_conn(), thus avoiding the
-access to uninitialized resources in smc_conn_free().
-
-Meanwhile, the new created link group should be terminated if smc
-connections can't be registered in it. So smc_lgr_cleanup_early() is
-modified to take care of link group only and invoked to terminate
-unusable link group by smc_conn_create(). The call to smc_conn_free()
-is moved out from smc_lgr_cleanup_early() to smc_conn_abort().
-
-Fixes: 56bc3b2094b4 ("net/smc: assign link to a new connection")
-Suggested-by: Karsten Graul <kgraul@linux.ibm.com>
-Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
-Acked-by: Karsten Graul <kgraul@linux.ibm.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: <stable@vger.kernel.org> # v5.2
+Fixes: a0ac778eb82c ("mtd: rawnand: ingenic: Add support for the JZ4740")
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20211016132228.40254-3-paul@crapouillou.net
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/smc/af_smc.c   |  8 +++++---
- net/smc/smc_core.c | 12 +++++++-----
- net/smc/smc_core.h |  2 +-
- 3 files changed, 13 insertions(+), 9 deletions(-)
+ drivers/mtd/nand/raw/davinci_nand.c |   10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-index 1c9289f56dc47..211cd91b6c408 100644
---- a/net/smc/af_smc.c
-+++ b/net/smc/af_smc.c
-@@ -632,10 +632,12 @@ static int smc_connect_decline_fallback(struct smc_sock *smc, int reason_code,
- 
- static void smc_conn_abort(struct smc_sock *smc, int local_first)
- {
-+	struct smc_connection *conn = &smc->conn;
-+	struct smc_link_group *lgr = conn->lgr;
-+
-+	smc_conn_free(conn);
- 	if (local_first)
--		smc_lgr_cleanup_early(&smc->conn);
--	else
--		smc_conn_free(&smc->conn);
-+		smc_lgr_cleanup_early(lgr);
+--- a/drivers/mtd/nand/raw/davinci_nand.c
++++ b/drivers/mtd/nand/raw/davinci_nand.c
+@@ -372,17 +372,15 @@ correct:
  }
  
- /* check if there is a rdma device available for this connection. */
-diff --git a/net/smc/smc_core.c b/net/smc/smc_core.c
-index a6849362f4ddd..c9a8092c4ac96 100644
---- a/net/smc/smc_core.c
-+++ b/net/smc/smc_core.c
-@@ -171,8 +171,10 @@ static int smc_lgr_register_conn(struct smc_connection *conn, bool first)
- 
- 	if (!conn->lgr->is_smcd) {
- 		rc = smcr_lgr_conn_assign_link(conn, first);
--		if (rc)
-+		if (rc) {
-+			conn->lgr = NULL;
- 			return rc;
-+		}
- 	}
- 	/* find a new alert_token_local value not yet used by some connection
- 	 * in this link group
-@@ -622,15 +624,13 @@ int smcd_nl_get_lgr(struct sk_buff *skb, struct netlink_callback *cb)
- 	return skb->len;
- }
- 
--void smc_lgr_cleanup_early(struct smc_connection *conn)
-+void smc_lgr_cleanup_early(struct smc_link_group *lgr)
- {
--	struct smc_link_group *lgr = conn->lgr;
- 	spinlock_t *lgr_lock;
- 
- 	if (!lgr)
- 		return;
- 
--	smc_conn_free(conn);
- 	smc_lgr_list_head(lgr, &lgr_lock);
- 	spin_lock_bh(lgr_lock);
- 	/* do not use this link group for new connections */
-@@ -1832,8 +1832,10 @@ create:
- 		write_lock_bh(&lgr->conns_lock);
- 		rc = smc_lgr_register_conn(conn, true);
- 		write_unlock_bh(&lgr->conns_lock);
--		if (rc)
-+		if (rc) {
-+			smc_lgr_cleanup_early(lgr);
- 			goto out;
-+		}
- 	}
- 	conn->local_tx_ctrl.common.type = SMC_CDC_MSG_TYPE;
- 	conn->local_tx_ctrl.len = SMC_WR_TX_SIZE;
-diff --git a/net/smc/smc_core.h b/net/smc/smc_core.h
-index d63b08274197e..73d0c35d3eb77 100644
---- a/net/smc/smc_core.h
-+++ b/net/smc/smc_core.h
-@@ -468,7 +468,7 @@ static inline void smc_set_pci_values(struct pci_dev *pci_dev,
- struct smc_sock;
- struct smc_clc_msg_accept_confirm;
- 
--void smc_lgr_cleanup_early(struct smc_connection *conn);
-+void smc_lgr_cleanup_early(struct smc_link_group *lgr);
- void smc_lgr_terminate_sched(struct smc_link_group *lgr);
- void smcr_port_add(struct smc_ib_device *smcibdev, u8 ibport);
- void smcr_port_err(struct smc_ib_device *smcibdev, u8 ibport);
--- 
-2.34.1
-
+ /**
+- * nand_read_page_hwecc_oob_first - hw ecc, read oob first
++ * nand_davinci_read_page_hwecc_oob_first - Hardware ECC page read with ECC
++ *                                          data read from OOB area
+  * @chip: nand chip info structure
+  * @buf: buffer to store read data
+  * @oob_required: caller requires OOB data read to chip->oob_poi
+  * @page: page number to read
+  *
+- * Hardware ECC for large page chips, require OOB to be read first. For this
+- * ECC mode, the write_page method is re-used from ECC_HW. These methods
+- * read/write ECC from the OOB area, unlike the ECC_HW_SYNDROME support with
+- * multiple ECC steps, follows the "infix ECC" scheme and reads/writes ECC from
+- * the data area, by overwriting the NAND manufacturer bad block markings.
++ * Hardware ECC for large page chips, which requires the ECC data to be
++ * extracted from the OOB before the actual data is read.
+  */
+ static int nand_davinci_read_page_hwecc_oob_first(struct nand_chip *chip,
+ 						  uint8_t *buf,
 
 

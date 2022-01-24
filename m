@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9736A4995C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:13:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCCC2499BC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442852AbiAXUzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:55:33 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58674 "EHLO
+        id S1576515AbiAXVzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:55:10 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44000 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385399AbiAXUdU (ORCPT
+        with ESMTP id S1450827AbiAXVVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:33:20 -0500
+        Mon, 24 Jan 2022 16:21:30 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0617D61540;
-        Mon, 24 Jan 2022 20:33:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA53EC340E8;
-        Mon, 24 Jan 2022 20:33:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64260614D8;
+        Mon, 24 Jan 2022 21:21:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4407EC340E4;
+        Mon, 24 Jan 2022 21:21:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056399;
-        bh=Vxt7sL+McsR0Y4kjTfaLdO0eDNOwuRPngtrNVKeST7o=;
+        s=korg; t=1643059289;
+        bh=EZGfL1TCmkidrIE1+PMXiJ6X9E2Pb7CtXObzgF6wVFY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lqJe3w1Q07E2QeGt5H4mwSrK5Kr/wLJpBDx3XFNKIiYy4uNYVIucStBL6q3SENmrZ
-         Mle+ogZ2VHm39ZWUdywQnfPED+Lv7LpdQ28x4QbTz5fxJwHaKJczAw9G8G77n3XPBl
-         wIwl6K63B+UPeClK2dDgxaa1vvYOQ0tkO53JWxrw=
+        b=URpk6Iuf87etJww0OLpVRGEVtTKLYFULytJT6+hbV8ccaa0vTPjPYpBQhAp5OWPMd
+         pM5/gfhWHenzk5Qpcje65CKt7nDrrGLO6iY7hi8iBpm/zHurlT/hMQXkkgzvmHZYde
+         wQ6DpbHmJ4C/o5AYphOFn0WfT3nwCiTGDfXqjLdo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sameer Pujar <spujar@nvidia.com>,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 438/846] arm64: tegra: Remove non existent Tegra194 reset
+        stable@vger.kernel.org,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0566/1039] usb: dwc3: meson-g12a: fix shared reset control use
 Date:   Mon, 24 Jan 2022 19:39:15 +0100
-Message-Id: <20220124184116.088164253@linuxfoundation.org>
+Message-Id: <20220124184144.353212169@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,38 +47,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sameer Pujar <spujar@nvidia.com>
+From: Amjad Ouled-Ameur <aouledameur@baylibre.com>
 
-[ Upstream commit 146b3a77af8091cabbd1decc51d67799e69682d2 ]
+[ Upstream commit 4ce3b45704d5ef46fb4b28083c8aba6716fabf3b ]
 
-Tegra194 does not really have "hda2codec_2x" related reset. Hence drop
-this entry to reflect actual HW.
+reset_control_(de)assert() calls are called on a shared reset line when
+reset_control_reset has been used. This is not allowed by the reset
+framework.
 
-Fixes: 4878cc0c9fab ("arm64: tegra: Add HDA controller on Tegra194")
-Signed-off-by: Sameer Pujar <spujar@nvidia.com>
-Link: https://lore.kernel.org/r/1640260431-11613-4-git-send-email-spujar@nvidia.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Use reset_control_rearm() call in suspend() and remove() as a way to state
+that the resource is no longer used, hence the shared reset line
+may be triggered again by other devices. Use reset_control_rearm() also in
+case probe fails after reset() has been called.
+
+reset_control_rearm() keeps use of triggered_count sane in the reset
+framework, use of reset_control_reset() on shared reset line should be
+balanced with reset_control_rearm().
+
+Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Reported-by: Jerome Brunet <jbrunet@baylibre.com>
+Link: https://lore.kernel.org/r/20211112162827.128319-3-aouledameur@baylibre.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/nvidia/tegra194.dtsi | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/usb/dwc3/dwc3-meson-g12a.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra194.dtsi b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
-index c8250a3f7891f..510d2974470cd 100644
---- a/arch/arm64/boot/dts/nvidia/tegra194.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
-@@ -818,9 +818,8 @@
- 				 <&bpmp TEGRA194_CLK_HDA2CODEC_2X>;
- 			clock-names = "hda", "hda2hdmi", "hda2codec_2x";
- 			resets = <&bpmp TEGRA194_RESET_HDA>,
--				 <&bpmp TEGRA194_RESET_HDA2HDMICODEC>,
--				 <&bpmp TEGRA194_RESET_HDA2CODEC_2X>;
--			reset-names = "hda", "hda2hdmi", "hda2codec_2x";
-+				 <&bpmp TEGRA194_RESET_HDA2HDMICODEC>;
-+			reset-names = "hda", "hda2hdmi";
- 			power-domains = <&bpmp TEGRA194_POWER_DOMAIN_DISP>;
- 			interconnects = <&mc TEGRA194_MEMORY_CLIENT_HDAR &emc>,
- 					<&mc TEGRA194_MEMORY_CLIENT_HDAW &emc>;
+diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
+index d0f9b7c296b0d..bd814df3bf8b8 100644
+--- a/drivers/usb/dwc3/dwc3-meson-g12a.c
++++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
+@@ -755,16 +755,16 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+ 
+ 	ret = dwc3_meson_g12a_get_phys(priv);
+ 	if (ret)
+-		goto err_disable_clks;
++		goto err_rearm;
+ 
+ 	ret = priv->drvdata->setup_regmaps(priv, base);
+ 	if (ret)
+-		goto err_disable_clks;
++		goto err_rearm;
+ 
+ 	if (priv->vbus) {
+ 		ret = regulator_enable(priv->vbus);
+ 		if (ret)
+-			goto err_disable_clks;
++			goto err_rearm;
+ 	}
+ 
+ 	/* Get dr_mode */
+@@ -825,6 +825,9 @@ err_disable_regulator:
+ 	if (priv->vbus)
+ 		regulator_disable(priv->vbus);
+ 
++err_rearm:
++	reset_control_rearm(priv->reset);
++
+ err_disable_clks:
+ 	clk_bulk_disable_unprepare(priv->drvdata->num_clks,
+ 				   priv->drvdata->clks);
+@@ -852,6 +855,8 @@ static int dwc3_meson_g12a_remove(struct platform_device *pdev)
+ 	pm_runtime_put_noidle(dev);
+ 	pm_runtime_set_suspended(dev);
+ 
++	reset_control_rearm(priv->reset);
++
+ 	clk_bulk_disable_unprepare(priv->drvdata->num_clks,
+ 				   priv->drvdata->clks);
+ 
+@@ -892,7 +897,7 @@ static int __maybe_unused dwc3_meson_g12a_suspend(struct device *dev)
+ 		phy_exit(priv->phys[i]);
+ 	}
+ 
+-	reset_control_assert(priv->reset);
++	reset_control_rearm(priv->reset);
+ 
+ 	return 0;
+ }
+@@ -902,7 +907,9 @@ static int __maybe_unused dwc3_meson_g12a_resume(struct device *dev)
+ 	struct dwc3_meson_g12a *priv = dev_get_drvdata(dev);
+ 	int i, ret;
+ 
+-	reset_control_deassert(priv->reset);
++	ret = reset_control_reset(priv->reset);
++	if (ret)
++		return ret;
+ 
+ 	ret = priv->drvdata->usb_init(priv);
+ 	if (ret)
 -- 
 2.34.1
 

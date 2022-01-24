@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D90FD4982EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:03:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E04924982DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:02:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240003AbiAXPDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 10:03:14 -0500
-Received: from mga14.intel.com ([192.55.52.115]:43409 "EHLO mga14.intel.com"
+        id S240343AbiAXPCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 10:02:53 -0500
+Received: from mga02.intel.com ([134.134.136.20]:19111 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239188AbiAXPC2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 10:02:28 -0500
+        id S239003AbiAXPC0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 10:02:26 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643036548; x=1674572548;
+  t=1643036546; x=1674572546;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=qcUqbzAY6M/ii9A7rG49fqPPHN0dWo5mN7mZmaHffu4=;
-  b=cNStg1N01fqC1hP0HtlVF87eTL36pkMt8awZxzX1it4zCJvbLwAXUKj8
-   8WOAodIIGdlnyeYYHV5hFaLnouaqgZ8ez/TEI9sQJjzZV2qwcY9On0omO
-   riPw8+i747WFm/aQXMQOIMGeWaR3VY9gR/Xo/1QfHBRAJs8gQcD3UCgjB
-   CGxC70CNLZ4hnoiRkXWWB903xoPBBvYqQa//23eUuSih5qjm6WSrk/+JN
-   n6jsGaSBP3iah3/logAVH0+KqqJ0zXivGdE1tE+svXt1gArLux14bBA/L
-   NtnrSC+CqjL+mWA4Huack4CJN+zg4D3K06NJjZYgwHm+h3XSi8PWUmr6+
+  bh=qHjdp065/pE2dGbXagUIgqF5Caf1mnBv+CAb9DUvCm4=;
+  b=CZr6FmxHiajhsW3ltsN0+BzL+4sj4ug/EVS3cHkkv87UW6Q1rAT0dPGn
+   gKClei+tPWUaBrSyCuLdvuZ6AiGvXfVtJzrj+N/RKM1WLkRdqEbhK41Ik
+   P2Et2s108uPNAsxjheLjzuiGS64vjOIMeC2vY1/84u19VsEAKbQ/KiQSQ
+   hwRphSf/mGwUe4dbukODaEEkq11r2BedN5YpztoYp4Un42stY/WdJ1g6S
+   bIicOGjyZcVKmE301rRLOvS7GgHIQfrOWZysA7iOy2xqDj4uUcpbqYIFd
+   jMYSREzeS1v3r5SQlwT6mx7DH67IwnnszgBKMn8CyPlgi77Zua3sNIX8z
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="246280269"
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="233423270"
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="246280269"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 07:02:19 -0800
+   d="scan'208";a="233423270"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 07:02:19 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="532102238"
+   d="scan'208";a="766422581"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 24 Jan 2022 07:02:13 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 24 Jan 2022 07:02:13 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id BC3DC56A; Mon, 24 Jan 2022 17:02:19 +0200 (EET)
+        id CA4F15E4; Mon, 24 Jan 2022 17:02:19 +0200 (EET)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
@@ -46,10 +46,10 @@ Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
         pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
         tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
         x86@kernel.org, linux-kernel@vger.kernel.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv2 09/29] x86/tdx: Detect TDX at early kernel decompression time
-Date:   Mon, 24 Jan 2022 18:01:55 +0300
-Message-Id: <20220124150215.36893-10-kirill.shutemov@linux.intel.com>
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCHv2 10/29] x86: Consolidate port I/O helpers
+Date:   Mon, 24 Jan 2022 18:01:56 +0300
+Message-Id: <20220124150215.36893-11-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
 References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
@@ -59,198 +59,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+There are two implementations of port I/O helpers: one in the kernel and
+one in the boot stub.
 
-The early decompression code does port I/O for its console output. But,
-handling the decompression-time port I/O demands a different approach
-from normal runtime because the IDT required to support #VE based port
-I/O emulation is not yet set up. Paravirtualizing I/O calls during
-the decompression step is acceptable because the decompression code size is
-small enough and hence patching it will not bloat the image size a lot.
+Move the helpers required for both to <asm/shared/io.h> and use the one
+implementation everywhere.
 
-To support port I/O in decompression code, TDX must be detected before
-the decompression code might do port I/O. Add support to detect for
-TDX guest support before console_init() in the extract_kernel().
-Detecting it above the console_init() is early enough for patching
-port I/O.
-
-Add an early_is_tdx_guest() interface to get the cached TDX guest
-status in the decompression code.
-
-The actual port I/O paravirtualization will come later in the series.
-
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 ---
- arch/x86/boot/compressed/Makefile |  1 +
- arch/x86/boot/compressed/misc.c   |  8 ++++++++
- arch/x86/boot/compressed/misc.h   |  2 ++
- arch/x86/boot/compressed/tdx.c    | 29 +++++++++++++++++++++++++++++
- arch/x86/boot/compressed/tdx.h    | 16 ++++++++++++++++
- arch/x86/boot/cpuflags.c          |  3 +--
- arch/x86/boot/cpuflags.h          |  1 +
- arch/x86/include/asm/shared/tdx.h |  7 +++++++
- arch/x86/include/asm/tdx.h        |  4 +---
- 9 files changed, 66 insertions(+), 5 deletions(-)
- create mode 100644 arch/x86/boot/compressed/tdx.c
- create mode 100644 arch/x86/boot/compressed/tdx.h
- create mode 100644 arch/x86/include/asm/shared/tdx.h
+ arch/x86/boot/boot.h             | 35 +-------------------------------
+ arch/x86/boot/compressed/misc.h  |  2 +-
+ arch/x86/include/asm/io.h        | 22 ++------------------
+ arch/x86/include/asm/shared/io.h | 32 +++++++++++++++++++++++++++++
+ 4 files changed, 36 insertions(+), 55 deletions(-)
+ create mode 100644 arch/x86/include/asm/shared/io.h
 
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 6115274fe10f..732f6b21ecbd 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -101,6 +101,7 @@ ifdef CONFIG_X86_64
- endif
+diff --git a/arch/x86/boot/boot.h b/arch/x86/boot/boot.h
+index 34c9dbb6a47d..22a474c5b3e8 100644
+--- a/arch/x86/boot/boot.h
++++ b/arch/x86/boot/boot.h
+@@ -23,6 +23,7 @@
+ #include <linux/edd.h>
+ #include <asm/setup.h>
+ #include <asm/asm.h>
++#include <asm/shared/io.h>
+ #include "bitops.h"
+ #include "ctype.h"
+ #include "cpuflags.h"
+@@ -35,40 +36,6 @@ extern struct boot_params boot_params;
  
- vmlinux-objs-$(CONFIG_ACPI) += $(obj)/acpi.o
-+vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o
+ #define cpu_relax()	asm volatile("rep; nop")
  
- vmlinux-objs-$(CONFIG_EFI_MIXED) += $(obj)/efi_thunk_$(BITS).o
- efi-obj-$(CONFIG_EFI_STUB) = $(objtree)/drivers/firmware/efi/libstub/lib.a
-diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
-index a4339cb2d247..d8373d766672 100644
---- a/arch/x86/boot/compressed/misc.c
-+++ b/arch/x86/boot/compressed/misc.c
-@@ -370,6 +370,14 @@ asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
- 	lines = boot_params->screen_info.orig_video_lines;
- 	cols = boot_params->screen_info.orig_video_cols;
- 
-+	/*
-+	 * Detect TDX guest environment.
-+	 *
-+	 * It has to be done before console_init() in order to use
-+	 * paravirtualized port I/O oprations if needed.
-+	 */
-+	early_tdx_detect();
-+
- 	console_init();
- 
- 	/*
+-/* Basic port I/O */
+-static inline void outb(u8 v, u16 port)
+-{
+-	asm volatile("outb %0,%1" : : "a" (v), "dN" (port));
+-}
+-static inline u8 inb(u16 port)
+-{
+-	u8 v;
+-	asm volatile("inb %1,%0" : "=a" (v) : "dN" (port));
+-	return v;
+-}
+-
+-static inline void outw(u16 v, u16 port)
+-{
+-	asm volatile("outw %0,%1" : : "a" (v), "dN" (port));
+-}
+-static inline u16 inw(u16 port)
+-{
+-	u16 v;
+-	asm volatile("inw %1,%0" : "=a" (v) : "dN" (port));
+-	return v;
+-}
+-
+-static inline void outl(u32 v, u16 port)
+-{
+-	asm volatile("outl %0,%1" : : "a" (v), "dN" (port));
+-}
+-static inline u32 inl(u16 port)
+-{
+-	u32 v;
+-	asm volatile("inl %1,%0" : "=a" (v) : "dN" (port));
+-	return v;
+-}
+-
+ static inline void io_delay(void)
+ {
+ 	const u16 DELAY_PORT = 0x80;
 diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
-index 16ed360b6692..0d8e275a9d96 100644
+index 0d8e275a9d96..8a253e85f990 100644
 --- a/arch/x86/boot/compressed/misc.h
 +++ b/arch/x86/boot/compressed/misc.h
-@@ -28,6 +28,8 @@
+@@ -22,11 +22,11 @@
+ #include <linux/linkage.h>
+ #include <linux/screen_info.h>
+ #include <linux/elf.h>
+-#include <linux/io.h>
+ #include <asm/page.h>
+ #include <asm/boot.h>
  #include <asm/bootparam.h>
  #include <asm/desc_defs.h>
++#include <asm/shared/io.h>
  
-+#include "tdx.h"
-+
- #define BOOT_CTYPE_H
- #include <linux/acpi.h>
+ #include "tdx.h"
  
-diff --git a/arch/x86/boot/compressed/tdx.c b/arch/x86/boot/compressed/tdx.c
+diff --git a/arch/x86/include/asm/io.h b/arch/x86/include/asm/io.h
+index f6d91ecb8026..8ce0a40379de 100644
+--- a/arch/x86/include/asm/io.h
++++ b/arch/x86/include/asm/io.h
+@@ -44,6 +44,7 @@
+ #include <asm/page.h>
+ #include <asm/early_ioremap.h>
+ #include <asm/pgtable_types.h>
++#include <asm/shared/io.h>
+ 
+ #define build_mmio_read(name, size, type, reg, barrier) \
+ static inline type name(const volatile void __iomem *addr) \
+@@ -258,20 +259,6 @@ static inline void slow_down_io(void)
+ #endif
+ 
+ #define BUILDIO(bwl, bw, type)						\
+-static inline void out##bwl(unsigned type value, int port)		\
+-{									\
+-	asm volatile("out" #bwl " %" #bw "0, %w1"			\
+-		     : : "a"(value), "Nd"(port));			\
+-}									\
+-									\
+-static inline unsigned type in##bwl(int port)				\
+-{									\
+-	unsigned type value;						\
+-	asm volatile("in" #bwl " %w1, %" #bw "0"			\
+-		     : "=a"(value) : "Nd"(port));			\
+-	return value;							\
+-}									\
+-									\
+ static inline void out##bwl##_p(unsigned type value, int port)		\
+ {									\
+ 	out##bwl(value, port);						\
+@@ -320,10 +307,8 @@ static inline void ins##bwl(int port, void *addr, unsigned long count)	\
+ BUILDIO(b, b, char)
+ BUILDIO(w, w, short)
+ BUILDIO(l, , int)
++#undef BUILDIO
+ 
+-#define inb inb
+-#define inw inw
+-#define inl inl
+ #define inb_p inb_p
+ #define inw_p inw_p
+ #define inl_p inl_p
+@@ -331,9 +316,6 @@ BUILDIO(l, , int)
+ #define insw insw
+ #define insl insl
+ 
+-#define outb outb
+-#define outw outw
+-#define outl outl
+ #define outb_p outb_p
+ #define outw_p outw_p
+ #define outl_p outl_p
+diff --git a/arch/x86/include/asm/shared/io.h b/arch/x86/include/asm/shared/io.h
 new file mode 100644
-index 000000000000..6853376fe69a
+index 000000000000..f17247f6c471
 --- /dev/null
-+++ b/arch/x86/boot/compressed/tdx.c
-@@ -0,0 +1,29 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * tdx.c - Early boot code for TDX
-+ */
-+
-+#include "../cpuflags.h"
-+#include "../string.h"
-+
-+#include <asm/shared/tdx.h>
-+
-+static bool tdx_guest_detected;
-+
-+bool early_is_tdx_guest(void)
-+{
-+	return tdx_guest_detected;
-+}
-+
-+void early_tdx_detect(void)
-+{
-+	u32 eax, sig[3];
-+
-+	cpuid_count(TDX_CPUID_LEAF_ID, 0, &eax, &sig[0], &sig[2],  &sig[1]);
-+
-+	if (memcmp(TDX_IDENT, sig, 12))
-+		return;
-+
-+	/* Cache TDX guest feature status */
-+	tdx_guest_detected = true;
-+}
-diff --git a/arch/x86/boot/compressed/tdx.h b/arch/x86/boot/compressed/tdx.h
-new file mode 100644
-index 000000000000..18970c09512e
---- /dev/null
-+++ b/arch/x86/boot/compressed/tdx.h
-@@ -0,0 +1,16 @@
++++ b/arch/x86/include/asm/shared/io.h
+@@ -0,0 +1,32 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (C) 2021 Intel Corporation */
-+#ifndef BOOT_COMPRESSED_TDX_H
-+#define BOOT_COMPRESSED_TDX_H
++#ifndef _ASM_X86_SHARED_IO_H
++#define _ASM_X86_SHARED_IO_H
 +
-+#include <linux/types.h>
++#define BUILDIO(bwl, bw, type)						\
++static inline void out##bwl(unsigned type value, int port)		\
++{									\
++	asm volatile("out" #bwl " %" #bw "0, %w1"			\
++		     : : "a"(value), "Nd"(port));			\
++}									\
++									\
++static inline unsigned type in##bwl(int port)				\
++{									\
++	unsigned type value;						\
++	asm volatile("in" #bwl " %w1, %" #bw "0"			\
++		     : "=a"(value) : "Nd"(port));			\
++	return value;							\
++}
 +
-+#ifdef CONFIG_INTEL_TDX_GUEST
-+void early_tdx_detect(void);
-+bool early_is_tdx_guest(void);
-+#else
-+static inline void early_tdx_detect(void) { };
-+static inline bool early_is_tdx_guest(void) { return false; }
-+#endif
++BUILDIO(b, b, char)
++BUILDIO(w, w, short)
++BUILDIO(l, , int)
++#undef BUILDIO
 +
-+#endif
-diff --git a/arch/x86/boot/cpuflags.c b/arch/x86/boot/cpuflags.c
-index a0b75f73dc63..a83d67ec627d 100644
---- a/arch/x86/boot/cpuflags.c
-+++ b/arch/x86/boot/cpuflags.c
-@@ -71,8 +71,7 @@ int has_eflag(unsigned long mask)
- # define EBX_REG "=b"
- #endif
- 
--static inline void cpuid_count(u32 id, u32 count,
--		u32 *a, u32 *b, u32 *c, u32 *d)
-+void cpuid_count(u32 id, u32 count, u32 *a, u32 *b, u32 *c, u32 *d)
- {
- 	asm volatile(".ifnc %%ebx,%3 ; movl  %%ebx,%3 ; .endif	\n\t"
- 		     "cpuid					\n\t"
-diff --git a/arch/x86/boot/cpuflags.h b/arch/x86/boot/cpuflags.h
-index 2e20814d3ce3..475b8fde90f7 100644
---- a/arch/x86/boot/cpuflags.h
-+++ b/arch/x86/boot/cpuflags.h
-@@ -17,5 +17,6 @@ extern u32 cpu_vendor[3];
- 
- int has_eflag(unsigned long mask);
- void get_cpuflags(void);
-+void cpuid_count(u32 id, u32 count, u32 *a, u32 *b, u32 *c, u32 *d);
- 
- #endif
-diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
-new file mode 100644
-index 000000000000..12bede46d048
---- /dev/null
-+++ b/arch/x86/include/asm/shared/tdx.h
-@@ -0,0 +1,7 @@
-+#ifndef _ASM_X86_SHARED_TDX_H
-+#define _ASM_X86_SHARED_TDX_H
-+
-+#define TDX_CPUID_LEAF_ID	0x21
-+#define TDX_IDENT		"IntelTDX    "
++#define inb inb
++#define inw inw
++#define inl inl
++#define outb outb
++#define outw outw
++#define outl outl
 +
 +#endif
-diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-index 9b4714a45bb9..53f7dd0fbe58 100644
---- a/arch/x86/include/asm/tdx.h
-+++ b/arch/x86/include/asm/tdx.h
-@@ -5,9 +5,7 @@
- 
- #include <linux/init.h>
- #include <asm/ptrace.h>
--
--#define TDX_CPUID_LEAF_ID	0x21
--#define TDX_IDENT		"IntelTDX    "
-+#include <asm/shared/tdx.h>
- 
- #define TDX_HYPERCALL_STANDARD  0
- 
 -- 
 2.34.1
 

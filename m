@@ -2,82 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EDE1498651
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:19:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FBA5498655
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:19:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244303AbiAXRS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:18:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244182AbiAXRS5 (ORCPT
+        id S244319AbiAXRTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:19:40 -0500
+Received: from mta-p6.oit.umn.edu ([134.84.196.206]:60758 "EHLO
+        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241556AbiAXRTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:18:57 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57CCC06173B;
-        Mon, 24 Jan 2022 09:18:56 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id x7so51342529lfu.8;
-        Mon, 24 Jan 2022 09:18:56 -0800 (PST)
+        Mon, 24 Jan 2022 12:19:39 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 4JjGty58rnz9vC9D
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 17:19:38 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p6.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 2wcjm_Vq0nlA for <linux-kernel@vger.kernel.org>;
+        Mon, 24 Jan 2022 11:19:38 -0600 (CST)
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id 4JjGty345pz9vC8v
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:19:38 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p6.oit.umn.edu 4JjGty345pz9vC8v
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p6.oit.umn.edu 4JjGty345pz9vC8v
+Received: by mail-pf1-f200.google.com with SMTP id y15-20020a056a001c8f00b004c8fad8f162so1816309pfw.14
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:19:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=mLsUg6FDJGu3ZQCzAL6Mke2UDjBXWESzO9zt25xxlzw=;
-        b=p70OjH5RbVKPPgBPYNpwJN6ahExMTCzhbrwbcr68F9zVzK3xK6bm8x7Pbj1pelKT+7
-         8Vps8uCUaMrwTzJ2dSflfq1VccIyOkag05Y1u0RQyNhanL8hAnnfxKQhOeLTYYkF+76A
-         Zn/yMcAxzl09eKLmbUiNVAjccc5ZPdI1Bd2LV15ibenx7jauQ5RCWHI/4T6r6UaLn20e
-         0lSwlls/JlMpkhJT1KE6/6GX4pzRsKjGrUmWC9Rhf0PflWT503jJa4ir71G8MbdFK84B
-         qr0m7N8ijmPb/8m25HtwtRGKFyvV8jwowt57pB3xmV0c908NyKkFy3miJ16Th95glrJs
-         Aj6w==
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N3N6wJzEY0KplvljaHwRHG8hIgjKSfmZz4U+e3o8/n4=;
+        b=kKgtzRoGQXzwgA6FcvxruW7ZL5r1jYaSsrGQeDWqMyjTOcKY2YTMvWotzDugTbVPCL
+         1rbbjgBabA9JJi7REFGlLi4WS0EynAZLgCmsfjww+3oxjSsrhkJkRfKCGxUOd4GWjY00
+         dB9ciyd86LzmS+ELkBLhxAqQ4ApQvUXp17GYFwzATQoSENdM3FAxMTfE71z2xc1ikvvC
+         DoDtTcvkBzUqTJBGcKgic4pVVculsdEVmnYJRALs0jlhwHVZT9fl+CMzW0ZDSnSfiF8V
+         oOJlBEYIKlP1PLrm1sSVODqZGv82g3OH8Jnd55uvUsAeTqfcPLjiKQJ2y5FzcLdn29SF
+         iYWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=mLsUg6FDJGu3ZQCzAL6Mke2UDjBXWESzO9zt25xxlzw=;
-        b=sNw2AtqEgkSSK4zrKik90kFbLLxkZQtrUFoNi8SmdraWWUnHudEQxcObAnHVNn//qQ
-         BU7w66HI/c8qij9tUqF+zJx3bJS1VGVdydn3e+sFFKTzJCFZO2yqQWgj1NnjF7TLG2nt
-         4vKnUVhThVnDcKbis9itQFhTWEzR0G7YZ6zvdXW1fS9nfZw8IfEgBVrmYMBWYBjsIBC4
-         wBo16qwuT6VcLb1JvAaamAMbHKb9xcYSgEbUucRWmfaaw8ZLuYFXeALMck4bqhTU87hh
-         3Yoltz+6n4um6XgvZtmevjOhMk0Uheg9/sl9dAY5mZcQ84YgYQfYZs26LXl7wL/RuBlA
-         qvSw==
-X-Gm-Message-State: AOAM533XZFF9V9Lvk8Dh84SMAYDzzuDP4K1nD1P24s4NatWGLWxhTrlT
-        BfJMXMQH/r7FTYLr7ALucrVqQg5THn4=
-X-Google-Smtp-Source: ABdhPJxaC1nse2djJr5e79EXHoQFceCpBhhox5IYuTAIWw/gPFy8nbks4WWi1bQb4YjSMQTHCvT7zQ==
-X-Received: by 2002:a05:6512:b19:: with SMTP id w25mr5361524lfu.690.1643044734838;
-        Mon, 24 Jan 2022 09:18:54 -0800 (PST)
-Received: from [192.168.1.103] ([178.176.78.239])
-        by smtp.gmail.com with ESMTPSA id h2sm1126268lft.58.2022.01.24.09.18.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jan 2022 09:18:54 -0800 (PST)
-Subject: Re: [PATCH] ata: pata_atiixp: make static read-only arrays const
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-ide@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220123221622.5543-1-colin.i.king@gmail.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <78ea807d-1bef-4eee-2ac0-ceebfb0a7db9@gmail.com>
-Date:   Mon, 24 Jan 2022 20:18:52 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        bh=N3N6wJzEY0KplvljaHwRHG8hIgjKSfmZz4U+e3o8/n4=;
+        b=mBhzLptFwy4JdlSyc+vYBgDYdOzT5vAFNH9hL0mXx7qzaJTKUehVFzS40On4EklDvB
+         zqBwmvILNt5NIDY5pj4aaIq5kprK+J+nwf8Op0qYeABFggiBnMJb9Jbfj27i2rmPd6OJ
+         cM9qNvra+MdbtYiuu4uptxM61O4dJc+W9Ermk2BAyz3ZdMvK4dK7WrBS4H24hwoVQ/la
+         UvjQnAVKs22K5vhT2cWqyckh3RqrBZD6XhA2JQTwUcvDConBP/EUbWwjONuXF9W/ME20
+         3xi8gsuu9neYPk6xm6saOBBf0ly9x1MNhgyL7Lpmwtn/4+mGnsN/tTyh/YPacWAiVqmZ
+         ntww==
+X-Gm-Message-State: AOAM533MQrJWVvj4S87Hi5Y6BK7VZn1fHbc5xrKN8vrZoB5JsjHR8Q50
+        ZWD/ppENcyRtkPfWJbcyBsYZo9WMxWt5uZJGTiQWTnPAUsmOKX7nUA/ZyfJK2sT9qcVV6NG+aRd
+        0Rz4sF59oFo+0RQm1QFuxghv+rh1c
+X-Received: by 2002:a63:41c6:: with SMTP id o189mr4269709pga.613.1643044777749;
+        Mon, 24 Jan 2022 09:19:37 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyBC7Yc8Jww7/CWdf2GQDqTT+vDsmi1youjQPMHW0084ltnZDJHX/mfaU0N99eHc/nHOQpt8w==
+X-Received: by 2002:a63:41c6:: with SMTP id o189mr4269697pga.613.1643044777539;
+        Mon, 24 Jan 2022 09:19:37 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.4.61.248])
+        by smtp.gmail.com with ESMTPSA id nv13sm7703946pjb.17.2022.01.24.09.19.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 09:19:37 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tasos Sahanidis <tasos@tasossah.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: saa7134: Fix a NULL pointer dereference in saa7134_initdev()
+Date:   Tue, 25 Jan 2022 01:19:30 +0800
+Message-Id: <20220124171931.62174-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20220123221622.5543-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/22 1:16 AM, Colin Ian King wrote:
+In saa7134_initdev(), the return value of vdev_init() is assigned to
+dev->video_dev and there is a dereference of it after that. The return
+value of vdev_init() will be NULL on the failure allocation, which could
+lead to NULL pointer dereference.
 
-> The static arrays pio_timings and mwdma_timings are read-only so
-> it make sense to make them const.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+The same as dev->vbi_dev.
 
-Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Fix this bug by adding a NULL check of dev->video_dev and dev->vbi_dev.
 
-[...]
+This bug was found by a static analyzer.
 
-MBR, Sergey
+Builds with 'make allyesconfig' show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Fixes: a9622391acb ("V4L/DVB (6792): Fix VBI support")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+The analysis employs differential checking to identify inconsistent 
+security operations (e.g., checks or kfrees) between two code paths 
+and confirms that the inconsistent operations are not recovered in the
+current function or the callers, so they constitute bugs. 
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+ drivers/media/pci/saa7134/saa7134-core.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/media/pci/saa7134/saa7134-core.c b/drivers/media/pci/saa7134/saa7134-core.c
+index 96328b0af164..0de0b00540b6 100644
+--- a/drivers/media/pci/saa7134/saa7134-core.c
++++ b/drivers/media/pci/saa7134/saa7134-core.c
+@@ -1202,6 +1202,11 @@ static int saa7134_initdev(struct pci_dev *pci_dev,
+ 		pr_info("%s: Overlay support disabled.\n", dev->name);
+ 
+ 	dev->video_dev = vdev_init(dev,&saa7134_video_template,"video");
++	if (!dev->video_dev) {
++		err = -ENOMEM;
++		goto err_unregister_video;
++	}
++
+ 	dev->video_dev->ctrl_handler = &dev->ctrl_handler;
+ 	dev->video_dev->lock = &dev->lock;
+ 	dev->video_dev->queue = &dev->video_vbq;
+@@ -1224,6 +1229,11 @@ static int saa7134_initdev(struct pci_dev *pci_dev,
+ 	       dev->name, video_device_node_name(dev->video_dev));
+ 
+ 	dev->vbi_dev = vdev_init(dev, &saa7134_video_template, "vbi");
++	if (!dev->vbi_dev) {
++		err = -ENOMEM;
++		goto err_unregister_video;
++	}
++
+ 	dev->vbi_dev->ctrl_handler = &dev->ctrl_handler;
+ 	dev->vbi_dev->lock = &dev->lock;
+ 	dev->vbi_dev->queue = &dev->vbi_vbq;
+-- 
+2.25.1
+

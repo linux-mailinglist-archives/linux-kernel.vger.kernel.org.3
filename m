@@ -2,42 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DAD7499C35
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A30634995E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:14:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1451496AbiAXWDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:03:32 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41166 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1450007AbiAXVRo (ORCPT
+        id S1443475AbiAXU5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:57:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385532AbiAXUdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:17:44 -0500
+        Mon, 24 Jan 2022 15:33:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E855C07E2A8;
+        Mon, 24 Jan 2022 11:46:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E119861425;
-        Mon, 24 Jan 2022 21:17:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E49C340E4;
-        Mon, 24 Jan 2022 21:17:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F272A61482;
+        Mon, 24 Jan 2022 19:46:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2E01C340E5;
+        Mon, 24 Jan 2022 19:46:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059060;
-        bh=tZ0YmxvMOQXfzZx00GnW7zNtkxAb1Ipi6CFgNNh80E0=;
+        s=korg; t=1643053596;
+        bh=/2RqlihE1x2dCaNhiMm97oLev/9P+gs0JBMsdtsmUIQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wrdxCP3qcmaHaDUPuFowYA/8jBaIHAQbP5CgC4Jx6DwxLuoZTci7KfKEcKOGc16ey
-         DIKNGtDRdvZnzQEQj+n4w1ZK5rjC17KZigR17ZVKBwInM6FtnEBlWC/YK96s3uT8By
-         lMqqVzr0NyF1QLyT5FsNUDyc7Ghp8JobR8KTNf4o=
+        b=J5M67QxNf2wCRsEemlc7dCMAc3ly0VncIF6enz2gHYV3wpYhxUjd87CNKWXJ85gn7
+         yrtOV5cXjSjm6HrmTNOB6Rex7GOWmEMd8bEvauGS9yI84CIq13rcFSBgWazw1PjUwm
+         niGGHGfn0L5yyxDyNiotOCY5OXND7AeE9FTdNADs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0492/1039] dmaengine: pxa/mmp: stop referencing config->slave_id
+Subject: [PATCH 5.10 116/563] media: venus: core: Fix a resource leak in the error handling path of venus_probe()
 Date:   Mon, 24 Jan 2022 19:38:01 +0100
-Message-Id: <20220124184141.798000209@linuxfoundation.org>
+Message-Id: <20220124184028.432876496@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,61 +51,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 134c37fa250a87a7e77c80a7c59ae16c462e46e0 ]
+[ Upstream commit 8cc7a1b2aca067397a016cdb971a5e6ad9b640c7 ]
 
-The last driver referencing the slave_id on Marvell PXA and MMP platforms
-was the SPI driver, but this stopped doing so a long time ago, so the
-TODO from the earlier patch can no be removed.
+A successful 'of_platform_populate()' call should be balanced by a
+corresponding 'of_platform_depopulate()' call in the error handling path
+of the probe, as already done in the remove function.
 
-Fixes: b729bf34535e ("spi/pxa2xx: Don't use slave_id of dma_slave_config")
-Fixes: 13b3006b8ebd ("dma: mmp_pdma: add filter function")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Acked-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20211122222203.4103644-7-arnd@kernel.org
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+A successful 'venus_firmware_init()' call should be balanced by a
+corresponding 'venus_firmware_deinit()' call in the error handling path
+of the probe, as already done in the remove function.
+
+Update the error handling path accordingly.
+
+Fixes: f9799fcce4bb ("media: venus: firmware: register separate platform_device for firmware loader")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/mmp_pdma.c | 6 ------
- drivers/dma/pxa_dma.c  | 7 -------
- 2 files changed, 13 deletions(-)
+ drivers/media/platform/qcom/venus/core.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/dma/mmp_pdma.c b/drivers/dma/mmp_pdma.c
-index a23563cd118b7..5a53d7fcef018 100644
---- a/drivers/dma/mmp_pdma.c
-+++ b/drivers/dma/mmp_pdma.c
-@@ -727,12 +727,6 @@ static int mmp_pdma_config_write(struct dma_chan *dchan,
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index 791ed1b1bbbd3..1d621f7769035 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -294,11 +294,11 @@ static int venus_probe(struct platform_device *pdev)
  
- 	chan->dir = direction;
- 	chan->dev_addr = addr;
--	/* FIXME: drivers should be ported over to use the filter
--	 * function. Once that's done, the following two lines can
--	 * be removed.
--	 */
--	if (cfg->slave_id)
--		chan->drcmr = cfg->slave_id;
+ 	ret = venus_firmware_init(core);
+ 	if (ret)
+-		goto err_runtime_disable;
++		goto err_of_depopulate;
  
- 	return 0;
- }
-diff --git a/drivers/dma/pxa_dma.c b/drivers/dma/pxa_dma.c
-index 52d04641e3611..6078cc81892e4 100644
---- a/drivers/dma/pxa_dma.c
-+++ b/drivers/dma/pxa_dma.c
-@@ -909,13 +909,6 @@ static void pxad_get_config(struct pxad_chan *chan,
- 		*dcmd |= PXA_DCMD_BURST16;
- 	else if (maxburst == 32)
- 		*dcmd |= PXA_DCMD_BURST32;
--
--	/* FIXME: drivers should be ported over to use the filter
--	 * function. Once that's done, the following two lines can
--	 * be removed.
--	 */
--	if (chan->cfg.slave_id)
--		chan->drcmr = chan->cfg.slave_id;
- }
+ 	ret = venus_boot(core);
+ 	if (ret)
+-		goto err_runtime_disable;
++		goto err_firmware_deinit;
  
- static struct dma_async_tx_descriptor *
+ 	ret = hfi_core_resume(core, true);
+ 	if (ret)
+@@ -330,6 +330,10 @@ err_dev_unregister:
+ 	v4l2_device_unregister(&core->v4l2_dev);
+ err_venus_shutdown:
+ 	venus_shutdown(core);
++err_firmware_deinit:
++	venus_firmware_deinit(core);
++err_of_depopulate:
++	of_platform_depopulate(dev);
+ err_runtime_disable:
+ 	pm_runtime_put_noidle(dev);
+ 	pm_runtime_set_suspended(dev);
 -- 
 2.34.1
 

@@ -2,121 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A62499E07
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E5C499E8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587326AbiAXW2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:28:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53846 "EHLO
+        id S1835489AbiAXWgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:36:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1454662AbiAXVdT (ORCPT
+        with ESMTP id S1456131AbiAXVhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:33:19 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05800C07597B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:21:27 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643055685;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5FTeBFVoufuU7ZebHlDAFZY8PMUgfTQm18f5SfOHL8s=;
-        b=R1P7/uDqxqfBfk6N4xEy69WETfs1Jhu/2hRwCYOe8xPmYjIrg8SFqoZzucC0OcvPxGC7gE
-        5o4eT4spbf9a2ZqK7eh9QlzJNBKyf+ZApSxLDIzy/x5B94QW+Qz6zpqCKEdWp1IUDVNkXi
-        GYfV8E0MbwnGXMV3FJvetYWqtILk1ViWaKaz/QYbxXSq9U0fH7KpHObVTFwMWrGkAqCu/N
-        cl5gbESO88l9KqBeU+mOEeqASkjarlsDg43xmRuM8k87sqN3ZMUO/r1AZ7D/O7XYWNZ+yq
-        JSjH0RaYGsijeqNc8VmEpNnMPIpsZBmy23yo4XiUmbLqWnyg2sefiMDe1hbZ4Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643055685;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5FTeBFVoufuU7ZebHlDAFZY8PMUgfTQm18f5SfOHL8s=;
-        b=hzlU/SjNn/fwwC/H/KRPQL79VdGm9mE7ZHkHxDA4MC0SLgFIgF2pfhSDFoTcrjigCCscSE
-        EYTOdPC2MJzUZHAw==
-To:     Fenghua Yu <fenghua.yu@intel.com>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>
-Cc:     iommu@lists.linux-foundation.org, x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>
-Subject: Re: [PATCH v2 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-In-Reply-To: <20211217220136.2762116-6-fenghua.yu@intel.com>
-References: <20211217220136.2762116-1-fenghua.yu@intel.com>
- <20211217220136.2762116-6-fenghua.yu@intel.com>
-Date:   Mon, 24 Jan 2022 21:21:24 +0100
-Message-ID: <87ee4w6g1n.ffs@tglx>
+        Mon, 24 Jan 2022 16:37:52 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18758C0BD132
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:24:11 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id m9so12922303oia.12
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:24:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=w3ynFKV1fLntHunSKUJ/uGzn1fGWIgjZmU7aBt47Qlo=;
+        b=i5o1/vEQIKJw1sMvH0GGqP/BOyX0hMhqYlSabek/jvvjhnl8Dd6qOmKf048VgTNIgL
+         W+mER+ik7PnWfOA5TdWVnoOWd4HDBmu0KUMfwo0rA7EBo6NDHZyxLLU1Jba6TlactXU8
+         TTOqJa0YtytYB5OBMJs5XhZLcXQZy6D+ZObjc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=w3ynFKV1fLntHunSKUJ/uGzn1fGWIgjZmU7aBt47Qlo=;
+        b=h2r6qPlw5CN8SeiYc6wShLfDtgyFtNAAFwcTdykEABiDQpYqed58ClWR6MAxx3kNXZ
+         dggx+GHuAJjEcydh3o2dq4ojHH9ANS0EcDNvGgN5uMNo0tgQP2u5j7oouNL9qVxlzWgO
+         QD7Itu2f+CKk0wpUGwj0AcMjW7vGSuzPDzgAOpr7zw9RptyV2fqlqi3LZga2ei1zWCZ6
+         V65tCUnvBw6eNsfDMggxYpuBEeL9wT9OpXTsWHj6pHgSuDjcfHo+8MBqrN1WMOBya+8a
+         qXjCig4hpk2CsNeVJLr0zTx5GWB/MLBGWNir+tEMW8a15IBhHLPas7kCJZOJ5l1cTItn
+         zT5g==
+X-Gm-Message-State: AOAM5316BUVEw3xrF890tbMlyX2MECYw7BNSJ3eGXlASln28AGRULRAq
+        ihdkmVZBzTdlZ4StVpceivOy60sZtT5M3f5e871ebNMCf14=
+X-Google-Smtp-Source: ABdhPJwJr+L9TLQ5U3Eh5OUnJaPwt9T0uy8XOGbvauiD6g+ZvjuWnHO+tGF2uwCLg7VOfdaAHF1gbUWcJoGO76mVM7Y=
+X-Received: by 2002:aca:aa0f:: with SMTP id t15mr2917122oie.32.1643055850425;
+ Mon, 24 Jan 2022 12:24:10 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 24 Jan 2022 12:24:10 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20220124011143.684348-1-dnojiri@chromium.org>
+References: <20220124010348.681893-1-dnojiri@chromium.org> <20220124011143.684348-1-dnojiri@chromium.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 24 Jan 2022 12:24:09 -0800
+Message-ID: <CAE-0n528Mw8mCLTL9GAiaYBXxTbTBUi_f_OfeFPo_gmDpBGqXg@mail.gmail.com>
+Subject: Re: [PATCH v2] power: supply: PCHG: Use MKBP for device event handling
+To:     Daisuke Nojiri <dnojiri@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17 2021 at 22:01, Fenghua Yu wrote:
-> diff --git a/drivers/iommu/iommu-sva-lib.c b/drivers/iommu/iommu-sva-lib.c
-> index bd41405d34e9..ee2294e02716 100644
-> --- a/drivers/iommu/iommu-sva-lib.c
-> +++ b/drivers/iommu/iommu-sva-lib.c
-> @@ -18,8 +18,7 @@ static DECLARE_IOASID_SET(iommu_sva_pasid);
->   *
->   * Try to allocate a PASID for this mm, or take a reference to the existing one
->   * provided it fits within the [@min, @max] range. On success the PASID is
-> - * available in mm->pasid, and must be released with iommu_sva_free_pasid().
-> - * @min must be greater than 0, because 0 indicates an unused mm->pasid.
-> + * available in mm->pasid and will be available for the lifetime of the mm.
->   *
->   * Returns 0 on success and < 0 on error.
->   */
-> @@ -33,38 +32,24 @@ int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t max)
->  		return -EINVAL;
->  
->  	mutex_lock(&iommu_sva_lock);
-> -	if (mm->pasid) {
-> -		if (mm->pasid >= min && mm->pasid <= max)
-> -			ioasid_get(mm->pasid);
-> -		else
-> +	/* Is a PASID already associated with this mm? */
-> +	if (pasid_valid(mm->pasid)) {
-> +		if (mm->pasid < min || mm->pasid >= max)
->  			ret = -EOVERFLOW;
-> -	} else {
-> -		pasid = ioasid_alloc(&iommu_sva_pasid, min, max, mm);
-> -		if (pasid == INVALID_IOASID)
-> -			ret = -ENOMEM;
-> -		else
-> -			mm->pasid = pasid;
-> +		goto out;
->  	}
+Quoting Daisuke Nojiri (2022-01-23 17:11:40)
+> This patch makes the PCHG driver receive device events through
+
+$ git grep "This patch" -- Documentation/process
+
+i.e. don't use "This patch"
+
+> MKBP protocol since CrOS EC switched to deliver all peripheral
+> charge events to the MKBP protocol. This will unify PCHG event
+> handling on X86 and ARM.
+>
+> Signed-off-by: Daisuke Nojiri <dnojiri@chromium.org>
+> ---
+
+Just some nitpicks
+
+> diff --git a/drivers/power/supply/cros_peripheral_charger.c b/drivers/power/supply/cros_peripheral_charger.c
+> index 305f10dfc06d1b..cb402f48087ddf 100644
+> --- a/drivers/power/supply/cros_peripheral_charger.c
+> +++ b/drivers/power/supply/cros_peripheral_charger.c
+> @@ -237,46 +238,22 @@ static int cros_pchg_event(const struct charger_data *charger,
+>         return NOTIFY_OK;
+>  }
+>
+> -static u32 cros_get_device_event(const struct charger_data *charger)
+> -{
+> -       struct ec_params_device_event req;
+> -       struct ec_response_device_event rsp;
+> -       struct device *dev = charger->dev;
+> -       int ret;
+> -
+> -       req.param = EC_DEVICE_EVENT_PARAM_GET_CURRENT_EVENTS;
+> -       ret = cros_pchg_ec_command(charger, 0, EC_CMD_DEVICE_EVENT,
+> -                                  &req, sizeof(req), &rsp, sizeof(rsp));
+> -       if (ret < 0) {
+> -               dev_warn(dev, "Unable to get device events (err:%d)\n", ret);
+> -               return 0;
+> -       }
+> -
+> -       return rsp.event_mask;
+> -}
+> -
+>  static int cros_ec_notify(struct notifier_block *nb,
+>                           unsigned long queued_during_suspend,
+>                           void *data)
+>  {
+>         struct cros_ec_device *ec_dev = (struct cros_ec_device *)data;
+
+Not a problem in this patch but the cast can be dropped.
+
+> -       u32 host_event = cros_ec_get_host_event(ec_dev);
+>         struct charger_data *charger =
+>                         container_of(nb, struct charger_data, notifier);
+> -       u32 device_event_mask;
+> +       u32 host_event;
+>
+> -       if (!host_event)
+> +       if (ec_dev->event_data.event_type != EC_MKBP_EVENT_PCHG
+> +                       || ec_dev->event_size != sizeof(host_event))
+
+Does checkpatch complain here? Preferably it's written as
+
+       if (ec_dev->event_data.event_type != EC_MKBP_EVENT_PCHG ||
+           ec_dev->event_size != sizeof(host_event))
+
+>                 return NOTIFY_DONE;
+>
+> -       if (!(host_event & EC_HOST_EVENT_MASK(EC_HOST_EVENT_DEVICE)))
+> -               return NOTIFY_DONE;
+> +       host_event = get_unaligned_le32(&ec_dev->event_data.data.host_event);
+>
+> -       /*
+> -        * todo: Retrieve device event mask in common place
+> -        * (e.g. cros_ec_proto.c).
+> -        */
+> -       device_event_mask = cros_get_device_event(charger);
+> -       if (!(device_event_mask & EC_DEVICE_EVENT_MASK(EC_DEVICE_EVENT_WLC)))
+> +       if (!(host_event & EC_MKBP_PCHG_DEVICE_EVENT))
+>                 return NOTIFY_DONE;
+>
+>         return cros_pchg_event(charger, host_event);
+> diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
+> index 271bd87bff0a25..c784bed3388865 100644
+> --- a/include/linux/platform_data/cros_ec_commands.h
+> +++ b/include/linux/platform_data/cros_ec_commands.h
+> @@ -3386,6 +3386,9 @@ enum ec_mkbp_event {
+>         /* Send an incoming CEC message to the AP */
+>         EC_MKBP_EVENT_CEC_MESSAGE = 9,
+>
+> +       /* Peripheral device charger event */
+> +       EC_MKBP_EVENT_PCHG = 12,
 > +
-> +	pasid = ioasid_alloc(&iommu_sva_pasid, min, max, mm);
-> +	if (!pasid_valid(pasid))
-> +		ret = -ENOMEM;
-> +	else
-> +		mm_pasid_get(mm, pasid);
+>         /* Number of MKBP events */
+>         EC_MKBP_EVENT_COUNT,
+>  };
+> @@ -5527,6 +5530,67 @@ enum pchg_state {
+>         [PCHG_STATE_CONNECTED] = "CONNECTED", \
+>         }
+>
+> +/**
 
-Hrm. This is odd.
+Please use only one '*', i.e. '/*' so that this doesn't trip up
+kernel-doc generation that looks for two stars.
 
-> +/* Associate a PASID with an mm_struct: */
-> +static inline void mm_pasid_get(struct mm_struct *mm, u32 pasid)
-> +{
-> +	mm->pasid = pasid;
-> +}
-
-This does not get anything. It sets the allocated PASID in the mm. The
-refcount on the PASID was already taken by the allocation. So this
-should be mm_pasid_set() or mm_pasid_install(), right?
-
-Thanks,
-
-        tglx
+> + * Update firmware of peripheral chip
+> + */
+> +#define EC_CMD_PCHG_UPDATE 0x0136

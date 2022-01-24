@@ -2,116 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FBC349A80A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:06:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC00C49A80B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:06:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1316056AbiAYCzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:55:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
+        id S1316080AbiAYCzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:55:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3410181AbiAYA2o (ORCPT
+        with ESMTP id S3410180AbiAYA2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 19:28:44 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FAAC046E0E
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:12:07 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id s185so10999907oie.3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:12:07 -0800 (PST)
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04E9C046E0F;
+        Mon, 24 Jan 2022 14:12:12 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id p12so59164187edq.9;
+        Mon, 24 Jan 2022 14:12:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qNPdZuTMGpmraXauVfaM+U1iXWmXev7WNI2qlgKJIbg=;
-        b=nRgyGzE6AxLpCKZz2UD75e4pkIds0FuUBfoftvvaRhjfZ3obN3fcNgGyXjDJ1FUNJK
-         yscYMaxHJNoZuehn/9plEiPHQFli9uS+MiJVAsTYc7Y99J1X0VTPX8pwP4RMy6O9k6+4
-         kmTz3t+nLjdXXoCfa5UIMs3JrxhHUwTvO/wnbllxBZHFWKvHFdDSqzYnYfi5wMKkIAko
-         CwscV3NQuKIuyYsBpzRL4/W9WqMLcbHXkBfF3T4ehrmsnRXNvJKOjJxbrHMGClil0sQ3
-         8cft5Kx4N+nlQwz/ypXl/Q62QRdHGpUMGu/LmmubbtqWbXziTQ6bDV7ZifJNxOpW95Qj
-         qGMA==
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=xjwGE6BH9L6fTcSZWs11vc8ZPM/FGmaGzfe0rXFXqwA=;
+        b=QHVQLYC2HKD8OOaj2moD02AYdjMBw8p5K4xFxHABxMRvnwHsT7GrFCjV1dS8EXr6jr
+         WHDEDm/40IBf1ngAe9nODvQSh3KpnMJecKBc/ZLEMwwQRAhDWwmCVaIlh8auCpT8PyuA
+         j0JU8Ix0bnxgpPWTTP9P2QEEJVftR54Mr0rNcS0pD7R/gH+DyoeeOqKhUMryA5ca23ps
+         09tues9fjNMs2dZ1xFmpLu20wSuVV31jxZEv60FJ+4orBPyIfBOYVOaH9JdtoQVj1Cll
+         e8i6kzb0O9NJVcRP21N3fhKl/674bw1uyvBuh5o6yoMwb6qO1zMSukWCZo6JUbl58bdL
+         Bvyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qNPdZuTMGpmraXauVfaM+U1iXWmXev7WNI2qlgKJIbg=;
-        b=jRBAHhZflViyEkTn+68Rs8MbOgj0tQfNiIhfloMubrrXQvcXlGUcEAaWUtHuuPwUST
-         AlGxMFp/c4IS3HgJ/QlT9/AWkLb6OWdGbwl8Pt8+H6vmVL9qjNLIAtiBot4/dY56SE2/
-         GwN4pNZ3m0K4gYAnULKYzzTiqmD+0PNFuEw2ogztWdvvoMDLg5LnjF0qU9acSI/O/24R
-         kQz4y1oe+BDEZOvK6hIx/nwiGZMw8QCMrjCm8ARFFwPIDM004jp4nlniEdE8+Poe5eZ8
-         NZjXSscFQz7fFzqul78CFxkl06Kh5M6c6AUyXzjWaf0djxWYUcJlHLJrL3fkYAhs5LtL
-         sM1A==
-X-Gm-Message-State: AOAM530HxcO0Xhsq22CDvvATUNMKOX6NuNBXOiGUTdzv0fUkfYyjmT9M
-        9GpM2IwHWUzOwdUMQ4FJtG64DnXF9pYRDuVv/NI=
-X-Google-Smtp-Source: ABdhPJyR03hrjLm79a0g6SkQdoHpkJeL3qMSV6vOsoHri99vsAcedey3FSY1h0XpwgmbhXH5wNFcoPGwNC5355tPXio=
-X-Received: by 2002:a05:6808:300b:: with SMTP id ay11mr3244011oib.120.1643062326701;
- Mon, 24 Jan 2022 14:12:06 -0800 (PST)
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=xjwGE6BH9L6fTcSZWs11vc8ZPM/FGmaGzfe0rXFXqwA=;
+        b=bYRtbehQi88PSaxPIF9u9Dga1PMfWHfqmbGjYYDy+D1R+61yrf8fQh+vB8NujuMEYG
+         XZmvvdBKWv7jFn/gvqo+KT23f0scvqPa6ptsOgOLzD+lA3Xa5R7wXXqvSJIOFo3xdkhg
+         LgNAwzS9iPmM3Ou5SRq+jXpngNoN2PKO9lcXtNJuPOT92z6GrHJFwVWqbxOIshF7yREe
+         dux5okBdqGEKr/d6ysVrnGT8SHryUkQy5o0LmI77dVmMPNRQnOejDNzpi5EtJkfYRjTl
+         LisEQguzcHTaR1lTKd8TbUHnUEo9JieEmPmEdmqo3P/zpI3Bd91hYcUCROYvoLIf86Kb
+         9fuA==
+X-Gm-Message-State: AOAM533qOm90N5/eNOlOB0ynrBXl7od6cviuoUJH1FRyEJZMX8xgHoPI
+        94zpEX2g2GNN/epmyMa3tulZrIFVbZc=
+X-Google-Smtp-Source: ABdhPJzL/E0nl+YviU6PAtvR7wAOAR1NhNSt+vJdHQXem0U+zwh9MVk6hIDRHv32faoqc+82XORa4w==
+X-Received: by 2002:a05:6402:190e:: with SMTP id e14mr7180908edz.186.1643062330973;
+        Mon, 24 Jan 2022 14:12:10 -0800 (PST)
+Received: from Ansuel-xps. (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
+        by smtp.gmail.com with ESMTPSA id by16sm5375876ejb.73.2022.01.24.14.12.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 14:12:10 -0800 (PST)
+Message-ID: <61ef243a.1c69fb81.26cae.716b@mx.google.com>
+X-Google-Original-Message-ID: <Ye8kN2Eh4DgUTg32@Ansuel-xps.>
+Date:   Mon, 24 Jan 2022 23:12:07 +0100
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/2] dt-bindings: mtd: partitions: Document new
+ dynamic-partitions node
+References: <20220120202615.28076-1-ansuelsmth@gmail.com>
+ <20220120202615.28076-2-ansuelsmth@gmail.com>
+ <a823e730-853d-901b-1b9f-937e1ec76444@gmail.com>
 MIME-Version: 1.0
-References: <20220122012343.32540-1-rdunlap@infradead.org> <fca36168-d66b-c914-a5c6-fb8d495238ad@amd.com>
-In-Reply-To: <fca36168-d66b-c914-a5c6-fb8d495238ad@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 24 Jan 2022 17:11:55 -0500
-Message-ID: <CADnq5_OMhZ38b-N=UVC6ckcrzRkh=xBHEMe0UqP2DbqW6-g59Q@mail.gmail.com>
-Subject: Re: [PATCH -next] drm/amd/display: don't use /** for non-kernel-doc comments
-To:     Harry Wentland <harry.wentland@amd.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a823e730-853d-901b-1b9f-937e1ec76444@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
-
-Alex
-
-On Mon, Jan 24, 2022 at 10:25 AM Harry Wentland <harry.wentland@amd.com> wrote:
->
-> On 2022-01-21 20:23, Randy Dunlap wrote:
-> > Change a static function's comment from "/**" (indicating kernel-doc
-> > notation) to "/*" (indicating a regular C language comment).
-> > This prevents multiple kernel-doc warnings:
-> >
-> >   drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:4343: warning: Function parameter or member 'max_supported_frl_bw_in_kbps' not described in 'intersect_frl_link_bw_support'
-> >   drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:4343: warning: Function parameter or member 'hdmi_encoded_link_bw' not described in 'intersect_frl_link_bw_support'
-> >   drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:4343: warning: expecting prototype for Return PCON's post FRL link training supported BW if its non(). Prototype was for intersect_frl_link_bw_support() instead
-> >
-> > Fixes: c022375ae095 ("drm/amd/display: Add DP-HDMI FRL PCON Support in DC")
-> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Cc: Fangzhi Zuo <Jerry.Zuo@amd.com>
-> > Cc: Alex Deucher <alexander.deucher@amd.com>
-> > Cc: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
-> > Cc: Harry Wentland <harry.wentland@amd.com>
-> > Cc: Leo Li <sunpeng.li@amd.com>
-> > Cc: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-> > Cc: amd-gfx@lists.freedesktop.org
-> > Cc: dri-devel@lists.freedesktop.org
->
-> Reviewed-by: Harry Wentland <harry.wentland@amd.com>
->
-> Harry
->
+On Mon, Jan 24, 2022 at 11:02:24PM +0100, Rafał Miłecki wrote:
+> On 20.01.2022 21:26, Ansuel Smith wrote:
+> > Document new dynamic-partitions node used to provide an of node for
+> > partition registred at runtime by parsers. This is required for nvmem
+> > system to declare and detect nvmem-cells.
+> > 
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 > > ---
-> >  drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c |    2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > --- linux-next-20220121.orig/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-> > +++ linux-next-20220121/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-> > @@ -4970,7 +4970,7 @@ uint32_t dc_link_bw_kbps_from_raw_frl_li
-> >       return 0;
-> >  }
-> >
-> > -/**
-> > +/*
-> >   * Return PCON's post FRL link training supported BW if its non-zero, otherwise return max_supported_frl_bw.
-> >   */
-> >  static uint32_t intersect_frl_link_bw_support(
+> >   .../mtd/partitions/dynamic-partitions.yaml    | 59 +++++++++++++++++++
+> >   1 file changed, 59 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/mtd/partitions/dynamic-partitions.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mtd/partitions/dynamic-partitions.yaml b/Documentation/devicetree/bindings/mtd/partitions/dynamic-partitions.yaml
+> > new file mode 100644
+> > index 000000000000..7528e49f2d7e
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/mtd/partitions/dynamic-partitions.yaml
+> > @@ -0,0 +1,59 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/mtd/partitions/dynamic-partitions.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Dynamic partitions
+> > +
+> > +description: |
+> > +  This binding can be used on platforms which have partitions registered at
+> > +  runtime by parsers or partition table present on the flash. Example are
+> > +  partitions declared from smem parser or cmdlinepart. This will create an
+> > +  of node for these dynamic partition where systems like Nvmem can get a
+> > +  reference to register nvmem-cells.
+> > +
+> > +  The partition table should be a node named "dynamic-partitions".
+> > +  Partitions are then defined as subnodes. Only the label is required
+> > +  as any other data will be taken from the parser.
+> > +
+> > +maintainers:
+> > +  - Ansuel Smith <ansuelsmth@gmail.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: dynamic-partitions
+> > +
+> > +patternProperties:
+> > +  "@[0-9a-f]+$":
+> > +    $ref: "partition.yaml#"
+> > +
+> > +additionalProperties: true
+> > +
+> > +examples:
+> > +  - |
+> > +    partitions {
+> > +        compatible = "qcom,smem";
+> > +        #address-cells = <1>;
+> > +        #size-cells = <1>;
+> > +    };
+> > +
+> > +    dynamic-partitions {
+> > +      compatible = "dynamic-partitions";
+> > +
+> > +      art: art {
+> > +        label = "0:art";
+> > +        read-only;
+> > +        compatible = "nvmem-cells";
+> > +        #address-cells = <1>;
+> > +        #size-cells = <1>;
+> > +
+> > +        macaddr_art_0: macaddr@0 {
+> > +          reg = <0x0 0x6>;
+> > +        };
+> > +
+> > +        macaddr_art_6: macaddr@6 {
+> > +          reg = <0x6 0x6>;
+> > +        };
+> > +      };
+> > +    };
+> 
+> First of all: I fully support such a feature. I need it for Broadom
+> platforms that use "brcm,bcm947xx-cfe-partitions" dynamic partitions.
+> In my case bootloader partition is created dynamically (it doesn't have
+> const offset and size). It contains NVMEM data however that needs to be
+> described in DT.
+> 
+> This binding however looks loose and confusing to me.
 >
+
+I agree.
+
+> First of all did you really mean to use "qcom,smem"? My first guess is
+> you meant "qcom,smem-part".
+> 
+
+Yes sorry, I was referring to the smem parser qcom,smem-part 
+
+> Secondly can't we have partitions defined just as subnodes of the
+> partitions { ... }; node?
+> 
+
+I would love to use it. My only concern is that due to the fact
+that we have to support legacy partition declaring, wonder if this could
+create some problem. I'm referring to declaring fixed partition without
+using any compatible/standard binding name.
+
+I remember we improved that with the introduction of the nvmem binding
+by making the fixed-partition compatible mandatory. But I would like to
+have extra check. Wonder if to be on the safe part we can consider
+appending to the "dynamic parser" a compatible like "dynamic-partitions"
+and use your way to declare them (aka keeping the dynamic-partition and
+removing the extra parallel partitions list)
+
+Feel free to tell me it's just a stupid and unnecessary idea. I just
+have fear to introduce regression in the partition parsing logic.
+
+> 
+> I think sth like below would make more sense:
+> 
+> partitions {
+>     compatible = "qcom,smem-part";
+> 
+>     art {
+>         label = "0:art";
+>         read-only;
+>         compatible = "nvmem-cells";
+>         #address-cells = <1>;
+>         #size-cells = <1>;
+> 
+>         macaddr_art_0: macaddr@0 {
+>             reg = <0x0 0x6>;
+>         };
+> 
+>         macaddr_art_6: macaddr@6 {
+>             reg = <0x6 0x6>;
+>         };
+>     };
+> };
+> 
+> 
+> Then I could also reuse that for something like:
+> 
+> partitions {
+>     compatible = "brcm,bcm947xx-cfe-partitions";
+> 
+>     partition-0 {
+>         compatible = "nvmem-cells";
+>         label = "boot";
+> 
+>         #address-cells = <1>;
+>         #size-cells = <1>;
+> 
+>         mac: macaddr@0 {
+>             reg = <0x100 0x6>;
+>         };
+>     }
+> };
+
+-- 
+	Ansuel

@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8001949965A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BECE499B87
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:04:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445417AbiAXVDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:03:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41054 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389064AbiAXUkY (ORCPT
+        id S1576317AbiAXVxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:53:19 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39134 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1450613AbiAXVVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:40:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CF0C04591E;
-        Mon, 24 Jan 2022 11:51:43 -0800 (PST)
+        Mon, 24 Jan 2022 16:21:06 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC1B86090B;
-        Mon, 24 Jan 2022 19:51:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FE95C340E7;
-        Mon, 24 Jan 2022 19:51:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E14BEB8105C;
+        Mon, 24 Jan 2022 21:21:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 476CFC340E4;
+        Mon, 24 Jan 2022 21:21:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053902;
-        bh=0dTjDPuPh42l9Elb2mTzWgKjEFKlEsgebhqLwC16fN0=;
+        s=korg; t=1643059262;
+        bh=oXLBzOz/hkAg5gBd5Fy/0nL79/vChLwPGP35T3oMc8g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FUsTsqmSS7Tv98W3Yh3dLaOrqvtE5c70fB3YjCTN6UcIlffoAGAm0y5BJfjwuoHGt
-         w41hBTOQr6wt0TZ15VUeZshlzVYz7o4UZ5W3OTR6pQcrghDU+CyDhQxgSjtAMnBM7n
-         WC4zcAz9t1DR8/rgRlYLfbHnHn6xikI6VX9DauHo=
+        b=YGFdxbEymKbUtjyT/cI/8cq/20UZ7c2KXi2+MblCdsOuYqpDjmok3rplTK81a7Yki
+         jmSNMAZe1diplyC6U1KdJ2MF8ocKxox7yma0gortz6sJ7vzf4DpNpp332uGiqC0Hdn
+         /JjvQ0fcx6gcONROG31ct3ucU6v4yjyVedq9VZqw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Errera <nathan.errera@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 181/563] iwlwifi: mvm: test roc running status bits before removing the sta
-Date:   Mon, 24 Jan 2022 19:39:06 +0100
-Message-Id: <20220124184030.678301912@linuxfoundation.org>
+Subject: [PATCH 5.16 0558/1039] media: atomisp-ov2680: Fix ov2680_set_fmt() clobbering the exposure
+Date:   Mon, 24 Jan 2022 19:39:07 +0100
+Message-Id: <20220124184144.069405886@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,65 +46,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Errera <nathan.errera@intel.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 998e1aba6e5eb35370eaf30ccc1823426ec11f90 ]
+[ Upstream commit 4492289c31364d28c2680b43b18883385a5d216c ]
 
-In some cases the sta is being removed twice since we do not test the
-roc aux running before removing it. Start looking at the bit before
-removing the sta.
+Now that we restore the default or last user set exposure setting on
+power_up() there is no need for the registers written by ov2680_set_fmt()
+to write to the exposure register.
 
-Signed-off-by: Nathan Errera <nathan.errera@intel.com>
-Fixes: 2c2c3647cde4 ("iwlwifi: mvm: support ADD_STA_CMD_API_S ver 12")
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Link: https://lore.kernel.org/r/iwlwifi.20211219121514.d5376ac6bcb0.Ic5f8470ea60c072bde9d1503e5f528b65e301e20@changeid
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Not doing so fixes the exposure always being reset to the value from
+the res->regs array after a set_fmt().
+
+Link: https://lore.kernel.org/linux-media/20211107171549.267583-11-hdegoede@redhat.com
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/wireless/intel/iwlwifi/mvm/time-event.c   | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ drivers/staging/media/atomisp/i2c/ov2680.h | 24 ----------------------
+ 1 file changed, 24 deletions(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/time-event.c b/drivers/net/wireless/intel/iwlwifi/mvm/time-event.c
-index 394598b14a173..a633ad5f8ca4e 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/time-event.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/time-event.c
-@@ -98,14 +98,13 @@ void iwl_mvm_roc_done_wk(struct work_struct *wk)
- 	struct iwl_mvm *mvm = container_of(wk, struct iwl_mvm, roc_done_wk);
+diff --git a/drivers/staging/media/atomisp/i2c/ov2680.h b/drivers/staging/media/atomisp/i2c/ov2680.h
+index 874115f35fcad..798b28e134b64 100644
+--- a/drivers/staging/media/atomisp/i2c/ov2680.h
++++ b/drivers/staging/media/atomisp/i2c/ov2680.h
+@@ -289,8 +289,6 @@ static struct ov2680_reg const ov2680_global_setting[] = {
+  */
+ static struct ov2680_reg const ov2680_QCIF_30fps[] = {
+ 	{0x3086, 0x01},
+-	{0x3501, 0x24},
+-	{0x3502, 0x40},
+ 	{0x370a, 0x23},
+ 	{0x3801, 0xa0},
+ 	{0x3802, 0x00},
+@@ -334,8 +332,6 @@ static struct ov2680_reg const ov2680_QCIF_30fps[] = {
+  */
+ static struct ov2680_reg const ov2680_CIF_30fps[] = {
+ 	{0x3086, 0x01},
+-	{0x3501, 0x24},
+-	{0x3502, 0x40},
+ 	{0x370a, 0x23},
+ 	{0x3801, 0xa0},
+ 	{0x3802, 0x00},
+@@ -377,8 +373,6 @@ static struct ov2680_reg const ov2680_CIF_30fps[] = {
+  */
+ static struct ov2680_reg const ov2680_QVGA_30fps[] = {
+ 	{0x3086, 0x01},
+-	{0x3501, 0x24},
+-	{0x3502, 0x40},
+ 	{0x370a, 0x23},
+ 	{0x3801, 0xa0},
+ 	{0x3802, 0x00},
+@@ -420,8 +414,6 @@ static struct ov2680_reg const ov2680_QVGA_30fps[] = {
+  */
+ static struct ov2680_reg const ov2680_656x496_30fps[] = {
+ 	{0x3086, 0x01},
+-	{0x3501, 0x24},
+-	{0x3502, 0x40},
+ 	{0x370a, 0x23},
+ 	{0x3801, 0xa0},
+ 	{0x3802, 0x00},
+@@ -463,8 +455,6 @@ static struct ov2680_reg const ov2680_656x496_30fps[] = {
+  */
+ static struct ov2680_reg const ov2680_720x592_30fps[] = {
+ 	{0x3086, 0x01},
+-	{0x3501, 0x26},
+-	{0x3502, 0x40},
+ 	{0x370a, 0x23},
+ 	{0x3801, 0x00}, // X_ADDR_START;
+ 	{0x3802, 0x00},
+@@ -508,8 +498,6 @@ static struct ov2680_reg const ov2680_720x592_30fps[] = {
+  */
+ static struct ov2680_reg const ov2680_800x600_30fps[] = {
+ 	{0x3086, 0x01},
+-	{0x3501, 0x26},
+-	{0x3502, 0x40},
+ 	{0x370a, 0x23},
+ 	{0x3801, 0x00},
+ 	{0x3802, 0x00},
+@@ -551,8 +539,6 @@ static struct ov2680_reg const ov2680_800x600_30fps[] = {
+  */
+ static struct ov2680_reg const ov2680_720p_30fps[] = {
+ 	{0x3086, 0x00},
+-	{0x3501, 0x48},
+-	{0x3502, 0xe0},
+ 	{0x370a, 0x21},
+ 	{0x3801, 0xa0},
+ 	{0x3802, 0x00},
+@@ -594,8 +580,6 @@ static struct ov2680_reg const ov2680_720p_30fps[] = {
+  */
+ static struct ov2680_reg const ov2680_1296x976_30fps[] = {
+ 	{0x3086, 0x00},
+-	{0x3501, 0x48},
+-	{0x3502, 0xe0},
+ 	{0x370a, 0x21},
+ 	{0x3801, 0xa0},
+ 	{0x3802, 0x00},
+@@ -637,8 +621,6 @@ static struct ov2680_reg const ov2680_1296x976_30fps[] = {
+  */
+ static struct ov2680_reg const ov2680_1456x1096_30fps[] = {
+ 	{0x3086, 0x00},
+-	{0x3501, 0x48},
+-	{0x3502, 0xe0},
+ 	{0x370a, 0x21},
+ 	{0x3801, 0x90},
+ 	{0x3802, 0x00},
+@@ -682,8 +664,6 @@ static struct ov2680_reg const ov2680_1456x1096_30fps[] = {
  
- 	/*
--	 * Clear the ROC_RUNNING /ROC_AUX_RUNNING status bit.
-+	 * Clear the ROC_RUNNING status bit.
- 	 * This will cause the TX path to drop offchannel transmissions.
- 	 * That would also be done by mac80211, but it is racy, in particular
- 	 * in the case that the time event actually completed in the firmware
- 	 * (which is handled in iwl_mvm_te_handle_notif).
- 	 */
- 	clear_bit(IWL_MVM_STATUS_ROC_RUNNING, &mvm->status);
--	clear_bit(IWL_MVM_STATUS_ROC_AUX_RUNNING, &mvm->status);
- 
- 	synchronize_net();
- 
-@@ -131,9 +130,19 @@ void iwl_mvm_roc_done_wk(struct work_struct *wk)
- 			mvmvif = iwl_mvm_vif_from_mac80211(mvm->p2p_device_vif);
- 			iwl_mvm_flush_sta(mvm, &mvmvif->bcast_sta, true);
- 		}
--	} else {
-+	}
-+
-+	/*
-+	 * Clear the ROC_AUX_RUNNING status bit.
-+	 * This will cause the TX path to drop offchannel transmissions.
-+	 * That would also be done by mac80211, but it is racy, in particular
-+	 * in the case that the time event actually completed in the firmware
-+	 * (which is handled in iwl_mvm_te_handle_notif).
-+	 */
-+	if (test_and_clear_bit(IWL_MVM_STATUS_ROC_AUX_RUNNING, &mvm->status)) {
- 		/* do the same in case of hot spot 2.0 */
- 		iwl_mvm_flush_sta(mvm, &mvm->aux_sta, true);
-+
- 		/* In newer version of this command an aux station is added only
- 		 * in cases of dedicated tx queue and need to be removed in end
- 		 * of use */
+ static struct ov2680_reg const ov2680_1616x916_30fps[] = {
+ 	{0x3086, 0x00},
+-	{0x3501, 0x48},
+-	{0x3502, 0xe0},
+ 	{0x370a, 0x21},
+ 	{0x3801, 0x00},
+ 	{0x3802, 0x00},
+@@ -726,8 +706,6 @@ static struct ov2680_reg const ov2680_1616x916_30fps[] = {
+ #if 0
+ static struct ov2680_reg const ov2680_1616x1082_30fps[] = {
+ 	{0x3086, 0x00},
+-	{0x3501, 0x48},
+-	{0x3502, 0xe0},
+ 	{0x370a, 0x21},
+ 	{0x3801, 0x00},
+ 	{0x3802, 0x00},
+@@ -769,8 +747,6 @@ static struct ov2680_reg const ov2680_1616x1082_30fps[] = {
+  */
+ static struct ov2680_reg const ov2680_1616x1216_30fps[] = {
+ 	{0x3086, 0x00},
+-	{0x3501, 0x48},
+-	{0x3502, 0xe0},
+ 	{0x370a, 0x21},
+ 	{0x3801, 0x00},
+ 	{0x3802, 0x00},
 -- 
 2.34.1
 

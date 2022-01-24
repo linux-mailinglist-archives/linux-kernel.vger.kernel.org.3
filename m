@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C29498AA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:07:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22886498AA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:06:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345456AbiAXTGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:06:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
+        id S237282AbiAXTGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:06:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345433AbiAXTAR (ORCPT
+        with ESMTP id S1345456AbiAXTAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:00:17 -0500
+        Mon, 24 Jan 2022 14:00:19 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D74C061395;
-        Mon, 24 Jan 2022 10:57:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C114C061345;
+        Mon, 24 Jan 2022 10:57:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 146AFB8121C;
-        Mon, 24 Jan 2022 18:57:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BCE6C340E5;
-        Mon, 24 Jan 2022 18:57:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30218B81223;
+        Mon, 24 Jan 2022 18:57:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5262FC340E7;
+        Mon, 24 Jan 2022 18:57:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050647;
-        bh=3/GDKWH79l9YKLNBw8nBU2t0luvKr2hRfUyc9c5GEiI=;
+        s=korg; t=1643050650;
+        bh=2C18HuDLscgc4+tKatxU9QstG6/auVKahETKdInN1gE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xCGuxkcXueGrj5qbWx6e/NDz6jzE3oB+BXtA5EbY4/9JEeDjARdZow7uCyh9o3wWK
-         jtzqsOfInWHCkdt8E789G0ik703m8RS6oSxkbeB3XxNLU0RK8Wzu5DV/yPFCT0cWlI
-         G9i0brfbnPtrJhNLV8/X/T4Fysfeti5xmRJ9DTWY=
+        b=LFNSYsTL38dDAuKLIs67a22ws6vLC99frPvw2bE3pMtr+2IFCSZVthzclN2RFOygq
+         9vfrKHSoGI9KjgUN2SSDwgXM6lvp4d7q/FX/jQgMdIhvFqY1MeoZbK8VQE6bChCRCi
+         Y3wzFhTYyQPkedEe/g6kScFqvAPJpD+CYyu5mWG4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 068/157] ASoC: samsung: idma: Check of ioremap return value
-Date:   Mon, 24 Jan 2022 19:42:38 +0100
-Message-Id: <20220124183934.947037909@linuxfoundation.org>
+Subject: [PATCH 4.9 069/157] misc: lattice-ecp3-config: Fix task hung when firmware load failed
+Date:   Mon, 24 Jan 2022 19:42:39 +0100
+Message-Id: <20220124183934.983778839@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
 References: <20220124183932.787526760@linuxfoundation.org>
@@ -50,38 +49,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Wei Yongjun <weiyongjun1@huawei.com>
 
-[ Upstream commit 3ecb46755eb85456b459a1a9f952c52986bce8ec ]
+[ Upstream commit fcee5ce50bdb21116711e38635e3865594af907e ]
 
-Because of the potential failure of the ioremap(), the buf->area could
-be NULL.
-Therefore, we need to check it and return -ENOMEM in order to transfer
-the error.
+When firmware load failed, kernel report task hung as follows:
 
-Fixes: f09aecd50f39 ("ASoC: SAMSUNG: Add I2S0 internal dma driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Link: https://lore.kernel.org/r/20211228034026.1659385-1-jiasheng@iscas.ac.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
+INFO: task xrun:5191 blocked for more than 147 seconds.
+      Tainted: G        W         5.16.0-rc5-next-20211220+ #11
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:xrun            state:D stack:    0 pid: 5191 ppid:   270 flags:0x00000004
+Call Trace:
+ __schedule+0xc12/0x4b50 kernel/sched/core.c:4986
+ schedule+0xd7/0x260 kernel/sched/core.c:6369 (discriminator 1)
+ schedule_timeout+0x7aa/0xa80 kernel/time/timer.c:1857
+ wait_for_completion+0x181/0x290 kernel/sched/completion.c:85
+ lattice_ecp3_remove+0x32/0x40 drivers/misc/lattice-ecp3-config.c:221
+ spi_remove+0x72/0xb0 drivers/spi/spi.c:409
+
+lattice_ecp3_remove() wait for signals from firmware loading, but when
+load failed, firmware_load() does not send this signal. This cause
+device remove hung. Fix it by sending signal even if load failed.
+
+Fixes: 781551df57c7 ("misc: Add Lattice ECP3 FPGA configuration via SPI")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Link: https://lore.kernel.org/r/20211228125522.3122284-1-weiyongjun1@huawei.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/samsung/idma.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/misc/lattice-ecp3-config.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/sound/soc/samsung/idma.c b/sound/soc/samsung/idma.c
-index 3e408158625db..72014dea75422 100644
---- a/sound/soc/samsung/idma.c
-+++ b/sound/soc/samsung/idma.c
-@@ -369,6 +369,8 @@ static int preallocate_idma_buffer(struct snd_pcm *pcm, int stream)
- 	buf->addr = idma.lp_tx_addr;
- 	buf->bytes = idma_hardware.buffer_bytes_max;
- 	buf->area = (unsigned char * __force)ioremap(buf->addr, buf->bytes);
-+	if (!buf->area)
-+		return -ENOMEM;
+diff --git a/drivers/misc/lattice-ecp3-config.c b/drivers/misc/lattice-ecp3-config.c
+index 626fdcaf25101..645d26536114f 100644
+--- a/drivers/misc/lattice-ecp3-config.c
++++ b/drivers/misc/lattice-ecp3-config.c
+@@ -81,12 +81,12 @@ static void firmware_load(const struct firmware *fw, void *context)
  
- 	return 0;
+ 	if (fw == NULL) {
+ 		dev_err(&spi->dev, "Cannot load firmware, aborting\n");
+-		return;
++		goto out;
+ 	}
+ 
+ 	if (fw->size == 0) {
+ 		dev_err(&spi->dev, "Error: Firmware size is 0!\n");
+-		return;
++		goto out;
+ 	}
+ 
+ 	/* Fill dummy data (24 stuffing bits for commands) */
+@@ -108,7 +108,7 @@ static void firmware_load(const struct firmware *fw, void *context)
+ 		dev_err(&spi->dev,
+ 			"Error: No supported FPGA detected (JEDEC_ID=%08x)!\n",
+ 			jedec_id);
+-		return;
++		goto out;
+ 	}
+ 
+ 	dev_info(&spi->dev, "FPGA %s detected\n", ecp3_dev[i].name);
+@@ -121,7 +121,7 @@ static void firmware_load(const struct firmware *fw, void *context)
+ 	buffer = kzalloc(fw->size + 8, GFP_KERNEL);
+ 	if (!buffer) {
+ 		dev_err(&spi->dev, "Error: Can't allocate memory!\n");
+-		return;
++		goto out;
+ 	}
+ 
+ 	/*
+@@ -160,7 +160,7 @@ static void firmware_load(const struct firmware *fw, void *context)
+ 			"Error: Timeout waiting for FPGA to clear (status=%08x)!\n",
+ 			status);
+ 		kfree(buffer);
+-		return;
++		goto out;
+ 	}
+ 
+ 	dev_info(&spi->dev, "Configuring the FPGA...\n");
+@@ -186,7 +186,7 @@ static void firmware_load(const struct firmware *fw, void *context)
+ 	release_firmware(fw);
+ 
+ 	kfree(buffer);
+-
++out:
+ 	complete(&data->fw_loaded);
  }
+ 
 -- 
 2.34.1
 

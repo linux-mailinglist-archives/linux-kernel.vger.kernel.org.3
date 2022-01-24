@@ -2,131 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 420264983C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C774983CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234604AbiAXPrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 10:47:17 -0500
-Received: from foss.arm.com ([217.140.110.172]:38338 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231434AbiAXPrP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 10:47:15 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 77AEA6D;
-        Mon, 24 Jan 2022 07:47:15 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B88C03F766;
-        Mon, 24 Jan 2022 07:47:13 -0800 (PST)
-Subject: Re: [PATCH] sched/rt: Plug rt_mutex_setprio() vs push_rt_task() race
-To:     Valentin Schneider <valentin.schneider@arm.com>,
-        linux-kernel@vger.kernel.org
-Cc:     John Keeping <john@metanate.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-References: <20220120194037.650433-1-valentin.schneider@arm.com>
- <aa5bf2d0-bef7-485a-9a51-0da7df67d8c5@arm.com> <875yq945yi.mognet@arm.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <349ada44-69bd-8653-a9f8-4f3d0f303392@arm.com>
-Date:   Mon, 24 Jan 2022 16:47:01 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S238584AbiAXPt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 10:49:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238677AbiAXPtY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 10:49:24 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EC2C06173B;
+        Mon, 24 Jan 2022 07:49:23 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id m11so57261541edi.13;
+        Mon, 24 Jan 2022 07:49:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ck0w51IvRliIB6pv/Ws3xhjRD4pvF1jTBIYtkJQiBu8=;
+        b=LL5yNLCd5JsqLpRQ5nzdeJeWV2vu2EoWJzHzeHCBYA/NWGdo4VeSsgsIEwI8Tn7nz6
+         W1e6v9wnY9BH8N79mkx56m4EfJoiT+3EjBvVBnG0jW3Rq/DaPVLKLlY5qNrdb+9ossC/
+         QpgfjRYxfcynBXH1Afp+KEhzd/ZaHQHo60DU3Dl+eUkkdUpxCKZKgtxBJO0/NcPgB/aE
+         D2Pch7iyAi2fFukvCrrQPnp8EF1ezevx+whtC1hW/HgDtPx97R/j+4MTZpXEmpvW36/a
+         zozwZnshO2LfsPDO9HAef0dqpjqaAt3Go04GBE2HWPqgJg40rg2NLOnF0U516sbb3V4u
+         rF2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ck0w51IvRliIB6pv/Ws3xhjRD4pvF1jTBIYtkJQiBu8=;
+        b=GkzgqP/RN2qE3nEsHv7QTB6iiZKByQJnV6J5hJaXshLi/z+iSwLbJMCknrQnqn0NKl
+         sD8zLKU5MuX94kpwrgxpmLrSpKQHilI4V1RCIJHZK/gT/wszteVswSwGsQyQjZO9Er3H
+         J5yXX4gNeN87oNXm1Llk+jpf6edyNEg3GOpFdK/bjiB331RkuZGmRHs8yV75fhlHfD89
+         83TKPjCBXW3m4ETIeW5PxBZoywdOjHQA4+A6TDAxUxl85GY0Vq2Rh585HXunlwXzGNjp
+         eZ786+9yliyrbIO41aKlwX4GhWqv/yq0+6g0LzwHJUDXGIsfzU6bMmdbUo7ERLTbpZJO
+         H+aQ==
+X-Gm-Message-State: AOAM531ADtf2TlOIXNXCVPF+KYhIxPDx/TYpzcvasmmXCOhG22w6TLgm
+        DwXARgJdxoZzooi6EBcgB1Fjpww2x6V6RTfeQ6g=
+X-Google-Smtp-Source: ABdhPJyccFD32PE0fHnTFMAkO1S4G2O0a7lkHbN88E2PpAwxoCEouvAtoC8wB/8SvFmF2nBGTwCFw1jhAqGsFD7ZDr8=
+X-Received: by 2002:a50:9504:: with SMTP id u4mr16091507eda.107.1643039361772;
+ Mon, 24 Jan 2022 07:49:21 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <875yq945yi.mognet@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20220110172738.31686-1-Frank.Li@nxp.com> <Yd/7NQLgoEU17TzI@abelvesa>
+In-Reply-To: <Yd/7NQLgoEU17TzI@abelvesa>
+From:   Zhi Li <lznuaa@gmail.com>
+Date:   Mon, 24 Jan 2022 09:49:10 -0600
+Message-ID: <CAHrpEqQGDaUzhSpOmxj_J6a8X3ohMCW32jY+PApvmajPe7ckSQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] usb: xhci-plat: fix crash when suspend if remote wake enable
+To:     Abel Vesa <abelvesa@kernel.org>
+Cc:     Frank Li <Frank.Li@nxp.com>, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org, Peter Chen <peter.chen@kernel.org>,
+        linux-usb@vger.kernel.org,
+        kernel list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/2022 14:29, Valentin Schneider wrote:
-> On 24/01/22 10:37, Dietmar Eggemann wrote:
->> On 20/01/2022 20:40, Valentin Schneider wrote:
->>
->> [...]
->>
->>> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
->>> index 7b4f4fbbb404..48fc8c04b038 100644
->>> --- a/kernel/sched/rt.c
->>> +++ b/kernel/sched/rt.c
->>> @@ -2026,6 +2026,16 @@ static int push_rt_task(struct rq *rq, bool pull)
->>>  		return 0;
->>>  
->>>  retry:
->>> +	/*
->>> +	 * It's possible that the next_task slipped in of
->>> +	 * higher priority than current. If that's the case
->>> +	 * just reschedule current.
->>> +	 */
->>> +	if (unlikely(next_task->prio < rq->curr->prio)) {
->>> +		resched_curr(rq);
->>> +		return 0;
->>> +	}
->>
->> If we do this before `is_migration_disabled(next_task), shouldn't then
->> the related condition in push_dl_task() also be moved up?
->>
->>   if (dl_task(rq->curr) &&
->>     dl_time_before(next_task->dl.deadline, rq->curr->dl.deadline) &&
->>     rq->curr->nr_cpus_allowed > 1)
->>
->> To enforce resched_curr(rq) in the `is_migration_disabled(next_task)`
->> case there as well?
->>
-> 
-> I'm not sure if we can hit the same issue with DL since DL doesn't have the
-> push irqwork. If there are DL tasks on the rq when current gets demoted,
-> switched_from_dl() won't queue pull_dl_task().
+On Thu, Jan 13, 2022 at 4:13 AM Abel Vesa <abelvesa@kernel.org> wrote:
+>
+> On 22-01-10 11:27:38, Frank Li wrote:
+> > Crashed at i.mx8qm platform when suspend if enable remote wakeup
+> >
+> > Internal error: synchronous external abort: 96000210 [#1] PREEMPT SMP
+> > Modules linked in:
+> > CPU: 2 PID: 244 Comm: kworker/u12:6 Not tainted 5.15.5-dirty #12
+> > Hardware name: Freescale i.MX8QM MEK (DT)
+> > Workqueue: events_unbound async_run_entry_fn
+> > pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > pc : xhci_disable_hub_port_wake.isra.62+0x60/0xf8
+> > lr : xhci_disable_hub_port_wake.isra.62+0x34/0xf8
+> > sp : ffff80001394bbf0
+> > x29: ffff80001394bbf0 x28: 0000000000000000 x27: ffff00081193b578
+> > x26: ffff00081193b570 x25: 0000000000000000 x24: 0000000000000000
+> > x23: ffff00081193a29c x22: 0000000000020001 x21: 0000000000000001
+> > x20: 0000000000000000 x19: ffff800014e90490 x18: 0000000000000000
+> > x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+> > x14: 0000000000000000 x13: 0000000000000002 x12: 0000000000000000
+> > x11: 0000000000000000 x10: 0000000000000960 x9 : ffff80001394baa0
+> > x8 : ffff0008145d1780 x7 : ffff0008f95b8e80 x6 : 000000001853b453
+> > x5 : 0000000000000496 x4 : 0000000000000000 x3 : ffff00081193a29c
+> > x2 : 0000000000000001 x1 : 0000000000000000 x0 : ffff000814591620
+> > Call trace:
+> >  xhci_disable_hub_port_wake.isra.62+0x60/0xf8
+> >  xhci_suspend+0x58/0x510
+> >  xhci_plat_suspend+0x50/0x78
+> >  platform_pm_suspend+0x2c/0x78
+> >  dpm_run_callback.isra.25+0x50/0xe8
+> >  __device_suspend+0x108/0x3c0
+> >
+> > The basic flow:
+> >       1. run time suspend call xhci_suspend, xhci parent devices gate the clock.
+> >         2. echo mem >/sys/power/state, system _device_suspend call xhci_suspend
+> >         3. xhci_suspend call xhci_disable_hub_port_wake, which access register,
+> >          but clock already gated by run time suspend.
+> >
+> > This problem was hidden by power domain driver, which call run time resume before it.
+> >
+> > But the below commit remove it and make this issue happen.
+> >       commit c1df456d0f06e ("PM: domains: Don't runtime resume devices at genpd_prepare()")
+> >
+> > This patch call run time resume before suspend to make sure clock is on
+> > before access register.
+> >
+> > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+>
+> Tested on i.MX8QM.
+>
+> Testeb-by: Abel Vesa <abel.vesa@nxp.com>
 
-True. But with your RT change we reschedule current (CFS task or lower
-rt task than next_task) now even in case next task is
-migration-disabled. I.e. we prefer rescheduling over pushing current away.
+Friendly ping
 
-But for DL we wouldn't reschedule current in such a case, we would just
-return 0.
-
-That said, the prio based check in RT includes other sched classes where
-the DL check only compares DL tasks.
-
-> That said, if say we have DL tasks on the rq and demote the current DL task
-> to RT, do we currently have anything that will call resched_curr() (I'm
-> looking at the rt_mutex path)?
-> switched_to_fair() has a resched_curr() (which helps for the RT -> CFS
-> case), I don't see anything that would give us that in switched_from_dl() /
-> switched_to_rt(), or am I missing something?
-> 
->>> +
->>>  	if (is_migration_disabled(next_task)) {
->>>  		struct task_struct *push_task = NULL;
->>>  		int cpu;
->>> @@ -2033,6 +2043,17 @@ static int push_rt_task(struct rq *rq, bool pull)
->>>  		if (!pull || rq->push_busy)
->>>  			return 0;
->>>  
->>> +		/*
->>> +		 * Per the above priority check, curr is at least RT. If it's
->>> +		 * of a higher class than RT, invoking find_lowest_rq() on it
->>> +		 * doesn't make sense.
->>> +		 *
->>> +		 * Note that the stoppers are masqueraded as SCHED_FIFO
->>> +		 * (cf. sched_set_stop_task()), so we can't rely on rt_task().
->>> +		 */
->>> +		if (rq->curr->sched_class != &rt_sched_class)
->>
->> s/ != / > / ... since the `unlikely(next_task->prio < rq->curr->prio)`
->> already filters tasks from lower sched classes (CFS)?
->>
-> 
-> != points out we won't invoke find_lowest_rq() on anything that isn't RT,
-> which makes it a bit clearer IMO, and it's not like either of those
-> comparisons is more expensive than the other :)
-
-Also true, but it would be more aligned to the comment above '...  If it
-(i.e. curr) 's of a higher class than ...'
-
-[...]
-
+>
+> > ---
+> >  drivers/usb/host/xhci-plat.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> > index c6b791a83ad18..7d2f665271310 100644
+> > --- a/drivers/usb/host/xhci-plat.c
+> > +++ b/drivers/usb/host/xhci-plat.c
+> > @@ -442,6 +442,9 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
+> >       struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+> >       int ret;
+> >
+> > +     if (pm_runtime_suspended(dev))
+> > +             pm_runtime_resume(dev);
+> > +
+> >       ret = xhci_priv_suspend_quirk(hcd);
+> >       if (ret)
+> >               return ret;
+> > --
+> > 2.24.0.rc1
+> >

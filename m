@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE093499F4A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:18:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB626499FF3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1837643AbiAXW4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:56:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59550 "EHLO
+        id S1842570AbiAXXCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:02:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1456750AbiAXVzC (ORCPT
+        with ESMTP id S1457283AbiAXVzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:55:02 -0500
+        Mon, 24 Jan 2022 16:55:04 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61500C07E295;
-        Mon, 24 Jan 2022 12:36:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAAC7C07E298;
+        Mon, 24 Jan 2022 12:36:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01C4E61536;
-        Mon, 24 Jan 2022 20:36:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D111CC340E5;
-        Mon, 24 Jan 2022 20:35:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C32661545;
+        Mon, 24 Jan 2022 20:36:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F4EEC340E5;
+        Mon, 24 Jan 2022 20:36:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056559;
-        bh=mVwKOa9TdbM1aRje2DNNGkcxM/BY7WVf6u62VGJnVNo=;
+        s=korg; t=1643056571;
+        bh=b1kuycPtIuGNh9eiV5SiIWKNRLWLaFZgezxgdv7TYmM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gTUsgdr899ihHNllE6u+2f8mw2tcMhBipmfFdg6peEWTnH+xzZ4iWosNBhc5UE2fm
-         J0VEYiLoMqUH0xiU/Yz1CCBgJ3uowk8h6IvcQN3HPOb1LKx+BA7p2yRMi9QWd6IZgc
-         2P9J4m8mvfahU0O9NQb/1jx+Dvseh/YzitPTD53U=
+        b=1ziLZFxRTzYJQS3pB/lezxpMtBuk/MygBG5z+vHXQ0+2LOzML+Vy5lKQKwAzZF2MD
+         TK8m6Mur305T2RSgkUDxONenD8xPhTv2/iHY9SBWb2m6ITpbmdk2hXCBdHBR7JKNDh
+         T2iXS5S0N2sJ3WcNglrQkmXwAzS/KlM8YyHCTOaI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 524/846] media: rcar-vin: Update format alignment constraints
-Date:   Mon, 24 Jan 2022 19:40:41 +0100
-Message-Id: <20220124184119.088634474@linuxfoundation.org>
+Subject: [PATCH 5.15 528/846] thunderbolt: Runtime PM activate both ends of the device link
+Date:   Mon, 24 Jan 2022 19:40:45 +0100
+Message-Id: <20220124184119.221967598@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -52,64 +50,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-[ Upstream commit da6911f330d40cfe115a37249e47643eff555e82 ]
+[ Upstream commit f3380cac0c0b3a6f49ab161e2a057c363962f48d ]
 
-This change fixes two issues with the size constraints for buffers.
+If protocol tunnels are already up when the driver is loaded, for
+instance if the boot firmware implements connection manager of its own,
+runtime PM reference count of the consumer devices behind the tunnel
+might have been increased already before the device link is created but
+the supplier device runtime PM reference count is not. This leads to a
+situation where the supplier (the Thunderbolt driver) can runtime
+suspend even if it should not because the corresponding protocol tunnel
+needs to be up causing the devices to be removed from the corresponding
+native bus.
 
-- There is no width alignment constraint for RGB formats. Prior to this
-  change they were treated as YUV and as a result were more restricted
-  than needed. Add a new check to differentiate between the two.
+Prevent this from happening by making both sides of the link runtime PM
+active briefly. The pm_runtime_put() for the consumer (PCIe
+root/downstream port, xHCI) then allows it to runtime suspend again but
+keeps the supplier runtime resumed the whole time it is runtime active.
 
-- The minimum width and height supported is 5x2, not 2x4, this is an
-  artifact from the driver's soc-camera days. Fix this incorrect
-  assumption.
-
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/rcar-vin/rcar-v4l2.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ drivers/thunderbolt/acpi.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-index 0d141155f0e3e..eb8c79bac540f 100644
---- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-@@ -175,20 +175,27 @@ static void rvin_format_align(struct rvin_dev *vin, struct v4l2_pix_format *pix)
- 		break;
+diff --git a/drivers/thunderbolt/acpi.c b/drivers/thunderbolt/acpi.c
+index b67e72d5644b3..7c9597a339295 100644
+--- a/drivers/thunderbolt/acpi.c
++++ b/drivers/thunderbolt/acpi.c
+@@ -7,6 +7,7 @@
+  */
+ 
+ #include <linux/acpi.h>
++#include <linux/pm_runtime.h>
+ 
+ #include "tb.h"
+ 
+@@ -74,8 +75,18 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
+ 		 pci_pcie_type(pdev) == PCI_EXP_TYPE_DOWNSTREAM))) {
+ 		const struct device_link *link;
+ 
++		/*
++		 * Make them both active first to make sure the NHI does
++		 * not runtime suspend before the consumer. The
++		 * pm_runtime_put() below then allows the consumer to
++		 * runtime suspend again (which then allows NHI runtime
++		 * suspend too now that the device link is established).
++		 */
++		pm_runtime_get_sync(&pdev->dev);
++
+ 		link = device_link_add(&pdev->dev, &nhi->pdev->dev,
+ 				       DL_FLAG_AUTOREMOVE_SUPPLIER |
++				       DL_FLAG_RPM_ACTIVE |
+ 				       DL_FLAG_PM_RUNTIME);
+ 		if (link) {
+ 			dev_dbg(&nhi->pdev->dev, "created link from %s\n",
+@@ -84,6 +95,8 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
+ 			dev_warn(&nhi->pdev->dev, "device link creation from %s failed\n",
+ 				 dev_name(&pdev->dev));
+ 		}
++
++		pm_runtime_put(&pdev->dev);
  	}
  
--	/* HW limit width to a multiple of 32 (2^5) for NV12/16 else 2 (2^1) */
-+	/* Hardware limits width alignment based on format. */
- 	switch (pix->pixelformat) {
-+	/* Multiple of 32 (2^5) for NV12/16. */
- 	case V4L2_PIX_FMT_NV12:
- 	case V4L2_PIX_FMT_NV16:
- 		walign = 5;
- 		break;
--	default:
-+	/* Multiple of 2 (2^1) for YUV. */
-+	case V4L2_PIX_FMT_YUYV:
-+	case V4L2_PIX_FMT_UYVY:
- 		walign = 1;
- 		break;
-+	/* No multiple for RGB. */
-+	default:
-+		walign = 0;
-+		break;
- 	}
- 
- 	/* Limit to VIN capabilities */
--	v4l_bound_align_image(&pix->width, 2, vin->info->max_width, walign,
--			      &pix->height, 4, vin->info->max_height, 2, 0);
-+	v4l_bound_align_image(&pix->width, 5, vin->info->max_width, walign,
-+			      &pix->height, 2, vin->info->max_height, 0, 0);
- 
- 	pix->bytesperline = rvin_format_bytesperline(vin, pix);
- 	pix->sizeimage = rvin_format_sizeimage(pix);
+ out_put:
 -- 
 2.34.1
 

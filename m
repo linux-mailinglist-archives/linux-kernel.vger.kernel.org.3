@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 198FF4992EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 136D0498A98
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:06:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382686AbiAXU0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:26:08 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60318 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353095AbiAXUDz (ORCPT
+        id S234207AbiAXTFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:05:52 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57686 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345608AbiAXTAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:03:55 -0500
+        Mon, 24 Jan 2022 14:00:41 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D5A86130A;
-        Mon, 24 Jan 2022 20:03:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39301C340E7;
-        Mon, 24 Jan 2022 20:03:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 392A6B81239;
+        Mon, 24 Jan 2022 19:00:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D92FC340E5;
+        Mon, 24 Jan 2022 19:00:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054634;
-        bh=TFPhLY7a+S1lP7pzZ62if65Bl194tX+Ki4DpuTF2t9c=;
+        s=korg; t=1643050839;
+        bh=7MnhLEjkv5OmPQOjR5kPlUEAsHS1KKAq0CkG2/QiCQc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p4A2Y2fG95+iMnqOlgRjgZKEDnx6L+uxuC4wN8wuAj52Y35s2XkEb1uuYilBeRlAy
-         b/cqE5QGVrAPrP4j1xw+Wu7QNSXPA/pwVRUbXyxIqAVAPgOq26iggZPr5gUpXvBZxt
-         j6U3eFmSRHwJnVE20aflizPJk9bq5+KFvACD71GA=
+        b=RBJ5kxq/aW8bXOgQ47/hhVIfQzd06gSM0tWEWXxeOtrcPuXivuTIsKeHdI1w14rxB
+         ns+GYJE/D9TM+NgD16pBvcBrlTJtKJQyb6iEPIXaBvUjXZENgqSXsrvLZq4Jp4GfJy
+         P9LF9T7hI9nPREVTEUsTlxf1XY7FnWzaoJza0yvA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vlastimil Babka <vbabka@suse.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Subject: [PATCH 5.10 453/563] s390/mm: fix 2KB pgtable release race
-Date:   Mon, 24 Jan 2022 19:43:38 +0100
-Message-Id: <20220124184040.107858769@linuxfoundation.org>
+        stable@vger.kernel.org, Chengguang Xu <cgxu519@mykernel.net>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 4.9 129/157] RDMA/rxe: Fix a typo in opcode name
+Date:   Mon, 24 Jan 2022 19:43:39 +0100
+Message-Id: <20220124183936.870235541@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,110 +47,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Gordeev <agordeev@linux.ibm.com>
+From: Chengguang Xu <cgxu519@mykernel.net>
 
-commit c2c224932fd0ee6854d6ebfc8d059c2bcad86606 upstream.
+commit 8d1cfb884e881efd69a3be4ef10772c71cb22216 upstream.
 
-There is a race on concurrent 2KB-pgtables release paths when
-both upper and lower halves of the containing parent page are
-freed, one via page_table_free_rcu() + __tlb_remove_table(),
-and the other via page_table_free(). The race might lead to a
-corruption as result of remove of list item in page_table_free()
-concurrently with __free_page() in __tlb_remove_table().
+There is a redundant ']' in the name of opcode IB_OPCODE_RC_SEND_MIDDLE,
+so just fix it.
 
-Let's assume first the lower and next the upper 2KB-pgtables are
-freed from a page. Since both halves of the page are allocated
-the tracking byte (bits 24-31 of the page _refcount) has value
-of 0x03 initially:
-
-CPU0				CPU1
-----				----
-
-page_table_free_rcu() // lower half
-{
-	// _refcount[31..24] == 0x03
-	...
-	atomic_xor_bits(&page->_refcount,
-			0x11U << (0 + 24));
-	// _refcount[31..24] <= 0x12
-	...
-	table = table | (1U << 0);
-	tlb_remove_table(tlb, table);
-}
-...
-__tlb_remove_table()
-{
-	// _refcount[31..24] == 0x12
-	mask = _table & 3;
-	// mask <= 0x01
-	...
-
-				page_table_free() // upper half
-				{
-					// _refcount[31..24] == 0x12
-					...
-					atomic_xor_bits(
-						&page->_refcount,
-						1U << (1 + 24));
-					// _refcount[31..24] <= 0x10
-					// mask <= 0x10
-					...
-	atomic_xor_bits(&page->_refcount,
-			mask << (4 + 24));
-	// _refcount[31..24] <= 0x00
-	// mask <= 0x00
-	...
-	if (mask != 0) // == false
-		break;
-	fallthrough;
-	...
-					if (mask & 3) // == false
-						...
-					else
-	__free_page(page);			list_del(&page->lru);
-	^^^^^^^^^^^^^^^^^^	RACE!		^^^^^^^^^^^^^^^^^^^^^
-}					...
-				}
-
-The problem is page_table_free() releases the page as result of
-lower nibble unset and __tlb_remove_table() observing zero too
-early. With this update page_table_free() will use the similar
-logic as page_table_free_rcu() + __tlb_remove_table(), and mark
-the fragment as pending for removal in the upper nibble until
-after the list_del().
-
-In other words, the parent page is considered as unreferenced and
-safe to release only when the lower nibble is cleared already and
-unsetting a bit in upper nibble results in that nibble turned zero.
-
-Cc: stable@vger.kernel.org
-Suggested-by: Vlastimil Babka <vbabka@suse.com>
-Reviewed-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Fixes: 8700e3e7c485 ("Soft RoCE driver")
+Link: https://lore.kernel.org/r/20211218112320.3558770-1-cgxu519@mykernel.net
+Signed-off-by: Chengguang Xu <cgxu519@mykernel.net>
+Acked-by: Zhu Yanjun <zyjzyj2000@gmail.com>
+Reviewed-by: Bob Pearson <rpearsonhpe@gmail.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/s390/mm/pgalloc.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/infiniband/sw/rxe/rxe_opcode.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/s390/mm/pgalloc.c
-+++ b/arch/s390/mm/pgalloc.c
-@@ -253,13 +253,15 @@ void page_table_free(struct mm_struct *m
- 		/* Free 2K page table fragment of a 4K page */
- 		bit = (__pa(table) & ~PAGE_MASK)/(PTRS_PER_PTE*sizeof(pte_t));
- 		spin_lock_bh(&mm->context.lock);
--		mask = atomic_xor_bits(&page->_refcount, 1U << (bit + 24));
-+		mask = atomic_xor_bits(&page->_refcount, 0x11U << (bit + 24));
- 		mask >>= 24;
- 		if (mask & 3)
- 			list_add(&page->lru, &mm->context.pgtable_list);
- 		else
- 			list_del(&page->lru);
- 		spin_unlock_bh(&mm->context.lock);
-+		mask = atomic_xor_bits(&page->_refcount, 0x10U << (bit + 24));
-+		mask >>= 24;
- 		if (mask != 0)
- 			return;
- 	} else {
+--- a/drivers/infiniband/sw/rxe/rxe_opcode.c
++++ b/drivers/infiniband/sw/rxe/rxe_opcode.c
+@@ -137,7 +137,7 @@ struct rxe_opcode_info rxe_opcode[RXE_NU
+ 		}
+ 	},
+ 	[IB_OPCODE_RC_SEND_MIDDLE]		= {
+-		.name	= "IB_OPCODE_RC_SEND_MIDDLE]",
++		.name	= "IB_OPCODE_RC_SEND_MIDDLE",
+ 		.mask	= RXE_PAYLOAD_MASK | RXE_REQ_MASK | RXE_SEND_MASK
+ 				| RXE_MIDDLE_MASK,
+ 		.length = RXE_BTH_BYTES,
 
 

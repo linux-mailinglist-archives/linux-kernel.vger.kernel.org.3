@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D8F499787
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5413B499644
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448468AbiAXVMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:12:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42140 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390872AbiAXUqc (ORCPT
+        id S1444793AbiAXVBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:01:35 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40348 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1387885AbiAXUh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:46:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF102C061259;
-        Mon, 24 Jan 2022 11:56:23 -0800 (PST)
+        Mon, 24 Jan 2022 15:37:29 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CC6760B89;
-        Mon, 24 Jan 2022 19:56:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BB8CC340E5;
-        Mon, 24 Jan 2022 19:56:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B839BB81060;
+        Mon, 24 Jan 2022 20:37:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B42DC340E5;
+        Mon, 24 Jan 2022 20:37:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054182;
-        bh=N+xAuBNrumYAwKdpAGtW0TSvVD1arLgbiAIJ/iqPfH8=;
+        s=korg; t=1643056646;
+        bh=zzwXETvO8DRgU0B6/KjTgVdtgOFdMCxyOYkTNdKrc3I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1Wgc1tA4QNEdQ8/T3xWQNaqSBbTnoU4lWyWnxMlzzKRl/U0evUKk9+6XO2qZ7qfLG
-         /TF301QQ+QmgT3mVsDLyW0FHmNQ4wCOp0HSwAWQINjfMMjoa0kqjGoLfd6IB/99sZP
-         fRZVnZ58qo04AV4O95JQ0jaPUNvIEy0jLV0CXi/Y=
+        b=l2HUbUl4K4GDXOe1I79HbT6YPuac2NnZqrUz98Mhh+j1Ugn+bMM37Tir8sV2cvi4o
+         5dxXk5XYPmldMAFcIjcga1stilzRJuhPz8egDNHwu8DPC9olKbM2k/2GnY3akAN9S+
+         CkTlDqpVyFSwbRclccVD8mxhncrN3C0oVovwMRRk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Diego Viola <diego.viola@gmail.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
+        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 305/563] drm/nouveau/pmu/gm200-: avoid touching PMU outside of DEVINIT/PREOS/ACR
-Date:   Mon, 24 Jan 2022 19:41:10 +0100
-Message-Id: <20220124184034.988303891@linuxfoundation.org>
+Subject: [PATCH 5.15 554/846] media: saa7146: hexium_gemini: Fix a NULL pointer dereference in hexium_attach()
+Date:   Mon, 24 Jan 2022 19:41:11 +0100
+Message-Id: <20220124184120.137322515@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,101 +46,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ben Skeggs <bskeggs@redhat.com>
+From: Zhou Qingyang <zhou1615@umn.edu>
 
-[ Upstream commit 1d2271d2fb85e54bfc9630a6c30ac0feb9ffb983 ]
+[ Upstream commit 3af86b046933ba513d08399dba0d4d8b50d607d0 ]
 
-There have been reports of the WFI timing out on some boards, and a
-patch was proposed to just remove it.  This stuff is rather fragile,
-and I believe the WFI might be needed with our FW prior to GM200.
+In hexium_attach(dev, info), saa7146_vv_init() is called to allocate
+a new memory for dev->vv_data. saa7146_vv_release() will be called on
+failure of saa7146_register_device(). There is a dereference of
+dev->vv_data in saa7146_vv_release(), which could lead to a NULL
+pointer dereference on failure of saa7146_vv_init().
 
-However, we probably should not be touching PMU during init on GPUs
-where we depend on NVIDIA FW, outside of limited circumstances, so
-this should be a somewhat safer change that achieves the desired
-result.
+Fix this bug by adding a check of saa7146_vv_init().
 
-Reported-by: Diego Viola <diego.viola@gmail.com>
-Signed-off-by: Ben Skeggs <bskeggs@redhat.com>
-Reviewed-by: Karol Herbst <kherbst@redhat.com>
-Signed-off-by: Karol Herbst <kherbst@redhat.com>
-Link: https://gitlab.freedesktop.org/drm/nouveau/-/merge_requests/10
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_VIDEO_HEXIUM_GEMINI=m show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Link: https://lore.kernel.org/linux-media/20211203154030.111210-1-zhou1615@umn.edu
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../gpu/drm/nouveau/nvkm/subdev/pmu/base.c    | 37 +++++++++++--------
- 1 file changed, 21 insertions(+), 16 deletions(-)
+ drivers/media/common/saa7146/saa7146_fops.c | 2 +-
+ drivers/media/pci/saa7146/hexium_gemini.c   | 7 ++++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
-index a0fe607c9c07f..3bfc55c571b5e 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
-@@ -94,20 +94,13 @@ nvkm_pmu_fini(struct nvkm_subdev *subdev, bool suspend)
- 	return 0;
- }
+diff --git a/drivers/media/common/saa7146/saa7146_fops.c b/drivers/media/common/saa7146/saa7146_fops.c
+index baf5772c52a96..be32159777142 100644
+--- a/drivers/media/common/saa7146/saa7146_fops.c
++++ b/drivers/media/common/saa7146/saa7146_fops.c
+@@ -521,7 +521,7 @@ int saa7146_vv_init(struct saa7146_dev* dev, struct saa7146_ext_vv *ext_vv)
+ 		ERR("out of memory. aborting.\n");
+ 		kfree(vv);
+ 		v4l2_ctrl_handler_free(hdl);
+-		return -1;
++		return -ENOMEM;
+ 	}
  
--static int
-+static void
- nvkm_pmu_reset(struct nvkm_pmu *pmu)
- {
- 	struct nvkm_device *device = pmu->subdev.device;
+ 	saa7146_video_uops.init(dev,vv);
+diff --git a/drivers/media/pci/saa7146/hexium_gemini.c b/drivers/media/pci/saa7146/hexium_gemini.c
+index 2214c74bbbf15..3947701cd6c7e 100644
+--- a/drivers/media/pci/saa7146/hexium_gemini.c
++++ b/drivers/media/pci/saa7146/hexium_gemini.c
+@@ -284,7 +284,12 @@ static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_d
+ 	hexium_set_input(hexium, 0);
+ 	hexium->cur_input = 0;
  
- 	if (!pmu->func->enabled(pmu))
--		return 0;
--
--	/* Inhibit interrupts, and wait for idle. */
--	nvkm_wr32(device, 0x10a014, 0x0000ffff);
--	nvkm_msec(device, 2000,
--		if (!nvkm_rd32(device, 0x10a04c))
--			break;
--	);
-+		return;
- 
- 	/* Reset. */
- 	if (pmu->func->reset)
-@@ -118,25 +111,37 @@ nvkm_pmu_reset(struct nvkm_pmu *pmu)
- 		if (!(nvkm_rd32(device, 0x10a10c) & 0x00000006))
- 			break;
- 	);
--
--	return 0;
- }
- 
- static int
- nvkm_pmu_preinit(struct nvkm_subdev *subdev)
- {
- 	struct nvkm_pmu *pmu = nvkm_pmu(subdev);
--	return nvkm_pmu_reset(pmu);
-+	nvkm_pmu_reset(pmu);
-+	return 0;
- }
- 
- static int
- nvkm_pmu_init(struct nvkm_subdev *subdev)
- {
- 	struct nvkm_pmu *pmu = nvkm_pmu(subdev);
--	int ret = nvkm_pmu_reset(pmu);
--	if (ret == 0 && pmu->func->init)
--		ret = pmu->func->init(pmu);
--	return ret;
-+	struct nvkm_device *device = pmu->subdev.device;
-+
-+	if (!pmu->func->init)
-+		return 0;
-+
-+	if (pmu->func->enabled(pmu)) {
-+		/* Inhibit interrupts, and wait for idle. */
-+		nvkm_wr32(device, 0x10a014, 0x0000ffff);
-+		nvkm_msec(device, 2000,
-+			if (!nvkm_rd32(device, 0x10a04c))
-+				break;
-+		);
-+
-+		nvkm_pmu_reset(pmu);
+-	saa7146_vv_init(dev, &vv_data);
++	ret = saa7146_vv_init(dev, &vv_data);
++	if (ret) {
++		i2c_del_adapter(&hexium->i2c_adapter);
++		kfree(hexium);
++		return ret;
 +	}
-+
-+	return pmu->func->init(pmu);
- }
  
- static void *
+ 	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
+ 	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
 -- 
 2.34.1
 

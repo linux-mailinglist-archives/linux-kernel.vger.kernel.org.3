@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 314F549A74E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5452849A3C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:03:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236769AbiAYChK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:37:10 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56570 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356389AbiAXUbs (ORCPT
+        id S2366881AbiAXXxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:53:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1846017AbiAXXOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:31:48 -0500
+        Mon, 24 Jan 2022 18:14:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF5FC061756;
+        Mon, 24 Jan 2022 13:21:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C734F61507;
-        Mon, 24 Jan 2022 20:31:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A88B7C340E7;
-        Mon, 24 Jan 2022 20:31:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B641DB811FB;
+        Mon, 24 Jan 2022 21:21:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E641C340E4;
+        Mon, 24 Jan 2022 21:21:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056306;
-        bh=jSECrfroaRL6gnqItNOsQdsp2IFqaB2YwhTsNYAREpQ=;
+        s=korg; t=1643059298;
+        bh=SfqMuc3aiXwjjvVxKLQUhZJjbDkbq19eOpNOriETP+g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qbkL7rZcAadjGGXiERffxLUBraxnHOt+gS5W3FLHh8bW2GzSm0cQiDXQguUIZFGCF
-         ZAUs0937BkD1Uvx+bbpiLg6CqyoMT3QiZeP53zbVroQp6Q84nqkjwCYac3fRQEY0Lf
-         CHYNCQr46COSyH0EzURxWBRq36DGvP/0/ISTaoCk=
+        b=bscOeXVWTXJ7yzA8UvPgEIk5nZoxJz4riRsN6e8oTWS8+BfkfyrKS1ZbnjWBppo5e
+         ymZtEUPlpmQhwPyF4tj1mpt4wATEvXksjb2vVAHTYOP4SgQpdfJzjXJdFc2WXjhO+/
+         KN5BV/PcqHjYJ6rS3y8/a3SvVddI59aRhgxRKEgw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ammar Faizi <ammarfaizi2@gmail.com>,
-        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Brian Chen <brianchen118@gmail.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 441/846] powerpc/xive: Add missing null check after calling kmalloc
+Subject: [PATCH 5.16 0569/1039] psi: Fix PSI_MEM_FULL state when tasks are in memstall and doing reclaim
 Date:   Mon, 24 Jan 2022 19:39:18 +0100
-Message-Id: <20220124184116.179143525@linuxfoundation.org>
+Message-Id: <20220124184144.456044468@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,39 +50,218 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ammar Faizi <ammarfaizi2@gmail.com>
+From: Brian Chen <brianchen118@gmail.com>
 
-[ Upstream commit 18dbfcdedc802f9500b2c29794f22a31d27639c0 ]
+[ Upstream commit cb0e52b7748737b2cf6481fdd9b920ce7e1ebbdf ]
 
-Commit 930914b7d528fc ("powerpc/xive: Add a debugfs file to dump
-internal XIVE state") forgot to add a null check.
+We've noticed cases where tasks in a cgroup are stalled on memory but
+there is little memory FULL pressure since tasks stay on the runqueue
+in reclaim.
 
-Add it.
+A simple example involves a single threaded program that keeps leaking
+and touching large amounts of memory. It runs in a cgroup with swap
+enabled, memory.high set at 10M and cpu.max ratio set at 5%. Though
+there is significant CPU pressure and memory SOME, there is barely any
+memory FULL since the task enters reclaim and stays on the runqueue.
+However, this memory-bound task is effectively stalled on memory and
+we expect memory FULL to match memory SOME in this scenario.
 
-Fixes: 930914b7d528fc6b0249bffc00564100bcf6ef75 ("powerpc/xive: Add a debugfs file to dump internal XIVE state")
-Signed-off-by: Ammar Faizi <ammarfaizi2@gmail.com>
-Reviewed-by: Cédric Le Goater <clg@kaod.org>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20211226135314.251221-1-ammar.faizi@intel.com
+The code is confused about memstall && running, thinking there is a
+stalled task and a productive task when there's only one task: a
+reclaimer that's counted as both. To fix this, we redefine the
+condition for PSI_MEM_FULL to check that all running tasks are in an
+active memstall instead of checking that there are no running tasks.
+
+        case PSI_MEM_FULL:
+-               return unlikely(tasks[NR_MEMSTALL] && !tasks[NR_RUNNING]);
++               return unlikely(tasks[NR_MEMSTALL] &&
++                       tasks[NR_RUNNING] == tasks[NR_MEMSTALL_RUNNING]);
+
+This will capture reclaimers. It will also capture tasks that called
+psi_memstall_enter() and are about to sleep, but this should be
+negligible noise.
+
+Signed-off-by: Brian Chen <brianchen118@gmail.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Link: https://lore.kernel.org/r/20211110213312.310243-1-brianchen118@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/sysdev/xive/spapr.c | 3 +++
- 1 file changed, 3 insertions(+)
+ include/linux/psi_types.h | 13 ++++++++++-
+ kernel/sched/psi.c        | 45 ++++++++++++++++++++++++---------------
+ kernel/sched/stats.h      |  5 ++++-
+ 3 files changed, 44 insertions(+), 19 deletions(-)
 
-diff --git a/arch/powerpc/sysdev/xive/spapr.c b/arch/powerpc/sysdev/xive/spapr.c
-index f143b6f111ac0..1179632560b8d 100644
---- a/arch/powerpc/sysdev/xive/spapr.c
-+++ b/arch/powerpc/sysdev/xive/spapr.c
-@@ -653,6 +653,9 @@ static int xive_spapr_debug_show(struct seq_file *m, void *private)
- 	struct xive_irq_bitmap *xibm;
- 	char *buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
+diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+index 0a23300d49af7..0819c82dba920 100644
+--- a/include/linux/psi_types.h
++++ b/include/linux/psi_types.h
+@@ -21,7 +21,17 @@ enum psi_task_count {
+ 	 * don't have to special case any state tracking for it.
+ 	 */
+ 	NR_ONCPU,
+-	NR_PSI_TASK_COUNTS = 4,
++	/*
++	 * For IO and CPU stalls the presence of running/oncpu tasks
++	 * in the domain means a partial rather than a full stall.
++	 * For memory it's not so simple because of page reclaimers:
++	 * they are running/oncpu while representing a stall. To tell
++	 * whether a domain has productivity left or not, we need to
++	 * distinguish between regular running (i.e. productive)
++	 * threads and memstall ones.
++	 */
++	NR_MEMSTALL_RUNNING,
++	NR_PSI_TASK_COUNTS = 5,
+ };
  
-+	if (!buf)
-+		return -ENOMEM;
+ /* Task state bitmasks */
+@@ -29,6 +39,7 @@ enum psi_task_count {
+ #define TSK_MEMSTALL	(1 << NR_MEMSTALL)
+ #define TSK_RUNNING	(1 << NR_RUNNING)
+ #define TSK_ONCPU	(1 << NR_ONCPU)
++#define TSK_MEMSTALL_RUNNING	(1 << NR_MEMSTALL_RUNNING)
+ 
+ /* Resources that workloads could be stalled on */
+ enum psi_res {
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index 1652f2bb54b79..69b19d3af690f 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -34,13 +34,19 @@
+  * delayed on that resource such that nobody is advancing and the CPU
+  * goes idle. This leaves both workload and CPU unproductive.
+  *
+- * Naturally, the FULL state doesn't exist for the CPU resource at the
+- * system level, but exist at the cgroup level, means all non-idle tasks
+- * in a cgroup are delayed on the CPU resource which used by others outside
+- * of the cgroup or throttled by the cgroup cpu.max configuration.
+- *
+  *	SOME = nr_delayed_tasks != 0
+- *	FULL = nr_delayed_tasks != 0 && nr_running_tasks == 0
++ *	FULL = nr_delayed_tasks != 0 && nr_productive_tasks == 0
++ *
++ * What it means for a task to be productive is defined differently
++ * for each resource. For IO, productive means a running task. For
++ * memory, productive means a running task that isn't a reclaimer. For
++ * CPU, productive means an oncpu task.
++ *
++ * Naturally, the FULL state doesn't exist for the CPU resource at the
++ * system level, but exist at the cgroup level. At the cgroup level,
++ * FULL means all non-idle tasks in the cgroup are delayed on the CPU
++ * resource which is being used by others outside of the cgroup or
++ * throttled by the cgroup cpu.max configuration.
+  *
+  * The percentage of wallclock time spent in those compound stall
+  * states gives pressure numbers between 0 and 100 for each resource,
+@@ -81,13 +87,13 @@
+  *
+  *	threads = min(nr_nonidle_tasks, nr_cpus)
+  *	   SOME = min(nr_delayed_tasks / threads, 1)
+- *	   FULL = (threads - min(nr_running_tasks, threads)) / threads
++ *	   FULL = (threads - min(nr_productive_tasks, threads)) / threads
+  *
+  * For the 257 number crunchers on 256 CPUs, this yields:
+  *
+  *	threads = min(257, 256)
+  *	   SOME = min(1 / 256, 1)             = 0.4%
+- *	   FULL = (256 - min(257, 256)) / 256 = 0%
++ *	   FULL = (256 - min(256, 256)) / 256 = 0%
+  *
+  * For the 1 out of 4 memory-delayed tasks, this yields:
+  *
+@@ -112,7 +118,7 @@
+  * For each runqueue, we track:
+  *
+  *	   tSOME[cpu] = time(nr_delayed_tasks[cpu] != 0)
+- *	   tFULL[cpu] = time(nr_delayed_tasks[cpu] && !nr_running_tasks[cpu])
++ *	   tFULL[cpu] = time(nr_delayed_tasks[cpu] && !nr_productive_tasks[cpu])
+  *	tNONIDLE[cpu] = time(nr_nonidle_tasks[cpu] != 0)
+  *
+  * and then periodically aggregate:
+@@ -233,7 +239,8 @@ static bool test_state(unsigned int *tasks, enum psi_states state)
+ 	case PSI_MEM_SOME:
+ 		return unlikely(tasks[NR_MEMSTALL]);
+ 	case PSI_MEM_FULL:
+-		return unlikely(tasks[NR_MEMSTALL] && !tasks[NR_RUNNING]);
++		return unlikely(tasks[NR_MEMSTALL] &&
++			tasks[NR_RUNNING] == tasks[NR_MEMSTALL_RUNNING]);
+ 	case PSI_CPU_SOME:
+ 		return unlikely(tasks[NR_RUNNING] > tasks[NR_ONCPU]);
+ 	case PSI_CPU_FULL:
+@@ -710,10 +717,11 @@ static void psi_group_change(struct psi_group *group, int cpu,
+ 		if (groupc->tasks[t]) {
+ 			groupc->tasks[t]--;
+ 		} else if (!psi_bug) {
+-			printk_deferred(KERN_ERR "psi: task underflow! cpu=%d t=%d tasks=[%u %u %u %u] clear=%x set=%x\n",
++			printk_deferred(KERN_ERR "psi: task underflow! cpu=%d t=%d tasks=[%u %u %u %u %u] clear=%x set=%x\n",
+ 					cpu, t, groupc->tasks[0],
+ 					groupc->tasks[1], groupc->tasks[2],
+-					groupc->tasks[3], clear, set);
++					groupc->tasks[3], groupc->tasks[4],
++					clear, set);
+ 			psi_bug = 1;
+ 		}
+ 	}
+@@ -854,12 +862,15 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
+ 		int clear = TSK_ONCPU, set = 0;
+ 
+ 		/*
+-		 * When we're going to sleep, psi_dequeue() lets us handle
+-		 * TSK_RUNNING and TSK_IOWAIT here, where we can combine it
+-		 * with TSK_ONCPU and save walking common ancestors twice.
++		 * When we're going to sleep, psi_dequeue() lets us
++		 * handle TSK_RUNNING, TSK_MEMSTALL_RUNNING and
++		 * TSK_IOWAIT here, where we can combine it with
++		 * TSK_ONCPU and save walking common ancestors twice.
+ 		 */
+ 		if (sleep) {
+ 			clear |= TSK_RUNNING;
++			if (prev->in_memstall)
++				clear |= TSK_MEMSTALL_RUNNING;
+ 			if (prev->in_iowait)
+ 				set |= TSK_IOWAIT;
+ 		}
+@@ -908,7 +919,7 @@ void psi_memstall_enter(unsigned long *flags)
+ 	rq = this_rq_lock_irq(&rf);
+ 
+ 	current->in_memstall = 1;
+-	psi_task_change(current, 0, TSK_MEMSTALL);
++	psi_task_change(current, 0, TSK_MEMSTALL | TSK_MEMSTALL_RUNNING);
+ 
+ 	rq_unlock_irq(rq, &rf);
+ }
+@@ -937,7 +948,7 @@ void psi_memstall_leave(unsigned long *flags)
+ 	rq = this_rq_lock_irq(&rf);
+ 
+ 	current->in_memstall = 0;
+-	psi_task_change(current, TSK_MEMSTALL, 0);
++	psi_task_change(current, TSK_MEMSTALL | TSK_MEMSTALL_RUNNING, 0);
+ 
+ 	rq_unlock_irq(rq, &rf);
+ }
+diff --git a/kernel/sched/stats.h b/kernel/sched/stats.h
+index cfb0893a83d45..3a3c826dd83a7 100644
+--- a/kernel/sched/stats.h
++++ b/kernel/sched/stats.h
+@@ -118,6 +118,9 @@ static inline void psi_enqueue(struct task_struct *p, bool wakeup)
+ 	if (static_branch_likely(&psi_disabled))
+ 		return;
+ 
++	if (p->in_memstall)
++		set |= TSK_MEMSTALL_RUNNING;
 +
- 	list_for_each_entry(xibm, &xive_irq_bitmaps, list) {
- 		memset(buf, 0, PAGE_SIZE);
- 		bitmap_print_to_pagebuf(true, buf, xibm->bitmap, xibm->count);
+ 	if (!wakeup || p->sched_psi_wake_requeue) {
+ 		if (p->in_memstall)
+ 			set |= TSK_MEMSTALL;
+@@ -148,7 +151,7 @@ static inline void psi_dequeue(struct task_struct *p, bool sleep)
+ 		return;
+ 
+ 	if (p->in_memstall)
+-		clear |= TSK_MEMSTALL;
++		clear |= (TSK_MEMSTALL | TSK_MEMSTALL_RUNNING);
+ 
+ 	psi_task_change(p, clear, 0);
+ }
 -- 
 2.34.1
 

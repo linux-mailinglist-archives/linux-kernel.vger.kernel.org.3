@@ -2,41 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D29C049A6EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:35:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E50949A4CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:10:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356753AbiAYC16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:27:58 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48884 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378614AbiAXUHr (ORCPT
+        id S3408076AbiAYAVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:21:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55398 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2361672AbiAXXko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:07:47 -0500
+        Mon, 24 Jan 2022 18:40:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F10C0BD489;
+        Mon, 24 Jan 2022 13:38:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24B72B81544;
-        Mon, 24 Jan 2022 20:07:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CC40C340E5;
-        Mon, 24 Jan 2022 20:07:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C77D9B811FB;
+        Mon, 24 Jan 2022 21:38:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F286BC36AE9;
+        Mon, 24 Jan 2022 21:38:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054864;
-        bh=br/iQTyRsURcetzVqnQpSl1GiGq29hfg10350Q/e9Ew=;
+        s=korg; t=1643060324;
+        bh=ongecXjzHtP37xKEtMPAuQCBn6ybQCZN/W1veZ+7+ls=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LpVDu3+9mWvN2wjDwgkCEgewy4tY/EJVgh8ZVg8lNrIdt7y8iNyKMYR/VrZtZnBpK
-         QVJ5SHPq7Lnl+cseu61w1JafGmOKsz2En5ASKOODQzDGJzZpi5xMaoD1p24UtLATtQ
-         LFy0WgVLvCY7+tSRMiNUjFleU1sYliSLma/8Fg8I=
+        b=kGPM/TQHUsdCQEbrx8xzQ3lfp87V/+QiTGk6yJvUQULDi+6+8knlVkAPyDQEeWIDB
+         dp7v4dqSdVafrVDzPr5sk1N8jLayYDhmoDt+LUGRk+1oN4On6PMzU+UiiwUPy1yXPh
+         ICtE0/3kuXxqn2VhTNf1vwI6w+GCBDzxsoEj8W+Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 527/563] net: axienet: fix for TX busy handling
+        stable@vger.kernel.org,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Jan Stancek <jstancek@redhat.com>,
+        Borislav Petkov <bp@suse.de>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.16 0903/1039] drm/radeon: fix error handling in radeon_driver_open_kms
 Date:   Mon, 24 Jan 2022 19:44:52 +0100
-Message-Id: <20220124184042.656055898@linuxfoundation.org>
+Message-Id: <20220124184155.650242882@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,149 +51,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Christian König <christian.koenig@amd.com>
 
-commit bb193e3db8b86a63f26889c99e14fd30c9ebd72a upstream.
+commit 4722f463896cc0ef1a6f1c3cb2e171e949831249 upstream.
 
-Network driver documentation indicates we should be avoiding returning
-NETDEV_TX_BUSY from ndo_start_xmit in normal cases, since it requires
-the packets to be requeued. Instead the queue should be stopped after
-a packet is added to the TX ring when there may not be enough room for an
-additional one. Also, when TX ring entries are completed, we should only
-wake the queue if we know there is room for another full maximally
-fragmented packet.
+The return value was never initialized so the cleanup code executed when
+it isn't even necessary.
 
-Print a warning if there is insufficient space at the start of start_xmit,
-since this should no longer happen.
+Just add proper error handling.
 
-Combined with increasing the default TX ring size (in a subsequent
-patch), this appears to recover the TX performance lost by previous changes
-to actually manage the TX ring state properly.
-
-Fixes: 8a3b7a252dca9 ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: ab50cb9df889 ("drm/radeon/radeon_kms: Fix a NULL pointer dereference in radeon_driver_open_kms()")
+Signed-off-by: Christian König <christian.koenig@amd.com>
+Tested-by: Jan Stancek <jstancek@redhat.com>
+Tested-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/xilinx/xilinx_axienet_main.c |   86 ++++++++++++----------
- 1 file changed, 47 insertions(+), 39 deletions(-)
+ drivers/gpu/drm/radeon/radeon_kms.c |   22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
---- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-@@ -661,6 +661,32 @@ static int axienet_free_tx_chain(struct
- }
+--- a/drivers/gpu/drm/radeon/radeon_kms.c
++++ b/drivers/gpu/drm/radeon/radeon_kms.c
+@@ -666,18 +666,18 @@ int radeon_driver_open_kms(struct drm_de
+ 		fpriv = kzalloc(sizeof(*fpriv), GFP_KERNEL);
+ 		if (unlikely(!fpriv)) {
+ 			r = -ENOMEM;
+-			goto out_suspend;
++			goto err_suspend;
+ 		}
  
- /**
-+ * axienet_check_tx_bd_space - Checks if a BD/group of BDs are currently busy
-+ * @lp:		Pointer to the axienet_local structure
-+ * @num_frag:	The number of BDs to check for
-+ *
-+ * Return: 0, on success
-+ *	    NETDEV_TX_BUSY, if any of the descriptors are not free
-+ *
-+ * This function is invoked before BDs are allocated and transmission starts.
-+ * This function returns 0 if a BD or group of BDs can be allocated for
-+ * transmission. If the BD or any of the BDs are not free the function
-+ * returns a busy status. This is invoked from axienet_start_xmit.
-+ */
-+static inline int axienet_check_tx_bd_space(struct axienet_local *lp,
-+					    int num_frag)
-+{
-+	struct axidma_bd *cur_p;
-+
-+	/* Ensure we see all descriptor updates from device or TX IRQ path */
-+	rmb();
-+	cur_p = &lp->tx_bd_v[(lp->tx_bd_tail + num_frag) % lp->tx_bd_num];
-+	if (cur_p->cntrl)
-+		return NETDEV_TX_BUSY;
-+	return 0;
-+}
-+
-+/**
-  * axienet_start_xmit_done - Invoked once a transmit is completed by the
-  * Axi DMA Tx channel.
-  * @ndev:	Pointer to the net_device structure
-@@ -689,33 +715,8 @@ static void axienet_start_xmit_done(stru
- 	/* Matches barrier in axienet_start_xmit */
- 	smp_mb();
+ 		if (rdev->accel_working) {
+ 			vm = &fpriv->vm;
+ 			r = radeon_vm_init(rdev, vm);
+ 			if (r)
+-				goto out_fpriv;
++				goto err_fpriv;
  
--	netif_wake_queue(ndev);
--}
--
--/**
-- * axienet_check_tx_bd_space - Checks if a BD/group of BDs are currently busy
-- * @lp:		Pointer to the axienet_local structure
-- * @num_frag:	The number of BDs to check for
-- *
-- * Return: 0, on success
-- *	    NETDEV_TX_BUSY, if any of the descriptors are not free
-- *
-- * This function is invoked before BDs are allocated and transmission starts.
-- * This function returns 0 if a BD or group of BDs can be allocated for
-- * transmission. If the BD or any of the BDs are not free the function
-- * returns a busy status. This is invoked from axienet_start_xmit.
-- */
--static inline int axienet_check_tx_bd_space(struct axienet_local *lp,
--					    int num_frag)
--{
--	struct axidma_bd *cur_p;
--
--	/* Ensure we see all descriptor updates from device or TX IRQ path */
--	rmb();
--	cur_p = &lp->tx_bd_v[(lp->tx_bd_tail + num_frag) % lp->tx_bd_num];
--	if (cur_p->cntrl)
--		return NETDEV_TX_BUSY;
--	return 0;
-+	if (!axienet_check_tx_bd_space(lp, MAX_SKB_FRAGS + 1))
-+		netif_wake_queue(ndev);
- }
+ 			r = radeon_bo_reserve(rdev->ring_tmp_bo.bo, false);
+ 			if (r)
+-				goto out_vm_fini;
++				goto err_vm_fini;
  
- /**
-@@ -748,19 +749,14 @@ axienet_start_xmit(struct sk_buff *skb,
- 	cur_p = &lp->tx_bd_v[lp->tx_bd_tail];
+ 			/* map the ib pool buffer read only into
+ 			 * virtual address space */
+@@ -685,7 +685,7 @@ int radeon_driver_open_kms(struct drm_de
+ 							rdev->ring_tmp_bo.bo);
+ 			if (!vm->ib_bo_va) {
+ 				r = -ENOMEM;
+-				goto out_vm_fini;
++				goto err_vm_fini;
+ 			}
  
- 	if (axienet_check_tx_bd_space(lp, num_frag + 1)) {
--		if (netif_queue_stopped(ndev))
--			return NETDEV_TX_BUSY;
--
-+		/* Should not happen as last start_xmit call should have
-+		 * checked for sufficient space and queue should only be
-+		 * woken when sufficient space is available.
-+		 */
- 		netif_stop_queue(ndev);
--
--		/* Matches barrier in axienet_start_xmit_done */
--		smp_mb();
--
--		/* Space might have just been freed - check again */
--		if (axienet_check_tx_bd_space(lp, num_frag + 1))
--			return NETDEV_TX_BUSY;
--
--		netif_wake_queue(ndev);
-+		if (net_ratelimit())
-+			netdev_warn(ndev, "TX ring unexpectedly full\n");
-+		return NETDEV_TX_BUSY;
+ 			r = radeon_vm_bo_set_addr(rdev, vm->ib_bo_va,
+@@ -693,19 +693,21 @@ int radeon_driver_open_kms(struct drm_de
+ 						  RADEON_VM_PAGE_READABLE |
+ 						  RADEON_VM_PAGE_SNOOPED);
+ 			if (r)
+-				goto out_vm_fini;
++				goto err_vm_fini;
+ 		}
+ 		file_priv->driver_priv = fpriv;
  	}
  
- 	if (skb->ip_summed == CHECKSUM_PARTIAL) {
-@@ -821,6 +817,18 @@ axienet_start_xmit(struct sk_buff *skb,
- 	if (++lp->tx_bd_tail >= lp->tx_bd_num)
- 		lp->tx_bd_tail = 0;
+-	if (!r)
+-		goto out_suspend;
++	pm_runtime_mark_last_busy(dev->dev);
++	pm_runtime_put_autosuspend(dev->dev);
++	return 0;
  
-+	/* Stop queue if next transmit may not have space */
-+	if (axienet_check_tx_bd_space(lp, MAX_SKB_FRAGS + 1)) {
-+		netif_stop_queue(ndev);
+-out_vm_fini:
++err_vm_fini:
+ 	radeon_vm_fini(rdev, vm);
+-out_fpriv:
++err_fpriv:
+ 	kfree(fpriv);
+-out_suspend:
 +
-+		/* Matches barrier in axienet_start_xmit_done */
-+		smp_mb();
-+
-+		/* Space might have just been freed - check again */
-+		if (!axienet_check_tx_bd_space(lp, MAX_SKB_FRAGS + 1))
-+			netif_wake_queue(ndev);
-+	}
-+
- 	return NETDEV_TX_OK;
- }
- 
++err_suspend:
+ 	pm_runtime_mark_last_busy(dev->dev);
+ 	pm_runtime_put_autosuspend(dev->dev);
+ 	return r;
 
 

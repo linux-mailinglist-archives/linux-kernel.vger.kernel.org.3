@@ -2,42 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F120E49A769
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:44:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8373449A320
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:02:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3410429AbiAYCnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:43:00 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37874 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382785AbiAXUck (ORCPT
+        id S2367855AbiAXX4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:56:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1846416AbiAXXPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:32:40 -0500
+        Mon, 24 Jan 2022 18:15:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D25C0604CF;
+        Mon, 24 Jan 2022 13:24:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8B3EB811F9;
-        Mon, 24 Jan 2022 20:32:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED9A6C340E7;
-        Mon, 24 Jan 2022 20:32:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00622614C9;
+        Mon, 24 Jan 2022 21:24:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7FA4C340E4;
+        Mon, 24 Jan 2022 21:24:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056357;
-        bh=qVTsRmkfHHvtcYhP+AfBxHTCm0Hpp40vXIcFjCKm+lI=;
+        s=korg; t=1643059447;
+        bh=REBuG4OoCqpO2dEgywiMEnlKX2lH4hWXFOcoOtaLmws=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ACdPH7SVTfYQySczm/6iwHLto0QBOmhwgY9zPGLPpiCmMynO1HnzOATB3brgA+oDU
-         x+OPh+JPWC2XnVvvDB6Xu+CXl5TXjkHGPSm8hlX2IAnG3eBCMtABodSDvMzJ7tNA5j
-         +5ArpqqC05FUsi00ax0F3dne4KqByhooTvRxQOyw=
+        b=kqBIs3K9j84lHej5as9GL+6WVJSycKSmxuAcTRR0T0lx4NhT4mMF07BvgjsNx58mF
+         PUfwTf2Zw13BYolNN4Nt6OO4hC6Rd0Q9eVWpHSL5wkBRx5z1tsj9+fUFuasAXZbO+m
+         xdnv5Iwgc00+ED6VNRax7p1gs/djwWobx6WwxcGY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Merlijn Wajer <merlijn@wizzup.org>,
-        "Sicelo A. Mhlongo" <absicsz@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 457/846] ARM: dts: omap3-n900: Fix lp5523 for multi color
-Date:   Mon, 24 Jan 2022 19:39:34 +0100
-Message-Id: <20220124184116.738683164@linuxfoundation.org>
+        stable@vger.kernel.org, Aric Cyr <Aric.Cyr@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Martin Leung <Martin.Leung@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0586/1039] drm/amd/display: add else to avoid double destroy clk_mgr
+Date:   Mon, 24 Jan 2022 19:39:35 +0100
+Message-Id: <20220124184145.038092690@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,139 +52,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sicelo A. Mhlongo <absicsz@gmail.com>
+From: Martin Leung <Martin.Leung@amd.com>
 
-[ Upstream commit e9af026a3b24f59d7af4609f73e0ef60a4d6d516 ]
+[ Upstream commit 11dff0e871037a6ad978e52f826a2eb7f5fb274a ]
 
-Since the LED multicolor framework support was added in commit
-92a81562e695 ("leds: lp55xx: Add multicolor framework support to lp55xx")
-LEDs on this platform stopped working.
+[Why & How]
+when changing some code we accidentally
+changed else if-> if. reverting that.
 
-Fixes: 92a81562e695 ("leds: lp55xx: Add multicolor framework support to lp55xx")
-Fixes: ac219bf3c9bd ("leds: lp55xx: Convert to use GPIO descriptors")
-Signed-off-by: Merlijn Wajer <merlijn@wizzup.org>
-Signed-off-by: Sicelo A. Mhlongo <absicsz@gmail.com>
-Signed-off-by: Pavel Machek <pavel@ucw.cz>
+Reviewed-by: Aric Cyr <Aric.Cyr@amd.com>
+Acked-by: Qingqing Zhuo <qingqing.zhuo@amd.com>
+Signed-off-by: Martin Leung <Martin.Leung@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/omap3-n900.dts | 50 +++++++++++++++++++++++++-------
- 1 file changed, 40 insertions(+), 10 deletions(-)
+ drivers/gpu/drm/amd/display/dc/clk_mgr/clk_mgr.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/omap3-n900.dts b/arch/arm/boot/dts/omap3-n900.dts
-index 32335d4ce478b..d40c3d2c4914e 100644
---- a/arch/arm/boot/dts/omap3-n900.dts
-+++ b/arch/arm/boot/dts/omap3-n900.dts
-@@ -8,6 +8,7 @@
- 
- #include "omap34xx.dtsi"
- #include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
- 
- /*
-  * Default secure signed bootloader (Nokia X-Loader) does not enable L3 firewall
-@@ -630,63 +631,92 @@
- 	};
- 
- 	lp5523: lp5523@32 {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
- 		compatible = "national,lp5523";
- 		reg = <0x32>;
- 		clock-mode = /bits/ 8 <0>; /* LP55XX_CLOCK_AUTO */
--		enable-gpio = <&gpio2 9 GPIO_ACTIVE_HIGH>; /* 41 */
-+		enable-gpios = <&gpio2 9 GPIO_ACTIVE_HIGH>; /* 41 */
- 
--		chan0 {
-+		led@0 {
-+			reg = <0>;
- 			chan-name = "lp5523:kb1";
- 			led-cur = /bits/ 8 <50>;
- 			max-cur = /bits/ 8 <100>;
-+			color = <LED_COLOR_ID_WHITE>;
-+			function = LED_FUNCTION_KBD_BACKLIGHT;
- 		};
- 
--		chan1 {
-+		led@1 {
-+			reg = <1>;
- 			chan-name = "lp5523:kb2";
- 			led-cur = /bits/ 8 <50>;
- 			max-cur = /bits/ 8 <100>;
-+			color = <LED_COLOR_ID_WHITE>;
-+			function = LED_FUNCTION_KBD_BACKLIGHT;
- 		};
- 
--		chan2 {
-+		led@2 {
-+			reg = <2>;
- 			chan-name = "lp5523:kb3";
- 			led-cur = /bits/ 8 <50>;
- 			max-cur = /bits/ 8 <100>;
-+			color = <LED_COLOR_ID_WHITE>;
-+			function = LED_FUNCTION_KBD_BACKLIGHT;
- 		};
- 
--		chan3 {
-+		led@3 {
-+			reg = <3>;
- 			chan-name = "lp5523:kb4";
- 			led-cur = /bits/ 8 <50>;
- 			max-cur = /bits/ 8 <100>;
-+			color = <LED_COLOR_ID_WHITE>;
-+			function = LED_FUNCTION_KBD_BACKLIGHT;
- 		};
- 
--		chan4 {
-+		led@4 {
-+			reg = <4>;
- 			chan-name = "lp5523:b";
- 			led-cur = /bits/ 8 <50>;
- 			max-cur = /bits/ 8 <100>;
-+			color = <LED_COLOR_ID_BLUE>;
-+			function = LED_FUNCTION_STATUS;
- 		};
- 
--		chan5 {
-+		led@5 {
-+			reg = <5>;
- 			chan-name = "lp5523:g";
- 			led-cur = /bits/ 8 <50>;
- 			max-cur = /bits/ 8 <100>;
-+			color = <LED_COLOR_ID_GREEN>;
-+			function = LED_FUNCTION_STATUS;
- 		};
- 
--		chan6 {
-+		led@6 {
-+			reg = <6>;
- 			chan-name = "lp5523:r";
- 			led-cur = /bits/ 8 <50>;
- 			max-cur = /bits/ 8 <100>;
-+			color = <LED_COLOR_ID_RED>;
-+			function = LED_FUNCTION_STATUS;
- 		};
- 
--		chan7 {
-+		led@7 {
-+			reg = <7>;
- 			chan-name = "lp5523:kb5";
- 			led-cur = /bits/ 8 <50>;
- 			max-cur = /bits/ 8 <100>;
-+			color = <LED_COLOR_ID_WHITE>;
-+			function = LED_FUNCTION_KBD_BACKLIGHT;
- 		};
- 
--		chan8 {
-+		led@8 {
-+			reg = <8>;
- 			chan-name = "lp5523:kb6";
- 			led-cur = /bits/ 8 <50>;
- 			max-cur = /bits/ 8 <100>;
-+			color = <LED_COLOR_ID_WHITE>;
-+			function = LED_FUNCTION_KBD_BACKLIGHT;
- 		};
- 	};
- 
+diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/clk_mgr.c
+index 26f96ee324729..9200c8ce02ba9 100644
+--- a/drivers/gpu/drm/amd/display/dc/clk_mgr/clk_mgr.c
++++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/clk_mgr.c
+@@ -308,8 +308,7 @@ void dc_destroy_clk_mgr(struct clk_mgr *clk_mgr_base)
+ 	case FAMILY_NV:
+ 		if (ASICREV_IS_SIENNA_CICHLID_P(clk_mgr_base->ctx->asic_id.hw_internal_rev)) {
+ 			dcn3_clk_mgr_destroy(clk_mgr);
+-		}
+-		if (ASICREV_IS_DIMGREY_CAVEFISH_P(clk_mgr_base->ctx->asic_id.hw_internal_rev)) {
++		} else if (ASICREV_IS_DIMGREY_CAVEFISH_P(clk_mgr_base->ctx->asic_id.hw_internal_rev)) {
+ 			dcn3_clk_mgr_destroy(clk_mgr);
+ 		}
+ 		if (ASICREV_IS_BEIGE_GOBY_P(clk_mgr_base->ctx->asic_id.hw_internal_rev)) {
 -- 
 2.34.1
 

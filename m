@@ -2,104 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B02497851
+	by mail.lfdr.de (Postfix) with ESMTP id CDB41497852
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 06:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235804AbiAXFSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 00:18:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
+        id S236544AbiAXFSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 00:18:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiAXFSE (ORCPT
+        with ESMTP id S236092AbiAXFSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 00:18:04 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC2EC06173B
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 21:18:04 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id j10so2183978pgc.6
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 21:18:04 -0800 (PST)
+        Mon, 24 Jan 2022 00:18:08 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F29C06173D
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 21:18:07 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so15561037pjp.0
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 21:18:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zP36aX2d/bL6wS6rcbFJKrOBtz963Nu2Kl7o23XZalE=;
-        b=u53kMVT1HAOzyAHD6LkcLXv4YmcYTS+naIZ3o73dHyAi/6jxb7xkkx8srkEdgI6wuC
-         5wqEUbd98o2kB8drLXvSSDVix9X3EGBdn6pvaTxT7RNdEpj645jfE4qxAwASiVAvDXjM
-         ARH8ayPrDE+L+VJvOdCFEy1sDgaNA8hDRliKjCWmZHrR4+w64uAMmPbxQSHSEhdB+REO
-         EytluLz/hkxH9jTtJGnz2GTlGJgren6/ISKvLuDi/HBw464+4Fuw25N1n46hjoT4BG18
-         LWJkecKpssASBvS1OOY3HltjsmttZchousDfKh2nxLBOfqhseBn3SgMHn4HwaRRPYU7a
-         UNhQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kKp2VsYVshLyXdr/Mm5s2c/ypkad29QD2/BMtkuP4rM=;
+        b=KMFMXHj1seUsAKWZF1wx6B80aQgEMVTjVCw3uuJwzlNCa4fehZo82ctufwGRlAx/nE
+         1Os6wrArlQlVOMsLzUOXbogYGGXyYCXhFJCR6N0818Utleh/fKrubFUP3fBm0Yubg9CE
+         Jg5ag39IA6Ot0T5y35480iUDQddincDphtjn4Dm4W1Q/lQydpeCDai/soZLgzFhdlVt6
+         atWJMdpe09b8mWmypGUz28vXNQXZtix3LpaGcXxJBusEaBK8PyoHArik4+PhVetiqkFg
+         cEDufP1xSnLPFQCGYVM3OpQbMKq9lil+I9NBrKu5YeY5kVaEr2LwfkBG8+VqHXWZrgpa
+         tcAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zP36aX2d/bL6wS6rcbFJKrOBtz963Nu2Kl7o23XZalE=;
-        b=oqBTG/eE05/Vl0Abp2s5XslUAqlr/D/bPh4GgGRuHb0PlvTxczUYSkdlsl0qbVayV0
-         0T+/GCkJWg1B6rXlep9Wuyv0KWg8xaKTvCdFA4rS+jUcQFk/T9Ob4L4gk4Ozvt5g4WYi
-         oEVfu0qsZyZcVNH7yQ3t7FrTNRTHGNVsayEN86fN6eqjd2UYhJ4bkEZ5/WnullXGTpNU
-         IpDYXPIP5GxUZ21kY9WON7UpwQuL/8SIcAWvpttH8bjgAYl+sm0dGvaqaX44wxtZbHet
-         5Yyci3bCarpFrqkg7t126+AQbxva0SGVtIQKhLBJkRMZ9u96eya1v2t7XJoK60CX46Yz
-         CjHw==
-X-Gm-Message-State: AOAM530+lwQ1h6jdSs1AJpvaudC1eUQhoGt4Uld55982DeUX/IbKSRM2
-        ppAZA/IB95+D/BQD71Vw+W7VqA==
-X-Google-Smtp-Source: ABdhPJy5c5N5VaAzxWc2RK+1xQ2ug8lRSvUjdW/Kex0OEX3SffhRhUWLglgrGGuU4rdCqCEVt41/tQ==
-X-Received: by 2002:a63:8c59:: with SMTP id q25mr10494273pgn.13.1643001483990;
-        Sun, 23 Jan 2022 21:18:03 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kKp2VsYVshLyXdr/Mm5s2c/ypkad29QD2/BMtkuP4rM=;
+        b=DGMNG+Mh0uAoFwC1eqYt1/o9fT6Rvquj14/iWeLWEQPYITAiahUf3ChMwIWCvUoL8H
+         PtN7CVE25HLGdFf7XeglFw/4mKxO8KRs9LL3HUiQqPnWQiV9L4fwL8l/PymH0VsZmurT
+         FAB/ypEDCiJNnOfOsg+OlHZSjLfmcI7IaX8yiHRhFcanMaB4UD4KmgGM46sGhUCjQ+vY
+         iwh8137SPcs3Y9Vj5Km/8QX6h+F2IJ19f4ESgxe675q5GC3NSBr2DtzFOgBJo8vS1jRC
+         fatdXrNYGZ8WoPuUel/m9ZMH4S0j7LXbvqDndhmsLhhJCtqWivzhXNMTwUXs60e8MWiU
+         WlLg==
+X-Gm-Message-State: AOAM531n9PkftlGFKFkjxhPqaLtLh3DOzl8yLsPqjtIXoWo4tPrvYusW
+        kYs1DJOnTNeQszZKg7p7dpkZLQ==
+X-Google-Smtp-Source: ABdhPJxybSZPlRDINVw0aEX2KARMUBoqgQqXKvdvrZKs+UMQM/WyESYd1/uYYZyNkz5zhJm/v1mvFg==
+X-Received: by 2002:a17:903:24d:b0:149:b68f:579 with SMTP id j13-20020a170903024d00b00149b68f0579mr13534093plh.1.1643001487395;
+        Sun, 23 Jan 2022 21:18:07 -0800 (PST)
 Received: from FVFYT0MHHV2J.tiktokcdn.com ([139.177.225.234])
-        by smtp.gmail.com with ESMTPSA id l21sm14263018pfu.120.2022.01.23.21.18.00
+        by smtp.gmail.com with ESMTPSA id l21sm14263018pfu.120.2022.01.23.21.18.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 21:18:03 -0800 (PST)
+        Sun, 23 Jan 2022 21:18:07 -0800 (PST)
 From:   Muchun Song <songmuchun@bytedance.com>
 To:     akpm@linux-foundation.org, zi.yan@cs.rutgers.edu,
         kirill.shutemov@linux.intel.com
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com,
-        Muchun Song <songmuchun@bytedance.com>, Zi Yan <ziy@nvidia.com>
-Subject: [PATCH v2 1/2] mm: thp: fix wrong cache flush in remove_migration_pmd()
-Date:   Mon, 24 Jan 2022 13:17:51 +0800
-Message-Id: <20220124051752.83281-1-songmuchun@bytedance.com>
+        duanxiongchun@bytedance.com, Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH v2 2/2] mm: fix missing cache flush for all tail pages of THP
+Date:   Mon, 24 Jan 2022 13:17:52 +0800
+Message-Id: <20220124051752.83281-2-songmuchun@bytedance.com>
 X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+In-Reply-To: <20220124051752.83281-1-songmuchun@bytedance.com>
+References: <20220124051752.83281-1-songmuchun@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The flush_cache_page() is supposed to be justified only if the page
-is already placed in process page table, and that is done right after
-flush_cache_page(). So using this interface is wrong. And there is
-no need to invalite cache since it was non-present before in
-remove_migration_pmd(). So just to remove it.
+The D-cache maintenance inside move_to_new_page() only consider one page,
+there is still D-cache maintenance issue for tail pages of THP. Fix this
+by not using flush_dcache_folio() since it is not backportable.
 
+Fixes: 616b8371539a ("mm: thp: enable thp migration in generic path")
 Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-Reviewed-by: Zi Yan <ziy@nvidia.com>
 ---
 Changes in v2:
- - Collect Reviewed-by tag. Thanks Zi.
+ - Using a for loop instead of the folio variant for backportable.
 
- mm/huge_memory.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ mm/migrate.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index f58524394dc1..45ede45b11f5 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -3207,7 +3207,6 @@ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
- 	if (pmd_swp_uffd_wp(*pvmw->pmd))
- 		pmde = pmd_wrprotect(pmd_mkuffd_wp(pmde));
+diff --git a/mm/migrate.c b/mm/migrate.c
+index c9296d63878d..c418e8d92b9c 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -933,9 +933,12 @@ static int move_to_new_page(struct page *newpage, struct page *page,
+ 		if (!PageMappingFlags(page))
+ 			page->mapping = NULL;
  
--	flush_cache_range(vma, mmun_start, mmun_start + HPAGE_PMD_SIZE);
- 	if (PageAnon(new))
- 		page_add_anon_rmap(new, vma, mmun_start, true);
- 	else
-@@ -3215,6 +3214,8 @@ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
- 	set_pmd_at(mm, mmun_start, pvmw->pmd, pmde);
- 	if ((vma->vm_flags & VM_LOCKED) && !PageDoubleMap(new))
- 		mlock_vma_page(new);
-+
-+	/* No need to invalidate - it was non-present before */
- 	update_mmu_cache_pmd(vma, address, pvmw->pmd);
- }
- #endif
+-		if (likely(!is_zone_device_page(newpage)))
+-			flush_dcache_page(newpage);
++		if (likely(!is_zone_device_page(newpage))) {
++			int i, nr = compound_nr(newpage);
+ 
++			for (i = 0; i < nr; i++)
++				flush_dcache_page(newpage + i);
++		}
+ 	}
+ out:
+ 	return rc;
 -- 
 2.11.0
 

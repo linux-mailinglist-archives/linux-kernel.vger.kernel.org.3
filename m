@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 181D949987C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:37:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A2E49964F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:17:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1452674AbiAXV0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:26:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392314AbiAXUvC (ORCPT
+        id S1444990AbiAXVBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:01:51 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34382 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385603AbiAXUjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:51:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1DDC054310;
-        Mon, 24 Jan 2022 11:58:16 -0800 (PST)
+        Mon, 24 Jan 2022 15:39:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3919260B43;
-        Mon, 24 Jan 2022 19:58:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1487FC340EA;
-        Mon, 24 Jan 2022 19:58:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27262613FB;
+        Mon, 24 Jan 2022 20:39:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08364C340E7;
+        Mon, 24 Jan 2022 20:39:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054295;
-        bh=ixHiAAhTeUJ3CTD9gpQ0BpOp0z4g1efWh7BF2ublt54=;
+        s=korg; t=1643056754;
+        bh=xZVrHsD0rPsj3VwK4y+uOU/PgOon9I3CUjgItIi+HoA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=upMIpHhkNmWpMaX6NU7iZtLVorcDJt4SdV71UbpnYQSAlzxC9LtXsec5H81r9tfKk
-         MT0TKK8mKXiXHKucX0nGuXy8KtGx9QOaMjtBoH51wt3+9+nwt4LOBvsWpvv24obIns
-         RyKllc98E57kE2z2b0GI0jnaSW/3GKzsaP3u7WPk=
+        b=aWqWlVkA1aMCIQjP1zEkg/dfjAxzdYq9qZNpEf61YK4nWSeo9Sf6NvhKOtaMhACTK
+         7tekrEJ+/SblIYVpt0SJS2GOf2pb8p1pNL8KqyI2o7Tco0q7B8SVCMTSC0pxD96TGs
+         RaZ5oDI5sxwz4U0iL0VEqVRwZiWcEaNONQyEohms=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, James Hilliard <james.hilliard1@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org,
+        Mark Asselstine <mark.asselstine@windriver.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Bob Moore <robert.moore@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 342/563] media: uvcvideo: Increase UVC_CTRL_CONTROL_TIMEOUT to 5 seconds.
+Subject: [PATCH 5.15 590/846] ACPICA: Utilities: Avoid deleting the same object twice in a row
 Date:   Mon, 24 Jan 2022 19:41:47 +0100
-Message-Id: <20220124184036.250507367@linuxfoundation.org>
+Message-Id: <20220124184121.389211625@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,43 +48,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Hilliard <james.hilliard1@gmail.com>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-[ Upstream commit c8ed7d2f614cd8b315981d116c7a2fb01829500d ]
+[ Upstream commit 1cdfe9e346b4c5509ffe19ccde880fd259d9f7a3 ]
 
-Some uvc devices appear to require the maximum allowed USB timeout
-for GET_CUR/SET_CUR requests.
+ACPICA commit c11af67d8f7e3d381068ce7771322f2b5324d687
 
-So lets just bump the UVC control timeout to 5 seconds which is the
-same as the usb ctrl get/set defaults:
-USB_CTRL_GET_TIMEOUT 5000
-USB_CTRL_SET_TIMEOUT 5000
+If original_count is 0 in acpi_ut_update_ref_count (),
+acpi_ut_delete_internal_obj () is invoked for the target object, which is
+incorrect, because that object has been deleted once already and the
+memory allocated to store it may have been reclaimed and allocated
+for a different purpose by the host OS.  Moreover, a confusing debug
+message following the "Reference Count is already zero, cannot
+decrement" warning is printed in that case.
 
-It fixes the following runtime warnings:
-   Failed to query (GET_CUR) UVC control 11 on unit 2: -110 (exp. 1).
-   Failed to query (SET_CUR) UVC control 3 on unit 2: -110 (exp. 2).
+To fix this issue, make acpi_ut_update_ref_count () return after finding
+that original_count is 0 and printing the above warning.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Link: https://github.com/acpica/acpica/commit/c11af67d
+Link: https://github.com/acpica/acpica/pull/652
+Reported-by: Mark Asselstine <mark.asselstine@windriver.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/uvc/uvcvideo.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/acpica/utdelete.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index a3dfacf069c44..c884020b28784 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -183,7 +183,7 @@
- /* Maximum status buffer size in bytes of interrupt URB. */
- #define UVC_MAX_STATUS_SIZE	16
+diff --git a/drivers/acpi/acpica/utdelete.c b/drivers/acpi/acpica/utdelete.c
+index e5ba9795ec696..8d7736d2d2699 100644
+--- a/drivers/acpi/acpica/utdelete.c
++++ b/drivers/acpi/acpica/utdelete.c
+@@ -422,6 +422,7 @@ acpi_ut_update_ref_count(union acpi_operand_object *object, u32 action)
+ 			ACPI_WARNING((AE_INFO,
+ 				      "Obj %p, Reference Count is already zero, cannot decrement\n",
+ 				      object));
++			return;
+ 		}
  
--#define UVC_CTRL_CONTROL_TIMEOUT	500
-+#define UVC_CTRL_CONTROL_TIMEOUT	5000
- #define UVC_CTRL_STREAMING_TIMEOUT	5000
- 
- /* Maximum allowed number of control mappings per device */
+ 		ACPI_DEBUG_PRINT_RAW((ACPI_DB_ALLOCATIONS,
 -- 
 2.34.1
 

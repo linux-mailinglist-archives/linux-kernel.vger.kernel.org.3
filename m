@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3AEF49961D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:16:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2F7499D1C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:16:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351874AbiAXU7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:59:17 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60552 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386929AbiAXUgI (ORCPT
+        id S1582313AbiAXWPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:15:05 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:42470 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1452896AbiAXV1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:36:08 -0500
+        Mon, 24 Jan 2022 16:27:23 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DD4061540;
-        Mon, 24 Jan 2022 20:36:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85476C340EB;
-        Mon, 24 Jan 2022 20:36:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F21D2B812A7;
+        Mon, 24 Jan 2022 21:27:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25F9AC340E4;
+        Mon, 24 Jan 2022 21:27:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056567;
-        bh=aXgAlWjFhuTYaGo0IQrs5NxFaBkHUtQAgDjh1OBwC9o=;
+        s=korg; t=1643059636;
+        bh=VugHGI8+6S85HjqW94JyGeLrIidA8ZW1E+7xFGmNbvY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eRDFt8ZChE/aVx24xQhSvrsG2lgkzOHdVgZYtgU6h+cRHaNrIzJSCbNh6La03XRod
-         9NJbZ0Zhkp+91aaEoQm77XXN7cnuwtP+UgV9pLd85Y4fIaUQZdBnFq+u7Q+yNFGSaa
-         kbusGGn81JLO5c5zS2kHKb047W/sDe2omT21okNU=
+        b=HwknhRKko4gRgnqWGES8sS/o3XUOfF0FeWg/QLttp1YG+Dnl3kOUJyB0xmjkP5hnj
+         EMAAvrceKAeQ62XG4sh3aJjhPAtKvaKkp0y/6zQ2fynfsl4fNTj5bF+ZR4MrxUx3yd
+         V/shXpUso9Ocw/1MzOTd9iOZ3ksblXJnUQTMyf3o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, rkardell@mida.se,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 527/846] media: m920x: dont use stack on USB reads
+Subject: [PATCH 5.16 0655/1039] mmc: tmio: reinit card irqs in reset routine
 Date:   Mon, 24 Jan 2022 19:40:44 +0100
-Message-Id: <20220124184119.182953737@linuxfoundation.org>
+Message-Id: <20220124184147.379482173@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,57 +48,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Biju Das <biju.das.jz@bp.renesas.com>
 
-[ Upstream commit a2ab06d7c4d6bfd0b545a768247a70463e977e27 ]
+[ Upstream commit e315b1f3a170f368da5618f8a598e68880302ed1 ]
 
-Using stack-allocated pointers for USB message data don't work.
-This driver is almost OK with that, except for the I2C read
-logic.
+Refactor the code so that card detect irqs are always reenabled after a
+reset. This avoids doing it manually all over the code or forgetting to
+do this in the future.
 
-Fix it by using a temporary read buffer, just like on all other
-calls to m920x_read().
-
-Link: https://lore.kernel.org/all/ccc99e48-de4f-045e-0fe4-61e3118e3f74@mida.se/
-Reported-by: rkardell@mida.se
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Reported-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+[wsa: added a comment when 'native_hotplug' has to be set]
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Link: https://lore.kernel.org/r/20211103122646.64422-1-wsa+renesas@sang-engineering.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb/m920x.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/mmc/host/tmio_mmc_core.c | 15 +++------------
+ 1 file changed, 3 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb/m920x.c b/drivers/media/usb/dvb-usb/m920x.c
-index 4bb5b82599a79..691e05833db19 100644
---- a/drivers/media/usb/dvb-usb/m920x.c
-+++ b/drivers/media/usb/dvb-usb/m920x.c
-@@ -274,6 +274,13 @@ static int m920x_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int nu
- 			/* Should check for ack here, if we knew how. */
- 		}
- 		if (msg[i].flags & I2C_M_RD) {
-+			char *read = kmalloc(1, GFP_KERNEL);
-+			if (!read) {
-+				ret = -ENOMEM;
-+				kfree(read);
-+				goto unlock;
-+			}
-+
- 			for (j = 0; j < msg[i].len; j++) {
- 				/* Last byte of transaction?
- 				 * Send STOP, otherwise send ACK. */
-@@ -281,9 +288,12 @@ static int m920x_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int nu
+diff --git a/drivers/mmc/host/tmio_mmc_core.c b/drivers/mmc/host/tmio_mmc_core.c
+index e2affa52ef469..a5850d83908be 100644
+--- a/drivers/mmc/host/tmio_mmc_core.c
++++ b/drivers/mmc/host/tmio_mmc_core.c
+@@ -960,14 +960,8 @@ static void tmio_mmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+ 	case MMC_POWER_OFF:
+ 		tmio_mmc_power_off(host);
+ 		/* For R-Car Gen2+, we need to reset SDHI specific SCC */
+-		if (host->pdata->flags & TMIO_MMC_MIN_RCAR2) {
+-			host->reset(host);
+-
+-			if (host->native_hotplug)
+-				tmio_mmc_enable_mmc_irqs(host,
+-						TMIO_STAT_CARD_REMOVE |
+-						TMIO_STAT_CARD_INSERT);
+-		}
++		if (host->pdata->flags & TMIO_MMC_MIN_RCAR2)
++			tmio_mmc_reset(host);
  
- 				if ((ret = m920x_read(d->udev, M9206_I2C, 0x0,
- 						      0x20 | stop,
--						      &msg[i].buf[j], 1)) != 0)
-+						      read, 1)) != 0)
- 					goto unlock;
-+				msg[i].buf[j] = read[0];
- 			}
-+
-+			kfree(read);
- 		} else {
- 			for (j = 0; j < msg[i].len; j++) {
- 				/* Last byte of transaction? Then send STOP. */
+ 		host->set_clock(host, 0);
+ 		break;
+@@ -1175,6 +1169,7 @@ int tmio_mmc_host_probe(struct tmio_mmc_host *_host)
+ 	if (mmc_can_gpio_cd(mmc))
+ 		_host->ops.get_cd = mmc_gpio_get_cd;
+ 
++	/* must be set before tmio_mmc_reset() */
+ 	_host->native_hotplug = !(mmc_can_gpio_cd(mmc) ||
+ 				  mmc->caps & MMC_CAP_NEEDS_POLL ||
+ 				  !mmc_card_is_removable(mmc));
+@@ -1295,10 +1290,6 @@ int tmio_mmc_host_runtime_resume(struct device *dev)
+ 	if (host->clk_cache)
+ 		host->set_clock(host, host->clk_cache);
+ 
+-	if (host->native_hotplug)
+-		tmio_mmc_enable_mmc_irqs(host,
+-				TMIO_STAT_CARD_REMOVE | TMIO_STAT_CARD_INSERT);
+-
+ 	tmio_mmc_enable_dma(host, true);
+ 
+ 	return 0;
 -- 
 2.34.1
 

@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F95499BE1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFF9499AAC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1576789AbiAXV4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:56:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51566 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1450887AbiAXVVn (ORCPT
+        id S1573748AbiAXVpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:45:45 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59654 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1446321AbiAXVHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:21:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EC0C0604E4;
-        Mon, 24 Jan 2022 12:16:36 -0800 (PST)
+        Mon, 24 Jan 2022 16:07:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB845611CD;
-        Mon, 24 Jan 2022 20:16:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D425BC340E5;
-        Mon, 24 Jan 2022 20:16:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3AD77B812A4;
+        Mon, 24 Jan 2022 21:07:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DD39C340E5;
+        Mon, 24 Jan 2022 21:07:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055395;
-        bh=QA8+oOIsCW4SEIRGEnJ6v+finhlrCS8bNEytK881OKw=;
+        s=korg; t=1643058470;
+        bh=KcnNIjP6Rz+rHunKoXuupK88UPEDoviX5kS4HSHMa6E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M3d0zvkQjcGslb1qbw+C8LbdHJPk8khVuCa8PFClLorIAbxwtSALlsnD8cQnwWZaE
-         06kI9dO7F1zD5A0UIZ7H+ZCoKCIrI1QgoTVPHSW3IAhh9X80cIT+uMD3Z4T87XPP8g
-         GFGXGZGYgWGLSEcMHmKhPMZ+csCLYNXKJcWYVIT4=
+        b=Pyuu7nsxmi7ZJDdcmi4SS2H/UbkpTuCrzfex8B8HZyOkmK9zORobpaDnY/Cz+/Aik
+         JDu9O/bEMFIXEvqH7oqrulsMLwsPh9pXerF/ru/4SPsG8ABkSeJzj+IluFN1q49AxP
+         fEq7YP+hdfaRHQqZujwNyTwUe3wOnZ6UCoSOz/5c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wolfgang Ocker <weo@reccoware.de>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 137/846] crypto: atmel-aes - Reestablish the correct tfm context at dequeue
-Date:   Mon, 24 Jan 2022 19:34:14 +0100
-Message-Id: <20220124184105.717837467@linuxfoundation.org>
+Subject: [PATCH 5.16 0266/1039] xfrm: fix a small bug in xfrm_sa_len()
+Date:   Mon, 24 Jan 2022 19:34:15 +0100
+Message-Id: <20220124184134.247461826@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,74 +46,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tudor Ambarus <tudor.ambarus@microchip.com>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit 6d48de655917a9d782953eba65de4e3db593ddf0 ]
+[ Upstream commit 7770a39d7c63faec6c4f33666d49a8cb664d0482 ]
 
-In case there were more requests from different tfms in the crypto
-queue, only the context of the last initialized tfm was considered.
+copy_user_offload() will actually push a struct struct xfrm_user_offload,
+which is different than (struct xfrm_state *)->xso
+(struct xfrm_state_offload)
 
-Fixes: ec2088b66f7a ("crypto: atmel-aes - Allocate aes dev at tfm init time")
-Reported-by: Wolfgang Ocker <weo@reccoware.de>
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Fixes: d77e38e612a01 ("xfrm: Add an IPsec hardware offloading API")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: Steffen Klassert <steffen.klassert@secunet.com>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/atmel-aes.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ net/xfrm/xfrm_user.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/crypto/atmel-aes.c b/drivers/crypto/atmel-aes.c
-index 9391ccc03382d..fe05584031914 100644
---- a/drivers/crypto/atmel-aes.c
-+++ b/drivers/crypto/atmel-aes.c
-@@ -960,6 +960,7 @@ static int atmel_aes_handle_queue(struct atmel_aes_dev *dd,
- 	ctx = crypto_tfm_ctx(areq->tfm);
- 
- 	dd->areq = areq;
-+	dd->ctx = ctx;
- 	start_async = (areq != new_areq);
- 	dd->is_async = start_async;
- 
-@@ -1274,7 +1275,6 @@ static int atmel_aes_init_tfm(struct crypto_skcipher *tfm)
- 
- 	crypto_skcipher_set_reqsize(tfm, sizeof(struct atmel_aes_reqctx));
- 	ctx->base.dd = dd;
--	ctx->base.dd->ctx = &ctx->base;
- 	ctx->base.start = atmel_aes_start;
- 
- 	return 0;
-@@ -1291,7 +1291,6 @@ static int atmel_aes_ctr_init_tfm(struct crypto_skcipher *tfm)
- 
- 	crypto_skcipher_set_reqsize(tfm, sizeof(struct atmel_aes_reqctx));
- 	ctx->base.dd = dd;
--	ctx->base.dd->ctx = &ctx->base;
- 	ctx->base.start = atmel_aes_ctr_start;
- 
- 	return 0;
-@@ -1783,7 +1782,6 @@ static int atmel_aes_gcm_init(struct crypto_aead *tfm)
- 
- 	crypto_aead_set_reqsize(tfm, sizeof(struct atmel_aes_reqctx));
- 	ctx->base.dd = dd;
--	ctx->base.dd->ctx = &ctx->base;
- 	ctx->base.start = atmel_aes_gcm_start;
- 
- 	return 0;
-@@ -1927,7 +1925,6 @@ static int atmel_aes_xts_init_tfm(struct crypto_skcipher *tfm)
- 	crypto_skcipher_set_reqsize(tfm, sizeof(struct atmel_aes_reqctx) +
- 				    crypto_skcipher_reqsize(ctx->fallback_tfm));
- 	ctx->base.dd = dd;
--	ctx->base.dd->ctx = &ctx->base;
- 	ctx->base.start = atmel_aes_xts_start;
- 
- 	return 0;
-@@ -2154,7 +2151,6 @@ static int atmel_aes_authenc_init_tfm(struct crypto_aead *tfm,
- 	crypto_aead_set_reqsize(tfm, (sizeof(struct atmel_aes_authenc_reqctx) +
- 				      auth_reqsize));
- 	ctx->base.dd = dd;
--	ctx->base.dd->ctx = &ctx->base;
- 	ctx->base.start = atmel_aes_authenc_start;
- 
- 	return 0;
+diff --git a/net/xfrm/xfrm_user.c b/net/xfrm/xfrm_user.c
+index 7c36cc1f3d79c..0a2d2bae28316 100644
+--- a/net/xfrm/xfrm_user.c
++++ b/net/xfrm/xfrm_user.c
+@@ -3058,7 +3058,7 @@ static inline unsigned int xfrm_sa_len(struct xfrm_state *x)
+ 	if (x->props.extra_flags)
+ 		l += nla_total_size(sizeof(x->props.extra_flags));
+ 	if (x->xso.dev)
+-		 l += nla_total_size(sizeof(x->xso));
++		 l += nla_total_size(sizeof(struct xfrm_user_offload));
+ 	if (x->props.smark.v | x->props.smark.m) {
+ 		l += nla_total_size(sizeof(x->props.smark.v));
+ 		l += nla_total_size(sizeof(x->props.smark.m));
 -- 
 2.34.1
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3397C49A773
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD9049A2E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:01:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234421AbiAYCn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:43:59 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60962 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387511AbiAXUgy (ORCPT
+        id S1385641AbiAXXyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:54:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50562 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1846507AbiAXXQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:36:54 -0500
+        Mon, 24 Jan 2022 18:16:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705E3C0617AF;
+        Mon, 24 Jan 2022 13:25:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D44361546;
-        Mon, 24 Jan 2022 20:36:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D811C340E5;
-        Mon, 24 Jan 2022 20:36:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E7BCB80FA1;
+        Mon, 24 Jan 2022 21:25:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64EF2C340E4;
+        Mon, 24 Jan 2022 21:25:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056612;
-        bh=AzZzTaPLBytSIFpEEogcfchQ2/fux3GJjwxbAzq4ws8=;
+        s=korg; t=1643059506;
+        bh=95GCpHGKqrDOnTHDjBov/AgE51i+C6JljTvU42fCrk4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rjZxGvOd1ZXemvcsA8o2yQ/Jc9CZuY4IpThSb/e1wnnyChXqek1zsSZoELyQ9Glks
-         EFlY6MPvkVrE4Qk0VguoLvHtYqcy/4QnTgKI2D6teY0xBpMS3NzJc53noGY332bSJD
-         tHaTMoB80UpHtSnr74ZBJY5jNJ1RBsPc+ClVAMdI=
+        b=z4NS6efURP0DlEy7fVX7+6b95kK3x930Tpc9r3mkRdBzpMtF7c7dDkVmWtTga40cg
+         PsQwXa86ubDQhaPxa/nwCSL1korZiQbo61LMEooWgWoASVeVJTm+drQwokBmC6FLRD
+         /ehP7Aj1FkXj8+3QfUb7B6EpkAgaT1qcyrMG+lNM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, Baochen Qiang <quic_bqiang@quicinc.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 509/846] media: venus: avoid calling core_clk_setrate() concurrently during concurrent video sessions
-Date:   Mon, 24 Jan 2022 19:40:26 +0100
-Message-Id: <20220124184118.583654172@linuxfoundation.org>
+Subject: [PATCH 5.16 0638/1039] ath11k: Avoid false DEADLOCK warning reported by lockdep
+Date:   Mon, 24 Jan 2022 19:40:27 +0100
+Message-Id: <20220124184146.802594787@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,207 +49,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mansur Alisha Shaik <mansur@codeaurora.org>
+From: Baochen Qiang <quic_bqiang@quicinc.com>
 
-[ Upstream commit 91f2b7d269e5c885c38c7ffa261f5276bd42f907 ]
+[ Upstream commit 767c94caf0efad136157110787fe221b74cb5c8a ]
 
-In existing implementation, core_clk_setrate() is getting called
-concurrently in concurrent video sessions. Before the previous call to
-core_clk_setrate returns, new call to core_clk_setrate is invoked from
-another video session running concurrently. This results in latest
-calculated frequency being set (higher/lower) instead of actual frequency
-required for that video session. It also results in stability crashes
-mention below. These resources are specific to video core, hence keeping
-under core lock would ensure that they are estimated for all running video
-sessions and called once for the video core.
+With CONFIG_LOCKDEP=y and CONFIG_DEBUG_SPINLOCK=y, lockdep reports
+below warning:
 
-Crash logs:
+[  166.059415] ============================================
+[  166.059416] WARNING: possible recursive locking detected
+[  166.059418] 5.15.0-wt-ath+ #10 Tainted: G        W  O
+[  166.059420] --------------------------------------------
+[  166.059421] kworker/0:2/116 is trying to acquire lock:
+[  166.059423] ffff9905f2083160 (&srng->lock){+.-.}-{2:2}, at: ath11k_hal_reo_cmd_send+0x20/0x490 [ath11k]
+[  166.059440]
+               but task is already holding lock:
+[  166.059442] ffff9905f2083230 (&srng->lock){+.-.}-{2:2}, at: ath11k_dp_process_reo_status+0x95/0x2d0 [ath11k]
+[  166.059491]
+               other info that might help us debug this:
+[  166.059492]  Possible unsafe locking scenario:
 
-[    1.900089] WARNING: CPU: 4 PID: 1 at drivers/opp/debugfs.c:33 opp_debug_remove_one+0x2c/0x48
-[    1.908493] Modules linked in:
-[    1.911524] CPU: 4 PID: 1 Comm: swapper/0 Not tainted 5.10.67 #35 f8edb8c30cf2dd6838495dd9ef9be47af7f5f60c
-[    1.921036] Hardware name: Qualcomm Technologies, Inc. sc7280 IDP SKU2 platform (DT)
-[    1.928673] pstate: 60800009 (nZCv daif -PAN +UAO -TCO BTYPE=--)
-[    1.934608] pc : opp_debug_remove_one+0x2c/0x48
-[    1.939080] lr : opp_debug_remove_one+0x2c/0x48
-[    1.943560] sp : ffffffc011d7b7f0
-[    1.946836] pmr_save: 000000e0
-[    1.949854] x29: ffffffc011d7b7f0 x28: ffffffc010733bbc
-[    1.955104] x27: ffffffc010733ba8 x26: ffffff8083cedd00
-[    1.960355] x25: 0000000000000001 x24: 0000000000000000
-[    1.965603] x23: ffffff8083cc2878 x22: ffffff8083ceb900
-[    1.970852] x21: ffffff8083ceb910 x20: ffffff8083cc2800
-[    1.976101] x19: ffffff8083ceb900 x18: 00000000ffff0a10
-[    1.981352] x17: ffffff80837a5620 x16: 00000000000000ec
-[    1.986601] x15: ffffffc010519ad4 x14: 0000000000000003
-[    1.991849] x13: 0000000000000004 x12: 0000000000000001
-[    1.997100] x11: c0000000ffffdfff x10: 00000000ffffffff
-[    2.002348] x9 : d2627c580300dc00 x8 : d2627c580300dc00
-[    2.007596] x7 : 0720072007200720 x6 : ffffff80802ecf00
-[    2.012845] x5 : 0000000000190004 x4 : 0000000000000000
-[    2.018094] x3 : ffffffc011d7b478 x2 : ffffffc011d7b480
-[    2.023343] x1 : 00000000ffffdfff x0 : 0000000000000017
-[    2.028594] Call trace:
-[    2.031022]  opp_debug_remove_one+0x2c/0x48
-[    2.035160]  dev_pm_opp_put+0x94/0xb0
-[    2.038780]  _opp_remove_all+0x7c/0xc8
-[    2.042486]  _opp_remove_all_static+0x54/0x7c
-[    2.046796]  dev_pm_opp_remove_table+0x74/0x98
-[    2.051183]  devm_pm_opp_of_table_release+0x18/0x24
-[    2.056001]  devm_action_release+0x1c/0x28
-[    2.060053]  release_nodes+0x23c/0x2b8
-[    2.063760]  devres_release_group+0xcc/0xd0
-[    2.067900]  component_bind+0xac/0x168
-[    2.071608]  component_bind_all+0x98/0x124
-[    2.075664]  msm_drm_bind+0x1e8/0x678
-[    2.079287]  try_to_bring_up_master+0x60/0x134
-[    2.083674]  component_master_add_with_match+0xd8/0x120
-[    2.088834]  msm_pdev_probe+0x20c/0x2a0
-[    2.092629]  platform_drv_probe+0x9c/0xbc
-[    2.096598]  really_probe+0x11c/0x46c
-[    2.100217]  driver_probe_device+0x8c/0xf0
-[    2.104270]  device_driver_attach+0x54/0x78
-[    2.108407]  __driver_attach+0x48/0x148
-[    2.112201]  bus_for_each_dev+0x88/0xd4
-[    2.115998]  driver_attach+0x2c/0x38
-[    2.119534]  bus_add_driver+0x10c/0x200
-[    2.123330]  driver_register+0x6c/0x104
-[    2.127122]  __platform_driver_register+0x4c/0x58
-[    2.131767]  msm_drm_register+0x6c/0x70
-[    2.135560]  do_one_initcall+0x64/0x23c
-[    2.139357]  do_initcall_level+0xac/0x15c
-[    2.143321]  do_initcalls+0x5c/0x9c
-[    2.146778]  do_basic_setup+0x2c/0x38
-[    2.150401]  kernel_init_freeable+0xf8/0x15c
-[    2.154622]  kernel_init+0x1c/0x11c
-[    2.158079]  ret_from_fork+0x10/0x30
-[    2.161615] ---[ end trace a2cc45a0f784b212 ]---
+[  166.059493]        CPU0
+[  166.059494]        ----
+[  166.059495]   lock(&srng->lock);
+[  166.059498]   lock(&srng->lock);
+[  166.059500]
+                *** DEADLOCK ***
 
-[    2.166272] Removing OPP: 300000000
+[  166.059501]  May be due to missing lock nesting notation
 
-Signed-off-by: Mansur Alisha Shaik <mansur@codeaurora.org>
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+[  166.059502] 3 locks held by kworker/0:2/116:
+[  166.059504]  #0: ffff9905c0081548 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x1f6/0x660
+[  166.059511]  #1: ffff9d2400a5fe68 ((debug_obj_work).work){+.+.}-{0:0}, at: process_one_work+0x1f6/0x660
+[  166.059517]  #2: ffff9905f2083230 (&srng->lock){+.-.}-{2:2}, at: ath11k_dp_process_reo_status+0x95/0x2d0 [ath11k]
+[  166.059532]
+               stack backtrace:
+[  166.059534] CPU: 0 PID: 116 Comm: kworker/0:2 Kdump: loaded Tainted: G        W  O      5.15.0-wt-ath+ #10
+[  166.059537] Hardware name: Intel(R) Client Systems NUC8i7HVK/NUC8i7HVB, BIOS HNKBLi70.86A.0059.2019.1112.1124 11/12/2019
+[  166.059539] Workqueue: events free_obj_work
+[  166.059543] Call Trace:
+[  166.059545]  <IRQ>
+[  166.059547]  dump_stack_lvl+0x56/0x7b
+[  166.059552]  __lock_acquire+0xb9a/0x1a50
+[  166.059556]  lock_acquire+0x1e2/0x330
+[  166.059560]  ? ath11k_hal_reo_cmd_send+0x20/0x490 [ath11k]
+[  166.059571]  _raw_spin_lock_bh+0x33/0x70
+[  166.059574]  ? ath11k_hal_reo_cmd_send+0x20/0x490 [ath11k]
+[  166.059584]  ath11k_hal_reo_cmd_send+0x20/0x490 [ath11k]
+[  166.059594]  ath11k_dp_tx_send_reo_cmd+0x3f/0x130 [ath11k]
+[  166.059605]  ath11k_dp_rx_tid_del_func+0x221/0x370 [ath11k]
+[  166.059618]  ath11k_dp_process_reo_status+0x22f/0x2d0 [ath11k]
+[  166.059632]  ? ath11k_dp_service_srng+0x2ea/0x2f0 [ath11k]
+[  166.059643]  ath11k_dp_service_srng+0x2ea/0x2f0 [ath11k]
+[  166.059655]  ath11k_pci_ext_grp_napi_poll+0x1c/0x70 [ath11k_pci]
+[  166.059659]  __napi_poll+0x28/0x230
+[  166.059664]  net_rx_action+0x285/0x310
+[  166.059668]  __do_softirq+0xe6/0x4d2
+[  166.059672]  irq_exit_rcu+0xd2/0xf0
+[  166.059675]  common_interrupt+0xa5/0xc0
+[  166.059678]  </IRQ>
+[  166.059679]  <TASK>
+[  166.059680]  asm_common_interrupt+0x1e/0x40
+[  166.059683] RIP: 0010:_raw_spin_unlock_irqrestore+0x38/0x70
+[  166.059686] Code: 83 c7 18 e8 2a 95 43 ff 48 89 ef e8 22 d2 43 ff 81 e3 00 02 00 00 75 25 9c 58 f6 c4 02 75 2d 48 85 db 74 01 fb bf 01 00 00 00 <e8> 63 2e 40 ff 65 8b 05 8c 59 97 5c 85 c0 74 0a 5b 5d c3 e8 00 6a
+[  166.059689] RSP: 0018:ffff9d2400a5fca0 EFLAGS: 00000206
+[  166.059692] RAX: 0000000000000002 RBX: 0000000000000200 RCX: 0000000000000006
+[  166.059694] RDX: 0000000000000000 RSI: ffffffffa404879b RDI: 0000000000000001
+[  166.059696] RBP: ffff9905c0053000 R08: 0000000000000001 R09: 0000000000000001
+[  166.059698] R10: ffff9d2400a5fc50 R11: 0000000000000001 R12: ffffe186c41e2840
+[  166.059700] R13: 0000000000000001 R14: ffff9905c78a1c68 R15: 0000000000000001
+[  166.059704]  free_debug_processing+0x257/0x3d0
+[  166.059708]  ? free_obj_work+0x1f5/0x250
+[  166.059712]  __slab_free+0x374/0x5a0
+[  166.059718]  ? kmem_cache_free+0x2e1/0x370
+[  166.059721]  ? free_obj_work+0x1f5/0x250
+[  166.059724]  kmem_cache_free+0x2e1/0x370
+[  166.059727]  free_obj_work+0x1f5/0x250
+[  166.059731]  process_one_work+0x28b/0x660
+[  166.059735]  ? process_one_work+0x660/0x660
+[  166.059738]  worker_thread+0x37/0x390
+[  166.059741]  ? process_one_work+0x660/0x660
+[  166.059743]  kthread+0x176/0x1a0
+[  166.059746]  ? set_kthread_struct+0x40/0x40
+[  166.059749]  ret_from_fork+0x22/0x30
+[  166.059754]  </TASK>
+
+Since these two lockes are both initialized in ath11k_hal_srng_setup,
+they are assigned with the same key. As a result lockdep suspects that
+the task is trying to acquire the same lock (due to same key) while
+already holding it, and thus reports the DEADLOCK warning. However as
+they are different spinlock instances, the warning is false positive.
+
+On the other hand, even no dead lock indeed, this is a major issue for
+upstream regression testing as it disables lockdep functionality.
+
+Fix it by assigning separate lock class key for each srng->lock.
+
+Tested-on: WCN6855 hw2.0 PCI WLAN.HSP.1.1-01720.1-QCAHSPSWPL_V1_V2_SILICONZ_LITE-1
+Signed-off-by: Baochen Qiang <quic_bqiang@quicinc.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20211209011949.151472-1-quic_bqiang@quicinc.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../media/platform/qcom/venus/pm_helpers.c    | 28 +++++++++----------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+ drivers/net/wireless/ath/ath11k/hal.c | 22 ++++++++++++++++++++++
+ drivers/net/wireless/ath/ath11k/hal.h |  2 ++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index d382872bc8a08..a591dd315ebcc 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -163,14 +163,12 @@ static u32 load_per_type(struct venus_core *core, u32 session_type)
- 	struct venus_inst *inst = NULL;
- 	u32 mbs_per_sec = 0;
+diff --git a/drivers/net/wireless/ath/ath11k/hal.c b/drivers/net/wireless/ath/ath11k/hal.c
+index f04edafbd0f15..1832d13654a87 100644
+--- a/drivers/net/wireless/ath/ath11k/hal.c
++++ b/drivers/net/wireless/ath/ath11k/hal.c
+@@ -971,6 +971,7 @@ int ath11k_hal_srng_setup(struct ath11k_base *ab, enum hal_ring_type type,
+ 	srng->msi_data = params->msi_data;
+ 	srng->initialized = 1;
+ 	spin_lock_init(&srng->lock);
++	lockdep_set_class(&srng->lock, hal->srng_key + ring_id);
  
--	mutex_lock(&core->lock);
- 	list_for_each_entry(inst, &core->instances, list) {
- 		if (inst->session_type != session_type)
- 			continue;
- 
- 		mbs_per_sec += load_per_instance(inst);
- 	}
--	mutex_unlock(&core->lock);
- 
- 	return mbs_per_sec;
- }
-@@ -219,14 +217,12 @@ static int load_scale_bw(struct venus_core *core)
- 	struct venus_inst *inst = NULL;
- 	u32 mbs_per_sec, avg, peak, total_avg = 0, total_peak = 0;
- 
--	mutex_lock(&core->lock);
- 	list_for_each_entry(inst, &core->instances, list) {
- 		mbs_per_sec = load_per_instance(inst);
- 		mbs_to_bw(inst, mbs_per_sec, &avg, &peak);
- 		total_avg += avg;
- 		total_peak += peak;
- 	}
--	mutex_unlock(&core->lock);
- 
- 	/*
- 	 * keep minimum bandwidth vote for "video-mem" path,
-@@ -253,8 +249,9 @@ static int load_scale_v1(struct venus_inst *inst)
- 	struct device *dev = core->dev;
- 	u32 mbs_per_sec;
- 	unsigned int i;
--	int ret;
-+	int ret = 0;
- 
-+	mutex_lock(&core->lock);
- 	mbs_per_sec = load_per_type(core, VIDC_SESSION_TYPE_ENC) +
- 		      load_per_type(core, VIDC_SESSION_TYPE_DEC);
- 
-@@ -279,17 +276,19 @@ set_freq:
- 	if (ret) {
- 		dev_err(dev, "failed to set clock rate %lu (%d)\n",
- 			freq, ret);
--		return ret;
-+		goto exit;
- 	}
- 
- 	ret = load_scale_bw(core);
- 	if (ret) {
- 		dev_err(dev, "failed to set bandwidth (%d)\n",
- 			ret);
--		return ret;
-+		goto exit;
- 	}
- 
--	return 0;
-+exit:
-+	mutex_unlock(&core->lock);
-+	return ret;
+ 	for (i = 0; i < HAL_SRNG_NUM_REG_GRP; i++) {
+ 		srng->hwreg_base[i] = srng_config->reg_start[i] +
+@@ -1257,6 +1258,24 @@ static int ath11k_hal_srng_create_config(struct ath11k_base *ab)
+ 	return 0;
  }
  
- static int core_get_v1(struct venus_core *core)
-@@ -1116,13 +1115,13 @@ static int load_scale_v4(struct venus_inst *inst)
- 	struct device *dev = core->dev;
- 	unsigned long freq = 0, freq_core1 = 0, freq_core2 = 0;
- 	unsigned long filled_len = 0;
--	int i, ret;
-+	int i, ret = 0;
++static void ath11k_hal_register_srng_key(struct ath11k_base *ab)
++{
++	struct ath11k_hal *hal = &ab->hal;
++	u32 ring_id;
++
++	for (ring_id = 0; ring_id < HAL_SRNG_RING_ID_MAX; ring_id++)
++		lockdep_register_key(hal->srng_key + ring_id);
++}
++
++static void ath11k_hal_unregister_srng_key(struct ath11k_base *ab)
++{
++	struct ath11k_hal *hal = &ab->hal;
++	u32 ring_id;
++
++	for (ring_id = 0; ring_id < HAL_SRNG_RING_ID_MAX; ring_id++)
++		lockdep_unregister_key(hal->srng_key + ring_id);
++}
++
+ int ath11k_hal_srng_init(struct ath11k_base *ab)
+ {
+ 	struct ath11k_hal *hal = &ab->hal;
+@@ -1276,6 +1295,8 @@ int ath11k_hal_srng_init(struct ath11k_base *ab)
+ 	if (ret)
+ 		goto err_free_cont_rdp;
  
- 	for (i = 0; i < inst->num_input_bufs; i++)
- 		filled_len = max(filled_len, inst->payloads[i]);
++	ath11k_hal_register_srng_key(ab);
++
+ 	return 0;
  
- 	if (inst->session_type == VIDC_SESSION_TYPE_DEC && !filled_len)
--		return 0;
-+		return ret;
+ err_free_cont_rdp:
+@@ -1290,6 +1311,7 @@ void ath11k_hal_srng_deinit(struct ath11k_base *ab)
+ {
+ 	struct ath11k_hal *hal = &ab->hal;
  
- 	freq = calculate_inst_freq(inst, filled_len);
- 	inst->clk_data.freq = freq;
-@@ -1138,7 +1137,6 @@ static int load_scale_v4(struct venus_inst *inst)
- 			freq_core2 += inst->clk_data.freq;
- 		}
- 	}
--	mutex_unlock(&core->lock);
++	ath11k_hal_unregister_srng_key(ab);
+ 	ath11k_hal_free_cont_rdp(ab);
+ 	ath11k_hal_free_cont_wrp(ab);
+ 	kfree(hal->srng_config);
+diff --git a/drivers/net/wireless/ath/ath11k/hal.h b/drivers/net/wireless/ath/ath11k/hal.h
+index 0f4f9ce74354b..a7d9b4c551ada 100644
+--- a/drivers/net/wireless/ath/ath11k/hal.h
++++ b/drivers/net/wireless/ath/ath11k/hal.h
+@@ -902,6 +902,8 @@ struct ath11k_hal {
+ 	/* shadow register configuration */
+ 	u32 shadow_reg_addr[HAL_SHADOW_NUM_REGS];
+ 	int num_shadow_reg_configured;
++
++	struct lock_class_key srng_key[HAL_SRNG_RING_ID_MAX];
+ };
  
- 	freq = max(freq_core1, freq_core2);
- 
-@@ -1162,17 +1160,19 @@ set_freq:
- 	if (ret) {
- 		dev_err(dev, "failed to set clock rate %lu (%d)\n",
- 			freq, ret);
--		return ret;
-+		goto exit;
- 	}
- 
- 	ret = load_scale_bw(core);
- 	if (ret) {
- 		dev_err(dev, "failed to set bandwidth (%d)\n",
- 			ret);
--		return ret;
-+		goto exit;
- 	}
- 
--	return 0;
-+exit:
-+	mutex_unlock(&core->lock);
-+	return ret;
- }
- 
- static const struct venus_pm_ops pm_ops_v4 = {
+ u32 ath11k_hal_reo_qdesc_size(u32 ba_window_size, u8 tid);
 -- 
 2.34.1
 

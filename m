@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E6649974F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BBB14996D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:20:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448369AbiAXVMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:12:30 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40750 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388131AbiAXUiN (ORCPT
+        id S1444425AbiAXVHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:07:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1390235AbiAXUpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:38:13 -0500
+        Mon, 24 Jan 2022 15:45:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6BCC0613A6;
+        Mon, 24 Jan 2022 11:55:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9E19B81253;
-        Mon, 24 Jan 2022 20:38:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA01EC340E8;
-        Mon, 24 Jan 2022 20:38:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0B8960B56;
+        Mon, 24 Jan 2022 19:55:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A25BBC340E5;
+        Mon, 24 Jan 2022 19:55:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056690;
-        bh=HIy2u0y7M5fy3vdbc5cARgsiZf/zd6A7vjYEMM4cDAU=;
+        s=korg; t=1643054143;
+        bh=PgU5/HgFGDp/MIMNYfxiJlEP6GPrvT3oRWfVLrJRIoM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eakL+C5M+Rpf+fz9zHGdnHLzzibhAR6WDfoGw6HGHGuC4cx5SDQ5MGuO0x7YYh3iC
-         6Z7WypI78mZrw79fbIISD1V1bF3ohURleobxu/BYdmMeYhjFyj96FsuK9Xz15PQr7E
-         8luXl7D2dCfxiK1y4+OcYJVY8nfSgWn6WUDHHXhI=
+        b=MdzTBkhkguYTa89AYOnKMM3lWMalR5riuRh0svrELFsEjviCqOmQoTxs3nGaqfqja
+         shl/EC48zPmR5KTXn5WJfbMEHsrNQj39cZzgK7t6pZn0kINJI1nh3J9oFRsqKXeaaT
+         iSXBP6VZhdUUd6g+KmVqiqQDX0iu5W6pxUM1YrSA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Heidelberg <david@ixit.cz>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Alex Elder <elder@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Kamal Heib <kamalheib1@gmail.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 541/846] ARM: dts: qcom: sdx55: fix IPA interconnect definitions
+Subject: [PATCH 5.10 293/563] RDMA/cxgb4: Set queue pair state when being queried
 Date:   Mon, 24 Jan 2022 19:40:58 +0100
-Message-Id: <20220124184119.681627935@linuxfoundation.org>
+Message-Id: <20220124184034.578172665@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,45 +50,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Elder <elder@linaro.org>
+From: Kamal Heib <kamalheib1@gmail.com>
 
-[ Upstream commit c0d6316c238b1bd743108bd4b08eda364f47c7c9 ]
+[ Upstream commit e375b9c92985e409c4bb95dd43d34915ea7f5e28 ]
 
-The first two interconnects defined for IPA on the SDX55 SoC are
-really two parts of what should be represented as a single path
-between IPA and system memory.
+The API for ib_query_qp requires the driver to set cur_qp_state on return,
+add the missing set.
 
-Fix this by combining the "memory-a" and "memory-b" interconnects
-into a single "memory" interconnect.
-
-Reported-by: David Heidelberg <david@ixit.cz>
-Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Signed-off-by: Alex Elder <elder@linaro.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 67bbc05512d8 ("RDMA/cxgb4: Add query_qp support")
+Link: https://lore.kernel.org/r/20211220152530.60399-1-kamalheib1@gmail.com
+Signed-off-by: Kamal Heib <kamalheib1@gmail.com>
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/qcom-sdx55.dtsi | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/infiniband/hw/cxgb4/qp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/qcom-sdx55.dtsi b/arch/arm/boot/dts/qcom-sdx55.dtsi
-index 1e6ce035f76a9..b5b784c5c65e4 100644
---- a/arch/arm/boot/dts/qcom-sdx55.dtsi
-+++ b/arch/arm/boot/dts/qcom-sdx55.dtsi
-@@ -334,12 +334,10 @@
- 			clocks = <&rpmhcc RPMH_IPA_CLK>;
- 			clock-names = "core";
- 
--			interconnects = <&system_noc MASTER_IPA &system_noc SLAVE_SNOC_MEM_NOC_GC>,
--					<&mem_noc MASTER_SNOC_GC_MEM_NOC &mc_virt SLAVE_EBI_CH0>,
-+			interconnects = <&system_noc MASTER_IPA &mc_virt SLAVE_EBI_CH0>,
- 					<&system_noc MASTER_IPA &system_noc SLAVE_OCIMEM>,
- 					<&mem_noc MASTER_AMPSS_M0 &system_noc SLAVE_IPA_CFG>;
--			interconnect-names = "memory-a",
--					     "memory-b",
-+			interconnect-names = "memory",
- 					     "imem",
- 					     "config";
- 
+diff --git a/drivers/infiniband/hw/cxgb4/qp.c b/drivers/infiniband/hw/cxgb4/qp.c
+index 861e19fdfeb46..12e5461581cb4 100644
+--- a/drivers/infiniband/hw/cxgb4/qp.c
++++ b/drivers/infiniband/hw/cxgb4/qp.c
+@@ -2469,6 +2469,7 @@ int c4iw_ib_query_qp(struct ib_qp *ibqp, struct ib_qp_attr *attr,
+ 	memset(attr, 0, sizeof(*attr));
+ 	memset(init_attr, 0, sizeof(*init_attr));
+ 	attr->qp_state = to_ib_qp_state(qhp->attr.state);
++	attr->cur_qp_state = to_ib_qp_state(qhp->attr.state);
+ 	init_attr->cap.max_send_wr = qhp->attr.sq_num_entries;
+ 	init_attr->cap.max_recv_wr = qhp->attr.rq_num_entries;
+ 	init_attr->cap.max_send_sge = qhp->attr.sq_max_sges;
 -- 
 2.34.1
 

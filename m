@@ -2,43 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81640499112
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2A64992D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352085AbiAXUIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:08:55 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47446 "EHLO
+        id S1381788AbiAXUYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:24:45 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:48564 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350903AbiAXTug (ORCPT
+        with ESMTP id S240634AbiAXTvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:50:36 -0500
+        Mon, 24 Jan 2022 14:51:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9D7E60920;
-        Mon, 24 Jan 2022 19:50:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2803C340E5;
-        Mon, 24 Jan 2022 19:50:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90F336090A;
+        Mon, 24 Jan 2022 19:51:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71283C340E5;
+        Mon, 24 Jan 2022 19:51:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053833;
-        bh=P1FEAYpAUHwEE1RE/qP8LxkIT85JWa3N48CBRmLc0jU=;
+        s=korg; t=1643053881;
+        bh=EWuSD09ncRWFckeaGe1epERgKjEawSin+XEHc36Lp5E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bdLDwe/nhgeqexLnUky4q6uZMwMeaLQbBW2HTflr47B2ne60jDLa30engkCT8fA2i
-         ZNmNM7Wv3E9nBFjMhkiSz+w1gyzazt0OmU427BIJqumlDDV+lDH9XrL7BPoAh41Wx7
-         niVXk4fmrmJVUbdQhERLog9/UmuKkM6PmtDlcrlA=
+        b=Y7+c6ARAUg6fbnj0mtSJ9nWqwUYweW7GeW+p0YK9siKKhHYfoPQxmke0ZsO6/KLq1
+         biULhaoLoljGfW4QeXzkYrogcEpu0Ot619vCSuHoYgpJvsqQga4HIMYHKF7OwXXuTC
+         Cqj3KK3dLuQ9S/fAMUKmvFvgfsuT/5nxnHI42pkY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 192/563] backlight: qcom-wled: Override default length with qcom,enabled-strings
-Date:   Mon, 24 Jan 2022 19:39:17 +0100
-Message-Id: <20220124184031.069588962@linuxfoundation.org>
+Subject: [PATCH 5.10 206/563] bpf: Fix SO_RCVBUF/SO_SNDBUF handling in _bpf_setsockopt().
+Date:   Mon, 24 Jan 2022 19:39:31 +0100
+Message-Id: <20220124184031.552229798@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -50,62 +46,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marijn Suijten <marijn.suijten@somainline.org>
+From: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
 
-[ Upstream commit 2b4b49602f9feca7b7a84eaa33ad9e666c8aa695 ]
+[ Upstream commit 04c350b1ae6bdb12b84009a4d0bf5ab4e621c47b ]
 
-The length of qcom,enabled-strings as property array is enough to
-determine the number of strings to be enabled, without needing to set
-qcom,num-strings to override the default number of strings when less
-than the default (which is also the maximum) is provided in DT.
+The commit 4057765f2dee ("sock: consistent handling of extreme
+SO_SNDBUF/SO_RCVBUF values") added a change to prevent underflow
+in setsockopt() around SO_SNDBUF/SO_RCVBUF.
 
-This also introduces an extra warning when qcom,num-strings is set,
-denoting that it is not necessary to set both anymore.  It is usually
-more concise to set just qcom,num-length when a zero-based, contiguous
-range of strings is needed (the majority of the cases), or to only set
-qcom,enabled-strings when a specific set of indices is desired.
+This patch adds the same change to _bpf_setsockopt().
 
-Fixes: 775d2ffb4af6 ("backlight: qcom-wled: Restructure the driver for WLED3")
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Link: https://lore.kernel.org/r/20211115203459.1634079-6-marijn.suijten@somainline.org
+Fixes: 4057765f2dee ("sock: consistent handling of extreme SO_SNDBUF/SO_RCVBUF values")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/20220104013153.97906-2-kuniyu@amazon.co.jp
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/backlight/qcom-wled.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ net/core/filter.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/video/backlight/qcom-wled.c b/drivers/video/backlight/qcom-wled.c
-index 9e09165984b48..70fcee74866a5 100644
---- a/drivers/video/backlight/qcom-wled.c
-+++ b/drivers/video/backlight/qcom-wled.c
-@@ -1521,6 +1521,8 @@ static int wled_configure(struct wled *wled)
- 				return -EINVAL;
- 			}
- 		}
-+
-+		cfg->num_strings = string_len;
- 	}
- 
- 	rc = of_property_read_u32(dev->of_node, "qcom,num-strings", &val);
-@@ -1531,9 +1533,13 @@ static int wled_configure(struct wled *wled)
- 			return -EINVAL;
- 		}
- 
--		if (string_len > 0 && val > string_len) {
--			dev_err(dev, "qcom,num-strings exceeds qcom,enabled-strings\n");
--			return -EINVAL;
-+		if (string_len > 0) {
-+			dev_warn(dev, "Only one of qcom,num-strings or qcom,enabled-strings"
-+				      " should be set\n");
-+			if (val > string_len) {
-+				dev_err(dev, "qcom,num-strings exceeds qcom,enabled-strings\n");
-+				return -EINVAL;
-+			}
- 		}
- 
- 		cfg->num_strings = val;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index abd58dce49bbc..706c31ae65b01 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4711,12 +4711,14 @@ static int _bpf_setsockopt(struct sock *sk, int level, int optname,
+ 		switch (optname) {
+ 		case SO_RCVBUF:
+ 			val = min_t(u32, val, sysctl_rmem_max);
++			val = min_t(int, val, INT_MAX / 2);
+ 			sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
+ 			WRITE_ONCE(sk->sk_rcvbuf,
+ 				   max_t(int, val * 2, SOCK_MIN_RCVBUF));
+ 			break;
+ 		case SO_SNDBUF:
+ 			val = min_t(u32, val, sysctl_wmem_max);
++			val = min_t(int, val, INT_MAX / 2);
+ 			sk->sk_userlocks |= SOCK_SNDBUF_LOCK;
+ 			WRITE_ONCE(sk->sk_sndbuf,
+ 				   max_t(int, val * 2, SOCK_MIN_SNDBUF));
 -- 
 2.34.1
 

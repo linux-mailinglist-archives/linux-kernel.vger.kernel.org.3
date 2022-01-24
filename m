@@ -2,90 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02404497E8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:10:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB9C497EB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:12:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238412AbiAXMK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 07:10:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
+        id S238278AbiAXMMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 07:12:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238278AbiAXMKN (ORCPT
+        with ESMTP id S233792AbiAXMM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:10:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C113C06173B;
-        Mon, 24 Jan 2022 04:10:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 38D72B80F91;
-        Mon, 24 Jan 2022 12:10:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E0ACAC340EB;
-        Mon, 24 Jan 2022 12:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643026210;
-        bh=IfvTnE0SElEHHi2ltg3BcoNG0+vnUbVnatoPsazTfrA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ZLj8jiXKiBJXx4rz5XwFYC7F2XjUZnGHfOJboWp8mjLqhmW+yZQD2itVrdnb1VIft
-         GLVgY46o0Dbbn16NiSQTZDOtYXLvfTl4mRvhnEYve2lkrO5A6wUomuuA24A2RoeKd1
-         knerznu2BY2pSImVwzTmYwOgRrz+vPrC6/wNAZs7wttp3q7XJmUK6lNRkgqiSAJkYN
-         SN2ldaD2kxs8bUffx/pGX/6MHRAca7Nc2jjiTKmEWfBjeu50AdkX4FboYaQ0CQsL/O
-         aguooll5IwUjpo613xGDw/Qjzaq8PSzh8tP1s6p5GkgS4K9p4KnEU4MbCPQSrszpWo
-         lxEejI2Tu2KMw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C3CDFC395DF;
-        Mon, 24 Jan 2022 12:10:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 24 Jan 2022 07:12:28 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A289C06173D
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 04:12:28 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id s13so20808581ejy.3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 04:12:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=EF33JaMG+hm3D3rC4FKnXqraG6SkDY8uCv7rbWwdgXo=;
+        b=h9kOSUGdVE4gKL9s/LJMs1IPT3IbpeWYBrpfv+AuECTvZC/d9Mgmj+8/qzAF3eXbfK
+         m2PtizTIvCHLxd6Gr7Fy05dMKmmlLLy4fEUmMzmo48gVyiHxEhPLV4MLyO9oPA3wQplh
+         Vu1eRpEh9FNcwp+b/0xm/G3Q5QeqPlP25zblpv7pn1fhf7z/jOebqtlWaC7aW9HA3fhF
+         VjHo7lvhY7/oUqkPSCrDzarLxSsOAQnP9tESF52Jr02HUzNrium0qVdHZa1C0dYGAGE8
+         mDJhzJkStQMJW3cmp/Q9xzv797988P0T7BpUMuqWmKMM8P4QGKIRCVs93TY4AR01o66n
+         x2fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=EF33JaMG+hm3D3rC4FKnXqraG6SkDY8uCv7rbWwdgXo=;
+        b=t+Zy6IDGt/3Mp08T1VvTcSljMn3jZLkjh5flyQr3hXf6aFawUGWSNRy+o1hFqp1lhE
+         Kbn5oIBkGiJFzDZXCeqG9T8QvI0Q/NGPWT0oDPye4QnnRbFHVQMZYb61pZCd9jMkZ8ZW
+         /+ZsBN7SlynIsFGKhyTcfQbpMBaEgire8r7zbm+pJmigCQTyUbQEUkVrs9gGJ74HXvEf
+         YdozkMwPaXYqp2czFshn3Qufk6IAGp0gLiKLVpJuP2UeXX41VzbkmphrZ9wnjfVl+cSz
+         RBu4bnv/wgzqpu8MNcivSmye/F4JPGQcDdmAUCfUXczFZqqk2L5uZpI12vda57gVJlk+
+         x1vw==
+X-Gm-Message-State: AOAM530In8MUkLfoOZzCU05iJ4LOBLG4cQUjeKavXwcsP+jQSUSMJiLB
+        o/jgbANtrQHybsUoOPXjbYIdfg==
+X-Google-Smtp-Source: ABdhPJyQSddN36xdAtpIRActuatI3ilXCh3FopeB7M5+U2SlQv66S7Fj/8y3ScreZHIH5mQGHDw6Ng==
+X-Received: by 2002:a17:906:c099:: with SMTP id f25mr12755359ejz.458.1643026346842;
+        Mon, 24 Jan 2022 04:12:26 -0800 (PST)
+Received: from ?IPV6:2a02:768:2307:40d6::f9e? ([2a02:768:2307:40d6::f9e])
+        by smtp.gmail.com with ESMTPSA id gu2sm4768438ejb.221.2022.01.24.04.12.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Jan 2022 04:12:26 -0800 (PST)
+Message-ID: <9e98c6c9-36a8-046a-b195-78942fdcafff@monstr.eu>
+Date:   Mon, 24 Jan 2022 13:12:25 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2] net/smc: Transitional solution for clcsock race issue
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164302621079.19022.3641686752810483922.git-patchwork-notify@kernel.org>
-Date:   Mon, 24 Jan 2022 12:10:10 +0000
-References: <1642844589-23022-1-git-send-email-guwen@linux.alibaba.com>
-In-Reply-To: <1642844589-23022-1-git-send-email-guwen@linux.alibaba.com>
-To:     Wen Gu <guwen@linux.alibaba.com>
-Cc:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1] microblaze/PCI: Remove pci_phys_mem_access_prot() dead
+ code
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20220121205150.1151607-1-helgaas@kernel.org>
+From:   Michal Simek <monstr@monstr.eu>
+In-Reply-To: <20220121205150.1151607-1-helgaas@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
 
-On Sat, 22 Jan 2022 17:43:09 +0800 you wrote:
-> We encountered a crash in smc_setsockopt() and it is caused by
-> accessing smc->clcsock after clcsock was released.
+On 1/21/22 21:51, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
 > 
->  BUG: kernel NULL pointer dereference, address: 0000000000000020
->  #PF: supervisor read access in kernel mode
->  #PF: error_code(0x0000) - not-present page
->  PGD 0 P4D 0
->  Oops: 0000 [#1] PREEMPT SMP PTI
->  CPU: 1 PID: 50309 Comm: nginx Kdump: loaded Tainted: G E     5.16.0-rc4+ #53
->  RIP: 0010:smc_setsockopt+0x59/0x280 [smc]
->  Call Trace:
->   <TASK>
->   __sys_setsockopt+0xfc/0x190
->   __x64_sys_setsockopt+0x20/0x30
->   do_syscall_64+0x34/0x90
->   entry_SYSCALL_64_after_hwframe+0x44/0xae
->  RIP: 0033:0x7f16ba83918e
->   </TASK>
+> pci_phys_mem_access_prot() is defined but never used.  Remove it.
 > 
-> [...]
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> ---
+>   arch/microblaze/include/asm/pci.h |  4 ---
+>   arch/microblaze/pci/pci-common.c  | 49 -------------------------------
+>   2 files changed, 53 deletions(-)
+> 
+> diff --git a/arch/microblaze/include/asm/pci.h b/arch/microblaze/include/asm/pci.h
+> index 7c4dc5d85f53..d90528064604 100644
+> --- a/arch/microblaze/include/asm/pci.h
+> +++ b/arch/microblaze/include/asm/pci.h
+> @@ -61,10 +61,6 @@ extern int pci_mmap_legacy_page_range(struct pci_bus *bus,
+>   extern void pcibios_resource_survey(void);
+>   
+>   struct file;
+> -extern pgprot_t	pci_phys_mem_access_prot(struct file *file,
+> -					 unsigned long pfn,
+> -					 unsigned long size,
+> -					 pgprot_t prot);
+>   
+>   /* This part of code was originally in xilinx-pci.h */
+>   #ifdef CONFIG_PCI_XILINX
+> diff --git a/arch/microblaze/pci/pci-common.c b/arch/microblaze/pci/pci-common.c
+> index 622a4867f9e9..33bab7eec731 100644
+> --- a/arch/microblaze/pci/pci-common.c
+> +++ b/arch/microblaze/pci/pci-common.c
+> @@ -165,55 +165,6 @@ int pci_iobar_pfn(struct pci_dev *pdev, int bar, struct vm_area_struct *vma)
+>   	return 0;
+>   }
+>   
+> -/*
+> - * This one is used by /dev/mem and fbdev who have no clue about the
+> - * PCI device, it tries to find the PCI device first and calls the
+> - * above routine
+> - */
+> -pgprot_t pci_phys_mem_access_prot(struct file *file,
+> -				  unsigned long pfn,
+> -				  unsigned long size,
+> -				  pgprot_t prot)
+> -{
+> -	struct pci_dev *pdev = NULL;
+> -	struct resource *found = NULL;
+> -	resource_size_t offset = ((resource_size_t)pfn) << PAGE_SHIFT;
+> -	int i;
+> -
+> -	if (page_is_ram(pfn))
+> -		return prot;
+> -
+> -	prot = pgprot_noncached(prot);
+> -	for_each_pci_dev(pdev) {
+> -		for (i = 0; i <= PCI_ROM_RESOURCE; i++) {
+> -			struct resource *rp = &pdev->resource[i];
+> -			int flags = rp->flags;
+> -
+> -			/* Active and same type? */
+> -			if ((flags & IORESOURCE_MEM) == 0)
+> -				continue;
+> -			/* In the range of this resource? */
+> -			if (offset < (rp->start & PAGE_MASK) ||
+> -			    offset > rp->end)
+> -				continue;
+> -			found = rp;
+> -			break;
+> -		}
+> -		if (found)
+> -			break;
+> -	}
+> -	if (found) {
+> -		if (found->flags & IORESOURCE_PREFETCH)
+> -			prot = pgprot_noncached_wc(prot);
+> -		pci_dev_put(pdev);
+> -	}
+> -
+> -	pr_debug("PCI: Non-PCI map for %llx, prot: %lx\n",
+> -		 (unsigned long long)offset, pgprot_val(prot));
+> -
+> -	return prot;
+> -}
+> -
+>   /* This provides legacy IO read access on a bus */
+>   int pci_legacy_read(struct pci_bus *bus, loff_t port, u32 *val, size_t size)
+>   {
 
-Here is the summary with links:
-  - [net,v2] net/smc: Transitional solution for clcsock race issue
-    https://git.kernel.org/netdev/net/c/c0bf3d8a943b
+Applied.
+M
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
 
 

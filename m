@@ -2,39 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 660E8498C65
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAEF4498DD3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344380AbiAXTWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:22:01 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43500 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344337AbiAXTOD (ORCPT
+        id S1354386AbiAXTge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:36:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352844AbiAXTbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:14:03 -0500
+        Mon, 24 Jan 2022 14:31:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF152C028C22;
+        Mon, 24 Jan 2022 11:14:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F147960BB9;
-        Mon, 24 Jan 2022 19:14:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E208C36AE3;
-        Mon, 24 Jan 2022 19:14:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B55BB81232;
+        Mon, 24 Jan 2022 19:14:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBD51C340E5;
+        Mon, 24 Jan 2022 19:14:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051642;
-        bh=28t1sweoB4qHEe4T76xab8j4fhECdC4c7ySIQE2cgDk=;
+        s=korg; t=1643051645;
+        bh=h9OWux2i1YLh5BjrO9KQYEBGMBejsiK7N9nwnwNhnxc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e+Qtbu8CBTTVxA0q10fGAzfb0SBEGFvIeukKCD1wdr+1rf4KFD6N3RX/xzcvCG7Ed
-         lZ28s0mwFnEoZbBc4aXuhWlLW48urr2GGiV7sSeiwDzLR7bc0VQ8sq2pA0Y512BEhL
-         mnvkiVbHPHvn0Z4IUvnYrf/cs4KrX//okKdw/Tt8=
+        b=pHP01jKj4ZrTM4WPBsVVOhcm6YLwfOIme96qWTmQ6z61ovZe4mhxCyaGpkEHTIdOh
+         fOPsr9RwChad5OP5SfOej/ZkqzWUEunS/yYe2WIRtNolpUJk25tdgyYqaynv/q8UV4
+         fLh10O7eIMH0Ks2yOOmxeOqVWgv7s8kfoZuxI9pA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Brian Silverman <brian.silverman@bluerivertech.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 4.19 008/239] can: gs_usb: gs_can_start_xmit(): zero-initialize hf->{flags,reserved}
-Date:   Mon, 24 Jan 2022 19:40:46 +0100
-Message-Id: <20220124183943.377652679@linuxfoundation.org>
+        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 4.19 009/239] random: fix data race on crng_node_pool
+Date:   Mon, 24 Jan 2022 19:40:47 +0100
+Message-Id: <20220124183943.409514111@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
 References: <20220124183943.102762895@linuxfoundation.org>
@@ -46,39 +49,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Silverman <brian.silverman@bluerivertech.com>
+From: Eric Biggers <ebiggers@google.com>
 
-commit 89d58aebe14a365c25ba6645414afdbf4e41cea4 upstream.
+commit 5d73d1e320c3fd94ea15ba5f79301da9a8bcc7de upstream.
 
-No information is deliberately sent in hf->flags in host -> device
-communications, but the open-source candleLight firmware echoes it
-back, which can result in the GS_CAN_FLAG_OVERFLOW flag being set and
-generating spurious ERRORFRAMEs.
+extract_crng() and crng_backtrack_protect() load crng_node_pool with a
+plain load, which causes undefined behavior if do_numa_crng_init()
+modifies it concurrently.
 
-While there also initialize the reserved member with 0.
+Fix this by using READ_ONCE().  Note: as per the previous discussion
+https://lore.kernel.org/lkml/20211219025139.31085-1-ebiggers@kernel.org/T/#u,
+READ_ONCE() is believed to be sufficient here, and it was requested that
+it be used here instead of smp_load_acquire().
 
-Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
-Link: https://lore.kernel.org/all/20220106002952.25883-1-brian.silverman@bluerivertech.com
-Link: https://github.com/candle-usb/candleLight_fw/issues/87
+Also change do_numa_crng_init() to set crng_node_pool using
+cmpxchg_release() instead of mb() + cmpxchg(), as the former is
+sufficient here but is more lightweight.
+
+Fixes: 1e7f583af67b ("random: make /dev/urandom scalable for silly userspace programs")
 Cc: stable@vger.kernel.org
-Signed-off-by: Brian Silverman <brian.silverman@bluerivertech.com>
-[mkl: initialize the reserved member, too]
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/usb/gs_usb.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/char/random.c |   42 ++++++++++++++++++++++--------------------
+ 1 file changed, 22 insertions(+), 20 deletions(-)
 
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -515,6 +515,8 @@ static netdev_tx_t gs_can_start_xmit(str
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -831,8 +831,8 @@ static void do_numa_crng_init(struct wor
+ 		crng_initialize(crng);
+ 		pool[i] = crng;
+ 	}
+-	mb();
+-	if (cmpxchg(&crng_node_pool, NULL, pool)) {
++	/* pairs with READ_ONCE() in select_crng() */
++	if (cmpxchg_release(&crng_node_pool, NULL, pool) != NULL) {
+ 		for_each_node(i)
+ 			kfree(pool[i]);
+ 		kfree(pool);
+@@ -845,8 +845,26 @@ static void numa_crng_init(void)
+ {
+ 	schedule_work(&numa_crng_init_work);
+ }
++
++static struct crng_state *select_crng(void)
++{
++	struct crng_state **pool;
++	int nid = numa_node_id();
++
++	/* pairs with cmpxchg_release() in do_numa_crng_init() */
++	pool = READ_ONCE(crng_node_pool);
++	if (pool && pool[nid])
++		return pool[nid];
++
++	return &primary_crng;
++}
+ #else
+ static void numa_crng_init(void) {}
++
++static struct crng_state *select_crng(void)
++{
++	return &primary_crng;
++}
+ #endif
  
- 	hf->echo_id = idx;
- 	hf->channel = dev->channel;
-+	hf->flags = 0;
-+	hf->reserved = 0;
+ /*
+@@ -995,15 +1013,7 @@ static void _extract_crng(struct crng_st
  
- 	cf = (struct can_frame *)skb->data;
+ static void extract_crng(__u8 out[CHACHA20_BLOCK_SIZE])
+ {
+-	struct crng_state *crng = NULL;
+-
+-#ifdef CONFIG_NUMA
+-	if (crng_node_pool)
+-		crng = crng_node_pool[numa_node_id()];
+-	if (crng == NULL)
+-#endif
+-		crng = &primary_crng;
+-	_extract_crng(crng, out);
++	_extract_crng(select_crng(), out);
+ }
  
+ /*
+@@ -1032,15 +1042,7 @@ static void _crng_backtrack_protect(stru
+ 
+ static void crng_backtrack_protect(__u8 tmp[CHACHA20_BLOCK_SIZE], int used)
+ {
+-	struct crng_state *crng = NULL;
+-
+-#ifdef CONFIG_NUMA
+-	if (crng_node_pool)
+-		crng = crng_node_pool[numa_node_id()];
+-	if (crng == NULL)
+-#endif
+-		crng = &primary_crng;
+-	_crng_backtrack_protect(crng, tmp, used);
++	_crng_backtrack_protect(select_crng(), tmp, used);
+ }
+ 
+ static ssize_t extract_crng_user(void __user *buf, size_t nbytes)
 
 

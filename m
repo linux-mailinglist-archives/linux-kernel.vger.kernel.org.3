@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49DEF498B67
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F9B4498FCE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:56:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237708AbiAXTNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:13:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
+        id S1358570AbiAXTz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:55:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346088AbiAXTFD (ORCPT
+        with ESMTP id S1349076AbiAXTlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:05:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA67C0604FD;
-        Mon, 24 Jan 2022 10:59:25 -0800 (PST)
+        Mon, 24 Jan 2022 14:41:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB718C07A96A;
+        Mon, 24 Jan 2022 11:20:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB8EDB8122C;
-        Mon, 24 Jan 2022 18:59:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F21BC340E5;
-        Mon, 24 Jan 2022 18:59:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AFDF612FA;
+        Mon, 24 Jan 2022 19:20:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C996C340E5;
+        Mon, 24 Jan 2022 19:20:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050762;
-        bh=bgNt8tan3HJNugIA65XVudB9fyuaNnnmV3HhitjxRuw=;
+        s=korg; t=1643052000;
+        bh=6DzRQODJCjeMyBnMxcQy/tJblSzRKBAhvfHA3MzPxh0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qOvJWEn/tAmqC7/MM0moTbTgUDeNUYKM7YIkLQrulRXWnyX6lnpwmRu2WZxhemBZo
-         OfZxykkoeGg0xOKy89EVIl0ZfSvz7MnsGd7DGPLJvYQqoT9KcQG4zitrdmTQRGFzb3
-         JnfIjfht1onWAyZ/Mw6IvXVzYLpd6UUSb4dxa/DQ=
+        b=R05fWYbiTuO0n3zCr3lQI5CfgOuA+8NwMM1SToPClI9HPq3p5hTS9E2DMDorhZ305
+         vDnPcjZ0IaEvgf6JVa8zAjhLxs+KZOoZdiJw/lPUV9DEp6Xw8KHiOOSVc+tCjrWvRw
+         ZgL7Ef4nAXnmkV4mvlox1uMhfejHvzxDEcjAkEDE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John David Anglin <dave.anglin@bell.net>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 104/157] parisc: Avoid calling faulthandler_disabled() twice
+        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 156/239] iwlwifi: remove module loading failure message
 Date:   Mon, 24 Jan 2022 19:43:14 +0100
-Message-Id: <20220124183936.063719333@linuxfoundation.org>
+Message-Id: <20220124183948.051913651@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,51 +49,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John David Anglin <dave.anglin@bell.net>
+From: Johannes Berg <johannes.berg@intel.com>
 
-[ Upstream commit 9e9d4b460f23bab61672eae397417d03917d116c ]
+[ Upstream commit 6518f83ffa51131daaf439b66094f684da3fb0ae ]
 
-In handle_interruption(), we call faulthandler_disabled() to check whether the
-fault handler is not disabled. If the fault handler is disabled, we immediately
-call do_page_fault(). It then calls faulthandler_disabled(). If disabled,
-do_page_fault() attempts to fixup the exception by jumping to no_context:
+When CONFIG_DEBUG_TEST_DRIVER_REMOVE is set, iwlwifi crashes
+when the opmode module cannot be loaded, due to completing
+the completion before using drv->dev, which can then already
+be freed.
 
-no_context:
+Fix this by removing the (fairly useless) message. Moving the
+completion later causes a deadlock instead, so that's not an
+option.
 
-        if (!user_mode(regs) && fixup_exception(regs)) {
-                return;
-        }
-
-        parisc_terminate("Bad Address (null pointer deref?)", regs, code, address);
-
-Apart from the error messages, the two blocks of code perform the same
-function.
-
-We can avoid two calls to faulthandler_disabled() by a simple revision
-to the code in handle_interruption().
-
-Note: I didn't try to fix the formatting of this code block.
-
-Signed-off-by: John David Anglin <dave.anglin@bell.net>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/20211210091245.289008-2-luca@coelho.fi
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/parisc/kernel/traps.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/wireless/intel/iwlwifi/iwl-drv.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/arch/parisc/kernel/traps.c b/arch/parisc/kernel/traps.c
-index 11c91697d5f9e..5b41779de2337 100644
---- a/arch/parisc/kernel/traps.c
-+++ b/arch/parisc/kernel/traps.c
-@@ -793,7 +793,7 @@ void notrace handle_interruption(int code, struct pt_regs *regs)
- 	     * unless pagefault_disable() was called before.
- 	     */
+diff --git a/drivers/net/wireless/intel/iwlwifi/iwl-drv.c b/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
+index 72f5df66cdeb5..c44108823f796 100644
+--- a/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
++++ b/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
+@@ -1532,15 +1532,8 @@ static void iwl_req_fw_callback(const struct firmware *ucode_raw, void *context)
+ 	 * else from proceeding if the module fails to load
+ 	 * or hangs loading.
+ 	 */
+-	if (load_module) {
++	if (load_module)
+ 		request_module("%s", op->name);
+-#ifdef CONFIG_IWLWIFI_OPMODE_MODULAR
+-		if (err)
+-			IWL_ERR(drv,
+-				"failed to load module %s (error %d), is dynamic loading enabled?\n",
+-				op->name, err);
+-#endif
+-	}
+ 	failure = false;
+ 	goto free;
  
--	    if (fault_space == 0 && !faulthandler_disabled())
-+	    if (faulthandler_disabled() || fault_space == 0)
- 	    {
- 		/* Clean up and return if in exception table. */
- 		if (fixup_exception(regs))
 -- 
 2.34.1
 

@@ -2,87 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2534497D8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 12:03:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBCB4497D95
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 12:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237042AbiAXLDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 06:03:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44810 "EHLO
+        id S237190AbiAXLDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 06:03:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236350AbiAXLDQ (ORCPT
+        with ESMTP id S237184AbiAXLDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 06:03:16 -0500
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2F2C061401
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 03:03:16 -0800 (PST)
-Received: by mail-vk1-xa32.google.com with SMTP id d189so9945018vkg.3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 03:03:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=JxKe5/w3Sw6bQzimXk5dzl9v/qFdYrygrwsRoUYCaIs=;
-        b=AmRIksR32TNysgo+mqKXTpUJ7d8zdsocp0aW/d/1J5U1PXmx2Y4Y1QYC5qbxH7PxQE
-         yOpI+fUps9NO6f1+y9t2Lu/j/EGZomIsfP4G0AVSpkx+jaz4Yh/HOTjVW8yJEis07d1N
-         PVEwfyFfjOJyIRrjVoMEamuK7tmlksV3sJNIgjlII/Ku74jbNtM2T+1txkyJJ5I1le5z
-         by2KHDGxujnZEb7Ts/zLaFj2wGcwSh5YkKxjG/3UTwGC5TCfUevMKxqChX9QRSigtmB7
-         605aKhlk46wzQzr2qCYCFmnMo3/jW41V6CrNOew1v01BhtKnY5JaK94kQDgU9wx+MT6M
-         D4lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=JxKe5/w3Sw6bQzimXk5dzl9v/qFdYrygrwsRoUYCaIs=;
-        b=C78dds4+xMCt0zbpmST0cxLUIQ/94GL0F3/KJa+L1ELCzRQT34VXVk2+iVEJ4KgGKd
-         rNPJhKVkjtVQS4TbLYGBj+L9WL2qXuYnrEmJM+sTclJTuPcACd9WMGo+k5ZjD7RI2RiH
-         +hOQJE1HMG0jSRAD742qLLE0FMdcVg6kryzrVLWXufkHRSM/oPbN3xQHa1bJIR0/QwTX
-         XtTuR5KTyLdUy5ZkpxJnYBaa98gRf8NB/4y7Dki1tVnMJvkWiR84EGHGhh4K/7996vIC
-         YIaCMNq38nDZR9fXbCDVizM3Yohd2a71X6TL8HcQItQ0eCkzX+XywYJs2x3WXLlbnqC0
-         ny2Q==
-X-Gm-Message-State: AOAM532ga+vt93kK46B2kq6QuxXZLz23WcVtNbiPQdzwKI/5ynBtvO4G
-        HZigKLWkVrvDYmyddVOyeFQcM/D6u+Zd7IhK4qk=
-X-Google-Smtp-Source: ABdhPJywIn+7j+MeEfp/Wh6ksoOa9VJ+e+8TUM/jvi5drs3+OxkxfQ9fg4FsCS8RCWLSFbAp7JQn4/jKdAn1N6preD0=
-X-Received: by 2002:a05:6122:ca1:: with SMTP id ba33mr1030934vkb.39.1643022195306;
- Mon, 24 Jan 2022 03:03:15 -0800 (PST)
+        Mon, 24 Jan 2022 06:03:41 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02331C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 03:03:41 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nBx8G-0000Si-PS; Mon, 24 Jan 2022 12:03:32 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nBx8F-0000Dm-Ea; Mon, 24 Jan 2022 12:03:31 +0100
+Date:   Mon, 24 Jan 2022 12:03:31 +0100
+From:   Sascha Hauer <sha@pengutronix.de>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-rockchip@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Johan Jonker <jbx6244@gmail.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH v2 2/2] arm64: dts: rockchip: Add Bananapi R2 Pro
+Message-ID: <20220124110331.GZ23490@pengutronix.de>
+References: <20220123135116.136846-1-linux@fw-web.de>
+ <20220123135116.136846-3-linux@fw-web.de>
+ <20220124083102.GW23490@pengutronix.de>
+ <trinity-2e9cf5db-4c9b-4ad7-b684-74541e639edf-1643014505272@3c-app-gmx-bs10>
 MIME-Version: 1.0
-Received: by 2002:a05:6102:913:0:0:0:0 with HTTP; Mon, 24 Jan 2022 03:03:14
- -0800 (PST)
-Reply-To: ibrahimajudgejohnson20@gmail.com
-From:   "Mrs. Shalla Bruce" <richardwilliam465@gmail.com>
-Date:   Mon, 24 Jan 2022 03:03:14 -0800
-Message-ID: <CAHaeUQA_2brc7Hwk_EdX47NuvUCo38_yERFWJbTMTFFzFQyp2A@mail.gmail.com>
-Subject: Attention Dear Fund Owner
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <trinity-2e9cf5db-4c9b-4ad7-b684-74541e639edf-1643014505272@3c-app-gmx-bs10>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 12:01:28 up 44 days, 19:47, 85 users,  load average: 0.47, 0.32,
+ 0.21
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 24, 2022 at 09:55:05AM +0100, Frank Wunderlich wrote:
+> Hi
+> 
+> > Gesendet: Montag, 24. Januar 2022 um 09:31 Uhr
+> > Von: "Sascha Hauer" <sha@pengutronix.de>
+> > An: "Frank Wunderlich" <linux@fw-web.de>
+> > Cc: linux-rockchip@lists.infradead.org, "Frank Wunderlich" <frank-w@public-files.de>, "Rob Herring" <robh+dt@kernel.org>, "Heiko Stuebner" <heiko@sntech.de>, "Peter Geis" <pgwipeout@gmail.com>, "Johan Jonker" <jbx6244@gmail.com>, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+> > Betreff: Re: [PATCH v2 2/2] arm64: dts: rockchip: Add Bananapi R2 Pro
+> >
+> > On Sun, Jan 23, 2022 at 02:51:16PM +0100, Frank Wunderlich wrote:
+> > > From: Frank Wunderlich <frank-w@public-files.de>
+> > >
+> > > This patch adds Devicetree for Bananapi R2 Pro based on RK3568.
+> > > Add uart/sd/emmc/i2c/rk809/tsadc nodes for basic function.
+> > > Gmac0 is directly connected to wan-port so usable without additional
+> > > driver.
+> > > On gmac1 there is a switch (rtl8367rb) connected which have not yet a
+> > > driver in mainline.
+> > >
+> > > Patch also prepares nodes for GPIO header.
+> > >
+> > > Co-developed-by: Peter Geis <pgwipeout@gmail.com>
+> > > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> > > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> > > ---
+> > > +&gmac0 {
+> > > +	assigned-clocks = <&cru SCLK_GMAC0_RX_TX>, <&cru SCLK_GMAC0>;
+> > > +	assigned-clock-parents = <&cru SCLK_GMAC0_RGMII_SPEED>, <&cru CLK_MAC0_2TOP>;
+> > > +	clock_in_out = "input";
+> > > +	phy-handle = <&rgmii_phy0>;
+> > > +	phy-mode = "rgmii";
+> > > +	pinctrl-names = "default";
+> > > +	pinctrl-0 = <&gmac0_miim
+> > > +		     &gmac0_tx_bus2
+> > > +		     &gmac0_rx_bus2
+> > > +		     &gmac0_rgmii_clk
+> > > +		     &gmac0_rgmii_bus>;
+> > > +
+> > > +	snps,reset-gpio = <&gpio3 RK_PB7 GPIO_ACTIVE_LOW>;
+> > > +	snps,reset-active-low;
+> > > +	/* Reset time is 20ms, 100ms for rtl8211f */
+> >
+> > Is this really a rtl8211f? I don't know and it could indeed be a
+> > rtl8211f, I'm just asking because the comment is copy pasted from
+> > the Quartz64 board.
+> 
+> i know thats a RTL8211 phy, but i see no additional letter on the
+> chip, based on shematics it's a RTL8211F-CG
+
+Ok. I just wanted to make sure you checked that.
+
+> 
+> > > +	snps,reset-delays-us = <0 20000 100000>;
+> > > +
+> > > +&mdio0 {
+> > > +	rgmii_phy0: ethernet-phy@0 {
+> > > +		compatible = "ethernet-phy-ieee802.3-c22";
+> > > +		reg = <0x0>;
+> > > +	};
+> >
+> > 0 is the broadcast address. I'm not sure if it's a good idea to use it.
+> > There should be another address the phy listens on.
+> 
+> took this from the 3568-EVB (like the most parts, as the board is
+> mostly the same), and in linux it's the same and working. The switch
+> have also phy-id 0 on mdio bus #1, are you sure this is invalid?
+
+It's not invalid, it's just the broadcast address to which other phys
+might answer as well. Anyway, as long as there's only a single phy on
+the bus it's probably okay.
+
+Sascha
+
+
 -- 
-Attention Beneficiary,
-
-We have concluded to effect your payment of $9.5Million, through Money
-Gram transfer office, but the maximum amount you will be receiving
-each day is $25,000.00 daily until the funds is completely
-transferred. i need all your information and address right now, So
-that i can go the UBA BANK Office Managements Director to submit your
-account number information immediately,
-
-Fill your details below for reference purposes:
-NAME OF CUSTOMER:
-ADDRESS:
-COUNTRY:
-OCCUPATION:
-DIRECT PHONE NUMBER:
-
-Contact Person:Chief Mr Judge Ibrahima Johnson
-Phone:Mobile:Tele:..+22969457855.
-Email;;(ibrahimajudgejohnson20@gmail.com)
-
-then to enable him transfer your Funds and give you the Reference No#,
-sender name and question/answer to pick the $25,000.00 also to
-continue sending rest of your payment till your total payment of
-$9.5Million is complete.
-
-Thanks for your Prompt Response.
-Thanks, And Best Regards.
-Mrs Shalla Bruce
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

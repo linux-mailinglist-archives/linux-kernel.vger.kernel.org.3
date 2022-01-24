@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD10D498FD8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:57:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BEDD498FDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358982AbiAXT4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:56:07 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42216 "EHLO
+        id S1359097AbiAXT4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:56:20 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42288 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351146AbiAXToo (ORCPT
+        with ESMTP id S1355616AbiAXTot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:44:44 -0500
+        Mon, 24 Jan 2022 14:44:49 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1CA06153F;
-        Mon, 24 Jan 2022 19:44:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E5AFC340E5;
-        Mon, 24 Jan 2022 19:44:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D281F6131E;
+        Mon, 24 Jan 2022 19:44:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B42F0C340E5;
+        Mon, 24 Jan 2022 19:44:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053482;
-        bh=m1F5fWtgDM8E6XKmaqCuV0mNrGXhTgIpzHKN+ItcTok=;
+        s=korg; t=1643053488;
+        bh=NnJCk13Goff3H48BL/psmetMcVRnOhKs9tjpoNimvyg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BuhWMXcfaCx2Do6tF3X+S/6OHP76J9g7cKEAv+8cm5engwBoMPFxeJ7wZAtpCZUg7
-         WCQtaOwOGaRRiIYNusOSr7fjHu3gn/lgaJWJmylE/NISTYN/ZA1jyau/j75xBs9bJQ
-         0HAPUnSZp296lS4drlywgLmmkPi06mH3rIU1Uxoc=
+        b=Llk8SmJq92rKeW6AZaHFsfJdltP6EGS6M6H3VK+b5avkxSssInGvzbXeaRF7zxPzO
+         zStG3xtS4YUsuif39s8fVIRDW9rFFoiQurU4AV4PRsu9fXHlinzcPhug7vJNwObaVe
+         Nw5z2swwxhPtNLBCTttXnE1zvKWiuaOVr/AVLOmU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
+        stable@vger.kernel.org, Alexander Aring <aahringo@redhat.com>,
+        David Teigland <teigland@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 080/563] arm64: dts: meson-gxbb-wetek: fix HDMI in early boot
-Date:   Mon, 24 Jan 2022 19:37:25 +0100
-Message-Id: <20220124184027.154017982@linuxfoundation.org>
+Subject: [PATCH 5.10 082/563] fs: dlm: use sk->sk_socket instead of con->sock
+Date:   Mon, 24 Jan 2022 19:37:27 +0100
+Message-Id: <20220124184027.228849912@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -47,44 +46,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Hewitt <christianshewitt@gmail.com>
+From: Alexander Aring <aahringo@redhat.com>
 
-[ Upstream commit 8182a35868db5f053111d5d9d4da8fcb3f99259d ]
+[ Upstream commit feb704bd17786c8ff52a49d7759b8ee4f3a5aaac ]
 
-Mark the VDDIO_AO18 regulator always-on and set hdmi-supply for the hdmi_tx
-node to ensure HDMI is powered in the early stages of boot.
+Instead of dereference "con->sock" we can get the socket structure over
+"sk->sk_socket" as well. This patch will switch to this behaviour.
 
-Fixes: fb72c03e0e32 ("ARM64: dts: meson-gxbb-wetek: add a wetek specific dtsi to cleanup hub and play2")
-
-Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://lore.kernel.org/r/20211012052522.30873-2-christianshewitt@gmail.com
+Signed-off-by: Alexander Aring <aahringo@redhat.com>
+Signed-off-by: David Teigland <teigland@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/amlogic/meson-gxbb-wetek.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/dlm/lowcomms.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-gxbb-wetek.dtsi b/arch/arm64/boot/dts/amlogic/meson-gxbb-wetek.dtsi
-index a350fee1264d7..8e2af986cebaf 100644
---- a/arch/arm64/boot/dts/amlogic/meson-gxbb-wetek.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-gxbb-wetek.dtsi
-@@ -64,6 +64,7 @@
- 		regulator-name = "VDDIO_AO18";
- 		regulator-min-microvolt = <1800000>;
- 		regulator-max-microvolt = <1800000>;
-+		regulator-always-on;
- 	};
+diff --git a/fs/dlm/lowcomms.c b/fs/dlm/lowcomms.c
+index 0c78fdfb1f6fa..0a8645ed4b2d6 100644
+--- a/fs/dlm/lowcomms.c
++++ b/fs/dlm/lowcomms.c
+@@ -480,8 +480,7 @@ static void lowcomms_error_report(struct sock *sk)
+ 		goto out;
  
- 	vcc_3v3: regulator-vcc_3v3 {
-@@ -161,6 +162,7 @@
- 	status = "okay";
- 	pinctrl-0 = <&hdmi_hpd_pins>, <&hdmi_i2c_pins>;
- 	pinctrl-names = "default";
-+	hdmi-supply = <&vddio_ao18>;
- };
- 
- &hdmi_tx_tmds_port {
+ 	orig_report = listen_sock.sk_error_report;
+-	if (con->sock == NULL ||
+-	    kernel_getpeername(con->sock, (struct sockaddr *)&saddr) < 0) {
++	if (kernel_getpeername(sk->sk_socket, (struct sockaddr *)&saddr) < 0) {
+ 		printk_ratelimited(KERN_ERR "dlm: node %d: socket error "
+ 				   "sending to node %d, port %d, "
+ 				   "sk_err=%d/%d\n", dlm_our_nodeid(),
 -- 
 2.34.1
 

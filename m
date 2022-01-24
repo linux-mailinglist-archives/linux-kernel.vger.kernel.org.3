@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7435F4994A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:44:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE7DA498FC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:56:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359211AbiAXUoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:44:00 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59238 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382039AbiAXUZJ (ORCPT
+        id S1358385AbiAXTzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:55:04 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41252 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355789AbiAXTnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:25:09 -0500
+        Mon, 24 Jan 2022 14:43:45 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BF6CB8121A;
-        Mon, 24 Jan 2022 20:25:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85392C340E5;
-        Mon, 24 Jan 2022 20:25:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DB0561523;
+        Mon, 24 Jan 2022 19:43:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F437C340E5;
+        Mon, 24 Jan 2022 19:43:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055906;
-        bh=xdgjS3mVQChhF70ldCsToTvWsLdPLVKFsZ1ngsqTNhA=;
+        s=korg; t=1643053424;
+        bh=hu1gV17cDebv5tvImuJ6Tjz/Hjil7NJhsdqGiuZJLm0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uFeggJW/ZUZHkxK6jsIkQ5mgAYbw1daSsqLvBKE72dxXiGUqxO4Pl73qrzoWN//zX
-         HbqD3sdejx7x9fmVNvyxSMa5r2LyqVxXSL4nKOCgtSq7EbNTamL2m1FtBly2PIrDEk
-         Wk/76wCaGGJkHM7x4A6DJuCX+p29L2iyNbjkuFkg=
+        b=rO1BYi4an3xTJPV5sLC/vDv5pJsgf976cUIo+0RaSLpwIBykWExUu+O4v16BC9xtp
+         4IA05iw7WvXZlNDf2uzr3HFkywrqERzu+Qw8PrVylatFEOA2bHyaWYif00McsTCrru
+         T5TkDOUx497jAT1UphnviLzSb0ZORFKxrkk00Fsc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Golle <daniel@makrotopia.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Benjamin Li <benl@squareup.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 306/846] net: ethernet: mtk_eth_soc: fix return values and refactor MDIO ops
-Date:   Mon, 24 Jan 2022 19:37:03 +0100
-Message-Id: <20220124184111.466072787@linuxfoundation.org>
+Subject: [PATCH 5.10 060/563] wcn36xx: populate band before determining rate on RX
+Date:   Mon, 24 Jan 2022 19:37:05 +0100
+Message-Id: <20220124184026.490498079@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,135 +47,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Golle <daniel@makrotopia.org>
+From: Benjamin Li <benl@squareup.com>
 
-[ Upstream commit eda80b249df7bbc7b3dd13907343a3e59bfc57fd ]
+[ Upstream commit c9c5608fafe4dae975c9644c7d14c51ad3b0ed73 ]
 
-Instead of returning -1 (-EPERM) when MDIO bus is stuck busy
-while writing or 0xffff if it happens while reading, return the
-appropriate -ETIMEDOUT. Also fix return type to int instead of u32.
-Refactor functions to use bitfield helpers instead of having various
-masking and shifting constants in the code, which also results in the
-register definitions in the header file being more obviously related
-to what is stated in the MediaTek's Reference Manual.
+status.band is used in determination of status.rate -- for 5GHz on legacy
+rates there is a linear shift between the BD descriptor's rate field and
+the wcn36xx driver's rate table (wcn_5ghz_rates).
 
-Fixes: 656e705243fd0 ("net-next: mediatek: add support for MT7623 ethernet")
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+We have a special clause to populate status.band for hardware scan offload
+frames. However, this block occurs after status.rate is already populated.
+Correctly handle this dependency by moving the band block before the rate
+block.
+
+This patch addresses kernel warnings & missing scan results for 5GHz APs
+that send their beacons/probe responses at the higher four legacy rates
+(24-54 Mbps), when using hardware scan offload:
+
+  ------------[ cut here ]------------
+  WARNING: CPU: 0 PID: 0 at net/mac80211/rx.c:4532 ieee80211_rx_napi+0x744/0x8d8
+  Modules linked in: wcn36xx [...]
+  CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W         4.19.107-g73909fa #1
+  Hardware name: Square, Inc. T2 (all variants) (DT)
+  Call trace:
+  dump_backtrace+0x0/0x148
+  show_stack+0x14/0x1c
+  dump_stack+0xb8/0xf0
+  __warn+0x2ac/0x2d8
+  warn_slowpath_null+0x44/0x54
+  ieee80211_rx_napi+0x744/0x8d8
+  ieee80211_tasklet_handler+0xa4/0xe0
+  tasklet_action_common+0xe0/0x118
+  tasklet_action+0x20/0x28
+  __do_softirq+0x108/0x1ec
+  irq_exit+0xd4/0xd8
+  __handle_domain_irq+0x84/0xbc
+  gic_handle_irq+0x4c/0xb8
+  el1_irq+0xe8/0x190
+  lpm_cpuidle_enter+0x220/0x260
+  cpuidle_enter_state+0x114/0x1c0
+  cpuidle_enter+0x34/0x48
+  do_idle+0x150/0x268
+  cpu_startup_entry+0x20/0x24
+  rest_init+0xd4/0xe0
+  start_kernel+0x398/0x430
+  ---[ end trace ae28cb759352b403 ]---
+
+Fixes: 8a27ca394782 ("wcn36xx: Correct band/freq reporting on RX")
+Signed-off-by: Benjamin Li <benl@squareup.com>
+Tested-by: Loic Poulain <loic.poulain@linaro.org>
+Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+Link: https://lore.kernel.org/r/20211104010548.1107405-2-benl@squareup.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mediatek/mtk_eth_soc.c | 53 ++++++++++++---------
- drivers/net/ethernet/mediatek/mtk_eth_soc.h | 16 +++++--
- 2 files changed, 41 insertions(+), 28 deletions(-)
+ drivers/net/wireless/ath/wcn36xx/txrx.c | 37 +++++++++++++------------
+ 1 file changed, 19 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index 398c23cec8151..9e7a872426fc4 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -91,46 +91,53 @@ static int mtk_mdio_busy_wait(struct mtk_eth *eth)
- 	}
+diff --git a/drivers/net/wireless/ath/wcn36xx/txrx.c b/drivers/net/wireless/ath/wcn36xx/txrx.c
+index bbd7194c82e27..f76de106570d2 100644
+--- a/drivers/net/wireless/ath/wcn36xx/txrx.c
++++ b/drivers/net/wireless/ath/wcn36xx/txrx.c
+@@ -259,8 +259,6 @@ int wcn36xx_rx_skb(struct wcn36xx *wcn, struct sk_buff *skb)
+ 	fc = __le16_to_cpu(hdr->frame_control);
+ 	sn = IEEE80211_SEQ_TO_SN(__le16_to_cpu(hdr->seq_ctrl));
  
- 	dev_err(eth->dev, "mdio: MDIO timeout\n");
--	return -1;
-+	return -ETIMEDOUT;
- }
+-	status.freq = WCN36XX_CENTER_FREQ(wcn);
+-	status.band = WCN36XX_BAND(wcn);
+ 	status.mactime = 10;
+ 	status.signal = -get_rssi0(bd);
+ 	status.antenna = 1;
+@@ -272,6 +270,25 @@ int wcn36xx_rx_skb(struct wcn36xx *wcn, struct sk_buff *skb)
  
--static u32 _mtk_mdio_write(struct mtk_eth *eth, u32 phy_addr,
--			   u32 phy_register, u32 write_data)
-+static int _mtk_mdio_write(struct mtk_eth *eth, u32 phy_addr, u32 phy_reg,
-+			   u32 write_data)
- {
--	if (mtk_mdio_busy_wait(eth))
--		return -1;
-+	int ret;
+ 	wcn36xx_dbg(WCN36XX_DBG_RX, "status.flags=%x\n", status.flag);
  
--	write_data &= 0xffff;
-+	ret = mtk_mdio_busy_wait(eth);
-+	if (ret < 0)
-+		return ret;
++	if (bd->scan_learn) {
++		/* If packet originate from hardware scanning, extract the
++		 * band/channel from bd descriptor.
++		 */
++		u8 hwch = (bd->reserved0 << 4) + bd->rx_ch;
++
++		if (bd->rf_band != 1 && hwch <= sizeof(ab_rx_ch_map) && hwch >= 1) {
++			status.band = NL80211_BAND_5GHZ;
++			status.freq = ieee80211_channel_to_frequency(ab_rx_ch_map[hwch - 1],
++								     status.band);
++		} else {
++			status.band = NL80211_BAND_2GHZ;
++			status.freq = ieee80211_channel_to_frequency(hwch, status.band);
++		}
++	} else {
++		status.band = WCN36XX_BAND(wcn);
++		status.freq = WCN36XX_CENTER_FREQ(wcn);
++	}
++
+ 	if (bd->rate_id < ARRAY_SIZE(wcn36xx_rate_table)) {
+ 		rate = &wcn36xx_rate_table[bd->rate_id];
+ 		status.encoding = rate->encoding;
+@@ -298,22 +315,6 @@ int wcn36xx_rx_skb(struct wcn36xx *wcn, struct sk_buff *skb)
+ 	    ieee80211_is_probe_resp(hdr->frame_control))
+ 		status.boottime_ns = ktime_get_boottime_ns();
  
--	mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START | PHY_IAC_WRITE |
--		(phy_register << PHY_IAC_REG_SHIFT) |
--		(phy_addr << PHY_IAC_ADDR_SHIFT) | write_data,
-+	mtk_w32(eth, PHY_IAC_ACCESS |
-+		     PHY_IAC_START_C22 |
-+		     PHY_IAC_CMD_WRITE |
-+		     PHY_IAC_REG(phy_reg) |
-+		     PHY_IAC_ADDR(phy_addr) |
-+		     PHY_IAC_DATA(write_data),
- 		MTK_PHY_IAC);
- 
--	if (mtk_mdio_busy_wait(eth))
--		return -1;
-+	ret = mtk_mdio_busy_wait(eth);
-+	if (ret < 0)
-+		return ret;
- 
- 	return 0;
- }
- 
--static u32 _mtk_mdio_read(struct mtk_eth *eth, int phy_addr, int phy_reg)
-+static int _mtk_mdio_read(struct mtk_eth *eth, u32 phy_addr, u32 phy_reg)
- {
--	u32 d;
-+	int ret;
- 
--	if (mtk_mdio_busy_wait(eth))
--		return 0xffff;
-+	ret = mtk_mdio_busy_wait(eth);
-+	if (ret < 0)
-+		return ret;
- 
--	mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START | PHY_IAC_READ |
--		(phy_reg << PHY_IAC_REG_SHIFT) |
--		(phy_addr << PHY_IAC_ADDR_SHIFT),
-+	mtk_w32(eth, PHY_IAC_ACCESS |
-+		     PHY_IAC_START_C22 |
-+		     PHY_IAC_CMD_C22_READ |
-+		     PHY_IAC_REG(phy_reg) |
-+		     PHY_IAC_ADDR(phy_addr),
- 		MTK_PHY_IAC);
- 
--	if (mtk_mdio_busy_wait(eth))
--		return 0xffff;
+-	if (bd->scan_learn) {
+-		/* If packet originates from hardware scanning, extract the
+-		 * band/channel from bd descriptor.
+-		 */
+-		u8 hwch = (bd->reserved0 << 4) + bd->rx_ch;
 -
--	d = mtk_r32(eth, MTK_PHY_IAC) & 0xffff;
-+	ret = mtk_mdio_busy_wait(eth);
-+	if (ret < 0)
-+		return ret;
+-		if (bd->rf_band != 1 && hwch <= sizeof(ab_rx_ch_map) && hwch >= 1) {
+-			status.band = NL80211_BAND_5GHZ;
+-			status.freq = ieee80211_channel_to_frequency(ab_rx_ch_map[hwch - 1],
+-								     status.band);
+-		} else {
+-			status.band = NL80211_BAND_2GHZ;
+-			status.freq = ieee80211_channel_to_frequency(hwch, status.band);
+-		}
+-	}
+-
+ 	memcpy(IEEE80211_SKB_RXCB(skb), &status, sizeof(status));
  
--	return d;
-+	return mtk_r32(eth, MTK_PHY_IAC) & PHY_IAC_DATA_MASK;
- }
- 
- static int mtk_mdio_write(struct mii_bus *bus, int phy_addr,
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-index 5ef70dd8b49c6..f2d90639d7ed1 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-@@ -341,11 +341,17 @@
- /* PHY Indirect Access Control registers */
- #define MTK_PHY_IAC		0x10004
- #define PHY_IAC_ACCESS		BIT(31)
--#define PHY_IAC_READ		BIT(19)
--#define PHY_IAC_WRITE		BIT(18)
--#define PHY_IAC_START		BIT(16)
--#define PHY_IAC_ADDR_SHIFT	20
--#define PHY_IAC_REG_SHIFT	25
-+#define PHY_IAC_REG_MASK	GENMASK(29, 25)
-+#define PHY_IAC_REG(x)		FIELD_PREP(PHY_IAC_REG_MASK, (x))
-+#define PHY_IAC_ADDR_MASK	GENMASK(24, 20)
-+#define PHY_IAC_ADDR(x)		FIELD_PREP(PHY_IAC_ADDR_MASK, (x))
-+#define PHY_IAC_CMD_MASK	GENMASK(19, 18)
-+#define PHY_IAC_CMD_WRITE	FIELD_PREP(PHY_IAC_CMD_MASK, 1)
-+#define PHY_IAC_CMD_C22_READ	FIELD_PREP(PHY_IAC_CMD_MASK, 2)
-+#define PHY_IAC_START_MASK	GENMASK(17, 16)
-+#define PHY_IAC_START_C22	FIELD_PREP(PHY_IAC_START_MASK, 1)
-+#define PHY_IAC_DATA_MASK	GENMASK(15, 0)
-+#define PHY_IAC_DATA(x)		FIELD_PREP(PHY_IAC_DATA_MASK, (x))
- #define PHY_IAC_TIMEOUT		HZ
- 
- #define MTK_MAC_MISC		0x1000c
+ 	if (ieee80211_is_beacon(hdr->frame_control)) {
 -- 
 2.34.1
 

@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7278649A6E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A8A449A381
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3421181AbiAYC00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:26:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38266 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344431AbiAXTsk (ORCPT
+        id S2366448AbiAXXwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:52:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1845905AbiAXXNz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:48:40 -0500
+        Mon, 24 Jan 2022 18:13:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0A2C067A6A;
+        Mon, 24 Jan 2022 13:19:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75973B8124C;
-        Mon, 24 Jan 2022 19:48:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94E18C340EF;
-        Mon, 24 Jan 2022 19:48:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A08B61320;
+        Mon, 24 Jan 2022 21:19:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2314C340E4;
+        Mon, 24 Jan 2022 21:19:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053717;
-        bh=1Xu0fY9+VgGKTdVcFCdBa37F4Om7SvBXrvrP+wodbko=;
+        s=korg; t=1643059187;
+        bh=BRth5bWhl+JDCIuYfy5CS8sx+fRhAfvxk/XHWkwWoXA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mGcgHpsmMPkru30ejAkt5iQCm9opDL1FJFCiTerXg+XQoOozmP1+qb0vM5nNjXgWs
-         3eyr+uVS229MnJAMT7kg28P3djciYumER3/9NAkI5GRW1mNKDLpAfA/Ax+AXTbX4ml
-         aHWH1pvLBJFLVfn9p9O2b4WmhRjdYaeVNuBT/yZ4=
+        b=Yq0qCppTxvsXdPzCMe3DJgUFi5OHflmySu+R15lCEks/J9WeV7kkk480Wobe/I6Mn
+         Bl0xEU6pLvyYSCn1Y0rumCOTEM4omeOsEfcYMD6Xk8EEs/7mvc7dbLHXanx+z/aFtO
+         6r7z+5758ib6T6gEgvjC6APmKHilckjbCFPY0/1k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 155/563] crypto: stm32/cryp - fix xts and race condition in crypto_engine requests
-Date:   Mon, 24 Jan 2022 19:38:40 +0100
-Message-Id: <20220124184029.752812235@linuxfoundation.org>
+Subject: [PATCH 5.16 0532/1039] MIPS: compressed: Fix build with ZSTD compression
+Date:   Mon, 24 Jan 2022 19:38:41 +0100
+Message-Id: <20220124184143.167822711@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,39 +51,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>
+From: Paul Cercueil <paul@crapouillou.net>
 
-[ Upstream commit d703c7a994ee34b7fa89baf21631fca0aa9f17fc ]
+[ Upstream commit c5c7440fe7f74645940d5c9e2c49cd7efb706a4f ]
 
-Don't erase key:
-If key is erased before the crypto_finalize_.*_request() call, some
-pending process will run with a key={ 0 }.
-Moreover if the key is reset at end of request, it breaks xts chaining
-mode, as for last xts block (in case input len is not a multiple of
-block) a new AES request is started without calling again set_key().
+Fix the following build issues:
 
-Fixes: 9e054ec21ef8 ("crypto: stm32 - Support for STM32 CRYP crypto module")
+mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `FSE_buildDTable_internal':
+ decompress.c:(.text.FSE_buildDTable_internal+0x2cc): undefined reference to `__clzdi2'
+   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `BIT_initDStream':
+   decompress.c:(.text.BIT_initDStream+0x7c): undefined reference to `__clzdi2'
+   mips64el-linux-ld: decompress.c:(.text.BIT_initDStream+0x158): undefined reference to `__clzdi2'
+   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `ZSTD_buildFSETable_body_default.constprop.0':
+ decompress.c:(.text.ZSTD_buildFSETable_body_default.constprop.0+0x2a8): undefined reference to `__clzdi2'
+   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `FSE_readNCount_body_default':
+ decompress.c:(.text.FSE_readNCount_body_default+0x130): undefined reference to `__ctzdi2'
+ mips64el-linux-ld: decompress.c:(.text.FSE_readNCount_body_default+0x1a4): undefined reference to `__ctzdi2'
+ mips64el-linux-ld: decompress.c:(.text.FSE_readNCount_body_default+0x2e4): undefined reference to `__clzdi2'
+   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `HUF_readStats_body_default':
+ decompress.c:(.text.HUF_readStats_body_default+0x184): undefined reference to `__clzdi2'
+ mips64el-linux-ld: decompress.c:(.text.HUF_readStats_body_default+0x1b4): undefined reference to `__clzdi2'
+   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `ZSTD_DCtx_getParameter':
+ decompress.c:(.text.ZSTD_DCtx_getParameter+0x60): undefined reference to `__clzdi2'
 
-Signed-off-by: Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Fixes: a510b616131f ("MIPS: Add support for ZSTD-compressed kernels")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Nick Terrell <terrelln@fb.com>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/stm32/stm32-cryp.c | 2 --
- 1 file changed, 2 deletions(-)
+ arch/mips/boot/compressed/Makefile  | 2 +-
+ arch/mips/boot/compressed/clz_ctz.c | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 arch/mips/boot/compressed/clz_ctz.c
 
-diff --git a/drivers/crypto/stm32/stm32-cryp.c b/drivers/crypto/stm32/stm32-cryp.c
-index d13b262b36252..e2bcc4f98b0ae 100644
---- a/drivers/crypto/stm32/stm32-cryp.c
-+++ b/drivers/crypto/stm32/stm32-cryp.c
-@@ -674,8 +674,6 @@ static void stm32_cryp_finish_req(struct stm32_cryp *cryp, int err)
- 	else
- 		crypto_finalize_skcipher_request(cryp->engine, cryp->req,
- 						   err);
--
--	memset(cryp->ctx->key, 0, cryp->ctx->keylen);
- }
+diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
+index f27cf31b41401..38e233f7fd7a4 100644
+--- a/arch/mips/boot/compressed/Makefile
++++ b/arch/mips/boot/compressed/Makefile
+@@ -52,7 +52,7 @@ endif
  
- static int stm32_cryp_cpu_start(struct stm32_cryp *cryp)
+ vmlinuzobjs-$(CONFIG_KERNEL_XZ) += $(obj)/ashldi3.o
+ 
+-vmlinuzobjs-$(CONFIG_KERNEL_ZSTD) += $(obj)/bswapdi.o $(obj)/ashldi3.o
++vmlinuzobjs-$(CONFIG_KERNEL_ZSTD) += $(obj)/bswapdi.o $(obj)/ashldi3.o $(obj)/clz_ctz.o
+ 
+ targets := $(notdir $(vmlinuzobjs-y))
+ 
+diff --git a/arch/mips/boot/compressed/clz_ctz.c b/arch/mips/boot/compressed/clz_ctz.c
+new file mode 100644
+index 0000000000000..b4a1b6eb2f8ad
+--- /dev/null
++++ b/arch/mips/boot/compressed/clz_ctz.c
+@@ -0,0 +1,2 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include "../../../../lib/clz_ctz.c"
 -- 
 2.34.1
 

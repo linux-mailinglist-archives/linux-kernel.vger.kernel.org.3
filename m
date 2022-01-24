@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89080499208
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:19:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA68498DF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380885AbiAXURB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:17:01 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44998 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359570AbiAXT7v (ORCPT
+        id S1345898AbiAXTiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:38:09 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60324 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345782AbiAXTc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:59:51 -0500
+        Mon, 24 Jan 2022 14:32:56 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7439B8121A;
-        Mon, 24 Jan 2022 19:59:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4ADDC340E5;
-        Mon, 24 Jan 2022 19:59:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DC5B61518;
+        Mon, 24 Jan 2022 19:32:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26316C340E5;
+        Mon, 24 Jan 2022 19:32:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054388;
-        bh=7iTssmaqpC1K/Xqd0MdRNMXEmtIL7JRZogdBpi/rGDQ=;
+        s=korg; t=1643052775;
+        bh=jIFB4DyR65lRtbEr6tbrfuZymy0Zzuv0IAIULieUXJA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MFmm58sKhK/Ejz9tehtTAhu/DoSMHgHGKiwD/5hQXzG2xYf1GJqwm/oit3NX6mb23
-         HDMkvZP4GTpiQ0gwsDTuyB0tRgvNEnC/5tWhP3/fHiAH127Z80/vsxMxY0IRmxQcng
-         P2cYyPQOUWz62vKzoVQ4qs0fFfO9+9zlZ6sBEiqs=
+        b=BM+DAkhcjtr8kFMl2r/DgPc3UkRnCtr2jYoq/tJ+MiJBKL12t0HC4sgEWHoJ3vGUl
+         TrTLua4CS3JigNsbGKsuk7ZMbwYc1ia6BrScS16j/qLM1N0H77i8fpkgG45m/8YSDH
+         Qyy6DgfGME3LN6wSWWHdnbftGa+y9xsVqgr71roc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        stable@vger.kernel.org, Erhard Furtner <erhard_f@mailbox.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 356/563] x86/mce: Allow instrumentation during task work queueing
+Subject: [PATCH 5.4 137/320] powerpc/powermac: Add additional missing lockdep_register_key()
 Date:   Mon, 24 Jan 2022 19:42:01 +0100
-Message-Id: <20220124184036.726854688@linuxfoundation.org>
+Message-Id: <20220124183958.317521976@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,50 +47,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-[ Upstream commit 4fbce464db81a42f9a57ee242d6150ec7f996415 ]
+[ Upstream commit b149d5d45ac9171ed699a256f026c8ebef901112 ]
 
-Fixes
+Commit df1f679d19ed ("powerpc/powermac: Add missing
+lockdep_register_key()") fixed a problem that was causing a WARNING.
 
-  vmlinux.o: warning: objtool: do_machine_check()+0xdb1: call to queue_task_work() leaves .noinstr.text section
+There are two other places in the same file with the same problem
+originating from commit 9e607f72748d ("i2c_powermac: shut up lockdep
+warning").
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20211208111343.8130-6-bp@alien8.de
+Add missing lockdep_register_key()
+
+Fixes: 9e607f72748d ("i2c_powermac: shut up lockdep warning")
+Reported-by: Erhard Furtner <erhard_f@mailbox.org>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Depends-on: df1f679d19ed ("powerpc/powermac: Add missing lockdep_register_key()")
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=200055
+Link: https://lore.kernel.org/r/2c7e421874e21b2fb87813d768cf662f630c2ad4.1638984999.git.christophe.leroy@csgroup.eu
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/cpu/mce/core.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ arch/powerpc/platforms/powermac/low_i2c.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 14b34963eb1f7..34fffffaf8730 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1443,6 +1443,14 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 	if (worst != MCE_AR_SEVERITY && !kill_it)
- 		goto out;
- 
-+	/*
-+	 * Enable instrumentation around the external facilities like
-+	 * task_work_add() (via queue_task_work()), fixup_exception() etc.
-+	 * For now, that is. Fixing this properly would need a lot more involved
-+	 * reorganization.
-+	 */
-+	instrumentation_begin();
-+
- 	/* Fault was in user mode and we need to take some action */
- 	if ((m.cs & 3) == 3) {
- 		/* If this triggers there is no way to recover. Die hard. */
-@@ -1468,6 +1476,9 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 		if (m.kflags & MCE_IN_KERNEL_COPYIN)
- 			queue_task_work(&m, msg, kill_it);
- 	}
-+
-+	instrumentation_end();
-+
- out:
- 	mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
- }
+diff --git a/arch/powerpc/platforms/powermac/low_i2c.c b/arch/powerpc/platforms/powermac/low_i2c.c
+index bf4be4b53b44d..a366233d8ac2d 100644
+--- a/arch/powerpc/platforms/powermac/low_i2c.c
++++ b/arch/powerpc/platforms/powermac/low_i2c.c
+@@ -811,6 +811,7 @@ static void __init pmu_i2c_probe(void)
+ 		bus->hostdata = bus + 1;
+ 		bus->xfer = pmu_i2c_xfer;
+ 		mutex_init(&bus->mutex);
++		lockdep_register_key(&bus->lock_key);
+ 		lockdep_set_class(&bus->mutex, &bus->lock_key);
+ 		bus->flags = pmac_i2c_multibus;
+ 		list_add(&bus->link, &pmac_i2c_busses);
+@@ -934,6 +935,7 @@ static void __init smu_i2c_probe(void)
+ 		bus->hostdata = bus + 1;
+ 		bus->xfer = smu_i2c_xfer;
+ 		mutex_init(&bus->mutex);
++		lockdep_register_key(&bus->lock_key);
+ 		lockdep_set_class(&bus->mutex, &bus->lock_key);
+ 		bus->flags = 0;
+ 		list_add(&bus->link, &pmac_i2c_busses);
 -- 
 2.34.1
 

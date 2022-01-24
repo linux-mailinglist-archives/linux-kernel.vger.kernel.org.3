@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 651EA49A2BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:01:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0286B49A76A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:44:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2367025AbiAXXyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:54:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49110 "EHLO
+        id S3411255AbiAYCnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:43:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1845968AbiAXXOG (ORCPT
+        with ESMTP id S1386940AbiAXUgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:14:06 -0500
+        Mon, 24 Jan 2022 15:36:10 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C31C0A02BC;
-        Mon, 24 Jan 2022 13:20:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00339C038AE5;
+        Mon, 24 Jan 2022 11:49:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB0E4B8122A;
-        Mon, 24 Jan 2022 21:20:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D22EEC340E4;
-        Mon, 24 Jan 2022 21:20:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90EF7B81188;
+        Mon, 24 Jan 2022 19:49:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3381C340E5;
+        Mon, 24 Jan 2022 19:49:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059221;
-        bh=FWew8kSA0PCwrUkOdUPtZ3rD8Vs0Xt6T0HP/cCKVwJM=;
+        s=korg; t=1643053757;
+        bh=7YyOM7VdATn/fg3G6KlcXEwxLFCFISDdhKejS+MmA9A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ve5EFQANxmJWrwbdugWUS3ICHuDZfouP78L6p4QCWqCTmtymjrBca7McffT/KaSAB
-         dPRpqtggyGjnh4Eqq1fUJRWHK1FSmOYocV7jJjeWoKOIo44EKvHpSWdRGj6aVI2lxR
-         TxE21lvfWve73DonBMPDkECFwloH+ktCAqEGvxcg=
+        b=yawm2nGOFkXKYy/9nAAd3bU+ILtMEI4lTDO6+hjONWijnfFMHOFyggdx59G+Dyppb
+         Ft7eT/UUtJCGJMZoDdQQIUrfaQNwbimXudbnbTd9FqR7a5kf9E3VAqLiboYTbiTYtZ
+         80JyVlnZ9yCA+KK2t0G6WbDBsGCPQLFDqmxJOqRg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
+        stable@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0542/1039] drm/panel: Delete panel on mipi_dsi_attach() failure
-Date:   Mon, 24 Jan 2022 19:38:51 +0100
-Message-Id: <20220124184143.497065511@linuxfoundation.org>
+Subject: [PATCH 5.10 167/563] arm64: dts: qcom: c630: Fix soundcard setup
+Date:   Mon, 24 Jan 2022 19:38:52 +0100
+Message-Id: <20220124184030.178934142@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,170 +51,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Norris <briannorris@chromium.org>
+From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
-[ Upstream commit 9bf7123bb07f98dc76acb5daa91248e6f95713cb ]
+[ Upstream commit c02b360ca67ebeb9de07b47b2fe53f964c2561d1 ]
 
-Many DSI panel drivers fail to clean up their panel references on
-mipi_dsi_attach() failure, so we're leaving a dangling drm_panel
-reference to freed memory. Clean that up on failure.
+Currently Soundcard has 1 rx device for headset and SoundWire Speaker Playback.
 
-Noticed by inspection, after seeing similar problems on other drivers.
-Therefore, I'm not marking Fixes/stable.
+This setup has issues, ex if we try to play on headset the audio stream is
+also sent to SoundWire Speakers and we will hear sound in both headsets and speakers.
 
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20210923173336.3.If9e74fa9b1d6eaa9e0e5b95b2b957b992740251c@changeid
+Make a separate device for Speakers and Headset so that the streams are
+different and handled properly.
+
+Fixes: 45021d35fcb2 ("arm64: dts: qcom: c630: Enable audio support")
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Tested-by: Steev Klimaszewski <steev@kali.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20211209175342.20386-2-srinivas.kandagatla@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/panel/panel-feiyang-fy07024di26a30d.c    | 8 +++++++-
- drivers/gpu/drm/panel/panel-jdi-lt070me05000.c           | 8 +++++++-
- drivers/gpu/drm/panel/panel-novatek-nt36672a.c           | 8 +++++++-
- drivers/gpu/drm/panel/panel-panasonic-vvx10f034n00.c     | 8 +++++++-
- drivers/gpu/drm/panel/panel-ronbo-rb070d30.c             | 8 +++++++-
- drivers/gpu/drm/panel/panel-samsung-s6e88a0-ams452ef01.c | 1 +
- drivers/gpu/drm/panel/panel-samsung-sofef00.c            | 1 +
- drivers/gpu/drm/panel/panel-sharp-ls043t1le01.c          | 8 +++++++-
- 8 files changed, 44 insertions(+), 6 deletions(-)
+ .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/drivers/gpu/drm/panel/panel-feiyang-fy07024di26a30d.c b/drivers/gpu/drm/panel/panel-feiyang-fy07024di26a30d.c
-index 581661b506f81..f9c1f7bc8218c 100644
---- a/drivers/gpu/drm/panel/panel-feiyang-fy07024di26a30d.c
-+++ b/drivers/gpu/drm/panel/panel-feiyang-fy07024di26a30d.c
-@@ -227,7 +227,13 @@ static int feiyang_dsi_probe(struct mipi_dsi_device *dsi)
- 	dsi->format = MIPI_DSI_FMT_RGB888;
- 	dsi->lanes = 4;
- 
--	return mipi_dsi_attach(dsi);
-+	ret = mipi_dsi_attach(dsi);
-+	if (ret < 0) {
-+		drm_panel_remove(&ctx->panel);
-+		return ret;
-+	}
+diff --git a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
+index ad6561843ba28..e080c317b5e3d 100644
+--- a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
++++ b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
+@@ -365,6 +365,10 @@
+ 	dai@1 {
+ 		reg = <1>;
+ 	};
 +
-+	return 0;
- }
++	dai@2 {
++		reg = <2>;
++	};
+ };
  
- static int feiyang_dsi_remove(struct mipi_dsi_device *dsi)
-diff --git a/drivers/gpu/drm/panel/panel-jdi-lt070me05000.c b/drivers/gpu/drm/panel/panel-jdi-lt070me05000.c
-index 733010b5e4f53..3c86ad262d5e0 100644
---- a/drivers/gpu/drm/panel/panel-jdi-lt070me05000.c
-+++ b/drivers/gpu/drm/panel/panel-jdi-lt070me05000.c
-@@ -473,7 +473,13 @@ static int jdi_panel_probe(struct mipi_dsi_device *dsi)
- 	if (ret < 0)
- 		return ret;
+ &sound {
+@@ -377,6 +381,7 @@
+ 		"SpkrLeft IN", "SPK1 OUT",
+ 		"SpkrRight IN", "SPK2 OUT",
+ 		"MM_DL1",  "MultiMedia1 Playback",
++		"MM_DL3",  "MultiMedia3 Playback",
+ 		"MultiMedia2 Capture", "MM_UL2";
  
--	return mipi_dsi_attach(dsi);
-+	ret = mipi_dsi_attach(dsi);
-+	if (ret < 0) {
-+		jdi_panel_del(jdi);
-+		return ret;
-+	}
+ 	mm1-dai-link {
+@@ -393,6 +398,13 @@
+ 		};
+ 	};
+ 
++	mm3-dai-link {
++		link-name = "MultiMedia3";
++		cpu {
++			sound-dai = <&q6asmdai  MSM_FRONTEND_DAI_MULTIMEDIA3>;
++		};
++	};
 +
-+	return 0;
- }
- 
- static int jdi_panel_remove(struct mipi_dsi_device *dsi)
-diff --git a/drivers/gpu/drm/panel/panel-novatek-nt36672a.c b/drivers/gpu/drm/panel/panel-novatek-nt36672a.c
-index 533cd3934b8b7..839b263fb3c0f 100644
---- a/drivers/gpu/drm/panel/panel-novatek-nt36672a.c
-+++ b/drivers/gpu/drm/panel/panel-novatek-nt36672a.c
-@@ -656,7 +656,13 @@ static int nt36672a_panel_probe(struct mipi_dsi_device *dsi)
- 	if (err < 0)
- 		return err;
- 
--	return mipi_dsi_attach(dsi);
-+	err = mipi_dsi_attach(dsi);
-+	if (err < 0) {
-+		drm_panel_remove(&pinfo->base);
-+		return err;
-+	}
+ 	slim-dai-link {
+ 		link-name = "SLIM Playback";
+ 		cpu {
+@@ -422,6 +434,21 @@
+ 			sound-dai = <&wcd9340 1>;
+ 		};
+ 	};
 +
-+	return 0;
- }
- 
- static int nt36672a_panel_remove(struct mipi_dsi_device *dsi)
-diff --git a/drivers/gpu/drm/panel/panel-panasonic-vvx10f034n00.c b/drivers/gpu/drm/panel/panel-panasonic-vvx10f034n00.c
-index 3c20beeb17819..3991f5d950af4 100644
---- a/drivers/gpu/drm/panel/panel-panasonic-vvx10f034n00.c
-+++ b/drivers/gpu/drm/panel/panel-panasonic-vvx10f034n00.c
-@@ -241,7 +241,13 @@ static int wuxga_nt_panel_probe(struct mipi_dsi_device *dsi)
- 	if (ret < 0)
- 		return ret;
- 
--	return mipi_dsi_attach(dsi);
-+	ret = mipi_dsi_attach(dsi);
-+	if (ret < 0) {
-+		wuxga_nt_panel_del(wuxga_nt);
-+		return ret;
-+	}
++	slim-wcd-dai-link {
++		link-name = "SLIM WCD Playback";
++		cpu {
++			sound-dai = <&q6afedai SLIMBUS_1_RX>;
++		};
 +
-+	return 0;
- }
- 
- static int wuxga_nt_panel_remove(struct mipi_dsi_device *dsi)
-diff --git a/drivers/gpu/drm/panel/panel-ronbo-rb070d30.c b/drivers/gpu/drm/panel/panel-ronbo-rb070d30.c
-index a3782830ae3c4..1fb579a574d9f 100644
---- a/drivers/gpu/drm/panel/panel-ronbo-rb070d30.c
-+++ b/drivers/gpu/drm/panel/panel-ronbo-rb070d30.c
-@@ -199,7 +199,13 @@ static int rb070d30_panel_dsi_probe(struct mipi_dsi_device *dsi)
- 	dsi->format = MIPI_DSI_FMT_RGB888;
- 	dsi->lanes = 4;
- 
--	return mipi_dsi_attach(dsi);
-+	ret = mipi_dsi_attach(dsi);
-+	if (ret < 0) {
-+		drm_panel_remove(&ctx->panel);
-+		return ret;
-+	}
++		platform {
++			sound-dai = <&q6routing>;
++		};
 +
-+	return 0;
- }
++		codec {
++			sound-dai =  <&wcd9340 2>;
++		};
++	};
+ };
  
- static int rb070d30_panel_dsi_remove(struct mipi_dsi_device *dsi)
-diff --git a/drivers/gpu/drm/panel/panel-samsung-s6e88a0-ams452ef01.c b/drivers/gpu/drm/panel/panel-samsung-s6e88a0-ams452ef01.c
-index ea63799ff2a1e..29fde3823212b 100644
---- a/drivers/gpu/drm/panel/panel-samsung-s6e88a0-ams452ef01.c
-+++ b/drivers/gpu/drm/panel/panel-samsung-s6e88a0-ams452ef01.c
-@@ -247,6 +247,7 @@ static int s6e88a0_ams452ef01_probe(struct mipi_dsi_device *dsi)
- 	ret = mipi_dsi_attach(dsi);
- 	if (ret < 0) {
- 		dev_err(dev, "Failed to attach to DSI host: %d\n", ret);
-+		drm_panel_remove(&ctx->panel);
- 		return ret;
- 	}
- 
-diff --git a/drivers/gpu/drm/panel/panel-samsung-sofef00.c b/drivers/gpu/drm/panel/panel-samsung-sofef00.c
-index 8cb1853574bb8..6d107e14fcc55 100644
---- a/drivers/gpu/drm/panel/panel-samsung-sofef00.c
-+++ b/drivers/gpu/drm/panel/panel-samsung-sofef00.c
-@@ -302,6 +302,7 @@ static int sofef00_panel_probe(struct mipi_dsi_device *dsi)
- 	ret = mipi_dsi_attach(dsi);
- 	if (ret < 0) {
- 		dev_err(dev, "Failed to attach to DSI host: %d\n", ret);
-+		drm_panel_remove(&ctx->panel);
- 		return ret;
- 	}
- 
-diff --git a/drivers/gpu/drm/panel/panel-sharp-ls043t1le01.c b/drivers/gpu/drm/panel/panel-sharp-ls043t1le01.c
-index b937e24dac8e0..25829a0a8e801 100644
---- a/drivers/gpu/drm/panel/panel-sharp-ls043t1le01.c
-+++ b/drivers/gpu/drm/panel/panel-sharp-ls043t1le01.c
-@@ -296,7 +296,13 @@ static int sharp_nt_panel_probe(struct mipi_dsi_device *dsi)
- 	if (ret < 0)
- 		return ret;
- 
--	return mipi_dsi_attach(dsi);
-+	ret = mipi_dsi_attach(dsi);
-+	if (ret < 0) {
-+		sharp_nt_panel_del(sharp_nt);
-+		return ret;
-+	}
-+
-+	return 0;
- }
- 
- static int sharp_nt_panel_remove(struct mipi_dsi_device *dsi)
+ &tlmm {
 -- 
 2.34.1
 

@@ -2,81 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58844498154
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:46:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39CA0498156
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 14:46:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232645AbiAXNqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 08:46:23 -0500
-Received: from mga14.intel.com ([192.55.52.115]:36514 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229562AbiAXNqW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 08:46:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643031982; x=1674567982;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JqT7w+jmr16g6nhf2sFMCeI70E8Qapcp3FqDAj0rZUQ=;
-  b=cHNeGHa9kV9WsH4Cq3/VOxQ+e8WE7MUE42kH6c/6mxUPleEGo7BJku+p
-   vFuLS8LULhICbMVhrxKBJoPu8uRbooSaKCx6HI9hq9fLofw1fKAFDtNcB
-   ryr1cSRdS5xqGkQcKq7Ej1oOpgcuqhS7D0vYIdcUz0JrIyxXCq09roQw3
-   RBd9bB6kafv1IyHKMbdCd5ZX7Zr5Cab5ibLjn8hk8ajtWwwzlAZLsVzyN
-   NgBzu2lVZ8f5gDjGRQA/xJUKyy5iuudcPN+b2BouzaodzgT8phG6GP4aX
-   1kM1uPTkDo2NZjKaDOwxBWKAjNUbuhMmJKBAnIxx5BAPPcVaV9ro7L7ww
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="246262724"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="246262724"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 05:46:22 -0800
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="695424489"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 05:46:20 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nBzej-00DuDp-H8;
-        Mon, 24 Jan 2022 15:45:13 +0200
-Date:   Mon, 24 Jan 2022 15:45:13 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Grace Kao <grace.kao@intel.com>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Kane Chen <kane.chen@intel.com>
-Subject: Re: pinctrl: intel: Fix a glitch when updating IRQ flags on a
- preconfigured line
-Message-ID: <Ye6taW8fCoLj83Pa@smile.fi.intel.com>
-References: <20220121093426.6336-1-grace.kao@intel.com>
- <CAHp75VfD72ZzTw4wc4Oteg+XvRqRipN-YjLqQjUGGy8f83By+w@mail.gmail.com>
+        id S232950AbiAXNqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 08:46:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:49058 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232769AbiAXNqe (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 08:46:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643031993;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VMWjUFPNROSNZ1gB7bIAJHjMk/KVdbCxC1i1CaU9o8k=;
+        b=dLaq+IBnNeXqPubyheXgyWNkID+xMyS8+JlPZKTFbclUe2gHPL7G0/GxOfs5yBNV6AK3BZ
+        vzBU70fEpeQR88+AaddKhapHfh5n1sqZFNb35lqpuJFLuNh+CIDhCNzXoBgUtdxK08DVcF
+        IFHGeb529SqUGYtE6FMivvH+FSUv7ls=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-323--LN8TaWMM6-n68guag0gWQ-1; Mon, 24 Jan 2022 08:46:32 -0500
+X-MC-Unique: -LN8TaWMM6-n68guag0gWQ-1
+Received: by mail-ej1-f71.google.com with SMTP id d18-20020a1709063ed200b006a5eeb2ee4dso2073625ejj.3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 05:46:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=VMWjUFPNROSNZ1gB7bIAJHjMk/KVdbCxC1i1CaU9o8k=;
+        b=NNxC7xZNwc8FkwgQQBV3t4mu8yoF447PG4cSKKwye7KF6+Hf3IHG15ExvaeaS659nH
+         7p3GnE2EK7buy31r/XAhnQFH6kaye50UY6SSnAjWUB4nhsGKpx7m28uZE+MvXTQfIsUd
+         9tMn9orwEzOWq6NYBSUK8JgehFhO3GntOkjx8u2hCZ5wVVV3CMH0YSPYFyYmMzd2WSg+
+         pxh7FOk+kzbo7Itqe/i8LHP083iNOXymOb6ezxA6gf3GEQdG7ErRZNUhW9ZUzbU8GjOq
+         x9+5ZIQhsoILRyXC5FmtgqEL1SI1lJH61no2BC5P8oq94+S1/iVJjgxii+4tCQczmFKZ
+         yncA==
+X-Gm-Message-State: AOAM533QENHZx+Xq8qaux+3JjjKyW7eJN5DZnBnhqd+4wujeASUas7YB
+        CwjdYIGfcks48kU3MxqH1FLHdYOC3eneb1SDRBTN5kiaY3iz17DJuorwlEzYTv8aMp2hlkK3JcD
+        3M1F8KxcjSmdKdgMJUVFF1uE6
+X-Received: by 2002:a05:6402:650:: with SMTP id u16mr16286102edx.163.1643031990561;
+        Mon, 24 Jan 2022 05:46:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyPPS6Cfx4PZykBtvSaLRQRaAbKk4CngKeatZ4sjeSvxKkSns8X1naDMiTsILFxx8eTjvA0Ag==
+X-Received: by 2002:a05:6402:650:: with SMTP id u16mr16286089edx.163.1643031990351;
+        Mon, 24 Jan 2022 05:46:30 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id gh14sm4886125ejb.38.2022.01.24.05.46.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Jan 2022 05:46:29 -0800 (PST)
+Message-ID: <93cd45a7-700b-2437-d56b-3597bdadb657@redhat.com>
+Date:   Mon, 24 Jan 2022 14:46:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75VfD72ZzTw4wc4Oteg+XvRqRipN-YjLqQjUGGy8f83By+w@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] KVM: VMX: Zero host's SYSENTER_ESP iff SYSENTER is NOT
+ used
+Content-Language: en-US
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lai Jiangshan <laijs@linux.alibaba.com>
+References: <20220122015211.1468758-1-seanjc@google.com>
+ <8735lgjgwl.fsf@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <8735lgjgwl.fsf@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 12:27:40PM +0200, Andy Shevchenko wrote:
-> On Fri, Jan 21, 2022 at 11:35 AM Grace Kao <grace.kao@intel.com> wrote:
+On 1/22/22 09:47, Vitaly Kuznetsov wrote:
+>>   	 */
+>> -	vmcs_writel(HOST_IA32_SYSENTER_ESP, 0);
+>> +	if (!IS_ENABLED(CONFIG_IA32_EMULATION) && !IS_ENABLED(CONFIG_X86_32))
+> Isn't it the same as "!IS_ENABLED(CONFIG_COMPAT_32)"? (same goes to the
+> check in vmx_vcpu_load_vmcs())
 > 
-> > Tested-by: Grace Kao <grace.kao@intel.com>
-> 
-> Thanks for testing. I will apply the tag to the original patch. The
-> idea that you simply reply to the original message with the line above
-> and that's it, no need to resend a full patch.
-> 
-> > Change-Id: I6ff5cf0c42a76dce709a445c1820c8f3a84d6d89
-> 
-> I see it comes from the internal tree.
 
-Original patch with your tag has been pushed to my review and testing queue, thanks!
+It is, but I think it's clearer to write it as it's already done in 
+arch/x86/kvm/vmx/vmx.c, or possibly
 
--- 
-With Best Regards,
-Andy Shevchenko
+if (IS_ENABLED(CONFIG_X86_64) && !IS_ENABLED(CONFIG_IA32_EMULATION))
 
+CONFIG_COMPAT_32 doesn't say as clearly whether it's enabled for 32-bit 
+systems or not.
+
+Paolo
 

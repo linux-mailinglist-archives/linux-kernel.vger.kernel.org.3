@@ -2,175 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F0249A821
+	by mail.lfdr.de (Postfix) with ESMTP id BE73649A822
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1316474AbiAYC5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:57:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
+        id S1316495AbiAYC5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:57:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3414758AbiAYAtZ (ORCPT
+        with ESMTP id S3414772AbiAYAte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 19:49:25 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7821C019B3F
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:33:34 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id e79so21417881iof.13
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:33:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CgcWWoipX9AEgl7WxsfTrdOoQ6j1cPPjeKFCSVhOPgs=;
-        b=Vj6YY87HCxZDs5pBmz1/Dft9TANUalCCRkfdUr2BxlhQSqmTG17dMpcl/r7f7CJ6+K
-         Wi3OIBr0nhW81qjVm1kNqyS26/IHk1uNa6s2+lqERHdviNWx822R8LxGpCI0C7bv84Zj
-         W7eK66lLZqzQqGocTrjUXfXDHJ8eDLkXlq2z5AHdHMGdHOcu9SlZ9xb4/gUWqOTnvUA3
-         BaleY0jlD2v/SoXysCK7zY9j972RNGWM4dq+Mq4ftDWl1b+1qae31tcRl9h0QDEsTapK
-         uFkYCSa9ca378ruYnd6h3v+C7lnRRjvPrcHROKnel3BwL8reMkavy/FKTKG3//c7iCg9
-         gIvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CgcWWoipX9AEgl7WxsfTrdOoQ6j1cPPjeKFCSVhOPgs=;
-        b=syE5BQ3d3swX72PIGAEBY0XOOIpXthQ+1og3wXYn9oLZnvny7ytnwbZ3ao+rhGZopM
-         Cb+qxqTq7stUDYq2j9yyo2JQ9SjYypzOI0C/8AD+C2a+PbNzu/lNzAeGa4ptlB2Z3wqq
-         ClXWOmGn9adBBFYOCRBg4l1FMiXLPQugVozBsxuTQ1TF6c9mwLYJfdSXtap7wIAjgVhQ
-         T96th0AMqh3UVNKgdTAe7I19GlnIPIeDTq+kOwOlGbnmek8DtIY1keFRwjk+gEq88o3R
-         mkL1Ivm1zzLjYYfyrJ+yCkWZuXbPCOhaKb2H+n0GcGhAaCoQcoQwT6mahotIwyOWKClF
-         3rQg==
-X-Gm-Message-State: AOAM530XUP8kh9gbzRcjf2IClhKd3frHciEMB+9OTs2idgjX8Ny5uIlG
-        mYsEg0uNsjoadBk0OEu7/hUmfK7DaM3f7fyw28E=
-X-Google-Smtp-Source: ABdhPJzrMzDeTEX/8ExPj5G5q+swZsIgUK6dW7wJbr/SA/Q3Be3RqOaILZTv+Re/VGjMuhg5lewyKVCj1zw4hCuR/yo=
-X-Received: by 2002:a02:c80a:: with SMTP id p10mr2768417jao.218.1643063614305;
- Mon, 24 Jan 2022 14:33:34 -0800 (PST)
+        Mon, 24 Jan 2022 19:49:34 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1049EC047CE4;
+        Mon, 24 Jan 2022 14:33:45 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JjPsL1zWVz4y82;
+        Tue, 25 Jan 2022 09:33:42 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643063623;
+        bh=Q7cV3zIVrbk4eZ0vx98E9oUuVG4Uaj8FKYUwZqQb2BU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=tSstAJsmJEYLMABaBazIkF0XpBRW/SOMc3kdt6nXnj1hiPz7i2TIEQYfFawA6AqLs
+         E4BTAf09G9wMUUQT7iFFAzJlyl93SJ0er4Ks7lKmeWg8Uq9EW3RjnnZySVqO9nllaC
+         2s+opzEvyUCdMiZkIC3W8kMJRW9+8TpSJ3mP78M5WgIdiLGHi4Tkc0tvTWVEJoSR2C
+         7C8kMDxFkKuhdh5ZG6fhaftYfGtDzst3My3BQlob8Nqk3F7VKppbVyq9FGDpbEAjuL
+         O7KDgZkAwVEbNcyEUdmTca4BJBS76plaByzsvZTgVCv+iVIawleELHxs+oz4V0RAmA
+         2duOdsAp+nW6Q==
+Date:   Tue, 25 Jan 2022 09:33:41 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     John Harrison <John.C.Harrison@Intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>
+Subject: linux-next: manual merge of the drm-intel tree with Linus' tree
+Message-ID: <20220125093341.15244634@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220117153634.150357-1-nogikh@google.com> <20220117153634.150357-3-nogikh@google.com>
-In-Reply-To: <20220117153634.150357-3-nogikh@google.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Mon, 24 Jan 2022 23:33:23 +0100
-Message-ID: <CA+fCnZdUJS=qcTKews9XEgZi8=u5=iHPkDh1MaZryKL45vOKDQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] kcov: properly handle subsequent mmap calls
-To:     Aleksandr Nogikh <nogikh@google.com>
-Cc:     kasan-dev <kasan-dev@googlegroups.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/2ZL55ve7xa9iF44s=AjpDmu";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 4:37 PM Aleksandr Nogikh <nogikh@google.com> wrote:
->
-> Allocate the kcov buffer during KCOV_MODE_INIT in order to untie mmapping
-> of a kcov instance and the actual coverage collection process. Modify
-> kcov_mmap, so that it can be reliably used any number of times once
-> KCOV_MODE_INIT has succeeded.
->
-> These changes to the user-facing interface of the tool only weaken the
-> preconditions, so all existing user space code should remain compatible
-> with the new version.
->
-> Signed-off-by: Aleksandr Nogikh <nogikh@google.com>
-> ---
->  kernel/kcov.c | 34 +++++++++++++++-------------------
->  1 file changed, 15 insertions(+), 19 deletions(-)
->
-> diff --git a/kernel/kcov.c b/kernel/kcov.c
-> index e1be7301500b..475524bd900a 100644
-> --- a/kernel/kcov.c
-> +++ b/kernel/kcov.c
-> @@ -459,37 +459,28 @@ void kcov_task_exit(struct task_struct *t)
->  static int kcov_mmap(struct file *filep, struct vm_area_struct *vma)
->  {
->         int res = 0;
-> -       void *area;
->         struct kcov *kcov = vma->vm_file->private_data;
->         unsigned long size, off;
->         struct page *page;
->         unsigned long flags;
->
-> -       area = vmalloc_user(vma->vm_end - vma->vm_start);
-> -       if (!area)
-> -               return -ENOMEM;
-> -
->         spin_lock_irqsave(&kcov->lock, flags);
->         size = kcov->size * sizeof(unsigned long);
-> -       if (kcov->mode != KCOV_MODE_INIT || vma->vm_pgoff != 0 ||
-> +       if (kcov->area == NULL || vma->vm_pgoff != 0 ||
->             vma->vm_end - vma->vm_start != size) {
->                 res = -EINVAL;
->                 goto exit;
->         }
-> -       if (!kcov->area) {
-> -               kcov->area = area;
-> -               vma->vm_flags |= VM_DONTEXPAND;
-> -               spin_unlock_irqrestore(&kcov->lock, flags);
-> -               for (off = 0; off < size; off += PAGE_SIZE) {
-> -                       page = vmalloc_to_page(kcov->area + off);
-> -                       if (vm_insert_page(vma, vma->vm_start + off, page))
-> -                               WARN_ONCE(1, "vm_insert_page() failed");
-> -               }
-> -               return 0;
-> +       spin_unlock_irqrestore(&kcov->lock, flags);
-> +       vma->vm_flags |= VM_DONTEXPAND;
-> +       for (off = 0; off < size; off += PAGE_SIZE) {
-> +               page = vmalloc_to_page(kcov->area + off);
+--Sig_/2ZL55ve7xa9iF44s=AjpDmu
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hm, you're accessing kcov->area without the lock here. Although, the
-old code does this as well. This is probably OK, as kcov->area can't
-be changed nor freed while this handler is executing.
+Hi all,
 
+Today's linux-next merge of the drm-intel tree got a conflict in:
 
-> +               if (vm_insert_page(vma, vma->vm_start + off, page))
-> +                       WARN_ONCE(1, "vm_insert_page() failed");
->         }
-> +       return 0;
->  exit:
->         spin_unlock_irqrestore(&kcov->lock, flags);
-> -       vfree(area);
->         return res;
->  }
->
-> @@ -674,6 +665,7 @@ static long kcov_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
->         unsigned int remote_num_handles;
->         unsigned long remote_arg_size;
->         unsigned long size, flags;
-> +       void *area;
->
->         kcov = filep->private_data;
->         switch (cmd) {
-> @@ -683,17 +675,21 @@ static long kcov_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
->                  * Must happen before anything else.
->                  *
->                  * First check the size argument - it must be at least 2
-> -                * to hold the current position and one PC. Later we allocate
-> -                * size * sizeof(unsigned long) memory, that must not overflow.
-> +                * to hold the current position and one PC.
->                  */
->                 size = arg;
->                 if (size < 2 || size > INT_MAX / sizeof(unsigned long))
->                         return -EINVAL;
-> +               area = vmalloc_user(size * sizeof(unsigned long));
-> +               if (area == NULL)
-> +                       return -ENOMEM;
->                 spin_lock_irqsave(&kcov->lock, flags);
->                 if (kcov->mode != KCOV_MODE_DISABLED) {
->                         spin_unlock_irqrestore(&kcov->lock, flags);
-> +                       vfree(area);
->                         return -EBUSY;
->                 }
-> +               kcov->area = area;
->                 kcov->size = size;
->                 kcov->mode = KCOV_MODE_INIT;
->                 spin_unlock_irqrestore(&kcov->lock, flags);
-> --
-> 2.34.1.703.g22d0c6ccf7-goog
->
+  drivers/gpu/drm/i915/i915_reg.h
 
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+between commit:
+
+  77cdd054dd2c ("drm/i915/pmu: Connect engine busyness stats from GuC to pm=
+u")
+
+from Linus' tree and commit:
+
+  202b1f4c1234 ("drm/i915/gt: Move engine registers to their own header")
+
+from the drm-intel tree.
+
+I fixed it up (see below - maybe should be done better?) and can carry the
+fix as necessary. This is now fixed as far as linux-next is concerned,
+but any non trivial conflicts should be mentioned to your upstream
+maintainer when your tree is submitted for merging.  You may also want
+to consider cooperating with the maintainer of the conflicting tree to
+minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/i915/i915_reg.h
+index 971d601fe751,cf168c3e0471..000000000000
+--- a/drivers/gpu/drm/i915/i915_reg.h
++++ b/drivers/gpu/drm/i915/i915_reg.h
+@@@ -2661,52 -1825,7 +1843,9 @@@
+  #define   AUX_INV		REG_BIT(0)
+  #define BLT_HWS_PGA_GEN7	_MMIO(0x04280)
+  #define VEBOX_HWS_PGA_GEN7	_MMIO(0x04380)
+- #define RING_ACTHD(base)	_MMIO((base) + 0x74)
+- #define RING_ACTHD_UDW(base)	_MMIO((base) + 0x5c)
+- #define RING_NOPID(base)	_MMIO((base) + 0x94)
+- #define RING_IMR(base)		_MMIO((base) + 0xa8)
+- #define RING_HWSTAM(base)	_MMIO((base) + 0x98)
+- #define RING_TIMESTAMP(base)		_MMIO((base) + 0x358)
+- #define RING_TIMESTAMP_UDW(base)	_MMIO((base) + 0x358 + 4)
+- #define   TAIL_ADDR		0x001FFFF8
+- #define   HEAD_WRAP_COUNT	0xFFE00000
+- #define   HEAD_WRAP_ONE		0x00200000
+- #define   HEAD_ADDR		0x001FFFFC
+- #define   RING_NR_PAGES		0x001FF000
+- #define   RING_REPORT_MASK	0x00000006
+- #define   RING_REPORT_64K	0x00000002
+- #define   RING_REPORT_128K	0x00000004
+- #define   RING_NO_REPORT	0x00000000
+- #define   RING_VALID_MASK	0x00000001
+- #define   RING_VALID		0x00000001
+- #define   RING_INVALID		0x00000000
+- #define   RING_WAIT_I8XX	(1 << 0) /* gen2, PRBx_HEAD */
+- #define   RING_WAIT		(1 << 11) /* gen3+, PRBx_CTL */
+- #define   RING_WAIT_SEMAPHORE	(1 << 10) /* gen6+ */
+ =20
+ +#define GUCPMTIMESTAMP          _MMIO(0xC3E8)
+ +
+- /* There are 16 64-bit CS General Purpose Registers per-engine on Gen8+ */
+- #define GEN8_RING_CS_GPR(base, n)	_MMIO((base) + 0x600 + (n) * 8)
+- #define GEN8_RING_CS_GPR_UDW(base, n)	_MMIO((base) + 0x600 + (n) * 8 + 4)
+-=20
+- #define RING_FORCE_TO_NONPRIV(base, i) _MMIO(((base) + 0x4D0) + (i) * 4)
+- #define   RING_FORCE_TO_NONPRIV_ADDRESS_MASK	REG_GENMASK(25, 2)
+- #define   RING_FORCE_TO_NONPRIV_ACCESS_RW	(0 << 28)    /* CFL+ & Gen11+ */
+- #define   RING_FORCE_TO_NONPRIV_ACCESS_RD	(1 << 28)
+- #define   RING_FORCE_TO_NONPRIV_ACCESS_WR	(2 << 28)
+- #define   RING_FORCE_TO_NONPRIV_ACCESS_INVALID	(3 << 28)
+- #define   RING_FORCE_TO_NONPRIV_ACCESS_MASK	(3 << 28)
+- #define   RING_FORCE_TO_NONPRIV_RANGE_1		(0 << 0)     /* CFL+ & Gen11+ */
+- #define   RING_FORCE_TO_NONPRIV_RANGE_4		(1 << 0)
+- #define   RING_FORCE_TO_NONPRIV_RANGE_16	(2 << 0)
+- #define   RING_FORCE_TO_NONPRIV_RANGE_64	(3 << 0)
+- #define   RING_FORCE_TO_NONPRIV_RANGE_MASK	(3 << 0)
+- #define   RING_FORCE_TO_NONPRIV_MASK_VALID	\
+- 					(RING_FORCE_TO_NONPRIV_RANGE_MASK \
+- 					| RING_FORCE_TO_NONPRIV_ACCESS_MASK)
+- #define   RING_MAX_NONPRIV_SLOTS  12
+-=20
+  #define GEN7_TLB_RD_ADDR	_MMIO(0x4700)
+ =20
+  #define GEN9_GAMT_ECO_REG_RW_IA _MMIO(0x4ab0)
+@@@ -2778,27 -1885,7 +1905,10 @@@
+  #define GEN2_INSTDONE	_MMIO(0x2090)
+  #define NOPID		_MMIO(0x2094)
+  #define HWSTAM		_MMIO(0x2098)
+- #define DMA_FADD_I8XX(base)	_MMIO((base) + 0xd0)
+- #define RING_BBSTATE(base)	_MMIO((base) + 0x110)
+- #define   RING_BB_PPGTT		(1 << 5)
+- #define RING_SBBADDR(base)	_MMIO((base) + 0x114) /* hsw+ */
+- #define RING_SBBSTATE(base)	_MMIO((base) + 0x118) /* hsw+ */
+- #define RING_SBBADDR_UDW(base)	_MMIO((base) + 0x11c) /* gen8+ */
+- #define RING_BBADDR(base)	_MMIO((base) + 0x140)
+- #define RING_BBADDR_UDW(base)	_MMIO((base) + 0x168) /* gen8+ */
+- #define RING_BB_PER_CTX_PTR(base)	_MMIO((base) + 0x1c0) /* gen8+ */
+- #define RING_INDIRECT_CTX(base)		_MMIO((base) + 0x1c4) /* gen8+ */
+- #define RING_INDIRECT_CTX_OFFSET(base)	_MMIO((base) + 0x1c8) /* gen8+ */
+- #define RING_CTX_TIMESTAMP(base)	_MMIO((base) + 0x3a8) /* gen8+ */
+-=20
+- #define VDBOX_CGCTL3F10(base)		_MMIO((base) + 0x3f10)
+- #define   IECPUNIT_CLKGATE_DIS		REG_BIT(22)
+ =20
+ +#define VDBOX_CGCTL3F18(base)		_MMIO((base) + 0x3f18)
+ +#define   ALNUNIT_CLKGATE_DIS		REG_BIT(13)
+ +
+  #define ERROR_GEN6	_MMIO(0x40a0)
+  #define GEN7_ERR_INT	_MMIO(0x44040)
+  #define   ERR_INT_POISON		(1 << 31)
+
+--Sig_/2ZL55ve7xa9iF44s=AjpDmu
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHvKUUACgkQAVBC80lX
+0Gwxewf+OMrUFaGLuYGYg5EgrZvYs6OAjlxGfiU6hn4qQimxLo0Idz+12DpIMtt1
+NA/MxjY9MzpHj756KK+jGSzsS1HmUYXQvCw1uPBY/6XesaRpFio/iujoRLtJKo0c
+KVK90J2IUv/Tj2XJg7KDWybDFBTTa7tyGWwIF6G10/i7vCplaswXERggRIdF+ACT
+Ty3meYA8lKIAoGv8AP3ryEvKLFSsiTyF4+GSZQ/AZVPsh9vOy7gqhSUbRTyRHrwa
+jK0Ucu/l5fHt7bbAVWePaHs1mkBA9PW6Kk7Eg7nN3i4C5PsSo/UyqbjOjnNXMY5Y
+GpnYoinv6581dqwm8dzdxazwN6TQYg==
+=WVH5
+-----END PGP SIGNATURE-----
+
+--Sig_/2ZL55ve7xa9iF44s=AjpDmu--

@@ -2,46 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BEEA4992AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:23:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78CEF498C4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381780AbiAXUXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:23:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359871AbiAXUBJ (ORCPT
+        id S1349864AbiAXTVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:21:44 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39036 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347913AbiAXTNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:01:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039C2C055A9B;
-        Mon, 24 Jan 2022 11:28:30 -0800 (PST)
+        Mon, 24 Jan 2022 14:13:32 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 839FB60917;
-        Mon, 24 Jan 2022 19:28:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6185CC340E8;
-        Mon, 24 Jan 2022 19:28:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69519B8122F;
+        Mon, 24 Jan 2022 19:13:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 865FBC340E5;
+        Mon, 24 Jan 2022 19:13:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052509;
-        bh=hazNcpa85LKHtize4WzzuyjDhfQX2MzPxLFQYOF7I9I=;
+        s=korg; t=1643051608;
+        bh=vyqw9JCEbFyxhmvCDNiK7lJwnozf/joACBAFI2qbUfM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q53UTEcAn/blL6RqQFGl5QqEudgClKrBOHSCby2R95fiPXOBcOIOXecTZlcJiNJ+H
-         BrawiiD2IDz2+VJ6bM1UYLIHHGR4Grd6hvpj+gkgODBTsosvXVbte0SUONhxKb1GFF
-         WO0YNHNQnzybe7GqYl2LcI01OAlmafPmqwcAzJMY=
+        b=bA9Fy/3LDysX5pq5d4+XUJzJzf8Xm/etjfUvDvFcsi504WTZqLEopym7uPCkvwJNw
+         Ygv/97n2BOHupuCbza+w14DTwfVnWJxSaEgKHjb5smILEZ2Rat3dt5pKx/VBGlh7KO
+         d4gF0GHOwdYFYmMPIMMGfflmWR416qSWIlmOniwo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Steven Maddox <s.maddox@lantizia.me.uk>,
-        Christian Lamparter <chunkeey@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 082/320] ARM: dts: gemini: NAS4220-B: fis-index-block with 128 KiB sectors
-Date:   Mon, 24 Jan 2022 19:41:06 +0100
-Message-Id: <20220124183956.534259323@linuxfoundation.org>
+        stable@vger.kernel.org, Lucas De Marchi <lucas.demarchi@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH 4.19 029/239] x86/gpu: Reserve stolen memory for first integrated Intel GPU
+Date:   Mon, 24 Jan 2022 19:41:07 +0100
+Message-Id: <20220124183944.052597788@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,65 +45,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Lamparter <chunkeey@gmail.com>
+From: Lucas De Marchi <lucas.demarchi@intel.com>
 
-[ Upstream commit 4754eab7e5a78bdefe7a960c5c260c95ebbb5fa6 ]
+commit 9c494ca4d3a535f9ca11ad6af1813983c1c6cbdd upstream.
 
-Steven Maddox reported in the OpenWrt bugzilla, that his
-RaidSonic IB-NAS4220-B was no longer booting with the new
-OpenWrt 21.02 (uses linux 5.10's device-tree). However, it was
-working with the previous OpenWrt 19.07 series (uses 4.14).
+"Stolen memory" is memory set aside for use by an Intel integrated GPU.
+The intel_graphics_quirks() early quirk reserves this memory when it is
+called for a GPU that appears in the intel_early_ids[] table of integrated
+GPUs.
 
-|[    5.548038] No RedBoot partition table detected in 30000000.flash
-|[    5.618553] Searching for RedBoot partition table in 30000000.flash at offset 0x0
-|[    5.739093] No RedBoot partition table detected in 30000000.flash
-|...
-|[    7.039504] Waiting for root device /dev/mtdblock3...
+Previously intel_graphics_quirks() was marked as QFLAG_APPLY_ONCE, so it
+was called only for the first Intel GPU found.  If a discrete GPU happened
+to be enumerated first, intel_graphics_quirks() was called for it but not
+for any integrated GPU found later.  Therefore, stolen memory for such an
+integrated GPU was never reserved.
 
-The provided bootlog shows that the RedBoot partition parser was
-looking for the partition table "at offset 0x0". Which is strange
-since the comment in the device-tree says it should be at 0xfe0000.
+For example, this problem occurs in this Alderlake-P (integrated) + DG2
+(discrete) topology where the DG2 is found first, but stolen memory is
+associated with the integrated GPU:
 
-Further digging on the internet led to a review site that took
-some useful PCB pictures of their review unit back in February 2009.
-Their picture shows a Spansion S29GL128N11TFI01 flash chip.
+  - 00:01.0 Bridge
+    `- 03:00.0 DG2 discrete GPU
+  - 00:02.0 Integrated GPU (with stolen memory)
 
->From Spansion's Datasheet:
-"S29GL128N: One hundred twenty-eight 64 Kword (128 Kbyte) sectors"
-Steven also provided a "cat /sys/class/mtd/mtd0/erasesize" from his
-unit: "131072".
+Remove the QFLAG_APPLY_ONCE flag and call intel_graphics_quirks() for every
+Intel GPU.  Reserve stolen memory for the first GPU that appears in
+intel_early_ids[].
 
-With the 128 KiB Sector/Erasesize in mind. This patch changes the
-fis-index-block property to (0xfe0000 / 0x20000) = 0x7f.
-
-Fixes: b5a923f8c739 ("ARM: dts: gemini: Switch to redboot partition parsing")
-Reported-by: Steven Maddox <s.maddox@lantizia.me.uk>
-Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Tested-by: Steven Maddox <s.maddox@lantizia.me.uk>
-Link: https://lore.kernel.org/r/20211206004334.4169408-1-linus.walleij@linaro.org'
-Bugzilla: https://bugs.openwrt.org/index.php?do=details&task_id=4137
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+[bhelgaas: commit log, add code comment, squash in
+https://lore.kernel.org/r/20220118190558.2ququ4vdfjuahicm@ldmartin-desk2]
+Link: https://lore.kernel.org/r/20220114002843.2083382-1-lucas.demarchi@intel.com
+Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/gemini-nas4220b.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/kernel/early-quirks.c |   10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/gemini-nas4220b.dts b/arch/arm/boot/dts/gemini-nas4220b.dts
-index e1020e07e1366..60cec653ac7c6 100644
---- a/arch/arm/boot/dts/gemini-nas4220b.dts
-+++ b/arch/arm/boot/dts/gemini-nas4220b.dts
-@@ -84,7 +84,7 @@
- 			partitions {
- 				compatible = "redboot-fis";
- 				/* Eraseblock at 0xfe0000 */
--				fis-index-block = <0x1fc>;
-+				fis-index-block = <0x7f>;
- 			};
- 		};
+--- a/arch/x86/kernel/early-quirks.c
++++ b/arch/x86/kernel/early-quirks.c
+@@ -515,6 +515,7 @@ static const struct intel_early_ops gen1
+ 	.stolen_size = gen9_stolen_size,
+ };
  
--- 
-2.34.1
-
++/* Intel integrated GPUs for which we need to reserve "stolen memory" */
+ static const struct pci_device_id intel_early_ids[] __initconst = {
+ 	INTEL_I830_IDS(&i830_early_ops),
+ 	INTEL_I845G_IDS(&i845_early_ops),
+@@ -584,6 +585,13 @@ static void __init intel_graphics_quirks
+ 	u16 device;
+ 	int i;
+ 
++	/*
++	 * Reserve "stolen memory" for an integrated GPU.  If we've already
++	 * found one, there's nothing to do for other (discrete) GPUs.
++	 */
++	if (resource_size(&intel_graphics_stolen_res))
++		return;
++
+ 	device = read_pci_config_16(num, slot, func, PCI_DEVICE_ID);
+ 
+ 	for (i = 0; i < ARRAY_SIZE(intel_early_ids); i++) {
+@@ -696,7 +704,7 @@ static struct chipset early_qrk[] __init
+ 	{ PCI_VENDOR_ID_INTEL, 0x3406, PCI_CLASS_BRIDGE_HOST,
+ 	  PCI_BASE_CLASS_BRIDGE, 0, intel_remapping_check },
+ 	{ PCI_VENDOR_ID_INTEL, PCI_ANY_ID, PCI_CLASS_DISPLAY_VGA, PCI_ANY_ID,
+-	  QFLAG_APPLY_ONCE, intel_graphics_quirks },
++	  0, intel_graphics_quirks },
+ 	/*
+ 	 * HPET on the current version of the Baytrail platform has accuracy
+ 	 * problems: it will halt in deep idle state - so we disable it.
 
 

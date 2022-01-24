@@ -2,47 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E626499AF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D68094997E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574227AbiAXVsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:48:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377749AbiAXVMv (ORCPT
+        id S1449882AbiAXVRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:17:14 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44116 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1392181AbiAXUuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:12:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E3CC02B779;
-        Mon, 24 Jan 2022 12:09:33 -0800 (PST)
+        Mon, 24 Jan 2022 15:50:35 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8DDD6131E;
-        Mon, 24 Jan 2022 20:09:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DCFFC340E5;
-        Mon, 24 Jan 2022 20:09:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B03160C3F;
+        Mon, 24 Jan 2022 20:50:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E55F4C340E7;
+        Mon, 24 Jan 2022 20:50:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054972;
-        bh=o4vXwjtGO5bckZbOzF25uhyLz3mbp8Clz6bUC0ZiGSE=;
+        s=korg; t=1643057434;
+        bh=Qlp85fVLXFysxne0M7vox7TTGm1Wpc/6yq/GnOLNTws=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2jaBrNmqwKlDDLCXsWwcVJttl2rS05jt9L46XRYOH2oMizawFPXOJ3m0VyKP+uJ5J
-         b6bQZf2KtMcnbxJFT8uurx1/fVkYyVgXO96Q8nJyz/FZ097tKLXU/nTTWO33hTZGom
-         VW57YzDdoEhEyMKxAUVX8s5yY49RLb6wTOgb7RFw=
+        b=UKigDxf+TK0J+0oR1pY6dz/DBZmOhFzrI2m3sCmnhuTfXl3IyaAg/uelvigrs2v7Y
+         u/AzyU7LDremVf2fHX7gm6RYPWlv+wZDqq8mDDUszjLvxikxVsOcwIU7MXilbw/f13
+         4QImHrya8THZDQW/LBAw6bchphSgxNiJWihWhaLM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Patrick Doyle <pdoyle@irobot.com>,
-        Richard Weinberger <richard@nod.at>,
-        Yoshio Furuyama <ytc-mb-yfuruyama7@kioxia.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>
-Subject: [PATCH 5.10 562/563] mtd: nand: bbt: Fix corner case in bad block table handling
-Date:   Mon, 24 Jan 2022 19:45:27 +0100
-Message-Id: <20220124184043.886778071@linuxfoundation.org>
+        stable@vger.kernel.org, Si-Wei Liu <si-wei.liu@oracle.com>,
+        Jason Wang <jasowang@redhat.com>, Eli Cohen <elic@nvidia.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Subject: [PATCH 5.15 811/846] vdpa/mlx5: Restore cur_num_vqs in case of failure in change_num_qps()
+Date:   Mon, 24 Jan 2022 19:45:28 +0100
+Message-Id: <20220124184128.895154057@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,36 +46,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Doyle, Patrick <pdoyle@irobot.com>
+From: Eli Cohen <elic@nvidia.com>
 
-commit fd0d8d85f7230052e638a56d1bfea170c488e6bc upstream.
+commit 37e07e705888e4c3502f204e9c6785c9c2d6d86a upstream.
 
-In the unlikely event that both blocks 10 and 11 are marked as bad (on a
-32 bit machine), then the process of marking block 10 as bad stomps on
-cached entry for block 11.  There are (of course) other examples.
+Restore ndev->cur_num_vqs to the original value in case change_num_qps()
+fails.
 
-Signed-off-by: Patrick Doyle <pdoyle@irobot.com>
-Reviewed-by: Richard Weinberger <richard@nod.at>
-Signed-off-by: Yoshio Furuyama <ytc-mb-yfuruyama7@kioxia.com>
-[<miquel.raynal@bootlin.com>: Fixed the title]
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Frieder Schrempf <frieder.schrempf@kontron.de>
-Link: https://lore.kernel.org/linux-mtd/774a92693f311e7de01e5935e720a179fb1b2468.1616635406.git.ytc-mb-yfuruyama7@kioxia.com
+Fixes: 52893733f2c5 ("vdpa/mlx5: Add multiqueue support")
+Reviewed-by: Si-Wei Liu<si-wei.liu@oracle.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+Signed-off-by: Eli Cohen <elic@nvidia.com>
+Link: https://lore.kernel.org/r/20220105114646.577224-10-elic@nvidia.com
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mtd/nand/bbt.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/vdpa/mlx5/net/mlx5_vnet.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/mtd/nand/bbt.c
-+++ b/drivers/mtd/nand/bbt.c
-@@ -123,7 +123,7 @@ int nanddev_bbt_set_block_status(struct
- 		unsigned int rbits = bits_per_block + offs - BITS_PER_LONG;
- 
- 		pos[1] &= ~GENMASK(rbits - 1, 0);
--		pos[1] |= val >> rbits;
-+		pos[1] |= val >> (bits_per_block - rbits);
- 	}
- 
+--- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
++++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+@@ -1510,9 +1510,11 @@ static int change_num_qps(struct mlx5_vd
  	return 0;
+ 
+ clean_added:
+-	for (--i; i >= cur_qps; --i)
++	for (--i; i >= 2 * cur_qps; --i)
+ 		teardown_vq(ndev, &ndev->vqs[i]);
+ 
++	ndev->cur_num_vqs = 2 * cur_qps;
++
+ 	return err;
+ }
+ 
 
 

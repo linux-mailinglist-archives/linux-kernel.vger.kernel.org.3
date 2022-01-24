@@ -2,39 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8B44992DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5093E499271
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382342AbiAXUZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:25:30 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45018 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353262AbiAXUCA (ORCPT
+        id S1355209AbiAXUUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:20:41 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58628 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354076AbiAXUCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:02:00 -0500
+        Mon, 24 Jan 2022 15:02:01 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D8DDB8121A;
-        Mon, 24 Jan 2022 20:01:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4C16C340E5;
-        Mon, 24 Jan 2022 20:01:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D47A60FEA;
+        Mon, 24 Jan 2022 20:01:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C95DCC340E5;
+        Mon, 24 Jan 2022 20:01:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054515;
-        bh=gHJkcpYKXR/RhQBBuV2zUOoAWjs3ei98HPq/WqtjGlw=;
+        s=korg; t=1643054518;
+        bh=JWXNqsVU8CyrmkM1MYCCOMy09l/9ViqNHqXM/QnraDA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RxT/LwrzdMcvb0o/8WoYEAXRBUqgPOFYa+5uwSceg+rs5HS9nW99qCESBdE67sZjk
-         GvK4C8AMAMwDE42ErMtWmf0CGewd5/G0z1GqsabbXXCsABXqQhbglhduFF3uIFSl7Y
-         sKD2LhJRim/X90RpjM2f8cYJ9V925zCBBWWE98Sk=
+        b=H6dyJ8IBtHOwPgmUTgrS75tlw5cl2H1WMSh1GJuawxq/e6L4MlyfhzafIfQsGmleS
+         7bA2zwuTIMvG/bmfwAzvC1mrq/5Ovqbm/1wkykZCANOEdcwfNYjQxhk01pyZ5QU722
+         7oN8RBxToEGHf9HUzren419ojS+2A5IlDnLlCEpQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
-        Jean Delvare <jdelvare@suse.de>, Wolfram Sang <wsa@kernel.org>,
+        stable@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 414/563] i2c: i801: Dont silently correct invalid transfer size
-Date:   Mon, 24 Jan 2022 19:42:59 +0100
-Message-Id: <20220124184038.762166278@linuxfoundation.org>
+Subject: [PATCH 5.10 415/563] powerpc/smp: Move setup_profiling_timer() under CONFIG_PROFILING
+Date:   Mon, 24 Jan 2022 19:43:00 +0100
+Message-Id: <20220124184038.792431735@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -46,61 +45,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heiner Kallweit <hkallweit1@gmail.com>
+From: Michael Ellerman <mpe@ellerman.id.au>
 
-[ Upstream commit effa453168a7eeb8a562ff4edc1dbf9067360a61 ]
+[ Upstream commit a4ac0d249a5db80e79d573db9e4ad29354b643a8 ]
 
-If an invalid block size is provided, reject it instead of silently
-changing it to a supported value. Especially critical I see the case of
-a write transfer with block length 0. In this case we have no guarantee
-that the byte we would write is valid. When silently reducing a read to
-32 bytes then we don't return an error and the caller may falsely
-assume that we returned the full requested data.
+setup_profiling_timer() is only needed when CONFIG_PROFILING is enabled.
 
-If this change should break any (broken) caller, then I think we should
-fix the caller.
+Fixes the following W=1 warning when CONFIG_PROFILING=n:
+  linux/arch/powerpc/kernel/smp.c:1638:5: error: no previous prototype for ‘setup_profiling_timer’
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20211124093254.1054750-5-mpe@ellerman.id.au
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-i801.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+ arch/powerpc/kernel/smp.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index eab6fd6b890eb..5618c1ff34dc3 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -797,6 +797,11 @@ static int i801_block_transaction(struct i801_priv *priv,
- 	int result = 0;
- 	unsigned char hostc;
+diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
+index 452cbf98bfd71..50aeef08aa470 100644
+--- a/arch/powerpc/kernel/smp.c
++++ b/arch/powerpc/kernel/smp.c
+@@ -1488,10 +1488,12 @@ void start_secondary(void *unused)
+ 	BUG();
+ }
  
-+	if (read_write == I2C_SMBUS_READ && command == I2C_SMBUS_BLOCK_DATA)
-+		data->block[0] = I2C_SMBUS_BLOCK_MAX;
-+	else if (data->block[0] < 1 || data->block[0] > I2C_SMBUS_BLOCK_MAX)
-+		return -EPROTO;
-+
- 	if (command == I2C_SMBUS_I2C_BLOCK_DATA) {
- 		if (read_write == I2C_SMBUS_WRITE) {
- 			/* set I2C_EN bit in configuration register */
-@@ -810,16 +815,6 @@ static int i801_block_transaction(struct i801_priv *priv,
- 		}
- 	}
++#ifdef CONFIG_PROFILING
+ int setup_profiling_timer(unsigned int multiplier)
+ {
+ 	return 0;
+ }
++#endif
  
--	if (read_write == I2C_SMBUS_WRITE
--	 || command == I2C_SMBUS_I2C_BLOCK_DATA) {
--		if (data->block[0] < 1)
--			data->block[0] = 1;
--		if (data->block[0] > I2C_SMBUS_BLOCK_MAX)
--			data->block[0] = I2C_SMBUS_BLOCK_MAX;
--	} else {
--		data->block[0] = 32;	/* max for SMBus block reads */
--	}
--
- 	/* Experience has shown that the block buffer can only be used for
- 	   SMBus (not I2C) block transactions, even though the datasheet
- 	   doesn't mention this limitation. */
+ static void fixup_topology(void)
+ {
 -- 
 2.34.1
 

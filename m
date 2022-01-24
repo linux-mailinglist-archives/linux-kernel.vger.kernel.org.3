@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4DF49A6F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A509649A5D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:13:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3421911AbiAYC3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:29:18 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33768 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353627AbiAXUI7 (ORCPT
+        id S1578556AbiAYAaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:30:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56390 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2363529AbiAXXop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:08:59 -0500
+        Mon, 24 Jan 2022 18:44:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB5BC05A1AF;
+        Mon, 24 Jan 2022 13:39:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DADF66130A;
-        Mon, 24 Jan 2022 20:08:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EEC9C340E5;
-        Mon, 24 Jan 2022 20:08:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BE1061028;
+        Mon, 24 Jan 2022 21:39:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B6B0C340E4;
+        Mon, 24 Jan 2022 21:39:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054935;
-        bh=kIZkiytabEpHce63qKZzZ+US9kAwLMoXJzrChs/Ap1M=;
+        s=korg; t=1643060376;
+        bh=j8QhFAcoP5YnbewakrrigomulAjYONylTaD5Y1/NRwM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MQKzktTByNWOPGOb4ElohpqpW4gfDnBJRxoko+ucp2phBa5nLVkzaL+WPlxFkN+Qs
-         LWMpr0RLZjvESgIYRkBZnDPgwD9Sil9IISWDM+lOE8CfAQI8RRcn4Vt9kvT+Qlrw47
-         YojwPbmMHtf+13GWg1TUsRa1gNUvqfM4jFe9OSXs=
+        b=a0P73G64fNbBi4o+BdjZ2itpM5/ahKOhX+msnVvqgwj/QHQzjT+GJCP6o6EE4VMTm
+         xPJvJsDikfPDMT+FkbBrlDECg1fnpTcwow+FAc7k+PeO4yUhRILex8gwNtJVUgk5oH
+         vLRHWWCKx1a44utKM7IBJ0lE09usuaoovSWAjhAs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 551/563] bcmgenet: add WOL IRQ check
+        stable@vger.kernel.org,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.16 0927/1039] dmaengine: stm32-mdma: fix STM32_MDMA_CTBR_TSEL_MASK
 Date:   Mon, 24 Jan 2022 19:45:16 +0100
-Message-Id: <20220124184043.489721539@linuxfoundation.org>
+Message-Id: <20220124184156.449877135@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,42 +49,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
 
-commit 9deb48b53e7f4056c2eaa2dc2ee3338df619e4f6 upstream.
+commit e7f110889a87307fb0fed408a5dee1707796ca04 upstream.
 
-The driver neglects to check the result of platform_get_irq_optional()'s
-call and blithely passes the negative error codes to devm_request_irq()
-(which takes *unsigned* IRQ #), causing it to fail with -EINVAL.
-Stop calling devm_request_irq() with the invalid IRQ #s.
+This patch fixes STM32_MDMA_CTBR_TSEL_MASK, which is [5:0], not [7:0].
 
-Fixes: 8562056f267d ("net: bcmgenet: request Wake-on-LAN interrupt")
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: a4ffb13c8946 ("dmaengine: Add STM32 MDMA driver")
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Link: https://lore.kernel.org/r/20211220165827.1238097-1-amelie.delaunay@foss.st.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/broadcom/genet/bcmgenet.c |   10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/dma/stm32-mdma.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-+++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-@@ -3962,10 +3962,12 @@ static int bcmgenet_probe(struct platfor
+--- a/drivers/dma/stm32-mdma.c
++++ b/drivers/dma/stm32-mdma.c
+@@ -184,7 +184,7 @@
+ #define STM32_MDMA_CTBR(x)		(0x68 + 0x40 * (x))
+ #define STM32_MDMA_CTBR_DBUS		BIT(17)
+ #define STM32_MDMA_CTBR_SBUS		BIT(16)
+-#define STM32_MDMA_CTBR_TSEL_MASK	GENMASK(7, 0)
++#define STM32_MDMA_CTBR_TSEL_MASK	GENMASK(5, 0)
+ #define STM32_MDMA_CTBR_TSEL(n)		STM32_MDMA_SET(n, \
+ 						      STM32_MDMA_CTBR_TSEL_MASK)
  
- 	/* Request the WOL interrupt and advertise suspend if available */
- 	priv->wol_irq_disabled = true;
--	err = devm_request_irq(&pdev->dev, priv->wol_irq, bcmgenet_wol_isr, 0,
--			       dev->name, priv);
--	if (!err)
--		device_set_wakeup_capable(&pdev->dev, 1);
-+	if (priv->wol_irq > 0) {
-+		err = devm_request_irq(&pdev->dev, priv->wol_irq,
-+				       bcmgenet_wol_isr, 0, dev->name, priv);
-+		if (!err)
-+			device_set_wakeup_capable(&pdev->dev, 1);
-+	}
- 
- 	/* Set the needed headroom to account for any possible
- 	 * features enabling/disabling at runtime
 
 

@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51AF6499851
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:35:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39223499D73
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1452228AbiAXVYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:24:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45814 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354702AbiAXU5p (ORCPT
+        id S1584435AbiAXWVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:21:11 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44990 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1453413AbiAXVaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:57:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314B0C05486B;
-        Mon, 24 Jan 2022 12:00:54 -0800 (PST)
+        Mon, 24 Jan 2022 16:30:08 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6C0A60B88;
-        Mon, 24 Jan 2022 20:00:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A560BC340E5;
-        Mon, 24 Jan 2022 20:00:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5006BB8105C;
+        Mon, 24 Jan 2022 21:30:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67E96C340E4;
+        Mon, 24 Jan 2022 21:30:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054453;
-        bh=0+XfjOPAbLf9sTVRzvQ+1jNIKU4CH6CO3sXWF4+Cn78=;
+        s=korg; t=1643059804;
+        bh=P8uN7Qcdlnrf6K1w94rRAe6b7mk1wt3YZB943ppmnEc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ME5svfsQxlOfTrXJEnMUTsGGlsEjpl8wkVs9d36wzWpHX2UnC7l7dfINMPfcQo1i/
-         YzxFQq1/7F3i7FNnuwPrQ2oNaACDgyVpgIBsz7kZt6oWGtKZ0LuNGv7fNwZjmkiNMH
-         u+wDZTPuKX9voJM8OVeLG+Ly5S4m8+Qk9P+9xZLc=
+        b=ee+6EdznbQGMeWMA3cysw69uuVJf6laigvy0HCqQKth3m2LJcuMrAYH1/mFG93oTc
+         jRehgTDjv3C0SZ5FYyW1/3ayiuoExzgsIPl8WOKCMsGWKXUJYF+zyNhBmwx25N5YBP
+         Te784DT9sNrpIWUx1FLBI9+exJ7Pv5d66p0m7mls=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alistair Francis <alistair@alistair23.me>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        stable@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
+        Jean Delvare <jdelvare@suse.de>, Wolfram Sang <wsa@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 362/563] HID: quirks: Allow inverting the absolute X/Y values
-Date:   Mon, 24 Jan 2022 19:42:07 +0100
-Message-Id: <20220124184036.931107513@linuxfoundation.org>
+Subject: [PATCH 5.16 0740/1039] i2c: i801: Dont silently correct invalid transfer size
+Date:   Mon, 24 Jan 2022 19:42:09 +0100
+Message-Id: <20220124184150.202022295@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,53 +46,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alistair Francis <alistair@alistair23.me>
+From: Heiner Kallweit <hkallweit1@gmail.com>
 
-[ Upstream commit fd8d135b2c5e88662f2729e034913f183455a667 ]
+[ Upstream commit effa453168a7eeb8a562ff4edc1dbf9067360a61 ]
 
-Add a HID_QUIRK_X_INVERT/HID_QUIRK_Y_INVERT quirk that can be used
-to invert the X/Y values.
+If an invalid block size is provided, reject it instead of silently
+changing it to a supported value. Especially critical I see the case of
+a write transfer with block length 0. In this case we have no guarantee
+that the byte we would write is valid. When silently reducing a read to
+32 bytes then we don't return an error and the caller may falsely
+assume that we returned the full requested data.
 
-Signed-off-by: Alistair Francis <alistair@alistair23.me>
-[bentiss: silence checkpatch warning]
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Link: https://lore.kernel.org/r/20211208124045.61815-2-alistair@alistair23.me
+If this change should break any (broken) caller, then I think we should
+fix the caller.
+
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/hid-input.c | 6 ++++++
- include/linux/hid.h     | 2 ++
- 2 files changed, 8 insertions(+)
+ drivers/i2c/busses/i2c-i801.c | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-index 580d378342c41..eb53855898c8d 100644
---- a/drivers/hid/hid-input.c
-+++ b/drivers/hid/hid-input.c
-@@ -1288,6 +1288,12 @@ void hidinput_hid_event(struct hid_device *hid, struct hid_field *field, struct
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index 41446f9cc52da..c87ea470eba98 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -775,6 +775,11 @@ static int i801_block_transaction(struct i801_priv *priv, union i2c_smbus_data *
+ 	int result = 0;
+ 	unsigned char hostc;
  
- 	input = field->hidinput->input;
- 
-+	if (usage->type == EV_ABS &&
-+	    (((*quirks & HID_QUIRK_X_INVERT) && usage->code == ABS_X) ||
-+	     ((*quirks & HID_QUIRK_Y_INVERT) && usage->code == ABS_Y))) {
-+		value = field->logical_maximum - value;
-+	}
++	if (read_write == I2C_SMBUS_READ && command == I2C_SMBUS_BLOCK_DATA)
++		data->block[0] = I2C_SMBUS_BLOCK_MAX;
++	else if (data->block[0] < 1 || data->block[0] > I2C_SMBUS_BLOCK_MAX)
++		return -EPROTO;
 +
- 	if (usage->hat_min < usage->hat_max || usage->hat_dir) {
- 		int hat_dir = usage->hat_dir;
- 		if (!hat_dir)
-diff --git a/include/linux/hid.h b/include/linux/hid.h
-index fc56d53cc68bf..2ba33d708942c 100644
---- a/include/linux/hid.h
-+++ b/include/linux/hid.h
-@@ -345,6 +345,8 @@ struct hid_item {
- /* BIT(9) reserved for backward compatibility, was NO_INIT_INPUT_REPORTS */
- #define HID_QUIRK_ALWAYS_POLL			BIT(10)
- #define HID_QUIRK_INPUT_PER_APP			BIT(11)
-+#define HID_QUIRK_X_INVERT			BIT(12)
-+#define HID_QUIRK_Y_INVERT			BIT(13)
- #define HID_QUIRK_SKIP_OUTPUT_REPORTS		BIT(16)
- #define HID_QUIRK_SKIP_OUTPUT_REPORT_ID		BIT(17)
- #define HID_QUIRK_NO_OUTPUT_REPORTS_ON_INTR_EP	BIT(18)
+ 	if (command == I2C_SMBUS_I2C_BLOCK_DATA) {
+ 		if (read_write == I2C_SMBUS_WRITE) {
+ 			/* set I2C_EN bit in configuration register */
+@@ -788,16 +793,6 @@ static int i801_block_transaction(struct i801_priv *priv, union i2c_smbus_data *
+ 		}
+ 	}
+ 
+-	if (read_write == I2C_SMBUS_WRITE
+-	 || command == I2C_SMBUS_I2C_BLOCK_DATA) {
+-		if (data->block[0] < 1)
+-			data->block[0] = 1;
+-		if (data->block[0] > I2C_SMBUS_BLOCK_MAX)
+-			data->block[0] = I2C_SMBUS_BLOCK_MAX;
+-	} else {
+-		data->block[0] = 32;	/* max for SMBus block reads */
+-	}
+-
+ 	/* Experience has shown that the block buffer can only be used for
+ 	   SMBus (not I2C) block transactions, even though the datasheet
+ 	   doesn't mention this limitation. */
 -- 
 2.34.1
 

@@ -2,228 +2,434 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C20FD49A9B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:27:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D06C149A988
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1321241AbiAYD04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 22:26:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
+        id S1347186AbiAYDXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 22:23:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1321309AbiAYDR7 (ORCPT
+        with ESMTP id S1320010AbiAYDKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 22:17:59 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E9FC0604C2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 15:23:44 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id 192so14144076pfz.3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 15:23:44 -0800 (PST)
+        Mon, 24 Jan 2022 22:10:10 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EBBBC0604D3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 15:23:45 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id h14so573870plf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 15:23:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=BUy1cq/aLQFwACsA66qUZgeTjdc6W6p6YIU+kLy4RXI=;
-        b=HMmVLm5Gk4xktbBAU6t3jLyp2yP/6L4jJnClTexhgIce1axDLwVbmNb9kclYALf+x2
-         0eOP9jYiB5WoTm+5qhwtBJz55pfhYca49Ml8+KCXSU5yP+mC++U9lcHxQUOWDgskC1MN
-         2wN/3QGEDEHBI9JYcXZGv9+GYD1bA3s9SGxz8=
+        bh=EZ8p5y9oUNksth/roXssMhpD2f8VzUDdp1g4RYGvHG8=;
+        b=FsCf9AlvKVkJ8vsKSKyrDqjwETjKkekMhO6Kx82kDnXILhh8wnEkgA8rH1cdNB5SMX
+         FrdiukrD80LHrPIUVzGBpw5K+/bDoJULiZ+Ii5PgOZc0TFkykODA6HJlwsIdrAwp0qQi
+         nSDs7Xww9WEzHmMM9BwzjC87gg/LRXabZMEEU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BUy1cq/aLQFwACsA66qUZgeTjdc6W6p6YIU+kLy4RXI=;
-        b=3Az2jDqLMt4Z1Wu5CuzrRTofqOdzaTOg0y4Awj4e0EX2zHVdTEIo7sIbtv5Swq5M6v
-         x+HOsBOypI5Q0+KoI9p2MzEfCypH5JNxNNy/yOdENB/KuiiQniDcNoMeY8l0L7JlYKUf
-         6sAqiSjjw2vk1CB/wF/f7jlPm3jxQstuF3TZuAt7KkVp0vf0kfpGvYKee9xPCWhKLkrl
-         1hqp10NImHsPqzulbXMaNk3V9axSjoVrhYMKOeeMj0+czqgZ2UstXjrtdsXHA5HPT8t/
-         Xts7t4WaUs6ej1YWlA4Qam0RGl1SccMvlV9AIklQLlQ1nCqoiy3GGnNuSJYsJad6jnIQ
-         20tw==
-X-Gm-Message-State: AOAM532We4JYp6gPHiRMAF/fhsvCcKcO3fbrygjo+RfpH/udJdGQtEMd
-        TEvTHq2fmg1GipYpVtXAyKkgIg==
-X-Google-Smtp-Source: ABdhPJzJq/ZflgOy7noX+l1C7fkXGtfuvMQKoRWncNP/9c4/r0pI+i3lo/9e35lzQWKaf5+WOauong==
-X-Received: by 2002:a63:2b01:: with SMTP id r1mr6103116pgr.182.1643066624239;
+        bh=EZ8p5y9oUNksth/roXssMhpD2f8VzUDdp1g4RYGvHG8=;
+        b=Am7uyMIZszL+qoxfl20+EbZd1EhWPIb+lAJqLi8awJTnqz2Zu0zfUYmMnRq3FPo3QX
+         w0iFpVQsqxmuuxr+Xz0pSdY3v8V15h2+KzBiM4Zjq90ca79Pv4MER8KCJVUPmZHHPEOH
+         Rfz4A1n3l/TpEr3wqcDpQ/H/iVOEO+T9fy3jvlsTN6omJlz2zQSut3k3VFOjG1UhTRnW
+         MoHCT/56MUHDdJ3AVjZVIRMCSiynancSTML1ceRk9kwxYUH2L/7/5ki2TGoRRQaiIQb/
+         7RjhCN2JoQGzsmL7g6cDn0ZLnJM5k8QdXrOVq2zbBhSJijnjnIA+lXZ2/qJM0sY9A/Wl
+         +0fw==
+X-Gm-Message-State: AOAM533CEhcoueP6+kP2JdLHTUqTn32pyrrOlOUAyDaaFDEP7lXIDMwK
+        zQJD7rrgxbN73z/fPAu3PMGMWA==
+X-Google-Smtp-Source: ABdhPJz4sDdLboRXNQJmwtE2APYB1rrDtgI5UwgcQtl4nNvICTIvrtNVg4aNn3dPi+ytuT5ptkWvcg==
+X-Received: by 2002:a17:90b:3e81:: with SMTP id rj1mr585788pjb.190.1643066624594;
         Mon, 24 Jan 2022 15:23:44 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b4sm17120790pfl.106.2022.01.24.15.23.43
+        by smtp.gmail.com with ESMTPSA id w11sm797010pfu.50.2022.01.24.15.23.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 24 Jan 2022 15:23:44 -0800 (PST)
 From:   Kees Cook <keescook@chromium.org>
 To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
 Cc:     Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Jason Gunthorpe <jgg@ziepe.ca>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         Leon Romanovsky <leon@kernel.org>,
         Keith Busch <kbusch@kernel.org>, Len Baker <len.baker@gmx.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v2 1/2] test_overflow: Regularize test reporting output
-Date:   Mon, 24 Jan 2022 15:23:41 -0800
-Message-Id: <20220124232342.3113350-2-keescook@chromium.org>
+Subject: [PATCH v2 2/2] overflow: Implement size_t saturating arithmetic helpers
+Date:   Mon, 24 Jan 2022 15:23:42 -0800
+Message-Id: <20220124232342.3113350-3-keescook@chromium.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220124232342.3113350-1-keescook@chromium.org>
 References: <20220124232342.3113350-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5607; h=from:subject; bh=J3Wsxeg4JzBB1opD2cR25s34lPwyOQCvqPa3Egl9H+E=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh7zT96q6+BfVriBVKq/ZNrGoNFi9S0asAOL9Kgk/1 VRdFiCeJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYe80/QAKCRCJcvTf3G3AJrzNEA CaRpSkCzT5WizfZbk+asSaEUEu4QhmQO7+JkP1dJubjfRmx4SgGUcq3ibh0ZLFAS2PqF2O6kb5vWaS g+kPJWdYWXDGhicKtiDgIc6266pep3/W5XRYgtoaI8vdzstVWNF3LEmw9YtTq04g9PEJ4kHyqJ5xii 3vhCip9Be/SY4UgfDtu9mSFrWTav91Z6qoNOYqmp/RiVsq9xP5ymUteR8aUfzIe/KPO6QNO+zGPh7i BWZckReajeP1l2Ffc83s8Ao7rSdOXERPxjbXxGkE7EDChDPzA2D16pQFGY4acKFJ/STYwnoVs+e5oG LhTCJf+zODcSDrXRPtFY0PVEiWhI0IMKXhhE2uw9Tw2xidIMRxhSzQUWwIXdJ2dYqOgPUSwWx1Yfqe Ezfjl9nXwUgas7bhyy+9dX6orfJx0Y+YVo/f64TpEpWBBlk6Ly9HMhSMoqeXHjwwHS1CZQm6lk49Qc w9Vrms1Z8uyqa6PEeWN2i3qzKvmvG7UBtCf/ML8Sf2Ue+H4uPCMcr4mxmr+r92ZDuaGsSYceEOlSwq Nhle/GEVIXy7HIOBEkHL/67h6FT9dp0tiRSIAlfVAjeEKwNu+Zw3zCuGqVgd/0RBmwd/vQCKA5Tsrk 7pj0u3jxpaN2caO4M/xN65lxaAJs1xG3xJFDl3VY8NUTd5sR+ykFgk0iSN0w==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=13659; h=from:subject; bh=FokG8Ywbbh733yQNUjpTzng9yD1PMKpMSVb/f0rF7jo=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh7zT9yHEA8+LTOksjqCQXYTG/bBmAjhBalLvgzHq1 cyxXqk+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYe80/QAKCRCJcvTf3G3AJrm9D/ 9uc1g3UP6axHgkLoGdDJRL4fPTDHdidFXXv8z04Xbh50YitchTxTt31i4DtILhp5E2K0DS9J6bd1pm LRtyiQmyiuaHHOtpf1ovBt9XnOV4rBfHVTddXJuK/eN1ANXadmGjIKBnVOypd/7Z9lWJpZ2wxAr+1t lcsFvu09O8wslWXnzJ42PIwgci6uoED6pPzuinihuOXIzg1DSNzLke6C3uaolmD3VQfZja9Vn8xDS0 UVDqioc+UBdWFEvzP7vEYbZkh+bQmS+ezNWwSGAzbb0R43Qa/0lD16joGgbMJFT9z/NZ83VFrCo45b JphGI2Tta/EGe3P/23nyEmbKBeRzDxHbkcrW7bKFGvxFejkHmbVnf4MwmJX6qU02zZLzxXGPAZpQC2 HjDwv5/s5QDG6I/CCiQVoLELRum1Dt11hlwpm58Z9svLXFbHbJwGF+oL+TynaQK+HAfuFLf5RCwefx +DqxxB+xJOH02b/or3nEBbIn5rV2VEUf/XyAsOiNLXOPT+qsH8bURZvwXO6XPM/g1WIZ15IL9W9619 Y4tUpdSJui4eRs/wRjT9selQbe4LxzBkHBZNhd5uCGILSX7zUHHBIXDZzh03qqUkOTTGSSxbszZblT LUSPSkWajbKkHJf468JzvfsbtvGNFz/eYNuxJn2DbSmhxPPk9eEWJmYO17Qg==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Report test run summaries more regularly, so it's easier to understand
-the output:
-- Remove noisy "ok" reports for shift and allocator tests.
-- Reorganize per-type output to the end of each type's tests.
-- Replace redundant vmalloc tests with __vmalloc so that __GFP_NO_WARN
-  can be used to keep the expected failure warnings out of dmesg,
-  similar to commit 8e060c21ae2c ("lib/test_overflow.c: avoid tainting
-  the kernel and fix wrap size")
+In order to perform more open-coded replacements of common allocation
+size arithmetic, the kernel needs saturating (SIZE_MAX) helpers for
+multiplication, addition, and subtraction. For example, it is common in
+allocators, especially on realloc, to add to an existing size:
 
-Resulting output:
+    p = krealloc(map->patch,
+                 sizeof(struct reg_sequence) * (map->patch_regs + num_regs),
+                 GFP_KERNEL);
 
-  test_overflow: 18 u8 arithmetic tests finished
-  test_overflow: 19 s8 arithmetic tests finished
-  test_overflow: 17 u16 arithmetic tests finished
-  test_overflow: 17 s16 arithmetic tests finished
-  test_overflow: 17 u32 arithmetic tests finished
-  test_overflow: 17 s32 arithmetic tests finished
-  test_overflow: 17 u64 arithmetic tests finished
-  test_overflow: 21 s64 arithmetic tests finished
-  test_overflow: 113 shift tests finished
-  test_overflow: 17 overflow size helper tests finished
-  test_overflow: 11 allocation overflow tests finished
-  test_overflow: all tests passed
+There is no existing saturating replacement for this calculation, and
+just leaving the addition open coded inside array_size() could
+potentially overflow as well. For example, an overflow in an expression
+for a size_t argument might wrap to zero:
 
-Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Link: https://lore.kernel.org/all/eb6d02ae-e2ed-e7bd-c700-8a6d004d84ce@rasmusvillemoes.dk/
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Link: https://lore.kernel.org/all/CAKwvOdnYYa+72VhtJ4ug=SJVFn7w+n7Th+hKYE87BRDt4hvqOg@mail.gmail.com/
+    array_size(anything, something_at_size_max + 1) == 0
+
+Introduce size_mul(), size_add(), and size_sub() helpers that
+implicitly promote arguments to size_t and saturated calculations for
+use in allocations. With these helpers it is also possible to redefine
+array_size(), array3_size(), flex_array_size(), and struct_size() in
+terms of the new helpers.
+
+As with the check_*_overflow() helpers, the new helpers use __must_check,
+though what is really desired is a way to make sure that assignment is
+only to a size_t lvalue. Without this, it's still possible to introduce
+overflow/underflow via type conversion (i.e. from size_t to int).
+Enforcing this will currently need to be left to static analysis or
+future use of -Wconversion.
+
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: Keith Busch <kbusch@kernel.org>
+Cc: Len Baker <len.baker@gmx.com>
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- lib/test_overflow.c | 54 +++++++++++++++++++++++++--------------------
- 1 file changed, 30 insertions(+), 24 deletions(-)
+ Documentation/process/deprecated.rst |  20 ++++-
+ include/linux/overflow.h             | 110 +++++++++++++++++----------
+ lib/test_overflow.c                  |  98 ++++++++++++++++++++++++
+ 3 files changed, 184 insertions(+), 44 deletions(-)
 
+diff --git a/Documentation/process/deprecated.rst b/Documentation/process/deprecated.rst
+index 388cb19f5dbb..a6e36d9c3d14 100644
+--- a/Documentation/process/deprecated.rst
++++ b/Documentation/process/deprecated.rst
+@@ -71,6 +71,9 @@ Instead, the 2-factor form of the allocator should be used::
+ 
+ 	foo = kmalloc_array(count, size, GFP_KERNEL);
+ 
++Specifically, kmalloc() can be replaced with kmalloc_array(), and
++kzalloc() can be replaced with kcalloc().
++
+ If no 2-factor form is available, the saturate-on-overflow helpers should
+ be used::
+ 
+@@ -91,9 +94,20 @@ Instead, use the helper::
+         array usage and switch to a `flexible array member
+         <#zero-length-and-one-element-arrays>`_ instead.
+ 
+-See array_size(), array3_size(), and struct_size(),
+-for more details as well as the related check_add_overflow() and
+-check_mul_overflow() family of functions.
++For other calculations, please compose the use of the size_mul(),
++size_add(), and size_sub() helpers. For example, in the case of::
++
++	foo = krealloc(current_size + chunk_size * (count - 3), GFP_KERNEL);
++
++Instead, use the helpers::
++
++	foo = krealloc(size_add(current_size,
++				size_mul(chunk_size,
++					 size_sub(count, 3))), GFP_KERNEL);
++
++For more details, also see array3_size() and flex_array_size(),
++as well as the related check_mul_overflow(), check_add_overflow(),
++check_sub_overflow(), and check_shl_overflow() family of functions.
+ 
+ simple_strtol(), simple_strtoll(), simple_strtoul(), simple_strtoull()
+ ----------------------------------------------------------------------
+diff --git a/include/linux/overflow.h b/include/linux/overflow.h
+index 4669632bd72b..59d7228104d0 100644
+--- a/include/linux/overflow.h
++++ b/include/linux/overflow.h
+@@ -118,81 +118,94 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+ }))
+ 
+ /**
+- * array_size() - Calculate size of 2-dimensional array.
+- *
+- * @a: dimension one
+- * @b: dimension two
++ * size_mul() - Calculate size_t multiplication with saturation at SIZE_MAX
+  *
+- * Calculates size of 2-dimensional array: @a * @b.
++ * @factor1: first factor
++ * @factor2: second factor
+  *
+- * Returns: number of bytes needed to represent the array or SIZE_MAX on
+- * overflow.
++ * Returns: calculate @factor1 * @factor2, both promoted to size_t,
++ * with any overflow causing the return value to be SIZE_MAX. The
++ * lvalue must be size_t to avoid implicit type conversion.
+  */
+-static inline __must_check size_t array_size(size_t a, size_t b)
++static inline size_t __must_check size_mul(size_t factor1, size_t factor2)
+ {
+ 	size_t bytes;
+ 
+-	if (check_mul_overflow(a, b, &bytes))
++	if (check_mul_overflow(factor1, factor2, &bytes))
+ 		return SIZE_MAX;
+ 
+ 	return bytes;
+ }
+ 
+ /**
+- * array3_size() - Calculate size of 3-dimensional array.
++ * size_add() - Calculate size_t addition with saturation at SIZE_MAX
+  *
+- * @a: dimension one
+- * @b: dimension two
+- * @c: dimension three
+- *
+- * Calculates size of 3-dimensional array: @a * @b * @c.
++ * @addend1: first addend
++ * @addend2: second addend
+  *
+- * Returns: number of bytes needed to represent the array or SIZE_MAX on
+- * overflow.
++ * Returns: calculate @addend1 + @addend2, both promoted to size_t,
++ * with any overflow causing the return value to be SIZE_MAX. The
++ * lvalue must be size_t to avoid implicit type conversion.
+  */
+-static inline __must_check size_t array3_size(size_t a, size_t b, size_t c)
++static inline size_t __must_check size_add(size_t addend1, size_t addend2)
+ {
+ 	size_t bytes;
+ 
+-	if (check_mul_overflow(a, b, &bytes))
+-		return SIZE_MAX;
+-	if (check_mul_overflow(bytes, c, &bytes))
++	if (check_add_overflow(addend1, addend2, &bytes))
+ 		return SIZE_MAX;
+ 
+ 	return bytes;
+ }
+ 
+-/*
+- * Compute a*b+c, returning SIZE_MAX on overflow. Internal helper for
+- * struct_size() below.
++/**
++ * size_sub() - Calculate size_t subtraction with saturation at SIZE_MAX
++ *
++ * @minuend: value to subtract from
++ * @subtrahend: value to subtract from @minuend
++ *
++ * Returns: calculate @minuend - @subtrahend, both promoted to size_t,
++ * with any overflow causing the return value to be SIZE_MAX. For
++ * composition with the size_add() and size_mul() helpers, neither
++ * argument may be SIZE_MAX (or the result with be forced to SIZE_MAX).
++ * The lvalue must be size_t to avoid implicit type conversion.
+  */
+-static inline __must_check size_t __ab_c_size(size_t a, size_t b, size_t c)
++static inline size_t __must_check size_sub(size_t minuend, size_t subtrahend)
+ {
+ 	size_t bytes;
+ 
+-	if (check_mul_overflow(a, b, &bytes))
+-		return SIZE_MAX;
+-	if (check_add_overflow(bytes, c, &bytes))
++	if (minuend == SIZE_MAX || subtrahend == SIZE_MAX ||
++	    check_sub_overflow(minuend, subtrahend, &bytes))
+ 		return SIZE_MAX;
+ 
+ 	return bytes;
+ }
+ 
+ /**
+- * struct_size() - Calculate size of structure with trailing array.
+- * @p: Pointer to the structure.
+- * @member: Name of the array member.
+- * @count: Number of elements in the array.
++ * array_size() - Calculate size of 2-dimensional array.
+  *
+- * Calculates size of memory needed for structure @p followed by an
+- * array of @count number of @member elements.
++ * @a: dimension one
++ * @b: dimension two
+  *
+- * Return: number of bytes needed or SIZE_MAX on overflow.
++ * Calculates size of 2-dimensional array: @a * @b.
++ *
++ * Returns: number of bytes needed to represent the array or SIZE_MAX on
++ * overflow.
+  */
+-#define struct_size(p, member, count)					\
+-	__ab_c_size(count,						\
+-		    sizeof(*(p)->member) + __must_be_array((p)->member),\
+-		    sizeof(*(p)))
++#define array_size(a, b)	size_mul(a, b)
++
++/**
++ * array3_size() - Calculate size of 3-dimensional array.
++ *
++ * @a: dimension one
++ * @b: dimension two
++ * @c: dimension three
++ *
++ * Calculates size of 3-dimensional array: @a * @b * @c.
++ *
++ * Returns: number of bytes needed to represent the array or SIZE_MAX on
++ * overflow.
++ */
++#define array3_size(a, b, c)	size_mul(size_mul(a, b), c)
+ 
+ /**
+  * flex_array_size() - Calculate size of a flexible array member
+@@ -208,7 +221,22 @@ static inline __must_check size_t __ab_c_size(size_t a, size_t b, size_t c)
+  * Return: number of bytes needed or SIZE_MAX on overflow.
+  */
+ #define flex_array_size(p, member, count)				\
+-	array_size(count,						\
+-		    sizeof(*(p)->member) + __must_be_array((p)->member))
++	size_mul(count,							\
++		 sizeof(*(p)->member) + __must_be_array((p)->member))
++
++/**
++ * struct_size() - Calculate size of structure with trailing flexible array.
++ *
++ * @p: Pointer to the structure.
++ * @member: Name of the array member.
++ * @count: Number of elements in the array.
++ *
++ * Calculates size of memory needed for structure @p followed by an
++ * array of @count number of @member elements.
++ *
++ * Return: number of bytes needed or SIZE_MAX on overflow.
++ */
++#define struct_size(p, member, count)					\
++	size_add(sizeof(*(p)), flex_array_size(p, member, count))
+ 
+ #endif /* __LINUX_OVERFLOW_H */
 diff --git a/lib/test_overflow.c b/lib/test_overflow.c
-index 7a4b6f6c5473..cea37ae82615 100644
+index cea37ae82615..712fb2351c27 100644
 --- a/lib/test_overflow.c
 +++ b/lib/test_overflow.c
-@@ -252,10 +252,10 @@ static int __init test_ ## t ## _overflow(void) {			\
- 	int err = 0;							\
- 	unsigned i;							\
- 									\
--	pr_info("%-3s: %zu arithmetic tests\n", #t,			\
--		ARRAY_SIZE(t ## _tests));				\
- 	for (i = 0; i < ARRAY_SIZE(t ## _tests); ++i)			\
- 		err |= do_test_ ## t(&t ## _tests[i]);			\
-+	pr_info("%zu %s arithmetic tests finished\n",			\
-+		ARRAY_SIZE(t ## _tests), #t);				\
- 	return err;							\
- }
- 
-@@ -291,6 +291,7 @@ static int __init test_overflow_calculation(void)
- static int __init test_overflow_shift(void)
- {
- 	int err = 0;
-+	int count = 0;
- 
- /* Args are: value, shift, type, expected result, overflow expected */
- #define TEST_ONE_SHIFT(a, s, t, expect, of) ({				\
-@@ -313,9 +314,7 @@ static int __init test_overflow_shift(void)
- 			pr_warn("got %llu\n", (u64)__d);		\
- 		__failed = 1;						\
- 	}								\
--	if (!__failed)							\
--		pr_info("ok: (%s)(%s << %s) == %s\n", #t, #a, #s,	\
--			of ? "overflow" : #expect);			\
-+	count++;							\
- 	__failed;							\
- })
- 
-@@ -479,6 +478,10 @@ static int __init test_overflow_shift(void)
- 	err |= TEST_ONE_SHIFT(0, 31, s32, 0, false);
- 	err |= TEST_ONE_SHIFT(0, 63, s64, 0, false);
- 
-+	pr_info("%d shift tests finished\n", count);
-+
-+#undef TEST_ONE_SHIFT
-+
+@@ -594,12 +594,110 @@ static int __init test_overflow_allocation(void)
  	return err;
  }
  
-@@ -530,7 +533,6 @@ static int __init test_ ## func (void *arg)				\
- 		free ## want_arg (free_func, arg, ptr);			\
- 		return 1;						\
- 	}								\
--	pr_info(#func " detected saturation\n");			\
- 	return 0;							\
- }
- 
-@@ -544,10 +546,7 @@ DEFINE_TEST_ALLOC(kmalloc,	 kfree,	     0, 1, 0);
- DEFINE_TEST_ALLOC(kmalloc_node,	 kfree,	     0, 1, 1);
- DEFINE_TEST_ALLOC(kzalloc,	 kfree,	     0, 1, 0);
- DEFINE_TEST_ALLOC(kzalloc_node,  kfree,	     0, 1, 1);
--DEFINE_TEST_ALLOC(vmalloc,	 vfree,	     0, 0, 0);
--DEFINE_TEST_ALLOC(vmalloc_node,  vfree,	     0, 0, 1);
--DEFINE_TEST_ALLOC(vzalloc,	 vfree,	     0, 0, 0);
--DEFINE_TEST_ALLOC(vzalloc_node,  vfree,	     0, 0, 1);
-+DEFINE_TEST_ALLOC(__vmalloc,	 vfree,	     0, 1, 0);
- DEFINE_TEST_ALLOC(kvmalloc,	 kvfree,     0, 1, 0);
- DEFINE_TEST_ALLOC(kvmalloc_node, kvfree,     0, 1, 1);
- DEFINE_TEST_ALLOC(kvzalloc,	 kvfree,     0, 1, 0);
-@@ -559,8 +558,14 @@ static int __init test_overflow_allocation(void)
- {
- 	const char device_name[] = "overflow-test";
- 	struct device *dev;
++struct __test_flex_array {
++	unsigned long flags;
++	size_t count;
++	unsigned long data[];
++};
++
++static int __init test_overflow_size_helpers(void)
++{
++	struct __test_flex_array *obj;
 +	int count = 0;
- 	int err = 0;
- 
-+#define check_allocation_overflow(alloc)	({	\
-+	count++;					\
-+	test_ ## alloc(dev);				\
++	int err = 0;
++	int var;
++
++#define check_one_size_helper(expected, func, args...)	({	\
++	bool __failure = false;					\
++	size_t _r;						\
++								\
++	_r = func(args);					\
++	if (_r != (expected)) {					\
++		pr_warn("expected " #func "(" #args ") "	\
++			"to return %zu but got %zu instead\n",	\
++			(size_t)(expected), _r);		\
++		__failure = true;				\
++	}							\
++	count++;						\
++	__failure;						\
 +})
 +
- 	/* Create dummy device for devm_kmalloc()-family tests. */
- 	dev = root_device_register(device_name);
- 	if (IS_ERR(dev)) {
-@@ -568,23 +573,24 @@ static int __init test_overflow_allocation(void)
- 		return 1;
- 	}
- 
--	err |= test_kmalloc(NULL);
--	err |= test_kmalloc_node(NULL);
--	err |= test_kzalloc(NULL);
--	err |= test_kzalloc_node(NULL);
--	err |= test_kvmalloc(NULL);
--	err |= test_kvmalloc_node(NULL);
--	err |= test_kvzalloc(NULL);
--	err |= test_kvzalloc_node(NULL);
--	err |= test_vmalloc(NULL);
--	err |= test_vmalloc_node(NULL);
--	err |= test_vzalloc(NULL);
--	err |= test_vzalloc_node(NULL);
--	err |= test_devm_kmalloc(dev);
--	err |= test_devm_kzalloc(dev);
-+	err |= check_allocation_overflow(kmalloc);
-+	err |= check_allocation_overflow(kmalloc_node);
-+	err |= check_allocation_overflow(kzalloc);
-+	err |= check_allocation_overflow(kzalloc_node);
-+	err |= check_allocation_overflow(__vmalloc);
-+	err |= check_allocation_overflow(kvmalloc);
-+	err |= check_allocation_overflow(kvmalloc_node);
-+	err |= check_allocation_overflow(kvzalloc);
-+	err |= check_allocation_overflow(kvzalloc_node);
-+	err |= check_allocation_overflow(devm_kmalloc);
-+	err |= check_allocation_overflow(devm_kzalloc);
- 
- 	device_unregister(dev);
- 
-+	pr_info("%d allocation overflow tests finished\n", count);
++	var = 4;
++	err |= check_one_size_helper(20,       size_mul, var++, 5);
++	err |= check_one_size_helper(20,       size_mul, 4, var++);
++	err |= check_one_size_helper(0,	       size_mul, 0, 3);
++	err |= check_one_size_helper(0,	       size_mul, 3, 0);
++	err |= check_one_size_helper(6,	       size_mul, 2, 3);
++	err |= check_one_size_helper(SIZE_MAX, size_mul, SIZE_MAX,  1);
++	err |= check_one_size_helper(SIZE_MAX, size_mul, SIZE_MAX,  3);
++	err |= check_one_size_helper(SIZE_MAX, size_mul, SIZE_MAX, -3);
 +
-+#undef check_allocation_overflow
++	var = 4;
++	err |= check_one_size_helper(9,        size_add, var++, 5);
++	err |= check_one_size_helper(9,        size_add, 4, var++);
++	err |= check_one_size_helper(9,	       size_add, 9, 0);
++	err |= check_one_size_helper(9,	       size_add, 0, 9);
++	err |= check_one_size_helper(5,	       size_add, 2, 3);
++	err |= check_one_size_helper(SIZE_MAX, size_add, SIZE_MAX,  1);
++	err |= check_one_size_helper(SIZE_MAX, size_add, SIZE_MAX,  3);
++	err |= check_one_size_helper(SIZE_MAX, size_add, SIZE_MAX, -3);
 +
- 	return err;
- }
++	var = 4;
++	err |= check_one_size_helper(1,        size_sub, var--, 3);
++	err |= check_one_size_helper(1,        size_sub, 4, var--);
++	err |= check_one_size_helper(1,        size_sub, 3, 2);
++	err |= check_one_size_helper(9,	       size_sub, 9, 0);
++	err |= check_one_size_helper(SIZE_MAX, size_sub, 9, -3);
++	err |= check_one_size_helper(SIZE_MAX, size_sub, 0, 9);
++	err |= check_one_size_helper(SIZE_MAX, size_sub, 2, 3);
++	err |= check_one_size_helper(SIZE_MAX, size_sub, SIZE_MAX,  0);
++	err |= check_one_size_helper(SIZE_MAX, size_sub, SIZE_MAX, 10);
++	err |= check_one_size_helper(SIZE_MAX, size_sub, 0,  SIZE_MAX);
++	err |= check_one_size_helper(SIZE_MAX, size_sub, 14, SIZE_MAX);
++	err |= check_one_size_helper(SIZE_MAX - 2, size_sub, SIZE_MAX - 1,  1);
++	err |= check_one_size_helper(SIZE_MAX - 4, size_sub, SIZE_MAX - 1,  3);
++	err |= check_one_size_helper(1,		size_sub, SIZE_MAX - 1, -3);
++
++	var = 4;
++	err |= check_one_size_helper(4 * sizeof(*obj->data),
++				     flex_array_size, obj, data, var++);
++	err |= check_one_size_helper(5 * sizeof(*obj->data),
++				     flex_array_size, obj, data, var++);
++	err |= check_one_size_helper(0, flex_array_size, obj, data, 0);
++	err |= check_one_size_helper(sizeof(*obj->data),
++				     flex_array_size, obj, data, 1);
++	err |= check_one_size_helper(7 * sizeof(*obj->data),
++				     flex_array_size, obj, data, 7);
++	err |= check_one_size_helper(SIZE_MAX,
++				     flex_array_size, obj, data, -1);
++	err |= check_one_size_helper(SIZE_MAX,
++				     flex_array_size, obj, data, SIZE_MAX - 4);
++
++	var = 4;
++	err |= check_one_size_helper(sizeof(*obj) + (4 * sizeof(*obj->data)),
++				     struct_size, obj, data, var++);
++	err |= check_one_size_helper(sizeof(*obj) + (5 * sizeof(*obj->data)),
++				     struct_size, obj, data, var++);
++	err |= check_one_size_helper(sizeof(*obj), struct_size, obj, data, 0);
++	err |= check_one_size_helper(sizeof(*obj) + sizeof(*obj->data),
++				     struct_size, obj, data, 1);
++	err |= check_one_size_helper(SIZE_MAX,
++				     struct_size, obj, data, -3);
++	err |= check_one_size_helper(SIZE_MAX,
++				     struct_size, obj, data, SIZE_MAX - 3);
++
++	pr_info("%d overflow size helper tests finished\n", count);
++
++	return err;
++}
++
+ static int __init test_module_init(void)
+ {
+ 	int err = 0;
  
+ 	err |= test_overflow_calculation();
+ 	err |= test_overflow_shift();
++	err |= test_overflow_size_helpers();
+ 	err |= test_overflow_allocation();
+ 
+ 	if (err) {
 -- 
 2.30.2
 

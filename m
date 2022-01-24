@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07DB5499A1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40EB8499B7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1456899AbiAXVkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:40:22 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:54806 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445114AbiAXVCO (ORCPT
+        id S1575931AbiAXVwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:52:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50398 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351988AbiAXVTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:02:14 -0500
+        Mon, 24 Jan 2022 16:19:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B1BC06F8CB;
+        Mon, 24 Jan 2022 12:12:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C28E261365;
-        Mon, 24 Jan 2022 21:02:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9860FC340E5;
-        Mon, 24 Jan 2022 21:02:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A0EB61375;
+        Mon, 24 Jan 2022 20:12:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56FCAC340E7;
+        Mon, 24 Jan 2022 20:12:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058133;
-        bh=elCfbszIBuVRR6VjRT0ZBLCHfXRupXPKDV8BynvhD0M=;
+        s=korg; t=1643055177;
+        bh=RHR1IXkcIgk2HJtIz0MhPowxjEOro65WsiGHJqwdpCQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p+kNFVc8FI3Kk3oBQCB8caq/D/BcEIXWRY39hNLyS4RngmnSdaKZ1+2NEAvRvqqfy
-         txUFP+KLt7SsvNhGfRBwjEkTxwr9GYBKSiMT7fNyVBp3Xd+FaxkeoEhQOWaBMEDl4F
-         oQBFwQvTIMwkZ4Y+5z2vsELbLOpKYWHLl1UmsBZY=
+        b=IVcLS4MlqI9lBDZAkRptHIUKQq26FuWR9YmaM8shZek6anmde8LOyBz9DefcdSf4l
+         plZzyVbPbSa2vHv5fkBQLusP0IY0BqcfF6BIcmG15yAk3bk7C6h+gWK50W/7hY+sA4
+         jbzv1atBlFIVOlm7jEbSlOrXeOSpnFQGeL1ea4co=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0189/1039] media: imx-pxp: Initialize the spinlock prior to using it
-Date:   Mon, 24 Jan 2022 19:32:58 +0100
-Message-Id: <20220124184131.658280532@linuxfoundation.org>
+        stable@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <treding@nvidia.com>
+Subject: [PATCH 5.15 066/846] drm/tegra: Add back arm_iommu_detach_device()
+Date:   Mon, 24 Jan 2022 19:33:03 +0100
+Message-Id: <20220124184103.245035526@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,51 +48,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+From: Dmitry Osipenko <digetx@gmail.com>
 
-[ Upstream commit ed2f97ad4b21072f849cf4ae6645d1f2b1d3f550 ]
+commit d210919dbdc8a82c676cc3e3c370b1802be63124 upstream.
 
-After devm_request_threaded_irq() is called there is a chance that an
-interrupt may occur before the spinlock is initialized, which will trigger
-a kernel oops.
+DMA buffers of 2D/3D engines aren't mapped properly when
+CONFIG_ARM_DMA_USE_IOMMU=y. The memory management code of Tegra DRM driver
+has a longstanding overhaul overdue and it's not obvious where the problem
+is in this case. Hence let's add back the old workaround which we already
+had sometime before. It explicitly detaches DRM devices from the offending
+implicit IOMMU domain. This fixes a completely broken 2d/3d drivers in
+case of ARM32 multiplatform kernel config.
 
-To prevent that, move the initialization of the spinlock prior to
-requesting the interrupts.
-
-Fixes: 51abcf7fdb70 ("media: imx-pxp: add i.MX Pixel Pipeline driver")
-Signed-off-by: Fabio Estevam <festevam@denx.de>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: fa6661b7aa0b ("drm/tegra: Optionally attach clients to the IOMMU")
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/platform/imx-pxp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/tegra/drm.c |   15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/drivers/media/platform/imx-pxp.c b/drivers/media/platform/imx-pxp.c
-index 723b096fedd10..b7174778db539 100644
---- a/drivers/media/platform/imx-pxp.c
-+++ b/drivers/media/platform/imx-pxp.c
-@@ -1659,6 +1659,8 @@ static int pxp_probe(struct platform_device *pdev)
- 	if (irq < 0)
- 		return irq;
+--- a/drivers/gpu/drm/tegra/drm.c
++++ b/drivers/gpu/drm/tegra/drm.c
+@@ -21,6 +21,10 @@
+ #include <drm/drm_prime.h>
+ #include <drm/drm_vblank.h>
  
-+	spin_lock_init(&dev->irqlock);
++#if IS_ENABLED(CONFIG_ARM_DMA_USE_IOMMU)
++#include <asm/dma-iommu.h>
++#endif
 +
- 	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL, pxp_irq_handler,
- 			IRQF_ONESHOT, dev_name(&pdev->dev), dev);
- 	if (ret < 0) {
-@@ -1676,8 +1678,6 @@ static int pxp_probe(struct platform_device *pdev)
- 		goto err_clk;
- 	}
+ #include "dc.h"
+ #include "drm.h"
+ #include "gem.h"
+@@ -936,6 +940,17 @@ int host1x_client_iommu_attach(struct ho
+ 	struct iommu_group *group = NULL;
+ 	int err;
  
--	spin_lock_init(&dev->irqlock);
--
- 	ret = v4l2_device_register(&pdev->dev, &dev->v4l2_dev);
- 	if (ret)
- 		goto err_clk;
--- 
-2.34.1
-
++#if IS_ENABLED(CONFIG_ARM_DMA_USE_IOMMU)
++	if (client->dev->archdata.mapping) {
++		struct dma_iommu_mapping *mapping =
++				to_dma_iommu_mapping(client->dev);
++		arm_iommu_detach_device(client->dev);
++		arm_iommu_release_mapping(mapping);
++
++		domain = iommu_get_domain_for_dev(client->dev);
++	}
++#endif
++
+ 	/*
+ 	 * If the host1x client is already attached to an IOMMU domain that is
+ 	 * not the shared IOMMU domain, don't try to attach it to a different
 
 

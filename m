@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0540C498CC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:32:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 751E34991FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:19:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350326AbiAXTYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:24:50 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40558 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343524AbiAXTPf (ORCPT
+        id S1380607AbiAXUQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:16:34 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54610 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359280AbiAXT6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:15:35 -0500
+        Mon, 24 Jan 2022 14:58:14 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0EB5AB8121F;
-        Mon, 24 Jan 2022 19:15:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3045CC340E5;
-        Mon, 24 Jan 2022 19:15:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E9C160916;
+        Mon, 24 Jan 2022 19:58:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 111CFC340EA;
+        Mon, 24 Jan 2022 19:58:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051732;
-        bh=pUEzmvsB/pzJ/e1MCSvYHZXzc52nrVDsD0HUPDnJMUc=;
+        s=korg; t=1643054292;
+        bh=WQCIdyoCBqzT1RiVCy6TIWZuU6QVvUeH/y9HpzGEJrU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zmb3wxAgIIl9gCA5oU5qdvjIlPOu3XbwZSIY3bPzg5FFf20nRAUCg7CAnXopDvj1U
-         kCouvpIwz3qT9vkNzG2JzdfoOE/+xqzney9oVD7oocFQ3ONKOWtyq90KLK4GiiroEA
-         d6Mc1keKlZLdYadLDQpab9vkAJ3jyL1pWpEPfYU8=
+        b=wLTuJfk0AksQz20HkkHE+WIfjZQFjixYTiWjqGjJ7ysQiTnpVWxZtCsrHB5XK9e9e
+         fMxW0dBa+4FtNvIExqIfbr9/FCNUyYeeg2V3LrH2MeuoMByL2KZg/7Zyt0K5nan3hD
+         g2bFzW2/47g5FncWQI0vZGNRiQZBF9dCs/8vE2J0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tasos Sahanidis <tasos@tasossah.com>,
-        Denis Efremov <efremov@linux.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 068/239] floppy: Fix hang in watchdog when disk is ejected
+        stable@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 341/563] drm: rcar-du: Fix CRTC timings when CMM is used
 Date:   Mon, 24 Jan 2022 19:41:46 +0100
-Message-Id: <20220124183945.297103403@linuxfoundation.org>
+Message-Id: <20220124184036.217959039@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,50 +46,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tasos Sahanidis <tasos@tasossah.com>
+From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
-[ Upstream commit fb48febce7e30baed94dd791e19521abd2c3fd83 ]
+[ Upstream commit f0ce591dc9a97067c6e783a2eaccd22c5476144d ]
 
-When the watchdog detects a disk change, it calls cancel_activity(),
-which in turn tries to cancel the fd_timer delayed work.
+When the CMM is enabled, an offset of 25 pixels must be subtracted from
+the HDS (horizontal display start) and HDE (horizontal display end)
+registers. Fix the timings calculation, and take this into account in
+the mode validation.
 
-In the above scenario, fd_timer_fn is set to fd_watchdog(), meaning
-it is trying to cancel its own work.
-This results in a hang as cancel_delayed_work_sync() is waiting for the
-watchdog (itself) to return, which never happens.
+This fixes a visible horizontal offset in the image with VGA monitors.
+HDMI monitors seem to be generally more tolerant to incorrect timings,
+but may be affected too.
 
-This can be reproduced relatively consistently by attempting to read a
-broken floppy, and ejecting it while IO is being attempted and retried.
-
-To resolve this, this patch calls cancel_delayed_work() instead, which
-cancels the work without waiting for the watchdog to return and finish.
-
-Before this regression was introduced, the code in this section used
-del_timer(), and not del_timer_sync() to delete the watchdog timer.
-
-Link: https://lore.kernel.org/r/399e486c-6540-db27-76aa-7a271b061f76@tasossah.com
-Fixes: 070ad7e793dc ("floppy: convert to delayed work and single-thread wq")
-Signed-off-by: Tasos Sahanidis <tasos@tasossah.com>
-Signed-off-by: Denis Efremov <efremov@linux.com>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/floppy.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/rcar-du/rcar_du_crtc.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/block/floppy.c b/drivers/block/floppy.c
-index 8f444b375761c..49ac9596c862e 100644
---- a/drivers/block/floppy.c
-+++ b/drivers/block/floppy.c
-@@ -1002,7 +1002,7 @@ static DECLARE_DELAYED_WORK(fd_timer, fd_timer_workfn);
- static void cancel_activity(void)
- {
- 	do_floppy = NULL;
--	cancel_delayed_work_sync(&fd_timer);
-+	cancel_delayed_work(&fd_timer);
- 	cancel_work_sync(&floppy_work);
- }
+diff --git a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
+index 1b9738e44909d..065604c5837de 100644
+--- a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
++++ b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
+@@ -215,6 +215,7 @@ static void rcar_du_crtc_set_display_timing(struct rcar_du_crtc *rcrtc)
+ 	const struct drm_display_mode *mode = &rcrtc->crtc.state->adjusted_mode;
+ 	struct rcar_du_device *rcdu = rcrtc->dev;
+ 	unsigned long mode_clock = mode->clock * 1000;
++	unsigned int hdse_offset;
+ 	u32 dsmr;
+ 	u32 escr;
  
+@@ -298,10 +299,15 @@ static void rcar_du_crtc_set_display_timing(struct rcar_du_crtc *rcrtc)
+ 	     | DSMR_DIPM_DISP | DSMR_CSPM;
+ 	rcar_du_crtc_write(rcrtc, DSMR, dsmr);
+ 
++	hdse_offset = 19;
++	if (rcrtc->group->cmms_mask & BIT(rcrtc->index % 2))
++		hdse_offset += 25;
++
+ 	/* Display timings */
+-	rcar_du_crtc_write(rcrtc, HDSR, mode->htotal - mode->hsync_start - 19);
++	rcar_du_crtc_write(rcrtc, HDSR, mode->htotal - mode->hsync_start -
++					hdse_offset);
+ 	rcar_du_crtc_write(rcrtc, HDER, mode->htotal - mode->hsync_start +
+-					mode->hdisplay - 19);
++					mode->hdisplay - hdse_offset);
+ 	rcar_du_crtc_write(rcrtc, HSWR, mode->hsync_end -
+ 					mode->hsync_start - 1);
+ 	rcar_du_crtc_write(rcrtc, HCR,  mode->htotal - 1);
+@@ -831,6 +837,7 @@ rcar_du_crtc_mode_valid(struct drm_crtc *crtc,
+ 	struct rcar_du_crtc *rcrtc = to_rcar_crtc(crtc);
+ 	struct rcar_du_device *rcdu = rcrtc->dev;
+ 	bool interlaced = mode->flags & DRM_MODE_FLAG_INTERLACE;
++	unsigned int min_sync_porch;
+ 	unsigned int vbp;
+ 
+ 	if (interlaced && !rcar_du_has(rcdu, RCAR_DU_FEATURE_INTERLACED))
+@@ -838,9 +845,14 @@ rcar_du_crtc_mode_valid(struct drm_crtc *crtc,
+ 
+ 	/*
+ 	 * The hardware requires a minimum combined horizontal sync and back
+-	 * porch of 20 pixels and a minimum vertical back porch of 3 lines.
++	 * porch of 20 pixels (when CMM isn't used) or 45 pixels (when CMM is
++	 * used), and a minimum vertical back porch of 3 lines.
+ 	 */
+-	if (mode->htotal - mode->hsync_start < 20)
++	min_sync_porch = 20;
++	if (rcrtc->group->cmms_mask & BIT(rcrtc->index % 2))
++		min_sync_porch += 25;
++
++	if (mode->htotal - mode->hsync_start < min_sync_porch)
+ 		return MODE_HBLANK_NARROW;
+ 
+ 	vbp = (mode->vtotal - mode->vsync_end) / (interlaced ? 2 : 1);
 -- 
 2.34.1
 

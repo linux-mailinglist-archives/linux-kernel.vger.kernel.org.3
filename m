@@ -2,114 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4CA4976E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 02:19:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0984976E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 02:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240714AbiAXBTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 20:19:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238668AbiAXBTj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 20:19:39 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC6EC06173B;
-        Sun, 23 Jan 2022 17:19:39 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id a28so15831669lfl.7;
-        Sun, 23 Jan 2022 17:19:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=t7TE4em7JB/tZ41yHK/CgF2TCS9fy9M15DMSLo68rwY=;
-        b=B6W25/ZJ4XdX2y1N6dkBAqcHFixu3Pou7AOICcmcNX+sQha4x7Af+ZiDbbYmtal19C
-         usRIxTgBjuhTN8eIEALApeWeW7gx5S6IEtZd+AGdg3L6cTqwDMWehrMu6AH5Vjb8Pq5N
-         Uk3nlyfxD8QZW3GIlKIgOwzehvwaON2uZJfeuSybDC8wg+ukbDJ/FsTzbH6JoS1X3kGp
-         xwjVrovFpuEDiMS5HCJeWhgijhZ8JLiIOHvyIcFOoIkpBSv+YInXbgmsJn0UXByhhnEq
-         77gqBHamQ3i/gjPmzRKrFeqZQUPU5UYMC5bbGvz+NABr3zeA3DtlqXaGPf9XtP1ep+ls
-         t9xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=t7TE4em7JB/tZ41yHK/CgF2TCS9fy9M15DMSLo68rwY=;
-        b=5vkMN6sKz2u2BFFBG5gnXtWOtB0SZww1+J0U0HpGDqf1duugfWTEN3+gowuI+CVWvB
-         ktIojFK5WtPhV9PrC51GjyOSRyA44x0M44OGJ8CkuMBu+nMMtpd/DntNfpLNIV/IAzp7
-         fOL52it1tqGzjyiL90MlOzS19q4UIl3H1NqHluSFKFkFNM+YwQpO0vumqYjzcuh9orAF
-         1Bu+nqywzxgkZ/7FN93FdOmxz7kAoGBX4FN+vt009FUYgn00hqJ7YsJMHx96s4asndJa
-         +3smaXInpDc2pduAKWt/uTqyw1g1xvs4rxd+CwizokF6pxygWwsQyDebNuVVgVNk1hQG
-         MOyA==
-X-Gm-Message-State: AOAM533opQ8eIEY7U8yfXHJ0MYI2nFSNhB5rn1gI7Hzt9c2ypedLHvE8
-        uJjDjcLgPN8ah46+CjsS/uc5wWlnrAuqn8LugCQ=
-X-Google-Smtp-Source: ABdhPJyhzegui+Ot229oGKSPqX96/DbvHusqhmuwaipzrltw7hPxgnnZMYu/YO4HRCo9AseWCtP6S4UKqByAyAcFt/o=
-X-Received: by 2002:a05:6512:398b:: with SMTP id j11mr10943260lfu.94.1642987177803;
- Sun, 23 Jan 2022 17:19:37 -0800 (PST)
+        id S240723AbiAXBau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 20:30:50 -0500
+Received: from mga12.intel.com ([192.55.52.136]:50683 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238668AbiAXBat (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 23 Jan 2022 20:30:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642987849; x=1674523849;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Ey+n2vpf3UL7JY06ddv7LGT5N6OBRc7eHh0eSLSCsF4=;
+  b=EcbWGnPwXvkFL8z5O85aKzV0/KOLYNbdwrng4TxLEihUEEvpn8MgOpwL
+   S6aWmQkkudwWShnkQ8QmfOZCY2BXkytKjkMTGRgMz+OFMDPdT2BiJT7vm
+   4xMGp23wT5LxXRMrTgO6wRLtqOYH2BjVpZvlnFqbhq2Qnzz0yLUZwl7iN
+   +fJaUoew5UxZ3PKHux6nSmxCqsGHrGdEsN7Qi5kR5stTKISHGQmiAHh3m
+   YOGFO8fY+ZIf2BP7+1OwxYIdJPydnC+YUSd5kY7Sj3473c33SaVetLjQv
+   wt9QJ2RXxsuJe1Ax5lHKmXaBvVyu5K2/BOXdj+WRjhX/sf3BwIGjb7bTM
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="225920905"
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="225920905"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2022 17:30:49 -0800
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="627316501"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2022 17:30:48 -0800
+From:   ira.weiny@intel.com
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] highmem: Document kunmap_local()
+Date:   Sun, 23 Jan 2022 17:30:44 -0800
+Message-Id: <20220124013045.806718-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <cover.1642960861.git.leonro@nvidia.com> <8bdb652b01f2316bc57b456fb8c60bfbffe6cc64.1642960861.git.leonro@nvidia.com>
-In-Reply-To: <8bdb652b01f2316bc57b456fb8c60bfbffe6cc64.1642960861.git.leonro@nvidia.com>
-From:   Zhu Yanjun <zyjzyj2000@gmail.com>
-Date:   Mon, 24 Jan 2022 09:19:26 +0800
-Message-ID: <CAD=hENc7UV4er4b3MwFJPRuJCBpFv46aEbG8zbnEPdE3ORQLjA@mail.gmail.com>
-Subject: Re: [PATCH rdma-next 08/11] RDMA/rxe: Delete useless module.h include
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Christian Benvenuti <benve@cisco.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        RDMA mailing list <linux-rdma@vger.kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Yishai Hadas <yishaih@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 2:03 AM Leon Romanovsky <leon@kernel.org> wrote:
->
-> From: Leon Romanovsky <leonro@nvidia.com>
->
-> There is no need in include of module.h in the following files.
->
-> Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+From: Ira Weiny <ira.weiny@intel.com>
 
-Thanks a lot.
-Acked-by: Zhu Yanjun <zyjzyj2000@gmail.com>
+Some users of kmap() add an offset to the kmap() address to be used
+during the mapping.
 
-Zhu Yanjun
+When converting to kmap_local_page() the base address does not
+need to be stored because any address within the page can be used in
+kunmap_local().  However, this was not clear from the documentation and
+caused some questions.[1]
 
-> ---
->  drivers/infiniband/sw/rxe/rxe.h      | 1 -
->  drivers/infiniband/sw/rxe/rxe_mmap.c | 1 -
->  2 files changed, 2 deletions(-)
->
-> diff --git a/drivers/infiniband/sw/rxe/rxe.h b/drivers/infiniband/sw/rxe/rxe.h
-> index fb9066e6f5f0..30fbdf3bc76a 100644
-> --- a/drivers/infiniband/sw/rxe/rxe.h
-> +++ b/drivers/infiniband/sw/rxe/rxe.h
-> @@ -12,7 +12,6 @@
->  #endif
->  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->
-> -#include <linux/module.h>
->  #include <linux/skbuff.h>
->
->  #include <rdma/ib_verbs.h>
-> diff --git a/drivers/infiniband/sw/rxe/rxe_mmap.c b/drivers/infiniband/sw/rxe/rxe_mmap.c
-> index 035f226af133..9149b6095429 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_mmap.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_mmap.c
-> @@ -4,7 +4,6 @@
->   * Copyright (c) 2015 System Fabric Works, Inc. All rights reserved.
->   */
->
-> -#include <linux/module.h>
->  #include <linux/vmalloc.h>
->  #include <linux/mm.h>
->  #include <linux/errno.h>
-> --
-> 2.34.1
->
+Document that any address in the page can be used in kunmap_local() to
+clarify this for future users.
+
+[1] https://lore.kernel.org/lkml/20211213154543.GM3538886@iweiny-DESK2.sc.intel.com/
+
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+---
+ include/linux/highmem-internal.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/include/linux/highmem-internal.h b/include/linux/highmem-internal.h
+index 0a0b2b09b1b8..fb2d3e033c01 100644
+--- a/include/linux/highmem-internal.h
++++ b/include/linux/highmem-internal.h
+@@ -246,6 +246,17 @@ do {								\
+ 	__kunmap_atomic(__addr);				\
+ } while (0)
+ 
++/**
++ * kunmap_local - Unmap a page mapped via kmap_local_page().
++ * @__addr: An address within the page mapped
++ *
++ * __addr is often an address returned from kmap_local_page().  However,
++ * this address can be any address within the mapped page.  It does not need to
++ * be the exact address returned from kmap_local_page()
++ *
++ * Unmapping should be done in the reverse order of the mapping.  See
++ * kmap_local_page() for details.
++ */
+ #define kunmap_local(__addr)					\
+ do {								\
+ 	BUILD_BUG_ON(__same_type((__addr), struct page *));	\
+-- 
+2.31.1
+

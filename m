@@ -2,40 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B93094990C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:07:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A844990C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:07:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376867AbiAXUEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:04:13 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36948 "EHLO
+        id S1353597AbiAXUD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:03:58 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37030 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356391AbiAXTqG (ORCPT
+        with ESMTP id S1356421AbiAXTqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:46:06 -0500
+        Mon, 24 Jan 2022 14:46:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED4EFB8121A;
-        Mon, 24 Jan 2022 19:46:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DF38C340E5;
-        Mon, 24 Jan 2022 19:46:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1EC4DB8122A;
+        Mon, 24 Jan 2022 19:46:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FE1BC340E5;
+        Mon, 24 Jan 2022 19:46:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053563;
-        bh=6ip6A0h5hrMAi23ynIfiqNaHv6NylR563ug94IIyhyA=;
+        s=korg; t=1643053569;
+        bh=CilhLBgCJlcnOoNau8LRQawIH8ihBF0Ww7tvfGee2IE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b6ZvJpVVXj+jpLSq2/Q7cTVxfB/ir2EWme5o7Rn+6qnbDGjC2NDCTzfD//T6gRJJo
-         0b9SJx3/pGwvSZrsAFM0F+petkRoU7aOPWUEl385wAzKOqMJxjtX31JMOuFXl6KTxf
-         +rGW+5fgQKrg+FovNjM/yafoQGU1bvmoLTmmJcqs=
+        b=eXTV7CBzCoErAJqo6OG23lobKpM1MafxaWHLujdKmyx6C0iSNUu1uT1J9it30XQfy
+         DfIUNQBdXi5J4DxwlcPsTNZ1d6+t6M+MQUbafsuW7PUMzgPt7/kwEB7AKdbH4Rd+lB
+         QAjy/s4g7WaMLg3YNjTkccJKIUFlPvTP1kzQ/YeA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 074/563] media: atomisp: fix uninitialized bug in gmin_get_pmic_id_and_addr()
-Date:   Mon, 24 Jan 2022 19:37:19 +0100
-Message-Id: <20220124184026.960692562@linuxfoundation.org>
+Subject: [PATCH 5.10 076/563] media: em28xx: fix memory leak in em28xx_init_dev
+Date:   Mon, 24 Jan 2022 19:37:21 +0100
+Message-Id: <20220124184027.022405066@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -47,36 +49,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit cb4d67a998e97365afdf34965b069601da1dae60 ]
+[ Upstream commit 22be5a10d0b24eec9e45decd15d7e6112b25f080 ]
 
-The "power" pointer is not initialized on the else path and that would
-lead to an Oops.
+In the em28xx_init_rev, if em28xx_audio_setup fails, this function fails
+to deallocate the media_dev allocated in the em28xx_media_device_init.
 
-Link: https://lore.kernel.org/linux-media/20211012082150.GA31086@kili
-Fixes: c30f4cb2d4c7 ("media: atomisp: Refactor PMIC detection to a separate function")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Fix this by adding em28xx_unregister_media_device to free media_dev.
+
+BTW, this patch is tested in my local syzkaller instance, and it can
+prevent the memory leak from occurring again.
+
+CC: Pavel Skripkin <paskripkin@gmail.com>
+Fixes: 37ecc7b1278f ("[media] em28xx: add media controller support")
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/usb/em28xx/em28xx-cards.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-index 135994d44802c..34480ca164746 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-@@ -481,7 +481,7 @@ fail:
+diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
+index cf45cc566cbe2..87e375562dbb2 100644
+--- a/drivers/media/usb/em28xx/em28xx-cards.c
++++ b/drivers/media/usb/em28xx/em28xx-cards.c
+@@ -3575,8 +3575,10 @@ static int em28xx_init_dev(struct em28xx *dev, struct usb_device *udev,
  
- static u8 gmin_get_pmic_id_and_addr(struct device *dev)
- {
--	struct i2c_client *power;
-+	struct i2c_client *power = NULL;
- 	static u8 pmic_i2c_addr;
+ 	if (dev->is_audio_only) {
+ 		retval = em28xx_audio_setup(dev);
+-		if (retval)
+-			return -ENODEV;
++		if (retval) {
++			retval = -ENODEV;
++			goto err_deinit_media;
++		}
+ 		em28xx_init_extension(dev);
  
- 	if (pmic_id)
+ 		return 0;
+@@ -3595,7 +3597,7 @@ static int em28xx_init_dev(struct em28xx *dev, struct usb_device *udev,
+ 		dev_err(&dev->intf->dev,
+ 			"%s: em28xx_i2c_register bus 0 - error [%d]!\n",
+ 		       __func__, retval);
+-		return retval;
++		goto err_deinit_media;
+ 	}
+ 
+ 	/* register i2c bus 1 */
+@@ -3611,9 +3613,7 @@ static int em28xx_init_dev(struct em28xx *dev, struct usb_device *udev,
+ 				"%s: em28xx_i2c_register bus 1 - error [%d]!\n",
+ 				__func__, retval);
+ 
+-			em28xx_i2c_unregister(dev, 0);
+-
+-			return retval;
++			goto err_unreg_i2c;
+ 		}
+ 	}
+ 
+@@ -3621,6 +3621,12 @@ static int em28xx_init_dev(struct em28xx *dev, struct usb_device *udev,
+ 	em28xx_card_setup(dev);
+ 
+ 	return 0;
++
++err_unreg_i2c:
++	em28xx_i2c_unregister(dev, 0);
++err_deinit_media:
++	em28xx_unregister_media_device(dev);
++	return retval;
+ }
+ 
+ static int em28xx_duplicate_dev(struct em28xx *dev)
 -- 
 2.34.1
 

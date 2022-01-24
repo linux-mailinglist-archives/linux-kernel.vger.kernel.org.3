@@ -2,41 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5750349972D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:25:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B35A7499A21
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447282AbiAXVKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:10:23 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46738 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390742AbiAXUqJ (ORCPT
+        id S1457046AbiAXVkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:40:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1445273AbiAXVCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:46:09 -0500
+        Mon, 24 Jan 2022 16:02:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E5EC06B580;
+        Mon, 24 Jan 2022 12:02:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DF19B8122A;
-        Mon, 24 Jan 2022 20:46:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7354AC340E5;
-        Mon, 24 Jan 2022 20:46:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9C3D60916;
+        Mon, 24 Jan 2022 20:02:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F94BC340E5;
+        Mon, 24 Jan 2022 20:02:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057167;
-        bh=iVX2nFnEFRhokD0VjO3Y941ZpUA2yRw+aa5PKgYWm4I=;
+        s=korg; t=1643054577;
+        bh=HTUHJVVdTyLs2HI+l2PKLckftklMLQZY10KtFgY2Q+4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U1fyC7UXzzdo+9zWhVBOTyQS5hkZ6dyAbS9vWj7GDXseRwX1ueThJ8ED1nb+DxWhQ
-         pt2zxpV7Mp0fjmtyQSI43+d62vq9207ZAiaP7VEGkZKBUDf025GVGUB8Ga2FUalAhm
-         9PmSV37+PwK/2lVopZ2zMGPSBIwh3dRDDZyuT9DI=
+        b=jddJedW3P03s2L2udHVHEoe1nagbxGWeDhh8wSPg2AAmHMmztmKdLg941j6raiA3Z
+         FrEzLHwKa04hLFP1UF1/VhfyCJxJnWXfxHt3V/+LEAxPrjomx1ZD5ggIeHoY9It3Oq
+         fgtSdtgwGb/RD1qWOaQVymOp6rlqfFTNTxP/tzlE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xie Yongji <xieyongji@bytedance.com>,
-        Miklos Szeredi <mszeredi@redhat.com>
-Subject: [PATCH 5.15 680/846] fuse: Pass correct lend value to filemap_write_and_wait_range()
-Date:   Mon, 24 Jan 2022 19:43:17 +0100
-Message-Id: <20220124184124.534235330@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 435/563] MIPS: Octeon: Fix build errors using clang
+Date:   Mon, 24 Jan 2022 19:43:20 +0100
+Message-Id: <20220124184039.489830457@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,35 +52,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xie Yongji <xieyongji@bytedance.com>
+From: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 
-commit e388164ea385f04666c4633f5dc4f951fca71890 upstream.
+[ Upstream commit 95339b70677dc6f9a2d669c4716058e71b8dc1c7 ]
 
-The acceptable maximum value of lend parameter in
-filemap_write_and_wait_range() is LLONG_MAX rather than -1. And there is
-also some logic depending on LLONG_MAX check in write_cache_pages(). So
-let's pass LLONG_MAX to filemap_write_and_wait_range() in
-fuse_writeback_range() instead.
+A large number of the following errors is reported when compiling
+with clang:
 
-Fixes: 59bda8ecee2f ("fuse: flush extending writes")
-Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-Cc: <stable@vger.kernel.org> # v5.15
-Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  cvmx-bootinfo.h:326:3: error: adding 'int' to a string does not append to the string [-Werror,-Wstring-plus-int]
+                  ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_NULL)
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  cvmx-bootinfo.h:321:20: note: expanded from macro 'ENUM_BRD_TYPE_CASE'
+          case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+                         ~~~^~~~
+  cvmx-bootinfo.h:326:3: note: use array indexing to silence this warning
+  cvmx-bootinfo.h:321:20: note: expanded from macro 'ENUM_BRD_TYPE_CASE'
+          case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+                          ^
+
+Follow the prompts to use the address operator '&' to fix this error.
+
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/fuse/file.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/include/asm/octeon/cvmx-bootinfo.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/fs/fuse/file.c
-+++ b/fs/fuse/file.c
-@@ -2913,7 +2913,7 @@ fuse_direct_IO(struct kiocb *iocb, struc
+diff --git a/arch/mips/include/asm/octeon/cvmx-bootinfo.h b/arch/mips/include/asm/octeon/cvmx-bootinfo.h
+index c114a7ba0badd..e77e8b7c00838 100644
+--- a/arch/mips/include/asm/octeon/cvmx-bootinfo.h
++++ b/arch/mips/include/asm/octeon/cvmx-bootinfo.h
+@@ -317,7 +317,7 @@ enum cvmx_chip_types_enum {
  
- static int fuse_writeback_range(struct inode *inode, loff_t start, loff_t end)
+ /* Functions to return string based on type */
+ #define ENUM_BRD_TYPE_CASE(x) \
+-	case x: return(#x + 16);	/* Skip CVMX_BOARD_TYPE_ */
++	case x: return (&#x[16]);	/* Skip CVMX_BOARD_TYPE_ */
+ static inline const char *cvmx_board_type_to_string(enum
+ 						    cvmx_board_types_enum type)
  {
--	int err = filemap_write_and_wait_range(inode->i_mapping, start, -1);
-+	int err = filemap_write_and_wait_range(inode->i_mapping, start, LLONG_MAX);
+@@ -408,7 +408,7 @@ static inline const char *cvmx_board_type_to_string(enum
+ }
  
- 	if (!err)
- 		fuse_sync_writes(inode);
+ #define ENUM_CHIP_TYPE_CASE(x) \
+-	case x: return(#x + 15);	/* Skip CVMX_CHIP_TYPE */
++	case x: return (&#x[15]);	/* Skip CVMX_CHIP_TYPE */
+ static inline const char *cvmx_chip_type_to_string(enum
+ 						   cvmx_chip_types_enum type)
+ {
+-- 
+2.34.1
+
 
 

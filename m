@@ -2,190 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7DF497F38
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:21:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70BC1497F40
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239284AbiAXMVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 07:21:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:21360 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239277AbiAXMVf (ORCPT
+        id S239497AbiAXMVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 07:21:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238418AbiAXMVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:21:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643026894;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kTQ7PaifhtIuOUaGkRwV0rZi7ijH/GseKpb0aQu503M=;
-        b=fqodM0oAkov2yURvwLTqkZ9aB3fhAZDKxKYqjCiHOJRkrhK6rPIzC3aViW/ENDkzT1lknI
-        XRoQ4GvBPhp4wzcBdGTWiaXpuubV7pRXwbmuS2sPxzTypf1h3qLa8nI8yW0VrQZKFk+MD+
-        qoXaUzIhTED2tIbMfPSDaeUhKIOzhWM=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-209-1eGiiO3OM5W2TahrRwNDhA-1; Mon, 24 Jan 2022 07:21:33 -0500
-X-MC-Unique: 1eGiiO3OM5W2TahrRwNDhA-1
-Received: by mail-ed1-f72.google.com with SMTP id el8-20020a056402360800b00403bbdcef64so13004902edb.14
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 04:21:33 -0800 (PST)
+        Mon, 24 Jan 2022 07:21:41 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540DCC061747;
+        Mon, 24 Jan 2022 04:21:41 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id p125so15248907pga.2;
+        Mon, 24 Jan 2022 04:21:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=lfYwGFrcApR91yKlfTGniS6H/vaqpvMlgwfQqesbDaY=;
+        b=ZYtJ1r8pGQLCubOfmcazDt25V3T+i4wn2EWuZacDmJHrAjyGg5AE3coBBRn0O1+Kf4
+         rNjh/0474kK3lnOeMAjcAO5Rc7DH80+aXNXLhRExyQJTjHwg9/kz4F99kiFiZD6FGsdK
+         reUDYZNnQhsVkLZv3BWdhxxSremyVBo95Ej3w4etK9t8qDQQSgjgKyIe8xJeam/qQCeG
+         KzXPv5cyOv2NRabd4uuub2NzV9XzeH0rY9j16G7Ej7gF9s7+wvYJh3PCdq5zfSrMQK68
+         tzOUGxmQW+vbbvGWx8IJMbN8vV24dm7OYNiSxgwkpDzGRw4gEA0NndpcAkt7IiHRX9XK
+         i3GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kTQ7PaifhtIuOUaGkRwV0rZi7ijH/GseKpb0aQu503M=;
-        b=mHZZbzKNKN0ILbBAHS62ZQ8BSccaRBhugZz5v/JPTcae165jjaIrqTO+8/0hEwd9xD
-         Y6TQmdikROSvC3HoBtMUjsEOmMUXj/mc1q3H6mQHMRDhiO/zPg1Fe0kX/Ktt2CCWK8ep
-         XZx8CfG4k4EBtqRXwEEOaqhTmBOYRyFhGvV5LjWg2tb4P4LcSEIgZrUAGPdmF+Fcx65p
-         BgjoplUeY05aJEHOIaa22jE3/Y2TMsdAWEbpUOs2pcqQY4un+WtM0/M1Gh9BOLifFAjd
-         VZceo8AFmT9iGPpRr3oPLgwA75oC0rIVEFz/bR0xAx57A3JzhLaIgnior6RVibXRufFu
-         iqZg==
-X-Gm-Message-State: AOAM530mSozSzt1pQYWncPlu77RaXl2FqFJ3CdqMkHMgzVTbO2P3HXm0
-        UB0fcNZGsLi+XSmWOOu5sfzUdurs/Coi/e6SgE2/PofCx38AFobZ0aQtL/m5rWUwJ6e+emCi96H
-        xI+MAYuinI8oIHFiBEBMDNb29
-X-Received: by 2002:a17:907:7215:: with SMTP id dr21mr12510961ejc.75.1643026892282;
-        Mon, 24 Jan 2022 04:21:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzS7uK/kism/BhI8pUrfROMKoK9OgoCpLIy8AaFqvZDEgRt4IY3hBtM8Sx8szftVyw6NcmdTA==
-X-Received: by 2002:a17:907:7215:: with SMTP id dr21mr12510940ejc.75.1643026892036;
-        Mon, 24 Jan 2022 04:21:32 -0800 (PST)
-Received: from krava ([83.240.63.12])
-        by smtp.gmail.com with ESMTPSA id l3sm6455280edr.61.2022.01.24.04.21.30
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=lfYwGFrcApR91yKlfTGniS6H/vaqpvMlgwfQqesbDaY=;
+        b=ni18pxesA9NjG+c0voiWlRTBC0EcPR1Rz5aYVPeU6EwkKb6t8Vy2BVFpXttIL+FoQM
+         u9tFd9LOlRapIlXVz33nWEKGpF4DQ0YGdjCYsH0cUiJQKcFyFBrqZ/QzzebF4eRY6E4R
+         aAFwHEhw1z4ao0nzGuunKKn5lzVEoWnK2ofVAICBxEW+PYmiLNXBAkrnzO3EGoeSCVk3
+         SAPyNHcw4RYnhlKYsuEaS0aeHeux09eVFuvMls0jU/sCbsI7Zfb8QtwWRb/Fc5hhy+1r
+         ZV0dS0YIBFSIzMKFx9Eon0qfyRFn3WvA6wg5dHfxrADsiKTQhpBRi9LmE9tio6ORXAvE
+         qdDg==
+X-Gm-Message-State: AOAM530QaQ4TISy22Rl9clCNDKZiVrWew7AADGf2k8orUi7yAo6yLMts
+        hEzIBihvQwUxSkFaws/+iXY=
+X-Google-Smtp-Source: ABdhPJzBoYPfrNNVVtAKwdcvzQwrYHlcJ59dn/C0mk10FiOIwCvx9bWf24iH2magER9hvPbA6cr4zA==
+X-Received: by 2002:a63:91c2:: with SMTP id l185mr9855325pge.157.1643026900649;
+        Mon, 24 Jan 2022 04:21:40 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id pc7sm14519645pjb.0.2022.01.24.04.21.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 04:21:31 -0800 (PST)
-Date:   Mon, 24 Jan 2022 13:21:29 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [RFC PATCH v3 0/9] fprobe: Introduce fprobe function entry/exit
- probe
-Message-ID: <Ye6ZyeHQtPfUoSvX@krava>
-References: <164260419349.657731.13913104835063027148.stgit@devnote2>
- <CAEf4Bzbbimea3ydwafXSHFiEffYx5zAcwGNKk8Zi6QZ==Vn0Ug@mail.gmail.com>
- <20220121135510.7cfa6540e31824aa39b1c1b8@kernel.org>
- <CAEf4Bza0eTft2kjcm9HhKpAm=AuXnGwZfZ+sYpVVBvj93PBreQ@mail.gmail.com>
- <Ye3ptcW0eAFRYm58@krava>
- <20220124092405.665e9e0fc3ce14b16a1a9fcf@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124092405.665e9e0fc3ce14b16a1a9fcf@kernel.org>
+        Mon, 24 Jan 2022 04:21:40 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Danil Kipnis <danil.kipnis@cloud.ionos.com>,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH v2] RDMA/rtrs: Fix double free in alloc_clt
+Date:   Mon, 24 Jan 2022 12:21:35 +0000
+Message-Id: <20220124122135.5745-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 09:24:05AM +0900, Masami Hiramatsu wrote:
-> On Mon, 24 Jan 2022 00:50:13 +0100
-> Jiri Olsa <jolsa@redhat.com> wrote:
-> 
-> > On Fri, Jan 21, 2022 at 09:29:00AM -0800, Andrii Nakryiko wrote:
-> > > On Thu, Jan 20, 2022 at 8:55 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > > >
-> > > > On Thu, 20 Jan 2022 14:24:15 -0800
-> > > > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> > > >
-> > > > > On Wed, Jan 19, 2022 at 6:56 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > > > > >
-> > > > > > Hello Jiri,
-> > > > > >
-> > > > > > Here is the 3rd version of fprobe. I added some comments and
-> > > > > > fixed some issues. But I still saw some problems when I add
-> > > > > > your selftest patches.
-> > > > > >
-> > > > > > This series introduces the fprobe, the function entry/exit probe
-> > > > > > with multiple probe point support. This also introduces the rethook
-> > > > > > for hooking function return as same as kretprobe does. This
-> > > > > > abstraction will help us to generalize the fgraph tracer,
-> > > > > > because we can just switch it from rethook in fprobe, depending
-> > > > > > on the kernel configuration.
-> > > > > >
-> > > > > > The patch [1/9] and [7/9] are from Jiri's series[1]. Other libbpf
-> > > > > > patches will not be affected by this change.
-> > > > > >
-> > > > > > [1] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#u
-> > > > > >
-> > > > > > However, when I applied all other patches on top of this series,
-> > > > > > I saw the "#8 bpf_cookie" test case has been stacked (maybe related
-> > > > > > to the bpf_cookie issue which Andrii and Jiri talked?) And when I
-> > > > > > remove the last selftest patch[2], the selftest stopped at "#112
-> > > > > > raw_tp_test_run".
-> > > > > >
-> > > > > > [2] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#m242d2b3a3775eeb5baba322424b15901e5e78483
-> > > > > >
-> > > > > > Note that I used tools/testing/selftests/bpf/vmtest.sh to check it.
-> > > > > >
-> > > > > > This added 2 more out-of-tree patches. [8/9] is for adding wildcard
-> > > > > > support to the sample program, [9/9] is a testing patch for replacing
-> > > > > > kretprobe trampoline with rethook.
-> > > > > > According to this work, I noticed that using rethook in kretprobe
-> > > > > > needs 2 steps.
-> > > > > >  1. port the rethook on all architectures which supports kretprobes.
-> > > > > >     (some arch requires CONFIG_KPROBES for rethook)
-> > > > > >  2. replace kretprobe trampoline with rethook for all archs, at once.
-> > > > > >     This must be done by one treewide patch.
-> > > > > >
-> > > > > > Anyway, I'll do the kretprobe update in the next step as another series.
-> > > > > > (This testing patch is just for confirming the rethook is correctly
-> > > > > >  implemented.)
-> > > > > >
-> > > > > > BTW, on the x86, ftrace (with fentry) location address is same as
-> > > > > > symbol address. But on other archs, it will be different (e.g. arm64
-> > > > > > will need 2 instructions to save link-register and call ftrace, the
-> > > > > > 2nd instruction will be the ftrace location.)
-> > > > > > Does libbpf correctly handle it?
-> > 
-> > hm, I'm probably missing something, but should this be handled by arm
-> > specific kernel code? user passes whatever is found in kallsyms, right?
-> 
-> In x86, fentry nop is always placed at the first instruction of the function,
-> but the other arches couldn't do that if they use LR (link register) for
-> storing return address instead of stack. E.g. arm64 saves lr and call the
-> ftrace. Then ftrace location address of a function is not the symbol address.
-> 
-> Anyway, I updated fprobe to handle those cases. I also found some issues
-> on rethook, so let me update the series again.
+Callback function rtrs_clt_dev_release() in put_device()
+calls kfree(clt); to free memory. We shouldn't call kfree(clt) again.
 
-great, I reworked the bpf fprobe link change and need to add the
-symbols attachment support, so you don't need to include it in
-new version.. I'll rebase it and send on top of your patchset
+Fixes: 6a98d71daea1 ("RDMA/rtrs: client: main functionality")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+Changes in v2:
+- call free_percpu() before put_device() to avoid UAF.
+---
+ drivers/infiniband/ulp/rtrs/rtrs-clt.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-thanks,
-jirka
-
-> 
-> > > > >
-> > > > > libbpf doesn't do anything there. The interface for kprobe is based on
-> > > > > function name and kernel performs name lookups internally to resolve
-> > > > > IP. For fentry it's similar (kernel handles IP resolution), but
-> > > > > instead of function name we specify BTF ID of a function type.
-> > > >
-> > > > Hmm, according to Jiri's original patch, it seems to pass an array of
-> > > > addresses. So I thought that has been resolved by libbpf.
-> > > >
-> > > > +                       struct {
-> > > > +                               __aligned_u64   addrs;
-> > > 
-> > > I think this is a pointer to an array of pointers to zero-terminated C strings
-> > 
-> > I used direct addresses, because bpftrace already has them, so there was
-> > no point passing strings, I cann add support for that
-> 
-> So now both direct address array or symbol array are OK.
-> 
-> Thank you,
-> 
-> -- 
-> Masami Hiramatsu <mhiramat@kernel.org>
-> 
+diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+index 7c3f98e57889..aff04f566304 100644
+--- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
++++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+@@ -2739,10 +2739,8 @@ static struct rtrs_clt_sess *alloc_clt(const char *sessname, size_t paths_num,
+ 	 */
+ 	dev_set_uevent_suppress(&clt->dev, true);
+ 	err = device_register(&clt->dev);
+-	if (err) {
+-		put_device(&clt->dev);
+-		goto err;
+-	}
++	if (err)
++		goto err_register;
+ 
+ 	clt->kobj_paths = kobject_create_and_add("paths", &clt->dev.kobj);
+ 	if (!clt->kobj_paths) {
+@@ -2764,6 +2762,11 @@ static struct rtrs_clt_sess *alloc_clt(const char *sessname, size_t paths_num,
+ err:
+ 	free_percpu(clt->pcpu_path);
+ 	kfree(clt);
++	goto ret;
++err_register:
++	free_percpu(clt->pcpu_path);
++	put_device(&clt->dev);
++ret:
+ 	return ERR_PTR(err);
+ }
+ 
+-- 
+2.17.1
 

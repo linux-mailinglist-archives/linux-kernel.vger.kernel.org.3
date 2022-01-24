@@ -2,167 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89FB749827A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 15:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A324F49827D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 15:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238842AbiAXOes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 09:34:48 -0500
-Received: from prt-mail.chinatelecom.cn ([42.123.76.222]:58734 "EHLO
-        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S237779AbiAXOer (ORCPT
+        id S238903AbiAXOfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 09:35:04 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:62544 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S238851AbiAXOfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 09:34:47 -0500
-HMM_SOURCE_IP: 172.18.0.218:37604.302679515
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-112.38.63.33 (unknown [172.18.0.218])
-        by chinatelecom.cn (HERMES) with SMTP id 7E99928009A;
-        Mon, 24 Jan 2022 22:34:35 +0800 (CST)
-X-189-SAVE-TO-SEND: sunshouxin@chinatelecom.cn
-Received: from  ([172.18.0.218])
-        by app0025 with ESMTP id 7f167e02474647c4a9bfcfb9959c7b6e for nikolay@nvidia.com;
-        Mon, 24 Jan 2022 22:34:39 CST
-X-Transaction-ID: 7f167e02474647c4a9bfcfb9959c7b6e
-X-Real-From: sunshouxin@chinatelecom.cn
-X-Receive-IP: 172.18.0.218
-X-MEDUSA-Status: 0
-Sender: sunshouxin@chinatelecom.cn
-Message-ID: <f7a4697e-4be0-49c6-caa9-e56b43026654@chinatelecom.cn>
-Date:   Mon, 24 Jan 2022 22:34:32 +0800
+        Mon, 24 Jan 2022 09:35:02 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20OEHr4I004956;
+        Mon, 24 Jan 2022 14:35:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=jw3VQBR3L4SwMNlmNuj+3fny674ETFe88Mqy3G/OMuM=;
+ b=tRcfYJ7nQ89mKnKaaBAmdRlfrRx4emUpUIEp/wzeF6X/F+xBB6Odk7NVPFKI2QuIyHhi
+ GKCbdyu2Wml/8uN9JWDoKecxCX/zp6sqrMx0RGvp8FRTaHtVIQdX00YXHtQpEjWU8+lq
+ 6TdVxth2r6xEAI9UcytlfwalshsCn52RtwTXQJOxFlf/6WDYb5WJBRVvFFyExkRWidLN
+ j8Gr+0o0tMKYTx0BqQWhIjCl5rVPuaNluTP2ecaq2mG1kavNoFAp7wtLVekp+dGBLdTh
+ B3Mwe3dm5/PKDclgvGDvPI0hx4qECjaHW/Xy4Np19p5a7kNe4CTqyc8WNBPJrbLrvQNn qg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dsvbf31yb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Jan 2022 14:35:01 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20OEIP3e011641;
+        Mon, 24 Jan 2022 14:35:00 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dsvbf31xs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Jan 2022 14:35:00 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20OESFVp019411;
+        Mon, 24 Jan 2022 14:34:59 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3dr96j5fet-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Jan 2022 14:34:58 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20OEYtEF42664426
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Jan 2022 14:34:55 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5FA7D5205A;
+        Mon, 24 Jan 2022 14:34:55 +0000 (GMT)
+Received: from [9.171.67.78] (unknown [9.171.67.78])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 59B655205F;
+        Mon, 24 Jan 2022 14:34:54 +0000 (GMT)
+Message-ID: <1c2a1e60-a4f6-2afa-6479-a2dbd0e6e849@linux.ibm.com>
+Date:   Mon, 24 Jan 2022 15:36:44 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v7] net: bonding: Add support for IPV6 ns/na to
- balance-alb/balance-tlb mode
-To:     Nikolay Aleksandrov <nikolay@nvidia.com>, j.vosburgh@gmail.com,
-        vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jay.vosburgh@canonical.com, huyd12@chinatelecom.cn
-References: <20220121082243.88155-1-sunshouxin@chinatelecom.cn>
- <fb358da0-d255-301d-c39c-8232aa415a38@nvidia.com>
-From:   =?UTF-8?B?5a2Z5a6I6ZGr?= <sunshouxin@chinatelecom.cn>
-In-Reply-To: <fb358da0-d255-301d-c39c-8232aa415a38@nvidia.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2 18/30] KVM: s390: pci: provide routines for
+ enabling/disabling interpretation
+Content-Language: en-US
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
+ <20220114203145.242984-19-mjrosato@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <20220114203145.242984-19-mjrosato@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 3YnikYjHUttUuBSe3PIcp1CRipfYsn2Q
+X-Proofpoint-ORIG-GUID: 6-s6tzk7Ddzw1wJTN4qKuwQ3FBVVRDLa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-24_07,2022-01-24_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ bulkscore=0 phishscore=0 suspectscore=0 priorityscore=1501 mlxlogscore=999
+ spamscore=0 mlxscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2201240094
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-在 2022/1/21 16:52, Nikolay Aleksandrov 写道:
-> On 21/01/2022 10:22, Sun Shouxin wrote:
->> Since ipv6 neighbor solicitation and advertisement messages
->> isn't handled gracefully in bond6 driver, we can see packet
->> drop due to inconsistency between mac address in the option
->> message and source MAC .
->>
->> Another examples is ipv6 neighbor solicitation and advertisement
->> messages from VM via tap attached to host bridge, the src mac
->> might be changed through balance-alb mode, but it is not synced
->> with Link-layer address in the option message.
->>
->> The patch implements bond6's tx handle for ipv6 neighbor
->> solicitation and advertisement messages.
->>
->> Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
->> Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
->> Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
->> ---
->>   drivers/net/bonding/bond_alb.c | 36 ++++++++++++++++++++++++++++++++++
->>   1 file changed, 36 insertions(+)
->>
-> Hi,
-> A few comments below,
+
+On 1/14/22 21:31, Matthew Rosato wrote:
+> These routines will be wired into the vfio_pci_zdev ioctl handlers to
+> respond to requests to enable / disable a device for zPCI Load/Store
+> interpretation.
+> 
+> The first time such a request is received, enable the necessary facilities
+> for the guest.
+> 
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> ---
+>   arch/s390/include/asm/kvm_pci.h |  4 ++
+>   arch/s390/kvm/pci.c             | 99 +++++++++++++++++++++++++++++++++
+>   arch/s390/pci/pci.c             |  3 +
+>   3 files changed, 106 insertions(+)
+> 
+> diff --git a/arch/s390/include/asm/kvm_pci.h b/arch/s390/include/asm/kvm_pci.h
+> index aafee2976929..072401aa7922 100644
+> --- a/arch/s390/include/asm/kvm_pci.h
+> +++ b/arch/s390/include/asm/kvm_pci.h
+> @@ -26,4 +26,8 @@ int kvm_s390_pci_dev_open(struct zpci_dev *zdev);
+>   void kvm_s390_pci_dev_release(struct zpci_dev *zdev);
+>   void kvm_s390_pci_attach_kvm(struct zpci_dev *zdev, struct kvm *kvm);
+>   
+> +int kvm_s390_pci_interp_probe(struct zpci_dev *zdev);
+> +int kvm_s390_pci_interp_enable(struct zpci_dev *zdev);
+> +int kvm_s390_pci_interp_disable(struct zpci_dev *zdev);
+> +
+>   #endif /* ASM_KVM_PCI_H */
+> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
+> index dae853da6df1..122d0992b521 100644
+> --- a/arch/s390/kvm/pci.c
+> +++ b/arch/s390/kvm/pci.c
+> @@ -12,7 +12,9 @@
+>   #include <asm/kvm_pci.h>
+>   #include <asm/pci.h>
+>   #include <asm/pci_insn.h>
+> +#include <asm/sclp.h>
+>   #include "pci.h"
+> +#include "kvm-s390.h"
+>   
+>   struct zpci_aift *aift;
+>   
+> @@ -143,6 +145,103 @@ int kvm_s390_pci_aen_init(u8 nisc)
+>   	return rc;
+>   }
+>   
+> +int kvm_s390_pci_interp_probe(struct zpci_dev *zdev)
+> +{
+> +	/* Must have appropriate hardware facilities */
+> +	if (!(sclp.has_zpci_lsi && test_facility(69)))
+
+Should'nt we also test the other facilities we need for the 
+interpretation like ARNI, AISII, ASI and GISA ?
+
+Or are we sure they are always there when ZPCI load/store interpretation 
+is available?
 
 
-Thanks your comment, I'll adjust it and send out V8 soon.
+> +		return -EINVAL;
+> +
+> +	/* Must have a KVM association registered */
+> +	if (!zdev->kzdev || !zdev->kzdev->kvm)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_s390_pci_interp_probe);
+> +
+> +int kvm_s390_pci_interp_enable(struct zpci_dev *zdev)
+> +{
+> +	u32 gd;
+> +	int rc;
+> +
+> +	if (!zdev->kzdev || !zdev->kzdev->kvm)
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * If this is the first request to use an interpreted device, make the
+> +	 * necessary vcpu changes
+> +	 */
+> +	if (!zdev->kzdev->kvm->arch.use_zpci_interp)
+> +		kvm_s390_vcpu_pci_enable_interp(zdev->kzdev->kvm);
+> +
+> +	/*
+> +	 * In the event of a system reset in userspace, the GISA designation
+> +	 * may still be assigned because the device is still enabled.
+> +	 * Verify it's the same guest before proceeding.
+> +	 */
+> +	gd = (u32)(u64)&zdev->kzdev->kvm->arch.sie_page2->gisa;
 
+should use the virt_to_phys transformation ?
 
->
->> diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
->> index 533e476988f2..82b7071840b1 100644
->> --- a/drivers/net/bonding/bond_alb.c
->> +++ b/drivers/net/bonding/bond_alb.c
->> @@ -1269,6 +1269,34 @@ static int alb_set_mac_address(struct bonding *bond, void *addr)
->>   	return res;
->>   }
->>   
->> +/*determine if the packet is NA or NS*
-> comments should have spaces, /* text */
->
->> +static bool __alb_determine_nd(struct icmp6hdr *hdr)
->> +{
->> +	if (hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
->> +	    hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
->> +		return true;
->> +	}
->> +
->> +	return false;
->> +}
->> +
->> +static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
->> +{
->> +	struct ipv6hdr *ip6hdr;
->> +	struct icmp6hdr *hdr;
->> +
->> +	if (skb->protocol == htons(ETH_P_IPV6)) {
-> You can drop this test if you re-arrange the cases in the caller. More below.
->
->> +		ip6hdr = ipv6_hdr(skb);
->> +		if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
->> +			hdr = icmp6_hdr(skb);
-> You have to use pskb_may_pull here, only the IPv6 header is pulled by the caller
-> and certain to be in the linear part. Also you have to change one of the callers,
-> more below.
->
->> +			if (__alb_determine_nd(hdr))
->> +				return true;
-> you can do directly return __alb_determine_nd(hdr) here.
->
->> +		}
->> +	}
->> +
->> +	return false;
->> +}
->> +
->>   /************************ exported alb functions ************************/
->>   
->>   int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
->> @@ -1350,6 +1378,9 @@ struct slave *bond_xmit_tlb_slave_get(struct bonding *bond,>  		switch (skb->protocol) {
->>   		case htons(ETH_P_IP):
->>   		case htons(ETH_P_IPV6):
->> +			if (alb_determine_nd(skb, bond))
->> +				break;
->> +
-> You can drop the IPv6 test in alb_determine_nd() if you re-arrange the cases here.
-> Something like:
->    		case htons(ETH_P_IPV6):
-> 			if (alb_determine_nd(skb, bond))
-> 				break;
-> 			fallthrough;
->    		case htons(ETH_P_IP):
->
-> You should also use pskb_may_pull to make sure the IPv6 header is in the linear part
-> and can be accessed.
->
->>   			hash_index = bond_xmit_hash(bond, skb);
->>   			if (bond->params.tlb_dynamic_lb) {
->>   				tx_slave = tlb_choose_channel(bond,
->> @@ -1446,6 +1477,11 @@ struct slave *bond_xmit_alb_slave_get(struct bonding *bond,
->>   			break;
->>   		}
->>   
->> +		if (alb_determine_nd(skb, bond)) {
->> +			do_tx_balance = false;
->> +			break;
->> +		}
->> +
->>   		hash_start = (char *)&ip6hdr->daddr;
->>   		hash_size = sizeof(ip6hdr->daddr);
->>   		break;
->>
->> base-commit: 79e06c4c4950be2abd8ca5d2428a8c915aa62c24
-> Thanks,
->   Nik
->
+> +	if (zdev->gd != 0 && zdev->gd != gd)
+> +		return -EPERM;
+> +
+> +	if (zdev_enabled(zdev)) {
+> +		zdev->gd = 0;
+> +		rc = zpci_disable_device(zdev);
+> +		if (rc)
+> +			return rc;
+> +	}
+> +
+> +	/*
+> +	 * Store information about the identity of the kvm guest allowed to
+> +	 * access this device via interpretation to be used by host CLP
+> +	 */
+> +	zdev->gd = gd;
+> +
+> +	rc = zpci_enable_device(zdev);
+> +	if (rc)
+> +		goto err;
+> +
+> +	/* Re-register the IOMMU that was already created */
+> +	rc = zpci_register_ioat(zdev, 0, zdev->start_dma, zdev->end_dma,
+> +				virt_to_phys(zdev->dma_table));
+> +	if (rc)
+> +		goto err;
+> +
+> +	return rc;
+> +
+> +err:
+> +	zdev->gd = 0;
+> +	return rc;
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_s390_pci_interp_enable);
+> +
+> +int kvm_s390_pci_interp_disable(struct zpci_dev *zdev)
+> +{
+> +	int rc;
+> +
+> +	if (zdev->gd == 0)
+> +		return -EINVAL;
+> +
+> +	/* Remove the host CLP guest designation */
+> +	zdev->gd = 0;
+> +
+> +	if (zdev_enabled(zdev)) {
+> +		rc = zpci_disable_device(zdev);
+> +		if (rc)
+> +			return rc;
+> +	}
+> +
+> +	rc = zpci_enable_device(zdev);
+> +	if (rc)
+> +		return rc;
+> +
+> +	/* Re-register the IOMMU that was already created */
+> +	rc = zpci_register_ioat(zdev, 0, zdev->start_dma, zdev->end_dma,
+> +				virt_to_phys(zdev->dma_table));
+> +
+> +	return rc;
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_s390_pci_interp_disable);
+> +
+>   int kvm_s390_pci_dev_open(struct zpci_dev *zdev)
+>   {
+>   	struct kvm_zdev *kzdev;
+> diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
+> index 2a19becbc14c..58673f633869 100644
+> --- a/arch/s390/pci/pci.c
+> +++ b/arch/s390/pci/pci.c
+> @@ -147,6 +147,7 @@ int zpci_register_ioat(struct zpci_dev *zdev, u8 dmaas,
+>   		zpci_dbg(3, "reg ioat fid:%x, cc:%d, status:%d\n", zdev->fid, cc, status);
+>   	return cc;
+>   }
+> +EXPORT_SYMBOL_GPL(zpci_register_ioat);
+>   
+>   /* Modify PCI: Unregister I/O address translation parameters */
+>   int zpci_unregister_ioat(struct zpci_dev *zdev, u8 dmaas)
+> @@ -727,6 +728,7 @@ int zpci_enable_device(struct zpci_dev *zdev)
+>   		zpci_update_fh(zdev, fh);
+>   	return rc;
+>   }
+> +EXPORT_SYMBOL_GPL(zpci_enable_device);
+>   
+>   int zpci_disable_device(struct zpci_dev *zdev)
+>   {
+> @@ -750,6 +752,7 @@ int zpci_disable_device(struct zpci_dev *zdev)
+>   	}
+>   	return rc;
+>   }
+> +EXPORT_SYMBOL_GPL(zpci_disable_device);
+>   
+>   /**
+>    * zpci_hot_reset_device - perform a reset of the given zPCI function
+> 
+
+-- 
+Pierre Morel
+IBM Lab Boeblingen

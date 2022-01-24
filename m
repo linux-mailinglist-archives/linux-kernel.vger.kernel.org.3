@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C869149A30B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9DE49A276
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2367600AbiAXX4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:56:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
+        id S2362518AbiAXXma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1846559AbiAXXQT (ORCPT
+        with ESMTP id S1843521AbiAXXEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:16:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CCBC07E291;
-        Mon, 24 Jan 2022 11:44:56 -0800 (PST)
+        Mon, 24 Jan 2022 18:04:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35811C06E003;
+        Mon, 24 Jan 2022 13:16:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 854D7B81188;
-        Mon, 24 Jan 2022 19:44:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B728C340E5;
-        Mon, 24 Jan 2022 19:44:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CABFA61496;
+        Mon, 24 Jan 2022 21:16:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A42BFC340E4;
+        Mon, 24 Jan 2022 21:16:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053494;
-        bh=XkwDeNlHci496NYmFmsJJ6uvx9eXXONCTwinhOIY5r4=;
+        s=korg; t=1643058970;
+        bh=s9tsxmFlqICboirL075gBp3+3Ny1m13WJnEkExbZ/tc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SFAuqllBdpTTuMW232PXkvT+5rgm49lZi5wMGf11jpdQOPSNMGHSpHYVOSk8JoTBL
-         lMVr3exZE5IPc5tsCyRUiAY+kMvEJvmrJqBY6OqrrqvNctyJRQAXT8m3xsoQ2nuYOP
-         3DZwEpUNSoe1IFqMTxl8WdJRuSxRQFctR7p2Exnk=
+        b=OsygMvCFr6Nq+9QhyFNmpH8xxml2RcEDgbX6RkYcIlsYzvRR7XAoY4egeb7lRGVJD
+         wGxjoJPHl8v/Rwb/nJDv9e3zl1UaffQWt2UMeVj5KY83zuhCd5tv7DSMCZpgghuCzp
+         nKKZMMvFtYwZcClnkuoZDoj7SjtTMULhKApRPNQg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 084/563] memory: renesas-rpc-if: Return error in case devm_ioremap_resource() fails
-Date:   Mon, 24 Jan 2022 19:37:29 +0100
-Message-Id: <20220124184027.303523032@linuxfoundation.org>
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0461/1039] dt-bindings: thermal: Fix definition of cooling-maps contribution property
+Date:   Mon, 24 Jan 2022 19:37:30 +0100
+Message-Id: <20220124184140.783230585@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,38 +51,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-[ Upstream commit 818fdfa89baac77a8df5a2c30f4fb798cc937aa0 ]
+[ Upstream commit 49bcb1506f2e095262c01bda7fd1c0db524c91e2 ]
 
-Make sure we return error in case devm_ioremap_resource() fails for dirmap
-resource.
+When converting the thermal-zones bindings to yaml the definition of the
+contribution property changed. The intention is the same, an integer
+value expressing a ratio of a sum on how much cooling is provided by the
+device to the zone. But after the conversion the integer value is
+limited to the range 0 to 100 and expressed as a percentage.
 
-Fixes: ca7d8b980b67 ("memory: add Renesas RPC-IF driver")
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/20211025205631.21151-6-prabhakar.mahadev-lad.rj@bp.renesas.com
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+This is problematic for two reasons.
+
+- This do not match how the binding is used. Out of the 18 files that
+  make use of the property only two (ste-dbx5x0.dtsi and
+  ste-hrefv60plus.dtsi) sets it at a value that satisfy the binding,
+  100. The remaining 16 files set the value higher and fail to validate.
+
+- Expressing the value as a percentage instead of a ratio of the sum is
+  confusing as there is nothing to enforce the sum in the zone is not
+  greater then 100.
+
+This patch restore the pre yaml conversion description and removes the
+value limitation allowing the usage of the bindings to validate.
+
+Fixes: 1202a442a31fd2e5 ("dt-bindings: thermal: Add yaml bindings for thermal zones")
+Reported-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Link: https://lore.kernel.org/r/20211109103045.1403686-1-niklas.soderlund+renesas@ragnatech.se
+Signed-off-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/memory/renesas-rpc-if.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../devicetree/bindings/thermal/thermal-zones.yaml       | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
-index a760ab08256ff..9019121a80f53 100644
---- a/drivers/memory/renesas-rpc-if.c
-+++ b/drivers/memory/renesas-rpc-if.c
-@@ -245,7 +245,7 @@ int rpcif_sw_init(struct rpcif *rpc, struct device *dev)
- 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dirmap");
- 	rpc->dirmap = devm_ioremap_resource(&pdev->dev, res);
- 	if (IS_ERR(rpc->dirmap))
--		rpc->dirmap = NULL;
-+		return PTR_ERR(rpc->dirmap);
- 	rpc->size = resource_size(res);
+diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+index a07de5ed0ca6a..2d34f3ccb2572 100644
+--- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
++++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+@@ -199,12 +199,11 @@ patternProperties:
  
- 	rpc->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+               contribution:
+                 $ref: /schemas/types.yaml#/definitions/uint32
+-                minimum: 0
+-                maximum: 100
+                 description:
+-                  The percentage contribution of the cooling devices at the
+-                  specific trip temperature referenced in this map
+-                  to this thermal zone
++                  The cooling contribution to the thermal zone of the referred
++                  cooling device at the referred trip point. The contribution is
++                  a ratio of the sum of all cooling contributions within a
++                  thermal zone.
+ 
+             required:
+               - trip
 -- 
 2.34.1
 

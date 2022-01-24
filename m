@@ -2,89 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A72497B07
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 830BB497B0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236476AbiAXJH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 04:07:29 -0500
-Received: from mga03.intel.com ([134.134.136.65]:19243 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236407AbiAXJH1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 04:07:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643015247; x=1674551247;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ANmmsgI45eUwG7SYlBwEQ7Ek8Xv052sncdNciT50LJ4=;
-  b=GEYgjx63jJPambwB5TU/atIkgTP9zmcPieZiUHT+iJh5MkWZI7KkpPaU
-   3AumqiqZjk8VS6pFvbLssD4qOE9q7jNNhw4F8uQq2LltsWAu3mV/WVuEv
-   KdQCf9z5WThe6nLWhJqvBEKf/rcJDmfmxPW3APjCUb1ZHw7KO1nS/UVR1
-   SfB9nakerNUqLM+xJE41mdR4kiqWohinQDIOeok5uo+67f2E7xS9Agb0a
-   7DANS/9WkTg5p8ki47CJwZhzYwhdgkKYGLqAHycjmsZ+xcA87LYuM59pd
-   iCdEb6reE/gbPQ2UdSfCDep5RPoh2IkEbHoEqyt7bP8z634dqV2D/w/f/
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="245946749"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="245946749"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 01:07:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="596732330"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 24 Jan 2022 01:07:25 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nBvJs-000I4v-Te; Mon, 24 Jan 2022 09:07:24 +0000
-Date:   Mon, 24 Jan 2022 17:07:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chuck Lever <chuck.lever@oracle.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [cel:topic-rpc-with-tls-upcall 15/18] arc-elf-ld:
- af_tlsh.c:undefined reference to `inet6_recvmsg'
-Message-ID: <202201241735.neUrpkni-lkp@intel.com>
+        id S242586AbiAXJIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 04:08:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242418AbiAXJIP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 04:08:15 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37DBC061401
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 01:08:14 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id i62so2682023ybg.5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 01:08:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Mo+uj8+53Ax7tIU91723WHax5XvtDO7oGefV09g/Eiw=;
+        b=Lag6Tc/VjcamDe0m5xYuMi0i4GEJpQqzDv2xv15qjoOeqbVWxK+nR+z87z3/Uds7yJ
+         xVMZsrEWXOp0quH66zVcVy5D9zyeeMNJ8MBFrQnj3VltAmEoKjttsv3dlG98dSbynjqk
+         PFnaOxWJQVmTUr0iugE5+mXiRzDIDnlGpq+Atf0UWF/05kXEtP98JOBc8mLU8YHEPRFF
+         F4B6lwfKhGX8rPNJo3AwlCueRsN7Pt4RrmA0biTfkV0Baij7u6nDkDnXHHN+LcrqhAqH
+         CShC3LlIw2tHICgexcSbDwofHLOvSY3OXjtQdxIIJaw/jzgvcxhEH1G/dQIPzOMr2C70
+         ai4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Mo+uj8+53Ax7tIU91723WHax5XvtDO7oGefV09g/Eiw=;
+        b=SL2E/xcOnCA6wT3CKMvQcUwUnaCqX00o/vD81Zfs8os8l7EfoUvVT/qBxFvYsIGsZ3
+         47SWmPcU1AWROyVQ9obn3IrrlHlIyyt6kYgeHM4FeF51xu/nr4c9MyJ0mokTPrZtIFic
+         b9fhxzdRpRo+acpFtfG09lWNddvSYQ4gNKBpj+z14vFGALH7bo8MwAX0YkDV8hL1/6YG
+         kEl3PMoe4KTOMLsNOq/kAvZ4Dr3abmgagXjjZkRDNutvX4fFCpFTb0hMj/P/QzuwIB5V
+         JRN14eGVnllALvNNPOvTRR+8A46Rpflr2Jt/TMxsdjF5kNxvGvK4PaTYpG9F6JMQErzp
+         RGsw==
+X-Gm-Message-State: AOAM5324yAOkkFhQSvMLeO8mp2P0JbKpHqsSBDj0xf963sG17w/TE+Zs
+        2BaWsb6kw8VWe21ld2uoNSabWazIRB9KlbMVjM/3pw==
+X-Google-Smtp-Source: ABdhPJxR2sNnK1U8ZMv0TLocVVFDh5rCZxvNsQJUvLgq5oQIsKgHQM/iDQMQSKuzKm7osYadMtzCvSPfXA2+9Ul2f20=
+X-Received: by 2002:a05:6902:100c:: with SMTP id w12mr6231737ybt.317.1643015294113;
+ Mon, 24 Jan 2022 01:08:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220121075515.79311-1-songmuchun@bytedance.com>
+ <20220121075515.79311-4-songmuchun@bytedance.com> <Ye5YNbBbVymwfPB0@infradead.org>
+In-Reply-To: <Ye5YNbBbVymwfPB0@infradead.org>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Mon, 24 Jan 2022 17:07:38 +0800
+Message-ID: <CAMZfGtUb+xF9nFd21g8tagjRTCYg7R=HOVmXvVZhbtx8im3FDQ@mail.gmail.com>
+Subject: Re: [PATCH 4/5] dax: fix missing writeprotect the pte entry
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>, apopple@nvidia.com,
+        Yang Shi <shy828301@gmail.com>, rcampbell@nvidia.com,
+        Hugh Dickins <hughd@google.com>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        zwisler@kernel.org, linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        nvdimm@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux topic-rpc-with-tls-upcall
-head:   da4c27539d2deaa2b9624c470a903b880497e398
-commit: 2d835a81bb38c6378f4cc53d0eb2320248a11a4c [15/18] net/tls: Add support for PF_TLSH (a TLS handshake listener)
-config: arc-randconfig-r043-20220123 (https://download.01.org/0day-ci/archive/20220124/202201241735.neUrpkni-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=2d835a81bb38c6378f4cc53d0eb2320248a11a4c
-        git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-        git fetch --no-tags cel topic-rpc-with-tls-upcall
-        git checkout 2d835a81bb38c6378f4cc53d0eb2320248a11a4c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
+On Mon, Jan 24, 2022 at 3:41 PM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Fri, Jan 21, 2022 at 03:55:14PM +0800, Muchun Song wrote:
+> > Reuse some infrastructure of page_mkclean_one() to let DAX can handle
+> > similar case to fix this issue.
+>
+> Can you split out some of the infrastructure changes into proper
+> well-documented preparation patches?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Will do. I'll introduce page_vma_mkclean_one in a prepared patch
+and then fix the DAX issue in a separate patch. Thanks for your
+suggestions.
 
-All errors (new ones prefixed by >>):
+>
+> > +     pgoff_t pgoff_end = pgoff_start + npfn - 1;
+> >
+> >       i_mmap_lock_read(mapping);
+> > -     vma_interval_tree_foreach(vma, &mapping->i_mmap, index, index) {
+> > -             struct mmu_notifier_range range;
+> > -             unsigned long address;
+> > -
+> > +     vma_interval_tree_foreach(vma, &mapping->i_mmap, pgoff_start, pgoff_end) {
+>
+> Please avoid the overly long lines here.  Just using start and end
+> might be an easy option.
+>
 
-   arc-elf-ld: net/tls/af_tlsh.o: in function `tlsh_recvmsg':
-   af_tlsh.c:(.text+0xc2): undefined reference to `inet6_recvmsg'
->> arc-elf-ld: af_tlsh.c:(.text+0xc2): undefined reference to `inet6_recvmsg'
-   arc-elf-ld: net/tls/af_tlsh.o: in function `tlsh_sendmsg':
-   af_tlsh.c:(.text+0xde): undefined reference to `inet6_sendmsg'
->> arc-elf-ld: af_tlsh.c:(.text+0xde): undefined reference to `inet6_sendmsg'
-   arc-elf-ld: net/tls/af_tlsh.o: in function `tlsh_getname':
-   af_tlsh.c:(.text+0x12a): undefined reference to `inet6_getname'
->> arc-elf-ld: af_tlsh.c:(.text+0x12a): undefined reference to `inet6_getname'
-   arc-elf-ld: net/tls/af_tlsh.o: in function `tlsh_release':
-   af_tlsh.c:(.text+0x4f6): undefined reference to `inet6_release'
->> arc-elf-ld: af_tlsh.c:(.text+0x4f6): undefined reference to `inet6_release'
+Will do.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks.

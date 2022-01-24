@@ -2,295 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66AF8498643
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:17:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B25FE498649
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244237AbiAXRR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:17:29 -0500
-Received: from mail-dm6nam10on2054.outbound.protection.outlook.com ([40.107.93.54]:55848
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        id S244277AbiAXRSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:18:04 -0500
+Received: from mail-co1nam11on2044.outbound.protection.outlook.com ([40.107.220.44]:23025
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S244182AbiAXRR1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:17:27 -0500
+        id S231765AbiAXRSC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 12:18:02 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IVh5YZEBcZGWwJFsCScjwlZYxqhnAKlB8eMNspGbpJKHel3OKaESue00a75nhzrNdOuTnG3wL8Er0vTjP4YCKvUZcJfWYqok3CPSewBh+7AVWYegOJVHKqT+xLqqi70V5ycShTDV6KbJJg6lrb6ae+82l9X6MkgHAjLZolmZQQFZodRlNXDi27JLd42FldMH/dK8UmbtJfBy1n13VwZ8dgMJczHSuVxN7FtbwPqZJjY164qWo2UUc6LOx3S74r6WU4z5OlqMcjQGLMhuZIBeHrJXFEjD/baOK1rHNmrIJ9lI0LEXYkJql+vBQSRhqlSDawhllot2rKrQS9j4Mq+Brw==
+ b=Dqbkg9Ey/PmuiFjD6/WUGQ5v4mq3VwVGWp1TCvVeKyuh92wCTg7IBb/kudmhxikJIYX71nc8/ej4axyWxjxloUpOhyvbgGoEfa7S3lAWM1s6dGsLCyvu5EE8VX4HCpr1Z865RN0MVbSUHE8uYwVHR4ATmLPCUg5TKLR39FdUylW6sPfCXuf5lVgcU9yjrIQ/29PDDIhZONxkcDQ/q14mAmY7RmCpweQ0CsHaJM4qkJhJGNP5C51cp92L/g4Fw1XXhKdf/PYRbzlixiEWvvmsP2w1WADSH2FKtzHpG6QyEc7djD/RnOOfnzDkqNdGVHnigxbQEyNjvHR5FYtLAZGanw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q0Eu+2xVKWm+ZczEQK2WBjqID4KJe0aXtKlMgoZ3AYw=;
- b=a1Pwqudq/3yOG0c/xXdmSS9p/bkBvmue1vKTpJ52AjaDsMG/P5wB/xDp7c+WagUos1whS50e+roUCOVS22F6hyk+ay4jt24j23z6tutFiGK6FwwYT6bS0IwEYVXq4vwpEonyZ2rv+x1TOn39otdpNZhmW/+YcGW4HCnMRQzmyFIy37AzF06Nwsj70e3zXctu9UmISUIAuJygNw3cPE9MV6HyQW1y1J2G+NYXN8sUfr5V8lZwdaybXu/vXuGZ1nJggA8yDGGq5RFZ4MxoG/XynXSiLLlX28kzmx1SFw/OALdW4r70Hl4+aY9dWT3ukbw8MuUw+hMCEWy3yhuSF6595Q==
+ bh=vYEBFzAm+76aFeLIl/mwxSlqinNryGozNFn7PHvX0D0=;
+ b=YtLvwM8xMNAZgy4OXzT7Q+rNpSWnsnjtml/2I7I8t5ah+yQ/2wZ1Galbc1vOa9thLzv3IHBTJ43k6qEIZXeaSn9KS70/fSaY/D3mXE8iCDL0AQG4p5vejXRzOAsAoJNDo0NeWNRWwC7f2RX86RXyhxSgQNdDDC63TL62GxzgGwuNF3e3zakWzLF1+Q3h3zxVY8EURxUlNt6d+3wCut69FbXxo/eZ5aD+I9S+ZGCfBY+P/JURwngDojIcXwcdUWUHAEG53WV7V+O2i5kIhNUgnkPlXNqX3dQQtFINFB3n3MWL6ulq+qhRJIEaUdxMIdcHXkHs+T5RTclOrrmW0g0W7w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q0Eu+2xVKWm+ZczEQK2WBjqID4KJe0aXtKlMgoZ3AYw=;
- b=N3omPLSwPNzJWmRnfKtDS0L0qdou1v97P9P5St5CPAL9oYru5JR5t3y/2ltwjIyQb3KWTtoBptruM07qXSUJCKMh9GgHe7x6vGE73vp4oxZoJXenpJN29MkQ7RIdyqpMjkCd816H56Uk2cL3tNvVEaK26glHRlA5o5ZtPCIP/YPsT5zOS0Mo3YGTT57k8zOUF6dE9LBR5BrUyQ95MRqPf4FdmmLEpeywXWDFRX/fA9Z+XP0X46DwGj7QmER64nc6ijC2rbuTtSjuVknkvAE/aEew6LB/Y1WijpRCl0DyDS4XxUqzpUZu/LPqxqnPBpbCQh26TNo1ZmMGw2IaJOAV/A==
+ bh=vYEBFzAm+76aFeLIl/mwxSlqinNryGozNFn7PHvX0D0=;
+ b=IY6c3yetaYq76TELopEahv/dm6D67fxXwYIzpO5H+3WhuE3P4M9/P+Nr88i/oi7i0q932Gq5kZ5AZQ9zqS4pDIYAfpDSE1kxGYN1Z/YWuE45Jxem5yf+CvHVJMELLEo3iROjLtOJkncuXphEva4lBmUHK4J6xYOaHOV6wwp9u6t1fB4+WFZICeped6kdfveeI9yrTyrCZbkwQ5c6zBzgd0g9roUQyV5TSSkj69UoFntz1a+c2RfgMvp9AqvdKYQAWTeFi/8W/RKJEF0d+F2YdKg8wp6vC+/oCljKLOQQsS6RPvyPEBNXx+Vxwrx5Jzz9jyIzqLjbfF0NzrTb/nqPHA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
- by MN2PR12MB4423.namprd12.prod.outlook.com (2603:10b6:208:24f::18) with
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by BN9PR12MB5114.namprd12.prod.outlook.com (2603:10b6:408:137::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.12; Mon, 24 Jan
- 2022 17:17:26 +0000
-Received: from MN2PR12MB3823.namprd12.prod.outlook.com
- ([fe80::a9db:9c46:183e:c213]) by MN2PR12MB3823.namprd12.prod.outlook.com
- ([fe80::a9db:9c46:183e:c213%3]) with mapi id 15.20.4909.017; Mon, 24 Jan 2022
- 17:17:26 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     Oscar Salvador <osalvador@suse.de>
-Cc:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8; Mon, 24 Jan
+ 2022 17:18:00 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ad3f:373f:b7d3:19c2]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ad3f:373f:b7d3:19c2%7]) with mapi id 15.20.4909.017; Mon, 24 Jan 2022
+ 17:18:00 +0000
+Date:   Mon, 24 Jan 2022 13:17:59 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
         Robin Murphy <robin.murphy@arm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org,
-        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Eric Ren <renzhengeek@gmail.com>
-Subject: Re: [PATCH v4 3/7] mm: page_isolation: check specified range for unmovable pages
-Date:   Mon, 24 Jan 2022 12:17:23 -0500
-X-Mailer: MailMate (1.14r5853)
-Message-ID: <6AEF32AC-4E0D-41E0-8850-33B8BD955920@nvidia.com>
-In-Reply-To: <b7c311d4b2cd377cdc4f92bc9ccf6af1@suse.de>
-References: <20220119190623.1029355-1-zi.yan@sent.com>
- <20220119190623.1029355-4-zi.yan@sent.com>
- <b7c311d4b2cd377cdc4f92bc9ccf6af1@suse.de>
-Content-Type: multipart/signed;
- boundary="=_MailMate_27B943FC-F449-4004-9416-0A7B85F9E6EB_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: BL0PR03CA0020.namprd03.prod.outlook.com
- (2603:10b6:208:2d::33) To MN2PR12MB3823.namprd12.prod.outlook.com
- (2603:10b6:208:168::26)
+        Alex Williamson <alex.williamson@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 7/7] iommu: Add iommu_domain::domain_ops
+Message-ID: <20220124171759.GD966497@nvidia.com>
+References: <20220124071103.2097118-1-baolu.lu@linux.intel.com>
+ <20220124071103.2097118-8-baolu.lu@linux.intel.com>
+ <BN9PR11MB5276BE30652988271878E78C8C5E9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276BE30652988271878E78C8C5E9@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: BL0PR05CA0012.namprd05.prod.outlook.com
+ (2603:10b6:208:91::22) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 21ebb096-c9d4-48d2-e6d1-08d9df5d6467
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4423:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB4423A4B08EF777B09B2D63C6C25E9@MN2PR12MB4423.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
+X-MS-Office365-Filtering-Correlation-Id: e9fd6ade-63bf-4343-345c-08d9df5d78e5
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5114:EE_
+X-Microsoft-Antispam-PRVS: <BN9PR12MB51147CFC88869911DF57E435C25E9@BN9PR12MB5114.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8baTpuSEhHP2JgmRnTwWh8eFsiHH0YtAxRu7G/fpAzo2ST40Wl+urFRSkpwvKxAxY+LdUpar8aTtuxjk7Iw/q6bp45s7gSyOTnIwNN3Uem2l3Y7oeACLus9GNnANkOmhEBr55xeZlz4Mb59n7DANR28KmTw8veUZnCjg+b/MXPhxyDuqtanQBqR8n2dRVIQDLhAdEzCYx+AWeD1pIxxwolMEKNUWb3TYH2Qs/YKxLB7njNnxRUBl2JaM2FvfpPKNmiQl8BWGnfs/f5pAC2tmnCa9fVdyl/pbvvh+hPgFrJbgaBkOBF4jWi9LxtDjy8EbsiSUYZIuqpeTwc78bE0dpMMiNPztRPc6D0mRdLKnWmcyMh2JMSl+9U0C2xJDQzPSoCeHcEo8tmC9eVkePuPDOk633aNbQJ9JbiC4i/0N3UnJhsJU1zEPjZx79rA1YVBZuULHDXQikHaxPN+Oz08PKQxuUd0VsXtptEX/gc4+MT7aXQQpERH6DohmqbSSlzqmMXz03X9ppQV0Eda54jO6uOMw3xnne1crTkiDK7kU1wCxY5vjmobYO/TOoaMXipEd4DWNAQvIq9YwKZ8OyytTBCquYBIqbJvle/ONKex+vfeXILCotc3Xxhign5HiVtlMfCbfwMX/FrOFy1Gjll7ciQYQqxAyNgb1SNFED/NRdPBUKlIlaDQc76LjCDjakaVoXoA103Cu96h0QeWF8VkZjaD8eIHYz8vCKSpiCpjo7ow=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(33656002)(54906003)(21480400003)(38100700002)(7416002)(235185007)(66946007)(5660300002)(6916009)(83380400001)(36756003)(2616005)(6512007)(6486002)(2906002)(26005)(8936002)(53546011)(316002)(4326008)(86362001)(6666004)(33964004)(6506007)(66556008)(508600001)(66476007)(186003)(8676002)(45980500001)(72826004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 4SGTk7ceCMglg8vutWBgN25pOTlo7aVHZt5kfd3HKEAl0seNGVlLwS34nt5njxsfel/6AEDKmV0kvhLML4lwJyD1CzdLjSlZhXJEQKDafiju7QJWSwiMQAtwp8rbUUwsisbnp0gZ9tIJ6f7afq0Bf9zVhFsgWuhN3UE/OFMyDZ6noVMiEtU39aFl8FnUSe+rtdqQ4u9/rvK3fcJy2svsPwjlRBn3iRpFtiDB5/tuI06j2gZm8BkJV2w25mEnk3OjJA3RJ8Em6UlNQRpGjWA2TtcSkNqkJKnGccNYY7YOwmWkWXlBctns8oxEMxT2jPLCKM6aJ7GoBSW08+eWPkS79nReYLNUlis3Lu7uney4l9S9d0OweYOTpbzqowqjDPtbZQTM5vEOWD3wSYcc73C2b8PoUHzQKGSRBUK8AjOZNY/k3El40ef5pf2x2K601OqXiBAvhLYK5hQcPPMsul2DndBi2/HWJdYyUOVv4MlM0iQGWNjthOeD95JpJi26XjT9Pnw5RttFMpZ7aCS8VsCHBE67J9HioycgQ1XvQVSNoTFI4tB7usBDzvPkBiqYMhII+6WwTtzsb8/zo8gTKoo+G4qiI3FCP6oTmSTETJhqavAm12kBblaO4WfZn1ZJk2vUNO6HeEUbOLrm0WGYJ1DzQaUFia/7KRi/ZS9jLLb8/avoWEWZIoBgGcHM707vbM48Akmt287iC+/MKJGMmGSlCQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66476007)(6486002)(33656002)(83380400001)(2906002)(6506007)(5660300002)(6512007)(2616005)(66556008)(6916009)(66946007)(4326008)(7416002)(508600001)(8936002)(8676002)(86362001)(38100700002)(316002)(1076003)(186003)(54906003)(26005)(36756003)(4744005)(27376004);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c3NuL0JMZkVML1pkS0dCdVF3M2pGaXBoYTExY2RBd2lZWHNBWnl3NVBRSzBH?=
- =?utf-8?B?M0poUENnRUR0dU5Wd253ZUhkTWFjRVdIT3N1Vk1RYk9yS2MrcE5STnpDalAz?=
- =?utf-8?B?M2xFYjZqK1Z4Q0RBMEF6dGQ3Q2NRaGVyWm5VRzdhTURKelRMUFBYaWJVVUZV?=
- =?utf-8?B?R3FmbStWM1cra1ZtVnF3eWtQbjN6S1lMVFlHeEdIM1l5NVVnSjdTZ3doZy91?=
- =?utf-8?B?SndzYTE0alZ3a3p2bzRQVDJRemJvNEF5NEI2bGU0TysyZDl0Ymh0RzBWcTRR?=
- =?utf-8?B?cjlBaEdCMkE5cHBGN0ZxeDR5Z2psQ204VDRvQldmWjhMUHpVMVJwMHJWTWZw?=
- =?utf-8?B?RTBLekthQ05Pc2l4MWwxNjdQcEwrTUh3eVNwVlhpaHRmeVZ1VkszV0pHdVV4?=
- =?utf-8?B?TytvL1EvSk5vZDFVck5FSWd2L011SUpjeE1nZ0dtc3NSc1lyd3REdVJJNlZr?=
- =?utf-8?B?eFBFMTlVendSNWJPMEgzM1Bwc0R6aEh3dEkvS29yV01BaWtaMEdlME1JVUpJ?=
- =?utf-8?B?UjBoelI3QVd1WjdwV1I4eHJRN0lnYXpSYk9uK3R2QldJQU9SRzZCRUY4NmZO?=
- =?utf-8?B?VWpaOWNUQ2tRV1F3ck5sNXBxd3BMMkZ3cFNrVlRDWDkya2FwWXlqUXhZc1JI?=
- =?utf-8?B?czc2K2dmZU5IL1lXNGpFVkplUDQ2cU04TkVFY3JRMUJSYUhpb3pmK3JESkhm?=
- =?utf-8?B?WVh0N2xOUHRYenAvUzI0VW42ajVzMTc5ZlRhd0VoUitzSExVdzJHYmZKTDYr?=
- =?utf-8?B?MHJPL3h1cEw4ZTNSby9mT2hOZVhEQ1pHdWl1R0NXVmZocFlCdUgwQ20xbEN0?=
- =?utf-8?B?TXAxQ2NHcnpacThzb3h4TTRtV2lpL0ZGb3dKaTJJUUdRL0hDUWdDcGJhMERT?=
- =?utf-8?B?RTlUOTYrTWlXVFlIVGNYVVBVR0N6NTlYQ3Z0NERhZ1M1TGJScE51c2QrWVZZ?=
- =?utf-8?B?K0pqMTFNZkpTMk9nTWZFYmJ4SXoyd3lVTWxqcVpiOCtkRzBWbXNKeXk0U3dU?=
- =?utf-8?B?akxIVDNpKzd1Yll3TDlYY0cyNFhZUXBDL0V1ZDlWN1RtYjJBK0dUQ1VFd2dk?=
- =?utf-8?B?TGNCYVVmOS9hRC95QmZPRzJRK25DQ2lRN09tYXlJRTdEajhxSHEvZnRydzFT?=
- =?utf-8?B?cnhrbFJscjJDeURiTUxvZnNRaXpFZUpDamxPNXYxUThaY2pYQTVhSEd1UEIx?=
- =?utf-8?B?OGMvRFkxYnZ6Q0RmOFVUNmpNam9rWWpHajFyaEJzTHFaOWloeDJQKzA0WFZY?=
- =?utf-8?B?R2ViVStrNFNhWGkrdnQyQjFhdlFYdklUUE03eHFFM2hmZzUxS1VxbXU2bWJD?=
- =?utf-8?B?M3ZLSmRja2RLakkwTHJwa0ZlMVVVc2J0MUF2VzhMYjZHV1VCTnBoT2lkcFFF?=
- =?utf-8?B?T2pHTDdSUkdLMTdPdFNpeDBuMnFVN1llK0llM2UvZVcwMmVaMlZWSERaNXRQ?=
- =?utf-8?B?TDQ5L3dPZG1BcitNTUVGU2lxTVlyR2p3U0hRV0pNZ2VDQ3dqcTdtenJzWlpz?=
- =?utf-8?B?OUd0d2ZiNldWVjBJQ0t1U1RyOVRQMFBKSmNrRXlsWXFPcGtqdDh2MWNDcjFl?=
- =?utf-8?B?di8wN2h2MThhNFN3U1REU0NaV3RsOHNKbXltaDA0ZVlDZmJhS2VyblVVQ2Ex?=
- =?utf-8?B?YjJEaXF2Vm9SR1BGMlJnc1VzKzdWUTdyQkNja0daL2EvYXYzdzN4dnZxQStv?=
- =?utf-8?B?VUVyWm1xYmZVa1RTSnZKN2F5SjlrcWc5UnM5TWYzUms0Ym5pV3BsbHdUeW5G?=
- =?utf-8?B?cXp2OFkyZm91MzBITWI2NUwzNUNpYXJEaTNiTmZnZzA4VGttT3oyTWVlV3hE?=
- =?utf-8?B?TXFtWnZXS0xMc3VMRllpSVNpbUsreVN4UjQwTW9SdWpzcFM5WTRBOFFDNnE5?=
- =?utf-8?B?aXUxakZSU0VYY3lnLzBwbVB1dU1HM3B2Y3JNczNURWZ1emp1d3NobEVnWmxT?=
- =?utf-8?B?ZUVUYlJqcVN3U1MrSHk1TXFzbzhyUFJHNGh2L2ZYaGpwTVdma3MwdXhrQmpq?=
- =?utf-8?B?dWVONzFhR05TcUgzSHptenZqR09qaW9GVlp5NWhqb0VnK0N0N05WODhZcU4w?=
- =?utf-8?B?WU83clllTjc3TDJIYkNjZmM5Wkx6eVIwZmMxR2o2N0NqQXkwTXpnbkNMYlE3?=
- =?utf-8?Q?q5E4=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8E6U9U03D03tFvJDwT9kXSRXHfDMNDYSEgo3+R4rPjs+Wzd0/jkEJpbJxjf3?=
+ =?us-ascii?Q?JoJuK+enTGyZUrtfDbSTaW5hGtF/xYezeDBEpwSA3IVRULFajNBQdQQ/oajh?=
+ =?us-ascii?Q?yOnPIcEOkMYFhldLrpnZAa1tFYpDACeABDUf//6a5EWF4RuOW/3ivg46O7Nd?=
+ =?us-ascii?Q?oVHHlSlUMt0hl4if9cVwOgstfLuowDkL8uvTuFS5DiyvDHeSadXaT7fNMYLo?=
+ =?us-ascii?Q?qPRtiBbCruV5v/3EkB/0K3O/uJp+z9z9QW8eaAe31pLz6y5khAwD6EX3YiXu?=
+ =?us-ascii?Q?7P1eVPIsqsk/WqBHOmHjdnp3OKxpUIElHVSasF9T2XnxhUB6oEI4m2mfliLR?=
+ =?us-ascii?Q?2MnUbM2wNtxif5YJsjIoOfh3UAqj/7fzPHVFKQf3ydDuSeG8JuimTlLCptov?=
+ =?us-ascii?Q?4EXmBQbYBQVVYu8uDnxLsXmbnbr7HnuJUXi9lg0Q4kX2xv+t/z81f0GPxVC1?=
+ =?us-ascii?Q?tNpYr6SktuRRCa5y++rb/tGq7pGbIGmvKW6+uqnUsQTe+pOL4Wq10cdk5Mep?=
+ =?us-ascii?Q?jdVM77/4AKb5hh852TkT1lLcJ1PV98s5uFD9uVVLRkiDJeAoLEsxuaxLhfFk?=
+ =?us-ascii?Q?XU1hYTCEQl46Dhk2RYztPy2lZ7gh/WYIhAc+Z1KSMhLmhJ/pJk92DU4nKpqt?=
+ =?us-ascii?Q?r3DYJgLvEA4oWRlRMbUV7cklBR02Vs3H0L2E4VJm9LEpDnqc8COgnSJfO/Du?=
+ =?us-ascii?Q?Zoy1E0V1/Rq7QEUcx1wf4mTKehPfzgmrUfbAepY2kcmhEiadI+Yx0HXfxzug?=
+ =?us-ascii?Q?nwIH6/JmVsdBoc2FAAxqTIoCKopDuerBb4Ap9hmqbDcc0YtDZ5iMVuPI6bNr?=
+ =?us-ascii?Q?FU3Y5gmgRgzcVS2wH4s5JZrXboxJZTNIuoC8CihZHJ6uD17w8gxjAnMfgnz1?=
+ =?us-ascii?Q?qqRqneQ/QJJqI4RpMFCWSNq+GRZ9E8KNwE49P8ytkB6z8kxR7dEFKezt+Zg5?=
+ =?us-ascii?Q?lvDgEQe8V2TPp+Fh/mpiB42z6eYAeUtgty9YgI3Asg/gVjkGVRpvR3sX2+7x?=
+ =?us-ascii?Q?+PiF+WkcePXXLBB9jhdocd2scc8Bx5YfXyQ0lxSnWuXBHGOEqoFoxKsWaP7b?=
+ =?us-ascii?Q?MftSe6eyHhruxohFelQ5sDN2aR2RMSbbTbaxHAp9iv6178SGqhNiS40iSCBW?=
+ =?us-ascii?Q?xuqWdW3TdPswjd8iGEt7IPBhOuOn/Rj5vC45fCGuhho+aqPrWRnf3OBAAU8X?=
+ =?us-ascii?Q?GqT3tOwXk2yDwXmJ5QBJknrhKdYTFojcXAZp+I6JIoPbd/S2gnBo1Idb976z?=
+ =?us-ascii?Q?NEHbeUIQCwaIrugj9uppuxzWp1EInQUhCZjHdpcF/AV1ySN47JvaiE3k1cH8?=
+ =?us-ascii?Q?qm/oZDyEzyillMEpzzWiYpk+Sdl48l/tmYiRtYoa8CTVEZbgz3xWaoA+5s1H?=
+ =?us-ascii?Q?+9L6z7PUozubFOzRE3lIZhrSYoA/941bMcr87cdZQDZLCB5EakcWdsw2229G?=
+ =?us-ascii?Q?gU098shx6g69ER5nZc+dXdsao1eXZhciBR4uSItZ5zuzbRStU93aqeMZA2Xi?=
+ =?us-ascii?Q?JDwuxEEeb3lLKzupH9O7uVax9QWllKbgqiUjsUNBdfvfhN0npEjoxxjqYVcO?=
+ =?us-ascii?Q?xkLKtKAZeW/lwqx3pHA=3D?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 21ebb096-c9d4-48d2-e6d1-08d9df5d6467
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9fd6ade-63bf-4343-345c-08d9df5d78e5
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2022 17:17:26.0994
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2022 17:18:00.7717
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZV2Ck8IrHNIS3WiNssSouOsKetTzoHJNCZthFfbnxRpdDnTTs4OH3vAOLVt7CkGj
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4423
+X-MS-Exchange-CrossTenant-UserPrincipalName: zzwA3CA6Dd0rMR966bWievsR1EGzhXoW4gzPQUNViGFeILRajI6kKjy/UOpjC0Yf
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5114
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=_MailMate_27B943FC-F449-4004-9416-0A7B85F9E6EB_=
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jan 24, 2022 at 09:58:18AM +0000, Tian, Kevin wrote:
+> > From: Lu Baolu <baolu.lu@linux.intel.com>
+> > Sent: Monday, January 24, 2022 3:11 PM
+> > +/**
+> > + * struct domain_ops - per-domain ops
+> > + * @attach_dev: attach an iommu domain to a device
+> > + * @detach_dev: detach an iommu domain from a device
+> 
+> What is the criteria about whether an op should be iommu_ops or domain_ops
+> when it requires both domain and device pointers like above two (and future
+> PASID-based attach)?
+> 
+> Other examples include:
+> 	@apply_resv_region
 
-On 24 Jan 2022, at 4:55, Oscar Salvador wrote:
+For apply_resv_region the 'dev' argument is really selecting a device
+that is already attached to the domain, so it should be in the domain
+ops.
 
-> On 2022-01-19 20:06, Zi Yan wrote:
->> From: Zi Yan <ziy@nvidia.com>
->>
->> Enable set_migratetype_isolate() to check specified sub-range for
->> unmovable pages during isolation. Page isolation is done
->> at max(MAX_ORDER_NR_PAEGS, pageblock_nr_pages) granularity, but not al=
-l
->> pages within that granularity are intended to be isolated. For example=
-,
->> alloc_contig_range(), which uses page isolation, allows ranges without=
+> 	@is_attach_deferred
 
->> alignment. This commit makes unmovable page check only look for
->> interesting pages, so that page isolation can succeed for any
->> non-overlapping ranges.
->
-> Hi Zi Yan,
->
-> I had to re-read this several times as I found this a bit misleading.
-> I was mainly confused by the fact that memory_hotplug does isolation on=
- PAGES_PER_SECTION granularity, and reading the above seems to indicate t=
-hat either do it at MAX_ORDER_NR_PAGES or at pageblock_nr_pages granulari=
-ty.
+Only two drivers implement this and neither use the domain
+argument. Remove the domain argument and keep it in the iommu_ops
 
-You are right. Sorry for the confusion. I think it should be
-=E2=80=9CPage isolation is done at least on max(MAX_ORDER_NR_PAEGS,
-pageblock_nr_pages) granularity.=E2=80=9D
-
-memory_hotplug uses PAGES_PER_SECTION. It is greater than that.
-
-
->
-> True is that start_isolate_page_range() expects the range to be pageblo=
-ck aligned and works in pageblock_nr_pages chunks, but I do not think tha=
-t is what you meant to say here.
-
-Actually, start_isolate_page_range() should expect max(MAX_ORDER_NR_PAEGS=
-,
-pageblock_nr_pages) alignment instead of pageblock alignment. It seems to=
-
-be an uncovered bug in the current code, since all callers uses at least
-max(MAX_ORDER_NR_PAEGS, pageblock_nr_pages) alignment.
-
-The reason is that if start_isolate_page_range() is only pageblock aligne=
-d
-and a caller wants to isolate one pageblock from a MAX_ORDER-1
-(2 pageblocks on x84_64 systems) free page, this will lead to MIGRATE_ISO=
-LATE
-accounting error. To avoid it, start_isolate_page_range() needs to isolat=
-e
-the max(MAX_ORDER_NR_PAEGS, pageblock_nr_pages) aligned range.
-
-
->
-> Now, to the change itself, below:
->
->
->> @@ -47,8 +51,8 @@ static struct page *has_unmovable_pages(struct zone
->> *zone, struct page *page,
->>  		return page;
->>  	}
->>
->> -	for (; iter < pageblock_nr_pages - offset; iter++) {
->> -		page =3D pfn_to_page(pfn + iter);
->> +	for (pfn =3D first_pfn; pfn < last_pfn; pfn++) {
->
-> You already did pfn =3D first_pfn before.
-
-Got it. Will remove the redundant code.
-
->
->>  /**
->>   * start_isolate_page_range() - make page-allocation-type of range of=
- pages to
->>   * be MIGRATE_ISOLATE.
->> - * @start_pfn:		The lower PFN of the range to be isolated.
->> - * @end_pfn:		The upper PFN of the range to be isolated.
->> + * @start_pfn:		The lower PFN of the range to be checked for
->> + *			possibility of isolation.
->> + * @end_pfn:		The upper PFN of the range to be checked for
->> + *			possibility of isolation.
->> + * @isolate_start:		The lower PFN of the range to be isolated.
->> + * @isolate_end:		The upper PFN of the range to be isolated.
->
-> So, what does "possibility" means here. I think this need to be clarifi=
-ed a bit better.
-
-start_isolate_page_range() needs to check if unmovable pages exist in the=
-
-range [start_pfn, end_pfn) but mark all pageblocks within [isolate_start,=
-
-isolate_end) MIGRATE_ISOLATE (isolate_* need to be max(MAX_ORDER_NR_PAEGS=
-,
-pageblock_nr_pages) aligned). But now I realize =E2=80=9Cpossibility=E2=80=
-=9D here is very
-confusing, since both ranges decide whether the isolation can succeed.
-
->
-> From what you pointed out in the commit message I think what you are do=
-ing is:
->
-> - alloc_contig_range() gets a range to be isolated.
-> - then you pass two ranges to start_isolate_page_range()
->   (start_pfn, end_pfn]: which is the unaligned range you got in alloc_c=
-ontig_range()
->   (isolate_start, isolate_end]: which got aligned to, let's say, to MAX=
-_ORDER_NR_PAGES
->
-> Now, most likely, (start_pfn, end_pfn] only covers a sub-range of (isol=
-ate_start, isolate_end], and that
-> sub-range is what you really want to isolate (so (start_pfn, end_pfn])?=
-
-
-Correct.
-
-I agree that isolate_start and isolate_end are pretty confusing here.
-They are implementation details of start_isolate_page_range() and should
-not be exposed. I will remove them from the parameter list and produce
-them inside start_isolate_page_range(). They are pfn_max_align_down()
-and pfn_max_align_up() of start_pfn and end_pfn, respectively.
-
-In alloc_contig_range(), the code is still needed to save and restore
-migrateypes for [isolate_start, start_pfn) and (end_pfn, isolate_end],
-because [start_pfn, end_pfn) is not required to be max(MAX_ORDER_NR_PAEGS=
-,
-pageblock_nr_pages) aligned. Like I said in the patch, the code will
-go away once MIGRATE_ISOLATE becomes a standalone bit without overwriting=
-
-existing migratetypes during page isolation. And then isolate_start
-and isolate_end here will be completely transparent to callers of
-start_isolate_page_range().
-
-Thanks for your review and comment.
-
---
-Best Regards,
-Yan, Zi
-
---=_MailMate_27B943FC-F449-4004-9416-0A7B85F9E6EB_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAmHu3yMPHHppeUBudmlk
-aWEuY29tAAoJEJ2yUfNrYfqKBkQP/1kYZhT3tIQI2CiaLQSdKeUXoiGIQMlMBkjG
-VMD8kwhRSSgi818FbCdRxLenBvQ94JkcO3LK2eARzdbhIAnZTPeSLPbrVaFSykI2
-GvW5YW8NZTF0K5lxoAkibZsejp1bVn1Vzjn2VkyDAmCgg6izwEi8pR8P0cNVmSZL
-Z108M158C3b7bAKXvwBo313TlykFpKGuJAhQWUR2wJ6vNb0FlqdxwF/Y51LLbatA
-WhhREntkA6tb1V4YOKPNSslPwOBOVWxT48DFE6KszqBRpqUbdFVAUErotJ81F9bO
-h/Y16HNpy7N3qyn2FMJHTYWuw7SlZia6TJof93CiuHlrsE9OFKVSmJyG5dtWMU28
-CDuFVWW7APNh8zbQkkJE/nz0hfWNnIo86ZwsL0b+j6fhlVONZtaxqzsUtS2kIweM
-A6caSjB5s0oWeImDD+CQxnhrozRWtSyTOqpya4ZR6VYm/BZnbB/zDFh323TJ+OvT
-Stlvt7xWzLk4mWek2i2s85QLfZiRvFh7NMBlJobWJHM4J10/FF+oxTOd3rfZKEnj
-iLIu06fX4FXKMqsRPArEaU2HOMYYZGhz4nZp3l0eUu4Cy2yDkWNHz2r1btL4JHLU
-O7JXKiA0+8ZA+OpfCUd6GBKdFYGA9JmNPJrxiSEi9TeQ6ztdX9IPqn++EP2nq36V
-DnBpRPB6
-=CVEt
------END PGP SIGNATURE-----
-
---=_MailMate_27B943FC-F449-4004-9416-0A7B85F9E6EB_=--
+Jason

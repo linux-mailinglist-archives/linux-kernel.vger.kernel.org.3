@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A90E49802B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3FC49802E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:59:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242986AbiAXM7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 07:59:14 -0500
-Received: from foss.arm.com ([217.140.110.172]:33250 "EHLO foss.arm.com"
+        id S242815AbiAXM7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 07:59:24 -0500
+Received: from foss.arm.com ([217.140.110.172]:33268 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242878AbiAXM67 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:58:59 -0500
+        id S242842AbiAXM7D (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 07:59:03 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AF1D7113E;
-        Mon, 24 Jan 2022 04:58:58 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9FE6B11B3;
+        Mon, 24 Jan 2022 04:59:02 -0800 (PST)
 Received: from p8cg001049571a15.arm.com (unknown [10.163.43.190])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D46AE3F774;
-        Mon, 24 Jan 2022 04:58:55 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6FE3F3F774;
+        Mon, 24 Jan 2022 04:58:59 -0800 (PST)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-mm@kvack.org
 Cc:     linux-kernel@vger.kernel.org, hch@infradead.org,
         akpm@linux-foundation.org,
         Anshuman Khandual <anshuman.khandual@arm.com>,
-        Nick Hu <nickhu@andestech.com>
-Subject: [RFC V1 27/31] nds32/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Date:   Mon, 24 Jan 2022 18:27:04 +0530
-Message-Id: <1643029028-12710-28-git-send-email-anshuman.khandual@arm.com>
+        linux-ia64@vger.kernel.org
+Subject: [RFC V1 28/31] ia64/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Date:   Mon, 24 Jan 2022 18:27:05 +0530
+Message-Id: <1643029028-12710-29-git-send-email-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
 References: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
@@ -37,99 +37,108 @@ This defines and exports a platform specific custom vm_get_page_prot() via
 subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
 macros can be dropped which are no longer needed.
 
-Cc: Nick Hu <nickhu@andestech.com>
+Cc: linux-ia64@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- arch/nds32/Kconfig               |  1 +
- arch/nds32/include/asm/pgtable.h | 17 -------------
- arch/nds32/mm/mmap.c             | 41 ++++++++++++++++++++++++++++++++
- 3 files changed, 42 insertions(+), 17 deletions(-)
+ arch/ia64/Kconfig               |  1 +
+ arch/ia64/include/asm/pgtable.h | 17 -------------
+ arch/ia64/mm/init.c             | 43 ++++++++++++++++++++++++++++++++-
+ 3 files changed, 43 insertions(+), 18 deletions(-)
 
-diff --git a/arch/nds32/Kconfig b/arch/nds32/Kconfig
-index 4d1421b18734..576e05479925 100644
---- a/arch/nds32/Kconfig
-+++ b/arch/nds32/Kconfig
-@@ -10,6 +10,7 @@ config NDS32
- 	select ARCH_HAS_DMA_PREP_COHERENT
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
+index 703952819e10..516c426e7606 100644
+--- a/arch/ia64/Kconfig
++++ b/arch/ia64/Kconfig
+@@ -11,6 +11,7 @@ config IA64
+ 	select ARCH_HAS_DMA_MARK_CLEAN
+ 	select ARCH_HAS_STRNCPY_FROM_USER
+ 	select ARCH_HAS_STRNLEN_USER
 +	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_WANT_FRAME_POINTERS if FTRACE
- 	select CLKSRC_MMIO
- 	select CLONE_BACKWARDS
-diff --git a/arch/nds32/include/asm/pgtable.h b/arch/nds32/include/asm/pgtable.h
-index 419f984eef70..79f64ed734cb 100644
---- a/arch/nds32/include/asm/pgtable.h
-+++ b/arch/nds32/include/asm/pgtable.h
-@@ -152,23 +152,6 @@ extern void __pgd_error(const char *file, int line, unsigned long val);
- #endif /* __ASSEMBLY__ */
- 
- /*         xwr */
--#define __P000  (PAGE_NONE | _PAGE_CACHE_SHRD)
--#define __P001  (PAGE_READ | _PAGE_CACHE_SHRD)
--#define __P010  (PAGE_COPY | _PAGE_CACHE_SHRD)
--#define __P011  (PAGE_COPY | _PAGE_CACHE_SHRD)
--#define __P100  (PAGE_EXEC | _PAGE_CACHE_SHRD)
--#define __P101  (PAGE_READ | _PAGE_E | _PAGE_CACHE_SHRD)
--#define __P110  (PAGE_COPY | _PAGE_E | _PAGE_CACHE_SHRD)
--#define __P111  (PAGE_COPY | _PAGE_E | _PAGE_CACHE_SHRD)
+ 	select ARCH_MIGHT_HAVE_PC_PARPORT
+ 	select ARCH_MIGHT_HAVE_PC_SERIO
+ 	select ACPI
+diff --git a/arch/ia64/include/asm/pgtable.h b/arch/ia64/include/asm/pgtable.h
+index 9584b2c5f394..8154c78bba56 100644
+--- a/arch/ia64/include/asm/pgtable.h
++++ b/arch/ia64/include/asm/pgtable.h
+@@ -161,23 +161,6 @@
+  * attempts to write to the page.
+  */
+ 	/* xwr */
+-#define __P000	PAGE_NONE
+-#define __P001	PAGE_READONLY
+-#define __P010	PAGE_READONLY	/* write to priv pg -> copy & make writable */
+-#define __P011	PAGE_READONLY	/* ditto */
+-#define __P100	__pgprot(__ACCESS_BITS | _PAGE_PL_3 | _PAGE_AR_X_RX)
+-#define __P101	__pgprot(__ACCESS_BITS | _PAGE_PL_3 | _PAGE_AR_RX)
+-#define __P110	PAGE_COPY_EXEC
+-#define __P111	PAGE_COPY_EXEC
 -
--#define __S000  (PAGE_NONE | _PAGE_CACHE_SHRD)
--#define __S001  (PAGE_READ | _PAGE_CACHE_SHRD)
--#define __S010  (PAGE_RDWR | _PAGE_CACHE_SHRD)
--#define __S011  (PAGE_RDWR | _PAGE_CACHE_SHRD)
--#define __S100  (PAGE_EXEC | _PAGE_CACHE_SHRD)
--#define __S101  (PAGE_READ | _PAGE_E | _PAGE_CACHE_SHRD)
--#define __S110  (PAGE_RDWR | _PAGE_E | _PAGE_CACHE_SHRD)
--#define __S111  (PAGE_RDWR | _PAGE_E | _PAGE_CACHE_SHRD)
+-#define __S000	PAGE_NONE
+-#define __S001	PAGE_READONLY
+-#define __S010	PAGE_SHARED	/* we don't have (and don't need) write-only */
+-#define __S011	PAGE_SHARED
+-#define __S100	__pgprot(__ACCESS_BITS | _PAGE_PL_3 | _PAGE_AR_X_RX)
+-#define __S101	__pgprot(__ACCESS_BITS | _PAGE_PL_3 | _PAGE_AR_RX)
+-#define __S110	__pgprot(__ACCESS_BITS | _PAGE_PL_3 | _PAGE_AR_RWX)
+-#define __S111	__pgprot(__ACCESS_BITS | _PAGE_PL_3 | _PAGE_AR_RWX)
  
- #ifndef __ASSEMBLY__
- /*
-diff --git a/arch/nds32/mm/mmap.c b/arch/nds32/mm/mmap.c
-index 1bdf5e7d1b43..bfb3929d634a 100644
---- a/arch/nds32/mm/mmap.c
-+++ b/arch/nds32/mm/mmap.c
-@@ -71,3 +71,44 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
- 	info.align_offset = pgoff << PAGE_SHIFT;
- 	return vm_unmapped_area(&info);
+ #define pgd_ERROR(e)	printk("%s:%d: bad pgd %016lx.\n", __FILE__, __LINE__, pgd_val(e))
+ #if CONFIG_PGTABLE_LEVELS == 4
+diff --git a/arch/ia64/mm/init.c b/arch/ia64/mm/init.c
+index 5d165607bf35..124bdf6fbf7b 100644
+--- a/arch/ia64/mm/init.c
++++ b/arch/ia64/mm/init.c
+@@ -273,7 +273,7 @@ static int __init gate_vma_init(void)
+ 	gate_vma.vm_start = FIXADDR_USER_START;
+ 	gate_vma.vm_end = FIXADDR_USER_END;
+ 	gate_vma.vm_flags = VM_READ | VM_MAYREAD | VM_EXEC | VM_MAYEXEC;
+-	gate_vma.vm_page_prot = __P101;
++	gate_vma.vm_page_prot = __pgprot(__ACCESS_BITS | _PAGE_PL_3 | _PAGE_AR_RX);
+ 
+ 	return 0;
  }
+@@ -492,3 +492,44 @@ void arch_remove_memory(u64 start, u64 size, struct vmem_altmap *altmap)
+ 	__remove_pages(start_pfn, nr_pages, altmap);
+ }
+ #endif
 +
 +pgprot_t vm_get_page_prot(unsigned long vm_flags)
 +{
 +	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
 +	case VM_NONE:
-+		return (PAGE_NONE | _PAGE_CACHE_SHRD);
++		return PAGE_NONE;
 +	case VM_READ:
-+		return (PAGE_READ | _PAGE_CACHE_SHRD);
++		return PAGE_READONLY;
 +	case VM_WRITE:
-+		return (PAGE_COPY | _PAGE_CACHE_SHRD);
++		return PAGE_READONLY;
 +	case VM_READ | VM_WRITE:
-+		return (PAGE_COPY | _PAGE_CACHE_SHRD);
++		return PAGE_READONLY;
 +	case VM_EXEC:
-+		return (PAGE_EXEC | _PAGE_CACHE_SHRD);
++		return  __pgprot(__ACCESS_BITS | _PAGE_PL_3 | _PAGE_AR_X_RX);
 +	case VM_EXEC | VM_READ:
-+		return (PAGE_READ | _PAGE_E | _PAGE_CACHE_SHRD);
++		return __pgprot(__ACCESS_BITS | _PAGE_PL_3 | _PAGE_AR_RX);
 +	case VM_EXEC | VM_WRITE:
-+		return (PAGE_COPY | _PAGE_E | _PAGE_CACHE_SHRD);
++		return PAGE_COPY_EXEC;
 +	case VM_EXEC | VM_READ | VM_WRITE:
-+		return (PAGE_COPY | _PAGE_E | _PAGE_CACHE_SHRD);
++		return PAGE_COPY_EXEC;
 +	case VM_SHARED:
-+		return (PAGE_NONE | _PAGE_CACHE_SHRD);
++		return PAGE_NONE;
 +	case VM_SHARED | VM_READ:
-+		return (PAGE_READ | _PAGE_CACHE_SHRD);
++		return PAGE_READONLY;
 +	case VM_SHARED | VM_WRITE:
-+		return (PAGE_RDWR | _PAGE_CACHE_SHRD);
++		return PAGE_SHARED;
 +	case VM_SHARED | VM_READ | VM_WRITE:
-+		return (PAGE_RDWR | _PAGE_CACHE_SHRD);
++		return PAGE_SHARED;
 +	case VM_SHARED | VM_EXEC:
-+		return (PAGE_EXEC | _PAGE_CACHE_SHRD);
++		return __pgprot(__ACCESS_BITS | _PAGE_PL_3 | _PAGE_AR_X_RX);
 +	case VM_SHARED | VM_EXEC | VM_READ:
-+		return (PAGE_READ | _PAGE_E | _PAGE_CACHE_SHRD);
++		return __pgprot(__ACCESS_BITS | _PAGE_PL_3 | _PAGE_AR_RX);
 +	case VM_SHARED | VM_EXEC | VM_WRITE:
-+		return (PAGE_RDWR | _PAGE_E | _PAGE_CACHE_SHRD);
++		return __pgprot(__ACCESS_BITS | _PAGE_PL_3 | _PAGE_AR_RWX);
 +	case VM_SHARED | VM_EXEC | VM_READ | VM_WRITE:
-+		return (PAGE_RDWR | _PAGE_E | _PAGE_CACHE_SHRD);
++		return __pgprot(__ACCESS_BITS | _PAGE_PL_3 | _PAGE_AR_RWX);
 +	default:
 +		BUILD_BUG();
 +	}

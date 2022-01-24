@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70078498EA6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:48:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C00498E73
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:44:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345647AbiAXToZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:44:25 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57572 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353746AbiAXTfT (ORCPT
+        id S1344259AbiAXTlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:41:44 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58052 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353760AbiAXTfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:35:19 -0500
+        Mon, 24 Jan 2022 14:35:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BEE2B8121C;
-        Mon, 24 Jan 2022 19:35:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57F64C340E5;
-        Mon, 24 Jan 2022 19:35:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AD9D614A8;
+        Mon, 24 Jan 2022 19:35:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BD58C340E5;
+        Mon, 24 Jan 2022 19:35:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052916;
-        bh=Bf2KpLKl42cxGt39Tk6pcrnnOXoTk3V933L/qa6WQzY=;
+        s=korg; t=1643052920;
+        bh=Sk1WZXtFuBPyZnc9AewrErQqj3ABhbI/oQ/pZG0TFls=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n/Sp8akf+NfLGVPpgv69FDqtG7vE8pgdS/F+nIvntrWhpJr8DppL0Gkyrkbz+4Jpw
-         aQSPjcSvygtaZvH1hIntEpTEnsAmSGlyPFOcECDEVGDV561Q1dqDY89wqGm7iOQ6rI
-         IXAEBm+hUlEpL732upXRuTTaqEZQsO3Z3XwiSuuc=
+        b=WQcOlHDBxFnbpx3qypRFweMEEe3U2ohsM5y3+Ry5KVeS4ie0x0MrOrCdqyNNcM+r4
+         UyBGGihcHznEZHpbJ2ss0+Y6v7oitQaMaNFr/R0Wmku21lkLEgs8zlxQ3N7O/CyWaO
+         ETkLyHRkGFVPASN5E0lVDdMKADWSJz05NcxGnPmE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joe Thornber <ejt@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>,
+        stable@vger.kernel.org, Corentin Labbe <clabbe.montjoie@gmail.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 216/320] dm space map common: add bounds check to sm_ll_lookup_bitmap()
-Date:   Mon, 24 Jan 2022 19:43:20 +0100
-Message-Id: <20220124184000.992054632@linuxfoundation.org>
+Subject: [PATCH 5.4 217/320] net: phy: marvell: configure RGMII delays for 88E1118
+Date:   Mon, 24 Jan 2022 19:43:21 +0100
+Message-Id: <20220124184001.023155581@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
 References: <20220124183953.750177707@linuxfoundation.org>
@@ -46,35 +47,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joe Thornber <ejt@redhat.com>
+From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-[ Upstream commit cba23ac158db7f3cd48a923d6861bee2eb7a2978 ]
+[ Upstream commit f22725c95ececb703c3f741e8f946d23705630b7 ]
 
-Corrupted metadata could warrant returning error from sm_ll_lookup_bitmap().
+Corentin Labbe reports that the SSI 1328 does not work when allowing
+the PHY to operate at gigabit speeds, but does work with the generic
+PHY driver.
 
-Signed-off-by: Joe Thornber <ejt@redhat.com>
-Signed-off-by: Mike Snitzer <snitzer@redhat.com>
+This appears to be because m88e1118_config_init() writes a fixed value
+to the MSCR register, claiming that this is to enable 1G speeds.
+However, this always sets bits 4 and 5, enabling RGMII transmit and
+receive delays. The suspicion is that the original board this was
+added for required the delays to make 1G speeds work.
+
+Add the necessary configuration for RGMII delays for the 88E1118 to
+bring this into line with the requirements for RGMII support, and thus
+make the SSI 1328 work.
+
+Corentin Labbe has tested this on gemini-ssi1328 and gemini-ns2502.
+
+Reported-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/persistent-data/dm-space-map-common.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/phy/marvell.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/md/persistent-data/dm-space-map-common.c b/drivers/md/persistent-data/dm-space-map-common.c
-index a213bf11738fb..85853ab629717 100644
---- a/drivers/md/persistent-data/dm-space-map-common.c
-+++ b/drivers/md/persistent-data/dm-space-map-common.c
-@@ -281,6 +281,11 @@ int sm_ll_lookup_bitmap(struct ll_disk *ll, dm_block_t b, uint32_t *result)
- 	struct disk_index_entry ie_disk;
- 	struct dm_block *blk;
+diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
+index 9dbe625ad4477..a69317e944229 100644
+--- a/drivers/net/phy/marvell.c
++++ b/drivers/net/phy/marvell.c
+@@ -917,6 +917,12 @@ static int m88e1118_config_init(struct phy_device *phydev)
+ 	if (err < 0)
+ 		return err;
  
-+	if (b >= ll->nr_blocks) {
-+		DMERR_LIMIT("metadata block out of bounds");
-+		return -EINVAL;
++	if (phy_interface_is_rgmii(phydev)) {
++		err = m88e1121_config_aneg_rgmii_delays(phydev);
++		if (err < 0)
++			return err;
 +	}
 +
- 	b = do_div(index, ll->entries_per_block);
- 	r = ll->load_ie(ll, index, &ie_disk);
- 	if (r < 0)
+ 	/* Adjust LED Control */
+ 	if (phydev->dev_flags & MARVELL_PHY_M1118_DNS323_LEDS)
+ 		err = phy_write(phydev, 0x10, 0x1100);
 -- 
 2.34.1
 

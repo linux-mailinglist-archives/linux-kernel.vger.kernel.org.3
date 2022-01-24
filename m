@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5CEA4990F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:08:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1204992BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354520AbiAXUIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:08:11 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46772 "EHLO
+        id S1354027AbiAXUY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:24:28 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:49206 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357225AbiAXTtj (ORCPT
+        with ESMTP id S1357770AbiAXTvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:49:39 -0500
+        Mon, 24 Jan 2022 14:51:46 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F2886091C;
-        Mon, 24 Jan 2022 19:49:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 867CAC340E5;
-        Mon, 24 Jan 2022 19:49:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2295601B6;
+        Mon, 24 Jan 2022 19:51:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93A27C340E5;
+        Mon, 24 Jan 2022 19:51:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053778;
-        bh=WzNw0oSd1gKe/M9faZwGg+IalzTanMcEGX+KVptdEPQ=;
+        s=korg; t=1643053905;
+        bh=zYvhXmgk5raJcaWJoqoTorEjCgspp2OTg+ecp5a6CF8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TcSepyyzt82KiaaIWdXx3BxTx7HKMqHV8mVziOHgPRBtmEpr1DvuR4sT69iadsslI
-         1s9voMzxfkEltQbjNjaqb2Ky1itTzxSthjpmE1ziAlnSK9rtExS9mRD7tWW5REiDb4
-         cxjwGPUKo3q1K+9DcFo/kyIFgjEVUcOKEQq1flvg=
+        b=bB4AhEl+8eQuy7HCEyDEQ7mwvUpZAjTw0YTmHsVVOBjr089i5Kk3RZY4TUjRcEmQx
+         yk2iN7IvGFcpYr2f4N2wzdehzcqqQj94Bd9z8yEsH+rtFc+0g+KMeDepXTUgnmGj+5
+         sRbECibJ0ccO/ilp3Uf5V4UTNBqxvQrFC4FgTN9k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Antony Antony <antony.antony@secunet.com>,
-        Eyal Birger <eyal.birger@gmail.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
+        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 173/563] xfrm: interface with if_id 0 should return error
-Date:   Mon, 24 Jan 2022 19:38:58 +0100
-Message-Id: <20220124184030.397155595@linuxfoundation.org>
+Subject: [PATCH 5.10 182/563] mmc: meson-mx-sdhc: add IRQ check
+Date:   Mon, 24 Jan 2022 19:39:07 +0100
+Message-Id: <20220124184030.714161210@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -47,67 +47,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Antony Antony <antony.antony@secunet.com>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-[ Upstream commit 8dce43919566f06e865f7e8949f5c10d8c2493f5 ]
+[ Upstream commit 77bed755e0f06135faccdd3948863703f9a6e640 ]
 
-xfrm interface if_id = 0 would cause xfrm policy lookup errors since
-Commit 9f8550e4bd9d.
+The driver neglects to check the result of platform_get_irq()'s call and
+blithely passes the negative error codes to devm_request_threaded_irq()
+(which takes *unsigned* IRQ #), causing it to fail with -EINVAL, overriding
+an original error code. Stop calling devm_request_threaded_irq() with the
+invalid IRQ #s.
 
-Now explicitly fail to create an xfrm interface when if_id = 0
-
-With this commit:
- ip link add ipsec0  type xfrm dev lo  if_id 0
- Error: if_id must be non zero.
-
-v1->v2 change:
- - add Fixes: tag
-
-Fixes: 9f8550e4bd9d ("xfrm: fix disable_xfrm sysctl when used on xfrm interfaces")
-Signed-off-by: Antony Antony <antony.antony@secunet.com>
-Reviewed-by: Eyal Birger <eyal.birger@gmail.com>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Fixes: e4bf1b0970ef ("mmc: host: meson-mx-sdhc: new driver for the Amlogic Meson SDHC host")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Link: https://lore.kernel.org/r/20211217202717.10041-2-s.shtylyov@omp.ru
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/xfrm/xfrm_interface.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ drivers/mmc/host/meson-mx-sdhc-mmc.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/net/xfrm/xfrm_interface.c b/net/xfrm/xfrm_interface.c
-index e9ce23343f5ca..e1fae61a5bb90 100644
---- a/net/xfrm/xfrm_interface.c
-+++ b/net/xfrm/xfrm_interface.c
-@@ -643,11 +643,16 @@ static int xfrmi_newlink(struct net *src_net, struct net_device *dev,
- 			struct netlink_ext_ack *extack)
- {
- 	struct net *net = dev_net(dev);
--	struct xfrm_if_parms p;
-+	struct xfrm_if_parms p = {};
- 	struct xfrm_if *xi;
- 	int err;
+diff --git a/drivers/mmc/host/meson-mx-sdhc-mmc.c b/drivers/mmc/host/meson-mx-sdhc-mmc.c
+index 8fdd0bbbfa21f..28aa78aa08f3f 100644
+--- a/drivers/mmc/host/meson-mx-sdhc-mmc.c
++++ b/drivers/mmc/host/meson-mx-sdhc-mmc.c
+@@ -854,6 +854,11 @@ static int meson_mx_sdhc_probe(struct platform_device *pdev)
+ 		goto err_disable_pclk;
  
- 	xfrmi_netlink_parms(data, &p);
-+	if (!p.if_id) {
-+		NL_SET_ERR_MSG(extack, "if_id must be non zero");
-+		return -EINVAL;
+ 	irq = platform_get_irq(pdev, 0);
++	if (irq < 0) {
++		ret = irq;
++		goto err_disable_pclk;
 +	}
 +
- 	xi = xfrmi_locate(net, &p);
- 	if (xi)
- 		return -EEXIST;
-@@ -672,7 +677,12 @@ static int xfrmi_changelink(struct net_device *dev, struct nlattr *tb[],
- {
- 	struct xfrm_if *xi = netdev_priv(dev);
- 	struct net *net = xi->net;
--	struct xfrm_if_parms p;
-+	struct xfrm_if_parms p = {};
-+
-+	if (!p.if_id) {
-+		NL_SET_ERR_MSG(extack, "if_id must be non zero");
-+		return -EINVAL;
-+	}
- 
- 	xfrmi_netlink_parms(data, &p);
- 	xi = xfrmi_locate(net, &p);
+ 	ret = devm_request_threaded_irq(dev, irq, meson_mx_sdhc_irq,
+ 					meson_mx_sdhc_irq_thread, IRQF_ONESHOT,
+ 					NULL, host);
 -- 
 2.34.1
 

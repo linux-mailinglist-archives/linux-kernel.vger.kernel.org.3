@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB81C49A4EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C321C49A6D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3408764AbiAYAXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:23:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33266 "EHLO
+        id S3421656AbiAYC1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:27:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1578647AbiAXWDP (ORCPT
+        with ESMTP id S1377325AbiAXUFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:03:15 -0500
+        Mon, 24 Jan 2022 15:05:17 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573A9C036BF6;
-        Mon, 24 Jan 2022 12:41:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3533C061378;
+        Mon, 24 Jan 2022 11:31:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBA7061008;
-        Mon, 24 Jan 2022 20:41:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE042C340E5;
-        Mon, 24 Jan 2022 20:41:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5075661318;
+        Mon, 24 Jan 2022 19:31:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 225D0C340E5;
+        Mon, 24 Jan 2022 19:31:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056908;
-        bh=8FkV0WtrVsrhL39FmDN47upyPEIVbo4YCWDOsiA95Uk=;
+        s=korg; t=1643052700;
+        bh=mgxWZWBc0Eucoc+hoIoXSz+Ix0iMdTBDwuB1PKnJCCk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XsbMrF+F9Cwif76Fr1tJ+mkbM2TSikyv420/XVj9tHBpIhqCLmtNDD9sVN1dcs0/J
-         xOWTJx1B9dc0floapjRIbE4aOWHYbq1JZCalSjKIyWoLtwhAaeMnKmEed7+t87I9H4
-         zmLNyCb4NwVVAieXWmf/SJA1rJy69m+LlMq0/Adw=
+        b=KyQ/xIIPUL0fktyDtNXio+ounmH1MkzXxCs4tJm9BlrTF7OF1sse4HRO1inwNouc1
+         n49/rCAqKQ1pAPXV3TeTBj6aDQ95UiA3ErYWZq+zWPxBKQc1iZK+sqClrBMILPiOtt
+         kYSUA9HIHnDsdgaJf+46V4i3Yn+5H2CgqP6YdaA8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Russell King <rmk+kernel@armlinux.org.uk>,
-        Lukas Wunner <lukas@wunner.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 612/846] serial: pl011: Drop CR register reset on set_termios
-Date:   Mon, 24 Jan 2022 19:42:09 +0100
-Message-Id: <20220124184122.148545675@linuxfoundation.org>
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 147/320] misc: lattice-ecp3-config: Fix task hung when firmware load failed
+Date:   Mon, 24 Jan 2022 19:42:11 +0100
+Message-Id: <20220124183958.645541290@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,60 +49,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Wunner <lukas@wunner.de>
+From: Wei Yongjun <weiyongjun1@huawei.com>
 
-[ Upstream commit e368cc656fd6d0075f1c3ab9676e2001451e3e04 ]
+[ Upstream commit fcee5ce50bdb21116711e38635e3865594af907e ]
 
-pl011_set_termios() briefly resets the CR register to zero, thereby
-glitching DTR/RTS signals.  With rs485 this may result in the bus being
-occupied for no reason.
+When firmware load failed, kernel report task hung as follows:
 
-Where does this register write originate from?
+INFO: task xrun:5191 blocked for more than 147 seconds.
+      Tainted: G        W         5.16.0-rc5-next-20211220+ #11
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:xrun            state:D stack:    0 pid: 5191 ppid:   270 flags:0x00000004
+Call Trace:
+ __schedule+0xc12/0x4b50 kernel/sched/core.c:4986
+ schedule+0xd7/0x260 kernel/sched/core.c:6369 (discriminator 1)
+ schedule_timeout+0x7aa/0xa80 kernel/time/timer.c:1857
+ wait_for_completion+0x181/0x290 kernel/sched/completion.c:85
+ lattice_ecp3_remove+0x32/0x40 drivers/misc/lattice-ecp3-config.c:221
+ spi_remove+0x72/0xb0 drivers/spi/spi.c:409
 
-The PL011 driver was forked from the PL010 driver in 2004:
-https://git.kernel.org/history/history/c/157c0342e591
+lattice_ecp3_remove() wait for signals from firmware loading, but when
+load failed, firmware_load() does not send this signal. This cause
+device remove hung. Fix it by sending signal even if load failed.
 
-Until this commit, the PL010 driver's IRQ handler ambauart_int()
-modified the CR register without holding the port spinlock.
-
-ambauart_set_termios() also modified that register.  To prevent
-concurrent read-modify-writes by the IRQ handler and to prevent
-transmission while changing baudrate, ambauart_set_termios() had to
-disable interrupts.  On the PL010, that is achieved by writing zero to
-the CR register.
-
-However, on the PL011, interrupts are disabled in the IMSC register,
-not in the CR register.
-
-Additionally, the commit amended both the PL010 and PL011 driver to
-acquire the port spinlock in the IRQ handler, obviating the need to
-disable interrupts in ->set_termios().
-
-So the CR register write is obsolete for two reasons.  Drop it.
-
-Cc: Russell King <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Link: https://lore.kernel.org/r/f49f945375f5ccb979893c49f1129f51651ac738.1641129062.git.lukas@wunner.de
+Fixes: 781551df57c7 ("misc: Add Lattice ECP3 FPGA configuration via SPI")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Link: https://lore.kernel.org/r/20211228125522.3122284-1-weiyongjun1@huawei.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/amba-pl011.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/misc/lattice-ecp3-config.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-index b831d4d64c0a2..6ec34260d6b18 100644
---- a/drivers/tty/serial/amba-pl011.c
-+++ b/drivers/tty/serial/amba-pl011.c
-@@ -2105,9 +2105,7 @@ pl011_set_termios(struct uart_port *port, struct ktermios *termios,
- 	if (port->rs485.flags & SER_RS485_ENABLED)
- 		termios->c_cflag &= ~CRTSCTS;
+diff --git a/drivers/misc/lattice-ecp3-config.c b/drivers/misc/lattice-ecp3-config.c
+index 884485c3f7232..3a0d2b052ed29 100644
+--- a/drivers/misc/lattice-ecp3-config.c
++++ b/drivers/misc/lattice-ecp3-config.c
+@@ -77,12 +77,12 @@ static void firmware_load(const struct firmware *fw, void *context)
  
--	/* first, disable everything */
- 	old_cr = pl011_read(uap, REG_CR);
--	pl011_write(0, uap, REG_CR);
+ 	if (fw == NULL) {
+ 		dev_err(&spi->dev, "Cannot load firmware, aborting\n");
+-		return;
++		goto out;
+ 	}
  
- 	if (termios->c_cflag & CRTSCTS) {
- 		if (old_cr & UART011_CR_RTS)
+ 	if (fw->size == 0) {
+ 		dev_err(&spi->dev, "Error: Firmware size is 0!\n");
+-		return;
++		goto out;
+ 	}
+ 
+ 	/* Fill dummy data (24 stuffing bits for commands) */
+@@ -104,7 +104,7 @@ static void firmware_load(const struct firmware *fw, void *context)
+ 		dev_err(&spi->dev,
+ 			"Error: No supported FPGA detected (JEDEC_ID=%08x)!\n",
+ 			jedec_id);
+-		return;
++		goto out;
+ 	}
+ 
+ 	dev_info(&spi->dev, "FPGA %s detected\n", ecp3_dev[i].name);
+@@ -117,7 +117,7 @@ static void firmware_load(const struct firmware *fw, void *context)
+ 	buffer = kzalloc(fw->size + 8, GFP_KERNEL);
+ 	if (!buffer) {
+ 		dev_err(&spi->dev, "Error: Can't allocate memory!\n");
+-		return;
++		goto out;
+ 	}
+ 
+ 	/*
+@@ -156,7 +156,7 @@ static void firmware_load(const struct firmware *fw, void *context)
+ 			"Error: Timeout waiting for FPGA to clear (status=%08x)!\n",
+ 			status);
+ 		kfree(buffer);
+-		return;
++		goto out;
+ 	}
+ 
+ 	dev_info(&spi->dev, "Configuring the FPGA...\n");
+@@ -182,7 +182,7 @@ static void firmware_load(const struct firmware *fw, void *context)
+ 	release_firmware(fw);
+ 
+ 	kfree(buffer);
+-
++out:
+ 	complete(&data->fw_loaded);
+ }
+ 
 -- 
 2.34.1
 

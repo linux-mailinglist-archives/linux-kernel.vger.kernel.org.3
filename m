@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2E04988A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:50:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5A449899A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245478AbiAXStY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:49:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245332AbiAXSsz (ORCPT
+        id S1344232AbiAXS5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:57:18 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53010 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344545AbiAXSys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:48:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE8CC06173D;
-        Mon, 24 Jan 2022 10:48:54 -0800 (PST)
+        Mon, 24 Jan 2022 13:54:48 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83352B8121A;
-        Mon, 24 Jan 2022 18:48:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C8F7C340E5;
-        Mon, 24 Jan 2022 18:48:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4D89B810BD;
+        Mon, 24 Jan 2022 18:54:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAA66C340E5;
+        Mon, 24 Jan 2022 18:54:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050132;
-        bh=LTmjrOQuGbGFxf9tbR9lV6bPJ6MV/ExjurJHeVNmXqM=;
+        s=korg; t=1643050485;
+        bh=axNKMA7GKOMDqQQ6KEjlUnFq8shm+cIF6WYV7RhtX34=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FWLuMSo+fFKMtT1PByX8SANHrm0i4oPmU9E35J34TzafE1laDUQ8qeC+6uimVEQqo
-         4MR1P20vMJGbwrlKiG3g19h42u0gDK28BfluKwhIM1KAD3mwc08zx8Zm36y4w9okBI
-         D1nZ5eQBVzDW2TdXj80McgpvgJnpsQinJY7tRYCE=
+        b=UAaZhxdXExUcWHPoEi+Xfd5EvzSDdPG6TZIu9zyUK3wpgTzxYvPaYvquXi0OhRp7z
+         WxqzbJ3uvYoxcxnKSlbKHEJ1PmnKsMVXZHjKvPUf3QcQ3aQPXNoBZXop92SEG19ceR
+         G/nLu2YZdMRC0BSJXybjXomLVlg2mGnOI7+32f5g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 4.4 013/114] media: mceusb: fix control-message timeouts
+Subject: [PATCH 4.9 018/157] media: mceusb: fix control-message timeouts
 Date:   Mon, 24 Jan 2022 19:41:48 +0100
-Message-Id: <20220124183927.523864117@linuxfoundation.org>
+Message-Id: <20220124183933.374165514@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183927.095545464@linuxfoundation.org>
-References: <20220124183927.095545464@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -68,7 +65,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/media/rc/mceusb.c
 +++ b/drivers/media/rc/mceusb.c
-@@ -1118,7 +1118,7 @@ static void mceusb_gen1_init(struct mceu
+@@ -1129,7 +1129,7 @@ static void mceusb_gen1_init(struct mceu
  	 */
  	ret = usb_control_msg(ir->usbdev, usb_rcvctrlpipe(ir->usbdev, 0),
  			      USB_REQ_SET_ADDRESS, USB_TYPE_VENDOR, 0, 0,
@@ -77,7 +74,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	dev_dbg(dev, "set address - ret = %d", ret);
  	dev_dbg(dev, "set address - data[0] = %d, data[1] = %d",
  						data[0], data[1]);
-@@ -1126,20 +1126,20 @@ static void mceusb_gen1_init(struct mceu
+@@ -1137,20 +1137,20 @@ static void mceusb_gen1_init(struct mceu
  	/* set feature: bit rate 38400 bps */
  	ret = usb_control_msg(ir->usbdev, usb_sndctrlpipe(ir->usbdev, 0),
  			      USB_REQ_SET_FEATURE, USB_TYPE_VENDOR,

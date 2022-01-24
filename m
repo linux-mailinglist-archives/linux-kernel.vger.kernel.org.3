@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5125B49A6DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:34:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 562C249A4D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:10:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3421701AbiAYC1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:27:32 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33974 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349172AbiAXUHM (ORCPT
+        id S3408148AbiAYAVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:21:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54972 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2360414AbiAXXgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:07:12 -0500
+        Mon, 24 Jan 2022 18:36:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38358C0ADFDF;
+        Mon, 24 Jan 2022 13:37:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9B906131D;
-        Mon, 24 Jan 2022 20:07:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83EFFC340E5;
-        Mon, 24 Jan 2022 20:07:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CAD726151E;
+        Mon, 24 Jan 2022 21:37:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EFB3C340E5;
+        Mon, 24 Jan 2022 21:37:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054831;
-        bh=bTFoX/N6uoPeZfsGy7J1VXRKpnYHbB47AS5vmroa+hU=;
+        s=korg; t=1643060268;
+        bh=aUqMRbesUG+fUwoezkLtVOmqh/MbsZg6evIG255zsv8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0e67oGZvX7TN207OLwdKmtS5tHUErLOlU4wRRl48B/6ntRMp/RDlY0trDrDpYW3bK
-         d0rw2ArRXY5AbWqTSXU6wzHjF1CoI36B6j4pXZ1hm7vba1Jr69FET8dajqZRwwxwhk
-         0edQpd4Z0laz/KMG/vhY81O2GcbFF0wkwwL2cWKQ=
+        b=P6g/cuid4NTAAyWiC2zQiPHPsuX4fWZ/kCzzgTxHKLrtMmphglcq50vkm9kYzJh/8
+         U7XZf4zYjE+zh/Ogze4UrX9yQlP4q9lDcu3xrnzDHtDtBsEMpYfOr2FZ8h8vQnRgtF
+         ZVR6u1rKT9zJ9HCvLpmmFlAM5l+2pW0lAT/3gs1o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH 5.10 517/563] clk: Emit a stern warning with writable debugfs enabled
+        stable@vger.kernel.org, Xin Yin <yinxin.x@bytedance.com>,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        Theodore Tso <tytso@mit.edu>, stable@kernel.org
+Subject: [PATCH 5.16 0893/1039] ext4: fix fast commit may miss tracking range for FALLOC_FL_ZERO_RANGE
 Date:   Mon, 24 Jan 2022 19:44:42 +0100
-Message-Id: <20220124184042.331859164@linuxfoundation.org>
+Message-Id: <20220124184155.301106304@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,51 +49,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephen Boyd <sboyd@kernel.org>
+From: Xin Yin <yinxin.x@bytedance.com>
 
-commit 489a71964f9d74e697a12cd0ace20ed829eb1f93 upstream.
+commit 5e4d0eba1ccaf19f93222abdeda5a368be141785 upstream.
 
-We don't want vendors to be enabling this part of the clk code and
-shipping it to customers. Exposing the ability to change clk frequencies
-and parents via debugfs is potentially damaging to the system if folks
-don't know what they're doing. Emit a strong warning so that the message
-is clear: don't enable this outside of development systems.
+when call falloc with FALLOC_FL_ZERO_RANGE, to set an range to unwritten,
+which has been already initialized. If the range is align to blocksize,
+fast commit will not track range for this change.
 
-Fixes: 37215da5553e ("clk: Add support for setting clk_rate via debugfs")
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/20211210014237.2130300-1-sboyd@kernel.org
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Also track range for unwritten range in ext4_map_blocks().
+
+Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
+Reviewed-by: Harshad Shirwadkar <harshadshirwadkar@gmail.com>
+Link: https://lore.kernel.org/r/20211221022839.374606-1-yinxin.x@bytedance.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/clk/clk.c |   18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ fs/ext4/extents.c |    2 --
+ fs/ext4/inode.c   |    7 ++++---
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -3314,6 +3314,24 @@ static int __init clk_debug_init(void)
- {
- 	struct clk_core *core;
- 
-+#ifdef CLOCK_ALLOW_WRITE_DEBUGFS
-+	pr_warn("\n");
-+	pr_warn("********************************************************************\n");
-+	pr_warn("**     NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE           **\n");
-+	pr_warn("**                                                                **\n");
-+	pr_warn("**  WRITEABLE clk DebugFS SUPPORT HAS BEEN ENABLED IN THIS KERNEL **\n");
-+	pr_warn("**                                                                **\n");
-+	pr_warn("** This means that this kernel is built to expose clk operations  **\n");
-+	pr_warn("** such as parent or rate setting, enabling, disabling, etc.      **\n");
-+	pr_warn("** to userspace, which may compromise security on your system.    **\n");
-+	pr_warn("**                                                                **\n");
-+	pr_warn("** If you see this message and you are not debugging the          **\n");
-+	pr_warn("** kernel, report this immediately to your vendor!                **\n");
-+	pr_warn("**                                                                **\n");
-+	pr_warn("**     NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE           **\n");
-+	pr_warn("********************************************************************\n");
-+#endif
-+
- 	rootdir = debugfs_create_dir("clk", NULL);
- 
- 	debugfs_create_file("clk_summary", 0444, rootdir, &all_lists,
+--- a/fs/ext4/extents.c
++++ b/fs/ext4/extents.c
+@@ -4647,8 +4647,6 @@ static long ext4_zero_range(struct file
+ 	ret = ext4_mark_inode_dirty(handle, inode);
+ 	if (unlikely(ret))
+ 		goto out_handle;
+-	ext4_fc_track_range(handle, inode, offset >> inode->i_sb->s_blocksize_bits,
+-			(offset + len - 1) >> inode->i_sb->s_blocksize_bits);
+ 	/* Zero out partial block at the edges of the range */
+ 	ret = ext4_zero_partial_blocks(handle, inode, offset, len);
+ 	if (ret >= 0)
+--- a/fs/ext4/inode.c
++++ b/fs/ext4/inode.c
+@@ -741,10 +741,11 @@ out_sem:
+ 			if (ret)
+ 				return ret;
+ 		}
+-		ext4_fc_track_range(handle, inode, map->m_lblk,
+-			    map->m_lblk + map->m_len - 1);
+ 	}
+-
++	if (retval > 0 && (map->m_flags & EXT4_MAP_UNWRITTEN ||
++				map->m_flags & EXT4_MAP_MAPPED))
++		ext4_fc_track_range(handle, inode, map->m_lblk,
++					map->m_lblk + map->m_len - 1);
+ 	if (retval < 0)
+ 		ext_debug(inode, "failed with err %d\n", retval);
+ 	return retval;
 
 

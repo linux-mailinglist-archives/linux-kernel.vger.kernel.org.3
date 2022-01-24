@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75726498AAF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8207D499064
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345417AbiAXTE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:04:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
+        id S1359609AbiAXT7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:59:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345268AbiAXS77 (ORCPT
+        with ESMTP id S1348920AbiAXTk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:59:59 -0500
+        Mon, 24 Jan 2022 14:40:59 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74E4C0619D0;
-        Mon, 24 Jan 2022 10:56:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA34C0613E7;
+        Mon, 24 Jan 2022 11:19:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4663B61416;
-        Mon, 24 Jan 2022 18:56:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A37EC340E5;
-        Mon, 24 Jan 2022 18:56:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EED761317;
+        Mon, 24 Jan 2022 19:19:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ED46C340E8;
+        Mon, 24 Jan 2022 19:19:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050599;
-        bh=tnFxo+X8MhMhJfzopAdktpTd6isKsEkPQG4eerdzgBg=;
+        s=korg; t=1643051979;
+        bh=0KD1eiKFQZ+15lvlwGjcpA2CZ9608oocxiXbhgHw+rM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jvlHXLzPptJjz0N4M+7QM3sYEwMqNMIk+u0mmXW8zbIIYvuQKX55cr4rAIprTxxrQ
-         xosC6oqE0jQfvp/cyNGADw7HSx4D6gfZ6eRLi6qI4fiSlQLbLyGmiKHl+iABYqlirh
-         CJw3NodlSxa04THOz3ahfpptDT/qj+vbtQN6p17Y=
+        b=mTNoHkbi2G/vIR0yU+zQDWXHU8RLjoSS60GeyVzCoww+t201svbfVvO+Kv2H92rX5
+         Oy6I/a4CIKxZvbN5FhPH92ndO6j7CZCJhOvteOSpC6gF4AcBHlTQtxUf7wEISGZyJ8
+         W3i1WH8v1+lijfeUkiSZw26ii8IXWzkscvFEecTs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@ZenIV.linux.org.uk>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        stable@vger.kernel.org, Kees Cook <keescook@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 054/157] pcmcia: fix setting of kthread task states
+Subject: [PATCH 4.19 106/239] char/mwave: Adjust io port register size
 Date:   Mon, 24 Jan 2022 19:42:24 +0100
-Message-Id: <20220124183934.499963137@linuxfoundation.org>
+Message-Id: <20220124183946.477016172@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,53 +48,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dominik Brodowski <linux@dominikbrodowski.net>
+From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit fbb3485f1f931102d8ba606f1c28123f5b48afa3 ]
+[ Upstream commit f5912cc19acd7c24b2dbf65a6340bf194244f085 ]
 
-We need to set TASK_INTERRUPTIBLE before calling kthread_should_stop().
-Otherwise, kthread_stop() might see that the pccardd thread is still
-in TASK_RUNNING state and fail to wake it up.
+Using MKWORD() on a byte-sized variable results in OOB read. Expand the
+size of the reserved area so both MKWORD and MKBYTE continue to work
+without overflow. Silences this warning on a -Warray-bounds build:
 
-Additionally, we only need to set the state back to TASK_RUNNING if
-kthread_should_stop() breaks the loop.
+drivers/char/mwave/3780i.h:346:22: error: array subscript 'short unsigned int[0]' is partly outside array bounds of 'DSP_ISA_SLAVE_CONTROL[1]' [-Werror=array-bounds]
+  346 | #define MKWORD(var) (*((unsigned short *)(&var)))
+      |                     ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/char/mwave/3780i.h:356:40: note: in definition of macro 'OutWordDsp'
+  356 | #define OutWordDsp(index,value)   outw(value,usDspBaseIO+index)
+      |                                        ^~~~~
+drivers/char/mwave/3780i.c:373:41: note: in expansion of macro 'MKWORD'
+  373 |         OutWordDsp(DSP_IsaSlaveControl, MKWORD(rSlaveControl));
+      |                                         ^~~~~~
+drivers/char/mwave/3780i.c:358:31: note: while referencing 'rSlaveControl'
+  358 |         DSP_ISA_SLAVE_CONTROL rSlaveControl;
+      |                               ^~~~~~~~~~~~~
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reported-by: Al Viro <viro@ZenIV.linux.org.uk>
-Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Fixes: d3046ba809ce ("pcmcia: fix a boot time warning in pcmcia cs code")
-Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20211203084206.3104326-1-keescook@chromium.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pcmcia/cs.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/char/mwave/3780i.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/pcmcia/cs.c b/drivers/pcmcia/cs.c
-index c3b615c94b4bf..a92cbc952b70b 100644
---- a/drivers/pcmcia/cs.c
-+++ b/drivers/pcmcia/cs.c
-@@ -665,18 +665,16 @@ static int pccardd(void *__skt)
- 		if (events || sysfs_events)
- 			continue;
+diff --git a/drivers/char/mwave/3780i.h b/drivers/char/mwave/3780i.h
+index 9ccb6b270b071..95164246afd1a 100644
+--- a/drivers/char/mwave/3780i.h
++++ b/drivers/char/mwave/3780i.h
+@@ -68,7 +68,7 @@ typedef struct {
+ 	unsigned char ClockControl:1;	/* RW: Clock control: 0=normal, 1=stop 3780i clocks */
+ 	unsigned char SoftReset:1;	/* RW: Soft reset 0=normal, 1=soft reset active */
+ 	unsigned char ConfigMode:1;	/* RW: Configuration mode, 0=normal, 1=config mode */
+-	unsigned char Reserved:5;	/* 0: Reserved */
++	unsigned short Reserved:13;	/* 0: Reserved */
+ } DSP_ISA_SLAVE_CONTROL;
  
-+		set_current_state(TASK_INTERRUPTIBLE);
- 		if (kthread_should_stop())
- 			break;
  
--		set_current_state(TASK_INTERRUPTIBLE);
--
- 		schedule();
- 
--		/* make sure we are running */
--		__set_current_state(TASK_RUNNING);
--
- 		try_to_freeze();
- 	}
-+	/* make sure we are running before we exit */
-+	__set_current_state(TASK_RUNNING);
- 
- 	/* shut down socket, if a device is still present */
- 	if (skt->state & SOCKET_PRESENT) {
 -- 
 2.34.1
 

@@ -2,47 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B1D4996EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:20:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F9F499CD7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446337AbiAXVH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:07:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42254 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390169AbiAXUpD (ORCPT
+        id S1580843AbiAXWKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:10:51 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45234 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1452401AbiAXVZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:45:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C16CC0424C9;
-        Mon, 24 Jan 2022 11:54:23 -0800 (PST)
+        Mon, 24 Jan 2022 16:25:28 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 243316090A;
-        Mon, 24 Jan 2022 19:54:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 092B1C340E5;
-        Mon, 24 Jan 2022 19:54:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59AAE61490;
+        Mon, 24 Jan 2022 21:25:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32E06C340E9;
+        Mon, 24 Jan 2022 21:25:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054062;
-        bh=3/xGQscgkM8CssT8T+AIB1T7dP+Y+M/pd+KZ9tVxfUw=;
+        s=korg; t=1643059527;
+        bh=eFTZK+BDoNPOY/zrtFGms/hGWY8oU/F68SCn7MXvx3c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VtHgAQgjvZdj2zGvRzb3yyknKnTDVIfVzVoj/RzouHwm1w6SblXUDiEPWOhzA1a0u
-         O4Xh8XN4xkVr2YHJ8uACwDWs0jQeBYSYKNDmJEQe3+eqp2kfEHZFVe0btGpdNdi58Z
-         gKQgZLwUORbxjuhK4nhWQlVIZ43mQN5dHG1Hse0Y=
+        b=Lg49AQR9kaj636vLB9iCi3UZZr4F90hygygjKR32xiA8MiTlNwuDAb9X+OmfHBMfV
+         gx6W37WQNeKc0paTVLytVg3XabQnvujL16/A1JKflAFNCm100e3/hzP07VuDmxbTMo
+         aDc7PBvTDqBUsBkDYLcsCV5pgmZED2Wj2/Rst6rQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Juergen Gross <jgross@suse.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
+        stable@vger.kernel.org, Suresh Kumar <suresh2514@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 266/563] PCI/MSI: Fix pci_irq_vector()/pci_irq_get_affinity()
-Date:   Mon, 24 Jan 2022 19:40:31 +0100
-Message-Id: <20220124184033.640624882@linuxfoundation.org>
+Subject: [PATCH 5.16 0645/1039] net: bonding: debug: avoid printing debug logs when bond is not notifying peers
+Date:   Mon, 24 Jan 2022 19:40:34 +0100
+Message-Id: <20220124184147.033735836@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,95 +46,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+From: Suresh Kumar <surkumar@redhat.com>
 
-[ Upstream commit 29bbc35e29d9b6347780dcacde2deb4b39344167 ]
+[ Upstream commit fee32de284ac277ba434a2d59f8ce46528ff3946 ]
 
-pci_irq_vector() and pci_irq_get_affinity() use the list position to find the
-MSI-X descriptor at a given index. That's correct for the normal case where
-the entry number is the same as the list position.
+Currently "bond_should_notify_peers: slave ..." messages are printed whenever
+"bond_should_notify_peers" function is called.
 
-But it's wrong for cases where MSI-X was allocated with an entries array
-describing sparse entry numbers into the hardware message descriptor
-table. That's inconsistent at best.
++++
+Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+Dec 12 12:33:26 node1 kernel: bond0: (slave enp0s25): Received LACPDU on port 1
+Dec 12 12:33:26 node1 kernel: bond0: (slave enp0s25): Rx Machine: Port=1, Last State=6, Curr State=6
+Dec 12 12:33:26 node1 kernel: bond0: (slave enp0s25): partner sync=1
+Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+...
+Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+Dec 12 12:33:30 node1 kernel: bond0: (slave enp4s3): Received LACPDU on port 2
+Dec 12 12:33:30 node1 kernel: bond0: (slave enp4s3): Rx Machine: Port=2, Last State=6, Curr State=6
+Dec 12 12:33:30 node1 kernel: bond0: (slave enp4s3): partner sync=1
+Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
+Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
++++
 
-Make it always check the entry number because that's what the zero base
-index really means. This change won't break existing users which use a
-sparse entries array for allocation because these users retrieve the Linux
-interrupt number from the entries array after allocation and none of them
-uses pci_irq_vector() or pci_irq_get_affinity().
+This is confusing and can also clutter up debug logs.
+Print logs only when the peer notification happens.
 
-Fixes: aff171641d18 ("PCI: Provide sensible IRQ vector alloc/free routines")
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-Link: https://lore.kernel.org/r/20211206210223.929792157@linutronix.de
+Signed-off-by: Suresh Kumar <suresh2514@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/msi.c | 26 ++++++++++++++++++--------
- 1 file changed, 18 insertions(+), 8 deletions(-)
+ drivers/net/bonding/bond_main.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/pci/msi.c b/drivers/pci/msi.c
-index 57314fec2261b..3da69b26e6743 100644
---- a/drivers/pci/msi.c
-+++ b/drivers/pci/msi.c
-@@ -1291,19 +1291,24 @@ EXPORT_SYMBOL(pci_free_irq_vectors);
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index ff8da720a33a7..0ac964359fbfe 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -1096,9 +1096,6 @@ static bool bond_should_notify_peers(struct bonding *bond)
+ 	slave = rcu_dereference(bond->curr_active_slave);
+ 	rcu_read_unlock();
  
- /**
-  * pci_irq_vector - return Linux IRQ number of a device vector
-- * @dev: PCI device to operate on
-- * @nr: device-relative interrupt vector index (0-based).
-+ * @dev:	PCI device to operate on
-+ * @nr:		Interrupt vector index (0-based)
-+ *
-+ * @nr has the following meanings depending on the interrupt mode:
-+ *   MSI-X:	The index in the MSI-X vector table
-+ *   MSI:	The index of the enabled MSI vectors
-+ *   INTx:	Must be 0
-+ *
-+ * Return: The Linux interrupt number or -EINVAl if @nr is out of range.
-  */
- int pci_irq_vector(struct pci_dev *dev, unsigned int nr)
- {
- 	if (dev->msix_enabled) {
- 		struct msi_desc *entry;
--		int i = 0;
+-	netdev_dbg(bond->dev, "bond_should_notify_peers: slave %s\n",
+-		   slave ? slave->dev->name : "NULL");
+-
+ 	if (!slave || !bond->send_peer_notif ||
+ 	    bond->send_peer_notif %
+ 	    max(1, bond->params.peer_notif_delay) != 0 ||
+@@ -1106,6 +1103,9 @@ static bool bond_should_notify_peers(struct bonding *bond)
+ 	    test_bit(__LINK_STATE_LINKWATCH_PENDING, &slave->dev->state))
+ 		return false;
  
- 		for_each_pci_msi_entry(entry, dev) {
--			if (i == nr)
-+			if (entry->msi_attrib.entry_nr == nr)
- 				return entry->irq;
--			i++;
- 		}
- 		WARN_ON_ONCE(1);
- 		return -EINVAL;
-@@ -1327,17 +1332,22 @@ EXPORT_SYMBOL(pci_irq_vector);
-  * pci_irq_get_affinity - return the affinity of a particular MSI vector
-  * @dev:	PCI device to operate on
-  * @nr:		device-relative interrupt vector index (0-based).
-+ *
-+ * @nr has the following meanings depending on the interrupt mode:
-+ *   MSI-X:	The index in the MSI-X vector table
-+ *   MSI:	The index of the enabled MSI vectors
-+ *   INTx:	Must be 0
-+ *
-+ * Return: A cpumask pointer or NULL if @nr is out of range
-  */
- const struct cpumask *pci_irq_get_affinity(struct pci_dev *dev, int nr)
- {
- 	if (dev->msix_enabled) {
- 		struct msi_desc *entry;
--		int i = 0;
++	netdev_dbg(bond->dev, "bond_should_notify_peers: slave %s\n",
++		   slave ? slave->dev->name : "NULL");
++
+ 	return true;
+ }
  
- 		for_each_pci_msi_entry(entry, dev) {
--			if (i == nr)
-+			if (entry->msi_attrib.entry_nr == nr)
- 				return &entry->affinity->mask;
--			i++;
- 		}
- 		WARN_ON_ONCE(1);
- 		return NULL;
 -- 
 2.34.1
 

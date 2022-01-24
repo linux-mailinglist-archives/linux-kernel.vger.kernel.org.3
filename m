@@ -2,79 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30679497A0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4FA497A0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:16:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242057AbiAXIPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 03:15:21 -0500
-Received: from smtp-fw-80007.amazon.com ([99.78.197.218]:16684 "EHLO
-        smtp-fw-80007.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233770AbiAXIPU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 03:15:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1643012121; x=1674548121;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=VtZz5pmqt4tS7pR0I4pHhznYpm34nVTG0TzfeIWikKY=;
-  b=fDlI6mWEfsObdBT00zbpO0MUS3ow+k9gNbb1NX5gSV3WWL0XhGGuiJeB
-   /hf6qkIxthnlO0m3FJlhGxnkCxzxC9tH3QLBfufO4N79b32NF/3IDsEX5
-   brWW6DCr6r2Cjpwxy1FcyUvmcrpjZmM1SfsKte1yAzL0eBX+90AiZV9WL
-   8=;
-X-IronPort-AV: E=Sophos;i="5.88,311,1635206400"; 
-   d="scan'208";a="57503450"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-2dbf0206.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 24 Jan 2022 08:15:06 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-2dbf0206.us-west-2.amazon.com (Postfix) with ESMTPS id 99DCAA2832;
-        Mon, 24 Jan 2022 08:15:03 +0000 (UTC)
-Received: from EX13D02ANC003.ant.amazon.com (10.43.157.69) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Mon, 24 Jan 2022 08:15:02 +0000
-Received: from 147ddabc1818.ant.amazon.com.com (10.43.160.209) by
- EX13D02ANC003.ant.amazon.com (10.43.157.69) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Mon, 24 Jan 2022 08:14:59 +0000
-From:   Takahiro Itazuri <itazur@amazon.com>
-To:     <linux-doc@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <trivial@kernel.org>,
-        Takahiro Itazuri <zulinx86@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Takahiro Itazuri <itazur@amazon.com>
-Subject: [PATCH] docs: fix typo in Documentation/kernel-hacking/locking.rst
-Date:   Mon, 24 Jan 2022 17:14:47 +0900
-Message-ID: <20220124081447.34066-1-itazur@amazon.com>
-X-Mailer: git-send-email 2.31.1
+        id S242064AbiAXIQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 03:16:08 -0500
+Received: from mga02.intel.com ([134.134.136.20]:22170 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242060AbiAXIPX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 03:15:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643012123; x=1674548123;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PZ03S5WLvrnyR1cFQZpyhVAI7MHzfl8ffKZ0Qvrf9pk=;
+  b=MWDCR5dB3LT+6pS3GcNB/pugEHoSPk7g2K5HTOVxNOW5iOUKGpXQJg0E
+   XcrKXeLqVeg0FOqVEWd0FAXMk50R8+SfyYKx+NXRaNLrdYbNuTHK8Z0lX
+   uzYNfVQ5CksuFPcYh5ySfDzKyyznB370v3vMabsOT1YlrWqEWSaec7riJ
+   PwmgoVElJe5T1RZChOTH5CNiuGiGG6yndReQlQ6U6rdIag4hguJw1ykpv
+   3t4PCbwO6JcfRBHMqU4zQnpjIYTxlxzOWUwY1RobU60XdQaIJh4+OVe5P
+   umWAKKTH5xyXc2ctvHWfGEWZU4x104M8QsNaaNXjfxf4Z174Ektx+PAim
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="233351563"
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="233351563"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 00:15:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="627408142"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 24 Jan 2022 00:15:22 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nBuVV-000Hxp-Lf; Mon, 24 Jan 2022 08:15:21 +0000
+Date:   Mon, 24 Jan 2022 16:14:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Allison Henderson <allison.henderson@oracle.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Dave Chinner <dchinner@redhat.com>
+Subject: [allisonhenderson-xfs-work:delayed_attrs_v26_extended 21/30]
+ fs/xfs/libxfs/xfs_parent.c:55:1: warning: no previous prototype for
+ 'xfs_init_parent_name_rec'
+Message-ID: <202201241644.gmgcv562-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.160.209]
-X-ClientProxiedBy: EX13D23UWC003.ant.amazon.com (10.43.162.81) To
- EX13D02ANC003.ant.amazon.com (10.43.157.69)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change copy_from_user*( to copy_from_user() .
+tree:   https://github.com/allisonhenderson/xfs_work.git delayed_attrs_v26_extended
+head:   19459f5cfa422b0a6a9cd3898892e43ecb49f8f3
+commit: 71c74c8dbb3644ba2a05927c016261b776cf17c8 [21/30] xfs: parent pointer attribute creation
+config: nds32-randconfig-r024-20220124 (https://download.01.org/0day-ci/archive/20220124/202201241644.gmgcv562-lkp@intel.com/config)
+compiler: nds32le-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/allisonhenderson/xfs_work/commit/71c74c8dbb3644ba2a05927c016261b776cf17c8
+        git remote add allisonhenderson-xfs-work https://github.com/allisonhenderson/xfs_work.git
+        git fetch --no-tags allisonhenderson-xfs-work delayed_attrs_v26_extended
+        git checkout 71c74c8dbb3644ba2a05927c016261b776cf17c8
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash fs/xfs/
 
-Signed-off-by: Takahiro Itazuri <itazur@amazon.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/xfs/libxfs/xfs_parent.c:55:1: warning: no previous prototype for 'xfs_init_parent_name_rec' [-Wmissing-prototypes]
+      55 | xfs_init_parent_name_rec(
+         | ^~~~~~~~~~~~~~~~~~~~~~~~
+>> fs/xfs/libxfs/xfs_parent.c:70:1: warning: no previous prototype for 'xfs_init_parent_name_irec' [-Wmissing-prototypes]
+      70 | xfs_init_parent_name_irec(
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/xfs_init_parent_name_rec +55 fs/xfs/libxfs/xfs_parent.c
+
+    35	
+    36	/*
+    37	 * Parent pointer attribute handling.
+    38	 *
+    39	 * Because the attribute value is a filename component, it will never be longer
+    40	 * than 255 bytes. This means the attribute will always be a local format
+    41	 * attribute as it is xfs_attr_leaf_entsize_local_max() for v5 filesystems will
+    42	 * always be larger than this (max is 75% of block size).
+    43	 *
+    44	 * Creating a new parent attribute will always create a new attribute - there
+    45	 * should never, ever be an existing attribute in the tree for a new inode.
+    46	 * ENOSPC behavior is problematic - creating the inode without the parent
+    47	 * pointer is effectively a corruption, so we allow parent attribute creation
+    48	 * to dip into the reserve block pool to avoid unexpected ENOSPC errors from
+    49	 * occurring.
+    50	 */
+    51	
+    52	
+    53	/* Initializes a xfs_parent_name_rec to be stored as an attribute name */
+    54	void
+  > 55	xfs_init_parent_name_rec(
+    56		struct xfs_parent_name_rec	*rec,
+    57		struct xfs_inode		*ip,
+    58		uint32_t			p_diroffset)
+    59	{
+    60		xfs_ino_t			p_ino = ip->i_ino;
+    61		uint32_t			p_gen = VFS_I(ip)->i_generation;
+    62	
+    63		rec->p_ino = cpu_to_be64(p_ino);
+    64		rec->p_gen = cpu_to_be32(p_gen);
+    65		rec->p_diroffset = cpu_to_be32(p_diroffset);
+    66	}
+    67	
+    68	/* Initializes a xfs_parent_name_irec from an xfs_parent_name_rec */
+    69	void
+  > 70	xfs_init_parent_name_irec(
+
 ---
- Documentation/kernel-hacking/locking.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/kernel-hacking/locking.rst b/Documentation/kernel-hacking/locking.rst
-index e6cd40663ea5..4cbd50edf277 100644
---- a/Documentation/kernel-hacking/locking.rst
-+++ b/Documentation/kernel-hacking/locking.rst
-@@ -295,7 +295,7 @@ Pete Zaitcev gives the following summary:
- 
- -  If you are in a process context (any syscall) and want to lock other
-    process out, use a mutex. You can take a mutex and sleep
--   (``copy_from_user*(`` or ``kmalloc(x,GFP_KERNEL)``).
-+   (``copy_from_user()`` or ``kmalloc(x,GFP_KERNEL)``).
- 
- -  Otherwise (== data can be touched in an interrupt), use
-    spin_lock_irqsave() and
--- 
-2.31.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

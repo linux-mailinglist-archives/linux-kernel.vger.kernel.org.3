@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E205498BEB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8BA498AB0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:07:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344912AbiAXTRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:17:35 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:36572 "EHLO
+        id S1345940AbiAXTEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:04:49 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56764 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345884AbiAXTGk (ORCPT
+        with ESMTP id S1343972AbiAXS5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:06:40 -0500
+        Mon, 24 Jan 2022 13:57:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16EB0611DA;
-        Mon, 24 Jan 2022 19:06:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD784C340E5;
-        Mon, 24 Jan 2022 19:06:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F2B361571;
+        Mon, 24 Jan 2022 18:57:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C2F0C340E5;
+        Mon, 24 Jan 2022 18:57:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051197;
-        bh=Sh+M3L0lB9KpZ1YUcJstaGMEojTqMlUaXuswNPJ9dYg=;
+        s=korg; t=1643050663;
+        bh=Qjjcms0dCT2MCUurdm3bONYYlLGmNucgLwcM9IbxerE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pBsBpRwJde5Gu4jGiFC6DzHgiPOPkFMlYspxUf2obor0F5oOL1PPCnDWuqI3iKMG3
-         C854UMPjLfBRk9kz3QWMxXRXkgBf8U3ZFxui3tL6DGjvelIOjN1vCbOq6MDHWLwC49
-         bavDU/9/7i2h203uzEJmhuFSmKrj1914cN0lJfg4=
+        b=LCpIuFmHfdgEV/6wEf6JytC1c0lRO8d7n+/UA4TOT7GFxRp+zuwi1p83Pbk6EPrnI
+         HHNUSJL75ibyQWQKQLyH4RPETIAUPHxu1gs+Xlj/Lz8SaU9GwVSH4qOchzQfm18nl7
+         OkkxRmsuzPP4ii83/j9Yzy0naN+NcLoXvts1UnQM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wei Yongjun <weiyongjun1@huawei.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
+        stable@vger.kernel.org, Kamal Heib <kamalheib1@gmail.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 086/186] Bluetooth: Fix debugfs entry leak in hci_register_dev()
-Date:   Mon, 24 Jan 2022 19:42:41 +0100
-Message-Id: <20220124183939.880661017@linuxfoundation.org>
+Subject: [PATCH 4.9 072/157] RDMA/cxgb4: Set queue pair state when being queried
+Date:   Mon, 24 Jan 2022 19:42:42 +0100
+Message-Id: <20220124183935.077018026@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,38 +47,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wei Yongjun <weiyongjun1@huawei.com>
+From: Kamal Heib <kamalheib1@gmail.com>
 
-[ Upstream commit 5a4bb6a8e981d3d0d492aa38412ee80b21033177 ]
+[ Upstream commit e375b9c92985e409c4bb95dd43d34915ea7f5e28 ]
 
-Fault injection test report debugfs entry leak as follows:
+The API for ib_query_qp requires the driver to set cur_qp_state on return,
+add the missing set.
 
-debugfs: Directory 'hci0' with parent 'bluetooth' already present!
-
-When register_pm_notifier() failed in hci_register_dev(), the debugfs
-create by debugfs_create_dir() do not removed in the error handing path.
-
-Add the remove debugfs code to fix it.
-
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Fixes: 67bbc05512d8 ("RDMA/cxgb4: Add query_qp support")
+Link: https://lore.kernel.org/r/20211220152530.60399-1-kamalheib1@gmail.com
+Signed-off-by: Kamal Heib <kamalheib1@gmail.com>
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/hci_core.c | 1 +
+ drivers/infiniband/hw/cxgb4/qp.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-index 1906adfd553ad..687b4d0e4c673 100644
---- a/net/bluetooth/hci_core.c
-+++ b/net/bluetooth/hci_core.c
-@@ -3183,6 +3183,7 @@ int hci_register_dev(struct hci_dev *hdev)
- 	return id;
- 
- err_wqueue:
-+	debugfs_remove_recursive(hdev->debugfs);
- 	destroy_workqueue(hdev->workqueue);
- 	destroy_workqueue(hdev->req_workqueue);
- err:
+diff --git a/drivers/infiniband/hw/cxgb4/qp.c b/drivers/infiniband/hw/cxgb4/qp.c
+index 87bc7b0db892b..2eeac8401c927 100644
+--- a/drivers/infiniband/hw/cxgb4/qp.c
++++ b/drivers/infiniband/hw/cxgb4/qp.c
+@@ -1974,6 +1974,7 @@ int c4iw_ib_query_qp(struct ib_qp *ibqp, struct ib_qp_attr *attr,
+ 	memset(attr, 0, sizeof *attr);
+ 	memset(init_attr, 0, sizeof *init_attr);
+ 	attr->qp_state = to_ib_qp_state(qhp->attr.state);
++	attr->cur_qp_state = to_ib_qp_state(qhp->attr.state);
+ 	init_attr->cap.max_send_wr = qhp->attr.sq_num_entries;
+ 	init_attr->cap.max_recv_wr = qhp->attr.rq_num_entries;
+ 	init_attr->cap.max_send_sge = qhp->attr.sq_max_sges;
 -- 
 2.34.1
 

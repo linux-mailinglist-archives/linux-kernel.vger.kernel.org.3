@@ -2,63 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D27014983E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDAED4983F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240718AbiAXP6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 10:58:47 -0500
-Received: from foss.arm.com ([217.140.110.172]:38634 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238984AbiAXP6q (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 10:58:46 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DBEE7D6E;
-        Mon, 24 Jan 2022 07:58:45 -0800 (PST)
-Received: from [192.168.99.12] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 33C7B3F766;
-        Mon, 24 Jan 2022 07:58:45 -0800 (PST)
-Message-ID: <9238e858-df20-6c61-011a-1f2b3e685db6@foss.arm.com>
-Date:   Mon, 24 Jan 2022 15:58:36 +0000
+        id S243216AbiAXP71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 10:59:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58004 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240856AbiAXP7Z (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 10:59:25 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D7CC061401;
+        Mon, 24 Jan 2022 07:59:25 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id a8so22573499ejc.8;
+        Mon, 24 Jan 2022 07:59:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SPs0KtT5EHl2Q5psmOSipZrVDwNuoDxsKSGua1QkkZ8=;
+        b=RdvmKY2SX6Dc7mVF2/PBXqKKpRPhzXFKqeIK9MtiR2+F1OMWwBuoruQFz9THfsVwgb
+         02ilngHJbbEuquM2o+YZRGNtVvWGbKLIqPcRYYxKxrzIY6eln6aBTSH7gvc3PYqS874y
+         zgkN1ilA8HoOSJWPvM8r0HosIUupgDC4d6YJ0pqNWgvKf9kKC1hZGtdyybf2K6IYYbzU
+         1obVxOJYtEY54Z2OKyXStk4SVyUby1yTmriyHZe9Bz5JpDuxS6+hyztjUMF2sZ5JSfk5
+         kQfeIKlcO7qS//OpWCUFXrU21k1Gz2t8xqD2mZ3aI4ZabjKhubNswMj9r0HyQVQEwb5I
+         UF6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SPs0KtT5EHl2Q5psmOSipZrVDwNuoDxsKSGua1QkkZ8=;
+        b=zjv3Q49vSRvR9/q6czZUAwyUpzZhv7+XNGWYKyyZatba8SvYRykEAXZ15oLmhEHe77
+         8aZ7HuP+cbJlwrD751wc5s6CY8RIvnLA8pLmou0t8RPJGg2GBw5xOgxoXSEOClwDHsEG
+         ixFXs72tzBgjXNdBobTzBrVoRB4ZEUQtosNC8ybhjIsXYNu57w0w1Gu7C3MDiHQjSAIY
+         mIfYP700/3LcKDZf5Wj5BPfmwNGm898QSNesoSuDVxUnTwsxCuBKMNr+3/5p5vNX7eyx
+         hCWZAs38qEVQMmrB7bBksEY2smTUapysfdchxO8r9FRhx2e++gZxM4D37f1N5Wf9WmVL
+         Li5A==
+X-Gm-Message-State: AOAM531PbzfhaEz0nxNAGeRKEd9D9CS+1JMqD+9BS2Tqk1CMPSgRPyhL
+        cWDP7fkrlncCyhdySno6Xds=
+X-Google-Smtp-Source: ABdhPJxzoPpX2r+9GAjf3g/xLj8VkdDZO2uYvqMl49ymPQ2PZBOfbk8FxWoanenUcz1gdhVsF2tsdg==
+X-Received: by 2002:a17:907:7ea8:: with SMTP id qb40mr6094701ejc.541.1643039963874;
+        Mon, 24 Jan 2022 07:59:23 -0800 (PST)
+Received: from skbuf ([188.25.255.2])
+        by smtp.gmail.com with ESMTPSA id i3sm6741296edb.13.2022.01.24.07.59.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 07:59:23 -0800 (PST)
+Date:   Mon, 24 Jan 2022 17:59:21 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [RFC PATCH v7 04/16] net: dsa: tag_qca: move define to include
+ linux/dsa
+Message-ID: <20220124155921.zhu3divm6brezjdd@skbuf>
+References: <20220123013337.20945-1-ansuelsmth@gmail.com>
+ <20220123013337.20945-5-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] drm/arm: Fix hdlcd selects to add DRM_GEM_CMA_HELPER for
- build
-Content-Language: en-US
-From:   Carsten Haitzler <carsten.haitzler@foss.arm.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     airlied@linux.ie, liviu.dudau@arm.com,
-        linux-kernel@vger.kernel.org, steven.price@arm.com
-References: <20220124145816.2466883-1-carsten.haitzler@foss.arm.com>
-Organization: Arm Ltd.
-In-Reply-To: <20220124145816.2466883-1-carsten.haitzler@foss.arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220123013337.20945-5-ansuelsmth@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry - I meant disregard THIS one - following patch is right.
-
-On 1/24/22 14:58, carsten.haitzler@foss.arm.com wrote:
-> From: Carsten Haitzler <carsten.haitzler@arm.com>
+On Sun, Jan 23, 2022 at 02:33:25AM +0100, Ansuel Smith wrote:
+> Move tag_qca define to include dir linux/dsa as the qca8k require access
+> to the tagger define to support in-band mdio read/write using ethernet
+> packet.
 > 
-> Without DRM_GEM_CMA_HELPER HDLCD won't build. This needs to be there too.
-> 
-> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 > ---
->   drivers/gpu/drm/arm/Kconfig | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/gpu/drm/arm/Kconfig b/drivers/gpu/drm/arm/Kconfig
-> index 58a242871b28..9eaceb981d92 100644
-> --- a/drivers/gpu/drm/arm/Kconfig
-> +++ b/drivers/gpu/drm/arm/Kconfig
-> @@ -6,6 +6,7 @@ config DRM_HDLCD
->   	depends on DRM && OF && (ARM || ARM64 || COMPILE_TEST)
->   	depends on COMMON_CLK
->   	select DRM_KMS_HELPER
-> +        select DRM_GEM_CMA_HELPER
->   	help
->   	  Choose this option if you have an ARM High Definition Colour LCD
->   	  controller.
+
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>

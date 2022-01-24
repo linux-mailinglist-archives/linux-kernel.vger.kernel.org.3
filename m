@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D87C498BC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:17:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C95498C54
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346489AbiAXTQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:16:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346254AbiAXTFO (ORCPT
+        id S1348870AbiAXTTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:19:50 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36414 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347827AbiAXTLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:05:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172DEC0613EC;
-        Mon, 24 Jan 2022 11:00:43 -0800 (PST)
+        Mon, 24 Jan 2022 14:11:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8178608D4;
-        Mon, 24 Jan 2022 19:00:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A27DC340E5;
-        Mon, 24 Jan 2022 19:00:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77718B811FC;
+        Mon, 24 Jan 2022 19:11:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E68EC340E5;
+        Mon, 24 Jan 2022 19:11:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050842;
-        bh=SqqKlmrkJD2ajJiHT7F53gMvsqqsiJfdubXqh3QjyAo=;
+        s=korg; t=1643051470;
+        bh=4k2z4KLtYvdYk31HaIx1OrD6ZDakKeeWxnh9mTjMlRk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qPBcD5KGCssJ//76QRGd3RDtOQr4p6jdRd0ozCv4/HDgle9DL3S/DsCOld0sLdMUQ
-         m7QBpukZ1AKo1cqcGH6l8iKVS7NABN8Sswi1Gjz+OsrXoXGWNcj4/0ktuC7g5+993i
-         4D9qDUQ7FFr+GTKtSAMrZh4bXhsCTo3EwXa3Npig=
+        b=Ykzvh0uKlgAaTqHvq9SGTrYi/Z+bxy5JjckihQphPF5pzkTsOaHOyypGbXpi6ylMo
+         Y4pRCSSOausjuyrMlCYDihD9321aPK8MNC577nNOX8UaiLWKOZFmebwIgW9d9kzBCM
+         goQU9PZ7v7c8+uVUyoT7GmZ4DaJtOm95fNSxVHWc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tobias Waldekranz <tobias@waldekranz.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.9 130/157] powerpc/fsl/dts: Enable WA for erratum A-009885 on fman3l MDIO buses
+        stable@vger.kernel.org, Baoquan He <bhe@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 145/186] scsi: sr: Dont use GFP_DMA
 Date:   Mon, 24 Jan 2022 19:43:40 +0100
-Message-Id: <20220124183936.908163451@linuxfoundation.org>
+Message-Id: <20220124183941.770293747@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,38 +47,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tobias Waldekranz <tobias@waldekranz.com>
+From: Christoph Hellwig <hch@lst.de>
 
-commit 0d375d610fa96524e2ee2b46830a46a7bfa92a9f upstream.
+[ Upstream commit d94d94969a4ba07a43d62429c60372320519c391 ]
 
-This block is used in (at least) T1024 and T1040, including their
-variants like T1023 etc.
+The allocated buffers are used as a command payload, for which the block
+layer and/or DMA API do the proper bounce buffering if needed.
 
-Fixes: d55ad2967d89 ("powerpc/mpc85xx: Create dts components for the FSL QorIQ DPAA FMan")
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20211222090842.920724-1-hch@lst.de
+Reported-by: Baoquan He <bhe@redhat.com>
+Reviewed-by: Baoquan He <bhe@redhat.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/boot/dts/fsl/qoriq-fman3l-0.dtsi |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/scsi/sr.c        | 2 +-
+ drivers/scsi/sr_vendor.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
---- a/arch/powerpc/boot/dts/fsl/qoriq-fman3l-0.dtsi
-+++ b/arch/powerpc/boot/dts/fsl/qoriq-fman3l-0.dtsi
-@@ -78,6 +78,7 @@ fman0: fman@400000 {
- 		#size-cells = <0>;
- 		compatible = "fsl,fman-memac-mdio", "fsl,fman-xmdio";
- 		reg = <0xfc000 0x1000>;
-+		fsl,erratum-a009885;
- 	};
+diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
+index be2daf5536ff7..180087d1c6cdb 100644
+--- a/drivers/scsi/sr.c
++++ b/drivers/scsi/sr.c
+@@ -885,7 +885,7 @@ static void get_capabilities(struct scsi_cd *cd)
  
- 	xmdio0: mdio@fd000 {
-@@ -85,6 +86,7 @@ fman0: fman@400000 {
- 		#size-cells = <0>;
- 		compatible = "fsl,fman-memac-mdio", "fsl,fman-xmdio";
- 		reg = <0xfd000 0x1000>;
-+		fsl,erratum-a009885;
- 	};
  
- 	ptp_timer0: ptp-timer@fe000 {
+ 	/* allocate transfer buffer */
+-	buffer = kmalloc(512, GFP_KERNEL | GFP_DMA);
++	buffer = kmalloc(512, GFP_KERNEL);
+ 	if (!buffer) {
+ 		sr_printk(KERN_ERR, cd, "out of memory.\n");
+ 		return;
+diff --git a/drivers/scsi/sr_vendor.c b/drivers/scsi/sr_vendor.c
+index e3b0ce25162ba..2887be4316be9 100644
+--- a/drivers/scsi/sr_vendor.c
++++ b/drivers/scsi/sr_vendor.c
+@@ -119,7 +119,7 @@ int sr_set_blocklength(Scsi_CD *cd, int blocklength)
+ 		density = (blocklength > 2048) ? 0x81 : 0x83;
+ #endif
+ 
+-	buffer = kmalloc(512, GFP_KERNEL | GFP_DMA);
++	buffer = kmalloc(512, GFP_KERNEL);
+ 	if (!buffer)
+ 		return -ENOMEM;
+ 
+@@ -167,7 +167,7 @@ int sr_cd_check(struct cdrom_device_info *cdi)
+ 	if (cd->cdi.mask & CDC_MULTI_SESSION)
+ 		return 0;
+ 
+-	buffer = kmalloc(512, GFP_KERNEL | GFP_DMA);
++	buffer = kmalloc(512, GFP_KERNEL);
+ 	if (!buffer)
+ 		return -ENOMEM;
+ 
+-- 
+2.34.1
+
 
 

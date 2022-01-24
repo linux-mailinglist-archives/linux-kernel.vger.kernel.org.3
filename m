@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D09D498007
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FBD449801A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:58:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242721AbiAXM5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 07:57:33 -0500
-Received: from foss.arm.com ([217.140.110.172]:32872 "EHLO foss.arm.com"
+        id S242787AbiAXM6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 07:58:32 -0500
+Received: from foss.arm.com ([217.140.110.172]:32892 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242707AbiAXM5Z (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:57:25 -0500
+        id S242741AbiAXM53 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 07:57:29 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0F327D6E;
-        Mon, 24 Jan 2022 04:57:25 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 59744ED1;
+        Mon, 24 Jan 2022 04:57:29 -0800 (PST)
 Received: from p8cg001049571a15.arm.com (unknown [10.163.43.190])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 449A63F774;
-        Mon, 24 Jan 2022 04:57:20 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id BB07D3F774;
+        Mon, 24 Jan 2022 04:57:25 -0800 (PST)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-mm@kvack.org
 Cc:     linux-kernel@vger.kernel.org, hch@infradead.org,
         akpm@linux-foundation.org,
         Anshuman Khandual <anshuman.khandual@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [RFC V1 04/31] powerpc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Date:   Mon, 24 Jan 2022 18:26:41 +0530
-Message-Id: <1643029028-12710-5-git-send-email-anshuman.khandual@arm.com>
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [RFC V1 05/31] arm64/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Date:   Mon, 24 Jan 2022 18:26:42 +0530
+Message-Id: <1643029028-12710-6-git-send-email-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
 References: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
@@ -37,91 +37,121 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 This defines and exports a platform specific custom vm_get_page_prot() via
 subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
-macros can be dropped which are no longer needed. While here, this also
-localizes arch_vm_get_page_prot() as powerpc_vm_get_page_prot().
+macros can be dropped which are no longer needed. This also localizes both
+arch_filter_pgprot and arch_vm_get_page_prot() helpers, unsubscribing from
+ARCH_HAS_FILTER_PGPROT as well.
 
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: linuxppc-dev@lists.ozlabs.org
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- arch/powerpc/Kconfig               |  1 +
- arch/powerpc/include/asm/mman.h    |  3 +-
- arch/powerpc/include/asm/pgtable.h | 19 ------------
- arch/powerpc/mm/mmap.c             | 47 ++++++++++++++++++++++++++++++
- 4 files changed, 49 insertions(+), 21 deletions(-)
+ arch/arm64/Kconfig                    |  2 +-
+ arch/arm64/include/asm/mman.h         |  3 +-
+ arch/arm64/include/asm/pgtable-prot.h | 18 ----------
+ arch/arm64/include/asm/pgtable.h      |  2 +-
+ arch/arm64/mm/mmap.c                  | 50 +++++++++++++++++++++++++++
+ 5 files changed, 53 insertions(+), 22 deletions(-)
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index b779603978e1..ddb4a3687c05 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -135,6 +135,7 @@ config PPC
- 	select ARCH_HAS_TICK_BROADCAST		if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UACCESS_FLUSHCACHE
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index cad609528e58..fce2d0fc4ecc 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -23,7 +23,6 @@ config ARM64
+ 	select ARCH_HAS_DMA_PREP_COHERENT
+ 	select ARCH_HAS_ACPI_TABLE_UPGRADE if ACPI
+ 	select ARCH_HAS_FAST_MULTIPLIER
+-	select ARCH_HAS_FILTER_PGPROT
+ 	select ARCH_HAS_FORTIFY_SOURCE
+ 	select ARCH_HAS_GCOV_PROFILE_ALL
+ 	select ARCH_HAS_GIGANTIC_PAGE
+@@ -44,6 +43,7 @@ config ARM64
+ 	select ARCH_HAS_SYSCALL_WRAPPER
+ 	select ARCH_HAS_TEARDOWN_DMA_OPS if IOMMU_SUPPORT
+ 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
 +	select ARCH_HAS_VM_GET_PAGE_PROT
+ 	select ARCH_HAS_ZONE_DMA_SET if EXPERT
+ 	select ARCH_HAVE_ELF_PROT
  	select ARCH_HAVE_NMI_SAFE_CMPXCHG
- 	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
-diff --git a/arch/powerpc/include/asm/mman.h b/arch/powerpc/include/asm/mman.h
-index 7cb6d18f5cd6..7b10c2031e82 100644
---- a/arch/powerpc/include/asm/mman.h
-+++ b/arch/powerpc/include/asm/mman.h
-@@ -24,7 +24,7 @@ static inline unsigned long arch_calc_vm_prot_bits(unsigned long prot,
+diff --git a/arch/arm64/include/asm/mman.h b/arch/arm64/include/asm/mman.h
+index e3e28f7daf62..85f41f72a8b3 100644
+--- a/arch/arm64/include/asm/mman.h
++++ b/arch/arm64/include/asm/mman.h
+@@ -35,7 +35,7 @@ static inline unsigned long arch_calc_vm_flag_bits(unsigned long flags)
  }
- #define arch_calc_vm_prot_bits(prot, pkey) arch_calc_vm_prot_bits(prot, pkey)
+ #define arch_calc_vm_flag_bits(flags) arch_calc_vm_flag_bits(flags)
  
 -static inline pgprot_t arch_vm_get_page_prot(unsigned long vm_flags)
-+static inline pgprot_t powerpc_vm_get_page_prot(unsigned long vm_flags)
++static inline pgprot_t arm64_arch_vm_get_page_prot(unsigned long vm_flags)
  {
- #ifdef CONFIG_PPC_MEM_KEYS
- 	return (vm_flags & VM_SAO) ?
-@@ -34,7 +34,6 @@ static inline pgprot_t arch_vm_get_page_prot(unsigned long vm_flags)
- 	return (vm_flags & VM_SAO) ? __pgprot(_PAGE_SAO) : __pgprot(0);
- #endif
+ 	pteval_t prot = 0;
+ 
+@@ -57,7 +57,6 @@ static inline pgprot_t arch_vm_get_page_prot(unsigned long vm_flags)
+ 
+ 	return __pgprot(prot);
  }
 -#define arch_vm_get_page_prot(vm_flags) arch_vm_get_page_prot(vm_flags)
  
- static inline bool arch_validate_prot(unsigned long prot, unsigned long addr)
+ static inline bool arch_validate_prot(unsigned long prot,
+ 	unsigned long addr __always_unused)
+diff --git a/arch/arm64/include/asm/pgtable-prot.h b/arch/arm64/include/asm/pgtable-prot.h
+index 7032f04c8ac6..d8ee0aa7886d 100644
+--- a/arch/arm64/include/asm/pgtable-prot.h
++++ b/arch/arm64/include/asm/pgtable-prot.h
+@@ -88,24 +88,6 @@ extern bool arm64_use_ng_mappings;
+ #define PAGE_READONLY_EXEC	__pgprot(_PAGE_DEFAULT | PTE_USER | PTE_RDONLY | PTE_NG | PTE_PXN)
+ #define PAGE_EXECONLY		__pgprot(_PAGE_DEFAULT | PTE_RDONLY | PTE_NG | PTE_PXN)
+ 
+-#define __P000  PAGE_NONE
+-#define __P001  PAGE_READONLY
+-#define __P010  PAGE_READONLY
+-#define __P011  PAGE_READONLY
+-#define __P100  PAGE_EXECONLY
+-#define __P101  PAGE_READONLY_EXEC
+-#define __P110  PAGE_READONLY_EXEC
+-#define __P111  PAGE_READONLY_EXEC
+-
+-#define __S000  PAGE_NONE
+-#define __S001  PAGE_READONLY
+-#define __S010  PAGE_SHARED
+-#define __S011  PAGE_SHARED
+-#define __S100  PAGE_EXECONLY
+-#define __S101  PAGE_READONLY_EXEC
+-#define __S110  PAGE_SHARED_EXEC
+-#define __S111  PAGE_SHARED_EXEC
+-
+ #endif /* __ASSEMBLY__ */
+ 
+ #endif /* __ASM_PGTABLE_PROT_H */
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index c4ba047a82d2..5a73501a45ed 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -1017,7 +1017,7 @@ static inline bool arch_wants_old_prefaulted_pte(void)
+ }
+ #define arch_wants_old_prefaulted_pte	arch_wants_old_prefaulted_pte
+ 
+-static inline pgprot_t arch_filter_pgprot(pgprot_t prot)
++static inline pgprot_t arm64_arch_filter_pgprot(pgprot_t prot)
  {
-diff --git a/arch/powerpc/include/asm/pgtable.h b/arch/powerpc/include/asm/pgtable.h
-index d564d0ecd4cd..3cbb6de20f9d 100644
---- a/arch/powerpc/include/asm/pgtable.h
-+++ b/arch/powerpc/include/asm/pgtable.h
-@@ -20,25 +20,6 @@ struct mm_struct;
- #include <asm/nohash/pgtable.h>
- #endif /* !CONFIG_PPC_BOOK3S */
+ 	if (cpus_have_const_cap(ARM64_HAS_EPAN))
+ 		return prot;
+diff --git a/arch/arm64/mm/mmap.c b/arch/arm64/mm/mmap.c
+index a38f54cd638c..ad605eb86d23 100644
+--- a/arch/arm64/mm/mmap.c
++++ b/arch/arm64/mm/mmap.c
+@@ -10,6 +10,7 @@
+ #include <linux/types.h>
  
--/* Note due to the way vm flags are laid out, the bits are XWR */
--#define __P000	PAGE_NONE
--#define __P001	PAGE_READONLY
--#define __P010	PAGE_COPY
--#define __P011	PAGE_COPY
--#define __P100	PAGE_READONLY_X
--#define __P101	PAGE_READONLY_X
--#define __P110	PAGE_COPY_X
--#define __P111	PAGE_COPY_X
--
--#define __S000	PAGE_NONE
--#define __S001	PAGE_READONLY
--#define __S010	PAGE_SHARED
--#define __S011	PAGE_SHARED
--#define __S100	PAGE_READONLY_X
--#define __S101	PAGE_READONLY_X
--#define __S110	PAGE_SHARED_X
--#define __S111	PAGE_SHARED_X
--
- #ifndef __ASSEMBLY__
+ #include <asm/page.h>
++#include <asm/mman.h>
  
- #ifndef MAX_PTRS_PER_PGD
-diff --git a/arch/powerpc/mm/mmap.c b/arch/powerpc/mm/mmap.c
-index c475cf810aa8..7f05e7903bd2 100644
---- a/arch/powerpc/mm/mmap.c
-+++ b/arch/powerpc/mm/mmap.c
-@@ -254,3 +254,50 @@ void arch_pick_mmap_layout(struct mm_struct *mm, struct rlimit *rlim_stack)
- 		mm->get_unmapped_area = arch_get_unmapped_area_topdown;
- 	}
+ /*
+  * You really shouldn't be using read() or write() on /dev/mem.  This might go
+@@ -38,3 +39,52 @@ int valid_mmap_phys_addr_range(unsigned long pfn, size_t size)
+ {
+ 	return !(((pfn << PAGE_SHIFT) + size) & ~PHYS_MASK);
  }
 +
 +static inline pgprot_t __vm_get_page_prot(unsigned long vm_flags)
@@ -132,17 +162,17 @@ index c475cf810aa8..7f05e7903bd2 100644
 +	case VM_READ:
 +		return PAGE_READONLY;
 +	case VM_WRITE:
-+		return PAGE_COPY;
++		return PAGE_READONLY;
 +	case VM_READ | VM_WRITE:
-+		return PAGE_COPY;
++		return PAGE_READONLY;
 +	case VM_EXEC:
-+		return PAGE_READONLY_X;
++		return PAGE_EXECONLY;
 +	case VM_EXEC | VM_READ:
-+		return PAGE_READONLY_X;
++		return PAGE_READONLY_EXEC;
 +	case VM_EXEC | VM_WRITE:
-+		return PAGE_COPY_X;
++		return PAGE_READONLY_EXEC;
 +	case VM_EXEC | VM_READ | VM_WRITE:
-+		return PAGE_COPY_X;
++		return PAGE_READONLY_EXEC;
 +	case VM_SHARED:
 +		return PAGE_NONE;
 +	case VM_SHARED | VM_READ:
@@ -152,13 +182,13 @@ index c475cf810aa8..7f05e7903bd2 100644
 +	case VM_SHARED | VM_READ | VM_WRITE:
 +		return PAGE_SHARED;
 +	case VM_SHARED | VM_EXEC:
-+		return PAGE_READONLY_X;
++		return PAGE_EXECONLY;
 +	case VM_SHARED | VM_EXEC | VM_READ:
-+		return PAGE_READONLY_X;
++		return PAGE_READONLY_EXEC;
 +	case VM_SHARED | VM_EXEC | VM_WRITE:
-+		return PAGE_SHARED_X;
++		return PAGE_SHARED_EXEC;
 +	case VM_SHARED | VM_EXEC | VM_READ | VM_WRITE:
-+		return PAGE_SHARED_X;
++		return PAGE_SHARED_EXEC;
 +	default:
 +		BUILD_BUG();
 +	}
@@ -166,8 +196,10 @@ index c475cf810aa8..7f05e7903bd2 100644
 +
 +pgprot_t vm_get_page_prot(unsigned long vm_flags)
 +{
-+	return __pgprot(pgprot_val(__vm_get_page_prot(vm_flags)) |
-+	       pgprot_val(powerpc_vm_get_page_prot(vm_flags)));
++	pgprot_t ret = __pgprot(pgprot_val(__vm_get_page_prot(vm_flags)) |
++			pgprot_val(arm64_arch_vm_get_page_prot(vm_flags)));
++
++	return arm64_arch_filter_pgprot(ret);
 +}
 +EXPORT_SYMBOL(vm_get_page_prot);
 -- 

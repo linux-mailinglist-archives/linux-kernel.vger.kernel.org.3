@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2AF498A6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 345A2498B4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:12:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233620AbiAXTDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:03:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245492AbiAXS7K (ORCPT
+        id S1345468AbiAXTMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:12:48 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:33906 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345514AbiAXTDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:59:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CAE6C061259;
-        Mon, 24 Jan 2022 10:56:20 -0800 (PST)
+        Mon, 24 Jan 2022 14:03:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E790DB81233;
-        Mon, 24 Jan 2022 18:56:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04AF4C340E5;
-        Mon, 24 Jan 2022 18:56:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 494AE60BB7;
+        Mon, 24 Jan 2022 19:03:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0608EC340E5;
+        Mon, 24 Jan 2022 19:03:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050577;
-        bh=0llLWABPLExHlQs4euURpnH0F+1WsUmniWIHam1or1M=;
+        s=korg; t=1643051022;
+        bh=APWsZhwa5pVHhTAULT9fAjfDNrVdk3v3541Ngoypbog=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=voJd23qb9H7g8ubTybR22rQdDpO85IuuN6kPh9YgLXQxQkxS/KlOH2IB2WSMUM0Wj
-         5NgrMjMylpZ4B9mX8+CIWwbJCR4P6XDNoIsWwLCJTphfERg+mbLMq5SY4X5CAPPh8y
-         KxCmKQUXjONZ8KUtIyfIKiJeYETSZNYVAVZPmMK4=
+        b=iIjd7gCgcro2wAkd6anhXkk/pOrMB9v3b31HOAKViH+yi7NedquXQx+2L7I57XFLh
+         9C0NAI6IRpcySfDojlvsPBqSy2IEVbc6qUJEf7h4J22eqtFb9Gh/WtbrOwNbVd7T7B
+         Xbtv3Fp5uL+y8I8aqakfAP6EXyIIGyhLHLwGwJjs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jason Gerecke <jason.gerecke@wacom.com>,
-        Ping Cheng <ping.cheng@wacom.com>,
-        Jiri Kosina <jkosina@suse.cz>
-Subject: [PATCH 4.9 014/157] HID: wacom: Avoid using stale array indicies to read contact count
+        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH 4.14 029/186] media: stk1160: fix control-message timeouts
 Date:   Mon, 24 Jan 2022 19:41:44 +0100
-Message-Id: <20220124183933.243616752@linuxfoundation.org>
+Message-Id: <20220124183938.057625168@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,44 +46,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason Gerecke <killertofu@gmail.com>
+From: Johan Hovold <johan@kernel.org>
 
-commit 20f3cf5f860f9f267a6a6e5642d3d0525edb1814 upstream.
+commit 6aa6e70cdb5b863a57bad61310bf89b6617a5d2d upstream.
 
-If we ever see a touch report with contact count data we initialize
-several variables used to read the contact count in the pre-report
-phase. These variables are never reset if we process a report which
-doesn't contain a contact count, however. This can cause the pre-
-report function to trigger a read of arbitrary memory (e.g. NULL
-if we're lucky) and potentially crash the driver.
+USB control-message timeouts are specified in milliseconds and should
+specifically not vary with CONFIG_HZ.
 
-This commit restores resetting of the variables back to default
-"none" values that were used prior to the commit mentioned
-below.
-
-Link: https://github.com/linuxwacom/input-wacom/issues/276
-Fixes: 003f50ab673c (HID: wacom: Update last_slot_field during pre_report phase)
-CC: stable@vger.kernel.org
-Signed-off-by: Jason Gerecke <jason.gerecke@wacom.com>
-Reviewed-by: Ping Cheng <ping.cheng@wacom.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Fixes: 9cb2173e6ea8 ("[media] media: Add stk1160 new driver (easycap replacement)")
+Cc: stable@vger.kernel.org      # 3.7
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/wacom_wac.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/media/usb/stk1160/stk1160-core.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/hid/wacom_wac.c
-+++ b/drivers/hid/wacom_wac.c
-@@ -1693,6 +1693,10 @@ static void wacom_wac_finger_pre_report(
- 	struct hid_data* hid_data = &wacom_wac->hid_data;
- 	int i;
+--- a/drivers/media/usb/stk1160/stk1160-core.c
++++ b/drivers/media/usb/stk1160/stk1160-core.c
+@@ -75,7 +75,7 @@ int stk1160_read_reg(struct stk1160 *dev
+ 		return -ENOMEM;
+ 	ret = usb_control_msg(dev->udev, pipe, 0x00,
+ 			USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+-			0x00, reg, buf, sizeof(u8), HZ);
++			0x00, reg, buf, sizeof(u8), 1000);
+ 	if (ret < 0) {
+ 		stk1160_err("read failed on reg 0x%x (%d)\n",
+ 			reg, ret);
+@@ -95,7 +95,7 @@ int stk1160_write_reg(struct stk1160 *de
  
-+	hid_data->cc_report = 0;
-+	hid_data->cc_index = -1;
-+	hid_data->cc_value_index = -1;
-+
- 	for (i = 0; i < report->maxfield; i++) {
- 		struct hid_field *field = report->field[i];
- 		int j;
+ 	ret =  usb_control_msg(dev->udev, pipe, 0x01,
+ 			USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+-			value, reg, NULL, 0, HZ);
++			value, reg, NULL, 0, 1000);
+ 	if (ret < 0) {
+ 		stk1160_err("write failed on reg 0x%x (%d)\n",
+ 			reg, ret);
 
 

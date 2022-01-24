@@ -2,42 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B5E499E9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:09:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7BD49A0CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1836605AbiAXWkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:40:18 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52096 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457434AbiAXVlj (ORCPT
+        id S1847815AbiAXXUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:20:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1584592AbiAXWV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:41:39 -0500
+        Mon, 24 Jan 2022 17:21:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD58C0424E5;
+        Mon, 24 Jan 2022 12:51:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EC971B8121C;
-        Mon, 24 Jan 2022 21:41:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59FE3C340E4;
-        Mon, 24 Jan 2022 21:41:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3B0E60B21;
+        Mon, 24 Jan 2022 20:51:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFE9AC340E5;
+        Mon, 24 Jan 2022 20:51:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060496;
-        bh=QQYbblQ35leF5mIDeINDGQFfwan87gWS7LaQi2QXxZI=;
+        s=korg; t=1643057516;
+        bh=Q+kbtrSzN3sW0F+y05oRP18A4WGq9IVLlwKWgshlVIM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xC5WVIK8pP/qk/JZV2filScwsAFq1NL7Ail9Nbm0hdyks/GUzkUEO1yvJfF0DEctd
-         RnNqfyffKmu8/2QS1GMhbpuNhYcKtqzUHu4rBnKDaRj1SC0wd9askaPFiclmnLv5Z0
-         RpRNjv+KK6jDVsLOEjR2T548foj+VSYRJQ3q2W14=
+        b=OC5Ph9KqbvZXiXJNLoEYuP2OVy20E9wYr1qyWP6YNAVBb4KHb5QGqVriWNiIK0KUc
+         wIYFNhnVrLzktdm2PgMLijp7CJXfFsphI0gpj3FFaaR7DLu/90L0PAeoU3qTiCc4fq
+         tiQBB12GqWw9SejtIhQqin28R57q7wkA3nbS+mCI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.16 0967/1039] net: axienet: increase reset timeout
+        stable@vger.kernel.org,
+        Alexander Stein <alexander.stein@mailbox.org>,
+        Rob Herring <robh@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH 5.15 839/846] dt-bindings: display: meson-vpu: Add missing amlogic,canvas property
 Date:   Mon, 24 Jan 2022 19:45:56 +0100
-Message-Id: <20220124184157.789743232@linuxfoundation.org>
+Message-Id: <20220124184129.847445968@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,58 +51,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Alexander Stein <alexander.stein@mailbox.org>
 
-commit 2e5644b1bab2ccea9cfc7a9520af95b94eb0dbf1 upstream.
+commit 640f35b871d29cd685ce0ea0762636381beeb98a upstream.
 
-The previous timeout of 1ms was too short to handle some cases where the
-core is reset just after the input clocks were started, which will
-be introduced in an upcoming patch. Increase the timeout to 50ms. Also
-simplify the reset timeout checking to use read_poll_timeout.
+This property was already mentioned in the old textual bindings
+amlogic,meson-vpu.txt, but got dropped during conversion.
+Adding it back similar to amlogic,gx-vdec.yaml.
 
-Fixes: 8a3b7a252dca9 ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 6b9ebf1e0e67 ("dt-bindings: display: amlogic, meson-vpu: convert to yaml")
+Signed-off-by: Alexander Stein <alexander.stein@mailbox.org>
+Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211219094155.177206-1-alexander.stein@mailbox.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/xilinx/xilinx_axienet_main.c |   19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ Documentation/devicetree/bindings/display/amlogic,meson-vpu.yaml |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-@@ -496,7 +496,8 @@ static void axienet_setoptions(struct ne
+--- a/Documentation/devicetree/bindings/display/amlogic,meson-vpu.yaml
++++ b/Documentation/devicetree/bindings/display/amlogic,meson-vpu.yaml
+@@ -78,6 +78,10 @@ properties:
+   interrupts:
+     maxItems: 1
  
- static int __axienet_device_reset(struct axienet_local *lp)
- {
--	u32 timeout;
-+	u32 value;
-+	int ret;
++  amlogic,canvas:
++    description: should point to a canvas provider node
++    $ref: /schemas/types.yaml#/definitions/phandle
++
+   power-domains:
+     maxItems: 1
+     description: phandle to the associated power domain
+@@ -106,6 +110,7 @@ required:
+   - port@1
+   - "#address-cells"
+   - "#size-cells"
++  - amlogic,canvas
  
- 	/* Reset Axi DMA. This would reset Axi Ethernet core as well. The reset
- 	 * process of Axi DMA takes a while to complete as all pending
-@@ -506,15 +507,13 @@ static int __axienet_device_reset(struct
- 	 * they both reset the entire DMA core, so only one needs to be used.
- 	 */
- 	axienet_dma_out32(lp, XAXIDMA_TX_CR_OFFSET, XAXIDMA_CR_RESET_MASK);
--	timeout = DELAY_OF_ONE_MILLISEC;
--	while (axienet_dma_in32(lp, XAXIDMA_TX_CR_OFFSET) &
--				XAXIDMA_CR_RESET_MASK) {
--		udelay(1);
--		if (--timeout == 0) {
--			netdev_err(lp->ndev, "%s: DMA reset timeout!\n",
--				   __func__);
--			return -ETIMEDOUT;
--		}
-+	ret = read_poll_timeout(axienet_dma_in32, value,
-+				!(value & XAXIDMA_CR_RESET_MASK),
-+				DELAY_OF_ONE_MILLISEC, 50000, false, lp,
-+				XAXIDMA_TX_CR_OFFSET);
-+	if (ret) {
-+		dev_err(lp->dev, "%s: DMA reset timeout!\n", __func__);
-+		return ret;
- 	}
+ additionalProperties: false
  
- 	return 0;
+@@ -118,6 +123,7 @@ examples:
+         interrupts = <3>;
+         #address-cells = <1>;
+         #size-cells = <0>;
++        amlogic,canvas = <&canvas>;
+ 
+         /* CVBS VDAC output port */
+         port@0 {
 
 

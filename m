@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD893499512
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:08:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B0E499BFE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392173AbiAXUuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:50:35 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34284 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383079AbiAXU0r (ORCPT
+        id S1573904AbiAXV6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:58:41 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:39294 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358044AbiAXVQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:26:47 -0500
+        Mon, 24 Jan 2022 16:16:31 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B57AB8123D;
-        Mon, 24 Jan 2022 20:26:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C819C340E5;
-        Mon, 24 Jan 2022 20:26:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2671F61484;
+        Mon, 24 Jan 2022 21:16:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32A19C340E4;
+        Mon, 24 Jan 2022 21:16:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056004;
-        bh=NT3dQlqn3L5kXWshF8v8pQDahNIDvVSGsE62MASjpNo=;
+        s=korg; t=1643058988;
+        bh=0mn07Z63UB9WDnRDyK8KAWId9NRvMSa9a8fRkkhTd6s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x4sdZS08khVEPBxrL8Ho10vTv9/qFcq1OfjFaxK7112rstnZv+Nc1JQljUz9SfbPS
-         f/y3UKIahrMFojGLG848bxbRVuZ01ZySPSQb9JATTcFPrphYLe+r0wlFNKYCXOUCx1
-         ffYM2/cxYFOVSEvRSaSL92wZhhlhlsGfs8T3skYQ=
+        b=1WYYDxYIwiBdDKG44Ou6Nvzvyfc/WtxSYU0TSFcmgj8si2atExbXCzDyas8Z9Edko
+         Yiv6cWVRhBRpyhvVTqLA8/ex552bWcTgT2RKy6P/VyhyErwqgRlzxTzXz5Ev50lNoy
+         acwW6BC0LK94UTnmh4ZKyJXdL9jWinfpQSFge9uY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maor Dickman <maord@nvidia.com>,
-        Roi Dayan <roid@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 339/846] net/mlx5e: Dont block routes with nexthop objects in SW
+Subject: [PATCH 5.16 0467/1039] ALSA: usb-audio: Drop superfluous 0 in Presonus Studio 1810cs ID
 Date:   Mon, 24 Jan 2022 19:37:36 +0100
-Message-Id: <20220124184112.612659954@linuxfoundation.org>
+Message-Id: <20220124184140.976598511@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,46 +45,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maor Dickman <maord@nvidia.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 9e72a55a3c9d54b38a704bb7292d984574a81d9d ]
+[ Upstream commit 1e583aef12aa74afd37c1418255cc4b74e023236 ]
 
-Routes with nexthop objects is currently not supported by multipath offload
-and any attempts to use it is blocked, however this also block adding SW
-routes with nexthop.
+The vendor ID of Presonus Studio 1810c had a superfluous '0' in its
+USB ID.  Drop it.
 
-Resolve this by returning NOTIFY_DONE instead of an error which will allow such
-a route to be created in SW but not offloaded.
-
-This fix also solve an issue which block adding such routes on different devices
-due to missing check if the route FIB device is one of multipath devices.
-
-Fixes: 6a87afc072c3 ("mlx5: Fail attempts to use routes with nexthop objects")
-Signed-off-by: Maor Dickman <maord@nvidia.com>
-Reviewed-by: Roi Dayan <roid@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Fixes: 8dc5efe3d17c ("ALSA: usb-audio: Add support for Presonus Studio 1810c")
+Link: https://lore.kernel.org/r/20211202083833.17784-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/lag_mp.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ sound/usb/format.c       | 2 +-
+ sound/usb/mixer_quirks.c | 2 +-
+ sound/usb/quirks.c       | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.c b/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.c
-index 21fdaf708f1fe..30282d86e6b96 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.c
-@@ -268,10 +268,8 @@ static int mlx5_lag_fib_event(struct notifier_block *nb,
- 		fen_info = container_of(info, struct fib_entry_notifier_info,
- 					info);
- 		fi = fen_info->fi;
--		if (fi->nh) {
--			NL_SET_ERR_MSG_MOD(info->extack, "IPv4 route with nexthop objects is not supported");
--			return notifier_from_errno(-EINVAL);
--		}
-+		if (fi->nh)
-+			return NOTIFY_DONE;
- 		fib_dev = fib_info_nh(fen_info->fi, 0)->fib_nh_dev;
- 		if (fib_dev != ldev->pf[MLX5_LAG_P1].netdev &&
- 		    fib_dev != ldev->pf[MLX5_LAG_P2].netdev) {
+diff --git a/sound/usb/format.c b/sound/usb/format.c
+index f5e676a51b30d..405dc0bf6678c 100644
+--- a/sound/usb/format.c
++++ b/sound/usb/format.c
+@@ -375,7 +375,7 @@ static int parse_uac2_sample_rate_range(struct snd_usb_audio *chip,
+ 		for (rate = min; rate <= max; rate += res) {
+ 
+ 			/* Filter out invalid rates on Presonus Studio 1810c */
+-			if (chip->usb_id == USB_ID(0x0194f, 0x010c) &&
++			if (chip->usb_id == USB_ID(0x194f, 0x010c) &&
+ 			    !s1810c_valid_sample_rate(fp, rate))
+ 				goto skip_rate;
+ 
+diff --git a/sound/usb/mixer_quirks.c b/sound/usb/mixer_quirks.c
+index 823b6b8de942d..d48729e6a3b0a 100644
+--- a/sound/usb/mixer_quirks.c
++++ b/sound/usb/mixer_quirks.c
+@@ -3254,7 +3254,7 @@ int snd_usb_mixer_apply_create_quirk(struct usb_mixer_interface *mixer)
+ 		err = snd_rme_controls_create(mixer);
+ 		break;
+ 
+-	case USB_ID(0x0194f, 0x010c): /* Presonus Studio 1810c */
++	case USB_ID(0x194f, 0x010c): /* Presonus Studio 1810c */
+ 		err = snd_sc1810_init_mixer(mixer);
+ 		break;
+ 	case USB_ID(0x2a39, 0x3fb0): /* RME Babyface Pro FS */
+diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
+index 64e1c20311ed4..ab9f3da49941f 100644
+--- a/sound/usb/quirks.c
++++ b/sound/usb/quirks.c
+@@ -1290,7 +1290,7 @@ int snd_usb_apply_interface_quirk(struct snd_usb_audio *chip,
+ 	if (chip->usb_id == USB_ID(0x0763, 0x2012))
+ 		return fasttrackpro_skip_setting_quirk(chip, iface, altno);
+ 	/* presonus studio 1810c: skip altsets incompatible with device_setup */
+-	if (chip->usb_id == USB_ID(0x0194f, 0x010c))
++	if (chip->usb_id == USB_ID(0x194f, 0x010c))
+ 		return s1810c_skip_setting_quirk(chip, iface, altno);
+ 
+ 
 -- 
 2.34.1
 

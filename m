@@ -2,128 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 115D149A196
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:38:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2806149A160
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:36:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386442AbiAXXhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:37:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1841661AbiAXW7m (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:59:42 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CA0C09D301
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 13:13:22 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id w190so11081170pfw.7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 13:13:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=f3UlEdUBM1gGXgQtpyjWqPmUgqNBHNEo7AYSujAnzt8=;
-        b=ASZXLuYtwDROEgcIql1Nl9Ws1AgZNwkzQcx2Vd7Dl4Ja8wgqd2SCDYU1Lv3CfdNgcm
-         RqcE161FTzk7PBk1wj71vYLCHXVPpQqbeLpwVkGqZRTyvO0mDvmpHZOGkIHe6ozDgD1m
-         qsJiipP7bqHZuHdfgjBF9Lf+GTA9O6mD3RJcQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=f3UlEdUBM1gGXgQtpyjWqPmUgqNBHNEo7AYSujAnzt8=;
-        b=jN6KWKerBdbtSfZ54RjK1+4U46doIVc6U756SKxr55oaCgtv7MjpLvuHlWfkqQ1fSm
-         qAcuGskEVkqFYTq0NQRvBAKKP3FXPwkjOB9dvHQB5dUcwc9RRqZLdjnxzjwxU5Ji4Tu5
-         skrGyDJAOUdGHHopwx4u0exy8HXaPTiabzIB8/UdNbPVHNeZATogVxjMtifR68LEy5F4
-         C0ode9rgsfihl+q7FtfCokVgkOE8SsomAb15VjjEiiw1eN4j4P0X+R7mUB2VY6gj7mST
-         3Ft0Psy4cyTv0rhV2R6qeGbuGsOvtl/sjdoGL6948geGtHGWr8MqbkJ9J/H0MhjKWGY1
-         zKAg==
-X-Gm-Message-State: AOAM531d54hO4FTxjpmd5FTncBnEKoHplma5k/0/UOkKPKUzlvID8guR
-        tcGkpJREHKpLs5tavlBKNWI3Bg==
-X-Google-Smtp-Source: ABdhPJwNR8Srqfc5OKBWmgOPvjXN/k1hIU5fnLL8J2NRnIxMn/bXsovf8HYlGXqHUpXfdjm8l8a8uQ==
-X-Received: by 2002:a63:9549:: with SMTP id t9mr13051175pgn.107.1643058801876;
-        Mon, 24 Jan 2022 13:13:21 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id p21sm2905353pfh.89.2022.01.24.13.13.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 13:13:21 -0800 (PST)
-Date:   Mon, 24 Jan 2022 13:13:20 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Keith Busch <kbusch@kernel.org>, Len Baker <len.baker@gmx.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 1/2] overflow: Implement size_t saturating arithmetic
- helpers
-Message-ID: <202201241237.C82267B66C@keescook>
-References: <20210920180853.1825195-1-keescook@chromium.org>
- <20210920180853.1825195-2-keescook@chromium.org>
- <aa42ebfa-03b8-93fa-e036-a7507397d0dc@rasmusvillemoes.dk>
+        id S1581137AbiAXXdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:33:31 -0500
+Received: from ip-8.mailobj.net ([213.182.54.8]:48906 "EHLO msg-3.mailo.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1579906AbiAXWoW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 17:44:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
+        t=1643059589; bh=54RnD92bAJU4pAPNS9Sc0PUtURd58AnU1lq5f8mSq0o=;
+        h=X-EA-Auth:From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:
+         References:MIME-Version:Content-Transfer-Encoding;
+        b=amdx8wyBUCBjoglJR01MufzVt32XU7Dx8dzIarK3/TGz3hSzmzbl3xCo7w1Hx/EB9
+         nfE0ZfayYwe7ealflPNy6uTNhDI7jljUhY4AOgE8zl2p3DKQjlVGN0p8S10DZZ+cb/
+         nvDJ2fjgkmZO7Fu+A4ZJrrnPbTWNxQqa6vE8wwYg=
+Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
+        via proxy.mailoo.org [213.182.55.207]
+        Mon, 24 Jan 2022 22:26:29 +0100 (CET)
+X-EA-Auth: XCU+AnyKLeXrETXExlh+i2lX5Csw3PNEN52rptVdlTieqmilxJuXpKiSU1XsBlYjcHEnmbtSbu44q/y+O1+g25KtJXYgnjB/FAL4tAAYVYQ=
+From:   Vincent Knecht <vincent.knecht@mailoo.org>
+To:     dmitry.torokhov@gmail.com, stephan@gerhold.net
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Vincent Knecht <vincent.knecht@mailoo.org>
+Subject: [PATCH v2 1/5] Input: msg2638 - Set max finger number and irqhandler from driver data
+Date:   Mon, 24 Jan 2022 22:26:07 +0100
+Message-Id: <20220124212611.752603-2-vincent.knecht@mailoo.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220124212611.752603-1-vincent.knecht@mailoo.org>
+References: <20220124212611.752603-1-vincent.knecht@mailoo.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aa42ebfa-03b8-93fa-e036-a7507397d0dc@rasmusvillemoes.dk>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-*thread necromancy*
+This will allow us to add other MStar touchscreen variants' support.
+No functional change.
 
-On Tue, Sep 21, 2021 at 08:51:53AM +0200, Rasmus Villemoes wrote:
-> Not that I can see that the __must_check matters much for these anyway;
-> if anybody does
-> 
->   size_mul(foo, bar);
-> 
-> that's just a statement with no side effects, so probably the compiler
-> would warn anyway, or at least nobody can then go on to do anything
-> "wrong". Unlike the check_*_overflow(), which have the (possibly
-> wrapped) result in a output-pointer and the "did it overflow" as the
-> return value, so you can do
-> 
->   check_mul_overflow(a, b, &d);
->   do_stuff_with(d);
-> 
-> were it not for the __must_check wrapper.
-> 
-> [Reminder: __must_check is a bit of a misnomer, the attribute is really
-> warn_unused_result, and there's no requirement that the result is part
-> of the controlling expression of an if() or while() - just passing the
-> result on directly to some other function counts as a "use", which is
-> indeed what we do with the size wrappers.]
+Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
+---
+v2:
+- no change
+---
+ drivers/input/touchscreen/msg2638.c | 40 +++++++++++++++++++++--------
+ 1 file changed, 30 insertions(+), 10 deletions(-)
 
-What I'd really like is a "store this in a size_t" check to catch dumb
-storage size problems (or related overflows). In other words:
-
-size_t big1 = 2147483647;
-size_t big2 = 2147483647;
-
-/* Doesn't overflow, but 4611686014132420609 becomes a 1 for int */
-int size = size_mul(big1, big2);
-...
-ptr = kmalloc(size, GFP_KERNEL); /* Allocates a 1 instead... */
-
-I could solve this but removing the assignment, but then I can't compose
-calls:
-
-static inline size_t __size_mul(size_t f1, size_t f2)
-{
-	size_t out;
-	if (check_mul_overflow(f1, f2, &out))
-		out = SIZE_MAX;
-	return out;
-}
-
-#define size_mul(f1, f2, out) do { \
-	BUILD_BUG_ON(!__same_type(out, size_t)); \
-	out = __size_mul(f1, f2); \
-} while (0)
-
-i.e. now I can't do size_mul(size_add(...), size_add(...))
-
-Better would be to build the entire kernel with -Wconversion. :)
-
+diff --git a/drivers/input/touchscreen/msg2638.c b/drivers/input/touchscreen/msg2638.c
+index 75536bc88969..222adedf78bf 100644
+--- a/drivers/input/touchscreen/msg2638.c
++++ b/drivers/input/touchscreen/msg2638.c
+@@ -26,23 +26,28 @@
+ 
+ #define MODE_DATA_RAW			0x5A
+ 
+-#define MAX_SUPPORTED_FINGER_NUM	5
++#define MSG2638_MAX_FINGERS		5
+ 
+ #define CHIP_ON_DELAY_MS		15
+ #define FIRMWARE_ON_DELAY_MS		50
+ #define RESET_DELAY_MIN_US		10000
+ #define RESET_DELAY_MAX_US		11000
+ 
+-struct packet {
++struct msg_chip_data {
++	irq_handler_t irq_handler;
++	unsigned int max_fingers;
++};
++
++struct msg2638_packet {
+ 	u8	xy_hi; /* higher bits of x and y coordinates */
+ 	u8	x_low;
+ 	u8	y_low;
+ 	u8	pressure;
+ };
+ 
+-struct touch_event {
++struct msg2638_touch_event {
+ 	u8	mode;
+-	struct	packet pkt[MAX_SUPPORTED_FINGER_NUM];
++	struct	msg2638_packet pkt[MSG2638_MAX_FINGERS];
+ 	u8	proximity;
+ 	u8	checksum;
+ };
+@@ -53,6 +58,7 @@ struct msg2638_ts_data {
+ 	struct touchscreen_properties prop;
+ 	struct regulator_bulk_data supplies[2];
+ 	struct gpio_desc *reset_gpiod;
++	int max_fingers;
+ };
+ 
+ static u8 msg2638_checksum(u8 *data, u32 length)
+@@ -71,7 +77,7 @@ static irqreturn_t msg2638_ts_irq_handler(int irq, void *msg2638_handler)
+ 	struct msg2638_ts_data *msg2638 = msg2638_handler;
+ 	struct i2c_client *client = msg2638->client;
+ 	struct input_dev *input = msg2638->input_dev;
+-	struct touch_event touch_event;
++	struct msg2638_touch_event touch_event;
+ 	u32 len = sizeof(touch_event);
+ 	struct i2c_msg msg[] = {
+ 		{
+@@ -81,7 +87,7 @@ static irqreturn_t msg2638_ts_irq_handler(int irq, void *msg2638_handler)
+ 			.buf	= (u8 *)&touch_event,
+ 		},
+ 	};
+-	struct packet *p;
++	struct msg2638_packet *p;
+ 	u16 x, y;
+ 	int ret;
+ 	int i;
+@@ -103,7 +109,7 @@ static irqreturn_t msg2638_ts_irq_handler(int irq, void *msg2638_handler)
+ 		goto out;
+ 	}
+ 
+-	for (i = 0; i < MAX_SUPPORTED_FINGER_NUM; i++) {
++	for (i = 0; i < msg2638->max_fingers; i++) {
+ 		p = &touch_event.pkt[i];
+ 
+ 		/* Ignore non-pressed finger data */
+@@ -215,7 +221,7 @@ static int msg2638_init_input_dev(struct msg2638_ts_data *msg2638)
+ 		return -EINVAL;
+ 	}
+ 
+-	error = input_mt_init_slots(input_dev, MAX_SUPPORTED_FINGER_NUM,
++	error = input_mt_init_slots(input_dev, msg2638->max_fingers,
+ 				    INPUT_MT_DIRECT | INPUT_MT_DROP_UNUSED);
+ 	if (error) {
+ 		dev_err(dev, "Failed to initialize MT slots: %d\n", error);
+@@ -233,6 +239,7 @@ static int msg2638_init_input_dev(struct msg2638_ts_data *msg2638)
+ 
+ static int msg2638_ts_probe(struct i2c_client *client)
+ {
++	const struct msg_chip_data *chip_data;
+ 	struct device *dev = &client->dev;
+ 	struct msg2638_ts_data *msg2638;
+ 	int error;
+@@ -249,6 +256,14 @@ static int msg2638_ts_probe(struct i2c_client *client)
+ 	msg2638->client = client;
+ 	i2c_set_clientdata(client, msg2638);
+ 
++	chip_data = device_get_match_data(&client->dev);
++	if (!chip_data || !chip_data->max_fingers) {
++		dev_err(dev, "Invalid or missing chip data\n");
++		return -EINVAL;
++	}
++
++	msg2638->max_fingers = chip_data->max_fingers;
++
+ 	msg2638->supplies[0].supply = "vdd";
+ 	msg2638->supplies[1].supply = "vddio";
+ 	error = devm_regulator_bulk_get(dev, ARRAY_SIZE(msg2638->supplies),
+@@ -272,7 +287,7 @@ static int msg2638_ts_probe(struct i2c_client *client)
+ 	}
+ 
+ 	error = devm_request_threaded_irq(dev, client->irq,
+-					  NULL, msg2638_ts_irq_handler,
++					  NULL, chip_data->irq_handler,
+ 					  IRQF_ONESHOT | IRQF_NO_AUTOEN,
+ 					  client->name, msg2638);
+ 	if (error) {
+@@ -316,8 +331,13 @@ static int __maybe_unused msg2638_resume(struct device *dev)
+ 
+ static SIMPLE_DEV_PM_OPS(msg2638_pm_ops, msg2638_suspend, msg2638_resume);
+ 
++static const struct msg_chip_data msg2638_data = {
++	.irq_handler = msg2638_ts_irq_handler,
++	.max_fingers = MSG2638_MAX_FINGERS,
++};
++
+ static const struct of_device_id msg2638_of_match[] = {
+-	{ .compatible = "mstar,msg2638" },
++	{ .compatible = "mstar,msg2638", .data = &msg2638_data },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, msg2638_of_match);
 -- 
-Kees Cook
+2.34.1
+
+
+

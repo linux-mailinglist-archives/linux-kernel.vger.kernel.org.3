@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E859749A0A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F6849A0C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1846408AbiAXXPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:15:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36728 "EHLO
+        id S1356923AbiAXXTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:19:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1584735AbiAXWVj (ORCPT
+        with ESMTP id S1584689AbiAXWVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:21:39 -0500
+        Mon, 24 Jan 2022 17:21:33 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFD6C054303;
-        Mon, 24 Jan 2022 12:53:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48013C041882;
+        Mon, 24 Jan 2022 12:52:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0516AB811FB;
-        Mon, 24 Jan 2022 20:53:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EC66C36AE2;
-        Mon, 24 Jan 2022 20:53:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04579B80CCF;
+        Mon, 24 Jan 2022 20:52:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E942C36AE3;
+        Mon, 24 Jan 2022 20:52:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057587;
-        bh=xnUn7jNRsQgFINae2Fala1LuQT7IMhQfr7FYju3KQAc=;
+        s=korg; t=1643057571;
+        bh=uDUAb+qZBHXld3qkmkZnFDhDfgMIF+C1eIkgRfrPvD4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dGlzzuTNSt1IwoJ7HbD9sEcqcMDWVluwANkOfdqZ57tINOdLIqopiDZzd1ZxfcCdN
-         Qc2j5ZHDvIg7cdSSD6cZmObTVFCMKhI4/j42hYA81e1aUdplb98YZqP8YbT08/ZyqJ
-         /0nhEZHJN0nx4OISSjmtDVihAFyEq3LDeCns3tjM=
+        b=UmJbyc5VqwfYgT8jI0xcQRz58kmNnPh4O44QkvDnf+y2Zv3/jfEgPzeFAS2JpQZcI
+         cNe1CplXU58HRALIM+SSju3j9OPWnJjLuqROz6WPNdO2HtTi8OPSGAB5bqeHZJe9BQ
+         bAXbWyn5pDNLm9VCrG4s0GgicMH6q3nC6QGPBo+c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jason Gerecke <jason.gerecke@wacom.com>,
-        Ping Cheng <ping.cheng@wacom.com>,
-        Jiri Kosina <jkosina@suse.cz>
-Subject: [PATCH 5.16 0005/1039] HID: wacom: Reset expected and received contact counts at the same time
-Date:   Mon, 24 Jan 2022 19:29:54 +0100
-Message-Id: <20220124184125.320093581@linuxfoundation.org>
+        stable@vger.kernel.org, Wenqing Liu <wenqingliu0120@gmail.com>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 5.16 0010/1039] f2fs: fix to do sanity check on inode type during garbage collection
+Date:   Mon, 24 Jan 2022 19:29:59 +0100
+Message-Id: <20220124184125.486229792@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -49,70 +48,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason Gerecke <killertofu@gmail.com>
+From: Chao Yu <chao@kernel.org>
 
-commit 546e41ac994cc185ef3de610ca849a294b5df3ba upstream.
+commit 9056d6489f5a41cfbb67f719d2c0ce61ead72d9f upstream.
 
-These two values go hand-in-hand and must be valid for the driver to
-behave correctly. We are currently lazy about updating the values and
-rely on the "expected" code flow to take care of making sure they're
-valid at the point they're needed. The "expected" flow changed somewhat
-with commit f8b6a74719b5 ("HID: wacom: generic: Support multiple tools
-per report"), however. This led to problems with the DTH-2452 due (in
-part) to *all* contacts being fully processed -- even those past the
-expected contact count. Specifically, the received count gets reset to
-0 once all expected fingers are processed, but not the expected count.
-The rest of the contacts in the report are then *also* processed since
-now the driver thinks we've only processed 0 of N expected contacts.
+As report by Wenqing Liu in bugzilla:
 
-Later commits such as 7fb0413baa7f (HID: wacom: Use "Confidence" flag to
-prevent reporting invalid contacts) worked around the DTH-2452 issue by
-skipping the invalid contacts at the end of the report, but this is not
-a complete fix. The confidence flag cannot be relied on when a contact
-is removed (see the following patch), and dealing with that condition
-re-introduces the DTH-2452 issue unless we also address this contact
-count laziness. By resetting expected and received counts at the same
-time we ensure the driver understands that there are 0 more contacts
-expected in the report. Similarly, we also make sure to reset the
-received count if for some reason we're out of sync in the pre-report
-phase.
+https://bugzilla.kernel.org/show_bug.cgi?id=215231
 
-Link: https://github.com/linuxwacom/input-wacom/issues/288
-Fixes: f8b6a74719b5 ("HID: wacom: generic: Support multiple tools per report")
-CC: stable@vger.kernel.org
-Signed-off-by: Jason Gerecke <jason.gerecke@wacom.com>
-Reviewed-by: Ping Cheng <ping.cheng@wacom.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+- Overview
+kernel NULL pointer dereference triggered  in folio_mark_dirty() when mount and operate on a crafted f2fs image
+
+- Reproduce
+tested on kernel 5.16-rc3, 5.15.X under root
+
+1. mkdir mnt
+2. mount -t f2fs tmp1.img mnt
+3. touch tmp
+4. cp tmp mnt
+
+F2FS-fs (loop0): sanity_check_inode: inode (ino=49) extent info [5942, 4294180864, 4] is incorrect, run fsck to fix
+F2FS-fs (loop0): f2fs_check_nid_range: out-of-range nid=31340049, run fsck to fix.
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+ folio_mark_dirty+0x33/0x50
+ move_data_page+0x2dd/0x460 [f2fs]
+ do_garbage_collect+0xc18/0x16a0 [f2fs]
+ f2fs_gc+0x1d3/0xd90 [f2fs]
+ f2fs_balance_fs+0x13a/0x570 [f2fs]
+ f2fs_create+0x285/0x840 [f2fs]
+ path_openat+0xe6d/0x1040
+ do_filp_open+0xc5/0x140
+ do_sys_openat2+0x23a/0x310
+ do_sys_open+0x57/0x80
+
+The root cause is for special file: e.g. character, block, fifo or socket file,
+f2fs doesn't assign address space operations pointer array for mapping->a_ops field,
+so, in a fuzzed image, SSA table indicates a data block belong to special file, when
+f2fs tries to migrate that block, it causes NULL pointer access once move_data_page()
+calls a_ops->set_dirty_page().
+
+Cc: stable@vger.kernel.org
+Reported-by: Wenqing Liu <wenqingliu0120@gmail.com>
+Signed-off-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/wacom_wac.c |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ fs/f2fs/gc.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/hid/wacom_wac.c
-+++ b/drivers/hid/wacom_wac.c
-@@ -2692,11 +2692,14 @@ static void wacom_wac_finger_pre_report(
- 	    hid_data->cc_index >= 0) {
- 		struct hid_field *field = report->field[hid_data->cc_index];
- 		int value = field->value[hid_data->cc_value_index];
--		if (value)
-+		if (value) {
- 			hid_data->num_expected = value;
-+			hid_data->num_received = 0;
-+		}
- 	}
- 	else {
- 		hid_data->num_expected = wacom_wac->features.touch_max;
-+		hid_data->num_received = 0;
- 	}
- }
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1457,7 +1457,8 @@ next_step:
  
-@@ -2724,6 +2727,7 @@ static void wacom_wac_finger_report(stru
+ 		if (phase == 3) {
+ 			inode = f2fs_iget(sb, dni.ino);
+-			if (IS_ERR(inode) || is_bad_inode(inode))
++			if (IS_ERR(inode) || is_bad_inode(inode) ||
++					special_file(inode->i_mode))
+ 				continue;
  
- 	input_sync(input);
- 	wacom_wac->hid_data.num_received = 0;
-+	wacom_wac->hid_data.num_expected = 0;
- 
- 	/* keep touch state for pen event */
- 	wacom_wac->shared->touch_down = wacom_wac_finger_count_touches(wacom_wac);
+ 			if (!down_write_trylock(
 
 

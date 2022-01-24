@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA3949A0D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D55499DFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1847978AbiAXXV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:21:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1582430AbiAXWPT (ORCPT
+        id S1587170AbiAXW1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:27:52 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46694 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1454734AbiAXVdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:15:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082C9C0E2631;
-        Mon, 24 Jan 2022 12:44:21 -0800 (PST)
+        Mon, 24 Jan 2022 16:33:31 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DD8D60B21;
-        Mon, 24 Jan 2022 20:44:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 805EEC340EA;
-        Mon, 24 Jan 2022 20:44:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06320B81057;
+        Mon, 24 Jan 2022 21:33:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 380ECC340E4;
+        Mon, 24 Jan 2022 21:33:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057060;
-        bh=uAlWWnbqersf2Iz6eORks7ljC27rMrLewZjq8ZOs8Hw=;
+        s=korg; t=1643060008;
+        bh=7OxJk9zzdj4xIrQaDWWQlHUaJmsfEp+0ewrq52q3dwQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2fxmw28WAXAfLg7yFrcRxFyZ34EGtKmd/K9j+vUhL8nAfY0OESrfsanBrDHvkDDwC
-         Yz/aWwF0pSzGRyJ452Nhum41yAbc8HT+TI7LyajBOiv9/poAXBHo4B9qJ1jZoQCHFO
-         hmrTIcN10k3p3g4H3V9MFGO4GXKT+rYjcs0rMC2U=
+        b=SCxHRnJphGOsgIL8RQBFCmTPaf+otoHnubVjKI9dlYZsE6VHKTWkWrNcZ5eQ5qsfq
+         VMjBSQeOhZQul+mFnIIimqYY7rNAZ7G8cCNVCxIO7bj1iO2CroMrCbYq5fz2CT2eXg
+         VPRy+/O9LqtfGSPEjhlY+JGs1VJyGNQT7reZYqzk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rafael Gago Castano <rgc@hms.se>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Su Bao Cheng <baocheng.su@siemens.com>,
-        Lukas Wunner <lukas@wunner.de>
-Subject: [PATCH 5.15 681/846] serial: Fix incorrect rs485 polarity on uart open
+        stable@vger.kernel.org, Rick Macklem <rmacklem@uoguelph.ca>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0809/1039] NFSD: Fix verifier returned in stable WRITEs
 Date:   Mon, 24 Jan 2022 19:43:18 +0100
-Message-Id: <20220124184124.566153384@linuxfoundation.org>
+Message-Id: <20220124184152.507995571@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,67 +46,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Wunner <lukas@wunner.de>
+From: Chuck Lever <chuck.lever@oracle.com>
 
-commit d3b3404df318504ec084213ab1065b73f49b0f1d upstream.
+[ Upstream commit f11ad7aa653130b71e2e89bed207f387718216d5 ]
 
-Commit a6845e1e1b78 ("serial: core: Consider rs485 settings to drive
-RTS") sought to deassert RTS when opening an rs485-enabled uart port.
-That way, the transceiver does not occupy the bus until it transmits
-data.
+RFC 8881 explains the purpose of the write verifier this way:
 
-Unfortunately, the commit mixed up the logic and *asserted* RTS instead
-of *deasserting* it:
+> The final portion of the result is the field writeverf. This field
+> is the write verifier and is a cookie that the client can use to
+> determine whether a server has changed instance state (e.g., server
+> restart) between a call to WRITE and a subsequent call to either
+> WRITE or COMMIT.
 
-The commit amended uart_port_dtr_rts(), which raises DTR and RTS when
-opening an rs232 port.  "Raising" actually means lowering the signal
-that's coming out of the uart, because an rs232 transceiver not only
-changes a signal's voltage level, it also *inverts* the signal.  See
-the simplified schematic in the MAX232 datasheet for an example:
-https://www.ti.com/lit/ds/symlink/max232.pdf
+But then it says:
 
-So, to raise RTS on an rs232 port, TIOCM_RTS is *set* in port->mctrl
-and that results in the signal being driven low.
+> This cookie MUST be unchanged during a single instance of the
+> NFSv4.1 server and MUST be unique between instances of the NFSv4.1
+> server. If the cookie changes, then the client MUST assume that
+> any data written with an UNSTABLE4 value for committed and an old
+> writeverf in the reply has been lost and will need to be
+> recovered.
 
-In contrast to rs232, the signal level for rs485 Transmit Enable is the
-identity, not the inversion:  If the transceiver expects a "high" RTS
-signal for Transmit Enable, the signal coming out of the uart must also
-be high, so TIOCM_RTS must be *cleared* in port->mctrl.
+RFC 1813 has similar language for NFSv3. NFSv2 does not have a write
+verifier since it doesn't implement the COMMIT procedure.
 
-The commit did the exact opposite, but it's easy to see why given the
-confusing semantics of rs232 and rs485.  Fix it.
+Since commit 19e0663ff9bc ("nfsd: Ensure sampling of the write
+verifier is atomic with the write"), the Linux NFS server has
+returned a boot-time-based verifier for UNSTABLE WRITEs, but a zero
+verifier for FILE_SYNC and DATA_SYNC WRITEs. FILE_SYNC and DATA_SYNC
+WRITEs are not followed up with a COMMIT, so there's no need for
+clients to compare verifiers for stable writes.
 
-Fixes: a6845e1e1b78 ("serial: core: Consider rs485 settings to drive RTS")
-Cc: stable@vger.kernel.org # v4.14+
-Cc: Rafael Gago Castano <rgc@hms.se>
-Cc: Jan Kiszka <jan.kiszka@siemens.com>
-Cc: Su Bao Cheng <baocheng.su@siemens.com>
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Link: https://lore.kernel.org/r/9395767847833f2f3193c49cde38501eeb3b5669.1639821059.git.lukas@wunner.de
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+However, by returning a different verifier for stable and unstable
+writes, the above commit puts the Linux NFS server a step farther
+out of compliance with the first MUST above. At least one NFS client
+(FreeBSD) noticed the difference, making this a potential
+regression.
+
+Reported-by: Rick Macklem <rmacklem@uoguelph.ca>
+Link: https://lore.kernel.org/linux-nfs/YQXPR0101MB096857EEACF04A6DF1FC6D9BDD749@YQXPR0101MB0968.CANPRD01.PROD.OUTLOOK.COM/T/
+Fixes: 19e0663ff9bc ("nfsd: Ensure sampling of the write verifier is atomic with the write")
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/serial_core.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/nfsd/vfs.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -162,7 +162,7 @@ static void uart_port_dtr_rts(struct uar
- 	int RTS_after_send = !!(uport->rs485.flags & SER_RS485_RTS_AFTER_SEND);
- 
- 	if (raise) {
--		if (rs485_on && !RTS_after_send) {
-+		if (rs485_on && RTS_after_send) {
- 			uart_set_mctrl(uport, TIOCM_DTR);
- 			uart_clear_mctrl(uport, TIOCM_RTS);
- 		} else {
-@@ -171,7 +171,7 @@ static void uart_port_dtr_rts(struct uar
- 	} else {
- 		unsigned int clear = TIOCM_DTR;
- 
--		clear |= (!rs485_on || !RTS_after_send) ? TIOCM_RTS : 0;
-+		clear |= (!rs485_on || RTS_after_send) ? TIOCM_RTS : 0;
- 		uart_clear_mctrl(uport, clear);
- 	}
- }
+diff --git a/fs/nfsd/vfs.c b/fs/nfsd/vfs.c
+index c99857689e2c2..7f2472e4b88f9 100644
+--- a/fs/nfsd/vfs.c
++++ b/fs/nfsd/vfs.c
+@@ -987,6 +987,10 @@ nfsd_vfs_write(struct svc_rqst *rqstp, struct svc_fh *fhp, struct nfsd_file *nf,
+ 	iov_iter_kvec(&iter, WRITE, vec, vlen, *cnt);
+ 	if (flags & RWF_SYNC) {
+ 		down_write(&nf->nf_rwsem);
++		if (verf)
++			nfsd_copy_boot_verifier(verf,
++					net_generic(SVC_NET(rqstp),
++					nfsd_net_id));
+ 		host_err = vfs_iter_write(file, &iter, &pos, flags);
+ 		if (host_err < 0)
+ 			nfsd_reset_boot_verifier(net_generic(SVC_NET(rqstp),
+-- 
+2.34.1
+
 
 

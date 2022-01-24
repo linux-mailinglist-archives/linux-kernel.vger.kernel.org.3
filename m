@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9214A498AB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D7C4992A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346245AbiAXTFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:05:14 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57104 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344474AbiAXS7b (ORCPT
+        id S1354266AbiAXUXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:23:02 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57884 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356460AbiAXUBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:59:31 -0500
+        Mon, 24 Jan 2022 15:01:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B3D2B81223;
-        Mon, 24 Jan 2022 18:59:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B64C340E5;
-        Mon, 24 Jan 2022 18:59:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA5146091B;
+        Mon, 24 Jan 2022 20:01:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8213DC340E5;
+        Mon, 24 Jan 2022 20:01:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050768;
-        bh=FOyqZlOeBq6u+MSMKyoUAfWpX/QM9j9Q1bEwVmshbS4=;
+        s=korg; t=1643054481;
+        bh=ttfyB81yNQlMenIPGF8dZQXmiBNmpBeJ8w+ZiOjs+5E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BEI8GBTbDswwxFN42t/MaJeiChfPsVMqkTG1pKirsx93MNXmEvTJsQ4tpisFj5kJU
-         ZkHIgADFQ0f37PQxrntwkoA1BWjN+VFuK2DiSdzs1FSiqrhcN4CrJqgkYzZwORON/i
-         tMOklyxb5ArWtazvGWfV/OmrsPn3SEgN4tG5K/g4=
+        b=QVobm+CrnqTJFJfcOo8leq2yvbbbC3sknlInPUL8l9/xi9BH90jkqcKJodLBdnrCS
+         Ylfid4tnaOoaN0DWGuNfNZd/g7GLiI6xIgqRe8sRyt6ZasDEf3g2rqr7g18dtosWx6
+         kHzCHdnqqiNoBDuGMpLjEFXV5RFyYaTAhKFIv9cw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 079/157] ARM: imx: rename DEBUG_IMX21_IMX27_UART to DEBUG_IMX27_UART
+Subject: [PATCH 5.10 404/563] serial: core: Keep mctrl register state and cached copy in sync
 Date:   Mon, 24 Jan 2022 19:42:49 +0100
-Message-Id: <20220124183935.290933240@linuxfoundation.org>
+Message-Id: <20220124184038.419766592@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,119 +45,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+From: Lukas Wunner <lukas@wunner.de>
 
-[ Upstream commit b0100bce4ff82ec1ccd3c1f3d339fd2df6a81784 ]
+[ Upstream commit 93a770b7e16772530196674ffc79bb13fa927dc6 ]
 
-Since commit 4b563a066611 ("ARM: imx: Remove imx21 support"), the config
-DEBUG_IMX21_IMX27_UART is really only debug support for IMX27.
+struct uart_port contains a cached copy of the Modem Control signals.
+It is used to skip register writes in uart_update_mctrl() if the new
+signal state equals the old signal state.  It also avoids a register
+read to obtain the current state of output signals.
 
-So, rename this option to DEBUG_IMX27_UART and adjust dependencies in
-Kconfig and rename the definitions to IMX27 as further clean-up.
+When a uart_port is registered, uart_configure_port() changes signal
+state but neglects to keep the cached copy in sync.  That may cause
+a subsequent register write to be incorrectly skipped.  Fix it before
+it trips somebody up.
 
-This issue was discovered with ./scripts/checkkconfigsymbols.py, which
-reported that DEBUG_IMX21_IMX27_UART depends on the non-existing config
-SOC_IMX21.
+This behavior has been present ever since the serial core was introduced
+in 2002:
+https://git.kernel.org/history/history/c/33c0d1b0c3eb
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+So far it was never an issue because the cached copy is initialized to 0
+by kzalloc() and when uart_configure_port() is executed, at most DTR has
+been set by uart_set_options() or sunsu_console_setup().  Therefore,
+a stable designation seems unnecessary.
+
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Link: https://lore.kernel.org/r/bceeaba030b028ed810272d55d5fc6f3656ddddb.1641129752.git.lukas@wunner.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/Kconfig.debug            | 14 +++++++-------
- arch/arm/include/debug/imx-uart.h | 18 +++++++++---------
- 2 files changed, 16 insertions(+), 16 deletions(-)
+ drivers/tty/serial/serial_core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
-index bb8f39fe3a225..8349a171a8f3c 100644
---- a/arch/arm/Kconfig.debug
-+++ b/arch/arm/Kconfig.debug
-@@ -341,12 +341,12 @@ choice
- 		  Say Y here if you want kernel low-level debugging support
- 		  on i.MX25.
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 046bedca7b8f5..55108db5b64bf 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -2414,7 +2414,8 @@ uart_configure_port(struct uart_driver *drv, struct uart_state *state,
+ 		 * We probably don't need a spinlock around this, but
+ 		 */
+ 		spin_lock_irqsave(&port->lock, flags);
+-		port->ops->set_mctrl(port, port->mctrl & TIOCM_DTR);
++		port->mctrl &= TIOCM_DTR;
++		port->ops->set_mctrl(port, port->mctrl);
+ 		spin_unlock_irqrestore(&port->lock, flags);
  
--	config DEBUG_IMX21_IMX27_UART
--		bool "i.MX21 and i.MX27 Debug UART"
--		depends on SOC_IMX21 || SOC_IMX27
-+	config DEBUG_IMX27_UART
-+		bool "i.MX27 Debug UART"
-+		depends on SOC_IMX27
- 		help
- 		  Say Y here if you want kernel low-level debugging support
--		  on i.MX21 or i.MX27.
-+		  on i.MX27.
- 
- 	config DEBUG_IMX28_UART
- 		bool "i.MX28 Debug UART"
-@@ -1350,7 +1350,7 @@ config DEBUG_IMX_UART_PORT
- 	int "i.MX Debug UART Port Selection"
- 	depends on DEBUG_IMX1_UART || \
- 		   DEBUG_IMX25_UART || \
--		   DEBUG_IMX21_IMX27_UART || \
-+		   DEBUG_IMX27_UART || \
- 		   DEBUG_IMX31_UART || \
- 		   DEBUG_IMX35_UART || \
- 		   DEBUG_IMX50_UART || \
-@@ -1403,12 +1403,12 @@ config DEBUG_LL_INCLUDE
- 	default "debug/icedcc.S" if DEBUG_ICEDCC
- 	default "debug/imx.S" if DEBUG_IMX1_UART || \
- 				 DEBUG_IMX25_UART || \
--				 DEBUG_IMX21_IMX27_UART || \
-+				 DEBUG_IMX27_UART || \
- 				 DEBUG_IMX31_UART || \
- 				 DEBUG_IMX35_UART || \
- 				 DEBUG_IMX50_UART || \
- 				 DEBUG_IMX51_UART || \
--				 DEBUG_IMX53_UART ||\
-+				 DEBUG_IMX53_UART || \
- 				 DEBUG_IMX6Q_UART || \
- 				 DEBUG_IMX6SL_UART || \
- 				 DEBUG_IMX6SX_UART || \
-diff --git a/arch/arm/include/debug/imx-uart.h b/arch/arm/include/debug/imx-uart.h
-index bce58e975ad1f..c750cc9876f6d 100644
---- a/arch/arm/include/debug/imx-uart.h
-+++ b/arch/arm/include/debug/imx-uart.h
-@@ -14,13 +14,6 @@
- #define IMX1_UART_BASE_ADDR(n)	IMX1_UART##n##_BASE_ADDR
- #define IMX1_UART_BASE(n)	IMX1_UART_BASE_ADDR(n)
- 
--#define IMX21_UART1_BASE_ADDR	0x1000a000
--#define IMX21_UART2_BASE_ADDR	0x1000b000
--#define IMX21_UART3_BASE_ADDR	0x1000c000
--#define IMX21_UART4_BASE_ADDR	0x1000d000
--#define IMX21_UART_BASE_ADDR(n)	IMX21_UART##n##_BASE_ADDR
--#define IMX21_UART_BASE(n)	IMX21_UART_BASE_ADDR(n)
--
- #define IMX25_UART1_BASE_ADDR	0x43f90000
- #define IMX25_UART2_BASE_ADDR	0x43f94000
- #define IMX25_UART3_BASE_ADDR	0x5000c000
-@@ -29,6 +22,13 @@
- #define IMX25_UART_BASE_ADDR(n)	IMX25_UART##n##_BASE_ADDR
- #define IMX25_UART_BASE(n)	IMX25_UART_BASE_ADDR(n)
- 
-+#define IMX27_UART1_BASE_ADDR	0x1000a000
-+#define IMX27_UART2_BASE_ADDR	0x1000b000
-+#define IMX27_UART3_BASE_ADDR	0x1000c000
-+#define IMX27_UART4_BASE_ADDR	0x1000d000
-+#define IMX27_UART_BASE_ADDR(n)	IMX27_UART##n##_BASE_ADDR
-+#define IMX27_UART_BASE(n)	IMX27_UART_BASE_ADDR(n)
-+
- #define IMX31_UART1_BASE_ADDR	0x43f90000
- #define IMX31_UART2_BASE_ADDR	0x43f94000
- #define IMX31_UART3_BASE_ADDR	0x5000c000
-@@ -115,10 +115,10 @@
- 
- #ifdef CONFIG_DEBUG_IMX1_UART
- #define UART_PADDR	IMX_DEBUG_UART_BASE(IMX1)
--#elif defined(CONFIG_DEBUG_IMX21_IMX27_UART)
--#define UART_PADDR	IMX_DEBUG_UART_BASE(IMX21)
- #elif defined(CONFIG_DEBUG_IMX25_UART)
- #define UART_PADDR	IMX_DEBUG_UART_BASE(IMX25)
-+#elif defined(CONFIG_DEBUG_IMX27_UART)
-+#define UART_PADDR	IMX_DEBUG_UART_BASE(IMX27)
- #elif defined(CONFIG_DEBUG_IMX31_UART)
- #define UART_PADDR	IMX_DEBUG_UART_BASE(IMX31)
- #elif defined(CONFIG_DEBUG_IMX35_UART)
+ 		/*
 -- 
 2.34.1
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F855499DE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D94BB49A184
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:37:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1586508AbiAXW0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:26:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
+        id S1382519AbiAXXhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:37:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453928AbiAXVbS (ORCPT
+        with ESMTP id S1382474AbiAXW4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:31:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72672C06137B;
-        Mon, 24 Jan 2022 12:20:07 -0800 (PST)
+        Mon, 24 Jan 2022 17:56:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA4EC055AA0;
+        Mon, 24 Jan 2022 13:10:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 305BAB8122F;
-        Mon, 24 Jan 2022 20:20:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DE94C340E5;
-        Mon, 24 Jan 2022 20:20:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CD006141C;
+        Mon, 24 Jan 2022 21:10:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FC78C340E5;
+        Mon, 24 Jan 2022 21:10:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055604;
-        bh=Fy97BY3BCmq+EiEuDqWIRCj+/y9yRMgy604pK4Qo1iA=;
+        s=korg; t=1643058633;
+        bh=1sxxLQIPWRG6aWSNdg8Rs1aLFGBqVedpdVrcpjRSgSU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=undDHj5LqMSYSla+RNLhQjYKm42mbMsR8kZVfhmQxM3ZXza/MIdAJJUsmOca9Tso/
-         qQaQ/oxvtETze/e1xpOZNALDgFJuZAebT3OVFRwpsA3R8EqGKr1vGaPeYrb1kYMtKN
-         k9sMTcJ8G+kPuuZn97s7ZqlSR58R0xMb8HCjUBXo=
+        b=dWlCZEk4OmQgk1laMwEUiMQ0BDnklTLeJXYWMQAOMATGv6MD9Ru0l0Boj9Y+WowtM
+         AYZNNcnm/dpxOL5Le41aEQzbWqLkr4jRLbTDPaIEO5Rhf2PVwV7CXcidDongP3pKsu
+         /YJfgrJQci4JMNLDa+6IEzINPNb+Kvj11B8lLBMw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Reiji Watanabe <reijiw@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        stable@vger.kernel.org, Bernard Zhao <bernard@vivo.com>,
+        Paul Moore <paul@paul-moore.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 205/846] arm64: mte: DC {GVA,GZVA} shouldnt be used when DCZID_EL0.DZP == 1
-Date:   Mon, 24 Jan 2022 19:35:22 +0100
-Message-Id: <20220124184108.001144253@linuxfoundation.org>
+Subject: [PATCH 5.16 0335/1039] selinux: fix potential memleak in selinux_add_opt()
+Date:   Mon, 24 Jan 2022 19:35:24 +0100
+Message-Id: <20220124184136.568570374@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,84 +49,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Reiji Watanabe <reijiw@google.com>
+From: Bernard Zhao <bernard@vivo.com>
 
-[ Upstream commit 685e2564daa1493053fcd7f1dbed38b35ee2f3cb ]
+[ Upstream commit 2e08df3c7c4e4e74e3dd5104c100f0bf6288aaa8 ]
 
-Currently, mte_set_mem_tag_range() and mte_zero_clear_page_tags() use
-DC {GVA,GZVA} unconditionally.  But, they should make sure that
-DCZID_EL0.DZP, which indicates whether or not use of those instructions
-is prohibited, is zero when using those instructions.
-Use ST{G,ZG,Z2G} instead when DCZID_EL0.DZP == 1.
+This patch try to fix potential memleak in error branch.
 
-Fixes: 013bb59dbb7c ("arm64: mte: handle tags zeroing at page allocation time")
-Fixes: 3d0cca0b02ac ("kasan: speed up mte_set_mem_tag_range")
-Signed-off-by: Reiji Watanabe <reijiw@google.com>
-Link: https://lore.kernel.org/r/20211206004736.1520989-3-reijiw@google.com
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Fixes: ba6418623385 ("selinux: new helper - selinux_add_opt()")
+Signed-off-by: Bernard Zhao <bernard@vivo.com>
+[PM: tweak the subject line, add Fixes tag]
+Signed-off-by: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/include/asm/mte-kasan.h | 8 +++++---
- arch/arm64/lib/mte.S               | 8 +++++++-
- 2 files changed, 12 insertions(+), 4 deletions(-)
+ security/selinux/hooks.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/include/asm/mte-kasan.h b/arch/arm64/include/asm/mte-kasan.h
-index 22420e1f8c037..26e013e540ae2 100644
---- a/arch/arm64/include/asm/mte-kasan.h
-+++ b/arch/arm64/include/asm/mte-kasan.h
-@@ -84,10 +84,12 @@ static inline void __dc_gzva(u64 p)
- static inline void mte_set_mem_tag_range(void *addr, size_t size, u8 tag,
- 					 bool init)
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index dde4ecc0cd186..49b4f59db35e7 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -988,18 +988,22 @@ out:
+ static int selinux_add_opt(int token, const char *s, void **mnt_opts)
  {
--	u64 curr, mask, dczid_bs, end1, end2, end3;
-+	u64 curr, mask, dczid, dczid_bs, dczid_dzp, end1, end2, end3;
+ 	struct selinux_mnt_opts *opts = *mnt_opts;
++	bool is_alloc_opts = false;
  
- 	/* Read DC G(Z)VA block size from the system register. */
--	dczid_bs = 4ul << (read_cpuid(DCZID_EL0) & 0xf);
-+	dczid = read_cpuid(DCZID_EL0);
-+	dczid_bs = 4ul << (dczid & 0xf);
-+	dczid_dzp = (dczid >> 4) & 1;
+ 	if (token == Opt_seclabel)	/* eaten and completely ignored */
+ 		return 0;
  
- 	curr = (u64)__tag_set(addr, tag);
- 	mask = dczid_bs - 1;
-@@ -106,7 +108,7 @@ static inline void mte_set_mem_tag_range(void *addr, size_t size, u8 tag,
- 	 */
- #define SET_MEMTAG_RANGE(stg_post, dc_gva)		\
- 	do {						\
--		if (size >= 2 * dczid_bs) {		\
-+		if (!dczid_dzp && size >= 2 * dczid_bs) {\
- 			do {				\
- 				curr = stg_post(curr);	\
- 			} while (curr < end1);		\
-diff --git a/arch/arm64/lib/mte.S b/arch/arm64/lib/mte.S
-index e83643b3995f4..f531dcb95174a 100644
---- a/arch/arm64/lib/mte.S
-+++ b/arch/arm64/lib/mte.S
-@@ -43,17 +43,23 @@ SYM_FUNC_END(mte_clear_page_tags)
-  *	x0 - address to the beginning of the page
-  */
- SYM_FUNC_START(mte_zero_clear_page_tags)
-+	and	x0, x0, #(1 << MTE_TAG_SHIFT) - 1	// clear the tag
- 	mrs	x1, dczid_el0
-+	tbnz	x1, #4, 2f	// Branch if DC GZVA is prohibited
- 	and	w1, w1, #0xf
- 	mov	x2, #4
- 	lsl	x1, x2, x1
--	and	x0, x0, #(1 << MTE_TAG_SHIFT) - 1	// clear the tag
- 
- 1:	dc	gzva, x0
- 	add	x0, x0, x1
- 	tst	x0, #(PAGE_SIZE - 1)
- 	b.ne	1b
- 	ret
++	if (!s)
++		return -ENOMEM;
 +
-+2:	stz2g	x0, [x0], #(MTE_GRANULE_SIZE * 2)
-+	tst	x0, #(PAGE_SIZE - 1)
-+	b.ne	2b
-+	ret
- SYM_FUNC_END(mte_zero_clear_page_tags)
- 
- /*
+ 	if (!opts) {
+ 		opts = kzalloc(sizeof(struct selinux_mnt_opts), GFP_KERNEL);
+ 		if (!opts)
+ 			return -ENOMEM;
+ 		*mnt_opts = opts;
++		is_alloc_opts = true;
+ 	}
+-	if (!s)
+-		return -ENOMEM;
++
+ 	switch (token) {
+ 	case Opt_context:
+ 		if (opts->context || opts->defcontext)
+@@ -1024,6 +1028,10 @@ static int selinux_add_opt(int token, const char *s, void **mnt_opts)
+ 	}
+ 	return 0;
+ Einval:
++	if (is_alloc_opts) {
++		kfree(opts);
++		*mnt_opts = NULL;
++	}
+ 	pr_warn(SEL_MOUNT_FAIL_MSG);
+ 	return -EINVAL;
+ }
 -- 
 2.34.1
 

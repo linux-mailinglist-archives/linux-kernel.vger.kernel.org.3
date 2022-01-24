@@ -2,95 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2784990BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6561349931E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:33:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376431AbiAXUDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:03:52 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36996 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356415AbiAXTqM (ORCPT
+        id S1384026AbiAXU2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:28:44 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:33698 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378280AbiAXUGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:46:12 -0500
+        Mon, 24 Jan 2022 15:06:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E598B8121C;
-        Mon, 24 Jan 2022 19:46:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCB7EC340E7;
-        Mon, 24 Jan 2022 19:46:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25EA460989;
+        Mon, 24 Jan 2022 20:06:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47DB4C340E5;
+        Mon, 24 Jan 2022 20:06:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643053567;
-        bh=gJlHbxnMW0wTSxm4hKs/P78n5KAVQuBy0pzkZMpkAGQ=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=pBLf/juVpsFO6ypTkWqRMy7awwXjZ8Rw3n3NDnpqdQKeMJ2cgvfQLL0GpUqvtulR+
-         bmo/qL875hJXqkr81U3qQrQyZ5F5D8Jyzdc5HuVrYZyuTlaU1tRRH075D6tlF9Z7yu
-         vsY/HEQSCUklTYdk89aYoyEc7/7AcqfhvgEJk6fBGMHQMkIkc3yUqVOreEUWcwq0+j
-         QJjAbkykYxXP2DL9/i1fPlNuezzba0ip2ANz3M3yC8Bc/07GKj4wGg9z5l+Fo9JiLZ
-         6rAjcIZjA9t0P2KKfQ5Ni3rLGfv9fm3mDEPQGkLcOzqJR2FtIeiFs+i2iVeep0n3+7
-         WBkVgCU05PHgw==
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1643054803;
+        bh=tAxMFrZB97HTTzVWzaI/qrmHKlzIq2ip8Mfv5JarAmU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=W71W7OVtlJXUuzDFOk4JNI3jFFGpgJEWDwmQccXN2Sp6MvKfTszyA9pNH+/chP+7S
+         AnJDhIObpRrxXfudSNj6cqZXbINuLF5Y7pGb7zr2DC+bd/YXrAaNUNIMeTEWf4yDYE
+         Miir9XGkeks2RYTOw/CQna7HPJn1PIsmfZcYSvuRrXqCzImlUIu32veQcMlzrTXc7b
+         m7EPBYtGKfrGoipdu9cncLKmh6zxvFVDBzcH9cb3sMC/z5AdUZv23XEgSpxWYZbPku
+         o5vOCZTHDMCFCCZolSlNkiDjckOwhjzH/J3uL0nTHS3bntFwFV9inMlyvZL/+MDHHs
+         TjxxMgsR4d90g==
+Date:   Mon, 24 Jan 2022 14:06:41 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Alain Volmat <avolmat@me.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Subject: Re: [PATCH RESEND v2 1/5] dt-bindings: pci: st-pcie: PCIe controller
+ found on STi platforms
+Message-ID: <20220124200641.GA1546900@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220124162442.29497-3-tdas@codeaurora.org>
-References: <20220124162442.29497-1-tdas@codeaurora.org> <20220124162442.29497-3-tdas@codeaurora.org>
-Subject: Re: [PATCH v3 2/2] clk: qcom: lpass: Add support for LPASS clock controller for SC7280
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh@kernel.org, robh+dt@kernel.org,
-        Taniya Das <tdas@codeaurora.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <tdas@codeaurora.org>
-Date:   Mon, 24 Jan 2022 11:46:05 -0800
-User-Agent: alot/0.10
-Message-Id: <20220124194607.BCB7EC340E7@smtp.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220103074731.3651-2-avolmat@me.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Taniya Das (2022-01-24 08:24:42)
-> diff --git a/drivers/clk/qcom/lpasscorecc-sc7280.c b/drivers/clk/qcom/lpa=
-sscorecc-sc7280.c
+On Mon, Jan 03, 2022 at 08:47:27AM +0100, Alain Volmat wrote:
+> Addition of the bindings for the Designware based PCIe controller
+> that can be found on STi platforms such as STiH407, STiH410 or STiH418.
+> 
+> Signed-off-by: Alain Volmat <avolmat@me.com>
+> ---
+>  .../devicetree/bindings/pci/snps,dw-pcie.yaml |   2 +-
+>  .../devicetree/bindings/pci/st,st-pcie.yaml   | 112 ++++++++++++++++++
+>  2 files changed, 113 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/devicetree/bindings/pci/st,st-pcie.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+> index 9ed0dfba7f89..3a92078128f7 100644
+> --- a/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+> @@ -35,7 +35,7 @@ properties:
+>      maxItems: 5
+>      items:
+>        enum: [ dbi, dbi2, config, atu, app, elbi, mgmt, ctrl, parf, cfg, link,
+> -              ulreg, smu, mpu, apb, phy ]
+> +              ulreg, smu, mpu, apb, phy, mem-window ]
+>  
+>    num-lanes:
+>      description: |
+> diff --git a/Documentation/devicetree/bindings/pci/st,st-pcie.yaml b/Documentation/devicetree/bindings/pci/st,st-pcie.yaml
 > new file mode 100644
-> index 000000000000..3ac62ea5767e
+> index 000000000000..2fa686d573c3
 > --- /dev/null
-> +++ b/drivers/clk/qcom/lpasscorecc-sc7280.c
-> @@ -0,0 +1,430 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-> + */
+> +++ b/Documentation/devicetree/bindings/pci/st,st-pcie.yaml
+> @@ -0,0 +1,112 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pci/st,st-pcie.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +#include <linux/clk-provider.h>
-> +#include <linux/err.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/of.h>
+> +title: PCIe RC controller on ST STi platform
+> +
+> +maintainers:
+> +  - Alain Volmat <avolmat@me.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/pci/snps,dw-pcie.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: st,stih407-pcie
+> +
+> +  reg:
+> +    items:
+> +      - description: Controller control and status registers.
+> +      - description: PCIe configuration registers.
+> +      - description: Memory made available to the controller
+> +
+> +  reg-names:
+> +    items:
+> +      - const: dbi
+> +      - const: config
+> +      - const: mem-window
 
-Is the of.h include used?
+I guess "mem-window" is the range for inbound DMA?  Other controllers
+should have similar ranges.  Can we use the same DT reg names used by
+other controllers instead of adding something new and STi-specific?
 
-> +#include <linux/pm_clock.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/regmap.h>
+> +  interrupts:
+> +    maxItems: 1
 > +
-> +#include <dt-bindings/clock/qcom,lpasscorecc-sc7280.h>
+> +  resets:
+> +    items:
+> +    - description: Controller reset
+> +    - description: Powerdown reset (optional)
+> +    minItems: 1
 > +
-> +#include "clk-alpha-pll.h"
-> +#include "clk-branch.h"
-> +#include "clk-rcg.h"
-> +#include "clk-regmap.h"
-> +#include "clk-regmap-divider.h"
-> +#include "common.h"
-> +#include "gdsc.h"
-> +
-[...]
-> +
-> +static struct regmap_config lpass_core_cc_sc7280_regmap_config =3D {
-> +       .reg_bits =3D 32,
-> +       .reg_stride =3D 4,
-> +       .val_bits =3D 32,
-> +       .fast_io =3D true,
+> +  reset-names:
+> +    items:
+> +      - const: softreset
+> +      - const: powerdown
 
-What's the max_register? Please set it so that debugfs works.
+"softreset" and "powerdown" appear only in this binding.  Are they
+really unique to STi, or can we use the same names used for other
+controllers?

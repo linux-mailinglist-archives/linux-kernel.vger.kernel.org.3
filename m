@@ -2,39 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF761499C5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF871499BE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1579170AbiAXWFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:05:06 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40852 "EHLO
+        id S1576847AbiAXV4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:56:35 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38404 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378406AbiAXVRZ (ORCPT
+        with ESMTP id S1378451AbiAXVRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:17:25 -0500
+        Mon, 24 Jan 2022 16:17:31 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3FFE60C60;
-        Mon, 24 Jan 2022 21:17:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88417C340E7;
-        Mon, 24 Jan 2022 21:17:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B574161320;
+        Mon, 24 Jan 2022 21:17:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D048C340E4;
+        Mon, 24 Jan 2022 21:17:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059042;
-        bh=KELrlWHcvTQuXSNFFxUFF1tW/4V0P2KYuGkbnaXmsdg=;
+        s=korg; t=1643059048;
+        bh=+JhNhfhX4CzHKo6zamglhaOW+gem5nuxs1xCVr/STrw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aFYXdpydSY/eMO53hRtULDDnhWxoTyBPgLEuZPFDqGzS0aNl00FLLBMddrrF57bcb
-         Yj+tNzhDxa43D63CGnrLs5HGO6dbi74whOa3hWBIs3o+jfGMgc7Ktf/11sAa1e3/Db
-         X4ttRuA8yMXz6CTw1SBraA/tKDD0SQ2oYAriYKEI=
+        b=sb3ptaBDq6E4OnMUQMJ++lRxS0o/iOIgFzjy71iMHv39PsitKBNC6Zx7VblUO5Z6l
+         j7454LWmHJrtps6LTXkBICMICE1wOeC1K9M0k/23Q+gRVCGBOxIcJ8zsk0GDbXKUBY
+         KhjfFGQT1UKhCaQULikkAZZyVqSgfoI2lr2t3Z6w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0486/1039] ASoC: rt5663: Handle device_property_read_u32_array error codes
-Date:   Mon, 24 Jan 2022 19:37:55 +0100
-Message-Id: <20220124184141.608319251@linuxfoundation.org>
+        stable@vger.kernel.org, Frank Rowand <frank.rowand@sony.com>,
+        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0488/1039] of: unittest: 64 bit dma address test requires arch support
+Date:   Mon, 24 Jan 2022 19:37:57 +0100
+Message-Id: <20220124184141.675082704@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -46,63 +45,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Frank Rowand <frank.rowand@sony.com>
 
-[ Upstream commit 2167c0b205960607fb136b4bb3c556a62be1569a ]
+[ Upstream commit 9fd4cf5d3571b27d746b8ead494a3f051485b679 ]
 
-The return value of device_property_read_u32_array() is not always 0.
-To catch the exception in case that devm_kzalloc failed and the
-rt5663->imp_table was NULL, which caused the failure of
-device_property_read_u32_array.
+If an architecture does not support 64 bit dma addresses then testing
+for an expected dma address >= 0x100000000 will fail.
 
-Fixes: 450f0f6a8fb4 ("ASoC: rt5663: Add the manual offset field to compensate the DC offset")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20211215031550.70702-1-jiasheng@iscas.ac.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: e0d072782c73 ("dma-mapping: introduce DMA range map, supplanting dma_pfn_offset")
+Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20211212221852.233295-1-frowand.list@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/rt5663.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/of/unittest.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/codecs/rt5663.c b/sound/soc/codecs/rt5663.c
-index 0389b2bb360e2..2138f62e6af5d 100644
---- a/sound/soc/codecs/rt5663.c
-+++ b/sound/soc/codecs/rt5663.c
-@@ -3461,6 +3461,7 @@ static void rt5663_calibrate(struct rt5663_priv *rt5663)
- static int rt5663_parse_dp(struct rt5663_priv *rt5663, struct device *dev)
+diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+index 02c5cd06ad19c..35af4fedc15de 100644
+--- a/drivers/of/unittest.c
++++ b/drivers/of/unittest.c
+@@ -942,8 +942,9 @@ static void __init of_unittest_parse_dma_ranges(void)
  {
- 	int table_size;
-+	int ret;
- 
- 	device_property_read_u32(dev, "realtek,dc_offset_l_manual",
- 		&rt5663->pdata.dc_offset_l_manual);
-@@ -3477,9 +3478,11 @@ static int rt5663_parse_dp(struct rt5663_priv *rt5663, struct device *dev)
- 		table_size = sizeof(struct impedance_mapping_table) *
- 			rt5663->pdata.impedance_sensing_num;
- 		rt5663->imp_table = devm_kzalloc(dev, table_size, GFP_KERNEL);
--		device_property_read_u32_array(dev,
-+		ret = device_property_read_u32_array(dev,
- 			"realtek,impedance_sensing_table",
- 			(u32 *)rt5663->imp_table, table_size);
-+		if (ret)
-+			return ret;
- 	}
- 
- 	return 0;
-@@ -3504,8 +3507,11 @@ static int rt5663_i2c_probe(struct i2c_client *i2c,
- 
- 	if (pdata)
- 		rt5663->pdata = *pdata;
--	else
--		rt5663_parse_dp(rt5663, &i2c->dev);
-+	else {
-+		ret = rt5663_parse_dp(rt5663, &i2c->dev);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	for (i = 0; i < ARRAY_SIZE(rt5663->supplies); i++)
- 		rt5663->supplies[i].supply = rt5663_supply_names[i];
+ 	of_unittest_dma_ranges_one("/testcase-data/address-tests/device@70000000",
+ 		0x0, 0x20000000);
+-	of_unittest_dma_ranges_one("/testcase-data/address-tests/bus@80000000/device@1000",
+-		0x100000000, 0x20000000);
++	if (IS_ENABLED(CONFIG_ARCH_DMA_ADDR_T_64BIT))
++		of_unittest_dma_ranges_one("/testcase-data/address-tests/bus@80000000/device@1000",
++			0x100000000, 0x20000000);
+ 	of_unittest_dma_ranges_one("/testcase-data/address-tests/pci@90000000",
+ 		0x80000000, 0x20000000);
+ }
 -- 
 2.34.1
 

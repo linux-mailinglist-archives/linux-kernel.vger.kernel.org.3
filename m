@@ -2,85 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB2F497F1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02534497F13
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241102AbiAXMRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 07:17:22 -0500
-Received: from mga06.intel.com ([134.134.136.31]:10615 "EHLO mga06.intel.com"
+        id S242774AbiAXMPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 07:15:52 -0500
+Received: from mga11.intel.com ([192.55.52.93]:63891 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241810AbiAXMQU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:16:20 -0500
+        id S241954AbiAXMOn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 07:14:43 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643026580; x=1674562580;
+  t=1643026483; x=1674562483;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=oSJpUR7qQooZpsgnfNqCcxKzq86iTJ3y0QT5ivH1Jg8=;
-  b=kQ9GuXdYG2uV/TK4pn/i2+fsh4gffga6BBIUe8BPioJ8cXwyVPXIiv1k
-   s68A3MFVY9vulzgh/1KGrmgKpG2b+5wvR8kx0mhlAuM66G9LogipZeMvs
-   voIblaYe06LJ+jSpZlG5lyvhmJp6qRwISQIzONglUc5uzlFeoucZkyiso
-   KFNkpOAJE+v5uITBZHSxgJoo6O1VJRnAlwUCtOFgUrlDqHBAa961hSnqT
-   hxVAc99x/E7GTQFc/LefbZVz1y2KCeH7XGqYkgMdUKu2VimJgvdQJw6WW
-   FbmDjd11Z+y8mT/iqGMjWKKJr/gBeZnywyvDUc3XsnwWG50PWVXugd3yd
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="306746283"
+  bh=FR/Plqwyf6P+JXGAx4Yblw5sOsYQlSfhlYedmM/BhpI=;
+  b=It3GvrS4HsbnwOAl9k9BxeAmnNFPLkYcoUt7DYeG1atxtJyvOxi3r388
+   N6xz97Up10aOq6P3iaQzf19+IkWFRj0nYmUtCPRjxH3fw6a8nPsW33c82
+   9g1nc0Y+mxB85s9g9IDAGpUI7sJUdTQt8ocookAjndJxMFmyIGVFdc7KG
+   riXbHaLrotnJjY7ZmRgk//+1NFHXy7ziHk4pIM/nayCaszrfOO3P17rjy
+   4gDU8UZMuXE5cw1p3MCoWMHARV1g5fmhC+z88w+T7oQqwJR3PZa/Bq9/t
+   /LzOKoPyJNTmRRRU3rb1Z9gdRsDHNgmyZKxNAeIsRI6Esc3Li+XmJe4Ln
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="243626687"
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="306746283"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 04:14:42 -0800
+   d="scan'208";a="243626687"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 04:14:42 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="479052944"
+   d="scan'208";a="617214240"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 24 Jan 2022 04:14:39 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 24 Jan 2022 04:14:39 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nByF5-000II4-3F; Mon, 24 Jan 2022 12:14:39 +0000
-Date:   Mon, 24 Jan 2022 20:14:16 +0800
+        id 1nByF5-000II9-52; Mon, 24 Jan 2022 12:14:39 +0000
+Date:   Mon, 24 Jan 2022 20:14:26 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     kbuild-all@lists.01.org, Chen-Yu Tsai <wenst@chromium.org>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 25/31] clk: mediatek: pll: Implement error handling in
- register API
-Message-ID: <202201242043.D1yrOE9S-lkp@intel.com>
-References: <20220122091731.283592-26-wenst@chromium.org>
+To:     Tong Zhang <ztong0001@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Tong Zhang <ztong0001@gmail.com>
+Subject: Re: [PATCH v1] binfmt_misc: fix crash when load/unload module
+Message-ID: <202201242006.cqM8NznF-lkp@intel.com>
+References: <20220124003342.1457437-1-ztong0001@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220122091731.283592-26-wenst@chromium.org>
+In-Reply-To: <20220124003342.1457437-1-ztong0001@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chen-Yu,
+Hi Tong,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on clk/clk-next]
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.17-rc1 next-20220124]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Chen-Yu-Tsai/clk-mediatek-Cleanups-and-Improvements-Part-1/20220122-172158
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-config: h8300-randconfig-c003-20220124 (https://download.01.org/0day-ci/archive/20220124/202201242043.D1yrOE9S-lkp@intel.com/config)
-compiler: h8300-linux-gcc (GCC) 11.2.0
+url:    https://github.com/0day-ci/linux/commits/Tong-Zhang/binfmt_misc-fix-crash-when-load-unload-module/20220124-083500
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
+config: arm-randconfig-c002-20220124 (https://download.01.org/0day-ci/archive/20220124/202201242006.cqM8NznF-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/d649008f3214eb4d94760873831ef5e53c292976
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Tong-Zhang/binfmt_misc-fix-crash-when-load-unload-module/20220124-083500
+        git checkout d649008f3214eb4d94760873831ef5e53c292976
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
 
-cocci warnings: (new ones prefixed by >>)
->> drivers/clk/mediatek/clk-pll.c:407:2-3: Unneeded semicolon
+   fs/binfmt_misc.c: In function 'init_misc_binfmt':
+>> fs/binfmt_misc.c:828:28: error: assignment to 'struct ctl_table_header *' from incompatible pointer type 'struct sysctl_header *' [-Werror=incompatible-pointer-types]
+     828 |         binfmt_misc_header = register_sysctl_mount_point("fs/binfmt_misc");
+         |                            ^
+   cc1: some warnings being treated as errors
 
-Please review and possibly fold the followup patch.
+
+vim +828 fs/binfmt_misc.c
+
+   821	
+   822	static int __init init_misc_binfmt(void)
+   823	{
+   824		int err = register_filesystem(&bm_fs_type);
+   825		if (!err)
+   826			insert_binfmt(&misc_format);
+   827	
+ > 828		binfmt_misc_header = register_sysctl_mount_point("fs/binfmt_misc");
+   829		if (!binfmt_misc_header) {
+   830			pr_warn("Failed to create fs/binfmt_misc sysctl mount point");
+   831			return -ENOMEM;
+   832		}
+   833		return 0;
+   834	}
+   835	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

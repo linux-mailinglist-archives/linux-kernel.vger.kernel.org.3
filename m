@@ -2,186 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D18449843A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C1B49843B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:07:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243387AbiAXQFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 11:05:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59656 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236170AbiAXQFl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 11:05:41 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A622CC06173B;
-        Mon, 24 Jan 2022 08:05:40 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id c24so55239664edy.4;
-        Mon, 24 Jan 2022 08:05:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MxIPg35/hMEKb65dLOLyBc6qfzIYj4rxK6ntVoYuCVw=;
-        b=E92jNsFGeJT0SRoqkUQNuRyI6Y6aDMlFx71e5/ovdYSpvFtyPmuoOIIfVGnZtqi2CN
-         NfbUNJehdtkKC8JzS0c3Jr/K3qYUKfFPRC0tF4LYqBmxz3Mb9ECqE0xLCoalOyEv2jUA
-         GOmM6jdYX3yonxgqJ/eqVFgFm/eGNHK1FgQbaPSPN/7vXXQ0CFNhaRdknuM6KbxdfMCN
-         N4vzImjnbqX+dhIdX/OXGayHBx/uqWnJVEBLTqqXvVCQLAblM4q7jjBekzZpi6SzHtz5
-         YthRftMipsTan/D43hwvwwvTjJZ8vIsbxBKmdZKGpQi+5cNIdmzt9LPMBqxrolY5jeUF
-         RBIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MxIPg35/hMEKb65dLOLyBc6qfzIYj4rxK6ntVoYuCVw=;
-        b=fmnxIs5gv5j3UT3oBw/PhbKMNg1RvD5HTGC09M9xVZO6SWiLb/y4fvNhAB5OK8W4XU
-         9HHR++N5eVI4YCdoW7CNxGGXGWG1zD6bDw44gNiov0vCUTd6NpPz+nF30w8i34SHmvp8
-         GFhyYc8Gsi3XvUw17RPqFAZuyA3uWAIpJNThhISv+GWXL2vr1PfH2PzjI6HOUP2Tffqf
-         dzz3fqa9BX8tpL2ZbpUBUGzv5r+zeRtg5v9Dr0Hfh+fGRLIogx8cnysRfEZJ8UsbuMGB
-         hU5ibbOymiq87KqG0e6T+Y5zI5h2OWe3tQ9wUcc+7EldynAX4CYEotbyL2/5ujts9SaC
-         SvLg==
-X-Gm-Message-State: AOAM533iVtakFXkh/4K2Idkw7Xxg/nKdOUwaHjLw0YPb7vRwgb6I3Gab
-        Q5PPEvNYM2PVqmL8gIirAr5+0kphwfs=
-X-Google-Smtp-Source: ABdhPJzkG5fWlvtS/zga4JjoPThId1pA6wmNsDl6Zz5DTDm8lXs9qm5k9MFk7WwstZhQLQ/tUAbJfg==
-X-Received: by 2002:a05:6402:40d5:: with SMTP id z21mr13315228edb.239.1643040339182;
-        Mon, 24 Jan 2022 08:05:39 -0800 (PST)
-Received: from skbuf ([188.25.255.2])
-        by smtp.gmail.com with ESMTPSA id z18sm5050049ejb.112.2022.01.24.08.05.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 08:05:38 -0800 (PST)
-Date:   Mon, 24 Jan 2022 18:05:37 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [RFC PATCH v7 06/16] net: dsa: tag_qca: add define for handling
- mgmt Ethernet packet
-Message-ID: <20220124160537.6xqdd337mg43ivn6@skbuf>
-References: <20220123013337.20945-1-ansuelsmth@gmail.com>
- <20220123013337.20945-7-ansuelsmth@gmail.com>
+        id S243323AbiAXQHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 11:07:40 -0500
+Received: from mail-bn8nam08on2082.outbound.protection.outlook.com ([40.107.100.82]:58848
+        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236170AbiAXQHi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 11:07:38 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VjQOgSOfPEDYSKreq4HRZ50E9sgIkeh6QV0M+xx4E1wg3aX+etzaBLTDPaIvHyb7/Hu7mQ6Y/syWxjTkvasuQM1SmkHubT4A5yzXXG0vF2BJRR++B/pFXAVAm6Rw9hzjReecGqAaBPn9CgGFqiboaNRJw1mk2gh2NMUTjcOP3U0HBvs3jzN3V7UKyzfBzsshXGqGaX1ngS31R5tpleANWyw3J553ke5CDUVTOOQySKLX+ZmlXi0AG7ywcSACan0M8CLtn2BC5YCNfSad/kCRIyHIoEJ9kvj90iTJICkd6Bnt78R4HNrmWhmudozetI1GUq99HYuHSDjL0HZlDKlVoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=InWxZcQ7w3/rd06SeMSddmGSTexiNW3XW7qGk9LKhxM=;
+ b=jOOh0EvT85v1XMpgzLePdXydDZRJLnrD4GmAIid0aiZq9+p1pIOcbUMfaZXRrhW3Y/O0GPhbvSk/aVz9zp+VCm2aqmJwLZx8e1ohZAxE1uk6tjWQsS6SQZLlisPh8PJ9sV0OlBU2e4gkwqPaBSRW51d+5sVxIDGQyjaGmCLwrIt6w5YkKtWR75ygbfS5YX3upVn73/r1ynLRIGqDf8JW9LXkhOZElJEbU6Ye0ZnEuAvCfbAsfjPZER7DtDEWZ7hVXFxbcBlmRmsm2YV2ECnAC2Uf9fz4Oull/DP4RGyPgI7GobzOlXWauRFvXVooOiQsbk73Rj9l79EiJjreEVEJcQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=InWxZcQ7w3/rd06SeMSddmGSTexiNW3XW7qGk9LKhxM=;
+ b=iSni84A7+xST6vJrf7LbAxWVJgVwUXk3syTYA/xGVHY1Kn20/GfRiJDXxsybgN2WvjzZIUw6yzUai+wmqd8GdxJfYIS12N8j44hmlGVWG6Ge4PHytaE48wqq0K92l6QQ2uQ+QV0A6P6hJOSpv836tFhJn0VV2a+cW3kXWVIvZ1zaO1uVNnVetw7FN71tL+5rZ7+qjF7ltOSBvHbDKrGV1GWy91CFiN/8x41dzpozLc70dKzp4iQgOKIWiLYh4xbPZnkBNQJ4A6ghKkv22tNh8q2tCNCCExLiuVxKLdnZ07rXzpQirpw/4FhexHRlTZHv/r0naahPuQCCA9PMUSaOeQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
+ by BN6PR12MB1905.namprd12.prod.outlook.com (2603:10b6:404:fe::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Mon, 24 Jan
+ 2022 16:07:36 +0000
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::a9db:9c46:183e:c213]) by MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::a9db:9c46:183e:c213%3]) with mapi id 15.20.4909.017; Mon, 24 Jan 2022
+ 16:07:36 +0000
+From:   Zi Yan <ziy@nvidia.com>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     akpm@linux-foundation.org, kirill.shutemov@linux.intel.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com
+Subject: Re: [PATCH v2 2/2] mm: fix missing cache flush for all tail pages of THP
+Date:   Mon, 24 Jan 2022 11:07:33 -0500
+X-Mailer: MailMate (1.14r5853)
+Message-ID: <1F326ECC-9F85-40CA-B731-0945BF071FBF@nvidia.com>
+In-Reply-To: <20220124051752.83281-2-songmuchun@bytedance.com>
+References: <20220124051752.83281-1-songmuchun@bytedance.com>
+ <20220124051752.83281-2-songmuchun@bytedance.com>
+Content-Type: multipart/signed;
+ boundary="=_MailMate_25E49A25-621D-4FC0-B37A-8E9EB4A44DDC_=";
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+X-ClientProxiedBy: BL1PR13CA0321.namprd13.prod.outlook.com
+ (2603:10b6:208:2c1::26) To MN2PR12MB3823.namprd12.prod.outlook.com
+ (2603:10b6:208:168::26)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220123013337.20945-7-ansuelsmth@gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 758cb33a-5c3b-422f-2a55-08d9df53a2c6
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1905:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR12MB1905B411197E03B8DAE8EB4EC25E9@BN6PR12MB1905.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vgvFZVW5YPHG7in6fp6iDu9Eby47FBqzLAGlDh0JYZcOQB/dherhea9s6m75cpDMQs2YWnJfQVVfgjZYeNXZp8MZZeN5VRCTPDhwHug2lzR7BkCPPZmlBU1ZHrJzQfulx3gb007NKJHluVB2af+iquR1jKLzMv7WIJOEoNtnGzeiq6wmEY3C8nxd3q0I2T5Hefws7PxAFsvVii/ECrmHk8KAZEf4KdRhkTFEuaySz8bZtLDJBjxi6L3vsbb7CDvvi/CG5Gz8ytRJbKfkk5SkbrGwOmkTyRz+SMQHaHgMhf8DX8jirBQ+LGoJlSjatyikHWqJZseSiDGVrW+U0YP+inIBgkLUbZ70AfiE2YZ8k8xkOloRFmgXw9BuHhM5pTD8LrJroRnBx8rmJFh91ZAuvLfbGryrC3tBZjq/Jt5VvD2FetqSDnrTSGkZF1PdCRbhWp7R0Dr6HRSR0tdMDGvq7GOv3nV3x+oh3ZTz+iaS3b9TQCkfArQmmR+yZOj/p+YVD3Fj7cGzCqrhYvQdtvkUYW5+EXQHBgwOQqc45qlYNdY4SisWXUHF0qWBCfjfBSk4eS+KIQmp1t3o3HVtxK/7XdsWcVeua1AlO5MGalkaIkJ/pcpGkRazy2MO6xfjL7CRLvn0svmhxhmTVUIw0KxDtwduCCO0wcG+NDEwsPUWuYvMozeplJA05yRPWyln/4EMBCjycv9TafEEaxoR/l/08GlZK0zxLfWHTr+Mx+zcUoU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(21480400003)(33656002)(36756003)(53546011)(83380400001)(6486002)(4326008)(8936002)(186003)(6666004)(5660300002)(66946007)(6512007)(8676002)(66476007)(66556008)(86362001)(2616005)(6916009)(38100700002)(316002)(2906002)(508600001)(26005)(6506007)(235185007)(72826004)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hVQEzROl+8o/hBQQCZY2TKzR+bB4+WMJZybuLmLn7TaEgwrMs4kw4HSR5r34?=
+ =?us-ascii?Q?Ka765j0N9jRIWdaOkdG2l5ZbKmo6KmslAIvMD5rUD9SPLtjEe/XaYRCvaZzj?=
+ =?us-ascii?Q?CjOw4KzVO2tWw3PCNRqpOCoMC9kKK3zzc1RKmEuxvyViLCDvdaaleK8Ca4lg?=
+ =?us-ascii?Q?ziaACpAyucG9EQ3nJOwnMrE+iluszvWNuQWZlEU0xdU0ZtMiLx3IXNycmesF?=
+ =?us-ascii?Q?VX+KWbTAJI8vayyye+8orgPcshVHkfTyaOTdLKL5V4FbrorVeLQaHATlLakK?=
+ =?us-ascii?Q?KDOb7pdIDTHG8c4FfCgImKhOEnJInPxs1SFxz9kl3qYMV3oOPI9qOWin7QGJ?=
+ =?us-ascii?Q?q1BbyWU3exEpmxuFEvXcPg9d/f62RmtBK0Q+Epu8IwHEK/pTVuSxW+pGeQ2E?=
+ =?us-ascii?Q?OmZiSlUZuLD6pt8H6o+F8aLjN5VEK0m/j4S+UvrtvXfCyWY0uA1hopkxAL3F?=
+ =?us-ascii?Q?QTCVUmPiyP0GrDlDp1kS+h9EnqsJ3e1ApIeW/c0DHI4aM9bIgvzFo50g0ij7?=
+ =?us-ascii?Q?ppzmuhgYmDRp/+j3LCwDrA9biApcCiS8neTW3s0F6J/fkwqb7Fr2OdU7EKko?=
+ =?us-ascii?Q?pMANKgPyyGl7IIlZwEdxuSQBzJQRhQqzcr2JnAFzGcCNtKwI7gYT7ODIelzx?=
+ =?us-ascii?Q?ooR7ToC3szqz8mXNWi+GLh3g9SDSJ/a3Wcu7FoPFS10JO9+cYYjrcYjXsvxr?=
+ =?us-ascii?Q?+GjbM+Jkd51/xnxx5cXjrb+FFZmstti3GnBJSrSt7OO+MskLeqURdoqZZJ7C?=
+ =?us-ascii?Q?1DDe1uGBoBu0vIOLr+5Xy3xoZwxCMmHfHGcC8oP1XNVIL4z4riNgYR3QsUYG?=
+ =?us-ascii?Q?I50hJz9CpTQlHjxCrr6iSkUP4OUPmNKRZqERP2kUe+iqiX3R+xje8jqqHJ1C?=
+ =?us-ascii?Q?pE6eAhJmYjG/59SI3mO5EOl7DDhPEPtqPdkma2QzyyAmLNRt4PmrcWjBOKhM?=
+ =?us-ascii?Q?9kiMNtBUbakypv+igrA3Zxe/Xg756cvZ9fWlkCwAbIW2TeEwbLnXQxwbb+/v?=
+ =?us-ascii?Q?iy3dvSL0tG/Q1XvCprD54uxslPCss8GJKnIJnhxuewxm5GoUKA+ST70OxnxK?=
+ =?us-ascii?Q?mG8RHeiWqpOyZ9LNKtrf6aJydU3aJs/JIhtm6DnQYuv0gqAjMJrJbD0anwrz?=
+ =?us-ascii?Q?Q90rmn6h14hwFgYl9Du8l33PHNQU5kOqcD//3wU9FYq7CWFyEpkQcwVB0v8r?=
+ =?us-ascii?Q?umpCUaNZjGzLPQx90u6QITnF5pE9mCi7CoIewyfEYyyN1m3DCyjYvdMApsSn?=
+ =?us-ascii?Q?qbzYxsNttb0vslGNASGXhj3KxT8EVyU+WaXYBGXLwFdlO/L6/7BGsHsGMNn5?=
+ =?us-ascii?Q?ilW/Rs3m1yezpU311GVaNv2J8/JPaGDlqn/K66jRYJCt8Mm2Kc9N3MO1i6G9?=
+ =?us-ascii?Q?35QpNtcrvo0XDY1qndH31pIPSzm/r2ODGd7/+4Ssmayh4uAaz3Ar3zhoi2Fv?=
+ =?us-ascii?Q?m8EjbcpmUTyJQToTl7PXDgIoekxPuG0RtaafbNV0KKarT21I8S4v027NpBB+?=
+ =?us-ascii?Q?w8i8JZIE7/a3rXKCwn3DRGHv3hW1Edr68IyGj/dNCqGEH/Lm0HK/SmYrsKka?=
+ =?us-ascii?Q?FphwgNxXxfoQH8P1imM=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 758cb33a-5c3b-422f-2a55-08d9df53a2c6
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2022 16:07:35.8779
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fJifXROLIuITBGGHhUCTLWvmYOzPTKw4R33Li+X8aHFnxhVxTekEV9+o8qxNaotu
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1905
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 23, 2022 at 02:33:27AM +0100, Ansuel Smith wrote:
-> Add all the required define to prepare support for mgmt read/write in
-> Ethernet packet. Any packet of this type has to be dropped as the only
-> use of these special packet is receive ack for an mgmt write request or
-> receive data for an mgmt read request.
-> A struct is used that emulates the Ethernet header but is used for a
-> different purpose.
-> 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+--=_MailMate_25E49A25-621D-4FC0-B37A-8E9EB4A44DDC_=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+
+On 24 Jan 2022, at 0:17, Muchun Song wrote:
+
+> The D-cache maintenance inside move_to_new_page() only consider one pag=
+e,
+> there is still D-cache maintenance issue for tail pages of THP. Fix thi=
+s
+> by not using flush_dcache_folio() since it is not backportable.
+>
+> Fixes: 616b8371539a ("mm: thp: enable thp migration in generic path")
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
 > ---
->  include/linux/dsa/tag_qca.h | 44 +++++++++++++++++++++++++++++++++++++
->  net/dsa/tag_qca.c           | 13 ++++++++---
->  2 files changed, 54 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/dsa/tag_qca.h b/include/linux/dsa/tag_qca.h
-> index c02d2d39ff4a..1a02f695f3a3 100644
-> --- a/include/linux/dsa/tag_qca.h
-> +++ b/include/linux/dsa/tag_qca.h
-> @@ -12,10 +12,54 @@
->  #define QCA_HDR_RECV_FRAME_IS_TAGGED	BIT(3)
->  #define QCA_HDR_RECV_SOURCE_PORT	GENMASK(2, 0)
->  
-> +/* Packet type for recv */
-> +#define QCA_HDR_RECV_TYPE_NORMAL	0x0
-> +#define QCA_HDR_RECV_TYPE_MIB		0x1
-> +#define QCA_HDR_RECV_TYPE_RW_REG_ACK	0x2
-> +
->  #define QCA_HDR_XMIT_VERSION		GENMASK(15, 14)
->  #define QCA_HDR_XMIT_PRIORITY		GENMASK(13, 11)
->  #define QCA_HDR_XMIT_CONTROL		GENMASK(10, 8)
->  #define QCA_HDR_XMIT_FROM_CPU		BIT(7)
->  #define QCA_HDR_XMIT_DP_BIT		GENMASK(6, 0)
->  
-> +/* Packet type for xmit */
-> +#define QCA_HDR_XMIT_TYPE_NORMAL	0x0
-> +#define QCA_HDR_XMIT_TYPE_RW_REG	0x1
-> +
-> +/* Check code for a valid mgmt packet. Switch will ignore the packet
-> + * with this wrong.
-> + */
-> +#define QCA_HDR_MGMT_CHECK_CODE_VAL	0x5
-> +
-> +/* Specific define for in-band MDIO read/write with Ethernet packet */
-> +#define QCA_HDR_MGMT_SEQ_LEN		4 /* 4 byte for the seq */
-> +#define QCA_HDR_MGMT_COMMAND_LEN	4 /* 4 byte for the command */
-> +#define QCA_HDR_MGMT_DATA1_LEN		4 /* First 4 byte for the mdio data */
-> +#define QCA_HDR_MGMT_HEADER_LEN		(QCA_HDR_MGMT_SEQ_LEN + \
-> +					QCA_HDR_MGMT_COMMAND_LEN + \
-> +					QCA_HDR_MGMT_DATA1_LEN)
-> +
-> +#define QCA_HDR_MGMT_DATA2_LEN		12 /* Other 12 byte for the mdio data */
-> +#define QCA_HDR_MGMT_PADDING_LEN	34 /* Padding to reach the min Ethernet packet */
-> +
-> +#define QCA_HDR_MGMT_PKG_LEN		(QCA_HDR_MGMT_HEADER_LEN + \
-> +					QCA_HDR_LEN + \
-> +					QCA_HDR_MGMT_DATA2_LEN + \
-> +					QCA_HDR_MGMT_PADDING_LEN)
+> Changes in v2:
+>  - Using a for loop instead of the folio variant for backportable.
+>
+>  mm/migrate.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index c9296d63878d..c418e8d92b9c 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -933,9 +933,12 @@ static int move_to_new_page(struct page *newpage, =
+struct page *page,
+>  		if (!PageMappingFlags(page))
+>  			page->mapping =3D NULL;
+>
+> -		if (likely(!is_zone_device_page(newpage)))
+> -			flush_dcache_page(newpage);
+> +		if (likely(!is_zone_device_page(newpage))) {
+> +			int i, nr =3D compound_nr(newpage);
+>
+> +			for (i =3D 0; i < nr; i++)
+> +				flush_dcache_page(newpage + i);
+> +		}
+>  	}
+>  out:
+>  	return rc;
+> -- =
 
-s/PKG/PKT/
+> 2.11.0
 
-> +
-> +#define QCA_HDR_MGMT_SEQ_NUM		GENMASK(31, 0)  /* 63, 32 */
-> +#define QCA_HDR_MGMT_CHECK_CODE		GENMASK(31, 29) /* 31, 29 */
-> +#define QCA_HDR_MGMT_CMD		BIT(28)		/* 28 */
-> +#define QCA_HDR_MGMT_LENGTH		GENMASK(23, 20) /* 23, 20 */
-> +#define QCA_HDR_MGMT_ADDR		GENMASK(18, 0)  /* 18, 0 */
-> +
-> +/* Special struct emulating a Ethernet header */
-> +struct mgmt_ethhdr {
-> +	u32 command;		/* command bit 31:0 */
-> +	u32 seq;		/* seq 63:32 */
-> +	u32 mdio_data;		/* first 4byte mdio */
-> +	__be16 hdr;		/* qca hdr */
-> +} __packed;
+LGTM. Thanks. Reviewed-by: Zi Yan <ziy@nvidia.com>
 
-Could you name this something a bit more specific, like qca_mgmt_ethhdr?
+--
+Best Regards,
+Yan, Zi
 
-> +
->  #endif /* __TAG_QCA_H */
-> diff --git a/net/dsa/tag_qca.c b/net/dsa/tag_qca.c
-> index f8df49d5956f..c57d6e1a0c0c 100644
-> --- a/net/dsa/tag_qca.c
-> +++ b/net/dsa/tag_qca.c
-> @@ -32,10 +32,10 @@ static struct sk_buff *qca_tag_xmit(struct sk_buff *skb, struct net_device *dev)
->  
->  static struct sk_buff *qca_tag_rcv(struct sk_buff *skb, struct net_device *dev)
->  {
-> -	u8 ver;
-> -	u16  hdr;
-> -	int port;
-> +	u16 hdr, pk_type;
->  	__be16 *phdr;
-> +	int port;
-> +	u8 ver;
->  
->  	if (unlikely(!pskb_may_pull(skb, QCA_HDR_LEN)))
->  		return NULL;
-> @@ -48,6 +48,13 @@ static struct sk_buff *qca_tag_rcv(struct sk_buff *skb, struct net_device *dev)
->  	if (unlikely(ver != QCA_HDR_VERSION))
->  		return NULL;
->  
-> +	/* Get pk type */
-> +	pk_type = FIELD_GET(QCA_HDR_RECV_TYPE, hdr);
-> +
-> +	/* Ethernet MDIO read/write packet */
-> +	if (pk_type == QCA_HDR_RECV_TYPE_RW_REG_ACK)
-> +		return NULL;
-> +
->  	/* Remove QCA tag and recalculate checksum */
->  	skb_pull_rcsum(skb, QCA_HDR_LEN);
->  	dsa_strip_etype_header(skb, QCA_HDR_LEN);
-> -- 
-> 2.33.1
-> 
+--=_MailMate_25E49A25-621D-4FC0-B37A-8E9EB4A44DDC_=
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAmHuzsUPHHppeUBudmlk
+aWEuY29tAAoJEJ2yUfNrYfqKdbYQALGOgrnDoIpBetzqBP/KGKbtF2o/DwQfjwto
+VE7wgckZvcW1m0ZiWkEOI6ja3kChUYjoQw0rsZghPJjY1pQdv7MJLmNfofbFi5H2
+E4mE3efv/AHZQaBODnvrylBOGoL1x8cSI4BADZNWpY7QC8dnjswCjD196NrgJ8kz
+ZGVPcF36N5oGtXto3Bs0bnbLRBA36xwq4d4RHjSjr3sk2Y9nWa3g6iZ3sTJpdwY1
+wfEJyXGKZ+F+68Jc4XWZyRarM5Fw2UzDVW7Fkf9WM5nvVVcAeQU/Fc2RIKE5wPid
+RoJ1vQTOFha74a00aZOY0iQdKBTFAUCLvHGHRUqKLQR1yAtfRPvborxynR+AsBSE
+ugDEBfiuaZazpAFrdOEY/RHPA/xHt06ZHPrvJDaK6XR6xOwusU8TPOKpkIXxeVTS
+KzV34o+XdrH5Cr+rVYtAZdNOtzK7PId8bMoeq0Sih2TYLxTgDzaJKwgcx/fMtjRg
+naLpGDIlxkcFt1dj27e3BO4V2WNDRFHMUh0OGuoWICQp1mkmWNeA7zi16DwCHW4Q
+x/vtidqYlf1x2ZMTgAiEHCkjGT5Is7GGU9UutDM3Be7SFvwCRxdqDyHQef13uv+k
+iswHDPdR0KAgpSNdQAuM8edhmBkf9PgZZDNr4WD+M3ACvcQbTO7x/dQys9nJWFVW
+eSLgyKaa
+=znuF
+-----END PGP SIGNATURE-----
+
+--=_MailMate_25E49A25-621D-4FC0-B37A-8E9EB4A44DDC_=--

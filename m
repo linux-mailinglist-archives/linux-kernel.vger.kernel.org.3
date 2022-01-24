@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B25FA4977CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 04:50:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 809544977EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 04:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241153AbiAXDu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 22:50:28 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:56712 "EHLO
+        id S241248AbiAXDyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 22:54:15 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:56994 "EHLO
         smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241158AbiAXDuZ (ORCPT
+        with ESMTP id S241230AbiAXDyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 22:50:25 -0500
+        Sun, 23 Jan 2022 22:54:13 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D5C1B212C4;
-        Mon, 24 Jan 2022 03:50:23 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C88BC21995;
+        Mon, 24 Jan 2022 03:54:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1642996223; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1642996452; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=D6Vgok4rvR931e84UowBUSY8Jhoy2T4G53/bpYOdzRw=;
-        b=qfTfxaPO9wnYVoBpIIE4Bljj6FUowggfuzi9HAhgJO5UeDZhGeWxSvTeNGMNzNdqzj5q/x
-        teZTiG5lmG/qnDYcjYQYidQ+qe+3TI1dv8UU0+oBvrK7BeTJA76lg4i3JBKBPNOGgjRzae
-        wRzUbqVHPc/4S7zSzgvsnBuk4jsJFGM=
+        bh=f9JPZARu0omLin5bRQVSgWDU6wAXTb1AVpCm2PGq0QA=;
+        b=oWLVbYedFQP9v6Y+Vt2dCmYJ7BswiwzErr2bNqohkHzF29J5NtnzRR3hInA0/7Pbsg+a4p
+        dkVN24TPtV/Zna3iFWM09kMIkBk2VhKvphP+cHwNm6UvHMXPUMMbSiNEVjA8OCcDOWDEtr
+        bYJ4pdL9OTrQ+svPLtAoHw7TN/KouOY=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1642996223;
+        s=susede2_ed25519; t=1642996452;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=D6Vgok4rvR931e84UowBUSY8Jhoy2T4G53/bpYOdzRw=;
-        b=fHub5mvlaa9hxdwcNnTf3ORPPh3W/K0C5TrT/E/tOmfoH8eOG+D0gqlf+Ypq4/HPKgqBC9
-        mwQMdUwjy+CDuiDQ==
+        bh=f9JPZARu0omLin5bRQVSgWDU6wAXTb1AVpCm2PGq0QA=;
+        b=d/H/0ZHUojlxTItoes3CwtM1O1/+IIfnm9ut5aMrLo6Gn1mp2AaqBsiqk+9II7iICgBBaQ
+        0SDOZBWG7iH2FMBw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D247F1331A;
-        Mon, 24 Jan 2022 03:50:20 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D7F8513305;
+        Mon, 24 Jan 2022 03:54:09 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id H0GBI/wh7mGkRAAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 24 Jan 2022 03:50:20 +0000
-Subject: [PATCH 02/23] MM: extend block-plugging to cover all swap reads with
- read-ahead
+        id qc9UJeEi7mHfRQAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 24 Jan 2022 03:54:09 +0000
+Subject: [PATCH 17/23] SUNRPC/xprt: async tasks mustn't block waiting for
+ memory
 From:   NeilBrown <neilb@suse.de>
 To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
         Anna Schumaker <anna.schumaker@netapp.com>,
@@ -59,7 +59,7 @@ To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
 Cc:     linux-nfs@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Date:   Mon, 24 Jan 2022 14:48:32 +1100
-Message-ID: <164299611274.26253.13900771841681128440.stgit@noble.brown>
+Message-ID: <164299611283.26253.16655442929244733353.stgit@noble.brown>
 In-Reply-To: <164299573337.26253.7538614611220034049.stgit@noble.brown>
 References: <164299573337.26253.7538614611220034049.stgit@noble.brown>
 User-Agent: StGit/0.23
@@ -70,89 +70,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Code that does swap read-ahead uses blk_start_plug() and
-blk_finish_plug() to allow lower levels to combine multiple read-ahead
-pages into a single request, but calls blk_finish_plug() *before*
-submitting the original (non-ahead) read request.
-This missed an opportunity to combine read requests.
+When memory is short, new worker threads cannot be created and we depend
+on the minimum one rpciod thread to be able to handle everything.  So it
+must not block waiting for memory.
 
-This patch moves the blk_finish_plug to *after* all the reads.
-This will likely combine the primary read with some of the "ahead"
-reads, and that may slightly increase the latency of that read, but it
-should more than make up for this by making more efficient use of the
-storage path.
+xprt_dynamic_alloc_slot can block indefinitely.  This can tie up all
+workqueue threads and NFS can deadlock.  So when called from a
+workqueue, set __GFP_NORETRY.
 
-The patch mostly makes the code look more consistent.  Performance
-change is unlikely to be noticeable.
+The rdma alloc_slot already does not block.  However it sets the error
+to -EAGAIN suggesting this will trigger a sleep.  It does not.  As we
+can see in call_reserveresult(), only -ENOMEM causes a sleep.  -EAGAIN
+causes immediate retry.
 
-Fixes-no-auto-backport: 3fb5c298b04e ("swap: allow swap readahead to be merged")
 Signed-off-by: NeilBrown <neilb@suse.de>
 ---
- mm/swap_state.c |   14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ net/sunrpc/xprt.c               |    5 ++++-
+ net/sunrpc/xprtrdma/transport.c |    2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/mm/swap_state.c b/mm/swap_state.c
-index bb38453425c7..093ecf864200 100644
---- a/mm/swap_state.c
-+++ b/mm/swap_state.c
-@@ -625,6 +625,7 @@ struct page *swap_cluster_readahead(swp_entry_t entry, gfp_t gfp_mask,
- 	struct vm_area_struct *vma = vmf->vma;
- 	unsigned long addr = vmf->address;
+diff --git a/net/sunrpc/xprt.c b/net/sunrpc/xprt.c
+index a02de2bddb28..47d207e416ab 100644
+--- a/net/sunrpc/xprt.c
++++ b/net/sunrpc/xprt.c
+@@ -1687,12 +1687,15 @@ static bool xprt_throttle_congested(struct rpc_xprt *xprt, struct rpc_task *task
+ static struct rpc_rqst *xprt_dynamic_alloc_slot(struct rpc_xprt *xprt)
+ {
+ 	struct rpc_rqst *req = ERR_PTR(-EAGAIN);
++	gfp_t gfp_mask = GFP_NOFS;
  
-+	blk_start_plug(&plug);
- 	mask = swapin_nr_pages(offset) - 1;
- 	if (!mask)
- 		goto skip;
-@@ -638,7 +639,6 @@ struct page *swap_cluster_readahead(swp_entry_t entry, gfp_t gfp_mask,
- 	if (end_offset >= si->max)
- 		end_offset = si->max - 1;
+ 	if (xprt->num_reqs >= xprt->max_reqs)
+ 		goto out;
+ 	++xprt->num_reqs;
+ 	spin_unlock(&xprt->reserve_lock);
+-	req = kzalloc(sizeof(struct rpc_rqst), GFP_NOFS);
++	if (current->flags & PF_WQ_WORKER)
++		gfp_mask |= __GFP_NORETRY | __GFP_NOWARN;
++	req = kzalloc(sizeof(struct rpc_rqst), gfp_mask);
+ 	spin_lock(&xprt->reserve_lock);
+ 	if (req != NULL)
+ 		goto out;
+diff --git a/net/sunrpc/xprtrdma/transport.c b/net/sunrpc/xprtrdma/transport.c
+index a52277115500..32df23796747 100644
+--- a/net/sunrpc/xprtrdma/transport.c
++++ b/net/sunrpc/xprtrdma/transport.c
+@@ -521,7 +521,7 @@ xprt_rdma_alloc_slot(struct rpc_xprt *xprt, struct rpc_task *task)
+ 	return;
  
--	blk_start_plug(&plug);
- 	for (offset = start_offset; offset <= end_offset ; offset++) {
- 		/* Ok, do the async read-ahead now */
- 		page = __read_swap_cache_async(
-@@ -655,11 +655,12 @@ struct page *swap_cluster_readahead(swp_entry_t entry, gfp_t gfp_mask,
- 		}
- 		put_page(page);
- 	}
--	blk_finish_plug(&plug);
- 
- 	lru_add_drain();	/* Push any new pages onto the LRU now */
- skip:
--	return read_swap_cache_async(entry, gfp_mask, vma, addr, do_poll);
-+	page = read_swap_cache_async(entry, gfp_mask, vma, addr, do_poll);
-+	blk_finish_plug(&plug);
-+	return page;
+ out_sleep:
+-	task->tk_status = -EAGAIN;
++	task->tk_status = -ENOMEM;
+ 	xprt_add_backlog(xprt, task);
  }
  
- int init_swap_address_space(unsigned int type, unsigned long nr_pages)
-@@ -800,11 +801,11 @@ static struct page *swap_vma_readahead(swp_entry_t fentry, gfp_t gfp_mask,
- 		.win = 1,
- 	};
- 
-+	blk_start_plug(&plug);
- 	swap_ra_info(vmf, &ra_info);
- 	if (ra_info.win == 1)
- 		goto skip;
- 
--	blk_start_plug(&plug);
- 	for (i = 0, pte = ra_info.ptes; i < ra_info.nr_pte;
- 	     i++, pte++) {
- 		pentry = *pte;
-@@ -828,11 +829,12 @@ static struct page *swap_vma_readahead(swp_entry_t fentry, gfp_t gfp_mask,
- 		}
- 		put_page(page);
- 	}
--	blk_finish_plug(&plug);
- 	lru_add_drain();
- skip:
--	return read_swap_cache_async(fentry, gfp_mask, vma, vmf->address,
-+	page = read_swap_cache_async(fentry, gfp_mask, vma, vmf->address,
- 				     ra_info.win == 1);
-+	blk_finish_plug(&plug);
-+	return page;
- }
- 
- /**
 
 
